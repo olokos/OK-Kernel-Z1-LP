@@ -189,7 +189,7 @@
 /* structure holding additional dynamic data -> send marker */
 /************************************************************/
 struct hfcsx_extra {
-	unsigned short marker[2 * (MAX_B_FRAMES + 1) + (MAX_D_FRAMES + 1)];
+    unsigned short marker[2 * (MAX_B_FRAMES + 1) + (MAX_D_FRAMES + 1)];
 };
 
 extern void main_irq_hfcsx(struct BCState *bcs);

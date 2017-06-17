@@ -24,19 +24,17 @@
 	"l.mtspr %0,%1,%2"					\
 	: : "r" (_off), "r" (_val), "K" (_spr))
 
-static inline unsigned long mfspr(unsigned long add)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("l.mfspr %0,r0,%1" : "=r" (ret) : "K" (add));
-	return ret;
+static inline unsigned long mfspr(unsigned long add) {
+    unsigned long ret;
+    __asm__ __volatile__ ("l.mfspr %0,r0,%1" : "=r" (ret) : "K" (add));
+    return ret;
 }
 
-static inline unsigned long mfspr_off(unsigned long add, unsigned long offset)
-{
-	unsigned long ret;
-	__asm__ __volatile__ ("l.mfspr %0,%1,%2" : "=r" (ret)
-						 : "r" (offset), "K" (add));
-	return ret;
+static inline unsigned long mfspr_off(unsigned long add, unsigned long offset) {
+    unsigned long ret;
+    __asm__ __volatile__ ("l.mfspr %0,%1,%2" : "=r" (ret)
+                          : "r" (offset), "K" (add));
+    return ret;
 }
 
 #endif

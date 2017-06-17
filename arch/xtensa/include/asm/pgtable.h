@@ -214,26 +214,49 @@ static inline void pgtable_cache_init(void) { }
 #define pmd_bad(pmd)	 (pmd_val(pmd) & ~PAGE_MASK)
 #define pmd_clear(pmdp)	 do { set_pmd(pmdp, __pmd(0)); } while (0)
 
-static inline int pte_write(pte_t pte) { return pte_val(pte) & _PAGE_WRITABLE; }
-static inline int pte_dirty(pte_t pte) { return pte_val(pte) & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte) { return pte_val(pte) & _PAGE_ACCESSED; }
-static inline int pte_file(pte_t pte)  { return pte_val(pte) & _PAGE_FILE; }
-static inline int pte_special(pte_t pte) { return 0; }
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_WRITABLE;
+}
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
+}
+static inline int pte_file(pte_t pte)  {
+    return pte_val(pte) & _PAGE_FILE;
+}
+static inline int pte_special(pte_t pte) {
+    return 0;
+}
 
-static inline pte_t pte_wrprotect(pte_t pte)	
-	{ pte_val(pte) &= ~(_PAGE_WRITABLE | _PAGE_HW_WRITE); return pte; }
-static inline pte_t pte_mkclean(pte_t pte)
-	{ pte_val(pte) &= ~(_PAGE_DIRTY | _PAGE_HW_WRITE); return pte; }
-static inline pte_t pte_mkold(pte_t pte)
-	{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)
-	{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)
-	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkwrite(pte_t pte)
-	{ pte_val(pte) |= _PAGE_WRITABLE; return pte; }
-static inline pte_t pte_mkspecial(pte_t pte)
-	{ return pte; }
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~(_PAGE_WRITABLE | _PAGE_HW_WRITE);
+    return pte;
+}
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_val(pte) &= ~(_PAGE_DIRTY | _PAGE_HW_WRITE);
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_val(pte) |= _PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_val(pte) |= _PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= _PAGE_WRITABLE;
+    return pte;
+}
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
+}
 
 /*
  * Conversion functions: convert a page and protection to a page entry,
@@ -246,9 +269,8 @@ static inline pte_t pte_mkspecial(pte_t pte)
 #define pfn_pte(pfn, prot)	__pte(((pfn) << PAGE_SHIFT) | pgprot_val(prot))
 #define mk_pte(page, prot)	pfn_pte(page_to_pfn(page), prot)
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
 }
 
 /*
@@ -256,11 +278,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
  * within a page table are directly modified.  Thus, the following
  * hook is made available.
  */
-static inline void update_pte(pte_t *ptep, pte_t pteval)
-{
-	*ptep = pteval;
+static inline void update_pte(pte_t *ptep, pte_t pteval) {
+    *ptep = pteval;
 #if (DCACHE_WAY_SIZE > PAGE_SIZE) && XCHAL_DCACHE_IS_WRITEBACK
-	__asm__ __volatile__ ("dhwb %0, 0" :: "a" (ptep));
+    __asm__ __volatile__ ("dhwb %0, 0" :: "a" (ptep));
 #endif
 
 }
@@ -268,44 +289,39 @@ static inline void update_pte(pte_t *ptep, pte_t pteval)
 struct mm_struct;
 
 static inline void
-set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep, pte_t pteval)
-{
-	update_pte(ptep, pteval);
+set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep, pte_t pteval) {
+    update_pte(ptep, pteval);
 }
 
 
 static inline void
-set_pmd(pmd_t *pmdp, pmd_t pmdval)
-{
-	*pmdp = pmdval;
+set_pmd(pmd_t *pmdp, pmd_t pmdval) {
+    *pmdp = pmdval;
 }
 
 struct vm_area_struct;
 
 static inline int
 ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr,
-    			  pte_t *ptep)
-{
-	pte_t pte = *ptep;
-	if (!pte_young(pte))
-		return 0;
-	update_pte(ptep, pte_mkold(pte));
-	return 1;
+                          pte_t *ptep) {
+    pte_t pte = *ptep;
+    if (!pte_young(pte))
+        return 0;
+    update_pte(ptep, pte_mkold(pte));
+    return 1;
 }
 
 static inline pte_t
-ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	pte_t pte = *ptep;
-	pte_clear(mm, addr, ptep);
-	return pte;
+ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_t pte = *ptep;
+    pte_clear(mm, addr, ptep);
+    return pte;
 }
 
 static inline void
-ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-  	pte_t pte = *ptep;
-  	update_pte(ptep, pte_wrprotect(pte));
+ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_t pte = *ptep;
+    update_pte(ptep, pte_wrprotect(pte));
 }
 
 /* to find an entry in a kernel page-table-directory */
@@ -337,7 +353,7 @@ ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
  *  bits   4 -  5  ring protection (must be 01: _PAGE_USER)
  *  bits   6 - 10  swap type (5 bits -> 32 types)
  *  bits  11 - 31  swap offset / PAGE_SIZE (21 bits -> 8GB)
- 
+
  * Format of file pte:
  *  bit	   0	   MBZ
  *  bit	   1	   page-file (must be one: _PAGE_FILE)
@@ -391,7 +407,7 @@ ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
 #define kern_addr_valid(addr)	(1)
 
 extern  void update_mmu_cache(struct vm_area_struct * vma,
-			      unsigned long address, pte_t *ptep);
+                              unsigned long address, pte_t *ptep);
 
 /*
  * remap a physical page `pfn' of size `size' with page protection `prot'

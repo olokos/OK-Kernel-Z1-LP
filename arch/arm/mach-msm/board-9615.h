@@ -29,10 +29,10 @@
 #define I2C_LIQUID (1 << 5)
 
 struct i2c_registry {
-	u8                     machs;
-	int                    bus;
-	struct i2c_board_info *info;
-	int                    len;
+    u8                     machs;
+    int                    bus;
+    struct i2c_board_info *info;
+    int                    len;
 };
 #endif
 /* Tabla slave address for I2C */
@@ -54,12 +54,12 @@ struct i2c_registry {
 #define PM8018_MPP_IRQ_BASE		(PM8018_IRQ_BASE + NR_GPIO_IRQS)
 
 extern struct pm8xxx_regulator_platform_data
-	msm_pm8018_regulator_pdata[] __devinitdata;
+    msm_pm8018_regulator_pdata[] __devinitdata;
 
 extern int msm_pm8018_regulator_pdata_len __devinitdata;
 
 extern struct rpm_regulator_platform_data
-msm_rpm_regulator_9615_pdata __devinitdata;
+    msm_rpm_regulator_9615_pdata __devinitdata;
 
 #define GPIO_VREG_ID_EXT_2P95V		0
 

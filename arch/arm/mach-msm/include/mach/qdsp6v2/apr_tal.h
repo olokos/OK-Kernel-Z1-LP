@@ -35,21 +35,21 @@
 
 typedef void (*apr_svc_cb_fn)(void *buf, int len, void *priv);
 struct apr_svc_ch_dev *apr_tal_open(uint32_t svc, uint32_t dest,
-			uint32_t dl, apr_svc_cb_fn func, void *priv);
+                                    uint32_t dl, apr_svc_cb_fn func, void *priv);
 int apr_tal_write(struct apr_svc_ch_dev *apr_ch, void *data, int len);
 int apr_tal_close(struct apr_svc_ch_dev *apr_ch);
 struct apr_svc_ch_dev {
-	struct smd_channel *ch;
-	spinlock_t         lock;
-	spinlock_t         w_lock;
-	struct mutex       m_lock;
-	apr_svc_cb_fn      func;
-	char               data[APR_MAX_BUF];
-	wait_queue_head_t  wait;
-	void               *priv;
-	uint32_t           smd_state;
-	wait_queue_head_t  dest;
-	uint32_t           dest_state;
+    struct smd_channel *ch;
+    spinlock_t         lock;
+    spinlock_t         w_lock;
+    struct mutex       m_lock;
+    apr_svc_cb_fn      func;
+    char               data[APR_MAX_BUF];
+    wait_queue_head_t  wait;
+    void               *priv;
+    uint32_t           smd_state;
+    wait_queue_head_t  dest;
+    uint32_t           dest_state;
 };
 
 #endif

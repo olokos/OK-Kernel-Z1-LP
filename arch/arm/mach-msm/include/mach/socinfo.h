@@ -97,67 +97,67 @@
 #define PLATFORM_SUBTYPE_SGLTE	6
 
 enum msm_cpu {
-	MSM_CPU_UNKNOWN = 0,
-	MSM_CPU_7X01,
-	MSM_CPU_7X25,
-	MSM_CPU_7X27,
-	MSM_CPU_8X50,
-	MSM_CPU_8X50A,
-	MSM_CPU_7X30,
-	MSM_CPU_8X55,
-	MSM_CPU_8X60,
-	MSM_CPU_8960,
-	MSM_CPU_8960AB,
-	MSM_CPU_7X27A,
-	FSM_CPU_9XXX,
-	MSM_CPU_7X25A,
-	MSM_CPU_7X25AA,
-	MSM_CPU_7X25AB,
-	MSM_CPU_8064,
-	MSM_CPU_8064AB,
-	MSM_CPU_8064AA,
-	MSM_CPU_8930,
-	MSM_CPU_8930AA,
-	MSM_CPU_8930AB,
-	MSM_CPU_7X27AA,
-	MSM_CPU_9615,
-	MSM_CPU_8974,
-	MSM_CPU_8974PRO_AA,
-	MSM_CPU_8974PRO_AB,
-	MSM_CPU_8974PRO_AC,
-	MSM_CPU_8627,
-	MSM_CPU_8625,
-	MSM_CPU_9625,
-	MSM_CPU_8092,
-	MSM_CPU_8226,
-	MSM_CPU_8610,
-	MSM_CPU_8625Q,
-	MSM_CPU_8084,
-	MSM_CPU_KRYPTON,
-	FSM_CPU_9900,
-	MSM_CPU_SAMARIUM,
+    MSM_CPU_UNKNOWN = 0,
+    MSM_CPU_7X01,
+    MSM_CPU_7X25,
+    MSM_CPU_7X27,
+    MSM_CPU_8X50,
+    MSM_CPU_8X50A,
+    MSM_CPU_7X30,
+    MSM_CPU_8X55,
+    MSM_CPU_8X60,
+    MSM_CPU_8960,
+    MSM_CPU_8960AB,
+    MSM_CPU_7X27A,
+    FSM_CPU_9XXX,
+    MSM_CPU_7X25A,
+    MSM_CPU_7X25AA,
+    MSM_CPU_7X25AB,
+    MSM_CPU_8064,
+    MSM_CPU_8064AB,
+    MSM_CPU_8064AA,
+    MSM_CPU_8930,
+    MSM_CPU_8930AA,
+    MSM_CPU_8930AB,
+    MSM_CPU_7X27AA,
+    MSM_CPU_9615,
+    MSM_CPU_8974,
+    MSM_CPU_8974PRO_AA,
+    MSM_CPU_8974PRO_AB,
+    MSM_CPU_8974PRO_AC,
+    MSM_CPU_8627,
+    MSM_CPU_8625,
+    MSM_CPU_9625,
+    MSM_CPU_8092,
+    MSM_CPU_8226,
+    MSM_CPU_8610,
+    MSM_CPU_8625Q,
+    MSM_CPU_8084,
+    MSM_CPU_KRYPTON,
+    FSM_CPU_9900,
+    MSM_CPU_SAMARIUM,
 };
 
 struct msm_soc_info {
-	enum msm_cpu generic_soc_type;
-	char *soc_id_string;
+    enum msm_cpu generic_soc_type;
+    char *soc_id_string;
 };
 
 enum pmic_model {
-	PMIC_MODEL_PM8058	= 13,
-	PMIC_MODEL_PM8028	= 14,
-	PMIC_MODEL_PM8901	= 15,
-	PMIC_MODEL_PM8027	= 16,
-	PMIC_MODEL_ISL_9519	= 17,
-	PMIC_MODEL_PM8921	= 18,
-	PMIC_MODEL_PM8018	= 19,
-	PMIC_MODEL_PM8015	= 20,
-	PMIC_MODEL_PM8014	= 21,
-	PMIC_MODEL_PM8821	= 22,
-	PMIC_MODEL_PM8038	= 23,
-	PMIC_MODEL_PM8922	= 24,
-	PMIC_MODEL_PM8917	= 25,
-	PMIC_MODEL_UNKNOWN	= 0xFFFFFFFF
+    PMIC_MODEL_PM8058	= 13,
+    PMIC_MODEL_PM8028	= 14,
+    PMIC_MODEL_PM8901	= 15,
+    PMIC_MODEL_PM8027	= 16,
+    PMIC_MODEL_ISL_9519	= 17,
+    PMIC_MODEL_PM8921	= 18,
+    PMIC_MODEL_PM8018	= 19,
+    PMIC_MODEL_PM8015	= 20,
+    PMIC_MODEL_PM8014	= 21,
+    PMIC_MODEL_PM8821	= 22,
+    PMIC_MODEL_PM8038	= 23,
+    PMIC_MODEL_PM8922	= 24,
+    PMIC_MODEL_PM8917	= 25,
+    PMIC_MODEL_UNKNOWN	= 0xFFFFFFFF
 };
 
 enum msm_cpu socinfo_get_msm_cpu(void);
@@ -178,382 +178,346 @@ const int cpu_is_krait_v1(void);
 const int cpu_is_krait_v2(void);
 const int cpu_is_krait_v3(void);
 
-static inline int cpu_is_msm7x01(void)
-{
+static inline int cpu_is_msm7x01(void) {
 #ifdef CONFIG_ARCH_MSM7X01A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X01;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X01;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x25(void)
-{
+static inline int cpu_is_msm7x25(void) {
 #ifdef CONFIG_ARCH_MSM7X25
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X25;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X25;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x27(void)
-{
+static inline int cpu_is_msm7x27(void) {
 #if defined(CONFIG_ARCH_MSM7X27) && !defined(CONFIG_ARCH_MSM7X27A)
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X27;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X27;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x27a(void)
-{
+static inline int cpu_is_msm7x27a(void) {
 #ifdef CONFIG_ARCH_MSM7X27A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X27A;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X27A;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x27aa(void)
-{
+static inline int cpu_is_msm7x27aa(void) {
 #ifdef CONFIG_ARCH_MSM7X27A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X27AA;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X27AA;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x25a(void)
-{
+static inline int cpu_is_msm7x25a(void) {
 #ifdef CONFIG_ARCH_MSM7X27A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X25A;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X25A;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x25aa(void)
-{
+static inline int cpu_is_msm7x25aa(void) {
 #ifdef CONFIG_ARCH_MSM7X27A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X25AA;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X25AA;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x25ab(void)
-{
+static inline int cpu_is_msm7x25ab(void) {
 #ifdef CONFIG_ARCH_MSM7X27A
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X25AB;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X25AB;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm7x30(void)
-{
+static inline int cpu_is_msm7x30(void) {
 #ifdef CONFIG_ARCH_MSM7X30
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_7X30;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_7X30;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_qsd8x50(void)
-{
+static inline int cpu_is_qsd8x50(void) {
 #ifdef CONFIG_ARCH_QSD8X50
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8X50;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8X50;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8x55(void)
-{
+static inline int cpu_is_msm8x55(void) {
 #ifdef CONFIG_ARCH_MSM7X30
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8X55;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8X55;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8x60(void)
-{
+static inline int cpu_is_msm8x60(void) {
 #ifdef CONFIG_ARCH_MSM8X60
-	return read_msm_cpu_type() == MSM_CPU_8X60;
+    return read_msm_cpu_type() == MSM_CPU_8X60;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8960(void)
-{
+static inline int cpu_is_msm8960(void) {
 #ifdef CONFIG_ARCH_MSM8960
-	return read_msm_cpu_type() == MSM_CPU_8960;
+    return read_msm_cpu_type() == MSM_CPU_8960;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8960ab(void)
-{
+static inline int cpu_is_msm8960ab(void) {
 #ifdef CONFIG_ARCH_MSM8960
-	return read_msm_cpu_type() == MSM_CPU_8960AB;
+    return read_msm_cpu_type() == MSM_CPU_8960AB;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_apq8064(void)
-{
+static inline int cpu_is_apq8064(void) {
 #ifdef CONFIG_ARCH_APQ8064
-	return read_msm_cpu_type() == MSM_CPU_8064;
+    return read_msm_cpu_type() == MSM_CPU_8064;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_apq8064ab(void)
-{
+static inline int cpu_is_apq8064ab(void) {
 #ifdef CONFIG_ARCH_APQ8064
-	return read_msm_cpu_type() == MSM_CPU_8064AB;
+    return read_msm_cpu_type() == MSM_CPU_8064AB;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_apq8064aa(void)
-{
+static inline int cpu_is_apq8064aa(void) {
 #ifdef CONFIG_ARCH_APQ8064
-	return read_msm_cpu_type() == MSM_CPU_8064AA;
+    return read_msm_cpu_type() == MSM_CPU_8064AA;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8930(void)
-{
+static inline int cpu_is_msm8930(void) {
 #ifdef CONFIG_ARCH_MSM8930
-	return read_msm_cpu_type() == MSM_CPU_8930;
+    return read_msm_cpu_type() == MSM_CPU_8930;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8930aa(void)
-{
+static inline int cpu_is_msm8930aa(void) {
 #ifdef CONFIG_ARCH_MSM8930
-	return read_msm_cpu_type() == MSM_CPU_8930AA;
+    return read_msm_cpu_type() == MSM_CPU_8930AA;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8930ab(void)
-{
+static inline int cpu_is_msm8930ab(void) {
 #ifdef CONFIG_ARCH_MSM8930
-	return read_msm_cpu_type() == MSM_CPU_8930AB;
+    return read_msm_cpu_type() == MSM_CPU_8930AB;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8627(void)
-{
-/* 8930 and 8627 will share the same CONFIG_ARCH type unless otherwise needed */
+static inline int cpu_is_msm8627(void) {
+    /* 8930 and 8627 will share the same CONFIG_ARCH type unless otherwise needed */
 #ifdef CONFIG_ARCH_MSM8930
-	return read_msm_cpu_type() == MSM_CPU_8627;
+    return read_msm_cpu_type() == MSM_CPU_8627;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_fsm9xxx(void)
-{
+static inline int cpu_is_fsm9xxx(void) {
 #ifdef CONFIG_ARCH_FSM9XXX
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == FSM_CPU_9XXX;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == FSM_CPU_9XXX;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm9615(void)
-{
+static inline int cpu_is_msm9615(void) {
 #ifdef CONFIG_ARCH_MSM9615
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_9615;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_9615;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8625(void)
-{
+static inline int cpu_is_msm8625(void) {
 #ifdef CONFIG_ARCH_MSM8625
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8625;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8625;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8974(void)
-{
+static inline int cpu_is_msm8974(void) {
 #ifdef CONFIG_ARCH_MSM8974
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8974;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8974;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8974pro_aa(void)
-{
+static inline int cpu_is_msm8974pro_aa(void) {
 #ifdef CONFIG_ARCH_MSM8974
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8974PRO_AA;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8974PRO_AA;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8974pro_ab(void)
-{
+static inline int cpu_is_msm8974pro_ab(void) {
 #ifdef CONFIG_ARCH_MSM8974
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8974PRO_AB;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8974PRO_AB;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8974pro_ac(void)
-{
+static inline int cpu_is_msm8974pro_ac(void) {
 #ifdef CONFIG_ARCH_MSM8974
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8974PRO_AC;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8974PRO_AC;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_mpq8092(void)
-{
+static inline int cpu_is_mpq8092(void) {
 #ifdef CONFIG_ARCH_MPQ8092
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8092;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8092;
 #else
-	return 0;
+    return 0;
 #endif
 
 }
 
-static inline int cpu_is_msm8226(void)
-{
+static inline int cpu_is_msm8226(void) {
 #ifdef CONFIG_ARCH_MSM8226
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8226;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8226;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8610(void)
-{
+static inline int cpu_is_msm8610(void) {
 #ifdef CONFIG_ARCH_MSM8610
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8610;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8610;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int cpu_is_msm8625q(void)
-{
+static inline int cpu_is_msm8625q(void) {
 #ifdef CONFIG_ARCH_MSM8625
-	enum msm_cpu cpu = socinfo_get_msm_cpu();
+    enum msm_cpu cpu = socinfo_get_msm_cpu();
 
-	BUG_ON(cpu == MSM_CPU_UNKNOWN);
-	return cpu == MSM_CPU_8625Q;
+    BUG_ON(cpu == MSM_CPU_UNKNOWN);
+    return cpu == MSM_CPU_8625Q;
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int soc_class_is_msm8960(void)
-{
-	return cpu_is_msm8960() || cpu_is_msm8960ab();
+static inline int soc_class_is_msm8960(void) {
+    return cpu_is_msm8960() || cpu_is_msm8960ab();
 }
 
-static inline int soc_class_is_apq8064(void)
-{
-	return cpu_is_apq8064() || cpu_is_apq8064ab() || cpu_is_apq8064aa();
+static inline int soc_class_is_apq8064(void) {
+    return cpu_is_apq8064() || cpu_is_apq8064ab() || cpu_is_apq8064aa();
 }
 
-static inline int soc_class_is_msm8930(void)
-{
-	return cpu_is_msm8930() || cpu_is_msm8930aa() || cpu_is_msm8930ab() ||
-	       cpu_is_msm8627();
+static inline int soc_class_is_msm8930(void) {
+    return cpu_is_msm8930() || cpu_is_msm8930aa() || cpu_is_msm8930ab() ||
+           cpu_is_msm8627();
 }
 
-static inline int soc_class_is_msm8974(void)
-{
-	return cpu_is_msm8974() || cpu_is_msm8974pro_aa() ||
-	       cpu_is_msm8974pro_ab() || cpu_is_msm8974pro_ac();
+static inline int soc_class_is_msm8974(void) {
+    return cpu_is_msm8974() || cpu_is_msm8974pro_aa() ||
+           cpu_is_msm8974pro_ab() || cpu_is_msm8974pro_ac();
 }
 
 #endif

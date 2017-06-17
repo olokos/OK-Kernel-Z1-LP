@@ -58,8 +58,7 @@
 static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
         void *pContext,
         tANI_U32 oemDataReqID,
-        eOemDataReqStatus oemDataReqStatus)
-{
+        eOemDataReqStatus oemDataReqStatus) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     struct net_device *dev = (struct net_device *) pContext;
     union iwreq_data wrqu;
@@ -71,18 +70,13 @@ static eHalStatus hdd_OemDataReqCallback(tHalHandle hHal,
     //now if the status is success, then send an event up
     //so that the application can request for the data
     //else no need to send the event up
-    if(oemDataReqStatus == eOEM_DATA_REQ_FAILURE)
-    {
+    if(oemDataReqStatus == eOEM_DATA_REQ_FAILURE) {
         snprintf(buffer, IW_CUSTOM_MAX, "QCOM: OEM-DATA-REQ-FAILED");
         hddLog(LOGW, "%s: oem data req %d failed", __func__, oemDataReqID);
-    }
-    else if(oemDataReqStatus == eOEM_DATA_REQ_INVALID_MODE)
-    {
+    } else if(oemDataReqStatus == eOEM_DATA_REQ_INVALID_MODE) {
         snprintf(buffer, IW_CUSTOM_MAX, "QCOM: OEM-DATA-REQ-INVALID-MODE");
         hddLog(LOGW, "%s: oem data req %d failed because the driver is in invalid mode (IBSS|BTAMP|AP)", __func__, oemDataReqID);
-    }
-    else
-    {
+    } else {
         snprintf(buffer, IW_CUSTOM_MAX, "QCOM: OEM-DATA-REQ-SUCCESS");
         //everything went alright
     }
@@ -115,8 +109,7 @@ int iw_get_oem_data_rsp(
     struct net_device *dev,
     struct iw_request_info *info,
     union iwreq_data *wrqu,
-    char *extra)
-{
+    char *extra) {
     int                                   rc = 0;
     eHalStatus                            status;
     struct iw_oem_data_rsp*               pHddOemDataRsp;
@@ -124,39 +117,30 @@ int iw_get_oem_data_rsp(
 
     hdd_adapter_t *pAdapter = (netdev_priv(dev));
 
-    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
-    {
+    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s:LOGP in Progress. Ignore!!!",__func__);
         return -EBUSY;
     }
 
-    do
-    {
+    do {
         //get the oem data response from sme
         status = sme_getOemDataRsp(WLAN_HDD_GET_HAL_CTX(pAdapter), &pSmeOemDataRsp);
-        if (status != eHAL_STATUS_SUCCESS)
-        {
+        if (status != eHAL_STATUS_SUCCESS) {
             hddLog(LOGE, "%s: failed in sme_getOemDataRsp", __func__);
             rc = -EIO;
             break;
-        }
-        else
-        {
-            if (pSmeOemDataRsp != NULL)
-            {
+        } else {
+            if (pSmeOemDataRsp != NULL) {
                 pHddOemDataRsp = (struct iw_oem_data_rsp*)(extra);
                 vos_mem_copy(pHddOemDataRsp->oemDataRsp, pSmeOemDataRsp->oemDataRsp, OEM_DATA_RSP_SIZE);
-            }
-            else
-            {
+            } else {
                 hddLog(LOGE, "%s: pSmeOemDataRsp = NULL", __func__);
                 rc = -EIO;
                 break;
             }
         }
-    }
-    while(0);
+    } while(0);
 
     return rc;
 }
@@ -181,8 +165,7 @@ int iw_set_oem_data_req(
     struct net_device *dev,
     struct iw_request_info *info,
     union iwreq_data *wrqu,
-    char *extra)
-{
+    char *extra) {
     int rc = 0;
     eHalStatus status = eHAL_STATUS_SUCCESS;
     struct iw_oem_data_req *pOemDataReq = NULL;
@@ -193,22 +176,18 @@ int iw_set_oem_data_req(
     hdd_adapter_t *pAdapter = (netdev_priv(dev));
     hdd_wext_state_t *pwextBuf = WLAN_HDD_GET_WEXT_STATE_PTR(pAdapter);
 
-    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
-    {
+    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s:LOGP in Progress. Ignore!!!",__func__);
         return -EBUSY;
     }
 
-    do
-    {
-        if (NULL != wrqu->data.pointer)
-        {
+    do {
+        if (NULL != wrqu->data.pointer) {
             pOemDataReq = (struct iw_oem_data_req *)wrqu->data.pointer;
         }
 
-        if (pOemDataReq == NULL)
-        {
+        if (pOemDataReq == NULL) {
             hddLog(LOGE, "in %s oemDataReq == NULL", __func__);
             rc = -EIO;
             break;
@@ -217,8 +196,7 @@ int iw_set_oem_data_req(
         vos_mem_zero(&oemDataReqConfig, sizeof(tOemDataReqConfig));
 
         if (copy_from_user((&oemDataReqConfig)->oemDataReq,
-                           pOemDataReq->oemDataReq, OEM_DATA_REQ_SIZE))
-        {
+                           pOemDataReq->oemDataReq, OEM_DATA_REQ_SIZE)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                       "%s: copy_from_user() failed!", __func__);
             rc = -EFAULT;
@@ -231,8 +209,7 @@ int iw_set_oem_data_req(
                                 &oemDataReqID,
                                 &hdd_OemDataReqCallback,
                                 dev);
-        if (status != eHAL_STATUS_SUCCESS)
-        {
+        if (status != eHAL_STATUS_SUCCESS) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: sme_OemDataReq status %d", __func__, status);
             rc = -EFAULT;
@@ -242,8 +219,7 @@ int iw_set_oem_data_req(
         pwextBuf->oemDataReqID = oemDataReqID;
         pwextBuf->oemDataReqInProgress = TRUE;
 
-    }
-    while(0);
+    } while(0);
 
     return rc;
 }

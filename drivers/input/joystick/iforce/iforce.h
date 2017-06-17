@@ -63,10 +63,10 @@
 #define FF_MODCORE_CNT		6
 
 struct iforce_core_effect {
-	/* Information about where modifiers are stored in the device's memory */
-	struct resource mod1_chunk;
-	struct resource mod2_chunk;
-	unsigned long flags[BITS_TO_LONGS(FF_MODCORE_CNT)];
+    /* Information about where modifiers are stored in the device's memory */
+    struct resource mod1_chunk;
+    struct resource mod2_chunk;
+    unsigned long flags[BITS_TO_LONGS(FF_MODCORE_CNT)];
 };
 
 #define FF_CMD_EFFECT		0x010e
@@ -90,45 +90,45 @@ struct iforce_core_effect {
 #define IFORCE_XMIT_AGAIN	1
 
 struct iforce_device {
-	u16 idvendor;
-	u16 idproduct;
-	char *name;
-	signed short *btn;
-	signed short *abs;
-	signed short *ff;
+    u16 idvendor;
+    u16 idproduct;
+    char *name;
+    signed short *btn;
+    signed short *abs;
+    signed short *ff;
 };
 
 struct iforce {
-	struct input_dev *dev;		/* Input device interface */
-	struct iforce_device *type;
-	int bus;
+    struct input_dev *dev;		/* Input device interface */
+    struct iforce_device *type;
+    int bus;
 
-	unsigned char data[IFORCE_MAX_LENGTH];
-	unsigned char edata[IFORCE_MAX_LENGTH];
-	u16 ecmd;
-	u16 expect_packet;
+    unsigned char data[IFORCE_MAX_LENGTH];
+    unsigned char edata[IFORCE_MAX_LENGTH];
+    u16 ecmd;
+    u16 expect_packet;
 
 #ifdef CONFIG_JOYSTICK_IFORCE_232
-	struct serio *serio;		/* RS232 transfer */
-	int idx, pkt, len, id;
-	unsigned char csum;
+    struct serio *serio;		/* RS232 transfer */
+    int idx, pkt, len, id;
+    unsigned char csum;
 #endif
 #ifdef CONFIG_JOYSTICK_IFORCE_USB
-	struct usb_device *usbdev;	/* USB transfer */
-	struct urb *irq, *out, *ctrl;
-	struct usb_ctrlrequest cr;
+    struct usb_device *usbdev;	/* USB transfer */
+    struct urb *irq, *out, *ctrl;
+    struct usb_ctrlrequest cr;
 #endif
-	spinlock_t xmit_lock;
-	/* Buffer used for asynchronous sending of bytes to the device */
-	struct circ_buf xmit;
-	unsigned char xmit_data[XMIT_SIZE];
-	unsigned long xmit_flags[1];
+    spinlock_t xmit_lock;
+    /* Buffer used for asynchronous sending of bytes to the device */
+    struct circ_buf xmit;
+    unsigned char xmit_data[XMIT_SIZE];
+    unsigned long xmit_flags[1];
 
-					/* Force Feedback */
-	wait_queue_head_t wait;
-	struct resource device_memory;
-	struct iforce_core_effect core_effects[IFORCE_EFFECTS_MAX];
-	struct mutex mem_mutex;
+    /* Force Feedback */
+    wait_queue_head_t wait;
+    struct resource device_memory;
+    struct iforce_core_effect core_effects[IFORCE_EFFECTS_MAX];
+    struct mutex mem_mutex;
 };
 
 /* Get hi and low bytes of a 16-bits int */

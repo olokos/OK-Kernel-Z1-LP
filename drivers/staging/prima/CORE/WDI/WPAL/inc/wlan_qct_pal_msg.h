@@ -56,8 +56,7 @@ typedef struct swpt_msg wpt_msg;
 
 typedef void (*wpal_msg_callback)(wpt_msg *pMsg);
 
-struct swpt_msg
-{
+struct swpt_msg {
     wpt_uint16 type;
     wpt_uint16 reserved;
     void *ptr;

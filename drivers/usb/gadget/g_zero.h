@@ -16,7 +16,7 @@ extern const struct usb_descriptor_header *otg_desc[];
 struct usb_request *alloc_ep_req(struct usb_ep *ep);
 void free_ep_req(struct usb_ep *ep, struct usb_request *req);
 void disable_endpoints(struct usb_composite_dev *cdev,
-		struct usb_ep *in, struct usb_ep *out);
+                       struct usb_ep *in, struct usb_ep *out);
 
 /* configuration-specific linkup */
 int sourcesink_add(struct usb_composite_dev *cdev, bool autoresume);

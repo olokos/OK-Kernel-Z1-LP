@@ -28,14 +28,13 @@
 #include <asm/machvec.h>
 #include <mach/sysasic.h>
 
-static void __init dreamcast_setup(char **cmdline_p)
-{
-	board_time_init = aica_time_init;
+static void __init dreamcast_setup(char **cmdline_p) {
+    board_time_init = aica_time_init;
 }
 
 static struct sh_machine_vector mv_dreamcast __initmv = {
-	.mv_name		= "Sega Dreamcast",
-	.mv_setup		= dreamcast_setup,
-	.mv_irq_demux		= systemasic_irq_demux,
-	.mv_init_irq		= systemasic_irq_init,
+    .mv_name		= "Sega Dreamcast",
+    .mv_setup		= dreamcast_setup,
+    .mv_irq_demux		= systemasic_irq_demux,
+    .mv_init_irq		= systemasic_irq_init,
 };

@@ -55,35 +55,35 @@
  * bfin dma registers layout
  */
 struct bfin_dma_regs {
-	u32 next_desc_ptr;
-	u32 start_addr;
-	__BFP(config);
-	u32 __pad0;
-	__BFP(x_count);
-	__BFP(x_modify);
-	__BFP(y_count);
-	__BFP(y_modify);
-	u32 curr_desc_ptr;
-	u32 curr_addr;
-	__BFP(irq_status);
-	__BFP(peripheral_map);
-	__BFP(curr_x_count);
-	u32 __pad1;
-	__BFP(curr_y_count);
-	u32 __pad2;
+    u32 next_desc_ptr;
+    u32 start_addr;
+    __BFP(config);
+    u32 __pad0;
+    __BFP(x_count);
+    __BFP(x_modify);
+    __BFP(y_count);
+    __BFP(y_modify);
+    u32 curr_desc_ptr;
+    u32 curr_addr;
+    __BFP(irq_status);
+    __BFP(peripheral_map);
+    __BFP(curr_x_count);
+    u32 __pad1;
+    __BFP(curr_y_count);
+    u32 __pad2;
 };
 
 /*
  * bfin handshake mdma registers layout
  */
 struct bfin_hmdma_regs {
-	__BFP(control);
-	__BFP(ecinit);
-	__BFP(bcinit);
-	__BFP(ecurgent);
-	__BFP(ecoverflow);
-	__BFP(ecount);
-	__BFP(bcount);
+    __BFP(control);
+    __BFP(ecinit);
+    __BFP(bcinit);
+    __BFP(ecurgent);
+    __BFP(ecoverflow);
+    __BFP(ecount);
+    __BFP(bcount);
 };
 
 #undef __BFP

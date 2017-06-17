@@ -52,7 +52,7 @@ typedef struct tagSUSBCounter {
 
 
 typedef struct tagSDot11Counters {
-  /* unsigned long Length; // Length of structure */
+    /* unsigned long Length; // Length of structure */
     unsigned long long   TransmittedFragmentCount;
     unsigned long long   MulticastTransmittedFrameCount;
     unsigned long long   FailedCount;
@@ -74,12 +74,12 @@ typedef struct tagSDot11Counters {
     unsigned long long   CCMPReplays;
     unsigned long long   CCMPDecryptErrors;
     unsigned long long   FourWayHandshakeFailures;
-  /*
-   * unsigned long long   WEPUndecryptableCount;
-   * unsigned long long   WEPICVErrorCount;
-   * unsigned long long   DecryptSuccessCount;
-   * unsigned long long   DecryptFailureCount;
-   */
+    /*
+     * unsigned long long   WEPUndecryptableCount;
+     * unsigned long long   WEPICVErrorCount;
+     * unsigned long long   DecryptSuccessCount;
+     * unsigned long long   DecryptFailureCount;
+     */
 } SDot11Counters, *PSDot11Counters;
 
 
@@ -89,7 +89,7 @@ typedef struct tagSDot11Counters {
 typedef struct tagSMib2Counter {
     signed long    ifIndex;
     char    ifDescr[256];               // max size 255 plus zero ending
-                                        // e.g. "interface 1"
+    // e.g. "interface 1"
     signed long    ifType;
     signed long    ifMtu;
     DWORD   ifSpeed;
@@ -303,7 +303,7 @@ typedef struct tagSStatCounter {
     DWORD   dwTsrOnceRetry;         // this packet only occur one collision
     DWORD   dwTsrMoreThanOnceRetry; // this packet occur more than one collision
     DWORD   dwTsrRetry;             // this packet has ever occur collision,
-                                         // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
+    // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
     DWORD   dwTsrACKData;
     DWORD   dwTsrErr;
     DWORD   dwAllTsrOK;
@@ -356,14 +356,14 @@ typedef struct tagSStatCounter {
 
     SCustomCounters CustomStat;
 
-       //Tx count:
-  unsigned long TxNoRetryOkCount;         /* success tx no retry ! */
-  unsigned long TxRetryOkCount;           /* success tx but retry ! */
-  unsigned long TxFailCount;              /* fail tx ? */
-      //Rx count:
-  unsigned long RxOkCnt;                  /* success rx ! */
-  unsigned long RxFcsErrCnt;              /* fail rx ? */
-      //statistic
+    //Tx count:
+    unsigned long TxNoRetryOkCount;         /* success tx no retry ! */
+    unsigned long TxRetryOkCount;           /* success tx but retry ! */
+    unsigned long TxFailCount;              /* fail tx ? */
+    //Rx count:
+    unsigned long RxOkCnt;                  /* success rx ! */
+    unsigned long RxFcsErrCnt;              /* fail rx ? */
+    //statistic
     unsigned long SignalStren;
     unsigned long LinkQuality;
 
@@ -378,21 +378,21 @@ typedef struct tagSStatCounter {
 void STAvClearAllCounter(PSStatCounter pStatistic);
 
 void STAvUpdateIsrStatCounter(PSStatCounter pStatistic,
-			      BYTE byIsr0,
-			      BYTE byIsr1);
+                              BYTE byIsr0,
+                              BYTE byIsr1);
 
 void STAvUpdateRDStatCounter(PSStatCounter pStatistic,
-			     BYTE byRSR, BYTE byNewRSR, BYTE byRxSts,
-			     BYTE byRxRate, PBYTE pbyBuffer,
-			     unsigned int cbFrameLength);
+                             BYTE byRSR, BYTE byNewRSR, BYTE byRxSts,
+                             BYTE byRxRate, PBYTE pbyBuffer,
+                             unsigned int cbFrameLength);
 
 void STAvUpdateRDStatCounterEx(PSStatCounter pStatistic,
-			       BYTE byRSR, BYTE byNewRSR, BYTE byRxSts,
-			       BYTE byRxRate, PBYTE pbyBuffer,
-			       unsigned int cbFrameLength);
+                               BYTE byRSR, BYTE byNewRSR, BYTE byRxSts,
+                               BYTE byRxRate, PBYTE pbyBuffer,
+                               unsigned int cbFrameLength);
 
 void STAvUpdateTDStatCounter(PSStatCounter pStatistic, BYTE byPktNum,
-			     BYTE byRate, BYTE byTSR);
+                             BYTE byRate, BYTE byTSR);
 
 void
 STAvUpdate802_11Counter(
@@ -402,7 +402,7 @@ STAvUpdate802_11Counter(
     BYTE                    byRTSFail,
     BYTE                    byACKFail,
     BYTE                    byFCSErr
-    );
+);
 
 void STAvClear802_11Counter(PSDot11Counters p802_11Counter);
 void STAvUpdateUSBCounter(PSUSBCounter pUsbCounter, int ntStatus);

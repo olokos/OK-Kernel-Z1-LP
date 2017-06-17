@@ -26,25 +26,23 @@
  *
  */
 static int ipa_rm_peers_list_get_resource_index(
-		enum ipa_rm_resource_name resource_name)
-{
-	int resource_index = IPA_RM_INDEX_INVALID;
-	if (IPA_RM_RESORCE_IS_PROD(resource_name))
-		resource_index = ipa_rm_prod_index(resource_name);
-	else if (IPA_RM_RESORCE_IS_CONS(resource_name)) {
-		resource_index = ipa_rm_cons_index(resource_name);
-		if (resource_index != IPA_RM_INDEX_INVALID)
-			resource_index =
-				resource_index - IPA_RM_RESOURCE_PROD_MAX;
-	}
+    enum ipa_rm_resource_name resource_name) {
+    int resource_index = IPA_RM_INDEX_INVALID;
+    if (IPA_RM_RESORCE_IS_PROD(resource_name))
+        resource_index = ipa_rm_prod_index(resource_name);
+    else if (IPA_RM_RESORCE_IS_CONS(resource_name)) {
+        resource_index = ipa_rm_cons_index(resource_name);
+        if (resource_index != IPA_RM_INDEX_INVALID)
+            resource_index =
+                resource_index - IPA_RM_RESOURCE_PROD_MAX;
+    }
 
-	return resource_index;
+    return resource_index;
 }
 
 static bool ipa_rm_peers_list_check_index(int index,
-		struct ipa_rm_peers_list *peers_list)
-{
-	return !(index > peers_list->max_peers || index < 0);
+        struct ipa_rm_peers_list *peers_list) {
+    return !(index > peers_list->max_peers || index < 0);
 }
 
 /**
@@ -56,28 +54,27 @@ static bool ipa_rm_peers_list_check_index(int index,
  * Returns: 0 in case of SUCCESS, negative otherwise
  */
 int ipa_rm_peers_list_create(int max_peers,
-		struct ipa_rm_peers_list **peers_list)
-{
-	int result;
-	*peers_list = kzalloc(sizeof(**peers_list), GFP_KERNEL);
-	if (!*peers_list) {
-		result = -ENOMEM;
-		goto bail;
-	}
-	rwlock_init(&(*peers_list)->peers_lock);
-	(*peers_list)->max_peers = max_peers;
-	(*peers_list)->peers = kzalloc((*peers_list)->max_peers *
-				sizeof(struct ipa_rm_resource *), GFP_KERNEL);
-	if (!((*peers_list)->peers)) {
-		result = -ENOMEM;
-		goto list_alloc_fail;
-	}
-	return 0;
+                             struct ipa_rm_peers_list **peers_list) {
+    int result;
+    *peers_list = kzalloc(sizeof(**peers_list), GFP_KERNEL);
+    if (!*peers_list) {
+        result = -ENOMEM;
+        goto bail;
+    }
+    rwlock_init(&(*peers_list)->peers_lock);
+    (*peers_list)->max_peers = max_peers;
+    (*peers_list)->peers = kzalloc((*peers_list)->max_peers *
+                                   sizeof(struct ipa_rm_resource *), GFP_KERNEL);
+    if (!((*peers_list)->peers)) {
+        result = -ENOMEM;
+        goto list_alloc_fail;
+    }
+    return 0;
 
 list_alloc_fail:
-	kfree(*peers_list);
+    kfree(*peers_list);
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -86,12 +83,11 @@ bail:
  * @peers_list: peers list
  *
  */
-void ipa_rm_peers_list_delete(struct ipa_rm_peers_list *peers_list)
-{
-	if (peers_list) {
-		kfree(peers_list->peers);
-		kfree(peers_list);
-	}
+void ipa_rm_peers_list_delete(struct ipa_rm_peers_list *peers_list) {
+    if (peers_list) {
+        kfree(peers_list->peers);
+        kfree(peers_list);
+    }
 }
 
 /**
@@ -102,16 +98,15 @@ void ipa_rm_peers_list_delete(struct ipa_rm_peers_list *peers_list)
  *
  */
 void ipa_rm_peers_list_remove_peer(
-		struct ipa_rm_peers_list *peers_list,
-		enum ipa_rm_resource_name resource_name)
-{
-	if (!peers_list)
-		return;
-	write_lock(&peers_list->peers_lock);
-	peers_list->peers[ipa_rm_peers_list_get_resource_index(
-			resource_name)] = NULL;
-	peers_list->peers_count--;
-	write_unlock(&peers_list->peers_lock);
+    struct ipa_rm_peers_list *peers_list,
+    enum ipa_rm_resource_name resource_name) {
+    if (!peers_list)
+        return;
+    write_lock(&peers_list->peers_lock);
+    peers_list->peers[ipa_rm_peers_list_get_resource_index(
+                          resource_name)] = NULL;
+    peers_list->peers_count--;
+    write_unlock(&peers_list->peers_lock);
 }
 
 /**
@@ -122,17 +117,16 @@ void ipa_rm_peers_list_remove_peer(
  *
  */
 void ipa_rm_peers_list_add_peer(
-		struct ipa_rm_peers_list *peers_list,
-		struct ipa_rm_resource *resource)
-{
-	if (!peers_list || !resource)
-		return;
-	read_lock(&peers_list->peers_lock);
-	peers_list->peers[ipa_rm_peers_list_get_resource_index(
-			resource->name)] =
-			resource;
-	peers_list->peers_count++;
-	read_unlock(&peers_list->peers_lock);
+    struct ipa_rm_peers_list *peers_list,
+    struct ipa_rm_resource *resource) {
+    if (!peers_list || !resource)
+        return;
+    read_lock(&peers_list->peers_lock);
+    peers_list->peers[ipa_rm_peers_list_get_resource_index(
+                          resource->name)] =
+                              resource;
+    peers_list->peers_count++;
+    read_unlock(&peers_list->peers_lock);
 }
 
 /**
@@ -143,17 +137,16 @@ void ipa_rm_peers_list_add_peer(
  *
  * Returns: true if the list is empty, false otherwise
  */
-bool ipa_rm_peers_list_is_empty(struct ipa_rm_peers_list *peers_list)
-{
-	bool result = true;
-	if (!peers_list)
-		goto bail;
-	read_lock(&peers_list->peers_lock);
-	if (peers_list->peers_count > 0)
-		result = false;
-	read_unlock(&peers_list->peers_lock);
+bool ipa_rm_peers_list_is_empty(struct ipa_rm_peers_list *peers_list) {
+    bool result = true;
+    if (!peers_list)
+        goto bail;
+    read_lock(&peers_list->peers_lock);
+    if (peers_list->peers_count > 0)
+        result = false;
+    read_unlock(&peers_list->peers_lock);
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -165,17 +158,16 @@ bail:
  * Returns: true if the list has exactly one peer, false otherwise
  */
 bool ipa_rm_peers_list_has_last_peer(
-		struct ipa_rm_peers_list *peers_list)
-{
-	bool result = false;
-	if (!peers_list)
-		goto bail;
-	read_lock(&peers_list->peers_lock);
-	if (peers_list->peers_count == 1)
-		result = true;
-	read_unlock(&peers_list->peers_lock);
+    struct ipa_rm_peers_list *peers_list) {
+    bool result = false;
+    if (!peers_list)
+        goto bail;
+    read_lock(&peers_list->peers_lock);
+    if (peers_list->peers_count == 1)
+        result = true;
+    read_unlock(&peers_list->peers_lock);
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -190,27 +182,26 @@ bail:
  *
  */
 bool ipa_rm_peers_list_check_dependency(
-		struct ipa_rm_peers_list *resource_peers,
-		enum ipa_rm_resource_name resource_name,
-		struct ipa_rm_peers_list *depends_on_peers,
-		enum ipa_rm_resource_name depends_on_name)
-{
-	bool result = false;
-	if (!resource_peers || !depends_on_peers)
-		return result;
-	read_lock(&resource_peers->peers_lock);
-	if (resource_peers->peers[ipa_rm_peers_list_get_resource_index(
-			depends_on_name)] != NULL)
-		result = true;
-	read_unlock(&resource_peers->peers_lock);
+    struct ipa_rm_peers_list *resource_peers,
+    enum ipa_rm_resource_name resource_name,
+    struct ipa_rm_peers_list *depends_on_peers,
+    enum ipa_rm_resource_name depends_on_name) {
+    bool result = false;
+    if (!resource_peers || !depends_on_peers)
+        return result;
+    read_lock(&resource_peers->peers_lock);
+    if (resource_peers->peers[ipa_rm_peers_list_get_resource_index(
+                                  depends_on_name)] != NULL)
+        result = true;
+    read_unlock(&resource_peers->peers_lock);
 
-	read_lock(&depends_on_peers->peers_lock);
-	if (depends_on_peers->peers[ipa_rm_peers_list_get_resource_index(
-						resource_name)] != NULL)
-		result = true;
-	read_unlock(&depends_on_peers->peers_lock);
+    read_lock(&depends_on_peers->peers_lock);
+    if (depends_on_peers->peers[ipa_rm_peers_list_get_resource_index(
+                                    resource_name)] != NULL)
+        result = true;
+    read_unlock(&depends_on_peers->peers_lock);
 
-	return result;
+    return result;
 }
 
 /**
@@ -222,16 +213,15 @@ bool ipa_rm_peers_list_check_dependency(
  * Returns: the resource if found, NULL otherwise
  */
 struct ipa_rm_resource *ipa_rm_peers_list_get_resource(int resource_index,
-		struct ipa_rm_peers_list *resource_peers)
-{
-	struct ipa_rm_resource *result = NULL;
-	if (!ipa_rm_peers_list_check_index(resource_index, resource_peers))
-		goto bail;
-	read_lock(&resource_peers->peers_lock);
-	result = resource_peers->peers[resource_index];
-	read_unlock(&resource_peers->peers_lock);
+        struct ipa_rm_peers_list *resource_peers) {
+    struct ipa_rm_resource *result = NULL;
+    if (!ipa_rm_peers_list_check_index(resource_index, resource_peers))
+        goto bail;
+    read_lock(&resource_peers->peers_lock);
+    result = resource_peers->peers[resource_index];
+    read_unlock(&resource_peers->peers_lock);
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -241,7 +231,6 @@ bail:
  *
  * Returns: the size of the peers list
  */
-int ipa_rm_peers_list_get_size(struct ipa_rm_peers_list *peers_list)
-{
-	return peers_list->max_peers;
+int ipa_rm_peers_list_get_size(struct ipa_rm_peers_list *peers_list) {
+    return peers_list->max_peers;
 }

@@ -187,17 +187,17 @@ int __dummy_1,__dummy_2; \
 
 /* Command Status Register definitions */
 
-  /* reset state interrupts */
+/* reset state interrupts */
 #define CSR_RESET    0x00
 #define CSR_RESET_AF    0x01
 
-  /* successful completion interrupts */
+/* successful completion interrupts */
 #define CSR_RESELECT    0x10
 #define CSR_SELECT      0x11
 #define CSR_SEL_XFER_DONE  0x16
 #define CSR_XFER_DONE      0x18
 
-  /* paused or aborted interrupts */
+/* paused or aborted interrupts */
 #define CSR_MSGIN    0x20
 #define CSR_SDP         0x21
 #define CSR_SEL_ABORT      0x22
@@ -205,7 +205,7 @@ int __dummy_1,__dummy_2; \
 #define CSR_RESEL_ABORT_AM 0x27
 #define CSR_ABORT    0x28
 
-  /* terminated interrupts */
+/* terminated interrupts */
 #define CSR_INVALID     0x40
 #define CSR_UNEXP_DISC     0x41
 #define CSR_TIMEOUT     0x42
@@ -214,13 +214,13 @@ int __dummy_1,__dummy_2; \
 #define CSR_BAD_STATUS     0x45
 #define CSR_UNEXP    0x48
 
-  /* service required interrupts */
+/* service required interrupts */
 #define CSR_RESEL    0x80
 #define CSR_RESEL_AM    0x81
 #define CSR_DISC     0x85
 #define CSR_SRV_REQ     0x88
 
-   /* Own ID/CDB Size register */
+/* Own ID/CDB Size register */
 #define OWNID_EAF    0x08
 #define OWNID_EHP    0x10
 #define OWNID_RAF    0x20
@@ -228,7 +228,7 @@ int __dummy_1,__dummy_2; \
 #define OWNID_FS_12  0x40
 #define OWNID_FS_16  0x80
 
-   /* Control register */
+/* Control register */
 #define CTRL_HSP     0x01
 #define CTRL_HA      0x02
 #define CTRL_IDI     0x04
@@ -239,19 +239,19 @@ int __dummy_1,__dummy_2; \
 #define CTRL_BUS     0x40
 #define CTRL_DMA     0x80
 
-   /* Timeout Period register */
+/* Timeout Period register */
 #define TIMEOUT_PERIOD_VALUE  20    /* results in 200 ms. */
 
-   /* Synchronous Transfer Register */
+/* Synchronous Transfer Register */
 #define STR_FSS      0x80
 
-   /* Destination ID register */
+/* Destination ID register */
 #define DSTID_DPD    0x40
 #define DATA_OUT_DIR 0
 #define DATA_IN_DIR  1
 #define DSTID_SCC    0x80
 
-   /* Source ID register */
+/* Source ID register */
 #define SRCID_MASK   0x07
 #define SRCID_SIV    0x08
 #define SRCID_DSP    0x20
@@ -270,9 +270,9 @@ int __dummy_1,__dummy_2; \
 #define OPTIMUM_SX_OFF     12    /* size of in2000 fifo */
 
 struct sx_period {
-   unsigned int   period_ns;
-   uchar          reg_value;
-   };
+    unsigned int   period_ns;
+    uchar          reg_value;
+};
 
 
 struct IN2000_hostdata {
@@ -309,7 +309,7 @@ struct IN2000_hostdata {
     unsigned long    disc_done_cnt[8]; /* # of disconnects done per target*/
 #endif
 #endif
-    };
+};
 
 
 /* defines for hostdata->chip */
@@ -400,7 +400,7 @@ static int in2000_queuecommand(struct Scsi_Host *, struct scsi_cmnd *);
 static int in2000_abort(Scsi_Cmnd *);
 static void in2000_setup(char *, int *) in2000__INIT;
 static int in2000_biosparam(struct scsi_device *, struct block_device *,
-		sector_t, int *);
+                            sector_t, int *);
 static int in2000_bus_reset(Scsi_Cmnd *);
 
 

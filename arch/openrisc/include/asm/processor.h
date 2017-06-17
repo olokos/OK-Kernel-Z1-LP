@@ -72,8 +72,7 @@ struct thread_struct {
 #define task_pt_regs(task) user_regs(task_thread_info(task))
 #define current_regs() user_regs(current_thread_info())
 
-extern inline void prepare_to_copy(struct task_struct *tsk)
-{
+extern inline void prepare_to_copy(struct task_struct *tsk) {
 }
 
 #define INIT_SP         (sizeof(init_stack) + (unsigned long) &init_stack)
@@ -95,9 +94,8 @@ unsigned long get_wchan(struct task_struct *p);
  * Free current thread data structures etc..
  */
 
-extern inline void exit_thread(void)
-{
-	/* Nothing needs to be done.  */
+extern inline void exit_thread(void) {
+    /* Nothing needs to be done.  */
 }
 
 /*

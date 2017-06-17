@@ -1,11 +1,11 @@
 #include <net/ieee80211_radiotap.h>
 
 struct tx_radiotap_hdr {
-	struct ieee80211_radiotap_header hdr;
-	u8 rate;
-	u8 txpower;
-	u8 rts_retries;
-	u8 data_retries;
+    struct ieee80211_radiotap_header hdr;
+    u8 rate;
+    u8 txpower;
+    u8 rts_retries;
+    u8 data_retries;
 } __packed;
 
 #define TX_RADIOTAP_PRESENT (				\
@@ -30,10 +30,10 @@ struct tx_radiotap_hdr {
 #define IEEE80211_FC_DSTODS          0x0300
 
 struct rx_radiotap_hdr {
-	struct ieee80211_radiotap_header hdr;
-	u8 flags;
-	u8 rate;
-	u8 antsignal;
+    struct ieee80211_radiotap_header hdr;
+    u8 flags;
+    u8 rate;
+    u8 antsignal;
 } __packed;
 
 #define RX_RADIOTAP_PRESENT (			\

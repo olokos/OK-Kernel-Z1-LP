@@ -9,9 +9,8 @@
 
 #define pcibios_assign_all_busses()	0
 
-static inline void pcibios_penalize_isa_irq(int irq, int active)
-{
-	/* We don't do dynamic PCI IRQ allocation */
+static inline void pcibios_penalize_isa_irq(int irq, int active) {
+    /* We don't do dynamic PCI IRQ allocation */
 }
 
 #define PCI_DMA_BUS_IS_PHYS	(1)

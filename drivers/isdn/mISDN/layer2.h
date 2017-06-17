@@ -21,76 +21,76 @@
 #define MAX_WINDOW	8
 
 struct manager {
-	struct mISDNchannel	ch;
-	struct mISDNchannel	bcast;
-	u_long			options;
-	struct list_head	layer2;
-	rwlock_t		lock;
-	struct FsmInst		deact;
-	struct FsmTimer		datimer;
-	struct sk_buff_head	sendq;
-	struct mISDNchannel	*up;
-	u_int			nextid;
-	u_int			lastid;
+    struct mISDNchannel	ch;
+    struct mISDNchannel	bcast;
+    u_long			options;
+    struct list_head	layer2;
+    rwlock_t		lock;
+    struct FsmInst		deact;
+    struct FsmTimer		datimer;
+    struct sk_buff_head	sendq;
+    struct mISDNchannel	*up;
+    u_int			nextid;
+    u_int			lastid;
 };
 
 struct teimgr {
-	int			ri;
-	int			rcnt;
-	struct FsmInst		tei_m;
-	struct FsmTimer		timer;
-	int			tval, nval;
-	struct layer2		*l2;
-	struct manager		*mgr;
+    int			ri;
+    int			rcnt;
+    struct FsmInst		tei_m;
+    struct FsmTimer		timer;
+    int			tval, nval;
+    struct layer2		*l2;
+    struct manager		*mgr;
 };
 
 struct laddr {
-	u_char	A;
-	u_char	B;
+    u_char	A;
+    u_char	B;
 };
 
 struct layer2 {
-	struct list_head	list;
-	struct mISDNchannel	ch;
-	u_long			flag;
-	int			id;
-	struct mISDNchannel	*up;
-	signed char		sapi;
-	signed char		tei;
-	struct laddr		addr;
-	u_int			maxlen;
-	struct teimgr		*tm;
-	u_int			vs, va, vr;
-	int			rc;
-	u_int			window;
-	u_int			sow;
-	struct FsmInst		l2m;
-	struct FsmTimer		t200, t203;
-	int			T200, N200, T203;
-	u_int			next_id;
-	u_int			down_id;
-	struct sk_buff		*windowar[MAX_WINDOW];
-	struct sk_buff_head	i_queue;
-	struct sk_buff_head	ui_queue;
-	struct sk_buff_head	down_queue;
-	struct sk_buff_head	tmp_queue;
+    struct list_head	list;
+    struct mISDNchannel	ch;
+    u_long			flag;
+    int			id;
+    struct mISDNchannel	*up;
+    signed char		sapi;
+    signed char		tei;
+    struct laddr		addr;
+    u_int			maxlen;
+    struct teimgr		*tm;
+    u_int			vs, va, vr;
+    int			rc;
+    u_int			window;
+    u_int			sow;
+    struct FsmInst		l2m;
+    struct FsmTimer		t200, t203;
+    int			T200, N200, T203;
+    u_int			next_id;
+    u_int			down_id;
+    struct sk_buff		*windowar[MAX_WINDOW];
+    struct sk_buff_head	i_queue;
+    struct sk_buff_head	ui_queue;
+    struct sk_buff_head	down_queue;
+    struct sk_buff_head	tmp_queue;
 };
 
 enum {
-	ST_L2_1,
-	ST_L2_2,
-	ST_L2_3,
-	ST_L2_4,
-	ST_L2_5,
-	ST_L2_6,
-	ST_L2_7,
-	ST_L2_8,
+    ST_L2_1,
+    ST_L2_2,
+    ST_L2_3,
+    ST_L2_4,
+    ST_L2_5,
+    ST_L2_6,
+    ST_L2_7,
+    ST_L2_8,
 };
 
 #define L2_STATE_COUNT (ST_L2_8 + 1)
 
 extern struct layer2	*create_l2(struct mISDNchannel *, u_int,
-				   u_long, int, int);
+                                   u_long, int, int);
 extern int		tei_l2(struct layer2 *, u_int, u_long arg);
 
 

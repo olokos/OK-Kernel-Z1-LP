@@ -87,26 +87,25 @@
 #include <asm/uaccess.h>
 
 static MGSL_PARAMS default_params = {
-	MGSL_MODE_HDLC,			/* unsigned long mode */
-	0,				/* unsigned char loopback; */
-	HDLC_FLAG_UNDERRUN_ABORT15,	/* unsigned short flags; */
-	HDLC_ENCODING_NRZI_SPACE,	/* unsigned char encoding; */
-	0,				/* unsigned long clock_speed; */
-	0xff,				/* unsigned char addr_filter; */
-	HDLC_CRC_16_CCITT,		/* unsigned short crc_type; */
-	HDLC_PREAMBLE_LENGTH_8BITS,	/* unsigned char preamble_length; */
-	HDLC_PREAMBLE_PATTERN_NONE,	/* unsigned char preamble; */
-	9600,				/* unsigned long data_rate; */
-	8,				/* unsigned char data_bits; */
-	1,				/* unsigned char stop_bits; */
-	ASYNC_PARITY_NONE		/* unsigned char parity; */
+    MGSL_MODE_HDLC,			/* unsigned long mode */
+    0,				/* unsigned char loopback; */
+    HDLC_FLAG_UNDERRUN_ABORT15,	/* unsigned short flags; */
+    HDLC_ENCODING_NRZI_SPACE,	/* unsigned char encoding; */
+    0,				/* unsigned long clock_speed; */
+    0xff,				/* unsigned char addr_filter; */
+    HDLC_CRC_16_CCITT,		/* unsigned short crc_type; */
+    HDLC_PREAMBLE_LENGTH_8BITS,	/* unsigned char preamble_length; */
+    HDLC_PREAMBLE_PATTERN_NONE,	/* unsigned char preamble; */
+    9600,				/* unsigned long data_rate; */
+    8,				/* unsigned char data_bits; */
+    1,				/* unsigned char stop_bits; */
+    ASYNC_PARITY_NONE		/* unsigned char parity; */
 };
 
-typedef struct
-{
-	int count;
-	unsigned char status;
-	char data[1];
+typedef struct {
+    int count;
+    unsigned char status;
+    char data[1];
 } RXBUF;
 
 /* The queue of BH actions to be performed */
@@ -120,14 +119,14 @@ typedef struct
 #define RELEVANT_IFLAG(iflag) (iflag & (IGNBRK|BRKINT|IGNPAR|PARMRK|INPCK))
 
 struct _input_signal_events {
-	int	ri_up;
-	int	ri_down;
-	int	dsr_up;
-	int	dsr_down;
-	int	dcd_up;
-	int	dcd_down;
-	int	cts_up;
-	int	cts_down;
+    int	ri_up;
+    int	ri_down;
+    int	dsr_up;
+    int	dsr_down;
+    int	dcd_up;
+    int	dcd_down;
+    int	cts_up;
+    int	cts_down;
 };
 
 
@@ -136,95 +135,95 @@ struct _input_signal_events {
  */
 
 typedef struct _mgslpc_info {
-	struct tty_port		port;
-	void *if_ptr;	/* General purpose pointer (used by SPPP) */
-	int			magic;
-	int			line;
+    struct tty_port		port;
+    void *if_ptr;	/* General purpose pointer (used by SPPP) */
+    int			magic;
+    int			line;
 
-	struct mgsl_icount	icount;
+    struct mgsl_icount	icount;
 
-	int			timeout;
-	int			x_char;		/* xon/xoff character */
-	unsigned char		read_status_mask;
-	unsigned char		ignore_status_mask;
+    int			timeout;
+    int			x_char;		/* xon/xoff character */
+    unsigned char		read_status_mask;
+    unsigned char		ignore_status_mask;
 
-	unsigned char *tx_buf;
-	int            tx_put;
-	int            tx_get;
-	int            tx_count;
+    unsigned char *tx_buf;
+    int            tx_put;
+    int            tx_get;
+    int            tx_count;
 
-	/* circular list of fixed length rx buffers */
+    /* circular list of fixed length rx buffers */
 
-	unsigned char  *rx_buf;        /* memory allocated for all rx buffers */
-	int            rx_buf_total_size; /* size of memory allocated for rx buffers */
-	int            rx_put;         /* index of next empty rx buffer */
-	int            rx_get;         /* index of next full rx buffer */
-	int            rx_buf_size;    /* size in bytes of single rx buffer */
-	int            rx_buf_count;   /* total number of rx buffers */
-	int            rx_frame_count; /* number of full rx buffers */
+    unsigned char  *rx_buf;        /* memory allocated for all rx buffers */
+    int            rx_buf_total_size; /* size of memory allocated for rx buffers */
+    int            rx_put;         /* index of next empty rx buffer */
+    int            rx_get;         /* index of next full rx buffer */
+    int            rx_buf_size;    /* size in bytes of single rx buffer */
+    int            rx_buf_count;   /* total number of rx buffers */
+    int            rx_frame_count; /* number of full rx buffers */
 
-	wait_queue_head_t	status_event_wait_q;
-	wait_queue_head_t	event_wait_q;
-	struct timer_list	tx_timer;	/* HDLC transmit timeout timer */
-	struct _mgslpc_info	*next_device;	/* device list link */
+    wait_queue_head_t	status_event_wait_q;
+    wait_queue_head_t	event_wait_q;
+    struct timer_list	tx_timer;	/* HDLC transmit timeout timer */
+    struct _mgslpc_info	*next_device;	/* device list link */
 
-	unsigned short imra_value;
-	unsigned short imrb_value;
-	unsigned char  pim_value;
+    unsigned short imra_value;
+    unsigned short imrb_value;
+    unsigned char  pim_value;
 
-	spinlock_t lock;
-	struct work_struct task;		/* task structure for scheduling bh */
+    spinlock_t lock;
+    struct work_struct task;		/* task structure for scheduling bh */
 
-	u32 max_frame_size;
+    u32 max_frame_size;
 
-	u32 pending_bh;
+    u32 pending_bh;
 
-	bool bh_running;
-	bool bh_requested;
+    bool bh_running;
+    bool bh_requested;
 
-	int dcd_chkcount; /* check counts to prevent */
-	int cts_chkcount; /* too many IRQs if a signal */
-	int dsr_chkcount; /* is floating */
-	int ri_chkcount;
+    int dcd_chkcount; /* check counts to prevent */
+    int cts_chkcount; /* too many IRQs if a signal */
+    int dsr_chkcount; /* is floating */
+    int ri_chkcount;
 
-	bool rx_enabled;
-	bool rx_overflow;
+    bool rx_enabled;
+    bool rx_overflow;
 
-	bool tx_enabled;
-	bool tx_active;
-	bool tx_aborting;
-	u32 idle_mode;
+    bool tx_enabled;
+    bool tx_active;
+    bool tx_aborting;
+    u32 idle_mode;
 
-	int if_mode; /* serial interface selection (RS-232, v.35 etc) */
+    int if_mode; /* serial interface selection (RS-232, v.35 etc) */
 
-	char device_name[25];		/* device instance name */
+    char device_name[25];		/* device instance name */
 
-	unsigned int io_base;	/* base I/O address of adapter */
-	unsigned int irq_level;
+    unsigned int io_base;	/* base I/O address of adapter */
+    unsigned int irq_level;
 
-	MGSL_PARAMS params;		/* communications parameters */
+    MGSL_PARAMS params;		/* communications parameters */
 
-	unsigned char serial_signals;	/* current serial signal states */
+    unsigned char serial_signals;	/* current serial signal states */
 
-	bool irq_occurred;		/* for diagnostics use */
-	char testing_irq;
-	unsigned int init_error;	/* startup error (DIAGS)	*/
+    bool irq_occurred;		/* for diagnostics use */
+    char testing_irq;
+    unsigned int init_error;	/* startup error (DIAGS)	*/
 
-	char flag_buf[MAX_ASYNC_BUFFER_SIZE];
-	bool drop_rts_on_tx_done;
+    char flag_buf[MAX_ASYNC_BUFFER_SIZE];
+    bool drop_rts_on_tx_done;
 
-	struct	_input_signal_events	input_signal_events;
+    struct	_input_signal_events	input_signal_events;
 
-	/* PCMCIA support */
-	struct pcmcia_device	*p_dev;
-	int		      stop;
+    /* PCMCIA support */
+    struct pcmcia_device	*p_dev;
+    int		      stop;
 
-	/* SPPP/Cisco HDLC device parts */
-	int netcount;
-	spinlock_t netlock;
+    /* SPPP/Cisco HDLC device parts */
+    int netcount;
+    spinlock_t netlock;
 
 #if SYNCLINK_GENERIC_HDLC
-	struct net_device *netdev;
+    struct net_device *netdev;
 #endif
 
 } MGSLPC_INFO;
@@ -334,25 +333,23 @@ typedef struct _mgslpc_info {
 /*
  * interrupt enable/disable routines
  */
-static void irq_disable(MGSLPC_INFO *info, unsigned char channel, unsigned short mask)
-{
-	if (channel == CHA) {
-		info->imra_value |= mask;
-		write_reg16(info, CHA + IMR, info->imra_value);
-	} else {
-		info->imrb_value |= mask;
-		write_reg16(info, CHB + IMR, info->imrb_value);
-	}
+static void irq_disable(MGSLPC_INFO *info, unsigned char channel, unsigned short mask) {
+    if (channel == CHA) {
+        info->imra_value |= mask;
+        write_reg16(info, CHA + IMR, info->imra_value);
+    } else {
+        info->imrb_value |= mask;
+        write_reg16(info, CHB + IMR, info->imrb_value);
+    }
 }
-static void irq_enable(MGSLPC_INFO *info, unsigned char channel, unsigned short mask)
-{
-	if (channel == CHA) {
-		info->imra_value &= ~mask;
-		write_reg16(info, CHA + IMR, info->imra_value);
-	} else {
-		info->imrb_value &= ~mask;
-		write_reg16(info, CHB + IMR, info->imrb_value);
-	}
+static void irq_enable(MGSLPC_INFO *info, unsigned char channel, unsigned short mask) {
+    if (channel == CHA) {
+        info->imra_value &= ~mask;
+        write_reg16(info, CHA + IMR, info->imra_value);
+    } else {
+        info->imrb_value &= ~mask;
+        write_reg16(info, CHB + IMR, info->imrb_value);
+    }
 }
 
 #define port_irq_disable(info, mask) \
@@ -419,7 +416,7 @@ static void bh_status(MGSLPC_INFO *info);
  */
 static int tiocmget(struct tty_struct *tty);
 static int tiocmset(struct tty_struct *tty,
-					unsigned int set, unsigned int clear);
+                    unsigned int set, unsigned int clear);
 static int get_stats(MGSLPC_INFO *info, struct mgsl_icount __user *user_icount);
 static int get_params(MGSLPC_INFO *info, MGSL_PARAMS __user *user_params);
 static int set_params(MGSLPC_INFO *info, MGSL_PARAMS __user *new_params, struct tty_struct *tty);
@@ -479,9 +476,8 @@ static void mgslpc_detach(struct pcmcia_device *p_dev);
  * (gdb) to get the .text address for the add-symbol-file command.
  * This allows remote debugging of dynamically loadable modules.
  */
-static void* mgslpc_get_text_ptr(void)
-{
-	return mgslpc_get_text_ptr;
+static void* mgslpc_get_text_ptr(void) {
+    return mgslpc_get_text_ptr;
 }
 
 /**
@@ -494,36 +490,34 @@ static void* mgslpc_get_text_ptr(void)
  */
 
 static void ldisc_receive_buf(struct tty_struct *tty,
-			      const __u8 *data, char *flags, int count)
-{
-	struct tty_ldisc *ld;
-	if (!tty)
-		return;
-	ld = tty_ldisc_ref(tty);
-	if (ld) {
-		if (ld->ops->receive_buf)
-			ld->ops->receive_buf(tty, data, flags, count);
-		tty_ldisc_deref(ld);
-	}
+                              const __u8 *data, char *flags, int count) {
+    struct tty_ldisc *ld;
+    if (!tty)
+        return;
+    ld = tty_ldisc_ref(tty);
+    if (ld) {
+        if (ld->ops->receive_buf)
+            ld->ops->receive_buf(tty, data, flags, count);
+        tty_ldisc_deref(ld);
+    }
 }
 
 static const struct tty_port_operations mgslpc_port_ops = {
-	.carrier_raised = carrier_raised,
-	.dtr_rts = dtr_rts
+    .carrier_raised = carrier_raised,
+    .dtr_rts = dtr_rts
 };
 
-static int mgslpc_probe(struct pcmcia_device *link)
-{
+static int mgslpc_probe(struct pcmcia_device *link) {
     MGSLPC_INFO *info;
     int ret;
 
     if (debug_level >= DEBUG_LEVEL_INFO)
-	    printk("mgslpc_attach\n");
+        printk("mgslpc_attach\n");
 
     info = kzalloc(sizeof(MGSLPC_INFO), GFP_KERNEL);
     if (!info) {
-	    printk("Error can't allocate device instance data\n");
-	    return -ENOMEM;
+        printk("Error can't allocate device instance data\n");
+        return -ENOMEM;
     }
 
     info->magic = MGSLPC_MAGIC;
@@ -550,7 +544,7 @@ static int mgslpc_probe(struct pcmcia_device *link)
 
     ret = mgslpc_config(link);
     if (ret)
-	    return ret;
+        return ret;
 
     mgslpc_add_device(info);
 
@@ -560,34 +554,32 @@ static int mgslpc_probe(struct pcmcia_device *link)
 /* Card has been inserted.
  */
 
-static int mgslpc_ioprobe(struct pcmcia_device *p_dev, void *priv_data)
-{
-	return pcmcia_request_io(p_dev);
+static int mgslpc_ioprobe(struct pcmcia_device *p_dev, void *priv_data) {
+    return pcmcia_request_io(p_dev);
 }
 
-static int mgslpc_config(struct pcmcia_device *link)
-{
+static int mgslpc_config(struct pcmcia_device *link) {
     MGSLPC_INFO *info = link->priv;
     int ret;
 
     if (debug_level >= DEBUG_LEVEL_INFO)
-	    printk("mgslpc_config(0x%p)\n", link);
+        printk("mgslpc_config(0x%p)\n", link);
 
     link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
 
     ret = pcmcia_loop_config(link, mgslpc_ioprobe, NULL);
     if (ret != 0)
-	    goto failed;
+        goto failed;
 
     link->config_index = 8;
     link->config_regs = PRESENT_OPTION;
 
     ret = pcmcia_request_irq(link, mgslpc_isr);
     if (ret)
-	    goto failed;
+        goto failed;
     ret = pcmcia_enable_device(link);
     if (ret)
-	    goto failed;
+        goto failed;
 
     info->io_base = link->resource[0]->start;
     info->irq_level = link->irq;
@@ -602,68 +594,63 @@ failed:
  * Unregister device and release PCMCIA configuration.
  * If device is open, postpone until it is closed.
  */
-static void mgslpc_release(u_long arg)
-{
-	struct pcmcia_device *link = (struct pcmcia_device *)arg;
+static void mgslpc_release(u_long arg) {
+    struct pcmcia_device *link = (struct pcmcia_device *)arg;
 
-	if (debug_level >= DEBUG_LEVEL_INFO)
-		printk("mgslpc_release(0x%p)\n", link);
+    if (debug_level >= DEBUG_LEVEL_INFO)
+        printk("mgslpc_release(0x%p)\n", link);
 
-	pcmcia_disable_device(link);
+    pcmcia_disable_device(link);
 }
 
-static void mgslpc_detach(struct pcmcia_device *link)
-{
-	if (debug_level >= DEBUG_LEVEL_INFO)
-		printk("mgslpc_detach(0x%p)\n", link);
+static void mgslpc_detach(struct pcmcia_device *link) {
+    if (debug_level >= DEBUG_LEVEL_INFO)
+        printk("mgslpc_detach(0x%p)\n", link);
 
-	((MGSLPC_INFO *)link->priv)->stop = 1;
-	mgslpc_release((u_long)link);
+    ((MGSLPC_INFO *)link->priv)->stop = 1;
+    mgslpc_release((u_long)link);
 
-	mgslpc_remove_device((MGSLPC_INFO *)link->priv);
+    mgslpc_remove_device((MGSLPC_INFO *)link->priv);
 }
 
-static int mgslpc_suspend(struct pcmcia_device *link)
-{
-	MGSLPC_INFO *info = link->priv;
+static int mgslpc_suspend(struct pcmcia_device *link) {
+    MGSLPC_INFO *info = link->priv;
 
-	info->stop = 1;
+    info->stop = 1;
 
-	return 0;
+    return 0;
 }
 
-static int mgslpc_resume(struct pcmcia_device *link)
-{
-	MGSLPC_INFO *info = link->priv;
+static int mgslpc_resume(struct pcmcia_device *link) {
+    MGSLPC_INFO *info = link->priv;
 
-	info->stop = 0;
+    info->stop = 0;
 
-	return 0;
+    return 0;
 }
 
 
 static inline bool mgslpc_paranoia_check(MGSLPC_INFO *info,
-					char *name, const char *routine)
-{
+        char *name, const char *routine) {
 #ifdef MGSLPC_PARANOIA_CHECK
-	static const char *badmagic =
-		"Warning: bad magic number for mgsl struct (%s) in %s\n";
-	static const char *badinfo =
-		"Warning: null mgslpc_info for (%s) in %s\n";
+    static const char *badmagic =
+        "Warning: bad magic number for mgsl struct (%s) in %s\n";
+    static const char *badinfo =
+        "Warning: null mgslpc_info for (%s) in %s\n";
 
-	if (!info) {
-		printk(badinfo, name, routine);
-		return true;
-	}
-	if (info->magic != MGSLPC_MAGIC) {
-		printk(badmagic, name, routine);
-		return true;
-	}
+    if (!info) {
+        printk(badinfo, name, routine);
+        return true;
+    }
+    if (info->magic != MGSLPC_MAGIC) {
+        printk(badmagic, name, routine);
+        return true;
+    }
 #else
-	if (!info)
-		return true;
+    if (!info)
+        return true;
 #endif
-	return false;
+    return false;
 }
 
 
@@ -675,471 +662,454 @@ static inline bool mgslpc_paranoia_check(MGSLPC_INFO *info,
 #define CMD_TXEOM       BIT1	// transmit end message
 #define CMD_TXRESET     BIT0	// transmit reset
 
-static bool wait_command_complete(MGSLPC_INFO *info, unsigned char channel)
-{
-	int i = 0;
-	/* wait for command completion */
-	while (read_reg(info, (unsigned char)(channel+STAR)) & BIT2) {
-		udelay(1);
-		if (i++ == 1000)
-			return false;
-	}
-	return true;
+static bool wait_command_complete(MGSLPC_INFO *info, unsigned char channel) {
+    int i = 0;
+    /* wait for command completion */
+    while (read_reg(info, (unsigned char)(channel+STAR)) & BIT2) {
+        udelay(1);
+        if (i++ == 1000)
+            return false;
+    }
+    return true;
 }
 
-static void issue_command(MGSLPC_INFO *info, unsigned char channel, unsigned char cmd)
-{
-	wait_command_complete(info, channel);
-	write_reg(info, (unsigned char) (channel + CMDR), cmd);
+static void issue_command(MGSLPC_INFO *info, unsigned char channel, unsigned char cmd) {
+    wait_command_complete(info, channel);
+    write_reg(info, (unsigned char) (channel + CMDR), cmd);
 }
 
-static void tx_pause(struct tty_struct *tty)
-{
-	MGSLPC_INFO *info = (MGSLPC_INFO *)tty->driver_data;
-	unsigned long flags;
+static void tx_pause(struct tty_struct *tty) {
+    MGSLPC_INFO *info = (MGSLPC_INFO *)tty->driver_data;
+    unsigned long flags;
 
-	if (mgslpc_paranoia_check(info, tty->name, "tx_pause"))
-		return;
-	if (debug_level >= DEBUG_LEVEL_INFO)
-		printk("tx_pause(%s)\n",info->device_name);
+    if (mgslpc_paranoia_check(info, tty->name, "tx_pause"))
+        return;
+    if (debug_level >= DEBUG_LEVEL_INFO)
+        printk("tx_pause(%s)\n",info->device_name);
 
-	spin_lock_irqsave(&info->lock,flags);
-	if (info->tx_enabled)
-	 	tx_stop(info);
-	spin_unlock_irqrestore(&info->lock,flags);
+    spin_lock_irqsave(&info->lock,flags);
+    if (info->tx_enabled)
+        tx_stop(info);
+    spin_unlock_irqrestore(&info->lock,flags);
 }
 
-static void tx_release(struct tty_struct *tty)
-{
-	MGSLPC_INFO *info = (MGSLPC_INFO *)tty->driver_data;
-	unsigned long flags;
+static void tx_release(struct tty_struct *tty) {
+    MGSLPC_INFO *info = (MGSLPC_INFO *)tty->driver_data;
+    unsigned long flags;
 
-	if (mgslpc_paranoia_check(info, tty->name, "tx_release"))
-		return;
-	if (debug_level >= DEBUG_LEVEL_INFO)
-		printk("tx_release(%s)\n",info->device_name);
+    if (mgslpc_paranoia_check(info, tty->name, "tx_release"))
+        return;
+    if (debug_level >= DEBUG_LEVEL_INFO)
+        printk("tx_release(%s)\n",info->device_name);
 
-	spin_lock_irqsave(&info->lock,flags);
-	if (!info->tx_enabled)
-	 	tx_start(info, tty);
-	spin_unlock_irqrestore(&info->lock,flags);
+    spin_lock_irqsave(&info->lock,flags);
+    if (!info->tx_enabled)
+        tx_start(info, tty);
+    spin_unlock_irqrestore(&info->lock,flags);
 }
 
 /* Return next bottom half action to perform.
  * or 0 if nothing to do.
  */
-static int bh_action(MGSLPC_INFO *info)
-{
-	unsigned long flags;
-	int rc = 0;
+static int bh_action(MGSLPC_INFO *info) {
+    unsigned long flags;
+    int rc = 0;
 
-	spin_lock_irqsave(&info->lock,flags);
+    spin_lock_irqsave(&info->lock,flags);
 
-	if (info->pending_bh & BH_RECEIVE) {
-		info->pending_bh &= ~BH_RECEIVE;
-		rc = BH_RECEIVE;
-	} else if (info->pending_bh & BH_TRANSMIT) {
-		info->pending_bh &= ~BH_TRANSMIT;
-		rc = BH_TRANSMIT;
-	} else if (info->pending_bh & BH_STATUS) {
-		info->pending_bh &= ~BH_STATUS;
-		rc = BH_STATUS;
-	}
+    if (info->pending_bh & BH_RECEIVE) {
+        info->pending_bh &= ~BH_RECEIVE;
+        rc = BH_RECEIVE;
+    } else if (info->pending_bh & BH_TRANSMIT) {
+        info->pending_bh &= ~BH_TRANSMIT;
+        rc = BH_TRANSMIT;
+    } else if (info->pending_bh & BH_STATUS) {
+        info->pending_bh &= ~BH_STATUS;
+        rc = BH_STATUS;
+    }
 
-	if (!rc) {
-		/* Mark BH routine as complete */
-		info->bh_running = false;
-		info->bh_requested = false;
-	}
+    if (!rc) {
+        /* Mark BH routine as complete */
+        info->bh_running = false;
+        info->bh_requested = false;
+    }
 
-	spin_unlock_irqrestore(&info->lock,flags);
+    spin_unlock_irqrestore(&info->lock,flags);
 
-	return rc;
+    return rc;
 }
 
-static void bh_handler(struct work_struct *work)
-{
-	MGSLPC_INFO *info = container_of(work, MGSLPC_INFO, task);
-	struct tty_struct *tty;
-	int action;
+static void bh_handler(struct work_struct *work) {
+    MGSLPC_INFO *info = container_of(work, MGSLPC_INFO, task);
+    struct tty_struct *tty;
+    int action;
 
-	if (!info)
-		return;
+    if (!info)
+        return;
 
-	if (debug_level >= DEBUG_LEVEL_BH)
-		printk( "%s(%d):bh_handler(%s) entry\n",
-			__FILE__,__LINE__,info->device_name);
+    if (debug_level >= DEBUG_LEVEL_BH)
+        printk( "%s(%d):bh_handler(%s) entry\n",
+                __FILE__,__LINE__,info->device_name);
 
-	info->bh_running = true;
-	tty = tty_port_tty_get(&info->port);
+    info->bh_running = true;
+    tty = tty_port_tty_get(&info->port);
 
-	while((action = bh_action(info)) != 0) {
+    while((action = bh_action(info)) != 0) {
 
-		/* Process work item */
-		if ( debug_level >= DEBUG_LEVEL_BH )
-			printk( "%s(%d):bh_handler() work item action=%d\n",
-				__FILE__,__LINE__,action);
+        /* Process work item */
+        if ( debug_level >= DEBUG_LEVEL_BH )
+            printk( "%s(%d):bh_handler() work item action=%d\n",
+                    __FILE__,__LINE__,action);
 
-		switch (action) {
+        switch (action) {
 
-		case BH_RECEIVE:
-			while(rx_get_frame(info, tty));
-			break;
-		case BH_TRANSMIT:
-			bh_transmit(info, tty);
-			break;
-		case BH_STATUS:
-			bh_status(info);
-			break;
-		default:
-			/* unknown work item ID */
-			printk("Unknown work item ID=%08X!\n", action);
-			break;
-		}
-	}
+        case BH_RECEIVE:
+            while(rx_get_frame(info, tty));
+            break;
+        case BH_TRANSMIT:
+            bh_transmit(info, tty);
+            break;
+        case BH_STATUS:
+            bh_status(info);
+            break;
+        default:
+            /* unknown work item ID */
+            printk("Unknown work item ID=%08X!\n", action);
+            break;
+        }
+    }
 
-	tty_kref_put(tty);
-	if (debug_level >= DEBUG_LEVEL_BH)
-		printk( "%s(%d):bh_handler(%s) exit\n",
-			__FILE__,__LINE__,info->device_name);
+    tty_kref_put(tty);
+    if (debug_level >= DEBUG_LEVEL_BH)
+        printk( "%s(%d):bh_handler(%s) exit\n",
+                __FILE__,__LINE__,info->device_name);
 }
 
-static void bh_transmit(MGSLPC_INFO *info, struct tty_struct *tty)
-{
-	if (debug_level >= DEBUG_LEVEL_BH)
-		printk("bh_transmit() entry on %s\n", info->device_name);
+static void bh_transmit(MGSLPC_INFO *info, struct tty_struct *tty) {
+    if (debug_level >= DEBUG_LEVEL_BH)
+        printk("bh_transmit() entry on %s\n", info->device_name);
 
-	if (tty)
-		tty_wakeup(tty);
+    if (tty)
+        tty_wakeup(tty);
 }
 
-static void bh_status(MGSLPC_INFO *info)
-{
-	info->ri_chkcount = 0;
-	info->dsr_chkcount = 0;
-	info->dcd_chkcount = 0;
-	info->cts_chkcount = 0;
+static void bh_status(MGSLPC_INFO *info) {
+    info->ri_chkcount = 0;
+    info->dsr_chkcount = 0;
+    info->dcd_chkcount = 0;
+    info->cts_chkcount = 0;
 }
 
 /* eom: non-zero = end of frame */
-static void rx_ready_hdlc(MGSLPC_INFO *info, int eom)
-{
-	unsigned char data[2];
-	unsigned char fifo_count, read_count, i;
-	RXBUF *buf = (RXBUF*)(info->rx_buf + (info->rx_put * info->rx_buf_size));
+static void rx_ready_hdlc(MGSLPC_INFO *info, int eom) {
+    unsigned char data[2];
+    unsigned char fifo_count, read_count, i;
+    RXBUF *buf = (RXBUF*)(info->rx_buf + (info->rx_put * info->rx_buf_size));
 
-	if (debug_level >= DEBUG_LEVEL_ISR)
-		printk("%s(%d):rx_ready_hdlc(eom=%d)\n",__FILE__,__LINE__,eom);
+    if (debug_level >= DEBUG_LEVEL_ISR)
+        printk("%s(%d):rx_ready_hdlc(eom=%d)\n",__FILE__,__LINE__,eom);
 
-	if (!info->rx_enabled)
-		return;
+    if (!info->rx_enabled)
+        return;
 
-	if (info->rx_frame_count >= info->rx_buf_count) {
-		/* no more free buffers */
-		issue_command(info, CHA, CMD_RXRESET);
-		info->pending_bh |= BH_RECEIVE;
-		info->rx_overflow = true;
-		info->icount.buf_overrun++;
-		return;
-	}
+    if (info->rx_frame_count >= info->rx_buf_count) {
+        /* no more free buffers */
+        issue_command(info, CHA, CMD_RXRESET);
+        info->pending_bh |= BH_RECEIVE;
+        info->rx_overflow = true;
+        info->icount.buf_overrun++;
+        return;
+    }
 
-	if (eom) {
-		/* end of frame, get FIFO count from RBCL register */
-		if (!(fifo_count = (unsigned char)(read_reg(info, CHA+RBCL) & 0x1f)))
-			fifo_count = 32;
-	} else
-		fifo_count = 32;
+    if (eom) {
+        /* end of frame, get FIFO count from RBCL register */
+        if (!(fifo_count = (unsigned char)(read_reg(info, CHA+RBCL) & 0x1f)))
+            fifo_count = 32;
+    } else
+        fifo_count = 32;
 
-	do {
-		if (fifo_count == 1) {
-			read_count = 1;
-			data[0] = read_reg(info, CHA + RXFIFO);
-		} else {
-			read_count = 2;
-			*((unsigned short *) data) = read_reg16(info, CHA + RXFIFO);
-		}
-		fifo_count -= read_count;
-		if (!fifo_count && eom)
-			buf->status = data[--read_count];
+    do {
+        if (fifo_count == 1) {
+            read_count = 1;
+            data[0] = read_reg(info, CHA + RXFIFO);
+        } else {
+            read_count = 2;
+            *((unsigned short *) data) = read_reg16(info, CHA + RXFIFO);
+        }
+        fifo_count -= read_count;
+        if (!fifo_count && eom)
+            buf->status = data[--read_count];
 
-		for (i = 0; i < read_count; i++) {
-			if (buf->count >= info->max_frame_size) {
-				/* frame too large, reset receiver and reset current buffer */
-				issue_command(info, CHA, CMD_RXRESET);
-				buf->count = 0;
-				return;
-			}
-			*(buf->data + buf->count) = data[i];
-			buf->count++;
-		}
-	} while (fifo_count);
+        for (i = 0; i < read_count; i++) {
+            if (buf->count >= info->max_frame_size) {
+                /* frame too large, reset receiver and reset current buffer */
+                issue_command(info, CHA, CMD_RXRESET);
+                buf->count = 0;
+                return;
+            }
+            *(buf->data + buf->count) = data[i];
+            buf->count++;
+        }
+    } while (fifo_count);
 
-	if (eom) {
-		info->pending_bh |= BH_RECEIVE;
-		info->rx_frame_count++;
-		info->rx_put++;
-		if (info->rx_put >= info->rx_buf_count)
-			info->rx_put = 0;
-	}
-	issue_command(info, CHA, CMD_RXFIFO);
+    if (eom) {
+        info->pending_bh |= BH_RECEIVE;
+        info->rx_frame_count++;
+        info->rx_put++;
+        if (info->rx_put >= info->rx_buf_count)
+            info->rx_put = 0;
+    }
+    issue_command(info, CHA, CMD_RXFIFO);
 }
 
-static void rx_ready_async(MGSLPC_INFO *info, int tcd, struct tty_struct *tty)
-{
-	unsigned char data, status, flag;
-	int fifo_count;
-	int work = 0;
- 	struct mgsl_icount *icount = &info->icount;
+static void rx_ready_async(MGSLPC_INFO *info, int tcd, struct tty_struct *tty) {
+    unsigned char data, status, flag;
+    int fifo_count;
+    int work = 0;
+    struct mgsl_icount *icount = &info->icount;
 
-	if (tcd) {
-		/* early termination, get FIFO count from RBCL register */
-		fifo_count = (unsigned char)(read_reg(info, CHA+RBCL) & 0x1f);
+    if (tcd) {
+        /* early termination, get FIFO count from RBCL register */
+        fifo_count = (unsigned char)(read_reg(info, CHA+RBCL) & 0x1f);
 
-		/* Zero fifo count could mean 0 or 32 bytes available.
-		 * If BIT5 of STAR is set then at least 1 byte is available.
-		 */
-		if (!fifo_count && (read_reg(info,CHA+STAR) & BIT5))
-			fifo_count = 32;
-	} else
-		fifo_count = 32;
+        /* Zero fifo count could mean 0 or 32 bytes available.
+         * If BIT5 of STAR is set then at least 1 byte is available.
+         */
+        if (!fifo_count && (read_reg(info,CHA+STAR) & BIT5))
+            fifo_count = 32;
+    } else
+        fifo_count = 32;
 
-	tty_buffer_request_room(tty, fifo_count);
-	/* Flush received async data to receive data buffer. */
-	while (fifo_count) {
-		data   = read_reg(info, CHA + RXFIFO);
-		status = read_reg(info, CHA + RXFIFO);
-		fifo_count -= 2;
+    tty_buffer_request_room(tty, fifo_count);
+    /* Flush received async data to receive data buffer. */
+    while (fifo_count) {
+        data   = read_reg(info, CHA + RXFIFO);
+        status = read_reg(info, CHA + RXFIFO);
+        fifo_count -= 2;
 
-		icount->rx++;
-		flag = TTY_NORMAL;
+        icount->rx++;
+        flag = TTY_NORMAL;
 
-		// if no frameing/crc error then save data
-		// BIT7:parity error
-		// BIT6:framing error
+        // if no frameing/crc error then save data
+        // BIT7:parity error
+        // BIT6:framing error
 
-		if (status & (BIT7 + BIT6)) {
-			if (status & BIT7)
-				icount->parity++;
-			else
-				icount->frame++;
+        if (status & (BIT7 + BIT6)) {
+            if (status & BIT7)
+                icount->parity++;
+            else
+                icount->frame++;
 
-			/* discard char if tty control flags say so */
-			if (status & info->ignore_status_mask)
-				continue;
+            /* discard char if tty control flags say so */
+            if (status & info->ignore_status_mask)
+                continue;
 
-			status &= info->read_status_mask;
+            status &= info->read_status_mask;
 
-			if (status & BIT7)
-				flag = TTY_PARITY;
-			else if (status & BIT6)
-				flag = TTY_FRAME;
-		}
-		work += tty_insert_flip_char(tty, data, flag);
-	}
-	issue_command(info, CHA, CMD_RXFIFO);
+            if (status & BIT7)
+                flag = TTY_PARITY;
+            else if (status & BIT6)
+                flag = TTY_FRAME;
+        }
+        work += tty_insert_flip_char(tty, data, flag);
+    }
+    issue_command(info, CHA, CMD_RXFIFO);
 
-	if (debug_level >= DEBUG_LEVEL_ISR) {
-		printk("%s(%d):rx_ready_async",
-			__FILE__,__LINE__);
-		printk("%s(%d):rx=%d brk=%d parity=%d frame=%d overrun=%d\n",
-			__FILE__,__LINE__,icount->rx,icount->brk,
-			icount->parity,icount->frame,icount->overrun);
-	}
+    if (debug_level >= DEBUG_LEVEL_ISR) {
+        printk("%s(%d):rx_ready_async",
+               __FILE__,__LINE__);
+        printk("%s(%d):rx=%d brk=%d parity=%d frame=%d overrun=%d\n",
+               __FILE__,__LINE__,icount->rx,icount->brk,
+               icount->parity,icount->frame,icount->overrun);
+    }
 
-	if (work)
-		tty_flip_buffer_push(tty);
+    if (work)
+        tty_flip_buffer_push(tty);
 }
 
 
-static void tx_done(MGSLPC_INFO *info, struct tty_struct *tty)
-{
-	if (!info->tx_active)
-		return;
+static void tx_done(MGSLPC_INFO *info, struct tty_struct *tty) {
+    if (!info->tx_active)
+        return;
 
-	info->tx_active = false;
-	info->tx_aborting = false;
+    info->tx_active = false;
+    info->tx_aborting = false;
 
-	if (info->params.mode == MGSL_MODE_ASYNC)
-		return;
+    if (info->params.mode == MGSL_MODE_ASYNC)
+        return;
 
-	info->tx_count = info->tx_put = info->tx_get = 0;
-	del_timer(&info->tx_timer);
+    info->tx_count = info->tx_put = info->tx_get = 0;
+    del_timer(&info->tx_timer);
 
-	if (info->drop_rts_on_tx_done) {
-		get_signals(info);
-		if (info->serial_signals & SerialSignal_RTS) {
-			info->serial_signals &= ~SerialSignal_RTS;
-			set_signals(info);
-		}
-		info->drop_rts_on_tx_done = false;
-	}
+    if (info->drop_rts_on_tx_done) {
+        get_signals(info);
+        if (info->serial_signals & SerialSignal_RTS) {
+            info->serial_signals &= ~SerialSignal_RTS;
+            set_signals(info);
+        }
+        info->drop_rts_on_tx_done = false;
+    }
 
 #if SYNCLINK_GENERIC_HDLC
-	if (info->netcount)
-		hdlcdev_tx_done(info);
-	else
+    if (info->netcount)
+        hdlcdev_tx_done(info);
+    else
 #endif
-	{
-		if (tty->stopped || tty->hw_stopped) {
-			tx_stop(info);
-			return;
-		}
-		info->pending_bh |= BH_TRANSMIT;
-	}
+    {
+        if (tty->stopped || tty->hw_stopped) {
+            tx_stop(info);
+            return;
+        }
+        info->pending_bh |= BH_TRANSMIT;
+    }
 }
 
-static void tx_ready(MGSLPC_INFO *info, struct tty_struct *tty)
-{
-	unsigned char fifo_count = 32;
-	int c;
+static void tx_ready(MGSLPC_INFO *info, struct tty_struct *tty) {
+    unsigned char fifo_count = 32;
+    int c;
 
-	if (debug_level >= DEBUG_LEVEL_ISR)
-		printk("%s(%d):tx_ready(%s)\n", __FILE__,__LINE__,info->device_name);
+    if (debug_level >= DEBUG_LEVEL_ISR)
+        printk("%s(%d):tx_ready(%s)\n", __FILE__,__LINE__,info->device_name);
 
-	if (info->params.mode == MGSL_MODE_HDLC) {
-		if (!info->tx_active)
-			return;
-	} else {
-		if (tty->stopped || tty->hw_stopped) {
-			tx_stop(info);
-			return;
-		}
-		if (!info->tx_count)
-			info->tx_active = false;
-	}
+    if (info->params.mode == MGSL_MODE_HDLC) {
+        if (!info->tx_active)
+            return;
+    } else {
+        if (tty->stopped || tty->hw_stopped) {
+            tx_stop(info);
+            return;
+        }
+        if (!info->tx_count)
+            info->tx_active = false;
+    }
 
-	if (!info->tx_count)
-		return;
+    if (!info->tx_count)
+        return;
 
-	while (info->tx_count && fifo_count) {
-		c = min(2, min_t(int, fifo_count, min(info->tx_count, TXBUFSIZE - info->tx_get)));
+    while (info->tx_count && fifo_count) {
+        c = min(2, min_t(int, fifo_count, min(info->tx_count, TXBUFSIZE - info->tx_get)));
 
-		if (c == 1) {
-			write_reg(info, CHA + TXFIFO, *(info->tx_buf + info->tx_get));
-		} else {
-			write_reg16(info, CHA + TXFIFO,
-					  *((unsigned short*)(info->tx_buf + info->tx_get)));
-		}
-		info->tx_count -= c;
-		info->tx_get = (info->tx_get + c) & (TXBUFSIZE - 1);
-		fifo_count -= c;
-	}
+        if (c == 1) {
+            write_reg(info, CHA + TXFIFO, *(info->tx_buf + info->tx_get));
+        } else {
+            write_reg16(info, CHA + TXFIFO,
+                        *((unsigned short*)(info->tx_buf + info->tx_get)));
+        }
+        info->tx_count -= c;
+        info->tx_get = (info->tx_get + c) & (TXBUFSIZE - 1);
+        fifo_count -= c;
+    }
 
-	if (info->params.mode == MGSL_MODE_ASYNC) {
-		if (info->tx_count < WAKEUP_CHARS)
-			info->pending_bh |= BH_TRANSMIT;
-		issue_command(info, CHA, CMD_TXFIFO);
-	} else {
-		if (info->tx_count)
-			issue_command(info, CHA, CMD_TXFIFO);
-		else
-			issue_command(info, CHA, CMD_TXFIFO + CMD_TXEOM);
-	}
+    if (info->params.mode == MGSL_MODE_ASYNC) {
+        if (info->tx_count < WAKEUP_CHARS)
+            info->pending_bh |= BH_TRANSMIT;
+        issue_command(info, CHA, CMD_TXFIFO);
+    } else {
+        if (info->tx_count)
+            issue_command(info, CHA, CMD_TXFIFO);
+        else
+            issue_command(info, CHA, CMD_TXFIFO + CMD_TXEOM);
+    }
 }
 
-static void cts_change(MGSLPC_INFO *info, struct tty_struct *tty)
-{
-	get_signals(info);
-	if ((info->cts_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
-		irq_disable(info, CHB, IRQ_CTS);
-	info->icount.cts++;
-	if (info->serial_signals & SerialSignal_CTS)
-		info->input_signal_events.cts_up++;
-	else
-		info->input_signal_events.cts_down++;
-	wake_up_interruptible(&info->status_event_wait_q);
-	wake_up_interruptible(&info->event_wait_q);
+static void cts_change(MGSLPC_INFO *info, struct tty_struct *tty) {
+    get_signals(info);
+    if ((info->cts_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
+        irq_disable(info, CHB, IRQ_CTS);
+    info->icount.cts++;
+    if (info->serial_signals & SerialSignal_CTS)
+        info->input_signal_events.cts_up++;
+    else
+        info->input_signal_events.cts_down++;
+    wake_up_interruptible(&info->status_event_wait_q);
+    wake_up_interruptible(&info->event_wait_q);
 
-	if (info->port.flags & ASYNC_CTS_FLOW) {
-		if (tty->hw_stopped) {
-			if (info->serial_signals & SerialSignal_CTS) {
-				if (debug_level >= DEBUG_LEVEL_ISR)
-					printk("CTS tx start...");
-				if (tty)
-					tty->hw_stopped = 0;
-				tx_start(info, tty);
-				info->pending_bh |= BH_TRANSMIT;
-				return;
-			}
-		} else {
-			if (!(info->serial_signals & SerialSignal_CTS)) {
-				if (debug_level >= DEBUG_LEVEL_ISR)
-					printk("CTS tx stop...");
-				if (tty)
-					tty->hw_stopped = 1;
-				tx_stop(info);
-			}
-		}
-	}
-	info->pending_bh |= BH_STATUS;
+    if (info->port.flags & ASYNC_CTS_FLOW) {
+        if (tty->hw_stopped) {
+            if (info->serial_signals & SerialSignal_CTS) {
+                if (debug_level >= DEBUG_LEVEL_ISR)
+                    printk("CTS tx start...");
+                if (tty)
+                    tty->hw_stopped = 0;
+                tx_start(info, tty);
+                info->pending_bh |= BH_TRANSMIT;
+                return;
+            }
+        } else {
+            if (!(info->serial_signals & SerialSignal_CTS)) {
+                if (debug_level >= DEBUG_LEVEL_ISR)
+                    printk("CTS tx stop...");
+                if (tty)
+                    tty->hw_stopped = 1;
+                tx_stop(info);
+            }
+        }
+    }
+    info->pending_bh |= BH_STATUS;
 }
 
-static void dcd_change(MGSLPC_INFO *info, struct tty_struct *tty)
-{
-	get_signals(info);
-	if ((info->dcd_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
-		irq_disable(info, CHB, IRQ_DCD);
-	info->icount.dcd++;
-	if (info->serial_signals & SerialSignal_DCD) {
-		info->input_signal_events.dcd_up++;
-	}
-	else
-		info->input_signal_events.dcd_down++;
+static void dcd_change(MGSLPC_INFO *info, struct tty_struct *tty) {
+    get_signals(info);
+    if ((info->dcd_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
+        irq_disable(info, CHB, IRQ_DCD);
+    info->icount.dcd++;
+    if (info->serial_signals & SerialSignal_DCD) {
+        info->input_signal_events.dcd_up++;
+    } else
+        info->input_signal_events.dcd_down++;
 #if SYNCLINK_GENERIC_HDLC
-	if (info->netcount) {
-		if (info->serial_signals & SerialSignal_DCD)
-			netif_carrier_on(info->netdev);
-		else
-			netif_carrier_off(info->netdev);
-	}
+    if (info->netcount) {
+        if (info->serial_signals & SerialSignal_DCD)
+            netif_carrier_on(info->netdev);
+        else
+            netif_carrier_off(info->netdev);
+    }
 #endif
-	wake_up_interruptible(&info->status_event_wait_q);
-	wake_up_interruptible(&info->event_wait_q);
+    wake_up_interruptible(&info->status_event_wait_q);
+    wake_up_interruptible(&info->event_wait_q);
 
-	if (info->port.flags & ASYNC_CHECK_CD) {
-		if (debug_level >= DEBUG_LEVEL_ISR)
-			printk("%s CD now %s...", info->device_name,
-			       (info->serial_signals & SerialSignal_DCD) ? "on" : "off");
-		if (info->serial_signals & SerialSignal_DCD)
-			wake_up_interruptible(&info->port.open_wait);
-		else {
-			if (debug_level >= DEBUG_LEVEL_ISR)
-				printk("doing serial hangup...");
-			if (tty)
-				tty_hangup(tty);
-		}
-	}
-	info->pending_bh |= BH_STATUS;
+    if (info->port.flags & ASYNC_CHECK_CD) {
+        if (debug_level >= DEBUG_LEVEL_ISR)
+            printk("%s CD now %s...", info->device_name,
+                   (info->serial_signals & SerialSignal_DCD) ? "on" : "off");
+        if (info->serial_signals & SerialSignal_DCD)
+            wake_up_interruptible(&info->port.open_wait);
+        else {
+            if (debug_level >= DEBUG_LEVEL_ISR)
+                printk("doing serial hangup...");
+            if (tty)
+                tty_hangup(tty);
+        }
+    }
+    info->pending_bh |= BH_STATUS;
 }
 
-static void dsr_change(MGSLPC_INFO *info)
-{
-	get_signals(info);
-	if ((info->dsr_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
-		port_irq_disable(info, PVR_DSR);
-	info->icount.dsr++;
-	if (info->serial_signals & SerialSignal_DSR)
-		info->input_signal_events.dsr_up++;
-	else
-		info->input_signal_events.dsr_down++;
-	wake_up_interruptible(&info->status_event_wait_q);
-	wake_up_interruptible(&info->event_wait_q);
-	info->pending_bh |= BH_STATUS;
+static void dsr_change(MGSLPC_INFO *info) {
+    get_signals(info);
+    if ((info->dsr_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
+        port_irq_disable(info, PVR_DSR);
+    info->icount.dsr++;
+    if (info->serial_signals & SerialSignal_DSR)
+        info->input_signal_events.dsr_up++;
+    else
+        info->input_signal_events.dsr_down++;
+    wake_up_interruptible(&info->status_event_wait_q);
+    wake_up_interruptible(&info->event_wait_q);
+    info->pending_bh |= BH_STATUS;
 }
 
-static void ri_change(MGSLPC_INFO *info)
-{
-	get_signals(info);
-	if ((info->ri_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
-		port_irq_disable(info, PVR_RI);
-	info->icount.rng++;
-	if (info->serial_signals & SerialSignal_RI)
-		info->input_signal_events.ri_up++;
-	else
-		info->input_signal_events.ri_down++;
-	wake_up_interruptible(&info->status_event_wait_q);
-	wake_up_interruptible(&info->event_wait_q);
-	info->pending_bh |= BH_STATUS;
+static void ri_change(MGSLPC_INFO *info) {
+    get_signals(info);
+    if ((info->ri_chkcount)++ >= IO_PIN_SHUTDOWN_LIMIT)
+        port_irq_disable(info, PVR_RI);
+    info->icount.rng++;
+    if (info->serial_signals & SerialSignal_RI)
+        info->input_signal_events.ri_up++;
+    else
+        info->input_signal_events.ri_down++;
+    wake_up_interruptible(&info->status_event_wait_q);
+    wake_up_interruptible(&info->event_wait_q);
+    info->pending_bh |= BH_STATUS;
 }
 
 /* Interrupt service routine entry point.
@@ -1149,132 +1119,127 @@ static void ri_change(MGSLPC_INFO *info)
  * irq     interrupt number that caused interrupt
  * dev_id  device ID supplied during interrupt registration
  */
-static irqreturn_t mgslpc_isr(int dummy, void *dev_id)
-{
-	MGSLPC_INFO *info = dev_id;
-	struct tty_struct *tty;
-	unsigned short isr;
-	unsigned char gis, pis;
-	int count=0;
+static irqreturn_t mgslpc_isr(int dummy, void *dev_id) {
+    MGSLPC_INFO *info = dev_id;
+    struct tty_struct *tty;
+    unsigned short isr;
+    unsigned char gis, pis;
+    int count=0;
 
-	if (debug_level >= DEBUG_LEVEL_ISR)
-		printk("mgslpc_isr(%d) entry.\n", info->irq_level);
+    if (debug_level >= DEBUG_LEVEL_ISR)
+        printk("mgslpc_isr(%d) entry.\n", info->irq_level);
 
-	if (!(info->p_dev->_locked))
-		return IRQ_HANDLED;
+    if (!(info->p_dev->_locked))
+        return IRQ_HANDLED;
 
-	tty = tty_port_tty_get(&info->port);
+    tty = tty_port_tty_get(&info->port);
 
-	spin_lock(&info->lock);
+    spin_lock(&info->lock);
 
-	while ((gis = read_reg(info, CHA + GIS))) {
-		if (debug_level >= DEBUG_LEVEL_ISR)
-			printk("mgslpc_isr %s gis=%04X\n", info->device_name,gis);
+    while ((gis = read_reg(info, CHA + GIS))) {
+        if (debug_level >= DEBUG_LEVEL_ISR)
+            printk("mgslpc_isr %s gis=%04X\n", info->device_name,gis);
 
-		if ((gis & 0x70) || count > 1000) {
-			printk("synclink_cs:hardware failed or ejected\n");
-			break;
-		}
-		count++;
+        if ((gis & 0x70) || count > 1000) {
+            printk("synclink_cs:hardware failed or ejected\n");
+            break;
+        }
+        count++;
 
-		if (gis & (BIT1 + BIT0)) {
-			isr = read_reg16(info, CHB + ISR);
-			if (isr & IRQ_DCD)
-				dcd_change(info, tty);
-			if (isr & IRQ_CTS)
-				cts_change(info, tty);
-		}
-		if (gis & (BIT3 + BIT2))
-		{
-			isr = read_reg16(info, CHA + ISR);
-			if (isr & IRQ_TIMER) {
-				info->irq_occurred = true;
-				irq_disable(info, CHA, IRQ_TIMER);
-			}
+        if (gis & (BIT1 + BIT0)) {
+            isr = read_reg16(info, CHB + ISR);
+            if (isr & IRQ_DCD)
+                dcd_change(info, tty);
+            if (isr & IRQ_CTS)
+                cts_change(info, tty);
+        }
+        if (gis & (BIT3 + BIT2)) {
+            isr = read_reg16(info, CHA + ISR);
+            if (isr & IRQ_TIMER) {
+                info->irq_occurred = true;
+                irq_disable(info, CHA, IRQ_TIMER);
+            }
 
-			/* receive IRQs */
-			if (isr & IRQ_EXITHUNT) {
-				info->icount.exithunt++;
-				wake_up_interruptible(&info->event_wait_q);
-			}
-			if (isr & IRQ_BREAK_ON) {
-				info->icount.brk++;
-				if (info->port.flags & ASYNC_SAK)
-					do_SAK(tty);
-			}
-			if (isr & IRQ_RXTIME) {
-				issue_command(info, CHA, CMD_RXFIFO_READ);
-			}
-			if (isr & (IRQ_RXEOM + IRQ_RXFIFO)) {
-				if (info->params.mode == MGSL_MODE_HDLC)
-					rx_ready_hdlc(info, isr & IRQ_RXEOM);
-				else
-					rx_ready_async(info, isr & IRQ_RXEOM, tty);
-			}
+            /* receive IRQs */
+            if (isr & IRQ_EXITHUNT) {
+                info->icount.exithunt++;
+                wake_up_interruptible(&info->event_wait_q);
+            }
+            if (isr & IRQ_BREAK_ON) {
+                info->icount.brk++;
+                if (info->port.flags & ASYNC_SAK)
+                    do_SAK(tty);
+            }
+            if (isr & IRQ_RXTIME) {
+                issue_command(info, CHA, CMD_RXFIFO_READ);
+            }
+            if (isr & (IRQ_RXEOM + IRQ_RXFIFO)) {
+                if (info->params.mode == MGSL_MODE_HDLC)
+                    rx_ready_hdlc(info, isr & IRQ_RXEOM);
+                else
+                    rx_ready_async(info, isr & IRQ_RXEOM, tty);
+            }
 
-			/* transmit IRQs */
-			if (isr & IRQ_UNDERRUN) {
-				if (info->tx_aborting)
-					info->icount.txabort++;
-				else
-					info->icount.txunder++;
-				tx_done(info, tty);
-			}
-			else if (isr & IRQ_ALLSENT) {
-				info->icount.txok++;
-				tx_done(info, tty);
-			}
-			else if (isr & IRQ_TXFIFO)
-				tx_ready(info, tty);
-		}
-		if (gis & BIT7) {
-			pis = read_reg(info, CHA + PIS);
-			if (pis & BIT1)
-				dsr_change(info);
-			if (pis & BIT2)
-				ri_change(info);
-		}
-	}
+            /* transmit IRQs */
+            if (isr & IRQ_UNDERRUN) {
+                if (info->tx_aborting)
+                    info->icount.txabort++;
+                else
+                    info->icount.txunder++;
+                tx_done(info, tty);
+            } else if (isr & IRQ_ALLSENT) {
+                info->icount.txok++;
+                tx_done(info, tty);
+            } else if (isr & IRQ_TXFIFO)
+                tx_ready(info, tty);
+        }
+        if (gis & BIT7) {
+            pis = read_reg(info, CHA + PIS);
+            if (pis & BIT1)
+                dsr_change(info);
+            if (pis & BIT2)
+                ri_change(info);
+        }
+    }
 
-	/* Request bottom half processing if there's something
-	 * for it to do and the bh is not already running
-	 */
+    /* Request bottom half processing if there's something
+     * for it to do and the bh is not already running
+     */
 
-	if (info->pending_bh && !info->bh_running && !info->bh_requested) {
-		if ( debug_level >= DEBUG_LEVEL_ISR )
-			printk("%s(%d):%s queueing bh task.\n",
-				__FILE__,__LINE__,info->device_name);
-		schedule_work(&info->task);
-		info->bh_requested = true;
-	}
+    if (info->pending_bh && !info->bh_running && !info->bh_requested) {
+        if ( debug_level >= DEBUG_LEVEL_ISR )
+            printk("%s(%d):%s queueing bh task.\n",
+                   __FILE__,__LINE__,info->device_name);
+        schedule_work(&info->task);
+        info->bh_requested = true;
+    }
 
-	spin_unlock(&info->lock);
-	tty_kref_put(tty);
+    spin_unlock(&info->lock);
+    tty_kref_put(tty);
 
-	if (debug_level >= DEBUG_LEVEL_ISR)
-		printk("%s(%d):mgslpc_isr(%d)exit.\n",
-		       __FILE__, __LINE__, info->irq_level);
+    if (debug_level >= DEBUG_LEVEL_ISR)
+        printk("%s(%d):mgslpc_isr(%d)exit.\n",
+               __FILE__, __LINE__, info->irq_level);
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 /* Initialize and start device.
  */
-static int startup(MGSLPC_INFO * info, struct tty_struct *tty)
-{
-	int retval = 0;
+static int startup(MGSLPC_INFO * info, struct tty_struct *tty) {
+    int retval = 0;
 
-	if (debug_level >= DEBUG_LEVEL_INFO)
-		printk("%s(%d):startup(%s)\n",__FILE__,__LINE__,info->device_name);
+    if (debug_level >= DEBUG_LEVEL_INFO)
+        printk("%s(%d):startup(%s)\n",__FILE__,__LINE__,info->device_name);
 
-	if (info->port.flags & ASYNC_INITIALIZED)
-		return 0;
+    if (info->port.flags & ASYNC_INITIALIZED)
+        return 0;
 
-	if (!info->tx_buf) {
-		/* allocate a page of memory for a transmit buffer */
-		info->tx_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
-		if (!info->tx_buf) {
-			printk(KERN_ERR"%s(%d):%s can't allocate transmit buffer\n",
+    if (!info->tx_buf) {
+        /* allocate a page of memory for a transmit buffer */
+        info->tx_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
+        if (!info->tx_buf) {
+            printk(KERN_ERR"%s(%d):%s can't allocate transmit buffer\n",
 				__FILE__,__LINE__,info->device_name);
 			return -ENOMEM;
 		}

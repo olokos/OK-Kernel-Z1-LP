@@ -39,52 +39,48 @@ extern void flush_cache_all(void);
 extern void flush_cache_mm(struct mm_struct *mm);
 extern void flush_cache_dup_mm(struct mm_struct *mm);
 extern void flush_cache_page(struct vm_area_struct *vma,
-				unsigned long addr, unsigned long pfn);
+                             unsigned long addr, unsigned long pfn);
 extern void flush_cache_range(struct vm_area_struct *vma,
-				 unsigned long start, unsigned long end);
+                              unsigned long start, unsigned long end);
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
 extern void flush_dcache_page(struct page *page);
 extern void flush_icache_range(unsigned long start, unsigned long end);
 extern void flush_icache_page(struct vm_area_struct *vma,
-				 struct page *page);
+                              struct page *page);
 extern void flush_cache_sigtramp(unsigned long address);
 
 struct flusher_data {
-	struct vm_area_struct *vma;
-	unsigned long addr1, addr2;
+    struct vm_area_struct *vma;
+    unsigned long addr1, addr2;
 };
 
 #define ARCH_HAS_FLUSH_ANON_PAGE
 extern void __flush_anon_page(struct page *page, unsigned long);
 
 static inline void flush_anon_page(struct vm_area_struct *vma,
-				   struct page *page, unsigned long vmaddr)
-{
-	if (boot_cpu_data.dcache.n_aliases && PageAnon(page))
-		__flush_anon_page(page, vmaddr);
+                                   struct page *page, unsigned long vmaddr) {
+    if (boot_cpu_data.dcache.n_aliases && PageAnon(page))
+        __flush_anon_page(page, vmaddr);
 }
-static inline void flush_kernel_vmap_range(void *addr, int size)
-{
-	__flush_wback_region(addr, size);
+static inline void flush_kernel_vmap_range(void *addr, int size) {
+    __flush_wback_region(addr, size);
 }
-static inline void invalidate_kernel_vmap_range(void *addr, int size)
-{
-	__flush_invalidate_region(addr, size);
+static inline void invalidate_kernel_vmap_range(void *addr, int size) {
+    __flush_invalidate_region(addr, size);
 }
 
 #define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-static inline void flush_kernel_dcache_page(struct page *page)
-{
-	flush_dcache_page(page);
+static inline void flush_kernel_dcache_page(struct page *page) {
+    flush_dcache_page(page);
 }
 
 extern void copy_to_user_page(struct vm_area_struct *vma,
-	struct page *page, unsigned long vaddr, void *dst, const void *src,
-	unsigned long len);
+                              struct page *page, unsigned long vaddr, void *dst, const void *src,
+                              unsigned long len);
 
 extern void copy_from_user_page(struct vm_area_struct *vma,
-	struct page *page, unsigned long vaddr, void *dst, const void *src,
-	unsigned long len);
+                                struct page *page, unsigned long vaddr, void *dst, const void *src,
+                                unsigned long len);
 
 #define flush_cache_vmap(start, end)		local_flush_cache_all(NULL)
 #define flush_cache_vunmap(start, end)		local_flush_cache_all(NULL)

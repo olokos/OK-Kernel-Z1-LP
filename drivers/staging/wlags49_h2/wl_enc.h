@@ -93,12 +93,11 @@
 /*******************************************************************************
  * type definitions
  ******************************************************************************/
-typedef struct _encstct
-{
-	hcf_32	                   dwMagic;
-	hcf_16	                   wTxKeyID;
-	hcf_16	                   wEnabled;
-	CFG_DEFAULT_KEYS_STRCT     EncStr;
+typedef struct _encstct {
+    hcf_32	                   dwMagic;
+    hcf_16	                   wTxKeyID;
+    hcf_16	                   wEnabled;
+    CFG_DEFAULT_KEYS_STRCT     EncStr;
 }
 ENCSTRCT, *PENCSTRCT;
 

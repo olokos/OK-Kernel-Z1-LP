@@ -16,12 +16,12 @@
 #define __MSM_FIPS_SELFTEST_H__
 
 struct ctr_debg_test_inputs_s {
-	char *entropy_string;		/* must by 16 bytes */
-	char *nonce_string;		/* must be 8 bytes */
-	char *reseed_entropy_string;	/* must be 16 bytes */
-	char *observed_string;		/* lenth is defined
+    char *entropy_string;		/* must by 16 bytes */
+    char *nonce_string;		/* must be 8 bytes */
+    char *reseed_entropy_string;	/* must be 16 bytes */
+    char *observed_string;		/* lenth is defined
 						in observed_string_len */
-	int  observed_string_len;
+    int  observed_string_len;
 };
 
 int fips_ctraes128_df_known_answer_test(struct ctr_debg_test_inputs_s *tcase);

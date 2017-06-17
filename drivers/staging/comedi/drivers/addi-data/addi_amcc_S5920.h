@@ -23,5 +23,5 @@
 #define NVCMD_BEGIN_WRITE	(0x6 << 5)	/* EEPROM begin write command */
 
 int i_AddiHeaderRW_ReadEeprom(int i_NbOfWordsToRead,
-			      unsigned int dw_PCIBoardEepromAddress,
-			      unsigned short w_EepromStartAddress, unsigned short *pw_DataRead);
+                              unsigned int dw_PCIBoardEepromAddress,
+                              unsigned short w_EepromStartAddress, unsigned short *pw_DataRead);

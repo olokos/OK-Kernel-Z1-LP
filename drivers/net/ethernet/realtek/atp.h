@@ -31,8 +31,7 @@ enum chip_type { RTL8002, RTL8012 };
 #define RdAddr	0xC0
 #define HNib	0x10
 
-enum page0_regs
-{
+enum page0_regs {
     /* The first six registers hold the ethernet physical station address. */
     PAR0 = 0, PAR1 = 1, PAR2 = 2, PAR3 = 3, PAR4 = 4, PAR5 = 5,
     TxCNT0 = 6, TxCNT1 = 7,		/* The transmit byte count. */
@@ -42,7 +41,8 @@ enum page0_regs
     CMR2 = 13,				/* Command register 2. */
     MODSEL = 14,			/* Mode select register. */
     MAR = 14,				/* Memory address register (?). */
-    CMR2_h = 0x1d, };
+    CMR2_h = 0x1d,
+};
 
 enum eepage_regs
 { PROM_CMD = 6, PROM_DATA = 7 };	/* Note that PROM_CMD is in the "high" bits. */
@@ -76,8 +76,7 @@ enum eepage_regs
 
 /* An inline function used below: it differs from inb() by explicitly return an unsigned
    char, saving a truncation. */
-static inline unsigned char inbyte(unsigned short port)
-{
+static inline unsigned char inbyte(unsigned short port) {
     unsigned char _v;
     __asm__ __volatile__ ("inb %w1,%b0" :"=a" (_v):"d" (port));
     return _v;
@@ -85,8 +84,7 @@ static inline unsigned char inbyte(unsigned short port)
 
 /* Read register OFFSET.
    This command should always be terminated with read_end(). */
-static inline unsigned char read_nibble(short port, unsigned char offset)
-{
+static inline unsigned char read_nibble(short port, unsigned char offset) {
     unsigned char retval;
     outb(EOC+offset, port + PAR_DATA);
     outb(RdAddr+offset, port + PAR_DATA);
@@ -99,8 +97,7 @@ static inline unsigned char read_nibble(short port, unsigned char offset)
 
 /* Functions for bulk data read.  The interrupt line is always disabled. */
 /* Get a byte using read mode 0, reading data from the control lines. */
-static inline unsigned char read_byte_mode0(short ioaddr)
-{
+static inline unsigned char read_byte_mode0(short ioaddr) {
     unsigned char low_nib;
 
     outb(Ctrl_LNibRead, ioaddr + PAR_CONTROL);
@@ -113,8 +110,7 @@ static inline unsigned char read_byte_mode0(short ioaddr)
 }
 
 /* The same as read_byte_mode0(), but does multiple inb()s for stability. */
-static inline unsigned char read_byte_mode2(short ioaddr)
-{
+static inline unsigned char read_byte_mode2(short ioaddr) {
     unsigned char low_nib;
 
     outb(Ctrl_LNibRead, ioaddr + PAR_CONTROL);
@@ -126,8 +122,7 @@ static inline unsigned char read_byte_mode2(short ioaddr)
 }
 
 /* Read a byte through the data register. */
-static inline unsigned char read_byte_mode4(short ioaddr)
-{
+static inline unsigned char read_byte_mode4(short ioaddr) {
     unsigned char low_nib;
 
     outb(RdAddr | MAR, ioaddr + PAR_DATA);
@@ -137,8 +132,7 @@ static inline unsigned char read_byte_mode4(short ioaddr)
 }
 
 /* Read a byte through the data register, double reading to allow settling. */
-static inline unsigned char read_byte_mode6(short ioaddr)
-{
+static inline unsigned char read_byte_mode6(short ioaddr) {
     unsigned char low_nib;
 
     outb(RdAddr | MAR, ioaddr + PAR_DATA);
@@ -150,8 +144,7 @@ static inline unsigned char read_byte_mode6(short ioaddr)
 }
 
 static inline void
-write_reg(short port, unsigned char reg, unsigned char value)
-{
+write_reg(short port, unsigned char reg, unsigned char value) {
     unsigned char outval;
     outb(EOC | reg, port + PAR_DATA);
     outval = WrAddr | reg;
@@ -169,8 +162,7 @@ write_reg(short port, unsigned char reg, unsigned char value)
 }
 
 static inline void
-write_reg_high(short port, unsigned char reg, unsigned char value)
-{
+write_reg_high(short port, unsigned char reg, unsigned char value) {
     unsigned char outval = EOC | HNib | reg;
 
     outb(outval, port + PAR_DATA);
@@ -189,8 +181,7 @@ write_reg_high(short port, unsigned char reg, unsigned char value)
 
 /* Write a byte out using nibble mode.  The low nibble is written first. */
 static inline void
-write_reg_byte(short port, unsigned char reg, unsigned char value)
-{
+write_reg_byte(short port, unsigned char reg, unsigned char value) {
     unsigned char outval;
     outb(EOC | reg, port + PAR_DATA); 	/* Reset the address register. */
     outval = WrAddr | reg;
@@ -214,14 +205,12 @@ write_reg_byte(short port, unsigned char reg, unsigned char value)
  * It should only be needed when there is skew between the individual data
  * lines.
  */
-static inline void write_byte_mode0(short ioaddr, unsigned char value)
-{
+static inline void write_byte_mode0(short ioaddr, unsigned char value) {
     outb(value & 0x0f, ioaddr + PAR_DATA);
     outb((value>>4) | 0x10, ioaddr + PAR_DATA);
 }
 
-static inline void write_byte_mode1(short ioaddr, unsigned char value)
-{
+static inline void write_byte_mode1(short ioaddr, unsigned char value) {
     outb(value & 0x0f, ioaddr + PAR_DATA);
     outb(Ctrl_IRQEN | Ctrl_LNibWrite, ioaddr + PAR_CONTROL);
     outb((value>>4) | 0x10, ioaddr + PAR_DATA);
@@ -229,8 +218,7 @@ static inline void write_byte_mode1(short ioaddr, unsigned char value)
 }
 
 /* Write 16bit VALUE to the packet buffer: the same as above just doubled. */
-static inline void write_word_mode0(short ioaddr, unsigned short value)
-{
+static inline void write_word_mode0(short ioaddr, unsigned short value) {
     outb(value & 0x0f, ioaddr + PAR_DATA);
     value >>= 4;
     outb((value & 0x0f) | 0x10, ioaddr + PAR_DATA);

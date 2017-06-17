@@ -1,4 +1,4 @@
-/* 
+/*
  *    Copyright (C) 2002 Richard Hirst <rhirst at parisc-linux.org>
  *    Copyright (C) 2003 James Bottomley <jejb at parisc-linux.org>
  *    Copyright (C) 2003 Randolph Chung <tausq with parisc-linux.org>
@@ -38,9 +38,9 @@
 typedef __u32 __sighandler_t32;
 
 struct sigaction32 {
-	__sighandler_t32 sa_handler;
-	unsigned int sa_flags;
-	compat_sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t32 sa_handler;
+    unsigned int sa_flags;
+    compat_sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 #endif

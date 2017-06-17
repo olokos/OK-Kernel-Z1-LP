@@ -76,9 +76,8 @@ do {						\
 
 
 #ifdef CONFIG_DYNAMIC_FTRACE
-static inline unsigned long ftrace_call_adjust(unsigned long addr)
-{
-	return addr;
+static inline unsigned long ftrace_call_adjust(unsigned long addr) {
+    return addr;
 }
 
 struct dyn_arch_ftrace {

@@ -53,9 +53,9 @@
 
 
 struct lgs8gl5_state {
-	struct i2c_adapter *i2c;
-	const struct lgs8gl5_config *config;
-	struct dvb_frontend frontend;
+    struct i2c_adapter *i2c;
+    const struct lgs8gl5_config *config;
+    struct dvb_frontend frontend;
 };
 
 
@@ -69,309 +69,293 @@ static int debug;
 
 /* Writes into demod's register */
 static int
-lgs8gl5_write_reg(struct lgs8gl5_state *state, u8 reg, u8 data)
-{
-	int ret;
-	u8 buf[] = {reg, data};
-	struct i2c_msg msg = {
-		.addr  = state->config->demod_address,
-		.flags = 0,
-		.buf   = buf,
-		.len   = 2
-	};
+lgs8gl5_write_reg(struct lgs8gl5_state *state, u8 reg, u8 data) {
+    int ret;
+    u8 buf[] = {reg, data};
+    struct i2c_msg msg = {
+        .addr  = state->config->demod_address,
+        .flags = 0,
+        .buf   = buf,
+        .len   = 2
+    };
 
-	ret = i2c_transfer(state->i2c, &msg, 1);
-	if (ret != 1)
-		dprintk("%s: error (reg=0x%02x, val=0x%02x, ret=%i)\n",
-			__func__, reg, data, ret);
-	return (ret != 1) ? -1 : 0;
+    ret = i2c_transfer(state->i2c, &msg, 1);
+    if (ret != 1)
+        dprintk("%s: error (reg=0x%02x, val=0x%02x, ret=%i)\n",
+                __func__, reg, data, ret);
+    return (ret != 1) ? -1 : 0;
 }
 
 
 /* Reads from demod's register */
 static int
-lgs8gl5_read_reg(struct lgs8gl5_state *state, u8 reg)
-{
-	int ret;
-	u8 b0[] = {reg};
-	u8 b1[] = {0};
-	struct i2c_msg msg[2] = {
-		{
-			.addr  = state->config->demod_address,
-			.flags = 0,
-			.buf   = b0,
-			.len   = 1
-		},
-		{
-			.addr  = state->config->demod_address,
-			.flags = I2C_M_RD,
-			.buf   = b1,
-			.len   = 1
-		}
-	};
+lgs8gl5_read_reg(struct lgs8gl5_state *state, u8 reg) {
+    int ret;
+    u8 b0[] = {reg};
+    u8 b1[] = {0};
+    struct i2c_msg msg[2] = {
+        {
+            .addr  = state->config->demod_address,
+            .flags = 0,
+            .buf   = b0,
+            .len   = 1
+        },
+        {
+            .addr  = state->config->demod_address,
+            .flags = I2C_M_RD,
+            .buf   = b1,
+            .len   = 1
+        }
+    };
 
-	ret = i2c_transfer(state->i2c, msg, 2);
-	if (ret != 2)
-		return -EIO;
+    ret = i2c_transfer(state->i2c, msg, 2);
+    if (ret != 2)
+        return -EIO;
 
-	return b1[0];
+    return b1[0];
 }
 
 
 static int
-lgs8gl5_update_reg(struct lgs8gl5_state *state, u8 reg, u8 data)
-{
-	lgs8gl5_read_reg(state, reg);
-	lgs8gl5_write_reg(state, reg, data);
-	return 0;
+lgs8gl5_update_reg(struct lgs8gl5_state *state, u8 reg, u8 data) {
+    lgs8gl5_read_reg(state, reg);
+    lgs8gl5_write_reg(state, reg, data);
+    return 0;
 }
 
 
 /* Writes into alternate device's register */
 /* TODO:  Find out what that device is for! */
 static int
-lgs8gl5_update_alt_reg(struct lgs8gl5_state *state, u8 reg, u8 data)
-{
-	int ret;
-	u8 b0[] = {reg};
-	u8 b1[] = {0};
-	u8 b2[] = {reg, data};
-	struct i2c_msg msg[3] = {
-		{
-			.addr  = state->config->demod_address + 2,
-			.flags = 0,
-			.buf   = b0,
-			.len   = 1
-		},
-		{
-			.addr  = state->config->demod_address + 2,
-			.flags = I2C_M_RD,
-			.buf   = b1,
-			.len   = 1
-		},
-		{
-			.addr  = state->config->demod_address + 2,
-			.flags = 0,
-			.buf   = b2,
-			.len   = 2
-		},
-	};
+lgs8gl5_update_alt_reg(struct lgs8gl5_state *state, u8 reg, u8 data) {
+    int ret;
+    u8 b0[] = {reg};
+    u8 b1[] = {0};
+    u8 b2[] = {reg, data};
+    struct i2c_msg msg[3] = {
+        {
+            .addr  = state->config->demod_address + 2,
+            .flags = 0,
+            .buf   = b0,
+            .len   = 1
+        },
+        {
+            .addr  = state->config->demod_address + 2,
+            .flags = I2C_M_RD,
+            .buf   = b1,
+            .len   = 1
+        },
+        {
+            .addr  = state->config->demod_address + 2,
+            .flags = 0,
+            .buf   = b2,
+            .len   = 2
+        },
+    };
 
-	ret = i2c_transfer(state->i2c, msg, 3);
-	return (ret != 3) ? -1 : 0;
+    ret = i2c_transfer(state->i2c, msg, 3);
+    return (ret != 3) ? -1 : 0;
 }
 
 
 static void
-lgs8gl5_soft_reset(struct lgs8gl5_state *state)
-{
-	u8 val;
+lgs8gl5_soft_reset(struct lgs8gl5_state *state) {
+    u8 val;
 
-	dprintk("%s\n", __func__);
+    dprintk("%s\n", __func__);
 
-	val = lgs8gl5_read_reg(state, REG_RESET);
-	lgs8gl5_write_reg(state, REG_RESET, val & ~REG_RESET_OFF);
-	lgs8gl5_write_reg(state, REG_RESET, val | REG_RESET_OFF);
-	msleep(5);
+    val = lgs8gl5_read_reg(state, REG_RESET);
+    lgs8gl5_write_reg(state, REG_RESET, val & ~REG_RESET_OFF);
+    lgs8gl5_write_reg(state, REG_RESET, val | REG_RESET_OFF);
+    msleep(5);
 }
 
 
 /* Starts demodulation */
 static void
-lgs8gl5_start_demod(struct lgs8gl5_state *state)
-{
-	u8  val;
-	int n;
+lgs8gl5_start_demod(struct lgs8gl5_state *state) {
+    u8  val;
+    int n;
 
-	dprintk("%s\n", __func__);
+    dprintk("%s\n", __func__);
 
-	lgs8gl5_update_alt_reg(state, 0xc2, 0x28);
-	lgs8gl5_soft_reset(state);
-	lgs8gl5_update_reg(state, REG_07, 0x10);
-	lgs8gl5_update_reg(state, REG_07, 0x10);
-	lgs8gl5_write_reg(state, REG_09, 0x0e);
-	lgs8gl5_write_reg(state, REG_0A, 0xe5);
-	lgs8gl5_write_reg(state, REG_0B, 0x35);
-	lgs8gl5_write_reg(state, REG_0C, 0x30);
+    lgs8gl5_update_alt_reg(state, 0xc2, 0x28);
+    lgs8gl5_soft_reset(state);
+    lgs8gl5_update_reg(state, REG_07, 0x10);
+    lgs8gl5_update_reg(state, REG_07, 0x10);
+    lgs8gl5_write_reg(state, REG_09, 0x0e);
+    lgs8gl5_write_reg(state, REG_0A, 0xe5);
+    lgs8gl5_write_reg(state, REG_0B, 0x35);
+    lgs8gl5_write_reg(state, REG_0C, 0x30);
 
-	lgs8gl5_update_reg(state, REG_03, 0x00);
-	lgs8gl5_update_reg(state, REG_7E, 0x01);
-	lgs8gl5_update_alt_reg(state, 0xc5, 0x00);
-	lgs8gl5_update_reg(state, REG_04, 0x02);
-	lgs8gl5_update_reg(state, REG_37, 0x01);
-	lgs8gl5_soft_reset(state);
+    lgs8gl5_update_reg(state, REG_03, 0x00);
+    lgs8gl5_update_reg(state, REG_7E, 0x01);
+    lgs8gl5_update_alt_reg(state, 0xc5, 0x00);
+    lgs8gl5_update_reg(state, REG_04, 0x02);
+    lgs8gl5_update_reg(state, REG_37, 0x01);
+    lgs8gl5_soft_reset(state);
 
-	/* Wait for carrier */
-	for (n = 0;  n < 10;  n++) {
-		val = lgs8gl5_read_reg(state, REG_STRENGTH);
-		dprintk("Wait for carrier[%d] 0x%02X\n", n, val);
-		if (val & REG_STRENGTH_CARRIER)
-			break;
-		msleep(4);
-	}
-	if (!(val & REG_STRENGTH_CARRIER))
-		return;
+    /* Wait for carrier */
+    for (n = 0;  n < 10;  n++) {
+        val = lgs8gl5_read_reg(state, REG_STRENGTH);
+        dprintk("Wait for carrier[%d] 0x%02X\n", n, val);
+        if (val & REG_STRENGTH_CARRIER)
+            break;
+        msleep(4);
+    }
+    if (!(val & REG_STRENGTH_CARRIER))
+        return;
 
-	/* Wait for lock */
-	for (n = 0;  n < 20;  n++) {
-		val = lgs8gl5_read_reg(state, REG_STATUS);
-		dprintk("Wait for lock[%d] 0x%02X\n", n, val);
-		if (val & REG_STATUS_LOCK)
-			break;
-		msleep(12);
-	}
-	if (!(val & REG_STATUS_LOCK))
-		return;
+    /* Wait for lock */
+    for (n = 0;  n < 20;  n++) {
+        val = lgs8gl5_read_reg(state, REG_STATUS);
+        dprintk("Wait for lock[%d] 0x%02X\n", n, val);
+        if (val & REG_STATUS_LOCK)
+            break;
+        msleep(12);
+    }
+    if (!(val & REG_STATUS_LOCK))
+        return;
 
-	lgs8gl5_write_reg(state, REG_7D, lgs8gl5_read_reg(state, REG_A2));
-	lgs8gl5_soft_reset(state);
+    lgs8gl5_write_reg(state, REG_7D, lgs8gl5_read_reg(state, REG_A2));
+    lgs8gl5_soft_reset(state);
 }
 
 
 static int
-lgs8gl5_init(struct dvb_frontend *fe)
-{
-	struct lgs8gl5_state *state = fe->demodulator_priv;
+lgs8gl5_init(struct dvb_frontend *fe) {
+    struct lgs8gl5_state *state = fe->demodulator_priv;
 
-	dprintk("%s\n", __func__);
+    dprintk("%s\n", __func__);
 
-	lgs8gl5_update_alt_reg(state, 0xc2, 0x28);
-	lgs8gl5_soft_reset(state);
-	lgs8gl5_update_reg(state, REG_07, 0x10);
-	lgs8gl5_update_reg(state, REG_07, 0x10);
-	lgs8gl5_write_reg(state, REG_09, 0x0e);
-	lgs8gl5_write_reg(state, REG_0A, 0xe5);
-	lgs8gl5_write_reg(state, REG_0B, 0x35);
-	lgs8gl5_write_reg(state, REG_0C, 0x30);
+    lgs8gl5_update_alt_reg(state, 0xc2, 0x28);
+    lgs8gl5_soft_reset(state);
+    lgs8gl5_update_reg(state, REG_07, 0x10);
+    lgs8gl5_update_reg(state, REG_07, 0x10);
+    lgs8gl5_write_reg(state, REG_09, 0x0e);
+    lgs8gl5_write_reg(state, REG_0A, 0xe5);
+    lgs8gl5_write_reg(state, REG_0B, 0x35);
+    lgs8gl5_write_reg(state, REG_0C, 0x30);
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_read_status(struct dvb_frontend *fe, fe_status_t *status)
-{
-	struct lgs8gl5_state *state = fe->demodulator_priv;
-	u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
-	u8 flags = lgs8gl5_read_reg(state, REG_STATUS);
+lgs8gl5_read_status(struct dvb_frontend *fe, fe_status_t *status) {
+    struct lgs8gl5_state *state = fe->demodulator_priv;
+    u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
+    u8 flags = lgs8gl5_read_reg(state, REG_STATUS);
 
-	*status = 0;
+    *status = 0;
 
-	if ((level & REG_STRENGTH_MASK) > 0)
-		*status |= FE_HAS_SIGNAL;
-	if (level & REG_STRENGTH_CARRIER)
-		*status |= FE_HAS_CARRIER;
-	if (flags & REG_STATUS_SYNC)
-		*status |= FE_HAS_SYNC;
-	if (flags & REG_STATUS_LOCK)
-		*status |= FE_HAS_LOCK;
+    if ((level & REG_STRENGTH_MASK) > 0)
+        *status |= FE_HAS_SIGNAL;
+    if (level & REG_STRENGTH_CARRIER)
+        *status |= FE_HAS_CARRIER;
+    if (flags & REG_STATUS_SYNC)
+        *status |= FE_HAS_SYNC;
+    if (flags & REG_STATUS_LOCK)
+        *status |= FE_HAS_LOCK;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_read_ber(struct dvb_frontend *fe, u32 *ber)
-{
-	*ber = 0;
+lgs8gl5_read_ber(struct dvb_frontend *fe, u32 *ber) {
+    *ber = 0;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_read_signal_strength(struct dvb_frontend *fe, u16 *signal_strength)
-{
-	struct lgs8gl5_state *state = fe->demodulator_priv;
-	u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
-	*signal_strength = (level & REG_STRENGTH_MASK) << 8;
+lgs8gl5_read_signal_strength(struct dvb_frontend *fe, u16 *signal_strength) {
+    struct lgs8gl5_state *state = fe->demodulator_priv;
+    u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
+    *signal_strength = (level & REG_STRENGTH_MASK) << 8;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_read_snr(struct dvb_frontend *fe, u16 *snr)
-{
-	struct lgs8gl5_state *state = fe->demodulator_priv;
-	u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
-	*snr = (level & REG_STRENGTH_MASK) << 8;
+lgs8gl5_read_snr(struct dvb_frontend *fe, u16 *snr) {
+    struct lgs8gl5_state *state = fe->demodulator_priv;
+    u8 level = lgs8gl5_read_reg(state, REG_STRENGTH);
+    *snr = (level & REG_STRENGTH_MASK) << 8;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks)
-{
-	*ucblocks = 0;
+lgs8gl5_read_ucblocks(struct dvb_frontend *fe, u32 *ucblocks) {
+    *ucblocks = 0;
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_set_frontend(struct dvb_frontend *fe)
-{
-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
-	struct lgs8gl5_state *state = fe->demodulator_priv;
+lgs8gl5_set_frontend(struct dvb_frontend *fe) {
+    struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+    struct lgs8gl5_state *state = fe->demodulator_priv;
 
-	dprintk("%s\n", __func__);
+    dprintk("%s\n", __func__);
 
-	if (p->bandwidth_hz != 8000000)
-		return -EINVAL;
+    if (p->bandwidth_hz != 8000000)
+        return -EINVAL;
 
-	if (fe->ops.tuner_ops.set_params) {
-		fe->ops.tuner_ops.set_params(fe);
-		if (fe->ops.i2c_gate_ctrl)
-			fe->ops.i2c_gate_ctrl(fe, 0);
-	}
+    if (fe->ops.tuner_ops.set_params) {
+        fe->ops.tuner_ops.set_params(fe);
+        if (fe->ops.i2c_gate_ctrl)
+            fe->ops.i2c_gate_ctrl(fe, 0);
+    }
 
-	/* lgs8gl5_set_inversion(state, p->inversion); */
+    /* lgs8gl5_set_inversion(state, p->inversion); */
 
-	lgs8gl5_start_demod(state);
+    lgs8gl5_start_demod(state);
 
-	return 0;
+    return 0;
 }
 
 
 static int
-lgs8gl5_get_frontend(struct dvb_frontend *fe)
-{
-	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
-	struct lgs8gl5_state *state = fe->demodulator_priv;
-	u8 inv = lgs8gl5_read_reg(state, REG_INVERSION);
+lgs8gl5_get_frontend(struct dvb_frontend *fe) {
+    struct dtv_frontend_properties *p = &fe->dtv_property_cache;
+    struct lgs8gl5_state *state = fe->demodulator_priv;
+    u8 inv = lgs8gl5_read_reg(state, REG_INVERSION);
 
-	p->inversion = (inv & REG_INVERSION_ON) ? INVERSION_ON : INVERSION_OFF;
+    p->inversion = (inv & REG_INVERSION_ON) ? INVERSION_ON : INVERSION_OFF;
 
-	p->code_rate_HP = FEC_1_2;
-	p->code_rate_LP = FEC_7_8;
-	p->guard_interval = GUARD_INTERVAL_1_32;
-	p->transmission_mode = TRANSMISSION_MODE_2K;
-	p->modulation = QAM_64;
-	p->hierarchy = HIERARCHY_NONE;
-	p->bandwidth_hz = 8000000;
+    p->code_rate_HP = FEC_1_2;
+    p->code_rate_LP = FEC_7_8;
+    p->guard_interval = GUARD_INTERVAL_1_32;
+    p->transmission_mode = TRANSMISSION_MODE_2K;
+    p->modulation = QAM_64;
+    p->hierarchy = HIERARCHY_NONE;
+    p->bandwidth_hz = 8000000;
 
-	return 0;
+    return 0;
 }
 
 
 static int
 lgs8gl5_get_tune_settings(struct dvb_frontend *fe,
-		struct dvb_frontend_tune_settings *fesettings)
-{
-	fesettings->min_delay_ms = 240;
-	fesettings->step_size    = 0;
-	fesettings->max_drift    = 0;
-	return 0;
+                          struct dvb_frontend_tune_settings *fesettings) {
+    fesettings->min_delay_ms = 240;
+    fesettings->step_size    = 0;
+    fesettings->max_drift    = 0;
+    return 0;
 }
 
 
 static void
-lgs8gl5_release(struct dvb_frontend *fe)
-{
-	struct lgs8gl5_state *state = fe->demodulator_priv;
-	kfree(state);
+lgs8gl5_release(struct dvb_frontend *fe) {
+    struct lgs8gl5_state *state = fe->demodulator_priv;
+    kfree(state);
 }
 
 
@@ -379,69 +363,68 @@ static struct dvb_frontend_ops lgs8gl5_ops;
 
 
 struct dvb_frontend*
-lgs8gl5_attach(const struct lgs8gl5_config *config, struct i2c_adapter *i2c)
-{
-	struct lgs8gl5_state *state = NULL;
+lgs8gl5_attach(const struct lgs8gl5_config *config, struct i2c_adapter *i2c) {
+    struct lgs8gl5_state *state = NULL;
 
-	dprintk("%s\n", __func__);
+    dprintk("%s\n", __func__);
 
-	/* Allocate memory for the internal state */
-	state = kzalloc(sizeof(struct lgs8gl5_state), GFP_KERNEL);
-	if (state == NULL)
-		goto error;
+    /* Allocate memory for the internal state */
+    state = kzalloc(sizeof(struct lgs8gl5_state), GFP_KERNEL);
+    if (state == NULL)
+        goto error;
 
-	/* Setup the state */
-	state->config = config;
-	state->i2c    = i2c;
+    /* Setup the state */
+    state->config = config;
+    state->i2c    = i2c;
 
-	/* Check if the demod is there */
-	if (lgs8gl5_read_reg(state, REG_RESET) < 0)
-		goto error;
+    /* Check if the demod is there */
+    if (lgs8gl5_read_reg(state, REG_RESET) < 0)
+        goto error;
 
-	/* Create dvb_frontend */
-	memcpy(&state->frontend.ops, &lgs8gl5_ops,
-		sizeof(struct dvb_frontend_ops));
-	state->frontend.demodulator_priv = state;
-	return &state->frontend;
+    /* Create dvb_frontend */
+    memcpy(&state->frontend.ops, &lgs8gl5_ops,
+           sizeof(struct dvb_frontend_ops));
+    state->frontend.demodulator_priv = state;
+    return &state->frontend;
 
 error:
-	kfree(state);
-	return NULL;
+    kfree(state);
+    return NULL;
 }
 EXPORT_SYMBOL(lgs8gl5_attach);
 
 
 static struct dvb_frontend_ops lgs8gl5_ops = {
-	.delsys = { SYS_DMBTH },
-	.info = {
-		.name			= "Legend Silicon LGS-8GL5 DMB-TH",
-		.frequency_min		= 474000000,
-		.frequency_max		= 858000000,
-		.frequency_stepsize	= 10000,
-		.frequency_tolerance	= 0,
-		.caps = FE_CAN_FEC_AUTO |
-			FE_CAN_QPSK | FE_CAN_QAM_16 | FE_CAN_QAM_32 |
-			FE_CAN_QAM_64 | FE_CAN_QAM_AUTO |
-			FE_CAN_TRANSMISSION_MODE_AUTO |
-			FE_CAN_BANDWIDTH_AUTO |
-			FE_CAN_GUARD_INTERVAL_AUTO |
-			FE_CAN_HIERARCHY_AUTO |
-			FE_CAN_RECOVER
-	},
+    .delsys = { SYS_DMBTH },
+    .info = {
+        .name			= "Legend Silicon LGS-8GL5 DMB-TH",
+        .frequency_min		= 474000000,
+        .frequency_max		= 858000000,
+        .frequency_stepsize	= 10000,
+        .frequency_tolerance	= 0,
+        .caps = FE_CAN_FEC_AUTO |
+        FE_CAN_QPSK | FE_CAN_QAM_16 | FE_CAN_QAM_32 |
+        FE_CAN_QAM_64 | FE_CAN_QAM_AUTO |
+        FE_CAN_TRANSMISSION_MODE_AUTO |
+        FE_CAN_BANDWIDTH_AUTO |
+        FE_CAN_GUARD_INTERVAL_AUTO |
+        FE_CAN_HIERARCHY_AUTO |
+        FE_CAN_RECOVER
+    },
 
-	.release = lgs8gl5_release,
+    .release = lgs8gl5_release,
 
-	.init = lgs8gl5_init,
+    .init = lgs8gl5_init,
 
-	.set_frontend = lgs8gl5_set_frontend,
-	.get_frontend = lgs8gl5_get_frontend,
-	.get_tune_settings = lgs8gl5_get_tune_settings,
+    .set_frontend = lgs8gl5_set_frontend,
+    .get_frontend = lgs8gl5_get_frontend,
+    .get_tune_settings = lgs8gl5_get_tune_settings,
 
-	.read_status = lgs8gl5_read_status,
-	.read_ber = lgs8gl5_read_ber,
-	.read_signal_strength = lgs8gl5_read_signal_strength,
-	.read_snr = lgs8gl5_read_snr,
-	.read_ucblocks = lgs8gl5_read_ucblocks,
+    .read_status = lgs8gl5_read_status,
+    .read_ber = lgs8gl5_read_ber,
+    .read_signal_strength = lgs8gl5_read_signal_strength,
+    .read_snr = lgs8gl5_read_snr,
+    .read_ucblocks = lgs8gl5_read_ucblocks,
 };
 
 

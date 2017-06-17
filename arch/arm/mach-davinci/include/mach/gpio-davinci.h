@@ -24,8 +24,8 @@
 #define DAVINCI_GPIO_BASE 0x01C67000
 
 enum davinci_gpio_type {
-	GPIO_TYPE_DAVINCI = 0,
-	GPIO_TYPE_TNETV107X,
+    GPIO_TYPE_DAVINCI = 0,
+    GPIO_TYPE_TNETV107X,
 };
 
 /*
@@ -53,13 +53,13 @@ enum davinci_gpio_type {
 #define GPIO_TO_PIN(bank, gpio)	(16 * (bank) + (gpio))
 
 struct davinci_gpio_controller {
-	struct gpio_chip	chip;
-	int			irq_base;
-	spinlock_t		lock;
-	void __iomem		*regs;
-	void __iomem		*set_data;
-	void __iomem		*clr_data;
-	void __iomem		*in_data;
+    struct gpio_chip	chip;
+    int			irq_base;
+    spinlock_t		lock;
+    void __iomem		*regs;
+    void __iomem		*set_data;
+    void __iomem		*clr_data;
+    void __iomem		*in_data;
 };
 
 /* The __gpio_to_controller() and __gpio_mask() functions inline to constants
@@ -72,20 +72,18 @@ struct davinci_gpio_controller {
  * These are NOT part of the cross-platform GPIO interface
  */
 static inline struct davinci_gpio_controller *
-__gpio_to_controller(unsigned gpio)
-{
-	struct davinci_gpio_controller *ctlrs = davinci_soc_info.gpio_ctlrs;
-	int index = gpio / 32;
+__gpio_to_controller(unsigned gpio) {
+    struct davinci_gpio_controller *ctlrs = davinci_soc_info.gpio_ctlrs;
+    int index = gpio / 32;
 
-	if (!ctlrs || index >= davinci_soc_info.gpio_ctlrs_num)
-		return NULL;
+    if (!ctlrs || index >= davinci_soc_info.gpio_ctlrs_num)
+        return NULL;
 
-	return ctlrs + index;
+    return ctlrs + index;
 }
 
-static inline u32 __gpio_mask(unsigned gpio)
-{
-	return 1 << (gpio % 32);
+static inline u32 __gpio_mask(unsigned gpio) {
+    return 1 << (gpio % 32);
 }
 
 #endif	/* __DAVINCI_DAVINCI_GPIO_H */

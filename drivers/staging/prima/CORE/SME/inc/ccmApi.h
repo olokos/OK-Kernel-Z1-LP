@@ -56,8 +56,7 @@
 
 typedef void (*tCcmCfgSetCallback)(tHalHandle hHal, tANI_S32 result) ;
 
-typedef enum
-{
+typedef enum {
     eCCM_STOPPED,
     eCCM_STARTED,
     eCCM_REQ_SENT,
@@ -66,8 +65,7 @@ typedef enum
 } eCcmState ;
 
 /* We do not use Linux's list facility */
-typedef struct cfgreq
-{
+typedef struct cfgreq {
     struct cfgreq       *next ;
     tANI_U16            cfgId ;
     tANI_U8             type ;
@@ -80,8 +78,7 @@ typedef struct cfgreq
     void                *done ;
 } tCfgReq ;
 
-typedef struct
-{
+typedef struct {
     tANI_U16            started : 1 ;
     tANI_U16            in_progress : 1 ;
     tANI_U16            reserved : 14 ;
@@ -91,14 +88,12 @@ typedef struct
     void                *done ;
 } tCfgReplay ;
 
-struct ccmlink
-{
+struct ccmlink {
     tCfgReq *head;
     tCfgReq *tail;
 } ;
 
-typedef struct
-{
+typedef struct {
     struct ccmlink      reqQ ;
     eCcmState           state ;
     tCfgReq *           comp[CFG_PARAM_MAX_NUM] ;

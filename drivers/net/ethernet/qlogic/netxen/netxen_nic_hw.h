@@ -274,14 +274,14 @@ void netxen_nic_set_link_parameters(struct netxen_adapter *adapter);
 		((config_word) |= 1 << 4)
 
 typedef struct {
-	unsigned valid;
-	unsigned start_128M;
-	unsigned end_128M;
-	unsigned start_2M;
+    unsigned valid;
+    unsigned start_128M;
+    unsigned end_128M;
+    unsigned start_2M;
 } crb_128M_2M_sub_block_map_t;
 
 typedef struct {
-	crb_128M_2M_sub_block_map_t sub_block[16];
+    crb_128M_2M_sub_block_map_t sub_block[16];
 } crb_128M_2M_block_map_t;
 
 #endif				/* __NETXEN_NIC_HW_H_ */

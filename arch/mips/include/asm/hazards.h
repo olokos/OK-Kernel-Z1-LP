@@ -32,12 +32,12 @@ extern void mips_ihb(void);
 #endif
 
 ASMMACRO(_ssnop,
-	 sll	$0, $0, 1
-	)
+         sll	$0, $0, 1
+        )
 
 ASMMACRO(_ehb,
-	 sll	$0, $0, 3
-	)
+         sll	$0, $0, 3
+        )
 
 /*
  * TLB hazards
@@ -49,23 +49,23 @@ ASMMACRO(_ehb,
  */
 
 ASMMACRO(mtc0_tlbw_hazard,
-	 _ehb
-	)
+         _ehb
+        )
 ASMMACRO(tlbw_use_hazard,
-	 _ehb
-	)
+         _ehb
+        )
 ASMMACRO(tlb_probe_hazard,
-	 _ehb
-	)
+         _ehb
+        )
 ASMMACRO(irq_enable_hazard,
-	 _ehb
-	)
+         _ehb
+        )
 ASMMACRO(irq_disable_hazard,
-	_ehb
-	)
+         _ehb
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	 _ehb
-	)
+         _ehb
+        )
 /*
  * gcc has a tradition of misscompiling the previous construct using the
  * address of a label as argument to inline assembler.  Gas otoh has the
@@ -95,23 +95,23 @@ do {									\
  * run fine on R2 processors.
  */
 ASMMACRO(mtc0_tlbw_hazard,
-	_ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ehb
+        )
 ASMMACRO(tlbw_use_hazard,
-	_ssnop; _ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ssnop; _ehb
+        )
 ASMMACRO(tlb_probe_hazard,
-	 _ssnop; _ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ssnop; _ehb
+        )
 ASMMACRO(irq_enable_hazard,
-	 _ssnop; _ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ssnop; _ehb
+        )
 ASMMACRO(irq_disable_hazard,
-	_ssnop; _ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ssnop; _ehb
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	 _ssnop; _ssnop; _ssnop; _ehb
-	)
+         _ssnop; _ssnop; _ssnop; _ehb
+        )
 /*
  * gcc has a tradition of misscompiling the previous construct using the
  * address of a label as argument to inline assembler.  Gas otoh has the
@@ -148,17 +148,17 @@ do {									\
  */
 
 ASMMACRO(mtc0_tlbw_hazard,
-	)
+        )
 ASMMACRO(tlbw_use_hazard,
-	)
+        )
 ASMMACRO(tlb_probe_hazard,
-	)
+        )
 ASMMACRO(irq_enable_hazard,
-	)
+        )
 ASMMACRO(irq_disable_hazard,
-	)
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	)
+        )
 #define instruction_hazard() do { } while (0)
 
 #elif defined(CONFIG_CPU_RM9000)
@@ -170,20 +170,20 @@ ASMMACRO(back_to_back_c0_hazard,
  */
 
 ASMMACRO(mtc0_tlbw_hazard,
-	 _ssnop; _ssnop; _ssnop; _ssnop
-	)
+         _ssnop; _ssnop; _ssnop; _ssnop
+        )
 ASMMACRO(tlbw_use_hazard,
-	 _ssnop; _ssnop; _ssnop; _ssnop
-	)
+         _ssnop; _ssnop; _ssnop; _ssnop
+        )
 ASMMACRO(tlb_probe_hazard,
-	 _ssnop; _ssnop; _ssnop; _ssnop
-	)
+         _ssnop; _ssnop; _ssnop; _ssnop
+        )
 ASMMACRO(irq_enable_hazard,
-	)
+        )
 ASMMACRO(irq_disable_hazard,
-	)
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	)
+        )
 #define instruction_hazard() do { } while (0)
 
 #elif defined(CONFIG_CPU_SB1)
@@ -192,18 +192,18 @@ ASMMACRO(back_to_back_c0_hazard,
  * Mostly like R4000 for historic reasons
  */
 ASMMACRO(mtc0_tlbw_hazard,
-	)
+        )
 ASMMACRO(tlbw_use_hazard,
-	)
+        )
 ASMMACRO(tlb_probe_hazard,
-	)
+        )
 ASMMACRO(irq_enable_hazard,
-	)
+        )
 ASMMACRO(irq_disable_hazard,
-	 _ssnop; _ssnop; _ssnop
-	)
+         _ssnop; _ssnop; _ssnop
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	)
+        )
 #define instruction_hazard() do { } while (0)
 
 #else
@@ -218,23 +218,23 @@ ASMMACRO(back_to_back_c0_hazard,
  * processors.
  */
 ASMMACRO(mtc0_tlbw_hazard,
-	nop; nop
-	)
+         nop; nop
+        )
 ASMMACRO(tlbw_use_hazard,
-	nop; nop; nop
-	)
+         nop; nop; nop
+        )
 ASMMACRO(tlb_probe_hazard,
-	 nop; nop; nop
-	)
+         nop; nop; nop
+        )
 ASMMACRO(irq_enable_hazard,
-	 _ssnop; _ssnop; _ssnop;
-	)
+         _ssnop; _ssnop; _ssnop;
+        )
 ASMMACRO(irq_disable_hazard,
-	nop; nop; nop
-	)
+         nop; nop; nop
+        )
 ASMMACRO(back_to_back_c0_hazard,
-	 _ssnop; _ssnop; _ssnop;
-	)
+         _ssnop; _ssnop; _ssnop;
+        )
 #define instruction_hazard() do { } while (0)
 
 #endif
@@ -244,31 +244,31 @@ ASMMACRO(back_to_back_c0_hazard,
 
 #if defined(CONFIG_CPU_SB1)
 ASMMACRO(enable_fpu_hazard,
-	 .set	push;
-	 .set	mips64;
-	 .set	noreorder;
-	 _ssnop;
-	 bnezl	$0, .+4;
-	 _ssnop;
-	 .set	pop
-)
+         .set	push;
+         .set	mips64;
+         .set	noreorder;
+         _ssnop;
+         bnezl	$0, .+4;
+         _ssnop;
+         .set	pop
+        )
 ASMMACRO(disable_fpu_hazard,
-)
+        )
 
 #elif defined(CONFIG_CPU_MIPSR2)
 ASMMACRO(enable_fpu_hazard,
-	 _ehb
-)
+         _ehb
+        )
 ASMMACRO(disable_fpu_hazard,
-	 _ehb
-)
+         _ehb
+        )
 #else
 ASMMACRO(enable_fpu_hazard,
-	 nop; nop; nop; nop
-)
+         nop; nop; nop; nop
+        )
 ASMMACRO(disable_fpu_hazard,
-	 _ehb
-)
+         _ehb
+        )
 #endif
 
 #endif /* _ASM_HAZARDS_H */

@@ -15,9 +15,9 @@
 
 #ifndef __ASSEMBLER__
 struct cache_info {
-	unsigned int ways;
-	unsigned int sets;
-	unsigned int linesz;
+    unsigned int ways;
+    unsigned int sets;
+    unsigned int linesz;
 };
 #endif /* __ASSEMBLER */
 

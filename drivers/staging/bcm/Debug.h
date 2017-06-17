@@ -188,23 +188,22 @@ DriverEntry.c, bcmfwup.c, ChipDetectTask.c, HaltnReset.c, InterfaceDDR.c */
  * Delibrately matches that of the Windows driver..
  * The TestApp's ioctl passes this struct to us.
  */
-typedef struct
-{
-	unsigned int Subtype, Type;
-	unsigned int OnOff;
+typedef struct {
+    unsigned int Subtype, Type;
+    unsigned int OnOff;
 //	unsigned int debug_level;	 /* future expansion */
 } __attribute__((packed)) USER_BCM_DBG_STATE;
 
 //---Kernel-space mapping of Debug State
 typedef struct _S_BCM_DEBUG_STATE {
-	UINT type;
-	/* A bitmap of 32 bits for Subtype per Type.
-	 * Valid indexes in 'subtype' array are *only* 1,2,4 and 8,
-	 * corresponding to valid Type values. Hence we use the 'Type' field
-	 * as the index value, ignoring the array entries 0,3,5,6,7 !
-	 */
-	UINT subtype[(NUMTYPES*2)+1];
-	UINT debug_level;
+    UINT type;
+    /* A bitmap of 32 bits for Subtype per Type.
+     * Valid indexes in 'subtype' array are *only* 1,2,4 and 8,
+     * corresponding to valid Type values. Hence we use the 'Type' field
+     * as the index value, ignoring the array entries 0,3,5,6,7 !
+     */
+    UINT subtype[(NUMTYPES*2)+1];
+    UINT debug_level;
 } S_BCM_DEBUG_STATE;
 /* Instantiated in the Adapter structure */
 /* We'll reuse the debug level parameter to include a bit (the MSB) to indicate whether or not

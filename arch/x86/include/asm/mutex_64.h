@@ -44,12 +44,11 @@ do {								\
  * or anything the slow path function returns
  */
 static inline int __mutex_fastpath_lock_retval(atomic_t *count,
-					       int (*fail_fn)(atomic_t *))
-{
-	if (unlikely(atomic_dec_return(count) < 0))
-		return fail_fn(count);
-	else
-		return 0;
+        int (*fail_fn)(atomic_t *)) {
+    if (unlikely(atomic_dec_return(count) < 0))
+        return fail_fn(count);
+    else
+        return 0;
 }
 
 /**
@@ -89,12 +88,11 @@ do {								\
  * x86_64, because all x86_64 CPUs have a CMPXCHG instruction.]
  */
 static inline int __mutex_fastpath_trylock(atomic_t *count,
-					   int (*fail_fn)(atomic_t *))
-{
-	if (likely(atomic_cmpxchg(count, 1, 0) == 1))
-		return 1;
-	else
-		return 0;
+        int (*fail_fn)(atomic_t *)) {
+    if (likely(atomic_cmpxchg(count, 1, 0) == 1))
+        return 1;
+    else
+        return 0;
 }
 
 #endif /* _ASM_X86_MUTEX_64_H */

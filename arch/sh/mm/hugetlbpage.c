@@ -22,69 +22,62 @@
 #include <asm/cacheflush.h>
 
 pte_t *huge_pte_alloc(struct mm_struct *mm,
-			unsigned long addr, unsigned long sz)
-{
-	pgd_t *pgd;
-	pud_t *pud;
-	pmd_t *pmd;
-	pte_t *pte = NULL;
+                      unsigned long addr, unsigned long sz) {
+    pgd_t *pgd;
+    pud_t *pud;
+    pmd_t *pmd;
+    pte_t *pte = NULL;
 
-	pgd = pgd_offset(mm, addr);
-	if (pgd) {
-		pud = pud_alloc(mm, pgd, addr);
-		if (pud) {
-			pmd = pmd_alloc(mm, pud, addr);
-			if (pmd)
-				pte = pte_alloc_map(mm, NULL, pmd, addr);
-		}
-	}
+    pgd = pgd_offset(mm, addr);
+    if (pgd) {
+        pud = pud_alloc(mm, pgd, addr);
+        if (pud) {
+            pmd = pmd_alloc(mm, pud, addr);
+            if (pmd)
+                pte = pte_alloc_map(mm, NULL, pmd, addr);
+        }
+    }
 
-	return pte;
+    return pte;
 }
 
-pte_t *huge_pte_offset(struct mm_struct *mm, unsigned long addr)
-{
-	pgd_t *pgd;
-	pud_t *pud;
-	pmd_t *pmd;
-	pte_t *pte = NULL;
+pte_t *huge_pte_offset(struct mm_struct *mm, unsigned long addr) {
+    pgd_t *pgd;
+    pud_t *pud;
+    pmd_t *pmd;
+    pte_t *pte = NULL;
 
-	pgd = pgd_offset(mm, addr);
-	if (pgd) {
-		pud = pud_offset(pgd, addr);
-		if (pud) {
-			pmd = pmd_offset(pud, addr);
-			if (pmd)
-				pte = pte_offset_map(pmd, addr);
-		}
-	}
+    pgd = pgd_offset(mm, addr);
+    if (pgd) {
+        pud = pud_offset(pgd, addr);
+        if (pud) {
+            pmd = pmd_offset(pud, addr);
+            if (pmd)
+                pte = pte_offset_map(pmd, addr);
+        }
+    }
 
-	return pte;
+    return pte;
 }
 
-int huge_pmd_unshare(struct mm_struct *mm, unsigned long *addr, pte_t *ptep)
-{
-	return 0;
+int huge_pmd_unshare(struct mm_struct *mm, unsigned long *addr, pte_t *ptep) {
+    return 0;
 }
 
 struct page *follow_huge_addr(struct mm_struct *mm,
-			      unsigned long address, int write)
-{
-	return ERR_PTR(-EINVAL);
+                              unsigned long address, int write) {
+    return ERR_PTR(-EINVAL);
 }
 
-int pmd_huge(pmd_t pmd)
-{
-	return 0;
+int pmd_huge(pmd_t pmd) {
+    return 0;
 }
 
-int pud_huge(pud_t pud)
-{
-	return 0;
+int pud_huge(pud_t pud) {
+    return 0;
 }
 
 struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
-			     pmd_t *pmd, int write)
-{
-	return NULL;
+                             pmd_t *pmd, int write) {
+    return NULL;
 }

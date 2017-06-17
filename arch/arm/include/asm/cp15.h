@@ -45,18 +45,16 @@
 extern unsigned long cr_no_alignment;	/* defined in entry-armv.S */
 extern unsigned long cr_alignment;	/* defined in entry-armv.S */
 
-static inline unsigned int get_cr(void)
-{
-	unsigned int val;
-	asm("mrc p15, 0, %0, c1, c0, 0	@ get CR" : "=r" (val) : : "cc");
-	return val;
+static inline unsigned int get_cr(void) {
+    unsigned int val;
+    asm("mrc p15, 0, %0, c1, c0, 0	@ get CR" : "=r" (val) : : "cc");
+    return val;
 }
 
-static inline void set_cr(unsigned int val)
-{
-	asm volatile("mcr p15, 0, %0, c1, c0, 0	@ set CR"
-	  : : "r" (val) : "cc");
-	isb();
+static inline void set_cr(unsigned int val) {
+    asm volatile("mcr p15, 0, %0, c1, c0, 0	@ set CR"
+                 : : "r" (val) : "cc");
+    isb();
 }
 
 #ifndef CONFIG_SMP
@@ -67,19 +65,17 @@ extern void adjust_cr(unsigned long mask, unsigned long set);
 #define CPACC_SVC(n)		(1 << (n * 2))
 #define CPACC_DISABLE(n)	(0 << (n * 2))
 
-static inline unsigned int get_copro_access(void)
-{
-	unsigned int val;
-	asm("mrc p15, 0, %0, c1, c0, 2 @ get copro access"
-	  : "=r" (val) : : "cc");
-	return val;
+static inline unsigned int get_copro_access(void) {
+    unsigned int val;
+    asm("mrc p15, 0, %0, c1, c0, 2 @ get copro access"
+        : "=r" (val) : : "cc");
+    return val;
 }
 
-static inline void set_copro_access(unsigned int val)
-{
-	asm volatile("mcr p15, 0, %0, c1, c0, 2 @ set copro access"
-	  : : "r" (val) : "cc");
-	isb();
+static inline void set_copro_access(unsigned int val) {
+    asm volatile("mcr p15, 0, %0, c1, c0, 2 @ set copro access"
+                 : : "r" (val) : "cc");
+    isb();
 }
 
 #endif

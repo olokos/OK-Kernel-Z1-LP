@@ -75,9 +75,8 @@
  * its supported irq's at init time, using this function.
  */
 extern unsigned char mcf_irq2imr[];
-static inline void mcf_mapirq2imr(int irq, int imr)
-{
-	mcf_irq2imr[irq] = imr;
+static inline void mcf_mapirq2imr(int irq, int imr) {
+    mcf_irq2imr[irq] = imr;
 }
 
 void mcf_autovector(int irq);

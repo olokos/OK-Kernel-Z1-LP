@@ -9,20 +9,20 @@
 #include <linux/clkdev.h>
 
 struct clkops {
-	void			(*enable)(struct clk *);
-	void			(*disable)(struct clk *);
-	unsigned long		(*getrate)(struct clk *);
-	int			(*setrate)(struct clk *, unsigned long);
+    void			(*enable)(struct clk *);
+    void			(*disable)(struct clk *);
+    unsigned long		(*getrate)(struct clk *);
+    int			(*setrate)(struct clk *, unsigned long);
 };
 
 struct clk {
-	const struct clkops	*ops;
+    const struct clkops	*ops;
 
-	void __iomem	*clk_rst;	/* clock reset control register */
-	int		fnclksel;	/* functional clock select (APBC) */
-	uint32_t	enable_val;	/* value for clock enable (APMU) */
-	unsigned long	rate;
-	int		enabled;
+    void __iomem	*clk_rst;	/* clock reset control register */
+    int		fnclksel;	/* functional clock select (APBC) */
+    uint32_t	enable_val;	/* value for clock enable (APMU) */
+    unsigned long	rate;
+    int		enabled;
 };
 
 extern struct clkops apbc_clk_ops;

@@ -58,7 +58,7 @@ void acpi_tb_create_local_fadt(struct acpi_table_header *table, u32 length);
  */
 acpi_status
 acpi_tb_find_table(char *signature,
-		   char *oem_id, char *oem_table_id, u32 *table_index);
+                   char *oem_id, char *oem_table_id, u32 *table_index);
 
 /*
  * tbinstal - Table removal and deletion
@@ -68,17 +68,17 @@ acpi_status acpi_tb_resize_root_table_list(void);
 acpi_status acpi_tb_verify_table(struct acpi_table_desc *table_desc);
 
 struct acpi_table_header *acpi_tb_table_override(struct acpi_table_header
-						 *table_header,
-						 struct acpi_table_desc
-						 *table_desc);
+        *table_header,
+        struct acpi_table_desc
+        *table_desc);
 
 acpi_status
 acpi_tb_add_table(struct acpi_table_desc *table_desc, u32 *table_index);
 
 acpi_status
 acpi_tb_store_table(acpi_physical_address address,
-		    struct acpi_table_header *table,
-		    u32 length, u8 flags, u32 *table_index);
+                    struct acpi_table_header *table,
+                    u32 length, u8 flags, u32 *table_index);
 
 void acpi_tb_delete_table(struct acpi_table_desc *table_desc);
 
@@ -105,7 +105,7 @@ u8 acpi_tb_tables_loaded(void);
 
 void
 acpi_tb_print_table_header(acpi_physical_address address,
-			   struct acpi_table_header *header);
+                           struct acpi_table_header *header);
 
 u8 acpi_tb_checksum(u8 *buffer, u32 length);
 
@@ -118,7 +118,7 @@ struct acpi_table_header *acpi_tb_copy_dsdt(u32 table_index);
 
 void
 acpi_tb_install_table(acpi_physical_address address,
-		      char *signature, u32 table_index);
+                      char *signature, u32 table_index);
 
 acpi_status acpi_tb_parse_root_table(acpi_physical_address rsdp_address);
 

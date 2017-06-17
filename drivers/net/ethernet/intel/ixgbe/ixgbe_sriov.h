@@ -35,17 +35,17 @@ void ixgbe_disable_tx_rx(struct ixgbe_adapter *adapter);
 void ixgbe_ping_all_vfs(struct ixgbe_adapter *adapter);
 int ixgbe_ndo_set_vf_mac(struct net_device *netdev, int queue, u8 *mac);
 int ixgbe_ndo_set_vf_vlan(struct net_device *netdev, int queue, u16 vlan,
-			   u8 qos);
+                          u8 qos);
 int ixgbe_ndo_set_vf_bw(struct net_device *netdev, int vf, int tx_rate);
 int ixgbe_ndo_set_vf_spoofchk(struct net_device *netdev, int vf, bool setting);
 int ixgbe_ndo_get_vf_config(struct net_device *netdev,
-			    int vf, struct ifla_vf_info *ivi);
+                            int vf, struct ifla_vf_info *ivi);
 void ixgbe_check_vf_rate_limit(struct ixgbe_adapter *adapter);
 void ixgbe_disable_sriov(struct ixgbe_adapter *adapter);
 int ixgbe_check_vf_assignment(struct ixgbe_adapter *adapter);
 #ifdef CONFIG_PCI_IOV
 void ixgbe_enable_sriov(struct ixgbe_adapter *adapter,
-			const struct ixgbe_info *ii);
+                        const struct ixgbe_info *ii);
 #endif
 
 

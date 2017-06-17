@@ -26,11 +26,11 @@
 #define SYSCTRL_PLLSTAT     0x00000800    /* read/write PLL_STAT register */
 
 typedef struct ADI_SYSCTRL_VALUES {
-	uint16_t uwVrCtl;
-	uint16_t uwPllCtl;
-	uint16_t uwPllDiv;
-	uint16_t uwPllLockCnt;
-	uint16_t uwPllStat;
+    uint16_t uwVrCtl;
+    uint16_t uwPllCtl;
+    uint16_t uwPllDiv;
+    uint16_t uwPllLockCnt;
+    uint16_t uwPllStat;
 } ADI_SYSCTRL_VALUES;
 
 static uint32_t (* const bfrom_SysControl)(uint32_t action_flags, ADI_SYSCTRL_VALUES *power_settings, void *reserved) = (void *)0xEF000038;
@@ -40,23 +40,22 @@ static uint32_t (* const bfrom_SysControl)(uint32_t action_flags, ADI_SYSCTRL_VA
  * when doing a system reset, so the stack cannot be outside of the chip.
  */
 __attribute__((__noreturn__))
-static inline void bfrom_SoftReset(void *new_stack)
-{
-	while (1)
-		/*
-		 * We don't declare the SP as clobbered on purpose, since
-		 * it confuses the heck out of the compiler, and this function
-		 * never returns
-		 */
-		__asm__ __volatile__(
-			"sp = %[stack];"
-			"jump (%[bfrom_syscontrol]);"
-			: : [bfrom_syscontrol] "p"(bfrom_SysControl),
-				"q0"(SYSCTRL_SOFTRESET),
-				"q1"(0),
-				"q2"(NULL),
-				[stack] "p"(new_stack)
-		);
+static inline void bfrom_SoftReset(void *new_stack) {
+    while (1)
+        /*
+         * We don't declare the SP as clobbered on purpose, since
+         * it confuses the heck out of the compiler, and this function
+         * never returns
+         */
+        __asm__ __volatile__(
+            "sp = %[stack];"
+            "jump (%[bfrom_syscontrol]);"
+            : : [bfrom_syscontrol] "p"(bfrom_SysControl),
+            "q0"(SYSCTRL_SOFTRESET),
+            "q1"(0),
+            "q2"(NULL),
+            [stack] "p"(new_stack)
+        );
 }
 
 /* OTP Functions */

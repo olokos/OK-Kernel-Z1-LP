@@ -201,13 +201,13 @@
 
 #define CONFIG3 0x0059
 #define CONFIG4 0x005A
-	/* SD3 szuyitasi: Mac0x57= CC -> B0 Mac0x60= D1 -> C6	*/
-	/* Mac0x60 = 0x000004C6 power save parameters			*/
-	#define ANAPARM_ASIC_ON    0xB0054D00
-	#define ANAPARM2_ASIC_ON  0x000004C6
+/* SD3 szuyitasi: Mac0x57= CC -> B0 Mac0x60= D1 -> C6	*/
+/* Mac0x60 = 0x000004C6 power save parameters			*/
+#define ANAPARM_ASIC_ON    0xB0054D00
+#define ANAPARM2_ASIC_ON  0x000004C6
 
-	#define ANAPARM_ON ANAPARM_ASIC_ON
-	#define ANAPARM2_ON ANAPARM2_ASIC_ON
+#define ANAPARM_ON ANAPARM_ASIC_ON
+#define ANAPARM2_ON ANAPARM2_ASIC_ON
 
 #define TESTR 0x005B
 

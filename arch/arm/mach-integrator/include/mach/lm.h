@@ -1,17 +1,17 @@
 
 struct lm_device {
-	struct device		dev;
-	struct resource		resource;
-	unsigned int		irq;
-	unsigned int		id;
+    struct device		dev;
+    struct resource		resource;
+    unsigned int		irq;
+    unsigned int		id;
 };
 
 struct lm_driver {
-	struct device_driver	drv;
-	int			(*probe)(struct lm_device *);
-	void			(*remove)(struct lm_device *);
-	int			(*suspend)(struct lm_device *, pm_message_t);
-	int			(*resume)(struct lm_device *);
+    struct device_driver	drv;
+    int			(*probe)(struct lm_device *);
+    void			(*remove)(struct lm_device *);
+    int			(*suspend)(struct lm_device *, pm_message_t);
+    int			(*resume)(struct lm_device *);
 };
 
 int lm_driver_register(struct lm_driver *drv);

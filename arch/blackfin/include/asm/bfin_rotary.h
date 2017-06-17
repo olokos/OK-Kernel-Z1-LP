@@ -23,22 +23,22 @@
 #define ROT_CZMINV	CZMINV		/* CZM Pin Polarity Invert */
 
 struct bfin_rotary_platform_data {
-	/* set rotary UP KEY_### or BTN_### in case you prefer
-	 * bfin-rotary to send EV_KEY otherwise set 0
-	 */
-	unsigned int rotary_up_key;
-	/* set rotary DOWN KEY_### or BTN_### in case you prefer
-	 * bfin-rotary to send EV_KEY otherwise set 0
-	 */
-	unsigned int rotary_down_key;
-	/* set rotary BUTTON KEY_### or BTN_### */
-	unsigned int rotary_button_key;
-	/* set rotary Relative Axis REL_### in case you prefer
-	 * bfin-rotary to send EV_REL otherwise set 0
-	 */
-	unsigned int rotary_rel_code;
-	unsigned short debounce;	/* 0..17 */
-	unsigned short mode;
+    /* set rotary UP KEY_### or BTN_### in case you prefer
+     * bfin-rotary to send EV_KEY otherwise set 0
+     */
+    unsigned int rotary_up_key;
+    /* set rotary DOWN KEY_### or BTN_### in case you prefer
+     * bfin-rotary to send EV_KEY otherwise set 0
+     */
+    unsigned int rotary_down_key;
+    /* set rotary BUTTON KEY_### or BTN_### */
+    unsigned int rotary_button_key;
+    /* set rotary Relative Axis REL_### in case you prefer
+     * bfin-rotary to send EV_REL otherwise set 0
+     */
+    unsigned int rotary_rel_code;
+    unsigned short debounce;	/* 0..17 */
+    unsigned short mode;
 };
 
 /* CNT_CONFIG bitmasks */

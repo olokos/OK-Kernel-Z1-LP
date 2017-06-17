@@ -98,8 +98,8 @@ void prism2mgmt_bytestr2pstr(hfa384x_bytestr_t *bytestr, p80211pstrd_t *pstr);
 /* functions to convert Group Addresses */
 void prism2mgmt_get_grpaddr(u32 did, p80211pstrd_t *pstr, hfa384x_t *priv);
 int prism2mgmt_set_grpaddr(u32 did,
-			   u8 *prism2buf, p80211pstrd_t *pstr,
-			   hfa384x_t *priv);
+                           u8 *prism2buf, p80211pstrd_t *pstr,
+                           hfa384x_t *priv);
 int prism2mgmt_get_grpaddr_index(u32 did);
 
 void prism2sta_processing_defer(struct work_struct *data);

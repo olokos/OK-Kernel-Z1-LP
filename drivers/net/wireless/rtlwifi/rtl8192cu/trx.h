@@ -40,10 +40,10 @@
 #define RTL_AGG_ON				1
 
 enum usb_rx_agg_mode {
-	USB_RX_AGG_DISABLE,
-	USB_RX_AGG_DMA,
-	USB_RX_AGG_USB,
-	USB_RX_AGG_DMA_USB
+    USB_RX_AGG_DISABLE,
+    USB_RX_AGG_DMA,
+    USB_RX_AGG_USB,
+    USB_RX_AGG_DMA_USB
 };
 
 #define TX_SELE_HQ				BIT(0)	/* High Queue */
@@ -61,39 +61,39 @@ enum usb_rx_agg_mode {
 /*======================== rx status =========================================*/
 
 struct rx_drv_info_92c {
-	/*
-	 * Driver info contain PHY status and other variabel size info
-	 * PHY Status content as below
-	 */
+    /*
+     * Driver info contain PHY status and other variabel size info
+     * PHY Status content as below
+     */
 
-	/* DWORD 0 */
-	u8 gain_trsw[4];
+    /* DWORD 0 */
+    u8 gain_trsw[4];
 
-	/* DWORD 1 */
-	u8 pwdb_all;
-	u8 cfosho[4];
+    /* DWORD 1 */
+    u8 pwdb_all;
+    u8 cfosho[4];
 
-	/* DWORD 2 */
-	u8 cfotail[4];
+    /* DWORD 2 */
+    u8 cfotail[4];
 
-	/* DWORD 3 */
-	s8 rxevm[2];
-	s8 rxsnr[4];
+    /* DWORD 3 */
+    s8 rxevm[2];
+    s8 rxsnr[4];
 
-	/* DWORD 4 */
-	u8 pdsnr[2];
+    /* DWORD 4 */
+    u8 pdsnr[2];
 
-	/* DWORD 5 */
-	u8 csi_current[2];
-	u8 csi_target[2];
+    /* DWORD 5 */
+    u8 csi_current[2];
+    u8 csi_target[2];
 
-	/* DWORD 6 */
-	u8 sigevm;
-	u8 max_ex_pwr;
-	u8 ex_intf_flag:1;
-	u8 sgi_en:1;
-	u8 rxsc:2;
-	u8 reserve:4;
+    /* DWORD 6 */
+    u8 sigevm;
+    u8 max_ex_pwr;
+    u8 ex_intf_flag:1;
+    u8 sgi_en:1;
+    u8 rxsc:2;
+    u8 reserve:4;
 } __packed;
 
 /* Define a macro that takes a le32 word, converts it to host ordering,
@@ -407,27 +407,27 @@ struct rx_drv_info_92c {
 int  rtl8192cu_endpoint_mapping(struct ieee80211_hw *hw);
 u16 rtl8192cu_mq_to_hwq(__le16 fc, u16 mac80211_queue_index);
 bool rtl92cu_rx_query_desc(struct ieee80211_hw *hw,
-			   struct rtl_stats *stats,
-			   struct ieee80211_rx_status *rx_status,
-			   u8 *p_desc, struct sk_buff *skb);
+                           struct rtl_stats *stats,
+                           struct ieee80211_rx_status *rx_status,
+                           u8 *p_desc, struct sk_buff *skb);
 void  rtl8192cu_rx_hdl(struct ieee80211_hw *hw, struct sk_buff * skb);
 void rtl8192c_rx_segregate_hdl(struct ieee80211_hw *, struct sk_buff *,
-			       struct sk_buff_head *);
+                               struct sk_buff_head *);
 void rtl8192c_tx_cleanup(struct ieee80211_hw *hw, struct sk_buff  *skb);
 int rtl8192c_tx_post_hdl(struct ieee80211_hw *hw, struct urb *urb,
-			 struct sk_buff *skb);
+                         struct sk_buff *skb);
 struct sk_buff *rtl8192c_tx_aggregate_hdl(struct ieee80211_hw *,
-					   struct sk_buff_head *);
+        struct sk_buff_head *);
 void rtl92cu_tx_fill_desc(struct ieee80211_hw *hw,
-			  struct ieee80211_hdr *hdr, u8 *pdesc_tx,
-			  struct ieee80211_tx_info *info, struct sk_buff *skb,
-			  u8 queue_index,
-			  struct rtl_tcb_desc *tcb_desc);
+                          struct ieee80211_hdr *hdr, u8 *pdesc_tx,
+                          struct ieee80211_tx_info *info, struct sk_buff *skb,
+                          u8 queue_index,
+                          struct rtl_tcb_desc *tcb_desc);
 void rtl92cu_fill_fake_txdesc(struct ieee80211_hw *hw, u8 * pDesc,
-			      u32 buffer_len, bool bIsPsPoll);
+                              u32 buffer_len, bool bIsPsPoll);
 void rtl92cu_tx_fill_cmddesc(struct ieee80211_hw *hw,
-			     u8 *pdesc, bool b_firstseg,
-			     bool b_lastseg, struct sk_buff *skb);
+                             u8 *pdesc, bool b_firstseg,
+                             bool b_lastseg, struct sk_buff *skb);
 bool rtl92cu_cmd_send_packet(struct ieee80211_hw *hw, struct sk_buff *skb);
 
 #endif

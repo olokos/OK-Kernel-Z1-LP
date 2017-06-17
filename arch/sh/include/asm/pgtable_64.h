@@ -32,14 +32,13 @@
  */
 #define set_pmd(pmdptr, pmdval) (*(pmdptr) = pmdval)
 
-static __inline__ void set_pte(pte_t *pteptr, pte_t pteval)
-{
-	unsigned long long x = ((unsigned long long) pteval.pte_low);
-	unsigned long long *xp = (unsigned long long *) pteptr;
-	/*
-	 * Sign-extend based on NPHYS.
-	 */
-	*(xp) = (x & NPHYS_SIGN) ? (x | NPHYS_MASK) : x;
+static __inline__ void set_pte(pte_t *pteptr, pte_t pteval) {
+    unsigned long long x = ((unsigned long long) pteval.pte_low);
+    unsigned long long *xp = (unsigned long long *) pteptr;
+    /*
+     * Sign-extend based on NPHYS.
+     */
+    *(xp) = (x & NPHYS_SIGN) ? (x | NPHYS_MASK) : x;
 }
 #define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
 
@@ -261,20 +260,54 @@ static __inline__ void set_pte(pte_t *pteptr, pte_t pteval)
 /*
  * The following have defined behavior only work if pte_present() is true.
  */
-static inline int pte_dirty(pte_t pte)  { return pte_val(pte) & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte)  { return pte_val(pte) & _PAGE_ACCESSED; }
-static inline int pte_file(pte_t pte)   { return pte_val(pte) & _PAGE_FILE; }
-static inline int pte_write(pte_t pte)  { return pte_val(pte) & _PAGE_WRITE; }
-static inline int pte_special(pte_t pte){ return pte_val(pte) & _PAGE_SPECIAL; }
+static inline int pte_dirty(pte_t pte)  {
+    return pte_val(pte) & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte)  {
+    return pte_val(pte) & _PAGE_ACCESSED;
+}
+static inline int pte_file(pte_t pte)   {
+    return pte_val(pte) & _PAGE_FILE;
+}
+static inline int pte_write(pte_t pte)  {
+    return pte_val(pte) & _PAGE_WRITE;
+}
+static inline int pte_special(pte_t pte) {
+    return pte_val(pte) & _PAGE_SPECIAL;
+}
 
-static inline pte_t pte_wrprotect(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_WRITE)); return pte; }
-static inline pte_t pte_mkclean(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_DIRTY)); return pte; }
-static inline pte_t pte_mkold(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_ACCESSED)); return pte; }
-static inline pte_t pte_mkwrite(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) | _PAGE_WRITE)); return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) | _PAGE_DIRTY)); return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) | _PAGE_ACCESSED)); return pte; }
-static inline pte_t pte_mkhuge(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) | _PAGE_SZHUGE)); return pte; }
-static inline pte_t pte_mkspecial(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) | _PAGE_SPECIAL)); return pte; }
+static inline pte_t pte_wrprotect(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_WRITE));
+    return pte;
+}
+static inline pte_t pte_mkclean(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_DIRTY));
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_ACCESSED));
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_WRITE));
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_DIRTY));
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_ACCESSED));
+    return pte;
+}
+static inline pte_t pte_mkhuge(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_SZHUGE));
+    return pte;
+}
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_SPECIAL));
+    return pte;
+}
 
 /*
  * Conversion functions: convert a page and protection to a page entry.
@@ -297,8 +330,10 @@ static inline pte_t pte_mkspecial(pte_t pte)	{ set_pte(&pte, __pte(pte_val(pte) 
 #define mk_pte_phys(physpage, pgprot) \
 ({ pte_t __pte; set_pte(&__pte, __pte(physpage | pgprot_val(pgprot))); __pte; })
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{ set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot))); return pte; }
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot)));
+    return pte;
+}
 
 /* Encode and decode a swap entry */
 #define __swp_type(x)			(((x).val & 3) + (((x).val >> 1) & 0x3c))

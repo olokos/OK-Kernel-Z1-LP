@@ -38,7 +38,9 @@ typedef unsigned long pte_basic_t;
 
 struct page;
 extern void clear_pages(void *page, int order);
-static inline void clear_page(void *page) { clear_pages(page, 0); }
+static inline void clear_page(void *page) {
+    clear_pages(page, 0);
+}
 extern void copy_page(void *to, void *from);
 
 #include <asm-generic/getorder.h>

@@ -23,19 +23,18 @@
 
 
 static inline unsigned long
-__reload_thread(struct pcb_struct *pcb)
-{
-	register unsigned long a0 __asm__("$16");
-	register unsigned long v0 __asm__("$0");
+__reload_thread(struct pcb_struct *pcb) {
+    register unsigned long a0 __asm__("$16");
+    register unsigned long v0 __asm__("$0");
 
-	a0 = virt_to_phys(pcb);
-	__asm__ __volatile__(
-		"call_pal %2 #__reload_thread"
-		: "=r"(v0), "=r"(a0)
-		: "i"(PAL_swpctx), "r"(a0)
-		: "$1", "$22", "$23", "$24", "$25");
+    a0 = virt_to_phys(pcb);
+    __asm__ __volatile__(
+        "call_pal %2 #__reload_thread"
+        : "=r"(v0), "=r"(a0)
+        : "i"(PAL_swpctx), "r"(a0)
+        : "$1", "$22", "$23", "$24", "$25");
 
-	return v0;
+    return v0;
 }
 
 
@@ -54,7 +53,7 @@ __reload_thread(struct pcb_struct *pcb)
  * in use) and the Valid bit set, then entries can also effectively be
  * made coherent by assigning a new, unused ASN to the currently
  * running process and not reusing the previous ASN before calling the
- * appropriate PALcode routine to invalidate the translation buffer (TB)". 
+ * appropriate PALcode routine to invalidate the translation buffer (TB)".
  *
  * In short, the EV4 has a "kind of" ASN capability, but it doesn't actually
  * work correctly and can thus not be used (explaining the lack of PAL-code
@@ -114,68 +113,65 @@ extern unsigned long last_asn;
 #endif
 
 extern inline unsigned long
-__get_new_mm_context(struct mm_struct *mm, long cpu)
-{
-	unsigned long asn = cpu_last_asn(cpu);
-	unsigned long next = asn + 1;
+__get_new_mm_context(struct mm_struct *mm, long cpu) {
+    unsigned long asn = cpu_last_asn(cpu);
+    unsigned long next = asn + 1;
 
-	if ((asn & HARDWARE_ASN_MASK) >= MAX_ASN) {
-		tbiap();
-		imb();
-		next = (asn & ~HARDWARE_ASN_MASK) + ASN_FIRST_VERSION;
-	}
-	cpu_last_asn(cpu) = next;
-	return next;
+    if ((asn & HARDWARE_ASN_MASK) >= MAX_ASN) {
+        tbiap();
+        imb();
+        next = (asn & ~HARDWARE_ASN_MASK) + ASN_FIRST_VERSION;
+    }
+    cpu_last_asn(cpu) = next;
+    return next;
 }
 
 __EXTERN_INLINE void
 ev5_switch_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm,
-	      struct task_struct *next)
-{
-	/* Check if our ASN is of an older version, and thus invalid. */
-	unsigned long asn;
-	unsigned long mmc;
-	long cpu = smp_processor_id();
+              struct task_struct *next) {
+    /* Check if our ASN is of an older version, and thus invalid. */
+    unsigned long asn;
+    unsigned long mmc;
+    long cpu = smp_processor_id();
 
 #ifdef CONFIG_SMP
-	cpu_data[cpu].asn_lock = 1;
-	barrier();
+    cpu_data[cpu].asn_lock = 1;
+    barrier();
 #endif
-	asn = cpu_last_asn(cpu);
-	mmc = next_mm->context[cpu];
-	if ((mmc ^ asn) & ~HARDWARE_ASN_MASK) {
-		mmc = __get_new_mm_context(next_mm, cpu);
-		next_mm->context[cpu] = mmc;
-	}
+    asn = cpu_last_asn(cpu);
+    mmc = next_mm->context[cpu];
+    if ((mmc ^ asn) & ~HARDWARE_ASN_MASK) {
+        mmc = __get_new_mm_context(next_mm, cpu);
+        next_mm->context[cpu] = mmc;
+    }
 #ifdef CONFIG_SMP
-	else
-		cpu_data[cpu].need_new_asn = 1;
+    else
+        cpu_data[cpu].need_new_asn = 1;
 #endif
 
-	/* Always update the PCB ASN.  Another thread may have allocated
-	   a new mm->context (via flush_tlb_mm) without the ASN serial
-	   number wrapping.  We have no way to detect when this is needed.  */
-	task_thread_info(next)->pcb.asn = mmc & HARDWARE_ASN_MASK;
+    /* Always update the PCB ASN.  Another thread may have allocated
+       a new mm->context (via flush_tlb_mm) without the ASN serial
+       number wrapping.  We have no way to detect when this is needed.  */
+    task_thread_info(next)->pcb.asn = mmc & HARDWARE_ASN_MASK;
 }
 
 __EXTERN_INLINE void
 ev4_switch_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm,
-	      struct task_struct *next)
-{
-	/* As described, ASN's are broken for TLB usage.  But we can
-	   optimize for switching between threads -- if the mm is
-	   unchanged from current we needn't flush.  */
-	/* ??? May not be needed because EV4 PALcode recognizes that
-	   ASN's are broken and does a tbiap itself on swpctx, under
-	   the "Must set ASN or flush" rule.  At least this is true
-	   for a 1992 SRM, reports Joseph Martin (jmartin@hlo.dec.com).
-	   I'm going to leave this here anyway, just to Be Sure.  -- r~  */
-	if (prev_mm != next_mm)
-		tbiap();
+              struct task_struct *next) {
+    /* As described, ASN's are broken for TLB usage.  But we can
+       optimize for switching between threads -- if the mm is
+       unchanged from current we needn't flush.  */
+    /* ??? May not be needed because EV4 PALcode recognizes that
+       ASN's are broken and does a tbiap itself on swpctx, under
+       the "Must set ASN or flush" rule.  At least this is true
+       for a 1992 SRM, reports Joseph Martin (jmartin@hlo.dec.com).
+       I'm going to leave this here anyway, just to Be Sure.  -- r~  */
+    if (prev_mm != next_mm)
+        tbiap();
 
-	/* Do continue to allocate ASNs, because we can still use them
-	   to avoid flushing the icache.  */
-	ev5_switch_mm(prev_mm, next_mm, next);
+    /* Do continue to allocate ASNs, because we can still use them
+       to avoid flushing the icache.  */
+    ev5_switch_mm(prev_mm, next_mm, next);
 }
 
 extern void __load_new_mm_context(struct mm_struct *);
@@ -198,16 +194,14 @@ do {								\
 #endif
 
 __EXTERN_INLINE void
-ev5_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
-{
-	__load_new_mm_context(next_mm);
+ev5_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm) {
+    __load_new_mm_context(next_mm);
 }
 
 __EXTERN_INLINE void
-ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
-{
-	__load_new_mm_context(next_mm);
-	tbiap();
+ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm) {
+    __load_new_mm_context(next_mm);
+    tbiap();
 }
 
 #define deactivate_mm(tsk,mm)	do { } while (0)
@@ -226,29 +220,26 @@ ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
 #endif
 
 static inline int
-init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-{
-	int i;
+init_new_context(struct task_struct *tsk, struct mm_struct *mm) {
+    int i;
 
-	for_each_online_cpu(i)
-		mm->context[i] = 0;
-	if (tsk != current)
-		task_thread_info(tsk)->pcb.ptbr
-		  = ((unsigned long)mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
-	return 0;
+    for_each_online_cpu(i)
+    mm->context[i] = 0;
+    if (tsk != current)
+        task_thread_info(tsk)->pcb.ptbr
+            = ((unsigned long)mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
+    return 0;
 }
 
 extern inline void
-destroy_context(struct mm_struct *mm)
-{
-	/* Nothing to do.  */
+destroy_context(struct mm_struct *mm) {
+    /* Nothing to do.  */
 }
 
 static inline void
-enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
-{
-	task_thread_info(tsk)->pcb.ptbr
-	  = ((unsigned long)mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
+enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk) {
+    task_thread_info(tsk)->pcb.ptbr
+        = ((unsigned long)mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
 }
 
 #ifdef __MMU_EXTERN_INLINE

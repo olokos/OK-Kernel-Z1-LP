@@ -64,7 +64,7 @@ u32 acpi_hw_get_mode(void);
  */
 acpi_status
 acpi_hw_validate_register(struct acpi_generic_address *reg,
-			  u8 max_bit_width, u64 *address);
+                          u8 max_bit_width, u64 *address);
 
 acpi_status acpi_hw_read(u32 *value, struct acpi_generic_address *reg);
 
@@ -111,24 +111,24 @@ acpi_status acpi_hw_write_port(acpi_io_address address, u32 value, u32 width);
  * hwgpe - GPE support
  */
 u32 acpi_hw_get_gpe_register_bit(struct acpi_gpe_event_info *gpe_event_info,
-			     struct acpi_gpe_register_info *gpe_register_info);
+                                 struct acpi_gpe_register_info *gpe_register_info);
 
 acpi_status
 acpi_hw_low_set_gpe(struct acpi_gpe_event_info *gpe_event_info, u32 action);
 
 acpi_status
 acpi_hw_disable_gpe_block(struct acpi_gpe_xrupt_info *gpe_xrupt_info,
-			  struct acpi_gpe_block_info *gpe_block, void *context);
+                          struct acpi_gpe_block_info *gpe_block, void *context);
 
 acpi_status acpi_hw_clear_gpe(struct acpi_gpe_event_info *gpe_event_info);
 
 acpi_status
 acpi_hw_clear_gpe_block(struct acpi_gpe_xrupt_info *gpe_xrupt_info,
-			struct acpi_gpe_block_info *gpe_block, void *context);
+                        struct acpi_gpe_block_info *gpe_block, void *context);
 
 acpi_status
 acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
-		       acpi_event_status * event_status);
+                       acpi_event_status * event_status);
 
 acpi_status acpi_hw_disable_all_gpes(void);
 
@@ -138,14 +138,14 @@ acpi_status acpi_hw_enable_all_wakeup_gpes(void);
 
 acpi_status
 acpi_hw_enable_runtime_gpe_block(struct acpi_gpe_xrupt_info *gpe_xrupt_info,
-				 struct acpi_gpe_block_info *gpe_block,
-				 void *context);
+                                 struct acpi_gpe_block_info *gpe_block,
+                                 void *context);
 
 /*
  * hwpci - PCI configuration support
  */
 acpi_status
 acpi_hw_derive_pci_id(struct acpi_pci_id *pci_id,
-		      acpi_handle root_pci_device, acpi_handle pci_region);
+                      acpi_handle root_pci_device, acpi_handle pci_region);
 
 #endif				/* __ACHWARE_H__ */

@@ -48,10 +48,9 @@
 /*
  *	Structure to hold the firmware information.
  */
-struct ltfirmware
-{
-        unsigned int length;
-        const unsigned char *data;
+struct ltfirmware {
+    unsigned int length;
+    const unsigned char *data;
 };
 
 #define DAYNA 1

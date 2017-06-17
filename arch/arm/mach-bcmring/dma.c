@@ -65,83 +65,82 @@ static struct proc_dir_entry *gDmaDir;
 /****************************************************************************/
 
 static int dma_proc_read_channels(char *buf, char **start, off_t offset,
-				  int count, int *eof, void *data)
-{
-	int controllerIdx;
-	int channelIdx;
-	int limit = count - 200;
-	int len = 0;
-	DMA_Channel_t *channel;
+                                  int count, int *eof, void *data) {
+    int controllerIdx;
+    int channelIdx;
+    int limit = count - 200;
+    int len = 0;
+    DMA_Channel_t *channel;
 
-	if (down_interruptible(&gDMA.lock) < 0) {
-		return -ERESTARTSYS;
-	}
+    if (down_interruptible(&gDMA.lock) < 0) {
+        return -ERESTARTSYS;
+    }
 
-	for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
-	     controllerIdx++) {
-		for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
-		     channelIdx++) {
-			if (len >= limit) {
-				break;
-			}
+    for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
+            controllerIdx++) {
+        for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
+                channelIdx++) {
+            if (len >= limit) {
+                break;
+            }
 
-			channel =
-			    &gDMA.controller[controllerIdx].channel[channelIdx];
+            channel =
+                &gDMA.controller[controllerIdx].channel[channelIdx];
 
-			len +=
-			    sprintf(buf + len, "%d:%d ", controllerIdx,
-				    channelIdx);
+            len +=
+                sprintf(buf + len, "%d:%d ", controllerIdx,
+                        channelIdx);
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) !=
-			    0) {
-				len +=
-				    sprintf(buf + len, "Dedicated for %s ",
-					    DMA_gDeviceAttribute[channel->
-								 devType].name);
-			} else {
-				len += sprintf(buf + len, "Shared ");
-			}
+            if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) !=
+                    0) {
+                len +=
+                    sprintf(buf + len, "Dedicated for %s ",
+                            DMA_gDeviceAttribute[channel->
+                                                 devType].name);
+            } else {
+                len += sprintf(buf + len, "Shared ");
+            }
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_NO_ISR) != 0) {
-				len += sprintf(buf + len, "No ISR ");
-			}
+            if ((channel->flags & DMA_CHANNEL_FLAG_NO_ISR) != 0) {
+                len += sprintf(buf + len, "No ISR ");
+            }
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_LARGE_FIFO) != 0) {
-				len += sprintf(buf + len, "Fifo: 128 ");
-			} else {
-				len += sprintf(buf + len, "Fifo: 64  ");
-			}
+            if ((channel->flags & DMA_CHANNEL_FLAG_LARGE_FIFO) != 0) {
+                len += sprintf(buf + len, "Fifo: 128 ");
+            } else {
+                len += sprintf(buf + len, "Fifo: 64  ");
+            }
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_IN_USE) != 0) {
-				len +=
-				    sprintf(buf + len, "InUse by %s",
-					    DMA_gDeviceAttribute[channel->
-								 devType].name);
+            if ((channel->flags & DMA_CHANNEL_FLAG_IN_USE) != 0) {
+                len +=
+                    sprintf(buf + len, "InUse by %s",
+                            DMA_gDeviceAttribute[channel->
+                                                 devType].name);
 #if (DMA_DEBUG_TRACK_RESERVATION)
-				len +=
-				    sprintf(buf + len, " (%s:%d)",
-					    channel->fileName,
-					    channel->lineNum);
+                len +=
+                    sprintf(buf + len, " (%s:%d)",
+                            channel->fileName,
+                            channel->lineNum);
 #endif
-			} else {
-				len += sprintf(buf + len, "Avail ");
-			}
+            } else {
+                len += sprintf(buf + len, "Avail ");
+            }
 
-			if (channel->lastDevType != DMA_DEVICE_NONE) {
-				len +=
-				    sprintf(buf + len, "Last use: %s ",
-					    DMA_gDeviceAttribute[channel->
-								 lastDevType].
-					    name);
-			}
+            if (channel->lastDevType != DMA_DEVICE_NONE) {
+                len +=
+                    sprintf(buf + len, "Last use: %s ",
+                            DMA_gDeviceAttribute[channel->
+                                                 lastDevType].
+                            name);
+            }
 
-			len += sprintf(buf + len, "\n");
-		}
-	}
-	up(&gDMA.lock);
-	*eof = 1;
+            len += sprintf(buf + len, "\n");
+        }
+    }
+    up(&gDMA.lock);
+    *eof = 1;
 
-	return len;
+    return len;
 }
 
 /****************************************************************************/
@@ -151,64 +150,63 @@ static int dma_proc_read_channels(char *buf, char **start, off_t offset,
 /****************************************************************************/
 
 static int dma_proc_read_devices(char *buf, char **start, off_t offset,
-				 int count, int *eof, void *data)
-{
-	int limit = count - 200;
-	int len = 0;
-	int devIdx;
+                                 int count, int *eof, void *data) {
+    int limit = count - 200;
+    int len = 0;
+    int devIdx;
 
-	if (down_interruptible(&gDMA.lock) < 0) {
-		return -ERESTARTSYS;
-	}
+    if (down_interruptible(&gDMA.lock) < 0) {
+        return -ERESTARTSYS;
+    }
 
-	for (devIdx = 0; devIdx < DMA_NUM_DEVICE_ENTRIES; devIdx++) {
-		DMA_DeviceAttribute_t *devAttr = &DMA_gDeviceAttribute[devIdx];
+    for (devIdx = 0; devIdx < DMA_NUM_DEVICE_ENTRIES; devIdx++) {
+        DMA_DeviceAttribute_t *devAttr = &DMA_gDeviceAttribute[devIdx];
 
-		if (devAttr->name == NULL) {
-			continue;
-		}
+        if (devAttr->name == NULL) {
+            continue;
+        }
 
-		if (len >= limit) {
-			break;
-		}
+        if (len >= limit) {
+            break;
+        }
 
-		len += sprintf(buf + len, "%-12s ", devAttr->name);
+        len += sprintf(buf + len, "%-12s ", devAttr->name);
 
-		if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
-			len +=
-			    sprintf(buf + len, "Dedicated %d:%d ",
-				    devAttr->dedicatedController,
-				    devAttr->dedicatedChannel);
-		} else {
-			len += sprintf(buf + len, "Shared DMA:");
-			if ((devAttr->flags & DMA_DEVICE_FLAG_ON_DMA0) != 0) {
-				len += sprintf(buf + len, "0");
-			}
-			if ((devAttr->flags & DMA_DEVICE_FLAG_ON_DMA1) != 0) {
-				len += sprintf(buf + len, "1");
-			}
-			len += sprintf(buf + len, " ");
-		}
-		if ((devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) != 0) {
-			len += sprintf(buf + len, "NoISR ");
-		}
-		if ((devAttr->flags & DMA_DEVICE_FLAG_ALLOW_LARGE_FIFO) != 0) {
-			len += sprintf(buf + len, "Allow-128 ");
-		}
+        if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
+            len +=
+                sprintf(buf + len, "Dedicated %d:%d ",
+                        devAttr->dedicatedController,
+                        devAttr->dedicatedChannel);
+        } else {
+            len += sprintf(buf + len, "Shared DMA:");
+            if ((devAttr->flags & DMA_DEVICE_FLAG_ON_DMA0) != 0) {
+                len += sprintf(buf + len, "0");
+            }
+            if ((devAttr->flags & DMA_DEVICE_FLAG_ON_DMA1) != 0) {
+                len += sprintf(buf + len, "1");
+            }
+            len += sprintf(buf + len, " ");
+        }
+        if ((devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) != 0) {
+            len += sprintf(buf + len, "NoISR ");
+        }
+        if ((devAttr->flags & DMA_DEVICE_FLAG_ALLOW_LARGE_FIFO) != 0) {
+            len += sprintf(buf + len, "Allow-128 ");
+        }
 
-		len +=
-		    sprintf(buf + len,
-			    "Xfer #: %Lu Ticks: %Lu Bytes: %Lu DescLen: %u\n",
-			    devAttr->numTransfers, devAttr->transferTicks,
-			    devAttr->transferBytes,
-			    devAttr->ring.bytesAllocated);
+        len +=
+            sprintf(buf + len,
+                    "Xfer #: %Lu Ticks: %Lu Bytes: %Lu DescLen: %u\n",
+                    devAttr->numTransfers, devAttr->transferTicks,
+                    devAttr->transferBytes,
+                    devAttr->ring.bytesAllocated);
 
-	}
+    }
 
-	up(&gDMA.lock);
-	*eof = 1;
+    up(&gDMA.lock);
+    *eof = 1;
 
-	return len;
+    return len;
 }
 
 /****************************************************************************/
@@ -221,9 +219,8 @@ static int dma_proc_read_devices(char *buf, char **start, off_t offset,
 */
 /****************************************************************************/
 
-static inline int IsDeviceValid(DMA_Device_t device)
-{
-	return (device >= 0) && (device < DMA_NUM_DEVICE_ENTRIES);
+static inline int IsDeviceValid(DMA_Device_t device) {
+    return (device >= 0) && (device < DMA_NUM_DEVICE_ENTRIES);
 }
 
 /****************************************************************************/
@@ -236,19 +233,18 @@ static inline int IsDeviceValid(DMA_Device_t device)
 */
 /****************************************************************************/
 
-static inline DMA_Channel_t *HandleToChannel(DMA_Handle_t handle)
-{
-	int controllerIdx;
-	int channelIdx;
+static inline DMA_Channel_t *HandleToChannel(DMA_Handle_t handle) {
+    int controllerIdx;
+    int channelIdx;
 
-	controllerIdx = CONTROLLER_FROM_HANDLE(handle);
-	channelIdx = CHANNEL_FROM_HANDLE(handle);
+    controllerIdx = CONTROLLER_FROM_HANDLE(handle);
+    channelIdx = CHANNEL_FROM_HANDLE(handle);
 
-	if ((controllerIdx > DMA_NUM_CONTROLLERS)
-	    || (channelIdx > DMA_NUM_CHANNELS)) {
-		return NULL;
-	}
-	return &gDMA.controller[controllerIdx].channel[channelIdx];
+    if ((controllerIdx > DMA_NUM_CONTROLLERS)
+            || (channelIdx > DMA_NUM_CHANNELS)) {
+        return NULL;
+    }
+    return &gDMA.controller[controllerIdx].channel[channelIdx];
 }
 
 /****************************************************************************/
@@ -257,51 +253,50 @@ static inline DMA_Channel_t *HandleToChannel(DMA_Handle_t handle)
 */
 /****************************************************************************/
 
-static irqreturn_t dma_interrupt_handler(int irq, void *dev_id)
-{
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
-	int irqStatus;
+static irqreturn_t dma_interrupt_handler(int irq, void *dev_id) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
+    int irqStatus;
 
-	channel = (DMA_Channel_t *) dev_id;
+    channel = (DMA_Channel_t *) dev_id;
 
-	/* Figure out why we were called, and knock down the interrupt */
+    /* Figure out why we were called, and knock down the interrupt */
 
-	irqStatus = dmacHw_getInterruptStatus(channel->dmacHwHandle);
-	dmacHw_clearInterrupt(channel->dmacHwHandle);
+    irqStatus = dmacHw_getInterruptStatus(channel->dmacHwHandle);
+    dmacHw_clearInterrupt(channel->dmacHwHandle);
 
-	if ((channel->devType < 0)
-	    || (channel->devType > DMA_NUM_DEVICE_ENTRIES)) {
-		printk(KERN_ERR "dma_interrupt_handler: Invalid devType: %d\n",
-		       channel->devType);
-		return IRQ_NONE;
-	}
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    if ((channel->devType < 0)
+            || (channel->devType > DMA_NUM_DEVICE_ENTRIES)) {
+        printk(KERN_ERR "dma_interrupt_handler: Invalid devType: %d\n",
+               channel->devType);
+        return IRQ_NONE;
+    }
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	/* Update stats */
+    /* Update stats */
 
-	if ((irqStatus & dmacHw_INTERRUPT_STATUS_TRANS) != 0) {
-		devAttr->transferTicks +=
-		    (timer_get_tick_count() - devAttr->transferStartTime);
-	}
+    if ((irqStatus & dmacHw_INTERRUPT_STATUS_TRANS) != 0) {
+        devAttr->transferTicks +=
+            (timer_get_tick_count() - devAttr->transferStartTime);
+    }
 
-	if ((irqStatus & dmacHw_INTERRUPT_STATUS_ERROR) != 0) {
-		printk(KERN_ERR
-		       "dma_interrupt_handler: devType :%d DMA error (%s)\n",
-		       channel->devType, devAttr->name);
-	} else {
-		devAttr->numTransfers++;
-		devAttr->transferBytes += devAttr->numBytes;
-	}
+    if ((irqStatus & dmacHw_INTERRUPT_STATUS_ERROR) != 0) {
+        printk(KERN_ERR
+               "dma_interrupt_handler: devType :%d DMA error (%s)\n",
+               channel->devType, devAttr->name);
+    } else {
+        devAttr->numTransfers++;
+        devAttr->transferBytes += devAttr->numBytes;
+    }
 
-	/* Call any installed handler */
+    /* Call any installed handler */
 
-	if (devAttr->devHandler != NULL) {
-		devAttr->devHandler(channel->devType, irqStatus,
-				    devAttr->userData);
-	}
+    if (devAttr->devHandler != NULL) {
+        devAttr->devHandler(channel->devType, irqStatus,
+                            devAttr->userData);
+    }
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 /****************************************************************************/
@@ -320,30 +315,30 @@ static irqreturn_t dma_interrupt_handler(int irq, void *dev_id)
 /****************************************************************************/
 
 int dma_alloc_descriptor_ring(DMA_DescriptorRing_t *ring,	/* Descriptor ring to populate */
-			      int numDescriptors	/* Number of descriptors that need to be allocated. */
-    ) {
-	size_t bytesToAlloc = dmacHw_descriptorLen(numDescriptors);
+                              int numDescriptors	/* Number of descriptors that need to be allocated. */
+                             ) {
+    size_t bytesToAlloc = dmacHw_descriptorLen(numDescriptors);
 
-	if ((ring == NULL) || (numDescriptors <= 0)) {
-		return -EINVAL;
-	}
+    if ((ring == NULL) || (numDescriptors <= 0)) {
+        return -EINVAL;
+    }
 
-	ring->physAddr = 0;
-	ring->descriptorsAllocated = 0;
-	ring->bytesAllocated = 0;
+    ring->physAddr = 0;
+    ring->descriptorsAllocated = 0;
+    ring->bytesAllocated = 0;
 
-	ring->virtAddr = dma_alloc_writecombine(NULL,
-						     bytesToAlloc,
-						     &ring->physAddr,
-						     GFP_KERNEL);
-	if (ring->virtAddr == NULL) {
-		return -ENOMEM;
-	}
+    ring->virtAddr = dma_alloc_writecombine(NULL,
+                                            bytesToAlloc,
+                                            &ring->physAddr,
+                                            GFP_KERNEL);
+    if (ring->virtAddr == NULL) {
+        return -ENOMEM;
+    }
 
-	ring->bytesAllocated = bytesToAlloc;
-	ring->descriptorsAllocated = numDescriptors;
+    ring->bytesAllocated = bytesToAlloc;
+    ring->descriptorsAllocated = numDescriptors;
 
-	return dma_init_descriptor_ring(ring, numDescriptors);
+    return dma_init_descriptor_ring(ring, numDescriptors);
 }
 
 EXPORT_SYMBOL(dma_alloc_descriptor_ring);
@@ -355,17 +350,17 @@ EXPORT_SYMBOL(dma_alloc_descriptor_ring);
 /****************************************************************************/
 
 void dma_free_descriptor_ring(DMA_DescriptorRing_t *ring	/* Descriptor to release */
-    ) {
-	if (ring->virtAddr != NULL) {
-		dma_free_writecombine(NULL,
-				      ring->bytesAllocated,
-				      ring->virtAddr, ring->physAddr);
-	}
+                             ) {
+    if (ring->virtAddr != NULL) {
+        dma_free_writecombine(NULL,
+                              ring->bytesAllocated,
+                              ring->virtAddr, ring->physAddr);
+    }
 
-	ring->bytesAllocated = 0;
-	ring->descriptorsAllocated = 0;
-	ring->virtAddr = NULL;
-	ring->physAddr = 0;
+    ring->bytesAllocated = 0;
+    ring->descriptorsAllocated = 0;
+    ring->virtAddr = NULL;
+    ring->physAddr = 0;
 }
 
 EXPORT_SYMBOL(dma_free_descriptor_ring);
@@ -389,20 +384,20 @@ EXPORT_SYMBOL(dma_free_descriptor_ring);
 /****************************************************************************/
 
 int dma_init_descriptor_ring(DMA_DescriptorRing_t *ring,	/* Descriptor ring to initialize */
-			     int numDescriptors	/* Number of descriptors to initialize. */
-    ) {
-	if (ring->virtAddr == NULL) {
-		return -EINVAL;
-	}
-	if (dmacHw_initDescriptor(ring->virtAddr,
-				  ring->physAddr,
-				  ring->bytesAllocated, numDescriptors) < 0) {
-		printk(KERN_ERR
-		       "dma_init_descriptor_ring: dmacHw_initDescriptor failed\n");
-		return -ENOMEM;
-	}
+                             int numDescriptors	/* Number of descriptors to initialize. */
+                            ) {
+    if (ring->virtAddr == NULL) {
+        return -EINVAL;
+    }
+    if (dmacHw_initDescriptor(ring->virtAddr,
+                              ring->physAddr,
+                              ring->bytesAllocated, numDescriptors) < 0) {
+        printk(KERN_ERR
+               "dma_init_descriptor_ring: dmacHw_initDescriptor failed\n");
+        return -ENOMEM;
+    }
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_init_descriptor_ring);
@@ -427,29 +422,29 @@ EXPORT_SYMBOL(dma_init_descriptor_ring);
 /****************************************************************************/
 
 int dma_calculate_descriptor_count(DMA_Device_t device,	/* DMA Device that this will be associated with */
-				   dma_addr_t srcData,	/* Place to get data to write to device */
-				   dma_addr_t dstData,	/* Pointer to device data address */
-				   size_t numBytes	/* Number of bytes to transfer to the device */
-    ) {
-	int numDescriptors;
-	DMA_DeviceAttribute_t *devAttr;
+                                   dma_addr_t srcData,	/* Place to get data to write to device */
+                                   dma_addr_t dstData,	/* Pointer to device data address */
+                                   size_t numBytes	/* Number of bytes to transfer to the device */
+                                  ) {
+    int numDescriptors;
+    DMA_DeviceAttribute_t *devAttr;
 
-	if (!IsDeviceValid(device)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[device];
+    if (!IsDeviceValid(device)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[device];
 
-	numDescriptors = dmacHw_calculateDescriptorCount(&devAttr->config,
-							      (void *)srcData,
-							      (void *)dstData,
-							      numBytes);
-	if (numDescriptors < 0) {
-		printk(KERN_ERR
-		       "dma_calculate_descriptor_count: dmacHw_calculateDescriptorCount failed\n");
-		return -EINVAL;
-	}
+    numDescriptors = dmacHw_calculateDescriptorCount(&devAttr->config,
+                     (void *)srcData,
+                     (void *)dstData,
+                     numBytes);
+    if (numDescriptors < 0) {
+        printk(KERN_ERR
+               "dma_calculate_descriptor_count: dmacHw_calculateDescriptorCount failed\n");
+        return -EINVAL;
+    }
 
-	return numDescriptors;
+    return numDescriptors;
 }
 
 EXPORT_SYMBOL(dma_calculate_descriptor_count);
@@ -469,31 +464,31 @@ EXPORT_SYMBOL(dma_calculate_descriptor_count);
 /****************************************************************************/
 
 int dma_add_descriptors(DMA_DescriptorRing_t *ring,	/* Descriptor ring to add descriptors to */
-			DMA_Device_t device,	/* DMA Device that descriptors are for */
-			dma_addr_t srcData,	/* Place to get data (memory or device) */
-			dma_addr_t dstData,	/* Place to put data (memory or device) */
-			size_t numBytes	/* Number of bytes to transfer to the device */
-    ) {
-	int rc;
-	DMA_DeviceAttribute_t *devAttr;
+                        DMA_Device_t device,	/* DMA Device that descriptors are for */
+                        dma_addr_t srcData,	/* Place to get data (memory or device) */
+                        dma_addr_t dstData,	/* Place to put data (memory or device) */
+                        size_t numBytes	/* Number of bytes to transfer to the device */
+                       ) {
+    int rc;
+    DMA_DeviceAttribute_t *devAttr;
 
-	if (!IsDeviceValid(device)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[device];
+    if (!IsDeviceValid(device)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[device];
 
-	rc = dmacHw_setDataDescriptor(&devAttr->config,
-				      ring->virtAddr,
-				      (void *)srcData,
-				      (void *)dstData, numBytes);
-	if (rc < 0) {
-		printk(KERN_ERR
-		       "dma_add_descriptors: dmacHw_setDataDescriptor failed with code: %d\n",
-		       rc);
-		return -ENOMEM;
-	}
+    rc = dmacHw_setDataDescriptor(&devAttr->config,
+                                  ring->virtAddr,
+                                  (void *)srcData,
+                                  (void *)dstData, numBytes);
+    if (rc < 0) {
+        printk(KERN_ERR
+               "dma_add_descriptors: dmacHw_setDataDescriptor failed with code: %d\n",
+               rc);
+        return -ENOMEM;
+    }
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_add_descriptors);
@@ -519,33 +514,33 @@ EXPORT_SYMBOL(dma_add_descriptors);
 /****************************************************************************/
 
 int dma_set_device_descriptor_ring(DMA_Device_t device,	/* Device to update the descriptor ring for. */
-				   DMA_DescriptorRing_t *ring	/* Descriptor ring to add descriptors to */
-    ) {
-	DMA_DeviceAttribute_t *devAttr;
+                                   DMA_DescriptorRing_t *ring	/* Descriptor ring to add descriptors to */
+                                  ) {
+    DMA_DeviceAttribute_t *devAttr;
 
-	if (!IsDeviceValid(device)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[device];
+    if (!IsDeviceValid(device)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[device];
 
-	/* Free the previously allocated descriptor ring */
+    /* Free the previously allocated descriptor ring */
 
-	dma_free_descriptor_ring(&devAttr->ring);
+    dma_free_descriptor_ring(&devAttr->ring);
 
-	if (ring != NULL) {
-		/* Copy in the new one */
+    if (ring != NULL) {
+        /* Copy in the new one */
 
-		devAttr->ring = *ring;
-	}
+        devAttr->ring = *ring;
+    }
 
-	/* Set things up so that if dma_transfer is called then this descriptor */
-	/* ring will get freed. */
+    /* Set things up so that if dma_transfer is called then this descriptor */
+    /* ring will get freed. */
 
-	devAttr->prevSrcData = 0;
-	devAttr->prevDstData = 0;
-	devAttr->prevNumBytes = 0;
+    devAttr->prevSrcData = 0;
+    devAttr->prevDstData = 0;
+    devAttr->prevNumBytes = 0;
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_set_device_descriptor_ring);
@@ -561,20 +556,20 @@ EXPORT_SYMBOL(dma_set_device_descriptor_ring);
 /****************************************************************************/
 
 int dma_get_device_descriptor_ring(DMA_Device_t device,	/* Device to retrieve the descriptor ring for. */
-				   DMA_DescriptorRing_t *ring	/* Place to store retrieved ring */
-    ) {
-	DMA_DeviceAttribute_t *devAttr;
+                                   DMA_DescriptorRing_t *ring	/* Place to store retrieved ring */
+                                  ) {
+    DMA_DeviceAttribute_t *devAttr;
 
-	memset(ring, 0, sizeof(*ring));
+    memset(ring, 0, sizeof(*ring));
 
-	if (!IsDeviceValid(device)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[device];
+    if (!IsDeviceValid(device)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[device];
 
-	*ring = devAttr->ring;
+    *ring = devAttr->ring;
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_get_device_descriptor_ring);
@@ -591,37 +586,36 @@ EXPORT_SYMBOL(dma_get_device_descriptor_ring);
 */
 /****************************************************************************/
 
-static int ConfigChannel(DMA_Handle_t handle)
-{
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
-	int controllerIdx;
+static int ConfigChannel(DMA_Handle_t handle) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
+    int controllerIdx;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
-	controllerIdx = CONTROLLER_FROM_HANDLE(handle);
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
+    controllerIdx = CONTROLLER_FROM_HANDLE(handle);
 
-	if ((devAttr->flags & DMA_DEVICE_FLAG_PORT_PER_DMAC) != 0) {
-		if (devAttr->config.transferType ==
-		    dmacHw_TRANSFER_TYPE_MEM_TO_PERIPHERAL) {
-			devAttr->config.dstPeripheralPort =
-			    devAttr->dmacPort[controllerIdx];
-		} else if (devAttr->config.transferType ==
-			   dmacHw_TRANSFER_TYPE_PERIPHERAL_TO_MEM) {
-			devAttr->config.srcPeripheralPort =
-			    devAttr->dmacPort[controllerIdx];
-		}
-	}
+    if ((devAttr->flags & DMA_DEVICE_FLAG_PORT_PER_DMAC) != 0) {
+        if (devAttr->config.transferType ==
+                dmacHw_TRANSFER_TYPE_MEM_TO_PERIPHERAL) {
+            devAttr->config.dstPeripheralPort =
+                devAttr->dmacPort[controllerIdx];
+        } else if (devAttr->config.transferType ==
+                   dmacHw_TRANSFER_TYPE_PERIPHERAL_TO_MEM) {
+            devAttr->config.srcPeripheralPort =
+                devAttr->dmacPort[controllerIdx];
+        }
+    }
 
-	if (dmacHw_configChannel(channel->dmacHwHandle, &devAttr->config) != 0) {
-		printk(KERN_ERR "ConfigChannel: dmacHw_configChannel failed\n");
-		return -EIO;
-	}
+    if (dmacHw_configChannel(channel->dmacHwHandle, &devAttr->config) != 0) {
+        printk(KERN_ERR "ConfigChannel: dmacHw_configChannel failed\n");
+        return -EIO;
+    }
 
-	return 0;
+    return 0;
 }
 
 /****************************************************************************/
@@ -635,177 +629,176 @@ static int ConfigChannel(DMA_Handle_t handle)
 */
 /****************************************************************************/
 
-int dma_init(void)
-{
-	int rc = 0;
-	int controllerIdx;
-	int channelIdx;
-	DMA_Device_t devIdx;
-	DMA_Channel_t *channel;
-	DMA_Handle_t dedicatedHandle;
+int dma_init(void) {
+    int rc = 0;
+    int controllerIdx;
+    int channelIdx;
+    DMA_Device_t devIdx;
+    DMA_Channel_t *channel;
+    DMA_Handle_t dedicatedHandle;
 
-	memset(&gDMA, 0, sizeof(gDMA));
+    memset(&gDMA, 0, sizeof(gDMA));
 
-	sema_init(&gDMA.lock, 0);
-	init_waitqueue_head(&gDMA.freeChannelQ);
+    sema_init(&gDMA.lock, 0);
+    init_waitqueue_head(&gDMA.freeChannelQ);
 
-	/* Initialize the Hardware */
+    /* Initialize the Hardware */
 
-	dmacHw_initDma();
+    dmacHw_initDma();
 
-	/* Start off by marking all of the DMA channels as shared. */
+    /* Start off by marking all of the DMA channels as shared. */
 
-	for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
-	     controllerIdx++) {
-		for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
-		     channelIdx++) {
-			channel =
-			    &gDMA.controller[controllerIdx].channel[channelIdx];
+    for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
+            controllerIdx++) {
+        for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
+                channelIdx++) {
+            channel =
+                &gDMA.controller[controllerIdx].channel[channelIdx];
 
-			channel->flags = 0;
-			channel->devType = DMA_DEVICE_NONE;
-			channel->lastDevType = DMA_DEVICE_NONE;
+            channel->flags = 0;
+            channel->devType = DMA_DEVICE_NONE;
+            channel->lastDevType = DMA_DEVICE_NONE;
 
 #if (DMA_DEBUG_TRACK_RESERVATION)
-			channel->fileName = "";
-			channel->lineNum = 0;
+            channel->fileName = "";
+            channel->lineNum = 0;
 #endif
 
-			channel->dmacHwHandle =
-			    dmacHw_getChannelHandle(dmacHw_MAKE_CHANNEL_ID
-						    (controllerIdx,
-						     channelIdx));
-			dmacHw_initChannel(channel->dmacHwHandle);
-		}
-	}
+            channel->dmacHwHandle =
+                dmacHw_getChannelHandle(dmacHw_MAKE_CHANNEL_ID
+                                        (controllerIdx,
+                                         channelIdx));
+            dmacHw_initChannel(channel->dmacHwHandle);
+        }
+    }
 
-	/* Record any special attributes that channels may have */
+    /* Record any special attributes that channels may have */
 
-	gDMA.controller[0].channel[0].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
-	gDMA.controller[0].channel[1].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
-	gDMA.controller[1].channel[0].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
-	gDMA.controller[1].channel[1].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
+    gDMA.controller[0].channel[0].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
+    gDMA.controller[0].channel[1].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
+    gDMA.controller[1].channel[0].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
+    gDMA.controller[1].channel[1].flags |= DMA_CHANNEL_FLAG_LARGE_FIFO;
 
-	/* Now walk through and record the dedicated channels. */
+    /* Now walk through and record the dedicated channels. */
 
-	for (devIdx = 0; devIdx < DMA_NUM_DEVICE_ENTRIES; devIdx++) {
-		DMA_DeviceAttribute_t *devAttr = &DMA_gDeviceAttribute[devIdx];
+    for (devIdx = 0; devIdx < DMA_NUM_DEVICE_ENTRIES; devIdx++) {
+        DMA_DeviceAttribute_t *devAttr = &DMA_gDeviceAttribute[devIdx];
 
-		if (((devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) != 0)
-		    && ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) == 0)) {
-			printk(KERN_ERR
-			       "DMA Device: %s Can only request NO_ISR for dedicated devices\n",
-			       devAttr->name);
-			rc = -EINVAL;
-			goto out;
-		}
+        if (((devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) != 0)
+                && ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) == 0)) {
+            printk(KERN_ERR
+                   "DMA Device: %s Can only request NO_ISR for dedicated devices\n",
+                   devAttr->name);
+            rc = -EINVAL;
+            goto out;
+        }
 
-		if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
-			/* This is a dedicated device. Mark the channel as being reserved. */
+        if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
+            /* This is a dedicated device. Mark the channel as being reserved. */
 
-			if (devAttr->dedicatedController >= DMA_NUM_CONTROLLERS) {
-				printk(KERN_ERR
-				       "DMA Device: %s DMA Controller %d is out of range\n",
-				       devAttr->name,
-				       devAttr->dedicatedController);
-				rc = -EINVAL;
-				goto out;
-			}
+            if (devAttr->dedicatedController >= DMA_NUM_CONTROLLERS) {
+                printk(KERN_ERR
+                       "DMA Device: %s DMA Controller %d is out of range\n",
+                       devAttr->name,
+                       devAttr->dedicatedController);
+                rc = -EINVAL;
+                goto out;
+            }
 
-			if (devAttr->dedicatedChannel >= DMA_NUM_CHANNELS) {
-				printk(KERN_ERR
-				       "DMA Device: %s DMA Channel %d is out of range\n",
-				       devAttr->name,
-				       devAttr->dedicatedChannel);
-				rc = -EINVAL;
-				goto out;
-			}
+            if (devAttr->dedicatedChannel >= DMA_NUM_CHANNELS) {
+                printk(KERN_ERR
+                       "DMA Device: %s DMA Channel %d is out of range\n",
+                       devAttr->name,
+                       devAttr->dedicatedChannel);
+                rc = -EINVAL;
+                goto out;
+            }
 
-			dedicatedHandle =
-			    MAKE_HANDLE(devAttr->dedicatedController,
-					devAttr->dedicatedChannel);
-			channel = HandleToChannel(dedicatedHandle);
+            dedicatedHandle =
+                MAKE_HANDLE(devAttr->dedicatedController,
+                            devAttr->dedicatedChannel);
+            channel = HandleToChannel(dedicatedHandle);
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) !=
-			    0) {
-				printk
-				    ("DMA Device: %s attempting to use same DMA Controller:Channel (%d:%d) as %s\n",
-				     devAttr->name,
-				     devAttr->dedicatedController,
-				     devAttr->dedicatedChannel,
-				     DMA_gDeviceAttribute[channel->devType].
-				     name);
-				rc = -EBUSY;
-				goto out;
-			}
+            if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) !=
+                    0) {
+                printk
+                ("DMA Device: %s attempting to use same DMA Controller:Channel (%d:%d) as %s\n",
+                 devAttr->name,
+                 devAttr->dedicatedController,
+                 devAttr->dedicatedChannel,
+                 DMA_gDeviceAttribute[channel->devType].
+                 name);
+                rc = -EBUSY;
+                goto out;
+            }
 
-			channel->flags |= DMA_CHANNEL_FLAG_IS_DEDICATED;
-			channel->devType = devIdx;
+            channel->flags |= DMA_CHANNEL_FLAG_IS_DEDICATED;
+            channel->devType = devIdx;
 
-			if (devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) {
-				channel->flags |= DMA_CHANNEL_FLAG_NO_ISR;
-			}
+            if (devAttr->flags & DMA_DEVICE_FLAG_NO_ISR) {
+                channel->flags |= DMA_CHANNEL_FLAG_NO_ISR;
+            }
 
-			/* For dedicated channels, we can go ahead and configure the DMA channel now */
-			/* as well. */
+            /* For dedicated channels, we can go ahead and configure the DMA channel now */
+            /* as well. */
 
-			ConfigChannel(dedicatedHandle);
-		}
-	}
+            ConfigChannel(dedicatedHandle);
+        }
+    }
 
-	/* Go through and register the interrupt handlers */
+    /* Go through and register the interrupt handlers */
 
-	for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
-	     controllerIdx++) {
-		for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
-		     channelIdx++) {
-			channel =
-			    &gDMA.controller[controllerIdx].channel[channelIdx];
+    for (controllerIdx = 0; controllerIdx < DMA_NUM_CONTROLLERS;
+            controllerIdx++) {
+        for (channelIdx = 0; channelIdx < DMA_NUM_CHANNELS;
+                channelIdx++) {
+            channel =
+                &gDMA.controller[controllerIdx].channel[channelIdx];
 
-			if ((channel->flags & DMA_CHANNEL_FLAG_NO_ISR) == 0) {
-				snprintf(channel->name, sizeof(channel->name),
-					 "dma %d:%d %s", controllerIdx,
-					 channelIdx,
-					 channel->devType ==
-					 DMA_DEVICE_NONE ? "" :
-					 DMA_gDeviceAttribute[channel->devType].
-					 name);
+            if ((channel->flags & DMA_CHANNEL_FLAG_NO_ISR) == 0) {
+                snprintf(channel->name, sizeof(channel->name),
+                         "dma %d:%d %s", controllerIdx,
+                         channelIdx,
+                         channel->devType ==
+                         DMA_DEVICE_NONE ? "" :
+                         DMA_gDeviceAttribute[channel->devType].
+                         name);
 
-				rc =
-				     request_irq(IRQ_DMA0C0 +
-						 (controllerIdx *
-						  DMA_NUM_CHANNELS) +
-						 channelIdx,
-						 dma_interrupt_handler,
-						 IRQF_DISABLED, channel->name,
-						 channel);
-				if (rc != 0) {
-					printk(KERN_ERR
-					       "request_irq for IRQ_DMA%dC%d failed\n",
-					       controllerIdx, channelIdx);
-				}
-			}
-		}
-	}
+                rc =
+                    request_irq(IRQ_DMA0C0 +
+                                (controllerIdx *
+                                 DMA_NUM_CHANNELS) +
+                                channelIdx,
+                                dma_interrupt_handler,
+                                IRQF_DISABLED, channel->name,
+                                channel);
+                if (rc != 0) {
+                    printk(KERN_ERR
+                           "request_irq for IRQ_DMA%dC%d failed\n",
+                           controllerIdx, channelIdx);
+                }
+            }
+        }
+    }
 
-	/* Create /proc/dma/channels and /proc/dma/devices */
+    /* Create /proc/dma/channels and /proc/dma/devices */
 
-	gDmaDir = proc_mkdir("dma", NULL);
+    gDmaDir = proc_mkdir("dma", NULL);
 
-	if (gDmaDir == NULL) {
-		printk(KERN_ERR "Unable to create /proc/dma\n");
-	} else {
-		create_proc_read_entry("channels", 0, gDmaDir,
-				       dma_proc_read_channels, NULL);
-		create_proc_read_entry("devices", 0, gDmaDir,
-				       dma_proc_read_devices, NULL);
-	}
+    if (gDmaDir == NULL) {
+        printk(KERN_ERR "Unable to create /proc/dma\n");
+    } else {
+        create_proc_read_entry("channels", 0, gDmaDir,
+                               dma_proc_read_channels, NULL);
+        create_proc_read_entry("devices", 0, gDmaDir,
+                               dma_proc_read_devices, NULL);
+    }
 
 out:
 
-	up(&gDMA.lock);
+    up(&gDMA.lock);
 
-	return rc;
+    return rc;
 }
 
 /****************************************************************************/
@@ -823,185 +816,184 @@ out:
 
 #if (DMA_DEBUG_TRACK_RESERVATION)
 DMA_Handle_t dma_request_channel_dbg
-    (DMA_Device_t dev, const char *fileName, int lineNum)
+(DMA_Device_t dev, const char *fileName, int lineNum)
 #else
 DMA_Handle_t dma_request_channel(DMA_Device_t dev)
 #endif
 {
-	DMA_Handle_t handle;
-	DMA_DeviceAttribute_t *devAttr;
-	DMA_Channel_t *channel;
-	int controllerIdx;
-	int controllerIdx2;
-	int channelIdx;
+    DMA_Handle_t handle;
+    DMA_DeviceAttribute_t *devAttr;
+    DMA_Channel_t *channel;
+    int controllerIdx;
+    int controllerIdx2;
+    int channelIdx;
 
-	if (down_interruptible(&gDMA.lock) < 0) {
-		return -ERESTARTSYS;
-	}
+    if (down_interruptible(&gDMA.lock) < 0) {
+        return -ERESTARTSYS;
+    }
 
-	if ((dev < 0) || (dev >= DMA_NUM_DEVICE_ENTRIES)) {
-		handle = -ENODEV;
-		goto out;
-	}
-	devAttr = &DMA_gDeviceAttribute[dev];
-
-#if (DMA_DEBUG_TRACK_RESERVATION)
-	{
-		char *s;
-
-		s = strrchr(fileName, '/');
-		if (s != NULL) {
-			fileName = s + 1;
-		}
-	}
-#endif
-	if ((devAttr->flags & DMA_DEVICE_FLAG_IN_USE) != 0) {
-		/* This device has already been requested and not been freed */
-
-		printk(KERN_ERR "%s: device %s is already requested\n",
-		       __func__, devAttr->name);
-		handle = -EBUSY;
-		goto out;
-	}
-
-	if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
-		/* This device has a dedicated channel. */
-
-		channel =
-		    &gDMA.controller[devAttr->dedicatedController].
-		    channel[devAttr->dedicatedChannel];
-		if ((channel->flags & DMA_CHANNEL_FLAG_IN_USE) != 0) {
-			handle = -EBUSY;
-			goto out;
-		}
-
-		channel->flags |= DMA_CHANNEL_FLAG_IN_USE;
-		devAttr->flags |= DMA_DEVICE_FLAG_IN_USE;
+    if ((dev < 0) || (dev >= DMA_NUM_DEVICE_ENTRIES)) {
+        handle = -ENODEV;
+        goto out;
+    }
+    devAttr = &DMA_gDeviceAttribute[dev];
 
 #if (DMA_DEBUG_TRACK_RESERVATION)
-		channel->fileName = fileName;
-		channel->lineNum = lineNum;
+    {
+        char *s;
+
+        s = strrchr(fileName, '/');
+        if (s != NULL) {
+            fileName = s + 1;
+        }
+    }
 #endif
-		handle =
-		    MAKE_HANDLE(devAttr->dedicatedController,
-				devAttr->dedicatedChannel);
-		goto out;
-	}
+    if ((devAttr->flags & DMA_DEVICE_FLAG_IN_USE) != 0) {
+        /* This device has already been requested and not been freed */
 
-	/* This device needs to use one of the shared channels. */
+        printk(KERN_ERR "%s: device %s is already requested\n",
+               __func__, devAttr->name);
+        handle = -EBUSY;
+        goto out;
+    }
 
-	handle = DMA_INVALID_HANDLE;
-	while (handle == DMA_INVALID_HANDLE) {
-		/* Scan through the shared channels and see if one is available */
+    if ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) != 0) {
+        /* This device has a dedicated channel. */
 
-		for (controllerIdx2 = 0; controllerIdx2 < DMA_NUM_CONTROLLERS;
-		     controllerIdx2++) {
-			/* Check to see if we should try on controller 1 first. */
+        channel =
+            &gDMA.controller[devAttr->dedicatedController].
+            channel[devAttr->dedicatedChannel];
+        if ((channel->flags & DMA_CHANNEL_FLAG_IN_USE) != 0) {
+            handle = -EBUSY;
+            goto out;
+        }
 
-			controllerIdx = controllerIdx2;
-			if ((devAttr->
-			     flags & DMA_DEVICE_FLAG_ALLOC_DMA1_FIRST) != 0) {
-				controllerIdx = 1 - controllerIdx;
-			}
-
-			/* See if the device is available on the controller being tested */
-
-			if ((devAttr->
-			     flags & (DMA_DEVICE_FLAG_ON_DMA0 << controllerIdx))
-			    != 0) {
-				for (channelIdx = 0;
-				     channelIdx < DMA_NUM_CHANNELS;
-				     channelIdx++) {
-					channel =
-					    &gDMA.controller[controllerIdx].
-					    channel[channelIdx];
-
-					if (((channel->
-					      flags &
-					      DMA_CHANNEL_FLAG_IS_DEDICATED) ==
-					     0)
-					    &&
-					    ((channel->
-					      flags & DMA_CHANNEL_FLAG_IN_USE)
-					     == 0)) {
-						if (((channel->
-						      flags &
-						      DMA_CHANNEL_FLAG_LARGE_FIFO)
-						     != 0)
-						    &&
-						    ((devAttr->
-						      flags &
-						      DMA_DEVICE_FLAG_ALLOW_LARGE_FIFO)
-						     == 0)) {
-							/* This channel is a large fifo - don't tie it up */
-							/* with devices that we don't want using it. */
-
-							continue;
-						}
-
-						channel->flags |=
-						    DMA_CHANNEL_FLAG_IN_USE;
-						channel->devType = dev;
-						devAttr->flags |=
-						    DMA_DEVICE_FLAG_IN_USE;
+        channel->flags |= DMA_CHANNEL_FLAG_IN_USE;
+        devAttr->flags |= DMA_DEVICE_FLAG_IN_USE;
 
 #if (DMA_DEBUG_TRACK_RESERVATION)
-						channel->fileName = fileName;
-						channel->lineNum = lineNum;
+        channel->fileName = fileName;
+        channel->lineNum = lineNum;
 #endif
-						handle =
-						    MAKE_HANDLE(controllerIdx,
-								channelIdx);
+        handle =
+            MAKE_HANDLE(devAttr->dedicatedController,
+                        devAttr->dedicatedChannel);
+        goto out;
+    }
 
-						/* Now that we've reserved the channel - we can go ahead and configure it */
+    /* This device needs to use one of the shared channels. */
 
-						if (ConfigChannel(handle) != 0) {
-							handle = -EIO;
-							printk(KERN_ERR
-							       "dma_request_channel: ConfigChannel failed\n");
-						}
-						goto out;
-					}
-				}
-			}
-		}
+    handle = DMA_INVALID_HANDLE;
+    while (handle == DMA_INVALID_HANDLE) {
+        /* Scan through the shared channels and see if one is available */
 
-		/* No channels are currently available. Let's wait for one to free up. */
+        for (controllerIdx2 = 0; controllerIdx2 < DMA_NUM_CONTROLLERS;
+                controllerIdx2++) {
+            /* Check to see if we should try on controller 1 first. */
 
-		{
-			DEFINE_WAIT(wait);
+            controllerIdx = controllerIdx2;
+            if ((devAttr->
+                    flags & DMA_DEVICE_FLAG_ALLOC_DMA1_FIRST) != 0) {
+                controllerIdx = 1 - controllerIdx;
+            }
 
-			prepare_to_wait(&gDMA.freeChannelQ, &wait,
-					TASK_INTERRUPTIBLE);
-			up(&gDMA.lock);
-			schedule();
-			finish_wait(&gDMA.freeChannelQ, &wait);
+            /* See if the device is available on the controller being tested */
 
-			if (signal_pending(current)) {
-				/* We don't currently hold gDMA.lock, so we return directly */
+            if ((devAttr->
+                    flags & (DMA_DEVICE_FLAG_ON_DMA0 << controllerIdx))
+                    != 0) {
+                for (channelIdx = 0;
+                        channelIdx < DMA_NUM_CHANNELS;
+                        channelIdx++) {
+                    channel =
+                        &gDMA.controller[controllerIdx].
+                        channel[channelIdx];
 
-				return -ERESTARTSYS;
-			}
-		}
+                    if (((channel->
+                            flags &
+                            DMA_CHANNEL_FLAG_IS_DEDICATED) ==
+                            0)
+                            &&
+                            ((channel->
+                              flags & DMA_CHANNEL_FLAG_IN_USE)
+                             == 0)) {
+                        if (((channel->
+                                flags &
+                                DMA_CHANNEL_FLAG_LARGE_FIFO)
+                                != 0)
+                                &&
+                                ((devAttr->
+                                  flags &
+                                  DMA_DEVICE_FLAG_ALLOW_LARGE_FIFO)
+                                 == 0)) {
+                            /* This channel is a large fifo - don't tie it up */
+                            /* with devices that we don't want using it. */
 
-		if (down_interruptible(&gDMA.lock)) {
-			return -ERESTARTSYS;
-		}
-	}
+                            continue;
+                        }
+
+                        channel->flags |=
+                            DMA_CHANNEL_FLAG_IN_USE;
+                        channel->devType = dev;
+                        devAttr->flags |=
+                            DMA_DEVICE_FLAG_IN_USE;
+
+#if (DMA_DEBUG_TRACK_RESERVATION)
+                        channel->fileName = fileName;
+                        channel->lineNum = lineNum;
+#endif
+                        handle =
+                            MAKE_HANDLE(controllerIdx,
+                                        channelIdx);
+
+                        /* Now that we've reserved the channel - we can go ahead and configure it */
+
+                        if (ConfigChannel(handle) != 0) {
+                            handle = -EIO;
+                            printk(KERN_ERR
+                                   "dma_request_channel: ConfigChannel failed\n");
+                        }
+                        goto out;
+                    }
+                }
+            }
+        }
+
+        /* No channels are currently available. Let's wait for one to free up. */
+
+        {
+            DEFINE_WAIT(wait);
+
+            prepare_to_wait(&gDMA.freeChannelQ, &wait,
+                            TASK_INTERRUPTIBLE);
+            up(&gDMA.lock);
+            schedule();
+            finish_wait(&gDMA.freeChannelQ, &wait);
+
+            if (signal_pending(current)) {
+                /* We don't currently hold gDMA.lock, so we return directly */
+
+                return -ERESTARTSYS;
+            }
+        }
+
+        if (down_interruptible(&gDMA.lock)) {
+            return -ERESTARTSYS;
+        }
+    }
 
 out:
-	up(&gDMA.lock);
+    up(&gDMA.lock);
 
-	return handle;
+    return handle;
 }
 
 /* Create both _dbg and non _dbg functions for modules. */
 
 #if (DMA_DEBUG_TRACK_RESERVATION)
 #undef dma_request_channel
-DMA_Handle_t dma_request_channel(DMA_Device_t dev)
-{
-	return dma_request_channel_dbg(dev, __FILE__, __LINE__);
+DMA_Handle_t dma_request_channel(DMA_Device_t dev) {
+    return dma_request_channel_dbg(dev, __FILE__, __LINE__);
 }
 
 EXPORT_SYMBOL(dma_request_channel_dbg);
@@ -1015,36 +1007,36 @@ EXPORT_SYMBOL(dma_request_channel);
 /****************************************************************************/
 
 int dma_free_channel(DMA_Handle_t handle	/* DMA handle. */
-    ) {
-	int rc = 0;
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
+                    ) {
+    int rc = 0;
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
 
-	if (down_interruptible(&gDMA.lock) < 0) {
-		return -ERESTARTSYS;
-	}
+    if (down_interruptible(&gDMA.lock) < 0) {
+        return -ERESTARTSYS;
+    }
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		rc = -EINVAL;
-		goto out;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        rc = -EINVAL;
+        goto out;
+    }
 
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) == 0) {
-		channel->lastDevType = channel->devType;
-		channel->devType = DMA_DEVICE_NONE;
-	}
-	channel->flags &= ~DMA_CHANNEL_FLAG_IN_USE;
-	devAttr->flags &= ~DMA_DEVICE_FLAG_IN_USE;
+    if ((channel->flags & DMA_CHANNEL_FLAG_IS_DEDICATED) == 0) {
+        channel->lastDevType = channel->devType;
+        channel->devType = DMA_DEVICE_NONE;
+    }
+    channel->flags &= ~DMA_CHANNEL_FLAG_IN_USE;
+    devAttr->flags &= ~DMA_DEVICE_FLAG_IN_USE;
 
 out:
-	up(&gDMA.lock);
+    up(&gDMA.lock);
 
-	wake_up_interruptible(&gDMA.freeChannelQ);
+    wake_up_interruptible(&gDMA.freeChannelQ);
 
-	return rc;
+    return rc;
 }
 
 EXPORT_SYMBOL(dma_free_channel);
@@ -1062,15 +1054,15 @@ EXPORT_SYMBOL(dma_free_channel);
 /****************************************************************************/
 
 int dma_device_is_channel_shared(DMA_Device_t device	/* Device to check. */
-    ) {
-	DMA_DeviceAttribute_t *devAttr;
+                                ) {
+    DMA_DeviceAttribute_t *devAttr;
 
-	if (!IsDeviceValid(device)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[device];
+    if (!IsDeviceValid(device)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[device];
 
-	return ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) == 0);
+    return ((devAttr->flags & DMA_DEVICE_FLAG_IS_DEDICATED) == 0);
 }
 
 EXPORT_SYMBOL(dma_device_is_channel_shared);
@@ -1090,109 +1082,109 @@ EXPORT_SYMBOL(dma_device_is_channel_shared);
 /****************************************************************************/
 
 int dma_alloc_descriptors(DMA_Handle_t handle,	/* DMA Handle */
-			  dmacHw_TRANSFER_TYPE_e transferType,	/* Type of transfer being performed */
-			  dma_addr_t srcData,	/* Place to get data to write to device */
-			  dma_addr_t dstData,	/* Pointer to device data address */
-			  size_t numBytes	/* Number of bytes to transfer to the device */
-    ) {
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
-	int numDescriptors;
-	size_t ringBytesRequired;
-	int rc = 0;
+                          dmacHw_TRANSFER_TYPE_e transferType,	/* Type of transfer being performed */
+                          dma_addr_t srcData,	/* Place to get data to write to device */
+                          dma_addr_t dstData,	/* Pointer to device data address */
+                          size_t numBytes	/* Number of bytes to transfer to the device */
+                         ) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
+    int numDescriptors;
+    size_t ringBytesRequired;
+    int rc = 0;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
 
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	if (devAttr->config.transferType != transferType) {
-		return -EINVAL;
-	}
+    if (devAttr->config.transferType != transferType) {
+        return -EINVAL;
+    }
 
-	/* Figure out how many descriptors we need. */
+    /* Figure out how many descriptors we need. */
 
-	/* printk("srcData: 0x%08x dstData: 0x%08x, numBytes: %d\n", */
-	/*        srcData, dstData, numBytes); */
+    /* printk("srcData: 0x%08x dstData: 0x%08x, numBytes: %d\n", */
+    /*        srcData, dstData, numBytes); */
 
-	numDescriptors = dmacHw_calculateDescriptorCount(&devAttr->config,
-							      (void *)srcData,
-							      (void *)dstData,
-							      numBytes);
-	if (numDescriptors < 0) {
-		printk(KERN_ERR "%s: dmacHw_calculateDescriptorCount failed\n",
-		       __func__);
-		return -EINVAL;
-	}
+    numDescriptors = dmacHw_calculateDescriptorCount(&devAttr->config,
+                     (void *)srcData,
+                     (void *)dstData,
+                     numBytes);
+    if (numDescriptors < 0) {
+        printk(KERN_ERR "%s: dmacHw_calculateDescriptorCount failed\n",
+               __func__);
+        return -EINVAL;
+    }
 
-	/* Check to see if we can reuse the existing descriptor ring, or if we need to allocate */
-	/* a new one. */
+    /* Check to see if we can reuse the existing descriptor ring, or if we need to allocate */
+    /* a new one. */
 
-	ringBytesRequired = dmacHw_descriptorLen(numDescriptors);
+    ringBytesRequired = dmacHw_descriptorLen(numDescriptors);
 
-	/* printk("ringBytesRequired: %d\n", ringBytesRequired); */
+    /* printk("ringBytesRequired: %d\n", ringBytesRequired); */
 
-	if (ringBytesRequired > devAttr->ring.bytesAllocated) {
-		/* Make sure that this code path is never taken from interrupt context. */
-		/* It's OK for an interrupt to initiate a DMA transfer, but the descriptor */
-		/* allocation needs to have already been done. */
+    if (ringBytesRequired > devAttr->ring.bytesAllocated) {
+        /* Make sure that this code path is never taken from interrupt context. */
+        /* It's OK for an interrupt to initiate a DMA transfer, but the descriptor */
+        /* allocation needs to have already been done. */
 
-		might_sleep();
+        might_sleep();
 
-		/* Free the old descriptor ring and allocate a new one. */
+        /* Free the old descriptor ring and allocate a new one. */
 
-		dma_free_descriptor_ring(&devAttr->ring);
+        dma_free_descriptor_ring(&devAttr->ring);
 
-		/* And allocate a new one. */
+        /* And allocate a new one. */
 
-		rc =
-		     dma_alloc_descriptor_ring(&devAttr->ring,
-					       numDescriptors);
-		if (rc < 0) {
-			printk(KERN_ERR
-			       "%s: dma_alloc_descriptor_ring(%d) failed\n",
-			       __func__, numDescriptors);
-			return rc;
-		}
-		/* Setup the descriptor for this transfer */
+        rc =
+            dma_alloc_descriptor_ring(&devAttr->ring,
+                                      numDescriptors);
+        if (rc < 0) {
+            printk(KERN_ERR
+                   "%s: dma_alloc_descriptor_ring(%d) failed\n",
+                   __func__, numDescriptors);
+            return rc;
+        }
+        /* Setup the descriptor for this transfer */
 
-		if (dmacHw_initDescriptor(devAttr->ring.virtAddr,
-					  devAttr->ring.physAddr,
-					  devAttr->ring.bytesAllocated,
-					  numDescriptors) < 0) {
-			printk(KERN_ERR "%s: dmacHw_initDescriptor failed\n",
-			       __func__);
-			return -EINVAL;
-		}
-	} else {
-		/* We've already got enough ring buffer allocated. All we need to do is reset */
-		/* any control information, just in case the previous DMA was stopped. */
+        if (dmacHw_initDescriptor(devAttr->ring.virtAddr,
+                                  devAttr->ring.physAddr,
+                                  devAttr->ring.bytesAllocated,
+                                  numDescriptors) < 0) {
+            printk(KERN_ERR "%s: dmacHw_initDescriptor failed\n",
+                   __func__);
+            return -EINVAL;
+        }
+    } else {
+        /* We've already got enough ring buffer allocated. All we need to do is reset */
+        /* any control information, just in case the previous DMA was stopped. */
 
-		dmacHw_resetDescriptorControl(devAttr->ring.virtAddr);
-	}
+        dmacHw_resetDescriptorControl(devAttr->ring.virtAddr);
+    }
 
-	/* dma_alloc/free both set the prevSrc/DstData to 0. If they happen to be the same */
-	/* as last time, then we don't need to call setDataDescriptor again. */
+    /* dma_alloc/free both set the prevSrc/DstData to 0. If they happen to be the same */
+    /* as last time, then we don't need to call setDataDescriptor again. */
 
-	if (dmacHw_setDataDescriptor(&devAttr->config,
-				     devAttr->ring.virtAddr,
-				     (void *)srcData,
-				     (void *)dstData, numBytes) < 0) {
-		printk(KERN_ERR "%s: dmacHw_setDataDescriptor failed\n",
-		       __func__);
-		return -EINVAL;
-	}
+    if (dmacHw_setDataDescriptor(&devAttr->config,
+                                 devAttr->ring.virtAddr,
+                                 (void *)srcData,
+                                 (void *)dstData, numBytes) < 0) {
+        printk(KERN_ERR "%s: dmacHw_setDataDescriptor failed\n",
+               __func__);
+        return -EINVAL;
+    }
 
-	/* Remember the critical information for this transfer so that we can eliminate */
-	/* another call to dma_alloc_descriptors if the caller reuses the same buffers */
+    /* Remember the critical information for this transfer so that we can eliminate */
+    /* another call to dma_alloc_descriptors if the caller reuses the same buffers */
 
-	devAttr->prevSrcData = srcData;
-	devAttr->prevDstData = dstData;
-	devAttr->prevNumBytes = numBytes;
+    devAttr->prevSrcData = srcData;
+    devAttr->prevDstData = dstData;
+    devAttr->prevNumBytes = numBytes;
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_alloc_descriptors);
@@ -1213,117 +1205,117 @@ EXPORT_SYMBOL(dma_alloc_descriptors);
 /****************************************************************************/
 
 int dma_alloc_double_dst_descriptors(DMA_Handle_t handle,	/* DMA Handle */
-				     dma_addr_t srcData,	/* Physical address of source data */
-				     dma_addr_t dstData1,	/* Physical address of first destination buffer */
-				     dma_addr_t dstData2,	/* Physical address of second destination buffer */
-				     size_t numBytes	/* Number of bytes in each destination buffer */
-    ) {
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
-	int numDst1Descriptors;
-	int numDst2Descriptors;
-	int numDescriptors;
-	size_t ringBytesRequired;
-	int rc = 0;
+                                     dma_addr_t srcData,	/* Physical address of source data */
+                                     dma_addr_t dstData1,	/* Physical address of first destination buffer */
+                                     dma_addr_t dstData2,	/* Physical address of second destination buffer */
+                                     size_t numBytes	/* Number of bytes in each destination buffer */
+                                    ) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
+    int numDst1Descriptors;
+    int numDst2Descriptors;
+    int numDescriptors;
+    size_t ringBytesRequired;
+    int rc = 0;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
 
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	/* Figure out how many descriptors we need. */
+    /* Figure out how many descriptors we need. */
 
-	/* printk("srcData: 0x%08x dstData: 0x%08x, numBytes: %d\n", */
-	/*        srcData, dstData, numBytes); */
+    /* printk("srcData: 0x%08x dstData: 0x%08x, numBytes: %d\n", */
+    /*        srcData, dstData, numBytes); */
 
-	numDst1Descriptors =
-	     dmacHw_calculateDescriptorCount(&devAttr->config, (void *)srcData,
-					     (void *)dstData1, numBytes);
-	if (numDst1Descriptors < 0) {
-		return -EINVAL;
-	}
-	numDst2Descriptors =
-	     dmacHw_calculateDescriptorCount(&devAttr->config, (void *)srcData,
-					     (void *)dstData2, numBytes);
-	if (numDst2Descriptors < 0) {
-		return -EINVAL;
-	}
-	numDescriptors = numDst1Descriptors + numDst2Descriptors;
-	/* printk("numDescriptors: %d\n", numDescriptors); */
+    numDst1Descriptors =
+        dmacHw_calculateDescriptorCount(&devAttr->config, (void *)srcData,
+                                        (void *)dstData1, numBytes);
+    if (numDst1Descriptors < 0) {
+        return -EINVAL;
+    }
+    numDst2Descriptors =
+        dmacHw_calculateDescriptorCount(&devAttr->config, (void *)srcData,
+                                        (void *)dstData2, numBytes);
+    if (numDst2Descriptors < 0) {
+        return -EINVAL;
+    }
+    numDescriptors = numDst1Descriptors + numDst2Descriptors;
+    /* printk("numDescriptors: %d\n", numDescriptors); */
 
-	/* Check to see if we can reuse the existing descriptor ring, or if we need to allocate */
-	/* a new one. */
+    /* Check to see if we can reuse the existing descriptor ring, or if we need to allocate */
+    /* a new one. */
 
-	ringBytesRequired = dmacHw_descriptorLen(numDescriptors);
+    ringBytesRequired = dmacHw_descriptorLen(numDescriptors);
 
-	/* printk("ringBytesRequired: %d\n", ringBytesRequired); */
+    /* printk("ringBytesRequired: %d\n", ringBytesRequired); */
 
-	if (ringBytesRequired > devAttr->ring.bytesAllocated) {
-		/* Make sure that this code path is never taken from interrupt context. */
-		/* It's OK for an interrupt to initiate a DMA transfer, but the descriptor */
-		/* allocation needs to have already been done. */
+    if (ringBytesRequired > devAttr->ring.bytesAllocated) {
+        /* Make sure that this code path is never taken from interrupt context. */
+        /* It's OK for an interrupt to initiate a DMA transfer, but the descriptor */
+        /* allocation needs to have already been done. */
 
-		might_sleep();
+        might_sleep();
 
-		/* Free the old descriptor ring and allocate a new one. */
+        /* Free the old descriptor ring and allocate a new one. */
 
-		dma_free_descriptor_ring(&devAttr->ring);
+        dma_free_descriptor_ring(&devAttr->ring);
 
-		/* And allocate a new one. */
+        /* And allocate a new one. */
 
-		rc =
-		     dma_alloc_descriptor_ring(&devAttr->ring,
-					       numDescriptors);
-		if (rc < 0) {
-			printk(KERN_ERR
-			       "%s: dma_alloc_descriptor_ring(%d) failed\n",
-			       __func__, ringBytesRequired);
-			return rc;
-		}
-	}
+        rc =
+            dma_alloc_descriptor_ring(&devAttr->ring,
+                                      numDescriptors);
+        if (rc < 0) {
+            printk(KERN_ERR
+                   "%s: dma_alloc_descriptor_ring(%d) failed\n",
+                   __func__, ringBytesRequired);
+            return rc;
+        }
+    }
 
-	/* Setup the descriptor for this transfer. Since this function is used with */
-	/* CONTINUOUS DMA operations, we need to reinitialize every time, otherwise */
-	/* setDataDescriptor will keep trying to append onto the end. */
+    /* Setup the descriptor for this transfer. Since this function is used with */
+    /* CONTINUOUS DMA operations, we need to reinitialize every time, otherwise */
+    /* setDataDescriptor will keep trying to append onto the end. */
 
-	if (dmacHw_initDescriptor(devAttr->ring.virtAddr,
-				  devAttr->ring.physAddr,
-				  devAttr->ring.bytesAllocated,
-				  numDescriptors) < 0) {
-		printk(KERN_ERR "%s: dmacHw_initDescriptor failed\n", __func__);
-		return -EINVAL;
-	}
+    if (dmacHw_initDescriptor(devAttr->ring.virtAddr,
+                              devAttr->ring.physAddr,
+                              devAttr->ring.bytesAllocated,
+                              numDescriptors) < 0) {
+        printk(KERN_ERR "%s: dmacHw_initDescriptor failed\n", __func__);
+        return -EINVAL;
+    }
 
-	/* dma_alloc/free both set the prevSrc/DstData to 0. If they happen to be the same */
-	/* as last time, then we don't need to call setDataDescriptor again. */
+    /* dma_alloc/free both set the prevSrc/DstData to 0. If they happen to be the same */
+    /* as last time, then we don't need to call setDataDescriptor again. */
 
-	if (dmacHw_setDataDescriptor(&devAttr->config,
-				     devAttr->ring.virtAddr,
-				     (void *)srcData,
-				     (void *)dstData1, numBytes) < 0) {
-		printk(KERN_ERR "%s: dmacHw_setDataDescriptor 1 failed\n",
-		       __func__);
-		return -EINVAL;
-	}
-	if (dmacHw_setDataDescriptor(&devAttr->config,
-				     devAttr->ring.virtAddr,
-				     (void *)srcData,
-				     (void *)dstData2, numBytes) < 0) {
-		printk(KERN_ERR "%s: dmacHw_setDataDescriptor 2 failed\n",
-		       __func__);
-		return -EINVAL;
-	}
+    if (dmacHw_setDataDescriptor(&devAttr->config,
+                                 devAttr->ring.virtAddr,
+                                 (void *)srcData,
+                                 (void *)dstData1, numBytes) < 0) {
+        printk(KERN_ERR "%s: dmacHw_setDataDescriptor 1 failed\n",
+               __func__);
+        return -EINVAL;
+    }
+    if (dmacHw_setDataDescriptor(&devAttr->config,
+                                 devAttr->ring.virtAddr,
+                                 (void *)srcData,
+                                 (void *)dstData2, numBytes) < 0) {
+        printk(KERN_ERR "%s: dmacHw_setDataDescriptor 2 failed\n",
+               __func__);
+        return -EINVAL;
+    }
 
-	/* You should use dma_start_transfer rather than dma_transfer_xxx so we don't */
-	/* try to make the 'prev' variables right. */
+    /* You should use dma_start_transfer rather than dma_transfer_xxx so we don't */
+    /* try to make the 'prev' variables right. */
 
-	devAttr->prevSrcData = 0;
-	devAttr->prevDstData = 0;
-	devAttr->prevNumBytes = 0;
+    devAttr->prevSrcData = 0;
+    devAttr->prevDstData = 0;
+    devAttr->prevNumBytes = 0;
 
-	return numDescriptors;
+    return numDescriptors;
 }
 
 EXPORT_SYMBOL(dma_alloc_double_dst_descriptors);
@@ -1341,23 +1333,22 @@ EXPORT_SYMBOL(dma_alloc_double_dst_descriptors);
 */
 /****************************************************************************/
 
-int dma_start_transfer(DMA_Handle_t handle)
-{
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
+int dma_start_transfer(DMA_Handle_t handle) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	dmacHw_initiateTransfer(channel->dmacHwHandle, &devAttr->config,
-				devAttr->ring.virtAddr);
+    dmacHw_initiateTransfer(channel->dmacHwHandle, &devAttr->config,
+                            devAttr->ring.virtAddr);
 
-	/* Since we got this far, everything went successfully */
+    /* Since we got this far, everything went successfully */
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_start_transfer);
@@ -1372,18 +1363,17 @@ EXPORT_SYMBOL(dma_start_transfer);
 */
 /****************************************************************************/
 
-int dma_stop_transfer(DMA_Handle_t handle)
-{
-	DMA_Channel_t *channel;
+int dma_stop_transfer(DMA_Handle_t handle) {
+    DMA_Channel_t *channel;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
 
-	dmacHw_stopTransfer(channel->dmacHwHandle);
+    dmacHw_stopTransfer(channel->dmacHwHandle);
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_stop_transfer);
@@ -1395,27 +1385,26 @@ EXPORT_SYMBOL(dma_stop_transfer);
 */
 /****************************************************************************/
 
-int dma_wait_transfer_done(DMA_Handle_t handle)
-{
-	DMA_Channel_t *channel;
-	dmacHw_TRANSFER_STATUS_e status;
+int dma_wait_transfer_done(DMA_Handle_t handle) {
+    DMA_Channel_t *channel;
+    dmacHw_TRANSFER_STATUS_e status;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
 
-	while ((status =
-		dmacHw_transferCompleted(channel->dmacHwHandle)) ==
-	       dmacHw_TRANSFER_STATUS_BUSY) {
-		;
-	}
+    while ((status =
+                dmacHw_transferCompleted(channel->dmacHwHandle)) ==
+            dmacHw_TRANSFER_STATUS_BUSY) {
+        ;
+    }
 
-	if (status == dmacHw_TRANSFER_STATUS_ERROR) {
-		printk(KERN_ERR "%s: DMA transfer failed\n", __func__);
-		return -EIO;
-	}
-	return 0;
+    if (status == dmacHw_TRANSFER_STATUS_ERROR) {
+        printk(KERN_ERR "%s: DMA transfer failed\n", __func__);
+        return -EIO;
+    }
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_wait_transfer_done);
@@ -1432,50 +1421,50 @@ EXPORT_SYMBOL(dma_wait_transfer_done);
 /****************************************************************************/
 
 int dma_transfer(DMA_Handle_t handle,	/* DMA Handle */
-		 dmacHw_TRANSFER_TYPE_e transferType,	/* Type of transfer being performed */
-		 dma_addr_t srcData,	/* Place to get data to write to device */
-		 dma_addr_t dstData,	/* Pointer to device data address */
-		 size_t numBytes	/* Number of bytes to transfer to the device */
-    ) {
-	DMA_Channel_t *channel;
-	DMA_DeviceAttribute_t *devAttr;
-	int rc = 0;
+                 dmacHw_TRANSFER_TYPE_e transferType,	/* Type of transfer being performed */
+                 dma_addr_t srcData,	/* Place to get data to write to device */
+                 dma_addr_t dstData,	/* Pointer to device data address */
+                 size_t numBytes	/* Number of bytes to transfer to the device */
+                ) {
+    DMA_Channel_t *channel;
+    DMA_DeviceAttribute_t *devAttr;
+    int rc = 0;
 
-	channel = HandleToChannel(handle);
-	if (channel == NULL) {
-		return -ENODEV;
-	}
+    channel = HandleToChannel(handle);
+    if (channel == NULL) {
+        return -ENODEV;
+    }
 
-	devAttr = &DMA_gDeviceAttribute[channel->devType];
+    devAttr = &DMA_gDeviceAttribute[channel->devType];
 
-	if (devAttr->config.transferType != transferType) {
-		return -EINVAL;
-	}
+    if (devAttr->config.transferType != transferType) {
+        return -EINVAL;
+    }
 
-	/* We keep track of the information about the previous request for this */
-	/* device, and if the attributes match, then we can use the descriptors we setup */
-	/* the last time, and not have to reinitialize everything. */
+    /* We keep track of the information about the previous request for this */
+    /* device, and if the attributes match, then we can use the descriptors we setup */
+    /* the last time, and not have to reinitialize everything. */
 
-	{
-		rc =
-		     dma_alloc_descriptors(handle, transferType, srcData,
-					   dstData, numBytes);
-		if (rc != 0) {
-			return rc;
-		}
-	}
+    {
+        rc =
+            dma_alloc_descriptors(handle, transferType, srcData,
+                                  dstData, numBytes);
+        if (rc != 0) {
+            return rc;
+        }
+    }
 
-	/* And kick off the transfer */
+    /* And kick off the transfer */
 
-	devAttr->numBytes = numBytes;
-	devAttr->transferStartTime = timer_get_tick_count();
+    devAttr->numBytes = numBytes;
+    devAttr->transferStartTime = timer_get_tick_count();
 
-	dmacHw_initiateTransfer(channel->dmacHwHandle, &devAttr->config,
-				devAttr->ring.virtAddr);
+    dmacHw_initiateTransfer(channel->dmacHwHandle, &devAttr->config,
+                            devAttr->ring.virtAddr);
 
-	/* Since we got this far, everything went successfully */
+    /* Since we got this far, everything went successfully */
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_transfer);
@@ -1494,25 +1483,25 @@ EXPORT_SYMBOL(dma_transfer);
 /****************************************************************************/
 
 int dma_set_device_handler(DMA_Device_t dev,	/* Device to set the callback for. */
-			   DMA_DeviceHandler_t devHandler,	/* Function to call when the DMA completes */
-			   void *userData	/* Pointer which will be passed to devHandler. */
-    ) {
-	DMA_DeviceAttribute_t *devAttr;
-	unsigned long flags;
+                           DMA_DeviceHandler_t devHandler,	/* Function to call when the DMA completes */
+                           void *userData	/* Pointer which will be passed to devHandler. */
+                          ) {
+    DMA_DeviceAttribute_t *devAttr;
+    unsigned long flags;
 
-	if (!IsDeviceValid(dev)) {
-		return -ENODEV;
-	}
-	devAttr = &DMA_gDeviceAttribute[dev];
+    if (!IsDeviceValid(dev)) {
+        return -ENODEV;
+    }
+    devAttr = &DMA_gDeviceAttribute[dev];
 
-	local_irq_save(flags);
+    local_irq_save(flags);
 
-	devAttr->userData = userData;
-	devAttr->devHandler = devHandler;
+    devAttr->userData = userData;
+    devAttr->devHandler = devHandler;
 
-	local_irq_restore(flags);
+    local_irq_restore(flags);
 
-	return 0;
+    return 0;
 }
 
 EXPORT_SYMBOL(dma_set_device_handler);

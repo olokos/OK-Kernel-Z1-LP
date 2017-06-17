@@ -30,16 +30,16 @@
  * The dynamic loader is parameterized for a particular system by 4 classes
  * that supply the module and system specific functions it requires
  */
-	/* The read functions for the module image to be loaded */
+/* The read functions for the module image to be loaded */
 struct dynamic_loader_stream;
 
-	/* This class defines "host" symbol and support functions */
+/* This class defines "host" symbol and support functions */
 struct dynamic_loader_sym;
 
-	/* This class defines the allocator for "target" memory */
+/* This class defines the allocator for "target" memory */
 struct dynamic_loader_allocate;
 
-	/* This class defines the copy-into-target-memory functions */
+/* This class defines the copy-into-target-memory functions */
 struct dynamic_loader_initialize;
 
 /*
@@ -71,17 +71,17 @@ struct dynamic_loader_initialize;
  * errors are reported during the load process using syms->error_report().
  **************************************************************************** */
 extern int dynamic_load_module(
-				      /* the source for the module image */
-				      struct dynamic_loader_stream *module,
-				      /* host support for symbols and storage */
-				      struct dynamic_loader_sym *syms,
-				      /* the target memory allocator */
-				      struct dynamic_loader_allocate *alloc,
-				      /* the target memory initializer */
-				      struct dynamic_loader_initialize *init,
-				      unsigned options,	/* option flags */
-				      /* the returned module handle */
-				      void **mhandle);
+    /* the source for the module image */
+    struct dynamic_loader_stream *module,
+    /* host support for symbols and storage */
+    struct dynamic_loader_sym *syms,
+    /* the target memory allocator */
+    struct dynamic_loader_allocate *alloc,
+    /* the target memory initializer */
+    struct dynamic_loader_initialize *init,
+    unsigned options,	/* option flags */
+    /* the returned module handle */
+    void **mhandle);
 
 /*****************************************************************************
  * Procedure dynamic_open_module
@@ -107,17 +107,17 @@ extern int dynamic_load_module(
  * errors are reported during the load process using syms->error_report().
  **************************************************************************** */
 extern int dynamic_open_module(
-				      /* the source for the module image */
-				      struct dynamic_loader_stream *module,
-				      /* host support for symbols and storage */
-				      struct dynamic_loader_sym *syms,
-				      /* the target memory allocator */
-				      struct dynamic_loader_allocate *alloc,
-				      /* the target memory initializer */
-				      struct dynamic_loader_initialize *init,
-				      unsigned options,	/* option flags */
-				      /* the returned module handle */
-				      void **mhandle);
+    /* the source for the module image */
+    struct dynamic_loader_stream *module,
+    /* host support for symbols and storage */
+    struct dynamic_loader_sym *syms,
+    /* the target memory allocator */
+    struct dynamic_loader_allocate *alloc,
+    /* the target memory initializer */
+    struct dynamic_loader_initialize *init,
+    unsigned options,	/* option flags */
+    /* the returned module handle */
+    void **mhandle);
 
 /*****************************************************************************
  * Procedure dynamic_unload_module
@@ -139,13 +139,13 @@ extern int dynamic_open_module(
  **************************************************************************** */
 extern int dynamic_unload_module(void *mhandle,	/* the module
 							 * handle */
-				 /* host support for symbols and
-				  * storage */
-				 struct dynamic_loader_sym *syms,
-				 /* the target memory allocator */
-				 struct dynamic_loader_allocate *alloc,
-				 /* the target memory initializer */
-				 struct dynamic_loader_initialize *init);
+                                 /* host support for symbols and
+                                  * storage */
+                                 struct dynamic_loader_sym *syms,
+                                 /* the target memory allocator */
+                                 struct dynamic_loader_allocate *alloc,
+                                 /* the target memory initializer */
+                                 struct dynamic_loader_initialize *init);
 
 /*****************************************************************************
  *****************************************************************************
@@ -153,7 +153,7 @@ extern int dynamic_unload_module(void *mhandle,	/* the module
  *****************************************************************************
  **************************************************************************** */
 struct dynamic_loader_stream {
-/* public: */
+    /* public: */
     /*************************************************************************
      * read_buffer
      *
@@ -170,8 +170,8 @@ struct dynamic_loader_stream {
      *  In release 1 increments the file position by the number of bytes read
      *
      ************************************************************************ */
-	int (*read_buffer) (struct dynamic_loader_stream *thisptr,
-			    void *buffer, unsigned bufsiz);
+    int (*read_buffer) (struct dynamic_loader_stream *thisptr,
+                        void *buffer, unsigned bufsiz);
 
     /*************************************************************************
      * set_file_posn (release 1 only)
@@ -186,9 +186,9 @@ struct dynamic_loader_stream {
      * for failure.
      *
      ************************************************************************ */
-	int (*set_file_posn) (struct dynamic_loader_stream *thisptr,
-			      /* to be eliminated in release 2 */
-			      unsigned int posn);
+    int (*set_file_posn) (struct dynamic_loader_stream *thisptr,
+                          /* to be eliminated in release 2 */
+                          unsigned int posn);
 
 };
 
@@ -205,11 +205,11 @@ typedef u32 ldr_addr;
  * the structure of a symbol known to the dynamic loader
  */
 struct dynload_symbol {
-	ldr_addr value;
+    ldr_addr value;
 };
 
 struct dynamic_loader_sym {
-/* public: */
+    /* public: */
     /*************************************************************************
      * find_matching_symbol
      *
@@ -222,8 +222,8 @@ struct dynamic_loader_sym {
      * found.
      *
      ************************************************************************ */
-	struct dynload_symbol *(*find_matching_symbol)
-	 (struct dynamic_loader_sym *thisptr, const char *name);
+    struct dynload_symbol *(*find_matching_symbol)
+    (struct dynamic_loader_sym *thisptr, const char *name);
 
     /*************************************************************************
      * add_to_symbol_table
@@ -242,9 +242,9 @@ struct dynamic_loader_sym {
      * subsequent loads.  Returning NULL will not cause the current load
      * to fail.
      ************************************************************************ */
-	struct dynload_symbol *(*add_to_symbol_table)
-	 (struct dynamic_loader_sym *
-	  thisptr, const char *nname, unsigned moduleid);
+    struct dynload_symbol *(*add_to_symbol_table)
+    (struct dynamic_loader_sym *
+     thisptr, const char *nname, unsigned moduleid);
 
     /*************************************************************************
      * purge_symbol_table
@@ -256,8 +256,8 @@ struct dynamic_loader_sym {
      *  Each symbol in the symbol table whose moduleid matches the argument
      * is removed from the table.
      ************************************************************************ */
-	void (*purge_symbol_table) (struct dynamic_loader_sym *thisptr,
-				    unsigned moduleid);
+    void (*purge_symbol_table) (struct dynamic_loader_sym *thisptr,
+                                unsigned moduleid);
 
     /*************************************************************************
      * dload_allocate
@@ -271,8 +271,8 @@ struct dynamic_loader_sym {
      * This function is serves as a replaceable form of "malloc" to
      * allow the user to configure the memory usage of the dynamic loader.
      ************************************************************************ */
-	void *(*dload_allocate) (struct dynamic_loader_sym *thisptr,
-				 unsigned memsiz);
+    void *(*dload_allocate) (struct dynamic_loader_sym *thisptr,
+                             unsigned memsiz);
 
     /*************************************************************************
      * dload_deallocate
@@ -283,8 +283,8 @@ struct dynamic_loader_sym {
      * EFFECT :
      *  Releases the previously allocated "host" memory.
      ************************************************************************ */
-	void (*dload_deallocate) (struct dynamic_loader_sym *thisptr,
-				  void *memptr);
+    void (*dload_deallocate) (struct dynamic_loader_sym *thisptr,
+                              void *memptr);
 
     /*************************************************************************
      * error_report
@@ -298,8 +298,8 @@ struct dynamic_loader_sym {
      * loader.  The error string and arguments are designed as for the
      * library function vprintf.
      ************************************************************************ */
-	void (*error_report) (struct dynamic_loader_sym *thisptr,
-			      const char *errstr, va_list args);
+    void (*error_report) (struct dynamic_loader_sym *thisptr,
+                          const char *errstr, va_list args);
 
 };				/* class dynamic_loader_sym */
 
@@ -310,21 +310,21 @@ struct dynamic_loader_sym {
  **************************************************************************** */
 
 struct ldr_section_info {
-	/* Name of the memory section assigned at build time */
-	const char *name;
-	ldr_addr run_addr;	/* execution address of the section */
-	ldr_addr load_addr;	/* load address of the section */
-	ldr_addr size;		/* size of the section in addressable units */
+    /* Name of the memory section assigned at build time */
+    const char *name;
+    ldr_addr run_addr;	/* execution address of the section */
+    ldr_addr load_addr;	/* load address of the section */
+    ldr_addr size;		/* size of the section in addressable units */
 #ifndef _BIG_ENDIAN
-	u16 page;		/* memory page or view */
-	u16 type;		/* one of the section types below */
+    u16 page;		/* memory page or view */
+    u16 type;		/* one of the section types below */
 #else
-	u16 type;		/* one of the section types below */
-	u16 page;		/* memory page or view */
+    u16 type;		/* one of the section types below */
+    u16 page;		/* memory page or view */
 #endif
-	/* a context field for use by dynamic_loader_allocate;
-	 *   ignored but maintained by the dynamic loader */
-	u32 context;
+    /* a context field for use by dynamic_loader_allocate;
+     *   ignored but maintained by the dynamic loader */
+    u32 context;
 };
 
 /* use this macro to extract type of section from ldr_section_info.type field */
@@ -334,11 +334,11 @@ struct ldr_section_info {
 #define DLOAD_TEXT 0
 #define DLOAD_DATA 1
 #define DLOAD_BSS 2
-	/* internal use only, run-time cinit will be of type DLOAD_DATA */
+/* internal use only, run-time cinit will be of type DLOAD_DATA */
 #define DLOAD_CINIT 3
 
 struct dynamic_loader_allocate {
-/* public: */
+    /* public: */
 
     /*************************************************************************
     * Function allocate
@@ -358,8 +358,8 @@ struct dynamic_loader_allocate {
     * used for almost all relocations.  This function should always initialize
     * both fields.
     ************************************************************************ */
-	int (*dload_allocate) (struct dynamic_loader_allocate *thisptr,
-			       struct ldr_section_info *info, unsigned align);
+    int (*dload_allocate) (struct dynamic_loader_allocate *thisptr,
+                           struct ldr_section_info *info, unsigned align);
 
     /*************************************************************************
     * Function deallocate
@@ -373,8 +373,8 @@ struct dynamic_loader_allocate {
     * Notes:
     * The content of the info->name field is undefined on call to this function.
     ************************************************************************ */
-	void (*dload_deallocate) (struct dynamic_loader_allocate *thisptr,
-				  struct ldr_section_info *info);
+    void (*dload_deallocate) (struct dynamic_loader_allocate *thisptr,
+                              struct ldr_section_info *info);
 
 };				/* class dynamic_loader_allocate */
 
@@ -386,7 +386,7 @@ struct dynamic_loader_allocate {
  **************************************************************************** */
 
 struct dynamic_loader_initialize {
-/* public: */
+    /* public: */
     /*************************************************************************
     * Function connect
     *
@@ -401,7 +401,7 @@ struct dynamic_loader_initialize {
     *   This function is called prior to use of any other functions in
     * this interface.
     ************************************************************************ */
-	int (*connect) (struct dynamic_loader_initialize *thisptr);
+    int (*connect) (struct dynamic_loader_initialize *thisptr);
 
     /*************************************************************************
     * Function readmem
@@ -416,10 +416,10 @@ struct dynamic_loader_initialize {
     *   Fills the specified buffer with data from the target.  Returns TRUE for
     * success, FALSE for failure.
     ************************************************************************ */
-	int (*readmem) (struct dynamic_loader_initialize *thisptr,
-			void *bufr,
-			ldr_addr locn,
-			struct ldr_section_info *info, unsigned bytsiz);
+    int (*readmem) (struct dynamic_loader_initialize *thisptr,
+                    void *bufr,
+                    ldr_addr locn,
+                    struct ldr_section_info *info, unsigned bytsiz);
 
     /*************************************************************************
     * Function writemem
@@ -434,10 +434,10 @@ struct dynamic_loader_initialize {
     *   Writes the specified buffer to the target.  Returns TRUE for success,
     * FALSE for failure.
     ************************************************************************ */
-	int (*writemem) (struct dynamic_loader_initialize *thisptr,
-			 void *bufr,
-			 ldr_addr locn,
-			 struct ldr_section_info *info, unsigned bytsiz);
+    int (*writemem) (struct dynamic_loader_initialize *thisptr,
+                     void *bufr,
+                     ldr_addr locn,
+                     struct ldr_section_info *info, unsigned bytsiz);
 
     /*************************************************************************
     * Function fillmem
@@ -451,9 +451,9 @@ struct dynamic_loader_initialize {
     *   Fills the specified area of target memory.  Returns TRUE for success,
     * FALSE for failure.
     ************************************************************************ */
-	int (*fillmem) (struct dynamic_loader_initialize *thisptr,
-			ldr_addr locn, struct ldr_section_info *info,
-			unsigned bytsiz, unsigned val);
+    int (*fillmem) (struct dynamic_loader_initialize *thisptr,
+                    ldr_addr locn, struct ldr_section_info *info,
+                    unsigned bytsiz, unsigned val);
 
     /*************************************************************************
     * Function execute
@@ -468,8 +468,8 @@ struct dynamic_loader_initialize {
     *   This function is called at the end of the dynamic load process
     * if the input module has specified a starting address.
     ************************************************************************ */
-	int (*execute) (struct dynamic_loader_initialize *thisptr,
-			ldr_addr start);
+    int (*execute) (struct dynamic_loader_initialize *thisptr,
+                    ldr_addr start);
 
     /*************************************************************************
     * Function release
@@ -483,7 +483,7 @@ struct dynamic_loader_initialize {
     * Notes:
     *   This function is called at the end of the dynamic load process.
     ************************************************************************ */
-	void (*release) (struct dynamic_loader_initialize *thisptr);
+    void (*release) (struct dynamic_loader_initialize *thisptr);
 
 };				/* class dynamic_loader_initialize */
 

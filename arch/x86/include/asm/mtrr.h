@@ -51,26 +51,26 @@ struct mtrr_gentry {
 #else /* __i386__ */
 
 struct mtrr_sentry {
-	__u64 base;		/*  Base address     */
-	__u32 size;		/*  Size of region   */
-	__u32 type;		/*  Type of region   */
+    __u64 base;		/*  Base address     */
+    __u32 size;		/*  Size of region   */
+    __u32 type;		/*  Type of region   */
 };
 
 struct mtrr_gentry {
-	__u64 base;		/*  Base address     */
-	__u32 size;		/*  Size of region   */
-	__u32 regnum;		/*  Register number  */
-	__u32 type;		/*  Type of region   */
-	__u32 _pad;		/*  Unused	     */
+    __u64 base;		/*  Base address     */
+    __u32 size;		/*  Size of region   */
+    __u32 regnum;		/*  Register number  */
+    __u32 type;		/*  Type of region   */
+    __u32 _pad;		/*  Unused	     */
 };
 
 #endif /* !__i386__ */
 
 struct mtrr_var_range {
-	__u32 base_lo;
-	__u32 base_hi;
-	__u32 mask_lo;
-	__u32 mask_hi;
+    __u32 base_lo;
+    __u32 base_hi;
+    __u32 mask_lo;
+    __u32 mask_hi;
 };
 
 /* In the Intel processor's MTRR interface, the MTRR type is always held in
@@ -81,11 +81,11 @@ typedef __u8 mtrr_type;
 #define MTRR_MAX_VAR_RANGES 256
 
 struct mtrr_state_type {
-	struct mtrr_var_range var_ranges[MTRR_MAX_VAR_RANGES];
-	mtrr_type fixed_ranges[MTRR_NUM_FIXED_RANGES];
-	unsigned char enabled;
-	unsigned char have_fixed;
-	mtrr_type def_type;
+    struct mtrr_var_range var_ranges[MTRR_MAX_VAR_RANGES];
+    mtrr_type fixed_ranges[MTRR_NUM_FIXED_RANGES];
+    unsigned char enabled;
+    unsigned char have_fixed;
+    mtrr_type def_type;
 };
 
 #define MTRRphysBase_MSR(reg) (0x200 + 2 * (reg))
@@ -121,9 +121,9 @@ extern u8 mtrr_type_lookup(u64 addr, u64 end);
 extern void mtrr_save_fixed_ranges(void *);
 extern void mtrr_save_state(void);
 extern int mtrr_add(unsigned long base, unsigned long size,
-		    unsigned int type, bool increment);
+                    unsigned int type, bool increment);
 extern int mtrr_add_page(unsigned long base, unsigned long size,
-			 unsigned int type, bool increment);
+                         unsigned int type, bool increment);
 extern int mtrr_del(int reg, unsigned long base, unsigned long size);
 extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
 extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
@@ -135,39 +135,32 @@ extern void mtrr_bp_restore(void);
 extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
 extern int amd_special_default_mtrr(void);
 #  else
-static inline u8 mtrr_type_lookup(u64 addr, u64 end)
-{
-	/*
-	 * Return no-MTRRs:
-	 */
-	return 0xff;
+static inline u8 mtrr_type_lookup(u64 addr, u64 end) {
+    /*
+     * Return no-MTRRs:
+     */
+    return 0xff;
 }
 #define mtrr_save_fixed_ranges(arg) do {} while (0)
 #define mtrr_save_state() do {} while (0)
 static inline int mtrr_add(unsigned long base, unsigned long size,
-			   unsigned int type, bool increment)
-{
+                           unsigned int type, bool increment) {
     return -ENODEV;
 }
 static inline int mtrr_add_page(unsigned long base, unsigned long size,
-				unsigned int type, bool increment)
-{
+                                unsigned int type, bool increment) {
     return -ENODEV;
 }
-static inline int mtrr_del(int reg, unsigned long base, unsigned long size)
-{
+static inline int mtrr_del(int reg, unsigned long base, unsigned long size) {
     return -ENODEV;
 }
-static inline int mtrr_del_page(int reg, unsigned long base, unsigned long size)
-{
+static inline int mtrr_del_page(int reg, unsigned long base, unsigned long size) {
     return -ENODEV;
 }
-static inline int mtrr_trim_uncached_memory(unsigned long end_pfn)
-{
-	return 0;
+static inline int mtrr_trim_uncached_memory(unsigned long end_pfn) {
+    return 0;
 }
-static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
-{
+static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi) {
 }
 
 #define mtrr_ap_init() do {} while (0)

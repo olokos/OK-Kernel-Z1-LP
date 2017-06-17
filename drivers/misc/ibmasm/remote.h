@@ -60,29 +60,29 @@
 #define XLATE_SIZE 256
 
 struct mouse_input {
-	unsigned short	y;
-	unsigned short	x;
+    unsigned short	y;
+    unsigned short	x;
 };
 
 
 struct keyboard_input {
-	unsigned short	key_code;
-	unsigned char	key_flag;
-	unsigned char	key_down;
+    unsigned short	key_code;
+    unsigned char	key_flag;
+    unsigned char	key_down;
 };
 
 
 
 struct remote_input {
-	union {
-		struct mouse_input	mouse;
-		struct keyboard_input	keyboard;
-	} data;
+    union {
+        struct mouse_input	mouse;
+        struct keyboard_input	keyboard;
+    } data;
 
-	unsigned char	type;
-	unsigned char	pad1;
-	unsigned char	mouse_buttons;
-	unsigned char	pad3;
+    unsigned char	type;
+    unsigned char	pad1;
+    unsigned char	mouse_buttons;
+    unsigned char	pad3;
 };
 
 #define mouse_addr(sp)		(sp->base_address + CONDOR_MOUSE_DATA)
@@ -110,14 +110,13 @@ struct remote_input {
 #define get_queue_entry(sp, read_index) \
 	((void*)(queue_begin + read_index * sizeof(struct remote_input)))
 
-static inline int advance_queue_reader(struct service_processor *sp, unsigned long reader)
-{
-	reader++;
-	if (reader == REMOTE_QUEUE_SIZE)
-		reader = 0;
+static inline int advance_queue_reader(struct service_processor *sp, unsigned long reader) {
+    reader++;
+    if (reader == REMOTE_QUEUE_SIZE)
+        reader = 0;
 
-	set_queue_reader(sp, reader);
-	return reader;
+    set_queue_reader(sp, reader);
+    return reader;
 }
 
 #define NO_KEYCODE 0

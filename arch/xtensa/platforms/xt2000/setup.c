@@ -37,85 +37,77 @@
 
 /* Assumes s points to an 8-chr string.  No checking for NULL. */
 
-static void led_print (int f, char *s)
-{
-	unsigned long* led_addr = (unsigned long*) (XT2000_LED_ADDR + 0xE0) + f;
-	int i;
-	for (i = f; i < 8; i++)
-		if ((*led_addr++ = *s++) == 0)
-		    break;
+static void led_print (int f, char *s) {
+    unsigned long* led_addr = (unsigned long*) (XT2000_LED_ADDR + 0xE0) + f;
+    int i;
+    for (i = f; i < 8; i++)
+        if ((*led_addr++ = *s++) == 0)
+            break;
 }
 
-void platform_halt(void)
-{
-	led_print (0, "  HALT  ");
-	local_irq_disable();
-	while (1);
+void platform_halt(void) {
+    led_print (0, "  HALT  ");
+    local_irq_disable();
+    while (1);
 }
 
-void platform_power_off(void)
-{
-	led_print (0, "POWEROFF");
-	local_irq_disable();
-	while (1);
+void platform_power_off(void) {
+    led_print (0, "POWEROFF");
+    local_irq_disable();
+    while (1);
 }
 
-void platform_restart(void)
-{
-	/* Flush and reset the mmu, simulate a processor reset, and
-	 * jump to the reset vector. */
+void platform_restart(void) {
+    /* Flush and reset the mmu, simulate a processor reset, and
+     * jump to the reset vector. */
 
-	__asm__ __volatile__ ("movi	a2, 15\n\t"
-			      "wsr	a2, " __stringify(ICOUNTLEVEL) "\n\t"
-			      "movi	a2, 0\n\t"
-			      "wsr	a2, " __stringify(ICOUNT) "\n\t"
-			      "wsr	a2, " __stringify(IBREAKENABLE) "\n\t"
-			      "wsr	a2, " __stringify(LCOUNT) "\n\t"
-			      "movi	a2, 0x1f\n\t"
-			      "wsr	a2, " __stringify(PS) "\n\t"
-			      "isync\n\t"
-			      "jx	%0\n\t"
-			      :
-			      : "a" (XCHAL_RESET_VECTOR_VADDR)
-			      : "a2"
-			      );
+    __asm__ __volatile__ ("movi	a2, 15\n\t"
+                          "wsr	a2, " __stringify(ICOUNTLEVEL) "\n\t"
+                          "movi	a2, 0\n\t"
+                          "wsr	a2, " __stringify(ICOUNT) "\n\t"
+                          "wsr	a2, " __stringify(IBREAKENABLE) "\n\t"
+                          "wsr	a2, " __stringify(LCOUNT) "\n\t"
+                          "movi	a2, 0x1f\n\t"
+                          "wsr	a2, " __stringify(PS) "\n\t"
+                          "isync\n\t"
+                          "jx	%0\n\t"
+                          :
+                          : "a" (XCHAL_RESET_VECTOR_VADDR)
+                          : "a2"
+                         );
 
-	/* control never gets here */
+    /* control never gets here */
 }
 
-void __init platform_setup(char** cmdline)
-{
-	led_print (0, "LINUX   ");
+void __init platform_setup(char** cmdline) {
+    led_print (0, "LINUX   ");
 }
 
 /* early initialization */
 
 extern sysmem_info_t __initdata sysmem;
 
-void platform_init(bp_tag_t* first)
-{
-	/* Set default memory block if not provided by the bootloader. */
+void platform_init(bp_tag_t* first) {
+    /* Set default memory block if not provided by the bootloader. */
 
-	if (sysmem.nr_banks == 0) {
-		sysmem.nr_banks = 1;
-		sysmem.bank[0].start = PLATFORM_DEFAULT_MEM_START;
-		sysmem.bank[0].end = PLATFORM_DEFAULT_MEM_START
-				     + PLATFORM_DEFAULT_MEM_SIZE;
-	}
+    if (sysmem.nr_banks == 0) {
+        sysmem.nr_banks = 1;
+        sysmem.bank[0].start = PLATFORM_DEFAULT_MEM_START;
+        sysmem.bank[0].end = PLATFORM_DEFAULT_MEM_START
+                             + PLATFORM_DEFAULT_MEM_SIZE;
+    }
 }
 
 /* Heartbeat. Let the LED blink. */
 
-void platform_heartbeat(void)
-{
-	static int i=0, t = 0;
+void platform_heartbeat(void) {
+    static int i=0, t = 0;
 
-	if (--t < 0)
-	{
-		t = 59;
-		led_print(7, i ? ".": " ");
-		i ^= 1;
-	}
+    if (--t < 0) {
+        t = 59;
+        led_print(7, i ? ".": " ");
+        i ^= 1;
+    }
 }
 
 //#define RS_TABLE_SIZE 2
@@ -134,48 +126,47 @@ void platform_heartbeat(void)
 
 static struct plat_serial8250_port xt2000_serial_data[] = {
 #if XCHAL_HAVE_BE
-	_SERIAL_PORT(DUART16552_1_ADDR + 3, DUART16552_1_INTNUM),
-	_SERIAL_PORT(DUART16552_2_ADDR + 3, DUART16552_2_INTNUM),
+    _SERIAL_PORT(DUART16552_1_ADDR + 3, DUART16552_1_INTNUM),
+    _SERIAL_PORT(DUART16552_2_ADDR + 3, DUART16552_2_INTNUM),
 #else
-	_SERIAL_PORT(DUART16552_1_ADDR, DUART16552_1_INTNUM),
-	_SERIAL_PORT(DUART16552_2_ADDR, DUART16552_2_INTNUM),
+    _SERIAL_PORT(DUART16552_1_ADDR, DUART16552_1_INTNUM),
+    _SERIAL_PORT(DUART16552_2_ADDR, DUART16552_2_INTNUM),
 #endif
-	{ }
+    { }
 };
 
 static struct platform_device xt2000_serial8250_device = {
-	.name		= "serial8250",
-	.id		= PLAT8250_DEV_PLATFORM,
-	.dev		= {
-	    .platform_data = xt2000_serial_data,
-	},
+    .name		= "serial8250",
+    .id		= PLAT8250_DEV_PLATFORM,
+    .dev		= {
+        .platform_data = xt2000_serial_data,
+    },
 };
 
 static struct resource xt2000_sonic_res[] = {
-	{
-		.start = SONIC83934_ADDR,
-		.end   = SONIC83934_ADDR + 0xff,
-		.flags = IORESOURCE_MEM,
-	},
-	{
-		.start = SONIC83934_INTNUM,
-		.end = SONIC83934_INTNUM,
-		.flags = IORESOURCE_IRQ,
-	},
+    {
+        .start = SONIC83934_ADDR,
+        .end   = SONIC83934_ADDR + 0xff,
+        .flags = IORESOURCE_MEM,
+    },
+    {
+        .start = SONIC83934_INTNUM,
+        .end = SONIC83934_INTNUM,
+        .flags = IORESOURCE_IRQ,
+    },
 };
 
 static struct platform_device xt2000_sonic_device = {
-	.name		= "xtsonic",
-	.num_resources	= ARRAY_SIZE(xt2000_sonic_res),
-	.resource		= xt2000_sonic_res,
+    .name		= "xtsonic",
+    .num_resources	= ARRAY_SIZE(xt2000_sonic_res),
+    .resource		= xt2000_sonic_res,
 };
 
-static int __init xt2000_setup_devinit(void)
-{
-	platform_device_register(&xt2000_serial8250_device);
-	platform_device_register(&xt2000_sonic_device);
+static int __init xt2000_setup_devinit(void) {
+    platform_device_register(&xt2000_serial8250_device);
+    platform_device_register(&xt2000_sonic_device);
 
-	return 0;
+    return 0;
 }
 
 device_initcall(xt2000_setup_devinit);

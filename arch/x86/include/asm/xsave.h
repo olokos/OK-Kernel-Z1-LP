@@ -39,112 +39,106 @@ extern void xsave_init(void);
 extern void update_regset_xstate_info(unsigned int size, u64 xstate_mask);
 extern int init_fpu(struct task_struct *child);
 extern int check_for_xstate(struct i387_fxsave_struct __user *buf,
-			    void __user *fpstate,
-			    struct _fpx_sw_bytes *sw);
+                            void __user *fpstate,
+                            struct _fpx_sw_bytes *sw);
 
-static inline int fpu_xrstor_checking(struct fpu *fpu)
-{
-	struct xsave_struct *fx = &fpu->state->xsave;
-	int err;
+static inline int fpu_xrstor_checking(struct fpu *fpu) {
+    struct xsave_struct *fx = &fpu->state->xsave;
+    int err;
 
-	asm volatile("1: .byte " REX_PREFIX "0x0f,0xae,0x2f\n\t"
-		     "2:\n"
-		     ".section .fixup,\"ax\"\n"
-		     "3:  movl $-1,%[err]\n"
-		     "    jmp  2b\n"
-		     ".previous\n"
-		     _ASM_EXTABLE(1b, 3b)
-		     : [err] "=r" (err)
-		     : "D" (fx), "m" (*fx), "a" (-1), "d" (-1), "0" (0)
-		     : "memory");
+    asm volatile("1: .byte " REX_PREFIX "0x0f,0xae,0x2f\n\t"
+                 "2:\n"
+                 ".section .fixup,\"ax\"\n"
+                 "3:  movl $-1,%[err]\n"
+                 "    jmp  2b\n"
+                 ".previous\n"
+                 _ASM_EXTABLE(1b, 3b)
+                 : [err] "=r" (err)
+                 : "D" (fx), "m" (*fx), "a" (-1), "d" (-1), "0" (0)
+                 : "memory");
 
-	return err;
+    return err;
 }
 
-static inline int xsave_user(struct xsave_struct __user *buf)
-{
-	int err;
+static inline int xsave_user(struct xsave_struct __user *buf) {
+    int err;
 
-	/*
-	 * Clear the xsave header first, so that reserved fields are
-	 * initialized to zero.
-	 */
-	err = __clear_user(&buf->xsave_hdr,
-			   sizeof(struct xsave_hdr_struct));
-	if (unlikely(err))
-		return -EFAULT;
+    /*
+     * Clear the xsave header first, so that reserved fields are
+     * initialized to zero.
+     */
+    err = __clear_user(&buf->xsave_hdr,
+                       sizeof(struct xsave_hdr_struct));
+    if (unlikely(err))
+        return -EFAULT;
 
-	__asm__ __volatile__("1: .byte " REX_PREFIX "0x0f,0xae,0x27\n"
-			     "2:\n"
-			     ".section .fixup,\"ax\"\n"
-			     "3:  movl $-1,%[err]\n"
-			     "    jmp  2b\n"
-			     ".previous\n"
-			     ".section __ex_table,\"a\"\n"
-			     _ASM_ALIGN "\n"
-			     _ASM_PTR "1b,3b\n"
-			     ".previous"
-			     : [err] "=r" (err)
-			     : "D" (buf), "a" (-1), "d" (-1), "0" (0)
-			     : "memory");
-	if (unlikely(err) && __clear_user(buf, xstate_size))
-		err = -EFAULT;
-	/* No need to clear here because the caller clears USED_MATH */
-	return err;
+    __asm__ __volatile__("1: .byte " REX_PREFIX "0x0f,0xae,0x27\n"
+                         "2:\n"
+                         ".section .fixup,\"ax\"\n"
+                         "3:  movl $-1,%[err]\n"
+                         "    jmp  2b\n"
+                         ".previous\n"
+                         ".section __ex_table,\"a\"\n"
+                         _ASM_ALIGN "\n"
+                         _ASM_PTR "1b,3b\n"
+                         ".previous"
+                         : [err] "=r" (err)
+                         : "D" (buf), "a" (-1), "d" (-1), "0" (0)
+                         : "memory");
+    if (unlikely(err) && __clear_user(buf, xstate_size))
+        err = -EFAULT;
+    /* No need to clear here because the caller clears USED_MATH */
+    return err;
 }
 
-static inline int xrestore_user(struct xsave_struct __user *buf, u64 mask)
-{
-	int err;
-	struct xsave_struct *xstate = ((__force struct xsave_struct *)buf);
-	u32 lmask = mask;
-	u32 hmask = mask >> 32;
+static inline int xrestore_user(struct xsave_struct __user *buf, u64 mask) {
+    int err;
+    struct xsave_struct *xstate = ((__force struct xsave_struct *)buf);
+    u32 lmask = mask;
+    u32 hmask = mask >> 32;
 
-	__asm__ __volatile__("1: .byte " REX_PREFIX "0x0f,0xae,0x2f\n"
-			     "2:\n"
-			     ".section .fixup,\"ax\"\n"
-			     "3:  movl $-1,%[err]\n"
-			     "    jmp  2b\n"
-			     ".previous\n"
-			     ".section __ex_table,\"a\"\n"
-			     _ASM_ALIGN "\n"
-			     _ASM_PTR "1b,3b\n"
-			     ".previous"
-			     : [err] "=r" (err)
-			     : "D" (xstate), "a" (lmask), "d" (hmask), "0" (0)
-			     : "memory");	/* memory required? */
-	return err;
+    __asm__ __volatile__("1: .byte " REX_PREFIX "0x0f,0xae,0x2f\n"
+                         "2:\n"
+                         ".section .fixup,\"ax\"\n"
+                         "3:  movl $-1,%[err]\n"
+                         "    jmp  2b\n"
+                         ".previous\n"
+                         ".section __ex_table,\"a\"\n"
+                         _ASM_ALIGN "\n"
+                         _ASM_PTR "1b,3b\n"
+                         ".previous"
+                         : [err] "=r" (err)
+                         : "D" (xstate), "a" (lmask), "d" (hmask), "0" (0)
+                         : "memory");	/* memory required? */
+    return err;
 }
 
-static inline void xrstor_state(struct xsave_struct *fx, u64 mask)
-{
-	u32 lmask = mask;
-	u32 hmask = mask >> 32;
+static inline void xrstor_state(struct xsave_struct *fx, u64 mask) {
+    u32 lmask = mask;
+    u32 hmask = mask >> 32;
 
-	asm volatile(".byte " REX_PREFIX "0x0f,0xae,0x2f\n\t"
-		     : : "D" (fx), "m" (*fx), "a" (lmask), "d" (hmask)
-		     :   "memory");
+    asm volatile(".byte " REX_PREFIX "0x0f,0xae,0x2f\n\t"
+                 : : "D" (fx), "m" (*fx), "a" (lmask), "d" (hmask)
+                 :   "memory");
 }
 
-static inline void xsave_state(struct xsave_struct *fx, u64 mask)
-{
-	u32 lmask = mask;
-	u32 hmask = mask >> 32;
+static inline void xsave_state(struct xsave_struct *fx, u64 mask) {
+    u32 lmask = mask;
+    u32 hmask = mask >> 32;
 
-	asm volatile(".byte " REX_PREFIX "0x0f,0xae,0x27\n\t"
-		     : : "D" (fx), "m" (*fx), "a" (lmask), "d" (hmask)
-		     :   "memory");
+    asm volatile(".byte " REX_PREFIX "0x0f,0xae,0x27\n\t"
+                 : : "D" (fx), "m" (*fx), "a" (lmask), "d" (hmask)
+                 :   "memory");
 }
 
-static inline void fpu_xsave(struct fpu *fpu)
-{
-	/* This, however, we can work around by forcing the compiler to select
-	   an addressing mode that doesn't require extended registers. */
-	alternative_input(
-		".byte " REX_PREFIX "0x0f,0xae,0x27",
-		".byte " REX_PREFIX "0x0f,0xae,0x37",
-		X86_FEATURE_XSAVEOPT,
-		[fx] "D" (&fpu->state->xsave), "a" (-1), "d" (-1) :
-		"memory");
+static inline void fpu_xsave(struct fpu *fpu) {
+    /* This, however, we can work around by forcing the compiler to select
+       an addressing mode that doesn't require extended registers. */
+    alternative_input(
+        ".byte " REX_PREFIX "0x0f,0xae,0x27",
+        ".byte " REX_PREFIX "0x0f,0xae,0x37",
+        X86_FEATURE_XSAVEOPT,
+        [fx] "D" (&fpu->state->xsave), "a" (-1), "d" (-1) :
+        "memory");
 }
 #endif

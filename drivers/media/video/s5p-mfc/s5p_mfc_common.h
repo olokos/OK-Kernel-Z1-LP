@@ -50,12 +50,11 @@
 
 #include <media/videobuf2-dma-contig.h>
 
-static inline dma_addr_t s5p_mfc_mem_cookie(void *a, void *b)
-{
-	/* Same functionality as the vb2_dma_contig_plane_paddr */
-	dma_addr_t *paddr = vb2_dma_contig_memops.cookie(b);
+static inline dma_addr_t s5p_mfc_mem_cookie(void *a, void *b) {
+    /* Same functionality as the vb2_dma_contig_plane_paddr */
+    dma_addr_t *paddr = vb2_dma_contig_memops.cookie(b);
 
-	return *paddr;
+    return *paddr;
 }
 
 /* MFC definitions */
@@ -84,66 +83,66 @@ static inline dma_addr_t s5p_mfc_mem_cookie(void *a, void *b)
  * enum s5p_mfc_fmt_type - type of the pixelformat
  */
 enum s5p_mfc_fmt_type {
-	MFC_FMT_DEC,
-	MFC_FMT_ENC,
-	MFC_FMT_RAW,
+    MFC_FMT_DEC,
+    MFC_FMT_ENC,
+    MFC_FMT_RAW,
 };
 
 /**
  * enum s5p_mfc_node_type - The type of an MFC device node.
  */
 enum s5p_mfc_node_type {
-	MFCNODE_INVALID = -1,
-	MFCNODE_DECODER = 0,
-	MFCNODE_ENCODER = 1,
+    MFCNODE_INVALID = -1,
+    MFCNODE_DECODER = 0,
+    MFCNODE_ENCODER = 1,
 };
 
 /**
  * enum s5p_mfc_inst_type - The type of an MFC instance.
  */
 enum s5p_mfc_inst_type {
-	MFCINST_INVALID,
-	MFCINST_DECODER,
-	MFCINST_ENCODER,
+    MFCINST_INVALID,
+    MFCINST_DECODER,
+    MFCINST_ENCODER,
 };
 
 /**
  * enum s5p_mfc_inst_state - The state of an MFC instance.
  */
 enum s5p_mfc_inst_state {
-	MFCINST_FREE = 0,
-	MFCINST_INIT = 100,
-	MFCINST_GOT_INST,
-	MFCINST_HEAD_PARSED,
-	MFCINST_BUFS_SET,
-	MFCINST_RUNNING,
-	MFCINST_FINISHING,
-	MFCINST_FINISHED,
-	MFCINST_RETURN_INST,
-	MFCINST_ERROR,
-	MFCINST_ABORT,
-	MFCINST_RES_CHANGE_INIT,
-	MFCINST_RES_CHANGE_FLUSH,
-	MFCINST_RES_CHANGE_END,
+    MFCINST_FREE = 0,
+    MFCINST_INIT = 100,
+    MFCINST_GOT_INST,
+    MFCINST_HEAD_PARSED,
+    MFCINST_BUFS_SET,
+    MFCINST_RUNNING,
+    MFCINST_FINISHING,
+    MFCINST_FINISHED,
+    MFCINST_RETURN_INST,
+    MFCINST_ERROR,
+    MFCINST_ABORT,
+    MFCINST_RES_CHANGE_INIT,
+    MFCINST_RES_CHANGE_FLUSH,
+    MFCINST_RES_CHANGE_END,
 };
 
 /**
  * enum s5p_mfc_queue_state - The state of buffer queue.
  */
 enum s5p_mfc_queue_state {
-	QUEUE_FREE,
-	QUEUE_BUFS_REQUESTED,
-	QUEUE_BUFS_QUERIED,
-	QUEUE_BUFS_MMAPED,
+    QUEUE_FREE,
+    QUEUE_BUFS_REQUESTED,
+    QUEUE_BUFS_QUERIED,
+    QUEUE_BUFS_MMAPED,
 };
 
 /**
  * enum s5p_mfc_decode_arg - type of frame decoding
  */
 enum s5p_mfc_decode_arg {
-	MFC_DEC_FRAME,
-	MFC_DEC_LAST_FRAME,
-	MFC_DEC_RES_CHANGE,
+    MFC_DEC_FRAME,
+    MFC_DEC_LAST_FRAME,
+    MFC_DEC_RES_CHANGE,
 };
 
 struct s5p_mfc_ctx;
@@ -152,26 +151,26 @@ struct s5p_mfc_ctx;
  * struct s5p_mfc_buf - MFC buffer
  */
 struct s5p_mfc_buf {
-	struct list_head list;
-	struct vb2_buffer *b;
-	union {
-		struct {
-			size_t luma;
-			size_t chroma;
-		} raw;
-		size_t stream;
-	} cookie;
-	int used;
+    struct list_head list;
+    struct vb2_buffer *b;
+    union {
+        struct {
+            size_t luma;
+            size_t chroma;
+        } raw;
+        size_t stream;
+    } cookie;
+    int used;
 };
 
 /**
  * struct s5p_mfc_pm - power management data structure
  */
 struct s5p_mfc_pm {
-	struct clk	*clock;
-	struct clk	*clock_gate;
-	atomic_t	power;
-	struct device	*device;
+    struct clk	*clock;
+    struct clk	*clock_gate;
+    atomic_t	power;
+    struct device	*device;
 };
 
 /**
@@ -213,128 +212,128 @@ struct s5p_mfc_pm {
  *
  */
 struct s5p_mfc_dev {
-	struct v4l2_device	v4l2_dev;
-	struct video_device	*vfd_dec;
-	struct video_device	*vfd_enc;
-	struct platform_device	*plat_dev;
-	struct device		*mem_dev_l;
-	struct device		*mem_dev_r;
-	void __iomem		*regs_base;
-	int			irq;
-	struct resource		*mfc_mem;
-	struct v4l2_ctrl_handler dec_ctrl_handler;
-	struct v4l2_ctrl_handler enc_ctrl_handler;
-	struct s5p_mfc_pm	pm;
-	int num_inst;
-	spinlock_t irqlock;	/* lock when operating on videobuf2 queues */
-	spinlock_t condlock;	/* lock when changing/checking if a context is
+    struct v4l2_device	v4l2_dev;
+    struct video_device	*vfd_dec;
+    struct video_device	*vfd_enc;
+    struct platform_device	*plat_dev;
+    struct device		*mem_dev_l;
+    struct device		*mem_dev_r;
+    void __iomem		*regs_base;
+    int			irq;
+    struct resource		*mfc_mem;
+    struct v4l2_ctrl_handler dec_ctrl_handler;
+    struct v4l2_ctrl_handler enc_ctrl_handler;
+    struct s5p_mfc_pm	pm;
+    int num_inst;
+    spinlock_t irqlock;	/* lock when operating on videobuf2 queues */
+    spinlock_t condlock;	/* lock when changing/checking if a context is
 					ready to be processed */
-	struct mutex mfc_mutex; /* video_device lock */
-	int int_cond;
-	int int_type;
-	unsigned int int_err;
-	wait_queue_head_t queue;
-	size_t fw_size;
-	size_t bank1;
-	size_t bank2;
-	unsigned long hw_lock;
-	struct s5p_mfc_ctx *ctx[MFC_NUM_CONTEXTS];
-	int curr_ctx;
-	unsigned long ctx_work_bits;
-	atomic_t watchdog_cnt;
-	struct timer_list watchdog_timer;
-	struct workqueue_struct *watchdog_workqueue;
-	struct work_struct watchdog_work;
-	void *alloc_ctx[2];
-	unsigned long enter_suspend;
+    struct mutex mfc_mutex; /* video_device lock */
+    int int_cond;
+    int int_type;
+    unsigned int int_err;
+    wait_queue_head_t queue;
+    size_t fw_size;
+    size_t bank1;
+    size_t bank2;
+    unsigned long hw_lock;
+    struct s5p_mfc_ctx *ctx[MFC_NUM_CONTEXTS];
+    int curr_ctx;
+    unsigned long ctx_work_bits;
+    atomic_t watchdog_cnt;
+    struct timer_list watchdog_timer;
+    struct workqueue_struct *watchdog_workqueue;
+    struct work_struct watchdog_work;
+    void *alloc_ctx[2];
+    unsigned long enter_suspend;
 };
 
 /**
  * struct s5p_mfc_h264_enc_params - encoding parameters for h264
  */
 struct s5p_mfc_h264_enc_params {
-	enum v4l2_mpeg_video_h264_profile profile;
-	enum v4l2_mpeg_video_h264_loop_filter_mode loop_filter_mode;
-	s8 loop_filter_alpha;
-	s8 loop_filter_beta;
-	enum v4l2_mpeg_video_h264_entropy_mode entropy_mode;
-	u8 max_ref_pic;
-	u8 num_ref_pic_4p;
-	int _8x8_transform;
-	int rc_mb;
-	int rc_mb_dark;
-	int rc_mb_smooth;
-	int rc_mb_static;
-	int rc_mb_activity;
-	int vui_sar;
-	u8 vui_sar_idc;
-	u16 vui_ext_sar_width;
-	u16 vui_ext_sar_height;
-	int open_gop;
-	u16 open_gop_size;
-	u8 rc_frame_qp;
-	u8 rc_min_qp;
-	u8 rc_max_qp;
-	u8 rc_p_frame_qp;
-	u8 rc_b_frame_qp;
-	enum v4l2_mpeg_video_h264_level level_v4l2;
-	int level;
-	u16 cpb_size;
+    enum v4l2_mpeg_video_h264_profile profile;
+    enum v4l2_mpeg_video_h264_loop_filter_mode loop_filter_mode;
+    s8 loop_filter_alpha;
+    s8 loop_filter_beta;
+    enum v4l2_mpeg_video_h264_entropy_mode entropy_mode;
+    u8 max_ref_pic;
+    u8 num_ref_pic_4p;
+    int _8x8_transform;
+    int rc_mb;
+    int rc_mb_dark;
+    int rc_mb_smooth;
+    int rc_mb_static;
+    int rc_mb_activity;
+    int vui_sar;
+    u8 vui_sar_idc;
+    u16 vui_ext_sar_width;
+    u16 vui_ext_sar_height;
+    int open_gop;
+    u16 open_gop_size;
+    u8 rc_frame_qp;
+    u8 rc_min_qp;
+    u8 rc_max_qp;
+    u8 rc_p_frame_qp;
+    u8 rc_b_frame_qp;
+    enum v4l2_mpeg_video_h264_level level_v4l2;
+    int level;
+    u16 cpb_size;
 };
 
 /**
  * struct s5p_mfc_mpeg4_enc_params - encoding parameters for h263 and mpeg4
  */
 struct s5p_mfc_mpeg4_enc_params {
-	/* MPEG4 Only */
-	enum v4l2_mpeg_video_mpeg4_profile profile;
-	int quarter_pixel;
-	/* Common for MPEG4, H263 */
-	u16 vop_time_res;
-	u16 vop_frm_delta;
-	u8 rc_frame_qp;
-	u8 rc_min_qp;
-	u8 rc_max_qp;
-	u8 rc_p_frame_qp;
-	u8 rc_b_frame_qp;
-	enum v4l2_mpeg_video_mpeg4_level level_v4l2;
-	int level;
+    /* MPEG4 Only */
+    enum v4l2_mpeg_video_mpeg4_profile profile;
+    int quarter_pixel;
+    /* Common for MPEG4, H263 */
+    u16 vop_time_res;
+    u16 vop_frm_delta;
+    u8 rc_frame_qp;
+    u8 rc_min_qp;
+    u8 rc_max_qp;
+    u8 rc_p_frame_qp;
+    u8 rc_b_frame_qp;
+    enum v4l2_mpeg_video_mpeg4_level level_v4l2;
+    int level;
 };
 
 /**
  * struct s5p_mfc_enc_params - general encoding parameters
  */
 struct s5p_mfc_enc_params {
-	u16 width;
-	u16 height;
+    u16 width;
+    u16 height;
 
-	u16 gop_size;
-	enum v4l2_mpeg_video_multi_slice_mode slice_mode;
-	u16 slice_mb;
-	u32 slice_bit;
-	u16 intra_refresh_mb;
-	int pad;
-	u8 pad_luma;
-	u8 pad_cb;
-	u8 pad_cr;
-	int rc_frame;
-	u32 rc_bitrate;
-	u16 rc_reaction_coeff;
-	u16 vbv_size;
+    u16 gop_size;
+    enum v4l2_mpeg_video_multi_slice_mode slice_mode;
+    u16 slice_mb;
+    u32 slice_bit;
+    u16 intra_refresh_mb;
+    int pad;
+    u8 pad_luma;
+    u8 pad_cb;
+    u8 pad_cr;
+    int rc_frame;
+    u32 rc_bitrate;
+    u16 rc_reaction_coeff;
+    u16 vbv_size;
 
-	enum v4l2_mpeg_video_header_mode seq_hdr_mode;
-	enum v4l2_mpeg_mfc51_video_frame_skip_mode frame_skip_mode;
-	int fixed_target_bit;
+    enum v4l2_mpeg_video_header_mode seq_hdr_mode;
+    enum v4l2_mpeg_mfc51_video_frame_skip_mode frame_skip_mode;
+    int fixed_target_bit;
 
-	u8 num_b_frame;
-	u32 rc_framerate_num;
-	u32 rc_framerate_denom;
-	int interlace;
+    u8 num_b_frame;
+    u32 rc_framerate_num;
+    u32 rc_framerate_denom;
+    int interlace;
 
-	union {
-		struct s5p_mfc_h264_enc_params h264;
-		struct s5p_mfc_mpeg4_enc_params mpeg4;
-	} codec;
+    union {
+        struct s5p_mfc_h264_enc_params h264;
+        struct s5p_mfc_mpeg4_enc_params mpeg4;
+    } codec;
 
 };
 
@@ -342,12 +341,12 @@ struct s5p_mfc_enc_params {
  * struct s5p_mfc_codec_ops - codec ops, used by encoding
  */
 struct s5p_mfc_codec_ops {
-	/* initialization routines */
-	int (*pre_seq_start) (struct s5p_mfc_ctx *ctx);
-	int (*post_seq_start) (struct s5p_mfc_ctx *ctx);
-	/* execution routines */
-	int (*pre_frame_start) (struct s5p_mfc_ctx *ctx);
-	int (*post_frame_start) (struct s5p_mfc_ctx *ctx);
+    /* initialization routines */
+    int (*pre_seq_start) (struct s5p_mfc_ctx *ctx);
+    int (*post_seq_start) (struct s5p_mfc_ctx *ctx);
+    /* execution routines */
+    int (*pre_frame_start) (struct s5p_mfc_ctx *ctx);
+    int (*post_frame_start) (struct s5p_mfc_ctx *ctx);
 };
 
 #define call_cop(c, op, args...)				\
@@ -433,105 +432,105 @@ struct s5p_mfc_codec_ops {
  * @ctrl_handler:	handler for v4l2 framework
  */
 struct s5p_mfc_ctx {
-	struct s5p_mfc_dev *dev;
-	struct v4l2_fh fh;
+    struct s5p_mfc_dev *dev;
+    struct v4l2_fh fh;
 
-	int num;
+    int num;
 
-	int int_cond;
-	int int_type;
-	unsigned int int_err;
-	wait_queue_head_t queue;
+    int int_cond;
+    int int_type;
+    unsigned int int_err;
+    wait_queue_head_t queue;
 
-	struct s5p_mfc_fmt *src_fmt;
-	struct s5p_mfc_fmt *dst_fmt;
+    struct s5p_mfc_fmt *src_fmt;
+    struct s5p_mfc_fmt *dst_fmt;
 
-	struct vb2_queue vq_src;
-	struct vb2_queue vq_dst;
+    struct vb2_queue vq_src;
+    struct vb2_queue vq_dst;
 
-	struct list_head src_queue;
-	struct list_head dst_queue;
+    struct list_head src_queue;
+    struct list_head dst_queue;
 
-	unsigned int src_queue_cnt;
-	unsigned int dst_queue_cnt;
+    unsigned int src_queue_cnt;
+    unsigned int dst_queue_cnt;
 
-	enum s5p_mfc_inst_type type;
-	enum s5p_mfc_inst_state state;
-	int inst_no;
+    enum s5p_mfc_inst_type type;
+    enum s5p_mfc_inst_state state;
+    int inst_no;
 
-	/* Image parameters */
-	int img_width;
-	int img_height;
-	int buf_width;
-	int buf_height;
+    /* Image parameters */
+    int img_width;
+    int img_height;
+    int buf_width;
+    int buf_height;
 
-	int luma_size;
-	int chroma_size;
-	int mv_size;
+    int luma_size;
+    int chroma_size;
+    int mv_size;
 
-	unsigned long consumed_stream;
+    unsigned long consumed_stream;
 
-	unsigned int dpb_flush_flag;
+    unsigned int dpb_flush_flag;
 
-	/* Buffers */
-	void *bank1_buf;
-	size_t bank1_phys;
-	size_t bank1_size;
+    /* Buffers */
+    void *bank1_buf;
+    size_t bank1_phys;
+    size_t bank1_size;
 
-	void *bank2_buf;
-	size_t bank2_phys;
-	size_t bank2_size;
+    void *bank2_buf;
+    size_t bank2_phys;
+    size_t bank2_size;
 
-	enum s5p_mfc_queue_state capture_state;
-	enum s5p_mfc_queue_state output_state;
+    enum s5p_mfc_queue_state capture_state;
+    enum s5p_mfc_queue_state output_state;
 
-	struct s5p_mfc_buf src_bufs[MFC_MAX_BUFFERS];
-	int src_bufs_cnt;
-	struct s5p_mfc_buf dst_bufs[MFC_MAX_BUFFERS];
-	int dst_bufs_cnt;
+    struct s5p_mfc_buf src_bufs[MFC_MAX_BUFFERS];
+    int src_bufs_cnt;
+    struct s5p_mfc_buf dst_bufs[MFC_MAX_BUFFERS];
+    int dst_bufs_cnt;
 
-	unsigned int sequence;
-	unsigned long dec_dst_flag;
-	size_t dec_src_buf_size;
+    unsigned int sequence;
+    unsigned long dec_dst_flag;
+    size_t dec_src_buf_size;
 
-	/* Control values */
-	int codec_mode;
-	int slice_interface;
-	int loop_filter_mpeg4;
-	int display_delay;
-	int display_delay_enable;
-	int after_packed_pb;
+    /* Control values */
+    int codec_mode;
+    int slice_interface;
+    int loop_filter_mpeg4;
+    int display_delay;
+    int display_delay_enable;
+    int after_packed_pb;
 
-	int dpb_count;
-	int total_dpb_count;
+    int dpb_count;
+    int total_dpb_count;
 
-	/* Buffers */
-	void *ctx_buf;
-	size_t ctx_phys;
-	size_t ctx_ofs;
-	size_t ctx_size;
+    /* Buffers */
+    void *ctx_buf;
+    size_t ctx_phys;
+    size_t ctx_ofs;
+    size_t ctx_size;
 
-	void *desc_buf;
-	size_t desc_phys;
+    void *desc_buf;
+    size_t desc_phys;
 
 
-	void *shm_alloc;
-	void *shm;
-	size_t shm_ofs;
+    void *shm_alloc;
+    void *shm;
+    size_t shm_ofs;
 
-	struct s5p_mfc_enc_params enc_params;
+    struct s5p_mfc_enc_params enc_params;
 
-	size_t enc_dst_buf_size;
+    size_t enc_dst_buf_size;
 
-	enum v4l2_mpeg_mfc51_video_force_frame_type force_frame_type;
+    enum v4l2_mpeg_mfc51_video_force_frame_type force_frame_type;
 
-	struct list_head ref_queue;
-	unsigned int ref_queue_cnt;
+    struct list_head ref_queue;
+    unsigned int ref_queue_cnt;
 
-	struct s5p_mfc_codec_ops *c_ops;
+    struct s5p_mfc_codec_ops *c_ops;
 
-	struct v4l2_ctrl *ctrls[MFC_MAX_CTRLS];
-	struct v4l2_ctrl_handler ctrl_handler;
+    struct v4l2_ctrl *ctrls[MFC_MAX_CTRLS];
+    struct v4l2_ctrl_handler ctrl_handler;
 };
 
 /*
@@ -539,11 +538,11 @@ struct s5p_mfc_ctx {
  *			used by the MFC
  */
 struct s5p_mfc_fmt {
-	char *name;
-	u32 fourcc;
-	u32 codec_mode;
-	enum s5p_mfc_fmt_type type;
-	u32 num_planes;
+    char *name;
+    u32 fourcc;
+    u32 codec_mode;
+    enum s5p_mfc_fmt_type type;
+    u32 num_planes;
 };
 
 /**
@@ -551,17 +550,17 @@ struct s5p_mfc_fmt {
  *			it is used to initialize the control framework.
  */
 struct mfc_control {
-	__u32			id;
-	enum v4l2_ctrl_type	type;
-	__u8			name[32];  /* Whatever */
-	__s32			minimum;   /* Note signedness */
-	__s32			maximum;
-	__s32			step;
-	__u32			menu_skip_mask;
-	__s32			default_value;
-	__u32			flags;
-	__u32			reserved[2];
-	__u8			is_volatile;
+    __u32			id;
+    enum v4l2_ctrl_type	type;
+    __u8			name[32];  /* Whatever */
+    __s32			minimum;   /* Note signedness */
+    __s32			maximum;
+    __s32			step;
+    __u32			menu_skip_mask;
+    __s32			default_value;
+    __u32			flags;
+    __u32			reserved[2];
+    __u8			is_volatile;
 };
 
 

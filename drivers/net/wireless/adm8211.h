@@ -12,74 +12,74 @@
 
 /* CSR (Host Control and Status Registers) */
 struct adm8211_csr {
-	__le32 PAR;		/* 0x00 CSR0 */
-	__le32 FRCTL;		/* 0x04 CSR0A */
-	__le32 TDR;		/* 0x08 CSR1 */
-	__le32 WTDP;		/* 0x0C CSR1A */
-	__le32 RDR;		/* 0x10 CSR2 */
-	__le32 WRDP;		/* 0x14 CSR2A */
-	__le32 RDB;		/* 0x18 CSR3 */
-	__le32 TDBH;		/* 0x1C CSR3A */
-	__le32 TDBD;		/* 0x20 CSR4 */
-	__le32 TDBP;		/* 0x24 CSR4A */
-	__le32 STSR;		/* 0x28 CSR5 */
-	__le32 TDBB;		/* 0x2C CSR5A */
-	__le32 NAR;		/* 0x30 CSR6 */
-	__le32 CSR6A;		/* reserved */
-	__le32 IER;		/* 0x38 CSR7 */
-	__le32 TKIPSCEP;	/* 0x3C CSR7A */
-	__le32 LPC;		/* 0x40 CSR8 */
-	__le32 CSR_TEST1;	/* 0x44 CSR8A */
-	__le32 SPR;		/* 0x48 CSR9 */
-	__le32 CSR_TEST0;	/* 0x4C CSR9A */
-	__le32 WCSR;		/* 0x50 CSR10 */
-	__le32 WPDR;		/* 0x54 CSR10A */
-	__le32 GPTMR;		/* 0x58 CSR11 */
-	__le32 GPIO;		/* 0x5C CSR11A */
-	__le32 BBPCTL;		/* 0x60 CSR12 */
-	__le32 SYNCTL;		/* 0x64 CSR12A */
-	__le32 PLCPHD;		/* 0x68 CSR13 */
-	__le32 MMIWA;		/* 0x6C CSR13A */
-	__le32 MMIRD0;		/* 0x70 CSR14 */
-	__le32 MMIRD1;		/* 0x74 CSR14A */
-	__le32 TXBR;		/* 0x78 CSR15 */
-	__le32 SYNDATA;		/* 0x7C CSR15A */
-	__le32 ALCS;		/* 0x80 CSR16 */
-	__le32 TOFS2;		/* 0x84 CSR17 */
-	__le32 CMDR;		/* 0x88 CSR18 */
-	__le32 PCIC;		/* 0x8C CSR19 */
-	__le32 PMCSR;		/* 0x90 CSR20 */
-	__le32 PAR0;		/* 0x94 CSR21 */
-	__le32 PAR1;		/* 0x98 CSR22 */
-	__le32 MAR0;		/* 0x9C CSR23 */
-	__le32 MAR1;		/* 0xA0 CSR24 */
-	__le32 ATIMDA0;		/* 0xA4 CSR25 */
-	__le32 ABDA1;		/* 0xA8 CSR26 */
-	__le32 BSSID0;		/* 0xAC CSR27 */
-	__le32 TXLMT;		/* 0xB0 CSR28 */
-	__le32 MIBCNT;		/* 0xB4 CSR29 */
-	__le32 BCNT;		/* 0xB8 CSR30 */
-	__le32 TSFTH;		/* 0xBC CSR31 */
-	__le32 TSC;		/* 0xC0 CSR32 */
-	__le32 SYNRF;		/* 0xC4 CSR33 */
-	__le32 BPLI;		/* 0xC8 CSR34 */
-	__le32 CAP0;		/* 0xCC CSR35 */
-	__le32 CAP1;		/* 0xD0 CSR36 */
-	__le32 RMD;		/* 0xD4 CSR37 */
-	__le32 CFPP;		/* 0xD8 CSR38 */
-	__le32 TOFS0;		/* 0xDC CSR39 */
-	__le32 TOFS1;		/* 0xE0 CSR40 */
-	__le32 IFST;		/* 0xE4 CSR41 */
-	__le32 RSPT;		/* 0xE8 CSR42 */
-	__le32 TSFTL;		/* 0xEC CSR43 */
-	__le32 WEPCTL;		/* 0xF0 CSR44 */
-	__le32 WESK;		/* 0xF4 CSR45 */
-	__le32 WEPCNT;		/* 0xF8 CSR46 */
-	__le32 MACTEST;		/* 0xFC CSR47 */
-	__le32 FER;		/* 0x100 */
-	__le32 FEMR;		/* 0x104 */
-	__le32 FPSR;		/* 0x108 */
-	__le32 FFER;		/* 0x10C */
+    __le32 PAR;		/* 0x00 CSR0 */
+    __le32 FRCTL;		/* 0x04 CSR0A */
+    __le32 TDR;		/* 0x08 CSR1 */
+    __le32 WTDP;		/* 0x0C CSR1A */
+    __le32 RDR;		/* 0x10 CSR2 */
+    __le32 WRDP;		/* 0x14 CSR2A */
+    __le32 RDB;		/* 0x18 CSR3 */
+    __le32 TDBH;		/* 0x1C CSR3A */
+    __le32 TDBD;		/* 0x20 CSR4 */
+    __le32 TDBP;		/* 0x24 CSR4A */
+    __le32 STSR;		/* 0x28 CSR5 */
+    __le32 TDBB;		/* 0x2C CSR5A */
+    __le32 NAR;		/* 0x30 CSR6 */
+    __le32 CSR6A;		/* reserved */
+    __le32 IER;		/* 0x38 CSR7 */
+    __le32 TKIPSCEP;	/* 0x3C CSR7A */
+    __le32 LPC;		/* 0x40 CSR8 */
+    __le32 CSR_TEST1;	/* 0x44 CSR8A */
+    __le32 SPR;		/* 0x48 CSR9 */
+    __le32 CSR_TEST0;	/* 0x4C CSR9A */
+    __le32 WCSR;		/* 0x50 CSR10 */
+    __le32 WPDR;		/* 0x54 CSR10A */
+    __le32 GPTMR;		/* 0x58 CSR11 */
+    __le32 GPIO;		/* 0x5C CSR11A */
+    __le32 BBPCTL;		/* 0x60 CSR12 */
+    __le32 SYNCTL;		/* 0x64 CSR12A */
+    __le32 PLCPHD;		/* 0x68 CSR13 */
+    __le32 MMIWA;		/* 0x6C CSR13A */
+    __le32 MMIRD0;		/* 0x70 CSR14 */
+    __le32 MMIRD1;		/* 0x74 CSR14A */
+    __le32 TXBR;		/* 0x78 CSR15 */
+    __le32 SYNDATA;		/* 0x7C CSR15A */
+    __le32 ALCS;		/* 0x80 CSR16 */
+    __le32 TOFS2;		/* 0x84 CSR17 */
+    __le32 CMDR;		/* 0x88 CSR18 */
+    __le32 PCIC;		/* 0x8C CSR19 */
+    __le32 PMCSR;		/* 0x90 CSR20 */
+    __le32 PAR0;		/* 0x94 CSR21 */
+    __le32 PAR1;		/* 0x98 CSR22 */
+    __le32 MAR0;		/* 0x9C CSR23 */
+    __le32 MAR1;		/* 0xA0 CSR24 */
+    __le32 ATIMDA0;		/* 0xA4 CSR25 */
+    __le32 ABDA1;		/* 0xA8 CSR26 */
+    __le32 BSSID0;		/* 0xAC CSR27 */
+    __le32 TXLMT;		/* 0xB0 CSR28 */
+    __le32 MIBCNT;		/* 0xB4 CSR29 */
+    __le32 BCNT;		/* 0xB8 CSR30 */
+    __le32 TSFTH;		/* 0xBC CSR31 */
+    __le32 TSC;		/* 0xC0 CSR32 */
+    __le32 SYNRF;		/* 0xC4 CSR33 */
+    __le32 BPLI;		/* 0xC8 CSR34 */
+    __le32 CAP0;		/* 0xCC CSR35 */
+    __le32 CAP1;		/* 0xD0 CSR36 */
+    __le32 RMD;		/* 0xD4 CSR37 */
+    __le32 CFPP;		/* 0xD8 CSR38 */
+    __le32 TOFS0;		/* 0xDC CSR39 */
+    __le32 TOFS1;		/* 0xE0 CSR40 */
+    __le32 IFST;		/* 0xE4 CSR41 */
+    __le32 RSPT;		/* 0xE8 CSR42 */
+    __le32 TSFTL;		/* 0xEC CSR43 */
+    __le32 WEPCTL;		/* 0xF0 CSR44 */
+    __le32 WESK;		/* 0xF4 CSR45 */
+    __le32 WEPCNT;		/* 0xF8 CSR46 */
+    __le32 MACTEST;		/* 0xFC CSR47 */
+    __le32 FER;		/* 0x100 */
+    __le32 FEMR;		/* 0x104 */
+    __le32 FPSR;		/* 0x108 */
+    __le32 FFER;		/* 0x10C */
 } __packed;
 
 /* CSR0 - PAR (PCI Address Register) */
@@ -361,10 +361,10 @@ do {								\
 #define ADM8211_REV_CA 0x30
 
 struct adm8211_desc {
-	__le32 status;
-	__le32 length;
-	__le32 buffer1;
-	__le32 buffer2;
+    __le32 status;
+    __le32 length;
+    __le32 buffer1;
+    __le32 buffer2;
 };
 
 #define RDES0_STATUS_OWN	(1 << 31)
@@ -436,14 +436,14 @@ struct adm8211_desc {
 #define ADM8211_SRAM_SIZE ADM8211_SRAM(SIZE)
 
 struct adm8211_rx_ring_info {
-	struct sk_buff *skb;
-	dma_addr_t mapping;
+    struct sk_buff *skb;
+    dma_addr_t mapping;
 };
 
 struct adm8211_tx_ring_info {
-	struct sk_buff *skb;
-	dma_addr_t mapping;
-	size_t hdrlen;
+    struct sk_buff *skb;
+    dma_addr_t mapping;
+    size_t hdrlen;
 };
 
 #define PLCP_SIGNAL_1M		0x0a
@@ -452,16 +452,16 @@ struct adm8211_tx_ring_info {
 #define PLCP_SIGNAL_11M		0x6e
 
 struct adm8211_tx_hdr {
-	u8 da[6];
-	u8 signal; /* PLCP signal / TX rate in 100 Kbps */
-	u8 service;
-	__le16 frame_body_size;
-	__le16 frame_control;
-	__le16 plcp_frag_tail_len;
-	__le16 plcp_frag_head_len;
-	__le16 dur_frag_tail;
-	__le16 dur_frag_head;
-	u8 addr4[6];
+    u8 da[6];
+    u8 signal; /* PLCP signal / TX rate in 100 Kbps */
+    u8 service;
+    __le16 frame_body_size;
+    __le16 frame_control;
+    __le16 plcp_frag_tail_len;
+    __le16 plcp_frag_head_len;
+    __le16 dur_frag_tail;
+    __le16 dur_frag_head;
+    u8 addr4[6];
 
 #define ADM8211_TXHDRCTL_SHORT_PREAMBLE		(1 <<  0)
 #define ADM8211_TXHDRCTL_MORE_FRAG		(1 <<  1)
@@ -470,20 +470,20 @@ struct adm8211_tx_hdr {
 #define ADM8211_TXHDRCTL_ENABLE_RTS		(1 <<  4)
 #define ADM8211_TXHDRCTL_ENABLE_WEP_ENGINE	(1 <<  5)
 #define ADM8211_TXHDRCTL_ENABLE_EXTEND_HEADER	(1 << 15) /* ? */
-	__le16 header_control;
-	__le16 frag;
-	u8 reserved_0;
-	u8 retry_limit;
+    __le16 header_control;
+    __le16 frag;
+    u8 reserved_0;
+    u8 retry_limit;
 
-	u32 wep2key0;
-	u32 wep2key1;
-	u32 wep2key2;
-	u32 wep2key3;
+    u32 wep2key0;
+    u32 wep2key1;
+    u32 wep2key2;
+    u32 wep2key3;
 
-	u8 keyid;
-	u8 entry_control;	// huh??
-	u16 reserved_1;
-	u32 reserved_2;
+    u8 keyid;
+    u8 entry_control;	// huh??
+    u16 reserved_1;
+    u32 reserved_2;
 } __packed;
 
 
@@ -491,112 +491,112 @@ struct adm8211_tx_hdr {
 #define RX_PKT_SIZE 2500
 
 struct adm8211_eeprom {
-	__le16	signature;		/* 0x00 */
-	u8	major_version;		/* 0x02 */
-	u8	minor_version;		/* 0x03 */
-	u8	reserved_1[4];		/* 0x04 */
-	u8	hwaddr[6];		/* 0x08 */
-	u8	reserved_2[8];		/* 0x1E */
-	__le16	cr49;			/* 0x16 */
-	u8	cr03;			/* 0x18 */
-	u8	cr28;			/* 0x19 */
-	u8	cr29;			/* 0x1A */
-	u8	country_code;		/* 0x1B */
+    __le16	signature;		/* 0x00 */
+    u8	major_version;		/* 0x02 */
+    u8	minor_version;		/* 0x03 */
+    u8	reserved_1[4];		/* 0x04 */
+    u8	hwaddr[6];		/* 0x08 */
+    u8	reserved_2[8];		/* 0x1E */
+    __le16	cr49;			/* 0x16 */
+    u8	cr03;			/* 0x18 */
+    u8	cr28;			/* 0x19 */
+    u8	cr29;			/* 0x1A */
+    u8	country_code;		/* 0x1B */
 
-/* specific bbp types */
+    /* specific bbp types */
 #define ADM8211_BBP_RFMD3000	0x00
 #define ADM8211_BBP_RFMD3002	0x01
 #define ADM8211_BBP_ADM8011	0x04
-	u8	specific_bbptype;	/* 0x1C */
-	u8	specific_rftype;	/* 0x1D */
-	u8	reserved_3[2];		/* 0x1E */
-	__le16	device_id;		/* 0x20 */
-	__le16	vendor_id;		/* 0x22 */
-	__le16	subsystem_id;		/* 0x24 */
-	__le16	subsystem_vendor_id;	/* 0x26 */
-	u8	maxlat;			/* 0x28 */
-	u8	mingnt;			/* 0x29 */
-	__le16	cis_pointer_low;	/* 0x2A */
-	__le16	cis_pointer_high;	/* 0x2C */
-	__le16	csr18;			/* 0x2E */
-	u8	reserved_4[16];		/* 0x30 */
-	u8	d1_pwrdara;		/* 0x40 */
-	u8	d0_pwrdara;		/* 0x41 */
-	u8	d3_pwrdara;		/* 0x42 */
-	u8	d2_pwrdara;		/* 0x43 */
-	u8	antenna_power[14];	/* 0x44 */
-	__le16	cis_wordcnt;		/* 0x52 */
-	u8	tx_power[14];		/* 0x54 */
-	u8	lpf_cutoff[14];		/* 0x62 */
-	u8	lnags_threshold[14];	/* 0x70 */
-	__le16	checksum;		/* 0x7E */
-	u8	cis_data[0];		/* 0x80, 384 bytes */
+    u8	specific_bbptype;	/* 0x1C */
+    u8	specific_rftype;	/* 0x1D */
+    u8	reserved_3[2];		/* 0x1E */
+    __le16	device_id;		/* 0x20 */
+    __le16	vendor_id;		/* 0x22 */
+    __le16	subsystem_id;		/* 0x24 */
+    __le16	subsystem_vendor_id;	/* 0x26 */
+    u8	maxlat;			/* 0x28 */
+    u8	mingnt;			/* 0x29 */
+    __le16	cis_pointer_low;	/* 0x2A */
+    __le16	cis_pointer_high;	/* 0x2C */
+    __le16	csr18;			/* 0x2E */
+    u8	reserved_4[16];		/* 0x30 */
+    u8	d1_pwrdara;		/* 0x40 */
+    u8	d0_pwrdara;		/* 0x41 */
+    u8	d3_pwrdara;		/* 0x42 */
+    u8	d2_pwrdara;		/* 0x43 */
+    u8	antenna_power[14];	/* 0x44 */
+    __le16	cis_wordcnt;		/* 0x52 */
+    u8	tx_power[14];		/* 0x54 */
+    u8	lpf_cutoff[14];		/* 0x62 */
+    u8	lnags_threshold[14];	/* 0x70 */
+    __le16	checksum;		/* 0x7E */
+    u8	cis_data[0];		/* 0x80, 384 bytes */
 } __packed;
 
 struct adm8211_priv {
-	struct pci_dev *pdev;
-	spinlock_t lock;
-	struct adm8211_csr __iomem *map;
-	struct adm8211_desc *rx_ring;
-	struct adm8211_desc *tx_ring;
-	dma_addr_t rx_ring_dma;
-	dma_addr_t tx_ring_dma;
-	struct adm8211_rx_ring_info *rx_buffers;
-	struct adm8211_tx_ring_info *tx_buffers;
-	unsigned int rx_ring_size, tx_ring_size;
-	unsigned int cur_tx, dirty_tx, cur_rx;
+    struct pci_dev *pdev;
+    spinlock_t lock;
+    struct adm8211_csr __iomem *map;
+    struct adm8211_desc *rx_ring;
+    struct adm8211_desc *tx_ring;
+    dma_addr_t rx_ring_dma;
+    dma_addr_t tx_ring_dma;
+    struct adm8211_rx_ring_info *rx_buffers;
+    struct adm8211_tx_ring_info *tx_buffers;
+    unsigned int rx_ring_size, tx_ring_size;
+    unsigned int cur_tx, dirty_tx, cur_rx;
 
-	struct ieee80211_low_level_stats stats;
-	struct ieee80211_supported_band band;
-	struct ieee80211_channel channels[14];
-	int mode;
+    struct ieee80211_low_level_stats stats;
+    struct ieee80211_supported_band band;
+    struct ieee80211_channel channels[14];
+    int mode;
 
-	int channel;
-	u8 bssid[ETH_ALEN];
+    int channel;
+    u8 bssid[ETH_ALEN];
 
-	u8 soft_rx_crc;
-	u8 retry_limit;
+    u8 soft_rx_crc;
+    u8 retry_limit;
 
-	u8 ant_power;
-	u8 tx_power;
-	u8 lpf_cutoff;
-	u8 lnags_threshold;
-	struct adm8211_eeprom *eeprom;
-	size_t eeprom_len;
+    u8 ant_power;
+    u8 tx_power;
+    u8 lpf_cutoff;
+    u8 lnags_threshold;
+    struct adm8211_eeprom *eeprom;
+    size_t eeprom_len;
 
-	u32 nar;
+    u32 nar;
 
 #define ADM8211_TYPE_INTERSIL	0x00
 #define ADM8211_TYPE_RFMD	0x01
 #define ADM8211_TYPE_MARVEL	0x02
 #define ADM8211_TYPE_AIROHA	0x03
 #define ADM8211_TYPE_ADMTEK     0x05
-	unsigned int rf_type:3;
-	unsigned int bbp_type:3;
+    unsigned int rf_type:3;
+    unsigned int bbp_type:3;
 
-	u8 specific_bbptype;
-	enum {
-		ADM8211_RFMD2948 = 0x0,
-		ADM8211_RFMD2958 = 0x1,
-		ADM8211_RFMD2958_RF3000_CONTROL_POWER = 0x2,
-		ADM8211_MAX2820 = 0x8,
-		ADM8211_AL2210L = 0xC,	/* Airoha */
-	} transceiver_type;
+    u8 specific_bbptype;
+    enum {
+        ADM8211_RFMD2948 = 0x0,
+        ADM8211_RFMD2958 = 0x1,
+        ADM8211_RFMD2958_RF3000_CONTROL_POWER = 0x2,
+        ADM8211_MAX2820 = 0x8,
+        ADM8211_AL2210L = 0xC,	/* Airoha */
+    } transceiver_type;
 };
 
 struct ieee80211_chan_range {
-	u8 min;
-	u8 max;
+    u8 min;
+    u8 max;
 };
 
 static const struct ieee80211_chan_range cranges[] = {
-	{1,  11},	/* FCC */
-	{1,  11},	/* IC */
-	{1,  13},	/* ETSI */
-	{10, 11},	/* SPAIN */
-	{10, 13},	/* FRANCE */
-	{14, 14},	/* MMK */
-	{1,  14},	/* MMK2 */
+    {1,  11},	/* FCC */
+    {1,  11},	/* IC */
+    {1,  13},	/* ETSI */
+    {10, 11},	/* SPAIN */
+    {10, 13},	/* FRANCE */
+    {14, 14},	/* MMK */
+    {1,  14},	/* MMK2 */
 };
 
 #endif /* ADM8211_H */

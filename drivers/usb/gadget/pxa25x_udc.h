@@ -38,41 +38,41 @@
 struct pxa25x_udc;
 
 struct pxa25x_ep {
-	struct usb_ep				ep;
-	struct pxa25x_udc			*dev;
+    struct usb_ep				ep;
+    struct pxa25x_udc			*dev;
 
-	const struct usb_endpoint_descriptor	*desc;
-	struct list_head			queue;
-	unsigned long				pio_irqs;
+    const struct usb_endpoint_descriptor	*desc;
+    struct list_head			queue;
+    unsigned long				pio_irqs;
 
-	unsigned short				fifo_size;
-	u8					bEndpointAddress;
-	u8					bmAttributes;
+    unsigned short				fifo_size;
+    u8					bEndpointAddress;
+    u8					bmAttributes;
 
-	unsigned				stopped : 1;
-	unsigned				dma_fixup : 1;
+    unsigned				stopped : 1;
+    unsigned				dma_fixup : 1;
 
-	/* UDCCS = UDC Control/Status for this EP
-	 * UBCR = UDC Byte Count Remaining (contents of OUT fifo)
-	 * UDDR = UDC Endpoint Data Register (the fifo)
-	 * DRCM = DMA Request Channel Map
-	 */
-	volatile u32				*reg_udccs;
-	volatile u32				*reg_ubcr;
-	volatile u32				*reg_uddr;
+    /* UDCCS = UDC Control/Status for this EP
+     * UBCR = UDC Byte Count Remaining (contents of OUT fifo)
+     * UDDR = UDC Endpoint Data Register (the fifo)
+     * DRCM = DMA Request Channel Map
+     */
+    volatile u32				*reg_udccs;
+    volatile u32				*reg_ubcr;
+    volatile u32				*reg_uddr;
 };
 
 struct pxa25x_request {
-	struct usb_request			req;
-	struct list_head			queue;
+    struct usb_request			req;
+    struct list_head			queue;
 };
 
 enum ep0_state {
-	EP0_IDLE,
-	EP0_IN_DATA_PHASE,
-	EP0_OUT_DATA_PHASE,
-	EP0_END_XFER,
-	EP0_STALL,
+    EP0_IDLE,
+    EP0_IN_DATA_PHASE,
+    EP0_OUT_DATA_PHASE,
+    EP0_END_XFER,
+    EP0_STALL,
 };
 
 #define EP0_FIFO_SIZE	((unsigned)16)
@@ -81,11 +81,11 @@ enum ep0_state {
 #define INT_FIFO_SIZE	((unsigned)8)
 
 struct udc_stats {
-	struct ep0stats {
-		unsigned long		ops;
-		unsigned long		bytes;
-	} read, write;
-	unsigned long			irqs;
+    struct ep0stats {
+        unsigned long		ops;
+        unsigned long		bytes;
+    } read, write;
+    unsigned long			irqs;
 };
 
 #ifdef CONFIG_USB_PXA25X_SMALL
@@ -98,33 +98,33 @@ struct udc_stats {
 #endif
 
 struct pxa25x_udc {
-	struct usb_gadget			gadget;
-	struct usb_gadget_driver		*driver;
+    struct usb_gadget			gadget;
+    struct usb_gadget_driver		*driver;
 
-	enum ep0_state				ep0state;
-	struct udc_stats			stats;
-	unsigned				got_irq : 1,
-						vbus : 1,
-						pullup : 1,
-						has_cfr : 1,
-						req_pending : 1,
-						req_std : 1,
-						req_config : 1,
-						suspended : 1,
-						active : 1;
+    enum ep0_state				ep0state;
+    struct udc_stats			stats;
+    unsigned				got_irq : 1,
+                            vbus : 1,
+                            pullup : 1,
+                            has_cfr : 1,
+                            req_pending : 1,
+                            req_std : 1,
+                            req_config : 1,
+                            suspended : 1,
+                            active : 1;
 
 #define start_watchdog(dev) mod_timer(&dev->timer, jiffies + (HZ/200))
-	struct timer_list			timer;
+    struct timer_list			timer;
 
-	struct device				*dev;
-	struct clk				*clk;
-	struct pxa2xx_udc_mach_info		*mach;
-	struct usb_phy				*transceiver;
-	u64					dma_mask;
-	struct pxa25x_ep			ep [PXA_UDC_NUM_ENDPOINTS];
+    struct device				*dev;
+    struct clk				*clk;
+    struct pxa2xx_udc_mach_info		*mach;
+    struct usb_phy				*transceiver;
+    u64					dma_mask;
+    struct pxa25x_ep			ep [PXA_UDC_NUM_ENDPOINTS];
 
 #ifdef CONFIG_USB_GADGET_DEBUG_FS
-	struct dentry				*debugfs_udc;
+    struct dentry				*debugfs_udc;
 #endif
 };
 
@@ -153,9 +153,9 @@ static struct pxa25x_udc *the_controller;
 #ifdef DEBUG
 
 static const char *state_name[] = {
-	"EP0_IDLE",
-	"EP0_IN_DATA_PHASE", "EP0_OUT_DATA_PHASE",
-	"EP0_END_XFER", "EP0_STALL"
+    "EP0_IDLE",
+    "EP0_IN_DATA_PHASE", "EP0_OUT_DATA_PHASE",
+    "EP0_END_XFER", "EP0_STALL"
 };
 
 #ifdef VERBOSE_DEBUG
@@ -165,71 +165,68 @@ static const char *state_name[] = {
 #endif
 
 static void __maybe_unused
-dump_udccr(const char *label)
-{
-	u32	udccr = UDCCR;
-	DMSG("%s %02X =%s%s%s%s%s%s%s%s\n",
-		label, udccr,
-		(udccr & UDCCR_REM) ? " rem" : "",
-		(udccr & UDCCR_RSTIR) ? " rstir" : "",
-		(udccr & UDCCR_SRM) ? " srm" : "",
-		(udccr & UDCCR_SUSIR) ? " susir" : "",
-		(udccr & UDCCR_RESIR) ? " resir" : "",
-		(udccr & UDCCR_RSM) ? " rsm" : "",
-		(udccr & UDCCR_UDA) ? " uda" : "",
-		(udccr & UDCCR_UDE) ? " ude" : "");
+dump_udccr(const char *label) {
+    u32	udccr = UDCCR;
+    DMSG("%s %02X =%s%s%s%s%s%s%s%s\n",
+         label, udccr,
+         (udccr & UDCCR_REM) ? " rem" : "",
+         (udccr & UDCCR_RSTIR) ? " rstir" : "",
+         (udccr & UDCCR_SRM) ? " srm" : "",
+         (udccr & UDCCR_SUSIR) ? " susir" : "",
+         (udccr & UDCCR_RESIR) ? " resir" : "",
+         (udccr & UDCCR_RSM) ? " rsm" : "",
+         (udccr & UDCCR_UDA) ? " uda" : "",
+         (udccr & UDCCR_UDE) ? " ude" : "");
 }
 
 static void __maybe_unused
-dump_udccs0(const char *label)
-{
-	u32		udccs0 = UDCCS0;
+dump_udccs0(const char *label) {
+    u32		udccs0 = UDCCS0;
 
-	DMSG("%s %s %02X =%s%s%s%s%s%s%s%s\n",
-		label, state_name[the_controller->ep0state], udccs0,
-		(udccs0 & UDCCS0_SA) ? " sa" : "",
-		(udccs0 & UDCCS0_RNE) ? " rne" : "",
-		(udccs0 & UDCCS0_FST) ? " fst" : "",
-		(udccs0 & UDCCS0_SST) ? " sst" : "",
-		(udccs0 & UDCCS0_DRWF) ? " dwrf" : "",
-		(udccs0 & UDCCS0_FTF) ? " ftf" : "",
-		(udccs0 & UDCCS0_IPR) ? " ipr" : "",
-		(udccs0 & UDCCS0_OPR) ? " opr" : "");
+    DMSG("%s %s %02X =%s%s%s%s%s%s%s%s\n",
+         label, state_name[the_controller->ep0state], udccs0,
+         (udccs0 & UDCCS0_SA) ? " sa" : "",
+         (udccs0 & UDCCS0_RNE) ? " rne" : "",
+         (udccs0 & UDCCS0_FST) ? " fst" : "",
+         (udccs0 & UDCCS0_SST) ? " sst" : "",
+         (udccs0 & UDCCS0_DRWF) ? " dwrf" : "",
+         (udccs0 & UDCCS0_FTF) ? " ftf" : "",
+         (udccs0 & UDCCS0_IPR) ? " ipr" : "",
+         (udccs0 & UDCCS0_OPR) ? " opr" : "");
 }
 
 static void __maybe_unused
-dump_state(struct pxa25x_udc *dev)
-{
-	u32		tmp;
-	unsigned	i;
+dump_state(struct pxa25x_udc *dev) {
+    u32		tmp;
+    unsigned	i;
 
-	DMSG("%s, uicr %02X.%02X, usir %02X.%02x, ufnr %02X.%02X\n",
-		state_name[dev->ep0state],
-		UICR1, UICR0, USIR1, USIR0, UFNRH, UFNRL);
-	dump_udccr("udccr");
-	if (dev->has_cfr) {
-		tmp = UDCCFR;
-		DMSG("udccfr %02X =%s%s\n", tmp,
-			(tmp & UDCCFR_AREN) ? " aren" : "",
-			(tmp & UDCCFR_ACM) ? " acm" : "");
-	}
+    DMSG("%s, uicr %02X.%02X, usir %02X.%02x, ufnr %02X.%02X\n",
+         state_name[dev->ep0state],
+         UICR1, UICR0, USIR1, USIR0, UFNRH, UFNRL);
+    dump_udccr("udccr");
+    if (dev->has_cfr) {
+        tmp = UDCCFR;
+        DMSG("udccfr %02X =%s%s\n", tmp,
+             (tmp & UDCCFR_AREN) ? " aren" : "",
+             (tmp & UDCCFR_ACM) ? " acm" : "");
+    }
 
-	if (!dev->driver) {
-		DMSG("no gadget driver bound\n");
-		return;
-	} else
-		DMSG("ep0 driver '%s'\n", dev->driver->driver.name);
+    if (!dev->driver) {
+        DMSG("no gadget driver bound\n");
+        return;
+    } else
+        DMSG("ep0 driver '%s'\n", dev->driver->driver.name);
 
-	dump_udccs0 ("udccs0");
-	DMSG("ep0 IN %lu/%lu, OUT %lu/%lu\n",
-		dev->stats.write.bytes, dev->stats.write.ops,
-		dev->stats.read.bytes, dev->stats.read.ops);
+    dump_udccs0 ("udccs0");
+    DMSG("ep0 IN %lu/%lu, OUT %lu/%lu\n",
+         dev->stats.write.bytes, dev->stats.write.ops,
+         dev->stats.read.bytes, dev->stats.read.ops);
 
-	for (i = 1; i < PXA_UDC_NUM_ENDPOINTS; i++) {
-		if (dev->ep [i].desc == NULL)
-			continue;
-		DMSG ("udccs%d = %02x\n", i, *dev->ep->reg_udccs);
-	}
+    for (i = 1; i < PXA_UDC_NUM_ENDPOINTS; i++) {
+        if (dev->ep [i].desc == NULL)
+            continue;
+        DMSG ("udccs%d = %02x\n", i, *dev->ep->reg_udccs);
+    }
 }
 
 #else

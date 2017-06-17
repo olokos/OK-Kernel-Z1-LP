@@ -155,22 +155,22 @@ Form of high byte dependent on justification set in ctrl reg */
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct lis3l02dq_state {
-	struct spi_device		*us;
-	struct iio_trigger		*trig;
-	struct mutex			buf_lock;
-	bool				trigger_on;
+    struct spi_device		*us;
+    struct iio_trigger		*trig;
+    struct mutex			buf_lock;
+    bool				trigger_on;
 
-	u8	tx[LIS3L02DQ_MAX_RX] ____cacheline_aligned;
-	u8	rx[LIS3L02DQ_MAX_RX] ____cacheline_aligned;
+    u8	tx[LIS3L02DQ_MAX_RX] ____cacheline_aligned;
+    u8	rx[LIS3L02DQ_MAX_RX] ____cacheline_aligned;
 };
 
 int lis3l02dq_spi_read_reg_8(struct iio_dev *indio_dev,
-			     u8 reg_address,
-			     u8 *val);
+                             u8 reg_address,
+                             u8 *val);
 
 int lis3l02dq_spi_write_reg_8(struct iio_dev *indio_dev,
-			      u8 reg_address,
-			      u8 val);
+                              u8 reg_address,
+                              u8 val);
 
 int lis3l02dq_disable_all_events(struct iio_dev *indio_dev);
 
@@ -198,20 +198,16 @@ irqreturn_t lis3l02dq_data_rdy_trig_poll(int irq, void *private);
 #else /* CONFIG_IIO_BUFFER */
 #define lis3l02dq_th lis3l02dq_nobuffer
 
-static inline void lis3l02dq_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void lis3l02dq_remove_trigger(struct iio_dev *indio_dev) {
 }
-static inline int lis3l02dq_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int lis3l02dq_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static int lis3l02dq_configure_buffer(struct iio_dev *indio_dev)
-{
-	return 0;
+static int lis3l02dq_configure_buffer(struct iio_dev *indio_dev) {
+    return 0;
 }
-static inline void lis3l02dq_unconfigure_buffer(struct iio_dev *indio_dev)
-{
+static inline void lis3l02dq_unconfigure_buffer(struct iio_dev *indio_dev) {
 }
 #endif /* CONFIG_IIO_BUFFER */
 #endif /* SPI_LIS3L02DQ_H_ */

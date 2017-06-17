@@ -51,11 +51,11 @@ extern int sysemu_supported;
 #endif
 
 struct uml_pt_regs {
-	unsigned long gp[MAX_REG_NR];
-	unsigned long fp[HOST_FPX_SIZE];
-	struct faultinfo faultinfo;
-	long syscall;
-	int is_user;
+    unsigned long gp[MAX_REG_NR];
+    unsigned long fp[HOST_FPX_SIZE];
+    struct faultinfo faultinfo;
+    long syscall;
+    int is_user;
 };
 
 #define EMPTY_UML_PT_REGS { }
@@ -90,7 +90,7 @@ extern int user_context(unsigned long sp);
 #define UPT_IS_USER(r) ((r)->is_user)
 
 struct syscall_args {
-	unsigned long args[6];
+    unsigned long args[6];
 };
 
 #define SYSCALL_ARGS(r) ((struct syscall_args) \

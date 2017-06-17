@@ -58,11 +58,21 @@ extern void copy_user_page(void *to, void *from, unsigned long vaddr, struct pag
 
 #ifdef STRICT_MM_TYPECHECKS
 /* These are used to make use of C type-checking.. */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long iopte; } iopte_t;
-typedef struct { unsigned int pmd; } pmd_t;
-typedef struct { unsigned int pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long iopte;
+} iopte_t;
+typedef struct {
+    unsigned int pmd;
+} pmd_t;
+typedef struct {
+    unsigned int pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 
 #define pte_val(x)	((x).pte)
 #define iopte_val(x)	((x).iopte)

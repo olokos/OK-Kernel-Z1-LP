@@ -34,23 +34,20 @@ unsigned long long cache_err_dcache[NR_CPUS];
  * tagged cache. No flushing is needed
  *
  */
-static void octeon_flush_data_cache_page(unsigned long addr)
-{
+static void octeon_flush_data_cache_page(unsigned long addr) {
     /* Nothing to do */
 }
 
-static inline void octeon_local_flush_icache(void)
-{
-	asm volatile ("synci 0($0)");
+static inline void octeon_local_flush_icache(void) {
+    asm volatile ("synci 0($0)");
 }
 
 /*
  * Flush local I-cache for the specified range.
  */
 static void local_octeon_flush_icache_range(unsigned long start,
-					    unsigned long end)
-{
-	octeon_local_flush_icache();
+        unsigned long end) {
+    octeon_local_flush_icache();
 }
 
 /**
@@ -59,33 +56,32 @@ static void local_octeon_flush_icache_range(unsigned long start,
  *
  * @vma:    VMA to flush or NULL to flush all icaches.
  */
-static void octeon_flush_icache_all_cores(struct vm_area_struct *vma)
-{
-	extern void octeon_send_ipi_single(int cpu, unsigned int action);
+static void octeon_flush_icache_all_cores(struct vm_area_struct *vma) {
+    extern void octeon_send_ipi_single(int cpu, unsigned int action);
 #ifdef CONFIG_SMP
-	int cpu;
-	cpumask_t mask;
+    int cpu;
+    cpumask_t mask;
 #endif
 
-	mb();
-	octeon_local_flush_icache();
+    mb();
+    octeon_local_flush_icache();
 #ifdef CONFIG_SMP
-	preempt_disable();
-	cpu = smp_processor_id();
+    preempt_disable();
+    cpu = smp_processor_id();
 
-	/*
-	 * If we have a vma structure, we only need to worry about
-	 * cores it has been used on
-	 */
-	if (vma)
-		mask = *mm_cpumask(vma->vm_mm);
-	else
-		mask = *cpu_online_mask;
-	cpumask_clear_cpu(cpu, &mask);
-	for_each_cpu(cpu, &mask)
-		octeon_send_ipi_single(cpu, SMP_ICACHE_FLUSH);
+    /*
+     * If we have a vma structure, we only need to worry about
+     * cores it has been used on
+     */
+    if (vma)
+        mask = *mm_cpumask(vma->vm_mm);
+    else
+        mask = *cpu_online_mask;
+    cpumask_clear_cpu(cpu, &mask);
+    for_each_cpu(cpu, &mask)
+    octeon_send_ipi_single(cpu, SMP_ICACHE_FLUSH);
 
-	preempt_enable();
+    preempt_enable();
 #endif
 }
 
@@ -93,9 +89,8 @@ static void octeon_flush_icache_all_cores(struct vm_area_struct *vma)
 /**
  * Called to flush the icache on all cores
  */
-static void octeon_flush_icache_all(void)
-{
-	octeon_flush_icache_all_cores(NULL);
+static void octeon_flush_icache_all(void) {
+    octeon_flush_icache_all_cores(NULL);
 }
 
 
@@ -105,12 +100,11 @@ static void octeon_flush_icache_all(void)
  *
  * @mm:     Memory context to flush
  */
-static void octeon_flush_cache_mm(struct mm_struct *mm)
-{
-	/*
-	 * According to the R4K version of this file, CPUs without
-	 * dcache aliases don't need to do anything here
-	 */
+static void octeon_flush_cache_mm(struct mm_struct *mm) {
+    /*
+     * According to the R4K version of this file, CPUs without
+     * dcache aliases don't need to do anything here
+     */
 }
 
 
@@ -118,9 +112,8 @@ static void octeon_flush_cache_mm(struct mm_struct *mm)
  * Flush a range of kernel addresses out of the icache
  *
  */
-static void octeon_flush_icache_range(unsigned long start, unsigned long end)
-{
-	octeon_flush_icache_all_cores(NULL);
+static void octeon_flush_icache_range(unsigned long start, unsigned long end) {
+    octeon_flush_icache_all_cores(NULL);
 }
 
 
@@ -130,12 +123,11 @@ static void octeon_flush_icache_range(unsigned long start, unsigned long end)
  *
  * @addr:   Address to flush
  */
-static void octeon_flush_cache_sigtramp(unsigned long addr)
-{
-	struct vm_area_struct *vma;
+static void octeon_flush_cache_sigtramp(unsigned long addr) {
+    struct vm_area_struct *vma;
 
-	vma = find_vma(current->mm, addr);
-	octeon_flush_icache_all_cores(vma);
+    vma = find_vma(current->mm, addr);
+    octeon_flush_icache_all_cores(vma);
 }
 
 
@@ -147,10 +139,9 @@ static void octeon_flush_cache_sigtramp(unsigned long addr)
  * @end:
  */
 static void octeon_flush_cache_range(struct vm_area_struct *vma,
-				     unsigned long start, unsigned long end)
-{
-	if (vma->vm_flags & VM_EXEC)
-		octeon_flush_icache_all_cores(vma);
+                                     unsigned long start, unsigned long end) {
+    if (vma->vm_flags & VM_EXEC)
+        octeon_flush_icache_all_cores(vma);
 }
 
 
@@ -162,90 +153,87 @@ static void octeon_flush_cache_range(struct vm_area_struct *vma,
  * @pfn:
  */
 static void octeon_flush_cache_page(struct vm_area_struct *vma,
-				    unsigned long page, unsigned long pfn)
-{
-	if (vma->vm_flags & VM_EXEC)
-		octeon_flush_icache_all_cores(vma);
+                                    unsigned long page, unsigned long pfn) {
+    if (vma->vm_flags & VM_EXEC)
+        octeon_flush_icache_all_cores(vma);
 }
 
-static void octeon_flush_kernel_vmap_range(unsigned long vaddr, int size)
-{
-	BUG();
+static void octeon_flush_kernel_vmap_range(unsigned long vaddr, int size) {
+    BUG();
 }
 
 /**
  * Probe Octeon's caches
  *
  */
-static void __cpuinit probe_octeon(void)
-{
-	unsigned long icache_size;
-	unsigned long dcache_size;
-	unsigned int config1;
-	struct cpuinfo_mips *c = &current_cpu_data;
+static void __cpuinit probe_octeon(void) {
+    unsigned long icache_size;
+    unsigned long dcache_size;
+    unsigned int config1;
+    struct cpuinfo_mips *c = &current_cpu_data;
 
-	config1 = read_c0_config1();
-	switch (c->cputype) {
-	case CPU_CAVIUM_OCTEON:
-	case CPU_CAVIUM_OCTEON_PLUS:
-		c->icache.linesz = 2 << ((config1 >> 19) & 7);
-		c->icache.sets = 64 << ((config1 >> 22) & 7);
-		c->icache.ways = 1 + ((config1 >> 16) & 7);
-		c->icache.flags |= MIPS_CACHE_VTAG;
-		icache_size =
-			c->icache.sets * c->icache.ways * c->icache.linesz;
-		c->icache.waybit = ffs(icache_size / c->icache.ways) - 1;
-		c->dcache.linesz = 128;
-		if (c->cputype == CPU_CAVIUM_OCTEON_PLUS)
-			c->dcache.sets = 2; /* CN5XXX has two Dcache sets */
-		else
-			c->dcache.sets = 1; /* CN3XXX has one Dcache set */
-		c->dcache.ways = 64;
-		dcache_size =
-			c->dcache.sets * c->dcache.ways * c->dcache.linesz;
-		c->dcache.waybit = ffs(dcache_size / c->dcache.ways) - 1;
-		c->options |= MIPS_CPU_PREFETCH;
-		break;
+    config1 = read_c0_config1();
+    switch (c->cputype) {
+    case CPU_CAVIUM_OCTEON:
+    case CPU_CAVIUM_OCTEON_PLUS:
+        c->icache.linesz = 2 << ((config1 >> 19) & 7);
+        c->icache.sets = 64 << ((config1 >> 22) & 7);
+        c->icache.ways = 1 + ((config1 >> 16) & 7);
+        c->icache.flags |= MIPS_CACHE_VTAG;
+        icache_size =
+            c->icache.sets * c->icache.ways * c->icache.linesz;
+        c->icache.waybit = ffs(icache_size / c->icache.ways) - 1;
+        c->dcache.linesz = 128;
+        if (c->cputype == CPU_CAVIUM_OCTEON_PLUS)
+            c->dcache.sets = 2; /* CN5XXX has two Dcache sets */
+        else
+            c->dcache.sets = 1; /* CN3XXX has one Dcache set */
+        c->dcache.ways = 64;
+        dcache_size =
+            c->dcache.sets * c->dcache.ways * c->dcache.linesz;
+        c->dcache.waybit = ffs(dcache_size / c->dcache.ways) - 1;
+        c->options |= MIPS_CPU_PREFETCH;
+        break;
 
-	case CPU_CAVIUM_OCTEON2:
-		c->icache.linesz = 2 << ((config1 >> 19) & 7);
-		c->icache.sets = 8;
-		c->icache.ways = 37;
-		c->icache.flags |= MIPS_CACHE_VTAG;
-		icache_size = c->icache.sets * c->icache.ways * c->icache.linesz;
+    case CPU_CAVIUM_OCTEON2:
+        c->icache.linesz = 2 << ((config1 >> 19) & 7);
+        c->icache.sets = 8;
+        c->icache.ways = 37;
+        c->icache.flags |= MIPS_CACHE_VTAG;
+        icache_size = c->icache.sets * c->icache.ways * c->icache.linesz;
 
-		c->dcache.linesz = 128;
-		c->dcache.ways = 32;
-		c->dcache.sets = 8;
-		dcache_size = c->dcache.sets * c->dcache.ways * c->dcache.linesz;
-		c->options |= MIPS_CPU_PREFETCH;
-		break;
+        c->dcache.linesz = 128;
+        c->dcache.ways = 32;
+        c->dcache.sets = 8;
+        dcache_size = c->dcache.sets * c->dcache.ways * c->dcache.linesz;
+        c->options |= MIPS_CPU_PREFETCH;
+        break;
 
-	default:
-		panic("Unsupported Cavium Networks CPU type");
-		break;
-	}
+    default:
+        panic("Unsupported Cavium Networks CPU type");
+        break;
+    }
 
-	/* compute a couple of other cache variables */
-	c->icache.waysize = icache_size / c->icache.ways;
-	c->dcache.waysize = dcache_size / c->dcache.ways;
+    /* compute a couple of other cache variables */
+    c->icache.waysize = icache_size / c->icache.ways;
+    c->dcache.waysize = dcache_size / c->dcache.ways;
 
-	c->icache.sets = icache_size / (c->icache.linesz * c->icache.ways);
-	c->dcache.sets = dcache_size / (c->dcache.linesz * c->dcache.ways);
+    c->icache.sets = icache_size / (c->icache.linesz * c->icache.ways);
+    c->dcache.sets = dcache_size / (c->dcache.linesz * c->dcache.ways);
 
-	if (smp_processor_id() == 0) {
-		pr_notice("Primary instruction cache %ldkB, %s, %d way, "
-			  "%d sets, linesize %d bytes.\n",
-			  icache_size >> 10,
-			  cpu_has_vtag_icache ?
-				"virtually tagged" : "physically tagged",
-			  c->icache.ways, c->icache.sets, c->icache.linesz);
+    if (smp_processor_id() == 0) {
+        pr_notice("Primary instruction cache %ldkB, %s, %d way, "
+                  "%d sets, linesize %d bytes.\n",
+                  icache_size >> 10,
+                  cpu_has_vtag_icache ?
+                  "virtually tagged" : "physically tagged",
+                  c->icache.ways, c->icache.sets, c->icache.linesz);
 
-		pr_notice("Primary data cache %ldkB, %d-way, %d sets, "
-			  "linesize %d bytes.\n",
-			  dcache_size >> 10, c->dcache.ways,
-			  c->dcache.sets, c->dcache.linesz);
-	}
+        pr_notice("Primary data cache %ldkB, %d-way, %d sets, "
+                  "linesize %d bytes.\n",
+                  dcache_size >> 10, c->dcache.ways,
+                  c->dcache.sets, c->dcache.linesz);
+    }
 }
 
 
@@ -253,75 +241,71 @@ static void __cpuinit probe_octeon(void)
  * Setup the Octeon cache flush routines
  *
  */
-void __cpuinit octeon_cache_init(void)
-{
-	extern unsigned long ebase;
-	extern char except_vec2_octeon;
+void __cpuinit octeon_cache_init(void) {
+    extern unsigned long ebase;
+    extern char except_vec2_octeon;
 
-	memcpy((void *)(ebase + 0x100), &except_vec2_octeon, 0x80);
-	octeon_flush_cache_sigtramp(ebase + 0x100);
+    memcpy((void *)(ebase + 0x100), &except_vec2_octeon, 0x80);
+    octeon_flush_cache_sigtramp(ebase + 0x100);
 
-	probe_octeon();
+    probe_octeon();
 
-	shm_align_mask = PAGE_SIZE - 1;
+    shm_align_mask = PAGE_SIZE - 1;
 
-	flush_cache_all			= octeon_flush_icache_all;
-	__flush_cache_all		= octeon_flush_icache_all;
-	flush_cache_mm			= octeon_flush_cache_mm;
-	flush_cache_page		= octeon_flush_cache_page;
-	flush_cache_range		= octeon_flush_cache_range;
-	flush_cache_sigtramp		= octeon_flush_cache_sigtramp;
-	flush_icache_all		= octeon_flush_icache_all;
-	flush_data_cache_page		= octeon_flush_data_cache_page;
-	flush_icache_range		= octeon_flush_icache_range;
-	local_flush_icache_range	= local_octeon_flush_icache_range;
+    flush_cache_all			= octeon_flush_icache_all;
+    __flush_cache_all		= octeon_flush_icache_all;
+    flush_cache_mm			= octeon_flush_cache_mm;
+    flush_cache_page		= octeon_flush_cache_page;
+    flush_cache_range		= octeon_flush_cache_range;
+    flush_cache_sigtramp		= octeon_flush_cache_sigtramp;
+    flush_icache_all		= octeon_flush_icache_all;
+    flush_data_cache_page		= octeon_flush_data_cache_page;
+    flush_icache_range		= octeon_flush_icache_range;
+    local_flush_icache_range	= local_octeon_flush_icache_range;
 
-	__flush_kernel_vmap_range	= octeon_flush_kernel_vmap_range;
+    __flush_kernel_vmap_range	= octeon_flush_kernel_vmap_range;
 
-	build_clear_page();
-	build_copy_page();
+    build_clear_page();
+    build_copy_page();
 }
 
 /**
  * Handle a cache error exception
  */
 
-static void  cache_parity_error_octeon(int non_recoverable)
-{
-	unsigned long coreid = cvmx_get_core_num();
-	uint64_t icache_err = read_octeon_c0_icacheerr();
+static void  cache_parity_error_octeon(int non_recoverable) {
+    unsigned long coreid = cvmx_get_core_num();
+    uint64_t icache_err = read_octeon_c0_icacheerr();
 
-	pr_err("Cache error exception:\n");
-	pr_err("cp0_errorepc == %lx\n", read_c0_errorepc());
-	if (icache_err & 1) {
-		pr_err("CacheErr (Icache) == %llx\n",
-		       (unsigned long long)icache_err);
-		write_octeon_c0_icacheerr(0);
-	}
-	if (cache_err_dcache[coreid] & 1) {
-		pr_err("CacheErr (Dcache) == %llx\n",
-		       (unsigned long long)cache_err_dcache[coreid]);
-		cache_err_dcache[coreid] = 0;
-	}
+    pr_err("Cache error exception:\n");
+    pr_err("cp0_errorepc == %lx\n", read_c0_errorepc());
+    if (icache_err & 1) {
+        pr_err("CacheErr (Icache) == %llx\n",
+               (unsigned long long)icache_err);
+        write_octeon_c0_icacheerr(0);
+    }
+    if (cache_err_dcache[coreid] & 1) {
+        pr_err("CacheErr (Dcache) == %llx\n",
+               (unsigned long long)cache_err_dcache[coreid]);
+        cache_err_dcache[coreid] = 0;
+    }
 
-	if (non_recoverable)
-		panic("Can't handle cache error: nested exception");
+    if (non_recoverable)
+        panic("Can't handle cache error: nested exception");
 }
 
 /**
  * Called when the the exception is recoverable
  */
 
-asmlinkage void cache_parity_error_octeon_recoverable(void)
-{
-	cache_parity_error_octeon(0);
+asmlinkage void cache_parity_error_octeon_recoverable(void) {
+    cache_parity_error_octeon(0);
 }
 
 /**
  * Called when the the exception is not recoverable
  */
 
-asmlinkage void cache_parity_error_octeon_non_recoverable(void)
-{
-	cache_parity_error_octeon(1);
+asmlinkage void cache_parity_error_octeon_non_recoverable(void) {
+    cache_parity_error_octeon(1);
 }

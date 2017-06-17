@@ -15,21 +15,21 @@
 #define ASMARM_HARDWARE_ICST_H
 
 struct icst_params {
-	unsigned long	ref;
-	unsigned long	vco_max;	/* inclusive */
-	unsigned long	vco_min;	/* exclusive */
-	unsigned short	vd_min;		/* inclusive */
-	unsigned short	vd_max;		/* inclusive */
-	unsigned char	rd_min;		/* inclusive */
-	unsigned char	rd_max;		/* inclusive */
-	const unsigned char *s2div;	/* chip specific s2div array */
-	const unsigned char *idx2s;	/* chip specific idx2s array */
+    unsigned long	ref;
+    unsigned long	vco_max;	/* inclusive */
+    unsigned long	vco_min;	/* exclusive */
+    unsigned short	vd_min;		/* inclusive */
+    unsigned short	vd_max;		/* inclusive */
+    unsigned char	rd_min;		/* inclusive */
+    unsigned char	rd_max;		/* inclusive */
+    const unsigned char *s2div;	/* chip specific s2div array */
+    const unsigned char *idx2s;	/* chip specific idx2s array */
 };
 
 struct icst_vco {
-	unsigned short	v;
-	unsigned char	r;
-	unsigned char	s;
+    unsigned short	v;
+    unsigned char	r;
+    unsigned char	s;
 };
 
 unsigned long icst_hz(const struct icst_params *p, struct icst_vco vco);

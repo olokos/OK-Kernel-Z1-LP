@@ -10,12 +10,12 @@
 #ifndef _LANGUAGE_ASSEMBLY
 #include <linux/types.h>
 struct bootloader_header {
-	u32 magic[2];
-	u32 version;
-	u32 image_start;
-	u32 image_size;
-	u32 kernel_start;
-	u32 kernel_entry;
+    u32 magic[2];
+    u32 version;
+    u32 image_start;
+    u32 image_size;
+    u32 kernel_start;
+    u32 kernel_entry;
 };
 #endif
 

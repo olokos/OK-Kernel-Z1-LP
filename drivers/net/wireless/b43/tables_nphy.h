@@ -4,61 +4,61 @@
 #include <linux/types.h>
 
 struct b43_phy_n_sfo_cfg {
-	u16 phy_bw1a;
-	u16 phy_bw2;
-	u16 phy_bw3;
-	u16 phy_bw4;
-	u16 phy_bw5;
-	u16 phy_bw6;
+    u16 phy_bw1a;
+    u16 phy_bw2;
+    u16 phy_bw3;
+    u16 phy_bw4;
+    u16 phy_bw5;
+    u16 phy_bw6;
 };
 
 struct b43_wldev;
 
 struct nphy_txiqcal_ladder {
-	u8 percent;
-	u8 g_env;
+    u8 percent;
+    u8 g_env;
 };
 
 struct nphy_rf_control_override_rev2 {
-	u8 addr0;
-	u8 addr1;
-	u16 bmask;
-	u8 shift;
+    u8 addr0;
+    u8 addr1;
+    u16 bmask;
+    u8 shift;
 };
 
 struct nphy_rf_control_override_rev3 {
-	u16 val_mask;
-	u8 val_shift;
-	u8 en_addr0;
-	u8 val_addr0;
-	u8 en_addr1;
-	u8 val_addr1;
+    u16 val_mask;
+    u8 val_shift;
+    u8 en_addr0;
+    u8 val_addr0;
+    u8 en_addr1;
+    u8 val_addr1;
 };
 
 struct nphy_gain_ctl_workaround_entry {
-	s8 lna1_gain[4];
-	s8 lna2_gain[4];
-	u8 gain_db[10];
-	u8 gain_bits[10];
+    s8 lna1_gain[4];
+    s8 lna2_gain[4];
+    u8 gain_db[10];
+    u8 gain_bits[10];
 
-	u16 init_gain;
-	u16 rfseq_init[4];
+    u16 init_gain;
+    u16 rfseq_init[4];
 
-	u16 cliphi_gain;
-	u16 clipmd_gain;
-	u16 cliplo_gain;
+    u16 cliphi_gain;
+    u16 clipmd_gain;
+    u16 cliplo_gain;
 
-	u16 crsmin;
-	u16 crsminl;
-	u16 crsminu;
+    u16 crsmin;
+    u16 crsminl;
+    u16 crsminu;
 
-	u16 nbclip;
-	u16 wlclip;
+    u16 nbclip;
+    u16 wlclip;
 };
 
 /* Get entry with workaround values for gain ctl. Does not return NULL. */
 struct nphy_gain_ctl_workaround_entry *b43_nphy_get_gain_ctl_workaround_ent(
-	struct b43_wldev *dev, bool ghz5, bool ext_lna);
+    struct b43_wldev *dev, bool ghz5, bool ext_lna);
 
 
 /* The N-PHY tables. */
@@ -169,10 +169,10 @@ struct nphy_gain_ctl_workaround_entry *b43_nphy_get_gain_ctl_workaround_ent(
 
 u32 b43_ntab_read(struct b43_wldev *dev, u32 offset);
 void b43_ntab_read_bulk(struct b43_wldev *dev, u32 offset,
-			 unsigned int nr_elements, void *_data);
+                        unsigned int nr_elements, void *_data);
 void b43_ntab_write(struct b43_wldev *dev, u32 offset, u32 value);
 void b43_ntab_write_bulk(struct b43_wldev *dev, u32 offset,
-			  unsigned int nr_elements, const void *_data);
+                         unsigned int nr_elements, const void *_data);
 
 void b43_nphy_rev0_1_2_tables_init(struct b43_wldev *dev);
 void b43_nphy_rev3plus_tables_init(struct b43_wldev *dev);
@@ -199,8 +199,8 @@ extern const u16 tbl_tx_iqlo_cal_cmds_fullcal_nphyrev3[];
 extern const s16 tbl_tx_filter_coef_rev4[7][15];
 
 extern const struct nphy_rf_control_override_rev2
-	tbl_rf_control_override_rev2[];
+    tbl_rf_control_override_rev2[];
 extern const struct nphy_rf_control_override_rev3
-	tbl_rf_control_override_rev3[];
+    tbl_rf_control_override_rev3[];
 
 #endif /* B43_TABLES_NPHY_H_ */

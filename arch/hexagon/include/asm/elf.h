@@ -38,7 +38,7 @@ struct elf32_hdr;
 /*  should have stuff like "CPU type" and maybe "ABI version", etc  */
 
 /* Hexagon relocations */
-  /* V2 */
+/* V2 */
 #define R_HEXAGON_NONE           0
 #define R_HEXAGON_B22_PCREL      1
 #define R_HEXAGON_B15_PCREL      2
@@ -53,14 +53,14 @@ struct elf32_hdr;
 #define R_HEXAGON_GPREL16_2     11
 #define R_HEXAGON_GPREL16_3     12
 #define R_HEXAGON_HL16          13
-  /* V3 */
+/* V3 */
 #define R_HEXAGON_B13_PCREL     14
-  /* V4 */
+/* V4 */
 #define R_HEXAGON_B9_PCREL      15
-  /* V4 (extenders) */
+/* V4 (extenders) */
 #define R_HEXAGON_B32_PCREL_X   16
 #define R_HEXAGON_32_6_X        17
-  /* V4 (extended) */
+/* V4 (extended) */
 #define R_HEXAGON_B22_PCREL_X   18
 #define R_HEXAGON_B15_PCREL_X   19
 #define R_HEXAGON_B13_PCREL_X   20
@@ -74,7 +74,7 @@ struct elf32_hdr;
 #define R_HEXAGON_8_X           28
 #define R_HEXAGON_7_X           29
 #define R_HEXAGON_6_X           30
-  /* V2 PIC */
+/* V2 PIC */
 #define R_HEXAGON_32_PCREL      31
 #define R_HEXAGON_COPY          32
 #define R_HEXAGON_GLOB_DAT      33
@@ -223,7 +223,7 @@ do {					\
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
 struct linux_binprm;
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-				       int uses_interp);
+                                       int uses_interp);
 
 
 #endif

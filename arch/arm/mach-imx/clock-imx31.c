@@ -36,36 +36,35 @@
 
 #define PRE_DIV_MIN_FREQ    10000000 /* Minimum Frequency after Predivider */
 
-static void __calc_pre_post_dividers(u32 div, u32 *pre, u32 *post)
-{
-	u32 min_pre, temp_pre, old_err, err;
+static void __calc_pre_post_dividers(u32 div, u32 *pre, u32 *post) {
+    u32 min_pre, temp_pre, old_err, err;
 
-	if (div >= 512) {
-		*pre = 8;
-		*post = 64;
-	} else if (div >= 64) {
-		min_pre = (div - 1) / 64 + 1;
-		old_err = 8;
-		for (temp_pre = 8; temp_pre >= min_pre; temp_pre--) {
-			err = div % temp_pre;
-			if (err == 0) {
-				*pre = temp_pre;
-				break;
-			}
-			err = temp_pre - err;
-			if (err < old_err) {
-				old_err = err;
-				*pre = temp_pre;
-			}
-		}
-		*post = (div + *pre - 1) / *pre;
-	} else if (div <= 8) {
-		*pre = div;
-		*post = 1;
-	} else {
-		*pre = 1;
-		*post = div;
-	}
+    if (div >= 512) {
+        *pre = 8;
+        *post = 64;
+    } else if (div >= 64) {
+        min_pre = (div - 1) / 64 + 1;
+        old_err = 8;
+        for (temp_pre = 8; temp_pre >= min_pre; temp_pre--) {
+            err = div % temp_pre;
+            if (err == 0) {
+                *pre = temp_pre;
+                break;
+            }
+            err = temp_pre - err;
+            if (err < old_err) {
+                old_err = err;
+                *pre = temp_pre;
+            }
+        }
+        *post = (div + *pre - 1) / *pre;
+    } else if (div <= 8) {
+        *pre = div;
+        *post = 1;
+    } else {
+        *pre = 1;
+        *post = div;
+    }
 }
 
 static struct clk mcu_pll_clk;
@@ -73,372 +72,343 @@ static struct clk serial_pll_clk;
 static struct clk ipg_clk;
 static struct clk ckih_clk;
 
-static int cgr_enable(struct clk *clk)
-{
-	u32 reg;
+static int cgr_enable(struct clk *clk) {
+    u32 reg;
 
-	if (!clk->enable_reg)
-		return 0;
+    if (!clk->enable_reg)
+        return 0;
 
-	reg = __raw_readl(clk->enable_reg);
-	reg |= 3 << clk->enable_shift;
-	__raw_writel(reg, clk->enable_reg);
+    reg = __raw_readl(clk->enable_reg);
+    reg |= 3 << clk->enable_shift;
+    __raw_writel(reg, clk->enable_reg);
 
-	return 0;
+    return 0;
 }
 
-static void cgr_disable(struct clk *clk)
-{
-	u32 reg;
+static void cgr_disable(struct clk *clk) {
+    u32 reg;
 
-	if (!clk->enable_reg)
-		return;
+    if (!clk->enable_reg)
+        return;
 
-	reg = __raw_readl(clk->enable_reg);
-	reg &= ~(3 << clk->enable_shift);
+    reg = __raw_readl(clk->enable_reg);
+    reg &= ~(3 << clk->enable_shift);
 
-	/* special case for EMI clock */
-	if (clk->enable_reg == MXC_CCM_CGR2 && clk->enable_shift == 8)
-		reg |= (1 << clk->enable_shift);
+    /* special case for EMI clock */
+    if (clk->enable_reg == MXC_CCM_CGR2 && clk->enable_shift == 8)
+        reg |= (1 << clk->enable_shift);
 
-	__raw_writel(reg, clk->enable_reg);
+    __raw_writel(reg, clk->enable_reg);
 }
 
-static unsigned long pll_ref_get_rate(void)
-{
-	unsigned long ccmr;
-	unsigned int prcs;
+static unsigned long pll_ref_get_rate(void) {
+    unsigned long ccmr;
+    unsigned int prcs;
 
-	ccmr = __raw_readl(MXC_CCM_CCMR);
-	prcs = (ccmr & MXC_CCM_CCMR_PRCS_MASK) >> MXC_CCM_CCMR_PRCS_OFFSET;
-	if (prcs == 0x1)
-		return CKIL_CLK_FREQ * 1024;
-	else
-		return clk_get_rate(&ckih_clk);
+    ccmr = __raw_readl(MXC_CCM_CCMR);
+    prcs = (ccmr & MXC_CCM_CCMR_PRCS_MASK) >> MXC_CCM_CCMR_PRCS_OFFSET;
+    if (prcs == 0x1)
+        return CKIL_CLK_FREQ * 1024;
+    else
+        return clk_get_rate(&ckih_clk);
 }
 
-static unsigned long usb_pll_get_rate(struct clk *clk)
-{
-	unsigned long reg;
+static unsigned long usb_pll_get_rate(struct clk *clk) {
+    unsigned long reg;
 
-	reg = __raw_readl(MXC_CCM_UPCTL);
+    reg = __raw_readl(MXC_CCM_UPCTL);
 
-	return mxc_decode_pll(reg, pll_ref_get_rate());
+    return mxc_decode_pll(reg, pll_ref_get_rate());
 }
 
-static unsigned long serial_pll_get_rate(struct clk *clk)
-{
-	unsigned long reg;
+static unsigned long serial_pll_get_rate(struct clk *clk) {
+    unsigned long reg;
 
-	reg = __raw_readl(MXC_CCM_SRPCTL);
+    reg = __raw_readl(MXC_CCM_SRPCTL);
 
-	return mxc_decode_pll(reg, pll_ref_get_rate());
+    return mxc_decode_pll(reg, pll_ref_get_rate());
 }
 
-static unsigned long mcu_pll_get_rate(struct clk *clk)
-{
-	unsigned long reg, ccmr;
+static unsigned long mcu_pll_get_rate(struct clk *clk) {
+    unsigned long reg, ccmr;
 
-	ccmr = __raw_readl(MXC_CCM_CCMR);
+    ccmr = __raw_readl(MXC_CCM_CCMR);
 
-	if (!(ccmr & MXC_CCM_CCMR_MPE) || (ccmr & MXC_CCM_CCMR_MDS))
-		return clk_get_rate(&ckih_clk);
+    if (!(ccmr & MXC_CCM_CCMR_MPE) || (ccmr & MXC_CCM_CCMR_MDS))
+        return clk_get_rate(&ckih_clk);
 
-	reg = __raw_readl(MXC_CCM_MPCTL);
+    reg = __raw_readl(MXC_CCM_MPCTL);
 
-	return mxc_decode_pll(reg, pll_ref_get_rate());
+    return mxc_decode_pll(reg, pll_ref_get_rate());
 }
 
-static int usb_pll_enable(struct clk *clk)
-{
-	u32 reg;
+static int usb_pll_enable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(MXC_CCM_CCMR);
-	reg |= MXC_CCM_CCMR_UPE;
-	__raw_writel(reg, MXC_CCM_CCMR);
+    reg = __raw_readl(MXC_CCM_CCMR);
+    reg |= MXC_CCM_CCMR_UPE;
+    __raw_writel(reg, MXC_CCM_CCMR);
 
-	/* No lock bit on MX31, so using max time from spec */
-	udelay(80);
+    /* No lock bit on MX31, so using max time from spec */
+    udelay(80);
 
-	return 0;
+    return 0;
 }
 
-static void usb_pll_disable(struct clk *clk)
-{
-	u32 reg;
+static void usb_pll_disable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(MXC_CCM_CCMR);
-	reg &= ~MXC_CCM_CCMR_UPE;
-	__raw_writel(reg, MXC_CCM_CCMR);
+    reg = __raw_readl(MXC_CCM_CCMR);
+    reg &= ~MXC_CCM_CCMR_UPE;
+    __raw_writel(reg, MXC_CCM_CCMR);
 }
 
-static int serial_pll_enable(struct clk *clk)
-{
-	u32 reg;
+static int serial_pll_enable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(MXC_CCM_CCMR);
-	reg |= MXC_CCM_CCMR_SPE;
-	__raw_writel(reg, MXC_CCM_CCMR);
+    reg = __raw_readl(MXC_CCM_CCMR);
+    reg |= MXC_CCM_CCMR_SPE;
+    __raw_writel(reg, MXC_CCM_CCMR);
 
-	/* No lock bit on MX31, so using max time from spec */
-	udelay(80);
+    /* No lock bit on MX31, so using max time from spec */
+    udelay(80);
 
-	return 0;
+    return 0;
 }
 
-static void serial_pll_disable(struct clk *clk)
-{
-	u32 reg;
+static void serial_pll_disable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(MXC_CCM_CCMR);
-	reg &= ~MXC_CCM_CCMR_SPE;
-	__raw_writel(reg, MXC_CCM_CCMR);
+    reg = __raw_readl(MXC_CCM_CCMR);
+    reg &= ~MXC_CCM_CCMR_SPE;
+    __raw_writel(reg, MXC_CCM_CCMR);
 }
 
 #define PDR0(mask, off) ((__raw_readl(MXC_CCM_PDR0) & mask) >> off)
 #define PDR1(mask, off) ((__raw_readl(MXC_CCM_PDR1) & mask) >> off)
 #define PDR2(mask, off) ((__raw_readl(MXC_CCM_PDR2) & mask) >> off)
 
-static unsigned long mcu_main_get_rate(struct clk *clk)
-{
-	u32 pmcr0 = __raw_readl(MXC_CCM_PMCR0);
+static unsigned long mcu_main_get_rate(struct clk *clk) {
+    u32 pmcr0 = __raw_readl(MXC_CCM_PMCR0);
 
-	if ((pmcr0 & MXC_CCM_PMCR0_DFSUP1) == MXC_CCM_PMCR0_DFSUP1_SPLL)
-		return clk_get_rate(&serial_pll_clk);
-	else
-		return clk_get_rate(&mcu_pll_clk);
+    if ((pmcr0 & MXC_CCM_PMCR0_DFSUP1) == MXC_CCM_PMCR0_DFSUP1_SPLL)
+        return clk_get_rate(&serial_pll_clk);
+    else
+        return clk_get_rate(&mcu_pll_clk);
 }
 
-static unsigned long ahb_get_rate(struct clk *clk)
-{
-	unsigned long max_pdf;
+static unsigned long ahb_get_rate(struct clk *clk) {
+    unsigned long max_pdf;
 
-	max_pdf = PDR0(MXC_CCM_PDR0_MAX_PODF_MASK,
-		       MXC_CCM_PDR0_MAX_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (max_pdf + 1);
+    max_pdf = PDR0(MXC_CCM_PDR0_MAX_PODF_MASK,
+                   MXC_CCM_PDR0_MAX_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (max_pdf + 1);
 }
 
-static unsigned long ipg_get_rate(struct clk *clk)
-{
-	unsigned long ipg_pdf;
+static unsigned long ipg_get_rate(struct clk *clk) {
+    unsigned long ipg_pdf;
 
-	ipg_pdf = PDR0(MXC_CCM_PDR0_IPG_PODF_MASK,
-		       MXC_CCM_PDR0_IPG_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (ipg_pdf + 1);
+    ipg_pdf = PDR0(MXC_CCM_PDR0_IPG_PODF_MASK,
+                   MXC_CCM_PDR0_IPG_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (ipg_pdf + 1);
 }
 
-static unsigned long nfc_get_rate(struct clk *clk)
-{
-	unsigned long nfc_pdf;
+static unsigned long nfc_get_rate(struct clk *clk) {
+    unsigned long nfc_pdf;
 
-	nfc_pdf = PDR0(MXC_CCM_PDR0_NFC_PODF_MASK,
-		       MXC_CCM_PDR0_NFC_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (nfc_pdf + 1);
+    nfc_pdf = PDR0(MXC_CCM_PDR0_NFC_PODF_MASK,
+                   MXC_CCM_PDR0_NFC_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (nfc_pdf + 1);
 }
 
-static unsigned long hsp_get_rate(struct clk *clk)
-{
-	unsigned long hsp_pdf;
+static unsigned long hsp_get_rate(struct clk *clk) {
+    unsigned long hsp_pdf;
 
-	hsp_pdf = PDR0(MXC_CCM_PDR0_HSP_PODF_MASK,
-		       MXC_CCM_PDR0_HSP_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (hsp_pdf + 1);
+    hsp_pdf = PDR0(MXC_CCM_PDR0_HSP_PODF_MASK,
+                   MXC_CCM_PDR0_HSP_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (hsp_pdf + 1);
 }
 
-static unsigned long usb_get_rate(struct clk *clk)
-{
-	unsigned long usb_pdf, usb_prepdf;
+static unsigned long usb_get_rate(struct clk *clk) {
+    unsigned long usb_pdf, usb_prepdf;
 
-	usb_pdf = PDR1(MXC_CCM_PDR1_USB_PODF_MASK,
-		       MXC_CCM_PDR1_USB_PODF_OFFSET);
-	usb_prepdf = PDR1(MXC_CCM_PDR1_USB_PRDF_MASK,
-			  MXC_CCM_PDR1_USB_PRDF_OFFSET);
-	return clk_get_rate(clk->parent) / (usb_prepdf + 1) / (usb_pdf + 1);
+    usb_pdf = PDR1(MXC_CCM_PDR1_USB_PODF_MASK,
+                   MXC_CCM_PDR1_USB_PODF_OFFSET);
+    usb_prepdf = PDR1(MXC_CCM_PDR1_USB_PRDF_MASK,
+                      MXC_CCM_PDR1_USB_PRDF_OFFSET);
+    return clk_get_rate(clk->parent) / (usb_prepdf + 1) / (usb_pdf + 1);
 }
 
-static unsigned long csi_get_rate(struct clk *clk)
-{
-	u32 reg, pre, post;
+static unsigned long csi_get_rate(struct clk *clk) {
+    u32 reg, pre, post;
 
-	reg = __raw_readl(MXC_CCM_PDR0);
-	pre = (reg & MXC_CCM_PDR0_CSI_PRDF_MASK) >>
-	    MXC_CCM_PDR0_CSI_PRDF_OFFSET;
-	pre++;
-	post = (reg & MXC_CCM_PDR0_CSI_PODF_MASK) >>
-	    MXC_CCM_PDR0_CSI_PODF_OFFSET;
-	post++;
-	return clk_get_rate(clk->parent) / (pre * post);
+    reg = __raw_readl(MXC_CCM_PDR0);
+    pre = (reg & MXC_CCM_PDR0_CSI_PRDF_MASK) >>
+          MXC_CCM_PDR0_CSI_PRDF_OFFSET;
+    pre++;
+    post = (reg & MXC_CCM_PDR0_CSI_PODF_MASK) >>
+           MXC_CCM_PDR0_CSI_PODF_OFFSET;
+    post++;
+    return clk_get_rate(clk->parent) / (pre * post);
 }
 
-static unsigned long csi_round_rate(struct clk *clk, unsigned long rate)
-{
-	u32 pre, post, parent = clk_get_rate(clk->parent);
-	u32 div = parent / rate;
+static unsigned long csi_round_rate(struct clk *clk, unsigned long rate) {
+    u32 pre, post, parent = clk_get_rate(clk->parent);
+    u32 div = parent / rate;
 
-	if (parent % rate)
-		div++;
+    if (parent % rate)
+        div++;
 
-	__calc_pre_post_dividers(div, &pre, &post);
+    __calc_pre_post_dividers(div, &pre, &post);
 
-	return parent / (pre * post);
+    return parent / (pre * post);
 }
 
-static int csi_set_rate(struct clk *clk, unsigned long rate)
-{
-	u32 reg, div, pre, post, parent = clk_get_rate(clk->parent);
+static int csi_set_rate(struct clk *clk, unsigned long rate) {
+    u32 reg, div, pre, post, parent = clk_get_rate(clk->parent);
 
-	div = parent / rate;
+    div = parent / rate;
 
-	if ((parent / div) != rate)
-		return -EINVAL;
+    if ((parent / div) != rate)
+        return -EINVAL;
 
-	__calc_pre_post_dividers(div, &pre, &post);
+    __calc_pre_post_dividers(div, &pre, &post);
 
-	/* Set CSI clock divider */
-	reg = __raw_readl(MXC_CCM_PDR0) &
-	    ~(MXC_CCM_PDR0_CSI_PODF_MASK | MXC_CCM_PDR0_CSI_PRDF_MASK);
-	reg |= (post - 1) << MXC_CCM_PDR0_CSI_PODF_OFFSET;
-	reg |= (pre - 1) << MXC_CCM_PDR0_CSI_PRDF_OFFSET;
-	__raw_writel(reg, MXC_CCM_PDR0);
+    /* Set CSI clock divider */
+    reg = __raw_readl(MXC_CCM_PDR0) &
+          ~(MXC_CCM_PDR0_CSI_PODF_MASK | MXC_CCM_PDR0_CSI_PRDF_MASK);
+    reg |= (post - 1) << MXC_CCM_PDR0_CSI_PODF_OFFSET;
+    reg |= (pre - 1) << MXC_CCM_PDR0_CSI_PRDF_OFFSET;
+    __raw_writel(reg, MXC_CCM_PDR0);
 
-	return 0;
+    return 0;
 }
 
-static unsigned long ssi1_get_rate(struct clk *clk)
-{
-	unsigned long ssi1_pdf, ssi1_prepdf;
+static unsigned long ssi1_get_rate(struct clk *clk) {
+    unsigned long ssi1_pdf, ssi1_prepdf;
 
-	ssi1_pdf = PDR1(MXC_CCM_PDR1_SSI1_PODF_MASK,
-			MXC_CCM_PDR1_SSI1_PODF_OFFSET);
-	ssi1_prepdf = PDR1(MXC_CCM_PDR1_SSI1_PRE_PODF_MASK,
-			   MXC_CCM_PDR1_SSI1_PRE_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (ssi1_prepdf + 1) / (ssi1_pdf + 1);
+    ssi1_pdf = PDR1(MXC_CCM_PDR1_SSI1_PODF_MASK,
+                    MXC_CCM_PDR1_SSI1_PODF_OFFSET);
+    ssi1_prepdf = PDR1(MXC_CCM_PDR1_SSI1_PRE_PODF_MASK,
+                       MXC_CCM_PDR1_SSI1_PRE_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (ssi1_prepdf + 1) / (ssi1_pdf + 1);
 }
 
-static unsigned long ssi2_get_rate(struct clk *clk)
-{
-	unsigned long ssi2_pdf, ssi2_prepdf;
+static unsigned long ssi2_get_rate(struct clk *clk) {
+    unsigned long ssi2_pdf, ssi2_prepdf;
 
-	ssi2_pdf = PDR1(MXC_CCM_PDR1_SSI2_PODF_MASK,
-			MXC_CCM_PDR1_SSI2_PODF_OFFSET);
-	ssi2_prepdf = PDR1(MXC_CCM_PDR1_SSI2_PRE_PODF_MASK,
-			   MXC_CCM_PDR1_SSI2_PRE_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (ssi2_prepdf + 1) / (ssi2_pdf + 1);
+    ssi2_pdf = PDR1(MXC_CCM_PDR1_SSI2_PODF_MASK,
+                    MXC_CCM_PDR1_SSI2_PODF_OFFSET);
+    ssi2_prepdf = PDR1(MXC_CCM_PDR1_SSI2_PRE_PODF_MASK,
+                       MXC_CCM_PDR1_SSI2_PRE_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (ssi2_prepdf + 1) / (ssi2_pdf + 1);
 }
 
-static unsigned long firi_get_rate(struct clk *clk)
-{
-	unsigned long firi_pdf, firi_prepdf;
+static unsigned long firi_get_rate(struct clk *clk) {
+    unsigned long firi_pdf, firi_prepdf;
 
-	firi_pdf = PDR1(MXC_CCM_PDR1_FIRI_PODF_MASK,
-			MXC_CCM_PDR1_FIRI_PODF_OFFSET);
-	firi_prepdf = PDR1(MXC_CCM_PDR1_FIRI_PRE_PODF_MASK,
-			   MXC_CCM_PDR1_FIRI_PRE_PODF_OFFSET);
-	return clk_get_rate(clk->parent) / (firi_prepdf + 1) / (firi_pdf + 1);
+    firi_pdf = PDR1(MXC_CCM_PDR1_FIRI_PODF_MASK,
+                    MXC_CCM_PDR1_FIRI_PODF_OFFSET);
+    firi_prepdf = PDR1(MXC_CCM_PDR1_FIRI_PRE_PODF_MASK,
+                       MXC_CCM_PDR1_FIRI_PRE_PODF_OFFSET);
+    return clk_get_rate(clk->parent) / (firi_prepdf + 1) / (firi_pdf + 1);
 }
 
-static unsigned long firi_round_rate(struct clk *clk, unsigned long rate)
-{
-	u32 pre, post;
-	u32 parent = clk_get_rate(clk->parent);
-	u32 div = parent / rate;
+static unsigned long firi_round_rate(struct clk *clk, unsigned long rate) {
+    u32 pre, post;
+    u32 parent = clk_get_rate(clk->parent);
+    u32 div = parent / rate;
 
-	if (parent % rate)
-		div++;
+    if (parent % rate)
+        div++;
 
-	__calc_pre_post_dividers(div, &pre, &post);
+    __calc_pre_post_dividers(div, &pre, &post);
 
-	return parent / (pre * post);
+    return parent / (pre * post);
 
 }
 
-static int firi_set_rate(struct clk *clk, unsigned long rate)
-{
-	u32 reg, div, pre, post, parent = clk_get_rate(clk->parent);
+static int firi_set_rate(struct clk *clk, unsigned long rate) {
+    u32 reg, div, pre, post, parent = clk_get_rate(clk->parent);
 
-	div = parent / rate;
+    div = parent / rate;
 
-	if ((parent / div) != rate)
-		return -EINVAL;
+    if ((parent / div) != rate)
+        return -EINVAL;
 
-	__calc_pre_post_dividers(div, &pre, &post);
+    __calc_pre_post_dividers(div, &pre, &post);
 
-	/* Set FIRI clock divider */
-	reg = __raw_readl(MXC_CCM_PDR1) &
-	    ~(MXC_CCM_PDR1_FIRI_PODF_MASK | MXC_CCM_PDR1_FIRI_PRE_PODF_MASK);
-	reg |= (pre - 1) << MXC_CCM_PDR1_FIRI_PRE_PODF_OFFSET;
-	reg |= (post - 1) << MXC_CCM_PDR1_FIRI_PODF_OFFSET;
-	__raw_writel(reg, MXC_CCM_PDR1);
+    /* Set FIRI clock divider */
+    reg = __raw_readl(MXC_CCM_PDR1) &
+          ~(MXC_CCM_PDR1_FIRI_PODF_MASK | MXC_CCM_PDR1_FIRI_PRE_PODF_MASK);
+    reg |= (pre - 1) << MXC_CCM_PDR1_FIRI_PRE_PODF_OFFSET;
+    reg |= (post - 1) << MXC_CCM_PDR1_FIRI_PODF_OFFSET;
+    __raw_writel(reg, MXC_CCM_PDR1);
 
-	return 0;
+    return 0;
 }
 
-static unsigned long mbx_get_rate(struct clk *clk)
-{
-	return clk_get_rate(clk->parent) / 2;
+static unsigned long mbx_get_rate(struct clk *clk) {
+    return clk_get_rate(clk->parent) / 2;
 }
 
-static unsigned long mstick1_get_rate(struct clk *clk)
-{
-	unsigned long msti_pdf;
+static unsigned long mstick1_get_rate(struct clk *clk) {
+    unsigned long msti_pdf;
 
-	msti_pdf = PDR2(MXC_CCM_PDR2_MST1_PDF_MASK,
-			MXC_CCM_PDR2_MST1_PDF_OFFSET);
-	return clk_get_rate(clk->parent) / (msti_pdf + 1);
+    msti_pdf = PDR2(MXC_CCM_PDR2_MST1_PDF_MASK,
+                    MXC_CCM_PDR2_MST1_PDF_OFFSET);
+    return clk_get_rate(clk->parent) / (msti_pdf + 1);
 }
 
-static unsigned long mstick2_get_rate(struct clk *clk)
-{
-	unsigned long msti_pdf;
+static unsigned long mstick2_get_rate(struct clk *clk) {
+    unsigned long msti_pdf;
 
-	msti_pdf = PDR2(MXC_CCM_PDR2_MST2_PDF_MASK,
-			MXC_CCM_PDR2_MST2_PDF_OFFSET);
-	return clk_get_rate(clk->parent) / (msti_pdf + 1);
+    msti_pdf = PDR2(MXC_CCM_PDR2_MST2_PDF_MASK,
+                    MXC_CCM_PDR2_MST2_PDF_OFFSET);
+    return clk_get_rate(clk->parent) / (msti_pdf + 1);
 }
 
 static unsigned long ckih_rate;
 
-static unsigned long clk_ckih_get_rate(struct clk *clk)
-{
-	return ckih_rate;
+static unsigned long clk_ckih_get_rate(struct clk *clk) {
+    return ckih_rate;
 }
 
-static unsigned long clk_ckil_get_rate(struct clk *clk)
-{
-	return CKIL_CLK_FREQ;
+static unsigned long clk_ckil_get_rate(struct clk *clk) {
+    return CKIL_CLK_FREQ;
 }
 
 static struct clk ckih_clk = {
-	.get_rate = clk_ckih_get_rate,
+    .get_rate = clk_ckih_get_rate,
 };
 
 static struct clk mcu_pll_clk = {
-	.parent = &ckih_clk,
-	.get_rate = mcu_pll_get_rate,
+    .parent = &ckih_clk,
+    .get_rate = mcu_pll_get_rate,
 };
 
 static struct clk mcu_main_clk = {
-	.parent = &mcu_pll_clk,
-	.get_rate = mcu_main_get_rate,
+    .parent = &mcu_pll_clk,
+    .get_rate = mcu_main_get_rate,
 };
 
 static struct clk serial_pll_clk = {
-	.parent = &ckih_clk,
-	.get_rate = serial_pll_get_rate,
-	.enable = serial_pll_enable,
-	.disable = serial_pll_disable,
+    .parent = &ckih_clk,
+    .get_rate = serial_pll_get_rate,
+    .enable = serial_pll_enable,
+    .disable = serial_pll_disable,
 };
 
 static struct clk usb_pll_clk = {
-	.parent = &ckih_clk,
-	.get_rate = usb_pll_get_rate,
-	.enable = usb_pll_enable,
-	.disable = usb_pll_disable,
+    .parent = &ckih_clk,
+    .get_rate = usb_pll_get_rate,
+    .enable = usb_pll_enable,
+    .disable = usb_pll_disable,
 };
 
 static struct clk ahb_clk = {
-	.parent = &mcu_main_clk,
-	.get_rate = ahb_get_rate,
+    .parent = &mcu_main_clk,
+    .get_rate = ahb_get_rate,
 };
 
 #define DEFINE_CLOCK(name, i, er, es, gr, s, p)		\
@@ -524,107 +494,106 @@ DEFINE_CLOCK(ipg_clk,     0, NULL,          0, ipg_get_rate, NULL, &ahb_clk);
 	},
 
 static struct clk_lookup lookups[] = {
-	_REGISTER_CLOCK(NULL, "emi", emi_clk)
-	_REGISTER_CLOCK("imx31-cspi.0", NULL, cspi1_clk)
-	_REGISTER_CLOCK("imx31-cspi.1", NULL, cspi2_clk)
-	_REGISTER_CLOCK("imx31-cspi.2", NULL, cspi3_clk)
-	_REGISTER_CLOCK(NULL, "gpt", gpt_clk)
-	_REGISTER_CLOCK(NULL, "pwm", pwm_clk)
-	_REGISTER_CLOCK("imx2-wdt.0", NULL, wdog_clk)
-	_REGISTER_CLOCK(NULL, "rtc", rtc_clk)
-	_REGISTER_CLOCK(NULL, "epit", epit1_clk)
-	_REGISTER_CLOCK(NULL, "epit", epit2_clk)
-	_REGISTER_CLOCK("mxc_nand.0", NULL, nfc_clk)
-	_REGISTER_CLOCK("ipu-core", NULL, ipu_clk)
-	_REGISTER_CLOCK("mx3_sdc_fb", NULL, ipu_clk)
-	_REGISTER_CLOCK(NULL, "kpp", kpp_clk)
-	_REGISTER_CLOCK("mxc-ehci.0", "usb", usb_clk1)
-	_REGISTER_CLOCK("mxc-ehci.0", "usb_ahb", usb_clk2)
-	_REGISTER_CLOCK("mxc-ehci.1", "usb", usb_clk1)
-	_REGISTER_CLOCK("mxc-ehci.1", "usb_ahb", usb_clk2)
-	_REGISTER_CLOCK("mxc-ehci.2", "usb", usb_clk1)
-	_REGISTER_CLOCK("mxc-ehci.2", "usb_ahb", usb_clk2)
-	_REGISTER_CLOCK("fsl-usb2-udc", "usb", usb_clk1)
-	_REGISTER_CLOCK("fsl-usb2-udc", "usb_ahb", usb_clk2)
-	_REGISTER_CLOCK("mx3-camera.0", NULL, csi_clk)
-	/* i.mx31 has the i.mx21 type uart */
-	_REGISTER_CLOCK("imx21-uart.0", NULL, uart1_clk)
-	_REGISTER_CLOCK("imx21-uart.1", NULL, uart2_clk)
-	_REGISTER_CLOCK("imx21-uart.2", NULL, uart3_clk)
-	_REGISTER_CLOCK("imx21-uart.3", NULL, uart4_clk)
-	_REGISTER_CLOCK("imx21-uart.4", NULL, uart5_clk)
-	_REGISTER_CLOCK("imx-i2c.0", NULL, i2c1_clk)
-	_REGISTER_CLOCK("imx-i2c.1", NULL, i2c2_clk)
-	_REGISTER_CLOCK("imx-i2c.2", NULL, i2c3_clk)
-	_REGISTER_CLOCK("mxc_w1.0", NULL, owire_clk)
-	_REGISTER_CLOCK("mxc-mmc.0", NULL, sdhc1_clk)
-	_REGISTER_CLOCK("mxc-mmc.1", NULL, sdhc2_clk)
-	_REGISTER_CLOCK("imx-ssi.0", NULL, ssi1_clk)
-	_REGISTER_CLOCK("imx-ssi.1", NULL, ssi2_clk)
-	_REGISTER_CLOCK(NULL, "firi", firi_clk)
-	_REGISTER_CLOCK("pata_imx", NULL, pata_clk)
-	_REGISTER_CLOCK(NULL, "rtic", rtic_clk)
-	_REGISTER_CLOCK(NULL, "rng", rng_clk)
-	_REGISTER_CLOCK("imx31-sdma", NULL, sdma_clk1)
-	_REGISTER_CLOCK(NULL, "sdma_ipg", sdma_clk2)
-	_REGISTER_CLOCK(NULL, "mstick", mstick1_clk)
-	_REGISTER_CLOCK(NULL, "mstick", mstick2_clk)
-	_REGISTER_CLOCK(NULL, "scc", scc_clk)
-	_REGISTER_CLOCK(NULL, "iim", iim_clk)
-	_REGISTER_CLOCK(NULL, "mpeg4", mpeg4_clk)
-	_REGISTER_CLOCK(NULL, "mbx", mbx_clk)
+    _REGISTER_CLOCK(NULL, "emi", emi_clk)
+    _REGISTER_CLOCK("imx31-cspi.0", NULL, cspi1_clk)
+    _REGISTER_CLOCK("imx31-cspi.1", NULL, cspi2_clk)
+    _REGISTER_CLOCK("imx31-cspi.2", NULL, cspi3_clk)
+    _REGISTER_CLOCK(NULL, "gpt", gpt_clk)
+    _REGISTER_CLOCK(NULL, "pwm", pwm_clk)
+    _REGISTER_CLOCK("imx2-wdt.0", NULL, wdog_clk)
+    _REGISTER_CLOCK(NULL, "rtc", rtc_clk)
+    _REGISTER_CLOCK(NULL, "epit", epit1_clk)
+    _REGISTER_CLOCK(NULL, "epit", epit2_clk)
+    _REGISTER_CLOCK("mxc_nand.0", NULL, nfc_clk)
+    _REGISTER_CLOCK("ipu-core", NULL, ipu_clk)
+    _REGISTER_CLOCK("mx3_sdc_fb", NULL, ipu_clk)
+    _REGISTER_CLOCK(NULL, "kpp", kpp_clk)
+    _REGISTER_CLOCK("mxc-ehci.0", "usb", usb_clk1)
+    _REGISTER_CLOCK("mxc-ehci.0", "usb_ahb", usb_clk2)
+    _REGISTER_CLOCK("mxc-ehci.1", "usb", usb_clk1)
+    _REGISTER_CLOCK("mxc-ehci.1", "usb_ahb", usb_clk2)
+    _REGISTER_CLOCK("mxc-ehci.2", "usb", usb_clk1)
+    _REGISTER_CLOCK("mxc-ehci.2", "usb_ahb", usb_clk2)
+    _REGISTER_CLOCK("fsl-usb2-udc", "usb", usb_clk1)
+    _REGISTER_CLOCK("fsl-usb2-udc", "usb_ahb", usb_clk2)
+    _REGISTER_CLOCK("mx3-camera.0", NULL, csi_clk)
+    /* i.mx31 has the i.mx21 type uart */
+    _REGISTER_CLOCK("imx21-uart.0", NULL, uart1_clk)
+    _REGISTER_CLOCK("imx21-uart.1", NULL, uart2_clk)
+    _REGISTER_CLOCK("imx21-uart.2", NULL, uart3_clk)
+    _REGISTER_CLOCK("imx21-uart.3", NULL, uart4_clk)
+    _REGISTER_CLOCK("imx21-uart.4", NULL, uart5_clk)
+    _REGISTER_CLOCK("imx-i2c.0", NULL, i2c1_clk)
+    _REGISTER_CLOCK("imx-i2c.1", NULL, i2c2_clk)
+    _REGISTER_CLOCK("imx-i2c.2", NULL, i2c3_clk)
+    _REGISTER_CLOCK("mxc_w1.0", NULL, owire_clk)
+    _REGISTER_CLOCK("mxc-mmc.0", NULL, sdhc1_clk)
+    _REGISTER_CLOCK("mxc-mmc.1", NULL, sdhc2_clk)
+    _REGISTER_CLOCK("imx-ssi.0", NULL, ssi1_clk)
+    _REGISTER_CLOCK("imx-ssi.1", NULL, ssi2_clk)
+    _REGISTER_CLOCK(NULL, "firi", firi_clk)
+    _REGISTER_CLOCK("pata_imx", NULL, pata_clk)
+    _REGISTER_CLOCK(NULL, "rtic", rtic_clk)
+    _REGISTER_CLOCK(NULL, "rng", rng_clk)
+    _REGISTER_CLOCK("imx31-sdma", NULL, sdma_clk1)
+    _REGISTER_CLOCK(NULL, "sdma_ipg", sdma_clk2)
+    _REGISTER_CLOCK(NULL, "mstick", mstick1_clk)
+    _REGISTER_CLOCK(NULL, "mstick", mstick2_clk)
+    _REGISTER_CLOCK(NULL, "scc", scc_clk)
+    _REGISTER_CLOCK(NULL, "iim", iim_clk)
+    _REGISTER_CLOCK(NULL, "mpeg4", mpeg4_clk)
+    _REGISTER_CLOCK(NULL, "mbx", mbx_clk)
 };
 
-int __init mx31_clocks_init(unsigned long fref)
-{
-	u32 reg;
+int __init mx31_clocks_init(unsigned long fref) {
+    u32 reg;
 
-	ckih_rate = fref;
+    ckih_rate = fref;
 
-	clkdev_add_table(lookups, ARRAY_SIZE(lookups));
+    clkdev_add_table(lookups, ARRAY_SIZE(lookups));
 
-	/* change the csi_clk parent if necessary */
-	reg = __raw_readl(MXC_CCM_CCMR);
-	if (!(reg & MXC_CCM_CCMR_CSCS))
-		if (clk_set_parent(&csi_clk, &usb_pll_clk))
-			pr_err("%s: error changing csi_clk parent\n", __func__);
+    /* change the csi_clk parent if necessary */
+    reg = __raw_readl(MXC_CCM_CCMR);
+    if (!(reg & MXC_CCM_CCMR_CSCS))
+        if (clk_set_parent(&csi_clk, &usb_pll_clk))
+            pr_err("%s: error changing csi_clk parent\n", __func__);
 
 
-	/* Turn off all possible clocks */
-	__raw_writel((3 << 4), MXC_CCM_CGR0);
-	__raw_writel(0, MXC_CCM_CGR1);
-	__raw_writel((3 << 8) | (3 << 14) | (3 << 16)|
-		     1 << 27 | 1 << 28, /* Bit 27 and 28 are not defined for
+    /* Turn off all possible clocks */
+    __raw_writel((3 << 4), MXC_CCM_CGR0);
+    __raw_writel(0, MXC_CCM_CGR1);
+    __raw_writel((3 << 8) | (3 << 14) | (3 << 16)|
+                 1 << 27 | 1 << 28, /* Bit 27 and 28 are not defined for
 					   MX32, but still required to be set */
-		     MXC_CCM_CGR2);
+                 MXC_CCM_CGR2);
 
-	/*
-	 * Before turning off usb_pll make sure ipg_per_clk is generated
-	 * by ipg_clk and not usb_pll.
-	 */
-	__raw_writel(__raw_readl(MXC_CCM_CCMR) | (1 << 24), MXC_CCM_CCMR);
+    /*
+     * Before turning off usb_pll make sure ipg_per_clk is generated
+     * by ipg_clk and not usb_pll.
+     */
+    __raw_writel(__raw_readl(MXC_CCM_CCMR) | (1 << 24), MXC_CCM_CCMR);
 
-	usb_pll_disable(&usb_pll_clk);
+    usb_pll_disable(&usb_pll_clk);
 
-	pr_info("Clock input source is %ld\n", clk_get_rate(&ckih_clk));
+    pr_info("Clock input source is %ld\n", clk_get_rate(&ckih_clk));
 
-	clk_enable(&gpt_clk);
-	clk_enable(&emi_clk);
-	clk_enable(&iim_clk);
-	mx31_revision();
-	clk_disable(&iim_clk);
+    clk_enable(&gpt_clk);
+    clk_enable(&emi_clk);
+    clk_enable(&iim_clk);
+    mx31_revision();
+    clk_disable(&iim_clk);
 
-	clk_enable(&serial_pll_clk);
+    clk_enable(&serial_pll_clk);
 
-	if (mx31_revision() >= IMX_CHIP_REVISION_2_0) {
-		reg = __raw_readl(MXC_CCM_PMCR1);
-		/* No PLL restart on DVFS switch; enable auto EMI handshake */
-		reg |= MXC_CCM_PMCR1_PLLRDIS | MXC_CCM_PMCR1_EMIRQ_EN;
-		__raw_writel(reg, MXC_CCM_PMCR1);
-	}
+    if (mx31_revision() >= IMX_CHIP_REVISION_2_0) {
+        reg = __raw_readl(MXC_CCM_PMCR1);
+        /* No PLL restart on DVFS switch; enable auto EMI handshake */
+        reg |= MXC_CCM_PMCR1_PLLRDIS | MXC_CCM_PMCR1_EMIRQ_EN;
+        __raw_writel(reg, MXC_CCM_PMCR1);
+    }
 
-	mxc_timer_init(&ipg_clk, MX31_IO_ADDRESS(MX31_GPT1_BASE_ADDR),
-			MX31_INT_GPT);
+    mxc_timer_init(&ipg_clk, MX31_IO_ADDRESS(MX31_GPT1_BASE_ADDR),
+                   MX31_INT_GPT);
 
-	return 0;
+    return 0;
 }

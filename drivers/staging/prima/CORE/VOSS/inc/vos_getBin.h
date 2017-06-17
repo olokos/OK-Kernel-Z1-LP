@@ -56,8 +56,7 @@
   Type declarations
   ------------------------------------------------------------------------*/
 /// Binary IDs
-typedef enum
-{
+typedef enum {
     /// Binary ID for firmware
     VOS_BINARY_ID_FIRMWARE,
 

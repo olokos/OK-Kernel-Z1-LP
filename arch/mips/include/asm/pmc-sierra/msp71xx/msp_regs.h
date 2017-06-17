@@ -47,21 +47,21 @@
  ***************************************************************************
  */
 #define MSP_SLP_BASE		0x1c000000
-					/* System Logic and Peripherals */
+/* System Logic and Peripherals */
 #define MSP_RST_BASE		(MSP_SLP_BASE + 0x10)
-					/* System reset register base	*/
+/* System reset register base	*/
 #define MSP_RST_SIZE		0x0C	/* System reset register space	*/
 
 #define MSP_WTIMER_BASE		(MSP_SLP_BASE + 0x04C)
-					/* watchdog timer base          */
+/* watchdog timer base          */
 #define MSP_ITIMER_BASE		(MSP_SLP_BASE + 0x054)
-					/* internal timer base          */
+/* internal timer base          */
 #define MSP_UART0_BASE		(MSP_SLP_BASE + 0x100)
-					/* UART0 controller base        */
+/* UART0 controller base        */
 #define MSP_BCPY_CTRL_BASE	(MSP_SLP_BASE + 0x120)
-					/* Block Copy controller base   */
+/* Block Copy controller base   */
 #define MSP_BCPY_DESC_BASE	(MSP_SLP_BASE + 0x160)
-					/* Block Copy descriptor base   */
+/* Block Copy descriptor base   */
 
 /*
  ***************************************************************************
@@ -76,37 +76,37 @@
  ***************************************************************************
  */
 #define MSP_MSB_BASE		0x18000000
-					/* MSbus address start          */
+/* MSbus address start          */
 #define MSP_PER_BASE		(MSP_MSB_BASE + 0x400000)
-					/* Peripheral device registers  */
+/* Peripheral device registers  */
 #define MSP_MAC0_BASE		(MSP_MSB_BASE + 0x600000)
-					/* MAC A device registers       */
+/* MAC A device registers       */
 #define MSP_MAC1_BASE		(MSP_MSB_BASE + 0x700000)
-					/* MAC B device registers       */
+/* MAC B device registers       */
 #define MSP_MAC_SIZE		0xE0	/* MAC register space		*/
 
 #define MSP_SEC_BASE		(MSP_MSB_BASE + 0x800000)
-					/* Security Engine registers    */
+/* Security Engine registers    */
 #define MSP_MAC2_BASE		(MSP_MSB_BASE + 0x900000)
-					/* MAC C device registers       */
+/* MAC C device registers       */
 #define MSP_ADSL2_BASE		(MSP_MSB_BASE + 0xA80000)
-					/* ADSL2 device registers       */
+/* ADSL2 device registers       */
 #define MSP_USB0_BASE		(MSP_MSB_BASE + 0xB00000)
-					/* USB0 device registers        */
+/* USB0 device registers        */
 #define MSP_USB1_BASE		(MSP_MSB_BASE + 0x300000)
-					/* USB1 device registers	*/
+/* USB1 device registers	*/
 #define MSP_CPUIF_BASE		(MSP_MSB_BASE + 0xC00000)
-					/* CPU interface registers      */
+/* CPU interface registers      */
 
 /* Devices within the MSbus peripheral block */
 #define MSP_UART1_BASE		(MSP_PER_BASE + 0x030)
-					/* UART1 controller base        */
+/* UART1 controller base        */
 #define MSP_SPI_BASE		(MSP_PER_BASE + 0x058)
-					/* SPI/MPI control registers    */
+/* SPI/MPI control registers    */
 #define MSP_TWI_BASE		(MSP_PER_BASE + 0x090)
-					/* Two-wire control registers   */
+/* Two-wire control registers   */
 #define MSP_PTIMER_BASE		(MSP_PER_BASE + 0x0F0)
-					/* Programmable timer control   */
+/* Programmable timer control   */
 
 /*
  ***************************************************************************
@@ -156,9 +156,9 @@
  * these are convenient for a lot of internal kernel code.
  */
 #ifdef __ASSEMBLER__
-	#define regptr(addr) (KSEG1ADDR(addr))
+#define regptr(addr) (KSEG1ADDR(addr))
 #else
-	#define regptr(addr) ((volatile u32 *const)(KSEG1ADDR(addr)))
+#define regptr(addr) ((volatile u32 *const)(KSEG1ADDR(addr)))
 #endif
 
 /*
@@ -169,192 +169,192 @@
 
 /* System Control register definitions */
 #define	DEV_ID_REG	regptr(MSP_SLP_BASE + 0x00)
-					/* Device-ID                 RO */
+/* Device-ID                 RO */
 #define	FWR_ID_REG	regptr(MSP_SLP_BASE + 0x04)
-					/* Firmware-ID Register      RW */
+/* Firmware-ID Register      RW */
 #define	SYS_ID_REG0	regptr(MSP_SLP_BASE + 0x08)
-					/* System-ID Register-0      RW */
+/* System-ID Register-0      RW */
 #define	SYS_ID_REG1	regptr(MSP_SLP_BASE + 0x0C)
-					/* System-ID Register-1      RW */
+/* System-ID Register-1      RW */
 
 /* System Reset register definitions */
 #define	RST_STS_REG	regptr(MSP_SLP_BASE + 0x10)
-					/* System Reset Status       RO */
+/* System Reset Status       RO */
 #define	RST_SET_REG	regptr(MSP_SLP_BASE + 0x14)
-					/* System Set Reset          WO */
+/* System Set Reset          WO */
 #define	RST_CLR_REG	regptr(MSP_SLP_BASE + 0x18)
-					/* System Clear Reset        WO */
+/* System Clear Reset        WO */
 
 /* System Clock Registers */
 #define PCI_SLP_REG	regptr(MSP_SLP_BASE + 0x1C)
-					/* PCI clock generator       RW */
+/* PCI clock generator       RW */
 #define URT_SLP_REG	regptr(MSP_SLP_BASE + 0x20)
-					/* UART clock generator      RW */
+/* UART clock generator      RW */
 /* reserved		      (MSP_SLP_BASE + 0x24)                     */
 /* reserved		      (MSP_SLP_BASE + 0x28)                     */
 #define PLL1_SLP_REG	regptr(MSP_SLP_BASE + 0x2C)
-					/* PLL1 clock generator      RW */
+/* PLL1 clock generator      RW */
 #define PLL0_SLP_REG	regptr(MSP_SLP_BASE + 0x30)
-					/* PLL0 clock generator      RW */
+/* PLL0 clock generator      RW */
 #define MIPS_SLP_REG	regptr(MSP_SLP_BASE + 0x34)
-					/* MIPS clock generator      RW */
+/* MIPS clock generator      RW */
 #define	VE_SLP_REG	regptr(MSP_SLP_BASE + 0x38)
-					/* Voice Eng clock generator RW */
+/* Voice Eng clock generator RW */
 /* reserved		      (MSP_SLP_BASE + 0x3C)                     */
 #define MSB_SLP_REG	regptr(MSP_SLP_BASE + 0x40)
-					/* MS-Bus clock generator    RW */
+/* MS-Bus clock generator    RW */
 #define SMAC_SLP_REG	regptr(MSP_SLP_BASE + 0x44)
-					/* Sec & MAC clock generator RW */
+/* Sec & MAC clock generator RW */
 #define PERF_SLP_REG	regptr(MSP_SLP_BASE + 0x48)
-					/* Per & TDM clock generator RW */
+/* Per & TDM clock generator RW */
 
 /* Interrupt Controller Registers */
 #define SLP_INT_STS_REG regptr(MSP_SLP_BASE + 0x70)
-					/* Interrupt status register RW */
+/* Interrupt status register RW */
 #define SLP_INT_MSK_REG regptr(MSP_SLP_BASE + 0x74)
-					/* Interrupt enable/mask     RW */
+/* Interrupt enable/mask     RW */
 #define SE_MBOX_REG	regptr(MSP_SLP_BASE + 0x78)
-					/* Security Engine mailbox   RW */
+/* Security Engine mailbox   RW */
 #define VE_MBOX_REG	regptr(MSP_SLP_BASE + 0x7C)
-					/* Voice Engine mailbox      RW */
+/* Voice Engine mailbox      RW */
 
 /* ELB Controller Registers */
 #define CS0_CNFG_REG	regptr(MSP_SLP_BASE + 0x80)
-					/* ELB CS0 Configuration Reg    */
+/* ELB CS0 Configuration Reg    */
 #define CS0_ADDR_REG	regptr(MSP_SLP_BASE + 0x84)
-					/* ELB CS0 Base Address Reg     */
+/* ELB CS0 Base Address Reg     */
 #define CS0_MASK_REG	regptr(MSP_SLP_BASE + 0x88)
-					/* ELB CS0 Mask Register        */
+/* ELB CS0 Mask Register        */
 #define CS0_ACCESS_REG	regptr(MSP_SLP_BASE + 0x8C)
-					/* ELB CS0 access register      */
+/* ELB CS0 access register      */
 
 #define CS1_CNFG_REG	regptr(MSP_SLP_BASE + 0x90)
-					/* ELB CS1 Configuration Reg    */
+/* ELB CS1 Configuration Reg    */
 #define CS1_ADDR_REG	regptr(MSP_SLP_BASE + 0x94)
-					/* ELB CS1 Base Address Reg     */
+/* ELB CS1 Base Address Reg     */
 #define CS1_MASK_REG	regptr(MSP_SLP_BASE + 0x98)
-					/* ELB CS1 Mask Register        */
+/* ELB CS1 Mask Register        */
 #define CS1_ACCESS_REG	regptr(MSP_SLP_BASE + 0x9C)
-					/* ELB CS1 access register      */
+/* ELB CS1 access register      */
 
 #define CS2_CNFG_REG	regptr(MSP_SLP_BASE + 0xA0)
-					/* ELB CS2 Configuration Reg    */
+/* ELB CS2 Configuration Reg    */
 #define CS2_ADDR_REG	regptr(MSP_SLP_BASE + 0xA4)
-					/* ELB CS2 Base Address Reg     */
+/* ELB CS2 Base Address Reg     */
 #define CS2_MASK_REG	regptr(MSP_SLP_BASE + 0xA8)
-					/* ELB CS2 Mask Register        */
+/* ELB CS2 Mask Register        */
 #define CS2_ACCESS_REG	regptr(MSP_SLP_BASE + 0xAC)
-					/* ELB CS2 access register      */
+/* ELB CS2 access register      */
 
 #define CS3_CNFG_REG	regptr(MSP_SLP_BASE + 0xB0)
-					/* ELB CS3 Configuration Reg    */
+/* ELB CS3 Configuration Reg    */
 #define CS3_ADDR_REG	regptr(MSP_SLP_BASE + 0xB4)
-					/* ELB CS3 Base Address Reg     */
+/* ELB CS3 Base Address Reg     */
 #define CS3_MASK_REG	regptr(MSP_SLP_BASE + 0xB8)
-					/* ELB CS3 Mask Register        */
+/* ELB CS3 Mask Register        */
 #define CS3_ACCESS_REG	regptr(MSP_SLP_BASE + 0xBC)
-					/* ELB CS3 access register      */
+/* ELB CS3 access register      */
 
 #define CS4_CNFG_REG	regptr(MSP_SLP_BASE + 0xC0)
-					/* ELB CS4 Configuration Reg    */
+/* ELB CS4 Configuration Reg    */
 #define CS4_ADDR_REG	regptr(MSP_SLP_BASE + 0xC4)
-					/* ELB CS4 Base Address Reg     */
+/* ELB CS4 Base Address Reg     */
 #define CS4_MASK_REG	regptr(MSP_SLP_BASE + 0xC8)
-					/* ELB CS4 Mask Register        */
+/* ELB CS4 Mask Register        */
 #define CS4_ACCESS_REG	regptr(MSP_SLP_BASE + 0xCC)
-					/* ELB CS4 access register      */
+/* ELB CS4 access register      */
 
 #define CS5_CNFG_REG	regptr(MSP_SLP_BASE + 0xD0)
-					/* ELB CS5 Configuration Reg    */
+/* ELB CS5 Configuration Reg    */
 #define CS5_ADDR_REG	regptr(MSP_SLP_BASE + 0xD4)
-					/* ELB CS5 Base Address Reg     */
+/* ELB CS5 Base Address Reg     */
 #define CS5_MASK_REG	regptr(MSP_SLP_BASE + 0xD8)
-					/* ELB CS5 Mask Register        */
+/* ELB CS5 Mask Register        */
 #define CS5_ACCESS_REG	regptr(MSP_SLP_BASE + 0xDC)
-					/* ELB CS5 access register      */
+/* ELB CS5 access register      */
 
 /* reserved			       0xE0 - 0xE8                      */
 #define ELB_1PC_EN_REG	regptr(MSP_SLP_BASE + 0xEC)
-					/* ELB single PC card detect    */
+/* ELB single PC card detect    */
 
 /* reserved			       0xF0 - 0xF8                      */
 #define ELB_CLK_CFG_REG	regptr(MSP_SLP_BASE + 0xFC)
-					/* SDRAM read/ELB timing Reg    */
+/* SDRAM read/ELB timing Reg    */
 
 /* Extended UART status registers */
 #define UART0_STATUS_REG	regptr(MSP_UART0_BASE + 0x0c0)
-					/* UART Status Register 0       */
+/* UART Status Register 0       */
 #define UART1_STATUS_REG	regptr(MSP_UART1_BASE + 0x170)
-					/* UART Status Register 1       */
+/* UART Status Register 1       */
 
 /* Performance monitoring registers */
 #define PERF_MON_CTRL_REG	regptr(MSP_SLP_BASE + 0x140)
-					/* Performance monitor control  */
+/* Performance monitor control  */
 #define PERF_MON_CLR_REG	regptr(MSP_SLP_BASE + 0x144)
-					/* Performance monitor clear    */
+/* Performance monitor clear    */
 #define PERF_MON_CNTH_REG	regptr(MSP_SLP_BASE + 0x148)
-					/* Perf monitor counter high    */
+/* Perf monitor counter high    */
 #define PERF_MON_CNTL_REG	regptr(MSP_SLP_BASE + 0x14C)
-					/* Perf monitor counter low     */
+/* Perf monitor counter low     */
 
 /* System control registers */
 #define SYS_CTRL_REG		regptr(MSP_SLP_BASE + 0x150)
-					/* System control register      */
+/* System control register      */
 #define SYS_ERR1_REG		regptr(MSP_SLP_BASE + 0x154)
-					/* System Error status 1        */
+/* System Error status 1        */
 #define SYS_ERR2_REG		regptr(MSP_SLP_BASE + 0x158)
-					/* System Error status 2        */
+/* System Error status 2        */
 #define SYS_INT_CFG_REG		regptr(MSP_SLP_BASE + 0x15C)
-					/* System Interrupt config      */
+/* System Interrupt config      */
 
 /* Voice Engine Memory configuration */
 #define VE_MEM_REG		regptr(MSP_SLP_BASE + 0x17C)
-					/* Voice engine memory config   */
+/* Voice engine memory config   */
 
 /* CPU/SLP Error Status registers */
 #define CPU_ERR1_REG		regptr(MSP_SLP_BASE + 0x180)
-					/* CPU/SLP Error status 1       */
+/* CPU/SLP Error status 1       */
 #define CPU_ERR2_REG		regptr(MSP_SLP_BASE + 0x184)
-					/* CPU/SLP Error status 1       */
+/* CPU/SLP Error status 1       */
 
 /* Extended GPIO registers       */
 #define EXTENDED_GPIO1_REG	regptr(MSP_SLP_BASE + 0x188)
 #define EXTENDED_GPIO2_REG	regptr(MSP_SLP_BASE + 0x18c)
 #define EXTENDED_GPIO_REG	EXTENDED_GPIO1_REG
-					/* Backward-compatibility	*/
+/* Backward-compatibility	*/
 
 /* System Error registers */
 #define SLP_ERR_STS_REG		regptr(MSP_SLP_BASE + 0x190)
-					/* Int status for SLP errors    */
+/* Int status for SLP errors    */
 #define SLP_ERR_MSK_REG		regptr(MSP_SLP_BASE + 0x194)
-					/* Int mask for SLP errors      */
+/* Int mask for SLP errors      */
 #define SLP_ELB_ERST_REG	regptr(MSP_SLP_BASE + 0x198)
-					/* External ELB reset           */
+/* External ELB reset           */
 #define SLP_BOOT_STS_REG	regptr(MSP_SLP_BASE + 0x19C)
-					/* Boot Status                  */
+/* Boot Status                  */
 
 /* Extended ELB addressing */
 #define CS0_EXT_ADDR_REG	regptr(MSP_SLP_BASE + 0x1A0)
-					/* CS0 Extended address         */
+/* CS0 Extended address         */
 #define CS1_EXT_ADDR_REG	regptr(MSP_SLP_BASE + 0x1A4)
-					/* CS1 Extended address         */
+/* CS1 Extended address         */
 #define CS2_EXT_ADDR_REG	regptr(MSP_SLP_BASE + 0x1A8)
-					/* CS2 Extended address         */
+/* CS2 Extended address         */
 #define CS3_EXT_ADDR_REG	regptr(MSP_SLP_BASE + 0x1AC)
-					/* CS3 Extended address         */
+/* CS3 Extended address         */
 /* reserved					      0x1B0             */
 #define CS5_EXT_ADDR_REG	regptr(MSP_SLP_BASE + 0x1B4)
-					/* CS5 Extended address         */
+/* CS5 Extended address         */
 
 /* PLL Adjustment registers */
 #define PLL_LOCK_REG		regptr(MSP_SLP_BASE + 0x200)
-					/* PLL0 lock status             */
+/* PLL0 lock status             */
 #define PLL_ARST_REG		regptr(MSP_SLP_BASE + 0x204)
-					/* PLL Analog reset status      */
+/* PLL Analog reset status      */
 #define PLL0_ADJ_REG		regptr(MSP_SLP_BASE + 0x208)
-					/* PLL0 Adjustment value        */
+/* PLL0 Adjustment value        */
 #define PLL1_ADJ_REG		regptr(MSP_SLP_BASE + 0x20C)
-					/* PLL1 Adjustment value        */
+/* PLL1 Adjustment value        */
 
 /*
  ***************************************************************************
@@ -364,103 +364,103 @@
 
 /* Peripheral status */
 #define PER_CTRL_REG		regptr(MSP_PER_BASE + 0x50)
-					/* Peripheral control register  */
+/* Peripheral control register  */
 #define PER_STS_REG		regptr(MSP_PER_BASE + 0x54)
-					/* Peripheral status register   */
+/* Peripheral status register   */
 
 /* SPI/MPI Registers */
 #define SMPI_TX_SZ_REG		regptr(MSP_PER_BASE + 0x58)
-					/* SPI/MPI Tx Size register     */
+/* SPI/MPI Tx Size register     */
 #define SMPI_RX_SZ_REG		regptr(MSP_PER_BASE + 0x5C)
-					/* SPI/MPI Rx Size register     */
+/* SPI/MPI Rx Size register     */
 #define SMPI_CTL_REG		regptr(MSP_PER_BASE + 0x60)
-					/* SPI/MPI Control register     */
+/* SPI/MPI Control register     */
 #define SMPI_MS_REG		regptr(MSP_PER_BASE + 0x64)
-					/* SPI/MPI Chip Select reg      */
+/* SPI/MPI Chip Select reg      */
 #define SMPI_CORE_DATA_REG	regptr(MSP_PER_BASE + 0xC0)
-					/* SPI/MPI Core Data reg        */
+/* SPI/MPI Core Data reg        */
 #define SMPI_CORE_CTRL_REG	regptr(MSP_PER_BASE + 0xC4)
-					/* SPI/MPI Core Control reg     */
+/* SPI/MPI Core Control reg     */
 #define SMPI_CORE_STAT_REG	regptr(MSP_PER_BASE + 0xC8)
-					/* SPI/MPI Core Status reg      */
+/* SPI/MPI Core Status reg      */
 #define SMPI_CORE_SSEL_REG	regptr(MSP_PER_BASE + 0xCC)
-					/* SPI/MPI Core Ssel reg        */
+/* SPI/MPI Core Ssel reg        */
 #define SMPI_FIFO_REG		regptr(MSP_PER_BASE + 0xD0)
-					/* SPI/MPI Data FIFO reg        */
+/* SPI/MPI Data FIFO reg        */
 
 /* Peripheral Block Error Registers           */
 #define PER_ERR_STS_REG		regptr(MSP_PER_BASE + 0x70)
-					/* Error Bit Status Register    */
+/* Error Bit Status Register    */
 #define PER_ERR_MSK_REG		regptr(MSP_PER_BASE + 0x74)
-					/* Error Bit Mask Register      */
+/* Error Bit Mask Register      */
 #define PER_HDR1_REG		regptr(MSP_PER_BASE + 0x78)
-					/* Error Header 1 Register      */
+/* Error Header 1 Register      */
 #define PER_HDR2_REG		regptr(MSP_PER_BASE + 0x7C)
-					/* Error Header 2 Register      */
+/* Error Header 2 Register      */
 
 /* Peripheral Block Interrupt Registers       */
 #define PER_INT_STS_REG		regptr(MSP_PER_BASE + 0x80)
-					/* Interrupt status register    */
+/* Interrupt status register    */
 #define PER_INT_MSK_REG		regptr(MSP_PER_BASE + 0x84)
-					/* Interrupt Mask Register      */
+/* Interrupt Mask Register      */
 #define GPIO_INT_STS_REG	regptr(MSP_PER_BASE + 0x88)
-					/* GPIO interrupt status reg    */
+/* GPIO interrupt status reg    */
 #define GPIO_INT_MSK_REG	regptr(MSP_PER_BASE + 0x8C)
-					/* GPIO interrupt MASK Reg      */
+/* GPIO interrupt MASK Reg      */
 
 /* POLO GPIO registers                        */
 #define POLO_GPIO_DAT1_REG	regptr(MSP_PER_BASE + 0x0E0)
-					/* Polo GPIO[8:0]  data reg     */
+/* Polo GPIO[8:0]  data reg     */
 #define POLO_GPIO_CFG1_REG	regptr(MSP_PER_BASE + 0x0E4)
-					/* Polo GPIO[7:0]  config reg   */
+/* Polo GPIO[7:0]  config reg   */
 #define POLO_GPIO_CFG2_REG	regptr(MSP_PER_BASE + 0x0E8)
-					/* Polo GPIO[15:8] config reg   */
+/* Polo GPIO[15:8] config reg   */
 #define POLO_GPIO_OD1_REG	regptr(MSP_PER_BASE + 0x0EC)
-					/* Polo GPIO[31:0] output drive */
+/* Polo GPIO[31:0] output drive */
 #define POLO_GPIO_CFG3_REG	regptr(MSP_PER_BASE + 0x170)
-					/* Polo GPIO[23:16] config reg  */
+/* Polo GPIO[23:16] config reg  */
 #define POLO_GPIO_DAT2_REG	regptr(MSP_PER_BASE + 0x174)
-					/* Polo GPIO[15:9]  data reg    */
+/* Polo GPIO[15:9]  data reg    */
 #define POLO_GPIO_DAT3_REG	regptr(MSP_PER_BASE + 0x178)
-					/* Polo GPIO[23:16]  data reg   */
+/* Polo GPIO[23:16]  data reg   */
 #define POLO_GPIO_DAT4_REG	regptr(MSP_PER_BASE + 0x17C)
-					/* Polo GPIO[31:24]  data reg   */
+/* Polo GPIO[31:24]  data reg   */
 #define POLO_GPIO_DAT5_REG	regptr(MSP_PER_BASE + 0x180)
-					/* Polo GPIO[39:32]  data reg   */
+/* Polo GPIO[39:32]  data reg   */
 #define POLO_GPIO_DAT6_REG	regptr(MSP_PER_BASE + 0x184)
-					/* Polo GPIO[47:40]  data reg   */
+/* Polo GPIO[47:40]  data reg   */
 #define POLO_GPIO_DAT7_REG	regptr(MSP_PER_BASE + 0x188)
-					/* Polo GPIO[54:48]  data reg   */
+/* Polo GPIO[54:48]  data reg   */
 #define POLO_GPIO_CFG4_REG	regptr(MSP_PER_BASE + 0x18C)
-					/* Polo GPIO[31:24] config reg  */
+/* Polo GPIO[31:24] config reg  */
 #define POLO_GPIO_CFG5_REG	regptr(MSP_PER_BASE + 0x190)
-					/* Polo GPIO[39:32] config reg  */
+/* Polo GPIO[39:32] config reg  */
 #define POLO_GPIO_CFG6_REG	regptr(MSP_PER_BASE + 0x194)
-					/* Polo GPIO[47:40] config reg  */
+/* Polo GPIO[47:40] config reg  */
 #define POLO_GPIO_CFG7_REG	regptr(MSP_PER_BASE + 0x198)
-					/* Polo GPIO[54:48] config reg  */
+/* Polo GPIO[54:48] config reg  */
 #define POLO_GPIO_OD2_REG	regptr(MSP_PER_BASE + 0x19C)
-					/* Polo GPIO[54:32] output drive */
+/* Polo GPIO[54:32] output drive */
 
 /* Generic GPIO registers                     */
 #define GPIO_DATA1_REG		regptr(MSP_PER_BASE + 0x170)
-					/* GPIO[1:0] data register      */
+/* GPIO[1:0] data register      */
 #define GPIO_DATA2_REG		regptr(MSP_PER_BASE + 0x174)
-					/* GPIO[5:2] data register      */
+/* GPIO[5:2] data register      */
 #define GPIO_DATA3_REG		regptr(MSP_PER_BASE + 0x178)
-					/* GPIO[9:6] data register      */
+/* GPIO[9:6] data register      */
 #define GPIO_DATA4_REG		regptr(MSP_PER_BASE + 0x17C)
-					/* GPIO[15:10] data register    */
+/* GPIO[15:10] data register    */
 #define GPIO_CFG1_REG		regptr(MSP_PER_BASE + 0x180)
-					/* GPIO[1:0] config register    */
+/* GPIO[1:0] config register    */
 #define GPIO_CFG2_REG		regptr(MSP_PER_BASE + 0x184)
-					/* GPIO[5:2] config register    */
+/* GPIO[5:2] config register    */
 #define GPIO_CFG3_REG		regptr(MSP_PER_BASE + 0x188)
-					/* GPIO[9:6] config register    */
+/* GPIO[9:6] config register    */
 #define GPIO_CFG4_REG		regptr(MSP_PER_BASE + 0x18C)
-					/* GPIO[15:10] config register  */
+/* GPIO[15:10] config register  */
 #define GPIO_OD_REG		regptr(MSP_PER_BASE + 0x190)
-					/* GPIO[15:0] output drive      */
+/* GPIO[15:0] output drive      */
 
 /*
  ***************************************************************************
@@ -468,39 +468,39 @@
  ***************************************************************************
  */
 #define PCI_FLUSH_REG		regptr(MSP_CPUIF_BASE + 0x00)
-					/* PCI-SDRAM queue flush trigger */
+/* PCI-SDRAM queue flush trigger */
 #define OCP_ERR1_REG		regptr(MSP_CPUIF_BASE + 0x04)
-					/* OCP Error Attribute 1        */
+/* OCP Error Attribute 1        */
 #define OCP_ERR2_REG		regptr(MSP_CPUIF_BASE + 0x08)
-					/* OCP Error Attribute 2        */
+/* OCP Error Attribute 2        */
 #define OCP_STS_REG		regptr(MSP_CPUIF_BASE + 0x0C)
-					/* OCP Error Status             */
+/* OCP Error Status             */
 #define CPUIF_PM_REG		regptr(MSP_CPUIF_BASE + 0x10)
-					/* CPU policy configuration     */
+/* CPU policy configuration     */
 #define CPUIF_CFG_REG		regptr(MSP_CPUIF_BASE + 0x10)
-					/* Misc configuration options   */
+/* Misc configuration options   */
 
 /* Central Interrupt Controller Registers */
 #define MSP_CIC_BASE		(MSP_CPUIF_BASE + 0x8000)
-					/* Central Interrupt registers  */
+/* Central Interrupt registers  */
 #define CIC_EXT_CFG_REG		regptr(MSP_CIC_BASE + 0x00)
-					/* External interrupt config    */
+/* External interrupt config    */
 #define CIC_STS_REG		regptr(MSP_CIC_BASE + 0x04)
-					/* CIC Interrupt Status         */
+/* CIC Interrupt Status         */
 #define CIC_VPE0_MSK_REG	regptr(MSP_CIC_BASE + 0x08)
-					/* VPE0 Interrupt Mask          */
+/* VPE0 Interrupt Mask          */
 #define CIC_VPE1_MSK_REG	regptr(MSP_CIC_BASE + 0x0C)
-					/* VPE1 Interrupt Mask          */
+/* VPE1 Interrupt Mask          */
 #define CIC_TC0_MSK_REG		regptr(MSP_CIC_BASE + 0x10)
-					/* Thread Context 0 Int Mask    */
+/* Thread Context 0 Int Mask    */
 #define CIC_TC1_MSK_REG		regptr(MSP_CIC_BASE + 0x14)
-					/* Thread Context 1 Int Mask    */
+/* Thread Context 1 Int Mask    */
 #define CIC_TC2_MSK_REG		regptr(MSP_CIC_BASE + 0x18)
-					/* Thread Context 2 Int Mask    */
+/* Thread Context 2 Int Mask    */
 #define CIC_TC3_MSK_REG		regptr(MSP_CIC_BASE + 0x18)
-					/* Thread Context 3 Int Mask    */
+/* Thread Context 3 Int Mask    */
 #define CIC_TC4_MSK_REG		regptr(MSP_CIC_BASE + 0x18)
-					/* Thread Context 4 Int Mask    */
+/* Thread Context 4 Int Mask    */
 #define CIC_PCIMSI_STS_REG	regptr(MSP_CIC_BASE + 0x18)
 #define CIC_PCIMSI_MSK_REG	regptr(MSP_CIC_BASE + 0x18)
 #define CIC_PCIFLSH_REG		regptr(MSP_CIC_BASE + 0x18)

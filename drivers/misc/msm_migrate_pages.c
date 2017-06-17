@@ -19,59 +19,54 @@
 
 static unsigned long unstable_memory_state;
 
-unsigned long get_msm_migrate_pages_status(void)
-{
-	return unstable_memory_state;
+unsigned long get_msm_migrate_pages_status(void) {
+    return unstable_memory_state;
 }
 EXPORT_SYMBOL(get_msm_migrate_pages_status);
 
 #ifdef CONFIG_MEMORY_HOTPLUG
 static int migrate_pages_callback(struct notifier_block *self,
-				unsigned long action, void *arg)
-{
-	int ret = 0;
+                                  unsigned long action, void *arg) {
+    int ret = 0;
 
-	switch (action) {
-	case MEM_ONLINE:
-		unstable_memory_state = action;
-		break;
-	case MEM_OFFLINE:
-		unstable_memory_state = action;
-		break;
-	case MEM_GOING_OFFLINE:
-	case MEM_GOING_ONLINE:
-	case MEM_CANCEL_ONLINE:
-	case MEM_CANCEL_OFFLINE:
-		break;
-	}
-	return ret;
+    switch (action) {
+    case MEM_ONLINE:
+        unstable_memory_state = action;
+        break;
+    case MEM_OFFLINE:
+        unstable_memory_state = action;
+        break;
+    case MEM_GOING_OFFLINE:
+    case MEM_GOING_ONLINE:
+    case MEM_CANCEL_ONLINE:
+    case MEM_CANCEL_OFFLINE:
+        break;
+    }
+    return ret;
 }
 #endif
 
-static int __devinit msm_migrate_pages_probe(struct platform_device *pdev)
-{
+static int __devinit msm_migrate_pages_probe(struct platform_device *pdev) {
 #ifdef CONFIG_MEMORY_HOTPLUG
-	hotplug_memory_notifier(migrate_pages_callback, 0);
+    hotplug_memory_notifier(migrate_pages_callback, 0);
 #endif
-	unstable_memory_state = 0;
-	return 0;
+    unstable_memory_state = 0;
+    return 0;
 }
 
 static struct platform_driver msm_migrate_pages_driver = {
-	.probe = msm_migrate_pages_probe,
-	.driver = {
-		.name = "msm_migrate_pages",
-	},
+    .probe = msm_migrate_pages_probe,
+    .driver = {
+        .name = "msm_migrate_pages",
+    },
 };
 
-static int __init msm_migrate_pages_init(void)
-{
-	return platform_driver_register(&msm_migrate_pages_driver);
+static int __init msm_migrate_pages_init(void) {
+    return platform_driver_register(&msm_migrate_pages_driver);
 }
 
-static void __exit msm_migrate_pages_exit(void)
-{
-	platform_driver_unregister(&msm_migrate_pages_driver);
+static void __exit msm_migrate_pages_exit(void) {
+    platform_driver_unregister(&msm_migrate_pages_driver);
 }
 
 module_init(msm_migrate_pages_init);

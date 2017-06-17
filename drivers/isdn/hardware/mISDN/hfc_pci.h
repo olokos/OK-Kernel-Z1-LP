@@ -183,45 +183,45 @@
 #define D_FREG_MASK  0xF
 
 struct zt {
-	__le16 z1;  /* Z1 pointer 16 Bit */
-	__le16 z2;  /* Z2 pointer 16 Bit */
+    __le16 z1;  /* Z1 pointer 16 Bit */
+    __le16 z2;  /* Z2 pointer 16 Bit */
 };
 
 struct dfifo {
-	u_char data[D_FIFO_SIZE]; /* FIFO data space */
-	u_char fill1[0x20A0 - D_FIFO_SIZE]; /* reserved, do not use */
-	u_char f1, f2; /* f pointers */
-	u_char fill2[0x20C0 - 0x20A2]; /* reserved, do not use */
-	/* mask index with D_FREG_MASK for access */
-	struct zt za[MAX_D_FRAMES + 1];
-	u_char fill3[0x4000 - 0x2100]; /* align 16K */
+    u_char data[D_FIFO_SIZE]; /* FIFO data space */
+    u_char fill1[0x20A0 - D_FIFO_SIZE]; /* reserved, do not use */
+    u_char f1, f2; /* f pointers */
+    u_char fill2[0x20C0 - 0x20A2]; /* reserved, do not use */
+    /* mask index with D_FREG_MASK for access */
+    struct zt za[MAX_D_FRAMES + 1];
+    u_char fill3[0x4000 - 0x2100]; /* align 16K */
 };
 
 struct bzfifo {
-	struct zt	za[MAX_B_FRAMES + 1]; /* only range 0x0..0x1F allowed */
-	u_char		f1, f2; /* f pointers */
-	u_char		fill[0x2100 - 0x2082]; /* alignment */
+    struct zt	za[MAX_B_FRAMES + 1]; /* only range 0x0..0x1F allowed */
+    u_char		f1, f2; /* f pointers */
+    u_char		fill[0x2100 - 0x2082]; /* alignment */
 };
 
 
 union fifo_area {
-	struct {
-		struct dfifo d_tx; /* D-send channel */
-		struct dfifo d_rx; /* D-receive channel */
-	} d_chan;
-	struct {
-		u_char		fill1[0x200];
-		u_char		txdat_b1[B_FIFO_SIZE];
-		struct bzfifo	txbz_b1;
-		struct bzfifo	txbz_b2;
-		u_char		txdat_b2[B_FIFO_SIZE];
-		u_char		fill2[D_FIFO_SIZE];
-		u_char		rxdat_b1[B_FIFO_SIZE];
-		struct bzfifo	rxbz_b1;
-		struct bzfifo	rxbz_b2;
-		u_char rxdat_b2[B_FIFO_SIZE];
-	} b_chans;
-	u_char fill[32768];
+    struct {
+        struct dfifo d_tx; /* D-send channel */
+        struct dfifo d_rx; /* D-receive channel */
+    } d_chan;
+    struct {
+        u_char		fill1[0x200];
+        u_char		txdat_b1[B_FIFO_SIZE];
+        struct bzfifo	txbz_b1;
+        struct bzfifo	txbz_b2;
+        u_char		txdat_b2[B_FIFO_SIZE];
+        u_char		fill2[D_FIFO_SIZE];
+        u_char		rxdat_b1[B_FIFO_SIZE];
+        struct bzfifo	rxbz_b1;
+        struct bzfifo	rxbz_b2;
+        u_char rxdat_b2[B_FIFO_SIZE];
+    } b_chans;
+    u_char fill[32768];
 };
 
 #define Write_hfc(a, b, c) (writeb(c, (a->hw.pci_io) + b))

@@ -81,12 +81,12 @@
 
 /* For TUBGETMOD and TUBSETMOD. Should include. */
 struct raw3270_iocb {
-	short model;
-	short line_cnt;
-	short col_cnt;
-	short pf_cnt;
-	short re_cnt;
-	short map;
+    short model;
+    short line_cnt;
+    short col_cnt;
+    short pf_cnt;
+    short re_cnt;
+    short map;
 };
 
 struct raw3270;
@@ -94,17 +94,17 @@ struct raw3270_view;
 
 /* 3270 CCW request */
 struct raw3270_request {
-	struct list_head list;		/* list head for request queueing. */
-	struct raw3270_view *view;	/* view of this request */
-	struct ccw1 ccw;		/* single ccw. */
-	void *buffer;			/* output buffer. */
-	size_t size;			/* size of output buffer. */
-	int rescnt;			/* residual count from devstat. */
-	int rc;				/* return code for this request. */
+    struct list_head list;		/* list head for request queueing. */
+    struct raw3270_view *view;	/* view of this request */
+    struct ccw1 ccw;		/* single ccw. */
+    void *buffer;			/* output buffer. */
+    size_t size;			/* size of output buffer. */
+    int rescnt;			/* residual count from devstat. */
+    int rc;				/* return code for this request. */
 
-	/* Callback for delivering final status. */
-	void (*callback)(struct raw3270_request *, void *);
-	void *callback_data;
+    /* Callback for delivering final status. */
+    void (*callback)(struct raw3270_request *, void *);
+    void *callback_data;
 };
 
 struct raw3270_request *raw3270_request_alloc(size_t size);
@@ -117,9 +117,8 @@ void raw3270_request_set_data(struct raw3270_request *, void *, size_t);
 void raw3270_request_set_idal(struct raw3270_request *, struct idal_buffer *);
 
 static inline int
-raw3270_request_final(struct raw3270_request *rq)
-{
-	return list_empty(&rq->list);
+raw3270_request_final(struct raw3270_request *rq) {
+    return list_empty(&rq->list);
 }
 
 void raw3270_buffer_address(struct raw3270 *, char *, unsigned short);
@@ -134,12 +133,12 @@ void raw3270_buffer_address(struct raw3270 *, char *, unsigned short);
  * Functions of a 3270 view.
  */
 struct raw3270_fn {
-	int  (*activate)(struct raw3270_view *);
-	void (*deactivate)(struct raw3270_view *);
-	int  (*intv)(struct raw3270_view *,
-		     struct raw3270_request *, struct irb *);
-	void (*release)(struct raw3270_view *);
-	void (*free)(struct raw3270_view *);
+    int  (*activate)(struct raw3270_view *);
+    void (*deactivate)(struct raw3270_view *);
+    int  (*intv)(struct raw3270_view *,
+                 struct raw3270_request *, struct irb *);
+    void (*release)(struct raw3270_view *);
+    void (*free)(struct raw3270_view *);
 };
 
 /*
@@ -151,14 +150,14 @@ struct raw3270_fn {
  *   };
  */
 struct raw3270_view {
-	struct list_head list;
-	spinlock_t lock;
-	atomic_t ref_count;
-	struct raw3270 *dev;
-	struct raw3270_fn *fn;
-	unsigned int model;
-	unsigned int rows, cols;	/* # of rows & colums of the view */
-	unsigned char *ascebc;		/* ascii -> ebcdic table */
+    struct list_head list;
+    spinlock_t lock;
+    atomic_t ref_count;
+    struct raw3270 *dev;
+    struct raw3270_fn *fn;
+    unsigned int model;
+    unsigned int rows, cols;	/* # of rows & colums of the view */
+    unsigned char *ascebc;		/* ascii -> ebcdic table */
 };
 
 int raw3270_add_view(struct raw3270_view *, struct raw3270_fn *, int);
@@ -174,18 +173,16 @@ struct raw3270_view *raw3270_view(struct raw3270_view *);
 
 /* Reference count inliner for view structures. */
 static inline void
-raw3270_get_view(struct raw3270_view *view)
-{
-	atomic_inc(&view->ref_count);
+raw3270_get_view(struct raw3270_view *view) {
+    atomic_inc(&view->ref_count);
 }
 
 extern wait_queue_head_t raw3270_wait_queue;
 
 static inline void
-raw3270_put_view(struct raw3270_view *view)
-{
-	if (atomic_dec_return(&view->ref_count) == 0)
-		wake_up(&raw3270_wait_queue);
+raw3270_put_view(struct raw3270_view *view) {
+    if (atomic_dec_return(&view->ref_count) == 0)
+        wake_up(&raw3270_wait_queue);
 }
 
 struct raw3270 *raw3270_setup_console(struct ccw_device *cdev);
@@ -197,83 +194,79 @@ void raw3270_unregister_notifier(void (*notifier)(int, int));
 void raw3270_pm_unfreeze(struct raw3270_view *);
 
 /*
- * Little memory allocator for string objects. 
+ * Little memory allocator for string objects.
  */
-struct string
-{
-	struct list_head list;
-	struct list_head update;
-	unsigned long size;
-	unsigned long len;
-	char string[0];
+struct string {
+    struct list_head list;
+    struct list_head update;
+    unsigned long size;
+    unsigned long len;
+    char string[0];
 } __attribute__ ((aligned(8)));
 
 static inline struct string *
-alloc_string(struct list_head *free_list, unsigned long len)
-{
-	struct string *cs, *tmp;
-	unsigned long size;
+alloc_string(struct list_head *free_list, unsigned long len) {
+    struct string *cs, *tmp;
+    unsigned long size;
 
-	size = (len + 7L) & -8L;
-	list_for_each_entry(cs, free_list, list) {
-		if (cs->size < size)
-			continue;
-		if (cs->size > size + sizeof(struct string)) {
-			char *endaddr = (char *) (cs + 1) + cs->size;
-			tmp = (struct string *) (endaddr - size) - 1;
-			tmp->size = size;
-			cs->size -= size + sizeof(struct string);
-			cs = tmp;
-		} else
-			list_del(&cs->list);
-		cs->len = len;
-		INIT_LIST_HEAD(&cs->list);
-		INIT_LIST_HEAD(&cs->update);
-		return cs;
-	}
-	return NULL;
+    size = (len + 7L) & -8L;
+    list_for_each_entry(cs, free_list, list) {
+        if (cs->size < size)
+            continue;
+        if (cs->size > size + sizeof(struct string)) {
+            char *endaddr = (char *) (cs + 1) + cs->size;
+            tmp = (struct string *) (endaddr - size) - 1;
+            tmp->size = size;
+            cs->size -= size + sizeof(struct string);
+            cs = tmp;
+        } else
+            list_del(&cs->list);
+        cs->len = len;
+        INIT_LIST_HEAD(&cs->list);
+        INIT_LIST_HEAD(&cs->update);
+        return cs;
+    }
+    return NULL;
 }
 
 static inline unsigned long
-free_string(struct list_head *free_list, struct string *cs)
-{
-	struct string *tmp;
-	struct list_head *p, *left;
+free_string(struct list_head *free_list, struct string *cs) {
+    struct string *tmp;
+    struct list_head *p, *left;
 
-	/* Find out the left neighbour in free memory list. */
-	left = free_list;
-	list_for_each(p, free_list) {
-		if (list_entry(p, struct string, list) > cs)
-			break;
-		left = p;
-	}
-	/* Try to merge with right neighbour = next element from left. */
-	if (left->next != free_list) {
-		tmp = list_entry(left->next, struct string, list);
-		if ((char *) (cs + 1) + cs->size == (char *) tmp) {
-			list_del(&tmp->list);
-			cs->size += tmp->size + sizeof(struct string);
-		}
-	}
-	/* Try to merge with left neighbour. */
-	if (left != free_list) {
-		tmp = list_entry(left, struct string, list);
-		if ((char *) (tmp + 1) + tmp->size == (char *) cs) {
-			tmp->size += cs->size + sizeof(struct string);
-			return tmp->size;
-		}
-	}
-	__list_add(&cs->list, left, left->next);
-	return cs->size;
+    /* Find out the left neighbour in free memory list. */
+    left = free_list;
+    list_for_each(p, free_list) {
+        if (list_entry(p, struct string, list) > cs)
+            break;
+        left = p;
+    }
+    /* Try to merge with right neighbour = next element from left. */
+    if (left->next != free_list) {
+        tmp = list_entry(left->next, struct string, list);
+        if ((char *) (cs + 1) + cs->size == (char *) tmp) {
+            list_del(&tmp->list);
+            cs->size += tmp->size + sizeof(struct string);
+        }
+    }
+    /* Try to merge with left neighbour. */
+    if (left != free_list) {
+        tmp = list_entry(left, struct string, list);
+        if ((char *) (tmp + 1) + tmp->size == (char *) cs) {
+            tmp->size += cs->size + sizeof(struct string);
+            return tmp->size;
+        }
+    }
+    __list_add(&cs->list, left, left->next);
+    return cs->size;
 }
 
 static inline void
-add_string_memory(struct list_head *free_list, void *mem, unsigned long size)
-{
-	struct string *cs;
+add_string_memory(struct list_head *free_list, void *mem, unsigned long size) {
+    struct string *cs;
 
-	cs = (struct string *) mem;
-	cs->size = size - sizeof(struct string);
-	free_string(free_list, cs);
+    cs = (struct string *) mem;
+    cs->size = size - sizeof(struct string);
+    free_string(free_list, cs);
 }
 

@@ -20,18 +20,18 @@
  */
 /* 8 byte segment descriptor */
 struct desc_struct {
-	union {
-		struct {
-			unsigned int a;
-			unsigned int b;
-		};
-		struct {
-			u16 limit0;
-			u16 base0;
-			unsigned base1: 8, type: 4, s: 1, dpl: 2, p: 1;
-			unsigned limit: 4, avl: 1, l: 1, d: 1, g: 1, base2: 8;
-		};
-	};
+    union {
+        struct {
+            unsigned int a;
+            unsigned int b;
+        };
+        struct {
+            u16 limit0;
+            u16 base0;
+            unsigned base1: 8, type: 4, s: 1, dpl: 2, p: 1;
+            unsigned limit: 4, avl: 1, l: 1, d: 1, g: 1, base2: 8;
+        };
+    };
 } __attribute__((packed));
 
 #define GDT_ENTRY_INIT(flags, base, limit) { { { \
@@ -41,20 +41,20 @@ struct desc_struct {
 	} } }
 
 enum {
-	GATE_INTERRUPT = 0xE,
-	GATE_TRAP = 0xF,
-	GATE_CALL = 0xC,
-	GATE_TASK = 0x5,
+    GATE_INTERRUPT = 0xE,
+    GATE_TRAP = 0xF,
+    GATE_CALL = 0xC,
+    GATE_TASK = 0x5,
 };
 
 /* 16byte gate */
 struct gate_struct64 {
-	u16 offset_low;
-	u16 segment;
-	unsigned ist : 3, zero0 : 5, type : 5, dpl : 2, p : 1;
-	u16 offset_middle;
-	u32 offset_high;
-	u32 zero1;
+    u16 offset_low;
+    u16 segment;
+    unsigned ist : 3, zero0 : 5, type : 5, dpl : 2, p : 1;
+    u16 offset_middle;
+    u32 offset_high;
+    u32 zero1;
 } __attribute__((packed));
 
 #define PTR_LOW(x) ((unsigned long long)(x) & 0xFFFF)
@@ -62,19 +62,19 @@ struct gate_struct64 {
 #define PTR_HIGH(x) ((unsigned long long)(x) >> 32)
 
 enum {
-	DESC_TSS = 0x9,
-	DESC_LDT = 0x2,
-	DESCTYPE_S = 0x10,	/* !system */
+    DESC_TSS = 0x9,
+    DESC_LDT = 0x2,
+    DESCTYPE_S = 0x10,	/* !system */
 };
 
 /* LDT or TSS descriptor in the GDT. 16 bytes. */
 struct ldttss_desc64 {
-	u16 limit0;
-	u16 base0;
-	unsigned base1 : 8, type : 5, dpl : 2, p : 1;
-	unsigned limit1 : 4, zero0 : 3, g : 1, base2 : 8;
-	u32 base3;
-	u32 zero1;
+    u16 limit0;
+    u16 base0;
+    unsigned base1 : 8, type : 5, dpl : 2, p : 1;
+    unsigned limit1 : 4, zero0 : 3, g : 1, base2 : 8;
+    u32 base3;
+    u32 zero1;
 } __attribute__((packed));
 
 #ifdef CONFIG_X86_64
@@ -92,8 +92,8 @@ typedef struct desc_struct tss_desc;
 #endif
 
 struct desc_ptr {
-	unsigned short size;
-	unsigned long address;
+    unsigned short size;
+    unsigned long address;
 } __attribute__((packed)) ;
 
 #endif /* !__ASSEMBLY__ */

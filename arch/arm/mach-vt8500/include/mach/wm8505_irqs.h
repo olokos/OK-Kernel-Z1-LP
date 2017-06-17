@@ -23,7 +23,7 @@
 #define IRQ_UHCI	0	/* UHC FS (UHCI?) */
 #define IRQ_EHCI	1	/* UHC HS */
 #define IRQ_UDCDMA	2	/* UDC DMA */
-				/* Reserved */
+/* Reserved */
 #define IRQ_PS2MOUSE	4	/* PS/2 Mouse */
 #define IRQ_UDC		5	/* UDC */
 #define IRQ_EXT0	6	/* External Interrupt 0 */
@@ -31,8 +31,8 @@
 #define IRQ_KEYPAD	8	/* Keypad */
 #define IRQ_DMA		9	/* DMA Controller */
 #define IRQ_ETHER	10	/* Ethernet MAC */
-				/* Reserved */
-				/* Reserved */
+/* Reserved */
+/* Reserved */
 #define IRQ_EXT2	13	/* External Interrupt 2 */
 #define IRQ_EXT3	14	/* External Interrupt 3 */
 #define IRQ_EXT4	15	/* External Interrupt 4 */
@@ -63,7 +63,7 @@
 #define IRQ_DMA3	40	/* DMA Channel 3 */
 #define IRQ_DMA4	41	/* DMA Channel 4 */
 #define IRQ_AC97	42	/* AC97 Interface */
-				/* Reserved */
+/* Reserved */
 #define IRQ_NOR		44	/* NOR Flash Controller */
 #define IRQ_DMA5	45	/* DMA Channel 5 */
 #define IRQ_DMA6	46	/* DMA Channel 6 */
@@ -84,10 +84,10 @@
 #define IRQ_SIC5	61	/* SIC IRQ5 */
 #define IRQ_SIC6	62	/* SIC IRQ6 */
 #define IRQ_SIC7	63	/* SIC IRQ7 */
-				/* Reserved */
+/* Reserved */
 #define IRQ_JPEGDEC	65	/* JPEG Decoder */
 #define IRQ_SAE		66	/* SAE (?) */
-				/* Reserved */
+/* Reserved */
 #define IRQ_VPU		79	/* Video Processing Unit */
 #define IRQ_VPP		80	/* Video Post-Processor */
 #define IRQ_VID		81	/* Video Digital Input Interface */
@@ -96,7 +96,7 @@
 #define IRQ_GE		84	/* Graphic Engine */
 #define IRQ_GOV		85	/* Graphic Overlay Engine */
 #define IRQ_DVO		86	/* Digital Video Output */
-				/* Reserved */
+/* Reserved */
 #define IRQ_DMA8	92	/* DMA Channel 8 */
 #define IRQ_DMA9	93	/* DMA Channel 9 */
 #define IRQ_DMA10	94	/* DMA Channel 10 */
@@ -105,7 +105,7 @@
 #define IRQ_DMA13	97	/* DMA Channel 13 */
 #define IRQ_DMA14	98	/* DMA Channel 14 */
 #define IRQ_DMA15	99	/* DMA Channel 15 */
-				/* Reserved */
+/* Reserved */
 #define IRQ_GOVW	111	/* GOVW (?) */
 #define IRQ_GOVRSDSCD	112	/* GOVR SDSCD (?) */
 #define IRQ_GOVRSDMIF	113	/* GOVR SDMIF (?) */

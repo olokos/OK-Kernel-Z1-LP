@@ -68,9 +68,8 @@ extern void set_l2_indirect_reg(u32 reg_addr, u32 val);
 extern u32 get_l2_indirect_reg(u32 reg_addr);
 #else
 static inline void set_l2_indirect_reg(u32 reg_addr, u32 val) {}
-static inline u32 get_l2_indirect_reg(u32 reg_addr)
-{
-	return 0;
+static inline u32 get_l2_indirect_reg(u32 reg_addr) {
+    return 0;
 }
 #endif
 

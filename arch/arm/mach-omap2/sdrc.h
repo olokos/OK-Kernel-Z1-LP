@@ -29,26 +29,22 @@ extern void __iomem *omap2_sms_base;
 
 /* SDRC global register get/set */
 
-static inline void sdrc_write_reg(u32 val, u16 reg)
-{
-	__raw_writel(val, OMAP_SDRC_REGADDR(reg));
+static inline void sdrc_write_reg(u32 val, u16 reg) {
+    __raw_writel(val, OMAP_SDRC_REGADDR(reg));
 }
 
-static inline u32 sdrc_read_reg(u16 reg)
-{
-	return __raw_readl(OMAP_SDRC_REGADDR(reg));
+static inline u32 sdrc_read_reg(u16 reg) {
+    return __raw_readl(OMAP_SDRC_REGADDR(reg));
 }
 
 /* SMS global register get/set */
 
-static inline void sms_write_reg(u32 val, u16 reg)
-{
-	__raw_writel(val, OMAP_SMS_REGADDR(reg));
+static inline void sms_write_reg(u32 val, u16 reg) {
+    __raw_writel(val, OMAP_SMS_REGADDR(reg));
 }
 
-static inline u32 sms_read_reg(u16 reg)
-{
-	return __raw_readl(OMAP_SMS_REGADDR(reg));
+static inline u32 sms_read_reg(u16 reg) {
+    return __raw_readl(OMAP_SMS_REGADDR(reg));
 }
 #else
 #define OMAP242X_SDRC_REGADDR(reg)					\

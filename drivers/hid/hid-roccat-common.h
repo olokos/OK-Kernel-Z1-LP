@@ -16,8 +16,8 @@
 #include <linux/types.h>
 
 int roccat_common_receive(struct usb_device *usb_dev, uint report_id,
-		void *data, uint size);
+                          void *data, uint size);
 int roccat_common_send(struct usb_device *usb_dev, uint report_id,
-		void const *data, uint size);
+                       void const *data, uint size);
 
 #endif

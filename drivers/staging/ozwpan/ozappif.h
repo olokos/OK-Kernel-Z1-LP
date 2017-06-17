@@ -11,24 +11,24 @@
 #define OZ_IOCTL_MAGIC	0xf4
 
 struct oz_mac_addr {
-	unsigned char a[6];
+    unsigned char a[6];
 };
 
 #define OZ_MAX_PDS	8
 
 struct oz_pd_list {
-	int count;
-	struct oz_mac_addr addr[OZ_MAX_PDS];
+    int count;
+    struct oz_mac_addr addr[OZ_MAX_PDS];
 };
 
 #define OZ_MAX_BINDING_LEN	32
 
 struct oz_binding_info {
-	char name[OZ_MAX_BINDING_LEN];
+    char name[OZ_MAX_BINDING_LEN];
 };
 
 struct oz_test {
-	int action;
+    int action;
 };
 
 #define OZ_IOCTL_GET_PD_LIST	_IOR(OZ_IOCTL_MAGIC, 0, struct oz_pd_list)

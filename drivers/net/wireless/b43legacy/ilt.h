@@ -28,7 +28,7 @@ extern const u16 b43legacy_ilt_sigmasqr2[B43legacy_ILT_SIGMASQR_SIZE];
 
 void b43legacy_ilt_write(struct b43legacy_wldev *dev, u16 offset, u16 val);
 void b43legacy_ilt_write32(struct b43legacy_wldev *dev, u16 offset,
-			   u32 val);
+                           u32 val);
 u16 b43legacy_ilt_read(struct b43legacy_wldev *dev, u16 offset);
 
 #endif /* B43legacy_ILT_H_ */

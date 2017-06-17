@@ -45,11 +45,11 @@
  *
  */
 struct error_hdr {
-	unsigned char reserved1;	/* 0x00			*/
-	unsigned char type;		/* 0x82 or 0x88		*/
-	unsigned char reserved2[2];	/* 0x0000		*/
-	unsigned char reply_code;	/* reply code		*/
-	unsigned char reserved3[3];	/* 0x000000		*/
+    unsigned char reserved1;	/* 0x00			*/
+    unsigned char type;		/* 0x82 or 0x88		*/
+    unsigned char reserved2[2];	/* 0x0000		*/
+    unsigned char reply_code;	/* reply code		*/
+    unsigned char reserved3[3];	/* 0x000000		*/
 };
 
 #define TYPE82_RSP_CODE 0x82
@@ -88,40 +88,39 @@ struct error_hdr {
 #define REP88_ERROR_OPERAND_EVEN_MOD 0x85	/* CEX2A	*/
 
 static inline int convert_error(struct zcrypt_device *zdev,
-				struct ap_message *reply)
-{
-	struct error_hdr *ehdr = reply->message;
+                                struct ap_message *reply) {
+    struct error_hdr *ehdr = reply->message;
 
-	switch (ehdr->reply_code) {
-	case REP82_ERROR_OPERAND_INVALID:
-	case REP82_ERROR_OPERAND_SIZE:
-	case REP82_ERROR_EVEN_MOD_IN_OPND:
-	case REP88_ERROR_MESSAGE_MALFORMD:
-	//   REP88_ERROR_INVALID_KEY		// '82' CEX2A
-	//   REP88_ERROR_OPERAND		// '84' CEX2A
-	//   REP88_ERROR_OPERAND_EVEN_MOD	// '85' CEX2A
-		/* Invalid input data. */
-		return -EINVAL;
-	case REP82_ERROR_MESSAGE_TYPE:
-	//   REP88_ERROR_MESSAGE_TYPE		// '20' CEX2A
-		/*
-		 * To sent a message of the wrong type is a bug in the
-		 * device driver. Warn about it, disable the device
-		 * and then repeat the request.
-		 */
-		WARN_ON(1);
-		zdev->online = 0;
-		return -EAGAIN;
-	case REP82_ERROR_TRANSPORT_FAIL:
-	case REP82_ERROR_MACHINE_FAILURE:
-	//   REP88_ERROR_MODULE_FAILURE		// '10' CEX2A
-		/* If a card fails disable it and repeat the request. */
-		zdev->online = 0;
-		return -EAGAIN;
-	default:
-		zdev->online = 0;
-		return -EAGAIN;	/* repeat the request on a different device. */
-	}
+    switch (ehdr->reply_code) {
+    case REP82_ERROR_OPERAND_INVALID:
+    case REP82_ERROR_OPERAND_SIZE:
+    case REP82_ERROR_EVEN_MOD_IN_OPND:
+    case REP88_ERROR_MESSAGE_MALFORMD:
+        //   REP88_ERROR_INVALID_KEY		// '82' CEX2A
+        //   REP88_ERROR_OPERAND		// '84' CEX2A
+        //   REP88_ERROR_OPERAND_EVEN_MOD	// '85' CEX2A
+        /* Invalid input data. */
+        return -EINVAL;
+    case REP82_ERROR_MESSAGE_TYPE:
+        //   REP88_ERROR_MESSAGE_TYPE		// '20' CEX2A
+        /*
+         * To sent a message of the wrong type is a bug in the
+         * device driver. Warn about it, disable the device
+         * and then repeat the request.
+         */
+        WARN_ON(1);
+        zdev->online = 0;
+        return -EAGAIN;
+    case REP82_ERROR_TRANSPORT_FAIL:
+    case REP82_ERROR_MACHINE_FAILURE:
+        //   REP88_ERROR_MODULE_FAILURE		// '10' CEX2A
+        /* If a card fails disable it and repeat the request. */
+        zdev->online = 0;
+        return -EAGAIN;
+    default:
+        zdev->online = 0;
+        return -EAGAIN;	/* repeat the request on a different device. */
+    }
 }
 
 #endif /* _ZCRYPT_ERROR_H_ */

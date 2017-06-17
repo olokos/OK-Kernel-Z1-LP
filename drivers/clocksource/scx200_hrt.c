@@ -43,47 +43,45 @@ MODULE_PARM_DESC(ppm, "+-adjust to actual XO freq (ppm)");
 /* The base timer frequency, * 27 if selected */
 #define HRT_FREQ   1000000
 
-static cycle_t read_hrt(struct clocksource *cs)
-{
-	/* Read the timer value */
-	return (cycle_t) inl(scx200_cb_base + SCx200_TIMER_OFFSET);
+static cycle_t read_hrt(struct clocksource *cs) {
+    /* Read the timer value */
+    return (cycle_t) inl(scx200_cb_base + SCx200_TIMER_OFFSET);
 }
 
 static struct clocksource cs_hrt = {
-	.name		= "scx200_hrt",
-	.rating		= 250,
-	.read		= read_hrt,
-	.mask		= CLOCKSOURCE_MASK(32),
-	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
-	/* mult, shift are set based on mhz27 flag */
+    .name		= "scx200_hrt",
+    .rating		= 250,
+    .read		= read_hrt,
+    .mask		= CLOCKSOURCE_MASK(32),
+    .flags		= CLOCK_SOURCE_IS_CONTINUOUS,
+    /* mult, shift are set based on mhz27 flag */
 };
 
-static int __init init_hrt_clocksource(void)
-{
-	u32 freq;
-	/* Make sure scx200 has initialized the configuration block */
-	if (!scx200_cb_present())
-		return -ENODEV;
+static int __init init_hrt_clocksource(void) {
+    u32 freq;
+    /* Make sure scx200 has initialized the configuration block */
+    if (!scx200_cb_present())
+        return -ENODEV;
 
-	/* Reserve the timer's ISA io-region for ourselves */
-	if (!request_region(scx200_cb_base + SCx200_TIMER_OFFSET,
-			    SCx200_TIMER_SIZE,
-			    "NatSemi SCx200 High-Resolution Timer")) {
-		pr_warn("unable to lock timer region\n");
-		return -ENODEV;
-	}
+    /* Reserve the timer's ISA io-region for ourselves */
+    if (!request_region(scx200_cb_base + SCx200_TIMER_OFFSET,
+                        SCx200_TIMER_SIZE,
+                        "NatSemi SCx200 High-Resolution Timer")) {
+        pr_warn("unable to lock timer region\n");
+        return -ENODEV;
+    }
 
-	/* write timer config */
-	outb(HR_TMEN | (mhz27 ? HR_TMCLKSEL : 0),
-	     scx200_cb_base + SCx200_TMCNFG_OFFSET);
+    /* write timer config */
+    outb(HR_TMEN | (mhz27 ? HR_TMCLKSEL : 0),
+         scx200_cb_base + SCx200_TMCNFG_OFFSET);
 
-	freq = (HRT_FREQ + ppm);
-	if (mhz27)
-		freq *= 27;
+    freq = (HRT_FREQ + ppm);
+    if (mhz27)
+        freq *= 27;
 
-	pr_info("enabling scx200 high-res timer (%s MHz +%d ppm)\n", mhz27 ? "27":"1", ppm);
+    pr_info("enabling scx200 high-res timer (%s MHz +%d ppm)\n", mhz27 ? "27":"1", ppm);
 
-	return clocksource_register_hz(&cs_hrt, freq);
+    return clocksource_register_hz(&cs_hrt, freq);
 }
 
 module_init(init_hrt_clocksource);

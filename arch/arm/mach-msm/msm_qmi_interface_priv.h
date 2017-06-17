@@ -25,37 +25,37 @@
 #include <mach/msm_qmi_interface.h>
 
 enum txn_type {
-	QMI_SYNC_TXN = 1,
-	QMI_ASYNC_TXN,
+    QMI_SYNC_TXN = 1,
+    QMI_ASYNC_TXN,
 };
 
 struct qmi_txn {
-	struct list_head list;
-	uint16_t txn_id;
-	enum txn_type type;
-	struct qmi_handle *handle;
-	void *enc_data;
-	unsigned int enc_data_len;
-	struct msg_desc *resp_desc;
-	void *resp;
-	unsigned int resp_len;
-	int resp_received;
-	int send_stat;
-	void (*resp_cb)(struct qmi_handle *handle, unsigned int msg_id,
-			void *msg, void *resp_cb_data, int stat);
-	void *resp_cb_data;
-	wait_queue_head_t wait_q;
+    struct list_head list;
+    uint16_t txn_id;
+    enum txn_type type;
+    struct qmi_handle *handle;
+    void *enc_data;
+    unsigned int enc_data_len;
+    struct msg_desc *resp_desc;
+    void *resp;
+    unsigned int resp_len;
+    int resp_received;
+    int send_stat;
+    void (*resp_cb)(struct qmi_handle *handle, unsigned int msg_id,
+                    void *msg, void *resp_cb_data, int stat);
+    void *resp_cb_data;
+    wait_queue_head_t wait_q;
 };
 
 struct svc_event_nb {
-	spinlock_t nb_lock;
-	uint32_t service_id;
-	uint32_t instance_id;
-	char pdriver_name[32];
-	int svc_avail;
-	struct platform_driver svc_driver;
-	struct raw_notifier_head svc_event_rcvr_list;
-	struct list_head list;
+    spinlock_t nb_lock;
+    uint32_t service_id;
+    uint32_t instance_id;
+    char pdriver_name[32];
+    int svc_avail;
+    struct platform_driver svc_driver;
+    struct raw_notifier_head svc_event_rcvr_list;
+    struct list_head list;
 };
 
 #endif

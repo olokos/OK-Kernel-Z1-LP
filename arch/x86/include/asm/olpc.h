@@ -6,9 +6,9 @@
 #include <asm/geode.h>
 
 struct olpc_platform_t {
-	int flags;
-	uint32_t boardrev;
-	int ecver;
+    int flags;
+    uint32_t boardrev;
+    int ecver;
 };
 
 #define OLPC_F_PRESENT		0x01
@@ -26,28 +26,24 @@ extern struct olpc_platform_t olpc_platform_info;
  * is a PreB1, and 0x0C18 is a C1.
  */
 
-static inline uint32_t olpc_board(uint8_t id)
-{
-	return (id << 4) | 0x8;
+static inline uint32_t olpc_board(uint8_t id) {
+    return (id << 4) | 0x8;
 }
 
-static inline uint32_t olpc_board_pre(uint8_t id)
-{
-	return id << 4;
+static inline uint32_t olpc_board_pre(uint8_t id) {
+    return id << 4;
 }
 
-static inline int machine_is_olpc(void)
-{
-	return (olpc_platform_info.flags & OLPC_F_PRESENT) ? 1 : 0;
+static inline int machine_is_olpc(void) {
+    return (olpc_platform_info.flags & OLPC_F_PRESENT) ? 1 : 0;
 }
 
 /*
  * The DCON is OLPC's Display Controller.  It has a number of unique
  * features that we might want to take advantage of..
  */
-static inline int olpc_has_dcon(void)
-{
-	return (olpc_platform_info.flags & OLPC_F_DCON) ? 1 : 0;
+static inline int olpc_has_dcon(void) {
+    return (olpc_platform_info.flags & OLPC_F_DCON) ? 1 : 0;
 }
 
 /*
@@ -58,9 +54,8 @@ static inline int olpc_has_dcon(void)
  * Geode LX CPUs.  There were also some hand-assembled models floating
  * around, referred to as PreB1, PreB2, etc.
  */
-static inline int olpc_board_at_least(uint32_t rev)
-{
-	return olpc_platform_info.boardrev >= rev;
+static inline int olpc_board_at_least(uint32_t rev) {
+    return olpc_platform_info.boardrev >= rev;
 }
 
 extern void olpc_ec_wakeup_set(u16 value);
@@ -72,22 +67,19 @@ extern int olpc_ec_sci_query(u16 *sci_value);
 
 #else
 
-static inline int machine_is_olpc(void)
-{
-	return 0;
+static inline int machine_is_olpc(void) {
+    return 0;
 }
 
-static inline int olpc_has_dcon(void)
-{
-	return 0;
+static inline int olpc_has_dcon(void) {
+    return 0;
 }
 
 static inline void olpc_ec_wakeup_set(u16 value) { }
 static inline void olpc_ec_wakeup_clear(u16 value) { }
 
-static inline bool olpc_ec_wakeup_available(void)
-{
-	return false;
+static inline bool olpc_ec_wakeup_available(void) {
+    return false;
 }
 
 #endif
@@ -103,7 +95,7 @@ extern int pci_olpc_init(void);
 /* EC related functions */
 
 extern int olpc_ec_cmd(unsigned char cmd, unsigned char *inbuf, size_t inlen,
-		unsigned char *outbuf, size_t outlen);
+                       unsigned char *outbuf, size_t outlen);
 
 /* EC commands */
 

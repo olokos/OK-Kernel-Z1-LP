@@ -168,21 +168,21 @@
  * Located at address 0x0000
  */
 struct global_regs {				/* Location: */
-	u32 txq_start_addr;			/*  0x0000 */
-	u32 txq_end_addr;			/*  0x0004 */
-	u32 rxq_start_addr;			/*  0x0008 */
-	u32 rxq_end_addr;			/*  0x000C */
-	u32 pm_csr;				/*  0x0010 */
-	u32 unused;				/*  0x0014 */
-	u32 int_status;				/*  0x0018 */
-	u32 int_mask;				/*  0x001C */
-	u32 int_alias_clr_en;			/*  0x0020 */
-	u32 int_status_alias;			/*  0x0024 */
-	u32 sw_reset;				/*  0x0028 */
-	u32 slv_timer;				/*  0x002C */
-	u32 msi_config;				/*  0x0030 */
-	u32 loopback;				/*  0x0034 */
-	u32 watchdog_timer;			/*  0x0038 */
+    u32 txq_start_addr;			/*  0x0000 */
+    u32 txq_end_addr;			/*  0x0004 */
+    u32 rxq_start_addr;			/*  0x0008 */
+    u32 rxq_end_addr;			/*  0x000C */
+    u32 pm_csr;				/*  0x0010 */
+    u32 unused;				/*  0x0014 */
+    u32 int_status;				/*  0x0018 */
+    u32 int_mask;				/*  0x001C */
+    u32 int_alias_clr_en;			/*  0x0020 */
+    u32 int_status_alias;			/*  0x0024 */
+    u32 sw_reset;				/*  0x0028 */
+    u32 slv_timer;				/*  0x002C */
+    u32 msi_config;				/*  0x0030 */
+    u32 loopback;				/*  0x0034 */
+    u32 watchdog_timer;			/*  0x0038 */
 };
 
 
@@ -262,32 +262,32 @@ struct global_regs {				/* Location: */
  * Located at address 0x1000
  */
 struct txdma_regs {			/* Location: */
-	u32 csr;			/*  0x1000 */
-	u32 pr_base_hi;			/*  0x1004 */
-	u32 pr_base_lo;			/*  0x1008 */
-	u32 pr_num_des;			/*  0x100C */
-	u32 txq_wr_addr;		/*  0x1010 */
-	u32 txq_wr_addr_ext;		/*  0x1014 */
-	u32 txq_rd_addr;		/*  0x1018 */
-	u32 dma_wb_base_hi;		/*  0x101C */
-	u32 dma_wb_base_lo;		/*  0x1020 */
-	u32 service_request;		/*  0x1024 */
-	u32 service_complete;		/*  0x1028 */
-	u32 cache_rd_index;		/*  0x102C */
-	u32 cache_wr_index;		/*  0x1030 */
-	u32 tx_dma_error;		/*  0x1034 */
-	u32 desc_abort_cnt;		/*  0x1038 */
-	u32 payload_abort_cnt;		/*  0x103c */
-	u32 writeback_abort_cnt;	/*  0x1040 */
-	u32 desc_timeout_cnt;		/*  0x1044 */
-	u32 payload_timeout_cnt;	/*  0x1048 */
-	u32 writeback_timeout_cnt;	/*  0x104c */
-	u32 desc_error_cnt;		/*  0x1050 */
-	u32 payload_error_cnt;		/*  0x1054 */
-	u32 writeback_error_cnt;	/*  0x1058 */
-	u32 dropped_tlp_cnt;		/*  0x105c */
-	u32 new_service_complete;	/*  0x1060 */
-	u32 ethernet_packet_cnt;	/*  0x1064 */
+    u32 csr;			/*  0x1000 */
+    u32 pr_base_hi;			/*  0x1004 */
+    u32 pr_base_lo;			/*  0x1008 */
+    u32 pr_num_des;			/*  0x100C */
+    u32 txq_wr_addr;		/*  0x1010 */
+    u32 txq_wr_addr_ext;		/*  0x1014 */
+    u32 txq_rd_addr;		/*  0x1018 */
+    u32 dma_wb_base_hi;		/*  0x101C */
+    u32 dma_wb_base_lo;		/*  0x1020 */
+    u32 service_request;		/*  0x1024 */
+    u32 service_complete;		/*  0x1028 */
+    u32 cache_rd_index;		/*  0x102C */
+    u32 cache_wr_index;		/*  0x1030 */
+    u32 tx_dma_error;		/*  0x1034 */
+    u32 desc_abort_cnt;		/*  0x1038 */
+    u32 payload_abort_cnt;		/*  0x103c */
+    u32 writeback_abort_cnt;	/*  0x1040 */
+    u32 desc_timeout_cnt;		/*  0x1044 */
+    u32 payload_timeout_cnt;	/*  0x1048 */
+    u32 writeback_timeout_cnt;	/*  0x104c */
+    u32 desc_error_cnt;		/*  0x1050 */
+    u32 payload_error_cnt;		/*  0x1054 */
+    u32 writeback_error_cnt;	/*  0x1058 */
+    u32 dropped_tlp_cnt;		/*  0x105c */
+    u32 new_service_complete;	/*  0x1060 */
+    u32 ethernet_packet_cnt;	/*  0x1064 */
 };
 
 /* END OF TXDMA REGISTER ADDRESS MAP */
@@ -507,35 +507,35 @@ struct txdma_regs {			/* Location: */
  * Located at address 0x2000
  */
 struct rxdma_regs {					/* Location: */
-	u32 csr;					/*  0x2000 */
-	u32 dma_wb_base_lo;				/*  0x2004 */
-	u32 dma_wb_base_hi;				/*  0x2008 */
-	u32 num_pkt_done;				/*  0x200C */
-	u32 max_pkt_time;				/*  0x2010 */
-	u32 rxq_rd_addr;				/*  0x2014 */
-	u32 rxq_rd_addr_ext;				/*  0x2018 */
-	u32 rxq_wr_addr;				/*  0x201C */
-	u32 psr_base_lo;				/*  0x2020 */
-	u32 psr_base_hi;				/*  0x2024 */
-	u32 psr_num_des;				/*  0x2028 */
-	u32 psr_avail_offset;				/*  0x202C */
-	u32 psr_full_offset;				/*  0x2030 */
-	u32 psr_access_index;				/*  0x2034 */
-	u32 psr_min_des;				/*  0x2038 */
-	u32 fbr0_base_lo;				/*  0x203C */
-	u32 fbr0_base_hi;				/*  0x2040 */
-	u32 fbr0_num_des;				/*  0x2044 */
-	u32 fbr0_avail_offset;				/*  0x2048 */
-	u32 fbr0_full_offset;				/*  0x204C */
-	u32 fbr0_rd_index;				/*  0x2050 */
-	u32 fbr0_min_des;				/*  0x2054 */
-	u32 fbr1_base_lo;				/*  0x2058 */
-	u32 fbr1_base_hi;				/*  0x205C */
-	u32 fbr1_num_des;				/*  0x2060 */
-	u32 fbr1_avail_offset;				/*  0x2064 */
-	u32 fbr1_full_offset;				/*  0x2068 */
-	u32 fbr1_rd_index;				/*  0x206C */
-	u32 fbr1_min_des;				/*  0x2070 */
+    u32 csr;					/*  0x2000 */
+    u32 dma_wb_base_lo;				/*  0x2004 */
+    u32 dma_wb_base_hi;				/*  0x2008 */
+    u32 num_pkt_done;				/*  0x200C */
+    u32 max_pkt_time;				/*  0x2010 */
+    u32 rxq_rd_addr;				/*  0x2014 */
+    u32 rxq_rd_addr_ext;				/*  0x2018 */
+    u32 rxq_wr_addr;				/*  0x201C */
+    u32 psr_base_lo;				/*  0x2020 */
+    u32 psr_base_hi;				/*  0x2024 */
+    u32 psr_num_des;				/*  0x2028 */
+    u32 psr_avail_offset;				/*  0x202C */
+    u32 psr_full_offset;				/*  0x2030 */
+    u32 psr_access_index;				/*  0x2034 */
+    u32 psr_min_des;				/*  0x2038 */
+    u32 fbr0_base_lo;				/*  0x203C */
+    u32 fbr0_base_hi;				/*  0x2040 */
+    u32 fbr0_num_des;				/*  0x2044 */
+    u32 fbr0_avail_offset;				/*  0x2048 */
+    u32 fbr0_full_offset;				/*  0x204C */
+    u32 fbr0_rd_index;				/*  0x2050 */
+    u32 fbr0_min_des;				/*  0x2054 */
+    u32 fbr1_base_lo;				/*  0x2058 */
+    u32 fbr1_base_hi;				/*  0x205C */
+    u32 fbr1_num_des;				/*  0x2060 */
+    u32 fbr1_avail_offset;				/*  0x2064 */
+    u32 fbr1_full_offset;				/*  0x2068 */
+    u32 fbr1_rd_index;				/*  0x206C */
+    u32 fbr1_min_des;				/*  0x2070 */
 };
 
 /* END OF RXDMA REGISTER ADDRESS MAP */
@@ -645,15 +645,15 @@ struct rxdma_regs {					/* Location: */
  * Tx MAC Module of JAGCore Address Mapping
  */
 struct txmac_regs {			/* Location: */
-	u32 ctl;			/*  0x3000 */
-	u32 shadow_ptr;			/*  0x3004 */
-	u32 err_cnt;			/*  0x3008 */
-	u32 max_fill;			/*  0x300C */
-	u32 cf_param;			/*  0x3010 */
-	u32 tx_test;			/*  0x3014 */
-	u32 err;			/*  0x3018 */
-	u32 err_int;			/*  0x301C */
-	u32 bp_ctrl;			/*  0x3020 */
+    u32 ctl;			/*  0x3000 */
+    u32 shadow_ptr;			/*  0x3004 */
+    u32 err_cnt;			/*  0x3008 */
+    u32 max_fill;			/*  0x300C */
+    u32 cf_param;			/*  0x3010 */
+    u32 tx_test;			/*  0x3014 */
+    u32 err;			/*  0x3018 */
+    u32 err_int;			/*  0x301C */
+    u32 bp_ctrl;			/*  0x3020 */
 };
 
 /* END OF TXMAC REGISTER ADDRESS MAP */
@@ -862,47 +862,47 @@ struct txmac_regs {			/* Location: */
  * Rx MAC Module of JAGCore Address Mapping
  */
 struct rxmac_regs {					/* Location: */
-	u32 ctrl;					/*  0x4000 */
-	u32 crc0;					/*  0x4004 */
-	u32 crc12;					/*  0x4008 */
-	u32 crc34;					/*  0x400C */
-	u32 sa_lo;					/*  0x4010 */
-	u32 sa_hi;					/*  0x4014 */
-	u32 mask0_word0;				/*  0x4018 */
-	u32 mask0_word1;				/*  0x401C */
-	u32 mask0_word2;				/*  0x4020 */
-	u32 mask0_word3;				/*  0x4024 */
-	u32 mask1_word0;				/*  0x4028 */
-	u32 mask1_word1;				/*  0x402C */
-	u32 mask1_word2;				/*  0x4030 */
-	u32 mask1_word3;				/*  0x4034 */
-	u32 mask2_word0;				/*  0x4038 */
-	u32 mask2_word1;				/*  0x403C */
-	u32 mask2_word2;				/*  0x4040 */
-	u32 mask2_word3;				/*  0x4044 */
-	u32 mask3_word0;				/*  0x4048 */
-	u32 mask3_word1;				/*  0x404C */
-	u32 mask3_word2;				/*  0x4050 */
-	u32 mask3_word3;				/*  0x4054 */
-	u32 mask4_word0;				/*  0x4058 */
-	u32 mask4_word1;				/*  0x405C */
-	u32 mask4_word2;				/*  0x4060 */
-	u32 mask4_word3;				/*  0x4064 */
-	u32 uni_pf_addr1;				/*  0x4068 */
-	u32 uni_pf_addr2;				/*  0x406C */
-	u32 uni_pf_addr3;				/*  0x4070 */
-	u32 multi_hash1;				/*  0x4074 */
-	u32 multi_hash2;				/*  0x4078 */
-	u32 multi_hash3;				/*  0x407C */
-	u32 multi_hash4;				/*  0x4080 */
-	u32 pf_ctrl;					/*  0x4084 */
-	u32 mcif_ctrl_max_seg;				/*  0x4088 */
-	u32 mcif_water_mark;				/*  0x408C */
-	u32 rxq_diag;					/*  0x4090 */
-	u32 space_avail;				/*  0x4094 */
+    u32 ctrl;					/*  0x4000 */
+    u32 crc0;					/*  0x4004 */
+    u32 crc12;					/*  0x4008 */
+    u32 crc34;					/*  0x400C */
+    u32 sa_lo;					/*  0x4010 */
+    u32 sa_hi;					/*  0x4014 */
+    u32 mask0_word0;				/*  0x4018 */
+    u32 mask0_word1;				/*  0x401C */
+    u32 mask0_word2;				/*  0x4020 */
+    u32 mask0_word3;				/*  0x4024 */
+    u32 mask1_word0;				/*  0x4028 */
+    u32 mask1_word1;				/*  0x402C */
+    u32 mask1_word2;				/*  0x4030 */
+    u32 mask1_word3;				/*  0x4034 */
+    u32 mask2_word0;				/*  0x4038 */
+    u32 mask2_word1;				/*  0x403C */
+    u32 mask2_word2;				/*  0x4040 */
+    u32 mask2_word3;				/*  0x4044 */
+    u32 mask3_word0;				/*  0x4048 */
+    u32 mask3_word1;				/*  0x404C */
+    u32 mask3_word2;				/*  0x4050 */
+    u32 mask3_word3;				/*  0x4054 */
+    u32 mask4_word0;				/*  0x4058 */
+    u32 mask4_word1;				/*  0x405C */
+    u32 mask4_word2;				/*  0x4060 */
+    u32 mask4_word3;				/*  0x4064 */
+    u32 uni_pf_addr1;				/*  0x4068 */
+    u32 uni_pf_addr2;				/*  0x406C */
+    u32 uni_pf_addr3;				/*  0x4070 */
+    u32 multi_hash1;				/*  0x4074 */
+    u32 multi_hash2;				/*  0x4078 */
+    u32 multi_hash3;				/*  0x407C */
+    u32 multi_hash4;				/*  0x4080 */
+    u32 pf_ctrl;					/*  0x4084 */
+    u32 mcif_ctrl_max_seg;				/*  0x4088 */
+    u32 mcif_water_mark;				/*  0x408C */
+    u32 rxq_diag;					/*  0x4090 */
+    u32 space_avail;				/*  0x4094 */
 
-	u32 mif_ctrl;					/*  0x4098 */
-	u32 err_reg;					/*  0x409C */
+    u32 mif_ctrl;					/*  0x4098 */
+    u32 err_reg;					/*  0x409C */
 };
 
 /* END OF RXMAC REGISTER ADDRESS MAP */
@@ -1123,24 +1123,24 @@ struct rxmac_regs {					/* Location: */
  * MAC Module of JAGCore Address Mapping
  */
 struct mac_regs {					/* Location: */
-	u32 cfg1;					/*  0x5000 */
-	u32 cfg2;					/*  0x5004 */
-	u32 ipg;					/*  0x5008 */
-	u32 hfdp;					/*  0x500C */
-	u32 max_fm_len;					/*  0x5010 */
-	u32 rsv1;					/*  0x5014 */
-	u32 rsv2;					/*  0x5018 */
-	u32 mac_test;					/*  0x501C */
-	u32 mii_mgmt_cfg;				/*  0x5020 */
-	u32 mii_mgmt_cmd;				/*  0x5024 */
-	u32 mii_mgmt_addr;				/*  0x5028 */
-	u32 mii_mgmt_ctrl;				/*  0x502C */
-	u32 mii_mgmt_stat;				/*  0x5030 */
-	u32 mii_mgmt_indicator;				/*  0x5034 */
-	u32 if_ctrl;					/*  0x5038 */
-	u32 if_stat;					/*  0x503C */
-	u32 station_addr_1;				/*  0x5040 */
-	u32 station_addr_2;				/*  0x5044 */
+    u32 cfg1;					/*  0x5000 */
+    u32 cfg2;					/*  0x5004 */
+    u32 ipg;					/*  0x5008 */
+    u32 hfdp;					/*  0x500C */
+    u32 max_fm_len;					/*  0x5010 */
+    u32 rsv1;					/*  0x5014 */
+    u32 rsv2;					/*  0x5018 */
+    u32 mac_test;					/*  0x501C */
+    u32 mii_mgmt_cfg;				/*  0x5020 */
+    u32 mii_mgmt_cmd;				/*  0x5024 */
+    u32 mii_mgmt_addr;				/*  0x5028 */
+    u32 mii_mgmt_ctrl;				/*  0x502C */
+    u32 mii_mgmt_stat;				/*  0x5030 */
+    u32 mii_mgmt_indicator;				/*  0x5034 */
+    u32 if_ctrl;					/*  0x5038 */
+    u32 if_stat;					/*  0x503C */
+    u32 station_addr_1;				/*  0x5040 */
+    u32 station_addr_2;				/*  0x5044 */
 };
 
 /* END OF MAC REGISTER ADDRESS MAP */
@@ -1209,151 +1209,151 @@ struct mac_regs {					/* Location: */
  * MAC STATS Module of JAGCore Address Mapping
  */
 struct macstat_regs {			/* Location: */
-	u32 pad[32];			/*  0x6000 - 607C */
+    u32 pad[32];			/*  0x6000 - 607C */
 
-	/* Tx/Rx 0-64 Byte Frame Counter */
-	u32 txrx_0_64_byte_frames;	/*  0x6080 */
+    /* Tx/Rx 0-64 Byte Frame Counter */
+    u32 txrx_0_64_byte_frames;	/*  0x6080 */
 
-	/* Tx/Rx 65-127 Byte Frame Counter */
-	u32 txrx_65_127_byte_frames;	/*  0x6084 */
+    /* Tx/Rx 65-127 Byte Frame Counter */
+    u32 txrx_65_127_byte_frames;	/*  0x6084 */
 
-	/* Tx/Rx 128-255 Byte Frame Counter */
-	u32 txrx_128_255_byte_frames;	/*  0x6088 */
+    /* Tx/Rx 128-255 Byte Frame Counter */
+    u32 txrx_128_255_byte_frames;	/*  0x6088 */
 
-	/* Tx/Rx 256-511 Byte Frame Counter */
-	u32 txrx_256_511_byte_frames;	/*  0x608C */
+    /* Tx/Rx 256-511 Byte Frame Counter */
+    u32 txrx_256_511_byte_frames;	/*  0x608C */
 
-	/* Tx/Rx 512-1023 Byte Frame Counter */
-	u32 txrx_512_1023_byte_frames;	/*  0x6090 */
+    /* Tx/Rx 512-1023 Byte Frame Counter */
+    u32 txrx_512_1023_byte_frames;	/*  0x6090 */
 
-	/* Tx/Rx 1024-1518 Byte Frame Counter */
-	u32 txrx_1024_1518_byte_frames;	/*  0x6094 */
+    /* Tx/Rx 1024-1518 Byte Frame Counter */
+    u32 txrx_1024_1518_byte_frames;	/*  0x6094 */
 
-	/* Tx/Rx 1519-1522 Byte Good VLAN Frame Count */
-	u32 txrx_1519_1522_gvln_frames;	/*  0x6098 */
+    /* Tx/Rx 1519-1522 Byte Good VLAN Frame Count */
+    u32 txrx_1519_1522_gvln_frames;	/*  0x6098 */
 
-	/* Rx Byte Counter */
-	u32 rx_bytes;			/*  0x609C */
+    /* Rx Byte Counter */
+    u32 rx_bytes;			/*  0x609C */
 
-	/* Rx Packet Counter */
-	u32 rx_packets;			/*  0x60A0 */
+    /* Rx Packet Counter */
+    u32 rx_packets;			/*  0x60A0 */
 
-	/* Rx FCS Error Counter */
-	u32 rx_fcs_errs;		/*  0x60A4 */
+    /* Rx FCS Error Counter */
+    u32 rx_fcs_errs;		/*  0x60A4 */
 
-	/* Rx Multicast Packet Counter */
-	u32 rx_multicast_packets;	/*  0x60A8 */
+    /* Rx Multicast Packet Counter */
+    u32 rx_multicast_packets;	/*  0x60A8 */
 
-	/* Rx Broadcast Packet Counter */
-	u32 rx_broadcast_packets;	/*  0x60AC */
+    /* Rx Broadcast Packet Counter */
+    u32 rx_broadcast_packets;	/*  0x60AC */
 
-	/* Rx Control Frame Packet Counter */
-	u32 rx_control_frames;		/*  0x60B0 */
+    /* Rx Control Frame Packet Counter */
+    u32 rx_control_frames;		/*  0x60B0 */
 
-	/* Rx Pause Frame Packet Counter */
-	u32 rx_pause_frames;		/*  0x60B4 */
+    /* Rx Pause Frame Packet Counter */
+    u32 rx_pause_frames;		/*  0x60B4 */
 
-	/* Rx Unknown OP Code Counter */
-	u32 rx_unknown_opcodes;		/*  0x60B8 */
+    /* Rx Unknown OP Code Counter */
+    u32 rx_unknown_opcodes;		/*  0x60B8 */
 
-	/* Rx Alignment Error Counter */
-	u32 rx_align_errs;		/*  0x60BC */
+    /* Rx Alignment Error Counter */
+    u32 rx_align_errs;		/*  0x60BC */
 
-	/* Rx Frame Length Error Counter */
-	u32 rx_frame_len_errs;		/*  0x60C0 */
+    /* Rx Frame Length Error Counter */
+    u32 rx_frame_len_errs;		/*  0x60C0 */
 
-	/* Rx Code Error Counter */
-	u32 rx_code_errs;		/*  0x60C4 */
+    /* Rx Code Error Counter */
+    u32 rx_code_errs;		/*  0x60C4 */
 
-	/* Rx Carrier Sense Error Counter */
-	u32 rx_carrier_sense_errs;	/*  0x60C8 */
+    /* Rx Carrier Sense Error Counter */
+    u32 rx_carrier_sense_errs;	/*  0x60C8 */
 
-	/* Rx Undersize Packet Counter */
-	u32 rx_undersize_packets;	/*  0x60CC */
+    /* Rx Undersize Packet Counter */
+    u32 rx_undersize_packets;	/*  0x60CC */
 
-	/* Rx Oversize Packet Counter */
-	u32 rx_oversize_packets;	/*  0x60D0 */
+    /* Rx Oversize Packet Counter */
+    u32 rx_oversize_packets;	/*  0x60D0 */
 
-	/* Rx Fragment Counter */
-	u32 rx_fragment_packets;	/*  0x60D4 */
+    /* Rx Fragment Counter */
+    u32 rx_fragment_packets;	/*  0x60D4 */
 
-	/* Rx Jabber Counter */
-	u32 rx_jabbers;			/*  0x60D8 */
+    /* Rx Jabber Counter */
+    u32 rx_jabbers;			/*  0x60D8 */
 
-	/* Rx Drop */
-	u32 rx_drops;			/*  0x60DC */
+    /* Rx Drop */
+    u32 rx_drops;			/*  0x60DC */
 
-	/* Tx Byte Counter */
-	u32 tx_bytes;			/*  0x60E0 */
+    /* Tx Byte Counter */
+    u32 tx_bytes;			/*  0x60E0 */
 
-	/* Tx Packet Counter */
-	u32 tx_packets;			/*  0x60E4 */
+    /* Tx Packet Counter */
+    u32 tx_packets;			/*  0x60E4 */
 
-	/* Tx Multicast Packet Counter */
-	u32 tx_multicast_packets;	/*  0x60E8 */
+    /* Tx Multicast Packet Counter */
+    u32 tx_multicast_packets;	/*  0x60E8 */
 
-	/* Tx Broadcast Packet Counter */
-	u32 tx_broadcast_packets;	/*  0x60EC */
+    /* Tx Broadcast Packet Counter */
+    u32 tx_broadcast_packets;	/*  0x60EC */
 
-	/* Tx Pause Control Frame Counter */
-	u32 tx_pause_frames;		/*  0x60F0 */
+    /* Tx Pause Control Frame Counter */
+    u32 tx_pause_frames;		/*  0x60F0 */
 
-	/* Tx Deferral Packet Counter */
-	u32 tx_deferred;		/*  0x60F4 */
+    /* Tx Deferral Packet Counter */
+    u32 tx_deferred;		/*  0x60F4 */
 
-	/* Tx Excessive Deferral Packet Counter */
-	u32 tx_excessive_deferred;	/*  0x60F8 */
+    /* Tx Excessive Deferral Packet Counter */
+    u32 tx_excessive_deferred;	/*  0x60F8 */
 
-	/* Tx Single Collision Packet Counter */
-	u32 tx_single_collisions;	/*  0x60FC */
+    /* Tx Single Collision Packet Counter */
+    u32 tx_single_collisions;	/*  0x60FC */
 
-	/* Tx Multiple Collision Packet Counter */
-	u32 tx_multiple_collisions;	/*  0x6100 */
+    /* Tx Multiple Collision Packet Counter */
+    u32 tx_multiple_collisions;	/*  0x6100 */
 
-	/* Tx Late Collision Packet Counter */
-	u32 tx_late_collisions;		/*  0x6104 */
+    /* Tx Late Collision Packet Counter */
+    u32 tx_late_collisions;		/*  0x6104 */
 
-	/* Tx Excessive Collision Packet Counter */
-	u32 tx_excessive_collisions;	/*  0x6108 */
+    /* Tx Excessive Collision Packet Counter */
+    u32 tx_excessive_collisions;	/*  0x6108 */
 
-	/* Tx Total Collision Packet Counter */
-	u32 tx_total_collisions;	/*  0x610C */
+    /* Tx Total Collision Packet Counter */
+    u32 tx_total_collisions;	/*  0x610C */
 
-	/* Tx Pause Frame Honored Counter */
-	u32 tx_pause_honored_frames;	/*  0x6110 */
+    /* Tx Pause Frame Honored Counter */
+    u32 tx_pause_honored_frames;	/*  0x6110 */
 
-	/* Tx Drop Frame Counter */
-	u32 tx_drops;			/*  0x6114 */
+    /* Tx Drop Frame Counter */
+    u32 tx_drops;			/*  0x6114 */
 
-	/* Tx Jabber Frame Counter */
-	u32 tx_jabbers;			/*  0x6118 */
+    /* Tx Jabber Frame Counter */
+    u32 tx_jabbers;			/*  0x6118 */
 
-	/* Tx FCS Error Counter */
-	u32 tx_fcs_errs;		/*  0x611C */
+    /* Tx FCS Error Counter */
+    u32 tx_fcs_errs;		/*  0x611C */
 
-	/* Tx Control Frame Counter */
-	u32 tx_control_frames;		/*  0x6120 */
+    /* Tx Control Frame Counter */
+    u32 tx_control_frames;		/*  0x6120 */
 
-	/* Tx Oversize Frame Counter */
-	u32 tx_oversize_frames;		/*  0x6124 */
+    /* Tx Oversize Frame Counter */
+    u32 tx_oversize_frames;		/*  0x6124 */
 
-	/* Tx Undersize Frame Counter */
-	u32 tx_undersize_frames;	/*  0x6128 */
+    /* Tx Undersize Frame Counter */
+    u32 tx_undersize_frames;	/*  0x6128 */
 
-	/* Tx Fragments Frame Counter */
-	u32 tx_fragments;		/*  0x612C */
+    /* Tx Fragments Frame Counter */
+    u32 tx_fragments;		/*  0x612C */
 
-	/* Carry Register One Register */
-	u32 carry_reg1;			/*  0x6130 */
+    /* Carry Register One Register */
+    u32 carry_reg1;			/*  0x6130 */
 
-	/* Carry Register Two Register */
-	u32 carry_reg2;			/*  0x6134 */
+    /* Carry Register Two Register */
+    u32 carry_reg2;			/*  0x6134 */
 
-	/* Carry Register One Mask Register */
-	u32 carry_reg1_mask;		/*  0x6138 */
+    /* Carry Register One Mask Register */
+    u32 carry_reg1_mask;		/*  0x6138 */
 
-	/* Carry Register Two Mask Register */
-	u32 carry_reg2_mask;		/*  0x613C */
+    /* Carry Register Two Mask Register */
+    u32 carry_reg2_mask;		/*  0x613C */
 };
 
 /* END OF MAC STAT REGISTER ADDRESS MAP */
@@ -1392,12 +1392,12 @@ struct macstat_regs {			/* Location: */
  * Memory Control Module of JAGCore Address Mapping
  */
 struct mmc_regs {		/* Location: */
-	u32 mmc_ctrl;		/*  0x7000 */
-	u32 sram_access;	/*  0x7004 */
-	u32 sram_word1;		/*  0x7008 */
-	u32 sram_word2;		/*  0x700C */
-	u32 sram_word3;		/*  0x7010 */
-	u32 sram_word4;		/*  0x7014 */
+    u32 mmc_ctrl;		/*  0x7000 */
+    u32 sram_access;	/*  0x7004 */
+    u32 sram_word1;		/*  0x7008 */
+    u32 sram_word2;		/*  0x700C */
+    u32 sram_word3;		/*  0x7010 */
+    u32 sram_word4;		/*  0x7014 */
 };
 
 /* END OF MMC REGISTER ADDRESS MAP */
@@ -1407,35 +1407,35 @@ struct mmc_regs {		/* Location: */
  * JAGCore Address Mapping
  */
 struct address_map {
-	struct global_regs global;
-	/* unused section of global address map */
-	u8 unused_global[4096 - sizeof(struct global_regs)];
-	struct txdma_regs txdma;
-	/* unused section of txdma address map */
-	u8 unused_txdma[4096 - sizeof(struct txdma_regs)];
-	struct rxdma_regs rxdma;
-	/* unused section of rxdma address map */
-	u8 unused_rxdma[4096 - sizeof(struct rxdma_regs)];
-	struct txmac_regs txmac;
-	/* unused section of txmac address map */
-	u8 unused_txmac[4096 - sizeof(struct txmac_regs)];
-	struct rxmac_regs rxmac;
-	/* unused section of rxmac address map */
-	u8 unused_rxmac[4096 - sizeof(struct rxmac_regs)];
-	struct mac_regs mac;
-	/* unused section of mac address map */
-	u8 unused_mac[4096 - sizeof(struct mac_regs)];
-	struct macstat_regs macstat;
-	/* unused section of mac stat address map */
-	u8 unused_mac_stat[4096 - sizeof(struct macstat_regs)];
-	struct mmc_regs mmc;
-	/* unused section of mmc address map */
-	u8 unused_mmc[4096 - sizeof(struct mmc_regs)];
-	/* unused section of address map */
-	u8 unused_[1015808];
+    struct global_regs global;
+    /* unused section of global address map */
+    u8 unused_global[4096 - sizeof(struct global_regs)];
+    struct txdma_regs txdma;
+    /* unused section of txdma address map */
+    u8 unused_txdma[4096 - sizeof(struct txdma_regs)];
+    struct rxdma_regs rxdma;
+    /* unused section of rxdma address map */
+    u8 unused_rxdma[4096 - sizeof(struct rxdma_regs)];
+    struct txmac_regs txmac;
+    /* unused section of txmac address map */
+    u8 unused_txmac[4096 - sizeof(struct txmac_regs)];
+    struct rxmac_regs rxmac;
+    /* unused section of rxmac address map */
+    u8 unused_rxmac[4096 - sizeof(struct rxmac_regs)];
+    struct mac_regs mac;
+    /* unused section of mac address map */
+    u8 unused_mac[4096 - sizeof(struct mac_regs)];
+    struct macstat_regs macstat;
+    /* unused section of mac stat address map */
+    u8 unused_mac_stat[4096 - sizeof(struct macstat_regs)];
+    struct mmc_regs mmc;
+    /* unused section of mmc address map */
+    u8 unused_mmc[4096 - sizeof(struct mmc_regs)];
+    /* unused section of address map */
+    u8 unused_[1015808];
 
-	u8 unused_exp_rom[4096];	/* MGS-size TBD */
-	u8 unused__[524288];	/* unused section of address map */
+    u8 unused_exp_rom[4096];	/* MGS-size TBD */
+    u8 unused__[524288];	/* unused section of address map */
 };
 
 /*
@@ -1450,7 +1450,7 @@ struct address_map {
 
 /* defines for specified registers */
 #define PHY_LOOPBACK_CONTROL       0x13	/* TRU_VMI_LOOPBACK_CONTROL_1_REG 19 */
-					/* TRU_VMI_LOOPBACK_CONTROL_2_REG 20 */
+/* TRU_VMI_LOOPBACK_CONTROL_2_REG 20 */
 #define PHY_REGISTER_MGMT_CONTROL  0x15	/* TRU_VMI_MI_SEQ_CONTROL_REG     21 */
 #define PHY_CONFIG                 0x16	/* TRU_VMI_CONFIGURATION_REG      22 */
 #define PHY_PHY_CONTROL            0x17	/* TRU_VMI_PHY_CONTROL_REG        23 */
@@ -1459,8 +1459,8 @@ struct address_map {
 #define PHY_PHY_STATUS             0x1A	/* TRU_VMI_PHY_STATUS_REG         26 */
 #define PHY_LED_1                  0x1B	/* TRU_VMI_LED_CONTROL_1_REG      27 */
 #define PHY_LED_2                  0x1C	/* TRU_VMI_LED_CONTROL_2_REG      28 */
-					/* TRU_VMI_LINK_CONTROL_REG       29 */
-					/* TRU_VMI_TIMING_CONTROL_REG        */
+/* TRU_VMI_LINK_CONTROL_REG       29 */
+/* TRU_VMI_TIMING_CONTROL_REG        */
 
 /* MI Register 10: Gigabit basic mode status reg(Reg 0x0A) */
 #define ET_1000BT_MSTR_SLV 0x4000

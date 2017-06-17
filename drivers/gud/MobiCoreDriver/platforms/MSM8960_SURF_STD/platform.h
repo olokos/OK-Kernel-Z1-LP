@@ -26,13 +26,12 @@
 #define SCM_CMD_MOBICORE		1
 
 extern int scm_call(u32 svc_id, u32 cmd_id, const void *cmd_buf, size_t cmd_len,
-		    void *resp_buf, size_t resp_len);
+                    void *resp_buf, size_t resp_len);
 
-static inline int smc_fastcall(void *fc_generic, size_t size)
-{
-	return scm_call(SCM_SVC_MOBICORE, SCM_CMD_MOBICORE,
-			fc_generic, size,
-			fc_generic, size);
+static inline int smc_fastcall(void *fc_generic, size_t size) {
+    return scm_call(SCM_SVC_MOBICORE, SCM_CMD_MOBICORE,
+                    fc_generic, size,
+                    fc_generic, size);
 }
 
 /* Enable mobicore mem traces */

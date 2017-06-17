@@ -64,15 +64,15 @@
 #define DCB_NOT_IMPLEMENTED      0x7FFFFFFF
 
 struct dcb_pfc_tc_debug {
-	u8  tc;
-	u8  pause_status;
-	u64 pause_quanta;
+    u8  tc;
+    u8  pause_status;
+    u64 pause_quanta;
 };
 
 enum strict_prio_type {
-	prio_none = 0,
-	prio_group,
-	prio_link
+    prio_none = 0,
+    prio_group,
+    prio_link
 };
 
 /* DCB capability definitions */
@@ -85,58 +85,58 @@ enum strict_prio_type {
 #define IXGBE_DCB_8_TC_SUPPORT      0x80
 
 struct dcb_support {
-	/* DCB capabilities */
-	u32 capabilities;
+    /* DCB capabilities */
+    u32 capabilities;
 
-	/* Each bit represents a number of TCs configurable in the hw.
-	 * If 8 traffic classes can be configured, the value is 0x80.
-	 */
-	u8  traffic_classes;
-	u8  pfc_traffic_classes;
+    /* Each bit represents a number of TCs configurable in the hw.
+     * If 8 traffic classes can be configured, the value is 0x80.
+     */
+    u8  traffic_classes;
+    u8  pfc_traffic_classes;
 };
 
 /* Traffic class bandwidth allocation per direction */
 struct tc_bw_alloc {
-	u8 bwg_id;		  /* Bandwidth Group (BWG) ID */
-	u8 bwg_percent;		  /* % of BWG's bandwidth */
-	u8 link_percent;	  /* % of link bandwidth */
-	u8 up_to_tc_bitmap;	  /* User Priority to Traffic Class mapping */
-	u16 data_credits_refill;  /* Credit refill amount in 64B granularity */
-	u16 data_credits_max;	  /* Max credits for a configured packet buffer
+    u8 bwg_id;		  /* Bandwidth Group (BWG) ID */
+    u8 bwg_percent;		  /* % of BWG's bandwidth */
+    u8 link_percent;	  /* % of link bandwidth */
+    u8 up_to_tc_bitmap;	  /* User Priority to Traffic Class mapping */
+    u16 data_credits_refill;  /* Credit refill amount in 64B granularity */
+    u16 data_credits_max;	  /* Max credits for a configured packet buffer
 				   * in 64B granularity.*/
-	enum strict_prio_type prio_type; /* Link or Group Strict Priority */
+    enum strict_prio_type prio_type; /* Link or Group Strict Priority */
 };
 
 enum dcb_pfc_type {
-	pfc_disabled = 0,
-	pfc_enabled_full,
-	pfc_enabled_tx,
-	pfc_enabled_rx
+    pfc_disabled = 0,
+    pfc_enabled_full,
+    pfc_enabled_tx,
+    pfc_enabled_rx
 };
 
 /* Traffic class configuration */
 struct tc_configuration {
-	struct tc_bw_alloc path[2]; /* One each for Tx/Rx */
-	enum dcb_pfc_type  dcb_pfc; /* Class based flow control setting */
+    struct tc_bw_alloc path[2]; /* One each for Tx/Rx */
+    enum dcb_pfc_type  dcb_pfc; /* Class based flow control setting */
 
-	u16 desc_credits_max; /* For Tx Descriptor arbitration */
-	u8 tc; /* Traffic class (TC) */
+    u16 desc_credits_max; /* For Tx Descriptor arbitration */
+    u8 tc; /* Traffic class (TC) */
 };
 
 struct dcb_num_tcs {
-	u8 pg_tcs;
-	u8 pfc_tcs;
+    u8 pg_tcs;
+    u8 pfc_tcs;
 };
 
 struct ixgbe_dcb_config {
-	struct dcb_support support;
-	struct dcb_num_tcs num_tcs;
-	struct tc_configuration tc_config[MAX_TRAFFIC_CLASS];
-	u8     bw_percentage[2][MAX_BW_GROUP]; /* One each for Tx/Rx */
-	bool   pfc_mode_enable;
+    struct dcb_support support;
+    struct dcb_num_tcs num_tcs;
+    struct tc_configuration tc_config[MAX_TRAFFIC_CLASS];
+    u8     bw_percentage[2][MAX_BW_GROUP]; /* One each for Tx/Rx */
+    bool   pfc_mode_enable;
 
-	u32  dcb_cfg_version; /* Not used...OS-specific? */
-	u32  link_speed; /* For bandwidth allocation validation purpose */
+    u32  dcb_cfg_version; /* Not used...OS-specific? */
+    u32  link_speed; /* For bandwidth allocation validation purpose */
 };
 
 /* DCB driver APIs */
@@ -149,12 +149,12 @@ void ixgbe_dcb_unpack_map(struct ixgbe_dcb_config *, int, u8 *);
 
 /* DCB credits calculation */
 s32 ixgbe_dcb_calculate_tc_credits(struct ixgbe_hw *,
-				   struct ixgbe_dcb_config *, int, u8);
+                                   struct ixgbe_dcb_config *, int, u8);
 
 /* DCB hw initialization */
 s32 ixgbe_dcb_hw_ets(struct ixgbe_hw *hw, struct ieee_ets *ets, int max);
 s32 ixgbe_dcb_hw_ets_config(struct ixgbe_hw *hw, u16 *refill, u16 *max,
-			    u8 *bwg_id, u8 *prio_type, u8 *tc_prio);
+                            u8 *bwg_id, u8 *prio_type, u8 *tc_prio);
 s32 ixgbe_dcb_hw_pfc_config(struct ixgbe_hw *hw, u8 pfc_en, u8 *tc_prio);
 s32 ixgbe_dcb_hw_config(struct ixgbe_hw *, struct ixgbe_dcb_config *);
 

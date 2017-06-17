@@ -45,124 +45,124 @@
 #define DRIVER_PATCHLEVEL	1
 
 typedef struct drm_mga_primary_buffer {
-	u8 *start;
-	u8 *end;
-	int size;
+    u8 *start;
+    u8 *end;
+    int size;
 
-	u32 tail;
-	int space;
-	volatile long wrapped;
+    u32 tail;
+    int space;
+    volatile long wrapped;
 
-	volatile u32 *status;
+    volatile u32 *status;
 
-	u32 last_flush;
-	u32 last_wrap;
+    u32 last_flush;
+    u32 last_wrap;
 
-	u32 high_mark;
+    u32 high_mark;
 } drm_mga_primary_buffer_t;
 
 typedef struct drm_mga_freelist {
-	struct drm_mga_freelist *next;
-	struct drm_mga_freelist *prev;
-	drm_mga_age_t age;
-	struct drm_buf *buf;
+    struct drm_mga_freelist *next;
+    struct drm_mga_freelist *prev;
+    drm_mga_age_t age;
+    struct drm_buf *buf;
 } drm_mga_freelist_t;
 
 typedef struct {
-	drm_mga_freelist_t *list_entry;
-	int discard;
-	int dispatched;
+    drm_mga_freelist_t *list_entry;
+    int discard;
+    int dispatched;
 } drm_mga_buf_priv_t;
 
 typedef struct drm_mga_private {
-	drm_mga_primary_buffer_t prim;
-	drm_mga_sarea_t *sarea_priv;
+    drm_mga_primary_buffer_t prim;
+    drm_mga_sarea_t *sarea_priv;
 
-	drm_mga_freelist_t *head;
-	drm_mga_freelist_t *tail;
+    drm_mga_freelist_t *head;
+    drm_mga_freelist_t *tail;
 
-	unsigned int warp_pipe;
-	unsigned long warp_pipe_phys[MGA_MAX_WARP_PIPES];
+    unsigned int warp_pipe;
+    unsigned long warp_pipe_phys[MGA_MAX_WARP_PIPES];
 
-	int chipset;
-	int usec_timeout;
+    int chipset;
+    int usec_timeout;
 
-	/**
-	 * If set, the new DMA initialization sequence was used.  This is
-	 * primarilly used to select how the driver should uninitialized its
-	 * internal DMA structures.
-	 */
-	int used_new_dma_init;
+    /**
+     * If set, the new DMA initialization sequence was used.  This is
+     * primarilly used to select how the driver should uninitialized its
+     * internal DMA structures.
+     */
+    int used_new_dma_init;
 
-	/**
-	 * If AGP memory is used for DMA buffers, this will be the value
-	 * \c MGA_PAGPXFER.  Otherwise, it will be zero (for a PCI transfer).
-	 */
-	u32 dma_access;
+    /**
+     * If AGP memory is used for DMA buffers, this will be the value
+     * \c MGA_PAGPXFER.  Otherwise, it will be zero (for a PCI transfer).
+     */
+    u32 dma_access;
 
-	/**
-	 * If AGP memory is used for DMA buffers, this will be the value
-	 * \c MGA_WAGP_ENABLE.  Otherwise, it will be zero (for a PCI
-	 * transfer).
-	 */
-	u32 wagp_enable;
+    /**
+     * If AGP memory is used for DMA buffers, this will be the value
+     * \c MGA_WAGP_ENABLE.  Otherwise, it will be zero (for a PCI
+     * transfer).
+     */
+    u32 wagp_enable;
 
-	/**
-	 * \name MMIO region parameters.
-	 *
-	 * \sa drm_mga_private_t::mmio
-	 */
-	/*@{ */
-	resource_size_t mmio_base;	   /**< Bus address of base of MMIO. */
-	resource_size_t mmio_size;	   /**< Size of the MMIO region. */
-	/*@} */
+    /**
+     * \name MMIO region parameters.
+     *
+     * \sa drm_mga_private_t::mmio
+     */
+    /*@{ */
+    resource_size_t mmio_base;	   /**< Bus address of base of MMIO. */
+    resource_size_t mmio_size;	   /**< Size of the MMIO region. */
+    /*@} */
 
-	u32 clear_cmd;
-	u32 maccess;
+    u32 clear_cmd;
+    u32 maccess;
 
-	atomic_t vbl_received;          /**< Number of vblanks received. */
-	wait_queue_head_t fence_queue;
-	atomic_t last_fence_retired;
-	u32 next_fence_to_post;
+    atomic_t vbl_received;          /**< Number of vblanks received. */
+    wait_queue_head_t fence_queue;
+    atomic_t last_fence_retired;
+    u32 next_fence_to_post;
 
-	unsigned int fb_cpp;
-	unsigned int front_offset;
-	unsigned int front_pitch;
-	unsigned int back_offset;
-	unsigned int back_pitch;
+    unsigned int fb_cpp;
+    unsigned int front_offset;
+    unsigned int front_pitch;
+    unsigned int back_offset;
+    unsigned int back_pitch;
 
-	unsigned int depth_cpp;
-	unsigned int depth_offset;
-	unsigned int depth_pitch;
+    unsigned int depth_cpp;
+    unsigned int depth_offset;
+    unsigned int depth_pitch;
 
-	unsigned int texture_offset;
-	unsigned int texture_size;
+    unsigned int texture_offset;
+    unsigned int texture_size;
 
-	drm_local_map_t *sarea;
-	drm_local_map_t *mmio;
-	drm_local_map_t *status;
-	drm_local_map_t *warp;
-	drm_local_map_t *primary;
-	drm_local_map_t *agp_textures;
+    drm_local_map_t *sarea;
+    drm_local_map_t *mmio;
+    drm_local_map_t *status;
+    drm_local_map_t *warp;
+    drm_local_map_t *primary;
+    drm_local_map_t *agp_textures;
 
-	unsigned long agp_handle;
-	unsigned int agp_size;
+    unsigned long agp_handle;
+    unsigned int agp_size;
 } drm_mga_private_t;
 
 extern struct drm_ioctl_desc mga_ioctls[];
 extern int mga_max_ioctl;
 
-				/* mga_dma.c */
+/* mga_dma.c */
 extern int mga_dma_bootstrap(struct drm_device *dev, void *data,
-			     struct drm_file *file_priv);
+                             struct drm_file *file_priv);
 extern int mga_dma_init(struct drm_device *dev, void *data,
-			struct drm_file *file_priv);
+                        struct drm_file *file_priv);
 extern int mga_dma_flush(struct drm_device *dev, void *data,
-			 struct drm_file *file_priv);
+                         struct drm_file *file_priv);
 extern int mga_dma_reset(struct drm_device *dev, void *data,
-			 struct drm_file *file_priv);
+                         struct drm_file *file_priv);
 extern int mga_dma_buffers(struct drm_device *dev, void *data,
-			   struct drm_file *file_priv);
+                           struct drm_file *file_priv);
 extern int mga_driver_load(struct drm_device *dev, unsigned long flags);
 extern int mga_driver_unload(struct drm_device *dev);
 extern void mga_driver_lastclose(struct drm_device *dev);
@@ -176,11 +176,11 @@ extern void mga_do_dma_wrap_end(drm_mga_private_t *dev_priv);
 
 extern int mga_freelist_put(struct drm_device *dev, struct drm_buf *buf);
 
-				/* mga_warp.c */
+/* mga_warp.c */
 extern int mga_warp_install_microcode(drm_mga_private_t *dev_priv);
 extern int mga_warp_init(drm_mga_private_t *dev_priv);
 
-				/* mga_irq.c */
+/* mga_irq.c */
 extern int mga_enable_vblank(struct drm_device *dev, int crtc);
 extern void mga_disable_vblank(struct drm_device *dev, int crtc);
 extern u32 mga_get_vblank_counter(struct drm_device *dev, int crtc);
@@ -191,7 +191,7 @@ extern void mga_driver_irq_preinstall(struct drm_device *dev);
 extern int mga_driver_irq_postinstall(struct drm_device *dev);
 extern void mga_driver_irq_uninstall(struct drm_device *dev);
 extern long mga_compat_ioctl(struct file *filp, unsigned int cmd,
-			     unsigned long arg);
+                             unsigned long arg);
 
 #define mga_flush_write_combine()	DRM_WRITEMEMORYBARRIER()
 
@@ -657,10 +657,9 @@ do {									\
 
 /* Simple idle test.
  */
-static __inline__ int mga_is_idle(drm_mga_private_t *dev_priv)
-{
-	u32 status = MGA_READ(MGA_STATUS) & MGA_ENGINE_IDLE_MASK;
-	return (status == MGA_ENDPRDMASTS);
+static __inline__ int mga_is_idle(drm_mga_private_t *dev_priv) {
+    u32 status = MGA_READ(MGA_STATUS) & MGA_ENGINE_IDLE_MASK;
+    return (status == MGA_ENDPRDMASTS);
 }
 
 #endif

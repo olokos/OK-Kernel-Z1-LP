@@ -148,12 +148,12 @@
 
 /* for MPP groups _num is a group index */
 enum dove_mpp_grp_idx {
-	MPP_24_39 = 2,
-	MPP_40_45 = 0,
-	MPP_46_51 = 1,
-	MPP_58_61 = 5,
-	MPP_62_63 = 4,
-	MPP_GRP_MAX = 5,
+    MPP_24_39 = 2,
+    MPP_40_45 = 0,
+    MPP_46_51 = 1,
+    MPP_58_61 = 5,
+    MPP_62_63 = 4,
+    MPP_GRP_MAX = 5,
 };
 
 #define MPP_GRP_24_39_GPIO		MPP_GRP(MPP_24_39, 0x1)
@@ -189,8 +189,8 @@ enum dove_mpp_grp_idx {
 #define MPP_GRP_AU1_52_57_SSP_TW	0xf
 
 void dove_mpp_conf(unsigned int *mpp_list,
-		   unsigned int *mpp_grp_list,
-		   unsigned int grp_au1_52_57,
-		   unsigned int grp_nfc_64_71);
+                   unsigned int *mpp_grp_list,
+                   unsigned int grp_au1_52_57,
+                   unsigned int grp_nfc_64_71);
 
 #endif	/* __ARCH_DOVE_MPP_CODED_H */

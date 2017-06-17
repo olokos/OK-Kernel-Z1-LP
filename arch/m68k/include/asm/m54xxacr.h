@@ -73,10 +73,10 @@
 /* attention : enabling CACR_DESB requires a "nop" to flush the store buffer */
 /* use '+' instead of '|' for assembler's sake */
 
-	/* Enable data cache */
-	/* Enable data store buffer */
-	/* outside ACRs : No cache, precise */
-	/* Enable instruction+branch caches */
+/* Enable data cache */
+/* Enable data store buffer */
+/* outside ACRs : No cache, precise */
+/* Enable instruction+branch caches */
 #if defined(CONFIG_M5407)
 #define CACHE_MODE (CACR_DEC+CACR_DESB+CACR_DDCM_P+CACR_BEC+CACR_IEC)
 #else

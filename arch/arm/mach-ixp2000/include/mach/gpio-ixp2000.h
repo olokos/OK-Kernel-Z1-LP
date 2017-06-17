@@ -29,18 +29,16 @@
 
 extern void gpio_line_config(int line, int direction);
 
-static inline int gpio_line_get(int line)
-{
-	return (((*IXP2000_GPIO_PLR) >> line) & 1);
+static inline int gpio_line_get(int line) {
+    return (((*IXP2000_GPIO_PLR) >> line) & 1);
 }
 
-static inline void gpio_line_set(int line, int value)
-{
-	if (value == IXP2000_GPIO_HIGH) {
-		ixp2000_reg_write(IXP2000_GPIO_POSR, 1 << line);
-	} else if (value == IXP2000_GPIO_LOW) {
-		ixp2000_reg_write(IXP2000_GPIO_POCR, 1 << line);
-	}
+static inline void gpio_line_set(int line, int value) {
+    if (value == IXP2000_GPIO_HIGH) {
+        ixp2000_reg_write(IXP2000_GPIO_POSR, 1 << line);
+    } else if (value == IXP2000_GPIO_LOW) {
+        ixp2000_reg_write(IXP2000_GPIO_POCR, 1 << line);
+    }
 }
 
 #endif /* !__ASSEMBLY__ */

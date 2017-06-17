@@ -152,7 +152,7 @@
 
 /* IO Translation Table Entries */
 #define IIO_NUM_ITTES	7		/* ITTEs numbered 0..6 */
-					/* Hw manuals number them 1..7! */
+/* Hw manuals number them 1..7! */
 
 /*
  * As a permanent workaround for a bug in the PI side of the hub, we've
@@ -172,97 +172,97 @@
 #ifndef __ASSEMBLY__
 
 typedef union hubii_wid_u {
-	u64	wid_reg_value;
-	struct {
-		u64 	wid_rsvd: 	32,	/* unused */
-			wid_rev_num:	 4,	/* revision number */
-			wid_part_num:	16,	/* the widget type: hub=c101 */
-			wid_mfg_num:	11,	/* Manufacturer id (IBM) */
-			wid_rsvd1:	 1;	/* Reserved */
-        } wid_fields_s;
+    u64	wid_reg_value;
+    struct {
+        u64 	wid_rsvd: 	32,	/* unused */
+                 wid_rev_num:	 4,	/* revision number */
+                 wid_part_num:	16,	/* the widget type: hub=c101 */
+                 wid_mfg_num:	11,	/* Manufacturer id (IBM) */
+                 wid_rsvd1:	 1;	/* Reserved */
+    } wid_fields_s;
 } hubii_wid_t;
 
 
 typedef union hubii_wcr_u {
-	u64	wcr_reg_value;
-	struct {
-		u64 	wcr_rsvd: 	41,	/* unused */
-			wcr_e_thresh:	 5,	/* elasticity threshold */
-			wcr_dir_con:	 1,	/* widget direct connect */
-			wcr_f_bad_pkt:	 1,	/* Force bad llp pkt enable */
-			wcr_xbar_crd:	 3,	/* LLP crossbar credit */
-			wcr_rsvd1:	 8,	/* Reserved */
-			wcr_tag_mode:    1,	/* Tag mode */
-			wcr_widget_id:	 4;	/* LLP crossbar credit */
-        } wcr_fields_s;
+    u64	wcr_reg_value;
+    struct {
+        u64 	wcr_rsvd: 	41,	/* unused */
+                 wcr_e_thresh:	 5,	/* elasticity threshold */
+                 wcr_dir_con:	 1,	/* widget direct connect */
+                 wcr_f_bad_pkt:	 1,	/* Force bad llp pkt enable */
+                 wcr_xbar_crd:	 3,	/* LLP crossbar credit */
+                 wcr_rsvd1:	 8,	/* Reserved */
+                 wcr_tag_mode:    1,	/* Tag mode */
+                 wcr_widget_id:	 4;	/* LLP crossbar credit */
+    } wcr_fields_s;
 } hubii_wcr_t;
 
 #define	iwcr_dir_con	wcr_fields_s.wcr_dir_con
 
 typedef union hubii_wstat_u {
-	u64      reg_value;
-	struct {
-		u64	rsvd1:		31,
-			crazy:		 1,	/* Crazy bit		*/
-			rsvd2:		 8,
-			llp_tx_cnt:	 8, 	/* LLP Xmit retry counter */
-			rsvd3:		 6,
-			tx_max_rtry:	 1,	/* LLP Retry Timeout Signal */
-			rsvd4:		 2,
-			xt_tail_to:	 1,	/* Xtalk Tail Timeout	*/
-			xt_crd_to:	 1,	/* Xtalk Credit Timeout	*/
-			pending:	 4;	/* Pending Requests	*/
-	} wstat_fields_s;
+    u64      reg_value;
+    struct {
+        u64	rsvd1:		31,
+                crazy:		 1,	/* Crazy bit		*/
+                rsvd2:		 8,
+                llp_tx_cnt:	 8, 	/* LLP Xmit retry counter */
+                rsvd3:		 6,
+                tx_max_rtry:	 1,	/* LLP Retry Timeout Signal */
+                rsvd4:		 2,
+                xt_tail_to:	 1,	/* Xtalk Tail Timeout	*/
+                xt_crd_to:	 1,	/* Xtalk Credit Timeout	*/
+                pending:	 4;	/* Pending Requests	*/
+    } wstat_fields_s;
 } hubii_wstat_t;
 
 
 typedef union hubii_ilcsr_u {
-	u64	icsr_reg_value;
-	struct {
-		u64 	icsr_rsvd: 	22,	/* unused */
-			icsr_max_burst:	10,	/* max burst */
-                        icsr_rsvd4:	 6,	/* reserved */
-			icsr_max_retry:	10,	/* max retry */
-                        icsr_rsvd3:	 2,	/* reserved */
-                        icsr_lnk_stat:	 2,	/* link status */
-                        icsr_bm8:	 1,	/* Bit mode 8 */
-                        icsr_llp_en:	 1,	/* LLP enable bit */
-			icsr_rsvd2:	 1,     /* reserver */
-                        icsr_wrm_reset:	 1,	/* Warm reset bit */
-			icsr_rsvd1:	 2,	/* Data ready offset */
-                        icsr_null_to:	 6;	/* Null timeout   */
+    u64	icsr_reg_value;
+    struct {
+        u64 	icsr_rsvd: 	22,	/* unused */
+                icsr_max_burst:	10,	/* max burst */
+                icsr_rsvd4:	 6,	/* reserved */
+                icsr_max_retry:	10,	/* max retry */
+                icsr_rsvd3:	 2,	/* reserved */
+                icsr_lnk_stat:	 2,	/* link status */
+                icsr_bm8:	 1,	/* Bit mode 8 */
+                icsr_llp_en:	 1,	/* LLP enable bit */
+                icsr_rsvd2:	 1,     /* reserver */
+                icsr_wrm_reset:	 1,	/* Warm reset bit */
+                icsr_rsvd1:	 2,	/* Data ready offset */
+                icsr_null_to:	 6;	/* Null timeout   */
 
-        } icsr_fields_s;
+    } icsr_fields_s;
 } hubii_ilcsr_t;
 
 
 typedef union hubii_iowa_u {
-	u64	iowa_reg_value;
-	struct {
-		u64 	iowa_rsvd: 	48,	/* unused */
-			iowa_wxoac:	 8,	/* xtalk widget access bits */
-			iowa_rsvd1:	 7,	/* xtalk widget access bits */
-			iowa_w0oac:	 1;	/* xtalk widget access bits */
-        } iowa_fields_s;
+    u64	iowa_reg_value;
+    struct {
+        u64 	iowa_rsvd: 	48,	/* unused */
+                iowa_wxoac:	 8,	/* xtalk widget access bits */
+                iowa_rsvd1:	 7,	/* xtalk widget access bits */
+                iowa_w0oac:	 1;	/* xtalk widget access bits */
+    } iowa_fields_s;
 } hubii_iowa_t;
 
 typedef union hubii_iiwa_u {
-	u64	iiwa_reg_value;
-	struct {
-		u64 	iiwa_rsvd: 	48,	/* unused */
-			iiwa_wxiac:	 8,	/* hub wid access bits */
-			iiwa_rsvd1:	 7,	/* reserved */
-			iiwa_w0iac:	 1;	/* hub wid0 access */
-        } iiwa_fields_s;
+    u64	iiwa_reg_value;
+    struct {
+        u64 	iiwa_rsvd: 	48,	/* unused */
+                iiwa_wxiac:	 8,	/* hub wid access bits */
+                iiwa_rsvd1:	 7,	/* reserved */
+                iiwa_w0iac:	 1;	/* hub wid0 access */
+    } iiwa_fields_s;
 } hubii_iiwa_t;
 
 typedef union	hubii_illr_u {
-	u64	illr_reg_value;
-	struct {
-		u64 	illr_rsvd: 	32,	/* unused */
-			illr_cb_cnt:	16,	/* checkbit error count */
-			illr_sn_cnt:	16;	/* sequence number count */
-        } illr_fields_s;
+    u64	illr_reg_value;
+    struct {
+        u64 	illr_rsvd: 	32,	/* unused */
+                illr_cb_cnt:	16,	/* checkbit error count */
+                illr_sn_cnt:	16;	/* sequence number count */
+    } illr_fields_s;
 } hubii_illr_t;
 
 /* The structures below are defined to extract and modify the ii
@@ -271,25 +271,25 @@ performance registers */
 /* io_perf_sel allows the caller to specify what tests will be
    performed */
 typedef union io_perf_sel {
-	u64 perf_sel_reg;
-	struct {
-		u64 	perf_rsvd  : 48,
-			perf_icct  :  8,
-			perf_ippr1 :  4,
-			perf_ippr0 :  4;
-	} perf_sel_bits;
+    u64 perf_sel_reg;
+    struct {
+        u64 	perf_rsvd  : 48,
+                perf_icct  :  8,
+                perf_ippr1 :  4,
+                perf_ippr0 :  4;
+    } perf_sel_bits;
 } io_perf_sel_t;
 
 /* io_perf_cnt is to extract the count from the hub registers. Due to
    hardware problems there is only one counter, not two. */
 
 typedef union io_perf_cnt {
-	u64	perf_cnt;
-	struct {
-		u64	perf_rsvd1 : 32,
-			perf_rsvd2 : 12,
-			perf_cnt   : 20;
-	} perf_cnt_bits;
+    u64	perf_cnt;
+    struct {
+        u64	perf_rsvd1 : 32,
+            perf_rsvd2 : 12,
+            perf_cnt   : 20;
+    } perf_cnt_bits;
 } io_perf_cnt_t;
 
 #endif /* !__ASSEMBLY__ */
@@ -442,44 +442,44 @@ typedef union io_perf_cnt {
  */
 #ifndef __ASSEMBLY__
 typedef union icrba_u {
-	u64	reg_value;
-	struct {
-		u64 	resvd: 	6,
-			stall_bte0: 1,	/* Stall BTE 0 */
-			stall_bte1: 1,	/* Stall BTE 1 */
-			error:	1,	/* CRB has an error	*/
-			ecode:	3,	/* Error Code 		*/
-			lnetuce: 1,	/* SN0net Uncorrectable error */
-			mark:	1,	/* CRB Has been marked 	*/
-			xerr:	1,	/* Error bit set in xtalk header */
-			sidn:	4,	/* SIDN field from xtalk	*/
-			tnum: 	5,	/* TNUM field in xtalk		*/
-			addr:	38,	/* Address of request	*/
-			valid:	1,	/* Valid status		*/
-			iow:	1;	/* IO Write operation	*/
-	} icrba_fields_s;
+    u64	reg_value;
+    struct {
+        u64 	resvd: 	6,
+                stall_bte0: 1,	/* Stall BTE 0 */
+                stall_bte1: 1,	/* Stall BTE 1 */
+                error:	1,	/* CRB has an error	*/
+                ecode:	3,	/* Error Code 		*/
+                lnetuce: 1,	/* SN0net Uncorrectable error */
+                mark:	1,	/* CRB Has been marked 	*/
+                xerr:	1,	/* Error bit set in xtalk header */
+                sidn:	4,	/* SIDN field from xtalk	*/
+                tnum: 	5,	/* TNUM field in xtalk		*/
+                addr:	38,	/* Address of request	*/
+                valid:	1,	/* Valid status		*/
+                iow:	1;	/* IO Write operation	*/
+    } icrba_fields_s;
 } icrba_t;
 
 /* This is an alternate typedef for the HUB1 CRB A in order to allow
    runtime selection of the format based on the REV_ID field of the
    NI_STATUS_REV_ID register. */
 typedef union h1_icrba_u {
-	u64	reg_value;
+    u64	reg_value;
 
-	struct {
-		u64 	resvd: 	6,
-			unused:	1,	/* Unused but RW!!	*/
-			error:	1,	/* CRB has an error	*/
-			ecode:	4,	/* Error Code 		*/
-			lnetuce: 1,	/* SN0net Uncorrectable error */
-			mark:	1,	/* CRB Has been marked 	*/
-			xerr:	1,	/* Error bit set in xtalk header */
-			sidn:	4,	/* SIDN field from xtalk	*/
-			tnum: 	5,	/* TNUM field in xtalk		*/
-			addr:	38,	/* Address of request	*/
-			valid:	1,	/* Valid status		*/
-			iow:	1;	/* IO Write operation	*/
-	} h1_icrba_fields_s;
+    struct {
+        u64 	resvd: 	6,
+                unused:	1,	/* Unused but RW!!	*/
+                error:	1,	/* CRB has an error	*/
+                ecode:	4,	/* Error Code 		*/
+                lnetuce: 1,	/* SN0net Uncorrectable error */
+                mark:	1,	/* CRB Has been marked 	*/
+                xerr:	1,	/* Error bit set in xtalk header */
+                sidn:	4,	/* SIDN field from xtalk	*/
+                tnum: 	5,	/* TNUM field in xtalk		*/
+                addr:	38,	/* Address of request	*/
+                valid:	1,	/* Valid status		*/
+                iow:	1;	/* IO Write operation	*/
+    } h1_icrba_fields_s;
 } h1_icrba_t;
 
 /* XXX - Is this still right?  Check the spec. */
@@ -511,90 +511,90 @@ typedef union h1_icrba_u {
  */
 #ifndef __ASSEMBLY__
 typedef union icrbb_u {
-	u64	reg_value;
-	struct {
-	    u64	rsvd1:	5,
-		btenum:	1,	/* BTE to which entry belongs to */
-		cohtrans: 1,	/* Coherent transaction	*/
-		xtsize:	2,	/* Xtalk operation size
+    u64	reg_value;
+    struct {
+        u64	rsvd1:	5,
+             btenum:	1,	/* BTE to which entry belongs to */
+             cohtrans: 1,	/* Coherent transaction	*/
+             xtsize:	2,	/* Xtalk operation size
 				 * 0: Double Word
 				 * 1: 32 Bytes.
 				 * 2: 128 Bytes,
 				 * 3: Reserved.
 				 */
-		srcnode: 9,	/* Source Node ID		*/
-		srcinit: 2,	/* Source Initiator:
+             srcnode: 9,	/* Source Node ID		*/
+             srcinit: 2,	/* Source Initiator:
 				 * See below for field values.
 				 */
-		useold:	1,	/* Use OLD command for processing */
-		imsgtype: 2,	/* Incoming message type
+             useold:	1,	/* Use OLD command for processing */
+             imsgtype: 2,	/* Incoming message type
 				 * see below for field values
 				 */
-		imsg: 	8,	/* Incoming message 	*/
-		initator: 3,	/* Initiator of original request
+             imsg: 	8,	/* Incoming message 	*/
+             initator: 3,	/* Initiator of original request
 				 * See below for field values.
 				 */
-		reqtype: 5,	/* Identifies type of request
+             reqtype: 5,	/* Identifies type of request
 				 * See below for field values.
 				 */
-		rsvd2:	7,
-		ackcnt:	11,	/* Invalidate ack count	*/
-		resp:	1,	/* data response  given to processor */
-		ack: 	1,	/* indicates data ack received 	*/
-		hold:	1,	/* entry is gathering inval acks */
-		wb_pend:1,	/* waiting for writeback to complete */
-		intvn: 	1,	/* Intervention */
-		stall_ib: 1,	/* Stall Ibuf (from crosstalk) */
-		stall_intr: 1;	/* Stall internal interrupts */
-	} icrbb_field_s;
+             rsvd2:	7,
+             ackcnt:	11,	/* Invalidate ack count	*/
+             resp:	1,	/* data response  given to processor */
+             ack: 	1,	/* indicates data ack received 	*/
+             hold:	1,	/* entry is gathering inval acks */
+             wb_pend:1,	/* waiting for writeback to complete */
+             intvn: 	1,	/* Intervention */
+             stall_ib: 1,	/* Stall Ibuf (from crosstalk) */
+             stall_intr: 1;	/* Stall internal interrupts */
+    } icrbb_field_s;
 } icrbb_t;
 
 /* This is an alternate typedef for the HUB1 CRB B in order to allow
    runtime selection of the format based on the REV_ID field of the
    NI_STATUS_REV_ID register. */
 typedef union h1_icrbb_u {
-	u64	reg_value;
-	struct {
-		u64	rsvd1:	5,
-			btenum:	1,	/* BTE to which entry belongs to */
-			cohtrans: 1,	/* Coherent transaction	*/
-			xtsize:	2,	/* Xtalk operation size
+    u64	reg_value;
+    struct {
+        u64	rsvd1:	5,
+             btenum:	1,	/* BTE to which entry belongs to */
+             cohtrans: 1,	/* Coherent transaction	*/
+             xtsize:	2,	/* Xtalk operation size
 					 * 0: Double Word
 					 * 1: 32 Bytes.
 					 * 2: 128 Bytes,
 					 * 3: Reserved.
 					 */
-			srcnode: 9,	/* Source Node ID		*/
-			srcinit: 2,	/* Source Initiator:
+             srcnode: 9,	/* Source Node ID		*/
+             srcinit: 2,	/* Source Initiator:
 					 * See below for field values.
 					 */
-			useold:	1,	/* Use OLD command for processing */
-			imsgtype: 2,	/* Incoming message type
+             useold:	1,	/* Use OLD command for processing */
+             imsgtype: 2,	/* Incoming message type
 					 * see below for field values
 					 */
-			imsg: 	8,	/* Incoming message 	*/
-			initator: 3,	/* Initiator of original request
+             imsg: 	8,	/* Incoming message 	*/
+             initator: 3,	/* Initiator of original request
 					 * See below for field values.
 					 */
-			rsvd2: 	1,
-			pcache: 1,	/* entry belongs to partial cache */
-			reqtype: 5,	/* Identifies type of request
+             rsvd2: 	1,
+             pcache: 1,	/* entry belongs to partial cache */
+             reqtype: 5,	/* Identifies type of request
 					 * See below for field values.
 					 */
-			stl_ib:	1,	/* stall Ibus coming from xtalk	*/
-			stl_intr: 1,	/* Stall internal interrupts */
-			stl_bte0: 1,	/* Stall BTE 0 	*/
-			stl_bte1: 1,	/* Stall BTE 1	*/
-			intrvn:	1,	/* Req was target of intervention */
-			ackcnt:	11,	/* Invalidate ack count	*/
-			resp:	1,	/* data response  given to processor */
-			ack: 	1,	/* indicates data ack received 	*/
-			hold:	1,	/* entry is gathering inval acks */
-			wb_pend:1,	/* waiting for writeback to complete */
-			sleep: 	1,	/* xtalk req sleeping till IO-sync */
-			pnd_reply: 1,	/* replies not issed due to IOQ full */
-			pnd_req: 1;	/* reqs not issued due to IOQ full */
-	} h1_icrbb_field_s;
+             stl_ib:	1,	/* stall Ibus coming from xtalk	*/
+             stl_intr: 1,	/* Stall internal interrupts */
+             stl_bte0: 1,	/* Stall BTE 0 	*/
+             stl_bte1: 1,	/* Stall BTE 1	*/
+             intrvn:	1,	/* Req was target of intervention */
+             ackcnt:	11,	/* Invalidate ack count	*/
+             resp:	1,	/* data response  given to processor */
+             ack: 	1,	/* indicates data ack received 	*/
+             hold:	1,	/* entry is gathering inval acks */
+             wb_pend:1,	/* waiting for writeback to complete */
+             sleep: 	1,	/* xtalk req sleeping till IO-sync */
+             pnd_reply: 1,	/* replies not issed due to IOQ full */
+             pnd_req: 1;	/* reqs not issued due to IOQ full */
+    } h1_icrbb_field_s;
 } h1_icrbb_t;
 
 
@@ -669,24 +669,24 @@ typedef union h1_icrbb_u {
 #ifndef __ASSEMBLY__
 
 typedef union icrbc_s {
-	u64	reg_value;
-	struct {
-		u64	rsvd:	6,
-			sleep:	1,
-			pricnt: 4,	/* Priority count sent with Read req */
-			pripsc: 4,	/* Priority Pre scalar 	*/
-			bteop:	1,	/* BTE Operation 	*/
-			push_be: 34,	/* Push address Byte enable
+    u64	reg_value;
+    struct {
+        u64	rsvd:	6,
+              sleep:	1,
+              pricnt: 4,	/* Priority count sent with Read req */
+              pripsc: 4,	/* Priority Pre scalar 	*/
+              bteop:	1,	/* BTE Operation 	*/
+              push_be: 34,	/* Push address Byte enable
 					 * Holds push addr, if CRB is for BTE
 					 * If CRB belongs to Partial cache,
 					 * this contains byte enables bits
 					 * ([47:46] = 0)
 					 */
-			suppl:	11,	/* Supplemental field	*/
-			barrop: 1,	/* Barrier Op bit set in xtalk req */
-			doresp: 1,	/* Xtalk req needs a response 	*/
-			gbr:	1;	/* GBR bit set in xtalk packet 	*/
-	} icrbc_field_s;
+              suppl:	11,	/* Supplemental field	*/
+              barrop: 1,	/* Barrier Op bit set in xtalk req */
+              doresp: 1,	/* Xtalk req needs a response 	*/
+              gbr:	1;	/* GBR bit set in xtalk packet 	*/
+    } icrbc_field_s;
 } icrbc_t;
 
 #define	c_pricnt	icrbc_field_s.pricnt
@@ -706,20 +706,20 @@ typedef union icrbc_s {
 
 #ifndef __ASSEMBLY__
 typedef union icrbd_s {
-	u64	reg_value;
-	struct {
-	    u64	rsvd:	38,
-		toutvld: 1,	/* Timeout in progress for this CRB */
-		ctxtvld: 1,	/* Context field below is valid	*/
-		rsvd2:	1,
-		context: 15, 	/* Bit vector:
+    u64	reg_value;
+    struct {
+        u64	rsvd:	38,
+              toutvld: 1,	/* Timeout in progress for this CRB */
+              ctxtvld: 1,	/* Context field below is valid	*/
+              rsvd2:	1,
+              context: 15, 	/* Bit vector:
 				 * Has a bit set for each CRB entry
 				 * which needs to be deallocated
 				 * before this CRB entry is processed.
 				 * Set only for barrier operations.
 				 */
-		timeout: 8;	/* Timeout Upper 8 bits	*/
-	} icrbd_field_s;
+              timeout: 8;	/* Timeout Upper 8 bits	*/
+    } icrbd_field_s;
 } icrbd_t;
 
 #define	icrbd_toutvld	icrbd_field_s.toutvld
@@ -728,13 +728,13 @@ typedef union icrbd_s {
 
 
 typedef union hubii_ifdr_u {
-	u64	hi_ifdr_value;
-	struct {
-		u64	ifdr_rsvd:	49,
-	                ifdr_maxrp:	 7,
-	                ifdr_rsvd1:	 1,
-			ifdr_maxrq:	 7;
-	} hi_ifdr_fields;
+    u64	hi_ifdr_value;
+    struct {
+        u64	ifdr_rsvd:	49,
+             ifdr_maxrp:	 7,
+             ifdr_rsvd1:	 1,
+             ifdr_maxrq:	 7;
+    } hi_ifdr_fields;
 } hubii_ifdr_t;
 
 #endif /* !__ASSEMBLY__ */
@@ -787,17 +787,17 @@ typedef union hubii_ifdr_u {
 #ifndef __ASSEMBLY__
 
 typedef union iprte_a {
-	u64	entry;
-	struct {
-	    u64	rsvd1     : 7,  /* Reserved field 		*/
-		valid     : 1,	/* Maps to a timeout entry	*/
-		rsvd2     : 1,
-		srcnode   : 9,	/* Node which did this PIO	*/
-		initiator : 2,	/* If T5A or T5B or IO 		*/
-		rsvd3     : 3,
-		addr      : 38,	/* Physical address of PIO	*/
-		rsvd4     : 3;
-	} iprte_fields;
+    u64	entry;
+    struct {
+        u64	rsvd1     : 7,  /* Reserved field 		*/
+            valid     : 1,	/* Maps to a timeout entry	*/
+            rsvd2     : 1,
+            srcnode   : 9,	/* Node which did this PIO	*/
+            initiator : 2,	/* If T5A or T5B or IO 		*/
+            rsvd3     : 3,
+            addr      : 38,	/* Physical address of PIO	*/
+            rsvd4     : 3;
+    } iprte_fields;
 } iprte_a_t;
 
 #define	iprte_valid	iprte_fields.valid
@@ -821,19 +821,19 @@ typedef union iprte_a {
  */
 
 typedef union iprb_u {
-	u64	reg_value;
-	struct {
-	    u64	rsvd1:	15,
-		error:	1,	/* Widget rcvd wr resp pkt w/ error */
-		ovflow:	5,	/* Overflow count. perf measurement */
-		fire_and_forget: 1, /* Launch Write without response */
-		mode:	2,	/* Widget operation Mode	*/
-		rsvd2:	2,
-		bnakctr: 14,
-		rsvd3: 	2,
-		anakctr: 14,
-		xtalkctr: 8;
-	} iprb_fields_s;
+    u64	reg_value;
+    struct {
+        u64	rsvd1:	15,
+             error:	1,	/* Widget rcvd wr resp pkt w/ error */
+             ovflow:	5,	/* Overflow count. perf measurement */
+             fire_and_forget: 1, /* Launch Write without response */
+             mode:	2,	/* Widget operation Mode	*/
+             rsvd2:	2,
+             bnakctr: 14,
+             rsvd3: 	2,
+             anakctr: 14,
+             xtalkctr: 8;
+    } iprb_fields_s;
 } iprb_t;
 
 #define iprb_regval	reg_value
@@ -863,36 +863,36 @@ typedef union iprb_u {
  */
 #ifndef __ASSEMBLY__
 typedef union icrbp_a {
-	u64   ip_reg;	    /* the entire register value	*/
-	struct {
-	     u64 error:	1,  /*    63, error occurred		*/
-		ln_uce:	1,  /*    62: uncorrectable memory 	*/
-		ln_ae:	1,  /*    61: protection violation 	*/
-		ln_werr:1,  /*    60: write access error 	*/
-		ln_aerr:1,  /*    59: sn0net: Address error	*/
-		ln_perr:1,  /*    58: sn0net: poison error	*/
-		timeout:1,  /*    57: CRB timed out		*/
-		l_bdpkt:1,  /*    56: truncated pkt on sn0net	*/
-		c_bdpkt:1,  /*    55: truncated pkt on xtalk	*/
-		c_err:	1,  /*    54: incoming xtalk req, err set*/
-		rsvd1: 12,  /* 53-42: reserved			*/
-		valid:	1,  /*    41: Valid status		*/
-		sidn:	4,  /* 40-37: SIDN field of xtalk rqst	*/
-		tnum:	5,  /* 36-32: TNUM of xtalk request	*/
-		bo:	1,  /*    31: barrier op set in xtalk rqst*/
-		resprqd:1,  /*    30: xtalk rqst requires response*/
-		gbr:	1,  /*    29: gbr bit set in xtalk rqst	*/
-		size:	2,  /* 28-27: size of xtalk request	*/
-		excl:	4,  /* 26-23: exclusive bit(s)		*/
-		stall:	3,  /* 22-20: stall (xtalk, bte 0/1)	*/
-		intvn:	1,  /*    19: rqst target of intervention*/
-		resp:	1,  /*    18: Data response given to t5	*/
-		ack:	1,  /*    17: Data ack received.	*/
-		hold:	1,  /*    16: crb gathering invalidate acks*/
-		wb:	1,  /*    15: writeback pending.	*/
-		ack_cnt:11, /* 14-04: counter of invalidate acks*/
-		tscaler:4;  /* 03-00: Timeout prescaler		*/
-	} ip_fmt;
+    u64   ip_reg;	    /* the entire register value	*/
+    struct {
+        u64 error:	1,  /*    63, error occurred		*/
+             ln_uce:	1,  /*    62: uncorrectable memory 	*/
+             ln_ae:	1,  /*    61: protection violation 	*/
+             ln_werr:1,  /*    60: write access error 	*/
+             ln_aerr:1,  /*    59: sn0net: Address error	*/
+             ln_perr:1,  /*    58: sn0net: poison error	*/
+             timeout:1,  /*    57: CRB timed out		*/
+             l_bdpkt:1,  /*    56: truncated pkt on sn0net	*/
+             c_bdpkt:1,  /*    55: truncated pkt on xtalk	*/
+             c_err:	1,  /*    54: incoming xtalk req, err set*/
+             rsvd1: 12,  /* 53-42: reserved			*/
+             valid:	1,  /*    41: Valid status		*/
+             sidn:	4,  /* 40-37: SIDN field of xtalk rqst	*/
+             tnum:	5,  /* 36-32: TNUM of xtalk request	*/
+             bo:	1,  /*    31: barrier op set in xtalk rqst*/
+             resprqd:1,  /*    30: xtalk rqst requires response*/
+             gbr:	1,  /*    29: gbr bit set in xtalk rqst	*/
+             size:	2,  /* 28-27: size of xtalk request	*/
+             excl:	4,  /* 26-23: exclusive bit(s)		*/
+             stall:	3,  /* 22-20: stall (xtalk, bte 0/1)	*/
+             intvn:	1,  /*    19: rqst target of intervention*/
+             resp:	1,  /*    18: Data response given to t5	*/
+             ack:	1,  /*    17: Data ack received.	*/
+             hold:	1,  /*    16: crb gathering invalidate acks*/
+             wb:	1,  /*    15: writeback pending.	*/
+             ack_cnt:11, /* 14-04: counter of invalidate acks*/
+             tscaler:4;  /* 03-00: Timeout prescaler		*/
+    } ip_fmt;
 } icrbp_a_t;
 
 #endif /* !__ASSEMBLY__ */
@@ -905,17 +905,17 @@ typedef union icrbp_a {
 
 #ifndef __ASSEMBLY__
 typedef union hubii_idsr {
-	u64 iin_reg;
-	struct {
-		u64 rsvd1 : 35,
-	            isent : 1,
-	            rsvd2 : 3,
-	            ienable: 1,
-	            rsvd  : 7,
-	            node  : 9,
-	            rsvd4 : 1,
-	            level : 7;
-	} iin_fmt;
+    u64 iin_reg;
+    struct {
+        u64 rsvd1 : 35,
+            isent : 1,
+            rsvd2 : 3,
+            ienable: 1,
+            rsvd  : 7,
+            node  : 9,
+            rsvd4 : 1,
+            level : 7;
+    } iin_fmt;
 } hubii_idsr_t;
 #endif /* !__ASSEMBLY__ */
 

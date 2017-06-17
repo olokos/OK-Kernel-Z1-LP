@@ -56,8 +56,7 @@
  *                                                                         *
  *-------------------------------------------------------------------------
  */
-typedef struct
-{
+typedef struct {
     // HDD to MAC parameters
     int             radioId;
 

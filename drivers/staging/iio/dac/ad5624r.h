@@ -37,8 +37,8 @@
  */
 
 struct ad5624r_chip_info {
-	const struct iio_chan_spec	*channels;
-	u16				int_vref_mv;
+    const struct iio_chan_spec	*channels;
+    u16				int_vref_mv;
 };
 
 /**
@@ -53,12 +53,12 @@ struct ad5624r_chip_info {
  */
 
 struct ad5624r_state {
-	struct spi_device		*us;
-	const struct ad5624r_chip_info	*chip_info;
-	struct regulator		*reg;
-	unsigned short			vref_mv;
-	unsigned			pwr_down_mask;
-	unsigned			pwr_down_mode;
+    struct spi_device		*us;
+    const struct ad5624r_chip_info	*chip_info;
+    struct regulator		*reg;
+    unsigned short			vref_mv;
+    unsigned			pwr_down_mask;
+    unsigned			pwr_down_mode;
 };
 
 /**
@@ -68,12 +68,12 @@ struct ad5624r_state {
  */
 
 enum ad5624r_supported_device_ids {
-	ID_AD5624R3,
-	ID_AD5644R3,
-	ID_AD5664R3,
-	ID_AD5624R5,
-	ID_AD5644R5,
-	ID_AD5664R5,
+    ID_AD5624R3,
+    ID_AD5644R3,
+    ID_AD5664R3,
+    ID_AD5624R5,
+    ID_AD5644R5,
+    ID_AD5664R5,
 };
 
 #endif /* SPI_AD5624R_H_ */

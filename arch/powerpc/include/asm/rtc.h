@@ -42,36 +42,31 @@
 #define RTC_24H 0x02		/* 24 hour mode - else hours bit 7 means pm */
 #define RTC_DST_EN 0x01	        /* auto switch DST - works f. USA only */
 
-static inline unsigned int get_rtc_time(struct rtc_time *time)
-{
-	if (ppc_md.get_rtc_time)
-		ppc_md.get_rtc_time(time);
-	return RTC_24H;
+static inline unsigned int get_rtc_time(struct rtc_time *time) {
+    if (ppc_md.get_rtc_time)
+        ppc_md.get_rtc_time(time);
+    return RTC_24H;
 }
 
 /* Set the current date and time in the real time clock. */
-static inline int set_rtc_time(struct rtc_time *time)
-{
-	if (ppc_md.set_rtc_time)
-		return ppc_md.set_rtc_time(time);
-	return -EINVAL;
+static inline int set_rtc_time(struct rtc_time *time) {
+    if (ppc_md.set_rtc_time)
+        return ppc_md.set_rtc_time(time);
+    return -EINVAL;
 }
 
-static inline unsigned int get_rtc_ss(void)
-{
-	struct rtc_time h;
+static inline unsigned int get_rtc_ss(void) {
+    struct rtc_time h;
 
-	get_rtc_time(&h);
-	return h.tm_sec;
+    get_rtc_time(&h);
+    return h.tm_sec;
 }
 
-static inline int get_rtc_pll(struct rtc_pll_info *pll)
-{
-	return -EINVAL;
+static inline int get_rtc_pll(struct rtc_pll_info *pll) {
+    return -EINVAL;
 }
-static inline int set_rtc_pll(struct rtc_pll_info *pll)
-{
-	return -EINVAL;
+static inline int set_rtc_pll(struct rtc_pll_info *pll) {
+    return -EINVAL;
 }
 
 #endif /* __KERNEL__ */

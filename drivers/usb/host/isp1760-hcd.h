@@ -3,10 +3,10 @@
 
 /* exports for if */
 struct usb_hcd *isp1760_register(phys_addr_t res_start, resource_size_t res_len,
-				 int irq, unsigned long irqflags,
-				 int rst_gpio,
-				 struct device *dev, const char *busname,
-				 unsigned int devflags);
+                                 int irq, unsigned long irqflags,
+                                 int rst_gpio,
+                                 struct device *dev, const char *busname,
+                                 unsigned int devflags);
 int init_kmem_once(void);
 void deinit_kmem_cache(void);
 
@@ -89,14 +89,14 @@ void deinit_kmem_cache(void);
 /* Philips Proprietary Transfer Descriptor (PTD) */
 typedef __u32 __bitwise __dw;
 struct ptd {
-	__dw dw0;
-	__dw dw1;
-	__dw dw2;
-	__dw dw3;
-	__dw dw4;
-	__dw dw5;
-	__dw dw6;
-	__dw dw7;
+    __dw dw0;
+    __dw dw1;
+    __dw dw2;
+    __dw dw3;
+    __dw dw4;
+    __dw dw5;
+    __dw dw6;
+    __dw dw7;
 };
 #define PTD_OFFSET		0x0400
 #define ISO_PTD_OFFSET		0x0400
@@ -105,14 +105,14 @@ struct ptd {
 #define PAYLOAD_OFFSET		0x1000
 
 struct slotinfo {
-	struct isp1760_qh *qh;
-	struct isp1760_qtd *qtd;
-	unsigned long timestamp;
+    struct isp1760_qh *qh;
+    struct isp1760_qtd *qtd;
+    unsigned long timestamp;
 };
 
 
 typedef void (packet_enqueue)(struct usb_hcd *hcd, struct isp1760_qh *qh,
-		struct isp1760_qtd *qtd);
+                              struct isp1760_qtd *qtd);
 
 /*
  * Device flags that can vary from board to board.  All of these
@@ -131,9 +131,9 @@ typedef void (packet_enqueue)(struct usb_hcd *hcd, struct isp1760_qh *qh,
 
 /* chip memory management */
 struct memory_chunk {
-	unsigned int start;
-	unsigned int size;
-	unsigned int free;
+    unsigned int start;
+    unsigned int size;
+    unsigned int free;
 };
 
 /*

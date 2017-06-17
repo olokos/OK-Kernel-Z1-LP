@@ -58,12 +58,10 @@
 #define RSNIE_CAPABILITY_LEN 2
 #define DEFAULT_RSNIE_CAP_VAL 0x00
 
-typedef struct sSirCountryInformation
-{
+typedef struct sSirCountryInformation {
     tANI_U8 countryString[COUNTRY_STRING_LENGTH];
     tANI_U8 numIntervals; //number of channel intervals
-    struct channelPowerLim
-    {
+    struct channelPowerLim {
         tANI_U8 channelNumber;
         tANI_U8 numChannel;
         tANI_U8 maxTransmitPower;
@@ -72,8 +70,7 @@ typedef struct sSirCountryInformation
 
 
 /// Structure common to Beaons & Probe Responses
-typedef struct sSirProbeRespBeacon
-{
+typedef struct sSirProbeRespBeacon {
     tSirMacTimeStamp          timeStamp;
     tANI_U16                  beaconInterval;
     tSirMacCapabilityInfo     capabilityInfo;
@@ -149,8 +146,7 @@ typedef struct sSirProbeRespBeacon
 } tSirProbeRespBeacon, *tpSirProbeRespBeacon;
 
 // probe Request structure
-typedef struct sSirProbeReq
-{
+typedef struct sSirProbeReq {
     tSirMacSSid               ssId;
     tSirMacRateSet            supportedRates;
     tSirMacRateSet            extendedRates;
@@ -170,8 +166,7 @@ typedef struct sSirProbeReq
 
 /// Association Request structure (one day to be replaced by
 /// tDot11fAssocRequest)
-typedef struct sSirAssocReq
-{
+typedef struct sSirAssocReq {
 
     tSirMacCapabilityInfo     capabilityInfo;
     tANI_U16                  listenInterval;
@@ -222,8 +217,7 @@ typedef struct sSirAssocReq
 
 /// Association Response structure (one day to be replaced by
 /// tDot11fAssocRequest)
-typedef struct sSirAssocRsp
-{
+typedef struct sSirAssocRsp {
 
     tSirMacCapabilityInfo     capabilityInfo;
     tANI_U16                  aid;
@@ -275,8 +269,7 @@ typedef struct sSirAssocRsp
 
 #if defined(FEATURE_WLAN_ESE_UPLOAD)
 // Structure to hold Ese Beacon report mandatory IEs
-typedef struct sSirEseBcnReportMandatoryIe
-{
+typedef struct sSirEseBcnReportMandatoryIe {
     tSirMacSSid           ssId;
     tSirMacRateSet        supportedRates;
     tSirMacFHParamSet     fhParamSet;

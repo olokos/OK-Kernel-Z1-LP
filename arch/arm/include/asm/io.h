@@ -118,9 +118,9 @@ extern void __raw_readsl(const void __iomem *addr, void *data, int longlen);
  * /proc/vmalloc to use - and should only be used in non-inline functions.
  */
 extern void __iomem *__arm_ioremap_pfn_caller(unsigned long, unsigned long,
-	size_t, unsigned int, void *);
+        size_t, unsigned int, void *);
 extern void __iomem *__arm_ioremap_caller(phys_addr_t, size_t, unsigned int,
-	void *);
+        void *);
 
 extern void __iomem *__arm_ioremap_pfn(unsigned long, unsigned long, size_t, unsigned int);
 extern void __iomem *__arm_ioremap(phys_addr_t, size_t, unsigned int);
@@ -129,7 +129,7 @@ extern void __iounmap(volatile void __iomem *addr);
 extern void __arm_iounmap(volatile void __iomem *addr);
 
 extern void __iomem * (*arch_ioremap_caller)(phys_addr_t, size_t,
-	unsigned int, void *);
+        unsigned int, void *);
 extern void (*arch_iounmap)(volatile void __iomem *);
 
 /*
@@ -140,9 +140,8 @@ extern void __readwrite_bug(const char *fn);
 /*
  * A typesafe __io() helper
  */
-static inline void __iomem *__typesafe_io(unsigned long addr)
-{
-	return (void __iomem *)addr;
+static inline void __iomem *__typesafe_io(unsigned long addr) {
+    return (void __iomem *)addr;
 }
 
 #define IOMEM(x)	((void __force __iomem *)(x))
@@ -397,7 +396,7 @@ extern int devmem_is_allowed(unsigned long pfn);
  * emulation.
  */
 extern void register_isa_ports(unsigned int mmio, unsigned int io,
-			       unsigned int io_shift);
+                               unsigned int io_shift);
 
 #endif	/* __KERNEL__ */
 #endif	/* __ASM_ARM_IO_H */

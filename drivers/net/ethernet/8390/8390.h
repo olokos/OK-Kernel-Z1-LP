@@ -16,9 +16,9 @@
 
 /* The 8390 specific per-packet-header format. */
 struct e8390_pkt_hdr {
-  unsigned char status; /* status */
-  unsigned char next;   /* pointer to next packet. */
-  unsigned short count; /* header + packet length in bytes */
+    unsigned char status; /* status */
+    unsigned char next;   /* pointer to next packet. */
+    unsigned short count; /* header + packet length in bytes */
 };
 
 #ifdef notdef
@@ -46,9 +46,8 @@ extern struct net_device_stats *ei_get_stats(struct net_device *dev);
 extern const struct net_device_ops ei_netdev_ops;
 
 extern struct net_device *__alloc_ei_netdev(int size);
-static inline struct net_device *alloc_ei_netdev(void)
-{
-	return __alloc_ei_netdev(0);
+static inline struct net_device *alloc_ei_netdev(void) {
+    return __alloc_ei_netdev(0);
 }
 
 /* With I/O delay form */
@@ -64,43 +63,42 @@ extern struct net_device_stats *eip_get_stats(struct net_device *dev);
 extern const struct net_device_ops eip_netdev_ops;
 
 extern struct net_device *__alloc_eip_netdev(int size);
-static inline struct net_device *alloc_eip_netdev(void)
-{
-	return __alloc_eip_netdev(0);
+static inline struct net_device *alloc_eip_netdev(void) {
+    return __alloc_eip_netdev(0);
 }
 
 /* You have one of these per-board */
 struct ei_device {
-	const char *name;
-	void (*reset_8390)(struct net_device *);
-	void (*get_8390_hdr)(struct net_device *, struct e8390_pkt_hdr *, int);
-	void (*block_output)(struct net_device *, int, const unsigned char *, int);
-	void (*block_input)(struct net_device *, int, struct sk_buff *, int);
-	unsigned long rmem_start;
-	unsigned long rmem_end;
-	void __iomem *mem;
-	unsigned char mcfilter[8];
-	unsigned open:1;
-	unsigned word16:1;  		/* We have the 16-bit (vs 8-bit) version of the card. */
-	unsigned bigendian:1;		/* 16-bit big endian mode. Do NOT */
-					/* set this on random 8390 clones! */
-	unsigned txing:1;		/* Transmit Active */
-	unsigned irqlock:1;		/* 8390's intrs disabled when '1'. */
-	unsigned dmaing:1;		/* Remote DMA Active */
-	unsigned char tx_start_page, rx_start_page, stop_page;
-	unsigned char current_page;	/* Read pointer in buffer  */
-	unsigned char interface_num;	/* Net port (AUI, 10bT.) to use. */
-	unsigned char txqueue;		/* Tx Packet buffer queue length. */
-	short tx1, tx2;			/* Packet lengths for ping-pong tx. */
-	short lasttx;			/* Alpha version consistency check. */
-	unsigned char reg0;		/* Register '0' in a WD8013 */
-	unsigned char reg5;		/* Register '5' in a WD8013 */
-	unsigned char saved_irq;	/* Original dev->irq value. */
-	u32 *reg_offset;		/* Register mapping table */
-	spinlock_t page_lock;		/* Page register locks */
-	unsigned long priv;		/* Private field to store bus IDs etc. */
+    const char *name;
+    void (*reset_8390)(struct net_device *);
+    void (*get_8390_hdr)(struct net_device *, struct e8390_pkt_hdr *, int);
+    void (*block_output)(struct net_device *, int, const unsigned char *, int);
+    void (*block_input)(struct net_device *, int, struct sk_buff *, int);
+    unsigned long rmem_start;
+    unsigned long rmem_end;
+    void __iomem *mem;
+    unsigned char mcfilter[8];
+    unsigned open:1;
+    unsigned word16:1;  		/* We have the 16-bit (vs 8-bit) version of the card. */
+    unsigned bigendian:1;		/* 16-bit big endian mode. Do NOT */
+    /* set this on random 8390 clones! */
+    unsigned txing:1;		/* Transmit Active */
+    unsigned irqlock:1;		/* 8390's intrs disabled when '1'. */
+    unsigned dmaing:1;		/* Remote DMA Active */
+    unsigned char tx_start_page, rx_start_page, stop_page;
+    unsigned char current_page;	/* Read pointer in buffer  */
+    unsigned char interface_num;	/* Net port (AUI, 10bT.) to use. */
+    unsigned char txqueue;		/* Tx Packet buffer queue length. */
+    short tx1, tx2;			/* Packet lengths for ping-pong tx. */
+    short lasttx;			/* Alpha version consistency check. */
+    unsigned char reg0;		/* Register '0' in a WD8013 */
+    unsigned char reg5;		/* Register '5' in a WD8013 */
+    unsigned char saved_irq;	/* Original dev->irq value. */
+    u32 *reg_offset;		/* Register mapping table */
+    spinlock_t page_lock;		/* Page register locks */
+    unsigned long priv;		/* Private field to store bus IDs etc. */
 #ifdef AX88796_PLATFORM
-	unsigned char rxcr_base;	/* default value for RXCR */
+    unsigned char rxcr_base;	/* default value for RXCR */
 #endif
 };
 

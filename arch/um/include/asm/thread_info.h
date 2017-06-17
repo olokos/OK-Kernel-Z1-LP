@@ -13,17 +13,17 @@
 #include <asm/uaccess.h>
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	__u32			cpu;		/* current CPU */
-	int			preempt_count;  /* 0 => preemptable,
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    __u32			cpu;		/* current CPU */
+    int			preempt_count;  /* 0 => preemptable,
 						   <0 => BUG */
-	mm_segment_t		addr_limit;	/* thread address space:
+    mm_segment_t		addr_limit;	/* thread address space:
 					 	   0-0xBFFFFFFF for user
 						   0-0xFFFFFFFF for kernel */
-	struct restart_block    restart_block;
-	struct thread_info	*real_thread;    /* Points to non-IRQ stack */
+    struct restart_block    restart_block;
+    struct thread_info	*real_thread;    /* Points to non-IRQ stack */
 };
 
 #define INIT_THREAD_INFO(tsk)			\
@@ -45,15 +45,14 @@ struct thread_info {
 
 #define THREAD_SIZE ((1 << CONFIG_KERNEL_STACK_ORDER) * PAGE_SIZE)
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	unsigned long mask = THREAD_SIZE - 1;
-	void *p;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    unsigned long mask = THREAD_SIZE - 1;
+    void *p;
 
-	asm volatile ("" : "=r" (p) : "0" (&ti));
-	ti = (struct thread_info *) (((unsigned long)p) & ~mask);
-	return ti;
+    asm volatile ("" : "=r" (p) : "0" (&ti));
+    ti = (struct thread_info *) (((unsigned long)p) & ~mask);
+    return ti;
 }
 
 #define THREAD_SIZE_ORDER CONFIG_KERNEL_STACK_ORDER

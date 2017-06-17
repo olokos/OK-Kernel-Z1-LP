@@ -55,8 +55,7 @@
 #define KEY_CTL_INVALID     0xFF
 
 
-typedef struct tagSKeyItem
-{
+typedef struct tagSKeyItem {
     BOOL        bKeyValid;
     unsigned long       uKeyLength;
     BYTE        abyKey[MAX_KEY_LEN];
@@ -69,8 +68,7 @@ typedef struct tagSKeyItem
     void *pvKeyTable;
 } SKeyItem, *PSKeyItem; //64
 
-typedef struct tagSKeyTable
-{
+typedef struct tagSKeyTable {
     BYTE        abyBSSID[ETH_ALEN];  /* 6 */
     BYTE        byReserved0[2];              //8
     SKeyItem    PairwiseKey;
@@ -82,8 +80,7 @@ typedef struct tagSKeyTable
     BYTE        byReserved1[6];
 } SKeyTable, *PSKeyTable; //352
 
-typedef struct tagSKeyManagement
-{
+typedef struct tagSKeyManagement {
     SKeyTable   KeyTable[MAX_KEY_TABLE];
 } SKeyManagement, *PSKeyManagement;
 
@@ -100,7 +97,7 @@ typedef struct tagSKeyManagement
 void KeyvInitTable(void *pDeviceHandler, PSKeyManagement pTable);
 
 BOOL KeybGetKey(PSKeyManagement pTable, PBYTE pbyBSSID, DWORD dwKeyIndex,
-		PSKeyItem *pKey);
+                PSKeyItem *pKey);
 
 BOOL KeybSetKey(
     void *pDeviceHandler,
@@ -111,34 +108,34 @@ BOOL KeybSetKey(
     PQWORD          pKeyRSC,
     PBYTE           pbyKey,
     BYTE            byKeyDecMode
-    );
+);
 
 BOOL KeybRemoveKey(
     void *pDeviceHandler,
     PSKeyManagement pTable,
     PBYTE           pbyBSSID,
     DWORD           dwKeyIndex
-    );
+);
 
 BOOL KeybRemoveAllKey(
     void *pDeviceHandler,
     PSKeyManagement pTable,
     PBYTE           pbyBSSID
-    );
+);
 
 void KeyvRemoveWEPKey(
     void *pDeviceHandler,
     PSKeyManagement pTable,
     DWORD           dwKeyIndex
-    );
+);
 
 void KeyvRemoveAllWEPKey(
     void *pDeviceHandler,
     PSKeyManagement pTable
-    );
+);
 
 BOOL KeybGetTransmitKey(PSKeyManagement pTable,	PBYTE pbyBSSID,	DWORD dwKeyType,
-			PSKeyItem *pKey);
+                        PSKeyItem *pKey);
 
 BOOL KeybCheckPairewiseKey(PSKeyManagement pTable, PSKeyItem *pKey);
 
@@ -150,7 +147,7 @@ BOOL KeybSetDefaultKey(
     PQWORD          pKeyRSC,
     PBYTE           pbyKey,
     BYTE            byKeyDecMode
-    );
+);
 
 BOOL KeybSetAllGroupKey(
     void *pDeviceHandler,
@@ -160,6 +157,6 @@ BOOL KeybSetAllGroupKey(
     PQWORD          pKeyRSC,
     PBYTE           pbyKey,
     BYTE            byKeyDecMode
-    );
+);
 
 #endif /* __KEY_H__ */

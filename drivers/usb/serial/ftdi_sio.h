@@ -150,28 +150,28 @@
  */
 
 enum ftdi_chip_type {
-	SIO = 1,
-	FT8U232AM = 2,
-	FT232BM = 3,
-	FT2232C = 4,
-	FT232RL = 5,
-	FT2232H = 6,
-	FT4232H = 7,
-	FT232H  = 8,
-	FTX     = 9,
+    SIO = 1,
+    FT8U232AM = 2,
+    FT232BM = 3,
+    FT2232C = 4,
+    FT232RL = 5,
+    FT2232H = 6,
+    FT4232H = 7,
+    FT232H  = 8,
+    FTX     = 9,
 };
 
 enum ftdi_sio_baudrate {
-	ftdi_sio_b300 = 0,
-	ftdi_sio_b600 = 1,
-	ftdi_sio_b1200 = 2,
-	ftdi_sio_b2400 = 3,
-	ftdi_sio_b4800 = 4,
-	ftdi_sio_b9600 = 5,
-	ftdi_sio_b19200 = 6,
-	ftdi_sio_b38400 = 7,
-	ftdi_sio_b57600 = 8,
-	ftdi_sio_b115200 = 9
+    ftdi_sio_b300 = 0,
+    ftdi_sio_b600 = 1,
+    ftdi_sio_b1200 = 2,
+    ftdi_sio_b2400 = 3,
+    ftdi_sio_b4800 = 4,
+    ftdi_sio_b9600 = 5,
+    ftdi_sio_b19200 = 6,
+    ftdi_sio_b38400 = 7,
+    ftdi_sio_b57600 = 8,
+    ftdi_sio_b115200 = 9
 };
 
 /*

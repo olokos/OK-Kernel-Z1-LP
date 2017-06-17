@@ -102,8 +102,7 @@ when           who        what, where, why
   priority channel */
 #define WLANDXE_HI_PRI_RES_NUM 10
 
-typedef enum
-{
+typedef enum {
     WLANDXE_POWER_STATE_FULL,
     WLANDXE_POWER_STATE_IMPS,
     WLANDXE_POWER_STATE_BMPS,
@@ -112,8 +111,7 @@ typedef enum
     WLANDXE_POWER_STATE_MAX
 } WLANDXE_PowerStateType;
 
-typedef enum
-{
+typedef enum {
     WLANDXE_RIVA_POWER_STATE_ACTIVE,
     WLANDXE_RIVA_POWER_STATE_IMPS_UNKNOWN,
     WLANDXE_RIVA_POWER_STATE_BMPS_UNKNOWN,

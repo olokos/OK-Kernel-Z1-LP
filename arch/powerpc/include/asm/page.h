@@ -141,10 +141,10 @@ extern long long virt_phys_offset;
  *
  * On BookE with RELOCATABLE (RELOCATABLE_PPC32)
  *
- *   With RELOCATABLE_PPC32,  we support loading the kernel at any physical 
+ *   With RELOCATABLE_PPC32,  we support loading the kernel at any physical
  *   address without any restriction on the page alignment.
  *
- *   We find the runtime address of _stext and relocate ourselves based on 
+ *   We find the runtime address of _stext and relocate ourselves based on
  *   the following calculation:
  *
  *  	  virtual_base = ALIGN_DOWN(KERNELBASE,256M) +
@@ -164,7 +164,7 @@ extern long long virt_phys_offset;
  *
  *   This formula holds true iff, kernel load address is TLB page aligned.
  *
- *   In our case, we need to also account for the shift in the kernel Virtual 
+ *   In our case, we need to also account for the shift in the kernel Virtual
  *   address.
  *
  *   E.g.,
@@ -192,7 +192,7 @@ extern long long virt_phys_offset;
  * 	a new variable virt_phys_offset, which will hold :
  *
  * 	virt_phys_offset = Effective KERNELBASE - PHYSICAL_START
- * 			 = ALIGN_DOWN(KERNELBASE,256M) - 
+ * 			 = ALIGN_DOWN(KERNELBASE,256M) -
  * 			 	ALIGN_DOWN(PHYSICALSTART,256M)
  *
  * 	Hence :
@@ -203,7 +203,7 @@ extern long long virt_phys_offset;
  * 		and
  * 	__pa(x) = x + PHYSICAL_START - Effective KERNELBASE
  * 		= x - virt_phys_offset
- * 		
+ *
  * On non-Book-E PPC64 PAGE_OFFSET and MEMORY_START are constants so use
  * the other definitions for __va & __pa.
  */
@@ -275,7 +275,9 @@ extern long long virt_phys_offset;
 /* These are used to make use of C type-checking. */
 
 /* PTE level */
-typedef struct { pte_basic_t pte; } pte_t;
+typedef struct {
+    pte_basic_t pte;
+} pte_t;
 #define pte_val(x)	((x).pte)
 #define __pte(x)	((pte_t) { (x) })
 
@@ -283,32 +285,45 @@ typedef struct { pte_basic_t pte; } pte_t;
  * the "second half" part of the PTE for pseudo 64k pages
  */
 #if defined(CONFIG_PPC_64K_PAGES) && defined(CONFIG_PPC_STD_MMU_64)
-typedef struct { pte_t pte; unsigned long hidx; } real_pte_t;
+typedef struct {
+    pte_t pte;
+    unsigned long hidx;
+} real_pte_t;
 #else
-typedef struct { pte_t pte; } real_pte_t;
+typedef struct {
+    pte_t pte;
+} real_pte_t;
 #endif
 
 /* PMD level */
 #ifdef CONFIG_PPC64
-typedef struct { unsigned long pmd; } pmd_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
 #define pmd_val(x)	((x).pmd)
 #define __pmd(x)	((pmd_t) { (x) })
 
 /* PUD level exusts only on 4k pages */
 #ifndef CONFIG_PPC_64K_PAGES
-typedef struct { unsigned long pud; } pud_t;
+typedef struct {
+    unsigned long pud;
+} pud_t;
 #define pud_val(x)	((x).pud)
 #define __pud(x)	((pud_t) { (x) })
 #endif /* !CONFIG_PPC_64K_PAGES */
 #endif /* CONFIG_PPC64 */
 
 /* PGD level */
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #define pgd_val(x)	((x).pgd)
 #define __pgd(x)	((pgd_t) { (x) })
 
 /* Page protection bits */
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 #define pgprot_val(x)	((x).pgprot)
 #define __pgprot(x)	((pgprot_t) { (x) })
 
@@ -323,7 +338,10 @@ typedef pte_basic_t pte_t;
 #define __pte(x)	(x)
 
 #if defined(CONFIG_PPC_64K_PAGES) && defined(CONFIG_PPC_STD_MMU_64)
-typedef struct { pte_t pte; unsigned long hidx; } real_pte_t;
+typedef struct {
+    pte_t pte;
+    unsigned long hidx;
+} real_pte_t;
 #else
 typedef pte_t real_pte_t;
 #endif
@@ -351,12 +369,13 @@ typedef unsigned long pgprot_t;
 
 #endif
 
-typedef struct { signed long pd; } hugepd_t;
+typedef struct {
+    signed long pd;
+} hugepd_t;
 
 #ifdef CONFIG_HUGETLB_PAGE
-static inline int hugepd_ok(hugepd_t hpd)
-{
-	return (hpd.pd > 0);
+static inline int hugepd_ok(hugepd_t hpd) {
+    return (hpd.pd > 0);
 }
 
 #define is_hugepd(pdep)               (hugepd_ok(*((hugepd_t *)(pdep))))
@@ -367,7 +386,7 @@ static inline int hugepd_ok(hugepd_t hpd)
 struct page;
 extern void clear_user_page(void *page, unsigned long vaddr, struct page *pg);
 extern void copy_user_page(void *to, void *from, unsigned long vaddr,
-		struct page *p);
+                           struct page *p);
 extern int page_is_ram(unsigned long pfn);
 extern int devmem_is_allowed(unsigned long pfn);
 

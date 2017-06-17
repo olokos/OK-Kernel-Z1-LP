@@ -181,8 +181,8 @@
  * types. Part of RspMsgStruct and ReqMsgStruct.
  */
 typedef struct {
-	unsigned long buff_offset;
-	unsigned short msg_len;
+    unsigned long buff_offset;
+    unsigned short msg_len;
 } LLData;
 
 
@@ -190,37 +190,37 @@ typedef struct {
  * Message payload template for an HWConfig message
  */
 typedef struct {
-	char st_u_sense;
-	char powr_sense;
-	char sply_sense;
-	unsigned char asic_id;
-	long ram_size;
-	char serial_no[13];
-	char part_no[13];
-	char rev_no[2];
+    char st_u_sense;
+    char powr_sense;
+    char sply_sense;
+    unsigned char asic_id;
+    long ram_size;
+    char serial_no[13];
+    char part_no[13];
+    char rev_no[2];
 } HWConfig_pl;
 
 /*
  * A Message
  */
 struct message {
-	unsigned char sequence_no;
-	unsigned char process_id;
-	unsigned char time_stamp;
-	unsigned char cmd_sequence_no;	/* Rsp messages only */
-	unsigned char reserved1[3];
-	unsigned char msg_byte_cnt;
-	unsigned char type;
-	unsigned char class;
-	unsigned char code;
-	unsigned char phy_link_no;
-	unsigned char rsp_status;	/* Rsp messages only */
-	unsigned char reseved2[3];
-	union {
-		unsigned char byte_array[MSG_DATA_LEN];
-		LLData response;
-		HWConfig_pl HWCresponse;
-	} msg_data;
+    unsigned char sequence_no;
+    unsigned char process_id;
+    unsigned char time_stamp;
+    unsigned char cmd_sequence_no;	/* Rsp messages only */
+    unsigned char reserved1[3];
+    unsigned char msg_byte_cnt;
+    unsigned char type;
+    unsigned char class;
+    unsigned char code;
+    unsigned char phy_link_no;
+    unsigned char rsp_status;	/* Rsp messages only */
+    unsigned char reseved2[3];
+    union {
+        unsigned char byte_array[MSG_DATA_LEN];
+        LLData response;
+        HWConfig_pl HWCresponse;
+    } msg_data;
 };
 
 typedef struct message ReqMessage;	/* Request message */
@@ -231,15 +231,15 @@ typedef struct message RspMessage;	/* Response message */
  * indexes and other data. This structure is its template
  */
 typedef struct {
-	volatile ReqMessage req_queue[MAX_MESSAGES];
-	volatile RspMessage rsp_queue[MAX_MESSAGES];
-	volatile unsigned char req_head;
-	volatile unsigned char req_tail;
-	volatile unsigned char rsp_head;
-	volatile unsigned char rsp_tail;
-	volatile unsigned long signature;
-	volatile unsigned long trace_enable;
-	volatile unsigned char reserved[4];
+    volatile ReqMessage req_queue[MAX_MESSAGES];
+    volatile RspMessage rsp_queue[MAX_MESSAGES];
+    volatile unsigned char req_head;
+    volatile unsigned char req_tail;
+    volatile unsigned char rsp_head;
+    volatile unsigned char rsp_tail;
+    volatile unsigned long signature;
+    volatile unsigned long trace_enable;
+    volatile unsigned char reserved[4];
 } DualPortMemory;
 
 #endif

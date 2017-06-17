@@ -10,9 +10,9 @@
  * (display/resolving)
  */
 struct arch_hw_breakpoint {
-	unsigned long	address;
-	u8		len;
-	u8		type;
+    unsigned long	address;
+    u8		len;
+    u8		type;
 };
 
 #include <linux/kdebug.h>
@@ -41,9 +41,8 @@ struct arch_hw_breakpoint {
 /* Total number of available HW breakpoint registers */
 #define HBP_NUM 4
 
-static inline int hw_breakpoint_slots(int type)
-{
-	return HBP_NUM;
+static inline int hw_breakpoint_slots(int type) {
+    return HBP_NUM;
 }
 
 struct perf_event;
@@ -52,7 +51,7 @@ struct pmu;
 extern int arch_check_bp_in_kernelspace(struct perf_event *bp);
 extern int arch_validate_hwbkpt_settings(struct perf_event *bp);
 extern int hw_breakpoint_exceptions_notify(struct notifier_block *unused,
-					   unsigned long val, void *data);
+        unsigned long val, void *data);
 
 
 int arch_install_hw_breakpoint(struct perf_event *bp);
@@ -67,7 +66,7 @@ unsigned long encode_dr7(int drnum, unsigned int len, unsigned int type);
 int decode_dr7(unsigned long dr7, int bpnum, unsigned *len, unsigned *type);
 
 extern int arch_bp_generic_fields(int x86_len, int x86_type,
-				  int *gen_len, int *gen_type);
+                                  int *gen_len, int *gen_type);
 
 extern struct pmu perf_ops_bp;
 

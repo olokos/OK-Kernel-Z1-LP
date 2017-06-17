@@ -173,35 +173,35 @@
 
 /* supported resolutions */
 enum {
-	W_QQCIF	= 88,
-	W_QQVGA	= 160,
-	W_QCIF	= 176,
-	W_QVGA	= 320,
-	W_CIF	= 352,
-	W_VGA	= 640,
-	W_SXGA	= 1280
+    W_QQCIF	= 88,
+    W_QQVGA	= 160,
+    W_QCIF	= 176,
+    W_QVGA	= 320,
+    W_CIF	= 352,
+    W_VGA	= 640,
+    W_SXGA	= 1280
 };
 #define	H_SXGA	960
 
 /* Misc. structures */
 struct ov9640_reg_alt {
-	u8	com7;
-	u8	com12;
-	u8	com13;
-	u8	com15;
+    u8	com7;
+    u8	com12;
+    u8	com13;
+    u8	com15;
 };
 
 struct ov9640_reg {
-	u8	reg;
-	u8	val;
+    u8	reg;
+    u8	val;
 };
 
 struct ov9640_priv {
-	struct v4l2_subdev		subdev;
-	struct v4l2_ctrl_handler	hdl;
+    struct v4l2_subdev		subdev;
+    struct v4l2_ctrl_handler	hdl;
 
-	int				model;
-	int				revision;
+    int				model;
+    int				revision;
 };
 
 #endif	/* __DRIVERS_MEDIA_VIDEO_OV9640_H__ */

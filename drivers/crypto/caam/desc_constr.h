@@ -29,114 +29,98 @@
 			       LDST_SRCDST_WORD_DECOCTRL | \
 			       (LDOFF_ENABLE_AUTO_NFIFO << LDST_OFFSET_SHIFT))
 
-static inline int desc_len(u32 *desc)
-{
-	return *desc & HDR_DESCLEN_MASK;
+static inline int desc_len(u32 *desc) {
+    return *desc & HDR_DESCLEN_MASK;
 }
 
-static inline int desc_bytes(void *desc)
-{
-	return desc_len(desc) * CAAM_CMD_SZ;
+static inline int desc_bytes(void *desc) {
+    return desc_len(desc) * CAAM_CMD_SZ;
 }
 
-static inline u32 *desc_end(u32 *desc)
-{
-	return desc + desc_len(desc);
+static inline u32 *desc_end(u32 *desc) {
+    return desc + desc_len(desc);
 }
 
-static inline void *sh_desc_pdb(u32 *desc)
-{
-	return desc + 1;
+static inline void *sh_desc_pdb(u32 *desc) {
+    return desc + 1;
 }
 
-static inline void init_desc(u32 *desc, u32 options)
-{
-	*desc = options | HDR_ONE | 1;
+static inline void init_desc(u32 *desc, u32 options) {
+    *desc = options | HDR_ONE | 1;
 }
 
-static inline void init_sh_desc(u32 *desc, u32 options)
-{
-	PRINT_POS;
-	init_desc(desc, CMD_SHARED_DESC_HDR | options);
+static inline void init_sh_desc(u32 *desc, u32 options) {
+    PRINT_POS;
+    init_desc(desc, CMD_SHARED_DESC_HDR | options);
 }
 
-static inline void init_sh_desc_pdb(u32 *desc, u32 options, size_t pdb_bytes)
-{
-	u32 pdb_len = pdb_bytes / CAAM_CMD_SZ + 1;
+static inline void init_sh_desc_pdb(u32 *desc, u32 options, size_t pdb_bytes) {
+    u32 pdb_len = pdb_bytes / CAAM_CMD_SZ + 1;
 
-	init_sh_desc(desc, ((pdb_len << HDR_START_IDX_SHIFT) + pdb_len) |
-		     options);
+    init_sh_desc(desc, ((pdb_len << HDR_START_IDX_SHIFT) + pdb_len) |
+                 options);
 }
 
-static inline void init_job_desc(u32 *desc, u32 options)
-{
-	init_desc(desc, CMD_DESC_HDR | options);
+static inline void init_job_desc(u32 *desc, u32 options) {
+    init_desc(desc, CMD_DESC_HDR | options);
 }
 
-static inline void append_ptr(u32 *desc, dma_addr_t ptr)
-{
-	dma_addr_t *offset = (dma_addr_t *)desc_end(desc);
+static inline void append_ptr(u32 *desc, dma_addr_t ptr) {
+    dma_addr_t *offset = (dma_addr_t *)desc_end(desc);
 
-	*offset = ptr;
+    *offset = ptr;
 
-	(*desc) += CAAM_PTR_SZ / CAAM_CMD_SZ;
+    (*desc) += CAAM_PTR_SZ / CAAM_CMD_SZ;
 }
 
 static inline void init_job_desc_shared(u32 *desc, dma_addr_t ptr, int len,
-					u32 options)
-{
-	PRINT_POS;
-	init_job_desc(desc, HDR_SHARED | options |
-		      (len << HDR_START_IDX_SHIFT));
-	append_ptr(desc, ptr);
+                                        u32 options) {
+    PRINT_POS;
+    init_job_desc(desc, HDR_SHARED | options |
+                  (len << HDR_START_IDX_SHIFT));
+    append_ptr(desc, ptr);
 }
 
-static inline void append_data(u32 *desc, void *data, int len)
-{
-	u32 *offset = desc_end(desc);
+static inline void append_data(u32 *desc, void *data, int len) {
+    u32 *offset = desc_end(desc);
 
-	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
-		memcpy(offset, data, len);
+    if (len) /* avoid sparse warning: memcpy with byte count of 0 */
+        memcpy(offset, data, len);
 
-	(*desc) += (len + CAAM_CMD_SZ - 1) / CAAM_CMD_SZ;
+    (*desc) += (len + CAAM_CMD_SZ - 1) / CAAM_CMD_SZ;
 }
 
-static inline void append_cmd(u32 *desc, u32 command)
-{
-	u32 *cmd = desc_end(desc);
+static inline void append_cmd(u32 *desc, u32 command) {
+    u32 *cmd = desc_end(desc);
 
-	*cmd = command;
+    *cmd = command;
 
-	(*desc)++;
+    (*desc)++;
 }
 
 static inline void append_cmd_ptr(u32 *desc, dma_addr_t ptr, int len,
-				  u32 command)
-{
-	append_cmd(desc, command | len);
-	append_ptr(desc, ptr);
+                                  u32 command) {
+    append_cmd(desc, command | len);
+    append_ptr(desc, ptr);
 }
 
 static inline void append_cmd_data(u32 *desc, void *data, int len,
-				   u32 command)
-{
-	append_cmd(desc, command | IMMEDIATE | len);
-	append_data(desc, data, len);
+                                   u32 command) {
+    append_cmd(desc, command | IMMEDIATE | len);
+    append_data(desc, data, len);
 }
 
-static inline u32 *append_jump(u32 *desc, u32 options)
-{
-	u32 *cmd = desc_end(desc);
+static inline u32 *append_jump(u32 *desc, u32 options) {
+    u32 *cmd = desc_end(desc);
 
-	PRINT_POS;
-	append_cmd(desc, CMD_JUMP | options);
+    PRINT_POS;
+    append_cmd(desc, CMD_JUMP | options);
 
-	return cmd;
+    return cmd;
 }
 
-static inline void set_jump_tgt_here(u32 *desc, u32 *jump_cmd)
-{
-	*jump_cmd = *jump_cmd | (desc_len(desc) - (jump_cmd - desc));
+static inline void set_jump_tgt_here(u32 *desc, u32 *jump_cmd) {
+    *jump_cmd = *jump_cmd | (desc_len(desc) - (jump_cmd - desc));
 }
 
 #define APPEND_CMD(cmd, op) \

@@ -32,16 +32,16 @@
  * low level task data.
  */
 struct thread_info {
-	struct task_struct *task;		/* main task structure */
-	struct exec_domain *exec_domain;	/* execution domain */
-	int		cpu;			/* cpu we're on */
-	int		preempt_count;		/* 0 => preemptable,
+    struct task_struct *task;		/* main task structure */
+    struct exec_domain *exec_domain;	/* execution domain */
+    int		cpu;			/* cpu we're on */
+    int		preempt_count;		/* 0 => preemptable,
 						   <0 => BUG */
-	struct restart_block restart_block;
-	unsigned long	local_flags;		/* private flags for thread */
+    struct restart_block restart_block;
+    unsigned long	local_flags;		/* private flags for thread */
 
-	/* low level flags - has atomic operations done on it */
-	unsigned long	flags ____cacheline_aligned_in_smp;
+    /* low level flags - has atomic operations done on it */
+    unsigned long	flags ____cacheline_aligned_in_smp;
 };
 
 /*
@@ -78,13 +78,12 @@ extern void free_thread_info(struct thread_info *ti);
 #endif /* THREAD_SHIFT < PAGE_SHIFT */
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	register unsigned long sp asm("r1");
+static inline struct thread_info *current_thread_info(void) {
+    register unsigned long sp asm("r1");
 
-	/* gcc4, at least, is smart enough to turn this into a single
-	 * rlwinm for ppc32 and clrrdi for ppc64 */
-	return (struct thread_info *)(sp & ~(THREAD_SIZE-1));
+    /* gcc4, at least, is smart enough to turn this into a single
+     * rlwinm for ppc32 and clrrdi for ppc64 */
+    return (struct thread_info *)(sp & ~(THREAD_SIZE-1));
 }
 
 #endif /* __ASSEMBLY__ */
@@ -150,17 +149,15 @@ static inline struct thread_info *current_thread_info(void)
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK	1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->local_flags |= _TLF_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, &ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->local_flags |= _TLF_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, &ti->flags);
 }
 
-static inline bool test_thread_local_flags(unsigned int flags)
-{
-	struct thread_info *ti = current_thread_info();
-	return (ti->local_flags & flags) != 0;
+static inline bool test_thread_local_flags(unsigned int flags) {
+    struct thread_info *ti = current_thread_info();
+    return (ti->local_flags & flags) != 0;
 }
 
 #ifdef CONFIG_PPC64

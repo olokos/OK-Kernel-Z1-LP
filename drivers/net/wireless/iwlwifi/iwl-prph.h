@@ -227,28 +227,25 @@
 #define SCD_AGGR_SEL		(SCD_BASE + 0x248)
 #define SCD_INTERRUPT_MASK	(SCD_BASE + 0x108)
 
-static inline unsigned int SCD_QUEUE_WRPTR(unsigned int chnl)
-{
-	if (chnl < 20)
-		return SCD_BASE + 0x18 + chnl * 4;
-	WARN_ON_ONCE(chnl >= 32);
-	return SCD_BASE + 0x284 + (chnl - 20) * 4;
+static inline unsigned int SCD_QUEUE_WRPTR(unsigned int chnl) {
+    if (chnl < 20)
+        return SCD_BASE + 0x18 + chnl * 4;
+    WARN_ON_ONCE(chnl >= 32);
+    return SCD_BASE + 0x284 + (chnl - 20) * 4;
 }
 
-static inline unsigned int SCD_QUEUE_RDPTR(unsigned int chnl)
-{
-	if (chnl < 20)
-		return SCD_BASE + 0x68 + chnl * 4;
-	WARN_ON_ONCE(chnl >= 32);
-	return SCD_BASE + 0x2B4 + (chnl - 20) * 4;
+static inline unsigned int SCD_QUEUE_RDPTR(unsigned int chnl) {
+    if (chnl < 20)
+        return SCD_BASE + 0x68 + chnl * 4;
+    WARN_ON_ONCE(chnl >= 32);
+    return SCD_BASE + 0x2B4 + (chnl - 20) * 4;
 }
 
-static inline unsigned int SCD_QUEUE_STATUS_BITS(unsigned int chnl)
-{
-	if (chnl < 20)
-		return SCD_BASE + 0x10c + chnl * 4;
-	WARN_ON_ONCE(chnl >= 32);
-	return SCD_BASE + 0x384 + (chnl - 20) * 4;
+static inline unsigned int SCD_QUEUE_STATUS_BITS(unsigned int chnl) {
+    if (chnl < 20)
+        return SCD_BASE + 0x10c + chnl * 4;
+    WARN_ON_ONCE(chnl >= 32);
+    return SCD_BASE + 0x384 + (chnl - 20) * 4;
 }
 
 /*********************** END TX SCHEDULER *************************************/

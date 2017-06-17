@@ -34,75 +34,75 @@
 typedef volatile __u32	igcsr32;
 
 typedef struct {
-	igcsr32 dev_vendor;		/* 0x00 - device ID, vendor ID */
-	igcsr32 stat_cmd;		/* 0x04 - status, command */
-	igcsr32 class;			/* 0x08 - class code, rev ID */
-	igcsr32 latency;		/* 0x0C - header type, PCI latency */
-	igcsr32 bar0;			/* 0x10 - BAR0 - AGP */
-	igcsr32 bar1;			/* 0x14 - BAR1 - GART */
-	igcsr32 bar2;			/* 0x18 - Power Management reg block */
+    igcsr32 dev_vendor;		/* 0x00 - device ID, vendor ID */
+    igcsr32 stat_cmd;		/* 0x04 - status, command */
+    igcsr32 class;			/* 0x08 - class code, rev ID */
+    igcsr32 latency;		/* 0x0C - header type, PCI latency */
+    igcsr32 bar0;			/* 0x10 - BAR0 - AGP */
+    igcsr32 bar1;			/* 0x14 - BAR1 - GART */
+    igcsr32 bar2;			/* 0x18 - Power Management reg block */
 
-	igcsr32 rsrvd0[6];		/* 0x1C-0x33 reserved */
+    igcsr32 rsrvd0[6];		/* 0x1C-0x33 reserved */
 
-	igcsr32 capptr;			/* 0x34 - Capabilities pointer */
+    igcsr32 capptr;			/* 0x34 - Capabilities pointer */
 
-	igcsr32 rsrvd1[2];		/* 0x38-0x3F reserved */
+    igcsr32 rsrvd1[2];		/* 0x38-0x3F reserved */
 
-	igcsr32 bacsr10;		/* 0x40 - base address chip selects */
-	igcsr32 bacsr32;		/* 0x44 - base address chip selects */
-	igcsr32 bacsr54_eccms761;	/* 0x48 - 751: base addr. chip selects
+    igcsr32 bacsr10;		/* 0x40 - base address chip selects */
+    igcsr32 bacsr32;		/* 0x44 - base address chip selects */
+    igcsr32 bacsr54_eccms761;	/* 0x48 - 751: base addr. chip selects
 						  761: ECC, mode/status */
 
-	igcsr32 rsrvd2[1];		/* 0x4C-0x4F reserved */
+    igcsr32 rsrvd2[1];		/* 0x4C-0x4F reserved */
 
-	igcsr32 drammap;		/* 0x50 - address mapping control */
-	igcsr32 dramtm;			/* 0x54 - timing, driver strength */
-	igcsr32 dramms;			/* 0x58 - DRAM mode/status */
+    igcsr32 drammap;		/* 0x50 - address mapping control */
+    igcsr32 dramtm;			/* 0x54 - timing, driver strength */
+    igcsr32 dramms;			/* 0x58 - DRAM mode/status */
 
-	igcsr32 rsrvd3[1];		/* 0x5C-0x5F reserved */
+    igcsr32 rsrvd3[1];		/* 0x5C-0x5F reserved */
 
-	igcsr32 biu0;			/* 0x60 - bus interface unit */
-	igcsr32 biusip;			/* 0x64 - Serial initialisation pkt */
+    igcsr32 biu0;			/* 0x60 - bus interface unit */
+    igcsr32 biusip;			/* 0x64 - Serial initialisation pkt */
 
-	igcsr32 rsrvd4[2];		/* 0x68-0x6F reserved */
+    igcsr32 rsrvd4[2];		/* 0x68-0x6F reserved */
 
-	igcsr32 mro;			/* 0x70 - memory request optimiser */
+    igcsr32 mro;			/* 0x70 - memory request optimiser */
 
-	igcsr32 rsrvd5[3];		/* 0x74-0x7F reserved */
+    igcsr32 rsrvd5[3];		/* 0x74-0x7F reserved */
 
-	igcsr32 whami;			/* 0x80 - who am I */
-	igcsr32 pciarb;			/* 0x84 - PCI arbitration control */
-	igcsr32 pcicfg;			/* 0x88 - PCI config status */
+    igcsr32 whami;			/* 0x80 - who am I */
+    igcsr32 pciarb;			/* 0x84 - PCI arbitration control */
+    igcsr32 pcicfg;			/* 0x88 - PCI config status */
 
-	igcsr32 rsrvd6[4];		/* 0x8C-0x9B reserved */
+    igcsr32 rsrvd6[4];		/* 0x8C-0x9B reserved */
 
-	igcsr32 pci_mem;		/* 0x9C - PCI top of memory,
+    igcsr32 pci_mem;		/* 0x9C - PCI top of memory,
 						  761 only */
 
-	/* AGP (bus 1) control registers */
-	igcsr32 agpcap;			/* 0xA0 - AGP Capability Identifier */
-	igcsr32 agpstat;		/* 0xA4 - AGP status register */
-	igcsr32 agpcmd;			/* 0xA8 - AGP control register */
-	igcsr32 agpva;			/* 0xAC - AGP Virtual Address Space */
-	igcsr32 agpmode;		/* 0xB0 - AGP/GART mode control */
+    /* AGP (bus 1) control registers */
+    igcsr32 agpcap;			/* 0xA0 - AGP Capability Identifier */
+    igcsr32 agpstat;		/* 0xA4 - AGP status register */
+    igcsr32 agpcmd;			/* 0xA8 - AGP control register */
+    igcsr32 agpva;			/* 0xAC - AGP Virtual Address Space */
+    igcsr32 agpmode;		/* 0xB0 - AGP/GART mode control */
 } Irongate0;
 
 
 typedef struct {
 
-	igcsr32 dev_vendor;		/* 0x00 - Device and Vendor IDs */
-	igcsr32 stat_cmd;		/* 0x04 - Status and Command regs */
-	igcsr32 class;			/* 0x08 - subclass, baseclass etc */
-	igcsr32 htype;			/* 0x0C - header type (at 0x0E) */
-	igcsr32 rsrvd0[2];		/* 0x10-0x17 reserved */
-	igcsr32 busnos;			/* 0x18 - Primary, secondary bus nos */
-	igcsr32 io_baselim_regs;	/* 0x1C - IO base, IO lim, AGP status */
-	igcsr32	mem_baselim;		/* 0x20 - memory base, memory lim */
-	igcsr32 pfmem_baselim;		/* 0x24 - prefetchable base, lim */
-	igcsr32 rsrvd1[2];		/* 0x28-0x2F reserved */
-	igcsr32 io_baselim;		/* 0x30 - IO base, IO limit */
-	igcsr32 rsrvd2[2];		/* 0x34-0x3B - reserved */
-	igcsr32 interrupt;		/* 0x3C - interrupt, PCI bridge ctrl */
+    igcsr32 dev_vendor;		/* 0x00 - Device and Vendor IDs */
+    igcsr32 stat_cmd;		/* 0x04 - Status and Command regs */
+    igcsr32 class;			/* 0x08 - subclass, baseclass etc */
+    igcsr32 htype;			/* 0x0C - header type (at 0x0E) */
+    igcsr32 rsrvd0[2];		/* 0x10-0x17 reserved */
+    igcsr32 busnos;			/* 0x18 - Primary, secondary bus nos */
+    igcsr32 io_baselim_regs;	/* 0x1C - IO base, IO lim, AGP status */
+    igcsr32	mem_baselim;		/* 0x20 - memory base, memory lim */
+    igcsr32 pfmem_baselim;		/* 0x24 - prefetchable base, lim */
+    igcsr32 rsrvd1[2];		/* 0x28-0x2F reserved */
+    igcsr32 io_baselim;		/* 0x30 - IO base, IO limit */
+    igcsr32 rsrvd2[2];		/* 0x34-0x3B - reserved */
+    igcsr32 interrupt;		/* 0x3C - interrupt, PCI bridge ctrl */
 
 } Irongate1;
 
@@ -152,27 +152,27 @@ extern igcsr32 *IronECC;
 #define SCB_Q_PROCMCHK	0x670
 
 struct el_IRONGATE_sysdata_mcheck {
-	__u32 FrameSize;                 /* Bytes, including this field */
-	__u32 FrameFlags;                /* <31> = Retry, <30> = Second Error */
-	__u32 CpuOffset;                 /* Offset to CPU-specific into */
-	__u32 SystemOffset;              /* Offset to system-specific info */
-	__u32 MCHK_Code;
-	__u32 MCHK_Frame_Rev;
-	__u64 I_STAT;
-	__u64 DC_STAT;
-	__u64 C_ADDR;
-	__u64 DC1_SYNDROME;
-	__u64 DC0_SYNDROME;
-	__u64 C_STAT;
-	__u64 C_STS;
-	__u64 RESERVED0;
-	__u64 EXC_ADDR;
-	__u64 IER_CM;
-	__u64 ISUM;
-	__u64 MM_STAT;
-	__u64 PAL_BASE;
-	__u64 I_CTL;
-	__u64 PCTX;
+    __u32 FrameSize;                 /* Bytes, including this field */
+    __u32 FrameFlags;                /* <31> = Retry, <30> = Second Error */
+    __u32 CpuOffset;                 /* Offset to CPU-specific into */
+    __u32 SystemOffset;              /* Offset to system-specific info */
+    __u32 MCHK_Code;
+    __u32 MCHK_Frame_Rev;
+    __u64 I_STAT;
+    __u64 DC_STAT;
+    __u64 C_ADDR;
+    __u64 DC1_SYNDROME;
+    __u64 DC0_SYNDROME;
+    __u64 C_STAT;
+    __u64 C_STS;
+    __u64 RESERVED0;
+    __u64 EXC_ADDR;
+    __u64 IER_CM;
+    __u64 ISUM;
+    __u64 MM_STAT;
+    __u64 PAL_BASE;
+    __u64 I_CTL;
+    __u64 PCTX;
 };
 
 
@@ -194,23 +194,20 @@ struct el_IRONGATE_sysdata_mcheck {
  * Memory functions.  All accesses are done through linear space.
  */
 
-__EXTERN_INLINE void __iomem *irongate_ioportmap(unsigned long addr)
-{
-	return (void __iomem *)(addr + IRONGATE_IO);
+__EXTERN_INLINE void __iomem *irongate_ioportmap(unsigned long addr) {
+    return (void __iomem *)(addr + IRONGATE_IO);
 }
 
 extern void __iomem *irongate_ioremap(unsigned long addr, unsigned long size);
 extern void irongate_iounmap(volatile void __iomem *addr);
 
-__EXTERN_INLINE int irongate_is_ioaddr(unsigned long addr)
-{
-	return addr >= IRONGATE_MEM;
+__EXTERN_INLINE int irongate_is_ioaddr(unsigned long addr) {
+    return addr >= IRONGATE_MEM;
 }
 
-__EXTERN_INLINE int irongate_is_mmio(const volatile void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr;
-	return addr < IRONGATE_IO || addr >= IRONGATE_CONF;
+__EXTERN_INLINE int irongate_is_mmio(const volatile void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr;
+    return addr < IRONGATE_IO || addr >= IRONGATE_CONF;
 }
 
 #undef __IO_PREFIX

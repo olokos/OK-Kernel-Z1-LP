@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-/* 
+/*
  * Operating system-dependent definitions that have to be defined
  * before any other header files are included.
  */
@@ -40,12 +40,12 @@
 // -----------------------
 
 
-// SMT Definitions 
+// SMT Definitions
 // -----------------------
 #define SYNC	       		/* allow synchronous frames */
 
 // #define SBA			/* Synchronous Bandwidth Allocator support */
-				/* not available as free source */
+/* not available as free source */
 
 #define ESS			/* SBA End Station Support */
 
@@ -106,13 +106,13 @@
  */
 
 struct s_txd_os {	// os-specific part of transmit descriptor
-	struct sk_buff *skb;
-	dma_addr_t dma_addr;
+    struct sk_buff *skb;
+    dma_addr_t dma_addr;
 } ;
 
 struct s_rxd_os {	// os-specific part of receive descriptor
-	struct sk_buff *skb;
-	dma_addr_t dma_addr;
+    struct sk_buff *skb;
+    dma_addr_t dma_addr;
 } ;
 
 

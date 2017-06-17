@@ -6,33 +6,33 @@
 #define PORT_C 2
 
 enum pin_mode {
-	pinmux_none = 0,
-	pinmux_fixed,
-	pinmux_gpio,
-	pinmux_iop
+    pinmux_none = 0,
+    pinmux_fixed,
+    pinmux_gpio,
+    pinmux_iop
 };
 
 enum fixed_function {
-	pinmux_eth,
-	pinmux_geth,
-	pinmux_tg_ccd,
-	pinmux_tg_cmos,
-	pinmux_vout,
-	pinmux_ser1,
-	pinmux_ser2,
-	pinmux_ser3,
-	pinmux_ser4,
-	pinmux_sser,
-	pinmux_pio,
-	pinmux_pwm0,
-	pinmux_pwm1,
-	pinmux_pwm2,
-	pinmux_i2c0,
-	pinmux_i2c1,
-	pinmux_i2c1_3wire,
-	pinmux_i2c1_sda1,
-	pinmux_i2c1_sda2,
-	pinmux_i2c1_sda3,
+    pinmux_eth,
+    pinmux_geth,
+    pinmux_tg_ccd,
+    pinmux_tg_cmos,
+    pinmux_vout,
+    pinmux_ser1,
+    pinmux_ser2,
+    pinmux_ser3,
+    pinmux_ser4,
+    pinmux_sser,
+    pinmux_pio,
+    pinmux_pwm0,
+    pinmux_pwm1,
+    pinmux_pwm2,
+    pinmux_i2c0,
+    pinmux_i2c1,
+    pinmux_i2c1_3wire,
+    pinmux_i2c1_sda1,
+    pinmux_i2c1_sda2,
+    pinmux_i2c1_sda3,
 };
 
 int crisv32_pinmux_init(void);

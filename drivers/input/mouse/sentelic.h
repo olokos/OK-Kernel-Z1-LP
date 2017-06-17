@@ -97,31 +97,29 @@
 #ifdef __KERNEL__
 
 struct fsp_data {
-	unsigned char	ver;		/* hardware version */
-	unsigned char	rev;		/* hardware revison */
-	unsigned int	buttons;	/* Number of buttons */
-	unsigned int	flags;
+    unsigned char	ver;		/* hardware version */
+    unsigned char	rev;		/* hardware revison */
+    unsigned int	buttons;	/* Number of buttons */
+    unsigned int	flags;
 #define	FSPDRV_FLAG_EN_OPC	(0x001)	/* enable on-pad clicking */
 
-	bool		vscroll;	/* Vertical scroll zone enabled */
-	bool		hscroll;	/* Horizontal scroll zone enabled */
+    bool		vscroll;	/* Vertical scroll zone enabled */
+    bool		hscroll;	/* Horizontal scroll zone enabled */
 
-	unsigned char	last_reg;	/* Last register we requested read from */
-	unsigned char	last_val;
-	unsigned int	last_mt_fgr;	/* Last seen finger(multitouch) */
+    unsigned char	last_reg;	/* Last register we requested read from */
+    unsigned char	last_val;
+    unsigned int	last_mt_fgr;	/* Last seen finger(multitouch) */
 };
 
 #ifdef CONFIG_MOUSE_PS2_SENTELIC
 extern int fsp_detect(struct psmouse *psmouse, bool set_properties);
 extern int fsp_init(struct psmouse *psmouse);
 #else
-inline int fsp_detect(struct psmouse *psmouse, bool set_properties)
-{
-	return -ENOSYS;
+inline int fsp_detect(struct psmouse *psmouse, bool set_properties) {
+    return -ENOSYS;
 }
-inline int fsp_init(struct psmouse *psmouse)
-{
-	return -ENOSYS;
+inline int fsp_init(struct psmouse *psmouse) {
+    return -ENOSYS;
 }
 #endif
 

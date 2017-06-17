@@ -352,23 +352,23 @@ typedef struct tagWLAN_IE_RSN {
 // CCX Identity DavidWang
 #pragma pack(1)
 typedef struct tagWLAN_IE_CCX {
-BYTE   byElementID;
-BYTE   len;
-BYTE   abyCCX[30];
+    BYTE   byElementID;
+    BYTE   len;
+    BYTE   abyCCX[30];
 } WLAN_IE_CCX, *PWLAN_IE_CCX;
 #pragma pack(1)
 typedef struct tagWLAN_IE_CCX_IP {
-BYTE   byElementID;
-BYTE   len;
-BYTE   abyCCXOUI[4];
-BYTE   abyCCXIP[4];
-BYTE   abyCCXREV[2];
+    BYTE   byElementID;
+    BYTE   len;
+    BYTE   abyCCXOUI[4];
+    BYTE   abyCCXIP[4];
+    BYTE   abyCCXREV[2];
 } WLAN_IE_CCX_IP, *PWLAN_IE_CCX_IP;
 #pragma pack(1)
 typedef struct tagWLAN_IE_CCX_Ver {
-BYTE   byElementID;
-BYTE   len;
-BYTE   abyCCXVer[5];
+    BYTE   byElementID;
+    BYTE   len;
+    BYTE   abyCCXVer[5];
 } WLAN_IE_CCX_Ver, *PWLAN_IE_CCX_Ver;
 
 
@@ -388,9 +388,9 @@ typedef struct _MEASEURE_REQ {
     BYTE                abyStartTime[8];
     BYTE                abyDuration[2];
 } MEASEURE_REQ, *PMEASEURE_REQ,
-  MEASEURE_REQ_BASIC, *PMEASEURE_REQ_BASIC,
-  MEASEURE_REQ_CCA, *PMEASEURE_REQ_CCA,
-  MEASEURE_REQ_RPI, *PMEASEURE_REQ_RPI;
+MEASEURE_REQ_BASIC, *PMEASEURE_REQ_BASIC,
+MEASEURE_REQ_CCA, *PMEASEURE_REQ_CCA,
+MEASEURE_REQ_RPI, *PMEASEURE_REQ_RPI;
 
 typedef struct _MEASEURE_REP_BASIC {
     BYTE                byChannel;
@@ -737,112 +737,112 @@ typedef struct tagWLAN_FR_DEAUTHEN {
 /*---------------------  Export Functions  --------------------------*/
 void
 vMgrEncodeBeacon(
-      PWLAN_FR_BEACON  pFrame
-     );
+    PWLAN_FR_BEACON  pFrame
+);
 
 void
 vMgrDecodeBeacon(
-      PWLAN_FR_BEACON  pFrame
-    );
+    PWLAN_FR_BEACON  pFrame
+);
 
 void
 vMgrEncodeIBSSATIM(
-      PWLAN_FR_IBSSATIM   pFrame
-    );
+    PWLAN_FR_IBSSATIM   pFrame
+);
 
 void
 vMgrDecodeIBSSATIM(
-      PWLAN_FR_IBSSATIM   pFrame
-    );
+    PWLAN_FR_IBSSATIM   pFrame
+);
 
 void
 vMgrEncodeDisassociation(
-      PWLAN_FR_DISASSOC  pFrame
-    );
+    PWLAN_FR_DISASSOC  pFrame
+);
 
 void
 vMgrDecodeDisassociation(
-      PWLAN_FR_DISASSOC  pFrame
-    );
+    PWLAN_FR_DISASSOC  pFrame
+);
 
 void
 vMgrEncodeAssocRequest(
-      PWLAN_FR_ASSOCREQ  pFrame
-    );
+    PWLAN_FR_ASSOCREQ  pFrame
+);
 
 void
 vMgrDecodeAssocRequest(
-      PWLAN_FR_ASSOCREQ  pFrame
-    );
+    PWLAN_FR_ASSOCREQ  pFrame
+);
 
 void
 vMgrEncodeAssocResponse(
-      PWLAN_FR_ASSOCRESP  pFrame
-    );
+    PWLAN_FR_ASSOCRESP  pFrame
+);
 
 void
 vMgrDecodeAssocResponse(
-     PWLAN_FR_ASSOCRESP  pFrame
-    );
+    PWLAN_FR_ASSOCRESP  pFrame
+);
 
 void
 vMgrEncodeReassocRequest(
-      PWLAN_FR_REASSOCREQ  pFrame
-    );
+    PWLAN_FR_REASSOCREQ  pFrame
+);
 
 void
 vMgrDecodeReassocRequest(
-      PWLAN_FR_REASSOCREQ  pFrame
-    );
+    PWLAN_FR_REASSOCREQ  pFrame
+);
 
 void
 vMgrEncodeProbeRequest(
-     PWLAN_FR_PROBEREQ  pFrame
-    );
+    PWLAN_FR_PROBEREQ  pFrame
+);
 
 void
 vMgrDecodeProbeRequest(
-     PWLAN_FR_PROBEREQ  pFrame
-    );
+    PWLAN_FR_PROBEREQ  pFrame
+);
 
 void
 vMgrEncodeProbeResponse(
-     PWLAN_FR_PROBERESP  pFrame
-    );
+    PWLAN_FR_PROBERESP  pFrame
+);
 
 void
 vMgrDecodeProbeResponse(
-     PWLAN_FR_PROBERESP  pFrame
-    );
+    PWLAN_FR_PROBERESP  pFrame
+);
 
 void
 vMgrEncodeAuthen(
-      PWLAN_FR_AUTHEN  pFrame
-    );
+    PWLAN_FR_AUTHEN  pFrame
+);
 
 void
 vMgrDecodeAuthen(
-      PWLAN_FR_AUTHEN  pFrame
-    );
+    PWLAN_FR_AUTHEN  pFrame
+);
 
 void
 vMgrEncodeDeauthen(
-      PWLAN_FR_DEAUTHEN  pFrame
-    );
+    PWLAN_FR_DEAUTHEN  pFrame
+);
 
 void
 vMgrDecodeDeauthen(
-      PWLAN_FR_DEAUTHEN  pFrame
-    );
+    PWLAN_FR_DEAUTHEN  pFrame
+);
 
 void
 vMgrEncodeReassocResponse(
-      PWLAN_FR_REASSOCRESP  pFrame
-    );
+    PWLAN_FR_REASSOCRESP  pFrame
+);
 
 void
 vMgrDecodeReassocResponse(
-      PWLAN_FR_REASSOCRESP  pFrame
-    );
+    PWLAN_FR_REASSOCRESP  pFrame
+);
 
 #endif// __80211MGR_H__

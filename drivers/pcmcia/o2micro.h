@@ -9,7 +9,7 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and
- * limitations under the License. 
+ * limitations under the License.
  *
  * The initial developer of the original code is David A. Hinds
  * <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
@@ -106,78 +106,76 @@
 #define O2_RES_READ_PREFETCH	0x02
 #define O2_RES_WRITE_BURST	0x08
 
-static int o2micro_override(struct yenta_socket *socket)
-{
-	/*
-	 * 'reserved' register at 0x94/D4. allows setting read prefetch and write
-	 * bursting. read prefetching for example makes the RME Hammerfall DSP
-	 * working. for some bridges it is at 0x94, for others at 0xD4. it's
-	 * ok to write to both registers on all O2 bridges.
-	 * from Eric Still, 02Micro.
-	 */
-	u8 a, b;
-	bool use_speedup;
+static int o2micro_override(struct yenta_socket *socket) {
+    /*
+     * 'reserved' register at 0x94/D4. allows setting read prefetch and write
+     * bursting. read prefetching for example makes the RME Hammerfall DSP
+     * working. for some bridges it is at 0x94, for others at 0xD4. it's
+     * ok to write to both registers on all O2 bridges.
+     * from Eric Still, 02Micro.
+     */
+    u8 a, b;
+    bool use_speedup;
 
-	if (PCI_FUNC(socket->dev->devfn) == 0) {
-		a = config_readb(socket, O2_RESERVED1);
-		b = config_readb(socket, O2_RESERVED2);
-		dev_dbg(&socket->dev->dev, "O2: 0x94/0xD4: %02x/%02x\n", a, b);
+    if (PCI_FUNC(socket->dev->devfn) == 0) {
+        a = config_readb(socket, O2_RESERVED1);
+        b = config_readb(socket, O2_RESERVED2);
+        dev_dbg(&socket->dev->dev, "O2: 0x94/0xD4: %02x/%02x\n", a, b);
 
-		switch (socket->dev->device) {
-		/*
-		 * older bridges have problems with both read prefetch and write
-		 * bursting depending on the combination of the chipset, bridge
-		 * and the cardbus card. so disable them to be on the safe side.
-		 */
-		case PCI_DEVICE_ID_O2_6729:
-		case PCI_DEVICE_ID_O2_6730:
-		case PCI_DEVICE_ID_O2_6812:
-		case PCI_DEVICE_ID_O2_6832:
-		case PCI_DEVICE_ID_O2_6836:
-		case PCI_DEVICE_ID_O2_6933:
-			use_speedup = false;
-			break;
-		default:
-			use_speedup = true;
-			break;
-		}
+        switch (socket->dev->device) {
+        /*
+         * older bridges have problems with both read prefetch and write
+         * bursting depending on the combination of the chipset, bridge
+         * and the cardbus card. so disable them to be on the safe side.
+         */
+        case PCI_DEVICE_ID_O2_6729:
+        case PCI_DEVICE_ID_O2_6730:
+        case PCI_DEVICE_ID_O2_6812:
+        case PCI_DEVICE_ID_O2_6832:
+        case PCI_DEVICE_ID_O2_6836:
+        case PCI_DEVICE_ID_O2_6933:
+            use_speedup = false;
+            break;
+        default:
+            use_speedup = true;
+            break;
+        }
 
-		/* the user may override our decision */
-		if (strcasecmp(o2_speedup, "on") == 0)
-			use_speedup = true;
-		else if (strcasecmp(o2_speedup, "off") == 0)
-			use_speedup = false;
-		else if (strcasecmp(o2_speedup, "default") != 0)
-			dev_warn(&socket->dev->dev,
-				"O2: Unknown parameter, using 'default'");
+        /* the user may override our decision */
+        if (strcasecmp(o2_speedup, "on") == 0)
+            use_speedup = true;
+        else if (strcasecmp(o2_speedup, "off") == 0)
+            use_speedup = false;
+        else if (strcasecmp(o2_speedup, "default") != 0)
+            dev_warn(&socket->dev->dev,
+                     "O2: Unknown parameter, using 'default'");
 
-		if (use_speedup) {
-			dev_info(&socket->dev->dev,
-				"O2: enabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=off'\n");
-			config_writeb(socket, O2_RESERVED1,
-				      a | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
-			config_writeb(socket, O2_RESERVED2,
-				      b | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
-		} else {
-			dev_info(&socket->dev->dev,
-				"O2: disabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=on'\n");
-			config_writeb(socket, O2_RESERVED1,
-				      a & ~(O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST));
-			config_writeb(socket, O2_RESERVED2,
-				      b & ~(O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST));
-		}
-	}
+        if (use_speedup) {
+            dev_info(&socket->dev->dev,
+                     "O2: enabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=off'\n");
+            config_writeb(socket, O2_RESERVED1,
+                          a | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
+            config_writeb(socket, O2_RESERVED2,
+                          b | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
+        } else {
+            dev_info(&socket->dev->dev,
+                     "O2: disabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=on'\n");
+            config_writeb(socket, O2_RESERVED1,
+                          a & ~(O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST));
+            config_writeb(socket, O2_RESERVED2,
+                          b & ~(O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST));
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
-static void o2micro_restore_state(struct yenta_socket *socket)
-{
-	/*
-	 * as long as read prefetch is the only thing in
-	 * o2micro_override, it's safe to call it from here
-	 */
-	o2micro_override(socket);
+static void o2micro_restore_state(struct yenta_socket *socket) {
+    /*
+     * as long as read prefetch is the only thing in
+     * o2micro_override, it's safe to call it from here
+     */
+    o2micro_override(socket);
 }
 
 #endif /* _LINUX_O2MICRO_H */

@@ -19,14 +19,14 @@
 
 /* the header the app uses in its write() data */
 struct monwrite_hdr {
-	unsigned char mon_function;
-	unsigned short applid;
-	unsigned char record_num;
-	unsigned short version;
-	unsigned short release;
-	unsigned short mod_level;
-	unsigned short datalen;
-	unsigned char hdrlen;
+    unsigned char mon_function;
+    unsigned short applid;
+    unsigned char record_num;
+    unsigned short version;
+    unsigned short release;
+    unsigned short mod_level;
+    unsigned short datalen;
+    unsigned char hdrlen;
 
 } __attribute__((packed));
 

@@ -214,8 +214,7 @@ typedef enum ePmcSmpsMode
 
 } tPmcSmpsMode;
 
-typedef enum
-{
+typedef enum {
     eWOWL_EXIT_USER,
     eWOWL_EXIT_WAKEIND
 } tWowlExitSource;

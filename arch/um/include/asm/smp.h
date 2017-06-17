@@ -17,8 +17,7 @@ extern int hard_smp_processor_id(void);
 extern int ncpus;
 
 
-static inline void smp_cpus_done(unsigned int maxcpus)
-{
+static inline void smp_cpus_done(unsigned int maxcpus) {
 }
 
 extern struct task_struct *idle_threads[NR_CPUS];

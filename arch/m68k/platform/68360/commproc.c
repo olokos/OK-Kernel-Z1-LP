@@ -63,8 +63,8 @@ QUICC  *pquicc;
 
 /* CPM interrupt vector functions. */
 struct	cpm_action {
-	void	(*handler)(void *);
-	void	*dev_id;
+    void	(*handler)(void *);
+    void	*dev_id;
 };
 static	struct	cpm_action cpm_vecs[CPMVEC_NR];
 static	void	cpm_interrupt(int irq, void * dev, struct pt_regs * regs);
@@ -77,43 +77,42 @@ void m360_cpm_reset(void);
 
 
 
-void m360_cpm_reset()
-{
-/* 	pte_t		   *pte; */
+void m360_cpm_reset() {
+    /* 	pte_t		   *pte; */
 
-	pquicc = (struct quicc *)(_quicc_base); /* initialized in crt0_rXm.S */
+    pquicc = (struct quicc *)(_quicc_base); /* initialized in crt0_rXm.S */
 
-	/* Perform a CPM reset. */
-	pquicc->cp_cr = (SOFTWARE_RESET | CMD_FLAG);
+    /* Perform a CPM reset. */
+    pquicc->cp_cr = (SOFTWARE_RESET | CMD_FLAG);
 
-	/* Wait for CPM to become ready (should be 2 clocks). */
-	while (pquicc->cp_cr & CMD_FLAG);
+    /* Wait for CPM to become ready (should be 2 clocks). */
+    while (pquicc->cp_cr & CMD_FLAG);
 
-	/* On the recommendation of the 68360 manual, p. 7-60
-	 * - Set sdma interrupt service mask to 7
-	 * - Set sdma arbitration ID to 4
-	 */
-	pquicc->sdma_sdcr = 0x0740;
-
-
-	/* Claim the DP memory for our use.
-	 */
-	dp_alloc_base = CPM_DATAONLY_BASE;
-	dp_alloc_top = dp_alloc_base + CPM_DATAONLY_SIZE;
+    /* On the recommendation of the 68360 manual, p. 7-60
+     * - Set sdma interrupt service mask to 7
+     * - Set sdma arbitration ID to 4
+     */
+    pquicc->sdma_sdcr = 0x0740;
 
 
-	/* Set the host page for allocation.
-	 */
-	/* 	host_buffer = host_page_addr; */
-	/* 	host_end = host_page_addr + PAGE_SIZE; */
+    /* Claim the DP memory for our use.
+     */
+    dp_alloc_base = CPM_DATAONLY_BASE;
+    dp_alloc_top = dp_alloc_base + CPM_DATAONLY_SIZE;
 
-	/* 	pte = find_pte(&init_mm, host_page_addr); */
-	/* 	pte_val(*pte) |= _PAGE_NO_CACHE; */
-	/* 	flush_tlb_page(current->mm->mmap, host_buffer); */
 
-	/* Tell everyone where the comm processor resides.
-	*/
-/* 	cpmp = (cpm360_t *)commproc; */
+    /* Set the host page for allocation.
+     */
+    /* 	host_buffer = host_page_addr; */
+    /* 	host_end = host_page_addr + PAGE_SIZE; */
+
+    /* 	pte = find_pte(&init_mm, host_page_addr); */
+    /* 	pte_val(*pte) |= _PAGE_NO_CACHE; */
+    /* 	flush_tlb_page(current->mm->mmap, host_buffer); */
+
+    /* Tell everyone where the comm processor resides.
+    */
+    /* 	cpmp = (cpm360_t *)commproc; */
 }
 
 
@@ -121,39 +120,38 @@ void m360_cpm_reset()
  * was too early since init_IRQ was not yet called.
  */
 void
-cpm_interrupt_init(void)
-{
-	/* Initialize the CPM interrupt controller.
-	 * NOTE THAT pquicc had better have been initialized!
-	 * reference: MC68360UM p. 7-377
-	 */
-	pquicc->intr_cicr =
-		(CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
-		(CPM_INTERRUPT << 13) |
-		CICR_HP_MASK |
-		(CPM_VECTOR_BASE << 5) |
-		CICR_SPS;
+cpm_interrupt_init(void) {
+    /* Initialize the CPM interrupt controller.
+     * NOTE THAT pquicc had better have been initialized!
+     * reference: MC68360UM p. 7-377
+     */
+    pquicc->intr_cicr =
+        (CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
+        (CPM_INTERRUPT << 13) |
+        CICR_HP_MASK |
+        (CPM_VECTOR_BASE << 5) |
+        CICR_SPS;
 
-	/* mask all CPM interrupts from reaching the cpu32 core: */
-	pquicc->intr_cimr = 0;
+    /* mask all CPM interrupts from reaching the cpu32 core: */
+    pquicc->intr_cimr = 0;
 
 
-	/* mles - If I understand correctly, the 360 just pops over to the CPM
-	 * specific vector, obviating the necessity to vector through the IRQ
-	 * whose priority the CPM is set to. This needs a closer look, though.
-	 */
+    /* mles - If I understand correctly, the 360 just pops over to the CPM
+     * specific vector, obviating the necessity to vector through the IRQ
+     * whose priority the CPM is set to. This needs a closer look, though.
+     */
 
-	/* Set our interrupt handler with the core CPU. */
-/* 	if (request_irq(CPM_INTERRUPT, cpm_interrupt, 0, "cpm", NULL) != 0) */
-/* 		panic("Could not allocate CPM IRQ!"); */
+    /* Set our interrupt handler with the core CPU. */
+    /* 	if (request_irq(CPM_INTERRUPT, cpm_interrupt, 0, "cpm", NULL) != 0) */
+    /* 		panic("Could not allocate CPM IRQ!"); */
 
-	/* Install our own error handler.
-	 */
-	/* I think we want to hold off on this one for the moment - mles */
-	/* cpm_install_handler(CPMVEC_ERROR, cpm_error_interrupt, NULL); */
+    /* Install our own error handler.
+     */
+    /* I think we want to hold off on this one for the moment - mles */
+    /* cpm_install_handler(CPMVEC_ERROR, cpm_error_interrupt, NULL); */
 
-	/* master CPM interrupt enable */
-	/* pquicc->intr_cicr |= CICR_IEN; */ /* no such animal for 360 */
+    /* master CPM interrupt enable */
+    /* pquicc->intr_cicr |= CICR_IEN; */ /* no such animal for 360 */
 }
 
 
@@ -161,35 +159,34 @@ cpm_interrupt_init(void)
 /* CPM interrupt controller interrupt.
 */
 static	void
-cpm_interrupt(int irq, void * dev, struct pt_regs * regs)
-{
-	/* uint	vec; */
+cpm_interrupt(int irq, void * dev, struct pt_regs * regs) {
+    /* uint	vec; */
 
-	/* mles: Note that this stuff is currently being performed by
-	 * M68360_do_irq(int vec, struct pt_regs *fp), in ../ints.c  */
+    /* mles: Note that this stuff is currently being performed by
+     * M68360_do_irq(int vec, struct pt_regs *fp), in ../ints.c  */
 
-	/* figure out the vector */
-	/* call that vector's handler */
-	/* clear the irq's bit in the service register */
+    /* figure out the vector */
+    /* call that vector's handler */
+    /* clear the irq's bit in the service register */
 
 #if 0 /* old 860 stuff: */
-	/* Get the vector by setting the ACK bit and then reading
-	 * the register.
-	 */
-	((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_civr = 1;
-	vec = ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_civr;
-	vec >>= 11;
+    /* Get the vector by setting the ACK bit and then reading
+     * the register.
+     */
+    ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_civr = 1;
+    vec = ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_civr;
+    vec >>= 11;
 
 
-	if (cpm_vecs[vec].handler != 0)
-		(*cpm_vecs[vec].handler)(cpm_vecs[vec].dev_id);
-	else
-		((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr &= ~(1 << vec);
+    if (cpm_vecs[vec].handler != 0)
+        (*cpm_vecs[vec].handler)(cpm_vecs[vec].dev_id);
+    else
+        ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr &= ~(1 << vec);
 
-	/* After servicing the interrupt, we have to remove the status
-	 * indicator.
-	 */
-	((immap_t *)IMAP_ADDR)->im_cpic.cpic_cisr |= (1 << vec);
+    /* After servicing the interrupt, we have to remove the status
+     * indicator.
+     */
+    ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cisr |= (1 << vec);
 #endif
 
 }
@@ -200,38 +197,35 @@ cpm_interrupt(int irq, void * dev, struct pt_regs * regs)
  * tests in the interrupt handler.
  */
 static	void
-cpm_error_interrupt(void *dev)
-{
+cpm_error_interrupt(void *dev) {
 }
 
 /* Install a CPM interrupt handler.
 */
 void
-cpm_install_handler(int vec, void (*handler)(), void *dev_id)
-{
+cpm_install_handler(int vec, void (*handler)(), void *dev_id) {
 
-	request_irq(vec, handler, 0, "timer", dev_id);
+    request_irq(vec, handler, 0, "timer", dev_id);
 
-/* 	if (cpm_vecs[vec].handler != 0) */
-/* 		printk(KERN_INFO "CPM interrupt %x replacing %x\n", */
-/* 			(uint)handler, (uint)cpm_vecs[vec].handler); */
-/* 	cpm_vecs[vec].handler = handler; */
-/* 	cpm_vecs[vec].dev_id = dev_id; */
+    /* 	if (cpm_vecs[vec].handler != 0) */
+    /* 		printk(KERN_INFO "CPM interrupt %x replacing %x\n", */
+    /* 			(uint)handler, (uint)cpm_vecs[vec].handler); */
+    /* 	cpm_vecs[vec].handler = handler; */
+    /* 	cpm_vecs[vec].dev_id = dev_id; */
 
-	/*              ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr |= (1 << vec); */
-/* 	pquicc->intr_cimr |= (1 << vec); */
+    /*              ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr |= (1 << vec); */
+    /* 	pquicc->intr_cimr |= (1 << vec); */
 
 }
 
 /* Free a CPM interrupt handler.
 */
 void
-cpm_free_handler(int vec)
-{
-	cpm_vecs[vec].handler = NULL;
-	cpm_vecs[vec].dev_id = NULL;
-	/* ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr &= ~(1 << vec); */
-	pquicc->intr_cimr &= ~(1 << vec);
+cpm_free_handler(int vec) {
+    cpm_vecs[vec].handler = NULL;
+    cpm_vecs[vec].dev_id = NULL;
+    /* ((immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr &= ~(1 << vec); */
+    pquicc->intr_cimr &= ~(1 << vec);
 }
 
 
@@ -242,17 +236,16 @@ cpm_free_handler(int vec)
  * citizen.
  */
 uint
-m360_cpm_dpalloc(uint size)
-{
-        uint    retloc;
+m360_cpm_dpalloc(uint size) {
+    uint    retloc;
 
-        if ((dp_alloc_base + size) >= dp_alloc_top)
-                return(CPM_DP_NOSPACE);
+    if ((dp_alloc_base + size) >= dp_alloc_top)
+        return(CPM_DP_NOSPACE);
 
-        retloc = dp_alloc_base;
-        dp_alloc_base += size;
+    retloc = dp_alloc_base;
+    dp_alloc_base += size;
 
-        return(retloc);
+    return(retloc);
 }
 
 
@@ -261,17 +254,16 @@ m360_cpm_dpalloc(uint size)
  * UART "fifos" and the like.
  */
 uint
-m360_cpm_hostalloc(uint size)
-{
-	uint	retloc;
+m360_cpm_hostalloc(uint size) {
+    uint	retloc;
 
-	if ((host_buffer + size) >= host_end)
-		return(0);
+    if ((host_buffer + size) >= host_end)
+        return(0);
 
-	retloc = host_buffer;
-	host_buffer += size;
+    retloc = host_buffer;
+    host_buffer += size;
 
-	return(retloc);
+    return(retloc);
 }
 #endif
 
@@ -286,16 +278,15 @@ m360_cpm_hostalloc(uint size)
 #define BRG_UART_CLK	(BRG_INT_CLK/16)
 
 void
-m360_cpm_setbrg(uint brg, uint rate)
-{
-	volatile uint	*bp;
+m360_cpm_setbrg(uint brg, uint rate) {
+    volatile uint	*bp;
 
-	/* This is good enough to get SMCs running.....
-	 */
-	/* bp = (uint *)&cpmp->cp_brgc1; */
-	bp = (volatile uint *)(&pquicc->brgc[0].l);
-	bp += brg;
-	*bp = ((BRG_UART_CLK / rate - 1) << 1) | CPM_BRG_EN;
+    /* This is good enough to get SMCs running.....
+     */
+    /* bp = (uint *)&cpmp->cp_brgc1; */
+    bp = (volatile uint *)(&pquicc->brgc[0].l);
+    bp += brg;
+    *bp = ((BRG_UART_CLK / rate - 1) << 1) | CPM_BRG_EN;
 }
 
 

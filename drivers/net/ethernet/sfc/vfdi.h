@@ -86,8 +86,8 @@
 #define VFDI_EV_DATA_WIDTH 16
 
 struct vfdi_endpoint {
-	u8 mac_addr[ETH_ALEN];
-	__be16 tci;
+    u8 mac_addr[ETH_ALEN];
+    __be16 tci;
 };
 
 /**
@@ -106,16 +106,16 @@ struct vfdi_endpoint {
  *	updates from PF.
  */
 enum vfdi_op {
-	VFDI_OP_RESPONSE = 0,
-	VFDI_OP_INIT_EVQ = 1,
-	VFDI_OP_INIT_RXQ = 2,
-	VFDI_OP_INIT_TXQ = 3,
-	VFDI_OP_FINI_ALL_QUEUES = 4,
-	VFDI_OP_INSERT_FILTER = 5,
-	VFDI_OP_REMOVE_ALL_FILTERS = 6,
-	VFDI_OP_SET_STATUS_PAGE = 7,
-	VFDI_OP_CLEAR_STATUS_PAGE = 8,
-	VFDI_OP_LIMIT,
+    VFDI_OP_RESPONSE = 0,
+    VFDI_OP_INIT_EVQ = 1,
+    VFDI_OP_INIT_RXQ = 2,
+    VFDI_OP_INIT_TXQ = 3,
+    VFDI_OP_FINI_ALL_QUEUES = 4,
+    VFDI_OP_INSERT_FILTER = 5,
+    VFDI_OP_REMOVE_ALL_FILTERS = 6,
+    VFDI_OP_SET_STATUS_PAGE = 7,
+    VFDI_OP_CLEAR_STATUS_PAGE = 8,
+    VFDI_OP_LIMIT,
 };
 
 /* Response codes for VFDI operations. Other values may be used in future. */
@@ -163,49 +163,49 @@ enum vfdi_op {
  *	must be page-aligned.
  */
 struct vfdi_req {
-	u32 op;
-	u32 reserved1;
-	s32 rc;
-	u32 reserved2;
-	union {
-		struct {
-			u32 index;
-			u32 buf_count;
-			u64 addr[];
-		} init_evq;
-		struct {
-			u32 index;
-			u32 buf_count;
-			u32 evq;
-			u32 label;
-			u32 flags;
+    u32 op;
+    u32 reserved1;
+    s32 rc;
+    u32 reserved2;
+    union {
+        struct {
+            u32 index;
+            u32 buf_count;
+            u64 addr[];
+        } init_evq;
+        struct {
+            u32 index;
+            u32 buf_count;
+            u32 evq;
+            u32 label;
+            u32 flags;
 #define VFDI_RXQ_FLAG_SCATTER_EN 1
-			u32 reserved;
-			u64 addr[];
-		} init_rxq;
-		struct {
-			u32 index;
-			u32 buf_count;
-			u32 evq;
-			u32 label;
-			u32 flags;
+            u32 reserved;
+            u64 addr[];
+        } init_rxq;
+        struct {
+            u32 index;
+            u32 buf_count;
+            u32 evq;
+            u32 label;
+            u32 flags;
 #define VFDI_TXQ_FLAG_IP_CSUM_DIS 1
 #define VFDI_TXQ_FLAG_TCPUDP_CSUM_DIS 2
-			u32 reserved;
-			u64 addr[];
-		} init_txq;
-		struct {
-			u32 rxq;
-			u32 flags;
+            u32 reserved;
+            u64 addr[];
+        } init_txq;
+        struct {
+            u32 rxq;
+            u32 flags;
 #define VFDI_MAC_FILTER_FLAG_RSS 1
 #define VFDI_MAC_FILTER_FLAG_SCATTER 2
-		} mac_filter;
-		struct {
-			u64 dma_addr;
-			u64 peer_page_count;
-			u64 peer_page_addr[];
-		} set_status_page;
-	} u;
+        } mac_filter;
+        struct {
+            u64 dma_addr;
+            u64 peer_page_count;
+            u64 peer_page_addr[];
+        } set_status_page;
+    } u;
 };
 
 /**
@@ -235,21 +235,21 @@ struct vfdi_req {
  *	present if @length is sufficiently large.
  */
 struct vfdi_status {
-	u32 generation_start;
-	u32 generation_end;
-	u32 version;
-	u32 length;
-	u8 vi_scale;
-	u8 max_tx_channels;
-	u8 rss_rxq_count;
-	u8 reserved1;
-	u16 peer_count;
-	u16 reserved2;
-	struct vfdi_endpoint local;
-	struct vfdi_endpoint peers[256];
+    u32 generation_start;
+    u32 generation_end;
+    u32 version;
+    u32 length;
+    u8 vi_scale;
+    u8 max_tx_channels;
+    u8 rss_rxq_count;
+    u8 reserved1;
+    u16 peer_count;
+    u16 reserved2;
+    struct vfdi_endpoint local;
+    struct vfdi_endpoint peers[256];
 
-	/* Members below here extend version 1 of this structure */
-	u32 timer_quantum_ns;
+    /* Members below here extend version 1 of this structure */
+    u32 timer_quantum_ns;
 };
 
 #endif

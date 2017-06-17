@@ -30,11 +30,11 @@
  */
 
 struct cpuinfo_m32r {
-	unsigned long pgtable_cache_sz;
-	unsigned long cpu_clock;
-	unsigned long bus_clock;
-	unsigned long timer_divide;
-	unsigned long loops_per_jiffy;
+    unsigned long pgtable_cache_sz;
+    unsigned long cpu_clock;
+    unsigned long bus_clock;
+    unsigned long timer_divide;
+    unsigned long loops_per_jiffy;
 };
 
 /*
@@ -71,24 +71,24 @@ extern struct cpuinfo_m32r cpu_data[];
 #define TASK_UNMAPPED_BASE	PAGE_ALIGN(TASK_SIZE / 3)
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #define MAX_TRAPS 10
 
 struct debug_trap {
-	int nr_trap;
-	unsigned long	addr[MAX_TRAPS];
-	unsigned long	insn[MAX_TRAPS];
+    int nr_trap;
+    unsigned long	addr[MAX_TRAPS];
+    unsigned long	insn[MAX_TRAPS];
 };
 
 struct thread_struct {
-	unsigned long address;
-	unsigned long trap_no;		/* Trap number  */
-	unsigned long error_code;	/* Error code of trap */
-	unsigned long lr;		/* saved pc */
-	unsigned long sp;		/* user stack pointer */
-	struct debug_trap debug_trap;
+    unsigned long address;
+    unsigned long trap_no;		/* Trap number  */
+    unsigned long error_code;	/* Error code of trap */
+    unsigned long lr;		/* saved pc */
+    unsigned long sp;		/* user stack pointer */
+    struct debug_trap debug_trap;
 };
 
 #define INIT_SP	(sizeof(init_stack) + (unsigned long) &init_stack)

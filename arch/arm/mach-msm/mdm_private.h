@@ -20,44 +20,44 @@
 struct mdm_modem_drv;
 
 struct mdm_ops {
-	void (*power_on_mdm_cb)(struct mdm_modem_drv *mdm_drv);
-	void (*reset_mdm_cb)(struct mdm_modem_drv *mdm_drv);
-	void (*atomic_reset_mdm_cb)(struct mdm_modem_drv *mdm_drv);
-	void (*normal_boot_done_cb)(struct mdm_modem_drv *mdm_drv);
-	void (*power_down_mdm_cb)(struct mdm_modem_drv *mdm_drv);
-	void (*debug_state_changed_cb)(int value);
-	void (*status_cb)(struct mdm_modem_drv *mdm_drv, int value);
-	void (*image_upgrade_cb)(struct mdm_modem_drv *mdm_drv, int type);
+    void (*power_on_mdm_cb)(struct mdm_modem_drv *mdm_drv);
+    void (*reset_mdm_cb)(struct mdm_modem_drv *mdm_drv);
+    void (*atomic_reset_mdm_cb)(struct mdm_modem_drv *mdm_drv);
+    void (*normal_boot_done_cb)(struct mdm_modem_drv *mdm_drv);
+    void (*power_down_mdm_cb)(struct mdm_modem_drv *mdm_drv);
+    void (*debug_state_changed_cb)(int value);
+    void (*status_cb)(struct mdm_modem_drv *mdm_drv, int value);
+    void (*image_upgrade_cb)(struct mdm_modem_drv *mdm_drv, int type);
 };
 
 /* Private mdm2 data structure */
 struct mdm_modem_drv {
-	unsigned mdm2ap_errfatal_gpio;
-	unsigned ap2mdm_errfatal_gpio;
-	unsigned mdm2ap_status_gpio;
-	unsigned ap2mdm_status_gpio;
-	unsigned mdm2ap_wakeup_gpio;
-	unsigned ap2mdm_wakeup_gpio;
-	unsigned ap2mdm_kpdpwr_n_gpio;
-	unsigned ap2mdm_soft_reset_gpio;
-	unsigned ap2mdm_pmic_pwr_en_gpio;
-	unsigned mdm2ap_pblrdy;
-	unsigned usb_switch_gpio;
+    unsigned mdm2ap_errfatal_gpio;
+    unsigned ap2mdm_errfatal_gpio;
+    unsigned mdm2ap_status_gpio;
+    unsigned ap2mdm_status_gpio;
+    unsigned mdm2ap_wakeup_gpio;
+    unsigned ap2mdm_wakeup_gpio;
+    unsigned ap2mdm_kpdpwr_n_gpio;
+    unsigned ap2mdm_soft_reset_gpio;
+    unsigned ap2mdm_pmic_pwr_en_gpio;
+    unsigned mdm2ap_pblrdy;
+    unsigned usb_switch_gpio;
 
-	atomic_t mdm_ready;
-	int mdm_boot_status;
-	int mdm_ram_dump_status;
-	enum charm_boot_type boot_type;
-	int mdm_debug_on;
-	int mdm_unexpected_reset_occurred;
-	int disable_status_check;
-	unsigned int dump_timeout_ms;
-	int power_on_count;
-	int peripheral_status;
-	struct mutex peripheral_status_lock;
-	int device_id;
+    atomic_t mdm_ready;
+    int mdm_boot_status;
+    int mdm_ram_dump_status;
+    enum charm_boot_type boot_type;
+    int mdm_debug_on;
+    int mdm_unexpected_reset_occurred;
+    int disable_status_check;
+    unsigned int dump_timeout_ms;
+    int power_on_count;
+    int peripheral_status;
+    struct mutex peripheral_status_lock;
+    int device_id;
 
-	struct mdm_platform_data *pdata;
+    struct mdm_platform_data *pdata;
 };
 int mdm_get_ops(struct mdm_ops **mdm_ops);
 

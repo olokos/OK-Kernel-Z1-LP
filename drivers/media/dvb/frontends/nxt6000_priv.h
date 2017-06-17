@@ -74,10 +74,10 @@
 /* 0x3A VIT_BERTIME_0 */
 #define VIT_BERTIME_0      (0x3a)
 
-			     /* 0x38 OFDM_BERTimer *//* Use the alias registers */
+/* 0x38 OFDM_BERTimer *//* Use the alias registers */
 #define A_VIT_BER_TIMER_0      (0x1D)
 
-			     /* 0x3A VIT_BER_TIMER_0 *//* Use the alias registers */
+/* 0x3A VIT_BER_TIMER_0 *//* Use the alias registers */
 #define A_VIT_BER_0            (0x1B)
 
 /* 0x3B VIT_BER_1 */

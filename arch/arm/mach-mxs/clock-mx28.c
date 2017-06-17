@@ -58,73 +58,66 @@ static DEFINE_SPINLOCK(clkmux_lock);
  *  EXTMSTR1(0x3): SAIF1 clock pin selected for both SAIF0 and SAIF1 input
  *		clocks.
  */
-int mxs_saif_clkmux_select(unsigned int clkmux)
-{
-	if (clkmux > 0x3)
-		return -EINVAL;
+int mxs_saif_clkmux_select(unsigned int clkmux) {
+    if (clkmux > 0x3)
+        return -EINVAL;
 
-	spin_lock(&clkmux_lock);
-	__raw_writel(BM_DIGCTL_CTRL_SAIF_CLKMUX,
-			DIGCTRL_BASE_ADDR + HW_DIGCTL_CTRL + MXS_CLR_ADDR);
-	__raw_writel(clkmux << BP_DIGCTL_CTRL_SAIF_CLKMUX,
-			DIGCTRL_BASE_ADDR + HW_DIGCTL_CTRL + MXS_SET_ADDR);
-	spin_unlock(&clkmux_lock);
+    spin_lock(&clkmux_lock);
+    __raw_writel(BM_DIGCTL_CTRL_SAIF_CLKMUX,
+                 DIGCTRL_BASE_ADDR + HW_DIGCTL_CTRL + MXS_CLR_ADDR);
+    __raw_writel(clkmux << BP_DIGCTL_CTRL_SAIF_CLKMUX,
+                 DIGCTRL_BASE_ADDR + HW_DIGCTL_CTRL + MXS_SET_ADDR);
+    spin_unlock(&clkmux_lock);
 
-	return 0;
+    return 0;
 }
 
-static int _raw_clk_enable(struct clk *clk)
-{
-	u32 reg;
+static int _raw_clk_enable(struct clk *clk) {
+    u32 reg;
 
-	if (clk->enable_reg) {
-		reg = __raw_readl(clk->enable_reg);
-		reg &= ~(1 << clk->enable_shift);
-		__raw_writel(reg, clk->enable_reg);
-	}
+    if (clk->enable_reg) {
+        reg = __raw_readl(clk->enable_reg);
+        reg &= ~(1 << clk->enable_shift);
+        __raw_writel(reg, clk->enable_reg);
+    }
 
-	return 0;
+    return 0;
 }
 
-static void _raw_clk_disable(struct clk *clk)
-{
-	u32 reg;
+static void _raw_clk_disable(struct clk *clk) {
+    u32 reg;
 
-	if (clk->enable_reg) {
-		reg = __raw_readl(clk->enable_reg);
-		reg |= 1 << clk->enable_shift;
-		__raw_writel(reg, clk->enable_reg);
-	}
+    if (clk->enable_reg) {
+        reg = __raw_readl(clk->enable_reg);
+        reg |= 1 << clk->enable_shift;
+        __raw_writel(reg, clk->enable_reg);
+    }
 }
 
 /*
  * ref_xtal_clk
  */
-static unsigned long ref_xtal_clk_get_rate(struct clk *clk)
-{
-	return 24000000;
+static unsigned long ref_xtal_clk_get_rate(struct clk *clk) {
+    return 24000000;
 }
 
 static struct clk ref_xtal_clk = {
-	.get_rate = ref_xtal_clk_get_rate,
+    .get_rate = ref_xtal_clk_get_rate,
 };
 
 /*
  * pll_clk
  */
-static unsigned long pll0_clk_get_rate(struct clk *clk)
-{
-	return 480000000;
+static unsigned long pll0_clk_get_rate(struct clk *clk) {
+    return 480000000;
 }
 
-static unsigned long pll1_clk_get_rate(struct clk *clk)
-{
-	return 480000000;
+static unsigned long pll1_clk_get_rate(struct clk *clk) {
+    return 480000000;
 }
 
-static unsigned long pll2_clk_get_rate(struct clk *clk)
-{
-	return 50000000;
+static unsigned long pll2_clk_get_rate(struct clk *clk) {
+    return 50000000;
 }
 
 #define _CLK_ENABLE_PLL(name, r, g)					\
@@ -225,25 +218,21 @@ _DEFINE_CLOCK_REF(ref_gpmi_clk, FRAC1, GPMI);
  *
  * clk_get_rate
  */
-static unsigned long lradc_clk_get_rate(struct clk *clk)
-{
-	return clk_get_rate(clk->parent) / 16;
+static unsigned long lradc_clk_get_rate(struct clk *clk) {
+    return clk_get_rate(clk->parent) / 16;
 }
 
-static unsigned long rtc_clk_get_rate(struct clk *clk)
-{
-	/* ref_xtal_clk is implemented as the only parent */
-	return clk_get_rate(clk->parent) / 768;
+static unsigned long rtc_clk_get_rate(struct clk *clk) {
+    /* ref_xtal_clk is implemented as the only parent */
+    return clk_get_rate(clk->parent) / 768;
 }
 
-static unsigned long clk32k_clk_get_rate(struct clk *clk)
-{
-	return clk->parent->get_rate(clk->parent) / 750;
+static unsigned long clk32k_clk_get_rate(struct clk *clk) {
+    return clk->parent->get_rate(clk->parent) / 750;
 }
 
-static unsigned long spdif_clk_get_rate(struct clk *clk)
-{
-	return clk_get_rate(clk->parent) / 4;
+static unsigned long spdif_clk_get_rate(struct clk *clk) {
+    return clk_get_rate(clk->parent) / 4;
 }
 
 #define _CLK_GET_RATE(name, rs)						\
@@ -530,48 +519,48 @@ _CLK_SET_PARENT_STUB(can1_clk)
  * clk definition
  */
 static struct clk cpu_clk = {
-	.get_rate = cpu_clk_get_rate,
-	.set_rate = cpu_clk_set_rate,
-	.set_parent = cpu_clk_set_parent,
-	.parent = &ref_cpu_clk,
+    .get_rate = cpu_clk_get_rate,
+    .set_rate = cpu_clk_set_rate,
+    .set_parent = cpu_clk_set_parent,
+    .parent = &ref_cpu_clk,
 };
 
 static struct clk hbus_clk = {
-	.get_rate = hbus_clk_get_rate,
-	.parent = &cpu_clk,
+    .get_rate = hbus_clk_get_rate,
+    .parent = &cpu_clk,
 };
 
 static struct clk xbus_clk = {
-	.get_rate = xbus_clk_get_rate,
-	.set_rate = xbus_clk_set_rate,
-	.parent = &ref_xtal_clk,
+    .get_rate = xbus_clk_get_rate,
+    .set_rate = xbus_clk_set_rate,
+    .parent = &ref_xtal_clk,
 };
 
 static struct clk lradc_clk = {
-	.get_rate = lradc_clk_get_rate,
-	.parent = &clk32k_clk,
+    .get_rate = lradc_clk_get_rate,
+    .parent = &clk32k_clk,
 };
 
 static struct clk rtc_clk = {
-	.get_rate = rtc_clk_get_rate,
-	.parent = &ref_xtal_clk,
+    .get_rate = rtc_clk_get_rate,
+    .parent = &ref_xtal_clk,
 };
 
 /* usb_clk gate is controlled in DIGCTRL other than CLKCTRL */
 static struct clk usb0_clk = {
-	.enable_reg = DIGCTRL_BASE_ADDR,
-	.enable_shift = 2,
-	.enable = _raw_clk_enable,
-	.disable = _raw_clk_disable,
-	.parent = &pll0_clk,
+    .enable_reg = DIGCTRL_BASE_ADDR,
+    .enable_shift = 2,
+    .enable = _raw_clk_enable,
+    .disable = _raw_clk_disable,
+    .parent = &pll0_clk,
 };
 
 static struct clk usb1_clk = {
-	.enable_reg = DIGCTRL_BASE_ADDR,
-	.enable_shift = 16,
-	.enable = _raw_clk_enable,
-	.disable = _raw_clk_disable,
-	.parent = &pll1_clk,
+    .enable_reg = DIGCTRL_BASE_ADDR,
+    .enable_shift = 16,
+    .enable = _raw_clk_enable,
+    .disable = _raw_clk_disable,
+    .parent = &pll1_clk,
 };
 
 #define _DEFINE_CLOCK(name, er, es, p)					\
@@ -611,193 +600,191 @@ _DEFINE_CLOCK(fec_clk, ENET, DISABLE, &hbus_clk);
 	},
 
 static struct clk_lookup lookups[] = {
-	/* for amba bus driver */
-	_REGISTER_CLOCK("duart", "apb_pclk", xbus_clk)
-	/* for amba-pl011 driver */
-	_REGISTER_CLOCK("duart", NULL, uart_clk)
-	_REGISTER_CLOCK("imx28-fec.0", NULL, fec_clk)
-	_REGISTER_CLOCK("imx28-fec.1", NULL, fec_clk)
-	_REGISTER_CLOCK("imx28-gpmi-nand", NULL, gpmi_clk)
-	_REGISTER_CLOCK("mxs-auart.0", NULL, uart_clk)
-	_REGISTER_CLOCK("mxs-auart.1", NULL, uart_clk)
-	_REGISTER_CLOCK("mxs-auart.2", NULL, uart_clk)
-	_REGISTER_CLOCK("mxs-auart.3", NULL, uart_clk)
-	_REGISTER_CLOCK("mxs-auart.4", NULL, uart_clk)
-	_REGISTER_CLOCK("rtc", NULL, rtc_clk)
-	_REGISTER_CLOCK("pll2", NULL, pll2_clk)
-	_REGISTER_CLOCK("mxs-dma-apbh", NULL, hbus_clk)
-	_REGISTER_CLOCK("mxs-dma-apbx", NULL, xbus_clk)
-	_REGISTER_CLOCK("mxs-mmc.0", NULL, ssp0_clk)
-	_REGISTER_CLOCK("mxs-mmc.1", NULL, ssp1_clk)
-	_REGISTER_CLOCK("mxs-mmc.2", NULL, ssp2_clk)
-	_REGISTER_CLOCK("mxs-mmc.3", NULL, ssp3_clk)
-	_REGISTER_CLOCK("flexcan.0", NULL, can0_clk)
-	_REGISTER_CLOCK("flexcan.1", NULL, can1_clk)
-	_REGISTER_CLOCK(NULL, "usb0", usb0_clk)
-	_REGISTER_CLOCK(NULL, "usb1", usb1_clk)
-	_REGISTER_CLOCK("mxs-pwm.0", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.1", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.2", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.3", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.4", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.5", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.6", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.7", NULL, pwm_clk)
-	_REGISTER_CLOCK(NULL, "lradc", lradc_clk)
-	_REGISTER_CLOCK(NULL, "spdif", spdif_clk)
-	_REGISTER_CLOCK("imx28-fb", NULL, lcdif_clk)
-	_REGISTER_CLOCK("mxs-saif.0", NULL, saif0_clk)
-	_REGISTER_CLOCK("mxs-saif.1", NULL, saif1_clk)
+    /* for amba bus driver */
+    _REGISTER_CLOCK("duart", "apb_pclk", xbus_clk)
+    /* for amba-pl011 driver */
+    _REGISTER_CLOCK("duart", NULL, uart_clk)
+    _REGISTER_CLOCK("imx28-fec.0", NULL, fec_clk)
+    _REGISTER_CLOCK("imx28-fec.1", NULL, fec_clk)
+    _REGISTER_CLOCK("imx28-gpmi-nand", NULL, gpmi_clk)
+    _REGISTER_CLOCK("mxs-auart.0", NULL, uart_clk)
+    _REGISTER_CLOCK("mxs-auart.1", NULL, uart_clk)
+    _REGISTER_CLOCK("mxs-auart.2", NULL, uart_clk)
+    _REGISTER_CLOCK("mxs-auart.3", NULL, uart_clk)
+    _REGISTER_CLOCK("mxs-auart.4", NULL, uart_clk)
+    _REGISTER_CLOCK("rtc", NULL, rtc_clk)
+    _REGISTER_CLOCK("pll2", NULL, pll2_clk)
+    _REGISTER_CLOCK("mxs-dma-apbh", NULL, hbus_clk)
+    _REGISTER_CLOCK("mxs-dma-apbx", NULL, xbus_clk)
+    _REGISTER_CLOCK("mxs-mmc.0", NULL, ssp0_clk)
+    _REGISTER_CLOCK("mxs-mmc.1", NULL, ssp1_clk)
+    _REGISTER_CLOCK("mxs-mmc.2", NULL, ssp2_clk)
+    _REGISTER_CLOCK("mxs-mmc.3", NULL, ssp3_clk)
+    _REGISTER_CLOCK("flexcan.0", NULL, can0_clk)
+    _REGISTER_CLOCK("flexcan.1", NULL, can1_clk)
+    _REGISTER_CLOCK(NULL, "usb0", usb0_clk)
+    _REGISTER_CLOCK(NULL, "usb1", usb1_clk)
+    _REGISTER_CLOCK("mxs-pwm.0", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.1", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.2", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.3", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.4", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.5", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.6", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.7", NULL, pwm_clk)
+    _REGISTER_CLOCK(NULL, "lradc", lradc_clk)
+    _REGISTER_CLOCK(NULL, "spdif", spdif_clk)
+    _REGISTER_CLOCK("imx28-fb", NULL, lcdif_clk)
+    _REGISTER_CLOCK("mxs-saif.0", NULL, saif0_clk)
+    _REGISTER_CLOCK("mxs-saif.1", NULL, saif1_clk)
 };
 
-static int clk_misc_init(void)
-{
-	u32 reg;
-	int ret;
+static int clk_misc_init(void) {
+    u32 reg;
+    int ret;
 
-	/* Fix up parent per register setting */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CLKSEQ);
-	cpu_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_CPU) ?
-			&ref_xtal_clk : &ref_cpu_clk;
-	emi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_EMI) ?
-			&ref_xtal_clk : &ref_emi_clk;
-	ssp0_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP0) ?
-			&ref_xtal_clk : &ref_io0_clk;
-	ssp1_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP1) ?
-			&ref_xtal_clk : &ref_io0_clk;
-	ssp2_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP2) ?
-			&ref_xtal_clk : &ref_io1_clk;
-	ssp3_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP3) ?
-			&ref_xtal_clk : &ref_io1_clk;
-	lcdif_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_DIS_LCDIF) ?
-			&ref_xtal_clk : &ref_pix_clk;
-	gpmi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_GPMI) ?
-			&ref_xtal_clk : &ref_gpmi_clk;
-	saif0_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SAIF0) ?
-			&ref_xtal_clk : &pll0_clk;
-	saif1_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SAIF1) ?
-			&ref_xtal_clk : &pll0_clk;
+    /* Fix up parent per register setting */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CLKSEQ);
+    cpu_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_CPU) ?
+                     &ref_xtal_clk : &ref_cpu_clk;
+    emi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_EMI) ?
+                     &ref_xtal_clk : &ref_emi_clk;
+    ssp0_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP0) ?
+                      &ref_xtal_clk : &ref_io0_clk;
+    ssp1_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP1) ?
+                      &ref_xtal_clk : &ref_io0_clk;
+    ssp2_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP2) ?
+                      &ref_xtal_clk : &ref_io1_clk;
+    ssp3_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP3) ?
+                      &ref_xtal_clk : &ref_io1_clk;
+    lcdif_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_DIS_LCDIF) ?
+                       &ref_xtal_clk : &ref_pix_clk;
+    gpmi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_GPMI) ?
+                      &ref_xtal_clk : &ref_gpmi_clk;
+    saif0_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SAIF0) ?
+                       &ref_xtal_clk : &pll0_clk;
+    saif1_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SAIF1) ?
+                       &ref_xtal_clk : &pll0_clk;
 
-	/* Use int div over frac when both are available */
-	__raw_writel(BM_CLKCTRL_CPU_DIV_XTAL_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
-	__raw_writel(BM_CLKCTRL_CPU_DIV_CPU_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
-	__raw_writel(BM_CLKCTRL_HBUS_DIV_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS_CLR);
+    /* Use int div over frac when both are available */
+    __raw_writel(BM_CLKCTRL_CPU_DIV_XTAL_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
+    __raw_writel(BM_CLKCTRL_CPU_DIV_CPU_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
+    __raw_writel(BM_CLKCTRL_HBUS_DIV_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS_CLR);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
-	reg &= ~BM_CLKCTRL_XBUS_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
+    reg &= ~BM_CLKCTRL_XBUS_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP0);
-	reg &= ~BM_CLKCTRL_SSP0_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP0);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP0);
+    reg &= ~BM_CLKCTRL_SSP0_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP0);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP1);
-	reg &= ~BM_CLKCTRL_SSP1_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP1);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP1);
+    reg &= ~BM_CLKCTRL_SSP1_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP1);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP2);
-	reg &= ~BM_CLKCTRL_SSP2_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP2);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP2);
+    reg &= ~BM_CLKCTRL_SSP2_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP2);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP3);
-	reg &= ~BM_CLKCTRL_SSP3_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP3);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP3);
+    reg &= ~BM_CLKCTRL_SSP3_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP3);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
-	reg &= ~BM_CLKCTRL_GPMI_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
+    reg &= ~BM_CLKCTRL_GPMI_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_DIS_LCDIF);
-	reg &= ~BM_CLKCTRL_DIS_LCDIF_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_DIS_LCDIF);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_DIS_LCDIF);
+    reg &= ~BM_CLKCTRL_DIS_LCDIF_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_DIS_LCDIF);
 
-	/* SAIF has to use frac div for functional operation */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF0);
-	reg |= BM_CLKCTRL_SAIF0_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF0);
+    /* SAIF has to use frac div for functional operation */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF0);
+    reg |= BM_CLKCTRL_SAIF0_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF0);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF1);
-	reg |= BM_CLKCTRL_SAIF1_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF1);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF1);
+    reg |= BM_CLKCTRL_SAIF1_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SAIF1);
 
-	/*
-	 * Set safe hbus clock divider. A divider of 3 ensure that
-	 * the Vddd voltage required for the cpu clock is sufficiently
-	 * high for the hbus clock.
-	 */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
-	reg &= BM_CLKCTRL_HBUS_DIV;
-	reg |= 3 << BP_CLKCTRL_HBUS_DIV;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
+    /*
+     * Set safe hbus clock divider. A divider of 3 ensure that
+     * the Vddd voltage required for the cpu clock is sufficiently
+     * high for the hbus clock.
+     */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
+    reg &= BM_CLKCTRL_HBUS_DIV;
+    reg |= 3 << BP_CLKCTRL_HBUS_DIV;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
 
-	ret = mxs_clkctrl_timeout(HW_CLKCTRL_HBUS, BM_CLKCTRL_HBUS_ASM_BUSY);
+    ret = mxs_clkctrl_timeout(HW_CLKCTRL_HBUS, BM_CLKCTRL_HBUS_ASM_BUSY);
 
-	/* Gate off cpu clock in WFI for power saving */
-	__raw_writel(BM_CLKCTRL_CPU_INTERRUPT_WAIT,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_SET);
+    /* Gate off cpu clock in WFI for power saving */
+    __raw_writel(BM_CLKCTRL_CPU_INTERRUPT_WAIT,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_SET);
 
-	/*
-	 * Extra fec clock setting
-	 * The DENX M28 uses an external clock source
-	 * and the clock output must not be enabled
-	 */
-	if (!machine_is_m28evk()) {
-		reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_ENET);
-		reg &= ~BM_CLKCTRL_ENET_SLEEP;
-		reg |= BM_CLKCTRL_ENET_CLK_OUT_EN;
-		__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_ENET);
-	}
+    /*
+     * Extra fec clock setting
+     * The DENX M28 uses an external clock source
+     * and the clock output must not be enabled
+     */
+    if (!machine_is_m28evk()) {
+        reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_ENET);
+        reg &= ~BM_CLKCTRL_ENET_SLEEP;
+        reg |= BM_CLKCTRL_ENET_CLK_OUT_EN;
+        __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_ENET);
+    }
 
-	/*
-	 * 480 MHz seems too high to be ssp clock source directly,
-	 * so set frac0 to get a 288 MHz ref_io0.
-	 */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC0);
-	reg &= ~BM_CLKCTRL_FRAC0_IO0FRAC;
-	reg |= 30 << BP_CLKCTRL_FRAC0_IO0FRAC;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC0);
+    /*
+     * 480 MHz seems too high to be ssp clock source directly,
+     * so set frac0 to get a 288 MHz ref_io0.
+     */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC0);
+    reg &= ~BM_CLKCTRL_FRAC0_IO0FRAC;
+    reg |= 30 << BP_CLKCTRL_FRAC0_IO0FRAC;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC0);
 
-	return ret;
+    return ret;
 }
 
-int __init mx28_clocks_init(void)
-{
-	clk_misc_init();
+int __init mx28_clocks_init(void) {
+    clk_misc_init();
 
-	/*
-	 * source ssp clock from ref_io0 than ref_xtal,
-	 * as ref_xtal only provides 24 MHz as maximum.
-	 */
-	clk_set_parent(&ssp0_clk, &ref_io0_clk);
-	clk_set_parent(&ssp1_clk, &ref_io0_clk);
-	clk_set_parent(&ssp2_clk, &ref_io1_clk);
-	clk_set_parent(&ssp3_clk, &ref_io1_clk);
+    /*
+     * source ssp clock from ref_io0 than ref_xtal,
+     * as ref_xtal only provides 24 MHz as maximum.
+     */
+    clk_set_parent(&ssp0_clk, &ref_io0_clk);
+    clk_set_parent(&ssp1_clk, &ref_io0_clk);
+    clk_set_parent(&ssp2_clk, &ref_io1_clk);
+    clk_set_parent(&ssp3_clk, &ref_io1_clk);
 
-	clk_prepare_enable(&cpu_clk);
-	clk_prepare_enable(&hbus_clk);
-	clk_prepare_enable(&xbus_clk);
-	clk_prepare_enable(&emi_clk);
-	clk_prepare_enable(&uart_clk);
+    clk_prepare_enable(&cpu_clk);
+    clk_prepare_enable(&hbus_clk);
+    clk_prepare_enable(&xbus_clk);
+    clk_prepare_enable(&emi_clk);
+    clk_prepare_enable(&uart_clk);
 
-	clk_set_parent(&lcdif_clk, &ref_pix_clk);
-	clk_set_parent(&saif0_clk, &pll0_clk);
-	clk_set_parent(&saif1_clk, &pll0_clk);
+    clk_set_parent(&lcdif_clk, &ref_pix_clk);
+    clk_set_parent(&saif0_clk, &pll0_clk);
+    clk_set_parent(&saif1_clk, &pll0_clk);
 
-	/*
-	 * Set an initial clock rate for the saif internal logic to work
-	 * properly. This is important when working in EXTMASTER mode that
-	 * uses the other saif's BITCLK&LRCLK but it still needs a basic
-	 * clock which should be fast enough for the internal logic.
-	 */
-	clk_set_rate(&saif0_clk, 24000000);
-	clk_set_rate(&saif1_clk, 24000000);
+    /*
+     * Set an initial clock rate for the saif internal logic to work
+     * properly. This is important when working in EXTMASTER mode that
+     * uses the other saif's BITCLK&LRCLK but it still needs a basic
+     * clock which should be fast enough for the internal logic.
+     */
+    clk_set_rate(&saif0_clk, 24000000);
+    clk_set_rate(&saif1_clk, 24000000);
 
-	clkdev_add_table(lookups, ARRAY_SIZE(lookups));
+    clkdev_add_table(lookups, ARRAY_SIZE(lookups));
 
-	mxs_timer_init(&clk32k_clk, MX28_INT_TIMER0);
+    mxs_timer_init(&clk32k_clk, MX28_INT_TIMER0);
 
-	return 0;
+    return 0;
 }

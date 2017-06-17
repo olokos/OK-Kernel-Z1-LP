@@ -33,8 +33,7 @@
  * tsk->mm will be NULL
  */
 static inline void
-enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
-{
+enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk) {
 }
 
 /*
@@ -45,12 +44,11 @@ enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
  */
 static inline void
 switch_mm(struct mm_struct *prev, struct mm_struct *next,
-	  struct task_struct *tsk)
-{
-	unsigned int cpu = smp_processor_id();
+          struct task_struct *tsk) {
+    unsigned int cpu = smp_processor_id();
 
-	if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next)) || prev != next)
-		cpu_switch_mm(next->pgd, next);
+    if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next)) || prev != next)
+        cpu_switch_mm(next->pgd, next);
 }
 
 #define deactivate_mm(tsk, mm)	do { } while (0)
@@ -80,8 +78,7 @@ do { \
 } while (0)
 
 static inline void arch_dup_mmap(struct mm_struct *oldmm,
-				 struct mm_struct *mm)
-{
+                                 struct mm_struct *mm) {
 }
 
 #endif

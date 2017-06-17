@@ -57,35 +57,32 @@
 #define clear_bit(nr, addr) ___clear_bit((nr), (addr))
 
 
-static inline void __clear_bit(unsigned long nr, volatile void *addr)
-{
-	unsigned int *a = (unsigned int *) addr;
-	int mask;
+static inline void __clear_bit(unsigned long nr, volatile void *addr) {
+    unsigned int *a = (unsigned int *) addr;
+    int mask;
 
-	a += nr >> 5;
-	mask = 1 << (nr & 0x1f);
-	*a &= ~mask;
+    a += nr >> 5;
+    mask = 1 << (nr & 0x1f);
+    *a &= ~mask;
 }
 
 /*
  * test bit
  */
-static inline int test_bit(unsigned long nr, const volatile void *addr)
-{
-	return 1UL & (((const volatile unsigned int *) addr)[nr >> 5] >> (nr & 31));
+static inline int test_bit(unsigned long nr, const volatile void *addr) {
+    return 1UL & (((const volatile unsigned int *) addr)[nr >> 5] >> (nr & 31));
 }
 
 /*
  * change bit
  */
-static inline void __change_bit(unsigned long nr, volatile void *addr)
-{
-	int	mask;
-	unsigned int *a = (unsigned int *) addr;
+static inline void __change_bit(unsigned long nr, volatile void *addr) {
+    int	mask;
+    unsigned int *a = (unsigned int *) addr;
 
-	a += nr >> 5;
-	mask = 1 << (nr & 0x1f);
-	*a ^= mask;
+    a += nr >> 5;
+    mask = 1 << (nr & 0x1f);
+    *a ^= mask;
 }
 
 extern void change_bit(unsigned long nr, volatile void *addr);
@@ -135,17 +132,16 @@ extern void change_bit(unsigned long nr, volatile void *addr);
 /*
  * test and change bit
  */
-static inline int __test_and_change_bit(unsigned long nr, volatile void *addr)
-{
-	int	mask, retval;
-	unsigned int *a = (unsigned int *)addr;
+static inline int __test_and_change_bit(unsigned long nr, volatile void *addr) {
+    int	mask, retval;
+    unsigned int *a = (unsigned int *)addr;
 
-	a += nr >> 5;
-	mask = 1 << (nr & 0x1f);
-	retval = (mask & *a) != 0;
-	*a ^= mask;
+    a += nr >> 5;
+    mask = 1 << (nr & 0x1f);
+    retval = (mask & *a) != 0;
+    *a ^= mask;
 
-	return retval;
+    return retval;
 }
 
 extern int test_and_change_bit(unsigned long nr, volatile void *addr);
@@ -162,11 +158,10 @@ extern int test_and_change_bit(unsigned long nr, volatile void *addr);
  * - if no bits are set in x, the result is undefined
  */
 static inline __attribute__((const))
-unsigned long __ffs(unsigned long x)
-{
-	int bit;
-	asm("bsch %2,%0" : "=r"(bit) : "0"(0), "r"(x & -x) : "cc");
-	return bit;
+unsigned long __ffs(unsigned long x) {
+    int bit;
+    asm("bsch %2,%0" : "=r"(bit) : "0"(0), "r"(x & -x) : "cc");
+    return bit;
 }
 
 /*
@@ -174,11 +169,10 @@ unsigned long __ffs(unsigned long x)
  * - note: no protection against n == 0
  */
 static inline __attribute__((const))
-int __ilog2_u32(u32 n)
-{
-	int bit;
-	asm("bsch %2,%0" : "=r"(bit) : "0"(0), "r"(n) : "cc");
-	return bit;
+int __ilog2_u32(u32 n) {
+    int bit;
+    asm("bsch %2,%0" : "=r"(bit) : "0"(0), "r"(n) : "cc");
+    return bit;
 }
 
 /**
@@ -190,9 +184,8 @@ int __ilog2_u32(u32 n)
  * - return 0 to indicate no bits set
  */
 static inline __attribute__((const))
-int fls(int x)
-{
-	return (x != 0) ? __ilog2_u32(x) + 1 : 0;
+int fls(int x) {
+    return (x != 0) ? __ilog2_u32(x) + 1 : 0;
 }
 
 /**
@@ -201,9 +194,8 @@ int fls(int x)
  *
  * Undefined if no set bit exists, so code should check against 0 first.
  */
-static inline unsigned long __fls(unsigned long word)
-{
-	return __ilog2_u32(word);
+static inline unsigned long __fls(unsigned long word) {
+    return __ilog2_u32(word);
 }
 
 /**
@@ -214,12 +206,11 @@ static inline unsigned long __fls(unsigned long word)
  * - return 0 to indicate no bits set
  */
 static inline __attribute__((const))
-int ffs(int x)
-{
-	/* Note: (x & -x) gives us a mask that is the least significant
-	 * (rightmost) 1-bit of the value in x.
-	 */
-	return fls(x & -x);
+int ffs(int x) {
+    /* Note: (x & -x) gives us a mask that is the least significant
+     * (rightmost) 1-bit of the value in x.
+     */
+    return fls(x & -x);
 }
 
 #include <asm-generic/bitops/ffz.h>

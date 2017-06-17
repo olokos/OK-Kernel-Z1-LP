@@ -18,42 +18,42 @@
 
 #include "efx.h"
 
-static inline unsigned efx_mdio_id_rev(u32 id) { return id & 0xf; }
-static inline unsigned efx_mdio_id_model(u32 id) { return (id >> 4) & 0x3f; }
+static inline unsigned efx_mdio_id_rev(u32 id) {
+    return id & 0xf;
+}
+static inline unsigned efx_mdio_id_model(u32 id) {
+    return (id >> 4) & 0x3f;
+}
 extern unsigned efx_mdio_id_oui(u32 id);
 
-static inline int efx_mdio_read(struct efx_nic *efx, int devad, int addr)
-{
-	return efx->mdio.mdio_read(efx->net_dev, efx->mdio.prtad, devad, addr);
+static inline int efx_mdio_read(struct efx_nic *efx, int devad, int addr) {
+    return efx->mdio.mdio_read(efx->net_dev, efx->mdio.prtad, devad, addr);
 }
 
 static inline void
-efx_mdio_write(struct efx_nic *efx, int devad, int addr, int value)
-{
-	efx->mdio.mdio_write(efx->net_dev, efx->mdio.prtad, devad, addr, value);
+efx_mdio_write(struct efx_nic *efx, int devad, int addr, int value) {
+    efx->mdio.mdio_write(efx->net_dev, efx->mdio.prtad, devad, addr, value);
 }
 
-static inline u32 efx_mdio_read_id(struct efx_nic *efx, int mmd)
-{
-	u16 id_low = efx_mdio_read(efx, mmd, MDIO_DEVID2);
-	u16 id_hi = efx_mdio_read(efx, mmd, MDIO_DEVID1);
-	return (id_hi << 16) | (id_low);
+static inline u32 efx_mdio_read_id(struct efx_nic *efx, int mmd) {
+    u16 id_low = efx_mdio_read(efx, mmd, MDIO_DEVID2);
+    u16 id_hi = efx_mdio_read(efx, mmd, MDIO_DEVID1);
+    return (id_hi << 16) | (id_low);
 }
 
-static inline bool efx_mdio_phyxgxs_lane_sync(struct efx_nic *efx)
-{
-	int i, lane_status;
-	bool sync;
+static inline bool efx_mdio_phyxgxs_lane_sync(struct efx_nic *efx) {
+    int i, lane_status;
+    bool sync;
 
-	for (i = 0; i < 2; ++i)
-		lane_status = efx_mdio_read(efx, MDIO_MMD_PHYXS,
-					    MDIO_PHYXS_LNSTAT);
+    for (i = 0; i < 2; ++i)
+        lane_status = efx_mdio_read(efx, MDIO_MMD_PHYXS,
+                                    MDIO_PHYXS_LNSTAT);
 
-	sync = !!(lane_status & MDIO_PHYXS_LNSTAT_ALIGN);
-	if (!sync)
-		netif_dbg(efx, hw, efx->net_dev, "XGXS lane status: %x\n",
-			  lane_status);
-	return sync;
+    sync = !!(lane_status & MDIO_PHYXS_LNSTAT_ALIGN);
+    if (!sync)
+        netif_dbg(efx, hw, efx->net_dev, "XGXS lane status: %x\n",
+                  lane_status);
+    return sync;
 }
 
 extern const char *efx_mdio_mmd_name(int mmd);
@@ -65,7 +65,7 @@ extern const char *efx_mdio_mmd_name(int mmd);
  * This function will sleep
  */
 extern int efx_mdio_reset_mmd(struct efx_nic *efx, int mmd,
-			      int spins, int spintime);
+                              int spins, int spintime);
 
 /* As efx_mdio_check_mmd but for multiple MMDs */
 int efx_mdio_check_mmds(struct efx_nic *efx, unsigned int mmd_mask);
@@ -81,7 +81,7 @@ extern void efx_mdio_phy_reconfigure(struct efx_nic *efx);
 
 /* Set the power state of the specified MMDs */
 extern void efx_mdio_set_mmds_lpower(struct efx_nic *efx,
-				     int low_power, unsigned int mmd_mask);
+                                     int low_power, unsigned int mmd_mask);
 
 /* Set (some of) the PHY settings over MDIO */
 extern int efx_mdio_set_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd);
@@ -96,14 +96,13 @@ u8 efx_mdio_get_pause(struct efx_nic *efx);
 
 /* Wait for specified MMDs to exit reset within a timeout */
 extern int efx_mdio_wait_reset_mmds(struct efx_nic *efx,
-				    unsigned int mmd_mask);
+                                    unsigned int mmd_mask);
 
 /* Set or clear flag, debouncing */
 static inline void
 efx_mdio_set_flag(struct efx_nic *efx, int devad, int addr,
-		  int mask, bool state)
-{
-	mdio_set_flag(&efx->mdio, efx->mdio.prtad, devad, addr, mask, state);
+                  int mask, bool state) {
+    mdio_set_flag(&efx->mdio, efx->mdio.prtad, devad, addr, mask, state);
 }
 
 /* Liveness self-test for MDIO PHYs */

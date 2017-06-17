@@ -80,6 +80,6 @@ extern cvmx_helper_link_info_t __cvmx_helper_spi_link_get(int ipd_port);
  * Returns Zero on success, negative on failure
  */
 extern int __cvmx_helper_spi_link_set(int ipd_port,
-				      cvmx_helper_link_info_t link_info);
+                                      cvmx_helper_link_info_t link_info);
 
 #endif

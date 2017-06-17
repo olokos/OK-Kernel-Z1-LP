@@ -2,38 +2,38 @@
  * rocket.h --- the exported interface of the rocket driver to its configuration program.
  *
  * Written by Theodore Ts'o, Copyright 1997.
- * Copyright 1997 Comtrol Corporation. 
+ * Copyright 1997 Comtrol Corporation.
  *
  */
 
 /*  Model Information Struct */
 typedef struct {
-	unsigned long model;
-	char modelString[80];
-	unsigned long numPorts;
-	int loadrm2;
-	int startingPortNumber;
+    unsigned long model;
+    char modelString[80];
+    unsigned long numPorts;
+    int loadrm2;
+    int startingPortNumber;
 } rocketModel_t;
 
 struct rocket_config {
-	int line;
-	int flags;
-	int closing_wait;
-	int close_delay;
-	int port;
-	int reserved[32];
+    int line;
+    int flags;
+    int closing_wait;
+    int close_delay;
+    int port;
+    int reserved[32];
 };
 
 struct rocket_ports {
-	int tty_major;
-	int callout_major;
-	rocketModel_t rocketModel[8];
+    int tty_major;
+    int callout_major;
+    rocketModel_t rocketModel[8];
 };
 
 struct rocket_version {
-	char rocket_version[32];
-	char rocket_date[32];
-	char reserved[64];
+    char rocket_version[32];
+    char rocket_date[32];
+    char reserved[64];
 };
 
 /*
@@ -100,7 +100,7 @@ struct rocket_version {
 #define MODEL_UPCI_RP32INTF   0x0801	/* RP UPCI 32 port w/external I/F     */
 #define MODEL_UPCI_RP8INTF    0x0802	/* RP UPCI 8 port w/external I/F      */
 #define MODEL_UPCI_RP16INTF   0x0803	/* RP UPCI 16 port w/external I/F     */
-#define MODEL_UPCI_RP8OCTA    0x0805	/* RP UPCI 8 port w/octa cable        */ 
+#define MODEL_UPCI_RP8OCTA    0x0805	/* RP UPCI 8 port w/octa cable        */
 #define MODEL_UPCI_RM3_8PORT  0x080C	/* RP UPCI Rocketmodem III 8 port     */
 #define MODEL_UPCI_RM3_4PORT  0x080C	/* RP UPCI Rocketmodem III 4 port     */
 

@@ -73,31 +73,31 @@ do {									\
 
 #define SLOT_NAME_SIZE 10
 struct slot {
-	u8 state;
-	struct controller *ctrl;
-	struct hotplug_slot *hotplug_slot;
-	struct delayed_work work;	/* work for button event */
-	struct mutex lock;
+    u8 state;
+    struct controller *ctrl;
+    struct hotplug_slot *hotplug_slot;
+    struct delayed_work work;	/* work for button event */
+    struct mutex lock;
 };
 
 struct event_info {
-	u32 event_type;
-	struct slot *p_slot;
-	struct work_struct work;
+    u32 event_type;
+    struct slot *p_slot;
+    struct work_struct work;
 };
 
 struct controller {
-	struct mutex ctrl_lock;		/* controller lock */
-	struct pcie_device *pcie;	/* PCI Express port service */
-	struct slot *slot;
-	wait_queue_head_t queue;	/* sleep & wake process */
-	u32 slot_cap;
-	struct timer_list poll_timer;
-	unsigned int cmd_busy:1;
-	unsigned int no_cmd_complete:1;
-	unsigned int link_active_reporting:1;
-	unsigned int notification_enabled:1;
-	unsigned int power_fault_detected;
+    struct mutex ctrl_lock;		/* controller lock */
+    struct pcie_device *pcie;	/* PCI Express port service */
+    struct slot *slot;
+    wait_queue_head_t queue;	/* sleep & wake process */
+    u32 slot_cap;
+    struct timer_list poll_timer;
+    unsigned int cmd_busy:1;
+    unsigned int no_cmd_complete:1;
+    unsigned int link_active_reporting:1;
+    unsigned int notification_enabled:1;
+    unsigned int power_fault_detected;
 };
 
 #define INT_BUTTON_IGNORE		0
@@ -160,9 +160,8 @@ void pciehp_green_led_blink(struct slot *slot);
 int pciehp_check_link_status(struct controller *ctrl);
 void pciehp_release_ctrl(struct controller *ctrl);
 
-static inline const char *slot_name(struct slot *slot)
-{
-	return hotplug_slot_name(slot->hotplug_slot);
+static inline const char *slot_name(struct slot *slot) {
+    return hotplug_slot_name(slot->hotplug_slot);
 }
 
 #ifdef CONFIG_ACPI
@@ -173,15 +172,13 @@ static inline const char *slot_name(struct slot *slot)
 extern void __init pciehp_acpi_slot_detection_init(void);
 extern int pciehp_acpi_slot_detection_check(struct pci_dev *dev);
 
-static inline void pciehp_firmware_init(void)
-{
-	pciehp_acpi_slot_detection_init();
+static inline void pciehp_firmware_init(void) {
+    pciehp_acpi_slot_detection_init();
 }
 #else
 #define pciehp_firmware_init()				do {} while (0)
-static inline int pciehp_acpi_slot_detection_check(struct pci_dev *dev)
-{
-	return 0;
+static inline int pciehp_acpi_slot_detection_check(struct pci_dev *dev) {
+    return 0;
 }
 #endif 				/* CONFIG_ACPI */
 #endif				/* _PCIEHP_H */

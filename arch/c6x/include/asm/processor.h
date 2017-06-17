@@ -52,16 +52,16 @@
 #define TASK_UNMAPPED_BASE	0
 
 struct thread_struct {
-	unsigned long long b15_14;
-	unsigned long long a15_14;
-	unsigned long long b13_12;
-	unsigned long long a13_12;
-	unsigned long long b11_10;
-	unsigned long long a11_10;
-	unsigned long long ricl_icl;
-	unsigned long  usp;		/* user stack pointer */
-	unsigned long  pc;		/* kernel pc */
-	unsigned long  wchan;
+    unsigned long long b15_14;
+    unsigned long long a15_14;
+    unsigned long long b13_12;
+    unsigned long long a13_12;
+    unsigned long long b11_10;
+    unsigned long long a11_10;
+    unsigned long long ricl_icl;
+    unsigned long  usp;		/* user stack pointer */
+    unsigned long  pc;		/* kernel pc */
+    unsigned long  wchan;
 };
 
 #define INIT_THREAD					\
@@ -85,11 +85,10 @@ struct thread_struct {
 struct task_struct;
 
 extern void start_thread(struct pt_regs *regs, unsigned int pc,
-			 unsigned long usp);
+                         unsigned long usp);
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
+static inline void release_thread(struct task_struct *dead_task) {
 }
 
 /* Prepare to copy thread state - unlazy all lazy status */

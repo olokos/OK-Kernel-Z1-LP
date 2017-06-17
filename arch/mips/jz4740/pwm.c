@@ -28,150 +28,144 @@ static struct clk *jz4740_pwm_clk;
 DEFINE_MUTEX(jz4740_pwm_mutex);
 
 struct pwm_device {
-	unsigned int id;
-	unsigned int gpio;
-	bool used;
+    unsigned int id;
+    unsigned int gpio;
+    bool used;
 };
 
 static struct pwm_device jz4740_pwm_list[] = {
-	{ 2, JZ_GPIO_PWM2, false },
-	{ 3, JZ_GPIO_PWM3, false },
-	{ 4, JZ_GPIO_PWM4, false },
-	{ 5, JZ_GPIO_PWM5, false },
-	{ 6, JZ_GPIO_PWM6, false },
-	{ 7, JZ_GPIO_PWM7, false },
+    { 2, JZ_GPIO_PWM2, false },
+    { 3, JZ_GPIO_PWM3, false },
+    { 4, JZ_GPIO_PWM4, false },
+    { 5, JZ_GPIO_PWM5, false },
+    { 6, JZ_GPIO_PWM6, false },
+    { 7, JZ_GPIO_PWM7, false },
 };
 
-struct pwm_device *pwm_request(int id, const char *label)
-{
-	int ret = 0;
-	struct pwm_device *pwm;
+struct pwm_device *pwm_request(int id, const char *label) {
+    int ret = 0;
+    struct pwm_device *pwm;
 
-	if (id < 2 || id > 7 || !jz4740_pwm_clk)
-		return ERR_PTR(-ENODEV);
+    if (id < 2 || id > 7 || !jz4740_pwm_clk)
+        return ERR_PTR(-ENODEV);
 
-	mutex_lock(&jz4740_pwm_mutex);
+    mutex_lock(&jz4740_pwm_mutex);
 
-	pwm = &jz4740_pwm_list[id - 2];
-	if (pwm->used)
-		ret = -EBUSY;
-	else
-		pwm->used = true;
+    pwm = &jz4740_pwm_list[id - 2];
+    if (pwm->used)
+        ret = -EBUSY;
+    else
+        pwm->used = true;
 
-	mutex_unlock(&jz4740_pwm_mutex);
+    mutex_unlock(&jz4740_pwm_mutex);
 
-	if (ret)
-		return ERR_PTR(ret);
+    if (ret)
+        return ERR_PTR(ret);
 
-	ret = gpio_request(pwm->gpio, label);
+    ret = gpio_request(pwm->gpio, label);
 
-	if (ret) {
-		printk(KERN_ERR "Failed to request pwm gpio: %d\n", ret);
-		pwm->used = false;
-		return ERR_PTR(ret);
-	}
+    if (ret) {
+        printk(KERN_ERR "Failed to request pwm gpio: %d\n", ret);
+        pwm->used = false;
+        return ERR_PTR(ret);
+    }
 
-	jz_gpio_set_function(pwm->gpio, JZ_GPIO_FUNC_PWM);
+    jz_gpio_set_function(pwm->gpio, JZ_GPIO_FUNC_PWM);
 
-	jz4740_timer_start(id);
+    jz4740_timer_start(id);
 
-	return pwm;
+    return pwm;
 }
 
-void pwm_free(struct pwm_device *pwm)
-{
-	pwm_disable(pwm);
-	jz4740_timer_set_ctrl(pwm->id, 0);
+void pwm_free(struct pwm_device *pwm) {
+    pwm_disable(pwm);
+    jz4740_timer_set_ctrl(pwm->id, 0);
 
-	jz_gpio_set_function(pwm->gpio, JZ_GPIO_FUNC_NONE);
-	gpio_free(pwm->gpio);
+    jz_gpio_set_function(pwm->gpio, JZ_GPIO_FUNC_NONE);
+    gpio_free(pwm->gpio);
 
-	jz4740_timer_stop(pwm->id);
+    jz4740_timer_stop(pwm->id);
 
-	pwm->used = false;
+    pwm->used = false;
 }
 
-int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns)
-{
-	unsigned long long tmp;
-	unsigned long period, duty;
-	unsigned int prescaler = 0;
-	unsigned int id = pwm->id;
-	uint16_t ctrl;
-	bool is_enabled;
+int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns) {
+    unsigned long long tmp;
+    unsigned long period, duty;
+    unsigned int prescaler = 0;
+    unsigned int id = pwm->id;
+    uint16_t ctrl;
+    bool is_enabled;
 
-	if (duty_ns < 0 || duty_ns > period_ns)
-		return -EINVAL;
+    if (duty_ns < 0 || duty_ns > period_ns)
+        return -EINVAL;
 
-	tmp = (unsigned long long)clk_get_rate(jz4740_pwm_clk) * period_ns;
-	do_div(tmp, 1000000000);
-	period = tmp;
+    tmp = (unsigned long long)clk_get_rate(jz4740_pwm_clk) * period_ns;
+    do_div(tmp, 1000000000);
+    period = tmp;
 
-	while (period > 0xffff && prescaler < 6) {
-		period >>= 2;
-		++prescaler;
-	}
+    while (period > 0xffff && prescaler < 6) {
+        period >>= 2;
+        ++prescaler;
+    }
 
-	if (prescaler == 6)
-		return -EINVAL;
+    if (prescaler == 6)
+        return -EINVAL;
 
-	tmp = (unsigned long long)period * duty_ns;
-	do_div(tmp, period_ns);
-	duty = period - tmp;
+    tmp = (unsigned long long)period * duty_ns;
+    do_div(tmp, period_ns);
+    duty = period - tmp;
 
-	if (duty >= period)
-		duty = period - 1;
+    if (duty >= period)
+        duty = period - 1;
 
-	is_enabled = jz4740_timer_is_enabled(id);
-	if (is_enabled)
-		pwm_disable(pwm);
+    is_enabled = jz4740_timer_is_enabled(id);
+    if (is_enabled)
+        pwm_disable(pwm);
 
-	jz4740_timer_set_count(id, 0);
-	jz4740_timer_set_duty(id, duty);
-	jz4740_timer_set_period(id, period);
+    jz4740_timer_set_count(id, 0);
+    jz4740_timer_set_duty(id, duty);
+    jz4740_timer_set_period(id, period);
 
-	ctrl = JZ_TIMER_CTRL_PRESCALER(prescaler) | JZ_TIMER_CTRL_SRC_EXT |
-		JZ_TIMER_CTRL_PWM_ABBRUPT_SHUTDOWN;
+    ctrl = JZ_TIMER_CTRL_PRESCALER(prescaler) | JZ_TIMER_CTRL_SRC_EXT |
+           JZ_TIMER_CTRL_PWM_ABBRUPT_SHUTDOWN;
 
-	jz4740_timer_set_ctrl(id, ctrl);
+    jz4740_timer_set_ctrl(id, ctrl);
 
-	if (is_enabled)
-		pwm_enable(pwm);
+    if (is_enabled)
+        pwm_enable(pwm);
 
-	return 0;
+    return 0;
 }
 
-int pwm_enable(struct pwm_device *pwm)
-{
-	uint32_t ctrl = jz4740_timer_get_ctrl(pwm->id);
+int pwm_enable(struct pwm_device *pwm) {
+    uint32_t ctrl = jz4740_timer_get_ctrl(pwm->id);
 
-	ctrl |= JZ_TIMER_CTRL_PWM_ENABLE;
-	jz4740_timer_set_ctrl(pwm->id, ctrl);
-	jz4740_timer_enable(pwm->id);
+    ctrl |= JZ_TIMER_CTRL_PWM_ENABLE;
+    jz4740_timer_set_ctrl(pwm->id, ctrl);
+    jz4740_timer_enable(pwm->id);
 
-	return 0;
+    return 0;
 }
 
-void pwm_disable(struct pwm_device *pwm)
-{
-	uint32_t ctrl = jz4740_timer_get_ctrl(pwm->id);
+void pwm_disable(struct pwm_device *pwm) {
+    uint32_t ctrl = jz4740_timer_get_ctrl(pwm->id);
 
-	ctrl &= ~JZ_TIMER_CTRL_PWM_ENABLE;
-	jz4740_timer_disable(pwm->id);
-	jz4740_timer_set_ctrl(pwm->id, ctrl);
+    ctrl &= ~JZ_TIMER_CTRL_PWM_ENABLE;
+    jz4740_timer_disable(pwm->id);
+    jz4740_timer_set_ctrl(pwm->id, ctrl);
 }
 
-static int __init jz4740_pwm_init(void)
-{
-	int ret = 0;
+static int __init jz4740_pwm_init(void) {
+    int ret = 0;
 
-	jz4740_pwm_clk = clk_get(NULL, "ext");
+    jz4740_pwm_clk = clk_get(NULL, "ext");
 
-	if (IS_ERR(jz4740_pwm_clk)) {
-		ret = PTR_ERR(jz4740_pwm_clk);
-		jz4740_pwm_clk = NULL;
-	}
+    if (IS_ERR(jz4740_pwm_clk)) {
+        ret = PTR_ERR(jz4740_pwm_clk);
+        jz4740_pwm_clk = NULL;
+    }
 
-	return ret;
+    return ret;
 }
 subsys_initcall(jz4740_pwm_init);

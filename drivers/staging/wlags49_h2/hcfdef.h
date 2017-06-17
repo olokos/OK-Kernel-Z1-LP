@@ -245,11 +245,13 @@
 /* HREG_EV_TX_EXT := 0x0000 or HREG_EV_TX_EXC and/or HREG_EV_TICK
  * could be extended with HREG_EV_TX */
 #if HCF_EXT_INT_TX_EX != HREG_EV_TX_EXC
-err: these values should match;
+err:
+these values should match;
 #endif // HCF_EXT_INT_TX_EX / HREG_EV_TX_EXC
 
 #if HCF_EXT_INT_TICK != HREG_EV_TICK
-err: these values should match;
+err:
+these values should match;
 #endif // HCF_EXT_INT_TICK / HREG_EV_TICK
 
 //************************* Host Software
@@ -422,11 +424,13 @@ err: these values should match;
 
 //---------------------------------------------------------------------------------------------------------------------
 #if defined HCF_CFG_PRI_1_TOP || defined HCF_CFG_PRI_1_BOTTOM
-err: PRI_1 not supported for H-I;   // Compatibility for Primary Firmware - driver I/F
+err:
+PRI_1 not supported for H-I;   // Compatibility for Primary Firmware - driver I/F
 #endif // HCF_CFG_PRI_1_TOP / HCF_CFG_PRI_1_BOTTOM
 
 #if defined HCF_CFG_PRI_2_TOP || defined HCF_CFG_PRI_2_BOTTOM
-err: PRI_2 not supported for H-I;   // Compatibility for Primary Firmware - driver I/F
+err:
+PRI_2 not supported for H-I;   // Compatibility for Primary Firmware - driver I/F
 #endif // HCF_CFG_PRI_2_TOP / HCF_CFG_PRI_2_BOTTOM
 
 #ifdef HCF_CFG_PRI_3_TOP                                    // Top Compatibility for Primary Firmware - driver I/F
@@ -435,7 +439,8 @@ err: PRI_2 not supported for H-I;   // Compatibility for Primary Firmware - driv
 #undef CFG_DRV_ACT_RANGES_PRI_3_TOP
 #define CFG_DRV_ACT_RANGES_PRI_3_TOP    HCF_CFG_PRI_3_TOP
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_PRI_3_TOP
 
@@ -444,26 +449,31 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_PRI_3_BOTTOM
 #define CFG_DRV_ACT_RANGES_PRI_3_BOTTOM HCF_CFG_PRI_3_BOTTOM
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_PRI_3_BOTTOM
 
 
 //---------------------------------------------------------------------------------------------------------------------
 #if defined HCF_CFG_HSI_0_TOP || defined HCF_CFG_HSI_0_BOTTOM
-err: HSI_0 not supported for H-I;   // Compatibility for HSI I/F
+err:
+HSI_0 not supported for H-I;   // Compatibility for HSI I/F
 #endif // HCF_CFG_HSI_0_TOP / HCF_CFG_HSI_0_BOTTOM
 
 #if defined HCF_CFG_HSI_1_TOP || defined HCF_CFG_HSI_1_BOTTOM
-err: HSI_1 not supported for H-I;   // Compatibility for HSI I/F
+err:
+HSI_1 not supported for H-I;   // Compatibility for HSI I/F
 #endif // HCF_CFG_HSI_1_TOP / HCF_CFG_HSI_1_BOTTOM
 
 #if defined HCF_CFG_HSI_2_TOP || defined HCF_CFG_HSI_2_BOTTOM
-err: HSI_2 not supported for H-I;   // Compatibility for HSI I/F
+err:
+HSI_2 not supported for H-I;   // Compatibility for HSI I/F
 #endif // HCF_CFG_HSI_2_TOP / HCF_CFG_HSI_2_BOTTOM
 
 #if defined HCF_CFG_HSI_3_TOP || defined HCF_CFG_HSI_3_BOTTOM
-err: HSI_3 not supported for H-I;   // Compatibility for HSI I/F
+err:
+HSI_3 not supported for H-I;   // Compatibility for HSI I/F
 #endif // HCF_CFG_HSI_3_TOP / HCF_CFG_HSI_3_BOTTOM
 
 #ifdef HCF_CFG_HSI_4_TOP                                    // Top Compatibility for HSI I/F
@@ -472,7 +482,8 @@ err: HSI_3 not supported for H-I;   // Compatibility for HSI I/F
 #undef CFG_DRV_ACT_RANGES_HSI_4_TOP
 #define CFG_DRV_ACT_RANGES_HSI_4_TOP    HCF_CFG_HSI_4_TOP
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_HSI_4_TOP
 
@@ -481,7 +492,8 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_HSI_4_BOTTOM
 #define CFG_DRV_ACT_RANGES_HSI_4_BOTTOM HCF_CFG_HSI_4_BOTTOM
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_HSI_4_BOTTOM
 
@@ -491,7 +503,8 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_HSI_5_TOP
 #define CFG_DRV_ACT_RANGES_HSI_5_TOP    HCF_CFG_HSI_5_TOP
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_HSI_5_TOP
 
@@ -500,12 +513,14 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_HSI_5_BOTTOM
 #define CFG_DRV_ACT_RANGES_HSI_5_BOTTOM HCF_CFG_HSI_5_BOTTOM
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_HSI_5_BOTTOM
 //---------------------------------------------------------------------------------------------------------------------
 #if defined HCF_CFG_APF_1_TOP || defined HCF_CFG_APF_1_BOTTOM
-err: APF_1 not supported for H-I;   // Compatibility for AP Firmware - driver I/F
+err:
+APF_1 not supported for H-I;   // Compatibility for AP Firmware - driver I/F
 #endif // HCF_CFG_APF_1_TOP / HCF_CFG_APF_1_BOTTOM
 
 #ifdef HCF_CFG_APF_2_TOP                                    // Top Compatibility for AP Firmware - driver I/F
@@ -514,7 +529,8 @@ err: APF_1 not supported for H-I;   // Compatibility for AP Firmware - driver I/
 #undef CFG_DRV_ACT_RANGES_APF_2_TOP
 #define CFG_DRV_ACT_RANGES_APF_2_TOP    HCF_CFG_APF_2_TOP
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_APF_TOP
 
@@ -523,13 +539,15 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_APF_2_BOTTOM
 #define CFG_DRV_ACT_RANGES_APF_2_BOTTOM HCF_CFG_APF_2_BOTTOM
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_APF_BOTTOM
 
 //---------------------------------------------------------------------------------------------------------------------
 #if defined HCF_CFG_STA_1_TOP || defined HCF_CFG_STA_1_BOTTOM
-err: STA_1 not supported for H-I;   // Compatibility for Station Firmware - driver I/F
+err:
+STA_1 not supported for H-I;   // Compatibility for Station Firmware - driver I/F
 #endif // HCF_CFG_STA_1_TOP / HCF_CFG_STA_1_BOTTOM
 
 #ifdef HCF_CFG_STA_2_TOP                                    // Top Compatibility for Station Firmware - driver I/F
@@ -538,7 +556,8 @@ err: STA_1 not supported for H-I;   // Compatibility for Station Firmware - driv
 #undef CFG_DRV_ACT_RANGES_STA_2_TOP
 #define CFG_DRV_ACT_RANGES_STA_2_TOP    HCF_CFG_STA_2_TOP
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_STA_TOP
 
@@ -547,7 +566,8 @@ err: ;
 #undef CFG_DRV_ACT_RANGES_STA_2_BOTTOM
 #define CFG_DRV_ACT_RANGES_STA_2_BOTTOM HCF_CFG_STA_2_BOTTOM
 #else
-err: ;
+err:
+;
 #endif
 #endif // HCF_CFG_STA_BOTTOM
 
@@ -642,7 +662,8 @@ err: ;
 
 #if defined HCF_EX_INT
 //#if HCF_EX_INT & ~( HCF_EX_INT_TX_EX | HCF_EX_INT_TX_OK | HCF_EX_INT_TICK )
-;? out dated checking
+;
+? out dated checking
 err: you used an invalid bitmask;
 // #endif // HCF_EX_INT validation
 // #else
@@ -651,15 +672,18 @@ err: you used an invalid bitmask;
 
 #if 0 //get compiler going
 #if HCF_EX_INT_TICK != HREG_EV_TICK
-;? out dated checking
+;
+? out dated checking
 err: someone redefined these macros while the implemenation assumes they are equal;
 #endif
 #if HCF_EX_INT_TX_OK != HFS_TX_CNTL_TX_OK || HFS_TX_CNTL_TX_OK != HREG_EV_TX_OK
-;? out dated checking
+;
+? out dated checking
 err: someone redefined these macros while the implemenation assumes they are equal;
 #endif
 #if HCF_EX_INT_TX_EX != HFS_TX_CNTL_TX_EX || HFS_TX_CNTL_TX_EX != HREG_EV_TX_EX
-;? out dated checking
+;
+? out dated checking
 err: someone redefined these macros while the implemenation assumes they are equal;
 #endif
 #endif // 0 get compiler going

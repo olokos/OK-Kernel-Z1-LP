@@ -104,17 +104,17 @@ MECR_GET((mecr), (sock), MECR_FAST_SHIFT, MECR_FAST_MODE_MASK)
  * using integer arithmetic:
  */
 static inline unsigned int sa1100_pcmcia_mecr_bs(unsigned int pcmcia_cycle_ns,
-						 unsigned int cpu_clock_khz){
-  unsigned int t = ((pcmcia_cycle_ns * cpu_clock_khz) / 6) - 1000000;
-  return (t / 1000000) + (((t % 1000000) == 0) ? 0 : 1);
+        unsigned int cpu_clock_khz) {
+    unsigned int t = ((pcmcia_cycle_ns * cpu_clock_khz) / 6) - 1000000;
+    return (t / 1000000) + (((t % 1000000) == 0) ? 0 : 1);
 }
 
 /* This function returns the (approximate) command assertion period, in
  * nanoseconds, for a given CPU clock frequency and MECR BS value:
  */
 static inline unsigned int sa1100_pcmcia_cmd_time(unsigned int cpu_clock_khz,
-						  unsigned int pcmcia_mecr_bs){
-  return (((10000000 * 2) / cpu_clock_khz) * (3 * (pcmcia_mecr_bs + 1))) / 10;
+        unsigned int pcmcia_mecr_bs) {
+    return (((10000000 * 2) / cpu_clock_khz) * (3 * (pcmcia_mecr_bs + 1))) / 10;
 }
 
 

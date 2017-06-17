@@ -7,7 +7,7 @@
  * struct mci_dma_data - DMA data for MCI interface
  */
 struct mci_dma_data {
-	struct at_dma_slave	sdata;
+    struct at_dma_slave	sdata;
 };
 
 /* accessor macros */

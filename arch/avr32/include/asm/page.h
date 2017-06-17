@@ -29,9 +29,15 @@ extern void copy_page(void *to, void *from);
 /*
  * These are used to make use of C type-checking..
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define pte_val(x)		((x).pte)
@@ -46,13 +52,12 @@ typedef struct page *pgtable_t;
 extern unsigned long memory_start, memory_end;
 
 /* Pure 2^n version of get_order */
-static inline int get_order(unsigned long size)
-{
-	unsigned lz;
+static inline int get_order(unsigned long size) {
+    unsigned lz;
 
-	size = (size - 1) >> PAGE_SHIFT;
-	asm("clz %0, %1" : "=r"(lz) : "r"(size));
-	return 32 - lz;
+    size = (size - 1) >> PAGE_SHIFT;
+    asm("clz %0, %1" : "=r"(lz) : "r"(size));
+    return 32 - lz;
 }
 
 #endif /* !__ASSEMBLY__ */

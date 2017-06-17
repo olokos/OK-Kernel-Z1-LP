@@ -6,52 +6,52 @@
  */
 
 enum pstate {
-	HW_PSTATE_INVALID = 0xff,
-	HW_PSTATE_0 = 0,
-	HW_PSTATE_1 = 1,
-	HW_PSTATE_2 = 2,
-	HW_PSTATE_3 = 3,
-	HW_PSTATE_4 = 4,
-	HW_PSTATE_5 = 5,
-	HW_PSTATE_6 = 6,
-	HW_PSTATE_7 = 7,
+    HW_PSTATE_INVALID = 0xff,
+    HW_PSTATE_0 = 0,
+    HW_PSTATE_1 = 1,
+    HW_PSTATE_2 = 2,
+    HW_PSTATE_3 = 3,
+    HW_PSTATE_4 = 4,
+    HW_PSTATE_5 = 5,
+    HW_PSTATE_6 = 6,
+    HW_PSTATE_7 = 7,
 };
 
 struct powernow_k8_data {
-	unsigned int cpu;
+    unsigned int cpu;
 
-	u32 numps;  /* number of p-states */
-	u32 batps;  /* number of p-states supported on battery */
-	u32 max_hw_pstate; /* maximum legal hardware pstate */
+    u32 numps;  /* number of p-states */
+    u32 batps;  /* number of p-states supported on battery */
+    u32 max_hw_pstate; /* maximum legal hardware pstate */
 
-	/* these values are constant when the PSB is used to determine
-	 * vid/fid pairings, but are modified during the ->target() call
-	 * when ACPI is used */
-	u32 rvo;     /* ramp voltage offset */
-	u32 irt;     /* isochronous relief time */
-	u32 vidmvs;  /* usable value calculated from mvs */
-	u32 vstable; /* voltage stabilization time, units 20 us */
-	u32 plllock; /* pll lock time, units 1 us */
-        u32 exttype; /* extended interface = 1 */
+    /* these values are constant when the PSB is used to determine
+     * vid/fid pairings, but are modified during the ->target() call
+     * when ACPI is used */
+    u32 rvo;     /* ramp voltage offset */
+    u32 irt;     /* isochronous relief time */
+    u32 vidmvs;  /* usable value calculated from mvs */
+    u32 vstable; /* voltage stabilization time, units 20 us */
+    u32 plllock; /* pll lock time, units 1 us */
+    u32 exttype; /* extended interface = 1 */
 
-	/* keep track of the current fid / vid or pstate */
-	u32 currvid;
-	u32 currfid;
-	enum pstate currpstate;
+    /* keep track of the current fid / vid or pstate */
+    u32 currvid;
+    u32 currfid;
+    enum pstate currpstate;
 
-	/* the powernow_table includes all frequency and vid/fid pairings:
-	 * fid are the lower 8 bits of the index, vid are the upper 8 bits.
-	 * frequency is in kHz */
-	struct cpufreq_frequency_table  *powernow_table;
+    /* the powernow_table includes all frequency and vid/fid pairings:
+     * fid are the lower 8 bits of the index, vid are the upper 8 bits.
+     * frequency is in kHz */
+    struct cpufreq_frequency_table  *powernow_table;
 
-	/* the acpi table needs to be kept. it's only available if ACPI was
-	 * used to determine valid frequency/vid/fid states */
-	struct acpi_processor_performance acpi_data;
+    /* the acpi table needs to be kept. it's only available if ACPI was
+     * used to determine valid frequency/vid/fid states */
+    struct acpi_processor_performance acpi_data;
 
-	/* we need to keep track of associated cores, but let cpufreq
-	 * handle hotplug events - so just point at cpufreq pol->cpus
-	 * structure */
-	struct cpumask *available_cores;
+    /* we need to keep track of associated cores, but let cpufreq
+     * handle hotplug events - so just point at cpufreq pol->cpus
+     * structure */
+    struct cpumask *available_cores;
 };
 
 /* processor's cpuid instruction support */
@@ -192,27 +192,27 @@ struct powernow_k8_data {
 #define PSB_VERSION_1_4  0x14
 
 struct psb_s {
-	u8 signature[10];
-	u8 tableversion;
-	u8 flags1;
-	u16 vstable;
-	u8 flags2;
-	u8 num_tables;
-	u32 cpuid;
-	u8 plllocktime;
-	u8 maxfid;
-	u8 maxvid;
-	u8 numps;
+    u8 signature[10];
+    u8 tableversion;
+    u8 flags1;
+    u16 vstable;
+    u8 flags2;
+    u8 num_tables;
+    u32 cpuid;
+    u8 plllocktime;
+    u8 maxfid;
+    u8 maxvid;
+    u8 numps;
 };
 
 /* Pairs of fid/vid values are appended to the version 1.4 PSB table. */
 struct pst_s {
-	u8 fid;
-	u8 vid;
+    u8 fid;
+    u8 vid;
 };
 
 static int core_voltage_pre_transition(struct powernow_k8_data *data,
-	u32 reqvid, u32 regfid);
+                                       u32 reqvid, u32 regfid);
 static int core_voltage_post_transition(struct powernow_k8_data *data, u32 reqvid);
 static int core_frequency_transition(struct powernow_k8_data *data, u32 reqfid);
 

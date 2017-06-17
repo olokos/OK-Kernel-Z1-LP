@@ -16,6 +16,6 @@
 #define MIPI_ORISE_H
 
 int mipi_orise_device_register(struct msm_panel_info *pinfo,
-					u32 channel, u32 panel);
+                               u32 channel, u32 panel);
 
 #endif  /* MIPI_ORISE_H */

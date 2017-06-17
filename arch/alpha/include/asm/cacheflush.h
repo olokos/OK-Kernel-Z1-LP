@@ -22,7 +22,7 @@
 
 /* We need to flush the kernel's icache after loading modules.  The
    only other use of this macro is in load_aout_interp which is not
-   used on Alpha. 
+   used on Alpha.
 
    Note that this definition should *not* be used for userspace
    icache flushing.  While functional, it is _way_ overkill.  The
@@ -48,19 +48,18 @@ extern void smp_imb(void);
 extern void __load_new_mm_context(struct mm_struct *);
 static inline void
 flush_icache_user_range(struct vm_area_struct *vma, struct page *page,
-			unsigned long addr, int len)
-{
-	if (vma->vm_flags & VM_EXEC) {
-		struct mm_struct *mm = vma->vm_mm;
-		if (current->active_mm == mm)
-			__load_new_mm_context(mm);
-		else
-			mm->context[smp_processor_id()] = 0;
-	}
+                        unsigned long addr, int len) {
+    if (vma->vm_flags & VM_EXEC) {
+        struct mm_struct *mm = vma->vm_mm;
+        if (current->active_mm == mm)
+            __load_new_mm_context(mm);
+        else
+            mm->context[smp_processor_id()] = 0;
+    }
 }
 #else
 extern void flush_icache_user_range(struct vm_area_struct *vma,
-		struct page *page, unsigned long addr, int len);
+                                    struct page *page, unsigned long addr, int len);
 #endif
 
 /* This is used only in __do_fault and do_swap_page.  */

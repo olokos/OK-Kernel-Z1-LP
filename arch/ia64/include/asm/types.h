@@ -34,8 +34,8 @@
 # ifdef __KERNEL__
 
 struct fnptr {
-	unsigned long ip;
-	unsigned long gp;
+    unsigned long ip;
+    unsigned long gp;
 };
 
 # endif /* __KERNEL__ */

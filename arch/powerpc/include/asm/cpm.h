@@ -10,46 +10,46 @@
  * SPI Parameter RAM common to QE and CPM.
  */
 struct spi_pram {
-	__be16	rbase;	/* Rx Buffer descriptor base address */
-	__be16	tbase;	/* Tx Buffer descriptor base address */
-	u8	rfcr;	/* Rx function code */
-	u8	tfcr;	/* Tx function code */
-	__be16	mrblr;	/* Max receive buffer length */
-	__be32	rstate;	/* Internal */
-	__be32	rdp;	/* Internal */
-	__be16	rbptr;	/* Internal */
-	__be16	rbc;	/* Internal */
-	__be32	rxtmp;	/* Internal */
-	__be32	tstate;	/* Internal */
-	__be32	tdp;	/* Internal */
-	__be16	tbptr;	/* Internal */
-	__be16	tbc;	/* Internal */
-	__be32	txtmp;	/* Internal */
-	__be32	res;	/* Tx temp. */
-	__be16  rpbase;	/* Relocation pointer (CPM1 only) */
-	__be16	res1;	/* Reserved */
+    __be16	rbase;	/* Rx Buffer descriptor base address */
+    __be16	tbase;	/* Tx Buffer descriptor base address */
+    u8	rfcr;	/* Rx function code */
+    u8	tfcr;	/* Tx function code */
+    __be16	mrblr;	/* Max receive buffer length */
+    __be32	rstate;	/* Internal */
+    __be32	rdp;	/* Internal */
+    __be16	rbptr;	/* Internal */
+    __be16	rbc;	/* Internal */
+    __be32	rxtmp;	/* Internal */
+    __be32	tstate;	/* Internal */
+    __be32	tdp;	/* Internal */
+    __be16	tbptr;	/* Internal */
+    __be16	tbc;	/* Internal */
+    __be32	txtmp;	/* Internal */
+    __be32	res;	/* Tx temp. */
+    __be16  rpbase;	/* Relocation pointer (CPM1 only) */
+    __be16	res1;	/* Reserved */
 };
 
 /*
  * USB Controller pram common to QE and CPM.
  */
 struct usb_ctlr {
-	u8	usb_usmod;
-	u8	usb_usadr;
-	u8	usb_uscom;
-	u8	res1[1];
-	__be16	usb_usep[4];
-	u8	res2[4];
-	__be16	usb_usber;
-	u8	res3[2];
-	__be16	usb_usbmr;
-	u8	res4[1];
-	u8	usb_usbs;
-	/* Fields down below are QE-only */
-	__be16	usb_ussft;
-	u8	res5[2];
-	__be16	usb_usfrn;
-	u8	res6[0x22];
+    u8	usb_usmod;
+    u8	usb_usadr;
+    u8	usb_uscom;
+    u8	res1[1];
+    __be16	usb_usep[4];
+    u8	res2[4];
+    __be16	usb_usber;
+    u8	res3[2];
+    __be16	usb_usbmr;
+    u8	res4[1];
+    u8	usb_usbs;
+    /* Fields down below are QE-only */
+    __be16	usb_ussft;
+    u8	res5[2];
+    __be16	usb_usfrn;
+    u8	res6[0x22];
 } __attribute__ ((packed));
 
 /*
@@ -84,9 +84,9 @@ struct usb_ctlr {
 
 /* Buffer descriptors used by many of the CPM protocols. */
 typedef struct cpm_buf_desc {
-	ushort	cbd_sc;		/* Status and Control */
-	ushort	cbd_datlen;	/* Data length in buffer */
-	uint	cbd_bufaddr;	/* Buffer address in host memory */
+    ushort	cbd_sc;		/* Status and Control */
+    ushort	cbd_datlen;	/* Data length in buffer */
+    uint	cbd_bufaddr;	/* Buffer address in host memory */
 } cbd_t;
 
 /* Buffer descriptor control/status used by serial
@@ -166,44 +166,37 @@ unsigned long cpm_muram_offset(void __iomem *addr);
 dma_addr_t cpm_muram_dma(void __iomem *addr);
 #else
 static inline unsigned long cpm_muram_alloc(unsigned long size,
-					    unsigned long align)
-{
-	return -ENOSYS;
+        unsigned long align) {
+    return -ENOSYS;
 }
 
-static inline int cpm_muram_free(unsigned long offset)
-{
-	return -ENOSYS;
+static inline int cpm_muram_free(unsigned long offset) {
+    return -ENOSYS;
 }
 
 static inline unsigned long cpm_muram_alloc_fixed(unsigned long offset,
-						  unsigned long size)
-{
-	return -ENOSYS;
+        unsigned long size) {
+    return -ENOSYS;
 }
 
-static inline void __iomem *cpm_muram_addr(unsigned long offset)
-{
-	return NULL;
+static inline void __iomem *cpm_muram_addr(unsigned long offset) {
+    return NULL;
 }
 
-static inline unsigned long cpm_muram_offset(void __iomem *addr)
-{
-	return -ENOSYS;
+static inline unsigned long cpm_muram_offset(void __iomem *addr) {
+    return -ENOSYS;
 }
 
-static inline dma_addr_t cpm_muram_dma(void __iomem *addr)
-{
-	return 0;
+static inline dma_addr_t cpm_muram_dma(void __iomem *addr) {
+    return 0;
 }
 #endif /* defined(CONFIG_CPM) || defined(CONFIG_QUICC_ENGINE) */
 
 #ifdef CONFIG_CPM
 int cpm_command(u32 command, u8 opcode);
 #else
-static inline int cpm_command(u32 command, u8 opcode)
-{
-	return -ENOSYS;
+static inline int cpm_command(u32 command, u8 opcode) {
+    return -ENOSYS;
 }
 #endif /* CONFIG_CPM */
 

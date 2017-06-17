@@ -40,79 +40,75 @@
 #define ULPIVW_WDATA_MASK	0xff	/* write data field */
 #define ULPIVW_WDATA_SHIFT	0
 
-static int ulpi_poll(void __iomem *view, u32 bit)
-{
-	int timeout = 10000;
+static int ulpi_poll(void __iomem *view, u32 bit) {
+    int timeout = 10000;
 
-	while (timeout--) {
-		u32 data = __raw_readl(view);
+    while (timeout--) {
+        u32 data = __raw_readl(view);
 
-		if (!(data & bit))
-			return 0;
+        if (!(data & bit))
+            return 0;
 
-		cpu_relax();
-	};
+        cpu_relax();
+    };
 
-	printk(KERN_WARNING "timeout polling for ULPI device\n");
+    printk(KERN_WARNING "timeout polling for ULPI device\n");
 
-	return -ETIMEDOUT;
+    return -ETIMEDOUT;
 }
 
-static int ulpi_read(struct usb_phy *otg, u32 reg)
-{
-	int ret;
-	void __iomem *view = otg->io_priv;
+static int ulpi_read(struct usb_phy *otg, u32 reg) {
+    int ret;
+    void __iomem *view = otg->io_priv;
 
-	/* make sure interface is running */
-	if (!(__raw_readl(view) & ULPIVW_SS)) {
-		__raw_writel(ULPIVW_WU, view);
+    /* make sure interface is running */
+    if (!(__raw_readl(view) & ULPIVW_SS)) {
+        __raw_writel(ULPIVW_WU, view);
 
-		/* wait for wakeup */
-		ret = ulpi_poll(view, ULPIVW_WU);
-		if (ret)
-			return ret;
-	}
+        /* wait for wakeup */
+        ret = ulpi_poll(view, ULPIVW_WU);
+        if (ret)
+            return ret;
+    }
 
-	/* read the register */
-	__raw_writel((ULPIVW_RUN | (reg << ULPIVW_ADDR_SHIFT)), view);
+    /* read the register */
+    __raw_writel((ULPIVW_RUN | (reg << ULPIVW_ADDR_SHIFT)), view);
 
-	/* wait for completion */
-	ret = ulpi_poll(view, ULPIVW_RUN);
-	if (ret)
-		return ret;
+    /* wait for completion */
+    ret = ulpi_poll(view, ULPIVW_RUN);
+    if (ret)
+        return ret;
 
-	return (__raw_readl(view) >> ULPIVW_RDATA_SHIFT) & ULPIVW_RDATA_MASK;
+    return (__raw_readl(view) >> ULPIVW_RDATA_SHIFT) & ULPIVW_RDATA_MASK;
 }
 
-static int ulpi_write(struct usb_phy *otg, u32 val, u32 reg)
-{
-	int ret;
-	void __iomem *view = otg->io_priv;
+static int ulpi_write(struct usb_phy *otg, u32 val, u32 reg) {
+    int ret;
+    void __iomem *view = otg->io_priv;
 
-	/* make sure the interface is running */
-	if (!(__raw_readl(view) & ULPIVW_SS)) {
-		__raw_writel(ULPIVW_WU, view);
-		/* wait for wakeup */
-		ret = ulpi_poll(view, ULPIVW_WU);
-		if (ret)
-			return ret;
-	}
+    /* make sure the interface is running */
+    if (!(__raw_readl(view) & ULPIVW_SS)) {
+        __raw_writel(ULPIVW_WU, view);
+        /* wait for wakeup */
+        ret = ulpi_poll(view, ULPIVW_WU);
+        if (ret)
+            return ret;
+    }
 
-	__raw_writel((ULPIVW_RUN | ULPIVW_WRITE |
-		      (reg << ULPIVW_ADDR_SHIFT) |
-		      ((val & ULPIVW_WDATA_MASK) << ULPIVW_WDATA_SHIFT)), view);
+    __raw_writel((ULPIVW_RUN | ULPIVW_WRITE |
+                  (reg << ULPIVW_ADDR_SHIFT) |
+                  ((val & ULPIVW_WDATA_MASK) << ULPIVW_WDATA_SHIFT)), view);
 
-	/* wait for completion */
-	return ulpi_poll(view, ULPIVW_RUN);
+    /* wait for completion */
+    return ulpi_poll(view, ULPIVW_RUN);
 }
 
 struct usb_phy_io_ops mxc_ulpi_access_ops = {
-	.read	= ulpi_read,
-	.write	= ulpi_write,
+    .read	= ulpi_read,
+    .write	= ulpi_write,
 };
 EXPORT_SYMBOL_GPL(mxc_ulpi_access_ops);
 
-struct usb_phy *imx_otg_ulpi_create(unsigned int flags)
-{
-	return otg_ulpi_create(&mxc_ulpi_access_ops, flags);
+struct usb_phy *imx_otg_ulpi_create(unsigned int flags) {
+    return otg_ulpi_create(&mxc_ulpi_access_ops, flags);
 }

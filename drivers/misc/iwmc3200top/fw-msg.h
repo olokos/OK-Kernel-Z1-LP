@@ -63,50 +63,50 @@
 #define FW_HCMD_BLOCK_SIZE      	256
 
 struct msg_hdr {
-	u8 type;
-	u8 category;
-	__le16 opcode;
-	u8 seqnum;
-	u8 flags;
-	__le16 length;
+    u8 type;
+    u8 category;
+    __le16 opcode;
+    u8 seqnum;
+    u8 flags;
+    __le16 length;
 } __attribute__((__packed__));
 
 struct log_hdr {
-	__le32 timestamp;
-	u8 severity;
-	u8 logsource;
-	__le16 reserved;
+    __le32 timestamp;
+    u8 severity;
+    u8 logsource;
+    __le16 reserved;
 } __attribute__((__packed__));
 
 struct mdump_hdr {
-	u8 dmpid;
-	u8 frag;
-	__le16 size;
-	__le32 addr;
+    u8 dmpid;
+    u8 frag;
+    __le16 size;
+    __le32 addr;
 } __attribute__((__packed__));
 
 struct top_msg {
-	struct msg_hdr hdr;
-	union {
-		/* D2H messages */
-		struct {
-			struct log_hdr log_hdr;
-			u8 data[1];
-		} __attribute__((__packed__)) log;
+    struct msg_hdr hdr;
+    union {
+        /* D2H messages */
+        struct {
+            struct log_hdr log_hdr;
+            u8 data[1];
+        } __attribute__((__packed__)) log;
 
-		struct {
-			struct log_hdr log_hdr;
-			struct mdump_hdr md_hdr;
-			u8 data[1];
-		} __attribute__((__packed__)) mdump;
+        struct {
+            struct log_hdr log_hdr;
+            struct mdump_hdr md_hdr;
+            u8 data[1];
+        } __attribute__((__packed__)) mdump;
 
-		/* H2D messages */
-		struct {
-			u8 logsource;
-			u8 sevmask;
-		} __attribute__((__packed__)) logdefs[FW_LOG_SRC_MAX];
-		struct mdump_hdr mdump_req;
-	} u;
+        /* H2D messages */
+        struct {
+            u8 logsource;
+            u8 sevmask;
+        } __attribute__((__packed__)) logdefs[FW_LOG_SRC_MAX];
+        struct mdump_hdr mdump_req;
+    } u;
 } __attribute__((__packed__));
 
 

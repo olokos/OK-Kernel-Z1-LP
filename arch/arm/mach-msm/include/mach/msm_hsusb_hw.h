@@ -1,18 +1,18 @@
- /*
- * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2008-2009, The Linux Foundation. All rights reserved.
- * Author: Brian Swetland <swetland@google.com>
- *
- * This software is licensed under the terms of the GNU General Public
- * License version 2, as published by the Free Software Foundation, and
- * may be copied, distributed, and modified under those terms.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- */
+/*
+* Copyright (C) 2007 Google, Inc.
+* Copyright (c) 2008-2009, The Linux Foundation. All rights reserved.
+* Author: Brian Swetland <swetland@google.com>
+*
+* This software is licensed under the terms of the GNU General Public
+* License version 2, as published by the Free Software Foundation, and
+* may be copied, distributed, and modified under those terms.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+*/
 
 #ifndef __LINUX_USB_GADGET_MSM72K_UDC_H__
 #define __LINUX_USB_GADGET_MSM72K_UDC_H__
@@ -260,7 +260,7 @@ struct ept_queue_item {
 #define ULPI_EXTCHGCTRL_180NM	(1 << 3)
 /* charger detection power on control */
 #define ULPI_CHGDETON           (1 << 1)
- /* enable charger detection */
+/* enable charger detection */
 #define ULPI_CHGDETEN           (1 << 0)
 #define ULPI_CHGTYPE_65NM	(1 << 3)
 #define ULPI_CHGTYPE_180NM	(1 << 4)

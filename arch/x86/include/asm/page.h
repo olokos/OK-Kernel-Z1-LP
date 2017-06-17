@@ -18,15 +18,13 @@
 struct page;
 
 static inline void clear_user_page(void *page, unsigned long vaddr,
-				   struct page *pg)
-{
-	clear_page(page);
+                                   struct page *pg) {
+    clear_page(page);
 }
 
 static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
-				  struct page *topage)
-{
-	copy_page(to, from);
+                                  struct page *topage) {
+    copy_page(to, from);
 }
 
 #define __alloc_zeroed_user_highpage(movableflags, vma, vaddr) \

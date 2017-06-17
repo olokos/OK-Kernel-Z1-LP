@@ -40,9 +40,9 @@ extern void efx_rx_strategy(struct efx_channel *channel);
 extern void efx_fast_push_rx_descriptors(struct efx_rx_queue *rx_queue);
 extern void efx_rx_slow_fill(unsigned long context);
 extern void __efx_rx_packet(struct efx_channel *channel,
-			    struct efx_rx_buffer *rx_buf);
+                            struct efx_rx_buffer *rx_buf);
 extern void efx_rx_packet(struct efx_rx_queue *rx_queue, unsigned int index,
-			  unsigned int len, u16 flags);
+                          unsigned int len, u16 flags);
 extern void efx_schedule_slow_fill(struct efx_rx_queue *rx_queue);
 
 #define EFX_MAX_DMAQ_SIZE 4096UL
@@ -62,31 +62,30 @@ extern int efx_probe_filters(struct efx_nic *efx);
 extern void efx_restore_filters(struct efx_nic *efx);
 extern void efx_remove_filters(struct efx_nic *efx);
 extern s32 efx_filter_insert_filter(struct efx_nic *efx,
-				    struct efx_filter_spec *spec,
-				    bool replace);
+                                    struct efx_filter_spec *spec,
+                                    bool replace);
 extern int efx_filter_remove_id_safe(struct efx_nic *efx,
-				     enum efx_filter_priority priority,
-				     u32 filter_id);
+                                     enum efx_filter_priority priority,
+                                     u32 filter_id);
 extern int efx_filter_get_filter_safe(struct efx_nic *efx,
-				      enum efx_filter_priority priority,
-				      u32 filter_id, struct efx_filter_spec *);
+                                      enum efx_filter_priority priority,
+                                      u32 filter_id, struct efx_filter_spec *);
 extern void efx_filter_clear_rx(struct efx_nic *efx,
-				enum efx_filter_priority priority);
+                                enum efx_filter_priority priority);
 extern u32 efx_filter_count_rx_used(struct efx_nic *efx,
-				    enum efx_filter_priority priority);
+                                    enum efx_filter_priority priority);
 extern u32 efx_filter_get_rx_id_limit(struct efx_nic *efx);
 extern s32 efx_filter_get_rx_ids(struct efx_nic *efx,
-				 enum efx_filter_priority priority,
-				 u32 *buf, u32 size);
+                                 enum efx_filter_priority priority,
+                                 u32 *buf, u32 size);
 #ifdef CONFIG_RFS_ACCEL
 extern int efx_filter_rfs(struct net_device *net_dev, const struct sk_buff *skb,
-			  u16 rxq_index, u32 flow_id);
+                          u16 rxq_index, u32 flow_id);
 extern bool __efx_filter_rfs_expire(struct efx_nic *efx, unsigned quota);
-static inline void efx_filter_rfs_expire(struct efx_channel *channel)
-{
-	if (channel->rfs_filters_added >= 60 &&
-	    __efx_filter_rfs_expire(channel->efx, 100))
-		channel->rfs_filters_added -= 60;
+static inline void efx_filter_rfs_expire(struct efx_channel *channel) {
+    if (channel->rfs_filters_added >= 60 &&
+            __efx_filter_rfs_expire(channel->efx, 100))
+        channel->rfs_filters_added -= 60;
 }
 #define efx_filter_rfs_enabled() 1
 #else
@@ -115,10 +114,10 @@ extern int efx_reset_up(struct efx_nic *efx, enum reset_type method, bool ok);
 /* Global */
 extern void efx_schedule_reset(struct efx_nic *efx, enum reset_type type);
 extern int efx_init_irq_moderation(struct efx_nic *efx, unsigned int tx_usecs,
-				   unsigned int rx_usecs, bool rx_adaptive,
-				   bool rx_may_override_tx);
+                                   unsigned int rx_usecs, bool rx_adaptive,
+                                   bool rx_may_override_tx);
 extern void efx_get_irq_moderation(struct efx_nic *efx, unsigned int *tx_usecs,
-				   unsigned int *rx_usecs, bool *rx_adaptive);
+                                   unsigned int *rx_usecs, bool *rx_adaptive);
 
 /* Dummy PHY ops for PHY drivers */
 extern int efx_port_dummy_op_int(struct efx_nic *efx);
@@ -131,25 +130,25 @@ extern int efx_mtd_probe(struct efx_nic *efx);
 extern void efx_mtd_rename(struct efx_nic *efx);
 extern void efx_mtd_remove(struct efx_nic *efx);
 #else
-static inline int efx_mtd_probe(struct efx_nic *efx) { return 0; }
+static inline int efx_mtd_probe(struct efx_nic *efx) {
+    return 0;
+}
 static inline void efx_mtd_rename(struct efx_nic *efx) {}
 static inline void efx_mtd_remove(struct efx_nic *efx) {}
 #endif
 
-static inline void efx_schedule_channel(struct efx_channel *channel)
-{
-	netif_vdbg(channel->efx, intr, channel->efx->net_dev,
-		   "channel %d scheduling NAPI poll on CPU%d\n",
-		   channel->channel, raw_smp_processor_id());
-	channel->work_pending = true;
+static inline void efx_schedule_channel(struct efx_channel *channel) {
+    netif_vdbg(channel->efx, intr, channel->efx->net_dev,
+               "channel %d scheduling NAPI poll on CPU%d\n",
+               channel->channel, raw_smp_processor_id());
+    channel->work_pending = true;
 
-	napi_schedule(&channel->napi_str);
+    napi_schedule(&channel->napi_str);
 }
 
-static inline void efx_schedule_channel_irq(struct efx_channel *channel)
-{
-	channel->event_test_cpu = raw_smp_processor_id();
-	efx_schedule_channel(channel);
+static inline void efx_schedule_channel_irq(struct efx_channel *channel) {
+    channel->event_test_cpu = raw_smp_processor_id();
+    efx_schedule_channel(channel);
 }
 
 extern void efx_link_status_changed(struct efx_nic *efx);

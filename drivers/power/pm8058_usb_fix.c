@@ -141,211 +141,201 @@
  * @BATTCONNECT_IRQ:
  */
 enum pmic_chg_interrupts {
-	CHGVAL_IRQ,
-	CHGINVAL_IRQ,
-	VBATDET_LOW_IRQ,
-	VCP_IRQ,
-	CHGILIM_IRQ,
-	ATC_DONE_IRQ,
-	ATCFAIL_IRQ,
-	AUTO_CHGDONE_IRQ,
-	AUTO_CHGFAIL_IRQ,
-	CHGSTATE_IRQ,
-	FASTCHG_IRQ,
-	CHG_END_IRQ,
-	BATTTEMP_IRQ,
-	CHGHOT_IRQ,
-	CHGTLIMIT_IRQ,
-	CHG_GONE_IRQ,
-	VCPMAJOR_IRQ,
-	VBATDET_IRQ,
-	BATFET_IRQ,
-	BATT_REPLACE_IRQ,
-	BATTCONNECT_IRQ,
-	PMIC_CHG_MAX_INTS
+    CHGVAL_IRQ,
+    CHGINVAL_IRQ,
+    VBATDET_LOW_IRQ,
+    VCP_IRQ,
+    CHGILIM_IRQ,
+    ATC_DONE_IRQ,
+    ATCFAIL_IRQ,
+    AUTO_CHGDONE_IRQ,
+    AUTO_CHGFAIL_IRQ,
+    CHGSTATE_IRQ,
+    FASTCHG_IRQ,
+    CHG_END_IRQ,
+    BATTTEMP_IRQ,
+    CHGHOT_IRQ,
+    CHGTLIMIT_IRQ,
+    CHG_GONE_IRQ,
+    VCPMAJOR_IRQ,
+    VBATDET_IRQ,
+    BATFET_IRQ,
+    BATT_REPLACE_IRQ,
+    BATTCONNECT_IRQ,
+    PMIC_CHG_MAX_INTS
 };
 
 struct pm8058_charger {
-	struct pmic_charger_pdata *pdata;
-	struct pm8058_chip *pm_chip;
-	struct device *dev;
+    struct pmic_charger_pdata *pdata;
+    struct pm8058_chip *pm_chip;
+    struct device *dev;
 
-	int pmic_chg_irq[PMIC_CHG_MAX_INTS];
-	DECLARE_BITMAP(enabled_irqs, PMIC_CHG_MAX_INTS);
+    int pmic_chg_irq[PMIC_CHG_MAX_INTS];
+    DECLARE_BITMAP(enabled_irqs, PMIC_CHG_MAX_INTS);
 
-	struct delayed_work check_vbat_low_work;
-	struct delayed_work veoc_begin_work;
-	int waiting_for_topoff;
-	int waiting_for_veoc;
-	int current_charger_current;
+    struct delayed_work check_vbat_low_work;
+    struct delayed_work veoc_begin_work;
+    int waiting_for_topoff;
+    int waiting_for_veoc;
+    int current_charger_current;
 
-	struct msm_xo_voter *voter;
-	struct dentry *dent;
+    struct msm_xo_voter *voter;
+    struct dentry *dent;
 };
 
 static struct pm8058_charger pm8058_chg;
 
-static int pm_chg_get_rt_status(int irq)
-{
-	int count = 3;
-	int ret;
+static int pm_chg_get_rt_status(int irq) {
+    int count = 3;
+    int ret;
 
-	while ((ret =
-		pm8058_irq_get_rt_status(pm8058_chg.pm_chip, irq)) == -EAGAIN
-	       && count--) {
-		dev_info(pm8058_chg.dev, "%s trycount=%d\n", __func__, count);
-		cpu_relax();
-	}
-	if (ret == -EAGAIN)
-		return 0;
-	else
-		return ret;
+    while ((ret =
+                pm8058_irq_get_rt_status(pm8058_chg.pm_chip, irq)) == -EAGAIN
+            && count--) {
+        dev_info(pm8058_chg.dev, "%s trycount=%d\n", __func__, count);
+        cpu_relax();
+    }
+    if (ret == -EAGAIN)
+        return 0;
+    else
+        return ret;
 }
 
-static int is_chg_plugged_in(void)
-{
-	return pm_chg_get_rt_status(pm8058_chg.pmic_chg_irq[CHGVAL_IRQ]);
+static int is_chg_plugged_in(void) {
+    return pm_chg_get_rt_status(pm8058_chg.pmic_chg_irq[CHGVAL_IRQ]);
 }
 
-static irqreturn_t pm8058_chg_chgval_handler(int irq, void *dev_id)
-{
-	u8 old, temp;
-	int ret;
+static irqreturn_t pm8058_chg_chgval_handler(int irq, void *dev_id) {
+    u8 old, temp;
+    int ret;
 
-	if (!is_chg_plugged_in()) {	/*this debounces it */
-		ret = pm8058_read(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
-					&old, 1);
-		temp = old | BIT(FORCE_OVP_OFF);
-		ret = pm8058_write(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
-					&temp, 1);
-		temp = 0xFC;
-		ret = pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST,
-					&temp, 1);
-		pr_debug("%s forced wrote 0xFC to test ret=%d\n",
-							__func__, ret);
-		/* 20 ms sleep is for the VCHG to discharge */
-		msleep(20);
-		temp = 0xF0;
-		ret = pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST,
-					&temp, 1);
-		ret = pm8058_write(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
-					&old, 1);
-	}
+    if (!is_chg_plugged_in()) {	/*this debounces it */
+        ret = pm8058_read(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
+                          &old, 1);
+        temp = old | BIT(FORCE_OVP_OFF);
+        ret = pm8058_write(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
+                           &temp, 1);
+        temp = 0xFC;
+        ret = pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST,
+                           &temp, 1);
+        pr_debug("%s forced wrote 0xFC to test ret=%d\n",
+                 __func__, ret);
+        /* 20 ms sleep is for the VCHG to discharge */
+        msleep(20);
+        temp = 0xF0;
+        ret = pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST,
+                           &temp, 1);
+        ret = pm8058_write(pm8058_chg.pm_chip, PM8058_OVP_TEST_REG,
+                           &old, 1);
+    }
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
-static void free_irqs(void)
-{
-	int i;
+static void free_irqs(void) {
+    int i;
 
-	for (i = 0; i < PMIC_CHG_MAX_INTS; i++)
-		if (pm8058_chg.pmic_chg_irq[i]) {
-			free_irq(pm8058_chg.pmic_chg_irq[i], NULL);
-			pm8058_chg.pmic_chg_irq[i] = 0;
-		}
+    for (i = 0; i < PMIC_CHG_MAX_INTS; i++)
+        if (pm8058_chg.pmic_chg_irq[i]) {
+            free_irq(pm8058_chg.pmic_chg_irq[i], NULL);
+            pm8058_chg.pmic_chg_irq[i] = 0;
+        }
 }
 
-static int __devinit request_irqs(struct platform_device *pdev)
-{
-	struct resource *res;
-	int ret;
+static int __devinit request_irqs(struct platform_device *pdev) {
+    struct resource *res;
+    int ret;
 
-	ret = 0;
-	bitmap_fill(pm8058_chg.enabled_irqs, PMIC_CHG_MAX_INTS);
+    ret = 0;
+    bitmap_fill(pm8058_chg.enabled_irqs, PMIC_CHG_MAX_INTS);
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_IRQ, "CHGVAL");
-	if (res == NULL) {
-		dev_err(pm8058_chg.dev,
-			"%s:couldnt find resource CHGVAL\n", __func__);
-		goto err_out;
-	} else {
-		ret = request_any_context_irq(res->start,
-				  pm8058_chg_chgval_handler,
-				  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
-				  res->name, NULL);
-		if (ret < 0) {
-			dev_err(pm8058_chg.dev, "%s:couldnt request %d %d\n",
-				__func__, res->start, ret);
-			goto err_out;
-		} else {
-			pm8058_chg.pmic_chg_irq[CHGVAL_IRQ] = res->start;
-		}
-	}
+    res = platform_get_resource_byname(pdev, IORESOURCE_IRQ, "CHGVAL");
+    if (res == NULL) {
+        dev_err(pm8058_chg.dev,
+                "%s:couldnt find resource CHGVAL\n", __func__);
+        goto err_out;
+    } else {
+        ret = request_any_context_irq(res->start,
+                                      pm8058_chg_chgval_handler,
+                                      IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+                                      res->name, NULL);
+        if (ret < 0) {
+            dev_err(pm8058_chg.dev, "%s:couldnt request %d %d\n",
+                    __func__, res->start, ret);
+            goto err_out;
+        } else {
+            pm8058_chg.pmic_chg_irq[CHGVAL_IRQ] = res->start;
+        }
+    }
 
-	return 0;
+    return 0;
 
 err_out:
-	free_irqs();
-	return -EINVAL;
+    free_irqs();
+    return -EINVAL;
 }
 
-static int pm8058_usb_voltage_lower_limit(void)
-{
-	u8 temp, old;
-	int ret = 0;
+static int pm8058_usb_voltage_lower_limit(void) {
+    u8 temp, old;
+    int ret = 0;
 
-	temp = 0x10;
-	ret |= pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST, &temp, 1);
-	ret |= pm8058_read(pm8058_chg.pm_chip, PM8058_CHG_TEST, &old, 1);
-	old = old & ~BIT(IGNORE_LL);
-	temp = 0x90  | (0xF & old);
-	pr_debug("%s writing 0x%x to test\n", __func__, temp);
-	ret |= pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST, &temp, 1);
+    temp = 0x10;
+    ret |= pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST, &temp, 1);
+    ret |= pm8058_read(pm8058_chg.pm_chip, PM8058_CHG_TEST, &old, 1);
+    old = old & ~BIT(IGNORE_LL);
+    temp = 0x90  | (0xF & old);
+    pr_debug("%s writing 0x%x to test\n", __func__, temp);
+    ret |= pm8058_write(pm8058_chg.pm_chip, PM8058_CHG_TEST, &temp, 1);
 
-	return ret;
+    return ret;
 }
 
-static int __devinit pm8058_charger_probe(struct platform_device *pdev)
-{
-	struct pm8058_chip *pm_chip;
+static int __devinit pm8058_charger_probe(struct platform_device *pdev) {
+    struct pm8058_chip *pm_chip;
 
-	pm_chip = dev_get_drvdata(pdev->dev.parent);
-	if (pm_chip == NULL) {
-		pr_err("%s:no parent data passed in.\n", __func__);
-		return -EFAULT;
-	}
+    pm_chip = dev_get_drvdata(pdev->dev.parent);
+    if (pm_chip == NULL) {
+        pr_err("%s:no parent data passed in.\n", __func__);
+        return -EFAULT;
+    }
 
-	pm8058_chg.pm_chip = pm_chip;
-	pm8058_chg.pdata = pdev->dev.platform_data;
-	pm8058_chg.dev = &pdev->dev;
+    pm8058_chg.pm_chip = pm_chip;
+    pm8058_chg.pdata = pdev->dev.platform_data;
+    pm8058_chg.dev = &pdev->dev;
 
-	if (request_irqs(pdev)) {
-		pr_err("%s: couldnt register interrupts\n", __func__);
-		return -EINVAL;
-	}
+    if (request_irqs(pdev)) {
+        pr_err("%s: couldnt register interrupts\n", __func__);
+        return -EINVAL;
+    }
 
-	if (pm8058_usb_voltage_lower_limit()) {
-		pr_err("%s: couldnt write to IGNORE_LL\n", __func__);
-		return -EINVAL;
-	}
+    if (pm8058_usb_voltage_lower_limit()) {
+        pr_err("%s: couldnt write to IGNORE_LL\n", __func__);
+        return -EINVAL;
+    }
 
-	return 0;
+    return 0;
 }
 
-static int __devexit pm8058_charger_remove(struct platform_device *pdev)
-{
-	free_irqs();
-	return 0;
+static int __devexit pm8058_charger_remove(struct platform_device *pdev) {
+    free_irqs();
+    return 0;
 }
 
 static struct platform_driver pm8058_charger_driver = {
-	.probe = pm8058_charger_probe,
-	.remove = __devexit_p(pm8058_charger_remove),
-	.driver = {
-		   .name = "pm-usb-fix",
-		   .owner = THIS_MODULE,
-	},
+    .probe = pm8058_charger_probe,
+    .remove = __devexit_p(pm8058_charger_remove),
+    .driver = {
+        .name = "pm-usb-fix",
+        .owner = THIS_MODULE,
+    },
 };
 
-static int __init pm8058_charger_init(void)
-{
-	return platform_driver_register(&pm8058_charger_driver);
+static int __init pm8058_charger_init(void) {
+    return platform_driver_register(&pm8058_charger_driver);
 }
 
-static void __exit pm8058_charger_exit(void)
-{
-	platform_driver_unregister(&pm8058_charger_driver);
+static void __exit pm8058_charger_exit(void) {
+    platform_driver_unregister(&pm8058_charger_driver);
 }
 
 late_initcall(pm8058_charger_init);

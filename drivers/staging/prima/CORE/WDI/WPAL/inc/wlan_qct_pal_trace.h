@@ -45,8 +45,7 @@
 #include "wlan_qct_pal_type.h"
 #include "wlan_qct_pal_status.h"
 
-typedef enum
-{
+typedef enum {
     // NONE means NO traces will be logged.  This value is in place for the
     // vos_trace_setlevel() to allow the user to turn off all traces.
     eWLAN_PAL_TRACE_LEVEL_NONE = 0,

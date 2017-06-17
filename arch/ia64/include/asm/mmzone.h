@@ -17,14 +17,13 @@
 
 #ifdef CONFIG_NUMA
 
-static inline int pfn_to_nid(unsigned long pfn)
-{
-	extern int paddr_to_nid(unsigned long);
-	int nid = paddr_to_nid(pfn << PAGE_SHIFT);
-	if (nid < 0)
-		return 0;
-	else
-		return nid;
+static inline int pfn_to_nid(unsigned long pfn) {
+    extern int paddr_to_nid(unsigned long);
+    int nid = paddr_to_nid(pfn << PAGE_SHIFT);
+    if (nid < 0)
+        return 0;
+    else
+        return nid;
 }
 
 #ifdef CONFIG_IA64_DIG /* DIG systems are small */

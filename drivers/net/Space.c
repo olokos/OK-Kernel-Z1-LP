@@ -92,23 +92,22 @@ extern int iph5526_probe(struct net_device *dev);
 extern int sbni_probe(int unit);
 
 struct devprobe2 {
-	struct net_device *(*probe)(int unit);
-	int status;	/* non-zero if autoprobe has failed */
+    struct net_device *(*probe)(int unit);
+    int status;	/* non-zero if autoprobe has failed */
 };
 
-static int __init probe_list2(int unit, struct devprobe2 *p, int autoprobe)
-{
-	struct net_device *dev;
-	for (; p->probe; p++) {
-		if (autoprobe && p->status)
-			continue;
-		dev = p->probe(unit);
-		if (!IS_ERR(dev))
-			return 0;
-		if (autoprobe)
-			p->status = PTR_ERR(dev);
-	}
-	return -ENODEV;
+static int __init probe_list2(int unit, struct devprobe2 *p, int autoprobe) {
+    struct net_device *dev;
+    for (; p->probe; p++) {
+        if (autoprobe && p->status)
+            continue;
+        dev = p->probe(unit);
+        if (!IS_ERR(dev))
+            return 0;
+        if (autoprobe)
+            p->status = PTR_ERR(dev);
+    }
+    return -ENODEV;
 }
 
 /*
@@ -120,31 +119,31 @@ static int __init probe_list2(int unit, struct devprobe2 *p, int autoprobe)
 
 static struct devprobe2 eisa_probes[] __initdata = {
 #ifdef CONFIG_ULTRA32
-	{ultra32_probe, 0},
+    {ultra32_probe, 0},
 #endif
 #ifdef CONFIG_AC3200
-	{ac3200_probe, 0},
+    {ac3200_probe, 0},
 #endif
 #ifdef CONFIG_ES3210
-	{es_probe, 0},
+    {es_probe, 0},
 #endif
 #ifdef CONFIG_LNE390
-	{lne390_probe, 0},
+    {lne390_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
 static struct devprobe2 mca_probes[] __initdata = {
 #ifdef CONFIG_NE2_MCA
-	{ne2_probe, 0},
+    {ne2_probe, 0},
 #endif
 #ifdef CONFIG_ELMC		/* 3c523 */
-	{elmc_probe, 0},
+    {elmc_probe, 0},
 #endif
 #ifdef CONFIG_ELMC_II		/* 3c527 */
-	{mc32_probe, 0},
+    {mc32_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
 /*
@@ -153,116 +152,116 @@ static struct devprobe2 mca_probes[] __initdata = {
  */
 static struct devprobe2 isa_probes[] __initdata = {
 #if defined(CONFIG_HP100) && defined(CONFIG_ISA)	/* ISA, EISA */
-	{hp100_probe, 0},
+    {hp100_probe, 0},
 #endif
 #ifdef CONFIG_3C515
-	{tc515_probe, 0},
+    {tc515_probe, 0},
 #endif
 #ifdef CONFIG_ULTRA
-	{ultra_probe, 0},
+    {ultra_probe, 0},
 #endif
 #ifdef CONFIG_WD80x3
-	{wd_probe, 0},
+    {wd_probe, 0},
 #endif
 #ifdef CONFIG_EL2 		/* 3c503 */
-	{el2_probe, 0},
+    {el2_probe, 0},
 #endif
 #ifdef CONFIG_HPLAN
-	{hp_probe, 0},
+    {hp_probe, 0},
 #endif
 #ifdef CONFIG_HPLAN_PLUS
-	{hp_plus_probe, 0},
+    {hp_plus_probe, 0},
 #endif
 #ifdef CONFIG_E2100		/* Cabletron E21xx series. */
-	{e2100_probe, 0},
+    {e2100_probe, 0},
 #endif
 #if defined(CONFIG_NE2000) || \
     defined(CONFIG_NE_H8300)  /* ISA (use ne2k-pci for PCI cards) */
-	{ne_probe, 0},
+    {ne_probe, 0},
 #endif
 #ifdef CONFIG_LANCE		/* ISA/VLB (use pcnet32 for PCI cards) */
-	{lance_probe, 0},
+    {lance_probe, 0},
 #endif
 #ifdef CONFIG_SMC9194
-	{smc_init, 0},
+    {smc_init, 0},
 #endif
 #ifdef CONFIG_SEEQ8005
-	{seeq8005_probe, 0},
+    {seeq8005_probe, 0},
 #endif
 #ifdef CONFIG_CS89x0
 #ifndef CONFIG_CS89x0_PLATFORM
- 	{cs89x0_probe, 0},
+    {cs89x0_probe, 0},
 #endif
 #endif
 #ifdef CONFIG_AT1700
-	{at1700_probe, 0},
+    {at1700_probe, 0},
 #endif
 #ifdef CONFIG_ETH16I
-	{eth16i_probe, 0},	/* ICL EtherTeam 16i/32 */
+    {eth16i_probe, 0},	/* ICL EtherTeam 16i/32 */
 #endif
 #ifdef CONFIG_EEXPRESS		/* Intel EtherExpress */
-	{express_probe, 0},
+    {express_probe, 0},
 #endif
 #ifdef CONFIG_EEXPRESS_PRO	/* Intel EtherExpress Pro/10 */
-	{eepro_probe, 0},
+    {eepro_probe, 0},
 #endif
 #ifdef CONFIG_EWRK3             /* DEC EtherWORKS 3 */
-    	{ewrk3_probe, 0},
+    {ewrk3_probe, 0},
 #endif
 #if defined(CONFIG_APRICOT) || defined(CONFIG_MVME16x_NET) || defined(CONFIG_BVME6000_NET)	/* Intel I82596 */
-	{i82596_probe, 0},
+    {i82596_probe, 0},
 #endif
 #ifdef CONFIG_EL1		/* 3c501 */
-	{el1_probe, 0},
+    {el1_probe, 0},
 #endif
 #ifdef CONFIG_EL16		/* 3c507 */
-	{el16_probe, 0},
+    {el16_probe, 0},
 #endif
 #ifdef CONFIG_ELPLUS		/* 3c505 */
-	{elplus_probe, 0},
+    {elplus_probe, 0},
 #endif
 #ifdef CONFIG_NI5010
-	{ni5010_probe, 0},
+    {ni5010_probe, 0},
 #endif
 #ifdef CONFIG_NI52
-	{ni52_probe, 0},
+    {ni52_probe, 0},
 #endif
 #ifdef CONFIG_NI65
-	{ni65_probe, 0},
+    {ni65_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
 static struct devprobe2 parport_probes[] __initdata = {
 #ifdef CONFIG_DE620		/* D-Link DE-620 adapter */
-	{de620_probe, 0},
+    {de620_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
 static struct devprobe2 m68k_probes[] __initdata = {
 #ifdef CONFIG_ATARILANCE	/* Lance-based Atari ethernet boards */
-	{atarilance_probe, 0},
+    {atarilance_probe, 0},
 #endif
 #ifdef CONFIG_SUN3LANCE         /* sun3 onboard Lance chip */
-	{sun3lance_probe, 0},
+    {sun3lance_probe, 0},
 #endif
 #ifdef CONFIG_SUN3_82586        /* sun3 onboard Intel 82586 chip */
-	{sun3_82586_probe, 0},
+    {sun3_82586_probe, 0},
 #endif
 #ifdef CONFIG_APNE		/* A1200 PCMCIA NE2000 */
-	{apne_probe, 0},
+    {apne_probe, 0},
 #endif
 #ifdef CONFIG_MVME147_NET	/* MVME147 internal Ethernet */
-	{mvme147lance_probe, 0},
+    {mvme147lance_probe, 0},
 #endif
 #ifdef CONFIG_MAC8390           /* NuBus NS8390-based cards */
-	{mac8390_probe, 0},
+    {mac8390_probe, 0},
 #endif
 #ifdef CONFIG_MAC89x0
- 	{mac89x0_probe, 0},
+    {mac89x0_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
 /*
@@ -270,18 +269,17 @@ static struct devprobe2 m68k_probes[] __initdata = {
  * per bus interface. This drives the legacy devices only for now.
  */
 
-static void __init ethif_probe2(int unit)
-{
-	unsigned long base_addr = netdev_boot_base("eth", unit);
+static void __init ethif_probe2(int unit) {
+    unsigned long base_addr = netdev_boot_base("eth", unit);
 
-	if (base_addr == 1)
-		return;
+    if (base_addr == 1)
+        return;
 
-	(void)(	probe_list2(unit, m68k_probes, base_addr == 0) &&
-		probe_list2(unit, eisa_probes, base_addr == 0) &&
-		probe_list2(unit, mca_probes, base_addr == 0) &&
-		probe_list2(unit, isa_probes, base_addr == 0) &&
-		probe_list2(unit, parport_probes, base_addr == 0));
+    (void)(	probe_list2(unit, m68k_probes, base_addr == 0) &&
+            probe_list2(unit, eisa_probes, base_addr == 0) &&
+            probe_list2(unit, mca_probes, base_addr == 0) &&
+            probe_list2(unit, isa_probes, base_addr == 0) &&
+            probe_list2(unit, parport_probes, base_addr == 0));
 }
 
 #ifdef CONFIG_TR
@@ -291,66 +289,63 @@ extern struct net_device *smctr_probe(int unit);
 
 static struct devprobe2 tr_probes2[] __initdata = {
 #ifdef CONFIG_SMCTR
-	{smctr_probe, 0},
+    {smctr_probe, 0},
 #endif
-	{NULL, 0},
+    {NULL, 0},
 };
 
-static __init int trif_probe(int unit)
-{
-	int err = -ENODEV;
+static __init int trif_probe(int unit) {
+    int err = -ENODEV;
 #ifdef CONFIG_IBMTR
-	struct net_device *dev = alloc_trdev(0);
-	if (!dev)
-		return -ENOMEM;
+    struct net_device *dev = alloc_trdev(0);
+    if (!dev)
+        return -ENOMEM;
 
-	sprintf(dev->name, "tr%d", unit);
-	netdev_boot_setup_check(dev);
-	err = ibmtr_probe_card(dev);
-	if (err)
-		free_netdev(dev);
+    sprintf(dev->name, "tr%d", unit);
+    netdev_boot_setup_check(dev);
+    err = ibmtr_probe_card(dev);
+    if (err)
+        free_netdev(dev);
 #endif
-	return err;
+    return err;
 }
 
-static void __init trif_probe2(int unit)
-{
-	unsigned long base_addr = netdev_boot_base("tr", unit);
+static void __init trif_probe2(int unit) {
+    unsigned long base_addr = netdev_boot_base("tr", unit);
 
-	if (base_addr == 1)
-		return;
-	probe_list2(unit, tr_probes2, base_addr == 0);
+    if (base_addr == 1)
+        return;
+    probe_list2(unit, tr_probes2, base_addr == 0);
 }
 #endif
 
 
 /*  Statically configured drivers -- order matters here. */
-static int __init net_olddevs_init(void)
-{
-	int num;
+static int __init net_olddevs_init(void) {
+    int num;
 
 #ifdef CONFIG_SBNI
-	for (num = 0; num < 8; ++num)
-		sbni_probe(num);
+    for (num = 0; num < 8; ++num)
+        sbni_probe(num);
 #endif
 #ifdef CONFIG_TR
-	for (num = 0; num < 8; ++num)
-		if (!trif_probe(num))
-			trif_probe2(num);
+    for (num = 0; num < 8; ++num)
+        if (!trif_probe(num))
+            trif_probe2(num);
 #endif
-	for (num = 0; num < 8; ++num)
-		ethif_probe2(num);
+    for (num = 0; num < 8; ++num)
+        ethif_probe2(num);
 
 #ifdef CONFIG_COPS
-	cops_probe(0);
-	cops_probe(1);
-	cops_probe(2);
+    cops_probe(0);
+    cops_probe(1);
+    cops_probe(2);
 #endif
 #ifdef CONFIG_LTPC
-	ltpc_probe();
+    ltpc_probe();
 #endif
 
-	return 0;
+    return 0;
 }
 
 device_initcall(net_olddevs_init);

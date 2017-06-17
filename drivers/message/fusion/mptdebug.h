@@ -145,128 +145,120 @@
  */
 #if defined(MPT_DEBUG_VERBOSE) && defined(CONFIG_FUSION_LOGGING)
 static inline void
-DBG_DUMP_FW_DOWNLOAD(MPT_ADAPTER *ioc, u32  *mfp, int numfrags)
-{
-	int i;
+DBG_DUMP_FW_DOWNLOAD(MPT_ADAPTER *ioc, u32  *mfp, int numfrags) {
+    int i;
 
-	if (!(ioc->debug_level & MPT_DEBUG))
-		return;
-	printk(KERN_DEBUG "F/W download request:\n");
-	for (i=0; i < 7+numfrags*2; i++)
-		printk(" %08x", le32_to_cpu(mfp[i]));
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG))
+        return;
+    printk(KERN_DEBUG "F/W download request:\n");
+    for (i=0; i < 7+numfrags*2; i++)
+        printk(" %08x", le32_to_cpu(mfp[i]));
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_PUT_MSG_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int	 ii, n;
+DBG_DUMP_PUT_MSG_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int	 ii, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
-		return;
-	printk(KERN_DEBUG "%s: About to Put msg frame @ %p:\n",
-		ioc->name, mfp);
-	n = ioc->req_sz/4 - 1;
-	while (mfp[n] == 0)
-		n--;
-	for (ii=0; ii<=n; ii++) {
-		if (ii && ((ii%8)==0))
-			printk("\n");
-		printk(" %08x", le32_to_cpu(mfp[ii]));
-	}
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
+        return;
+    printk(KERN_DEBUG "%s: About to Put msg frame @ %p:\n",
+           ioc->name, mfp);
+    n = ioc->req_sz/4 - 1;
+    while (mfp[n] == 0)
+        n--;
+    for (ii=0; ii<=n; ii++) {
+        if (ii && ((ii%8)==0))
+            printk("\n");
+        printk(" %08x", le32_to_cpu(mfp[ii]));
+    }
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_FW_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_FW_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
-		return;
-	n = 10;
-	printk(KERN_INFO " ");
-	for (i = 0; i < n; i++)
-		printk(" %08x", le32_to_cpu(mfp[i]));
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
+        return;
+    n = 10;
+    printk(KERN_INFO " ");
+    for (i = 0; i < n; i++)
+        printk(" %08x", le32_to_cpu(mfp[i]));
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
-		return;
-	n = 24;
-	for (i=0; i<n; i++) {
-		if (i && ((i%8)==0))
-			printk("\n");
-		printk("%08x ", le32_to_cpu(mfp[i]));
-	}
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
+        return;
+    n = 24;
+    for (i=0; i<n; i++) {
+        if (i && ((i%8)==0))
+            printk("\n");
+        printk("%08x ", le32_to_cpu(mfp[i]));
+    }
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_REPLY_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_REPLY_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
-		return;
-	n = (le32_to_cpu(mfp[0]) & 0x00FF0000) >> 16;
-	printk(KERN_INFO " ");
-	for (i=0; i<n; i++)
-		printk(" %08x", le32_to_cpu(mfp[i]));
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
+        return;
+    n = (le32_to_cpu(mfp[0]) & 0x00FF0000) >> 16;
+    printk(KERN_INFO " ");
+    for (i=0; i<n; i++)
+        printk(" %08x", le32_to_cpu(mfp[i]));
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_REQUEST_FRAME_HDR(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_REQUEST_FRAME_HDR(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
-		return;
-	n = 3;
-	printk(KERN_INFO " ");
-	for (i=0; i<n; i++)
-		printk(" %08x", le32_to_cpu(mfp[i]));
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_MSG_FRAME))
+        return;
+    n = 3;
+    printk(KERN_INFO " ");
+    for (i=0; i<n; i++)
+        printk(" %08x", le32_to_cpu(mfp[i]));
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_TM_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_TM_REQUEST_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_TM))
-		return;
-	n = 13;
-	printk(KERN_DEBUG "TM_REQUEST:\n");
-	for (i=0; i<n; i++) {
-		if (i && ((i%8)==0))
-			printk("\n");
-		printk("%08x ", le32_to_cpu(mfp[i]));
-	}
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_TM))
+        return;
+    n = 13;
+    printk(KERN_DEBUG "TM_REQUEST:\n");
+    for (i=0; i<n; i++) {
+        if (i && ((i%8)==0))
+            printk("\n");
+        printk("%08x ", le32_to_cpu(mfp[i]));
+    }
+    printk("\n");
 }
 
 static inline void
-DBG_DUMP_TM_REPLY_FRAME(MPT_ADAPTER *ioc, u32 *mfp)
-{
-	int  i, n;
+DBG_DUMP_TM_REPLY_FRAME(MPT_ADAPTER *ioc, u32 *mfp) {
+    int  i, n;
 
-	if (!(ioc->debug_level & MPT_DEBUG_TM))
-		return;
-	n = (le32_to_cpu(mfp[0]) & 0x00FF0000) >> 16;
-	printk(KERN_DEBUG "TM_REPLY MessageLength=%d:\n", n);
-	for (i=0; i<n; i++) {
-		if (i && ((i%8)==0))
-			printk("\n");
-		printk(" %08x", le32_to_cpu(mfp[i]));
-	}
-	printk("\n");
+    if (!(ioc->debug_level & MPT_DEBUG_TM))
+        return;
+    n = (le32_to_cpu(mfp[0]) & 0x00FF0000) >> 16;
+    printk(KERN_DEBUG "TM_REPLY MessageLength=%d:\n", n);
+    for (i=0; i<n; i++) {
+        if (i && ((i%8)==0))
+            printk("\n");
+        printk(" %08x", le32_to_cpu(mfp[i]));
+    }
+    printk("\n");
 }
 
 #define dmfprintk(IOC, CMD)			\

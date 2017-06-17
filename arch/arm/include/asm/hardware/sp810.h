@@ -56,13 +56,12 @@
 #define SCCTRL_TIMEREN1SEL_REFCLK	(0 << 17)
 #define SCCTRL_TIMEREN1SEL_TIMCLK	(1 << 17)
 
-static inline void sysctl_soft_reset(void __iomem *base)
-{
-	/* switch to slow mode */
-	writel(0x2, base + SCCTRL);
+static inline void sysctl_soft_reset(void __iomem *base) {
+    /* switch to slow mode */
+    writel(0x2, base + SCCTRL);
 
-	/* writing any value to SCSYSSTAT reg will reset system */
-	writel(0, base + SCSYSSTAT);
+    /* writing any value to SCSYSSTAT reg will reset system */
+    writel(0, base + SCSYSSTAT);
 }
 
 #endif	/* __ASM_ARM_SP810_H */

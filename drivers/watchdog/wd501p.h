@@ -39,7 +39,7 @@
 /* programmable outputs: */
 #define WDT_PROGOUT		(io+15)	/* wr=enable, rd=disable */
 
-							 /* FAN 501 500 */
+/* FAN 501 500 */
 #define WDC_SR_WCCR		1	/* Active low */ /*  X   X   X  */
 #define WDC_SR_TGOOD		2			 /*  X   X   -  */
 #define WDC_SR_ISOI0		4			 /*  X   X   X  */

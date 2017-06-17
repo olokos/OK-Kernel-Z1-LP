@@ -19,26 +19,26 @@
 
 /* The IOMMU registers occupy three pages in IO space. */
 struct iommu_regs {
-	/* First page */
-	volatile unsigned long control;    /* IOMMU control */
-	volatile unsigned long base;       /* Physical base of iopte page table */
-	volatile unsigned long _unused1[3];
-	volatile unsigned long tlbflush;   /* write only */
-	volatile unsigned long pageflush;  /* write only */
-	volatile unsigned long _unused2[1017];
-	/* Second page */
-	volatile unsigned long afsr;       /* Async-fault status register */
-	volatile unsigned long afar;       /* Async-fault physical address */
-	volatile unsigned long _unused3[2];
-	volatile unsigned long sbuscfg0;   /* SBUS configuration registers, per-slot */
-	volatile unsigned long sbuscfg1;
-	volatile unsigned long sbuscfg2;
-	volatile unsigned long sbuscfg3;
-	volatile unsigned long mfsr;       /* Memory-fault status register */
-	volatile unsigned long mfar;       /* Memory-fault physical address */
-	volatile unsigned long _unused4[1014];
-	/* Third page */
-	volatile unsigned long mid;        /* IOMMU module-id */
+    /* First page */
+    volatile unsigned long control;    /* IOMMU control */
+    volatile unsigned long base;       /* Physical base of iopte page table */
+    volatile unsigned long _unused1[3];
+    volatile unsigned long tlbflush;   /* write only */
+    volatile unsigned long pageflush;  /* write only */
+    volatile unsigned long _unused2[1017];
+    /* Second page */
+    volatile unsigned long afsr;       /* Async-fault status register */
+    volatile unsigned long afar;       /* Async-fault physical address */
+    volatile unsigned long _unused3[2];
+    volatile unsigned long sbuscfg0;   /* SBUS configuration registers, per-slot */
+    volatile unsigned long sbuscfg1;
+    volatile unsigned long sbuscfg2;
+    volatile unsigned long sbuscfg3;
+    volatile unsigned long mfsr;       /* Memory-fault status register */
+    volatile unsigned long mfar;       /* Memory-fault physical address */
+    volatile unsigned long _unused4[1014];
+    /* Third page */
+    volatile unsigned long mid;        /* IOMMU module-id */
 };
 
 #define IOMMU_CTRL_IMPL     0xf0000000 /* Implementation */
@@ -99,23 +99,21 @@ struct iommu_regs {
 #define IOPTE_WAZ           0x00000001 /* Write as zeros */
 
 struct iommu_struct {
-	struct iommu_regs *regs;
-	iopte_t *page_table;
-	/* For convenience */
-	unsigned long start; /* First managed virtual address */
-	unsigned long end;   /* Last managed virtual address */
+    struct iommu_regs *regs;
+    iopte_t *page_table;
+    /* For convenience */
+    unsigned long start; /* First managed virtual address */
+    unsigned long end;   /* Last managed virtual address */
 
-	struct bit_map usemap;
+    struct bit_map usemap;
 };
 
-static inline void iommu_invalidate(struct iommu_regs *regs)
-{
-	regs->tlbflush = 0;
+static inline void iommu_invalidate(struct iommu_regs *regs) {
+    regs->tlbflush = 0;
 }
 
-static inline void iommu_invalidate_page(struct iommu_regs *regs, unsigned long ba)
-{
-	regs->pageflush = (ba & PAGE_MASK);
+static inline void iommu_invalidate_page(struct iommu_regs *regs, unsigned long ba) {
+    regs->pageflush = (ba & PAGE_MASK);
 }
 
 #endif /* !(_SPARC_IOMMU_H) */

@@ -53,19 +53,19 @@ extern unsigned long vr41xx_get_tclock_frequency(void);
  * Clock Mask Unit
  */
 typedef enum {
-	PIU_CLOCK,
-	SIU_CLOCK,
-	AIU_CLOCK,
-	KIU_CLOCK,
-	FIR_CLOCK,
-	DSIU_CLOCK,
-	CSI_CLOCK,
-	PCIU_CLOCK,
-	HSP_CLOCK,
-	PCI_CLOCK,
-	CEU_CLOCK,
-	ETHER0_CLOCK,
-	ETHER1_CLOCK
+    PIU_CLOCK,
+    SIU_CLOCK,
+    AIU_CLOCK,
+    KIU_CLOCK,
+    FIR_CLOCK,
+    DSIU_CLOCK,
+    CSI_CLOCK,
+    PCIU_CLOCK,
+    HSP_CLOCK,
+    PCI_CLOCK,
+    CEU_CLOCK,
+    ETHER0_CLOCK,
+    ETHER1_CLOCK
 } vr41xx_clock_t;
 
 extern void vr41xx_supply_clock(vr41xx_clock_t clock);

@@ -167,93 +167,94 @@ extern unsigned int gru_max_gids;
  * GRU statistics.
  */
 struct gru_stats_s {
-	atomic_long_t vdata_alloc;
-	atomic_long_t vdata_free;
-	atomic_long_t gts_alloc;
-	atomic_long_t gts_free;
-	atomic_long_t gms_alloc;
-	atomic_long_t gms_free;
-	atomic_long_t gts_double_allocate;
-	atomic_long_t assign_context;
-	atomic_long_t assign_context_failed;
-	atomic_long_t free_context;
-	atomic_long_t load_user_context;
-	atomic_long_t load_kernel_context;
-	atomic_long_t lock_kernel_context;
-	atomic_long_t unlock_kernel_context;
-	atomic_long_t steal_user_context;
-	atomic_long_t steal_kernel_context;
-	atomic_long_t steal_context_failed;
-	atomic_long_t nopfn;
-	atomic_long_t asid_new;
-	atomic_long_t asid_next;
-	atomic_long_t asid_wrap;
-	atomic_long_t asid_reuse;
-	atomic_long_t intr;
-	atomic_long_t intr_cbr;
-	atomic_long_t intr_tfh;
-	atomic_long_t intr_spurious;
-	atomic_long_t intr_mm_lock_failed;
-	atomic_long_t call_os;
-	atomic_long_t call_os_wait_queue;
-	atomic_long_t user_flush_tlb;
-	atomic_long_t user_unload_context;
-	atomic_long_t user_exception;
-	atomic_long_t set_context_option;
-	atomic_long_t check_context_retarget_intr;
-	atomic_long_t check_context_unload;
-	atomic_long_t tlb_dropin;
-	atomic_long_t tlb_preload_page;
-	atomic_long_t tlb_dropin_fail_no_asid;
-	atomic_long_t tlb_dropin_fail_upm;
-	atomic_long_t tlb_dropin_fail_invalid;
-	atomic_long_t tlb_dropin_fail_range_active;
-	atomic_long_t tlb_dropin_fail_idle;
-	atomic_long_t tlb_dropin_fail_fmm;
-	atomic_long_t tlb_dropin_fail_no_exception;
-	atomic_long_t tfh_stale_on_fault;
-	atomic_long_t mmu_invalidate_range;
-	atomic_long_t mmu_invalidate_page;
-	atomic_long_t flush_tlb;
-	atomic_long_t flush_tlb_gru;
-	atomic_long_t flush_tlb_gru_tgh;
-	atomic_long_t flush_tlb_gru_zero_asid;
+    atomic_long_t vdata_alloc;
+    atomic_long_t vdata_free;
+    atomic_long_t gts_alloc;
+    atomic_long_t gts_free;
+    atomic_long_t gms_alloc;
+    atomic_long_t gms_free;
+    atomic_long_t gts_double_allocate;
+    atomic_long_t assign_context;
+    atomic_long_t assign_context_failed;
+    atomic_long_t free_context;
+    atomic_long_t load_user_context;
+    atomic_long_t load_kernel_context;
+    atomic_long_t lock_kernel_context;
+    atomic_long_t unlock_kernel_context;
+    atomic_long_t steal_user_context;
+    atomic_long_t steal_kernel_context;
+    atomic_long_t steal_context_failed;
+    atomic_long_t nopfn;
+    atomic_long_t asid_new;
+    atomic_long_t asid_next;
+    atomic_long_t asid_wrap;
+    atomic_long_t asid_reuse;
+    atomic_long_t intr;
+    atomic_long_t intr_cbr;
+    atomic_long_t intr_tfh;
+    atomic_long_t intr_spurious;
+    atomic_long_t intr_mm_lock_failed;
+    atomic_long_t call_os;
+    atomic_long_t call_os_wait_queue;
+    atomic_long_t user_flush_tlb;
+    atomic_long_t user_unload_context;
+    atomic_long_t user_exception;
+    atomic_long_t set_context_option;
+    atomic_long_t check_context_retarget_intr;
+    atomic_long_t check_context_unload;
+    atomic_long_t tlb_dropin;
+    atomic_long_t tlb_preload_page;
+    atomic_long_t tlb_dropin_fail_no_asid;
+    atomic_long_t tlb_dropin_fail_upm;
+    atomic_long_t tlb_dropin_fail_invalid;
+    atomic_long_t tlb_dropin_fail_range_active;
+    atomic_long_t tlb_dropin_fail_idle;
+    atomic_long_t tlb_dropin_fail_fmm;
+    atomic_long_t tlb_dropin_fail_no_exception;
+    atomic_long_t tfh_stale_on_fault;
+    atomic_long_t mmu_invalidate_range;
+    atomic_long_t mmu_invalidate_page;
+    atomic_long_t flush_tlb;
+    atomic_long_t flush_tlb_gru;
+    atomic_long_t flush_tlb_gru_tgh;
+    atomic_long_t flush_tlb_gru_zero_asid;
 
-	atomic_long_t copy_gpa;
-	atomic_long_t read_gpa;
+    atomic_long_t copy_gpa;
+    atomic_long_t read_gpa;
 
-	atomic_long_t mesq_receive;
-	atomic_long_t mesq_receive_none;
-	atomic_long_t mesq_send;
-	atomic_long_t mesq_send_failed;
-	atomic_long_t mesq_noop;
-	atomic_long_t mesq_send_unexpected_error;
-	atomic_long_t mesq_send_lb_overflow;
-	atomic_long_t mesq_send_qlimit_reached;
-	atomic_long_t mesq_send_amo_nacked;
-	atomic_long_t mesq_send_put_nacked;
-	atomic_long_t mesq_page_overflow;
-	atomic_long_t mesq_qf_locked;
-	atomic_long_t mesq_qf_noop_not_full;
-	atomic_long_t mesq_qf_switch_head_failed;
-	atomic_long_t mesq_qf_unexpected_error;
-	atomic_long_t mesq_noop_unexpected_error;
-	atomic_long_t mesq_noop_lb_overflow;
-	atomic_long_t mesq_noop_qlimit_reached;
-	atomic_long_t mesq_noop_amo_nacked;
-	atomic_long_t mesq_noop_put_nacked;
-	atomic_long_t mesq_noop_page_overflow;
+    atomic_long_t mesq_receive;
+    atomic_long_t mesq_receive_none;
+    atomic_long_t mesq_send;
+    atomic_long_t mesq_send_failed;
+    atomic_long_t mesq_noop;
+    atomic_long_t mesq_send_unexpected_error;
+    atomic_long_t mesq_send_lb_overflow;
+    atomic_long_t mesq_send_qlimit_reached;
+    atomic_long_t mesq_send_amo_nacked;
+    atomic_long_t mesq_send_put_nacked;
+    atomic_long_t mesq_page_overflow;
+    atomic_long_t mesq_qf_locked;
+    atomic_long_t mesq_qf_noop_not_full;
+    atomic_long_t mesq_qf_switch_head_failed;
+    atomic_long_t mesq_qf_unexpected_error;
+    atomic_long_t mesq_noop_unexpected_error;
+    atomic_long_t mesq_noop_lb_overflow;
+    atomic_long_t mesq_noop_qlimit_reached;
+    atomic_long_t mesq_noop_amo_nacked;
+    atomic_long_t mesq_noop_put_nacked;
+    atomic_long_t mesq_noop_page_overflow;
 
 };
 
 enum mcs_op {cchop_allocate, cchop_start, cchop_interrupt, cchop_interrupt_sync,
-	cchop_deallocate, tfhop_write_only, tfhop_write_restart,
-	tghop_invalidate, mcsop_last};
+             cchop_deallocate, tfhop_write_only, tfhop_write_restart,
+             tghop_invalidate, mcsop_last
+            };
 
 struct mcs_op_statistic {
-	atomic_long_t	count;
-	atomic_long_t	total;
-	unsigned long	max;
+    atomic_long_t	count;
+    atomic_long_t	total;
+    unsigned long	max;
 };
 
 extern struct mcs_op_statistic mcs_op_statistics[mcsop_last];
@@ -311,21 +312,21 @@ struct gru_state;
  * There is one of these per address space.
  */
 struct gru_mm_tracker {				/* pack to reduce size */
-	unsigned int		mt_asid_gen:24;	/* ASID wrap count */
-	unsigned int		mt_asid:24;	/* current base ASID for gru */
-	unsigned short		mt_ctxbitmap:16;/* bitmap of contexts using
+    unsigned int		mt_asid_gen:24;	/* ASID wrap count */
+    unsigned int		mt_asid:24;	/* current base ASID for gru */
+    unsigned short		mt_ctxbitmap:16;/* bitmap of contexts using
 						   asid */
 } __attribute__ ((packed));
 
 struct gru_mm_struct {
-	struct mmu_notifier	ms_notifier;
-	atomic_t		ms_refcnt;
-	spinlock_t		ms_asid_lock;	/* protects ASID assignment */
-	atomic_t		ms_range_active;/* num range_invals active */
-	char			ms_released;
-	wait_queue_head_t	ms_wait_queue;
-	DECLARE_BITMAP(ms_asidmap, GRU_MAX_GRUS);
-	struct gru_mm_tracker	ms_asids[GRU_MAX_GRUS];
+    struct mmu_notifier	ms_notifier;
+    atomic_t		ms_refcnt;
+    spinlock_t		ms_asid_lock;	/* protects ASID assignment */
+    atomic_t		ms_range_active;/* num range_invals active */
+    char			ms_released;
+    wait_queue_head_t	ms_wait_queue;
+    DECLARE_BITMAP(ms_asidmap, GRU_MAX_GRUS);
+    struct gru_mm_tracker	ms_asids[GRU_MAX_GRUS];
 };
 
 /*
@@ -333,12 +334,12 @@ struct gru_mm_struct {
  * structure is pointed to by the vma->vm_private_data field in the vma struct.
  */
 struct gru_vma_data {
-	spinlock_t		vd_lock;	/* Serialize access to vma */
-	struct list_head	vd_head;	/* head of linked list of gts */
-	long			vd_user_options;/* misc user option flags */
-	int			vd_cbr_au_count;
-	int			vd_dsr_au_count;
-	unsigned char		vd_tlb_preload_count;
+    spinlock_t		vd_lock;	/* Serialize access to vma */
+    struct list_head	vd_head;	/* head of linked list of gts */
+    long			vd_user_options;/* misc user option flags */
+    int			vd_cbr_au_count;
+    int			vd_dsr_au_count;
+    unsigned char		vd_tlb_preload_count;
 };
 
 /*
@@ -346,47 +347,47 @@ struct gru_vma_data {
  * list of these structure is hung off the struct gru_vma_data in the mm_struct.
  */
 struct gru_thread_state {
-	struct list_head	ts_next;	/* list - head at vma-private */
-	struct mutex		ts_ctxlock;	/* load/unload CTX lock */
-	struct mm_struct	*ts_mm;		/* mm currently mapped to
+    struct list_head	ts_next;	/* list - head at vma-private */
+    struct mutex		ts_ctxlock;	/* load/unload CTX lock */
+    struct mm_struct	*ts_mm;		/* mm currently mapped to
 						   context */
-	struct vm_area_struct	*ts_vma;	/* vma of GRU context */
-	struct gru_state	*ts_gru;	/* GRU where the context is
+    struct vm_area_struct	*ts_vma;	/* vma of GRU context */
+    struct gru_state	*ts_gru;	/* GRU where the context is
 						   loaded */
-	struct gru_mm_struct	*ts_gms;	/* asid & ioproc struct */
-	unsigned char		ts_tlb_preload_count; /* TLB preload pages */
-	unsigned long		ts_cbr_map;	/* map of allocated CBRs */
-	unsigned long		ts_dsr_map;	/* map of allocated DATA
+    struct gru_mm_struct	*ts_gms;	/* asid & ioproc struct */
+    unsigned char		ts_tlb_preload_count; /* TLB preload pages */
+    unsigned long		ts_cbr_map;	/* map of allocated CBRs */
+    unsigned long		ts_dsr_map;	/* map of allocated DATA
 						   resources */
-	unsigned long		ts_steal_jiffies;/* jiffies when context last
+    unsigned long		ts_steal_jiffies;/* jiffies when context last
 						    stolen */
-	long			ts_user_options;/* misc user option flags */
-	pid_t			ts_tgid_owner;	/* task that is using the
+    long			ts_user_options;/* misc user option flags */
+    pid_t			ts_tgid_owner;	/* task that is using the
 						   context - for migration */
-	short			ts_user_blade_id;/* user selected blade */
-	char			ts_user_chiplet_id;/* user selected chiplet */
-	unsigned short		ts_sizeavail;	/* Pagesizes in use */
-	int			ts_tsid;	/* thread that owns the
+    short			ts_user_blade_id;/* user selected blade */
+    char			ts_user_chiplet_id;/* user selected chiplet */
+    unsigned short		ts_sizeavail;	/* Pagesizes in use */
+    int			ts_tsid;	/* thread that owns the
 						   structure */
-	int			ts_tlb_int_select;/* target cpu if interrupts
+    int			ts_tlb_int_select;/* target cpu if interrupts
 						     enabled */
-	int			ts_ctxnum;	/* context number where the
+    int			ts_ctxnum;	/* context number where the
 						   context is loaded */
-	atomic_t		ts_refcnt;	/* reference count GTS */
-	unsigned char		ts_dsr_au_count;/* Number of DSR resources
+    atomic_t		ts_refcnt;	/* reference count GTS */
+    unsigned char		ts_dsr_au_count;/* Number of DSR resources
 						   required for contest */
-	unsigned char		ts_cbr_au_count;/* Number of CBR resources
+    unsigned char		ts_cbr_au_count;/* Number of CBR resources
 						   required for contest */
-	char			ts_cch_req_slice;/* CCH packet slice */
-	char			ts_blade;	/* If >= 0, migrate context if
+    char			ts_cch_req_slice;/* CCH packet slice */
+    char			ts_blade;	/* If >= 0, migrate context if
 						   ref from different blade */
-	char			ts_force_cch_reload;
-	char			ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
+    char			ts_force_cch_reload;
+    char			ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
 							  allocated CB */
-	int			ts_data_valid;	/* Indicates if ts_gdata has
+    int			ts_data_valid;	/* Indicates if ts_gdata has
 						   valid data */
-	struct gru_gseg_statistics ustats;	/* User statistics */
-	unsigned long		ts_gdata[0];	/* save area for GRU data (CB,
+    struct gru_gseg_statistics ustats;	/* User statistics */
+    unsigned long		ts_gdata[0];	/* save area for GRU data (CB,
 						   DS, CBE) */
 };
 
@@ -409,74 +410,74 @@ struct gru_thread_state {
  * One of these exists for each GRU chiplet.
  */
 struct gru_state {
-	struct gru_blade_state	*gs_blade;		/* GRU state for entire
+    struct gru_blade_state	*gs_blade;		/* GRU state for entire
 							   blade */
-	unsigned long		gs_gru_base_paddr;	/* Physical address of
+    unsigned long		gs_gru_base_paddr;	/* Physical address of
 							   gru segments (64) */
-	void			*gs_gru_base_vaddr;	/* Virtual address of
+    void			*gs_gru_base_vaddr;	/* Virtual address of
 							   gru segments (64) */
-	unsigned short		gs_gid;			/* unique GRU number */
-	unsigned short		gs_blade_id;		/* blade of GRU */
-	unsigned char		gs_chiplet_id;		/* blade chiplet of GRU */
-	unsigned char		gs_tgh_local_shift;	/* used to pick TGH for
+    unsigned short		gs_gid;			/* unique GRU number */
+    unsigned short		gs_blade_id;		/* blade of GRU */
+    unsigned char		gs_chiplet_id;		/* blade chiplet of GRU */
+    unsigned char		gs_tgh_local_shift;	/* used to pick TGH for
 							   local flush */
-	unsigned char		gs_tgh_first_remote;	/* starting TGH# for
+    unsigned char		gs_tgh_first_remote;	/* starting TGH# for
 							   remote flush */
-	spinlock_t		gs_asid_lock;		/* lock used for
+    spinlock_t		gs_asid_lock;		/* lock used for
 							   assigning asids */
-	spinlock_t		gs_lock;		/* lock used for
+    spinlock_t		gs_lock;		/* lock used for
 							   assigning contexts */
 
-	/* -- the following are protected by the gs_asid_lock spinlock ---- */
-	unsigned int		gs_asid;		/* Next availe ASID */
-	unsigned int		gs_asid_limit;		/* Limit of available
+    /* -- the following are protected by the gs_asid_lock spinlock ---- */
+    unsigned int		gs_asid;		/* Next availe ASID */
+    unsigned int		gs_asid_limit;		/* Limit of available
 							   ASIDs */
-	unsigned int		gs_asid_gen;		/* asid generation.
+    unsigned int		gs_asid_gen;		/* asid generation.
 							   Inc on wrap */
 
-	/* --- the following fields are protected by the gs_lock spinlock --- */
-	unsigned long		gs_context_map;		/* bitmap to manage
+    /* --- the following fields are protected by the gs_lock spinlock --- */
+    unsigned long		gs_context_map;		/* bitmap to manage
 							   contexts in use */
-	unsigned long		gs_cbr_map;		/* bitmap to manage CB
+    unsigned long		gs_cbr_map;		/* bitmap to manage CB
 							   resources */
-	unsigned long		gs_dsr_map;		/* bitmap used to manage
+    unsigned long		gs_dsr_map;		/* bitmap used to manage
 							   DATA resources */
-	unsigned int		gs_reserved_cbrs;	/* Number of kernel-
+    unsigned int		gs_reserved_cbrs;	/* Number of kernel-
 							   reserved cbrs */
-	unsigned int		gs_reserved_dsr_bytes;	/* Bytes of kernel-
+    unsigned int		gs_reserved_dsr_bytes;	/* Bytes of kernel-
 							   reserved dsrs */
-	unsigned short		gs_active_contexts;	/* number of contexts
+    unsigned short		gs_active_contexts;	/* number of contexts
 							   in use */
-	struct gru_thread_state	*gs_gts[GRU_NUM_CCH];	/* GTS currently using
+    struct gru_thread_state	*gs_gts[GRU_NUM_CCH];	/* GTS currently using
 							   the context */
-	int			gs_irq[GRU_NUM_TFM];	/* Interrupt irqs */
+    int			gs_irq[GRU_NUM_TFM];	/* Interrupt irqs */
 };
 
 /*
  * This structure contains the GRU state for all the GRUs on a blade.
  */
 struct gru_blade_state {
-	void			*kernel_cb;		/* First kernel
+    void			*kernel_cb;		/* First kernel
 							   reserved cb */
-	void			*kernel_dsr;		/* First kernel
+    void			*kernel_dsr;		/* First kernel
 							   reserved DSR */
-	struct rw_semaphore	bs_kgts_sema;		/* lock for kgts */
-	struct gru_thread_state *bs_kgts;		/* GTS for kernel use */
+    struct rw_semaphore	bs_kgts_sema;		/* lock for kgts */
+    struct gru_thread_state *bs_kgts;		/* GTS for kernel use */
 
-	/* ---- the following are used for managing kernel async GRU CBRs --- */
-	int			bs_async_dsr_bytes;	/* DSRs for async */
-	int			bs_async_cbrs;		/* CBRs AU for async */
-	struct completion	*bs_async_wq;
+    /* ---- the following are used for managing kernel async GRU CBRs --- */
+    int			bs_async_dsr_bytes;	/* DSRs for async */
+    int			bs_async_cbrs;		/* CBRs AU for async */
+    struct completion	*bs_async_wq;
 
-	/* ---- the following are protected by the bs_lock spinlock ---- */
-	spinlock_t		bs_lock;		/* lock used for
+    /* ---- the following are protected by the bs_lock spinlock ---- */
+    spinlock_t		bs_lock;		/* lock used for
 							   stealing contexts */
-	int			bs_lru_ctxnum;		/* STEAL - last context
+    int			bs_lru_ctxnum;		/* STEAL - last context
 							   stolen */
-	struct gru_state	*bs_lru_gru;		/* STEAL - last gru
+    struct gru_state	*bs_lru_gru;		/* STEAL - last gru
 							   stolen */
 
-	struct gru_state	bs_grus[GRU_CHIPLETS_PER_BLADE];
+    struct gru_state	bs_grus[GRU_CHIPLETS_PER_BLADE];
 };
 
 /*-----------------------------------------------------------------------------
@@ -562,51 +563,42 @@ struct gru_blade_state {
 /* Lock hierarchy checking enabled only in emulator */
 
 /* 0 = lock failed, 1 = locked */
-static inline int __trylock_handle(void *h)
-{
-	return !test_and_set_bit(1, h);
+static inline int __trylock_handle(void *h) {
+    return !test_and_set_bit(1, h);
 }
 
-static inline void __lock_handle(void *h)
-{
-	while (test_and_set_bit(1, h))
-		cpu_relax();
+static inline void __lock_handle(void *h) {
+    while (test_and_set_bit(1, h))
+        cpu_relax();
 }
 
-static inline void __unlock_handle(void *h)
-{
-	clear_bit(1, h);
+static inline void __unlock_handle(void *h) {
+    clear_bit(1, h);
 }
 
-static inline int trylock_cch_handle(struct gru_context_configuration_handle *cch)
-{
-	return __trylock_handle(cch);
+static inline int trylock_cch_handle(struct gru_context_configuration_handle *cch) {
+    return __trylock_handle(cch);
 }
 
-static inline void lock_cch_handle(struct gru_context_configuration_handle *cch)
-{
-	__lock_handle(cch);
+static inline void lock_cch_handle(struct gru_context_configuration_handle *cch) {
+    __lock_handle(cch);
 }
 
 static inline void unlock_cch_handle(struct gru_context_configuration_handle
-				     *cch)
-{
-	__unlock_handle(cch);
+                                     *cch) {
+    __unlock_handle(cch);
 }
 
-static inline void lock_tgh_handle(struct gru_tlb_global_handle *tgh)
-{
-	__lock_handle(tgh);
+static inline void lock_tgh_handle(struct gru_tlb_global_handle *tgh) {
+    __lock_handle(tgh);
 }
 
-static inline void unlock_tgh_handle(struct gru_tlb_global_handle *tgh)
-{
-	__unlock_handle(tgh);
+static inline void unlock_tgh_handle(struct gru_tlb_global_handle *tgh) {
+    __unlock_handle(tgh);
 }
 
-static inline int is_kernel_context(struct gru_thread_state *gts)
-{
-	return !gts->ts_mm;
+static inline int is_kernel_context(struct gru_thread_state *gts) {
+    return !gts->ts_mm;
 }
 
 /*
@@ -627,11 +619,11 @@ extern const struct vm_operations_struct gru_vm_ops;
 extern struct device *grudev;
 
 extern struct gru_vma_data *gru_alloc_vma_data(struct vm_area_struct *vma,
-				int tsid);
+        int tsid);
 extern struct gru_thread_state *gru_find_thread_state(struct vm_area_struct
-				*vma, int tsid);
+        *vma, int tsid);
 extern struct gru_thread_state *gru_alloc_thread_state(struct vm_area_struct
-				*vma, int tsid);
+        *vma, int tsid);
 extern struct gru_state *gru_assign_gru_context(struct gru_thread_state *gts);
 extern void gru_load_context(struct gru_thread_state *gts);
 extern void gru_steal_context(struct gru_thread_state *gts);
@@ -659,19 +651,19 @@ extern int gru_proc_init(void);
 extern void gru_proc_exit(void);
 
 extern struct gru_thread_state *gru_alloc_gts(struct vm_area_struct *vma,
-		int cbr_au_count, int dsr_au_count,
-		unsigned char tlb_preload_count, int options, int tsid);
+        int cbr_au_count, int dsr_au_count,
+        unsigned char tlb_preload_count, int options, int tsid);
 extern unsigned long gru_reserve_cb_resources(struct gru_state *gru,
-		int cbr_au_count, char *cbmap);
+        int cbr_au_count, char *cbmap);
 extern unsigned long gru_reserve_ds_resources(struct gru_state *gru,
-		int dsr_au_count, char *dsmap);
+        int dsr_au_count, char *dsmap);
 extern int gru_fault(struct vm_area_struct *, struct vm_fault *vmf);
 extern struct gru_mm_struct *gru_register_mmu_notifier(void);
 extern void gru_drop_mmu_notifier(struct gru_mm_struct *gms);
 
 extern int gru_ktest(unsigned long arg);
 extern void gru_flush_tlb_range(struct gru_mm_struct *gms, unsigned long start,
-					unsigned long len);
+                                unsigned long len);
 
 extern unsigned long gru_options;
 

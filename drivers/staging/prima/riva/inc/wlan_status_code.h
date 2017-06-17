@@ -54,8 +54,7 @@
  *  Type Declarations
  * -------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     /* PAL Request succeeded!*/
     PAL_STATUS_SUCCESS = 0,
 

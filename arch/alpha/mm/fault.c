@@ -38,19 +38,18 @@ unsigned long last_asn = ASN_FIRST_VERSION;
 #endif
 
 void
-__load_new_mm_context(struct mm_struct *next_mm)
-{
-	unsigned long mmc;
-	struct pcb_struct *pcb;
+__load_new_mm_context(struct mm_struct *next_mm) {
+    unsigned long mmc;
+    struct pcb_struct *pcb;
 
-	mmc = __get_new_mm_context(next_mm, smp_processor_id());
-	next_mm->context[smp_processor_id()] = mmc;
+    mmc = __get_new_mm_context(next_mm, smp_processor_id());
+    next_mm->context[smp_processor_id()] = mmc;
 
-	pcb = &current_thread_info()->pcb;
-	pcb->asn = mmc & HARDWARE_ASN_MASK;
-	pcb->ptbr = ((unsigned long) next_mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
+    pcb = &current_thread_info()->pcb;
+    pcb->asn = mmc & HARDWARE_ASN_MASK;
+    pcb->ptbr = ((unsigned long) next_mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
 
-	__reload_thread(pcb);
+    __reload_thread(pcb);
 }
 
 
@@ -82,152 +81,151 @@ __load_new_mm_context(struct mm_struct *next_mm)
 
 asmlinkage void
 do_page_fault(unsigned long address, unsigned long mmcsr,
-	      long cause, struct pt_regs *regs)
-{
-	struct vm_area_struct * vma;
-	struct mm_struct *mm = current->mm;
-	const struct exception_table_entry *fixup;
-	int fault, si_code = SEGV_MAPERR;
-	siginfo_t info;
+              long cause, struct pt_regs *regs) {
+    struct vm_area_struct * vma;
+    struct mm_struct *mm = current->mm;
+    const struct exception_table_entry *fixup;
+    int fault, si_code = SEGV_MAPERR;
+    siginfo_t info;
 
-	/* As of EV6, a load into $31/$f31 is a prefetch, and never faults
-	   (or is suppressed by the PALcode).  Support that for older CPUs
-	   by ignoring such an instruction.  */
-	if (cause == 0) {
-		unsigned int insn;
-		__get_user(insn, (unsigned int __user *)regs->pc);
-		if ((insn >> 21 & 0x1f) == 0x1f &&
-		    /* ldq ldl ldt lds ldg ldf ldwu ldbu */
-		    (1ul << (insn >> 26) & 0x30f00001400ul)) {
-			regs->pc += 4;
-			return;
-		}
-	}
+    /* As of EV6, a load into $31/$f31 is a prefetch, and never faults
+       (or is suppressed by the PALcode).  Support that for older CPUs
+       by ignoring such an instruction.  */
+    if (cause == 0) {
+        unsigned int insn;
+        __get_user(insn, (unsigned int __user *)regs->pc);
+        if ((insn >> 21 & 0x1f) == 0x1f &&
+                /* ldq ldl ldt lds ldg ldf ldwu ldbu */
+                (1ul << (insn >> 26) & 0x30f00001400ul)) {
+            regs->pc += 4;
+            return;
+        }
+    }
 
-	/* If we're in an interrupt context, or have no user context,
-	   we must not take the fault.  */
-	if (!mm || in_atomic())
-		goto no_context;
+    /* If we're in an interrupt context, or have no user context,
+       we must not take the fault.  */
+    if (!mm || in_atomic())
+        goto no_context;
 
 #ifdef CONFIG_ALPHA_LARGE_VMALLOC
-	if (address >= TASK_SIZE)
-		goto vmalloc_fault;
+    if (address >= TASK_SIZE)
+        goto vmalloc_fault;
 #endif
 
-	down_read(&mm->mmap_sem);
-	vma = find_vma(mm, address);
-	if (!vma)
-		goto bad_area;
-	if (vma->vm_start <= address)
-		goto good_area;
-	if (!(vma->vm_flags & VM_GROWSDOWN))
-		goto bad_area;
-	if (expand_stack(vma, address))
-		goto bad_area;
+    down_read(&mm->mmap_sem);
+    vma = find_vma(mm, address);
+    if (!vma)
+        goto bad_area;
+    if (vma->vm_start <= address)
+        goto good_area;
+    if (!(vma->vm_flags & VM_GROWSDOWN))
+        goto bad_area;
+    if (expand_stack(vma, address))
+        goto bad_area;
 
-	/* Ok, we have a good vm_area for this memory access, so
-	   we can handle it.  */
- good_area:
-	si_code = SEGV_ACCERR;
-	if (cause < 0) {
-		if (!(vma->vm_flags & VM_EXEC))
-			goto bad_area;
-	} else if (!cause) {
-		/* Allow reads even for write-only mappings */
-		if (!(vma->vm_flags & (VM_READ | VM_WRITE)))
-			goto bad_area;
-	} else {
-		if (!(vma->vm_flags & VM_WRITE))
-			goto bad_area;
-	}
+    /* Ok, we have a good vm_area for this memory access, so
+       we can handle it.  */
+good_area:
+    si_code = SEGV_ACCERR;
+    if (cause < 0) {
+        if (!(vma->vm_flags & VM_EXEC))
+            goto bad_area;
+    } else if (!cause) {
+        /* Allow reads even for write-only mappings */
+        if (!(vma->vm_flags & (VM_READ | VM_WRITE)))
+            goto bad_area;
+    } else {
+        if (!(vma->vm_flags & VM_WRITE))
+            goto bad_area;
+    }
 
-	/* If for any reason at all we couldn't handle the fault,
-	   make sure we exit gracefully rather than endlessly redo
-	   the fault.  */
-	fault = handle_mm_fault(mm, vma, address, cause > 0 ? FAULT_FLAG_WRITE : 0);
-	up_read(&mm->mmap_sem);
-	if (unlikely(fault & VM_FAULT_ERROR)) {
-		if (fault & VM_FAULT_OOM)
-			goto out_of_memory;
-		else if (fault & VM_FAULT_SIGBUS)
-			goto do_sigbus;
-		BUG();
-	}
-	if (fault & VM_FAULT_MAJOR)
-		current->maj_flt++;
-	else
-		current->min_flt++;
-	return;
+    /* If for any reason at all we couldn't handle the fault,
+       make sure we exit gracefully rather than endlessly redo
+       the fault.  */
+    fault = handle_mm_fault(mm, vma, address, cause > 0 ? FAULT_FLAG_WRITE : 0);
+    up_read(&mm->mmap_sem);
+    if (unlikely(fault & VM_FAULT_ERROR)) {
+        if (fault & VM_FAULT_OOM)
+            goto out_of_memory;
+        else if (fault & VM_FAULT_SIGBUS)
+            goto do_sigbus;
+        BUG();
+    }
+    if (fault & VM_FAULT_MAJOR)
+        current->maj_flt++;
+    else
+        current->min_flt++;
+    return;
 
-	/* Something tried to access memory that isn't in our memory map.
-	   Fix it, but check if it's kernel or user first.  */
- bad_area:
-	up_read(&mm->mmap_sem);
+    /* Something tried to access memory that isn't in our memory map.
+       Fix it, but check if it's kernel or user first.  */
+bad_area:
+    up_read(&mm->mmap_sem);
 
-	if (user_mode(regs))
-		goto do_sigsegv;
+    if (user_mode(regs))
+        goto do_sigsegv;
 
- no_context:
-	/* Are we prepared to handle this fault as an exception?  */
-	if ((fixup = search_exception_tables(regs->pc)) != 0) {
-		unsigned long newpc;
-		newpc = fixup_exception(dpf_reg, fixup, regs->pc);
-		regs->pc = newpc;
-		return;
-	}
+no_context:
+    /* Are we prepared to handle this fault as an exception?  */
+    if ((fixup = search_exception_tables(regs->pc)) != 0) {
+        unsigned long newpc;
+        newpc = fixup_exception(dpf_reg, fixup, regs->pc);
+        regs->pc = newpc;
+        return;
+    }
 
-	/* Oops. The kernel tried to access some bad page. We'll have to
-	   terminate things with extreme prejudice.  */
-	printk(KERN_ALERT "Unable to handle kernel paging request at "
-	       "virtual address %016lx\n", address);
-	die_if_kernel("Oops", regs, cause, (unsigned long*)regs - 16);
-	do_exit(SIGKILL);
+    /* Oops. The kernel tried to access some bad page. We'll have to
+       terminate things with extreme prejudice.  */
+    printk(KERN_ALERT "Unable to handle kernel paging request at "
+           "virtual address %016lx\n", address);
+    die_if_kernel("Oops", regs, cause, (unsigned long*)regs - 16);
+    do_exit(SIGKILL);
 
-	/* We ran out of memory, or some other thing happened to us that
-	   made us unable to handle the page fault gracefully.  */
- out_of_memory:
-	if (!user_mode(regs))
-		goto no_context;
-	pagefault_out_of_memory();
-	return;
+    /* We ran out of memory, or some other thing happened to us that
+       made us unable to handle the page fault gracefully.  */
+out_of_memory:
+    if (!user_mode(regs))
+        goto no_context;
+    pagefault_out_of_memory();
+    return;
 
- do_sigbus:
-	/* Send a sigbus, regardless of whether we were in kernel
-	   or user mode.  */
-	info.si_signo = SIGBUS;
-	info.si_errno = 0;
-	info.si_code = BUS_ADRERR;
-	info.si_addr = (void __user *) address;
-	force_sig_info(SIGBUS, &info, current);
-	if (!user_mode(regs))
-		goto no_context;
-	return;
+do_sigbus:
+    /* Send a sigbus, regardless of whether we were in kernel
+       or user mode.  */
+    info.si_signo = SIGBUS;
+    info.si_errno = 0;
+    info.si_code = BUS_ADRERR;
+    info.si_addr = (void __user *) address;
+    force_sig_info(SIGBUS, &info, current);
+    if (!user_mode(regs))
+        goto no_context;
+    return;
 
- do_sigsegv:
-	info.si_signo = SIGSEGV;
-	info.si_errno = 0;
-	info.si_code = si_code;
-	info.si_addr = (void __user *) address;
-	force_sig_info(SIGSEGV, &info, current);
-	return;
+do_sigsegv:
+    info.si_signo = SIGSEGV;
+    info.si_errno = 0;
+    info.si_code = si_code;
+    info.si_addr = (void __user *) address;
+    force_sig_info(SIGSEGV, &info, current);
+    return;
 
 #ifdef CONFIG_ALPHA_LARGE_VMALLOC
- vmalloc_fault:
-	if (user_mode(regs))
-		goto do_sigsegv;
-	else {
-		/* Synchronize this task's top level page-table
-		   with the "reference" page table from init.  */
-		long index = pgd_index(address);
-		pgd_t *pgd, *pgd_k;
+vmalloc_fault:
+    if (user_mode(regs))
+        goto do_sigsegv;
+    else {
+        /* Synchronize this task's top level page-table
+           with the "reference" page table from init.  */
+        long index = pgd_index(address);
+        pgd_t *pgd, *pgd_k;
 
-		pgd = current->active_mm->pgd + index;
-		pgd_k = swapper_pg_dir + index;
-		if (!pgd_present(*pgd) && pgd_present(*pgd_k)) {
-			pgd_val(*pgd) = pgd_val(*pgd_k);
-			return;
-		}
-		goto no_context;
-	}
+        pgd = current->active_mm->pgd + index;
+        pgd_k = swapper_pg_dir + index;
+        if (!pgd_present(*pgd) && pgd_present(*pgd_k)) {
+            pgd_val(*pgd) = pgd_val(*pgd_k);
+            return;
+        }
+        goto no_context;
+    }
 #endif
 }

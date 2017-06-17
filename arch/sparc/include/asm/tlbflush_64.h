@@ -9,9 +9,9 @@
 #define TLB_BATCH_NR	192
 
 struct tlb_batch {
-	struct mm_struct *mm;
-	unsigned long tlb_nr;
-	unsigned long vaddrs[TLB_BATCH_NR];
+    struct mm_struct *mm;
+    unsigned long tlb_nr;
+    unsigned long vaddrs[TLB_BATCH_NR];
 };
 
 extern void flush_tsb_kernel_range(unsigned long start, unsigned long end);

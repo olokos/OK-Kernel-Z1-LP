@@ -13,8 +13,7 @@
 #include <mach/irqs.h>
 #include <mach/gpiomux.h>
 
-static int __init gpiomux_init(void)
-{
-	return msm_gpiomux_init(NR_GPIO_IRQS);
+static int __init gpiomux_init(void) {
+    return msm_gpiomux_init(NR_GPIO_IRQS);
 }
 postcore_initcall(gpiomux_init);

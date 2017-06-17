@@ -29,73 +29,68 @@ static const char bt_name[] = "brf6300";
 
 extern int sapphire_bt_fastclock_power(int on);
 
-static int bluetooth_set_power(void *data, bool blocked)
-{
-	if (!blocked) {
-		sapphire_bt_fastclock_power(1);
-		gpio_set_value(SAPPHIRE_GPIO_BT_32K_EN, 1);
-		udelay(10);
-		gpio_direction_output(101, 1);
-	} else {
-		gpio_direction_output(101, 0);
-		gpio_set_value(SAPPHIRE_GPIO_BT_32K_EN, 0);
-		sapphire_bt_fastclock_power(0);
-	}
-	return 0;
+static int bluetooth_set_power(void *data, bool blocked) {
+    if (!blocked) {
+        sapphire_bt_fastclock_power(1);
+        gpio_set_value(SAPPHIRE_GPIO_BT_32K_EN, 1);
+        udelay(10);
+        gpio_direction_output(101, 1);
+    } else {
+        gpio_direction_output(101, 0);
+        gpio_set_value(SAPPHIRE_GPIO_BT_32K_EN, 0);
+        sapphire_bt_fastclock_power(0);
+    }
+    return 0;
 }
 
 static struct rfkill_ops sapphire_rfkill_ops = {
-	.set_block = bluetooth_set_power,
+    .set_block = bluetooth_set_power,
 };
 
-static int sapphire_rfkill_probe(struct platform_device *pdev)
-{
-	int rc = 0;
-	bool default_state = true;  /* off */
+static int sapphire_rfkill_probe(struct platform_device *pdev) {
+    int rc = 0;
+    bool default_state = true;  /* off */
 
-	bluetooth_set_power(NULL, default_state);
+    bluetooth_set_power(NULL, default_state);
 
-	bt_rfk = rfkill_alloc(bt_name, &pdev->dev, RFKILL_TYPE_BLUETOOTH,
-			      &sapphire_rfkill_ops, NULL);
-	if (!bt_rfk)
-		return -ENOMEM;
+    bt_rfk = rfkill_alloc(bt_name, &pdev->dev, RFKILL_TYPE_BLUETOOTH,
+                          &sapphire_rfkill_ops, NULL);
+    if (!bt_rfk)
+        return -ENOMEM;
 
-	/* userspace cannot take exclusive control */
+    /* userspace cannot take exclusive control */
 
-	rfkill_set_states(bt_rfk, default_state, false);
+    rfkill_set_states(bt_rfk, default_state, false);
 
-	rc = rfkill_register(bt_rfk);
+    rc = rfkill_register(bt_rfk);
 
-	if (rc)
-		rfkill_destroy(bt_rfk);
-	return rc;
+    if (rc)
+        rfkill_destroy(bt_rfk);
+    return rc;
 }
 
-static int sapphire_rfkill_remove(struct platform_device *dev)
-{
-	rfkill_unregister(bt_rfk);
-	rfkill_destroy(bt_rfk);
+static int sapphire_rfkill_remove(struct platform_device *dev) {
+    rfkill_unregister(bt_rfk);
+    rfkill_destroy(bt_rfk);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver sapphire_rfkill_driver = {
-	.probe = sapphire_rfkill_probe,
-	.remove = sapphire_rfkill_remove,
-	.driver = {
-		.name = "sapphire_rfkill",
-		.owner = THIS_MODULE,
-	},
+    .probe = sapphire_rfkill_probe,
+    .remove = sapphire_rfkill_remove,
+    .driver = {
+        .name = "sapphire_rfkill",
+        .owner = THIS_MODULE,
+    },
 };
 
-static int __init sapphire_rfkill_init(void)
-{
-	return platform_driver_register(&sapphire_rfkill_driver);
+static int __init sapphire_rfkill_init(void) {
+    return platform_driver_register(&sapphire_rfkill_driver);
 }
 
-static void __exit sapphire_rfkill_exit(void)
-{
-	platform_driver_unregister(&sapphire_rfkill_driver);
+static void __exit sapphire_rfkill_exit(void) {
+    platform_driver_unregister(&sapphire_rfkill_driver);
 }
 
 module_init(sapphire_rfkill_init);

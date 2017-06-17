@@ -48,23 +48,22 @@
 /*
  * check that a range of addresses falls within the current address limit
  */
-static inline int ___range_ok(unsigned long addr, unsigned int size)
-{
-	int flag = 1, tmp;
+static inline int ___range_ok(unsigned long addr, unsigned int size) {
+    int flag = 1, tmp;
 
-	asm("	add	%3,%1	\n"	/* set C-flag if addr + size > 4Gb */
-	    "	bcs	0f	\n"
-	    "	cmp	%4,%1	\n"	/* jump if addr+size>limit (error) */
-	    "	bhi	0f	\n"
-	    "	clr	%0	\n"	/* mark okay */
-	    "0:			\n"
-	    : "=r"(flag), "=&r"(tmp)
-	    : "1"(addr), "ir"(size),
-	      "r"(current_thread_info()->addr_limit.seg), "0"(flag)
-	    : "cc"
-	    );
+    asm("	add	%3,%1	\n"	/* set C-flag if addr + size > 4Gb */
+        "	bcs	0f	\n"
+        "	cmp	%4,%1	\n"	/* jump if addr+size>limit (error) */
+        "	bhi	0f	\n"
+        "	clr	%0	\n"	/* mark okay */
+        "0:			\n"
+        : "=r"(flag), "=&r"(tmp)
+        : "1"(addr), "ir"(size),
+        "r"(current_thread_info()->addr_limit.seg), "0"(flag)
+        : "cc"
+       );
 
-	return flag;
+    return flag;
 }
 
 #define __range_ok(addr, size) ___range_ok((unsigned long)(addr), (u32)(size))
@@ -72,9 +71,8 @@ static inline int ___range_ok(unsigned long addr, unsigned int size)
 #define access_ok(type, addr, size) (__range_ok((addr), (size)) == 0)
 #define __access_ok(addr, size)     (__range_ok((addr), (size)) == 0)
 
-static inline int verify_area(int type, const void *addr, unsigned long size)
-{
-	return access_ok(type, addr, size) ? 0 : -EFAULT;
+static inline int verify_area(int type, const void *addr, unsigned long size) {
+    return access_ok(type, addr, size) ? 0 : -EFAULT;
 }
 
 
@@ -91,9 +89,8 @@ static inline int verify_area(int type, const void *addr, unsigned long size)
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -125,7 +122,9 @@ extern int fixup_exception(struct pt_regs *regs);
 #define __get_user_ret(x, ptr, ret) \
 	({ if (__get_user((x), (ptr)))	return (ret); })
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct *)(x))
 
 #define __get_user_nocheck(x, ptr, size)				\
@@ -361,18 +360,16 @@ do {									\
  */
 static inline
 unsigned long __generic_copy_from_user_nocheck(void *to, const void *from,
-					       unsigned long n)
-{
-	__copy_user_zeroing(to, from, n);
-	return n;
+        unsigned long n) {
+    __copy_user_zeroing(to, from, n);
+    return n;
 }
 
 static inline
 unsigned long __generic_copy_to_user_nocheck(void *to, const void *from,
-					     unsigned long n)
-{
-	__copy_user(to, from, n);
-	return n;
+        unsigned long n) {
+    __copy_user(to, from, n);
+    return n;
 }
 
 
@@ -426,43 +423,39 @@ do {							\
 
 static inline
 unsigned long __constant_copy_to_user(void *to, const void *from,
-				      unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		__constant_copy_user(to, from, n);
-	return n;
+                                      unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        __constant_copy_user(to, from, n);
+    return n;
 }
 
 static inline
 unsigned long __constant_copy_from_user(void *to, const void *from,
-					unsigned long n)
-{
-	if (access_ok(VERIFY_READ, from, n))
-		__constant_copy_user_zeroing(to, from, n);
-	return n;
+                                        unsigned long n) {
+    if (access_ok(VERIFY_READ, from, n))
+        __constant_copy_user_zeroing(to, from, n);
+    return n;
 }
 
 static inline
 unsigned long __constant_copy_to_user_nocheck(void *to, const void *from,
-					      unsigned long n)
-{
-	__constant_copy_user(to, from, n);
-	return n;
+        unsigned long n) {
+    __constant_copy_user(to, from, n);
+    return n;
 }
 
 static inline
 unsigned long __constant_copy_from_user_nocheck(void *to, const void *from,
-						unsigned long n)
-{
-	__constant_copy_user_zeroing(to, from, n);
-	return n;
+        unsigned long n) {
+    __constant_copy_user_zeroing(to, from, n);
+    return n;
 }
 #endif
 
 extern unsigned long __generic_copy_to_user(void __user *, const void *,
-					    unsigned long);
+        unsigned long);
 extern unsigned long __generic_copy_from_user(void *, const void __user *,
-					      unsigned long);
+        unsigned long);
 
 #define __copy_to_user_inatomic(to, from, n) \
 	__generic_copy_to_user_nocheck((to), (from), (n))

@@ -35,19 +35,19 @@ extern int edac_get_poll_msec(void);
 extern int edac_mc_get_poll_msec(void);
 
 extern int edac_device_register_sysfs_main_kobj(
-				struct edac_device_ctl_info *edac_dev);
+    struct edac_device_ctl_info *edac_dev);
 extern void edac_device_unregister_sysfs_main_kobj(
-				struct edac_device_ctl_info *edac_dev);
+    struct edac_device_ctl_info *edac_dev);
 extern int edac_device_create_sysfs(struct edac_device_ctl_info *edac_dev);
 extern void edac_device_remove_sysfs(struct edac_device_ctl_info *edac_dev);
 
 /* edac core workqueue: single CPU mode */
 extern struct workqueue_struct *edac_workqueue;
 extern void edac_device_workq_setup(struct edac_device_ctl_info *edac_dev,
-				    unsigned msec);
+                                    unsigned msec);
 extern void edac_device_workq_teardown(struct edac_device_ctl_info *edac_dev);
 extern void edac_device_reset_delay_period(struct edac_device_ctl_info
-					   *edac_dev, unsigned long value);
+        *edac_dev, unsigned long value);
 extern void edac_mc_reset_delay_period(int value);
 
 extern void *edac_align_ptr(void *ptr, unsigned size);
@@ -65,7 +65,7 @@ extern int edac_pci_get_poll_msec(void);
 extern void edac_pci_remove_sysfs(struct edac_pci_ctl_info *pci);
 extern void edac_pci_handle_pe(struct edac_pci_ctl_info *pci, const char *msg);
 extern void edac_pci_handle_npe(struct edac_pci_ctl_info *pci,
-				const char *msg);
+                                const char *msg);
 #else				/* CONFIG_PCI */
 /* pre-process these away */
 #define edac_pci_do_parity_check()

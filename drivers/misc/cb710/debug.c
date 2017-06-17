@@ -14,19 +14,18 @@
 #define CB710_REG_COUNT		0x80
 
 static const u16 allow[CB710_REG_COUNT/16] = {
-	0xFFF0, 0xFFFF, 0xFFFF, 0xFFFF,
-	0xFFF0, 0xFFFF, 0xFFFF, 0xFFFF,
+    0xFFF0, 0xFFFF, 0xFFFF, 0xFFFF,
+    0xFFF0, 0xFFFF, 0xFFFF, 0xFFFF,
 };
 static const char *const prefix[ARRAY_SIZE(allow)] = {
-	"MMC", "MMC", "MMC", "MMC",
-	"MS?", "MS?", "SM?", "SM?"
+    "MMC", "MMC", "MMC", "MMC",
+    "MS?", "MS?", "SM?", "SM?"
 };
 
-static inline int allow_reg_read(unsigned block, unsigned offset, unsigned bits)
-{
-	unsigned mask = (1 << bits/8) - 1;
-	offset *= bits/8;
-	return ((allow[block] >> offset) & mask) == mask;
+static inline int allow_reg_read(unsigned block, unsigned offset, unsigned bits) {
+    unsigned mask = (1 << bits/8) - 1;
+    offset *= bits/8;
+    return ((allow[block] >> offset) & mask) == mask;
 }
 
 #define CB710_READ_REGS_TEMPLATE(t)					\
@@ -100,19 +99,18 @@ CB710_REG_ACCESS_TEMPLATES(8)
 CB710_REG_ACCESS_TEMPLATES(16)
 CB710_REG_ACCESS_TEMPLATES(32)
 
-void cb710_dump_regs(struct cb710_chip *chip, unsigned select)
-{
-	if (!(select & CB710_DUMP_REGS_MASK))
-		select = CB710_DUMP_REGS_ALL;
-	if (!(select & CB710_DUMP_ACCESS_MASK))
-		select |= CB710_DUMP_ACCESS_8;
+void cb710_dump_regs(struct cb710_chip *chip, unsigned select) {
+    if (!(select & CB710_DUMP_REGS_MASK))
+        select = CB710_DUMP_REGS_ALL;
+    if (!(select & CB710_DUMP_ACCESS_MASK))
+        select |= CB710_DUMP_ACCESS_8;
 
-	if (select & CB710_DUMP_ACCESS_32)
-		cb710_read_and_dump_regs_32(chip, select);
-	if (select & CB710_DUMP_ACCESS_16)
-		cb710_read_and_dump_regs_16(chip, select);
-	if (select & CB710_DUMP_ACCESS_8)
-		cb710_read_and_dump_regs_8(chip, select);
+    if (select & CB710_DUMP_ACCESS_32)
+        cb710_read_and_dump_regs_32(chip, select);
+    if (select & CB710_DUMP_ACCESS_16)
+        cb710_read_and_dump_regs_16(chip, select);
+    if (select & CB710_DUMP_ACCESS_8)
+        cb710_read_and_dump_regs_8(chip, select);
 }
 EXPORT_SYMBOL_GPL(cb710_dump_regs);
 

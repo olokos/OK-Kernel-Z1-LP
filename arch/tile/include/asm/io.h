@@ -44,7 +44,7 @@
 #if CHIP_HAS_MMIO()
 extern void __iomem *ioremap(resource_size_t offset, unsigned long size);
 extern void __iomem *ioremap_prot(resource_size_t offset, unsigned long size,
-	pgprot_t pgprot);
+                                  pgprot_t pgprot);
 extern void iounmap(volatile void __iomem *addr);
 #else
 #define ioremap(physaddr, size)	((void __iomem *)(unsigned long)(physaddr))
@@ -82,50 +82,41 @@ extern void _tile_writeq(u64 val, unsigned long addr);
  * we never run, uses them unconditionally.
  */
 
-static inline int iomem_panic(void)
-{
-	panic("readb/writeb and friends do not exist on tile without PCI");
-	return 0;
+static inline int iomem_panic(void) {
+    panic("readb/writeb and friends do not exist on tile without PCI");
+    return 0;
 }
 
-static inline u8 _tile_readb(unsigned long addr)
-{
-	return iomem_panic();
+static inline u8 _tile_readb(unsigned long addr) {
+    return iomem_panic();
 }
 
-static inline u16 _tile_readw(unsigned long addr)
-{
-	return iomem_panic();
+static inline u16 _tile_readw(unsigned long addr) {
+    return iomem_panic();
 }
 
-static inline u32 _tile_readl(unsigned long addr)
-{
-	return iomem_panic();
+static inline u32 _tile_readl(unsigned long addr) {
+    return iomem_panic();
 }
 
-static inline u64 _tile_readq(unsigned long addr)
-{
-	return iomem_panic();
+static inline u64 _tile_readq(unsigned long addr) {
+    return iomem_panic();
 }
 
-static inline void _tile_writeb(u8  val, unsigned long addr)
-{
-	iomem_panic();
+static inline void _tile_writeb(u8  val, unsigned long addr) {
+    iomem_panic();
 }
 
-static inline void _tile_writew(u16 val, unsigned long addr)
-{
-	iomem_panic();
+static inline void _tile_writew(u16 val, unsigned long addr) {
+    iomem_panic();
 }
 
-static inline void _tile_writel(u32 val, unsigned long addr)
-{
-	iomem_panic();
+static inline void _tile_writel(u32 val, unsigned long addr) {
+    iomem_panic();
 }
 
-static inline void _tile_writeq(u64 val, unsigned long addr)
-{
-	iomem_panic();
+static inline void _tile_writeq(u64 val, unsigned long addr) {
+    iomem_panic();
 }
 
 #endif
@@ -162,31 +153,28 @@ static inline void _tile_writeq(u64 val, unsigned long addr)
 #define iowrite32 writel
 #define iowrite64 writeq
 
-static inline void memset_io(void *dst, int val, size_t len)
-{
-	int x;
-	BUG_ON((unsigned long)dst & 0x3);
-	val = (val & 0xff) * 0x01010101;
-	for (x = 0; x < len; x += 4)
-		writel(val, dst + x);
+static inline void memset_io(void *dst, int val, size_t len) {
+    int x;
+    BUG_ON((unsigned long)dst & 0x3);
+    val = (val & 0xff) * 0x01010101;
+    for (x = 0; x < len; x += 4)
+        writel(val, dst + x);
 }
 
 static inline void memcpy_fromio(void *dst, const volatile void __iomem *src,
-				 size_t len)
-{
-	int x;
-	BUG_ON((unsigned long)src & 0x3);
-	for (x = 0; x < len; x += 4)
-		*(u32 *)(dst + x) = readl(src + x);
+                                 size_t len) {
+    int x;
+    BUG_ON((unsigned long)src & 0x3);
+    for (x = 0; x < len; x += 4)
+        *(u32 *)(dst + x) = readl(src + x);
 }
 
 static inline void memcpy_toio(volatile void __iomem *dst, const void *src,
-				size_t len)
-{
-	int x;
-	BUG_ON((unsigned long)dst & 0x3);
-	for (x = 0; x < len; x += 4)
-		writel(*(u32 *)(src + x), dst + x);
+                               size_t len) {
+    int x;
+    BUG_ON((unsigned long)dst & 0x3);
+    for (x = 0; x < len; x += 4)
+        writel(*(u32 *)(src + x), dst + x);
 }
 
 /*
@@ -196,51 +184,42 @@ static inline void memcpy_toio(volatile void __iomem *dst, const void *src,
  * we never run, uses them unconditionally.
  */
 
-static inline long ioport_panic(void)
-{
-	panic("inb/outb and friends do not exist on tile");
-	return 0;
+static inline long ioport_panic(void) {
+    panic("inb/outb and friends do not exist on tile");
+    return 0;
 }
 
-static inline void __iomem *ioport_map(unsigned long port, unsigned int len)
-{
-	pr_info("ioport_map: mapping IO resources is unsupported on tile.\n");
-	return NULL;
+static inline void __iomem *ioport_map(unsigned long port, unsigned int len) {
+    pr_info("ioport_map: mapping IO resources is unsupported on tile.\n");
+    return NULL;
 }
 
-static inline void ioport_unmap(void __iomem *addr)
-{
-	ioport_panic();
+static inline void ioport_unmap(void __iomem *addr) {
+    ioport_panic();
 }
 
-static inline u8 inb(unsigned long addr)
-{
-	return ioport_panic();
+static inline u8 inb(unsigned long addr) {
+    return ioport_panic();
 }
 
-static inline u16 inw(unsigned long addr)
-{
-	return ioport_panic();
+static inline u16 inw(unsigned long addr) {
+    return ioport_panic();
 }
 
-static inline u32 inl(unsigned long addr)
-{
-	return ioport_panic();
+static inline u32 inl(unsigned long addr) {
+    return ioport_panic();
 }
 
-static inline void outb(u8 b, unsigned long addr)
-{
-	ioport_panic();
+static inline void outb(u8 b, unsigned long addr) {
+    ioport_panic();
 }
 
-static inline void outw(u16 b, unsigned long addr)
-{
-	ioport_panic();
+static inline void outw(u16 b, unsigned long addr) {
+    ioport_panic();
 }
 
-static inline void outl(u32 b, unsigned long addr)
-{
-	ioport_panic();
+static inline void outl(u32 b, unsigned long addr) {
+    ioport_panic();
 }
 
 #define inb_p(addr)	inb(addr)
@@ -250,34 +229,28 @@ static inline void outl(u32 b, unsigned long addr)
 #define outw_p(x, addr)	outw((x), (addr))
 #define outl_p(x, addr)	outl((x), (addr))
 
-static inline void insb(unsigned long addr, void *buffer, int count)
-{
-	ioport_panic();
+static inline void insb(unsigned long addr, void *buffer, int count) {
+    ioport_panic();
 }
 
-static inline void insw(unsigned long addr, void *buffer, int count)
-{
-	ioport_panic();
+static inline void insw(unsigned long addr, void *buffer, int count) {
+    ioport_panic();
 }
 
-static inline void insl(unsigned long addr, void *buffer, int count)
-{
-	ioport_panic();
+static inline void insl(unsigned long addr, void *buffer, int count) {
+    ioport_panic();
 }
 
-static inline void outsb(unsigned long addr, const void *buffer, int count)
-{
-	ioport_panic();
+static inline void outsb(unsigned long addr, const void *buffer, int count) {
+    ioport_panic();
 }
 
-static inline void outsw(unsigned long addr, const void *buffer, int count)
-{
-	ioport_panic();
+static inline void outsw(unsigned long addr, const void *buffer, int count) {
+    ioport_panic();
 }
 
-static inline void outsl(unsigned long addr, const void *buffer, int count)
-{
-	ioport_panic();
+static inline void outsl(unsigned long addr, const void *buffer, int count) {
+    ioport_panic();
 }
 
 #define ioread16be(addr)	be16_to_cpu(ioread16(addr))

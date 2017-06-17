@@ -72,47 +72,47 @@
 
 
 struct rtl28xxu_priv {
-	u8 chip_id;
-	u8 tuner;
-	u8 page; /* integrated demod active register page */
-	bool rc_active;
+    u8 chip_id;
+    u8 tuner;
+    u8 page; /* integrated demod active register page */
+    bool rc_active;
 };
 
 enum rtl28xxu_chip_id {
-	CHIP_ID_NONE,
-	CHIP_ID_RTL2831U,
-	CHIP_ID_RTL2832U,
+    CHIP_ID_NONE,
+    CHIP_ID_RTL2831U,
+    CHIP_ID_RTL2832U,
 };
 
 enum rtl28xxu_tuner {
-	TUNER_NONE,
+    TUNER_NONE,
 
-	TUNER_RTL2830_QT1010,
-	TUNER_RTL2830_MT2060,
-	TUNER_RTL2830_MXL5005S,
+    TUNER_RTL2830_QT1010,
+    TUNER_RTL2830_MT2060,
+    TUNER_RTL2830_MXL5005S,
 
-	TUNER_RTL2832_MT2266,
-	TUNER_RTL2832_FC2580,
-	TUNER_RTL2832_MT2063,
-	TUNER_RTL2832_MAX3543,
-	TUNER_RTL2832_TUA9001,
-	TUNER_RTL2832_MXL5007T,
-	TUNER_RTL2832_FC0012,
-	TUNER_RTL2832_E4000,
-	TUNER_RTL2832_TDA18272,
-	TUNER_RTL2832_FC0013,
+    TUNER_RTL2832_MT2266,
+    TUNER_RTL2832_FC2580,
+    TUNER_RTL2832_MT2063,
+    TUNER_RTL2832_MAX3543,
+    TUNER_RTL2832_TUA9001,
+    TUNER_RTL2832_MXL5007T,
+    TUNER_RTL2832_FC0012,
+    TUNER_RTL2832_E4000,
+    TUNER_RTL2832_TDA18272,
+    TUNER_RTL2832_FC0013,
 };
 
 struct rtl28xxu_req {
-	u16 value;
-	u16 index;
-	u16 size;
-	u8 *data;
+    u16 value;
+    u16 index;
+    u16 size;
+    u8 *data;
 };
 
 struct rtl28xxu_reg_val {
-	u16 reg;
-	u8 val;
+    u16 reg;
+    u8 val;
 };
 
 /*

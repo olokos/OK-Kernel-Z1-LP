@@ -4,12 +4,12 @@ FILE:
 
 DESCRIPTION:
    Qualcomm QMI driver header
-   
+
 FUNCTIONS:
    Generic QMUX functions
       ParseQMUX
       FillQMUX
-   
+
    Generic QMI functions
       GetTLV
       ValidQMIMessage
@@ -31,7 +31,7 @@ FUNCTIONS:
       QMIWDSSetEventReportReq
       QMIWDSGetPKGSRVCStatusReq
       QMIDMSGetMEIDReq
-      
+
    Parse data from QMI responses
       QMICTLGetClientIDResp
       QMICTLReleaseClientIDResp
@@ -87,24 +87,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 //    Structure that defines a QMUX header
 /*=========================================================================*/
-typedef struct sQMUX
-{
-   /* T\F, always 1 */
-   u8         mTF;
+typedef struct sQMUX {
+    /* T\F, always 1 */
+    u8         mTF;
 
-   /* Size of message */
-   u16        mLength;
+    /* Size of message */
+    u16        mLength;
 
-   /* Control flag */
-   u8         mCtrlFlag;
-   
-   /* Service Type */
-   u8         mQMIService;
-   
-   /* Client ID */
-   u8         mQMIClientID;
+    /* Control flag */
+    u8         mCtrlFlag;
 
-}__attribute__((__packed__)) sQMUX;
+    /* Service Type */
+    u8         mQMIService;
+
+    /* Client ID */
+    u8         mQMIClientID;
+
+} __attribute__((__packed__)) sQMUX;
 
 /*=========================================================================*/
 // Generic QMUX functions
@@ -112,15 +111,15 @@ typedef struct sQMUX
 
 // Remove QMUX headers from a buffer
 int ParseQMUX(
-   u16 *    pClientID,
-   void *   pBuffer,
-   u16      buffSize );
+    u16 *    pClientID,
+    void *   pBuffer,
+    u16      buffSize );
 
 // Fill buffer with QMUX headers
 int FillQMUX(
-   u16      clientID,
-   void *   pBuffer,
-   u16      buffSize );
+    u16      clientID,
+    void *   pBuffer,
+    u16      buffSize );
 
 /*=========================================================================*/
 // Generic QMI functions
@@ -128,21 +127,21 @@ int FillQMUX(
 
 // Get data bufffer of a specified TLV from a QMI message
 u16 GetTLV(
-   void *   pQMIMessage,
-   u16      messageLen,
-   u8       type,
-   void *   pOutDataBuf,
-   u16      bufferLen );
+    void *   pQMIMessage,
+    u16      messageLen,
+    u8       type,
+    void *   pOutDataBuf,
+    u16      bufferLen );
 
 // Check mandatory TLV in a QMI message
 int ValidQMIMessage(
-   void *   pQMIMessage,
-   u16      messageLen );
+    void *   pQMIMessage,
+    u16      messageLen );
 
 // Get the message ID of a QMI message
 int GetQMIMessageID(
-   void *   pQMIMessage,
-   u16      messageLen );
+    void *   pQMIMessage,
+    u16      messageLen );
 
 /*=========================================================================*/
 // Get sizes of buffers needed by QMI requests
@@ -175,41 +174,41 @@ u16 QMIDMSGetMEIDReqSize( void );
 
 // Fill buffer with QMI CTL Get Client ID Request
 int QMICTLGetClientIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID,
-   u8       serviceType );
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID,
+    u8       serviceType );
 
 // Fill buffer with QMI CTL Release Client ID Request
 int QMICTLReleaseClientIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID,
-   u16      clientID );
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID,
+    u16      clientID );
 
 // Fill buffer with QMI CTL Get Version Info Request
 int QMICTLReadyReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID );
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID );
 
 // Fill buffer with QMI WDS Set Event Report Request
 int QMIWDSSetEventReportReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID );
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID );
 
 // Fill buffer with QMI WDS Get PKG SRVC Status Request
 int QMIWDSGetPKGSRVCStatusReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID );
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID );
 
 // Fill buffer with QMI DMS Get Serial Numbers Request
 int QMIDMSGetMEIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID );
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID );
 
 /*=========================================================================*/
 // Parse data from QMI responses
@@ -217,35 +216,35 @@ int QMIDMSGetMEIDReq(
 
 // Parse the QMI CTL Get Client ID Resp
 int QMICTLGetClientIDResp(
-   void * pBuffer,
-   u16    buffSize,
-   u16 *  pClientID );
+    void * pBuffer,
+    u16    buffSize,
+    u16 *  pClientID );
 
 // Verify the QMI CTL Release Client ID Resp is valid
 int QMICTLReleaseClientIDResp(
-   void *   pBuffer,
-   u16      buffSize );
+    void *   pBuffer,
+    u16      buffSize );
 
 // Parse the QMI WDS Set Event Report Resp/Indication or
 //    QMI WDS Get PKG SRVC Status Resp/Indication
 int QMIWDSEventResp(
-   void *   pBuffer,
-   u16      buffSize,
-   u32 *    pTXOk,
-   u32 *    pRXOk,
-   u32 *    pTXErr,
-   u32 *    pRXErr,
-   u32 *    pTXOfl,
-   u32 *    pRXOfl,
-   u64 *    pTXBytesOk,
-   u64 *    pRXBytesOk,
-   bool *   pbLinkState,
-   bool *   pbReconfigure );
+    void *   pBuffer,
+    u16      buffSize,
+    u32 *    pTXOk,
+    u32 *    pRXOk,
+    u32 *    pTXErr,
+    u32 *    pRXErr,
+    u32 *    pTXOfl,
+    u32 *    pRXOfl,
+    u64 *    pTXBytesOk,
+    u64 *    pRXBytesOk,
+    bool *   pbLinkState,
+    bool *   pbReconfigure );
 
 // Parse the QMI DMS Get Serial Numbers Resp
 int QMIDMSGetMEIDResp(
-   void *   pBuffer,
-   u16      buffSize,
-   char *   pMEID,
-   int      meidSize );
+    void *   pBuffer,
+    u16      buffSize,
+    char *   pMEID,
+    int      meidSize );
 

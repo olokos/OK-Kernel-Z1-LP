@@ -36,27 +36,27 @@
 #define MV64x60_PCI_ACC_CNTL_RDSIZE_MASK	0x00000c00
 
 struct mv64x60_cpu2pci_win {
-	u32 lo;
-	u32 size;
-	u32 remap_hi;
-	u32 remap_lo;
+    u32 lo;
+    u32 size;
+    u32 remap_hi;
+    u32 remap_lo;
 };
 
 extern struct mv64x60_cpu2pci_win mv64x60_cpu2pci_io[2];
 extern struct mv64x60_cpu2pci_win mv64x60_cpu2pci_mem[2];
 
 u32 mv64x60_cfg_read(u8 *bridge_base, u8 hose, u8 bus, u8 devfn,
-		u8 offset);
+                     u8 offset);
 void mv64x60_cfg_write(u8 *bridge_base, u8 hose, u8 bus, u8 devfn,
-		u8 offset, u32 val);
+                       u8 offset, u32 val);
 
 void mv64x60_config_ctlr_windows(u8 *bridge_base, u8 *bridge_pbase,
-		u8 is_coherent);
+                                 u8 is_coherent);
 void mv64x60_config_pci_windows(u8 *bridge_base, u8 *bridge_pbase, u8 hose,
-		u8 bus, u32 mem_size, u32 acc_bits);
+                                u8 bus, u32 mem_size, u32 acc_bits);
 void mv64x60_config_cpu2pci_window(u8 *bridge_base, u8 hose, u32 pci_base_hi,
-		u32 pci_base_lo, u32 cpu_base, u32 size,
-		struct mv64x60_cpu2pci_win *offset_tbl);
+                                   u32 pci_base_lo, u32 cpu_base, u32 size,
+                                   struct mv64x60_cpu2pci_win *offset_tbl);
 u32 mv64x60_get_mem_size(u8 *bridge_base);
 u8 *mv64x60_get_bridge_pbase(void);
 u8 *mv64x60_get_bridge_base(void);
@@ -64,7 +64,7 @@ u8 mv64x60_is_coherent(void);
 
 int mv64x60_i2c_open(void);
 int mv64x60_i2c_read(u32 devaddr, u8 *buf, u32 offset, u32 offset_size,
-		u32 count);
+                     u32 count);
 void mv64x60_i2c_close(void);
 
 #endif /* _PPC_BOOT_MV64x60_H_ */

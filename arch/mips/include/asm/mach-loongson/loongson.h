@@ -36,10 +36,9 @@ extern unsigned long _loongson_uart_base, loongson_uart_base;
 extern void prom_init_loongson_uart_base(void);
 #endif
 
-static inline void prom_init_uart_base(void)
-{
+static inline void prom_init_uart_base(void) {
 #ifdef CONFIG_LOONGSON_UART_BASE
-	prom_init_loongson_uart_base();
+    prom_init_loongson_uart_base();
 #endif
 }
 
@@ -64,10 +63,9 @@ extern int mach_i8259_irq(void);
 #define LOONGSON2_PERFCNT_IRQ	(MIPS_CPU_IRQ_BASE + 6) /* cpu perf counter */
 
 #include <linux/interrupt.h>
-static inline void do_perfcnt_IRQ(void)
-{
+static inline void do_perfcnt_IRQ(void) {
 #if defined(CONFIG_OPROFILE) || defined(CONFIG_OPROFILE_MODULE)
-	do_IRQ(LOONGSON2_PERFCNT_IRQ);
+    do_IRQ(LOONGSON2_PERFCNT_IRQ);
 #endif
 }
 

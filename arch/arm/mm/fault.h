@@ -11,14 +11,12 @@
 #define FSR_FS5_0		(0x3f)
 
 #ifdef CONFIG_ARM_LPAE
-static inline int fsr_fs(unsigned int fsr)
-{
-	return fsr & FSR_FS5_0;
+static inline int fsr_fs(unsigned int fsr) {
+    return fsr & FSR_FS5_0;
 }
 #else
-static inline int fsr_fs(unsigned int fsr)
-{
-	return (fsr & FSR_FS3_0) | (fsr & FSR_FS4) >> 6;
+static inline int fsr_fs(unsigned int fsr) {
+    return (fsr & FSR_FS3_0) | (fsr & FSR_FS4) >> 6;
 }
 #endif
 

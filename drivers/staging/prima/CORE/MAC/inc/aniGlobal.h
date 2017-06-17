@@ -149,14 +149,12 @@ typedef void (*CHANGE_CHANNEL_CALLBACK)(tpAniSirGlobal pMac, eHalStatus status, 
                                         tpPESession psessionEntry);
 
 /// LIM global definitions
-typedef struct sAniSirLimIbss
-{
+typedef struct sAniSirLimIbss {
     void *pHdr;
     void *pBeacon;
 } tAniSirLimIbss;
 
-typedef struct sDialogueToken
-{
+typedef struct sDialogueToken {
     //bytes 0-3
     tANI_U16 assocId;
     tANI_U8 token;
@@ -168,8 +166,7 @@ typedef struct sDialogueToken
     struct sDialogueToken* next;
 } tDialogueToken, *tpDialogueToken;
 
-typedef struct sLimTimers
-{
+typedef struct sLimTimers {
     //TIMERS IN LIM ARE NOT SUPPOSED TO BE ZEROED OUT DURING RESET.
     //DURING limInitialize DONOT ZERO THEM OUT.
 
@@ -253,14 +250,12 @@ typedef struct sLimTimers
 
 } tLimTimers;
 
-typedef struct
-{
+typedef struct {
     void *pMlmDisassocReq;
     void *pMlmDeauthReq;
 } tLimDisassocDeauthCnfReq;
 
-typedef struct sAniSirLim
-{
+typedef struct sAniSirLim {
     //////////////////////////////////////     TIMER RELATED START ///////////////////////////////////////////
 
     tLimTimers limTimers;
@@ -926,8 +921,7 @@ typedef struct sAniSirLim
     tANI_U32 remOnChnSeqNum;
 } tAniSirLim, *tpAniSirLim;
 
-typedef struct sLimMgmtFrameRegistration
-{
+typedef struct sLimMgmtFrameRegistration {
     vos_list_node_t node;     // MUST be first element
     tANI_U16        frameType;
     tANI_U16        matchLen;
@@ -936,16 +930,14 @@ typedef struct sLimMgmtFrameRegistration
 } tLimMgmtFrameRegistration, *tpLimMgmtFrameRegistration;
 
 #if defined WLAN_FEATURE_VOWIFI
-typedef struct sRrmContext
-{
+typedef struct sRrmContext {
     tRrmSMEContext rrmSmeContext;
     tRrmPEContext  rrmPEContext;
 } tRrmContext, *tpRrmContext;
 #endif
 
 #if defined WLAN_FEATURE_VOWIFI_11R
-typedef struct sFTContext
-{
+typedef struct sFTContext {
     tftSMEContext ftSmeContext;
     tftPEContext  ftPEContext;
 } tftContext, *tpFTContext;
@@ -962,8 +954,7 @@ typedef struct sFTContext
 
     -------------------------------------------------------------------------- */
 
-typedef enum
-{
+typedef enum {
     eDRIVER_TYPE_PRODUCTION  = 0,
     eDRIVER_TYPE_MFG         = 1,
     eDRIVER_TYPE_DVT         = 2
@@ -978,16 +969,14 @@ typedef enum
 
     -------------------------------------------------------------------------- */
 
-typedef struct sMacOpenParameters
-{
+typedef struct sMacOpenParameters {
     tANI_U16 maxStation;
     tANI_U16 maxBssId;
     tANI_U32 frameTransRequired;
     tDriverType  driverType;
 } tMacOpenParameters;
 
-typedef struct sHalMacStartParameters
-{
+typedef struct sHalMacStartParameters {
     // parametes for the Firmware
     //tHalFirmwareParameters FW;
     tDriverType  driverType;

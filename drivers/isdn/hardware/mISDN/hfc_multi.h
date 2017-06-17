@@ -37,44 +37,44 @@
 */
 
 struct hfc_chan {
-	struct dchannel	*dch;	/* link if channel is a D-channel */
-	struct bchannel	*bch;	/* link if channel is a B-channel */
-	int		port;	/* the interface port this */
-				/* channel is associated with */
-	int		nt_timer; /* -1 if off, 0 if elapsed, >0 if running */
-	int		los, ais, slip_tx, slip_rx, rdi; /* current alarms */
-	int		jitter;
-	u_long		cfg;	/* port configuration */
-	int		sync;	/* sync state (used by E1) */
-	u_int		protocol; /* current protocol */
-	int		slot_tx; /* current pcm slot */
-	int		bank_tx; /* current pcm bank */
-	int		slot_rx;
-	int		bank_rx;
-	int		conf;	/* conference setting of TX slot */
-	int		txpending;	/* if there is currently data in */
-					/* the FIFO 0=no, 1=yes, 2=splloop */
-	int		Zfill;	/* rx-fifo level on last hfcmulti_tx */
-	int		rx_off; /* set to turn fifo receive off */
-	int		coeff_count; /* curren coeff block */
-	s32		*coeff; /* memory pointer to 8 coeff blocks */
+    struct dchannel	*dch;	/* link if channel is a D-channel */
+    struct bchannel	*bch;	/* link if channel is a B-channel */
+    int		port;	/* the interface port this */
+    /* channel is associated with */
+    int		nt_timer; /* -1 if off, 0 if elapsed, >0 if running */
+    int		los, ais, slip_tx, slip_rx, rdi; /* current alarms */
+    int		jitter;
+    u_long		cfg;	/* port configuration */
+    int		sync;	/* sync state (used by E1) */
+    u_int		protocol; /* current protocol */
+    int		slot_tx; /* current pcm slot */
+    int		bank_tx; /* current pcm bank */
+    int		slot_rx;
+    int		bank_rx;
+    int		conf;	/* conference setting of TX slot */
+    int		txpending;	/* if there is currently data in */
+    /* the FIFO 0=no, 1=yes, 2=splloop */
+    int		Zfill;	/* rx-fifo level on last hfcmulti_tx */
+    int		rx_off; /* set to turn fifo receive off */
+    int		coeff_count; /* curren coeff block */
+    s32		*coeff; /* memory pointer to 8 coeff blocks */
 };
 
 
 struct hfcm_hw {
-	u_char	r_ctrl;
-	u_char	r_irq_ctrl;
-	u_char	r_cirm;
-	u_char	r_ram_sz;
-	u_char	r_pcm_md0;
-	u_char	r_irqmsk_misc;
-	u_char	r_dtmf;
-	u_char	r_st_sync;
-	u_char	r_sci_msk;
-	u_char	r_tx0, r_tx1;
-	u_char	a_st_ctrl0[8];
-	u_char	r_bert_wd_md;
-	timer_t	timer;
+    u_char	r_ctrl;
+    u_char	r_irq_ctrl;
+    u_char	r_cirm;
+    u_char	r_ram_sz;
+    u_char	r_pcm_md0;
+    u_char	r_irqmsk_misc;
+    u_char	r_dtmf;
+    u_char	r_st_sync;
+    u_char	r_sci_msk;
+    u_char	r_tx0, r_tx1;
+    u_char	a_st_ctrl0[8];
+    u_char	r_bert_wd_md;
+    timer_t	timer;
 };
 
 
@@ -122,119 +122,119 @@ struct hfcm_hw {
 
 /* table entry in the PCI devices list */
 struct hm_map {
-	char *vendor_name;
-	char *card_name;
-	int type;
-	int ports;
-	int clock2;
-	int leds;
-	int opticalsupport;
-	int dip_type;
-	int io_mode;
-	int irq;
+    char *vendor_name;
+    char *card_name;
+    int type;
+    int ports;
+    int clock2;
+    int leds;
+    int opticalsupport;
+    int dip_type;
+    int io_mode;
+    int irq;
 };
 
 struct hfc_multi {
-	struct list_head	list;
-	struct hm_map	*mtyp;
-	int		id;
-	int		pcm;	/* id of pcm bus */
-	int		ctype;	/* controller type */
-	int		ports;
+    struct list_head	list;
+    struct hm_map	*mtyp;
+    int		id;
+    int		pcm;	/* id of pcm bus */
+    int		ctype;	/* controller type */
+    int		ports;
 
-	u_int		irq;	/* irq used by card */
-	u_int		irqcnt;
-	struct pci_dev	*pci_dev;
-	int		io_mode; /* selects mode */
+    u_int		irq;	/* irq used by card */
+    u_int		irqcnt;
+    struct pci_dev	*pci_dev;
+    int		io_mode; /* selects mode */
 #ifdef HFC_REGISTER_DEBUG
-	void		(*HFC_outb)(struct hfc_multi *hc, u_char reg,
-				    u_char val, const char *function, int line);
-	void		(*HFC_outb_nodebug)(struct hfc_multi *hc, u_char reg,
-					    u_char val, const char *function, int line);
-	u_char		(*HFC_inb)(struct hfc_multi *hc, u_char reg,
-				   const char *function, int line);
-	u_char		(*HFC_inb_nodebug)(struct hfc_multi *hc, u_char reg,
-					   const char *function, int line);
-	u_short		(*HFC_inw)(struct hfc_multi *hc, u_char reg,
-				   const char *function, int line);
-	u_short		(*HFC_inw_nodebug)(struct hfc_multi *hc, u_char reg,
-					   const char *function, int line);
-	void		(*HFC_wait)(struct hfc_multi *hc,
-				    const char *function, int line);
-	void		(*HFC_wait_nodebug)(struct hfc_multi *hc,
-					    const char *function, int line);
+    void		(*HFC_outb)(struct hfc_multi *hc, u_char reg,
+                            u_char val, const char *function, int line);
+    void		(*HFC_outb_nodebug)(struct hfc_multi *hc, u_char reg,
+                                    u_char val, const char *function, int line);
+    u_char		(*HFC_inb)(struct hfc_multi *hc, u_char reg,
+                           const char *function, int line);
+    u_char		(*HFC_inb_nodebug)(struct hfc_multi *hc, u_char reg,
+                                   const char *function, int line);
+    u_short		(*HFC_inw)(struct hfc_multi *hc, u_char reg,
+                           const char *function, int line);
+    u_short		(*HFC_inw_nodebug)(struct hfc_multi *hc, u_char reg,
+                                   const char *function, int line);
+    void		(*HFC_wait)(struct hfc_multi *hc,
+                            const char *function, int line);
+    void		(*HFC_wait_nodebug)(struct hfc_multi *hc,
+                                    const char *function, int line);
 #else
-	void		(*HFC_outb)(struct hfc_multi *hc, u_char reg,
-				    u_char val);
-	void		(*HFC_outb_nodebug)(struct hfc_multi *hc, u_char reg,
-					    u_char val);
-	u_char		(*HFC_inb)(struct hfc_multi *hc, u_char reg);
-	u_char		(*HFC_inb_nodebug)(struct hfc_multi *hc, u_char reg);
-	u_short		(*HFC_inw)(struct hfc_multi *hc, u_char reg);
-	u_short		(*HFC_inw_nodebug)(struct hfc_multi *hc, u_char reg);
-	void		(*HFC_wait)(struct hfc_multi *hc);
-	void		(*HFC_wait_nodebug)(struct hfc_multi *hc);
+    void		(*HFC_outb)(struct hfc_multi *hc, u_char reg,
+                            u_char val);
+    void		(*HFC_outb_nodebug)(struct hfc_multi *hc, u_char reg,
+                                    u_char val);
+    u_char		(*HFC_inb)(struct hfc_multi *hc, u_char reg);
+    u_char		(*HFC_inb_nodebug)(struct hfc_multi *hc, u_char reg);
+    u_short		(*HFC_inw)(struct hfc_multi *hc, u_char reg);
+    u_short		(*HFC_inw_nodebug)(struct hfc_multi *hc, u_char reg);
+    void		(*HFC_wait)(struct hfc_multi *hc);
+    void		(*HFC_wait_nodebug)(struct hfc_multi *hc);
 #endif
-	void		(*read_fifo)(struct hfc_multi *hc, u_char *data,
-				     int len);
-	void		(*write_fifo)(struct hfc_multi *hc, u_char *data,
-				      int len);
-	u_long		pci_origmembase, plx_origmembase;
-	void __iomem	*pci_membase; /* PCI memory */
-	void __iomem	*plx_membase; /* PLX memory */
-	u_long		xhfc_origmembase;
-	u_char		*xhfc_membase;
-	u_long		*xhfc_memaddr, *xhfc_memdata;
+    void		(*read_fifo)(struct hfc_multi *hc, u_char *data,
+                             int len);
+    void		(*write_fifo)(struct hfc_multi *hc, u_char *data,
+                              int len);
+    u_long		pci_origmembase, plx_origmembase;
+    void __iomem	*pci_membase; /* PCI memory */
+    void __iomem	*plx_membase; /* PLX memory */
+    u_long		xhfc_origmembase;
+    u_char		*xhfc_membase;
+    u_long		*xhfc_memaddr, *xhfc_memdata;
 #ifdef CONFIG_MISDN_HFCMULTI_8xx
-	struct immap	*immap;
+    struct immap	*immap;
 #endif
-	u_long		pb_irqmsk;	/* Portbit mask to check the IRQ line */
-	u_long		pci_iobase; /* PCI IO */
-	struct hfcm_hw	hw;	/* remember data of write-only-registers */
+    u_long		pb_irqmsk;	/* Portbit mask to check the IRQ line */
+    u_long		pci_iobase; /* PCI IO */
+    struct hfcm_hw	hw;	/* remember data of write-only-registers */
 
-	u_long		chip;	/* chip configuration */
-	int		masterclk; /* port that provides master clock -1=off */
-	unsigned char	silence;/* silence byte */
-	unsigned char	silence_data[128];/* silence block */
-	int		dtmf;	/* flag that dtmf is currently in process */
-	int		Flen;	/* F-buffer size */
-	int		Zlen;	/* Z-buffer size (must be int for calculation)*/
-	int		max_trans; /* maximum transparent fifo fill */
-	int		Zmin;	/* Z-buffer offset */
-	int		DTMFbase; /* base address of DTMF coefficients */
+    u_long		chip;	/* chip configuration */
+    int		masterclk; /* port that provides master clock -1=off */
+    unsigned char	silence;/* silence byte */
+    unsigned char	silence_data[128];/* silence block */
+    int		dtmf;	/* flag that dtmf is currently in process */
+    int		Flen;	/* F-buffer size */
+    int		Zlen;	/* Z-buffer size (must be int for calculation)*/
+    int		max_trans; /* maximum transparent fifo fill */
+    int		Zmin;	/* Z-buffer offset */
+    int		DTMFbase; /* base address of DTMF coefficients */
 
-	u_int		slots;	/* number of PCM slots */
-	u_int		leds;	/* type of leds */
-	u_int		ledcount; /* used to animate leds */
-	u_long		ledstate; /* save last state of leds */
-	int		opticalsupport; /* has the e1 board */
-					/* an optical Interface */
-	int		dslot;	/* channel # of d-channel (E1) default 16 */
+    u_int		slots;	/* number of PCM slots */
+    u_int		leds;	/* type of leds */
+    u_int		ledcount; /* used to animate leds */
+    u_long		ledstate; /* save last state of leds */
+    int		opticalsupport; /* has the e1 board */
+    /* an optical Interface */
+    int		dslot;	/* channel # of d-channel (E1) default 16 */
 
-	u_long		wdcount;	/* every 500 ms we need to */
-					/* send the watchdog a signal */
-	u_char		wdbyte; /* watchdog toggle byte */
-	u_int		activity[8];	/* if there is any action on this */
-					/* port (will be cleared after */
-					/* showing led-states) */
-	int		e1_state; /* keep track of last state */
-	int		e1_getclock; /* if sync is retrieved from interface */
-	int		syncronized; /* keep track of existing sync interface */
-	int		e1_resync; /* resync jobs */
+    u_long		wdcount;	/* every 500 ms we need to */
+    /* send the watchdog a signal */
+    u_char		wdbyte; /* watchdog toggle byte */
+    u_int		activity[8];	/* if there is any action on this */
+    /* port (will be cleared after */
+    /* showing led-states) */
+    int		e1_state; /* keep track of last state */
+    int		e1_getclock; /* if sync is retrieved from interface */
+    int		syncronized; /* keep track of existing sync interface */
+    int		e1_resync; /* resync jobs */
 
-	spinlock_t	lock;	/* the lock */
+    spinlock_t	lock;	/* the lock */
 
-	struct mISDNclock *iclock; /* isdn clock support */
-	int		iclock_on;
+    struct mISDNclock *iclock; /* isdn clock support */
+    int		iclock_on;
 
-	/*
-	 * the channel index is counted from 0, regardless where the channel
-	 * is located on the hfc-channel.
-	 * the bch->channel is equvalent to the hfc-channel
-	 */
-	struct hfc_chan	chan[32];
-	u_char		created[8]; /* what port is created */
-	signed char	slot_owner[256]; /* owner channel of slot */
+    /*
+     * the channel index is counted from 0, regardless where the channel
+     * is located on the hfc-channel.
+     * the bch->channel is equvalent to the hfc-channel
+     */
+    struct hfc_chan	chan[32];
+    u_char		created[8]; /* what port is created */
+    signed char	slot_owner[256]; /* owner channel of slot */
 };
 
 /* PLX GPIOs */
@@ -1084,149 +1084,149 @@ struct hfc_multi {
 
 #ifdef HFC_REGISTER_DEBUG
 struct hfc_register_names {
-	char *name;
-	u_char reg;
+    char *name;
+    u_char reg;
 } hfc_register_names[] = {
-	/* write registers */
-	{"R_CIRM",		0x00},
-	{"R_CTRL",		0x01},
-	{"R_BRG_PCM_CFG ",	0x02},
-	{"R_RAM_ADDR0",		0x08},
-	{"R_RAM_ADDR1",		0x09},
-	{"R_RAM_ADDR2",		0x0A},
-	{"R_FIRST_FIFO",	0x0B},
-	{"R_RAM_SZ",		0x0C},
-	{"R_FIFO_MD",		0x0D},
-	{"R_INC_RES_FIFO",	0x0E},
-	{"R_FIFO / R_FSM_IDX",	0x0F},
-	{"R_SLOT",		0x10},
-	{"R_IRQMSK_MISC",	0x11},
-	{"R_SCI_MSK",		0x12},
-	{"R_IRQ_CTRL",		0x13},
-	{"R_PCM_MD0",		0x14},
-	{"R_0x15",		0x15},
-	{"R_ST_SEL",		0x16},
-	{"R_ST_SYNC",		0x17},
-	{"R_CONF_EN",		0x18},
-	{"R_TI_WD",		0x1A},
-	{"R_BERT_WD_MD",	0x1B},
-	{"R_DTMF",		0x1C},
-	{"R_DTMF_N",		0x1D},
-	{"R_E1_XX_STA",		0x20},
-	{"R_LOS0",		0x22},
-	{"R_LOS1",		0x23},
-	{"R_RX0",		0x24},
-	{"R_RX_FR0",		0x25},
-	{"R_RX_FR1",		0x26},
-	{"R_TX0",		0x28},
-	{"R_TX1",		0x29},
-	{"R_TX_FR0",		0x2C},
-	{"R_TX_FR1",		0x2D},
-	{"R_TX_FR2",		0x2E},
-	{"R_JATT_ATT",		0x2F},
-	{"A_ST_xx_STA/R_RX_OFF", 0x30},
-	{"A_ST_CTRL0/R_SYNC_OUT", 0x31},
-	{"A_ST_CTRL1",		0x32},
-	{"A_ST_CTRL2",		0x33},
-	{"A_ST_SQ_WR",		0x34},
-	{"R_TX_OFF",		0x34},
-	{"R_SYNC_CTRL",		0x35},
-	{"A_ST_CLK_DLY",	0x37},
-	{"R_PWM0",		0x38},
-	{"R_PWM1",		0x39},
-	{"A_ST_B1_TX",		0x3C},
-	{"A_ST_B2_TX",		0x3D},
-	{"A_ST_D_TX",		0x3E},
-	{"R_GPIO_OUT0",		0x40},
-	{"R_GPIO_OUT1",		0x41},
-	{"R_GPIO_EN0",		0x42},
-	{"R_GPIO_EN1",		0x43},
-	{"R_GPIO_SEL",		0x44},
-	{"R_BRG_CTRL",		0x45},
-	{"R_PWM_MD",		0x46},
-	{"R_BRG_MD",		0x47},
-	{"R_BRG_TIM0",		0x48},
-	{"R_BRG_TIM1",		0x49},
-	{"R_BRG_TIM2",		0x4A},
-	{"R_BRG_TIM3",		0x4B},
-	{"R_BRG_TIM_SEL01",	0x4C},
-	{"R_BRG_TIM_SEL23",	0x4D},
-	{"R_BRG_TIM_SEL45",	0x4E},
-	{"R_BRG_TIM_SEL67",	0x4F},
-	{"A_FIFO_DATA0-2",	0x80},
-	{"A_FIFO_DATA0-2_NOINC", 0x84},
-	{"R_RAM_DATA",		0xC0},
-	{"A_SL_CFG",		0xD0},
-	{"A_CONF",		0xD1},
-	{"A_CH_MSK",		0xF4},
-	{"A_CON_HDLC",		0xFA},
-	{"A_SUBCH_CFG",		0xFB},
-	{"A_CHANNEL",		0xFC},
-	{"A_FIFO_SEQ",		0xFD},
-	{"A_IRQ_MSK",		0xFF},
-	{NULL, 0},
+    /* write registers */
+    {"R_CIRM",		0x00},
+    {"R_CTRL",		0x01},
+    {"R_BRG_PCM_CFG ",	0x02},
+    {"R_RAM_ADDR0",		0x08},
+    {"R_RAM_ADDR1",		0x09},
+    {"R_RAM_ADDR2",		0x0A},
+    {"R_FIRST_FIFO",	0x0B},
+    {"R_RAM_SZ",		0x0C},
+    {"R_FIFO_MD",		0x0D},
+    {"R_INC_RES_FIFO",	0x0E},
+    {"R_FIFO / R_FSM_IDX",	0x0F},
+    {"R_SLOT",		0x10},
+    {"R_IRQMSK_MISC",	0x11},
+    {"R_SCI_MSK",		0x12},
+    {"R_IRQ_CTRL",		0x13},
+    {"R_PCM_MD0",		0x14},
+    {"R_0x15",		0x15},
+    {"R_ST_SEL",		0x16},
+    {"R_ST_SYNC",		0x17},
+    {"R_CONF_EN",		0x18},
+    {"R_TI_WD",		0x1A},
+    {"R_BERT_WD_MD",	0x1B},
+    {"R_DTMF",		0x1C},
+    {"R_DTMF_N",		0x1D},
+    {"R_E1_XX_STA",		0x20},
+    {"R_LOS0",		0x22},
+    {"R_LOS1",		0x23},
+    {"R_RX0",		0x24},
+    {"R_RX_FR0",		0x25},
+    {"R_RX_FR1",		0x26},
+    {"R_TX0",		0x28},
+    {"R_TX1",		0x29},
+    {"R_TX_FR0",		0x2C},
+    {"R_TX_FR1",		0x2D},
+    {"R_TX_FR2",		0x2E},
+    {"R_JATT_ATT",		0x2F},
+    {"A_ST_xx_STA/R_RX_OFF", 0x30},
+    {"A_ST_CTRL0/R_SYNC_OUT", 0x31},
+    {"A_ST_CTRL1",		0x32},
+    {"A_ST_CTRL2",		0x33},
+    {"A_ST_SQ_WR",		0x34},
+    {"R_TX_OFF",		0x34},
+    {"R_SYNC_CTRL",		0x35},
+    {"A_ST_CLK_DLY",	0x37},
+    {"R_PWM0",		0x38},
+    {"R_PWM1",		0x39},
+    {"A_ST_B1_TX",		0x3C},
+    {"A_ST_B2_TX",		0x3D},
+    {"A_ST_D_TX",		0x3E},
+    {"R_GPIO_OUT0",		0x40},
+    {"R_GPIO_OUT1",		0x41},
+    {"R_GPIO_EN0",		0x42},
+    {"R_GPIO_EN1",		0x43},
+    {"R_GPIO_SEL",		0x44},
+    {"R_BRG_CTRL",		0x45},
+    {"R_PWM_MD",		0x46},
+    {"R_BRG_MD",		0x47},
+    {"R_BRG_TIM0",		0x48},
+    {"R_BRG_TIM1",		0x49},
+    {"R_BRG_TIM2",		0x4A},
+    {"R_BRG_TIM3",		0x4B},
+    {"R_BRG_TIM_SEL01",	0x4C},
+    {"R_BRG_TIM_SEL23",	0x4D},
+    {"R_BRG_TIM_SEL45",	0x4E},
+    {"R_BRG_TIM_SEL67",	0x4F},
+    {"A_FIFO_DATA0-2",	0x80},
+    {"A_FIFO_DATA0-2_NOINC", 0x84},
+    {"R_RAM_DATA",		0xC0},
+    {"A_SL_CFG",		0xD0},
+    {"A_CONF",		0xD1},
+    {"A_CH_MSK",		0xF4},
+    {"A_CON_HDLC",		0xFA},
+    {"A_SUBCH_CFG",		0xFB},
+    {"A_CHANNEL",		0xFC},
+    {"A_FIFO_SEQ",		0xFD},
+    {"A_IRQ_MSK",		0xFF},
+    {NULL, 0},
 
-	/* read registers */
-	{"A_Z1",		0x04},
-	{"A_Z1H",		0x05},
-	{"A_Z2",		0x06},
-	{"A_Z2H",		0x07},
-	{"A_F1",		0x0C},
-	{"A_F2",		0x0D},
-	{"R_IRQ_OVIEW",		0x10},
-	{"R_IRQ_MISC",		0x11},
-	{"R_IRQ_STATECH",	0x12},
-	{"R_CONF_OFLOW",	0x14},
-	{"R_RAM_USE",		0x15},
-	{"R_CHIP_ID",		0x16},
-	{"R_BERT_STA",		0x17},
-	{"R_F0_CNTL",		0x18},
-	{"R_F0_CNTH",		0x19},
-	{"R_BERT_ECL",		0x1A},
-	{"R_BERT_ECH",		0x1B},
-	{"R_STATUS",		0x1C},
-	{"R_CHIP_RV",		0x1F},
-	{"R_STATE",		0x20},
-	{"R_SYNC_STA",		0x24},
-	{"R_RX_SL0_0",		0x25},
-	{"R_RX_SL0_1",		0x26},
-	{"R_RX_SL0_2",		0x27},
-	{"R_JATT_DIR",		0x2b},
-	{"R_SLIP",		0x2c},
-	{"A_ST_RD_STA",		0x30},
-	{"R_FAS_ECL",		0x30},
-	{"R_FAS_ECH",		0x31},
-	{"R_VIO_ECL",		0x32},
-	{"R_VIO_ECH",		0x33},
-	{"R_CRC_ECL / A_ST_SQ_RD", 0x34},
-	{"R_CRC_ECH",		0x35},
-	{"R_E_ECL",		0x36},
-	{"R_E_ECH",		0x37},
-	{"R_SA6_SA13_ECL",	0x38},
-	{"R_SA6_SA13_ECH",	0x39},
-	{"R_SA6_SA23_ECL",	0x3A},
-	{"R_SA6_SA23_ECH",	0x3B},
-	{"A_ST_B1_RX",		0x3C},
-	{"A_ST_B2_RX",		0x3D},
-	{"A_ST_D_RX",		0x3E},
-	{"A_ST_E_RX",		0x3F},
-	{"R_GPIO_IN0",		0x40},
-	{"R_GPIO_IN1",		0x41},
-	{"R_GPI_IN0",		0x44},
-	{"R_GPI_IN1",		0x45},
-	{"R_GPI_IN2",		0x46},
-	{"R_GPI_IN3",		0x47},
-	{"A_FIFO_DATA0-2",	0x80},
-	{"A_FIFO_DATA0-2_NOINC", 0x84},
-	{"R_INT_DATA",		0x88},
-	{"R_RAM_DATA",		0xC0},
-	{"R_IRQ_FIFO_BL0",	0xC8},
-	{"R_IRQ_FIFO_BL1",	0xC9},
-	{"R_IRQ_FIFO_BL2",	0xCA},
-	{"R_IRQ_FIFO_BL3",	0xCB},
-	{"R_IRQ_FIFO_BL4",	0xCC},
-	{"R_IRQ_FIFO_BL5",	0xCD},
-	{"R_IRQ_FIFO_BL6",	0xCE},
-	{"R_IRQ_FIFO_BL7",	0xCF},
+    /* read registers */
+    {"A_Z1",		0x04},
+    {"A_Z1H",		0x05},
+    {"A_Z2",		0x06},
+    {"A_Z2H",		0x07},
+    {"A_F1",		0x0C},
+    {"A_F2",		0x0D},
+    {"R_IRQ_OVIEW",		0x10},
+    {"R_IRQ_MISC",		0x11},
+    {"R_IRQ_STATECH",	0x12},
+    {"R_CONF_OFLOW",	0x14},
+    {"R_RAM_USE",		0x15},
+    {"R_CHIP_ID",		0x16},
+    {"R_BERT_STA",		0x17},
+    {"R_F0_CNTL",		0x18},
+    {"R_F0_CNTH",		0x19},
+    {"R_BERT_ECL",		0x1A},
+    {"R_BERT_ECH",		0x1B},
+    {"R_STATUS",		0x1C},
+    {"R_CHIP_RV",		0x1F},
+    {"R_STATE",		0x20},
+    {"R_SYNC_STA",		0x24},
+    {"R_RX_SL0_0",		0x25},
+    {"R_RX_SL0_1",		0x26},
+    {"R_RX_SL0_2",		0x27},
+    {"R_JATT_DIR",		0x2b},
+    {"R_SLIP",		0x2c},
+    {"A_ST_RD_STA",		0x30},
+    {"R_FAS_ECL",		0x30},
+    {"R_FAS_ECH",		0x31},
+    {"R_VIO_ECL",		0x32},
+    {"R_VIO_ECH",		0x33},
+    {"R_CRC_ECL / A_ST_SQ_RD", 0x34},
+    {"R_CRC_ECH",		0x35},
+    {"R_E_ECL",		0x36},
+    {"R_E_ECH",		0x37},
+    {"R_SA6_SA13_ECL",	0x38},
+    {"R_SA6_SA13_ECH",	0x39},
+    {"R_SA6_SA23_ECL",	0x3A},
+    {"R_SA6_SA23_ECH",	0x3B},
+    {"A_ST_B1_RX",		0x3C},
+    {"A_ST_B2_RX",		0x3D},
+    {"A_ST_D_RX",		0x3E},
+    {"A_ST_E_RX",		0x3F},
+    {"R_GPIO_IN0",		0x40},
+    {"R_GPIO_IN1",		0x41},
+    {"R_GPI_IN0",		0x44},
+    {"R_GPI_IN1",		0x45},
+    {"R_GPI_IN2",		0x46},
+    {"R_GPI_IN3",		0x47},
+    {"A_FIFO_DATA0-2",	0x80},
+    {"A_FIFO_DATA0-2_NOINC", 0x84},
+    {"R_INT_DATA",		0x88},
+    {"R_RAM_DATA",		0xC0},
+    {"R_IRQ_FIFO_BL0",	0xC8},
+    {"R_IRQ_FIFO_BL1",	0xC9},
+    {"R_IRQ_FIFO_BL2",	0xCA},
+    {"R_IRQ_FIFO_BL3",	0xCB},
+    {"R_IRQ_FIFO_BL4",	0xCC},
+    {"R_IRQ_FIFO_BL5",	0xCD},
+    {"R_IRQ_FIFO_BL6",	0xCE},
+    {"R_IRQ_FIFO_BL7",	0xCF},
 };
 #endif /* HFC_REGISTER_DEBUG */

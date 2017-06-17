@@ -594,19 +594,19 @@
 #define QLA82XX_PCI_MSIX_CONTROL		0x40
 
 struct crb_128M_2M_sub_block_map {
-	unsigned valid;
-	unsigned start_128M;
-	unsigned end_128M;
-	unsigned start_2M;
+    unsigned valid;
+    unsigned start_128M;
+    unsigned end_128M;
+    unsigned start_2M;
 };
 
 struct crb_128M_2M_block_map {
-	struct crb_128M_2M_sub_block_map sub_block[16];
+    struct crb_128M_2M_sub_block_map sub_block[16];
 };
 
 struct crb_addr_pair {
-	long addr;
-	long data;
+    long addr;
+    long data;
 };
 
 #define ADDR_ERROR ((unsigned long) 0xffffffff)
@@ -717,10 +717,10 @@ struct crb_addr_pair {
 #define	PCIX_INT_VECTOR_BIT_F7	0x4000
 
 struct qla82xx_legacy_intr_set {
-	uint32_t	int_vec_bit;
-	uint32_t	tgt_status_reg;
-	uint32_t	tgt_mask_reg;
-	uint32_t	pci_int_reg;
+    uint32_t	int_vec_bit;
+    uint32_t	tgt_status_reg;
+    uint32_t	tgt_mask_reg;
+    uint32_t	pci_int_reg;
 };
 
 #define QLA82XX_LEGACY_INTR_CONFIG					\
@@ -798,17 +798,17 @@ struct qla82xx_legacy_intr_set {
 #define QLA82XX_URI_BOOTLD_IDX_OFF	27
 #define QLA82XX_URI_FIRMWARE_IDX_OFF	29
 
-struct qla82xx_uri_table_desc{
-	uint32_t	findex;
-	uint32_t	num_entries;
-	uint32_t	entry_size;
-	uint32_t	reserved[5];
+struct qla82xx_uri_table_desc {
+    uint32_t	findex;
+    uint32_t	num_entries;
+    uint32_t	entry_size;
+    uint32_t	reserved[5];
 };
 
-struct qla82xx_uri_data_desc{
-	uint32_t	findex;
-	uint32_t	size;
-	uint32_t	reserved[5];
+struct qla82xx_uri_data_desc {
+    uint32_t	findex;
+    uint32_t	size;
+    uint32_t	reserved[5];
 };
 
 /* UNIFIED ROMIMAGE END */
@@ -821,17 +821,15 @@ struct qla82xx_uri_data_desc{
 #define	MIU_TEST_AGT_WRDATA_UPPER_HI		(0x0b4)
 
 #ifndef readq
-static inline u64 readq(void __iomem *addr)
-{
-	return readl(addr) | (((u64) readl(addr + 4)) << 32LL);
+static inline u64 readq(void __iomem *addr) {
+    return readl(addr) | (((u64) readl(addr + 4)) << 32LL);
 }
 #endif
 
 #ifndef writeq
-static inline void writeq(u64 val, void __iomem *addr)
-{
-	writel(((u32) (val)), (addr));
-	writel(((u32) (val >> 32)), (addr + 4));
+static inline void writeq(u64 val, void __iomem *addr) {
+    writel(((u32) (val)), (addr));
+    writel(((u32) (val >> 32)), (addr + 4));
 }
 #endif
 
@@ -843,48 +841,48 @@ static inline void writeq(u64 val, void __iomem *addr)
  * ISP 8021 I/O Register Set structure definitions.
  */
 struct device_reg_82xx {
-	uint32_t req_q_out[64];		/* Request Queue out-Pointer (64 * 4) */
-	uint32_t rsp_q_in[64];		/* Response Queue In-Pointer. */
-	uint32_t rsp_q_out[64];		/* Response Queue Out-Pointer. */
+    uint32_t req_q_out[64];		/* Request Queue out-Pointer (64 * 4) */
+    uint32_t rsp_q_in[64];		/* Response Queue In-Pointer. */
+    uint32_t rsp_q_out[64];		/* Response Queue Out-Pointer. */
 
-	uint16_t mailbox_in[32];	/* Mail box In registers */
-	uint16_t unused_1[32];
-	uint32_t hint;			/* Host interrupt register */
+    uint16_t mailbox_in[32];	/* Mail box In registers */
+    uint16_t unused_1[32];
+    uint32_t hint;			/* Host interrupt register */
 #define	HINT_MBX_INT_PENDING	BIT_0
-	uint16_t unused_2[62];
-	uint16_t mailbox_out[32];	/* Mail box Out registers */
-	uint32_t unused_3[48];
+    uint16_t unused_2[62];
+    uint16_t mailbox_out[32];	/* Mail box Out registers */
+    uint32_t unused_3[48];
 
-	uint32_t host_status;		/* host status */
+    uint32_t host_status;		/* host status */
 #define HSRX_RISC_INT		BIT_15	/* RISC to Host interrupt. */
 #define HSRX_RISC_PAUSED	BIT_8	/* RISC Paused. */
-	uint32_t host_int;		/* Interrupt status. */
+    uint32_t host_int;		/* Interrupt status. */
 #define ISRX_NX_RISC_INT	BIT_0	/* RISC interrupt. */
 };
 
 struct fcp_cmnd {
-	struct scsi_lun lun;
-	uint8_t crn;
-	uint8_t task_attribute;
-	uint8_t task_management;
-	uint8_t additional_cdb_len;
-	uint8_t cdb[260]; /* 256 for CDB len and 4 for FCP_DL */
+    struct scsi_lun lun;
+    uint8_t crn;
+    uint8_t task_attribute;
+    uint8_t task_management;
+    uint8_t additional_cdb_len;
+    uint8_t cdb[260]; /* 256 for CDB len and 4 for FCP_DL */
 };
 
 struct dsd_dma {
-	struct list_head list;
-	dma_addr_t dsd_list_dma;
-	void *dsd_addr;
+    struct list_head list;
+    dma_addr_t dsd_list_dma;
+    void *dsd_addr;
 };
 
 #define QLA_DSDS_PER_IOCB	37
 #define QLA_DSD_SIZE		12
 struct ct6_dsd {
-	uint16_t fcp_cmnd_len;
-	dma_addr_t fcp_cmnd_dma;
-	struct fcp_cmnd *fcp_cmnd;
-	int dsd_use_cnt;
-	struct list_head dsd_list;
+    uint16_t fcp_cmnd_len;
+    dma_addr_t fcp_cmnd_dma;
+    struct fcp_cmnd *fcp_cmnd;
+    int dsd_use_cnt;
+    struct list_head dsd_list;
 };
 
 #define MBC_TOGGLE_INTERRUPT	0x10
@@ -988,28 +986,28 @@ struct ct6_dsd {
 #define	QLA82XX_DEFAULT_CAP_MASK	0xFF	/* default capture mask */
 
 struct qla82xx_md_template_hdr {
-	uint32_t entry_type;
-	uint32_t first_entry_offset;
-	uint32_t size_of_template;
-	uint32_t capture_debug_level;
+    uint32_t entry_type;
+    uint32_t first_entry_offset;
+    uint32_t size_of_template;
+    uint32_t capture_debug_level;
 
-	uint32_t num_of_entries;
-	uint32_t version;
-	uint32_t driver_timestamp;
-	uint32_t template_checksum;
+    uint32_t num_of_entries;
+    uint32_t version;
+    uint32_t driver_timestamp;
+    uint32_t template_checksum;
 
-	uint32_t driver_capture_mask;
-	uint32_t driver_info[3];
+    uint32_t driver_capture_mask;
+    uint32_t driver_info[3];
 
-	uint32_t saved_state_array[QLA82XX_DBG_STATE_ARRAY_LEN];
-	uint32_t capture_size_array[QLA82XX_DBG_CAP_SIZE_ARRAY_LEN];
+    uint32_t saved_state_array[QLA82XX_DBG_STATE_ARRAY_LEN];
+    uint32_t capture_size_array[QLA82XX_DBG_CAP_SIZE_ARRAY_LEN];
 
-	/*  markers_array used to capture some special locations on board */
-	uint32_t markers_array[QLA82XX_DBG_RSVD_ARRAY_LEN];
-	uint32_t num_of_free_entries;	/* For internal use */
-	uint32_t free_entry_offset;	/* For internal use */
-	uint32_t total_table_size;	/*  For internal use */
-	uint32_t bkup_table_offset;	/*  For internal use */
+    /*  markers_array used to capture some special locations on board */
+    uint32_t markers_array[QLA82XX_DBG_RSVD_ARRAY_LEN];
+    uint32_t num_of_free_entries;	/* For internal use */
+    uint32_t free_entry_offset;	/* For internal use */
+    uint32_t total_table_size;	/*  For internal use */
+    uint32_t bkup_table_offset;	/*  For internal use */
 } __packed;
 
 /*
@@ -1021,146 +1019,146 @@ struct qla82xx_md_template_hdr {
  * Currently not used.
  */
 typedef struct qla82xx_md_entry_hdr {
-	uint32_t entry_type;
-	uint32_t entry_size;
-	uint32_t entry_capture_size;
-	struct {
-		uint8_t entry_capture_mask;
-		uint8_t entry_code;
-		uint8_t driver_code;
-		uint8_t driver_flags;
-	} d_ctrl;
+    uint32_t entry_type;
+    uint32_t entry_size;
+    uint32_t entry_capture_size;
+    struct {
+        uint8_t entry_capture_mask;
+        uint8_t entry_code;
+        uint8_t driver_code;
+        uint8_t driver_flags;
+    } d_ctrl;
 } __packed qla82xx_md_entry_hdr_t;
 
 /*
  *  Read CRB entry header
  */
 struct qla82xx_md_entry_crb {
-	qla82xx_md_entry_hdr_t h;
-	uint32_t addr;
-	struct {
-		uint8_t addr_stride;
-		uint8_t state_index_a;
-		uint16_t poll_timeout;
-	} crb_strd;
+    qla82xx_md_entry_hdr_t h;
+    uint32_t addr;
+    struct {
+        uint8_t addr_stride;
+        uint8_t state_index_a;
+        uint16_t poll_timeout;
+    } crb_strd;
 
-	uint32_t data_size;
-	uint32_t op_count;
+    uint32_t data_size;
+    uint32_t op_count;
 
-	struct {
-		uint8_t opcode;
-		uint8_t state_index_v;
-		uint8_t shl;
-		uint8_t shr;
-	} crb_ctrl;
+    struct {
+        uint8_t opcode;
+        uint8_t state_index_v;
+        uint8_t shl;
+        uint8_t shr;
+    } crb_ctrl;
 
-	uint32_t value_1;
-	uint32_t value_2;
-	uint32_t value_3;
+    uint32_t value_1;
+    uint32_t value_2;
+    uint32_t value_3;
 } __packed;
 
 /*
  * Cache entry header
  */
 struct qla82xx_md_entry_cache {
-	qla82xx_md_entry_hdr_t h;
+    qla82xx_md_entry_hdr_t h;
 
-	uint32_t tag_reg_addr;
-	struct {
-		uint16_t tag_value_stride;
-		uint16_t init_tag_value;
-	} addr_ctrl;
+    uint32_t tag_reg_addr;
+    struct {
+        uint16_t tag_value_stride;
+        uint16_t init_tag_value;
+    } addr_ctrl;
 
-	uint32_t data_size;
-	uint32_t op_count;
+    uint32_t data_size;
+    uint32_t op_count;
 
-	uint32_t control_addr;
-	struct {
-		uint16_t write_value;
-		uint8_t poll_mask;
-		uint8_t poll_wait;
-	} cache_ctrl;
+    uint32_t control_addr;
+    struct {
+        uint16_t write_value;
+        uint8_t poll_mask;
+        uint8_t poll_wait;
+    } cache_ctrl;
 
-	uint32_t read_addr;
-	struct {
-		uint8_t read_addr_stride;
-		uint8_t read_addr_cnt;
-		uint16_t rsvd_1;
-	} read_ctrl;
+    uint32_t read_addr;
+    struct {
+        uint8_t read_addr_stride;
+        uint8_t read_addr_cnt;
+        uint16_t rsvd_1;
+    } read_ctrl;
 } __packed;
 
 /*
  * Read OCM
  */
 struct qla82xx_md_entry_rdocm {
-	qla82xx_md_entry_hdr_t h;
+    qla82xx_md_entry_hdr_t h;
 
-	uint32_t rsvd_0;
-	uint32_t rsvd_1;
-	uint32_t data_size;
-	uint32_t op_count;
+    uint32_t rsvd_0;
+    uint32_t rsvd_1;
+    uint32_t data_size;
+    uint32_t op_count;
 
-	uint32_t rsvd_2;
-	uint32_t rsvd_3;
-	uint32_t read_addr;
-	uint32_t read_addr_stride;
-	uint32_t read_addr_cntrl;
+    uint32_t rsvd_2;
+    uint32_t rsvd_3;
+    uint32_t read_addr;
+    uint32_t read_addr_stride;
+    uint32_t read_addr_cntrl;
 } __packed;
 
 /*
  * Read Memory
  */
 struct qla82xx_md_entry_rdmem {
-	qla82xx_md_entry_hdr_t h;
-	uint32_t rsvd[6];
-	uint32_t read_addr;
-	uint32_t read_data_size;
+    qla82xx_md_entry_hdr_t h;
+    uint32_t rsvd[6];
+    uint32_t read_addr;
+    uint32_t read_data_size;
 } __packed;
 
 /*
  * Read ROM
  */
 struct qla82xx_md_entry_rdrom {
-	qla82xx_md_entry_hdr_t h;
-	uint32_t rsvd[6];
-	uint32_t read_addr;
-	uint32_t read_data_size;
+    qla82xx_md_entry_hdr_t h;
+    uint32_t rsvd[6];
+    uint32_t read_addr;
+    uint32_t read_data_size;
 } __packed;
 
 struct qla82xx_md_entry_mux {
-	qla82xx_md_entry_hdr_t h;
+    qla82xx_md_entry_hdr_t h;
 
-	uint32_t select_addr;
-	uint32_t rsvd_0;
-	uint32_t data_size;
-	uint32_t op_count;
+    uint32_t select_addr;
+    uint32_t rsvd_0;
+    uint32_t data_size;
+    uint32_t op_count;
 
-	uint32_t select_value;
-	uint32_t select_value_stride;
-	uint32_t read_addr;
-	uint32_t rsvd_1;
+    uint32_t select_value;
+    uint32_t select_value_stride;
+    uint32_t read_addr;
+    uint32_t rsvd_1;
 } __packed;
 
 struct qla82xx_md_entry_queue {
-	qla82xx_md_entry_hdr_t h;
+    qla82xx_md_entry_hdr_t h;
 
-	uint32_t select_addr;
-	struct {
-		uint16_t queue_id_stride;
-		uint16_t rsvd_0;
-	} q_strd;
+    uint32_t select_addr;
+    struct {
+        uint16_t queue_id_stride;
+        uint16_t rsvd_0;
+    } q_strd;
 
-	uint32_t data_size;
-	uint32_t op_count;
-	uint32_t rsvd_1;
-	uint32_t rsvd_2;
+    uint32_t data_size;
+    uint32_t op_count;
+    uint32_t rsvd_1;
+    uint32_t rsvd_2;
 
-	uint32_t read_addr;
-	struct {
-		uint8_t read_addr_stride;
-		uint8_t read_addr_cnt;
-		uint16_t rsvd_3;
-	} rd_strd;
+    uint32_t read_addr;
+    struct {
+        uint8_t read_addr_stride;
+        uint8_t read_addr_cnt;
+        uint16_t rsvd_3;
+    } rd_strd;
 } __packed;
 
 #define MBC_DIAGNOSTIC_MINIDUMP_TEMPLATE 0x129
@@ -1173,7 +1171,8 @@ struct qla82xx_md_entry_queue {
 #define MD_MIU_TEST_AGT_ADDR_HI		0x41000098
 
 static const int MD_MIU_TEST_AGT_RDDATA[] = { 0x410000A8, 0x410000AC,
-	0x410000B8, 0x410000BC };
+                                              0x410000B8, 0x410000BC
+                                            };
 
 #define CRB_NIU_XG_PAUSE_CTL_P0        0x1
 #define CRB_NIU_XG_PAUSE_CTL_P1        0x8

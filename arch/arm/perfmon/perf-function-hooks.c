@@ -59,23 +59,20 @@ RETURN VALUE
 
 SIDE EFFECTS
 */
-void perf_mon_interrupt_out(void)
-{
-  if (pp_loaded)
-	(*pp_interrupt_out_ptr)();
+void perf_mon_interrupt_out(void) {
+    if (pp_loaded)
+        (*pp_interrupt_out_ptr)();
 }
 EXPORT_SYMBOL(pp_interrupt_out_ptr);
 
-void perf_mon_interrupt_in(void)
-{
-  if (pp_loaded)
-	(*pp_interrupt_in_ptr)();
+void perf_mon_interrupt_in(void) {
+    if (pp_loaded)
+        (*pp_interrupt_in_ptr)();
 }
 EXPORT_SYMBOL(pp_interrupt_in_ptr);
 
-void per_process_remove(unsigned long pid)
-{
-  if (pp_loaded)
-		(*pp_process_remove_ptr)(pid);
+void per_process_remove(unsigned long pid) {
+    if (pp_loaded)
+        (*pp_process_remove_ptr)(pid);
 }
 EXPORT_SYMBOL(pp_process_remove_ptr);

@@ -120,60 +120,60 @@
  * reported in raw packets.
  */
 struct synaptics_mt_state {
-	int count;			/* num fingers being tracked */
-	int sgm;			/* which slot is reported by sgm pkt */
-	int agm;			/* which slot is reported by agm pkt*/
+    int count;			/* num fingers being tracked */
+    int sgm;			/* which slot is reported by sgm pkt */
+    int agm;			/* which slot is reported by agm pkt*/
 };
 
 /*
  * A structure to describe the state of the touchpad hardware (buttons and pad)
  */
 struct synaptics_hw_state {
-	int x;
-	int y;
-	int z;
-	int w;
-	unsigned int left:1;
-	unsigned int right:1;
-	unsigned int middle:1;
-	unsigned int up:1;
-	unsigned int down:1;
-	unsigned char ext_buttons;
-	signed char scroll;
+    int x;
+    int y;
+    int z;
+    int w;
+    unsigned int left:1;
+    unsigned int right:1;
+    unsigned int middle:1;
+    unsigned int up:1;
+    unsigned int down:1;
+    unsigned char ext_buttons;
+    signed char scroll;
 
-	/* As reported in last AGM-CONTACT packets */
-	struct synaptics_mt_state mt_state;
+    /* As reported in last AGM-CONTACT packets */
+    struct synaptics_mt_state mt_state;
 };
 
 struct synaptics_data {
-	/* Data read from the touchpad */
-	unsigned long int model_id;		/* Model-ID */
-	unsigned long int capabilities;		/* Capabilities */
-	unsigned long int ext_cap;		/* Extended Capabilities */
-	unsigned long int ext_cap_0c;		/* Ext Caps from 0x0c query */
-	unsigned long int identity;		/* Identification */
-	unsigned int x_res, y_res;		/* X/Y resolution in units/mm */
-	unsigned int x_max, y_max;		/* Max coordinates (from FW) */
-	unsigned int x_min, y_min;		/* Min coordinates (from FW) */
+    /* Data read from the touchpad */
+    unsigned long int model_id;		/* Model-ID */
+    unsigned long int capabilities;		/* Capabilities */
+    unsigned long int ext_cap;		/* Extended Capabilities */
+    unsigned long int ext_cap_0c;		/* Ext Caps from 0x0c query */
+    unsigned long int identity;		/* Identification */
+    unsigned int x_res, y_res;		/* X/Y resolution in units/mm */
+    unsigned int x_max, y_max;		/* Max coordinates (from FW) */
+    unsigned int x_min, y_min;		/* Min coordinates (from FW) */
 
-	unsigned char pkt_type;			/* packet type - old, new, etc */
-	unsigned char mode;			/* current mode byte */
-	int scroll;
+    unsigned char pkt_type;			/* packet type - old, new, etc */
+    unsigned char mode;			/* current mode byte */
+    int scroll;
 
-	bool absolute_mode;			/* run in Absolute mode */
-	bool disable_gesture;			/* disable gestures */
+    bool absolute_mode;			/* run in Absolute mode */
+    bool disable_gesture;			/* disable gestures */
 
-	struct serio *pt_port;			/* Pass-through serio port */
+    struct serio *pt_port;			/* Pass-through serio port */
 
-	struct synaptics_mt_state mt_state;	/* Current mt finger state */
-	bool mt_state_lost;			/* mt_state may be incorrect */
+    struct synaptics_mt_state mt_state;	/* Current mt finger state */
+    bool mt_state_lost;			/* mt_state may be incorrect */
 
-	/*
-	 * Last received Advanced Gesture Mode (AGM) packet. An AGM packet
-	 * contains position data for a second contact, at half resolution.
-	 */
-	struct synaptics_hw_state agm;
-	bool agm_pending;			/* new AGM packet received */
+    /*
+     * Last received Advanced Gesture Mode (AGM) packet. An AGM packet
+     * contains position data for a second contact, at half resolution.
+     */
+    struct synaptics_hw_state agm;
+    bool agm_pending;			/* new AGM packet received */
 };
 
 void synaptics_module_init(void);

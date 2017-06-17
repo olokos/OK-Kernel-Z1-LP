@@ -11,23 +11,23 @@
 
 #define DTMF_NPOINTS 205        /* Number of samples for DTMF recognition */
 typedef struct adpcm_state {
-	int a;
-	int d;
-	int word;
-	int nleft;
-	int nbits;
+    int a;
+    int d;
+    int word;
+    int nleft;
+    int nbits;
 } adpcm_state;
 
 typedef struct dtmf_state {
-	char last;
-	char llast;
-	int idx;
-	int buf[DTMF_NPOINTS];
+    char last;
+    char llast;
+    int idx;
+    int buf[DTMF_NPOINTS];
 } dtmf_state;
 
 typedef struct silence_state {
-	int state;
-	unsigned int idx;
+    int state;
+    unsigned int idx;
 } silence_state;
 
 extern void isdn_audio_ulaw2alaw(unsigned char *, unsigned long);

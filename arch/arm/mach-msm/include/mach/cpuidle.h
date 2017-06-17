@@ -18,23 +18,27 @@
 #include "../../pm.h"
 
 struct msm_cpuidle_state {
-	unsigned int cpu;
-	int state_nr;
-	char *name;
-	char *desc;
-	enum msm_pm_sleep_mode mode_nr;
+    unsigned int cpu;
+    int state_nr;
+    char *name;
+    char *desc;
+    enum msm_pm_sleep_mode mode_nr;
 };
 
 #ifdef CONFIG_PM
 s32 msm_cpuidle_get_deep_idle_latency(void);
 #else
-static inline s32 msm_cpuidle_get_deep_idle_latency(void) { return 0; }
+static inline s32 msm_cpuidle_get_deep_idle_latency(void) {
+    return 0;
+}
 #endif
 
 #ifdef CONFIG_CPU_IDLE
 int msm_cpuidle_init(void);
 #else
-static inline int msm_cpuidle_init(void) { return -ENOSYS; }
+static inline int msm_cpuidle_init(void) {
+    return -ENOSYS;
+}
 #endif
 
 #endif /* __ARCH_ARM_MACH_MSM_CPUIDLE_H */

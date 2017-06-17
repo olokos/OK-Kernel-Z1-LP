@@ -43,9 +43,8 @@
 
 struct cputopo_arm cpu_topology[NR_CPUS];
 
-const struct cpumask *cpu_coregroup_mask(int cpu)
-{
-	return &cpu_topology[cpu].core_sibling;
+const struct cpumask *cpu_coregroup_mask(int cpu) {
+    return &cpu_topology[cpu].core_sibling;
 }
 
 /*
@@ -53,96 +52,94 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
  * and with the mutex cpu_hotplug.lock locked, when several cpus have booted,
  * which prevents simultaneous write access to cpu_topology array
  */
-void store_cpu_topology(unsigned int cpuid)
-{
-	struct cputopo_arm *cpuid_topo = &cpu_topology[cpuid];
-	unsigned int mpidr;
-	unsigned int cpu;
+void store_cpu_topology(unsigned int cpuid) {
+    struct cputopo_arm *cpuid_topo = &cpu_topology[cpuid];
+    unsigned int mpidr;
+    unsigned int cpu;
 
-	/* If the cpu topology has been already set, just return */
-	if (cpuid_topo->core_id != -1)
-		return;
+    /* If the cpu topology has been already set, just return */
+    if (cpuid_topo->core_id != -1)
+        return;
 
-	mpidr = read_cpuid_mpidr();
+    mpidr = read_cpuid_mpidr();
 
-	/* create cpu topology mapping */
-	if ((mpidr & MPIDR_SMP_BITMASK) == MPIDR_SMP_VALUE) {
-		/*
-		 * This is a multiprocessor system
-		 * multiprocessor format & multiprocessor mode field are set
-		 */
+    /* create cpu topology mapping */
+    if ((mpidr & MPIDR_SMP_BITMASK) == MPIDR_SMP_VALUE) {
+        /*
+         * This is a multiprocessor system
+         * multiprocessor format & multiprocessor mode field are set
+         */
 
-		if (mpidr & MPIDR_MT_BITMASK) {
-			/* core performance interdependency */
-			cpuid_topo->thread_id = (mpidr >> MPIDR_LEVEL0_SHIFT)
-				& MPIDR_LEVEL0_MASK;
-			cpuid_topo->core_id = (mpidr >> MPIDR_LEVEL1_SHIFT)
-				& MPIDR_LEVEL1_MASK;
-			cpuid_topo->socket_id = (mpidr >> MPIDR_LEVEL2_SHIFT)
-				& MPIDR_LEVEL2_MASK;
-		} else {
-			/* largely independent cores */
-			cpuid_topo->thread_id = -1;
-			cpuid_topo->core_id = (mpidr >> MPIDR_LEVEL0_SHIFT)
-				& MPIDR_LEVEL0_MASK;
-			cpuid_topo->socket_id = (mpidr >> MPIDR_LEVEL1_SHIFT)
-				& MPIDR_LEVEL1_MASK;
-		}
-	} else {
-		/*
-		 * This is an uniprocessor system
-		 * we are in multiprocessor format but uniprocessor system
-		 * or in the old uniprocessor format
-		 */
-		cpuid_topo->thread_id = -1;
-		cpuid_topo->core_id = 0;
-		cpuid_topo->socket_id = -1;
-	}
+        if (mpidr & MPIDR_MT_BITMASK) {
+            /* core performance interdependency */
+            cpuid_topo->thread_id = (mpidr >> MPIDR_LEVEL0_SHIFT)
+                                    & MPIDR_LEVEL0_MASK;
+            cpuid_topo->core_id = (mpidr >> MPIDR_LEVEL1_SHIFT)
+                                  & MPIDR_LEVEL1_MASK;
+            cpuid_topo->socket_id = (mpidr >> MPIDR_LEVEL2_SHIFT)
+                                    & MPIDR_LEVEL2_MASK;
+        } else {
+            /* largely independent cores */
+            cpuid_topo->thread_id = -1;
+            cpuid_topo->core_id = (mpidr >> MPIDR_LEVEL0_SHIFT)
+                                  & MPIDR_LEVEL0_MASK;
+            cpuid_topo->socket_id = (mpidr >> MPIDR_LEVEL1_SHIFT)
+                                    & MPIDR_LEVEL1_MASK;
+        }
+    } else {
+        /*
+         * This is an uniprocessor system
+         * we are in multiprocessor format but uniprocessor system
+         * or in the old uniprocessor format
+         */
+        cpuid_topo->thread_id = -1;
+        cpuid_topo->core_id = 0;
+        cpuid_topo->socket_id = -1;
+    }
 
-	/* update core and thread sibling masks */
-	for_each_possible_cpu(cpu) {
-		struct cputopo_arm *cpu_topo = &cpu_topology[cpu];
+    /* update core and thread sibling masks */
+    for_each_possible_cpu(cpu) {
+        struct cputopo_arm *cpu_topo = &cpu_topology[cpu];
 
-		if (cpuid_topo->socket_id == cpu_topo->socket_id) {
-			cpumask_set_cpu(cpuid, &cpu_topo->core_sibling);
-			if (cpu != cpuid)
-				cpumask_set_cpu(cpu,
-					&cpuid_topo->core_sibling);
+        if (cpuid_topo->socket_id == cpu_topo->socket_id) {
+            cpumask_set_cpu(cpuid, &cpu_topo->core_sibling);
+            if (cpu != cpuid)
+                cpumask_set_cpu(cpu,
+                                &cpuid_topo->core_sibling);
 
-			if (cpuid_topo->core_id == cpu_topo->core_id) {
-				cpumask_set_cpu(cpuid,
-					&cpu_topo->thread_sibling);
-				if (cpu != cpuid)
-					cpumask_set_cpu(cpu,
-						&cpuid_topo->thread_sibling);
-			}
-		}
-	}
-	smp_wmb();
+            if (cpuid_topo->core_id == cpu_topo->core_id) {
+                cpumask_set_cpu(cpuid,
+                                &cpu_topo->thread_sibling);
+                if (cpu != cpuid)
+                    cpumask_set_cpu(cpu,
+                                    &cpuid_topo->thread_sibling);
+            }
+        }
+    }
+    smp_wmb();
 
-	printk(KERN_INFO "CPU%u: thread %d, cpu %d, socket %d, mpidr %x\n",
-		cpuid, cpu_topology[cpuid].thread_id,
-		cpu_topology[cpuid].core_id,
-		cpu_topology[cpuid].socket_id, mpidr);
+    printk(KERN_INFO "CPU%u: thread %d, cpu %d, socket %d, mpidr %x\n",
+           cpuid, cpu_topology[cpuid].thread_id,
+           cpu_topology[cpuid].core_id,
+           cpu_topology[cpuid].socket_id, mpidr);
 }
 
 /*
  * init_cpu_topology is called at boot when only one cpu is running
  * which prevent simultaneous write access to cpu_topology array
  */
-void init_cpu_topology(void)
-{
-	unsigned int cpu;
+void init_cpu_topology(void) {
+    unsigned int cpu;
 
-	/* init core mask */
-	for_each_possible_cpu(cpu) {
-		struct cputopo_arm *cpu_topo = &(cpu_topology[cpu]);
+    /* init core mask */
+    for_each_possible_cpu(cpu) {
+        struct cputopo_arm *cpu_topo = &(cpu_topology[cpu]);
 
-		cpu_topo->thread_id = -1;
-		cpu_topo->core_id =  -1;
-		cpu_topo->socket_id = -1;
-		cpumask_clear(&cpu_topo->core_sibling);
-		cpumask_clear(&cpu_topo->thread_sibling);
-	}
-	smp_wmb();
+        cpu_topo->thread_id = -1;
+        cpu_topo->core_id =  -1;
+        cpu_topo->socket_id = -1;
+        cpumask_clear(&cpu_topo->core_sibling);
+        cpumask_clear(&cpu_topo->thread_sibling);
+    }
+    smp_wmb();
 }

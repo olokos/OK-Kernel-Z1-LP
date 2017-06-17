@@ -64,15 +64,15 @@
 #define MWIFIEX_BUF_FLAG_REQUEUED_PKT      BIT(0)
 
 enum mwifiex_bss_type {
-	MWIFIEX_BSS_TYPE_STA = 0,
-	MWIFIEX_BSS_TYPE_UAP = 1,
-	MWIFIEX_BSS_TYPE_ANY = 0xff,
+    MWIFIEX_BSS_TYPE_STA = 0,
+    MWIFIEX_BSS_TYPE_UAP = 1,
+    MWIFIEX_BSS_TYPE_ANY = 0xff,
 };
 
 enum mwifiex_bss_role {
-	MWIFIEX_BSS_ROLE_STA = 0,
-	MWIFIEX_BSS_ROLE_UAP = 1,
-	MWIFIEX_BSS_ROLE_ANY = 0xff,
+    MWIFIEX_BSS_ROLE_STA = 0,
+    MWIFIEX_BSS_ROLE_UAP = 1,
+    MWIFIEX_BSS_ROLE_ANY = 0xff,
 };
 
 #define BSS_ROLE_BIT_MASK    BIT(0)
@@ -80,40 +80,40 @@ enum mwifiex_bss_role {
 #define GET_BSS_ROLE(priv)   ((priv)->bss_role & BSS_ROLE_BIT_MASK)
 
 enum mwifiex_data_frame_type {
-	MWIFIEX_DATA_FRAME_TYPE_ETH_II = 0,
-	MWIFIEX_DATA_FRAME_TYPE_802_11,
+    MWIFIEX_DATA_FRAME_TYPE_ETH_II = 0,
+    MWIFIEX_DATA_FRAME_TYPE_802_11,
 };
 
 struct mwifiex_fw_image {
-	u8 *helper_buf;
-	u32 helper_len;
-	u8 *fw_buf;
-	u32 fw_len;
+    u8 *helper_buf;
+    u32 helper_len;
+    u8 *fw_buf;
+    u32 fw_len;
 };
 
 struct mwifiex_wait_queue {
-	wait_queue_head_t wait;
-	int status;
+    wait_queue_head_t wait;
+    int status;
 };
 
 struct mwifiex_rxinfo {
-	u8 bss_num;
-	u8 bss_type;
-	struct sk_buff *parent;
-	u8 use_count;
+    u8 bss_num;
+    u8 bss_type;
+    struct sk_buff *parent;
+    u8 use_count;
 };
 
 struct mwifiex_txinfo {
-	u32 status_code;
-	u8 flags;
-	u8 bss_num;
-	u8 bss_type;
+    u32 status_code;
+    u8 flags;
+    u8 bss_num;
+    u8 bss_type;
 };
 
 enum mwifiex_wmm_ac_e {
-	WMM_AC_BK,
-	WMM_AC_BE,
-	WMM_AC_VI,
-	WMM_AC_VO
+    WMM_AC_BK,
+    WMM_AC_BE,
+    WMM_AC_VI,
+    WMM_AC_VO
 } __packed;
 #endif /* !_MWIFIEX_DECL_H_ */

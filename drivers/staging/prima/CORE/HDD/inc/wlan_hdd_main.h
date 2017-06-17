@@ -266,8 +266,7 @@ typedef v_U8_t tWlanHddMacAddr[HDD_MAC_ADDR_LEN];
  * threads will be serialized.
  */
 
-struct statsContext
-{
+struct statsContext {
     struct completion completion;
     hdd_adapter_t *pAdapter;
     unsigned int magic;
@@ -288,8 +287,7 @@ extern spinlock_t hdd_context_lock;
 #define WLAN_HDD_DRIVER_MIRACAST_CFG_MIN_VAL 0
 #define WLAN_HDD_DRIVER_MIRACAST_CFG_MAX_VAL 2
 
-typedef struct hdd_tx_rx_stats_s
-{
+typedef struct hdd_tx_rx_stats_s {
     // start_xmit stats
     __u32    txXmitCalled;
     __u32    txXmitDropped;
@@ -334,8 +332,7 @@ typedef struct hdd_tx_rx_stats_s
     v_ULONG_t    jiffiesLastTxTimeOut;//Store time when last txtime out occur
 } hdd_tx_rx_stats_t;
 
-typedef struct hdd_chip_reset_stats_s
-{
+typedef struct hdd_chip_reset_stats_s {
     __u32    totalLogpResets;
     __u32    totalCMD53Failures;
     __u32    totalMutexReadFailures;
@@ -345,15 +342,13 @@ typedef struct hdd_chip_reset_stats_s
 } hdd_chip_reset_stats_t;
 
 #ifdef WLAN_FEATURE_11W
-typedef struct hdd_pmf_stats_s
-{
+typedef struct hdd_pmf_stats_s {
     uint8    numUnprotDeauthRx;
     uint8    numUnprotDisassocRx;
 } hdd_pmf_stats_t;
 #endif
 
-typedef struct hdd_stats_s
-{
+typedef struct hdd_stats_s {
     tCsrSummaryStatsInfo       summary_stat;
     tCsrGlobalClassAStatsInfo  ClassA_stat;
     tCsrGlobalClassBStatsInfo  ClassB_stat;
@@ -367,8 +362,7 @@ typedef struct hdd_stats_s
 #endif
 } hdd_stats_t;
 
-typedef enum
-{
+typedef enum {
     HDD_ROAM_STATE_NONE,
 
     // Issuing a disconnect due to transition into low power states.
@@ -380,15 +374,13 @@ typedef enum
     HDD_ROAM_STATE_SETTING_KEY,
 } HDD_ROAM_STATE;
 
-typedef enum
-{
+typedef enum {
     eHDD_SUSPEND_NONE = 0,
     eHDD_SUSPEND_DEEP_SLEEP,
     eHDD_SUSPEND_STANDBY,
 } hdd_ps_state_t;
 
-typedef struct roaming_info_s
-{
+typedef struct roaming_info_s {
     HDD_ROAM_STATE roamingState;
     vos_event_t roamingEvent;
 
@@ -411,8 +403,7 @@ typedef struct roaming_info_s
 #define MAX_NUM_BKIDS         16
 
 /** WAPI AUTH mode definition */
-enum _WAPIAuthMode
-{
+enum _WAPIAuthMode {
     WAPI_AUTH_MODE_OPEN = 0,
     WAPI_AUTH_MODE_PSK = 1,
     WAPI_AUTH_MODE_CERT
@@ -423,21 +414,18 @@ typedef enum _WAPIAuthMode WAPIAuthMode;
 #define   WZC_ORIGINAL      0
 #define   WAPI_EXTENTION    1
 
-struct _WAPI_FUNCTION_MODE
-{
+struct _WAPI_FUNCTION_MODE {
     unsigned char wapiMode;
 } __packed;
 
 typedef struct _WAPI_FUNCTION_MODE WAPI_FUNCTION_MODE;
 
-typedef struct _WAPI_BKID
-{
+typedef struct _WAPI_BKID {
     v_U8_t   bkid[16];
 } WAPI_BKID, *pWAPI_BKID;
 
 /** WAPI Association information structure definition */
-struct _WAPI_AssocInfo
-{
+struct _WAPI_AssocInfo {
     v_U8_t      elementID;
     v_U8_t      length;
     v_U16_t     version;
@@ -455,16 +443,14 @@ typedef struct _WAPI_AssocInfo WAPI_AssocInfo;
 typedef struct _WAPI_AssocInfo *pWAPI_IEAssocInfo;
 
 /** WAPI KEY Type definition */
-enum _WAPIKeyType
-{
+enum _WAPIKeyType {
     PAIRWISE_KEY, //0
     GROUP_KEY     //1
 } __packed;
 typedef enum _WAPIKeyType WAPIKeyType;
 
 /** WAPI KEY Direction definition */
-enum _KEY_DIRECTION
-{
+enum _KEY_DIRECTION {
     None,
     Rx,
     Tx,
@@ -474,8 +460,7 @@ enum _KEY_DIRECTION
 typedef enum _KEY_DIRECTION WAPI_KEY_DIRECTION;
 
 /** WAPI KEY stucture definition */
-struct WLAN_WAPI_KEY
-{
+struct WLAN_WAPI_KEY {
     WAPIKeyType     keyType;
     WAPI_KEY_DIRECTION   keyDirection;  /*reserved for future use*/
     v_U8_t          keyId;
@@ -497,8 +482,7 @@ typedef struct WLAN_WAPI_KEY *pWLAN_WAPI_KEY;
 #define WAPI_CERT_AKM_SUITE 0x01721400
 
 /** WAPI BKID List stucture definition */
-struct _WLAN_BKID_LIST
-{
+struct _WLAN_BKID_LIST {
     v_U32_t          length;
     v_U32_t          BKIDCount;
     WAPI_BKID        BKID[1];
@@ -509,8 +493,7 @@ typedef struct _WLAN_BKID_LIST *pWLAN_BKID_LIST;
 
 
 /** WAPI Information stucture definition */
-struct hdd_wapi_info_s
-{
+struct hdd_wapi_info_s {
     v_U32_t     nWapiMode;
     v_BOOL_t    fIsWapiSta;
     v_MACADDR_t cachedMacAddr;
@@ -519,15 +502,13 @@ struct hdd_wapi_info_s
 typedef struct hdd_wapi_info_s hdd_wapi_info_t;
 #endif /* FEATURE_WLAN_WAPI */
 
-typedef struct beacon_data_s
-{
+typedef struct beacon_data_s {
     u8 *head, *tail;
     int head_len, tail_len;
     int dtim_period;
 } beacon_data_t;
 
-typedef enum device_mode
-{
+typedef enum device_mode {
     /* MAINTAIN 1 - 1 CORRESPONDENCE WITH tVOS_CON_MODE*/
     WLAN_HDD_INFRA_STATION,
     WLAN_HDD_SOFTAP,
@@ -539,15 +520,13 @@ typedef enum device_mode
     WLAN_HDD_P2P_DEVICE
 } device_mode_t;
 
-typedef enum rem_on_channel_request_type
-{
+typedef enum rem_on_channel_request_type {
     REMAIN_ON_CHANNEL_REQUEST,
     OFF_CHANNEL_ACTION_TX,
 } rem_on_channel_request_type_t;
 
 /* Thermal mitigation Level Enum Type */
-typedef enum
-{
+typedef enum {
     WLAN_HDD_TM_LEVEL_0,
     WLAN_HDD_TM_LEVEL_1,
     WLAN_HDD_TM_LEVEL_2,
@@ -556,16 +535,14 @@ typedef enum
     WLAN_HDD_TM_LEVEL_MAX
 } WLAN_TmLevelEnumType;
 
-typedef enum
-{
+typedef enum {
     WLAN_HDD_NO_LOAD_UNLOAD_IN_PROGRESS = 0 ,
     WLAN_HDD_LOAD_IN_PROGRESS           = 1<<0,
     WLAN_HDD_UNLOAD_IN_PROGRESS         = 1<<1,
 } load_unload_sequence;
 
 /* Driver Action based on thermal mitigation level structure */
-typedef struct
-{
+typedef struct {
     v_BOOL_t  ampduEnable;
     v_BOOL_t  enterImps;
     v_U32_t   txSleepDuration;
@@ -574,8 +551,7 @@ typedef struct
 } hdd_tmLevelAction_t;
 
 /* Thermal Mitigation control context structure */
-typedef struct
-{
+typedef struct {
     WLAN_TmLevelEnumType currentTmLevel;
     hdd_tmLevelAction_t  tmAction;
     vos_timer_t          txSleepTimer;
@@ -587,15 +563,13 @@ typedef struct
     struct netdev_queue *blockedQueue;
     v_BOOL_t             qBlocked;
 } hdd_thermal_mitigation_info_t;
-typedef struct action_pkt_buffer
-{
+typedef struct action_pkt_buffer {
     tANI_U8* frame_ptr;
     tANI_U32 frame_length;
     tANI_U16 freq;
 } action_pkt_buffer_t;
 
-typedef struct hdd_remain_on_chan_ctx
-{
+typedef struct hdd_remain_on_chan_ctx {
     struct net_device *dev;
     struct ieee80211_channel chan;
     enum nl80211_channel_type chan_type;
@@ -608,16 +582,14 @@ typedef struct hdd_remain_on_chan_ctx
     tANI_BOOLEAN is_pending_roc_cancelled;
 } hdd_remain_on_chan_ctx_t;
 
-typedef enum
-{
+typedef enum {
     HDD_IDLE,
     HDD_PD_REQ_ACK_PENDING,
     HDD_GO_NEG_REQ_ACK_PENDING,
     HDD_INVALID_STATE,
 } eP2PActionFrameState;
 
-typedef enum
-{
+typedef enum {
     WLAN_HDD_GO_NEG_REQ,
     WLAN_HDD_GO_NEG_RESP,
     WLAN_HDD_GO_NEG_CNF,
@@ -630,8 +602,7 @@ typedef enum
     WLAN_HDD_ACTION_FRM_TYPE_MAX = 255,
 } tActionFrmType;
 
-typedef struct hdd_cfg80211_state_s
-{
+typedef struct hdd_cfg80211_state_s {
     tANI_U16 current_freq;
     u64 action_cookie;
     tANI_U8 *buf;
@@ -642,15 +613,13 @@ typedef struct hdd_cfg80211_state_s
 } hdd_cfg80211_state_t;
 
 
-typedef enum
-{
+typedef enum {
     HDD_SSR_NOT_REQUIRED,
     HDD_SSR_REQUIRED,
     HDD_SSR_DISABLED,
 } e_hdd_ssr_required;
 
-struct hdd_station_ctx
-{
+struct hdd_station_ctx {
     /** Handle to the Wireless Extension State */
     hdd_wext_state_t WextState;
 
@@ -683,8 +652,7 @@ struct hdd_station_ctx
 
 #define BSS_STOP    0
 #define BSS_START   1
-typedef struct hdd_hostapd_state_s
-{
+typedef struct hdd_hostapd_state_s {
     int bssState;
     vos_event_t vosEvent;
     VOS_STATUS vosStatus;
@@ -697,8 +665,7 @@ typedef struct hdd_hostapd_state_s
  * Per station structure kept in HDD for multiple station support for SoftAP
 */
 
-struct hdd_ap_ctx_s
-{
+struct hdd_ap_ctx_s {
     hdd_hostapd_state_t HostapdState;
 
     // Memory differentiation mode is enabled
@@ -739,13 +706,11 @@ struct hdd_ap_ctx_s
     beacon_data_t *beacon;
 };
 
-struct hdd_mon_ctx_s
-{
+struct hdd_mon_ctx_s {
     hdd_adapter_t *pAdapterForTx;
 };
 
-typedef struct hdd_scaninfo_s
-{
+typedef struct hdd_scaninfo_s {
     /* The scan id  */
     v_U32_t scanId;
 
@@ -787,8 +752,7 @@ typedef struct hdd_scaninfo_s
 #define WLAN_HDD_MAX_MC_ADDR_LIST 240
 
 #ifdef WLAN_FEATURE_PACKET_FILTERING
-typedef struct multicast_addr_list
-{
+typedef struct multicast_addr_list {
     v_U8_t isFilterApplied;
     v_U8_t mc_cnt;
     v_U8_t addr[WLAN_HDD_MAX_MC_ADDR_LIST][ETH_ALEN];
@@ -798,8 +762,7 @@ typedef struct multicast_addr_list
 #ifdef FEATURE_WLAN_BATCH_SCAN
 
 /*Batch scan repsonse AP info*/
-typedef struct
-{
+typedef struct {
     /*Batch ID*/
     tANI_U32 batchId;
     /*is it last AP in GET BATCH SCAN RSP*/
@@ -817,8 +780,7 @@ typedef struct
 } tHDDbatchScanRspApInfo;
 
 /*Batch scan response list*/
-struct tHDDBatchScanRspList
-{
+struct tHDDBatchScanRspList {
     tHDDbatchScanRspApInfo ApInfo;
     struct tHDDBatchScanRspList *pNext;
 };
@@ -826,8 +788,7 @@ struct tHDDBatchScanRspList
 typedef struct tHDDBatchScanRspList tHddBatchScanRsp;
 
 /*Batch Scan state*/
-typedef enum
-{
+typedef enum {
     /*Batch scan is started this means WLS_BATCHING SET command is issued
       from framework*/
     eHDD_BATCH_SCAN_STATE_STARTED,
@@ -844,8 +805,7 @@ typedef enum
 
 #define WLAN_HDD_ADAPTER_MAGIC 0x574c414e //ASCII "WLAN"
 
-struct hdd_adapter_s
-{
+struct hdd_adapter_s {
     void *pHddCtx;
 
     device_mode_t device_mode;
@@ -976,8 +936,7 @@ struct hdd_adapter_s
     struct work_struct  monTxWorkQueue;
     struct sk_buff *skb_to_tx;
 
-    union
-    {
+    union {
         hdd_station_ctx_t station;
         hdd_ap_ctx_t  ap;
         hdd_mon_ctx_t monitor;
@@ -1067,21 +1026,18 @@ struct hdd_adapter_s
         (tdlsCtx_t*)(pAdapter)->sessionCtx.station.pHddTdlsCtx : NULL)
 #endif
 
-typedef struct hdd_adapter_list_node
-{
+typedef struct hdd_adapter_list_node {
     hdd_list_node_t node;     // MUST be first element
     hdd_adapter_t *pAdapter;
 } hdd_adapter_list_node_t;
 
-typedef struct hdd_priv_data_s
-{
+typedef struct hdd_priv_data_s {
     tANI_U8 *buf;
     int used_len;
     int total_len;
 } hdd_priv_data_t;
 
-typedef struct
-{
+typedef struct {
     vos_timer_t trafficTimer;
     atomic_t    isActiveMode;
     v_U8_t      isInitialized;
@@ -1089,21 +1045,18 @@ typedef struct
     v_TIME_t    lastFrameTs;
 } hdd_traffic_monitor_t;
 
-typedef struct
-{
+typedef struct {
     struct completion completion;
     tANI_U32 magic;
 } bcnMissRateContext_t;
 
-typedef struct
-{
+typedef struct {
     v_MACADDR_t randomMacAddr;
 } macAddrSpoof_t;
 
 /** Adapter stucture definition */
 
-struct hdd_context_s
-{
+struct hdd_context_s {
     /** Global VOS context  */
     v_CONTEXT_t pvosContext;
 

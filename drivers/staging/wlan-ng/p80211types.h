@@ -113,9 +113,9 @@
 #define MAXLEN_PSTR32		(32)	/* pascal array of 32 bytes */
 #define MAXLEN_PSTR255		(255)	/* pascal array of 255 bytes */
 #define MAXLEN_MIBATTRIBUTE	(392)	/* maximum mibattribute */
-					/* where the size of the DATA itself */
-					/* is a DID-LEN-DATA triple */
-					/* with a max size of 4+4+384 */
+/* where the size of the DATA itself */
+/* is a DID-LEN-DATA triple */
+/* with a max size of 4+4+384 */
 
 /*----------------------------------------------------------------*/
 /* The following macro creates a name for an enum */
@@ -201,13 +201,13 @@
 /*  of ENUMint type metadata. */
 
 typedef struct p80211enumpair {
-	u32 val;
-	char *name;
+    u32 val;
+    char *name;
 } p80211enumpair_t;
 
 typedef struct p80211enum {
-	int nitems;
-	p80211enumpair_t *list;
+    int nitems;
+    p80211enumpair_t *list;
 } p80211enum_t;
 
 /*----------------------------------------------------------------*/
@@ -216,121 +216,121 @@ typedef struct p80211enum {
 
 /* Template pascal string */
 typedef struct p80211pstr {
-	u8 len;
+    u8 len;
 } __packed p80211pstr_t;
 
 typedef struct p80211pstrd {
-	u8 len;
-	u8 data[0];
+    u8 len;
+    u8 data[0];
 } __packed p80211pstrd_t;
 
 /* Maximum pascal string */
 typedef struct p80211pstr255 {
-	u8 len;
-	u8 data[MAXLEN_PSTR255];
+    u8 len;
+    u8 data[MAXLEN_PSTR255];
 } __packed p80211pstr255_t;
 
 /* pascal string for macaddress and bssid */
 typedef struct p80211pstr6 {
-	u8 len;
-	u8 data[MAXLEN_PSTR6];
+    u8 len;
+    u8 data[MAXLEN_PSTR6];
 } __packed p80211pstr6_t;
 
 /* pascal string for channel list */
 typedef struct p80211pstr14 {
-	u8 len;
-	u8 data[MAXLEN_PSTR14];
+    u8 len;
+    u8 data[MAXLEN_PSTR14];
 } __packed p80211pstr14_t;
 
 /* pascal string for ssid */
 typedef struct p80211pstr32 {
-	u8 len;
-	u8 data[MAXLEN_PSTR32];
+    u8 len;
+    u8 data[MAXLEN_PSTR32];
 } __packed p80211pstr32_t;
 
 /* MAC address array */
 typedef struct p80211macarray {
-	u32 cnt;
-	u8 data[1][MAXLEN_PSTR6];
+    u32 cnt;
+    u8 data[1][MAXLEN_PSTR6];
 } __packed p80211macarray_t;
 
 /* prototype template */
 typedef struct p80211item {
-	u32 did;
-	u16 status;
-	u16 len;
+    u32 did;
+    u16 status;
+    u16 len;
 } __packed p80211item_t;
 
 /* prototype template w/ data item */
 typedef struct p80211itemd {
-	u32 did;
-	u16 status;
-	u16 len;
-	u8 data[0];
+    u32 did;
+    u16 status;
+    u16 len;
+    u8 data[0];
 } __packed p80211itemd_t;
 
 /* message data item for int, BOUNDEDINT, ENUMINT */
 typedef struct p80211item_uint32 {
-	u32 did;
-	u16 status;
-	u16 len;
-	u32 data;
+    u32 did;
+    u16 status;
+    u16 len;
+    u32 data;
 } __packed p80211item_uint32_t;
 
 /* message data item for OCTETSTR, DISPLAYSTR */
 typedef struct p80211item_pstr6 {
-	u32 did;
-	u16 status;
-	u16 len;
-	p80211pstr6_t data;
+    u32 did;
+    u16 status;
+    u16 len;
+    p80211pstr6_t data;
 } __packed p80211item_pstr6_t;
 
 /* message data item for OCTETSTR, DISPLAYSTR */
 typedef struct p80211item_pstr14 {
-	u32 did;
-	u16 status;
-	u16 len;
-	p80211pstr14_t data;
+    u32 did;
+    u16 status;
+    u16 len;
+    p80211pstr14_t data;
 } __packed p80211item_pstr14_t;
 
 /* message data item for OCTETSTR, DISPLAYSTR */
 typedef struct p80211item_pstr32 {
-	u32 did;
-	u16 status;
-	u16 len;
-	p80211pstr32_t data;
+    u32 did;
+    u16 status;
+    u16 len;
+    p80211pstr32_t data;
 } __packed p80211item_pstr32_t;
 
 /* message data item for OCTETSTR, DISPLAYSTR */
 typedef struct p80211item_pstr255 {
-	u32 did;
-	u16 status;
-	u16 len;
-	p80211pstr255_t data;
+    u32 did;
+    u16 status;
+    u16 len;
+    p80211pstr255_t data;
 } __packed p80211item_pstr255_t;
 
 /* message data item for UNK 392, namely mib items */
 typedef struct p80211item_unk392 {
-	u32 did;
-	u16 status;
-	u16 len;
-	u8 data[MAXLEN_MIBATTRIBUTE];
+    u32 did;
+    u16 status;
+    u16 len;
+    u8 data[MAXLEN_MIBATTRIBUTE];
 } __packed p80211item_unk392_t;
 
 /* message data item for UNK 1025, namely p2 pdas */
 typedef struct p80211item_unk1024 {
-	u32 did;
-	u16 status;
-	u16 len;
-	u8 data[1024];
+    u32 did;
+    u16 status;
+    u16 len;
+    u8 data[1024];
 } __packed p80211item_unk1024_t;
 
 /* message data item for UNK 4096, namely p2 download chunks */
 typedef struct p80211item_unk4096 {
-	u32 did;
-	u16 status;
-	u16 len;
-	u8 data[4096];
+    u32 did;
+    u16 status;
+    u16 len;
+    u8 data[4096];
 } __packed p80211item_unk4096_t;
 
 struct catlistitem;
@@ -341,9 +341,9 @@ struct catlistitem;
 /*  less or different metadata items. */
 
 typedef void (*p80211_totext_t) (struct catlistitem *, u32 did, u8 *itembuf,
-				 char *textbuf);
+                                 char *textbuf);
 typedef void (*p80211_fromtext_t) (struct catlistitem *, u32 did, u8 *itembuf,
-				   char *textbuf);
+                                   char *textbuf);
 typedef u32(*p80211_valid_t) (struct catlistitem *, u32 did, u8 *itembuf);
 
 /*----------------------------------------------------------------*/

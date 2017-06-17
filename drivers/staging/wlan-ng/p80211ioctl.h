@@ -79,11 +79,11 @@
 /*  the p80211 module. */
 
 struct p80211ioctl_req {
-	char name[WLAN_DEVNAMELEN_MAX];
-	caddr_t data;
-	u32 magic;
-	u16 len;
-	u32 result;
+    char name[WLAN_DEVNAMELEN_MAX];
+    caddr_t data;
+    u32 magic;
+    u16 len;
+    u32 result;
 } __packed;
 
 #endif /* _P80211IOCTL_H */

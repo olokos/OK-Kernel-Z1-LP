@@ -27,25 +27,25 @@ extern int32_t audio_phys;
 extern uint32_t tx_clk_freq;
 
 struct audio_buffer {
-	dma_addr_t phys;
-	void *data;
-	uint32_t size;
-	uint32_t used;	/* 1 = CPU is waiting for DSP to consume this buf */
-	uint32_t actual_size; /* actual number of bytes read by DSP */
+    dma_addr_t phys;
+    void *data;
+    uint32_t size;
+    uint32_t used;	/* 1 = CPU is waiting for DSP to consume this buf */
+    uint32_t actual_size; /* actual number of bytes read by DSP */
 };
 
 struct audio_client {
-	struct audio_buffer buf[2];
-	int cpu_buf;	/* next buffer the CPU will touch */
-	int dsp_buf;	/* next buffer the DSP will touch */
-	int running;
-	int session;
+    struct audio_buffer buf[2];
+    int cpu_buf;	/* next buffer the CPU will touch */
+    int dsp_buf;	/* next buffer the DSP will touch */
+    int running;
+    int session;
 
-	wait_queue_head_t wait;
-	struct dal_client *client;
+    wait_queue_head_t wait;
+    struct dal_client *client;
 
-	int cb_status;
-	uint32_t flags;
+    int cb_status;
+    uint32_t flags;
 };
 
 /* Obtain a 16bit signed, interleaved audio channel of the specified
@@ -73,13 +73,13 @@ int q6audio_set_rx_volume(int level);
 int q6audio_set_route(const char *name);
 
 struct q6audio_analog_ops {
-	void (*init)(void);
-	void (*speaker_enable)(int en);
-	void (*headset_enable)(int en);
-	void (*receiver_enable)(int en);
-	void (*bt_sco_enable)(int en);
-	void (*int_mic_enable)(int en);
-	void (*ext_mic_enable)(int en);
+    void (*init)(void);
+    void (*speaker_enable)(int en);
+    void (*headset_enable)(int en);
+    void (*receiver_enable)(int en);
+    void (*bt_sco_enable)(int en);
+    void (*int_mic_enable)(int en);
+    void (*ext_mic_enable)(int en);
 };
 
 void q6audio_register_analog_ops(struct q6audio_analog_ops *ops);

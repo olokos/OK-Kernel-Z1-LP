@@ -16,11 +16,11 @@
 #define DAVINCI_WDOG_BASE		(IO_PHYS + 0x21C00)
 
 enum {
-	T0_BOT,
-	T0_TOP,
-	T1_BOT,
-	T1_TOP,
-	NUM_TIMERS
+    T0_BOT,
+    T0_TOP,
+    T1_BOT,
+    T1_TOP,
+    NUM_TIMERS
 };
 
 #define IS_TIMER1(id)		(id & 0x2)

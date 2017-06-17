@@ -3,13 +3,13 @@
  * host controller drivers.
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -17,7 +17,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -79,12 +79,12 @@ extern SDIOH_API_RC sdioh_request_byte(sdioh_info_t *si, uint rw, uint fnc, uint
 
 /* read or write 2/4 bytes using cmd53 */
 extern SDIOH_API_RC sdioh_request_word(sdioh_info_t *si, uint cmd_type, uint rw, uint fnc,
-	uint addr, uint32 *word, uint nbyte);
+                                       uint addr, uint32 *word, uint nbyte);
 
 /* read or write any buffer using cmd53 */
 extern SDIOH_API_RC sdioh_request_buffer(sdioh_info_t *si, uint pio_dma, uint fix_inc,
-	uint rw, uint fnc_num, uint32 addr, uint regwidth, uint32 buflen, uint8 *buffer,
-	void *pkt);
+        uint rw, uint fnc_num, uint32 addr, uint regwidth, uint32 buflen, uint8 *buffer,
+        void *pkt);
 
 /* get cis data */
 extern SDIOH_API_RC sdioh_cis_read(sdioh_info_t *si, uint fuc, uint8 *cis, uint32 length);
@@ -118,7 +118,7 @@ void *bcmsdh_get_sdioh(bcmsdh_info_t *sdh);
 
 
 #if defined(BCMSDIOH_STD)
-	#define SDIOH_SLEEP_ENABLED
+#define SDIOH_SLEEP_ENABLED
 #endif
 extern SDIOH_API_RC sdioh_sleep(sdioh_info_t *si, bool enab);
 

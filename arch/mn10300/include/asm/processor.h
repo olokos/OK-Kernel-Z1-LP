@@ -47,9 +47,9 @@ extern void show_registers(struct pt_regs *regs);
  */
 
 struct mn10300_cpuinfo {
-	int		type;
-	unsigned long	loops_per_jiffy;
-	char		hard_math;
+    int		type;
+    unsigned long	loops_per_jiffy;
+    char		hard_math;
 };
 
 extern struct mn10300_cpuinfo boot_cpu_data;
@@ -87,21 +87,21 @@ extern void dodgy_tsc(void);
 #define TASK_UNMAPPED_BASE	0x30000000
 
 struct fpu_state_struct {
-	unsigned long	fs[32];		/* fpu registers */
-	unsigned long	fpcr;		/* fpu control register */
+    unsigned long	fs[32];		/* fpu registers */
+    unsigned long	fpcr;		/* fpu control register */
 };
 
 struct thread_struct {
-	struct pt_regs		*uregs;		/* userspace register frame */
-	unsigned long		pc;		/* kernel PC */
-	unsigned long		sp;		/* kernel SP */
-	unsigned long		a3;		/* kernel FP */
-	unsigned long		wchan;
-	unsigned long		usp;
-	unsigned long		fpu_flags;
+    struct pt_regs		*uregs;		/* userspace register frame */
+    unsigned long		pc;		/* kernel PC */
+    unsigned long		sp;		/* kernel SP */
+    unsigned long		a3;		/* kernel FP */
+    unsigned long		wchan;
+    unsigned long		usp;
+    unsigned long		fpu_flags;
 #define THREAD_USING_FPU	0x00000001	/* T if this task is using the FPU */
 #define THREAD_HAS_FPU		0x00000002	/* T if this task owns the FPU right now */
-	struct fpu_state_struct	fpu_state;
+    struct fpu_state_struct	fpu_state;
 };
 
 #define INIT_THREAD		\
@@ -123,16 +123,15 @@ struct thread_struct {
  *   syscall (see RESTORE_ALL macro)
  */
 static inline void start_thread(struct pt_regs *regs,
-				unsigned long new_pc, unsigned long new_sp)
-{
-	struct thread_info *ti = current_thread_info();
-	struct pt_regs *frame0;
+                                unsigned long new_pc, unsigned long new_sp) {
+    struct thread_info *ti = current_thread_info();
+    struct pt_regs *frame0;
 
-	frame0 = thread_info_to_uregs(ti);
-	frame0->epsw = EPSW_nSL | EPSW_IE | EPSW_IM;
-	frame0->pc = new_pc;
-	frame0->sp = new_sp;
-	ti->frame = frame0;
+    frame0 = thread_info_to_uregs(ti);
+    frame0->epsw = EPSW_nSL | EPSW_IE | EPSW_IM;
+    frame0->pc = new_pc;
+    frame0->sp = new_sp;
+    ti->frame = frame0;
 }
 
 
@@ -166,24 +165,22 @@ unsigned long get_wchan(struct task_struct *p);
 #define ARCH_HAS_PREFETCH
 #define ARCH_HAS_PREFETCHW
 
-static inline void prefetch(const void *x)
-{
+static inline void prefetch(const void *x) {
 #ifdef CONFIG_MN10300_CACHE_ENABLED
 #ifdef CONFIG_MN10300_PROC_MN103E010
-	asm volatile ("nop; nop; dcpf (%0)" : : "r"(x));
+    asm volatile ("nop; nop; dcpf (%0)" : : "r"(x));
 #else
-	asm volatile ("dcpf (%0)" : : "r"(x));
+    asm volatile ("dcpf (%0)" : : "r"(x));
 #endif
 #endif
 }
 
-static inline void prefetchw(const void *x)
-{
+static inline void prefetchw(const void *x) {
 #ifdef CONFIG_MN10300_CACHE_ENABLED
 #ifdef CONFIG_MN10300_PROC_MN103E010
-	asm volatile ("nop; nop; dcpf (%0)" : : "r"(x));
+    asm volatile ("nop; nop; dcpf (%0)" : : "r"(x));
 #else
-	asm volatile ("dcpf (%0)" : : "r"(x));
+    asm volatile ("dcpf (%0)" : : "r"(x));
 #endif
 #endif
 }

@@ -228,7 +228,7 @@ struct vm_area_struct;
  * pages.
  */
 
-	 /*xwr*/
+/*xwr*/
 #define __P000  PAGE_NONE
 #define __P001  PAGE_READONLY
 #define __P010  __P000 /* copy on write */
@@ -285,13 +285,13 @@ extern unsigned long *empty_zero_page;
 #define pmd_present(x)	(pmd_flag(x) & PxD_FLAG_PRESENT)
 static inline void pmd_clear(pmd_t *pmd) {
 #if PT_NLEVELS == 3
-	if (pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
-		/* This is the entry pointing to the permanent pmd
-		 * attached to the pgd; cannot clear it */
-		__pmd_val_set(*pmd, PxD_FLAG_ATTACHED);
-	else
+    if (pmd_flag(*pmd) & PxD_FLAG_ATTACHED)
+        /* This is the entry pointing to the permanent pmd
+         * attached to the pgd; cannot clear it */
+        __pmd_val_set(*pmd, PxD_FLAG_ATTACHED);
+    else
 #endif
-		__pmd_val_set(*pmd,  0);
+        __pmd_val_set(*pmd,  0);
 }
 
 
@@ -307,12 +307,12 @@ static inline void pmd_clear(pmd_t *pmd) {
 #define pgd_present(x)  (pgd_flag(x) & PxD_FLAG_PRESENT)
 static inline void pgd_clear(pgd_t *pgd) {
 #if PT_NLEVELS == 3
-	if(pgd_flag(*pgd) & PxD_FLAG_ATTACHED)
-		/* This is the permanent pmd attached to the pgd; cannot
-		 * free it */
-		return;
+    if(pgd_flag(*pgd) & PxD_FLAG_ATTACHED)
+        /* This is the permanent pmd attached to the pgd; cannot
+         * free it */
+        return;
 #endif
-	__pgd_val_set(*pgd, 0);
+    __pgd_val_set(*pgd, 0);
 }
 #else
 /*
@@ -320,9 +320,15 @@ static inline void pgd_clear(pgd_t *pgd) {
  * setup: the pgd is never bad, and a pmd always exists (as it's folded
  * into the pgd entry)
  */
-static inline int pgd_none(pgd_t pgd)		{ return 0; }
-static inline int pgd_bad(pgd_t pgd)		{ return 0; }
-static inline int pgd_present(pgd_t pgd)	{ return 1; }
+static inline int pgd_none(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_present(pgd_t pgd)	{
+    return 1;
+}
 static inline void pgd_clear(pgd_t * pgdp)	{ }
 #endif
 
@@ -330,19 +336,49 @@ static inline void pgd_clear(pgd_t * pgdp)	{ }
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte)		{ return pte_val(pte) & _PAGE_ACCESSED; }
-static inline int pte_write(pte_t pte)		{ return pte_val(pte) & _PAGE_WRITE; }
-static inline int pte_file(pte_t pte)		{ return pte_val(pte) & _PAGE_FILE; }
-static inline int pte_special(pte_t pte)	{ return 0; }
+static inline int pte_dirty(pte_t pte)		{
+    return pte_val(pte) & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte)		{
+    return pte_val(pte) & _PAGE_ACCESSED;
+}
+static inline int pte_write(pte_t pte)		{
+    return pte_val(pte) & _PAGE_WRITE;
+}
+static inline int pte_file(pte_t pte)		{
+    return pte_val(pte) & _PAGE_FILE;
+}
+static inline int pte_special(pte_t pte)	{
+    return 0;
+}
 
-static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~_PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkold(pte_t pte)	{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) &= ~_PAGE_WRITE; return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)	{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkwrite(pte_t pte)	{ pte_val(pte) |= _PAGE_WRITE; return pte; }
-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+static inline pte_t pte_mkclean(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_wrprotect(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_WRITE;
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte)	{
+    pte_val(pte) |= _PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte)	{
+    pte_val(pte) |= _PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte)	{
+    pte_val(pte) |= _PAGE_WRITE;
+    return pte;
+}
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    return pte;
+}
 
 /*
  * Conversion functions: convert a page and protection to a page entry,
@@ -359,15 +395,16 @@ static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
 
 #define mk_pte(page, pgprot)	pfn_pte(page_to_pfn(page), (pgprot))
 
-static inline pte_t pfn_pte(unsigned long pfn, pgprot_t pgprot)
-{
-	pte_t pte;
-	pte_val(pte) = (pfn << PFN_PTE_SHIFT) | pgprot_val(pgprot);
-	return pte;
+static inline pte_t pfn_pte(unsigned long pfn, pgprot_t pgprot) {
+    pte_t pte;
+    pte_val(pte) = (pfn << PFN_PTE_SHIFT) | pgprot_val(pgprot);
+    return pte;
 }
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{ pte_val(pte) = (pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot); return pte; }
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) = (pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot);
+    return pte;
+}
 
 /* Permanent address of a page.  On parisc we don't have highmem. */
 
@@ -398,7 +435,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 #define pmd_offset(dir,addr) ((pmd_t *) dir)
 #endif
 
-/* Find an entry in the third-level page table.. */ 
+/* Find an entry in the third-level page table.. */
 #define pte_index(address) (((address) >> PAGE_SHIFT) & (PTRS_PER_PTE-1))
 #define pte_offset_kernel(pmd, address) \
 	((pte_t *) pmd_page_vaddr(*(pmd)) + pte_index(address))
@@ -427,48 +464,45 @@ extern void update_mmu_cache(struct vm_area_struct *, unsigned long, pte_t *);
 #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
 #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
 
-static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-{
+static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep) {
 #ifdef CONFIG_SMP
-	if (!pte_young(*ptep))
-		return 0;
-	return test_and_clear_bit(xlate_pabit(_PAGE_ACCESSED_BIT), &pte_val(*ptep));
+    if (!pte_young(*ptep))
+        return 0;
+    return test_and_clear_bit(xlate_pabit(_PAGE_ACCESSED_BIT), &pte_val(*ptep));
 #else
-	pte_t pte = *ptep;
-	if (!pte_young(pte))
-		return 0;
-	set_pte_at(vma->vm_mm, addr, ptep, pte_mkold(pte));
-	return 1;
+    pte_t pte = *ptep;
+    if (!pte_young(pte))
+        return 0;
+    set_pte_at(vma->vm_mm, addr, ptep, pte_mkold(pte));
+    return 1;
 #endif
 }
 
 extern spinlock_t pa_dbit_lock;
 
 struct mm_struct;
-static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	pte_t old_pte;
+static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_t old_pte;
 
-	spin_lock(&pa_dbit_lock);
-	old_pte = *ptep;
-	pte_clear(mm,addr,ptep);
-	spin_unlock(&pa_dbit_lock);
+    spin_lock(&pa_dbit_lock);
+    old_pte = *ptep;
+    pte_clear(mm,addr,ptep);
+    spin_unlock(&pa_dbit_lock);
 
-	return old_pte;
+    return old_pte;
 }
 
-static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
+static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
 #ifdef CONFIG_SMP
-	unsigned long new, old;
+    unsigned long new, old;
 
-	do {
-		old = pte_val(*ptep);
-		new = pte_val(pte_wrprotect(__pte (old)));
-	} while (cmpxchg((unsigned long *) ptep, old, new) != old);
+    do {
+        old = pte_val(*ptep);
+        new = pte_val(pte_wrprotect(__pte (old)));
+    } while (cmpxchg((unsigned long *) ptep, old, new) != old);
 #else
-	pte_t old_pte = *ptep;
-	set_pte_at(mm, addr, ptep, pte_wrprotect(old_pte));
+    pte_t old_pte = *ptep;
+    set_pte_at(mm, addr, ptep, pte_wrprotect(old_pte));
 #endif
 }
 

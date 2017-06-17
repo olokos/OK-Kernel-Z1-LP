@@ -144,60 +144,60 @@ struct e1000_adapter;
 /* wrapper around a pointer to a socket buffer,
  * so a DMA handle can be stored along with the buffer */
 struct e1000_buffer {
-	struct sk_buff *skb;
-	dma_addr_t dma;
-	struct page *page;
-	unsigned long time_stamp;
-	u16 length;
-	u16 next_to_watch;
-	unsigned int segs;
-	unsigned int bytecount;
-	u16 mapped_as_page;
+    struct sk_buff *skb;
+    dma_addr_t dma;
+    struct page *page;
+    unsigned long time_stamp;
+    u16 length;
+    u16 next_to_watch;
+    unsigned int segs;
+    unsigned int bytecount;
+    u16 mapped_as_page;
 };
 
 struct e1000_tx_ring {
-	/* pointer to the descriptor ring memory */
-	void *desc;
-	/* physical address of the descriptor ring */
-	dma_addr_t dma;
-	/* length of descriptor ring in bytes */
-	unsigned int size;
-	/* number of descriptors in the ring */
-	unsigned int count;
-	/* next descriptor to associate a buffer with */
-	unsigned int next_to_use;
-	/* next descriptor to check for DD status bit */
-	unsigned int next_to_clean;
-	/* array of buffer information structs */
-	struct e1000_buffer *buffer_info;
+    /* pointer to the descriptor ring memory */
+    void *desc;
+    /* physical address of the descriptor ring */
+    dma_addr_t dma;
+    /* length of descriptor ring in bytes */
+    unsigned int size;
+    /* number of descriptors in the ring */
+    unsigned int count;
+    /* next descriptor to associate a buffer with */
+    unsigned int next_to_use;
+    /* next descriptor to check for DD status bit */
+    unsigned int next_to_clean;
+    /* array of buffer information structs */
+    struct e1000_buffer *buffer_info;
 
-	u16 tdh;
-	u16 tdt;
-	bool last_tx_tso;
+    u16 tdh;
+    u16 tdt;
+    bool last_tx_tso;
 };
 
 struct e1000_rx_ring {
-	/* pointer to the descriptor ring memory */
-	void *desc;
-	/* physical address of the descriptor ring */
-	dma_addr_t dma;
-	/* length of descriptor ring in bytes */
-	unsigned int size;
-	/* number of descriptors in the ring */
-	unsigned int count;
-	/* next descriptor to associate a buffer with */
-	unsigned int next_to_use;
-	/* next descriptor to check for DD status bit */
-	unsigned int next_to_clean;
-	/* array of buffer information structs */
-	struct e1000_buffer *buffer_info;
-	struct sk_buff *rx_skb_top;
+    /* pointer to the descriptor ring memory */
+    void *desc;
+    /* physical address of the descriptor ring */
+    dma_addr_t dma;
+    /* length of descriptor ring in bytes */
+    unsigned int size;
+    /* number of descriptors in the ring */
+    unsigned int count;
+    /* next descriptor to associate a buffer with */
+    unsigned int next_to_use;
+    /* next descriptor to check for DD status bit */
+    unsigned int next_to_clean;
+    /* array of buffer information structs */
+    struct e1000_buffer *buffer_info;
+    struct sk_buff *rx_skb_top;
 
-	/* cpu for rx queue */
-	int cpu;
+    /* cpu for rx queue */
+    int cpu;
 
-	u16 rdh;
-	u16 rdt;
+    u16 rdh;
+    u16 rdt;
 };
 
 #define E1000_DESC_UNUSED(R)						\
@@ -214,111 +214,111 @@ struct e1000_rx_ring {
 /* board specific private data structure */
 
 struct e1000_adapter {
-	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
-	u16 mng_vlan_id;
-	u32 bd_number;
-	u32 rx_buffer_len;
-	u32 wol;
-	u32 smartspeed;
-	u32 en_mng_pt;
-	u16 link_speed;
-	u16 link_duplex;
-	spinlock_t stats_lock;
-	unsigned int total_tx_bytes;
-	unsigned int total_tx_packets;
-	unsigned int total_rx_bytes;
-	unsigned int total_rx_packets;
-	/* Interrupt Throttle Rate */
-	u32 itr;
-	u32 itr_setting;
-	u16 tx_itr;
-	u16 rx_itr;
+    unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+    u16 mng_vlan_id;
+    u32 bd_number;
+    u32 rx_buffer_len;
+    u32 wol;
+    u32 smartspeed;
+    u32 en_mng_pt;
+    u16 link_speed;
+    u16 link_duplex;
+    spinlock_t stats_lock;
+    unsigned int total_tx_bytes;
+    unsigned int total_tx_packets;
+    unsigned int total_rx_bytes;
+    unsigned int total_rx_packets;
+    /* Interrupt Throttle Rate */
+    u32 itr;
+    u32 itr_setting;
+    u16 tx_itr;
+    u16 rx_itr;
 
-	u8 fc_autoneg;
+    u8 fc_autoneg;
 
-	/* TX */
-	struct e1000_tx_ring *tx_ring;      /* One per active queue */
-	unsigned int restart_queue;
-	u32 txd_cmd;
-	u32 tx_int_delay;
-	u32 tx_abs_int_delay;
-	u32 gotcl;
-	u64 gotcl_old;
-	u64 tpt_old;
-	u64 colc_old;
-	u32 tx_timeout_count;
-	u32 tx_fifo_head;
-	u32 tx_head_addr;
-	u32 tx_fifo_size;
-	u8  tx_timeout_factor;
-	atomic_t tx_fifo_stall;
-	bool pcix_82544;
-	bool detect_tx_hung;
-	bool dump_buffers;
+    /* TX */
+    struct e1000_tx_ring *tx_ring;      /* One per active queue */
+    unsigned int restart_queue;
+    u32 txd_cmd;
+    u32 tx_int_delay;
+    u32 tx_abs_int_delay;
+    u32 gotcl;
+    u64 gotcl_old;
+    u64 tpt_old;
+    u64 colc_old;
+    u32 tx_timeout_count;
+    u32 tx_fifo_head;
+    u32 tx_head_addr;
+    u32 tx_fifo_size;
+    u8  tx_timeout_factor;
+    atomic_t tx_fifo_stall;
+    bool pcix_82544;
+    bool detect_tx_hung;
+    bool dump_buffers;
 
-	/* RX */
-	bool (*clean_rx)(struct e1000_adapter *adapter,
-			 struct e1000_rx_ring *rx_ring,
-			 int *work_done, int work_to_do);
-	void (*alloc_rx_buf)(struct e1000_adapter *adapter,
-			     struct e1000_rx_ring *rx_ring,
-			     int cleaned_count);
-	struct e1000_rx_ring *rx_ring;      /* One per active queue */
-	struct napi_struct napi;
+    /* RX */
+    bool (*clean_rx)(struct e1000_adapter *adapter,
+                     struct e1000_rx_ring *rx_ring,
+                     int *work_done, int work_to_do);
+    void (*alloc_rx_buf)(struct e1000_adapter *adapter,
+                         struct e1000_rx_ring *rx_ring,
+                         int cleaned_count);
+    struct e1000_rx_ring *rx_ring;      /* One per active queue */
+    struct napi_struct napi;
 
-	int num_tx_queues;
-	int num_rx_queues;
+    int num_tx_queues;
+    int num_rx_queues;
 
-	u64 hw_csum_err;
-	u64 hw_csum_good;
-	u32 alloc_rx_buff_failed;
-	u32 rx_int_delay;
-	u32 rx_abs_int_delay;
-	bool rx_csum;
-	u32 gorcl;
-	u64 gorcl_old;
+    u64 hw_csum_err;
+    u64 hw_csum_good;
+    u32 alloc_rx_buff_failed;
+    u32 rx_int_delay;
+    u32 rx_abs_int_delay;
+    bool rx_csum;
+    u32 gorcl;
+    u64 gorcl_old;
 
-	/* OS defined structs */
-	struct net_device *netdev;
-	struct pci_dev *pdev;
+    /* OS defined structs */
+    struct net_device *netdev;
+    struct pci_dev *pdev;
 
-	/* structs defined in e1000_hw.h */
-	struct e1000_hw hw;
-	struct e1000_hw_stats stats;
-	struct e1000_phy_info phy_info;
-	struct e1000_phy_stats phy_stats;
+    /* structs defined in e1000_hw.h */
+    struct e1000_hw hw;
+    struct e1000_hw_stats stats;
+    struct e1000_phy_info phy_info;
+    struct e1000_phy_stats phy_stats;
 
-	u32 test_icr;
-	struct e1000_tx_ring test_tx_ring;
-	struct e1000_rx_ring test_rx_ring;
+    u32 test_icr;
+    struct e1000_tx_ring test_tx_ring;
+    struct e1000_rx_ring test_rx_ring;
 
-	int msg_enable;
+    int msg_enable;
 
-	/* to not mess up cache alignment, always add to the bottom */
-	bool tso_force;
-	bool smart_power_down;	/* phy smart power down */
-	bool quad_port_a;
-	unsigned long flags;
-	u32 eeprom_wol;
+    /* to not mess up cache alignment, always add to the bottom */
+    bool tso_force;
+    bool smart_power_down;	/* phy smart power down */
+    bool quad_port_a;
+    unsigned long flags;
+    u32 eeprom_wol;
 
-	/* for ioport free */
-	int bars;
-	int need_ioport;
+    /* for ioport free */
+    int bars;
+    int need_ioport;
 
-	bool discarding;
+    bool discarding;
 
-	struct work_struct reset_task;
-	struct delayed_work watchdog_task;
-	struct delayed_work fifo_stall_task;
-	struct delayed_work phy_info_task;
+    struct work_struct reset_task;
+    struct delayed_work watchdog_task;
+    struct delayed_work fifo_stall_task;
+    struct delayed_work phy_info_task;
 
-	struct mutex mutex;
+    struct mutex mutex;
 };
 
 enum e1000_state_t {
-	__E1000_TESTING,
-	__E1000_RESETTING,
-	__E1000_DOWN
+    __E1000_TESTING,
+    __E1000_RESETTING,
+    __E1000_DOWN
 };
 
 #undef pr_fmt

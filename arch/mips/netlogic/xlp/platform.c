@@ -51,14 +51,12 @@
 #include <asm/netlogic/xlp-hal/pic.h>
 #include <asm/netlogic/xlp-hal/uart.h>
 
-static unsigned int nlm_xlp_uart_in(struct uart_port *p, int offset)
-{
-	 return nlm_read_reg(p->iobase, offset);
+static unsigned int nlm_xlp_uart_in(struct uart_port *p, int offset) {
+    return nlm_read_reg(p->iobase, offset);
 }
 
-static void nlm_xlp_uart_out(struct uart_port *p, int offset, int value)
-{
-	nlm_write_reg(p->iobase, offset, value);
+static void nlm_xlp_uart_out(struct uart_port *p, int offset, int value) {
+    nlm_write_reg(p->iobase, offset, value);
 }
 
 #define PORT(_irq)					\
@@ -75,34 +73,33 @@ static void nlm_xlp_uart_out(struct uart_port *p, int offset, int value)
 	}
 
 static struct plat_serial8250_port xlp_uart_data[] = {
-	PORT(PIC_UART_0_IRQ),
-	PORT(PIC_UART_1_IRQ),
-	{},
+    PORT(PIC_UART_0_IRQ),
+    PORT(PIC_UART_1_IRQ),
+    {},
 };
 
 static struct platform_device uart_device = {
-	.name		= "serial8250",
-	.id		= PLAT8250_DEV_PLATFORM,
-	.dev = {
-		.platform_data = xlp_uart_data,
-	},
+    .name		= "serial8250",
+    .id		= PLAT8250_DEV_PLATFORM,
+    .dev = {
+        .platform_data = xlp_uart_data,
+    },
 };
 
-static int __init nlm_platform_uart_init(void)
-{
-	unsigned long mmio;
+static int __init nlm_platform_uart_init(void) {
+    unsigned long mmio;
 
-	mmio = (unsigned long)nlm_get_uart_regbase(0, 0);
-	xlp_uart_data[0].iobase = mmio;
-	xlp_uart_data[0].membase = (void __iomem *)mmio;
-	xlp_uart_data[0].mapbase = mmio;
+    mmio = (unsigned long)nlm_get_uart_regbase(0, 0);
+    xlp_uart_data[0].iobase = mmio;
+    xlp_uart_data[0].membase = (void __iomem *)mmio;
+    xlp_uart_data[0].mapbase = mmio;
 
-	mmio = (unsigned long)nlm_get_uart_regbase(0, 1);
-	xlp_uart_data[1].iobase = mmio;
-	xlp_uart_data[1].membase = (void __iomem *)mmio;
-	xlp_uart_data[1].mapbase = mmio;
+    mmio = (unsigned long)nlm_get_uart_regbase(0, 1);
+    xlp_uart_data[1].iobase = mmio;
+    xlp_uart_data[1].membase = (void __iomem *)mmio;
+    xlp_uart_data[1].mapbase = mmio;
 
-	return platform_device_register(&uart_device);
+    return platform_device_register(&uart_device);
 }
 
 arch_initcall(nlm_platform_uart_init);

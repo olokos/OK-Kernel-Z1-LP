@@ -33,38 +33,38 @@
 #define PCI_LBA_COUNT		4
 
 struct pci_map {
-	u32 address;		/* Address. */
-	u32 control;		/* Control. */
-	u32 mapping;		/* mapping. */
+    u32 address;		/* Address. */
+    u32 control;		/* Control. */
+    u32 mapping;		/* mapping. */
 };
 
 struct pci_reg {
-	u32 pcic;
-	u32 pcis;
-	u32 pcism;
-	u32 pcicfga;
-	u32 pcicfgd;
-	volatile struct pci_map pcilba[PCI_LBA_COUNT];
-	u32 pcidac;
-	u32 pcidas;
-	u32 pcidasm;
-	u32 pcidad;
-	u32 pcidma8c;
-	u32 pcidma9c;
-	u32 pcitc;
+    u32 pcic;
+    u32 pcis;
+    u32 pcism;
+    u32 pcicfga;
+    u32 pcicfgd;
+    volatile struct pci_map pcilba[PCI_LBA_COUNT];
+    u32 pcidac;
+    u32 pcidas;
+    u32 pcidasm;
+    u32 pcidad;
+    u32 pcidma8c;
+    u32 pcidma9c;
+    u32 pcitc;
 };
 
 #define PCI_MSU_COUNT		2
 
 struct pci_msu {
-	u32 pciim[PCI_MSU_COUNT];
-	u32 pciom[PCI_MSU_COUNT];
-	u32 pciid;
-	u32 pciiic;
-	u32 pciiim;
-	u32 pciiod;
-	u32 pciioic;
-	u32 pciioim;
+    u32 pciim[PCI_MSU_COUNT];
+    u32 pciom[PCI_MSU_COUNT];
+    u32 pciid;
+    u32 pciiic;
+    u32 pciiim;
+    u32 pciiod;
+    u32 pciioic;
+    u32 pciioim;
 };
 
 /*

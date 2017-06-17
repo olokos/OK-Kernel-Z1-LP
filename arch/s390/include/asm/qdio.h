@@ -35,15 +35,15 @@
  * @dkey: access key for SLSB
  */
 struct qdesfmt0 {
-	u64 sliba;
-	u64 sla;
-	u64 slsba;
-	u32	 : 32;
-	u32 akey : 4;
-	u32 bkey : 4;
-	u32 ckey : 4;
-	u32 dkey : 4;
-	u32	 : 16;
+    u64 sliba;
+    u64 sla;
+    u64 slsba;
+    u32	 : 32;
+    u32 akey : 4;
+    u32 bkey : 4;
+    u32 ckey : 4;
+    u32 dkey : 4;
+    u32	 : 16;
 } __attribute__ ((packed));
 
 #define QDR_AC_MULTI_BUFFER_ENABLE 0x01
@@ -62,26 +62,26 @@ struct qdesfmt0 {
  * @qdf0: queue descriptions
  */
 struct qdr {
-	u32 qfmt   : 8;
-	u32 pfmt   : 8;
-	u32	   : 8;
-	u32 ac	   : 8;
-	u32	   : 8;
-	u32 iqdcnt : 8;
-	u32	   : 8;
-	u32 oqdcnt : 8;
-	u32	   : 8;
-	u32 iqdsz  : 8;
-	u32	   : 8;
-	u32 oqdsz  : 8;
-	/* private: */
-	u32 res[9];
-	/* public: */
-	u64 qiba;
-	u32	   : 32;
-	u32 qkey   : 4;
-	u32	   : 28;
-	struct qdesfmt0 qdf0[126];
+    u32 qfmt   : 8;
+    u32 pfmt   : 8;
+    u32	   : 8;
+    u32 ac	   : 8;
+    u32	   : 8;
+    u32 iqdcnt : 8;
+    u32	   : 8;
+    u32 oqdcnt : 8;
+    u32	   : 8;
+    u32 iqdsz  : 8;
+    u32	   : 8;
+    u32 oqdsz  : 8;
+    /* private: */
+    u32 res[9];
+    /* public: */
+    u64 qiba;
+    u32	   : 32;
+    u32 qkey   : 4;
+    u32	   : 28;
+    struct qdesfmt0 qdf0[126];
 } __attribute__ ((packed, aligned(4096)));
 
 #define QIB_AC_OUTBOUND_PCI_SUPPORTED	0x40
@@ -100,20 +100,20 @@ struct qdr {
  * @parm: implementation dependent parameters
  */
 struct qib {
-	u32 qfmt   : 8;
-	u32 pfmt   : 8;
-	u32 rflags : 8;
-	u32 ac	   : 8;
-	u32	   : 32;
-	u64 isliba;
-	u64 osliba;
-	u32	   : 32;
-	u32	   : 32;
-	u8 ebcnam[8];
-	/* private: */
-	u8 res[88];
-	/* public: */
-	u8 parm[QDIO_MAX_BUFFERS_PER_Q];
+    u32 qfmt   : 8;
+    u32 pfmt   : 8;
+    u32 rflags : 8;
+    u32 ac	   : 8;
+    u32	   : 32;
+    u64 isliba;
+    u64 osliba;
+    u32	   : 32;
+    u32	   : 32;
+    u8 ebcnam[8];
+    /* private: */
+    u8 res[88];
+    /* public: */
+    u8 parm[QDIO_MAX_BUFFERS_PER_Q];
 } __attribute__ ((packed, aligned(256)));
 
 /**
@@ -121,7 +121,7 @@ struct qib {
  * @parms: implementation dependent parameters
  */
 struct slibe {
-	u64 parms;
+    u64 parms;
 };
 
 /**
@@ -142,20 +142,20 @@ struct slibe {
  * @user2: user defineable value
  */
 struct qaob {
-	u64 res0[6];
-	u8 res1;
-	u8 res2;
-	u8 res3;
-	u8 aorc;
-	u8 flags;
-	u16 cbtbs;
-	u8 sb_count;
-	u64 sba[QDIO_MAX_ELEMENTS_PER_BUFFER];
-	u16 dcount[QDIO_MAX_ELEMENTS_PER_BUFFER];
-	u64 user0;
-	u64 res4[2];
-	u64 user1;
-	u64 user2;
+    u64 res0[6];
+    u8 res1;
+    u8 res2;
+    u8 res3;
+    u8 aorc;
+    u8 flags;
+    u16 cbtbs;
+    u8 sb_count;
+    u64 sba[QDIO_MAX_ELEMENTS_PER_BUFFER];
+    u16 dcount[QDIO_MAX_ELEMENTS_PER_BUFFER];
+    u64 user0;
+    u64 res4[2];
+    u64 user1;
+    u64 user2;
 } __attribute__ ((packed, aligned(256)));
 
 /**
@@ -166,13 +166,13 @@ struct qaob {
  * @slibe: SLIB elements
  */
 struct slib {
-	u64 nsliba;
-	u64 sla;
-	u64 slsba;
-	/* private: */
-	u8 res[1000];
-	/* public: */
-	struct slibe slibe[QDIO_MAX_BUFFERS_PER_Q];
+    u64 nsliba;
+    u64 sla;
+    u64 slsba;
+    /* private: */
+    u8 res[1000];
+    /* public: */
+    struct slibe slibe[QDIO_MAX_BUFFERS_PER_Q];
 } __attribute__ ((packed, aligned(2048)));
 
 #define SBAL_EFLAGS_LAST_ENTRY		0x40
@@ -206,19 +206,19 @@ struct slib {
  * @addr: address
 */
 struct qdio_buffer_element {
-	u8 eflags;
-	/* private: */
-	u8 res1;
-	/* public: */
-	u8 scount;
-	u8 sflags;
-	u32 length;
+    u8 eflags;
+    /* private: */
+    u8 res1;
+    /* public: */
+    u8 scount;
+    u8 sflags;
+    u32 length;
 #ifdef CONFIG_32BIT
-	/* private: */
-	void *res2;
-	/* public: */
+    /* private: */
+    void *res2;
+    /* public: */
 #endif
-	void *addr;
+    void *addr;
 } __attribute__ ((packed, aligned(16)));
 
 /**
@@ -226,7 +226,7 @@ struct qdio_buffer_element {
  * @element: SBAL entries
  */
 struct qdio_buffer {
-	struct qdio_buffer_element element[QDIO_MAX_ELEMENTS_PER_BUFFER];
+    struct qdio_buffer_element element[QDIO_MAX_ELEMENTS_PER_BUFFER];
 } __attribute__ ((packed, aligned(256)));
 
 /**
@@ -235,11 +235,11 @@ struct qdio_buffer {
  */
 struct sl_element {
 #ifdef CONFIG_32BIT
-	/* private: */
-	unsigned long reserved;
-	/* public: */
+    /* private: */
+    unsigned long reserved;
+    /* public: */
 #endif
-	unsigned long sbal;
+    unsigned long sbal;
 } __attribute__ ((packed));
 
 /**
@@ -247,7 +247,7 @@ struct sl_element {
  * @element: SL entries
  */
 struct sl {
-	struct sl_element element[QDIO_MAX_BUFFERS_PER_Q];
+    struct sl_element element[QDIO_MAX_BUFFERS_PER_Q];
 } __attribute__ ((packed, aligned(1024)));
 
 /**
@@ -255,7 +255,7 @@ struct sl {
  * @val: state per buffer
  */
 struct slsb {
-	u8 val[QDIO_MAX_BUFFERS_PER_Q];
+    u8 val[QDIO_MAX_BUFFERS_PER_Q];
 } __attribute__ ((packed, aligned(256)));
 
 #define CHSC_AC2_MULTI_BUFFER_AVAILABLE	0x0080
@@ -273,9 +273,9 @@ struct slsb {
  *        (stored in user1 data of QAOB)
  */
 struct qdio_outbuf_state {
-	u8 flags;
-	struct qaob *aob;
-	void *user;
+    u8 flags;
+    struct qaob *aob;
+    void *user;
 };
 
 #define QDIO_OUTBUF_STATE_FLAG_NONE	0x00
@@ -299,33 +299,33 @@ struct qdio_outbuf_state {
 #define CHSC_AC3_FORMAT2_CQ_AVAILABLE	0x8000
 
 struct qdio_ssqd_desc {
-	u8 flags;
-	u8:8;
-	u16 sch;
-	u8 qfmt;
-	u8 parm;
-	u8 qdioac1;
-	u8 sch_class;
-	u8 pcnt;
-	u8 icnt;
-	u8:8;
-	u8 ocnt;
-	u8:8;
-	u8 mbccnt;
-	u16 qdioac2;
-	u64 sch_token;
-	u8 mro;
-	u8 mri;
-	u16 qdioac3;
-	u16:16;
-	u8:8;
-	u8 mmwc;
+    u8 flags;
+    u8:8;
+    u16 sch;
+    u8 qfmt;
+    u8 parm;
+    u8 qdioac1;
+    u8 sch_class;
+    u8 pcnt;
+    u8 icnt;
+    u8:8;
+    u8 ocnt;
+    u8:8;
+    u8 mbccnt;
+    u16 qdioac2;
+    u64 sch_token;
+    u8 mro;
+    u8 mri;
+    u16 qdioac3;
+    u16:16;
+    u8:8;
+    u8 mmwc;
 } __attribute__ ((packed));
 
 /* params are: ccw_device, qdio_error, queue_number,
    first element processed, number of elements processed, int_parm */
 typedef void qdio_handler_t(struct ccw_device *, unsigned int, int,
-			    int, int, unsigned long);
+                            int, int, unsigned long);
 
 /* qdio errors reported to the upper-layer program */
 #define QDIO_ERROR_SIGA_TARGET			0x02
@@ -359,26 +359,26 @@ typedef void qdio_handler_t(struct ccw_device *, unsigned int, int,
  * @output_sbal_state_array: no_output_qs * 128 state info (for CQ or NULL)
  */
 struct qdio_initialize {
-	struct ccw_device *cdev;
-	unsigned char q_format;
-	unsigned char qdr_ac;
-	unsigned char adapter_name[8];
-	unsigned int qib_param_field_format;
-	unsigned char *qib_param_field;
-	unsigned char qib_rflags;
-	unsigned long *input_slib_elements;
-	unsigned long *output_slib_elements;
-	unsigned int no_input_qs;
-	unsigned int no_output_qs;
-	qdio_handler_t *input_handler;
-	qdio_handler_t *output_handler;
-	void (**queue_start_poll_array) (struct ccw_device *, int,
-					  unsigned long);
-	int scan_threshold;
-	unsigned long int_parm;
-	void **input_sbal_addr_array;
-	void **output_sbal_addr_array;
-	struct qdio_outbuf_state *output_sbal_state_array;
+    struct ccw_device *cdev;
+    unsigned char q_format;
+    unsigned char qdr_ac;
+    unsigned char adapter_name[8];
+    unsigned int qib_param_field_format;
+    unsigned char *qib_param_field;
+    unsigned char qib_rflags;
+    unsigned long *input_slib_elements;
+    unsigned long *output_slib_elements;
+    unsigned int no_input_qs;
+    unsigned int no_output_qs;
+    qdio_handler_t *input_handler;
+    qdio_handler_t *output_handler;
+    void (**queue_start_poll_array) (struct ccw_device *, int,
+                                     unsigned long);
+    int scan_threshold;
+    unsigned long int_parm;
+    void **input_sbal_addr_array;
+    void **output_sbal_addr_array;
+    struct qdio_outbuf_state *output_sbal_state_array;
 };
 
 #define QDIO_STATE_INACTIVE		0x00000002 /* after qdio_cleanup */
@@ -395,7 +395,7 @@ extern int qdio_establish(struct qdio_initialize *);
 extern int qdio_activate(struct ccw_device *);
 extern void qdio_release_aob(struct qaob *);
 extern int do_QDIO(struct ccw_device *, unsigned int, int, unsigned int,
-		   unsigned int);
+                   unsigned int);
 extern int qdio_start_irq(struct ccw_device *, int);
 extern int qdio_stop_irq(struct ccw_device *, int);
 extern int qdio_get_next_buffers(struct ccw_device *, int, int *, int *);

@@ -10,7 +10,7 @@
 #include <asm/setup.h>
 
 #ifndef __ASSEMBLY__
- 
+
 #define get_user_page(vaddr)		__get_free_page(GFP_KERNEL)
 #define free_user_page(page, addr)	free_page(addr)
 
@@ -27,10 +27,18 @@
 /*
  * These are used to make use of C type-checking..
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pmd[16]; } pmd_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pmd[16];
+} pmd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define pte_val(x)	((x).pte)

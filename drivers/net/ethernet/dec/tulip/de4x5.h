@@ -221,7 +221,7 @@
 #define BMR_BAR    0x00000002       /* Bus ARbitration */
 #define BMR_SWR    0x00000001       /* Software Reset */
 
-                                    /* Timings here are for 10BASE-T/AUI only*/
+/* Timings here are for 10BASE-T/AUI only*/
 #define TAP_NOPOLL 0x00000000       /* No automatic polling */
 #define TAP_200US  0x00020000       /* TX automatic polling every 200us */
 #define TAP_800US  0x00040000       /* TX automatic polling every 800us */
@@ -992,9 +992,9 @@
 #include <linux/sockios.h>
 
 struct de4x5_ioctl {
-	unsigned short cmd;                /* Command to run */
-	unsigned short len;                /* Length of the data buffer */
-	unsigned char  __user *data;       /* Pointer to the data buffer */
+    unsigned short cmd;                /* Command to run */
+    unsigned short len;                /* Length of the data buffer */
+    unsigned char  __user *data;       /* Pointer to the data buffer */
 };
 
 /*

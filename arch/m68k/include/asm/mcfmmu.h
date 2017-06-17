@@ -94,15 +94,13 @@
  *	Simple access functions for the MMU registers. Nothing fancy
  *	currently required, just simple 32bit access.
  */
-static inline u32 mmu_read(u32 a)
-{
-	return *((volatile u32 *) a);
+static inline u32 mmu_read(u32 a) {
+    return *((volatile u32 *) a);
 }
 
-static inline void mmu_write(u32 a, u32 v)
-{
-	*((volatile u32 *) a) = v;
-	__asm__ __volatile__ ("nop");
+static inline void mmu_write(u32 a, u32 v) {
+    *((volatile u32 *) a) = v;
+    __asm__ __volatile__ ("nop");
 }
 
 int cf_tlb_miss(struct pt_regs *regs, int write, int dtlb, int extension_word);

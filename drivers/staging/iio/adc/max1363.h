@@ -64,26 +64,26 @@
  * @modemask:	Bit mask corresponding to channels enabled in this mode
  */
 struct max1363_mode {
-	int8_t		conf;
-	DECLARE_BITMAP(modemask, MAX1363_MAX_CHANNELS);
+    int8_t		conf;
+    DECLARE_BITMAP(modemask, MAX1363_MAX_CHANNELS);
 };
 
 /* This must be maintained along side the max1363_mode_table in max1363_core */
 enum max1363_modes {
-	/* Single read of a single channel */
-	_s0, _s1, _s2, _s3, _s4, _s5, _s6, _s7, _s8, _s9, _s10, _s11,
-	/* Differential single read */
-	d0m1, d2m3, d4m5, d6m7, d8m9, d10m11,
-	d1m0, d3m2, d5m4, d7m6, d9m8, d11m10,
-	/* Scan to channel and mid to channel where overlapping */
-	s0to1, s0to2, s2to3, s0to3, s0to4, s0to5, s0to6,
-	s6to7, s0to7, s6to8, s0to8, s6to9,
-	s0to9, s6to10, s0to10, s6to11, s0to11,
-	/* Differential scan to channel and mid to channel where overlapping */
-	d0m1to2m3, d0m1to4m5, d0m1to6m7, d6m7to8m9,
-	d0m1to8m9, d6m7to10m11, d0m1to10m11, d1m0to3m2,
-	d1m0to5m4, d1m0to7m6, d7m6to9m8, d1m0to9m8,
-	d7m6to11m10, d1m0to11m10,
+    /* Single read of a single channel */
+    _s0, _s1, _s2, _s3, _s4, _s5, _s6, _s7, _s8, _s9, _s10, _s11,
+    /* Differential single read */
+    d0m1, d2m3, d4m5, d6m7, d8m9, d10m11,
+    d1m0, d3m2, d5m4, d7m6, d9m8, d11m10,
+    /* Scan to channel and mid to channel where overlapping */
+    s0to1, s0to2, s2to3, s0to3, s0to4, s0to5, s0to6,
+    s6to7, s0to7, s6to8, s0to8, s6to9,
+    s0to9, s6to10, s0to10, s6to11, s0to11,
+    /* Differential scan to channel and mid to channel where overlapping */
+    d0m1to2m3, d0m1to4m5, d0m1to6m7, d6m7to8m9,
+    d0m1to8m9, d6m7to10m11, d0m1to10m11, d1m0to3m2,
+    d1m0to5m4, d1m0to7m6, d7m6to9m8, d1m0to9m8,
+    d7m6to11m10, d1m0to11m10,
 };
 
 /**
@@ -99,14 +99,14 @@ enum max1363_modes {
  * @num_channels:	number of channels
  */
 struct max1363_chip_info {
-	const struct iio_info		*info;
-	struct iio_chan_spec *channels;
-	int num_channels;
-	const enum max1363_modes	*mode_list;
-	enum max1363_modes		default_mode;
-	u16				int_vref_mv;
-	u8				num_modes;
-	u8				bits;
+    const struct iio_info		*info;
+    struct iio_chan_spec *channels;
+    int num_channels;
+    const enum max1363_modes	*mode_list;
+    enum max1363_modes		default_mode;
+    u16				int_vref_mv;
+    u8				num_modes;
+    u8				bits;
 };
 
 /**
@@ -126,52 +126,49 @@ struct max1363_chip_info {
  * @thresh_low:		low threshold values
  */
 struct max1363_state {
-	struct i2c_client		*client;
-	u8				setupbyte;
-	u8				configbyte;
-	const struct max1363_chip_info	*chip_info;
-	const struct max1363_mode	*current_mode;
-	u32				requestedmask;
-	struct regulator		*reg;
+    struct i2c_client		*client;
+    u8				setupbyte;
+    u8				configbyte;
+    const struct max1363_chip_info	*chip_info;
+    const struct max1363_mode	*current_mode;
+    u32				requestedmask;
+    struct regulator		*reg;
 
-	/* Using monitor modes and buffer at the same time is
-	   currently not supported */
-	bool				monitor_on;
-	unsigned int			monitor_speed:3;
-	u8				mask_high;
-	u8				mask_low;
-	/* 4x unipolar first then the fours bipolar ones */
-	s16				thresh_high[8];
-	s16				thresh_low[8];
+    /* Using monitor modes and buffer at the same time is
+       currently not supported */
+    bool				monitor_on;
+    unsigned int			monitor_speed:3;
+    u8				mask_high;
+    u8				mask_low;
+    /* 4x unipolar first then the fours bipolar ones */
+    s16				thresh_high[8];
+    s16				thresh_low[8];
 };
 
 const struct max1363_mode
 *max1363_match_mode(const unsigned long *mask,
-		    const struct max1363_chip_info *ci);
+                    const struct max1363_chip_info *ci);
 
 int max1363_set_scan_mode(struct max1363_state *st);
 
 #ifdef CONFIG_MAX1363_RING_BUFFER
 int max1363_update_scan_mode(struct iio_dev *indio_dev,
-			     const unsigned long *scan_mask);
+                             const unsigned long *scan_mask);
 int max1363_register_ring_funcs_and_init(struct iio_dev *indio_dev);
 void max1363_ring_cleanup(struct iio_dev *indio_dev);
 
 #else /* CONFIG_MAX1363_RING_BUFFER */
 int max1363_update_scan_mode(struct iio_dev *indio_dev,
-			     const long *scan_mask)
-{
-	return 0;
+                             const long *scan_mask) {
+    return 0;
 }
 
 static inline int
-max1363_register_ring_funcs_and_init(struct iio_dev *indio_dev)
-{
-	return 0;
+max1363_register_ring_funcs_and_init(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void max1363_ring_cleanup(struct iio_dev *indio_dev)
-{
+static inline void max1363_ring_cleanup(struct iio_dev *indio_dev) {
 }
 #endif /* CONFIG_MAX1363_RING_BUFFER */
 #endif /* _MAX1363_H_ */

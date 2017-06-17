@@ -143,8 +143,7 @@ WLANBAP_GetCurrentChannel
     ptBtampContext  pBtampCtx,
     v_U32_t *channel, // return current channel here
     v_U32_t *activeFlag   // return active flag here
-)
-{
+) {
     //v_U32_t cb_enabled;
     tHalHandle halHandle;
 
@@ -152,8 +151,7 @@ WLANBAP_GetCurrentChannel
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if (( NULL == pBtampCtx ) || (NULL == channel) || (NULL == activeFlag))
-    {
+    if (( NULL == pBtampCtx ) || (NULL == channel) || (NULL == activeFlag)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -161,16 +159,14 @@ WLANBAP_GetCurrentChannel
 
     halHandle =  VOS_GET_HAL_CB(pBtampCtx->pvosGCtx);
 
-    if(NULL == halHandle)
-    {
+    if(NULL == halHandle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "halHandle is NULL in %s", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
     if (ccmCfgGetInt(halHandle, WNI_CFG_CURRENT_CHANNEL, channel)
-            != eHAL_STATUS_SUCCESS )
-    {
+            != eHAL_STATUS_SUCCESS ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Get CFG failed in %s", __func__);
         return VOS_STATUS_E_FAULT;

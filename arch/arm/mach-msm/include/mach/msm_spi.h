@@ -27,18 +27,18 @@
  *	the delay between a transfer request.
  */
 struct msm_spi_platform_data {
-	u32 max_clock_speed;
-	bool active_only;
-	u32  master_id;
-	int (*gpio_config)(void);
-	void (*gpio_release)(void);
-	int (*dma_config)(void);
-	const char *rsl_id;
-	u32  pm_lat;
-	u32  infinite_mode;
-	bool ver_reg_exists;
-	bool use_bam;
-	u32  bam_consumer_pipe_index;
-	u32  bam_producer_pipe_index;
-	bool rt_priority;
+    u32 max_clock_speed;
+    bool active_only;
+    u32  master_id;
+    int (*gpio_config)(void);
+    void (*gpio_release)(void);
+    int (*dma_config)(void);
+    const char *rsl_id;
+    u32  pm_lat;
+    u32  infinite_mode;
+    bool ver_reg_exists;
+    bool use_bam;
+    u32  bam_consumer_pipe_index;
+    u32  bam_producer_pipe_index;
+    bool rt_priority;
 };

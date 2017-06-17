@@ -83,9 +83,8 @@ extern unsigned long VMALLOC_RESERVE /* = CONFIG_VMALLOC_RESERVE */;
 #include <asm-generic/pgtable-nopmd.h>
 
 /* We don't define any pgds for these addresses. */
-static inline int pgd_addr_invalid(unsigned long addr)
-{
-	return addr >= MEM_HV_INTRPT;
+static inline int pgd_addr_invalid(unsigned long addr) {
+    return addr >= MEM_HV_INTRPT;
 }
 
 /*
@@ -98,36 +97,36 @@ static inline int pgd_addr_invalid(unsigned long addr)
 #define __HAVE_ARCH_PTEP_SET_WRPROTECT
 
 extern int ptep_test_and_clear_young(struct vm_area_struct *,
-				     unsigned long addr, pte_t *);
+                                     unsigned long addr, pte_t *);
 extern void ptep_set_wrprotect(struct mm_struct *,
-			       unsigned long addr, pte_t *);
+                               unsigned long addr, pte_t *);
 
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-				       unsigned long addr, pte_t *ptep)
-{
-	pte_t pte = *ptep;
-	pte_clear(_mm, addr, ptep);
-	return pte;
+                                       unsigned long addr, pte_t *ptep) {
+    pte_t pte = *ptep;
+    pte_clear(_mm, addr, ptep);
+    return pte;
 }
 
-static inline void __set_pmd(pmd_t *pmdp, pmd_t pmdval)
-{
-	set_pte(&pmdp->pud.pgd, pmdval.pud.pgd);
+static inline void __set_pmd(pmd_t *pmdp, pmd_t pmdval) {
+    set_pte(&pmdp->pud.pgd, pmdval.pud.pgd);
 }
 
 /* Create a pmd from a PTFN. */
-static inline pmd_t ptfn_pmd(unsigned long ptfn, pgprot_t prot)
-{
-	return (pmd_t){ { hv_pte_set_ptfn(prot, ptfn) } };
+static inline pmd_t ptfn_pmd(unsigned long ptfn, pgprot_t prot) {
+    return (pmd_t) {
+        {
+            hv_pte_set_ptfn(prot, ptfn)
+        }
+    };
 }
 
 /* Return the page-table frame number (ptfn) that a pmd_t points at. */
 #define pmd_ptfn(pmd) hv_pte_get_ptfn((pmd).pud.pgd)
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	__pte_clear(&pmdp->pud.pgd);
+static inline void pmd_clear(pmd_t *pmdp) {
+    __pte_clear(&pmdp->pud.pgd);
 }
 
 #endif /* __ASSEMBLY__ */

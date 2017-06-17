@@ -44,33 +44,33 @@ void pm_axi_update(void);
 void pm_axi_disable(void);
 void pm_axi_enable(void);
 
-struct perf_mon_axi_cnts{
-  unsigned long long cycles;
-  unsigned long long cnt0;
-  unsigned long long cnt1;
-  unsigned long long tenure_total;
-  unsigned long long tenure_min;
-  unsigned long long tenure_max;
-  unsigned long long tenure_last;
+struct perf_mon_axi_cnts {
+    unsigned long long cycles;
+    unsigned long long cnt0;
+    unsigned long long cnt1;
+    unsigned long long tenure_total;
+    unsigned long long tenure_min;
+    unsigned long long tenure_max;
+    unsigned long long tenure_last;
 };
 
-struct perf_mon_axi_data{
-  struct proc_dir_entry *proc;
-  unsigned long enable;
-  unsigned long clear;
-  unsigned long valid;
-  unsigned long sel_reg0;
-  unsigned long sel_reg1;
-  unsigned long ten_sel_reg;
-  unsigned long refresh;
+struct perf_mon_axi_data {
+    struct proc_dir_entry *proc;
+    unsigned long enable;
+    unsigned long clear;
+    unsigned long valid;
+    unsigned long sel_reg0;
+    unsigned long sel_reg1;
+    unsigned long ten_sel_reg;
+    unsigned long refresh;
 };
 
 extern struct perf_mon_axi_data pm_axi_info;
 extern struct perf_mon_axi_cnts axi_cnts;
 
 void pm_axi_set_proc_entry(char *name, unsigned long *var,
-	struct proc_dir_entry *d, int hex);
+                           struct proc_dir_entry *d, int hex);
 void pm_axi_get_cnt_proc_entry(char *name, struct perf_mon_axi_cnts *var,
-	struct proc_dir_entry *d, int hex);
+                               struct proc_dir_entry *d, int hex);
 
 #endif

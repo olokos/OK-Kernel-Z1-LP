@@ -16,62 +16,62 @@
 #define VINO_PAGE_SIZE	4096
 
 struct sgi_vino_channel {
-	u32 _pad_alpha;
-	volatile u32 alpha;
+    u32 _pad_alpha;
+    volatile u32 alpha;
 
 #define VINO_CLIP_X(x)		((x) & 0x3ff)		/* bits 0:9 */
 #define VINO_CLIP_ODD(x)	(((x) & 0x1ff) << 10)	/* bits 10:18 */
 #define VINO_CLIP_EVEN(x)	(((x) & 0x1ff) << 19)	/* bits 19:27 */
-	u32 _pad_clip_start;
-	volatile u32 clip_start;
-	u32 _pad_clip_end;
-	volatile u32 clip_end;
+    u32 _pad_clip_start;
+    volatile u32 clip_start;
+    u32 _pad_clip_end;
+    volatile u32 clip_end;
 
 #define VINO_FRAMERT_FULL	0xfff
 #define VINO_FRAMERT_PAL	(1<<0)			/* 0=NTSC 1=PAL */
 #define VINO_FRAMERT_RT(x)	(((x) & 0xfff) << 1)	/* bits 1:12 */
-	u32 _pad_frame_rate;
-	volatile u32 frame_rate;
+    u32 _pad_frame_rate;
+    volatile u32 frame_rate;
 
-	u32 _pad_field_counter;
-	volatile u32 field_counter;
-	u32 _pad_line_size;
-	volatile u32 line_size;
-	u32 _pad_line_count;
-	volatile u32 line_count;
-	u32 _pad_page_index;
-	volatile u32 page_index;
-	u32 _pad_next_4_desc;
-	volatile u32 next_4_desc;
-	u32 _pad_start_desc_tbl;
-	volatile u32 start_desc_tbl;
+    u32 _pad_field_counter;
+    volatile u32 field_counter;
+    u32 _pad_line_size;
+    volatile u32 line_size;
+    u32 _pad_line_count;
+    volatile u32 line_count;
+    u32 _pad_page_index;
+    volatile u32 page_index;
+    u32 _pad_next_4_desc;
+    volatile u32 next_4_desc;
+    u32 _pad_start_desc_tbl;
+    volatile u32 start_desc_tbl;
 
 #define VINO_DESC_JUMP		(1<<30)
 #define VINO_DESC_STOP		(1<<31)
 #define VINO_DESC_VALID		(1<<32)
-	u32 _pad_desc_0;
-	volatile u32 desc_0;
-	u32 _pad_desc_1;
-	volatile u32 desc_1;
-	u32 _pad_desc_2;
-	volatile u32 desc_2;
-	u32 _pad_Bdesc_3;
-	volatile u32 desc_3;
+    u32 _pad_desc_0;
+    volatile u32 desc_0;
+    u32 _pad_desc_1;
+    volatile u32 desc_1;
+    u32 _pad_desc_2;
+    volatile u32 desc_2;
+    u32 _pad_Bdesc_3;
+    volatile u32 desc_3;
 
-	u32 _pad_fifo_thres;
-	volatile u32 fifo_thres;
-	u32 _pad_fifo_read;
-	volatile u32 fifo_read;
-	u32 _pad_fifo_write;
-	volatile u32 fifo_write;
+    u32 _pad_fifo_thres;
+    volatile u32 fifo_thres;
+    u32 _pad_fifo_read;
+    volatile u32 fifo_read;
+    u32 _pad_fifo_write;
+    volatile u32 fifo_write;
 };
 
 struct sgi_vino {
 #define VINO_CHIP_ID		0xb
 #define VINO_REV_NUM(x)		((x) & 0x0f)
 #define VINO_ID_VALUE(x)	(((x) & 0xf0) >> 4)
-	u32 _pad_rev_id;
-	volatile u32 rev_id;
+    u32 _pad_rev_id;
+    volatile u32 rev_id;
 
 #define VINO_CTRL_LITTLE_ENDIAN		(1<<0)
 #define VINO_CTRL_A_EOF_INT		(1<<1)	/* Field transferred int */
@@ -108,8 +108,8 @@ struct sgi_vino {
 #define VINO_CTRL_B_DEC_SCALE_SHIFT	(26)
 #define VINO_CTRL_B_DEC_HOR_ONLY	(1<<29)	/* Decimation horizontal only */
 #define VINO_CTRL_B_DITHER		(1<<30)	/* ChanB 24 -> 8 bit dither */
-	u32 _pad_control;
-	volatile u32 control;
+    u32 _pad_control;
+    volatile u32 control;
 
 #define VINO_INTSTAT_A_EOF		(1<<0)	/* Field transferred int */
 #define VINO_INTSTAT_A_FIFO		(1<<1)	/* FIFO overflow int */
@@ -123,16 +123,16 @@ struct sgi_vino {
 #define VINO_INTSTAT_B			(VINO_INTSTAT_B_EOF | \
 					 VINO_INTSTAT_B_FIFO | \
 					 VINO_INTSTAT_B_EOD)
-	u32 _pad_intr_status;
-	volatile u32 intr_status;
+    u32 _pad_intr_status;
+    volatile u32 intr_status;
 
-	u32 _pad_i2c_control;
-	volatile u32 i2c_control;
-	u32 _pad_i2c_data;
-	volatile u32 i2c_data;
+    u32 _pad_i2c_control;
+    volatile u32 i2c_control;
+    u32 _pad_i2c_data;
+    volatile u32 i2c_data;
 
-	struct sgi_vino_channel a;
-	struct sgi_vino_channel b;
+    struct sgi_vino_channel a;
+    struct sgi_vino_channel b;
 };
 
 #endif

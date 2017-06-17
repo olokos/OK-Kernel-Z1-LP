@@ -25,24 +25,22 @@
 
 static atomic_t num_fab = ATOMIC_INIT(0);
 
-int msm_bus_get_num_fab(void)
-{
-	return atomic_read(&num_fab);
+int msm_bus_get_num_fab(void) {
+    return atomic_read(&num_fab);
 }
 
-int msm_bus_device_match(struct device *dev, void* id)
-{
-	struct msm_bus_fabric_device *fabdev = to_msm_bus_fabric_device(dev);
+int msm_bus_device_match(struct device *dev, void* id) {
+    struct msm_bus_fabric_device *fabdev = to_msm_bus_fabric_device(dev);
 
-	if (!fabdev) {
-		MSM_BUS_WARN("Fabric %p returning 0\n", fabdev);
-		return 0;
-	}
-	return (fabdev->id == (int)id);
+    if (!fabdev) {
+        MSM_BUS_WARN("Fabric %p returning 0\n", fabdev);
+        return 0;
+    }
+    return (fabdev->id == (int)id);
 }
 
 struct bus_type msm_bus_type = {
-	.name      = "msm-bus-type",
+    .name      = "msm-bus-type",
 };
 EXPORT_SYMBOL(msm_bus_type);
 
@@ -52,65 +50,60 @@ EXPORT_SYMBOL(msm_bus_type);
  * @fabid: Fabric id
  * Function returns: Pointer to the fabric device
  */
-struct msm_bus_fabric_device *msm_bus_get_fabric_device(int fabid)
-{
-	struct device *dev;
-	struct msm_bus_fabric_device *fabric;
-	dev = bus_find_device(&msm_bus_type, NULL, (void *)fabid,
-		msm_bus_device_match);
-	if (!dev)
-		return NULL;
-	fabric = to_msm_bus_fabric_device(dev);
-	return fabric;
+struct msm_bus_fabric_device *msm_bus_get_fabric_device(int fabid) {
+    struct device *dev;
+    struct msm_bus_fabric_device *fabric;
+    dev = bus_find_device(&msm_bus_type, NULL, (void *)fabid,
+                          msm_bus_device_match);
+    if (!dev)
+        return NULL;
+    fabric = to_msm_bus_fabric_device(dev);
+    return fabric;
 }
 
 /**
  * msm_bus_fabric_device_register() - Registers a fabric on msm bus
  * @fabdev: Fabric device to be registered
  */
-int msm_bus_fabric_device_register(struct msm_bus_fabric_device *fabdev)
-{
-	int ret = 0;
-	fabdev->dev.bus = &msm_bus_type;
-	ret = dev_set_name(&fabdev->dev, fabdev->name);
-	if (ret) {
-		MSM_BUS_ERR("error setting dev name\n");
-		goto err;
-	}
-	ret = device_register(&fabdev->dev);
-	if (ret < 0) {
-		MSM_BUS_ERR("error registering device%d %s\n",
-				ret, fabdev->name);
-		goto err;
-	}
-	atomic_inc(&num_fab);
+int msm_bus_fabric_device_register(struct msm_bus_fabric_device *fabdev) {
+    int ret = 0;
+    fabdev->dev.bus = &msm_bus_type;
+    ret = dev_set_name(&fabdev->dev, fabdev->name);
+    if (ret) {
+        MSM_BUS_ERR("error setting dev name\n");
+        goto err;
+    }
+    ret = device_register(&fabdev->dev);
+    if (ret < 0) {
+        MSM_BUS_ERR("error registering device%d %s\n",
+                    ret, fabdev->name);
+        goto err;
+    }
+    atomic_inc(&num_fab);
 err:
-	return ret;
+    return ret;
 }
 
 /**
  * msm_bus_fabric_device_unregister() - Unregisters the fabric
  * devices from the msm bus
  */
-void msm_bus_fabric_device_unregister(struct msm_bus_fabric_device *fabdev)
-{
-	device_unregister(&fabdev->dev);
-	atomic_dec(&num_fab);
+void msm_bus_fabric_device_unregister(struct msm_bus_fabric_device *fabdev) {
+    device_unregister(&fabdev->dev);
+    atomic_dec(&num_fab);
 }
 
-static void __exit msm_bus_exit(void)
-{
-	bus_unregister(&msm_bus_type);
+static void __exit msm_bus_exit(void) {
+    bus_unregister(&msm_bus_type);
 }
 
-static int __init msm_bus_init(void)
-{
-	int retval = 0;
-	retval = bus_register(&msm_bus_type);
-	if (retval)
-		MSM_BUS_ERR("bus_register error! %d\n",
-			retval);
-	return retval;
+static int __init msm_bus_init(void) {
+    int retval = 0;
+    retval = bus_register(&msm_bus_type);
+    if (retval)
+        MSM_BUS_ERR("bus_register error! %d\n",
+                    retval);
+    return retval;
 }
 postcore_initcall(msm_bus_init);
 module_exit(msm_bus_exit);

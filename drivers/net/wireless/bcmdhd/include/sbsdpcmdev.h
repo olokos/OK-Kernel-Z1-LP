@@ -3,13 +3,13 @@
  * device core support
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -17,7 +17,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -37,126 +37,126 @@
 
 
 typedef volatile struct {
-	dma64regs_t	xmt;		/* dma tx */
-	uint32 PAD[2];
-	dma64regs_t	rcv;		/* dma rx */
-	uint32 PAD[2];
+    dma64regs_t	xmt;		/* dma tx */
+    uint32 PAD[2];
+    dma64regs_t	rcv;		/* dma rx */
+    uint32 PAD[2];
 } dma64p_t;
 
 /* dma64 sdiod corerev >= 1 */
 typedef volatile struct {
-	dma64p_t dma64regs[2];
-	dma64diag_t dmafifo;		/* DMA Diagnostic Regs, 0x280-0x28c */
-	uint32 PAD[92];
+    dma64p_t dma64regs[2];
+    dma64diag_t dmafifo;		/* DMA Diagnostic Regs, 0x280-0x28c */
+    uint32 PAD[92];
 } sdiodma64_t;
 
 /* dma32 sdiod corerev == 0 */
 typedef volatile struct {
-	dma32regp_t dma32regs[2];	/* dma tx & rx, 0x200-0x23c */
-	dma32diag_t dmafifo;		/* DMA Diagnostic Regs, 0x240-0x24c */
-	uint32 PAD[108];
+    dma32regp_t dma32regs[2];	/* dma tx & rx, 0x200-0x23c */
+    dma32diag_t dmafifo;		/* DMA Diagnostic Regs, 0x240-0x24c */
+    uint32 PAD[108];
 } sdiodma32_t;
 
 /* dma32 regs for pcmcia core */
 typedef volatile struct {
-	dma32regp_t dmaregs;		/* DMA Regs, 0x200-0x21c, rev8 */
-	dma32diag_t dmafifo;		/* DMA Diagnostic Regs, 0x220-0x22c */
-	uint32 PAD[116];
+    dma32regp_t dmaregs;		/* DMA Regs, 0x200-0x21c, rev8 */
+    dma32diag_t dmafifo;		/* DMA Diagnostic Regs, 0x220-0x22c */
+    uint32 PAD[116];
 } pcmdma32_t;
 
 /* core registers */
 typedef volatile struct {
-	uint32 corecontrol;		/* CoreControl, 0x000, rev8 */
-	uint32 corestatus;		/* CoreStatus, 0x004, rev8  */
-	uint32 PAD[1];
-	uint32 biststatus;		/* BistStatus, 0x00c, rev8  */
+    uint32 corecontrol;		/* CoreControl, 0x000, rev8 */
+    uint32 corestatus;		/* CoreStatus, 0x004, rev8  */
+    uint32 PAD[1];
+    uint32 biststatus;		/* BistStatus, 0x00c, rev8  */
 
-	/* PCMCIA access */
-	uint16 pcmciamesportaladdr;	/* PcmciaMesPortalAddr, 0x010, rev8   */
-	uint16 PAD[1];
-	uint16 pcmciamesportalmask;	/* PcmciaMesPortalMask, 0x014, rev8   */
-	uint16 PAD[1];
-	uint16 pcmciawrframebc;		/* PcmciaWrFrameBC, 0x018, rev8   */
-	uint16 PAD[1];
-	uint16 pcmciaunderflowtimer;	/* PcmciaUnderflowTimer, 0x01c, rev8   */
-	uint16 PAD[1];
+    /* PCMCIA access */
+    uint16 pcmciamesportaladdr;	/* PcmciaMesPortalAddr, 0x010, rev8   */
+    uint16 PAD[1];
+    uint16 pcmciamesportalmask;	/* PcmciaMesPortalMask, 0x014, rev8   */
+    uint16 PAD[1];
+    uint16 pcmciawrframebc;		/* PcmciaWrFrameBC, 0x018, rev8   */
+    uint16 PAD[1];
+    uint16 pcmciaunderflowtimer;	/* PcmciaUnderflowTimer, 0x01c, rev8   */
+    uint16 PAD[1];
 
-	/* interrupt */
-	uint32 intstatus;		/* IntStatus, 0x020, rev8   */
-	uint32 hostintmask;		/* IntHostMask, 0x024, rev8   */
-	uint32 intmask;			/* IntSbMask, 0x028, rev8   */
-	uint32 sbintstatus;		/* SBIntStatus, 0x02c, rev8   */
-	uint32 sbintmask;		/* SBIntMask, 0x030, rev8   */
-	uint32 funcintmask;		/* SDIO Function Interrupt Mask, SDIO rev4 */
-	uint32 PAD[2];
-	uint32 tosbmailbox;		/* ToSBMailbox, 0x040, rev8   */
-	uint32 tohostmailbox;		/* ToHostMailbox, 0x044, rev8   */
-	uint32 tosbmailboxdata;		/* ToSbMailboxData, 0x048, rev8   */
-	uint32 tohostmailboxdata;	/* ToHostMailboxData, 0x04c, rev8   */
+    /* interrupt */
+    uint32 intstatus;		/* IntStatus, 0x020, rev8   */
+    uint32 hostintmask;		/* IntHostMask, 0x024, rev8   */
+    uint32 intmask;			/* IntSbMask, 0x028, rev8   */
+    uint32 sbintstatus;		/* SBIntStatus, 0x02c, rev8   */
+    uint32 sbintmask;		/* SBIntMask, 0x030, rev8   */
+    uint32 funcintmask;		/* SDIO Function Interrupt Mask, SDIO rev4 */
+    uint32 PAD[2];
+    uint32 tosbmailbox;		/* ToSBMailbox, 0x040, rev8   */
+    uint32 tohostmailbox;		/* ToHostMailbox, 0x044, rev8   */
+    uint32 tosbmailboxdata;		/* ToSbMailboxData, 0x048, rev8   */
+    uint32 tohostmailboxdata;	/* ToHostMailboxData, 0x04c, rev8   */
 
-	/* synchronized access to registers in SDIO clock domain */
-	uint32 sdioaccess;		/* SdioAccess, 0x050, rev8   */
-	uint32 PAD[3];
+    /* synchronized access to registers in SDIO clock domain */
+    uint32 sdioaccess;		/* SdioAccess, 0x050, rev8   */
+    uint32 PAD[3];
 
-	/* PCMCIA frame control */
-	uint8 pcmciaframectrl;		/* pcmciaFrameCtrl, 0x060, rev8   */
-	uint8 PAD[3];
-	uint8 pcmciawatermark;		/* pcmciaWaterMark, 0x064, rev8   */
-	uint8 PAD[155];
+    /* PCMCIA frame control */
+    uint8 pcmciaframectrl;		/* pcmciaFrameCtrl, 0x060, rev8   */
+    uint8 PAD[3];
+    uint8 pcmciawatermark;		/* pcmciaWaterMark, 0x064, rev8   */
+    uint8 PAD[155];
 
-	/* interrupt batching control */
-	uint32 intrcvlazy;		/* IntRcvLazy, 0x100, rev8 */
-	uint32 PAD[3];
+    /* interrupt batching control */
+    uint32 intrcvlazy;		/* IntRcvLazy, 0x100, rev8 */
+    uint32 PAD[3];
 
-	/* counters */
-	uint32 cmd52rd;			/* Cmd52RdCount, 0x110, rev8, SDIO: cmd52 reads */
-	uint32 cmd52wr;			/* Cmd52WrCount, 0x114, rev8, SDIO: cmd52 writes */
-	uint32 cmd53rd;			/* Cmd53RdCount, 0x118, rev8, SDIO: cmd53 reads */
-	uint32 cmd53wr;			/* Cmd53WrCount, 0x11c, rev8, SDIO: cmd53 writes */
-	uint32 abort;			/* AbortCount, 0x120, rev8, SDIO: aborts */
-	uint32 datacrcerror;		/* DataCrcErrorCount, 0x124, rev8, SDIO: frames w/bad CRC */
-	uint32 rdoutofsync;		/* RdOutOfSyncCount, 0x128, rev8, SDIO/PCMCIA: Rd Frm OOS */
-	uint32 wroutofsync;		/* RdOutOfSyncCount, 0x12c, rev8, SDIO/PCMCIA: Wr Frm OOS */
-	uint32 writebusy;		/* WriteBusyCount, 0x130, rev8, SDIO: dev asserted "busy" */
-	uint32 readwait;		/* ReadWaitCount, 0x134, rev8, SDIO: read: no data avail */
-	uint32 readterm;		/* ReadTermCount, 0x138, rev8, SDIO: rd frm terminates */
-	uint32 writeterm;		/* WriteTermCount, 0x13c, rev8, SDIO: wr frm terminates */
-	uint32 PAD[40];
-	uint32 clockctlstatus;		/* ClockCtlStatus, 0x1e0, rev8 */
-	uint32 PAD[7];
+    /* counters */
+    uint32 cmd52rd;			/* Cmd52RdCount, 0x110, rev8, SDIO: cmd52 reads */
+    uint32 cmd52wr;			/* Cmd52WrCount, 0x114, rev8, SDIO: cmd52 writes */
+    uint32 cmd53rd;			/* Cmd53RdCount, 0x118, rev8, SDIO: cmd53 reads */
+    uint32 cmd53wr;			/* Cmd53WrCount, 0x11c, rev8, SDIO: cmd53 writes */
+    uint32 abort;			/* AbortCount, 0x120, rev8, SDIO: aborts */
+    uint32 datacrcerror;		/* DataCrcErrorCount, 0x124, rev8, SDIO: frames w/bad CRC */
+    uint32 rdoutofsync;		/* RdOutOfSyncCount, 0x128, rev8, SDIO/PCMCIA: Rd Frm OOS */
+    uint32 wroutofsync;		/* RdOutOfSyncCount, 0x12c, rev8, SDIO/PCMCIA: Wr Frm OOS */
+    uint32 writebusy;		/* WriteBusyCount, 0x130, rev8, SDIO: dev asserted "busy" */
+    uint32 readwait;		/* ReadWaitCount, 0x134, rev8, SDIO: read: no data avail */
+    uint32 readterm;		/* ReadTermCount, 0x138, rev8, SDIO: rd frm terminates */
+    uint32 writeterm;		/* WriteTermCount, 0x13c, rev8, SDIO: wr frm terminates */
+    uint32 PAD[40];
+    uint32 clockctlstatus;		/* ClockCtlStatus, 0x1e0, rev8 */
+    uint32 PAD[7];
 
-	/* DMA engines */
-	volatile union {
-		pcmdma32_t pcm32;
-		sdiodma32_t sdiod32;
-		sdiodma64_t sdiod64;
-	} dma;
+    /* DMA engines */
+    volatile union {
+        pcmdma32_t pcm32;
+        sdiodma32_t sdiod32;
+        sdiodma64_t sdiod64;
+    } dma;
 
-	/* SDIO/PCMCIA CIS region */
-	char cis[512];			/* 512 byte CIS, 0x400-0x5ff, rev6 */
+    /* SDIO/PCMCIA CIS region */
+    char cis[512];			/* 512 byte CIS, 0x400-0x5ff, rev6 */
 
-	/* PCMCIA function control registers */
-	char pcmciafcr[256];		/* PCMCIA FCR, 0x600-6ff, rev6 */
-	uint16 PAD[55];
+    /* PCMCIA function control registers */
+    char pcmciafcr[256];		/* PCMCIA FCR, 0x600-6ff, rev6 */
+    uint16 PAD[55];
 
-	/* PCMCIA backplane access */
-	uint16 backplanecsr;		/* BackplaneCSR, 0x76E, rev6 */
-	uint16 backplaneaddr0;		/* BackplaneAddr0, 0x770, rev6 */
-	uint16 backplaneaddr1;		/* BackplaneAddr1, 0x772, rev6 */
-	uint16 backplaneaddr2;		/* BackplaneAddr2, 0x774, rev6 */
-	uint16 backplaneaddr3;		/* BackplaneAddr3, 0x776, rev6 */
-	uint16 backplanedata0;		/* BackplaneData0, 0x778, rev6 */
-	uint16 backplanedata1;		/* BackplaneData1, 0x77a, rev6 */
-	uint16 backplanedata2;		/* BackplaneData2, 0x77c, rev6 */
-	uint16 backplanedata3;		/* BackplaneData3, 0x77e, rev6 */
-	uint16 PAD[31];
+    /* PCMCIA backplane access */
+    uint16 backplanecsr;		/* BackplaneCSR, 0x76E, rev6 */
+    uint16 backplaneaddr0;		/* BackplaneAddr0, 0x770, rev6 */
+    uint16 backplaneaddr1;		/* BackplaneAddr1, 0x772, rev6 */
+    uint16 backplaneaddr2;		/* BackplaneAddr2, 0x774, rev6 */
+    uint16 backplaneaddr3;		/* BackplaneAddr3, 0x776, rev6 */
+    uint16 backplanedata0;		/* BackplaneData0, 0x778, rev6 */
+    uint16 backplanedata1;		/* BackplaneData1, 0x77a, rev6 */
+    uint16 backplanedata2;		/* BackplaneData2, 0x77c, rev6 */
+    uint16 backplanedata3;		/* BackplaneData3, 0x77e, rev6 */
+    uint16 PAD[31];
 
-	/* sprom "size" & "blank" info */
-	uint16 spromstatus;		/* SPROMStatus, 0x7BE, rev2 */
-	uint32 PAD[464];
+    /* sprom "size" & "blank" info */
+    uint16 spromstatus;		/* SPROMStatus, 0x7BE, rev2 */
+    uint32 PAD[464];
 
-	/* Sonics SiliconBackplane registers */
-	sbconfig_t sbconfig;		/* SbConfig Regs, 0xf00-0xfff, rev8 */
+    /* Sonics SiliconBackplane registers */
+    sbconfig_t sbconfig;		/* SbConfig Regs, 0xf00-0xfff, rev8 */
 } sdpcmd_regs_t;
 
 /* corecontrol */
@@ -276,8 +276,8 @@ typedef volatile struct {
 
 /* rx header */
 typedef volatile struct {
-	uint16 len;
-	uint16 flags;
+    uint16 len;
+    uint16 flags;
 } sdpcmd_rxh_t;
 
 /* rx header flags */

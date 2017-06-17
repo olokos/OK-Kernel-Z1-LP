@@ -11,13 +11,13 @@
 
 /* Full oob structure as written on the flash */
 struct sm_oob {
-	uint32_t reserved;
-	uint8_t data_status;
-	uint8_t block_status;
-	uint8_t lba_copy1[2];
-	uint8_t ecc2[3];
-	uint8_t lba_copy2[2];
-	uint8_t ecc1[3];
+    uint32_t reserved;
+    uint8_t data_status;
+    uint8_t block_status;
+    uint8_t lba_copy1[2];
+    uint8_t ecc2[3];
+    uint8_t lba_copy2[2];
+    uint8_t ecc1[3];
 } __attribute__((packed));
 
 
@@ -39,23 +39,21 @@ struct sm_oob {
 extern int sm_register_device(struct mtd_info *mtd, int smartmedia);
 
 
-static inline int sm_sector_valid(struct sm_oob *oob)
-{
-	return hweight16(oob->data_status) >= 5;
+static inline int sm_sector_valid(struct sm_oob *oob) {
+    return hweight16(oob->data_status) >= 5;
 }
 
-static inline int sm_block_valid(struct sm_oob *oob)
-{
-	return hweight16(oob->block_status) >= 7;
+static inline int sm_block_valid(struct sm_oob *oob) {
+    return hweight16(oob->block_status) >= 7;
 }
 
-static inline int sm_block_erased(struct sm_oob *oob)
-{
-	static const uint32_t erased_pattern[4] = {
-		0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
+static inline int sm_block_erased(struct sm_oob *oob) {
+    static const uint32_t erased_pattern[4] = {
+        0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
+    };
 
-	/* First test for erased block */
-	if (!memcmp(oob, erased_pattern, sizeof(*oob)))
-		return 1;
-	return 0;
+    /* First test for erased block */
+    if (!memcmp(oob, erased_pattern, sizeof(*oob)))
+        return 1;
+    return 0;
 }

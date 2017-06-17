@@ -51,12 +51,11 @@ extern int ibmasm_debug;
 			printk(KERN_DEBUG STR , ##ARGS);	\
 	} while (0)
 
-static inline char *get_timestamp(char *buf)
-{
-	struct timeval now;
-	do_gettimeofday(&now);
-	sprintf(buf, "%lu.%lu", now.tv_sec, now.tv_usec);
-	return buf;
+static inline char *get_timestamp(char *buf) {
+    struct timeval now;
+    do_gettimeofday(&now);
+    sprintf(buf, "%lu.%lu", now.tv_sec, now.tv_usec);
+    return buf;
 }
 
 #define IBMASM_CMD_PENDING	0
@@ -88,80 +87,78 @@ static inline char *get_timestamp(char *buf)
 
 
 struct command {
-	struct list_head	queue_node;
-	wait_queue_head_t	wait;
-	unsigned char		*buffer;
-	size_t			buffer_size;
-	int			status;
-	struct kref		kref;
-	spinlock_t		*lock;
+    struct list_head	queue_node;
+    wait_queue_head_t	wait;
+    unsigned char		*buffer;
+    size_t			buffer_size;
+    int			status;
+    struct kref		kref;
+    spinlock_t		*lock;
 };
 #define to_command(c) container_of(c, struct command, kref)
 
 void ibmasm_free_command(struct kref *kref);
-static inline void command_put(struct command *cmd)
-{
-	unsigned long flags;
-	spinlock_t *lock = cmd->lock;
+static inline void command_put(struct command *cmd) {
+    unsigned long flags;
+    spinlock_t *lock = cmd->lock;
 
-	spin_lock_irqsave(lock, flags);
-	kref_put(&cmd->kref, ibmasm_free_command);
-	spin_unlock_irqrestore(lock, flags);
+    spin_lock_irqsave(lock, flags);
+    kref_put(&cmd->kref, ibmasm_free_command);
+    spin_unlock_irqrestore(lock, flags);
 }
 
-static inline void command_get(struct command *cmd)
-{
-	kref_get(&cmd->kref);
+static inline void command_get(struct command *cmd) {
+    kref_get(&cmd->kref);
 }
 
 
 struct ibmasm_event {
-	unsigned int	serial_number;
-	unsigned int	data_size;
-	unsigned char	data[IBMASM_EVENT_MAX_SIZE];
+    unsigned int	serial_number;
+    unsigned int	data_size;
+    unsigned char	data[IBMASM_EVENT_MAX_SIZE];
 };
 
 struct event_buffer {
-	struct ibmasm_event	events[IBMASM_NUM_EVENTS];
-	unsigned int		next_serial_number;
-	unsigned int		next_index;
-	struct list_head	readers;
+    struct ibmasm_event	events[IBMASM_NUM_EVENTS];
+    unsigned int		next_serial_number;
+    unsigned int		next_index;
+    struct list_head	readers;
 };
 
 struct event_reader {
-	int			cancelled;
-	unsigned int		next_serial_number;
-	wait_queue_head_t	wait;
-	struct list_head	node;
-	unsigned int		data_size;
-	unsigned char		data[IBMASM_EVENT_MAX_SIZE];
+    int			cancelled;
+    unsigned int		next_serial_number;
+    wait_queue_head_t	wait;
+    struct list_head	node;
+    unsigned int		data_size;
+    unsigned char		data[IBMASM_EVENT_MAX_SIZE];
 };
 
 struct reverse_heartbeat {
-	wait_queue_head_t	wait;
-	unsigned int		stopped;
+    wait_queue_head_t	wait;
+    unsigned int		stopped;
 };
 
 struct ibmasm_remote {
-	struct input_dev *keybd_dev;
-	struct input_dev *mouse_dev;
+    struct input_dev *keybd_dev;
+    struct input_dev *mouse_dev;
 };
 
 struct service_processor {
-	struct list_head	node;
-	spinlock_t		lock;
-	void __iomem		*base_address;
-	unsigned int		irq;
-	struct command		*current_command;
-	struct command		*heartbeat;
-	struct list_head	command_queue;
-	struct event_buffer	*event_buffer;
-	char			dirname[IBMASM_NAME_SIZE];
-	char			devname[IBMASM_NAME_SIZE];
-	unsigned int		number;
-	struct ibmasm_remote	remote;
-	int			serial_line;
-	struct device		*dev;
+    struct list_head	node;
+    spinlock_t		lock;
+    void __iomem		*base_address;
+    unsigned int		irq;
+    struct command		*current_command;
+    struct command		*heartbeat;
+    struct list_head	command_queue;
+    struct event_buffer	*event_buffer;
+    char			dirname[IBMASM_NAME_SIZE];
+    char			devname[IBMASM_NAME_SIZE];
+    unsigned int		number;
+    struct ibmasm_remote	remote;
+    int			serial_line;
+    struct device		*dev;
 };
 
 /* command processing */

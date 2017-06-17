@@ -53,8 +53,7 @@
 /*--------------------------------------------------------------------------
   FT Pre Auth Req SME<->PE
   ------------------------------------------------------------------------*/
-typedef struct sSirFTPreAuthReq
-{
+typedef struct sSirFTPreAuthReq {
     tANI_U16    messageType;      // eWNI_SME_FT_PRE_AUTH_REQ
     tANI_U16    length;
     tANI_BOOLEAN bPreAuthRspProcessed; /* Track if response is processed for this request
@@ -70,8 +69,7 @@ typedef struct sSirFTPreAuthReq
 /*-------------------------------------------------------------------------
   FT Pre Auth Rsp PE<->SME
   ------------------------------------------------------------------------*/
-typedef struct sSirFTPreAuthRsp
-{
+typedef struct sSirFTPreAuthRsp {
     tANI_U16         messageType;      // eWNI_SME_FT_PRE_AUTH_RSP
     tANI_U16         length;
     tANI_U8          smeSessionId;
@@ -86,8 +84,7 @@ typedef struct sSirFTPreAuthRsp
 /*--------------------------------------------------------------------------
   FT Pre Auth Rsp Key SME<->PE
   ------------------------------------------------------------------------*/
-typedef struct sSirFTUpdateKeyInfo
-{
+typedef struct sSirFTUpdateKeyInfo {
     tANI_U16             messageType;
     tANI_U16             length;
     tSirMacAddr          bssId;
@@ -97,8 +94,7 @@ typedef struct sSirFTUpdateKeyInfo
 /*--------------------------------------------------------------------------
   FT Pre Auth Rsp Key SME<->PE
   ------------------------------------------------------------------------*/
-typedef struct sSirFTPreAuthKeyInfo
-{
+typedef struct sSirFTPreAuthKeyInfo {
     tANI_U8 extSetStaKeyParamValid; //Ext Bss Config Msg if set
     tSetStaKeyParams extSetStaKeyParam;  //SetStaKeyParams for ext bss msg
 } tSirFTPreAuthKeyInfo, *tpSirFTPreAuthKeyInfo;
@@ -106,8 +102,7 @@ typedef struct sSirFTPreAuthKeyInfo
 /*-------------------------------------------------------------------------
   Global FT Information
   ------------------------------------------------------------------------*/
-typedef struct sFTPEContext
-{
+typedef struct sFTPEContext {
     tpSirFTPreAuthReq pFTPreAuthReq;                      // Saved FT Pre Auth Req
     void              *psavedsessionEntry;
     tSirRetStatus     ftPreAuthStatus;

@@ -53,14 +53,14 @@ Timer four  (Timer ID 3) runs at 150 MHz
 #define tmrHw_TIMER_NUM_COUNT           (4)	/* Number of timer module supported */
 
 typedef struct {
-	uint32_t LoadValue;	/* Load value for timer */
-	uint32_t CurrentValue;	/* Current value for timer */
-	uint32_t Control;	/* Control register */
-	uint32_t InterruptClear;	/* Interrupt clear register */
-	uint32_t RawInterruptStatus;	/* Raw interrupt status */
-	uint32_t InterruptStatus;	/* Masked interrupt status */
-	uint32_t BackgroundLoad;	/* Background load value */
-	uint32_t padding;	/* Padding register */
+    uint32_t LoadValue;	/* Load value for timer */
+    uint32_t CurrentValue;	/* Current value for timer */
+    uint32_t Control;	/* Control register */
+    uint32_t InterruptClear;	/* Interrupt clear register */
+    uint32_t RawInterruptStatus;	/* Raw interrupt status */
+    uint32_t InterruptStatus;	/* Masked interrupt status */
+    uint32_t BackgroundLoad;	/* Background load value */
+    uint32_t padding;	/* Padding register */
 } tmrHw_REG_t;
 
 /* Control bot masks */

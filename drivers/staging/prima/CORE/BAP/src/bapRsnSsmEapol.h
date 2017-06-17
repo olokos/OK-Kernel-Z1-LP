@@ -90,8 +90,7 @@
 #define ANI_SSM_IE_RSN_GROUP_KEY_DATA_ENCAPS_ID 1
 #define ANI_SSM_GROUP_KEY_KDE_TX_BIT            0x04
 
-typedef struct sAniEapolLegacyRc4KeyDesc
-{
+typedef struct sAniEapolLegacyRc4KeyDesc {
     v_U16_t keyLen;
     v_U8_t  replayCounter[ANI_EAPOL_KEY_RC4_REPLAY_CTR_SIZE];
     v_U8_t  keyIv[ANI_EAPOL_KEY_RC4_IV_SIZE];
@@ -101,8 +100,7 @@ typedef struct sAniEapolLegacyRc4KeyDesc
     v_U8_t  *key;
 } tAniEapolLegacyRc4KeyDesc;
 
-typedef struct sAniRsnKeyInfo
-{
+typedef struct sAniRsnKeyInfo {
     v_U32_t keyDescVers;
     tANI_BOOLEAN unicastFlag; // Pair-wise key
     v_U16_t keyId;
@@ -115,8 +113,7 @@ typedef struct sAniRsnKeyInfo
     tANI_BOOLEAN encKeyDataFlag; // RSN only (Is 0 in WPA)
 } tAniRsnKeyInfo;
 
-typedef struct sAniEapolRsnKeyDesc
-{
+typedef struct sAniEapolRsnKeyDesc {
     tAniRsnKeyInfo info;
     v_U16_t keyLen;
     v_U8_t  replayCounter[ANI_EAPOL_KEY_RSN_REPLAY_CTR_SIZE];

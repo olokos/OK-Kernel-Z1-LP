@@ -80,20 +80,20 @@
 struct pll_data;
 
 struct clk {
-	struct list_head	node;
-	struct module		*owner;
-	const char		*name;
-	unsigned long		rate;
-	int			usecount;
-	u32			flags;
-	struct clk		*parent;
-	struct list_head	children;	/* list of children */
-	struct list_head	childnode;	/* parent's child list node */
-	struct pll_data		*pll_data;
-	u32			div;
-	unsigned long (*recalc) (struct clk *);
-	int (*set_rate) (struct clk *clk, unsigned long rate);
-	int (*round_rate) (struct clk *clk, unsigned long rate);
+    struct list_head	node;
+    struct module		*owner;
+    const char		*name;
+    unsigned long		rate;
+    int			usecount;
+    u32			flags;
+    struct clk		*parent;
+    struct list_head	children;	/* list of children */
+    struct list_head	childnode;	/* parent's child list node */
+    struct pll_data		*pll_data;
+    u32			div;
+    unsigned long (*recalc) (struct clk *);
+    int (*set_rate) (struct clk *clk, unsigned long rate);
+    int (*round_rate) (struct clk *clk, unsigned long rate);
 };
 
 /* Clock flags: SoC-specific flags start at BIT(16) */
@@ -106,14 +106,14 @@ struct clk {
 #define MAX_PLL_SYSCLKS 16
 
 struct pll_data {
-	void __iomem *base;
-	u32 num;
-	u32 flags;
-	u32 input_rate;
-	u32 bypass_delay; /* in loops */
-	u32 reset_delay;  /* in loops */
-	u32 lock_delay;   /* in loops */
-	struct clk sysclks[MAX_PLL_SYSCLKS + 1];
+    void __iomem *base;
+    u32 num;
+    u32 flags;
+    u32 input_rate;
+    u32 bypass_delay; /* in loops */
+    u32 reset_delay;  /* in loops */
+    u32 lock_delay;   /* in loops */
+    struct clk sysclks[MAX_PLL_SYSCLKS + 1];
 };
 
 /* pll_data flag bit */

@@ -41,24 +41,24 @@
  *			for real fiq mode debugger.
  */
 struct fiq_debugger_pdata {
-	int (*uart_init)(struct platform_device *pdev);
-	void (*uart_free)(struct platform_device *pdev);
-	int (*uart_resume)(struct platform_device *pdev);
-	int (*uart_getc)(struct platform_device *pdev);
-	void (*uart_putc)(struct platform_device *pdev, unsigned int c);
-	void (*uart_flush)(struct platform_device *pdev);
-	void (*uart_enable)(struct platform_device *pdev);
-	void (*uart_disable)(struct platform_device *pdev);
+    int (*uart_init)(struct platform_device *pdev);
+    void (*uart_free)(struct platform_device *pdev);
+    int (*uart_resume)(struct platform_device *pdev);
+    int (*uart_getc)(struct platform_device *pdev);
+    void (*uart_putc)(struct platform_device *pdev, unsigned int c);
+    void (*uart_flush)(struct platform_device *pdev);
+    void (*uart_enable)(struct platform_device *pdev);
+    void (*uart_disable)(struct platform_device *pdev);
 
-	int (*uart_dev_suspend)(struct platform_device *pdev);
-	int (*uart_dev_resume)(struct platform_device *pdev);
+    int (*uart_dev_suspend)(struct platform_device *pdev);
+    int (*uart_dev_resume)(struct platform_device *pdev);
 
-	void (*fiq_enable)(struct platform_device *pdev, unsigned int fiq,
-								bool enable);
-	void (*fiq_ack)(struct platform_device *pdev, unsigned int fiq);
+    void (*fiq_enable)(struct platform_device *pdev, unsigned int fiq,
+                       bool enable);
+    void (*fiq_ack)(struct platform_device *pdev, unsigned int fiq);
 
-	void (*force_irq)(struct platform_device *pdev, unsigned int irq);
-	void (*force_irq_ack)(struct platform_device *pdev, unsigned int irq);
+    void (*force_irq)(struct platform_device *pdev, unsigned int irq);
+    void (*force_irq_ack)(struct platform_device *pdev, unsigned int irq);
 };
 
 #endif

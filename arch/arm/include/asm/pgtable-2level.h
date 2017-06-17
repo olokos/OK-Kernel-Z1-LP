@@ -153,9 +153,8 @@
 #define pud_clear(pudp)		do { } while (0)
 #define set_pud(pud,pudp)	do { } while (0)
 
-static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr)
-{
-	return (pmd_t *)pud;
+static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr) {
+    return (pmd_t *)pud;
 }
 
 #define pmd_bad(pmd)		(pmd_val(pmd) & 2)

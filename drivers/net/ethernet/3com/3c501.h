@@ -26,13 +26,12 @@ static int el_debug = EL_DEBUG;
  *	Board-specific info in netdev_priv(dev).
  */
 
-struct net_local
-{
-	int		tx_pkt_start;	/* The length of the current Tx packet. */
-	int		collisions;	/* Tx collisions this packet */
-	int		loading;	/* Spot buffer load collisions */
-	int		txing;		/* True if card is in TX mode */
-	spinlock_t	lock;		/* Serializing lock */
+struct net_local {
+    int		tx_pkt_start;	/* The length of the current Tx packet. */
+    int		collisions;	/* Tx collisions this packet */
+    int		loading;	/* Spot buffer load collisions */
+    int		txing;		/* True if card is in TX mode */
+    spinlock_t	lock;		/* Serializing lock */
 };
 
 

@@ -17,9 +17,9 @@ struct task_struct;
  *	switch_to() should switch tasks to task nr n, first
  */
 struct task_struct *sh64_switch_to(struct task_struct *prev,
-				   struct thread_struct *prev_thread,
-				   struct task_struct *next,
-				   struct thread_struct *next_thread);
+                                   struct thread_struct *prev_thread,
+                                   struct task_struct *next,
+                                   struct thread_struct *next_thread);
 
 #define switch_to(prev,next,last)				\
 do {								\

@@ -57,8 +57,7 @@
   Type declarations
   ------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     /// Request succeeded!
     VOS_STATUS_SUCCESS,
 

@@ -36,76 +36,76 @@
 #define MAX_CS	2
 
 struct pasemi_mac_txring {
-	struct pasemi_dmachan chan; /* Must be first */
-	spinlock_t	 lock;
-	unsigned int	 size;
-	unsigned int	 next_to_fill;
-	unsigned int	 next_to_clean;
-	struct pasemi_mac_buffer *ring_info;
-	struct pasemi_mac *mac;	/* Needed in intr handler */
-	struct timer_list clean_timer;
+    struct pasemi_dmachan chan; /* Must be first */
+    spinlock_t	 lock;
+    unsigned int	 size;
+    unsigned int	 next_to_fill;
+    unsigned int	 next_to_clean;
+    struct pasemi_mac_buffer *ring_info;
+    struct pasemi_mac *mac;	/* Needed in intr handler */
+    struct timer_list clean_timer;
 };
 
 struct pasemi_mac_rxring {
-	struct pasemi_dmachan chan; /* Must be first */
-	spinlock_t	 lock;
-	u64		*buffers;	/* RX interface buffer ring */
-	dma_addr_t	 buf_dma;
-	unsigned int	 size;
-	unsigned int	 next_to_fill;
-	unsigned int	 next_to_clean;
-	struct pasemi_mac_buffer *ring_info;
-	struct pasemi_mac *mac;	/* Needed in intr handler */
+    struct pasemi_dmachan chan; /* Must be first */
+    spinlock_t	 lock;
+    u64		*buffers;	/* RX interface buffer ring */
+    dma_addr_t	 buf_dma;
+    unsigned int	 size;
+    unsigned int	 next_to_fill;
+    unsigned int	 next_to_clean;
+    struct pasemi_mac_buffer *ring_info;
+    struct pasemi_mac *mac;	/* Needed in intr handler */
 };
 
 struct pasemi_mac_csring {
-	struct pasemi_dmachan chan;
-	unsigned int	size;
-	unsigned int	next_to_fill;
-	int		events[2];
-	int		last_event;
-	int		fun;
+    struct pasemi_dmachan chan;
+    unsigned int	size;
+    unsigned int	next_to_fill;
+    int		events[2];
+    int		last_event;
+    int		fun;
 };
 
 struct pasemi_mac {
-	struct net_device *netdev;
-	struct pci_dev *pdev;
-	struct pci_dev *dma_pdev;
-	struct pci_dev *iob_pdev;
-	struct phy_device *phydev;
-	struct napi_struct napi;
+    struct net_device *netdev;
+    struct pci_dev *pdev;
+    struct pci_dev *dma_pdev;
+    struct pci_dev *iob_pdev;
+    struct phy_device *phydev;
+    struct napi_struct napi;
 
-	int		bufsz; /* RX ring buffer size */
-	int		last_cs;
-	int		num_cs;
-	u32		dma_if;
-	u8		type;
+    int		bufsz; /* RX ring buffer size */
+    int		last_cs;
+    int		num_cs;
+    u32		dma_if;
+    u8		type;
 #define MAC_TYPE_GMAC	1
 #define MAC_TYPE_XAUI	2
 
-	u8		mac_addr[6];
+    u8		mac_addr[6];
 
-	struct net_lro_mgr	lro_mgr;
-	struct net_lro_desc	lro_desc[MAX_LRO_DESCRIPTORS];
-	struct timer_list	rxtimer;
-	unsigned int		lro_max_aggr;
+    struct net_lro_mgr	lro_mgr;
+    struct net_lro_desc	lro_desc[MAX_LRO_DESCRIPTORS];
+    struct timer_list	rxtimer;
+    unsigned int		lro_max_aggr;
 
-	struct pasemi_mac_txring *tx;
-	struct pasemi_mac_rxring *rx;
-	struct pasemi_mac_csring *cs[MAX_CS];
-	char		tx_irq_name[10];		/* "eth%d tx" */
-	char		rx_irq_name[10];		/* "eth%d rx" */
-	int	link;
-	int	speed;
-	int	duplex;
+    struct pasemi_mac_txring *tx;
+    struct pasemi_mac_rxring *rx;
+    struct pasemi_mac_csring *cs[MAX_CS];
+    char		tx_irq_name[10];		/* "eth%d tx" */
+    char		rx_irq_name[10];		/* "eth%d rx" */
+    int	link;
+    int	speed;
+    int	duplex;
 
-	unsigned int	msg_enable;
+    unsigned int	msg_enable;
 };
 
 /* Software status descriptor (ring_info) */
 struct pasemi_mac_buffer {
-	struct sk_buff *skb;
-	dma_addr_t	dma;
+    struct sk_buff *skb;
+    dma_addr_t	dma;
 };
 
 #define TX_DESC(tx, num)	((tx)->chan.ring_virt[(num) & (TX_RING_SIZE-1)])
@@ -124,13 +124,13 @@ struct pasemi_mac_buffer {
 
 /* MAC CFG register offsets */
 enum {
-	PAS_MAC_CFG_PCFG = 0x80,
-	PAS_MAC_CFG_MACCFG = 0x84,
-	PAS_MAC_CFG_ADR0 = 0x8c,
-	PAS_MAC_CFG_ADR1 = 0x90,
-	PAS_MAC_CFG_TXP = 0x98,
-	PAS_MAC_CFG_RMON = 0x100,
-	PAS_MAC_IPC_CHNL = 0x208,
+    PAS_MAC_CFG_PCFG = 0x80,
+    PAS_MAC_CFG_MACCFG = 0x84,
+    PAS_MAC_CFG_ADR0 = 0x8c,
+    PAS_MAC_CFG_ADR1 = 0x90,
+    PAS_MAC_CFG_TXP = 0x98,
+    PAS_MAC_CFG_RMON = 0x100,
+    PAS_MAC_IPC_CHNL = 0x208,
 };
 
 /* MAC CFG register fields */

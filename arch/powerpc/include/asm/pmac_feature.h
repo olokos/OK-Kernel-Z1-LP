@@ -144,11 +144,10 @@
 struct device_node;
 
 static inline long pmac_call_feature(int selector, struct device_node* node,
-					long param, long value)
-{
-	if (!ppc_md.feature_call || !machine_is(powermac))
-		return -ENODEV;
-	return ppc_md.feature_call(selector, node, param, value);
+                                     long param, long value) {
+    if (!ppc_md.feature_call || !machine_is(powermac))
+        return -ENODEV;
+    return ppc_md.feature_call(selector, node, param, value);
 }
 
 /* PMAC_FTR_SERIAL_ENABLE	(struct device_node* node, int param, int value)
@@ -159,10 +158,10 @@ static inline long pmac_call_feature(int selector, struct device_node* node,
  * for use by xmon.
  */
 #define PMAC_FTR_SCC_ENABLE		PMAC_FTR_DEF(0)
-	#define PMAC_SCC_ASYNC		0
-	#define PMAC_SCC_IRDA		1
-	#define PMAC_SCC_I2S1		2
-	#define PMAC_SCC_FLAG_XMON	0x00001000
+#define PMAC_SCC_ASYNC		0
+#define PMAC_SCC_IRDA		1
+#define PMAC_SCC_I2S1		2
+#define PMAC_SCC_FLAG_XMON	0x00001000
 
 /* PMAC_FTR_MODEM_ENABLE	(struct device_node* node, 0, int value)
  * enable/disable the internal modem.
@@ -309,8 +308,8 @@ extern void pmac_call_early_video_resume(void);
 
 /* The AGP driver registers itself here */
 extern void pmac_register_agp_pm(struct pci_dev *bridge,
-				 int (*suspend)(struct pci_dev *bridge),
-				 int (*resume)(struct pci_dev *bridge));
+                                 int (*suspend)(struct pci_dev *bridge),
+                                 int (*resume)(struct pci_dev *bridge));
 
 /* Those are meant to be used by video drivers to deal with AGP
  * suspend resume properly
@@ -327,31 +326,30 @@ extern void pmac_resume_agp_for_card(struct pci_dev *dev);
 #define MAX_MACIO_CHIPS		2
 
 enum {
-	macio_unknown = 0,
-	macio_grand_central,
-	macio_ohare,
-	macio_ohareII,
-	macio_heathrow,
-	macio_gatwick,
-	macio_paddington,
-	macio_keylargo,
-	macio_pangea,
-	macio_intrepid,
-	macio_keylargo2,
-	macio_shasta,
+    macio_unknown = 0,
+    macio_grand_central,
+    macio_ohare,
+    macio_ohareII,
+    macio_heathrow,
+    macio_gatwick,
+    macio_paddington,
+    macio_keylargo,
+    macio_pangea,
+    macio_intrepid,
+    macio_keylargo2,
+    macio_shasta,
 };
 
-struct macio_chip
-{
-	struct device_node	*of_node;
-	int			type;
-	const char		*name;
-	int			rev;
-	volatile u32		__iomem *base;
-	unsigned long		flags;
+struct macio_chip {
+    struct device_node	*of_node;
+    int			type;
+    const char		*name;
+    int			rev;
+    volatile u32		__iomem *base;
+    unsigned long		flags;
 
-	/* For use by macio_asic PCI driver */
-	struct macio_bus	lbus;
+    /* For use by macio_asic PCI driver */
+    struct macio_bus	lbus;
 };
 
 extern struct macio_chip macio_chips[MAX_MACIO_CHIPS];

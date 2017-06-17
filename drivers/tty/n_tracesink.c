@@ -71,24 +71,23 @@ static DEFINE_MUTEX(writelock);
  * Caveats: open() should only be successful the first time a
  * SW entity calls it.
  */
-static int n_tracesink_open(struct tty_struct *tty)
-{
-	int retval = -EEXIST;
+static int n_tracesink_open(struct tty_struct *tty) {
+    int retval = -EEXIST;
 
-	mutex_lock(&writelock);
-	if (this_tty == NULL) {
-		this_tty = tty_kref_get(tty);
-		if (this_tty == NULL) {
-			retval = -EFAULT;
-		} else {
-			tty->disc_data = this_tty;
-			tty_driver_flush_buffer(tty);
-			retval = 0;
-		}
-	}
-	mutex_unlock(&writelock);
+    mutex_lock(&writelock);
+    if (this_tty == NULL) {
+        this_tty = tty_kref_get(tty);
+        if (this_tty == NULL) {
+            retval = -EFAULT;
+        } else {
+            tty->disc_data = this_tty;
+            tty_driver_flush_buffer(tty);
+            retval = 0;
+        }
+    }
+    mutex_unlock(&writelock);
 
-	return retval;
+    return retval;
 }
 
 /**
@@ -97,14 +96,13 @@ static int n_tracesink_open(struct tty_struct *tty)
  *
  * Called when a software entity wants to close a connection.
  */
-static void n_tracesink_close(struct tty_struct *tty)
-{
-	mutex_lock(&writelock);
-	tty_driver_flush_buffer(tty);
-	tty_kref_put(this_tty);
-	this_tty = NULL;
-	tty->disc_data = NULL;
-	mutex_unlock(&writelock);
+static void n_tracesink_close(struct tty_struct *tty) {
+    mutex_lock(&writelock);
+    tty_driver_flush_buffer(tty);
+    tty_kref_put(this_tty);
+    this_tty = NULL;
+    tty->disc_data = NULL;
+    mutex_unlock(&writelock);
 }
 
 /**
@@ -125,8 +123,8 @@ static void n_tracesink_close(struct tty_struct *tty)
  *	 -EINVAL
  */
 static ssize_t n_tracesink_read(struct tty_struct *tty, struct file *file,
-				unsigned char __user *buf, size_t nr) {
-	return -EINVAL;
+                                unsigned char __user *buf, size_t nr) {
+    return -EINVAL;
 }
 
 /**
@@ -149,8 +147,8 @@ static ssize_t n_tracesink_read(struct tty_struct *tty, struct file *file,
  *	-EINVAL
  */
 static ssize_t n_tracesink_write(struct tty_struct *tty, struct file *file,
-				 const unsigned char *buf, size_t nr) {
-	return -EINVAL;
+                                 const unsigned char *buf, size_t nr) {
+    return -EINVAL;
 }
 
 /**
@@ -168,14 +166,13 @@ static ssize_t n_tracesink_write(struct tty_struct *tty, struct file *file,
  * call the tty's write() call because it will have no pointer
  * to call the write().
  */
-void n_tracesink_datadrain(u8 *buf, int count)
-{
-	mutex_lock(&writelock);
+void n_tracesink_datadrain(u8 *buf, int count) {
+    mutex_lock(&writelock);
 
-	if ((buf != NULL) && (count > 0) && (this_tty != NULL))
-		this_tty->ops->write(this_tty, buf, count);
+    if ((buf != NULL) && (count > 0) && (this_tty != NULL))
+        this_tty->ops->write(this_tty, buf, count);
 
-	mutex_unlock(&writelock);
+    mutex_unlock(&writelock);
 }
 EXPORT_SYMBOL_GPL(n_tracesink_datadrain);
 
@@ -188,13 +185,13 @@ EXPORT_SYMBOL_GPL(n_tracesink_datadrain);
  * tty_ldisc function operations for this driver.
  */
 static struct tty_ldisc_ops tty_n_tracesink = {
-	.owner		= THIS_MODULE,
-	.magic		= TTY_LDISC_MAGIC,
-	.name		= DRIVERNAME,
-	.open		= n_tracesink_open,
-	.close		= n_tracesink_close,
-	.read		= n_tracesink_read,
-	.write		= n_tracesink_write
+    .owner		= THIS_MODULE,
+    .magic		= TTY_LDISC_MAGIC,
+    .name		= DRIVERNAME,
+    .open		= n_tracesink_open,
+    .close		= n_tracesink_close,
+    .read		= n_tracesink_read,
+    .write		= n_tracesink_write
 };
 
 /**
@@ -205,15 +202,14 @@ static struct tty_ldisc_ops tty_n_tracesink = {
  * Return:
  *	0 for success, any other value error.
  */
-static int __init n_tracesink_init(void)
-{
-	/* Note N_TRACESINK is defined in linux/tty.h */
-	int retval = tty_register_ldisc(N_TRACESINK, &tty_n_tracesink);
+static int __init n_tracesink_init(void) {
+    /* Note N_TRACESINK is defined in linux/tty.h */
+    int retval = tty_register_ldisc(N_TRACESINK, &tty_n_tracesink);
 
-	if (retval < 0)
-		pr_err("%s: Registration failed: %d\n", __func__, retval);
+    if (retval < 0)
+        pr_err("%s: Registration failed: %d\n", __func__, retval);
 
-	return retval;
+    return retval;
 }
 
 /**
@@ -221,12 +217,11 @@ static int __init n_tracesink_init(void)
  *
  * Removes this module as a line discipline driver.
  */
-static void __exit n_tracesink_exit(void)
-{
-	int retval = tty_unregister_ldisc(N_TRACESINK);
+static void __exit n_tracesink_exit(void) {
+    int retval = tty_unregister_ldisc(N_TRACESINK);
 
-	if (retval < 0)
-		pr_err("%s: Unregistration failed: %d\n", __func__,  retval);
+    if (retval < 0)
+        pr_err("%s: Unregistration failed: %d\n", __func__,  retval);
 }
 
 module_init(n_tracesink_init);

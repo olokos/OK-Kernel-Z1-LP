@@ -164,9 +164,8 @@ RETURN VALUE
 	AXI_SEL_REG0
 SIDE EFFECTS
 */
-unsigned long get_axi_sel_reg0(void)
-{
-	return pm_axi_info.sel_reg0;
+unsigned long get_axi_sel_reg0(void) {
+    return pm_axi_info.sel_reg0;
 }
 
 /*
@@ -181,9 +180,8 @@ RETURN VALUE
 	AXI_SEL_REG1
 SIDE EFFECTS
 */
-unsigned long get_axi_sel_reg1(void)
-{
-	return pm_axi_info.sel_reg1;
+unsigned long get_axi_sel_reg1(void) {
+    return pm_axi_info.sel_reg1;
 }
 
 /*
@@ -198,9 +196,8 @@ RETURN VALUE
 	AXI_TEN_REG
 SIDE EFFECTS
 */
-unsigned long get_axi_ten_sel_reg(void)
-{
-	return pm_axi_info.ten_sel_reg;
+unsigned long get_axi_ten_sel_reg(void) {
+    return pm_axi_info.ten_sel_reg;
 }
 
 /*
@@ -215,9 +212,8 @@ RETURN VALUE
 	AXI Valid bit
 SIDE EFFECTS
 */
-unsigned long get_axi_valid(void)
-{
-	return pm_axi_info.valid;
+unsigned long get_axi_valid(void) {
+    return pm_axi_info.valid;
 }
 
 /*
@@ -232,9 +228,8 @@ RETURN VALUE
 	AXI enable bit
 SIDE EFFECTS
 */
-unsigned long get_axi_enable(void)
-{
-	return pm_axi_info.enable;
+unsigned long get_axi_enable(void) {
+    return pm_axi_info.enable;
 }
 
 /*
@@ -249,9 +244,8 @@ RETURN VALUE
 	AXI clear bit
 SIDE EFFECTS
 */
-unsigned long get_axi_clear(void)
-{
-	return pm_axi_info.clear;
+unsigned long get_axi_clear(void) {
+    return pm_axi_info.clear;
 }
 
 /*
@@ -268,25 +262,24 @@ RETURN VALUE
 SIDE EFFECTS
 */
 int pm_axi_cnts_write(struct file *file, const char *buff,
-    unsigned long cnt, void *data)
-{
-	char *newbuf;
-	struct PerfMonAxiCnts *p =
-	(struct PerfMonAxiCnts *)data;
+                      unsigned long cnt, void *data) {
+    char *newbuf;
+    struct PerfMonAxiCnts *p =
+        (struct PerfMonAxiCnts *)data;
 
-	if (p == 0)
-		return cnt;
-	/*
-	* Alloc the user data in kernel space. and then copy user to kernel
-	*/
-	newbuf = kmalloc(cnt + 1, GFP_KERNEL);
-	if (0 == newbuf)
-		return cnt;
-	if (copy_from_user(newbuf, buff, cnt) != 0) {
-		printk(KERN_INFO "%s copy_from_user failed\n", __func__);
-		return cnt;
-	}
-	return cnt;
+    if (p == 0)
+        return cnt;
+    /*
+    * Alloc the user data in kernel space. and then copy user to kernel
+    */
+    newbuf = kmalloc(cnt + 1, GFP_KERNEL);
+    if (0 == newbuf)
+        return cnt;
+    if (copy_from_user(newbuf, buff, cnt) != 0) {
+        printk(KERN_INFO "%s copy_from_user failed\n", __func__);
+        return cnt;
+    }
+    return cnt;
 }
 
 /*
@@ -302,29 +295,28 @@ RETURN VALUE
 
 SIDE EFFECTS
 */
-void pm_axi_update_cnts(void)
-{
-	if (is_first) {
-		pm_axi_start();
-	} else {
-		if (pm_axi_info.valid == 1) {
-			pm_axi_info.valid = 0;
-			pm_axi_update();
-		} else {
-			pm_axi_enable();
-		}
-	}
-	is_first = 0;
-	axi_cnts.cycles += pm_get_axi_cycle_count();
-	axi_cnts.cnt0 += pm_get_axi_evt0_count();
-	axi_cnts.cnt1 += pm_get_axi_evt1_count();
-	axi_cnts.tenure_total += pm_get_axi_ten_total_count();
+void pm_axi_update_cnts(void) {
+    if (is_first) {
+        pm_axi_start();
+    } else {
+        if (pm_axi_info.valid == 1) {
+            pm_axi_info.valid = 0;
+            pm_axi_update();
+        } else {
+            pm_axi_enable();
+        }
+    }
+    is_first = 0;
+    axi_cnts.cycles += pm_get_axi_cycle_count();
+    axi_cnts.cnt0 += pm_get_axi_evt0_count();
+    axi_cnts.cnt1 += pm_get_axi_evt1_count();
+    axi_cnts.tenure_total += pm_get_axi_ten_total_count();
 
-	axi_cnts.tenure_min = pm_get_axi_ten_min_count();
-	axi_cnts.tenure_max = pm_get_axi_ten_max_count();
-	axi_cnts.tenure_last = pm_get_axi_ten_last_count();
+    axi_cnts.tenure_min = pm_get_axi_ten_min_count();
+    axi_cnts.tenure_max = pm_get_axi_ten_max_count();
+    axi_cnts.tenure_last = pm_get_axi_ten_last_count();
 
-	pm_axi_start();
+    pm_axi_start();
 }
 
 /*
@@ -340,16 +332,15 @@ RETURN VALUE
 
 SIDE EFFECTS
 */
-void pm_axi_clear_cnts(void)
-{
-	axi_cnts.cycles = 0;
-	axi_cnts.cnt0 = 0;
-	axi_cnts.cnt1 = 0;
-	axi_cnts.tenure_total = 0;
-	axi_cnts.tenure_min = 0;
-	axi_cnts.tenure_max = 0;
-	axi_cnts.tenure_last = 0;
-	pm_axi_start();
+void pm_axi_clear_cnts(void) {
+    axi_cnts.cycles = 0;
+    axi_cnts.cnt0 = 0;
+    axi_cnts.cnt1 = 0;
+    axi_cnts.tenure_total = 0;
+    axi_cnts.tenure_min = 0;
+    axi_cnts.tenure_max = 0;
+    axi_cnts.tenure_last = 0;
+    pm_axi_start();
 }
 
 /*
@@ -366,19 +357,18 @@ RETURN VALUE
 SIDE EFFECTS
 */
 int pm_axi_read_decimal(char *page, char **start, off_t off, int count,
-   int *eof, void *data)
-{
-	struct perf_mon_axi_cnts *p = (struct perf_mon_axi_cnts *)data;
+                        int *eof, void *data) {
+    struct perf_mon_axi_cnts *p = (struct perf_mon_axi_cnts *)data;
 
-	return sprintf(page, "cnt0:%llu cnt1:%llu tenure:%llu ten_max:%llu \
+    return sprintf(page, "cnt0:%llu cnt1:%llu tenure:%llu ten_max:%llu \
 				ten_min:%llu ten_last:%llu cycles:%llu\n",
-				p->cnt0,
-				p->cnt1,
-				p->tenure_total,
-				p->tenure_max,
-				p->tenure_min,
-				p->tenure_last,
-				p->cycles);
+                   p->cnt0,
+                   p->cnt1,
+                   p->tenure_total,
+                   p->tenure_max,
+                   p->tenure_min,
+                   p->tenure_last,
+                   p->cycles);
 }
 
 /*
@@ -395,19 +385,18 @@ RETURN VALUE
 SIDE EFFECTS
 */
 int pm_axi_read_hex(char *page, char **start, off_t off, int count,
-   int *eof, void *data)
-{
-	struct perf_mon_axi_cnts *p = (struct perf_mon_axi_cnts *)data;
+                    int *eof, void *data) {
+    struct perf_mon_axi_cnts *p = (struct perf_mon_axi_cnts *)data;
 
-	return sprintf(page, "cnt0:%llx cnt1:%llx tenure:%llx ten_max:%llx \
+    return sprintf(page, "cnt0:%llx cnt1:%llx tenure:%llx ten_max:%llx \
 				ten_min:%llx ten_last:%llx cycles:%llx\n",
-				p->cnt0,
-				p->cnt1,
-				p->tenure_total,
-				p->tenure_max,
-				p->tenure_min,
-				p->tenure_last,
-				p->cycles);
+                   p->cnt0,
+                   p->cnt1,
+                   p->tenure_total,
+                   p->tenure_max,
+                   p->tenure_min,
+                   p->tenure_last,
+                   p->cycles);
 
 }
 
@@ -424,20 +413,19 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void pm_axi_set_proc_entry(char *name, unsigned long *var,
-    struct proc_dir_entry *d, int hex)
-{
-	struct proc_dir_entry *pe;
-	pe = create_proc_entry(name, 0777, d);
-	if (0 == pe)
-		return;
-	if (hex) {
-		pe->read_proc = per_process_read;
-		pe->write_proc = per_process_write_hex;
-	} else {
-		pe->read_proc = per_process_read_decimal;
-		pe->write_proc = per_process_write_dec;
-	}
-	pe->data = (void *)var;
+                           struct proc_dir_entry *d, int hex) {
+    struct proc_dir_entry *pe;
+    pe = create_proc_entry(name, 0777, d);
+    if (0 == pe)
+        return;
+    if (hex) {
+        pe->read_proc = per_process_read;
+        pe->write_proc = per_process_write_hex;
+    } else {
+        pe->read_proc = per_process_read_decimal;
+        pe->write_proc = per_process_write_dec;
+    }
+    pe->data = (void *)var;
 }
 
 /*
@@ -453,20 +441,19 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void pm_axi_get_cnt_proc_entry(char *name, struct perf_mon_axi_cnts *var,
-    struct proc_dir_entry *d, int hex)
-{
-	struct proc_dir_entry *pe;
-	pe = create_proc_entry(name, 0777, d);
-	if (0 == pe)
-		return;
-	if (hex) {
-		pe->read_proc = pm_axi_read_hex;
-		pe->write_proc = pm_axi_cnts_write;
-	} else {
-		pe->read_proc = pm_axi_read_decimal;
-		pe->write_proc = pm_axi_cnts_write;
-	}
-	pe->data = (void *)var;
+                               struct proc_dir_entry *d, int hex) {
+    struct proc_dir_entry *pe;
+    pe = create_proc_entry(name, 0777, d);
+    if (0 == pe)
+        return;
+    if (hex) {
+        pe->read_proc = pm_axi_read_hex;
+        pe->write_proc = pm_axi_cnts_write;
+    } else {
+        pe->read_proc = pm_axi_read_decimal;
+        pe->write_proc = pm_axi_cnts_write;
+    }
+    pe->data = (void *)var;
 }
 
 /*
@@ -482,10 +469,9 @@ RETURN VALUE
 
 SIDE EFFECTS
 */
-void pm_axi_clear_tenure(void)
-{
-	HWIO_AXI_MONITOR_TENURE_UPPER_REG_OUT(0x0);
-	HWIO_AXI_MONITOR_TENURE_LOWER_REG_OUT(0x0);
+void pm_axi_clear_tenure(void) {
+    HWIO_AXI_MONITOR_TENURE_UPPER_REG_OUT(0x0);
+    HWIO_AXI_MONITOR_TENURE_LOWER_REG_OUT(0x0);
 }
 
 /*
@@ -500,21 +486,20 @@ RETURN VALUE
 
 SIDE EFFECTS
 */
-void pm_axi_init()
-{
-	/*Map the AXI regs*/
-	#ifdef CONFIG_ARCH_QSD8X50
-	{
-		/*Map the AXI regs*/
-		AXI_BASE = (uint32_t)ioremap(AXI_REG_BASE_PHYS, AXI_BASE_SIZE);
-		if (!AXI_BASE)
-			printk(KERN_ERR "Mem map failed\n");
-	}
-	#else
-	{
-		AXI_BASE = (uint32_t)kmalloc(AXI_BASE_SIZE, GFP_KERNEL);
-	}
-	#endif
+void pm_axi_init() {
+    /*Map the AXI regs*/
+#ifdef CONFIG_ARCH_QSD8X50
+    {
+        /*Map the AXI regs*/
+        AXI_BASE = (uint32_t)ioremap(AXI_REG_BASE_PHYS, AXI_BASE_SIZE);
+        if (!AXI_BASE)
+            printk(KERN_ERR "Mem map failed\n");
+    }
+#else
+    {
+        AXI_BASE = (uint32_t)kmalloc(AXI_BASE_SIZE, GFP_KERNEL);
+    }
+#endif
 
 }
 
@@ -532,25 +517,24 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void
-pm_axi_start()
-{
-	unsigned long sel_reg0, sel_reg1, ten_sel_reg;
-	sel_reg0 = get_axi_sel_reg0();
-	sel_reg1 = get_axi_sel_reg1();
-	ten_sel_reg = get_axi_ten_sel_reg();
-	HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
-	/*Set AXI Cycle Counter to enable AXI Monitors*/
-	HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_OUT(0xffff);
-	HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_OUT(0xfffe);
-	/*Set master/slave*/
-	HWIO_AXI_MONITOR_SELECTION_REG1_OUT(sel_reg1);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_RESET_ALL);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_ENABLE_ALL_NOCYCLES);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
-		| sel_reg0);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
-		| HWIO_AXI_MONITOR_SELECTION_REG0_ECC_BMSK);
-	HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
+pm_axi_start() {
+    unsigned long sel_reg0, sel_reg1, ten_sel_reg;
+    sel_reg0 = get_axi_sel_reg0();
+    sel_reg1 = get_axi_sel_reg1();
+    ten_sel_reg = get_axi_ten_sel_reg();
+    HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
+    /*Set AXI Cycle Counter to enable AXI Monitors*/
+    HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_OUT(0xffff);
+    HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_OUT(0xfffe);
+    /*Set master/slave*/
+    HWIO_AXI_MONITOR_SELECTION_REG1_OUT(sel_reg1);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_RESET_ALL);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_ENABLE_ALL_NOCYCLES);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
+                                        | sel_reg0);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
+                                        | HWIO_AXI_MONITOR_SELECTION_REG0_ECC_BMSK);
+    HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
 }
 
 /*
@@ -566,14 +550,13 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void
-pm_axi_update()
-{
-	HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
-		| HWIO_AXI_RESET_ALL);
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
-	& HWIO_AXI_DISABLE_ALL);
-	pm_axi_start();
+pm_axi_update() {
+    HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
+                                        | HWIO_AXI_RESET_ALL);
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(HWIO_AXI_MONITOR_SELECTION_REG0_IN
+                                        & HWIO_AXI_DISABLE_ALL);
+    pm_axi_start();
 }
 
 /*
@@ -589,14 +572,13 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void
-pm_axi_disable(void)
-{
-	unsigned long sel_reg0;
-	/*Disable cntrs*/
-	sel_reg0 = get_axi_sel_reg0();
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(sel_reg0 & AXI_EVTSEL_DISABLE_MASK);
-	/*Disable clk*/
-	HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_DISABLE);
+pm_axi_disable(void) {
+    unsigned long sel_reg0;
+    /*Disable cntrs*/
+    sel_reg0 = get_axi_sel_reg0();
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(sel_reg0 & AXI_EVTSEL_DISABLE_MASK);
+    /*Disable clk*/
+    HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_DISABLE);
 }
 
 /*
@@ -612,14 +594,13 @@ RETURN VALUE
 SIDE EFFECTS
 */
 void
-pm_axi_enable(void)
-{
-	unsigned long sel_reg0;
-	/*Enable cntrs*/
-	sel_reg0 = get_axi_sel_reg0();
-	HWIO_AXI_MONITOR_SELECTION_REG0_OUT(sel_reg0 | 0x6a00);
-	/*Enable clk*/
-	HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
+pm_axi_enable(void) {
+    unsigned long sel_reg0;
+    /*Enable cntrs*/
+    sel_reg0 = get_axi_sel_reg0();
+    HWIO_AXI_MONITOR_SELECTION_REG0_OUT(sel_reg0 | 0x6a00);
+    /*Enable clk*/
+    HWIO_AXI_CONFIGURATION_REG_OUT(HWIO_AXI_CONFIGURATION_REG_PPDM_BMSK);
 }
 
 /*
@@ -635,16 +616,15 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_cycle_count(void)
-{
-	if (HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_IN == 0x0 &&
-		HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_IN == 0x0) {
-		/*Set AXI Cycle Counter to enable AXI Monitors*/
-		HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_OUT(0xffff);
-		HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_OUT(0xfffe);
-	}
-	return 0xfffffffe - ((HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_IN << 16)
-	+ HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_IN);
+pm_get_axi_cycle_count(void) {
+    if (HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_IN == 0x0 &&
+            HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_IN == 0x0) {
+        /*Set AXI Cycle Counter to enable AXI Monitors*/
+        HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_OUT(0xffff);
+        HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_OUT(0xfffe);
+    }
+    return 0xfffffffe - ((HWIO_AXI_MONITOR_CYCLE_COUNT_UPPER_REG_IN << 16)
+                         + HWIO_AXI_MONITOR_CYCLE_COUNT_LOWER_REG_IN);
 }
 
 /*
@@ -660,10 +640,9 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_evt0_count(void)
-{
-	return (HWIO_AXI_MONITOR_EVENT_UPPER_REG0_IN << 16)
-		+ HWIO_AXI_MONITOR_EVENT_LOWER_REG0_IN;
+pm_get_axi_evt0_count(void) {
+    return (HWIO_AXI_MONITOR_EVENT_UPPER_REG0_IN << 16)
+           + HWIO_AXI_MONITOR_EVENT_LOWER_REG0_IN;
 }
 
 /*
@@ -679,10 +658,9 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_evt1_count(void)
-{
-	return (HWIO_AXI_MONITOR_EVENT_UPPER_REG1_IN << 16)
-		+ HWIO_AXI_MONITOR_EVENT_LOWER_REG1_IN;
+pm_get_axi_evt1_count(void) {
+    return (HWIO_AXI_MONITOR_EVENT_UPPER_REG1_IN << 16)
+           + HWIO_AXI_MONITOR_EVENT_LOWER_REG1_IN;
 }
 
 /*
@@ -698,9 +676,8 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_ten_min_count(void)
-{
-	return HWIO_AXI_MONITOR_MIN_REG_IN;
+pm_get_axi_ten_min_count(void) {
+    return HWIO_AXI_MONITOR_MIN_REG_IN;
 }
 
 /*
@@ -716,9 +693,8 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_ten_max_count(void)
-{
-	return HWIO_AXI_MONITOR_MAX_REG_IN;
+pm_get_axi_ten_max_count(void) {
+    return HWIO_AXI_MONITOR_MAX_REG_IN;
 }
 
 /*
@@ -734,10 +710,9 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_ten_total_count(void)
-{
-	return (HWIO_AXI_MONITOR_TENURE_UPPER_REG_IN << 16)
-		+ HWIO_AXI_MONITOR_TENURE_LOWER_REG_IN;
+pm_get_axi_ten_total_count(void) {
+    return (HWIO_AXI_MONITOR_TENURE_UPPER_REG_IN << 16)
+           + HWIO_AXI_MONITOR_TENURE_LOWER_REG_IN;
 }
 
 /*
@@ -753,7 +728,6 @@ RETURN VALUE
 SIDE EFFECTS
 */
 unsigned long
-pm_get_axi_ten_last_count(void)
-{
-	return HWIO_AXI_MONITOR_LAST_TENURE_REG_IN;
+pm_get_axi_ten_last_count(void) {
+    return HWIO_AXI_MONITOR_LAST_TENURE_REG_IN;
 }

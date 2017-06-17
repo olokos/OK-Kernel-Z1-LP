@@ -87,15 +87,15 @@
 static int timeout = WATCHDOG_TIMEOUT;
 module_param(timeout, int, 0);
 MODULE_PARM_DESC(timeout,
-	"Watchdog timeout in seconds. (1<=timeout<=3600, default="
-				__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
+                 "Watchdog timeout in seconds. (1<=timeout<=3600, default="
+                 __MODULE_STRING(WATCHDOG_TIMEOUT) ")");
 
 
 static bool nowayout = WATCHDOG_NOWAYOUT;
 module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout,
-		"Watchdog cannot be stopped once started (default="
-				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+                 "Watchdog cannot be stopped once started (default="
+                 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 
 static void wdt_timer_ping(unsigned long);
 static DEFINE_TIMER(timer, wdt_timer_ping, 0, 0);
@@ -108,79 +108,74 @@ static DEFINE_SPINLOCK(wdt_spinlock);
  *	Whack the dog
  */
 
-static void wdt_timer_ping(unsigned long data)
-{
-	/* If we got a heartbeat pulse within the WDT_US_INTERVAL
-	 * we agree to ping the WDT
-	 */
-	if (time_before(jiffies, next_heartbeat)) {
-		/* Ping the WDT */
-		spin_lock(&wdt_spinlock);
+static void wdt_timer_ping(unsigned long data) {
+    /* If we got a heartbeat pulse within the WDT_US_INTERVAL
+     * we agree to ping the WDT
+     */
+    if (time_before(jiffies, next_heartbeat)) {
+        /* Ping the WDT */
+        spin_lock(&wdt_spinlock);
 
-		/* Ping the WDT by reading from WDT_PING */
-		inb_p(WDT_PING);
+        /* Ping the WDT by reading from WDT_PING */
+        inb_p(WDT_PING);
 
-		/* Re-set the timer interval */
-		mod_timer(&timer, jiffies + WDT_INTERVAL);
+        /* Re-set the timer interval */
+        mod_timer(&timer, jiffies + WDT_INTERVAL);
 
-		spin_unlock(&wdt_spinlock);
+        spin_unlock(&wdt_spinlock);
 
-	} else
-		pr_warn("Heartbeat lost! Will not ping the watchdog\n");
+    } else
+        pr_warn("Heartbeat lost! Will not ping the watchdog\n");
 }
 
 /*
  * Utility routines
  */
 
-static void wdt_change(int writeval)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&wdt_spinlock, flags);
+static void wdt_change(int writeval) {
+    unsigned long flags;
+    spin_lock_irqsave(&wdt_spinlock, flags);
 
-	/* buy some time */
-	inb_p(WDT_PING);
+    /* buy some time */
+    inb_p(WDT_PING);
 
-	/* make W83877F available */
-	outb_p(ENABLE_W83877F,  ENABLE_W83877F_PORT);
-	outb_p(ENABLE_W83877F,  ENABLE_W83877F_PORT);
+    /* make W83877F available */
+    outb_p(ENABLE_W83877F,  ENABLE_W83877F_PORT);
+    outb_p(ENABLE_W83877F,  ENABLE_W83877F_PORT);
 
-	/* enable watchdog */
-	outb_p(WDT_REGISTER,    ENABLE_W83877F_PORT);
-	outb_p(writeval,        ENABLE_W83877F_PORT+1);
+    /* enable watchdog */
+    outb_p(WDT_REGISTER,    ENABLE_W83877F_PORT);
+    outb_p(writeval,        ENABLE_W83877F_PORT+1);
 
-	/* lock the W8387FF away */
-	outb_p(DISABLE_W83877F, ENABLE_W83877F_PORT);
+    /* lock the W8387FF away */
+    outb_p(DISABLE_W83877F, ENABLE_W83877F_PORT);
 
-	spin_unlock_irqrestore(&wdt_spinlock, flags);
+    spin_unlock_irqrestore(&wdt_spinlock, flags);
 }
 
-static void wdt_startup(void)
-{
-	next_heartbeat = jiffies + (timeout * HZ);
+static void wdt_startup(void) {
+    next_heartbeat = jiffies + (timeout * HZ);
 
-	/* Start the timer */
-	mod_timer(&timer, jiffies + WDT_INTERVAL);
+    /* Start the timer */
+    mod_timer(&timer, jiffies + WDT_INTERVAL);
 
-	wdt_change(WDT_ENABLE);
+    wdt_change(WDT_ENABLE);
 
-	pr_info("Watchdog timer is now enabled\n");
+    pr_info("Watchdog timer is now enabled\n");
 }
 
-static void wdt_turnoff(void)
-{
-	/* Stop the timer */
-	del_timer(&timer);
+static void wdt_turnoff(void) {
+    /* Stop the timer */
+    del_timer(&timer);
 
-	wdt_change(WDT_DISABLE);
+    wdt_change(WDT_DISABLE);
 
-	pr_info("Watchdog timer is now disabled...\n");
+    pr_info("Watchdog timer is now disabled...\n");
 }
 
-static void wdt_keepalive(void)
-{
-	/* user land ping */
-	next_heartbeat = jiffies + (timeout * HZ);
+static void wdt_keepalive(void) {
+    /* user land ping */
+    next_heartbeat = jiffies + (timeout * HZ);
 }
 
 /*
@@ -188,132 +183,126 @@ static void wdt_keepalive(void)
  */
 
 static ssize_t fop_write(struct file *file, const char __user *buf,
-						size_t count, loff_t *ppos)
-{
-	/* See if we got the magic character 'V' and reload the timer */
-	if (count) {
-		if (!nowayout) {
-			size_t ofs;
+                         size_t count, loff_t *ppos) {
+    /* See if we got the magic character 'V' and reload the timer */
+    if (count) {
+        if (!nowayout) {
+            size_t ofs;
 
-			/* note: just in case someone wrote the magic
-			   character five months ago... */
-			wdt_expect_close = 0;
+            /* note: just in case someone wrote the magic
+               character five months ago... */
+            wdt_expect_close = 0;
 
-			/* scan to see whether or not we got the
-			   magic character */
-			for (ofs = 0; ofs != count; ofs++) {
-				char c;
-				if (get_user(c, buf + ofs))
-					return -EFAULT;
-				if (c == 'V')
-					wdt_expect_close = 42;
-			}
-		}
+            /* scan to see whether or not we got the
+               magic character */
+            for (ofs = 0; ofs != count; ofs++) {
+                char c;
+                if (get_user(c, buf + ofs))
+                    return -EFAULT;
+                if (c == 'V')
+                    wdt_expect_close = 42;
+            }
+        }
 
-		/* someone wrote to us, we should restart timer */
-		wdt_keepalive();
-	}
-	return count;
+        /* someone wrote to us, we should restart timer */
+        wdt_keepalive();
+    }
+    return count;
 }
 
-static int fop_open(struct inode *inode, struct file *file)
-{
-	/* Just in case we're already talking to someone... */
-	if (test_and_set_bit(0, &wdt_is_open))
-		return -EBUSY;
+static int fop_open(struct inode *inode, struct file *file) {
+    /* Just in case we're already talking to someone... */
+    if (test_and_set_bit(0, &wdt_is_open))
+        return -EBUSY;
 
-	/* Good, fire up the show */
-	wdt_startup();
-	return nonseekable_open(inode, file);
+    /* Good, fire up the show */
+    wdt_startup();
+    return nonseekable_open(inode, file);
 }
 
-static int fop_close(struct inode *inode, struct file *file)
-{
-	if (wdt_expect_close == 42)
-		wdt_turnoff();
-	else {
-		del_timer(&timer);
-		pr_crit("device file closed unexpectedly. Will not stop the WDT!\n");
-	}
-	clear_bit(0, &wdt_is_open);
-	wdt_expect_close = 0;
-	return 0;
+static int fop_close(struct inode *inode, struct file *file) {
+    if (wdt_expect_close == 42)
+        wdt_turnoff();
+    else {
+        del_timer(&timer);
+        pr_crit("device file closed unexpectedly. Will not stop the WDT!\n");
+    }
+    clear_bit(0, &wdt_is_open);
+    wdt_expect_close = 0;
+    return 0;
 }
 
-static long fop_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-{
-	void __user *argp = (void __user *)arg;
-	int __user *p = argp;
-	static const struct watchdog_info ident = {
-		.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT
-							| WDIOF_MAGICCLOSE,
-		.firmware_version = 1,
-		.identity = "W83877F",
-	};
+static long fop_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
+    void __user *argp = (void __user *)arg;
+    int __user *p = argp;
+    static const struct watchdog_info ident = {
+        .options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT
+        | WDIOF_MAGICCLOSE,
+        .firmware_version = 1,
+        .identity = "W83877F",
+    };
 
-	switch (cmd) {
-	case WDIOC_GETSUPPORT:
-		return copy_to_user(argp, &ident, sizeof(ident)) ? -EFAULT : 0;
-	case WDIOC_GETSTATUS:
-	case WDIOC_GETBOOTSTATUS:
-		return put_user(0, p);
-	case WDIOC_SETOPTIONS:
-	{
-		int new_options, retval = -EINVAL;
+    switch (cmd) {
+    case WDIOC_GETSUPPORT:
+        return copy_to_user(argp, &ident, sizeof(ident)) ? -EFAULT : 0;
+    case WDIOC_GETSTATUS:
+    case WDIOC_GETBOOTSTATUS:
+        return put_user(0, p);
+    case WDIOC_SETOPTIONS: {
+        int new_options, retval = -EINVAL;
 
-		if (get_user(new_options, p))
-			return -EFAULT;
+        if (get_user(new_options, p))
+            return -EFAULT;
 
-		if (new_options & WDIOS_DISABLECARD) {
-			wdt_turnoff();
-			retval = 0;
-		}
+        if (new_options & WDIOS_DISABLECARD) {
+            wdt_turnoff();
+            retval = 0;
+        }
 
-		if (new_options & WDIOS_ENABLECARD) {
-			wdt_startup();
-			retval = 0;
-		}
+        if (new_options & WDIOS_ENABLECARD) {
+            wdt_startup();
+            retval = 0;
+        }
 
-		return retval;
-	}
-	case WDIOC_KEEPALIVE:
-		wdt_keepalive();
-		return 0;
-	case WDIOC_SETTIMEOUT:
-	{
-		int new_timeout;
+        return retval;
+    }
+    case WDIOC_KEEPALIVE:
+        wdt_keepalive();
+        return 0;
+    case WDIOC_SETTIMEOUT: {
+        int new_timeout;
 
-		if (get_user(new_timeout, p))
-			return -EFAULT;
+        if (get_user(new_timeout, p))
+            return -EFAULT;
 
-		/* arbitrary upper limit */
-		if (new_timeout < 1 || new_timeout > 3600)
-			return -EINVAL;
+        /* arbitrary upper limit */
+        if (new_timeout < 1 || new_timeout > 3600)
+            return -EINVAL;
 
-		timeout = new_timeout;
-		wdt_keepalive();
-		/* Fall through */
-	}
-	case WDIOC_GETTIMEOUT:
-		return put_user(timeout, p);
-	default:
-		return -ENOTTY;
-	}
+        timeout = new_timeout;
+        wdt_keepalive();
+        /* Fall through */
+    }
+    case WDIOC_GETTIMEOUT:
+        return put_user(timeout, p);
+    default:
+        return -ENOTTY;
+    }
 }
 
 static const struct file_operations wdt_fops = {
-	.owner		= THIS_MODULE,
-	.llseek		= no_llseek,
-	.write		= fop_write,
-	.open		= fop_open,
-	.release	= fop_close,
-	.unlocked_ioctl	= fop_ioctl,
+    .owner		= THIS_MODULE,
+    .llseek		= no_llseek,
+    .write		= fop_write,
+    .open		= fop_open,
+    .release	= fop_close,
+    .unlocked_ioctl	= fop_ioctl,
 };
 
 static struct miscdevice wdt_miscdev = {
-	.minor	= WATCHDOG_MINOR,
-	.name	= "watchdog",
-	.fops	= &wdt_fops,
+    .minor	= WATCHDOG_MINOR,
+    .name	= "watchdog",
+    .fops	= &wdt_fops,
 };
 
 /*
@@ -321,11 +310,10 @@ static struct miscdevice wdt_miscdev = {
  */
 
 static int wdt_notify_sys(struct notifier_block *this, unsigned long code,
-	void *unused)
-{
-	if (code == SYS_DOWN || code == SYS_HALT)
-		wdt_turnoff();
-	return NOTIFY_DONE;
+                          void *unused) {
+    if (code == SYS_DOWN || code == SYS_HALT)
+        wdt_turnoff();
+    return NOTIFY_DONE;
 }
 
 /*
@@ -334,70 +322,68 @@ static int wdt_notify_sys(struct notifier_block *this, unsigned long code,
  */
 
 static struct notifier_block wdt_notifier = {
-	.notifier_call = wdt_notify_sys,
+    .notifier_call = wdt_notify_sys,
 };
 
-static void __exit w83877f_wdt_unload(void)
-{
-	wdt_turnoff();
+static void __exit w83877f_wdt_unload(void) {
+    wdt_turnoff();
 
-	/* Deregister */
-	misc_deregister(&wdt_miscdev);
+    /* Deregister */
+    misc_deregister(&wdt_miscdev);
 
-	unregister_reboot_notifier(&wdt_notifier);
-	release_region(WDT_PING, 1);
-	release_region(ENABLE_W83877F_PORT, 2);
+    unregister_reboot_notifier(&wdt_notifier);
+    release_region(WDT_PING, 1);
+    release_region(ENABLE_W83877F_PORT, 2);
 }
 
-static int __init w83877f_wdt_init(void)
-{
-	int rc = -EBUSY;
+static int __init w83877f_wdt_init(void) {
+    int rc = -EBUSY;
 
-	if (timeout < 1 || timeout > 3600) { /* arbitrary upper limit */
-		timeout = WATCHDOG_TIMEOUT;
-		pr_info("timeout value must be 1 <= x <= 3600, using %d\n",
-			timeout);
-	}
+    if (timeout < 1 || timeout > 3600) { /* arbitrary upper limit */
+        timeout = WATCHDOG_TIMEOUT;
+        pr_info("timeout value must be 1 <= x <= 3600, using %d\n",
+                timeout);
+    }
 
-	if (!request_region(ENABLE_W83877F_PORT, 2, "W83877F WDT")) {
-		pr_err("I/O address 0x%04x already in use\n",
-		       ENABLE_W83877F_PORT);
-		rc = -EIO;
-		goto err_out;
-	}
+    if (!request_region(ENABLE_W83877F_PORT, 2, "W83877F WDT")) {
+        pr_err("I/O address 0x%04x already in use\n",
+               ENABLE_W83877F_PORT);
+        rc = -EIO;
+        goto err_out;
+    }
 
-	if (!request_region(WDT_PING, 1, "W8387FF WDT")) {
-		pr_err("I/O address 0x%04x already in use\n", WDT_PING);
-		rc = -EIO;
-		goto err_out_region1;
-	}
+    if (!request_region(WDT_PING, 1, "W8387FF WDT")) {
+        pr_err("I/O address 0x%04x already in use\n", WDT_PING);
+        rc = -EIO;
+        goto err_out_region1;
+    }
 
-	rc = register_reboot_notifier(&wdt_notifier);
-	if (rc) {
-		pr_err("cannot register reboot notifier (err=%d)\n", rc);
-		goto err_out_region2;
-	}
+    rc = register_reboot_notifier(&wdt_notifier);
+    if (rc) {
+        pr_err("cannot register reboot notifier (err=%d)\n", rc);
+        goto err_out_region2;
+    }
 
-	rc = misc_register(&wdt_miscdev);
-	if (rc) {
-		pr_err("cannot register miscdev on minor=%d (err=%d)\n",
-		       wdt_miscdev.minor, rc);
-		goto err_out_reboot;
-	}
+    rc = misc_register(&wdt_miscdev);
+    if (rc) {
+        pr_err("cannot register miscdev on minor=%d (err=%d)\n",
+               wdt_miscdev.minor, rc);
+        goto err_out_reboot;
+    }
 
-	pr_info("WDT driver for W83877F initialised. timeout=%d sec (nowayout=%d)\n",
-		timeout, nowayout);
+    pr_info("WDT driver for W83877F initialised. timeout=%d sec (nowayout=%d)\n",
+            timeout, nowayout);
 
-	return 0;
+    return 0;
 
 err_out_reboot:
-	unregister_reboot_notifier(&wdt_notifier);
+    unregister_reboot_notifier(&wdt_notifier);
 err_out_region2:
-	release_region(WDT_PING, 1);
+    release_region(WDT_PING, 1);
 err_out_region1:
-	release_region(ENABLE_W83877F_PORT, 2);
+    release_region(ENABLE_W83877F_PORT, 2);
 err_out:
-	return rc;
+    return rc;
 }
 
 module_init(w83877f_wdt_init);

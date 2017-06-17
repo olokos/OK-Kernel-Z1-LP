@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 struct cpu_map {
-	int nr;
-	int map[];
+    int nr;
+    int map[];
 };
 
 struct cpu_map *cpu_map__new(const char *cpu_list);

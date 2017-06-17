@@ -56,34 +56,29 @@
  ----------------------------------------------------------------------------*/
 
 
-VOS_STATUS hdd_list_insert_front( hdd_list_t *pList, hdd_list_node_t *pNode )
-{
+VOS_STATUS hdd_list_insert_front( hdd_list_t *pList, hdd_list_node_t *pNode ) {
     list_add( pNode, &pList->anchor );
     pList->count++;
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS hdd_list_insert_back( hdd_list_t *pList, hdd_list_node_t *pNode )
-{
+VOS_STATUS hdd_list_insert_back( hdd_list_t *pList, hdd_list_node_t *pNode ) {
     list_add_tail( pNode, &pList->anchor );
     pList->count++;
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS hdd_list_insert_back_size( hdd_list_t *pList, hdd_list_node_t *pNode, v_SIZE_t *pSize )
-{
+VOS_STATUS hdd_list_insert_back_size( hdd_list_t *pList, hdd_list_node_t *pNode, v_SIZE_t *pSize ) {
     list_add_tail( pNode, &pList->anchor );
     pList->count++;
     *pSize = pList->count;
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS hdd_list_remove_front( hdd_list_t *pList, hdd_list_node_t **ppNode )
-{
+VOS_STATUS hdd_list_remove_front( hdd_list_t *pList, hdd_list_node_t **ppNode ) {
     struct list_head * listptr;
 
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         return VOS_STATUS_E_EMPTY;
     }
 
@@ -95,12 +90,10 @@ VOS_STATUS hdd_list_remove_front( hdd_list_t *pList, hdd_list_node_t **ppNode )
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS hdd_list_remove_back( hdd_list_t *pList, hdd_list_node_t **ppNode )
-{
+VOS_STATUS hdd_list_remove_back( hdd_list_t *pList, hdd_list_node_t **ppNode ) {
     struct list_head * listptr;
 
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         return VOS_STATUS_E_EMPTY;
     }
 
@@ -113,21 +106,17 @@ VOS_STATUS hdd_list_remove_back( hdd_list_t *pList, hdd_list_node_t **ppNode )
 }
 
 VOS_STATUS hdd_list_remove_node( hdd_list_t *pList,
-                                 hdd_list_node_t *pNodeToRemove )
-{
+                                 hdd_list_node_t *pNodeToRemove ) {
     hdd_list_node_t *tmp;
     int found = 0;
 
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         return VOS_STATUS_E_EMPTY;
     }
 
     // verify that pNodeToRemove is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNodeToRemove)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNodeToRemove) {
             found = 1;
             break;
         }
@@ -142,11 +131,9 @@ VOS_STATUS hdd_list_remove_node( hdd_list_t *pList,
 }
 
 VOS_STATUS hdd_list_peek_front( hdd_list_t *pList,
-                                hdd_list_node_t **ppNode )
-{
+                                hdd_list_node_t **ppNode ) {
     struct list_head * listptr;
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         return VOS_STATUS_E_EMPTY;
     }
 
@@ -156,40 +143,33 @@ VOS_STATUS hdd_list_peek_front( hdd_list_t *pList,
 }
 
 VOS_STATUS hdd_list_peek_next( hdd_list_t *pList, hdd_list_node_t *pNode,
-                               hdd_list_node_t **ppNode )
-{
+                               hdd_list_node_t **ppNode ) {
     struct list_head * listptr;
     int found = 0;
     hdd_list_node_t *tmp;
 
-    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL))
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL)) {
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         return VOS_STATUS_E_EMPTY;
     }
 
     // verify that pNode is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNode)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNode) {
             found = 1;
             break;
         }
     }
 
-    if (found == 0)
-    {
+    if (found == 0) {
         return VOS_STATUS_E_INVAL;
     }
 
     listptr = pNode->next;
-    if (listptr == &pList->anchor)
-    {
+    if (listptr == &pList->anchor) {
         return VOS_STATUS_E_EMPTY;
     }
 
@@ -198,21 +178,18 @@ VOS_STATUS hdd_list_peek_next( hdd_list_t *pList, hdd_list_node_t *pNode,
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS hdd_string_to_hex( char *pSrcMac, int length, char *pDescMac )
-{
+VOS_STATUS hdd_string_to_hex( char *pSrcMac, int length, char *pDescMac ) {
     int i;
     int k;
     char temp[3] = {0};
     int rv;
 
     //18 is MAC Address length plus the colons
-    if ( !pSrcMac && (length > 18 || length < 18) )
-    {
+    if ( !pSrcMac && (length > 18 || length < 18) ) {
         return VOS_STATUS_E_FAILURE;
     }
     i = k = 0;
-    while ( i < length )
-    {
+    while ( i < length ) {
         memcpy(temp, pSrcMac+i, 2);
         rv = kstrtou8(temp, 16, &pDescMac[k++]);
         if (rv < 0)

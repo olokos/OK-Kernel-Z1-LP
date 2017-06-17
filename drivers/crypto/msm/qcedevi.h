@@ -32,50 +32,50 @@ extern enum fips_status g_fips140_status;
 extern void *drbg_call_back;
 
 enum qcedev_crypto_oper_type {
-	QCEDEV_CRYPTO_OPER_CIPHER = 0,
-	QCEDEV_CRYPTO_OPER_SHA = 1,
-	QCEDEV_CRYPTO_OPER_LAST
+    QCEDEV_CRYPTO_OPER_CIPHER = 0,
+    QCEDEV_CRYPTO_OPER_SHA = 1,
+    QCEDEV_CRYPTO_OPER_LAST
 };
 
 struct qcedev_handle;
 
 struct qcedev_cipher_req {
-	struct ablkcipher_request creq;
-	void *cookie;
+    struct ablkcipher_request creq;
+    void *cookie;
 };
 
 struct qcedev_sha_req {
-	struct ahash_request sreq;
-	void *cookie;
+    struct ahash_request sreq;
+    void *cookie;
 };
 
 struct	qcedev_sha_ctxt {
-	uint32_t	auth_data[4];
-	uint8_t	digest[QCEDEV_MAX_SHA_DIGEST];
-	uint32_t	diglen;
-	uint8_t	trailing_buf[64];
-	uint32_t	trailing_buf_len;
-	uint8_t	first_blk;
-	uint8_t	last_blk;
-	uint8_t	authkey[QCEDEV_MAX_SHA_BLOCK_SIZE];
-	bool		init_done;
+    uint32_t	auth_data[4];
+    uint8_t	digest[QCEDEV_MAX_SHA_DIGEST];
+    uint32_t	diglen;
+    uint8_t	trailing_buf[64];
+    uint32_t	trailing_buf_len;
+    uint8_t	first_blk;
+    uint8_t	last_blk;
+    uint8_t	authkey[QCEDEV_MAX_SHA_BLOCK_SIZE];
+    bool		init_done;
 };
 
 struct qcedev_async_req {
-	struct list_head			list;
-	struct completion			complete;
-	enum qcedev_crypto_oper_type		op_type;
-	union {
-		struct qcedev_cipher_op_req	cipher_op_req;
-		struct qcedev_sha_op_req	sha_op_req;
-	};
+    struct list_head			list;
+    struct completion			complete;
+    enum qcedev_crypto_oper_type		op_type;
+    union {
+        struct qcedev_cipher_op_req	cipher_op_req;
+        struct qcedev_sha_op_req	sha_op_req;
+    };
 
-	union {
-		struct qcedev_cipher_req	cipher_req;
-		struct qcedev_sha_req		sha_req;
-	};
-	struct qcedev_handle			*handle;
-	int					err;
+    union {
+        struct qcedev_cipher_req	cipher_req;
+        struct qcedev_sha_req		sha_req;
+    };
+    struct qcedev_handle			*handle;
+    int					err;
 };
 
 /**********************************************************************
@@ -86,46 +86,46 @@ struct qcedev_async_req {
 
 struct qcedev_control {
 
-	/* CE features supported by platform */
-	struct msm_ce_hw_support platform_support;
+    /* CE features supported by platform */
+    struct msm_ce_hw_support platform_support;
 
-	uint32_t ce_lock_count;
-	uint32_t high_bw_req_count;
+    uint32_t ce_lock_count;
+    uint32_t high_bw_req_count;
 
-	/* CE features/algorithms supported by HW engine*/
-	struct ce_hw_support ce_support;
+    /* CE features/algorithms supported by HW engine*/
+    struct ce_hw_support ce_support;
 
-	uint32_t  bus_scale_handle;
+    uint32_t  bus_scale_handle;
 
-	/* misc device */
-	struct miscdevice miscdevice;
+    /* misc device */
+    struct miscdevice miscdevice;
 
-	/* qce handle */
-	void *qce;
+    /* qce handle */
+    void *qce;
 
-	/* platform device */
-	struct platform_device *pdev;
+    /* platform device */
+    struct platform_device *pdev;
 
-	unsigned magic;
+    unsigned magic;
 
-	struct list_head ready_commands;
-	struct qcedev_async_req *active_command;
-	spinlock_t lock;
-	struct tasklet_struct done_tasklet;
+    struct list_head ready_commands;
+    struct qcedev_async_req *active_command;
+    spinlock_t lock;
+    struct tasklet_struct done_tasklet;
 };
 
 struct qcedev_handle {
-	/* qcedev control handle */
-	struct qcedev_control *cntl;
-	/* qce internal sha context*/
-	struct qcedev_sha_ctxt sha_ctxt;
+    /* qcedev control handle */
+    struct qcedev_control *cntl;
+    /* qce internal sha context*/
+    struct qcedev_sha_ctxt sha_ctxt;
 };
 
 void qcedev_cipher_req_cb(void *cookie, unsigned char *icv,
-	unsigned char *iv, int ret);
+                          unsigned char *iv, int ret);
 
 void qcedev_sha_req_cb(void *cookie, unsigned char *digest,
-	unsigned char *authdata, int ret);
+                       unsigned char *authdata, int ret);
 
 extern int _do_msm_fips_drbg_init(void *rng_dev);
 
@@ -145,27 +145,23 @@ int _fips_qcedev_sha_selftest(struct qcedev_control *podev);
 /*
  * Update FIPs Global status Status
  */
-static inline enum fips_status _fips_update_status(enum fips_status status)
-{
-	return (status == FIPS140_STATUS_PASS) ?
-		FIPS140_STATUS_QCRYPTO_ALLOWED :
-		FIPS140_STATUS_FAIL;
+static inline enum fips_status _fips_update_status(enum fips_status status) {
+    return (status == FIPS140_STATUS_PASS) ?
+           FIPS140_STATUS_QCRYPTO_ALLOWED :
+           FIPS140_STATUS_FAIL;
 }
 
 #else
 
-static inline int _fips_qcedev_cipher_selftest(struct qcedev_control *podev)
-{
-	return 0;
+static inline int _fips_qcedev_cipher_selftest(struct qcedev_control *podev) {
+    return 0;
 }
-static inline int _fips_qcedev_sha_selftest(struct qcedev_control *podev)
-{
-	return 0;
+static inline int _fips_qcedev_sha_selftest(struct qcedev_control *podev) {
+    return 0;
 }
 
-static inline enum fips_status _fips_update_status(enum fips_status status)
-{
-	return FIPS140_STATUS_NA;
+static inline enum fips_status _fips_update_status(enum fips_status status) {
+    return FIPS140_STATUS_NA;
 }
 
 #endif  /* CONFIG_FIPS_ENABLE */

@@ -99,39 +99,37 @@ ssize_t iwmct_dbgfs_##name##_write(struct file *file,			\
  * Create the debugfs files and directories
  *
  */
-void iwmct_dbgfs_register(struct iwmct_priv *priv, const char *name)
-{
-	struct iwmct_debugfs *dbgfs;
+void iwmct_dbgfs_register(struct iwmct_priv *priv, const char *name) {
+    struct iwmct_debugfs *dbgfs;
 
-	dbgfs = kzalloc(sizeof(struct iwmct_debugfs), GFP_KERNEL);
-	if (!dbgfs) {
-		LOG_ERROR(priv, DEBUGFS, "failed to allocate %zd bytes\n",
-					sizeof(struct iwmct_debugfs));
-		return;
-	}
+    dbgfs = kzalloc(sizeof(struct iwmct_debugfs), GFP_KERNEL);
+    if (!dbgfs) {
+        LOG_ERROR(priv, DEBUGFS, "failed to allocate %zd bytes\n",
+                  sizeof(struct iwmct_debugfs));
+        return;
+    }
 
-	priv->dbgfs = dbgfs;
-	dbgfs->name = name;
-	dbgfs->dir_drv = debugfs_create_dir(name, NULL);
-	if (!dbgfs->dir_drv) {
-		LOG_ERROR(priv, DEBUGFS, "failed to create debugfs dir\n");
-		return;
-	}
+    priv->dbgfs = dbgfs;
+    dbgfs->name = name;
+    dbgfs->dir_drv = debugfs_create_dir(name, NULL);
+    if (!dbgfs->dir_drv) {
+        LOG_ERROR(priv, DEBUGFS, "failed to create debugfs dir\n");
+        return;
+    }
 
-	return;
+    return;
 }
 
 /**
  * Remove the debugfs files and directories
  *
  */
-void iwmct_dbgfs_unregister(struct iwmct_debugfs *dbgfs)
-{
-	if (!dbgfs)
-		return;
+void iwmct_dbgfs_unregister(struct iwmct_debugfs *dbgfs) {
+    if (!dbgfs)
+        return;
 
-	DEBUGFS_RM(dbgfs->dir_drv);
-	kfree(dbgfs);
-	dbgfs = NULL;
+    DEBUGFS_RM(dbgfs->dir_drv);
+    kfree(dbgfs);
+    dbgfs = NULL;
 }
 

@@ -45,13 +45,13 @@ extern unsigned int drm_vblank_offdelay;
 
 /* this enumerates display type. */
 enum exynos_drm_output_type {
-	EXYNOS_DISPLAY_TYPE_NONE,
-	/* RGB or CPU Interface. */
-	EXYNOS_DISPLAY_TYPE_LCD,
-	/* HDMI Interface. */
-	EXYNOS_DISPLAY_TYPE_HDMI,
-	/* Virtual Display Interface. */
-	EXYNOS_DISPLAY_TYPE_VIDI,
+    EXYNOS_DISPLAY_TYPE_NONE,
+    /* RGB or CPU Interface. */
+    EXYNOS_DISPLAY_TYPE_LCD,
+    /* HDMI Interface. */
+    EXYNOS_DISPLAY_TYPE_HDMI,
+    /* Virtual Display Interface. */
+    EXYNOS_DISPLAY_TYPE_VIDI,
 };
 
 /*
@@ -62,10 +62,10 @@ enum exynos_drm_output_type {
  * @disable: disable hardware specific overlay.
  */
 struct exynos_drm_overlay_ops {
-	void (*mode_set)(struct device *subdrv_dev,
-			 struct exynos_drm_overlay *overlay);
-	void (*commit)(struct device *subdrv_dev, int zpos);
-	void (*disable)(struct device *subdrv_dev, int zpos);
+    void (*mode_set)(struct device *subdrv_dev,
+                     struct exynos_drm_overlay *overlay);
+    void (*commit)(struct device *subdrv_dev, int zpos);
+    void (*disable)(struct device *subdrv_dev, int zpos);
 };
 
 /*
@@ -104,31 +104,31 @@ struct exynos_drm_overlay_ops {
  * to hardware specific overlay info.
  */
 struct exynos_drm_overlay {
-	unsigned int fb_x;
-	unsigned int fb_y;
-	unsigned int fb_width;
-	unsigned int fb_height;
-	unsigned int crtc_x;
-	unsigned int crtc_y;
-	unsigned int crtc_width;
-	unsigned int crtc_height;
-	unsigned int mode_width;
-	unsigned int mode_height;
-	unsigned int refresh;
-	unsigned int scan_flag;
-	unsigned int bpp;
-	unsigned int pitch;
-	uint32_t pixel_format;
-	dma_addr_t dma_addr[MAX_FB_BUFFER];
-	void __iomem *vaddr[MAX_FB_BUFFER];
-	int zpos;
+    unsigned int fb_x;
+    unsigned int fb_y;
+    unsigned int fb_width;
+    unsigned int fb_height;
+    unsigned int crtc_x;
+    unsigned int crtc_y;
+    unsigned int crtc_width;
+    unsigned int crtc_height;
+    unsigned int mode_width;
+    unsigned int mode_height;
+    unsigned int refresh;
+    unsigned int scan_flag;
+    unsigned int bpp;
+    unsigned int pitch;
+    uint32_t pixel_format;
+    dma_addr_t dma_addr[MAX_FB_BUFFER];
+    void __iomem *vaddr[MAX_FB_BUFFER];
+    int zpos;
 
-	bool default_win;
-	bool color_key;
-	unsigned int index_color;
-	bool local_path;
-	bool transparency;
-	bool activated;
+    bool default_win;
+    bool color_key;
+    unsigned int index_color;
+    bool local_path;
+    bool transparency;
+    bool activated;
 };
 
 /*
@@ -143,13 +143,13 @@ struct exynos_drm_overlay {
  * @power_on: display device on or off.
  */
 struct exynos_drm_display_ops {
-	enum exynos_drm_output_type type;
-	bool (*is_connected)(struct device *dev);
-	int (*get_edid)(struct device *dev, struct drm_connector *connector,
-				u8 *edid, int len);
-	void *(*get_panel)(struct device *dev);
-	int (*check_timing)(struct device *dev, void *timing);
-	int (*power_on)(struct device *dev, int mode);
+    enum exynos_drm_output_type type;
+    bool (*is_connected)(struct device *dev);
+    int (*get_edid)(struct device *dev, struct drm_connector *connector,
+                    u8 *edid, int len);
+    void *(*get_panel)(struct device *dev);
+    int (*check_timing)(struct device *dev, void *timing);
+    int (*power_on)(struct device *dev, int mode);
 };
 
 /*
@@ -166,18 +166,18 @@ struct exynos_drm_display_ops {
  * @disable_vblank: specific driver callback for disabling vblank interrupt.
  */
 struct exynos_drm_manager_ops {
-	void (*dpms)(struct device *subdrv_dev, int mode);
-	void (*apply)(struct device *subdrv_dev);
-	void (*mode_fixup)(struct device *subdrv_dev,
-				struct drm_connector *connector,
-				struct drm_display_mode *mode,
-				struct drm_display_mode *adjusted_mode);
-	void (*mode_set)(struct device *subdrv_dev, void *mode);
-	void (*get_max_resol)(struct device *subdrv_dev, unsigned int *width,
-				unsigned int *height);
-	void (*commit)(struct device *subdrv_dev);
-	int (*enable_vblank)(struct device *subdrv_dev);
-	void (*disable_vblank)(struct device *subdrv_dev);
+    void (*dpms)(struct device *subdrv_dev, int mode);
+    void (*apply)(struct device *subdrv_dev);
+    void (*mode_fixup)(struct device *subdrv_dev,
+                       struct drm_connector *connector,
+                       struct drm_display_mode *mode,
+                       struct drm_display_mode *adjusted_mode);
+    void (*mode_set)(struct device *subdrv_dev, void *mode);
+    void (*get_max_resol)(struct device *subdrv_dev, unsigned int *width,
+                          unsigned int *height);
+    void (*commit)(struct device *subdrv_dev);
+    int (*enable_vblank)(struct device *subdrv_dev);
+    void (*disable_vblank)(struct device *subdrv_dev);
 };
 
 /*
@@ -198,27 +198,27 @@ struct exynos_drm_manager_ops {
  *	analog tv, digital tv and lcd panel and also get timing data for them.
  */
 struct exynos_drm_manager {
-	struct device *dev;
-	int pipe;
-	struct exynos_drm_manager_ops *ops;
-	struct exynos_drm_overlay_ops *overlay_ops;
-	struct exynos_drm_display_ops *display_ops;
+    struct device *dev;
+    int pipe;
+    struct exynos_drm_manager_ops *ops;
+    struct exynos_drm_overlay_ops *overlay_ops;
+    struct exynos_drm_display_ops *display_ops;
 };
 
 /*
  * Exynos drm private structure.
  */
 struct exynos_drm_private {
-	struct drm_fb_helper *fb_helper;
+    struct drm_fb_helper *fb_helper;
 
-	/* list head for new event to be added. */
-	struct list_head pageflip_event_list;
+    /* list head for new event to be added. */
+    struct list_head pageflip_event_list;
 
-	/*
-	 * created crtc object would be contained at this array and
-	 * this array is used to be aware of which crtc did it request vblank.
-	 */
-	struct drm_crtc *crtc[MAX_CRTC];
+    /*
+     * created crtc object would be contained at this array and
+     * this array is used to be aware of which crtc did it request vblank.
+     */
+    struct drm_crtc *crtc[MAX_CRTC];
 };
 
 /*
@@ -240,20 +240,20 @@ struct exynos_drm_private {
  * @connector: connector object owned by this sub driver.
  */
 struct exynos_drm_subdrv {
-	struct list_head list;
-	struct device *dev;
-	struct drm_device *drm_dev;
-	struct exynos_drm_manager *manager;
+    struct list_head list;
+    struct device *dev;
+    struct drm_device *drm_dev;
+    struct exynos_drm_manager *manager;
 
-	int (*probe)(struct drm_device *drm_dev, struct device *dev);
-	void (*remove)(struct drm_device *dev);
-	int (*open)(struct drm_device *drm_dev, struct device *dev,
-			struct drm_file *file);
-	void (*close)(struct drm_device *drm_dev, struct device *dev,
-			struct drm_file *file);
+    int (*probe)(struct drm_device *drm_dev, struct device *dev);
+    void (*remove)(struct drm_device *dev);
+    int (*open)(struct drm_device *drm_dev, struct device *dev,
+                struct drm_file *file);
+    void (*close)(struct drm_device *drm_dev, struct device *dev,
+                  struct drm_file *file);
 
-	struct drm_encoder *encoder;
-	struct drm_connector *connector;
+    struct drm_encoder *encoder;
+    struct drm_connector *connector;
 };
 
 /*

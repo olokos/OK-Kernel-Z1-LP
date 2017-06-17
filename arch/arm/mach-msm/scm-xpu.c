@@ -25,50 +25,48 @@
 
 #define XPU_PROTECT_AREA 0x3
 
-static int __init xpu_err_fatal_init(void)
-{
-	int ret, response;
-	struct {
-		unsigned int config;
-		unsigned int spare;
-	} cmd;
-	cmd.config = ERR_FATAL_ENABLE;
-	cmd.spare = 0;
+static int __init xpu_err_fatal_init(void) {
+    int ret, response;
+    struct {
+        unsigned int config;
+        unsigned int spare;
+    } cmd;
+    cmd.config = ERR_FATAL_ENABLE;
+    cmd.spare = 0;
 
-	ret = scm_call(SCM_SVC_MP, XPU_ERR_FATAL, &cmd, sizeof(cmd), &response,
-			sizeof(response));
+    ret = scm_call(SCM_SVC_MP, XPU_ERR_FATAL, &cmd, sizeof(cmd), &response,
+                   sizeof(response));
 
-	if (ret != 0)
-		pr_warn("Failed to set XPU violations as fatal errors: %d\n",
-			ret);
-	else
-		pr_info("Configuring XPU violations to be fatal errors\n");
+    if (ret != 0)
+        pr_warn("Failed to set XPU violations as fatal errors: %d\n",
+                ret);
+    else
+        pr_info("Configuring XPU violations to be fatal errors\n");
 
-	return ret;
+    return ret;
 }
 early_initcall(xpu_err_fatal_init);
 
-static int __init xpu_protect_init(void)
-{
+static int __init xpu_protect_init(void) {
 
-	int ret, response;
-	struct {
-		unsigned int start;
-		unsigned int size;
-	} cmd;
-	cmd.start = __pa(_stext);
-	cmd.size = PAGE_ALIGN((u32)_etext - (u32)_stext);
+    int ret, response;
+    struct {
+        unsigned int start;
+        unsigned int size;
+    } cmd;
+    cmd.start = __pa(_stext);
+    cmd.size = PAGE_ALIGN((u32)_etext - (u32)_stext);
 
-	ret = scm_call(SCM_SVC_OEM, XPU_PROTECT_AREA, &cmd, sizeof(cmd),
-			&response, sizeof(response));
+    ret = scm_call(SCM_SVC_OEM, XPU_PROTECT_AREA, &cmd, sizeof(cmd),
+                   &response, sizeof(response));
 
-	if (ret != 0)
-		pr_warn("Failed to XPU protect text area 0x%08x--0x%08x: %d\n",
-			cmd.start, cmd.start + cmd.size - 1, ret);
-	else
-		pr_info("Configured XPU protection in region 0x%08x--0x%08x\n",
-			cmd.start, cmd.start + cmd.size - 1);
+    if (ret != 0)
+        pr_warn("Failed to XPU protect text area 0x%08x--0x%08x: %d\n",
+                cmd.start, cmd.start + cmd.size - 1, ret);
+    else
+        pr_info("Configured XPU protection in region 0x%08x--0x%08x\n",
+                cmd.start, cmd.start + cmd.size - 1);
 
-	return ret;
+    return ret;
 }
 late_initcall(xpu_protect_init);

@@ -23,10 +23,10 @@ struct matrix_keymap_data;
  * @flags:		see above
  */
 struct ep93xx_keypad_platform_data {
-	struct matrix_keymap_data *keymap_data;
-	unsigned int	debounce;
-	unsigned int	prescale;
-	unsigned int	flags;
+    struct matrix_keymap_data *keymap_data;
+    unsigned int	debounce;
+    unsigned int	prescale;
+    unsigned int	flags;
 };
 
 #define EP93XX_MATRIX_ROWS		(8)

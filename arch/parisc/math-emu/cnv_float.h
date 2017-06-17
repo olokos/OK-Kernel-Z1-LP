@@ -20,12 +20,12 @@
  */
 
 #ifdef __NO_PA_HDRS
-    PA header file -- do not include this header file for non-PA builds.
+PA header file -- do not include this header file for non-PA builds.
 #endif
 
-/*
- * Some more constants
- */
+    /*
+     * Some more constants
+     */
 #define SGL_FX_MAX_EXP 30
 #define DBL_FX_MAX_EXP 62
 #define QUAD_FX_MAX_EXP 126
@@ -42,12 +42,12 @@
 #define Qintp3(object) (object)
 
 
-/*
- * These macros will be used specifically by the convert instructions.
- *
- *
- * Single format macros
- */
+    /*
+     * These macros will be used specifically by the convert instructions.
+     *
+     *
+     * Single format macros
+     */
 
 #define Sgl_to_dbl_exponent(src_exponent,dest)			\
     Deposit_dexponent(dest,src_exponent+(DBL_BIAS-SGL_BIAS))
@@ -91,9 +91,9 @@
      Sall(sgl_value) << (SGL_EXP_LENGTH + 2 + exponent) : FALSE)
 
 
-/* 
- * Double format macros
- */
+    /*
+     * Double format macros
+     */
 
 #define Dbl_to_sgl_exponent(src_exponent,dest)			\
     dest = src_exponent + (SGL_BIAS - DBL_BIAS)
@@ -196,7 +196,7 @@
 
 #define Dbl_isoverflow_to_int(exponent,dbl_valueA,dbl_valueB)		\
     ((exponent > SGL_FX_MAX_EXP + 1) || Dsign(dbl_valueA)==0 ||		\
-     Dmantissap1(dbl_valueA)!=0 || (Dallp2(dbl_valueB)>>21)!=0 ) 
+     Dmantissap1(dbl_valueA)!=0 || (Dallp2(dbl_valueB)>>21)!=0 )
 
 #define Dbl_isone_roundbit(dbl_valueA,dbl_valueB,exponent)              \
     ((exponent < (DBL_P - 33) ?						\
@@ -210,7 +210,7 @@
       FALSE))
 
 
-/* Int macros */
+    /* Int macros */
 
 #define Int_from_sgl_mantissa(sgl_value,exponent)	\
     Sall(sgl_value) = 				\
@@ -224,7 +224,7 @@
 #define Int_negate(int_value) int_value = -int_value
 
 
-/* Dint macros */
+    /* Dint macros */
 
 #define Dint_from_sgl_mantissa(sgl_value,exponent,dresultA,dresultB)	\
     {Sall(sgl_value) <<= SGL_EXP_LENGTH;  /*  left-justify  */		\
@@ -292,7 +292,7 @@
     dest->wd1 = Dintp2(srcB)
 
 
-/* other macros  */
+    /* other macros  */
 
 #define Find_ms_one_bit(value, position)	\
     {						\
@@ -308,9 +308,9 @@
     }
 
 
-/*
- * Unsigned int macros
- */
+    /*
+     * Unsigned int macros
+     */
 #define Duint_copyfromptr(src,destA,destB) \
     Dint_copyfromptr(src,destA,destB)
 #define Duint_copytoptr(srcA,srcB,dest)	\
@@ -362,7 +362,7 @@
 #define Duint_setzero(dresultA,dresultB) 	\
     Dint_setzero(dresultA,dresultB)
 
-#define Duint_increment(dresultA,dresultB) Dint_increment(dresultA,dresultB) 
+#define Duint_increment(dresultA,dresultB) Dint_increment(dresultA,dresultB)
 
 #define Duint_isone_lowp2(dresultB)  Dint_isone_lowp2(dresultB)
 
@@ -374,4 +374,4 @@
     Dbl_isinexact_to_fix(dbl_valueA,dbl_valueB,exponent)
 
 #define Duint_from_dbl_mantissa(dbl_valueA,dbl_valueB,exponent,destA,destB) \
-    Dint_from_dbl_mantissa(dbl_valueA,dbl_valueB,exponent,destA,destB) 
+    Dint_from_dbl_mantissa(dbl_valueA,dbl_valueB,exponent,destA,destB)

@@ -40,21 +40,21 @@
 #define SERCR_MCPR	0x00000001
 
 struct ipic {
-	volatile u32 __iomem	*regs;
+    volatile u32 __iomem	*regs;
 
-	/* The remapper for this IPIC */
-	struct irq_domain		*irqhost;
+    /* The remapper for this IPIC */
+    struct irq_domain		*irqhost;
 };
 
 struct ipic_info {
-	u8	ack;		/* pending register offset from base if the irq
+    u8	ack;		/* pending register offset from base if the irq
 				   supports ack operation */
-	u8	mask;		/* mask register offset from base */
-	u8	prio;		/* priority register offset from base */
-	u8	force;		/* force register offset from base */
-	u8	bit;		/* register bit position (as per doc)
+    u8	mask;		/* mask register offset from base */
+    u8	prio;		/* priority register offset from base */
+    u8	force;		/* force register offset from base */
+    u8	bit;		/* register bit position (as per doc)
 				   bit mask = 1 << (31 - bit) */
-	u8	prio_mask;	/* priority mask value */
+    u8	prio_mask;	/* priority mask value */
 };
 
 #endif /* __IPIC_H__ */

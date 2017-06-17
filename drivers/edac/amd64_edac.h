@@ -191,7 +191,7 @@
 #define dhar_base(pvt)			((pvt)->dhar & 0xff000000)
 #define k8_dhar_offset(pvt)		(((pvt)->dhar & 0x0000ff00) << 16)
 
-					/* NOTE: Extra mask bit vs K8 */
+/* NOTE: Extra mask bit vs K8 */
 #define f10_dhar_offset(pvt)		(((pvt)->dhar & 0x0000ff80) << 16)
 
 #define DCT_CFG_SEL			0x10C
@@ -291,125 +291,121 @@
 #define MSR_MCGCTL_NBE			BIT(4)
 
 /* AMD sets the first MC device at device ID 0x18. */
-static inline u8 get_node_id(struct pci_dev *pdev)
-{
-	return PCI_SLOT(pdev->devfn) - 0x18;
+static inline u8 get_node_id(struct pci_dev *pdev) {
+    return PCI_SLOT(pdev->devfn) - 0x18;
 }
 
 enum amd_families {
-	K8_CPUS = 0,
-	F10_CPUS,
-	F15_CPUS,
-	NUM_FAMILIES,
+    K8_CPUS = 0,
+    F10_CPUS,
+    F15_CPUS,
+    NUM_FAMILIES,
 };
 
 /* Error injection control structure */
 struct error_injection {
-	u32	section;
-	u32	word;
-	u32	bit_map;
+    u32	section;
+    u32	word;
+    u32	bit_map;
 };
 
 /* low and high part of PCI config space regs */
 struct reg_pair {
-	u32 lo, hi;
+    u32 lo, hi;
 };
 
 /*
  * See F1x[1, 0][7C:40] DRAM Base/Limit Registers
  */
 struct dram_range {
-	struct reg_pair base;
-	struct reg_pair lim;
+    struct reg_pair base;
+    struct reg_pair lim;
 };
 
 /* A DCT chip selects collection */
 struct chip_select {
-	u32 csbases[NUM_CHIPSELECTS];
-	u8 b_cnt;
+    u32 csbases[NUM_CHIPSELECTS];
+    u8 b_cnt;
 
-	u32 csmasks[NUM_CHIPSELECTS];
-	u8 m_cnt;
+    u32 csmasks[NUM_CHIPSELECTS];
+    u8 m_cnt;
 };
 
 struct amd64_pvt {
-	struct low_ops *ops;
+    struct low_ops *ops;
 
-	/* pci_device handles which we utilize */
-	struct pci_dev *F1, *F2, *F3;
+    /* pci_device handles which we utilize */
+    struct pci_dev *F1, *F2, *F3;
 
-	unsigned mc_node_id;	/* MC index of this MC node */
-	int ext_model;		/* extended model value of this node */
-	int channel_count;
+    unsigned mc_node_id;	/* MC index of this MC node */
+    int ext_model;		/* extended model value of this node */
+    int channel_count;
 
-	/* Raw registers */
-	u32 dclr0;		/* DRAM Configuration Low DCT0 reg */
-	u32 dclr1;		/* DRAM Configuration Low DCT1 reg */
-	u32 dchr0;		/* DRAM Configuration High DCT0 reg */
-	u32 dchr1;		/* DRAM Configuration High DCT1 reg */
-	u32 nbcap;		/* North Bridge Capabilities */
-	u32 nbcfg;		/* F10 North Bridge Configuration */
-	u32 ext_nbcfg;		/* Extended F10 North Bridge Configuration */
-	u32 dhar;		/* DRAM Hoist reg */
-	u32 dbam0;		/* DRAM Base Address Mapping reg for DCT0 */
-	u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
+    /* Raw registers */
+    u32 dclr0;		/* DRAM Configuration Low DCT0 reg */
+    u32 dclr1;		/* DRAM Configuration Low DCT1 reg */
+    u32 dchr0;		/* DRAM Configuration High DCT0 reg */
+    u32 dchr1;		/* DRAM Configuration High DCT1 reg */
+    u32 nbcap;		/* North Bridge Capabilities */
+    u32 nbcfg;		/* F10 North Bridge Configuration */
+    u32 ext_nbcfg;		/* Extended F10 North Bridge Configuration */
+    u32 dhar;		/* DRAM Hoist reg */
+    u32 dbam0;		/* DRAM Base Address Mapping reg for DCT0 */
+    u32 dbam1;		/* DRAM Base Address Mapping reg for DCT1 */
 
-	/* one for each DCT */
-	struct chip_select csels[2];
+    /* one for each DCT */
+    struct chip_select csels[2];
 
-	/* DRAM base and limit pairs F1x[78,70,68,60,58,50,48,40] */
-	struct dram_range ranges[DRAM_RANGES];
+    /* DRAM base and limit pairs F1x[78,70,68,60,58,50,48,40] */
+    struct dram_range ranges[DRAM_RANGES];
 
-	u64 top_mem;		/* top of memory below 4GB */
-	u64 top_mem2;		/* top of memory above 4GB */
+    u64 top_mem;		/* top of memory below 4GB */
+    u64 top_mem2;		/* top of memory above 4GB */
 
-	u32 dct_sel_lo;		/* DRAM Controller Select Low */
-	u32 dct_sel_hi;		/* DRAM Controller Select High */
-	u32 online_spare;	/* On-Line spare Reg */
+    u32 dct_sel_lo;		/* DRAM Controller Select Low */
+    u32 dct_sel_hi;		/* DRAM Controller Select High */
+    u32 online_spare;	/* On-Line spare Reg */
 
-	/* x4 or x8 syndromes in use */
-	u8 ecc_sym_sz;
+    /* x4 or x8 syndromes in use */
+    u8 ecc_sym_sz;
 
-	/* place to store error injection parameters prior to issue */
-	struct error_injection injection;
+    /* place to store error injection parameters prior to issue */
+    struct error_injection injection;
 };
 
-static inline u64 get_dram_base(struct amd64_pvt *pvt, unsigned i)
-{
-	u64 addr = ((u64)pvt->ranges[i].base.lo & 0xffff0000) << 8;
+static inline u64 get_dram_base(struct amd64_pvt *pvt, unsigned i) {
+    u64 addr = ((u64)pvt->ranges[i].base.lo & 0xffff0000) << 8;
 
-	if (boot_cpu_data.x86 == 0xf)
-		return addr;
+    if (boot_cpu_data.x86 == 0xf)
+        return addr;
 
-	return (((u64)pvt->ranges[i].base.hi & 0x000000ff) << 40) | addr;
+    return (((u64)pvt->ranges[i].base.hi & 0x000000ff) << 40) | addr;
 }
 
-static inline u64 get_dram_limit(struct amd64_pvt *pvt, unsigned i)
-{
-	u64 lim = (((u64)pvt->ranges[i].lim.lo & 0xffff0000) << 8) | 0x00ffffff;
+static inline u64 get_dram_limit(struct amd64_pvt *pvt, unsigned i) {
+    u64 lim = (((u64)pvt->ranges[i].lim.lo & 0xffff0000) << 8) | 0x00ffffff;
 
-	if (boot_cpu_data.x86 == 0xf)
-		return lim;
+    if (boot_cpu_data.x86 == 0xf)
+        return lim;
 
-	return (((u64)pvt->ranges[i].lim.hi & 0x000000ff) << 40) | lim;
+    return (((u64)pvt->ranges[i].lim.hi & 0x000000ff) << 40) | lim;
 }
 
-static inline u16 extract_syndrome(u64 status)
-{
-	return ((status >> 47) & 0xff) | ((status >> 16) & 0xff00);
+static inline u16 extract_syndrome(u64 status) {
+    return ((status >> 47) & 0xff) | ((status >> 16) & 0xff00);
 }
 
 /*
  * per-node ECC settings descriptor
  */
 struct ecc_settings {
-	u32 old_nbctl;
-	bool nbctl_valid;
+    u32 old_nbctl;
+    bool nbctl_valid;
 
-	struct flags {
-		unsigned long nb_mce_enable:1;
-		unsigned long nb_ecc_prev:1;
-	} flags;
+    struct flags {
+        unsigned long nb_mce_enable:1;
+        unsigned long nb_ecc_prev:1;
+    } flags;
 };
 
 #ifdef CONFIG_EDAC_DEBUG
@@ -425,29 +421,29 @@ struct ecc_settings {
 #endif
 
 extern struct mcidev_sysfs_attribute amd64_dbg_attrs[NUM_DBG_ATTRS],
-				     amd64_inj_attrs[NUM_INJ_ATTRS];
+           amd64_inj_attrs[NUM_INJ_ATTRS];
 
 /*
  * Each of the PCI Device IDs types have their own set of hardware accessor
  * functions and per device encoding/decoding logic.
  */
 struct low_ops {
-	int (*early_channel_count)	(struct amd64_pvt *pvt);
-	void (*map_sysaddr_to_csrow)	(struct mem_ctl_info *mci, u64 sys_addr,
-					 u16 syndrome);
-	int (*dbam_to_cs)		(struct amd64_pvt *pvt, u8 dct, unsigned cs_mode);
-	int (*read_dct_pci_cfg)		(struct amd64_pvt *pvt, int offset,
-					 u32 *val, const char *func);
+    int (*early_channel_count)	(struct amd64_pvt *pvt);
+    void (*map_sysaddr_to_csrow)	(struct mem_ctl_info *mci, u64 sys_addr,
+                                     u16 syndrome);
+    int (*dbam_to_cs)		(struct amd64_pvt *pvt, u8 dct, unsigned cs_mode);
+    int (*read_dct_pci_cfg)		(struct amd64_pvt *pvt, int offset,
+                                 u32 *val, const char *func);
 };
 
 struct amd64_family_type {
-	const char *ctl_name;
-	u16 f1_id, f3_id;
-	struct low_ops ops;
+    const char *ctl_name;
+    u16 f1_id, f3_id;
+    struct low_ops ops;
 };
 
 int __amd64_write_pci_cfg_dword(struct pci_dev *pdev, int offset,
-				u32 val, const char *func);
+                                u32 val, const char *func);
 
 #define amd64_read_pci_cfg(pdev, offset, val)	\
 	__amd64_read_pci_cfg_dword(pdev, offset, val, __func__)
@@ -459,4 +455,4 @@ int __amd64_write_pci_cfg_dword(struct pci_dev *pdev, int offset,
 	pvt->ops->read_dct_pci_cfg(pvt, offset, val, __func__)
 
 int amd64_get_dram_hole_info(struct mem_ctl_info *mci, u64 *hole_base,
-			     u64 *hole_offset, u64 *hole_size);
+                             u64 *hole_offset, u64 *hole_size);

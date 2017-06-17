@@ -28,14 +28,12 @@
 #ifdef CONFIG_TEGRA_PCI
 extern void __iomem *tegra_pcie_io_base;
 
-static inline void __iomem *__io(unsigned long addr)
-{
-	return tegra_pcie_io_base + (addr & IO_SPACE_LIMIT);
+static inline void __iomem *__io(unsigned long addr) {
+    return tegra_pcie_io_base + (addr & IO_SPACE_LIMIT);
 }
 #else
-static inline void __iomem *__io(unsigned long addr)
-{
-	return (void __iomem *)addr;
+static inline void __iomem *__io(unsigned long addr) {
+    return (void __iomem *)addr;
 }
 #endif
 

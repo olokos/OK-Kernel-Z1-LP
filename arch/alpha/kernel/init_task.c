@@ -14,4 +14,4 @@ struct task_struct init_task = INIT_TASK(init_task);
 EXPORT_SYMBOL(init_task);
 
 union thread_union init_thread_union __init_task_data =
-	{ INIT_THREAD_INFO(init_task) };
+{ INIT_THREAD_INFO(init_task) };

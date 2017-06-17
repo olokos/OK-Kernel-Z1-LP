@@ -88,26 +88,26 @@
 #define KBD_LEDS				0x00004000
 
 struct dj_report {
-	u8 report_id;
-	u8 device_index;
-	u8 report_type;
-	u8 report_params[DJREPORT_SHORT_LENGTH - 3];
+    u8 report_id;
+    u8 device_index;
+    u8 report_type;
+    u8 report_params[DJREPORT_SHORT_LENGTH - 3];
 };
 
 struct dj_receiver_dev {
-	struct hid_device *hdev;
-	struct dj_device *paired_dj_devices[DJ_MAX_PAIRED_DEVICES +
-					    DJ_DEVICE_INDEX_MIN];
-	struct work_struct work;
-	struct kfifo notif_fifo;
-	spinlock_t lock;
+    struct hid_device *hdev;
+    struct dj_device *paired_dj_devices[DJ_MAX_PAIRED_DEVICES +
+                                            DJ_DEVICE_INDEX_MIN];
+    struct work_struct work;
+    struct kfifo notif_fifo;
+    spinlock_t lock;
 };
 
 struct dj_device {
-	struct hid_device *hdev;
-	struct dj_receiver_dev *dj_receiver_dev;
-	u32 reports_supported;
-	u8 device_index;
+    struct hid_device *hdev;
+    struct dj_receiver_dev *dj_receiver_dev;
+    u32 reports_supported;
+    u8 device_index;
 };
 
 /**

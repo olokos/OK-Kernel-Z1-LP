@@ -166,8 +166,7 @@ extern dbg_info_t *DbgInfo;
  *      errno value otherwise
  *
  ******************************************************************************/
-int wl_init( struct net_device *dev )
-{
+int wl_init( struct net_device *dev ) {
 //    unsigned long       flags;
 //    struct wl_private   *lp = wl_priv(dev);
     /*------------------------------------------------------------------------*/
@@ -206,8 +205,7 @@ int wl_init( struct net_device *dev )
  *      errno otherwise
  *
  ******************************************************************************/
-int wl_config( struct net_device *dev, struct ifmap *map )
-{
+int wl_config( struct net_device *dev, struct ifmap *map ) {
     DBG_FUNC( "wl_config" );
     DBG_ENTER( DbgInfo );
 
@@ -241,8 +239,7 @@ int wl_config( struct net_device *dev, struct ifmap *map )
  *      statistics.
  *
  ******************************************************************************/
-struct net_device_stats *wl_stats( struct net_device *dev )
-{
+struct net_device_stats *wl_stats( struct net_device *dev ) {
 #ifdef USE_WDS
     int                         count;
 #endif  /* USE_WDS */
@@ -261,10 +258,10 @@ struct net_device_stats *wl_stats( struct net_device *dev )
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-	wl_unlock( lp, &flags );
+        wl_unlock( lp, &flags );
 
-	//DBG_LEAVE( DbgInfo );
-	return NULL;
+        //DBG_LEAVE( DbgInfo );
+        return NULL;
     }
 #endif  /* USE_RTS */
 
@@ -272,9 +269,9 @@ struct net_device_stats *wl_stats( struct net_device *dev )
 #ifdef USE_WDS
 
     for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-	if( dev == lp->wds_port[count].dev ) {
-	    pStats = &( lp->wds_port[count].stats );
-	}
+        if( dev == lp->wds_port[count].dev ) {
+            pStats = &( lp->wds_port[count].stats );
+        }
     }
 
 #endif  /* USE_WDS */
@@ -310,8 +307,7 @@ struct net_device_stats *wl_stats( struct net_device *dev )
  *      errno otherwise
  *
  ******************************************************************************/
-int wl_open(struct net_device *dev)
-{
+int wl_open(struct net_device *dev) {
     int                 status = HCF_SUCCESS;
     struct wl_private   *lp = wl_priv(dev);
     unsigned long       flags;
@@ -324,10 +320,10 @@ int wl_open(struct net_device *dev)
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-	DBG_TRACE( DbgInfo, "Skipping device open, in RTS mode\n" );
-	wl_unlock( lp, &flags );
-	DBG_LEAVE( DbgInfo );
-	return -EIO;
+        DBG_TRACE( DbgInfo, "Skipping device open, in RTS mode\n" );
+        wl_unlock( lp, &flags );
+        DBG_LEAVE( DbgInfo );
+        return -EIO;
     }
 #endif  /* USE_RTS */
 
@@ -336,8 +332,8 @@ int wl_open(struct net_device *dev)
 #endif
 
     if( lp->portState == WVLAN_PORT_STATE_DISABLED ) {
-	DBG_TRACE( DbgInfo, "Enabling Port 0\n" );
-	status = wl_enable( lp );
+        DBG_TRACE( DbgInfo, "Enabling Port 0\n" );
+        status = wl_enable( lp );
 
         if( status != HCF_SUCCESS ) {
             DBG_TRACE( DbgInfo, "Enable port 0 failed: 0x%x\n", status );
@@ -349,10 +345,10 @@ int wl_open(struct net_device *dev)
     wl_lock( lp, &flags );
 
     if ( strlen( lp->fw_image_filename ) ) {
-	DBG_TRACE( DbgInfo, ";???? Kludgy way to force a download\n" );
-	status = wl_go( lp );
+        DBG_TRACE( DbgInfo, ";???? Kludgy way to force a download\n" );
+        status = wl_go( lp );
     } else {
-	status = wl_apply( lp );
+        status = wl_apply( lp );
     }
 
     // Holding the lock too long, make a gap to allow other processes
@@ -360,8 +356,8 @@ int wl_open(struct net_device *dev)
     wl_lock( lp, &flags );
 
     if( status != HCF_SUCCESS ) {
-	// Unsuccessful, try reset of the card to recover
-	status = wl_reset( dev );
+        // Unsuccessful, try reset of the card to recover
+        status = wl_reset( dev );
     }
 
     // Holding the lock too long, make a gap to allow other processes
@@ -369,14 +365,14 @@ int wl_open(struct net_device *dev)
     wl_lock( lp, &flags );
 
     if( status == HCF_SUCCESS ) {
-	netif_carrier_on( dev );
-	WL_WDS_NETIF_CARRIER_ON( lp );
+        netif_carrier_on( dev );
+        WL_WDS_NETIF_CARRIER_ON( lp );
 
-	lp->is_handling_int = WL_HANDLING_INT; // Start handling interrupts
+        lp->is_handling_int = WL_HANDLING_INT; // Start handling interrupts
         wl_act_int_on( lp );
 
-	netif_start_queue( dev );
-	WL_WDS_NETIF_START_QUEUE( lp );
+        netif_start_queue( dev );
+        WL_WDS_NETIF_START_QUEUE( lp );
     } else {
         wl_hcf_error( dev, status );		/* Report the error */
         netif_device_detach( dev );		/* Stop the device and queue */
@@ -407,8 +403,7 @@ int wl_open(struct net_device *dev)
  *      errno otherwise
  *
  ******************************************************************************/
-int wl_close( struct net_device *dev )
-{
+int wl_close( struct net_device *dev ) {
     struct wl_private   *lp = wl_priv(dev);
     unsigned long   flags;
     /*------------------------------------------------------------------------*/
@@ -438,10 +433,10 @@ int wl_close( struct net_device *dev )
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-	DBG_TRACE( DbgInfo, "Skipping device close, in RTS mode\n" );
-	wl_unlock( lp, &flags );
-	DBG_LEAVE( DbgInfo );
-	return -EIO;
+        DBG_TRACE( DbgInfo, "Skipping device close, in RTS mode\n" );
+        wl_unlock( lp, &flags );
+        DBG_LEAVE( DbgInfo );
+        return -EIO;
     }
 #endif  /* USE_RTS */
 
@@ -455,20 +450,19 @@ int wl_close( struct net_device *dev )
 } // wl_close
 /*============================================================================*/
 
-static void wl_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
-{
+static void wl_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info) {
     strncpy(info->driver, DRIVER_NAME, sizeof(info->driver) - 1);
     strncpy(info->version, DRV_VERSION_STR, sizeof(info->version) - 1);
 //	strncpy(info.fw_version, priv->fw_name,
 //	sizeof(info.fw_version) - 1);
 
     if (dev->dev.parent) {
-    	dev_set_name(dev->dev.parent, "%s", info->bus_info);
-	//strncpy(info->bus_info, dev->dev.parent->bus_id,
-	//	sizeof(info->bus_info) - 1);
+        dev_set_name(dev->dev.parent, "%s", info->bus_info);
+        //strncpy(info->bus_info, dev->dev.parent->bus_id,
+        //	sizeof(info->bus_info) - 1);
     } else {
-	snprintf(info->bus_info, sizeof(info->bus_info) - 1,
-		"PCMCIA FIXME");
+        snprintf(info->bus_info, sizeof(info->bus_info) - 1,
+                 "PCMCIA FIXME");
 //		    "PCMCIA 0x%lx", priv->hw.iobase);
     }
 } // wl_get_drvinfo
@@ -499,8 +493,7 @@ static struct ethtool_ops wl_ethtool_ops = {
  *      errno value otherwise
  *
  ******************************************************************************/
-int wl_ioctl( struct net_device *dev, struct ifreq *rq, int cmd )
-{
+int wl_ioctl( struct net_device *dev, struct ifreq *rq, int cmd ) {
     struct wl_private  *lp = wl_priv(dev);
     unsigned long           flags;
     int                     ret = 0;
@@ -518,42 +511,42 @@ int wl_ioctl( struct net_device *dev, struct ifreq *rq, int cmd )
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-	/* Handle any RTS IOCTL here */
-	if( cmd == WL_IOCTL_RTS ) {
-	    DBG_TRACE( DbgInfo, "IOCTL: WL_IOCTL_RTS\n" );
-	    ret = wvlan_rts( (struct rtsreq *)rq, dev->base_addr );
-	} else {
-	    DBG_TRACE( DbgInfo, "IOCTL not supported in RTS mode: 0x%X\n", cmd );
-	    ret = -EOPNOTSUPP;
-	}
+        /* Handle any RTS IOCTL here */
+        if( cmd == WL_IOCTL_RTS ) {
+            DBG_TRACE( DbgInfo, "IOCTL: WL_IOCTL_RTS\n" );
+            ret = wvlan_rts( (struct rtsreq *)rq, dev->base_addr );
+        } else {
+            DBG_TRACE( DbgInfo, "IOCTL not supported in RTS mode: 0x%X\n", cmd );
+            ret = -EOPNOTSUPP;
+        }
 
-	goto out_act_int_on_unlock;
+        goto out_act_int_on_unlock;
     }
 #endif  /* USE_RTS */
 
     /* Only handle UIL IOCTL requests when the UIL has the system blocked. */
     if( !(( lp->flags & WVLAN2_UIL_BUSY ) && ( cmd != WVLAN2_IOCTL_UIL ))) {
 #ifdef USE_UIL
-	struct uilreq  *urq = (struct uilreq *)rq;
+        struct uilreq  *urq = (struct uilreq *)rq;
 #endif /* USE_UIL */
 
-	switch( cmd ) {
-		// ================== Private IOCTLs (up to 16) ==================
+        switch( cmd ) {
+            // ================== Private IOCTLs (up to 16) ==================
 #ifdef USE_UIL
-	case WVLAN2_IOCTL_UIL:
-	     DBG_TRACE( DbgInfo, "IOCTL: WVLAN2_IOCTL_UIL\n" );
-	     ret = wvlan_uil( urq, lp );
-	     break;
+        case WVLAN2_IOCTL_UIL:
+            DBG_TRACE( DbgInfo, "IOCTL: WVLAN2_IOCTL_UIL\n" );
+            ret = wvlan_uil( urq, lp );
+            break;
 #endif  /* USE_UIL */
 
-	default:
-	     DBG_TRACE(DbgInfo, "IOCTL CODE NOT SUPPORTED: 0x%X\n", cmd );
-	     ret = -EOPNOTSUPP;
-	     break;
-	}
+        default:
+            DBG_TRACE(DbgInfo, "IOCTL CODE NOT SUPPORTED: 0x%X\n", cmd );
+            ret = -EOPNOTSUPP;
+            break;
+        }
     } else {
-	DBG_WARNING( DbgInfo, "DEVICE IS BUSY, CANNOT PROCESS REQUEST\n" );
-	ret = -EBUSY;
+        DBG_WARNING( DbgInfo, "DEVICE IS BUSY, CANNOT PROCESS REQUEST\n" );
+        ret = -EBUSY;
     }
 
 #ifdef USE_RTS
@@ -569,8 +562,7 @@ out_act_int_on_unlock:
 /*============================================================================*/
 
 #ifdef CONFIG_NET_POLL_CONTROLLER
-void wl_poll(struct net_device *dev)
-{
+void wl_poll(struct net_device *dev) {
     struct wl_private *lp = wl_priv(dev);
     unsigned long flags;
     struct pt_regs regs;
@@ -598,8 +590,7 @@ void wl_poll(struct net_device *dev)
  *      N/A
  *
  ******************************************************************************/
-void wl_tx_timeout( struct net_device *dev )
-{
+void wl_tx_timeout( struct net_device *dev ) {
 #ifdef USE_WDS
     int                     count;
 #endif  /* USE_WDS */
@@ -617,11 +608,11 @@ void wl_tx_timeout( struct net_device *dev )
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-	DBG_TRACE( DbgInfo, "Skipping tx_timeout handler, in RTS mode\n" );
-	wl_unlock( lp, &flags );
+        DBG_TRACE( DbgInfo, "Skipping tx_timeout handler, in RTS mode\n" );
+        wl_unlock( lp, &flags );
 
-	DBG_LEAVE( DbgInfo );
-	return;
+        DBG_LEAVE( DbgInfo );
+        return;
     }
 #endif  /* USE_RTS */
 
@@ -630,20 +621,20 @@ void wl_tx_timeout( struct net_device *dev )
 #ifdef USE_WDS
 
     for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-	if( dev == lp->wds_port[count].dev ) {
-	    pStats = &( lp->wds_port[count].stats );
+        if( dev == lp->wds_port[count].dev ) {
+            pStats = &( lp->wds_port[count].stats );
 
-	    /* Break the loop so that we can use the counter to access WDS
-	       information in the private structure */
-	    break;
-	}
+            /* Break the loop so that we can use the counter to access WDS
+               information in the private structure */
+            break;
+        }
     }
 
 #endif  /* USE_WDS */
 
     /* If pStats is still NULL, then the device is not a WDS port */
     if( pStats == NULL ) {
-	pStats = &( lp->stats );
+        pStats = &( lp->stats );
     }
 
     /* Accumulate the timeout error */
@@ -674,8 +665,7 @@ void wl_tx_timeout( struct net_device *dev )
  *      1 on error
  *
  ******************************************************************************/
-int wl_send( struct wl_private *lp )
-{
+int wl_send( struct wl_private *lp ) {
 
     int                 status;
     DESC_STRCT          *desc;
@@ -755,8 +745,7 @@ int wl_send( struct wl_private *lp )
         }
 
 #ifdef USE_WDS
-        else
-        {
+        else {
             lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_packets++;
             lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_bytes += lp->txF.skb->len;
         }
@@ -794,8 +783,7 @@ int wl_send( struct wl_private *lp )
  *      1 on error
  *
  ******************************************************************************/
-int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
-{
+int wl_tx( struct sk_buff *skb, struct net_device *dev, int port ) {
     unsigned long           flags;
     struct wl_private       *lp = wl_priv(dev);
     WVLAN_LFRAME            *txF = NULL;
@@ -810,14 +798,14 @@ int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
     if( lp->flags & WVLAN2_UIL_BUSY ) {
         DBG_WARNING( DbgInfo, "UIL has device blocked\n" );
         /* Start dropping packets here??? */
-	wl_unlock( lp, &flags );
+        wl_unlock( lp, &flags );
         return 1;
     }
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
         DBG_PRINT( "RTS: we're getting a Tx...\n" );
-	wl_unlock( lp, &flags );
+        wl_unlock( lp, &flags );
         return 1;
     }
 #endif  /* USE_RTS */
@@ -828,7 +816,7 @@ int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
         txF = (WVLAN_LFRAME *)list_entry( element, WVLAN_LFRAME, node );
         if( txF == NULL ) {
             DBG_ERROR( DbgInfo, "Problem with list_entry\n" );
-	    wl_unlock( lp, &flags );
+            wl_unlock( lp, &flags );
             return 1;
         }
         /* Fill out the frame */
@@ -855,8 +843,7 @@ int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
 #ifdef ENABLE_DMA
     if( lp->use_dma ) {
         wl_send_dma( lp, skb, port );
-    }
-    else
+    } else
 #endif
     {
         wl_send( lp );
@@ -886,8 +873,7 @@ int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
  *      1 on error
  *
  ******************************************************************************/
-int wl_rx(struct net_device *dev)
-{
+int wl_rx(struct net_device *dev) {
     int                     port;
     struct sk_buff          *skb;
     struct wl_private       *lp = wl_priv(dev);
@@ -951,12 +937,12 @@ int wl_rx(struct net_device *dev)
 
                 desc->next_desc_addr = NULL;
 
-/*
-#define BLOCK_INPUT(buf, len) \
-    desc->buf_addr = buf; \
-    desc->BUF_SIZE = len; \
-    status = hcf_rcv_msg(&(lp->hcfCtx), desc, 0)
-*/
+                /*
+                #define BLOCK_INPUT(buf, len) \
+                    desc->buf_addr = buf; \
+                    desc->BUF_SIZE = len; \
+                    status = hcf_rcv_msg(&(lp->hcfCtx), desc, 0)
+                */
 
                 GET_PACKET( skb->dev, skb, pktlen );
 
@@ -968,8 +954,7 @@ int wl_rx(struct net_device *dev)
                         lp->stats.rx_bytes += pktlen;
                     }
 #ifdef USE_WDS
-                    else
-                    {
+                    else {
                         lp->wds_port[port-1].stats.rx_packets++;
                         lp->wds_port[port-1].stats.rx_bytes += pktlen;
                     }
@@ -993,8 +978,7 @@ int wl_rx(struct net_device *dev)
                         lp->stats.rx_dropped++;
                     }
 #ifdef USE_WDS
-                    else
-                    {
+                    else {
                         lp->wds_port[port-1].stats.rx_dropped++;
                     }
 #endif  /* USE_WDS */
@@ -1008,8 +992,7 @@ int wl_rx(struct net_device *dev)
                     lp->stats.rx_dropped++;
                 }
 #ifdef USE_WDS
-                else
-                {
+                else {
                     lp->wds_port[port-1].stats.rx_dropped++;
                 }
 #endif  /* USE_WDS */
@@ -1040,8 +1023,7 @@ int wl_rx(struct net_device *dev)
  ******************************************************************************/
 #ifdef NEW_MULTICAST
 
-void wl_multicast( struct net_device *dev )
-{
+void wl_multicast( struct net_device *dev ) {
 #if 1 //;? (HCF_TYPE) & HCF_TYPE_STA //;?should we return an error status in AP mode
 //;?seems reasonable that even an AP-only driver could afford this small additional footprint
 
@@ -1063,14 +1045,14 @@ void wl_multicast( struct net_device *dev )
 #if DBG
     if( DBG_FLAGS( DbgInfo ) & DBG_PARAM_ON ) {
         DBG_PRINT("  flags: %s%s%s\n",
-            ( dev->flags & IFF_PROMISC ) ? "Promiscous " : "",
-            ( dev->flags & IFF_MULTICAST ) ? "Multicast " : "",
-            ( dev->flags & IFF_ALLMULTI ) ? "All-Multicast" : "" );
+                  ( dev->flags & IFF_PROMISC ) ? "Promiscous " : "",
+                  ( dev->flags & IFF_MULTICAST ) ? "Multicast " : "",
+                  ( dev->flags & IFF_ALLMULTI ) ? "All-Multicast" : "" );
 
         DBG_PRINT( "  mc_count: %d\n", netdev_mc_count(dev));
 
-	netdev_for_each_mc_addr(ha, dev)
-	DBG_PRINT("    %pM (%d)\n", ha->addr, dev->addr_len);
+        netdev_for_each_mc_addr(ha, dev)
+        DBG_PRINT("    %pM (%d)\n", ha->addr, dev->addr_len);
     }
 #endif /* DBG */
 
@@ -1088,7 +1070,7 @@ void wl_multicast( struct net_device *dev )
         wl_lock( lp, &flags );
         wl_act_int_off( lp );
 
-		if ( CNV_INT_TO_LITTLE( lp->hcfCtx.IFB_FWIdentity.comp_id ) == COMP_ID_FW_STA  ) {
+        if ( CNV_INT_TO_LITTLE( lp->hcfCtx.IFB_FWIdentity.comp_id ) == COMP_ID_FW_STA  ) {
             if( dev->flags & IFF_PROMISC ) {
                 /* Enable promiscuous mode */
                 lp->ltvRecord.len       = 2;
@@ -1096,9 +1078,8 @@ void wl_multicast( struct net_device *dev )
                 lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 1 );
                 DBG_PRINT( "Enabling Promiscuous mode (IFF_PROMISC)\n" );
                 hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
-            }
-            else if ((netdev_mc_count(dev) > HCF_MAX_MULTICAST) ||
-                    ( dev->flags & IFF_ALLMULTI )) {
+            } else if ((netdev_mc_count(dev) > HCF_MAX_MULTICAST) ||
+                       ( dev->flags & IFF_ALLMULTI )) {
                 /* Shutting off this filter will enable all multicast frames to
                    be sent up from the device; however, this is a static RID, so
                    a call to wl_apply() is needed */
@@ -1108,16 +1089,15 @@ void wl_multicast( struct net_device *dev )
                 DBG_PRINT( "Enabling all multicast mode (IFF_ALLMULTI)\n" );
                 hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
                 wl_apply( lp );
-            }
-            else if (!netdev_mc_empty(dev)) {
+            } else if (!netdev_mc_empty(dev)) {
                 /* Set the multicast addresses */
                 lp->ltvRecord.len = ( netdev_mc_count(dev) * 3 ) + 1;
                 lp->ltvRecord.typ = CFG_GROUP_ADDR;
 
-		x = 0;
-		netdev_for_each_mc_addr(ha, dev)
-                    memcpy(&(lp->ltvRecord.u.u8[x++ * ETH_ALEN]),
-			   ha->addr, ETH_ALEN);
+                x = 0;
+                netdev_for_each_mc_addr(ha, dev)
+                memcpy(&(lp->ltvRecord.u.u8[x++ * ETH_ALEN]),
+                       ha->addr, ETH_ALEN);
                 DBG_PRINT( "Setting multicast list\n" );
                 hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
             } else {
@@ -1146,7 +1126,7 @@ void wl_multicast( struct net_device *dev )
             }
         }
         wl_act_int_on( lp );
-	wl_unlock( lp, &flags );
+        wl_unlock( lp, &flags );
     }
     DBG_LEAVE( DbgInfo );
 #endif /* HCF_STA */
@@ -1155,8 +1135,7 @@ void wl_multicast( struct net_device *dev )
 
 #else /* NEW_MULTICAST */
 
-void wl_multicast( struct net_device *dev, int num_addrs, void *addrs )
-{
+void wl_multicast( struct net_device *dev, int num_addrs, void *addrs ) {
     DBG_FUNC( "wl_multicast");
     DBG_ENTER(DbgInfo);
 
@@ -1172,8 +1151,7 @@ void wl_multicast( struct net_device *dev, int num_addrs, void *addrs )
 
 #endif /* NEW_MULTICAST */
 
-static const struct net_device_ops wl_netdev_ops =
-{
+static const struct net_device_ops wl_netdev_ops = {
     .ndo_start_xmit         = &wl_tx_port0,
 
     .ndo_set_config         = &wl_config,
@@ -1211,8 +1189,7 @@ static const struct net_device_ops wl_netdev_ops =
  *      device.
  *
  ******************************************************************************/
-struct net_device * wl_device_alloc( void )
-{
+struct net_device * wl_device_alloc( void ) {
     struct net_device   *dev = NULL;
     struct wl_private   *lp = NULL;
     /*------------------------------------------------------------------------*/
@@ -1231,11 +1208,10 @@ struct net_device * wl_device_alloc( void )
 
 
     /* Check MTU */
-    if( dev->mtu > MTU_MAX )
-    {
-	    DBG_WARNING( DbgInfo, "%s: MTU set too high, limiting to %d.\n",
-                        dev->name, MTU_MAX );
-    	dev->mtu = MTU_MAX;
+    if( dev->mtu > MTU_MAX ) {
+        DBG_WARNING( DbgInfo, "%s: MTU set too high, limiting to %d.\n",
+                     dev->name, MTU_MAX );
+        dev->mtu = MTU_MAX;
     }
 
     /* Setup the function table in the device structure. */
@@ -1278,8 +1254,7 @@ struct net_device * wl_device_alloc( void )
  *      N/A
  *
  ******************************************************************************/
-void wl_device_dealloc( struct net_device *dev )
-{
+void wl_device_dealloc( struct net_device *dev ) {
 //    struct wl_private   *lp = wl_priv(dev);
     /*------------------------------------------------------------------------*/
 
@@ -1314,8 +1289,7 @@ void wl_device_dealloc( struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port0( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port0( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 0\n" );
 
     return wl_tx( skb, dev, HCF_PORT_0 );
@@ -1345,8 +1319,7 @@ int wl_tx_port0( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port1( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port1( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 1\n" );
     return wl_tx( skb, dev, HCF_PORT_1 );
 } // wl_tx_port1
@@ -1370,8 +1343,7 @@ int wl_tx_port1( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port2( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port2( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 2\n" );
     return wl_tx( skb, dev, HCF_PORT_2 );
 } // wl_tx_port2
@@ -1395,8 +1367,7 @@ int wl_tx_port2( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port3( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port3( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 3\n" );
     return wl_tx( skb, dev, HCF_PORT_3 );
 } // wl_tx_port3
@@ -1420,8 +1391,7 @@ int wl_tx_port3( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port4( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port4( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 4\n" );
     return wl_tx( skb, dev, HCF_PORT_4 );
 } // wl_tx_port4
@@ -1445,8 +1415,7 @@ int wl_tx_port4( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port5( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port5( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 5\n" );
     return wl_tx( skb, dev, HCF_PORT_5 );
 } // wl_tx_port5
@@ -1470,8 +1439,7 @@ int wl_tx_port5( struct sk_buff *skb, struct net_device *dev )
  *      N/A
  *
  ******************************************************************************/
-int wl_tx_port6( struct sk_buff *skb, struct net_device *dev )
-{
+int wl_tx_port6( struct sk_buff *skb, struct net_device *dev ) {
     DBG_TX( DbgInfo, "Tx on Port 6\n" );
     return wl_tx( skb, dev, HCF_PORT_6 );
 } // wl_tx_port6
@@ -1496,8 +1464,7 @@ int wl_tx_port6( struct sk_buff *skb, struct net_device *dev )
  *      structs in the private adapter structure.
  *
  ******************************************************************************/
-void wl_wds_device_alloc( struct wl_private *lp )
-{
+void wl_wds_device_alloc( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
@@ -1565,8 +1532,7 @@ void wl_wds_device_alloc( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_device_dealloc( struct wl_private *lp )
-{
+void wl_wds_device_dealloc( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
@@ -1612,15 +1578,14 @@ void wl_wds_device_dealloc( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_netif_start_queue( struct wl_private *lp )
-{
+void wl_wds_netif_start_queue( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
         for( count = 0; count < NUM_WDS_PORTS; count++ ) {
             if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == FALSE ) {
+                    lp->wds_port[count].netif_queue_on == FALSE ) {
                 netif_start_queue( lp->wds_port[count].dev );
                 lp->wds_port[count].netif_queue_on = TRUE;
             }
@@ -1649,15 +1614,14 @@ void wl_wds_netif_start_queue( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_netif_stop_queue( struct wl_private *lp )
-{
+void wl_wds_netif_stop_queue( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
         for( count = 0; count < NUM_WDS_PORTS; count++ ) {
             if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == TRUE ) {
+                    lp->wds_port[count].netif_queue_on == TRUE ) {
                 netif_stop_queue( lp->wds_port[count].dev );
                 lp->wds_port[count].netif_queue_on = FALSE;
             }
@@ -1686,15 +1650,14 @@ void wl_wds_netif_stop_queue( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_netif_wake_queue( struct wl_private *lp )
-{
+void wl_wds_netif_wake_queue( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
         for( count = 0; count < NUM_WDS_PORTS; count++ ) {
             if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == FALSE ) {
+                    lp->wds_port[count].netif_queue_on == FALSE ) {
                 netif_wake_queue( lp->wds_port[count].dev );
                 lp->wds_port[count].netif_queue_on = TRUE;
             }
@@ -1723,8 +1686,7 @@ void wl_wds_netif_wake_queue( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_netif_carrier_on( struct wl_private *lp )
-{
+void wl_wds_netif_carrier_on( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
@@ -1758,8 +1720,7 @@ void wl_wds_netif_carrier_on( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_wds_netif_carrier_off( struct wl_private *lp )
-{
+void wl_wds_netif_carrier_off( struct wl_private *lp ) {
     int count;
     /*------------------------------------------------------------------------*/
 
@@ -1798,8 +1759,7 @@ void wl_wds_netif_carrier_off( struct wl_private *lp )
  *      1 on error
  *
  ******************************************************************************/
-int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
-{
+int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port ) {
     int         len;
     DESC_STRCT *desc = NULL;
     DESC_STRCT *desc_next = NULL;
@@ -1807,22 +1767,19 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
 
     DBG_FUNC( "wl_send_dma" );
 
-    if( lp == NULL )
-    {
+    if( lp == NULL ) {
         DBG_ERROR( DbgInfo, "Private adapter struct is NULL\n" );
         return FALSE;
     }
 
-    if( lp->dev == NULL )
-    {
+    if( lp->dev == NULL ) {
         DBG_ERROR( DbgInfo, "net_device struct in wl_private is NULL\n" );
         return FALSE;
     }
 
     /* AGAIN, ALL THE QUEUEING DONE HERE IN I/O MODE IS NOT PERFORMED */
 
-    if( skb == NULL )
-    {
+    if( skb == NULL ) {
         DBG_WARNING (DbgInfo, "Nothing to send.\n");
         return FALSE;
     }
@@ -1832,8 +1789,7 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
     /* Get a free descriptor */
     desc = wl_pci_dma_get_tx_packet( lp );
 
-    if( desc == NULL )
-    {
+    if( desc == NULL ) {
         if( lp->netif_queue_on == TRUE ) {
             netif_stop_queue( lp->dev );
             WL_WDS_NETIF_STOP_QUEUE( lp );
@@ -1849,8 +1805,7 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
 
     desc_next = desc->next_desc_addr;
 
-    if( desc_next->buf_addr == NULL )
-    {
+    if( desc_next->buf_addr == NULL ) {
         DBG_ERROR( DbgInfo, "DMA descriptor buf_addr is NULL\n" );
         return FALSE;
     }
@@ -1889,8 +1844,7 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
  *      1 on error
  *
  ******************************************************************************/
-int wl_rx_dma( struct net_device *dev )
-{
+int wl_rx_dma( struct net_device *dev ) {
     int                      port;
     hcf_16                   pktlen;
     hcf_16                   hfs_stat;
@@ -1904,7 +1858,7 @@ int wl_rx_dma( struct net_device *dev )
     DBG_PARAM(DbgInfo, "dev", "%s (0x%p)", dev->name, dev);
 
     if((( lp = dev->priv ) != NULL ) &&
-	!( lp->flags & WVLAN2_UIL_BUSY )) {
+            !( lp->flags & WVLAN2_UIL_BUSY )) {
 
 #ifdef USE_RTS
         if( lp->useRTS == 1 ) {
@@ -1915,118 +1869,113 @@ int wl_rx_dma( struct net_device *dev )
 
         //if( lp->dma.status == 0 )
         //{
-            desc = hcf_dma_rx_get( &( lp->hcfCtx ));
+        desc = hcf_dma_rx_get( &( lp->hcfCtx ));
 
-            if( desc != NULL )
+        if( desc != NULL ) {
+            /* Check and see if we rcvd. a WMP frame */
+            /*
+            if((( *(hcf_8 *)&desc->buf_addr[HFS_STAT] ) &
+                ( HFS_STAT_MSG_TYPE | HFS_STAT_ERR )) == HFS_STAT_WMP_MSG )
             {
-                /* Check and see if we rcvd. a WMP frame */
-                /*
-                if((( *(hcf_8 *)&desc->buf_addr[HFS_STAT] ) &
-                    ( HFS_STAT_MSG_TYPE | HFS_STAT_ERR )) == HFS_STAT_WMP_MSG )
-                {
-                    DBG_TRACE( DbgInfo, "Got a WMP frame\n" );
+                DBG_TRACE( DbgInfo, "Got a WMP frame\n" );
 
-                    x.len = sizeof( CFG_MB_INFO_RANGE2_STRCT ) / sizeof( hcf_16 );
-				    x.typ = CFG_MB_INFO;
-				    x.base_typ = CFG_WMP;
-				    x.frag_cnt = 2;
-				    x.frag_buf[0].frag_len  = GET_BUF_CNT( descp ) / sizeof( hcf_16 );
-				    x.frag_buf[0].frag_addr = (hcf_8 *) descp->buf_addr ;
-				    x.frag_buf[1].frag_len  = ( GET_BUF_CNT( descp->next_desc_addr ) + 1 ) / sizeof( hcf_16 );
-				    x.frag_buf[1].frag_addr = (hcf_8 *) descp->next_desc_addr->buf_addr ;
+                x.len = sizeof( CFG_MB_INFO_RANGE2_STRCT ) / sizeof( hcf_16 );
+                x.typ = CFG_MB_INFO;
+                x.base_typ = CFG_WMP;
+                x.frag_cnt = 2;
+                x.frag_buf[0].frag_len  = GET_BUF_CNT( descp ) / sizeof( hcf_16 );
+                x.frag_buf[0].frag_addr = (hcf_8 *) descp->buf_addr ;
+                x.frag_buf[1].frag_len  = ( GET_BUF_CNT( descp->next_desc_addr ) + 1 ) / sizeof( hcf_16 );
+                x.frag_buf[1].frag_addr = (hcf_8 *) descp->next_desc_addr->buf_addr ;
 
-                    hcf_put_info( &( lp->hcfCtx ), (LTVP)&x );
-                }
-                */
+                hcf_put_info( &( lp->hcfCtx ), (LTVP)&x );
+            }
+            */
 
-                desc_next = desc->next_desc_addr;
+            desc_next = desc->next_desc_addr;
 
-                /* Make sure the buffer isn't empty */
-                if( GET_BUF_CNT( desc ) == 0 ) {
-                    DBG_WARNING( DbgInfo, "Buffer is empty!\n" );
+            /* Make sure the buffer isn't empty */
+            if( GET_BUF_CNT( desc ) == 0 ) {
+                DBG_WARNING( DbgInfo, "Buffer is empty!\n" );
 
-                    /* Give the descriptor back to the HCF */
-                    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
-                    return -EIO;
-                }
+                /* Give the descriptor back to the HCF */
+                hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+                return -EIO;
+            }
 
-                /* Read the HFS_STAT register from the lookahead buffer */
-                hfs_stat = (hcf_16)( desc->buf_addr[HFS_STAT/2] );
+            /* Read the HFS_STAT register from the lookahead buffer */
+            hfs_stat = (hcf_16)( desc->buf_addr[HFS_STAT/2] );
 
-                /* Make sure the frame isn't bad */
-                if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS )
-                {
-                    DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
-                                desc->buf_addr[HFS_STAT/2] );
+            /* Make sure the frame isn't bad */
+            if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS ) {
+                DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
+                             desc->buf_addr[HFS_STAT/2] );
 
-                    /* Give the descriptor back to the HCF */
-                    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
-                    return -EIO;
-                }
+                /* Give the descriptor back to the HCF */
+                hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+                return -EIO;
+            }
 
-                /* Determine what port this packet is for */
-                port = ( hfs_stat >> 8 ) & 0x0007;
-                DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
+            /* Determine what port this packet is for */
+            port = ( hfs_stat >> 8 ) & 0x0007;
+            DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
 
-                pktlen = GET_BUF_CNT(desc_next);
-                if (pktlen != 0) {
-                    skb = ALLOC_SKB(pktlen);
-                    if (skb != NULL) {
-                        switch( port ) {
+            pktlen = GET_BUF_CNT(desc_next);
+            if (pktlen != 0) {
+                skb = ALLOC_SKB(pktlen);
+                if (skb != NULL) {
+                    switch( port ) {
 #ifdef USE_WDS
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                        case 6:
-                            skb->dev = lp->wds_port[port-1].dev;
-                            break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                        skb->dev = lp->wds_port[port-1].dev;
+                        break;
 #endif  /* USE_WDS */
 
-                        case 0:
-                        default:
-                            skb->dev = dev;
-                            break;
-                        }
-
-                        GET_PACKET_DMA( skb->dev, skb, pktlen );
-
-                        /* Give the descriptor back to the HCF */
-                        hcf_dma_rx_put( &( lp->hcfCtx ), desc );
-
-                        netif_rx( skb );
-
-                        if( port == 0 ) {
-                            lp->stats.rx_packets++;
-                            lp->stats.rx_bytes += pktlen;
-                        }
-#ifdef USE_WDS
-                        else
-                        {
-                            lp->wds_port[port-1].stats.rx_packets++;
-                            lp->wds_port[port-1].stats.rx_bytes += pktlen;
-                        }
-#endif  /* USE_WDS */
-
-                        dev->last_rx = jiffies;
-
-                    } else {
-                        DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
-
-                        if( port == 0 )
-	                    {
-	                        lp->stats.rx_dropped++;
-	                    }
-#ifdef USE_WDS
-                        else
-                        {
-                            lp->wds_port[port-1].stats.rx_dropped++;
-                        }
-#endif  /* USE_WDS */
+                    case 0:
+                    default:
+                        skb->dev = dev;
+                        break;
                     }
+
+                    GET_PACKET_DMA( skb->dev, skb, pktlen );
+
+                    /* Give the descriptor back to the HCF */
+                    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+
+                    netif_rx( skb );
+
+                    if( port == 0 ) {
+                        lp->stats.rx_packets++;
+                        lp->stats.rx_bytes += pktlen;
+                    }
+#ifdef USE_WDS
+                    else {
+                        lp->wds_port[port-1].stats.rx_packets++;
+                        lp->wds_port[port-1].stats.rx_bytes += pktlen;
+                    }
+#endif  /* USE_WDS */
+
+                    dev->last_rx = jiffies;
+
+                } else {
+                    DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
+
+                    if( port == 0 ) {
+                        lp->stats.rx_dropped++;
+                    }
+#ifdef USE_WDS
+                    else {
+                        lp->wds_port[port-1].stats.rx_dropped++;
+                    }
+#endif  /* USE_WDS */
                 }
             }
+        }
         //}
     }
 

@@ -39,27 +39,27 @@
 #ifndef __ASSEMBLY__
 
 enum VM_CACHE_OPS {
-	ickill,
-	dckill,
-	l2kill,
-	dccleaninva,
-	icinva,
-	idsync,
-	fetch_cfg
+    ickill,
+    dckill,
+    l2kill,
+    dccleaninva,
+    icinva,
+    idsync,
+    fetch_cfg
 };
 
 enum VM_INT_OPS {
-	nop,
-	globen,
-	globdis,
-	locen,
-	locdis,
-	affinity,
-	get,
-	peek,
-	status,
-	post,
-	clear
+    nop,
+    globen,
+    globdis,
+    locen,
+    locdis,
+    affinity,
+    get,
+    peek,
+    status,
+    post,
+    clear
 };
 
 extern void _K_VM_event_vector(void);
@@ -80,97 +80,79 @@ long __vmwait(void);
 void __vmyield(void);
 long __vmvpid(void);
 
-static inline long __vmcache_ickill(void)
-{
-	return __vmcache(ickill, 0, 0);
+static inline long __vmcache_ickill(void) {
+    return __vmcache(ickill, 0, 0);
 }
 
-static inline long __vmcache_dckill(void)
-{
-	return __vmcache(dckill, 0, 0);
+static inline long __vmcache_dckill(void) {
+    return __vmcache(dckill, 0, 0);
 }
 
-static inline long __vmcache_l2kill(void)
-{
-	return __vmcache(l2kill, 0, 0);
+static inline long __vmcache_l2kill(void) {
+    return __vmcache(l2kill, 0, 0);
 }
 
-static inline long __vmcache_dccleaninva(unsigned long addr, unsigned long len)
-{
-	return __vmcache(dccleaninva, addr, len);
+static inline long __vmcache_dccleaninva(unsigned long addr, unsigned long len) {
+    return __vmcache(dccleaninva, addr, len);
 }
 
-static inline long __vmcache_icinva(unsigned long addr, unsigned long len)
-{
-	return __vmcache(icinva, addr, len);
+static inline long __vmcache_icinva(unsigned long addr, unsigned long len) {
+    return __vmcache(icinva, addr, len);
 }
 
 static inline long __vmcache_idsync(unsigned long addr,
-					   unsigned long len)
-{
-	return __vmcache(idsync, addr, len);
+                                    unsigned long len) {
+    return __vmcache(idsync, addr, len);
 }
 
-static inline long __vmcache_fetch_cfg(unsigned long val)
-{
-	return __vmcache(fetch_cfg, val, 0);
+static inline long __vmcache_fetch_cfg(unsigned long val) {
+    return __vmcache(fetch_cfg, val, 0);
 }
 
 /* interrupt operations  */
 
-static inline long __vmintop_nop(void)
-{
-	return __vmintop(nop, 0, 0, 0, 0);
+static inline long __vmintop_nop(void) {
+    return __vmintop(nop, 0, 0, 0, 0);
 }
 
-static inline long __vmintop_globen(long i)
-{
-	return __vmintop(globen, i, 0, 0, 0);
+static inline long __vmintop_globen(long i) {
+    return __vmintop(globen, i, 0, 0, 0);
 }
 
-static inline long __vmintop_globdis(long i)
-{
-	return __vmintop(globdis, i, 0, 0, 0);
+static inline long __vmintop_globdis(long i) {
+    return __vmintop(globdis, i, 0, 0, 0);
 }
 
-static inline long __vmintop_locen(long i)
-{
-	return __vmintop(locen, i, 0, 0, 0);
+static inline long __vmintop_locen(long i) {
+    return __vmintop(locen, i, 0, 0, 0);
 }
 
-static inline long __vmintop_locdis(long i)
-{
-	return __vmintop(locdis, i, 0, 0, 0);
+static inline long __vmintop_locdis(long i) {
+    return __vmintop(locdis, i, 0, 0, 0);
 }
 
-static inline long __vmintop_affinity(long i, long cpu)
-{
-	return __vmintop(locdis, i, cpu, 0, 0);
+static inline long __vmintop_affinity(long i, long cpu) {
+    return __vmintop(locdis, i, cpu, 0, 0);
 }
 
-static inline long __vmintop_get(void)
-{
-	return __vmintop(get, 0, 0, 0, 0);
+static inline long __vmintop_get(void) {
+    return __vmintop(get, 0, 0, 0, 0);
 }
 
-static inline long __vmintop_peek(void)
-{
-	return __vmintop(peek, 0, 0, 0, 0);
+static inline long __vmintop_peek(void) {
+    return __vmintop(peek, 0, 0, 0, 0);
 }
 
-static inline long __vmintop_status(long i)
-{
-	return __vmintop(status, i, 0, 0, 0);
+static inline long __vmintop_status(long i) {
+    return __vmintop(status, i, 0, 0, 0);
 }
 
-static inline long __vmintop_post(long i)
-{
-	return __vmintop(post, i, 0, 0, 0);
+static inline long __vmintop_post(long i) {
+    return __vmintop(post, i, 0, 0, 0);
 }
 
-static inline long __vmintop_clear(long i)
-{
-	return __vmintop(clear, i, 0, 0, 0);
+static inline long __vmintop_clear(long i) {
+    return __vmintop(clear, i, 0, 0, 0);
 }
 
 #else /* Only assembly code should reference these */

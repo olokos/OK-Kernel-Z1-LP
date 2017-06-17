@@ -27,10 +27,10 @@
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
 
 struct arch_hw_breakpoint {
-	bool		extraneous_interrupt;
-	u8		len; /* length of the target data symbol */
-	int		type;
-	unsigned long	address;
+    bool		extraneous_interrupt;
+    u8		len; /* length of the target data symbol */
+    int		type;
+    unsigned long	address;
 };
 
 #include <linux/kdebug.h>
@@ -50,7 +50,7 @@ extern int arch_bp_generic_fields(int type, int *gen_bp_type);
 extern int arch_check_bp_in_kernelspace(struct perf_event *bp);
 extern int arch_validate_hwbkpt_settings(struct perf_event *bp);
 extern int hw_breakpoint_exceptions_notify(struct notifier_block *unused,
-						unsigned long val, void *data);
+        unsigned long val, void *data);
 int arch_install_hw_breakpoint(struct perf_event *bp);
 void arch_uninstall_hw_breakpoint(struct perf_event *bp);
 void hw_breakpoint_pmu_read(struct perf_event *bp);
@@ -58,17 +58,16 @@ extern void flush_ptrace_hw_breakpoint(struct task_struct *tsk);
 
 extern struct pmu perf_ops_bp;
 extern void ptrace_triggered(struct perf_event *bp,
-			struct perf_sample_data *data, struct pt_regs *regs);
-static inline void hw_breakpoint_disable(void)
-{
-	set_dabr(0);
+                             struct perf_sample_data *data, struct pt_regs *regs);
+static inline void hw_breakpoint_disable(void) {
+    set_dabr(0);
 }
 extern void thread_change_pc(struct task_struct *tsk, struct pt_regs *regs);
 
 #else	/* CONFIG_HAVE_HW_BREAKPOINT */
 static inline void hw_breakpoint_disable(void) { }
 static inline void thread_change_pc(struct task_struct *tsk,
-					struct pt_regs *regs) { }
+                                    struct pt_regs *regs) { }
 #endif	/* CONFIG_HAVE_HW_BREAKPOINT */
 #endif	/* __KERNEL__ */
 #endif	/* _PPC_BOOK3S_64_HW_BREAKPOINT_H */

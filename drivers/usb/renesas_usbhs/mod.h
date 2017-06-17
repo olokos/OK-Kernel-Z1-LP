@@ -25,83 +25,83 @@
  *	struct
  */
 struct usbhs_irq_state {
-	u16 intsts0;
-	u16 intsts1;
-	u16 brdysts;
-	u16 nrdysts;
-	u16 bempsts;
+    u16 intsts0;
+    u16 intsts1;
+    u16 brdysts;
+    u16 nrdysts;
+    u16 bempsts;
 };
 
 struct usbhs_mod {
-	char *name;
+    char *name;
 
-	/*
-	 * entry point from common.c
-	 */
-	int (*start)(struct usbhs_priv *priv);
-	int (*stop)(struct usbhs_priv *priv);
+    /*
+     * entry point from common.c
+     */
+    int (*start)(struct usbhs_priv *priv);
+    int (*stop)(struct usbhs_priv *priv);
 
-	/*
-	 * INTSTS0
-	 */
+    /*
+     * INTSTS0
+     */
 
-	/* DVST (DVSQ) */
-	int (*irq_dev_state)(struct usbhs_priv *priv,
-			     struct usbhs_irq_state *irq_state);
+    /* DVST (DVSQ) */
+    int (*irq_dev_state)(struct usbhs_priv *priv,
+                         struct usbhs_irq_state *irq_state);
 
-	/* CTRT (CTSQ) */
-	int (*irq_ctrl_stage)(struct usbhs_priv *priv,
-			      struct usbhs_irq_state *irq_state);
+    /* CTRT (CTSQ) */
+    int (*irq_ctrl_stage)(struct usbhs_priv *priv,
+                          struct usbhs_irq_state *irq_state);
 
-	/* BEMP / BEMPSTS */
-	int (*irq_empty)(struct usbhs_priv *priv,
-			 struct usbhs_irq_state *irq_state);
-	u16 irq_bempsts;
+    /* BEMP / BEMPSTS */
+    int (*irq_empty)(struct usbhs_priv *priv,
+                     struct usbhs_irq_state *irq_state);
+    u16 irq_bempsts;
 
-	/* BRDY / BRDYSTS */
-	int (*irq_ready)(struct usbhs_priv *priv,
-			 struct usbhs_irq_state *irq_state);
-	u16 irq_brdysts;
+    /* BRDY / BRDYSTS */
+    int (*irq_ready)(struct usbhs_priv *priv,
+                     struct usbhs_irq_state *irq_state);
+    u16 irq_brdysts;
 
-	/*
-	 * INTSTS1
-	 */
+    /*
+     * INTSTS1
+     */
 
-	/* ATTCHE */
-	int (*irq_attch)(struct usbhs_priv *priv,
-			 struct usbhs_irq_state *irq_state);
+    /* ATTCHE */
+    int (*irq_attch)(struct usbhs_priv *priv,
+                     struct usbhs_irq_state *irq_state);
 
-	/* DTCHE */
-	int (*irq_dtch)(struct usbhs_priv *priv,
-			struct usbhs_irq_state *irq_state);
+    /* DTCHE */
+    int (*irq_dtch)(struct usbhs_priv *priv,
+                    struct usbhs_irq_state *irq_state);
 
-	/* SIGN */
-	int (*irq_sign)(struct usbhs_priv *priv,
-			struct usbhs_irq_state *irq_state);
+    /* SIGN */
+    int (*irq_sign)(struct usbhs_priv *priv,
+                    struct usbhs_irq_state *irq_state);
 
-	/* SACK */
-	int (*irq_sack)(struct usbhs_priv *priv,
-			struct usbhs_irq_state *irq_state);
+    /* SACK */
+    int (*irq_sack)(struct usbhs_priv *priv,
+                    struct usbhs_irq_state *irq_state);
 
-	struct usbhs_priv *priv;
+    struct usbhs_priv *priv;
 };
 
 struct usbhs_mod_info {
-	struct usbhs_mod *mod[USBHS_MAX];
-	struct usbhs_mod *curt; /* current mod */
+    struct usbhs_mod *mod[USBHS_MAX];
+    struct usbhs_mod *curt; /* current mod */
 
-	/*
-	 * INTSTS0 :: VBINT
-	 *
-	 * This function will be used as autonomy mode
-	 * when platform cannot call notify_hotplug.
-	 *
-	 * This callback cannot be member of "struct usbhs_mod"
-	 * because it will be used even though
-	 * host/gadget has not been selected.
-	 */
-	int (*irq_vbus)(struct usbhs_priv *priv,
-			struct usbhs_irq_state *irq_state);
+    /*
+     * INTSTS0 :: VBINT
+     *
+     * This function will be used as autonomy mode
+     * when platform cannot call notify_hotplug.
+     *
+     * This callback cannot be member of "struct usbhs_mod"
+     * because it will be used even though
+     * host/gadget has not been selected.
+     */
+    int (*irq_vbus)(struct usbhs_priv *priv,
+                    struct usbhs_irq_state *irq_state);
 };
 
 /*
@@ -146,12 +146,10 @@ void usbhs_irq_callback_update(struct usbhs_priv *priv, struct usbhs_mod *mod);
 extern int usbhs_mod_host_probe(struct usbhs_priv *priv);
 extern int usbhs_mod_host_remove(struct usbhs_priv *priv);
 #else
-static inline int usbhs_mod_host_probe(struct usbhs_priv *priv)
-{
-	return 0;
+static inline int usbhs_mod_host_probe(struct usbhs_priv *priv) {
+    return 0;
 }
-static inline void usbhs_mod_host_remove(struct usbhs_priv *priv)
-{
+static inline void usbhs_mod_host_remove(struct usbhs_priv *priv) {
 }
 #endif
 
@@ -160,12 +158,10 @@ static inline void usbhs_mod_host_remove(struct usbhs_priv *priv)
 extern int usbhs_mod_gadget_probe(struct usbhs_priv *priv);
 extern void usbhs_mod_gadget_remove(struct usbhs_priv *priv);
 #else
-static inline int usbhs_mod_gadget_probe(struct usbhs_priv *priv)
-{
-	return 0;
+static inline int usbhs_mod_gadget_probe(struct usbhs_priv *priv) {
+    return 0;
 }
-static inline void usbhs_mod_gadget_remove(struct usbhs_priv *priv)
-{
+static inline void usbhs_mod_gadget_remove(struct usbhs_priv *priv) {
 }
 #endif
 

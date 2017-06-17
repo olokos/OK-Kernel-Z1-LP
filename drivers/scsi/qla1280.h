@@ -100,14 +100,14 @@
  * on cmd->SCp location of every I/O
  */
 struct srb {
-	struct list_head list;		/* (8/16) LU queue */
-	struct scsi_cmnd *cmd;	/* (4/8) SCSI command block */
-	/* NOTE: the sp->cmd will be NULL when this completion is
-	 * called, so you should know the scsi_cmnd when using this */
-	struct completion *wait;
-	dma_addr_t saved_dma_handle;	/* for unmap of single transfers */
-	uint8_t flags;		/* (1) Status flags. */
-	uint8_t dir;		/* direction of transfer */
+    struct list_head list;		/* (8/16) LU queue */
+    struct scsi_cmnd *cmd;	/* (4/8) SCSI command block */
+    /* NOTE: the sp->cmd will be NULL when this completion is
+     * called, so you should know the scsi_cmnd when using this */
+    struct completion *wait;
+    dma_addr_t saved_dma_handle;	/* for unmap of single transfers */
+    uint8_t flags;		/* (1) Status flags. */
+    uint8_t dir;		/* direction of transfer */
 };
 
 /*
@@ -122,9 +122,9 @@ struct srb {
  *  ISP I/O Register Set structure definitions.
  */
 struct device_reg {
-	uint16_t id_l;		/* ID low */
-	uint16_t id_h;		/* ID high */
-	uint16_t cfg_0;		/* Configuration 0 */
+    uint16_t id_l;		/* ID low */
+    uint16_t id_h;		/* ID high */
+    uint16_t cfg_0;		/* Configuration 0 */
 #define ISP_CFG0_HWMSK   0x000f	/* Hardware revision mask */
 #define ISP_CFG0_1020    BIT_0	/* ISP1020 */
 #define ISP_CFG0_1020A	 BIT_1	/* ISP1020A */
@@ -132,92 +132,92 @@ struct device_reg {
 #define ISP_CFG0_1040A	 BIT_3	/* ISP1040A */
 #define ISP_CFG0_1040B	 BIT_4	/* ISP1040B */
 #define ISP_CFG0_1040C	 BIT_5	/* ISP1040C */
-	uint16_t cfg_1;		/* Configuration 1 */
+    uint16_t cfg_1;		/* Configuration 1 */
 #define ISP_CFG1_F128    BIT_6  /* 128-byte FIFO threshold */
 #define ISP_CFG1_F64     BIT_4|BIT_5 /* 128-byte FIFO threshold */
 #define ISP_CFG1_F32     BIT_5  /* 128-byte FIFO threshold */
 #define ISP_CFG1_F16     BIT_4  /* 128-byte FIFO threshold */
 #define ISP_CFG1_BENAB   BIT_2  /* Global Bus burst enable */
 #define ISP_CFG1_SXP     BIT_0  /* SXP register select */
-	uint16_t ictrl;		/* Interface control */
+    uint16_t ictrl;		/* Interface control */
 #define ISP_RESET        BIT_0	/* ISP soft reset */
 #define ISP_EN_INT       BIT_1	/* ISP enable interrupts. */
 #define ISP_EN_RISC      BIT_2	/* ISP enable RISC interrupts. */
 #define ISP_FLASH_ENABLE BIT_8	/* Flash BIOS Read/Write enable */
 #define ISP_FLASH_UPPER  BIT_9	/* Flash upper bank select */
-	uint16_t istatus;	/* Interface status */
+    uint16_t istatus;	/* Interface status */
 #define PCI_64BIT_SLOT   BIT_14	/* PCI 64-bit slot indicator. */
 #define RISC_INT         BIT_2	/* RISC interrupt */
 #define PCI_INT          BIT_1	/* PCI interrupt */
-	uint16_t semaphore;	/* Semaphore */
-	uint16_t nvram;		/* NVRAM register. */
+    uint16_t semaphore;	/* Semaphore */
+    uint16_t nvram;		/* NVRAM register. */
 #define NV_DESELECT     0
 #define NV_CLOCK        BIT_0
 #define NV_SELECT       BIT_1
 #define NV_DATA_OUT     BIT_2
 #define NV_DATA_IN      BIT_3
-	uint16_t flash_data;	/* Flash BIOS data */
-	uint16_t flash_address;	/* Flash BIOS address */
+    uint16_t flash_data;	/* Flash BIOS data */
+    uint16_t flash_address;	/* Flash BIOS address */
 
-	uint16_t unused_1[0x06];
-	
-	/* cdma_* and ddma_* are 1040 only */
-	uint16_t cdma_cfg;
+    uint16_t unused_1[0x06];
+
+    /* cdma_* and ddma_* are 1040 only */
+    uint16_t cdma_cfg;
 #define CDMA_CONF_SENAB  BIT_3	/* SXP to DMA Data enable */
 #define CDMA_CONF_RIRQ   BIT_2	/* RISC interrupt enable */
 #define CDMA_CONF_BENAB  BIT_1	/* Bus burst enable */
 #define CDMA_CONF_DIR    BIT_0	/* DMA direction (0=fifo->host 1=host->fifo) */
-	uint16_t cdma_ctrl; 
-	uint16_t cdma_status;   
-	uint16_t cdma_fifo_status;
-	uint16_t cdma_count;
-	uint16_t cdma_reserved;
-	uint16_t cdma_address_count_0;
-	uint16_t cdma_address_count_1;
-	uint16_t cdma_address_count_2;
-	uint16_t cdma_address_count_3;
+    uint16_t cdma_ctrl;
+    uint16_t cdma_status;
+    uint16_t cdma_fifo_status;
+    uint16_t cdma_count;
+    uint16_t cdma_reserved;
+    uint16_t cdma_address_count_0;
+    uint16_t cdma_address_count_1;
+    uint16_t cdma_address_count_2;
+    uint16_t cdma_address_count_3;
 
-	uint16_t unused_2[0x06];
+    uint16_t unused_2[0x06];
 
-	uint16_t ddma_cfg;
+    uint16_t ddma_cfg;
 #define DDMA_CONF_SENAB  BIT_3	/* SXP to DMA Data enable */
 #define DDMA_CONF_RIRQ   BIT_2	/* RISC interrupt enable */
 #define DDMA_CONF_BENAB  BIT_1	/* Bus burst enable */
 #define DDMA_CONF_DIR    BIT_0	/* DMA direction (0=fifo->host 1=host->fifo) */
-	uint16_t ddma_ctrl;
-	uint16_t ddma_status; 
-	uint16_t ddma_fifo_status;
-	uint16_t ddma_xfer_count_low;
-	uint16_t ddma_xfer_count_high;
-	uint16_t ddma_addr_count_0;
-	uint16_t ddma_addr_count_1;
-	uint16_t ddma_addr_count_2;
-	uint16_t ddma_addr_count_3; 
+    uint16_t ddma_ctrl;
+    uint16_t ddma_status;
+    uint16_t ddma_fifo_status;
+    uint16_t ddma_xfer_count_low;
+    uint16_t ddma_xfer_count_high;
+    uint16_t ddma_addr_count_0;
+    uint16_t ddma_addr_count_1;
+    uint16_t ddma_addr_count_2;
+    uint16_t ddma_addr_count_3;
 
-	uint16_t unused_3[0x0e];
+    uint16_t unused_3[0x0e];
 
-	uint16_t mailbox0;	/* Mailbox 0 */
-	uint16_t mailbox1;	/* Mailbox 1 */
-	uint16_t mailbox2;	/* Mailbox 2 */
-	uint16_t mailbox3;	/* Mailbox 3 */
-	uint16_t mailbox4;	/* Mailbox 4 */
-	uint16_t mailbox5;	/* Mailbox 5 */
-	uint16_t mailbox6;	/* Mailbox 6 */
-	uint16_t mailbox7;	/* Mailbox 7 */
+    uint16_t mailbox0;	/* Mailbox 0 */
+    uint16_t mailbox1;	/* Mailbox 1 */
+    uint16_t mailbox2;	/* Mailbox 2 */
+    uint16_t mailbox3;	/* Mailbox 3 */
+    uint16_t mailbox4;	/* Mailbox 4 */
+    uint16_t mailbox5;	/* Mailbox 5 */
+    uint16_t mailbox6;	/* Mailbox 6 */
+    uint16_t mailbox7;	/* Mailbox 7 */
 
-	uint16_t unused_4[0x20];/* 0x80-0xbf Gap */
+    uint16_t unused_4[0x20];/* 0x80-0xbf Gap */
 
-	uint16_t host_cmd;	/* Host command and control */
+    uint16_t host_cmd;	/* Host command and control */
 #define HOST_INT      BIT_7	/* host interrupt bit */
 #define BIOS_ENABLE   BIT_0
 
-	uint16_t unused_5[0x5];	/* 0xc2-0xcb Gap */
+    uint16_t unused_5[0x5];	/* 0xc2-0xcb Gap */
 
-	uint16_t gpio_data;
-	uint16_t gpio_enable;
+    uint16_t gpio_data;
+    uint16_t gpio_enable;
 
-	uint16_t unused_6[0x11];	/* d0-f0 */
-	uint16_t scsiControlPins;	/* f2 */
+    uint16_t unused_6[0x11];	/* d0-f0 */
+    uint16_t scsiControlPins;	/* f2 */
 };
 
 #define MAILBOX_REGISTER_COUNT	8
@@ -340,171 +340,171 @@ struct device_reg {
  *  QLogic ISP1280/ISP12160 NVRAM structure definition.
  */
 struct nvram {
-	uint8_t id0;		/* 0 */
-	uint8_t id1;		/* 1 */
-	uint8_t id2;		/* 2 */
-	uint8_t id3;		/* 3 */
-	uint8_t version;	/* 4 */
+    uint8_t id0;		/* 0 */
+    uint8_t id1;		/* 1 */
+    uint8_t id2;		/* 2 */
+    uint8_t id3;		/* 3 */
+    uint8_t version;	/* 4 */
 
-	struct {
-		uint8_t bios_configuration_mode:2;
-		uint8_t bios_disable:1;
-		uint8_t selectable_scsi_boot_enable:1;
-		uint8_t cd_rom_boot_enable:1;
-		uint8_t disable_loading_risc_code:1;
-		uint8_t enable_64bit_addressing:1;
-		uint8_t unused_7:1;
-	} cntr_flags_1;		/* 5 */
+    struct {
+        uint8_t bios_configuration_mode:2;
+        uint8_t bios_disable:1;
+        uint8_t selectable_scsi_boot_enable:1;
+        uint8_t cd_rom_boot_enable:1;
+        uint8_t disable_loading_risc_code:1;
+        uint8_t enable_64bit_addressing:1;
+        uint8_t unused_7:1;
+    } cntr_flags_1;		/* 5 */
 
-	struct {
-		uint8_t boot_lun_number:5;
-		uint8_t scsi_bus_number:1;
-		uint8_t unused_6:1;
-		uint8_t unused_7:1;
-	} cntr_flags_2l;	/* 7 */
+    struct {
+        uint8_t boot_lun_number:5;
+        uint8_t scsi_bus_number:1;
+        uint8_t unused_6:1;
+        uint8_t unused_7:1;
+    } cntr_flags_2l;	/* 7 */
 
-	struct {
-		uint8_t boot_target_number:4;
-		uint8_t unused_12:1;
-		uint8_t unused_13:1;
-		uint8_t unused_14:1;
-		uint8_t unused_15:1;
-	} cntr_flags_2h;	/* 8 */
+    struct {
+        uint8_t boot_target_number:4;
+        uint8_t unused_12:1;
+        uint8_t unused_13:1;
+        uint8_t unused_14:1;
+        uint8_t unused_15:1;
+    } cntr_flags_2h;	/* 8 */
 
-	uint16_t unused_8;	/* 8, 9 */
-	uint16_t unused_10;	/* 10, 11 */
-	uint16_t unused_12;	/* 12, 13 */
-	uint16_t unused_14;	/* 14, 15 */
+    uint16_t unused_8;	/* 8, 9 */
+    uint16_t unused_10;	/* 10, 11 */
+    uint16_t unused_12;	/* 12, 13 */
+    uint16_t unused_14;	/* 14, 15 */
 
-	struct {
-		uint8_t reserved:2;
-		uint8_t burst_enable:1;
-		uint8_t reserved_1:1;
-		uint8_t fifo_threshold:4;
-	} isp_config;		/* 16 */
+    struct {
+        uint8_t reserved:2;
+        uint8_t burst_enable:1;
+        uint8_t reserved_1:1;
+        uint8_t fifo_threshold:4;
+    } isp_config;		/* 16 */
 
-	/* Termination
-	 * 0 = Disable, 1 = high only, 3 = Auto term
-	 */
-	struct {
-		uint8_t scsi_bus_1_control:2;
-		uint8_t scsi_bus_0_control:2;
-		uint8_t unused_0:1;
-		uint8_t unused_1:1;
-		uint8_t unused_2:1;
-		uint8_t auto_term_support:1;
-	} termination;		/* 17 */
+    /* Termination
+     * 0 = Disable, 1 = high only, 3 = Auto term
+     */
+    struct {
+        uint8_t scsi_bus_1_control:2;
+        uint8_t scsi_bus_0_control:2;
+        uint8_t unused_0:1;
+        uint8_t unused_1:1;
+        uint8_t unused_2:1;
+        uint8_t auto_term_support:1;
+    } termination;		/* 17 */
 
-	uint16_t isp_parameter;	/* 18, 19 */
+    uint16_t isp_parameter;	/* 18, 19 */
 
-	union {
-		uint16_t w;
-		struct {
-			uint16_t enable_fast_posting:1;
-			uint16_t report_lvd_bus_transition:1;
-			uint16_t unused_2:1;
-			uint16_t unused_3:1;
-			uint16_t disable_iosbs_with_bus_reset_status:1;
-			uint16_t disable_synchronous_backoff:1;
-			uint16_t unused_6:1;
-			uint16_t synchronous_backoff_reporting:1;
-			uint16_t disable_reselection_fairness:1;
-			uint16_t unused_9:1;
-			uint16_t unused_10:1;
-			uint16_t unused_11:1;
-			uint16_t unused_12:1;
-			uint16_t unused_13:1;
-			uint16_t unused_14:1;
-			uint16_t unused_15:1;
-		} f;
-	} firmware_feature;	/* 20, 21 */
+    union {
+        uint16_t w;
+        struct {
+            uint16_t enable_fast_posting:1;
+            uint16_t report_lvd_bus_transition:1;
+            uint16_t unused_2:1;
+            uint16_t unused_3:1;
+            uint16_t disable_iosbs_with_bus_reset_status:1;
+            uint16_t disable_synchronous_backoff:1;
+            uint16_t unused_6:1;
+            uint16_t synchronous_backoff_reporting:1;
+            uint16_t disable_reselection_fairness:1;
+            uint16_t unused_9:1;
+            uint16_t unused_10:1;
+            uint16_t unused_11:1;
+            uint16_t unused_12:1;
+            uint16_t unused_13:1;
+            uint16_t unused_14:1;
+            uint16_t unused_15:1;
+        } f;
+    } firmware_feature;	/* 20, 21 */
 
-	uint16_t unused_22;	/* 22, 23 */
+    uint16_t unused_22;	/* 22, 23 */
 
-	struct {
-		struct {
-			uint8_t initiator_id:4;
-			uint8_t scsi_reset_disable:1;
-			uint8_t scsi_bus_size:1;
-			uint8_t scsi_bus_type:1;
-			uint8_t unused_7:1;
-		} config_1;	/* 24 */
+    struct {
+        struct {
+            uint8_t initiator_id:4;
+            uint8_t scsi_reset_disable:1;
+            uint8_t scsi_bus_size:1;
+            uint8_t scsi_bus_type:1;
+            uint8_t unused_7:1;
+        } config_1;	/* 24 */
 
-		uint8_t bus_reset_delay;	/* 25 */
-		uint8_t retry_count;	/* 26 */
-		uint8_t retry_delay;	/* 27 */
+        uint8_t bus_reset_delay;	/* 25 */
+        uint8_t retry_count;	/* 26 */
+        uint8_t retry_delay;	/* 27 */
 
-		struct {
-			uint8_t async_data_setup_time:4;
-			uint8_t req_ack_active_negation:1;
-			uint8_t data_line_active_negation:1;
-			uint8_t unused_6:1;
-			uint8_t unused_7:1;
-		} config_2;	/* 28 */
+        struct {
+            uint8_t async_data_setup_time:4;
+            uint8_t req_ack_active_negation:1;
+            uint8_t data_line_active_negation:1;
+            uint8_t unused_6:1;
+            uint8_t unused_7:1;
+        } config_2;	/* 28 */
 
-		uint8_t unused_29;	/* 29 */
+        uint8_t unused_29;	/* 29 */
 
-		uint16_t selection_timeout;	/* 30, 31 */
-		uint16_t max_queue_depth;	/* 32, 33 */
+        uint16_t selection_timeout;	/* 30, 31 */
+        uint16_t max_queue_depth;	/* 32, 33 */
 
-		uint16_t unused_34;	/* 34, 35 */
-		uint16_t unused_36;	/* 36, 37 */
-		uint16_t unused_38;	/* 38, 39 */
+        uint16_t unused_34;	/* 34, 35 */
+        uint16_t unused_36;	/* 36, 37 */
+        uint16_t unused_38;	/* 38, 39 */
 
-		struct {
-			struct {
-				uint8_t renegotiate_on_error:1;
-				uint8_t stop_queue_on_check:1;
-				uint8_t auto_request_sense:1;
-				uint8_t tag_queuing:1;
-				uint8_t enable_sync:1;
-				uint8_t enable_wide:1;
-				uint8_t parity_checking:1;
-				uint8_t disconnect_allowed:1;
-			} parameter;	/* 40 */
+        struct {
+            struct {
+                uint8_t renegotiate_on_error:1;
+                uint8_t stop_queue_on_check:1;
+                uint8_t auto_request_sense:1;
+                uint8_t tag_queuing:1;
+                uint8_t enable_sync:1;
+                uint8_t enable_wide:1;
+                uint8_t parity_checking:1;
+                uint8_t disconnect_allowed:1;
+            } parameter;	/* 40 */
 
-			uint8_t execution_throttle;	/* 41 */
-			uint8_t sync_period;	/* 42 */
+            uint8_t execution_throttle;	/* 41 */
+            uint8_t sync_period;	/* 42 */
 
-			union {		/* 43 */
-				uint8_t flags_43;
-				struct {
-					uint8_t sync_offset:4;
-					uint8_t device_enable:1;
-					uint8_t lun_disable:1;
-					uint8_t unused_6:1;
-					uint8_t unused_7:1;
-				} flags1x80;
-				struct {
-					uint8_t sync_offset:5;
-					uint8_t device_enable:1;
-					uint8_t unused_6:1;
-					uint8_t unused_7:1;
-				} flags1x160;
-			} flags;
-			union {	/* PPR flags for the 1x160 controllers */
-				uint8_t unused_44;
-				struct {
-					uint8_t ppr_options:4;
-					uint8_t ppr_bus_width:2;
-					uint8_t unused_8:1;
-					uint8_t enable_ppr:1;
-				} flags;	/* 44 */
-			} ppr_1x160;
-			uint8_t unused_45;	/* 45 */
-		} target[MAX_TARGETS];
-	} bus[MAX_BUSES];
+            union {		/* 43 */
+                uint8_t flags_43;
+                struct {
+                    uint8_t sync_offset:4;
+                    uint8_t device_enable:1;
+                    uint8_t lun_disable:1;
+                    uint8_t unused_6:1;
+                    uint8_t unused_7:1;
+                } flags1x80;
+                struct {
+                    uint8_t sync_offset:5;
+                    uint8_t device_enable:1;
+                    uint8_t unused_6:1;
+                    uint8_t unused_7:1;
+                } flags1x160;
+            } flags;
+            union {	/* PPR flags for the 1x160 controllers */
+                uint8_t unused_44;
+                struct {
+                    uint8_t ppr_options:4;
+                    uint8_t ppr_bus_width:2;
+                    uint8_t unused_8:1;
+                    uint8_t enable_ppr:1;
+                } flags;	/* 44 */
+            } ppr_1x160;
+            uint8_t unused_45;	/* 45 */
+        } target[MAX_TARGETS];
+    } bus[MAX_BUSES];
 
-	uint16_t unused_248;	/* 248, 249 */
+    uint16_t unused_248;	/* 248, 249 */
 
-	uint16_t subsystem_id[2];	/* 250, 251, 252, 253 */
+    uint16_t subsystem_id[2];	/* 250, 251, 252, 253 */
 
-	union {				/* 254 */
-		uint8_t unused_254;
-		uint8_t system_id_pointer;
-	} sysid_1x160;
+    union {				/* 254 */
+        uint8_t unused_254;
+        uint8_t system_id_pointer;
+    } sysid_1x160;
 
-	uint8_t chksum;		/* 255 */
+    uint8_t chksum;		/* 255 */
 };
 
 /*
@@ -512,73 +512,73 @@ struct nvram {
  */
 #define MAX_CMDSZ	12		/* SCSI maximum CDB size. */
 struct cmd_entry {
-	uint8_t entry_type;		/* Entry type. */
+    uint8_t entry_type;		/* Entry type. */
 #define COMMAND_TYPE    1		/* Command entry */
-	uint8_t entry_count;		/* Entry count. */
-	uint8_t sys_define;		/* System defined. */
-	uint8_t entry_status;		/* Entry Status. */
-	__le32 handle;			/* System handle. */
-	uint8_t lun;			/* SCSI LUN */
-	uint8_t target;			/* SCSI ID */
-	__le16 cdb_len;			/* SCSI command length. */
-	__le16 control_flags;		/* Control flags. */
-	__le16 reserved;
-	__le16 timeout;			/* Command timeout. */
-	__le16 dseg_count;		/* Data segment count. */
-	uint8_t scsi_cdb[MAX_CMDSZ];	/* SCSI command words. */
-	__le32 dseg_0_address;		/* Data segment 0 address. */
-	__le32 dseg_0_length;		/* Data segment 0 length. */
-	__le32 dseg_1_address;		/* Data segment 1 address. */
-	__le32 dseg_1_length;		/* Data segment 1 length. */
-	__le32 dseg_2_address;		/* Data segment 2 address. */
-	__le32 dseg_2_length;		/* Data segment 2 length. */
-	__le32 dseg_3_address;		/* Data segment 3 address. */
-	__le32 dseg_3_length;		/* Data segment 3 length. */
+    uint8_t entry_count;		/* Entry count. */
+    uint8_t sys_define;		/* System defined. */
+    uint8_t entry_status;		/* Entry Status. */
+    __le32 handle;			/* System handle. */
+    uint8_t lun;			/* SCSI LUN */
+    uint8_t target;			/* SCSI ID */
+    __le16 cdb_len;			/* SCSI command length. */
+    __le16 control_flags;		/* Control flags. */
+    __le16 reserved;
+    __le16 timeout;			/* Command timeout. */
+    __le16 dseg_count;		/* Data segment count. */
+    uint8_t scsi_cdb[MAX_CMDSZ];	/* SCSI command words. */
+    __le32 dseg_0_address;		/* Data segment 0 address. */
+    __le32 dseg_0_length;		/* Data segment 0 length. */
+    __le32 dseg_1_address;		/* Data segment 1 address. */
+    __le32 dseg_1_length;		/* Data segment 1 length. */
+    __le32 dseg_2_address;		/* Data segment 2 address. */
+    __le32 dseg_2_length;		/* Data segment 2 length. */
+    __le32 dseg_3_address;		/* Data segment 3 address. */
+    __le32 dseg_3_length;		/* Data segment 3 length. */
 };
 
 /*
  * ISP queue - continuation entry structure definition.
  */
 struct cont_entry {
-	uint8_t entry_type;		/* Entry type. */
+    uint8_t entry_type;		/* Entry type. */
 #define CONTINUE_TYPE   2		/* Continuation entry. */
-	uint8_t entry_count;		/* Entry count. */
-	uint8_t sys_define;		/* System defined. */
-	uint8_t entry_status;		/* Entry Status. */
-	__le32 reserved;		/* Reserved */
-	__le32 dseg_0_address;		/* Data segment 0 address. */
-	__le32 dseg_0_length;		/* Data segment 0 length. */
-	__le32 dseg_1_address;		/* Data segment 1 address. */
-	__le32 dseg_1_length;		/* Data segment 1 length. */
-	__le32 dseg_2_address;		/* Data segment 2 address. */
-	__le32 dseg_2_length;		/* Data segment 2 length. */
-	__le32 dseg_3_address;		/* Data segment 3 address. */
-	__le32 dseg_3_length;		/* Data segment 3 length. */
-	__le32 dseg_4_address;		/* Data segment 4 address. */
-	__le32 dseg_4_length;		/* Data segment 4 length. */
-	__le32 dseg_5_address;		/* Data segment 5 address. */
-	__le32 dseg_5_length;		/* Data segment 5 length. */
-	__le32 dseg_6_address;		/* Data segment 6 address. */
-	__le32 dseg_6_length;		/* Data segment 6 length. */
+    uint8_t entry_count;		/* Entry count. */
+    uint8_t sys_define;		/* System defined. */
+    uint8_t entry_status;		/* Entry Status. */
+    __le32 reserved;		/* Reserved */
+    __le32 dseg_0_address;		/* Data segment 0 address. */
+    __le32 dseg_0_length;		/* Data segment 0 length. */
+    __le32 dseg_1_address;		/* Data segment 1 address. */
+    __le32 dseg_1_length;		/* Data segment 1 length. */
+    __le32 dseg_2_address;		/* Data segment 2 address. */
+    __le32 dseg_2_length;		/* Data segment 2 length. */
+    __le32 dseg_3_address;		/* Data segment 3 address. */
+    __le32 dseg_3_length;		/* Data segment 3 length. */
+    __le32 dseg_4_address;		/* Data segment 4 address. */
+    __le32 dseg_4_length;		/* Data segment 4 length. */
+    __le32 dseg_5_address;		/* Data segment 5 address. */
+    __le32 dseg_5_length;		/* Data segment 5 length. */
+    __le32 dseg_6_address;		/* Data segment 6 address. */
+    __le32 dseg_6_length;		/* Data segment 6 length. */
 };
 
 /*
  * ISP queue - status entry structure definition.
  */
 struct response {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define STATUS_TYPE     3	/* Status entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t sys_define;	/* System defined. */
-	uint8_t entry_status;	/* Entry Status. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t sys_define;	/* System defined. */
+    uint8_t entry_status;	/* Entry Status. */
 #define RF_CONT         BIT_0	/* Continuation. */
 #define RF_FULL         BIT_1	/* Full */
 #define RF_BAD_HEADER   BIT_2	/* Bad header. */
 #define RF_BAD_PAYLOAD  BIT_3	/* Bad payload. */
-	__le32 handle;		/* System handle. */
-	__le16 scsi_status;	/* SCSI status. */
-	__le16 comp_status;	/* Completion status. */
-	__le16 state_flags;	/* State flags. */
+    __le32 handle;		/* System handle. */
+    __le16 scsi_status;	/* SCSI status. */
+    __le16 comp_status;	/* Completion status. */
+    __le16 state_flags;	/* State flags. */
 #define SF_TRANSFER_CMPL	BIT_14	/* Transfer Complete. */
 #define SF_GOT_SENSE	 	BIT_13	/* Got Sense */
 #define SF_GOT_STATUS	 	BIT_12	/* Got Status */
@@ -586,31 +586,31 @@ struct response {
 #define SF_SENT_CDB	 	BIT_10	/* Send CDB */
 #define SF_GOT_TARGET	 	BIT_9	/*  */
 #define SF_GOT_BUS	 	BIT_8	/*  */
-	__le16 status_flags;	/* Status flags. */
-	__le16 time;		/* Time. */
-	__le16 req_sense_length;/* Request sense data length. */
-	__le32 residual_length;	/* Residual transfer length. */
-	__le16 reserved[4];
-	uint8_t req_sense_data[32];	/* Request sense data. */
+    __le16 status_flags;	/* Status flags. */
+    __le16 time;		/* Time. */
+    __le16 req_sense_length;/* Request sense data length. */
+    __le32 residual_length;	/* Residual transfer length. */
+    __le16 reserved[4];
+    uint8_t req_sense_data[32];	/* Request sense data. */
 };
 
 /*
  * ISP queue - marker entry structure definition.
  */
 struct mrk_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define MARKER_TYPE     4	/* Marker entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t sys_define;	/* System defined. */
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t target;		/* SCSI ID */
-	uint8_t modifier;	/* Modifier (7-0). */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t sys_define;	/* System defined. */
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t target;		/* SCSI ID */
+    uint8_t modifier;	/* Modifier (7-0). */
 #define MK_SYNC_ID_LUN      0	/* Synchronize ID/LUN */
 #define MK_SYNC_ID          1	/* Synchronize ID */
 #define MK_SYNC_ALL         2	/* Synchronize all ID/LUN */
-	uint8_t reserved_1[53];
+    uint8_t reserved_1[53];
 };
 
 /*
@@ -619,92 +619,92 @@ struct mrk_entry {
  * Unused by the driver!
  */
 struct ecmd_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define EXTENDED_CMD_TYPE  5	/* Extended command entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t sys_define;	/* System defined. */
-	uint8_t entry_status;	/* Entry Status. */
-	uint32_t handle;	/* System handle. */
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t target;		/* SCSI ID */
-	__le16 cdb_len;		/* SCSI command length. */
-	__le16 control_flags;	/* Control flags. */
-	__le16 reserved;
-	__le16 timeout;		/* Command timeout. */
-	__le16 dseg_count;	/* Data segment count. */
-	uint8_t scsi_cdb[88];	/* SCSI command words. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t sys_define;	/* System defined. */
+    uint8_t entry_status;	/* Entry Status. */
+    uint32_t handle;	/* System handle. */
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t target;		/* SCSI ID */
+    __le16 cdb_len;		/* SCSI command length. */
+    __le16 control_flags;	/* Control flags. */
+    __le16 reserved;
+    __le16 timeout;		/* Command timeout. */
+    __le16 dseg_count;	/* Data segment count. */
+    uint8_t scsi_cdb[88];	/* SCSI command words. */
 };
 
 /*
  * ISP queue - 64-Bit addressing, command entry structure definition.
  */
 typedef struct {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define COMMAND_A64_TYPE 9	/* Command A64 entry */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t sys_define;	/* System defined. */
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 handle;	/* System handle. */
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t target;		/* SCSI ID */
-	__le16 cdb_len;	/* SCSI command length. */
-	__le16 control_flags;	/* Control flags. */
-	__le16 reserved;
-	__le16 timeout;	/* Command timeout. */
-	__le16 dseg_count;	/* Data segment count. */
-	uint8_t scsi_cdb[MAX_CMDSZ];	/* SCSI command words. */
-	__le32 reserved_1[2];	/* unused */
-	__le32 dseg_0_address[2];	/* Data segment 0 address. */
-	__le32 dseg_0_length;	/* Data segment 0 length. */
-	__le32 dseg_1_address[2];	/* Data segment 1 address. */
-	__le32 dseg_1_length;	/* Data segment 1 length. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t sys_define;	/* System defined. */
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 handle;	/* System handle. */
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t target;		/* SCSI ID */
+    __le16 cdb_len;	/* SCSI command length. */
+    __le16 control_flags;	/* Control flags. */
+    __le16 reserved;
+    __le16 timeout;	/* Command timeout. */
+    __le16 dseg_count;	/* Data segment count. */
+    uint8_t scsi_cdb[MAX_CMDSZ];	/* SCSI command words. */
+    __le32 reserved_1[2];	/* unused */
+    __le32 dseg_0_address[2];	/* Data segment 0 address. */
+    __le32 dseg_0_length;	/* Data segment 0 length. */
+    __le32 dseg_1_address[2];	/* Data segment 1 address. */
+    __le32 dseg_1_length;	/* Data segment 1 length. */
 } cmd_a64_entry_t, request_t;
 
 /*
  * ISP queue - 64-Bit addressing, continuation entry structure definition.
  */
 struct cont_a64_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define CONTINUE_A64_TYPE 0xA	/* Continuation A64 entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t sys_define;	/* System defined. */
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 dseg_0_address[2];	/* Data segment 0 address. */
-	__le32 dseg_0_length;		/* Data segment 0 length. */
-	__le32 dseg_1_address[2];	/* Data segment 1 address. */
-	__le32 dseg_1_length;		/* Data segment 1 length. */
-	__le32 dseg_2_address[2];	/* Data segment 2 address. */
-	__le32 dseg_2_length;		/* Data segment 2 length. */
-	__le32 dseg_3_address[2];	/* Data segment 3 address. */
-	__le32 dseg_3_length;		/* Data segment 3 length. */
-	__le32 dseg_4_address[2];	/* Data segment 4 address. */
-	__le32 dseg_4_length;		/* Data segment 4 length. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t sys_define;	/* System defined. */
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 dseg_0_address[2];	/* Data segment 0 address. */
+    __le32 dseg_0_length;		/* Data segment 0 length. */
+    __le32 dseg_1_address[2];	/* Data segment 1 address. */
+    __le32 dseg_1_length;		/* Data segment 1 length. */
+    __le32 dseg_2_address[2];	/* Data segment 2 address. */
+    __le32 dseg_2_length;		/* Data segment 2 length. */
+    __le32 dseg_3_address[2];	/* Data segment 3 address. */
+    __le32 dseg_3_length;		/* Data segment 3 length. */
+    __le32 dseg_4_address[2];	/* Data segment 4 address. */
+    __le32 dseg_4_length;		/* Data segment 4 length. */
 };
 
 /*
  * ISP queue - enable LUN entry structure definition.
  */
 struct elun_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define ENABLE_LUN_TYPE 0xB	/* Enable LUN entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status not used. */
-	__le32 reserved_2;
-	__le16 lun;		/* Bit 15 is bus number. */
-	__le16 reserved_4;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t reserved_5;
-	uint8_t command_count;	/* Number of ATIOs allocated. */
-	uint8_t immed_notify_count;	/* Number of Immediate Notify */
-	/* entries allocated. */
-	uint8_t group_6_length;	/* SCSI CDB length for group 6 */
-	/* commands (2-26). */
-	uint8_t group_7_length;	/* SCSI CDB length for group 7 */
-	/* commands (2-26). */
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 reserved_6[20];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status not used. */
+    __le32 reserved_2;
+    __le16 lun;		/* Bit 15 is bus number. */
+    __le16 reserved_4;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t reserved_5;
+    uint8_t command_count;	/* Number of ATIOs allocated. */
+    uint8_t immed_notify_count;	/* Number of Immediate Notify */
+    /* entries allocated. */
+    uint8_t group_6_length;	/* SCSI CDB length for group 6 */
+    /* commands (2-26). */
+    uint8_t group_7_length;	/* SCSI CDB length for group 7 */
+    /* commands (2-26). */
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 reserved_6[20];
 };
 
 /*
@@ -713,215 +713,215 @@ struct elun_entry {
  * Unused by the driver!
  */
 struct modify_lun_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define MODIFY_LUN_TYPE 0xC	/* Modify LUN entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t reserved_3;
-	uint8_t operators;
-	uint8_t reserved_4;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t reserved_5;
-	uint8_t command_count;	/* Number of ATIOs allocated. */
-	uint8_t immed_notify_count;	/* Number of Immediate Notify */
-	/* entries allocated. */
-	__le16 reserved_6;
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 reserved_7[20];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t reserved_3;
+    uint8_t operators;
+    uint8_t reserved_4;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t reserved_5;
+    uint8_t command_count;	/* Number of ATIOs allocated. */
+    uint8_t immed_notify_count;	/* Number of Immediate Notify */
+    /* entries allocated. */
+    __le16 reserved_6;
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 reserved_7[20];
 };
 
 /*
  * ISP queue - immediate notify entry structure definition.
  */
 struct notify_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define IMMED_NOTIFY_TYPE 0xD	/* Immediate notify entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t reserved_4;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	/* entries allocated. */
-	__le16 seq_id;
-	uint8_t scsi_msg[8];	/* SCSI message not handled by ISP */
-	__le16 reserved_5[8];
-	uint8_t sense_data[18];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t reserved_4;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    /* entries allocated. */
+    __le16 seq_id;
+    uint8_t scsi_msg[8];	/* SCSI message not handled by ISP */
+    __le16 reserved_5[8];
+    uint8_t sense_data[18];
 };
 
 /*
  * ISP queue - notify acknowledge entry structure definition.
  */
 struct nack_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define NOTIFY_ACK_TYPE 0xE	/* Notify acknowledge entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t event;
-	__le16 seq_id;
-	__le16 reserved_4[22];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t event;
+    __le16 seq_id;
+    __le16 reserved_4[22];
 };
 
 /*
  * ISP queue - Accept Target I/O (ATIO) entry structure definition.
  */
 struct atio_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define ACCEPT_TGT_IO_TYPE 6	/* Accept target I/O entry. */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;
-	uint8_t initiator_id;
-	uint8_t cdb_len;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t scsi_status;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	uint8_t cdb[26];
-	uint8_t sense_data[18];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;
+    uint8_t initiator_id;
+    uint8_t cdb_len;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t scsi_status;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    uint8_t cdb[26];
+    uint8_t sense_data[18];
 };
 
 /*
  * ISP queue - Continue Target I/O (CTIO) entry structure definition.
  */
 struct ctio_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define CONTINUE_TGT_IO_TYPE 7	/* CTIO entry */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t scsi_status;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	__le32 transfer_length;
-	__le32 residual;
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 dseg_count;	/* Data segment count. */
-	__le32 dseg_0_address;	/* Data segment 0 address. */
-	__le32 dseg_0_length;	/* Data segment 0 length. */
-	__le32 dseg_1_address;	/* Data segment 1 address. */
-	__le32 dseg_1_length;	/* Data segment 1 length. */
-	__le32 dseg_2_address;	/* Data segment 2 address. */
-	__le32 dseg_2_length;	/* Data segment 2 length. */
-	__le32 dseg_3_address;	/* Data segment 3 address. */
-	__le32 dseg_3_length;	/* Data segment 3 length. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t scsi_status;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    __le32 transfer_length;
+    __le32 residual;
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 dseg_count;	/* Data segment count. */
+    __le32 dseg_0_address;	/* Data segment 0 address. */
+    __le32 dseg_0_length;	/* Data segment 0 length. */
+    __le32 dseg_1_address;	/* Data segment 1 address. */
+    __le32 dseg_1_length;	/* Data segment 1 length. */
+    __le32 dseg_2_address;	/* Data segment 2 address. */
+    __le32 dseg_2_length;	/* Data segment 2 length. */
+    __le32 dseg_3_address;	/* Data segment 3 address. */
+    __le32 dseg_3_length;	/* Data segment 3 length. */
 };
 
 /*
  * ISP queue - CTIO returned entry structure definition.
  */
 struct ctio_ret_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define CTIO_RET_TYPE   7	/* CTIO return entry */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t scsi_status;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	__le32 transfer_length;
-	__le32 residual;
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 dseg_count;	/* Data segment count. */
-	__le32 dseg_0_address;	/* Data segment 0 address. */
-	__le32 dseg_0_length;	/* Data segment 0 length. */
-	__le32 dseg_1_address;	/* Data segment 1 address. */
-	__le16 dseg_1_length;	/* Data segment 1 length. */
-	uint8_t sense_data[18];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t scsi_status;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    __le32 transfer_length;
+    __le32 residual;
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 dseg_count;	/* Data segment count. */
+    __le32 dseg_0_address;	/* Data segment 0 address. */
+    __le32 dseg_0_length;	/* Data segment 0 length. */
+    __le32 dseg_1_address;	/* Data segment 1 address. */
+    __le16 dseg_1_length;	/* Data segment 1 length. */
+    uint8_t sense_data[18];
 };
 
 /*
  * ISP queue - CTIO A64 entry structure definition.
  */
 struct ctio_a64_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define CTIO_A64_TYPE 0xF	/* CTIO A64 entry */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t scsi_status;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	__le32 transfer_length;
-	__le32 residual;
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 dseg_count;	/* Data segment count. */
-	__le32 reserved_4[2];
-	__le32 dseg_0_address[2];/* Data segment 0 address. */
-	__le32 dseg_0_length;	/* Data segment 0 length. */
-	__le32 dseg_1_address[2];/* Data segment 1 address. */
-	__le32 dseg_1_length;	/* Data segment 1 length. */
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t scsi_status;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    __le32 transfer_length;
+    __le32 residual;
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 dseg_count;	/* Data segment count. */
+    __le32 reserved_4[2];
+    __le32 dseg_0_address[2];/* Data segment 0 address. */
+    __le32 dseg_0_length;	/* Data segment 0 length. */
+    __le32 dseg_1_address[2];/* Data segment 1 address. */
+    __le32 dseg_1_length;	/* Data segment 1 length. */
 };
 
 /*
  * ISP queue - CTIO returned entry structure definition.
  */
 struct ctio_a64_ret_entry {
-	uint8_t entry_type;	/* Entry type. */
+    uint8_t entry_type;	/* Entry type. */
 #define CTIO_A64_RET_TYPE 0xF	/* CTIO A64 returned entry */
-	uint8_t entry_count;	/* Entry count. */
-	uint8_t reserved_1;
-	uint8_t entry_status;	/* Entry Status. */
-	__le32 reserved_2;
-	uint8_t lun;		/* SCSI LUN */
-	uint8_t initiator_id;
-	uint8_t reserved_3;
-	uint8_t target_id;
-	__le32 option_flags;
-	uint8_t status;
-	uint8_t scsi_status;
-	uint8_t tag_value;	/* Received queue tag message value */
-	uint8_t tag_type;	/* Received queue tag message type */
-	__le32 transfer_length;
-	__le32 residual;
-	__le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
-	__le16 dseg_count;	/* Data segment count. */
-	__le16 reserved_4[7];
-	uint8_t sense_data[18];
+    uint8_t entry_count;	/* Entry count. */
+    uint8_t reserved_1;
+    uint8_t entry_status;	/* Entry Status. */
+    __le32 reserved_2;
+    uint8_t lun;		/* SCSI LUN */
+    uint8_t initiator_id;
+    uint8_t reserved_3;
+    uint8_t target_id;
+    __le32 option_flags;
+    uint8_t status;
+    uint8_t scsi_status;
+    uint8_t tag_value;	/* Received queue tag message value */
+    uint8_t tag_type;	/* Received queue tag message type */
+    __le32 transfer_length;
+    __le32 residual;
+    __le16 timeout;		/* 0 = 30 seconds, 0xFFFF = disable */
+    __le16 dseg_count;	/* Data segment count. */
+    __le16 reserved_4[7];
+    uint8_t sense_data[18];
 };
 
 /*
@@ -972,9 +972,9 @@ struct ctio_a64_ret_entry {
  */
 #define OF_ENABLE_TAG       BIT_1	/* Tagged queue action enable */
 #define OF_DATA_IN          BIT_6	/* Data in to initiator */
-					/*  (data from target to initiator) */
+/*  (data from target to initiator) */
 #define OF_DATA_OUT         BIT_7	/* Data out from initiator */
-					/*  (data from initiator to target) */
+/*  (data from initiator to target) */
 #define OF_NO_DATA          (BIT_7 | BIT_6)
 #define OF_DISC_DISABLED    BIT_15	/* Disconnects disabled */
 #define OF_DISABLE_SDP      BIT_24	/* Disable sending save data ptr */
@@ -987,28 +987,28 @@ struct ctio_a64_ret_entry {
  * BUS parameters/settings structure - UNUSED
  */
 struct bus_param {
-	uint8_t id;		/* Host adapter SCSI id */
-	uint8_t bus_reset_delay;	/* SCSI bus reset delay. */
-	uint8_t failed_reset_count;	/* number of time reset failed */
-	uint8_t unused;
-	uint16_t device_enables;	/* Device enable bits. */
-	uint16_t lun_disables;	/* LUN disable bits. */
-	uint16_t qtag_enables;	/* Tag queue enables. */
-	uint16_t hiwat;		/* High water mark per device. */
-	uint8_t reset_marker:1;
-	uint8_t disable_scsi_reset:1;
-	uint8_t scsi_bus_dead:1;	/* SCSI Bus is Dead, when 5 back to back resets failed */
+    uint8_t id;		/* Host adapter SCSI id */
+    uint8_t bus_reset_delay;	/* SCSI bus reset delay. */
+    uint8_t failed_reset_count;	/* number of time reset failed */
+    uint8_t unused;
+    uint16_t device_enables;	/* Device enable bits. */
+    uint16_t lun_disables;	/* LUN disable bits. */
+    uint16_t qtag_enables;	/* Tag queue enables. */
+    uint16_t hiwat;		/* High water mark per device. */
+    uint8_t reset_marker:1;
+    uint8_t disable_scsi_reset:1;
+    uint8_t scsi_bus_dead:1;	/* SCSI Bus is Dead, when 5 back to back resets failed */
 };
 
 
 struct qla_driver_setup {
-	uint32_t no_sync:1;
-	uint32_t no_wide:1;
-	uint32_t no_ppr:1;
-	uint32_t no_nvram:1;
-	uint16_t sync_mask;
-	uint16_t wide_mask;
-	uint16_t ppr_mask;
+    uint32_t no_sync:1;
+    uint32_t no_wide:1;
+    uint32_t no_ppr:1;
+    uint32_t no_nvram:1;
+    uint16_t sync_mask;
+    uint16_t wide_mask;
+    uint16_t ppr_mask;
 };
 
 
@@ -1016,66 +1016,66 @@ struct qla_driver_setup {
  * Linux Host Adapter structure
  */
 struct scsi_qla_host {
-	/* Linux adapter configuration data */
-	struct Scsi_Host *host;	/* pointer to host data */
-	struct scsi_qla_host *next;
-	struct device_reg __iomem *iobase;	/* Base Memory-mapped I/O address */
+    /* Linux adapter configuration data */
+    struct Scsi_Host *host;	/* pointer to host data */
+    struct scsi_qla_host *next;
+    struct device_reg __iomem *iobase;	/* Base Memory-mapped I/O address */
 
-	unsigned char __iomem *mmpbase;	/* memory mapped address */
-	unsigned long host_no;
-	struct pci_dev *pdev;
-	uint8_t devnum;
-	uint8_t revision;
-	uint8_t ports;
+    unsigned char __iomem *mmpbase;	/* memory mapped address */
+    unsigned long host_no;
+    struct pci_dev *pdev;
+    uint8_t devnum;
+    uint8_t revision;
+    uint8_t ports;
 
-	unsigned long actthreads;
-	unsigned long isr_count;	/* Interrupt count */
-	unsigned long spurious_int;
+    unsigned long actthreads;
+    unsigned long isr_count;	/* Interrupt count */
+    unsigned long spurious_int;
 
-	/* Outstandings ISP commands. */
-	struct srb *outstanding_cmds[MAX_OUTSTANDING_COMMANDS];
+    /* Outstandings ISP commands. */
+    struct srb *outstanding_cmds[MAX_OUTSTANDING_COMMANDS];
 
-	/* BUS configuration data */
-	struct bus_param bus_settings[MAX_BUSES];
+    /* BUS configuration data */
+    struct bus_param bus_settings[MAX_BUSES];
 
-	/* Received ISP mailbox data. */
-	volatile uint16_t mailbox_out[MAILBOX_REGISTER_COUNT];
+    /* Received ISP mailbox data. */
+    volatile uint16_t mailbox_out[MAILBOX_REGISTER_COUNT];
 
-	dma_addr_t request_dma;		/* Physical Address */
-	request_t *request_ring;	/* Base virtual address */
-	request_t *request_ring_ptr;	/* Current address. */
-	uint16_t req_ring_index;	/* Current index. */
-	uint16_t req_q_cnt;		/* Number of available entries. */
+    dma_addr_t request_dma;		/* Physical Address */
+    request_t *request_ring;	/* Base virtual address */
+    request_t *request_ring_ptr;	/* Current address. */
+    uint16_t req_ring_index;	/* Current index. */
+    uint16_t req_q_cnt;		/* Number of available entries. */
 
-	dma_addr_t response_dma;	/* Physical address. */
-	struct response *response_ring;	/* Base virtual address */
-	struct response *response_ring_ptr;	/* Current address. */
-	uint16_t rsp_ring_index;	/* Current index. */
+    dma_addr_t response_dma;	/* Physical address. */
+    struct response *response_ring;	/* Base virtual address */
+    struct response *response_ring_ptr;	/* Current address. */
+    uint16_t rsp_ring_index;	/* Current index. */
 
-	struct list_head done_q;	/* Done queue */
+    struct list_head done_q;	/* Done queue */
 
-	struct completion *mailbox_wait;
+    struct completion *mailbox_wait;
 
-	volatile struct {
-		uint32_t online:1;			/* 0 */
-		uint32_t reset_marker:1;		/* 1 */
-		uint32_t disable_host_adapter:1;	/* 2 */
-		uint32_t reset_active:1;		/* 3 */
-		uint32_t abort_isp_active:1;		/* 4 */
-		uint32_t disable_risc_code_load:1;	/* 5 */
+    volatile struct {
+        uint32_t online:1;			/* 0 */
+        uint32_t reset_marker:1;		/* 1 */
+        uint32_t disable_host_adapter:1;	/* 2 */
+        uint32_t reset_active:1;		/* 3 */
+        uint32_t abort_isp_active:1;		/* 4 */
+        uint32_t disable_risc_code_load:1;	/* 5 */
 #ifdef __ia64__
-		uint32_t use_pci_vchannel:1;
+        uint32_t use_pci_vchannel:1;
 #endif
-	} flags;
+    } flags;
 
-	struct nvram nvram;
-	int nvram_valid;
+    struct nvram nvram;
+    int nvram_valid;
 
-	/* Firmware Info */
-	unsigned short fwstart; /* start address for F/W   */
-	unsigned char fwver1;   /* F/W version first char  */
-	unsigned char fwver2;   /* F/W version second char */
-	unsigned char fwver3;   /* F/W version third char  */
+    /* Firmware Info */
+    unsigned short fwstart; /* start address for F/W   */
+    unsigned char fwver1;   /* F/W version first char  */
+    unsigned char fwver2;   /* F/W version second char */
+    unsigned char fwver3;   /* F/W version third char  */
 };
 
 #endif /* _QLA1280_H */

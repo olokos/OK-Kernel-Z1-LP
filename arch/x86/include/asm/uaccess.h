@@ -92,7 +92,7 @@
  */
 
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 extern int fixup_exception(struct pt_regs *regs);
@@ -428,7 +428,9 @@ do {									\
 })
 
 /* FIXME: this hack is definitely wrong -AK */
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct __user *)(x))
 
 /*
@@ -565,7 +567,7 @@ strncpy_from_user(char *dst, const char __user *src, long count);
  */
 #ifdef CONFIG_X86_INTEL_USERCOPY
 extern struct movsl_mask {
-	int mask;
+    int mask;
 } ____cacheline_aligned_in_smp movsl_mask;
 #endif
 

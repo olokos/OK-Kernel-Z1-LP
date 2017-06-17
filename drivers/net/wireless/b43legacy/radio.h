@@ -64,12 +64,12 @@ void b43legacy_radio_turn_on(struct b43legacy_wldev *dev);
 void b43legacy_radio_turn_off(struct b43legacy_wldev *dev, bool force);
 
 int b43legacy_radio_selectchannel(struct b43legacy_wldev *dev, u8 channel,
-				  int synthetic_pu_workaround);
+                                  int synthetic_pu_workaround);
 
 void b43legacy_radio_set_txpower_a(struct b43legacy_wldev *dev, u16 txpower);
 void b43legacy_radio_set_txpower_bg(struct b43legacy_wldev *dev,
-				    u16 baseband_attenuation, u16 attenuation,
-				    u16 txpower);
+                                    u16 baseband_attenuation, u16 attenuation,
+                                    u16 txpower);
 
 u16 b43legacy_default_baseband_attenuation(struct b43legacy_wldev *dev);
 u16 b43legacy_default_radio_attenuation(struct b43legacy_wldev *dev);
@@ -83,7 +83,7 @@ u8 b43legacy_radio_aci_detect(struct b43legacy_wldev *dev, u8 channel);
 u8 b43legacy_radio_aci_scan(struct b43legacy_wldev *dev);
 
 int b43legacy_radio_set_interference_mitigation(struct b43legacy_wldev *dev,
-						int mode);
+        int mode);
 
 void b43legacy_calc_nrssi_slope(struct b43legacy_wldev *dev);
 void b43legacy_calc_nrssi_threshold(struct b43legacy_wldev *dev);

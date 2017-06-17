@@ -42,49 +42,49 @@
 #define AGPIOC_CHIPSET_FLUSH32 _IO (AGPIOC_BASE, 10)
 
 struct agp_info32 {
-	struct agp_version version;	/* version of the driver        */
-	u32 bridge_id;		/* bridge vendor/device         */
-	u32 agp_mode;		/* mode info of bridge          */
-	compat_long_t aper_base;	/* base of aperture             */
-	compat_size_t aper_size;	/* size of aperture             */
-	compat_size_t pg_total;	/* max pages (swap + system)    */
-	compat_size_t pg_system;	/* max pages (system)           */
-	compat_size_t pg_used;		/* current pages used           */
+    struct agp_version version;	/* version of the driver        */
+    u32 bridge_id;		/* bridge vendor/device         */
+    u32 agp_mode;		/* mode info of bridge          */
+    compat_long_t aper_base;	/* base of aperture             */
+    compat_size_t aper_size;	/* size of aperture             */
+    compat_size_t pg_total;	/* max pages (swap + system)    */
+    compat_size_t pg_system;	/* max pages (system)           */
+    compat_size_t pg_used;		/* current pages used           */
 };
 
 /*
  * The "prot" down below needs still a "sleep" flag somehow ...
  */
 struct agp_segment32 {
-	compat_off_t pg_start;		/* starting page to populate    */
-	compat_size_t pg_count;	/* number of pages              */
-	compat_int_t prot;		/* prot flags for mmap          */
+    compat_off_t pg_start;		/* starting page to populate    */
+    compat_size_t pg_count;	/* number of pages              */
+    compat_int_t prot;		/* prot flags for mmap          */
 };
 
 struct agp_region32 {
-	compat_pid_t pid;		/* pid of process               */
-	compat_size_t seg_count;	/* number of segments           */
-	struct agp_segment32 *seg_list;
+    compat_pid_t pid;		/* pid of process               */
+    compat_size_t seg_count;	/* number of segments           */
+    struct agp_segment32 *seg_list;
 };
 
 struct agp_allocate32 {
-	compat_int_t key;		/* tag of allocation            */
-	compat_size_t pg_count;	/* number of pages              */
-	u32 type;		/* 0 == normal, other devspec   */
-	u32 physical;           /* device specific (some devices
+    compat_int_t key;		/* tag of allocation            */
+    compat_size_t pg_count;	/* number of pages              */
+    u32 type;		/* 0 == normal, other devspec   */
+    u32 physical;           /* device specific (some devices
 				 * need a phys address of the
 				 * actual page behind the gatt
 				 * table)                        */
 };
 
 struct agp_bind32 {
-	compat_int_t key;		/* tag of allocation            */
-	compat_off_t pg_start;		/* starting page to populate    */
+    compat_int_t key;		/* tag of allocation            */
+    compat_off_t pg_start;		/* starting page to populate    */
 };
 
 struct agp_unbind32 {
-	compat_int_t key;		/* tag of allocation            */
-	u32 priority;		/* priority for paging out      */
+    compat_int_t key;		/* tag of allocation            */
+    u32 priority;		/* priority for paging out      */
 };
 
 extern struct agp_front_data agp_fe;

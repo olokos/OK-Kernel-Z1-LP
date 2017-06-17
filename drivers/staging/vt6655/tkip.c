@@ -139,8 +139,7 @@ unsigned int rotr1(unsigned int a);
 /* Returns a 16 bit value from a 64K entry table. The Table */
 /* is synthesized from two 256 entry byte wide tables.      */
 /************************************************************/
-unsigned int tkip_sbox(unsigned int index)
-{
+unsigned int tkip_sbox(unsigned int index) {
     unsigned int index_low;
     unsigned int index_high;
     unsigned int left, right;
@@ -155,8 +154,7 @@ unsigned int tkip_sbox(unsigned int index)
 };
 
 
-unsigned int rotr1(unsigned int a)
-{
+unsigned int rotr1(unsigned int a) {
     unsigned int b;
 
     if ((a & 0x01) == 0x01) {
@@ -189,8 +187,7 @@ void TKIPvMixKey(
     unsigned short wTSC15_0,
     unsigned long dwTSC47_16,
     unsigned char *pbyRC4Key
-    )
-{
+) {
     unsigned int p1k[5];
 //    unsigned int ttak0, ttak1, ttak2, ttak3, ttak4;
     unsigned int tsc0, tsc1, tsc2;

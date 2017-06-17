@@ -14,32 +14,32 @@
 #define SCLP_CHP_INFO_MASK_SIZE		32
 
 struct sclp_chp_info {
-	u8 recognized[SCLP_CHP_INFO_MASK_SIZE];
-	u8 standby[SCLP_CHP_INFO_MASK_SIZE];
-	u8 configured[SCLP_CHP_INFO_MASK_SIZE];
+    u8 recognized[SCLP_CHP_INFO_MASK_SIZE];
+    u8 standby[SCLP_CHP_INFO_MASK_SIZE];
+    u8 configured[SCLP_CHP_INFO_MASK_SIZE];
 };
 
 #define LOADPARM_LEN 8
 
 struct sclp_ipl_info {
-	int is_valid;
-	int has_dump;
-	char loadparm[LOADPARM_LEN];
+    int is_valid;
+    int has_dump;
+    char loadparm[LOADPARM_LEN];
 };
 
 struct sclp_cpu_entry {
-	u8 address;
-	u8 reserved0[13];
-	u8 type;
-	u8 reserved1;
+    u8 address;
+    u8 reserved0[13];
+    u8 type;
+    u8 reserved1;
 } __attribute__((packed));
 
 struct sclp_cpu_info {
-	unsigned int configured;
-	unsigned int standby;
-	unsigned int combined;
-	int has_cpu_type;
-	struct sclp_cpu_entry cpu[255];
+    unsigned int configured;
+    unsigned int standby;
+    unsigned int combined;
+    int has_cpu_type;
+    struct sclp_cpu_entry cpu[255];
 };
 
 int sclp_get_cpu_info(struct sclp_cpu_info *info);

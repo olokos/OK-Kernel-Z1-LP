@@ -80,8 +80,7 @@ when        who    what, where, why
    Re-order opcode filled in by RPE
    !!! fix me: (check with RPE doc if the codes are correct)
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WLANTL_OPCODE_INVALID         = 0,
     WLANTL_OPCODE_QCUR_FWDBUF     = 1,
     WLANTL_OPCODE_FWDBUF_FWDCUR   = 2,

@@ -78,42 +78,42 @@
 #define CONF_DIRTYDETECTION_ON	(0x601)
 
 struct dumchannel_uf {
-	int channelnr;
-	u32 *dirty;
-	u32 *source;
-	u32 x_offset;
-	u32 y_offset;
-	u32 width;
-	u32 height;
+    int channelnr;
+    u32 *dirty;
+    u32 *source;
+    u32 x_offset;
+    u32 y_offset;
+    u32 width;
+    u32 height;
 };
 
 enum {
-	FB_TYPE_YUV,
-	FB_TYPE_RGB
+    FB_TYPE_YUV,
+    FB_TYPE_RGB
 };
 
 struct cmdstring {
-	int channelnr;
-	uint16_t prestringlen;
-	uint16_t poststringlen;
-	uint16_t format;
-	uint16_t reserved;
-	uint16_t startaddr_low;
-	uint16_t startaddr_high;
-	uint16_t pixdatlen_low;
-	uint16_t pixdatlen_high;
-	u32 precmd[MAX_NR_PRESTRINGS];
-	u32 postcmd[MAX_NR_POSTSTRINGS];
+    int channelnr;
+    uint16_t prestringlen;
+    uint16_t poststringlen;
+    uint16_t format;
+    uint16_t reserved;
+    uint16_t startaddr_low;
+    uint16_t startaddr_high;
+    uint16_t pixdatlen_low;
+    uint16_t pixdatlen_high;
+    u32 precmd[MAX_NR_PRESTRINGS];
+    u32 postcmd[MAX_NR_POSTSTRINGS];
 
 };
 
 struct dumchannel {
-	int channelnr;
-	int dum_ch_min;
-	int dum_ch_max;
-	int dum_ch_conf;
-	int dum_ch_stat;
-	int dum_ch_ctrl;
+    int channelnr;
+    int dum_ch_min;
+    int dum_ch_max;
+    int dum_ch_conf;
+    int dum_ch_stat;
+    int dum_ch_ctrl;
 };
 
 int pnx4008_alloc_dum_channel(int dev_id);
@@ -133,4 +133,4 @@ int pnx4008_sdum_mmap(struct fb_info *info, struct vm_area_struct *vma, struct d
 int pnx4008_set_dum_exit_notification(int dev_id);
 
 int pnx4008_get_fb_addresses(int fb_type, void **virt_addr,
-			     dma_addr_t * phys_addr, int *fb_length);
+                             dma_addr_t * phys_addr, int *fb_length);

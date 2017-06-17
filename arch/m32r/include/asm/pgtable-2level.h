@@ -30,9 +30,15 @@
  * setup: the pgd is never bad, and a pmd always exists (as it's folded
  * into the pgd entry)
  */
-static inline int pgd_none(pgd_t pgd)	{ return 0; }
-static inline int pgd_bad(pgd_t pgd)	{ return 0; }
-static inline int pgd_present(pgd_t pgd)	{ return 1; }
+static inline int pgd_none(pgd_t pgd)	{
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd)	{
+    return 0;
+}
+static inline int pgd_present(pgd_t pgd)	{
+    return 1;
+}
 #define pgd_clear(xp)				do { } while (0)
 
 /*
@@ -57,9 +63,8 @@ static inline int pgd_present(pgd_t pgd)	{ return 1; }
 #define pgd_page(pgd)	(mem_map + ((pgd_val(pgd) >> PAGE_SHIFT) - PFN_BASE))
 #endif /* !CONFIG_DISCONTIGMEM */
 
-static inline pmd_t *pmd_offset(pgd_t * dir, unsigned long address)
-{
-	return (pmd_t *) dir;
+static inline pmd_t *pmd_offset(pgd_t * dir, unsigned long address) {
+    return (pmd_t *) dir;
 }
 
 #define ptep_get_and_clear(mm,addr,xp)	__pte(xchg(&(xp)->pte, 0))

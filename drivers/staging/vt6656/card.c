@@ -92,9 +92,8 @@ const WORD cwRXBCNTSFOff[MAX_RATE] =
  *  Out:
  *      none
  */
-void CARDbSetMediaChannel(void *pDeviceHandler, unsigned int uConnectionChannel)
-{
-PSDevice            pDevice = (PSDevice) pDeviceHandler;
+void CARDbSetMediaChannel(void *pDeviceHandler, unsigned int uConnectionChannel) {
+    PSDevice            pDevice = (PSDevice) pDeviceHandler;
 
     if (pDevice->byBBType == BB_TYPE_11A) { // 15 ~ 38
         if ((uConnectionChannel < (CB_MAX_CHANNEL_24G+1)) || (uConnectionChannel > CB_MAX_CHANNEL))
@@ -119,7 +118,7 @@ PSDevice            pDevice = (PSDevice) pDeviceHandler;
                         0,
                         0,
                         NULL
-                        );
+                       );
 
     //{{ RobertYu: 20041202
     //// TX_PE will reserve 3 us for MAX2829 A mode only, it is for better TX throughput
@@ -150,8 +149,7 @@ PSDevice            pDevice = (PSDevice) pDeviceHandler;
  * Return Value: response Control frame rate
  *
  */
-static WORD swGetCCKControlRate(void *pDeviceHandler, WORD wRateIdx)
-{
+static WORD swGetCCKControlRate(void *pDeviceHandler, WORD wRateIdx) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     unsigned int ui = (unsigned int)wRateIdx;
     while (ui > RATE_1M) {
@@ -176,8 +174,7 @@ static WORD swGetCCKControlRate(void *pDeviceHandler, WORD wRateIdx)
  * Return Value: response Control frame rate
  *
  */
-static WORD swGetOFDMControlRate(void *pDeviceHandler, WORD wRateIdx)
-{
+static WORD swGetOFDMControlRate(void *pDeviceHandler, WORD wRateIdx) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     unsigned int ui = (unsigned int)wRateIdx;
 
@@ -216,19 +213,17 @@ static WORD swGetOFDMControlRate(void *pDeviceHandler, WORD wRateIdx)
  */
 void
 CARDvCaculateOFDMRParameter (
-      WORD wRate,
-      BYTE byBBType,
-     PBYTE pbyTxRate,
-     PBYTE pbyRsvTime
-    )
-{
+    WORD wRate,
+    BYTE byBBType,
+    PBYTE pbyTxRate,
+    PBYTE pbyRsvTime
+) {
     switch (wRate) {
     case RATE_6M :
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9B;
             *pbyRsvTime = 24;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8B;
             *pbyRsvTime = 30;
         }
@@ -238,30 +233,27 @@ CARDvCaculateOFDMRParameter (
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9F;
             *pbyRsvTime = 16;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8F;
             *pbyRsvTime = 22;
         }
         break;
 
-   case RATE_12M :
+    case RATE_12M :
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9A;
             *pbyRsvTime = 12;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8A;
             *pbyRsvTime = 18;
         }
         break;
 
-   case RATE_18M :
+    case RATE_18M :
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9E;
             *pbyRsvTime = 8;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8E;
             *pbyRsvTime = 14;
         }
@@ -271,8 +263,7 @@ CARDvCaculateOFDMRParameter (
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9D;
             *pbyRsvTime = 4;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8D;
             *pbyRsvTime = 10;
         }
@@ -282,8 +273,7 @@ CARDvCaculateOFDMRParameter (
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x98;
             *pbyRsvTime = 4;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x88;
             *pbyRsvTime = 10;
         }
@@ -293,8 +283,7 @@ CARDvCaculateOFDMRParameter (
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x9C;
             *pbyRsvTime = 4;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x8C;
             *pbyRsvTime = 10;
         }
@@ -305,8 +294,7 @@ CARDvCaculateOFDMRParameter (
         if (byBBType == BB_TYPE_11A) {//5GHZ
             *pbyTxRate = 0x99;
             *pbyRsvTime = 8;
-        }
-        else {
+        } else {
             *pbyTxRate = 0x89;
             *pbyRsvTime = 14;
         }
@@ -326,8 +314,7 @@ CARDvCaculateOFDMRParameter (
  * Return Value: None.
  *
  */
-void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
-{
+void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     BYTE    abyServ[4] = {0,0,0,0};             // For CCK
     BYTE    abySignal[4] = {0,0,0,0};
@@ -345,7 +332,7 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
                          &awLen[0],
                          &abyServ[0],
                          &abySignal[0]
-    );
+                        );
 
     ///RSPINF_b_2
     BBvCaculateParameter(pDevice,
@@ -355,7 +342,7 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
                          &awLen[1],
                          &abyServ[1],
                          &abySignal[1]
-    );
+                        );
 
     //RSPINF_b_5
     BBvCaculateParameter(pDevice,
@@ -365,7 +352,7 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
                          &awLen[2],
                          &abyServ[2],
                          &abySignal[2]
-    );
+                        );
 
     //RSPINF_b_11
     BBvCaculateParameter(pDevice,
@@ -375,7 +362,7 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
                          &awLen[3],
                          &abyServ[3],
                          &abySignal[3]
-    );
+                        );
 
     //RSPINF_a_6
     CARDvCaculateOFDMRParameter (RATE_6M,
@@ -452,8 +439,8 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
     abyData[15] = abyServ[3];
 
     for (i = 0; i < 9; i++) {
-	abyData[16+i*2] = abyTxRate[i];
-	abyData[16+i*2+1] = abyRsvTime[i];
+        abyData[16+i*2] = abyTxRate[i];
+        abyData[16+i*2+1] = abyRsvTime[i];
     }
 
     CONTROLnsRequestOut(pDevice,
@@ -477,8 +464,7 @@ void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType)
  * Return Value: None.
  *
  */
-void vUpdateIFS(void *pDeviceHandler)
-{
+void vUpdateIFS(void *pDeviceHandler) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     //Set SIFS, DIFS, EIFS, SlotTime, CwMin
     BYTE byMaxMin = 0;
@@ -490,18 +476,16 @@ void vUpdateIFS(void *pDeviceHandler)
         pDevice->uDIFS = C_SIFS_A + 2*C_SLOT_SHORT;
         pDevice->uCwMin = C_CWMIN_A;
         byMaxMin = 4;
-    }
-    else if (pDevice->byPacketType==PK_TYPE_11B) {//0000 0001 0000 0000,11b
+    } else if (pDevice->byPacketType==PK_TYPE_11B) { //0000 0001 0000 0000,11b
         pDevice->uSlot = C_SLOT_LONG;
         pDevice->uSIFS = C_SIFS_BG;
         pDevice->uDIFS = C_SIFS_BG + 2*C_SLOT_LONG;
-          pDevice->uCwMin = C_CWMIN_B;
+        pDevice->uCwMin = C_CWMIN_B;
         byMaxMin = 5;
-    }
-    else {// PK_TYPE_11GA & PK_TYPE_11GB
+    } else { // PK_TYPE_11GA & PK_TYPE_11GB
         BYTE byRate = 0;
         BOOL bOFDMRate = FALSE;
-	unsigned int ii = 0;
+        unsigned int ii = 0;
         PWLAN_IE_SUPP_RATES pItemRates = NULL;
 
         pDevice->uSIFS = C_SIFS_BG;
@@ -562,31 +546,30 @@ void vUpdateIFS(void *pDeviceHandler)
                         &byMaxMin);
 }
 
-void CARDvUpdateBasicTopRate(void *pDeviceHandler)
-{
-PSDevice    pDevice = (PSDevice) pDeviceHandler;
-BYTE byTopOFDM = RATE_24M, byTopCCK = RATE_1M;
-BYTE ii;
+void CARDvUpdateBasicTopRate(void *pDeviceHandler) {
+    PSDevice    pDevice = (PSDevice) pDeviceHandler;
+    BYTE byTopOFDM = RATE_24M, byTopCCK = RATE_1M;
+    BYTE ii;
 
-     //Determines the highest basic rate.
-     for (ii = RATE_54M; ii >= RATE_6M; ii --) {
-         if ( (pDevice->wBasicRate) & ((WORD)(1<<ii)) ) {
-             byTopOFDM = ii;
-             break;
-         }
-     }
-     pDevice->byTopOFDMBasicRate = byTopOFDM;
-
-     for (ii = RATE_11M;; ii --) {
-         if ( (pDevice->wBasicRate) & ((WORD)(1<<ii)) ) {
-             byTopCCK = ii;
-             break;
-         }
-         if (ii == RATE_1M)
+    //Determines the highest basic rate.
+    for (ii = RATE_54M; ii >= RATE_6M; ii --) {
+        if ( (pDevice->wBasicRate) & ((WORD)(1<<ii)) ) {
+            byTopOFDM = ii;
             break;
-     }
-     pDevice->byTopCCKBasicRate = byTopCCK;
- }
+        }
+    }
+    pDevice->byTopOFDMBasicRate = byTopOFDM;
+
+    for (ii = RATE_11M;; ii --) {
+        if ( (pDevice->wBasicRate) & ((WORD)(1<<ii)) ) {
+            byTopCCK = ii;
+            break;
+        }
+        if (ii == RATE_1M)
+            break;
+    }
+    pDevice->byTopCCKBasicRate = byTopCCK;
+}
 
 /*
  * Description: Set NIC Tx Basic Rate
@@ -601,10 +584,9 @@ BYTE ii;
  * Return Value: TRUE if succeeded; FALSE if failed.
  *
  */
-void CARDbAddBasicRate(void *pDeviceHandler, WORD wRateIdx)
-{
-PSDevice    pDevice = (PSDevice) pDeviceHandler;
-WORD wRate = (WORD)(1<<wRateIdx);
+void CARDbAddBasicRate(void *pDeviceHandler, WORD wRateIdx) {
+    PSDevice    pDevice = (PSDevice) pDeviceHandler;
+    WORD wRate = (WORD)(1<<wRateIdx);
 
     pDevice->wBasicRate |= wRate;
 
@@ -612,10 +594,9 @@ WORD wRate = (WORD)(1<<wRateIdx);
     CARDvUpdateBasicTopRate(pDevice);
 }
 
-BOOL CARDbIsOFDMinBasicRate(void *pDeviceHandler)
-{
-PSDevice    pDevice = (PSDevice) pDeviceHandler;
-int ii;
+BOOL CARDbIsOFDMinBasicRate(void *pDeviceHandler) {
+    PSDevice    pDevice = (PSDevice) pDeviceHandler;
+    int ii;
 
     for (ii = RATE_54M; ii >= RATE_6M; ii --) {
         if ((pDevice->wBasicRate) & ((WORD)(1<<ii)))
@@ -624,17 +605,14 @@ int ii;
     return FALSE;
 }
 
-BYTE CARDbyGetPktType(void *pDeviceHandler)
-{
+BYTE CARDbyGetPktType(void *pDeviceHandler) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
 
     if (pDevice->byBBType == BB_TYPE_11A || pDevice->byBBType == BB_TYPE_11B) {
         return (BYTE)pDevice->byBBType;
-    }
-    else if (CARDbIsOFDMinBasicRate(pDevice)) {
+    } else if (CARDbIsOFDMinBasicRate(pDevice)) {
         return PK_TYPE_11GA;
-    }
-    else {
+    } else {
         return PK_TYPE_11GB;
     }
 }
@@ -655,8 +633,7 @@ BYTE CARDbyGetPktType(void *pDeviceHandler)
  * Return Value: TSF Offset value
  *
  */
-QWORD CARDqGetTSFOffset (BYTE byRxRate, QWORD qwTSF1, QWORD qwTSF2)
-{
+QWORD CARDqGetTSFOffset (BYTE byRxRate, QWORD qwTSF1, QWORD qwTSF2) {
     QWORD   qwTSFOffset;
     WORD    wRxBcnTSFOffst = 0;
 
@@ -672,8 +649,7 @@ QWORD CARDqGetTSFOffset (BYTE byRxRate, QWORD qwTSF1, QWORD qwTSF2)
     if (LODWORD(qwTSF1) < LODWORD(qwTSF2)) {
         // if borrow needed
         HIDWORD(qwTSFOffset) = HIDWORD(qwTSF1) - HIDWORD(qwTSF2) - 1 ;
-    }
-    else {
+    } else {
         HIDWORD(qwTSFOffset) = HIDWORD(qwTSF1) - HIDWORD(qwTSF2);
     };
     return (qwTSFOffset);
@@ -697,8 +673,7 @@ QWORD CARDqGetTSFOffset (BYTE byRxRate, QWORD qwTSF1, QWORD qwTSF2)
  *
  */
 void CARDvAdjustTSF(void *pDeviceHandler, BYTE byRxRate,
-		    QWORD qwBSSTimestamp, QWORD qwLocalTSF)
-{
+                    QWORD qwBSSTimestamp, QWORD qwLocalTSF) {
 
     PSDevice        pDevice = (PSDevice) pDeviceHandler;
     QWORD           qwTSFOffset;
@@ -730,7 +705,7 @@ void CARDvAdjustTSF(void *pDeviceHandler, BYTE byRxRate,
                         0,
                         8,
                         pbyData
-                        );
+                       );
 
 }
 /*
@@ -746,8 +721,7 @@ void CARDvAdjustTSF(void *pDeviceHandler, BYTE byRxRate,
  * Return Value: TRUE if success; otherwise FALSE
  *
  */
-BOOL CARDbGetCurrentTSF(void *pDeviceHandler, PQWORD pqwCurrTSF)
-{
+BOOL CARDbGetCurrentTSF(void *pDeviceHandler, PQWORD pqwCurrTSF) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
 
     LODWORD(*pqwCurrTSF) = LODWORD(pDevice->qwCurrTSF);
@@ -768,8 +742,7 @@ BOOL CARDbGetCurrentTSF(void *pDeviceHandler, PQWORD pqwCurrTSF)
  * Return Value: TRUE if success; otherwise FALSE
  *
  */
-BOOL CARDbClearCurrentTSF(void *pDeviceHandler)
-{
+BOOL CARDbClearCurrentTSF(void *pDeviceHandler) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
 
     MACvRegBitsOn(pDevice,MAC_REG_TFTCTL,TFTCTL_TSFCNTRST);
@@ -794,8 +767,7 @@ BOOL CARDbClearCurrentTSF(void *pDeviceHandler)
  * Return Value: TSF value of next Beacon
  *
  */
-QWORD CARDqGetNextTBTT (QWORD qwTSF, WORD wBeaconInterval)
-{
+QWORD CARDqGetNextTBTT (QWORD qwTSF, WORD wBeaconInterval) {
 
     unsigned int    uLowNextTBTT;
     unsigned int    uHighRemain, uLowRemain;
@@ -834,8 +806,7 @@ QWORD CARDqGetNextTBTT (QWORD qwTSF, WORD wBeaconInterval)
  * Return Value: none
  *
  */
-void CARDvSetFirstNextTBTT(void *pDeviceHandler, WORD wBeaconInterval)
-{
+void CARDvSetFirstNextTBTT(void *pDeviceHandler, WORD wBeaconInterval) {
 
     PSDevice        pDevice = (PSDevice) pDeviceHandler;
     QWORD           qwNextTBTT;
@@ -867,7 +838,7 @@ void CARDvSetFirstNextTBTT(void *pDeviceHandler, WORD wBeaconInterval)
                         0,
                         8,
                         pbyData
-                        );
+                       );
 
     return;
 }
@@ -889,8 +860,7 @@ void CARDvSetFirstNextTBTT(void *pDeviceHandler, WORD wBeaconInterval)
  *
  */
 void CARDvUpdateNextTBTT(void *pDeviceHandler, QWORD qwTSF,
-			 WORD wBeaconInterval)
-{
+                         WORD wBeaconInterval) {
     PSDevice        pDevice = (PSDevice) pDeviceHandler;
     DWORD           dwLoTBTT,dwHiTBTT;
     BYTE            pbyData[8];
@@ -916,7 +886,7 @@ void CARDvUpdateNextTBTT(void *pDeviceHandler, QWORD qwTSF,
                         0,
                         8,
                         pbyData
-                        );
+                       );
 
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Card:Update Next TBTT[%8xh:%8xh] \n",(int)HIDWORD(qwTSF), (int)LODWORD(qwTSF));
@@ -936,10 +906,9 @@ void CARDvUpdateNextTBTT(void *pDeviceHandler, QWORD qwTSF,
  * Return Value: TRUE if success; otherwise FALSE
  *
  */
-BOOL CARDbRadioPowerOff(void *pDeviceHandler)
-{
-PSDevice    pDevice = (PSDevice) pDeviceHandler;
-BOOL bResult = TRUE;
+BOOL CARDbRadioPowerOff(void *pDeviceHandler) {
+    PSDevice    pDevice = (PSDevice) pDeviceHandler;
+    BOOL bResult = TRUE;
 
     //if (pDevice->bRadioOff == TRUE)
     //    return TRUE;
@@ -947,14 +916,14 @@ BOOL bResult = TRUE;
     pDevice->bRadioOff = TRUE;
 
     switch (pDevice->byRFType) {
-        case RF_AL2230:
-        case RF_AL2230S:
-        case RF_AIROHA7230:
-        case RF_VT3226:     //RobertYu:20051111
-        case RF_VT3226D0:
-        case RF_VT3342A0:   //RobertYu:20060609
-            MACvRegBitsOff(pDevice, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE2 | SOFTPWRCTL_SWPE3));
-            break;
+    case RF_AL2230:
+    case RF_AL2230S:
+    case RF_AIROHA7230:
+    case RF_VT3226:     //RobertYu:20051111
+    case RF_VT3226D0:
+    case RF_VT3342A0:   //RobertYu:20060609
+        MACvRegBitsOff(pDevice, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE2 | SOFTPWRCTL_SWPE3));
+        break;
     }
 
     MACvRegBitsOff(pDevice, MAC_REG_HOSTCR, HOSTCR_RXON);
@@ -977,10 +946,9 @@ BOOL bResult = TRUE;
  * Return Value: TRUE if success; otherwise FALSE
  *
  */
-BOOL CARDbRadioPowerOn(void *pDeviceHandler)
-{
-PSDevice    pDevice = (PSDevice) pDeviceHandler;
-BOOL bResult = TRUE;
+BOOL CARDbRadioPowerOn(void *pDeviceHandler) {
+    PSDevice    pDevice = (PSDevice) pDeviceHandler;
+    BOOL bResult = TRUE;
 
 
     if ((pDevice->bHWRadioOff == TRUE) || (pDevice->bRadioControlOff == TRUE)) {
@@ -997,30 +965,26 @@ BOOL bResult = TRUE;
     MACvRegBitsOn(pDevice, MAC_REG_HOSTCR, HOSTCR_RXON);
 
     switch (pDevice->byRFType) {
-        case RF_AL2230:
-        case RF_AL2230S:
-        case RF_AIROHA7230:
-        case RF_VT3226:     //RobertYu:20051111
-        case RF_VT3226D0:
-        case RF_VT3342A0:   //RobertYu:20060609
-            MACvRegBitsOn(pDevice, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE2 | SOFTPWRCTL_SWPE3));
-            break;
+    case RF_AL2230:
+    case RF_AL2230S:
+    case RF_AIROHA7230:
+    case RF_VT3226:     //RobertYu:20051111
+    case RF_VT3226D0:
+    case RF_VT3342A0:   //RobertYu:20060609
+        MACvRegBitsOn(pDevice, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE2 | SOFTPWRCTL_SWPE3));
+        break;
     }
 
     return bResult;
 }
 
-void CARDvSetBSSMode(void *pDeviceHandler)
-{
+void CARDvSetBSSMode(void *pDeviceHandler) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     // Set BB and packet type at the same time.//{{RobertYu:20050222, AL7230 have two TX PA output, only connet to b/g now
     // so in 11a mode need to set the MAC Reg0x4C to 11b/g mode to turn on PA
-    if( (pDevice->byRFType == RF_AIROHA7230 ) && (pDevice->byBBType == BB_TYPE_11A) )
-    {
+    if( (pDevice->byRFType == RF_AIROHA7230 ) && (pDevice->byBBType == BB_TYPE_11A) ) {
         MACvSetBBType(pDevice, BB_TYPE_11G);
-    }
-    else
-    {
+    } else {
         MACvSetBBType(pDevice, pDevice->byBBType);
     }
     pDevice->byPacketType = CARDbyGetPktType(pDevice);
@@ -1071,20 +1035,19 @@ void CARDvSetBSSMode(void *pDeviceHandler)
 -*/
 BOOL
 CARDbChannelSwitch (
-     void *pDeviceHandler,
-     BYTE             byMode,
-     BYTE             byNewChannel,
-     BYTE             byCount
-    )
-{
+    void *pDeviceHandler,
+    BYTE             byMode,
+    BYTE             byNewChannel,
+    BYTE             byCount
+) {
     PSDevice    pDevice = (PSDevice) pDeviceHandler;
     BOOL        bResult = TRUE;
 
     if (byCount == 0) {
         pDevice->sMgmtObj.uCurrChannel = byNewChannel;
-	CARDbSetMediaChannel(pDevice, byNewChannel);
+        CARDbSetMediaChannel(pDevice, byNewChannel);
 
-	return bResult;
+        return bResult;
     }
     pDevice->byChannelSwitchCount = byCount;
     pDevice->byNewChannel = byNewChannel;
@@ -1094,7 +1057,7 @@ CARDbChannelSwitch (
         //bResult=CARDbStopTxPacket(pDevice, PKT_TYPE_802_11_ALL);
         pDevice->bStopDataPkt = TRUE;
     }
-	return bResult;
+    return bResult;
 }
 
 

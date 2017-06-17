@@ -93,12 +93,12 @@ extern unsigned long mips_machtype;
  * or specified on the command line.
  */
 struct boot_mem_map {
-	int nr_map;
-	struct boot_mem_map_entry {
-		phys_t addr;	/* start of memory segment */
-		phys_t size;	/* size of memory segment */
-		long type;		/* type of memory segment */
-	} map[BOOT_MEM_MAP_MAX];
+    int nr_map;
+    struct boot_mem_map_entry {
+        phys_t addr;	/* start of memory segment */
+        phys_t size;	/* size of memory segment */
+        long type;		/* type of memory segment */
+    } map[BOOT_MEM_MAP_MAX];
 };
 
 extern struct boot_mem_map boot_mem_map;
@@ -109,7 +109,7 @@ extern void prom_init(void);
 extern void prom_free_prom_memory(void);
 
 extern void free_init_pages(const char *what,
-			    unsigned long begin, unsigned long end);
+                            unsigned long begin, unsigned long end);
 
 /*
  * Initial kernel command line, usually setup by prom_init()

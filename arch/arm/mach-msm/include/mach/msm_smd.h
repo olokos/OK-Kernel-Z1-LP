@@ -43,40 +43,40 @@ struct cpumask;
  * SMD, the entry will only exist in this enum.
  */
 enum {
-	SMD_APPS = SMEM_APPS,
-	SMD_MODEM = SMEM_MODEM,
-	SMD_Q6 = SMEM_Q6,
-	SMD_DSPS = SMEM_DSPS,
-	SMD_TZ = SMEM_DSPS,
-	SMD_WCNSS = SMEM_WCNSS,
-	SMD_MODEM_Q6_FW = SMEM_MODEM_Q6_FW,
-	SMD_RPM = SMEM_RPM,
-	NUM_SMD_SUBSYSTEMS,
+    SMD_APPS = SMEM_APPS,
+    SMD_MODEM = SMEM_MODEM,
+    SMD_Q6 = SMEM_Q6,
+    SMD_DSPS = SMEM_DSPS,
+    SMD_TZ = SMEM_DSPS,
+    SMD_WCNSS = SMEM_WCNSS,
+    SMD_MODEM_Q6_FW = SMEM_MODEM_Q6_FW,
+    SMD_RPM = SMEM_RPM,
+    NUM_SMD_SUBSYSTEMS,
 };
 
 enum {
-	SMD_APPS_MODEM = 0,
-	SMD_APPS_QDSP,
-	SMD_MODEM_QDSP,
-	SMD_APPS_DSPS,
-	SMD_MODEM_DSPS,
-	SMD_QDSP_DSPS,
-	SMD_APPS_WCNSS,
-	SMD_MODEM_WCNSS,
-	SMD_QDSP_WCNSS,
-	SMD_DSPS_WCNSS,
-	SMD_APPS_Q6FW,
-	SMD_MODEM_Q6FW,
-	SMD_QDSP_Q6FW,
-	SMD_DSPS_Q6FW,
-	SMD_WCNSS_Q6FW,
-	SMD_APPS_RPM,
-	SMD_MODEM_RPM,
-	SMD_QDSP_RPM,
-	SMD_WCNSS_RPM,
-	SMD_TZ_RPM,
-	SMD_NUM_TYPE,
-	SMD_LOOPBACK_TYPE = 100,
+    SMD_APPS_MODEM = 0,
+    SMD_APPS_QDSP,
+    SMD_MODEM_QDSP,
+    SMD_APPS_DSPS,
+    SMD_MODEM_DSPS,
+    SMD_QDSP_DSPS,
+    SMD_APPS_WCNSS,
+    SMD_MODEM_WCNSS,
+    SMD_QDSP_WCNSS,
+    SMD_DSPS_WCNSS,
+    SMD_APPS_Q6FW,
+    SMD_MODEM_Q6FW,
+    SMD_QDSP_Q6FW,
+    SMD_DSPS_Q6FW,
+    SMD_WCNSS_Q6FW,
+    SMD_APPS_RPM,
+    SMD_MODEM_RPM,
+    SMD_QDSP_RPM,
+    SMD_WCNSS_RPM,
+    SMD_TZ_RPM,
+    SMD_NUM_TYPE,
+    SMD_LOOPBACK_TYPE = 100,
 
 };
 
@@ -93,17 +93,17 @@ enum {
  */
 
 struct smd_irq_config {
-	/* incoming interrupt config */
-	const char *irq_name;
-	unsigned long flags;
-	int irq_id;
-	const char *device_name;
-	const void *dev_id;
+    /* incoming interrupt config */
+    const char *irq_name;
+    unsigned long flags;
+    int irq_id;
+    const char *device_name;
+    const void *dev_id;
 
-	/* outgoing interrupt config */
-	uint32_t out_bit_pos;
-	void __iomem *out_base;
-	uint32_t out_offset;
+    /* outgoing interrupt config */
+    uint32_t out_bit_pos;
+    void __iomem *out_base;
+    uint32_t out_offset;
 };
 
 /*
@@ -119,12 +119,12 @@ struct smd_irq_config {
  *
  */
 struct smd_subsystem_config {
-	unsigned irq_config_id;
-	const char *subsys_name;
-	int edge;
+    unsigned irq_config_id;
+    const char *subsys_name;
+    int edge;
 
-	struct smd_irq_config smd_int;
-	struct smd_irq_config smsm_int;
+    struct smd_irq_config smd_int;
+    struct smd_irq_config smsm_int;
 
 };
 
@@ -134,19 +134,19 @@ struct smd_subsystem_config {
  * @disable_smsm_reset_handshake
  */
 struct smd_subsystem_restart_config {
-	int disable_smsm_reset_handshake;
+    int disable_smsm_reset_handshake;
 };
 
 struct smd_platform {
-	uint32_t num_ss_configs;
-	struct smd_subsystem_config *smd_ss_configs;
-	struct smd_subsystem_restart_config *smd_ssr_config;
+    uint32_t num_ss_configs;
+    struct smd_subsystem_config *smd_ss_configs;
+    struct smd_subsystem_restart_config *smd_ssr_config;
 };
 
 #ifdef CONFIG_MSM_SMD
 /* warning: notify() may be called before open returns */
 int smd_open(const char *name, smd_channel_t **ch, void *priv,
-	     void (*notify)(void *priv, unsigned event));
+             void (*notify)(void *priv, unsigned event));
 
 int smd_close(smd_channel_t *ch);
 
@@ -194,7 +194,7 @@ int smd_tiocmset(smd_channel_t *ch, unsigned int set, unsigned int clear);
 int
 smd_tiocmset_from_cb(smd_channel_t *ch, unsigned int set, unsigned int clear);
 int smd_named_open_on_edge(const char *name, uint32_t edge, smd_channel_t **_ch,
-			   void *priv, void (*notify)(void *, unsigned));
+                           void *priv, void (*notify)(void *, unsigned));
 
 /* Tells the other end of the smd channel that this end wants to recieve
  * interrupts when the written data is read.  Read interrupts should only
@@ -226,7 +226,7 @@ void smd_disable_read_intr(smd_channel_t *ch);
  * use cases such as power-collapse sequencing.
  */
 int smd_mask_receive_interrupt(smd_channel_t *ch, bool mask,
-		const struct cpumask *cpumask);
+                               const struct cpumask *cpumask);
 
 /* Starts a packet transaction.  The size of the packet may exceed the total
  * size of the smd ring buffer.
@@ -331,139 +331,113 @@ int smd_remote_ss_to_edge(const char *name);
 #else
 
 static inline int smd_open(const char *name, smd_channel_t **ch, void *priv,
-	     void (*notify)(void *priv, unsigned event))
-{
-	return -ENODEV;
+                           void (*notify)(void *priv, unsigned event)) {
+    return -ENODEV;
 }
 
-static inline int smd_close(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_close(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int smd_read(smd_channel_t *ch, void *data, int len)
-{
-	return -ENODEV;
+static inline int smd_read(smd_channel_t *ch, void *data, int len) {
+    return -ENODEV;
 }
 
-static inline int smd_read_from_cb(smd_channel_t *ch, void *data, int len)
-{
-	return -ENODEV;
+static inline int smd_read_from_cb(smd_channel_t *ch, void *data, int len) {
+    return -ENODEV;
 }
 
-static inline int smd_read_user_buffer(smd_channel_t *ch, void *data, int len)
-{
-	return -ENODEV;
+static inline int smd_read_user_buffer(smd_channel_t *ch, void *data, int len) {
+    return -ENODEV;
 }
 
-static inline int smd_write(smd_channel_t *ch, const void *data, int len)
-{
-	return -ENODEV;
+static inline int smd_write(smd_channel_t *ch, const void *data, int len) {
+    return -ENODEV;
 }
 
 static inline int
-smd_write_user_buffer(smd_channel_t *ch, const void *data, int len)
-{
-	return -ENODEV;
+smd_write_user_buffer(smd_channel_t *ch, const void *data, int len) {
+    return -ENODEV;
 }
 
-static inline int smd_write_avail(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_write_avail(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int smd_read_avail(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_read_avail(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int smd_cur_packet_size(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_cur_packet_size(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int smd_tiocmget(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_tiocmget(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
 static inline int
-smd_tiocmset(smd_channel_t *ch, unsigned int set, unsigned int clear)
-{
-	return -ENODEV;
+smd_tiocmset(smd_channel_t *ch, unsigned int set, unsigned int clear) {
+    return -ENODEV;
 }
 
 static inline int
-smd_tiocmset_from_cb(smd_channel_t *ch, unsigned int set, unsigned int clear)
-{
-	return -ENODEV;
+smd_tiocmset_from_cb(smd_channel_t *ch, unsigned int set, unsigned int clear) {
+    return -ENODEV;
 }
 
 static inline int
 smd_named_open_on_edge(const char *name, uint32_t edge, smd_channel_t **_ch,
-			   void *priv, void (*notify)(void *, unsigned))
-{
-	return -ENODEV;
+                       void *priv, void (*notify)(void *, unsigned)) {
+    return -ENODEV;
 }
 
-static inline void smd_enable_read_intr(smd_channel_t *ch)
-{
+static inline void smd_enable_read_intr(smd_channel_t *ch) {
 }
 
-static inline void smd_disable_read_intr(smd_channel_t *ch)
-{
+static inline void smd_disable_read_intr(smd_channel_t *ch) {
 }
 
 static inline int smd_mask_receive_interrupt(smd_channel_t *ch, bool mask,
-		struct cpumask *cpumask)
-{
-	return -ENODEV;
+        struct cpumask *cpumask) {
+    return -ENODEV;
 }
 
-static inline int smd_write_start(smd_channel_t *ch, int len)
-{
-	return -ENODEV;
+static inline int smd_write_start(smd_channel_t *ch, int len) {
+    return -ENODEV;
 }
 
 static inline int
-smd_write_segment(smd_channel_t *ch, void *data, int len, int user_buf)
-{
-	return -ENODEV;
+smd_write_segment(smd_channel_t *ch, void *data, int len, int user_buf) {
+    return -ENODEV;
 }
 
-static inline int smd_write_end(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_write_end(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int smd_write_segment_avail(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_write_segment_avail(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline const char *smd_edge_to_subsystem(uint32_t type)
-{
-	return NULL;
+static inline const char *smd_edge_to_subsystem(uint32_t type) {
+    return NULL;
 }
 
-static inline const char *smd_pid_to_subsystem(uint32_t pid)
-{
-	return NULL;
+static inline const char *smd_pid_to_subsystem(uint32_t pid) {
+    return NULL;
 }
 
-static inline int smd_is_pkt_avail(smd_channel_t *ch)
-{
-	return -ENODEV;
+static inline int smd_is_pkt_avail(smd_channel_t *ch) {
+    return -ENODEV;
 }
 
-static inline int __init msm_smd_init(void)
-{
-	return 0;
+static inline int __init msm_smd_init(void) {
+    return 0;
 }
 
-static inline int smd_remote_ss_to_edge(const char *name)
-{
-	return -EINVAL;
+static inline int smd_remote_ss_to_edge(const char *name) {
+    return -EINVAL;
 }
 #endif
 

@@ -52,16 +52,14 @@
 #define PMC_ABORT
 
 /* Host power sources. */
-typedef enum ePowerSource
-{
+typedef enum ePowerSource {
     AC_POWER,  /* host is operating from AC power */
     BATTERY_POWER  /* host is operating from battery power */
 } tPowerSource;
 
 
 /* Power save check routine list entry. */
-typedef struct sPowerSaveCheckEntry
-{
+typedef struct sPowerSaveCheckEntry {
     tListElem link;  /* list links */
     tANI_BOOLEAN (*checkRoutine) (void *checkContext);  /* power save check routine */
     void *checkContext;  /* value to be passed as parameter to routine specified above */
@@ -69,16 +67,14 @@ typedef struct sPowerSaveCheckEntry
 
 
 /* Device Power State update indication list entry. */
-typedef struct sDeviceStateUpdateIndEntry
-{
+typedef struct sDeviceStateUpdateIndEntry {
     tListElem link;  /* list links */
     void (*callbackRoutine) (void *callbackContext, tPmcState pmcState); /* Callback routine to be invoked when pmc changes device state */
     void *callbackContext;  /* value to be passed as parameter to routine specified above */
 } tDeviceStateUpdateIndEntry, *tpDeviceStateUpdateIndEntry;
 
 /* Request full power callback routine list entry. */
-typedef struct sRequestFullPowerEntry
-{
+typedef struct sRequestFullPowerEntry {
     tListElem link;  /* list links */
     void (*callbackRoutine) (void *callbackContext, eHalStatus status);  /* routine to call when full power is restored */
     void *callbackContext;  /* value to be passed as parameter to routine specified above */
@@ -86,8 +82,7 @@ typedef struct sRequestFullPowerEntry
 
 
 /* Request BMPS callback routine list entry. */
-typedef struct sRequestBmpsEntry
-{
+typedef struct sRequestBmpsEntry {
     tListElem link;  /* list links */
 
     /* routine to call when BMPS request succeeded/failed */
@@ -100,8 +95,7 @@ typedef struct sRequestBmpsEntry
 
 
 /* Start U-APSD callback routine list entry. */
-typedef struct sStartUapsdEntry
-{
+typedef struct sStartUapsdEntry {
     tListElem link;  /* list links */
 
     /* routine to call when Uapsd Start succeeded/failed*/
@@ -112,14 +106,12 @@ typedef struct sStartUapsdEntry
 
 } tStartUapsdEntry, *tpStartUapsdEntry;
 
-typedef struct sPmcDeferredMsg
-{
+typedef struct sPmcDeferredMsg {
     tListElem link;
     tpAniSirGlobal pMac;
     tANI_U16 messageType;
     tANI_U16 size;  //number of bytes in u.data
-    union
-    {
+    union {
         tSirPowerSaveCfg powerSaveConfig;
         tSirWowlAddBcastPtrn wowlAddPattern;
         tSirWowlDelBcastPtrn wowlDelPattern;
@@ -130,8 +122,7 @@ typedef struct sPmcDeferredMsg
 
 
 /* Current PMC information for a particular device. */
-typedef struct sPmcInfo
-{
+typedef struct sPmcInfo {
     tPowerSource powerSource;  /* host power source */
     tPmcSwitchState hwWlanSwitchState;  /* Hardware WLAN Switch state */
     tPmcSwitchState swWlanSwitchState;  /* Software WLAN Switch state */

@@ -380,194 +380,194 @@
 /* UDC CSR's */
 struct udc_csrs {
 
-	/* sca - setup command address */
-	u32 sca;
+    /* sca - setup command address */
+    u32 sca;
 
-	/* ep ne's */
-	u32 ne[UDC_USED_EP_NUM];
+    /* ep ne's */
+    u32 ne[UDC_USED_EP_NUM];
 } __attribute__ ((packed));
 
 /* AHB subsystem CSR registers */
 struct udc_regs {
 
-	/* device configuration */
-	u32 cfg;
+    /* device configuration */
+    u32 cfg;
 
-	/* device control */
-	u32 ctl;
+    /* device control */
+    u32 ctl;
 
-	/* device status */
-	u32 sts;
+    /* device status */
+    u32 sts;
 
-	/* device interrupt */
-	u32 irqsts;
+    /* device interrupt */
+    u32 irqsts;
 
-	/* device interrupt mask */
-	u32 irqmsk;
+    /* device interrupt mask */
+    u32 irqmsk;
 
-	/* endpoint interrupt */
-	u32 ep_irqsts;
+    /* endpoint interrupt */
+    u32 ep_irqsts;
 
-	/* endpoint interrupt mask */
-	u32 ep_irqmsk;
+    /* endpoint interrupt mask */
+    u32 ep_irqmsk;
 } __attribute__ ((packed));
 
 /* endpoint specific registers */
 struct udc_ep_regs {
 
-	/* endpoint control */
-	u32 ctl;
+    /* endpoint control */
+    u32 ctl;
 
-	/* endpoint status */
-	u32 sts;
+    /* endpoint status */
+    u32 sts;
 
-	/* endpoint buffer size in/ receive packet frame number out */
-	u32 bufin_framenum;
+    /* endpoint buffer size in/ receive packet frame number out */
+    u32 bufin_framenum;
 
-	/* endpoint buffer size out/max packet size */
-	u32 bufout_maxpkt;
+    /* endpoint buffer size out/max packet size */
+    u32 bufout_maxpkt;
 
-	/* endpoint setup buffer pointer */
-	u32 subptr;
+    /* endpoint setup buffer pointer */
+    u32 subptr;
 
-	/* endpoint data descriptor pointer */
-	u32 desptr;
+    /* endpoint data descriptor pointer */
+    u32 desptr;
 
-	/* reserverd */
-	u32 reserved;
+    /* reserverd */
+    u32 reserved;
 
-	/* write/read confirmation */
-	u32 confirm;
+    /* write/read confirmation */
+    u32 confirm;
 
 } __attribute__ ((packed));
 
 /* control data DMA desc */
 struct udc_stp_dma {
-	/* status quadlet */
-	u32	status;
-	/* reserved */
-	u32	_reserved;
-	/* first setup word */
-	u32	data12;
-	/* second setup word */
-	u32	data34;
+    /* status quadlet */
+    u32	status;
+    /* reserved */
+    u32	_reserved;
+    /* first setup word */
+    u32	data12;
+    /* second setup word */
+    u32	data34;
 } __attribute__ ((aligned (16)));
 
 /* normal data DMA desc */
 struct udc_data_dma {
-	/* status quadlet */
-	u32	status;
-	/* reserved */
-	u32	_reserved;
-	/* buffer pointer */
-	u32	bufptr;
-	/* next descriptor pointer */
-	u32	next;
+    /* status quadlet */
+    u32	status;
+    /* reserved */
+    u32	_reserved;
+    /* buffer pointer */
+    u32	bufptr;
+    /* next descriptor pointer */
+    u32	next;
 } __attribute__ ((aligned (16)));
 
 /* request packet */
 struct udc_request {
-	/* embedded gadget ep */
-	struct usb_request		req;
+    /* embedded gadget ep */
+    struct usb_request		req;
 
-	/* flags */
-	unsigned			dma_going : 1,
-					dma_mapping : 1,
-					dma_done : 1;
-	/* phys. address */
-	dma_addr_t			td_phys;
-	/* first dma desc. of chain */
-	struct udc_data_dma		*td_data;
-	/* last dma desc. of chain */
-	struct udc_data_dma		*td_data_last;
-	struct list_head		queue;
+    /* flags */
+    unsigned			dma_going : 1,
+                        dma_mapping : 1,
+                        dma_done : 1;
+    /* phys. address */
+    dma_addr_t			td_phys;
+    /* first dma desc. of chain */
+    struct udc_data_dma		*td_data;
+    /* last dma desc. of chain */
+    struct udc_data_dma		*td_data_last;
+    struct list_head		queue;
 
-	/* chain length */
-	unsigned			chain_len;
+    /* chain length */
+    unsigned			chain_len;
 
 };
 
 /* UDC specific endpoint parameters */
 struct udc_ep {
-	struct usb_ep			ep;
-	struct udc_ep_regs __iomem	*regs;
-	u32 __iomem			*txfifo;
-	u32 __iomem			*dma;
-	dma_addr_t			td_phys;
-	dma_addr_t			td_stp_dma;
-	struct udc_stp_dma		*td_stp;
-	struct udc_data_dma		*td;
-	/* temp request */
-	struct udc_request		*req;
-	unsigned			req_used;
-	unsigned			req_completed;
-	/* dummy DMA desc for BNA dummy */
-	struct udc_request		*bna_dummy_req;
-	unsigned			bna_occurred;
+    struct usb_ep			ep;
+    struct udc_ep_regs __iomem	*regs;
+    u32 __iomem			*txfifo;
+    u32 __iomem			*dma;
+    dma_addr_t			td_phys;
+    dma_addr_t			td_stp_dma;
+    struct udc_stp_dma		*td_stp;
+    struct udc_data_dma		*td;
+    /* temp request */
+    struct udc_request		*req;
+    unsigned			req_used;
+    unsigned			req_completed;
+    /* dummy DMA desc for BNA dummy */
+    struct udc_request		*bna_dummy_req;
+    unsigned			bna_occurred;
 
-	/* NAK state */
-	unsigned			naking;
+    /* NAK state */
+    unsigned			naking;
 
-	struct udc			*dev;
+    struct udc			*dev;
 
-	/* queue for requests */
-	struct list_head		queue;
-	const struct usb_endpoint_descriptor	*desc;
-	unsigned			halted;
-	unsigned			cancel_transfer;
-	unsigned			num : 5,
-					fifo_depth : 14,
-					in : 1;
+    /* queue for requests */
+    struct list_head		queue;
+    const struct usb_endpoint_descriptor	*desc;
+    unsigned			halted;
+    unsigned			cancel_transfer;
+    unsigned			num : 5,
+                        fifo_depth : 14,
+                        in : 1;
 };
 
 /* device struct */
 struct udc {
-	struct usb_gadget		gadget;
-	spinlock_t			lock;	/* protects all state */
-	/* all endpoints */
-	struct udc_ep			ep[UDC_EP_NUM];
-	struct usb_gadget_driver	*driver;
-	/* operational flags */
-	unsigned			active : 1,
-					stall_ep0in : 1,
-					waiting_zlp_ack_ep0in : 1,
-					set_cfg_not_acked : 1,
-					irq_registered : 1,
-					data_ep_enabled : 1,
-					data_ep_queued : 1,
-					mem_region : 1,
-					sys_suspended : 1,
-					connected;
+    struct usb_gadget		gadget;
+    spinlock_t			lock;	/* protects all state */
+    /* all endpoints */
+    struct udc_ep			ep[UDC_EP_NUM];
+    struct usb_gadget_driver	*driver;
+    /* operational flags */
+    unsigned			active : 1,
+                        stall_ep0in : 1,
+                        waiting_zlp_ack_ep0in : 1,
+                        set_cfg_not_acked : 1,
+                        irq_registered : 1,
+                        data_ep_enabled : 1,
+                        data_ep_queued : 1,
+                        mem_region : 1,
+                        sys_suspended : 1,
+                        connected;
 
-	u16				chiprev;
+    u16				chiprev;
 
-	/* registers */
-	struct pci_dev			*pdev;
-	struct udc_csrs __iomem		*csr;
-	struct udc_regs __iomem		*regs;
-	struct udc_ep_regs __iomem	*ep_regs;
-	u32 __iomem			*rxfifo;
-	u32 __iomem			*txfifo;
+    /* registers */
+    struct pci_dev			*pdev;
+    struct udc_csrs __iomem		*csr;
+    struct udc_regs __iomem		*regs;
+    struct udc_ep_regs __iomem	*ep_regs;
+    u32 __iomem			*rxfifo;
+    u32 __iomem			*txfifo;
 
-	/* DMA desc pools */
-	struct pci_pool			*data_requests;
-	struct pci_pool			*stp_requests;
+    /* DMA desc pools */
+    struct pci_pool			*data_requests;
+    struct pci_pool			*stp_requests;
 
-	/* device data */
-	unsigned long			phys_addr;
-	void __iomem			*virt_addr;
-	unsigned			irq;
+    /* device data */
+    unsigned long			phys_addr;
+    void __iomem			*virt_addr;
+    unsigned			irq;
 
-	/* states */
-	u16				cur_config;
-	u16				cur_intf;
-	u16				cur_alt;
+    /* states */
+    u16				cur_config;
+    u16				cur_intf;
+    u16				cur_alt;
 };
 
 /* setup request data */
 union udc_setup_data {
-	u32			data[2];
-	struct usb_ctrlrequest	request;
+    u32			data[2];
+    struct usb_ctrlrequest	request;
 };
 
 /*

@@ -19,17 +19,17 @@
 #include <asm/timer64.h>
 
 struct timer_regs {
-	u32	reserved0;
-	u32	emumgt;
-	u32	reserved1;
-	u32	reserved2;
-	u32	cntlo;
-	u32	cnthi;
-	u32	prdlo;
-	u32	prdhi;
-	u32	tcr;
-	u32	tgcr;
-	u32	wdtcr;
+    u32	reserved0;
+    u32	emumgt;
+    u32	reserved1;
+    u32	reserved2;
+    u32	cntlo;
+    u32	cnthi;
+    u32	prdlo;
+    u32	prdhi;
+    u32	tcr;
+    u32	tgcr;
+    u32	wdtcr;
 };
 
 static struct timer_regs __iomem *timer;
@@ -77,169 +77,162 @@ static struct timer_regs __iomem *timer;
 static int timer64_mode;
 static int timer64_devstate_id = -1;
 
-static void timer64_config(unsigned long period)
-{
-	u32 tcr = soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK;
+static void timer64_config(unsigned long period) {
+    u32 tcr = soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK;
 
-	soc_writel(tcr, &timer->tcr);
-	soc_writel(period - 1, &timer->prdlo);
-	soc_writel(0, &timer->cntlo);
-	tcr |= timer64_mode;
-	soc_writel(tcr, &timer->tcr);
+    soc_writel(tcr, &timer->tcr);
+    soc_writel(period - 1, &timer->prdlo);
+    soc_writel(0, &timer->cntlo);
+    tcr |= timer64_mode;
+    soc_writel(tcr, &timer->tcr);
 }
 
-static void timer64_enable(void)
-{
-	u32 val;
+static void timer64_enable(void) {
+    u32 val;
 
-	if (timer64_devstate_id >= 0)
-		dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_ENABLED);
+    if (timer64_devstate_id >= 0)
+        dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_ENABLED);
 
-	/* disable timer, reset count */
-	soc_writel(soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK, &timer->tcr);
-	soc_writel(0, &timer->prdlo);
+    /* disable timer, reset count */
+    soc_writel(soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK, &timer->tcr);
+    soc_writel(0, &timer->prdlo);
 
-	/* use internal clock and 1 cycle pulse width */
-	val = soc_readl(&timer->tcr);
-	soc_writel(val & ~(TCR_CLKSRCLO | TCR_PWIDLO_MASK), &timer->tcr);
+    /* use internal clock and 1 cycle pulse width */
+    val = soc_readl(&timer->tcr);
+    soc_writel(val & ~(TCR_CLKSRCLO | TCR_PWIDLO_MASK), &timer->tcr);
 
-	/* dual 32-bit unchained mode */
-	val = soc_readl(&timer->tgcr) & ~TGCR_TIMMODE_MASK;
-	soc_writel(val, &timer->tgcr);
-	soc_writel(val | (TGCR_TIMLORS | TGCR_TIMMODE_UD32), &timer->tgcr);
+    /* dual 32-bit unchained mode */
+    val = soc_readl(&timer->tgcr) & ~TGCR_TIMMODE_MASK;
+    soc_writel(val, &timer->tgcr);
+    soc_writel(val | (TGCR_TIMLORS | TGCR_TIMMODE_UD32), &timer->tgcr);
 }
 
-static void timer64_disable(void)
-{
-	/* disable timer, reset count */
-	soc_writel(soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK, &timer->tcr);
-	soc_writel(0, &timer->prdlo);
+static void timer64_disable(void) {
+    /* disable timer, reset count */
+    soc_writel(soc_readl(&timer->tcr) & ~TCR_ENAMODELO_MASK, &timer->tcr);
+    soc_writel(0, &timer->prdlo);
 
-	if (timer64_devstate_id >= 0)
-		dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_DISABLED);
+    if (timer64_devstate_id >= 0)
+        dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_DISABLED);
 }
 
 static int next_event(unsigned long delta,
-		      struct clock_event_device *evt)
-{
-	timer64_config(delta);
-	return 0;
+                      struct clock_event_device *evt) {
+    timer64_config(delta);
+    return 0;
 }
 
 static void set_clock_mode(enum clock_event_mode mode,
-			   struct clock_event_device *evt)
-{
-	switch (mode) {
-	case CLOCK_EVT_MODE_PERIODIC:
-		timer64_enable();
-		timer64_mode = TIMER64_MODE_PERIODIC;
-		timer64_config(TIMER64_RATE / HZ);
-		break;
-	case CLOCK_EVT_MODE_ONESHOT:
-		timer64_enable();
-		timer64_mode = TIMER64_MODE_ONE_SHOT;
-		break;
-	case CLOCK_EVT_MODE_UNUSED:
-	case CLOCK_EVT_MODE_SHUTDOWN:
-		timer64_mode = TIMER64_MODE_DISABLED;
-		timer64_disable();
-		break;
-	case CLOCK_EVT_MODE_RESUME:
-		break;
-	}
+                           struct clock_event_device *evt) {
+    switch (mode) {
+    case CLOCK_EVT_MODE_PERIODIC:
+        timer64_enable();
+        timer64_mode = TIMER64_MODE_PERIODIC;
+        timer64_config(TIMER64_RATE / HZ);
+        break;
+    case CLOCK_EVT_MODE_ONESHOT:
+        timer64_enable();
+        timer64_mode = TIMER64_MODE_ONE_SHOT;
+        break;
+    case CLOCK_EVT_MODE_UNUSED:
+    case CLOCK_EVT_MODE_SHUTDOWN:
+        timer64_mode = TIMER64_MODE_DISABLED;
+        timer64_disable();
+        break;
+    case CLOCK_EVT_MODE_RESUME:
+        break;
+    }
 }
 
 static struct clock_event_device t64_clockevent_device = {
-	.name		= "TIMER64_EVT32_TIMER",
-	.features	= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_PERIODIC,
-	.rating		= 200,
-	.set_mode	= set_clock_mode,
-	.set_next_event	= next_event,
+    .name		= "TIMER64_EVT32_TIMER",
+    .features	= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_PERIODIC,
+    .rating		= 200,
+    .set_mode	= set_clock_mode,
+    .set_next_event	= next_event,
 };
 
-static irqreturn_t timer_interrupt(int irq, void *dev_id)
-{
-	struct clock_event_device *cd = &t64_clockevent_device;
+static irqreturn_t timer_interrupt(int irq, void *dev_id) {
+    struct clock_event_device *cd = &t64_clockevent_device;
 
-	cd->event_handler(cd);
+    cd->event_handler(cd);
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 static struct irqaction timer_iact = {
-	.name		= "timer",
-	.flags		= IRQF_TIMER,
-	.handler	= timer_interrupt,
-	.dev_id		= &t64_clockevent_device,
+    .name		= "timer",
+    .flags		= IRQF_TIMER,
+    .handler	= timer_interrupt,
+    .dev_id		= &t64_clockevent_device,
 };
 
-void __init timer64_init(void)
-{
-	struct clock_event_device *cd = &t64_clockevent_device;
-	struct device_node *np, *first = NULL;
-	u32 val;
-	int err, found = 0;
+void __init timer64_init(void) {
+    struct clock_event_device *cd = &t64_clockevent_device;
+    struct device_node *np, *first = NULL;
+    u32 val;
+    int err, found = 0;
 
-	for_each_compatible_node(np, NULL, "ti,c64x+timer64") {
-		err = of_property_read_u32(np, "ti,core-mask", &val);
-		if (!err) {
-			if (val & (1 << get_coreid())) {
-				found = 1;
-				break;
-			}
-		} else if (!first)
-			first = np;
-	}
-	if (!found) {
-		/* try first one with no core-mask */
-		if (first)
-			np = of_node_get(first);
-		else {
-			pr_debug("Cannot find ti,c64x+timer64 timer.\n");
-			return;
-		}
-	}
+    for_each_compatible_node(np, NULL, "ti,c64x+timer64") {
+        err = of_property_read_u32(np, "ti,core-mask", &val);
+        if (!err) {
+            if (val & (1 << get_coreid())) {
+                found = 1;
+                break;
+            }
+        } else if (!first)
+            first = np;
+    }
+    if (!found) {
+        /* try first one with no core-mask */
+        if (first)
+            np = of_node_get(first);
+        else {
+            pr_debug("Cannot find ti,c64x+timer64 timer.\n");
+            return;
+        }
+    }
 
-	timer = of_iomap(np, 0);
-	if (!timer) {
-		pr_debug("%s: Cannot map timer registers.\n", np->full_name);
-		goto out;
-	}
-	pr_debug("%s: Timer registers=%p.\n", np->full_name, timer);
+    timer = of_iomap(np, 0);
+    if (!timer) {
+        pr_debug("%s: Cannot map timer registers.\n", np->full_name);
+        goto out;
+    }
+    pr_debug("%s: Timer registers=%p.\n", np->full_name, timer);
 
-	cd->irq	= irq_of_parse_and_map(np, 0);
-	if (cd->irq == NO_IRQ) {
-		pr_debug("%s: Cannot find interrupt.\n", np->full_name);
-		iounmap(timer);
-		goto out;
-	}
+    cd->irq	= irq_of_parse_and_map(np, 0);
+    if (cd->irq == NO_IRQ) {
+        pr_debug("%s: Cannot find interrupt.\n", np->full_name);
+        iounmap(timer);
+        goto out;
+    }
 
-	/* If there is a device state control, save the ID. */
-	err = of_property_read_u32(np, "ti,dscr-dev-enable", &val);
-	if (!err) {
-		timer64_devstate_id = val;
+    /* If there is a device state control, save the ID. */
+    err = of_property_read_u32(np, "ti,dscr-dev-enable", &val);
+    if (!err) {
+        timer64_devstate_id = val;
 
-		/*
-		 * It is necessary to enable the timer block here because
-		 * the TIMER_DIVISOR macro needs to read a timer register
-		 * to get the divisor.
-		 */
-		dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_ENABLED);
-	}
+        /*
+         * It is necessary to enable the timer block here because
+         * the TIMER_DIVISOR macro needs to read a timer register
+         * to get the divisor.
+         */
+        dscr_set_devstate(timer64_devstate_id, DSCR_DEVSTATE_ENABLED);
+    }
 
-	pr_debug("%s: Timer irq=%d.\n", np->full_name, cd->irq);
+    pr_debug("%s: Timer irq=%d.\n", np->full_name, cd->irq);
 
-	clockevents_calc_mult_shift(cd, c6x_core_freq / TIMER_DIVISOR, 5);
+    clockevents_calc_mult_shift(cd, c6x_core_freq / TIMER_DIVISOR, 5);
 
-	cd->max_delta_ns	= clockevent_delta2ns(0x7fffffff, cd);
-	cd->min_delta_ns	= clockevent_delta2ns(250, cd);
+    cd->max_delta_ns	= clockevent_delta2ns(0x7fffffff, cd);
+    cd->min_delta_ns	= clockevent_delta2ns(250, cd);
 
-	cd->cpumask		= cpumask_of(smp_processor_id());
+    cd->cpumask		= cpumask_of(smp_processor_id());
 
-	clockevents_register_device(cd);
-	setup_irq(cd->irq, &timer_iact);
+    clockevents_register_device(cd);
+    setup_irq(cd->irq, &timer_iact);
 
 out:
-	of_node_put(np);
-	return;
+    of_node_put(np);
+    return;
 }

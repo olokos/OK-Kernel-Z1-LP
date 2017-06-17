@@ -344,8 +344,8 @@ extern u32 infinipath_i_rcvavail_mask, infinipath_i_rcvurg_mask;
  * an enum but allows for better hiding of chip differences.
  */
 typedef const u16 ipath_kreg,	/* infinipath general registers */
- ipath_creg,			/* infinipath counter registers */
- ipath_sreg;			/* kernel-only, infinipath send registers */
+        ipath_creg,			/* infinipath counter registers */
+        ipath_sreg;			/* kernel-only, infinipath send registers */
 
 /*
  * These are the chip registers common to all infinipath chips, and
@@ -358,155 +358,155 @@ typedef const u16 ipath_kreg,	/* infinipath general registers */
  * complexity).  The rest are all accessed as 64 bits.
  */
 struct ipath_kregs {
-	/* These are the 32 bit group */
-	ipath_kreg kr_control;
-	ipath_kreg kr_counterregbase;
-	ipath_kreg kr_intmask;
-	ipath_kreg kr_intstatus;
-	ipath_kreg kr_pagealign;
-	ipath_kreg kr_portcnt;
-	ipath_kreg kr_rcvtidbase;
-	ipath_kreg kr_rcvtidcnt;
-	ipath_kreg kr_rcvegrbase;
-	ipath_kreg kr_rcvegrcnt;
-	ipath_kreg kr_scratch;
-	ipath_kreg kr_sendctrl;
-	ipath_kreg kr_sendpiobufbase;
-	ipath_kreg kr_sendpiobufcnt;
-	ipath_kreg kr_sendpiosize;
-	ipath_kreg kr_sendregbase;
-	ipath_kreg kr_userregbase;
-	/* These are the 64 bit group */
-	ipath_kreg kr_debugport;
-	ipath_kreg kr_debugportselect;
-	ipath_kreg kr_errorclear;
-	ipath_kreg kr_errormask;
-	ipath_kreg kr_errorstatus;
-	ipath_kreg kr_extctrl;
-	ipath_kreg kr_extstatus;
-	ipath_kreg kr_gpio_clear;
-	ipath_kreg kr_gpio_mask;
-	ipath_kreg kr_gpio_out;
-	ipath_kreg kr_gpio_status;
-	ipath_kreg kr_hwdiagctrl;
-	ipath_kreg kr_hwerrclear;
-	ipath_kreg kr_hwerrmask;
-	ipath_kreg kr_hwerrstatus;
-	ipath_kreg kr_ibcctrl;
-	ipath_kreg kr_ibcstatus;
-	ipath_kreg kr_intblocked;
-	ipath_kreg kr_intclear;
-	ipath_kreg kr_interruptconfig;
-	ipath_kreg kr_mdio;
-	ipath_kreg kr_partitionkey;
-	ipath_kreg kr_rcvbthqp;
-	ipath_kreg kr_rcvbufbase;
-	ipath_kreg kr_rcvbufsize;
-	ipath_kreg kr_rcvctrl;
-	ipath_kreg kr_rcvhdrcnt;
-	ipath_kreg kr_rcvhdrentsize;
-	ipath_kreg kr_rcvhdrsize;
-	ipath_kreg kr_rcvintmembase;
-	ipath_kreg kr_rcvintmemsize;
-	ipath_kreg kr_revision;
-	ipath_kreg kr_sendbuffererror;
-	ipath_kreg kr_sendpioavailaddr;
-	ipath_kreg kr_serdesconfig0;
-	ipath_kreg kr_serdesconfig1;
-	ipath_kreg kr_serdesstatus;
-	ipath_kreg kr_txintmembase;
-	ipath_kreg kr_txintmemsize;
-	ipath_kreg kr_xgxsconfig;
-	ipath_kreg kr_ibpllcfg;
-	/* use these two (and the following N ports) only with
-	 * ipath_k*_kreg64_port(); not *kreg64() */
-	ipath_kreg kr_rcvhdraddr;
-	ipath_kreg kr_rcvhdrtailaddr;
+    /* These are the 32 bit group */
+    ipath_kreg kr_control;
+    ipath_kreg kr_counterregbase;
+    ipath_kreg kr_intmask;
+    ipath_kreg kr_intstatus;
+    ipath_kreg kr_pagealign;
+    ipath_kreg kr_portcnt;
+    ipath_kreg kr_rcvtidbase;
+    ipath_kreg kr_rcvtidcnt;
+    ipath_kreg kr_rcvegrbase;
+    ipath_kreg kr_rcvegrcnt;
+    ipath_kreg kr_scratch;
+    ipath_kreg kr_sendctrl;
+    ipath_kreg kr_sendpiobufbase;
+    ipath_kreg kr_sendpiobufcnt;
+    ipath_kreg kr_sendpiosize;
+    ipath_kreg kr_sendregbase;
+    ipath_kreg kr_userregbase;
+    /* These are the 64 bit group */
+    ipath_kreg kr_debugport;
+    ipath_kreg kr_debugportselect;
+    ipath_kreg kr_errorclear;
+    ipath_kreg kr_errormask;
+    ipath_kreg kr_errorstatus;
+    ipath_kreg kr_extctrl;
+    ipath_kreg kr_extstatus;
+    ipath_kreg kr_gpio_clear;
+    ipath_kreg kr_gpio_mask;
+    ipath_kreg kr_gpio_out;
+    ipath_kreg kr_gpio_status;
+    ipath_kreg kr_hwdiagctrl;
+    ipath_kreg kr_hwerrclear;
+    ipath_kreg kr_hwerrmask;
+    ipath_kreg kr_hwerrstatus;
+    ipath_kreg kr_ibcctrl;
+    ipath_kreg kr_ibcstatus;
+    ipath_kreg kr_intblocked;
+    ipath_kreg kr_intclear;
+    ipath_kreg kr_interruptconfig;
+    ipath_kreg kr_mdio;
+    ipath_kreg kr_partitionkey;
+    ipath_kreg kr_rcvbthqp;
+    ipath_kreg kr_rcvbufbase;
+    ipath_kreg kr_rcvbufsize;
+    ipath_kreg kr_rcvctrl;
+    ipath_kreg kr_rcvhdrcnt;
+    ipath_kreg kr_rcvhdrentsize;
+    ipath_kreg kr_rcvhdrsize;
+    ipath_kreg kr_rcvintmembase;
+    ipath_kreg kr_rcvintmemsize;
+    ipath_kreg kr_revision;
+    ipath_kreg kr_sendbuffererror;
+    ipath_kreg kr_sendpioavailaddr;
+    ipath_kreg kr_serdesconfig0;
+    ipath_kreg kr_serdesconfig1;
+    ipath_kreg kr_serdesstatus;
+    ipath_kreg kr_txintmembase;
+    ipath_kreg kr_txintmemsize;
+    ipath_kreg kr_xgxsconfig;
+    ipath_kreg kr_ibpllcfg;
+    /* use these two (and the following N ports) only with
+     * ipath_k*_kreg64_port(); not *kreg64() */
+    ipath_kreg kr_rcvhdraddr;
+    ipath_kreg kr_rcvhdrtailaddr;
 
-	/* remaining registers are not present on all types of infinipath
-	   chips  */
-	ipath_kreg kr_rcvpktledcnt;
-	ipath_kreg kr_pcierbuftestreg0;
-	ipath_kreg kr_pcierbuftestreg1;
-	ipath_kreg kr_pcieq0serdesconfig0;
-	ipath_kreg kr_pcieq0serdesconfig1;
-	ipath_kreg kr_pcieq0serdesstatus;
-	ipath_kreg kr_pcieq1serdesconfig0;
-	ipath_kreg kr_pcieq1serdesconfig1;
-	ipath_kreg kr_pcieq1serdesstatus;
-	ipath_kreg kr_hrtbt_guid;
-	ipath_kreg kr_ibcddrctrl;
-	ipath_kreg kr_ibcddrstatus;
-	ipath_kreg kr_jintreload;
+    /* remaining registers are not present on all types of infinipath
+       chips  */
+    ipath_kreg kr_rcvpktledcnt;
+    ipath_kreg kr_pcierbuftestreg0;
+    ipath_kreg kr_pcierbuftestreg1;
+    ipath_kreg kr_pcieq0serdesconfig0;
+    ipath_kreg kr_pcieq0serdesconfig1;
+    ipath_kreg kr_pcieq0serdesstatus;
+    ipath_kreg kr_pcieq1serdesconfig0;
+    ipath_kreg kr_pcieq1serdesconfig1;
+    ipath_kreg kr_pcieq1serdesstatus;
+    ipath_kreg kr_hrtbt_guid;
+    ipath_kreg kr_ibcddrctrl;
+    ipath_kreg kr_ibcddrstatus;
+    ipath_kreg kr_jintreload;
 
-	/* send dma related regs */
-	ipath_kreg kr_senddmabase;
-	ipath_kreg kr_senddmalengen;
-	ipath_kreg kr_senddmatail;
-	ipath_kreg kr_senddmahead;
-	ipath_kreg kr_senddmaheadaddr;
-	ipath_kreg kr_senddmabufmask0;
-	ipath_kreg kr_senddmabufmask1;
-	ipath_kreg kr_senddmabufmask2;
-	ipath_kreg kr_senddmastatus;
+    /* send dma related regs */
+    ipath_kreg kr_senddmabase;
+    ipath_kreg kr_senddmalengen;
+    ipath_kreg kr_senddmatail;
+    ipath_kreg kr_senddmahead;
+    ipath_kreg kr_senddmaheadaddr;
+    ipath_kreg kr_senddmabufmask0;
+    ipath_kreg kr_senddmabufmask1;
+    ipath_kreg kr_senddmabufmask2;
+    ipath_kreg kr_senddmastatus;
 
-	/* SerDes related regs (IBA7220-only) */
-	ipath_kreg kr_ibserdesctrl;
-	ipath_kreg kr_ib_epbacc;
-	ipath_kreg kr_ib_epbtrans;
-	ipath_kreg kr_pcie_epbacc;
-	ipath_kreg kr_pcie_epbtrans;
-	ipath_kreg kr_ib_ddsrxeq;
+    /* SerDes related regs (IBA7220-only) */
+    ipath_kreg kr_ibserdesctrl;
+    ipath_kreg kr_ib_epbacc;
+    ipath_kreg kr_ib_epbtrans;
+    ipath_kreg kr_pcie_epbacc;
+    ipath_kreg kr_pcie_epbtrans;
+    ipath_kreg kr_ib_ddsrxeq;
 };
 
 struct ipath_cregs {
-	ipath_creg cr_badformatcnt;
-	ipath_creg cr_erricrccnt;
-	ipath_creg cr_errlinkcnt;
-	ipath_creg cr_errlpcrccnt;
-	ipath_creg cr_errpkey;
-	ipath_creg cr_errrcvflowctrlcnt;
-	ipath_creg cr_err_rlencnt;
-	ipath_creg cr_errslencnt;
-	ipath_creg cr_errtidfull;
-	ipath_creg cr_errtidvalid;
-	ipath_creg cr_errvcrccnt;
-	ipath_creg cr_ibstatuschange;
-	ipath_creg cr_intcnt;
-	ipath_creg cr_invalidrlencnt;
-	ipath_creg cr_invalidslencnt;
-	ipath_creg cr_lbflowstallcnt;
-	ipath_creg cr_iblinkdowncnt;
-	ipath_creg cr_iblinkerrrecovcnt;
-	ipath_creg cr_ibsymbolerrcnt;
-	ipath_creg cr_pktrcvcnt;
-	ipath_creg cr_pktrcvflowctrlcnt;
-	ipath_creg cr_pktsendcnt;
-	ipath_creg cr_pktsendflowcnt;
-	ipath_creg cr_portovflcnt;
-	ipath_creg cr_rcvebpcnt;
-	ipath_creg cr_rcvovflcnt;
-	ipath_creg cr_rxdroppktcnt;
-	ipath_creg cr_senddropped;
-	ipath_creg cr_sendstallcnt;
-	ipath_creg cr_sendunderruncnt;
-	ipath_creg cr_unsupvlcnt;
-	ipath_creg cr_wordrcvcnt;
-	ipath_creg cr_wordsendcnt;
-	ipath_creg cr_vl15droppedpktcnt;
-	ipath_creg cr_rxotherlocalphyerrcnt;
-	ipath_creg cr_excessbufferovflcnt;
-	ipath_creg cr_locallinkintegrityerrcnt;
-	ipath_creg cr_rxvlerrcnt;
-	ipath_creg cr_rxdlidfltrcnt;
-	ipath_creg cr_psstat;
-	ipath_creg cr_psstart;
-	ipath_creg cr_psinterval;
-	ipath_creg cr_psrcvdatacount;
-	ipath_creg cr_psrcvpktscount;
-	ipath_creg cr_psxmitdatacount;
-	ipath_creg cr_psxmitpktscount;
-	ipath_creg cr_psxmitwaitcount;
+    ipath_creg cr_badformatcnt;
+    ipath_creg cr_erricrccnt;
+    ipath_creg cr_errlinkcnt;
+    ipath_creg cr_errlpcrccnt;
+    ipath_creg cr_errpkey;
+    ipath_creg cr_errrcvflowctrlcnt;
+    ipath_creg cr_err_rlencnt;
+    ipath_creg cr_errslencnt;
+    ipath_creg cr_errtidfull;
+    ipath_creg cr_errtidvalid;
+    ipath_creg cr_errvcrccnt;
+    ipath_creg cr_ibstatuschange;
+    ipath_creg cr_intcnt;
+    ipath_creg cr_invalidrlencnt;
+    ipath_creg cr_invalidslencnt;
+    ipath_creg cr_lbflowstallcnt;
+    ipath_creg cr_iblinkdowncnt;
+    ipath_creg cr_iblinkerrrecovcnt;
+    ipath_creg cr_ibsymbolerrcnt;
+    ipath_creg cr_pktrcvcnt;
+    ipath_creg cr_pktrcvflowctrlcnt;
+    ipath_creg cr_pktsendcnt;
+    ipath_creg cr_pktsendflowcnt;
+    ipath_creg cr_portovflcnt;
+    ipath_creg cr_rcvebpcnt;
+    ipath_creg cr_rcvovflcnt;
+    ipath_creg cr_rxdroppktcnt;
+    ipath_creg cr_senddropped;
+    ipath_creg cr_sendstallcnt;
+    ipath_creg cr_sendunderruncnt;
+    ipath_creg cr_unsupvlcnt;
+    ipath_creg cr_wordrcvcnt;
+    ipath_creg cr_wordsendcnt;
+    ipath_creg cr_vl15droppedpktcnt;
+    ipath_creg cr_rxotherlocalphyerrcnt;
+    ipath_creg cr_excessbufferovflcnt;
+    ipath_creg cr_locallinkintegrityerrcnt;
+    ipath_creg cr_rxvlerrcnt;
+    ipath_creg cr_rxdlidfltrcnt;
+    ipath_creg cr_psstat;
+    ipath_creg cr_psstart;
+    ipath_creg cr_psinterval;
+    ipath_creg cr_psrcvdatacount;
+    ipath_creg cr_psrcvpktscount;
+    ipath_creg cr_psxmitdatacount;
+    ipath_creg cr_psxmitpktscount;
+    ipath_creg cr_psxmitwaitcount;
 };
 
 #endif				/* _IPATH_REGISTERS_H */

@@ -51,8 +51,8 @@
 static int vendorsupport;
 module_param(vendorsupport, int, 0);
 MODULE_PARM_DESC(vendorsupport, "iTCO vendor specific support mode, default="
-			"0 (none), 1=SuperMicro Pent3, 2=SuperMicro Pent4+, "
-							"911=Broken SMI BIOS");
+                 "0 (none), 1=SuperMicro Pent3, 2=SuperMicro Pent4+, "
+                 "911=Broken SMI BIOS");
 
 /*
  *	Vendor Specific Support
@@ -82,24 +82,22 @@ MODULE_PARM_DESC(vendorsupport, "iTCO vendor specific support mode, default="
  *	    20.6 seconds.
  */
 
-static void supermicro_old_pre_start(unsigned long acpibase)
-{
-	unsigned long val32;
+static void supermicro_old_pre_start(unsigned long acpibase) {
+    unsigned long val32;
 
-	/* Bit 13: TCO_EN -> 0 = Disables TCO logic generating an SMI# */
-	val32 = inl(SMI_EN);
-	val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
-	outl(val32, SMI_EN);	/* Needed to activate watchdog */
+    /* Bit 13: TCO_EN -> 0 = Disables TCO logic generating an SMI# */
+    val32 = inl(SMI_EN);
+    val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
+    outl(val32, SMI_EN);	/* Needed to activate watchdog */
 }
 
-static void supermicro_old_pre_stop(unsigned long acpibase)
-{
-	unsigned long val32;
+static void supermicro_old_pre_stop(unsigned long acpibase) {
+    unsigned long val32;
 
-	/* Bit 13: TCO_EN -> 1 = Enables the TCO logic to generate SMI# */
-	val32 = inl(SMI_EN);
-	val32 |= 0x00002000;	/* Turn on SMI clearing watchdog */
-	outl(val32, SMI_EN);	/* Needed to deactivate watchdog */
+    /* Bit 13: TCO_EN -> 1 = Enables the TCO logic to generate SMI# */
+    val32 = inl(SMI_EN);
+    val32 |= 0x00002000;	/* Turn on SMI clearing watchdog */
+    outl(val32, SMI_EN);	/* Needed to deactivate watchdog */
 }
 
 /*
@@ -159,84 +157,79 @@ static void supermicro_old_pre_stop(unsigned long acpibase)
 #define SM_ENDWATCH	0xAA	/* Watchdog lock control page */
 
 #define SM_COUNTMODE	0xf5	/* Watchdog count mode select */
-				/* (Bit 3: 0 = seconds, 1 = minutes */
+/* (Bit 3: 0 = seconds, 1 = minutes */
 
 #define SM_WATCHTIMER	0xf6	/* 8-bits, Watchdog timer counter (RW) */
 
 #define SM_RESETCONTROL	0xf7	/* Watchdog reset control */
-				/* Bit 6: timer is reset by kbd interrupt */
-				/* Bit 7: timer is reset by mouse interrupt */
+/* Bit 6: timer is reset by kbd interrupt */
+/* Bit 7: timer is reset by mouse interrupt */
 
-static void supermicro_new_unlock_watchdog(void)
-{
-	/* Write 0x87 to port 0x2e twice */
-	outb(SM_WATCHPAGE, SM_REGINDEX);
-	outb(SM_WATCHPAGE, SM_REGINDEX);
-	/* Switch to watchdog control page */
-	outb(SM_CTLPAGESW, SM_REGINDEX);
-	outb(SM_CTLPAGE, SM_DATAIO);
+static void supermicro_new_unlock_watchdog(void) {
+    /* Write 0x87 to port 0x2e twice */
+    outb(SM_WATCHPAGE, SM_REGINDEX);
+    outb(SM_WATCHPAGE, SM_REGINDEX);
+    /* Switch to watchdog control page */
+    outb(SM_CTLPAGESW, SM_REGINDEX);
+    outb(SM_CTLPAGE, SM_DATAIO);
 }
 
-static void supermicro_new_lock_watchdog(void)
-{
-	outb(SM_ENDWATCH, SM_REGINDEX);
+static void supermicro_new_lock_watchdog(void) {
+    outb(SM_ENDWATCH, SM_REGINDEX);
 }
 
-static void supermicro_new_pre_start(unsigned int heartbeat)
-{
-	unsigned int val;
+static void supermicro_new_pre_start(unsigned int heartbeat) {
+    unsigned int val;
 
-	supermicro_new_unlock_watchdog();
+    supermicro_new_unlock_watchdog();
 
-	/* Watchdog timer setting needs to be in seconds*/
-	outb(SM_COUNTMODE, SM_REGINDEX);
-	val = inb(SM_DATAIO);
-	val &= 0xF7;
-	outb(val, SM_DATAIO);
+    /* Watchdog timer setting needs to be in seconds*/
+    outb(SM_COUNTMODE, SM_REGINDEX);
+    val = inb(SM_DATAIO);
+    val &= 0xF7;
+    outb(val, SM_DATAIO);
 
-	/* Write heartbeat interval to WDOG */
-	outb(SM_WATCHTIMER, SM_REGINDEX);
-	outb((heartbeat & 255), SM_DATAIO);
+    /* Write heartbeat interval to WDOG */
+    outb(SM_WATCHTIMER, SM_REGINDEX);
+    outb((heartbeat & 255), SM_DATAIO);
 
-	/* Make sure keyboard/mouse interrupts don't interfere */
-	outb(SM_RESETCONTROL, SM_REGINDEX);
-	val = inb(SM_DATAIO);
-	val &= 0x3f;
-	outb(val, SM_DATAIO);
+    /* Make sure keyboard/mouse interrupts don't interfere */
+    outb(SM_RESETCONTROL, SM_REGINDEX);
+    val = inb(SM_DATAIO);
+    val &= 0x3f;
+    outb(val, SM_DATAIO);
 
-	/* enable watchdog by setting bit 0 of Watchdog Enable to 1 */
-	outb(SM_WATCHENABLE, SM_REGINDEX);
-	val = inb(SM_DATAIO);
-	val |= 0x01;
-	outb(val, SM_DATAIO);
+    /* enable watchdog by setting bit 0 of Watchdog Enable to 1 */
+    outb(SM_WATCHENABLE, SM_REGINDEX);
+    val = inb(SM_DATAIO);
+    val |= 0x01;
+    outb(val, SM_DATAIO);
 
-	supermicro_new_lock_watchdog();
+    supermicro_new_lock_watchdog();
 }
 
-static void supermicro_new_pre_stop(void)
-{
-	unsigned int val;
+static void supermicro_new_pre_stop(void) {
+    unsigned int val;
 
-	supermicro_new_unlock_watchdog();
+    supermicro_new_unlock_watchdog();
 
-	/* disable watchdog by setting bit 0 of Watchdog Enable to 0 */
-	outb(SM_WATCHENABLE, SM_REGINDEX);
-	val = inb(SM_DATAIO);
-	val &= 0xFE;
-	outb(val, SM_DATAIO);
+    /* disable watchdog by setting bit 0 of Watchdog Enable to 0 */
+    outb(SM_WATCHENABLE, SM_REGINDEX);
+    val = inb(SM_DATAIO);
+    val &= 0xFE;
+    outb(val, SM_DATAIO);
 
-	supermicro_new_lock_watchdog();
+    supermicro_new_lock_watchdog();
 }
 
-static void supermicro_new_pre_set_heartbeat(unsigned int heartbeat)
-{
-	supermicro_new_unlock_watchdog();
+static void supermicro_new_pre_set_heartbeat(unsigned int heartbeat) {
+    supermicro_new_unlock_watchdog();
 
-	/* reset watchdog timeout to heartveat value */
-	outb(SM_WATCHTIMER, SM_REGINDEX);
-	outb((heartbeat & 255), SM_DATAIO);
+    /* reset watchdog timeout to heartveat value */
+    outb(SM_WATCHTIMER, SM_REGINDEX);
+    outb((heartbeat & 255), SM_DATAIO);
 
-	supermicro_new_lock_watchdog();
+    supermicro_new_lock_watchdog();
 }
 
 /*
@@ -270,26 +263,24 @@ static void supermicro_new_pre_set_heartbeat(unsigned int heartbeat)
  *	Don't use this fix if you don't need to!!!
  */
 
-static void broken_bios_start(unsigned long acpibase)
-{
-	unsigned long val32;
+static void broken_bios_start(unsigned long acpibase) {
+    unsigned long val32;
 
-	val32 = inl(SMI_EN);
-	/* Bit 13: TCO_EN     -> 0 = Disables TCO logic generating an SMI#
-	   Bit  0: GBL_SMI_EN -> 0 = No SMI# will be generated by ICH. */
-	val32 &= 0xffffdffe;
-	outl(val32, SMI_EN);
+    val32 = inl(SMI_EN);
+    /* Bit 13: TCO_EN     -> 0 = Disables TCO logic generating an SMI#
+       Bit  0: GBL_SMI_EN -> 0 = No SMI# will be generated by ICH. */
+    val32 &= 0xffffdffe;
+    outl(val32, SMI_EN);
 }
 
-static void broken_bios_stop(unsigned long acpibase)
-{
-	unsigned long val32;
+static void broken_bios_stop(unsigned long acpibase) {
+    unsigned long val32;
 
-	val32 = inl(SMI_EN);
-	/* Bit 13: TCO_EN     -> 1 = Enables TCO logic generating an SMI#
-	   Bit  0: GBL_SMI_EN -> 1 = Turn global SMI on again. */
-	val32 |= 0x00002001;
-	outl(val32, SMI_EN);
+    val32 = inl(SMI_EN);
+    /* Bit 13: TCO_EN     -> 1 = Enables TCO logic generating an SMI#
+       Bit  0: GBL_SMI_EN -> 1 = Turn global SMI on again. */
+    val32 |= 0x00002001;
+    outl(val32, SMI_EN);
 }
 
 /*
@@ -297,79 +288,72 @@ static void broken_bios_stop(unsigned long acpibase)
  */
 
 void iTCO_vendor_pre_start(unsigned long acpibase,
-			   unsigned int heartbeat)
-{
-	switch (vendorsupport) {
-	case SUPERMICRO_OLD_BOARD:
-		supermicro_old_pre_start(acpibase);
-		break;
-	case SUPERMICRO_NEW_BOARD:
-		supermicro_new_pre_start(heartbeat);
-		break;
-	case BROKEN_BIOS:
-		broken_bios_start(acpibase);
-		break;
-	}
+                           unsigned int heartbeat) {
+    switch (vendorsupport) {
+    case SUPERMICRO_OLD_BOARD:
+        supermicro_old_pre_start(acpibase);
+        break;
+    case SUPERMICRO_NEW_BOARD:
+        supermicro_new_pre_start(heartbeat);
+        break;
+    case BROKEN_BIOS:
+        broken_bios_start(acpibase);
+        break;
+    }
 }
 EXPORT_SYMBOL(iTCO_vendor_pre_start);
 
-void iTCO_vendor_pre_stop(unsigned long acpibase)
-{
-	switch (vendorsupport) {
-	case SUPERMICRO_OLD_BOARD:
-		supermicro_old_pre_stop(acpibase);
-		break;
-	case SUPERMICRO_NEW_BOARD:
-		supermicro_new_pre_stop();
-		break;
-	case BROKEN_BIOS:
-		broken_bios_stop(acpibase);
-		break;
-	}
+void iTCO_vendor_pre_stop(unsigned long acpibase) {
+    switch (vendorsupport) {
+    case SUPERMICRO_OLD_BOARD:
+        supermicro_old_pre_stop(acpibase);
+        break;
+    case SUPERMICRO_NEW_BOARD:
+        supermicro_new_pre_stop();
+        break;
+    case BROKEN_BIOS:
+        broken_bios_stop(acpibase);
+        break;
+    }
 }
 EXPORT_SYMBOL(iTCO_vendor_pre_stop);
 
-void iTCO_vendor_pre_keepalive(unsigned long acpibase, unsigned int heartbeat)
-{
-	if (vendorsupport == SUPERMICRO_NEW_BOARD)
-		supermicro_new_pre_set_heartbeat(heartbeat);
+void iTCO_vendor_pre_keepalive(unsigned long acpibase, unsigned int heartbeat) {
+    if (vendorsupport == SUPERMICRO_NEW_BOARD)
+        supermicro_new_pre_set_heartbeat(heartbeat);
 }
 EXPORT_SYMBOL(iTCO_vendor_pre_keepalive);
 
-void iTCO_vendor_pre_set_heartbeat(unsigned int heartbeat)
-{
-	if (vendorsupport == SUPERMICRO_NEW_BOARD)
-		supermicro_new_pre_set_heartbeat(heartbeat);
+void iTCO_vendor_pre_set_heartbeat(unsigned int heartbeat) {
+    if (vendorsupport == SUPERMICRO_NEW_BOARD)
+        supermicro_new_pre_set_heartbeat(heartbeat);
 }
 EXPORT_SYMBOL(iTCO_vendor_pre_set_heartbeat);
 
-int iTCO_vendor_check_noreboot_on(void)
-{
-	switch (vendorsupport) {
-	case SUPERMICRO_OLD_BOARD:
-		return 0;
-	default:
-		return 1;
-	}
+int iTCO_vendor_check_noreboot_on(void) {
+    switch (vendorsupport) {
+    case SUPERMICRO_OLD_BOARD:
+        return 0;
+    default:
+        return 1;
+    }
 }
 EXPORT_SYMBOL(iTCO_vendor_check_noreboot_on);
 
-static int __init iTCO_vendor_init_module(void)
-{
-	pr_info("vendor-support=%d\n", vendorsupport);
-	return 0;
+static int __init iTCO_vendor_init_module(void) {
+    pr_info("vendor-support=%d\n", vendorsupport);
+    return 0;
 }
 
-static void __exit iTCO_vendor_exit_module(void)
-{
-	pr_info("Module Unloaded\n");
+static void __exit iTCO_vendor_exit_module(void) {
+    pr_info("Module Unloaded\n");
 }
 
 module_init(iTCO_vendor_init_module);
 module_exit(iTCO_vendor_exit_module);
 
 MODULE_AUTHOR("Wim Van Sebroeck <wim@iguana.be>, "
-		"R. Seretny <lkpatches@paypc.com>");
+              "R. Seretny <lkpatches@paypc.com>");
 MODULE_DESCRIPTION("Intel TCO Vendor Specific WatchDog Timer Driver Support");
 MODULE_VERSION(DRV_VERSION);
 MODULE_LICENSE("GPL");

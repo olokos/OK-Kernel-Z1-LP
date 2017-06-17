@@ -490,15 +490,14 @@
 #define PESDRx_RCSSET_RSTDL     0x00010000
 #define PESDRx_RCSSET_RSTPYN    0x00001000
 
-enum
-{
-	PTYPE_ENDPOINT		= 0x0,
-	PTYPE_LEGACY_ENDPOINT	= 0x1,
-	PTYPE_ROOT_PORT		= 0x4,
+enum {
+    PTYPE_ENDPOINT		= 0x0,
+    PTYPE_LEGACY_ENDPOINT	= 0x1,
+    PTYPE_ROOT_PORT		= 0x4,
 
-	LNKW_X1			= 0x1,
-	LNKW_X4			= 0x4,
-	LNKW_X8			= 0x8
+    LNKW_X1			= 0x1,
+    LNKW_X4			= 0x4,
+    LNKW_X8			= 0x8
 };
 
 

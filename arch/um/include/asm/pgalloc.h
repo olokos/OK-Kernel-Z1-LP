@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2000, 2001, 2002 Jeff Dike (jdike@karaya.com)
  * Copyright 2003 PathScale, Inc.
  * Derived from include/asm-i386/pgalloc.h and include/asm-i386/pgtable.h
@@ -28,15 +28,13 @@ extern void pgd_free(struct mm_struct *mm, pgd_t *pgd);
 extern pte_t *pte_alloc_one_kernel(struct mm_struct *, unsigned long);
 extern pgtable_t pte_alloc_one(struct mm_struct *, unsigned long);
 
-static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	free_page((unsigned long) pte);
+static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    free_page((unsigned long) pte);
 }
 
-static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
-{
-	pgtable_page_dtor(pte);
-	__free_page(pte);
+static inline void pte_free(struct mm_struct *mm, pgtable_t pte) {
+    pgtable_page_dtor(pte);
+    __free_page(pte);
 }
 
 #define __pte_free_tlb(tlb,pte, address)		\
@@ -47,9 +45,8 @@ do {							\
 
 #ifdef CONFIG_3_LEVEL_PGTABLES
 
-static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
-{
-	free_page((unsigned long)pmd);
+static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd) {
+    free_page((unsigned long)pmd);
 }
 
 #define __pmd_free_tlb(tlb,x, address)   tlb_remove_page((tlb),virt_to_page(x))

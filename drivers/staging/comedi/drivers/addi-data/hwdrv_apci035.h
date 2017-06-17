@@ -21,15 +21,15 @@
 
 /* ANALOG INPUT RANGE */
 static struct comedi_lrange range_apci035_ai = { 8, {
-				       BIP_RANGE(10),
-				       BIP_RANGE(5),
-				       BIP_RANGE(2),
-				       BIP_RANGE(1),
-				       UNI_RANGE(10),
-				       UNI_RANGE(5),
-				       UNI_RANGE(2),
-				       UNI_RANGE(1)
-				       }
+        BIP_RANGE(10),
+        BIP_RANGE(5),
+        BIP_RANGE(2),
+        BIP_RANGE(1),
+        UNI_RANGE(10),
+        UNI_RANGE(5),
+        UNI_RANGE(2),
+        UNI_RANGE(1)
+    }
 };
 
 /* Timer / Watchdog Related Defines */
@@ -88,19 +88,19 @@ static struct comedi_lrange range_apci035_ai = { 8, {
 /* TIMER */
 /* timer value is passed as u seconds */
 int i_APCI035_ConfigTimerWatchdog(struct comedi_device *dev, struct comedi_subdevice *s,
-				  struct comedi_insn *insn, unsigned int *data);
+                                  struct comedi_insn *insn, unsigned int *data);
 int i_APCI035_StartStopWriteTimerWatchdog(struct comedi_device *dev,
-					  struct comedi_subdevice *s,
-					  struct comedi_insn *insn, unsigned int *data);
+        struct comedi_subdevice *s,
+        struct comedi_insn *insn, unsigned int *data);
 int i_APCI035_ReadTimerWatchdog(struct comedi_device *dev, struct comedi_subdevice *s,
-				struct comedi_insn *insn, unsigned int *data);
+                                struct comedi_insn *insn, unsigned int *data);
 
 /* Temperature Related Defines (Analog Input Subdevice) */
 
 int i_APCI035_ConfigAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				struct comedi_insn *insn, unsigned int *data);
+                                struct comedi_insn *insn, unsigned int *data);
 int i_APCI035_ReadAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s,
-			      struct comedi_insn *insn, unsigned int *data);
+                              struct comedi_insn *insn, unsigned int *data);
 
 /* Interrupt */
 static void v_APCI035_Interrupt(int irq, void *d);

@@ -5,12 +5,11 @@
 #include <arch/io.h>
 #include <linux/kernel.h>
 
-struct cris_io_operations
-{
-	u32 (*read_mem)(void *addr, int size);
-	void (*write_mem)(u32 val, int size, void *addr);
-	u32 (*read_io)(u32 port, void *addr, int size, int count);
-	void (*write_io)(u32 port, void *addr, int size, int count);
+struct cris_io_operations {
+    u32 (*read_mem)(void *addr, int size);
+    void (*write_mem)(u32 val, int size, void *addr);
+    u32 (*read_io)(u32 port, void *addr, int size, int count);
+    void (*write_io)(u32 port, void *addr, int size, int count);
 };
 
 #ifdef CONFIG_PCI
@@ -23,22 +22,19 @@ extern struct cris_io_operations *cris_iops;
  * Change virtual addresses to physical addresses and vv.
  */
 
-static inline unsigned long virt_to_phys(volatile void * address)
-{
-	return __pa(address);
+static inline unsigned long virt_to_phys(volatile void * address) {
+    return __pa(address);
 }
 
-static inline void * phys_to_virt(unsigned long address)
-{
-	return __va(address);
+static inline void * phys_to_virt(unsigned long address) {
+    return __va(address);
 }
 
 extern void __iomem * __ioremap(unsigned long offset, unsigned long size, unsigned long flags);
 extern void __iomem * __ioremap_prot(unsigned long phys_addr, unsigned long size, pgprot_t prot);
 
-static inline void __iomem * ioremap (unsigned long offset, unsigned long size)
-{
-	return __ioremap(offset, size, 0);
+static inline void __iomem * ioremap (unsigned long offset, unsigned long size) {
+    return __ioremap(offset, size, 0);
 }
 
 extern void iounmap(volatile void * __iomem addr);
@@ -62,26 +58,23 @@ extern void __iomem * ioremap_nocache(unsigned long offset, unsigned long size);
 #else
 #define PCI_SPACE(x) 0
 #endif
-static inline unsigned char readb(const volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		return cris_iops->read_mem((void*)addr, 1);
-	else
-		return *(volatile unsigned char __force *) addr;
+static inline unsigned char readb(const volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        return cris_iops->read_mem((void*)addr, 1);
+    else
+        return *(volatile unsigned char __force *) addr;
 }
-static inline unsigned short readw(const volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		return cris_iops->read_mem((void*)addr, 2);
-	else
-		return *(volatile unsigned short __force *) addr;
+static inline unsigned short readw(const volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        return cris_iops->read_mem((void*)addr, 2);
+    else
+        return *(volatile unsigned short __force *) addr;
 }
-static inline unsigned int readl(const volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		return cris_iops->read_mem((void*)addr, 4);
-	else
-		return *(volatile unsigned int __force *) addr;
+static inline unsigned int readl(const volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        return cris_iops->read_mem((void*)addr, 4);
+    else
+        return *(volatile unsigned int __force *) addr;
 }
 #define readb_relaxed(addr) readb(addr)
 #define readw_relaxed(addr) readw(addr)
@@ -90,26 +83,23 @@ static inline unsigned int readl(const volatile void __iomem *addr)
 #define __raw_readw readw
 #define __raw_readl readl
 
-static inline void writeb(unsigned char b, volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		cris_iops->write_mem(b, 1, (void*)addr);
-	else
-		*(volatile unsigned char __force *) addr = b;
+static inline void writeb(unsigned char b, volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        cris_iops->write_mem(b, 1, (void*)addr);
+    else
+        *(volatile unsigned char __force *) addr = b;
 }
-static inline void writew(unsigned short b, volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		cris_iops->write_mem(b, 2, (void*)addr);
-	else
-		*(volatile unsigned short __force *) addr = b;
+static inline void writew(unsigned short b, volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        cris_iops->write_mem(b, 2, (void*)addr);
+    else
+        *(volatile unsigned short __force *) addr = b;
 }
-static inline void writel(unsigned int b, volatile void __iomem *addr)
-{
-	if (PCI_SPACE(addr) && cris_iops)
-		cris_iops->write_mem(b, 4, (void*)addr);
-	else
-		*(volatile unsigned int __force *) addr = b;
+static inline void writel(unsigned int b, volatile void __iomem *addr) {
+    if (PCI_SPACE(addr) && cris_iops)
+        cris_iops->write_mem(b, 4, (void*)addr);
+    else
+        *(volatile unsigned int __force *) addr = b;
 }
 #define __raw_writeb writeb
 #define __raw_writew writew

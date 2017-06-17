@@ -170,40 +170,40 @@
 #define REG_DAL			(15)
 
 typedef enum {
-	PHASE_IDLE,					/* we're not planning on doing anything	*/
-	PHASE_SELECTION,				/* selecting a device			*/
-	PHASE_SELSTEPS,					/* selection with command steps		*/
-	PHASE_COMMAND,					/* command sent				*/
-	PHASE_MESSAGESENT,				/* selected, and we're sending cmd	*/
-	PHASE_DATAOUT,					/* data out to device			*/
-	PHASE_DATAIN,					/* data in from device			*/
-	PHASE_MSGIN,					/* message in from device		*/
-	PHASE_MSGIN_DISCONNECT,				/* disconnecting from bus		*/
-	PHASE_MSGOUT,					/* after message out phase		*/
-	PHASE_MSGOUT_EXPECT,				/* expecting message out		*/
-	PHASE_STATUS,					/* status from device			*/
-	PHASE_DONE					/* Command complete			*/
+    PHASE_IDLE,					/* we're not planning on doing anything	*/
+    PHASE_SELECTION,				/* selecting a device			*/
+    PHASE_SELSTEPS,					/* selection with command steps		*/
+    PHASE_COMMAND,					/* command sent				*/
+    PHASE_MESSAGESENT,				/* selected, and we're sending cmd	*/
+    PHASE_DATAOUT,					/* data out to device			*/
+    PHASE_DATAIN,					/* data in from device			*/
+    PHASE_MSGIN,					/* message in from device		*/
+    PHASE_MSGIN_DISCONNECT,				/* disconnecting from bus		*/
+    PHASE_MSGOUT,					/* after message out phase		*/
+    PHASE_MSGOUT_EXPECT,				/* expecting message out		*/
+    PHASE_STATUS,					/* status from device			*/
+    PHASE_DONE					/* Command complete			*/
 } phase_t;
 
 typedef enum {
-	DMA_OUT,					/* DMA from memory to chip		*/
-	DMA_IN						/* DMA from chip to memory		*/
+    DMA_OUT,					/* DMA from memory to chip		*/
+    DMA_IN						/* DMA from chip to memory		*/
 } fasdmadir_t;
 
 typedef enum {
-	fasdma_none,					/* No dma				*/
-	fasdma_pio,					/* PIO mode				*/
-	fasdma_pseudo,					/* Pseudo DMA				*/
-	fasdma_real_block,				/* Real DMA, on block by block basis	*/
-	fasdma_real_all					/* Real DMA, on request by request	*/
+    fasdma_none,					/* No dma				*/
+    fasdma_pio,					/* PIO mode				*/
+    fasdma_pseudo,					/* Pseudo DMA				*/
+    fasdma_real_block,				/* Real DMA, on block by block basis	*/
+    fasdma_real_all					/* Real DMA, on request by request	*/
 } fasdmatype_t;
 
 typedef enum {
-	neg_wait,					/* Negotiate with device		*/
-	neg_inprogress,					/* Negotiation sent			*/
-	neg_complete,					/* Negotiation complete			*/
-	neg_targcomplete,				/* Target completed negotiation		*/
-	neg_invalid					/* Negotiation not supported		*/
+    neg_wait,					/* Negotiate with device		*/
+    neg_inprogress,					/* Negotiation sent			*/
+    neg_complete,					/* Negotiation complete			*/
+    neg_targcomplete,				/* Target completed negotiation		*/
+    neg_invalid					/* Negotiation not supported		*/
 } neg_t;
 
 #define MAGIC	0x441296bdUL
@@ -213,104 +213,104 @@ typedef enum {
 #define FASCAP_PSEUDODMA	(1 << 1)
 
 typedef struct {
-	unsigned long		magic_start;
-	spinlock_t		host_lock;
-	struct Scsi_Host	*host;			/* host					*/
-	struct scsi_cmnd	*SCpnt;			/* currently processing command		*/
-	struct scsi_cmnd	*origSCpnt;		/* original connecting command		*/
-	struct scsi_cmnd	*reqSCpnt;		/* request sense command		*/
-	struct scsi_cmnd	*rstSCpnt;		/* reset command			*/
-	struct scsi_cmnd	*pending_SCpnt[8];	/* per-device pending commands		*/
-	int			next_pending;		/* next pending device			*/
+    unsigned long		magic_start;
+    spinlock_t		host_lock;
+    struct Scsi_Host	*host;			/* host					*/
+    struct scsi_cmnd	*SCpnt;			/* currently processing command		*/
+    struct scsi_cmnd	*origSCpnt;		/* original connecting command		*/
+    struct scsi_cmnd	*reqSCpnt;		/* request sense command		*/
+    struct scsi_cmnd	*rstSCpnt;		/* reset command			*/
+    struct scsi_cmnd	*pending_SCpnt[8];	/* per-device pending commands		*/
+    int			next_pending;		/* next pending device			*/
 
-	/*
-	 * Error recovery
-	 */
-	wait_queue_head_t	eh_wait;
-	struct timer_list	eh_timer;
-	unsigned int		rst_dev_status;
-	unsigned int		rst_bus_status;
+    /*
+     * Error recovery
+     */
+    wait_queue_head_t	eh_wait;
+    struct timer_list	eh_timer;
+    unsigned int		rst_dev_status;
+    unsigned int		rst_bus_status;
 
-	/* driver information */
-	struct {
-		phase_t		phase;			/* current phase			*/
-		void __iomem	*io_base;		/* iomem base of FAS216			*/
-		unsigned int	io_shift;		/* shift to adjust reg offsets by	*/
-		unsigned char	cfg[4];			/* configuration registers		*/
-		const char	*type;			/* chip type				*/
-		unsigned int	irq;			/* interrupt				*/
-		int		dma;			/* dma channel				*/
+    /* driver information */
+    struct {
+        phase_t		phase;			/* current phase			*/
+        void __iomem	*io_base;		/* iomem base of FAS216			*/
+        unsigned int	io_shift;		/* shift to adjust reg offsets by	*/
+        unsigned char	cfg[4];			/* configuration registers		*/
+        const char	*type;			/* chip type				*/
+        unsigned int	irq;			/* interrupt				*/
+        int		dma;			/* dma channel				*/
 
-		struct scsi_pointer	SCp;			/* current commands data pointer	*/
+        struct scsi_pointer	SCp;			/* current commands data pointer	*/
 
-		MsgQueue_t	msgs;			/* message queue for connected device	*/
+        MsgQueue_t	msgs;			/* message queue for connected device	*/
 
-		unsigned int	async_stp;		/* Async transfer STP value		*/
-		unsigned char	msgin_fifo;		/* bytes in fifo at time of message in	*/
-		unsigned char	message[256];		/* last message received from device	*/
+        unsigned int	async_stp;		/* Async transfer STP value		*/
+        unsigned char	msgin_fifo;		/* bytes in fifo at time of message in	*/
+        unsigned char	message[256];		/* last message received from device	*/
 
-		unsigned char	disconnectable:1;	/* this command can be disconnected	*/
-		unsigned char	aborting:1;		/* aborting command			*/
-	} scsi;
+        unsigned char	disconnectable:1;	/* this command can be disconnected	*/
+        unsigned char	aborting:1;		/* aborting command			*/
+    } scsi;
 
-	/* statistics information */
-	struct {
-		unsigned int	queues;
-		unsigned int	removes;
-		unsigned int	fins;
-		unsigned int	reads;
-		unsigned int	writes;
-		unsigned int	miscs;
-		unsigned int	disconnects;
-		unsigned int	aborts;
-		unsigned int	bus_resets;
-		unsigned int	host_resets;
-	} stats;
+    /* statistics information */
+    struct {
+        unsigned int	queues;
+        unsigned int	removes;
+        unsigned int	fins;
+        unsigned int	reads;
+        unsigned int	writes;
+        unsigned int	miscs;
+        unsigned int	disconnects;
+        unsigned int	aborts;
+        unsigned int	bus_resets;
+        unsigned int	host_resets;
+    } stats;
 
-	/* configuration information */
-	struct {
-		unsigned char	clockrate;		/* clock rate of FAS device (MHz)	*/
-		unsigned char	select_timeout;		/* timeout (R5)				*/
-		unsigned char	sync_max_depth;		/* Synchronous xfer max fifo depth	*/
-		unsigned char	wide_max_size;		/* Maximum wide transfer size		*/
-		unsigned char	cntl3;			/* Control Reg 3			*/
-		unsigned int	asyncperiod;		/* Async transfer period (ns)		*/
-		unsigned int	capabilities;		/* driver capabilities			*/
-		unsigned int	disconnect_ok:1;	/* Disconnects allowed?			*/
-	} ifcfg;
+    /* configuration information */
+    struct {
+        unsigned char	clockrate;		/* clock rate of FAS device (MHz)	*/
+        unsigned char	select_timeout;		/* timeout (R5)				*/
+        unsigned char	sync_max_depth;		/* Synchronous xfer max fifo depth	*/
+        unsigned char	wide_max_size;		/* Maximum wide transfer size		*/
+        unsigned char	cntl3;			/* Control Reg 3			*/
+        unsigned int	asyncperiod;		/* Async transfer period (ns)		*/
+        unsigned int	capabilities;		/* driver capabilities			*/
+        unsigned int	disconnect_ok:1;	/* Disconnects allowed?			*/
+    } ifcfg;
 
-	/* queue handling */
-	struct {
-	    	Queue_t		issue;			/* issue queue				*/
-    		Queue_t		disconnected;		/* disconnected command queue		*/
-	} queues;
+    /* queue handling */
+    struct {
+        Queue_t		issue;			/* issue queue				*/
+        Queue_t		disconnected;		/* disconnected command queue		*/
+    } queues;
 
-	/* per-device info */
-	struct fas216_device {
-		unsigned char	disconnect_ok:1;	/* device can disconnect		*/
-		unsigned char	parity_enabled:1;	/* parity checking enabled		*/
-		unsigned char	parity_check:1;		/* need to check parity checking	*/
-		unsigned char	period;			/* sync xfer period in (*4ns)		*/
-		unsigned char	stp;			/* synchronous transfer period		*/
-		unsigned char	sof;			/* synchronous offset register		*/
-		unsigned char	wide_xfer;		/* currently negociated wide transfer	*/
-		neg_t		sync_state;		/* synchronous transfer mode		*/
-		neg_t		wide_state;		/* wide transfer mode			*/
-	} device[8];
-	unsigned long	busyluns[64/sizeof(unsigned long)];/* array of bits indicating LUNs busy	*/
+    /* per-device info */
+    struct fas216_device {
+        unsigned char	disconnect_ok:1;	/* device can disconnect		*/
+        unsigned char	parity_enabled:1;	/* parity checking enabled		*/
+        unsigned char	parity_check:1;		/* need to check parity checking	*/
+        unsigned char	period;			/* sync xfer period in (*4ns)		*/
+        unsigned char	stp;			/* synchronous transfer period		*/
+        unsigned char	sof;			/* synchronous offset register		*/
+        unsigned char	wide_xfer;		/* currently negociated wide transfer	*/
+        neg_t		sync_state;		/* synchronous transfer mode		*/
+        neg_t		wide_state;		/* wide transfer mode			*/
+    } device[8];
+    unsigned long	busyluns[64/sizeof(unsigned long)];/* array of bits indicating LUNs busy	*/
 
-	/* dma */
-	struct {
-		fasdmatype_t	transfer_type;		/* current type of DMA transfer		*/
-		fasdmatype_t	(*setup) (struct Scsi_Host *host, struct scsi_pointer *SCp, fasdmadir_t direction, fasdmatype_t min_dma);
-		void		(*pseudo)(struct Scsi_Host *host, struct scsi_pointer *SCp, fasdmadir_t direction, int transfer);
-		void		(*stop)  (struct Scsi_Host *host, struct scsi_pointer *SCp);
-	} dma;
+    /* dma */
+    struct {
+        fasdmatype_t	transfer_type;		/* current type of DMA transfer		*/
+        fasdmatype_t	(*setup) (struct Scsi_Host *host, struct scsi_pointer *SCp, fasdmadir_t direction, fasdmatype_t min_dma);
+        void		(*pseudo)(struct Scsi_Host *host, struct scsi_pointer *SCp, fasdmadir_t direction, int transfer);
+        void		(*stop)  (struct Scsi_Host *host, struct scsi_pointer *SCp);
+    } dma;
 
-	/* miscellaneous */
-	int			internal_done;		/* flag to indicate request done */
-	struct scsi_eh_save	ses;		/* holds request sense restore info */
-	unsigned long		magic_end;
+    /* miscellaneous */
+    int			internal_done;		/* flag to indicate request done */
+    struct scsi_eh_save	ses;		/* holds request sense restore info */
+    unsigned long		magic_end;
 } FAS216_Info;
 
 /* Function: int fas216_init (struct Scsi_Host *instance)

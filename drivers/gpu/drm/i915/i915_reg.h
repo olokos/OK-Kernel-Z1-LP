@@ -743,7 +743,7 @@
 #define   GMBUS_PORT_PANEL	3
 #define   GMBUS_PORT_DPC	4 /* HDMIC */
 #define   GMBUS_PORT_DPB	5 /* SDVO, HDMIB */
-				  /* 6 reserved */
+/* 6 reserved */
 #define   GMBUS_PORT_DPD	7 /* HDMID */
 #define   GMBUS_NUM_PORTS       8
 #define GMBUS1			0x5104 /* command/status */

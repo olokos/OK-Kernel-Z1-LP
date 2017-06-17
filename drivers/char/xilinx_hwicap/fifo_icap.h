@@ -42,15 +42,15 @@
 
 /* Reads integers from the device into the storage buffer. */
 int fifo_icap_get_configuration(
-		struct hwicap_drvdata *drvdata,
-		u32 *FrameBuffer,
-		u32 NumWords);
+    struct hwicap_drvdata *drvdata,
+    u32 *FrameBuffer,
+    u32 NumWords);
 
 /* Writes integers to the device from the storage buffer. */
 int fifo_icap_set_configuration(
-		struct hwicap_drvdata *drvdata,
-		u32 *FrameBuffer,
-		u32 NumWords);
+    struct hwicap_drvdata *drvdata,
+    u32 *FrameBuffer,
+    u32 NumWords);
 
 u32 fifo_icap_get_status(struct hwicap_drvdata *drvdata);
 void fifo_icap_reset(struct hwicap_drvdata *drvdata);

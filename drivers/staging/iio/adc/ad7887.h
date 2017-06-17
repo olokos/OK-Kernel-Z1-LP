@@ -18,9 +18,9 @@
 #define AD7887_PM_MODE4		(3)	 /* standby mode */
 
 enum ad7887_channels {
-	AD7887_CH0,
-	AD7887_CH0_CH1,
-	AD7887_CH1,
+    AD7887_CH0,
+    AD7887_CH0_CH1,
+    AD7887_CH1,
 };
 
 #define RES_MASK(bits)	((1 << (bits)) - 1) /* TODO: move this into a common header */
@@ -30,22 +30,22 @@ enum ad7887_channels {
  */
 
 struct ad7887_platform_data {
-	/* External Vref voltage applied */
-	u16				vref_mv;
-	/*
-	 * AD7887:
-	 * In single channel mode en_dual = flase, AIN1/Vref pins assumes its
-	 * Vref function. In dual channel mode en_dual = true, AIN1 becomes the
-	 * second input channel, and Vref is internally connected to Vdd.
-	 */
-	bool				en_dual;
-	/*
-	 * AD7887:
-	 * use_onchip_ref = true, the Vref is internally connected to the 2.500V
-	 * Voltage reference. If use_onchip_ref = false, the reference voltage
-	 * is supplied by AIN1/Vref
-	 */
-	bool				use_onchip_ref;
+    /* External Vref voltage applied */
+    u16				vref_mv;
+    /*
+     * AD7887:
+     * In single channel mode en_dual = flase, AIN1/Vref pins assumes its
+     * Vref function. In dual channel mode en_dual = true, AIN1 becomes the
+     * second input channel, and Vref is internally connected to Vdd.
+     */
+    bool				en_dual;
+    /*
+     * AD7887:
+     * use_onchip_ref = true, the Vref is internally connected to the 2.500V
+     * Voltage reference. If use_onchip_ref = false, the reference voltage
+     * is supplied by AIN1/Vref
+     */
+    bool				use_onchip_ref;
 };
 
 /**
@@ -55,31 +55,31 @@ struct ad7887_platform_data {
  */
 
 struct ad7887_chip_info {
-	u16				int_vref_mv;
-	struct iio_chan_spec		channel[3];
+    u16				int_vref_mv;
+    struct iio_chan_spec		channel[3];
 };
 
 struct ad7887_state {
-	struct spi_device		*spi;
-	const struct ad7887_chip_info	*chip_info;
-	struct regulator		*reg;
-	size_t				d_size;
-	u16				int_vref_mv;
-	struct spi_transfer		xfer[4];
-	struct spi_message		msg[3];
-	struct spi_message		*ring_msg;
-	unsigned char			tx_cmd_buf[8];
+    struct spi_device		*spi;
+    const struct ad7887_chip_info	*chip_info;
+    struct regulator		*reg;
+    size_t				d_size;
+    u16				int_vref_mv;
+    struct spi_transfer		xfer[4];
+    struct spi_message		msg[3];
+    struct spi_message		*ring_msg;
+    unsigned char			tx_cmd_buf[8];
 
-	/*
-	 * DMA (thus cache coherency maintenance) requires the
-	 * transfer buffers to live in their own cache lines.
-	 */
+    /*
+     * DMA (thus cache coherency maintenance) requires the
+     * transfer buffers to live in their own cache lines.
+     */
 
-	unsigned char			data[4] ____cacheline_aligned;
+    unsigned char			data[4] ____cacheline_aligned;
 };
 
 enum ad7887_supported_device_ids {
-	ID_AD7887
+    ID_AD7887
 };
 
 #ifdef CONFIG_IIO_BUFFER
@@ -88,13 +88,11 @@ void ad7887_ring_cleanup(struct iio_dev *indio_dev);
 #else /* CONFIG_IIO_BUFFER */
 
 static inline int
-ad7887_register_ring_funcs_and_init(struct iio_dev *indio_dev)
-{
-	return 0;
+ad7887_register_ring_funcs_and_init(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void ad7887_ring_cleanup(struct iio_dev *indio_dev)
-{
+static inline void ad7887_ring_cleanup(struct iio_dev *indio_dev) {
 }
 #endif /* CONFIG_IIO_BUFFER */
 #endif /* IIO_ADC_AD7887_H_ */

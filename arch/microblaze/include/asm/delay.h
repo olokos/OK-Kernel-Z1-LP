@@ -13,14 +13,13 @@
 #ifndef _ASM_MICROBLAZE_DELAY_H
 #define _ASM_MICROBLAZE_DELAY_H
 
-extern inline void __delay(unsigned long loops)
-{
-	asm volatile ("# __delay		\n\t"		\
-			"1: addi	%0, %0, -1\t\n"		\
-			"bneid	%0, 1b		\t\n"		\
-			"nop			\t\n"
-			: "=r" (loops)
-			: "0" (loops));
+extern inline void __delay(unsigned long loops) {
+    asm volatile ("# __delay		\n\t"		\
+                  "1: addi	%0, %0, -1\t\n"		\
+                  "bneid	%0, 1b		\t\n"		\
+                  "nop			\t\n"
+                  : "=r" (loops)
+                  : "0" (loops));
 }
 
 /*
@@ -41,19 +40,18 @@ extern inline void __delay(unsigned long loops)
 
 extern unsigned long loops_per_jiffy;
 
-extern inline void __udelay(unsigned int x)
-{
+extern inline void __udelay(unsigned int x) {
 
-	unsigned long long tmp =
-		(unsigned long long)x * (unsigned long long)loops_per_jiffy \
-			* 226LL;
-	unsigned loops = tmp >> 32;
+    unsigned long long tmp =
+        (unsigned long long)x * (unsigned long long)loops_per_jiffy \
+        * 226LL;
+    unsigned loops = tmp >> 32;
 
-/*
-	__asm__("mulxuu %0,%1,%2" : "=r" (loops) :
-		"r" (x), "r" (loops_per_jiffy * 226));
-*/
-	__delay(loops);
+    /*
+    	__asm__("mulxuu %0,%1,%2" : "=r" (loops) :
+    		"r" (x), "r" (loops_per_jiffy * 226));
+    */
+    __delay(loops);
 }
 
 extern void __bad_udelay(void);		/* deliberately undefined */

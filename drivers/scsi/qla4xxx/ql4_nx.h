@@ -34,9 +34,9 @@
  * Temperature control.
  */
 enum {
-	QLA82XX_TEMP_NORMAL = 0x1,	/* Normal operating range */
-	QLA82XX_TEMP_WARN,	/* Sound alert, temperature getting high */
-	QLA82XX_TEMP_PANIC	/* Fatal error, hardware has shut down. */
+    QLA82XX_TEMP_NORMAL = 0x1,	/* Normal operating range */
+    QLA82XX_TEMP_WARN,	/* Sound alert, temperature getting high */
+    QLA82XX_TEMP_PANIC	/* Fatal error, hardware has shut down. */
 };
 
 #define CRB_NIU_XG_PAUSE_CTL_P0		0x1
@@ -606,19 +606,19 @@ enum {
 #define QLA82XX_PCI_MSIX_CONTROL	0x40
 
 struct crb_128M_2M_sub_block_map {
-	unsigned valid;
-	unsigned start_128M;
-	unsigned end_128M;
-	unsigned start_2M;
+    unsigned valid;
+    unsigned start_128M;
+    unsigned end_128M;
+    unsigned start_2M;
 };
 
 struct crb_128M_2M_block_map {
-	struct crb_128M_2M_sub_block_map sub_block[16];
+    struct crb_128M_2M_sub_block_map sub_block[16];
 };
 
 struct crb_addr_pair {
-	long addr;
-	long data;
+    long addr;
+    long data;
 };
 
 #define ADDR_ERROR	((unsigned long) 0xffffffff)

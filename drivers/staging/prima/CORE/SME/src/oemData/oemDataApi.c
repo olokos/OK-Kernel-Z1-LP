@@ -52,22 +52,18 @@
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 
-eHalStatus oemData_OemDataReqOpen(tHalHandle hHal)
-{
+eHalStatus oemData_OemDataReqOpen(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    do
-    {
+    do {
         //initialize all the variables to null
         vos_mem_set(&(pMac->oemData), sizeof(tOemDataStruct), 0);
-        if(!HAL_STATUS_SUCCESS(status))
-        {
+        if(!HAL_STATUS_SUCCESS(status)) {
             smsLog(pMac, LOGE, "oemData_OemDataReqOpen: Cannot allocate memory for the timer function");
             break;
         }
-    }
-    while(0);
+    } while(0);
 
     return status;
 }
@@ -78,28 +74,23 @@ eHalStatus oemData_OemDataReqOpen(tHalHandle hHal)
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 
-eHalStatus oemData_OemDataReqClose(tHalHandle hHal)
-{
+eHalStatus oemData_OemDataReqClose(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    do
-    {
-        if(!HAL_STATUS_SUCCESS(status))
-        {
+    do {
+        if(!HAL_STATUS_SUCCESS(status)) {
             smsLog(pMac, LOGE, "oemData_OemDataReqClose: Failed in oemData_OemDataReqClose at StopTimers");
             break;
         }
 
-        if(pMac->oemData.pOemDataRsp != NULL)
-        {
+        if(pMac->oemData.pOemDataRsp != NULL) {
             vos_mem_free(pMac->oemData.pOemDataRsp);
         }
 
         //initialize all the variables to null
         vos_mem_set(&(pMac->oemData), sizeof(tOemDataStruct), 0);
-    }
-    while(0);
+    } while(0);
 
     return eHAL_STATUS_SUCCESS;
 }
@@ -110,21 +101,17 @@ eHalStatus oemData_OemDataReqClose(tHalHandle hHal)
            and frees up any memory occupied by this
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-void oemData_ReleaseOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDataCmd, eOemDataReqStatus oemDataReqStatus)
-{
+void oemData_ReleaseOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDataCmd, eOemDataReqStatus oemDataReqStatus) {
     //Do the callback
     pOemDataCmd->u.oemDataCmd.callback(pMac, pOemDataCmd->u.oemDataCmd.pContext, pOemDataCmd->u.oemDataCmd.oemDataReqID, oemDataReqStatus);
 
     //First take this command out of the active list
-    if(csrLLRemoveEntry(&pMac->sme.smeCmdActiveList, &pOemDataCmd->Link, LL_ACCESS_LOCK))
-    {
+    if(csrLLRemoveEntry(&pMac->sme.smeCmdActiveList, &pOemDataCmd->Link, LL_ACCESS_LOCK)) {
         vos_mem_set(&(pOemDataCmd->u.oemDataCmd), sizeof(tOemDataCmd), 0);
 
         //Now put this command back on the avilable command list
         smeReleaseCommand(pMac, pOemDataCmd);
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOGE, "OEM_DATA: **************** oemData_ReleaseOemDataReqCommand cannot release the command");
     }
 }
@@ -143,16 +130,13 @@ eHalStatus oemData_OemDataReq(tHalHandle hHal,
                               tOemDataReqConfig *oemDataReqConfig,
                               tANI_U32 *pOemDataReqID,
                               oemData_OemDataReqCompleteCallback callback,
-                              void *pContext)
-{
+                              void *pContext) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tSmeCmd *pOemDataCmd = NULL;
 
-    do
-    {
-        if( !CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    do {
+        if( !CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = eHAL_STATUS_FAILURE;
             break;
         }
@@ -171,8 +155,7 @@ eHalStatus oemData_OemDataReq(tHalHandle hHal,
         pOemDataCmd = smeGetCommandBuffer(pMac);
 
         //fill up the command before posting it.
-        if(pOemDataCmd)
-        {
+        if(pOemDataCmd) {
             pOemDataCmd->command = eSmeCommandOemDataReq;
             pOemDataCmd->u.oemDataCmd.callback = callback;
             pOemDataCmd->u.oemDataCmd.pContext = pContext;
@@ -183,9 +166,7 @@ eHalStatus oemData_OemDataReq(tHalHandle hHal,
             vos_mem_copy((v_VOID_t*)(pOemDataCmd->u.oemDataCmd.oemDataReq.oemDataReq),
                          (v_VOID_t*)(pMac->oemData.oemDataReqConfig.oemDataReq),
                          OEM_DATA_REQ_SIZE);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_FAILURE;
             break;
         }
@@ -195,11 +176,9 @@ eHalStatus oemData_OemDataReq(tHalHandle hHal,
         //into the sme queue. Also push this command with the normal priority
         smePushCommand(pMac, pOemDataCmd, eANI_BOOLEAN_FALSE);
 
-    }
-    while(0);
+    } while(0);
 
-    if(!HAL_STATUS_SUCCESS(status) && pOemDataCmd)
-    {
+    if(!HAL_STATUS_SUCCESS(status) && pOemDataCmd) {
         oemData_ReleaseOemDataReqCommand(pMac, pOemDataCmd, eOEM_DATA_REQ_FAILURE);
         pMac->oemData.oemDataReqActive = eANI_BOOLEAN_FALSE;
     }
@@ -214,8 +193,7 @@ eHalStatus oemData_OemDataReq(tHalHandle hHal,
     \param pOemDataReq: Pointer to the oem data request
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus oemData_SendMBOemDataReq(tpAniSirGlobal pMac, tOemDataReq *pOemDataReq)
-{
+eHalStatus oemData_SendMBOemDataReq(tpAniSirGlobal pMac, tOemDataReq *pOemDataReq) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tSirOemDataReq* pMsg;
     tANI_U16 msgLen;
@@ -230,8 +208,7 @@ eHalStatus oemData_SendMBOemDataReq(tpAniSirGlobal pMac, tOemDataReq *pOemDataRe
         status = eHAL_STATUS_FAILURE;
     else
         status = eHAL_STATUS_SUCCESS;
-    if(HAL_STATUS_SUCCESS(status))
-    {
+    if(HAL_STATUS_SUCCESS(status)) {
         vos_mem_set(pMsg, msgLen, 0);
         pMsg->messageType = pal_cpu_to_be16((tANI_U16)eWNI_SME_OEM_DATA_REQ);
         pMsg->messageLen = pal_cpu_to_be16(msgLen);
@@ -252,8 +229,7 @@ eHalStatus oemData_SendMBOemDataReq(tpAniSirGlobal pMac, tOemDataReq *pOemDataRe
            eSmeCommandOemDataReq
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus oemData_ProcessOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDataReqCmd)
-{
+eHalStatus oemData_ProcessOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDataReqCmd) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
 
     //check if the system is in proper mode of operation for
@@ -266,14 +242,11 @@ eHalStatus oemData_ProcessOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDa
     //2. IBSS Mode
     //3. BTAMP Mode ...
 
-    if(eHAL_STATUS_SUCCESS == oemData_IsOemDataReqAllowed(pMac))
-    {
+    if(eHAL_STATUS_SUCCESS == oemData_IsOemDataReqAllowed(pMac)) {
         smsLog(pMac, LOG1, "%s: OEM_DATA REQ allowed in the current mode", __func__);
         pMac->oemData.oemDataReqActive = eANI_BOOLEAN_TRUE;
         status = oemData_SendMBOemDataReq(pMac, &(pOemDataReqCmd->u.oemDataCmd.oemDataReq));
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOG1, "%s: OEM_DATA REQ not allowed in the current mode", __func__);
         oemData_ReleaseOemDataReqCommand(pMac, pOemDataReqCmd, eOEM_DATA_REQ_INVALID_MODE);
         pMac->oemData.oemDataReqActive = eANI_BOOLEAN_FALSE;
@@ -288,8 +261,7 @@ eHalStatus oemData_ProcessOemDataReqCommand(tpAniSirGlobal pMac, tSmeCmd *pOemDa
     \param pMsg - Pointer to the pSirOemDataRsp
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg)
-{
+eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg) {
     eHalStatus                         status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal                     pMac;
     tListElem                          *pEntry = NULL;
@@ -299,38 +271,31 @@ eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg)
 
     smsLog(pMac, LOG1, "%s: OEM_DATA Entering", __func__);
 
-    do
-    {
-        if(pMsg == NULL)
-        {
+    do {
+        if(pMsg == NULL) {
             smsLog(pMac, LOGE, "in %s msg ptr is NULL", __func__);
             status = eHAL_STATUS_FAILURE;
             break;
         }
 
         pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
-        if(pEntry)
-        {
+        if(pEntry) {
             pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
-            if(eSmeCommandOemDataReq == pCommand->command)
-            {
+            if(eSmeCommandOemDataReq == pCommand->command) {
                 pOemDataRsp = (tSirOemDataRsp*)pMsg;
 
                 //make sure to acquire the lock before modifying the data
                 status = sme_AcquireGlobalLock(&pMac->sme);
-                if(!HAL_STATUS_SUCCESS(status))
-                {
+                if(!HAL_STATUS_SUCCESS(status)) {
                     break;
                 }
 
-                if(pMac->oemData.pOemDataRsp != NULL)
-                {
+                if(pMac->oemData.pOemDataRsp != NULL) {
                     vos_mem_free(pMac->oemData.pOemDataRsp);
                 }
                 pMac->oemData.pOemDataRsp = (tOemDataRsp*)vos_mem_malloc(sizeof(tOemDataRsp));
 
-                if(pMac->oemData.pOemDataRsp == NULL)
-                {
+                if(pMac->oemData.pOemDataRsp == NULL) {
                     sme_ReleaseGlobalLock(&pMac->sme);
                     smsLog(pMac, LOGE, "in %s vos_mem_malloc failed for pMac->oemData.pOemDataRsp", __func__);
                     status = eHAL_STATUS_FAILURE;
@@ -343,17 +308,13 @@ eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg)
                              sizeof(tOemDataRsp));
                 smsLog(pMac, LOGE, "after memory copy");
                 sme_ReleaseGlobalLock(&pMac->sme);
-            }
-            else
-            {
+            } else {
                 smsLog(pMac, LOGE, "in %s eWNI_SME_OEM_DATA_RSP Received but NO REQs are ACTIVE ...",
                        __func__);
                 status = eHAL_STATUS_FAILURE;
                 break;
             }
-        }
-        else
-        {
+        } else {
             smsLog(pMac, LOGE, "in %s eWNI_SME_OEM_DATA_RSP Received but NO commands are ACTIVE ...", __func__);
             status = eHAL_STATUS_FAILURE;
             break;
@@ -362,8 +323,7 @@ eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg)
         oemData_ReleaseOemDataReqCommand(pMac, pCommand, eHAL_STATUS_SUCCESS);
         pMac->oemData.oemDataReqActive = eANI_BOOLEAN_FALSE;
 
-    }
-    while(0);
+    } while(0);
 
     return status;
 }
@@ -374,20 +334,16 @@ eHalStatus sme_HandleOemDataRsp(tHalHandle hHal, tANI_U8* pMsg)
            current driver state
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus oemData_IsOemDataReqAllowed(tHalHandle hHal)
-{
+eHalStatus oemData_IsOemDataReqAllowed(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tANI_U32 sessionId;
 
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    for(sessionId = 0; sessionId < CSR_ROAM_SESSION_MAX; sessionId++)
-    {
-        if(CSR_IS_SESSION_VALID(pMac, sessionId))
-        {
+    for(sessionId = 0; sessionId < CSR_ROAM_SESSION_MAX; sessionId++) {
+        if(CSR_IS_SESSION_VALID(pMac, sessionId)) {
             //co-exist with IBSS or BT-AMP mode is not supported
-            if(csrIsConnStateIbss(pMac, sessionId) || csrIsBTAMP(pMac, sessionId) )
-            {
+            if(csrIsConnStateIbss(pMac, sessionId) || csrIsBTAMP(pMac, sessionId) ) {
                 //co-exist with IBSS or BT-AMP mode is not supported
                 smsLog(pMac, LOGW, "OEM DATA REQ is not allowed due to IBSS|BTAMP exist in session %d", sessionId);
                 status = eHAL_STATUS_CSR_WRONG_STATE;

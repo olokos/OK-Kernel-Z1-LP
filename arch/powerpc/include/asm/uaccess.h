@@ -74,8 +74,8 @@
  */
 
 struct exception_table_entry {
-	unsigned long insn;
-	unsigned long fixup;
+    unsigned long insn;
+    unsigned long fixup;
 };
 
 /*
@@ -325,38 +325,36 @@ do {								\
 /* more complex routines */
 
 extern unsigned long __copy_tofrom_user(void __user *to,
-		const void __user *from, unsigned long size);
+                                        const void __user *from, unsigned long size);
 
 #ifndef __powerpc64__
 
 static inline unsigned long copy_from_user(void *to,
-		const void __user *from, unsigned long n)
-{
-	unsigned long over;
+        const void __user *from, unsigned long n) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_READ, from, n))
-		return __copy_tofrom_user((__force void __user *)to, from, n);
-	if ((unsigned long)from < TASK_SIZE) {
-		over = (unsigned long)from + n - TASK_SIZE;
-		return __copy_tofrom_user((__force void __user *)to, from,
-				n - over) + over;
-	}
-	return n;
+    if (access_ok(VERIFY_READ, from, n))
+        return __copy_tofrom_user((__force void __user *)to, from, n);
+    if ((unsigned long)from < TASK_SIZE) {
+        over = (unsigned long)from + n - TASK_SIZE;
+        return __copy_tofrom_user((__force void __user *)to, from,
+                                  n - over) + over;
+    }
+    return n;
 }
 
 static inline unsigned long copy_to_user(void __user *to,
-		const void *from, unsigned long n)
-{
-	unsigned long over;
+        const void *from, unsigned long n) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __copy_tofrom_user(to, (__force void __user *)from, n);
-	if ((unsigned long)to < TASK_SIZE) {
-		over = (unsigned long)to + n - TASK_SIZE;
-		return __copy_tofrom_user(to, (__force void __user *)from,
-				n - over) + over;
-	}
-	return n;
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __copy_tofrom_user(to, (__force void __user *)from, n);
+    if ((unsigned long)to < TASK_SIZE) {
+        over = (unsigned long)to + n - TASK_SIZE;
+        return __copy_tofrom_user(to, (__force void __user *)from,
+                                  n - over) + over;
+    }
+    return n;
 }
 
 #else /* __powerpc64__ */
@@ -365,103 +363,97 @@ static inline unsigned long copy_to_user(void __user *to,
 	__copy_tofrom_user((to), (from), (size))
 
 extern unsigned long copy_from_user(void *to, const void __user *from,
-				    unsigned long n);
+                                    unsigned long n);
 extern unsigned long copy_to_user(void __user *to, const void *from,
-				  unsigned long n);
+                                  unsigned long n);
 extern unsigned long copy_in_user(void __user *to, const void __user *from,
-				  unsigned long n);
+                                  unsigned long n);
 
 #endif /* __powerpc64__ */
 
 static inline unsigned long __copy_from_user_inatomic(void *to,
-		const void __user *from, unsigned long n)
-{
-	if (__builtin_constant_p(n) && (n <= 8)) {
-		unsigned long ret = 1;
+        const void __user *from, unsigned long n) {
+    if (__builtin_constant_p(n) && (n <= 8)) {
+        unsigned long ret = 1;
 
-		switch (n) {
-		case 1:
-			__get_user_size(*(u8 *)to, from, 1, ret);
-			break;
-		case 2:
-			__get_user_size(*(u16 *)to, from, 2, ret);
-			break;
-		case 4:
-			__get_user_size(*(u32 *)to, from, 4, ret);
-			break;
-		case 8:
-			__get_user_size(*(u64 *)to, from, 8, ret);
-			break;
-		}
-		if (ret == 0)
-			return 0;
-	}
-	return __copy_tofrom_user((__force void __user *)to, from, n);
+        switch (n) {
+        case 1:
+            __get_user_size(*(u8 *)to, from, 1, ret);
+            break;
+        case 2:
+            __get_user_size(*(u16 *)to, from, 2, ret);
+            break;
+        case 4:
+            __get_user_size(*(u32 *)to, from, 4, ret);
+            break;
+        case 8:
+            __get_user_size(*(u64 *)to, from, 8, ret);
+            break;
+        }
+        if (ret == 0)
+            return 0;
+    }
+    return __copy_tofrom_user((__force void __user *)to, from, n);
 }
 
 static inline unsigned long __copy_to_user_inatomic(void __user *to,
-		const void *from, unsigned long n)
-{
-	if (__builtin_constant_p(n) && (n <= 8)) {
-		unsigned long ret = 1;
+        const void *from, unsigned long n) {
+    if (__builtin_constant_p(n) && (n <= 8)) {
+        unsigned long ret = 1;
 
-		switch (n) {
-		case 1:
-			__put_user_size(*(u8 *)from, (u8 __user *)to, 1, ret);
-			break;
-		case 2:
-			__put_user_size(*(u16 *)from, (u16 __user *)to, 2, ret);
-			break;
-		case 4:
-			__put_user_size(*(u32 *)from, (u32 __user *)to, 4, ret);
-			break;
-		case 8:
-			__put_user_size(*(u64 *)from, (u64 __user *)to, 8, ret);
-			break;
-		}
-		if (ret == 0)
-			return 0;
-	}
-	return __copy_tofrom_user(to, (__force const void __user *)from, n);
+        switch (n) {
+        case 1:
+            __put_user_size(*(u8 *)from, (u8 __user *)to, 1, ret);
+            break;
+        case 2:
+            __put_user_size(*(u16 *)from, (u16 __user *)to, 2, ret);
+            break;
+        case 4:
+            __put_user_size(*(u32 *)from, (u32 __user *)to, 4, ret);
+            break;
+        case 8:
+            __put_user_size(*(u64 *)from, (u64 __user *)to, 8, ret);
+            break;
+        }
+        if (ret == 0)
+            return 0;
+    }
+    return __copy_tofrom_user(to, (__force const void __user *)from, n);
 }
 
 static inline unsigned long __copy_from_user(void *to,
-		const void __user *from, unsigned long size)
-{
-	might_sleep();
-	return __copy_from_user_inatomic(to, from, size);
+        const void __user *from, unsigned long size) {
+    might_sleep();
+    return __copy_from_user_inatomic(to, from, size);
 }
 
 static inline unsigned long __copy_to_user(void __user *to,
-		const void *from, unsigned long size)
-{
-	might_sleep();
-	return __copy_to_user_inatomic(to, from, size);
+        const void *from, unsigned long size) {
+    might_sleep();
+    return __copy_to_user_inatomic(to, from, size);
 }
 
 extern unsigned long __clear_user(void __user *addr, unsigned long size);
 
-static inline unsigned long clear_user(void __user *addr, unsigned long size)
-{
-	might_sleep();
-	if (likely(access_ok(VERIFY_WRITE, addr, size)))
-		return __clear_user(addr, size);
-	if ((unsigned long)addr < TASK_SIZE) {
-		unsigned long over = (unsigned long)addr + size - TASK_SIZE;
-		return __clear_user(addr, size - over) + over;
-	}
-	return size;
+static inline unsigned long clear_user(void __user *addr, unsigned long size) {
+    might_sleep();
+    if (likely(access_ok(VERIFY_WRITE, addr, size)))
+        return __clear_user(addr, size);
+    if ((unsigned long)addr < TASK_SIZE) {
+        unsigned long over = (unsigned long)addr + size - TASK_SIZE;
+        return __clear_user(addr, size - over) + over;
+    }
+    return size;
 }
 
 extern int __strncpy_from_user(char *dst, const char __user *src, long count);
 
 static inline long strncpy_from_user(char *dst, const char __user *src,
-		long count)
-{
-	might_sleep();
-	if (likely(access_ok(VERIFY_READ, src, 1)))
-		return __strncpy_from_user(dst, src, count);
-	return -EFAULT;
+                                     long count) {
+    might_sleep();
+    if (likely(access_ok(VERIFY_READ, src, 1)))
+        return __strncpy_from_user(dst, src, count);
+    return -EFAULT;
 }
 
 /*
@@ -479,13 +471,12 @@ extern int __strnlen_user(const char __user *str, long len, unsigned long top);
  * The `top' parameter to __strnlen_user is to make sure that
  * we can never overflow from the user area into kernel space.
  */
-static inline int strnlen_user(const char __user *str, long len)
-{
-	unsigned long top = current->thread.fs.seg;
+static inline int strnlen_user(const char __user *str, long len) {
+    unsigned long top = current->thread.fs.seg;
 
-	if ((unsigned long)str > top)
-		return 0;
-	return __strnlen_user(str, len, top);
+    if ((unsigned long)str > top)
+        return 0;
+    return __strnlen_user(str, len, top);
 }
 
 #define strlen_user(str)	strnlen_user((str), 0x7ffffffe)

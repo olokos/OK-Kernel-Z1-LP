@@ -71,14 +71,11 @@ static vos_lock_t          persistentTimerCountLock;
 
 // clean up timer states after it has been deactivated
 // check and try to allow sleep after a timer has been stopped or expired
-static void tryAllowingSleep( VOS_TIMER_TYPE type )
-{
-    if ( VOS_TIMER_TYPE_WAKE_APPS == type )
-    {
+static void tryAllowingSleep( VOS_TIMER_TYPE type ) {
+    if ( VOS_TIMER_TYPE_WAKE_APPS == type ) {
         // vos_lock_acquire( &persistentTimerCountLock );
         persistentTimerCount--;
-        if ( 0 == persistentTimerCount )
-        {
+        if ( 0 == persistentTimerCount ) {
             // since the number of persistent timers has decreased from 1 to 0,
             // the timer should allow sleep
             //sleep_assert_okts( sleepClientHandle );
@@ -109,8 +106,7 @@ static void tryAllowingSleep( VOS_TIMER_TYPE type )
 
   --------------------------------------------------------------------------*/
 
-static void vos_linux_timer_callback (unsigned long data)
-{
+static void vos_linux_timer_callback (unsigned long data) {
     vos_timer_t *timer = ( vos_timer_t *)data;
     vos_msg_t msg;
     VOS_STATUS vStatus;
@@ -123,8 +119,7 @@ static void vos_linux_timer_callback (unsigned long data)
 
     VOS_ASSERT(timer);
 
-    if (timer == NULL)
-    {
+    if (timer == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s Null pointer passed in!",__func__);
         return;
     }
@@ -132,8 +127,7 @@ static void vos_linux_timer_callback (unsigned long data)
     threadId = timer->platformInfo.threadID;
     spin_lock_irqsave( &timer->platformInfo.spinlock,flags );
 
-    switch ( timer->state )
-    {
+    switch ( timer->state ) {
     case VOS_TIMER_STATE_STARTING:
         // we are in this state because someone just started the timer, MM timer
         // got started and expired, but the time content have not bee updated
@@ -168,8 +162,7 @@ static void vos_linux_timer_callback (unsigned long data)
 
     spin_unlock_irqrestore( &timer->platformInfo.spinlock,flags );
 
-    if ( VOS_STATUS_SUCCESS != vStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vStatus ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "TIMER callback called in a wrong state=%d", timer->state);
         return;
@@ -177,8 +170,7 @@ static void vos_linux_timer_callback (unsigned long data)
 
     tryAllowingSleep( type );
 
-    if (callback == NULL)
-    {
+    if (callback == NULL) {
         VOS_ASSERT(0);
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: No TIMER callback, Could not enqueue timer to any queue",
@@ -187,8 +179,7 @@ static void vos_linux_timer_callback (unsigned long data)
     }
 
     // If timer has expired then call vos_client specific callback
-    if ( vos_sched_is_tx_thread( threadId ) )
-    {
+    if ( vos_sched_is_tx_thread( threadId ) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                   "TIMER callback: running on TX thread");
 
@@ -200,9 +191,7 @@ static void vos_linux_timer_callback (unsigned long data)
 
         if(vos_tx_mq_serialize( VOS_MQ_ID_SYS, &msg ) == VOS_STATUS_SUCCESS)
             return;
-    }
-    else if ( vos_sched_is_rx_thread( threadId ) )
-    {
+    } else if ( vos_sched_is_rx_thread( threadId ) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                   "TIMER callback: running on RX thread");
 
@@ -214,9 +203,7 @@ static void vos_linux_timer_callback (unsigned long data)
 
         if(vos_rx_mq_serialize( VOS_MQ_ID_SYS, &msg ) == VOS_STATUS_SUCCESS)
             return;
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                    "TIMER callback: running on MC thread");
 
@@ -246,16 +233,13 @@ static void vos_linux_timer_callback (unsigned long data)
   \sa
 
 ---------------------------------------------------------------------------*/
-VOS_TIMER_STATE vos_timer_getCurrentState( vos_timer_t *pTimer )
-{
-    if ( NULL == pTimer )
-    {
+VOS_TIMER_STATE vos_timer_getCurrentState( vos_timer_t *pTimer ) {
+    if ( NULL == pTimer ) {
         VOS_ASSERT(0);
         return VOS_TIMER_STATE_UNUSED;
     }
 
-    switch ( pTimer->state )
-    {
+    switch ( pTimer->state ) {
     case VOS_TIMER_STATE_STOPPED:
     case VOS_TIMER_STATE_STARTING:
     case VOS_TIMER_STATE_RUNNING:
@@ -278,8 +262,7 @@ VOS_TIMER_STATE vos_timer_getCurrentState( vos_timer_t *pTimer )
 
   --------------------------------------------------------------------------*/
 
-void vos_timer_module_init( void )
-{
+void vos_timer_module_init( void ) {
     VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                "Initializing the VOSS timer module");
     vos_lock_init( &persistentTimerCountLock );
@@ -292,22 +275,19 @@ hdd_list_t vosTimerList;
 
 static void vos_timer_clean(void);
 
-void vos_timer_manager_init()
-{
+void vos_timer_manager_init() {
     /* Initalizing the list with maximum size of 60000 */
     hdd_list_init(&vosTimerList, 1000);
     return;
 }
 
-static void vos_timer_clean()
-{
+static void vos_timer_clean() {
     v_SIZE_t listSize;
     unsigned long flags;
 
     hdd_list_size(&vosTimerList, &listSize);
 
-    if (listSize)
-    {
+    if (listSize) {
         hdd_list_node_t* pNode;
         VOS_STATUS vosStatus;
 
@@ -316,13 +296,11 @@ static void vos_timer_clean()
                   "%s: List is not Empty. listSize %d ",
                   __func__, (int)listSize);
 
-        do
-        {
+        do {
             spin_lock_irqsave(&vosTimerList.lock, flags);
             vosStatus = hdd_list_remove_front(&vosTimerList, &pNode);
             spin_unlock_irqrestore(&vosTimerList.lock, flags);
-            if (VOS_STATUS_SUCCESS == vosStatus)
-            {
+            if (VOS_STATUS_SUCCESS == vosStatus) {
                 ptimerNode = (timer_node_t*)pNode;
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "Timer Leak@ File %s, @Line %d",
@@ -330,13 +308,11 @@ static void vos_timer_clean()
 
                 vos_mem_free(ptimerNode);
             }
-        }
-        while (vosStatus == VOS_STATUS_SUCCESS);
+        } while (vosStatus == VOS_STATUS_SUCCESS);
     }
 }
 
-void vos_timer_exit()
-{
+void vos_timer_exit() {
     vos_timer_clean();
     hdd_list_destroy(&vosTimerList);
 }
@@ -403,13 +379,11 @@ void vos_timer_exit()
 #ifdef TIMER_MANAGER
 VOS_STATUS vos_timer_init_debug( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
                                  vos_timer_callback_t callback, v_PVOID_t userData,
-                                 char* fileName, v_U32_t lineNum )
-{
+                                 char* fileName, v_U32_t lineNum ) {
     VOS_STATUS vosStatus;
     unsigned long flags;
     // Check for invalid pointer
-    if ((timer == NULL) || (callback == NULL))
-    {
+    if ((timer == NULL) || (callback == NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Null params being passed",__func__);
         VOS_ASSERT(0);
@@ -418,8 +392,7 @@ VOS_STATUS vos_timer_init_debug( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
 
     timer->ptimerNode = vos_mem_malloc(sizeof(timer_node_t));
 
-    if(timer->ptimerNode == NULL)
-    {
+    if(timer->ptimerNode == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for timeNode",__func__);
         VOS_ASSERT(0);
@@ -435,8 +408,7 @@ VOS_STATUS vos_timer_init_debug( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
     spin_lock_irqsave(&vosTimerList.lock, flags);
     vosStatus = hdd_list_insert_front(&vosTimerList, &timer->ptimerNode->pNode);
     spin_unlock_irqrestore(&vosTimerList.lock, flags);
-    if(VOS_STATUS_SUCCESS != vosStatus)
-    {
+    if(VOS_STATUS_SUCCESS != vosStatus) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Unable to insert node into List vosStatus %d", __func__, vosStatus);
     }
@@ -458,11 +430,9 @@ VOS_STATUS vos_timer_init_debug( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
 }
 #else
 VOS_STATUS vos_timer_init( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
-                           vos_timer_callback_t callback, v_PVOID_t userData )
-{
+                           vos_timer_callback_t callback, v_PVOID_t userData ) {
     // Check for invalid pointer
-    if ((timer == NULL) || (callback == NULL))
-    {
+    if ((timer == NULL) || (callback == NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Null params being passed",__func__);
         VOS_ASSERT(0);
@@ -520,14 +490,12 @@ VOS_STATUS vos_timer_init( vos_timer_t *timer, VOS_TIMER_TYPE timerType,
 
 ---------------------------------------------------------------------------*/
 #ifdef TIMER_MANAGER
-VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
-{
+VOS_STATUS vos_timer_destroy ( vos_timer_t *timer ) {
     VOS_STATUS vStatus=VOS_STATUS_SUCCESS;
     unsigned long flags;
 
     // Check for invalid pointer
-    if ( NULL == timer )
-    {
+    if ( NULL == timer ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Null timer pointer being passed",__func__);
         VOS_ASSERT(0);
@@ -535,8 +503,7 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
     }
 
     // Check if timer refers to an uninitialized object
-    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie )
-    {
+    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Cannot destroy uninitialized timer",__func__);
         return VOS_STATUS_E_INVAL;
@@ -545,8 +512,7 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
     spin_lock_irqsave(&vosTimerList.lock, flags);
     vStatus = hdd_list_remove_node(&vosTimerList, &timer->ptimerNode->pNode);
     spin_unlock_irqrestore(&vosTimerList.lock, flags);
-    if(vStatus != VOS_STATUS_SUCCESS)
-    {
+    if(vStatus != VOS_STATUS_SUCCESS) {
         VOS_ASSERT(0);
         return VOS_STATUS_E_INVAL;
     }
@@ -555,8 +521,7 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
 
     spin_lock_irqsave( &timer->platformInfo.spinlock,flags );
 
-    switch ( timer->state )
-    {
+    switch ( timer->state ) {
     case VOS_TIMER_STATE_STARTING:
         vStatus = VOS_STATUS_E_BUSY;
         break;
@@ -576,8 +541,7 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
         break;
     }
 
-    if ( VOS_STATUS_SUCCESS == vStatus )
-    {
+    if ( VOS_STATUS_SUCCESS == vStatus ) {
         timer->platformInfo.cookie = LINUX_INVALID_TIMER_COOKIE;
         timer->state = VOS_TIMER_STATE_UNUSED;
         spin_unlock_irqrestore( &timer->platformInfo.spinlock,flags );
@@ -595,14 +559,12 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
 }
 
 #else
-VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
-{
+VOS_STATUS vos_timer_destroy ( vos_timer_t *timer ) {
     VOS_STATUS vStatus=VOS_STATUS_SUCCESS;
     unsigned long flags;
 
     // Check for invalid pointer
-    if ( NULL == timer )
-    {
+    if ( NULL == timer ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Null timer pointer being passed",__func__);
         VOS_ASSERT(0);
@@ -610,16 +572,14 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
     }
 
     // Check if timer refers to an uninitialized object
-    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie )
-    {
+    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Cannot destroy uninitialized timer",__func__);
         return VOS_STATUS_E_INVAL;
     }
     spin_lock_irqsave( &timer->platformInfo.spinlock,flags );
 
-    switch ( timer->state )
-    {
+    switch ( timer->state ) {
     case VOS_TIMER_STATE_STARTING:
         vStatus = VOS_STATUS_E_BUSY;
         break;
@@ -639,8 +599,7 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
         break;
     }
 
-    if ( VOS_STATUS_SUCCESS == vStatus )
-    {
+    if ( VOS_STATUS_SUCCESS == vStatus ) {
         timer->platformInfo.cookie = LINUX_INVALID_TIMER_COOKIE;
         timer->state = VOS_TIMER_STATE_UNUSED;
         spin_unlock_irqrestore( &timer->platformInfo.spinlock,flags );
@@ -685,16 +644,14 @@ VOS_STATUS vos_timer_destroy ( vos_timer_t *timer )
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime )
-{
+VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime ) {
     unsigned long flags;
 
     VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
                "Timer Addr inside voss_start : 0x%p ", timer );
 
     // Check for invalid pointer
-    if ( NULL == timer )
-    {
+    if ( NULL == timer ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s Null timer pointer being passed", __func__);
         VOS_ASSERT(0);
@@ -702,20 +659,17 @@ VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime )
     }
 
     // Check if timer refers to an uninitialized object
-    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie )
-    {
+    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Cannot start uninitialized timer",__func__);
-        if ( LINUX_INVALID_TIMER_COOKIE != timer->platformInfo.cookie )
-        {
+        if ( LINUX_INVALID_TIMER_COOKIE != timer->platformInfo.cookie ) {
             VOS_ASSERT(0);
         }
         return VOS_STATUS_E_INVAL;
     }
 
     // Check if timer has expiration time less than 10 ms
-    if ( expirationTime < 10 )
-    {
+    if ( expirationTime < 10 ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Cannot start a "
                   "timer with expiration less than 10 ms", __func__);
@@ -727,8 +681,7 @@ VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime )
     spin_lock_irqsave( &timer->platformInfo.spinlock,flags );
 
     // Ensure if the timer can be started
-    if ( VOS_TIMER_STATE_STOPPED != timer->state )
-    {
+    if ( VOS_TIMER_STATE_STOPPED != timer->state ) {
         spin_unlock_irqrestore( &timer->platformInfo.spinlock,flags );
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
                   "%s: Cannot start timer in state = %d ",__func__, timer->state);
@@ -744,11 +697,9 @@ VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime )
     // Get the thread ID on which the timer is being started
     timer->platformInfo.threadID  = current->pid;
 
-    if ( VOS_TIMER_TYPE_WAKE_APPS == timer->type )
-    {
+    if ( VOS_TIMER_TYPE_WAKE_APPS == timer->type ) {
         persistentTimerCount++;
-        if ( 1 == persistentTimerCount )
-        {
+        if ( 1 == persistentTimerCount ) {
             // Since we now have one persistent timer, we need to disallow sleep
             // sleep_negate_okts( sleepClientHandle );
         }
@@ -780,16 +731,14 @@ VOS_STATUS vos_timer_start( vos_timer_t *timer, v_U32_t expirationTime )
   \sa
 
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_timer_stop ( vos_timer_t *timer )
-{
+VOS_STATUS vos_timer_stop ( vos_timer_t *timer ) {
     unsigned long flags;
 
     VOS_TRACE( VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
                "%s: Timer Addr inside voss_stop : 0x%p",__func__,timer );
 
     // Check for invalid pointer
-    if ( NULL == timer )
-    {
+    if ( NULL == timer ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s Null timer pointer being passed", __func__);
         VOS_ASSERT(0);
@@ -797,12 +746,10 @@ VOS_STATUS vos_timer_stop ( vos_timer_t *timer )
     }
 
     // Check if timer refers to an uninitialized object
-    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie )
-    {
+    if ( LINUX_TIMER_COOKIE != timer->platformInfo.cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: Cannot stop uninitialized timer",__func__);
-        if ( LINUX_INVALID_TIMER_COOKIE != timer->platformInfo.cookie )
-        {
+        if ( LINUX_INVALID_TIMER_COOKIE != timer->platformInfo.cookie ) {
             VOS_ASSERT(0);
         }
         return VOS_STATUS_E_INVAL;
@@ -811,8 +758,7 @@ VOS_STATUS vos_timer_stop ( vos_timer_t *timer )
     // Ensure the timer state is correct
     spin_lock_irqsave( &timer->platformInfo.spinlock,flags );
 
-    if ( VOS_TIMER_STATE_RUNNING != timer->state )
-    {
+    if ( VOS_TIMER_STATE_RUNNING != timer->state ) {
         spin_unlock_irqrestore( &timer->platformInfo.spinlock,flags );
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
                   "%s: Cannot stop timer in state = %d",
@@ -847,8 +793,7 @@ VOS_STATUS vos_timer_stop ( vos_timer_t *timer )
   \sa
 
   ------------------------------------------------------------------------*/
-v_TIME_t vos_timer_get_system_ticks( v_VOID_t )
-{
+v_TIME_t vos_timer_get_system_ticks( v_VOID_t ) {
     return( jiffies_to_msecs(jiffies) / 10 );
 }
 
@@ -865,8 +810,7 @@ v_TIME_t vos_timer_get_system_ticks( v_VOID_t )
   \sa
 
   ------------------------------------------------------------------------*/
-v_TIME_t vos_timer_get_system_time( v_VOID_t )
-{
+v_TIME_t vos_timer_get_system_time( v_VOID_t ) {
     struct timeval tv;
     do_gettimeofday(&tv);
     return tv.tv_sec*1000 + tv.tv_usec/1000;

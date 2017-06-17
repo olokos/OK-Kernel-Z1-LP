@@ -106,8 +106,7 @@
 
 
 /// implementation specific vos packet type
-struct vos_pkt_t
-{
+struct vos_pkt_t {
 
     //palPacket MUST be the first member of vos_pkt_t
     wpt_packet palPacket;
@@ -139,8 +138,7 @@ struct vos_pkt_t
 // to be saved in 'low resource' conditions.  We need all the
 // parameters from the original call to vos_pkt_get_packet()
 // to resolve the packet request when one become available.
-typedef struct
-{
+typedef struct {
     vos_pkt_get_packet_callback callback;
 
     v_VOID_t *userData;
@@ -159,8 +157,7 @@ typedef struct
 // - memory for the vos Packet Head / Tail buffers
 // - memory for the Rx Raw data buffers
 // - memory for the Tx Mgmt data buffers.
-typedef struct vos_pkt_context_s
-{
+typedef struct vos_pkt_context_s {
     // place to save the vos Context
     v_CONTEXT_t vosContext;
 

@@ -29,7 +29,8 @@
 				   socket to transmit pending data.  */
 #define SO_OOBINLINE 0x0100	/* Receive out-of-band data in-band.  */
 #if 0
-To add: #define SO_REUSEPORT 0x0200	/* Allow local address and port reuse.  */
+To add:
+#define SO_REUSEPORT 0x0200	/* Allow local address and port reuse.  */
 #endif
 
 #define SO_TYPE		0x1008	/* Compatible name for SO_STYLE.  */
@@ -106,13 +107,13 @@ To add: #define SO_REUSEPORT 0x0200	/* Allow local address and port reuse.  */
  *		  For writing rarp and other similar things on the user level.
  */
 enum sock_type {
-	SOCK_DGRAM	= 1,
-	SOCK_STREAM	= 2,
-	SOCK_RAW	= 3,
-	SOCK_RDM	= 4,
-	SOCK_SEQPACKET	= 5,
-	SOCK_DCCP	= 6,
-	SOCK_PACKET	= 10,
+    SOCK_DGRAM	= 1,
+    SOCK_STREAM	= 2,
+    SOCK_RAW	= 3,
+    SOCK_RDM	= 4,
+    SOCK_SEQPACKET	= 5,
+    SOCK_DCCP	= 6,
+    SOCK_PACKET	= 10,
 };
 
 #define SOCK_MAX (SOCK_PACKET + 1)

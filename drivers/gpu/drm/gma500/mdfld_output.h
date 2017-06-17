@@ -38,25 +38,25 @@
 struct mdfld_dsi_config;
 
 enum panel_type {
-	TPO_VID,
-	TMD_VID,
-	HDMI,
-	TC35876X,
+    TPO_VID,
+    TMD_VID,
+    HDMI,
+    TC35876X,
 };
 
 struct panel_info {
-	u32 width_mm;
-	u32 height_mm;
-	/* Other info */
+    u32 width_mm;
+    u32 height_mm;
+    /* Other info */
 };
 
 struct panel_funcs {
-	const struct drm_encoder_funcs *encoder_funcs;
-	const struct drm_encoder_helper_funcs *encoder_helper_funcs;
-	struct drm_display_mode * (*get_config_mode)(struct drm_device *);
-	int (*get_panel_info)(struct drm_device *, int, struct panel_info *);
-	int (*reset)(int pipe);
-	void (*drv_ic_init)(struct mdfld_dsi_config *dsi_config, int pipe);
+    const struct drm_encoder_funcs *encoder_funcs;
+    const struct drm_encoder_helper_funcs *encoder_helper_funcs;
+    struct drm_display_mode * (*get_config_mode)(struct drm_device *);
+    int (*get_panel_info)(struct drm_device *, int, struct panel_info *);
+    int (*reset)(int pipe);
+    void (*drv_ic_init)(struct mdfld_dsi_config *dsi_config, int pipe);
 };
 
 int mdfld_output_init(struct drm_device *dev);

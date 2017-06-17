@@ -114,68 +114,68 @@
 #define DRIVER_PATCHLEVEL	0
 
 enum radeon_cp_microcode_version {
-	UCODE_R100,
-	UCODE_R200,
-	UCODE_R300,
+    UCODE_R100,
+    UCODE_R200,
+    UCODE_R300,
 };
 
 typedef struct drm_radeon_freelist {
-	unsigned int age;
-	struct drm_buf *buf;
-	struct drm_radeon_freelist *next;
-	struct drm_radeon_freelist *prev;
+    unsigned int age;
+    struct drm_buf *buf;
+    struct drm_radeon_freelist *next;
+    struct drm_radeon_freelist *prev;
 } drm_radeon_freelist_t;
 
 typedef struct drm_radeon_ring_buffer {
-	u32 *start;
-	u32 *end;
-	int size;
-	int size_l2qw;
+    u32 *start;
+    u32 *end;
+    int size;
+    int size_l2qw;
 
-	int rptr_update; /* Double Words */
-	int rptr_update_l2qw; /* log2 Quad Words */
+    int rptr_update; /* Double Words */
+    int rptr_update_l2qw; /* log2 Quad Words */
 
-	int fetch_size; /* Double Words */
-	int fetch_size_l2ow; /* log2 Oct Words */
+    int fetch_size; /* Double Words */
+    int fetch_size_l2ow; /* log2 Oct Words */
 
-	u32 tail;
-	u32 tail_mask;
-	int space;
+    u32 tail;
+    u32 tail_mask;
+    int space;
 
-	int high_mark;
+    int high_mark;
 } drm_radeon_ring_buffer_t;
 
 typedef struct drm_radeon_depth_clear_t {
-	u32 rb3d_cntl;
-	u32 rb3d_zstencilcntl;
-	u32 se_cntl;
+    u32 rb3d_cntl;
+    u32 rb3d_zstencilcntl;
+    u32 se_cntl;
 } drm_radeon_depth_clear_t;
 
 struct drm_radeon_driver_file_fields {
-	int64_t radeon_fb_delta;
+    int64_t radeon_fb_delta;
 };
 
 struct mem_block {
-	struct mem_block *next;
-	struct mem_block *prev;
-	int start;
-	int size;
-	struct drm_file *file_priv; /* NULL: free, -1: heap, other: real files */
+    struct mem_block *next;
+    struct mem_block *prev;
+    int start;
+    int size;
+    struct drm_file *file_priv; /* NULL: free, -1: heap, other: real files */
 };
 
 struct radeon_surface {
-	int refcount;
-	u32 lower;
-	u32 upper;
-	u32 flags;
+    int refcount;
+    u32 lower;
+    u32 upper;
+    u32 flags;
 };
 
 struct radeon_virt_surface {
-	int surface_index;
-	u32 lower;
-	u32 upper;
-	u32 flags;
-	struct drm_file *file_priv;
+    int surface_index;
+    u32 lower;
+    u32 upper;
+    u32 flags;
+    struct drm_file *file_priv;
 #define PCIGART_FILE_PRIV	((void *) -1L)
 };
 
@@ -183,146 +183,146 @@ struct radeon_virt_surface {
 #define RADEON_PURGE_EMITED	(1 << 1)
 
 struct drm_radeon_master_private {
-	drm_local_map_t *sarea;
-	drm_radeon_sarea_t *sarea_priv;
+    drm_local_map_t *sarea;
+    drm_radeon_sarea_t *sarea_priv;
 };
 
 typedef struct drm_radeon_private {
-	drm_radeon_ring_buffer_t ring;
+    drm_radeon_ring_buffer_t ring;
 
-	u32 fb_location;
-	u32 fb_size;
-	int new_memmap;
+    u32 fb_location;
+    u32 fb_size;
+    int new_memmap;
 
-	int gart_size;
-	u32 gart_vm_start;
-	unsigned long gart_buffers_offset;
+    int gart_size;
+    u32 gart_vm_start;
+    unsigned long gart_buffers_offset;
 
-	int cp_mode;
-	int cp_running;
+    int cp_mode;
+    int cp_running;
 
-	drm_radeon_freelist_t *head;
-	drm_radeon_freelist_t *tail;
-	int last_buf;
-	int writeback_works;
+    drm_radeon_freelist_t *head;
+    drm_radeon_freelist_t *tail;
+    int last_buf;
+    int writeback_works;
 
-	int usec_timeout;
+    int usec_timeout;
 
-	int microcode_version;
+    int microcode_version;
 
-	struct {
-		u32 boxes;
-		int freelist_timeouts;
-		int freelist_loops;
-		int requested_bufs;
-		int last_frame_reads;
-		int last_clear_reads;
-		int clears;
-		int texture_uploads;
-	} stats;
+    struct {
+        u32 boxes;
+        int freelist_timeouts;
+        int freelist_loops;
+        int requested_bufs;
+        int last_frame_reads;
+        int last_clear_reads;
+        int clears;
+        int texture_uploads;
+    } stats;
 
-	int do_boxes;
-	int page_flipping;
+    int do_boxes;
+    int page_flipping;
 
-	u32 color_fmt;
-	unsigned int front_offset;
-	unsigned int front_pitch;
-	unsigned int back_offset;
-	unsigned int back_pitch;
+    u32 color_fmt;
+    unsigned int front_offset;
+    unsigned int front_pitch;
+    unsigned int back_offset;
+    unsigned int back_pitch;
 
-	u32 depth_fmt;
-	unsigned int depth_offset;
-	unsigned int depth_pitch;
+    u32 depth_fmt;
+    unsigned int depth_offset;
+    unsigned int depth_pitch;
 
-	u32 front_pitch_offset;
-	u32 back_pitch_offset;
-	u32 depth_pitch_offset;
+    u32 front_pitch_offset;
+    u32 back_pitch_offset;
+    u32 depth_pitch_offset;
 
-	drm_radeon_depth_clear_t depth_clear;
+    drm_radeon_depth_clear_t depth_clear;
 
-	unsigned long ring_offset;
-	unsigned long ring_rptr_offset;
-	unsigned long buffers_offset;
-	unsigned long gart_textures_offset;
+    unsigned long ring_offset;
+    unsigned long ring_rptr_offset;
+    unsigned long buffers_offset;
+    unsigned long gart_textures_offset;
 
-	drm_local_map_t *sarea;
-	drm_local_map_t *cp_ring;
-	drm_local_map_t *ring_rptr;
-	drm_local_map_t *gart_textures;
+    drm_local_map_t *sarea;
+    drm_local_map_t *cp_ring;
+    drm_local_map_t *ring_rptr;
+    drm_local_map_t *gart_textures;
 
-	struct mem_block *gart_heap;
-	struct mem_block *fb_heap;
+    struct mem_block *gart_heap;
+    struct mem_block *fb_heap;
 
-	/* SW interrupt */
-	wait_queue_head_t swi_queue;
-	atomic_t swi_emitted;
-	int vblank_crtc;
-	uint32_t irq_enable_reg;
-	uint32_t r500_disp_irq_reg;
+    /* SW interrupt */
+    wait_queue_head_t swi_queue;
+    atomic_t swi_emitted;
+    int vblank_crtc;
+    uint32_t irq_enable_reg;
+    uint32_t r500_disp_irq_reg;
 
-	struct radeon_surface surfaces[RADEON_MAX_SURFACES];
-	struct radeon_virt_surface virt_surfaces[2 * RADEON_MAX_SURFACES];
+    struct radeon_surface surfaces[RADEON_MAX_SURFACES];
+    struct radeon_virt_surface virt_surfaces[2 * RADEON_MAX_SURFACES];
 
-	unsigned long pcigart_offset;
-	unsigned int pcigart_offset_set;
-	struct drm_ati_pcigart_info gart_info;
+    unsigned long pcigart_offset;
+    unsigned int pcigart_offset_set;
+    struct drm_ati_pcigart_info gart_info;
 
-	u32 scratch_ages[5];
+    u32 scratch_ages[5];
 
-	int have_z_offset;
+    int have_z_offset;
 
-	/* starting from here on, data is preserved across an open */
-	uint32_t flags;		/* see radeon_chip_flags */
-	resource_size_t fb_aper_offset;
+    /* starting from here on, data is preserved across an open */
+    uint32_t flags;		/* see radeon_chip_flags */
+    resource_size_t fb_aper_offset;
 
-	int num_gb_pipes;
-	int num_z_pipes;
-	int track_flush;
-	drm_local_map_t *mmio;
+    int num_gb_pipes;
+    int num_z_pipes;
+    int track_flush;
+    drm_local_map_t *mmio;
 
-	/* r6xx/r7xx pipe/shader config */
-	int r600_max_pipes;
-	int r600_max_tile_pipes;
-	int r600_max_simds;
-	int r600_max_backends;
-	int r600_max_gprs;
-	int r600_max_threads;
-	int r600_max_stack_entries;
-	int r600_max_hw_contexts;
-	int r600_max_gs_threads;
-	int r600_sx_max_export_size;
-	int r600_sx_max_export_pos_size;
-	int r600_sx_max_export_smx_size;
-	int r600_sq_num_cf_insts;
-	int r700_sx_num_of_sets;
-	int r700_sc_prim_fifo_size;
-	int r700_sc_hiz_tile_fifo_size;
-	int r700_sc_earlyz_tile_fifo_fize;
-	int r600_group_size;
-	int r600_npipes;
-	int r600_nbanks;
+    /* r6xx/r7xx pipe/shader config */
+    int r600_max_pipes;
+    int r600_max_tile_pipes;
+    int r600_max_simds;
+    int r600_max_backends;
+    int r600_max_gprs;
+    int r600_max_threads;
+    int r600_max_stack_entries;
+    int r600_max_hw_contexts;
+    int r600_max_gs_threads;
+    int r600_sx_max_export_size;
+    int r600_sx_max_export_pos_size;
+    int r600_sx_max_export_smx_size;
+    int r600_sq_num_cf_insts;
+    int r700_sx_num_of_sets;
+    int r700_sc_prim_fifo_size;
+    int r700_sc_hiz_tile_fifo_size;
+    int r700_sc_earlyz_tile_fifo_fize;
+    int r600_group_size;
+    int r600_npipes;
+    int r600_nbanks;
 
-	struct mutex cs_mutex;
-	u32 cs_id_scnt;
-	u32 cs_id_wcnt;
-	/* r6xx/r7xx drm blit vertex buffer */
-	struct drm_buf *blit_vb;
+    struct mutex cs_mutex;
+    u32 cs_id_scnt;
+    u32 cs_id_wcnt;
+    /* r6xx/r7xx drm blit vertex buffer */
+    struct drm_buf *blit_vb;
 
-	/* firmware */
-	const struct firmware *me_fw, *pfp_fw;
+    /* firmware */
+    const struct firmware *me_fw, *pfp_fw;
 } drm_radeon_private_t;
 
 typedef struct drm_radeon_buf_priv {
-	u32 age;
+    u32 age;
 } drm_radeon_buf_priv_t;
 
 struct drm_buffer;
 
 typedef struct drm_radeon_kcmd_buffer {
-	int bufsz;
-	struct drm_buffer *buffer;
-	int nbox;
-	struct drm_clip_rect __user *boxes;
+    int bufsz;
+    struct drm_buffer *buffer;
+    int nbox;
+    struct drm_clip_rect __user *boxes;
 } drm_radeon_kcmd_buffer_t;
 
 extern int radeon_no_wb;
@@ -339,21 +339,20 @@ extern void radeon_set_ring_head(drm_radeon_private_t *dev_priv, u32 val);
  * GART area.
  */
 static __inline__ int radeon_check_offset(drm_radeon_private_t *dev_priv,
-					  u64 off)
-{
-	u32 fb_start = dev_priv->fb_location;
-	u32 fb_end = fb_start + dev_priv->fb_size - 1;
-	u32 gart_start = dev_priv->gart_vm_start;
-	u32 gart_end = gart_start + dev_priv->gart_size - 1;
+        u64 off) {
+    u32 fb_start = dev_priv->fb_location;
+    u32 fb_end = fb_start + dev_priv->fb_size - 1;
+    u32 gart_start = dev_priv->gart_vm_start;
+    u32 gart_end = gart_start + dev_priv->gart_size - 1;
 
-	return ((off >= fb_start && off <= fb_end) ||
-		(off >= gart_start && off <= gart_end));
+    return ((off >= fb_start && off <= fb_end) ||
+            (off >= gart_start && off <= gart_end));
 }
 
 /* radeon_state.c */
 extern void radeon_cp_discard_buffer(struct drm_device *dev, struct drm_master *master, struct drm_buf *buf);
 
-				/* radeon_cp.c */
+/* radeon_cp.c */
 extern int radeon_cp_init(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern int radeon_cp_start(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern int radeon_cp_stop(struct drm_device *dev, void *data, struct drm_file *file_priv);
@@ -384,13 +383,13 @@ extern int radeon_mem_free(struct drm_device *dev, void *data, struct drm_file *
 extern int radeon_mem_init_heap(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern void radeon_mem_takedown(struct mem_block **heap);
 extern void radeon_mem_release(struct drm_file *file_priv,
-			       struct mem_block *heap);
+                               struct mem_block *heap);
 
 extern void radeon_enable_bm(struct drm_radeon_private *dev_priv);
 extern u32 radeon_read_ring_rptr(drm_radeon_private_t *dev_priv, u32 off);
 extern void radeon_write_ring_rptr(drm_radeon_private_t *dev_priv, u32 off, u32 val);
 
-				/* radeon_irq.c */
+/* radeon_irq.c */
 extern void radeon_irq_set_state(struct drm_device *dev, u32 mask, int state);
 extern int radeon_irq_emit(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern int radeon_irq_wait(struct drm_device *dev, void *data, struct drm_file *file_priv);
@@ -411,16 +410,16 @@ extern int radeon_driver_load(struct drm_device *dev, unsigned long flags);
 extern int radeon_driver_unload(struct drm_device *dev);
 extern int radeon_driver_firstopen(struct drm_device *dev);
 extern void radeon_driver_preclose(struct drm_device *dev,
-				   struct drm_file *file_priv);
+                                   struct drm_file *file_priv);
 extern void radeon_driver_postclose(struct drm_device *dev,
-				    struct drm_file *file_priv);
+                                    struct drm_file *file_priv);
 extern void radeon_driver_lastclose(struct drm_device * dev);
 extern int radeon_driver_open(struct drm_device *dev,
-			      struct drm_file *file_priv);
+                              struct drm_file *file_priv);
 extern long radeon_compat_ioctl(struct file *filp, unsigned int cmd,
-				unsigned long arg);
+                                unsigned long arg);
 extern long radeon_kms_compat_ioctl(struct file *filp, unsigned int cmd,
-				    unsigned long arg);
+                                    unsigned long arg);
 
 extern int radeon_master_create(struct drm_device *dev, struct drm_master *master);
 extern void radeon_master_destroy(struct drm_device *dev, struct drm_master *master);
@@ -429,39 +428,39 @@ extern void radeon_cp_dispatch_flip(struct drm_device *dev, struct drm_master *m
 extern void r300_init_reg_flags(struct drm_device *dev);
 
 extern int r300_do_cp_cmdbuf(struct drm_device *dev,
-			     struct drm_file *file_priv,
-			     drm_radeon_kcmd_buffer_t *cmdbuf);
+                             struct drm_file *file_priv,
+                             drm_radeon_kcmd_buffer_t *cmdbuf);
 
 /* r600_cp.c */
 extern int r600_do_engine_reset(struct drm_device *dev);
 extern int r600_do_cleanup_cp(struct drm_device *dev);
 extern int r600_do_init_cp(struct drm_device *dev, drm_radeon_init_t *init,
-			   struct drm_file *file_priv);
+                           struct drm_file *file_priv);
 extern int r600_do_resume_cp(struct drm_device *dev, struct drm_file *file_priv);
 extern int r600_do_cp_idle(drm_radeon_private_t *dev_priv);
 extern void r600_do_cp_start(drm_radeon_private_t *dev_priv);
 extern void r600_do_cp_reset(drm_radeon_private_t *dev_priv);
 extern void r600_do_cp_stop(drm_radeon_private_t *dev_priv);
 extern int r600_cp_dispatch_indirect(struct drm_device *dev,
-				     struct drm_buf *buf, int start, int end);
+                                     struct drm_buf *buf, int start, int end);
 extern int r600_page_table_init(struct drm_device *dev);
 extern void r600_page_table_cleanup(struct drm_device *dev, struct drm_ati_pcigart_info *gart_info);
 extern int r600_cs_legacy_ioctl(struct drm_device *dev, void *data, struct drm_file *fpriv);
 extern void r600_cp_dispatch_swap(struct drm_device *dev, struct drm_file *file_priv);
 extern int r600_cp_dispatch_texture(struct drm_device *dev,
-				    struct drm_file *file_priv,
-				    drm_radeon_texture_t *tex,
-				    drm_radeon_tex_image_t *image);
+                                    struct drm_file *file_priv,
+                                    drm_radeon_texture_t *tex,
+                                    drm_radeon_tex_image_t *image);
 /* r600_blit.c */
 extern int r600_prepare_blit_copy(struct drm_device *dev, struct drm_file *file_priv);
 extern void r600_done_blit_copy(struct drm_device *dev);
 extern void r600_blit_copy(struct drm_device *dev,
-			   uint64_t src_gpu_addr, uint64_t dst_gpu_addr,
-			   int size_bytes);
+                           uint64_t src_gpu_addr, uint64_t dst_gpu_addr,
+                           int size_bytes);
 extern void r600_blit_swap(struct drm_device *dev,
-			   uint64_t src_gpu_addr, uint64_t dst_gpu_addr,
-			   int sx, int sy, int dx, int dy,
-			   int w, int h, int src_pitch, int dst_pitch, int cpp);
+                           uint64_t src_gpu_addr, uint64_t dst_gpu_addr,
+                           int sx, int sy, int dx, int dy,
+                           int w, int h, int src_pitch, int dst_pitch, int cpp);
 
 /* atpx handler */
 #if defined(CONFIG_VGA_SWITCHEROO)
@@ -1079,7 +1078,7 @@ extern u32 radeon_get_scratch(drm_radeon_private_t *dev_priv, int index);
 #       define RADEON_CP_NEXT_CHAR              0x00001900
 #       define RADEON_CP_PLY_NEXTSCAN           0x00001D00
 #       define RADEON_CP_SET_SCISSORS           0x00001E00
-	     /* GEN_INDX_PRIM is unsupported starting with R300 */
+/* GEN_INDX_PRIM is unsupported starting with R300 */
 #	define RADEON_3D_RNDR_GEN_INDX_PRIM	0x00002300
 #	define RADEON_WAIT_FOR_IDLE		0x00002600
 #	define RADEON_3D_DRAW_VBUF		0x00002800

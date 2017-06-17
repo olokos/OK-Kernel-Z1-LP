@@ -10,8 +10,8 @@
 
 /* Preamble_Type, see <SFS-802.11G-MIB-203> */
 enum {
-	WLAN_PREAMBLE_TYPE_SHORT,
-	WLAN_PREAMBLE_TYPE_LONG,
+    WLAN_PREAMBLE_TYPE_SHORT,
+    WLAN_PREAMBLE_TYPE_LONG,
 };
 
 /*****************************************************************************/
@@ -80,51 +80,51 @@ enum {
 #define PACKET_SEND_COMPLETE		0xff
 
 struct wb35_mds {
-	/* For Tx usage */
-	u8	TxOwner[((MAX_USB_TX_BUFFER_NUMBER + 3) & ~0x03)];
-	u8	*pTxBuffer;
-	u16	TxBufferSize[((MAX_USB_TX_BUFFER_NUMBER + 1) & ~0x01)];
-	u8	TxDesFrom[((MAX_USB_TX_DESCRIPTOR + 3) & ~0x03)];/* 1: MLME 2: NDIS control 3: NDIS data */
-	u8	TxCountInBuffer[((MAX_USB_TX_DESCRIPTOR + 3) & ~0x03)];
+    /* For Tx usage */
+    u8	TxOwner[((MAX_USB_TX_BUFFER_NUMBER + 3) & ~0x03)];
+    u8	*pTxBuffer;
+    u16	TxBufferSize[((MAX_USB_TX_BUFFER_NUMBER + 1) & ~0x01)];
+    u8	TxDesFrom[((MAX_USB_TX_DESCRIPTOR + 3) & ~0x03)];/* 1: MLME 2: NDIS control 3: NDIS data */
+    u8	TxCountInBuffer[((MAX_USB_TX_DESCRIPTOR + 3) & ~0x03)];
 
-	u8	TxFillIndex;	/* the next index of TxBuffer can be used */
-	u8	TxDesIndex;	/* The next index of TxDes can be used */
-	u8	ScanTxPause;	/* data Tx pause because the scanning is progressing, but probe request Tx won't. */
-	u8	TxPause;	/*For pause the Mds_Tx modult */
+    u8	TxFillIndex;	/* the next index of TxBuffer can be used */
+    u8	TxDesIndex;	/* The next index of TxDes can be used */
+    u8	ScanTxPause;	/* data Tx pause because the scanning is progressing, but probe request Tx won't. */
+    u8	TxPause;	/*For pause the Mds_Tx modult */
 
-	atomic_t	TxThreadCount;	/* For thread counting */
+    atomic_t	TxThreadCount;	/* For thread counting */
 
-	u16	TxResult[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)];/* Collect the sending result of Mpdu */
+    u16	TxResult[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)];/* Collect the sending result of Mpdu */
 
-	u8	MicRedundant[8]; /* For tmp use */
-	u8	*MicWriteAddress[2]; /* The start address to fill the Mic, use 2 point due to Mic maybe fragment */
+    u8	MicRedundant[8]; /* For tmp use */
+    u8	*MicWriteAddress[2]; /* The start address to fill the Mic, use 2 point due to Mic maybe fragment */
 
-	u16	MicWriteSize[2];
+    u16	MicWriteSize[2];
 
-	u16	MicAdd; /* If want to add the Mic, this variable equal to 8 */
-	u16	MicWriteIndex; /* The number of MicWriteAddress */
+    u16	MicAdd; /* If want to add the Mic, this variable equal to 8 */
+    u16	MicWriteIndex; /* The number of MicWriteAddress */
 
-	u8	TxRate[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)][2]; /* [0] current tx rate, [1] fall back rate */
-	u8	TxInfo[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)]; /*Store information for callback function */
+    u8	TxRate[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)][2]; /* [0] current tx rate, [1] fall back rate */
+    u8	TxInfo[((MAX_USB_TX_DESCRIPTOR + 1) & ~0x01)]; /*Store information for callback function */
 
-	/* ---- for Tx Parameter */
-	u16	TxFragmentThreshold;	/* For frame body only */
-	u16	TxRTSThreshold;
+    /* ---- for Tx Parameter */
+    u16	TxFragmentThreshold;	/* For frame body only */
+    u16	TxRTSThreshold;
 
-	u32	MaxReceiveTime;
+    u32	MaxReceiveTime;
 
-	/* depend on OS, */
-	u32	MulticastListNo;
-	u32	PacketFilter; /* Setting by NDIS, the current packet filter in use. */
-	u8	MulticastAddressesArray[DEFAULT_MULTICASTLISTMAX][MAC_ADDR_LENGTH];
+    /* depend on OS, */
+    u32	MulticastListNo;
+    u32	PacketFilter; /* Setting by NDIS, the current packet filter in use. */
+    u8	MulticastAddressesArray[DEFAULT_MULTICASTLISTMAX][MAC_ADDR_LENGTH];
 
-	/* COUNTERMEASURE */
-	u8	bMICfailCount;
-	u8	boCounterMeasureBlock;
-	u8	reserved_4[2];
+    /* COUNTERMEASURE */
+    u8	bMICfailCount;
+    u8	boCounterMeasureBlock;
+    u8	reserved_4[2];
 
-	u32	TxTsc;
-	u32	TxTsc_2;
+    u32	TxTsc;
+    u32	TxTsc_2;
 };
 
 #endif

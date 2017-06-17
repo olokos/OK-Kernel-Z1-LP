@@ -98,10 +98,10 @@
 #define AD7793_IO_IXCEN_1mA	(3 << 0) /* Excitation Current 1mA */
 
 struct ad7793_platform_data {
-	u16			vref_mv;
-	u16			mode;
-	u16			conf;
-	u8			io;
+    u16			vref_mv;
+    u16			mode;
+    u16			conf;
+    u8			io;
 };
 
 #endif /* IIO_ADC_AD7793_H_ */

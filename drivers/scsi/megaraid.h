@@ -121,34 +121,34 @@
 #define NVIRT_CHAN		4	/* # of virtual channels to represent
 					   up to 60 logical drives */
 struct mbox_out {
-	/* 0x0 */ u8 cmd;
-	/* 0x1 */ u8 cmdid;
-	/* 0x2 */ u16 numsectors;
-	/* 0x4 */ u32 lba;
-	/* 0x8 */ u32 xferaddr;
-	/* 0xC */ u8 logdrv;
-	/* 0xD */ u8 numsgelements;
-	/* 0xE */ u8 resvd;
+    /* 0x0 */ u8 cmd;
+    /* 0x1 */ u8 cmdid;
+    /* 0x2 */ u16 numsectors;
+    /* 0x4 */ u32 lba;
+    /* 0x8 */ u32 xferaddr;
+    /* 0xC */ u8 logdrv;
+    /* 0xD */ u8 numsgelements;
+    /* 0xE */ u8 resvd;
 } __attribute__ ((packed));
 
 struct mbox_in {
-	/* 0xF */ volatile u8 busy;
-	/* 0x10 */ volatile u8 numstatus;
-	/* 0x11 */ volatile u8 status;
-	/* 0x12 */ volatile u8 completed[MAX_FIRMWARE_STATUS];
-	volatile u8 poll;
-	volatile u8 ack;
+    /* 0xF */ volatile u8 busy;
+    /* 0x10 */ volatile u8 numstatus;
+    /* 0x11 */ volatile u8 status;
+    /* 0x12 */ volatile u8 completed[MAX_FIRMWARE_STATUS];
+    volatile u8 poll;
+    volatile u8 ack;
 } __attribute__ ((packed));
 
 typedef struct {
-	struct mbox_out	m_out;
-	struct mbox_in	m_in;
+    struct mbox_out	m_out;
+    struct mbox_in	m_in;
 } __attribute__ ((packed)) mbox_t;
 
 typedef struct {
-	u32 xfer_segment_lo;
-	u32 xfer_segment_hi;
-	mbox_t mbox;
+    u32 xfer_segment_lo;
+    u32 xfer_segment_hi;
+    mbox_t mbox;
 } __attribute__ ((packed)) mbox64_t;
 
 
@@ -158,23 +158,23 @@ typedef struct {
 #define MAX_REQ_SENSE_LEN       0x20
 
 typedef struct {
-	u8 timeout:3;		/* 0=6sec/1=60sec/2=10min/3=3hrs */
-	u8 ars:1;
-	u8 reserved:3;
-	u8 islogical:1;
-	u8 logdrv;		/* if islogical == 1 */
-	u8 channel;		/* if islogical == 0 */
-	u8 target;		/* if islogical == 0 */
-	u8 queuetag;		/* unused */
-	u8 queueaction;		/* unused */
-	u8 cdb[MAX_CDB_LEN];
-	u8 cdblen;
-	u8 reqsenselen;
-	u8 reqsensearea[MAX_REQ_SENSE_LEN];
-	u8 numsgelements;
-	u8 scsistatus;
-	u32 dataxferaddr;
-	u32 dataxferlen;
+    u8 timeout:3;		/* 0=6sec/1=60sec/2=10min/3=3hrs */
+    u8 ars:1;
+    u8 reserved:3;
+    u8 islogical:1;
+    u8 logdrv;		/* if islogical == 1 */
+    u8 channel;		/* if islogical == 0 */
+    u8 target;		/* if islogical == 0 */
+    u8 queuetag;		/* unused */
+    u8 queueaction;		/* unused */
+    u8 cdb[MAX_CDB_LEN];
+    u8 cdblen;
+    u8 reqsenselen;
+    u8 reqsensearea[MAX_REQ_SENSE_LEN];
+    u8 numsgelements;
+    u8 scsistatus;
+    u32 dataxferaddr;
+    u32 dataxferlen;
 } __attribute__ ((packed)) mega_passthru;
 
 
@@ -182,61 +182,61 @@ typedef struct {
  * Extended passthru: support CDB > 10 bytes
  */
 typedef struct {
-	u8 timeout:3;		/* 0=6sec/1=60sec/2=10min/3=3hrs */
-	u8 ars:1;
-	u8 rsvd1:1;
-	u8 cd_rom:1;
-	u8 rsvd2:1;
-	u8 islogical:1;
-	u8 logdrv;		/* if islogical == 1 */
-	u8 channel;		/* if islogical == 0 */
-	u8 target;		/* if islogical == 0 */
-	u8 queuetag;		/* unused */
-	u8 queueaction;		/* unused */
-	u8 cdblen;
-	u8 rsvd3;
-	u8 cdb[MAX_EXT_CDB_LEN];
-	u8 numsgelements;
-	u8 status;
-	u8 reqsenselen;
-	u8 reqsensearea[MAX_REQ_SENSE_LEN];
-	u8 rsvd4;
-	u32 dataxferaddr;
-	u32 dataxferlen;
+    u8 timeout:3;		/* 0=6sec/1=60sec/2=10min/3=3hrs */
+    u8 ars:1;
+    u8 rsvd1:1;
+    u8 cd_rom:1;
+    u8 rsvd2:1;
+    u8 islogical:1;
+    u8 logdrv;		/* if islogical == 1 */
+    u8 channel;		/* if islogical == 0 */
+    u8 target;		/* if islogical == 0 */
+    u8 queuetag;		/* unused */
+    u8 queueaction;		/* unused */
+    u8 cdblen;
+    u8 rsvd3;
+    u8 cdb[MAX_EXT_CDB_LEN];
+    u8 numsgelements;
+    u8 status;
+    u8 reqsenselen;
+    u8 reqsensearea[MAX_REQ_SENSE_LEN];
+    u8 rsvd4;
+    u32 dataxferaddr;
+    u32 dataxferlen;
 } __attribute__ ((packed)) mega_ext_passthru;
 
 typedef struct {
-	u64 address;
-	u32 length;
+    u64 address;
+    u32 length;
 } __attribute__ ((packed)) mega_sgl64;
 
 typedef struct {
-	u32 address;
-	u32 length;
+    u32 address;
+    u32 length;
 } __attribute__ ((packed)) mega_sglist;
 
 
 /* Queued command data */
 typedef struct {
-	int	idx;
-	u32	state;
-	struct list_head	list;
-	u8	raw_mbox[66];
-	u32	dma_type;
-	u32	dma_direction;
+    int	idx;
+    u32	state;
+    struct list_head	list;
+    u8	raw_mbox[66];
+    u32	dma_type;
+    u32	dma_direction;
 
-	Scsi_Cmnd	*cmd;
-	dma_addr_t	dma_h_bulkdata;
-	dma_addr_t	dma_h_sgdata;
+    Scsi_Cmnd	*cmd;
+    dma_addr_t	dma_h_bulkdata;
+    dma_addr_t	dma_h_sgdata;
 
-	mega_sglist	*sgl;
-	mega_sgl64	*sgl64;
-	dma_addr_t	sgl_dma_addr;
+    mega_sglist	*sgl;
+    mega_sgl64	*sgl64;
+    dma_addr_t	sgl_dma_addr;
 
-	mega_passthru		*pthru;
-	dma_addr_t		pthru_dma_addr;
-	mega_ext_passthru	*epthru;
-	dma_addr_t		epthru_dma_addr;
+    mega_passthru		*pthru;
+    dma_addr_t		pthru_dma_addr;
+    mega_ext_passthru	*epthru;
+    dma_addr_t		epthru_dma_addr;
 } scb_t;
 
 /*
@@ -254,131 +254,131 @@ typedef struct {
  * be added in future.
  */
 typedef struct {
-	u32	data_size; /* current size in bytes (not including resvd) */
+    u32	data_size; /* current size in bytes (not including resvd) */
 
-	u32	config_signature;
-		/* Current value is 0x00282008
-		 * 0x28=MAX_LOGICAL_DRIVES,
-		 * 0x20=Number of stripes and
-		 * 0x08=Number of spans */
+    u32	config_signature;
+    /* Current value is 0x00282008
+     * 0x28=MAX_LOGICAL_DRIVES,
+     * 0x20=Number of stripes and
+     * 0x08=Number of spans */
 
-	u8	fw_version[16];		/* printable ASCI string */
-	u8	bios_version[16];	/* printable ASCI string */
-	u8	product_name[80];	/* printable ASCI string */
+    u8	fw_version[16];		/* printable ASCI string */
+    u8	bios_version[16];	/* printable ASCI string */
+    u8	product_name[80];	/* printable ASCI string */
 
-	u8	max_commands;		/* Max. concurrent commands supported */
-	u8	nchannels;		/* Number of SCSI Channels detected */
-	u8	fc_loop_present;	/* Number of Fibre Loops detected */
-	u8	mem_type;		/* EDO, FPM, SDRAM etc */
+    u8	max_commands;		/* Max. concurrent commands supported */
+    u8	nchannels;		/* Number of SCSI Channels detected */
+    u8	fc_loop_present;	/* Number of Fibre Loops detected */
+    u8	mem_type;		/* EDO, FPM, SDRAM etc */
 
-	u32	signature;
-	u16	dram_size;		/* In terms of MB */
-	u16	subsysid;
+    u32	signature;
+    u16	dram_size;		/* In terms of MB */
+    u16	subsysid;
 
-	u16	subsysvid;
-	u8	notify_counters;
-	u8	pad1k[889];		/* 135 + 889 resvd = 1024 total size */
+    u16	subsysvid;
+    u8	notify_counters;
+    u8	pad1k[889];		/* 135 + 889 resvd = 1024 total size */
 } __attribute__ ((packed)) mega_product_info;
 
 struct notify {
-	u32 global_counter;	/* Any change increments this counter */
+    u32 global_counter;	/* Any change increments this counter */
 
-	u8 param_counter;	/* Indicates any params changed  */
-	u8 param_id;		/* Param modified - defined below */
-	u16 param_val;		/* New val of last param modified */
+    u8 param_counter;	/* Indicates any params changed  */
+    u8 param_id;		/* Param modified - defined below */
+    u16 param_val;		/* New val of last param modified */
 
-	u8 write_config_counter;	/* write config occurred */
-	u8 write_config_rsvd[3];
+    u8 write_config_counter;	/* write config occurred */
+    u8 write_config_rsvd[3];
 
-	u8 ldrv_op_counter;	/* Indicates ldrv op started/completed */
-	u8 ldrv_opid;		/* ldrv num */
-	u8 ldrv_opcmd;		/* ldrv operation - defined below */
-	u8 ldrv_opstatus;	/* status of the operation */
+    u8 ldrv_op_counter;	/* Indicates ldrv op started/completed */
+    u8 ldrv_opid;		/* ldrv num */
+    u8 ldrv_opcmd;		/* ldrv operation - defined below */
+    u8 ldrv_opstatus;	/* status of the operation */
 
-	u8 ldrv_state_counter;	/* Indicates change of ldrv state */
-	u8 ldrv_state_id;		/* ldrv num */
-	u8 ldrv_state_new;	/* New state */
-	u8 ldrv_state_old;	/* old state */
+    u8 ldrv_state_counter;	/* Indicates change of ldrv state */
+    u8 ldrv_state_id;		/* ldrv num */
+    u8 ldrv_state_new;	/* New state */
+    u8 ldrv_state_old;	/* old state */
 
-	u8 pdrv_state_counter;	/* Indicates change of ldrv state */
-	u8 pdrv_state_id;		/* pdrv id */
-	u8 pdrv_state_new;	/* New state */
-	u8 pdrv_state_old;	/* old state */
+    u8 pdrv_state_counter;	/* Indicates change of ldrv state */
+    u8 pdrv_state_id;		/* pdrv id */
+    u8 pdrv_state_new;	/* New state */
+    u8 pdrv_state_old;	/* old state */
 
-	u8 pdrv_fmt_counter;	/* Indicates pdrv format started/over */
-	u8 pdrv_fmt_id;		/* pdrv id */
-	u8 pdrv_fmt_val;		/* format started/over */
-	u8 pdrv_fmt_rsvd;
+    u8 pdrv_fmt_counter;	/* Indicates pdrv format started/over */
+    u8 pdrv_fmt_id;		/* pdrv id */
+    u8 pdrv_fmt_val;		/* format started/over */
+    u8 pdrv_fmt_rsvd;
 
-	u8 targ_xfer_counter;	/* Indicates SCSI-2 Xfer rate change */
-	u8 targ_xfer_id;	/* pdrv Id  */
-	u8 targ_xfer_val;		/* new Xfer params of last pdrv */
-	u8 targ_xfer_rsvd;
+    u8 targ_xfer_counter;	/* Indicates SCSI-2 Xfer rate change */
+    u8 targ_xfer_id;	/* pdrv Id  */
+    u8 targ_xfer_val;		/* new Xfer params of last pdrv */
+    u8 targ_xfer_rsvd;
 
-	u8 fcloop_id_chg_counter;	/* Indicates loopid changed */
-	u8 fcloopid_pdrvid;		/* pdrv id */
-	u8 fcloop_id0;			/* loopid on fc loop 0 */
-	u8 fcloop_id1;			/* loopid on fc loop 1 */
+    u8 fcloop_id_chg_counter;	/* Indicates loopid changed */
+    u8 fcloopid_pdrvid;		/* pdrv id */
+    u8 fcloop_id0;			/* loopid on fc loop 0 */
+    u8 fcloop_id1;			/* loopid on fc loop 1 */
 
-	u8 fcloop_state_counter;	/* Indicates loop state changed */
-	u8 fcloop_state0;		/* state of fc loop 0 */
-	u8 fcloop_state1;		/* state of fc loop 1 */
-	u8 fcloop_state_rsvd;
+    u8 fcloop_state_counter;	/* Indicates loop state changed */
+    u8 fcloop_state0;		/* state of fc loop 0 */
+    u8 fcloop_state1;		/* state of fc loop 1 */
+    u8 fcloop_state_rsvd;
 } __attribute__ ((packed));
 
 #define MAX_NOTIFY_SIZE     0x80
 #define CUR_NOTIFY_SIZE     sizeof(struct notify)
 
 typedef struct {
-	u32	data_size; /* current size in bytes (not including resvd) */
+    u32	data_size; /* current size in bytes (not including resvd) */
 
-	struct notify notify;
+    struct notify notify;
 
-	u8	notify_rsvd[MAX_NOTIFY_SIZE - CUR_NOTIFY_SIZE];
+    u8	notify_rsvd[MAX_NOTIFY_SIZE - CUR_NOTIFY_SIZE];
 
-	u8	rebuild_rate;		/* Rebuild rate (0% - 100%) */
-	u8	cache_flush_interval;	/* In terms of Seconds */
-	u8	sense_alert;
-	u8	drive_insert_count;	/* drive insertion count */
+    u8	rebuild_rate;		/* Rebuild rate (0% - 100%) */
+    u8	cache_flush_interval;	/* In terms of Seconds */
+    u8	sense_alert;
+    u8	drive_insert_count;	/* drive insertion count */
 
-	u8	battery_status;
-	u8	num_ldrv;		/* No. of Log Drives configured */
-	u8	recon_state[MAX_LOGICAL_DRIVES_40LD / 8];	/* State of
+    u8	battery_status;
+    u8	num_ldrv;		/* No. of Log Drives configured */
+    u8	recon_state[MAX_LOGICAL_DRIVES_40LD / 8];	/* State of
 							   reconstruct */
-	u16	ldrv_op_status[MAX_LOGICAL_DRIVES_40LD / 8]; /* logdrv
+    u16	ldrv_op_status[MAX_LOGICAL_DRIVES_40LD / 8]; /* logdrv
 								 Status */
 
-	u32	ldrv_size[MAX_LOGICAL_DRIVES_40LD];/* Size of each log drv */
-	u8	ldrv_prop[MAX_LOGICAL_DRIVES_40LD];
-	u8	ldrv_state[MAX_LOGICAL_DRIVES_40LD];/* State of log drives */
-	u8	pdrv_state[FC_MAX_PHYSICAL_DEVICES];/* State of phys drvs. */
-	u16	pdrv_format[FC_MAX_PHYSICAL_DEVICES / 16];
+    u32	ldrv_size[MAX_LOGICAL_DRIVES_40LD];/* Size of each log drv */
+    u8	ldrv_prop[MAX_LOGICAL_DRIVES_40LD];
+    u8	ldrv_state[MAX_LOGICAL_DRIVES_40LD];/* State of log drives */
+    u8	pdrv_state[FC_MAX_PHYSICAL_DEVICES];/* State of phys drvs. */
+    u16	pdrv_format[FC_MAX_PHYSICAL_DEVICES / 16];
 
-	u8	targ_xfer[80];	/* phys device transfer rate */
-	u8	pad1k[263];	/* 761 + 263reserved = 1024 bytes total size */
+    u8	targ_xfer[80];	/* phys device transfer rate */
+    u8	pad1k[263];	/* 761 + 263reserved = 1024 bytes total size */
 } __attribute__ ((packed)) mega_inquiry3;
 
 
 /* Structures */
 typedef struct {
-	u8	max_commands;	/* Max concurrent commands supported */
-	u8	rebuild_rate;	/* Rebuild rate - 0% thru 100% */
-	u8	max_targ_per_chan;	/* Max targ per channel */
-	u8	nchannels;	/* Number of channels on HBA */
-	u8	fw_version[4];	/* Firmware version */
-	u16	age_of_flash;	/* Number of times FW has been flashed */
-	u8	chip_set_value;	/* Contents of 0xC0000832 */
-	u8	dram_size;	/* In MB */
-	u8	cache_flush_interval;	/* in seconds */
-	u8	bios_version[4];
-	u8	board_type;
-	u8	sense_alert;
-	u8	write_config_count;	/* Increase with every configuration
+    u8	max_commands;	/* Max concurrent commands supported */
+    u8	rebuild_rate;	/* Rebuild rate - 0% thru 100% */
+    u8	max_targ_per_chan;	/* Max targ per channel */
+    u8	nchannels;	/* Number of channels on HBA */
+    u8	fw_version[4];	/* Firmware version */
+    u16	age_of_flash;	/* Number of times FW has been flashed */
+    u8	chip_set_value;	/* Contents of 0xC0000832 */
+    u8	dram_size;	/* In MB */
+    u8	cache_flush_interval;	/* in seconds */
+    u8	bios_version[4];
+    u8	board_type;
+    u8	sense_alert;
+    u8	write_config_count;	/* Increase with every configuration
 					   change */
-	u8	drive_inserted_count;	/* Increase with every drive inserted
+    u8	drive_inserted_count;	/* Increase with every drive inserted
 					 */
-	u8	inserted_drive;	/* Channel:Id of inserted drive */
-	u8	battery_status;	/*
+    u8	inserted_drive;	/* Channel:Id of inserted drive */
+    u8	battery_status;	/*
 				 * BIT 0: battery module missing
 				 * BIT 1: VBAD
 				 * BIT 2: temperature high
@@ -391,102 +391,102 @@ typedef struct {
 				 * Bit 6: counter > 1000
 				 * Bit 7: Undefined
 				 */
-	u8	dec_fault_bus_info;
+    u8	dec_fault_bus_info;
 } __attribute__ ((packed)) mega_adp_info;
 
 
 typedef struct {
-	u8	num_ldrv;	/* Number of logical drives configured */
-	u8	rsvd[3];
-	u32	ldrv_size[MAX_LOGICAL_DRIVES_8LD];
-	u8	ldrv_prop[MAX_LOGICAL_DRIVES_8LD];
-	u8	ldrv_state[MAX_LOGICAL_DRIVES_8LD];
+    u8	num_ldrv;	/* Number of logical drives configured */
+    u8	rsvd[3];
+    u32	ldrv_size[MAX_LOGICAL_DRIVES_8LD];
+    u8	ldrv_prop[MAX_LOGICAL_DRIVES_8LD];
+    u8	ldrv_state[MAX_LOGICAL_DRIVES_8LD];
 } __attribute__ ((packed)) mega_ldrv_info;
 
 typedef struct {
-	u8	pdrv_state[MAX_PHYSICAL_DRIVES];
-	u8	rsvd;
+    u8	pdrv_state[MAX_PHYSICAL_DRIVES];
+    u8	rsvd;
 } __attribute__ ((packed)) mega_pdrv_info;
 
 /* RAID inquiry: Mailbox command 0x05*/
 typedef struct {
-	mega_adp_info	adapter_info;
-	mega_ldrv_info	logdrv_info;
-	mega_pdrv_info	pdrv_info;
+    mega_adp_info	adapter_info;
+    mega_ldrv_info	logdrv_info;
+    mega_pdrv_info	pdrv_info;
 } __attribute__ ((packed)) mraid_inquiry;
 
 
 /* RAID extended inquiry: Mailbox command 0x04*/
 typedef struct {
-	mraid_inquiry	raid_inq;
-	u16	phys_drv_format[MAX_CHANNELS];
-	u8	stack_attn;
-	u8	modem_status;
-	u8	rsvd[2];
+    mraid_inquiry	raid_inq;
+    u16	phys_drv_format[MAX_CHANNELS];
+    u8	stack_attn;
+    u8	modem_status;
+    u8	rsvd[2];
 } __attribute__ ((packed)) mraid_ext_inquiry;
 
 
 typedef struct {
-	u8	channel;
-	u8	target;
-}__attribute__ ((packed)) adp_device;
+    u8	channel;
+    u8	target;
+} __attribute__ ((packed)) adp_device;
 
 typedef struct {
-	u32		start_blk;	/* starting block */
-	u32		num_blks;	/* # of blocks */
-	adp_device	device[MAX_ROW_SIZE_40LD];
-}__attribute__ ((packed)) adp_span_40ld;
+    u32		start_blk;	/* starting block */
+    u32		num_blks;	/* # of blocks */
+    adp_device	device[MAX_ROW_SIZE_40LD];
+} __attribute__ ((packed)) adp_span_40ld;
 
 typedef struct {
-	u32		start_blk;	/* starting block */
-	u32		num_blks;	/* # of blocks */
-	adp_device	device[MAX_ROW_SIZE_8LD];
-}__attribute__ ((packed)) adp_span_8ld;
+    u32		start_blk;	/* starting block */
+    u32		num_blks;	/* # of blocks */
+    adp_device	device[MAX_ROW_SIZE_8LD];
+} __attribute__ ((packed)) adp_span_8ld;
 
 typedef struct {
-	u8	span_depth;	/* Total # of spans */
-	u8	level;		/* RAID level */
-	u8	read_ahead;	/* read ahead, no read ahead, adaptive read
+    u8	span_depth;	/* Total # of spans */
+    u8	level;		/* RAID level */
+    u8	read_ahead;	/* read ahead, no read ahead, adaptive read
 				   ahead */
-	u8	stripe_sz;	/* Encoded stripe size */
-	u8	status;		/* Status of the logical drive */
-	u8	write_mode;	/* write mode, write_through/write_back */
-	u8	direct_io;	/* direct io or through cache */
-	u8	row_size;	/* Number of stripes in a row */
+    u8	stripe_sz;	/* Encoded stripe size */
+    u8	status;		/* Status of the logical drive */
+    u8	write_mode;	/* write mode, write_through/write_back */
+    u8	direct_io;	/* direct io or through cache */
+    u8	row_size;	/* Number of stripes in a row */
 } __attribute__ ((packed)) logdrv_param;
 
 typedef struct {
-	logdrv_param	lparam;
-	adp_span_40ld	span[MAX_SPAN_DEPTH];
-}__attribute__ ((packed)) logdrv_40ld;
+    logdrv_param	lparam;
+    adp_span_40ld	span[MAX_SPAN_DEPTH];
+} __attribute__ ((packed)) logdrv_40ld;
 
 typedef struct {
-	logdrv_param	lparam;
-	adp_span_8ld	span[MAX_SPAN_DEPTH];
-}__attribute__ ((packed)) logdrv_8ld;
+    logdrv_param	lparam;
+    adp_span_8ld	span[MAX_SPAN_DEPTH];
+} __attribute__ ((packed)) logdrv_8ld;
 
 typedef struct {
-	u8	type;		/* Type of the device */
-	u8	cur_status;	/* current status of the device */
-	u8	tag_depth;	/* Level of tagging */
-	u8	sync_neg;	/* sync negotiation - ENABLE or DISABLE */
-	u32	size;		/* configurable size in terms of 512 byte
+    u8	type;		/* Type of the device */
+    u8	cur_status;	/* current status of the device */
+    u8	tag_depth;	/* Level of tagging */
+    u8	sync_neg;	/* sync negotiation - ENABLE or DISABLE */
+    u32	size;		/* configurable size in terms of 512 byte
 				   blocks */
-}__attribute__ ((packed)) phys_drv;
+} __attribute__ ((packed)) phys_drv;
 
 typedef struct {
-	u8		nlog_drives;		/* number of logical drives */
-	u8		resvd[3];
-	logdrv_40ld	ldrv[MAX_LOGICAL_DRIVES_40LD];
-	phys_drv	pdrv[MAX_PHYSICAL_DRIVES];
-}__attribute__ ((packed)) disk_array_40ld;
+    u8		nlog_drives;		/* number of logical drives */
+    u8		resvd[3];
+    logdrv_40ld	ldrv[MAX_LOGICAL_DRIVES_40LD];
+    phys_drv	pdrv[MAX_PHYSICAL_DRIVES];
+} __attribute__ ((packed)) disk_array_40ld;
 
 typedef struct {
-	u8		nlog_drives;	/* number of logical drives */
-	u8		resvd[3];
-	logdrv_8ld	ldrv[MAX_LOGICAL_DRIVES_8LD];
-	phys_drv	pdrv[MAX_PHYSICAL_DRIVES];
-}__attribute__ ((packed)) disk_array_8ld;
+    u8		nlog_drives;	/* number of logical drives */
+    u8		resvd[3];
+    logdrv_8ld	ldrv[MAX_LOGICAL_DRIVES_8LD];
+    phys_drv	pdrv[MAX_PHYSICAL_DRIVES];
+} __attribute__ ((packed)) disk_array_8ld;
 
 
 /*
@@ -501,32 +501,32 @@ typedef struct {
 #define IOCTL_MAX_DATALEN       4096
 
 struct uioctl_t {
-	u32 inlen;
-	u32 outlen;
-	union {
-		u8 fca[16];
-		struct {
-			u8 opcode;
-			u8 subopcode;
-			u16 adapno;
+    u32 inlen;
+    u32 outlen;
+    union {
+        u8 fca[16];
+        struct {
+            u8 opcode;
+            u8 subopcode;
+            u16 adapno;
 #if BITS_PER_LONG == 32
-			u8 *buffer;
-			u8 pad[4];
+            u8 *buffer;
+            u8 pad[4];
 #endif
 #if BITS_PER_LONG == 64
-			u8 *buffer;
+            u8 *buffer;
 #endif
-			u32 length;
-		} __attribute__ ((packed)) fcs;
-	} __attribute__ ((packed)) ui;
-	u8 mbox[18];		/* 16 bytes + 2 status bytes */
-	mega_passthru pthru;
+            u32 length;
+        } __attribute__ ((packed)) fcs;
+    } __attribute__ ((packed)) ui;
+    u8 mbox[18];		/* 16 bytes + 2 status bytes */
+    mega_passthru pthru;
 #if BITS_PER_LONG == 32
-	char __user *data;		/* buffer <= 4096 for 0x80 commands */
-	char pad[4];
+    char __user *data;		/* buffer <= 4096 for 0x80 commands */
+    char pad[4];
 #endif
 #if BITS_PER_LONG == 64
-	char __user *data;
+    char __user *data;
 #endif
 } __attribute__ ((packed));
 
@@ -540,32 +540,32 @@ struct uioctl_t {
 #define MAX_CONTROLLERS 32
 
 struct mcontroller {
-	u64 base;
-	u8 irq;
-	u8 numldrv;
-	u8 pcibus;
-	u16 pcidev;
-	u8 pcifun;
-	u16 pciid;
-	u16 pcivendor;
-	u8 pcislot;
-	u32 uid;
+    u64 base;
+    u8 irq;
+    u8 numldrv;
+    u8 pcibus;
+    u16 pcidev;
+    u8 pcifun;
+    u16 pciid;
+    u16 pcivendor;
+    u8 pcislot;
+    u32 uid;
 };
 
 /*
  * mailbox structure used for internal commands
  */
 typedef struct {
-	u8	cmd;
-	u8	cmdid;
-	u8	opcode;
-	u8	subopcode;
-	u32	lba;
-	u32	xferaddr;
-	u8	logdrv;
-	u8	rsvd[3];
-	u8	numstatus;
-	u8	status;
+    u8	cmd;
+    u8	cmdid;
+    u8	opcode;
+    u8	subopcode;
+    u32	lba;
+    u32	xferaddr;
+    u8	logdrv;
+    u8	rsvd[3];
+    u8	numstatus;
+    u8	status;
 } __attribute__ ((packed)) megacmd_t;
 
 /*
@@ -617,23 +617,23 @@ typedef struct {
  * MBOX_P macro converts a nitioctl_t pointer to megacmd_t pointer.
  */
 typedef struct {
-	char		signature[8];	/* Must contain "MEGANIT" */
-	u32		opcode;		/* opcode for the command */
-	u32		adapno;		/* adapter number */
-	union {
-		u8	__raw_mbox[18];
-		void __user *__uaddr; /* xferaddr for non-mbox cmds */
-	}__ua;
+    char		signature[8];	/* Must contain "MEGANIT" */
+    u32		opcode;		/* opcode for the command */
+    u32		adapno;		/* adapter number */
+    union {
+        u8	__raw_mbox[18];
+        void __user *__uaddr; /* xferaddr for non-mbox cmds */
+    } __ua;
 
 #define uioc_rmbox	__ua.__raw_mbox
 #define MBOX(uioc)	((megacmd_t *)&((uioc).__ua.__raw_mbox[0]))
 #define MBOX_P(uioc)	((megacmd_t __user *)&((uioc)->__ua.__raw_mbox[0]))
 #define uioc_uaddr	__ua.__uaddr
 
-	u32		xferlen;	/* xferlen for DCMD and non-mbox
+    u32		xferlen;	/* xferlen for DCMD and non-mbox
 					   commands */
-	u32		flags;		/* data direction flags */
-}nitioctl_t;
+    u32		flags;		/* data direction flags */
+} nitioctl_t;
 
 
 /*
@@ -641,44 +641,44 @@ typedef struct {
  * provide the number of logical drives for which status should be reported.
  */
 typedef struct {
-	int	num_ldrv;	/* Number for logical drives for which the
+    int	num_ldrv;	/* Number for logical drives for which the
 				   status should be reported. */
-	u32	nreads[MAX_LOGICAL_DRIVES_40LD];	/* number of reads for
+    u32	nreads[MAX_LOGICAL_DRIVES_40LD];	/* number of reads for
 							each logical drive */
-	u32	nreadblocks[MAX_LOGICAL_DRIVES_40LD];	/* number of blocks
+    u32	nreadblocks[MAX_LOGICAL_DRIVES_40LD];	/* number of blocks
 							read for each logical
 							drive */
-	u32	nwrites[MAX_LOGICAL_DRIVES_40LD];	/* number of writes
+    u32	nwrites[MAX_LOGICAL_DRIVES_40LD];	/* number of writes
 							for each logical
 							drive */
-	u32	nwriteblocks[MAX_LOGICAL_DRIVES_40LD];	/* number of blocks
+    u32	nwriteblocks[MAX_LOGICAL_DRIVES_40LD];	/* number of blocks
 							writes for each
 							logical drive */
-	u32	rd_errors[MAX_LOGICAL_DRIVES_40LD];	/* number of read
+    u32	rd_errors[MAX_LOGICAL_DRIVES_40LD];	/* number of read
 							   errors for each
 							   logical drive */
-	u32	wr_errors[MAX_LOGICAL_DRIVES_40LD];	/* number of write
+    u32	wr_errors[MAX_LOGICAL_DRIVES_40LD];	/* number of write
 							   errors for each
 							   logical drive */
-}megastat_t;
+} megastat_t;
 
 
 struct private_bios_data {
-	u8	geometry:4;	/*
+    u8	geometry:4;	/*
 				 * bits 0-3 - BIOS geometry
 				 * 0x0001 - 1GB
 				 * 0x0010 - 2GB
 				 * 0x1000 - 8GB
 				 * Others values are invalid
 							 */
-	u8	unused:4;	/* bits 4-7 are unused */
-	u8	boot_drv;	/*
+    u8	unused:4;	/* bits 4-7 are unused */
+    u8	boot_drv;	/*
 				 * logical drive set as boot drive
 				 * 0..7 - for 8LD cards
 				 * 0..39 - for 40LD cards
 				 */
-	u8	rsvd[12];
-	u16	cksum;	/* 0-(sum of first 13 bytes of this structure) */
+    u8	rsvd[12];
+    u16	cksum;	/* 0-(sum of first 13 bytes of this structure) */
 } __attribute__ ((packed));
 
 
@@ -797,111 +797,111 @@ struct private_bios_data {
  * Each controller's soft state
  */
 typedef struct {
-	int	this_id;	/* our id, may set to different than 7 if
+    int	this_id;	/* our id, may set to different than 7 if
 				   clustering is available */
-	u32	flag;
+    u32	flag;
 
-	unsigned long		base;
-	void __iomem		*mmio_base;
+    unsigned long		base;
+    void __iomem		*mmio_base;
 
-	/* mbox64 with mbox not aligned on 16-byte boundary */
-	mbox64_t	*una_mbox64;
-	dma_addr_t	una_mbox64_dma;
+    /* mbox64 with mbox not aligned on 16-byte boundary */
+    mbox64_t	*una_mbox64;
+    dma_addr_t	una_mbox64_dma;
 
-	volatile mbox64_t	*mbox64;/* ptr to 64-bit mailbox */
-	volatile mbox_t		*mbox;	/* ptr to standard mailbox */
-	dma_addr_t		mbox_dma;
+    volatile mbox64_t	*mbox64;/* ptr to 64-bit mailbox */
+    volatile mbox_t		*mbox;	/* ptr to standard mailbox */
+    dma_addr_t		mbox_dma;
 
-	struct pci_dev	*dev;
+    struct pci_dev	*dev;
 
-	struct list_head	free_list;
-	struct list_head	pending_list;
-	struct list_head	completed_list;
+    struct list_head	free_list;
+    struct list_head	pending_list;
+    struct list_head	completed_list;
 
-	struct Scsi_Host	*host;
+    struct Scsi_Host	*host;
 
 #define MEGA_BUFFER_SIZE (2*1024)
-	u8		*mega_buffer;
-	dma_addr_t	buf_dma_handle;
+    u8		*mega_buffer;
+    dma_addr_t	buf_dma_handle;
 
-	mega_product_info	product_info;
+    mega_product_info	product_info;
 
-	u8		max_cmds;
-	scb_t		*scb_list;
+    u8		max_cmds;
+    scb_t		*scb_list;
 
-	atomic_t	pend_cmds;	/* maintain a counter for pending
+    atomic_t	pend_cmds;	/* maintain a counter for pending
 					   commands in firmware */
 
 #if MEGA_HAVE_STATS
-	u32	nreads[MAX_LOGICAL_DRIVES_40LD];
-	u32	nreadblocks[MAX_LOGICAL_DRIVES_40LD];
-	u32	nwrites[MAX_LOGICAL_DRIVES_40LD];
-	u32	nwriteblocks[MAX_LOGICAL_DRIVES_40LD];
-	u32	rd_errors[MAX_LOGICAL_DRIVES_40LD];
-	u32	wr_errors[MAX_LOGICAL_DRIVES_40LD];
+    u32	nreads[MAX_LOGICAL_DRIVES_40LD];
+    u32	nreadblocks[MAX_LOGICAL_DRIVES_40LD];
+    u32	nwrites[MAX_LOGICAL_DRIVES_40LD];
+    u32	nwriteblocks[MAX_LOGICAL_DRIVES_40LD];
+    u32	rd_errors[MAX_LOGICAL_DRIVES_40LD];
+    u32	wr_errors[MAX_LOGICAL_DRIVES_40LD];
 #endif
 
-	/* Host adapter parameters */
-	u8	numldrv;
-	u8	fw_version[7];
-	u8	bios_version[7];
+    /* Host adapter parameters */
+    u8	numldrv;
+    u8	fw_version[7];
+    u8	bios_version[7];
 
 #ifdef CONFIG_PROC_FS
-	struct proc_dir_entry	*controller_proc_dir_entry;
-	struct proc_dir_entry	*proc_read;
-	struct proc_dir_entry	*proc_stat;
-	struct proc_dir_entry	*proc_mbox;
+    struct proc_dir_entry	*controller_proc_dir_entry;
+    struct proc_dir_entry	*proc_read;
+    struct proc_dir_entry	*proc_stat;
+    struct proc_dir_entry	*proc_mbox;
 
 #if MEGA_HAVE_ENH_PROC
-	struct proc_dir_entry	*proc_rr;
-	struct proc_dir_entry	*proc_battery;
+    struct proc_dir_entry	*proc_rr;
+    struct proc_dir_entry	*proc_battery;
 #define MAX_PROC_CHANNELS	4
-	struct proc_dir_entry	*proc_pdrvstat[MAX_PROC_CHANNELS];
-	struct proc_dir_entry	*proc_rdrvstat[MAX_PROC_CHANNELS];
+    struct proc_dir_entry	*proc_pdrvstat[MAX_PROC_CHANNELS];
+    struct proc_dir_entry	*proc_rdrvstat[MAX_PROC_CHANNELS];
 #endif
 
 #endif
 
-	int	has_64bit_addr;		/* are we using 64-bit addressing */
-	int	support_ext_cdb;
-	int	boot_ldrv_enabled;
-	int	boot_ldrv;
-	int	boot_pdrv_enabled;	/* boot from physical drive */
-	int	boot_pdrv_ch;		/* boot physical drive channel */
-	int	boot_pdrv_tgt;		/* boot physical drive target */
+    int	has_64bit_addr;		/* are we using 64-bit addressing */
+    int	support_ext_cdb;
+    int	boot_ldrv_enabled;
+    int	boot_ldrv;
+    int	boot_pdrv_enabled;	/* boot from physical drive */
+    int	boot_pdrv_ch;		/* boot physical drive channel */
+    int	boot_pdrv_tgt;		/* boot physical drive target */
 
 
-	int	support_random_del;	/* Do we support random deletion of
+    int	support_random_del;	/* Do we support random deletion of
 					   logdrvs */
-	int	read_ldidmap;	/* set after logical drive deltion. The
+    int	read_ldidmap;	/* set after logical drive deltion. The
 				   logical drive number must be read from the
 				   map */
-	atomic_t	quiescent;	/* a stage reached when delete logical
+    atomic_t	quiescent;	/* a stage reached when delete logical
 					   drive needs to be done. Stop
 					   sending requests to the hba till
 					   delete operation is completed */
-	spinlock_t	lock;
+    spinlock_t	lock;
 
-	u8	logdrv_chan[MAX_CHANNELS+NVIRT_CHAN]; /* logical drive are on
+    u8	logdrv_chan[MAX_CHANNELS+NVIRT_CHAN]; /* logical drive are on
 							what channels. */
-	int	mega_ch_class;
+    int	mega_ch_class;
 
-	u8	sglen;	/* f/w supported scatter-gather list length */
+    u8	sglen;	/* f/w supported scatter-gather list length */
 
-	unsigned char int_cdb[MAX_COMMAND_SIZE];
-	scb_t			int_scb;
-	struct mutex		int_mtx;	/* To synchronize the internal
+    unsigned char int_cdb[MAX_COMMAND_SIZE];
+    scb_t			int_scb;
+    struct mutex		int_mtx;	/* To synchronize the internal
 						commands */
-	struct completion	int_waitq;	/* wait queue for internal
+    struct completion	int_waitq;	/* wait queue for internal
 						 cmds */
 
-	int	has_cluster;	/* cluster support on this HBA */
-}adapter_t;
+    int	has_cluster;	/* cluster support on this HBA */
+} adapter_t;
 
 
 struct mega_hbas {
-	int is_bios_enabled;
-	adapter_t *hostdata_addr;
+    int is_bios_enabled;
+    adapter_t *hostdata_addr;
 };
 
 
@@ -1001,16 +1001,16 @@ static int megaraid_abort(Scsi_Cmnd *);
 static int megaraid_reset(Scsi_Cmnd *);
 static int megaraid_abort_and_reset(adapter_t *, Scsi_Cmnd *, int);
 static int megaraid_biosparam(struct scsi_device *, struct block_device *,
-		sector_t, int []);
+                              sector_t, int []);
 
 static int mega_build_sglist (adapter_t *adapter, scb_t *scb,
-			      u32 *buffer, u32 *length);
+                              u32 *buffer, u32 *length);
 static int __mega_busywait_mbox (adapter_t *);
 static void mega_rundoneq (adapter_t *);
 static void mega_cmd_done(adapter_t *, u8 [], int, int);
 static inline void mega_free_sgl (adapter_t *adapter);
 static void mega_8_to_40ld (mraid_inquiry *inquiry,
-		mega_inquiry3 *enquiry3, mega_product_info *);
+                            mega_inquiry3 *enquiry3, mega_product_info *);
 
 static int megadev_open (struct inode *, struct file *);
 static int megadev_ioctl (struct file *, unsigned int, unsigned long);
@@ -1046,9 +1046,9 @@ static int mega_internal_dev_inquiry(adapter_t *, u8, u8, dma_addr_t);
 
 static int mega_support_ext_cdb(adapter_t *);
 static mega_passthru* mega_prepare_passthru(adapter_t *, scb_t *,
-		Scsi_Cmnd *, int, int);
+        Scsi_Cmnd *, int, int);
 static mega_ext_passthru* mega_prepare_extpassthru(adapter_t *,
-		scb_t *, Scsi_Cmnd *, int, int);
+        scb_t *, Scsi_Cmnd *, int, int);
 static void mega_enum_raid_scsi(adapter_t *);
 static void mega_get_boot_drv(adapter_t *);
 static int mega_support_random_del(adapter_t *);

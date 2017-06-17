@@ -10,8 +10,8 @@
 #define NOSY_IOC_FILTER    _IOW('&', 2, __u32)
 
 struct nosy_stats {
-	__u32 total_packet_count;
-	__u32 lost_packet_count;
+    __u32 total_packet_count;
+    __u32 lost_packet_count;
 };
 
 /*

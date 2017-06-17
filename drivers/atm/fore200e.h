@@ -44,8 +44,8 @@
 
 
 /* the cp starts putting a received PDU into one *small* buffer,
-   then it uses a number of *large* buffers for the trailing data. 
-   we compute here the total number of receive segment descriptors 
+   then it uses a number of *large* buffers for the trailing data.
+   we compute here the total number of receive segment descriptors
    required to hold the largest possible PDU */
 
 #define RSD_REQUIRED  (((MAX_PDU_SIZE - SMALL_BUFFER_SIZE + LARGE_BUFFER_SIZE) / LARGE_BUFFER_SIZE) + 1)
@@ -54,7 +54,7 @@
 
 /* RSD_REQUIRED receive segment descriptors are enough to describe a max-sized PDU,
    but we have to keep the size of the receive PDU descriptor multiple of 32 bytes,
-   so we add one extra RSD to RSD_EXTENSION 
+   so we add one extra RSD to RSD_EXTENSION
    (WARNING: THIS MAY CHANGE IF BUFFER SIZES ARE MODIFIED) */
 
 #define RSD_EXTENSION  ((RSD_REQUIRED - RSD_FIXED) + 1)
@@ -82,17 +82,17 @@
 #error unknown bitfield endianess
 #endif
 
- 
+
 /* ATM cell header (minus HEC byte) */
 
 typedef struct atm_header {
-    BITFIELD5( 
+    BITFIELD5(
         u32 clp :  1,    /* cell loss priority         */
         u32 plt :  3,    /* payload type               */
         u32 vci : 16,    /* virtual channel identifier */
         u32 vpi :  8,    /* virtual path identifier    */
         u32 gfc :  4     /* generic flow control       */
-   )
+    )
 } atm_header_t;
 
 
@@ -119,9 +119,8 @@ typedef struct tpd_spec {
 
 /* transmit PDU rate control */
 
-typedef struct tpd_rate
-{
-    BITFIELD2( 
+typedef struct tpd_rate {
+    BITFIELD2(
         u32 idle_cells : 16,    /* number of idle cells to insert   */
         u32 data_cells : 16     /* number of data cells to transmit */
     )
@@ -200,7 +199,7 @@ typedef struct rbd_block {
 /* tpd DMA address */
 
 typedef struct tpd_haddr {
-    BITFIELD3( 
+    BITFIELD3(
         u32 size  :  4,    /* tpd size expressed in 32 byte blocks     */
         u32 pad   :  1,    /* reserved                                 */
         u32 haddr : 27     /* tpd DMA addr aligned on 32 byte boundary */
@@ -277,12 +276,12 @@ typedef struct vpvc {
 /* activate VC command opcode */
 
 typedef struct activate_opcode {
-    BITFIELD4( 
+    BITFIELD4(
         enum opcode        opcode : 8,    /* cp opcode        */
         enum fore200e_aal  aal    : 8,    /* adaptation layer */
         enum buffer_scheme scheme : 8,    /* buffer scheme    */
         u32  pad                  : 8     /* reserved         */
-   )
+    )
 } activate_opcode_t;
 
 
@@ -328,9 +327,9 @@ typedef struct oc3_regs {
 typedef struct oc3_opcode {
     BITFIELD4(
         enum opcode opcode : 8,    /* cp opcode                           */
-	u32         reg    : 8,    /* register index                      */
-	u32         value  : 8,    /* register value                      */
-	u32         mask   : 8     /* register mask that specifies which
+        u32         reg    : 8,    /* register index                      */
+        u32         value  : 8,    /* register value                      */
+        u32         mask   : 8     /* register mask that specifies which
 				      bits of the register value field
 				      are significant                     */
     )
@@ -810,8 +809,8 @@ typedef struct fore200e_bus {
     void                 (*dma_sync_for_device)(struct fore200e*, u32, int, int);
     int                  (*dma_chunk_alloc)(struct fore200e*, struct chunk*, int, int, int);
     void                 (*dma_chunk_free)(struct fore200e*, struct chunk*);
-    int                  (*configure)(struct fore200e*); 
-    int                  (*map)(struct fore200e*); 
+    int                  (*configure)(struct fore200e*);
+    int                  (*map)(struct fore200e*);
     void                 (*reset)(struct fore200e*);
     int                  (*prom_read)(struct fore200e*, struct prom_data*);
     void                 (*unmap)(struct fore200e*);
@@ -847,7 +846,7 @@ typedef struct fore200e {
     int                        irq;                    /* irq number                         */
     unsigned long              phys_base;              /* physical base address              */
     void __iomem *             virt_base;              /* virtual base address               */
-    
+
     unsigned char              esi[ ESI_LEN ];         /* end system identifier              */
 
     struct cp_monitor __iomem *         cp_monitor;    /* i960 monitor address               */
@@ -855,15 +854,15 @@ typedef struct fore200e {
     struct host_cmdq           host_cmdq;              /* host resident cmd queue            */
     struct host_txq            host_txq;               /* host resident tx queue             */
     struct host_rxq            host_rxq;               /* host resident rx queue             */
-                                                       /* host resident buffer supply queues */
-    struct host_bsq            host_bsq[ BUFFER_SCHEME_NBR ][ BUFFER_MAGN_NBR ];       
+    /* host resident buffer supply queues */
+    struct host_bsq            host_bsq[ BUFFER_SCHEME_NBR ][ BUFFER_MAGN_NBR ];
 
     u32                        available_cell_rate;    /* remaining pseudo-CBR bw on link    */
 
     int                        loop_mode;              /* S/UNI loopback mode                */
 
     struct stats*              stats;                  /* last snapshot of the stats         */
-    
+
     struct mutex               rate_mtx;               /* protects rate reservation ops      */
     spinlock_t                 q_lock;                 /* protects queue ops                 */
 #ifdef FORE200E_USE_TASKLET

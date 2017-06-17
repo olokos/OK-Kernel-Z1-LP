@@ -170,14 +170,14 @@ enum card_clock { CLK_20 = 1, CLK_30, CLK_40, CLK_50, CLK_60, CLK_80, CLK_100 };
 #define TRACE_ITEM_CNT		64
 
 struct trace_msg_t {
-	u16 line;
+    u16 line;
 #define MSG_FUNC_LEN 64
-	char func[MSG_FUNC_LEN];
+    char func[MSG_FUNC_LEN];
 #define MSG_FILE_LEN 32
-	char file[MSG_FILE_LEN];
+    char file[MSG_FILE_LEN];
 #define TIME_VAL_LEN 16
-	u8 timeval_buf[TIME_VAL_LEN];
-	u8 valid;
+    u8 timeval_buf[TIME_VAL_LEN];
+    u8 valid;
 };
 
 #endif /* _MSG_TRACE */
@@ -224,7 +224,7 @@ struct trace_msg_t {
 #define UNIT_ATTENTION          0x06	/* unit attention condition occur   */
 #define DAT_PRTCT               0x07	/* read/write is desable            */
 #define BLNC_CHK                0x08	/* find blank/DOF in read           */
-					/* write to unblank area            */
+/* write to unblank area            */
 #define CPY_ABRT                0x0a	/* Copy/Compare/Copy&Verify illgal  */
 #define ABRT_CMD                0x0b	/* Target make the command in error */
 #define EQUAL                   0x0c	/* Search Data end with Equal       */
@@ -286,23 +286,23 @@ struct trace_msg_t {
 #define	ASCQ_WRITE_PROTECT	0x00
 
 struct sense_data_t {
-	unsigned char err_code;	/* error code */
-	/* bit7 : valid                    */
-	/*   (1 : SCSI2)                    */
-	/*   (0 : Vendor specific)          */
-	/* bit6-0 : error code             */
-	/*  (0x70 : current error)          */
-	/*  (0x71 : specific command error) */
-	unsigned char seg_no;	/* segment No.                      */
-	unsigned char sense_key;	/* byte5 : ILI                      */
-	/* bit3-0 : sense key              */
-	unsigned char info[4];	/* infomation                       */
-	unsigned char ad_sense_len;	/* additional sense data length     */
-	unsigned char cmd_info[4];	/* command specific infomation      */
-	unsigned char asc;	/* ASC                              */
-	unsigned char ascq;	/* ASCQ                             */
-	unsigned char rfu;	/* FRU                              */
-	unsigned char sns_key_info[3];	/* sense key specific infomation    */
+    unsigned char err_code;	/* error code */
+    /* bit7 : valid                    */
+    /*   (1 : SCSI2)                    */
+    /*   (0 : Vendor specific)          */
+    /* bit6-0 : error code             */
+    /*  (0x70 : current error)          */
+    /*  (0x71 : specific command error) */
+    unsigned char seg_no;	/* segment No.                      */
+    unsigned char sense_key;	/* byte5 : ILI                      */
+    /* bit3-0 : sense key              */
+    unsigned char info[4];	/* infomation                       */
+    unsigned char ad_sense_len;	/* additional sense data length     */
+    unsigned char cmd_info[4];	/* command specific infomation      */
+    unsigned char asc;	/* ASC                              */
+    unsigned char ascq;	/* ASCQ                             */
+    unsigned char rfu;	/* FRU                              */
+    unsigned char sns_key_info[3];	/* sense key specific infomation    */
 };
 
 /* sd_ctl bit map */
@@ -323,95 +323,95 @@ struct sense_data_t {
 #define SUPPORT_UHS50_MMC44		0x40
 
 struct rts51x_option {
-	u8 led_blink_speed;
+    u8 led_blink_speed;
 
-	int mspro_formatter_enable;
+    int mspro_formatter_enable;
 
-	/* card clock expected by user for fpga platform */
-	int fpga_sd_sdr104_clk;
-	int fpga_sd_ddr50_clk;
-	int fpga_sd_sdr50_clk;
-	int fpga_sd_hs_clk;
-	int fpga_mmc_52m_clk;
-	int fpga_ms_hg_clk;
-	int fpga_ms_4bit_clk;
+    /* card clock expected by user for fpga platform */
+    int fpga_sd_sdr104_clk;
+    int fpga_sd_ddr50_clk;
+    int fpga_sd_sdr50_clk;
+    int fpga_sd_hs_clk;
+    int fpga_mmc_52m_clk;
+    int fpga_ms_hg_clk;
+    int fpga_ms_4bit_clk;
 
-	/* card clock expected by user for asic platform */
-	int asic_sd_sdr104_clk;
-	int asic_sd_ddr50_clk;
-	int asic_sd_sdr50_clk;
-	int asic_sd_hs_clk;
-	int asic_mmc_52m_clk;
-	int asic_ms_hg_clk;
-	int asic_ms_4bit_clk;
+    /* card clock expected by user for asic platform */
+    int asic_sd_sdr104_clk;
+    int asic_sd_ddr50_clk;
+    int asic_sd_sdr50_clk;
+    int asic_sd_hs_clk;
+    int asic_mmc_52m_clk;
+    int asic_ms_hg_clk;
+    int asic_ms_4bit_clk;
 
-	u8 ssc_depth_sd_sdr104;	/* sw */
-	u8 ssc_depth_sd_ddr50;	/* sw */
-	u8 ssc_depth_sd_sdr50;	/* sw */
-	u8 ssc_depth_sd_hs;	/* sw */
-	u8 ssc_depth_mmc_52m;	/* sw */
-	u8 ssc_depth_ms_hg;	/* sw */
-	u8 ssc_depth_ms_4bit;	/* sw */
-	u8 ssc_depth_low_speed;	/* sw */
+    u8 ssc_depth_sd_sdr104;	/* sw */
+    u8 ssc_depth_sd_ddr50;	/* sw */
+    u8 ssc_depth_sd_sdr50;	/* sw */
+    u8 ssc_depth_sd_hs;	/* sw */
+    u8 ssc_depth_mmc_52m;	/* sw */
+    u8 ssc_depth_ms_hg;	/* sw */
+    u8 ssc_depth_ms_4bit;	/* sw */
+    u8 ssc_depth_low_speed;	/* sw */
 
-	/* SD/MMC Tx phase */
-	int sd_ddr_tx_phase;	/* Enabled by bit 4 of sd_ctl */
-	int mmc_ddr_tx_phase;	/* Enabled by bit 5 of sd_ctl */
+    /* SD/MMC Tx phase */
+    int sd_ddr_tx_phase;	/* Enabled by bit 4 of sd_ctl */
+    int mmc_ddr_tx_phase;	/* Enabled by bit 5 of sd_ctl */
 
-	/* priority of choosing sd speed funciton */
-	u32 sd_speed_prior;
+    /* priority of choosing sd speed funciton */
+    u32 sd_speed_prior;
 
-	/* sd card control */
-	u32 sd_ctl;
+    /* sd card control */
+    u32 sd_ctl;
 
-	/* Enable Selective Suspend */
-	int ss_en;
-	/* Interval to enter SS from IDLE state (second) */
-	int ss_delay;
-	int needs_remote_wakeup;
-	u8 ww_enable;	/* sangdy2010-08-03:add for remote wakeup */
+    /* Enable Selective Suspend */
+    int ss_en;
+    /* Interval to enter SS from IDLE state (second) */
+    int ss_delay;
+    int needs_remote_wakeup;
+    u8 ww_enable;	/* sangdy2010-08-03:add for remote wakeup */
 
-	/* Enable SSC clock */
-	int ssc_en;
+    /* Enable SSC clock */
+    int ssc_en;
 
-	int auto_delink_en;
+    int auto_delink_en;
 
-	/* sangdy2010-07-13:add FT2 fast mode */
-	int FT2_fast_mode;
-	/* sangdy2010-07-15:
-	 * add for config delay between 1/4 PMOS and 3/4 PMOS */
-	int pwr_delay;
+    /* sangdy2010-07-13:add FT2 fast mode */
+    int FT2_fast_mode;
+    /* sangdy2010-07-15:
+     * add for config delay between 1/4 PMOS and 3/4 PMOS */
+    int pwr_delay;
 
-	int xd_rw_step;		/* add to tune xd tRP */
-	int D3318_off_delay;	/* add to tune D3318 off delay time */
-	int delink_delay;	/* add to tune delink delay time */
-	/* add for rts5129 to enable/disable D3318 off */
-	u8 rts5129_D3318_off_enable;
-	u8 sd20_pad_drive;	/* add to config SD20 PAD drive */
-	u8 sd30_pad_drive;	/* add to config SD30 pad drive */
-	/*if reset or rw fail,then set SD20 pad drive again */
-	u8 reset_or_rw_fail_set_pad_drive;
+    int xd_rw_step;		/* add to tune xd tRP */
+    int D3318_off_delay;	/* add to tune D3318 off delay time */
+    int delink_delay;	/* add to tune delink delay time */
+    /* add for rts5129 to enable/disable D3318 off */
+    u8 rts5129_D3318_off_enable;
+    u8 sd20_pad_drive;	/* add to config SD20 PAD drive */
+    u8 sd30_pad_drive;	/* add to config SD30 pad drive */
+    /*if reset or rw fail,then set SD20 pad drive again */
+    u8 reset_or_rw_fail_set_pad_drive;
 
-	u8 rcc_fail_flag;	/* add to indicate whether rcc bug happen */
-	u8 rcc_bug_fix_en;	/* if set,then support fixing rcc bug */
-	u8 debounce_num;	/* debounce number */
-	int polling_time;	/* polling delay time */
-	u8 led_toggle_interval;	/* used to control led toggle speed */
-	int xd_rwn_step;
-	u8 sd_send_status_en;
-	/* used to store default phase which is
-	 * used when phase tune all pass. */
-	u8 ddr50_tx_phase;
-	u8 ddr50_rx_phase;
-	u8 sdr50_tx_phase;
-	u8 sdr50_rx_phase;
-	/* used to enable select sdr50 tx phase according to  proportion. */
-	u8 sdr50_phase_sel;
-	u8 ms_errreg_fix;
-	u8 reset_mmc_first;
-	u8 speed_mmc;		/* when set, then try CMD55 only twice */
-	u8 led_always_on;	/* if set, then led always on when card exist */
-	u8 dv18_voltage;	/* add to tune dv18 voltage */
+    u8 rcc_fail_flag;	/* add to indicate whether rcc bug happen */
+    u8 rcc_bug_fix_en;	/* if set,then support fixing rcc bug */
+    u8 debounce_num;	/* debounce number */
+    int polling_time;	/* polling delay time */
+    u8 led_toggle_interval;	/* used to control led toggle speed */
+    int xd_rwn_step;
+    u8 sd_send_status_en;
+    /* used to store default phase which is
+     * used when phase tune all pass. */
+    u8 ddr50_tx_phase;
+    u8 ddr50_rx_phase;
+    u8 sdr50_tx_phase;
+    u8 sdr50_rx_phase;
+    /* used to enable select sdr50 tx phase according to  proportion. */
+    u8 sdr50_phase_sel;
+    u8 ms_errreg_fix;
+    u8 reset_mmc_first;
+    u8 speed_mmc;		/* when set, then try CMD55 only twice */
+    u8 led_always_on;	/* if set, then led always on when card exist */
+    u8 dv18_voltage;	/* add to tune dv18 voltage */
 };
 
 #define MS_FORMATTER_ENABLED(chip)	((chip)->option.mspro_formatter_enable)
@@ -419,50 +419,50 @@ struct rts51x_option {
 struct rts51x_chip;
 
 typedef int (*card_rw_func) (struct scsi_cmnd *srb, struct rts51x_chip *chip,
-			     u32 sec_addr, u16 sec_cnt);
+                             u32 sec_addr, u16 sec_cnt);
 
 /* For MS Card */
 #define    MAX_DEFECTIVE_BLOCK     10
 
 struct zone_entry {
-	u16 *l2p_table;
-	u16 *free_table;
-	u16 defect_list[MAX_DEFECTIVE_BLOCK];	/* For MS card only */
-	int set_index;
-	int get_index;
-	int unused_blk_cnt;
-	int disable_count;
-	/* To indicate whether the L2P table of this zone has been built. */
-	int build_flag;
+    u16 *l2p_table;
+    u16 *free_table;
+    u16 defect_list[MAX_DEFECTIVE_BLOCK];	/* For MS card only */
+    int set_index;
+    int get_index;
+    int unused_blk_cnt;
+    int disable_count;
+    /* To indicate whether the L2P table of this zone has been built. */
+    int build_flag;
 };
 
 struct xd_delay_write_tag {
-	u32 old_phyblock;
-	u32 new_phyblock;
-	u32 logblock;
-	u8 pageoff;
-	u8 delay_write_flag;
+    u32 old_phyblock;
+    u32 new_phyblock;
+    u32 logblock;
+    u8 pageoff;
+    u8 delay_write_flag;
 };
 
 struct xd_info {
-	u8 maker_code;
-	u8 device_code;
-	u8 block_shift;
-	u8 page_off;
-	u8 addr_cycle;
-	u16 cis_block;
-	u8 multi_flag;
-	u8 err_code;
-	u32 capacity;
+    u8 maker_code;
+    u8 device_code;
+    u8 block_shift;
+    u8 page_off;
+    u8 addr_cycle;
+    u16 cis_block;
+    u8 multi_flag;
+    u8 err_code;
+    u32 capacity;
 
-	struct zone_entry *zone;
-	int zone_cnt;
+    struct zone_entry *zone;
+    int zone_cnt;
 
-	struct xd_delay_write_tag delay_write;
+    struct xd_delay_write_tag delay_write;
 
-	int counter;
+    int counter;
 
-	int xd_clock;
+    int xd_clock;
 };
 
 #define TYPE_SD			0x0000
@@ -577,47 +577,47 @@ do {						\
 	((sd_card)->retry_SD20_mode == 1)
 
 struct sd_info {
-	u16 sd_type;
-	u8 err_code;
-	u8 sd_data_buf_ready;
-	u32 sd_addr;
-	u32 capacity;
+    u16 sd_type;
+    u8 err_code;
+    u8 sd_data_buf_ready;
+    u32 sd_addr;
+    u32 capacity;
 
-	u8 raw_csd[16];
-	u8 raw_scr[8];
+    u8 raw_csd[16];
+    u8 raw_scr[8];
 
-	/* Sequential RW */
-	int seq_mode;
-	enum dma_data_direction pre_dir;
-	u32 pre_sec_addr;
-	u16 pre_sec_cnt;
+    /* Sequential RW */
+    int seq_mode;
+    enum dma_data_direction pre_dir;
+    u32 pre_sec_addr;
+    u16 pre_sec_cnt;
 
-	int counter;
+    int counter;
 
-	int sd_clock;
+    int sd_clock;
 
 #ifdef SUPPORT_CPRM
-	int sd_pass_thru_en;
-	int pre_cmd_err;
-	u8 last_rsp_type;
-	u8 rsp[17];
+    int sd_pass_thru_en;
+    int pre_cmd_err;
+    u8 last_rsp_type;
+    u8 rsp[17];
 #endif
 
-	u8 func_group1_mask;
-	u8 func_group2_mask;
-	u8 func_group3_mask;
-	u8 func_group4_mask;
+    u8 func_group1_mask;
+    u8 func_group2_mask;
+    u8 func_group3_mask;
+    u8 func_group4_mask;
 
-	u8 sd_switch_fail;
-	u8 sd_read_phase;
-	u8 retry_SD20_mode;	/* sangdy2010-06-10 */
-	u8 sd_reset_fail;	/* sangdy2010-07-01 */
-	u8 sd_send_status_en;
+    u8 sd_switch_fail;
+    u8 sd_read_phase;
+    u8 retry_SD20_mode;	/* sangdy2010-06-10 */
+    u8 sd_reset_fail;	/* sangdy2010-07-01 */
+    u8 sd_send_status_en;
 
 #ifdef SUPPORT_SD_LOCK
-	u8 sd_lock_status;
-	u8 sd_erase_status;
-	u8 sd_lock_notify;
+    u8 sd_lock_status;
+    u8 sd_erase_status;
+    u8 sd_lock_notify;
 #endif
 };
 
@@ -647,56 +647,56 @@ struct sd_info {
 #define CHK_MS4BIT(ms_card)	(((ms_card)->ms_type & MS_4BIT))
 
 struct ms_delay_write_tag {
-	u16 old_phyblock;
-	u16 new_phyblock;
-	u16 logblock;
-	u8 pageoff;
-	u8 delay_write_flag;
+    u16 old_phyblock;
+    u16 new_phyblock;
+    u16 logblock;
+    u8 pageoff;
+    u8 delay_write_flag;
 };
 
 struct ms_info {
-	u16 ms_type;
-	u8 block_shift;
-	u8 page_off;
-	u16 total_block;
-	u16 boot_block;
-	u32 capacity;
+    u16 ms_type;
+    u8 block_shift;
+    u8 page_off;
+    u16 total_block;
+    u16 boot_block;
+    u32 capacity;
 
-	u8 check_ms_flow;
-	u8 switch_8bit_fail;
-	u8 err_code;
+    u8 check_ms_flow;
+    u8 switch_8bit_fail;
+    u8 err_code;
 
-	struct zone_entry *segment;
-	int segment_cnt;
+    struct zone_entry *segment;
+    int segment_cnt;
 
-	int pro_under_formatting;
-	int format_status;
-	u16 progress;
-	u8 raw_sys_info[96];
+    int pro_under_formatting;
+    int format_status;
+    u16 progress;
+    u8 raw_sys_info[96];
 #ifdef SUPPORT_PCGL_1P18
-	u8 raw_model_name[48];
+    u8 raw_model_name[48];
 #endif
 
-	u8 multi_flag;
+    u8 multi_flag;
 
-	/* Sequential RW */
-	u8 seq_mode;
-	enum dma_data_direction pre_dir;
-	u32 pre_sec_addr;
-	u16 pre_sec_cnt;
-	u32 total_sec_cnt;
-	u8 last_rw_int;
+    /* Sequential RW */
+    u8 seq_mode;
+    enum dma_data_direction pre_dir;
+    u32 pre_sec_addr;
+    u16 pre_sec_cnt;
+    u32 total_sec_cnt;
+    u8 last_rw_int;
 
-	struct ms_delay_write_tag delay_write;
+    struct ms_delay_write_tag delay_write;
 
-	int counter;
+    int counter;
 
-	int ms_clock;
+    int ms_clock;
 
 #ifdef SUPPORT_MAGIC_GATE
-	u8 magic_gate_id[16];
-	u8 mg_entry_num;
-	int mg_auth;		/* flag to indicate authentication process */
+    u8 magic_gate_id[16];
+    u8 mg_entry_num;
+    int mg_auth;		/* flag to indicate authentication process */
 #endif
 };
 
@@ -710,97 +710,98 @@ struct ms_info {
 struct scsi_cmnd;
 
 enum CHIP_STAT { STAT_INIT, STAT_IDLE, STAT_RUN, STAT_SS_PRE, STAT_SS,
-	    STAT_SUSPEND };
+                 STAT_SUSPEND
+               };
 
 struct rts51x_chip {
-	u16 vendor_id;
-	u16 product_id;
-	char max_lun;
+    u16 vendor_id;
+    u16 product_id;
+    char max_lun;
 
-	struct scsi_cmnd *srb;
-	struct sense_data_t sense_buffer[MAX_ALLOWED_LUN_CNT];
+    struct scsi_cmnd *srb;
+    struct sense_data_t sense_buffer[MAX_ALLOWED_LUN_CNT];
 
 #ifndef LED_AUTO_BLINK
-	int led_toggle_counter;
+    int led_toggle_counter;
 #endif
-	int ss_counter;
-	int idle_counter;
-	int auto_delink_counter;
-	enum CHIP_STAT chip_stat;
+    int ss_counter;
+    int idle_counter;
+    int auto_delink_counter;
+    enum CHIP_STAT chip_stat;
 
-	int resume_from_scsi;
+    int resume_from_scsi;
 
-	/* Card information */
-	struct xd_info xd_card;
-	struct sd_info sd_card;
-	struct ms_info ms_card;
+    /* Card information */
+    struct xd_info xd_card;
+    struct sd_info sd_card;
+    struct ms_info ms_card;
 
-	int cur_clk;		/* current card clock */
-	int cur_card;		/* Current card module */
+    int cur_clk;		/* current card clock */
+    int cur_card;		/* Current card module */
 
-	u8 card_exist;		/* card exist bit map (physical exist) */
-	u8 card_ready;		/* card ready bit map (reset successfully) */
-	u8 card_fail;		/* card reset fail bit map */
-	u8 card_ejected;	/* card ejected bit map */
-	u8 card_wp;		/* card write protected bit map */
+    u8 card_exist;		/* card exist bit map (physical exist) */
+    u8 card_ready;		/* card ready bit map (reset successfully) */
+    u8 card_fail;		/* card reset fail bit map */
+    u8 card_ejected;	/* card ejected bit map */
+    u8 card_wp;		/* card write protected bit map */
 
-	u8 fake_card_ready;
-	/* flag to indicate whether to answer MediaChange */
-	unsigned long lun_mc;
+    u8 fake_card_ready;
+    /* flag to indicate whether to answer MediaChange */
+    unsigned long lun_mc;
 
-	/* card bus width */
-	u8 card_bus_width[MAX_ALLOWED_LUN_CNT];
-	/* card capacity */
-	u32 capacity[MAX_ALLOWED_LUN_CNT];
+    /* card bus width */
+    u8 card_bus_width[MAX_ALLOWED_LUN_CNT];
+    /* card capacity */
+    u32 capacity[MAX_ALLOWED_LUN_CNT];
 
-	/* read/write card function pointer */
-	card_rw_func rw_card[MAX_ALLOWED_LUN_CNT];
-	/* read/write capacity, used for GPIO Toggle */
-	u32 rw_cap[MAX_ALLOWED_LUN_CNT];
-	/* card to lun mapping table */
-	u8 card2lun[32];
-	/* lun to card mapping table */
-	u8 lun2card[MAX_ALLOWED_LUN_CNT];
+    /* read/write card function pointer */
+    card_rw_func rw_card[MAX_ALLOWED_LUN_CNT];
+    /* read/write capacity, used for GPIO Toggle */
+    u32 rw_cap[MAX_ALLOWED_LUN_CNT];
+    /* card to lun mapping table */
+    u8 card2lun[32];
+    /* lun to card mapping table */
+    u8 lun2card[MAX_ALLOWED_LUN_CNT];
 
 #ifdef _MSG_TRACE
-	struct trace_msg_t trace_msg[TRACE_ITEM_CNT];
-	int msg_idx;
+    struct trace_msg_t trace_msg[TRACE_ITEM_CNT];
+    int msg_idx;
 #endif
 
-	int rw_need_retry;
+    int rw_need_retry;
 
-	/* ASIC or FPGA */
-	int asic_code;
+    /* ASIC or FPGA */
+    int asic_code;
 
-	/* QFN24 or LQFP48 */
-	int package;
+    /* QFN24 or LQFP48 */
+    int package;
 
-	/* Full Speed or High Speed */
-	int usb_speed;
+    /* Full Speed or High Speed */
+    int usb_speed;
 
-	/*sangdy:enable or disable UHS50 and MMC4.4 */
-	int uhs50_mmc44_en;
+    /*sangdy:enable or disable UHS50 and MMC4.4 */
+    int uhs50_mmc44_en;
 
-	u8 ic_version;
+    u8 ic_version;
 
-	/* Command buffer */
-	u8 *cmd_buf;
-	unsigned int cmd_idx;
-	/* Response buffer */
-	u8 *rsp_buf;
+    /* Command buffer */
+    u8 *cmd_buf;
+    unsigned int cmd_idx;
+    /* Response buffer */
+    u8 *rsp_buf;
 
-	u16 card_status;
+    u16 card_status;
 
 #ifdef SUPPORT_OCP
-	u16 ocp_stat;
+    u16 ocp_stat;
 #endif
 
-	struct rts51x_option option;
-	struct rts51x_usb *usb;
+    struct rts51x_option option;
+    struct rts51x_usb *usb;
 
-	u8 rcc_read_response;
-	int reset_need_retry;
-	u8 rts5179;
+    u8 rcc_read_response;
+    int reset_need_retry;
+    u8 rts5179;
 };
 
 #define UHS50_EN 0x0001
@@ -831,42 +832,39 @@ int rts51x_init_chip(struct rts51x_chip *chip);
 int rts51x_release_chip(struct rts51x_chip *chip);
 void rts51x_polling_func(struct rts51x_chip *chip);
 
-static inline void rts51x_init_cmd(struct rts51x_chip *chip)
-{
-	chip->cmd_idx = 0;
-	chip->cmd_buf[0] = 'R';
-	chip->cmd_buf[1] = 'T';
-	chip->cmd_buf[2] = 'C';
-	chip->cmd_buf[3] = 'R';
-	chip->cmd_buf[PACKET_TYPE] = BATCH_CMD;
+static inline void rts51x_init_cmd(struct rts51x_chip *chip) {
+    chip->cmd_idx = 0;
+    chip->cmd_buf[0] = 'R';
+    chip->cmd_buf[1] = 'T';
+    chip->cmd_buf[2] = 'C';
+    chip->cmd_buf[3] = 'R';
+    chip->cmd_buf[PACKET_TYPE] = BATCH_CMD;
 }
 
 void rts51x_add_cmd(struct rts51x_chip *chip,
-		    u8 cmd_type, u16 reg_addr, u8 mask, u8 data);
+                    u8 cmd_type, u16 reg_addr, u8 mask, u8 data);
 int rts51x_send_cmd(struct rts51x_chip *chip, u8 flag, int timeout);
 int rts51x_get_rsp(struct rts51x_chip *chip, int rsp_len, int timeout);
 
 static inline void rts51x_read_rsp_buf(struct rts51x_chip *chip, int offset,
-				       u8 *buf, int buf_len)
-{
-	memcpy(buf, chip->rsp_buf + offset, buf_len);
+                                       u8 *buf, int buf_len) {
+    memcpy(buf, chip->rsp_buf + offset, buf_len);
 }
 
-static inline u8 *rts51x_get_rsp_data(struct rts51x_chip *chip)
-{
-	return chip->rsp_buf;
+static inline u8 *rts51x_get_rsp_data(struct rts51x_chip *chip) {
+    return chip->rsp_buf;
 }
 
 int rts51x_get_card_status(struct rts51x_chip *chip, u16 *status);
 int rts51x_write_register(struct rts51x_chip *chip, u16 addr, u8 mask, u8 data);
 int rts51x_read_register(struct rts51x_chip *chip, u16 addr, u8 *data);
 int rts51x_ep0_write_register(struct rts51x_chip *chip, u16 addr, u8 mask,
-			      u8 data);
+                              u8 data);
 int rts51x_ep0_read_register(struct rts51x_chip *chip, u16 addr, u8 *data);
 int rts51x_seq_write_register(struct rts51x_chip *chip, u16 addr, u16 len,
-			      u8 *data);
+                              u8 *data);
 int rts51x_seq_read_register(struct rts51x_chip *chip, u16 addr, u16 len,
-			     u8 *data);
+                             u8 *data);
 int rts51x_read_ppbuf(struct rts51x_chip *chip, u8 *buf, int buf_len);
 int rts51x_write_ppbuf(struct rts51x_chip *chip, u8 *buf, int buf_len);
 int rts51x_write_phy_register(struct rts51x_chip *chip, u8 addr, u8 val);
@@ -876,12 +874,12 @@ void rts51x_clear_hw_error(struct rts51x_chip *chip);
 void rts51x_prepare_run(struct rts51x_chip *chip);
 void rts51x_trace_msg(struct rts51x_chip *chip, unsigned char *buf, int clear);
 void rts51x_pp_status(struct rts51x_chip *chip, unsigned int lun, u8 *status,
-		      u8 status_len);
+                      u8 status_len);
 void rts51x_read_status(struct rts51x_chip *chip, unsigned int lun,
-			u8 *rts51x_status, u8 status_len);
+                        u8 *rts51x_status, u8 status_len);
 int rts51x_transfer_data_rcc(struct rts51x_chip *chip, unsigned int pipe,
-			     void *buf, unsigned int len, int use_sg,
-			     unsigned int *act_len, int timeout, u8 stage_flag);
+                             void *buf, unsigned int len, int use_sg,
+                             unsigned int *act_len, int timeout, u8 stage_flag);
 
 #define RTS51X_WRITE_REG(chip, addr, mask, data)	\
 do {							\

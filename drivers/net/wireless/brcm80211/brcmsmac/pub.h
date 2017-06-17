@@ -23,229 +23,229 @@
 #include "defs.h"
 
 enum brcms_srom_id {
-	BRCMS_SROM_NULL,
-	BRCMS_SROM_CONT,
-	BRCMS_SROM_AA2G,
-	BRCMS_SROM_AA5G,
-	BRCMS_SROM_AG0,
-	BRCMS_SROM_AG1,
-	BRCMS_SROM_AG2,
-	BRCMS_SROM_AG3,
-	BRCMS_SROM_ANTSWCTL2G,
-	BRCMS_SROM_ANTSWCTL5G,
-	BRCMS_SROM_ANTSWITCH,
-	BRCMS_SROM_BOARDFLAGS2,
-	BRCMS_SROM_BOARDFLAGS,
-	BRCMS_SROM_BOARDNUM,
-	BRCMS_SROM_BOARDREV,
-	BRCMS_SROM_BOARDTYPE,
-	BRCMS_SROM_BW40PO,
-	BRCMS_SROM_BWDUPPO,
-	BRCMS_SROM_BXA2G,
-	BRCMS_SROM_BXA5G,
-	BRCMS_SROM_CC,
-	BRCMS_SROM_CCK2GPO,
-	BRCMS_SROM_CCKBW202GPO,
-	BRCMS_SROM_CCKBW20UL2GPO,
-	BRCMS_SROM_CCODE,
-	BRCMS_SROM_CDDPO,
-	BRCMS_SROM_DEVID,
-	BRCMS_SROM_ET1MACADDR,
-	BRCMS_SROM_EXTPAGAIN2G,
-	BRCMS_SROM_EXTPAGAIN5G,
-	BRCMS_SROM_FREQOFFSET_CORR,
-	BRCMS_SROM_HW_IQCAL_EN,
-	BRCMS_SROM_IL0MACADDR,
-	BRCMS_SROM_IQCAL_SWP_DIS,
-	BRCMS_SROM_LEDBH0,
-	BRCMS_SROM_LEDBH1,
-	BRCMS_SROM_LEDBH2,
-	BRCMS_SROM_LEDBH3,
-	BRCMS_SROM_LEDDC,
-	BRCMS_SROM_LEGOFDM40DUPPO,
-	BRCMS_SROM_LEGOFDMBW202GPO,
-	BRCMS_SROM_LEGOFDMBW205GHPO,
-	BRCMS_SROM_LEGOFDMBW205GLPO,
-	BRCMS_SROM_LEGOFDMBW205GMPO,
-	BRCMS_SROM_LEGOFDMBW20UL2GPO,
-	BRCMS_SROM_LEGOFDMBW20UL5GHPO,
-	BRCMS_SROM_LEGOFDMBW20UL5GLPO,
-	BRCMS_SROM_LEGOFDMBW20UL5GMPO,
-	BRCMS_SROM_MACADDR,
-	BRCMS_SROM_MCS2GPO0,
-	BRCMS_SROM_MCS2GPO1,
-	BRCMS_SROM_MCS2GPO2,
-	BRCMS_SROM_MCS2GPO3,
-	BRCMS_SROM_MCS2GPO4,
-	BRCMS_SROM_MCS2GPO5,
-	BRCMS_SROM_MCS2GPO6,
-	BRCMS_SROM_MCS2GPO7,
-	BRCMS_SROM_MCS32PO,
-	BRCMS_SROM_MCS5GHPO0,
-	BRCMS_SROM_MCS5GHPO1,
-	BRCMS_SROM_MCS5GHPO2,
-	BRCMS_SROM_MCS5GHPO3,
-	BRCMS_SROM_MCS5GHPO4,
-	BRCMS_SROM_MCS5GHPO5,
-	BRCMS_SROM_MCS5GHPO6,
-	BRCMS_SROM_MCS5GHPO7,
-	BRCMS_SROM_MCS5GLPO0,
-	BRCMS_SROM_MCS5GLPO1,
-	BRCMS_SROM_MCS5GLPO2,
-	BRCMS_SROM_MCS5GLPO3,
-	BRCMS_SROM_MCS5GLPO4,
-	BRCMS_SROM_MCS5GLPO5,
-	BRCMS_SROM_MCS5GLPO6,
-	BRCMS_SROM_MCS5GLPO7,
-	BRCMS_SROM_MCS5GPO0,
-	BRCMS_SROM_MCS5GPO1,
-	BRCMS_SROM_MCS5GPO2,
-	BRCMS_SROM_MCS5GPO3,
-	BRCMS_SROM_MCS5GPO4,
-	BRCMS_SROM_MCS5GPO5,
-	BRCMS_SROM_MCS5GPO6,
-	BRCMS_SROM_MCS5GPO7,
-	BRCMS_SROM_MCSBW202GPO,
-	BRCMS_SROM_MCSBW205GHPO,
-	BRCMS_SROM_MCSBW205GLPO,
-	BRCMS_SROM_MCSBW205GMPO,
-	BRCMS_SROM_MCSBW20UL2GPO,
-	BRCMS_SROM_MCSBW20UL5GHPO,
-	BRCMS_SROM_MCSBW20UL5GLPO,
-	BRCMS_SROM_MCSBW20UL5GMPO,
-	BRCMS_SROM_MCSBW402GPO,
-	BRCMS_SROM_MCSBW405GHPO,
-	BRCMS_SROM_MCSBW405GLPO,
-	BRCMS_SROM_MCSBW405GMPO,
-	BRCMS_SROM_MEASPOWER,
-	BRCMS_SROM_OFDM2GPO,
-	BRCMS_SROM_OFDM5GHPO,
-	BRCMS_SROM_OFDM5GLPO,
-	BRCMS_SROM_OFDM5GPO,
-	BRCMS_SROM_OPO,
-	BRCMS_SROM_PA0B0,
-	BRCMS_SROM_PA0B1,
-	BRCMS_SROM_PA0B2,
-	BRCMS_SROM_PA0ITSSIT,
-	BRCMS_SROM_PA0MAXPWR,
-	BRCMS_SROM_PA1B0,
-	BRCMS_SROM_PA1B1,
-	BRCMS_SROM_PA1B2,
-	BRCMS_SROM_PA1HIB0,
-	BRCMS_SROM_PA1HIB1,
-	BRCMS_SROM_PA1HIB2,
-	BRCMS_SROM_PA1HIMAXPWR,
-	BRCMS_SROM_PA1ITSSIT,
-	BRCMS_SROM_PA1LOB0,
-	BRCMS_SROM_PA1LOB1,
-	BRCMS_SROM_PA1LOB2,
-	BRCMS_SROM_PA1LOMAXPWR,
-	BRCMS_SROM_PA1MAXPWR,
-	BRCMS_SROM_PDETRANGE2G,
-	BRCMS_SROM_PDETRANGE5G,
-	BRCMS_SROM_PHYCAL_TEMPDELTA,
-	BRCMS_SROM_RAWTEMPSENSE,
-	BRCMS_SROM_REGREV,
-	BRCMS_SROM_REV,
-	BRCMS_SROM_RSSISAV2G,
-	BRCMS_SROM_RSSISAV5G,
-	BRCMS_SROM_RSSISMC2G,
-	BRCMS_SROM_RSSISMC5G,
-	BRCMS_SROM_RSSISMF2G,
-	BRCMS_SROM_RSSISMF5G,
-	BRCMS_SROM_RXCHAIN,
-	BRCMS_SROM_RXPO2G,
-	BRCMS_SROM_RXPO5G,
-	BRCMS_SROM_STBCPO,
-	BRCMS_SROM_TEMPCORRX,
-	BRCMS_SROM_TEMPOFFSET,
-	BRCMS_SROM_TEMPSENSE_OPTION,
-	BRCMS_SROM_TEMPSENSE_SLOPE,
-	BRCMS_SROM_TEMPTHRESH,
-	BRCMS_SROM_TRI2G,
-	BRCMS_SROM_TRI5GH,
-	BRCMS_SROM_TRI5GL,
-	BRCMS_SROM_TRI5G,
-	BRCMS_SROM_TRISO2G,
-	BRCMS_SROM_TRISO5G,
-	BRCMS_SROM_TSSIPOS2G,
-	BRCMS_SROM_TSSIPOS5G,
-	BRCMS_SROM_TXCHAIN,
-	/*
-	 * per-path identifiers (see srom.c)
-	 */
-	BRCMS_SROM_ITT2GA0,
-	BRCMS_SROM_ITT2GA1,
-	BRCMS_SROM_ITT2GA2,
-	BRCMS_SROM_ITT2GA3,
-	BRCMS_SROM_ITT5GA0,
-	BRCMS_SROM_ITT5GA1,
-	BRCMS_SROM_ITT5GA2,
-	BRCMS_SROM_ITT5GA3,
-	BRCMS_SROM_MAXP2GA0,
-	BRCMS_SROM_MAXP2GA1,
-	BRCMS_SROM_MAXP2GA2,
-	BRCMS_SROM_MAXP2GA3,
-	BRCMS_SROM_MAXP5GA0,
-	BRCMS_SROM_MAXP5GA1,
-	BRCMS_SROM_MAXP5GA2,
-	BRCMS_SROM_MAXP5GA3,
-	BRCMS_SROM_MAXP5GHA0,
-	BRCMS_SROM_MAXP5GHA1,
-	BRCMS_SROM_MAXP5GHA2,
-	BRCMS_SROM_MAXP5GHA3,
-	BRCMS_SROM_MAXP5GLA0,
-	BRCMS_SROM_MAXP5GLA1,
-	BRCMS_SROM_MAXP5GLA2,
-	BRCMS_SROM_MAXP5GLA3,
-	BRCMS_SROM_PA2GW0A0,
-	BRCMS_SROM_PA2GW0A1,
-	BRCMS_SROM_PA2GW0A2,
-	BRCMS_SROM_PA2GW0A3,
-	BRCMS_SROM_PA2GW1A0,
-	BRCMS_SROM_PA2GW1A1,
-	BRCMS_SROM_PA2GW1A2,
-	BRCMS_SROM_PA2GW1A3,
-	BRCMS_SROM_PA2GW2A0,
-	BRCMS_SROM_PA2GW2A1,
-	BRCMS_SROM_PA2GW2A2,
-	BRCMS_SROM_PA2GW2A3,
-	BRCMS_SROM_PA5GHW0A0,
-	BRCMS_SROM_PA5GHW0A1,
-	BRCMS_SROM_PA5GHW0A2,
-	BRCMS_SROM_PA5GHW0A3,
-	BRCMS_SROM_PA5GHW1A0,
-	BRCMS_SROM_PA5GHW1A1,
-	BRCMS_SROM_PA5GHW1A2,
-	BRCMS_SROM_PA5GHW1A3,
-	BRCMS_SROM_PA5GHW2A0,
-	BRCMS_SROM_PA5GHW2A1,
-	BRCMS_SROM_PA5GHW2A2,
-	BRCMS_SROM_PA5GHW2A3,
-	BRCMS_SROM_PA5GLW0A0,
-	BRCMS_SROM_PA5GLW0A1,
-	BRCMS_SROM_PA5GLW0A2,
-	BRCMS_SROM_PA5GLW0A3,
-	BRCMS_SROM_PA5GLW1A0,
-	BRCMS_SROM_PA5GLW1A1,
-	BRCMS_SROM_PA5GLW1A2,
-	BRCMS_SROM_PA5GLW1A3,
-	BRCMS_SROM_PA5GLW2A0,
-	BRCMS_SROM_PA5GLW2A1,
-	BRCMS_SROM_PA5GLW2A2,
-	BRCMS_SROM_PA5GLW2A3,
-	BRCMS_SROM_PA5GW0A0,
-	BRCMS_SROM_PA5GW0A1,
-	BRCMS_SROM_PA5GW0A2,
-	BRCMS_SROM_PA5GW0A3,
-	BRCMS_SROM_PA5GW1A0,
-	BRCMS_SROM_PA5GW1A1,
-	BRCMS_SROM_PA5GW1A2,
-	BRCMS_SROM_PA5GW1A3,
-	BRCMS_SROM_PA5GW2A0,
-	BRCMS_SROM_PA5GW2A1,
-	BRCMS_SROM_PA5GW2A2,
-	BRCMS_SROM_PA5GW2A3,
+    BRCMS_SROM_NULL,
+    BRCMS_SROM_CONT,
+    BRCMS_SROM_AA2G,
+    BRCMS_SROM_AA5G,
+    BRCMS_SROM_AG0,
+    BRCMS_SROM_AG1,
+    BRCMS_SROM_AG2,
+    BRCMS_SROM_AG3,
+    BRCMS_SROM_ANTSWCTL2G,
+    BRCMS_SROM_ANTSWCTL5G,
+    BRCMS_SROM_ANTSWITCH,
+    BRCMS_SROM_BOARDFLAGS2,
+    BRCMS_SROM_BOARDFLAGS,
+    BRCMS_SROM_BOARDNUM,
+    BRCMS_SROM_BOARDREV,
+    BRCMS_SROM_BOARDTYPE,
+    BRCMS_SROM_BW40PO,
+    BRCMS_SROM_BWDUPPO,
+    BRCMS_SROM_BXA2G,
+    BRCMS_SROM_BXA5G,
+    BRCMS_SROM_CC,
+    BRCMS_SROM_CCK2GPO,
+    BRCMS_SROM_CCKBW202GPO,
+    BRCMS_SROM_CCKBW20UL2GPO,
+    BRCMS_SROM_CCODE,
+    BRCMS_SROM_CDDPO,
+    BRCMS_SROM_DEVID,
+    BRCMS_SROM_ET1MACADDR,
+    BRCMS_SROM_EXTPAGAIN2G,
+    BRCMS_SROM_EXTPAGAIN5G,
+    BRCMS_SROM_FREQOFFSET_CORR,
+    BRCMS_SROM_HW_IQCAL_EN,
+    BRCMS_SROM_IL0MACADDR,
+    BRCMS_SROM_IQCAL_SWP_DIS,
+    BRCMS_SROM_LEDBH0,
+    BRCMS_SROM_LEDBH1,
+    BRCMS_SROM_LEDBH2,
+    BRCMS_SROM_LEDBH3,
+    BRCMS_SROM_LEDDC,
+    BRCMS_SROM_LEGOFDM40DUPPO,
+    BRCMS_SROM_LEGOFDMBW202GPO,
+    BRCMS_SROM_LEGOFDMBW205GHPO,
+    BRCMS_SROM_LEGOFDMBW205GLPO,
+    BRCMS_SROM_LEGOFDMBW205GMPO,
+    BRCMS_SROM_LEGOFDMBW20UL2GPO,
+    BRCMS_SROM_LEGOFDMBW20UL5GHPO,
+    BRCMS_SROM_LEGOFDMBW20UL5GLPO,
+    BRCMS_SROM_LEGOFDMBW20UL5GMPO,
+    BRCMS_SROM_MACADDR,
+    BRCMS_SROM_MCS2GPO0,
+    BRCMS_SROM_MCS2GPO1,
+    BRCMS_SROM_MCS2GPO2,
+    BRCMS_SROM_MCS2GPO3,
+    BRCMS_SROM_MCS2GPO4,
+    BRCMS_SROM_MCS2GPO5,
+    BRCMS_SROM_MCS2GPO6,
+    BRCMS_SROM_MCS2GPO7,
+    BRCMS_SROM_MCS32PO,
+    BRCMS_SROM_MCS5GHPO0,
+    BRCMS_SROM_MCS5GHPO1,
+    BRCMS_SROM_MCS5GHPO2,
+    BRCMS_SROM_MCS5GHPO3,
+    BRCMS_SROM_MCS5GHPO4,
+    BRCMS_SROM_MCS5GHPO5,
+    BRCMS_SROM_MCS5GHPO6,
+    BRCMS_SROM_MCS5GHPO7,
+    BRCMS_SROM_MCS5GLPO0,
+    BRCMS_SROM_MCS5GLPO1,
+    BRCMS_SROM_MCS5GLPO2,
+    BRCMS_SROM_MCS5GLPO3,
+    BRCMS_SROM_MCS5GLPO4,
+    BRCMS_SROM_MCS5GLPO5,
+    BRCMS_SROM_MCS5GLPO6,
+    BRCMS_SROM_MCS5GLPO7,
+    BRCMS_SROM_MCS5GPO0,
+    BRCMS_SROM_MCS5GPO1,
+    BRCMS_SROM_MCS5GPO2,
+    BRCMS_SROM_MCS5GPO3,
+    BRCMS_SROM_MCS5GPO4,
+    BRCMS_SROM_MCS5GPO5,
+    BRCMS_SROM_MCS5GPO6,
+    BRCMS_SROM_MCS5GPO7,
+    BRCMS_SROM_MCSBW202GPO,
+    BRCMS_SROM_MCSBW205GHPO,
+    BRCMS_SROM_MCSBW205GLPO,
+    BRCMS_SROM_MCSBW205GMPO,
+    BRCMS_SROM_MCSBW20UL2GPO,
+    BRCMS_SROM_MCSBW20UL5GHPO,
+    BRCMS_SROM_MCSBW20UL5GLPO,
+    BRCMS_SROM_MCSBW20UL5GMPO,
+    BRCMS_SROM_MCSBW402GPO,
+    BRCMS_SROM_MCSBW405GHPO,
+    BRCMS_SROM_MCSBW405GLPO,
+    BRCMS_SROM_MCSBW405GMPO,
+    BRCMS_SROM_MEASPOWER,
+    BRCMS_SROM_OFDM2GPO,
+    BRCMS_SROM_OFDM5GHPO,
+    BRCMS_SROM_OFDM5GLPO,
+    BRCMS_SROM_OFDM5GPO,
+    BRCMS_SROM_OPO,
+    BRCMS_SROM_PA0B0,
+    BRCMS_SROM_PA0B1,
+    BRCMS_SROM_PA0B2,
+    BRCMS_SROM_PA0ITSSIT,
+    BRCMS_SROM_PA0MAXPWR,
+    BRCMS_SROM_PA1B0,
+    BRCMS_SROM_PA1B1,
+    BRCMS_SROM_PA1B2,
+    BRCMS_SROM_PA1HIB0,
+    BRCMS_SROM_PA1HIB1,
+    BRCMS_SROM_PA1HIB2,
+    BRCMS_SROM_PA1HIMAXPWR,
+    BRCMS_SROM_PA1ITSSIT,
+    BRCMS_SROM_PA1LOB0,
+    BRCMS_SROM_PA1LOB1,
+    BRCMS_SROM_PA1LOB2,
+    BRCMS_SROM_PA1LOMAXPWR,
+    BRCMS_SROM_PA1MAXPWR,
+    BRCMS_SROM_PDETRANGE2G,
+    BRCMS_SROM_PDETRANGE5G,
+    BRCMS_SROM_PHYCAL_TEMPDELTA,
+    BRCMS_SROM_RAWTEMPSENSE,
+    BRCMS_SROM_REGREV,
+    BRCMS_SROM_REV,
+    BRCMS_SROM_RSSISAV2G,
+    BRCMS_SROM_RSSISAV5G,
+    BRCMS_SROM_RSSISMC2G,
+    BRCMS_SROM_RSSISMC5G,
+    BRCMS_SROM_RSSISMF2G,
+    BRCMS_SROM_RSSISMF5G,
+    BRCMS_SROM_RXCHAIN,
+    BRCMS_SROM_RXPO2G,
+    BRCMS_SROM_RXPO5G,
+    BRCMS_SROM_STBCPO,
+    BRCMS_SROM_TEMPCORRX,
+    BRCMS_SROM_TEMPOFFSET,
+    BRCMS_SROM_TEMPSENSE_OPTION,
+    BRCMS_SROM_TEMPSENSE_SLOPE,
+    BRCMS_SROM_TEMPTHRESH,
+    BRCMS_SROM_TRI2G,
+    BRCMS_SROM_TRI5GH,
+    BRCMS_SROM_TRI5GL,
+    BRCMS_SROM_TRI5G,
+    BRCMS_SROM_TRISO2G,
+    BRCMS_SROM_TRISO5G,
+    BRCMS_SROM_TSSIPOS2G,
+    BRCMS_SROM_TSSIPOS5G,
+    BRCMS_SROM_TXCHAIN,
+    /*
+     * per-path identifiers (see srom.c)
+     */
+    BRCMS_SROM_ITT2GA0,
+    BRCMS_SROM_ITT2GA1,
+    BRCMS_SROM_ITT2GA2,
+    BRCMS_SROM_ITT2GA3,
+    BRCMS_SROM_ITT5GA0,
+    BRCMS_SROM_ITT5GA1,
+    BRCMS_SROM_ITT5GA2,
+    BRCMS_SROM_ITT5GA3,
+    BRCMS_SROM_MAXP2GA0,
+    BRCMS_SROM_MAXP2GA1,
+    BRCMS_SROM_MAXP2GA2,
+    BRCMS_SROM_MAXP2GA3,
+    BRCMS_SROM_MAXP5GA0,
+    BRCMS_SROM_MAXP5GA1,
+    BRCMS_SROM_MAXP5GA2,
+    BRCMS_SROM_MAXP5GA3,
+    BRCMS_SROM_MAXP5GHA0,
+    BRCMS_SROM_MAXP5GHA1,
+    BRCMS_SROM_MAXP5GHA2,
+    BRCMS_SROM_MAXP5GHA3,
+    BRCMS_SROM_MAXP5GLA0,
+    BRCMS_SROM_MAXP5GLA1,
+    BRCMS_SROM_MAXP5GLA2,
+    BRCMS_SROM_MAXP5GLA3,
+    BRCMS_SROM_PA2GW0A0,
+    BRCMS_SROM_PA2GW0A1,
+    BRCMS_SROM_PA2GW0A2,
+    BRCMS_SROM_PA2GW0A3,
+    BRCMS_SROM_PA2GW1A0,
+    BRCMS_SROM_PA2GW1A1,
+    BRCMS_SROM_PA2GW1A2,
+    BRCMS_SROM_PA2GW1A3,
+    BRCMS_SROM_PA2GW2A0,
+    BRCMS_SROM_PA2GW2A1,
+    BRCMS_SROM_PA2GW2A2,
+    BRCMS_SROM_PA2GW2A3,
+    BRCMS_SROM_PA5GHW0A0,
+    BRCMS_SROM_PA5GHW0A1,
+    BRCMS_SROM_PA5GHW0A2,
+    BRCMS_SROM_PA5GHW0A3,
+    BRCMS_SROM_PA5GHW1A0,
+    BRCMS_SROM_PA5GHW1A1,
+    BRCMS_SROM_PA5GHW1A2,
+    BRCMS_SROM_PA5GHW1A3,
+    BRCMS_SROM_PA5GHW2A0,
+    BRCMS_SROM_PA5GHW2A1,
+    BRCMS_SROM_PA5GHW2A2,
+    BRCMS_SROM_PA5GHW2A3,
+    BRCMS_SROM_PA5GLW0A0,
+    BRCMS_SROM_PA5GLW0A1,
+    BRCMS_SROM_PA5GLW0A2,
+    BRCMS_SROM_PA5GLW0A3,
+    BRCMS_SROM_PA5GLW1A0,
+    BRCMS_SROM_PA5GLW1A1,
+    BRCMS_SROM_PA5GLW1A2,
+    BRCMS_SROM_PA5GLW1A3,
+    BRCMS_SROM_PA5GLW2A0,
+    BRCMS_SROM_PA5GLW2A1,
+    BRCMS_SROM_PA5GLW2A2,
+    BRCMS_SROM_PA5GLW2A3,
+    BRCMS_SROM_PA5GW0A0,
+    BRCMS_SROM_PA5GW0A1,
+    BRCMS_SROM_PA5GW0A2,
+    BRCMS_SROM_PA5GW0A3,
+    BRCMS_SROM_PA5GW1A0,
+    BRCMS_SROM_PA5GW1A1,
+    BRCMS_SROM_PA5GW1A2,
+    BRCMS_SROM_PA5GW1A3,
+    BRCMS_SROM_PA5GW2A0,
+    BRCMS_SROM_PA5GW2A1,
+    BRCMS_SROM_PA5GW2A2,
+    BRCMS_SROM_PA5GW2A3,
 };
 
 #define	BRCMS_NUMRATES	16	/* max # of rates in a rateset */
@@ -328,18 +328,18 @@ enum brcms_srom_id {
 #define MAX_STREAMS_SUPPORTED	4	/* max number of streams supported */
 
 struct brcm_rateset {
-	/* # rates in this set */
-	u32 count;
-	/* rates in 500kbps units w/hi bit set if basic */
-	u8 rates[WL_NUMRATES];
+    /* # rates in this set */
+    u32 count;
+    /* rates in 500kbps units w/hi bit set if basic */
+    u8 rates[WL_NUMRATES];
 };
 
 struct brcms_c_rateset {
-	uint count;		/* number of rates in rates[] */
-	 /* rates in 500kbps units w/hi bit set if basic */
-	u8 rates[BRCMS_NUMRATES];
-	u8 htphy_membership;	/* HT PHY Membership */
-	u8 mcs[MCSSET_LEN];	/* supported mcs index bit map */
+    uint count;		/* number of rates in rates[] */
+    /* rates in 500kbps units w/hi bit set if basic */
+    u8 rates[BRCMS_NUMRATES];
+    u8 htphy_membership;	/* HT PHY Membership */
+    u8 mcs[MCSSET_LEN];	/* supported mcs index bit map */
 };
 
 /* All the HT-specific default advertised capabilities (including AMPDU)
@@ -349,15 +349,15 @@ struct brcms_c_rateset {
 
 /* wlc internal bss_info */
 struct brcms_bss_info {
-	u8 BSSID[ETH_ALEN];	/* network BSSID */
-	u16 flags;		/* flags for internal attributes */
-	u8 SSID_len;		/* the length of SSID */
-	u8 SSID[32];		/* SSID string */
-	s16 RSSI;		/* receive signal strength (in dBm) */
-	s16 SNR;		/* receive signal SNR in dB */
-	u16 beacon_period;	/* units are Kusec */
-	u16 chanspec;	/* Channel num, bw, ctrl_sb and band */
-	struct brcms_c_rateset rateset;	/* supported rates */
+    u8 BSSID[ETH_ALEN];	/* network BSSID */
+    u16 flags;		/* flags for internal attributes */
+    u8 SSID_len;		/* the length of SSID */
+    u8 SSID[32];		/* SSID string */
+    s16 RSSI;		/* receive signal strength (in dBm) */
+    s16 SNR;		/* receive signal SNR in dB */
+    u16 beacon_period;	/* units are Kusec */
+    u16 chanspec;	/* Channel num, bw, ctrl_sb and band */
+    struct brcms_c_rateset rateset;	/* supported rates */
 };
 
 #define MAC80211_PROMISC_BCNS	(1 << 0)
@@ -368,47 +368,47 @@ struct brcms_bss_info {
  * The wlc handle points at this.
  */
 struct brcms_pub {
-	struct brcms_c_info *wlc;
-	struct ieee80211_hw *ieee_hw;
-	struct scb_ampdu *global_ampdu;
-	uint mac80211_state;
-	uint unit;		/* device instance number */
-	uint corerev;		/* core revision */
-	struct si_pub *sih;	/* SI handle (cookie for siutils calls) */
-	bool up;		/* interface up and running */
-	bool hw_off;		/* HW is off */
-	bool hw_up;		/* one time hw up/down */
-	bool _piomode;		/* true if pio mode */
-	uint _nbands;		/* # bands supported */
-	uint now;		/* # elapsed seconds */
+    struct brcms_c_info *wlc;
+    struct ieee80211_hw *ieee_hw;
+    struct scb_ampdu *global_ampdu;
+    uint mac80211_state;
+    uint unit;		/* device instance number */
+    uint corerev;		/* core revision */
+    struct si_pub *sih;	/* SI handle (cookie for siutils calls) */
+    bool up;		/* interface up and running */
+    bool hw_off;		/* HW is off */
+    bool hw_up;		/* one time hw up/down */
+    bool _piomode;		/* true if pio mode */
+    uint _nbands;		/* # bands supported */
+    uint now;		/* # elapsed seconds */
 
-	bool delayed_down;	/* down delayed */
-	bool associated;	/* true:part of [I]BSS, false: not */
-	/* (union of stas_associated, aps_associated) */
-	bool _ampdu;		/* ampdu enabled or not */
-	u8 _n_enab;		/* bitmap of 11N + HT support */
+    bool delayed_down;	/* down delayed */
+    bool associated;	/* true:part of [I]BSS, false: not */
+    /* (union of stas_associated, aps_associated) */
+    bool _ampdu;		/* ampdu enabled or not */
+    u8 _n_enab;		/* bitmap of 11N + HT support */
 
-	u8 cur_etheraddr[ETH_ALEN];	/* our local ethernet address */
+    u8 cur_etheraddr[ETH_ALEN];	/* our local ethernet address */
 
-	int bcmerror;		/* last bcm error */
+    int bcmerror;		/* last bcm error */
 
-	u32 radio_disabled;	/* bit vector for radio disabled reasons */
+    u32 radio_disabled;	/* bit vector for radio disabled reasons */
 
-	u16 boardrev;	/* version # of particular board */
-	u8 sromrev;		/* version # of the srom */
-	char srom_ccode[BRCM_CNTRY_BUF_SZ];	/* Country Code in SROM */
-	u32 boardflags;	/* Board specific flags from srom */
-	u32 boardflags2;	/* More board flags if sromrev >= 4 */
-	bool phy_11ncapable;	/* the PHY/HW is capable of 802.11N */
+    u16 boardrev;	/* version # of particular board */
+    u8 sromrev;		/* version # of the srom */
+    char srom_ccode[BRCM_CNTRY_BUF_SZ];	/* Country Code in SROM */
+    u32 boardflags;	/* Board specific flags from srom */
+    u32 boardflags2;	/* More board flags if sromrev >= 4 */
+    bool phy_11ncapable;	/* the PHY/HW is capable of 802.11N */
 
-	struct wl_cnt *_cnt;	/* low-level counters in driver */
+    struct wl_cnt *_cnt;	/* low-level counters in driver */
 };
 
 enum wlc_par_id {
-	IOV_MPC = 1,
-	IOV_RTSTHRESH,
-	IOV_QTXPOWER,
-	IOV_BCN_LI_BCN		/* Beacon listen interval in # of beacons */
+    IOV_MPC = 1,
+    IOV_RTSTHRESH,
+    IOV_QTXPOWER,
+    IOV_BCN_LI_BCN		/* Beacon listen interval in # of beacons */
 };
 
 /***********************************************
@@ -525,14 +525,14 @@ extern const u8 wlc_prio2prec_map[];
 #define ANT_SELCFG_MAX		4
 
 struct brcms_antselcfg {
-	u8 ant_config[ANT_SELCFG_MAX];	/* antenna configuration */
-	u8 num_antcfg;	/* number of available antenna configurations */
+    u8 ant_config[ANT_SELCFG_MAX];	/* antenna configuration */
+    u8 num_antcfg;	/* number of available antenna configurations */
 };
 
 /* common functions for every port */
 extern struct brcms_c_info *
 brcms_c_attach(struct brcms_info *wl, struct bcma_device *core, uint unit,
-	       bool piomode, uint *perr);
+               bool piomode, uint *perr);
 extern uint brcms_c_detach(struct brcms_c_info *wlc);
 extern int brcms_c_up(struct brcms_c_info *wlc);
 extern uint brcms_c_down(struct brcms_c_info *wlc);
@@ -548,30 +548,30 @@ extern bool brcms_c_intrsupd(struct brcms_c_info *wlc);
 extern bool brcms_c_isr(struct brcms_c_info *wlc, bool *wantdpc);
 extern bool brcms_c_dpc(struct brcms_c_info *wlc, bool bounded);
 extern void brcms_c_sendpkt_mac80211(struct brcms_c_info *wlc,
-				     struct sk_buff *sdu,
-				     struct ieee80211_hw *hw);
+                                     struct sk_buff *sdu,
+                                     struct ieee80211_hw *hw);
 extern bool brcms_c_aggregatable(struct brcms_c_info *wlc, u8 tid);
 extern void brcms_c_protection_upd(struct brcms_c_info *wlc, uint idx,
-				   int val);
+                                   int val);
 extern int brcms_c_get_header_len(void);
 extern void brcms_c_set_addrmatch(struct brcms_c_info *wlc,
-				  int match_reg_offset,
-				  const u8 *addr);
+                                  int match_reg_offset,
+                                  const u8 *addr);
 extern void brcms_c_wme_setparams(struct brcms_c_info *wlc, u16 aci,
-			      const struct ieee80211_tx_queue_params *arg,
-			      bool suspend);
+                                  const struct ieee80211_tx_queue_params *arg,
+                                  bool suspend);
 extern struct brcms_pub *brcms_c_pub(struct brcms_c_info *wlc);
 extern void brcms_c_ampdu_flush(struct brcms_c_info *wlc,
-			    struct ieee80211_sta *sta, u16 tid);
+                                struct ieee80211_sta *sta, u16 tid);
 extern void brcms_c_ampdu_tx_operational(struct brcms_c_info *wlc, u8 tid,
-					 u8 ba_wsize, uint max_rx_ampdu_bytes);
+        u8 ba_wsize, uint max_rx_ampdu_bytes);
 extern char *getvar(struct si_pub *sih, enum brcms_srom_id id);
 extern int getintvar(struct si_pub *sih, enum brcms_srom_id id);
 extern int brcms_c_module_register(struct brcms_pub *pub,
-				   const char *name, struct brcms_info *hdl,
-				   int (*down_fn)(void *handle));
+                                   const char *name, struct brcms_info *hdl,
+                                   int (*down_fn)(void *handle));
 extern int brcms_c_module_unregister(struct brcms_pub *pub, const char *name,
-				     struct brcms_info *hdl);
+                                     struct brcms_info *hdl);
 extern void brcms_c_suspend_mac_and_wait(struct brcms_c_info *wlc);
 extern void brcms_c_enable_mac(struct brcms_c_info *wlc);
 extern void brcms_c_associate_upd(struct brcms_c_info *wlc, bool state);
@@ -579,19 +579,19 @@ extern void brcms_c_scan_start(struct brcms_c_info *wlc);
 extern void brcms_c_scan_stop(struct brcms_c_info *wlc);
 extern int brcms_c_get_curband(struct brcms_c_info *wlc);
 extern void brcms_c_wait_for_tx_completion(struct brcms_c_info *wlc,
-					   bool drop);
+        bool drop);
 extern int brcms_c_set_channel(struct brcms_c_info *wlc, u16 channel);
 extern int brcms_c_set_rate_limit(struct brcms_c_info *wlc, u16 srl, u16 lrl);
 extern void brcms_c_get_current_rateset(struct brcms_c_info *wlc,
-				 struct brcm_rateset *currs);
+                                        struct brcm_rateset *currs);
 extern int brcms_c_set_rateset(struct brcms_c_info *wlc,
-					struct brcm_rateset *rs);
+                               struct brcm_rateset *rs);
 extern int brcms_c_set_beacon_period(struct brcms_c_info *wlc, u16 period);
 extern u16 brcms_c_get_phy_type(struct brcms_c_info *wlc, int phyidx);
 extern void brcms_c_set_shortslot_override(struct brcms_c_info *wlc,
-				    s8 sslot_override);
+        s8 sslot_override);
 extern void brcms_c_set_beacon_listen_interval(struct brcms_c_info *wlc,
-					u8 interval);
+        u8 interval);
 extern int brcms_c_set_tx_power(struct brcms_c_info *wlc, int txpwr);
 extern int brcms_c_get_tx_power(struct brcms_c_info *wlc);
 extern bool brcms_c_check_radio_disabled(struct brcms_c_info *wlc);

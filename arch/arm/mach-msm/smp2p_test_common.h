@@ -121,35 +121,34 @@
 
 /* Structure to track state changes for the notifier callback. */
 struct mock_cb_data {
-	bool initialized;
-	spinlock_t lock;
-	struct notifier_block nb;
+    bool initialized;
+    spinlock_t lock;
+    struct notifier_block nb;
 
-	/* events */
-	struct completion cb_completion;
-	int cb_count;
-	int event_open;
-	int event_entry_update;
-	struct msm_smp2p_update_notif entry_data;
+    /* events */
+    struct completion cb_completion;
+    int cb_count;
+    int event_open;
+    int event_entry_update;
+    struct msm_smp2p_update_notif entry_data;
 };
 
 void smp2p_debug_create(const char *name, void (*show)(struct seq_file *));
 static inline int smp2p_test_notify(struct notifier_block *self,
-	unsigned long event, void *data);
+                                    unsigned long event, void *data);
 
 /**
  * Reset mock callback data to default values.
  *
  * @cb:  Mock callback data
  */
-static inline void mock_cb_data_reset(struct mock_cb_data *cb)
-{
-	INIT_COMPLETION(cb->cb_completion);
-	cb->cb_count = 0;
-	cb->event_open = 0;
-	cb->event_entry_update = 0;
-	memset(&cb->entry_data, 0,
-		sizeof(struct msm_smp2p_update_notif));
+static inline void mock_cb_data_reset(struct mock_cb_data *cb) {
+    INIT_COMPLETION(cb->cb_completion);
+    cb->cb_count = 0;
+    cb->event_open = 0;
+    cb->event_entry_update = 0;
+    memset(&cb->entry_data, 0,
+           sizeof(struct msm_smp2p_update_notif));
 }
 
 
@@ -158,17 +157,16 @@ static inline void mock_cb_data_reset(struct mock_cb_data *cb)
  *
  * @cb:  Mock callback data
  */
-static inline void mock_cb_data_init(struct mock_cb_data *cb)
-{
-	if (!cb->initialized) {
-		init_completion(&cb->cb_completion);
-		spin_lock_init(&cb->lock);
-		cb->initialized = true;
-		cb->nb.notifier_call = smp2p_test_notify;
-		memset(&cb->entry_data, 0,
-			sizeof(struct msm_smp2p_update_notif));
-	}
-	mock_cb_data_reset(cb);
+static inline void mock_cb_data_init(struct mock_cb_data *cb) {
+    if (!cb->initialized) {
+        init_completion(&cb->cb_completion);
+        spin_lock_init(&cb->lock);
+        cb->initialized = true;
+        cb->nb.notifier_call = smp2p_test_notify;
+        memset(&cb->entry_data, 0,
+               sizeof(struct msm_smp2p_update_notif));
+    }
+    mock_cb_data_reset(cb);
 }
 
 /**
@@ -180,38 +178,37 @@ static inline void mock_cb_data_init(struct mock_cb_data *cb)
  * @returns:    0
  */
 static inline int smp2p_test_notify(struct notifier_block *self,
-		unsigned long event, void *data)
-{
-	struct mock_cb_data *cb_data_ptr;
-	unsigned long flags;
+                                    unsigned long event, void *data) {
+    struct mock_cb_data *cb_data_ptr;
+    unsigned long flags;
 
-	cb_data_ptr = container_of(self, struct mock_cb_data, nb);
+    cb_data_ptr = container_of(self, struct mock_cb_data, nb);
 
-	spin_lock_irqsave(&cb_data_ptr->lock, flags);
+    spin_lock_irqsave(&cb_data_ptr->lock, flags);
 
-	switch (event) {
-	case SMP2P_OPEN:
-		++cb_data_ptr->event_open;
-		if (data) {
-			cb_data_ptr->entry_data =
-			*(struct msm_smp2p_update_notif *)(data);
-		}
-		break;
-	case SMP2P_ENTRY_UPDATE:
-		++cb_data_ptr->event_entry_update;
-		if (data) {
-			cb_data_ptr->entry_data =
-			*(struct msm_smp2p_update_notif *)(data);
-		}
-		break;
-	default:
-		pr_err("%s Unknown event\n", __func__);
-		break;
-	}
+    switch (event) {
+    case SMP2P_OPEN:
+        ++cb_data_ptr->event_open;
+        if (data) {
+            cb_data_ptr->entry_data =
+                *(struct msm_smp2p_update_notif *)(data);
+        }
+        break;
+    case SMP2P_ENTRY_UPDATE:
+        ++cb_data_ptr->event_entry_update;
+        if (data) {
+            cb_data_ptr->entry_data =
+                *(struct msm_smp2p_update_notif *)(data);
+        }
+        break;
+    default:
+        pr_err("%s Unknown event\n", __func__);
+        break;
+    }
 
-	++cb_data_ptr->cb_count;
-	complete(&cb_data_ptr->cb_completion);
-	spin_unlock_irqrestore(&cb_data_ptr->lock, flags);
-	return 0;
+    ++cb_data_ptr->cb_count;
+    complete(&cb_data_ptr->cb_completion);
+    spin_unlock_irqrestore(&cb_data_ptr->lock, flags);
+    return 0;
 }
 #endif /* _ARCH_ARM_MACH_MSM_SMP2P_TEST_COMMON_H_ */

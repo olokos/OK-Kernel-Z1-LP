@@ -43,8 +43,8 @@ name:
  * unpleasant things will happen.
  */
 
-	.section "__ex_table", "a"		// declare section & section attributes
-	.previous
+.section "__ex_table", "a"		// declare section & section attributes
+.previous
 
 # define EX(y,x...)				\
 	.xdata4 "__ex_table", 99f-., y-.;	\
@@ -57,8 +57,8 @@ name:
  * Tag MCA recoverable instruction ranges.
  */
 
-	.section "__mca_table", "a"		// declare section & section attributes
-	.previous
+.section "__mca_table", "a"		// declare section & section attributes
+.previous
 
 # define MCA_RECOVER_RANGE(y)			\
 	.xdata4 "__mca_table", y-., 99f-.;	\
@@ -70,8 +70,8 @@ name:
  * path (ivt.S - TLB miss processing) or in places where it might not be
  * safe to use a "tpa" instruction (mca_asm.S - error recovery).
  */
-	.section ".data..patch.vtop", "a"	// declare section & section attributes
-	.previous
+.section ".data..patch.vtop", "a"	// declare section & section attributes
+.previous
 
 #define	LOAD_PHYSICAL(pr, reg, obj)		\
 [1:](pr)movl reg = obj;				\
@@ -84,8 +84,8 @@ name:
 #define DO_MCKINLEY_E9_WORKAROUND
 
 #ifdef DO_MCKINLEY_E9_WORKAROUND
-	.section ".data..patch.mckinley_e9", "a"
-	.previous
+.section ".data..patch.mckinley_e9", "a"
+.previous
 /* workaround for Itanium 2 Errata 9: */
 # define FSYS_RETURN					\
 	.xdata4 ".data..patch.mckinley_e9", 1f-.;	\
@@ -107,8 +107,8 @@ name:
  * If physical stack register size is different from DEF_NUM_STACK_REG,
  * dynamically patch the kernel for correct size.
  */
-	.section ".data..patch.phys_stack_reg", "a"
-	.previous
+.section ".data..patch.phys_stack_reg", "a"
+.previous
 #define LOAD_PHYS_STACK_REG_SIZE(reg)			\
 [1:]	adds reg=IA64_NUM_PHYS_STACK_REG*8+8,r0;	\
 	.xdata4 ".data..patch.phys_stack_reg", 1b-.

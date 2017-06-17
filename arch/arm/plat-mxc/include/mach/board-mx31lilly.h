@@ -25,8 +25,8 @@
 #ifndef __ASSEMBLY__
 
 enum mx31lilly_boards {
-	MX31LILLY_NOBOARD	= 0,
-	MX31LILLY_DB		= 1,
+    MX31LILLY_NOBOARD	= 0,
+    MX31LILLY_DB		= 1,
 };
 
 /*

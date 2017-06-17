@@ -41,11 +41,11 @@
 #define XO_DISABLE		(XO_MODE_MANUAL | XO_BUFFER_DISABLE)
 
 struct pm8058_xo_buffer {
-	struct device			*dev;
-	struct pm8058_xo_pdata		*pdata;
-	struct regulator_dev		*rdev;
-	u16				ctrl_addr;
-	u8				ctrl_reg;
+    struct device			*dev;
+    struct pm8058_xo_pdata		*pdata;
+    struct regulator_dev		*rdev;
+    u16				ctrl_addr;
+    u8				ctrl_reg;
 };
 
 #define XO_BUFFER(_id, _ctrl_addr) \
@@ -54,67 +54,63 @@ struct pm8058_xo_buffer {
 	}
 
 static struct pm8058_xo_buffer pm8058_xo_buffer[] = {
-	XO_BUFFER(A0, 0x185),
-	XO_BUFFER(A1, 0x186),
+    XO_BUFFER(A0, 0x185),
+    XO_BUFFER(A1, 0x186),
 };
 
 static int pm8058_xo_buffer_write(struct pm8058_xo_buffer *xo,
-		u16 addr, u8 val, u8 mask, u8 *reg_save)
-{
-	u8	reg;
-	int	rc = 0;
+                                  u16 addr, u8 val, u8 mask, u8 *reg_save) {
+    u8	reg;
+    int	rc = 0;
 
-	reg = (*reg_save & ~mask) | (val & mask);
-	if (reg != *reg_save)
-		rc = pm8xxx_writeb(xo->dev->parent, addr, reg);
+    reg = (*reg_save & ~mask) | (val & mask);
+    if (reg != *reg_save)
+        rc = pm8xxx_writeb(xo->dev->parent, addr, reg);
 
-	if (rc)
-		pr_err("FAIL: pm8xxx_write: rc=%d\n", rc);
-	else
-		*reg_save = reg;
-	return rc;
+    if (rc)
+        pr_err("FAIL: pm8xxx_write: rc=%d\n", rc);
+    else
+        *reg_save = reg;
+    return rc;
 }
 
-static int pm8058_xo_buffer_enable(struct regulator_dev *dev)
-{
-	struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
-	int rc;
+static int pm8058_xo_buffer_enable(struct regulator_dev *dev) {
+    struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
+    int rc;
 
-	rc = pm8058_xo_buffer_write(xo, xo->ctrl_addr, XO_ENABLE,
-				    XO_ENABLE_MASK, &xo->ctrl_reg);
-	if (rc)
-		pr_err("FAIL: pm8058_xo_buffer_write: rc=%d\n", rc);
+    rc = pm8058_xo_buffer_write(xo, xo->ctrl_addr, XO_ENABLE,
+                                XO_ENABLE_MASK, &xo->ctrl_reg);
+    if (rc)
+        pr_err("FAIL: pm8058_xo_buffer_write: rc=%d\n", rc);
 
-	return rc;
+    return rc;
 }
 
-static int pm8058_xo_buffer_is_enabled(struct regulator_dev *dev)
-{
-	struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
+static int pm8058_xo_buffer_is_enabled(struct regulator_dev *dev) {
+    struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
 
-	if (xo->ctrl_reg & XO_BUFFER_ENABLE)
-		return 1;
-	else
-		return 0;
+    if (xo->ctrl_reg & XO_BUFFER_ENABLE)
+        return 1;
+    else
+        return 0;
 }
 
-static int pm8058_xo_buffer_disable(struct regulator_dev *dev)
-{
-	struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
-	int rc;
+static int pm8058_xo_buffer_disable(struct regulator_dev *dev) {
+    struct pm8058_xo_buffer *xo = rdev_get_drvdata(dev);
+    int rc;
 
-	rc = pm8058_xo_buffer_write(xo, xo->ctrl_addr, XO_DISABLE,
-				    XO_ENABLE_MASK, &xo->ctrl_reg);
-	if (rc)
-		pr_err("FAIL: pm8058_xo_buffer_write: rc=%d\n", rc);
+    rc = pm8058_xo_buffer_write(xo, xo->ctrl_addr, XO_DISABLE,
+                                XO_ENABLE_MASK, &xo->ctrl_reg);
+    if (rc)
+        pr_err("FAIL: pm8058_xo_buffer_write: rc=%d\n", rc);
 
-	return rc;
+    return rc;
 }
 
 static struct regulator_ops pm8058_xo_ops = {
-	.enable = pm8058_xo_buffer_enable,
-	.disable = pm8058_xo_buffer_disable,
-	.is_enabled = pm8058_xo_buffer_is_enabled,
+    .enable = pm8058_xo_buffer_enable,
+    .disable = pm8058_xo_buffer_disable,
+    .is_enabled = pm8058_xo_buffer_is_enabled,
 };
 
 #define VREG_DESCRIP(_id, _name, _ops) \
@@ -127,82 +123,77 @@ static struct regulator_ops pm8058_xo_ops = {
 	}
 
 static struct regulator_desc pm8058_xo_buffer_desc[] = {
-	VREG_DESCRIP(PM8058_XO_ID_A0, "8058_xo_a0", &pm8058_xo_ops),
-	VREG_DESCRIP(PM8058_XO_ID_A1, "8058_xo_a1", &pm8058_xo_ops),
+    VREG_DESCRIP(PM8058_XO_ID_A0, "8058_xo_a0", &pm8058_xo_ops),
+    VREG_DESCRIP(PM8058_XO_ID_A1, "8058_xo_a1", &pm8058_xo_ops),
 };
 
-static int pm8058_init_xo_buffer(struct pm8058_xo_buffer *xo)
-{
-	int	rc;
+static int pm8058_init_xo_buffer(struct pm8058_xo_buffer *xo) {
+    int	rc;
 
-	/* Save the current control register state */
-	rc = pm8xxx_readb(xo->dev->parent, xo->ctrl_addr, &xo->ctrl_reg);
+    /* Save the current control register state */
+    rc = pm8xxx_readb(xo->dev->parent, xo->ctrl_addr, &xo->ctrl_reg);
 
-	if (rc)
-		pr_err("FAIL: pm8xxx_read: rc=%d\n", rc);
-	return rc;
+    if (rc)
+        pr_err("FAIL: pm8xxx_read: rc=%d\n", rc);
+    return rc;
 }
 
-static int __devinit pm8058_xo_buffer_probe(struct platform_device *pdev)
-{
-	struct regulator_desc *rdesc;
-	struct pm8058_xo_buffer *xo;
-	int rc = 0;
+static int __devinit pm8058_xo_buffer_probe(struct platform_device *pdev) {
+    struct regulator_desc *rdesc;
+    struct pm8058_xo_buffer *xo;
+    int rc = 0;
 
-	if (pdev == NULL)
-		return -EINVAL;
+    if (pdev == NULL)
+        return -EINVAL;
 
-	if (pdev->id >= 0 && pdev->id < PM8058_XO_ID_MAX) {
-		rdesc = &pm8058_xo_buffer_desc[pdev->id];
-		xo = &pm8058_xo_buffer[pdev->id];
-		xo->pdata = pdev->dev.platform_data;
-		xo->dev  = &pdev->dev;
+    if (pdev->id >= 0 && pdev->id < PM8058_XO_ID_MAX) {
+        rdesc = &pm8058_xo_buffer_desc[pdev->id];
+        xo = &pm8058_xo_buffer[pdev->id];
+        xo->pdata = pdev->dev.platform_data;
+        xo->dev  = &pdev->dev;
 
-		rc = pm8058_init_xo_buffer(xo);
-		if (rc)
-			goto bail;
+        rc = pm8058_init_xo_buffer(xo);
+        if (rc)
+            goto bail;
 
-		xo->rdev = regulator_register(rdesc, &pdev->dev,
-					&xo->pdata->init_data, xo, NULL);
-		if (IS_ERR(xo->rdev)) {
-			rc = PTR_ERR(xo->rdev);
-			pr_err("FAIL: regulator_register(%s): rc=%d\n",
-				pm8058_xo_buffer_desc[pdev->id].name, rc);
-		}
-	} else {
-		rc = -ENODEV;
-	}
+        xo->rdev = regulator_register(rdesc, &pdev->dev,
+                                      &xo->pdata->init_data, xo, NULL);
+        if (IS_ERR(xo->rdev)) {
+            rc = PTR_ERR(xo->rdev);
+            pr_err("FAIL: regulator_register(%s): rc=%d\n",
+                   pm8058_xo_buffer_desc[pdev->id].name, rc);
+        }
+    } else {
+        rc = -ENODEV;
+    }
 
 bail:
-	if (rc)
-		pr_err("Error: xo-id=%d, rc=%d\n", pdev->id, rc);
+    if (rc)
+        pr_err("Error: xo-id=%d, rc=%d\n", pdev->id, rc);
 
-	return rc;
+    return rc;
 }
 
-static int __devexit pm8058_xo_buffer_remove(struct platform_device *pdev)
-{
-	regulator_unregister(pm8058_xo_buffer[pdev->id].rdev);
-	return 0;
+static int __devexit pm8058_xo_buffer_remove(struct platform_device *pdev) {
+    regulator_unregister(pm8058_xo_buffer[pdev->id].rdev);
+    return 0;
 }
 
 static struct platform_driver pm8058_xo_buffer_driver = {
-	.probe = pm8058_xo_buffer_probe,
-	.remove = __devexit_p(pm8058_xo_buffer_remove),
-	.driver = {
-		.name = PM8058_XO_BUFFER_DEV_NAME,
-		.owner = THIS_MODULE,
-	},
+    .probe = pm8058_xo_buffer_probe,
+    .remove = __devexit_p(pm8058_xo_buffer_remove),
+    .driver = {
+        .name = PM8058_XO_BUFFER_DEV_NAME,
+        .owner = THIS_MODULE,
+    },
 };
 
-static int __init pm8058_xo_buffer_init(void)
-{
-	return platform_driver_register(&pm8058_xo_buffer_driver);
+static int __init pm8058_xo_buffer_init(void) {
+    return platform_driver_register(&pm8058_xo_buffer_driver);
 }
 
-static void __exit pm8058_xo_buffer_exit(void)
-{
-	platform_driver_unregister(&pm8058_xo_buffer_driver);
+static void __exit pm8058_xo_buffer_exit(void) {
+    platform_driver_unregister(&pm8058_xo_buffer_driver);
 }
 
 subsys_initcall(pm8058_xo_buffer_init);

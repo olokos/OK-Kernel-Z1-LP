@@ -160,20 +160,20 @@
  */
 #define MBOX_MAX_FIRMWARE_STATUS	46
 typedef struct {
-	uint8_t		cmd;
-	uint8_t		cmdid;
-	uint16_t	numsectors;
-	uint32_t	lba;
-	uint32_t	xferaddr;
-	uint8_t		logdrv;
-	uint8_t		numsge;
-	uint8_t		resvd;
-	uint8_t		busy;
-	uint8_t		numstatus;
-	uint8_t		status;
-	uint8_t		completed[MBOX_MAX_FIRMWARE_STATUS];
-	uint8_t		poll;
-	uint8_t		ack;
+    uint8_t		cmd;
+    uint8_t		cmdid;
+    uint16_t	numsectors;
+    uint32_t	lba;
+    uint32_t	xferaddr;
+    uint8_t		logdrv;
+    uint8_t		numsge;
+    uint8_t		resvd;
+    uint8_t		busy;
+    uint8_t		numstatus;
+    uint8_t		status;
+    uint8_t		completed[MBOX_MAX_FIRMWARE_STATUS];
+    uint8_t		poll;
+    uint8_t		ack;
 } __attribute__ ((packed)) mbox_t;
 
 
@@ -188,25 +188,25 @@ typedef struct {
  * beyond 4GB address range.
  */
 typedef struct {
-	uint32_t	xferaddr_lo;
-	uint32_t	xferaddr_hi;
-	mbox_t		mbox32;
+    uint32_t	xferaddr_lo;
+    uint32_t	xferaddr_hi;
+    mbox_t		mbox32;
 } __attribute__ ((packed)) mbox64_t;
 
 /*
  * mailbox structure used for internal commands
  */
 typedef struct {
-	u8	cmd;
-	u8	cmdid;
-	u8	opcode;
-	u8	subopcode;
-	u32	lba;
-	u32	xferaddr;
-	u8	logdrv;
-	u8	rsvd[3];
-	u8	numstatus;
-	u8	status;
+    u8	cmd;
+    u8	cmdid;
+    u8	opcode;
+    u8	subopcode;
+    u32	lba;
+    u32	xferaddr;
+    u8	logdrv;
+    u8	rsvd[3];
+    u8	numstatus;
+    u8	status;
 } __attribute__ ((packed)) int_mbox_t;
 
 /**
@@ -229,30 +229,30 @@ typedef struct {
  * @dataxferlen		: amount of the data to be transferred.
  */
 typedef struct {
-	uint8_t		timeout		:3;
-	uint8_t		ars		:1;
-	uint8_t		reserved	:3;
-	uint8_t		islogical	:1;
-	uint8_t		logdrv;
-	uint8_t		channel;
-	uint8_t		target;
-	uint8_t		queuetag;
-	uint8_t		queueaction;
-	uint8_t		cdb[10];
-	uint8_t		cdblen;
-	uint8_t		reqsenselen;
-	uint8_t		reqsensearea[MAX_REQ_SENSE_LEN];
-	uint8_t		numsge;
-	uint8_t		scsistatus;
-	uint32_t	dataxferaddr;
-	uint32_t	dataxferlen;
+    uint8_t		timeout		:3;
+    uint8_t		ars		:1;
+    uint8_t		reserved	:3;
+    uint8_t		islogical	:1;
+    uint8_t		logdrv;
+    uint8_t		channel;
+    uint8_t		target;
+    uint8_t		queuetag;
+    uint8_t		queueaction;
+    uint8_t		cdb[10];
+    uint8_t		cdblen;
+    uint8_t		reqsenselen;
+    uint8_t		reqsensearea[MAX_REQ_SENSE_LEN];
+    uint8_t		numsge;
+    uint8_t		scsistatus;
+    uint32_t	dataxferaddr;
+    uint32_t	dataxferlen;
 } __attribute__ ((packed)) mraid_passthru_t;
 
 typedef struct {
 
-	uint32_t		dataxferaddr_lo;
-	uint32_t		dataxferaddr_hi;
-	mraid_passthru_t	pthru32;
+    uint32_t		dataxferaddr_lo;
+    uint32_t		dataxferaddr_hi;
+    mraid_passthru_t	pthru32;
 
 } __attribute__ ((packed)) mega_passthru64_t;
 
@@ -281,27 +281,27 @@ typedef struct {
  * @dataxferlen		: amount of the data to be transferred.
  */
 typedef struct {
-	uint8_t		timeout		:3;
-	uint8_t		ars		:1;
-	uint8_t		rsvd1		:1;
-	uint8_t		cd_rom		:1;
-	uint8_t		rsvd2		:1;
-	uint8_t		islogical	:1;
-	uint8_t		logdrv;
-	uint8_t		channel;
-	uint8_t		target;
-	uint8_t		queuetag;
-	uint8_t		queueaction;
-	uint8_t		cdblen;
-	uint8_t		rsvd3;
-	uint8_t		cdb[16];
-	uint8_t		numsge;
-	uint8_t		status;
-	uint8_t		reqsenselen;
-	uint8_t		reqsensearea[MAX_REQ_SENSE_LEN];
-	uint8_t		rsvd4;
-	uint32_t	dataxferaddr;
-	uint32_t	dataxferlen;
+    uint8_t		timeout		:3;
+    uint8_t		ars		:1;
+    uint8_t		rsvd1		:1;
+    uint8_t		cd_rom		:1;
+    uint8_t		rsvd2		:1;
+    uint8_t		islogical	:1;
+    uint8_t		logdrv;
+    uint8_t		channel;
+    uint8_t		target;
+    uint8_t		queuetag;
+    uint8_t		queueaction;
+    uint8_t		cdblen;
+    uint8_t		rsvd3;
+    uint8_t		cdb[16];
+    uint8_t		numsge;
+    uint8_t		status;
+    uint8_t		reqsenselen;
+    uint8_t		reqsensearea[MAX_REQ_SENSE_LEN];
+    uint8_t		rsvd4;
+    uint32_t	dataxferaddr;
+    uint32_t	dataxferlen;
 } __attribute__ ((packed)) mraid_epassthru_t;
 
 
@@ -332,21 +332,21 @@ typedef struct {
  * 0x08 = Number of spans
  */
 typedef struct {
-	uint32_t	data_size;
-	uint32_t	config_signature;
-	uint8_t		fw_version[16];
-	uint8_t		bios_version[16];
-	uint8_t		product_name[80];
-	uint8_t		max_commands;
-	uint8_t		nchannels;
-	uint8_t		fc_loop_present;
-	uint8_t		mem_type;
-	uint32_t	signature;
-	uint16_t	dram_size;
-	uint16_t	subsysid;
-	uint16_t	subsysvid;
-	uint8_t		notify_counters;
-	uint8_t		pad1k[889];
+    uint32_t	data_size;
+    uint32_t	config_signature;
+    uint8_t		fw_version[16];
+    uint8_t		bios_version[16];
+    uint8_t		product_name[80];
+    uint8_t		max_commands;
+    uint8_t		nchannels;
+    uint8_t		fc_loop_present;
+    uint8_t		mem_type;
+    uint32_t	signature;
+    uint16_t	dram_size;
+    uint16_t	subsysid;
+    uint16_t	subsysvid;
+    uint8_t		notify_counters;
+    uint8_t		pad1k[889];
 } __attribute__ ((packed)) mraid_pinfo_t;
 
 
@@ -388,40 +388,40 @@ typedef struct {
  * @fcloop_state_rsvd		:
  */
 typedef struct {
-	uint32_t	global_counter;
-	uint8_t		param_counter;
-	uint8_t		param_id;
-	uint16_t	param_val;
-	uint8_t		write_config_counter;
-	uint8_t		write_config_rsvd[3];
-	uint8_t		ldrv_op_counter;
-	uint8_t		ldrv_opid;
-	uint8_t		ldrv_opcmd;
-	uint8_t		ldrv_opstatus;
-	uint8_t		ldrv_state_counter;
-	uint8_t		ldrv_state_id;
-	uint8_t		ldrv_state_new;
-	uint8_t		ldrv_state_old;
-	uint8_t		pdrv_state_counter;
-	uint8_t		pdrv_state_id;
-	uint8_t		pdrv_state_new;
-	uint8_t		pdrv_state_old;
-	uint8_t		pdrv_fmt_counter;
-	uint8_t		pdrv_fmt_id;
-	uint8_t		pdrv_fmt_val;
-	uint8_t		pdrv_fmt_rsvd;
-	uint8_t		targ_xfer_counter;
-	uint8_t		targ_xfer_id;
-	uint8_t		targ_xfer_val;
-	uint8_t		targ_xfer_rsvd;
-	uint8_t		fcloop_id_chg_counter;
-	uint8_t		fcloopid_pdrvid;
-	uint8_t		fcloop_id0;
-	uint8_t		fcloop_id1;
-	uint8_t		fcloop_state_counter;
-	uint8_t		fcloop_state0;
-	uint8_t		fcloop_state1;
-	uint8_t		fcloop_state_rsvd;
+    uint32_t	global_counter;
+    uint8_t		param_counter;
+    uint8_t		param_id;
+    uint16_t	param_val;
+    uint8_t		write_config_counter;
+    uint8_t		write_config_rsvd[3];
+    uint8_t		ldrv_op_counter;
+    uint8_t		ldrv_opid;
+    uint8_t		ldrv_opcmd;
+    uint8_t		ldrv_opstatus;
+    uint8_t		ldrv_state_counter;
+    uint8_t		ldrv_state_id;
+    uint8_t		ldrv_state_new;
+    uint8_t		ldrv_state_old;
+    uint8_t		pdrv_state_counter;
+    uint8_t		pdrv_state_id;
+    uint8_t		pdrv_state_new;
+    uint8_t		pdrv_state_old;
+    uint8_t		pdrv_fmt_counter;
+    uint8_t		pdrv_fmt_id;
+    uint8_t		pdrv_fmt_val;
+    uint8_t		pdrv_fmt_rsvd;
+    uint8_t		targ_xfer_counter;
+    uint8_t		targ_xfer_id;
+    uint8_t		targ_xfer_val;
+    uint8_t		targ_xfer_rsvd;
+    uint8_t		fcloop_id_chg_counter;
+    uint8_t		fcloopid_pdrvid;
+    uint8_t		fcloop_id0;
+    uint8_t		fcloop_id1;
+    uint8_t		fcloop_state_counter;
+    uint8_t		fcloop_state0;
+    uint8_t		fcloop_state1;
+    uint8_t		fcloop_state_rsvd;
 } __attribute__ ((packed)) mraid_notify_t;
 
 
@@ -451,30 +451,30 @@ typedef struct {
 #define CUR_NOTIFY_SIZE		sizeof(mraid_notify_t)
 
 typedef struct {
-	uint32_t	data_size;
+    uint32_t	data_size;
 
-	mraid_notify_t	notify;
+    mraid_notify_t	notify;
 
-	uint8_t		notify_rsvd[MAX_NOTIFY_SIZE - CUR_NOTIFY_SIZE];
+    uint8_t		notify_rsvd[MAX_NOTIFY_SIZE - CUR_NOTIFY_SIZE];
 
-	uint8_t		rebuild_rate;
-	uint8_t		cache_flush_int;
-	uint8_t		sense_alert;
-	uint8_t		drive_insert_count;
+    uint8_t		rebuild_rate;
+    uint8_t		cache_flush_int;
+    uint8_t		sense_alert;
+    uint8_t		drive_insert_count;
 
-	uint8_t		battery_status;
-	uint8_t		num_ldrv;
-	uint8_t		recon_state[MAX_LOGICAL_DRIVES_40LD / 8];
-	uint16_t	ldrv_op_status[MAX_LOGICAL_DRIVES_40LD / 8];
+    uint8_t		battery_status;
+    uint8_t		num_ldrv;
+    uint8_t		recon_state[MAX_LOGICAL_DRIVES_40LD / 8];
+    uint16_t	ldrv_op_status[MAX_LOGICAL_DRIVES_40LD / 8];
 
-	uint32_t	ldrv_size[MAX_LOGICAL_DRIVES_40LD];
-	uint8_t		ldrv_prop[MAX_LOGICAL_DRIVES_40LD];
-	uint8_t		ldrv_state[MAX_LOGICAL_DRIVES_40LD];
-	uint8_t		pdrv_state[FC_MAX_PHYSICAL_DEVICES];
-	uint16_t	pdrv_format[FC_MAX_PHYSICAL_DEVICES / 16];
+    uint32_t	ldrv_size[MAX_LOGICAL_DRIVES_40LD];
+    uint8_t		ldrv_prop[MAX_LOGICAL_DRIVES_40LD];
+    uint8_t		ldrv_state[MAX_LOGICAL_DRIVES_40LD];
+    uint8_t		pdrv_state[FC_MAX_PHYSICAL_DEVICES];
+    uint16_t	pdrv_format[FC_MAX_PHYSICAL_DEVICES / 16];
 
-	uint8_t		targ_xfer[80];
-	uint8_t		pad1k[263];
+    uint8_t		targ_xfer[80];
+    uint8_t		pad1k[263];
 } __attribute__ ((packed)) mraid_inquiry3_t;
 
 
@@ -509,21 +509,21 @@ typedef struct {
  * @dec_fault_bus_info		:
  */
 typedef struct {
-	uint8_t		max_commands;
-	uint8_t		rebuild_rate;
-	uint8_t		max_targ_per_chan;
-	uint8_t		nchannels;
-	uint8_t		fw_version[4];
-	uint16_t	age_of_flash;
-	uint8_t		chip_set_value;
-	uint8_t		dram_size;
-	uint8_t		cache_flush_interval;
-	uint8_t		bios_version[4];
-	uint8_t		board_type;
-	uint8_t		sense_alert;
-	uint8_t		write_config_count;
-	uint8_t		battery_status;
-	uint8_t		dec_fault_bus_info;
+    uint8_t		max_commands;
+    uint8_t		rebuild_rate;
+    uint8_t		max_targ_per_chan;
+    uint8_t		nchannels;
+    uint8_t		fw_version[4];
+    uint16_t	age_of_flash;
+    uint8_t		chip_set_value;
+    uint8_t		dram_size;
+    uint8_t		cache_flush_interval;
+    uint8_t		bios_version[4];
+    uint8_t		board_type;
+    uint8_t		sense_alert;
+    uint8_t		write_config_count;
+    uint8_t		battery_status;
+    uint8_t		dec_fault_bus_info;
 } __attribute__ ((packed)) mraid_adapinfo_t;
 
 
@@ -536,11 +536,11 @@ typedef struct {
  * @state	: state of each logical drive
  */
 typedef struct {
-	uint8_t		nldrv;
-	uint8_t		rsvd[3];
-	uint32_t	size[MAX_LOGICAL_DRIVES_8LD];
-	uint8_t		prop[MAX_LOGICAL_DRIVES_8LD];
-	uint8_t		state[MAX_LOGICAL_DRIVES_8LD];
+    uint8_t		nldrv;
+    uint8_t		rsvd[3];
+    uint32_t	size[MAX_LOGICAL_DRIVES_8LD];
+    uint8_t		prop[MAX_LOGICAL_DRIVES_8LD];
+    uint8_t		state[MAX_LOGICAL_DRIVES_8LD];
 } __attribute__ ((packed)) mraid_ldrv_info_t;
 
 
@@ -549,8 +549,8 @@ typedef struct {
  * @pdrv_state	: state of each physical drive
  */
 typedef struct {
-	uint8_t		pdrv_state[MBOX_MAX_PHYSICAL_DRIVES];
-	uint8_t		rsvd;
+    uint8_t		pdrv_state[MBOX_MAX_PHYSICAL_DRIVES];
+    uint8_t		rsvd;
 } __attribute__ ((packed)) mraid_pdrv_info_t;
 
 
@@ -561,9 +561,9 @@ typedef struct {
  * @mraid_pdrv_info_t	: physical drives information
  */
 typedef struct {
-	mraid_adapinfo_t	adapter_info;
-	mraid_ldrv_info_t	logdrv_info;
-	mraid_pdrv_info_t	pdrv_info;
+    mraid_adapinfo_t	adapter_info;
+    mraid_ldrv_info_t	logdrv_info;
+    mraid_pdrv_info_t	pdrv_info;
 } __attribute__ ((packed)) mraid_inquiry_t;
 
 
@@ -577,11 +577,11 @@ typedef struct {
  * @rsvd		:
  */
 typedef struct {
-	mraid_inquiry_t	raid_inq;
-	uint16_t	phys_drv_format[MAX_MBOX_CHANNELS];
-	uint8_t		stack_attn;
-	uint8_t		modem_status;
-	uint8_t		rsvd[2];
+    mraid_inquiry_t	raid_inq;
+    uint16_t	phys_drv_format[MAX_MBOX_CHANNELS];
+    uint8_t		stack_attn;
+    uint8_t		modem_status;
+    uint8_t		rsvd[2];
 } __attribute__ ((packed)) mraid_extinq_t;
 
 
@@ -591,9 +591,9 @@ typedef struct {
  * @target	: target ID of the device
  */
 typedef struct {
-	uint8_t		channel;
-	uint8_t		target;
-}__attribute__ ((packed)) adap_device_t;
+    uint8_t		channel;
+    uint8_t		target;
+} __attribute__ ((packed)) adap_device_t;
 
 
 /**
@@ -602,10 +602,10 @@ typedef struct {
  * @num_blks	: number of blocks
  */
 typedef struct {
-	uint32_t	start_blk;
-	uint32_t	num_blks;
-	adap_device_t	device[MAX_ROW_SIZE_40LD];
-}__attribute__ ((packed)) adap_span_40ld_t;
+    uint32_t	start_blk;
+    uint32_t	num_blks;
+    adap_device_t	device[MAX_ROW_SIZE_40LD];
+} __attribute__ ((packed)) adap_span_40ld_t;
 
 
 /**
@@ -614,10 +614,10 @@ typedef struct {
  * @num_blks	: number of blocks
  */
 typedef struct {
-	uint32_t	start_blk;
-	uint32_t	num_blks;
-	adap_device_t	device[MAX_ROW_SIZE_8LD];
-}__attribute__ ((packed)) adap_span_8ld_t;
+    uint32_t	start_blk;
+    uint32_t	num_blks;
+    adap_device_t	device[MAX_ROW_SIZE_8LD];
+} __attribute__ ((packed)) adap_span_8ld_t;
 
 
 /**
@@ -633,14 +633,14 @@ typedef struct {
  * @row_size	: number of stripes in a row
  */
 typedef struct {
-	uint8_t		span_depth;
-	uint8_t		level;
-	uint8_t		read_ahead;
-	uint8_t		stripe_sz;
-	uint8_t		status;
-	uint8_t		write_mode;
-	uint8_t		direct_io;
-	uint8_t		row_size;
+    uint8_t		span_depth;
+    uint8_t		level;
+    uint8_t		read_ahead;
+    uint8_t		stripe_sz;
+    uint8_t		status;
+    uint8_t		write_mode;
+    uint8_t		direct_io;
+    uint8_t		row_size;
 } __attribute__ ((packed)) logdrv_param_t;
 
 
@@ -650,9 +650,9 @@ typedef struct {
  * @span	: span
  */
 typedef struct {
-	logdrv_param_t		lparam;
-	adap_span_40ld_t	span[SPAN_DEPTH_8_SPANS];
-}__attribute__ ((packed)) logdrv_40ld_t;
+    logdrv_param_t		lparam;
+    adap_span_40ld_t	span[SPAN_DEPTH_8_SPANS];
+} __attribute__ ((packed)) logdrv_40ld_t;
 
 
 /**
@@ -663,9 +663,9 @@ typedef struct {
  * 8-LD logical drive with up to 8 spans
  */
 typedef struct {
-	logdrv_param_t	lparam;
-	adap_span_8ld_t	span[SPAN_DEPTH_8_SPANS];
-}__attribute__ ((packed)) logdrv_8ld_span8_t;
+    logdrv_param_t	lparam;
+    adap_span_8ld_t	span[SPAN_DEPTH_8_SPANS];
+} __attribute__ ((packed)) logdrv_8ld_span8_t;
 
 
 /**
@@ -676,9 +676,9 @@ typedef struct {
  * 8-LD logical drive with up to 4 spans
  */
 typedef struct {
-	logdrv_param_t	lparam;
-	adap_span_8ld_t	span[SPAN_DEPTH_4_SPANS];
-}__attribute__ ((packed)) logdrv_8ld_span4_t;
+    logdrv_param_t	lparam;
+    adap_span_8ld_t	span[SPAN_DEPTH_4_SPANS];
+} __attribute__ ((packed)) logdrv_8ld_span4_t;
 
 
 /**
@@ -690,12 +690,12 @@ typedef struct {
  * @size	: configurable size in terms of 512 byte
  */
 typedef struct {
-	uint8_t		type;
-	uint8_t		cur_status;
-	uint8_t		tag_depth;
-	uint8_t		sync_neg;
-	uint32_t	size;
-}__attribute__ ((packed)) phys_drive_t;
+    uint8_t		type;
+    uint8_t		cur_status;
+    uint8_t		tag_depth;
+    uint8_t		sync_neg;
+    uint32_t	size;
+} __attribute__ ((packed)) phys_drive_t;
 
 
 /**
@@ -706,11 +706,11 @@ typedef struct {
  * @pdrv	: physical drives information
  */
 typedef struct {
-	uint8_t		numldrv;
-	uint8_t		resvd[3];
-	logdrv_40ld_t	ldrv[MAX_LOGICAL_DRIVES_40LD];
-	phys_drive_t	pdrv[MBOX_MAX_PHYSICAL_DRIVES];
-}__attribute__ ((packed)) disk_array_40ld_t;
+    uint8_t		numldrv;
+    uint8_t		resvd[3];
+    logdrv_40ld_t	ldrv[MAX_LOGICAL_DRIVES_40LD];
+    phys_drive_t	pdrv[MBOX_MAX_PHYSICAL_DRIVES];
+} __attribute__ ((packed)) disk_array_40ld_t;
 
 
 /**
@@ -723,11 +723,11 @@ typedef struct {
  * Disk array for 8LD logical drives with up to 8 spans
  */
 typedef struct {
-	uint8_t			numldrv;
-	uint8_t			resvd[3];
-	logdrv_8ld_span8_t	ldrv[MAX_LOGICAL_DRIVES_8LD];
-	phys_drive_t		pdrv[MBOX_MAX_PHYSICAL_DRIVES];
-}__attribute__ ((packed)) disk_array_8ld_span8_t;
+    uint8_t			numldrv;
+    uint8_t			resvd[3];
+    logdrv_8ld_span8_t	ldrv[MAX_LOGICAL_DRIVES_8LD];
+    phys_drive_t		pdrv[MBOX_MAX_PHYSICAL_DRIVES];
+} __attribute__ ((packed)) disk_array_8ld_span8_t;
 
 
 /**
@@ -740,11 +740,11 @@ typedef struct {
  * Disk array for 8LD logical drives with up to 4 spans
  */
 typedef struct {
-	uint8_t			numldrv;
-	uint8_t			resvd[3];
-	logdrv_8ld_span4_t	ldrv[MAX_LOGICAL_DRIVES_8LD];
-	phys_drive_t		pdrv[MBOX_MAX_PHYSICAL_DRIVES];
-}__attribute__ ((packed)) disk_array_8ld_span4_t;
+    uint8_t			numldrv;
+    uint8_t			resvd[3];
+    logdrv_8ld_span4_t	ldrv[MAX_LOGICAL_DRIVES_8LD];
+    phys_drive_t		pdrv[MBOX_MAX_PHYSICAL_DRIVES];
+} __attribute__ ((packed)) disk_array_8ld_span4_t;
 
 
 /**
@@ -757,11 +757,11 @@ typedef struct {
  * @cksum	: 0-(sum of first 13 bytes of this structure)
  */
 struct private_bios_data {
-	uint8_t		geometry	:4;
-	uint8_t		unused		:4;
-	uint8_t		boot_drv;
-	uint8_t		rsvd[12];
-	uint16_t	cksum;
+    uint8_t		geometry	:4;
+    uint8_t		unused		:4;
+    uint8_t		boot_drv;
+    uint8_t		rsvd[12];
+    uint16_t	cksum;
 } __attribute__ ((packed));
 
 
@@ -771,8 +771,8 @@ struct private_bios_data {
  * @length	: data transfer length
  */
 typedef struct {
-	uint64_t	address;
-	uint32_t	length;
+    uint64_t	address;
+    uint32_t	length;
 } __attribute__ ((packed)) mbox_sgl64;
 
 /**
@@ -781,8 +781,8 @@ typedef struct {
  * @length	: data transfer length
  */
 typedef struct {
-	uint32_t	address;
-	uint32_t	length;
+    uint32_t	address;
+    uint32_t	length;
 } __attribute__ ((packed)) mbox_sgl32;
 
 #endif		// _MRAID_MBOX_DEFS_H_

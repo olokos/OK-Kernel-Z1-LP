@@ -5,9 +5,9 @@
 /* read the CPU version register */
 
 static inline unsigned long rdvr(void) {
-	unsigned char vr;
-	__asm__ volatile ("move $vr,%0" : "=rm" (vr));
-	return vr;
+    unsigned char vr;
+    __asm__ volatile ("move $vr,%0" : "=rm" (vr));
+    return vr;
 }
 
 #define cris_machine_name "cris"
@@ -15,9 +15,9 @@ static inline unsigned long rdvr(void) {
 /* read/write the user-mode stackpointer */
 
 static inline unsigned long rdusp(void) {
-	unsigned long usp;
-	__asm__ __volatile__("move $usp,%0" : "=rm" (usp));
-	return usp;
+    unsigned long usp;
+    __asm__ __volatile__("move $usp,%0" : "=rm" (usp));
+    return usp;
 }
 
 #define wrusp(usp) \
@@ -26,14 +26,13 @@ static inline unsigned long rdusp(void) {
 /* read the current stackpointer */
 
 static inline unsigned long rdsp(void) {
-	unsigned long sp;
-	__asm__ __volatile__("move.d $sp,%0" : "=rm" (sp));
-	return sp;
+    unsigned long sp;
+    __asm__ __volatile__("move.d $sp,%0" : "=rm" (sp));
+    return sp;
 }
 
-static inline unsigned long _get_base(char * addr)
-{
-  return 0;
+static inline unsigned long _get_base(char * addr) {
+    return 0;
 }
 
 #define nop() __asm__ __volatile__ ("nop");
@@ -41,7 +40,9 @@ static inline unsigned long _get_base(char * addr)
 #define xchg(ptr,x) ((__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
 #define tas(ptr) (xchg((ptr),1))
 
-struct __xchg_dummy { unsigned long a[100]; };
+struct __xchg_dummy {
+    unsigned long a[100];
+};
 #define __xg(x) ((struct __xchg_dummy *)(x))
 
 #endif

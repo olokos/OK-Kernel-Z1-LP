@@ -100,8 +100,7 @@
 /// Start of Sirius/Host message types
 #define WNI_HOST_MSG_START             0x1500
 
-enum eWniMsgTypes
-{
+enum eWniMsgTypes {
     /// CFG message types
     eWNI_CFG_MSG_TYPES_BEGIN=WNI_HOST_MSG_START,
     eWNI_CFG_MSG_TYPES_END=eWNI_CFG_MSG_TYPES_BEGIN+0xFF,
@@ -607,8 +606,7 @@ enum eWniMsgTypes
 #define WNI_CFG_GET_PER_STA_STAT_RSP_FIRST_PARAM                2
 
 // Per STA statistic structure
-typedef struct sAniCfgPerStaStatStruct
-{
+typedef struct sAniCfgPerStaStatStruct {
     unsigned long     sentAesBlksUcastHi;
     unsigned long     sentAesBlksUcastLo;
 
@@ -658,8 +656,7 @@ typedef struct sAniCfgPerStaStatStruct
 // Get TX rate based stats
 #define WNI_CFG_GET_TX_RATE_CTR_RSP_RES                        0
 
-typedef struct sAniCfgTxRateCtrs
-{
+typedef struct sAniCfgTxRateCtrs {
 // add the rate counters here
     unsigned long TxFrames_1Mbps;
     unsigned long TxFrames_2Mbps;

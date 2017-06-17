@@ -103,7 +103,7 @@
 #define TIOCSLCKTRMIOS	0x5457
 #define TIOCSERGSTRUCT	0x5458 /* For debugging only */
 #define TIOCSERGETLSR   0x5459 /* Get line status register */
-  /* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
 # define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
 #define TIOCSERGETMULTI 0x545A /* Get multiport config  */
 #define TIOCSERSETMULTI 0x545B /* Set multiport config */

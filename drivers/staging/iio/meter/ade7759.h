@@ -46,10 +46,10 @@
  * @rx:			receive buffer
  **/
 struct ade7759_state {
-	struct spi_device	*us;
-	struct mutex		buf_lock;
-	u8			tx[ADE7759_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADE7759_MAX_RX];
+    struct spi_device	*us;
+    struct mutex		buf_lock;
+    u8			tx[ADE7759_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADE7759_MAX_RX];
 };
 
 #endif

@@ -31,19 +31,19 @@ int diagfwd_read_complete_bridge(struct diag_request *diag_read_ptr);
  * for instance SMUX, HSIC working at same time
  */
 struct diag_bridge_dev {
-	int id;
-	char name[20];
-	int enabled;
-	struct mutex bridge_mutex;
-	int usb_connected;
-	int read_len;
-	int write_len;
-	unsigned char *usb_buf_out;
-	struct usb_diag_ch *ch;
-	struct workqueue_struct *wq;
-	struct work_struct diag_read_work;
-	struct diag_request *usb_read_ptr;
-	struct work_struct usb_read_complete_work;
+    int id;
+    char name[20];
+    int enabled;
+    struct mutex bridge_mutex;
+    int usb_connected;
+    int read_len;
+    int write_len;
+    unsigned char *usb_buf_out;
+    struct usb_diag_ch *ch;
+    struct workqueue_struct *wq;
+    struct work_struct diag_read_work;
+    struct diag_request *usb_read_ptr;
+    struct work_struct usb_read_complete_work;
 };
 
 #endif

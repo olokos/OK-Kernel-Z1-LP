@@ -22,16 +22,15 @@
 #ifndef __W1_H
 #define __W1_H
 
-struct w1_reg_num
-{
+struct w1_reg_num {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	__u64	family:8,
-		id:48,
-		crc:8;
+    __u64	family:8,
+            id:48,
+            crc:8;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	__u64	crc:8,
-		id:48,
-		family:8;
+    __u64	crc:8,
+            id:48,
+            family:8;
 #else
 #error "Please fix <asm/byteorder.h>"
 #endif
@@ -59,22 +58,21 @@ struct w1_reg_num
 
 #define W1_SLAVE_ACTIVE		0
 
-struct w1_slave
-{
-	struct module		*owner;
-	unsigned char		name[W1_MAXNAMELEN];
-	struct list_head	w1_slave_entry;
-	struct w1_reg_num	reg_num;
-	atomic_t		refcnt;
-	u8			rom[9];
-	u32			flags;
-	int			ttl;
+struct w1_slave {
+    struct module		*owner;
+    unsigned char		name[W1_MAXNAMELEN];
+    struct list_head	w1_slave_entry;
+    struct w1_reg_num	reg_num;
+    atomic_t		refcnt;
+    u8			rom[9];
+    u32			flags;
+    int			ttl;
 
-	struct w1_master	*master;
-	struct w1_family	*family;
-	void			*family_data;
-	struct device		dev;
-	struct completion	released;
+    struct w1_master	*master;
+    struct w1_family	*family;
+    void			*family_data;
+    struct device		dev;
+    struct completion	released;
 };
 
 typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
@@ -87,106 +85,104 @@ typedef void (*w1_slave_found_callback)(struct w1_master *, u64);
  * Either define read_bit and write_bit OR define, at minimum, touch_bit and
  * reset_bus.
  */
-struct w1_bus_master
-{
-	/** the first parameter in all the functions below */
-	void		*data;
+struct w1_bus_master {
+    /** the first parameter in all the functions below */
+    void		*data;
 
-	/**
-	 * Sample the line level
-	 * @return the level read (0 or 1)
-	 */
-	u8		(*read_bit)(void *);
+    /**
+     * Sample the line level
+     * @return the level read (0 or 1)
+     */
+    u8		(*read_bit)(void *);
 
-	/** Sets the line level */
-	void		(*write_bit)(void *, u8);
+    /** Sets the line level */
+    void		(*write_bit)(void *, u8);
 
-	/**
-	 * touch_bit is the lowest-level function for devices that really
-	 * support the 1-wire protocol.
-	 * touch_bit(0) = write-0 cycle
-	 * touch_bit(1) = write-1 / read cycle
-	 * @return the bit read (0 or 1)
-	 */
-	u8		(*touch_bit)(void *, u8);
+    /**
+     * touch_bit is the lowest-level function for devices that really
+     * support the 1-wire protocol.
+     * touch_bit(0) = write-0 cycle
+     * touch_bit(1) = write-1 / read cycle
+     * @return the bit read (0 or 1)
+     */
+    u8		(*touch_bit)(void *, u8);
 
-	/**
-	 * Reads a bytes. Same as 8 touch_bit(1) calls.
-	 * @return the byte read
-	 */
-	u8		(*read_byte)(void *);
+    /**
+     * Reads a bytes. Same as 8 touch_bit(1) calls.
+     * @return the byte read
+     */
+    u8		(*read_byte)(void *);
 
-	/**
-	 * Writes a byte. Same as 8 touch_bit(x) calls.
-	 */
-	void		(*write_byte)(void *, u8);
+    /**
+     * Writes a byte. Same as 8 touch_bit(x) calls.
+     */
+    void		(*write_byte)(void *, u8);
 
-	/**
-	 * Same as a series of read_byte() calls
-	 * @return the number of bytes read
-	 */
-	u8		(*read_block)(void *, u8 *, int);
+    /**
+     * Same as a series of read_byte() calls
+     * @return the number of bytes read
+     */
+    u8		(*read_block)(void *, u8 *, int);
 
-	/** Same as a series of write_byte() calls */
-	void		(*write_block)(void *, const u8 *, int);
+    /** Same as a series of write_byte() calls */
+    void		(*write_block)(void *, const u8 *, int);
 
-	/**
-	 * Combines two reads and a smart write for ROM searches
-	 * @return bit0=Id bit1=comp_id bit2=dir_taken
-	 */
-	u8		(*triplet)(void *, u8);
+    /**
+     * Combines two reads and a smart write for ROM searches
+     * @return bit0=Id bit1=comp_id bit2=dir_taken
+     */
+    u8		(*triplet)(void *, u8);
 
-	/**
-	 * long write-0 with a read for the presence pulse detection
-	 * @return -1=Error, 0=Device present, 1=No device present
-	 */
-	u8		(*reset_bus)(void *);
+    /**
+     * long write-0 with a read for the presence pulse detection
+     * @return -1=Error, 0=Device present, 1=No device present
+     */
+    u8		(*reset_bus)(void *);
 
-	/**
-	 * Put out a strong pull-up pulse of the specified duration.
-	 * @return -1=Error, 0=completed
-	 */
-	u8		(*set_pullup)(void *, int);
+    /**
+     * Put out a strong pull-up pulse of the specified duration.
+     * @return -1=Error, 0=completed
+     */
+    u8		(*set_pullup)(void *, int);
 
-	/** Really nice hardware can handles the different types of ROM search
-	 *  w1_master* is passed to the slave found callback.
-	 */
-	void		(*search)(void *, struct w1_master *,
-		u8, w1_slave_found_callback);
+    /** Really nice hardware can handles the different types of ROM search
+     *  w1_master* is passed to the slave found callback.
+     */
+    void		(*search)(void *, struct w1_master *,
+                          u8, w1_slave_found_callback);
 };
 
-struct w1_master
-{
-	struct list_head	w1_master_entry;
-	struct module		*owner;
-	unsigned char		name[W1_MAXNAMELEN];
-	struct list_head	slist;
-	int			max_slave_count, slave_count;
-	unsigned long		attempts;
-	int			slave_ttl;
-	int			initialized;
-	u32			id;
-	int			search_count;
+struct w1_master {
+    struct list_head	w1_master_entry;
+    struct module		*owner;
+    unsigned char		name[W1_MAXNAMELEN];
+    struct list_head	slist;
+    int			max_slave_count, slave_count;
+    unsigned long		attempts;
+    int			slave_ttl;
+    int			initialized;
+    u32			id;
+    int			search_count;
 
-	atomic_t		refcnt;
+    atomic_t		refcnt;
 
-	void			*priv;
-	int			priv_size;
+    void			*priv;
+    int			priv_size;
 
-	/** 5V strong pullup enabled flag, 1 enabled, zero disabled. */
-	int			enable_pullup;
-	/** 5V strong pullup duration in milliseconds, zero disabled. */
-	int			pullup_duration;
+    /** 5V strong pullup enabled flag, 1 enabled, zero disabled. */
+    int			enable_pullup;
+    /** 5V strong pullup duration in milliseconds, zero disabled. */
+    int			pullup_duration;
 
-	struct task_struct	*thread;
-	struct mutex		mutex;
+    struct task_struct	*thread;
+    struct mutex		mutex;
 
-	struct device_driver	*driver;
-	struct device		dev;
+    struct device_driver	*driver;
+    struct device		dev;
 
-	struct w1_bus_master	*bus_master;
+    struct w1_bus_master	*bus_master;
 
-	u32			seq;
+    u32			seq;
 };
 
 int w1_create_master_attributes(struct w1_master *);
@@ -196,7 +192,7 @@ void w1_search_devices(struct w1_master *dev, u8 search_type, w1_slave_found_cal
 struct w1_slave *w1_search_slave(struct w1_reg_num *id);
 void w1_slave_found(struct w1_master *dev, u64 rn);
 void w1_search_process_cb(struct w1_master *dev, u8 search_type,
-	w1_slave_found_callback cb);
+                          w1_slave_found_callback cb);
 struct w1_master *w1_search_master_id(u32 id);
 
 /* Disconnect and reconnect devices in the given family.  Used for finding
@@ -219,19 +215,16 @@ int w1_reset_select_slave(struct w1_slave *sl);
 int w1_reset_resume_command(struct w1_master *);
 void w1_next_pullup(struct w1_master *, int);
 
-static inline struct w1_slave* dev_to_w1_slave(struct device *dev)
-{
-	return container_of(dev, struct w1_slave, dev);
+static inline struct w1_slave* dev_to_w1_slave(struct device *dev) {
+    return container_of(dev, struct w1_slave, dev);
 }
 
-static inline struct w1_slave* kobj_to_w1_slave(struct kobject *kobj)
-{
-	return dev_to_w1_slave(container_of(kobj, struct device, kobj));
+static inline struct w1_slave* kobj_to_w1_slave(struct kobject *kobj) {
+    return dev_to_w1_slave(container_of(kobj, struct device, kobj));
 }
 
-static inline struct w1_master* dev_to_w1_master(struct device *dev)
-{
-	return container_of(dev, struct w1_master, dev);
+static inline struct w1_master* dev_to_w1_master(struct device *dev) {
+    return container_of(dev, struct w1_master, dev);
 }
 
 extern struct device_driver w1_master_driver;

@@ -31,6 +31,6 @@ extern int core_scsi3_ua_allocate(struct se_node_acl *, u32, u8, u8);
 extern void core_scsi3_ua_release_all(struct se_dev_entry *);
 extern void core_scsi3_ua_for_check_condition(struct se_cmd *, u8 *, u8 *);
 extern int core_scsi3_ua_clear_for_request_sense(struct se_cmd *,
-						u8 *, u8 *);
+        u8 *, u8 *);
 
 #endif /* TARGET_CORE_UA_H */

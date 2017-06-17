@@ -15,18 +15,16 @@
 #undef scr_writew
 #undef scr_readw
 
-static inline void scr_writew(u16 val, u16 *addr)
-{
-	BUG_ON((long) addr >= 0);
+static inline void scr_writew(u16 val, u16 *addr) {
+    BUG_ON((long) addr >= 0);
 
-	*addr = val;
+    *addr = val;
 }
 
-static inline u16 scr_readw(const u16 *addr)
-{
-	BUG_ON((long) addr >= 0);
+static inline u16 scr_readw(const u16 *addr) {
+    BUG_ON((long) addr >= 0);
 
-	return *addr;
+    return *addr;
 }
 
 #define VGA_MAP_MEM(x,s) (x)

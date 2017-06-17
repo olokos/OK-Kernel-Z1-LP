@@ -63,7 +63,9 @@ typedef pte_t *pte_addr_t;
 #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
 
 #ifndef __ASSEMBLY__
-static inline int pte_file(pte_t pte) { return 0; }
+static inline int pte_file(pte_t pte) {
+    return 0;
+}
 #endif
 
 #define ZERO_PAGE(vaddr)	({ BUG(); NULL; })
@@ -195,9 +197,15 @@ do {							\
  * setup: the pud is never bad, and a pud always exists (as it's folded
  * into the pgd entry)
  */
-static inline int pgd_none(pgd_t pgd)		{ return 0; }
-static inline int pgd_bad(pgd_t pgd)		{ return 0; }
-static inline int pgd_present(pgd_t pgd)	{ return 1; }
+static inline int pgd_none(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_present(pgd_t pgd)	{
+    return 1;
+}
 static inline void pgd_clear(pgd_t *pgd)	{ }
 
 #define pgd_populate(mm, pgd, pud)		do { } while (0)
@@ -211,9 +219,8 @@ do {							\
 	asm volatile("dcf %M0" :: "U"(*(pgdptr)));	\
 } while(0)
 
-static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
-{
-	return (pud_t *) pgd;
+static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address) {
+    return (pud_t *) pgd;
 }
 
 #define pgd_page(pgd)				(pud_page((pud_t){ pgd }))
@@ -232,9 +239,15 @@ static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
  * setup: the pmd is never bad, and a pmd always exists (as it's folded
  * into the pud entry)
  */
-static inline int pud_none(pud_t pud)		{ return 0; }
-static inline int pud_bad(pud_t pud)		{ return 0; }
-static inline int pud_present(pud_t pud)	{ return 1; }
+static inline int pud_none(pud_t pud)		{
+    return 0;
+}
+static inline int pud_bad(pud_t pud)		{
+    return 0;
+}
+static inline int pud_present(pud_t pud)	{
+    return 1;
+}
 static inline void pud_clear(pud_t *pud)	{ }
 
 #define pud_populate(mm, pmd, pte)		do { } while (0)
@@ -261,9 +274,8 @@ do {						\
 
 #define __pmd_index(address)			0
 
-static inline pmd_t *pmd_offset(pud_t *dir, unsigned long address)
-{
-	return (pmd_t *) dir + __pmd_index(address);
+static inline pmd_t *pmd_offset(pud_t *dir, unsigned long address) {
+    return (pmd_t *) dir + __pmd_index(address);
 }
 
 #define pte_same(a, b)		((a).pte == (b).pte)
@@ -375,37 +387,62 @@ static inline pmd_t *pmd_offset(pud_t *dir, unsigned long address)
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_dirty(pte_t pte)		{ return (pte).pte & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte)		{ return (pte).pte & _PAGE_ACCESSED; }
-static inline int pte_write(pte_t pte)		{ return !((pte).pte & _PAGE_WP); }
-static inline int pte_special(pte_t pte)	{ return 0; }
-
-static inline pte_t pte_mkclean(pte_t pte)	{ (pte).pte &= ~_PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkold(pte_t pte)	{ (pte).pte &= ~_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_wrprotect(pte_t pte)	{ (pte).pte |= _PAGE_WP; return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)	{ (pte).pte |= _PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)	{ (pte).pte |= _PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkwrite(pte_t pte)	{ (pte).pte &= ~_PAGE_WP; return pte; }
-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
-
-static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-{
-	int i = test_and_clear_bit(_PAGE_BIT_ACCESSED, ptep);
-	asm volatile("dcf %M0" :: "U"(*ptep));
-	return i;
+static inline int pte_dirty(pte_t pte)		{
+    return (pte).pte & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte)		{
+    return (pte).pte & _PAGE_ACCESSED;
+}
+static inline int pte_write(pte_t pte)		{
+    return !((pte).pte & _PAGE_WP);
+}
+static inline int pte_special(pte_t pte)	{
+    return 0;
 }
 
-static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	unsigned long x = xchg(&ptep->pte, 0);
-	asm volatile("dcf %M0" :: "U"(*ptep));
-	return __pte(x);
+static inline pte_t pte_mkclean(pte_t pte)	{
+    (pte).pte &= ~_PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte)	{
+    (pte).pte &= ~_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_wrprotect(pte_t pte)	{
+    (pte).pte |= _PAGE_WP;
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte)	{
+    (pte).pte |= _PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte)	{
+    (pte).pte |= _PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte)	{
+    (pte).pte &= ~_PAGE_WP;
+    return pte;
+}
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    return pte;
 }
 
-static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	set_bit(_PAGE_BIT_WP, ptep);
-	asm volatile("dcf %M0" :: "U"(*ptep));
+static inline int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep) {
+    int i = test_and_clear_bit(_PAGE_BIT_ACCESSED, ptep);
+    asm volatile("dcf %M0" :: "U"(*ptep));
+    return i;
+}
+
+static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    unsigned long x = xchg(&ptep->pte, 0);
+    asm volatile("dcf %M0" :: "U"(*ptep));
+    return __pte(x);
+}
+
+static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    set_bit(_PAGE_BIT_WP, ptep);
+    asm volatile("dcf %M0" :: "U"(*ptep));
 }
 
 /*
@@ -424,11 +461,10 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, 
 /* This takes a physical page address that is used by the remapping functions */
 #define mk_pte_phys(physpage, pgprot)	pfn_pte((physpage) >> PAGE_SHIFT, pgprot)
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte.pte &= _PAGE_CHG_MASK;
-	pte.pte |= pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte.pte &= _PAGE_CHG_MASK;
+    pte.pte |= pgprot_val(newprot);
+    return pte;
 }
 
 /* to find an entry in a page-table-directory. */
@@ -474,9 +510,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 #define __pte_to_swp_entry(_pte)	((swp_entry_t) { (_pte).pte })
 #define __swp_entry_to_pte(x)		((pte_t) { (x).val })
 
-static inline int pte_file(pte_t pte)
-{
-	return pte.pte & _PAGE_FILE;
+static inline int pte_file(pte_t pte) {
+    return pte.pte & _PAGE_FILE;
 }
 
 #define PTE_FILE_MAX_BITS	29
@@ -500,32 +535,31 @@ static inline int pte_file(pte_t pte)
 /*
  * preload information about a newly instantiated PTE into the SCR0/SCR1 PGE cache
  */
-static inline void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
-{
-	struct mm_struct *mm;
-	unsigned long ampr;
+static inline void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep) {
+    struct mm_struct *mm;
+    unsigned long ampr;
 
-	mm = current->mm;
-	if (mm) {
-		pgd_t *pge = pgd_offset(mm, address);
-		pud_t *pue = pud_offset(pge, address);
-		pmd_t *pme = pmd_offset(pue, address);
+    mm = current->mm;
+    if (mm) {
+        pgd_t *pge = pgd_offset(mm, address);
+        pud_t *pue = pud_offset(pge, address);
+        pmd_t *pme = pmd_offset(pue, address);
 
-		ampr = pme->ste[0] & 0xffffff00;
-		ampr |= xAMPRx_L | xAMPRx_SS_16Kb | xAMPRx_S | xAMPRx_C |
-			xAMPRx_V;
-	} else {
-		address = ULONG_MAX;
-		ampr = 0;
-	}
+        ampr = pme->ste[0] & 0xffffff00;
+        ampr |= xAMPRx_L | xAMPRx_SS_16Kb | xAMPRx_S | xAMPRx_C |
+                xAMPRx_V;
+    } else {
+        address = ULONG_MAX;
+        ampr = 0;
+    }
 
-	asm volatile("movgs %0,scr0\n"
-		     "movgs %0,scr1\n"
-		     "movgs %1,dampr4\n"
-		     "movgs %1,dampr5\n"
-		     :
-		     : "r"(address), "r"(ampr)
-		     );
+    asm volatile("movgs %0,scr0\n"
+                 "movgs %0,scr1\n"
+                 "movgs %1,dampr4\n"
+                 "movgs %1,dampr5\n"
+                 :
+                 : "r"(address), "r"(ampr)
+                );
 }
 
 #ifdef CONFIG_PROC_FS

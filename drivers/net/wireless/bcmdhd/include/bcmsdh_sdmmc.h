@@ -2,13 +2,13 @@
  * BCMSDH Function Driver for the native SDIO/MMC driver in the Linux Kernel
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -62,30 +62,30 @@ extern void sdioh_sdmmc_osfree(sdioh_info_t *sd);
 #define CLIENT_INTR 		0x100	/* Get rid of this! */
 
 struct sdioh_info {
-	osl_t 		*osh;			/* osh handler */
-	bool		client_intr_enabled;	/* interrupt connnected flag */
-	bool		intr_handler_valid;	/* client driver interrupt handler valid */
-	sdioh_cb_fn_t	intr_handler;		/* registered interrupt handler */
-	void		*intr_handler_arg;	/* argument to call interrupt handler */
-	uint16		intmask;		/* Current active interrupts */
-	void		*sdos_info;		/* Pointer to per-OS private data */
+    osl_t 		*osh;			/* osh handler */
+    bool		client_intr_enabled;	/* interrupt connnected flag */
+    bool		intr_handler_valid;	/* client driver interrupt handler valid */
+    sdioh_cb_fn_t	intr_handler;		/* registered interrupt handler */
+    void		*intr_handler_arg;	/* argument to call interrupt handler */
+    uint16		intmask;		/* Current active interrupts */
+    void		*sdos_info;		/* Pointer to per-OS private data */
 
-	uint 		irq;			/* Client irq */
-	int 		intrcount;		/* Client interrupts */
+    uint 		irq;			/* Client irq */
+    int 		intrcount;		/* Client interrupts */
 
-	bool		sd_use_dma;		/* DMA on CMD53 */
-	bool 		sd_blockmode;		/* sd_blockmode == FALSE => 64 Byte Cmd 53s. */
-						/*  Must be on for sd_multiblock to be effective */
-	bool 		use_client_ints;	/* If this is false, make sure to restore */
-	int 		sd_mode;		/* SD1/SD4/SPI */
-	int 		client_block_size[SDIOD_MAX_IOFUNCS];		/* Blocksize */
-	uint8 		num_funcs;		/* Supported funcs on client */
-	uint32 		com_cis_ptr;
-	uint32 		func_cis_ptr[SDIOD_MAX_IOFUNCS];
+    bool		sd_use_dma;		/* DMA on CMD53 */
+    bool 		sd_blockmode;		/* sd_blockmode == FALSE => 64 Byte Cmd 53s. */
+    /*  Must be on for sd_multiblock to be effective */
+    bool 		use_client_ints;	/* If this is false, make sure to restore */
+    int 		sd_mode;		/* SD1/SD4/SPI */
+    int 		client_block_size[SDIOD_MAX_IOFUNCS];		/* Blocksize */
+    uint8 		num_funcs;		/* Supported funcs on client */
+    uint32 		com_cis_ptr;
+    uint32 		func_cis_ptr[SDIOD_MAX_IOFUNCS];
 
 #define SDIOH_SDMMC_MAX_SG_ENTRIES	32
-	struct scatterlist sg_list[SDIOH_SDMMC_MAX_SG_ENTRIES];
-	bool		use_rxchain;
+    struct scatterlist sg_list[SDIOH_SDMMC_MAX_SG_ENTRIES];
+    bool		use_rxchain;
 };
 
 /************************************************************
@@ -116,8 +116,8 @@ extern int sdioh_sdmmc_register_irq(sdioh_info_t *sd, uint irq);
 extern void sdioh_sdmmc_free_irq(uint irq, sdioh_info_t *sd);
 
 typedef struct _BCMSDH_SDMMC_INSTANCE {
-	sdioh_info_t	*sd;
-	struct sdio_func *func[SDIOD_MAX_IOFUNCS];
+    sdioh_info_t	*sd;
+    struct sdio_func *func[SDIOD_MAX_IOFUNCS];
 } BCMSDH_SDMMC_INSTANCE, *PBCMSDH_SDMMC_INSTANCE;
 
 #endif /* __BCMSDH_SDMMC_H__ */

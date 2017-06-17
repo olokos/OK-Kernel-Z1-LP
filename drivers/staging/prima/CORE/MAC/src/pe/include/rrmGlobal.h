@@ -42,29 +42,25 @@
 
   ========================================================================*/
 
-typedef enum eRrmRetStatus
-{
+typedef enum eRrmRetStatus {
     eRRM_SUCCESS,
     eRRM_INCAPABLE,
     eRRM_REFUSED,
     eRRM_FAILURE
 } tRrmRetStatus;
 
-typedef enum eRrmMsgReqSource
-{
+typedef enum eRrmMsgReqSource {
     eRRM_MSG_SOURCE_LEGACY_ESE  = 1, /* legacy ese */
     eRRM_MSG_SOURCE_11K         = 2, /* 11k */
     eRRM_MSG_SOURCE_ESE_UPLOAD  = 3  /* ese upload approach */
 } tRrmMsgReqSource;
 
-typedef struct sSirChannelInfo
-{
+typedef struct sSirChannelInfo {
     tANI_U8 regulatoryClass;
     tANI_U8 channelNum;
 } tSirChannelInfo, * tpSirChannelInfo;
 
-typedef struct sSirBeaconReportReqInd
-{
+typedef struct sSirBeaconReportReqInd {
     tANI_U16     messageType; // eWNI_SME_BEACON_REPORT_REQ_IND
     tANI_U16     length;
     tSirMacAddr  bssId;
@@ -80,8 +76,7 @@ typedef struct sSirBeaconReportReqInd
 } tSirBeaconReportReqInd, * tpSirBeaconReportReqInd;
 
 
-typedef struct sSirBeaconReportXmitInd
-{
+typedef struct sSirBeaconReportXmitInd {
     tANI_U16    messageType; // eWNI_SME_BEACON_REPORT_RESP_XMIT_IND
     tANI_U16    length;
     tSirMacAddr bssId;
@@ -93,8 +88,7 @@ typedef struct sSirBeaconReportXmitInd
     tpSirBssDescription pBssDescription[SIR_BCN_REPORT_MAX_BSS_DESC];
 } tSirBeaconReportXmitInd, * tpSirBeaconReportXmitInd;
 
-typedef struct sSirNeighborReportReqInd
-{
+typedef struct sSirNeighborReportReqInd {
     tANI_U16     messageType; // eWNI_SME_NEIGHBOR_REPORT_REQ_IND
     tANI_U16     length;
     tSirMacAddr  bssId;  //For the session.
@@ -104,17 +98,14 @@ typedef struct sSirNeighborReportReqInd
 } tSirNeighborReportReqInd, * tpSirNeighborReportReqInd;
 
 
-typedef struct sSirNeighborBssDescription
-{
+typedef struct sSirNeighborBssDescription {
     tANI_U16        length;
     tSirMacAddr     bssId;
     tANI_U8         regClass;
     tANI_U8         channel;
     tANI_U8         phyType;
-    union sSirNeighborBssidInfo
-    {
-        struct _rrmInfo
-        {
+    union sSirNeighborBssidInfo {
+        struct _rrmInfo {
             tANI_U32      fApPreauthReachable:2;  //see IEEE 802.11k Table 7-43a
             tANI_U32      fSameSecurityMode:1;
             tANI_U32      fSameAuthenticator:1;
@@ -127,8 +118,7 @@ typedef struct sSirNeighborBssDescription
             tANI_U32      fMobilityDomain:1;
             tANI_U32      reserved:21;
         } rrmInfo;
-        struct _eseInfo
-        {
+        struct _eseInfo {
             tANI_U32      channelBand:8;
             tANI_U32      minRecvSigPower:8;
             tANI_U32      apTxPower:8;
@@ -146,8 +136,7 @@ typedef struct sSirNeighborBssDescription
     //Optional sub IEs....ignoring for now.
 } tSirNeighborBssDescription, *tpSirNeighborBssDescripton;
 
-typedef struct sSirNeighborReportInd
-{
+typedef struct sSirNeighborReportInd {
     tANI_U16     messageType; // eWNI_SME_NEIGHBOR_REPORT_IND
     tANI_U16     length;
     tANI_U16     numNeighborReports;
@@ -156,8 +145,7 @@ typedef struct sSirNeighborReportInd
     tSirNeighborBssDescription sNeighborBssDescription[1];
 } tSirNeighborReportInd, * tpSirNeighborReportInd;
 
-typedef struct sRRMBeaconReportRequestedIes
-{
+typedef struct sRRMBeaconReportRequestedIes {
     tANI_U8 num;
     tANI_U8 *pElementIds;
 } tRRMBeaconReportRequestedIes, *tpRRMBeaconReportRequestedIes;
@@ -169,15 +157,12 @@ typedef struct sRRMBeaconReportRequestedIes
 #define BEACON_REPORTING_DETAIL_ALL_FF_IE 2
 
 
-typedef struct sRRMReq
-{
+typedef struct sRRMReq {
     tANI_U8 dialog_token; //In action frame;
     tANI_U8 token; //Within individual request;
     tANI_U8 type;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             tANI_U8 reportingDetail;
             tRRMBeaconReportRequestedIes reqIes;
         } Beacon;
@@ -185,8 +170,7 @@ typedef struct sRRMReq
     tANI_U8 sendEmptyBcnRpt;
 } tRRMReq, *tpRRMReq;
 
-typedef struct sRRMCaps
-{
+typedef struct sRRMCaps {
     tANI_U8  LinkMeasurement: 1;
     tANI_U8      NeighborRpt: 1;
     tANI_U8         parallel: 1;
@@ -218,8 +202,7 @@ typedef struct sRRMCaps
     tANI_U8 MeasurementPilot;
 } tRRMCaps, *tpRRMCaps;
 
-typedef struct sRrmPEContext
-{
+typedef struct sRrmPEContext {
     tANI_U8  rrmEnable;
     //tChannelList APchannelReport;
     tANI_U32   startTSF[2]; //Used during scan/measurement to store the start TSF. this is not used directly in beacon reports.

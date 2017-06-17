@@ -25,19 +25,19 @@
  * The structure is placed at the bottom of the supervisor stack.
  */
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	unsigned long		status;		/* thread-synchronous flags */
-	__u32			homecache_cpu;	/* CPU we are homecached on */
-	__u32			cpu;		/* current CPU */
-	int			preempt_count;	/* 0 => preemptable,
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    unsigned long		status;		/* thread-synchronous flags */
+    __u32			homecache_cpu;	/* CPU we are homecached on */
+    __u32			cpu;		/* current CPU */
+    int			preempt_count;	/* 0 => preemptable,
 						   <0 => BUG */
 
-	mm_segment_t		addr_limit;	/* thread address space
+    mm_segment_t		addr_limit;	/* thread address space
 						   (KERNEL_DS or USER_DS) */
-	struct restart_block	restart_block;
-	struct single_step_state *step_state;	/* single step state
+    struct restart_block	restart_block;
+    struct single_step_state *step_state;	/* single step state
 						   (if non-zero) */
 };
 
@@ -95,8 +95,8 @@ extern void _cpu_idle(void);
 
 /* Switch boot idle thread to a freshly-allocated stack and free old stack. */
 extern void cpu_idle_on_new_stack(struct thread_info *old_ti,
-				  unsigned long new_sp,
-				  unsigned long new_ss10);
+                                  unsigned long new_sp,
+                                  unsigned long new_ss10);
 
 #else /* __ASSEMBLY__ */
 
@@ -164,11 +164,10 @@ extern void cpu_idle_on_new_stack(struct thread_info *old_ti,
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK	1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->status |= TS_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, &ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->status |= TS_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, &ti->flags);
 }
 #endif	/* !__ASSEMBLY__ */
 

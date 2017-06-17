@@ -114,35 +114,35 @@
 /* USB Frame Number Register */
 #define USB_USFRN_MASK		0xFFFF
 
-struct usb_device_para{
-	u16	epptr[4];
-	u32	rstate;
-	u32	rptr;
-	u16	frame_n;
-	u16	rbcnt;
-	u32	rtemp;
-	u32	rxusb_data;
-	u16	rxuptr;
-	u8	reso[2];
-	u32	softbl;
-	u8	sofucrctemp;
+struct usb_device_para {
+    u16	epptr[4];
+    u32	rstate;
+    u32	rptr;
+    u16	frame_n;
+    u16	rbcnt;
+    u32	rtemp;
+    u32	rxusb_data;
+    u16	rxuptr;
+    u8	reso[2];
+    u32	softbl;
+    u8	sofucrctemp;
 };
 
-struct usb_ep_para{
-	u16	rbase;
-	u16	tbase;
-	u8	rbmr;
-	u8	tbmr;
-	u16	mrblr;
-	u16	rbptr;
-	u16	tbptr;
-	u32	tstate;
-	u32	tptr;
-	u16	tcrc;
-	u16	tbcnt;
-	u32	ttemp;
-	u16	txusbu_ptr;
-	u8	reserve[2];
+struct usb_ep_para {
+    u16	rbase;
+    u16	tbase;
+    u8	rbmr;
+    u8	tbmr;
+    u16	mrblr;
+    u16	rbptr;
+    u16	tbptr;
+    u32	tstate;
+    u32	tptr;
+    u16	tcrc;
+    u16	tbcnt;
+    u32	ttemp;
+    u16	txusbu_ptr;
+    u8	reserve[2];
 };
 
 #define USB_BUSMODE_GBL		0x20
@@ -175,14 +175,14 @@ struct usb_ep_para{
 /*-----------------------------------------------------------------------------
 	USB RX And TX DATA Frame
  -----------------------------------------------------------------------------*/
-struct qe_frame{
-	u8 *data;
-	u32 len;
-	u32 status;
-	u32 info;
+struct qe_frame {
+    u8 *data;
+    u32 len;
+    u32 status;
+    u32 info;
 
-	void *privdata;
-	struct list_head node;
+    void *privdata;
+    struct list_head node;
 };
 
 /* Frame structure, info field. */
@@ -238,129 +238,127 @@ struct qe_frame{
 #define frame_get_privdata(frm) (frm->privdata)
 #define frame_set_privdata(frm, dat) (frm->privdata = dat)
 
-static inline void qe_frame_clean(struct qe_frame *frm)
-{
-	frame_set_data(frm, NULL);
-	frame_set_length(frm, 0);
-	frame_set_status(frm, FRAME_OK);
-	frame_set_info(frm, 0);
-	frame_set_privdata(frm, NULL);
+static inline void qe_frame_clean(struct qe_frame *frm) {
+    frame_set_data(frm, NULL);
+    frame_set_length(frm, 0);
+    frame_set_status(frm, FRAME_OK);
+    frame_set_info(frm, 0);
+    frame_set_privdata(frm, NULL);
 }
 
-static inline void qe_frame_init(struct qe_frame *frm)
-{
-	qe_frame_clean(frm);
-	INIT_LIST_HEAD(&(frm->node));
+static inline void qe_frame_init(struct qe_frame *frm) {
+    qe_frame_clean(frm);
+    INIT_LIST_HEAD(&(frm->node));
 }
 
 struct qe_req {
-	struct usb_request req;
-	struct list_head queue;
-	/* ep_queue() func will add
-	 a request->queue into a udc_ep->queue 'd tail */
-	struct qe_ep *ep;
-	unsigned mapped:1;
+    struct usb_request req;
+    struct list_head queue;
+    /* ep_queue() func will add
+     a request->queue into a udc_ep->queue 'd tail */
+    struct qe_ep *ep;
+    unsigned mapped:1;
 };
 
 struct qe_ep {
-	struct usb_ep ep;
-	struct list_head queue;
-	struct qe_udc *udc;
-	const struct usb_endpoint_descriptor *desc;
-	struct usb_gadget *gadget;
+    struct usb_ep ep;
+    struct list_head queue;
+    struct qe_udc *udc;
+    const struct usb_endpoint_descriptor *desc;
+    struct usb_gadget *gadget;
 
-	u8 state;
+    u8 state;
 
-	struct qe_bd __iomem *rxbase;
-	struct qe_bd __iomem *n_rxbd;
-	struct qe_bd __iomem *e_rxbd;
+    struct qe_bd __iomem *rxbase;
+    struct qe_bd __iomem *n_rxbd;
+    struct qe_bd __iomem *e_rxbd;
 
-	struct qe_bd __iomem *txbase;
-	struct qe_bd __iomem *n_txbd;
-	struct qe_bd __iomem *c_txbd;
+    struct qe_bd __iomem *txbase;
+    struct qe_bd __iomem *n_txbd;
+    struct qe_bd __iomem *c_txbd;
 
-	struct qe_frame *rxframe;
-	u8 *rxbuffer;
-	dma_addr_t rxbuf_d;
-	u8 rxbufmap;
-	unsigned char localnack;
-	int has_data;
+    struct qe_frame *rxframe;
+    u8 *rxbuffer;
+    dma_addr_t rxbuf_d;
+    u8 rxbufmap;
+    unsigned char localnack;
+    int has_data;
 
-	struct qe_frame *txframe;
-	struct qe_req *tx_req;
-	int sent;  /*data already sent */
-	int last;  /*data sent in the last time*/
+    struct qe_frame *txframe;
+    struct qe_req *tx_req;
+    int sent;  /*data already sent */
+    int last;  /*data sent in the last time*/
 
-	u8 dir;
-	u8 epnum;
-	u8 tm; /* transfer mode */
-	u8 data01;
-	u8 init;
+    u8 dir;
+    u8 epnum;
+    u8 tm; /* transfer mode */
+    u8 data01;
+    u8 init;
 
-	u8 already_seen;
-	u8 enable_tasklet;
-	u8 setup_stage;
-	u32 last_io;            /* timestamp */
+    u8 already_seen;
+    u8 enable_tasklet;
+    u8 setup_stage;
+    u32 last_io;            /* timestamp */
 
-	char name[14];
+    char name[14];
 
-	unsigned double_buf:1;
-	unsigned stopped:1;
-	unsigned fnf:1;
-	unsigned has_dma:1;
+    unsigned double_buf:1;
+    unsigned stopped:1;
+    unsigned fnf:1;
+    unsigned has_dma:1;
 
-	u8 ackwait;
-	u8 dma_channel;
-	u16 dma_counter;
-	int lch;
+    u8 ackwait;
+    u8 dma_channel;
+    u16 dma_counter;
+    int lch;
 
-	struct timer_list timer;
+    struct timer_list timer;
 };
 
 struct qe_udc {
-	struct usb_gadget gadget;
-	struct usb_gadget_driver *driver;
-	struct device *dev;
-	struct qe_ep eps[USB_MAX_ENDPOINTS];
-	struct usb_ctrlrequest local_setup_buff;
-	spinlock_t lock;	/* lock for set/config qe_udc */
-	unsigned long soc_type;		/* QE or CPM soc */
+    struct usb_gadget gadget;
+    struct usb_gadget_driver *driver;
+    struct device *dev;
+    struct qe_ep eps[USB_MAX_ENDPOINTS];
+    struct usb_ctrlrequest local_setup_buff;
+    spinlock_t lock;	/* lock for set/config qe_udc */
+    unsigned long soc_type;		/* QE or CPM soc */
 
-	struct qe_req *status_req;	/* ep0 status request */
+    struct qe_req *status_req;	/* ep0 status request */
 
-	/* USB and EP Parameter Block pointer */
-	struct usb_device_para __iomem *usb_param;
-	struct usb_ep_para __iomem *ep_param[4];
+    /* USB and EP Parameter Block pointer */
+    struct usb_device_para __iomem *usb_param;
+    struct usb_ep_para __iomem *ep_param[4];
 
-	u32 max_pipes;          /* Device max pipes */
-	u32 max_use_endpts;     /* Max endpointes to be used */
-	u32 bus_reset;          /* Device is bus reseting */
-	u32 resume_state;       /* USB state to resume*/
-	u32 usb_state;          /* USB current state */
-	u32 usb_next_state;     /* USB next state */
-	u32 ep0_state;          /* Enpoint zero state */
-	u32 ep0_dir;            /* Enpoint zero direction: can be
+    u32 max_pipes;          /* Device max pipes */
+    u32 max_use_endpts;     /* Max endpointes to be used */
+    u32 bus_reset;          /* Device is bus reseting */
+    u32 resume_state;       /* USB state to resume*/
+    u32 usb_state;          /* USB current state */
+    u32 usb_next_state;     /* USB next state */
+    u32 ep0_state;          /* Enpoint zero state */
+    u32 ep0_dir;            /* Enpoint zero direction: can be
 				USB_DIR_IN or USB_DIR_OUT*/
-	u32 usb_sof_count;      /* SOF count */
-	u32 errors;             /* USB ERRORs count */
+    u32 usb_sof_count;      /* SOF count */
+    u32 errors;             /* USB ERRORs count */
 
-	u8 *tmpbuf;
-	u32 c_start;
-	u32 c_end;
+    u8 *tmpbuf;
+    u32 c_start;
+    u32 c_end;
 
-	u8 *nullbuf;
-	u8 *statusbuf;
-	dma_addr_t nullp;
-	u8 nullmap;
-	u8 device_address;	/* Device USB address */
+    u8 *nullbuf;
+    u8 *statusbuf;
+    dma_addr_t nullp;
+    u8 nullmap;
+    u8 device_address;	/* Device USB address */
 
-	unsigned int usb_clock;
-	unsigned int usb_irq;
-	struct usb_ctlr __iomem *usb_regs;
+    unsigned int usb_clock;
+    unsigned int usb_irq;
+    struct usb_ctlr __iomem *usb_regs;
 
-	struct tasklet_struct rx_tasklet;
+    struct tasklet_struct rx_tasklet;
 
-	struct completion *done;	/* to make sure release() is done */
+    struct completion *done;	/* to make sure release() is done */
 };
 
 #define EP_STATE_IDLE	0

@@ -53,17 +53,16 @@
 
 #undef DUMP_FIFO_DATA
 #ifdef DUMP_FIFO_DATA
-static void dump_fifo_data(u8 *buf, u16 len)
-{
-	u8 *tmp = buf;
-	int i;
+static void dump_fifo_data(u8 *buf, u16 len) {
+    u8 *tmp = buf;
+    int i;
 
-	for (i = 0; i < len; i++) {
-		if (!(i % 16) && i)
-			pr_debug("\n");
-		pr_debug("%02x ", *tmp++);
-	}
-	pr_debug("\n");
+    for (i = 0; i < len; i++) {
+        if (!(i % 16) && i)
+            pr_debug("\n");
+        pr_debug("%02x ", *tmp++);
+    }
+    pr_debug("\n");
 }
 #else
 #define dump_fifo_data(buf, len)	do {} while (0)

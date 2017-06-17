@@ -33,24 +33,24 @@
 #ifndef __ASSEMBLY__
 
 struct w90x900_uart_clksrc {
-	const char	*name;
-	unsigned int	divisor;
-	unsigned int	min_baud;
-	unsigned int	max_baud;
+    const char	*name;
+    unsigned int	divisor;
+    unsigned int	min_baud;
+    unsigned int	max_baud;
 };
 
 struct w90x900_uartcfg {
-	unsigned char	hwport;
-	unsigned char	unused;
-	unsigned short	flags;
-	unsigned long	uart_flags;
+    unsigned char	hwport;
+    unsigned char	unused;
+    unsigned short	flags;
+    unsigned long	uart_flags;
 
-	unsigned long	ucon;
-	unsigned long	ulcon;
-	unsigned long	ufcon;
+    unsigned long	ucon;
+    unsigned long	ulcon;
+    unsigned long	ufcon;
 
-	struct w90x900_uart_clksrc *clocks;
-	unsigned int	clocks_size;
+    struct w90x900_uart_clksrc *clocks;
+    unsigned int	clocks_size;
 };
 
 #endif /* __ASSEMBLY__ */

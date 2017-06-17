@@ -67,71 +67,71 @@ typedef u32		compat_ulong_t;
 typedef u64		compat_u64;
 
 struct compat_timespec {
-	compat_time_t	tv_sec;
-	s32		tv_nsec;
+    compat_time_t	tv_sec;
+    s32		tv_nsec;
 };
 
 struct compat_timeval {
-	compat_time_t	tv_sec;
-	s32		tv_usec;
+    compat_time_t	tv_sec;
+    s32		tv_usec;
 };
 
 struct compat_stat {
-	compat_dev_t	st_dev;
-	u16		__pad1;
-	compat_ino_t	st_ino;
-	compat_mode_t	st_mode;
-	compat_nlink_t	st_nlink;
-	__compat_uid_t	st_uid;
-	__compat_gid_t	st_gid;
-	compat_dev_t	st_rdev;
-	u16		__pad2;
-	u32		st_size;
-	u32		st_blksize;
-	u32		st_blocks;
-	u32		st_atime;
-	u32		st_atime_nsec;
-	u32		st_mtime;
-	u32		st_mtime_nsec;
-	u32		st_ctime;
-	u32		st_ctime_nsec;
-	u32		__unused4;
-	u32		__unused5;
+    compat_dev_t	st_dev;
+    u16		__pad1;
+    compat_ino_t	st_ino;
+    compat_mode_t	st_mode;
+    compat_nlink_t	st_nlink;
+    __compat_uid_t	st_uid;
+    __compat_gid_t	st_gid;
+    compat_dev_t	st_rdev;
+    u16		__pad2;
+    u32		st_size;
+    u32		st_blksize;
+    u32		st_blocks;
+    u32		st_atime;
+    u32		st_atime_nsec;
+    u32		st_mtime;
+    u32		st_mtime_nsec;
+    u32		st_ctime;
+    u32		st_ctime_nsec;
+    u32		__unused4;
+    u32		__unused5;
 };
 
 struct compat_flock {
-	short		l_type;
-	short		l_whence;
-	compat_off_t	l_start;
-	compat_off_t	l_len;
-	compat_pid_t	l_pid;
+    short		l_type;
+    short		l_whence;
+    compat_off_t	l_start;
+    compat_off_t	l_len;
+    compat_pid_t	l_pid;
 };
 
 #define F_GETLK64       12
 #define F_SETLK64       13
-#define F_SETLKW64      14    
+#define F_SETLKW64      14
 
 struct compat_flock64 {
-	short		l_type;
-	short		l_whence;
-	compat_loff_t	l_start;
-	compat_loff_t	l_len;
-	compat_pid_t	l_pid;
+    short		l_type;
+    short		l_whence;
+    compat_loff_t	l_start;
+    compat_loff_t	l_len;
+    compat_pid_t	l_pid;
 };
 
 struct compat_statfs {
-	s32		f_type;
-	s32		f_bsize;
-	s32		f_blocks;
-	s32		f_bfree;
-	s32		f_bavail;
-	s32		f_files;
-	s32		f_ffree;
-	compat_fsid_t	f_fsid;
-	s32		f_namelen;
-	s32		f_frsize;
-	s32		f_flags;
-	s32		f_spare[5];
+    s32		f_type;
+    s32		f_bsize;
+    s32		f_blocks;
+    s32		f_bfree;
+    s32		f_bavail;
+    s32		f_files;
+    s32		f_ffree;
+    compat_fsid_t	f_fsid;
+    s32		f_namelen;
+    s32		f_frsize;
+    s32		f_flags;
+    s32		f_spare[5];
 };
 
 #define COMPAT_RLIM_OLD_INFINITY	0x7fffffff
@@ -155,90 +155,86 @@ typedef u32		compat_sigset_word;
  */
 typedef	u32		compat_uptr_t;
 
-static inline void __user *compat_ptr(compat_uptr_t uptr)
-{
-	return (void __user *)(unsigned long)(uptr & 0x7fffffffUL);
+static inline void __user *compat_ptr(compat_uptr_t uptr) {
+    return (void __user *)(unsigned long)(uptr & 0x7fffffffUL);
 }
 
-static inline compat_uptr_t ptr_to_compat(void __user *uptr)
-{
-	return (u32)(unsigned long)uptr;
+static inline compat_uptr_t ptr_to_compat(void __user *uptr) {
+    return (u32)(unsigned long)uptr;
 }
 
 #ifdef CONFIG_COMPAT
 
-static inline int is_compat_task(void)
-{
-	return is_32bit_task();
+static inline int is_compat_task(void) {
+    return is_32bit_task();
 }
 
 #endif
 
-static inline void __user *arch_compat_alloc_user_space(long len)
-{
-	unsigned long stack;
+static inline void __user *arch_compat_alloc_user_space(long len) {
+    unsigned long stack;
 
-	stack = KSTK_ESP(current);
-	if (is_compat_task())
-		stack &= 0x7fffffffUL;
-	return (void __user *) (stack - len);
+    stack = KSTK_ESP(current);
+    if (is_compat_task())
+        stack &= 0x7fffffffUL;
+    return (void __user *) (stack - len);
 }
 
 struct compat_ipc64_perm {
-	compat_key_t key;
-	__compat_uid32_t uid;
-	__compat_gid32_t gid;
-	__compat_uid32_t cuid;
-	__compat_gid32_t cgid;
-	compat_mode_t mode;
-	unsigned short __pad1;
-	unsigned short seq;
-	unsigned short __pad2;
-	unsigned int __unused1;
-	unsigned int __unused2;
+    compat_key_t key;
+    __compat_uid32_t uid;
+    __compat_gid32_t gid;
+    __compat_uid32_t cuid;
+    __compat_gid32_t cgid;
+    compat_mode_t mode;
+    unsigned short __pad1;
+    unsigned short seq;
+    unsigned short __pad2;
+    unsigned int __unused1;
+    unsigned int __unused2;
 };
 
 struct compat_semid64_ds {
-	struct compat_ipc64_perm sem_perm;
-	compat_time_t  sem_otime;
-	compat_ulong_t __pad1;
-	compat_time_t  sem_ctime;
-	compat_ulong_t __pad2;
-	compat_ulong_t sem_nsems;
-	compat_ulong_t __unused1;
-	compat_ulong_t __unused2;
+    struct compat_ipc64_perm sem_perm;
+    compat_time_t  sem_otime;
+    compat_ulong_t __pad1;
+    compat_time_t  sem_ctime;
+    compat_ulong_t __pad2;
+    compat_ulong_t sem_nsems;
+    compat_ulong_t __unused1;
+    compat_ulong_t __unused2;
 };
 
 struct compat_msqid64_ds {
-	struct compat_ipc64_perm msg_perm;
-	compat_time_t   msg_stime;
-	compat_ulong_t __pad1;
-	compat_time_t   msg_rtime;
-	compat_ulong_t __pad2;
-	compat_time_t   msg_ctime;
-	compat_ulong_t __pad3;
-	compat_ulong_t msg_cbytes;
-	compat_ulong_t msg_qnum;
-	compat_ulong_t msg_qbytes;
-	compat_pid_t   msg_lspid;
-	compat_pid_t   msg_lrpid;
-	compat_ulong_t __unused1;
-	compat_ulong_t __unused2;
+    struct compat_ipc64_perm msg_perm;
+    compat_time_t   msg_stime;
+    compat_ulong_t __pad1;
+    compat_time_t   msg_rtime;
+    compat_ulong_t __pad2;
+    compat_time_t   msg_ctime;
+    compat_ulong_t __pad3;
+    compat_ulong_t msg_cbytes;
+    compat_ulong_t msg_qnum;
+    compat_ulong_t msg_qbytes;
+    compat_pid_t   msg_lspid;
+    compat_pid_t   msg_lrpid;
+    compat_ulong_t __unused1;
+    compat_ulong_t __unused2;
 };
 
 struct compat_shmid64_ds {
-	struct compat_ipc64_perm shm_perm;
-	compat_size_t  shm_segsz;
-	compat_time_t  shm_atime;
-	compat_ulong_t __pad1;
-	compat_time_t  shm_dtime;
-	compat_ulong_t __pad2;
-	compat_time_t  shm_ctime;
-	compat_ulong_t __pad3;
-	compat_pid_t   shm_cpid;
-	compat_pid_t   shm_lpid;
-	compat_ulong_t shm_nattch;
-	compat_ulong_t __unused1;
-	compat_ulong_t __unused2;
+    struct compat_ipc64_perm shm_perm;
+    compat_size_t  shm_segsz;
+    compat_time_t  shm_atime;
+    compat_ulong_t __pad1;
+    compat_time_t  shm_dtime;
+    compat_ulong_t __pad2;
+    compat_time_t  shm_ctime;
+    compat_ulong_t __pad3;
+    compat_pid_t   shm_cpid;
+    compat_pid_t   shm_lpid;
+    compat_ulong_t shm_nattch;
+    compat_ulong_t __unused1;
+    compat_ulong_t __unused2;
 };
 #endif /* _ASM_S390X_COMPAT_H */

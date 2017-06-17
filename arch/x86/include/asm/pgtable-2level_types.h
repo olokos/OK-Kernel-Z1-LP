@@ -11,8 +11,8 @@ typedef unsigned long	pgdval_t;
 typedef unsigned long	pgprotval_t;
 
 typedef union {
-	pteval_t pte;
-	pteval_t pte_low;
+    pteval_t pte;
+    pteval_t pte_low;
 } pte_t;
 #endif	/* !__ASSEMBLY__ */
 

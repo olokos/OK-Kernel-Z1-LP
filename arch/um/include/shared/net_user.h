@@ -14,20 +14,20 @@
 #define UML_NET_VERSION (4)
 
 struct net_user_info {
-	int (*init)(void *, void *);
-	int (*open)(void *);
-	void (*close)(int, void *);
-	void (*remove)(void *);
-	void (*add_address)(unsigned char *, unsigned char *, void *);
-	void (*delete_address)(unsigned char *, unsigned char *, void *);
-	int max_packet;
-	int mtu;
+    int (*init)(void *, void *);
+    int (*open)(void *);
+    void (*close)(int, void *);
+    void (*remove)(void *);
+    void (*add_address)(unsigned char *, unsigned char *, void *);
+    void (*delete_address)(unsigned char *, unsigned char *, void *);
+    int max_packet;
+    int mtu;
 };
 
 extern void ether_user_init(void *data, void *dev);
 extern void iter_addresses(void *d, void (*cb)(unsigned char *,
-					       unsigned char *, void *),
-			   void *arg);
+                           unsigned char *, void *),
+                           void *arg);
 
 extern void *get_output_buffer(int *len_out);
 extern void free_output_buffer(void *buffer);

@@ -10,8 +10,7 @@
 #include <asm-generic/mm_hooks.h>
 
 static inline void paravirt_activate_mm(struct mm_struct *prev,
-					struct mm_struct *next)
-{
+                                        struct mm_struct *next) {
 }
 #endif	/* !CONFIG_PARAVIRT */
 
@@ -22,52 +21,50 @@ int init_new_context(struct task_struct *tsk, struct mm_struct *mm);
 void destroy_context(struct mm_struct *mm);
 
 
-static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
-{
+static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk) {
 #ifdef CONFIG_SMP
-	if (percpu_read(cpu_tlbstate.state) == TLBSTATE_OK)
-		percpu_write(cpu_tlbstate.state, TLBSTATE_LAZY);
+    if (percpu_read(cpu_tlbstate.state) == TLBSTATE_OK)
+        percpu_write(cpu_tlbstate.state, TLBSTATE_LAZY);
 #endif
 }
 
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-			     struct task_struct *tsk)
-{
-	unsigned cpu = smp_processor_id();
+                             struct task_struct *tsk) {
+    unsigned cpu = smp_processor_id();
 
-	if (likely(prev != next)) {
+    if (likely(prev != next)) {
 #ifdef CONFIG_SMP
-		percpu_write(cpu_tlbstate.state, TLBSTATE_OK);
-		percpu_write(cpu_tlbstate.active_mm, next);
+        percpu_write(cpu_tlbstate.state, TLBSTATE_OK);
+        percpu_write(cpu_tlbstate.active_mm, next);
 #endif
-		cpumask_set_cpu(cpu, mm_cpumask(next));
+        cpumask_set_cpu(cpu, mm_cpumask(next));
 
-		/* Re-load page tables */
-		load_cr3(next->pgd);
+        /* Re-load page tables */
+        load_cr3(next->pgd);
 
-		/* stop flush ipis for the previous mm */
-		cpumask_clear_cpu(cpu, mm_cpumask(prev));
+        /* stop flush ipis for the previous mm */
+        cpumask_clear_cpu(cpu, mm_cpumask(prev));
 
-		/*
-		 * load the LDT, if the LDT is different:
-		 */
-		if (unlikely(prev->context.ldt != next->context.ldt))
-			load_LDT_nolock(&next->context);
-	}
+        /*
+         * load the LDT, if the LDT is different:
+         */
+        if (unlikely(prev->context.ldt != next->context.ldt))
+            load_LDT_nolock(&next->context);
+    }
 #ifdef CONFIG_SMP
-	else {
-		percpu_write(cpu_tlbstate.state, TLBSTATE_OK);
-		BUG_ON(percpu_read(cpu_tlbstate.active_mm) != next);
+    else {
+        percpu_write(cpu_tlbstate.state, TLBSTATE_OK);
+        BUG_ON(percpu_read(cpu_tlbstate.active_mm) != next);
 
-		if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next))) {
-			/* We were in lazy tlb mode and leave_mm disabled
-			 * tlb flush IPI delivery. We must reload CR3
-			 * to make sure to use no freed page tables.
-			 */
-			load_cr3(next->pgd);
-			load_LDT_nolock(&next->context);
-		}
-	}
+        if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next))) {
+            /* We were in lazy tlb mode and leave_mm disabled
+             * tlb flush IPI delivery. We must reload CR3
+             * to make sure to use no freed page tables.
+             */
+            load_cr3(next->pgd);
+            load_LDT_nolock(&next->context);
+        }
+    }
 #endif
 }
 

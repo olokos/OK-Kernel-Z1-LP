@@ -50,13 +50,13 @@ extern void lpc23xx_restart(char, const char *);
  * Structure used for setting up and querying the PLLS
  */
 struct clk_pll_setup {
-	int analog_on;
-	int cco_bypass_b15;
-	int direct_output_b14;
-	int fdbk_div_ctrl_b13;
-	int pll_p;
-	int pll_n;
-	u32 pll_m;
+    int analog_on;
+    int cco_bypass_b15;
+    int direct_output_b14;
+    int fdbk_div_ctrl_b13;
+    int pll_p;
+    int pll_n;
+    u32 pll_m;
 };
 
 extern int clk_is_sysclk_mainosc(void);

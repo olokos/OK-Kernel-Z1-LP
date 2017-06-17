@@ -11,8 +11,8 @@
 #include <linux/list.h>
 
 struct reset_call {
-	struct list_head list;
-	void (*fn)(void);
+    struct list_head list;
+    void (*fn)(void);
 };
 
 extern void register_reset_call(struct reset_call *reset);

@@ -57,8 +57,8 @@ static u32 GBRcvUCodeLen = 512;
 #define SECTION_SIZE 65536
 
 struct slic_spinlock {
-	spinlock_t	lock;
-	unsigned long	flags;
+    spinlock_t	lock;
+    unsigned long	flags;
 };
 
 #define SLIC_RSPQ_PAGES_GB        10
@@ -103,13 +103,13 @@ struct slic_rcvbuf_info {
  Simplifies ucode in 64-bit systems
 */
 struct slic_handle_word {
-	union {
-		struct {
-			ushort      index;
-			ushort      bottombits; /* to denote num bufs to card */
-		}  parts;
-		u32         whole;
-	}  handle;
+    union {
+        struct {
+            ushort      index;
+            ushort      bottombits; /* to denote num bufs to card */
+        }  parts;
+        u32         whole;
+    }  handle;
 };
 
 struct slic_handle {
@@ -156,16 +156,16 @@ struct slic_hostcmd {
 #define SLIC_CMDQ_INITPAGES      (SLIC_CMDQ_INITCMDS / SLIC_CMDQ_CMDSINPAGE)
 
 struct slic_cmdqmem {
-	int pagecnt;
-	u32 *pages[SLIC_CMDQ_MAXPAGES];
-	dma_addr_t dma_pages[SLIC_CMDQ_MAXPAGES];
+    int pagecnt;
+    u32 *pages[SLIC_CMDQ_MAXPAGES];
+    dma_addr_t dma_pages[SLIC_CMDQ_MAXPAGES];
 };
 
 struct slic_cmdqueue {
-	struct slic_hostcmd *head;
-	struct slic_hostcmd *tail;
-	int count;
-	struct slic_spinlock lock;
+    struct slic_hostcmd *head;
+    struct slic_hostcmd *tail;
+    int count;
+    struct slic_spinlock lock;
 };
 
 #define SLIC_MAX_CARDS              32
@@ -173,8 +173,8 @@ struct slic_cmdqueue {
 
 
 struct mcast_address {
-	unsigned char address[6];
-	struct mcast_address *next;
+    unsigned char address[6];
+    struct mcast_address *next;
 };
 
 #define CARD_DOWN        0x00000000
@@ -341,10 +341,10 @@ struct physcard {
     struct physcard *next;
     uint                adapters_allocd;
 
- /*  the following is not currently needed
-    u32               bridge_busnum;
-    u32               bridge_cfg[NUM_CFG_SPACES][NUM_CFG_REG_ULONGS];
- */
+    /*  the following is not currently needed
+       u32               bridge_busnum;
+       u32               bridge_cfg[NUM_CFG_SPACES][NUM_CFG_REG_ULONGS];
+    */
 };
 
 struct base_driver {

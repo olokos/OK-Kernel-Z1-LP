@@ -31,19 +31,18 @@
 /*
  * Enable the PCI device and request the regions.
  */
-static inline int comedi_pci_enable(struct pci_dev *pdev, const char *res_name)
-{
-	int rc;
+static inline int comedi_pci_enable(struct pci_dev *pdev, const char *res_name) {
+    int rc;
 
-	rc = pci_enable_device(pdev);
-	if (rc < 0)
-		return rc;
+    rc = pci_enable_device(pdev);
+    if (rc < 0)
+        return rc;
 
-	rc = pci_request_regions(pdev, res_name);
-	if (rc < 0)
-		pci_disable_device(pdev);
+    rc = pci_request_regions(pdev, res_name);
+    if (rc < 0)
+        pci_disable_device(pdev);
 
-	return rc;
+    return rc;
 }
 
 /*
@@ -51,10 +50,9 @@ static inline int comedi_pci_enable(struct pci_dev *pdev, const char *res_name)
  *
  * This must be matched with a previous successful call to comedi_pci_enable().
  */
-static inline void comedi_pci_disable(struct pci_dev *pdev)
-{
-	pci_release_regions(pdev);
-	pci_disable_device(pdev);
+static inline void comedi_pci_disable(struct pci_dev *pdev) {
+    pci_release_regions(pdev);
+    pci_disable_device(pdev);
 }
 
 #endif

@@ -18,10 +18,10 @@
 
 /* assembly code in softirq.h is sensitive to the offsets of these fields */
 typedef struct {
-	unsigned int	__softirq_pending;
+    unsigned int	__softirq_pending;
 #ifdef CONFIG_MN10300_WD_TIMER
-	unsigned int	__nmi_count;	/* arch dependent */
-	unsigned int	__irq_count;	/* arch dependent */
+    unsigned int	__nmi_count;	/* arch dependent */
+    unsigned int	__irq_count;	/* arch dependent */
 #endif
 } ____cacheline_aligned irq_cpustat_t;
 
@@ -35,7 +35,7 @@ extern void ack_bad_irq(int irq);
  *   reason to do otherwise (see trap_preinit() in traps.c)
  */
 typedef void (*intr_stub_fnx)(struct pt_regs *regs,
-			      enum exception_code intcode);
+                              enum exception_code intcode);
 
 /*
  * manipulate pointers in the Exception table (see entry.S)
@@ -44,6 +44,6 @@ typedef void (*intr_stub_fnx)(struct pt_regs *regs,
  *   but does always set the TBR correctly
  */
 extern asmlinkage void set_excp_vector(enum exception_code code,
-				       intr_stub_fnx handler);
+                                       intr_stub_fnx handler);
 
 #endif /* _ASM_HARDIRQ_H */

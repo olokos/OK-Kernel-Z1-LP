@@ -85,7 +85,7 @@ BYTE abyAL2230InitTable[CB_AL2230_INIT_SEQ][3] = {
     {0x0B, 0xDF, 0xFC},
     {0x00, 0x00, 0x0D},
     {0x00, 0x58, 0x0F}
-    };
+};
 
 BYTE abyAL2230ChannelTable0[CB_MAX_CHANNEL_24G][3] = {
     {0x03, 0xF7, 0x90}, // channel = 1, Tf = 2412MHz
@@ -102,7 +102,7 @@ BYTE abyAL2230ChannelTable0[CB_MAX_CHANNEL_24G][3] = {
     {0x03, 0xE7, 0xB0}, // channel = 12, Tf = 2467MHz
     {0x03, 0xF7, 0xC0}, // channel = 13, Tf = 2472MHz
     {0x03, 0xE7, 0xC0}  // channel = 14, Tf = 2412M
-    };
+};
 
 BYTE abyAL2230ChannelTable1[CB_MAX_CHANNEL_24G][3] = {
     {0x03, 0x33, 0x31}, // channel = 1, Tf = 2412MHz
@@ -119,7 +119,7 @@ BYTE abyAL2230ChannelTable1[CB_MAX_CHANNEL_24G][3] = {
     {0x0B, 0x33, 0x31}, // channel = 12, Tf = 2467MHz
     {0x03, 0x33, 0x31}, // channel = 13, Tf = 2472MHz
     {0x06, 0x66, 0x61}  // channel = 14, Tf = 2412M
-    };
+};
 
 // 40MHz reference frequency
 // Need to Pull PLLON(PE3) low when writing channel registers through 3-wire.
@@ -144,7 +144,7 @@ BYTE abyAL7230InitTable[CB_AL7230_INIT_SEQ][3] = {
     {0xFF, 0xFF, 0xFD},
     {0x00, 0x00, 0x0E},
     {0x1A, 0xBA, 0x8F} // Need modify for 11a: 12BACF
-    };
+};
 
 BYTE abyAL7230InitTableAMode[CB_AL7230_INIT_SEQ][3] = {
     {0x2F, 0xF5, 0x20}, // Channel184 // Need modify for 11b/g
@@ -163,7 +163,7 @@ BYTE abyAL7230InitTableAMode[CB_AL7230_INIT_SEQ][3] = {
     {0xFF, 0xFF, 0xFD},
     {0x00, 0x00, 0x0E},
     {0x12, 0xBA, 0xCF} // Need modify for 11b/g
-    };
+};
 
 BYTE abyAL7230ChannelTable0[CB_MAX_CHANNEL][3] = {
     {0x20, 0x37, 0x90}, // channel =  1, Tf = 2412MHz
@@ -229,7 +229,7 @@ BYTE abyAL7230ChannelTable0[CB_MAX_CHANNEL][3] = {
     {0x2F, 0xF6, 0x00}, // channel = 157, Tf = 5785MHz (54)
     {0x2F, 0xF6, 0x10}, // channel = 161, Tf = 5805MHz (55)
     {0x2F, 0xF6, 0x10} // channel = 165, Tf = 5825MHz (56)
-    };
+};
 
 BYTE abyAL7230ChannelTable1[CB_MAX_CHANNEL][3] = {
     {0x13, 0x33, 0x31}, // channel =  1, Tf = 2412MHz
@@ -293,7 +293,7 @@ BYTE abyAL7230ChannelTable1[CB_MAX_CHANNEL][3] = {
     {0x0D, 0x55, 0x51}, // channel = 157, Tf = 5785MHz (54)
     {0x18, 0x00, 0x01}, // channel = 161, Tf = 5805MHz (55)
     {0x02, 0xAA, 0xB1}  // channel = 165, Tf = 5825MHz (56)
-    };
+};
 
 BYTE abyAL7230ChannelTable2[CB_MAX_CHANNEL][3] = {
     {0x7F, 0xD7, 0x84}, // channel =  1, Tf = 2412MHz
@@ -357,7 +357,7 @@ BYTE abyAL7230ChannelTable2[CB_MAX_CHANNEL][3] = {
     {0x7F, 0xD7, 0x84}, // channel = 157, Tf = 5785MHz (54)
     {0x7F, 0xD7, 0x84}, // channel = 161, Tf = 5805MHz (55)
     {0x7F, 0xD7, 0x84}  // channel = 165, Tf = 5825MHz (56)
-    };
+};
 
 ///{{RobertYu:20051111
 BYTE abyVT3226_InitTable[CB_VT3226_INIT_SEQ][3] = {
@@ -372,7 +372,7 @@ BYTE abyVT3226_InitTable[CB_VT3226_INIT_SEQ][3] = {
     {0x03, 0xF8, 0x08},
     {0x00, 0x02, 0x39},   //RobertYu:20051116
     {0x02, 0x00, 0x2A}
-    };
+};
 
 BYTE abyVT3226D0_InitTable[CB_VT3226_INIT_SEQ][3] = {
     {0x03, 0xFF, 0x80},
@@ -386,7 +386,7 @@ BYTE abyVT3226D0_InitTable[CB_VT3226_INIT_SEQ][3] = {
     {0x00, 0x58, 0x08}, //RobertYu:20060111
     {0x00, 0x02, 0x79}, //RobertYu:20060420
     {0x02, 0x01, 0xAA}  //RobertYu:20060523
-    };
+};
 
 
 BYTE abyVT3226_ChannelTable0[CB_MAX_CHANNEL_24G][3] = {
@@ -404,7 +404,7 @@ BYTE abyVT3226_ChannelTable0[CB_MAX_CHANNEL_24G][3] = {
     {0x01, 0x97, 0xB3}, // channel = 12, Tf = 2467MHz
     {0x01, 0x97, 0xB3}, // channel = 13, Tf = 2472MHz
     {0x03, 0x37, 0xC3}  // channel = 14, Tf = 2484MHz
-    };
+};
 
 BYTE abyVT3226_ChannelTable1[CB_MAX_CHANNEL_24G][3] = {
     {0x02, 0x66, 0x64}, // channel = 1, Tf = 2412MHz
@@ -421,7 +421,7 @@ BYTE abyVT3226_ChannelTable1[CB_MAX_CHANNEL_24G][3] = {
     {0x01, 0x66, 0x64}, // channel = 12, Tf = 2467MHz
     {0x02, 0x66, 0x64}, // channel = 13, Tf = 2472MHz
     {0x00, 0xCC, 0xC4}  // channel = 14, Tf = 2484MHz
-    };
+};
 ///}}RobertYu
 
 
@@ -460,14 +460,14 @@ BYTE abyVT3342A0_InitTable[CB_VT3342_INIT_SEQ][3] = { // 11b/g mode
     {0x02, 0x00, 0xAA},
     {0x00, 0x08, 0xCB},
     {0x01, 0x70, 0x0C}
-    };
+};
 
- //11b/g mode: 0x03, 0xFF, 0x80,
- //11a mode:   0x03, 0xFF, 0xC0,
+//11b/g mode: 0x03, 0xFF, 0x80,
+//11a mode:   0x03, 0xFF, 0xC0,
 
- // channel44, 5220MHz  0x00C402
- // channel56, 5280MHz  0x00C402 for disable Frac
- // other channels 0x00C602
+// channel44, 5220MHz  0x00C402
+// channel56, 5280MHz  0x00C402 for disable Frac
+// other channels 0x00C602
 
 BYTE abyVT3342_ChannelTable0[CB_MAX_CHANNEL][3] = {
     {0x02, 0x05, 0x03}, // channel = 1, Tf = 2412MHz
@@ -533,7 +533,7 @@ BYTE abyVT3342_ChannelTable0[CB_MAX_CHANNEL][3] = {
     {0x02, 0xA6, 0x03}, // channel = 157, Tf = 5785MHz (54)
     {0x00, 0x06, 0x03}, // channel = 161, Tf = 5805MHz (55)
     {0x00, 0x06, 0x03}  // channel = 165, Tf = 5825MHz (56), TBD
-    };
+};
 
 BYTE abyVT3342_ChannelTable1[CB_MAX_CHANNEL][3] = {
     {0x01, 0x99, 0x94}, // channel = 1, Tf = 2412MHz
@@ -597,7 +597,7 @@ BYTE abyVT3342_ChannelTable1[CB_MAX_CHANNEL][3] = {
     {0x01, 0xAA, 0xA4}, // channel = 157, Tf = 5785MHz (54)
     {0x03, 0x00, 0x04}, // channel = 161, Tf = 5805MHz (55)
     {0x03, 0x00, 0x04}  // channel = 165, Tf = 5825MHz (56), TBD
-    };
+};
 
 
 /*+
@@ -671,7 +671,7 @@ const DWORD dwAL2230PowerTable[AL2230_PWR_IDX_LEN] = {
     0x0407D900+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW,
     0x0407E900+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW,
     0x0407F900+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW
-    };
+};
 
 /*---------------------  Static Functions  --------------------------*/
 
@@ -683,7 +683,7 @@ const DWORD dwAL2230PowerTable[AL2230_PWR_IDX_LEN] = {
 // 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 149, 153, 157, 161, 165  (Value 23 ~ 56)
 
 const BYTE RFaby11aChannelIndex[200] = {
-  // 1   2   3   4   5   6   7   8   9  10
+    // 1   2   3   4   5   6   7   8   9  10
     00, 00, 00, 00, 00, 00, 23, 24, 25, 00,  // 10
     26, 27, 00, 00, 00, 28, 00, 00, 00, 00,  // 20
     00, 00, 00, 00, 00, 00, 00, 00, 00, 00,  // 30
@@ -722,8 +722,7 @@ const BYTE RFaby11aChannelIndex[200] = {
  * Return Value: TRUE if succeeded; FALSE if failed.
  *
  */
-BOOL IFRFbWriteEmbeded (PSDevice pDevice, DWORD dwData)
-{
+BOOL IFRFbWriteEmbeded (PSDevice pDevice, DWORD dwData) {
     BYTE        pbyData[4];
 
     pbyData[0] = (BYTE)dwData;
@@ -731,12 +730,12 @@ BOOL IFRFbWriteEmbeded (PSDevice pDevice, DWORD dwData)
     pbyData[2] = (BYTE)(dwData>>16);
     pbyData[3] = (BYTE)(dwData>>24);
     CONTROLnsRequestOut(pDevice,
-                    MESSAGE_TYPE_WRITE_IFRF,
-                    0,
-                    0,
-                    4,
-                    pbyData
-                        );
+                        MESSAGE_TYPE_WRITE_IFRF,
+                        0,
+                        0,
+                        4,
+                        pbyData
+                       );
 
 
     return TRUE;
@@ -757,13 +756,12 @@ BOOL IFRFbWriteEmbeded (PSDevice pDevice, DWORD dwData)
  *
  */
 BOOL RFbSetPower (
-      PSDevice  pDevice,
-      unsigned int      uRATE,
-      unsigned int      uCH
-    )
-{
-BOOL    bResult = TRUE;
-BYTE    byPwr = pDevice->byCCKPwr;
+    PSDevice  pDevice,
+    unsigned int      uRATE,
+    unsigned int      uCH
+) {
+    BOOL    bResult = TRUE;
+    BYTE    byPwr = pDevice->byCCKPwr;
 
     if (pDevice->dwDiagRefCount != 0) {
         return TRUE;
@@ -811,12 +809,11 @@ BYTE    byPwr = pDevice->byCCKPwr;
  *
  */
 BOOL RFbRawSetPower (
-      PSDevice  pDevice,
-      BYTE      byPwr,
-      unsigned int      uRATE
-    )
-{
-BOOL        bResult = TRUE;
+    PSDevice  pDevice,
+    BYTE      byPwr,
+    unsigned int      uRATE
+) {
+    BOOL        bResult = TRUE;
 
     if (pDevice->byCurPwr == byPwr)
         return TRUE;
@@ -825,116 +822,111 @@ BOOL        bResult = TRUE;
 
     switch (pDevice->byRFType) {
 
-        case RF_AL2230 :
-            if (pDevice->byCurPwr >= AL2230_PWR_IDX_LEN)
-                return FALSE;
-            bResult &= IFRFbWriteEmbeded(pDevice, dwAL2230PowerTable[pDevice->byCurPwr]);
-            if (uRATE <= RATE_11M)
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x0001B400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            else
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            break;
+    case RF_AL2230 :
+        if (pDevice->byCurPwr >= AL2230_PWR_IDX_LEN)
+            return FALSE;
+        bResult &= IFRFbWriteEmbeded(pDevice, dwAL2230PowerTable[pDevice->byCurPwr]);
+        if (uRATE <= RATE_11M)
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x0001B400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+        else
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+        break;
 
-        case RF_AL2230S :
-            if (pDevice->byCurPwr >= AL2230_PWR_IDX_LEN)
-                return FALSE;
-            bResult &= IFRFbWriteEmbeded(pDevice, dwAL2230PowerTable[pDevice->byCurPwr]);
-            if (uRATE <= RATE_11M) {
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x040C1400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x00299B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            }else {
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x00099B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            }
-            break;
+    case RF_AL2230S :
+        if (pDevice->byCurPwr >= AL2230_PWR_IDX_LEN)
+            return FALSE;
+        bResult &= IFRFbWriteEmbeded(pDevice, dwAL2230PowerTable[pDevice->byCurPwr]);
+        if (uRATE <= RATE_11M) {
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x040C1400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x00299B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+        } else {
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x00099B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+        }
+        break;
 
 
-        case RF_AIROHA7230:
-            {
-                DWORD       dwMax7230Pwr;
+    case RF_AIROHA7230: {
+        DWORD       dwMax7230Pwr;
 
-                if (uRATE <= RATE_11M) { //RobertYu:20060426, for better 11b mask
-                    bResult &= IFRFbWriteEmbeded(pDevice, 0x111BB900+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
-                }
-                else {
-                    bResult &= IFRFbWriteEmbeded(pDevice, 0x221BB900+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
-                }
+        if (uRATE <= RATE_11M) { //RobertYu:20060426, for better 11b mask
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x111BB900+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
+        } else {
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x221BB900+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
+        }
 
-                if (pDevice->byCurPwr > AL7230_PWR_IDX_LEN) return FALSE;
+        if (pDevice->byCurPwr > AL7230_PWR_IDX_LEN) return FALSE;
 
-                //  0x080F1B00 for 3 wire control TxGain(D10) and 0x31 as TX Gain value
-                dwMax7230Pwr = 0x080C0B00 | ( (pDevice->byCurPwr) << 12 ) |
-                                 (BY_AL7230_REG_LEN << 3 )  | IFREGCTL_REGW;
+        //  0x080F1B00 for 3 wire control TxGain(D10) and 0x31 as TX Gain value
+        dwMax7230Pwr = 0x080C0B00 | ( (pDevice->byCurPwr) << 12 ) |
+                       (BY_AL7230_REG_LEN << 3 )  | IFREGCTL_REGW;
 
-                bResult &= IFRFbWriteEmbeded(pDevice, dwMax7230Pwr);
-                break;
-            }
-            break;
+        bResult &= IFRFbWriteEmbeded(pDevice, dwMax7230Pwr);
+        break;
+    }
+    break;
 
-        case RF_VT3226: //RobertYu:20051111, VT3226C0 and before
-        {
-            DWORD       dwVT3226Pwr;
+    case RF_VT3226: { //RobertYu:20051111, VT3226C0 and before
+        DWORD       dwVT3226Pwr;
 
-            if (pDevice->byCurPwr >= VT3226_PWR_IDX_LEN)
-                return FALSE;
-            dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x17 << 8 ) /* Reg7 */ |
-                           (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
+        if (pDevice->byCurPwr >= VT3226_PWR_IDX_LEN)
+            return FALSE;
+        dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x17 << 8 ) /* Reg7 */ |
+                      (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
+        bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226Pwr);
+        break;
+    }
+
+    case RF_VT3226D0: { //RobertYu:20051228
+        DWORD       dwVT3226Pwr;
+
+        if (pDevice->byCurPwr >= VT3226_PWR_IDX_LEN)
+            return FALSE;
+
+        if (uRATE <= RATE_11M) {
+
+            dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0xE07 << 8 ) /* Reg7 */ |   //RobertYu:20060420, TWIF 1.10
+                          (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
             bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226Pwr);
-            break;
-        }
 
-        case RF_VT3226D0: //RobertYu:20051228
-        {
-            DWORD       dwVT3226Pwr;
-
-            if (pDevice->byCurPwr >= VT3226_PWR_IDX_LEN)
-                return FALSE;
-
-            if (uRATE <= RATE_11M) {
-
-                dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0xE07 << 8 ) /* Reg7 */ |   //RobertYu:20060420, TWIF 1.10
-                               (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
-                bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226Pwr);
-
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x03C6A200+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW);
-                if (pDevice->sMgmtObj.eScanState != WMAC_NO_SCANNING) {
-                    // scanning, the channel number is pDevice->uScanChannel
-                    DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11B mode uCurrChannel[%d]\n", pDevice->sMgmtObj.uScanChannel);
-                    bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226D0LoCurrentTable[pDevice->sMgmtObj.uScanChannel-1]); //RobertYu:20060420, sometimes didn't change channel just set power with different rate
-                } else {
-                    DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11B mode uCurrChannel[%d]\n", pDevice->sMgmtObj.uCurrChannel);
-                    bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226D0LoCurrentTable[pDevice->sMgmtObj.uCurrChannel-1]); //RobertYu:20060420, sometimes didn't change channel just set power with different rate
-                }
-
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x015C0800+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060420, ok now, new switching power (mini-pci can have bigger power consumption)
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x03C6A200+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW);
+            if (pDevice->sMgmtObj.eScanState != WMAC_NO_SCANNING) {
+                // scanning, the channel number is pDevice->uScanChannel
+                DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11B mode uCurrChannel[%d]\n", pDevice->sMgmtObj.uScanChannel);
+                bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226D0LoCurrentTable[pDevice->sMgmtObj.uScanChannel-1]); //RobertYu:20060420, sometimes didn't change channel just set power with different rate
             } else {
-                DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11G mode\n");
-                dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x7 << 8 ) /* Reg7 */ |   //RobertYu:20060420, TWIF 1.10
-                               (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
-                bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226Pwr);
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x00C6A200+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060327
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x016BC600+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060111
-                bResult &= IFRFbWriteEmbeded(pDevice, 0x00900800+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060111
+                DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11B mode uCurrChannel[%d]\n", pDevice->sMgmtObj.uCurrChannel);
+                bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226D0LoCurrentTable[pDevice->sMgmtObj.uCurrChannel-1]); //RobertYu:20060420, sometimes didn't change channel just set power with different rate
             }
-            break;
+
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x015C0800+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060420, ok now, new switching power (mini-pci can have bigger power consumption)
+        } else {
+            DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"@@@@ RFbRawSetPower> 11G mode\n");
+            dwVT3226Pwr = ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x7 << 8 ) /* Reg7 */ |   //RobertYu:20060420, TWIF 1.10
+                          (BY_VT3226_REG_LEN << 3 )  | IFREGCTL_REGW;
+            bResult &= IFRFbWriteEmbeded(pDevice, dwVT3226Pwr);
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x00C6A200+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060327
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x016BC600+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060111
+            bResult &= IFRFbWriteEmbeded(pDevice, 0x00900800+(BY_VT3226_REG_LEN<<3)+IFREGCTL_REGW); //RobertYu:20060111
         }
+        break;
+    }
 
-        //{{RobertYu:20060609
-        case RF_VT3342A0:
-        {
-            DWORD       dwVT3342Pwr;
+    //{{RobertYu:20060609
+    case RF_VT3342A0: {
+        DWORD       dwVT3342Pwr;
 
-            if (pDevice->byCurPwr >= VT3342_PWR_IDX_LEN)
-                return FALSE;
+        if (pDevice->byCurPwr >= VT3342_PWR_IDX_LEN)
+            return FALSE;
 
-            dwVT3342Pwr =  ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x27 << 8 ) /* Reg7 */ |
-                            (BY_VT3342_REG_LEN << 3 )  | IFREGCTL_REGW;
-            bResult &= IFRFbWriteEmbeded(pDevice, dwVT3342Pwr);
-            break;
-        }
+        dwVT3342Pwr =  ((0x3F-pDevice->byCurPwr) << 20 ) | ( 0x27 << 8 ) /* Reg7 */ |
+                       (BY_VT3342_REG_LEN << 3 )  | IFREGCTL_REGW;
+        bResult &= IFRFbWriteEmbeded(pDevice, dwVT3342Pwr);
+        break;
+    }
 
-        default :
-            break;
+    default :
+        break;
     }
     return bResult;
 }
@@ -956,27 +948,26 @@ BOOL        bResult = TRUE;
 -*/
 void
 RFvRSSITodBm (
-      PSDevice pDevice,
-      BYTE     byCurrRSSI,
+    PSDevice pDevice,
+    BYTE     byCurrRSSI,
     long *    pldBm
-    )
-{
+) {
     BYTE byIdx = (((byCurrRSSI & 0xC0) >> 6) & 0x03);
     signed long b = (byCurrRSSI & 0x3F);
     signed long a = 0;
     BYTE abyAIROHARF[4] = {0, 18, 0, 40};
 
     switch (pDevice->byRFType) {
-        case RF_AL2230:
-        case RF_AL2230S:
-        case RF_AIROHA7230:
-        case RF_VT3226: //RobertYu:20051111
-        case RF_VT3226D0:
-        case RF_VT3342A0:   //RobertYu:20060609
-            a = abyAIROHARF[byIdx];
-            break;
-        default:
-            break;
+    case RF_AL2230:
+    case RF_AL2230S:
+    case RF_AIROHA7230:
+    case RF_VT3226: //RobertYu:20051111
+    case RF_VT3226D0:
+    case RF_VT3342A0:   //RobertYu:20060609
+        a = abyAIROHARF[byIdx];
+        break;
+    default:
+        break;
     }
 
     *pldBm = -1 * (a + b * 2);
@@ -986,68 +977,67 @@ RFvRSSITodBm (
 
 void
 RFbRFTableDownload (
-      PSDevice pDevice
-    )
-{
-WORD    wLength1 = 0,wLength2 = 0 ,wLength3 = 0;
-PBYTE   pbyAddr1 = NULL,pbyAddr2 = NULL,pbyAddr3 = NULL;
-WORD    wLength,wValue;
-BYTE    abyArray[256];
+    PSDevice pDevice
+) {
+    WORD    wLength1 = 0,wLength2 = 0 ,wLength3 = 0;
+    PBYTE   pbyAddr1 = NULL,pbyAddr2 = NULL,pbyAddr3 = NULL;
+    WORD    wLength,wValue;
+    BYTE    abyArray[256];
 
     switch ( pDevice->byRFType ) {
-        case RF_AL2230:
-        case RF_AL2230S:
-            wLength1 = CB_AL2230_INIT_SEQ * 3;
-            wLength2 = CB_MAX_CHANNEL_24G * 3;
-            wLength3 = CB_MAX_CHANNEL_24G * 3;
-            pbyAddr1 = &(abyAL2230InitTable[0][0]);
-            pbyAddr2 = &(abyAL2230ChannelTable0[0][0]);
-            pbyAddr3 = &(abyAL2230ChannelTable1[0][0]);
-            break;
-        case RF_AIROHA7230:
-            wLength1 = CB_AL7230_INIT_SEQ * 3;
-            wLength2 = CB_MAX_CHANNEL * 3;
-            wLength3 = CB_MAX_CHANNEL * 3;
-            pbyAddr1 = &(abyAL7230InitTable[0][0]);
-            pbyAddr2 = &(abyAL7230ChannelTable0[0][0]);
-            pbyAddr3 = &(abyAL7230ChannelTable1[0][0]);
-            break;
-        case RF_VT3226: //RobertYu:20051111
-            wLength1 = CB_VT3226_INIT_SEQ * 3;
-            wLength2 = CB_MAX_CHANNEL_24G * 3;
-            wLength3 = CB_MAX_CHANNEL_24G * 3;
-            pbyAddr1 = &(abyVT3226_InitTable[0][0]);
-            pbyAddr2 = &(abyVT3226_ChannelTable0[0][0]);
-            pbyAddr3 = &(abyVT3226_ChannelTable1[0][0]);
-            break;
-        case RF_VT3226D0: //RobertYu:20051114
-            wLength1 = CB_VT3226_INIT_SEQ * 3;
-            wLength2 = CB_MAX_CHANNEL_24G * 3;
-            wLength3 = CB_MAX_CHANNEL_24G * 3;
-            pbyAddr1 = &(abyVT3226D0_InitTable[0][0]);
-            pbyAddr2 = &(abyVT3226_ChannelTable0[0][0]);
-            pbyAddr3 = &(abyVT3226_ChannelTable1[0][0]);
-            break;
-        case RF_VT3342A0: //RobertYu:20060609
-            wLength1 = CB_VT3342_INIT_SEQ * 3;
-            wLength2 = CB_MAX_CHANNEL * 3;
-            wLength3 = CB_MAX_CHANNEL * 3;
-            pbyAddr1 = &(abyVT3342A0_InitTable[0][0]);
-            pbyAddr2 = &(abyVT3342_ChannelTable0[0][0]);
-            pbyAddr3 = &(abyVT3342_ChannelTable1[0][0]);
-            break;
+    case RF_AL2230:
+    case RF_AL2230S:
+        wLength1 = CB_AL2230_INIT_SEQ * 3;
+        wLength2 = CB_MAX_CHANNEL_24G * 3;
+        wLength3 = CB_MAX_CHANNEL_24G * 3;
+        pbyAddr1 = &(abyAL2230InitTable[0][0]);
+        pbyAddr2 = &(abyAL2230ChannelTable0[0][0]);
+        pbyAddr3 = &(abyAL2230ChannelTable1[0][0]);
+        break;
+    case RF_AIROHA7230:
+        wLength1 = CB_AL7230_INIT_SEQ * 3;
+        wLength2 = CB_MAX_CHANNEL * 3;
+        wLength3 = CB_MAX_CHANNEL * 3;
+        pbyAddr1 = &(abyAL7230InitTable[0][0]);
+        pbyAddr2 = &(abyAL7230ChannelTable0[0][0]);
+        pbyAddr3 = &(abyAL7230ChannelTable1[0][0]);
+        break;
+    case RF_VT3226: //RobertYu:20051111
+        wLength1 = CB_VT3226_INIT_SEQ * 3;
+        wLength2 = CB_MAX_CHANNEL_24G * 3;
+        wLength3 = CB_MAX_CHANNEL_24G * 3;
+        pbyAddr1 = &(abyVT3226_InitTable[0][0]);
+        pbyAddr2 = &(abyVT3226_ChannelTable0[0][0]);
+        pbyAddr3 = &(abyVT3226_ChannelTable1[0][0]);
+        break;
+    case RF_VT3226D0: //RobertYu:20051114
+        wLength1 = CB_VT3226_INIT_SEQ * 3;
+        wLength2 = CB_MAX_CHANNEL_24G * 3;
+        wLength3 = CB_MAX_CHANNEL_24G * 3;
+        pbyAddr1 = &(abyVT3226D0_InitTable[0][0]);
+        pbyAddr2 = &(abyVT3226_ChannelTable0[0][0]);
+        pbyAddr3 = &(abyVT3226_ChannelTable1[0][0]);
+        break;
+    case RF_VT3342A0: //RobertYu:20060609
+        wLength1 = CB_VT3342_INIT_SEQ * 3;
+        wLength2 = CB_MAX_CHANNEL * 3;
+        wLength3 = CB_MAX_CHANNEL * 3;
+        pbyAddr1 = &(abyVT3342A0_InitTable[0][0]);
+        pbyAddr2 = &(abyVT3342_ChannelTable0[0][0]);
+        pbyAddr3 = &(abyVT3342_ChannelTable1[0][0]);
+        break;
 
     }
     //Init Table
 
     memcpy(abyArray, pbyAddr1, wLength1);
     CONTROLnsRequestOut(pDevice,
-                    MESSAGE_TYPE_WRITE,
-                    0,
-                    MESSAGE_REQUEST_RF_INIT,
-                    wLength1,
-                    abyArray
-                    );
+                        MESSAGE_TYPE_WRITE,
+                        0,
+                        MESSAGE_REQUEST_RF_INIT,
+                        wLength1,
+                        abyArray
+                       );
     //Channle Table 0
     wValue = 0;
     while ( wLength2 > 0 ) {
@@ -1059,11 +1049,11 @@ BYTE    abyArray[256];
         }
         memcpy(abyArray, pbyAddr2, wLength);
         CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE,
-                        wValue,
-                        MESSAGE_REQUEST_RF_CH0,
-                        wLength,
-                        abyArray);
+                            MESSAGE_TYPE_WRITE,
+                            wValue,
+                            MESSAGE_REQUEST_RF_CH0,
+                            wLength,
+                            abyArray);
 
         wLength2 -= wLength;
         wValue += wLength;
@@ -1080,11 +1070,11 @@ BYTE    abyArray[256];
         }
         memcpy(abyArray, pbyAddr3, wLength);
         CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE,
-                        wValue,
-                        MESSAGE_REQUEST_RF_CH1,
-                        wLength,
-                        abyArray);
+                            MESSAGE_TYPE_WRITE,
+                            wValue,
+                            MESSAGE_REQUEST_RF_CH1,
+                            wLength,
+                            abyArray);
 
         wLength3 -= wLength;
         wValue += wLength;
@@ -1100,11 +1090,11 @@ BYTE    abyArray[256];
         memcpy(abyArray, pbyAddr1, wLength1);
         //Init Table 2
         CONTROLnsRequestOut(pDevice,
-                    MESSAGE_TYPE_WRITE,
-                    0,
-                    MESSAGE_REQUEST_RF_INIT2,
-                    wLength1,
-                    abyArray);
+                            MESSAGE_TYPE_WRITE,
+                            0,
+                            MESSAGE_REQUEST_RF_INIT2,
+                            wLength1,
+                            abyArray);
 
         //Channle Table 0
         wValue = 0;
@@ -1117,11 +1107,11 @@ BYTE    abyArray[256];
             }
             memcpy(abyArray, pbyAddr2, wLength);
             CONTROLnsRequestOut(pDevice,
-                            MESSAGE_TYPE_WRITE,
-                            wValue,
-                            MESSAGE_REQUEST_RF_CH2,
-                            wLength,
-                            abyArray);
+                                MESSAGE_TYPE_WRITE,
+                                wValue,
+                                MESSAGE_REQUEST_RF_CH2,
+                                wLength,
+                                abyArray);
 
             wLength2 -= wLength;
             wValue += wLength;
@@ -1133,10 +1123,9 @@ BYTE    abyArray[256];
 
 // RobertYu:20060412, TWIF1.11 adjust LO Current for 11b mode
 BOOL s_bVT3226D0_11bLoCurrentAdjust(
-      PSDevice    pDevice,
-      BYTE        byChannel,
-      BOOL        b11bMode)
-{
+    PSDevice    pDevice,
+    BYTE        byChannel,
+    BOOL        b11bMode) {
     BOOL    bResult;
 
     bResult = TRUE;

@@ -23,24 +23,24 @@
 #define CSID_NUM_CLK_MAX  16
 
 enum msm_csid_state_t {
-	CSID_POWER_UP,
-	CSID_POWER_DOWN,
+    CSID_POWER_UP,
+    CSID_POWER_DOWN,
 };
 
 struct csid_device {
-	struct platform_device *pdev;
-	struct msm_sd_subdev msm_sd;
-	struct resource *mem;
-	struct resource *irq;
-	struct resource *io;
-	struct regulator *csi_vdd;
-	void __iomem *base;
-	struct mutex mutex;
-	struct completion reset_complete;
-	uint32_t hw_version;
-	enum msm_csid_state_t csid_state;
+    struct platform_device *pdev;
+    struct msm_sd_subdev msm_sd;
+    struct resource *mem;
+    struct resource *irq;
+    struct resource *io;
+    struct regulator *csi_vdd;
+    void __iomem *base;
+    struct mutex mutex;
+    struct completion reset_complete;
+    uint32_t hw_version;
+    enum msm_csid_state_t csid_state;
 
-	struct clk *csid_clk[CSID_NUM_CLK_MAX];
+    struct clk *csid_clk[CSID_NUM_CLK_MAX];
 };
 
 #define VIDIOC_MSM_CSID_RELEASE \

@@ -14,19 +14,18 @@
 #ifndef __IXP2400_MSF_H
 #define __IXP2400_MSF_H
 
-struct ixp2400_msf_parameters
-{
-	u32				rx_mode;
-	unsigned			rxclk01_multiplier:2;
-	unsigned			rxclk23_multiplier:2;
-	unsigned			rx_poll_ports:6;
-	u32				rx_channel_mode[4];
+struct ixp2400_msf_parameters {
+    u32				rx_mode;
+    unsigned			rxclk01_multiplier:2;
+    unsigned			rxclk23_multiplier:2;
+    unsigned			rx_poll_ports:6;
+    u32				rx_channel_mode[4];
 
-	u32				tx_mode;
-	unsigned			txclk01_multiplier:2;
-	unsigned			txclk23_multiplier:2;
-	unsigned			tx_poll_ports:6;
-	u32				tx_channel_mode[4];
+    u32				tx_mode;
+    unsigned			txclk01_multiplier:2;
+    unsigned			txclk23_multiplier:2;
+    unsigned			tx_poll_ports:6;
+    u32				tx_channel_mode[4];
 };
 
 void ixp2400_msf_init(struct ixp2400_msf_parameters *mp);

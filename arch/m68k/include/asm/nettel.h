@@ -4,8 +4,8 @@
  *	nettel.h -- Lineo (formerly Moreton Bay) NETtel support.
  *
  *	(C) Copyright 1999-2000, Moreton Bay (www.moretonbay.com)
- * 	(C) Copyright 2000-2001, Lineo Inc. (www.lineo.com) 
- * 	(C) Copyright 2001-2002, SnapGear Inc., (www.snapgear.com) 
+ * 	(C) Copyright 2000-2001, Lineo Inc. (www.lineo.com)
+ * 	(C) Copyright 2001-2002, SnapGear Inc., (www.snapgear.com)
  */
 
 /****************************************************************************/
@@ -45,19 +45,17 @@ extern volatile unsigned short ppdata;
  *	These functions defined to give quasi generic access to the
  *	PPIO bits used for DTR/DCD.
  */
-static __inline__ unsigned int mcf_getppdata(void)
-{
-	volatile unsigned short *pp;
-	pp = (volatile unsigned short *) MCFSIM_PADAT;
-	return((unsigned int) *pp);
+static __inline__ unsigned int mcf_getppdata(void) {
+    volatile unsigned short *pp;
+    pp = (volatile unsigned short *) MCFSIM_PADAT;
+    return((unsigned int) *pp);
 }
 
-static __inline__ void mcf_setppdata(unsigned int mask, unsigned int bits)
-{
-	volatile unsigned short *pp;
-	pp = (volatile unsigned short *) MCFSIM_PADAT;
-	ppdata = (ppdata & ~mask) | bits;
-	*pp = ppdata;
+static __inline__ void mcf_setppdata(unsigned int mask, unsigned int bits) {
+    volatile unsigned short *pp;
+    pp = (volatile unsigned short *) MCFSIM_PADAT;
+    ppdata = (ppdata & ~mask) | bits;
+    *pp = ppdata;
 }
 #endif
 
@@ -84,18 +82,16 @@ static __inline__ void mcf_setppdata(unsigned int mask, unsigned int bits)
  *	These functions defined to give quasi generic access to the
  *	PPIO bits used for DTR/DCD.
  */
-static __inline__ unsigned int mcf_getppdata(void)
-{
-	volatile unsigned short *pp;
-	pp = (volatile unsigned short *) (MCF_MBAR + MCFSIM_PBDAT);
-	return((unsigned int) *pp);
+static __inline__ unsigned int mcf_getppdata(void) {
+    volatile unsigned short *pp;
+    pp = (volatile unsigned short *) (MCF_MBAR + MCFSIM_PBDAT);
+    return((unsigned int) *pp);
 }
 
-static __inline__ void mcf_setppdata(unsigned int mask, unsigned int bits)
-{
-	volatile unsigned short *pp;
-	pp = (volatile unsigned short *) (MCF_MBAR + MCFSIM_PBDAT);
-	*pp = (*pp & ~mask) | bits;
+static __inline__ void mcf_setppdata(unsigned int mask, unsigned int bits) {
+    volatile unsigned short *pp;
+    pp = (volatile unsigned short *) (MCF_MBAR + MCFSIM_PBDAT);
+    *pp = (*pp & ~mask) | bits;
 }
 #endif
 

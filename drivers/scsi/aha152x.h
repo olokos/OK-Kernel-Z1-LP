@@ -252,24 +252,24 @@
 /* On the AHA-152x board PORTA and PORTB contain
    some information about the board's configuration. */
 typedef union {
-  struct {
-    unsigned reserved:2;    /* reserved */
-    unsigned tardisc:1;     /* Target disconnect: 0=disabled, 1=enabled */
-    unsigned syncneg:1;     /* Initial sync neg: 0=disabled, 1=enabled */
-    unsigned msgclasses:2;  /* Message classes
+    struct {
+        unsigned reserved:2;    /* reserved */
+        unsigned tardisc:1;     /* Target disconnect: 0=disabled, 1=enabled */
+        unsigned syncneg:1;     /* Initial sync neg: 0=disabled, 1=enabled */
+        unsigned msgclasses:2;  /* Message classes
                                  0=#4
                                  1=#0, #1, #2, #3, #4
                                  2=#0, #3, #4
                                  3=#0, #4
                              */
-    unsigned boot:1;        /* boot: 0=disabled, 1=enabled */
-    unsigned dma:1;         /* Transfer mode: 0=PIO; 1=DMA */
-    unsigned id:3;          /* SCSI-id */
-    unsigned irq:2;         /* IRQ-Channel: 0,3=12, 1=10, 2=11 */
-    unsigned dmachan:2;     /* DMA-Channel: 0=0, 1=5, 2=6, 3=7 */
-    unsigned parity:1;      /* SCSI-parity: 1=enabled 0=disabled */
-  } fields;
-  unsigned short port;
+        unsigned boot:1;        /* boot: 0=disabled, 1=enabled */
+        unsigned dma:1;         /* Transfer mode: 0=PIO; 1=DMA */
+        unsigned id:3;          /* SCSI-id */
+        unsigned irq:2;         /* IRQ-Channel: 0,3=12, 1=10, 2=11 */
+        unsigned dmachan:2;     /* DMA-Channel: 0=0, 1=5, 2=6, 3=7 */
+        unsigned parity:1;      /* SCSI-parity: 1=enabled 0=disabled */
+    } fields;
+    unsigned short port;
 } aha152x_config ;
 
 #define cf_parity     fields.parity
@@ -296,38 +296,38 @@ typedef union {
 
 #if defined(AHA152X_DEBUG)
 enum {
-  debug_procinfo  = 0x0001,
-  debug_queue     = 0x0002,
-  debug_locking   = 0x0004,
-  debug_intr      = 0x0008,
-  debug_selection = 0x0010,
-  debug_msgo      = 0x0020,
-  debug_msgi      = 0x0040,
-  debug_status    = 0x0080,
-  debug_cmd       = 0x0100,
-  debug_datai     = 0x0200,
-  debug_datao     = 0x0400,
-  debug_eh	  = 0x0800,
-  debug_done      = 0x1000,
-  debug_phases    = 0x2000,
+    debug_procinfo  = 0x0001,
+    debug_queue     = 0x0002,
+    debug_locking   = 0x0004,
+    debug_intr      = 0x0008,
+    debug_selection = 0x0010,
+    debug_msgo      = 0x0020,
+    debug_msgi      = 0x0040,
+    debug_status    = 0x0080,
+    debug_cmd       = 0x0100,
+    debug_datai     = 0x0200,
+    debug_datao     = 0x0400,
+    debug_eh	  = 0x0800,
+    debug_done      = 0x1000,
+    debug_phases    = 0x2000,
 };
 #endif
 
 /* for the pcmcia stub */
 struct aha152x_setup {
-	int io_port;
-	int irq;
-	int scsiid;
-	int reconnect;
-	int parity;
-	int synchronous;
-	int delay;
-	int ext_trans;
-	int tc1550;
+    int io_port;
+    int irq;
+    int scsiid;
+    int reconnect;
+    int parity;
+    int synchronous;
+    int delay;
+    int ext_trans;
+    int tc1550;
 #if defined(AHA152X_DEBUG)
-	int debug;
+    int debug;
 #endif
-	char *conf;
+    char *conf;
 };
 
 struct Scsi_Host *aha152x_probe_one(struct aha152x_setup *);

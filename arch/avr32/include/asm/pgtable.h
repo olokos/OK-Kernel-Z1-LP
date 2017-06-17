@@ -193,73 +193,60 @@ extern struct page *empty_zero_page;
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_RW;
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_RW;
 }
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_DIRTY;
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_DIRTY;
 }
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_ACCESSED;
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
 }
-static inline int pte_special(pte_t pte)
-{
-	return 0;
+static inline int pte_special(pte_t pte) {
+    return 0;
 }
 
 /*
  * The following only work if pte_present() is not true.
  */
-static inline int pte_file(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_FILE;
+static inline int pte_file(pte_t pte) {
+    return pte_val(pte) & _PAGE_FILE;
 }
 
 /* Mutator functions for PTE bits */
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_RW));
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_RW));
+    return pte;
 }
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_DIRTY));
-	return pte;
+static inline pte_t pte_mkclean(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_DIRTY));
+    return pte;
 }
-static inline pte_t pte_mkold(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_ACCESSED));
-	return pte;
+static inline pte_t pte_mkold(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) & ~_PAGE_ACCESSED));
+    return pte;
 }
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) | _PAGE_RW));
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_RW));
+    return pte;
 }
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) | _PAGE_DIRTY));
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_DIRTY));
+    return pte;
 }
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	set_pte(&pte, __pte(pte_val(pte) | _PAGE_ACCESSED));
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    set_pte(&pte, __pte(pte_val(pte) | _PAGE_ACCESSED));
+    return pte;
 }
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	return pte;
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
 }
 
 #define pmd_none(x)	(!pmd_val(x))
 #define pmd_present(x)	(pmd_val(x))
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	set_pmd(pmdp, __pmd(0));
+static inline void pmd_clear(pmd_t *pmdp) {
+    set_pmd(pmdp, __pmd(0));
 }
 
 #define	pmd_bad(x)	(pmd_val(x) & ~PAGE_MASK)
@@ -291,11 +278,10 @@ static inline void pmd_clear(pmd_t *pmdp)
  */
 #define mk_pte(page, pgprot)	pfn_pte(page_to_pfn(page), (pgprot))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK)
-			    | pgprot_val(newprot)));
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK)
+                        | pgprot_val(newprot)));
+    return pte;
 }
 
 #define page_pte(page)	page_pte_prot(page, __pgprot(0))
@@ -323,7 +309,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 
 struct vm_area_struct;
 extern void update_mmu_cache(struct vm_area_struct * vma,
-			     unsigned long address, pte_t *ptep);
+                             unsigned long address, pte_t *ptep);
 
 /*
  * Encode and decode a swap entry

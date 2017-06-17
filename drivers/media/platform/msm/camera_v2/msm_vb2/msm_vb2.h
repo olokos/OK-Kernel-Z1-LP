@@ -34,33 +34,33 @@
 #include "msm_sd.h"
 
 struct msm_vb2_buffer {
-	/*
-	 * vb2 buffer has to be first in the structure
-	 * because both v4l2 frameworks and driver directly
-	 * cast msm_vb2_buffer to a vb2_buf.
-	 */
-	struct vb2_buffer vb2_buf;
-	struct list_head list;
-	int in_freeq;
+    /*
+     * vb2 buffer has to be first in the structure
+     * because both v4l2 frameworks and driver directly
+     * cast msm_vb2_buffer to a vb2_buf.
+     */
+    struct vb2_buffer vb2_buf;
+    struct list_head list;
+    int in_freeq;
 };
 
 struct msm_vb2_private_data {
-	void *vaddr;
-	unsigned long size;
-	/* Offset of the plane inside the buffer */
-	void *alloc_ctx;
+    void *vaddr;
+    unsigned long size;
+    /* Offset of the plane inside the buffer */
+    void *alloc_ctx;
 };
 
 struct msm_stream {
-	struct list_head list;
+    struct list_head list;
 
-	/* stream index per session, same
-	 * as stream_id but set through s_parm */
-	unsigned int stream_id;
-	/* vb2 buffer handling */
-	struct vb2_queue *vb2_q;
-	spinlock_t stream_lock;
-	struct list_head queued_list;
+    /* stream index per session, same
+     * as stream_id but set through s_parm */
+    unsigned int stream_id;
+    /* vb2 buffer handling */
+    struct vb2_queue *vb2_q;
+    spinlock_t stream_lock;
+    struct list_head queued_list;
 };
 
 struct vb2_ops *msm_vb2_get_q_ops(void);

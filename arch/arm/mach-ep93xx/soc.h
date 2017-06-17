@@ -200,14 +200,12 @@
 void ep93xx_syscon_swlocked_write(unsigned int val, void __iomem *reg);
 void ep93xx_devcfg_set_clear(unsigned int set_bits, unsigned int clear_bits);
 
-static inline void ep93xx_devcfg_set_bits(unsigned int bits)
-{
-	ep93xx_devcfg_set_clear(bits, 0x00);
+static inline void ep93xx_devcfg_set_bits(unsigned int bits) {
+    ep93xx_devcfg_set_clear(bits, 0x00);
 }
 
-static inline void ep93xx_devcfg_clear_bits(unsigned int bits)
-{
-	ep93xx_devcfg_set_clear(0x00, bits);
+static inline void ep93xx_devcfg_clear_bits(unsigned int bits) {
+    ep93xx_devcfg_set_clear(0x00, bits);
 }
 
 #endif /* _EP93XX_SOC_H */

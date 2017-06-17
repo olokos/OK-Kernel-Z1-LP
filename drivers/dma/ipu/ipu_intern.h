@@ -146,22 +146,22 @@
 #define TASK_STAT_WAIT4READY	2
 
 struct idmac {
-	struct dma_device	dma;
+    struct dma_device	dma;
 };
 
 struct ipu {
-	void __iomem		*reg_ipu;
-	void __iomem		*reg_ic;
-	unsigned int		irq_fn;		/* IPU Function IRQ to the CPU */
-	unsigned int		irq_err;	/* IPU Error IRQ to the CPU */
-	unsigned int		irq_base;	/* Beginning of the IPU IRQ range */
-	unsigned long		channel_init_mask;
-	spinlock_t		lock;
-	struct clk		*ipu_clk;
-	struct device		*dev;
-	struct idmac		idmac;
-	struct idmac_channel	channel[IPU_CHANNELS_NUM];
-	struct tasklet_struct	tasklet;
+    void __iomem		*reg_ipu;
+    void __iomem		*reg_ic;
+    unsigned int		irq_fn;		/* IPU Function IRQ to the CPU */
+    unsigned int		irq_err;	/* IPU Error IRQ to the CPU */
+    unsigned int		irq_base;	/* Beginning of the IPU IRQ range */
+    unsigned long		channel_init_mask;
+    spinlock_t		lock;
+    struct clk		*ipu_clk;
+    struct device		*dev;
+    struct idmac		idmac;
+    struct idmac_channel	channel[IPU_CHANNELS_NUM];
+    struct tasklet_struct	tasklet;
 };
 
 #define to_idmac(d) container_of(d, struct idmac, dma)

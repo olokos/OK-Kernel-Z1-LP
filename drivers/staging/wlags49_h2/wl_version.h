@@ -90,7 +90,8 @@
 #elif defined BUS_PCI
 #define BUS_TYPE            "PCI"
 #else
-err: define bus type;
+err:
+define bus type;
 #endif  // BUS_XXX
 
 #if defined HERMES25

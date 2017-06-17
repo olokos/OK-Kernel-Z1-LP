@@ -29,10 +29,10 @@ extern struct mhl_msm_state_t *mhl_msm_state;
 
 int mhl_i2c_reg_read(uint8_t slave_addr_index, uint8_t reg_offset);
 int mhl_i2c_reg_write(uint8_t slave_addr_index, uint8_t reg_offset,
-	uint8_t value);
+                      uint8_t value);
 int mhl_i2c_reg_write_cmds(uint8_t slave_addr_index, uint8_t reg_offset,
-	uint8_t *value, uint16_t count);
+                           uint8_t *value, uint16_t count);
 void mhl_i2c_reg_modify(uint8_t slave_addr_index, uint8_t reg_offset,
-	uint8_t mask, uint8_t val);
+                        uint8_t mask, uint8_t val);
 
 #endif /* __MHL_I2C_UTILS_H__ */

@@ -87,16 +87,30 @@ typedef unsigned long pte_basic_t;
  * These are used to make use of C type-checking..
  */
 typedef struct page *pgtable_t;
-typedef struct { unsigned long	pte; }		pte_t;
-typedef struct { unsigned long	pgprot; }	pgprot_t;
+typedef struct {
+    unsigned long	pte;
+}		pte_t;
+typedef struct {
+    unsigned long	pgprot;
+}	pgprot_t;
 /* FIXME this can depend on linux kernel version */
 #   ifdef CONFIG_MMU
-typedef struct { unsigned long pmd; } pmd_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #   else /* CONFIG_MMU */
-typedef struct { unsigned long	ste[64]; }	pmd_t;
-typedef struct { pmd_t		pue[1]; }	pud_t;
-typedef struct { pud_t		pge[1]; }	pgd_t;
+typedef struct {
+    unsigned long	ste[64];
+}	pmd_t;
+typedef struct {
+    pmd_t		pue[1];
+}	pud_t;
+typedef struct {
+    pud_t		pge[1];
+}	pgd_t;
 #   endif /* CONFIG_MMU */
 
 # define pte_val(x)	((x).pte)

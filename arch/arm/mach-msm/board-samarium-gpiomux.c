@@ -18,36 +18,35 @@
 #include <mach/gpiomux.h>
 
 static struct gpiomux_setting gpio_uart_config = {
-	.func = GPIOMUX_FUNC_2,
-	.drv = GPIOMUX_DRV_16MA,
-	.pull = GPIOMUX_PULL_NONE,
-	.dir = GPIOMUX_OUT_HIGH,
+    .func = GPIOMUX_FUNC_2,
+    .drv = GPIOMUX_DRV_16MA,
+    .pull = GPIOMUX_PULL_NONE,
+    .dir = GPIOMUX_OUT_HIGH,
 };
 
 static struct msm_gpiomux_config msm_blsp_configs[] __initdata = {
-	{
-		.gpio      = 4,	       /* BLSP2 UART TX */
-		.settings = {
-			[GPIOMUX_SUSPENDED] = &gpio_uart_config,
-		},
-	},
-	{
-		.gpio      = 5,	       /* BLSP2 UART RX */
-		.settings = {
-			[GPIOMUX_SUSPENDED] = &gpio_uart_config,
-		},
-	},
+    {
+        .gpio      = 4,	       /* BLSP2 UART TX */
+        .settings = {
+            [GPIOMUX_SUSPENDED] = &gpio_uart_config,
+        },
+    },
+    {
+        .gpio      = 5,	       /* BLSP2 UART RX */
+        .settings = {
+            [GPIOMUX_SUSPENDED] = &gpio_uart_config,
+        },
+    },
 };
 
-void __init msmsamarium_init_gpiomux(void)
-{
-	int rc;
+void __init msmsamarium_init_gpiomux(void) {
+    int rc;
 
-	rc = msm_gpiomux_init_dt();
-	if (rc) {
-		pr_err("%s failed %d\n", __func__, rc);
-		return;
-	}
+    rc = msm_gpiomux_init_dt();
+    if (rc) {
+        pr_err("%s failed %d\n", __func__, rc);
+        return;
+    }
 
-	msm_gpiomux_install(msm_blsp_configs, ARRAY_SIZE(msm_blsp_configs));
+    msm_gpiomux_install(msm_blsp_configs, ARRAY_SIZE(msm_blsp_configs));
 }

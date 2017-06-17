@@ -128,9 +128,9 @@ void unset_dram_srfs(void);
 #define CPUFREQ_CPU 0
 #endif
 struct bfin_dpmc_platform_data {
-	const unsigned int *tuple_tab;
-	unsigned short tabsize;
-	unsigned short vr_settling_time; /* in us */
+    const unsigned int *tuple_tab;
+    unsigned short tabsize;
+    unsigned short vr_settling_time; /* in us */
 };
 
 #endif

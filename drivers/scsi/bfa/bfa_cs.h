@@ -46,37 +46,37 @@
 
 struct bfa_trc_s {
 #ifdef __BIG_ENDIAN
-	u16	fileno;
-	u16	line;
+    u16	fileno;
+    u16	line;
 #else
-	u16	line;
-	u16	fileno;
+    u16	line;
+    u16	fileno;
 #endif
-	u32	timestamp;
-	union {
-		struct {
-			u32	rsvd;
-			u32	u32;
-		} u32;
-		u64	u64;
-	} data;
+    u32	timestamp;
+    union {
+        struct {
+            u32	rsvd;
+            u32	u32;
+        } u32;
+        u64	u64;
+    } data;
 };
 
 struct bfa_trc_mod_s {
-	u32	head;
-	u32	tail;
-	u32	ntrc;
-	u32	stopped;
-	u32	ticks;
-	u32	rsvd[3];
-	struct bfa_trc_s trc[BFA_TRC_MAX];
+    u32	head;
+    u32	tail;
+    u32	ntrc;
+    u32	stopped;
+    u32	ticks;
+    u32	rsvd[3];
+    struct bfa_trc_s trc[BFA_TRC_MAX];
 };
 
 enum {
-	BFA_TRC_HAL  = 1,	/*  BFA modules */
-	BFA_TRC_FCS  = 2,	/*  BFA FCS modules */
-	BFA_TRC_LDRV = 3,	/*  Linux driver modules */
-	BFA_TRC_CNA  = 4,	/*  Common modules */
+    BFA_TRC_HAL  = 1,	/*  BFA modules */
+    BFA_TRC_FCS  = 2,	/*  BFA FCS modules */
+    BFA_TRC_LDRV = 3,	/*  Linux driver modules */
+    BFA_TRC_CNA  = 4,	/*  Common modules */
 };
 #define BFA_TRC_MOD_SH	10
 #define BFA_TRC_MOD(__mod)	((BFA_TRC_ ## __mod) << BFA_TRC_MOD_SH)
@@ -95,55 +95,51 @@ enum {
 	__bfa_trc((_trcp)->trcmod, __trc_fileno, __LINE__, (u64)_data)
 
 static inline void
-bfa_trc_init(struct bfa_trc_mod_s *trcm)
-{
-	trcm->head = trcm->tail = trcm->stopped = 0;
-	trcm->ntrc = BFA_TRC_MAX;
+bfa_trc_init(struct bfa_trc_mod_s *trcm) {
+    trcm->head = trcm->tail = trcm->stopped = 0;
+    trcm->ntrc = BFA_TRC_MAX;
 }
 
 static inline void
-bfa_trc_stop(struct bfa_trc_mod_s *trcm)
-{
-	trcm->stopped = 1;
+bfa_trc_stop(struct bfa_trc_mod_s *trcm) {
+    trcm->stopped = 1;
 }
 
 static inline void
-__bfa_trc(struct bfa_trc_mod_s *trcm, int fileno, int line, u64 data)
-{
-	int		tail = trcm->tail;
-	struct bfa_trc_s	*trc = &trcm->trc[tail];
+__bfa_trc(struct bfa_trc_mod_s *trcm, int fileno, int line, u64 data) {
+    int		tail = trcm->tail;
+    struct bfa_trc_s	*trc = &trcm->trc[tail];
 
-	if (trcm->stopped)
-		return;
+    if (trcm->stopped)
+        return;
 
-	trc->fileno = (u16) fileno;
-	trc->line = (u16) line;
-	trc->data.u64 = data;
-	trc->timestamp = BFA_TRC_TS(trcm);
+    trc->fileno = (u16) fileno;
+    trc->line = (u16) line;
+    trc->data.u64 = data;
+    trc->timestamp = BFA_TRC_TS(trcm);
 
-	trcm->tail = (trcm->tail + 1) & (BFA_TRC_MAX - 1);
-	if (trcm->tail == trcm->head)
-		trcm->head = (trcm->head + 1) & (BFA_TRC_MAX - 1);
+    trcm->tail = (trcm->tail + 1) & (BFA_TRC_MAX - 1);
+    if (trcm->tail == trcm->head)
+        trcm->head = (trcm->head + 1) & (BFA_TRC_MAX - 1);
 }
 
 
 static inline void
-__bfa_trc32(struct bfa_trc_mod_s *trcm, int fileno, int line, u32 data)
-{
-	int		tail = trcm->tail;
-	struct bfa_trc_s *trc = &trcm->trc[tail];
+__bfa_trc32(struct bfa_trc_mod_s *trcm, int fileno, int line, u32 data) {
+    int		tail = trcm->tail;
+    struct bfa_trc_s *trc = &trcm->trc[tail];
 
-	if (trcm->stopped)
-		return;
+    if (trcm->stopped)
+        return;
 
-	trc->fileno = (u16) fileno;
-	trc->line = (u16) line;
-	trc->data.u32.u32 = data;
-	trc->timestamp = BFA_TRC_TS(trcm);
+    trc->fileno = (u16) fileno;
+    trc->line = (u16) line;
+    trc->data.u32.u32 = data;
+    trc->timestamp = BFA_TRC_TS(trcm);
 
-	trcm->tail = (trcm->tail + 1) & (BFA_TRC_MAX - 1);
-	if (trcm->tail == trcm->head)
-		trcm->head = (trcm->head + 1) & (BFA_TRC_MAX - 1);
+    trcm->tail = (trcm->tail + 1) & (BFA_TRC_MAX - 1);
+    if (trcm->tail == trcm->head)
+        trcm->head = (trcm->head + 1) & (BFA_TRC_MAX - 1);
 }
 
 #define bfa_sm_fault(__mod, __event)	do {				\
@@ -194,19 +190,18 @@ __bfa_trc32(struct bfa_trc_mod_s *trcm, int fileno, int line, u32 data)
 }
 
 static inline int
-bfa_q_is_on_q_func(struct list_head *q, struct list_head *qe)
-{
-	struct list_head        *tqe;
+bfa_q_is_on_q_func(struct list_head *q, struct list_head *qe) {
+    struct list_head        *tqe;
 
-	tqe = bfa_q_next(q);
-	while (tqe != q) {
-		if (tqe == qe)
-			return 1;
-		tqe = bfa_q_next(tqe);
-		if (tqe == NULL)
-			break;
-	}
-	return 0;
+    tqe = bfa_q_next(q);
+    while (tqe != q) {
+        if (tqe == qe)
+            return 1;
+        tqe = bfa_q_next(tqe);
+        if (tqe == NULL)
+            break;
+    }
+    return 0;
 }
 
 #define bfa_q_is_on_q(_q, _qe)      \
@@ -236,9 +231,9 @@ typedef void (*bfa_sm_t)(void *sm, int event);
  * For converting from state machine function to state encoding.
  */
 struct bfa_sm_table_s {
-	bfa_sm_t	sm;	/*  state machine function	*/
-	int		state;	/*  state machine encoding	*/
-	char		*name;	/*  state name for display	*/
+    bfa_sm_t	sm;	/*  state machine function	*/
+    int		state;	/*  state machine encoding	*/
+    char		*name;	/*  state name for display	*/
 };
 #define BFA_SM(_sm)	((bfa_sm_t)(_sm))
 
@@ -268,13 +263,12 @@ typedef void (*bfa_fsm_t)(void *fsm, int event);
 	((_fsm)->fsm == (bfa_fsm_t)(_state))
 
 static inline int
-bfa_sm_to_state(struct bfa_sm_table_s *smt, bfa_sm_t sm)
-{
-	int	i = 0;
+bfa_sm_to_state(struct bfa_sm_table_s *smt, bfa_sm_t sm) {
+    int	i = 0;
 
-	while (smt[i].sm && smt[i].sm != sm)
-		i++;
-	return smt[i].state;
+    while (smt[i].sm && smt[i].sm != sm)
+        i++;
+    return smt[i].state;
 }
 
 /*
@@ -284,70 +278,64 @@ bfa_sm_to_state(struct bfa_sm_table_s *smt, bfa_sm_t sm)
 typedef void (*bfa_wc_resume_t) (void *cbarg);
 
 struct bfa_wc_s {
-	bfa_wc_resume_t wc_resume;
-	void		*wc_cbarg;
-	int		wc_count;
+    bfa_wc_resume_t wc_resume;
+    void		*wc_cbarg;
+    int		wc_count;
 };
 
 static inline void
-bfa_wc_up(struct bfa_wc_s *wc)
-{
-	wc->wc_count++;
+bfa_wc_up(struct bfa_wc_s *wc) {
+    wc->wc_count++;
 }
 
 static inline void
-bfa_wc_down(struct bfa_wc_s *wc)
-{
-	wc->wc_count--;
-	if (wc->wc_count == 0)
-		wc->wc_resume(wc->wc_cbarg);
+bfa_wc_down(struct bfa_wc_s *wc) {
+    wc->wc_count--;
+    if (wc->wc_count == 0)
+        wc->wc_resume(wc->wc_cbarg);
 }
 
 /*
  * Initialize a waiting counter.
  */
 static inline void
-bfa_wc_init(struct bfa_wc_s *wc, bfa_wc_resume_t wc_resume, void *wc_cbarg)
-{
-	wc->wc_resume = wc_resume;
-	wc->wc_cbarg = wc_cbarg;
-	wc->wc_count = 0;
-	bfa_wc_up(wc);
+bfa_wc_init(struct bfa_wc_s *wc, bfa_wc_resume_t wc_resume, void *wc_cbarg) {
+    wc->wc_resume = wc_resume;
+    wc->wc_cbarg = wc_cbarg;
+    wc->wc_count = 0;
+    bfa_wc_up(wc);
 }
 
 /*
  * Wait for counter to reach zero
  */
 static inline void
-bfa_wc_wait(struct bfa_wc_s *wc)
-{
-	bfa_wc_down(wc);
+bfa_wc_wait(struct bfa_wc_s *wc) {
+    bfa_wc_down(wc);
 }
 
 static inline void
-wwn2str(char *wwn_str, u64 wwn)
-{
-	union {
-		u64 wwn;
-		u8 byte[8];
-	} w;
+wwn2str(char *wwn_str, u64 wwn) {
+    union {
+        u64 wwn;
+        u8 byte[8];
+    } w;
 
-	w.wwn = wwn;
-	sprintf(wwn_str, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", w.byte[0],
-		w.byte[1], w.byte[2], w.byte[3], w.byte[4], w.byte[5],
-		w.byte[6], w.byte[7]);
+    w.wwn = wwn;
+    sprintf(wwn_str, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", w.byte[0],
+            w.byte[1], w.byte[2], w.byte[3], w.byte[4], w.byte[5],
+            w.byte[6], w.byte[7]);
 }
 
 static inline void
-fcid2str(char *fcid_str, u32 fcid)
-{
-	union {
-		u32 fcid;
-		u8 byte[4];
-	} f;
+fcid2str(char *fcid_str, u32 fcid) {
+    union {
+        u32 fcid;
+        u8 byte[4];
+    } f;
 
-	f.fcid = fcid;
-	sprintf(fcid_str, "%02x:%02x:%02x", f.byte[1], f.byte[2], f.byte[3]);
+    f.fcid = fcid;
+    sprintf(fcid_str, "%02x:%02x:%02x", f.byte[1], f.byte[2], f.byte[3]);
 }
 
 #define bfa_swap_3b(_x)				\

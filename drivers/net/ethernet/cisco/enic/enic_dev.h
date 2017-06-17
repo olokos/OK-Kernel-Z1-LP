@@ -43,7 +43,7 @@ int enic_dev_stats_dump(struct enic *enic, struct vnic_stats **vstats);
 int enic_dev_add_station_addr(struct enic *enic);
 int enic_dev_del_station_addr(struct enic *enic);
 int enic_dev_packet_filter(struct enic *enic, int directed, int multicast,
-	int broadcast, int promisc, int allmulti);
+                           int broadcast, int promisc, int allmulti);
 int enic_dev_add_addr(struct enic *enic, u8 *addr);
 int enic_dev_del_addr(struct enic *enic, u8 *addr);
 int enic_vlan_rx_add_vid(struct net_device *netdev, u16 vid);

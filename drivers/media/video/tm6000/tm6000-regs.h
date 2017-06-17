@@ -26,12 +26,12 @@
 #define REQ_03_SET_GET_MCU_PIN		3
 #define REQ_04_EN_DISABLE_MCU_INT	4
 #define REQ_05_SET_GET_USBREG		5
-	/* Write: RegNum, Value, 0 */
-	/* Read : RegNum, Value, 1, RegStatus */
+/* Write: RegNum, Value, 0 */
+/* Read : RegNum, Value, 1, RegStatus */
 #define REQ_06_SET_GET_USBREG_BIT	6
 #define REQ_07_SET_GET_AVREG		7
-	/* Write: RegNum, Value, 0 */
-	/* Read : RegNum, Value, 1, RegStatus */
+/* Write: RegNum, Value, 0 */
+/* Read : RegNum, Value, 1, RegStatus */
 #define REQ_08_SET_GET_AVREG_BIT	8
 #define REQ_09_SET_GET_TUNER_FQ		9
 #define REQ_10_SET_TUNER_SYSTEM		10
@@ -40,13 +40,13 @@
 #define REQ_13_GET_EEPROM_SEQREAD	13
 #define REQ_14_SET_GET_I2C_WR2_RDN	14
 #define REQ_15_SET_GET_I2CBYTE		15
-	/* Write: Subaddr, Slave Addr, value, 0 */
-	/* Read : Subaddr, Slave Addr, value, 1 */
+/* Write: Subaddr, Slave Addr, value, 0 */
+/* Read : Subaddr, Slave Addr, value, 1 */
 #define REQ_16_SET_GET_I2C_WR1_RDN	16
-	/* Subaddr, Slave Addr, 0, length */
+/* Subaddr, Slave Addr, 0, length */
 #define REQ_17_SET_GET_I2CFP		17
-	/* Write: Slave Addr, register, value */
-	/* Read : Slave Addr, register, 2, data */
+/* Write: Slave Addr, register, value */
+/* Read : Slave Addr, register, 2, data */
 #define REQ_20_DATA_TRANSFER		20
 #define REQ_30_I2C_WRITE		30
 #define REQ_31_I2C_READ			31
@@ -90,11 +90,11 @@
  */
 
 enum {
-	TM6000_URB_MSG_VIDEO = 1,
-	TM6000_URB_MSG_AUDIO,
-	TM6000_URB_MSG_VBI,
-	TM6000_URB_MSG_PTS,
-	TM6000_URB_MSG_ERR,
+    TM6000_URB_MSG_VIDEO = 1,
+    TM6000_URB_MSG_AUDIO,
+    TM6000_URB_MSG_VBI,
+    TM6000_URB_MSG_PTS,
+    TM6000_URB_MSG_ERR,
 };
 
 /* Define specific TM6000 Video decoder registers */

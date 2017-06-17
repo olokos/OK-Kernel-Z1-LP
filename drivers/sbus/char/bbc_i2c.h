@@ -6,69 +6,69 @@
 #include <linux/list.h>
 
 struct bbc_i2c_client {
-	struct bbc_i2c_bus		*bp;
-	struct platform_device		*op;
-	int				bus;
-	int				address;
+    struct bbc_i2c_bus		*bp;
+    struct platform_device		*op;
+    int				bus;
+    int				address;
 };
 
 enum fan_action { FAN_SLOWER, FAN_SAME, FAN_FASTER, FAN_FULLBLAST, FAN_STATE_MAX };
 
 struct bbc_cpu_temperature {
-	struct list_head		bp_list;
-	struct list_head		glob_list;
+    struct list_head		bp_list;
+    struct list_head		glob_list;
 
-	struct bbc_i2c_client		*client;
-	int				index;
+    struct bbc_i2c_client		*client;
+    int				index;
 
-	/* Current readings, and history. */
-	s8				curr_cpu_temp;
-	s8				curr_amb_temp;
-	s8				prev_cpu_temp;
-	s8				prev_amb_temp;
-	s8				avg_cpu_temp;
-	s8				avg_amb_temp;
+    /* Current readings, and history. */
+    s8				curr_cpu_temp;
+    s8				curr_amb_temp;
+    s8				prev_cpu_temp;
+    s8				prev_amb_temp;
+    s8				avg_cpu_temp;
+    s8				avg_amb_temp;
 
-	int				sample_tick;
+    int				sample_tick;
 
-	enum fan_action			fan_todo[2];
+    enum fan_action			fan_todo[2];
 #define FAN_AMBIENT	0
 #define FAN_CPU		1
 };
 
 struct bbc_fan_control {
-	struct list_head		bp_list;
-	struct list_head		glob_list;
+    struct list_head		bp_list;
+    struct list_head		glob_list;
 
-	struct bbc_i2c_client 		*client;
-	int 				index;
+    struct bbc_i2c_client 		*client;
+    int 				index;
 
-	int				psupply_fan_on;
-	int				cpu_fan_speed;
-	int				system_fan_speed;
+    int				psupply_fan_on;
+    int				cpu_fan_speed;
+    int				system_fan_speed;
 };
 
 #define NUM_CHILDREN	8
 
 struct bbc_i2c_bus {
-	struct bbc_i2c_bus		*next;
-	int				index;
-	spinlock_t			lock;
-	void				__iomem *i2c_bussel_reg;
-	void				__iomem *i2c_control_regs;
-	unsigned char			own, clock;
+    struct bbc_i2c_bus		*next;
+    int				index;
+    spinlock_t			lock;
+    void				__iomem *i2c_bussel_reg;
+    void				__iomem *i2c_control_regs;
+    unsigned char			own, clock;
 
-	wait_queue_head_t		wq;
-	volatile int			waiting;
+    wait_queue_head_t		wq;
+    volatile int			waiting;
 
-	struct list_head		temps;
-	struct list_head		fans;
+    struct list_head		temps;
+    struct list_head		fans;
 
-	struct platform_device		*op;
-	struct {
-		struct platform_device	*device;
-		int			client_claimed;
-	} devs[NUM_CHILDREN];
+    struct platform_device		*op;
+    struct {
+        struct platform_device	*device;
+        int			client_claimed;
+    } devs[NUM_CHILDREN];
 };
 
 /* Probing and attachment. */

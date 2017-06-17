@@ -38,12 +38,12 @@
 #endif
 
 struct security_rule {
-	struct list_head list;
-	uint32_t service_id;
-	uint32_t instance_id;
-	unsigned reserved;
-	int num_group_info;
-	gid_t *group_id;
+    struct list_head list;
+    uint32_t service_id;
+    uint32_t instance_id;
+    unsigned reserved;
+    int num_group_info;
+    gid_t *group_id;
 };
 
 static DECLARE_RWSEM(security_rules_lock_lha4);
@@ -54,24 +54,22 @@ static DECLARE_COMPLETION(irsc_completion);
  * wait_for_irsc_completion() - Wait for IPC Router Security Configuration
  *                              (IRSC) to complete
  */
-void wait_for_irsc_completion(void)
-{
-	unsigned long rem_jiffies;
-	do {
-		rem_jiffies = wait_for_completion_timeout(&irsc_completion,
-				msecs_to_jiffies(IRSC_COMPLETION_TIMEOUT_MS));
-		if (rem_jiffies)
-			return;
-		pr_err("%s: waiting for IPC Security Conf.\n", __func__);
-	} while (1);
+void wait_for_irsc_completion(void) {
+    unsigned long rem_jiffies;
+    do {
+        rem_jiffies = wait_for_completion_timeout(&irsc_completion,
+                      msecs_to_jiffies(IRSC_COMPLETION_TIMEOUT_MS));
+        if (rem_jiffies)
+            return;
+        pr_err("%s: waiting for IPC Security Conf.\n", __func__);
+    } while (1);
 }
 
 /**
  * signal_irsc_completion() - Signal the completion of IRSC
  */
-void signal_irsc_completion(void)
-{
-	complete_all(&irsc_completion);
+void signal_irsc_completion(void) {
+    complete_all(&irsc_completion);
 }
 
 /**
@@ -80,12 +78,11 @@ void signal_irsc_completion(void)
  *
  * @return: true if the process has permissions, else false.
  */
-int check_permissions(void)
-{
-	int rc = 0;
-	if (!current_euid() || in_egroup_p(AID_NET_RAW))
-		rc = 1;
-	return rc;
+int check_permissions(void) {
+    int rc = 0;
+    if (!current_euid() || in_egroup_p(AID_NET_RAW))
+        rc = 1;
+    return rc;
 }
 EXPORT_SYMBOL(check_permissions);
 
@@ -99,77 +96,76 @@ EXPORT_SYMBOL(check_permissions);
  * implies that a user-space process in order to send a QMI message to
  * service Service_ID should belong to the Linux group Group_ID.
  */
-int msm_ipc_config_sec_rules(void *arg)
-{
-	struct config_sec_rules_args sec_rules_arg;
-	struct security_rule *rule, *temp_rule;
-	int key;
-	size_t group_info_sz;
-	int ret;
+int msm_ipc_config_sec_rules(void *arg) {
+    struct config_sec_rules_args sec_rules_arg;
+    struct security_rule *rule, *temp_rule;
+    int key;
+    size_t group_info_sz;
+    int ret;
 
-	if (current_euid())
-		return -EPERM;
+    if (current_euid())
+        return -EPERM;
 
-	ret = copy_from_user(&sec_rules_arg, (void *)arg,
-			     sizeof(sec_rules_arg));
-	if (ret)
-		return -EFAULT;
+    ret = copy_from_user(&sec_rules_arg, (void *)arg,
+                         sizeof(sec_rules_arg));
+    if (ret)
+        return -EFAULT;
 
-	if (sec_rules_arg.num_group_info <= 0)
-		return -EINVAL;
+    if (sec_rules_arg.num_group_info <= 0)
+        return -EINVAL;
 
-	if (sec_rules_arg.num_group_info > (SIZE_MAX / sizeof(gid_t))) {
-		pr_err("%s: Integer Overflow %d * %d\n", __func__,
-			sizeof(gid_t), sec_rules_arg.num_group_info);
-		return -EINVAL;
-	}
-	group_info_sz = sec_rules_arg.num_group_info * sizeof(gid_t);
+    if (sec_rules_arg.num_group_info > (SIZE_MAX / sizeof(gid_t))) {
+        pr_err("%s: Integer Overflow %d * %d\n", __func__,
+               sizeof(gid_t), sec_rules_arg.num_group_info);
+        return -EINVAL;
+    }
+    group_info_sz = sec_rules_arg.num_group_info * sizeof(gid_t);
 
-	rule = kzalloc(sizeof(struct security_rule), GFP_KERNEL);
-	if (!rule) {
-		pr_err("%s: security_rule alloc failed\n", __func__);
-		return -ENOMEM;
-	}
+    rule = kzalloc(sizeof(struct security_rule), GFP_KERNEL);
+    if (!rule) {
+        pr_err("%s: security_rule alloc failed\n", __func__);
+        return -ENOMEM;
+    }
 
-	rule->group_id = kzalloc(group_info_sz, GFP_KERNEL);
-	if (!rule->group_id) {
-		pr_err("%s: group_id alloc failed\n", __func__);
-		kfree(rule);
-		return -ENOMEM;
-	}
+    rule->group_id = kzalloc(group_info_sz, GFP_KERNEL);
+    if (!rule->group_id) {
+        pr_err("%s: group_id alloc failed\n", __func__);
+        kfree(rule);
+        return -ENOMEM;
+    }
 
-	rule->service_id = sec_rules_arg.service_id;
-	rule->instance_id = sec_rules_arg.instance_id;
-	rule->reserved = sec_rules_arg.reserved;
-	rule->num_group_info = sec_rules_arg.num_group_info;
-	ret = copy_from_user(rule->group_id,
-			     ((void *)(arg + sizeof(sec_rules_arg))),
-			     group_info_sz);
-	if (ret) {
-		kfree(rule->group_id);
-		kfree(rule);
-		return -EFAULT;
-	}
+    rule->service_id = sec_rules_arg.service_id;
+    rule->instance_id = sec_rules_arg.instance_id;
+    rule->reserved = sec_rules_arg.reserved;
+    rule->num_group_info = sec_rules_arg.num_group_info;
+    ret = copy_from_user(rule->group_id,
+                         ((void *)(arg + sizeof(sec_rules_arg))),
+                         group_info_sz);
+    if (ret) {
+        kfree(rule->group_id);
+        kfree(rule);
+        return -EFAULT;
+    }
 
-	key = rule->service_id & (SEC_RULES_HASH_SZ - 1);
-	down_write(&security_rules_lock_lha4);
-	if (rule->service_id == ALL_SERVICE) {
-		temp_rule = list_first_entry(&security_rules[key],
-					     struct security_rule, list);
-		list_del(&temp_rule->list);
-		kfree(temp_rule->group_id);
-		kfree(temp_rule);
-	}
-	list_add_tail(&rule->list, &security_rules[key]);
-	up_write(&security_rules_lock_lha4);
+    key = rule->service_id & (SEC_RULES_HASH_SZ - 1);
+    down_write(&security_rules_lock_lha4);
+    if (rule->service_id == ALL_SERVICE) {
+        temp_rule = list_first_entry(&security_rules[key],
+                                     struct security_rule, list);
+        list_del(&temp_rule->list);
+        kfree(temp_rule->group_id);
+        kfree(temp_rule);
+    }
+    list_add_tail(&rule->list, &security_rules[key]);
+    up_write(&security_rules_lock_lha4);
 
-	if (rule->service_id == ALL_SERVICE)
-		msm_ipc_sync_default_sec_rule((void *)rule);
-	else
-		msm_ipc_sync_sec_rule(rule->service_id, rule->instance_id,
-				      (void *)rule);
+    if (rule->service_id == ALL_SERVICE)
+        msm_ipc_sync_default_sec_rule((void *)rule);
+    else
+        msm_ipc_sync_sec_rule(rule->service_id, rule->instance_id,
+                              (void *)rule);
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL(msm_ipc_config_sec_rules);
 
@@ -182,33 +178,32 @@ EXPORT_SYMBOL(msm_ipc_config_sec_rules);
  * security rule defined for a service. It can be overwritten by the
  * default security rule from user-space script.
  */
-static int msm_ipc_add_default_rule(void)
-{
-	struct security_rule *rule;
-	int key;
+static int msm_ipc_add_default_rule(void) {
+    struct security_rule *rule;
+    int key;
 
-	rule = kzalloc(sizeof(struct security_rule), GFP_KERNEL);
-	if (!rule) {
-		pr_err("%s: security_rule alloc failed\n", __func__);
-		return -ENOMEM;
-	}
+    rule = kzalloc(sizeof(struct security_rule), GFP_KERNEL);
+    if (!rule) {
+        pr_err("%s: security_rule alloc failed\n", __func__);
+        return -ENOMEM;
+    }
 
-	rule->group_id = kzalloc(sizeof(int), GFP_KERNEL);
-	if (!rule->group_id) {
-		pr_err("%s: group_id alloc failed\n", __func__);
-		kfree(rule);
-		return -ENOMEM;
-	}
+    rule->group_id = kzalloc(sizeof(int), GFP_KERNEL);
+    if (!rule->group_id) {
+        pr_err("%s: group_id alloc failed\n", __func__);
+        kfree(rule);
+        return -ENOMEM;
+    }
 
-	rule->service_id = ALL_SERVICE;
-	rule->instance_id = ALL_INSTANCE;
-	rule->num_group_info = 1;
-	*(rule->group_id) = AID_NET_RAW;
-	down_write(&security_rules_lock_lha4);
-	key = (ALL_SERVICE & (SEC_RULES_HASH_SZ - 1));
-	list_add_tail(&rule->list, &security_rules[key]);
-	up_write(&security_rules_lock_lha4);
-	return 0;
+    rule->service_id = ALL_SERVICE;
+    rule->instance_id = ALL_INSTANCE;
+    rule->num_group_info = 1;
+    *(rule->group_id) = AID_NET_RAW;
+    down_write(&security_rules_lock_lha4);
+    key = (ALL_SERVICE & (SEC_RULES_HASH_SZ - 1));
+    list_add_tail(&rule->list, &security_rules[key]);
+    up_write(&security_rules_lock_lha4);
+    return 0;
 }
 
 /**
@@ -222,42 +217,41 @@ static int msm_ipc_add_default_rule(void)
  * This function is used when the service comes up and gets registered with
  * the IPC Router.
  */
-void *msm_ipc_get_security_rule(uint32_t service_id, uint32_t instance_id)
-{
-	int key;
-	struct security_rule *rule;
+void *msm_ipc_get_security_rule(uint32_t service_id, uint32_t instance_id) {
+    int key;
+    struct security_rule *rule;
 
-	key = (service_id & (SEC_RULES_HASH_SZ - 1));
-	down_read(&security_rules_lock_lha4);
-	/* Return the rule for a specific <service:instance>, if found. */
-	list_for_each_entry(rule, &security_rules[key], list) {
-		if ((rule->service_id == service_id) &&
-		    (rule->instance_id == instance_id)) {
-			up_read(&security_rules_lock_lha4);
-			return (void *)rule;
-		}
-	}
+    key = (service_id & (SEC_RULES_HASH_SZ - 1));
+    down_read(&security_rules_lock_lha4);
+    /* Return the rule for a specific <service:instance>, if found. */
+    list_for_each_entry(rule, &security_rules[key], list) {
+        if ((rule->service_id == service_id) &&
+                (rule->instance_id == instance_id)) {
+            up_read(&security_rules_lock_lha4);
+            return (void *)rule;
+        }
+    }
 
-	/* Return the rule for a specific service, if found. */
-	list_for_each_entry(rule, &security_rules[key], list) {
-		if ((rule->service_id == service_id) &&
-		    (rule->instance_id == ALL_INSTANCE)) {
-			up_read(&security_rules_lock_lha4);
-			return (void *)rule;
-		}
-	}
+    /* Return the rule for a specific service, if found. */
+    list_for_each_entry(rule, &security_rules[key], list) {
+        if ((rule->service_id == service_id) &&
+                (rule->instance_id == ALL_INSTANCE)) {
+            up_read(&security_rules_lock_lha4);
+            return (void *)rule;
+        }
+    }
 
-	/* Return the default rule, if no rule defined for a service. */
-	key = (ALL_SERVICE & (SEC_RULES_HASH_SZ - 1));
-	list_for_each_entry(rule, &security_rules[key], list) {
-		if ((rule->service_id == ALL_SERVICE) &&
-		    (rule->instance_id == ALL_INSTANCE)) {
-			up_read(&security_rules_lock_lha4);
-			return (void *)rule;
-		}
-	}
-	up_read(&security_rules_lock_lha4);
-	return NULL;
+    /* Return the default rule, if no rule defined for a service. */
+    key = (ALL_SERVICE & (SEC_RULES_HASH_SZ - 1));
+    list_for_each_entry(rule, &security_rules[key], list) {
+        if ((rule->service_id == ALL_SERVICE) &&
+                (rule->instance_id == ALL_INSTANCE)) {
+            up_read(&security_rules_lock_lha4);
+            return (void *)rule;
+        }
+    }
+    up_read(&security_rules_lock_lha4);
+    return NULL;
 }
 EXPORT_SYMBOL(msm_ipc_get_security_rule);
 
@@ -272,24 +266,23 @@ EXPORT_SYMBOL(msm_ipc_get_security_rule);
  * permissions to send message to the remote entity. The security rule
  * corresponding to the remote entity is specified by "data" parameter
  */
-int msm_ipc_check_send_permissions(void *data)
-{
-	int i;
-	struct security_rule *rule = (struct security_rule *)data;
+int msm_ipc_check_send_permissions(void *data) {
+    int i;
+    struct security_rule *rule = (struct security_rule *)data;
 
-	/* Source/Sender is Root user */
-	if (!current_euid())
-		return 1;
+    /* Source/Sender is Root user */
+    if (!current_euid())
+        return 1;
 
-	/* Destination has no rules defined, possibly a client. */
-	if (!rule)
-		return 1;
+    /* Destination has no rules defined, possibly a client. */
+    if (!rule)
+        return 1;
 
-	for (i = 0; i < rule->num_group_info; i++) {
-		if (in_egroup_p(rule->group_id[i]))
-			return 1;
-	}
-	return 0;
+    for (i = 0; i < rule->num_group_info; i++) {
+        if (in_egroup_p(rule->group_id[i]))
+            return 1;
+    }
+    return 0;
 }
 EXPORT_SYMBOL(msm_ipc_check_send_permissions);
 
@@ -298,14 +291,13 @@ EXPORT_SYMBOL(msm_ipc_check_send_permissions);
  *
  * @return: 0 if successful, < 0 for error.
  */
-int msm_ipc_router_security_init(void)
-{
-	int i;
+int msm_ipc_router_security_init(void) {
+    int i;
 
-	for (i = 0; i < SEC_RULES_HASH_SZ; i++)
-		INIT_LIST_HEAD(&security_rules[i]);
+    for (i = 0; i < SEC_RULES_HASH_SZ; i++)
+        INIT_LIST_HEAD(&security_rules[i]);
 
-	msm_ipc_add_default_rule();
-	return 0;
+    msm_ipc_add_default_rule();
+    return 0;
 }
 EXPORT_SYMBOL(msm_ipc_router_security_init);

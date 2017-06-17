@@ -185,7 +185,7 @@ do {								\
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
 struct linux_binprm;
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-	int uses_interp);
+                                       int uses_interp);
 
 extern unsigned long um_vdso_addr;
 #define AT_SYSINFO_EHDR 33

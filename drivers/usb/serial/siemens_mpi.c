@@ -23,30 +23,30 @@
 
 
 static const struct usb_device_id id_table[] = {
-	/* Vendor and product id for 6ES7-972-0CB20-0XA0 */
-	{ USB_DEVICE(0x908, 0x0004) },
-	{ },
+    /* Vendor and product id for 6ES7-972-0CB20-0XA0 */
+    { USB_DEVICE(0x908, 0x0004) },
+    { },
 };
 MODULE_DEVICE_TABLE(usb, id_table);
 
 static struct usb_driver siemens_usb_mpi_driver = {
-	.name =		"siemens_mpi",
-	.probe =	usb_serial_probe,
-	.disconnect =	usb_serial_disconnect,
-	.id_table =	id_table,
+    .name =		"siemens_mpi",
+    .probe =	usb_serial_probe,
+    .disconnect =	usb_serial_disconnect,
+    .id_table =	id_table,
 };
 
 static struct usb_serial_driver siemens_usb_mpi_device = {
-	.driver = {
-		.owner =	THIS_MODULE,
-		.name =		"siemens_mpi",
-	},
-	.id_table =		id_table,
-	.num_ports =		1,
+    .driver = {
+        .owner =	THIS_MODULE,
+        .name =		"siemens_mpi",
+    },
+    .id_table =		id_table,
+    .num_ports =		1,
 };
 
 static struct usb_serial_driver * const serial_drivers[] = {
-	&siemens_usb_mpi_device, NULL
+    &siemens_usb_mpi_device, NULL
 };
 
 module_usb_serial_driver(siemens_usb_mpi_driver, serial_drivers);

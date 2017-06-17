@@ -57,15 +57,15 @@
  * @rsvd: reserved
  */
 struct ipa_flt_rule_hw_hdr {
-	union {
-		u32 word;
-		struct {
-			u32 en_rule:16;
-			u32 action:5;
-			u32 rt_tbl_idx:5;
-			u32 rsvd:6;
-		} hdr;
-	} u;
+    union {
+        u32 word;
+        struct {
+            u32 en_rule:16;
+            u32 action:5;
+            u32 rt_tbl_idx:5;
+            u32 rsvd:6;
+        } hdr;
+    } u;
 };
 
 /**
@@ -77,15 +77,15 @@ struct ipa_flt_rule_hw_hdr {
  * @hdr_offset: header offset
  */
 struct ipa_rt_rule_hw_hdr {
-	union {
-		u32 word;
-		struct {
-			u32 en_rule:16;
-			u32 pipe_dest_idx:5;
-			u32 system:1;
-			u32 hdr_offset:10;
-		} hdr;
-	} u;
+    union {
+        u32 word;
+        struct {
+            u32 en_rule:16;
+            u32 pipe_dest_idx:5;
+            u32 system:1;
+            u32 hdr_offset:10;
+        } hdr;
+    } u;
 };
 
 /**
@@ -96,10 +96,10 @@ struct ipa_rt_rule_hw_hdr {
  * @rsvd: reserved
  */
 struct ipa_ip_v4_filter_init {
-	u64 ipv4_rules_addr:32;
-	u64 size_ipv4_rules:12;
-	u64 ipv4_addr:16;
-	u64 rsvd:4;
+    u64 ipv4_rules_addr:32;
+    u64 size_ipv4_rules:12;
+    u64 ipv4_addr:16;
+    u64 rsvd:4;
 };
 
 /**
@@ -109,9 +109,9 @@ struct ipa_ip_v4_filter_init {
  * @ipv6_addr: ipv6 address
  */
 struct ipa_ip_v6_filter_init {
-	u64 ipv6_rules_addr:32;
-	u64 size_ipv6_rules:16;
-	u64 ipv6_addr:16;
+    u64 ipv6_rules_addr:32;
+    u64 size_ipv6_rules:16;
+    u64 ipv6_addr:16;
 };
 
 /**
@@ -122,10 +122,10 @@ struct ipa_ip_v6_filter_init {
  * @rsvd: reserved
  */
 struct ipa_ip_v4_routing_init {
-	u64 ipv4_rules_addr:32;
-	u64 size_ipv4_rules:12;
-	u64 ipv4_addr:16;
-	u64 rsvd:4;
+    u64 ipv4_rules_addr:32;
+    u64 size_ipv4_rules:12;
+    u64 ipv4_addr:16;
+    u64 rsvd:4;
 };
 
 /**
@@ -135,9 +135,9 @@ struct ipa_ip_v4_routing_init {
  * @ipv6_addr: ipv6 address
  */
 struct ipa_ip_v6_routing_init {
-	u64 ipv6_rules_addr:32;
-	u64 size_ipv6_rules:16;
-	u64 ipv6_addr:16;
+    u64 ipv6_rules_addr:32;
+    u64 size_ipv6_rules:16;
+    u64 ipv6_addr:16;
 };
 
 /**
@@ -148,10 +148,10 @@ struct ipa_ip_v6_routing_init {
  * @rsvd: reserved
  */
 struct ipa_hdr_init_local {
-	u64 hdr_table_addr:32;
-	u64 size_hdr_table:12;
-	u64 hdr_addr:16;
-	u64 rsvd:4;
+    u64 hdr_table_addr:32;
+    u64 size_hdr_table:12;
+    u64 hdr_addr:16;
+    u64 rsvd:4;
 };
 
 /**
@@ -160,8 +160,8 @@ struct ipa_hdr_init_local {
  * @rsvd: reserved
  */
 struct ipa_hdr_init_system {
-	u64 hdr_table_addr:32;
-	u64 rsvd:32;
+    u64 hdr_table_addr:32;
+    u64 rsvd:32;
 };
 
 #define IPA_A5_MUX_HDR_EXCP_FLAG_IP		BIT(7)
@@ -182,10 +182,10 @@ struct ipa_hdr_init_system {
  * allows A5 SW to correctly parse the header
  */
 struct ipa_a5_mux_hdr {
-	u16 interface_id;
-	u8 src_pipe_index;
-	u8 flags;
-	u32 metadata;
+    u16 interface_id;
+    u8 src_pipe_index;
+    u8 flags;
+    u32 metadata;
 };
 
 /**
@@ -199,13 +199,13 @@ struct ipa_a5_mux_hdr {
  * @rsvd3: reserved
  */
 struct ipa_nat_dma {
-	u64 table_index:3;
-	u64 rsvd1:1;
-	u64 base_addr:2;
-	u64 rsvd2:2;
-	u64 offset:32;
-	u64 data:16;
-	u64 rsvd3:8;
+    u64 table_index:3;
+    u64 rsvd1:1;
+    u64 base_addr:2;
+    u64 rsvd2:2;
+    u64 offset:32;
+    u64 data:16;
+    u64 rsvd3:8;
 };
 
 /**
@@ -216,10 +216,10 @@ struct ipa_nat_dma {
  * @rsvd2: reserved
  */
 struct ipa_ip_packet_init {
-	u64 destination_pipe_index:5;
-	u64 rsvd1:3;
-	u64 metadata:32;
-	u64 rsvd2:24;
+    u64 destination_pipe_index:5;
+    u64 rsvd1:3;
+    u64 metadata:32;
+    u64 rsvd2:24;
 };
 
 /**
@@ -239,20 +239,20 @@ struct ipa_ip_packet_init {
  * @public_ip_addr: public IP address
  */
 struct ipa_ip_v4_nat_init {
-	u64 ipv4_rules_addr:32;
-	u64 ipv4_expansion_rules_addr:32;
-	u64 index_table_addr:32;
-	u64 index_table_expansion_addr:32;
-	u64 table_index:3;
-	u64 rsvd1:1;
-	u64 ipv4_rules_addr_type:1;
-	u64 ipv4_expansion_rules_addr_type:1;
-	u64 index_table_addr_type:1;
-	u64 index_table_expansion_addr_type:1;
-	u64 size_base_tables:12;
-	u64 size_expansion_tables:10;
-	u64 rsvd2:2;
-	u64 public_ip_addr:32;
+    u64 ipv4_rules_addr:32;
+    u64 ipv4_expansion_rules_addr:32;
+    u64 index_table_addr:32;
+    u64 index_table_expansion_addr:32;
+    u64 table_index:3;
+    u64 rsvd1:1;
+    u64 ipv4_rules_addr_type:1;
+    u64 ipv4_expansion_rules_addr_type:1;
+    u64 index_table_addr_type:1;
+    u64 index_table_expansion_addr_type:1;
+    u64 size_base_tables:12;
+    u64 size_expansion_tables:10;
+    u64 rsvd2:2;
+    u64 public_ip_addr:32;
 };
 
 /**
@@ -260,7 +260,7 @@ struct ipa_ip_v4_nat_init {
  * @tag: tag value returned with response
  */
 struct ipa_ip_packet_tag {
-	u32 tag;
+    u32 tag;
 };
 
 #endif /* _IPA_HW_DEFS_H */

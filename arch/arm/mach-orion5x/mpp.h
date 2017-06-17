@@ -10,7 +10,7 @@
 	/* available on F5182 */	((!!(_F5182)) << 15) | \
 	/* available on F5281 */	((!!(_F5281)) << 16))
 
-				/* num sel  i  o  5181 5182 5281 */
+/* num sel  i  o  5181 5182 5281 */
 
 #define MPP_F5181_MASK		MPP(0,  0x0, 0, 0, 1,   0,   0)
 #define MPP_F5182_MASK		MPP(0,  0x0, 0, 0, 0,   1,   0)

@@ -110,63 +110,62 @@
 #define OTG_ID_POLL_MS	1000
 
 struct msm_otg {
-	struct usb_phy phy;
+    struct usb_phy phy;
 
-	/* usb clocks */
-	struct clk		*alt_core_clk;
-	struct clk		*iface_clk;
-	struct clk		*core_clk;
+    /* usb clocks */
+    struct clk		*alt_core_clk;
+    struct clk		*iface_clk;
+    struct clk		*core_clk;
 
-	/* clk regime has created dummy clock id for phy so
-	 * that generic clk_reset api can be used to reset phy
-	 */
-	struct clk		*phy_reset_clk;
+    /* clk regime has created dummy clock id for phy so
+     * that generic clk_reset api can be used to reset phy
+     */
+    struct clk		*phy_reset_clk;
 
-	int			irq;
-	int			vbus_on_irq;
-	int			id_irq;
-	void __iomem		*regs;
-	atomic_t		in_lpm;
-	/* charger-type is modified by gadget for legacy chargers
-	 * and OTG modifies it for ACA
-	 */
-	atomic_t 		chg_type;
+    int			irq;
+    int			vbus_on_irq;
+    int			id_irq;
+    void __iomem		*regs;
+    atomic_t		in_lpm;
+    /* charger-type is modified by gadget for legacy chargers
+     * and OTG modifies it for ACA
+     */
+    atomic_t 		chg_type;
 
-	void (*start_host)	(struct usb_bus *bus, int suspend);
-	/* Enable/disable the clocks */
-	int (*set_clk)		(struct usb_phy *phy, int on);
-	/* Reset phy and link */
-	void (*reset)		(struct usb_phy *phy, int phy_reset);
-	/* pmic notfications apis */
-	u8 pmic_vbus_notif_supp;
-	u8 pmic_id_notif_supp;
-	struct msm_otg_platform_data *pdata;
+    void (*start_host)	(struct usb_bus *bus, int suspend);
+    /* Enable/disable the clocks */
+    int (*set_clk)		(struct usb_phy *phy, int on);
+    /* Reset phy and link */
+    void (*reset)		(struct usb_phy *phy, int phy_reset);
+    /* pmic notfications apis */
+    u8 pmic_vbus_notif_supp;
+    u8 pmic_id_notif_supp;
+    struct msm_otg_platform_data *pdata;
 
-	spinlock_t lock; /* protects OTG state */
-	struct wake_lock wlock;
-	unsigned long b_last_se0_sess; /* SRP initial condition check */
-	unsigned long inputs;
-	unsigned long tmouts;
-	u8 active_tmout;
-	struct hrtimer timer;
-	struct workqueue_struct *wq;
-	struct work_struct sm_work; /* state machine work */
-	struct work_struct otg_resume_work;
-	struct notifier_block usbdev_nb;
-	struct msm_xo_voter *xo_handle; /*handle to vote for TCXO D1 buffer*/
-	unsigned curr_power;
+    spinlock_t lock; /* protects OTG state */
+    struct wake_lock wlock;
+    unsigned long b_last_se0_sess; /* SRP initial condition check */
+    unsigned long inputs;
+    unsigned long tmouts;
+    u8 active_tmout;
+    struct hrtimer timer;
+    struct workqueue_struct *wq;
+    struct work_struct sm_work; /* state machine work */
+    struct work_struct otg_resume_work;
+    struct notifier_block usbdev_nb;
+    struct msm_xo_voter *xo_handle; /*handle to vote for TCXO D1 buffer*/
+    unsigned curr_power;
 #ifdef CONFIG_USB_MSM_ACA
-	struct timer_list	id_timer;	/* drives id_status polling */
-	unsigned		b_max_power;	/* ACA: max power of accessory*/
+    struct timer_list	id_timer;	/* drives id_status polling */
+    unsigned		b_max_power;	/* ACA: max power of accessory*/
 #endif
 };
 
-static inline int can_phy_power_collapse(struct msm_otg *dev)
-{
-	if (!dev || !dev->pdata)
-		return -ENODEV;
+static inline int can_phy_power_collapse(struct msm_otg *dev) {
+    if (!dev || !dev->pdata)
+        return -ENODEV;
 
-	return dev->pdata->phy_can_powercollapse;
+    return dev->pdata->phy_can_powercollapse;
 }
 
 #endif

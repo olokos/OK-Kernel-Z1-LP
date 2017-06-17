@@ -151,23 +151,23 @@
 
 /* Config struct */
 struct ti_uart_config {
-	__u16	wBaudRate;
-	__u16	wFlags;
-	__u8	bDataBits;
-	__u8	bParity;
-	__u8	bStopBits;
-	char	cXon;
-	char	cXoff;
-	__u8	bUartMode;
+    __u16	wBaudRate;
+    __u16	wFlags;
+    __u8	bDataBits;
+    __u8	bParity;
+    __u8	bStopBits;
+    char	cXon;
+    char	cXoff;
+    __u8	bUartMode;
 } __attribute__((packed));
 
 /* Get port status */
 struct ti_port_status {
-	__u8	bCmdCode;
-	__u8	bModuleId;
-	__u8	bErrorCode;
-	__u8	bMSR;
-	__u8	bLSR;
+    __u8	bCmdCode;
+    __u8	bModuleId;
+    __u8	bErrorCode;
+    __u8	bMSR;
+    __u8	bLSR;
 } __attribute__((packed));
 
 /* Purge modes */
@@ -190,33 +190,33 @@ struct ti_port_status {
 #define TI_RW_DATA_DOUBLE_WORD		0x04
 
 struct ti_write_data_bytes {
-	__u8	bAddrType;
-	__u8	bDataType;
-	__u8	bDataCounter;
-	__be16	wBaseAddrHi;
-	__be16	wBaseAddrLo;
-	__u8	bData[0];
+    __u8	bAddrType;
+    __u8	bDataType;
+    __u8	bDataCounter;
+    __be16	wBaseAddrHi;
+    __be16	wBaseAddrLo;
+    __u8	bData[0];
 } __attribute__((packed));
 
 struct ti_read_data_request {
-	__u8	bAddrType;
-	__u8	bDataType;
-	__u8	bDataCounter;
-	__be16	wBaseAddrHi;
-	__be16	wBaseAddrLo;
+    __u8	bAddrType;
+    __u8	bDataType;
+    __u8	bDataCounter;
+    __be16	wBaseAddrHi;
+    __be16	wBaseAddrLo;
 } __attribute__((packed));
 
 struct ti_read_data_bytes {
-	__u8	bCmdCode;
-	__u8	bModuleId;
-	__u8	bErrorCode;
-	__u8	bData[0];
+    __u8	bCmdCode;
+    __u8	bModuleId;
+    __u8	bErrorCode;
+    __u8	bData[0];
 } __attribute__((packed));
 
 /* Interrupt struct */
 struct ti_interrupt {
-	__u8	bICode;
-	__u8	bIInfo;
+    __u8	bICode;
+    __u8	bIInfo;
 } __attribute__((packed));
 
 /* Interrupt codes */
@@ -231,8 +231,8 @@ struct ti_interrupt {
 
 /* Firmware image header */
 struct ti_firmware_header {
-	__le16	wLength;
-	__u8	bCheckSum;
+    __le16	wLength;
+    __u8	bCheckSum;
 } __attribute__((packed));
 
 /* UART addresses */

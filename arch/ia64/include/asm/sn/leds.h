@@ -23,10 +23,9 @@
  */
 
 static __inline__ void
-set_led_bits(u8 value, u8 mask)
-{
-	pda->led_state = (pda->led_state & ~mask) | (value & mask);
-	*pda->led_address = (short) pda->led_state;
+set_led_bits(u8 value, u8 mask) {
+    pda->led_state = (pda->led_state & ~mask) | (value & mask);
+    *pda->led_address = (short) pda->led_state;
 }
 
 #endif /* _ASM_IA64_SN_LEDS_H */

@@ -7,7 +7,7 @@
 #define SCRATCHPAD_CPUID	0x08 /* Shared with OBP - set by hypervisor */
 #define SCRATCHPAD_UTSBREG1	0x10
 #define SCRATCHPAD_UTSBREG2	0x18
-	/* 0x20 and 0x28, hypervisor only... */
+/* 0x20 and 0x28, hypervisor only... */
 #define SCRATCHPAD_UNUSED1	0x30
 #define SCRATCHPAD_UNUSED2	0x38 /* Reserved for OBP		    */
 

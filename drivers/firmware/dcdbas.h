@@ -72,33 +72,33 @@ struct bin_attribute bin_attr_##_name = { \
 }
 
 struct smi_cmd {
-	__u32 magic;
-	__u32 ebx;
-	__u32 ecx;
-	__u16 command_address;
-	__u8 command_code;
-	__u8 reserved;
-	__u8 command_buffer[1];
+    __u32 magic;
+    __u32 ebx;
+    __u32 ecx;
+    __u16 command_address;
+    __u8 command_code;
+    __u8 reserved;
+    __u8 command_buffer[1];
 } __attribute__ ((packed));
 
 struct apm_cmd {
-	__u8 command;
-	__s8 status;
-	__u16 reserved;
-	union {
-		struct {
-			__u8 parm[MAX_SYSMGMT_SHORTCMD_PARMBUF_LEN];
-		} __attribute__ ((packed)) shortreq;
+    __u8 command;
+    __s8 status;
+    __u16 reserved;
+    union {
+        struct {
+            __u8 parm[MAX_SYSMGMT_SHORTCMD_PARMBUF_LEN];
+        } __attribute__ ((packed)) shortreq;
 
-		struct {
-			__u16 num_sg_entries;
-			struct {
-				__u32 size;
-				__u64 addr;
-			} __attribute__ ((packed))
-			    sglist[MAX_SYSMGMT_LONGCMD_SGENTRY_NUM];
-		} __attribute__ ((packed)) longreq;
-	} __attribute__ ((packed)) parameters;
+        struct {
+            __u16 num_sg_entries;
+            struct {
+                __u32 size;
+                __u64 addr;
+            } __attribute__ ((packed))
+            sglist[MAX_SYSMGMT_LONGCMD_SGENTRY_NUM];
+        } __attribute__ ((packed)) longreq;
+    } __attribute__ ((packed)) parameters;
 } __attribute__ ((packed));
 
 int dcdbas_smi_request(struct smi_cmd *smi_cmd);

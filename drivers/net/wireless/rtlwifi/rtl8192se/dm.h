@@ -30,98 +30,98 @@
 #define __RTL_92S_DM_H__
 
 struct dig_t {
-	u8 dig_enable_flag;
-	u8 dig_algorithm;
-	u8 dig_twoport_algorithm;
-	u8 dig_ext_port_stage;
-	u8 dig_dbgmode;
-	u8 dig_slgorithm_switch;
+    u8 dig_enable_flag;
+    u8 dig_algorithm;
+    u8 dig_twoport_algorithm;
+    u8 dig_ext_port_stage;
+    u8 dig_dbgmode;
+    u8 dig_slgorithm_switch;
 
-	long rssi_lowthresh;
-	long rssi_highthresh;
+    long rssi_lowthresh;
+    long rssi_highthresh;
 
-	u32 fa_lowthresh;
-	u32 fa_highthresh;
+    u32 fa_lowthresh;
+    u32 fa_highthresh;
 
-	long rssi_highpower_lowthresh;
-	long rssi_highpower_highthresh;
+    long rssi_highpower_lowthresh;
+    long rssi_highpower_highthresh;
 
-	u8 dig_state;
-	u8 dig_highpwrstate;
-	u8 cur_sta_connectstate;
-	u8 pre_sta_connectstate;
-	u8 cur_ap_connectstate;
-	u8 pre_ap_connectstate;
+    u8 dig_state;
+    u8 dig_highpwrstate;
+    u8 cur_sta_connectstate;
+    u8 pre_sta_connectstate;
+    u8 cur_ap_connectstate;
+    u8 pre_ap_connectstate;
 
-	u8 cur_pd_thstate;
-	u8 pre_pd_thstate;
-	u8 cur_cs_ratiostate;
-	u8 pre_cs_ratiostate;
+    u8 cur_pd_thstate;
+    u8 pre_pd_thstate;
+    u8 cur_cs_ratiostate;
+    u8 pre_cs_ratiostate;
 
-	u32 pre_igvalue;
-	u32	cur_igvalue;
+    u32 pre_igvalue;
+    u32	cur_igvalue;
 
-	u8 backoff_enable_flag;
-	char backoff_val;
-	char backoffval_range_max;
-	char backoffval_range_min;
-	u8 rx_gain_range_max;
-	u8 rx_gain_range_min;
+    u8 backoff_enable_flag;
+    char backoff_val;
+    char backoffval_range_max;
+    char backoffval_range_min;
+    u8 rx_gain_range_max;
+    u8 rx_gain_range_min;
 
-	long rssi_val;
+    long rssi_val;
 };
 
 enum dm_dig_alg {
-	DIG_ALGO_BY_FALSE_ALARM = 0,
-	DIG_ALGO_BY_RSSI	= 1,
-	DIG_ALGO_BEFORE_CONNECT_BY_RSSI_AND_ALARM = 2,
-	DIG_ALGO_BY_TOW_PORT = 3,
-	DIG_ALGO_MAX
+    DIG_ALGO_BY_FALSE_ALARM = 0,
+    DIG_ALGO_BY_RSSI	= 1,
+    DIG_ALGO_BEFORE_CONNECT_BY_RSSI_AND_ALARM = 2,
+    DIG_ALGO_BY_TOW_PORT = 3,
+    DIG_ALGO_MAX
 };
 
 enum dm_dig_two_port_alg {
-	DIG_TWO_PORT_ALGO_RSSI = 0,
-	DIG_TWO_PORT_ALGO_FALSE_ALARM = 1,
+    DIG_TWO_PORT_ALGO_RSSI = 0,
+    DIG_TWO_PORT_ALGO_FALSE_ALARM = 1,
 };
 
 enum dm_dig_dbg {
-	DM_DBG_OFF = 0,
-	DM_DBG_ON = 1,
-	DM_DBG_MAX
+    DM_DBG_OFF = 0,
+    DM_DBG_ON = 1,
+    DM_DBG_MAX
 };
 
 enum dm_dig_sta {
-	DM_STA_DIG_OFF = 0,
-	DM_STA_DIG_ON,
-	DM_STA_DIG_MAX
+    DM_STA_DIG_OFF = 0,
+    DM_STA_DIG_ON,
+    DM_STA_DIG_MAX
 };
 
 enum dm_dig_connect {
-	DIG_STA_DISCONNECT = 0,
-	DIG_STA_CONNECT = 1,
-	DIG_STA_BEFORE_CONNECT = 2,
-	DIG_AP_DISCONNECT = 3,
-	DIG_AP_CONNECT = 4,
-	DIG_AP_ADD_STATION = 5,
-	DIG_CONNECT_MAX
+    DIG_STA_DISCONNECT = 0,
+    DIG_STA_CONNECT = 1,
+    DIG_STA_BEFORE_CONNECT = 2,
+    DIG_AP_DISCONNECT = 3,
+    DIG_AP_CONNECT = 4,
+    DIG_AP_ADD_STATION = 5,
+    DIG_CONNECT_MAX
 };
 
 enum dm_dig_ext_port_alg {
-	DIG_EXT_PORT_STAGE_0 = 0,
-	DIG_EXT_PORT_STAGE_1 = 1,
-	DIG_EXT_PORT_STAGE_2 = 2,
-	DIG_EXT_PORT_STAGE_3 = 3,
-	DIG_EXT_PORT_STAGE_MAX = 4,
+    DIG_EXT_PORT_STAGE_0 = 0,
+    DIG_EXT_PORT_STAGE_1 = 1,
+    DIG_EXT_PORT_STAGE_2 = 2,
+    DIG_EXT_PORT_STAGE_3 = 3,
+    DIG_EXT_PORT_STAGE_MAX = 4,
 };
 
 enum dm_ratr_sta {
-	DM_RATR_STA_HIGH = 0,
-	DM_RATR_STA_MIDDLEHIGH = 1,
-	DM_RATR_STA_MIDDLE = 2,
-	DM_RATR_STA_MIDDLELOW = 3,
-	DM_RATR_STA_LOW = 4,
-	DM_RATR_STA_ULTRALOW = 5,
-	DM_RATR_STA_MAX
+    DM_RATR_STA_HIGH = 0,
+    DM_RATR_STA_MIDDLEHIGH = 1,
+    DM_RATR_STA_MIDDLE = 2,
+    DM_RATR_STA_MIDDLELOW = 3,
+    DM_RATR_STA_LOW = 4,
+    DM_RATR_STA_ULTRALOW = 5,
+    DM_RATR_STA_MAX
 };
 
 #define DM_TYPE_BYFW			0

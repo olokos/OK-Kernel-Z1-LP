@@ -17,17 +17,16 @@
 #include <linux/serial_core.h>
 #include <linux/serial_reg.h>
 
-void jz4740_serial_out(struct uart_port *p, int offset, int value)
-{
-	switch (offset) {
-	case UART_FCR:
-		value |= 0x10; /* Enable uart module */
-		break;
-	case UART_IER:
-		value |= (value & 0x4) << 2;
-		break;
-	default:
-		break;
-	}
-	writeb(value, p->membase + (offset << p->regshift));
+void jz4740_serial_out(struct uart_port *p, int offset, int value) {
+    switch (offset) {
+    case UART_FCR:
+        value |= 0x10; /* Enable uart module */
+        break;
+    case UART_IER:
+        value |= (value & 0x4) << 2;
+        break;
+    default:
+        break;
+    }
+    writeb(value, p->membase + (offset << p->regshift));
 }

@@ -38,7 +38,7 @@
 #define PTR_LPTB_IRQ7	0x08
 #define PTR_LEVEL_IRQ	0x80	/* When not ECP/EPP: Use level IRQ           */
 #define PTR_LPT_REG_DIR	0x80	/* When ECP/EPP: LPT CTR controls direction */
-				/*               of the parallel port	     */
+/*               of the parallel port	     */
 
 /* Function Control Register (FCR) bits */
 #define FCR_LDE		0x10	/* Logical Drive Exchange                    */
@@ -50,7 +50,7 @@
 #define PCR_ECP_ENABLE	0x04
 #define PCR_ECP_CLK_ENA	0x08	/* If 0 ECP Clock is stopped on Power down   */
 #define PCR_IRQ_POLAR	0x20	/* If 0 IRQ is level high or negative pulse, */
-				/* if 1 polarity is inverted                 */
+/* if 1 polarity is inverted                 */
 #define PCR_IRQ_ODRAIN	0x40	/* If 1, IRQ is open drain                   */
 
 /* Tape UARTs and Parallel Port Config Register (TUP) bits */
@@ -84,32 +84,31 @@
 extern spinlock_t ns87303_lock;
 
 static inline int ns87303_modify(unsigned long port, unsigned int index,
-				     unsigned char clr, unsigned char set)
-{
-	static unsigned char reserved[] = {
-		FER_RESERVED, FAR_RESERVED, PTR_RESERVED, FCR_RESERVED,
-		PCR_RESERVED, KRR_RESERVED, PMC_RESERVED, TUP_RESERVED,
-		SIP_RESERVED, ASC_RESERVED, CS0CF0_RESERVED, CS0CF1_RESERVED,
-		CS1CF0_RESERVED, CS1CF1_RESERVED
-	};
-	unsigned long flags;
-	unsigned char value;
+                                 unsigned char clr, unsigned char set) {
+    static unsigned char reserved[] = {
+        FER_RESERVED, FAR_RESERVED, PTR_RESERVED, FCR_RESERVED,
+        PCR_RESERVED, KRR_RESERVED, PMC_RESERVED, TUP_RESERVED,
+        SIP_RESERVED, ASC_RESERVED, CS0CF0_RESERVED, CS0CF1_RESERVED,
+        CS1CF0_RESERVED, CS1CF1_RESERVED
+    };
+    unsigned long flags;
+    unsigned char value;
 
-	if (index > 0x0d)
-		return -EINVAL;
+    if (index > 0x0d)
+        return -EINVAL;
 
-	spin_lock_irqsave(&ns87303_lock, flags);
+    spin_lock_irqsave(&ns87303_lock, flags);
 
-	outb(index, port);
-	value = inb(port + 1);
-	value &= ~(reserved[index] | clr);
-	value |= set;
-	outb(value, port + 1);
-	outb(value, port + 1);
+    outb(index, port);
+    value = inb(port + 1);
+    value &= ~(reserved[index] | clr);
+    value |= set;
+    outb(value, port + 1);
+    outb(value, port + 1);
 
-	spin_unlock_irqrestore(&ns87303_lock, flags);
+    spin_unlock_irqrestore(&ns87303_lock, flags);
 
-	return 0;
+    return 0;
 }
 
 #endif /* __KERNEL__ */

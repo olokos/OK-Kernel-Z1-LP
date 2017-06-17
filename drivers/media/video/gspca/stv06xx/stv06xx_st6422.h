@@ -38,15 +38,15 @@ static int st6422_stop(struct sd *sd);
 static void st6422_disconnect(struct sd *sd);
 
 const struct stv06xx_sensor stv06xx_sensor_st6422 = {
-	.name = "ST6422",
-	/* No known way to lower framerate in case of less bandwidth */
-	.min_packet_size = { 300, 847 },
-	.max_packet_size = { 300, 847 },
-	.init = st6422_init,
-	.probe = st6422_probe,
-	.start = st6422_start,
-	.stop = st6422_stop,
-	.disconnect = st6422_disconnect,
+    .name = "ST6422",
+    /* No known way to lower framerate in case of less bandwidth */
+    .min_packet_size = { 300, 847 },
+    .max_packet_size = { 300, 847 },
+    .init = st6422_init,
+    .probe = st6422_probe,
+    .start = st6422_start,
+    .stop = st6422_stop,
+    .disconnect = st6422_disconnect,
 };
 
 #endif

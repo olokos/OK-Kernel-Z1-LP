@@ -114,10 +114,10 @@
 #define BDX_NO_UPD_PACKETS 40
 
 struct pci_nic {
-	int port_num;
-	void __iomem *regs;
-	int irq_type;
-	struct bdx_priv *priv[LUXOR_MAX_PORT];
+    int port_num;
+    void __iomem *regs;
+    int irq_type;
+    struct bdx_priv *priv[LUXOR_MAX_PORT];
 };
 
 enum { IRQ_INTX, IRQ_MSI, IRQ_MSIX };
@@ -141,153 +141,153 @@ enum { IRQ_INTX, IRQ_MSI, IRQ_MSIX };
 	((coal)|((coal_rc)<<15)|((rxf_th)<<16)|((pck_th)<<20))
 
 struct fifo {
-	dma_addr_t da;		/* physical address of fifo (used by HW) */
-	char *va;		/* virtual address of fifo (used by SW) */
-	u32 rptr, wptr;		/* cached values of RPTR and WPTR registers,
+    dma_addr_t da;		/* physical address of fifo (used by HW) */
+    char *va;		/* virtual address of fifo (used by SW) */
+    u32 rptr, wptr;		/* cached values of RPTR and WPTR registers,
 				   they're 32 bits on both 32 and 64 archs */
-	u16 reg_CFG0, reg_CFG1;
-	u16 reg_RPTR, reg_WPTR;
-	u16 memsz;		/* memory size allocated for fifo */
-	u16 size_mask;
-	u16 pktsz;		/* skb packet size to allocate */
-	u16 rcvno;		/* number of buffers that come from this RXF */
+    u16 reg_CFG0, reg_CFG1;
+    u16 reg_RPTR, reg_WPTR;
+    u16 memsz;		/* memory size allocated for fifo */
+    u16 size_mask;
+    u16 pktsz;		/* skb packet size to allocate */
+    u16 rcvno;		/* number of buffers that come from this RXF */
 };
 
 struct txf_fifo {
-	struct fifo m;		/* minimal set of variables used by all fifos */
+    struct fifo m;		/* minimal set of variables used by all fifos */
 };
 
 struct txd_fifo {
-	struct fifo m;		/* minimal set of variables used by all fifos */
+    struct fifo m;		/* minimal set of variables used by all fifos */
 };
 
 struct rxf_fifo {
-	struct fifo m;		/* minimal set of variables used by all fifos */
+    struct fifo m;		/* minimal set of variables used by all fifos */
 };
 
 struct rxd_fifo {
-	struct fifo m;		/* minimal set of variables used by all fifos */
+    struct fifo m;		/* minimal set of variables used by all fifos */
 };
 
 struct rx_map {
-	u64 dma;
-	struct sk_buff *skb;
+    u64 dma;
+    struct sk_buff *skb;
 };
 
 struct rxdb {
-	int *stack;
-	struct rx_map *elems;
-	int nelem;
-	int top;
+    int *stack;
+    struct rx_map *elems;
+    int nelem;
+    int top;
 };
 
 union bdx_dma_addr {
-	dma_addr_t dma;
-	struct sk_buff *skb;
+    dma_addr_t dma;
+    struct sk_buff *skb;
 };
 
 /* Entry in the db.
  * if len == 0 addr is dma
  * if len != 0 addr is skb */
 struct tx_map {
-	union bdx_dma_addr addr;
-	int len;
+    union bdx_dma_addr addr;
+    int len;
 };
 
 /* tx database - implemented as circular fifo buffer*/
 struct txdb {
-	struct tx_map *start;	/* points to the first element */
-	struct tx_map *end;	/* points just AFTER the last element */
-	struct tx_map *rptr;	/* points to the next element to read */
-	struct tx_map *wptr;	/* points to the next element to write */
-	int size;		/* number of elements in the db */
+    struct tx_map *start;	/* points to the first element */
+    struct tx_map *end;	/* points just AFTER the last element */
+    struct tx_map *rptr;	/* points to the next element to read */
+    struct tx_map *wptr;	/* points to the next element to write */
+    int size;		/* number of elements in the db */
 };
 
 /*Internal stats structure*/
 struct bdx_stats {
-	u64 InUCast;			/* 0x7200 */
-	u64 InMCast;			/* 0x7210 */
-	u64 InBCast;			/* 0x7220 */
-	u64 InPkts;			/* 0x7230 */
-	u64 InErrors;			/* 0x7240 */
-	u64 InDropped;			/* 0x7250 */
-	u64 FrameTooLong;		/* 0x7260 */
-	u64 FrameSequenceErrors;	/* 0x7270 */
-	u64 InVLAN;			/* 0x7280 */
-	u64 InDroppedDFE;		/* 0x7290 */
-	u64 InDroppedIntFull;		/* 0x72A0 */
-	u64 InFrameAlignErrors;		/* 0x72B0 */
+    u64 InUCast;			/* 0x7200 */
+    u64 InMCast;			/* 0x7210 */
+    u64 InBCast;			/* 0x7220 */
+    u64 InPkts;			/* 0x7230 */
+    u64 InErrors;			/* 0x7240 */
+    u64 InDropped;			/* 0x7250 */
+    u64 FrameTooLong;		/* 0x7260 */
+    u64 FrameSequenceErrors;	/* 0x7270 */
+    u64 InVLAN;			/* 0x7280 */
+    u64 InDroppedDFE;		/* 0x7290 */
+    u64 InDroppedIntFull;		/* 0x72A0 */
+    u64 InFrameAlignErrors;		/* 0x72B0 */
 
-	/* 0x72C0-0x72E0 RSRV */
+    /* 0x72C0-0x72E0 RSRV */
 
-	u64 OutUCast;			/* 0x72F0 */
-	u64 OutMCast;			/* 0x7300 */
-	u64 OutBCast;			/* 0x7310 */
-	u64 OutPkts;			/* 0x7320 */
+    u64 OutUCast;			/* 0x72F0 */
+    u64 OutMCast;			/* 0x7300 */
+    u64 OutBCast;			/* 0x7310 */
+    u64 OutPkts;			/* 0x7320 */
 
-	/* 0x7330-0x7360 RSRV */
+    /* 0x7330-0x7360 RSRV */
 
-	u64 OutVLAN;			/* 0x7370 */
-	u64 InUCastOctects;		/* 0x7380 */
-	u64 OutUCastOctects;		/* 0x7390 */
+    u64 OutVLAN;			/* 0x7370 */
+    u64 InUCastOctects;		/* 0x7380 */
+    u64 OutUCastOctects;		/* 0x7390 */
 
-	/* 0x73A0-0x73B0 RSRV */
+    /* 0x73A0-0x73B0 RSRV */
 
-	u64 InBCastOctects;		/* 0x73C0 */
-	u64 OutBCastOctects;		/* 0x73D0 */
-	u64 InOctects;			/* 0x73E0 */
-	u64 OutOctects;			/* 0x73F0 */
+    u64 InBCastOctects;		/* 0x73C0 */
+    u64 OutBCastOctects;		/* 0x73D0 */
+    u64 InOctects;			/* 0x73E0 */
+    u64 OutOctects;			/* 0x73F0 */
 };
 
 struct bdx_priv {
-	void __iomem *pBdxRegs;
-	struct net_device *ndev;
+    void __iomem *pBdxRegs;
+    struct net_device *ndev;
 
-	struct napi_struct napi;
+    struct napi_struct napi;
 
-	/* RX FIFOs: 1 for data (full) descs, and 2 for free descs */
-	struct rxd_fifo rxd_fifo0;
-	struct rxf_fifo rxf_fifo0;
-	struct rxdb *rxdb;	/* rx dbs to store skb pointers */
-	int napi_stop;
+    /* RX FIFOs: 1 for data (full) descs, and 2 for free descs */
+    struct rxd_fifo rxd_fifo0;
+    struct rxf_fifo rxf_fifo0;
+    struct rxdb *rxdb;	/* rx dbs to store skb pointers */
+    int napi_stop;
 
-	/* Tx FIFOs: 1 for data desc, 1 for empty (acks) desc */
-	struct txd_fifo txd_fifo0;
-	struct txf_fifo txf_fifo0;
+    /* Tx FIFOs: 1 for data desc, 1 for empty (acks) desc */
+    struct txd_fifo txd_fifo0;
+    struct txf_fifo txf_fifo0;
 
-	struct txdb txdb;
-	int tx_level;
+    struct txdb txdb;
+    int tx_level;
 #ifdef BDX_DELAY_WPTR
-	int tx_update_mark;
-	int tx_noupd;
+    int tx_update_mark;
+    int tx_noupd;
 #endif
-	spinlock_t tx_lock;	/* NETIF_F_LLTX mode */
+    spinlock_t tx_lock;	/* NETIF_F_LLTX mode */
 
-	/* rarely used */
-	u8 port;
-	u32 msg_enable;
-	int stats_flag;
-	struct bdx_stats hw_stats;
-	struct pci_dev *pdev;
+    /* rarely used */
+    u8 port;
+    u32 msg_enable;
+    int stats_flag;
+    struct bdx_stats hw_stats;
+    struct pci_dev *pdev;
 
-	struct pci_nic *nic;
+    struct pci_nic *nic;
 
-	u8 txd_size;
-	u8 txf_size;
-	u8 rxd_size;
-	u8 rxf_size;
-	u32 rdintcm;
-	u32 tdintcm;
+    u8 txd_size;
+    u8 txf_size;
+    u8 rxd_size;
+    u8 rxf_size;
+    u32 rdintcm;
+    u32 tdintcm;
 };
 
 /* RX FREE descriptor - 64bit*/
 struct rxf_desc {
-	u32 info;		/* Buffer Count + Info - described below */
-	u32 va_lo;		/* VAdr[31:0] */
-	u32 va_hi;		/* VAdr[63:32] */
-	u32 pa_lo;		/* PAdr[31:0] */
-	u32 pa_hi;		/* PAdr[63:32] */
-	u32 len;		/* Buffer Length */
+    u32 info;		/* Buffer Count + Info - described below */
+    u32 va_lo;		/* VAdr[31:0] */
+    u32 va_hi;		/* VAdr[63:32] */
+    u32 pa_lo;		/* PAdr[31:0] */
+    u32 pa_hi;		/* PAdr[63:32] */
+    u32 len;		/* Buffer Length */
 };
 
 #define GET_RXD_BC(x)			GET_BITS_SHIFT((x), 5, 0)
@@ -304,19 +304,19 @@ struct rxf_desc {
 #define GET_RXD_PRIO(x)			GET_BITS_SHIFT((x), 3, 13)
 
 struct rxd_desc {
-	u32 rxd_val1;
-	u16 len;
-	u16 rxd_vlan;
-	u32 va_lo;
-	u32 va_hi;
+    u32 rxd_val1;
+    u16 len;
+    u16 rxd_vlan;
+    u32 va_lo;
+    u32 va_hi;
 };
 
 /* PBL describes each virtual buffer to be */
 /* transmitted from the host.*/
 struct pbl {
-	u32 pa_lo;
-	u32 pa_hi;
-	u32 len;
+    u32 pa_lo;
+    u32 pa_hi;
+    u32 len;
 };
 
 /* First word for TXD descriptor. It means: type = 3 for regular Tx packet,
@@ -326,12 +326,12 @@ struct pbl {
 	((lgsnd)<<9) | (0x30000) | ((vlan_id)<<20))
 
 struct txd_desc {
-	u32 txd_val1;
-	u16 mss;
-	u16 length;
-	u32 va_lo;
-	u32 va_hi;
-	struct pbl pbl[0];	/* Fragments */
+    u32 txd_val1;
+    u16 mss;
+    u16 length;
+    u32 va_lo;
+    u32 va_hi;
+    struct pbl pbl[0];	/* Fragments */
 } __packed;
 
 /* Register region size */

@@ -22,10 +22,10 @@
 #define TAPECLASS_NAME_LEN	32
 
 struct tape_class_device {
-	struct cdev		*char_device;
-	struct device		*class_device;
-	char			device_name[TAPECLASS_NAME_LEN];
-	char			mode_name[TAPECLASS_NAME_LEN];
+    struct cdev		*char_device;
+    struct device		*class_device;
+    char			device_name[TAPECLASS_NAME_LEN];
+    char			mode_name[TAPECLASS_NAME_LEN];
 };
 
 /*
@@ -48,11 +48,11 @@ struct tape_class_device {
  *	name from the physical device to the logical device (class).
  */
 struct tape_class_device *register_tape_dev(
-	struct device *		device,
-	dev_t			dev,
-	const struct file_operations *fops,
-	char *			device_name,
-	char *			node_name
+    struct device *		device,
+    dev_t			dev,
+    const struct file_operations *fops,
+    char *			device_name,
+    char *			node_name
 );
 void unregister_tape_dev(struct device *device, struct tape_class_device *tcd);
 

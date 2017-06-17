@@ -14,44 +14,42 @@
 
 #ifdef CONFIG_DWARF_UNWINDER
 
-void *return_address(unsigned int depth)
-{
-	struct dwarf_frame *frame;
-	unsigned long ra;
-	int i;
+void *return_address(unsigned int depth) {
+    struct dwarf_frame *frame;
+    unsigned long ra;
+    int i;
 
-	for (i = 0, frame = NULL, ra = 0; i <= depth; i++) {
-		struct dwarf_frame *tmp;
+    for (i = 0, frame = NULL, ra = 0; i <= depth; i++) {
+        struct dwarf_frame *tmp;
 
-		tmp = dwarf_unwind_stack(ra, frame);
-		if (!tmp)
-			return NULL;
+        tmp = dwarf_unwind_stack(ra, frame);
+        if (!tmp)
+            return NULL;
 
-		if (frame)
-			dwarf_free_frame(frame);
+        if (frame)
+            dwarf_free_frame(frame);
 
-		frame = tmp;
+        frame = tmp;
 
-		if (!frame || !frame->return_addr)
-			break;
+        if (!frame || !frame->return_addr)
+            break;
 
-		ra = frame->return_addr;
-	}
+        ra = frame->return_addr;
+    }
 
-	/* Failed to unwind the stack to the specified depth. */
-	WARN_ON(i != depth + 1);
+    /* Failed to unwind the stack to the specified depth. */
+    WARN_ON(i != depth + 1);
 
-	if (frame)
-		dwarf_free_frame(frame);
+    if (frame)
+        dwarf_free_frame(frame);
 
-	return (void *)ra;
+    return (void *)ra;
 }
 
 #else
 
-void *return_address(unsigned int depth)
-{
-	return NULL;
+void *return_address(unsigned int depth) {
+    return NULL;
 }
 
 #endif

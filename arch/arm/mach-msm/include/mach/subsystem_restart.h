@@ -24,9 +24,9 @@
 struct subsys_device;
 
 enum {
-	RESET_SOC = 0,
-	RESET_SUBSYS_COUPLED,
-	RESET_LEVEL_MAX
+    RESET_SOC = 0,
+    RESET_SUBSYS_COUPLED,
+    RESET_LEVEL_MAX
 };
 
 struct device;
@@ -48,27 +48,27 @@ struct module;
  * framework
  */
 struct subsys_desc {
-	const char *name;
-	const char *depends_on;
-	struct device *dev;
-	struct module *owner;
+    const char *name;
+    const char *depends_on;
+    struct device *dev;
+    struct module *owner;
 
-	int (*start)(const struct subsys_desc *desc);
-	void (*stop)(const struct subsys_desc *desc);
+    int (*start)(const struct subsys_desc *desc);
+    void (*stop)(const struct subsys_desc *desc);
 
-	int (*shutdown)(const struct subsys_desc *desc);
-	int (*powerup)(const struct subsys_desc *desc);
-	void (*crash_shutdown)(const struct subsys_desc *desc);
-	int (*ramdump)(int, const struct subsys_desc *desc);
-	irqreturn_t (*err_fatal_handler) (int irq, void *dev_id);
-	irqreturn_t (*stop_ack_handler) (int irq, void *dev_id);
-	irqreturn_t (*wdog_bite_handler) (int irq, void *dev_id);
-	int is_not_loadable;
-	unsigned int err_fatal_irq;
-	unsigned int err_ready_irq;
-	unsigned int stop_ack_irq;
-	unsigned int wdog_bite_irq;
-	int force_stop_gpio;
+    int (*shutdown)(const struct subsys_desc *desc);
+    int (*powerup)(const struct subsys_desc *desc);
+    void (*crash_shutdown)(const struct subsys_desc *desc);
+    int (*ramdump)(int, const struct subsys_desc *desc);
+    irqreturn_t (*err_fatal_handler) (int irq, void *dev_id);
+    irqreturn_t (*stop_ack_handler) (int irq, void *dev_id);
+    irqreturn_t (*wdog_bite_handler) (int irq, void *dev_id);
+    int is_not_loadable;
+    unsigned int err_fatal_irq;
+    unsigned int err_ready_irq;
+    unsigned int stop_ack_irq;
+    unsigned int wdog_bite_irq;
+    int force_stop_gpio;
 };
 
 #if defined(CONFIG_MSM_SUBSYSTEM_RESTART)
@@ -94,48 +94,41 @@ extern int subsystem_crash_reason(const char *name, char *reason);
 extern void update_crash_reason(struct subsys_device *dev, char *, int);
 #else
 static inline void update_crash_reason(struct subsys_device *dev,
-						char *reason, int size) { }
+                                       char *reason, int size) { }
 #endif
 #else
 static inline void update_crash_reason(struct subsys_device *dev,
-						char *reason, int size) { }
+                                       char *reason, int size) { }
 
-static inline int subsystem_crash_reason(const char *name, char *reason)
-{
-	return 0;
+static inline int subsystem_crash_reason(const char *name, char *reason) {
+    return 0;
 }
-static inline int subsys_get_restart_level(struct subsys_device *dev)
-{
-	return 0;
+static inline int subsys_get_restart_level(struct subsys_device *dev) {
+    return 0;
 }
 static inline void subsys_set_restart_level(struct subsys_device *dev,
-						int new_level) {}
-static inline int subsystem_restart_dev(struct subsys_device *dev)
-{
-	return 0;
+        int new_level) {}
+static inline int subsystem_restart_dev(struct subsys_device *dev) {
+    return 0;
 }
 
-static inline int subsystem_restart(const char *name)
-{
-	return 0;
+static inline int subsystem_restart(const char *name) {
+    return 0;
 }
 
-static inline int subsystem_crashed(const char *name)
-{
-	return 0;
+static inline int subsystem_crashed(const char *name) {
+    return 0;
 }
 
-static inline void *subsystem_get(const char *name)
-{
-	return NULL;
+static inline void *subsystem_get(const char *name) {
+    return NULL;
 }
 
 static inline void subsystem_put(void *subsystem) { }
 
 static inline
-struct subsys_device *subsys_register(struct subsys_desc *desc)
-{
-	return NULL;
+struct subsys_device *subsys_register(struct subsys_desc *desc) {
+    return NULL;
 }
 
 static inline void subsys_unregister(struct subsys_device *dev) { }
@@ -143,9 +136,8 @@ static inline void subsys_unregister(struct subsys_device *dev) { }
 static inline void subsys_default_online(struct subsys_device *dev) { }
 static inline
 void subsys_set_crash_status(struct subsys_device *dev, bool crashed) { }
-static inline bool subsys_get_crash_status(struct subsys_device *dev)
-{
-	return false;
+static inline bool subsys_get_crash_status(struct subsys_device *dev) {
+    return false;
 }
 
 #endif /* CONFIG_MSM_SUBSYSTEM_RESTART */

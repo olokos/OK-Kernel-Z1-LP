@@ -15,30 +15,30 @@
 #include "sysmon.h"
 
 struct mdm_vddmin_resource {
-	int rpm_id;
-	int ap2mdm_vddmin_gpio;
-	unsigned int modes;
-	unsigned int drive_strength;
-	int mdm2ap_vddmin_gpio;
+    int rpm_id;
+    int ap2mdm_vddmin_gpio;
+    unsigned int modes;
+    unsigned int drive_strength;
+    int mdm2ap_vddmin_gpio;
 };
 
 struct mdm_platform_data {
-	char *mdm_version;
-	int ramdump_delay_ms;
-	int ps_hold_delay_ms;
-	int soft_reset_inverted;
-	int early_power_on;
-	int sfr_query;
-	int no_powerdown_after_ramdumps;
-	struct mdm_vddmin_resource *vddmin_resource;
-	struct platform_device *peripheral_platform_device;
-	const unsigned int ramdump_timeout_ms;
-	int image_upgrade_supported;
-	struct gpiomux_setting *mdm2ap_status_gpio_run_cfg;
-	int send_shdn;
-	int cascading_ssr;
-	int sysmon_subsys_id_valid;
-	enum subsys_id sysmon_subsys_id;
+    char *mdm_version;
+    int ramdump_delay_ms;
+    int ps_hold_delay_ms;
+    int soft_reset_inverted;
+    int early_power_on;
+    int sfr_query;
+    int no_powerdown_after_ramdumps;
+    struct mdm_vddmin_resource *vddmin_resource;
+    struct platform_device *peripheral_platform_device;
+    const unsigned int ramdump_timeout_ms;
+    int image_upgrade_supported;
+    struct gpiomux_setting *mdm2ap_status_gpio_run_cfg;
+    int send_shdn;
+    int cascading_ssr;
+    int sysmon_subsys_id_valid;
+    enum subsys_id sysmon_subsys_id;
 };
 
 #endif

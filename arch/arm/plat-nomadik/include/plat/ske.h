@@ -38,13 +38,13 @@
  * @wakeup_enable: allow waking up the system
  */
 struct ske_keypad_platform_data {
-	int (*init)(void);
-	int (*exit)(void);
-	const struct matrix_keymap_data *keymap_data;
-	u8 krow;
-	u8 kcol;
-	u8 debounce_ms;
-	bool no_autorepeat;
-	bool wakeup_enable;
+    int (*init)(void);
+    int (*exit)(void);
+    const struct matrix_keymap_data *keymap_data;
+    u8 krow;
+    u8 kcol;
+    u8 debounce_ms;
+    bool no_autorepeat;
+    bool wakeup_enable;
 };
 #endif	/*__SKE_KPD_H*/

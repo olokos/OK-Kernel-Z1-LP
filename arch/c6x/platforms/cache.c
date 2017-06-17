@@ -116,11 +116,10 @@ do {								\
 	soc_readl(cache_base + (reg));				\
 } while (0)
 
-static void cache_block_operation_wait(unsigned int wc_reg)
-{
-	/* Wait for completion */
-	while (imcr_get(wc_reg))
-		cpu_relax();
+static void cache_block_operation_wait(unsigned int wc_reg) {
+    /* Wait for completion */
+    while (imcr_get(wc_reg))
+        cpu_relax();
 }
 
 static DEFINE_SPINLOCK(cache_lock);
@@ -130,81 +129,79 @@ static DEFINE_SPINLOCK(cache_lock);
  * invalidate or writeback/invalidate
  */
 static void cache_block_operation(unsigned int *start,
-				  unsigned int *end,
-				  unsigned int bar_reg,
-				  unsigned int wc_reg)
-{
-	unsigned long flags;
-	unsigned int wcnt =
-		(L2_CACHE_ALIGN_CNT((unsigned int) end)
-		 - L2_CACHE_ALIGN_LOW((unsigned int) start)) >> 2;
-	unsigned int wc = 0;
+                                  unsigned int *end,
+                                  unsigned int bar_reg,
+                                  unsigned int wc_reg) {
+    unsigned long flags;
+    unsigned int wcnt =
+        (L2_CACHE_ALIGN_CNT((unsigned int) end)
+         - L2_CACHE_ALIGN_LOW((unsigned int) start)) >> 2;
+    unsigned int wc = 0;
 
-	for (; wcnt; wcnt -= wc, start += wc) {
+    for (; wcnt; wcnt -= wc, start += wc) {
 loop:
-		spin_lock_irqsave(&cache_lock, flags);
+        spin_lock_irqsave(&cache_lock, flags);
 
-		/*
-		 * If another cache operation is occuring
-		 */
-		if (unlikely(imcr_get(wc_reg))) {
-			spin_unlock_irqrestore(&cache_lock, flags);
+        /*
+         * If another cache operation is occuring
+         */
+        if (unlikely(imcr_get(wc_reg))) {
+            spin_unlock_irqrestore(&cache_lock, flags);
 
-			/* Wait for previous operation completion */
-			cache_block_operation_wait(wc_reg);
+            /* Wait for previous operation completion */
+            cache_block_operation_wait(wc_reg);
 
-			/* Try again */
-			goto loop;
-		}
+            /* Try again */
+            goto loop;
+        }
 
-		imcr_set(bar_reg, L2_CACHE_ALIGN_LOW((unsigned int) start));
+        imcr_set(bar_reg, L2_CACHE_ALIGN_LOW((unsigned int) start));
 
-		if (wcnt > 0xffff)
-			wc = 0xffff;
-		else
-			wc = wcnt;
+        if (wcnt > 0xffff)
+            wc = 0xffff;
+        else
+            wc = wcnt;
 
-		/* Set word count value in the WC register */
-		imcr_set(wc_reg, wc & 0xffff);
+        /* Set word count value in the WC register */
+        imcr_set(wc_reg, wc & 0xffff);
 
-		spin_unlock_irqrestore(&cache_lock, flags);
+        spin_unlock_irqrestore(&cache_lock, flags);
 
-		/* Wait for completion */
-		cache_block_operation_wait(wc_reg);
-	}
+        /* Wait for completion */
+        cache_block_operation_wait(wc_reg);
+    }
 }
 
 static void cache_block_operation_nowait(unsigned int *start,
-					 unsigned int *end,
-					 unsigned int bar_reg,
-					 unsigned int wc_reg)
-{
-	unsigned long flags;
-	unsigned int wcnt =
-		(L2_CACHE_ALIGN_CNT((unsigned int) end)
-		 - L2_CACHE_ALIGN_LOW((unsigned int) start)) >> 2;
-	unsigned int wc = 0;
+        unsigned int *end,
+        unsigned int bar_reg,
+        unsigned int wc_reg) {
+    unsigned long flags;
+    unsigned int wcnt =
+        (L2_CACHE_ALIGN_CNT((unsigned int) end)
+         - L2_CACHE_ALIGN_LOW((unsigned int) start)) >> 2;
+    unsigned int wc = 0;
 
-	for (; wcnt; wcnt -= wc, start += wc) {
+    for (; wcnt; wcnt -= wc, start += wc) {
 
-		spin_lock_irqsave(&cache_lock, flags);
+        spin_lock_irqsave(&cache_lock, flags);
 
-		imcr_set(bar_reg, L2_CACHE_ALIGN_LOW((unsigned int) start));
+        imcr_set(bar_reg, L2_CACHE_ALIGN_LOW((unsigned int) start));
 
-		if (wcnt > 0xffff)
-			wc = 0xffff;
-		else
-			wc = wcnt;
+        if (wcnt > 0xffff)
+            wc = 0xffff;
+        else
+            wc = wcnt;
 
-		/* Set word count value in the WC register */
-		imcr_set(wc_reg, wc & 0xffff);
+        /* Set word count value in the WC register */
+        imcr_set(wc_reg, wc & 0xffff);
 
-		spin_unlock_irqrestore(&cache_lock, flags);
+        spin_unlock_irqrestore(&cache_lock, flags);
 
-		/* Don't wait for completion on last cache operation */
-		if (wcnt > 0xffff)
-			cache_block_operation_wait(wc_reg);
-	}
+        /* Don't wait for completion on last cache operation */
+        if (wcnt > 0xffff)
+            cache_block_operation_wait(wc_reg);
+    }
 }
 
 /*
@@ -214,40 +211,37 @@ static void cache_block_operation_nowait(unsigned int *start,
 /*
  * Disable L1 caches
  */
-void L1_cache_off(void)
-{
-	unsigned int dummy;
+void L1_cache_off(void) {
+    unsigned int dummy;
 
-	imcr_set(IMCR_L1PCFG, 0);
-	dummy = imcr_get(IMCR_L1PCFG);
+    imcr_set(IMCR_L1PCFG, 0);
+    dummy = imcr_get(IMCR_L1PCFG);
 
-	imcr_set(IMCR_L1DCFG, 0);
-	dummy = imcr_get(IMCR_L1DCFG);
+    imcr_set(IMCR_L1DCFG, 0);
+    dummy = imcr_get(IMCR_L1DCFG);
 }
 
 /*
  * Enable L1 caches
  */
-void L1_cache_on(void)
-{
-	unsigned int dummy;
+void L1_cache_on(void) {
+    unsigned int dummy;
 
-	imcr_set(IMCR_L1PCFG, 7);
-	dummy = imcr_get(IMCR_L1PCFG);
+    imcr_set(IMCR_L1PCFG, 7);
+    dummy = imcr_get(IMCR_L1PCFG);
 
-	imcr_set(IMCR_L1DCFG, 7);
-	dummy = imcr_get(IMCR_L1DCFG);
+    imcr_set(IMCR_L1DCFG, 7);
+    dummy = imcr_get(IMCR_L1DCFG);
 }
 
 /*
  *  L1P global-invalidate all
  */
-void L1P_cache_global_invalidate(void)
-{
-	unsigned int set = 1;
-	imcr_set(IMCR_L1PINV, set);
-	while (imcr_get(IMCR_L1PINV) & 1)
-		cpu_relax();
+void L1P_cache_global_invalidate(void) {
+    unsigned int set = 1;
+    imcr_set(IMCR_L1PINV, set);
+    while (imcr_get(IMCR_L1PINV) & 1)
+        cpu_relax();
 }
 
 /*
@@ -257,28 +251,25 @@ void L1P_cache_global_invalidate(void)
  * be discarded rather than written back to the lower levels of
  * memory
  */
-void L1D_cache_global_invalidate(void)
-{
-	unsigned int set = 1;
-	imcr_set(IMCR_L1DINV, set);
-	while (imcr_get(IMCR_L1DINV) & 1)
-		cpu_relax();
+void L1D_cache_global_invalidate(void) {
+    unsigned int set = 1;
+    imcr_set(IMCR_L1DINV, set);
+    while (imcr_get(IMCR_L1DINV) & 1)
+        cpu_relax();
 }
 
-void L1D_cache_global_writeback(void)
-{
-	unsigned int set = 1;
-	imcr_set(IMCR_L1DWB, set);
-	while (imcr_get(IMCR_L1DWB) & 1)
-		cpu_relax();
+void L1D_cache_global_writeback(void) {
+    unsigned int set = 1;
+    imcr_set(IMCR_L1DWB, set);
+    while (imcr_get(IMCR_L1DWB) & 1)
+        cpu_relax();
 }
 
-void L1D_cache_global_writeback_invalidate(void)
-{
-	unsigned int set = 1;
-	imcr_set(IMCR_L1DWBINV, set);
-	while (imcr_get(IMCR_L1DWBINV) & 1)
-		cpu_relax();
+void L1D_cache_global_writeback_invalidate(void) {
+    unsigned int set = 1;
+    imcr_set(IMCR_L1DWBINV, set);
+    while (imcr_get(IMCR_L1DWBINV) & 1)
+        cpu_relax();
 }
 
 /*
@@ -288,158 +279,142 @@ void L1D_cache_global_writeback_invalidate(void)
 /*
  * Set L2 operation mode
  */
-void L2_cache_set_mode(unsigned int mode)
-{
-	unsigned int ccfg = imcr_get(IMCR_CCFG);
+void L2_cache_set_mode(unsigned int mode) {
+    unsigned int ccfg = imcr_get(IMCR_CCFG);
 
-	/* Clear and set the L2MODE bits in CCFG */
-	ccfg &= ~7;
-	ccfg |= (mode & 7);
-	imcr_set(IMCR_CCFG, ccfg);
-	ccfg = imcr_get(IMCR_CCFG);
+    /* Clear and set the L2MODE bits in CCFG */
+    ccfg &= ~7;
+    ccfg |= (mode & 7);
+    imcr_set(IMCR_CCFG, ccfg);
+    ccfg = imcr_get(IMCR_CCFG);
 }
 
 /*
  *  L2 global-writeback and global-invalidate all
  */
-void L2_cache_global_writeback_invalidate(void)
-{
-	imcr_set(IMCR_L2WBINV, 1);
-	while (imcr_get(IMCR_L2WBINV))
-		cpu_relax();
+void L2_cache_global_writeback_invalidate(void) {
+    imcr_set(IMCR_L2WBINV, 1);
+    while (imcr_get(IMCR_L2WBINV))
+        cpu_relax();
 }
 
 /*
  *  L2 global-writeback all
  */
-void L2_cache_global_writeback(void)
-{
-	imcr_set(IMCR_L2WB, 1);
-	while (imcr_get(IMCR_L2WB))
-		cpu_relax();
+void L2_cache_global_writeback(void) {
+    imcr_set(IMCR_L2WB, 1);
+    while (imcr_get(IMCR_L2WB))
+        cpu_relax();
 }
 
 /*
  * Cacheability controls
  */
-void enable_caching(unsigned long start, unsigned long end)
-{
-	unsigned int mar = IMCR_MAR_BASE + ((start >> 24) << 2);
-	unsigned int mar_e = IMCR_MAR_BASE + ((end >> 24) << 2);
+void enable_caching(unsigned long start, unsigned long end) {
+    unsigned int mar = IMCR_MAR_BASE + ((start >> 24) << 2);
+    unsigned int mar_e = IMCR_MAR_BASE + ((end >> 24) << 2);
 
-	for (; mar <= mar_e; mar += 4)
-		imcr_set(mar, imcr_get(mar) | 1);
+    for (; mar <= mar_e; mar += 4)
+        imcr_set(mar, imcr_get(mar) | 1);
 }
 
-void disable_caching(unsigned long start, unsigned long end)
-{
-	unsigned int mar = IMCR_MAR_BASE + ((start >> 24) << 2);
-	unsigned int mar_e = IMCR_MAR_BASE + ((end >> 24) << 2);
+void disable_caching(unsigned long start, unsigned long end) {
+    unsigned int mar = IMCR_MAR_BASE + ((start >> 24) << 2);
+    unsigned int mar_e = IMCR_MAR_BASE + ((end >> 24) << 2);
 
-	for (; mar <= mar_e; mar += 4)
-		imcr_set(mar, imcr_get(mar) & ~1);
+    for (; mar <= mar_e; mar += 4)
+        imcr_set(mar, imcr_get(mar) & ~1);
 }
 
 
 /*
  *  L1 block operations
  */
-void L1P_cache_block_invalidate(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L1PIBAR, IMCR_L1PIWC);
+void L1P_cache_block_invalidate(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L1PIBAR, IMCR_L1PIWC);
 }
 
-void L1D_cache_block_invalidate(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L1DIBAR, IMCR_L1DIWC);
+void L1D_cache_block_invalidate(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L1DIBAR, IMCR_L1DIWC);
 }
 
-void L1D_cache_block_writeback_invalidate(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L1DWIBAR, IMCR_L1DWIWC);
+void L1D_cache_block_writeback_invalidate(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L1DWIBAR, IMCR_L1DWIWC);
 }
 
-void L1D_cache_block_writeback(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L1DWBAR, IMCR_L1DWWC);
+void L1D_cache_block_writeback(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L1DWBAR, IMCR_L1DWWC);
 }
 
 /*
  *  L2 block operations
  */
-void L2_cache_block_invalidate(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L2IBAR, IMCR_L2IWC);
+void L2_cache_block_invalidate(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L2IBAR, IMCR_L2IWC);
 }
 
-void L2_cache_block_writeback(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L2WBAR, IMCR_L2WWC);
+void L2_cache_block_writeback(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L2WBAR, IMCR_L2WWC);
 }
 
-void L2_cache_block_writeback_invalidate(unsigned int start, unsigned int end)
-{
-	cache_block_operation((unsigned int *) start,
-			      (unsigned int *) end,
-			      IMCR_L2WIBAR, IMCR_L2WIWC);
+void L2_cache_block_writeback_invalidate(unsigned int start, unsigned int end) {
+    cache_block_operation((unsigned int *) start,
+                          (unsigned int *) end,
+                          IMCR_L2WIBAR, IMCR_L2WIWC);
 }
 
-void L2_cache_block_invalidate_nowait(unsigned int start, unsigned int end)
-{
-	cache_block_operation_nowait((unsigned int *) start,
-				     (unsigned int *) end,
-				     IMCR_L2IBAR, IMCR_L2IWC);
+void L2_cache_block_invalidate_nowait(unsigned int start, unsigned int end) {
+    cache_block_operation_nowait((unsigned int *) start,
+                                 (unsigned int *) end,
+                                 IMCR_L2IBAR, IMCR_L2IWC);
 }
 
-void L2_cache_block_writeback_nowait(unsigned int start, unsigned int end)
-{
-	cache_block_operation_nowait((unsigned int *) start,
-				     (unsigned int *) end,
-				     IMCR_L2WBAR, IMCR_L2WWC);
+void L2_cache_block_writeback_nowait(unsigned int start, unsigned int end) {
+    cache_block_operation_nowait((unsigned int *) start,
+                                 (unsigned int *) end,
+                                 IMCR_L2WBAR, IMCR_L2WWC);
 }
 
 void L2_cache_block_writeback_invalidate_nowait(unsigned int start,
-						unsigned int end)
-{
-	cache_block_operation_nowait((unsigned int *) start,
-				     (unsigned int *) end,
-				     IMCR_L2WIBAR, IMCR_L2WIWC);
+        unsigned int end) {
+    cache_block_operation_nowait((unsigned int *) start,
+                                 (unsigned int *) end,
+                                 IMCR_L2WIBAR, IMCR_L2WIWC);
 }
 
 
 /*
  * L1 and L2 caches configuration
  */
-void __init c6x_cache_init(void)
-{
-	struct device_node *node;
+void __init c6x_cache_init(void) {
+    struct device_node *node;
 
-	node = of_find_compatible_node(NULL, NULL, "ti,c64x+cache");
-	if (!node)
-		return;
+    node = of_find_compatible_node(NULL, NULL, "ti,c64x+cache");
+    if (!node)
+        return;
 
-	cache_base = of_iomap(node, 0);
+    cache_base = of_iomap(node, 0);
 
-	of_node_put(node);
+    of_node_put(node);
 
-	if (!cache_base)
-		return;
+    if (!cache_base)
+        return;
 
-	/* Set L2 caches on the the whole L2 SRAM memory */
-	L2_cache_set_mode(L2MODE_SIZE);
+    /* Set L2 caches on the the whole L2 SRAM memory */
+    L2_cache_set_mode(L2MODE_SIZE);
 
-	/* Enable L1 */
-	L1_cache_on();
+    /* Enable L1 */
+    L1_cache_on();
 }

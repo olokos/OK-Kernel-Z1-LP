@@ -29,11 +29,11 @@ typedef irqreturn_t (*dma_irq_handler_t)(int dmachan, unsigned long cstr, void *
 extern void frv_dma_init(void);
 
 extern int frv_dma_open(const char *devname,
-			unsigned long dmamask,
-			int dmacap,
-			dma_irq_handler_t handler,
-			unsigned long irq_flags,
-			void *data);
+                        unsigned long dmamask,
+                        int dmacap,
+                        dma_irq_handler_t handler,
+                        unsigned long irq_flags,
+                        void *data);
 
 /* channels required */
 #define FRV_DMA_MASK_ANY	ULONG_MAX	/* any channel */
@@ -48,8 +48,8 @@ extern void frv_dma_close(int dma);
 extern void frv_dma_config(int dma, unsigned long ccfr, unsigned long cctr, unsigned long apr);
 
 extern void frv_dma_start(int dma,
-			  unsigned long sba, unsigned long dba,
-			  unsigned long pix, unsigned long six, unsigned long bcl);
+                          unsigned long sba, unsigned long dba,
+                          unsigned long pix, unsigned long six, unsigned long bcl);
 
 extern void frv_dma_restart_circular(int dma, unsigned long six);
 

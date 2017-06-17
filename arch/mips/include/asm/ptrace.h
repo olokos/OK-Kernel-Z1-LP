@@ -28,29 +28,29 @@
  */
 struct pt_regs {
 #ifdef CONFIG_32BIT
-	/* Pad bytes for argument save space on the stack. */
-	unsigned long pad0[6];
+    /* Pad bytes for argument save space on the stack. */
+    unsigned long pad0[6];
 #endif
 
-	/* Saved main processor registers. */
-	unsigned long regs[32];
+    /* Saved main processor registers. */
+    unsigned long regs[32];
 
-	/* Saved special registers. */
-	unsigned long cp0_status;
-	unsigned long hi;
-	unsigned long lo;
+    /* Saved special registers. */
+    unsigned long cp0_status;
+    unsigned long hi;
+    unsigned long lo;
 #ifdef CONFIG_CPU_HAS_SMARTMIPS
-	unsigned long acx;
+    unsigned long acx;
 #endif
-	unsigned long cp0_badvaddr;
-	unsigned long cp0_cause;
-	unsigned long cp0_epc;
+    unsigned long cp0_badvaddr;
+    unsigned long cp0_cause;
+    unsigned long cp0_epc;
 #ifdef CONFIG_MIPS_MT_SMTC
-	unsigned long cp0_tcstatus;
+    unsigned long cp0_tcstatus;
 #endif /* CONFIG_MIPS_MT_SMTC */
 #ifdef CONFIG_CPU_CAVIUM_OCTEON
-	unsigned long long mpl[3];        /* MTM{0,1,2} */
-	unsigned long long mtp[3];        /* MTP{0,1,2} */
+    unsigned long long mpl[3];        /* MTM{0,1,2} */
+    unsigned long long mtp[3];        /* MTP{0,1,2} */
 #endif
 } __attribute__ ((aligned (8)));
 
@@ -76,37 +76,37 @@ struct pt_regs {
 
 /* Read and write watchpoint registers.  */
 enum pt_watch_style {
-	pt_watch_style_mips32,
-	pt_watch_style_mips64
+    pt_watch_style_mips32,
+    pt_watch_style_mips64
 };
 struct mips32_watch_regs {
-	unsigned int watchlo[8];
-	/* Lower 16 bits of watchhi. */
-	unsigned short watchhi[8];
-	/* Valid mask and I R W bits.
-	 * bit 0 -- 1 if W bit is usable.
-	 * bit 1 -- 1 if R bit is usable.
-	 * bit 2 -- 1 if I bit is usable.
-	 * bits 3 - 11 -- Valid watchhi mask bits.
-	 */
-	unsigned short watch_masks[8];
-	/* The number of valid watch register pairs.  */
-	unsigned int num_valid;
+    unsigned int watchlo[8];
+    /* Lower 16 bits of watchhi. */
+    unsigned short watchhi[8];
+    /* Valid mask and I R W bits.
+     * bit 0 -- 1 if W bit is usable.
+     * bit 1 -- 1 if R bit is usable.
+     * bit 2 -- 1 if I bit is usable.
+     * bits 3 - 11 -- Valid watchhi mask bits.
+     */
+    unsigned short watch_masks[8];
+    /* The number of valid watch register pairs.  */
+    unsigned int num_valid;
 } __attribute__((aligned(8)));
 
 struct mips64_watch_regs {
-	unsigned long long watchlo[8];
-	unsigned short watchhi[8];
-	unsigned short watch_masks[8];
-	unsigned int num_valid;
+    unsigned long long watchlo[8];
+    unsigned short watchhi[8];
+    unsigned short watch_masks[8];
+    unsigned int num_valid;
 } __attribute__((aligned(8)));
 
 struct pt_watch_regs {
-	enum pt_watch_style style;
-	union {
-		struct mips32_watch_regs mips32;
-		struct mips64_watch_regs mips64;
-	};
+    enum pt_watch_style style;
+    union {
+        struct mips32_watch_regs mips32;
+        struct mips64_watch_regs mips64;
+    };
 };
 
 #define PTRACE_GET_WATCH_REGS	0xd0
@@ -128,26 +128,24 @@ extern int ptrace_getfpregs(struct task_struct *child, __u32 __user *data);
 extern int ptrace_setfpregs(struct task_struct *child, __u32 __user *data);
 
 extern int ptrace_get_watch_regs(struct task_struct *child,
-	struct pt_watch_regs __user *addr);
+                                 struct pt_watch_regs __user *addr);
 extern int ptrace_set_watch_regs(struct task_struct *child,
-	struct pt_watch_regs __user *addr);
+                                 struct pt_watch_regs __user *addr);
 
 /*
  * Does the process account for user or for system time?
  */
 #define user_mode(regs) (((regs)->cp0_status & KU_MASK) == KU_USER)
 
-static inline int is_syscall_success(struct pt_regs *regs)
-{
-	return !regs->regs[7];
+static inline int is_syscall_success(struct pt_regs *regs) {
+    return !regs->regs[7];
 }
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	if (is_syscall_success(regs))
-		return regs->regs[2];
-	else
-		return -regs->regs[2];
+static inline long regs_return_value(struct pt_regs *regs) {
+    if (is_syscall_success(regs))
+        return regs->regs[2];
+    else
+        return -regs->regs[2];
 }
 
 #define instruction_pointer(regs) ((regs)->cp0_epc)
@@ -158,10 +156,9 @@ extern asmlinkage void syscall_trace_leave(struct pt_regs *regs);
 
 extern void die(const char *, struct pt_regs *) __noreturn;
 
-static inline void die_if_kernel(const char *str, struct pt_regs *regs)
-{
-	if (unlikely(!user_mode(regs)))
-		die(str, regs);
+static inline void die_if_kernel(const char *str, struct pt_regs *regs) {
+    if (unlikely(!user_mode(regs)))
+        die(str, regs);
 }
 
 #endif

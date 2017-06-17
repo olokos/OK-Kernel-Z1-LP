@@ -16,31 +16,31 @@
 #define QETH_SNIFF_AVAIL	0x0008
 
 struct qeth_ipaddr {
-	struct list_head entry;
-	enum qeth_ip_types type;
-	enum qeth_ipa_setdelip_flags set_flags;
-	enum qeth_ipa_setdelip_flags del_flags;
-	int is_multicast;
-	int users;
-	enum qeth_prot_versions proto;
-	unsigned char mac[OSA_ADDR_LEN];
-	union {
-		struct {
-			unsigned int addr;
-			unsigned int mask;
-		} a4;
-		struct {
-			struct in6_addr addr;
-			unsigned int pfxlen;
-		} a6;
-	} u;
+    struct list_head entry;
+    enum qeth_ip_types type;
+    enum qeth_ipa_setdelip_flags set_flags;
+    enum qeth_ipa_setdelip_flags del_flags;
+    int is_multicast;
+    int users;
+    enum qeth_prot_versions proto;
+    unsigned char mac[OSA_ADDR_LEN];
+    union {
+        struct {
+            unsigned int addr;
+            unsigned int mask;
+        } a4;
+        struct {
+            struct in6_addr addr;
+            unsigned int pfxlen;
+        } a6;
+    } u;
 };
 
 struct qeth_ipato_entry {
-	struct list_head entry;
-	enum qeth_prot_versions proto;
-	char addr[16];
-	int mask_bits;
+    struct list_head entry;
+    enum qeth_prot_versions proto;
+    char addr[16];
+    int mask_bits;
 };
 
 
@@ -56,12 +56,12 @@ int qeth_l3_setrouting_v4(struct qeth_card *);
 int qeth_l3_setrouting_v6(struct qeth_card *);
 int qeth_l3_add_ipato_entry(struct qeth_card *, struct qeth_ipato_entry *);
 void qeth_l3_del_ipato_entry(struct qeth_card *, enum qeth_prot_versions,
-			u8 *, int);
+                             u8 *, int);
 int qeth_l3_add_vipa(struct qeth_card *, enum qeth_prot_versions, const u8 *);
 void qeth_l3_del_vipa(struct qeth_card *, enum qeth_prot_versions, const u8 *);
 int qeth_l3_add_rxip(struct qeth_card *, enum qeth_prot_versions, const u8 *);
 void qeth_l3_del_rxip(struct qeth_card *card, enum qeth_prot_versions,
-			const u8 *);
+                      const u8 *);
 int qeth_l3_is_addr_covered_by_ipato(struct qeth_card *, struct qeth_ipaddr *);
 struct qeth_ipaddr *qeth_l3_get_addr_buffer(enum qeth_prot_versions);
 int qeth_l3_add_ip(struct qeth_card *, struct qeth_ipaddr *);

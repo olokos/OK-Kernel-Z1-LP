@@ -18,9 +18,8 @@
 
 typedef unsigned long long cycles_t;
 
-static __inline__ cycles_t get_cycles (void)
-{
-	return 0;
+static __inline__ cycles_t get_cycles (void) {
+    return 0;
 }
 #endif  /* __KERNEL__ */
 

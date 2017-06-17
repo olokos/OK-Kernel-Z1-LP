@@ -4,10 +4,10 @@
 struct device;
 
 struct pxaohci_platform_data {
-	int (*init)(struct device *);
-	void (*exit)(struct device *);
+    int (*init)(struct device *);
+    void (*exit)(struct device *);
 
-	unsigned long flags;
+    unsigned long flags;
 #define ENABLE_PORT1		(1 << 0)
 #define ENABLE_PORT2		(1 << 1)
 #define ENABLE_PORT3		(1 << 2)
@@ -19,16 +19,16 @@ struct pxaohci_platform_data {
 #define OC_MODE_GLOBAL		(0 << 6)
 #define OC_MODE_PERPORT		(1 << 6)
 
-	int power_on_delay;	/* Power On to Power Good time - in ms
+    int power_on_delay;	/* Power On to Power Good time - in ms
 				 * HCD must wait for this duration before
 				 * accessing a powered on port
 				 */
-	int port_mode;
+    int port_mode;
 #define PMM_NPS_MODE           1
 #define PMM_GLOBAL_MODE        2
 #define PMM_PERPORT_MODE       3
 
-	int power_budget;
+    int power_budget;
 };
 
 extern void pxa_set_ohci_info(struct pxaohci_platform_data *info);

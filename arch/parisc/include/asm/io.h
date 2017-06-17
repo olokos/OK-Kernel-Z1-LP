@@ -10,13 +10,13 @@
 #define bus_to_virt phys_to_virt
 
 static inline unsigned long isa_bus_to_virt(unsigned long addr) {
-	BUG();
-	return 0;
+    BUG();
+    return 0;
 }
 
 static inline unsigned long isa_virt_to_bus(void *addr) {
-	BUG();
-	return 0;
+    BUG();
+    return 0;
 }
 
 /*
@@ -28,98 +28,90 @@ static inline unsigned long isa_virt_to_bus(void *addr) {
  *   eg dev->hpa or 0xfee00000.
  */
 
-static inline unsigned char gsc_readb(unsigned long addr)
-{
-	long flags;
-	unsigned char ret;
+static inline unsigned char gsc_readb(unsigned long addr) {
+    long flags;
+    unsigned char ret;
 
-	__asm__ __volatile__(
-	"	rsm	2,%0\n"
-	"	ldbx	0(%2),%1\n"
-	"	mtsm	%0\n"
-	: "=&r" (flags), "=r" (ret) : "r" (addr) );
+    __asm__ __volatile__(
+        "	rsm	2,%0\n"
+        "	ldbx	0(%2),%1\n"
+        "	mtsm	%0\n"
+        : "=&r" (flags), "=r" (ret) : "r" (addr) );
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned short gsc_readw(unsigned long addr)
-{
-	long flags;
-	unsigned short ret;
+static inline unsigned short gsc_readw(unsigned long addr) {
+    long flags;
+    unsigned short ret;
 
-	__asm__ __volatile__(
-	"	rsm	2,%0\n"
-	"	ldhx	0(%2),%1\n"
-	"	mtsm	%0\n"
-	: "=&r" (flags), "=r" (ret) : "r" (addr) );
+    __asm__ __volatile__(
+        "	rsm	2,%0\n"
+        "	ldhx	0(%2),%1\n"
+        "	mtsm	%0\n"
+        : "=&r" (flags), "=r" (ret) : "r" (addr) );
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned int gsc_readl(unsigned long addr)
-{
-	u32 ret;
+static inline unsigned int gsc_readl(unsigned long addr) {
+    u32 ret;
 
-	__asm__ __volatile__(
-	"	ldwax	0(%1),%0\n"
-	: "=r" (ret) : "r" (addr) );
+    __asm__ __volatile__(
+        "	ldwax	0(%1),%0\n"
+        : "=r" (ret) : "r" (addr) );
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned long long gsc_readq(unsigned long addr)
-{
-	unsigned long long ret;
+static inline unsigned long long gsc_readq(unsigned long addr) {
+    unsigned long long ret;
 
 #ifdef CONFIG_64BIT
-	__asm__ __volatile__(
-	"	ldda	0(%1),%0\n"
-	:  "=r" (ret) : "r" (addr) );
+    __asm__ __volatile__(
+        "	ldda	0(%1),%0\n"
+        :  "=r" (ret) : "r" (addr) );
 #else
-	/* two reads may have side effects.. */
-	ret = ((u64) gsc_readl(addr)) << 32;
-	ret |= gsc_readl(addr+4);
+    /* two reads may have side effects.. */
+    ret = ((u64) gsc_readl(addr)) << 32;
+    ret |= gsc_readl(addr+4);
 #endif
-	return ret;
+    return ret;
 }
 
-static inline void gsc_writeb(unsigned char val, unsigned long addr)
-{
-	long flags;
-	__asm__ __volatile__(
-	"	rsm	2,%0\n"
-	"	stbs	%1,0(%2)\n"
-	"	mtsm	%0\n"
-	: "=&r" (flags) :  "r" (val), "r" (addr) );
+static inline void gsc_writeb(unsigned char val, unsigned long addr) {
+    long flags;
+    __asm__ __volatile__(
+        "	rsm	2,%0\n"
+        "	stbs	%1,0(%2)\n"
+        "	mtsm	%0\n"
+        : "=&r" (flags) :  "r" (val), "r" (addr) );
 }
 
-static inline void gsc_writew(unsigned short val, unsigned long addr)
-{
-	long flags;
-	__asm__ __volatile__(
-	"	rsm	2,%0\n"
-	"	sths	%1,0(%2)\n"
-	"	mtsm	%0\n"
-	: "=&r" (flags) :  "r" (val), "r" (addr) );
+static inline void gsc_writew(unsigned short val, unsigned long addr) {
+    long flags;
+    __asm__ __volatile__(
+        "	rsm	2,%0\n"
+        "	sths	%1,0(%2)\n"
+        "	mtsm	%0\n"
+        : "=&r" (flags) :  "r" (val), "r" (addr) );
 }
 
-static inline void gsc_writel(unsigned int val, unsigned long addr)
-{
-	__asm__ __volatile__(
-	"	stwas	%0,0(%1)\n"
-	: :  "r" (val), "r" (addr) );
+static inline void gsc_writel(unsigned int val, unsigned long addr) {
+    __asm__ __volatile__(
+        "	stwas	%0,0(%1)\n"
+        : :  "r" (val), "r" (addr) );
 }
 
-static inline void gsc_writeq(unsigned long long val, unsigned long addr)
-{
+static inline void gsc_writeq(unsigned long long val, unsigned long addr) {
 #ifdef CONFIG_64BIT
-	__asm__ __volatile__(
-	"	stda	%0,0(%1)\n"
-	: :  "r" (val), "r" (addr) );
+    __asm__ __volatile__(
+        "	stda	%0,0(%1)\n"
+        : :  "r" (val), "r" (addr) );
 #else
-	/* two writes may have side effects.. */
-	gsc_writel(val >> 32, addr);
-	gsc_writel(val, addr+4);
+    /* two writes may have side effects.. */
+    gsc_writel(val >> 32, addr);
+    gsc_writel(val, addr+4);
 #endif
 }
 
@@ -132,80 +124,63 @@ extern void __iomem * __ioremap(unsigned long offset, unsigned long size, unsign
 /* Most machines react poorly to I/O-space being cacheable... Instead let's
  * define ioremap() in terms of ioremap_nocache().
  */
-static inline void __iomem * ioremap(unsigned long offset, unsigned long size)
-{
-	return __ioremap(offset, size, _PAGE_NO_CACHE);
+static inline void __iomem * ioremap(unsigned long offset, unsigned long size) {
+    return __ioremap(offset, size, _PAGE_NO_CACHE);
 }
 #define ioremap_nocache(off, sz)	ioremap((off), (sz))
 
 extern void iounmap(const volatile void __iomem *addr);
 
-static inline unsigned char __raw_readb(const volatile void __iomem *addr)
-{
-	return (*(volatile unsigned char __force *) (addr));
+static inline unsigned char __raw_readb(const volatile void __iomem *addr) {
+    return (*(volatile unsigned char __force *) (addr));
 }
-static inline unsigned short __raw_readw(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned short __force *) addr;
+static inline unsigned short __raw_readw(const volatile void __iomem *addr) {
+    return *(volatile unsigned short __force *) addr;
 }
-static inline unsigned int __raw_readl(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned int __force *) addr;
+static inline unsigned int __raw_readl(const volatile void __iomem *addr) {
+    return *(volatile unsigned int __force *) addr;
 }
-static inline unsigned long long __raw_readq(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned long long __force *) addr;
+static inline unsigned long long __raw_readq(const volatile void __iomem *addr) {
+    return *(volatile unsigned long long __force *) addr;
 }
 
-static inline void __raw_writeb(unsigned char b, volatile void __iomem *addr)
-{
-	*(volatile unsigned char __force *) addr = b;
+static inline void __raw_writeb(unsigned char b, volatile void __iomem *addr) {
+    *(volatile unsigned char __force *) addr = b;
 }
-static inline void __raw_writew(unsigned short b, volatile void __iomem *addr)
-{
-	*(volatile unsigned short __force *) addr = b;
+static inline void __raw_writew(unsigned short b, volatile void __iomem *addr) {
+    *(volatile unsigned short __force *) addr = b;
 }
-static inline void __raw_writel(unsigned int b, volatile void __iomem *addr)
-{
-	*(volatile unsigned int __force *) addr = b;
+static inline void __raw_writel(unsigned int b, volatile void __iomem *addr) {
+    *(volatile unsigned int __force *) addr = b;
 }
-static inline void __raw_writeq(unsigned long long b, volatile void __iomem *addr)
-{
-	*(volatile unsigned long long __force *) addr = b;
+static inline void __raw_writeq(unsigned long long b, volatile void __iomem *addr) {
+    *(volatile unsigned long long __force *) addr = b;
 }
 
-static inline unsigned char readb(const volatile void __iomem *addr)
-{
-	return __raw_readb(addr);
+static inline unsigned char readb(const volatile void __iomem *addr) {
+    return __raw_readb(addr);
 }
-static inline unsigned short readw(const volatile void __iomem *addr)
-{
-	return le16_to_cpu(__raw_readw(addr));
+static inline unsigned short readw(const volatile void __iomem *addr) {
+    return le16_to_cpu(__raw_readw(addr));
 }
-static inline unsigned int readl(const volatile void __iomem *addr)
-{
-	return le32_to_cpu(__raw_readl(addr));
+static inline unsigned int readl(const volatile void __iomem *addr) {
+    return le32_to_cpu(__raw_readl(addr));
 }
-static inline unsigned long long readq(const volatile void __iomem *addr)
-{
-	return le64_to_cpu(__raw_readq(addr));
+static inline unsigned long long readq(const volatile void __iomem *addr) {
+    return le64_to_cpu(__raw_readq(addr));
 }
 
-static inline void writeb(unsigned char b, volatile void __iomem *addr)
-{
-	__raw_writeb(b, addr);
+static inline void writeb(unsigned char b, volatile void __iomem *addr) {
+    __raw_writeb(b, addr);
 }
-static inline void writew(unsigned short w, volatile void __iomem *addr)
-{
-	__raw_writew(cpu_to_le16(w), addr);
+static inline void writew(unsigned short w, volatile void __iomem *addr) {
+    __raw_writew(cpu_to_le16(w), addr);
 }
-static inline void writel(unsigned int l, volatile void __iomem *addr)
-{
-	__raw_writel(cpu_to_le32(l), addr);
+static inline void writel(unsigned int l, volatile void __iomem *addr) {
+    __raw_writel(cpu_to_le32(l), addr);
 }
-static inline void writeq(unsigned long long q, volatile void __iomem *addr)
-{
-	__raw_writeq(cpu_to_le64(q), addr);
+static inline void writeq(unsigned long long q, volatile void __iomem *addr) {
+    __raw_writeq(cpu_to_le64(q), addr);
 }
 
 #define	readb	readb
@@ -260,22 +235,19 @@ extern void outl(unsigned int b, int addr);
 #define outw eisa_out16
 #define outl eisa_out32
 #else
-static inline char inb(unsigned long addr)
-{
-	BUG();
-	return -1;
+static inline char inb(unsigned long addr) {
+    BUG();
+    return -1;
 }
 
-static inline short inw(unsigned long addr)
-{
-	BUG();
-	return -1;
+static inline short inw(unsigned long addr) {
+    BUG();
+    return -1;
 }
 
-static inline int inl(unsigned long addr)
-{
-	BUG();
-	return -1;
+static inline int inl(unsigned long addr) {
+    BUG();
+    return -1;
 }
 
 #define outb(x, y)	BUG()

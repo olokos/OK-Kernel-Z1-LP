@@ -11,4 +11,4 @@
 
 int exynos_plane_init(struct drm_device *dev, unsigned int nr);
 int exynos_plane_set_zpos_ioctl(struct drm_device *dev, void *data,
-				struct drm_file *file_priv);
+                                struct drm_file *file_priv);

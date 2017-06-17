@@ -19,14 +19,14 @@
 #define SERIAL_NUMBER_LENGTH	128
 
 struct magic_num_struct {
-	uint32_t pid;
-	uint32_t serial_num;
+    uint32_t pid;
+    uint32_t serial_num;
 };
 
 struct dload_struct {
-	uint32_t	pid;
-	char		serial_number[SERIAL_NUMBER_LENGTH];
-	struct magic_num_struct magic_struct;
+    uint32_t	pid;
+    char		serial_number[SERIAL_NUMBER_LENGTH];
+    struct magic_num_struct magic_struct;
 };
 
 #endif

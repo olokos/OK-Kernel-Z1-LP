@@ -114,8 +114,7 @@
 //Support for "Fast roaming" (i.e., ESE, LFR, or 802.11r.)
 #define CSR_BG_SCAN_OCCUPIED_CHANNEL_LIST_LEN 15
 
-typedef enum
-{
+typedef enum {
     //eCSR_CFG_DOT11_MODE_BEST = 0,
     eCSR_CFG_DOT11_MODE_TAURUS = 0,
     eCSR_CFG_DOT11_MODE_ABG,
@@ -137,8 +136,7 @@ typedef enum
     eCSR_CFG_DOT11_MODE_AUTO,
 } eCsrCfgDot11Mode; //Used to determine what to set to the WNI_CFG_DOT11_MODE
 
-typedef enum etCsrRoamCommands
-{
+typedef enum etCsrRoamCommands {
     eCsrRoamNoCommand,
     eCsrRoamCommandScan,
     eCsrRoamCommandRoam,
@@ -148,8 +146,7 @@ typedef enum etCsrRoamCommands
 
 } eCsrRoamCommands;
 
-typedef enum
-{
+typedef enum {
     eCsrScanOther = 1,
     eCsrScanLostLink1,
     eCsrScanLostLink2,
@@ -176,8 +173,7 @@ typedef enum
     eCsrScanGetLfrResult, // get the LFR candidates from PE scan cache
 } eCsrScanReason;
 
-typedef enum
-{
+typedef enum {
     eCsrNoConnection,          // Roaming because we have not established the initial connection.
     eCsrCapsChange,            // roaming because LIM reported a Capability change in the associated AP.
     eCsrForcedDisassoc,        // roaming becuase someone asked us to Disassoc and stay disassociated.
@@ -205,8 +201,7 @@ typedef enum
 
 } eCsrRoamReason;
 
-typedef enum
-{
+typedef enum {
     eCSR_ROAM_SUBSTATE_NONE = 0,
     eCSR_ROAM_SUBSTATE_START_BSS_REQ,
     eCSR_ROAM_SUBSTATE_JOIN_REQ,
@@ -229,8 +224,7 @@ typedef enum
 } eCsrRoamSubState;
 
 
-typedef enum
-{
+typedef enum {
     eCSR_ROAMING_STATE_STOP = 0,
     eCSR_ROAMING_STATE_IDLE,
     eCSR_ROAMING_STATE_SCANNING,
@@ -239,8 +233,7 @@ typedef enum
 } eCsrRoamState;
 
 
-typedef enum
-{
+typedef enum {
     eCsrContinueRoaming,
     eCsrStopRoaming,
     eCsrStartIbss,
@@ -250,8 +243,7 @@ typedef enum
 
 } eCsrJoinState;
 
-typedef enum
-{
+typedef enum {
     eCsrNotRoaming,
     eCsrLostlinkRoamingDisassoc,
     eCsrLostlinkRoamingDeauth,
@@ -259,15 +251,13 @@ typedef enum
     eCsrReassocRoaming,
 } eCsrRoamingReason;
 
-typedef enum
-{
+typedef enum {
     eCsrDisassociated,
     eCsrDeauthenticated
 
 } eCsrRoamWmStatusChangeTypes;
 
-typedef enum
-{
+typedef enum {
     eCsrSummaryStats = 0,
     eCsrGlobalClassAStats,
     eCsrGlobalClassBStats,
@@ -278,15 +268,13 @@ typedef enum
 } eCsrRoamStatsClassTypes;
 
 #ifdef FEATURE_WLAN_DIAG_SUPPORT
-typedef enum
-{
+typedef enum {
     eCSR_WLAN_STATUS_CONNECT =0,
     eCSR_WLAN_STATUS_DISCONNECT
 
 } eCsrDiagWlanStatusEventSubtype;
 
-typedef enum
-{
+typedef enum {
     eCSR_REASON_UNSPECIFIED = 0,
     eCSR_REASON_USER_REQUESTED,
     eCSR_REASON_MIC_ERROR,
@@ -296,28 +284,24 @@ typedef enum
 
 } eCsrDiagWlanStatusEventReason;
 
-typedef enum
-{
+typedef enum {
     eCSR_WLAN_HANDOFF_EVENT =0,
 
 } eCsrDiagWlanHandoffEventSubtype;
 
-typedef enum
-{
+typedef enum {
     eCSR_WLAN_VCC_EVENT =0,
 
 } eCsrDiagWlanVccEventSubtype;
 
 #endif //FEATURE_WLAN_DIAG_SUPPORT
 
-typedef struct tagCsrChannel
-{
+typedef struct tagCsrChannel {
     tANI_U8 numChannels;
     tANI_U8 channelList[WNI_CFG_VALID_CHANNEL_LIST_LEN];
 } tCsrChannel;
 
-typedef struct tagScanProfile
-{
+typedef struct tagScanProfile {
     tANI_U32 minChnTime;
     tANI_U32 maxChnTime;
     tANI_U32 restTime;  //This is ignored if not associated
@@ -332,8 +316,7 @@ typedef struct tagScanProfile
     tCsrBssid bssid;
 } tScanProfile;
 
-typedef struct tagBssConfigParam
-{
+typedef struct tagBssConfigParam {
     eCsrMediaAccessType qosType;
     tSirMacSSid SSID;
     tANI_U32 uRTSThresh;
@@ -356,8 +339,7 @@ typedef struct tagBssConfigParam
 } tBssConfigParam;
 
 
-typedef struct tagCsrRoamStartBssParams
-{
+typedef struct tagCsrRoamStartBssParams {
     tSirMacSSid         ssId;
     tCsrBssid           bssid;    //this is the BSSID for the party we want to join (only use for IBSS or WDS)
     tSirNwType          sirNwType;
@@ -389,8 +371,7 @@ typedef struct tagCsrRoamStartBssParams
 } tCsrRoamStartBssParams;
 
 
-typedef struct tagScanCmd
-{
+typedef struct tagScanCmd {
     tANI_U32                scanID;
     csrScanCompleteCallback callback;
     void                    *pContext;
@@ -398,8 +379,7 @@ typedef struct tagScanCmd
     eCsrRoamState           lastRoamState[CSR_ROAM_SESSION_MAX];
     tCsrRoamProfile         *pToRoamProfile;
     tANI_U32                roamId;    //this is the ID related to the pToRoamProfile
-    union
-    {
+    union {
         tCsrScanRequest   scanRequest;
         tCsrBGScanRequest bgScanRequest;
     } u;
@@ -407,8 +387,7 @@ typedef struct tagScanCmd
     tANI_BOOLEAN            abortScanDueToBandChange;
 } tScanCmd;
 
-typedef struct tagRoamCmd
-{
+typedef struct tagRoamCmd {
     tANI_U32 roamId;
     eCsrRoamReason roamReason;
     tCsrRoamProfile roamProfile;
@@ -428,8 +407,7 @@ typedef struct tagRoamCmd
     tSirMacReasonCodes reason;
 } tRoamCmd;
 
-typedef struct tagSetKeyCmd
-{
+typedef struct tagSetKeyCmd {
     tANI_U32 roamId;
     eCsrEncryptionType encType;
     eCsrAuthType authType;
@@ -442,8 +420,7 @@ typedef struct tagSetKeyCmd
     tANI_U8 keyRsc[CSR_MAX_RSC_LEN];
 } tSetKeyCmd;
 
-typedef struct tahRemoveKeyCmd
-{
+typedef struct tahRemoveKeyCmd {
     tANI_U32 roamId;
     eCsrEncryptionType encType;
     eCsrAuthType authType;
@@ -451,11 +428,9 @@ typedef struct tahRemoveKeyCmd
     tANI_U8 keyId;  //key index
 } tRemoveKeyCmd;
 
-typedef struct tagWmStatusChangeCmd
-{
+typedef struct tagWmStatusChangeCmd {
     eCsrRoamWmStatusChangeTypes Type;
-    union
-    {
+    union {
         tSirSmeDeauthInd   DeauthIndMsg;
         tSirSmeDisassocInd DisassocIndMsg;
     } u;
@@ -463,15 +438,13 @@ typedef struct tagWmStatusChangeCmd
 } tWmStatusChangeCmd;
 
 
-typedef struct tagAddStaForSessionCmd
-{
+typedef struct tagAddStaForSessionCmd {
     //Session self mac addr
     tSirMacAddr selfMacAddr;
     tVOS_CON_MODE currDeviceMode;
 } tAddStaForSessionCmd;
 
-typedef struct tagDelStaForSessionCmd
-{
+typedef struct tagDelStaForSessionCmd {
     //Session self mac addr
     tSirMacAddr selfMacAddr;
     csrRoamSessionCloseCallback callback;
@@ -479,13 +452,11 @@ typedef struct tagDelStaForSessionCmd
 } tDelStaForSessionCmd;
 
 //This structure represents one scan request
-typedef struct tagCsrCmd
-{
+typedef struct tagCsrCmd {
     tListElem Link;
     eCsrRoamCommands command;
     tANI_U8 sessionId;              // Session ID for this command
-    union
-    {
+    union {
         tScanCmd scanCmd;
         tRoamCmd roamCmd;
         tWmStatusChangeCmd wmStatusChangeCmd;
@@ -497,15 +468,13 @@ typedef struct tagCsrCmd
 } tCsrCmd;
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
-typedef struct tagCsr11rConfig
-{
+typedef struct tagCsr11rConfig {
     tANI_BOOLEAN   IsFTResourceReqSupported;
 } tCsr11rConfig;
 #endif
 
 #ifdef WLAN_FEATURE_NEIGHBOR_ROAMING
-typedef struct tagCsrNeighborRoamConfig
-{
+typedef struct tagCsrNeighborRoamConfig {
     tANI_U32       nNeighborScanTimerPeriod;
     tANI_U8        nNeighborLookupRssiThreshold;
     tANI_U8        nNeighborReassocRssiThreshold;
@@ -519,8 +488,7 @@ typedef struct tagCsrNeighborRoamConfig
 } tCsrNeighborRoamConfig;
 #endif
 
-typedef struct tagCsrConfig
-{
+typedef struct tagCsrConfig {
     tANI_U32 agingCount;
     tANI_U32 FragmentationThreshold;
     tANI_U32 channelBondingMode24GHz;
@@ -673,8 +641,7 @@ typedef struct tagCsrConfig
     tANI_BOOLEAN sendDeauthBeforeCon;
 } tCsrConfig;
 
-typedef struct tagCsrChannelPowerInfo
-{
+typedef struct tagCsrChannelPowerInfo {
     tListElem link;
     tANI_U8 firstChannel;
     tANI_U8 numChannels;
@@ -682,29 +649,25 @@ typedef struct tagCsrChannelPowerInfo
     tANI_U8 interChannelOffset;
 } tCsrChannelPowerInfo;
 
-typedef struct tagRoamJoinStatus
-{
+typedef struct tagRoamJoinStatus {
     tSirResultCodes statusCode;
     //this is set to unspecified if statusCode indicates timeout. Or it is the failed reason from the other BSS(per 802.11 spec)
     tANI_U32 reasonCode;
     tSirMacAddr bssId;
 } tCsrRoamJoinStatus;
 
-typedef struct tagCsrOsChannelMask
-{
+typedef struct tagCsrOsChannelMask {
     tANI_U8 numChannels;
     tANI_BOOLEAN scanEnabled[WNI_CFG_VALID_CHANNEL_LIST_LEN];
     tANI_U8 channelList[WNI_CFG_VALID_CHANNEL_LIST_LEN];
 } tCsrOsChannelMask;
 
-typedef struct tagCsrVotes11d
-{
+typedef struct tagCsrVotes11d {
     tANI_U8 votes;
     tANI_U8 countryCode[WNI_CFG_COUNTRY_CODE_LEN];
 } tCsrVotes11d;
 
-typedef struct tagCsrScanStruct
-{
+typedef struct tagCsrScanStruct {
     tScanProfile scanProfile;
     tANI_U32 nextScanID;
     tDblLinkList scanResultList;
@@ -805,16 +768,14 @@ typedef struct tagCsrScanStruct
 /*
  * struct to carry TDLS discovery info..
  */
-typedef struct sCsrTdlsContext
-{
+typedef struct sCsrTdlsContext {
     tDblLinkList tdlsPotentialPeerList ;
     tANI_U16 tdlsCommonFlag ;
     tANI_U16 tdlsCommonState ;
     tANI_U16 tdlsPeerCount ;
 } tCsrTdlsCtxStruct;
 
-typedef struct sCsrTdlsPeerLinkInfo
-{
+typedef struct sCsrTdlsPeerLinkInfo {
     tListElem tdlsPeerStaLink ;
     tSirTdlsPeerInfo tdlsDisPeerInfo ;
 } tCsrTdlsPeerLinkinfo ;
@@ -825,8 +786,7 @@ typedef struct sCsrTdlsPeerLinkInfo
 
 //Save the connected information. This structure + connectedProfile
 //should contain all information about the connection
-typedef struct tagRoamCsrConnectedInfo
-{
+typedef struct tagRoamCsrConnectedInfo {
     tANI_U32 nBeaconLength; //the length, in bytes, of the beacon frame, can be 0
     tANI_U32 nAssocReqLength;   //the length, in bytes, of the assoc req frame, can be 0
     tANI_U32 nAssocRspLength;   //The length, in bytes, of the assoc rsp frame, can be 0
@@ -843,14 +803,12 @@ typedef struct tagRoamCsrConnectedInfo
 } tCsrRoamConnectedInfo;
 
 
-typedef struct tagCsrLinkQualityIndInfo
-{
+typedef struct tagCsrLinkQualityIndInfo {
     csrRoamLinkQualityIndCallback  callback;
     void                          *context;
 } tCsrLinkQualityIndInfo;
 
-typedef struct tagCsrPeStatsReqInfo
-{
+typedef struct tagCsrPeStatsReqInfo {
     tListElem              link;  /* list links */
     tANI_U32               statsMask;
     tANI_U32               periodicity;
@@ -865,8 +823,7 @@ typedef struct tagCsrPeStatsReqInfo
 
 } tCsrPeStatsReqInfo;
 
-typedef struct tagCsrStatsClientReqInfo
-{
+typedef struct tagCsrStatsClientReqInfo {
     tListElem              link;  /* list links */
     eCsrStatsRequesterType requesterId;
     tCsrStatsCallback      callback;
@@ -880,16 +837,14 @@ typedef struct tagCsrStatsClientReqInfo
     tpAniSirGlobal         pMac; // TODO: Confirm this change BTAMP
 } tCsrStatsClientReqInfo;
 
-typedef struct tagCsrTlStatsReqInfo
-{
+typedef struct tagCsrTlStatsReqInfo {
     tANI_U32               periodicity;
     tANI_BOOLEAN           timerRunning;
     vos_timer_t            hTlStatsTimer;
     tANI_U8                numClient;
 } tCsrTlStatsReqInfo;
 
-typedef struct tagCsrRoamSession
-{
+typedef struct tagCsrRoamSession {
     tANI_U8 sessionId;             // Session ID
     tANI_BOOLEAN sessionActive;      // TRUE if it is used
     tCsrBssid selfMacAddr;           // For BT-AMP station, this serve as BSSID for self-BSS.
@@ -976,8 +931,7 @@ typedef struct tagCsrRoamSession
     tANI_BOOLEAN fIgnorePMKIDCache;
 } tCsrRoamSession;
 
-typedef struct tagCsrRoamStruct
-{
+typedef struct tagCsrRoamStruct {
     tANI_U32 nextRoamId;
     tDblLinkList roamCmdPendingList;
     tDblLinkList channelList5G;

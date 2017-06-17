@@ -48,47 +48,44 @@ EXPORT_SYMBOL(rtc_lock);
 #define USECS_PER_JIFFY	(1000000/HZ)
 
 #ifdef CONFIG_SMP
-unsigned long profile_pc(struct pt_regs *regs)
-{
-	struct stackframe frame;
+unsigned long profile_pc(struct pt_regs *regs) {
+    struct stackframe frame;
 
-	if (!in_lock_functions(regs->ARM_pc))
-		return regs->ARM_pc;
+    if (!in_lock_functions(regs->ARM_pc))
+        return regs->ARM_pc;
 
-	frame.fp = regs->ARM_fp;
-	frame.sp = regs->ARM_sp;
-	frame.lr = regs->ARM_lr;
-	frame.pc = regs->ARM_pc;
-	do {
-		int ret = unwind_frame(&frame);
-		if (ret < 0)
-			return 0;
-	} while (in_lock_functions(frame.pc));
+    frame.fp = regs->ARM_fp;
+    frame.sp = regs->ARM_sp;
+    frame.lr = regs->ARM_lr;
+    frame.pc = regs->ARM_pc;
+    do {
+        int ret = unwind_frame(&frame);
+        if (ret < 0)
+            return 0;
+    } while (in_lock_functions(frame.pc));
 
-	return frame.pc;
+    return frame.pc;
 }
 EXPORT_SYMBOL(profile_pc);
 #endif
 
 #ifdef CONFIG_ARCH_USES_GETTIMEOFFSET
-u32 arch_gettimeoffset(void)
-{
-	if (system_timer->offset != NULL)
-		return system_timer->offset() * 1000;
+u32 arch_gettimeoffset(void) {
+    if (system_timer->offset != NULL)
+        return system_timer->offset() * 1000;
 
-	return 0;
+    return 0;
 }
 #endif /* CONFIG_ARCH_USES_GETTIMEOFFSET */
 
 #ifdef CONFIG_LEDS_TIMER
-static inline void do_leds(void)
-{
-	static unsigned int count = HZ/2;
+static inline void do_leds(void) {
+    static unsigned int count = HZ/2;
 
-	if (--count == 0) {
-		count = HZ/2;
-		leds_event(led_timer);
-	}
+    if (--count == 0) {
+        count = HZ/2;
+        leds_event(led_timer);
+    }
 }
 #else
 #define	do_leds()
@@ -99,30 +96,27 @@ static inline void do_leds(void)
 /*
  * Kernel system timer support.
  */
-void timer_tick(void)
-{
-	profile_tick(CPU_PROFILING);
-	do_leds();
-	xtime_update(1);
+void timer_tick(void) {
+    profile_tick(CPU_PROFILING);
+    do_leds();
+    xtime_update(1);
 #ifndef CONFIG_SMP
-	update_process_times(user_mode(get_irq_regs()));
+    update_process_times(user_mode(get_irq_regs()));
 #endif
 }
 #endif
 
 #if defined(CONFIG_PM) && !defined(CONFIG_GENERIC_CLOCKEVENTS)
-static int timer_suspend(void)
-{
-	if (system_timer->suspend)
-		system_timer->suspend();
+static int timer_suspend(void) {
+    if (system_timer->suspend)
+        system_timer->suspend();
 
-	return 0;
+    return 0;
 }
 
-static void timer_resume(void)
-{
-	if (system_timer->resume)
-		system_timer->resume();
+static void timer_resume(void) {
+    if (system_timer->resume)
+        system_timer->resume();
 }
 #else
 #define timer_suspend NULL
@@ -130,23 +124,21 @@ static void timer_resume(void)
 #endif
 
 static struct syscore_ops timer_syscore_ops = {
-	.suspend	= timer_suspend,
-	.resume		= timer_resume,
+    .suspend	= timer_suspend,
+    .resume		= timer_resume,
 };
 
-static int __init timer_init_syscore_ops(void)
-{
-	register_syscore_ops(&timer_syscore_ops);
+static int __init timer_init_syscore_ops(void) {
+    register_syscore_ops(&timer_syscore_ops);
 
-	return 0;
+    return 0;
 }
 
 device_initcall(timer_init_syscore_ops);
 
-void __init time_init(void)
-{
-	system_timer = machine_desc->timer;
-	system_timer->init();
-	sched_clock_postinit();
+void __init time_init(void) {
+    system_timer = machine_desc->timer;
+    system_timer->init();
+    sched_clock_postinit();
 }
 

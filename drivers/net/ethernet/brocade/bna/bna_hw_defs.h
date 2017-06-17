@@ -341,34 +341,34 @@ do {									\
  */
 
 struct bna_reg_offset {
-	u32 fn_int_status;
-	u32 fn_int_mask;
+    u32 fn_int_status;
+    u32 fn_int_mask;
 };
 
 struct bna_bit_defn {
-	u32 mbox_status_bits;
-	u32 mbox_mask_bits;
-	u32 error_status_bits;
-	u32 error_mask_bits;
-	u32 halt_status_bits;
-	u32 halt_mask_bits;
+    u32 mbox_status_bits;
+    u32 mbox_mask_bits;
+    u32 error_status_bits;
+    u32 error_mask_bits;
+    u32 halt_status_bits;
+    u32 halt_mask_bits;
 };
 
 struct bna_reg {
-	void __iomem *fn_int_status;
-	void __iomem *fn_int_mask;
+    void __iomem *fn_int_status;
+    void __iomem *fn_int_mask;
 };
 
 /* TxQ Vector (a.k.a. Tx-Buffer Descriptor) */
 struct bna_dma_addr {
-	u32		msb;
-	u32		lsb;
+    u32		msb;
+    u32		lsb;
 };
 
 struct bna_txq_wi_vector {
-	u16		reserved;
-	u16		length;		/* Only 14 LSB are valid */
-	struct bna_dma_addr host_addr; /* Tx-Buf DMA addr */
+    u16		reserved;
+    u16		length;		/* Only 14 LSB are valid */
+    struct bna_dma_addr host_addr; /* Tx-Buf DMA addr */
 };
 
 /**
@@ -377,46 +377,46 @@ struct bna_txq_wi_vector {
  *  BEWARE:  Load values into this structure with correct endianess.
  */
 struct bna_txq_entry {
-	union {
-		struct {
-			u8 reserved;
-			u8 num_vectors;	/* number of vectors present */
-			u16 opcode; /* Either */
-						    /* BNA_TXQ_WI_SEND or */
-						    /* BNA_TXQ_WI_SEND_LSO */
-			u16 flags; /* OR of all the flags */
-			u16 l4_hdr_size_n_offset;
-			u16 vlan_tag;
-			u16 lso_mss;	/* Only 14 LSB are valid */
-			u32 frame_length;	/* Only 24 LSB are valid */
-		} wi;
+    union {
+        struct {
+            u8 reserved;
+            u8 num_vectors;	/* number of vectors present */
+            u16 opcode; /* Either */
+            /* BNA_TXQ_WI_SEND or */
+            /* BNA_TXQ_WI_SEND_LSO */
+            u16 flags; /* OR of all the flags */
+            u16 l4_hdr_size_n_offset;
+            u16 vlan_tag;
+            u16 lso_mss;	/* Only 14 LSB are valid */
+            u32 frame_length;	/* Only 24 LSB are valid */
+        } wi;
 
-		struct {
-			u16 reserved;
-			u16 opcode; /* Must be */
-						    /* BNA_TXQ_WI_EXTENSION */
-			u32 reserved2[3];	/* Place holder for */
-						/* removed vector (12 bytes) */
-		} wi_ext;
-	} hdr;
-	struct bna_txq_wi_vector vector[4];
+        struct {
+            u16 reserved;
+            u16 opcode; /* Must be */
+            /* BNA_TXQ_WI_EXTENSION */
+            u32 reserved2[3];	/* Place holder for */
+            /* removed vector (12 bytes) */
+        } wi_ext;
+    } hdr;
+    struct bna_txq_wi_vector vector[4];
 };
 
 /* RxQ Entry Structure */
 struct bna_rxq_entry {		/* Rx-Buffer */
-	struct bna_dma_addr host_addr; /* Rx-Buffer DMA address */
+    struct bna_dma_addr host_addr; /* Rx-Buffer DMA address */
 };
 
 /* CQ Entry Structure */
 struct bna_cq_entry {
-	u32 flags;
-	u16 vlan_tag;
-	u16 length;
-	u32 rss_hash;
-	u8 valid;
-	u8 reserved1;
-	u8 reserved2;
-	u8 rxq_id;
+    u32 flags;
+    u16 vlan_tag;
+    u16 length;
+    u32 rss_hash;
+    u8 valid;
+    u8 reserved1;
+    u8 reserved2;
+    u8 rxq_id;
 };
 
 #endif /* __BNA_HW_DEFS_H__ */

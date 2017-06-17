@@ -127,18 +127,18 @@
 /* DMA linked list chain structure */
 
 struct pl080_lli {
-	u32	src_addr;
-	u32	dst_addr;
-	u32	next_lli;
-	u32	control0;
+    u32	src_addr;
+    u32	dst_addr;
+    u32	next_lli;
+    u32	control0;
 };
 
 struct pl080s_lli {
-	u32	src_addr;
-	u32	dst_addr;
-	u32	next_lli;
-	u32	control0;
-	u32	control1;
+    u32	src_addr;
+    u32	dst_addr;
+    u32	next_lli;
+    u32	control0;
+    u32	control1;
 };
 
 #endif /* ASM_PL080_H */

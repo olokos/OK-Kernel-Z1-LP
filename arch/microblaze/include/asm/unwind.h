@@ -14,9 +14,9 @@
 struct stack_trace;
 
 struct trap_handler_info {
-	unsigned long start_addr;
-	unsigned long end_addr;
-	const char    *trap_name;
+    unsigned long start_addr;
+    unsigned long end_addr;
+    const char    *trap_name;
 };
 extern struct trap_handler_info microblaze_trap_handlers;
 

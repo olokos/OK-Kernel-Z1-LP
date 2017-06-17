@@ -90,8 +90,7 @@
  * Static Variable Definitions
  * -------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     struct resource *wcnss_memory;
     void __iomem    *mmio;
     int              tx_irq;
@@ -142,10 +141,8 @@ static irqreturn_t wpalTxIsr
 (
     int irq,
     void *dev_id
-)
-{
-    if ((NULL != gpEnv) && (NULL != gpEnv->tx_isr))
-    {
+) {
+    if ((NULL != gpEnv) && (NULL != gpEnv->tx_isr)) {
         gpEnv->tx_isr(gpEnv->tx_context);
     }
     return IRQ_HANDLED;
@@ -172,10 +169,8 @@ static irqreturn_t wpalRxIsr
 (
     int irq,
     void *dev_id
-)
-{
-    if ((NULL != gpEnv) && (NULL != gpEnv->rx_isr))
-    {
+) {
+    if ((NULL != gpEnv) && (NULL != gpEnv->rx_isr)) {
         gpEnv->rx_isr(gpEnv->rx_context);
     }
     return IRQ_HANDLED;
@@ -208,30 +203,25 @@ wpt_status wpalRegisterInterrupt
     wpt_uint32      intType,
     wpalIsrType     callbackFunction,
     void            *usrCtxt
-)
-{
-    if (NULL == gpEnv)
-    {
+) {
+    if (NULL == gpEnv) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    if (NULL == callbackFunction)
-    {
+    if (NULL == callbackFunction) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked with NULL callback",
                    __func__);
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    switch (intType)
-    {
+    switch (intType) {
 
     case DXE_INTERRUPT_TX_COMPLE:
-        if (NULL != gpEnv->tx_isr)
-        {
+        if (NULL != gpEnv->tx_isr) {
             /* TX complete handler already registered */
             WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_WARN,
                        "%s: TX interrupt handler already registered",
@@ -243,8 +233,7 @@ wpt_status wpalRegisterInterrupt
         break;
 
     case DXE_INTERRUPT_RX_READY:
-        if (NULL != gpEnv->rx_isr)
-        {
+        if (NULL != gpEnv->rx_isr) {
             /* RX complete handler already registered */
             WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_WARN,
                        "%s: RX interrupt handler already registered",
@@ -279,23 +268,19 @@ wpt_status wpalRegisterInterrupt
 void wpalUnRegisterInterrupt
 (
     wpt_uint32      intType
-)
-{
-    if (NULL == gpEnv)
-    {
+) {
+    if (NULL == gpEnv) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
         return;
     }
 
-    switch (intType)
-    {
+    switch (intType) {
 
     case DXE_INTERRUPT_TX_COMPLE:
         disable_irq_nosync(gpEnv->tx_irq);
-        if (gpEnv->tx_registered)
-        {
+        if (gpEnv->tx_registered) {
             free_irq(gpEnv->tx_irq, gpEnv);
             gpEnv->tx_registered = 0;
         }
@@ -305,8 +290,7 @@ void wpalUnRegisterInterrupt
 
     case DXE_INTERRUPT_RX_READY:
         disable_irq_nosync(gpEnv->rx_irq);
-        if (gpEnv->rx_registered)
-        {
+        if (gpEnv->rx_registered) {
             free_irq(gpEnv->rx_irq, gpEnv);
             gpEnv->rx_registered = 0;
         }
@@ -342,21 +326,17 @@ void wpalUnRegisterInterrupt
 wpt_status wpalEnableInterrupt
 (
     wpt_uint32    intType
-)
-{
+) {
     int ret;
 
-    switch (intType)
-    {
+    switch (intType) {
     case DXE_INTERRUPT_RX_READY:
         gpEnv->rx_enable_return = VOS_RETURN_ADDRESS;
-        if (!gpEnv->rx_registered)
-        {
+        if (!gpEnv->rx_registered) {
             gpEnv->rx_registered = 1;
             ret = request_irq(gpEnv->rx_irq, wpalRxIsr, IRQF_TRIGGER_HIGH,
                               "wcnss_wlan", gpEnv);
-            if (ret)
-            {
+            if (ret) {
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                            "%s: RX IRQ request failure",
                            __func__);
@@ -366,8 +346,7 @@ wpt_status wpalEnableInterrupt
 
 
             ret = enable_irq_wake(gpEnv->rx_irq);
-            if (ret)
-            {
+            if (ret) {
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                            "%s: enable_irq_wake failed for RX IRQ",
                            __func__);
@@ -375,21 +354,17 @@ wpt_status wpalEnableInterrupt
                 /* not fatal -- keep on going */
             }
             gpEnv->rx_isr_enabled = 1;
-        }
-        else
-        {
+        } else {
             enable_irq(gpEnv->rx_irq);
             gpEnv->rx_isr_enabled = 1;
         }
         break;
     case DXE_INTERRUPT_TX_COMPLE:
-        if (!gpEnv->tx_registered)
-        {
+        if (!gpEnv->tx_registered) {
             gpEnv->tx_registered = 1;
             ret = request_irq(gpEnv->tx_irq, wpalTxIsr, IRQF_TRIGGER_HIGH,
                               "wcnss_wlan", gpEnv);
-            if (ret)
-            {
+            if (ret) {
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                            "%s: TX IRQ request failure",
                            __func__);
@@ -398,16 +373,13 @@ wpt_status wpalEnableInterrupt
 
 
             ret = enable_irq_wake(gpEnv->tx_irq);
-            if (ret)
-            {
+            if (ret) {
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                            "%s: enable_irq_wake failed for TX IRQ",
                            __func__);
                 /* not fatal -- keep on going */
             }
-        }
-        else
-        {
+        } else {
             enable_irq(gpEnv->tx_irq);
         }
         break;
@@ -440,10 +412,8 @@ wpt_status wpalEnableInterrupt
 wpt_status wpalDisableInterrupt
 (
     wpt_uint32    intType
-)
-{
-    switch (intType)
-    {
+) {
+    switch (intType) {
     case DXE_INTERRUPT_RX_READY:
         gpEnv->rx_disable_return = VOS_RETURN_ADDRESS;
         disable_irq_nosync(gpEnv->rx_irq);
@@ -477,14 +447,12 @@ wpt_status wpalWriteRegister
 (
     wpt_uint32   address,
     wpt_uint32   data
-)
-{
+) {
     /* if SSR is in progress, and WCNSS is not out of reset (re-init
      * not invoked), then do not access WCNSS registers */
     if (NULL == gpEnv || wcnss_device_is_shutdown() ||
             (vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL) &&
-             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL)))
-    {
+             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL))) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
@@ -494,8 +462,7 @@ wpt_status wpalWriteRegister
     address = (address | gpEnv->wcnss_memory->start);
 
     if ((address < gpEnv->wcnss_memory->start) ||
-            (address > gpEnv->wcnss_memory->end))
-    {
+            (address > gpEnv->wcnss_memory->end)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Register address 0x%0x out of range 0x%0x - 0x%0x",
                    __func__, address,
@@ -504,8 +471,7 @@ wpt_status wpalWriteRegister
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    if (0 != (address & 0x3))
-    {
+    if (0 != (address & 0x3)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Register address 0x%0x is not word aligned",
                    __func__, address);
@@ -531,21 +497,18 @@ wpt_status wpalReadRegister
 (
     wpt_uint32   address,
     wpt_uint32  *data
-)
-{
+) {
     /* if SSR is in progress, and WCNSS is not out of reset (re-init
      * not invoked), then do not access WCNSS registers */
     if (NULL == gpEnv || wcnss_device_is_shutdown() ||
             (vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL) &&
-             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL)))
-    {
+             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL))) {
         /* Ratelimit wpalReadRegister failure messages which
          * can flood serial console during improper system
          * initialization or wcnss_device in shutdown state.
          * wpalRegisterInterrupt() call to wpalReadRegister is
          * likely to cause flooding. */
-        if (__ratelimit(&wpalReadRegister_rs))
-        {
+        if (__ratelimit(&wpalReadRegister_rs)) {
             WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                        "%s: invoked before subsystem initialized",
                        __func__);
@@ -556,8 +519,7 @@ wpt_status wpalReadRegister
     address = (address | gpEnv->wcnss_memory->start);
 
     if ((address < gpEnv->wcnss_memory->start) ||
-            (address > gpEnv->wcnss_memory->end))
-    {
+            (address > gpEnv->wcnss_memory->end)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Register address 0x%0x out of range 0x%0x - 0x%0x",
                    __func__, address,
@@ -566,8 +528,7 @@ wpt_status wpalReadRegister
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    if (0 != (address & 0x3))
-    {
+    if (0 != (address & 0x3)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Register address 0x%0x is not word aligned",
                    __func__, address);
@@ -596,14 +557,12 @@ wpt_status wpalWriteDeviceMemory
     wpt_uint32 address,
     wpt_uint8* s_buffer,
     wpt_uint32 len
-)
-{
+) {
     /* if SSR is in progress, and WCNSS is not out of reset (re-init
      * not invoked), then do not access WCNSS registers */
     if (NULL == gpEnv || wcnss_device_is_shutdown() ||
             (vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL) &&
-             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL)))
-    {
+             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL))) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
@@ -613,8 +572,7 @@ wpt_status wpalWriteDeviceMemory
     address = (address | gpEnv->wcnss_memory->start);
 
     if ((address < gpEnv->wcnss_memory->start) ||
-            ((address + len) > gpEnv->wcnss_memory->end))
-    {
+            ((address + len) > gpEnv->wcnss_memory->end)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Memory address 0x%0x len %d out of range 0x%0x - 0x%0x",
                    __func__, address, len,
@@ -646,14 +604,12 @@ wpt_status wpalReadDeviceMemory
     wpt_uint32 address,
     wpt_uint8* d_buffer,
     wpt_uint32 len
-)
-{
+) {
     /* if SSR is in progress, and WCNSS is not out of reset (re-init
      * not invoked), then do not access WCNSS registers */
     if (NULL == gpEnv || wcnss_device_is_shutdown() ||
             (vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL) &&
-             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL)))
-    {
+             !vos_is_reinit_in_progress(VOS_MODULE_ID_WDI, NULL))) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
@@ -663,8 +619,7 @@ wpt_status wpalReadDeviceMemory
     address = (address | gpEnv->wcnss_memory->start);
 
     if ((address < gpEnv->wcnss_memory->start) ||
-            ((address + len) > gpEnv->wcnss_memory->end))
-    {
+            ((address + len) > gpEnv->wcnss_memory->end)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: Memory address 0x%0x len %d out of range 0x%0x - 0x%0x",
                    __func__, address, len,
@@ -693,23 +648,20 @@ wpt_status wpalReadDeviceMemory
 wpt_status wpalDeviceInit
 (
     void * devHandle
-)
-{
+) {
     struct device *wcnss_device = (struct device *)devHandle;
     struct resource *wcnss_memory;
     int tx_irq;
     int rx_irq;
 
-    if (NULL != gpEnv)
-    {
+    if (NULL != gpEnv) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked  after subsystem initialized",
                    __func__);
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    if (NULL == wcnss_device)
-    {
+    if (NULL == wcnss_device) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invalid device",
                    __func__);
@@ -717,8 +669,7 @@ wpt_status wpalDeviceInit
     }
 
     wcnss_memory = wcnss_wlan_get_memory_map(wcnss_device);
-    if (NULL == wcnss_memory)
-    {
+    if (NULL == wcnss_memory) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: WCNSS memory map unavailable",
                    __func__);
@@ -726,8 +677,7 @@ wpt_status wpalDeviceInit
     }
 
     tx_irq = wcnss_wlan_get_dxe_tx_irq(wcnss_device);
-    if (0 > tx_irq)
-    {
+    if (0 > tx_irq) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: WCNSS TX IRQ unavailable",
                    __func__);
@@ -735,8 +685,7 @@ wpt_status wpalDeviceInit
     }
 
     rx_irq = wcnss_wlan_get_dxe_rx_irq(wcnss_device);
-    if (0 > rx_irq)
-    {
+    if (0 > rx_irq) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: WCNSS RX IRQ unavailable",
                    __func__);
@@ -744,8 +693,7 @@ wpt_status wpalDeviceInit
     }
 
     gpEnv = &gEnv;
-    if (NULL == gpEnv)
-    {
+    if (NULL == gpEnv) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: memory allocation failure",
                    __func__);
@@ -765,8 +713,7 @@ wpt_status wpalDeviceInit
 
     gpEnv->mmio = ioremap(wcnss_memory->start, resource_size(wcnss_memory));
 
-    if (NULL == gpEnv->mmio)
-    {
+    if (NULL == gpEnv->mmio) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: memory remap failure",
                    __func__);
@@ -800,22 +747,18 @@ err_ioremap:
 wpt_status wpalDeviceClose
 (
     void * deviceCB
-)
-{
-    if (NULL == gpEnv)
-    {
+) {
+    if (NULL == gpEnv) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: invoked before subsystem initialized",
                    __func__);
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    if (gpEnv->rx_registered)
-    {
+    if (gpEnv->rx_registered) {
         free_irq(gpEnv->rx_irq, gpEnv);
     }
-    if (gpEnv->tx_registered)
-    {
+    if (gpEnv->tx_registered) {
         free_irq(gpEnv->tx_irq, gpEnv);
     }
     iounmap(gpEnv->mmio);
@@ -838,12 +781,10 @@ wpt_status wpalNotifySmsm
 (
     wpt_uint32                            clrSt,
     wpt_uint32                            setSt
-)
-{
+) {
     int rc;
     rc = smsm_change_state(SMSM_APPS_STATE, clrSt, setSt);
-    if(0 != rc)
-    {
+    if(0 != rc) {
         WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s: smsm_change_state failed",
                    __func__);

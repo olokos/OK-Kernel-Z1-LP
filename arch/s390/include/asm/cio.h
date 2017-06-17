@@ -29,10 +29,10 @@
  * command words are supported.
  */
 struct ccw1 {
-	__u8  cmd_code;
-	__u8  flags;
-	__u16 count;
-	__u32 cda;
+    __u8  cmd_code;
+    __u8  flags;
+    __u16 count;
+    __u32 cda;
 } __attribute__ ((packed,aligned(8)));
 
 #define CCW_FLAG_DC		0x80
@@ -72,16 +72,16 @@ struct ccw1 {
  * @res16: reserved
  */
 struct erw {
-	__u32 res0  : 3;
-	__u32 auth  : 1;
-	__u32 pvrf  : 1;
-	__u32 cpt   : 1;
-	__u32 fsavf : 1;
-	__u32 cons  : 1;
-	__u32 scavf : 1;
-	__u32 fsaf  : 1;
-	__u32 scnt  : 6;
-	__u32 res16 : 16;
+    __u32 res0  : 3;
+    __u32 auth  : 1;
+    __u32 pvrf  : 1;
+    __u32 cpt   : 1;
+    __u32 fsavf : 1;
+    __u32 cons  : 1;
+    __u32 scavf : 1;
+    __u32 fsaf  : 1;
+    __u32 scnt  : 6;
+    __u32 res16 : 16;
 } __attribute__ ((packed));
 
 /**
@@ -99,17 +99,17 @@ struct erw {
  * @seqc: sequence code
  */
 struct sublog {
-	__u32 res0  : 1;
-	__u32 esf   : 7;
-	__u32 lpum  : 8;
-	__u32 arep  : 1;
-	__u32 fvf   : 5;
-	__u32 sacc  : 2;
-	__u32 termc : 2;
-	__u32 devsc : 1;
-	__u32 serr  : 1;
-	__u32 ioerr : 1;
-	__u32 seqc  : 3;
+    __u32 res0  : 1;
+    __u32 esf   : 7;
+    __u32 lpum  : 8;
+    __u32 arep  : 1;
+    __u32 fvf   : 5;
+    __u32 sacc  : 2;
+    __u32 termc : 2;
+    __u32 devsc : 1;
+    __u32 serr  : 1;
+    __u32 ioerr : 1;
+    __u32 seqc  : 3;
 } __attribute__ ((packed));
 
 /**
@@ -120,10 +120,10 @@ struct sublog {
  * @saddr: secondary ccw address
  */
 struct esw0 {
-	struct sublog sublog;
-	struct erw erw;
-	__u32  faddr[2];
-	__u32  saddr;
+    struct sublog sublog;
+    struct erw erw;
+    __u32  faddr[2];
+    __u32  saddr;
 } __attribute__ ((packed));
 
 /**
@@ -135,11 +135,11 @@ struct esw0 {
  * @zeros: three fullwords of zeros
  */
 struct esw1 {
-	__u8  zero0;
-	__u8  lpum;
-	__u16 zero16;
-	struct erw erw;
-	__u32 zeros[3];
+    __u8  zero0;
+    __u8  lpum;
+    __u16 zero16;
+    struct erw erw;
+    __u32 zeros[3];
 } __attribute__ ((packed));
 
 /**
@@ -151,11 +151,11 @@ struct esw1 {
  * @zeros: three fullwords of zeros
  */
 struct esw2 {
-	__u8  zero0;
-	__u8  lpum;
-	__u16 dcti;
-	struct erw erw;
-	__u32 zeros[3];
+    __u8  zero0;
+    __u8  lpum;
+    __u16 dcti;
+    struct erw erw;
+    __u32 zeros[3];
 } __attribute__ ((packed));
 
 /**
@@ -167,11 +167,11 @@ struct esw2 {
  * @zeros: three fullwords of zeros
  */
 struct esw3 {
-	__u8  zero0;
-	__u8  lpum;
-	__u16 res;
-	struct erw erw;
-	__u32 zeros[3];
+    __u8  zero0;
+    __u8  lpum;
+    __u16 res;
+    struct erw erw;
+    __u32 zeros[3];
 } __attribute__ ((packed));
 
 /**
@@ -190,14 +190,14 @@ struct esw3 {
  * if applicable).
  */
 struct irb {
-	union scsw scsw;
-	union {
-		struct esw0 esw0;
-		struct esw1 esw1;
-		struct esw2 esw2;
-		struct esw3 esw3;
-	} esw;
-	__u8   ecw[32];
+    union scsw scsw;
+    union {
+        struct esw0 esw0;
+        struct esw1 esw1;
+        struct esw2 esw2;
+        struct esw3 esw3;
+    } esw;
+    __u8   ecw[32];
 } __attribute__ ((packed,aligned(4)));
 
 /**
@@ -209,11 +209,11 @@ struct irb {
  * @count: command count
  */
 struct ciw {
-	__u32 et       :  2;
-	__u32 reserved :  2;
-	__u32 ct       :  4;
-	__u32 cmd      :  8;
-	__u32 count    : 16;
+    __u32 et       :  2;
+    __u32 reserved :  2;
+    __u32 ct       :  4;
+    __u32 cmd      :  8;
+    __u32 count    : 16;
 } __attribute__ ((packed));
 
 #define CIW_TYPE_RCD	0x0    	/* read configuration data */
@@ -226,7 +226,7 @@ struct ciw {
 #define DOIO_ALLOW_SUSPEND	 0x0001 /* allow for channel prog. suspend */
 #define DOIO_DENY_PREFETCH	 0x0002 /* don't allow for CCW prefetch */
 #define DOIO_SUPPRESS_INTER	 0x0004 /* suppress intermediate inter. */
-					/* ... for suspended CCWs */
+/* ... for suspended CCWs */
 /* Device or subchannel gone. */
 #define CIO_GONE       0x0001
 /* No path to device. */
@@ -250,8 +250,8 @@ struct ciw {
  * introduced.
  */
 struct ccw_dev_id {
-	u8 ssid;
-	u16 devno;
+    u8 ssid;
+    u16 devno;
 };
 
 /**
@@ -265,12 +265,11 @@ struct ccw_dev_id {
  *  any
  */
 static inline int ccw_dev_id_is_equal(struct ccw_dev_id *dev_id1,
-				      struct ccw_dev_id *dev_id2)
-{
-	if ((dev_id1->ssid == dev_id2->ssid) &&
-	    (dev_id1->devno == dev_id2->devno))
-		return 1;
-	return 0;
+                                      struct ccw_dev_id *dev_id2) {
+    if ((dev_id1->ssid == dev_id2->ssid) &&
+            (dev_id1->devno == dev_id2->devno))
+        return 1;
+    return 0;
 }
 
 extern void wait_cons_dev(void);
@@ -280,8 +279,8 @@ extern void css_schedule_reprobe(void);
 extern void reipl_ccw_dev(struct ccw_dev_id *id);
 
 struct cio_iplinfo {
-	u16 devno;
-	int is_qdio;
+    u16 devno;
+    int is_qdio;
 };
 
 extern int cio_get_iplinfo(struct cio_iplinfo *iplinfo);

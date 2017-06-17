@@ -176,15 +176,15 @@ access to ME_CBD */
  * used by hbm_host_stop_request.reason
  */
 enum mei_stop_reason_types {
-	DRIVER_STOP_REQUEST = 0x00,
-	DEVICE_D1_ENTRY = 0x01,
-	DEVICE_D2_ENTRY = 0x02,
-	DEVICE_D3_ENTRY = 0x03,
-	SYSTEM_S1_ENTRY = 0x04,
-	SYSTEM_S2_ENTRY = 0x05,
-	SYSTEM_S3_ENTRY = 0x06,
-	SYSTEM_S4_ENTRY = 0x07,
-	SYSTEM_S5_ENTRY = 0x08
+    DRIVER_STOP_REQUEST = 0x00,
+    DEVICE_D1_ENTRY = 0x01,
+    DEVICE_D2_ENTRY = 0x02,
+    DEVICE_D3_ENTRY = 0x03,
+    SYSTEM_S1_ENTRY = 0x04,
+    SYSTEM_S2_ENTRY = 0x05,
+    SYSTEM_S3_ENTRY = 0x06,
+    SYSTEM_S4_ENTRY = 0x07,
+    SYSTEM_S5_ENTRY = 0x08
 };
 
 /*
@@ -192,140 +192,140 @@ enum mei_stop_reason_types {
  * used by hbm_client_connect_response.status
  */
 enum client_connect_status_types {
-	CCS_SUCCESS = 0x00,
-	CCS_NOT_FOUND = 0x01,
-	CCS_ALREADY_STARTED = 0x02,
-	CCS_OUT_OF_RESOURCES = 0x03,
-	CCS_MESSAGE_SMALL = 0x04
+    CCS_SUCCESS = 0x00,
+    CCS_NOT_FOUND = 0x01,
+    CCS_ALREADY_STARTED = 0x02,
+    CCS_OUT_OF_RESOURCES = 0x03,
+    CCS_MESSAGE_SMALL = 0x04
 };
 
 /*
  * Client Disconnect Status
  */
 enum client_disconnect_status_types {
-	CDS_SUCCESS = 0x00
+    CDS_SUCCESS = 0x00
 };
 
 /*
  *  MEI BUS Interface Section
  */
 struct mei_msg_hdr {
-	u32 me_addr:8;
-	u32 host_addr:8;
-	u32 length:9;
-	u32 reserved:6;
-	u32 msg_complete:1;
+    u32 me_addr:8;
+    u32 host_addr:8;
+    u32 length:9;
+    u32 reserved:6;
+    u32 msg_complete:1;
 } __packed;
 
 
 struct mei_bus_message {
-	u8 hbm_cmd;
-	u8 data[0];
+    u8 hbm_cmd;
+    u8 data[0];
 } __packed;
 
 struct hbm_version {
-	u8 minor_version;
-	u8 major_version;
+    u8 minor_version;
+    u8 major_version;
 } __packed;
 
 struct hbm_host_version_request {
-	u8 hbm_cmd;
-	u8 reserved;
-	struct hbm_version host_version;
+    u8 hbm_cmd;
+    u8 reserved;
+    struct hbm_version host_version;
 } __packed;
 
 struct hbm_host_version_response {
-	u8 hbm_cmd;
-	u8 host_version_supported;
-	struct hbm_version me_max_version;
+    u8 hbm_cmd;
+    u8 host_version_supported;
+    struct hbm_version me_max_version;
 } __packed;
 
 struct hbm_host_stop_request {
-	u8 hbm_cmd;
-	u8 reason;
-	u8 reserved[2];
+    u8 hbm_cmd;
+    u8 reason;
+    u8 reserved[2];
 } __packed;
 
 struct hbm_host_stop_response {
-	u8 hbm_cmd;
-	u8 reserved[3];
+    u8 hbm_cmd;
+    u8 reserved[3];
 } __packed;
 
 struct hbm_me_stop_request {
-	u8 hbm_cmd;
-	u8 reason;
-	u8 reserved[2];
+    u8 hbm_cmd;
+    u8 reason;
+    u8 reserved[2];
 } __packed;
 
 struct hbm_host_enum_request {
-	u8 hbm_cmd;
-	u8 reserved[3];
+    u8 hbm_cmd;
+    u8 reserved[3];
 } __packed;
 
 struct hbm_host_enum_response {
-	u8 hbm_cmd;
-	u8 reserved[3];
-	u8 valid_addresses[32];
+    u8 hbm_cmd;
+    u8 reserved[3];
+    u8 valid_addresses[32];
 } __packed;
 
 struct mei_client_properties {
-	uuid_le protocol_name;
-	u8 protocol_version;
-	u8 max_number_of_connections;
-	u8 fixed_address;
-	u8 single_recv_buf;
-	u32 max_msg_length;
+    uuid_le protocol_name;
+    u8 protocol_version;
+    u8 max_number_of_connections;
+    u8 fixed_address;
+    u8 single_recv_buf;
+    u32 max_msg_length;
 } __packed;
 
 struct hbm_props_request {
-	u8 hbm_cmd;
-	u8 address;
-	u8 reserved[2];
+    u8 hbm_cmd;
+    u8 address;
+    u8 reserved[2];
 } __packed;
 
 
 struct hbm_props_response {
-	u8 hbm_cmd;
-	u8 address;
-	u8 status;
-	u8 reserved[1];
-	struct mei_client_properties client_properties;
+    u8 hbm_cmd;
+    u8 address;
+    u8 status;
+    u8 reserved[1];
+    struct mei_client_properties client_properties;
 } __packed;
 
 struct hbm_client_connect_request {
-	u8 hbm_cmd;
-	u8 me_addr;
-	u8 host_addr;
-	u8 reserved;
+    u8 hbm_cmd;
+    u8 me_addr;
+    u8 host_addr;
+    u8 reserved;
 } __packed;
 
 struct hbm_client_connect_response {
-	u8 hbm_cmd;
-	u8 me_addr;
-	u8 host_addr;
-	u8 status;
+    u8 hbm_cmd;
+    u8 me_addr;
+    u8 host_addr;
+    u8 status;
 } __packed;
 
 struct hbm_client_disconnect_request {
-	u8 hbm_cmd;
-	u8 me_addr;
-	u8 host_addr;
-	u8 reserved[1];
+    u8 hbm_cmd;
+    u8 me_addr;
+    u8 host_addr;
+    u8 reserved[1];
 } __packed;
 
 #define MEI_FC_MESSAGE_RESERVED_LENGTH           5
 
 struct hbm_flow_control {
-	u8 hbm_cmd;
-	u8 me_addr;
-	u8 host_addr;
-	u8 reserved[MEI_FC_MESSAGE_RESERVED_LENGTH];
+    u8 hbm_cmd;
+    u8 me_addr;
+    u8 host_addr;
+    u8 reserved[MEI_FC_MESSAGE_RESERVED_LENGTH];
 } __packed;
 
 struct mei_me_client {
-	struct mei_client_properties props;
-	u8 client_id;
-	u8 mei_flow_ctrl_creds;
+    struct mei_client_properties props;
+    u8 client_id;
+    u8 mei_flow_ctrl_creds;
 } __packed;
 
 

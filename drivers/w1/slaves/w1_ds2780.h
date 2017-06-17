@@ -123,9 +123,9 @@
 #define DS2780_EEPROM_REG_BL0		(1 << 0)
 
 extern int w1_ds2780_io(struct device *dev, char *buf, int addr, size_t count,
-			int io);
+                        int io);
 extern int w1_ds2780_io_nolock(struct device *dev, char *buf, int addr,
-			size_t count, int io);
+                               size_t count, int io);
 extern int w1_ds2780_eeprom_cmd(struct device *dev, int addr, int cmd);
 
 #endif /* !_W1_DS2780_H */

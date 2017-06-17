@@ -45,20 +45,19 @@
  *
  * Returns 0
  */
-static int ufshcd_pltfrm_suspend(struct device *dev)
-{
-	struct platform_device *pdev = to_platform_device(dev);
-	struct ufs_hba *hba =  platform_get_drvdata(pdev);
+static int ufshcd_pltfrm_suspend(struct device *dev) {
+    struct platform_device *pdev = to_platform_device(dev);
+    struct ufs_hba *hba =  platform_get_drvdata(pdev);
 
-	/*
-	 * TODO:
-	 * 1. Call ufshcd_suspend
-	 * 2. Do bus specific power management
-	 */
+    /*
+     * TODO:
+     * 1. Call ufshcd_suspend
+     * 2. Do bus specific power management
+     */
 
-	disable_irq(hba->irq);
+    disable_irq(hba->irq);
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -67,20 +66,19 @@ static int ufshcd_pltfrm_suspend(struct device *dev)
  *
  * Returns 0
  */
-static int ufshcd_pltfrm_resume(struct device *dev)
-{
-	struct platform_device *pdev = to_platform_device(dev);
-	struct ufs_hba *hba =  platform_get_drvdata(pdev);
+static int ufshcd_pltfrm_resume(struct device *dev) {
+    struct platform_device *pdev = to_platform_device(dev);
+    struct ufs_hba *hba =  platform_get_drvdata(pdev);
 
-	/*
-	 * TODO:
-	 * 1. Call ufshcd_resume.
-	 * 2. Do bus specific wake up
-	 */
+    /*
+     * TODO:
+     * 1. Call ufshcd_resume.
+     * 2. Do bus specific wake up
+     */
 
-	enable_irq(hba->irq);
+    enable_irq(hba->irq);
 
-	return 0;
+    return 0;
 }
 #else
 #define ufshcd_pltfrm_suspend	NULL
@@ -93,45 +91,44 @@ static int ufshcd_pltfrm_resume(struct device *dev)
  *
  * Returns 0 on success, non-zero value on failure
  */
-static int ufshcd_pltfrm_probe(struct platform_device *pdev)
-{
-	struct ufs_hba *hba;
-	void __iomem *mmio_base;
-	struct resource *mem_res;
-	int irq, err;
-	struct device *dev = &pdev->dev;
+static int ufshcd_pltfrm_probe(struct platform_device *pdev) {
+    struct ufs_hba *hba;
+    void __iomem *mmio_base;
+    struct resource *mem_res;
+    int irq, err;
+    struct device *dev = &pdev->dev;
 
-	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	if (!mem_res) {
-		dev_err(dev, "Memory resource not available\n");
-		err = -ENODEV;
-		goto out;
-	}
+    mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    if (!mem_res) {
+        dev_err(dev, "Memory resource not available\n");
+        err = -ENODEV;
+        goto out;
+    }
 
-	mmio_base = devm_ioremap_resource(dev, mem_res);
-	if (IS_ERR(mmio_base)) {
-		dev_err(dev, "memory map failed\n");
-		err = PTR_ERR(mmio_base);
-		goto out;
-	}
+    mmio_base = devm_ioremap_resource(dev, mem_res);
+    if (IS_ERR(mmio_base)) {
+        dev_err(dev, "memory map failed\n");
+        err = PTR_ERR(mmio_base);
+        goto out;
+    }
 
-	irq = platform_get_irq(pdev, 0);
-	if (irq < 0) {
-		dev_err(dev, "IRQ resource not available\n");
-		err = -ENODEV;
-		goto out;
-	}
+    irq = platform_get_irq(pdev, 0);
+    if (irq < 0) {
+        dev_err(dev, "IRQ resource not available\n");
+        err = -ENODEV;
+        goto out;
+    }
 
-	err = ufshcd_init(dev, &hba, mmio_base, irq);
-	if (err) {
-		dev_err(dev, "Intialization failed\n");
-		goto out;
-	}
+    err = ufshcd_init(dev, &hba, mmio_base, irq);
+    if (err) {
+        dev_err(dev, "Intialization failed\n");
+        goto out;
+    }
 
-	platform_set_drvdata(pdev, hba);
+    platform_set_drvdata(pdev, hba);
 
 out:
-	return err;
+    return err;
 }
 
 /**
@@ -140,34 +137,33 @@ out:
  *
  * Returns 0 on success, non-zero value on failure
  */
-static int ufshcd_pltfrm_remove(struct platform_device *pdev)
-{
-	struct ufs_hba *hba =  platform_get_drvdata(pdev);
+static int ufshcd_pltfrm_remove(struct platform_device *pdev) {
+    struct ufs_hba *hba =  platform_get_drvdata(pdev);
 
-	disable_irq(hba->irq);
-	ufshcd_remove(hba);
-	return 0;
+    disable_irq(hba->irq);
+    ufshcd_remove(hba);
+    return 0;
 }
 
 static const struct of_device_id ufs_of_match[] = {
-	{ .compatible = "jedec,ufs-1.1"},
-	{},
+    { .compatible = "jedec,ufs-1.1"},
+    {},
 };
 
 static const struct dev_pm_ops ufshcd_dev_pm_ops = {
-	.suspend	= ufshcd_pltfrm_suspend,
-	.resume		= ufshcd_pltfrm_resume,
+    .suspend	= ufshcd_pltfrm_suspend,
+    .resume		= ufshcd_pltfrm_resume,
 };
 
 static struct platform_driver ufshcd_pltfrm_driver = {
-	.probe	= ufshcd_pltfrm_probe,
-	.remove	= ufshcd_pltfrm_remove,
-	.driver	= {
-		.name	= "ufshcd",
-		.owner	= THIS_MODULE,
-		.pm	= &ufshcd_dev_pm_ops,
-		.of_match_table = ufs_of_match,
-	},
+    .probe	= ufshcd_pltfrm_probe,
+    .remove	= ufshcd_pltfrm_remove,
+    .driver	= {
+        .name	= "ufshcd",
+        .owner	= THIS_MODULE,
+        .pm	= &ufshcd_dev_pm_ops,
+        .of_match_table = ufs_of_match,
+    },
 };
 
 module_platform_driver(ufshcd_pltfrm_driver);

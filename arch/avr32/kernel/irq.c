@@ -17,12 +17,10 @@
 #include <linux/device.h>
 
 /* May be overridden by platform code */
-int __weak nmi_enable(void)
-{
-	return -ENOSYS;
+int __weak nmi_enable(void) {
+    return -ENOSYS;
 }
 
-void __weak nmi_disable(void)
-{
+void __weak nmi_disable(void) {
 
 }

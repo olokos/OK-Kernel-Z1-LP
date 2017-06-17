@@ -47,41 +47,40 @@
  * A zero is returned on success and a negative errno code for
  * failure.
  */
-int watchdog_register_device(struct watchdog_device *wdd)
-{
-	int ret;
+int watchdog_register_device(struct watchdog_device *wdd) {
+    int ret;
 
-	if (wdd == NULL || wdd->info == NULL || wdd->ops == NULL)
-		return -EINVAL;
+    if (wdd == NULL || wdd->info == NULL || wdd->ops == NULL)
+        return -EINVAL;
 
-	/* Mandatory operations need to be supported */
-	if (wdd->ops->start == NULL || wdd->ops->stop == NULL)
-		return -EINVAL;
+    /* Mandatory operations need to be supported */
+    if (wdd->ops->start == NULL || wdd->ops->stop == NULL)
+        return -EINVAL;
 
-	/*
-	 * Check that we have valid min and max timeout values, if
-	 * not reset them both to 0 (=not used or unknown)
-	 */
-	if (wdd->min_timeout > wdd->max_timeout) {
-		pr_info("Invalid min and max timeout values, resetting to 0!\n");
-		wdd->min_timeout = 0;
-		wdd->max_timeout = 0;
-	}
+    /*
+     * Check that we have valid min and max timeout values, if
+     * not reset them both to 0 (=not used or unknown)
+     */
+    if (wdd->min_timeout > wdd->max_timeout) {
+        pr_info("Invalid min and max timeout values, resetting to 0!\n");
+        wdd->min_timeout = 0;
+        wdd->max_timeout = 0;
+    }
 
-	/*
-	 * Note: now that all watchdog_device data has been verified, we
-	 * will not check this anymore in other functions. If data gets
-	 * corrupted in a later stage then we expect a kernel panic!
-	 */
+    /*
+     * Note: now that all watchdog_device data has been verified, we
+     * will not check this anymore in other functions. If data gets
+     * corrupted in a later stage then we expect a kernel panic!
+     */
 
-	/* We only support 1 watchdog device via the /dev/watchdog interface */
-	ret = watchdog_dev_register(wdd);
-	if (ret) {
-		pr_err("error registering /dev/watchdog (err=%d)\n", ret);
-		return ret;
-	}
+    /* We only support 1 watchdog device via the /dev/watchdog interface */
+    ret = watchdog_dev_register(wdd);
+    if (ret) {
+        pr_err("error registering /dev/watchdog (err=%d)\n", ret);
+        return ret;
+    }
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL_GPL(watchdog_register_device);
 
@@ -92,16 +91,15 @@ EXPORT_SYMBOL_GPL(watchdog_register_device);
  * Unregister a watchdog device that was previously successfully
  * registered with watchdog_register_device().
  */
-void watchdog_unregister_device(struct watchdog_device *wdd)
-{
-	int ret;
+void watchdog_unregister_device(struct watchdog_device *wdd) {
+    int ret;
 
-	if (wdd == NULL)
-		return;
+    if (wdd == NULL)
+        return;
 
-	ret = watchdog_dev_unregister(wdd);
-	if (ret)
-		pr_err("error unregistering /dev/watchdog (err=%d)\n", ret);
+    ret = watchdog_dev_unregister(wdd);
+    if (ret)
+        pr_err("error unregistering /dev/watchdog (err=%d)\n", ret);
 }
 EXPORT_SYMBOL_GPL(watchdog_unregister_device);
 

@@ -36,11 +36,11 @@
  *
  */
 struct mem_map_data {
-	struct list_head node;
-	ion_phys_addr_t addr;
-	ion_phys_addr_t addr_end;
-	unsigned long size;
-	const char *client_name;
+    struct list_head node;
+    ion_phys_addr_t addr;
+    ion_phys_addr_t addr_end;
+    unsigned long size;
+    const char *client_name;
 };
 
 struct ion_heap *ion_iommu_heap_create(struct ion_platform_heap *);
@@ -61,14 +61,12 @@ int ion_secure_cma_prefetch(struct ion_heap *heap, void *data);
 int ion_secure_cma_drain_pool(struct ion_heap *heap, void *unused);
 
 #else
-static inline int ion_secure_cma_prefetch(struct ion_heap *heap, void *data)
-{
-	return -ENODEV;
+static inline int ion_secure_cma_prefetch(struct ion_heap *heap, void *data) {
+    return -ENODEV;
 }
 
-static inline int ion_secure_cma_drain_pool(struct ion_heap *heap, void *unused)
-{
-	return -ENODEV;
+static inline int ion_secure_cma_drain_pool(struct ion_heap *heap, void *unused) {
+    return -ENODEV;
 }
 
 
@@ -97,18 +95,18 @@ void ion_removed_heap_destroy(struct ion_heap *);
  * Returns 0 on success
  */
 int ion_do_cache_op(struct ion_client *client, struct ion_handle *handle,
-			void *uaddr, unsigned long offset, unsigned long len,
-			unsigned int cmd);
+                    void *uaddr, unsigned long offset, unsigned long len,
+                    unsigned int cmd);
 
 void ion_cp_heap_get_base(struct ion_heap *heap, unsigned long *base,
-			unsigned long *size);
+                          unsigned long *size);
 
 void ion_mem_map_show(struct ion_heap *heap);
 
 
 
 int ion_secure_handle(struct ion_client *client, struct ion_handle *handle,
-			int version, void *data, int flags);
+                      int version, void *data, int flags);
 
 int ion_unsecure_handle(struct ion_client *client, struct ion_handle *handle);
 
@@ -128,5 +126,5 @@ int ion_heap_allow_handle_secure(enum ion_heap_type type);
  *			multiple of `chunk_size'
  */
 struct sg_table *ion_create_chunked_sg_table(phys_addr_t buffer_base,
-					size_t chunk_size, size_t total_size);
+        size_t chunk_size, size_t total_size);
 #endif /* _MSM_ION_PRIV_H */

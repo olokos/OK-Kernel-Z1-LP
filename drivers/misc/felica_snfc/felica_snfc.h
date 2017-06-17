@@ -19,68 +19,68 @@
 #include <linux/wait.h>
 
 struct felica_cen_ops {
-	int	(*cen_init)(void *);
-	int	(*cen_read)(u8 *, void *);
-	int	(*cen_write)(u8, void *);
-	int	(*cen_release)(void *);
+    int	(*cen_init)(void *);
+    int	(*cen_read)(u8 *, void *);
+    int	(*cen_write)(u8, void *);
+    int	(*cen_release)(void *);
 };
 
 struct felica_pon_ops {
-	int	(*pon_init)(void *);
-	void	(*pon_write)(int, void *);
-	void	(*pon_release)(void *);
+    int	(*pon_init)(void *);
+    void	(*pon_write)(int, void *);
+    void	(*pon_release)(void *);
 };
 
 struct felica_rfs_ops {
-	int	(*rfs_init)(void *);
-	int	(*rfs_read)(void *);
-	void	(*rfs_release)(void *);
+    int	(*rfs_init)(void *);
+    int	(*rfs_read)(void *);
+    void	(*rfs_release)(void *);
 };
 
 struct felica_int_ops {
-	int	(*int_init)(void *);
-	int	(*int_read)(void *);
-	void	(*int_release)(void *);
+    int	(*int_init)(void *);
+    int	(*int_read)(void *);
+    void	(*int_release)(void *);
 };
 
 struct nfc_intu_ops {
-	int	(*intu_init)(void *);
-	int	(*intu_read)(void *);
-	void	(*intu_release)(void *);
+    int	(*intu_init)(void *);
+    int	(*intu_read)(void *);
+    void	(*intu_release)(void *);
 };
 
 struct nfc_hsel_ops {
-	int	(*hsel_init)(void *);
-	void	(*hsel_write)(int, void *);
-	void	(*hsel_release)(void *);
+    int	(*hsel_init)(void *);
+    void	(*hsel_write)(int, void *);
+    void	(*hsel_release)(void *);
 };
 
 struct nfc_ldo_ops {
-	void	(*ldo_write)(int, void *);
+    void	(*ldo_write)(int, void *);
 };
 
 enum dev_type {
-	FELICA,
-	FELICA_SNFC,
+    FELICA,
+    FELICA_SNFC,
 };
 
 struct felica_data {
-	enum dev_type type;
-	void *user;
+    enum dev_type type;
+    void *user;
 
-	/* FeliCa */
-	const struct felica_cen_ops *flcen;
-	const struct felica_pon_ops *flpon;
-	const struct felica_rfs_ops *flrfs;
-	const struct felica_int_ops *flint;
-	unsigned int irq_rfs;
-	unsigned int irq_int;
+    /* FeliCa */
+    const struct felica_cen_ops *flcen;
+    const struct felica_pon_ops *flpon;
+    const struct felica_rfs_ops *flrfs;
+    const struct felica_int_ops *flint;
+    unsigned int irq_rfs;
+    unsigned int irq_int;
 
-	/* NFC */
-	const struct nfc_intu_ops *flintu;
-	const struct nfc_hsel_ops *flhsel;
-	const struct nfc_ldo_ops *flldo;
-	unsigned int irq_intu;
+    /* NFC */
+    const struct nfc_intu_ops *flintu;
+    const struct nfc_hsel_ops *flhsel;
+    const struct nfc_ldo_ops *flldo;
+    unsigned int irq_intu;
 };
 
 int felica_snfc_irq_start(struct device *dev);

@@ -69,14 +69,12 @@
 #define raw_smp_processor_id()	(current_thread_info()->cpu)
 #endif
 
-static inline int cpu_logical_map(int cpu)
-{
-	return cpu;
+static inline int cpu_logical_map(int cpu) {
+    return cpu;
 }
 
-static inline int cpu_number_map(int cpu)
-{
-	return cpu;
+static inline int cpu_number_map(int cpu) {
+    return cpu;
 }
 
 

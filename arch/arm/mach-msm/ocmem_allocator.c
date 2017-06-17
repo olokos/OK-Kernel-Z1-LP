@@ -37,67 +37,63 @@
 */
 
 int allocate_head(struct ocmem_zone *z, unsigned long size,
-							unsigned long *offset)
-{
-	*offset  = gen_pool_alloc(z->z_pool, size);
+                  unsigned long *offset) {
+    *offset  = gen_pool_alloc(z->z_pool, size);
 
-	if (!(*offset))
-		return -ENOMEM;
+    if (!(*offset))
+        return -ENOMEM;
 
-	z->z_head += size;
-	z->z_free -= size;
-	return 0;
+    z->z_head += size;
+    z->z_free -= size;
+    return 0;
 }
 
 int allocate_tail(struct ocmem_zone *z, unsigned long size,
-							unsigned long *offset)
-{
-	unsigned long reserve;
-	unsigned long head;
+                  unsigned long *offset) {
+    unsigned long reserve;
+    unsigned long head;
 
-	if (z->z_tail < (z->z_head + size))
-		return -ENOMEM;
+    if (z->z_tail < (z->z_head + size))
+        return -ENOMEM;
 
-	reserve = z->z_tail - z->z_head - size;
-	if (reserve) {
-		head = gen_pool_alloc(z->z_pool, reserve);
-		*offset = gen_pool_alloc(z->z_pool, size);
-		gen_pool_free(z->z_pool, head, reserve);
-	} else
-		*offset = gen_pool_alloc(z->z_pool, size);
+    reserve = z->z_tail - z->z_head - size;
+    if (reserve) {
+        head = gen_pool_alloc(z->z_pool, reserve);
+        *offset = gen_pool_alloc(z->z_pool, size);
+        gen_pool_free(z->z_pool, head, reserve);
+    } else
+        *offset = gen_pool_alloc(z->z_pool, size);
 
-	if (!(*offset))
-		return -ENOMEM;
+    if (!(*offset))
+        return -ENOMEM;
 
-	z->z_tail -= size;
-	z->z_free -= size;
-	return 0;
+    z->z_tail -= size;
+    z->z_free -= size;
+    return 0;
 }
 
 int free_head(struct ocmem_zone *z, unsigned long offset,
-			unsigned long size)
-{
-	if (offset > z->z_head) {
-		pr_err("ocmem: Detected out of order free "
-				"leading to fragmentation\n");
-		return -EINVAL;
-	}
-	gen_pool_free(z->z_pool, offset, size);
-	z->z_head -= size;
-	z->z_free += size;
-	return 0;
+              unsigned long size) {
+    if (offset > z->z_head) {
+        pr_err("ocmem: Detected out of order free "
+               "leading to fragmentation\n");
+        return -EINVAL;
+    }
+    gen_pool_free(z->z_pool, offset, size);
+    z->z_head -= size;
+    z->z_free += size;
+    return 0;
 }
 
 int free_tail(struct ocmem_zone *z, unsigned long offset,
-				unsigned long size)
-{
-	if (offset > z->z_tail) {
-		pr_err("ocmem: Detected out of order free "
-				"leading to fragmentation\n");
-		return -EINVAL;
-	}
-	gen_pool_free(z->z_pool, offset, size);
-	z->z_tail += size;
-	z->z_free += size;
-	return 0;
+              unsigned long size) {
+    if (offset > z->z_tail) {
+        pr_err("ocmem: Detected out of order free "
+               "leading to fragmentation\n");
+        return -EINVAL;
+    }
+    gen_pool_free(z->z_pool, offset, size);
+    z->z_tail += size;
+    z->z_free += size;
+    return 0;
 }

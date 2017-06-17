@@ -70,8 +70,8 @@
 
 /* 32-bit DMA descriptor. */
 struct b43legacy_dmadesc32 {
-	__le32 control;
-	__le32 address;
+    __le32 control;
+    __le32 address;
 } __packed;
 #define B43legacy_DMA32_DCTL_BYTECNT		0x00001FFF
 #define B43legacy_DMA32_DCTL_ADDREXT_MASK	0x00030000
@@ -105,76 +105,74 @@ struct b43legacy_txstatus;
 
 
 struct b43legacy_dmadesc_meta {
-	/* The kernel DMA-able buffer. */
-	struct sk_buff *skb;
-	/* DMA base bus-address of the descriptor buffer. */
-	dma_addr_t dmaaddr;
-	/* ieee80211 TX status. Only used once per 802.11 frag. */
-	bool is_last_fragment;
+    /* The kernel DMA-able buffer. */
+    struct sk_buff *skb;
+    /* DMA base bus-address of the descriptor buffer. */
+    dma_addr_t dmaaddr;
+    /* ieee80211 TX status. Only used once per 802.11 frag. */
+    bool is_last_fragment;
 };
 
 enum b43legacy_dmatype {
-	B43legacy_DMA_30BIT = 30,
-	B43legacy_DMA_32BIT = 32,
+    B43legacy_DMA_30BIT = 30,
+    B43legacy_DMA_32BIT = 32,
 };
 
 struct b43legacy_dmaring {
-	/* Kernel virtual base address of the ring memory. */
-	void *descbase;
-	/* Meta data about all descriptors. */
-	struct b43legacy_dmadesc_meta *meta;
-	/* Cache of TX headers for each slot.
-	 * This is to avoid an allocation on each TX.
-	 * This is NULL for an RX ring.
-	 */
-	u8 *txhdr_cache;
-	/* (Unadjusted) DMA base bus-address of the ring memory. */
-	dma_addr_t dmabase;
-	/* Number of descriptor slots in the ring. */
-	int nr_slots;
-	/* Number of used descriptor slots. */
-	int used_slots;
-	/* Currently used slot in the ring. */
-	int current_slot;
-	/* Frameoffset in octets. */
-	u32 frameoffset;
-	/* Descriptor buffer size. */
-	u16 rx_buffersize;
-	/* The MMIO base register of the DMA controller. */
-	u16 mmio_base;
-	/* DMA controller index number (0-5). */
-	int index;
-	/* Boolean. Is this a TX ring? */
-	bool tx;
-	/* The type of DMA engine used. */
-	enum b43legacy_dmatype type;
-	/* Boolean. Is this ring stopped at ieee80211 level? */
-	bool stopped;
-	/* The QOS priority assigned to this ring. Only used for TX rings.
-	 * This is the mac80211 "queue" value. */
-	u8 queue_prio;
-	struct b43legacy_wldev *dev;
+    /* Kernel virtual base address of the ring memory. */
+    void *descbase;
+    /* Meta data about all descriptors. */
+    struct b43legacy_dmadesc_meta *meta;
+    /* Cache of TX headers for each slot.
+     * This is to avoid an allocation on each TX.
+     * This is NULL for an RX ring.
+     */
+    u8 *txhdr_cache;
+    /* (Unadjusted) DMA base bus-address of the ring memory. */
+    dma_addr_t dmabase;
+    /* Number of descriptor slots in the ring. */
+    int nr_slots;
+    /* Number of used descriptor slots. */
+    int used_slots;
+    /* Currently used slot in the ring. */
+    int current_slot;
+    /* Frameoffset in octets. */
+    u32 frameoffset;
+    /* Descriptor buffer size. */
+    u16 rx_buffersize;
+    /* The MMIO base register of the DMA controller. */
+    u16 mmio_base;
+    /* DMA controller index number (0-5). */
+    int index;
+    /* Boolean. Is this a TX ring? */
+    bool tx;
+    /* The type of DMA engine used. */
+    enum b43legacy_dmatype type;
+    /* Boolean. Is this ring stopped at ieee80211 level? */
+    bool stopped;
+    /* The QOS priority assigned to this ring. Only used for TX rings.
+     * This is the mac80211 "queue" value. */
+    u8 queue_prio;
+    struct b43legacy_wldev *dev;
 #ifdef CONFIG_B43LEGACY_DEBUG
-	/* Maximum number of used slots. */
-	int max_used_slots;
-	/* Last time we injected a ring overflow. */
-	unsigned long last_injected_overflow;
+    /* Maximum number of used slots. */
+    int max_used_slots;
+    /* Last time we injected a ring overflow. */
+    unsigned long last_injected_overflow;
 #endif /* CONFIG_B43LEGACY_DEBUG*/
 };
 
 
 static inline
 u32 b43legacy_dma_read(struct b43legacy_dmaring *ring,
-		       u16 offset)
-{
-	return b43legacy_read32(ring->dev, ring->mmio_base + offset);
+                       u16 offset) {
+    return b43legacy_read32(ring->dev, ring->mmio_base + offset);
 }
 
 static inline
 void b43legacy_dma_write(struct b43legacy_dmaring *ring,
-			 u16 offset, u32 value)
-{
-	b43legacy_write32(ring->dev, ring->mmio_base + offset, value);
+                         u16 offset, u32 value) {
+    b43legacy_write32(ring->dev, ring->mmio_base + offset, value);
 }
 
 
@@ -185,9 +183,9 @@ void b43legacy_dma_tx_suspend(struct b43legacy_wldev *dev);
 void b43legacy_dma_tx_resume(struct b43legacy_wldev *dev);
 
 int b43legacy_dma_tx(struct b43legacy_wldev *dev,
-		     struct sk_buff *skb);
+                     struct sk_buff *skb);
 void b43legacy_dma_handle_txstatus(struct b43legacy_wldev *dev,
-				   const struct b43legacy_txstatus *status);
+                                   const struct b43legacy_txstatus *status);
 
 void b43legacy_dma_rx(struct b43legacy_dmaring *ring);
 
@@ -195,36 +193,29 @@ void b43legacy_dma_rx(struct b43legacy_dmaring *ring);
 
 
 static inline
-int b43legacy_dma_init(struct b43legacy_wldev *dev)
-{
-	return 0;
+int b43legacy_dma_init(struct b43legacy_wldev *dev) {
+    return 0;
 }
 static inline
-void b43legacy_dma_free(struct b43legacy_wldev *dev)
-{
+void b43legacy_dma_free(struct b43legacy_wldev *dev) {
 }
 static inline
 int b43legacy_dma_tx(struct b43legacy_wldev *dev,
-		     struct sk_buff *skb)
-{
-	return 0;
+                     struct sk_buff *skb) {
+    return 0;
 }
 static inline
 void b43legacy_dma_handle_txstatus(struct b43legacy_wldev *dev,
-				   const struct b43legacy_txstatus *status)
-{
+                                   const struct b43legacy_txstatus *status) {
 }
 static inline
-void b43legacy_dma_rx(struct b43legacy_dmaring *ring)
-{
+void b43legacy_dma_rx(struct b43legacy_dmaring *ring) {
 }
 static inline
-void b43legacy_dma_tx_suspend(struct b43legacy_wldev *dev)
-{
+void b43legacy_dma_tx_suspend(struct b43legacy_wldev *dev) {
 }
 static inline
-void b43legacy_dma_tx_resume(struct b43legacy_wldev *dev)
-{
+void b43legacy_dma_tx_resume(struct b43legacy_wldev *dev) {
 }
 
 #endif /* CONFIG_B43LEGACY_DMA */

@@ -40,22 +40,21 @@ do {							\
 #define ASID_MASK	0xff0
 
 static inline void enter_lazy_tlb(struct mm_struct *mm,
-				struct task_struct *tsk)
-{}
+                                  struct task_struct *tsk) {
+}
 
 static inline void
-get_new_mmu_context(struct mm_struct *mm)
-{
-	unsigned long asid = asid_cache + ASID_INC;
+get_new_mmu_context(struct mm_struct *mm) {
+    unsigned long asid = asid_cache + ASID_INC;
 
-	if (!(asid & ASID_MASK)) {
-		local_flush_tlb_all();		/* start new asid cycle */
-		if (!asid)			/* fix version if needed */
-			asid = ASID_FIRST_VERSION;
-	}
+    if (!(asid & ASID_MASK)) {
+        local_flush_tlb_all();		/* start new asid cycle */
+        if (!asid)			/* fix version if needed */
+            asid = ASID_FIRST_VERSION;
+    }
 
-	mm->context = asid;
-	asid_cache = asid;
+    mm->context = asid;
+    asid_cache = asid;
 }
 
 /*
@@ -63,51 +62,48 @@ get_new_mmu_context(struct mm_struct *mm)
  * instance.
  */
 static inline int
-init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-{
-	mm->context = 0;
-	return 0;
+init_new_context(struct task_struct *tsk, struct mm_struct *mm) {
+    mm->context = 0;
+    return 0;
 }
 
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-			struct task_struct *tsk)
-{
-	unsigned long flags;
+                             struct task_struct *tsk) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	if ((next->context ^ asid_cache) & ASID_VERSION_MASK)
-		get_new_mmu_context(next);
+    local_irq_save(flags);
+    if ((next->context ^ asid_cache) & ASID_VERSION_MASK)
+        get_new_mmu_context(next);
 
-	pevn_set(next->context);
-	TLBMISS_HANDLER_SETUP_PGD(next->pgd);
-	local_irq_restore(flags);
+    pevn_set(next->context);
+    TLBMISS_HANDLER_SETUP_PGD(next->pgd);
+    local_irq_restore(flags);
 }
 
 /*
  * Destroy context related info for an mm_struct that is about
  * to be put to rest.
  */
-static inline void destroy_context(struct mm_struct *mm)
-{}
+static inline void destroy_context(struct mm_struct *mm) {
+}
 
 static inline void
-deactivate_mm(struct task_struct *task, struct mm_struct *mm)
-{}
+deactivate_mm(struct task_struct *task, struct mm_struct *mm) {
+}
 
 /*
  * After we have set current->mm to a new value, this activates
  * the context for the new mm so we see the new mappings.
  */
 static inline void
-activate_mm(struct mm_struct *prev, struct mm_struct *next)
-{
-	unsigned long flags;
+activate_mm(struct mm_struct *prev, struct mm_struct *next) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	get_new_mmu_context(next);
-	pevn_set(next->context);
-	TLBMISS_HANDLER_SETUP_PGD(next->pgd);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    get_new_mmu_context(next);
+    pevn_set(next->context);
+    TLBMISS_HANDLER_SETUP_PGD(next->pgd);
+    local_irq_restore(flags);
 }
 
 #endif /* _ASM_SCORE_MMU_CONTEXT_H */

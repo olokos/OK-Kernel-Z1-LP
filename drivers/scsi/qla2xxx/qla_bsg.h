@@ -48,23 +48,23 @@
 #define A84_ISSUE_UPDATE_DIAGFW_CMD     6
 
 struct qla84_mgmt_param {
-	union {
-		struct {
-			uint32_t start_addr;
-		} mem; /* for QLA84_MGMT_READ/WRITE_MEM */
-		struct {
-			uint32_t id;
+    union {
+        struct {
+            uint32_t start_addr;
+        } mem; /* for QLA84_MGMT_READ/WRITE_MEM */
+        struct {
+            uint32_t id;
 #define QLA84_MGMT_CONFIG_ID_UIF        1
 #define QLA84_MGMT_CONFIG_ID_FCOE_COS   2
 #define QLA84_MGMT_CONFIG_ID_PAUSE      3
 #define QLA84_MGMT_CONFIG_ID_TIMEOUTS   4
 
-		uint32_t param0;
-		uint32_t param1;
-	} config; /* for QLA84_MGMT_CHNG_CONFIG */
+            uint32_t param0;
+            uint32_t param1;
+        } config; /* for QLA84_MGMT_CHNG_CONFIG */
 
-	struct {
-		uint32_t type;
+        struct {
+            uint32_t type;
 #define QLA84_MGMT_INFO_CONFIG_LOG_DATA         1 /* Get Config Log Data */
 #define QLA84_MGMT_INFO_LOG_DATA                2 /* Get Log Data */
 #define QLA84_MGMT_INFO_PORT_STAT               3 /* Get Port Statistics */
@@ -73,10 +73,10 @@ struct qla84_mgmt_param {
 #define QLA84_MGMT_INFO_CONFIG_PARAMS           6 /* Get Config Parameters */
 #define QLA84_MGMT_INFO_PANIC_LOG               7 /* Get Panic Log */
 
-		uint32_t context;
-/*
-* context definitions for QLA84_MGMT_INFO_CONFIG_LOG_DATA
-*/
+            uint32_t context;
+            /*
+            * context definitions for QLA84_MGMT_INFO_CONFIG_LOG_DATA
+            */
 #define IC_LOG_DATA_LOG_ID_DEBUG_LOG                    0
 #define IC_LOG_DATA_LOG_ID_LEARN_LOG                    1
 #define IC_LOG_DATA_LOG_ID_FC_ACL_INGRESS_LOG           2
@@ -88,9 +88,9 @@ struct qla84_mgmt_param {
 #define IC_LOG_DATA_LOG_ID_LINK_EVENT_LOG               8
 #define IC_LOG_DATA_LOG_ID_DCX_LOG                      9
 
-/*
-* context definitions for QLA84_MGMT_INFO_PORT_STAT
-*/
+            /*
+            * context definitions for QLA84_MGMT_INFO_PORT_STAT
+            */
 #define IC_PORT_STATISTICS_PORT_NUMBER_ETHERNET_PORT0   0
 #define IC_PORT_STATISTICS_PORT_NUMBER_ETHERNET_PORT1   1
 #define IC_PORT_STATISTICS_PORT_NUMBER_NSL_PORT0        2
@@ -99,57 +99,57 @@ struct qla84_mgmt_param {
 #define IC_PORT_STATISTICS_PORT_NUMBER_FC_PORT1         5
 
 
-/*
-* context definitions for QLA84_MGMT_INFO_LIF_STAT
-*/
+            /*
+            * context definitions for QLA84_MGMT_INFO_LIF_STAT
+            */
 #define IC_LIF_STATISTICS_LIF_NUMBER_ETHERNET_PORT0     0
 #define IC_LIF_STATISTICS_LIF_NUMBER_ETHERNET_PORT1     1
 #define IC_LIF_STATISTICS_LIF_NUMBER_FC_PORT0           2
 #define IC_LIF_STATISTICS_LIF_NUMBER_FC_PORT1           3
 #define IC_LIF_STATISTICS_LIF_NUMBER_CPU                6
 
-		} info; /* for QLA84_MGMT_GET_INFO */
-	} u;
+        } info; /* for QLA84_MGMT_GET_INFO */
+    } u;
 };
 
 struct qla84_msg_mgmt {
-	uint16_t cmd;
+    uint16_t cmd;
 #define QLA84_MGMT_READ_MEM     0x00
 #define QLA84_MGMT_WRITE_MEM    0x01
 #define QLA84_MGMT_CHNG_CONFIG  0x02
 #define QLA84_MGMT_GET_INFO     0x03
-	uint16_t rsrvd;
-	struct qla84_mgmt_param mgmtp;/* parameters for cmd */
-	uint32_t len; /* bytes in payload following this struct */
-	uint8_t payload[0]; /* payload for cmd */
+    uint16_t rsrvd;
+    struct qla84_mgmt_param mgmtp;/* parameters for cmd */
+    uint32_t len; /* bytes in payload following this struct */
+    uint8_t payload[0]; /* payload for cmd */
 };
 
 struct qla_bsg_a84_mgmt {
-	struct qla84_msg_mgmt mgmt;
+    struct qla84_msg_mgmt mgmt;
 } __attribute__ ((packed));
 
 struct qla_scsi_addr {
-	uint16_t bus;
-	uint16_t target;
+    uint16_t bus;
+    uint16_t target;
 } __attribute__ ((packed));
 
 struct qla_ext_dest_addr {
-	union {
-		uint8_t wwnn[8];
-		uint8_t wwpn[8];
-		uint8_t id[4];
-		struct qla_scsi_addr scsi_addr;
-	} dest_addr;
-	uint16_t dest_type;
+    union {
+        uint8_t wwnn[8];
+        uint8_t wwpn[8];
+        uint8_t id[4];
+        struct qla_scsi_addr scsi_addr;
+    } dest_addr;
+    uint16_t dest_type;
 #define	EXT_DEF_TYPE_WWPN	2
-	uint16_t lun;
-	uint16_t padding[2];
+    uint16_t lun;
+    uint16_t padding[2];
 } __attribute__ ((packed));
 
 struct qla_port_param {
-	struct qla_ext_dest_addr fc_scsi_addr;
-	uint16_t mode;
-	uint16_t speed;
+    struct qla_ext_dest_addr fc_scsi_addr;
+    uint16_t mode;
+    uint16_t speed;
 } __attribute__ ((packed));
 
 
@@ -158,29 +158,29 @@ struct qla_port_param {
 #define MAX_FRU_SIZE	36
 
 struct qla_field_address {
-	uint16_t offset;
-	uint16_t device;
-	uint16_t option;
+    uint16_t offset;
+    uint16_t device;
+    uint16_t option;
 } __packed;
 
 struct qla_field_info {
-	uint8_t version[MAX_FRU_SIZE];
+    uint8_t version[MAX_FRU_SIZE];
 } __packed;
 
 struct qla_image_version {
-	struct qla_field_address field_address;
-	struct qla_field_info field_info;
+    struct qla_field_address field_address;
+    struct qla_field_info field_info;
 } __packed;
 
 struct qla_image_version_list {
-	uint32_t count;
-	struct qla_image_version version[0];
+    uint32_t count;
+    struct qla_image_version version[0];
 } __packed;
 
 struct qla_status_reg {
-	struct qla_field_address field_address;
-	uint8_t status_reg;
-	uint8_t reserved[7];
+    struct qla_field_address field_address;
+    uint8_t status_reg;
+    uint8_t reserved[7];
 } __packed;
 
 #endif

@@ -3,9 +3,8 @@
 
 #include <arch/irq.h>
 
-static inline int irq_canonicalize(int irq)
-{  
-  return irq; 
+static inline int irq_canonicalize(int irq) {
+    return irq;
 }
 
 #endif  /* _ASM_IRQ_H */

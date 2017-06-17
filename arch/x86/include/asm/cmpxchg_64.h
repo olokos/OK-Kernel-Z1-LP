@@ -1,9 +1,8 @@
 #ifndef _ASM_X86_CMPXCHG_64_H
 #define _ASM_X86_CMPXCHG_64_H
 
-static inline void set_64bit(volatile u64 *ptr, u64 val)
-{
-	*ptr = val;
+static inline void set_64bit(volatile u64 *ptr, u64 val) {
+    *ptr = val;
 }
 
 #define __HAVE_ARCH_CMPXCHG 1

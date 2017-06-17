@@ -33,27 +33,27 @@ void diag_hsic_close(int);
  * for instance HSIC(0), HS-USB(1) working at same time
  */
 struct diag_hsic_dev {
-	int id;
-	int hsic_ch;
-	int hsic_inited;
-	int hsic_device_enabled;
-	int hsic_device_opened;
-	int hsic_suspend;
-	int hsic_data_requested;
-	int in_busy_hsic_read_on_device;
-	int in_busy_hsic_write;
-	struct work_struct diag_read_hsic_work;
-	int count_hsic_pool;
-	int count_hsic_write_pool;
-	unsigned int poolsize_hsic;
-	unsigned int poolsize_hsic_write;
-	unsigned int itemsize_hsic;
-	unsigned int itemsize_hsic_write;
-	mempool_t *diag_hsic_pool;
-	mempool_t *diag_hsic_write_pool;
-	int num_hsic_buf_tbl_entries;
-	struct diag_write_device *hsic_buf_tbl;
-	spinlock_t hsic_spinlock;
+    int id;
+    int hsic_ch;
+    int hsic_inited;
+    int hsic_device_enabled;
+    int hsic_device_opened;
+    int hsic_suspend;
+    int hsic_data_requested;
+    int in_busy_hsic_read_on_device;
+    int in_busy_hsic_write;
+    struct work_struct diag_read_hsic_work;
+    int count_hsic_pool;
+    int count_hsic_write_pool;
+    unsigned int poolsize_hsic;
+    unsigned int poolsize_hsic_write;
+    unsigned int itemsize_hsic;
+    unsigned int itemsize_hsic_write;
+    mempool_t *diag_hsic_pool;
+    mempool_t *diag_hsic_write_pool;
+    int num_hsic_buf_tbl_entries;
+    struct diag_write_device *hsic_buf_tbl;
+    spinlock_t hsic_spinlock;
 };
 
 #endif

@@ -48,15 +48,15 @@ s32  igb_get_auto_rd_done(struct e1000_hw *hw);
 s32  igb_get_bus_info_pcie(struct e1000_hw *hw);
 s32  igb_get_hw_semaphore(struct e1000_hw *hw);
 s32  igb_get_speed_and_duplex_copper(struct e1000_hw *hw, u16 *speed,
-				       u16 *duplex);
+                                     u16 *duplex);
 s32  igb_id_led_init(struct e1000_hw *hw);
 s32  igb_led_off(struct e1000_hw *hw);
 void igb_update_mc_addr_list(struct e1000_hw *hw,
-	                     u8 *mc_addr_list, u32 mc_addr_count);
+                             u8 *mc_addr_list, u32 mc_addr_count);
 s32  igb_setup_link(struct e1000_hw *hw);
 s32  igb_validate_mdi_setting(struct e1000_hw *hw);
 s32  igb_write_8bit_ctrl_reg(struct e1000_hw *hw, u32 reg,
-			       u32 offset, u8 data);
+                             u32 offset, u8 data);
 
 void igb_clear_hw_cntrs_base(struct e1000_hw *hw);
 void igb_clear_vfta(struct e1000_hw *hw);
@@ -72,11 +72,11 @@ s32  igb_check_alt_mac_addr(struct e1000_hw *hw);
 bool igb_enable_mng_pass_thru(struct e1000_hw *hw);
 
 enum e1000_mng_mode {
-	e1000_mng_mode_none = 0,
-	e1000_mng_mode_asf,
-	e1000_mng_mode_pt,
-	e1000_mng_mode_ipmi,
-	e1000_mng_mode_host_if_only
+    e1000_mng_mode_none = 0,
+    e1000_mng_mode_asf,
+    e1000_mng_mode_pt,
+    e1000_mng_mode_ipmi,
+    e1000_mng_mode_host_if_only
 };
 
 #define E1000_FACTPS_MNGCG    0x20000000

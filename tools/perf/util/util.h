@@ -149,10 +149,9 @@ extern int prefixcmp(const char *str, const char *prefix);
 extern void set_buildid_dir(void);
 extern void disable_buildid_cache(void);
 
-static inline const char *skip_prefix(const char *str, const char *prefix)
-{
-	size_t len = strlen(prefix);
-	return strncmp(str, prefix, len) ? NULL : str + len;
+static inline const char *skip_prefix(const char *str, const char *prefix) {
+    size_t len = strlen(prefix);
+    return strncmp(str, prefix, len) ? NULL : str + len;
 }
 
 #ifdef __GLIBC_PREREQ
@@ -163,11 +162,10 @@ static inline const char *skip_prefix(const char *str, const char *prefix)
 
 #ifndef HAVE_STRCHRNUL
 #define strchrnul gitstrchrnul
-static inline char *gitstrchrnul(const char *s, int c)
-{
-	while (*s && *s != c)
-		s++;
-	return (char *)s;
+static inline char *gitstrchrnul(const char *s, int c) {
+    while (*s && *s != c)
+        s++;
+    return (char *)s;
 }
 #endif
 
@@ -178,17 +176,15 @@ extern char *xstrdup(const char *str);
 extern void *xrealloc(void *ptr, size_t size) __attribute__((weak));
 
 
-static inline void *zalloc(size_t size)
-{
-	return calloc(1, size);
+static inline void *zalloc(size_t size) {
+    return calloc(1, size);
 }
 
-static inline int has_extension(const char *filename, const char *ext)
-{
-	size_t len = strlen(filename);
-	size_t extlen = strlen(ext);
+static inline int has_extension(const char *filename, const char *ext) {
+    size_t len = strlen(filename);
+    size_t extlen = strlen(ext);
 
-	return len > extlen && !memcmp(filename + len - extlen, ext, extlen);
+    return len > extlen && !memcmp(filename + len - extlen, ext, extlen);
 }
 
 /* Sane ctype - no locale, and works with signed chars */
@@ -226,11 +222,10 @@ extern unsigned char sane_ctype[256];
 #define tolower(x) sane_case((unsigned char)(x), 0x20)
 #define toupper(x) sane_case((unsigned char)(x), 0)
 
-static inline int sane_case(int x, int high)
-{
-	if (sane_istest(x, GIT_ALPHA))
-		x = (x & ~0x20) | high;
-	return x;
+static inline int sane_case(int x, int high) {
+    if (sane_istest(x, GIT_ALPHA))
+        x = (x & ~0x20) | high;
+    return x;
 }
 
 int mkdir_p(char *path, mode_t mode);
@@ -260,9 +255,8 @@ uid_t parse_target_uid(const char *str, const char *tid, const char *pid);
  */
 
 static inline __attribute__((const))
-bool is_power_of_2(unsigned long n)
-{
-	return (n != 0 && ((n & (n - 1)) == 0));
+bool is_power_of_2(unsigned long n) {
+    return (n != 0 && ((n & (n - 1)) == 0));
 }
 
 #endif

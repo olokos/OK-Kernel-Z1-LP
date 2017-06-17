@@ -42,40 +42,40 @@
 #define ISCSI_PDU_WRITE				0x02
 
 struct iscsi_build_list {
-	int		data_direction;
-	int		randomize;
-	int		type;
-	int		immediate_data_length;
+    int		data_direction;
+    int		randomize;
+    int		type;
+    int		immediate_data_length;
 };
 
 struct iscsi_pdu {
-	int		status;
-	int		type;
-	u8		flags;
-	u32		data_sn;
-	u32		length;
-	u32		offset;
-	u32		pdu_send_order;
-	u32		seq_no;
+    int		status;
+    int		type;
+    u8		flags;
+    u32		data_sn;
+    u32		length;
+    u32		offset;
+    u32		pdu_send_order;
+    u32		seq_no;
 } ____cacheline_aligned;
 
 struct iscsi_seq {
-	int		sent;
-	int		status;
-	int		type;
-	u32		data_sn;
-	u32		first_datasn;
-	u32		last_datasn;
-	u32		next_burst_len;
-	u32		pdu_start;
-	u32		pdu_count;
-	u32		offset;
-	u32		orig_offset;
-	u32		pdu_send_order;
-	u32		r2t_sn;
-	u32		seq_send_order;
-	u32		seq_no;
-	u32		xfer_len;
+    int		sent;
+    int		status;
+    int		type;
+    u32		data_sn;
+    u32		first_datasn;
+    u32		last_datasn;
+    u32		next_burst_len;
+    u32		pdu_start;
+    u32		pdu_count;
+    u32		offset;
+    u32		orig_offset;
+    u32		pdu_send_order;
+    u32		r2t_sn;
+    u32		seq_send_order;
+    u32		seq_no;
+    u32		xfer_len;
 } ____cacheline_aligned;
 
 extern int iscsit_do_build_list(struct iscsi_cmd *, struct iscsi_build_list *);

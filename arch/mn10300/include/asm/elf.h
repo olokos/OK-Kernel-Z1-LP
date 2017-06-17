@@ -49,8 +49,8 @@ typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 typedef float elf_fpreg_t;
 
 typedef struct {
-	elf_fpreg_t	fpregs[ELF_NFPREG];
-	u_int32_t	fpcr;
+    elf_fpreg_t	fpregs[ELF_NFPREG];
+    u_int32_t	fpcr;
 } elf_fpregset_t;
 
 /*

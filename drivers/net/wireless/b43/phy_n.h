@@ -717,122 +717,122 @@
 struct b43_wldev;
 
 enum b43_nphy_spur_avoid {
-	B43_SPUR_AVOID_DISABLE,
-	B43_SPUR_AVOID_AUTO,
-	B43_SPUR_AVOID_FORCE,
+    B43_SPUR_AVOID_DISABLE,
+    B43_SPUR_AVOID_AUTO,
+    B43_SPUR_AVOID_FORCE,
 };
 
 struct b43_chanspec {
-	u16 center_freq;
-	enum nl80211_channel_type channel_type;
+    u16 center_freq;
+    enum nl80211_channel_type channel_type;
 };
 
 struct b43_phy_n_iq_comp {
-	s16 a0;
-	s16 b0;
-	s16 a1;
-	s16 b1;
+    s16 a0;
+    s16 b0;
+    s16 a1;
+    s16 b1;
 };
 
 struct b43_phy_n_rssical_cache {
-	u16 rssical_radio_regs_2G[2];
-	u16 rssical_phy_regs_2G[12];
+    u16 rssical_radio_regs_2G[2];
+    u16 rssical_phy_regs_2G[12];
 
-	u16 rssical_radio_regs_5G[2];
-	u16 rssical_phy_regs_5G[12];
+    u16 rssical_radio_regs_5G[2];
+    u16 rssical_phy_regs_5G[12];
 };
 
 struct b43_phy_n_cal_cache {
-	u16 txcal_radio_regs_2G[8];
-	u16 txcal_coeffs_2G[8];
-	struct b43_phy_n_iq_comp rxcal_coeffs_2G;
+    u16 txcal_radio_regs_2G[8];
+    u16 txcal_coeffs_2G[8];
+    struct b43_phy_n_iq_comp rxcal_coeffs_2G;
 
-	u16 txcal_radio_regs_5G[8];
-	u16 txcal_coeffs_5G[8];
-	struct b43_phy_n_iq_comp rxcal_coeffs_5G;
+    u16 txcal_radio_regs_5G[8];
+    u16 txcal_coeffs_5G[8];
+    struct b43_phy_n_iq_comp rxcal_coeffs_5G;
 };
 
 struct b43_phy_n_txpwrindex {
-	s8 index;
-	s8 index_internal;
-	s8 index_internal_save;
-	u16 AfectrlOverride;
-	u16 AfeCtrlDacGain;
-	u16 rad_gain;
-	u8 bbmult;
-	u16 iqcomp_a;
-	u16 iqcomp_b;
-	u16 locomp;
+    s8 index;
+    s8 index_internal;
+    s8 index_internal_save;
+    u16 AfectrlOverride;
+    u16 AfeCtrlDacGain;
+    u16 rad_gain;
+    u8 bbmult;
+    u16 iqcomp_a;
+    u16 iqcomp_b;
+    u16 locomp;
 };
 
 struct b43_phy_n_pwr_ctl_info {
-	u8 idle_tssi_2g;
-	u8 idle_tssi_5g;
+    u8 idle_tssi_2g;
+    u8 idle_tssi_5g;
 };
 
 struct b43_phy_n {
-	u8 antsel_type;
-	u8 cal_orig_pwr_idx[2];
-	u8 measure_hold;
-	u8 phyrxchain;
-	u8 hw_phyrxchain;
-	u8 hw_phytxchain;
-	u8 perical;
-	u32 deaf_count;
-	u32 rxcalparams;
-	bool hang_avoid;
-	bool mute;
-	u16 papd_epsilon_offset[2];
-	s32 preamble_override;
-	u32 bb_mult_save;
+    u8 antsel_type;
+    u8 cal_orig_pwr_idx[2];
+    u8 measure_hold;
+    u8 phyrxchain;
+    u8 hw_phyrxchain;
+    u8 hw_phytxchain;
+    u8 perical;
+    u32 deaf_count;
+    u32 rxcalparams;
+    bool hang_avoid;
+    bool mute;
+    u16 papd_epsilon_offset[2];
+    s32 preamble_override;
+    u32 bb_mult_save;
 
-	bool gain_boost;
-	bool elna_gain_config;
-	bool band5g_pwrgain;
+    bool gain_boost;
+    bool elna_gain_config;
+    bool band5g_pwrgain;
 
-	u8 mphase_cal_phase_id;
-	u16 mphase_txcal_cmdidx;
-	u16 mphase_txcal_numcmds;
-	u16 mphase_txcal_bestcoeffs[11];
+    u8 mphase_cal_phase_id;
+    u16 mphase_txcal_cmdidx;
+    u16 mphase_txcal_numcmds;
+    u16 mphase_txcal_bestcoeffs[11];
 
-	bool txpwrctrl;
-	bool pwg_gain_5ghz;
-	u8 tx_pwr_idx[2];
-	s8 tx_power_offset[101];
-	u16 adj_pwr_tbl[84];
-	u16 txcal_bbmult;
-	u16 txiqlocal_bestc[11];
-	bool txiqlocal_coeffsvalid;
-	struct b43_phy_n_txpwrindex txpwrindex[2];
-	struct b43_phy_n_pwr_ctl_info pwr_ctl_info[2];
-	struct b43_chanspec txiqlocal_chanspec;
+    bool txpwrctrl;
+    bool pwg_gain_5ghz;
+    u8 tx_pwr_idx[2];
+    s8 tx_power_offset[101];
+    u16 adj_pwr_tbl[84];
+    u16 txcal_bbmult;
+    u16 txiqlocal_bestc[11];
+    bool txiqlocal_coeffsvalid;
+    struct b43_phy_n_txpwrindex txpwrindex[2];
+    struct b43_phy_n_pwr_ctl_info pwr_ctl_info[2];
+    struct b43_chanspec txiqlocal_chanspec;
 
-	u8 txrx_chain;
-	u16 tx_rx_cal_phy_saveregs[11];
-	u16 tx_rx_cal_radio_saveregs[22];
+    u8 txrx_chain;
+    u16 tx_rx_cal_phy_saveregs[11];
+    u16 tx_rx_cal_radio_saveregs[22];
 
-	u16 rfctrl_intc1_save;
-	u16 rfctrl_intc2_save;
+    u16 rfctrl_intc1_save;
+    u16 rfctrl_intc2_save;
 
-	u16 classifier_state;
-	u16 clip_state[2];
+    u16 classifier_state;
+    u16 clip_state[2];
 
-	enum b43_nphy_spur_avoid spur_avoid;
-	bool aband_spurwar_en;
-	bool gband_spurwar_en;
+    enum b43_nphy_spur_avoid spur_avoid;
+    bool aband_spurwar_en;
+    bool gband_spurwar_en;
 
-	bool ipa2g_on;
-	struct b43_chanspec iqcal_chanspec_2G;
-	struct b43_chanspec rssical_chanspec_2G;
+    bool ipa2g_on;
+    struct b43_chanspec iqcal_chanspec_2G;
+    struct b43_chanspec rssical_chanspec_2G;
 
-	bool ipa5g_on;
-	struct b43_chanspec iqcal_chanspec_5G;
-	struct b43_chanspec rssical_chanspec_5G;
+    bool ipa5g_on;
+    struct b43_chanspec iqcal_chanspec_5G;
+    struct b43_chanspec rssical_chanspec_5G;
 
-	struct b43_phy_n_rssical_cache rssical_cache;
-	struct b43_phy_n_cal_cache cal_cache;
-	bool crsminpwr_adjusted;
-	bool noisevars_adjusted;
+    struct b43_phy_n_rssical_cache rssical_cache;
+    struct b43_phy_n_cal_cache cal_cache;
+    bool crsminpwr_adjusted;
+    bool noisevars_adjusted;
 };
 
 

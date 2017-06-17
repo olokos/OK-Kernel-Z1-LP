@@ -30,7 +30,7 @@ struct flash_platform_data;
 struct resource;
 
 void sa11x0_register_mtd(struct flash_platform_data *flash,
-			 struct resource *res, int nr);
+                         struct resource *res, int nr);
 
 struct irda_platform_data;
 void sa11x0_register_irda(struct irda_platform_data *irda);

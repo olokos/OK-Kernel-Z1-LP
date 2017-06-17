@@ -72,8 +72,7 @@ typedef void *tHalHandle;
     HAL interface functions.
 
     -------------------------------------------------------------------------- */
-typedef enum
-{
+typedef enum {
     eHAL_STATUS_SUCCESS,
 
     // general failure.  This status applies to all failure that are not covered
@@ -224,8 +223,7 @@ typedef enum
 
 } eHalStatus;
 
-typedef enum
-{
+typedef enum {
     HAL_STOP_TYPE_SYS_RESET,
     HAL_STOP_TYPE_SYS_DEEP_SLEEP,
     HAL_STOP_TYPE_RF_KILL,
@@ -235,24 +233,21 @@ typedef enum
 #define HAL_STATUS_SUCCESS( variable ) ( eHAL_STATUS_SUCCESS == ( variable ) )
 
 /// Bit value data structure
-typedef enum sHalBitVal  // For Bit operations
-{
+typedef enum sHalBitVal { // For Bit operations
     eHAL_CLEAR,
     eHAL_SET
 } tHalBitVal;
 
 // -------------------------------------------------------------
 /// MMH APIs
-enum
-{
+enum {
     eHI_PRI,
     ePROT,
     eDBG
 };
 
 /// System role definition on a per BSS
-typedef enum eBssSystemRole
-{
+typedef enum eBssSystemRole {
     eSYSTEM_UNKNOWN_ROLE,
     eSYSTEM_AP_ROLE,
     eSYSTEM_STA_IN_IBSS_ROLE,
@@ -268,8 +263,7 @@ typedef enum eBssSystemRole
 // ---------------------------------------
 // Channel Bonding Sideband configuration
 // ---------------------------------------
-typedef enum sHalCBsidebandType
-{
+typedef enum sHalCBsidebandType {
     eHAL_SIDEBAND_CENTER=0,
     eHAL_SIDEBAND_LOWER,
     eHAL_SIDEBAND_UPPER,
@@ -278,8 +272,7 @@ typedef enum sHalCBsidebandType
 
 
 /// HAL states
-typedef enum
-{
+typedef enum {
     eHAL_IDLE,
     eHAL_INIT,
     eHAL_CFG, //CFG download completed.
@@ -292,8 +285,7 @@ typedef enum
 
 
 // Type to define softmac mode (also system mode)
-typedef enum
-{
+typedef enum {
     //3- Promisc, 2 - Scan, 1 - Learn  0 - Normal
     eHAL_SYS_MODE_NORMAL = 0,
     eHAL_SYS_MODE_LEARN,
@@ -309,8 +301,7 @@ typedef enum
 
 // HAL frame types.  Used on the TxRx APIs and the
 // corresponding PAL routines.
-typedef enum
-{
+typedef enum {
 
     HAL_TXRX_FRM_RAW,
     HAL_TXRX_FRM_ETH2,
@@ -324,8 +315,7 @@ typedef enum
 } eFrameType;
 
 
-typedef enum
-{
+typedef enum {
     ANI_TXDIR_IBSS = 0,
     ANI_TXDIR_TODS,
     ANI_TXDIR_FROMDS,
@@ -333,8 +323,7 @@ typedef enum
 
 } eFrameTxDir;
 
-typedef enum
-{
+typedef enum {
     eRF_BAND_UNKNOWN = 0,
     eRF_BAND_2_4_GHZ = 1,
     eRF_BAND_5_GHZ = 2

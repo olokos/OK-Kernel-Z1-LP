@@ -102,11 +102,11 @@
  * VISOR_GET_CONNECTION_INFORMATION returns data in the following format
  ****************************************************************************/
 struct visor_connection_info {
-	__le16	num_ports;
-	struct {
-		__u8	port_function_id;
-		__u8	port;
-	} connections[2];
+    __le16	num_ports;
+    struct {
+        __u8	port_function_id;
+        __u8	port;
+    } connections[2];
 };
 
 
@@ -146,15 +146,15 @@ struct visor_connection_info {
  * The maximum number of connections currently supported is 2
  */
 struct palm_ext_connection_info {
-	__u8 num_ports;
-	__u8 endpoint_numbers_different;
-	__le16 reserved1;
-	struct {
-		__u32 port_function_id;
-		__u8 port;
-		__u8 end_point_info;
-		__le16 reserved;
-	} connections[2];
+    __u8 num_ports;
+    __u8 endpoint_numbers_different;
+    __le16 reserved1;
+    struct {
+        __u32 port_function_id;
+        __u8 port;
+        __u8 end_point_info;
+        __le16 reserved;
+    } connections[2];
 };
 
 #endif

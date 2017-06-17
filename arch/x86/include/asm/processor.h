@@ -44,13 +44,12 @@ struct mm_struct;
  * Default implementation of macro that returns current
  * instruction pointer ("program counter").
  */
-static inline void *current_text_addr(void)
-{
-	void *pc;
+static inline void *current_text_addr(void) {
+    void *pc;
 
-	asm volatile("mov $1f, %0; 1:":"=r" (pc));
+    asm volatile("mov $1f, %0; 1:":"=r" (pc));
 
-	return pc;
+    return pc;
 }
 
 #ifdef CONFIG_X86_VSMP
@@ -68,57 +67,57 @@ static inline void *current_text_addr(void)
  */
 
 struct cpuinfo_x86 {
-	__u8			x86;		/* CPU family */
-	__u8			x86_vendor;	/* CPU vendor */
-	__u8			x86_model;
-	__u8			x86_mask;
+    __u8			x86;		/* CPU family */
+    __u8			x86_vendor;	/* CPU vendor */
+    __u8			x86_model;
+    __u8			x86_mask;
 #ifdef CONFIG_X86_32
-	char			wp_works_ok;	/* It doesn't on 386's */
+    char			wp_works_ok;	/* It doesn't on 386's */
 
-	/* Problems on some 486Dx4's and old 386's: */
-	char			hlt_works_ok;
-	char			hard_math;
-	char			rfu;
-	char			fdiv_bug;
-	char			f00f_bug;
-	char			coma_bug;
-	char			pad0;
+    /* Problems on some 486Dx4's and old 386's: */
+    char			hlt_works_ok;
+    char			hard_math;
+    char			rfu;
+    char			fdiv_bug;
+    char			f00f_bug;
+    char			coma_bug;
+    char			pad0;
 #else
-	/* Number of 4K pages in DTLB/ITLB combined(in pages): */
-	int			x86_tlbsize;
+    /* Number of 4K pages in DTLB/ITLB combined(in pages): */
+    int			x86_tlbsize;
 #endif
-	__u8			x86_virt_bits;
-	__u8			x86_phys_bits;
-	/* CPUID returned core id bits: */
-	__u8			x86_coreid_bits;
-	/* Max extended CPUID function supported: */
-	__u32			extended_cpuid_level;
-	/* Maximum supported CPUID level, -1=no CPUID: */
-	int			cpuid_level;
-	__u32			x86_capability[NCAPINTS];
-	char			x86_vendor_id[16];
-	char			x86_model_id[64];
-	/* in KB - valid for CPUS which support this call: */
-	int			x86_cache_size;
-	int			x86_cache_alignment;	/* In bytes */
-	int			x86_power;
-	unsigned long		loops_per_jiffy;
-	/* cpuid returned max cores value: */
-	u16			 x86_max_cores;
-	u16			apicid;
-	u16			initial_apicid;
-	u16			x86_clflush_size;
-	/* number of cores as seen by the OS: */
-	u16			booted_cores;
-	/* Physical processor id: */
-	u16			phys_proc_id;
-	/* Core id: */
-	u16			cpu_core_id;
-	/* Compute unit id */
-	u8			compute_unit_id;
-	/* Index into per_cpu list: */
-	u16			cpu_index;
-	u32			microcode;
+    __u8			x86_virt_bits;
+    __u8			x86_phys_bits;
+    /* CPUID returned core id bits: */
+    __u8			x86_coreid_bits;
+    /* Max extended CPUID function supported: */
+    __u32			extended_cpuid_level;
+    /* Maximum supported CPUID level, -1=no CPUID: */
+    int			cpuid_level;
+    __u32			x86_capability[NCAPINTS];
+    char			x86_vendor_id[16];
+    char			x86_model_id[64];
+    /* in KB - valid for CPUS which support this call: */
+    int			x86_cache_size;
+    int			x86_cache_alignment;	/* In bytes */
+    int			x86_power;
+    unsigned long		loops_per_jiffy;
+    /* cpuid returned max cores value: */
+    u16			 x86_max_cores;
+    u16			apicid;
+    u16			initial_apicid;
+    u16			x86_clflush_size;
+    /* number of cores as seen by the OS: */
+    u16			booted_cores;
+    /* Physical processor id: */
+    u16			phys_proc_id;
+    /* Core id: */
+    u16			cpu_core_id;
+    /* Compute unit id */
+    u8			compute_unit_id;
+    /* Index into per_cpu list: */
+    u16			cpu_index;
+    u32			microcode;
 } __attribute__((__aligned__(SMP_CACHE_BYTES)));
 
 #define X86_VENDOR_INTEL	0
@@ -152,12 +151,11 @@ DECLARE_PER_CPU_SHARED_ALIGNED(struct cpuinfo_x86, cpu_info);
 
 extern const struct seq_operations cpuinfo_op;
 
-static inline int hlt_works(int cpu)
-{
+static inline int hlt_works(int cpu) {
 #ifdef CONFIG_X86_32
-	return cpu_data(cpu).hlt_works_ok;
+    return cpu_data(cpu).hlt_works_ok;
 #else
-	return 1;
+    return 1;
 #endif
 }
 
@@ -180,68 +178,66 @@ extern void detect_extended_topology(struct cpuinfo_x86 *c);
 extern void detect_ht(struct cpuinfo_x86 *c);
 
 static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
-				unsigned int *ecx, unsigned int *edx)
-{
-	/* ecx is often an input as well as an output. */
-	asm volatile("cpuid"
-	    : "=a" (*eax),
-	      "=b" (*ebx),
-	      "=c" (*ecx),
-	      "=d" (*edx)
-	    : "0" (*eax), "2" (*ecx)
-	    : "memory");
+                                unsigned int *ecx, unsigned int *edx) {
+    /* ecx is often an input as well as an output. */
+    asm volatile("cpuid"
+                 : "=a" (*eax),
+                 "=b" (*ebx),
+                 "=c" (*ecx),
+                 "=d" (*edx)
+                 : "0" (*eax), "2" (*ecx)
+                 : "memory");
 }
 
-static inline void load_cr3(pgd_t *pgdir)
-{
-	write_cr3(__pa(pgdir));
+static inline void load_cr3(pgd_t *pgdir) {
+    write_cr3(__pa(pgdir));
 }
 
 #ifdef CONFIG_X86_32
 /* This is the TSS defined by the hardware. */
 struct x86_hw_tss {
-	unsigned short		back_link, __blh;
-	unsigned long		sp0;
-	unsigned short		ss0, __ss0h;
-	unsigned long		sp1;
-	/* ss1 caches MSR_IA32_SYSENTER_CS: */
-	unsigned short		ss1, __ss1h;
-	unsigned long		sp2;
-	unsigned short		ss2, __ss2h;
-	unsigned long		__cr3;
-	unsigned long		ip;
-	unsigned long		flags;
-	unsigned long		ax;
-	unsigned long		cx;
-	unsigned long		dx;
-	unsigned long		bx;
-	unsigned long		sp;
-	unsigned long		bp;
-	unsigned long		si;
-	unsigned long		di;
-	unsigned short		es, __esh;
-	unsigned short		cs, __csh;
-	unsigned short		ss, __ssh;
-	unsigned short		ds, __dsh;
-	unsigned short		fs, __fsh;
-	unsigned short		gs, __gsh;
-	unsigned short		ldt, __ldth;
-	unsigned short		trace;
-	unsigned short		io_bitmap_base;
+    unsigned short		back_link, __blh;
+    unsigned long		sp0;
+    unsigned short		ss0, __ss0h;
+    unsigned long		sp1;
+    /* ss1 caches MSR_IA32_SYSENTER_CS: */
+    unsigned short		ss1, __ss1h;
+    unsigned long		sp2;
+    unsigned short		ss2, __ss2h;
+    unsigned long		__cr3;
+    unsigned long		ip;
+    unsigned long		flags;
+    unsigned long		ax;
+    unsigned long		cx;
+    unsigned long		dx;
+    unsigned long		bx;
+    unsigned long		sp;
+    unsigned long		bp;
+    unsigned long		si;
+    unsigned long		di;
+    unsigned short		es, __esh;
+    unsigned short		cs, __csh;
+    unsigned short		ss, __ssh;
+    unsigned short		ds, __dsh;
+    unsigned short		fs, __fsh;
+    unsigned short		gs, __gsh;
+    unsigned short		ldt, __ldth;
+    unsigned short		trace;
+    unsigned short		io_bitmap_base;
 
 } __attribute__((packed));
 #else
 struct x86_hw_tss {
-	u32			reserved1;
-	u64			sp0;
-	u64			sp1;
-	u64			sp2;
-	u64			reserved2;
-	u64			ist[7];
-	u32			reserved3;
-	u32			reserved4;
-	u16			reserved5;
-	u16			io_bitmap_base;
+    u32			reserved1;
+    u64			sp0;
+    u64			sp1;
+    u64			sp2;
+    u64			reserved2;
+    u64			ist[7];
+    u32			reserved3;
+    u32			reserved4;
+    u16			reserved5;
+    u16			io_bitmap_base;
 
 } __attribute__((packed)) ____cacheline_aligned;
 #endif
@@ -256,23 +252,23 @@ struct x86_hw_tss {
 #define INVALID_IO_BITMAP_OFFSET	0x8000
 
 struct tss_struct {
-	/*
-	 * The hardware state:
-	 */
-	struct x86_hw_tss	x86_tss;
+    /*
+     * The hardware state:
+     */
+    struct x86_hw_tss	x86_tss;
 
-	/*
-	 * The extra 1 is there because the CPU will access an
-	 * additional byte beyond the end of the IO permission
-	 * bitmap. The extra byte must be all 1 bits, and must
-	 * be within the limit.
-	 */
-	unsigned long		io_bitmap[IO_BITMAP_LONGS + 1];
+    /*
+     * The extra 1 is there because the CPU will access an
+     * additional byte beyond the end of the IO permission
+     * bitmap. The extra byte must be all 1 bits, and must
+     * be within the limit.
+     */
+    unsigned long		io_bitmap[IO_BITMAP_LONGS + 1];
 
-	/*
-	 * .. and then another 0x100 bytes for the emergency kernel stack:
-	 */
-	unsigned long		stack[64];
+    /*
+     * .. and then another 0x100 bytes for the emergency kernel stack:
+     */
+    unsigned long		stack[64];
 
 } ____cacheline_aligned;
 
@@ -282,127 +278,127 @@ DECLARE_PER_CPU_SHARED_ALIGNED(struct tss_struct, init_tss);
  * Save the original ist values for checking stack pointers during debugging
  */
 struct orig_ist {
-	unsigned long		ist[7];
+    unsigned long		ist[7];
 };
 
 #define	MXCSR_DEFAULT		0x1f80
 
 struct i387_fsave_struct {
-	u32			cwd;	/* FPU Control Word		*/
-	u32			swd;	/* FPU Status Word		*/
-	u32			twd;	/* FPU Tag Word			*/
-	u32			fip;	/* FPU IP Offset		*/
-	u32			fcs;	/* FPU IP Selector		*/
-	u32			foo;	/* FPU Operand Pointer Offset	*/
-	u32			fos;	/* FPU Operand Pointer Selector	*/
+    u32			cwd;	/* FPU Control Word		*/
+    u32			swd;	/* FPU Status Word		*/
+    u32			twd;	/* FPU Tag Word			*/
+    u32			fip;	/* FPU IP Offset		*/
+    u32			fcs;	/* FPU IP Selector		*/
+    u32			foo;	/* FPU Operand Pointer Offset	*/
+    u32			fos;	/* FPU Operand Pointer Selector	*/
 
-	/* 8*10 bytes for each FP-reg = 80 bytes:			*/
-	u32			st_space[20];
+    /* 8*10 bytes for each FP-reg = 80 bytes:			*/
+    u32			st_space[20];
 
-	/* Software status information [not touched by FSAVE ]:		*/
-	u32			status;
+    /* Software status information [not touched by FSAVE ]:		*/
+    u32			status;
 };
 
 struct i387_fxsave_struct {
-	u16			cwd; /* Control Word			*/
-	u16			swd; /* Status Word			*/
-	u16			twd; /* Tag Word			*/
-	u16			fop; /* Last Instruction Opcode		*/
-	union {
-		struct {
-			u64	rip; /* Instruction Pointer		*/
-			u64	rdp; /* Data Pointer			*/
-		};
-		struct {
-			u32	fip; /* FPU IP Offset			*/
-			u32	fcs; /* FPU IP Selector			*/
-			u32	foo; /* FPU Operand Offset		*/
-			u32	fos; /* FPU Operand Selector		*/
-		};
-	};
-	u32			mxcsr;		/* MXCSR Register State */
-	u32			mxcsr_mask;	/* MXCSR Mask		*/
+    u16			cwd; /* Control Word			*/
+    u16			swd; /* Status Word			*/
+    u16			twd; /* Tag Word			*/
+    u16			fop; /* Last Instruction Opcode		*/
+    union {
+        struct {
+            u64	rip; /* Instruction Pointer		*/
+            u64	rdp; /* Data Pointer			*/
+        };
+        struct {
+            u32	fip; /* FPU IP Offset			*/
+            u32	fcs; /* FPU IP Selector			*/
+            u32	foo; /* FPU Operand Offset		*/
+            u32	fos; /* FPU Operand Selector		*/
+        };
+    };
+    u32			mxcsr;		/* MXCSR Register State */
+    u32			mxcsr_mask;	/* MXCSR Mask		*/
 
-	/* 8*16 bytes for each FP-reg = 128 bytes:			*/
-	u32			st_space[32];
+    /* 8*16 bytes for each FP-reg = 128 bytes:			*/
+    u32			st_space[32];
 
-	/* 16*16 bytes for each XMM-reg = 256 bytes:			*/
-	u32			xmm_space[64];
+    /* 16*16 bytes for each XMM-reg = 256 bytes:			*/
+    u32			xmm_space[64];
 
-	u32			padding[12];
+    u32			padding[12];
 
-	union {
-		u32		padding1[12];
-		u32		sw_reserved[12];
-	};
+    union {
+        u32		padding1[12];
+        u32		sw_reserved[12];
+    };
 
 } __attribute__((aligned(16)));
 
 struct i387_soft_struct {
-	u32			cwd;
-	u32			swd;
-	u32			twd;
-	u32			fip;
-	u32			fcs;
-	u32			foo;
-	u32			fos;
-	/* 8*10 bytes for each FP-reg = 80 bytes: */
-	u32			st_space[20];
-	u8			ftop;
-	u8			changed;
-	u8			lookahead;
-	u8			no_update;
-	u8			rm;
-	u8			alimit;
-	struct math_emu_info	*info;
-	u32			entry_eip;
+    u32			cwd;
+    u32			swd;
+    u32			twd;
+    u32			fip;
+    u32			fcs;
+    u32			foo;
+    u32			fos;
+    /* 8*10 bytes for each FP-reg = 80 bytes: */
+    u32			st_space[20];
+    u8			ftop;
+    u8			changed;
+    u8			lookahead;
+    u8			no_update;
+    u8			rm;
+    u8			alimit;
+    struct math_emu_info	*info;
+    u32			entry_eip;
 };
 
 struct ymmh_struct {
-	/* 16 * 16 bytes for each YMMH-reg = 256 bytes */
-	u32 ymmh_space[64];
+    /* 16 * 16 bytes for each YMMH-reg = 256 bytes */
+    u32 ymmh_space[64];
 };
 
 struct xsave_hdr_struct {
-	u64 xstate_bv;
-	u64 reserved1[2];
-	u64 reserved2[5];
+    u64 xstate_bv;
+    u64 reserved1[2];
+    u64 reserved2[5];
 } __attribute__((packed));
 
 struct xsave_struct {
-	struct i387_fxsave_struct i387;
-	struct xsave_hdr_struct xsave_hdr;
-	struct ymmh_struct ymmh;
-	/* new processor state extensions will go here */
+    struct i387_fxsave_struct i387;
+    struct xsave_hdr_struct xsave_hdr;
+    struct ymmh_struct ymmh;
+    /* new processor state extensions will go here */
 } __attribute__ ((packed, aligned (64)));
 
 union thread_xstate {
-	struct i387_fsave_struct	fsave;
-	struct i387_fxsave_struct	fxsave;
-	struct i387_soft_struct		soft;
-	struct xsave_struct		xsave;
+    struct i387_fsave_struct	fsave;
+    struct i387_fxsave_struct	fxsave;
+    struct i387_soft_struct		soft;
+    struct xsave_struct		xsave;
 };
 
 struct fpu {
-	unsigned int last_cpu;
-	unsigned int has_fpu;
-	union thread_xstate *state;
+    unsigned int last_cpu;
+    unsigned int has_fpu;
+    union thread_xstate *state;
 };
 
 #ifdef CONFIG_X86_64
 DECLARE_PER_CPU(struct orig_ist, orig_ist);
 
 union irq_stack_union {
-	char irq_stack[IRQ_STACK_SIZE];
-	/*
-	 * GCC hardcodes the stack canary as %gs:40.  Since the
-	 * irq_stack is the object at %gs:0, we reserve the bottom
-	 * 48 bytes of the irq stack for the canary.
-	 */
-	struct {
-		char gs_base[40];
-		unsigned long stack_canary;
-	};
+    char irq_stack[IRQ_STACK_SIZE];
+    /*
+     * GCC hardcodes the stack canary as %gs:40.  Since the
+     * irq_stack is the object at %gs:0, we reserve the bottom
+     * 48 bytes of the irq stack for the canary.
+     */
+    struct {
+        char gs_base[40];
+        unsigned long stack_canary;
+    };
 };
 
 DECLARE_PER_CPU_FIRST(union irq_stack_union, irq_stack_union);
@@ -421,8 +417,8 @@ extern asmlinkage void ignore_sysret(void);
  * (Optim Ref Manual Assembly/Compiler Coding Rule 15.)
  */
 struct stack_canary {
-	char __pad[20];		/* canary at %gs:20 */
-	unsigned long canary;
+    char __pad[20];		/* canary at %gs:20 */
+    unsigned long canary;
 };
 DECLARE_PER_CPU_ALIGNED(struct stack_canary, stack_canary);
 #endif
@@ -435,91 +431,88 @@ extern struct kmem_cache *task_xstate_cachep;
 struct perf_event;
 
 struct thread_struct {
-	/* Cached TLS descriptors: */
-	struct desc_struct	tls_array[GDT_ENTRY_TLS_ENTRIES];
-	unsigned long		sp0;
-	unsigned long		sp;
+    /* Cached TLS descriptors: */
+    struct desc_struct	tls_array[GDT_ENTRY_TLS_ENTRIES];
+    unsigned long		sp0;
+    unsigned long		sp;
 #ifdef CONFIG_X86_32
-	unsigned long		sysenter_cs;
+    unsigned long		sysenter_cs;
 #else
-	unsigned long		usersp;	/* Copy from PDA */
-	unsigned short		es;
-	unsigned short		ds;
-	unsigned short		fsindex;
-	unsigned short		gsindex;
+    unsigned long		usersp;	/* Copy from PDA */
+    unsigned short		es;
+    unsigned short		ds;
+    unsigned short		fsindex;
+    unsigned short		gsindex;
 #endif
 #ifdef CONFIG_X86_32
-	unsigned long		ip;
+    unsigned long		ip;
 #endif
 #ifdef CONFIG_X86_64
-	unsigned long		fs;
+    unsigned long		fs;
 #endif
-	unsigned long		gs;
-	/* Save middle states of ptrace breakpoints */
-	struct perf_event	*ptrace_bps[HBP_NUM];
-	/* Debug status used for traps, single steps, etc... */
-	unsigned long           debugreg6;
-	/* Keep track of the exact dr7 value set by the user */
-	unsigned long           ptrace_dr7;
-	/* Fault info: */
-	unsigned long		cr2;
-	unsigned long		trap_nr;
-	unsigned long		error_code;
-	/* floating point and extended processor state */
-	struct fpu		fpu;
+    unsigned long		gs;
+    /* Save middle states of ptrace breakpoints */
+    struct perf_event	*ptrace_bps[HBP_NUM];
+    /* Debug status used for traps, single steps, etc... */
+    unsigned long           debugreg6;
+    /* Keep track of the exact dr7 value set by the user */
+    unsigned long           ptrace_dr7;
+    /* Fault info: */
+    unsigned long		cr2;
+    unsigned long		trap_nr;
+    unsigned long		error_code;
+    /* floating point and extended processor state */
+    struct fpu		fpu;
 #ifdef CONFIG_X86_32
-	/* Virtual 86 mode info */
-	struct vm86_struct __user *vm86_info;
-	unsigned long		screen_bitmap;
-	unsigned long		v86flags;
-	unsigned long		v86mask;
-	unsigned long		saved_sp0;
-	unsigned int		saved_fs;
-	unsigned int		saved_gs;
+    /* Virtual 86 mode info */
+    struct vm86_struct __user *vm86_info;
+    unsigned long		screen_bitmap;
+    unsigned long		v86flags;
+    unsigned long		v86mask;
+    unsigned long		saved_sp0;
+    unsigned int		saved_fs;
+    unsigned int		saved_gs;
 #endif
-	/* IO permissions: */
-	unsigned long		*io_bitmap_ptr;
-	unsigned long		iopl;
-	/* Max allowed port in the bitmap, in bytes: */
-	unsigned		io_bitmap_max;
+    /* IO permissions: */
+    unsigned long		*io_bitmap_ptr;
+    unsigned long		iopl;
+    /* Max allowed port in the bitmap, in bytes: */
+    unsigned		io_bitmap_max;
 };
 
 /*
  * Set IOPL bits in EFLAGS from given mask
  */
-static inline void native_set_iopl_mask(unsigned mask)
-{
+static inline void native_set_iopl_mask(unsigned mask) {
 #ifdef CONFIG_X86_32
-	unsigned int reg;
+    unsigned int reg;
 
-	asm volatile ("pushfl;"
-		      "popl %0;"
-		      "andl %1, %0;"
-		      "orl %2, %0;"
-		      "pushl %0;"
-		      "popfl"
-		      : "=&r" (reg)
-		      : "i" (~X86_EFLAGS_IOPL), "r" (mask));
+    asm volatile ("pushfl;"
+                  "popl %0;"
+                  "andl %1, %0;"
+                  "orl %2, %0;"
+                  "pushl %0;"
+                  "popfl"
+                  : "=&r" (reg)
+                  : "i" (~X86_EFLAGS_IOPL), "r" (mask));
 #endif
 }
 
 static inline void
-native_load_sp0(struct tss_struct *tss, struct thread_struct *thread)
-{
-	tss->x86_tss.sp0 = thread->sp0;
+native_load_sp0(struct tss_struct *tss, struct thread_struct *thread) {
+    tss->x86_tss.sp0 = thread->sp0;
 #ifdef CONFIG_X86_32
-	/* Only happens when SEP is enabled, no need to test "SEP"arately: */
-	if (unlikely(tss->x86_tss.ss1 != thread->sysenter_cs)) {
-		tss->x86_tss.ss1 = thread->sysenter_cs;
-		wrmsr(MSR_IA32_SYSENTER_CS, thread->sysenter_cs, 0);
-	}
+    /* Only happens when SEP is enabled, no need to test "SEP"arately: */
+    if (unlikely(tss->x86_tss.ss1 != thread->sysenter_cs)) {
+        tss->x86_tss.ss1 = thread->sysenter_cs;
+        wrmsr(MSR_IA32_SYSENTER_CS, thread->sysenter_cs, 0);
+    }
 #endif
 }
 
-static inline void native_swapgs(void)
-{
+static inline void native_swapgs(void) {
 #ifdef CONFIG_X86_64
-	asm volatile("swapgs" ::: "memory");
+    asm volatile("swapgs" ::: "memory");
 #endif
 }
 
@@ -530,9 +523,8 @@ static inline void native_swapgs(void)
 #define paravirt_enabled()	0
 
 static inline void load_sp0(struct tss_struct *tss,
-			    struct thread_struct *thread)
-{
-	native_load_sp0(tss, thread);
+                            struct thread_struct *thread) {
+    native_load_sp0(tss, thread);
 }
 
 #define set_iopl_mask native_set_iopl_mask
@@ -546,28 +538,26 @@ static inline void load_sp0(struct tss_struct *tss,
  */
 extern unsigned long		mmu_cr4_features;
 
-static inline void set_in_cr4(unsigned long mask)
-{
-	unsigned long cr4;
+static inline void set_in_cr4(unsigned long mask) {
+    unsigned long cr4;
 
-	mmu_cr4_features |= mask;
-	cr4 = read_cr4();
-	cr4 |= mask;
-	write_cr4(cr4);
+    mmu_cr4_features |= mask;
+    cr4 = read_cr4();
+    cr4 |= mask;
+    write_cr4(cr4);
 }
 
-static inline void clear_in_cr4(unsigned long mask)
-{
-	unsigned long cr4;
+static inline void clear_in_cr4(unsigned long mask) {
+    unsigned long cr4;
 
-	mmu_cr4_features &= ~mask;
-	cr4 = read_cr4();
-	cr4 &= ~mask;
-	write_cr4(cr4);
+    mmu_cr4_features &= ~mask;
+    cr4 = read_cr4();
+    cr4 &= ~mask;
+    write_cr4(cr4);
 }
 
 typedef struct {
-	unsigned long		seg;
+    unsigned long		seg;
 } mm_segment_t;
 
 
@@ -590,114 +580,102 @@ unsigned long get_wchan(struct task_struct *p);
  * resulting in stale register contents being returned.
  */
 static inline void cpuid(unsigned int op,
-			 unsigned int *eax, unsigned int *ebx,
-			 unsigned int *ecx, unsigned int *edx)
-{
-	*eax = op;
-	*ecx = 0;
-	__cpuid(eax, ebx, ecx, edx);
+                         unsigned int *eax, unsigned int *ebx,
+                         unsigned int *ecx, unsigned int *edx) {
+    *eax = op;
+    *ecx = 0;
+    __cpuid(eax, ebx, ecx, edx);
 }
 
 /* Some CPUID calls want 'count' to be placed in ecx */
 static inline void cpuid_count(unsigned int op, int count,
-			       unsigned int *eax, unsigned int *ebx,
-			       unsigned int *ecx, unsigned int *edx)
-{
-	*eax = op;
-	*ecx = count;
-	__cpuid(eax, ebx, ecx, edx);
+                               unsigned int *eax, unsigned int *ebx,
+                               unsigned int *ecx, unsigned int *edx) {
+    *eax = op;
+    *ecx = count;
+    __cpuid(eax, ebx, ecx, edx);
 }
 
 /*
  * CPUID functions returning a single datum
  */
-static inline unsigned int cpuid_eax(unsigned int op)
-{
-	unsigned int eax, ebx, ecx, edx;
+static inline unsigned int cpuid_eax(unsigned int op) {
+    unsigned int eax, ebx, ecx, edx;
 
-	cpuid(op, &eax, &ebx, &ecx, &edx);
+    cpuid(op, &eax, &ebx, &ecx, &edx);
 
-	return eax;
+    return eax;
 }
 
-static inline unsigned int cpuid_ebx(unsigned int op)
-{
-	unsigned int eax, ebx, ecx, edx;
+static inline unsigned int cpuid_ebx(unsigned int op) {
+    unsigned int eax, ebx, ecx, edx;
 
-	cpuid(op, &eax, &ebx, &ecx, &edx);
+    cpuid(op, &eax, &ebx, &ecx, &edx);
 
-	return ebx;
+    return ebx;
 }
 
-static inline unsigned int cpuid_ecx(unsigned int op)
-{
-	unsigned int eax, ebx, ecx, edx;
+static inline unsigned int cpuid_ecx(unsigned int op) {
+    unsigned int eax, ebx, ecx, edx;
 
-	cpuid(op, &eax, &ebx, &ecx, &edx);
+    cpuid(op, &eax, &ebx, &ecx, &edx);
 
-	return ecx;
+    return ecx;
 }
 
-static inline unsigned int cpuid_edx(unsigned int op)
-{
-	unsigned int eax, ebx, ecx, edx;
+static inline unsigned int cpuid_edx(unsigned int op) {
+    unsigned int eax, ebx, ecx, edx;
 
-	cpuid(op, &eax, &ebx, &ecx, &edx);
+    cpuid(op, &eax, &ebx, &ecx, &edx);
 
-	return edx;
+    return edx;
 }
 
 /* REP NOP (PAUSE) is a good thing to insert into busy-wait loops. */
-static inline void rep_nop(void)
-{
-	asm volatile("rep; nop" ::: "memory");
+static inline void rep_nop(void) {
+    asm volatile("rep; nop" ::: "memory");
 }
 
-static inline void cpu_relax(void)
-{
-	rep_nop();
+static inline void cpu_relax(void) {
+    rep_nop();
 }
 
 /* Stop speculative execution and prefetching of modified code. */
-static inline void sync_core(void)
-{
-	int tmp;
+static inline void sync_core(void) {
+    int tmp;
 
 #if defined(CONFIG_M386) || defined(CONFIG_M486)
-	if (boot_cpu_data.x86 < 5)
-		/* There is no speculative execution.
-		 * jmp is a barrier to prefetching. */
-		asm volatile("jmp 1f\n1:\n" ::: "memory");
-	else
+    if (boot_cpu_data.x86 < 5)
+        /* There is no speculative execution.
+         * jmp is a barrier to prefetching. */
+        asm volatile("jmp 1f\n1:\n" ::: "memory");
+    else
 #endif
-		/* cpuid is a barrier to speculative execution.
-		 * Prefetched instructions are automatically
-		 * invalidated when modified. */
-		asm volatile("cpuid" : "=a" (tmp) : "0" (1)
-			     : "ebx", "ecx", "edx", "memory");
+        /* cpuid is a barrier to speculative execution.
+         * Prefetched instructions are automatically
+         * invalidated when modified. */
+        asm volatile("cpuid" : "=a" (tmp) : "0" (1)
+                     : "ebx", "ecx", "edx", "memory");
 }
 
 static inline void __monitor(const void *eax, unsigned long ecx,
-			     unsigned long edx)
-{
-	/* "monitor %eax, %ecx, %edx;" */
-	asm volatile(".byte 0x0f, 0x01, 0xc8;"
-		     :: "a" (eax), "c" (ecx), "d"(edx));
+                             unsigned long edx) {
+    /* "monitor %eax, %ecx, %edx;" */
+    asm volatile(".byte 0x0f, 0x01, 0xc8;"
+                 :: "a" (eax), "c" (ecx), "d"(edx));
 }
 
-static inline void __mwait(unsigned long eax, unsigned long ecx)
-{
-	/* "mwait %eax, %ecx;" */
-	asm volatile(".byte 0x0f, 0x01, 0xc9;"
-		     :: "a" (eax), "c" (ecx));
+static inline void __mwait(unsigned long eax, unsigned long ecx) {
+    /* "mwait %eax, %ecx;" */
+    asm volatile(".byte 0x0f, 0x01, 0xc9;"
+                 :: "a" (eax), "c" (ecx));
 }
 
-static inline void __sti_mwait(unsigned long eax, unsigned long ecx)
-{
-	trace_hardirqs_on();
-	/* "mwait %eax, %ecx;" */
-	asm volatile("sti; .byte 0x0f, 0x01, 0xc9;"
-		     :: "a" (eax), "c" (ecx));
+static inline void __sti_mwait(unsigned long eax, unsigned long ecx) {
+    trace_hardirqs_on();
+    /* "mwait %eax, %ecx;" */
+    asm volatile("sti; .byte 0x0f, 0x01, 0xc9;"
+                 :: "a" (eax), "c" (ecx));
 }
 
 extern void select_idle_routine(const struct cpuinfo_x86 *c);
@@ -707,7 +685,8 @@ extern unsigned long		boot_option_idle_override;
 extern bool			amd_e400_c1e_detected;
 
 enum idle_boot_override {IDLE_NO_OVERRIDE=0, IDLE_HALT, IDLE_NOMWAIT,
-			 IDLE_POLL, IDLE_FORCE_MWAIT};
+                         IDLE_POLL, IDLE_FORCE_MWAIT
+                        };
 
 extern void enable_sep_cpu(void);
 extern int sysenter_setup(void);
@@ -722,26 +701,24 @@ extern void switch_to_new_gdt(int);
 extern void load_percpu_segment(int);
 extern void cpu_init(void);
 
-static inline unsigned long get_debugctlmsr(void)
-{
-	unsigned long debugctlmsr = 0;
+static inline unsigned long get_debugctlmsr(void) {
+    unsigned long debugctlmsr = 0;
 
 #ifndef CONFIG_X86_DEBUGCTLMSR
-	if (boot_cpu_data.x86 < 6)
-		return 0;
+    if (boot_cpu_data.x86 < 6)
+        return 0;
 #endif
-	rdmsrl(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
+    rdmsrl(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
 
-	return debugctlmsr;
+    return debugctlmsr;
 }
 
-static inline void update_debugctlmsr(unsigned long debugctlmsr)
-{
+static inline void update_debugctlmsr(unsigned long debugctlmsr) {
 #ifndef CONFIG_X86_DEBUGCTLMSR
-	if (boot_cpu_data.x86 < 6)
-		return;
+    if (boot_cpu_data.x86 < 6)
+        return;
 #endif
-	wrmsrl(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
+    wrmsrl(MSR_IA32_DEBUGCTLMSR, debugctlmsr);
 }
 
 /*
@@ -775,12 +752,11 @@ extern char			ignore_fpu_irq;
  * It's not worth to care about 3dnow prefetches for the K6
  * because they are microcoded there and very slow.
  */
-static inline void prefetch(const void *x)
-{
-	alternative_input(BASE_PREFETCH,
-			  "prefetchnta (%1)",
-			  X86_FEATURE_XMM,
-			  "r" (x));
+static inline void prefetch(const void *x) {
+    alternative_input(BASE_PREFETCH,
+                      "prefetchnta (%1)",
+                      X86_FEATURE_XMM,
+                      "r" (x));
 }
 
 /*
@@ -788,17 +764,15 @@ static inline void prefetch(const void *x)
  * Useful for spinlocks to avoid one state transition in the
  * cache coherency protocol:
  */
-static inline void prefetchw(const void *x)
-{
-	alternative_input(BASE_PREFETCH,
-			  "prefetchw (%1)",
-			  X86_FEATURE_3DNOW,
-			  "r" (x));
+static inline void prefetchw(const void *x) {
+    alternative_input(BASE_PREFETCH,
+                      "prefetchw (%1)",
+                      X86_FEATURE_3DNOW,
+                      "r" (x));
 }
 
-static inline void spin_lock_prefetch(const void *x)
-{
-	prefetchw(x);
+static inline void spin_lock_prefetch(const void *x) {
+    prefetchw(x);
 }
 
 #ifdef CONFIG_X86_32
@@ -906,7 +880,7 @@ DECLARE_PER_CPU(unsigned long, old_rsp);
 #endif /* CONFIG_X86_64 */
 
 extern void start_thread(struct pt_regs *regs, unsigned long new_ip,
-					       unsigned long new_sp);
+                         unsigned long new_sp);
 
 /*
  * This decides where the kernel will search for a free chunk of vm
@@ -926,32 +900,30 @@ extern int set_tsc_mode(unsigned int val);
 extern int amd_get_nb_id(int cpu);
 
 struct aperfmperf {
-	u64 aperf, mperf;
+    u64 aperf, mperf;
 };
 
-static inline void get_aperfmperf(struct aperfmperf *am)
-{
-	WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_APERFMPERF));
+static inline void get_aperfmperf(struct aperfmperf *am) {
+    WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_APERFMPERF));
 
-	rdmsrl(MSR_IA32_APERF, am->aperf);
-	rdmsrl(MSR_IA32_MPERF, am->mperf);
+    rdmsrl(MSR_IA32_APERF, am->aperf);
+    rdmsrl(MSR_IA32_MPERF, am->mperf);
 }
 
 #define APERFMPERF_SHIFT 10
 
 static inline
 unsigned long calc_aperfmperf_ratio(struct aperfmperf *old,
-				    struct aperfmperf *new)
-{
-	u64 aperf = new->aperf - old->aperf;
-	u64 mperf = new->mperf - old->mperf;
-	unsigned long ratio = aperf;
+                                    struct aperfmperf *new) {
+    u64 aperf = new->aperf - old->aperf;
+    u64 mperf = new->mperf - old->mperf;
+    unsigned long ratio = aperf;
 
-	mperf >>= APERFMPERF_SHIFT;
-	if (mperf)
-		ratio = div64_u64(aperf, mperf);
+    mperf >>= APERFMPERF_SHIFT;
+    if (mperf)
+        ratio = div64_u64(aperf, mperf);
 
-	return ratio;
+    return ratio;
 }
 
 /*

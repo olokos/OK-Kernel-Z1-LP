@@ -73,21 +73,21 @@ struct pci_iommu_arena;
 
 #define DEFAULT_AGP_APER_SIZE	(64*1024*1024)
 
-/* 
+/*
  * A small note about bridges and interrupts.  The DECchip 21050 (and
  * later) adheres to the PCI-PCI bridge specification.  This says that
  * the interrupts on the other side of a bridge are swizzled in the
  * following manner:
  *
- * Dev    Interrupt   Interrupt 
- *        Pin on      Pin on 
+ * Dev    Interrupt   Interrupt
+ *        Pin on      Pin on
  *        Device      Connector
  *
  *   4    A           A
  *        B           B
  *        C           C
  *        D           D
- * 
+ *
  *   5    A           B
  *        B           C
  *        C           D
@@ -129,17 +129,16 @@ struct pci_iommu_arena;
    machine, but if we ever did, we'd need to parameterize all this quite
    a bit further.  Probably with per-bus operation tables.  */
 
-struct pci_iommu_arena
-{
-	spinlock_t lock;
-	struct pci_controller *hose;
+struct pci_iommu_arena {
+    spinlock_t lock;
+    struct pci_controller *hose;
 #define IOMMU_INVALID_PTE 0x2 /* 32:63 bits MBZ */
 #define IOMMU_RESERVED_PTE 0xface
-	unsigned long *ptes;
-	dma_addr_t dma_base;
-	unsigned int size;
-	unsigned int next_entry;
-	unsigned int align_entry;
+    unsigned long *ptes;
+    dma_addr_t dma_base;
+    unsigned int size;
+    unsigned int next_entry;
+    unsigned int align_entry;
 };
 
 #if defined(CONFIG_ALPHA_SRM) && \
@@ -157,10 +156,9 @@ struct pci_iommu_arena
 
 #ifdef ALPHA_RESTORE_SRM_SETUP
 /* Store PCI device configuration left by SRM here. */
-struct pdev_srm_saved_conf
-{
-	struct pdev_srm_saved_conf *next;
-	struct pci_dev *dev;
+struct pdev_srm_saved_conf {
+    struct pdev_srm_saved_conf *next;
+    struct pci_dev *dev;
 };
 
 extern void pci_restore_srm_config(void);
@@ -181,12 +179,12 @@ extern struct pci_controller *alloc_pci_controller(void);
 extern struct resource *alloc_resource(void);
 
 extern struct pci_iommu_arena *iommu_arena_new_node(int,
-						    struct pci_controller *,
-					            dma_addr_t, unsigned long,
-					            unsigned long);
+        struct pci_controller *,
+        dma_addr_t, unsigned long,
+        unsigned long);
 extern struct pci_iommu_arena *iommu_arena_new(struct pci_controller *,
-					       dma_addr_t, unsigned long,
-					       unsigned long);
+        dma_addr_t, unsigned long,
+        unsigned long);
 extern const char *const pci_io_names[];
 extern const char *const pci_mem_names[];
 extern const char pci_hae0_name[];

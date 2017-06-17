@@ -3,7 +3,7 @@
 
 /*
  *	PDC return values ...
- *	All PDC calls return a subset of these errors. 
+ *	All PDC calls return a subset of these errors.
  */
 
 #define PDC_WARN		  3	/* Call completed with a warning */
@@ -154,7 +154,7 @@
 #define PDC_PSW_GET_DEFAULTS	1	/* Return defaults              */
 #define PDC_PSW_SET_DEFAULTS	2	/* Set default                  */
 #define PDC_PSW_ENDIAN_BIT	1	/* set for big endian           */
-#define PDC_PSW_WIDE_BIT	2	/* set for wide mode            */ 
+#define PDC_PSW_WIDE_BIT	2	/* set for wide mode            */
 
 #define PDC_SYSTEM_MAP	22		/* find system modules		*/
 #define PDC_FIND_MODULE 	0
@@ -254,7 +254,7 @@
 #define PDC_PCI_PCI_INT_ROUTE_SIZE	13
 #define PDC_PCI_GET_INT_TBL_SIZE	PDC_PCI_PCI_INT_ROUTE_SIZE
 #define PDC_PCI_PCI_INT_ROUTE		14
-#define PDC_PCI_GET_INT_TBL		PDC_PCI_PCI_INT_ROUTE 
+#define PDC_PCI_GET_INT_TBL		PDC_PCI_PCI_INT_ROUTE
 #define PDC_PCI_READ_MON_TYPE		15
 #define PDC_PCI_WRITE_MON_TYPE		16
 
@@ -321,7 +321,7 @@
 
 /* constants for PDC_CHASSIS */
 #define OSTAT_OFF		0
-#define OSTAT_FLT		1 
+#define OSTAT_FLT		1
 #define OSTAT_TEST		2
 #define OSTAT_INIT		3
 #define OSTAT_SHUT		4
@@ -352,93 +352,93 @@ extern int pdc_type;
 #define PDC_TYPE_SNAKE		 2 /* Doesn't support SYSTEM_MAP */
 
 struct pdc_chassis_info {       /* for PDC_CHASSIS_INFO */
-	unsigned long actcnt;   /* actual number of bytes returned */
-	unsigned long maxcnt;   /* maximum number of bytes that could be returned */
+    unsigned long actcnt;   /* actual number of bytes returned */
+    unsigned long maxcnt;   /* maximum number of bytes that could be returned */
 };
 
 struct pdc_coproc_cfg {         /* for PDC_COPROC_CFG */
-        unsigned long ccr_functional;
-        unsigned long ccr_present;
-        unsigned long revision;
-        unsigned long model;
+    unsigned long ccr_functional;
+    unsigned long ccr_present;
+    unsigned long revision;
+    unsigned long model;
 };
 
 struct pdc_model {		/* for PDC_MODEL */
-	unsigned long hversion;
-	unsigned long sversion;
-	unsigned long hw_id;
-	unsigned long boot_id;
-	unsigned long sw_id;
-	unsigned long sw_cap;
-	unsigned long arch_rev;
-	unsigned long pot_key;
-	unsigned long curr_key;
+    unsigned long hversion;
+    unsigned long sversion;
+    unsigned long hw_id;
+    unsigned long boot_id;
+    unsigned long sw_id;
+    unsigned long sw_cap;
+    unsigned long arch_rev;
+    unsigned long pot_key;
+    unsigned long curr_key;
 };
 
 struct pdc_cache_cf {		/* for PDC_CACHE  (I/D-caches) */
     unsigned long
 #ifdef CONFIG_64BIT
-		cc_padW:32,
+    cc_padW:32,
 #endif
-		cc_alias: 4,	/* alias boundaries for virtual addresses   */
-		cc_block: 4,	/* to determine most efficient stride */
-		cc_line	: 3,	/* maximum amount written back as a result of store (multiple of 16 bytes) */
-		cc_shift: 2,	/* how much to shift cc_block left */
-		cc_wt	: 1,	/* 0 = WT-Dcache, 1 = WB-Dcache */
-		cc_sh	: 2,	/* 0 = separate I/D-cache, else shared I/D-cache */
-		cc_cst  : 3,	/* 0 = incoherent D-cache, 1=coherent D-cache */
-		cc_pad1 : 10,	/* reserved */
-		cc_hv   : 3;	/* hversion dependent */
+            cc_alias: 4,	/* alias boundaries for virtual addresses   */
+            cc_block: 4,	/* to determine most efficient stride */
+            cc_line	: 3,	/* maximum amount written back as a result of store (multiple of 16 bytes) */
+            cc_shift: 2,	/* how much to shift cc_block left */
+            cc_wt	: 1,	/* 0 = WT-Dcache, 1 = WB-Dcache */
+            cc_sh	: 2,	/* 0 = separate I/D-cache, else shared I/D-cache */
+            cc_cst  : 3,	/* 0 = incoherent D-cache, 1=coherent D-cache */
+            cc_pad1 : 10,	/* reserved */
+            cc_hv   : 3;	/* hversion dependent */
 };
 
 struct pdc_tlb_cf {		/* for PDC_CACHE (I/D-TLB's) */
     unsigned long tc_pad0:12,	/* reserved */
 #ifdef CONFIG_64BIT
-		tc_padW:32,
+             tc_padW:32,
 #endif
-		tc_sh	: 2,	/* 0 = separate I/D-TLB, else shared I/D-TLB */
-		tc_hv   : 1,	/* HV */
-		tc_page : 1,	/* 0 = 2K page-size-machine, 1 = 4k page size */
-		tc_cst  : 3,	/* 0 = incoherent operations, else coherent operations */
-		tc_aid  : 5,	/* ITLB: width of access ids of processor (encoded!) */
-		tc_pad1 : 8;	/* ITLB: width of space-registers (encoded) */
+             tc_sh	: 2,	/* 0 = separate I/D-TLB, else shared I/D-TLB */
+             tc_hv   : 1,	/* HV */
+             tc_page : 1,	/* 0 = 2K page-size-machine, 1 = 4k page size */
+             tc_cst  : 3,	/* 0 = incoherent operations, else coherent operations */
+             tc_aid  : 5,	/* ITLB: width of access ids of processor (encoded!) */
+             tc_pad1 : 8;	/* ITLB: width of space-registers (encoded) */
 };
 
 struct pdc_cache_info {		/* main-PDC_CACHE-structure (caches & TLB's) */
-	/* I-cache */
-	unsigned long	ic_size;	/* size in bytes */
-	struct pdc_cache_cf ic_conf;	/* configuration */
-	unsigned long	ic_base;	/* base-addr */
-	unsigned long	ic_stride;
-	unsigned long	ic_count;
-	unsigned long	ic_loop;
-	/* D-cache */
-	unsigned long	dc_size;	/* size in bytes */
-	struct pdc_cache_cf dc_conf;	/* configuration */
-	unsigned long	dc_base;	/* base-addr */
-	unsigned long	dc_stride;
-	unsigned long	dc_count;
-	unsigned long	dc_loop;
-	/* Instruction-TLB */
-	unsigned long	it_size;	/* number of entries in I-TLB */
-	struct pdc_tlb_cf it_conf;	/* I-TLB-configuration */
-	unsigned long	it_sp_base;
-	unsigned long	it_sp_stride;
-	unsigned long	it_sp_count;
-	unsigned long	it_off_base;
-	unsigned long	it_off_stride;
-	unsigned long	it_off_count;
-	unsigned long	it_loop;
-	/* data-TLB */
-	unsigned long	dt_size;	/* number of entries in D-TLB */
-	struct pdc_tlb_cf dt_conf;	/* D-TLB-configuration */
-	unsigned long	dt_sp_base;
-	unsigned long	dt_sp_stride;
-	unsigned long	dt_sp_count;
-	unsigned long	dt_off_base;
-	unsigned long	dt_off_stride;
-	unsigned long	dt_off_count;
-	unsigned long	dt_loop;
+    /* I-cache */
+    unsigned long	ic_size;	/* size in bytes */
+    struct pdc_cache_cf ic_conf;	/* configuration */
+    unsigned long	ic_base;	/* base-addr */
+    unsigned long	ic_stride;
+    unsigned long	ic_count;
+    unsigned long	ic_loop;
+    /* D-cache */
+    unsigned long	dc_size;	/* size in bytes */
+    struct pdc_cache_cf dc_conf;	/* configuration */
+    unsigned long	dc_base;	/* base-addr */
+    unsigned long	dc_stride;
+    unsigned long	dc_count;
+    unsigned long	dc_loop;
+    /* Instruction-TLB */
+    unsigned long	it_size;	/* number of entries in I-TLB */
+    struct pdc_tlb_cf it_conf;	/* I-TLB-configuration */
+    unsigned long	it_sp_base;
+    unsigned long	it_sp_stride;
+    unsigned long	it_sp_count;
+    unsigned long	it_off_base;
+    unsigned long	it_off_stride;
+    unsigned long	it_off_count;
+    unsigned long	it_loop;
+    /* data-TLB */
+    unsigned long	dt_size;	/* number of entries in D-TLB */
+    struct pdc_tlb_cf dt_conf;	/* D-TLB-configuration */
+    unsigned long	dt_sp_base;
+    unsigned long	dt_sp_stride;
+    unsigned long	dt_sp_count;
+    unsigned long	dt_off_base;
+    unsigned long	dt_off_stride;
+    unsigned long	dt_off_count;
+    unsigned long	dt_loop;
 };
 
 #if 0
@@ -446,121 +446,121 @@ struct pdc_cache_info {		/* main-PDC_CACHE-structure (caches & TLB's) */
  * work with 64-bit firmware I think -PB
  */
 struct pdc_iodc {     /* PDC_IODC */
-	unsigned char   hversion_model;
-	unsigned char 	hversion;
-	unsigned char 	spa;
-	unsigned char 	type;
-	unsigned int	sversion_rev:4;
-	unsigned int	sversion_model:19;
-	unsigned int	sversion_opt:8;
-	unsigned char	rev;
-	unsigned char	dep;
-	unsigned char	features;
-	unsigned char	pad1;
-	unsigned int	checksum:16;
-	unsigned int	length:16;
-	unsigned int    pad[15];
+    unsigned char   hversion_model;
+    unsigned char 	hversion;
+    unsigned char 	spa;
+    unsigned char 	type;
+    unsigned int	sversion_rev:4;
+    unsigned int	sversion_model:19;
+    unsigned int	sversion_opt:8;
+    unsigned char	rev;
+    unsigned char	dep;
+    unsigned char	features;
+    unsigned char	pad1;
+    unsigned int	checksum:16;
+    unsigned int	length:16;
+    unsigned int    pad[15];
 } __attribute__((aligned(8))) ;
 #endif
 
 #ifndef CONFIG_PA20
 /* no BLTBs in pa2.0 processors */
 struct pdc_btlb_info_range {
-	__u8 res00;
-	__u8 num_i;
-	__u8 num_d;
-	__u8 num_comb;
+    __u8 res00;
+    __u8 num_i;
+    __u8 num_d;
+    __u8 num_comb;
 };
 
 struct pdc_btlb_info {	/* PDC_BLOCK_TLB, return of PDC_BTLB_INFO */
-	unsigned int min_size;	/* minimum size of BTLB in pages */
-	unsigned int max_size;	/* maximum size of BTLB in pages */
-	struct pdc_btlb_info_range fixed_range_info;
-	struct pdc_btlb_info_range variable_range_info;
+    unsigned int min_size;	/* minimum size of BTLB in pages */
+    unsigned int max_size;	/* maximum size of BTLB in pages */
+    struct pdc_btlb_info_range fixed_range_info;
+    struct pdc_btlb_info_range variable_range_info;
 };
 
 #endif /* !CONFIG_PA20 */
 
 #ifdef CONFIG_64BIT
 struct pdc_memory_table_raddr { /* PDC_MEM/PDC_MEM_TABLE (return info) */
-	unsigned long entries_returned;
-	unsigned long entries_total;
+    unsigned long entries_returned;
+    unsigned long entries_total;
 };
 
 struct pdc_memory_table {       /* PDC_MEM/PDC_MEM_TABLE (arguments) */
-	unsigned long paddr;
-	unsigned int  pages;
-	unsigned int  reserved;
+    unsigned long paddr;
+    unsigned int  pages;
+    unsigned int  reserved;
 };
 #endif /* CONFIG_64BIT */
 
 struct pdc_system_map_mod_info { /* PDC_SYSTEM_MAP/FIND_MODULE */
-	unsigned long mod_addr;
-	unsigned long mod_pgs;
-	unsigned long add_addrs;
+    unsigned long mod_addr;
+    unsigned long mod_pgs;
+    unsigned long add_addrs;
 };
 
 struct pdc_system_map_addr_info { /* PDC_SYSTEM_MAP/FIND_ADDRESS */
-	unsigned long mod_addr;
-	unsigned long mod_pgs;
+    unsigned long mod_addr;
+    unsigned long mod_pgs;
 };
 
 struct pdc_initiator { /* PDC_INITIATOR */
-	int host_id;
-	int factor;
-	int width;
-	int mode;
+    int host_id;
+    int factor;
+    int width;
+    int mode;
 };
 
 struct hardware_path {
-	char  flags;	/* see bit definitions below */
-	char  bc[6];	/* Bus Converter routing info to a specific */
-			/* I/O adaptor (< 0 means none, > 63 resvd) */
-	char  mod;	/* fixed field of specified module */
+    char  flags;	/* see bit definitions below */
+    char  bc[6];	/* Bus Converter routing info to a specific */
+    /* I/O adaptor (< 0 means none, > 63 resvd) */
+    char  mod;	/* fixed field of specified module */
 };
 
 /*
  * Device path specifications used by PDC.
  */
 struct pdc_module_path {
-	struct hardware_path path;
-	unsigned int layers[6]; /* device-specific info (ctlr #, unit # ...) */
+    struct hardware_path path;
+    unsigned int layers[6]; /* device-specific info (ctlr #, unit # ...) */
 };
 
 #ifndef CONFIG_PA20
 /* Only used on some pre-PA2.0 boxes */
 struct pdc_memory_map {		/* PDC_MEMORY_MAP */
-	unsigned long hpa;	/* mod's register set address */
-	unsigned long more_pgs;	/* number of additional I/O pgs */
+    unsigned long hpa;	/* mod's register set address */
+    unsigned long more_pgs;	/* number of additional I/O pgs */
 };
 #endif
 
 struct pdc_tod {
-	unsigned long tod_sec; 
-	unsigned long tod_usec;
+    unsigned long tod_sec;
+    unsigned long tod_usec;
 };
 
 /* architected results from PDC_PIM/transfer hpmc on a PA1.1 machine */
 
 struct pdc_hpmc_pim_11 { /* PDC_PIM */
-	__u32 gr[32];
-	__u32 cr[32];
-	__u32 sr[8];
-	__u32 iasq_back;
-	__u32 iaoq_back;
-	__u32 check_type;
-	__u32 cpu_state;
-	__u32 rsvd1;
-	__u32 cache_check;
-	__u32 tlb_check;
-	__u32 bus_check;
-	__u32 assists_check;
-	__u32 rsvd2;
-	__u32 assist_state;
-	__u32 responder_addr;
-	__u32 requestor_addr;
-	__u32 path_info;
-	__u64 fr[32];
+    __u32 gr[32];
+    __u32 cr[32];
+    __u32 sr[8];
+    __u32 iasq_back;
+    __u32 iaoq_back;
+    __u32 check_type;
+    __u32 cpu_state;
+    __u32 rsvd1;
+    __u32 cache_check;
+    __u32 tlb_check;
+    __u32 bus_check;
+    __u32 assists_check;
+    __u32 rsvd2;
+    __u32 assist_state;
+    __u32 responder_addr;
+    __u32 requestor_addr;
+    __u32 path_info;
+    __u64 fr[32];
 };
 
 /*
@@ -576,22 +576,22 @@ struct pdc_hpmc_pim_11 { /* PDC_PIM */
  */
 
 struct pdc_hpmc_pim_20 { /* PDC_PIM */
-	__u64 gr[32];
-	__u64 cr[32];
-	__u64 sr[8];
-	__u64 iasq_back;
-	__u64 iaoq_back;
-	__u32 check_type;
-	__u32 cpu_state;
-	__u32 cache_check;
-	__u32 tlb_check;
-	__u32 bus_check;
-	__u32 assists_check;
-	__u32 assist_state;
-	__u32 path_info;
-	__u64 responder_addr;
-	__u64 requestor_addr;
-	__u64 fr[32];
+    __u64 gr[32];
+    __u64 cr[32];
+    __u64 sr[8];
+    __u64 iasq_back;
+    __u64 iaoq_back;
+    __u32 check_type;
+    __u32 cpu_state;
+    __u32 cache_check;
+    __u32 tlb_check;
+    __u32 bus_check;
+    __u32 assists_check;
+    __u32 assist_state;
+    __u32 path_info;
+    __u64 responder_addr;
+    __u64 requestor_addr;
+    __u64 fr[32];
 };
 
 void pdc_console_init(void);	/* in pdc_console.c */
@@ -608,11 +608,11 @@ int pdc_chassis_warn(unsigned long *warn);
 int pdc_coproc_cfg(struct pdc_coproc_cfg *pdc_coproc_info);
 int pdc_coproc_cfg_unlocked(struct pdc_coproc_cfg *pdc_coproc_info);
 int pdc_iodc_read(unsigned long *actcnt, unsigned long hpa, unsigned int index,
-		  void *iodc_data, unsigned int iodc_data_size);
+                  void *iodc_data, unsigned int iodc_data_size);
 int pdc_system_map_find_mods(struct pdc_system_map_mod_info *pdc_mod_info,
-			     struct pdc_module_path *mod_path, long mod_index);
+                             struct pdc_module_path *mod_path, long mod_index);
 int pdc_system_map_find_addrs(struct pdc_system_map_addr_info *pdc_addr_info,
-			      long mod_index, long addr_index);
+                              long mod_index, long addr_index);
 int pdc_model_info(struct pdc_model *model);
 int pdc_model_sysmodel(char *name);
 int pdc_model_cpuid(unsigned long *cpu_id);
@@ -641,7 +641,7 @@ int pdc_tod_set(unsigned long sec, unsigned long usec);
 
 #ifdef CONFIG_64BIT
 int pdc_mem_mem_table(struct pdc_memory_table_raddr *r_addr,
-		struct pdc_memory_table *tbl, unsigned long entries);
+                      struct pdc_memory_table *tbl, unsigned long entries);
 #endif
 
 void set_firmware_width(void);
@@ -661,16 +661,24 @@ int pdc_sti_call(unsigned long func, unsigned long flags,
                  unsigned long glob_cfg);
 
 static inline char * os_id_to_string(u16 os_id) {
-	switch(os_id) {
-	case OS_ID_NONE:	return "No OS";
-	case OS_ID_HPUX:	return "HP-UX";
-	case OS_ID_MPEXL:	return "MPE-iX";
-	case OS_ID_OSF:		return "OSF";
-	case OS_ID_HPRT:	return "HP-RT";
-	case OS_ID_NOVEL:	return "Novell Netware";
-	case OS_ID_LINUX:	return "Linux";
-	default:	return "Unknown";
-	}
+    switch(os_id) {
+    case OS_ID_NONE:
+        return "No OS";
+    case OS_ID_HPUX:
+        return "HP-UX";
+    case OS_ID_MPEXL:
+        return "MPE-iX";
+    case OS_ID_OSF:
+        return "OSF";
+    case OS_ID_HPRT:
+        return "HP-RT";
+    case OS_ID_NOVEL:
+        return "Novell Netware";
+    case OS_ID_LINUX:
+        return "Linux";
+    default:
+        return "Unknown";
+    }
 }
 
 #endif /* __KERNEL__ */
@@ -681,78 +689,78 @@ static inline char * os_id_to_string(u16 os_id) {
 #define	PF_TIMER	0x0F
 
 struct device_path {		/* page 1-69 */
-	unsigned char flags;	/* flags see above! */
-	unsigned char bc[6];	/* bus converter routing info */
-	unsigned char mod;
-	unsigned int  layers[6];/* device-specific layer-info */
+    unsigned char flags;	/* flags see above! */
+    unsigned char bc[6];	/* bus converter routing info */
+    unsigned char mod;
+    unsigned int  layers[6];/* device-specific layer-info */
 } __attribute__((aligned(8))) ;
 
 struct pz_device {
-	struct	device_path dp;	/* see above */
-	/* struct	iomod *hpa; */
-	unsigned int hpa;	/* HPA base address */
-	/* char	*spa; */
-	unsigned int spa;	/* SPA base address */
-	/* int	(*iodc_io)(struct iomod*, ...); */
-	unsigned int iodc_io;	/* device entry point */
-	short	pad;		/* reserved */
-	unsigned short cl_class;/* see below */
+    struct	device_path dp;	/* see above */
+    /* struct	iomod *hpa; */
+    unsigned int hpa;	/* HPA base address */
+    /* char	*spa; */
+    unsigned int spa;	/* SPA base address */
+    /* int	(*iodc_io)(struct iomod*, ...); */
+    unsigned int iodc_io;	/* device entry point */
+    short	pad;		/* reserved */
+    unsigned short cl_class;/* see below */
 } __attribute__((aligned(8))) ;
 
 struct zeropage {
-	/* [0x000] initialize vectors (VEC) */
-	unsigned int	vec_special;		/* must be zero */
-	/* int	(*vec_pow_fail)(void);*/
-	unsigned int	vec_pow_fail; /* power failure handler */
-	/* int	(*vec_toc)(void); */
-	unsigned int	vec_toc;
-	unsigned int	vec_toclen;
-	/* int	(*vec_rendz)(void); */
-	unsigned int vec_rendz;
-	int	vec_pow_fail_flen;
-	int	vec_pad[10];		
-	
-	/* [0x040] reserved processor dependent */
-	int	pad0[112];
+    /* [0x000] initialize vectors (VEC) */
+    unsigned int	vec_special;		/* must be zero */
+    /* int	(*vec_pow_fail)(void);*/
+    unsigned int	vec_pow_fail; /* power failure handler */
+    /* int	(*vec_toc)(void); */
+    unsigned int	vec_toc;
+    unsigned int	vec_toclen;
+    /* int	(*vec_rendz)(void); */
+    unsigned int vec_rendz;
+    int	vec_pow_fail_flen;
+    int	vec_pad[10];
 
-	/* [0x200] reserved */
-	int	pad1[84];
+    /* [0x040] reserved processor dependent */
+    int	pad0[112];
 
-	/* [0x350] memory configuration (MC) */
-	int	memc_cont;		/* contiguous mem size (bytes) */
-	int	memc_phsize;		/* physical memory size */
-	int	memc_adsize;		/* additional mem size, bytes of SPA space used by PDC */
-	unsigned int mem_pdc_hi;	/* used for 64-bit */
+    /* [0x200] reserved */
+    int	pad1[84];
 
-	/* [0x360] various parameters for the boot-CPU */
-	/* unsigned int *mem_booterr[8]; */
-	unsigned int mem_booterr[8];	/* ptr to boot errors */
-	unsigned int mem_free;		/* first location, where OS can be loaded */
-	/* struct iomod *mem_hpa; */
-	unsigned int mem_hpa;		/* HPA of the boot-CPU */
-	/* int (*mem_pdc)(int, ...); */
-	unsigned int mem_pdc;		/* PDC entry point */
-	unsigned int mem_10msec;	/* number of clock ticks in 10msec */
+    /* [0x350] memory configuration (MC) */
+    int	memc_cont;		/* contiguous mem size (bytes) */
+    int	memc_phsize;		/* physical memory size */
+    int	memc_adsize;		/* additional mem size, bytes of SPA space used by PDC */
+    unsigned int mem_pdc_hi;	/* used for 64-bit */
 
-	/* [0x390] initial memory module (IMM) */
-	/* struct iomod *imm_hpa; */
-	unsigned int imm_hpa;		/* HPA of the IMM */
-	int	imm_soft_boot;		/* 0 = was hard boot, 1 = was soft boot */
-	unsigned int	imm_spa_size;		/* SPA size of the IMM in bytes */
-	unsigned int	imm_max_mem;		/* bytes of mem in IMM */
+    /* [0x360] various parameters for the boot-CPU */
+    /* unsigned int *mem_booterr[8]; */
+    unsigned int mem_booterr[8];	/* ptr to boot errors */
+    unsigned int mem_free;		/* first location, where OS can be loaded */
+    /* struct iomod *mem_hpa; */
+    unsigned int mem_hpa;		/* HPA of the boot-CPU */
+    /* int (*mem_pdc)(int, ...); */
+    unsigned int mem_pdc;		/* PDC entry point */
+    unsigned int mem_10msec;	/* number of clock ticks in 10msec */
 
-	/* [0x3A0] boot console, display device and keyboard */
-	struct pz_device mem_cons;	/* description of console device */
-	struct pz_device mem_boot;	/* description of boot device */
-	struct pz_device mem_kbd;	/* description of keyboard device */
+    /* [0x390] initial memory module (IMM) */
+    /* struct iomod *imm_hpa; */
+    unsigned int imm_hpa;		/* HPA of the IMM */
+    int	imm_soft_boot;		/* 0 = was hard boot, 1 = was soft boot */
+    unsigned int	imm_spa_size;		/* SPA size of the IMM in bytes */
+    unsigned int	imm_max_mem;		/* bytes of mem in IMM */
 
-	/* [0x430] reserved */
-	int	pad430[116];
+    /* [0x3A0] boot console, display device and keyboard */
+    struct pz_device mem_cons;	/* description of console device */
+    struct pz_device mem_boot;	/* description of boot device */
+    struct pz_device mem_kbd;	/* description of keyboard device */
 
-	/* [0x600] processor dependent */
-	__u32	pad600[1];
-	__u32	proc_sti;		/* pointer to STI ROM */
-	__u32	pad608[126];
+    /* [0x430] reserved */
+    int	pad430[116];
+
+    /* [0x600] processor dependent */
+    __u32	pad600[1];
+    __u32	proc_sti;		/* pointer to STI ROM */
+    __u32	pad608[126];
 };
 
 #endif /* !defined(__ASSEMBLY__) */

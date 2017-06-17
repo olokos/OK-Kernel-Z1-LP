@@ -19,56 +19,56 @@
 #include <linux/can/dev.h>
 
 struct cc770_msgobj {
-	u8 ctrl0;
-	u8 ctrl1;
-	u8 id[4];
-	u8 config;
-	u8 data[8];
-	u8 dontuse;		/* padding */
+    u8 ctrl0;
+    u8 ctrl1;
+    u8 id[4];
+    u8 config;
+    u8 data[8];
+    u8 dontuse;		/* padding */
 } __packed;
 
 struct cc770_regs {
-	union {
-		struct cc770_msgobj msgobj[16]; /* Message object 1..15 */
-		struct {
-			u8 control;		/* Control Register */
-			u8 status;		/* Status Register */
-			u8 cpu_interface;	/* CPU Interface Register */
-			u8 dontuse1;
-			u8 high_speed_read[2];	/* High Speed Read */
-			u8 global_mask_std[2];	/* Standard Global Mask */
-			u8 global_mask_ext[4];	/* Extended Global Mask */
-			u8 msg15_mask[4];	/* Message 15 Mask */
-			u8 dontuse2[15];
-			u8 clkout;		/* Clock Out Register */
-			u8 dontuse3[15];
-			u8 bus_config;		/* Bus Configuration Register */
-			u8 dontuse4[15];
-			u8 bit_timing_0;	/* Bit Timing Register byte 0 */
-			u8 dontuse5[15];
-			u8 bit_timing_1;	/* Bit Timing Register byte 1 */
-			u8 dontuse6[15];
-			u8 interrupt;		/* Interrupt Register */
-			u8 dontuse7[15];
-			u8 rx_error_counter;	/* Receive Error Counter */
-			u8 dontuse8[15];
-			u8 tx_error_counter;	/* Transmit Error Counter */
-			u8 dontuse9[31];
-			u8 p1_conf;
-			u8 dontuse10[15];
-			u8 p2_conf;
-			u8 dontuse11[15];
-			u8 p1_in;
-			u8 dontuse12[15];
-			u8 p2_in;
-			u8 dontuse13[15];
-			u8 p1_out;
-			u8 dontuse14[15];
-			u8 p2_out;
-			u8 dontuse15[15];
-			u8 serial_reset_addr;
-		};
-	};
+    union {
+        struct cc770_msgobj msgobj[16]; /* Message object 1..15 */
+        struct {
+            u8 control;		/* Control Register */
+            u8 status;		/* Status Register */
+            u8 cpu_interface;	/* CPU Interface Register */
+            u8 dontuse1;
+            u8 high_speed_read[2];	/* High Speed Read */
+            u8 global_mask_std[2];	/* Standard Global Mask */
+            u8 global_mask_ext[4];	/* Extended Global Mask */
+            u8 msg15_mask[4];	/* Message 15 Mask */
+            u8 dontuse2[15];
+            u8 clkout;		/* Clock Out Register */
+            u8 dontuse3[15];
+            u8 bus_config;		/* Bus Configuration Register */
+            u8 dontuse4[15];
+            u8 bit_timing_0;	/* Bit Timing Register byte 0 */
+            u8 dontuse5[15];
+            u8 bit_timing_1;	/* Bit Timing Register byte 1 */
+            u8 dontuse6[15];
+            u8 interrupt;		/* Interrupt Register */
+            u8 dontuse7[15];
+            u8 rx_error_counter;	/* Receive Error Counter */
+            u8 dontuse8[15];
+            u8 tx_error_counter;	/* Transmit Error Counter */
+            u8 dontuse9[31];
+            u8 p1_conf;
+            u8 dontuse10[15];
+            u8 p2_conf;
+            u8 dontuse11[15];
+            u8 p1_in;
+            u8 dontuse12[15];
+            u8 p2_in;
+            u8 dontuse13[15];
+            u8 p1_out;
+            u8 dontuse14[15];
+            u8 p2_out;
+            u8 dontuse15[15];
+            u8 serial_reset_addr;
+        };
+    };
 } __packed;
 
 /* Control Register (0x00) */
@@ -159,12 +159,12 @@ struct cc770_regs {
 #define CC770_OBJ_FLAG_EFF	0x04
 
 enum {
-	CC770_OBJ_RX0 = 0,	/* for receiving normal messages */
-	CC770_OBJ_RX1,		/* for receiving normal messages */
-	CC770_OBJ_RX_RTR0,	/* for receiving remote transmission requests */
-	CC770_OBJ_RX_RTR1,	/* for receiving remote transmission requests */
-	CC770_OBJ_TX,		/* for sending messages */
-	CC770_OBJ_MAX
+    CC770_OBJ_RX0 = 0,	/* for receiving normal messages */
+    CC770_OBJ_RX1,		/* for receiving normal messages */
+    CC770_OBJ_RX_RTR0,	/* for receiving remote transmission requests */
+    CC770_OBJ_RX_RTR1,	/* for receiving remote transmission requests */
+    CC770_OBJ_TX,		/* for sending messages */
+    CC770_OBJ_MAX
 };
 
 #define obj2msgobj(o)	(MSGOBJ_LAST - (o)) /* message object 11..15 */
@@ -173,26 +173,26 @@ enum {
  * CC770 private data structure
  */
 struct cc770_priv {
-	struct can_priv can;	/* must be the first member */
-	struct sk_buff *echo_skb;
+    struct can_priv can;	/* must be the first member */
+    struct sk_buff *echo_skb;
 
-	/* the lower-layer is responsible for appropriate locking */
-	u8 (*read_reg)(const struct cc770_priv *priv, int reg);
-	void (*write_reg)(const struct cc770_priv *priv, int reg, u8 val);
-	void (*pre_irq)(const struct cc770_priv *priv);
-	void (*post_irq)(const struct cc770_priv *priv);
+    /* the lower-layer is responsible for appropriate locking */
+    u8 (*read_reg)(const struct cc770_priv *priv, int reg);
+    void (*write_reg)(const struct cc770_priv *priv, int reg, u8 val);
+    void (*pre_irq)(const struct cc770_priv *priv);
+    void (*post_irq)(const struct cc770_priv *priv);
 
-	void *priv;		/* for board-specific data */
-	struct net_device *dev;
+    void *priv;		/* for board-specific data */
+    struct net_device *dev;
 
-	void __iomem *reg_base;	 /* ioremap'ed address to registers */
-	unsigned long irq_flags; /* for request_irq() */
+    void __iomem *reg_base;	 /* ioremap'ed address to registers */
+    unsigned long irq_flags; /* for request_irq() */
 
-	unsigned char obj_flags[CC770_OBJ_MAX];
-	u8 control_normal_mode;	/* Control register for normal mode */
-	u8 cpu_interface;	/* CPU interface register */
-	u8 clkout;		/* Clock out register */
-	u8 bus_config;		/* Bus conffiguration register */
+    unsigned char obj_flags[CC770_OBJ_MAX];
+    u8 control_normal_mode;	/* Control register for normal mode */
+    u8 cpu_interface;	/* CPU interface register */
+    u8 clkout;		/* Clock out register */
+    u8 bus_config;		/* Bus conffiguration register */
 };
 
 struct net_device *alloc_cc770dev(int sizeof_priv);

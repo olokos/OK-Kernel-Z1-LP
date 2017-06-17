@@ -42,19 +42,19 @@
  * replaced with individual ioctl()s for each piece of data!
  */
 struct ica_z90_status {
-	int totalcount;
-	int leedslitecount; // PCICA
-	int leeds2count;    // PCICC
-	// int PCIXCCCount; is not in struct for backward compatibility
-	int requestqWaitCount;
-	int pendingqWaitCount;
-	int totalOpenCount;
-	int cryptoDomain;
-	// status: 0=not there, 1=PCICA, 2=PCICC, 3=PCIXCC_MCL2, 4=PCIXCC_MCL3,
-	//	   5=CEX2C
-	unsigned char status[64];
-	// qdepth: # work elements waiting for each device
-	unsigned char qdepth[64];
+    int totalcount;
+    int leedslitecount; // PCICA
+    int leeds2count;    // PCICC
+    // int PCIXCCCount; is not in struct for backward compatibility
+    int requestqWaitCount;
+    int pendingqWaitCount;
+    int totalOpenCount;
+    int cryptoDomain;
+    // status: 0=not there, 1=PCICA, 2=PCICC, 3=PCIXCC_MCL2, 4=PCIXCC_MCL3,
+    //	   5=CEX2C
+    unsigned char status[64];
+    // qdepth: # work elements waiting for each device
+    unsigned char qdepth[64];
 };
 
 /**
@@ -84,32 +84,32 @@ struct ica_z90_status {
 struct zcrypt_device;
 
 struct zcrypt_ops {
-	long (*rsa_modexpo)(struct zcrypt_device *, struct ica_rsa_modexpo *);
-	long (*rsa_modexpo_crt)(struct zcrypt_device *,
-				struct ica_rsa_modexpo_crt *);
-	long (*send_cprb)(struct zcrypt_device *, struct ica_xcRB *);
-	long (*rng)(struct zcrypt_device *, char *);
+    long (*rsa_modexpo)(struct zcrypt_device *, struct ica_rsa_modexpo *);
+    long (*rsa_modexpo_crt)(struct zcrypt_device *,
+                            struct ica_rsa_modexpo_crt *);
+    long (*send_cprb)(struct zcrypt_device *, struct ica_xcRB *);
+    long (*rng)(struct zcrypt_device *, char *);
 };
 
 struct zcrypt_device {
-	struct list_head list;		/* Device list. */
-	spinlock_t lock;		/* Per device lock. */
-	struct kref refcount;		/* device refcounting */
-	struct ap_device *ap_dev;	/* The "real" ap device. */
-	struct zcrypt_ops *ops;		/* Crypto operations. */
-	int online;			/* User online/offline */
+    struct list_head list;		/* Device list. */
+    spinlock_t lock;		/* Per device lock. */
+    struct kref refcount;		/* device refcounting */
+    struct ap_device *ap_dev;	/* The "real" ap device. */
+    struct zcrypt_ops *ops;		/* Crypto operations. */
+    int online;			/* User online/offline */
 
-	int user_space_type;		/* User space device id. */
-	char *type_string;		/* User space device name. */
-	int min_mod_size;		/* Min number of bits. */
-	int max_mod_size;		/* Max number of bits. */
-	int short_crt;			/* Card has crt length restriction. */
-	int speed_rating;		/* Speed of the crypto device. */
+    int user_space_type;		/* User space device id. */
+    char *type_string;		/* User space device name. */
+    int min_mod_size;		/* Min number of bits. */
+    int max_mod_size;		/* Max number of bits. */
+    int short_crt;			/* Card has crt length restriction. */
+    int speed_rating;		/* Speed of the crypto device. */
 
-	int request_count;		/* # current requests. */
+    int request_count;		/* # current requests. */
 
-	struct ap_message reply;	/* Per-device reply structure. */
-	int max_exp_bit_length;
+    struct ap_message reply;	/* Per-device reply structure. */
+    int max_exp_bit_length;
 };
 
 struct zcrypt_device *zcrypt_device_alloc(size_t);

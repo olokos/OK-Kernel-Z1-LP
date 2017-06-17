@@ -51,8 +51,7 @@
 #include "palTypes.h"
 #include "wlan_qct_wda_debug.h"
 
-void wdaLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
-{
+void wdaLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
     va_list marker;
 
     if(loglevel > pMac->utils.gLogDbgLevel[WDA_DEBUG_LOGIDX])

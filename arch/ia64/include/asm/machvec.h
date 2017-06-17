@@ -35,9 +35,9 @@ typedef u8 ia64_mv_irq_to_vector (int);
 typedef unsigned int ia64_mv_local_vector_to_irq (u8);
 typedef char *ia64_mv_pci_get_legacy_mem_t (struct pci_bus *);
 typedef int ia64_mv_pci_legacy_read_t (struct pci_bus *, u16 port, u32 *val,
-				       u8 size);
+                                       u8 size);
 typedef int ia64_mv_pci_legacy_write_t (struct pci_bus *, u16 port, u32 val,
-					u8 size);
+                                        u8 size);
 typedef void ia64_mv_migrate_t(struct task_struct * task);
 typedef void ia64_mv_pci_fixup_bus_t (struct pci_bus *);
 typedef void ia64_mv_kernel_launch_event_t(void);
@@ -76,23 +76,19 @@ typedef int ia64_mv_setup_msi_irq_t (struct pci_dev *pdev, struct msi_desc *);
 typedef void ia64_mv_teardown_msi_irq_t (unsigned int irq);
 
 static inline void
-machvec_noop (void)
-{
+machvec_noop (void) {
 }
 
 static inline void
-machvec_noop_mm (struct mm_struct *mm)
-{
+machvec_noop_mm (struct mm_struct *mm) {
 }
 
 static inline void
-machvec_noop_task (struct task_struct *task)
-{
+machvec_noop_task (struct task_struct *task) {
 }
 
 static inline void
-machvec_noop_bus (struct pci_bus *bus)
-{
+machvec_noop_bus (struct pci_bus *bus) {
 }
 
 extern void machvec_setup (char **);
@@ -164,42 +160,42 @@ extern void machvec_tlb_migrate_finish (struct mm_struct *);
  * Software Conventions guide.
  */
 struct ia64_machine_vector {
-	const char *name;
-	ia64_mv_setup_t *setup;
-	ia64_mv_cpu_init_t *cpu_init;
-	ia64_mv_irq_init_t *irq_init;
-	ia64_mv_send_ipi_t *send_ipi;
-	ia64_mv_timer_interrupt_t *timer_interrupt;
-	ia64_mv_global_tlb_purge_t *global_tlb_purge;
-	ia64_mv_tlb_migrate_finish_t *tlb_migrate_finish;
-	ia64_mv_dma_init *dma_init;
-	ia64_mv_dma_get_required_mask *dma_get_required_mask;
-	ia64_mv_dma_get_ops *dma_get_ops;
-	ia64_mv_irq_to_vector *irq_to_vector;
-	ia64_mv_local_vector_to_irq *local_vector_to_irq;
-	ia64_mv_pci_get_legacy_mem_t *pci_get_legacy_mem;
-	ia64_mv_pci_legacy_read_t *pci_legacy_read;
-	ia64_mv_pci_legacy_write_t *pci_legacy_write;
-	ia64_mv_inb_t *inb;
-	ia64_mv_inw_t *inw;
-	ia64_mv_inl_t *inl;
-	ia64_mv_outb_t *outb;
-	ia64_mv_outw_t *outw;
-	ia64_mv_outl_t *outl;
-	ia64_mv_mmiowb_t *mmiowb;
-	ia64_mv_readb_t *readb;
-	ia64_mv_readw_t *readw;
-	ia64_mv_readl_t *readl;
-	ia64_mv_readq_t *readq;
-	ia64_mv_readb_relaxed_t *readb_relaxed;
-	ia64_mv_readw_relaxed_t *readw_relaxed;
-	ia64_mv_readl_relaxed_t *readl_relaxed;
-	ia64_mv_readq_relaxed_t *readq_relaxed;
-	ia64_mv_migrate_t *migrate;
-	ia64_mv_setup_msi_irq_t *setup_msi_irq;
-	ia64_mv_teardown_msi_irq_t *teardown_msi_irq;
-	ia64_mv_pci_fixup_bus_t *pci_fixup_bus;
-	ia64_mv_kernel_launch_event_t *kernel_launch_event;
+    const char *name;
+    ia64_mv_setup_t *setup;
+    ia64_mv_cpu_init_t *cpu_init;
+    ia64_mv_irq_init_t *irq_init;
+    ia64_mv_send_ipi_t *send_ipi;
+    ia64_mv_timer_interrupt_t *timer_interrupt;
+    ia64_mv_global_tlb_purge_t *global_tlb_purge;
+    ia64_mv_tlb_migrate_finish_t *tlb_migrate_finish;
+    ia64_mv_dma_init *dma_init;
+    ia64_mv_dma_get_required_mask *dma_get_required_mask;
+    ia64_mv_dma_get_ops *dma_get_ops;
+    ia64_mv_irq_to_vector *irq_to_vector;
+    ia64_mv_local_vector_to_irq *local_vector_to_irq;
+    ia64_mv_pci_get_legacy_mem_t *pci_get_legacy_mem;
+    ia64_mv_pci_legacy_read_t *pci_legacy_read;
+    ia64_mv_pci_legacy_write_t *pci_legacy_write;
+    ia64_mv_inb_t *inb;
+    ia64_mv_inw_t *inw;
+    ia64_mv_inl_t *inl;
+    ia64_mv_outb_t *outb;
+    ia64_mv_outw_t *outw;
+    ia64_mv_outl_t *outl;
+    ia64_mv_mmiowb_t *mmiowb;
+    ia64_mv_readb_t *readb;
+    ia64_mv_readw_t *readw;
+    ia64_mv_readl_t *readl;
+    ia64_mv_readq_t *readq;
+    ia64_mv_readb_relaxed_t *readb_relaxed;
+    ia64_mv_readw_relaxed_t *readw_relaxed;
+    ia64_mv_readl_relaxed_t *readl_relaxed;
+    ia64_mv_readq_relaxed_t *readq_relaxed;
+    ia64_mv_migrate_t *migrate;
+    ia64_mv_setup_msi_irq_t *setup_msi_irq;
+    ia64_mv_teardown_msi_irq_t *teardown_msi_irq;
+    ia64_mv_pci_fixup_bus_t *pci_fixup_bus;
+    ia64_mv_kernel_launch_event_t *kernel_launch_event;
 } __attribute__((__aligned__(16))); /* align attrib? see above comment */
 
 #define MACHVEC_INIT(name)			\

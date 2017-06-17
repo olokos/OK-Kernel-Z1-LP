@@ -52,75 +52,72 @@
  * Raise a SIGFPE for the current process.
  * sicode describes the signal being raised.
  */
-void ucf64_raise_sigfpe(unsigned int sicode, struct pt_regs *regs)
-{
-	siginfo_t info;
+void ucf64_raise_sigfpe(unsigned int sicode, struct pt_regs *regs) {
+    siginfo_t info;
 
-	memset(&info, 0, sizeof(info));
+    memset(&info, 0, sizeof(info));
 
-	info.si_signo = SIGFPE;
-	info.si_code = sicode;
-	info.si_addr = (void __user *)(instruction_pointer(regs) - 4);
+    info.si_signo = SIGFPE;
+    info.si_code = sicode;
+    info.si_addr = (void __user *)(instruction_pointer(regs) - 4);
 
-	/*
-	 * This is the same as NWFPE, because it's not clear what
-	 * this is used for
-	 */
-	current->thread.error_code = 0;
-	current->thread.trap_no = 6;
+    /*
+     * This is the same as NWFPE, because it's not clear what
+     * this is used for
+     */
+    current->thread.error_code = 0;
+    current->thread.trap_no = 6;
 
-	send_sig_info(SIGFPE, &info, current);
+    send_sig_info(SIGFPE, &info, current);
 }
 
 /*
  * Handle exceptions of UniCore-F64.
  */
-void ucf64_exchandler(u32 inst, u32 fpexc, struct pt_regs *regs)
-{
-	u32 tmp = fpexc;
-	u32 exc = F64_EXCEPTION_ERROR & fpexc;
+void ucf64_exchandler(u32 inst, u32 fpexc, struct pt_regs *regs) {
+    u32 tmp = fpexc;
+    u32 exc = F64_EXCEPTION_ERROR & fpexc;
 
-	pr_debug("UniCore-F64: instruction %08x fpscr %08x\n",
-			inst, fpexc);
+    pr_debug("UniCore-F64: instruction %08x fpscr %08x\n",
+             inst, fpexc);
 
-	if (exc & FPSCR_CMPINSTR_BIT) {
-		if (exc & FPSCR_CON)
-			tmp |= FPSCR_CON;
-		else
-			tmp &= ~(FPSCR_CON);
-		exc &= ~(FPSCR_CMPINSTR_BIT | FPSCR_CON);
-	} else {
-		pr_debug(KERN_ERR "UniCore-F64 Error: unhandled exceptions\n");
-		pr_debug(KERN_ERR "UniCore-F64 FPSCR 0x%08x INST 0x%08x\n",
-				cff(FPSCR), inst);
+    if (exc & FPSCR_CMPINSTR_BIT) {
+        if (exc & FPSCR_CON)
+            tmp |= FPSCR_CON;
+        else
+            tmp &= ~(FPSCR_CON);
+        exc &= ~(FPSCR_CMPINSTR_BIT | FPSCR_CON);
+    } else {
+        pr_debug(KERN_ERR "UniCore-F64 Error: unhandled exceptions\n");
+        pr_debug(KERN_ERR "UniCore-F64 FPSCR 0x%08x INST 0x%08x\n",
+                 cff(FPSCR), inst);
 
-		ucf64_raise_sigfpe(0, regs);
-		return;
-	}
+        ucf64_raise_sigfpe(0, regs);
+        return;
+    }
 
-	/*
-	 * Update the FPSCR with the additional exception flags.
-	 * Comparison instructions always return at least one of
-	 * these flags set.
-	 */
-	tmp &= ~(FPSCR_TRAP | FPSCR_IOS | FPSCR_OFS | FPSCR_UFS |
-			FPSCR_IXS | FPSCR_HIS | FPSCR_IOC | FPSCR_OFC |
-			FPSCR_UFC | FPSCR_IXC | FPSCR_HIC);
+    /*
+     * Update the FPSCR with the additional exception flags.
+     * Comparison instructions always return at least one of
+     * these flags set.
+     */
+    tmp &= ~(FPSCR_TRAP | FPSCR_IOS | FPSCR_OFS | FPSCR_UFS |
+             FPSCR_IXS | FPSCR_HIS | FPSCR_IOC | FPSCR_OFC |
+             FPSCR_UFC | FPSCR_IXC | FPSCR_HIC);
 
-	tmp |= exc;
-	ctf(FPSCR, tmp);
+    tmp |= exc;
+    ctf(FPSCR, tmp);
 }
 
 /*
  * F64 support code initialisation.
  */
-static int __init ucf64_init(void)
-{
-	ctf(FPSCR, 0x0);     /* FPSCR_UFE | FPSCR_NDE perhaps better */
+static int __init ucf64_init(void) {
+    ctf(FPSCR, 0x0);     /* FPSCR_UFE | FPSCR_NDE perhaps better */
 
-	printk(KERN_INFO "Enable UniCore-F64 support.\n");
+    printk(KERN_INFO "Enable UniCore-F64 support.\n");
 
-	return 0;
+    return 0;
 }
 
 late_initcall(ucf64_init);

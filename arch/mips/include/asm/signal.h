@@ -16,7 +16,7 @@
 #define _NSIG_WORDS	(_NSIG / _NSIG_BPW)
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
@@ -112,20 +112,20 @@ typedef unsigned long old_sigset_t;		/* at least 32 bits */
 #include <asm-generic/signal-defs.h>
 
 struct sigaction {
-	unsigned int	sa_flags;
-	__sighandler_t	sa_handler;
-	sigset_t	sa_mask;
+    unsigned int	sa_flags;
+    __sighandler_t	sa_handler;
+    sigset_t	sa_mask;
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 /* IRIX compatible stack_t  */
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	size_t ss_size;
-	int ss_flags;
+    void __user *ss_sp;
+    size_t ss_size;
+    int ss_flags;
 } stack_t;
 
 #ifdef __KERNEL__

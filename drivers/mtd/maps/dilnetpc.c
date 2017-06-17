@@ -76,7 +76,7 @@
 #define CSC_RBWR	0xa7	/* GPIO Read-Back/Write Register B */
 
 #define CSC_CR		0xd0	/* internal I/O device disable/Echo */
-				/* Z-bus/configuration register */
+/* Z-bus/configuration register */
 
 #define CSC_PCCMDCR	0xf1	/* PC card mode and DMA control register */
 
@@ -101,28 +101,24 @@
 ** Access to SC4x0's Chip Setup and Control (CSC)
 ** and PC Card (PCC) indexed registers:
 */
-static inline void setcsc(int reg, unsigned char data)
-{
-	outb(reg, CSC_INDEX);
-	outb(data, CSC_DATA);
+static inline void setcsc(int reg, unsigned char data) {
+    outb(reg, CSC_INDEX);
+    outb(data, CSC_DATA);
 }
 
-static inline unsigned char getcsc(int reg)
-{
-	outb(reg, CSC_INDEX);
-	return(inb(CSC_DATA));
+static inline unsigned char getcsc(int reg) {
+    outb(reg, CSC_INDEX);
+    return(inb(CSC_DATA));
 }
 
-static inline void setpcc(int reg, unsigned char data)
-{
-	outb(reg, PCC_INDEX);
-	outb(data, PCC_DATA);
+static inline void setpcc(int reg, unsigned char data) {
+    outb(reg, PCC_INDEX);
+    outb(data, PCC_DATA);
 }
 
-static inline unsigned char getpcc(int reg)
-{
-	outb(reg, PCC_INDEX);
-	return(inb(PCC_DATA));
+static inline unsigned char getpcc(int reg) {
+    outb(reg, PCC_INDEX);
+    return(inb(PCC_DATA));
 }
 
 
@@ -132,42 +128,41 @@ static inline unsigned char getpcc(int reg)
 ** the SC4x0's MMS Window C.
 ************************************************************
 */
-static void dnpc_map_flash(unsigned long flash_base, unsigned long flash_size)
-{
-	unsigned long flash_end = flash_base + flash_size - 1;
+static void dnpc_map_flash(unsigned long flash_base, unsigned long flash_size) {
+    unsigned long flash_end = flash_base + flash_size - 1;
 
-	/*
-	** enable setup of MMS windows C-F:
-	*/
-	/* - enable PC Card indexed register space */
-	setcsc(CSC_CR, getcsc(CSC_CR) | 0x2);
-	/* - set PC Card controller to operate in standard mode */
-	setcsc(CSC_PCCMDCR, getcsc(CSC_PCCMDCR) & ~1);
+    /*
+    ** enable setup of MMS windows C-F:
+    */
+    /* - enable PC Card indexed register space */
+    setcsc(CSC_CR, getcsc(CSC_CR) | 0x2);
+    /* - set PC Card controller to operate in standard mode */
+    setcsc(CSC_PCCMDCR, getcsc(CSC_PCCMDCR) & ~1);
 
-	/*
-	** Program base address and end address of window
-	** where the flash ROM should appear in CPU address space
-	*/
-	setpcc(PCC_MWSAR_1_Lo, (flash_base >> 12) & 0xff);
-	setpcc(PCC_MWSAR_1_Hi, (flash_base >> 20) & 0x3f);
-	setpcc(PCC_MWEAR_1_Lo, (flash_end >> 12) & 0xff);
-	setpcc(PCC_MWEAR_1_Hi, (flash_end >> 20) & 0x3f);
+    /*
+    ** Program base address and end address of window
+    ** where the flash ROM should appear in CPU address space
+    */
+    setpcc(PCC_MWSAR_1_Lo, (flash_base >> 12) & 0xff);
+    setpcc(PCC_MWSAR_1_Hi, (flash_base >> 20) & 0x3f);
+    setpcc(PCC_MWEAR_1_Lo, (flash_end >> 12) & 0xff);
+    setpcc(PCC_MWEAR_1_Hi, (flash_end >> 20) & 0x3f);
 
-	/* program offset of first flash location to appear in this window (0) */
-	setpcc(PCC_MWAOR_1_Lo, ((0 - flash_base) >> 12) & 0xff);
-	setpcc(PCC_MWAOR_1_Hi, ((0 - flash_base)>> 20) & 0x3f);
+    /* program offset of first flash location to appear in this window (0) */
+    setpcc(PCC_MWAOR_1_Lo, ((0 - flash_base) >> 12) & 0xff);
+    setpcc(PCC_MWAOR_1_Hi, ((0 - flash_base)>> 20) & 0x3f);
 
-	/* set attributes for MMS window C: non-cacheable, write-enabled */
-	setcsc(CSC_MMSWAR, getcsc(CSC_MMSWAR) & ~0x11);
+    /* set attributes for MMS window C: non-cacheable, write-enabled */
+    setcsc(CSC_MMSWAR, getcsc(CSC_MMSWAR) & ~0x11);
 
-	/* select physical device ROMCS0 (i.e. flash) for MMS Window C */
-	setcsc(CSC_MMSWDSR, getcsc(CSC_MMSWDSR) & ~0x03);
+    /* select physical device ROMCS0 (i.e. flash) for MMS Window C */
+    setcsc(CSC_MMSWDSR, getcsc(CSC_MMSWDSR) & ~0x03);
 
-	/* enable memory window 1 */
-	setpcc(PCC_AWER_B, getpcc(PCC_AWER_B) | 0x02);
+    /* enable memory window 1 */
+    setpcc(PCC_AWER_B, getpcc(PCC_AWER_B) | 0x02);
 
-	/* now disable PC Card indexed register space again */
-	setcsc(CSC_CR, getcsc(CSC_CR) & ~0x2);
+    /* now disable PC Card indexed register space again */
+    setcsc(CSC_CR, getcsc(CSC_CR) & ~0x2);
 }
 
 
@@ -177,16 +172,15 @@ static void dnpc_map_flash(unsigned long flash_base, unsigned long flash_size)
 ** the SC4x0's MMS Window C.
 ************************************************************
 */
-static void dnpc_unmap_flash(void)
-{
-	/* - enable PC Card indexed register space */
-	setcsc(CSC_CR, getcsc(CSC_CR) | 0x2);
+static void dnpc_unmap_flash(void) {
+    /* - enable PC Card indexed register space */
+    setcsc(CSC_CR, getcsc(CSC_CR) | 0x2);
 
-	/* disable memory window 1 */
-	setpcc(PCC_AWER_B, getpcc(PCC_AWER_B) & ~0x02);
+    /* disable memory window 1 */
+    setpcc(PCC_AWER_B, getpcc(PCC_AWER_B) & ~0x02);
 
-	/* now disable PC Card indexed register space again */
-	setcsc(CSC_CR, getcsc(CSC_CR) & ~0x2);
+    /* now disable PC Card indexed register space again */
+    setcsc(CSC_CR, getcsc(CSC_CR) & ~0x2);
 }
 
 
@@ -202,45 +196,37 @@ static int        vpp_counter = 0;
 /*
 ** This is what has to be done for the DNP board ..
 */
-static void dnp_set_vpp(struct map_info *not_used, int on)
-{
-	spin_lock_irq(&dnpc_spin);
+static void dnp_set_vpp(struct map_info *not_used, int on) {
+    spin_lock_irq(&dnpc_spin);
 
-	if (on)
-	{
-		if(++vpp_counter == 1)
-			setcsc(CSC_RBWR, getcsc(CSC_RBWR) & ~0x4);
-	}
-	else
-	{
-		if(--vpp_counter == 0)
-			setcsc(CSC_RBWR, getcsc(CSC_RBWR) | 0x4);
-		else
-			BUG_ON(vpp_counter < 0);
-	}
-	spin_unlock_irq(&dnpc_spin);
+    if (on) {
+        if(++vpp_counter == 1)
+            setcsc(CSC_RBWR, getcsc(CSC_RBWR) & ~0x4);
+    } else {
+        if(--vpp_counter == 0)
+            setcsc(CSC_RBWR, getcsc(CSC_RBWR) | 0x4);
+        else
+            BUG_ON(vpp_counter < 0);
+    }
+    spin_unlock_irq(&dnpc_spin);
 }
 
 /*
 ** .. and this the ADNP version:
 */
-static void adnp_set_vpp(struct map_info *not_used, int on)
-{
-	spin_lock_irq(&dnpc_spin);
+static void adnp_set_vpp(struct map_info *not_used, int on) {
+    spin_lock_irq(&dnpc_spin);
 
-	if (on)
-	{
-		if(++vpp_counter == 1)
-			setcsc(CSC_RBWR, getcsc(CSC_RBWR) & ~0x8);
-	}
-	else
-	{
-		if(--vpp_counter == 0)
-			setcsc(CSC_RBWR, getcsc(CSC_RBWR) | 0x8);
-		else
-			BUG_ON(vpp_counter < 0);
-	}
-	spin_unlock_irq(&dnpc_spin);
+    if (on) {
+        if(++vpp_counter == 1)
+            setcsc(CSC_RBWR, getcsc(CSC_RBWR) & ~0x8);
+    } else {
+        if(--vpp_counter == 0)
+            setcsc(CSC_RBWR, getcsc(CSC_RBWR) | 0x8);
+        else
+            BUG_ON(vpp_counter < 0);
+    }
+    spin_unlock_irq(&dnpc_spin);
 }
 
 
@@ -250,11 +236,11 @@ static void adnp_set_vpp(struct map_info *not_used, int on)
 #define WINDOW_ADDR		FLASH_BASE
 
 static struct map_info dnpc_map = {
-	.name = "ADNP Flash Bank",
-	.size = ADNP_WINDOW_SIZE,
-	.bankwidth = 1,
-	.set_vpp = adnp_set_vpp,
-	.phys = WINDOW_ADDR
+    .name = "ADNP Flash Bank",
+    .size = ADNP_WINDOW_SIZE,
+    .bankwidth = 1,
+    .set_vpp = adnp_set_vpp,
+    .phys = WINDOW_ADDR
 };
 
 /*
@@ -267,34 +253,33 @@ static struct map_info dnpc_map = {
 ** 4.   64 KiB (1 block)   : System BIOS Entry
 */
 
-static struct mtd_partition partition_info[]=
-{
-	{
-		.name =		"ADNP boot",
-		.offset =	0,
-		.size =		0xf0000,
-	},
-	{
-		.name =		"ADNP system BIOS",
-		.offset =	MTDPART_OFS_NXTBLK,
-		.size =		0x10000,
+static struct mtd_partition partition_info[]= {
+    {
+        .name =		"ADNP boot",
+        .offset =	0,
+        .size =		0xf0000,
+    },
+    {
+        .name =		"ADNP system BIOS",
+        .offset =	MTDPART_OFS_NXTBLK,
+        .size =		0x10000,
 #ifdef DNPC_BIOS_BLOCKS_WRITEPROTECTED
-		.mask_flags =	MTD_WRITEABLE,
+        .mask_flags =	MTD_WRITEABLE,
 #endif
-	},
-	{
-		.name =		"ADNP file system",
-		.offset =	MTDPART_OFS_NXTBLK,
-		.size =		0x2f0000,
-	},
-	{
-		.name =		"ADNP system BIOS entry",
-		.offset =	MTDPART_OFS_NXTBLK,
-		.size =		MTDPART_SIZ_FULL,
+    },
+    {
+        .name =		"ADNP file system",
+        .offset =	MTDPART_OFS_NXTBLK,
+        .size =		0x2f0000,
+    },
+    {
+        .name =		"ADNP system BIOS entry",
+        .offset =	MTDPART_OFS_NXTBLK,
+        .size =		MTDPART_SIZ_FULL,
 #ifdef DNPC_BIOS_BLOCKS_WRITEPROTECTED
-		.mask_flags =	MTD_WRITEABLE,
+        .mask_flags =	MTD_WRITEABLE,
 #endif
-	},
+    },
 };
 
 #define NUM_PARTITIONS ARRAY_SIZE(partition_info)
@@ -320,172 +305,167 @@ static struct mtd_info *merged_mtd;
 ** is available as file system space.
 */
 
-static struct mtd_partition higlvl_partition_info[]=
-{
-	{
-		.name =		"ADNP boot block",
-		.offset =	0,
-		.size =		CONFIG_MTD_DILNETPC_BOOTSIZE,
-	},
-	{
-		.name =		"ADNP file system space",
-		.offset =	MTDPART_OFS_NXTBLK,
-		.size =		ADNP_WINDOW_SIZE-CONFIG_MTD_DILNETPC_BOOTSIZE-0x20000,
-	},
-	{
-		.name =		"ADNP system BIOS + BIOS Entry",
-		.offset =	MTDPART_OFS_NXTBLK,
-		.size =		MTDPART_SIZ_FULL,
+static struct mtd_partition higlvl_partition_info[]= {
+    {
+        .name =		"ADNP boot block",
+        .offset =	0,
+        .size =		CONFIG_MTD_DILNETPC_BOOTSIZE,
+    },
+    {
+        .name =		"ADNP file system space",
+        .offset =	MTDPART_OFS_NXTBLK,
+        .size =		ADNP_WINDOW_SIZE-CONFIG_MTD_DILNETPC_BOOTSIZE-0x20000,
+    },
+    {
+        .name =		"ADNP system BIOS + BIOS Entry",
+        .offset =	MTDPART_OFS_NXTBLK,
+        .size =		MTDPART_SIZ_FULL,
 #ifdef DNPC_BIOS_BLOCKS_WRITEPROTECTED
-		.mask_flags =	MTD_WRITEABLE,
+        .mask_flags =	MTD_WRITEABLE,
 #endif
-	},
+    },
 };
 
 #define NUM_HIGHLVL_PARTITIONS ARRAY_SIZE(higlvl_partition_info)
 
 
-static int dnp_adnp_probe(void)
-{
-	char *biosid, rc = -1;
+static int dnp_adnp_probe(void) {
+    char *biosid, rc = -1;
 
-	biosid = (char*)ioremap(BIOSID_BASE, 16);
-	if(biosid)
-	{
-		if(!strcmp(biosid, ID_DNPC))
-			rc = 1;		/* this is a DNPC  */
-		else if(!strcmp(biosid, ID_ADNP))
-			rc = 0;		/* this is a ADNPC */
-	}
-	iounmap((void *)biosid);
-	return(rc);
+    biosid = (char*)ioremap(BIOSID_BASE, 16);
+    if(biosid) {
+        if(!strcmp(biosid, ID_DNPC))
+            rc = 1;		/* this is a DNPC  */
+        else if(!strcmp(biosid, ID_ADNP))
+            rc = 0;		/* this is a ADNPC */
+    }
+    iounmap((void *)biosid);
+    return(rc);
 }
 
 
-static int __init init_dnpc(void)
-{
-	int is_dnp;
+static int __init init_dnpc(void) {
+    int is_dnp;
 
-	/*
-	** determine hardware (DNP/ADNP/invalid)
-	*/
-	if((is_dnp = dnp_adnp_probe()) < 0)
-		return -ENXIO;
+    /*
+    ** determine hardware (DNP/ADNP/invalid)
+    */
+    if((is_dnp = dnp_adnp_probe()) < 0)
+        return -ENXIO;
 
-	/*
-	** Things are set up for ADNP by default
-	** -> modify all that needs to be different for DNP
-	*/
-	if(is_dnp)
-	{	/*
-		** Adjust window size, select correct set_vpp function.
-		** The partitioning scheme is identical on both DNP
-		** and ADNP except for the size of the third partition.
-		*/
-		int i;
-		dnpc_map.size          = DNP_WINDOW_SIZE;
-		dnpc_map.set_vpp       = dnp_set_vpp;
-		partition_info[2].size = 0xf0000;
+    /*
+    ** Things are set up for ADNP by default
+    ** -> modify all that needs to be different for DNP
+    */
+    if(is_dnp) {
+        /*
+        ** Adjust window size, select correct set_vpp function.
+        ** The partitioning scheme is identical on both DNP
+        ** and ADNP except for the size of the third partition.
+        */
+        int i;
+        dnpc_map.size          = DNP_WINDOW_SIZE;
+        dnpc_map.set_vpp       = dnp_set_vpp;
+        partition_info[2].size = 0xf0000;
 
-		/*
-		** increment all string pointers so the leading 'A' gets skipped,
-		** thus turning all occurrences of "ADNP ..." into "DNP ..."
-		*/
-		++dnpc_map.name;
-		for(i = 0; i < NUM_PARTITIONS; i++)
-			++partition_info[i].name;
-		higlvl_partition_info[1].size = DNP_WINDOW_SIZE -
-			CONFIG_MTD_DILNETPC_BOOTSIZE - 0x20000;
-		for(i = 0; i < NUM_HIGHLVL_PARTITIONS; i++)
-			++higlvl_partition_info[i].name;
-	}
+        /*
+        ** increment all string pointers so the leading 'A' gets skipped,
+        ** thus turning all occurrences of "ADNP ..." into "DNP ..."
+        */
+        ++dnpc_map.name;
+        for(i = 0; i < NUM_PARTITIONS; i++)
+            ++partition_info[i].name;
+        higlvl_partition_info[1].size = DNP_WINDOW_SIZE -
+                                        CONFIG_MTD_DILNETPC_BOOTSIZE - 0x20000;
+        for(i = 0; i < NUM_HIGHLVL_PARTITIONS; i++)
+            ++higlvl_partition_info[i].name;
+    }
 
-	printk(KERN_NOTICE "DIL/Net %s flash: 0x%lx at 0x%llx\n",
-		is_dnp ? "DNPC" : "ADNP", dnpc_map.size, (unsigned long long)dnpc_map.phys);
+    printk(KERN_NOTICE "DIL/Net %s flash: 0x%lx at 0x%llx\n",
+           is_dnp ? "DNPC" : "ADNP", dnpc_map.size, (unsigned long long)dnpc_map.phys);
 
-	dnpc_map.virt = ioremap_nocache(dnpc_map.phys, dnpc_map.size);
+    dnpc_map.virt = ioremap_nocache(dnpc_map.phys, dnpc_map.size);
 
-	dnpc_map_flash(dnpc_map.phys, dnpc_map.size);
+    dnpc_map_flash(dnpc_map.phys, dnpc_map.size);
 
-	if (!dnpc_map.virt) {
-		printk("Failed to ioremap_nocache\n");
-		return -EIO;
-	}
-	simple_map_init(&dnpc_map);
+    if (!dnpc_map.virt) {
+        printk("Failed to ioremap_nocache\n");
+        return -EIO;
+    }
+    simple_map_init(&dnpc_map);
 
-	printk("FLASH virtual address: 0x%p\n", dnpc_map.virt);
+    printk("FLASH virtual address: 0x%p\n", dnpc_map.virt);
 
-	mymtd = do_map_probe("jedec_probe", &dnpc_map);
+    mymtd = do_map_probe("jedec_probe", &dnpc_map);
 
-	if (!mymtd)
-		mymtd = do_map_probe("cfi_probe", &dnpc_map);
+    if (!mymtd)
+        mymtd = do_map_probe("cfi_probe", &dnpc_map);
 
-	/*
-	** If flash probes fail, try to make flashes accessible
-	** at least as ROM. Ajust erasesize in this case since
-	** the default one (128M) will break our partitioning
-	*/
-	if (!mymtd)
-		if((mymtd = do_map_probe("map_rom", &dnpc_map)))
-			mymtd->erasesize = 0x10000;
+    /*
+    ** If flash probes fail, try to make flashes accessible
+    ** at least as ROM. Ajust erasesize in this case since
+    ** the default one (128M) will break our partitioning
+    */
+    if (!mymtd)
+        if((mymtd = do_map_probe("map_rom", &dnpc_map)))
+            mymtd->erasesize = 0x10000;
 
-	if (!mymtd) {
-		iounmap(dnpc_map.virt);
-		return -ENXIO;
-	}
+    if (!mymtd) {
+        iounmap(dnpc_map.virt);
+        return -ENXIO;
+    }
 
-	mymtd->owner = THIS_MODULE;
+    mymtd->owner = THIS_MODULE;
 
-	/*
-	** Supply pointers to lowlvl_parts[] array to add_mtd_partitions()
-	** -> add_mtd_partitions() will _not_ register MTD devices for
-	** the partitions, but will instead store pointers to the MTD
-	** objects it creates into our lowlvl_parts[] array.
-	** NOTE: we arrange the pointers such that the sequence of the
-	**       partitions gets re-arranged: partition #2 follows
-	**       partition #0.
-	*/
-	partition_info[0].mtdp = &lowlvl_parts[0];
-	partition_info[1].mtdp = &lowlvl_parts[2];
-	partition_info[2].mtdp = &lowlvl_parts[1];
-	partition_info[3].mtdp = &lowlvl_parts[3];
+    /*
+    ** Supply pointers to lowlvl_parts[] array to add_mtd_partitions()
+    ** -> add_mtd_partitions() will _not_ register MTD devices for
+    ** the partitions, but will instead store pointers to the MTD
+    ** objects it creates into our lowlvl_parts[] array.
+    ** NOTE: we arrange the pointers such that the sequence of the
+    **       partitions gets re-arranged: partition #2 follows
+    **       partition #0.
+    */
+    partition_info[0].mtdp = &lowlvl_parts[0];
+    partition_info[1].mtdp = &lowlvl_parts[2];
+    partition_info[2].mtdp = &lowlvl_parts[1];
+    partition_info[3].mtdp = &lowlvl_parts[3];
 
-	mtd_device_register(mymtd, partition_info, NUM_PARTITIONS);
+    mtd_device_register(mymtd, partition_info, NUM_PARTITIONS);
 
-	/*
-	** now create a virtual MTD device by concatenating the for partitions
-	** (in the sequence given by the lowlvl_parts[] array.
-	*/
-	merged_mtd = mtd_concat_create(lowlvl_parts, NUM_PARTITIONS, "(A)DNP Flash Concatenated");
-	if(merged_mtd)
-	{	/*
-		** now partition the new device the way we want it. This time,
-		** we do not supply mtd pointers in higlvl_partition_info, so
-		** add_mtd_partitions() will register the devices.
-		*/
-		mtd_device_register(merged_mtd, higlvl_partition_info,
-				    NUM_HIGHLVL_PARTITIONS);
-	}
+    /*
+    ** now create a virtual MTD device by concatenating the for partitions
+    ** (in the sequence given by the lowlvl_parts[] array.
+    */
+    merged_mtd = mtd_concat_create(lowlvl_parts, NUM_PARTITIONS, "(A)DNP Flash Concatenated");
+    if(merged_mtd) {
+        /*
+        ** now partition the new device the way we want it. This time,
+        ** we do not supply mtd pointers in higlvl_partition_info, so
+        ** add_mtd_partitions() will register the devices.
+        */
+        mtd_device_register(merged_mtd, higlvl_partition_info,
+                            NUM_HIGHLVL_PARTITIONS);
+    }
 
-	return 0;
+    return 0;
 }
 
-static void __exit cleanup_dnpc(void)
-{
-	if(merged_mtd) {
-		mtd_device_unregister(merged_mtd);
-		mtd_concat_destroy(merged_mtd);
-	}
+static void __exit cleanup_dnpc(void) {
+    if(merged_mtd) {
+        mtd_device_unregister(merged_mtd);
+        mtd_concat_destroy(merged_mtd);
+    }
 
-	if (mymtd) {
-		mtd_device_unregister(mymtd);
-		map_destroy(mymtd);
-	}
-	if (dnpc_map.virt) {
-		iounmap(dnpc_map.virt);
-		dnpc_unmap_flash();
-		dnpc_map.virt = NULL;
-	}
+    if (mymtd) {
+        mtd_device_unregister(mymtd);
+        map_destroy(mymtd);
+    }
+    if (dnpc_map.virt) {
+        iounmap(dnpc_map.virt);
+        dnpc_unmap_flash();
+        dnpc_map.virt = NULL;
+    }
 }
 
 module_init(init_dnpc);

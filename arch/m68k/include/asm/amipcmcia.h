@@ -24,29 +24,24 @@ void pcmcia_access_speed(int speed);
 void pcmcia_write_enable(void);
 void pcmcia_write_disable(void);
 
-static inline u_char pcmcia_read_status(void)
-{
-	return (gayle.cardstatus & 0x7c);
+static inline u_char pcmcia_read_status(void) {
+    return (gayle.cardstatus & 0x7c);
 }
 
-static inline u_char pcmcia_get_intreq(void)
-{
-	return (gayle.intreq);
+static inline u_char pcmcia_get_intreq(void) {
+    return (gayle.intreq);
 }
 
-static inline void pcmcia_ack_int(u_char intreq)
-{
-	gayle.intreq = 0xf8;
+static inline void pcmcia_ack_int(u_char intreq) {
+    gayle.intreq = 0xf8;
 }
 
-static inline void pcmcia_enable_irq(void)
-{
-	gayle.inten |= GAYLE_IRQ_IRQ;
+static inline void pcmcia_enable_irq(void) {
+    gayle.inten |= GAYLE_IRQ_IRQ;
 }
 
-static inline void pcmcia_disable_irq(void)
-{
-	gayle.inten &= ~GAYLE_IRQ_IRQ;
+static inline void pcmcia_disable_irq(void) {
+    gayle.inten &= ~GAYLE_IRQ_IRQ;
 }
 
 #define PCMCIA_INSERTED	(gayle.cardstatus & GAYLE_CS_CCDET)

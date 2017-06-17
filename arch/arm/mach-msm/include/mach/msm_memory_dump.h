@@ -17,36 +17,36 @@
 #include <linux/types.h>
 
 enum dump_client_type {
-	MSM_CPU_CTXT = 0,
-	MSM_L1_CACHE,
-	MSM_L2_CACHE,
-	MSM_OCMEM,
-	MSM_TMC_ETFETB,
-	MSM_ETM0_REG,
-	MSM_ETM1_REG,
-	MSM_ETM2_REG,
-	MSM_ETM3_REG,
-	MSM_TMC0_REG, /* TMC_ETR */
-	MSM_TMC1_REG, /* TMC_ETF */
-	MSM_LOG_BUF,
-	MAX_NUM_CLIENTS,
+    MSM_CPU_CTXT = 0,
+    MSM_L1_CACHE,
+    MSM_L2_CACHE,
+    MSM_OCMEM,
+    MSM_TMC_ETFETB,
+    MSM_ETM0_REG,
+    MSM_ETM1_REG,
+    MSM_ETM2_REG,
+    MSM_ETM3_REG,
+    MSM_TMC0_REG, /* TMC_ETR */
+    MSM_TMC1_REG, /* TMC_ETF */
+    MSM_LOG_BUF,
+    MAX_NUM_CLIENTS,
 };
 
 struct msm_client_dump {
-	enum dump_client_type id;
-	unsigned long start_addr;
-	unsigned long end_addr;
+    enum dump_client_type id;
+    unsigned long start_addr;
+    unsigned long end_addr;
 };
 
 struct msm_dump_table {
-	u32 version;
-	u32 num_entries;
-	struct msm_client_dump client_entries[MAX_NUM_CLIENTS];
+    u32 version;
+    u32 num_entries;
+    struct msm_client_dump client_entries[MAX_NUM_CLIENTS];
 };
 
 struct msm_memory_dump {
-	unsigned long dump_table_phys;
-	struct msm_dump_table *dump_table_ptr;
+    unsigned long dump_table_phys;
+    struct msm_dump_table *dump_table_ptr;
 };
 
 #define TABLE_MAJOR(val)	(val >> 20)
@@ -54,14 +54,12 @@ struct msm_memory_dump {
 #define MK_TABLE(ma, mi)	((ma << 20) | mi)
 
 #ifndef CONFIG_MSM_MEMORY_DUMP
-static inline int msm_dump_table_register(struct msm_client_dump *entry)
-{
-	return -EIO;
+static inline int msm_dump_table_register(struct msm_client_dump *entry) {
+    return -EIO;
 }
 
-static inline void msm_reserve_last_regs(void)
-{
-	return;
+static inline void msm_reserve_last_regs(void) {
+    return;
 }
 #else
 int msm_dump_table_register(struct msm_client_dump *client_entry);

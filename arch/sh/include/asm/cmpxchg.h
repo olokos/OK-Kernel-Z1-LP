@@ -49,14 +49,13 @@ extern void __cmpxchg_called_with_bad_pointer(void);
 #define __HAVE_ARCH_CMPXCHG 1
 
 static inline unsigned long __cmpxchg(volatile void * ptr, unsigned long old,
-		unsigned long new, int size)
-{
-	switch (size) {
-	case 4:
-		return __cmpxchg_u32(ptr, old, new);
-	}
-	__cmpxchg_called_with_bad_pointer();
-	return old;
+                                      unsigned long new, int size) {
+    switch (size) {
+    case 4:
+        return __cmpxchg_u32(ptr, old, new);
+    }
+    __cmpxchg_called_with_bad_pointer();
+    return old;
 }
 
 #define cmpxchg(ptr,o,n)						 \

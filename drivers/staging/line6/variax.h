@@ -28,105 +28,105 @@
 	Stages of Variax startup procedure
 */
 enum {
-	VARIAX_STARTUP_INIT = 1,
-	VARIAX_STARTUP_VERSIONREQ,
-	VARIAX_STARTUP_WAIT,
-	VARIAX_STARTUP_ACTIVATE,
-	VARIAX_STARTUP_DUMPREQ,
-	VARIAX_STARTUP_WORKQUEUE,
-	VARIAX_STARTUP_SETUP,
-	VARIAX_STARTUP_LAST = VARIAX_STARTUP_SETUP - 1
+    VARIAX_STARTUP_INIT = 1,
+    VARIAX_STARTUP_VERSIONREQ,
+    VARIAX_STARTUP_WAIT,
+    VARIAX_STARTUP_ACTIVATE,
+    VARIAX_STARTUP_DUMPREQ,
+    VARIAX_STARTUP_WORKQUEUE,
+    VARIAX_STARTUP_SETUP,
+    VARIAX_STARTUP_LAST = VARIAX_STARTUP_SETUP - 1
 };
 
 enum {
-	VARIAX_DUMP_PASS1 = LINE6_DUMP_CURRENT,
-	VARIAX_DUMP_PASS2,
-	VARIAX_DUMP_PASS3
+    VARIAX_DUMP_PASS1 = LINE6_DUMP_CURRENT,
+    VARIAX_DUMP_PASS2,
+    VARIAX_DUMP_PASS3
 };
 
 /**
 	Binary Variax model dump
 */
 struct variax_model {
-	/**
-		Header information (including program name).
-	*/
-	unsigned char name[18];
+    /**
+    	Header information (including program name).
+    */
+    unsigned char name[18];
 
-	/**
-		Model parameters.
-	*/
-	unsigned char control[78 * 2];
+    /**
+    	Model parameters.
+    */
+    unsigned char control[78 * 2];
 };
 
 struct usb_line6_variax {
-	/**
-		Generic Line6 USB data.
-	*/
-	struct usb_line6 line6;
+    /**
+    	Generic Line6 USB data.
+    */
+    struct usb_line6 line6;
 
-	/**
-		Dump request structure.
-		Append two extra buffers for 3-pass data query.
-	*/
-	struct line6_dump_request dumpreq;
-	struct line6_dump_reqbuf extrabuf[2];
+    /**
+    	Dump request structure.
+    	Append two extra buffers for 3-pass data query.
+    */
+    struct line6_dump_request dumpreq;
+    struct line6_dump_reqbuf extrabuf[2];
 
-	/**
-		Buffer for activation code.
-	*/
-	unsigned char *buffer_activate;
+    /**
+    	Buffer for activation code.
+    */
+    unsigned char *buffer_activate;
 
-	/**
-		Model number.
-	*/
-	int model;
+    /**
+    	Model number.
+    */
+    int model;
 
-	/**
-		Current model settings.
-	*/
-	struct variax_model model_data;
+    /**
+    	Current model settings.
+    */
+    struct variax_model model_data;
 
-	/**
-		Name of connected guitar.
-	*/
-	unsigned char guitar[18];
+    /**
+    	Name of connected guitar.
+    */
+    unsigned char guitar[18];
 
-	/**
-		Name of current model bank.
-	*/
-	unsigned char bank[18];
+    /**
+    	Name of current model bank.
+    */
+    unsigned char bank[18];
 
-	/**
-		Position of volume dial.
-	*/
-	int volume;
+    /**
+    	Position of volume dial.
+    */
+    int volume;
 
-	/**
-		Position of tone control dial.
-	*/
-	int tone;
+    /**
+    	Position of tone control dial.
+    */
+    int tone;
 
-	/**
-		Handler for device initializaton.
-	*/
-	struct work_struct startup_work;
+    /**
+    	Handler for device initializaton.
+    */
+    struct work_struct startup_work;
 
-	/**
-		Timers for device initializaton.
-	*/
-	struct timer_list startup_timer1;
-	struct timer_list startup_timer2;
+    /**
+    	Timers for device initializaton.
+    */
+    struct timer_list startup_timer1;
+    struct timer_list startup_timer2;
 
-	/**
-		Current progress in startup procedure.
-	*/
-	int startup_progress;
+    /**
+    	Current progress in startup procedure.
+    */
+    int startup_progress;
 };
 
 extern void line6_variax_disconnect(struct usb_interface *interface);
 extern int line6_variax_init(struct usb_interface *interface,
-			     struct usb_line6_variax *variax);
+                             struct usb_line6_variax *variax);
 extern void line6_variax_process_message(struct usb_line6_variax *variax);
 
 #endif

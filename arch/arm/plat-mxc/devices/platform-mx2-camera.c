@@ -27,56 +27,54 @@
 
 #ifdef CONFIG_SOC_IMX25
 const struct imx_mx2_camera_data imx25_mx2_camera_data __initconst =
-	imx_mx2_camera_data_entry_single(MX25);
+    imx_mx2_camera_data_entry_single(MX25);
 #endif /* ifdef CONFIG_SOC_IMX25 */
 
 #ifdef CONFIG_SOC_IMX27
 const struct imx_mx2_camera_data imx27_mx2_camera_data __initconst =
-	imx_mx2_camera_data_entry_single_emma(MX27);
+    imx_mx2_camera_data_entry_single_emma(MX27);
 #endif /* ifdef CONFIG_SOC_IMX27 */
 
 struct platform_device *__init imx_add_mx2_camera(
-		const struct imx_mx2_camera_data *data,
-		const struct mx2_camera_platform_data *pdata)
-{
-	struct resource res[] = {
-		{
-			.start = data->iobasecsi,
-			.end = data->iobasecsi + data->iosizecsi - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irqcsi,
-			.end = data->irqcsi,
-			.flags = IORESOURCE_IRQ,
-		}, {
-			.start = data->iobaseemmaprp,
-			.end = data->iobaseemmaprp + data->iosizeemmaprp - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irqemmaprp,
-			.end = data->irqemmaprp,
-			.flags = IORESOURCE_IRQ,
-		},
-	};
-	return imx_add_platform_device_dmamask("mx2-camera", 0,
-			res, data->iobaseemmaprp ? 4 : 2,
-			pdata, sizeof(*pdata), DMA_BIT_MASK(32));
+    const struct imx_mx2_camera_data *data,
+    const struct mx2_camera_platform_data *pdata) {
+    struct resource res[] = {
+        {
+            .start = data->iobasecsi,
+            .end = data->iobasecsi + data->iosizecsi - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irqcsi,
+            .end = data->irqcsi,
+            .flags = IORESOURCE_IRQ,
+        }, {
+            .start = data->iobaseemmaprp,
+            .end = data->iobaseemmaprp + data->iosizeemmaprp - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irqemmaprp,
+            .end = data->irqemmaprp,
+            .flags = IORESOURCE_IRQ,
+        },
+    };
+    return imx_add_platform_device_dmamask("mx2-camera", 0,
+                                           res, data->iobaseemmaprp ? 4 : 2,
+                                           pdata, sizeof(*pdata), DMA_BIT_MASK(32));
 }
 
 struct platform_device *__init imx_add_mx2_emmaprp(
-		const struct imx_mx2_camera_data *data)
-{
-	struct resource res[] = {
-		{
-			.start = data->iobaseemmaprp,
-			.end = data->iobaseemmaprp + data->iosizeemmaprp - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irqemmaprp,
-			.end = data->irqemmaprp,
-			.flags = IORESOURCE_IRQ,
-		},
-	};
-	return imx_add_platform_device_dmamask("m2m-emmaprp", 0,
-			res, 2, NULL, 0, DMA_BIT_MASK(32));
+    const struct imx_mx2_camera_data *data) {
+    struct resource res[] = {
+        {
+            .start = data->iobaseemmaprp,
+            .end = data->iobaseemmaprp + data->iosizeemmaprp - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irqemmaprp,
+            .end = data->irqemmaprp,
+            .flags = IORESOURCE_IRQ,
+        },
+    };
+    return imx_add_platform_device_dmamask("m2m-emmaprp", 0,
+                                           res, 2, NULL, 0, DMA_BIT_MASK(32));
 }

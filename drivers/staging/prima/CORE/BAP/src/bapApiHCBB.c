@@ -139,8 +139,7 @@ VOS_STATUS
 WLAN_BAPReset
 (
     ptBtampHandle btampHandle
-)
-{
+) {
     VOS_STATUS  vosStatus;
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
@@ -150,8 +149,7 @@ WLAN_BAPReset
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "btampHandle is NULL in %s", __func__);
 
@@ -160,8 +158,7 @@ WLAN_BAPReset
 
     /* Perform a "reset" */
     hHal = VOS_GET_HAL_CB(btampContext->pvosGCtx);
-    if (NULL == hHal)
-    {
+    if (NULL == hHal) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "hHal is NULL in %s", __func__);
 
@@ -170,8 +167,7 @@ WLAN_BAPReset
 
     //csrRoamDisconnect();
     /* To avoid sending Disassoc on STA interface */
-    if( TRUE == btampContext->isBapSessionOpen )
-    {
+    if( TRUE == btampContext->isBapSessionOpen ) {
         sme_RoamDisconnect(hHal,
                            btampContext->sessionId,
                            // Danlin, where are the richer reason codes?
@@ -248,8 +244,7 @@ WLAN_BAPSetEventMask
     tBtampTLVHCI_Set_Event_Mask_Cmd   *pBapHCISetEventMask,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPSetEventMask */
@@ -287,8 +282,7 @@ WLAN_BAPFlush
 (
     ptBtampHandle btampHandle,
     tBtampTLVHCI_Flush_Cmd     *pBapHCIFlush
-)
-{
+) {
     VOS_STATUS  vosStatus;
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
@@ -297,8 +291,7 @@ WLAN_BAPFlush
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -361,8 +354,7 @@ WLAN_EnhancedBAPFlush
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
 
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     ptBtampContext btampContext;
@@ -372,8 +364,7 @@ WLAN_EnhancedBAPFlush
 
     /* Validate params */
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -442,8 +433,7 @@ WLAN_BAPReadConnectionAcceptTimeout
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete */
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -451,8 +441,7 @@ WLAN_BAPReadConnectionAcceptTimeout
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -511,8 +500,7 @@ WLAN_BAPWriteConnectionAcceptTimeout
     tBtampTLVHCI_Write_Connection_Accept_Timeout_Cmd   *pBapHCIWriteConnectionAcceptTimeout,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -521,8 +509,7 @@ WLAN_BAPWriteConnectionAcceptTimeout
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIWriteConnectionAcceptTimeout)
-            || (NULL == pBapHCIEvent))
-    {
+            || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -532,16 +519,13 @@ WLAN_BAPWriteConnectionAcceptTimeout
     if ((pBapHCIWriteConnectionAcceptTimeout->connection_accept_timeout >
             WLANBAP_CON_ACCEPT_TIMEOUT_MAX_RANGE) ||
             (pBapHCIWriteConnectionAcceptTimeout->connection_accept_timeout <
-             WLANBAP_CON_ACCEPT_TIMEOUT_MIN_RANGE))
-    {
+             WLANBAP_CON_ACCEPT_TIMEOUT_MIN_RANGE)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Out of range for connection accept timeout parameters in %s",
                    __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Write_Connection_Accept_TO.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         /* Save the Physical link connection accept timeout value */
         btampContext->bapConnectionAcceptTimerInterval =
             pBapHCIWriteConnectionAcceptTimeout->connection_accept_timeout;
@@ -601,8 +585,7 @@ WLAN_BAPReadLinkSupervisionTimeout
     tBtampTLVHCI_Read_Link_Supervision_Timeout_Cmd *pBapHCIReadLinkSupervisionTimeout,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     v_U8_t         phyLinkHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -612,8 +595,7 @@ WLAN_BAPReadLinkSupervisionTimeout
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIReadLinkSupervisionTimeout) ||
-            (NULL == pBapHCIEvent))
-    {
+            (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -623,8 +605,7 @@ WLAN_BAPReadLinkSupervisionTimeout
        logical link handle (lower byte valid) */
     phyLinkHandle = (v_U8_t) pBapHCIReadLinkSupervisionTimeout->log_link_handle;
 
-    if (phyLinkHandle != btampContext->phy_link_handle)
-    {
+    if (phyLinkHandle != btampContext->phy_link_handle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid Physical link handle in %s", __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Supervision_TO.link_supervision_timeout
@@ -633,9 +614,7 @@ WLAN_BAPReadLinkSupervisionTimeout
             = pBapHCIReadLinkSupervisionTimeout->log_link_handle;
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Supervision_TO.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Supervision_TO.link_supervision_timeout
             = btampContext->bapLinkSupervisionTimerInterval;
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Supervision_TO.log_link_handle
@@ -693,8 +672,7 @@ WLAN_BAPWriteLinkSupervisionTimeout
     tBtampTLVHCI_Write_Link_Supervision_Timeout_Cmd   *pBapHCIWriteLinkSupervisionTimeout,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     v_U8_t         phyLinkHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -704,8 +682,7 @@ WLAN_BAPWriteLinkSupervisionTimeout
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIWriteLinkSupervisionTimeout) ||
-            (NULL == pBapHCIEvent))
-    {
+            (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -715,17 +692,14 @@ WLAN_BAPWriteLinkSupervisionTimeout
        logical link handle (lower byte valid) */
     phyLinkHandle = (v_U8_t) pBapHCIWriteLinkSupervisionTimeout->log_link_handle;
 
-    if (phyLinkHandle != btampContext->phy_link_handle)
-    {
+    if (phyLinkHandle != btampContext->phy_link_handle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid Physical link handle in %s", __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Write_Link_Supervision_TO.log_link_handle
             = pBapHCIWriteLinkSupervisionTimeout->log_link_handle;
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Write_Link_Supervision_TO.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         /* Save the LS timeout interval */
         btampContext->bapLinkSupervisionTimerInterval =
             pBapHCIWriteLinkSupervisionTimeout->link_supervision_timeout;
@@ -786,8 +760,7 @@ WLAN_BAPReadLogicalLinkAcceptTimeout
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -795,8 +768,7 @@ WLAN_BAPReadLogicalLinkAcceptTimeout
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -855,8 +827,7 @@ WLAN_BAPWriteLogicalLinkAcceptTimeout
     tBtampTLVHCI_Write_Logical_Link_Accept_Timeout_Cmd   *pBapHCIWriteLogicalLinkAcceptTimeout,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -865,8 +836,7 @@ WLAN_BAPWriteLogicalLinkAcceptTimeout
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIWriteLogicalLinkAcceptTimeout)
-            || (NULL == pBapHCIEvent))
-    {
+            || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -876,16 +846,13 @@ WLAN_BAPWriteLogicalLinkAcceptTimeout
     if ((pBapHCIWriteLogicalLinkAcceptTimeout->logical_link_accept_timeout >
             WLANBAP_CON_ACCEPT_TIMEOUT_MAX_RANGE) ||
             (pBapHCIWriteLogicalLinkAcceptTimeout->logical_link_accept_timeout <
-             WLANBAP_CON_ACCEPT_TIMEOUT_MIN_RANGE))
-    {
+             WLANBAP_CON_ACCEPT_TIMEOUT_MIN_RANGE)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Out of range for logical connection accept timeout parameters in %s",
                    __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Write_Logical_Link_Accept_TO.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         /* Save the Physical link connection accept timeout value */
         btampContext->bapLogicalLinkAcceptTimerInterval =
             pBapHCIWriteLogicalLinkAcceptTimeout->logical_link_accept_timeout;
@@ -943,8 +910,7 @@ WLAN_BAPSetEventMaskPage2
     tBtampTLVHCI_Set_Event_Mask_Page_2_Cmd   *pBapHCISetEventMaskPage2,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -953,8 +919,7 @@ WLAN_BAPSetEventMaskPage2
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCISetEventMaskPage2)
-            || (NULL == pBapHCIEvent))
-    {
+            || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1018,8 +983,7 @@ WLAN_BAPReadLocationData
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     ptBtampContext btampContext;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -1027,8 +991,7 @@ WLAN_BAPReadLocationData
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1100,8 +1063,7 @@ WLAN_BAPWriteLocationData
     tBtampTLVHCI_Write_Location_Data_Cmd   *pBapHCIWriteLocationData,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -1110,8 +1072,7 @@ WLAN_BAPWriteLocationData
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIWriteLocationData)
-            || (NULL == pBapHCIEvent))
-    {
+            || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1182,16 +1143,14 @@ WLAN_BAPReadFlowControlMode
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1250,8 +1209,7 @@ WLAN_BAPWriteFlowControlMode
     tBtampTLVHCI_Write_Flow_Control_Mode_Cmd   *pBapHCIWriteFlowControlMode,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPWriteFlowControlMode */
@@ -1295,8 +1253,7 @@ WLAN_BAPReadBestEffortFlushTimeout
     tBtampTLVHCI_Read_Best_Effort_Flush_Timeout_Cmd   *pBapHCIReadBEFlushTO,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPReadBestEffortFlushTimeout */
@@ -1340,8 +1297,7 @@ WLAN_BAPWriteBestEffortFlushTimeout
     tBtampTLVHCI_Write_Best_Effort_Flush_Timeout_Cmd   *pBapHCIWriteBEFlushTO,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPWriteBestEffortFlushTimeout */
@@ -1385,8 +1341,7 @@ WLAN_BAPSetShortRangeMode
     tBtampTLVHCI_Set_Short_Range_Mode_Cmd   *pBapHCIShortRangeMode,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     BTAMPFSM_INSTANCEDATA_T *instanceVar = &(btampContext->bapPhysLinkMachine);
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -1395,8 +1350,7 @@ WLAN_BAPSetShortRangeMode
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1412,22 +1366,17 @@ WLAN_BAPSetShortRangeMode
     pBapHCIEvent->u.btampCommandStatusEvent.command_opcode
         = BTAMP_TLV_HCI_SET_SHORT_RANGE_MODE_CMD;
 
-    if (CONNECTED != instanceVar->stateVar)
-    {
+    if (CONNECTED != instanceVar->stateVar) {
         /* Short Range Mode request in invalid state */
         pBapHCIEvent->u.btampCommandStatusEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
         return VOS_STATUS_SUCCESS;
-    }
-    else if (pBapHCIShortRangeMode->phy_link_handle != btampContext->phy_link_handle)
-    {
+    } else if (pBapHCIShortRangeMode->phy_link_handle != btampContext->phy_link_handle) {
         /* Invalid Physical link handle */
         pBapHCIEvent->u.btampCommandStatusEvent.status =
             WLANBAP_ERROR_NO_CNCT;
         return VOS_STATUS_SUCCESS;
-    }
-    else if (pBapHCIShortRangeMode->short_range_mode > 0x01)
-    {
+    } else if (pBapHCIShortRangeMode->short_range_mode > 0x01) {
         /* Invalid mode requested */
         pBapHCIEvent->u.btampCommandStatusEvent.status =
             WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
@@ -1459,8 +1408,7 @@ WLAN_BAPSetShortRangeMode
         pBapHCIShortRangeMode->short_range_mode; /* Assumption for now */
 
     /* If the requested setting is different from the current setting... */
-    if (pBapHCIShortRangeMode->short_range_mode != btampContext->phy_link_srm)
-    {
+    if (pBapHCIShortRangeMode->short_range_mode != btampContext->phy_link_srm) {
         /* ... then change the SRM according to the requested value.
          * If the attempt fails, the assumptions above need to be corrected.
          */
@@ -1475,9 +1423,7 @@ WLAN_BAPSetShortRangeMode
                 WLANBAP_ERROR_HARDWARE_FAILURE;
             pBapHCIEvent->u.btampShortRangeModeChangeCompleteEvent.short_range_mode =
                 btampContext->phy_link_srm; /* Switch back to current value */
-        }
-        else
-        {
+        } else {
             /* Update the SRM setting for this physical link, since it worked */
             btampContext->phy_link_srm = pBapHCIShortRangeMode->short_range_mode;
         }
@@ -1526,8 +1472,7 @@ WLAN_BAPVendorSpecificCmd0
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     BTAMPFSM_INSTANCEDATA_T *instanceVar = &(btampContext->bapPhysLinkMachine);
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -1536,8 +1481,7 @@ WLAN_BAPVendorSpecificCmd0
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1554,8 +1498,7 @@ WLAN_BAPVendorSpecificCmd0
         = BTAMP_TLV_HCI_VENDOR_SPECIFIC_CMD_0;
 
     if ( (BT_INITIATOR != btampContext->BAPDeviceRole) ||
-            (CONNECTING != instanceVar->stateVar) )
-    {
+            (CONNECTING != instanceVar->stateVar) ) {
         /* Vendor Specific Command 0 happened in invalid state */
         pBapHCIEvent->u.btampCommandStatusEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
@@ -1627,8 +1570,7 @@ WLAN_BAPVendorSpecificCmd1
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -1636,8 +1578,7 @@ WLAN_BAPVendorSpecificCmd1
                "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if ((NULL == btampHandle) || (NULL == pBapHCIEvent))
-    {
+    if ((NULL == btampHandle) || (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1687,8 +1628,7 @@ VOS_STATUS WLANBAP_TLFlushCompCallback
     v_U8_t        ucStaId,
     v_U8_t        ucTID,
     v_U8_t        status
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } // WLANBAP_TLFlushCompCallback

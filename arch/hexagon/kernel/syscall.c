@@ -36,33 +36,31 @@
  */
 
 asmlinkage int sys_execve(char __user *ufilename,
-			  const char __user *const __user *argv,
-			  const char __user *const __user *envp)
-{
-	struct pt_regs *pregs = current_thread_info()->regs;
-	char *filename;
-	int retval;
+                          const char __user *const __user *argv,
+                          const char __user *const __user *envp) {
+    struct pt_regs *pregs = current_thread_info()->regs;
+    char *filename;
+    int retval;
 
-	filename = getname(ufilename);
-	retval = PTR_ERR(filename);
-	if (IS_ERR(filename))
-		return retval;
+    filename = getname(ufilename);
+    retval = PTR_ERR(filename);
+    if (IS_ERR(filename))
+        return retval;
 
-	retval = do_execve(filename, argv, envp, pregs);
-	putname(filename);
+    retval = do_execve(filename, argv, envp, pregs);
+    putname(filename);
 
-	return retval;
+    return retval;
 }
 
 asmlinkage int sys_clone(unsigned long clone_flags, unsigned long newsp,
-			 unsigned long parent_tidp, unsigned long child_tidp)
-{
-	struct pt_regs *pregs = current_thread_info()->regs;
+                         unsigned long parent_tidp, unsigned long child_tidp) {
+    struct pt_regs *pregs = current_thread_info()->regs;
 
-	if (!newsp)
-		newsp = pregs->SP;
-	return do_fork(clone_flags, newsp, pregs, 0, (int __user *)parent_tidp,
-		       (int __user *)child_tidp);
+    if (!newsp)
+        newsp = pregs->SP;
+    return do_fork(clone_flags, newsp, pregs, 0, (int __user *)parent_tidp,
+                   (int __user *)child_tidp);
 }
 
 /*
@@ -70,21 +68,20 @@ asmlinkage int sys_clone(unsigned long clone_flags, unsigned long newsp,
  * and recycle the sys_execvpe infrustructure.
  */
 int kernel_execve(const char *filename,
-		  const char *const argv[], const char *const envp[])
-{
-	register unsigned long __a0 asm("r0") = (unsigned long) filename;
-	register unsigned long __a1 asm("r1") = (unsigned long) argv;
-	register unsigned long __a2 asm("r2") = (unsigned long) envp;
-	int retval;
+                  const char *const argv[], const char *const envp[]) {
+    register unsigned long __a0 asm("r0") = (unsigned long) filename;
+    register unsigned long __a1 asm("r1") = (unsigned long) argv;
+    register unsigned long __a2 asm("r2") = (unsigned long) envp;
+    int retval;
 
-	__asm__ volatile(
-		"	R6 = #%4;\n"
-		"	trap0(#1);\n"
-		"	%0 = R0;\n"
-		: "=r" (retval)
-		: "r" (__a0), "r" (__a1), "r" (__a2), "i" (__NR_execve)
-	);
+    __asm__ volatile(
+        "	R6 = #%4;\n"
+        "	trap0(#1);\n"
+        "	%0 = R0;\n"
+        : "=r" (retval)
+        : "r" (__a0), "r" (__a1), "r" (__a2), "i" (__NR_execve)
+    );
 
-	return retval;
+    return retval;
 }
 EXPORT_SYMBOL(kernel_execve);

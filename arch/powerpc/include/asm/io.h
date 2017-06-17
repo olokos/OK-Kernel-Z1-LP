@@ -169,14 +169,12 @@ DEF_MMIO_OUT_BE(out_be64, 64, std);
 DEF_MMIO_IN_BE(in_be64, 64, ld);
 
 /* There is no asm instructions for 64 bits reverse loads and stores */
-static inline u64 in_le64(const volatile u64 __iomem *addr)
-{
-	return swab64(in_be64(addr));
+static inline u64 in_le64(const volatile u64 __iomem *addr) {
+    return swab64(in_be64(addr));
 }
 
-static inline void out_le64(volatile u64 __iomem *addr, u64 val)
-{
-	out_be64(addr, swab64(val));
+static inline void out_le64(volatile u64 __iomem *addr, u64 val) {
+    out_be64(addr, swab64(val));
 }
 #endif /* __powerpc64__ */
 
@@ -205,9 +203,9 @@ extern void _outsl_ns(volatile u32 __iomem *addr, const void *buf, long count);
 
 extern void _memset_io(volatile void __iomem *addr, int c, unsigned long n);
 extern void _memcpy_fromio(void *dest, const volatile void __iomem *src,
-			   unsigned long n);
+                           unsigned long n);
 extern void _memcpy_toio(volatile void __iomem *dest, const void *src,
-			 unsigned long n);
+                         unsigned long n);
 
 /*
  *
@@ -287,39 +285,31 @@ do {									\
  * Non ordered and non-swapping "raw" accessors
  */
 
-static inline unsigned char __raw_readb(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned char __force *)PCI_FIX_ADDR(addr);
+static inline unsigned char __raw_readb(const volatile void __iomem *addr) {
+    return *(volatile unsigned char __force *)PCI_FIX_ADDR(addr);
 }
-static inline unsigned short __raw_readw(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned short __force *)PCI_FIX_ADDR(addr);
+static inline unsigned short __raw_readw(const volatile void __iomem *addr) {
+    return *(volatile unsigned short __force *)PCI_FIX_ADDR(addr);
 }
-static inline unsigned int __raw_readl(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned int __force *)PCI_FIX_ADDR(addr);
+static inline unsigned int __raw_readl(const volatile void __iomem *addr) {
+    return *(volatile unsigned int __force *)PCI_FIX_ADDR(addr);
 }
-static inline void __raw_writeb(unsigned char v, volatile void __iomem *addr)
-{
-	*(volatile unsigned char __force *)PCI_FIX_ADDR(addr) = v;
+static inline void __raw_writeb(unsigned char v, volatile void __iomem *addr) {
+    *(volatile unsigned char __force *)PCI_FIX_ADDR(addr) = v;
 }
-static inline void __raw_writew(unsigned short v, volatile void __iomem *addr)
-{
-	*(volatile unsigned short __force *)PCI_FIX_ADDR(addr) = v;
+static inline void __raw_writew(unsigned short v, volatile void __iomem *addr) {
+    *(volatile unsigned short __force *)PCI_FIX_ADDR(addr) = v;
 }
-static inline void __raw_writel(unsigned int v, volatile void __iomem *addr)
-{
-	*(volatile unsigned int __force *)PCI_FIX_ADDR(addr) = v;
+static inline void __raw_writel(unsigned int v, volatile void __iomem *addr) {
+    *(volatile unsigned int __force *)PCI_FIX_ADDR(addr) = v;
 }
 
 #ifdef __powerpc64__
-static inline unsigned long __raw_readq(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned long __force *)PCI_FIX_ADDR(addr);
+static inline unsigned long __raw_readq(const volatile void __iomem *addr) {
+    return *(volatile unsigned long __force *)PCI_FIX_ADDR(addr);
 }
-static inline void __raw_writeq(unsigned long v, volatile void __iomem *addr)
-{
-	*(volatile unsigned long __force *)PCI_FIX_ADDR(addr) = v;
+static inline void __raw_writeq(unsigned long v, volatile void __iomem *addr) {
+    *(volatile unsigned long __force *)PCI_FIX_ADDR(addr) = v;
 }
 #endif /* __powerpc64__ */
 
@@ -566,19 +556,17 @@ static inline void name at					\
  * (this does it explicitly, though our implementation of spin_unlock
  * does it implicitely too)
  */
-static inline void mmiowb(void)
-{
-	unsigned long tmp;
+static inline void mmiowb(void) {
+    unsigned long tmp;
 
-	__asm__ __volatile__("sync; li %0,0; stb %0,%1(13)"
-	: "=&r" (tmp) : "i" (offsetof(struct paca_struct, io_sync))
-	: "memory");
+    __asm__ __volatile__("sync; li %0,0; stb %0,%1(13)"
+                         : "=&r" (tmp) : "i" (offsetof(struct paca_struct, io_sync))
+                         : "memory");
 }
 #endif /* !CONFIG_PPC32 */
 
-static inline void iosync(void)
-{
-        __asm__ __volatile__ ("sync" : : : "memory");
+static inline void iosync(void) {
+    __asm__ __volatile__ ("sync" : : : "memory");
 }
 
 /* Enforce in-order execution of data I/O.
@@ -650,21 +638,21 @@ static inline void iosync(void)
  */
 extern void __iomem *ioremap(phys_addr_t address, unsigned long size);
 extern void __iomem *ioremap_prot(phys_addr_t address, unsigned long size,
-				  unsigned long flags);
+                                  unsigned long flags);
 extern void __iomem *ioremap_wc(phys_addr_t address, unsigned long size);
 #define ioremap_nocache(addr, size)	ioremap((addr), (size))
 
 extern void iounmap(volatile void __iomem *addr);
 
 extern void __iomem *__ioremap(phys_addr_t, unsigned long size,
-			       unsigned long flags);
+                               unsigned long flags);
 extern void __iomem *__ioremap_caller(phys_addr_t, unsigned long size,
-				      unsigned long flags, void *caller);
+                                      unsigned long flags, void *caller);
 
 extern void __iounmap(volatile void __iomem *addr);
 
 extern void __iomem * __ioremap_at(phys_addr_t pa, void *ea,
-				   unsigned long size, unsigned long flags);
+                                   unsigned long size, unsigned long flags);
 extern void __iounmap_at(void *ea, unsigned long size);
 
 /*
@@ -701,9 +689,8 @@ extern void __iounmap_at(void *ea, unsigned long size);
  *	almost all conceivable cases a device driver should not be using
  *	this function
  */
-static inline unsigned long virt_to_phys(volatile void * address)
-{
-	return __pa((unsigned long)address);
+static inline unsigned long virt_to_phys(volatile void * address) {
+    return __pa((unsigned long)address);
 }
 
 /**
@@ -718,9 +705,8 @@ static inline unsigned long virt_to_phys(volatile void * address)
  *	almost all conceivable cases a device driver should not be using
  *	this function
  */
-static inline void * phys_to_virt(unsigned long address)
-{
-	return (void *)__va(address);
+static inline void * phys_to_virt(unsigned long address) {
+    return (void *)__va(address);
 }
 
 /*
@@ -736,18 +722,16 @@ static inline void * phys_to_virt(unsigned long address)
  */
 #ifdef CONFIG_PPC32
 
-static inline unsigned long virt_to_bus(volatile void * address)
-{
-        if (address == NULL)
-		return 0;
-        return __pa(address) + PCI_DRAM_OFFSET;
+static inline unsigned long virt_to_bus(volatile void * address) {
+    if (address == NULL)
+        return 0;
+    return __pa(address) + PCI_DRAM_OFFSET;
 }
 
-static inline void * bus_to_virt(unsigned long address)
-{
-        if (address == 0)
-		return NULL;
-        return __va(address - PCI_DRAM_OFFSET);
+static inline void * bus_to_virt(unsigned long address) {
+    if (address == 0)
+        return NULL;
+    return __va(address - PCI_DRAM_OFFSET);
 }
 
 #define page_to_bus(page)	(page_to_phys(page) + PCI_DRAM_OFFSET)
@@ -788,7 +772,7 @@ static inline void * bus_to_virt(unsigned long address)
 #define clrsetbits_8(addr, clear, set) clrsetbits(8, addr, clear, set)
 
 void __iomem *devm_ioremap_prot(struct device *dev, resource_size_t offset,
-				size_t size, unsigned long flags);
+                                size_t size, unsigned long flags);
 
 #endif /* __KERNEL__ */
 

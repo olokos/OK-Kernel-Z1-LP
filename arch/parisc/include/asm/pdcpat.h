@@ -111,7 +111,7 @@
 #define PDC_PAT_IO                  71L
 #define PDC_PAT_IO_GET_SLOT_STATUS   	5L /* Get Slot Status Info*/
 #define PDC_PAT_IO_GET_LOC_FROM_HARDWARE 6L /* Get Physical Location from */
-                                            /* Hardware Path */
+/* Hardware Path */
 #define PDC_PAT_IO_GET_HARDWARE_FROM_LOC 7L /* Get Hardware Path from 
                                              * Physical Location */
 #define PDC_PAT_IO_GET_PCI_CONFIG_FROM_HW 11L /* Get PCI Configuration
@@ -130,7 +130,7 @@
 #define PDC_PAT_IO_GET_NUM_IO_SLOTS 	21L /* Get Number of I/O Bay Slots in 
                                        		  * Cabinet */
 #define PDC_PAT_IO_GET_LOC_IO_SLOTS 	22L /* Get Physical Location of I/O */
-                                   		     /* Bay Slots in Cabinet */
+/* Bay Slots in Cabinet */
 #define PDC_PAT_IO_BAY_STATUS_INFO  	28L /* Get I/O Bay Slot Status Info */
 #define PDC_PAT_IO_GET_PROC_VIEW        29L /* Get Processor view of IO address */
 #define PDC_PAT_IO_PROG_SBA_DIR_RANGE   30L /* Program directed range */
@@ -150,7 +150,7 @@
 #define PDC_PAT_MEM_SETGM	  	9L /* Set Golden Memory value      */
 #define PDC_PAT_MEM_ADD_PAGE    	10L /* ADDs a page to the cell      */
 #define PDC_PAT_MEM_ADDRESS     	11L /* Get Physical Location From   */
-                                    		 /* Memory Address               */
+/* Memory Address               */
 #define PDC_PAT_MEM_GET_TXT_SIZE   	12L /* Get Formatted Text Size   */
 #define PDC_PAT_MEM_GET_PD_TXT     	13L /* Get PD Formatted Text     */
 #define PDC_PAT_MEM_GET_CELL_TXT   	14L /* Get Cell Formatted Text   */
@@ -175,7 +175,7 @@
 #define PDC_PAT_PD_GET_ADDR_MAP		0L  /* Get Address Map          */
 
 /* PDC_PAT_PD_GET_ADDR_MAP entry types */
-#define PAT_MEMORY_DESCRIPTOR		1   
+#define PAT_MEMORY_DESCRIPTOR		1
 
 /* PDC_PAT_PD_GET_ADDR_MAP memory types */
 #define PAT_MEMTYPE_MEMORY		0
@@ -203,24 +203,24 @@ extern int pdc_pat_get_irt(void *r_addr, unsigned long cell_num);
 
 
 struct pdc_pat_cell_num {
-	unsigned long cell_num;
-	unsigned long cell_loc;
+    unsigned long cell_num;
+    unsigned long cell_loc;
 };
 
 struct pdc_pat_cpu_num {
-	unsigned long cpu_num;
-	unsigned long cpu_loc;
+    unsigned long cpu_num;
+    unsigned long cpu_loc;
 };
 
 struct pdc_pat_pd_addr_map_entry {
-	unsigned char entry_type;       /* 1 = Memory Descriptor Entry Type */
-	unsigned char reserve1[5];
-	unsigned char memory_type;
-	unsigned char memory_usage;
-	unsigned long paddr;
-	unsigned int  pages;            /* Length in 4K pages */
-	unsigned int  reserve2;
-	unsigned long cell_map;
+    unsigned char entry_type;       /* 1 = Memory Descriptor Entry Type */
+    unsigned char reserve1[5];
+    unsigned char memory_type;
+    unsigned char memory_usage;
+    unsigned long paddr;
+    unsigned int  pages;            /* Length in 4K pages */
+    unsigned int  reserve2;
+    unsigned long cell_map;
 };
 
 /********************************************************************
@@ -257,28 +257,28 @@ struct pdc_pat_pd_addr_map_entry {
 ** PDC_PAT_CELL_GET_INFO return block
 */
 typedef struct pdc_pat_cell_info_rtn_block {
-	unsigned long cpu_info;
-	unsigned long cell_info;
-	unsigned long cell_location;
-	unsigned long reo_location;
-	unsigned long mem_size;
-	unsigned long dimm_status;
-	unsigned long pdc_rev;
-	unsigned long fabric_info0;
-	unsigned long fabric_info1;
-	unsigned long fabric_info2;
-	unsigned long fabric_info3;
-	unsigned long reserved[21];
+    unsigned long cpu_info;
+    unsigned long cell_info;
+    unsigned long cell_location;
+    unsigned long reo_location;
+    unsigned long mem_size;
+    unsigned long dimm_status;
+    unsigned long pdc_rev;
+    unsigned long fabric_info0;
+    unsigned long fabric_info1;
+    unsigned long fabric_info2;
+    unsigned long fabric_info3;
+    unsigned long reserved[21];
 } pdc_pat_cell_info_rtn_block_t;
 
 
 /* FIXME: mod[508] should really be a union of the various mod components */
 struct pdc_pat_cell_mod_maddr_block {	/* PDC_PAT_CELL_MODULE */
-	unsigned long cba;		/* func 0 cfg space address */
-	unsigned long mod_info;		/* module information */
-	unsigned long mod_location;	/* physical location of the module */
-	struct hardware_path mod_path;	/* module path (device path - layers) */
-	unsigned long mod[508];		/* PAT cell module components */
+    unsigned long cba;		/* func 0 cfg space address */
+    unsigned long mod_info;		/* module information */
+    unsigned long mod_location;	/* physical location of the module */
+    struct hardware_path mod_path;	/* module path (device path - layers) */
+    unsigned long mod[508];		/* PAT cell module components */
 } __attribute__((aligned(8))) ;
 
 typedef struct pdc_pat_cell_mod_maddr_block pdc_pat_cell_mod_maddr_block_t;
@@ -294,8 +294,8 @@ extern int pdc_pat_cpu_get_number(struct pdc_pat_cpu_num *cpu_info, void *hpa);
 extern int pdc_pat_pd_get_addr_map(unsigned long *actual_len, void *mem_addr, unsigned long count, unsigned long offset);
 
 
-extern int pdc_pat_io_pci_cfg_read(unsigned long pci_addr, int pci_size, u32 *val); 
-extern int pdc_pat_io_pci_cfg_write(unsigned long pci_addr, int pci_size, u32 val); 
+extern int pdc_pat_io_pci_cfg_read(unsigned long pci_addr, int pci_size, u32 *val);
+extern int pdc_pat_io_pci_cfg_write(unsigned long pci_addr, int pci_size, u32 val);
 
 
 /* Flag to indicate this is a PAT box...don't use this unless you

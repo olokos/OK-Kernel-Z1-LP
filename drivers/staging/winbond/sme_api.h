@@ -88,7 +88,7 @@ s8 sme_get_supported_rate(void *pcore_data, u8 *prates);
 
 /* OID_802_11_ADD_WEP */
 s8 sme_set_add_wep(void *pcore_data, u32 key_index, u32 key_len,
-					 u8 *Address, u8 *key);
+                   u8 *Address, u8 *key);
 
 /* OID_802_11_REMOVE_WEP */
 s8 sme_set_remove_wep(void *pcre_data, u32 key_index);
@@ -114,13 +114,13 @@ s8 sme_get_connect_status(void *pcore_data, u8 *pstatus);
 void sme_get_encryption_status(void *pcore_data, u8 *EncryptStatus);
 void sme_set_encryption_status(void *pcore_data, u8 EncryptStatus);
 s8 sme_add_key(void	*pcore_data,
-		u32	key_index,
-		u8	key_len,
-		u8	key_type,
-		u8	*key_bssid,
-		u8	*ptx_tsc,
-		u8	*prx_tsc,
-		u8	*key_material);
+               u32	key_index,
+               u8	key_len,
+               u8	key_type,
+               u8	*key_bssid,
+               u8	*ptx_tsc,
+               u8	*prx_tsc,
+               u8	*key_material);
 void sme_remove_default_key(void *pcore_data, int index);
 void sme_remove_mapping_key(void *pcore_data, u8 *pmac_addr);
 void sme_clear_all_mapping_key(void *pcore_data);
@@ -153,38 +153,38 @@ s8 sme_set_IE_append(void *pcore_data, u8 *buffer, u16 buf_len);
 
 /* ================== Local functions ====================== */
 static const u32 PowerDbToMw[] = {
-	56,	/* mW, MAX - 0,	17.5 dbm */
-	40,	/* mW, MAX - 1,	16.0 dbm */
-	30,	/* mW, MAX - 2,	14.8 dbm */
-	20,	/* mW, MAX - 3,	13.0 dbm */
-	15,	/* mW, MAX - 4,	11.8 dbm */
-	12,	/* mW, MAX - 5,	10.6 dbm */
-	9,	/* mW, MAX - 6,	 9.4 dbm */
-	7,	/* mW, MAX - 7,	 8.3 dbm */
-	5,	/* mW, MAX - 8,	 6.4 dbm */
-	4,	/* mW, MAX - 9,	 5.3 dbm */
-	3,	/* mW, MAX - 10,  4.0 dbm */
-	2,	/* mW, MAX - 11,  ? dbm */
-	2,	/* mW, MAX - 12,  ? dbm */
-	2,	/* mW, MAX - 13,  ? dbm */
-	2,	/* mW, MAX - 14,  ? dbm */
-	2,	/* mW, MAX - 15,  ? dbm */
-	2,	/* mW, MAX - 16,  ? dbm */
-	2,	/* mW, MAX - 17,  ? dbm */
-	2,	/* mW, MAX - 18,  ? dbm */
-	1,	/* mW, MAX - 19,  ? dbm */
-	1,	/* mW, MAX - 20,  ? dbm */
-	1,	/* mW, MAX - 21,  ? dbm */
-	1,	/* mW, MAX - 22,  ? dbm */
-	1,	/* mW, MAX - 23,  ? dbm */
-	1,	/* mW, MAX - 24,  ? dbm */
-	1,	/* mW, MAX - 25,  ? dbm */
-	1,	/* mW, MAX - 26,  ? dbm */
-	1,	/* mW, MAX - 27,  ? dbm */
-	1,	/* mW, MAX - 28,  ? dbm */
-	1,	/* mW, MAX - 29,  ? dbm */
-	1,	/* mW, MAX - 30,  ? dbm */
-	1	/* mW, MAX - 31,  ? dbm */
+    56,	/* mW, MAX - 0,	17.5 dbm */
+    40,	/* mW, MAX - 1,	16.0 dbm */
+    30,	/* mW, MAX - 2,	14.8 dbm */
+    20,	/* mW, MAX - 3,	13.0 dbm */
+    15,	/* mW, MAX - 4,	11.8 dbm */
+    12,	/* mW, MAX - 5,	10.6 dbm */
+    9,	/* mW, MAX - 6,	 9.4 dbm */
+    7,	/* mW, MAX - 7,	 8.3 dbm */
+    5,	/* mW, MAX - 8,	 6.4 dbm */
+    4,	/* mW, MAX - 9,	 5.3 dbm */
+    3,	/* mW, MAX - 10,  4.0 dbm */
+    2,	/* mW, MAX - 11,  ? dbm */
+    2,	/* mW, MAX - 12,  ? dbm */
+    2,	/* mW, MAX - 13,  ? dbm */
+    2,	/* mW, MAX - 14,  ? dbm */
+    2,	/* mW, MAX - 15,  ? dbm */
+    2,	/* mW, MAX - 16,  ? dbm */
+    2,	/* mW, MAX - 17,  ? dbm */
+    2,	/* mW, MAX - 18,  ? dbm */
+    1,	/* mW, MAX - 19,  ? dbm */
+    1,	/* mW, MAX - 20,  ? dbm */
+    1,	/* mW, MAX - 21,  ? dbm */
+    1,	/* mW, MAX - 22,  ? dbm */
+    1,	/* mW, MAX - 23,  ? dbm */
+    1,	/* mW, MAX - 24,  ? dbm */
+    1,	/* mW, MAX - 25,  ? dbm */
+    1,	/* mW, MAX - 26,  ? dbm */
+    1,	/* mW, MAX - 27,  ? dbm */
+    1,	/* mW, MAX - 28,  ? dbm */
+    1,	/* mW, MAX - 29,  ? dbm */
+    1,	/* mW, MAX - 30,  ? dbm */
+    1	/* mW, MAX - 31,  ? dbm */
 };
 
 #endif /* __SME_API_H__ */

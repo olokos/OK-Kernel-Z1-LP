@@ -81,52 +81,52 @@ pc; })
  */
 
 struct sh_fpu_hard_struct {
-	unsigned long fp_regs[64];
-	unsigned int fpscr;
-	/* long status; * software status information */
+    unsigned long fp_regs[64];
+    unsigned int fpscr;
+    /* long status; * software status information */
 };
 
 /* Dummy fpu emulator  */
 struct sh_fpu_soft_struct {
-	unsigned long fp_regs[64];
-	unsigned int fpscr;
-	unsigned char lookahead;
-	unsigned long entry_pc;
+    unsigned long fp_regs[64];
+    unsigned int fpscr;
+    unsigned char lookahead;
+    unsigned long entry_pc;
 };
 
 union thread_xstate {
-	struct sh_fpu_hard_struct hardfpu;
-	struct sh_fpu_soft_struct softfpu;
-	/*
-	 * The structure definitions only produce 32 bit alignment, yet we need
-	 * to access them using 64 bit load/store as well.
-	 */
-	unsigned long long alignment_dummy;
+    struct sh_fpu_hard_struct hardfpu;
+    struct sh_fpu_soft_struct softfpu;
+    /*
+     * The structure definitions only produce 32 bit alignment, yet we need
+     * to access them using 64 bit load/store as well.
+     */
+    unsigned long long alignment_dummy;
 };
 
 struct thread_struct {
-	unsigned long sp;
-	unsigned long pc;
+    unsigned long sp;
+    unsigned long pc;
 
-	/* Various thread flags, see SH_THREAD_xxx */
-	unsigned long flags;
+    /* Various thread flags, see SH_THREAD_xxx */
+    unsigned long flags;
 
-	/* This stores the address of the pt_regs built during a context
-	   switch, or of the register save area built for a kernel mode
-	   exception.  It is used for backtracing the stack of a sleeping task
-	   or one that traps in kernel mode. */
-        struct pt_regs *kregs;
-	/* This stores the address of the pt_regs constructed on entry from
-	   user mode.  It is a fixed value over the lifetime of a process, or
-	   NULL for a kernel thread. */
-	struct pt_regs *uregs;
+    /* This stores the address of the pt_regs built during a context
+       switch, or of the register save area built for a kernel mode
+       exception.  It is used for backtracing the stack of a sleeping task
+       or one that traps in kernel mode. */
+    struct pt_regs *kregs;
+    /* This stores the address of the pt_regs constructed on entry from
+       user mode.  It is a fixed value over the lifetime of a process, or
+       NULL for a kernel thread. */
+    struct pt_regs *uregs;
 
-	unsigned long trap_no, error_code;
-	unsigned long address;
-	/* Hardware debugging registers may come here */
+    unsigned long trap_no, error_code;
+    unsigned long address;
+    /* Hardware debugging registers may come here */
 
-	/* floating point info */
-	union thread_xstate *xstate;
+    /* floating point info */
+    union thread_xstate *xstate;
 };
 
 #define INIT_MMAP \
@@ -177,28 +177,26 @@ extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
  * FPU lazy state save handling.
  */
 
-static inline void disable_fpu(void)
-{
-	unsigned long long __dummy;
+static inline void disable_fpu(void) {
+    unsigned long long __dummy;
 
-	/* Set FD flag in SR */
-	__asm__ __volatile__("getcon	" __SR ", %0\n\t"
-			     "or	%0, %1, %0\n\t"
-			     "putcon	%0, " __SR "\n\t"
-			     : "=&r" (__dummy)
-			     : "r" (SR_FD));
+    /* Set FD flag in SR */
+    __asm__ __volatile__("getcon	" __SR ", %0\n\t"
+                         "or	%0, %1, %0\n\t"
+                         "putcon	%0, " __SR "\n\t"
+                         : "=&r" (__dummy)
+                         : "r" (SR_FD));
 }
 
-static inline void enable_fpu(void)
-{
-	unsigned long long __dummy;
+static inline void enable_fpu(void) {
+    unsigned long long __dummy;
 
-	/* Clear out FD flag in SR */
-	__asm__ __volatile__("getcon	" __SR ", %0\n\t"
-			     "and	%0, %1, %0\n\t"
-			     "putcon	%0, " __SR "\n\t"
-			     : "=&r" (__dummy)
-			     : "r" (~SR_FD));
+    /* Clear out FD flag in SR */
+    __asm__ __volatile__("getcon	" __SR ", %0\n\t"
+                         "and	%0, %1, %0\n\t"
+                         "putcon	%0, " __SR "\n\t"
+                         : "=&r" (__dummy)
+                         : "r" (~SR_FD));
 }
 
 /* Round to nearest, no exceptions on inexact, overflow, underflow,

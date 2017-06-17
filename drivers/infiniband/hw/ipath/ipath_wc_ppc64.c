@@ -43,9 +43,8 @@
  *
  * Nothing to do on PowerPC, so just return without error.
  */
-int ipath_enable_wc(struct ipath_devdata *dd)
-{
-	return 0;
+int ipath_enable_wc(struct ipath_devdata *dd) {
+    return 0;
 }
 
 /**
@@ -56,7 +55,6 @@ int ipath_enable_wc(struct ipath_devdata *dd)
  * know if we are on a processor that may reorder stores when
  * write combining.
  */
-int ipath_unordered_wc(void)
-{
-	return 1;
+int ipath_unordered_wc(void) {
+    return 1;
 }

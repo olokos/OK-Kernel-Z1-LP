@@ -1,6 +1,6 @@
-/*  Driver for the PPA3 parallel port SCSI HBA embedded in 
+/*  Driver for the PPA3 parallel port SCSI HBA embedded in
  * the Iomega ZIP drive
- * 
+ *
  * (c) 1996     Grant R. Guenther  grant@torque.net
  *              David Campbell
  *
@@ -12,7 +12,7 @@
 
 #define   PPA_VERSION   "2.07 (for Linux 2.4.x)"
 
-/* 
+/*
  * this driver has been hacked by Matteo Frigo (athena@theory.lcs.mit.edu)
  * to support EPP and scatter-gather.                        [0.26-athena]
  *
@@ -68,7 +68,7 @@
  *  for short periods of time.
  * Add udelay() to ppa_select()
  *  by Peter Cherriman <pjc@ecs.soton.ac.uk> and
- *     Oleg Makarenko <omakarenko@cyberplat.ru>         
+ *     Oleg Makarenko <omakarenko@cyberplat.ru>
  *                                                      [2.07]
  */
 /* ------ END OF USER CONFIGURABLE PARAMETERS ----- */
@@ -89,7 +89,7 @@
 /* batteries not included :-) */
 
 /*
- * modes in which the driver can operate 
+ * modes in which the driver can operate
  */
 #define   PPA_AUTODETECT        0	/* Autodetect mode                */
 #define   PPA_NIBBLE            1	/* work in standard 4 bit mode    */
@@ -99,8 +99,7 @@
 #define   PPA_EPP_32            5	/* EPP mode, 32 bit               */
 #define   PPA_UNKNOWN           6	/* Just in case...                */
 
-static char *PPA_MODE_STRING[] =
-{
+static char *PPA_MODE_STRING[] = {
     "Autodetect",
     "SPP",
     "PS/2",
@@ -111,7 +110,8 @@ static char *PPA_MODE_STRING[] =
 #else
     "EPP 32 bit",
 #endif
-    "Unknown"};
+    "Unknown"
+};
 
 /* other options */
 #define PPA_BURST_SIZE	512	/* data burst size */
@@ -130,7 +130,7 @@ static char *PPA_MODE_STRING[] =
 #define r_ctr(x)        (unsigned char)inb((x)+2)
 #define r_epp(x)        (unsigned char)inb((x)+4)
 #define r_fifo(x)       (unsigned char)inb((x)) /* x must be base_hi */
-					/* On PCI is base+0x400 != base_hi */
+/* On PCI is base+0x400 != base_hi */
 #define r_ecr(x)        (unsigned char)inb((x)+0x2) /* x must be base_hi */
 
 #define w_dtr(x,y)      outb(y, (x))

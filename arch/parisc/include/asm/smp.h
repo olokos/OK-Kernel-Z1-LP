@@ -37,18 +37,20 @@ extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
 
 #else /* CONFIG_SMP */
 
-static inline void smp_send_all_nop(void) { return; }
+static inline void smp_send_all_nop(void) {
+    return;
+}
 
 #endif
 
 #define NO_PROC_ID		0xFF		/* No processor magic marker */
 #define ANY_PROC_ID		0xFF		/* Any processor magic marker */
 static inline int __cpu_disable (void) {
-  return 0;
+    return 0;
 }
 static inline void __cpu_die (unsigned int cpu) {
-  while(1)
-    ;
+    while(1)
+        ;
 }
 extern int __cpu_up (unsigned int cpu);
 

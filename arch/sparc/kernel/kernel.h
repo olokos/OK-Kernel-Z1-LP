@@ -17,11 +17,10 @@ extern int ncpus_probed;
 struct seq_file;
 extern void cpucap_info(struct seq_file *);
 
-static inline unsigned long kimage_addr_to_ra(const char *p)
-{
-	unsigned long val = (unsigned long) p;
+static inline unsigned long kimage_addr_to_ra(const char *p) {
+    unsigned long val = (unsigned long) p;
 
-	return kern_base + (val - KERNBASE);
+    return kern_base + (val - KERNBASE);
 }
 #endif
 

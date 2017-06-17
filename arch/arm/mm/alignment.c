@@ -88,89 +88,84 @@ core_param(alignment, ai_usermode, int, 0600);
 #define UM_SIGNAL	(1 << 2)
 
 /* Return true if and only if the ARMv6 unaligned access model is in use. */
-static bool cpu_is_v6_unaligned(void)
-{
-	return cpu_architecture() >= CPU_ARCH_ARMv6 && (cr_alignment & CR_U);
+static bool cpu_is_v6_unaligned(void) {
+    return cpu_architecture() >= CPU_ARCH_ARMv6 && (cr_alignment & CR_U);
 }
 
-static int safe_usermode(int new_usermode, bool warn)
-{
-	/*
-	 * ARMv6 and later CPUs can perform unaligned accesses for
-	 * most single load and store instructions up to word size.
-	 * LDM, STM, LDRD and STRD still need to be handled.
-	 *
-	 * Ignoring the alignment fault is not an option on these
-	 * CPUs since we spin re-faulting the instruction without
-	 * making any progress.
-	 */
-	if (cpu_is_v6_unaligned() && !(new_usermode & (UM_FIXUP | UM_SIGNAL))) {
-		new_usermode |= UM_FIXUP;
+static int safe_usermode(int new_usermode, bool warn) {
+    /*
+     * ARMv6 and later CPUs can perform unaligned accesses for
+     * most single load and store instructions up to word size.
+     * LDM, STM, LDRD and STRD still need to be handled.
+     *
+     * Ignoring the alignment fault is not an option on these
+     * CPUs since we spin re-faulting the instruction without
+     * making any progress.
+     */
+    if (cpu_is_v6_unaligned() && !(new_usermode & (UM_FIXUP | UM_SIGNAL))) {
+        new_usermode |= UM_FIXUP;
 
-		if (warn)
-			printk(KERN_WARNING "alignment: ignoring faults is unsafe on this CPU.  Defaulting to fixup mode.\n");
-	}
+        if (warn)
+            printk(KERN_WARNING "alignment: ignoring faults is unsafe on this CPU.  Defaulting to fixup mode.\n");
+    }
 
-	return new_usermode;
+    return new_usermode;
 }
 
 #ifdef CONFIG_PROC_FS
 static const char *usermode_action[] = {
-	"ignored",
-	"warn",
-	"fixup",
-	"fixup+warn",
-	"signal",
-	"signal+warn"
+    "ignored",
+    "warn",
+    "fixup",
+    "fixup+warn",
+    "signal",
+    "signal+warn"
 };
 
-static int alignment_proc_show(struct seq_file *m, void *v)
-{
-	seq_printf(m, "User:\t\t%lu\n", ai_user);
-	seq_printf(m, "System:\t\t%lu\n", ai_sys);
-	seq_printf(m, "Skipped:\t%lu\n", ai_skipped);
-	seq_printf(m, "Half:\t\t%lu\n", ai_half);
-	seq_printf(m, "Word:\t\t%lu\n", ai_word);
-	if (cpu_architecture() >= CPU_ARCH_ARMv5TE)
-		seq_printf(m, "DWord:\t\t%lu\n", ai_dword);
-	seq_printf(m, "Multi:\t\t%lu\n", ai_multi);
-	seq_printf(m, "User faults:\t%i (%s)\n", ai_usermode,
-			usermode_action[ai_usermode]);
+static int alignment_proc_show(struct seq_file *m, void *v) {
+    seq_printf(m, "User:\t\t%lu\n", ai_user);
+    seq_printf(m, "System:\t\t%lu\n", ai_sys);
+    seq_printf(m, "Skipped:\t%lu\n", ai_skipped);
+    seq_printf(m, "Half:\t\t%lu\n", ai_half);
+    seq_printf(m, "Word:\t\t%lu\n", ai_word);
+    if (cpu_architecture() >= CPU_ARCH_ARMv5TE)
+        seq_printf(m, "DWord:\t\t%lu\n", ai_dword);
+    seq_printf(m, "Multi:\t\t%lu\n", ai_multi);
+    seq_printf(m, "User faults:\t%i (%s)\n", ai_usermode,
+               usermode_action[ai_usermode]);
 
-	return 0;
+    return 0;
 }
 
-static int alignment_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, alignment_proc_show, NULL);
+static int alignment_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, alignment_proc_show, NULL);
 }
 
 static ssize_t alignment_proc_write(struct file *file, const char __user *buffer,
-				    size_t count, loff_t *pos)
-{
-	char mode;
+                                    size_t count, loff_t *pos) {
+    char mode;
 
-	if (count > 0) {
-		if (get_user(mode, buffer))
-			return -EFAULT;
-		if (mode >= '0' && mode <= '5')
-			ai_usermode = safe_usermode(mode - '0', true);
-	}
-	return count;
+    if (count > 0) {
+        if (get_user(mode, buffer))
+            return -EFAULT;
+        if (mode >= '0' && mode <= '5')
+            ai_usermode = safe_usermode(mode - '0', true);
+    }
+    return count;
 }
 
 static const struct file_operations alignment_proc_fops = {
-	.open		= alignment_proc_open,
-	.read		= seq_read,
-	.llseek		= seq_lseek,
-	.release	= single_release,
-	.write		= alignment_proc_write,
+    .open		= alignment_proc_open,
+    .read		= seq_read,
+    .llseek		= seq_lseek,
+    .release	= single_release,
+    .write		= alignment_proc_write,
 };
 #endif /* CONFIG_PROC_FS */
 
 union offset_union {
-	unsigned long un;
-	  signed long sn;
+    unsigned long un;
+    signed long sn;
 };
 
 #define TYPE_ERROR	0
@@ -321,146 +316,142 @@ union offset_union {
 	__put32_unaligned_check("strbt", val, addr)
 
 static void
-do_alignment_finish_ldst(unsigned long addr, unsigned long instr, struct pt_regs *regs, union offset_union offset)
-{
-	if (!LDST_U_BIT(instr))
-		offset.un = -offset.un;
+do_alignment_finish_ldst(unsigned long addr, unsigned long instr, struct pt_regs *regs, union offset_union offset) {
+    if (!LDST_U_BIT(instr))
+        offset.un = -offset.un;
 
-	if (!LDST_P_BIT(instr))
-		addr += offset.un;
+    if (!LDST_P_BIT(instr))
+        addr += offset.un;
 
-	if (!LDST_P_BIT(instr) || LDST_W_BIT(instr))
-		regs->uregs[RN_BITS(instr)] = addr;
+    if (!LDST_P_BIT(instr) || LDST_W_BIT(instr))
+        regs->uregs[RN_BITS(instr)] = addr;
 }
 
 static int
-do_alignment_ldrhstrh(unsigned long addr, unsigned long instr, struct pt_regs *regs)
-{
-	unsigned int rd = RD_BITS(instr);
+do_alignment_ldrhstrh(unsigned long addr, unsigned long instr, struct pt_regs *regs) {
+    unsigned int rd = RD_BITS(instr);
 
-	ai_half += 1;
+    ai_half += 1;
 
-	if (user_mode(regs))
-		goto user;
+    if (user_mode(regs))
+        goto user;
 
-	if (LDST_L_BIT(instr)) {
-		unsigned long val;
-		get16_unaligned_check(val, addr);
+    if (LDST_L_BIT(instr)) {
+        unsigned long val;
+        get16_unaligned_check(val, addr);
 
-		/* signed half-word? */
-		if (instr & 0x40)
-			val = (signed long)((signed short) val);
+        /* signed half-word? */
+        if (instr & 0x40)
+            val = (signed long)((signed short) val);
 
-		regs->uregs[rd] = val;
-	} else
-		put16_unaligned_check(regs->uregs[rd], addr);
+        regs->uregs[rd] = val;
+    } else
+        put16_unaligned_check(regs->uregs[rd], addr);
 
-	return TYPE_LDST;
+    return TYPE_LDST;
 
- user:
-	if (LDST_L_BIT(instr)) {
-		unsigned long val;
-		get16t_unaligned_check(val, addr);
+user:
+    if (LDST_L_BIT(instr)) {
+        unsigned long val;
+        get16t_unaligned_check(val, addr);
 
-		/* signed half-word? */
-		if (instr & 0x40)
-			val = (signed long)((signed short) val);
+        /* signed half-word? */
+        if (instr & 0x40)
+            val = (signed long)((signed short) val);
 
-		regs->uregs[rd] = val;
-	} else
-		put16t_unaligned_check(regs->uregs[rd], addr);
+        regs->uregs[rd] = val;
+    } else
+        put16t_unaligned_check(regs->uregs[rd], addr);
 
-	return TYPE_LDST;
+    return TYPE_LDST;
 
- fault:
-	return TYPE_FAULT;
+fault:
+    return TYPE_FAULT;
 }
 
 static int
 do_alignment_ldrdstrd(unsigned long addr, unsigned long instr,
-		      struct pt_regs *regs)
-{
-	unsigned int rd = RD_BITS(instr);
-	unsigned int rd2;
-	int load;
+                      struct pt_regs *regs) {
+    unsigned int rd = RD_BITS(instr);
+    unsigned int rd2;
+    int load;
 
-	if ((instr & 0xfe000000) == 0xe8000000) {
-		/* ARMv7 Thumb-2 32-bit LDRD/STRD */
-		rd2 = (instr >> 8) & 0xf;
-		load = !!(LDST_L_BIT(instr));
-	} else if (((rd & 1) == 1) || (rd == 14))
-		goto bad;
-	else {
-		load = ((instr & 0xf0) == 0xd0);
-		rd2 = rd + 1;
-	}
+    if ((instr & 0xfe000000) == 0xe8000000) {
+        /* ARMv7 Thumb-2 32-bit LDRD/STRD */
+        rd2 = (instr >> 8) & 0xf;
+        load = !!(LDST_L_BIT(instr));
+    } else if (((rd & 1) == 1) || (rd == 14))
+        goto bad;
+    else {
+        load = ((instr & 0xf0) == 0xd0);
+        rd2 = rd + 1;
+    }
 
-	ai_dword += 1;
+    ai_dword += 1;
 
-	if (user_mode(regs))
-		goto user;
+    if (user_mode(regs))
+        goto user;
 
-	if (load) {
-		unsigned long val;
-		get32_unaligned_check(val, addr);
-		regs->uregs[rd] = val;
-		get32_unaligned_check(val, addr + 4);
-		regs->uregs[rd2] = val;
-	} else {
-		put32_unaligned_check(regs->uregs[rd], addr);
-		put32_unaligned_check(regs->uregs[rd2], addr + 4);
-	}
+    if (load) {
+        unsigned long val;
+        get32_unaligned_check(val, addr);
+        regs->uregs[rd] = val;
+        get32_unaligned_check(val, addr + 4);
+        regs->uregs[rd2] = val;
+    } else {
+        put32_unaligned_check(regs->uregs[rd], addr);
+        put32_unaligned_check(regs->uregs[rd2], addr + 4);
+    }
 
-	return TYPE_LDST;
+    return TYPE_LDST;
 
- user:
-	if (load) {
-		unsigned long val;
-		get32t_unaligned_check(val, addr);
-		regs->uregs[rd] = val;
-		get32t_unaligned_check(val, addr + 4);
-		regs->uregs[rd2] = val;
-	} else {
-		put32t_unaligned_check(regs->uregs[rd], addr);
-		put32t_unaligned_check(regs->uregs[rd2], addr + 4);
-	}
+user:
+    if (load) {
+        unsigned long val;
+        get32t_unaligned_check(val, addr);
+        regs->uregs[rd] = val;
+        get32t_unaligned_check(val, addr + 4);
+        regs->uregs[rd2] = val;
+    } else {
+        put32t_unaligned_check(regs->uregs[rd], addr);
+        put32t_unaligned_check(regs->uregs[rd2], addr + 4);
+    }
 
-	return TYPE_LDST;
- bad:
-	return TYPE_ERROR;
- fault:
-	return TYPE_FAULT;
+    return TYPE_LDST;
+bad:
+    return TYPE_ERROR;
+fault:
+    return TYPE_FAULT;
 }
 
 static int
-do_alignment_ldrstr(unsigned long addr, unsigned long instr, struct pt_regs *regs)
-{
-	unsigned int rd = RD_BITS(instr);
+do_alignment_ldrstr(unsigned long addr, unsigned long instr, struct pt_regs *regs) {
+    unsigned int rd = RD_BITS(instr);
 
-	ai_word += 1;
+    ai_word += 1;
 
-	if ((!LDST_P_BIT(instr) && LDST_W_BIT(instr)) || user_mode(regs))
-		goto trans;
+    if ((!LDST_P_BIT(instr) && LDST_W_BIT(instr)) || user_mode(regs))
+        goto trans;
 
-	if (LDST_L_BIT(instr)) {
-		unsigned int val;
-		get32_unaligned_check(val, addr);
-		regs->uregs[rd] = val;
-	} else
-		put32_unaligned_check(regs->uregs[rd], addr);
-	return TYPE_LDST;
+    if (LDST_L_BIT(instr)) {
+        unsigned int val;
+        get32_unaligned_check(val, addr);
+        regs->uregs[rd] = val;
+    } else
+        put32_unaligned_check(regs->uregs[rd], addr);
+    return TYPE_LDST;
 
- trans:
-	if (LDST_L_BIT(instr)) {
-		unsigned int val;
-		get32t_unaligned_check(val, addr);
-		regs->uregs[rd] = val;
-	} else
-		put32t_unaligned_check(regs->uregs[rd], addr);
-	return TYPE_LDST;
+trans:
+    if (LDST_L_BIT(instr)) {
+        unsigned int val;
+        get32t_unaligned_check(val, addr);
+        regs->uregs[rd] = val;
+    } else
+        put32t_unaligned_check(regs->uregs[rd], addr);
+    return TYPE_LDST;
 
- fault:
-	return TYPE_FAULT;
+fault:
+    return TYPE_FAULT;
 }
 
 /*
@@ -477,93 +468,92 @@ do_alignment_ldrstr(unsigned long addr, unsigned long instr, struct pt_regs *reg
  * PU = 10             A                    B
  */
 static int
-do_alignment_ldmstm(unsigned long addr, unsigned long instr, struct pt_regs *regs)
-{
-	unsigned int rd, rn, correction, nr_regs, regbits;
-	unsigned long eaddr, newaddr;
+do_alignment_ldmstm(unsigned long addr, unsigned long instr, struct pt_regs *regs) {
+    unsigned int rd, rn, correction, nr_regs, regbits;
+    unsigned long eaddr, newaddr;
 
-	if (LDM_S_BIT(instr))
-		goto bad;
+    if (LDM_S_BIT(instr))
+        goto bad;
 
-	correction = 4; /* processor implementation defined */
-	regs->ARM_pc += correction;
+    correction = 4; /* processor implementation defined */
+    regs->ARM_pc += correction;
 
-	ai_multi += 1;
+    ai_multi += 1;
 
-	/* count the number of registers in the mask to be transferred */
-	nr_regs = hweight16(REGMASK_BITS(instr)) * 4;
+    /* count the number of registers in the mask to be transferred */
+    nr_regs = hweight16(REGMASK_BITS(instr)) * 4;
 
-	rn = RN_BITS(instr);
-	newaddr = eaddr = regs->uregs[rn];
+    rn = RN_BITS(instr);
+    newaddr = eaddr = regs->uregs[rn];
 
-	if (!LDST_U_BIT(instr))
-		nr_regs = -nr_regs;
-	newaddr += nr_regs;
-	if (!LDST_U_BIT(instr))
-		eaddr = newaddr;
+    if (!LDST_U_BIT(instr))
+        nr_regs = -nr_regs;
+    newaddr += nr_regs;
+    if (!LDST_U_BIT(instr))
+        eaddr = newaddr;
 
-	if (LDST_P_EQ_U(instr))	/* U = P */
-		eaddr += 4;
+    if (LDST_P_EQ_U(instr))	/* U = P */
+        eaddr += 4;
 
-	/*
-	 * For alignment faults on the ARM922T/ARM920T the MMU  makes
-	 * the FSR (and hence addr) equal to the updated base address
-	 * of the multiple access rather than the restored value.
-	 * Switch this message off if we've got a ARM92[02], otherwise
-	 * [ls]dm alignment faults are noisy!
-	 */
+    /*
+     * For alignment faults on the ARM922T/ARM920T the MMU  makes
+     * the FSR (and hence addr) equal to the updated base address
+     * of the multiple access rather than the restored value.
+     * Switch this message off if we've got a ARM92[02], otherwise
+     * [ls]dm alignment faults are noisy!
+     */
 #if !(defined CONFIG_CPU_ARM922T)  && !(defined CONFIG_CPU_ARM920T)
-	/*
-	 * This is a "hint" - we already have eaddr worked out by the
-	 * processor for us.
-	 */
-	if (addr != eaddr) {
-		printk(KERN_ERR "LDMSTM: PC = %08lx, instr = %08lx, "
-			"addr = %08lx, eaddr = %08lx\n",
-			 instruction_pointer(regs), instr, addr, eaddr);
-		show_regs(regs);
-	}
+    /*
+     * This is a "hint" - we already have eaddr worked out by the
+     * processor for us.
+     */
+    if (addr != eaddr) {
+        printk(KERN_ERR "LDMSTM: PC = %08lx, instr = %08lx, "
+               "addr = %08lx, eaddr = %08lx\n",
+               instruction_pointer(regs), instr, addr, eaddr);
+        show_regs(regs);
+    }
 #endif
 
-	if (user_mode(regs)) {
-		for (regbits = REGMASK_BITS(instr), rd = 0; regbits;
-		     regbits >>= 1, rd += 1)
-			if (regbits & 1) {
-				if (LDST_L_BIT(instr)) {
-					unsigned int val;
-					get32t_unaligned_check(val, eaddr);
-					regs->uregs[rd] = val;
-				} else
-					put32t_unaligned_check(regs->uregs[rd], eaddr);
-				eaddr += 4;
-			}
-	} else {
-		for (regbits = REGMASK_BITS(instr), rd = 0; regbits;
-		     regbits >>= 1, rd += 1)
-			if (regbits & 1) {
-				if (LDST_L_BIT(instr)) {
-					unsigned int val;
-					get32_unaligned_check(val, eaddr);
-					regs->uregs[rd] = val;
-				} else
-					put32_unaligned_check(regs->uregs[rd], eaddr);
-				eaddr += 4;
-			}
-	}
+    if (user_mode(regs)) {
+        for (regbits = REGMASK_BITS(instr), rd = 0; regbits;
+                regbits >>= 1, rd += 1)
+            if (regbits & 1) {
+                if (LDST_L_BIT(instr)) {
+                    unsigned int val;
+                    get32t_unaligned_check(val, eaddr);
+                    regs->uregs[rd] = val;
+                } else
+                    put32t_unaligned_check(regs->uregs[rd], eaddr);
+                eaddr += 4;
+            }
+    } else {
+        for (regbits = REGMASK_BITS(instr), rd = 0; regbits;
+                regbits >>= 1, rd += 1)
+            if (regbits & 1) {
+                if (LDST_L_BIT(instr)) {
+                    unsigned int val;
+                    get32_unaligned_check(val, eaddr);
+                    regs->uregs[rd] = val;
+                } else
+                    put32_unaligned_check(regs->uregs[rd], eaddr);
+                eaddr += 4;
+            }
+    }
 
-	if (LDST_W_BIT(instr))
-		regs->uregs[rn] = newaddr;
-	if (!LDST_L_BIT(instr) || !(REGMASK_BITS(instr) & (1 << 15)))
-		regs->ARM_pc -= correction;
-	return TYPE_DONE;
+    if (LDST_W_BIT(instr))
+        regs->uregs[rn] = newaddr;
+    if (!LDST_L_BIT(instr) || !(REGMASK_BITS(instr) & (1 << 15)))
+        regs->ARM_pc -= correction;
+    return TYPE_DONE;
 
 fault:
-	regs->ARM_pc -= correction;
-	return TYPE_FAULT;
+    regs->ARM_pc -= correction;
+    return TYPE_FAULT;
 
 bad:
-	printk(KERN_ERR "Alignment trap: not handling ldm with s-bit set\n");
-	return TYPE_ERROR;
+    printk(KERN_ERR "Alignment trap: not handling ldm with s-bit set\n");
+    return TYPE_ERROR;
 }
 
 /*
@@ -583,100 +573,97 @@ bad:
  */
 
 static unsigned long
-thumb2arm(u16 tinstr)
-{
-	u32 L = (tinstr & (1<<11)) >> 11;
+thumb2arm(u16 tinstr) {
+    u32 L = (tinstr & (1<<11)) >> 11;
 
-	switch ((tinstr & 0xf800) >> 11) {
-	/* 6.5.1 Format 1: */
-	case 0x6000 >> 11:				/* 7.1.52 STR(1) */
-	case 0x6800 >> 11:				/* 7.1.26 LDR(1) */
-	case 0x7000 >> 11:				/* 7.1.55 STRB(1) */
-	case 0x7800 >> 11:				/* 7.1.30 LDRB(1) */
-		return 0xe5800000 |
-			((tinstr & (1<<12)) << (22-12)) |	/* fixup */
-			(L<<20) |				/* L==1? */
-			((tinstr & (7<<0)) << (12-0)) |		/* Rd */
-			((tinstr & (7<<3)) << (16-3)) |		/* Rn */
-			((tinstr & (31<<6)) >>			/* immed_5 */
-				(6 - ((tinstr & (1<<12)) ? 0 : 2)));
-	case 0x8000 >> 11:				/* 7.1.57 STRH(1) */
-	case 0x8800 >> 11:				/* 7.1.32 LDRH(1) */
-		return 0xe1c000b0 |
-			(L<<20) |				/* L==1? */
-			((tinstr & (7<<0)) << (12-0)) |		/* Rd */
-			((tinstr & (7<<3)) << (16-3)) |		/* Rn */
-			((tinstr & (7<<6)) >> (6-1)) |	 /* immed_5[2:0] */
-			((tinstr & (3<<9)) >> (9-8));	 /* immed_5[4:3] */
+    switch ((tinstr & 0xf800) >> 11) {
+    /* 6.5.1 Format 1: */
+    case 0x6000 >> 11:				/* 7.1.52 STR(1) */
+    case 0x6800 >> 11:				/* 7.1.26 LDR(1) */
+    case 0x7000 >> 11:				/* 7.1.55 STRB(1) */
+    case 0x7800 >> 11:				/* 7.1.30 LDRB(1) */
+        return 0xe5800000 |
+               ((tinstr & (1<<12)) << (22-12)) |	/* fixup */
+               (L<<20) |				/* L==1? */
+               ((tinstr & (7<<0)) << (12-0)) |		/* Rd */
+               ((tinstr & (7<<3)) << (16-3)) |		/* Rn */
+               ((tinstr & (31<<6)) >>			/* immed_5 */
+                (6 - ((tinstr & (1<<12)) ? 0 : 2)));
+    case 0x8000 >> 11:				/* 7.1.57 STRH(1) */
+    case 0x8800 >> 11:				/* 7.1.32 LDRH(1) */
+        return 0xe1c000b0 |
+               (L<<20) |				/* L==1? */
+               ((tinstr & (7<<0)) << (12-0)) |		/* Rd */
+               ((tinstr & (7<<3)) << (16-3)) |		/* Rn */
+               ((tinstr & (7<<6)) >> (6-1)) |	 /* immed_5[2:0] */
+               ((tinstr & (3<<9)) >> (9-8));	 /* immed_5[4:3] */
 
-	/* 6.5.1 Format 2: */
-	case 0x5000 >> 11:
-	case 0x5800 >> 11:
-		{
-			static const u32 subset[8] = {
-				0xe7800000,		/* 7.1.53 STR(2) */
-				0xe18000b0,		/* 7.1.58 STRH(2) */
-				0xe7c00000,		/* 7.1.56 STRB(2) */
-				0xe19000d0,		/* 7.1.34 LDRSB */
-				0xe7900000,		/* 7.1.27 LDR(2) */
-				0xe19000b0,		/* 7.1.33 LDRH(2) */
-				0xe7d00000,		/* 7.1.31 LDRB(2) */
-				0xe19000f0		/* 7.1.35 LDRSH */
-			};
-			return subset[(tinstr & (7<<9)) >> 9] |
-			    ((tinstr & (7<<0)) << (12-0)) |	/* Rd */
-			    ((tinstr & (7<<3)) << (16-3)) |	/* Rn */
-			    ((tinstr & (7<<6)) >> (6-0));	/* Rm */
-		}
+    /* 6.5.1 Format 2: */
+    case 0x5000 >> 11:
+    case 0x5800 >> 11: {
+        static const u32 subset[8] = {
+            0xe7800000,		/* 7.1.53 STR(2) */
+            0xe18000b0,		/* 7.1.58 STRH(2) */
+            0xe7c00000,		/* 7.1.56 STRB(2) */
+            0xe19000d0,		/* 7.1.34 LDRSB */
+            0xe7900000,		/* 7.1.27 LDR(2) */
+            0xe19000b0,		/* 7.1.33 LDRH(2) */
+            0xe7d00000,		/* 7.1.31 LDRB(2) */
+            0xe19000f0		/* 7.1.35 LDRSH */
+        };
+        return subset[(tinstr & (7<<9)) >> 9] |
+               ((tinstr & (7<<0)) << (12-0)) |	/* Rd */
+               ((tinstr & (7<<3)) << (16-3)) |	/* Rn */
+               ((tinstr & (7<<6)) >> (6-0));	/* Rm */
+    }
 
-	/* 6.5.1 Format 3: */
-	case 0x4800 >> 11:				/* 7.1.28 LDR(3) */
-		/* NOTE: This case is not technically possible. We're
-		 *	 loading 32-bit memory data via PC relative
-		 *	 addressing mode. So we can and should eliminate
-		 *	 this case. But I'll leave it here for now.
-		 */
-		return 0xe59f0000 |
-		    ((tinstr & (7<<8)) << (12-8)) |		/* Rd */
-		    ((tinstr & 255) << (2-0));			/* immed_8 */
+    /* 6.5.1 Format 3: */
+    case 0x4800 >> 11:				/* 7.1.28 LDR(3) */
+        /* NOTE: This case is not technically possible. We're
+         *	 loading 32-bit memory data via PC relative
+         *	 addressing mode. So we can and should eliminate
+         *	 this case. But I'll leave it here for now.
+         */
+        return 0xe59f0000 |
+               ((tinstr & (7<<8)) << (12-8)) |		/* Rd */
+               ((tinstr & 255) << (2-0));			/* immed_8 */
 
-	/* 6.5.1 Format 4: */
-	case 0x9000 >> 11:				/* 7.1.54 STR(3) */
-	case 0x9800 >> 11:				/* 7.1.29 LDR(4) */
-		return 0xe58d0000 |
-			(L<<20) |				/* L==1? */
-			((tinstr & (7<<8)) << (12-8)) |		/* Rd */
-			((tinstr & 255) << 2);			/* immed_8 */
+    /* 6.5.1 Format 4: */
+    case 0x9000 >> 11:				/* 7.1.54 STR(3) */
+    case 0x9800 >> 11:				/* 7.1.29 LDR(4) */
+        return 0xe58d0000 |
+               (L<<20) |				/* L==1? */
+               ((tinstr & (7<<8)) << (12-8)) |		/* Rd */
+               ((tinstr & 255) << 2);			/* immed_8 */
 
-	/* 6.6.1 Format 1: */
-	case 0xc000 >> 11:				/* 7.1.51 STMIA */
-	case 0xc800 >> 11:				/* 7.1.25 LDMIA */
-		{
-			u32 Rn = (tinstr & (7<<8)) >> 8;
-			u32 W = ((L<<Rn) & (tinstr&255)) ? 0 : 1<<21;
+    /* 6.6.1 Format 1: */
+    case 0xc000 >> 11:				/* 7.1.51 STMIA */
+    case 0xc800 >> 11: {			/* 7.1.25 LDMIA */
+        u32 Rn = (tinstr & (7<<8)) >> 8;
+        u32 W = ((L<<Rn) & (tinstr&255)) ? 0 : 1<<21;
 
-			return 0xe8800000 | W | (L<<20) | (Rn<<16) |
-				(tinstr&255);
-		}
+        return 0xe8800000 | W | (L<<20) | (Rn<<16) |
+               (tinstr&255);
+    }
 
-	/* 6.6.1 Format 2: */
-	case 0xb000 >> 11:				/* 7.1.48 PUSH */
-	case 0xb800 >> 11:				/* 7.1.47 POP */
-		if ((tinstr & (3 << 9)) == 0x0400) {
-			static const u32 subset[4] = {
-				0xe92d0000,	/* STMDB sp!,{registers} */
-				0xe92d4000,	/* STMDB sp!,{registers,lr} */
-				0xe8bd0000,	/* LDMIA sp!,{registers} */
-				0xe8bd8000	/* LDMIA sp!,{registers,pc} */
-			};
-			return subset[(L<<1) | ((tinstr & (1<<8)) >> 8)] |
-			    (tinstr & 255);		/* register_list */
-		}
-		/* Else fall through for illegal instruction case */
+    /* 6.6.1 Format 2: */
+    case 0xb000 >> 11:				/* 7.1.48 PUSH */
+    case 0xb800 >> 11:				/* 7.1.47 POP */
+        if ((tinstr & (3 << 9)) == 0x0400) {
+            static const u32 subset[4] = {
+                0xe92d0000,	/* STMDB sp!,{registers} */
+                0xe92d4000,	/* STMDB sp!,{registers,lr} */
+                0xe8bd0000,	/* LDMIA sp!,{registers} */
+                0xe8bd8000	/* LDMIA sp!,{registers,pc} */
+            };
+            return subset[(L<<1) | ((tinstr & (1<<8)) >> 8)] |
+                   (tinstr & 255);		/* register_list */
+        }
+    /* Else fall through for illegal instruction case */
 
-	default:
-		return BAD_INSTR;
-	}
+    default:
+        return BAD_INSTR;
+    }
 }
 
 /*
@@ -694,257 +681,255 @@ thumb2arm(u16 tinstr)
  */
 static void *
 do_alignment_t32_to_handler(unsigned long *pinstr, struct pt_regs *regs,
-			    union offset_union *poffset)
-{
-	unsigned long instr = *pinstr;
-	u16 tinst1 = (instr >> 16) & 0xffff;
-	u16 tinst2 = instr & 0xffff;
-	poffset->un = 0;
+                            union offset_union *poffset) {
+    unsigned long instr = *pinstr;
+    u16 tinst1 = (instr >> 16) & 0xffff;
+    u16 tinst2 = instr & 0xffff;
+    poffset->un = 0;
 
-	switch (tinst1 & 0xffe0) {
-	/* A6.3.5 Load/Store multiple */
-	case 0xe880:		/* STM/STMIA/STMEA,LDM/LDMIA, PUSH/POP T2 */
-	case 0xe8a0:		/* ...above writeback version */
-	case 0xe900:		/* STMDB/STMFD, LDMDB/LDMEA */
-	case 0xe920:		/* ...above writeback version */
-		/* no need offset decision since handler calculates it */
-		return do_alignment_ldmstm;
+    switch (tinst1 & 0xffe0) {
+    /* A6.3.5 Load/Store multiple */
+    case 0xe880:		/* STM/STMIA/STMEA,LDM/LDMIA, PUSH/POP T2 */
+    case 0xe8a0:		/* ...above writeback version */
+    case 0xe900:		/* STMDB/STMFD, LDMDB/LDMEA */
+    case 0xe920:		/* ...above writeback version */
+        /* no need offset decision since handler calculates it */
+        return do_alignment_ldmstm;
 
-	case 0xf840:		/* POP/PUSH T3 (single register) */
-		if (RN_BITS(instr) == 13 && (tinst2 & 0x09ff) == 0x0904) {
-			u32 L = !!(LDST_L_BIT(instr));
-			const u32 subset[2] = {
-				0xe92d0000,	/* STMDB sp!,{registers} */
-				0xe8bd0000,	/* LDMIA sp!,{registers} */
-			};
-			*pinstr = subset[L] | (1<<RD_BITS(instr));
-			return do_alignment_ldmstm;
-		}
-		/* Else fall through for illegal instruction case */
-		break;
+    case 0xf840:		/* POP/PUSH T3 (single register) */
+        if (RN_BITS(instr) == 13 && (tinst2 & 0x09ff) == 0x0904) {
+            u32 L = !!(LDST_L_BIT(instr));
+            const u32 subset[2] = {
+                0xe92d0000,	/* STMDB sp!,{registers} */
+                0xe8bd0000,	/* LDMIA sp!,{registers} */
+            };
+            *pinstr = subset[L] | (1<<RD_BITS(instr));
+            return do_alignment_ldmstm;
+        }
+        /* Else fall through for illegal instruction case */
+        break;
 
-	/* A6.3.6 Load/store double, STRD/LDRD(immed, lit, reg) */
-	case 0xe860:
-	case 0xe960:
-	case 0xe8e0:
-	case 0xe9e0:
-		poffset->un = (tinst2 & 0xff) << 2;
-	case 0xe940:
-	case 0xe9c0:
-		return do_alignment_ldrdstrd;
+    /* A6.3.6 Load/store double, STRD/LDRD(immed, lit, reg) */
+    case 0xe860:
+    case 0xe960:
+    case 0xe8e0:
+    case 0xe9e0:
+        poffset->un = (tinst2 & 0xff) << 2;
+    case 0xe940:
+    case 0xe9c0:
+        return do_alignment_ldrdstrd;
 
-	/*
-	 * No need to handle load/store instructions up to word size
-	 * since ARMv6 and later CPUs can perform unaligned accesses.
-	 */
-	default:
-		break;
-	}
-	return NULL;
+    /*
+     * No need to handle load/store instructions up to word size
+     * since ARMv6 and later CPUs can perform unaligned accesses.
+     */
+    default:
+        break;
+    }
+    return NULL;
 }
 
 static int
-do_alignment(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
-{
-	union offset_union offset;
-	unsigned long instr = 0, instrptr;
-	int (*handler)(unsigned long addr, unsigned long instr, struct pt_regs *regs);
-	unsigned int type;
-	mm_segment_t fs;
-	unsigned int fault;
-	u16 tinstr = 0;
-	int isize = 4;
-	int thumb2_32b = 0;
+do_alignment(unsigned long addr, unsigned int fsr, struct pt_regs *regs) {
+    union offset_union offset;
+    unsigned long instr = 0, instrptr;
+    int (*handler)(unsigned long addr, unsigned long instr, struct pt_regs *regs);
+    unsigned int type;
+    mm_segment_t fs;
+    unsigned int fault;
+    u16 tinstr = 0;
+    int isize = 4;
+    int thumb2_32b = 0;
 
-	if (interrupts_enabled(regs))
-		local_irq_enable();
+    if (interrupts_enabled(regs))
+        local_irq_enable();
 
-	instrptr = instruction_pointer(regs);
+    instrptr = instruction_pointer(regs);
 
-	fs = get_fs();
-	set_fs(KERNEL_DS);
-	if (thumb_mode(regs)) {
-		fault = __get_user(tinstr, (u16 *)(instrptr & ~1));
-		if (!fault) {
-			if (cpu_architecture() >= CPU_ARCH_ARMv7 &&
-			    IS_T32(tinstr)) {
-				/* Thumb-2 32-bit */
-				u16 tinst2 = 0;
-				fault = __get_user(tinst2, (u16 *)(instrptr+2));
-				instr = (tinstr << 16) | tinst2;
-				thumb2_32b = 1;
-			} else {
-				isize = 2;
-				instr = thumb2arm(tinstr);
-			}
-		}
-	} else
-		fault = __get_user(instr, (u32 *)instrptr);
-	set_fs(fs);
+    fs = get_fs();
+    set_fs(KERNEL_DS);
+    if (thumb_mode(regs)) {
+        fault = __get_user(tinstr, (u16 *)(instrptr & ~1));
+        if (!fault) {
+            if (cpu_architecture() >= CPU_ARCH_ARMv7 &&
+                    IS_T32(tinstr)) {
+                /* Thumb-2 32-bit */
+                u16 tinst2 = 0;
+                fault = __get_user(tinst2, (u16 *)(instrptr+2));
+                instr = (tinstr << 16) | tinst2;
+                thumb2_32b = 1;
+            } else {
+                isize = 2;
+                instr = thumb2arm(tinstr);
+            }
+        }
+    } else
+        fault = __get_user(instr, (u32 *)instrptr);
+    set_fs(fs);
 
-	if (fault) {
-		type = TYPE_FAULT;
-		goto bad_or_fault;
-	}
+    if (fault) {
+        type = TYPE_FAULT;
+        goto bad_or_fault;
+    }
 
-	if (user_mode(regs))
-		goto user;
+    if (user_mode(regs))
+        goto user;
 
-	ai_sys += 1;
+    ai_sys += 1;
 
- fixup:
+fixup:
 
-	regs->ARM_pc += isize;
+    regs->ARM_pc += isize;
 
-	switch (CODING_BITS(instr)) {
-	case 0x00000000:	/* 3.13.4 load/store instruction extensions */
-		if (LDSTHD_I_BIT(instr))
-			offset.un = (instr & 0xf00) >> 4 | (instr & 15);
-		else
-			offset.un = regs->uregs[RM_BITS(instr)];
+    switch (CODING_BITS(instr)) {
+    case 0x00000000:	/* 3.13.4 load/store instruction extensions */
+        if (LDSTHD_I_BIT(instr))
+            offset.un = (instr & 0xf00) >> 4 | (instr & 15);
+        else
+            offset.un = regs->uregs[RM_BITS(instr)];
 
-		if ((instr & 0x000000f0) == 0x000000b0 || /* LDRH, STRH */
-		    (instr & 0x001000f0) == 0x001000f0)   /* LDRSH */
-			handler = do_alignment_ldrhstrh;
-		else if ((instr & 0x001000f0) == 0x000000d0 || /* LDRD */
-			 (instr & 0x001000f0) == 0x000000f0)   /* STRD */
-			handler = do_alignment_ldrdstrd;
-		else if ((instr & 0x01f00ff0) == 0x01000090) /* SWP */
-			goto swp;
-		else
-			goto bad;
-		break;
+        if ((instr & 0x000000f0) == 0x000000b0 || /* LDRH, STRH */
+                (instr & 0x001000f0) == 0x001000f0)   /* LDRSH */
+            handler = do_alignment_ldrhstrh;
+        else if ((instr & 0x001000f0) == 0x000000d0 || /* LDRD */
+                 (instr & 0x001000f0) == 0x000000f0)   /* STRD */
+            handler = do_alignment_ldrdstrd;
+        else if ((instr & 0x01f00ff0) == 0x01000090) /* SWP */
+            goto swp;
+        else
+            goto bad;
+        break;
 
-	case 0x04000000:	/* ldr or str immediate */
-		offset.un = OFFSET_BITS(instr);
-		handler = do_alignment_ldrstr;
-		break;
+    case 0x04000000:	/* ldr or str immediate */
+        offset.un = OFFSET_BITS(instr);
+        handler = do_alignment_ldrstr;
+        break;
 
-	case 0x06000000:	/* ldr or str register */
-		offset.un = regs->uregs[RM_BITS(instr)];
+    case 0x06000000:	/* ldr or str register */
+        offset.un = regs->uregs[RM_BITS(instr)];
 
-		if (IS_SHIFT(instr)) {
-			unsigned int shiftval = SHIFT_BITS(instr);
+        if (IS_SHIFT(instr)) {
+            unsigned int shiftval = SHIFT_BITS(instr);
 
-			switch(SHIFT_TYPE(instr)) {
-			case SHIFT_LSL:
-				offset.un <<= shiftval;
-				break;
+            switch(SHIFT_TYPE(instr)) {
+            case SHIFT_LSL:
+                offset.un <<= shiftval;
+                break;
 
-			case SHIFT_LSR:
-				offset.un >>= shiftval;
-				break;
+            case SHIFT_LSR:
+                offset.un >>= shiftval;
+                break;
 
-			case SHIFT_ASR:
-				offset.sn >>= shiftval;
-				break;
+            case SHIFT_ASR:
+                offset.sn >>= shiftval;
+                break;
 
-			case SHIFT_RORRRX:
-				if (shiftval == 0) {
-					offset.un >>= 1;
-					if (regs->ARM_cpsr & PSR_C_BIT)
-						offset.un |= 1 << 31;
-				} else
-					offset.un = offset.un >> shiftval |
-							  offset.un << (32 - shiftval);
-				break;
-			}
-		}
-		handler = do_alignment_ldrstr;
-		break;
+            case SHIFT_RORRRX:
+                if (shiftval == 0) {
+                    offset.un >>= 1;
+                    if (regs->ARM_cpsr & PSR_C_BIT)
+                        offset.un |= 1 << 31;
+                } else
+                    offset.un = offset.un >> shiftval |
+                                offset.un << (32 - shiftval);
+                break;
+            }
+        }
+        handler = do_alignment_ldrstr;
+        break;
 
-	case 0x08000000:	/* ldm or stm, or thumb-2 32bit instruction */
-		if (thumb2_32b)
-			handler = do_alignment_t32_to_handler(&instr, regs, &offset);
-		else {
-			handler = do_alignment_ldmstm;
-			offset.un = 0;
-		}
-		break;
+    case 0x08000000:	/* ldm or stm, or thumb-2 32bit instruction */
+        if (thumb2_32b)
+            handler = do_alignment_t32_to_handler(&instr, regs, &offset);
+        else {
+            handler = do_alignment_ldmstm;
+            offset.un = 0;
+        }
+        break;
 
-	default:
-		goto bad;
-	}
+    default:
+        goto bad;
+    }
 
-	if (!handler)
-		goto bad;
-	type = handler(addr, instr, regs);
+    if (!handler)
+        goto bad;
+    type = handler(addr, instr, regs);
 
-	if (type == TYPE_ERROR || type == TYPE_FAULT) {
-		regs->ARM_pc -= isize;
-		goto bad_or_fault;
-	}
+    if (type == TYPE_ERROR || type == TYPE_FAULT) {
+        regs->ARM_pc -= isize;
+        goto bad_or_fault;
+    }
 
-	if (type == TYPE_LDST)
-		do_alignment_finish_ldst(addr, instr, regs, offset);
+    if (type == TYPE_LDST)
+        do_alignment_finish_ldst(addr, instr, regs, offset);
 
-	return 0;
+    return 0;
 
- bad_or_fault:
-	if (type == TYPE_ERROR)
-		goto bad;
-	/*
-	 * We got a fault - fix it up, or die.
-	 */
-	do_bad_area(addr, fsr, regs);
-	return 0;
+bad_or_fault:
+    if (type == TYPE_ERROR)
+        goto bad;
+    /*
+     * We got a fault - fix it up, or die.
+     */
+    do_bad_area(addr, fsr, regs);
+    return 0;
 
- swp:
-	printk(KERN_ERR "Alignment trap: not handling swp instruction\n");
+swp:
+    printk(KERN_ERR "Alignment trap: not handling swp instruction\n");
 
- bad:
-	/*
-	 * Oops, we didn't handle the instruction.
-	 */
-	printk(KERN_ERR "Alignment trap: not handling instruction "
-		"%0*lx at [<%08lx>]\n",
-		isize << 1,
-		isize == 2 ? tinstr : instr, instrptr);
-	ai_skipped += 1;
-	return 1;
+bad:
+    /*
+     * Oops, we didn't handle the instruction.
+     */
+    printk(KERN_ERR "Alignment trap: not handling instruction "
+           "%0*lx at [<%08lx>]\n",
+           isize << 1,
+           isize == 2 ? tinstr : instr, instrptr);
+    ai_skipped += 1;
+    return 1;
 
- user:
-	ai_user += 1;
+user:
+    ai_user += 1;
 
-	if (ai_usermode & UM_WARN)
-		printk("Alignment trap: %s (%d) PC=0x%08lx Instr=0x%0*lx "
-		       "Address=0x%08lx FSR 0x%03x\n", current->comm,
-			task_pid_nr(current), instrptr,
-			isize << 1,
-			isize == 2 ? tinstr : instr,
-		        addr, fsr);
+    if (ai_usermode & UM_WARN)
+        printk("Alignment trap: %s (%d) PC=0x%08lx Instr=0x%0*lx "
+               "Address=0x%08lx FSR 0x%03x\n", current->comm,
+               task_pid_nr(current), instrptr,
+               isize << 1,
+               isize == 2 ? tinstr : instr,
+               addr, fsr);
 
-	if (ai_usermode & UM_FIXUP)
-		goto fixup;
+    if (ai_usermode & UM_FIXUP)
+        goto fixup;
 
-	if (ai_usermode & UM_SIGNAL) {
-		siginfo_t si;
+    if (ai_usermode & UM_SIGNAL) {
+        siginfo_t si;
 
-		si.si_signo = SIGBUS;
-		si.si_errno = 0;
-		si.si_code = BUS_ADRALN;
-		si.si_addr = (void __user *)addr;
+        si.si_signo = SIGBUS;
+        si.si_errno = 0;
+        si.si_code = BUS_ADRALN;
+        si.si_addr = (void __user *)addr;
 
-		force_sig_info(si.si_signo, &si, current);
-	} else {
-		/*
-		 * We're about to disable the alignment trap and return to
-		 * user space.  But if an interrupt occurs before actually
-		 * reaching user space, then the IRQ vector entry code will
-		 * notice that we were still in kernel space and therefore
-		 * the alignment trap won't be re-enabled in that case as it
-		 * is presumed to be always on from kernel space.
-		 * Let's prevent that race by disabling interrupts here (they
-		 * are disabled on the way back to user space anyway in
-		 * entry-common.S) and disable the alignment trap only if
-		 * there is no work pending for this thread.
-		 */
-		raw_local_irq_disable();
-		if (!(current_thread_info()->flags & _TIF_WORK_MASK))
-			set_cr(cr_no_alignment);
-	}
+        force_sig_info(si.si_signo, &si, current);
+    } else {
+        /*
+         * We're about to disable the alignment trap and return to
+         * user space.  But if an interrupt occurs before actually
+         * reaching user space, then the IRQ vector entry code will
+         * notice that we were still in kernel space and therefore
+         * the alignment trap won't be re-enabled in that case as it
+         * is presumed to be always on from kernel space.
+         * Let's prevent that race by disabling interrupts here (they
+         * are disabled on the way back to user space anyway in
+         * entry-common.S) and disable the alignment trap only if
+         * there is no work pending for this thread.
+         */
+        raw_local_irq_disable();
+        if (!(current_thread_info()->flags & _TIF_WORK_MASK))
+            set_cr(cr_no_alignment);
+    }
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -953,40 +938,39 @@ do_alignment(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
  * it isn't a sysctl, and it doesn't contain sysctl information.
  * We now locate it in /proc/cpu/alignment instead.
  */
-static int __init alignment_init(void)
-{
+static int __init alignment_init(void) {
 #ifdef CONFIG_PROC_FS
-	struct proc_dir_entry *res;
+    struct proc_dir_entry *res;
 
-	res = proc_create("cpu/alignment", S_IWUSR | S_IRUGO, NULL,
-			  &alignment_proc_fops);
-	if (!res)
-		return -ENOMEM;
+    res = proc_create("cpu/alignment", S_IWUSR | S_IRUGO, NULL,
+                      &alignment_proc_fops);
+    if (!res)
+        return -ENOMEM;
 #endif
 
-	if (cpu_is_v6_unaligned()) {
-		cr_alignment &= ~CR_A;
-		cr_no_alignment &= ~CR_A;
-		set_cr(cr_alignment);
-		ai_usermode = safe_usermode(ai_usermode, false);
-	}
+    if (cpu_is_v6_unaligned()) {
+        cr_alignment &= ~CR_A;
+        cr_no_alignment &= ~CR_A;
+        set_cr(cr_alignment);
+        ai_usermode = safe_usermode(ai_usermode, false);
+    }
 
-	hook_fault_code(FAULT_CODE_ALIGNMENT, do_alignment, SIGBUS, BUS_ADRALN,
-			"alignment exception");
+    hook_fault_code(FAULT_CODE_ALIGNMENT, do_alignment, SIGBUS, BUS_ADRALN,
+                    "alignment exception");
 
-	/*
-	 * ARMv6K and ARMv7 use fault status 3 (0b00011) as Access Flag section
-	 * fault, not as alignment error.
-	 *
-	 * TODO: handle ARMv6K properly. Runtime check for 'K' extension is
-	 * needed.
-	 */
-	if (cpu_architecture() <= CPU_ARCH_ARMv6) {
-		hook_fault_code(3, do_alignment, SIGBUS, BUS_ADRALN,
-				"alignment exception");
-	}
+    /*
+     * ARMv6K and ARMv7 use fault status 3 (0b00011) as Access Flag section
+     * fault, not as alignment error.
+     *
+     * TODO: handle ARMv6K properly. Runtime check for 'K' extension is
+     * needed.
+     */
+    if (cpu_architecture() <= CPU_ARCH_ARMv6) {
+        hook_fault_code(3, do_alignment, SIGBUS, BUS_ADRALN,
+                        "alignment exception");
+    }
 
-	return 0;
+    return 0;
 }
 
 fs_initcall(alignment_init);

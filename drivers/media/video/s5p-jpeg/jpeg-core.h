@@ -62,20 +62,20 @@
  * @alloc_ctx:		videobuf2 memory allocator's context
  */
 struct s5p_jpeg {
-	struct mutex		lock;
-	struct spinlock		slock;
+    struct mutex		lock;
+    struct spinlock		slock;
 
-	struct v4l2_device	v4l2_dev;
-	struct video_device	*vfd_encoder;
-	struct video_device	*vfd_decoder;
-	struct v4l2_m2m_dev	*m2m_dev;
+    struct v4l2_device	v4l2_dev;
+    struct video_device	*vfd_encoder;
+    struct video_device	*vfd_decoder;
+    struct v4l2_m2m_dev	*m2m_dev;
 
-	struct resource		*ioarea;
-	void __iomem		*regs;
-	unsigned int		irq;
-	struct clk		*clk;
-	struct device		*dev;
-	void			*alloc_ctx;
+    struct resource		*ioarea;
+    void __iomem		*regs;
+    unsigned int		irq;
+    struct clk		*clk;
+    struct device		*dev;
+    void			*alloc_ctx;
 };
 
 /**
@@ -89,13 +89,13 @@ struct s5p_jpeg {
  * @types:	types of queue this format is applicable to
  */
 struct s5p_jpeg_fmt {
-	char	*name;
-	u32	fourcc;
-	int	depth;
-	int	colplanes;
-	int	h_align;
-	int	v_align;
-	u32	types;
+    char	*name;
+    u32	fourcc;
+    int	depth;
+    int	colplanes;
+    int	h_align;
+    int	v_align;
+    u32	types;
 };
 
 /**
@@ -106,10 +106,10 @@ struct s5p_jpeg_fmt {
  * @size:	image buffer size in bytes
  */
 struct s5p_jpeg_q_data {
-	struct s5p_jpeg_fmt	*fmt;
-	u32			w;
-	u32			h;
-	u32			size;
+    struct s5p_jpeg_fmt	*fmt;
+    u32			w;
+    u32			h;
+    u32			size;
 };
 
 /**
@@ -124,17 +124,17 @@ struct s5p_jpeg_q_data {
  * @ctrl_handler:	controls handler
  */
 struct s5p_jpeg_ctx {
-	struct s5p_jpeg		*jpeg;
-	unsigned int		mode;
-	unsigned short		compr_quality;
-	unsigned short		restart_interval;
-	unsigned short		subsampling;
-	struct v4l2_m2m_ctx	*m2m_ctx;
-	struct s5p_jpeg_q_data	out_q;
-	struct s5p_jpeg_q_data	cap_q;
-	struct v4l2_fh		fh;
-	bool			hdr_parsed;
-	struct v4l2_ctrl_handler ctrl_handler;
+    struct s5p_jpeg		*jpeg;
+    unsigned int		mode;
+    unsigned short		compr_quality;
+    unsigned short		restart_interval;
+    unsigned short		subsampling;
+    struct v4l2_m2m_ctx	*m2m_ctx;
+    struct s5p_jpeg_q_data	out_q;
+    struct s5p_jpeg_q_data	cap_q;
+    struct v4l2_fh		fh;
+    bool			hdr_parsed;
+    struct v4l2_ctrl_handler ctrl_handler;
 };
 
 /**
@@ -144,9 +144,9 @@ struct s5p_jpeg_ctx {
  * @data:	pointer to the data
  */
 struct s5p_jpeg_buffer {
-	unsigned long size;
-	unsigned long curr;
-	unsigned long data;
+    unsigned long size;
+    unsigned long curr;
+    unsigned long data;
 };
 
 #endif /* JPEG_CORE_H */

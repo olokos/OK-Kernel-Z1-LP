@@ -25,57 +25,57 @@ extern int budget_debug;
 	    do { if ((budget_debug & level)) { printk("%s: %s(): ", KBUILD_MODNAME, __func__); printk(args); } } while (0)
 
 struct budget_info {
-	char *name;
-	int type;
+    char *name;
+    int type;
 };
 
 /* place to store all the necessary device information */
 struct budget {
 
-	/* devices */
-	struct dvb_device dvb_dev;
-	struct dvb_net dvb_net;
+    /* devices */
+    struct dvb_device dvb_dev;
+    struct dvb_net dvb_net;
 
-	struct saa7146_dev *dev;
+    struct saa7146_dev *dev;
 
-	struct i2c_adapter i2c_adap;
-	struct budget_info *card;
+    struct i2c_adapter i2c_adap;
+    struct budget_info *card;
 
-	unsigned char *grabbing;
-	struct saa7146_pgtable pt;
+    unsigned char *grabbing;
+    struct saa7146_pgtable pt;
 
-	struct tasklet_struct fidb_tasklet;
-	struct tasklet_struct vpe_tasklet;
+    struct tasklet_struct fidb_tasklet;
+    struct tasklet_struct vpe_tasklet;
 
-	struct dmxdev dmxdev;
-	struct dvb_demux demux;
+    struct dmxdev dmxdev;
+    struct dvb_demux demux;
 
-	struct dmx_frontend hw_frontend;
-	struct dmx_frontend mem_frontend;
+    struct dmx_frontend hw_frontend;
+    struct dmx_frontend mem_frontend;
 
-	int ci_present;
-	int video_port;
+    int ci_present;
+    int video_port;
 
-	u32 buffer_width;
-	u32 buffer_height;
-	u32 buffer_size;
-	u32 buffer_warning_threshold;
-	u32 buffer_warnings;
-	unsigned long buffer_warning_time;
+    u32 buffer_width;
+    u32 buffer_height;
+    u32 buffer_size;
+    u32 buffer_warning_threshold;
+    u32 buffer_warnings;
+    unsigned long buffer_warning_time;
 
-	u32 ttbp;
-	int feeding;
+    u32 ttbp;
+    int feeding;
 
-	spinlock_t feedlock;
+    spinlock_t feedlock;
 
-	spinlock_t debilock;
+    spinlock_t debilock;
 
-	struct dvb_adapter dvb_adapter;
-	struct dvb_frontend *dvb_frontend;
-	int (*read_fe_status)(struct dvb_frontend *fe, fe_status_t *status);
-	int fe_synced;
+    struct dvb_adapter dvb_adapter;
+    struct dvb_frontend *dvb_frontend;
+    int (*read_fe_status)(struct dvb_frontend *fe, fe_status_t *status);
+    int fe_synced;
 
-	void *priv;
+    void *priv;
 };
 
 #define MAKE_BUDGET_INFO(x_var,x_name,x_type) \
@@ -110,15 +110,15 @@ static struct saa7146_pci_extension_data x_var = { \
 #define BUDGET_VIDEO_PORTB         1
 
 extern int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
-			     struct saa7146_pci_extension_data *info,
-			     struct module *owner, short *adapter_nums);
+                             struct saa7146_pci_extension_data *info,
+                             struct module *owner, short *adapter_nums);
 extern void ttpci_budget_init_hooks(struct budget *budget);
 extern int ttpci_budget_deinit(struct budget *budget);
 extern void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 * isr);
 extern void ttpci_budget_set_video_port(struct saa7146_dev *dev, int video_port);
 extern int ttpci_budget_debiread(struct budget *budget, u32 config, int addr, int count,
-				 int uselocks, int nobusyloop);
+                                 int uselocks, int nobusyloop);
 extern int ttpci_budget_debiwrite(struct budget *budget, u32 config, int addr, int count, u32 value,
-				  int uselocks, int nobusyloop);
+                                  int uselocks, int nobusyloop);
 
 #endif

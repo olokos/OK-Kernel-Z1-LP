@@ -34,27 +34,26 @@
 
 static inline unsigned long
 flat_get_addr_from_rp(unsigned long *rp, unsigned long relval,
-			unsigned long flags, unsigned long *persistent)
-{
-	unsigned long addr;
-	(void)flags;
+                      unsigned long flags, unsigned long *persistent) {
+    unsigned long addr;
+    (void)flags;
 
-	/* Is it a split 64/32 reference? */
-	if (relval & 0x80000000) {
-		/* Grab the two halves of the reference */
-		unsigned long val_hi, val_lo;
+    /* Is it a split 64/32 reference? */
+    if (relval & 0x80000000) {
+        /* Grab the two halves of the reference */
+        unsigned long val_hi, val_lo;
 
-		val_hi = get_unaligned(rp);
-		val_lo = get_unaligned(rp+1);
+        val_hi = get_unaligned(rp);
+        val_lo = get_unaligned(rp+1);
 
-		/* Crack the address out */
-		addr = ((val_hi & 0xffff) << 16) + (val_lo & 0xffff);
-	} else {
-		/* Get the address straight out */
-		addr = get_unaligned(rp);
-	}
+        /* Crack the address out */
+        addr = ((val_hi & 0xffff) << 16) + (val_lo & 0xffff);
+    } else {
+        /* Get the address straight out */
+        addr = get_unaligned(rp);
+    }
 
-	return addr;
+    return addr;
 }
 
 /*
@@ -63,25 +62,24 @@ flat_get_addr_from_rp(unsigned long *rp, unsigned long relval,
  */
 
 static inline void
-flat_put_addr_at_rp(unsigned long *rp, unsigned long addr, unsigned long relval)
-{
-	/* Is this a split 64/32 reloc? */
-	if (relval & 0x80000000) {
-		/* Get the two "halves" */
-		unsigned long val_hi = get_unaligned(rp);
-		unsigned long val_lo = get_unaligned(rp + 1);
+flat_put_addr_at_rp(unsigned long *rp, unsigned long addr, unsigned long relval) {
+    /* Is this a split 64/32 reloc? */
+    if (relval & 0x80000000) {
+        /* Get the two "halves" */
+        unsigned long val_hi = get_unaligned(rp);
+        unsigned long val_lo = get_unaligned(rp + 1);
 
-		/* insert the address */
-		val_hi = (val_hi & 0xffff0000) | addr >> 16;
-		val_lo = (val_lo & 0xffff0000) | (addr & 0xffff);
+        /* insert the address */
+        val_hi = (val_hi & 0xffff0000) | addr >> 16;
+        val_lo = (val_lo & 0xffff0000) | (addr & 0xffff);
 
-		/* store the two halves back into memory */
-		put_unaligned(val_hi, rp);
-		put_unaligned(val_lo, rp+1);
-	} else {
-		/* Put it straight in, no messing around */
-		put_unaligned(addr, rp);
-	}
+        /* store the two halves back into memory */
+        put_unaligned(val_hi, rp);
+        put_unaligned(val_lo, rp+1);
+    } else {
+        /* Put it straight in, no messing around */
+        put_unaligned(addr, rp);
+    }
 }
 
 #define	flat_get_relocate_addr(rel)	(rel & 0x7fffffff)

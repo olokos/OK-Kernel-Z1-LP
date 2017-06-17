@@ -1,4 +1,4 @@
- /***************************************************************************\
+/***************************************************************************\
 |*                                                                           *|
 |*       Copyright 1993-1999 NVIDIA, Corporation.  All rights reserved.      *|
 |*                                                                           *|
@@ -35,13 +35,13 @@
 |*     all U.S. Government End Users  acquire the source code  with only     *|
 |*     those rights set forth herein.                                        *|
 |*                                                                           *|
- \***************************************************************************/
+\***************************************************************************/
 
 /*
  * GPL licensing note -- nVidia is allowing a liberal interpretation of
  * the documentation restriction above, to merely say that this nVidia's
  * copyright and disclaimer should be included with all code derived
- * from this source.  -- Jeff Garzik <jgarzik@pobox.com>, 01/Nov/99 
+ * from this source.  -- Jeff Garzik <jgarzik@pobox.com>, 01/Nov/99
  */
 
 /* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/nv/riva_tbl.h,v 1.9 2002/01/30 01:35:03 mvojkovi Exp $ */
@@ -50,21 +50,18 @@
 /*
  * RIVA Fixed Functionality Init Tables.
  */
-static unsigned RivaTablePMC[][2] =
-{
+static unsigned RivaTablePMC[][2] = {
     {0x00000050, 0x00000000},
     {0x00000080, 0xFFFF00FF},
     {0x00000080, 0xFFFFFFFF}
 };
-static unsigned RivaTablePTIMER[][2] =
-{
+static unsigned RivaTablePTIMER[][2] = {
     {0x00000080, 0x00000008},
     {0x00000084, 0x00000003},
     {0x00000050, 0x00000000},
     {0x00000040, 0xFFFFFFFF}
 };
-static unsigned RivaTableFIFO[][2] =
-{
+static unsigned RivaTableFIFO[][2] = {
     {0x00000000, 0x80000000},
     {0x00000800, 0x80000001},
     {0x00001000, 0x80000002},
@@ -74,8 +71,7 @@ static unsigned RivaTableFIFO[][2] =
     {0x00003000, 0x80000016},
     {0x00003800, 0x80000013}
 };
-static unsigned nv3TablePFIFO[][2] =
-{
+static unsigned nv3TablePFIFO[][2] = {
     {0x00000140, 0x00000000},
     {0x00000480, 0x00000000},
     {0x00000490, 0x00000000},
@@ -103,8 +99,7 @@ static unsigned nv3TablePFIFO[][2] =
     {0x00000490, 0x00000001},
     {0x00000140, 0x00000001}
 };
-static unsigned nv3TablePGRAPH[][2] =
-{
+static unsigned nv3TablePGRAPH[][2] = {
     {0x00000020, 0x1230001F},
     {0x00000021, 0x10113000},
     {0x00000022, 0x1131F101},
@@ -139,20 +134,16 @@ static unsigned nv3TablePGRAPH[][2] =
     {0x00000440, 0xFFFFFFFF},
     {0x000001A9, 0x00000001}
 };
-static unsigned nv3TablePGRAPH_8BPP[][2] =
-{
+static unsigned nv3TablePGRAPH_8BPP[][2] = {
     {0x000001AA, 0x00001111}
 };
-static unsigned nv3TablePGRAPH_15BPP[][2] =
-{
+static unsigned nv3TablePGRAPH_15BPP[][2] = {
     {0x000001AA, 0x00002222}
 };
-static unsigned nv3TablePGRAPH_32BPP[][2] =
-{
+static unsigned nv3TablePGRAPH_32BPP[][2] = {
     {0x000001AA, 0x00003333}
 };
-static unsigned nv3TablePRAMIN[][2] =
-{
+static unsigned nv3TablePRAMIN[][2] = {
     {0x00000500, 0x00010000},
     {0x00000501, 0x007FFFFF},
     {0x00000200, 0x80000000},
@@ -220,8 +211,7 @@ static unsigned nv3TablePRAMIN[][2] =
     {0x00000D32, 0x00000000},
     {0x00000D33, 0x00000000}
 };
-static unsigned nv3TablePRAMIN_8BPP[][2] =
-{
+static unsigned nv3TablePRAMIN_8BPP[][2] = {
     /*           0xXXXXX3XX For  MSB mono format */
     /*           0xXXXXX2XX For  LSB mono format */
     {0x00000D04, 0x10110203},
@@ -233,8 +223,7 @@ static unsigned nv3TablePRAMIN_8BPP[][2] =
     {0x00000D1C, 0x10419208},
     {0x00000D30, 0x10118203}
 };
-static unsigned nv3TablePRAMIN_15BPP[][2] =
-{
+static unsigned nv3TablePRAMIN_15BPP[][2] = {
     /*           0xXXXXX2XX For  MSB mono format */
     /*           0xXXXXX3XX For  LSB mono format */
     {0x00000D04, 0x10110200},
@@ -246,8 +235,7 @@ static unsigned nv3TablePRAMIN_15BPP[][2] =
     {0x00000D1C, 0x10419208},
     {0x00000D30, 0x10118200}
 };
-static unsigned nv3TablePRAMIN_32BPP[][2] =
-{
+static unsigned nv3TablePRAMIN_32BPP[][2] = {
     /*           0xXXXXX3XX For  MSB mono format */
     /*           0xXXXXX2XX For  LSB mono format */
     {0x00000D04, 0x10110201},
@@ -259,12 +247,10 @@ static unsigned nv3TablePRAMIN_32BPP[][2] =
     {0x00000D1C, 0x10419208},
     {0x00000D30, 0x10118201}
 };
-static unsigned nv4TableFIFO[][2] =
-{
+static unsigned nv4TableFIFO[][2] = {
     {0x00003800, 0x80000014}
 };
-static unsigned nv4TablePFIFO[][2] =
-{
+static unsigned nv4TablePFIFO[][2] = {
     {0x00000140, 0x00000000},
     {0x00000480, 0x00000000},
     {0x00000494, 0x00000000},
@@ -272,9 +258,9 @@ static unsigned nv4TablePFIFO[][2] =
     {0x0000048B, 0x00000000},
     {0x00000400, 0x00000000},
     {0x00000414, 0x00000000},
-    {0x00000084, 0x03000100},  
+    {0x00000084, 0x03000100},
     {0x00000085, 0x00000110},
-    {0x00000086, 0x00000112},  
+    {0x00000086, 0x00000112},
     {0x00000143, 0x0000FFFF},
     {0x00000496, 0x0000FFFF},
     {0x00000050, 0x00000000},
@@ -285,8 +271,7 @@ static unsigned nv4TablePFIFO[][2] =
     {0x00000495, 0x00000001},
     {0x00000140, 0x00000001}
 };
-static unsigned nv4TablePGRAPH[][2] =
-{
+static unsigned nv4TablePGRAPH[][2] = {
     {0x00000020, 0x1231C001},
     {0x00000021, 0x72111101},
     {0x00000022, 0x11D5F071},
@@ -343,32 +328,27 @@ static unsigned nv4TablePGRAPH[][2] =
     {0x00000204, 0x00000000},
     {0x000001C3, 0x00000001}
 };
-static unsigned nv4TablePGRAPH_8BPP[][2] =
-{
+static unsigned nv4TablePGRAPH_8BPP[][2] = {
     {0x000001C9, 0x00111111},
     {0x00000186, 0x00001010},
     {0x0000020C, 0x03020202}
 };
-static unsigned nv4TablePGRAPH_15BPP[][2] =
-{
+static unsigned nv4TablePGRAPH_15BPP[][2] = {
     {0x000001C9, 0x00226222},
     {0x00000186, 0x00002071},
     {0x0000020C, 0x09080808}
 };
-static unsigned nv4TablePGRAPH_16BPP[][2] =
-{
+static unsigned nv4TablePGRAPH_16BPP[][2] = {
     {0x000001C9, 0x00556555},
     {0x00000186, 0x000050C2},
     {0x0000020C, 0x0C0B0B0B}
 };
-static unsigned nv4TablePGRAPH_32BPP[][2] =
-{
+static unsigned nv4TablePGRAPH_32BPP[][2] = {
     {0x000001C9, 0x0077D777},
     {0x00000186, 0x000070E5},
     {0x0000020C, 0x0E0D0D0D}
 };
-static unsigned nv4TablePRAMIN[][2] =
-{
+static unsigned nv4TablePRAMIN[][2] = {
     {0x00000000, 0x80000010},
     {0x00000001, 0x80011145},
     {0x00000002, 0x80000011},
@@ -388,7 +368,7 @@ static unsigned nv4TablePRAMIN[][2] =
     {0x00000022, 0x80000001},
     {0x00000023, 0x80011143},
     {0x00000024, 0x80000002},
-    {0x00000025, 0x80011144}, 
+    {0x00000025, 0x80011144},
     {0x00000026, 0x80000003},
     {0x00000027, 0x8001114B},
     {0x00000028, 0x80000004},
@@ -455,8 +435,7 @@ static unsigned nv4TablePRAMIN[][2] =
     {0x0000053E, 0x11401140},
     {0x0000053F, 0x00000000}
 };
-static unsigned nv4TablePRAMIN_8BPP[][2] =
-{
+static unsigned nv4TablePRAMIN_8BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000302},
@@ -471,8 +450,7 @@ static unsigned nv4TablePRAMIN_8BPP[][2] =
     {0x00000539, 0x00000000},
     {0x0000053D, 0x00000302}
 };
-static unsigned nv4TablePRAMIN_15BPP[][2] =
-{
+static unsigned nv4TablePRAMIN_15BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000902},
@@ -487,8 +465,7 @@ static unsigned nv4TablePRAMIN_15BPP[][2] =
     {0x00000539, 0x00000702},
     {0x0000053D, 0x00000902}
 };
-static unsigned nv4TablePRAMIN_16BPP[][2] =
-{
+static unsigned nv4TablePRAMIN_16BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000C02},
@@ -503,8 +480,7 @@ static unsigned nv4TablePRAMIN_16BPP[][2] =
     {0x00000539, 0x00000702},
     {0x0000053D, 0x00000C02}
 };
-static unsigned nv4TablePRAMIN_32BPP[][2] =
-{
+static unsigned nv4TablePRAMIN_32BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000E02},
@@ -519,12 +495,10 @@ static unsigned nv4TablePRAMIN_32BPP[][2] =
     {0x00000539, 0x00000E02},
     {0x0000053D, 0x00000E02}
 };
-static unsigned nv10TableFIFO[][2] =
-{
+static unsigned nv10TableFIFO[][2] = {
     {0x00003800, 0x80000014}
 };
-static unsigned nv10TablePFIFO[][2] =
-{
+static unsigned nv10TablePFIFO[][2] = {
     {0x00000140, 0x00000000},
     {0x00000480, 0x00000000},
     {0x00000494, 0x00000000},
@@ -545,8 +519,7 @@ static unsigned nv10TablePFIFO[][2] =
     {0x00000495, 0x00000001},
     {0x00000140, 0x00000001}
 };
-static unsigned nv10TablePGRAPH[][2] =
-{
+static unsigned nv10TablePGRAPH[][2] = {
     {0x00000020, 0x0003FFFF},
     {0x00000021, 0x00118701},
     {0x00000022, 0x24F82AD9},
@@ -618,32 +591,27 @@ static unsigned nv10TablePGRAPH[][2] =
     {0x00000204, 0x00000000},
     {0x000001C4, 0x00000001}
 };
-static unsigned nv10TablePGRAPH_8BPP[][2] =
-{
+static unsigned nv10TablePGRAPH_8BPP[][2] = {
     {0x000001C9, 0x00111111},
     {0x00000186, 0x00001010},
     {0x0000020C, 0x03020202}
 };
-static unsigned nv10TablePGRAPH_15BPP[][2] =
-{
+static unsigned nv10TablePGRAPH_15BPP[][2] = {
     {0x000001C9, 0x00226222},
     {0x00000186, 0x00002071},
     {0x0000020C, 0x09080808}
 };
-static unsigned nv10TablePGRAPH_16BPP[][2] =
-{
+static unsigned nv10TablePGRAPH_16BPP[][2] = {
     {0x000001C9, 0x00556555},
     {0x00000186, 0x000050C2},
     {0x0000020C, 0x000B0B0C}
 };
-static unsigned nv10TablePGRAPH_32BPP[][2] =
-{
+static unsigned nv10TablePGRAPH_32BPP[][2] = {
     {0x000001C9, 0x0077D777},
     {0x00000186, 0x000070E5},
     {0x0000020C, 0x0E0D0D0D}
 };
-static unsigned nv10tri05TablePGRAPH[][2] =
-{
+static unsigned nv10tri05TablePGRAPH[][2] = {
     {(0x00000E00/4), 0x00000000},
     {(0x00000E04/4), 0x00000000},
     {(0x00000E08/4), 0x00000000},
@@ -816,8 +784,7 @@ static unsigned nv10tri05TablePGRAPH[][2] =
     {(0x00000F48/4), 0x10000000},
     {(0x00000F4C/4), 0x00000000}
 };
-static unsigned nv10TablePRAMIN[][2] =
-{
+static unsigned nv10TablePRAMIN[][2] = {
     {0x00000000, 0x80000010},
     {0x00000001, 0x80011145},
     {0x00000002, 0x80000011},
@@ -853,7 +820,7 @@ static unsigned nv10TablePRAMIN[][2] =
     {0x00000502, 0x00000002},
     {0x00000503, 0x00000002},
 #ifdef __BIG_ENDIAN
-    {0x00000508, 0x01088043}, 
+    {0x00000508, 0x01088043},
 #else
     {0x00000508, 0x01008043},
 #endif
@@ -937,8 +904,7 @@ static unsigned nv10TablePRAMIN[][2] =
     {0x00000542, 0x11401140},
     {0x00000543, 0x00000000}
 };
-static unsigned nv10TablePRAMIN_8BPP[][2] =
-{
+static unsigned nv10TablePRAMIN_8BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000302},
@@ -954,8 +920,7 @@ static unsigned nv10TablePRAMIN_8BPP[][2] =
     {0x0000053D, 0x00000000},
     {0x00000541, 0x00000302}
 };
-static unsigned nv10TablePRAMIN_15BPP[][2] =
-{
+static unsigned nv10TablePRAMIN_15BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000902},
@@ -967,12 +932,11 @@ static unsigned nv10TablePRAMIN_15BPP[][2] =
     {0x0000052D, 0x00000902},
     {0x0000052E, 0x00000902},
     {0x00000535, 0x00000902},
-    {0x00000539, 0x00000902}, 
+    {0x00000539, 0x00000902},
     {0x0000053D, 0x00000902},
     {0x00000541, 0x00000902}
 };
-static unsigned nv10TablePRAMIN_16BPP[][2] =
-{
+static unsigned nv10TablePRAMIN_16BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000C02},
@@ -988,8 +952,7 @@ static unsigned nv10TablePRAMIN_16BPP[][2] =
     {0x0000053D, 0x00000C02},
     {0x00000541, 0x00000C02}
 };
-static unsigned nv10TablePRAMIN_32BPP[][2] =
-{
+static unsigned nv10TablePRAMIN_32BPP[][2] = {
     /*           0xXXXXXX01 For  MSB mono format */
     /*           0xXXXXXX02 For  LSB mono format */
     {0x00000509, 0x00000E02},

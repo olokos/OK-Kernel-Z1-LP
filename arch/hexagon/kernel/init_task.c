@@ -40,10 +40,10 @@ static struct sighand_struct init_sighand = INIT_SIGHAND(init_sighand);
  * and making head.S ensure the proper alignment.
  */
 union thread_union init_thread_union
-	__attribute__((__section__(".data.init_task"),
-		__aligned__(THREAD_SIZE))) = {
-			INIT_THREAD_INFO(init_task)
-		};
+    __attribute__((__section__(".data.init_task"),
+                   __aligned__(THREAD_SIZE))) = {
+    INIT_THREAD_INFO(init_task)
+};
 
 /*
  * Initial task structure.

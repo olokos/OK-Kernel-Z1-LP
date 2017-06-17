@@ -23,9 +23,8 @@ struct page;
 	set_pmd(pmd, __pmd(__pa(pte) | _PAGE_TABLE))
 
 static inline
-void pmd_populate(struct mm_struct *mm, pmd_t *pmd, struct page *pte)
-{
-	set_pmd(pmd, __pmd((page_to_pfn(pte) << PAGE_SHIFT) | _PAGE_TABLE));
+void pmd_populate(struct mm_struct *mm, pmd_t *pmd, struct page *pte) {
+    set_pmd(pmd, __pmd((page_to_pfn(pte) << PAGE_SHIFT) | _PAGE_TABLE));
 }
 #define pmd_pgtable(pmd) pmd_page(pmd)
 
@@ -39,14 +38,12 @@ extern void pgd_free(struct mm_struct *, pgd_t *);
 extern pte_t *pte_alloc_one_kernel(struct mm_struct *, unsigned long);
 extern struct page *pte_alloc_one(struct mm_struct *, unsigned long);
 
-static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	free_page((unsigned long) pte);
+static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    free_page((unsigned long) pte);
 }
 
-static inline void pte_free(struct mm_struct *mm, struct page *pte)
-{
-	__free_page(pte);
+static inline void pte_free(struct mm_struct *mm, struct page *pte) {
+    __free_page(pte);
 }
 
 

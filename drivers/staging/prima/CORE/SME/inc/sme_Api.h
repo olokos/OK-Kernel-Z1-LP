@@ -90,8 +90,7 @@
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct _smeConfigParams
-{
+typedef struct _smeConfigParams {
     tCsrConfigParam  csrConfig;
 #if defined WLAN_FEATURE_VOWIFI
     tRrmConfigParam  rrmConfig;
@@ -283,8 +282,7 @@ eHalStatus sme_EXTScanRegisterCallback (tHalHandle hHal,
 #endif /* WLAN_FEATURE_EXTSCAN */
 tANI_BOOLEAN  sme_SpoofMacAddrReq(tHalHandle hHal, v_MACADDR_t *macaddr);
 
-typedef enum
-{
+typedef enum {
     eSME_ROAM_TRIGGER_NONE = 0,
     eSME_ROAM_TRIGGER_SCAN = 1,
     eSME_ROAM_TRIGGER_FAST_ROAM = 2,
@@ -3234,8 +3232,7 @@ void sme_SetTdlsPowerSaveProhibited(tHalHandle hHal, v_BOOL_t val);
 v_BOOL_t sme_IsPmcBmps(tHalHandle hHal);
 
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
-typedef struct smeTdlsDisResult
-{
+typedef struct smeTdlsDisResult {
     tSirMacAddr tdlsPeerMac;
     v_S7_t tdlsPeerRssi;
 } tSmeTdlsDisResult;

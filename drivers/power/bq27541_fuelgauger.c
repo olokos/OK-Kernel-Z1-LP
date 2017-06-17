@@ -107,514 +107,492 @@ static DEFINE_MUTEX(battery_mutex);
 
 struct bq27541_device_info;
 struct bq27541_access_methods {
-	int (*read)(u8 reg, int *rt_value, int b_single,
-		struct bq27541_device_info *di);
+    int (*read)(u8 reg, int *rt_value, int b_single,
+                struct bq27541_device_info *di);
 };
 
 struct bq27541_device_info {
-	struct device			*dev;
-	int				id;
-	struct bq27541_access_methods	*bus;
-	struct i2c_client		*client;
-	struct work_struct		counter;
-	/* 300ms delay is needed after bq27541 is powered up
-	 * and before any successful I2C transaction
-	 */
-	struct  delayed_work		hw_config;
+    struct device			*dev;
+    int				id;
+    struct bq27541_access_methods	*bus;
+    struct i2c_client		*client;
+    struct work_struct		counter;
+    /* 300ms delay is needed after bq27541 is powered up
+     * and before any successful I2C transaction
+     */
+    struct  delayed_work		hw_config;
 };
 
 static int coulomb_counter;
 static spinlock_t lock; /* protect access to coulomb_counter */
 
 static int bq27541_i2c_txsubcmd(u8 reg, unsigned short subcmd,
-		struct bq27541_device_info *di);
+                                struct bq27541_device_info *di);
 
 static int bq27541_read(u8 reg, int *rt_value, int b_single,
-			struct bq27541_device_info *di)
-{
-	return di->bus->read(reg, rt_value, b_single, di);
+                        struct bq27541_device_info *di) {
+    return di->bus->read(reg, rt_value, b_single, di);
 }
 
 /*
  * Return the battery temperature in tenths of degree Celsius
  * Or < 0 if something fails.
  */
-static int bq27541_battery_temperature(struct bq27541_device_info *di)
-{
-	int ret;
-	int temp = 0;
+static int bq27541_battery_temperature(struct bq27541_device_info *di) {
+    int ret;
+    int temp = 0;
 
-	ret = bq27541_read(BQ27541_REG_TEMP, &temp, 0, di);
-	if (ret) {
-		dev_err(di->dev, "error reading temperature\n");
-		return ret;
-	}
+    ret = bq27541_read(BQ27541_REG_TEMP, &temp, 0, di);
+    if (ret) {
+        dev_err(di->dev, "error reading temperature\n");
+        return ret;
+    }
 
-	return temp + ZERO_DEGREE_CELSIUS_IN_TENTH_KELVIN;
+    return temp + ZERO_DEGREE_CELSIUS_IN_TENTH_KELVIN;
 }
 
 /*
  * Return the battery Voltage in milivolts
  * Or < 0 if something fails.
  */
-static int bq27541_battery_voltage(struct bq27541_device_info *di)
-{
-	int ret;
-	int volt = 0;
+static int bq27541_battery_voltage(struct bq27541_device_info *di) {
+    int ret;
+    int volt = 0;
 
-	ret = bq27541_read(BQ27541_REG_VOLT, &volt, 0, di);
-	if (ret) {
-		dev_err(di->dev, "error reading voltage\n");
-		return ret;
-	}
+    ret = bq27541_read(BQ27541_REG_VOLT, &volt, 0, di);
+    if (ret) {
+        dev_err(di->dev, "error reading voltage\n");
+        return ret;
+    }
 
-	return volt * 1000;
+    return volt * 1000;
 }
 
 static void bq27541_cntl_cmd(struct bq27541_device_info *di,
-				int subcmd)
-{
-	bq27541_i2c_txsubcmd(BQ27541_REG_CNTL, subcmd, di);
+                             int subcmd) {
+    bq27541_i2c_txsubcmd(BQ27541_REG_CNTL, subcmd, di);
 }
 
 /*
  * i2c specific code
  */
 static int bq27541_i2c_txsubcmd(u8 reg, unsigned short subcmd,
-		struct bq27541_device_info *di)
-{
-	struct i2c_msg msg;
-	unsigned char data[3];
-	int ret;
+                                struct bq27541_device_info *di) {
+    struct i2c_msg msg;
+    unsigned char data[3];
+    int ret;
 
-	if (!di->client)
-		return -ENODEV;
+    if (!di->client)
+        return -ENODEV;
 
-	memset(data, 0, sizeof(data));
-	data[0] = reg;
-	data[1] = subcmd & 0x00FF;
-	data[2] = (subcmd & 0xFF00) >> 8;
+    memset(data, 0, sizeof(data));
+    data[0] = reg;
+    data[1] = subcmd & 0x00FF;
+    data[2] = (subcmd & 0xFF00) >> 8;
 
-	msg.addr = di->client->addr;
-	msg.flags = 0;
-	msg.len = 3;
-	msg.buf = data;
+    msg.addr = di->client->addr;
+    msg.flags = 0;
+    msg.len = 3;
+    msg.buf = data;
 
-	ret = i2c_transfer(di->client->adapter, &msg, 1);
-	if (ret < 0)
-		return -EIO;
+    ret = i2c_transfer(di->client->adapter, &msg, 1);
+    if (ret < 0)
+        return -EIO;
 
-	return 0;
+    return 0;
 }
 
-static int bq27541_chip_config(struct bq27541_device_info *di)
-{
-	int flags = 0, ret = 0;
+static int bq27541_chip_config(struct bq27541_device_info *di) {
+    int flags = 0, ret = 0;
 
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_CTNL_STATUS);
-	udelay(66);
-	ret = bq27541_read(BQ27541_REG_CNTL, &flags, 0, di);
-	if (ret < 0) {
-		dev_err(di->dev, "error reading register %02x ret = %d\n",
-			 BQ27541_REG_CNTL, ret);
-		return ret;
-	}
-	udelay(66);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_CTNL_STATUS);
+    udelay(66);
+    ret = bq27541_read(BQ27541_REG_CNTL, &flags, 0, di);
+    if (ret < 0) {
+        dev_err(di->dev, "error reading register %02x ret = %d\n",
+                BQ27541_REG_CNTL, ret);
+        return ret;
+    }
+    udelay(66);
 
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_ENABLE_IT);
-	udelay(66);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_ENABLE_IT);
+    udelay(66);
 
-	if (!(flags & BQ27541_CS_DLOGEN)) {
-		bq27541_cntl_cmd(di, BQ27541_SUBCMD_ENABLE_DLOG);
-		udelay(66);
-	}
+    if (!(flags & BQ27541_CS_DLOGEN)) {
+        bq27541_cntl_cmd(di, BQ27541_SUBCMD_ENABLE_DLOG);
+        udelay(66);
+    }
 
-	return 0;
+    return 0;
 }
 
-static void bq27541_coulomb_counter_work(struct work_struct *work)
-{
-	int value = 0, temp = 0, index = 0, ret = 0;
-	struct bq27541_device_info *di;
-	unsigned long flags;
-	int count = 0;
+static void bq27541_coulomb_counter_work(struct work_struct *work) {
+    int value = 0, temp = 0, index = 0, ret = 0;
+    struct bq27541_device_info *di;
+    unsigned long flags;
+    int count = 0;
 
-	di = container_of(work, struct bq27541_device_info, counter);
+    di = container_of(work, struct bq27541_device_info, counter);
 
-	/* retrieve 30 values from FIFO of coulomb data logging buffer
-	 * and average over time
-	 */
-	do {
-		ret = bq27541_read(BQ27541_REG_LOGBUF, &temp, 0, di);
-		if (ret < 0)
-			break;
-		if (temp != 0x7FFF) {
-			++count;
-			value += temp;
-		}
-		/* delay 66uS, waiting time between continuous reading
-		 * results
-		 */
-		udelay(66);
-		ret = bq27541_read(BQ27541_REG_LOGIDX, &index, 0, di);
-		if (ret < 0)
-			break;
-		udelay(66);
-	} while (index != 0 || temp != 0x7FFF);
+    /* retrieve 30 values from FIFO of coulomb data logging buffer
+     * and average over time
+     */
+    do {
+        ret = bq27541_read(BQ27541_REG_LOGBUF, &temp, 0, di);
+        if (ret < 0)
+            break;
+        if (temp != 0x7FFF) {
+            ++count;
+            value += temp;
+        }
+        /* delay 66uS, waiting time between continuous reading
+         * results
+         */
+        udelay(66);
+        ret = bq27541_read(BQ27541_REG_LOGIDX, &index, 0, di);
+        if (ret < 0)
+            break;
+        udelay(66);
+    } while (index != 0 || temp != 0x7FFF);
 
-	if (ret < 0) {
-		dev_err(di->dev, "Error reading datalog register\n");
-		return;
-	}
+    if (ret < 0) {
+        dev_err(di->dev, "Error reading datalog register\n");
+        return;
+    }
 
-	if (count) {
-		spin_lock_irqsave(&lock, flags);
-		coulomb_counter = value/count;
-		spin_unlock_irqrestore(&lock, flags);
-	}
+    if (count) {
+        spin_lock_irqsave(&lock, flags);
+        coulomb_counter = value/count;
+        spin_unlock_irqrestore(&lock, flags);
+    }
 }
 
 struct bq27541_device_info *bq27541_di;
 
-static int bq27541_get_battery_mvolts(void)
-{
-	return bq27541_battery_voltage(bq27541_di);
+static int bq27541_get_battery_mvolts(void) {
+    return bq27541_battery_voltage(bq27541_di);
 }
 
-static int bq27541_get_battery_temperature(void)
-{
-	return bq27541_battery_temperature(bq27541_di);
+static int bq27541_get_battery_temperature(void) {
+    return bq27541_battery_temperature(bq27541_di);
 }
-static int bq27541_is_battery_present(void)
-{
-	return 1;
+static int bq27541_is_battery_present(void) {
+    return 1;
 }
-static int bq27541_is_battery_temp_within_range(void)
-{
-	return 1;
+static int bq27541_is_battery_temp_within_range(void) {
+    return 1;
 }
-static int bq27541_is_battery_id_valid(void)
-{
-	return 1;
+static int bq27541_is_battery_id_valid(void) {
+    return 1;
 }
 
 static struct msm_battery_gauge bq27541_batt_gauge = {
-	.get_battery_mvolts		= bq27541_get_battery_mvolts,
-	.get_battery_temperature	= bq27541_get_battery_temperature,
-	.is_battery_present		= bq27541_is_battery_present,
-	.is_battery_temp_within_range	= bq27541_is_battery_temp_within_range,
-	.is_battery_id_valid		= bq27541_is_battery_id_valid,
+    .get_battery_mvolts		= bq27541_get_battery_mvolts,
+    .get_battery_temperature	= bq27541_get_battery_temperature,
+    .is_battery_present		= bq27541_is_battery_present,
+    .is_battery_temp_within_range	= bq27541_is_battery_temp_within_range,
+    .is_battery_id_valid		= bq27541_is_battery_id_valid,
 };
-static void bq27541_hw_config(struct work_struct *work)
-{
-	int ret = 0, flags = 0, type = 0, fw_ver = 0;
-	struct bq27541_device_info *di;
+static void bq27541_hw_config(struct work_struct *work) {
+    int ret = 0, flags = 0, type = 0, fw_ver = 0;
+    struct bq27541_device_info *di;
 
-	di  = container_of(work, struct bq27541_device_info, hw_config.work);
-	ret = bq27541_chip_config(di);
-	if (ret) {
-		dev_err(di->dev, "Failed to config Bq27541\n");
-		return;
-	}
-	msm_battery_gauge_register(&bq27541_batt_gauge);
+    di  = container_of(work, struct bq27541_device_info, hw_config.work);
+    ret = bq27541_chip_config(di);
+    if (ret) {
+        dev_err(di->dev, "Failed to config Bq27541\n");
+        return;
+    }
+    msm_battery_gauge_register(&bq27541_batt_gauge);
 
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_CTNL_STATUS);
-	udelay(66);
-	bq27541_read(BQ27541_REG_CNTL, &flags, 0, di);
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_DEVCIE_TYPE);
-	udelay(66);
-	bq27541_read(BQ27541_REG_CNTL, &type, 0, di);
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_FW_VER);
-	udelay(66);
-	bq27541_read(BQ27541_REG_CNTL, &fw_ver, 0, di);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_CTNL_STATUS);
+    udelay(66);
+    bq27541_read(BQ27541_REG_CNTL, &flags, 0, di);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_DEVCIE_TYPE);
+    udelay(66);
+    bq27541_read(BQ27541_REG_CNTL, &type, 0, di);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_FW_VER);
+    udelay(66);
+    bq27541_read(BQ27541_REG_CNTL, &fw_ver, 0, di);
 
-	dev_info(di->dev, "DEVICE_TYPE is 0x%02X, FIRMWARE_VERSION is 0x%02X\n",
-			type, fw_ver);
-	dev_info(di->dev, "Complete bq27541 configuration 0x%02X\n", flags);
+    dev_info(di->dev, "DEVICE_TYPE is 0x%02X, FIRMWARE_VERSION is 0x%02X\n",
+             type, fw_ver);
+    dev_info(di->dev, "Complete bq27541 configuration 0x%02X\n", flags);
 }
 
 static int bq27541_read_i2c(u8 reg, int *rt_value, int b_single,
-			struct bq27541_device_info *di)
-{
-	struct i2c_client *client = di->client;
-	struct i2c_msg msg[1];
-	unsigned char data[2];
-	int err;
+                            struct bq27541_device_info *di) {
+    struct i2c_client *client = di->client;
+    struct i2c_msg msg[1];
+    unsigned char data[2];
+    int err;
 
-	if (!client->adapter)
-		return -ENODEV;
+    if (!client->adapter)
+        return -ENODEV;
 
-	msg->addr = client->addr;
-	msg->flags = 0;
-	msg->len = 1;
-	msg->buf = data;
+    msg->addr = client->addr;
+    msg->flags = 0;
+    msg->len = 1;
+    msg->buf = data;
 
-	data[0] = reg;
-	err = i2c_transfer(client->adapter, msg, 1);
+    data[0] = reg;
+    err = i2c_transfer(client->adapter, msg, 1);
 
-	if (err >= 0) {
-		if (!b_single)
-			msg->len = 2;
-		else
-			msg->len = 1;
+    if (err >= 0) {
+        if (!b_single)
+            msg->len = 2;
+        else
+            msg->len = 1;
 
-		msg->flags = I2C_M_RD;
-		err = i2c_transfer(client->adapter, msg, 1);
-		if (err >= 0) {
-			if (!b_single)
-				*rt_value = get_unaligned_le16(data);
-			else
-				*rt_value = data[0];
+        msg->flags = I2C_M_RD;
+        err = i2c_transfer(client->adapter, msg, 1);
+        if (err >= 0) {
+            if (!b_single)
+                *rt_value = get_unaligned_le16(data);
+            else
+                *rt_value = data[0];
 
-			return 0;
-		}
-	}
-	return err;
+            return 0;
+        }
+    }
+    return err;
 }
 
 #ifdef CONFIG_BQ27541_TEST_ENABLE
 static int reg;
 static int subcmd;
 static ssize_t bq27541_read_stdcmd(struct device *dev,
-	struct device_attribute *attr, char *buf)
-{
-	int ret;
-	int temp = 0;
-	struct platform_device *client;
-	struct bq27541_device_info *di;
+                                   struct device_attribute *attr, char *buf) {
+    int ret;
+    int temp = 0;
+    struct platform_device *client;
+    struct bq27541_device_info *di;
 
-	client = to_platform_device(dev);
-	di = platform_get_drvdata(client);
+    client = to_platform_device(dev);
+    di = platform_get_drvdata(client);
 
-	if (reg <= BQ27541_REG_ICR && reg > 0x00) {
-		ret = bq27541_read(reg, &temp, 0, di);
-		if (ret)
-			ret = snprintf(buf, PAGE_SIZE, "Read Error!\n");
-		else
-			ret = snprintf(buf, PAGE_SIZE, "0x%02x\n", temp);
-	} else
-		ret = snprintf(buf, PAGE_SIZE, "Register Error!\n");
+    if (reg <= BQ27541_REG_ICR && reg > 0x00) {
+        ret = bq27541_read(reg, &temp, 0, di);
+        if (ret)
+            ret = snprintf(buf, PAGE_SIZE, "Read Error!\n");
+        else
+            ret = snprintf(buf, PAGE_SIZE, "0x%02x\n", temp);
+    } else
+        ret = snprintf(buf, PAGE_SIZE, "Register Error!\n");
 
-	return ret;
+    return ret;
 }
 
 static ssize_t bq27541_write_stdcmd(struct device *dev,
-	struct device_attribute *attr, const char *buf, size_t count)
-{
-	ssize_t ret = strnlen(buf, PAGE_SIZE);
-	int cmd;
+                                    struct device_attribute *attr, const char *buf, size_t count) {
+    ssize_t ret = strnlen(buf, PAGE_SIZE);
+    int cmd;
 
-	sscanf(buf, "%x", &cmd);
-	reg = cmd;
-	return ret;
+    sscanf(buf, "%x", &cmd);
+    reg = cmd;
+    return ret;
 }
 
 static ssize_t bq27541_read_subcmd(struct device *dev,
-	struct device_attribute *attr, char *buf)
-{
-	int ret;
-	int temp = 0;
-	struct platform_device *client;
-	struct bq27541_device_info *di;
+                                   struct device_attribute *attr, char *buf) {
+    int ret;
+    int temp = 0;
+    struct platform_device *client;
+    struct bq27541_device_info *di;
 
-	client = to_platform_device(dev);
-	di = platform_get_drvdata(client);
+    client = to_platform_device(dev);
+    di = platform_get_drvdata(client);
 
-	if (subcmd == BQ27541_SUBCMD_DEVCIE_TYPE ||
-		 subcmd == BQ27541_SUBCMD_FW_VER ||
-		 subcmd == BQ27541_SUBCMD_HW_VER ||
-		 subcmd == BQ27541_SUBCMD_CHEM_ID) {
+    if (subcmd == BQ27541_SUBCMD_DEVCIE_TYPE ||
+            subcmd == BQ27541_SUBCMD_FW_VER ||
+            subcmd == BQ27541_SUBCMD_HW_VER ||
+            subcmd == BQ27541_SUBCMD_CHEM_ID) {
 
-		bq27541_cntl_cmd(di, subcmd); /* Retrieve Chip status */
-		udelay(66);
-		ret = bq27541_read(BQ27541_REG_CNTL, &temp, 0, di);
+        bq27541_cntl_cmd(di, subcmd); /* Retrieve Chip status */
+        udelay(66);
+        ret = bq27541_read(BQ27541_REG_CNTL, &temp, 0, di);
 
-		if (ret)
-			ret = snprintf(buf, PAGE_SIZE, "Read Error!\n");
-		else
-			ret = snprintf(buf, PAGE_SIZE, "0x%02x\n", temp);
-	} else
-		ret = snprintf(buf, PAGE_SIZE, "Register Error!\n");
+        if (ret)
+            ret = snprintf(buf, PAGE_SIZE, "Read Error!\n");
+        else
+            ret = snprintf(buf, PAGE_SIZE, "0x%02x\n", temp);
+    } else
+        ret = snprintf(buf, PAGE_SIZE, "Register Error!\n");
 
-	return ret;
+    return ret;
 }
 
 static ssize_t bq27541_write_subcmd(struct device *dev,
-	struct device_attribute *attr, const char *buf, size_t count)
-{
-	ssize_t ret = strnlen(buf, PAGE_SIZE);
-	int cmd;
+                                    struct device_attribute *attr, const char *buf, size_t count) {
+    ssize_t ret = strnlen(buf, PAGE_SIZE);
+    int cmd;
 
-	sscanf(buf, "%x", &cmd);
-	subcmd = cmd;
-	return ret;
+    sscanf(buf, "%x", &cmd);
+    subcmd = cmd;
+    return ret;
 }
 
 static DEVICE_ATTR(std_cmd, S_IRUGO|S_IWUGO, bq27541_read_stdcmd,
-	bq27541_write_stdcmd);
+                   bq27541_write_stdcmd);
 static DEVICE_ATTR(sub_cmd, S_IRUGO|S_IWUGO, bq27541_read_subcmd,
-	bq27541_write_subcmd);
+                   bq27541_write_subcmd);
 static struct attribute *fs_attrs[] = {
-	&dev_attr_std_cmd.attr,
-	&dev_attr_sub_cmd.attr,
-	NULL,
+    &dev_attr_std_cmd.attr,
+    &dev_attr_sub_cmd.attr,
+    NULL,
 };
 static struct attribute_group fs_attr_group = {
-	.attrs = fs_attrs,
+    .attrs = fs_attrs,
 };
 
 static struct platform_device this_device = {
-	.name			= "bq27541-test",
-	.id			= -1,
-	.dev.platform_data	= NULL,
+    .name			= "bq27541-test",
+    .id			= -1,
+    .dev.platform_data	= NULL,
 };
 #endif
 
 static int bq27541_battery_probe(struct i2c_client *client,
-				 const struct i2c_device_id *id)
-{
-	char *name;
-	struct bq27541_device_info *di;
-	struct bq27541_access_methods *bus;
-	int num;
-	int retval = 0;
+                                 const struct i2c_device_id *id) {
+    char *name;
+    struct bq27541_device_info *di;
+    struct bq27541_access_methods *bus;
+    int num;
+    int retval = 0;
 
-	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-		return -ENODEV;
+    if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+        return -ENODEV;
 
-	/* Get new ID for the new battery device */
-	retval = idr_pre_get(&battery_id, GFP_KERNEL);
-	if (retval == 0)
-		return -ENOMEM;
-	mutex_lock(&battery_mutex);
-	retval = idr_get_new(&battery_id, client, &num);
-	mutex_unlock(&battery_mutex);
-	if (retval < 0)
-		return retval;
+    /* Get new ID for the new battery device */
+    retval = idr_pre_get(&battery_id, GFP_KERNEL);
+    if (retval == 0)
+        return -ENOMEM;
+    mutex_lock(&battery_mutex);
+    retval = idr_get_new(&battery_id, client, &num);
+    mutex_unlock(&battery_mutex);
+    if (retval < 0)
+        return retval;
 
-	name = kasprintf(GFP_KERNEL, "%s-%d", id->name, num);
-	if (!name) {
-		dev_err(&client->dev, "failed to allocate device name\n");
-		retval = -ENOMEM;
-		goto batt_failed_1;
-	}
+    name = kasprintf(GFP_KERNEL, "%s-%d", id->name, num);
+    if (!name) {
+        dev_err(&client->dev, "failed to allocate device name\n");
+        retval = -ENOMEM;
+        goto batt_failed_1;
+    }
 
-	di = kzalloc(sizeof(*di), GFP_KERNEL);
-	if (!di) {
-		dev_err(&client->dev, "failed to allocate device info data\n");
-		retval = -ENOMEM;
-		goto batt_failed_2;
-	}
-	di->id = num;
+    di = kzalloc(sizeof(*di), GFP_KERNEL);
+    if (!di) {
+        dev_err(&client->dev, "failed to allocate device info data\n");
+        retval = -ENOMEM;
+        goto batt_failed_2;
+    }
+    di->id = num;
 
-	bus = kzalloc(sizeof(*bus), GFP_KERNEL);
-	if (!bus) {
-		dev_err(&client->dev, "failed to allocate access method "
-					"data\n");
-		retval = -ENOMEM;
-		goto batt_failed_3;
-	}
+    bus = kzalloc(sizeof(*bus), GFP_KERNEL);
+    if (!bus) {
+        dev_err(&client->dev, "failed to allocate access method "
+                "data\n");
+        retval = -ENOMEM;
+        goto batt_failed_3;
+    }
 
-	i2c_set_clientdata(client, di);
-	di->dev = &client->dev;
-	bus->read = &bq27541_read_i2c;
-	di->bus = bus;
-	di->client = client;
+    i2c_set_clientdata(client, di);
+    di->dev = &client->dev;
+    bus->read = &bq27541_read_i2c;
+    di->bus = bus;
+    di->client = client;
 
 #ifdef CONFIG_BQ27541_TEST_ENABLE
-	platform_set_drvdata(&this_device, di);
-	retval = platform_device_register(&this_device);
-	if (!retval) {
-		retval = sysfs_create_group(&this_device.dev.kobj,
-			 &fs_attr_group);
-		if (retval)
-			goto batt_failed_4;
-	} else
-		goto batt_failed_4;
+    platform_set_drvdata(&this_device, di);
+    retval = platform_device_register(&this_device);
+    if (!retval) {
+        retval = sysfs_create_group(&this_device.dev.kobj,
+                                    &fs_attr_group);
+        if (retval)
+            goto batt_failed_4;
+    } else
+        goto batt_failed_4;
 #endif
 
-	if (retval) {
-		dev_err(&client->dev, "failed to setup bq27541\n");
-		goto batt_failed_4;
-	}
+    if (retval) {
+        dev_err(&client->dev, "failed to setup bq27541\n");
+        goto batt_failed_4;
+    }
 
-	if (retval) {
-		dev_err(&client->dev, "failed to powerup bq27541\n");
-		goto batt_failed_4;
-	}
+    if (retval) {
+        dev_err(&client->dev, "failed to powerup bq27541\n");
+        goto batt_failed_4;
+    }
 
-	spin_lock_init(&lock);
+    spin_lock_init(&lock);
 
-	bq27541_di = di;
-	INIT_WORK(&di->counter, bq27541_coulomb_counter_work);
-	INIT_DELAYED_WORK(&di->hw_config, bq27541_hw_config);
-	schedule_delayed_work(&di->hw_config, BQ27541_INIT_DELAY);
-	return 0;
+    bq27541_di = di;
+    INIT_WORK(&di->counter, bq27541_coulomb_counter_work);
+    INIT_DELAYED_WORK(&di->hw_config, bq27541_hw_config);
+    schedule_delayed_work(&di->hw_config, BQ27541_INIT_DELAY);
+    return 0;
 
 batt_failed_4:
-	kfree(bus);
+    kfree(bus);
 batt_failed_3:
-	kfree(di);
+    kfree(di);
 batt_failed_2:
-	kfree(name);
+    kfree(name);
 batt_failed_1:
-	mutex_lock(&battery_mutex);
-	idr_remove(&battery_id, num);
-	mutex_unlock(&battery_mutex);
+    mutex_lock(&battery_mutex);
+    idr_remove(&battery_id, num);
+    mutex_unlock(&battery_mutex);
 
-	return retval;
+    return retval;
 }
 
-static int bq27541_battery_remove(struct i2c_client *client)
-{
-	struct bq27541_device_info *di = i2c_get_clientdata(client);
+static int bq27541_battery_remove(struct i2c_client *client) {
+    struct bq27541_device_info *di = i2c_get_clientdata(client);
 
-	msm_battery_gauge_unregister(&bq27541_batt_gauge);
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_DISABLE_DLOG);
-	udelay(66);
-	bq27541_cntl_cmd(di, BQ27541_SUBCMD_DISABLE_IT);
-	cancel_delayed_work_sync(&di->hw_config);
+    msm_battery_gauge_unregister(&bq27541_batt_gauge);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_DISABLE_DLOG);
+    udelay(66);
+    bq27541_cntl_cmd(di, BQ27541_SUBCMD_DISABLE_IT);
+    cancel_delayed_work_sync(&di->hw_config);
 
-	kfree(di->bus);
+    kfree(di->bus);
 
-	mutex_lock(&battery_mutex);
-	idr_remove(&battery_id, di->id);
-	mutex_unlock(&battery_mutex);
+    mutex_lock(&battery_mutex);
+    idr_remove(&battery_id, di->id);
+    mutex_unlock(&battery_mutex);
 
-	kfree(di);
-	return 0;
+    kfree(di);
+    return 0;
 }
 
 static const struct i2c_device_id bq27541_id[] = {
-	{ "bq27541", 1 },
-	{},
+    { "bq27541", 1 },
+    {},
 };
 MODULE_DEVICE_TABLE(i2c, BQ27541_id);
 
 static struct i2c_driver bq27541_battery_driver = {
-	.driver		= {
-			.name = "bq27541-battery",
-	},
-	.probe		= bq27541_battery_probe,
-	.remove		= bq27541_battery_remove,
-	.id_table	= bq27541_id,
+    .driver		= {
+        .name = "bq27541-battery",
+    },
+    .probe		= bq27541_battery_probe,
+    .remove		= bq27541_battery_remove,
+    .id_table	= bq27541_id,
 };
 
-static int __init bq27541_battery_init(void)
-{
-	int ret;
+static int __init bq27541_battery_init(void) {
+    int ret;
 
-	ret = i2c_add_driver(&bq27541_battery_driver);
-	if (ret)
-		printk(KERN_ERR "Unable to register BQ27541 driver\n");
+    ret = i2c_add_driver(&bq27541_battery_driver);
+    if (ret)
+        printk(KERN_ERR "Unable to register BQ27541 driver\n");
 
-	return ret;
+    return ret;
 }
 module_init(bq27541_battery_init);
 
-static void __exit bq27541_battery_exit(void)
-{
-	i2c_del_driver(&bq27541_battery_driver);
+static void __exit bq27541_battery_exit(void) {
+    i2c_del_driver(&bq27541_battery_driver);
 }
 module_exit(bq27541_battery_exit);
 

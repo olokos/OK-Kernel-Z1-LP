@@ -175,29 +175,29 @@
 #ifndef __ASSEMBLY__
 
 struct gpio_port_t {
-	unsigned short port_fer;
-	unsigned short dummy1;
-	unsigned short data;
-	unsigned short dummy2;
-	unsigned short data_set;
-	unsigned short dummy3;
-	unsigned short data_clear;
-	unsigned short dummy4;
-	unsigned short dir_set;
-	unsigned short dummy5;
-	unsigned short dir_clear;
-	unsigned short dummy6;
-	unsigned short inen;
-	unsigned short dummy7;
-	unsigned int port_mux;
+    unsigned short port_fer;
+    unsigned short dummy1;
+    unsigned short data;
+    unsigned short dummy2;
+    unsigned short data_set;
+    unsigned short dummy3;
+    unsigned short data_clear;
+    unsigned short dummy4;
+    unsigned short dir_set;
+    unsigned short dummy5;
+    unsigned short dir_clear;
+    unsigned short dummy6;
+    unsigned short inen;
+    unsigned short dummy7;
+    unsigned int port_mux;
 };
 
 struct gpio_port_s {
-	unsigned short fer;
-	unsigned short data;
-	unsigned short dir;
-	unsigned short inen;
-	unsigned int mux;
+    unsigned short fer;
+    unsigned short data;
+    unsigned short dir;
+    unsigned short inen;
+    unsigned int mux;
 };
 
 #endif

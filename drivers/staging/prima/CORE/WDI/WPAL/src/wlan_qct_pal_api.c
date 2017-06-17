@@ -65,8 +65,7 @@
 tPalContext gContext;
 
 //This structure need to be 4-byte aligned. No packing.
-typedef struct
-{
+typedef struct {
     wpt_uint32 length;
     //The offset from beginning of the buffer where it is allocated
     wpt_uint32 offset;
@@ -90,15 +89,13 @@ typedef struct
  *
  * @return wpt_status eWLAN_PAL_STATUS_SUCCESS - success. Otherwise fail.
  */
-wpt_status wpalOpen(void **ppPalContext, void *devHandle)
-{
+wpt_status wpalOpen(void **ppPalContext, void *devHandle) {
     wpt_status status;
 
     gContext.devHandle = devHandle;
 
     status = wpalDeviceInit(devHandle);
-    if (!WLAN_PAL_IS_STATUS_SUCCESS(status))
-    {
+    if (!WLAN_PAL_IS_STATUS_SUCCESS(status)) {
         WPAL_TRACE(eWLAN_MODULE_PAL, eWLAN_PAL_TRACE_LEVEL_FATAL,
                    "%s: wpalDeviceInit failed with status %u",
                    __func__, status);
@@ -114,8 +111,7 @@ wpt_status wpalOpen(void **ppPalContext, void *devHandle)
  *
  * @return wpt_status eWLAN_PAL_STATUS_SUCCESS - success. Otherwise fail.
  */
-wpt_status wpalClose(void *pPalContext)
-{
+wpt_status wpalClose(void *pPalContext) {
     wpalDeviceClose(gContext.devHandle);
     gContext.devHandle = NULL;
 
@@ -130,8 +126,7 @@ wpt_status wpalClose(void *pPalContext)
  * @return void* A pointer to the allocated memory.
  * NULL - fail to allocate memory
  */
-void *wpalMemoryAllocate(wpt_uint32 size)
-{
+void *wpalMemoryAllocate(wpt_uint32 size) {
     return vos_mem_malloc( size );
 }
 
@@ -139,8 +134,7 @@ void *wpalMemoryAllocate(wpt_uint32 size)
  * @brief wpalMemoryFree -  Free allocated memory
  * @param pv pointer to buffer to be freed
  */
-void wpalMemoryFree(void *pv)
-{
+void wpalMemoryFree(void *pv) {
     vos_mem_free( pv );
 }
 #endif /* MEMORY_DEBUG */
@@ -154,8 +148,7 @@ void wpalMemoryFree(void *pv)
  *         eWLAN_PAL_STATUS_SUCCESS
  *         eWLAN_PAL_STATUS_INVALID_PARAM
  */
-wpt_status wpalMemoryCopy(void * dest, void * src, wpt_uint32 size)
-{
+wpt_status wpalMemoryCopy(void * dest, void * src, wpt_uint32 size) {
     vos_mem_copy( dest, src, size );
 
     return eWLAN_PAL_STATUS_SUCCESS;
@@ -171,8 +164,7 @@ wpt_status wpalMemoryCopy(void * dest, void * src, wpt_uint32 size)
  *        eWLAN_PAL_TRUE - if two buffers have same content
  *        eWLAN_PAL_FALSE - not match
  */
-wpt_boolean wpalMemoryCompare(void * buf1, void * buf2, wpt_uint32 size)
-{
+wpt_boolean wpalMemoryCompare(void * buf1, void * buf2, wpt_uint32 size) {
     return (wpt_boolean)vos_mem_compare( buf1, buf2, size );
 }
 
@@ -185,8 +177,7 @@ wpt_boolean wpalMemoryCompare(void * buf1, void * buf2, wpt_uint32 size)
     Return:
        None
 ---------------------------------------------------------------------------*/
-void wpalMemoryZero(void *buf, wpt_uint32 size)
-{
+void wpalMemoryZero(void *buf, wpt_uint32 size) {
     vos_mem_zero( buf, size );
 }
 
@@ -197,8 +188,7 @@ void wpalMemoryZero(void *buf, wpt_uint32 size)
  * @param bFill one byte of data to fill in (size) bytes from the start of the
  * buffer
  */
-void wpalMemoryFill(void *buf, wpt_uint32 size, wpt_byte bFill)
-{
+void wpalMemoryFill(void *buf, wpt_uint32 size, wpt_byte bFill) {
     vos_mem_set( buf, size, bFill );
 }
 
@@ -210,16 +200,14 @@ void wpalMemoryFill(void *buf, wpt_uint32 size, wpt_byte bFill)
  * @return void* A pointer to the allocated memory (virtual address).
  *               NULL - fail to allocate memory
  */
-void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr)
-{
+void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr) {
     struct device *wcnss_device = (struct device *) gContext.devHandle;
     void *pv = NULL;
     dma_addr_t PhyAddr;
     wpt_uint32 uAllocLen = size + sizeof(tPalDmaMemInfo);
 
     pv = dma_alloc_coherent(wcnss_device, uAllocLen, &PhyAddr, GFP_KERNEL);
-    if ( NULL == pv )
-    {
+    if ( NULL == pv ) {
         WPAL_TRACE(eWLAN_MODULE_PAL, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "%s Unable to allocate DMA buffer", __func__);
         return NULL;
@@ -242,14 +230,12 @@ void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr)
  * @brief wpalDmaMemoryFree -  Free memory ready for DMA
  * @param pv address for the buffer to be freed
  */
-void wpalDmaMemoryFree(void *pv)
-{
+void wpalDmaMemoryFree(void *pv) {
     struct device *wcnss_device = (struct device *) gContext.devHandle;
 
     tPalDmaMemInfo *pMemInfo = (tPalDmaMemInfo *)(((wpt_byte *)pv) -
                                sizeof(tPalDmaMemInfo));
-    if(pv)
-    {
+    if(pv) {
         pv = (wpt_byte *)pv - pMemInfo->offset;
         dma_free_coherent(wcnss_device, pMemInfo->length, pv, pMemInfo->phyAddr);
     }
@@ -264,10 +250,8 @@ void wpalDmaMemoryFree(void *pv)
  * @return
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
  */
-wpt_status wpalDbgReadRegister(wpt_uint32 regAddr, wpt_uint32 *pregValue)
-{
-    if (NULL == pregValue)
-    {
+wpt_status wpalDbgReadRegister(wpt_uint32 regAddr, wpt_uint32 *pregValue) {
+    if (NULL == pregValue) {
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
@@ -282,8 +266,7 @@ wpt_status wpalDbgReadRegister(wpt_uint32 regAddr, wpt_uint32 *pregValue)
  * @return
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 */
-wpt_status wpalDbgWriteRegister(wpt_uint32 regAddr, wpt_uint32 regValue)
-{
+wpt_status wpalDbgWriteRegister(wpt_uint32 regAddr, wpt_uint32 regValue) {
     return wpalWriteRegister(regAddr, regValue);
 }
 
@@ -296,8 +279,7 @@ wpt_status wpalDbgWriteRegister(wpt_uint32 regAddr, wpt_uint32 regValue)
  * @return
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 */
-wpt_status wpalDbgReadMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len)
-{
+wpt_status wpalDbgReadMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len) {
     return wpalReadDeviceMemory(memAddr, buf, len);
 }
 
@@ -310,8 +292,7 @@ wpt_status wpalDbgReadMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len)
  * @return
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 */
-wpt_status wpalDbgWriteMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len)
-{
+wpt_status wpalDbgWriteMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len) {
     return wpalWriteDeviceMemory(memAddr, buf, len);
 }
 
@@ -326,13 +307,11 @@ wpt_status wpalDbgWriteMemory(wpt_uint32 memAddr, wpt_uint8 *buf, wpt_uint32 len
     Return:
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 ---------------------------------------------------------------------------*/
-wpt_status wpalDriverShutdown(void)
-{
+wpt_status wpalDriverShutdown(void) {
     VOS_STATUS vosStatus;
     vosStatus = vos_wlanShutdown();
 
-    if (VOS_STATUS_SUCCESS == vosStatus)
-    {
+    if (VOS_STATUS_SUCCESS == vosStatus) {
         return eWLAN_PAL_STATUS_SUCCESS;
     }
     return eWLAN_PAL_STATUS_E_FAILURE;
@@ -349,13 +328,11 @@ wpt_status wpalDriverShutdown(void)
     Return:
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 ---------------------------------------------------------------------------*/
-wpt_status wpalDriverReInit(void)
-{
+wpt_status wpalDriverReInit(void) {
     VOS_STATUS vosStatus;
 
     vosStatus = vos_wlanReInit();
-    if (VOS_STATUS_SUCCESS == vosStatus)
-    {
+    if (VOS_STATUS_SUCCESS == vosStatus) {
         return eWLAN_PAL_STATUS_SUCCESS;
     }
     return eWLAN_PAL_STATUS_E_FAILURE;
@@ -371,20 +348,17 @@ wpt_status wpalDriverReInit(void)
     Return:
        eWLAN_PAL_STATUS_SUCCESS - when everything is OK
 ---------------------------------------------------------------------------*/
-wpt_status wpalRivaSubystemRestart(void)
-{
+wpt_status wpalRivaSubystemRestart(void) {
     /* call SSR only if driver is not in load/unload process.
      * A WDI timeout during load/unload cannot be fixed thru
      * SSR */
-    if (vos_is_load_unload_in_progress(VOS_MODULE_ID_WDI, NULL))
-    {
+    if (vos_is_load_unload_in_progress(VOS_MODULE_ID_WDI, NULL)) {
         WPAL_TRACE(eWLAN_MODULE_PAL, eWLAN_PAL_TRACE_LEVEL_FATAL,
                    "%s: loading/unloading in progress,"
                    " SSR will be done at the end of unload", __func__);
         return eWLAN_PAL_STATUS_E_FAILURE;
     }
-    if (0 == subsystem_restart("wcnss"))
-    {
+    if (0 == subsystem_restart("wcnss")) {
         return eWLAN_PAL_STATUS_SUCCESS;
     }
     return eWLAN_PAL_STATUS_E_FAILURE;
@@ -398,8 +372,7 @@ wpt_status wpalRivaSubystemRestart(void)
     Return:
        NONE
 ---------------------------------------------------------------------------*/
-void wpalWlanReload(void)
-{
+void wpalWlanReload(void) {
     vos_wlanRestart();
     return;
 }
@@ -412,8 +385,7 @@ void wpalWlanReload(void)
     Return:
        NONE
 ---------------------------------------------------------------------------*/
-void wpalWcnssResetIntr(void)
-{
+void wpalWcnssResetIntr(void) {
 #ifdef HAVE_WCNSS_RESET_INTR
     wcnss_reset_intr();
 #endif
@@ -433,8 +405,7 @@ void wpalWcnssResetIntr(void)
        NONE
 ---------------------------------------------------------------------------*/
 void wpalFwDumpReq(wpt_uint32 cmd, wpt_uint32 arg1, wpt_uint32 arg2,
-                   wpt_uint32 arg3, wpt_uint32 arg4)
-{
+                   wpt_uint32 arg3, wpt_uint32 arg4) {
     vos_fwDumpReq(cmd, arg1, arg2, arg3, arg4);
     return;
 }
@@ -449,8 +420,7 @@ void wpalFwDumpReq(wpt_uint32 cmd, wpt_uint32 arg1, wpt_uint32 arg2,
     Return:
        NONE
 ---------------------------------------------------------------------------*/
-void wpalDevicePanic(void)
-{
+void wpalDevicePanic(void) {
     BUG_ON(1);
     return;
 }
@@ -462,8 +432,7 @@ void wpalDevicePanic(void)
     Return:
        STATUS
  ---------------------------------------------------------------------------*/
-int  wpalIslogPInProgress(void)
-{
+int  wpalIslogPInProgress(void) {
     return vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL);
 }
 
@@ -475,8 +444,7 @@ int  wpalIslogPInProgress(void)
     Return:
        STATUS
  ---------------------------------------------------------------------------*/
-int  wpalIsSsrPanicOnFailure(void)
-{
+int  wpalIsSsrPanicOnFailure(void) {
     return isSsrPanicOnFailure();
 }
 

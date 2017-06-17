@@ -21,25 +21,25 @@
  * describe the PMU on a particular POWER-family CPU.
  */
 struct power_pmu {
-	const char	*name;
-	int		n_counter;
-	int		max_alternatives;
-	unsigned long	add_fields;
-	unsigned long	test_adder;
-	int		(*compute_mmcr)(u64 events[], int n_ev,
-				unsigned int hwc[], unsigned long mmcr[]);
-	int		(*get_constraint)(u64 event_id, unsigned long *mskp,
-				unsigned long *valp);
-	int		(*get_alternatives)(u64 event_id, unsigned int flags,
-				u64 alt[]);
-	void		(*disable_pmc)(unsigned int pmc, unsigned long mmcr[]);
-	int		(*limited_pmc_event)(u64 event_id);
-	u32		flags;
-	int		n_generic;
-	int		*generic_events;
-	int		(*cache_events)[PERF_COUNT_HW_CACHE_MAX]
-			       [PERF_COUNT_HW_CACHE_OP_MAX]
-			       [PERF_COUNT_HW_CACHE_RESULT_MAX];
+    const char	*name;
+    int		n_counter;
+    int		max_alternatives;
+    unsigned long	add_fields;
+    unsigned long	test_adder;
+    int		(*compute_mmcr)(u64 events[], int n_ev,
+                            unsigned int hwc[], unsigned long mmcr[]);
+    int		(*get_constraint)(u64 event_id, unsigned long *mskp,
+                              unsigned long *valp);
+    int		(*get_alternatives)(u64 event_id, unsigned int flags,
+                                u64 alt[]);
+    void		(*disable_pmc)(unsigned int pmc, unsigned long mmcr[]);
+    int		(*limited_pmc_event)(u64 event_id);
+    u32		flags;
+    int		n_generic;
+    int		*generic_events;
+    int		(*cache_events)[PERF_COUNT_HW_CACHE_MAX]
+    [PERF_COUNT_HW_CACHE_OP_MAX]
+    [PERF_COUNT_HW_CACHE_RESULT_MAX];
 };
 
 /*

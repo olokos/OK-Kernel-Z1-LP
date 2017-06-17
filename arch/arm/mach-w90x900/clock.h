@@ -16,9 +16,9 @@ void nuc900_clk_enable(struct clk *clk, int enable);
 void nuc900_subclk_enable(struct clk *clk, int enable);
 
 struct clk {
-	unsigned long		cken;
-	unsigned int		enabled;
-	void			(*enable)(struct clk *, int enable);
+    unsigned long		cken;
+    unsigned int		enabled;
+    void			(*enable)(struct clk *, int enable);
 };
 
 #define DEFINE_CLK(_name, _ctrlbit)			\

@@ -21,7 +21,7 @@ static struct sighand_struct init_sighand = INIT_SIGHAND(init_sighand);
  * "init_task" linker map entry..
  */
 union thread_union init_thread_union __init_task_data =
-	{ INIT_THREAD_INFO(init_task) };
+{ INIT_THREAD_INFO(init_task) };
 
 /*
  * Initial task structure.

@@ -30,10 +30,10 @@
 
 
 enum rtl819x_loopback {
-	RTL819X_NO_LOOPBACK = 0,
-	RTL819X_MAC_LOOPBACK = 1,
-	RTL819X_DMA_LOOPBACK = 2,
-	RTL819X_CCK_LOOPBACK = 3,
+    RTL819X_NO_LOOPBACK = 0,
+    RTL819X_MAC_LOOPBACK = 1,
+    RTL819X_DMA_LOOPBACK = 2,
+    RTL819X_CCK_LOOPBACK = 3,
 };
 
 
@@ -130,8 +130,8 @@ enum rtl819x_loopback {
 
 
 enum version_8190_loopback {
-	VERSION_8190_BD = 0x3,
-	VERSION_8190_BE
+    VERSION_8190_BD = 0x3,
+    VERSION_8190_BE
 };
 
 #define IC_VersionCut_C	0x2
@@ -139,100 +139,100 @@ enum version_8190_loopback {
 #define IC_VersionCut_E	0x4
 
 enum rf_optype {
-	RF_OP_By_SW_3wire = 0,
-	RF_OP_By_FW,
-	RF_OP_MAX
+    RF_OP_By_SW_3wire = 0,
+    RF_OP_By_FW,
+    RF_OP_MAX
 };
 
 
 enum power_save_mode {
-	POWER_SAVE_MODE_ACTIVE,
-	POWER_SAVE_MODE_SAVE,
+    POWER_SAVE_MODE_ACTIVE,
+    POWER_SAVE_MODE_SAVE,
 };
 
 enum interface_select_8190pci {
-	INTF_SEL1_MINICARD		= 0,
-	INTF_SEL0_PCIE			= 1,
-	INTF_SEL2_RSV			= 2,
-	INTF_SEL3_RSV			= 3,
+    INTF_SEL1_MINICARD		= 0,
+    INTF_SEL0_PCIE			= 1,
+    INTF_SEL2_RSV			= 2,
+    INTF_SEL3_RSV			= 3,
 };
 
 struct bb_reg_definition {
-	u32 rfintfs;
-	u32 rfintfi;
-	u32 rfintfo;
-	u32 rfintfe;
-	u32 rf3wireOffset;
-	u32 rfLSSI_Select;
-	u32 rfTxGainStage;
-	u32 rfHSSIPara1;
-	u32 rfHSSIPara2;
-	u32 rfSwitchControl;
-	u32 rfAGCControl1;
-	u32 rfAGCControl2;
-	u32 rfRxIQImbalance;
-	u32 rfRxAFE;
-	u32 rfTxIQImbalance;
-	u32 rfTxAFE;
-	u32 rfLSSIReadBack;
-	u32 rfLSSIReadBackPi;
+    u32 rfintfs;
+    u32 rfintfi;
+    u32 rfintfo;
+    u32 rfintfe;
+    u32 rf3wireOffset;
+    u32 rfLSSI_Select;
+    u32 rfTxGainStage;
+    u32 rfHSSIPara1;
+    u32 rfHSSIPara2;
+    u32 rfSwitchControl;
+    u32 rfAGCControl1;
+    u32 rfAGCControl2;
+    u32 rfRxIQImbalance;
+    u32 rfRxAFE;
+    u32 rfTxIQImbalance;
+    u32 rfTxAFE;
+    u32 rfLSSIReadBack;
+    u32 rfLSSIReadBackPi;
 };
 
 struct tx_fwinfo {
-	u8			TxRate:7;
-	u8			CtsEnable:1;
-	u8			RtsRate:7;
-	u8			RtsEnable:1;
-	u8			TxHT:1;
-	u8			Short:1;
-	u8			TxBandwidth:1;
-	u8			TxSubCarrier:2;
-	u8			STBC:2;
-	u8			AllowAggregation:1;
-	u8			RtsHT:1;
-	u8			RtsShort:1;
-	u8			RtsBandwidth:1;
-	u8			RtsSubcarrier:2;
-	u8			RtsSTBC:2;
-	u8			EnableCPUDur:1;
+    u8			TxRate:7;
+    u8			CtsEnable:1;
+    u8			RtsRate:7;
+    u8			RtsEnable:1;
+    u8			TxHT:1;
+    u8			Short:1;
+    u8			TxBandwidth:1;
+    u8			TxSubCarrier:2;
+    u8			STBC:2;
+    u8			AllowAggregation:1;
+    u8			RtsHT:1;
+    u8			RtsShort:1;
+    u8			RtsBandwidth:1;
+    u8			RtsSubcarrier:2;
+    u8			RtsSTBC:2;
+    u8			EnableCPUDur:1;
 
-	u32			RxMF:2;
-	u32			RxAMD:3;
-	u32			Reserved1:3;
-	u32			TxAGCOffset:4;
-	u32			TxAGCSign:1;
-	u32			Tx_INFO_RSVD:6;
-	u32			PacketID:13;
+    u32			RxMF:2;
+    u32			RxAMD:3;
+    u32			Reserved1:3;
+    u32			TxAGCOffset:4;
+    u32			TxAGCSign:1;
+    u32			Tx_INFO_RSVD:6;
+    u32			PacketID:13;
 };
 
 struct tx_fwinfo_8190pci {
-	u8			TxRate:7;
-	u8			CtsEnable:1;
-	u8			RtsRate:7;
-	u8			RtsEnable:1;
-	u8			TxHT:1;
-	u8			Short:1;
-	u8			TxBandwidth:1;
-	u8			TxSubCarrier:2;
-	u8			STBC:2;
-	u8			AllowAggregation:1;
-	u8			RtsHT:1;
-	u8			RtsShort:1;
-	u8			RtsBandwidth:1;
-	u8			RtsSubcarrier:2;
-	u8			RtsSTBC:2;
-	u8			EnableCPUDur:1;
+    u8			TxRate:7;
+    u8			CtsEnable:1;
+    u8			RtsRate:7;
+    u8			RtsEnable:1;
+    u8			TxHT:1;
+    u8			Short:1;
+    u8			TxBandwidth:1;
+    u8			TxSubCarrier:2;
+    u8			STBC:2;
+    u8			AllowAggregation:1;
+    u8			RtsHT:1;
+    u8			RtsShort:1;
+    u8			RtsBandwidth:1;
+    u8			RtsSubcarrier:2;
+    u8			RtsSTBC:2;
+    u8			EnableCPUDur:1;
 
-	u32			RxMF:2;
-	u32			RxAMD:3;
-	u32			TxPerPktInfoFeedback:1;
-	u32			Reserved1:2;
-	u32			TxAGCOffset:4;
-	u32			TxAGCSign:1;
-	u32			RAW_TXD:1;
-	u32			Retry_Limit:4;
-	u32			Reserved2:1;
-	u32			PacketID:13;
+    u32			RxMF:2;
+    u32			RxAMD:3;
+    u32			TxPerPktInfoFeedback:1;
+    u32			Reserved1:2;
+    u32			TxAGCOffset:4;
+    u32			TxAGCSign:1;
+    u32			RAW_TXD:1;
+    u32			Retry_Limit:4;
+    u32			Reserved2:1;
+    u32			PacketID:13;
 
 
 };
@@ -255,47 +255,47 @@ struct tx_fwinfo_8190pci {
 #define RX_DRIVER_INFO_SIZE	8
 
 struct log_int_8190 {
-	u32	nIMR_COMDOK;
-	u32	nIMR_MGNTDOK;
-	u32	nIMR_HIGH;
-	u32	nIMR_VODOK;
-	u32	nIMR_VIDOK;
-	u32	nIMR_BEDOK;
-	u32	nIMR_BKDOK;
-	u32	nIMR_ROK;
-	u32	nIMR_RCOK;
-	u32	nIMR_TBDOK;
-	u32	nIMR_BDOK;
-	u32	nIMR_RXFOVW;
+    u32	nIMR_COMDOK;
+    u32	nIMR_MGNTDOK;
+    u32	nIMR_HIGH;
+    u32	nIMR_VODOK;
+    u32	nIMR_VIDOK;
+    u32	nIMR_BEDOK;
+    u32	nIMR_BKDOK;
+    u32	nIMR_ROK;
+    u32	nIMR_RCOK;
+    u32	nIMR_TBDOK;
+    u32	nIMR_BDOK;
+    u32	nIMR_RXFOVW;
 };
 
 struct phy_ofdm_rx_status_rxsc_sgien_exintfflag {
-	u8			reserved:4;
-	u8			rxsc:2;
-	u8			sgi_en:1;
-	u8			ex_intf_flag:1;
+    u8			reserved:4;
+    u8			rxsc:2;
+    u8			sgi_en:1;
+    u8			ex_intf_flag:1;
 };
 
 struct phy_sts_ofdm_819xpci {
-	u8	trsw_gain_X[4];
-	u8	pwdb_all;
-	u8	cfosho_X[4];
-	u8	cfotail_X[4];
-	u8	rxevm_X[2];
-	u8	rxsnr_X[4];
-	u8	pdsnr_X[2];
-	u8	csi_current_X[2];
-	u8	csi_target_X[2];
-	u8	sigevm;
-	u8	max_ex_pwr;
-	u8	sgi_en;
-	u8	rxsc_sgien_exflg;
+    u8	trsw_gain_X[4];
+    u8	pwdb_all;
+    u8	cfosho_X[4];
+    u8	cfotail_X[4];
+    u8	rxevm_X[2];
+    u8	rxsnr_X[4];
+    u8	pdsnr_X[2];
+    u8	csi_current_X[2];
+    u8	csi_target_X[2];
+    u8	sigevm;
+    u8	max_ex_pwr;
+    u8	sgi_en;
+    u8	rxsc_sgien_exflg;
 };
 
 struct phy_sts_cck_819xpci {
-	u8	adc_pwdb_X[4];
-	u8	sq_rpt;
-	u8	cck_agc_rpt;
+    u8	adc_pwdb_X[4];
+    u8	sq_rpt;
+    u8	cck_agc_rpt;
 };
 
 
@@ -303,107 +303,107 @@ struct phy_sts_cck_819xpci {
 #define		PHY_Beacon_RSSI_SLID_WIN_MAX		10
 
 struct tx_desc {
-	u16	PktSize;
-	u8	Offset;
-	u8	Reserved1:3;
-	u8	CmdInit:1;
-	u8	LastSeg:1;
-	u8	FirstSeg:1;
-	u8	LINIP:1;
-	u8	OWN:1;
+    u16	PktSize;
+    u8	Offset;
+    u8	Reserved1:3;
+    u8	CmdInit:1;
+    u8	LastSeg:1;
+    u8	FirstSeg:1;
+    u8	LINIP:1;
+    u8	OWN:1;
 
-	u8	TxFWInfoSize;
-	u8	RATid:3;
-	u8	DISFB:1;
-	u8	USERATE:1;
-	u8	MOREFRAG:1;
-	u8	NoEnc:1;
-	u8	PIFS:1;
-	u8	QueueSelect:5;
-	u8	NoACM:1;
-	u8	Resv:2;
-	u8	SecCAMID:5;
-	u8	SecDescAssign:1;
-	u8	SecType:2;
+    u8	TxFWInfoSize;
+    u8	RATid:3;
+    u8	DISFB:1;
+    u8	USERATE:1;
+    u8	MOREFRAG:1;
+    u8	NoEnc:1;
+    u8	PIFS:1;
+    u8	QueueSelect:5;
+    u8	NoACM:1;
+    u8	Resv:2;
+    u8	SecCAMID:5;
+    u8	SecDescAssign:1;
+    u8	SecType:2;
 
-	u16	TxBufferSize;
-	u8	PktId:7;
-	u8	Resv1:1;
-	u8	Reserved2;
+    u16	TxBufferSize;
+    u8	PktId:7;
+    u8	Resv1:1;
+    u8	Reserved2;
 
-	u32	TxBuffAddr;
+    u32	TxBuffAddr;
 
-	u32	NextDescAddress;
+    u32	NextDescAddress;
 
-	u32	Reserved5;
-	u32	Reserved6;
-	u32	Reserved7;
+    u32	Reserved5;
+    u32	Reserved6;
+    u32	Reserved7;
 };
 
 
 struct tx_desc_cmd {
-	u16	PktSize;
-	u8	Reserved1;
-	u8	CmdType:3;
-	u8	CmdInit:1;
-	u8	LastSeg:1;
-	u8	FirstSeg:1;
-	u8	LINIP:1;
-	u8	OWN:1;
+    u16	PktSize;
+    u8	Reserved1;
+    u8	CmdType:3;
+    u8	CmdInit:1;
+    u8	LastSeg:1;
+    u8	FirstSeg:1;
+    u8	LINIP:1;
+    u8	OWN:1;
 
-	u16	ElementReport;
-	u16	Reserved2;
+    u16	ElementReport;
+    u16	Reserved2;
 
-	u16	TxBufferSize;
-	u16	Reserved3;
+    u16	TxBufferSize;
+    u16	Reserved3;
 
-	u32	TxBuffAddr;
-	u32	NextDescAddress;
-	u32	Reserved4;
-	u32	Reserved5;
-	u32	Reserved6;
+    u32	TxBuffAddr;
+    u32	NextDescAddress;
+    u32	Reserved4;
+    u32	Reserved5;
+    u32	Reserved6;
 };
 
 struct rx_desc {
-	u16			Length:14;
-	u16			CRC32:1;
-	u16			ICV:1;
-	u8			RxDrvInfoSize;
-	u8			Shift:2;
-	u8			PHYStatus:1;
-	u8			SWDec:1;
-	u8			LastSeg:1;
-	u8			FirstSeg:1;
-	u8			EOR:1;
-	u8			OWN:1;
+    u16			Length:14;
+    u16			CRC32:1;
+    u16			ICV:1;
+    u8			RxDrvInfoSize;
+    u8			Shift:2;
+    u8			PHYStatus:1;
+    u8			SWDec:1;
+    u8			LastSeg:1;
+    u8			FirstSeg:1;
+    u8			EOR:1;
+    u8			OWN:1;
 
-	u32			Reserved2;
+    u32			Reserved2;
 
-	u32			Reserved3;
+    u32			Reserved3;
 
-	u32	BufferAddress;
+    u32	BufferAddress;
 
 };
 
 
 struct rx_fwinfo {
-	u16			Reserved1:12;
-	u16			PartAggr:1;
-	u16			FirstAGGR:1;
-	u16			Reserved2:2;
+    u16			Reserved1:12;
+    u16			PartAggr:1;
+    u16			FirstAGGR:1;
+    u16			Reserved2:2;
 
-	u8			RxRate:7;
-	u8			RxHT:1;
+    u8			RxRate:7;
+    u8			RxHT:1;
 
-	u8			BW:1;
-	u8			SPLCP:1;
-	u8			Reserved3:2;
-	u8			PAM:1;
-	u8			Mcast:1;
-	u8			Bcast:1;
-	u8			Reserved4:1;
+    u8			BW:1;
+    u8			SPLCP:1;
+    u8			Reserved3:2;
+    u8			PAM:1;
+    u8			Mcast:1;
+    u8			Bcast:1;
+    u8			Reserved4:1;
 
-	u32			TSFL;
+    u32			TSFL;
 
 };
 

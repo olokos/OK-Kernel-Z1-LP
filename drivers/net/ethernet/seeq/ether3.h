@@ -157,9 +157,9 @@ struct dev_priv {
     void __iomem *base;
     void __iomem *seeq;
     struct {
-	unsigned int command;
-	unsigned int config1;
-	unsigned int config2;
+        unsigned int command;
+        unsigned int config1;
+        unsigned int config2;
     } regs;
     unsigned char tx_head;		/* buffer nr to insert next packet	 */
     unsigned char tx_tail;		/* buffer nr of transmitting packet	 */
@@ -169,8 +169,8 @@ struct dev_priv {
 };
 
 struct ether3_data {
-	const char name[8];
-	unsigned long base_offset;
+    const char name[8];
+    unsigned long base_offset;
 };
 
 #endif

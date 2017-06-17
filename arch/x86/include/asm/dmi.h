@@ -7,9 +7,8 @@
 #include <asm/io.h>
 #include <asm/setup.h>
 
-static __always_inline __init void *dmi_alloc(unsigned len)
-{
-	return extend_brk(len, sizeof(int));
+static __always_inline __init void *dmi_alloc(unsigned len) {
+    return extend_brk(len, sizeof(int));
 }
 
 /* Use early IO mappings for DMI because it's initialized early */

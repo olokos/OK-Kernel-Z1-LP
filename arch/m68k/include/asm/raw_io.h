@@ -22,7 +22,7 @@
 extern void iounmap(void __iomem *addr);
 
 extern void __iomem *__ioremap(unsigned long physaddr, unsigned long size,
-		       int cacheflag);
+                               int cacheflag);
 extern void __iounmap(void *addr, unsigned long size);
 
 
@@ -60,286 +60,278 @@ extern void __iounmap(void *addr, unsigned long size);
 #define __raw_writew(val,addr) out_be16((addr),(val))
 #define __raw_writel(val,addr) out_be32((addr),(val))
 
-static inline void raw_insb(volatile u8 __iomem *port, u8 *buf, unsigned int len)
-{
-	unsigned int i;
+static inline void raw_insb(volatile u8 __iomem *port, u8 *buf, unsigned int len) {
+    unsigned int i;
 
-        for (i = 0; i < len; i++)
-		*buf++ = in_8(port);
+    for (i = 0; i < len; i++)
+        *buf++ = in_8(port);
 }
 
 static inline void raw_outsb(volatile u8 __iomem *port, const u8 *buf,
-			     unsigned int len)
-{
-	unsigned int i;
+                             unsigned int len) {
+    unsigned int i;
 
-        for (i = 0; i < len; i++)
-		out_8(port, *buf++);
+    for (i = 0; i < len; i++)
+        out_8(port, *buf++);
 }
 
-static inline void raw_insw(volatile u16 __iomem *port, u16 *buf, unsigned int nr)
-{
-	unsigned int tmp;
+static inline void raw_insw(volatile u16 __iomem *port, u16 *buf, unsigned int nr) {
+    unsigned int tmp;
 
-	if (nr & 15) {
-		tmp = (nr & 15) - 1;
-		asm volatile (
-			"1: movew %2@,%0@+; dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
-	if (nr >> 4) {
-		tmp = (nr >> 4) - 1;
-		asm volatile (
-			"1: "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"movew %2@,%0@+; "
-			"dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
+    if (nr & 15) {
+        tmp = (nr & 15) - 1;
+        asm volatile (
+            "1: movew %2@,%0@+; dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
+    if (nr >> 4) {
+        tmp = (nr >> 4) - 1;
+        asm volatile (
+            "1: "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "movew %2@,%0@+; "
+            "dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
 }
 
 static inline void raw_outsw(volatile u16 __iomem *port, const u16 *buf,
-			     unsigned int nr)
-{
-	unsigned int tmp;
+                             unsigned int nr) {
+    unsigned int tmp;
 
-	if (nr & 15) {
-		tmp = (nr & 15) - 1;
-		asm volatile (
-			"1: movew %0@+,%2@; dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
-	if (nr >> 4) {
-		tmp = (nr >> 4) - 1;
-		asm volatile (
-			"1: "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"movew %0@+,%2@; "
-			"dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
+    if (nr & 15) {
+        tmp = (nr & 15) - 1;
+        asm volatile (
+            "1: movew %0@+,%2@; dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
+    if (nr >> 4) {
+        tmp = (nr >> 4) - 1;
+        asm volatile (
+            "1: "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "movew %0@+,%2@; "
+            "dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
 }
 
-static inline void raw_insl(volatile u32 __iomem *port, u32 *buf, unsigned int nr)
-{
-	unsigned int tmp;
+static inline void raw_insl(volatile u32 __iomem *port, u32 *buf, unsigned int nr) {
+    unsigned int tmp;
 
-	if (nr & 15) {
-		tmp = (nr & 15) - 1;
-		asm volatile (
-			"1: movel %2@,%0@+; dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
-	if (nr >> 4) {
-		tmp = (nr >> 4) - 1;
-		asm volatile (
-			"1: "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"movel %2@,%0@+; "
-			"dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
+    if (nr & 15) {
+        tmp = (nr & 15) - 1;
+        asm volatile (
+            "1: movel %2@,%0@+; dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
+    if (nr >> 4) {
+        tmp = (nr >> 4) - 1;
+        asm volatile (
+            "1: "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "movel %2@,%0@+; "
+            "dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
 }
 
 static inline void raw_outsl(volatile u32 __iomem *port, const u32 *buf,
-			     unsigned int nr)
-{
-	unsigned int tmp;
+                             unsigned int nr) {
+    unsigned int tmp;
 
-	if (nr & 15) {
-		tmp = (nr & 15) - 1;
-		asm volatile (
-			"1: movel %0@+,%2@; dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
-	if (nr >> 4) {
-		tmp = (nr >> 4) - 1;
-		asm volatile (
-			"1: "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"movel %0@+,%2@; "
-			"dbra %1,1b"
-			: "=a" (buf), "=d" (tmp)
-			: "a" (port), "0" (buf),
-			  "1" (tmp));
-	}
+    if (nr & 15) {
+        tmp = (nr & 15) - 1;
+        asm volatile (
+            "1: movel %0@+,%2@; dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
+    if (nr >> 4) {
+        tmp = (nr >> 4) - 1;
+        asm volatile (
+            "1: "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "movel %0@+,%2@; "
+            "dbra %1,1b"
+            : "=a" (buf), "=d" (tmp)
+            : "a" (port), "0" (buf),
+            "1" (tmp));
+    }
 }
 
 
 static inline void raw_insw_swapw(volatile u16 __iomem *port, u16 *buf,
-				  unsigned int nr)
-{
+                                  unsigned int nr) {
     if ((nr) % 8)
-	__asm__ __volatile__
-	       ("\tmovel %0,%/a0\n\t"
-		"movel %1,%/a1\n\t"
-		"movel %2,%/d6\n\t"
-		"subql #1,%/d6\n"
-		"1:\tmovew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"dbra %/d6,1b"
-		:
-		: "g" (port), "g" (buf), "g" (nr)
-		: "d0", "a0", "a1", "d6");
+        __asm__ __volatile__
+        ("\tmovel %0,%/a0\n\t"
+         "movel %1,%/a1\n\t"
+         "movel %2,%/d6\n\t"
+         "subql #1,%/d6\n"
+         "1:\tmovew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "dbra %/d6,1b"
+         :
+         : "g" (port), "g" (buf), "g" (nr)
+         : "d0", "a0", "a1", "d6");
     else
-	__asm__ __volatile__
-	       ("movel %0,%/a0\n\t"
-		"movel %1,%/a1\n\t"
-		"movel %2,%/d6\n\t"
-		"lsrl  #3,%/d6\n\t"
-		"subql #1,%/d6\n"
-		"1:\tmovew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"movew %/a0@,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a1@+\n\t"
-		"dbra %/d6,1b"
-                :
-		: "g" (port), "g" (buf), "g" (nr)
-		: "d0", "a0", "a1", "d6");
+        __asm__ __volatile__
+        ("movel %0,%/a0\n\t"
+         "movel %1,%/a1\n\t"
+         "movel %2,%/d6\n\t"
+         "lsrl  #3,%/d6\n\t"
+         "subql #1,%/d6\n"
+         "1:\tmovew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "movew %/a0@,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a1@+\n\t"
+         "dbra %/d6,1b"
+         :
+         : "g" (port), "g" (buf), "g" (nr)
+         : "d0", "a0", "a1", "d6");
 }
 
 static inline void raw_outsw_swapw(volatile u16 __iomem *port, const u16 *buf,
-				   unsigned int nr)
-{
+                                   unsigned int nr) {
     if ((nr) % 8)
-	__asm__ __volatile__
-	       ("movel %0,%/a0\n\t"
-		"movel %1,%/a1\n\t"
-		"movel %2,%/d6\n\t"
-		"subql #1,%/d6\n"
-		"1:\tmovew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"dbra %/d6,1b"
-                :
-		: "g" (port), "g" (buf), "g" (nr)
-		: "d0", "a0", "a1", "d6");
+        __asm__ __volatile__
+        ("movel %0,%/a0\n\t"
+         "movel %1,%/a1\n\t"
+         "movel %2,%/d6\n\t"
+         "subql #1,%/d6\n"
+         "1:\tmovew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "dbra %/d6,1b"
+         :
+         : "g" (port), "g" (buf), "g" (nr)
+         : "d0", "a0", "a1", "d6");
     else
-	__asm__ __volatile__
-	       ("movel %0,%/a0\n\t"
-		"movel %1,%/a1\n\t"
-		"movel %2,%/d6\n\t"
-		"lsrl  #3,%/d6\n\t"
-		"subql #1,%/d6\n"
-		"1:\tmovew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"movew %/a1@+,%/d0\n\t"
-		"rolw  #8,%/d0\n\t"
-		"movew %/d0,%/a0@\n\t"
-		"dbra %/d6,1b"
-                :
-		: "g" (port), "g" (buf), "g" (nr)
-		: "d0", "a0", "a1", "d6");
+        __asm__ __volatile__
+        ("movel %0,%/a0\n\t"
+         "movel %1,%/a1\n\t"
+         "movel %2,%/d6\n\t"
+         "lsrl  #3,%/d6\n\t"
+         "subql #1,%/d6\n"
+         "1:\tmovew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "movew %/a1@+,%/d0\n\t"
+         "rolw  #8,%/d0\n\t"
+         "movew %/d0,%/a0@\n\t"
+         "dbra %/d6,1b"
+         :
+         : "g" (port), "g" (buf), "g" (nr)
+         : "d0", "a0", "a1", "d6");
 }
 
 #endif /* __KERNEL__ */

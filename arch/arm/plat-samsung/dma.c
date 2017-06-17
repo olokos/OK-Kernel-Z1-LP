@@ -29,56 +29,52 @@ struct s3c2410_dma_chan *s3c_dma_chan_map[DMACH_MAX];
  * change the dma channel number given into a real dma channel id
 */
 
-struct s3c2410_dma_chan *s3c_dma_lookup_channel(unsigned int channel)
-{
-	if (channel & DMACH_LOW_LEVEL)
-		return &s3c2410_chans[channel & ~DMACH_LOW_LEVEL];
-	else
-		return s3c_dma_chan_map[channel];
+struct s3c2410_dma_chan *s3c_dma_lookup_channel(unsigned int channel) {
+    if (channel & DMACH_LOW_LEVEL)
+        return &s3c2410_chans[channel & ~DMACH_LOW_LEVEL];
+    else
+        return s3c_dma_chan_map[channel];
 }
 
 /* do we need to protect the settings of the fields from
  * irq?
 */
 
-int s3c2410_dma_set_opfn(enum dma_ch channel, s3c2410_dma_opfn_t rtn)
-{
-	struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
+int s3c2410_dma_set_opfn(enum dma_ch channel, s3c2410_dma_opfn_t rtn) {
+    struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
 
-	if (chan == NULL)
-		return -EINVAL;
+    if (chan == NULL)
+        return -EINVAL;
 
-	pr_debug("%s: chan=%p, op rtn=%p\n", __func__, chan, rtn);
+    pr_debug("%s: chan=%p, op rtn=%p\n", __func__, chan, rtn);
 
-	chan->op_fn = rtn;
+    chan->op_fn = rtn;
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL(s3c2410_dma_set_opfn);
 
-int s3c2410_dma_set_buffdone_fn(enum dma_ch channel, s3c2410_dma_cbfn_t rtn)
-{
-	struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
+int s3c2410_dma_set_buffdone_fn(enum dma_ch channel, s3c2410_dma_cbfn_t rtn) {
+    struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
 
-	if (chan == NULL)
-		return -EINVAL;
+    if (chan == NULL)
+        return -EINVAL;
 
-	pr_debug("%s: chan=%p, callback rtn=%p\n", __func__, chan, rtn);
+    pr_debug("%s: chan=%p, callback rtn=%p\n", __func__, chan, rtn);
 
-	chan->callback_fn = rtn;
+    chan->callback_fn = rtn;
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL(s3c2410_dma_set_buffdone_fn);
 
-int s3c2410_dma_setflags(enum dma_ch channel, unsigned int flags)
-{
-	struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
+int s3c2410_dma_setflags(enum dma_ch channel, unsigned int flags) {
+    struct s3c2410_dma_chan *chan = s3c_dma_lookup_channel(channel);
 
-	if (chan == NULL)
-		return -EINVAL;
+    if (chan == NULL)
+        return -EINVAL;
 
-	chan->flags = flags;
-	return 0;
+    chan->flags = flags;
+    return 0;
 }
 EXPORT_SYMBOL(s3c2410_dma_setflags);

@@ -1,28 +1,28 @@
 /*********************************************************************
- *                
+ *
  * Filename:      nsc-ircc.h
- * Version:       
- * Description:   
+ * Version:
+ * Description:
  * Status:        Experimental.
  * Author:        Dag Brattli <dagb@cs.uit.no>
  * Created at:    Fri Nov 13 14:37:40 1998
  * Modified at:   Sun Jan 23 17:47:00 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1998-2000 Dag Brattli <dagb@cs.uit.no>
  *     Copyright (c) 1998 Lichen Wang, <lwang@actisys.com>
  *     Copyright (c) 1998 Actisys Corp., www.actisys.com
  *     All Rights Reserved
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- *     
+ *
  ********************************************************************/
 
 #ifndef NSC_IRCC_H
@@ -119,7 +119,7 @@
 #define MCR		0x04 /* Mode Control Register */
 #define MCR_MODE_MASK	~(0xd0)
 #define MCR_UART        0x00
-#define MCR_RESERVED  	0x20	
+#define MCR_RESERVED  	0x20
 #define MCR_SHARP_IR    0x40
 #define MCR_SIR         0x60
 #define MCR_MIR  	0x80
@@ -185,7 +185,7 @@
 #define FRM_ST_LOST_FR  0x40 /* Frame lost */
 #define FRM_ST_MAX_LEN  0x10 /* Max frame len exceeded */
 #define FRM_ST_PHY_ERR  0x08 /* Physical layer error */
-#define FRM_ST_BAD_CRC  0x04 
+#define FRM_ST_BAD_CRC  0x04
 #define FRM_ST_OVR1     0x02 /* Rx FIFO overrun */
 #define FRM_ST_OVR2     0x01 /* Frame status FIFO overrun */
 
@@ -203,80 +203,79 @@
 
 /* NSC chip information */
 struct nsc_chip {
-	char *name;          /* Name of chipset */
-	int cfg[3];          /* Config registers */
-	u_int8_t cid_index;  /* Chip identification index reg */
-	u_int8_t cid_value;  /* Chip identification expected value */
-	u_int8_t cid_mask;   /* Chip identification revision mask */
+    char *name;          /* Name of chipset */
+    int cfg[3];          /* Config registers */
+    u_int8_t cid_index;  /* Chip identification index reg */
+    u_int8_t cid_value;  /* Chip identification expected value */
+    u_int8_t cid_mask;   /* Chip identification revision mask */
 
-	/* Functions for probing and initializing the specific chip */
-	int (*probe)(struct nsc_chip *chip, chipio_t *info);
-	int (*init)(struct nsc_chip *chip, chipio_t *info);
+    /* Functions for probing and initializing the specific chip */
+    int (*probe)(struct nsc_chip *chip, chipio_t *info);
+    int (*init)(struct nsc_chip *chip, chipio_t *info);
 };
 typedef struct nsc_chip nsc_chip_t;
 
 /* For storing entries in the status FIFO */
 struct st_fifo_entry {
-	int status;
-	int len;
+    int status;
+    int len;
 };
 
 #define MAX_TX_WINDOW 7
 #define MAX_RX_WINDOW 7
 
 struct st_fifo {
-	struct st_fifo_entry entries[MAX_RX_WINDOW];
-	int pending_bytes;
-	int head;
-	int tail;
-	int len;
+    struct st_fifo_entry entries[MAX_RX_WINDOW];
+    int pending_bytes;
+    int head;
+    int tail;
+    int len;
 };
 
 struct frame_cb {
-	void *start; /* Start of frame in DMA mem */
-	int len;     /* Length of frame in DMA mem */
+    void *start; /* Start of frame in DMA mem */
+    int len;     /* Length of frame in DMA mem */
 };
 
 struct tx_fifo {
-	struct frame_cb queue[MAX_TX_WINDOW]; /* Info about frames in queue */
-	int             ptr;                  /* Currently being sent */
-	int             len;                  /* Length of queue */
-	int             free;                 /* Next free slot */
-	void           *tail;                 /* Next free start in DMA mem */
+    struct frame_cb queue[MAX_TX_WINDOW]; /* Info about frames in queue */
+    int             ptr;                  /* Currently being sent */
+    int             len;                  /* Length of queue */
+    int             free;                 /* Next free slot */
+    void           *tail;                 /* Next free start in DMA mem */
 };
 
 /* Private data for each instance */
 struct nsc_ircc_cb {
-	struct st_fifo st_fifo;    /* Info about received frames */
-	struct tx_fifo tx_fifo;    /* Info about frames to be transmitted */
+    struct st_fifo st_fifo;    /* Info about received frames */
+    struct tx_fifo tx_fifo;    /* Info about frames to be transmitted */
 
-	struct net_device *netdev;     /* Yes! we are some kind of netdevice */
-	
-	struct irlap_cb *irlap;    /* The link layer we are binded to */
-	struct qos_info qos;       /* QoS capabilities for this device */
-	
-	chipio_t io;               /* IrDA controller information */
-	iobuff_t tx_buff;          /* Transmit buffer */
-	iobuff_t rx_buff;          /* Receive buffer */
-	dma_addr_t tx_buff_dma;
-	dma_addr_t rx_buff_dma;
+    struct net_device *netdev;     /* Yes! we are some kind of netdevice */
 
-	__u8 ier;                  /* Interrupt enable register */
+    struct irlap_cb *irlap;    /* The link layer we are binded to */
+    struct qos_info qos;       /* QoS capabilities for this device */
 
-	struct timeval stamp;
-	struct timeval now;
+    chipio_t io;               /* IrDA controller information */
+    iobuff_t tx_buff;          /* Transmit buffer */
+    iobuff_t rx_buff;          /* Receive buffer */
+    dma_addr_t tx_buff_dma;
+    dma_addr_t rx_buff_dma;
 
-	spinlock_t lock;           /* For serializing operations */
-	
-	__u32 new_speed;
-	int index;                 /* Instance index */
+    __u8 ier;                  /* Interrupt enable register */
 
-	struct platform_device *pldev;
+    struct timeval stamp;
+    struct timeval now;
+
+    spinlock_t lock;           /* For serializing operations */
+
+    __u32 new_speed;
+    int index;                 /* Instance index */
+
+    struct platform_device *pldev;
 };
 
-static inline void switch_bank(int iobase, int bank)
-{
-		outb(bank, iobase+BSR);
+static inline void switch_bank(int iobase, int bank) {
+    outb(bank, iobase+BSR);
 }
 
 #endif /* NSC_IRCC_H */

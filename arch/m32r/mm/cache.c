@@ -44,45 +44,43 @@
 
 
 /* Copy back and invalidate D-cache and invalidate I-cache all */
-void _flush_cache_all(void)
-{
+void _flush_cache_all(void) {
 #if defined(CONFIG_CHIP_M32102)
-	unsigned char mccr;
-	*MCCR = MCCR_ICACHE_INV;
+    unsigned char mccr;
+    *MCCR = MCCR_ICACHE_INV;
 #elif defined(CONFIG_CHIP_M32104)
-	unsigned short mccr;
+    unsigned short mccr;
 
-	/* Copyback and invalidate D-cache */
-	/* Invalidate I-cache */
-	*MCCR |= (MCCR_ICACHE_INV | MCCR_DCACHE_CBINV);
+    /* Copyback and invalidate D-cache */
+    /* Invalidate I-cache */
+    *MCCR |= (MCCR_ICACHE_INV | MCCR_DCACHE_CBINV);
 #else
-	unsigned long mccr;
+    unsigned long mccr;
 
-	/* Copyback and invalidate D-cache */
-	/* Invalidate I-cache */
-	*MCCR = MCCR_ICACHE_INV | MCCR_DCACHE_CBINV;
+    /* Copyback and invalidate D-cache */
+    /* Invalidate I-cache */
+    *MCCR = MCCR_ICACHE_INV | MCCR_DCACHE_CBINV;
 #endif
-	while ((mccr = *MCCR) & MCCR_IIV); /* loop while invalidating... */
+    while ((mccr = *MCCR) & MCCR_IIV); /* loop while invalidating... */
 }
 
 /* Copy back D-cache and invalidate I-cache all */
-void _flush_cache_copyback_all(void)
-{
+void _flush_cache_copyback_all(void) {
 #if defined(CONFIG_CHIP_M32102)
-	unsigned char mccr;
-	*MCCR = MCCR_ICACHE_INV;
+    unsigned char mccr;
+    *MCCR = MCCR_ICACHE_INV;
 #elif defined(CONFIG_CHIP_M32104)
-	unsigned short mccr;
+    unsigned short mccr;
 
-	/* Copyback and invalidate D-cache */
-	/* Invalidate I-cache */
-	*MCCR |= (MCCR_ICACHE_INV | MCCR_DCACHE_CB);
+    /* Copyback and invalidate D-cache */
+    /* Invalidate I-cache */
+    *MCCR |= (MCCR_ICACHE_INV | MCCR_DCACHE_CB);
 #else
-	unsigned long mccr;
+    unsigned long mccr;
 
-	/* Copyback D-cache */
-	/* Invalidate I-cache */
-	*MCCR = MCCR_ICACHE_INV | MCCR_DCACHE_CB;
+    /* Copyback D-cache */
+    /* Invalidate I-cache */
+    *MCCR = MCCR_ICACHE_INV | MCCR_DCACHE_CB;
 #endif
-	while ((mccr = *MCCR) & MCCR_IIV); /* loop while invalidating... */
+    while ((mccr = *MCCR) & MCCR_IIV); /* loop while invalidating... */
 }

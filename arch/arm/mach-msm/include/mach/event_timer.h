@@ -57,9 +57,8 @@ void destroy_event_timer(struct event_timer_info *event);
  */
 ktime_t get_next_event_time(void);
 #else
-static inline void *add_event_timer(void (*function)(void *), void *data)
-{
-	return NULL;
+static inline void *add_event_timer(void (*function)(void *), void *data) {
+    return NULL;
 }
 
 static inline void activate_event_timer(void *event, ktime_t event_time) {}
@@ -68,9 +67,8 @@ static inline void deactivate_event_timer(void *event) {}
 
 static inline void destroy_event_timer(void *event) {}
 
-static inline ktime_t get_next_event_time(void)
-{
-	return ns_to_ktime(0);
+static inline ktime_t get_next_event_time(void) {
+    return ns_to_ktime(0);
 }
 
 #endif /* CONFIG_MSM_EVENT_TIMER_MANAGER */

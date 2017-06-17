@@ -74,37 +74,37 @@
 /* this struct defines the way the registers are stored on the
    stack during a system call. */
 struct pt_regs {
-	/* Saved main processor registers. */
-	unsigned long r4;
-	unsigned long r5;
-	unsigned long r6;
-	struct pt_regs *pt_regs;
-	unsigned long r0;
-	unsigned long r1;
-	unsigned long r2;
-	unsigned long r3;
-	unsigned long r7;
-	unsigned long r8;
-	unsigned long r9;
-	unsigned long r10;
-	unsigned long r11;
-	unsigned long r12;
-	long syscall_nr;
+    /* Saved main processor registers. */
+    unsigned long r4;
+    unsigned long r5;
+    unsigned long r6;
+    struct pt_regs *pt_regs;
+    unsigned long r0;
+    unsigned long r1;
+    unsigned long r2;
+    unsigned long r3;
+    unsigned long r7;
+    unsigned long r8;
+    unsigned long r9;
+    unsigned long r10;
+    unsigned long r11;
+    unsigned long r12;
+    long syscall_nr;
 
-	/* Saved main processor status and miscellaneous context registers. */
-	unsigned long acc0h;
-	unsigned long acc0l;
-	unsigned long acc1h;	/* ISA_DSP_LEVEL2 only */
-	unsigned long acc1l;	/* ISA_DSP_LEVEL2 only */
-	unsigned long psw;
-	unsigned long bpc;		/* saved PC for TRAP syscalls */
-	unsigned long bbpsw;
-	unsigned long bbpc;
-	unsigned long spu;		/* saved user stack */
-	unsigned long fp;
-	unsigned long lr;		/* saved PC for JL syscalls */
-	unsigned long spi;		/* saved kernel stack */
-	unsigned long orig_r0;
+    /* Saved main processor status and miscellaneous context registers. */
+    unsigned long acc0h;
+    unsigned long acc0l;
+    unsigned long acc1h;	/* ISA_DSP_LEVEL2 only */
+    unsigned long acc1l;	/* ISA_DSP_LEVEL2 only */
+    unsigned long psw;
+    unsigned long bpc;		/* saved PC for TRAP syscalls */
+    unsigned long bbpsw;
+    unsigned long bbpc;
+    unsigned long spu;		/* saved user stack */
+    unsigned long fp;
+    unsigned long lr;		/* saved PC for JL syscalls */
+    unsigned long spi;		/* saved kernel stack */
+    unsigned long orig_r0;
 };
 
 /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */

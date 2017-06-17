@@ -16,24 +16,24 @@
 #include <linux/spmi.h>
 
 struct qpnp_irq_spec {
-	uint8_t slave; /* 0-15 */
-	uint8_t per; /* 0-255 */
-	uint8_t irq; /* 0-7 */
+    uint8_t slave; /* 0-15 */
+    uint8_t per; /* 0-255 */
+    uint8_t irq; /* 0-7 */
 };
 
 struct qpnp_local_int {
-	 /* mask - Invoke PMIC Arbiter local mask handler */
-	int (*mask)(struct spmi_controller *spmi_ctrl,
-		    struct qpnp_irq_spec *spec,
-		    uint32_t priv_d);
-	 /* unmask - Invoke PMIC Arbiter local unmask handler */
-	int (*unmask)(struct spmi_controller *spmi_ctrl,
-		      struct qpnp_irq_spec *spec,
-		      uint32_t priv_d);
-	/* register_priv_data - Return per irq priv data */
-	int (*register_priv_data)(struct spmi_controller *spmi_ctrl,
-				  struct qpnp_irq_spec *spec,
-				  uint32_t *priv_d);
+    /* mask - Invoke PMIC Arbiter local mask handler */
+    int (*mask)(struct spmi_controller *spmi_ctrl,
+                struct qpnp_irq_spec *spec,
+                uint32_t priv_d);
+    /* unmask - Invoke PMIC Arbiter local unmask handler */
+    int (*unmask)(struct spmi_controller *spmi_ctrl,
+                  struct qpnp_irq_spec *spec,
+                  uint32_t priv_d);
+    /* register_priv_data - Return per irq priv data */
+    int (*register_priv_data)(struct spmi_controller *spmi_ctrl,
+                              struct qpnp_irq_spec *spec,
+                              uint32_t *priv_d);
 };
 
 #ifdef CONFIG_MSM_QPNP_INT
@@ -44,7 +44,7 @@ struct qpnp_local_int {
  * of_irq_init().
  */
 int __init qpnpint_of_init(struct device_node *node,
-			   struct device_node *parent);
+                           struct device_node *parent);
 
 /**
  * qpnpint_register_controller() - Register local interrupt callbacks
@@ -53,8 +53,8 @@ int __init qpnpint_of_init(struct device_node *node,
  * callbacks for interrupt events.
  */
 int qpnpint_register_controller(struct device_node *node,
-				struct spmi_controller *ctrl,
-				struct qpnp_local_int *li_cb);
+                                struct spmi_controller *ctrl,
+                                struct qpnp_local_int *li_cb);
 
 /**
  * qpnpint_unregister_controller() - Unregister local interrupt callbacks
@@ -70,7 +70,7 @@ int qpnpint_unregister_controller(struct device_node *node);
  * Pass a PMIC Arbiter interrupt to Linux.
  */
 int qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
-		       struct qpnp_irq_spec *spec);
+                       struct qpnp_irq_spec *spec);
 
 /**
  * qpnpint_show_irq - Prints the Linux interrupt number
@@ -78,56 +78,50 @@ int qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
  * Pass a PMIC Arbiter interrupt to Linux.
  */
 int qpnpint_show_irq(struct spmi_controller *spmi_ctrl,
-		       struct qpnp_irq_spec *spec);
+                     struct qpnp_irq_spec *spec);
 
 #ifdef CONFIG_MSM_SHOW_RESUME_IRQ
 extern int msm_show_resume_irq_mask;
-static inline bool qpnpint_show_resume_irq(void)
-{
-	return msm_show_resume_irq_mask;
+static inline bool qpnpint_show_resume_irq(void) {
+    return msm_show_resume_irq_mask;
 }
 #else
-static inline bool qpnpint_show_resume_irq(void)
-{
-	return false;
+static inline bool qpnpint_show_resume_irq(void) {
+    return false;
 }
 #endif
 
 #else
 static inline int __init qpnpint_of_init(struct device_node *node,
-				  struct device_node *parent)
-{
-	return -ENXIO;
+        struct device_node *parent) {
+    return -ENXIO;
 }
 
 static inline int qpnpint_register_controller(struct device_node *node,
-					      struct spmi_controller *ctrl,
-					      struct qpnp_local_int *li_cb)
+        struct spmi_controller *ctrl,
+        struct qpnp_local_int *li_cb)
 
 {
-	return -ENXIO;
+    return -ENXIO;
 }
 
 static inline int qpnpint_unregister_controller(struct device_node *node)
 
 {
-	return -ENXIO;
+    return -ENXIO;
 }
 
 static inline int qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
-		       struct qpnp_irq_spec *spec)
-{
-	return -ENXIO;
+                                     struct qpnp_irq_spec *spec) {
+    return -ENXIO;
 }
 int qpnpint_show_irq(struct spmi_controller *spmi_ctrl,
-		       struct qpnp_irq_spec *spec)
-{
-	return -ENXIO;
+                     struct qpnp_irq_spec *spec) {
+    return -ENXIO;
 }
 
-static inline bool qpnpint_show_resume_irq(void)
-{
-	return false;
+static inline bool qpnpint_show_resume_irq(void) {
+    return false;
 }
 #endif /* CONFIG_MSM_QPNP_INT */
 #endif /* QPNPINT_H */

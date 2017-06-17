@@ -26,17 +26,16 @@ extern struct sfi_rtc_table_entry sfi_mrtc_array[];
  * identified via MSRs.
  */
 enum mrst_cpu_type {
-	/* 1 was Moorestown */
-	MRST_CPU_CHIP_PENWELL = 2,
+    /* 1 was Moorestown */
+    MRST_CPU_CHIP_PENWELL = 2,
 };
 
 extern enum mrst_cpu_type __mrst_cpu_chip;
 
 #ifdef CONFIG_X86_INTEL_MID
 
-static inline enum mrst_cpu_type mrst_identify_cpu(void)
-{
-	return __mrst_cpu_chip;
+static inline enum mrst_cpu_type mrst_identify_cpu(void) {
+    return __mrst_cpu_chip;
 }
 
 #else /* !CONFIG_X86_INTEL_MID */
@@ -46,9 +45,9 @@ static inline enum mrst_cpu_type mrst_identify_cpu(void)
 #endif /* !CONFIG_X86_INTEL_MID */
 
 enum mrst_timer_options {
-	MRST_TIMER_DEFAULT,
-	MRST_TIMER_APBT_ONLY,
-	MRST_TIMER_LAPIC_APBT,
+    MRST_TIMER_DEFAULT,
+    MRST_TIMER_APBT_ONLY,
+    MRST_TIMER_LAPIC_APBT,
 };
 
 extern enum mrst_timer_options mrst_timer_options;

@@ -27,20 +27,17 @@ extern void msp71xx_init_gpio_extended(void);
 extern int msp71xx_set_output_drive(unsigned gpio, int value);
 
 /* Custom output drive functionss */
-static inline int gpio_set_output_drive(unsigned gpio, int value)
-{
-	return msp71xx_set_output_drive(gpio, value);
+static inline int gpio_set_output_drive(unsigned gpio, int value) {
+    return msp71xx_set_output_drive(gpio, value);
 }
 
 /* IRQ's are not supported for gpio lines */
-static inline int gpio_to_irq(unsigned gpio)
-{
-	return -EINVAL;
+static inline int gpio_to_irq(unsigned gpio) {
+    return -EINVAL;
 }
 
-static inline int irq_to_gpio(unsigned irq)
-{
-	return -EINVAL;
+static inline int irq_to_gpio(unsigned irq) {
+    return -EINVAL;
 }
 
 #endif /* __PMC_MSP71XX_GPIO_H */

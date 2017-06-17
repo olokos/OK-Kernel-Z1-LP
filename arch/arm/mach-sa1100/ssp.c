@@ -25,16 +25,15 @@
 
 #define TIMEOUT 100000
 
-static irqreturn_t ssp_interrupt(int irq, void *dev_id)
-{
-	unsigned int status = Ser4SSSR;
+static irqreturn_t ssp_interrupt(int irq, void *dev_id) {
+    unsigned int status = Ser4SSSR;
 
-	if (status & SSSR_ROR)
-		printk(KERN_WARNING "SSP: receiver overrun\n");
+    if (status & SSSR_ROR)
+        printk(KERN_WARNING "SSP: receiver overrun\n");
 
-	Ser4SSSR = SSSR_ROR;
+    Ser4SSSR = SSSR_ROR;
 
-	return status ? IRQ_HANDLED : IRQ_NONE;
+    return status ? IRQ_HANDLED : IRQ_NONE;
 }
 
 /**
@@ -51,26 +50,25 @@ static irqreturn_t ssp_interrupt(int irq, void *dev_id)
  *   %-ETIMEDOUT	timeout occurred
  *   0			success
  */
-int ssp_write_word(u16 data)
-{
-	int timeout = TIMEOUT;
+int ssp_write_word(u16 data) {
+    int timeout = TIMEOUT;
 
-	while (!(Ser4SSSR & SSSR_TNF)) {
-	        if (!--timeout)
-	        	return -ETIMEDOUT;
-		cpu_relax();
-	}
+    while (!(Ser4SSSR & SSSR_TNF)) {
+        if (!--timeout)
+            return -ETIMEDOUT;
+        cpu_relax();
+    }
 
-	Ser4SSDR = data;
+    Ser4SSDR = data;
 
-	timeout = TIMEOUT;
-	while (!(Ser4SSSR & SSSR_BSY)) {
-	        if (!--timeout)
-	        	return -ETIMEDOUT;
-		cpu_relax();
-	}
+    timeout = TIMEOUT;
+    while (!(Ser4SSSR & SSSR_BSY)) {
+        if (!--timeout)
+            return -ETIMEDOUT;
+        cpu_relax();
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -88,19 +86,18 @@ int ssp_write_word(u16 data)
  *   %-ETIMEDOUT	timeout occurred
  *   16-bit data	success
  */
-int ssp_read_word(u16 *data)
-{
-	int timeout = TIMEOUT;
+int ssp_read_word(u16 *data) {
+    int timeout = TIMEOUT;
 
-	while (!(Ser4SSSR & SSSR_RNE)) {
-	        if (!--timeout)
-	        	return -ETIMEDOUT;
-		cpu_relax();
-	}
+    while (!(Ser4SSSR & SSSR_RNE)) {
+        if (!--timeout)
+            return -ETIMEDOUT;
+        cpu_relax();
+    }
 
-	*data = (u16)Ser4SSDR;
+    *data = (u16)Ser4SSDR;
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -115,21 +112,20 @@ int ssp_read_word(u16 *data)
  *   %-ETIMEDOUT	timeout occurred
  *   0			success
  */
-int ssp_flush(void)
-{
-	int timeout = TIMEOUT * 2;
+int ssp_flush(void) {
+    int timeout = TIMEOUT * 2;
 
-	do {
-		while (Ser4SSSR & SSSR_RNE) {
-		        if (!--timeout)
-		        	return -ETIMEDOUT;
-			(void) Ser4SSDR;
-		}
-	        if (!--timeout)
-	        	return -ETIMEDOUT;
-	} while (Ser4SSSR & SSSR_BSY);
+    do {
+        while (Ser4SSSR & SSSR_RNE) {
+            if (!--timeout)
+                return -ETIMEDOUT;
+            (void) Ser4SSDR;
+        }
+        if (!--timeout)
+            return -ETIMEDOUT;
+    } while (Ser4SSSR & SSSR_BSY);
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -137,9 +133,8 @@ int ssp_flush(void)
  *
  * Turn on the SSP port.
  */
-void ssp_enable(void)
-{
-	Ser4SSCR0 |= SSCR0_SSE;
+void ssp_enable(void) {
+    Ser4SSCR0 |= SSCR0_SSE;
 }
 
 /**
@@ -147,9 +142,8 @@ void ssp_enable(void)
  *
  * Turn off the SSP port, optionally powering it down.
  */
-void ssp_disable(void)
-{
-	Ser4SSCR0 &= ~SSCR0_SSE;
+void ssp_disable(void) {
+    Ser4SSCR0 &= ~SSCR0_SSE;
 }
 
 /**
@@ -158,12 +152,11 @@ void ssp_disable(void)
  *
  * Save the configured SSP state for suspend.
  */
-void ssp_save_state(struct ssp_state *ssp)
-{
-	ssp->cr0 = Ser4SSCR0;
-	ssp->cr1 = Ser4SSCR1;
+void ssp_save_state(struct ssp_state *ssp) {
+    ssp->cr0 = Ser4SSCR0;
+    ssp->cr1 = Ser4SSCR1;
 
-	Ser4SSCR0 &= ~SSCR0_SSE;
+    Ser4SSCR0 &= ~SSCR0_SSE;
 }
 
 /**
@@ -172,13 +165,12 @@ void ssp_save_state(struct ssp_state *ssp)
  *
  * Restore the SSP configuration saved previously by ssp_save_state.
  */
-void ssp_restore_state(struct ssp_state *ssp)
-{
-	Ser4SSSR = SSSR_ROR;
+void ssp_restore_state(struct ssp_state *ssp) {
+    Ser4SSSR = SSSR_ROR;
 
-	Ser4SSCR0 = ssp->cr0 & ~SSCR0_SSE;
-	Ser4SSCR1 = ssp->cr1;
-	Ser4SSCR0 = ssp->cr0;
+    Ser4SSCR0 = ssp->cr0 & ~SSCR0_SSE;
+    Ser4SSCR1 = ssp->cr1;
+    Ser4SSCR0 = ssp->cr0;
 }
 
 /**
@@ -191,28 +183,27 @@ void ssp_restore_state(struct ssp_state *ssp)
  *   %-EBUSY	if the resources are already in use
  *   %0		on success
  */
-int ssp_init(void)
-{
-	int ret;
+int ssp_init(void) {
+    int ret;
 
-	if (!(PPAR & PPAR_SPR) && (Ser4MCCR0 & MCCR0_MCE))
-		return -ENODEV;
+    if (!(PPAR & PPAR_SPR) && (Ser4MCCR0 & MCCR0_MCE))
+        return -ENODEV;
 
-	if (!request_mem_region(__PREG(Ser4SSCR0), 0x18, "SSP")) {
-		return -EBUSY;
-	}
+    if (!request_mem_region(__PREG(Ser4SSCR0), 0x18, "SSP")) {
+        return -EBUSY;
+    }
 
-	Ser4SSSR = SSSR_ROR;
+    Ser4SSSR = SSSR_ROR;
 
-	ret = request_irq(IRQ_Ser4SSP, ssp_interrupt, 0, "SSP", NULL);
-	if (ret)
-		goto out_region;
+    ret = request_irq(IRQ_Ser4SSP, ssp_interrupt, 0, "SSP", NULL);
+    if (ret)
+        goto out_region;
 
-	return 0;
+    return 0;
 
- out_region:
-	release_mem_region(__PREG(Ser4SSCR0), 0x18);
-	return ret;
+out_region:
+    release_mem_region(__PREG(Ser4SSCR0), 0x18);
+    return ret;
 }
 
 /**
@@ -220,12 +211,11 @@ int ssp_init(void)
  *
  * release and free resources for the SSP port.
  */
-void ssp_exit(void)
-{
-	Ser4SSCR0 &= ~SSCR0_SSE;
+void ssp_exit(void) {
+    Ser4SSCR0 &= ~SSCR0_SSE;
 
-	free_irq(IRQ_Ser4SSP, NULL);
-	release_mem_region(__PREG(Ser4SSCR0), 0x18);
+    free_irq(IRQ_Ser4SSP, NULL);
+    release_mem_region(__PREG(Ser4SSCR0), 0x18);
 }
 
 MODULE_AUTHOR("Russell King");

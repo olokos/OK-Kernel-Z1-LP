@@ -44,7 +44,7 @@ extern struct il_mod_params il4965_mod_params;
 
 /* tx queue */
 void il4965_free_tfds_in_queue(struct il_priv *il, int sta_id, int tid,
-			       int freed);
+                               int freed);
 
 /* RXON */
 void il4965_set_rxon_chain(struct il_priv *il);
@@ -74,15 +74,15 @@ void il4965_rx_handle(struct il_priv *il);
 /* tx */
 void il4965_hw_txq_free_tfd(struct il_priv *il, struct il_tx_queue *txq);
 int il4965_hw_txq_attach_buf_to_tfd(struct il_priv *il, struct il_tx_queue *txq,
-				    dma_addr_t addr, u16 len, u8 reset, u8 pad);
+                                    dma_addr_t addr, u16 len, u8 reset, u8 pad);
 int il4965_hw_tx_queue_init(struct il_priv *il, struct il_tx_queue *txq);
 void il4965_hwrate_to_tx_control(struct il_priv *il, u32 rate_n_flags,
-				 struct ieee80211_tx_info *info);
+                                 struct ieee80211_tx_info *info);
 int il4965_tx_skb(struct il_priv *il, struct sk_buff *skb);
 int il4965_tx_agg_start(struct il_priv *il, struct ieee80211_vif *vif,
-			struct ieee80211_sta *sta, u16 tid, u16 * ssn);
+                        struct ieee80211_sta *sta, u16 tid, u16 * ssn);
 int il4965_tx_agg_stop(struct il_priv *il, struct ieee80211_vif *vif,
-		       struct ieee80211_sta *sta, u16 tid);
+                       struct ieee80211_sta *sta, u16 tid);
 int il4965_txq_check_empty(struct il_priv *il, int sta_id, u8 tid, int txq_id);
 int il4965_tx_queue_reclaim(struct il_priv *il, int txq_id, int idx);
 void il4965_hw_txq_ctx_free(struct il_priv *il);
@@ -103,14 +103,14 @@ void il4965_set_wr_ptrs(struct il_priv *il, int txq_id, u32 idx);
  * NOTE:  Acquire il->lock before calling this function !
  */
 void il4965_tx_queue_set_status(struct il_priv *il, struct il_tx_queue *txq,
-				int tx_fifo_id, int scd_retry);
+                                int tx_fifo_id, int scd_retry);
 
 /* scan */
 int il4965_request_scan(struct il_priv *il, struct ieee80211_vif *vif);
 
 /* station mgmt */
 int il4965_manage_ibss_station(struct il_priv *il, struct ieee80211_vif *vif,
-			       bool add);
+                               bool add);
 
 /* hcmd */
 int il4965_send_beacon_cmd(struct il_priv *il);
@@ -119,9 +119,8 @@ int il4965_send_beacon_cmd(struct il_priv *il);
 const char *il4965_get_tx_fail_reason(u32 status);
 #else
 static inline const char *
-il4965_get_tx_fail_reason(u32 status)
-{
-	return "";
+il4965_get_tx_fail_reason(u32 status) {
+    return "";
 }
 #endif
 
@@ -129,31 +128,30 @@ il4965_get_tx_fail_reason(u32 status)
 int il4965_alloc_bcast_station(struct il_priv *il);
 int il4965_add_bssid_station(struct il_priv *il, const u8 *addr, u8 *sta_id_r);
 int il4965_remove_default_wep_key(struct il_priv *il,
-				  struct ieee80211_key_conf *key);
+                                  struct ieee80211_key_conf *key);
 int il4965_set_default_wep_key(struct il_priv *il,
-			       struct ieee80211_key_conf *key);
+                               struct ieee80211_key_conf *key);
 int il4965_restore_default_wep_keys(struct il_priv *il);
 int il4965_set_dynamic_key(struct il_priv *il,
-			   struct ieee80211_key_conf *key, u8 sta_id);
+                           struct ieee80211_key_conf *key, u8 sta_id);
 int il4965_remove_dynamic_key(struct il_priv *il,
-			      struct ieee80211_key_conf *key, u8 sta_id);
+                              struct ieee80211_key_conf *key, u8 sta_id);
 void il4965_update_tkip_key(struct il_priv *il,
-			    struct ieee80211_key_conf *keyconf,
-			    struct ieee80211_sta *sta, u32 iv32,
-			    u16 *phase1key);
+                            struct ieee80211_key_conf *keyconf,
+                            struct ieee80211_sta *sta, u32 iv32,
+                            u16 *phase1key);
 int il4965_sta_tx_modify_enable_tid(struct il_priv *il, int sta_id, int tid);
 int il4965_sta_rx_agg_start(struct il_priv *il, struct ieee80211_sta *sta,
-			    int tid, u16 ssn);
+                            int tid, u16 ssn);
 int il4965_sta_rx_agg_stop(struct il_priv *il, struct ieee80211_sta *sta,
-			   int tid);
+                           int tid);
 void il4965_sta_modify_sleep_tx_count(struct il_priv *il, int sta_id, int cnt);
 int il4965_update_bcast_stations(struct il_priv *il);
 
 /* rate */
 static inline u8
-il4965_hw_get_rate(__le32 rate_n_flags)
-{
-	return le32_to_cpu(rate_n_flags) & 0xFF;
+il4965_hw_get_rate(__le32 rate_n_flags) {
+    return le32_to_cpu(rate_n_flags) & 0xFF;
 }
 
 /* eeprom */
@@ -167,24 +165,24 @@ void il4965_mac_tx(struct ieee80211_hw *hw, struct sk_buff *skb);
 int il4965_mac_start(struct ieee80211_hw *hw);
 void il4965_mac_stop(struct ieee80211_hw *hw);
 void il4965_configure_filter(struct ieee80211_hw *hw,
-			     unsigned int changed_flags,
-			     unsigned int *total_flags, u64 multicast);
+                             unsigned int changed_flags,
+                             unsigned int *total_flags, u64 multicast);
 int il4965_mac_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
-		       struct ieee80211_vif *vif, struct ieee80211_sta *sta,
-		       struct ieee80211_key_conf *key);
+                       struct ieee80211_vif *vif, struct ieee80211_sta *sta,
+                       struct ieee80211_key_conf *key);
 void il4965_mac_update_tkip_key(struct ieee80211_hw *hw,
-				struct ieee80211_vif *vif,
-				struct ieee80211_key_conf *keyconf,
-				struct ieee80211_sta *sta, u32 iv32,
-				u16 *phase1key);
+                                struct ieee80211_vif *vif,
+                                struct ieee80211_key_conf *keyconf,
+                                struct ieee80211_sta *sta, u32 iv32,
+                                u16 *phase1key);
 int il4965_mac_ampdu_action(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
-			    enum ieee80211_ampdu_mlme_action action,
-			    struct ieee80211_sta *sta, u16 tid, u16 * ssn,
-			    u8 buf_size);
+                            enum ieee80211_ampdu_mlme_action action,
+                            struct ieee80211_sta *sta, u16 tid, u16 * ssn,
+                            u8 buf_size);
 int il4965_mac_sta_add(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
-		       struct ieee80211_sta *sta);
+                       struct ieee80211_sta *sta);
 void il4965_mac_channel_switch(struct ieee80211_hw *hw,
-			       struct ieee80211_channel_switch *ch_switch);
+                               struct ieee80211_channel_switch *ch_switch);
 
 void il4965_led_enable(struct il_priv *il);
 
@@ -218,10 +216,9 @@ void il4965_led_enable(struct il_priv *il);
 #define IL49_MAX_BSM_SIZE BSM_SRAM_SIZE
 
 static inline int
-il4965_hw_valid_rtc_data_addr(u32 addr)
-{
-	return (addr >= IL49_RTC_DATA_LOWER_BOUND &&
-		addr < IL49_RTC_DATA_UPPER_BOUND);
+il4965_hw_valid_rtc_data_addr(u32 addr) {
+    return (addr >= IL49_RTC_DATA_LOWER_BOUND &&
+            addr < IL49_RTC_DATA_UPPER_BOUND);
 }
 
 /********************* START TEMPERATURE *************************************/
@@ -847,12 +844,12 @@ extern void il4965_temperature_calib(struct il_priv *il);
 #define CALIB_IL_TX_ATTEN_GR5_LCH 20
 
 enum {
-	CALIB_CH_GROUP_1 = 0,
-	CALIB_CH_GROUP_2 = 1,
-	CALIB_CH_GROUP_3 = 2,
-	CALIB_CH_GROUP_4 = 3,
-	CALIB_CH_GROUP_5 = 4,
-	CALIB_CH_GROUP_MAX
+    CALIB_CH_GROUP_1 = 0,
+    CALIB_CH_GROUP_2 = 1,
+    CALIB_CH_GROUP_3 = 2,
+    CALIB_CH_GROUP_4 = 3,
+    CALIB_CH_GROUP_5 = 4,
+    CALIB_CH_GROUP_MAX
 };
 
 /********************* END TXPOWER *****************************************/
@@ -901,8 +898,8 @@ enum {
  * 4965 assumes tables are separated by 1024 bytes.
  */
 struct il4965_scd_bc_tbl {
-	__le16 tfd_offset[TFD_QUEUE_BC_SIZE];
-	u8 pad[1024 - (TFD_QUEUE_BC_SIZE) * sizeof(__le16)];
+    __le16 tfd_offset[TFD_QUEUE_BC_SIZE];
+    u8 pad[1024 - (TFD_QUEUE_BC_SIZE) * sizeof(__le16)];
 } __packed;
 
 #define IL4965_RTC_INST_LOWER_BOUND		(0x000000)

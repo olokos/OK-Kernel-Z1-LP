@@ -136,10 +136,9 @@ __BUILD_MEMORY_STRING(__raw_, q, u64)
  */
 extern const unsigned long sh_io_port_base;
 
-static inline void __set_io_port_base(unsigned long pbase)
-{
-	*(unsigned long *)&sh_io_port_base = pbase;
-	barrier();
+static inline void __set_io_port_base(unsigned long pbase) {
+    *(unsigned long *)&sh_io_port_base = pbase;
+    barrier();
 }
 
 #ifdef CONFIG_GENERIC_IOMAP
@@ -233,7 +232,7 @@ void memset_io(volatile void __iomem *, int, unsigned long);
 /* Quad-word real-mode I/O, don't ask.. */
 unsigned long long peek_real_address_q(unsigned long long addr);
 unsigned long long poke_real_address_q(unsigned long long addr,
-				       unsigned long long val);
+                                       unsigned long long val);
 
 #if !defined(CONFIG_MMU)
 #define virt_to_phys(address)	((unsigned long)(address))
@@ -262,64 +261,61 @@ unsigned long long poke_real_address_q(unsigned long long addr,
  */
 #ifdef CONFIG_MMU
 void __iomem *__ioremap_caller(phys_addr_t offset, unsigned long size,
-			       pgprot_t prot, void *caller);
+                               pgprot_t prot, void *caller);
 void __iounmap(void __iomem *addr);
 
 static inline void __iomem *
-__ioremap(phys_addr_t offset, unsigned long size, pgprot_t prot)
-{
-	return __ioremap_caller(offset, size, prot, __builtin_return_address(0));
+__ioremap(phys_addr_t offset, unsigned long size, pgprot_t prot) {
+    return __ioremap_caller(offset, size, prot, __builtin_return_address(0));
 }
 
 static inline void __iomem *
-__ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot)
-{
+__ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot) {
 #ifdef CONFIG_29BIT
-	phys_addr_t last_addr = offset + size - 1;
+    phys_addr_t last_addr = offset + size - 1;
 
-	/*
-	 * For P1 and P2 space this is trivial, as everything is already
-	 * mapped. Uncached access for P1 addresses are done through P2.
-	 * In the P3 case or for addresses outside of the 29-bit space,
-	 * mapping must be done by the PMB or by using page tables.
-	 */
-	if (likely(PXSEG(offset) < P3SEG && PXSEG(last_addr) < P3SEG)) {
-		u64 flags = pgprot_val(prot);
+    /*
+     * For P1 and P2 space this is trivial, as everything is already
+     * mapped. Uncached access for P1 addresses are done through P2.
+     * In the P3 case or for addresses outside of the 29-bit space,
+     * mapping must be done by the PMB or by using page tables.
+     */
+    if (likely(PXSEG(offset) < P3SEG && PXSEG(last_addr) < P3SEG)) {
+        u64 flags = pgprot_val(prot);
 
-		/*
-		 * Anything using the legacy PTEA space attributes needs
-		 * to be kicked down to page table mappings.
-		 */
-		if (unlikely(flags & _PAGE_PCC_MASK))
-			return NULL;
-		if (unlikely(flags & _PAGE_CACHABLE))
-			return (void __iomem *)P1SEGADDR(offset);
+        /*
+         * Anything using the legacy PTEA space attributes needs
+         * to be kicked down to page table mappings.
+         */
+        if (unlikely(flags & _PAGE_PCC_MASK))
+            return NULL;
+        if (unlikely(flags & _PAGE_CACHABLE))
+            return (void __iomem *)P1SEGADDR(offset);
 
-		return (void __iomem *)P2SEGADDR(offset);
-	}
+        return (void __iomem *)P2SEGADDR(offset);
+    }
 
-	/* P4 above the store queues are always mapped. */
-	if (unlikely(offset >= P3_ADDR_MAX))
-		return (void __iomem *)P4SEGADDR(offset);
+    /* P4 above the store queues are always mapped. */
+    if (unlikely(offset >= P3_ADDR_MAX))
+        return (void __iomem *)P4SEGADDR(offset);
 #endif
 
-	return NULL;
+    return NULL;
 }
 
 static inline void __iomem *
-__ioremap_mode(phys_addr_t offset, unsigned long size, pgprot_t prot)
-{
-	void __iomem *ret;
+__ioremap_mode(phys_addr_t offset, unsigned long size, pgprot_t prot) {
+    void __iomem *ret;
 
-	ret = __ioremap_trapped(offset, size);
-	if (ret)
-		return ret;
+    ret = __ioremap_trapped(offset, size);
+    if (ret)
+        return ret;
 
-	ret = __ioremap_29bit(offset, size, prot);
-	if (ret)
-		return ret;
+    ret = __ioremap_29bit(offset, size, prot);
+    if (ret)
+        return ret;
 
-	return __ioremap(offset, size, prot);
+    return __ioremap(offset, size, prot);
 }
 #else
 #define __ioremap(offset, size, prot)		((void __iomem *)(offset))
@@ -327,22 +323,19 @@ __ioremap_mode(phys_addr_t offset, unsigned long size, pgprot_t prot)
 #define __iounmap(addr)				do { } while (0)
 #endif /* CONFIG_MMU */
 
-static inline void __iomem *ioremap(phys_addr_t offset, unsigned long size)
-{
-	return __ioremap_mode(offset, size, PAGE_KERNEL_NOCACHE);
+static inline void __iomem *ioremap(phys_addr_t offset, unsigned long size) {
+    return __ioremap_mode(offset, size, PAGE_KERNEL_NOCACHE);
 }
 
 static inline void __iomem *
-ioremap_cache(phys_addr_t offset, unsigned long size)
-{
-	return __ioremap_mode(offset, size, PAGE_KERNEL);
+ioremap_cache(phys_addr_t offset, unsigned long size) {
+    return __ioremap_mode(offset, size, PAGE_KERNEL);
 }
 
 #ifdef CONFIG_HAVE_IOREMAP_PROT
 static inline void __iomem *
-ioremap_prot(phys_addr_t offset, unsigned long size, unsigned long flags)
-{
-	return __ioremap_mode(offset, size, __pgprot(flags));
+ioremap_prot(phys_addr_t offset, unsigned long size, unsigned long flags) {
+    return __ioremap_mode(offset, size, __pgprot(flags));
 }
 #endif
 
@@ -352,14 +345,15 @@ extern int iounmap_fixed(void __iomem *);
 extern void ioremap_fixed_init(void);
 #else
 static inline void __iomem *
-ioremap_fixed(phys_addr_t phys_addr, unsigned long size, pgprot_t prot)
-{
-	BUG();
-	return NULL;
+ioremap_fixed(phys_addr_t phys_addr, unsigned long size, pgprot_t prot) {
+    BUG();
+    return NULL;
 }
 
 static inline void ioremap_fixed_init(void) { }
-static inline int iounmap_fixed(void __iomem *addr) { return -EINVAL; }
+static inline int iounmap_fixed(void __iomem *addr) {
+    return -EINVAL;
+}
 #endif
 
 #define ioremap_nocache	ioremap

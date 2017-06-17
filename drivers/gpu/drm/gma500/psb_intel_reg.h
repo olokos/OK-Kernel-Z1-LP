@@ -55,7 +55,7 @@
 #define   GMBUS_PORT_PANEL	3
 #define   GMBUS_PORT_DPC	4 /* HDMIC */
 #define   GMBUS_PORT_DPB	5 /* SDVO, HDMIB */
-				  /* 6 reserved */
+/* 6 reserved */
 #define   GMBUS_PORT_DPD	7 /* HDMID */
 #define   GMBUS_NUM_PORTS       8
 #define GMBUS1			0x5104 /* command/status */
@@ -525,35 +525,35 @@
 #define DPST_YUV_LUMA_MODE			0
 
 struct dpst_ie_histogram_control {
-	union {
-		uint32_t data;
-		struct {
-			uint32_t bin_reg_index:7;
-			uint32_t reserved:4;
-			uint32_t bin_reg_func_select:1;
-			uint32_t sync_to_phase_in:1;
-			uint32_t alt_enhancement_mode:2;
-			uint32_t reserved1:1;
-			uint32_t sync_to_phase_in_count:8;
-			uint32_t histogram_mode_select:1;
-			uint32_t reserved2:4;
-			uint32_t ie_pipe_assignment:1;
-			uint32_t ie_mode_table_enabled:1;
-			uint32_t ie_histogram_enable:1;
-		};
-	};
+    union {
+        uint32_t data;
+        struct {
+            uint32_t bin_reg_index:7;
+            uint32_t reserved:4;
+            uint32_t bin_reg_func_select:1;
+            uint32_t sync_to_phase_in:1;
+            uint32_t alt_enhancement_mode:2;
+            uint32_t reserved1:1;
+            uint32_t sync_to_phase_in_count:8;
+            uint32_t histogram_mode_select:1;
+            uint32_t reserved2:4;
+            uint32_t ie_pipe_assignment:1;
+            uint32_t ie_mode_table_enabled:1;
+            uint32_t ie_histogram_enable:1;
+        };
+    };
 };
 
 struct dpst_guardband {
-	union {
-		uint32_t data;
-		struct {
-			uint32_t guardband:22;
-			uint32_t guardband_interrupt_delay:8;
-			uint32_t interrupt_status:1;
-			uint32_t interrupt_enable:1;
-		};
-	};
+    union {
+        uint32_t data;
+        struct {
+            uint32_t guardband:22;
+            uint32_t guardband_interrupt_delay:8;
+            uint32_t interrupt_status:1;
+            uint32_t interrupt_enable:1;
+        };
+    };
 };
 
 #define PIPEAFRAMEHIGH		0x70040
@@ -1171,9 +1171,9 @@ No status bits are changed.
 #define write_display_brightness	0x51
 #define write_ctrl_display		0x53
 #define write_ctrl_cabc			0x55
-  #define UI_IMAGE		0x01
-  #define STILL_IMAGE		0x02
-  #define MOVING_IMAGE		0x03
+#define UI_IMAGE		0x01
+#define STILL_IMAGE		0x02
+#define MOVING_IMAGE		0x03
 #define write_hysteresis		0x57
 #define write_gamma_setting		0x58
 #define write_cabc_min_bright		0x5e
@@ -1217,10 +1217,10 @@ No status bits are changed.
 						 */
 #define BURST_MODE			0x03	/* Burst Mode */
 #define DBI_COMMAND_BUFFER_SIZE		0x240   /* 0x32 */    /* 0x120 */
-						/* Allocate at least
-						 * 0x100 Byte with 32
-						 * byte alignment
-						 */
+/* Allocate at least
+ * 0x100 Byte with 32
+ * byte alignment
+ */
 #define DBI_DATA_BUFFER_SIZE		0x120	/* Allocate at least
 						 * 0x100 Byte with 32
 						 * byte alignment

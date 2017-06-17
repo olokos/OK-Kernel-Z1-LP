@@ -42,7 +42,7 @@ struct cod_libraryobj;
  *  and freeing DSP memory.
  */
 typedef u32(*cod_writefxn) (void *priv_ref, u32 dsp_add,
-			    void *pbuf, u32 ul_num_bytes, u32 mem_space);
+                            void *pbuf, u32 ul_num_bytes, u32 mem_space);
 
 /*
  *  ======== cod_close ========
@@ -82,7 +82,7 @@ extern void cod_close(struct cod_libraryobj *lib);
  *  Ensures:
  */
 extern int cod_create(struct cod_manager **mgr,
-			     char *str_zl_file);
+                      char *str_zl_file);
 
 /*
  *  ======== cod_delete ========
@@ -115,7 +115,7 @@ extern void cod_delete(struct cod_manager *cod_mgr_obj);
  *  Ensures:
  */
 extern int cod_get_base_lib(struct cod_manager *cod_mgr_obj,
-				   struct dbll_library_obj **plib);
+                            struct dbll_library_obj **plib);
 
 /*
  *  ======== cod_get_base_name ========
@@ -135,7 +135,7 @@ extern int cod_get_base_lib(struct cod_manager *cod_mgr_obj,
  *  Ensures:
  */
 extern int cod_get_base_name(struct cod_manager *cod_mgr_obj,
-				    char *sz_name, u32 usize);
+                             char *sz_name, u32 usize);
 
 /*
  *  ======== cod_get_entry ========
@@ -153,7 +153,7 @@ extern int cod_get_base_name(struct cod_manager *cod_mgr_obj,
  *  Ensures:
  */
 extern int cod_get_entry(struct cod_manager *cod_mgr_obj,
-				u32 *entry_pt);
+                         u32 *entry_pt);
 
 /*
  *  ======== cod_get_loader ========
@@ -171,7 +171,7 @@ extern int cod_get_entry(struct cod_manager *cod_mgr_obj,
  *  Ensures:
  */
 extern int cod_get_loader(struct cod_manager *cod_mgr_obj,
-				 struct dbll_tar_obj **loader);
+                          struct dbll_tar_obj **loader);
 
 /*
  *  ======== cod_get_section ========
@@ -200,8 +200,8 @@ extern int cod_get_loader(struct cod_manager *cod_mgr_obj,
  *
  */
 extern int cod_get_section(struct cod_libraryobj *lib,
-				  char *str_sect,
-				  u32 *addr, u32 *len);
+                           char *str_sect,
+                           u32 *addr, u32 *len);
 
 /*
  *  ======== cod_get_sym_value ========
@@ -225,7 +225,7 @@ extern int cod_get_section(struct cod_libraryobj *lib,
  *  Ensures:
  */
 extern int cod_get_sym_value(struct cod_manager *cod_mgr_obj,
-				    char *str_sym, u32 * pul_value);
+                             char *str_sym, u32 * pul_value);
 
 /*
  *  ======== cod_load_base ========
@@ -254,9 +254,9 @@ extern int cod_get_sym_value(struct cod_manager *cod_mgr_obj,
  *  Ensures:
  */
 extern int cod_load_base(struct cod_manager *cod_mgr_obj,
-				u32 num_argc, char *args[],
-				cod_writefxn pfn_write, void *arb,
-				char *envp[]);
+                         u32 num_argc, char *args[],
+                         cod_writefxn pfn_write, void *arb,
+                         char *envp[]);
 
 /*
  *  ======== cod_open ========
@@ -280,8 +280,8 @@ extern int cod_load_base(struct cod_manager *cod_mgr_obj,
  *  Ensures:
  */
 extern int cod_open(struct cod_manager *hmgr,
-			   char *sz_coff_path,
-			   u32 flags, struct cod_libraryobj **lib_obj);
+                    char *sz_coff_path,
+                    u32 flags, struct cod_libraryobj **lib_obj);
 
 /*
  *  ======== cod_open_base ========
@@ -301,7 +301,7 @@ extern int cod_open(struct cod_manager *hmgr,
  *  Ensures:
  */
 extern int cod_open_base(struct cod_manager *hmgr, char *sz_coff_path,
-				dbll_flags flags);
+                         dbll_flags flags);
 
 /*
  *  ======== cod_read_section ========
@@ -323,7 +323,7 @@ extern int cod_open_base(struct cod_manager *hmgr, char *sz_coff_path,
  *      0:  *str_content stores the content of the named section.
  */
 extern int cod_read_section(struct cod_libraryobj *lib,
-				   char *str_sect,
-				   char *str_content, u32 content_size);
+                            char *str_sect,
+                            char *str_content, u32 content_size);
 
 #endif /* COD_ */

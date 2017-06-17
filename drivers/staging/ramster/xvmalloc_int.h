@@ -51,45 +51,45 @@
 /* End of user params */
 
 enum blockflags {
-	BLOCK_FREE,
-	PREV_FREE,
-	__NR_BLOCKFLAGS,
+    BLOCK_FREE,
+    PREV_FREE,
+    __NR_BLOCKFLAGS,
 };
 
 #define FLAGS_MASK	XV_ALIGN_MASK
 #define PREV_MASK	(~FLAGS_MASK)
 
 struct freelist_entry {
-	struct page *page;
-	u16 offset;
-	u16 pad;
+    struct page *page;
+    u16 offset;
+    u16 pad;
 };
 
 struct link_free {
-	struct page *prev_page;
-	struct page *next_page;
-	u16 prev_offset;
-	u16 next_offset;
+    struct page *prev_page;
+    struct page *next_page;
+    u16 prev_offset;
+    u16 next_offset;
 };
 
 struct block_header {
-	union {
-		/* This common header must be XV_ALIGN bytes */
-		u8 common[XV_ALIGN];
-		struct {
-			u16 size;
-			u16 prev;
-		};
-	};
-	struct link_free link;
+    union {
+        /* This common header must be XV_ALIGN bytes */
+        u8 common[XV_ALIGN];
+        struct {
+            u16 size;
+            u16 prev;
+        };
+    };
+    struct link_free link;
 };
 
 struct xv_pool {
-	ulong flbitmap;
-	ulong slbitmap[MAX_FLI];
-	u64 total_pages;	/* stats */
-	struct freelist_entry freelist[NUM_FREE_LISTS];
-	spinlock_t lock;
+    ulong flbitmap;
+    ulong slbitmap[MAX_FLI];
+    u64 total_pages;	/* stats */
+    struct freelist_entry freelist[NUM_FREE_LISTS];
+    spinlock_t lock;
 };
 
 #endif

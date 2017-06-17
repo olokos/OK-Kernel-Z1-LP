@@ -23,52 +23,49 @@
 #define CMD_COREB_RESET		_IO('b', 2)
 
 static long
-coreb_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-{
-	int ret = 0;
+coreb_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
+    int ret = 0;
 
-	switch (cmd) {
-	case CMD_COREB_START:
-		bfin_write_SYSCR(bfin_read_SYSCR() & ~0x0020);
-		break;
-	case CMD_COREB_STOP:
-		bfin_write_SYSCR(bfin_read_SYSCR() | 0x0020);
-		bfin_write_SICB_SYSCR(bfin_read_SICB_SYSCR() | 0x0080);
-		break;
-	case CMD_COREB_RESET:
-		bfin_write_SICB_SYSCR(bfin_read_SICB_SYSCR() | 0x0080);
-		break;
-	default:
-		ret = -EINVAL;
-		break;
-	}
+    switch (cmd) {
+    case CMD_COREB_START:
+        bfin_write_SYSCR(bfin_read_SYSCR() & ~0x0020);
+        break;
+    case CMD_COREB_STOP:
+        bfin_write_SYSCR(bfin_read_SYSCR() | 0x0020);
+        bfin_write_SICB_SYSCR(bfin_read_SICB_SYSCR() | 0x0080);
+        break;
+    case CMD_COREB_RESET:
+        bfin_write_SICB_SYSCR(bfin_read_SICB_SYSCR() | 0x0080);
+        break;
+    default:
+        ret = -EINVAL;
+        break;
+    }
 
-	CSYNC();
+    CSYNC();
 
-	return ret;
+    return ret;
 }
 
 static const struct file_operations coreb_fops = {
-	.owner          = THIS_MODULE,
-	.unlocked_ioctl = coreb_ioctl,
-	.llseek		= noop_llseek,
+    .owner          = THIS_MODULE,
+    .unlocked_ioctl = coreb_ioctl,
+    .llseek		= noop_llseek,
 };
 
 static struct miscdevice coreb_dev = {
-	.minor = MISC_DYNAMIC_MINOR,
-	.name  = "coreb",
-	.fops  = &coreb_fops,
+    .minor = MISC_DYNAMIC_MINOR,
+    .name  = "coreb",
+    .fops  = &coreb_fops,
 };
 
-static int __init bf561_coreb_init(void)
-{
-	return misc_register(&coreb_dev);
+static int __init bf561_coreb_init(void) {
+    return misc_register(&coreb_dev);
 }
 module_init(bf561_coreb_init);
 
-static void __exit bf561_coreb_exit(void)
-{
-	misc_deregister(&coreb_dev);
+static void __exit bf561_coreb_exit(void) {
+    misc_deregister(&coreb_dev);
 }
 module_exit(bf561_coreb_exit);
 

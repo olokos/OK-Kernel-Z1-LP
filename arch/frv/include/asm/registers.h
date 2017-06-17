@@ -74,51 +74,51 @@
 #ifndef __ASSEMBLY__
 
 struct pt_regs {
-	unsigned long		psr;		/* Processor Status Register */
-	unsigned long		isr;		/* Integer Status Register */
-	unsigned long		ccr;		/* Condition Code Register */
-	unsigned long		cccr;		/* Condition Code for Conditional Insns Register */
-	unsigned long		lr;		/* Link Register */
-	unsigned long		lcr;		/* Loop Count Register */
-	unsigned long		pc;		/* Program Counter Register */
-	unsigned long		__status;	/* exception status */
-	unsigned long		syscallno;	/* syscall number or -1 */
-	unsigned long		orig_gr8;	/* original syscall arg #1 */
-	unsigned long		gner0;
-	unsigned long		gner1;
-	unsigned long long	iacc0;
-	unsigned long		tbr;		/* GR0 is fixed zero, so we use this for TBR */
-	unsigned long		sp;		/* GR1: USP/KSP */
-	unsigned long		fp;		/* GR2: FP */
-	unsigned long		gr3;
-	unsigned long		gr4;
-	unsigned long		gr5;
-	unsigned long		gr6;
-	unsigned long		gr7;		/* syscall number */
-	unsigned long		gr8;		/* 1st syscall param; syscall return */
-	unsigned long		gr9;		/* 2nd syscall param */
-	unsigned long		gr10;		/* 3rd syscall param */
-	unsigned long		gr11;		/* 4th syscall param */
-	unsigned long		gr12;		/* 5th syscall param */
-	unsigned long		gr13;		/* 6th syscall param */
-	unsigned long		gr14;
-	unsigned long		gr15;
-	unsigned long		gr16;		/* GP pointer */
-	unsigned long		gr17;		/* small data */
-	unsigned long		gr18;		/* PIC/PID */
-	unsigned long		gr19;
-	unsigned long		gr20;
-	unsigned long		gr21;
-	unsigned long		gr22;
-	unsigned long		gr23;
-	unsigned long		gr24;
-	unsigned long		gr25;
-	unsigned long		gr26;
-	unsigned long		gr27;
-	struct pt_regs		*next_frame;	/* GR28 - next exception frame */
-	unsigned long		gr29;		/* GR29 - OS reserved */
-	unsigned long		gr30;		/* GR30 - OS reserved */
-	unsigned long		gr31;		/* GR31 - OS reserved */
+    unsigned long		psr;		/* Processor Status Register */
+    unsigned long		isr;		/* Integer Status Register */
+    unsigned long		ccr;		/* Condition Code Register */
+    unsigned long		cccr;		/* Condition Code for Conditional Insns Register */
+    unsigned long		lr;		/* Link Register */
+    unsigned long		lcr;		/* Loop Count Register */
+    unsigned long		pc;		/* Program Counter Register */
+    unsigned long		__status;	/* exception status */
+    unsigned long		syscallno;	/* syscall number or -1 */
+    unsigned long		orig_gr8;	/* original syscall arg #1 */
+    unsigned long		gner0;
+    unsigned long		gner1;
+    unsigned long long	iacc0;
+    unsigned long		tbr;		/* GR0 is fixed zero, so we use this for TBR */
+    unsigned long		sp;		/* GR1: USP/KSP */
+    unsigned long		fp;		/* GR2: FP */
+    unsigned long		gr3;
+    unsigned long		gr4;
+    unsigned long		gr5;
+    unsigned long		gr6;
+    unsigned long		gr7;		/* syscall number */
+    unsigned long		gr8;		/* 1st syscall param; syscall return */
+    unsigned long		gr9;		/* 2nd syscall param */
+    unsigned long		gr10;		/* 3rd syscall param */
+    unsigned long		gr11;		/* 4th syscall param */
+    unsigned long		gr12;		/* 5th syscall param */
+    unsigned long		gr13;		/* 6th syscall param */
+    unsigned long		gr14;
+    unsigned long		gr15;
+    unsigned long		gr16;		/* GP pointer */
+    unsigned long		gr17;		/* small data */
+    unsigned long		gr18;		/* PIC/PID */
+    unsigned long		gr19;
+    unsigned long		gr20;
+    unsigned long		gr21;
+    unsigned long		gr22;
+    unsigned long		gr23;
+    unsigned long		gr24;
+    unsigned long		gr25;
+    unsigned long		gr26;
+    unsigned long		gr27;
+    struct pt_regs		*next_frame;	/* GR28 - next exception frame */
+    unsigned long		gr29;		/* GR29 - OS reserved */
+    unsigned long		gr30;		/* GR30 - OS reserved */
+    unsigned long		gr31;		/* GR31 - OS reserved */
 } __attribute__((aligned(8)));
 
 #endif
@@ -142,13 +142,12 @@ struct pt_regs {
  */
 #ifndef __ASSEMBLY__
 
-struct frv_debug_regs
-{
-	unsigned long		dcr;
-	unsigned long		ibar[4] __attribute__((aligned(8)));
-	unsigned long		dbar[4] __attribute__((aligned(8)));
-	unsigned long		dbdr[4][4] __attribute__((aligned(8)));
-	unsigned long		dbmr[4][4] __attribute__((aligned(8)));
+struct frv_debug_regs {
+    unsigned long		dcr;
+    unsigned long		ibar[4] __attribute__((aligned(8)));
+    unsigned long		dbar[4] __attribute__((aligned(8)));
+    unsigned long		dbdr[4][4] __attribute__((aligned(8)));
+    unsigned long		dbmr[4][4] __attribute__((aligned(8)));
 } __attribute__((aligned(8)));
 
 #endif
@@ -159,60 +158,57 @@ struct frv_debug_regs
  */
 #ifndef __ASSEMBLY__
 
-struct user_int_regs
-{
-	/* integer registers
-	 * - up to gr[31] mirror pt_regs
-	 * - total size must be multiple of 8 bytes
-	 */
-	unsigned long		psr;		/* Processor Status Register */
-	unsigned long		isr;		/* Integer Status Register */
-	unsigned long		ccr;		/* Condition Code Register */
-	unsigned long		cccr;		/* Condition Code for Conditional Insns Register */
-	unsigned long		lr;		/* Link Register */
-	unsigned long		lcr;		/* Loop Count Register */
-	unsigned long		pc;		/* Program Counter Register */
-	unsigned long		__status;	/* exception status */
-	unsigned long		syscallno;	/* syscall number or -1 */
-	unsigned long		orig_gr8;	/* original syscall arg #1 */
-	unsigned long		gner[2];
-	unsigned long long	iacc[1];
+struct user_int_regs {
+    /* integer registers
+     * - up to gr[31] mirror pt_regs
+     * - total size must be multiple of 8 bytes
+     */
+    unsigned long		psr;		/* Processor Status Register */
+    unsigned long		isr;		/* Integer Status Register */
+    unsigned long		ccr;		/* Condition Code Register */
+    unsigned long		cccr;		/* Condition Code for Conditional Insns Register */
+    unsigned long		lr;		/* Link Register */
+    unsigned long		lcr;		/* Loop Count Register */
+    unsigned long		pc;		/* Program Counter Register */
+    unsigned long		__status;	/* exception status */
+    unsigned long		syscallno;	/* syscall number or -1 */
+    unsigned long		orig_gr8;	/* original syscall arg #1 */
+    unsigned long		gner[2];
+    unsigned long long	iacc[1];
 
-	union {
-		unsigned long	tbr;
-		unsigned long	gr[64];
-	};
+    union {
+        unsigned long	tbr;
+        unsigned long	gr[64];
+    };
 };
 
-struct user_fpmedia_regs
-{
-	/* FP/Media registers */
-	unsigned long	fr[64];
-	unsigned long	fner[2];
-	unsigned long	msr[2];
-	unsigned long	acc[8];
-	unsigned char	accg[8];
-	unsigned long	fsr[1];
+struct user_fpmedia_regs {
+    /* FP/Media registers */
+    unsigned long	fr[64];
+    unsigned long	fner[2];
+    unsigned long	msr[2];
+    unsigned long	acc[8];
+    unsigned char	accg[8];
+    unsigned long	fsr[1];
 };
 
-struct user_context
-{
-	struct user_int_regs		i;
-	struct user_fpmedia_regs	f;
+struct user_context {
+    struct user_int_regs		i;
+    struct user_fpmedia_regs	f;
 
-	/* we provide a context extension so that we can save the regs for CPUs that
-	 * implement many more of Fujitsu's lavish register spec
-	 */
-	void *extension;
+    /* we provide a context extension so that we can save the regs for CPUs that
+     * implement many more of Fujitsu's lavish register spec
+     */
+    void *extension;
 } __attribute__((aligned(8)));
 
 struct frv_frame0 {
-	union {
-		struct pt_regs		regs;
-		struct user_context	uc;
-	};
+    union {
+        struct pt_regs		regs;
+        struct user_context	uc;
+    };
 
-	struct frv_debug_regs		debug;
+    struct frv_debug_regs		debug;
 
 } __attribute__((aligned(32)));
 

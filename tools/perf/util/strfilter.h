@@ -7,14 +7,14 @@
 
 /* A node of string filter */
 struct strfilter_node {
-	struct strfilter_node *l;	/* Tree left branche (for &,|) */
-	struct strfilter_node *r;	/* Tree right branche (for !,&,|) */
-	const char *p;		/* Operator or rule */
+    struct strfilter_node *l;	/* Tree left branche (for &,|) */
+    struct strfilter_node *r;	/* Tree right branche (for !,&,|) */
+    const char *p;		/* Operator or rule */
 };
 
 /* String filter */
 struct strfilter {
-	struct strfilter_node *root;
+    struct strfilter_node *root;
 };
 
 /**

@@ -52,50 +52,48 @@
  * national semiconductor nv ram chip the op code is 3 bits and
  * the address is 6/8 bits.
  */
-static inline void eeprom_cmd(unsigned int *ctrl, unsigned cmd, unsigned reg)
-{
-	unsigned short ser_cmd;
-	int i;
+static inline void eeprom_cmd(unsigned int *ctrl, unsigned cmd, unsigned reg) {
+    unsigned short ser_cmd;
+    int i;
 
-	ser_cmd = cmd | (reg << (16 - BITS_IN_COMMAND));
-	for (i = 0; i < BITS_IN_COMMAND; i++) {
-		if (ser_cmd & (1<<15))	/* if high order bit set */
-			__raw_writel(__raw_readl(ctrl) | EEPROM_DATO, ctrl);
-		else
-			__raw_writel(__raw_readl(ctrl) & ~EEPROM_DATO, ctrl);
-		__raw_writel(__raw_readl(ctrl) & ~EEPROM_ECLK, ctrl);
-		delay();
-		__raw_writel(__raw_readl(ctrl) | EEPROM_ECLK, ctrl);
-		delay();
-		ser_cmd <<= 1;
-	}
-	/* see data sheet timing diagram */
-	__raw_writel(__raw_readl(ctrl) & ~EEPROM_DATO, ctrl);
+    ser_cmd = cmd | (reg << (16 - BITS_IN_COMMAND));
+    for (i = 0; i < BITS_IN_COMMAND; i++) {
+        if (ser_cmd & (1<<15))	/* if high order bit set */
+            __raw_writel(__raw_readl(ctrl) | EEPROM_DATO, ctrl);
+        else
+            __raw_writel(__raw_readl(ctrl) & ~EEPROM_DATO, ctrl);
+        __raw_writel(__raw_readl(ctrl) & ~EEPROM_ECLK, ctrl);
+        delay();
+        __raw_writel(__raw_readl(ctrl) | EEPROM_ECLK, ctrl);
+        delay();
+        ser_cmd <<= 1;
+    }
+    /* see data sheet timing diagram */
+    __raw_writel(__raw_readl(ctrl) & ~EEPROM_DATO, ctrl);
 }
 
-unsigned short ip22_eeprom_read(unsigned int *ctrl, int reg)
-{
-	unsigned short res = 0;
-	int i;
+unsigned short ip22_eeprom_read(unsigned int *ctrl, int reg) {
+    unsigned short res = 0;
+    int i;
 
-	__raw_writel(__raw_readl(ctrl) & ~EEPROM_EPROT, ctrl);
-	eeprom_cs_on(ctrl);
-	eeprom_cmd(ctrl, EEPROM_READ, reg);
+    __raw_writel(__raw_readl(ctrl) & ~EEPROM_EPROT, ctrl);
+    eeprom_cs_on(ctrl);
+    eeprom_cmd(ctrl, EEPROM_READ, reg);
 
-	/* clock the data ouf of serial mem */
-	for (i = 0; i < 16; i++) {
-		__raw_writel(__raw_readl(ctrl) & ~EEPROM_ECLK, ctrl);
-		delay();
-		__raw_writel(__raw_readl(ctrl) | EEPROM_ECLK, ctrl);
-		delay();
-		res <<= 1;
-		if (__raw_readl(ctrl) & EEPROM_DATI)
-			res |= 1;
-	}
+    /* clock the data ouf of serial mem */
+    for (i = 0; i < 16; i++) {
+        __raw_writel(__raw_readl(ctrl) & ~EEPROM_ECLK, ctrl);
+        delay();
+        __raw_writel(__raw_readl(ctrl) | EEPROM_ECLK, ctrl);
+        delay();
+        res <<= 1;
+        if (__raw_readl(ctrl) & EEPROM_DATI)
+            res |= 1;
+    }
 
-	eeprom_cs_off(ctrl);
+    eeprom_cs_off(ctrl);
 
-	return res;
+    return res;
 }
 
 EXPORT_SYMBOL(ip22_eeprom_read);
@@ -103,19 +101,18 @@ EXPORT_SYMBOL(ip22_eeprom_read);
 /*
  * Read specified register from main NVRAM
  */
-unsigned short ip22_nvram_read(int reg)
-{
-	if (ip22_is_fullhouse())
-		/* IP22 (Indigo2 aka FullHouse) stores env variables into
-		 * 93CS56 Microwire Bus EEPROM 2048 Bit (128x16) */
-		return ip22_eeprom_read(&hpc3c0->eeprom, reg);
-	else {
-		unsigned short tmp;
-		/* IP24 (Indy aka Guiness) uses DS1386 8K version */
-		reg <<= 1;
-		tmp = hpc3c0->bbram[reg++] & 0xff;
-		return (tmp << 8) | (hpc3c0->bbram[reg] & 0xff);
-	}
+unsigned short ip22_nvram_read(int reg) {
+    if (ip22_is_fullhouse())
+        /* IP22 (Indigo2 aka FullHouse) stores env variables into
+         * 93CS56 Microwire Bus EEPROM 2048 Bit (128x16) */
+        return ip22_eeprom_read(&hpc3c0->eeprom, reg);
+    else {
+        unsigned short tmp;
+        /* IP24 (Indy aka Guiness) uses DS1386 8K version */
+        reg <<= 1;
+        tmp = hpc3c0->bbram[reg++] & 0xff;
+        return (tmp << 8) | (hpc3c0->bbram[reg] & 0xff);
+    }
 }
 
 EXPORT_SYMBOL(ip22_nvram_read);

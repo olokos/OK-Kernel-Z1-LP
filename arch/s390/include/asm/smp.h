@@ -33,18 +33,20 @@ extern void smp_stop_cpu(void);
 
 #else /* CONFIG_SMP */
 
-static inline void smp_call_ipl_cpu(void (*func)(void *), void *data)
-{
-	func(data);
+static inline void smp_call_ipl_cpu(void (*func)(void *), void *data) {
+    func(data);
 }
 
-static inline void smp_call_online_cpu(void (*func)(void *), void *data)
-{
-	func(data);
+static inline void smp_call_online_cpu(void (*func)(void *), void *data) {
+    func(data);
 }
 
-static inline int smp_find_processor_id(int address) { return 0; }
-static inline int smp_vcpu_scheduled(int cpu) { return 1; }
+static inline int smp_find_processor_id(int address) {
+    return 0;
+}
+static inline int smp_vcpu_scheduled(int cpu) {
+    return 1;
+}
 static inline void smp_yield_cpu(int cpu) { }
 static inline void smp_yield(void) { }
 static inline void smp_stop_cpu(void) { }
@@ -57,7 +59,9 @@ extern void __noreturn cpu_die(void);
 extern void __cpu_die(unsigned int cpu);
 extern int __cpu_disable(void);
 #else
-static inline int smp_rescan_cpus(void) { return 0; }
+static inline int smp_rescan_cpus(void) {
+    return 0;
+}
 static inline void cpu_die(void) { }
 #endif
 

@@ -77,54 +77,54 @@ extern int usbip_use_debug ;
 	} while (0)
 
 enum usb_device_speed {
-	USB_SPEED_UNKNOWN = 0,                  /* enumerating */
-	USB_SPEED_LOW, USB_SPEED_FULL,          /* usb 1.1 */
-	USB_SPEED_HIGH,                         /* usb 2.0 */
-	USB_SPEED_VARIABLE                      /* wireless (usb 2.5) */
+    USB_SPEED_UNKNOWN = 0,                  /* enumerating */
+    USB_SPEED_LOW, USB_SPEED_FULL,          /* usb 1.1 */
+    USB_SPEED_HIGH,                         /* usb 2.0 */
+    USB_SPEED_VARIABLE                      /* wireless (usb 2.5) */
 };
 
 /* FIXME: how to sync with drivers/usbip_common.h ? */
-enum usbip_device_status{
-	/* sdev is available. */
-	SDEV_ST_AVAILABLE = 0x01,
-	/* sdev is now used. */
-	SDEV_ST_USED,
-	/* sdev is unusable because of a fatal error. */
-	SDEV_ST_ERROR,
+enum usbip_device_status {
+    /* sdev is available. */
+    SDEV_ST_AVAILABLE = 0x01,
+    /* sdev is now used. */
+    SDEV_ST_USED,
+    /* sdev is unusable because of a fatal error. */
+    SDEV_ST_ERROR,
 
-	/* vdev does not connect a remote device. */
-	VDEV_ST_NULL,
-	/* vdev is used, but the USB address is not assigned yet */
-	VDEV_ST_NOTASSIGNED,
-	VDEV_ST_USED,
-	VDEV_ST_ERROR
+    /* vdev does not connect a remote device. */
+    VDEV_ST_NULL,
+    /* vdev is used, but the USB address is not assigned yet */
+    VDEV_ST_NOTASSIGNED,
+    VDEV_ST_USED,
+    VDEV_ST_ERROR
 };
 
 struct usbip_usb_interface {
-	uint8_t bInterfaceClass;
-	uint8_t bInterfaceSubClass;
-	uint8_t bInterfaceProtocol;
-	uint8_t padding;	/* alignment */
+    uint8_t bInterfaceClass;
+    uint8_t bInterfaceSubClass;
+    uint8_t bInterfaceProtocol;
+    uint8_t padding;	/* alignment */
 } __attribute__((packed));
 
 struct usbip_usb_device {
-	char path[SYSFS_PATH_MAX];
-	char busid[SYSFS_BUS_ID_SIZE];
+    char path[SYSFS_PATH_MAX];
+    char busid[SYSFS_BUS_ID_SIZE];
 
-	uint32_t busnum;
-	uint32_t devnum;
-	uint32_t speed;
+    uint32_t busnum;
+    uint32_t devnum;
+    uint32_t speed;
 
-	uint16_t idVendor;
-	uint16_t idProduct;
-	uint16_t bcdDevice;
+    uint16_t idVendor;
+    uint16_t idProduct;
+    uint16_t bcdDevice;
 
-	uint8_t bDeviceClass;
-	uint8_t bDeviceSubClass;
-	uint8_t bDeviceProtocol;
-	uint8_t bConfigurationValue;
-	uint8_t bNumConfigurations;
-	uint8_t bNumInterfaces;
+    uint8_t bDeviceClass;
+    uint8_t bDeviceSubClass;
+    uint8_t bDeviceProtocol;
+    uint8_t bConfigurationValue;
+    uint8_t bNumConfigurations;
+    uint8_t bNumInterfaces;
 } __attribute__((packed));
 
 #define to_string(s)	#s
@@ -134,7 +134,7 @@ void dump_usb_device(struct usbip_usb_device *);
 int read_usb_device(struct sysfs_device *sdev, struct usbip_usb_device *udev);
 int read_attr_value(struct sysfs_device *dev, const char *name, const char *format);
 int read_usb_interface(struct usbip_usb_device *udev, int i,
-		       struct usbip_usb_interface *uinf);
+                       struct usbip_usb_interface *uinf);
 
 const char *usbip_speed_string(int num);
 const char *usbip_status_string(int32_t status);

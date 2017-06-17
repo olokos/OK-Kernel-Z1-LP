@@ -35,7 +35,7 @@ extern struct pci_dev *isa_bridge_pcidev;	/* may be NULL if no ISA bus */
 struct device_node;
 typedef void *(*traverse_func)(struct device_node *me, void *data);
 void *traverse_pci_devices(struct device_node *start, traverse_func pre,
-		void *data);
+                           void *data);
 
 extern void pci_devs_phb_init(void);
 extern void pci_devs_phb_init_dynamic(struct pci_controller *phb);
@@ -64,14 +64,12 @@ struct device_node *eeh_find_device_pe(struct device_node *dn);
 void eeh_sysfs_add_device(struct pci_dev *pdev);
 void eeh_sysfs_remove_device(struct pci_dev *pdev);
 
-static inline const char *eeh_pci_name(struct pci_dev *pdev) 
-{ 
-	return pdev ? pci_name(pdev) : "<null>";
-} 
+static inline const char *eeh_pci_name(struct pci_dev *pdev) {
+    return pdev ? pci_name(pdev) : "<null>";
+}
 
-static inline const char *eeh_driver_name(struct pci_dev *pdev)
-{
-	return (pdev && pdev->driver) ? pdev->driver->name : "<null>";
+static inline const char *eeh_driver_name(struct pci_dev *pdev) {
+    return (pdev && pdev->driver) ? pdev->driver->name : "<null>";
 }
 
 #endif /* CONFIG_EEH */

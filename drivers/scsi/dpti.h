@@ -37,7 +37,7 @@ static int adpt_slave_configure(struct scsi_device *);
 
 static const char *adpt_info(struct Scsi_Host *pSHost);
 static int adpt_bios_param(struct scsi_device * sdev, struct block_device *dev,
-		sector_t, int geom[]);
+                           sector_t, int geom[]);
 
 static int adpt_bus_reset(struct scsi_cmnd* cmd);
 static int adpt_device_reset(struct scsi_cmnd* cmd);
@@ -61,7 +61,7 @@ static int adpt_device_reset(struct scsi_cmnd* cmd);
 #define DPT_REVISION    '4'
 #define DPT_SUBREVISION '5'
 #define DPT_BETA	""
-#define DPT_MONTH      8 
+#define DPT_MONTH      8
 #define DPT_DAY        7
 #define DPT_YEAR        (2001-1980)
 
@@ -82,7 +82,7 @@ static int adpt_device_reset(struct scsi_cmnd* cmd);
 
 #define PCI_DPT_VENDOR_ID         (0x1044)	// DPT PCI Vendor ID
 #define PCI_DPT_DEVICE_ID         (0xA501)	// DPT PCI I2O Device ID
-#define PCI_DPT_RAPTOR_DEVICE_ID  (0xA511)	
+#define PCI_DPT_RAPTOR_DEVICE_ID  (0xA511)
 
 /* Debugging macro from Linux Device Drivers - Rubini */
 #undef PDEBUG
@@ -177,27 +177,27 @@ static int adpt_device_reset(struct scsi_cmnd* cmd);
 
 
 struct adpt_device {
-	struct adpt_device* next_lun;
-	u32	flags;
-	u32	type;
-	u32	capacity;
-	u32	block_size;
-	u8	scsi_channel;
-	u8	scsi_id;
-	u8 	scsi_lun;
-	u8	state;
-	u16	tid;
-	struct i2o_device* pI2o_dev;
-	struct scsi_device *pScsi_dev;
+    struct adpt_device* next_lun;
+    u32	flags;
+    u32	type;
+    u32	capacity;
+    u32	block_size;
+    u8	scsi_channel;
+    u8	scsi_id;
+    u8 	scsi_lun;
+    u8	state;
+    u16	tid;
+    struct i2o_device* pI2o_dev;
+    struct scsi_device *pScsi_dev;
 };
 
 struct adpt_channel {
-	struct adpt_device* device[MAX_ID];	/* used as an array of 128 scsi ids */
-	u8	scsi_id;
-	u8	type;
-	u16	tid;
-	u32	state;
-	struct i2o_device* pI2o_dev;
+    struct adpt_device* device[MAX_ID];	/* used as an array of 128 scsi ids */
+    u8	scsi_id;
+    u8	type;
+    u16	tid;
+    u32	state;
+    struct i2o_device* pI2o_dev;
 };
 
 // HBA state flags
@@ -205,61 +205,61 @@ struct adpt_channel {
 #define DPTI_STATE_IOCTL	(0x02)
 
 typedef struct _adpt_hba {
-	struct _adpt_hba *next;
-	struct pci_dev *pDev;
-	struct Scsi_Host *host;
-	u32 state;
-	spinlock_t state_lock;
-	int unit;
-	int host_no;		/* SCSI host number */
-	u8 initialized;
-	u8 in_use;		/* is the management node open*/
+    struct _adpt_hba *next;
+    struct pci_dev *pDev;
+    struct Scsi_Host *host;
+    u32 state;
+    spinlock_t state_lock;
+    int unit;
+    int host_no;		/* SCSI host number */
+    u8 initialized;
+    u8 in_use;		/* is the management node open*/
 
-	char name[32];
-	char detail[55];
+    char name[32];
+    char detail[55];
 
-	void __iomem *base_addr_virt;
-	void __iomem *msg_addr_virt;
-	ulong base_addr_phys;
-	void __iomem *post_port;
-	void __iomem *reply_port;
-	void __iomem *irq_mask;
-	u16  post_count;
-	u32  post_fifo_size;
-	u32  reply_fifo_size;
-	u32* reply_pool;
-	dma_addr_t reply_pool_pa;
-	u32  sg_tablesize;	// Scatter/Gather List Size.       
-	u8  top_scsi_channel;
-	u8  top_scsi_id;
-	u8  top_scsi_lun;
-	u8  dma64;
+    void __iomem *base_addr_virt;
+    void __iomem *msg_addr_virt;
+    ulong base_addr_phys;
+    void __iomem *post_port;
+    void __iomem *reply_port;
+    void __iomem *irq_mask;
+    u16  post_count;
+    u32  post_fifo_size;
+    u32  reply_fifo_size;
+    u32* reply_pool;
+    dma_addr_t reply_pool_pa;
+    u32  sg_tablesize;	// Scatter/Gather List Size.
+    u8  top_scsi_channel;
+    u8  top_scsi_id;
+    u8  top_scsi_lun;
+    u8  dma64;
 
-	i2o_status_block* status_block;
-	dma_addr_t status_block_pa;
-	i2o_hrt* hrt;
-	dma_addr_t hrt_pa;
-	i2o_lct* lct;
-	dma_addr_t lct_pa;
-	uint lct_size;
-	struct i2o_device* devices;
-	struct adpt_channel channel[MAX_CHANNEL];
-	struct proc_dir_entry* proc_entry;	/* /proc dir */
+    i2o_status_block* status_block;
+    dma_addr_t status_block_pa;
+    i2o_hrt* hrt;
+    dma_addr_t hrt_pa;
+    i2o_lct* lct;
+    dma_addr_t lct_pa;
+    uint lct_size;
+    struct i2o_device* devices;
+    struct adpt_channel channel[MAX_CHANNEL];
+    struct proc_dir_entry* proc_entry;	/* /proc dir */
 
-	void __iomem *FwDebugBuffer_P;	// Virtual Address Of FW Debug Buffer
-	u32   FwDebugBufferSize;	// FW Debug Buffer Size In Bytes
-	void __iomem *FwDebugStrLength_P;// Virtual Addr Of FW Debug String Len
-	void __iomem *FwDebugFlags_P;	// Virtual Address Of FW Debug Flags 
-	void __iomem *FwDebugBLEDflag_P;// Virtual Addr Of FW Debug BLED
-	void __iomem *FwDebugBLEDvalue_P;// Virtual Addr Of FW Debug BLED
-	u32 FwDebugFlags;
-	u32 *ioctl_reply_context[4];
+    void __iomem *FwDebugBuffer_P;	// Virtual Address Of FW Debug Buffer
+    u32   FwDebugBufferSize;	// FW Debug Buffer Size In Bytes
+    void __iomem *FwDebugStrLength_P;// Virtual Addr Of FW Debug String Len
+    void __iomem *FwDebugFlags_P;	// Virtual Address Of FW Debug Flags
+    void __iomem *FwDebugBLEDflag_P;// Virtual Addr Of FW Debug BLED
+    void __iomem *FwDebugBLEDvalue_P;// Virtual Addr Of FW Debug BLED
+    u32 FwDebugFlags;
+    u32 *ioctl_reply_context[4];
 } adpt_hba;
 
 struct sg_simple_element {
-   u32  flag_count;
-   u32 addr_bus;
-}; 
+    u32  flag_count;
+    u32 addr_bus;
+};
 
 /*
  * Function Prototypes
@@ -271,14 +271,14 @@ static int adpt_i2o_build_sys_table(void);
 static irqreturn_t adpt_isr(int irq, void *dev_id);
 
 static void adpt_i2o_report_hba_unit(adpt_hba* pHba, struct i2o_device *d);
-static int adpt_i2o_query_scalar(adpt_hba* pHba, int tid, 
-			int group, int field, void *buf, int buflen);
+static int adpt_i2o_query_scalar(adpt_hba* pHba, int tid,
+                                 int group, int field, void *buf, int buflen);
 #ifdef DEBUG
 static const char *adpt_i2o_get_class_name(int class);
 #endif
-static int adpt_i2o_issue_params(int cmd, adpt_hba* pHba, int tid, 
-		  void *opblk, dma_addr_t opblk_pa, int oplen,
-		  void *resblk, dma_addr_t resblk_pa, int reslen);
+static int adpt_i2o_issue_params(int cmd, adpt_hba* pHba, int tid,
+                                 void *opblk, dma_addr_t opblk_pa, int oplen,
+                                 void *resblk, dma_addr_t resblk_pa, int reslen);
 static int adpt_i2o_post_wait(adpt_hba* pHba, u32* msg, int len, int timeout);
 static int adpt_i2o_lct_get(adpt_hba* pHba);
 static int adpt_i2o_parse_lct(adpt_hba* pHba);

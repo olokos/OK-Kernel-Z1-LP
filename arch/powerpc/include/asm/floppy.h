@@ -36,10 +36,10 @@
 static int fd_request_dma(void);
 
 struct fd_dma_ops {
-	void (*_disable_dma)(unsigned int dmanr);
-	void (*_free_dma)(unsigned int dmanr);
-	int (*_get_dma_residue)(unsigned int dummy);
-	int (*_dma_setup)(char *addr, unsigned long size, int mode, int io);
+    void (*_disable_dma)(unsigned int dmanr);
+    void (*_free_dma)(unsigned int dmanr);
+    int (*_get_dma_residue)(unsigned int dummy);
+    int (*_dma_setup)(char *addr, unsigned long size, int mode, int io);
 };
 
 static int virtual_dma_count;
@@ -49,145 +49,134 @@ static int virtual_dma_mode;
 static int doing_vdma;
 static struct fd_dma_ops *fd_ops;
 
-static irqreturn_t floppy_hardint(int irq, void *dev_id)
-{
-	unsigned char st;
-	int lcount;
-	char *lptr;
+static irqreturn_t floppy_hardint(int irq, void *dev_id) {
+    unsigned char st;
+    int lcount;
+    char *lptr;
 
-	if (!doing_vdma)
-		return floppy_interrupt(irq, dev_id);
+    if (!doing_vdma)
+        return floppy_interrupt(irq, dev_id);
 
 
-	st = 1;
-	for (lcount=virtual_dma_count, lptr=virtual_dma_addr;
-	     lcount; lcount--, lptr++) {
-		st=inb(virtual_dma_port+4) & 0xa0 ;
-		if (st != 0xa0)
-			break;
-		if (virtual_dma_mode)
-			outb_p(*lptr, virtual_dma_port+5);
-		else
-			*lptr = inb_p(virtual_dma_port+5);
-	}
-	virtual_dma_count = lcount;
-	virtual_dma_addr = lptr;
-	st = inb(virtual_dma_port+4);
+    st = 1;
+    for (lcount=virtual_dma_count, lptr=virtual_dma_addr;
+            lcount; lcount--, lptr++) {
+        st=inb(virtual_dma_port+4) & 0xa0 ;
+        if (st != 0xa0)
+            break;
+        if (virtual_dma_mode)
+            outb_p(*lptr, virtual_dma_port+5);
+        else
+            *lptr = inb_p(virtual_dma_port+5);
+    }
+    virtual_dma_count = lcount;
+    virtual_dma_addr = lptr;
+    st = inb(virtual_dma_port+4);
 
-	if (st == 0x20)
-		return IRQ_HANDLED;
-	if (!(st & 0x20)) {
-		virtual_dma_residue += virtual_dma_count;
-		virtual_dma_count=0;
-		doing_vdma = 0;
-		floppy_interrupt(irq, dev_id);
-		return IRQ_HANDLED;
-	}
-	return IRQ_HANDLED;
+    if (st == 0x20)
+        return IRQ_HANDLED;
+    if (!(st & 0x20)) {
+        virtual_dma_residue += virtual_dma_count;
+        virtual_dma_count=0;
+        doing_vdma = 0;
+        floppy_interrupt(irq, dev_id);
+        return IRQ_HANDLED;
+    }
+    return IRQ_HANDLED;
 }
 
-static void vdma_disable_dma(unsigned int dummy)
-{
-	doing_vdma = 0;
-	virtual_dma_residue += virtual_dma_count;
-	virtual_dma_count=0;
+static void vdma_disable_dma(unsigned int dummy) {
+    doing_vdma = 0;
+    virtual_dma_residue += virtual_dma_count;
+    virtual_dma_count=0;
 }
 
-static void vdma_nop(unsigned int dummy)
-{
+static void vdma_nop(unsigned int dummy) {
 }
 
 
-static int vdma_get_dma_residue(unsigned int dummy)
-{
-	return virtual_dma_count + virtual_dma_residue;
+static int vdma_get_dma_residue(unsigned int dummy) {
+    return virtual_dma_count + virtual_dma_residue;
 }
 
 
-static int fd_request_irq(void)
-{
-	if (can_use_virtual_dma)
-		return request_irq(FLOPPY_IRQ, floppy_hardint,
-				   0, "floppy", NULL);
-	else
-		return request_irq(FLOPPY_IRQ, floppy_interrupt,
-				   0, "floppy", NULL);
+static int fd_request_irq(void) {
+    if (can_use_virtual_dma)
+        return request_irq(FLOPPY_IRQ, floppy_hardint,
+                           0, "floppy", NULL);
+    else
+        return request_irq(FLOPPY_IRQ, floppy_interrupt,
+                           0, "floppy", NULL);
 }
 
-static int vdma_dma_setup(char *addr, unsigned long size, int mode, int io)
-{
-	doing_vdma = 1;
-	virtual_dma_port = io;
-	virtual_dma_mode = (mode  == DMA_MODE_WRITE);
-	virtual_dma_addr = addr;
-	virtual_dma_count = size;
-	virtual_dma_residue = 0;
-	return 0;
+static int vdma_dma_setup(char *addr, unsigned long size, int mode, int io) {
+    doing_vdma = 1;
+    virtual_dma_port = io;
+    virtual_dma_mode = (mode  == DMA_MODE_WRITE);
+    virtual_dma_addr = addr;
+    virtual_dma_count = size;
+    virtual_dma_residue = 0;
+    return 0;
 }
 
-static int hard_dma_setup(char *addr, unsigned long size, int mode, int io)
-{
-	static unsigned long prev_size;
-	static dma_addr_t bus_addr = 0;
-	static char *prev_addr;
-	static int prev_dir;
-	int dir;
+static int hard_dma_setup(char *addr, unsigned long size, int mode, int io) {
+    static unsigned long prev_size;
+    static dma_addr_t bus_addr = 0;
+    static char *prev_addr;
+    static int prev_dir;
+    int dir;
 
-	doing_vdma = 0;
-	dir = (mode == DMA_MODE_READ) ? PCI_DMA_FROMDEVICE : PCI_DMA_TODEVICE;
+    doing_vdma = 0;
+    dir = (mode == DMA_MODE_READ) ? PCI_DMA_FROMDEVICE : PCI_DMA_TODEVICE;
 
-	if (bus_addr 
-	    && (addr != prev_addr || size != prev_size || dir != prev_dir)) {
-		/* different from last time -- unmap prev */
-		pci_unmap_single(isa_bridge_pcidev, bus_addr, prev_size, prev_dir);
-		bus_addr = 0;
-	}
+    if (bus_addr
+            && (addr != prev_addr || size != prev_size || dir != prev_dir)) {
+        /* different from last time -- unmap prev */
+        pci_unmap_single(isa_bridge_pcidev, bus_addr, prev_size, prev_dir);
+        bus_addr = 0;
+    }
 
-	if (!bus_addr)	/* need to map it */
-		bus_addr = pci_map_single(isa_bridge_pcidev, addr, size, dir);
+    if (!bus_addr)	/* need to map it */
+        bus_addr = pci_map_single(isa_bridge_pcidev, addr, size, dir);
 
-	/* remember this one as prev */
-	prev_addr = addr;
-	prev_size = size;
-	prev_dir = dir;
+    /* remember this one as prev */
+    prev_addr = addr;
+    prev_size = size;
+    prev_dir = dir;
 
-	fd_clear_dma_ff();
-	fd_cacheflush(addr, size);
-	fd_set_dma_mode(mode);
-	set_dma_addr(FLOPPY_DMA, bus_addr);
-	fd_set_dma_count(size);
-	virtual_dma_port = io;
-	fd_enable_dma();
+    fd_clear_dma_ff();
+    fd_cacheflush(addr, size);
+    fd_set_dma_mode(mode);
+    set_dma_addr(FLOPPY_DMA, bus_addr);
+    fd_set_dma_count(size);
+    virtual_dma_port = io;
+    fd_enable_dma();
 
-	return 0;
+    return 0;
 }
 
-static struct fd_dma_ops real_dma_ops =
-{
-	._disable_dma = disable_dma,
-	._free_dma = free_dma,
-	._get_dma_residue = get_dma_residue,
-	._dma_setup = hard_dma_setup
+static struct fd_dma_ops real_dma_ops = {
+    ._disable_dma = disable_dma,
+    ._free_dma = free_dma,
+    ._get_dma_residue = get_dma_residue,
+    ._dma_setup = hard_dma_setup
 };
 
-static struct fd_dma_ops virt_dma_ops =
-{
-	._disable_dma = vdma_disable_dma,
-	._free_dma = vdma_nop,
-	._get_dma_residue = vdma_get_dma_residue,
-	._dma_setup = vdma_dma_setup
+static struct fd_dma_ops virt_dma_ops = {
+    ._disable_dma = vdma_disable_dma,
+    ._free_dma = vdma_nop,
+    ._get_dma_residue = vdma_get_dma_residue,
+    ._dma_setup = vdma_dma_setup
 };
 
-static int fd_request_dma(void)
-{
-	if (can_use_virtual_dma & 1) {
-		fd_ops = &virt_dma_ops;
-		return 0;
-	}
-	else {
-		fd_ops = &real_dma_ops;
-		return request_dma(FLOPPY_DMA, "floppy");
-	}
+static int fd_request_dma(void) {
+    if (can_use_virtual_dma & 1) {
+        fd_ops = &virt_dma_ops;
+        return 0;
+    } else {
+        fd_ops = &real_dma_ops;
+        return request_dma(FLOPPY_DMA, "floppy");
+    }
 }
 
 static int FDC1 = 0x3f0;

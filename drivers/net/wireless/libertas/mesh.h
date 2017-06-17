@@ -21,10 +21,9 @@ int lbs_deinit_mesh(struct lbs_private *priv);
 
 void lbs_remove_mesh(struct lbs_private *priv);
 
-static inline bool lbs_mesh_activated(struct lbs_private *priv)
-{
-	/* Mesh SSID is only programmed after successful init */
-	return priv->mesh_ssid_len != 0;
+static inline bool lbs_mesh_activated(struct lbs_private *priv) {
+    /* Mesh SSID is only programmed after successful init */
+    return priv->mesh_ssid_len != 0;
 }
 
 int lbs_mesh_set_channel(struct lbs_private *priv, u8 channel);
@@ -35,9 +34,9 @@ struct rxpd;
 struct txpd;
 
 struct net_device *lbs_mesh_set_dev(struct lbs_private *priv,
-	struct net_device *dev, struct rxpd *rxpd);
+                                    struct net_device *dev, struct rxpd *rxpd);
 void lbs_mesh_set_txpd(struct lbs_private *priv,
-	struct net_device *dev, struct txpd *txpd);
+                       struct net_device *dev, struct txpd *txpd);
 
 
 /* Command handling */
@@ -52,10 +51,10 @@ struct cmd_ds_mesh_config;
 struct ethtool_stats;
 
 void lbs_mesh_ethtool_get_stats(struct net_device *dev,
-	struct ethtool_stats *stats, uint64_t *data);
+                                struct ethtool_stats *stats, uint64_t *data);
 int lbs_mesh_ethtool_get_sset_count(struct net_device *dev, int sset);
 void lbs_mesh_ethtool_get_strings(struct net_device *dev,
-	uint32_t stringset, uint8_t *s);
+                                  uint32_t stringset, uint8_t *s);
 
 
 #else

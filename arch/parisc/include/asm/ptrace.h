@@ -7,7 +7,7 @@
 
 #include <linux/types.h>
 
-/* This struct defines the way the registers are stored on the 
+/* This struct defines the way the registers are stored on the
  * stack during a system call.
  *
  * N.B. gdb/strace care about the size and offsets within this
@@ -16,21 +16,21 @@
  */
 
 struct pt_regs {
-	unsigned long gr[32];	/* PSW is in gr[0] */
-	__u64 fr[32];
-	unsigned long sr[ 8];
-	unsigned long iasq[2];
-	unsigned long iaoq[2];
-	unsigned long cr27;
-	unsigned long pad0;     /* available for other uses */
-	unsigned long orig_r28;
-	unsigned long ksp;
-	unsigned long kpc;
-	unsigned long sar;	/* CR11 */
-	unsigned long iir;	/* CR19 */
-	unsigned long isr;	/* CR20 */
-	unsigned long ior;	/* CR21 */
-	unsigned long ipsw;	/* CR22 */
+    unsigned long gr[32];	/* PSW is in gr[0] */
+    __u64 fr[32];
+    unsigned long sr[ 8];
+    unsigned long iasq[2];
+    unsigned long iaoq[2];
+    unsigned long cr27;
+    unsigned long pad0;     /* available for other uses */
+    unsigned long orig_r28;
+    unsigned long ksp;
+    unsigned long kpc;
+    unsigned long sar;	/* CR11 */
+    unsigned long iir;	/* CR19 */
+    unsigned long isr;	/* CR20 */
+    unsigned long ior;	/* CR21 */
+    unsigned long ipsw;	/* CR22 */
 };
 
 /*

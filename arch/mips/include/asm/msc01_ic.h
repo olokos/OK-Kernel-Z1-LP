@@ -132,9 +132,9 @@
  * Every board describes its IRQ mapping with this table.
  */
 typedef struct msc_irqmap {
-	int	im_irq;
-	int	im_type;
-	int	im_lvl;
+    int	im_irq;
+    int	im_type;
+    int	im_lvl;
 } msc_irqmap_t;
 
 /* im_type */

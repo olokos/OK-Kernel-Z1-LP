@@ -32,36 +32,36 @@
 #define BC_BIT(_x)		(1 << (_x))
 
 enum BC_STATUS {
-	BC_STS_SUCCESS		= 0,
-	BC_STS_INV_ARG		= 1,
-	BC_STS_BUSY		= 2,
-	BC_STS_NOT_IMPL		= 3,
-	BC_STS_PGM_QUIT		= 4,
-	BC_STS_NO_ACCESS	= 5,
-	BC_STS_INSUFF_RES	= 6,
-	BC_STS_IO_ERROR		= 7,
-	BC_STS_NO_DATA		= 8,
-	BC_STS_VER_MISMATCH	= 9,
-	BC_STS_TIMEOUT		= 10,
-	BC_STS_FW_CMD_ERR	= 11,
-	BC_STS_DEC_NOT_OPEN	= 12,
-	BC_STS_ERR_USAGE	= 13,
-	BC_STS_IO_USER_ABORT	= 14,
-	BC_STS_IO_XFR_ERROR	= 15,
-	BC_STS_DEC_NOT_STARTED	= 16,
-	BC_STS_FWHEX_NOT_FOUND	= 17,
-	BC_STS_FMT_CHANGE	= 18,
-	BC_STS_HIF_ACCESS	= 19,
-	BC_STS_CMD_CANCELLED	= 20,
-	BC_STS_FW_AUTH_FAILED	= 21,
-	BC_STS_BOOTLOADER_FAILED = 22,
-	BC_STS_CERT_VERIFY_ERROR = 23,
-	BC_STS_DEC_EXIST_OPEN	= 24,
-	BC_STS_PENDING		= 25,
-	BC_STS_CLK_NOCHG	= 26,
+    BC_STS_SUCCESS		= 0,
+    BC_STS_INV_ARG		= 1,
+    BC_STS_BUSY		= 2,
+    BC_STS_NOT_IMPL		= 3,
+    BC_STS_PGM_QUIT		= 4,
+    BC_STS_NO_ACCESS	= 5,
+    BC_STS_INSUFF_RES	= 6,
+    BC_STS_IO_ERROR		= 7,
+    BC_STS_NO_DATA		= 8,
+    BC_STS_VER_MISMATCH	= 9,
+    BC_STS_TIMEOUT		= 10,
+    BC_STS_FW_CMD_ERR	= 11,
+    BC_STS_DEC_NOT_OPEN	= 12,
+    BC_STS_ERR_USAGE	= 13,
+    BC_STS_IO_USER_ABORT	= 14,
+    BC_STS_IO_XFR_ERROR	= 15,
+    BC_STS_DEC_NOT_STARTED	= 16,
+    BC_STS_FWHEX_NOT_FOUND	= 17,
+    BC_STS_FMT_CHANGE	= 18,
+    BC_STS_HIF_ACCESS	= 19,
+    BC_STS_CMD_CANCELLED	= 20,
+    BC_STS_FW_AUTH_FAILED	= 21,
+    BC_STS_BOOTLOADER_FAILED = 22,
+    BC_STS_CERT_VERIFY_ERROR = 23,
+    BC_STS_DEC_EXIST_OPEN	= 24,
+    BC_STS_PENDING		= 25,
+    BC_STS_CLK_NOCHG	= 26,
 
-	/* Must be the last one.*/
-	BC_STS_ERROR		= -1
+    /* Must be the last one.*/
+    BC_STS_ERROR		= -1
 };
 
 /*------------------------------------------------------*
@@ -82,12 +82,12 @@ enum BC_STATUS {
  */
 
 enum BC_SW_OPTIONS {
-	BC_OPT_DOSER_OUT_ENCRYPT	= BC_BIT(3),
-	BC_OPT_LINK_OUT_ENCRYPT		= BC_BIT(29),
+    BC_OPT_DOSER_OUT_ENCRYPT	= BC_BIT(3),
+    BC_OPT_LINK_OUT_ENCRYPT		= BC_BIT(29),
 };
 
 struct BC_REG_CONFIG {
-	uint32_t		DbgOptions;
+    uint32_t		DbgOptions;
 };
 
 #if defined(__KERNEL__) || defined(__LINUX_USER__)
@@ -109,23 +109,23 @@ struct BC_REG_CONFIG {
 
 /* To allow multiple apps to open the device. */
 enum DtsDeviceOpenMode {
-	DTS_PLAYBACK_MODE = 0,
-	DTS_DIAG_MODE,
-	DTS_MONITOR_MODE,
-	DTS_HWINIT_MODE
+    DTS_PLAYBACK_MODE = 0,
+    DTS_DIAG_MODE,
+    DTS_MONITOR_MODE,
+    DTS_HWINIT_MODE
 };
 
 /* To enable the filter to selectively enable/disable fixes or erratas */
 enum DtsDeviceFixMode {
-	DTS_LOAD_NEW_FW		= BC_BIT(8),
-	DTS_LOAD_FILE_PLAY_FW	= BC_BIT(9),
-	DTS_DISK_FMT_BD		= BC_BIT(10),
-	/* b[11]-b[15] : Default output resolution */
-	DTS_SKIP_TX_CHK_CPB	= BC_BIT(16),
-	DTS_ADAPTIVE_OUTPUT_PER	= BC_BIT(17),
-	DTS_INTELLIMAP		= BC_BIT(18),
-	/* b[19]-b[21] : select clock frequency */
-	DTS_PLAYBACK_DROP_RPT_MODE = BC_BIT(22)
+    DTS_LOAD_NEW_FW		= BC_BIT(8),
+    DTS_LOAD_FILE_PLAY_FW	= BC_BIT(9),
+    DTS_DISK_FMT_BD		= BC_BIT(10),
+    /* b[11]-b[15] : Default output resolution */
+    DTS_SKIP_TX_CHK_CPB	= BC_BIT(16),
+    DTS_ADAPTIVE_OUTPUT_PER	= BC_BIT(17),
+    DTS_INTELLIMAP		= BC_BIT(18),
+    /* b[19]-b[21] : select clock frequency */
+    DTS_PLAYBACK_DROP_RPT_MODE = BC_BIT(22)
 };
 
 #define DTS_DFLT_RESOLUTION(x)	(x<<11)
@@ -134,28 +134,28 @@ enum DtsDeviceFixMode {
 
 /* F/W File Version corresponding to S/W Releases */
 enum FW_FILE_VER {
-	/* S/W release: 02.04.02	F/W release 2.12.2.0 */
-	BC_FW_VER_020402 = ((12<<16) | (2<<8) | (0))
+    /* S/W release: 02.04.02	F/W release 2.12.2.0 */
+    BC_FW_VER_020402 = ((12<<16) | (2<<8) | (0))
 };
 
 /*------------------------------------------------------*
  *    Stream Types for DtsOpenDecoder()			*
  *------------------------------------------------------*/
 enum DtsOpenDecStreamTypes {
-	BC_STREAM_TYPE_ES		= 0,
-	BC_STREAM_TYPE_PES		= 1,
-	BC_STREAM_TYPE_TS		= 2,
-	BC_STREAM_TYPE_ES_TSTAMP	= 6,
+    BC_STREAM_TYPE_ES		= 0,
+    BC_STREAM_TYPE_PES		= 1,
+    BC_STREAM_TYPE_TS		= 2,
+    BC_STREAM_TYPE_ES_TSTAMP	= 6,
 };
 
 /*------------------------------------------------------*
  *    Video Algorithms for DtsSetVideoParams()		*
  *------------------------------------------------------*/
 enum DtsSetVideoParamsAlgo {
-	BC_VID_ALGO_H264		= 0,
-	BC_VID_ALGO_MPEG2		= 1,
-	BC_VID_ALGO_VC1			= 4,
-	BC_VID_ALGO_VC1MP		= 7,
+    BC_VID_ALGO_H264		= 0,
+    BC_VID_ALGO_MPEG2		= 1,
+    BC_VID_ALGO_VC1			= 4,
+    BC_VID_ALGO_VC1MP		= 7,
 };
 
 /*------------------------------------------------------*
@@ -164,17 +164,17 @@ enum DtsSetVideoParamsAlgo {
 #define BC_MPEG_VALID_PANSCAN		(1)
 
 struct BC_PIB_EXT_MPEG {
-	uint32_t	valid;
-	/* Always valid,  defaults to picture size if no
-	 * sequence display extension in the stream. */
-	uint32_t	display_horizontal_size;
-	uint32_t	display_vertical_size;
+    uint32_t	valid;
+    /* Always valid,  defaults to picture size if no
+     * sequence display extension in the stream. */
+    uint32_t	display_horizontal_size;
+    uint32_t	display_vertical_size;
 
-	/* MPEG_VALID_PANSCAN
-	 * Offsets are a copy values from the MPEG stream. */
-	uint32_t	offset_count;
-	int32_t		horizontal_offset[3];
-	int32_t		vertical_offset[3];
+    /* MPEG_VALID_PANSCAN
+     * Offsets are a copy values from the MPEG stream. */
+    uint32_t	offset_count;
+    int32_t		horizontal_offset[3];
+    int32_t		vertical_offset[3];
 };
 
 /*------------------------------------------------------*
@@ -186,28 +186,28 @@ struct BC_PIB_EXT_MPEG {
 #define H264_VALID_VUI			(4)
 
 struct BC_PIB_EXT_H264 {
-	/* 'valid' specifies which fields (or sets of
-	 * fields) below are valid.  If the corresponding
-	 * bit in 'valid' is NOT set then that field(s)
-	 * is (are) not initialized. */
-	uint32_t	valid;
+    /* 'valid' specifies which fields (or sets of
+     * fields) below are valid.  If the corresponding
+     * bit in 'valid' is NOT set then that field(s)
+     * is (are) not initialized. */
+    uint32_t	valid;
 
-	/* H264_VALID_PANSCAN */
-	uint32_t	pan_scan_count;
-	int32_t		pan_scan_left[3];
-	int32_t		pan_scan_right[3];
-	int32_t		pan_scan_top[3];
-	int32_t		pan_scan_bottom[3];
+    /* H264_VALID_PANSCAN */
+    uint32_t	pan_scan_count;
+    int32_t		pan_scan_left[3];
+    int32_t		pan_scan_right[3];
+    int32_t		pan_scan_top[3];
+    int32_t		pan_scan_bottom[3];
 
-	/* H264_VALID_SPS_CROP */
-	int32_t		sps_crop_left;
-	int32_t		sps_crop_right;
-	int32_t		sps_crop_top;
-	int32_t		sps_crop_bottom;
+    /* H264_VALID_SPS_CROP */
+    int32_t		sps_crop_left;
+    int32_t		sps_crop_right;
+    int32_t		sps_crop_top;
+    int32_t		sps_crop_bottom;
 
-	/* H264_VALID_VUI */
-	uint32_t	chroma_top;
-	uint32_t	chroma_bottom;
+    /* H264_VALID_VUI */
+    uint32_t	chroma_top;
+    uint32_t	chroma_bottom;
 };
 
 /*------------------------------------------------------*
@@ -216,19 +216,19 @@ struct BC_PIB_EXT_H264 {
 #define VC1_VALID_PANSCAN		(1)
 
 struct BC_PIB_EXT_VC1 {
-	uint32_t	valid;
+    uint32_t	valid;
 
-	/* Always valid, defaults to picture size if no
-	 * sequence display extension in the stream. */
-	uint32_t	display_horizontal_size;
-	uint32_t	display_vertical_size;
+    /* Always valid, defaults to picture size if no
+     * sequence display extension in the stream. */
+    uint32_t	display_horizontal_size;
+    uint32_t	display_vertical_size;
 
-	/* VC1 pan scan windows */
-	uint32_t	num_panscan_windows;
-	int32_t		ps_horiz_offset[4];
-	int32_t		ps_vert_offset[4];
-	int32_t		ps_width[4];
-	int32_t		ps_height[4];
+    /* VC1 pan scan windows */
+    uint32_t	num_panscan_windows;
+    int32_t		ps_horiz_offset[4];
+    int32_t		ps_vert_offset[4];
+    int32_t		ps_width[4];
+    int32_t		ps_height[4];
 };
 
 /*------------------------------------------------------*
@@ -238,65 +238,65 @@ struct BC_PIB_EXT_VC1 {
 /* Values for 'pulldown' field.  '0' means no pulldown information
  * was present for this picture. */
 enum {
-	vdecNoPulldownInfo	= 0,
-	vdecTop			= 1,
-	vdecBottom		= 2,
-	vdecTopBottom		= 3,
-	vdecBottomTop		= 4,
-	vdecTopBottomTop	= 5,
-	vdecBottomTopBottom	= 6,
-	vdecFrame_X2		= 7,
-	vdecFrame_X3		= 8,
-	vdecFrame_X1		= 9,
-	vdecFrame_X4		= 10,
+    vdecNoPulldownInfo	= 0,
+    vdecTop			= 1,
+    vdecBottom		= 2,
+    vdecTopBottom		= 3,
+    vdecBottomTop		= 4,
+    vdecTopBottomTop	= 5,
+    vdecBottomTopBottom	= 6,
+    vdecFrame_X2		= 7,
+    vdecFrame_X3		= 8,
+    vdecFrame_X1		= 9,
+    vdecFrame_X4		= 10,
 };
 
 /* Values for the 'frame_rate' field. */
 enum {
-	vdecFrameRateUnknown = 0,
-	vdecFrameRate23_97,
-	vdecFrameRate24,
-	vdecFrameRate25,
-	vdecFrameRate29_97,
-	vdecFrameRate30,
-	vdecFrameRate50,
-	vdecFrameRate59_94,
-	vdecFrameRate60,
+    vdecFrameRateUnknown = 0,
+    vdecFrameRate23_97,
+    vdecFrameRate24,
+    vdecFrameRate25,
+    vdecFrameRate29_97,
+    vdecFrameRate30,
+    vdecFrameRate50,
+    vdecFrameRate59_94,
+    vdecFrameRate60,
 };
 
 /* Values for the 'aspect_ratio' field. */
 enum {
-	vdecAspectRatioUnknown = 0,
-	vdecAspectRatioSquare,
-	vdecAspectRatio12_11,
-	vdecAspectRatio10_11,
-	vdecAspectRatio16_11,
-	vdecAspectRatio40_33,
-	vdecAspectRatio24_11,
-	vdecAspectRatio20_11,
-	vdecAspectRatio32_11,
-	vdecAspectRatio80_33,
-	vdecAspectRatio18_11,
-	vdecAspectRatio15_11,
-	vdecAspectRatio64_33,
-	vdecAspectRatio160_99,
-	vdecAspectRatio4_3,
-	vdecAspectRatio16_9,
-	vdecAspectRatio221_1,
-	vdecAspectRatioOther = 255,
+    vdecAspectRatioUnknown = 0,
+    vdecAspectRatioSquare,
+    vdecAspectRatio12_11,
+    vdecAspectRatio10_11,
+    vdecAspectRatio16_11,
+    vdecAspectRatio40_33,
+    vdecAspectRatio24_11,
+    vdecAspectRatio20_11,
+    vdecAspectRatio32_11,
+    vdecAspectRatio80_33,
+    vdecAspectRatio18_11,
+    vdecAspectRatio15_11,
+    vdecAspectRatio64_33,
+    vdecAspectRatio160_99,
+    vdecAspectRatio4_3,
+    vdecAspectRatio16_9,
+    vdecAspectRatio221_1,
+    vdecAspectRatioOther = 255,
 };
 
 /* Values for the 'colour_primaries' field. */
 enum {
-	vdecColourPrimariesUnknown = 0,
-	vdecColourPrimariesBT709,
-	vdecColourPrimariesUnspecified,
-	vdecColourPrimariesReserved,
-	vdecColourPrimariesBT470_2M = 4,
-	vdecColourPrimariesBT470_2BG,
-	vdecColourPrimariesSMPTE170M,
-	vdecColourPrimariesSMPTE240M,
-	vdecColourPrimariesGenericFilm,
+    vdecColourPrimariesUnknown = 0,
+    vdecColourPrimariesBT709,
+    vdecColourPrimariesUnspecified,
+    vdecColourPrimariesReserved,
+    vdecColourPrimariesBT470_2M = 4,
+    vdecColourPrimariesBT470_2BG,
+    vdecColourPrimariesSMPTE170M,
+    vdecColourPrimariesSMPTE240M,
+    vdecColourPrimariesGenericFilm,
 };
 /**
  * @vdecRESOLUTION_CUSTOM: custom
@@ -336,41 +336,41 @@ enum {
  * @vdecRESOLUTION_1080i0: 1080i (1920x1080, 0i)
  */
 enum {
-	vdecRESOLUTION_CUSTOM	= 0x00000000,
-	vdecRESOLUTION_480i	= 0x00000001,
-	vdecRESOLUTION_1080i	= 0x00000002,
-	vdecRESOLUTION_NTSC	= 0x00000003,
-	vdecRESOLUTION_480p	= 0x00000004,
-	vdecRESOLUTION_720p	= 0x00000005,
-	vdecRESOLUTION_PAL1	= 0x00000006,
-	vdecRESOLUTION_1080i25	= 0x00000007,
-	vdecRESOLUTION_720p50	= 0x00000008,
-	vdecRESOLUTION_576p	= 0x00000009,
-	vdecRESOLUTION_1080i29_97 = 0x0000000A,
-	vdecRESOLUTION_720p59_94  = 0x0000000B,
-	vdecRESOLUTION_SD_DVD	= 0x0000000C,
-	vdecRESOLUTION_480p656	= 0x0000000D,
-	vdecRESOLUTION_1080p23_976 = 0x0000000E,
-	vdecRESOLUTION_720p23_976  = 0x0000000F,
-	vdecRESOLUTION_240p29_97   = 0x00000010,
-	vdecRESOLUTION_240p30	= 0x00000011,
-	vdecRESOLUTION_288p25	= 0x00000012,
-	vdecRESOLUTION_1080p29_97 = 0x00000013,
-	vdecRESOLUTION_1080p30	= 0x00000014,
-	vdecRESOLUTION_1080p24	= 0x00000015,
-	vdecRESOLUTION_1080p25	= 0x00000016,
-	vdecRESOLUTION_720p24	= 0x00000017,
-	vdecRESOLUTION_720p29_97  = 0x00000018,
-	vdecRESOLUTION_480p23_976 = 0x00000019,
-	vdecRESOLUTION_480p29_97  = 0x0000001A,
-	vdecRESOLUTION_576p25	= 0x0000001B,
-	/* For Zero Frame Rate */
-	vdecRESOLUTION_480p0	= 0x0000001C,
-	vdecRESOLUTION_480i0	= 0x0000001D,
-	vdecRESOLUTION_576p0	= 0x0000001E,
-	vdecRESOLUTION_720p0	= 0x0000001F,
-	vdecRESOLUTION_1080p0	= 0x00000020,
-	vdecRESOLUTION_1080i0	= 0x00000021,
+    vdecRESOLUTION_CUSTOM	= 0x00000000,
+    vdecRESOLUTION_480i	= 0x00000001,
+    vdecRESOLUTION_1080i	= 0x00000002,
+    vdecRESOLUTION_NTSC	= 0x00000003,
+    vdecRESOLUTION_480p	= 0x00000004,
+    vdecRESOLUTION_720p	= 0x00000005,
+    vdecRESOLUTION_PAL1	= 0x00000006,
+    vdecRESOLUTION_1080i25	= 0x00000007,
+    vdecRESOLUTION_720p50	= 0x00000008,
+    vdecRESOLUTION_576p	= 0x00000009,
+    vdecRESOLUTION_1080i29_97 = 0x0000000A,
+    vdecRESOLUTION_720p59_94  = 0x0000000B,
+    vdecRESOLUTION_SD_DVD	= 0x0000000C,
+    vdecRESOLUTION_480p656	= 0x0000000D,
+    vdecRESOLUTION_1080p23_976 = 0x0000000E,
+    vdecRESOLUTION_720p23_976  = 0x0000000F,
+    vdecRESOLUTION_240p29_97   = 0x00000010,
+    vdecRESOLUTION_240p30	= 0x00000011,
+    vdecRESOLUTION_288p25	= 0x00000012,
+    vdecRESOLUTION_1080p29_97 = 0x00000013,
+    vdecRESOLUTION_1080p30	= 0x00000014,
+    vdecRESOLUTION_1080p24	= 0x00000015,
+    vdecRESOLUTION_1080p25	= 0x00000016,
+    vdecRESOLUTION_720p24	= 0x00000017,
+    vdecRESOLUTION_720p29_97  = 0x00000018,
+    vdecRESOLUTION_480p23_976 = 0x00000019,
+    vdecRESOLUTION_480p29_97  = 0x0000001A,
+    vdecRESOLUTION_576p25	= 0x0000001B,
+    /* For Zero Frame Rate */
+    vdecRESOLUTION_480p0	= 0x0000001C,
+    vdecRESOLUTION_480i0	= 0x0000001D,
+    vdecRESOLUTION_576p0	= 0x0000001E,
+    vdecRESOLUTION_720p0	= 0x0000001F,
+    vdecRESOLUTION_1080p0	= 0x00000020,
+    vdecRESOLUTION_1080i0	= 0x00000021,
 };
 
 /* Bit definitions for 'flags' field */
@@ -393,9 +393,9 @@ enum {
 #endif /* __LINUX_USER__ */
 
 enum _BC_OUTPUT_FORMAT {
-	MODE420				= 0x0,
-	MODE422_YUY2			= 0x1,
-	MODE422_UYVY			= 0x2,
+    MODE420				= 0x0,
+    MODE422_YUY2			= 0x1,
+    MODE422_UYVY			= 0x2,
 };
 /**
  * struct BC_PIC_INFO_BLOCK
@@ -408,30 +408,30 @@ enum _BC_OUTPUT_FORMAT {
  *	remaining to be dropped
  */
 struct BC_PIC_INFO_BLOCK {
-	/* Common fields. */
-	uint64_t	timeStamp;
-	uint32_t	picture_number;
-	uint32_t	width;
-	uint32_t	height;
-	uint32_t	chroma_format;
-	uint32_t	pulldown;
-	uint32_t	flags;
-	uint32_t	frame_rate;
-	uint32_t	aspect_ratio;
-	uint32_t	colour_primaries;
-	uint32_t	picture_meta_payload;
-	uint32_t	sess_num;
-	uint32_t	ycom;
-	uint32_t	custom_aspect_ratio_width_height;
-	uint32_t	n_drop;	/* number of non-reference frames
+    /* Common fields. */
+    uint64_t	timeStamp;
+    uint32_t	picture_number;
+    uint32_t	width;
+    uint32_t	height;
+    uint32_t	chroma_format;
+    uint32_t	pulldown;
+    uint32_t	flags;
+    uint32_t	frame_rate;
+    uint32_t	aspect_ratio;
+    uint32_t	colour_primaries;
+    uint32_t	picture_meta_payload;
+    uint32_t	sess_num;
+    uint32_t	ycom;
+    uint32_t	custom_aspect_ratio_width_height;
+    uint32_t	n_drop;	/* number of non-reference frames
 					remaining to be dropped */
 
-	/* Protocol-specific extensions. */
-	union {
-		struct BC_PIB_EXT_H264	h264;
-		struct BC_PIB_EXT_MPEG	mpeg;
-		struct BC_PIB_EXT_VC1	 vc1;
-	} other;
+    /* Protocol-specific extensions. */
+    union {
+        struct BC_PIB_EXT_H264	h264;
+        struct BC_PIB_EXT_MPEG	mpeg;
+        struct BC_PIB_EXT_VC1	 vc1;
+    } other;
 
 };
 
@@ -452,22 +452,22 @@ struct BC_PIC_INFO_BLOCK {
  * @BC_POUT_FLAGS_FLD_BOT:  Bottom Field data
  */
 enum POUT_OPTIONAL_IN_FLAGS_ {
-	/* Flags from App to Device */
-	BC_POUT_FLAGS_YV12	  = 0x01,
-	BC_POUT_FLAGS_STRIDE	  = 0x02,
-	BC_POUT_FLAGS_SIZE	  = 0x04,
-	BC_POUT_FLAGS_INTERLACED  = 0x08,
-	BC_POUT_FLAGS_INTERLEAVED = 0x10,
+    /* Flags from App to Device */
+    BC_POUT_FLAGS_YV12	  = 0x01,
+    BC_POUT_FLAGS_STRIDE	  = 0x02,
+    BC_POUT_FLAGS_SIZE	  = 0x04,
+    BC_POUT_FLAGS_INTERLACED  = 0x08,
+    BC_POUT_FLAGS_INTERLEAVED = 0x10,
 
-	/* Flags from Device to APP */
-	BC_POUT_FLAGS_FMT_CHANGE  = 0x10000,
-	BC_POUT_FLAGS_PIB_VALID	  = 0x20000,
-	BC_POUT_FLAGS_ENCRYPTED	  = 0x40000,
-	BC_POUT_FLAGS_FLD_BOT	  = 0x80000,
+    /* Flags from Device to APP */
+    BC_POUT_FLAGS_FMT_CHANGE  = 0x10000,
+    BC_POUT_FLAGS_PIB_VALID	  = 0x20000,
+    BC_POUT_FLAGS_ENCRYPTED	  = 0x40000,
+    BC_POUT_FLAGS_FLD_BOT	  = 0x80000,
 };
 
 typedef enum BC_STATUS(*dts_pout_callback)(void  *shnd, uint32_t width,
-			uint32_t height, uint32_t stride, void *pOut);
+        uint32_t height, uint32_t stride, void *pOut);
 
 /* Line 21 Closed Caption */
 /* User Data */
@@ -489,32 +489,32 @@ typedef enum BC_STATUS(*dts_pout_callback)(void  *shnd, uint32_t width,
  * @bPibEnc: PIB encrypted
  */
 struct BC_DTS_PROC_OUT {
-	uint8_t		*Ybuff;
-	uint32_t	YbuffSz;
-	uint32_t	YBuffDoneSz;
+    uint8_t		*Ybuff;
+    uint32_t	YbuffSz;
+    uint32_t	YBuffDoneSz;
 
-	uint8_t		*UVbuff;
-	uint32_t	UVbuffSz;
-	uint32_t	UVBuffDoneSz;
+    uint8_t		*UVbuff;
+    uint32_t	UVbuffSz;
+    uint32_t	UVBuffDoneSz;
 
-	uint32_t	StrideSz;
-	uint32_t	PoutFlags;
+    uint32_t	StrideSz;
+    uint32_t	PoutFlags;
 
-	uint32_t	discCnt;
+    uint32_t	discCnt;
 
-	struct BC_PIC_INFO_BLOCK PicInfo;
+    struct BC_PIC_INFO_BLOCK PicInfo;
 
-	/* Line 21 Closed Caption */
-	/* User Data */
-	uint32_t	UserDataSz;
-	uint8_t		UserData[MAX_UD_SIZE];
+    /* Line 21 Closed Caption */
+    /* User Data */
+    uint32_t	UserDataSz;
+    uint8_t		UserData[MAX_UD_SIZE];
 
-	void		*hnd;
-	dts_pout_callback AppCallBack;
-	uint8_t		DropFrames;
-	uint8_t		b422Mode;
-	uint8_t		bPibEnc;
-	uint8_t		bRevertScramble;
+    void		*hnd;
+    dts_pout_callback AppCallBack;
+    uint8_t		DropFrames;
+    uint8_t		b422Mode;
+    uint8_t		bPibEnc;
+    uint8_t		bRevertScramble;
 
 };
 /**
@@ -539,20 +539,20 @@ struct BC_DTS_PROC_OUT {
  *	back from the driver
  */
 struct BC_DTS_STATUS {
-	uint8_t		ReadyListCount;
-	uint8_t		FreeListCount;
-	uint8_t		PowerStateChange;
-	uint8_t		reserved_[1];
-	uint32_t	FramesDropped;
-	uint32_t	FramesCaptured;
-	uint32_t	FramesRepeated;
-	uint32_t	InputCount;
-	uint64_t	InputTotalSize;
-	uint32_t	InputBusyCount;
-	uint32_t	PIBMissCount;
-	uint32_t	cpbEmptySize;
-	uint64_t	NextTimeStamp;
-	uint8_t		reserved__[16];
+    uint8_t		ReadyListCount;
+    uint8_t		FreeListCount;
+    uint8_t		PowerStateChange;
+    uint8_t		reserved_[1];
+    uint32_t	FramesDropped;
+    uint32_t	FramesCaptured;
+    uint32_t	FramesRepeated;
+    uint32_t	InputCount;
+    uint64_t	InputTotalSize;
+    uint32_t	InputBusyCount;
+    uint32_t	PIBMissCount;
+    uint32_t	cpbEmptySize;
+    uint64_t	NextTimeStamp;
+    uint8_t		reserved__[16];
 };
 
 #define BC_SWAP32(_v)			\

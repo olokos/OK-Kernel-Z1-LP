@@ -73,28 +73,24 @@
 #define SME_TOTAL_COMMAND  30
 
 
-typedef struct sGenericPmcCmd
-{
+typedef struct sGenericPmcCmd {
     tANI_U32 size;  //sizeof the data in the union, if any
     tRequestFullPowerReason fullPowerReason;
     tANI_BOOLEAN fReleaseWhenDone; //if TRUE, the command shall not put back to the queue, free te memory instead.
-    union
-    {
+    union {
         tExitBmpsInfo exitBmpsInfo;
         tSirSmeWowlEnterParams enterWowlInfo;
     } u;
 } tGenericPmcCmd;
 
 
-typedef struct sGenericQosCmd
-{
+typedef struct sGenericQosCmd {
     sme_QosWmmTspecInfo tspecInfo;
     sme_QosEdcaAcType ac;
     v_U8_t tspec_mask;
 } tGenericQosCmd;
 
-typedef struct sRemainChlCmd
-{
+typedef struct sRemainChlCmd {
     tANI_U8 chn;
     tANI_U8 phyMode;
     tANI_U32 duration;
@@ -103,13 +99,11 @@ typedef struct sRemainChlCmd
     void* callbackCtx;
 } tRemainChlCmd;
 
-typedef struct sNoACmd
-{
+typedef struct sNoACmd {
     tP2pPsConfig NoA;
 } tNoACmd;
 #ifdef FEATURE_WLAN_TDLS
-typedef struct TdlsSendMgmtInfo
-{
+typedef struct TdlsSendMgmtInfo {
     tSirMacAddr peerMac;
     tANI_U8 frameType;
     tANI_U8 dialog;
@@ -120,8 +114,7 @@ typedef struct TdlsSendMgmtInfo
     tANI_U8 len;
 } tTdlsSendMgmtCmdInfo;
 
-typedef struct TdlsLinkEstablishInfo
-{
+typedef struct TdlsLinkEstablishInfo {
     tSirMacAddr peerMac;
     tANI_U8 uapsdQueues;
     tANI_U8 maxSp;
@@ -134,8 +127,7 @@ typedef struct TdlsLinkEstablishInfo
     tANI_U8 supportedOperClasses[SIR_MAC_MAX_SUPP_OPER_CLASSES];
 } tTdlsLinkEstablishCmdInfo;
 
-typedef struct TdlsAddStaInfo
-{
+typedef struct TdlsAddStaInfo {
     eTdlsAddOper tdlsAddOper;
     tSirMacAddr peerMac;
     tANI_U16  capability;
@@ -150,14 +142,12 @@ typedef struct TdlsAddStaInfo
     tANI_U8   maxSp;
 } tTdlsAddStaCmdInfo;
 
-typedef struct TdlsDelStaInfo
-{
+typedef struct TdlsDelStaInfo {
     tSirMacAddr peerMac;
 } tTdlsDelStaCmdInfo;
 
 // tdlsoffchan
-typedef struct TdlsChanSwitchInfo
-{
+typedef struct TdlsChanSwitchInfo {
     tSirMacAddr peerMac;
     tANI_U8 tdlsOffCh;
     tANI_U8 tdlsOffChBwOffset;
@@ -165,30 +155,25 @@ typedef struct TdlsChanSwitchInfo
 } tTdlsChanSwitchCmdInfo;
 
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
-typedef struct TdlsDisReqCmdinfo
-{
+typedef struct TdlsDisReqCmdinfo {
     tSirMacAddr peerMac;
     tANI_U8 tdlsDisType;
 } tTdlsDisReqCmdinfo;
 
-typedef struct tdlsLinkSetupReqCmdinfo
-{
+typedef struct tdlsLinkSetupReqCmdinfo {
     tSirMacAddr peerMac;
 } tTdlsLinkSetupReqCmdinfo;
 
-typedef struct tdlsLinkTeardownCmdinfo
-{
+typedef struct tdlsLinkTeardownCmdinfo {
     tSirMacAddr peerMac;
 } tTdlsLinkTeardownCmdinfo;
 #endif
 /*
  * TDLS cmd info, CMD from SME to PE.
  */
-typedef struct s_tdls_cmd
-{
+typedef struct s_tdls_cmd {
     tANI_U32 size;
-    union
-    {
+    union {
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
         tTdlsDisReqCmdinfo tdlsDisReqCmdInfo ;
         tTdlsLinkSetupReqCmdinfo tdlsLinkSetupReqCmdInfo ;
@@ -205,13 +190,11 @@ typedef struct s_tdls_cmd
 } tTdlsCmd;
 #endif  /* FEATURE_WLAN_TDLS */
 
-typedef struct tagSmeCmd
-{
+typedef struct tagSmeCmd {
     tListElem Link;
     eSmeCommandType command;
     tANI_U32 sessionId;
-    union
-    {
+    union {
         tScanCmd scanCmd;
         tRoamCmd roamCmd;
         tWmStatusChangeCmd wmStatusChangeCmd;

@@ -52,15 +52,15 @@
  * There is 1:1 corres. between ccb & ctrl
  */
 struct bnad_rx_ctrl {
-	struct bna_ccb *ccb;
-	struct bnad *bnad;
-	unsigned long  flags;
-	struct napi_struct	napi;
-	u64		rx_intr_ctr;
-	u64		rx_poll_ctr;
-	u64		rx_schedule;
-	u64		rx_keep_poll;
-	u64		rx_complete;
+    struct bna_ccb *ccb;
+    struct bnad *bnad;
+    unsigned long  flags;
+    struct napi_struct	napi;
+    u64		rx_intr_ctr;
+    u64		rx_poll_ctr;
+    u64		rx_schedule;
+    u64		rx_keep_poll;
+    u64		rx_complete;
 };
 
 #define BNAD_RXMODE_PROMISC_DEFAULT	BNA_RXMODE_PROMISC
@@ -115,122 +115,122 @@ struct bnad_rx_ctrl {
 
 /* enums */
 enum bnad_intr_source {
-	BNAD_INTR_TX		= 1,
-	BNAD_INTR_RX		= 2
+    BNAD_INTR_TX		= 1,
+    BNAD_INTR_RX		= 2
 };
 
 enum bnad_link_state {
-	BNAD_LS_DOWN		= 0,
-	BNAD_LS_UP		= 1
+    BNAD_LS_DOWN		= 0,
+    BNAD_LS_UP		= 1
 };
 
 struct bnad_iocmd_comp {
-	struct bnad		*bnad;
-	struct completion	comp;
-	int			comp_status;
+    struct bnad		*bnad;
+    struct completion	comp;
+    int			comp_status;
 };
 
 struct bnad_completion {
-	struct completion	ioc_comp;
-	struct completion	ucast_comp;
-	struct completion	mcast_comp;
-	struct completion	tx_comp;
-	struct completion	rx_comp;
-	struct completion	stats_comp;
-	struct completion	enet_comp;
-	struct completion	mtu_comp;
+    struct completion	ioc_comp;
+    struct completion	ucast_comp;
+    struct completion	mcast_comp;
+    struct completion	tx_comp;
+    struct completion	rx_comp;
+    struct completion	stats_comp;
+    struct completion	enet_comp;
+    struct completion	mtu_comp;
 
-	u8			ioc_comp_status;
-	u8			ucast_comp_status;
-	u8			mcast_comp_status;
-	u8			tx_comp_status;
-	u8			rx_comp_status;
-	u8			stats_comp_status;
-	u8			port_comp_status;
-	u8			mtu_comp_status;
+    u8			ioc_comp_status;
+    u8			ucast_comp_status;
+    u8			mcast_comp_status;
+    u8			tx_comp_status;
+    u8			rx_comp_status;
+    u8			stats_comp_status;
+    u8			port_comp_status;
+    u8			mtu_comp_status;
 };
 
 /* Tx Rx Control Stats */
 struct bnad_drv_stats {
-	u64		netif_queue_stop;
-	u64		netif_queue_wakeup;
-	u64		netif_queue_stopped;
-	u64		tso4;
-	u64		tso6;
-	u64		tso_err;
-	u64		tcpcsum_offload;
-	u64		udpcsum_offload;
-	u64		csum_help;
-	u64		tx_skb_too_short;
-	u64		tx_skb_stopping;
-	u64		tx_skb_max_vectors;
-	u64		tx_skb_mss_too_long;
-	u64		tx_skb_tso_too_short;
-	u64		tx_skb_tso_prepare;
-	u64		tx_skb_non_tso_too_long;
-	u64		tx_skb_tcp_hdr;
-	u64		tx_skb_udp_hdr;
-	u64		tx_skb_csum_err;
-	u64		tx_skb_headlen_too_long;
-	u64		tx_skb_headlen_zero;
-	u64		tx_skb_frag_zero;
-	u64		tx_skb_len_mismatch;
+    u64		netif_queue_stop;
+    u64		netif_queue_wakeup;
+    u64		netif_queue_stopped;
+    u64		tso4;
+    u64		tso6;
+    u64		tso_err;
+    u64		tcpcsum_offload;
+    u64		udpcsum_offload;
+    u64		csum_help;
+    u64		tx_skb_too_short;
+    u64		tx_skb_stopping;
+    u64		tx_skb_max_vectors;
+    u64		tx_skb_mss_too_long;
+    u64		tx_skb_tso_too_short;
+    u64		tx_skb_tso_prepare;
+    u64		tx_skb_non_tso_too_long;
+    u64		tx_skb_tcp_hdr;
+    u64		tx_skb_udp_hdr;
+    u64		tx_skb_csum_err;
+    u64		tx_skb_headlen_too_long;
+    u64		tx_skb_headlen_zero;
+    u64		tx_skb_frag_zero;
+    u64		tx_skb_len_mismatch;
 
-	u64		hw_stats_updates;
-	u64		netif_rx_dropped;
+    u64		hw_stats_updates;
+    u64		netif_rx_dropped;
 
-	u64		link_toggle;
-	u64		cee_toggle;
+    u64		link_toggle;
+    u64		cee_toggle;
 
-	u64		rxp_info_alloc_failed;
-	u64		mbox_intr_disabled;
-	u64		mbox_intr_enabled;
-	u64		tx_unmap_q_alloc_failed;
-	u64		rx_unmap_q_alloc_failed;
+    u64		rxp_info_alloc_failed;
+    u64		mbox_intr_disabled;
+    u64		mbox_intr_enabled;
+    u64		tx_unmap_q_alloc_failed;
+    u64		rx_unmap_q_alloc_failed;
 
-	u64		rxbuf_alloc_failed;
+    u64		rxbuf_alloc_failed;
 };
 
 /* Complete driver stats */
 struct bnad_stats {
-	struct bnad_drv_stats drv_stats;
-	struct bna_stats *bna_stats;
+    struct bnad_drv_stats drv_stats;
+    struct bna_stats *bna_stats;
 };
 
 /* Tx / Rx Resources */
 struct bnad_tx_res_info {
-	struct bna_res_info res_info[BNA_TX_RES_T_MAX];
+    struct bna_res_info res_info[BNA_TX_RES_T_MAX];
 };
 
 struct bnad_rx_res_info {
-	struct bna_res_info res_info[BNA_RX_RES_T_MAX];
+    struct bna_res_info res_info[BNA_RX_RES_T_MAX];
 };
 
 struct bnad_tx_info {
-	struct bna_tx *tx; /* 1:1 between tx_info & tx */
-	struct bna_tcb *tcb[BNAD_MAX_TXQ_PER_TX];
-	u32 tx_id;
+    struct bna_tx *tx; /* 1:1 between tx_info & tx */
+    struct bna_tcb *tcb[BNAD_MAX_TXQ_PER_TX];
+    u32 tx_id;
 } ____cacheline_aligned;
 
 struct bnad_rx_info {
-	struct bna_rx *rx; /* 1:1 between rx_info & rx */
+    struct bna_rx *rx; /* 1:1 between rx_info & rx */
 
-	struct bnad_rx_ctrl rx_ctrl[BNAD_MAX_RXP_PER_RX];
-	u32 rx_id;
+    struct bnad_rx_ctrl rx_ctrl[BNAD_MAX_RXP_PER_RX];
+    u32 rx_id;
 } ____cacheline_aligned;
 
 /* Unmap queues for Tx / Rx cleanup */
 struct bnad_skb_unmap {
-	struct sk_buff		*skb;
-	DEFINE_DMA_UNMAP_ADDR(dma_addr);
+    struct sk_buff		*skb;
+    DEFINE_DMA_UNMAP_ADDR(dma_addr);
 };
 
 struct bnad_unmap_q {
-	u32		producer_index;
-	u32		consumer_index;
-	u32		q_depth;
-	/* This should be the last one */
-	struct bnad_skb_unmap unmap_array[1];
+    u32		producer_index;
+    u32		consumer_index;
+    u32		q_depth;
+    /* This should be the last one */
+    struct bnad_skb_unmap unmap_array[1];
 };
 
 /* Bit mask values for bnad->cfg_flags */
@@ -256,92 +256,92 @@ struct bnad_unmap_q {
 #define BNAD_FP_IN_RX_PATH	      0
 
 struct bnad {
-	struct net_device	*netdev;
-	u32			id;
-	struct list_head	list_entry;
+    struct net_device	*netdev;
+    u32			id;
+    struct list_head	list_entry;
 
-	/* Data path */
-	struct bnad_tx_info tx_info[BNAD_MAX_TX];
-	struct bnad_rx_info rx_info[BNAD_MAX_RX];
+    /* Data path */
+    struct bnad_tx_info tx_info[BNAD_MAX_TX];
+    struct bnad_rx_info rx_info[BNAD_MAX_RX];
 
-	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
-	/*
-	 * These q numbers are global only because
-	 * they are used to calculate MSIx vectors.
-	 * Actually the exact # of queues are per Tx/Rx
-	 * object.
-	 */
-	u32		num_tx;
-	u32		num_rx;
-	u32		num_txq_per_tx;
-	u32		num_rxp_per_rx;
+    unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+    /*
+     * These q numbers are global only because
+     * they are used to calculate MSIx vectors.
+     * Actually the exact # of queues are per Tx/Rx
+     * object.
+     */
+    u32		num_tx;
+    u32		num_rx;
+    u32		num_txq_per_tx;
+    u32		num_rxp_per_rx;
 
-	u32		txq_depth;
-	u32		rxq_depth;
+    u32		txq_depth;
+    u32		rxq_depth;
 
-	u8			tx_coalescing_timeo;
-	u8			rx_coalescing_timeo;
+    u8			tx_coalescing_timeo;
+    u8			rx_coalescing_timeo;
 
-	struct bna_rx_config rx_config[BNAD_MAX_RX];
-	struct bna_tx_config tx_config[BNAD_MAX_TX];
+    struct bna_rx_config rx_config[BNAD_MAX_RX];
+    struct bna_tx_config tx_config[BNAD_MAX_TX];
 
-	void __iomem		*bar0;	/* BAR0 address */
+    void __iomem		*bar0;	/* BAR0 address */
 
-	struct bna bna;
+    struct bna bna;
 
-	u32		cfg_flags;
-	unsigned long		run_flags;
+    u32		cfg_flags;
+    unsigned long		run_flags;
 
-	struct pci_dev		*pcidev;
-	u64		mmio_start;
-	u64		mmio_len;
+    struct pci_dev		*pcidev;
+    u64		mmio_start;
+    u64		mmio_len;
 
-	u32		msix_num;
-	struct msix_entry	*msix_table;
+    u32		msix_num;
+    struct msix_entry	*msix_table;
 
-	struct mutex		conf_mutex;
-	spinlock_t		bna_lock ____cacheline_aligned;
+    struct mutex		conf_mutex;
+    spinlock_t		bna_lock ____cacheline_aligned;
 
-	/* Timers */
-	struct timer_list	ioc_timer;
-	struct timer_list	dim_timer;
-	struct timer_list	stats_timer;
+    /* Timers */
+    struct timer_list	ioc_timer;
+    struct timer_list	dim_timer;
+    struct timer_list	stats_timer;
 
-	/* Control path resources, memory & irq */
-	struct bna_res_info res_info[BNA_RES_T_MAX];
-	struct bna_res_info mod_res_info[BNA_MOD_RES_T_MAX];
-	struct bnad_tx_res_info tx_res_info[BNAD_MAX_TX];
-	struct bnad_rx_res_info rx_res_info[BNAD_MAX_RX];
+    /* Control path resources, memory & irq */
+    struct bna_res_info res_info[BNA_RES_T_MAX];
+    struct bna_res_info mod_res_info[BNA_MOD_RES_T_MAX];
+    struct bnad_tx_res_info tx_res_info[BNAD_MAX_TX];
+    struct bnad_rx_res_info rx_res_info[BNAD_MAX_RX];
 
-	struct bnad_completion bnad_completions;
+    struct bnad_completion bnad_completions;
 
-	/* Burnt in MAC address */
-	mac_t			perm_addr;
+    /* Burnt in MAC address */
+    mac_t			perm_addr;
 
-	struct tasklet_struct	tx_free_tasklet;
+    struct tasklet_struct	tx_free_tasklet;
 
-	/* Statistics */
-	struct bnad_stats stats;
+    /* Statistics */
+    struct bnad_stats stats;
 
-	struct bnad_diag *diag;
+    struct bnad_diag *diag;
 
-	char			adapter_name[BNAD_NAME_LEN];
-	char			port_name[BNAD_NAME_LEN];
-	char			mbox_irq_name[BNAD_NAME_LEN];
+    char			adapter_name[BNAD_NAME_LEN];
+    char			port_name[BNAD_NAME_LEN];
+    char			mbox_irq_name[BNAD_NAME_LEN];
 
-	/* debugfs specific data */
-	char	*regdata;
-	u32	reglen;
-	struct dentry *bnad_dentry_files[5];
-	struct dentry *port_debugfs_root;
+    /* debugfs specific data */
+    char	*regdata;
+    u32	reglen;
+    struct dentry *bnad_dentry_files[5];
+    struct dentry *port_debugfs_root;
 };
 
 struct bnad_drvinfo {
-	struct bfa_ioc_attr  ioc_attr;
-	struct bfa_cee_attr  cee_attr;
-	struct bfa_flash_attr flash_attr;
-	u32	cee_status;
-	u32	flash_status;
+    struct bfa_ioc_attr  ioc_attr;
+    struct bfa_cee_attr  cee_attr;
+    struct bfa_flash_attr flash_attr;
+    u32	cee_status;
+    u32	flash_status;
 };
 
 /*
@@ -357,7 +357,7 @@ extern u32 *cna_get_firmware_buf(struct pci_dev *pdev);
 /* Netdev entry point prototypes */
 extern void bnad_set_rx_mode(struct net_device *netdev);
 extern struct net_device_stats *bnad_get_netdev_stats(
-				struct net_device *netdev);
+    struct net_device *netdev);
 extern int bnad_mac_addr_set_locked(struct bnad *bnad, u8 *mac_addr);
 extern int bnad_enable_default_bcast(struct bnad *bnad);
 extern void bnad_restore_vlans(struct bnad *bnad, u32 rx_id);
@@ -378,9 +378,9 @@ extern void bnad_dim_timer_start(struct bnad *bnad);
 
 /* Statistics */
 extern void bnad_netdev_qstats_fill(struct bnad *bnad,
-		struct rtnl_link_stats64 *stats);
+                                    struct rtnl_link_stats64 *stats);
 extern void bnad_netdev_hwstats_fill(struct bnad *bnad,
-		struct rtnl_link_stats64 *stats);
+                                     struct rtnl_link_stats64 *stats);
 
 /* Debugfs */
 void	bnad_debugfs_init(struct bnad *bnad);

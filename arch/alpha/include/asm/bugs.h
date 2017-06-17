@@ -15,6 +15,5 @@
  * I don't know of any alpha bugs yet.. Nice chip
  */
 
-static void check_bugs(void)
-{
+static void check_bugs(void) {
 }

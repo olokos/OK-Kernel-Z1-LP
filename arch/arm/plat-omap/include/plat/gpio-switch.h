@@ -31,24 +31,24 @@
 #define OMAP_GPIO_SWITCH_FLAG_OUTPUT		0x0002
 
 struct omap_gpio_switch {
-	const char *name;
-	s16 gpio;
-	unsigned flags:4;
-	unsigned type:4;
+    const char *name;
+    s16 gpio;
+    unsigned flags:4;
+    unsigned type:4;
 
-	/* Time in ms to debounce when transitioning from
-	 * inactive state to active state. */
-	u16 debounce_rising;
-	/* Same for transition from active to inactive state. */
-	u16 debounce_falling;
+    /* Time in ms to debounce when transitioning from
+     * inactive state to active state. */
+    u16 debounce_rising;
+    /* Same for transition from active to inactive state. */
+    u16 debounce_falling;
 
-	/* notify board-specific code about state changes */
-	void (* notify)(void *data, int state);
-	void *notify_data;
+    /* notify board-specific code about state changes */
+    void (* notify)(void *data, int state);
+    void *notify_data;
 };
 
 /* Call at init time only */
 extern void omap_register_gpio_switches(const struct omap_gpio_switch *tbl,
-					int count);
+                                        int count);
 
 #endif

@@ -47,9 +47,9 @@ extern u64 efi_call2(void *fp, u64 arg1, u64 arg2);
 extern u64 efi_call3(void *fp, u64 arg1, u64 arg2, u64 arg3);
 extern u64 efi_call4(void *fp, u64 arg1, u64 arg2, u64 arg3, u64 arg4);
 extern u64 efi_call5(void *fp, u64 arg1, u64 arg2, u64 arg3,
-		     u64 arg4, u64 arg5);
+                     u64 arg4, u64 arg5);
 extern u64 efi_call6(void *fp, u64 arg1, u64 arg2, u64 arg3,
-		     u64 arg4, u64 arg5, u64 arg6);
+                     u64 arg4, u64 arg5, u64 arg6);
 
 #define efi_call_phys0(f)			\
 	efi_call0((void *)(f))
@@ -89,7 +89,7 @@ extern u64 efi_call6(void *fp, u64 arg1, u64 arg2, u64 arg3,
 		  (u64)(a3), (u64)(a4), (u64)(a5), (u64)(a6))
 
 extern void __iomem *efi_ioremap(unsigned long addr, unsigned long size,
-				 u32 type);
+                                 u32 type);
 
 #endif /* CONFIG_X86_32 */
 

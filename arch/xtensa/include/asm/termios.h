@@ -17,20 +17,20 @@
 #include <asm/ioctls.h>
 
 struct winsize {
-	unsigned short ws_row;
-	unsigned short ws_col;
-	unsigned short ws_xpixel;
-	unsigned short ws_ypixel;
+    unsigned short ws_row;
+    unsigned short ws_col;
+    unsigned short ws_xpixel;
+    unsigned short ws_ypixel;
 };
 
 #define NCC 8
 struct termio {
-	unsigned short c_iflag;		/* input mode flags */
-	unsigned short c_oflag;		/* output mode flags */
-	unsigned short c_cflag;		/* control mode flags */
-	unsigned short c_lflag;		/* local mode flags */
-	unsigned char c_line;		/* line discipline */
-	unsigned char c_cc[NCC];	/* control characters */
+    unsigned short c_iflag;		/* input mode flags */
+    unsigned short c_oflag;		/* output mode flags */
+    unsigned short c_cflag;		/* control mode flags */
+    unsigned short c_lflag;		/* local mode flags */
+    unsigned char c_line;		/* line discipline */
+    unsigned char c_cc[NCC];	/* control characters */
 };
 
 /* Modem lines */

@@ -77,9 +77,9 @@
 
 /* Codes for CMD_802_11_SET_MODE */
 enum lbtf_mode {
-	LBTF_PASSIVE_MODE,
-	LBTF_STA_MODE,
-	LBTF_AP_MODE,
+    LBTF_PASSIVE_MODE,
+    LBTF_STA_MODE,
+    LBTF_AP_MODE,
 };
 
 /** Card Event definition */
@@ -150,10 +150,10 @@ enum lbtf_mode {
 /** Global Variable Declaration */
 /** mv_ms_type */
 enum mv_ms_type {
-	MVMS_DAT = 0,
-	MVMS_CMD = 1,
-	MVMS_TXDONE = 2,
-	MVMS_EVENT
+    MVMS_DAT = 0,
+    MVMS_CMD = 1,
+    MVMS_TXDONE = 2,
+    MVMS_EVENT
 };
 
 extern struct workqueue_struct *lbtf_wq;
@@ -161,178 +161,178 @@ extern struct workqueue_struct *lbtf_wq;
 struct lbtf_private;
 
 struct lbtf_offset_value {
-	u32 offset;
-	u32 value;
+    u32 offset;
+    u32 value;
 };
 
 struct channel_range {
-	u8 regdomain;
-	u8 start;
-	u8 end; /* exclusive (channel must be less than end) */
+    u8 regdomain;
+    u8 start;
+    u8 end; /* exclusive (channel must be less than end) */
 };
 
 struct if_usb_card;
 
 /** Private structure for the MV device */
 struct lbtf_private {
-	void *card;
-	struct ieee80211_hw *hw;
+    void *card;
+    struct ieee80211_hw *hw;
 
-	/* Command response buffer */
-	u8 cmd_resp_buff[LBS_UPLD_SIZE];
-	/* Download sent:
-	   bit0 1/0=data_sent/data_tx_done,
-	   bit1 1/0=cmd_sent/cmd_tx_done,
-	   all other bits reserved 0 */
-	struct ieee80211_vif *vif;
+    /* Command response buffer */
+    u8 cmd_resp_buff[LBS_UPLD_SIZE];
+    /* Download sent:
+       bit0 1/0=data_sent/data_tx_done,
+       bit1 1/0=cmd_sent/cmd_tx_done,
+       all other bits reserved 0 */
+    struct ieee80211_vif *vif;
 
-	struct work_struct cmd_work;
-	struct work_struct tx_work;
-	/** Hardware access */
-	int (*hw_host_to_card) (struct lbtf_private *priv, u8 type, u8 *payload, u16 nb);
-	int (*hw_prog_firmware) (struct if_usb_card *cardp);
-	int (*hw_reset_device) (struct if_usb_card *cardp);
+    struct work_struct cmd_work;
+    struct work_struct tx_work;
+    /** Hardware access */
+    int (*hw_host_to_card) (struct lbtf_private *priv, u8 type, u8 *payload, u16 nb);
+    int (*hw_prog_firmware) (struct if_usb_card *cardp);
+    int (*hw_reset_device) (struct if_usb_card *cardp);
 
 
-	/** Wlan adapter data structure*/
-	/** STATUS variables */
-	u32 fwrelease;
-	u32 fwcapinfo;
-	/* protected with big lock */
+    /** Wlan adapter data structure*/
+    /** STATUS variables */
+    u32 fwrelease;
+    u32 fwcapinfo;
+    /* protected with big lock */
 
-	struct mutex lock;
+    struct mutex lock;
 
-	/** command-related variables */
-	u16 seqnum;
-	/* protected by big lock */
+    /** command-related variables */
+    u16 seqnum;
+    /* protected by big lock */
 
-	struct cmd_ctrl_node *cmd_array;
-	/** Current command */
-	struct cmd_ctrl_node *cur_cmd;
-	/** command Queues */
-	/** Free command buffers */
-	struct list_head cmdfreeq;
-	/** Pending command buffers */
-	struct list_head cmdpendingq;
+    struct cmd_ctrl_node *cmd_array;
+    /** Current command */
+    struct cmd_ctrl_node *cur_cmd;
+    /** command Queues */
+    /** Free command buffers */
+    struct list_head cmdfreeq;
+    /** Pending command buffers */
+    struct list_head cmdpendingq;
 
-	/** spin locks */
-	spinlock_t driver_lock;
+    /** spin locks */
+    spinlock_t driver_lock;
 
-	/** Timers */
-	struct timer_list command_timer;
-	int nr_retries;
-	int cmd_timed_out;
+    /** Timers */
+    struct timer_list command_timer;
+    int nr_retries;
+    int cmd_timed_out;
 
-	u8 cmd_response_rxed;
+    u8 cmd_response_rxed;
 
-	/** capability Info used in Association, start, join */
-	u16 capability;
+    /** capability Info used in Association, start, join */
+    u16 capability;
 
-	/** MAC address information */
-	u8 current_addr[ETH_ALEN];
-	u8 multicastlist[MRVDRV_MAX_MULTICAST_LIST_SIZE][ETH_ALEN];
-	u32 nr_of_multicastmacaddr;
-	int cur_freq;
+    /** MAC address information */
+    u8 current_addr[ETH_ALEN];
+    u8 multicastlist[MRVDRV_MAX_MULTICAST_LIST_SIZE][ETH_ALEN];
+    u32 nr_of_multicastmacaddr;
+    int cur_freq;
 
-	struct sk_buff *skb_to_tx;
-	struct sk_buff *tx_skb;
+    struct sk_buff *skb_to_tx;
+    struct sk_buff *tx_skb;
 
-	/** NIC Operation characteristics */
-	u16 mac_control;
-	u16 regioncode;
-	struct channel_range range;
+    /** NIC Operation characteristics */
+    u16 mac_control;
+    u16 regioncode;
+    struct channel_range range;
 
-	u8 radioon;
-	u32 preamble;
+    u8 radioon;
+    u32 preamble;
 
-	struct ieee80211_channel channels[14];
-	struct ieee80211_rate rates[12];
-	struct ieee80211_supported_band band;
-	struct lbtf_offset_value offsetvalue;
+    struct ieee80211_channel channels[14];
+    struct ieee80211_rate rates[12];
+    struct ieee80211_supported_band band;
+    struct lbtf_offset_value offsetvalue;
 
-	u8 fw_ready;
-	u8 surpriseremoved;
-	struct sk_buff_head bc_ps_buf;
+    u8 fw_ready;
+    u8 surpriseremoved;
+    struct sk_buff_head bc_ps_buf;
 
-	/* Most recently reported noise in dBm */
-	s8 noise;
+    /* Most recently reported noise in dBm */
+    s8 noise;
 };
 
 /* 802.11-related definitions */
 
 /* TxPD descriptor */
 struct txpd {
-	/* Current Tx packet status */
-	__le32 tx_status;
-	/* Tx control */
-	__le32 tx_control;
-	__le32 tx_packet_location;
-	/* Tx packet length */
-	__le16 tx_packet_length;
-	/* First 2 byte of destination MAC address */
-	u8 tx_dest_addr_high[2];
-	/* Last 4 byte of destination MAC address */
-	u8 tx_dest_addr_low[4];
-	/* Pkt Priority */
-	u8 priority;
-	/* Pkt Trasnit Power control */
-	u8 powermgmt;
-	/* Time the packet has been queued in the driver (units = 2ms) */
-	u8 pktdelay_2ms;
-	/* reserved */
-	u8 reserved1;
+    /* Current Tx packet status */
+    __le32 tx_status;
+    /* Tx control */
+    __le32 tx_control;
+    __le32 tx_packet_location;
+    /* Tx packet length */
+    __le16 tx_packet_length;
+    /* First 2 byte of destination MAC address */
+    u8 tx_dest_addr_high[2];
+    /* Last 4 byte of destination MAC address */
+    u8 tx_dest_addr_low[4];
+    /* Pkt Priority */
+    u8 priority;
+    /* Pkt Trasnit Power control */
+    u8 powermgmt;
+    /* Time the packet has been queued in the driver (units = 2ms) */
+    u8 pktdelay_2ms;
+    /* reserved */
+    u8 reserved1;
 };
 
 /* RxPD Descriptor */
 struct rxpd {
-	/* Current Rx packet status */
-	__le16 status;
+    /* Current Rx packet status */
+    __le16 status;
 
-	/* SNR */
-	u8 snr;
+    /* SNR */
+    u8 snr;
 
-	/* Tx control */
-	u8 rx_control;
+    /* Tx control */
+    u8 rx_control;
 
-	/* Pkt length */
-	__le16 pkt_len;
+    /* Pkt length */
+    __le16 pkt_len;
 
-	/* Noise Floor */
-	u8 nf;
+    /* Noise Floor */
+    u8 nf;
 
-	/* Rx Packet Rate */
-	u8 rx_rate;
+    /* Rx Packet Rate */
+    u8 rx_rate;
 
-	/* Pkt addr */
-	__le32 pkt_ptr;
+    /* Pkt addr */
+    __le32 pkt_ptr;
 
-	/* Next Rx RxPD addr */
-	__le32 next_rxpd_ptr;
+    /* Next Rx RxPD addr */
+    __le32 next_rxpd_ptr;
 
-	/* Pkt Priority */
-	u8 priority;
-	u8 reserved[3];
+    /* Pkt Priority */
+    u8 priority;
+    u8 reserved[3];
 };
 
 struct cmd_header {
-	__le16 command;
-	__le16 size;
-	__le16 seqnum;
-	__le16 result;
+    __le16 command;
+    __le16 size;
+    __le16 seqnum;
+    __le16 result;
 } __packed;
 
 struct cmd_ctrl_node {
-	struct list_head list;
-	int result;
-	/* command response */
-	int (*callback)(struct lbtf_private *,
-			unsigned long, struct cmd_header *);
-	unsigned long callback_arg;
-	/* command data */
-	struct cmd_header *cmdbuf;
-	/* wait queue */
-	u16 cmdwaitqwoken;
-	wait_queue_head_t cmdwait_q;
+    struct list_head list;
+    int result;
+    /* command response */
+    int (*callback)(struct lbtf_private *,
+                    unsigned long, struct cmd_header *);
+    unsigned long callback_arg;
+    /* command data */
+    struct cmd_header *cmdbuf;
+    /* wait queue */
+    u16 cmdwaitqwoken;
+    wait_queue_head_t cmdwait_q;
 };
 
 /*
@@ -340,118 +340,118 @@ struct cmd_ctrl_node {
  * This structure defines the response for the GET_HW_SPEC command
  */
 struct cmd_ds_get_hw_spec {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	/* HW Interface version number */
-	__le16 hwifversion;
-	/* HW version number */
-	__le16 version;
-	/* Max number of TxPD FW can handle */
-	__le16 nr_txpd;
-	/* Max no of Multicast address */
-	__le16 nr_mcast_adr;
-	/* MAC address */
-	u8 permanentaddr[6];
+    /* HW Interface version number */
+    __le16 hwifversion;
+    /* HW version number */
+    __le16 version;
+    /* Max number of TxPD FW can handle */
+    __le16 nr_txpd;
+    /* Max no of Multicast address */
+    __le16 nr_mcast_adr;
+    /* MAC address */
+    u8 permanentaddr[6];
 
-	/* region Code */
-	__le16 regioncode;
+    /* region Code */
+    __le16 regioncode;
 
-	/* Number of antenna used */
-	__le16 nr_antenna;
+    /* Number of antenna used */
+    __le16 nr_antenna;
 
-	/* FW release number, example 0x01030304 = 2.3.4p1 */
-	__le32 fwrelease;
+    /* FW release number, example 0x01030304 = 2.3.4p1 */
+    __le32 fwrelease;
 
-	/* Base Address of TxPD queue */
-	__le32 wcb_base;
-	/* Read Pointer of RxPd queue */
-	__le32 rxpd_rdptr;
+    /* Base Address of TxPD queue */
+    __le32 wcb_base;
+    /* Read Pointer of RxPd queue */
+    __le32 rxpd_rdptr;
 
-	/* Write Pointer of RxPd queue */
-	__le32 rxpd_wrptr;
+    /* Write Pointer of RxPd queue */
+    __le32 rxpd_wrptr;
 
-	/*FW/HW capability */
-	__le32 fwcapinfo;
+    /*FW/HW capability */
+    __le32 fwcapinfo;
 } __packed;
 
 struct cmd_ds_mac_control {
-	struct cmd_header hdr;
-	__le16 action;
-	u16 reserved;
+    struct cmd_header hdr;
+    __le16 action;
+    u16 reserved;
 };
 
 struct cmd_ds_802_11_mac_address {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	uint8_t macadd[ETH_ALEN];
+    __le16 action;
+    uint8_t macadd[ETH_ALEN];
 };
 
 struct cmd_ds_mac_multicast_addr {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	__le16 nr_of_adrs;
-	u8 maclist[ETH_ALEN * MRVDRV_MAX_MULTICAST_LIST_SIZE];
+    __le16 action;
+    __le16 nr_of_adrs;
+    u8 maclist[ETH_ALEN * MRVDRV_MAX_MULTICAST_LIST_SIZE];
 };
 
 struct cmd_ds_set_mode {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 mode;
+    __le16 mode;
 };
 
 struct cmd_ds_set_bssid {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	u8 bssid[6];
-	u8 activate;
+    u8 bssid[6];
+    u8 activate;
 };
 
 struct cmd_ds_802_11_radio_control {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	__le16 control;
+    __le16 action;
+    __le16 control;
 };
 
 
 struct cmd_ds_802_11_rf_channel {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	__le16 channel;
-	__le16 rftype;      /* unused */
-	__le16 reserved;    /* unused */
-	u8 channellist[32]; /* unused */
+    __le16 action;
+    __le16 channel;
+    __le16 rftype;      /* unused */
+    __le16 reserved;    /* unused */
+    u8 channellist[32]; /* unused */
 };
 
 struct cmd_ds_set_boot2_ver {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	__le16 version;
+    __le16 action;
+    __le16 version;
 };
 
 struct cmd_ds_802_11_reset {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
+    __le16 action;
 };
 
 struct cmd_ds_802_11_beacon_control {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 action;
-	__le16 beacon_enable;
-	__le16 beacon_period;
+    __le16 action;
+    __le16 beacon_enable;
+    __le16 beacon_period;
 };
 
 struct cmd_ds_802_11_beacon_set {
-	struct cmd_header hdr;
+    struct cmd_header hdr;
 
-	__le16 len;
-	u8 beacon[MRVL_MAX_BCN_SIZE];
+    __le16 len;
+    u8 beacon[MRVL_MAX_BCN_SIZE];
 };
 
 struct lbtf_private;
@@ -475,17 +475,17 @@ int lbtf_set_channel(struct lbtf_private *priv, u8 channel);
 
 int lbtf_beacon_set(struct lbtf_private *priv, struct sk_buff *beacon);
 int lbtf_beacon_ctrl(struct lbtf_private *priv, bool beacon_enable,
-		     int beacon_int);
+                     int beacon_int);
 
 
 int lbtf_process_rx_command(struct lbtf_private *priv);
 void lbtf_complete_command(struct lbtf_private *priv, struct cmd_ctrl_node *cmd,
-			  int result);
+                           int result);
 void lbtf_cmd_response_rx(struct lbtf_private *priv);
 
 /* main.c */
 struct chan_freq_power *lbtf_get_region_cfp_table(u8 region,
-	int *cfp_no);
+        int *cfp_no);
 struct lbtf_private *lbtf_add_card(void *card, struct device *dmdev);
 int lbtf_remove_card(struct lbtf_private *priv);
 int lbtf_start_card(struct lbtf_private *priv);
@@ -507,13 +507,13 @@ void lbtf_bcn_sent(struct lbtf_private *priv);
 	lbtf_cmd(priv, cmdnr, cmd, lbtf_cmd_copyback, (unsigned long) (cmd))
 
 void lbtf_cmd_async(struct lbtf_private *priv, uint16_t command,
-	struct cmd_header *in_cmd, int in_cmd_size);
+                    struct cmd_header *in_cmd, int in_cmd_size);
 
 int __lbtf_cmd(struct lbtf_private *priv, uint16_t command,
-	      struct cmd_header *in_cmd, int in_cmd_size,
-	      int (*callback)(struct lbtf_private *, unsigned long,
-			      struct cmd_header *),
-	      unsigned long callback_arg);
+               struct cmd_header *in_cmd, int in_cmd_size,
+               int (*callback)(struct lbtf_private *, unsigned long,
+                               struct cmd_header *),
+               unsigned long callback_arg);
 
 int lbtf_cmd_copyback(struct lbtf_private *priv, unsigned long extra,
-		     struct cmd_header *resp);
+                      struct cmd_header *resp);

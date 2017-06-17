@@ -13,16 +13,16 @@ extern void usb_wwan_disconnect(struct usb_serial *serial);
 extern void usb_wwan_release(struct usb_serial *serial);
 extern int usb_wwan_write_room(struct tty_struct *tty);
 extern void usb_wwan_set_termios(struct tty_struct *tty,
-				 struct usb_serial_port *port,
-				 struct ktermios *old);
+                                 struct usb_serial_port *port,
+                                 struct ktermios *old);
 extern int usb_wwan_tiocmget(struct tty_struct *tty);
 extern int usb_wwan_tiocmset(struct tty_struct *tty,
-			     unsigned int set, unsigned int clear);
+                             unsigned int set, unsigned int clear);
 extern int usb_wwan_ioctl(struct tty_struct *tty,
-			  unsigned int cmd, unsigned long arg);
+                          unsigned int cmd, unsigned long arg);
 extern int usb_wwan_send_setup(struct usb_serial_port *port);
 extern int usb_wwan_write(struct tty_struct *tty, struct usb_serial_port *port,
-			  const unsigned char *buf, int count);
+                          const unsigned char *buf, int count);
 extern int usb_wwan_chars_in_buffer(struct tty_struct *tty);
 extern void usb_wwan_throttle(struct tty_struct *tty);
 extern void usb_wwan_unthrottle(struct tty_struct *tty);
@@ -39,38 +39,38 @@ extern int usb_wwan_resume(struct usb_serial *serial);
 #define OUT_BUFLEN 65536
 
 struct usb_wwan_intf_private {
-	spinlock_t susp_lock;
-	unsigned int suspended:1;
-	int in_flight;
-	int (*send_setup) (struct usb_serial_port *port);
-	void *private;
+    spinlock_t susp_lock;
+    unsigned int suspended:1;
+    int in_flight;
+    int (*send_setup) (struct usb_serial_port *port);
+    void *private;
 };
 
 struct usb_wwan_port_private {
-	/* Input endpoints and buffer for this port */
-	struct urb *in_urbs[N_IN_URB];
-	u8 *in_buffer[N_IN_URB];
-	/* Output endpoints and buffer for this port */
-	struct urb *out_urbs[N_OUT_URB];
-	u8 *out_buffer[N_OUT_URB];
-	unsigned long out_busy;	/* Bit vector of URBs in use */
-	int opened;
-	struct usb_anchor submitted;
-	struct usb_anchor delayed;
-	struct list_head in_urb_list;
-	spinlock_t in_lock;
-	ssize_t n_read;
-	struct work_struct in_work;
+    /* Input endpoints and buffer for this port */
+    struct urb *in_urbs[N_IN_URB];
+    u8 *in_buffer[N_IN_URB];
+    /* Output endpoints and buffer for this port */
+    struct urb *out_urbs[N_OUT_URB];
+    u8 *out_buffer[N_OUT_URB];
+    unsigned long out_busy;	/* Bit vector of URBs in use */
+    int opened;
+    struct usb_anchor submitted;
+    struct usb_anchor delayed;
+    struct list_head in_urb_list;
+    spinlock_t in_lock;
+    ssize_t n_read;
+    struct work_struct in_work;
 
-	/* Settings for the port */
-	int rts_state;		/* Handshaking pins (outputs) */
-	int dtr_state;
-	int cts_state;		/* Handshaking pins (inputs) */
-	int dsr_state;
-	int dcd_state;
-	int ri_state;
+    /* Settings for the port */
+    int rts_state;		/* Handshaking pins (outputs) */
+    int dtr_state;
+    int cts_state;		/* Handshaking pins (inputs) */
+    int dsr_state;
+    int dcd_state;
+    int ri_state;
 
-	unsigned long tx_start_time[N_OUT_URB];
+    unsigned long tx_start_time[N_OUT_URB];
 };
 
 #endif /* __LINUX_USB_USB_WWAN */

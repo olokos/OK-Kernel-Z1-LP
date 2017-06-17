@@ -163,7 +163,7 @@
  * In a private shared memory segment, we do a copy-on-write if a task
  * attempts to write to the page.
  */
-	/* xwr */
+/* xwr */
 #define __P000	PAGE_NONE
 #define __P001	PAGE_READONLY
 #define __P010	PAGE_READONLY	/* write to priv pg -> copy & make writable */
@@ -197,9 +197,8 @@
 
 /* Quick test to see if ADDR is a (potentially) valid physical address. */
 static inline long
-ia64_phys_addr_valid (unsigned long addr)
-{
-	return (addr & (local_cpu_data->unimpl_pa_mask)) == 0;
+ia64_phys_addr_valid (unsigned long addr) {
+    return (addr & (local_cpu_data->unimpl_pa_mask)) == 0;
 }
 
 /*
@@ -330,18 +329,17 @@ extern unsigned long VMALLOC_END;
 		(_PAGE_P | _PAGE_PL_3 | _PAGE_AR_RX))
 
 extern void __ia64_sync_icache_dcache(pte_t pteval);
-static inline void set_pte(pte_t *ptep, pte_t pteval)
-{
-	/* page is present && page is user  && page is executable
-	 * && (page swapin or new page or page migraton
-	 *	|| copy_on_write with page copying.)
-	 */
-	if (pte_present_exec_user(pteval) &&
-	    (!pte_present(*ptep) ||
-		pte_pfn(*ptep) != pte_pfn(pteval)))
-		/* load_module() calles flush_icache_range() explicitly*/
-		__ia64_sync_icache_dcache(pteval);
-	*ptep = pteval;
+static inline void set_pte(pte_t *ptep, pte_t pteval) {
+    /* page is present && page is user  && page is executable
+     * && (page swapin or new page or page migraton
+     *	|| copy_on_write with page copying.)
+     */
+    if (pte_present_exec_user(pteval) &&
+            (!pte_present(*ptep) ||
+             pte_pfn(*ptep) != pte_pfn(pteval)))
+        /* load_module() calles flush_icache_range() explicitly*/
+        __ia64_sync_icache_dcache(pteval);
+    *ptep = pteval;
 }
 
 #define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
@@ -358,24 +356,22 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
 
 struct file;
 extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-				     unsigned long size, pgprot_t vma_prot);
+                                     unsigned long size, pgprot_t vma_prot);
 #define __HAVE_PHYS_MEM_ACCESS_PROT
 
 static inline unsigned long
-pgd_index (unsigned long address)
-{
-	unsigned long region = address >> 61;
-	unsigned long l1index = (address >> PGDIR_SHIFT) & ((PTRS_PER_PGD >> 3) - 1);
+pgd_index (unsigned long address) {
+    unsigned long region = address >> 61;
+    unsigned long l1index = (address >> PGDIR_SHIFT) & ((PTRS_PER_PGD >> 3) - 1);
 
-	return (region << (PAGE_SHIFT - 6)) | l1index;
+    return (region << (PAGE_SHIFT - 6)) | l1index;
 }
 
 /* The offset in the 1-level directory is given by the 3 region bits
    (61..63) and the level-1 bits.  */
 static inline pgd_t*
-pgd_offset (const struct mm_struct *mm, unsigned long address)
-{
-	return mm->pgd + pgd_index(address);
+pgd_offset (const struct mm_struct *mm, unsigned long address) {
+    return mm->pgd + pgd_index(address);
 }
 
 /* In the kernel's mapped region we completely ignore the region number
@@ -410,53 +406,49 @@ pgd_offset (const struct mm_struct *mm, unsigned long address)
 /* atomic versions of the some PTE manipulations: */
 
 static inline int
-ptep_test_and_clear_young (struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-{
+ptep_test_and_clear_young (struct vm_area_struct *vma, unsigned long addr, pte_t *ptep) {
 #ifdef CONFIG_SMP
-	if (!pte_young(*ptep))
-		return 0;
-	return test_and_clear_bit(_PAGE_A_BIT, ptep);
+    if (!pte_young(*ptep))
+        return 0;
+    return test_and_clear_bit(_PAGE_A_BIT, ptep);
 #else
-	pte_t pte = *ptep;
-	if (!pte_young(pte))
-		return 0;
-	set_pte_at(vma->vm_mm, addr, ptep, pte_mkold(pte));
-	return 1;
+    pte_t pte = *ptep;
+    if (!pte_young(pte))
+        return 0;
+    set_pte_at(vma->vm_mm, addr, ptep, pte_mkold(pte));
+    return 1;
 #endif
 }
 
 static inline pte_t
-ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
+ptep_get_and_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
 #ifdef CONFIG_SMP
-	return __pte(xchg((long *) ptep, 0));
+    return __pte(xchg((long *) ptep, 0));
 #else
-	pte_t pte = *ptep;
-	pte_clear(mm, addr, ptep);
-	return pte;
+    pte_t pte = *ptep;
+    pte_clear(mm, addr, ptep);
+    return pte;
 #endif
 }
 
 static inline void
-ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
+ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
 #ifdef CONFIG_SMP
-	unsigned long new, old;
+    unsigned long new, old;
 
-	do {
-		old = pte_val(*ptep);
-		new = pte_val(pte_wrprotect(__pte (old)));
-	} while (cmpxchg((unsigned long *) ptep, old, new) != old);
+    do {
+        old = pte_val(*ptep);
+        new = pte_val(pte_wrprotect(__pte (old)));
+    } while (cmpxchg((unsigned long *) ptep, old, new) != old);
 #else
-	pte_t old_pte = *ptep;
-	set_pte_at(mm, addr, ptep, pte_wrprotect(old_pte));
+    pte_t old_pte = *ptep;
+    set_pte_at(mm, addr, ptep, pte_wrprotect(old_pte));
 #endif
 }
 
 static inline int
-pte_same (pte_t a, pte_t b)
-{
-	return pte_val(a) == pte_val(b);
+pte_same (pte_t a, pte_t b) {
+    return pte_val(a) == pte_val(b);
 }
 
 #define update_mmu_cache(vma, address, ptep) do { } while (0)
@@ -560,10 +552,10 @@ extern struct page *zero_page_memmap_ptr;
 #endif
 
 #  ifdef CONFIG_VIRTUAL_MEM_MAP
-  /* arch mem_map init routine is needed due to holes in a virtual mem_map */
+/* arch mem_map init routine is needed due to holes in a virtual mem_map */
 #   define __HAVE_ARCH_MEMMAP_INIT
-    extern void memmap_init (unsigned long size, int nid, unsigned long zone,
-			     unsigned long start_pfn);
+extern void memmap_init (unsigned long size, int nid, unsigned long zone,
+                         unsigned long start_pfn);
 #  endif /* CONFIG_VIRTUAL_MEM_MAP */
 # endif /* !__ASSEMBLY__ */
 

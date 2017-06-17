@@ -21,9 +21,8 @@
 #define __clk_put(clk)	do { } while (0)
 #endif
 
-static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size)
-{
-	return kzalloc(size, GFP_KERNEL);
+static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size) {
+    return kzalloc(size, GFP_KERNEL);
 }
 
 #endif

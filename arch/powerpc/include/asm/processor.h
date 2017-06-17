@@ -103,8 +103,8 @@ extern struct task_struct *last_task_used_spe;
 /* 64-bit user address space is 44-bits (16TB user VM) */
 #define TASK_SIZE_USER64 (0x0000100000000000UL)
 
-/* 
- * 32-bit user address space is 4GB - 1 page 
+/*
+ * 32-bit user address space is 4GB - 1 page
  * (this 1 page is needed so referencing of 0xFFFFFFFF generates EFAULT
  */
 #define TASK_SIZE_USER32 (0x0000000100000000UL - (1*PAGE_SIZE))
@@ -141,7 +141,7 @@ extern struct task_struct *last_task_used_spe;
 #endif /* __powerpc64__ */
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #define TS_FPROFFSET 0
@@ -149,103 +149,103 @@ typedef struct {
 #define TS_FPR(i) fpr[i][TS_FPROFFSET]
 
 struct thread_struct {
-	unsigned long	ksp;		/* Kernel stack pointer */
-	unsigned long	ksp_limit;	/* if ksp <= ksp_limit stack overflow */
+    unsigned long	ksp;		/* Kernel stack pointer */
+    unsigned long	ksp_limit;	/* if ksp <= ksp_limit stack overflow */
 
 #ifdef CONFIG_PPC64
-	unsigned long	ksp_vsid;
+    unsigned long	ksp_vsid;
 #endif
-	struct pt_regs	*regs;		/* Pointer to saved register state */
-	mm_segment_t	fs;		/* for get_fs() validation */
+    struct pt_regs	*regs;		/* Pointer to saved register state */
+    mm_segment_t	fs;		/* for get_fs() validation */
 #ifdef CONFIG_BOOKE
-	/* BookE base exception scratch space; align on cacheline */
-	unsigned long	normsave[8] ____cacheline_aligned;
+    /* BookE base exception scratch space; align on cacheline */
+    unsigned long	normsave[8] ____cacheline_aligned;
 #endif
 #ifdef CONFIG_PPC32
-	void		*pgdir;		/* root of page-table tree */
+    void		*pgdir;		/* root of page-table tree */
 #endif
 #ifdef CONFIG_PPC_ADV_DEBUG_REGS
-	/*
-	 * The following help to manage the use of Debug Control Registers
-	 * om the BookE platforms.
-	 */
-	unsigned long	dbcr0;
-	unsigned long	dbcr1;
+    /*
+     * The following help to manage the use of Debug Control Registers
+     * om the BookE platforms.
+     */
+    unsigned long	dbcr0;
+    unsigned long	dbcr1;
 #ifdef CONFIG_BOOKE
-	unsigned long	dbcr2;
+    unsigned long	dbcr2;
 #endif
-	/*
-	 * The stored value of the DBSR register will be the value at the
-	 * last debug interrupt. This register can only be read from the
-	 * user (will never be written to) and has value while helping to
-	 * describe the reason for the last debug trap.  Torez
-	 */
-	unsigned long	dbsr;
-	/*
-	 * The following will contain addresses used by debug applications
-	 * to help trace and trap on particular address locations.
-	 * The bits in the Debug Control Registers above help define which
-	 * of the following registers will contain valid data and/or addresses.
-	 */
-	unsigned long	iac1;
-	unsigned long	iac2;
+    /*
+     * The stored value of the DBSR register will be the value at the
+     * last debug interrupt. This register can only be read from the
+     * user (will never be written to) and has value while helping to
+     * describe the reason for the last debug trap.  Torez
+     */
+    unsigned long	dbsr;
+    /*
+     * The following will contain addresses used by debug applications
+     * to help trace and trap on particular address locations.
+     * The bits in the Debug Control Registers above help define which
+     * of the following registers will contain valid data and/or addresses.
+     */
+    unsigned long	iac1;
+    unsigned long	iac2;
 #if CONFIG_PPC_ADV_DEBUG_IACS > 2
-	unsigned long	iac3;
-	unsigned long	iac4;
+    unsigned long	iac3;
+    unsigned long	iac4;
 #endif
-	unsigned long	dac1;
-	unsigned long	dac2;
+    unsigned long	dac1;
+    unsigned long	dac2;
 #if CONFIG_PPC_ADV_DEBUG_DVCS > 0
-	unsigned long	dvc1;
-	unsigned long	dvc2;
+    unsigned long	dvc1;
+    unsigned long	dvc2;
 #endif
 #endif
-	/* FP and VSX 0-31 register set */
-	double		fpr[32][TS_FPRWIDTH];
-	struct {
+    /* FP and VSX 0-31 register set */
+    double		fpr[32][TS_FPRWIDTH];
+    struct {
 
-		unsigned int pad;
-		unsigned int val;	/* Floating point status */
-	} fpscr;
-	int		fpexc_mode;	/* floating-point exception mode */
-	unsigned int	align_ctl;	/* alignment handling control */
+        unsigned int pad;
+        unsigned int val;	/* Floating point status */
+    } fpscr;
+    int		fpexc_mode;	/* floating-point exception mode */
+    unsigned int	align_ctl;	/* alignment handling control */
 #ifdef CONFIG_PPC64
-	unsigned long	start_tb;	/* Start purr when proc switched in */
-	unsigned long	accum_tb;	/* Total accumilated purr for process */
+    unsigned long	start_tb;	/* Start purr when proc switched in */
+    unsigned long	accum_tb;	/* Total accumilated purr for process */
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
-	struct perf_event *ptrace_bps[HBP_NUM];
-	/*
-	 * Helps identify source of single-step exception and subsequent
-	 * hw-breakpoint enablement
-	 */
-	struct perf_event *last_hit_ubp;
+    struct perf_event *ptrace_bps[HBP_NUM];
+    /*
+     * Helps identify source of single-step exception and subsequent
+     * hw-breakpoint enablement
+     */
+    struct perf_event *last_hit_ubp;
 #endif /* CONFIG_HAVE_HW_BREAKPOINT */
 #endif
-	unsigned long	dabr;		/* Data address breakpoint register */
+    unsigned long	dabr;		/* Data address breakpoint register */
 #ifdef CONFIG_ALTIVEC
-	/* Complete AltiVec register set */
-	vector128	vr[32] __attribute__((aligned(16)));
-	/* AltiVec status */
-	vector128	vscr __attribute__((aligned(16)));
-	unsigned long	vrsave;
-	int		used_vr;	/* set if process has used altivec */
+    /* Complete AltiVec register set */
+    vector128	vr[32] __attribute__((aligned(16)));
+    /* AltiVec status */
+    vector128	vscr __attribute__((aligned(16)));
+    unsigned long	vrsave;
+    int		used_vr;	/* set if process has used altivec */
 #endif /* CONFIG_ALTIVEC */
 #ifdef CONFIG_VSX
-	/* VSR status */
-	int		used_vsr;	/* set if process has used altivec */
+    /* VSR status */
+    int		used_vsr;	/* set if process has used altivec */
 #endif /* CONFIG_VSX */
 #ifdef CONFIG_SPE
-	unsigned long	evr[32];	/* upper 32-bits of SPE regs */
-	u64		acc;		/* Accumulator */
-	unsigned long	spefscr;	/* SPE & eFP status */
-	int		used_spe;	/* set if process has used spe */
+    unsigned long	evr[32];	/* upper 32-bits of SPE regs */
+    u64		acc;		/* Accumulator */
+    unsigned long	spefscr;	/* SPE & eFP status */
+    int		used_spe;	/* set if process has used spe */
 #endif /* CONFIG_SPE */
 #ifdef CONFIG_KVM_BOOK3S_32_HANDLER
-	void*		kvm_shadow_vcpu; /* KVM internal data */
+    void*		kvm_shadow_vcpu; /* KVM internal data */
 #endif /* CONFIG_KVM_BOOK3S_32_HANDLER */
 #ifdef CONFIG_PPC64
-	unsigned long	dscr;
-	int		dscr_inherit;
+    unsigned long	dscr;
+    int		dscr_inherit;
 #endif
 };
 
@@ -314,14 +314,12 @@ extern int set_endian(struct task_struct *tsk, unsigned int val);
 extern int get_unalign_ctl(struct task_struct *tsk, unsigned long adr);
 extern int set_unalign_ctl(struct task_struct *tsk, unsigned int val);
 
-static inline unsigned int __unpack_fe01(unsigned long msr_bits)
-{
-	return ((msr_bits & MSR_FE0) >> 10) | ((msr_bits & MSR_FE1) >> 8);
+static inline unsigned int __unpack_fe01(unsigned long msr_bits) {
+    return ((msr_bits & MSR_FE0) >> 10) | ((msr_bits & MSR_FE1) >> 8);
 }
 
-static inline unsigned long __pack_fe01(unsigned int fpmode)
-{
-	return ((fpmode << 10) & MSR_FE0) | ((fpmode << 8) & MSR_FE1);
+static inline unsigned long __pack_fe01(unsigned int fpmode) {
+    return ((fpmode << 10) & MSR_FE0) | ((fpmode << 8) & MSR_FE1);
 }
 
 #ifdef CONFIG_PPC64
@@ -332,7 +330,7 @@ static inline unsigned long __pack_fe01(unsigned int fpmode)
 
 /* Check that a certain kernel stack pointer is valid in task_struct p */
 int validate_sp(unsigned long sp, struct task_struct *p,
-                       unsigned long nbytes);
+                unsigned long nbytes);
 
 /*
  * Prefetch macros.
@@ -341,20 +339,18 @@ int validate_sp(unsigned long sp, struct task_struct *p,
 #define ARCH_HAS_PREFETCHW
 #define ARCH_HAS_SPINLOCK_PREFETCH
 
-static inline void prefetch(const void *x)
-{
-	if (unlikely(!x))
-		return;
+static inline void prefetch(const void *x) {
+    if (unlikely(!x))
+        return;
 
-	__asm__ __volatile__ ("dcbt 0,%0" : : "r" (x));
+    __asm__ __volatile__ ("dcbt 0,%0" : : "r" (x));
 }
 
-static inline void prefetchw(const void *x)
-{
-	if (unlikely(!x))
-		return;
+static inline void prefetchw(const void *x) {
+    if (unlikely(!x))
+        return;
 
-	__asm__ __volatile__ ("dcbtst 0,%0" : : "r" (x));
+    __asm__ __volatile__ ("dcbtst 0,%0" : : "r" (x));
 }
 
 #define spin_lock_prefetch(x)	prefetchw(x)
@@ -364,21 +360,19 @@ static inline void prefetchw(const void *x)
 #endif
 
 #ifdef CONFIG_PPC64
-static inline unsigned long get_clean_sp(struct pt_regs *regs, int is_32)
-{
-	unsigned long sp;
+static inline unsigned long get_clean_sp(struct pt_regs *regs, int is_32) {
+    unsigned long sp;
 
-	if (is_32)
-		sp = regs->gpr[1] & 0x0ffffffffUL;
-	else
-		sp = regs->gpr[1];
+    if (is_32)
+        sp = regs->gpr[1] & 0x0ffffffffUL;
+    else
+        sp = regs->gpr[1];
 
-	return sp;
+    return sp;
 }
 #else
-static inline unsigned long get_clean_sp(struct pt_regs *regs, int is_32)
-{
-	return regs->gpr[1];
+static inline unsigned long get_clean_sp(struct pt_regs *regs, int is_32) {
+    return regs->gpr[1];
 }
 #endif
 
@@ -393,7 +387,9 @@ extern void update_smt_snooze_delay(int snooze);
 extern int pseries_notify_cpuidle_add_cpu(int cpu);
 #else
 static inline void update_smt_snooze_delay(int snooze) {}
-static inline int pseries_notify_cpuidle_add_cpu(int cpu) { return 0; }
+static inline int pseries_notify_cpuidle_add_cpu(int cpu) {
+    return 0;
+}
 #endif
 
 extern void flush_instruction_cache(void);
@@ -406,7 +402,7 @@ extern void _nmask_and_or_msr(unsigned long nmask, unsigned long or_val);
 
 #ifdef CONFIG_PPC64
 /*
- * We handle most unaligned accesses in hardware. On the other hand 
+ * We handle most unaligned accesses in hardware. On the other hand
  * unaligned DMA can be very expensive on some ppc64 IO chips (it does
  * powers of 2 writes until it reaches sufficient alignment).
  *

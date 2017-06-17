@@ -92,14 +92,14 @@
 typedef volatile u32 ms02nv_uint;
 
 struct ms02nv_private {
-	struct mtd_info *next;
-	struct {
-		struct resource *module;
-		struct resource *diag_ram;
-		struct resource *user_ram;
-		struct resource *csr;
-	} resource;
-	u_char *addr;
-	size_t size;
-	u_char *uaddr;
+    struct mtd_info *next;
+    struct {
+        struct resource *module;
+        struct resource *diag_ram;
+        struct resource *user_ram;
+        struct resource *csr;
+    } resource;
+    u_char *addr;
+    size_t size;
+    u_char *uaddr;
 };

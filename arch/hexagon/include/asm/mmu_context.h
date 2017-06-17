@@ -26,8 +26,7 @@
 #include <asm/pgalloc.h>
 #include <asm/mem-layout.h>
 
-static inline void destroy_context(struct mm_struct *mm)
-{
+static inline void destroy_context(struct mm_struct *mm) {
 }
 
 /*
@@ -36,16 +35,14 @@ static inline void destroy_context(struct mm_struct *mm)
  * this is almost invariably a null function.
  */
 static inline void enter_lazy_tlb(struct mm_struct *mm,
-	struct task_struct *tsk)
-{
+                                  struct task_struct *tsk) {
 }
 
 /*
  * Architecture-specific actions, if any, for memory map deactivation.
  */
 static inline void deactivate_mm(struct task_struct *tsk,
-	struct mm_struct *mm)
-{
+                                 struct mm_struct *mm) {
 }
 
 /**
@@ -54,44 +51,41 @@ static inline void deactivate_mm(struct task_struct *tsk,
  * @mm: pointer to a new mm struct
  */
 static inline int init_new_context(struct task_struct *tsk,
-					struct mm_struct *mm)
-{
-	/* mm->context is set up by pgd_alloc */
-	return 0;
+                                   struct mm_struct *mm) {
+    /* mm->context is set up by pgd_alloc */
+    return 0;
 }
 
 /*
  *  Switch active mm context
  */
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-				struct task_struct *tsk)
-{
-	int l1;
+                             struct task_struct *tsk) {
+    int l1;
 
-	/*
-	 * For virtual machine, we have to update system map if it's been
-	 * touched.
-	 */
-	if (next->context.generation < prev->context.generation) {
-		for (l1 = MIN_KERNEL_SEG; l1 <= max_kernel_seg; l1++)
-			next->pgd[l1] = init_mm.pgd[l1];
+    /*
+     * For virtual machine, we have to update system map if it's been
+     * touched.
+     */
+    if (next->context.generation < prev->context.generation) {
+        for (l1 = MIN_KERNEL_SEG; l1 <= max_kernel_seg; l1++)
+            next->pgd[l1] = init_mm.pgd[l1];
 
-		next->context.generation = prev->context.generation;
-	}
+        next->context.generation = prev->context.generation;
+    }
 
-	__vmnewmap((void *)next->context.ptbase);
+    __vmnewmap((void *)next->context.ptbase);
 }
 
 /*
  *  Activate new memory map for task
  */
-static inline void activate_mm(struct mm_struct *prev, struct mm_struct *next)
-{
-	unsigned long flags;
+static inline void activate_mm(struct mm_struct *prev, struct mm_struct *next) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	switch_mm(prev, next, current_thread_info()->task);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    switch_mm(prev, next, current_thread_info()->task);
+    local_irq_restore(flags);
 }
 
 /*  Generic hooks for arch_dup_mmap and arch_exit_mmap  */

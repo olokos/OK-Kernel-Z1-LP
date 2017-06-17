@@ -20,8 +20,8 @@
  * @nr_sources: The size of @sources
  */
 struct clksrc_sources {
-	unsigned int	nr_sources;
-	struct clk	**sources;
+    unsigned int	nr_sources;
+    struct clk	**sources;
 };
 
 /**
@@ -34,9 +34,9 @@ struct clksrc_sources {
  * in within the register specified by @reg.
  */
 struct clksrc_reg {
-	void __iomem		*reg;
-	unsigned short		shift;
-	unsigned short		size;
+    void __iomem		*reg;
+    unsigned short		shift;
+    unsigned short		size;
 };
 
 /**
@@ -56,11 +56,11 @@ struct clksrc_reg {
  * the output.
  */
 struct clksrc_clk {
-	struct clk		clk;
-	struct clksrc_sources	*sources;
+    struct clk		clk;
+    struct clksrc_sources	*sources;
 
-	struct clksrc_reg	reg_src;
-	struct clksrc_reg	reg_div;
+    struct clksrc_reg	reg_src;
+    struct clksrc_reg	reg_div;
 };
 
 /**

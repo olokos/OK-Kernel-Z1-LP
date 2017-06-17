@@ -44,71 +44,67 @@
  * daughter board PIC operations
  * - there is no way to ACK interrupts in the MB93493 chip
  */
-static void frv_mb93493_mask(struct irq_data *d)
-{
-	uint32_t iqsr;
-	volatile void *piqsr;
+static void frv_mb93493_mask(struct irq_data *d) {
+    uint32_t iqsr;
+    volatile void *piqsr;
 
-	if (IRQ_ROUTING & (1 << (d->irq - IRQ_BASE_MB93493)))
-		piqsr = __addr_MB93493_IQSR(1);
-	else
-		piqsr = __addr_MB93493_IQSR(0);
+    if (IRQ_ROUTING & (1 << (d->irq - IRQ_BASE_MB93493)))
+        piqsr = __addr_MB93493_IQSR(1);
+    else
+        piqsr = __addr_MB93493_IQSR(0);
 
-	iqsr = readl(piqsr);
-	iqsr &= ~(1 << (d->irq - IRQ_BASE_MB93493 + 16));
-	writel(iqsr, piqsr);
+    iqsr = readl(piqsr);
+    iqsr &= ~(1 << (d->irq - IRQ_BASE_MB93493 + 16));
+    writel(iqsr, piqsr);
 }
 
-static void frv_mb93493_ack(struct irq_data *d)
-{
+static void frv_mb93493_ack(struct irq_data *d) {
 }
 
-static void frv_mb93493_unmask(struct irq_data *d)
-{
-	uint32_t iqsr;
-	volatile void *piqsr;
+static void frv_mb93493_unmask(struct irq_data *d) {
+    uint32_t iqsr;
+    volatile void *piqsr;
 
-	if (IRQ_ROUTING & (1 << (d->irq - IRQ_BASE_MB93493)))
-		piqsr = __addr_MB93493_IQSR(1);
-	else
-		piqsr = __addr_MB93493_IQSR(0);
+    if (IRQ_ROUTING & (1 << (d->irq - IRQ_BASE_MB93493)))
+        piqsr = __addr_MB93493_IQSR(1);
+    else
+        piqsr = __addr_MB93493_IQSR(0);
 
-	iqsr = readl(piqsr);
-	iqsr |= 1 << (d->irq - IRQ_BASE_MB93493 + 16);
-	writel(iqsr, piqsr);
+    iqsr = readl(piqsr);
+    iqsr |= 1 << (d->irq - IRQ_BASE_MB93493 + 16);
+    writel(iqsr, piqsr);
 }
 
 static struct irq_chip frv_mb93493_pic = {
-	.name		= "mb93093",
-	.irq_ack	= frv_mb93493_ack,
-	.irq_mask	= frv_mb93493_mask,
-	.irq_mask_ack	= frv_mb93493_mask,
-	.irq_unmask	= frv_mb93493_unmask,
+    .name		= "mb93093",
+    .irq_ack	= frv_mb93493_ack,
+    .irq_mask	= frv_mb93493_mask,
+    .irq_mask_ack	= frv_mb93493_mask,
+    .irq_unmask	= frv_mb93493_unmask,
 };
 
 /*
  * MB93493 PIC interrupt handler
  */
-static irqreturn_t mb93493_interrupt(int irq, void *_piqsr)
-{
-	volatile void *piqsr = _piqsr;
-	uint32_t iqsr;
+static irqreturn_t mb93493_interrupt(int irq, void *_piqsr) {
+    volatile void *piqsr = _piqsr;
+    uint32_t iqsr;
 
-	iqsr = readl(piqsr);
-	iqsr = iqsr & (iqsr >> 16) & 0xffff;
+    iqsr = readl(piqsr);
+    iqsr = iqsr & (iqsr >> 16) & 0xffff;
 
-	/* poll all the triggered IRQs */
-	while (iqsr) {
-		int irq;
+    /* poll all the triggered IRQs */
+    while (iqsr) {
+        int irq;
 
-		asm("scan %1,gr0,%0" : "=r"(irq) : "r"(iqsr));
-		irq = 31 - irq;
-		iqsr &= ~(1 << irq);
+        asm("scan %1,gr0,%0" : "=r"(irq) : "r"(iqsr));
+        irq = 31 - irq;
+        iqsr &= ~(1 << irq);
 
-		generic_handle_irq(IRQ_BASE_MB93493 + irq);
-	}
+        generic_handle_irq(IRQ_BASE_MB93493 + irq);
+    }
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 /*
@@ -116,32 +112,31 @@ static irqreturn_t mb93493_interrupt(int irq, void *_piqsr)
  * - use dev_id to indicate the MB93493 PIC input to output mappings
  */
 static struct irqaction mb93493_irq[2]  = {
-	[0] = {
-		.handler	= mb93493_interrupt,
-		.flags		= IRQF_DISABLED | IRQF_SHARED,
-		.name		= "mb93493.0",
-		.dev_id		= (void *) __addr_MB93493_IQSR(0),
-	},
-	[1] = {
-		.handler	= mb93493_interrupt,
-		.flags		= IRQF_DISABLED | IRQF_SHARED,
-		.name		= "mb93493.1",
-		.dev_id		= (void *) __addr_MB93493_IQSR(1),
-	}
+    [0] = {
+        .handler	= mb93493_interrupt,
+        .flags		= IRQF_DISABLED | IRQF_SHARED,
+        .name		= "mb93493.0",
+        .dev_id		= (void *) __addr_MB93493_IQSR(0),
+    },
+    [1] = {
+        .handler	= mb93493_interrupt,
+        .flags		= IRQF_DISABLED | IRQF_SHARED,
+        .name		= "mb93493.1",
+        .dev_id		= (void *) __addr_MB93493_IQSR(1),
+    }
 };
 
 /*
  * initialise the motherboard MB93493's PIC
  */
-void __init mb93493_init(void)
-{
-	int irq;
+void __init mb93493_init(void) {
+    int irq;
 
-	for (irq = IRQ_BASE_MB93493 + 0; irq <= IRQ_BASE_MB93493 + 10; irq++)
-		irq_set_chip_and_handler(irq, &frv_mb93493_pic,
-					 handle_edge_irq);
+    for (irq = IRQ_BASE_MB93493 + 0; irq <= IRQ_BASE_MB93493 + 10; irq++)
+        irq_set_chip_and_handler(irq, &frv_mb93493_pic,
+                                 handle_edge_irq);
 
-	/* the MB93493 drives external IRQ inputs on the CPU PIC */
-	setup_irq(IRQ_CPU_MB93493_0, &mb93493_irq[0]);
-	setup_irq(IRQ_CPU_MB93493_1, &mb93493_irq[1]);
+    /* the MB93493 drives external IRQ inputs on the CPU PIC */
+    setup_irq(IRQ_CPU_MB93493_0, &mb93493_irq[0]);
+    setup_irq(IRQ_CPU_MB93493_1, &mb93493_irq[1]);
 }

@@ -30,53 +30,53 @@
 
 
 struct wfd_stats_encode_sample {
-	ktime_t encode_start_ts;
-	struct list_head list;
+    ktime_t encode_start_ts;
+    struct list_head list;
 };
 
 struct wfd_stats {
-	struct mutex mutex;
+    struct mutex mutex;
 
-	/* Output Buffers */
-	uint32_t v4l2_buf_count;
+    /* Output Buffers */
+    uint32_t v4l2_buf_count;
 
-	/* Input Buffers */
-	uint32_t mdp_buf_count;
-	uint32_t vsg_buf_count;
-	uint32_t enc_buf_count;
+    /* Input Buffers */
+    uint32_t mdp_buf_count;
+    uint32_t vsg_buf_count;
+    uint32_t enc_buf_count;
 
-	/* Other */
-	uint32_t frames_encoded;
-	uint32_t mdp_updates;
+    /* Other */
+    uint32_t frames_encoded;
+    uint32_t mdp_updates;
 
-	uint32_t enc_avg_latency;
-	uint32_t enc_cumulative_latency;
-	uint32_t enc_latency_samples;
-	struct list_head enc_queue;
+    uint32_t enc_avg_latency;
+    uint32_t enc_cumulative_latency;
+    uint32_t enc_latency_samples;
+    struct list_head enc_queue;
 
-	/* Debugfs entries */
-	struct dentry *d_parent;
-	struct dentry *d_v4l2_buf_count;
-	struct dentry *d_mdp_buf_count;
-	struct dentry *d_vsg_buf_count;
-	struct dentry *d_enc_buf_count;
-	struct dentry *d_frames_encoded;
-	struct dentry *d_mdp_updates;
-	struct dentry *d_enc_avg_latency;
+    /* Debugfs entries */
+    struct dentry *d_parent;
+    struct dentry *d_v4l2_buf_count;
+    struct dentry *d_mdp_buf_count;
+    struct dentry *d_vsg_buf_count;
+    struct dentry *d_enc_buf_count;
+    struct dentry *d_frames_encoded;
+    struct dentry *d_mdp_updates;
+    struct dentry *d_enc_avg_latency;
 };
 
 enum wfd_stats_event {
-	WFD_STAT_EVENT_CLIENT_QUEUE,
-	WFD_STAT_EVENT_CLIENT_DEQUEUE,
+    WFD_STAT_EVENT_CLIENT_QUEUE,
+    WFD_STAT_EVENT_CLIENT_DEQUEUE,
 
-	WFD_STAT_EVENT_MDP_QUEUE,
-	WFD_STAT_EVENT_MDP_DEQUEUE,
+    WFD_STAT_EVENT_MDP_QUEUE,
+    WFD_STAT_EVENT_MDP_DEQUEUE,
 
-	WFD_STAT_EVENT_VSG_QUEUE,
-	WFD_STAT_EVENT_VSG_DEQUEUE,
+    WFD_STAT_EVENT_VSG_QUEUE,
+    WFD_STAT_EVENT_VSG_DEQUEUE,
 
-	WFD_STAT_EVENT_ENC_QUEUE,
-	WFD_STAT_EVENT_ENC_DEQUEUE,
+    WFD_STAT_EVENT_ENC_QUEUE,
+    WFD_STAT_EVENT_ENC_DEQUEUE,
 };
 
 int wfd_stats_setup(void);

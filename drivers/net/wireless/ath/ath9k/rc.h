@@ -65,21 +65,21 @@ struct ath_softc;
 #define RC_ALL			(RC_LEGACY | RC_HT_2040 | RC_ALL_STREAM)
 
 enum {
-	WLAN_RC_PHY_OFDM,
-	WLAN_RC_PHY_CCK,
-	WLAN_RC_PHY_HT_20_SS,
-	WLAN_RC_PHY_HT_20_DS,
-	WLAN_RC_PHY_HT_20_TS,
-	WLAN_RC_PHY_HT_40_SS,
-	WLAN_RC_PHY_HT_40_DS,
-	WLAN_RC_PHY_HT_40_TS,
-	WLAN_RC_PHY_HT_20_SS_HGI,
-	WLAN_RC_PHY_HT_20_DS_HGI,
-	WLAN_RC_PHY_HT_20_TS_HGI,
-	WLAN_RC_PHY_HT_40_SS_HGI,
-	WLAN_RC_PHY_HT_40_DS_HGI,
-	WLAN_RC_PHY_HT_40_TS_HGI,
-	WLAN_RC_PHY_MAX
+    WLAN_RC_PHY_OFDM,
+    WLAN_RC_PHY_CCK,
+    WLAN_RC_PHY_HT_20_SS,
+    WLAN_RC_PHY_HT_20_DS,
+    WLAN_RC_PHY_HT_20_TS,
+    WLAN_RC_PHY_HT_40_SS,
+    WLAN_RC_PHY_HT_40_DS,
+    WLAN_RC_PHY_HT_40_TS,
+    WLAN_RC_PHY_HT_20_SS_HGI,
+    WLAN_RC_PHY_HT_20_DS_HGI,
+    WLAN_RC_PHY_HT_20_TS_HGI,
+    WLAN_RC_PHY_HT_40_SS_HGI,
+    WLAN_RC_PHY_HT_40_DS_HGI,
+    WLAN_RC_PHY_HT_40_TS_HGI,
+    WLAN_RC_PHY_MAX
 };
 
 #define WLAN_RC_PHY_DS(_phy)   ((_phy == WLAN_RC_PHY_HT_20_DS)		\
@@ -151,34 +151,34 @@ enum {
  * @initial_ratemax: initial ratemax value
  */
 struct ath_rate_table {
-	int rate_cnt;
-	int mcs_start;
-	struct {
-		u16 rate_flags;
-		u8 phy;
-		u32 ratekbps;
-		u32 user_ratekbps;
-		u8 ratecode;
-		u8 dot11rate;
-		u8 ctrl_rate;
-		u8 cw40index;
-		u8 sgi_index;
-		u8 ht_index;
-	} info[RATE_TABLE_SIZE];
-	u32 probe_interval;
-	u8 initial_ratemax;
+    int rate_cnt;
+    int mcs_start;
+    struct {
+        u16 rate_flags;
+        u8 phy;
+        u32 ratekbps;
+        u32 user_ratekbps;
+        u8 ratecode;
+        u8 dot11rate;
+        u8 ctrl_rate;
+        u8 cw40index;
+        u8 sgi_index;
+        u8 ht_index;
+    } info[RATE_TABLE_SIZE];
+    u32 probe_interval;
+    u8 initial_ratemax;
 };
 
 struct ath_rateset {
-	u8 rs_nrates;
-	u8 rs_rates[ATH_RATE_MAX];
+    u8 rs_nrates;
+    u8 rs_rates[ATH_RATE_MAX];
 };
 
 struct ath_rc_stats {
-	u32 success;
-	u32 retries;
-	u32 xretries;
-	u8 per;
+    u32 success;
+    u32 retries;
+    u32 xretries;
+    u8 per;
 };
 
 /**
@@ -198,38 +198,36 @@ struct ath_rc_stats {
  * @neg_ht_rates: Negotiated HT rates
  */
 struct ath_rate_priv {
-	u8 rate_table_size;
-	u8 probe_rate;
-	u8 hw_maxretry_pktcnt;
-	u8 max_valid_rate;
-	u8 valid_rate_index[RATE_TABLE_SIZE];
-	u8 ht_cap;
-	u8 valid_phy_ratecnt[WLAN_RC_PHY_MAX];
-	u8 valid_phy_rateidx[WLAN_RC_PHY_MAX][RATE_TABLE_SIZE];
-	u8 rate_max_phy;
-	u8 per[RATE_TABLE_SIZE];
-	u32 probe_time;
-	u32 per_down_time;
-	u32 probe_interval;
-	struct ath_rateset neg_rates;
-	struct ath_rateset neg_ht_rates;
-	const struct ath_rate_table *rate_table;
+    u8 rate_table_size;
+    u8 probe_rate;
+    u8 hw_maxretry_pktcnt;
+    u8 max_valid_rate;
+    u8 valid_rate_index[RATE_TABLE_SIZE];
+    u8 ht_cap;
+    u8 valid_phy_ratecnt[WLAN_RC_PHY_MAX];
+    u8 valid_phy_rateidx[WLAN_RC_PHY_MAX][RATE_TABLE_SIZE];
+    u8 rate_max_phy;
+    u8 per[RATE_TABLE_SIZE];
+    u32 probe_time;
+    u32 per_down_time;
+    u32 probe_interval;
+    struct ath_rateset neg_rates;
+    struct ath_rateset neg_ht_rates;
+    const struct ath_rate_table *rate_table;
 
-	struct dentry *debugfs_rcstats;
-	struct ath_rc_stats rcstats[RATE_TABLE_SIZE];
+    struct dentry *debugfs_rcstats;
+    struct ath_rc_stats rcstats[RATE_TABLE_SIZE];
 };
 
 #ifdef CONFIG_ATH9K_RATE_CONTROL
 int ath_rate_control_register(void);
 void ath_rate_control_unregister(void);
 #else
-static inline int ath_rate_control_register(void)
-{
-	return 0;
+static inline int ath_rate_control_register(void) {
+    return 0;
 }
 
-static inline void ath_rate_control_unregister(void)
-{
+static inline void ath_rate_control_unregister(void) {
 }
 #endif
 

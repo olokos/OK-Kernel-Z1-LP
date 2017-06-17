@@ -32,27 +32,27 @@
 
 /* PCAN_USBPRO_INFO_BL vendor request record type */
 struct __packed pcan_usb_pro_blinfo {
-	u32 ctrl_type;
-	u8  version[4];
-	u8  day;
-	u8  month;
-	u8  year;
-	u8  dummy;
-	u32 serial_num_hi;
-	u32 serial_num_lo;
-	u32 hw_type;
-	u32 hw_rev;
+    u32 ctrl_type;
+    u8  version[4];
+    u8  day;
+    u8  month;
+    u8  year;
+    u8  dummy;
+    u32 serial_num_hi;
+    u32 serial_num_lo;
+    u32 hw_type;
+    u32 hw_rev;
 };
 
 /* PCAN_USBPRO_INFO_FW vendor request record type */
 struct __packed pcan_usb_pro_fwinfo {
-	u32 ctrl_type;
-	u8  version[4];
-	u8  day;
-	u8  month;
-	u8  year;
-	u8  dummy;
-	u32 fw_type;
+    u32 ctrl_type;
+    u8  version[4];
+    u8  day;
+    u8  month;
+    u8  year;
+    u8  dummy;
+    u32 fw_type;
 };
 
 /*
@@ -77,59 +77,59 @@ struct __packed pcan_usb_pro_fwinfo {
 
 /* record structures */
 struct __packed pcan_usb_pro_btr {
-	u8  data_type;
-	u8  channel;
-	u16 dummy;
-	u32 CCBT;
+    u8  data_type;
+    u8  channel;
+    u16 dummy;
+    u32 CCBT;
 };
 
 struct __packed pcan_usb_pro_busact {
-	u8  data_type;
-	u8  channel;
-	u16 onoff;
+    u8  data_type;
+    u8  channel;
+    u16 onoff;
 };
 
 struct __packed pcan_usb_pro_silent {
-	u8  data_type;
-	u8  channel;
-	u16 onoff;
+    u8  data_type;
+    u8  channel;
+    u16 onoff;
 };
 
 struct __packed pcan_usb_pro_filter {
-	u8  data_type;
-	u8  dummy;
-	u16 filter_mode;
+    u8  data_type;
+    u8  dummy;
+    u16 filter_mode;
 };
 
 struct __packed pcan_usb_pro_setts {
-	u8  data_type;
-	u8  dummy;
-	u16 mode;
+    u8  data_type;
+    u8  dummy;
+    u16 mode;
 };
 
 struct __packed pcan_usb_pro_devid {
-	u8  data_type;
-	u8  channel;
-	u16 dummy;
-	u32 serial_num;
+    u8  data_type;
+    u8  channel;
+    u16 dummy;
+    u32 serial_num;
 };
 
 struct __packed pcan_usb_pro_setled {
-	u8  data_type;
-	u8  channel;
-	u16 mode;
-	u32 timeout;
+    u8  data_type;
+    u8  channel;
+    u16 mode;
+    u32 timeout;
 };
 
 struct __packed pcan_usb_pro_rxmsg {
-	u8  data_type;
-	u8  client;
-	u8  flags;
-	u8  len;
-	u32 ts32;
-	u32 id;
+    u8  data_type;
+    u8  client;
+    u8  flags;
+    u8  len;
+    u32 ts32;
+    u32 id;
 
-	u8  data[8];
+    u8  data[8];
 };
 
 #define PCAN_USBPRO_STATUS_ERROR	0x0001
@@ -138,41 +138,41 @@ struct __packed pcan_usb_pro_rxmsg {
 #define PCAN_USBPRO_STATUS_QOVERRUN	0x0008
 
 struct __packed pcan_usb_pro_rxstatus {
-	u8  data_type;
-	u8  channel;
-	u16 status;
-	u32 ts32;
-	u32 err_frm;
+    u8  data_type;
+    u8  channel;
+    u16 status;
+    u32 ts32;
+    u32 err_frm;
 };
 
 struct __packed pcan_usb_pro_rxts {
-	u8  data_type;
-	u8  dummy[3];
-	u32 ts64[2];
+    u8  data_type;
+    u8  dummy[3];
+    u32 ts64[2];
 };
 
 struct __packed pcan_usb_pro_txmsg {
-	u8  data_type;
-	u8  client;
-	u8  flags;
-	u8  len;
-	u32 id;
-	u8  data[8];
+    u8  data_type;
+    u8  client;
+    u8  flags;
+    u8  len;
+    u32 id;
+    u8  data[8];
 };
 
 union pcan_usb_pro_rec {
-	u8				data_type;
-	struct pcan_usb_pro_btr		btr;
-	struct pcan_usb_pro_busact	bus_act;
-	struct pcan_usb_pro_silent	silent_mode;
-	struct pcan_usb_pro_filter	filter_mode;
-	struct pcan_usb_pro_setts	ts;
-	struct pcan_usb_pro_devid	dev_id;
-	struct pcan_usb_pro_setled	set_led;
-	struct pcan_usb_pro_rxmsg	rx_msg;
-	struct pcan_usb_pro_rxstatus	rx_status;
-	struct pcan_usb_pro_rxts	rx_ts;
-	struct pcan_usb_pro_txmsg	tx_msg;
+    u8				data_type;
+    struct pcan_usb_pro_btr		btr;
+    struct pcan_usb_pro_busact	bus_act;
+    struct pcan_usb_pro_silent	silent_mode;
+    struct pcan_usb_pro_filter	filter_mode;
+    struct pcan_usb_pro_setts	ts;
+    struct pcan_usb_pro_devid	dev_id;
+    struct pcan_usb_pro_setled	set_led;
+    struct pcan_usb_pro_rxmsg	rx_msg;
+    struct pcan_usb_pro_rxstatus	rx_status;
+    struct pcan_usb_pro_rxts	rx_ts;
+    struct pcan_usb_pro_txmsg	tx_msg;
 };
 
 #endif

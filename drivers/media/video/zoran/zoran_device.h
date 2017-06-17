@@ -32,33 +32,33 @@
 
 /* general purpose I/O */
 extern void GPIO(struct zoran *zr,
-		 int bit,
-		 unsigned int value);
+                 int bit,
+                 unsigned int value);
 
 /* codec (or actually: guest bus) access */
 extern int post_office_wait(struct zoran *zr);
 extern int post_office_write(struct zoran *zr,
-			     unsigned guest,
-			     unsigned reg,
-			     unsigned value);
+                             unsigned guest,
+                             unsigned reg,
+                             unsigned value);
 extern int post_office_read(struct zoran *zr,
-			    unsigned guest,
-			    unsigned reg);
+                            unsigned guest,
+                            unsigned reg);
 
 extern void detect_guest_activity(struct zoran *zr);
 
 extern void jpeg_codec_sleep(struct zoran *zr,
-			     int sleep);
+                             int sleep);
 extern int jpeg_codec_reset(struct zoran *zr);
 
 /* zr360x7 access to raw capture */
 extern void zr36057_overlay(struct zoran *zr,
-			    int on);
+                            int on);
 extern void write_overlay_mask(struct zoran_fh *fh,
-			       struct v4l2_clip *vp,
-			       int count);
+                               struct v4l2_clip *vp,
+                               int count);
 extern void zr36057_set_memgrab(struct zoran *zr,
-				int mode);
+                                int mode);
 extern int wait_grab_pending(struct zoran *zr);
 
 /* interrupts */
@@ -69,12 +69,12 @@ extern irqreturn_t zoran_irq(int irq, void *dev_id);
 /* JPEG codec access */
 extern void jpeg_start(struct zoran *zr);
 extern void zr36057_enable_jpg(struct zoran *zr,
-			       enum zoran_codec_mode mode);
+                               enum zoran_codec_mode mode);
 extern void zoran_feed_stat_com(struct zoran *zr);
 
 /* general */
 extern void zoran_set_pci_master(struct zoran *zr,
-				 int set_master);
+                                 int set_master);
 extern void zoran_init_hardware(struct zoran *zr);
 extern void zr36057_restart(struct zoran *zr);
 

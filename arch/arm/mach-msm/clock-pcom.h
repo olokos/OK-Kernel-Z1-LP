@@ -149,13 +149,12 @@ extern struct clk_ops clk_ops_pcom_ext_config;
  * @c:
  */
 struct pcom_clk {
-	unsigned id;
-	struct clk c;
+    unsigned id;
+    struct clk c;
 };
 
-static inline struct pcom_clk *to_pcom_clk(struct clk *clk)
-{
-	return container_of(clk, struct pcom_clk, c);
+static inline struct pcom_clk *to_pcom_clk(struct clk *clk) {
+    return container_of(clk, struct pcom_clk, c);
 }
 
 #define DEFINE_CLK_PCOM(clk_name, clk_id, clk_flags) \

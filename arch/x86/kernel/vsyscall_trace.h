@@ -8,18 +8,18 @@
 
 TRACE_EVENT(emulate_vsyscall,
 
-	    TP_PROTO(int nr),
+            TP_PROTO(int nr),
 
-	    TP_ARGS(nr),
+            TP_ARGS(nr),
 
-	    TP_STRUCT__entry(__field(int, nr)),
+            TP_STRUCT__entry(__field(int, nr)),
 
-	    TP_fast_assign(
-			   __entry->nr = nr;
-			   ),
+            TP_fast_assign(
+                __entry->nr = nr;
+            ),
 
-	    TP_printk("nr = %d", __entry->nr)
-);
+            TP_printk("nr = %d", __entry->nr)
+           );
 
 #endif
 

@@ -37,34 +37,34 @@
 /* CSR typedefs have been moved to cvmx-csr-*.h */
 
 typedef enum {
-	CVMX_SPI_MODE_UNKNOWN = 0,
-	CVMX_SPI_MODE_TX_HALFPLEX = 1,
-	CVMX_SPI_MODE_RX_HALFPLEX = 2,
-	CVMX_SPI_MODE_DUPLEX = 3
+    CVMX_SPI_MODE_UNKNOWN = 0,
+    CVMX_SPI_MODE_TX_HALFPLEX = 1,
+    CVMX_SPI_MODE_RX_HALFPLEX = 2,
+    CVMX_SPI_MODE_DUPLEX = 3
 } cvmx_spi_mode_t;
 
 /** Callbacks structure to customize SPI4 initialization sequence */
 typedef struct {
     /** Called to reset SPI4 DLL */
-	int (*reset_cb) (int interface, cvmx_spi_mode_t mode);
+    int (*reset_cb) (int interface, cvmx_spi_mode_t mode);
 
     /** Called to setup calendar */
-	int (*calendar_setup_cb) (int interface, cvmx_spi_mode_t mode,
-				  int num_ports);
+    int (*calendar_setup_cb) (int interface, cvmx_spi_mode_t mode,
+                              int num_ports);
 
     /** Called for Tx and Rx clock detection */
-	int (*clock_detect_cb) (int interface, cvmx_spi_mode_t mode,
-				int timeout);
+    int (*clock_detect_cb) (int interface, cvmx_spi_mode_t mode,
+                            int timeout);
 
     /** Called to perform link training */
-	int (*training_cb) (int interface, cvmx_spi_mode_t mode, int timeout);
+    int (*training_cb) (int interface, cvmx_spi_mode_t mode, int timeout);
 
     /** Called for calendar data synchronization */
-	int (*calendar_sync_cb) (int interface, cvmx_spi_mode_t mode,
-				 int timeout);
+    int (*calendar_sync_cb) (int interface, cvmx_spi_mode_t mode,
+                             int timeout);
 
     /** Called when interface is up */
-	int (*interface_up_cb) (int interface, cvmx_spi_mode_t mode);
+    int (*interface_up_cb) (int interface, cvmx_spi_mode_t mode);
 
 } cvmx_spi_callbacks_t;
 
@@ -74,10 +74,9 @@ typedef struct {
  * @interface: Interface to check
  * Returns True if interface is SPI
  */
-static inline int cvmx_spi_is_spi_interface(int interface)
-{
-	uint64_t gmxState = cvmx_read_csr(CVMX_GMXX_INF_MODE(interface));
-	return (gmxState & 0x2) && (gmxState & 0x1);
+static inline int cvmx_spi_is_spi_interface(int interface) {
+    uint64_t gmxState = cvmx_read_csr(CVMX_GMXX_INF_MODE(interface));
+    return (gmxState & 0x2) && (gmxState & 0x1);
 }
 
 /**
@@ -95,7 +94,7 @@ static inline int cvmx_spi_is_spi_interface(int interface)
  * Returns Zero on success, negative of failure.
  */
 extern int cvmx_spi_start_interface(int interface, cvmx_spi_mode_t mode,
-				    int timeout, int num_ports);
+                                    int timeout, int num_ports);
 
 /**
  * This routine restarts the SPI interface after it has lost synchronization
@@ -111,7 +110,7 @@ extern int cvmx_spi_start_interface(int interface, cvmx_spi_mode_t mode,
  * Returns Zero on success, negative of failure.
  */
 extern int cvmx_spi_restart_interface(int interface, cvmx_spi_mode_t mode,
-				      int timeout);
+                                      int timeout);
 
 /**
  * Return non-zero if the SPI interface has a SPI4000 attached
@@ -120,9 +119,8 @@ extern int cvmx_spi_restart_interface(int interface, cvmx_spi_mode_t mode,
  *
  * Returns
  */
-static inline int cvmx_spi4000_is_present(int interface)
-{
-	return 0;
+static inline int cvmx_spi4000_is_present(int interface) {
+    return 0;
 }
 
 /**
@@ -130,9 +128,8 @@ static inline int cvmx_spi4000_is_present(int interface)
  *
  * @interface: SPI interface the SPI4000 is connected to
  */
-static inline int cvmx_spi4000_initialize(int interface)
-{
-	return 0;
+static inline int cvmx_spi4000_initialize(int interface) {
+    return 0;
 }
 
 /**
@@ -143,12 +140,11 @@ static inline int cvmx_spi4000_initialize(int interface)
  * Returns Status of the port. 0=down. All other values the port is up.
  */
 static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
-	int interface,
-	int port)
-{
-	union cvmx_gmxx_rxx_rx_inbnd r;
-	r.u64 = 0;
-	return r;
+        int interface,
+        int port) {
+    union cvmx_gmxx_rxx_rx_inbnd r;
+    r.u64 = 0;
+    return r;
 }
 
 /**
@@ -198,7 +194,7 @@ extern int cvmx_spi_reset_cb(int interface, cvmx_spi_mode_t mode);
  * SPI initialization to abort)
  */
 extern int cvmx_spi_calendar_setup_cb(int interface, cvmx_spi_mode_t mode,
-				      int num_ports);
+                                      int num_ports);
 
 /**
  * Callback to perform clock detection
@@ -215,7 +211,7 @@ extern int cvmx_spi_calendar_setup_cb(int interface, cvmx_spi_mode_t mode,
  * SPI initialization to abort)
  */
 extern int cvmx_spi_clock_detect_cb(int interface, cvmx_spi_mode_t mode,
-				    int timeout);
+                                    int timeout);
 
 /**
  * Callback to perform link training
@@ -232,7 +228,7 @@ extern int cvmx_spi_clock_detect_cb(int interface, cvmx_spi_mode_t mode,
  * SPI initialization to abort)
  */
 extern int cvmx_spi_training_cb(int interface, cvmx_spi_mode_t mode,
-				int timeout);
+                                int timeout);
 
 /**
  * Callback to perform calendar data synchronization
@@ -249,7 +245,7 @@ extern int cvmx_spi_training_cb(int interface, cvmx_spi_mode_t mode,
  * SPI initialization to abort)
  */
 extern int cvmx_spi_calendar_sync_cb(int interface, cvmx_spi_mode_t mode,
-				     int timeout);
+                                     int timeout);
 
 /**
  * Callback to handle interface up

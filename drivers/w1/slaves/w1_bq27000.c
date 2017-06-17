@@ -26,81 +26,76 @@
 
 static int F_ID;
 
-static int w1_bq27000_read(struct device *dev, unsigned int reg)
-{
-	u8 val;
-	struct w1_slave *sl = container_of(dev->parent, struct w1_slave, dev);
+static int w1_bq27000_read(struct device *dev, unsigned int reg) {
+    u8 val;
+    struct w1_slave *sl = container_of(dev->parent, struct w1_slave, dev);
 
-	mutex_lock(&sl->master->mutex);
-	w1_write_8(sl->master, HDQ_CMD_READ | reg);
-	val = w1_read_8(sl->master);
-	mutex_unlock(&sl->master->mutex);
+    mutex_lock(&sl->master->mutex);
+    w1_write_8(sl->master, HDQ_CMD_READ | reg);
+    val = w1_read_8(sl->master);
+    mutex_unlock(&sl->master->mutex);
 
-	return val;
+    return val;
 }
 
 static struct bq27000_platform_data bq27000_battery_info = {
-	.read   = w1_bq27000_read,
-	.name   = "bq27000-battery",
+    .read   = w1_bq27000_read,
+    .name   = "bq27000-battery",
 };
 
-static int w1_bq27000_add_slave(struct w1_slave *sl)
-{
-	int ret;
-	struct platform_device *pdev;
+static int w1_bq27000_add_slave(struct w1_slave *sl) {
+    int ret;
+    struct platform_device *pdev;
 
-	pdev = platform_device_alloc("bq27000-battery", -1);
-	if (!pdev) {
-		ret = -ENOMEM;
-		return ret;
-	}
-	ret = platform_device_add_data(pdev,
-				       &bq27000_battery_info,
-				       sizeof(bq27000_battery_info));
-	pdev->dev.parent = &sl->dev;
+    pdev = platform_device_alloc("bq27000-battery", -1);
+    if (!pdev) {
+        ret = -ENOMEM;
+        return ret;
+    }
+    ret = platform_device_add_data(pdev,
+                                   &bq27000_battery_info,
+                                   sizeof(bq27000_battery_info));
+    pdev->dev.parent = &sl->dev;
 
-	ret = platform_device_add(pdev);
-	if (ret)
-		goto pdev_add_failed;
+    ret = platform_device_add(pdev);
+    if (ret)
+        goto pdev_add_failed;
 
-	dev_set_drvdata(&sl->dev, pdev);
+    dev_set_drvdata(&sl->dev, pdev);
 
-	goto success;
+    goto success;
 
 pdev_add_failed:
-	platform_device_unregister(pdev);
+    platform_device_unregister(pdev);
 success:
-	return ret;
+    return ret;
 }
 
-static void w1_bq27000_remove_slave(struct w1_slave *sl)
-{
-	struct platform_device *pdev = dev_get_drvdata(&sl->dev);
+static void w1_bq27000_remove_slave(struct w1_slave *sl) {
+    struct platform_device *pdev = dev_get_drvdata(&sl->dev);
 
-	platform_device_unregister(pdev);
+    platform_device_unregister(pdev);
 }
 
 static struct w1_family_ops w1_bq27000_fops = {
-	.add_slave	= w1_bq27000_add_slave,
-	.remove_slave	= w1_bq27000_remove_slave,
+    .add_slave	= w1_bq27000_add_slave,
+    .remove_slave	= w1_bq27000_remove_slave,
 };
 
 static struct w1_family w1_bq27000_family = {
-	.fid = 1,
-	.fops = &w1_bq27000_fops,
+    .fid = 1,
+    .fops = &w1_bq27000_fops,
 };
 
-static int __init w1_bq27000_init(void)
-{
-	if (F_ID)
-		w1_bq27000_family.fid = F_ID;
+static int __init w1_bq27000_init(void) {
+    if (F_ID)
+        w1_bq27000_family.fid = F_ID;
 
-	return w1_register_family(&w1_bq27000_family);
+    return w1_register_family(&w1_bq27000_family);
 }
 
-static void __exit w1_bq27000_exit(void)
-{
-	w1_unregister_family(&w1_bq27000_family);
+static void __exit w1_bq27000_exit(void) {
+    w1_unregister_family(&w1_bq27000_family);
 }
 
 

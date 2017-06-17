@@ -7,15 +7,15 @@
 #include <linux/kvm_host.h>
 
 struct kvm_lapic {
-	unsigned long base_address;
-	struct kvm_io_device dev;
-	struct kvm_timer lapic_timer;
-	u32 divide_count;
-	struct kvm_vcpu *vcpu;
-	bool irr_pending;
-	void *regs;
-	gpa_t vapic_addr;
-	struct page *vapic_page;
+    unsigned long base_address;
+    struct kvm_io_device dev;
+    struct kvm_timer lapic_timer;
+    u32 divide_count;
+    struct kvm_vcpu *vcpu;
+    bool irr_pending;
+    void *regs;
+    gpa_t vapic_addr;
+    struct page *vapic_page;
 };
 int kvm_create_lapic(struct kvm_vcpu *vcpu);
 void kvm_free_lapic(struct kvm_vcpu *vcpu);
@@ -56,8 +56,7 @@ int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data);
 int kvm_hv_vapic_msr_write(struct kvm_vcpu *vcpu, u32 msr, u64 data);
 int kvm_hv_vapic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data);
 
-static inline bool kvm_hv_vapic_assist_page_enabled(struct kvm_vcpu *vcpu)
-{
-	return vcpu->arch.hv_vapic & HV_X64_MSR_APIC_ASSIST_PAGE_ENABLE;
+static inline bool kvm_hv_vapic_assist_page_enabled(struct kvm_vcpu *vcpu) {
+    return vcpu->arch.hv_vapic & HV_X64_MSR_APIC_ASSIST_PAGE_ENABLE;
 }
 #endif

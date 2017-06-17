@@ -28,5 +28,5 @@ void DChannel_proc_rcv(struct IsdnCardState *cs);
 void l1_msg(struct IsdnCardState *cs, int pr, void *arg);
 void l1_msg_b(struct PStack *st, int pr, void *arg);
 void Logl2Frame(struct IsdnCardState *cs, struct sk_buff *skb, char *buf,
-		int dir);
+                int dir);
 void BChannel_bh(struct work_struct *work);

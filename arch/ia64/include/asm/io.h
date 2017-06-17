@@ -46,8 +46,8 @@
 #define IO_SPACE_SPARSE_ENCODING(p)	((((p) >> 2) << 12) | ((p) & 0xfff))
 
 struct io_space {
-	unsigned long mmio_base;	/* base in MMIO space */
-	int sparse;
+    unsigned long mmio_base;	/* base in MMIO space */
+    int sparse;
 };
 
 extern struct io_space io_space[];
@@ -77,15 +77,13 @@ extern unsigned int num_io_spaces;
  * Change virtual addresses to physical addresses and vv.
  */
 static inline unsigned long
-virt_to_phys (volatile void *address)
-{
-	return (unsigned long) address - PAGE_OFFSET;
+virt_to_phys (volatile void *address) {
+    return (unsigned long) address - PAGE_OFFSET;
 }
 
 static inline void*
-phys_to_virt (unsigned long address)
-{
-	return (void *) (address + PAGE_OFFSET);
+phys_to_virt (unsigned long address) {
+    return (void *) (address + PAGE_OFFSET);
 }
 
 #define ARCH_HAS_VALID_PHYS_ADDR_RANGE
@@ -118,25 +116,23 @@ extern int valid_mmap_phys_addr_range (unsigned long pfn, size_t count);
  *
  * See Documentation/DocBook/deviceiobook.tmpl for more information.
  */
-static inline void ___ia64_mmiowb(void)
-{
-	ia64_mfa();
+static inline void ___ia64_mmiowb(void) {
+    ia64_mfa();
 }
 
 static inline void*
-__ia64_mk_io_addr (unsigned long port)
-{
-	struct io_space *space;
-	unsigned long offset;
+__ia64_mk_io_addr (unsigned long port) {
+    struct io_space *space;
+    unsigned long offset;
 
-	space = &io_space[IO_SPACE_NR(port)];
-	port = IO_SPACE_PORT(port);
-	if (space->sparse)
-		offset = IO_SPACE_SPARSE_ENCODING(port);
-	else
-		offset = port;
+    space = &io_space[IO_SPACE_NR(port)];
+    port = IO_SPACE_PORT(port);
+    if (space->sparse)
+        offset = IO_SPACE_SPARSE_ENCODING(port);
+    else
+        offset = port;
 
-	return (void *) (space->mmio_base | offset);
+    return (void *) (space->mmio_base | offset);
 }
 
 #define __ia64_inb	___ia64_inb
@@ -168,117 +164,105 @@ __ia64_mk_io_addr (unsigned long port)
  */
 
 static inline unsigned int
-___ia64_inb (unsigned long port)
-{
-	volatile unsigned char *addr = __ia64_mk_io_addr(port);
-	unsigned char ret;
+___ia64_inb (unsigned long port) {
+    volatile unsigned char *addr = __ia64_mk_io_addr(port);
+    unsigned char ret;
 
-	ret = *addr;
-	__ia64_mf_a();
-	return ret;
+    ret = *addr;
+    __ia64_mf_a();
+    return ret;
 }
 
 static inline unsigned int
-___ia64_inw (unsigned long port)
-{
-	volatile unsigned short *addr = __ia64_mk_io_addr(port);
-	unsigned short ret;
+___ia64_inw (unsigned long port) {
+    volatile unsigned short *addr = __ia64_mk_io_addr(port);
+    unsigned short ret;
 
-	ret = *addr;
-	__ia64_mf_a();
-	return ret;
+    ret = *addr;
+    __ia64_mf_a();
+    return ret;
 }
 
 static inline unsigned int
-___ia64_inl (unsigned long port)
-{
-	volatile unsigned int *addr = __ia64_mk_io_addr(port);
-	unsigned int ret;
+___ia64_inl (unsigned long port) {
+    volatile unsigned int *addr = __ia64_mk_io_addr(port);
+    unsigned int ret;
 
-	ret = *addr;
-	__ia64_mf_a();
-	return ret;
+    ret = *addr;
+    __ia64_mf_a();
+    return ret;
 }
 
 static inline void
-___ia64_outb (unsigned char val, unsigned long port)
-{
-	volatile unsigned char *addr = __ia64_mk_io_addr(port);
+___ia64_outb (unsigned char val, unsigned long port) {
+    volatile unsigned char *addr = __ia64_mk_io_addr(port);
 
-	*addr = val;
-	__ia64_mf_a();
+    *addr = val;
+    __ia64_mf_a();
 }
 
 static inline void
-___ia64_outw (unsigned short val, unsigned long port)
-{
-	volatile unsigned short *addr = __ia64_mk_io_addr(port);
+___ia64_outw (unsigned short val, unsigned long port) {
+    volatile unsigned short *addr = __ia64_mk_io_addr(port);
 
-	*addr = val;
-	__ia64_mf_a();
+    *addr = val;
+    __ia64_mf_a();
 }
 
 static inline void
-___ia64_outl (unsigned int val, unsigned long port)
-{
-	volatile unsigned int *addr = __ia64_mk_io_addr(port);
+___ia64_outl (unsigned int val, unsigned long port) {
+    volatile unsigned int *addr = __ia64_mk_io_addr(port);
 
-	*addr = val;
-	__ia64_mf_a();
+    *addr = val;
+    __ia64_mf_a();
 }
 
 static inline void
-__insb (unsigned long port, void *dst, unsigned long count)
-{
-	unsigned char *dp = dst;
+__insb (unsigned long port, void *dst, unsigned long count) {
+    unsigned char *dp = dst;
 
-	while (count--)
-		*dp++ = platform_inb(port);
+    while (count--)
+        *dp++ = platform_inb(port);
 }
 
 static inline void
-__insw (unsigned long port, void *dst, unsigned long count)
-{
-	unsigned short *dp = dst;
+__insw (unsigned long port, void *dst, unsigned long count) {
+    unsigned short *dp = dst;
 
-	while (count--)
-		put_unaligned(platform_inw(port), dp++);
+    while (count--)
+        put_unaligned(platform_inw(port), dp++);
 }
 
 static inline void
-__insl (unsigned long port, void *dst, unsigned long count)
-{
-	unsigned int *dp = dst;
+__insl (unsigned long port, void *dst, unsigned long count) {
+    unsigned int *dp = dst;
 
-	while (count--)
-		put_unaligned(platform_inl(port), dp++);
+    while (count--)
+        put_unaligned(platform_inl(port), dp++);
 }
 
 static inline void
-__outsb (unsigned long port, const void *src, unsigned long count)
-{
-	const unsigned char *sp = src;
+__outsb (unsigned long port, const void *src, unsigned long count) {
+    const unsigned char *sp = src;
 
-	while (count--)
-		platform_outb(*sp++, port);
+    while (count--)
+        platform_outb(*sp++, port);
 }
 
 static inline void
-__outsw (unsigned long port, const void *src, unsigned long count)
-{
-	const unsigned short *sp = src;
+__outsw (unsigned long port, const void *src, unsigned long count) {
+    const unsigned short *sp = src;
 
-	while (count--)
-		platform_outw(get_unaligned(sp++), port);
+    while (count--)
+        platform_outw(get_unaligned(sp++), port);
 }
 
 static inline void
-__outsl (unsigned long port, const void *src, unsigned long count)
-{
-	const unsigned int *sp = src;
+__outsl (unsigned long port, const void *src, unsigned long count) {
+    const unsigned int *sp = src;
 
-	while (count--)
-		platform_outl(get_unaligned(sp++), port);
+    while (count--)
+        platform_outl(get_unaligned(sp++), port);
 }
 
 /*
@@ -317,51 +301,43 @@ __outsl (unsigned long port, const void *src, unsigned long count)
  * hopefully it'll stay that way).
  */
 static inline unsigned char
-___ia64_readb (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned char __force *)addr;
+___ia64_readb (const volatile void __iomem *addr) {
+    return *(volatile unsigned char __force *)addr;
 }
 
 static inline unsigned short
-___ia64_readw (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned short __force *)addr;
+___ia64_readw (const volatile void __iomem *addr) {
+    return *(volatile unsigned short __force *)addr;
 }
 
 static inline unsigned int
-___ia64_readl (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned int __force *) addr;
+___ia64_readl (const volatile void __iomem *addr) {
+    return *(volatile unsigned int __force *) addr;
 }
 
 static inline unsigned long
-___ia64_readq (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned long __force *) addr;
+___ia64_readq (const volatile void __iomem *addr) {
+    return *(volatile unsigned long __force *) addr;
 }
 
 static inline void
-__writeb (unsigned char val, volatile void __iomem *addr)
-{
-	*(volatile unsigned char __force *) addr = val;
+__writeb (unsigned char val, volatile void __iomem *addr) {
+    *(volatile unsigned char __force *) addr = val;
 }
 
 static inline void
-__writew (unsigned short val, volatile void __iomem *addr)
-{
-	*(volatile unsigned short __force *) addr = val;
+__writew (unsigned short val, volatile void __iomem *addr) {
+    *(volatile unsigned short __force *) addr = val;
 }
 
 static inline void
-__writel (unsigned int val, volatile void __iomem *addr)
-{
-	*(volatile unsigned int __force *) addr = val;
+__writel (unsigned int val, volatile void __iomem *addr) {
+    *(volatile unsigned int __force *) addr = val;
 }
 
 static inline void
-__writeq (unsigned long val, volatile void __iomem *addr)
-{
-	*(volatile unsigned long __force *) addr = val;
+__writeq (unsigned long val, volatile void __iomem *addr) {
+    *(volatile unsigned long __force *) addr = val;
 }
 
 #define __readb		platform_readb
@@ -425,9 +401,8 @@ extern void __iomem * ioremap_nocache (unsigned long offset, unsigned long size)
 extern void iounmap (volatile void __iomem *addr);
 extern void __iomem * early_ioremap (unsigned long phys_addr, unsigned long size);
 extern void early_iounmap (volatile void __iomem *addr, unsigned long size);
-static inline void __iomem * ioremap_cache (unsigned long phys_addr, unsigned long size)
-{
-	return ioremap(phys_addr, size);
+static inline void __iomem * ioremap_cache (unsigned long phys_addr, unsigned long size) {
+    return ioremap(phys_addr, size);
 }
 
 

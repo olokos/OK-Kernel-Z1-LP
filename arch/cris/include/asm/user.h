@@ -28,19 +28,19 @@
  *	current->start_stack, so we round each of these in order to be able
  *	to write an integer number of pages.
  */
-        
+
 struct user {
-	struct user_regs_struct	regs;		/* entire machine state */
-	size_t		u_tsize;		/* text size (pages) */
-	size_t		u_dsize;		/* data size (pages) */
-	size_t		u_ssize;		/* stack size (pages) */
-	unsigned long	start_code;		/* text starting address */
-	unsigned long	start_data;		/* data starting address */
-	unsigned long	start_stack;		/* stack starting address */
-	long int	signal;			/* signal causing core dump */
-	unsigned long	u_ar0;			/* help gdb find registers */
-	unsigned long	magic;			/* identifies a core file */
-	char		u_comm[32];		/* user command name */
+    struct user_regs_struct	regs;		/* entire machine state */
+    size_t		u_tsize;		/* text size (pages) */
+    size_t		u_dsize;		/* data size (pages) */
+    size_t		u_ssize;		/* stack size (pages) */
+    unsigned long	start_code;		/* text starting address */
+    unsigned long	start_data;		/* data starting address */
+    unsigned long	start_stack;		/* stack starting address */
+    long int	signal;			/* signal causing core dump */
+    unsigned long	u_ar0;			/* help gdb find registers */
+    unsigned long	magic;			/* identifies a core file */
+    char		u_comm[32];		/* user command name */
 };
 
 #define NBPG			PAGE_SIZE

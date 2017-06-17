@@ -424,12 +424,12 @@
 
 
 enum {
-	RADIO_BAND_2_4GHZ = 0,  /* 2.4 Ghz band */
-	RADIO_BAND_5GHZ = 1,    /* 5 Ghz band */
-	RADIO_BAND_JAPAN_4_9_GHZ = 2,
-	DEFAULT_BAND = RADIO_BAND_2_4GHZ,
-	INVALID_BAND = 0xFE,
-	MAX_RADIO_BANDS = 0xFF
+    RADIO_BAND_2_4GHZ = 0,  /* 2.4 Ghz band */
+    RADIO_BAND_5GHZ = 1,    /* 5 Ghz band */
+    RADIO_BAND_JAPAN_4_9_GHZ = 2,
+    DEFAULT_BAND = RADIO_BAND_2_4GHZ,
+    INVALID_BAND = 0xFE,
+    MAX_RADIO_BANDS = 0xFF
 };
 
 #define SHORT_PREAMBLE_BIT   BIT(0) /* CCK or Barker depending on the rate */
@@ -437,11 +437,11 @@ enum {
 #define PBCC_RATE_BIT        BIT(7)
 
 enum {
-	CCK_LONG = 0,
-	CCK_SHORT = SHORT_PREAMBLE_BIT,
-	PBCC_LONG = PBCC_RATE_BIT,
-	PBCC_SHORT = PBCC_RATE_BIT | SHORT_PREAMBLE_BIT,
-	OFDM = OFDM_RATE_BIT
+    CCK_LONG = 0,
+    CCK_SHORT = SHORT_PREAMBLE_BIT,
+    PBCC_LONG = PBCC_RATE_BIT,
+    PBCC_SHORT = PBCC_RATE_BIT | SHORT_PREAMBLE_BIT,
+    OFDM = OFDM_RATE_BIT
 };
 
 /******************************************************************************

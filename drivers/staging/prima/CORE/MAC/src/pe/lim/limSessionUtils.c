@@ -61,10 +61,8 @@ tANI_U8 peGetVhtCapable(tpAniSirGlobal pMac)
     tANI_U8 i;
     //assumption here is that all the sessions will be on the same channel.
     //This function will not work, once we have multiple channel support.
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid) {
             return(pMac->lim.gpSession[i].vhtCapability);
         }
     }
@@ -81,15 +79,12 @@ tANI_U8 peGetVhtCapable(tpAniSirGlobal pMac)
   \return                       - channel to scan from valid session else zero.
   \sa
   --------------------------------------------------------------------------*/
-tANI_U8 peGetCurrentChannel(tpAniSirGlobal pMac)
-{
+tANI_U8 peGetCurrentChannel(tpAniSirGlobal pMac) {
     tANI_U8 i;
     //assumption here is that all the sessions will be on the same channel.
     //This function will not work, once we have multiple channel support.
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid) {
             return(pMac->lim.gpSession[i].currentOperChannel);
         }
     }
@@ -111,16 +106,13 @@ tANI_U8 peGetCurrentChannel(tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 
-tANI_U8 peValidateBtJoinRequest(tpAniSirGlobal pMac)
-{
+tANI_U8 peValidateBtJoinRequest(tpAniSirGlobal pMac) {
 
     tANI_U8 i;
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
         if( (pMac->lim.gpSession[i].valid) &&
                 (pMac->lim.gpSession[i].bssType == eSIR_BTAMP_STA_MODE) &&
-                (pMac->lim.gpSession[i].statypeForBss == STA_ENTRY_SELF))
-        {
+                (pMac->lim.gpSession[i].statypeForBss == STA_ENTRY_SELF)) {
             return(TRUE);
         }
 
@@ -144,23 +136,19 @@ tANI_U8 peValidateBtJoinRequest(tpAniSirGlobal pMac)
   --------------------------------------------------------------------------*/
 
 
-tpPESession peGetValidPowerSaveSession(tpAniSirGlobal pMac)
-{
+tpPESession peGetValidPowerSaveSession(tpAniSirGlobal pMac) {
     tANI_U8 i;
     tANI_U8 sessioncount = 0;
     tANI_U8 sessionId = 0;
 
-    for(i = 0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i = 0; i < pMac->lim.maxBssId; i++) {
         if( (pMac->lim.gpSession[i].valid == TRUE)&&
                 (pMac->lim.gpSession[i].limSystemRole == eLIM_STA_ROLE)&&
-                (pMac->lim.gpSession[i].limMlmState == eLIM_MLM_LINK_ESTABLISHED_STATE))
-        {
+                (pMac->lim.gpSession[i].limMlmState == eLIM_MLM_LINK_ESTABLISHED_STATE)) {
             sessioncount++;
             sessionId = i;
 
-            if(sessioncount > 1)
-            {
+            if(sessioncount > 1) {
                 return(NULL);
             }
         }
@@ -189,13 +177,10 @@ tpPESession peGetValidPowerSaveSession(tpAniSirGlobal pMac)
   --------------------------------------------------------------------------*/
 
 
-tANI_U8 peIsAnySessionActive(tpAniSirGlobal pMac)
-{
+tANI_U8 peIsAnySessionActive(tpAniSirGlobal pMac) {
     tANI_U8 i;
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid == TRUE)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid == TRUE) {
             return(TRUE);
         }
 
@@ -215,13 +200,10 @@ tANI_U8 peIsAnySessionActive(tpAniSirGlobal pMac)
   --------------------------------------------------------------------------*/
 
 
-void pePrintActiveSession(tpAniSirGlobal pMac)
-{
+void pePrintActiveSession(tpAniSirGlobal pMac) {
     tANI_U8 i;
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid == TRUE)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid == TRUE) {
             limLog(pMac, LOGE, FL("Active sessionId: %d BSID: "MAC_ADDRESS_STR
                                   "opmode = %d bssIdx = %d"), i,
                    MAC_ADDR_ARRAY(pMac->lim.gpSession[i].bssId),
@@ -248,20 +230,16 @@ void pePrintActiveSession(tpAniSirGlobal pMac)
   --------------------------------------------------------------------------*/
 
 tANI_U8
-isLimSessionOffChannel(tpAniSirGlobal pMac, tANI_U8 sessionId)
-{
+isLimSessionOffChannel(tpAniSirGlobal pMac, tANI_U8 sessionId) {
     tANI_U8 i;
 
-    if(sessionId >=  pMac->lim.maxBssId)
-    {
+    if(sessionId >=  pMac->lim.maxBssId) {
         limLog(pMac, LOGE, FL("Invalid sessionId: %d \n "), sessionId);
         return FALSE;
     }
 
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if( i == sessionId )
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if( i == sessionId ) {
             //Skip the sessionId that is to be joined.
             continue;
         }
@@ -269,8 +247,7 @@ isLimSessionOffChannel(tpAniSirGlobal pMac, tANI_U8 sessionId)
         //it is an off channel operation.
         if( (pMac->lim.gpSession[i].valid) &&
                 (pMac->lim.gpSession[i].currentOperChannel !=
-                 pMac->lim.gpSession[sessionId].currentOperChannel) )
-        {
+                 pMac->lim.gpSession[sessionId].currentOperChannel) ) {
             return TRUE;
         }
     }
@@ -291,24 +268,20 @@ isLimSessionOffChannel(tpAniSirGlobal pMac, tANI_U8 sessionId)
   \sa
   --------------------------------------------------------------------------*/
 void
-peGetActiveSessionChannel (tpAniSirGlobal pMac, tANI_U8* resumeChannel, ePhyChanBondState* resumePhyCbState)
-{
+peGetActiveSessionChannel (tpAniSirGlobal pMac, tANI_U8* resumeChannel, ePhyChanBondState* resumePhyCbState) {
     tANI_U8 i;
     ePhyChanBondState prevPhyCbState = PHY_SINGLE_CHANNEL_CENTERED;
 
     // Initialize the pointers passed to INVALID values in case we don't find a valid session
     *resumeChannel = 0;
     *resumePhyCbState = 0;
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid) {
             *resumeChannel = pMac->lim.gpSession[i].currentOperChannel;
             *resumePhyCbState = pMac->lim.gpSession[i].htSecondaryChannelOffset;
 
 #ifdef WLAN_FEATURE_11AC
-            if ((pMac->lim.gpSession[i].vhtCapability))
-            {
+            if ((pMac->lim.gpSession[i].vhtCapability)) {
                 /*Get 11ac cbState from 11n cbState*/
                 *resumePhyCbState = limGet11ACPhyCBState(pMac,
                                     pMac->lim.gpSession[i].currentOperChannel,
@@ -336,15 +309,12 @@ peGetActiveSessionChannel (tpAniSirGlobal pMac, tANI_U8* resumeChannel, ePhyChan
   \sa
   --------------------------------------------------------------------------*/
 tANI_U8
-limIsChanSwitchRunning (tpAniSirGlobal pMac)
-{
+limIsChanSwitchRunning (tpAniSirGlobal pMac) {
     tANI_U8 i;
 
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
         if(pMac->lim.gpSession[i].valid &&
-                pMac->lim.gpSession[i].gLimSpecMgmt.dot11hChanSwState == eLIM_11H_CHANSW_RUNNING)
-        {
+                pMac->lim.gpSession[i].gLimSpecMgmt.dot11hChanSwState == eLIM_11H_CHANSW_RUNNING) {
             return 1;
         }
     }
@@ -362,15 +332,12 @@ limIsChanSwitchRunning (tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 tANI_U8
-limIsInQuietDuration (tpAniSirGlobal pMac)
-{
+limIsInQuietDuration (tpAniSirGlobal pMac) {
     tANI_U8 i;
 
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
         if(pMac->lim.gpSession[i].valid &&
-                pMac->lim.gpSession[i].gLimSpecMgmt.quietState == eLIM_QUIET_RUNNING)
-        {
+                pMac->lim.gpSession[i].gLimSpecMgmt.quietState == eLIM_QUIET_RUNNING) {
             return 1;
         }
     }
@@ -388,15 +355,12 @@ limIsInQuietDuration (tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 tANI_U8
-limIsQuietBegin (tpAniSirGlobal pMac)
-{
+limIsQuietBegin (tpAniSirGlobal pMac) {
     tANI_U8 i;
 
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
         if(pMac->lim.gpSession[i].valid &&
-                pMac->lim.gpSession[i].gLimSpecMgmt.quietState == eLIM_QUIET_BEGIN)
-        {
+                pMac->lim.gpSession[i].gLimSpecMgmt.quietState == eLIM_QUIET_BEGIN) {
             return 1;
         }
     }
@@ -414,23 +378,17 @@ limIsQuietBegin (tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 tANI_U8
-limIsInMCC (tpAniSirGlobal pMac)
-{
+limIsInMCC (tpAniSirGlobal pMac) {
     tANI_U8 i;
     tANI_U8 chan = 0;
 
-    for(i = 0; i < pMac->lim.maxBssId; i++)
-    {
+    for(i = 0; i < pMac->lim.maxBssId; i++) {
         //if another session is valid and it is on different channel
         //it is an off channel operation.
-        if( (pMac->lim.gpSession[i].valid) )
-        {
-            if( chan == 0 )
-            {
+        if( (pMac->lim.gpSession[i].valid) ) {
+            if( chan == 0 ) {
                 chan = pMac->lim.gpSession[i].currentOperChannel;
-            }
-            else if( chan != pMac->lim.gpSession[i].currentOperChannel)
-            {
+            } else if( chan != pMac->lim.gpSession[i].currentOperChannel) {
                 return TRUE;
             }
         }
@@ -448,14 +406,11 @@ limIsInMCC (tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 
-tANI_U8 peGetCurrentSTAsCount(tpAniSirGlobal pMac)
-{
+tANI_U8 peGetCurrentSTAsCount(tpAniSirGlobal pMac) {
     tANI_U8 i;
     tANI_U8 staCount = 0;
-    for(i =0; i < pMac->lim.maxBssId; i++)
-    {
-        if(pMac->lim.gpSession[i].valid == TRUE)
-        {
+    for(i =0; i < pMac->lim.maxBssId; i++) {
+        if(pMac->lim.gpSession[i].valid == TRUE) {
             staCount += pMac->lim.gpSession[i].gLimNumOfCurrentSTAs;
         }
     }
@@ -476,13 +431,10 @@ tANI_U8 peGetCurrentSTAsCount(tpAniSirGlobal pMac)
   \sa
   --------------------------------------------------------------------------*/
 
-tANI_U8 limIsFastRoamEnabled(tpAniSirGlobal pMac, tANI_U8 sessionId)
-{
-    if(TRUE == pMac->lim.gpSession[sessionId].valid)
-    {
+tANI_U8 limIsFastRoamEnabled(tpAniSirGlobal pMac, tANI_U8 sessionId) {
+    if(TRUE == pMac->lim.gpSession[sessionId].valid) {
         if((eSIR_INFRASTRUCTURE_MODE == pMac->lim.gpSession[sessionId].bssType) &&
-                (pMac->lim.gpSession[sessionId].isFastRoamIniFeatureEnabled))
-        {
+                (pMac->lim.gpSession[sessionId].isFastRoamIniFeatureEnabled)) {
             return TRUE;
         }
     }

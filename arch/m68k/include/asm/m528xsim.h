@@ -263,7 +263,7 @@
 /* Port UA Pin Assignment Register (8 Bit) */
 #define MCF5282_GPIO_PUAPAR	0x10005C
 
-/* Interrupt Mask Register Register Low */ 
+/* Interrupt Mask Register Register Low */
 #define MCF5282_INTC0_IMRL      (volatile u32 *) (MCF_IPSBAR + 0x0C0C)
 /* Interrupt Control Register 7 */
 #define MCF5282_INTC0_ICR17     (volatile u8 *) (MCF_IPSBAR + 0x0C51)

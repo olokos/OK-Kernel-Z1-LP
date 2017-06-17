@@ -21,14 +21,12 @@
 
 #define VT_BUF_HAVE_RW
 
-static inline void scr_writew(u16 val, volatile u16 *addr)
-{
-	__raw_writew(val, (volatile u16 __iomem *) addr);
+static inline void scr_writew(u16 val, volatile u16 *addr) {
+    __raw_writew(val, (volatile u16 __iomem *) addr);
 }
 
-static inline u16 scr_readw(volatile const u16 *addr)
-{
-	return __raw_readw((volatile const u16 __iomem *) addr);
+static inline u16 scr_readw(volatile const u16 *addr) {
+    return __raw_readw((volatile const u16 __iomem *) addr);
 }
 
 #define vga_readb(a)	readb((u8 __iomem *)(a))

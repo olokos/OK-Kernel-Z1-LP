@@ -32,54 +32,54 @@
 #ifndef __ASSEMBLY__
 
 struct mn10300_serial_port {
-	char			*rx_buffer;	/* reception buffer base */
-	unsigned		rx_inp;		/* pointer to rx input offset */
-	unsigned		rx_outp;	/* pointer to rx output offset */
-	u8			tx_xchar;	/* high-priority XON/XOFF buffer */
-	u8			tx_break;	/* transmit break request */
-	u8			intr_flags;	/* interrupt flags */
-	volatile u16		*rx_icr;	/* Rx interrupt control register */
-	volatile u16		*tx_icr;	/* Tx interrupt control register */
-	int			rx_irq;		/* reception IRQ */
-	int			tx_irq;		/* transmission IRQ */
-	int			tm_irq;		/* timer IRQ */
+    char			*rx_buffer;	/* reception buffer base */
+    unsigned		rx_inp;		/* pointer to rx input offset */
+    unsigned		rx_outp;	/* pointer to rx output offset */
+    u8			tx_xchar;	/* high-priority XON/XOFF buffer */
+    u8			tx_break;	/* transmit break request */
+    u8			intr_flags;	/* interrupt flags */
+    volatile u16		*rx_icr;	/* Rx interrupt control register */
+    volatile u16		*tx_icr;	/* Tx interrupt control register */
+    int			rx_irq;		/* reception IRQ */
+    int			tx_irq;		/* transmission IRQ */
+    int			tm_irq;		/* timer IRQ */
 
-	const char		*name;		/* name of serial port */
-	const char		*rx_name;	/* Rx interrupt handler name of serial port */
-	const char		*tx_name;	/* Tx interrupt handler name of serial port */
-	const char		*tm_name;	/* Timer interrupt handler name */
-	unsigned short		type;		/* type of serial port */
-	unsigned char		isconsole;	/* T if it's a console */
-	volatile void		*_iobase;	/* pointer to base of I/O control regs */
-	volatile u16		*_control;	/* control register pointer */
-	volatile u8		*_status;	/* status register pointer */
-	volatile u8		*_intr;		/* interrupt register pointer */
-	volatile void		*_rxb;		/* receive buffer register pointer */
-	volatile void		*_txb;		/* transmit buffer register pointer */
-	volatile u16		*_tmicr;	/* timer interrupt control register */
-	volatile u8		*_tmxmd;	/* baud rate timer mode register */
-	volatile u16		*_tmxbr;	/* baud rate timer base register */
+    const char		*name;		/* name of serial port */
+    const char		*rx_name;	/* Rx interrupt handler name of serial port */
+    const char		*tx_name;	/* Tx interrupt handler name of serial port */
+    const char		*tm_name;	/* Timer interrupt handler name */
+    unsigned short		type;		/* type of serial port */
+    unsigned char		isconsole;	/* T if it's a console */
+    volatile void		*_iobase;	/* pointer to base of I/O control regs */
+    volatile u16		*_control;	/* control register pointer */
+    volatile u8		*_status;	/* status register pointer */
+    volatile u8		*_intr;		/* interrupt register pointer */
+    volatile void		*_rxb;		/* receive buffer register pointer */
+    volatile void		*_txb;		/* transmit buffer register pointer */
+    volatile u16		*_tmicr;	/* timer interrupt control register */
+    volatile u8		*_tmxmd;	/* baud rate timer mode register */
+    volatile u16		*_tmxbr;	/* baud rate timer base register */
 
-	/* this must come down here so that assembly can use BSET to access the
-	 * above fields */
-	struct uart_port	uart;
+    /* this must come down here so that assembly can use BSET to access the
+     * above fields */
+    struct uart_port	uart;
 
-	unsigned short		rx_brk;		/* current break reception status */
-	u16			tx_cts;		/* current CTS status */
-	int			gdbstub;	/* preemptively stolen by GDB stub */
+    unsigned short		rx_brk;		/* current break reception status */
+    u16			tx_cts;		/* current CTS status */
+    int			gdbstub;	/* preemptively stolen by GDB stub */
 
-	u8			clock_src;	/* clock source */
+    u8			clock_src;	/* clock source */
 #define MNSCx_CLOCK_SRC_IOCLK	0
 #define MNSCx_CLOCK_SRC_IOBCLK	1
 
-	u8			div_timer;	/* timer used as divisor */
+    u8			div_timer;	/* timer used as divisor */
 #define MNSCx_DIV_TIMER_16BIT	0
 #define MNSCx_DIV_TIMER_8BIT	1
 
-	u16			options;	/* options */
+    u16			options;	/* options */
 #define MNSCx_OPT_CTS		0x0001
 
-	unsigned long		ioclk;		/* base clock rate */
+    unsigned long		ioclk;		/* base clock rate */
 };
 
 #ifdef CONFIG_MN10300_TTYSM0
@@ -97,8 +97,8 @@ extern struct mn10300_serial_port mn10300_serial_port_sif2;
 extern struct mn10300_serial_port *mn10300_serial_ports[];
 
 struct mn10300_serial_int {
-	struct mn10300_serial_port *port;
-	asmlinkage void (*vdma)(void);
+    struct mn10300_serial_port *port;
+    asmlinkage void (*vdma)(void);
 };
 
 extern struct mn10300_serial_int mn10300_serial_int_tbl[];

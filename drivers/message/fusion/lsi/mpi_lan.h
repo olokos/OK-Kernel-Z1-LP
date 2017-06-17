@@ -45,8 +45,7 @@
 
 /* LANSend messages */
 
-typedef struct _MSG_LAN_SEND_REQUEST
-{
+typedef struct _MSG_LAN_SEND_REQUEST {
     U16                     Reserved;           /* 00h */
     U8                      ChainOffset;        /* 02h */
     U8                      Function;           /* 03h */
@@ -56,11 +55,10 @@ typedef struct _MSG_LAN_SEND_REQUEST
     U32                     MsgContext;         /* 08h */
     SGE_MPI_UNION           SG_List[1];         /* 0Ch */
 } MSG_LAN_SEND_REQUEST, MPI_POINTER PTR_MSG_LAN_SEND_REQUEST,
-  LANSendRequest_t, MPI_POINTER pLANSendRequest_t;
+LANSendRequest_t, MPI_POINTER pLANSendRequest_t;
 
 
-typedef struct _MSG_LAN_SEND_REPLY
-{
+typedef struct _MSG_LAN_SEND_REPLY {
     U16                     Reserved;           /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -74,13 +72,12 @@ typedef struct _MSG_LAN_SEND_REPLY
     U32                     IOCLogInfo;         /* 10h */
     U32                     BufferContext;      /* 14h */
 } MSG_LAN_SEND_REPLY, MPI_POINTER PTR_MSG_LAN_SEND_REPLY,
-  LANSendReply_t, MPI_POINTER pLANSendReply_t;
+LANSendReply_t, MPI_POINTER pLANSendReply_t;
 
 
 /* LANReceivePost */
 
-typedef struct _MSG_LAN_RECEIVE_POST_REQUEST
-{
+typedef struct _MSG_LAN_RECEIVE_POST_REQUEST {
     U16                     Reserved;           /* 00h */
     U8                      ChainOffset;        /* 02h */
     U8                      Function;           /* 03h */
@@ -91,11 +88,10 @@ typedef struct _MSG_LAN_RECEIVE_POST_REQUEST
     U32                     BucketCount;        /* 0Ch */
     SGE_MPI_UNION           SG_List[1];         /* 10h */
 } MSG_LAN_RECEIVE_POST_REQUEST, MPI_POINTER PTR_MSG_LAN_RECEIVE_POST_REQUEST,
-  LANReceivePostRequest_t, MPI_POINTER pLANReceivePostRequest_t;
+LANReceivePostRequest_t, MPI_POINTER pLANReceivePostRequest_t;
 
 
-typedef struct _MSG_LAN_RECEIVE_POST_REPLY
-{
+typedef struct _MSG_LAN_RECEIVE_POST_REPLY {
     U16                     Reserved;           /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -112,13 +108,12 @@ typedef struct _MSG_LAN_RECEIVE_POST_REPLY
     U32                     PacketLength;       /* 1Ch */
     U32                     BucketContext[1];   /* 20h */
 } MSG_LAN_RECEIVE_POST_REPLY, MPI_POINTER PTR_MSG_LAN_RECEIVE_POST_REPLY,
-  LANReceivePostReply_t, MPI_POINTER pLANReceivePostReply_t;
+LANReceivePostReply_t, MPI_POINTER pLANReceivePostReply_t;
 
 
 /* LANReset */
 
-typedef struct _MSG_LAN_RESET_REQUEST
-{
+typedef struct _MSG_LAN_RESET_REQUEST {
     U16                     Reserved;           /* 00h */
     U8                      ChainOffset;        /* 02h */
     U8                      Function;           /* 03h */
@@ -127,11 +122,10 @@ typedef struct _MSG_LAN_RESET_REQUEST
     U8                      MsgFlags;           /* 07h */
     U32                     MsgContext;         /* 08h */
 } MSG_LAN_RESET_REQUEST, MPI_POINTER PTR_MSG_LAN_RESET_REQUEST,
-  LANResetRequest_t, MPI_POINTER pLANResetRequest_t;
+LANResetRequest_t, MPI_POINTER pLANResetRequest_t;
 
 
-typedef struct _MSG_LAN_RESET_REPLY
-{
+typedef struct _MSG_LAN_RESET_REPLY {
     U16                     Reserved;           /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -143,7 +137,7 @@ typedef struct _MSG_LAN_RESET_REPLY
     U16                     IOCStatus;          /* 0Eh */
     U32                     IOCLogInfo;         /* 10h */
 } MSG_LAN_RESET_REPLY, MPI_POINTER PTR_MSG_LAN_RESET_REPLY,
-  LANResetReply_t, MPI_POINTER pLANResetReply_t;
+LANResetReply_t, MPI_POINTER pLANResetReply_t;
 
 
 /****************************************************************************/

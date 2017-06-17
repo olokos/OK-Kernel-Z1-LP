@@ -16,23 +16,23 @@
 #ifndef _ASMPPC_GG2_H
 #define _ASMPPC_GG2_H
 
-    /*
-     *  Memory Map (CHRP mode)
-     */
+/*
+ *  Memory Map (CHRP mode)
+ */
 
 #define GG2_PCI_MEM_BASE	0xc0000000	/* Peripheral memory space */
 #define GG2_ISA_MEM_BASE	0xf7000000	/* Peripheral memory alias */
 #define GG2_ISA_IO_BASE		0xf8000000	/* Peripheral I/O space */
 #define GG2_PCI_CONFIG_BASE	0xfec00000	/* PCI configuration space */
 #define GG2_INT_ACK_SPECIAL	0xfec80000	/* Interrupt acknowledge and */
-						/* special PCI cycles */
+/* special PCI cycles */
 #define GG2_ROM_BASE0		0xff000000	/* ROM bank 0 */
 #define GG2_ROM_BASE1		0xff800000	/* ROM bank 1 */
 
 
-    /*
-     *  GG2 specific PCI Registers
-     */
+/*
+ *  GG2 specific PCI Registers
+ */
 
 extern void __iomem *gg2_pci_config_base;	/* kernel virtual address */
 
@@ -56,6 +56,6 @@ extern void __iomem *gg2_pci_config_base;	/* kernel virtual address */
 #define GG2_PCI_DRAM_CTRL	0xc0	/* DRAM control */
 #define GG2_PCI_ERR_CTRL	0xd0	/* Error control register */
 #define GG2_PCI_ERR_STATUS	0xd4	/* Error status register */
-					/* Cleared when read */
+/* Cleared when read */
 
 #endif /* _ASMPPC_GG2_H */

@@ -1,5 +1,5 @@
 /*----------------------------------------
-  PERFORMANCE INSTRUMENTATION  
+  PERFORMANCE INSTRUMENTATION
   Guillaume Thouvenin           08/10/98
   David S. Miller               10/06/98
   ---------------------------------------*/
@@ -21,37 +21,37 @@
  * counters remain enabled for fork/clone children.
  */
 enum perfctr_opcode {
-	/* Enable UltraSparc performance counters, ARG0 is pointer
-	 * to 64-bit accumulator for D0 counter in PIC, ARG1 is pointer
-	 * to 64-bit accumulator for D1 counter.  ARG2 is a pointer to
-	 * the initial PCR register value to use.
-	 */
-	PERFCTR_ON,
+    /* Enable UltraSparc performance counters, ARG0 is pointer
+     * to 64-bit accumulator for D0 counter in PIC, ARG1 is pointer
+     * to 64-bit accumulator for D1 counter.  ARG2 is a pointer to
+     * the initial PCR register value to use.
+     */
+    PERFCTR_ON,
 
-	/* Disable UltraSparc performance counters.  The PCR is written
-	 * with zero and the user counter accumulator pointers and
-	 * working PCR register value are forgotten.
-	 */
-	PERFCTR_OFF,
+    /* Disable UltraSparc performance counters.  The PCR is written
+     * with zero and the user counter accumulator pointers and
+     * working PCR register value are forgotten.
+     */
+    PERFCTR_OFF,
 
-	/* Add current D0 and D1 PIC values into user pointers given
-	 * in PERFCTR_ON operation.  The PIC is cleared before returning.
-	 */
-	PERFCTR_READ,
+    /* Add current D0 and D1 PIC values into user pointers given
+     * in PERFCTR_ON operation.  The PIC is cleared before returning.
+     */
+    PERFCTR_READ,
 
-	/* Clear the PIC register. */
-	PERFCTR_CLRPIC,
+    /* Clear the PIC register. */
+    PERFCTR_CLRPIC,
 
-	/* Begin using a new PCR value, the pointer to which is passed
-	 * in ARG0.  The PIC is also cleared after the new PCR value is
-	 * written.
-	 */
-	PERFCTR_SETPCR,
+    /* Begin using a new PCR value, the pointer to which is passed
+     * in ARG0.  The PIC is also cleared after the new PCR value is
+     * written.
+     */
+    PERFCTR_SETPCR,
 
-	/* Store in pointer given in ARG0 the current PCR register value
-	 * being used.
-	 */
-	PERFCTR_GETPCR
+    /* Store in pointer given in ARG0 the current PCR register value
+     * being used.
+     */
+    PERFCTR_GETPCR
 };
 
 /* I don't want the kernel's namespace to be polluted with this
@@ -164,8 +164,8 @@ enum perfctr_opcode {
 #define  US3_FM_PIPE_COMPLETION	0x00014000
 
 struct vcounter_struct {
-  unsigned long long vcnt0;
-  unsigned long long vcnt1;
+    unsigned long long vcnt0;
+    unsigned long long vcnt1;
 };
 
 #else /* !(__KERNEL__) */

@@ -5,9 +5,9 @@
 
 struct pt_regs;
 extern void __die(const char *, struct pt_regs *, const char *,
-	const char *, unsigned long) __attribute__((noreturn));
+                  const char *, unsigned long) __attribute__((noreturn));
 extern void __die_if_kernel(const char *, struct pt_regs *, const char *,
-	const char *, unsigned long);
+                            const char *, unsigned long);
 
 #define die(msg, regs)							\
 	__die(msg, regs, __FILE__ ":", __func__, __LINE__)

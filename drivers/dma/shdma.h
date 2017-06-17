@@ -24,37 +24,37 @@
 struct device;
 
 enum dmae_pm_state {
-	DMAE_PM_ESTABLISHED,
-	DMAE_PM_BUSY,
-	DMAE_PM_PENDING,
+    DMAE_PM_ESTABLISHED,
+    DMAE_PM_BUSY,
+    DMAE_PM_PENDING,
 };
 
 struct sh_dmae_chan {
-	spinlock_t desc_lock;		/* Descriptor operation lock */
-	struct list_head ld_queue;	/* Link descriptors queue */
-	struct list_head ld_free;	/* Link descriptors free */
-	struct dma_chan common;		/* DMA common channel */
-	struct device *dev;		/* Channel device */
-	struct tasklet_struct tasklet;	/* Tasklet */
-	int descs_allocated;		/* desc count */
-	int xmit_shift;			/* log_2(bytes_per_xfer) */
-	int irq;
-	int id;				/* Raw id of this channel */
-	u32 __iomem *base;
-	char dev_id[16];		/* unique name per DMAC of channel */
-	int pm_error;
-	enum dmae_pm_state pm_state;
+    spinlock_t desc_lock;		/* Descriptor operation lock */
+    struct list_head ld_queue;	/* Link descriptors queue */
+    struct list_head ld_free;	/* Link descriptors free */
+    struct dma_chan common;		/* DMA common channel */
+    struct device *dev;		/* Channel device */
+    struct tasklet_struct tasklet;	/* Tasklet */
+    int descs_allocated;		/* desc count */
+    int xmit_shift;			/* log_2(bytes_per_xfer) */
+    int irq;
+    int id;				/* Raw id of this channel */
+    u32 __iomem *base;
+    char dev_id[16];		/* unique name per DMAC of channel */
+    int pm_error;
+    enum dmae_pm_state pm_state;
 };
 
 struct sh_dmae_device {
-	struct dma_device common;
-	struct sh_dmae_chan *chan[SH_DMAC_MAX_CHANNELS];
-	struct sh_dmae_pdata *pdata;
-	struct list_head node;
-	u32 __iomem *chan_reg;
-	u16 __iomem *dmars;
-	unsigned int chcr_offset;
-	u32 chcr_ie_bit;
+    struct dma_device common;
+    struct sh_dmae_chan *chan[SH_DMAC_MAX_CHANNELS];
+    struct sh_dmae_pdata *pdata;
+    struct list_head node;
+    u32 __iomem *chan_reg;
+    u16 __iomem *dmars;
+    unsigned int chcr_offset;
+    u32 chcr_ie_bit;
 };
 
 #define to_sh_chan(chan) container_of(chan, struct sh_dmae_chan, common)

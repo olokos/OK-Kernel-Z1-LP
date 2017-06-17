@@ -54,52 +54,49 @@ static struct clk *ocpi_ck;
  * Enables device access to OMAP buses via the OCPI bridge
  * FIXME: Add locking
  */
-int ocpi_enable(void)
-{
-	unsigned int val;
+int ocpi_enable(void) {
+    unsigned int val;
 
-	if (!cpu_is_omap16xx())
-		return -ENODEV;
+    if (!cpu_is_omap16xx())
+        return -ENODEV;
 
-	/* Enable access for OHCI in OCPI */
-	val = omap_readl(OCPI_PROT);
-	val &= ~0xff;
-	//val &= (1 << 0);	/* Allow access only to EMIFS */
-	omap_writel(val, OCPI_PROT);
+    /* Enable access for OHCI in OCPI */
+    val = omap_readl(OCPI_PROT);
+    val &= ~0xff;
+    //val &= (1 << 0);	/* Allow access only to EMIFS */
+    omap_writel(val, OCPI_PROT);
 
-	val = omap_readl(OCPI_SEC);
-	val &= ~0xff;
-	omap_writel(val, OCPI_SEC);
+    val = omap_readl(OCPI_SEC);
+    val &= ~0xff;
+    omap_writel(val, OCPI_SEC);
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL(ocpi_enable);
 
-static int __init omap_ocpi_init(void)
-{
-	if (!cpu_is_omap16xx())
-		return -ENODEV;
+static int __init omap_ocpi_init(void) {
+    if (!cpu_is_omap16xx())
+        return -ENODEV;
 
-	ocpi_ck = clk_get(NULL, "l3_ocpi_ck");
-	if (IS_ERR(ocpi_ck))
-		return PTR_ERR(ocpi_ck);
+    ocpi_ck = clk_get(NULL, "l3_ocpi_ck");
+    if (IS_ERR(ocpi_ck))
+        return PTR_ERR(ocpi_ck);
 
-	clk_enable(ocpi_ck);
-	ocpi_enable();
-	printk("OMAP OCPI interconnect driver loaded\n");
+    clk_enable(ocpi_ck);
+    ocpi_enable();
+    printk("OMAP OCPI interconnect driver loaded\n");
 
-	return 0;
+    return 0;
 }
 
-static void __exit omap_ocpi_exit(void)
-{
-	/* REVISIT: Disable OCPI */
+static void __exit omap_ocpi_exit(void) {
+    /* REVISIT: Disable OCPI */
 
-	if (!cpu_is_omap16xx())
-		return;
+    if (!cpu_is_omap16xx())
+        return;
 
-	clk_disable(ocpi_ck);
-	clk_put(ocpi_ck);
+    clk_disable(ocpi_ck);
+    clk_put(ocpi_ck);
 }
 
 MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");

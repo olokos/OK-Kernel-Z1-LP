@@ -45,7 +45,7 @@ static struct sighand_struct init_sighand = INIT_SIGHAND(init_sighand);
  * "init_task" linker map entry..
  */
 union thread_union init_thread_union __init_task_data =
-	{ INIT_THREAD_INFO(init_task) };
+{ INIT_THREAD_INFO(init_task) };
 
 /*
  * Initial task structure.
@@ -67,20 +67,18 @@ EXPORT_SYMBOL(init_task);
 
 int cris_hlt_counter=0;
 
-void disable_hlt(void)
-{
-	cris_hlt_counter++;
+void disable_hlt(void) {
+    cris_hlt_counter++;
 }
 
 EXPORT_SYMBOL(disable_hlt);
 
-void enable_hlt(void)
-{
-	cris_hlt_counter--;
+void enable_hlt(void) {
+    cris_hlt_counter--;
 }
 
 EXPORT_SYMBOL(enable_hlt);
- 
+
 /*
  * The following aren't currently used.
  */
@@ -98,31 +96,29 @@ EXPORT_SYMBOL(pm_power_off);
  * somebody to say that they'd like to reschedule)
  */
 
-void cpu_idle (void)
-{
-	/* endless idle loop with no priority at all */
-	while (1) {
-		while (!need_resched()) {
-			void (*idle)(void);
-			/*
-			 * Mark this as an RCU critical section so that
-			 * synchronize_kernel() in the unload path waits
-			 * for our completion.
-			 */
-			idle = pm_idle;
-			if (!idle)
-				idle = default_idle;
-			idle();
-		}
-		schedule_preempt_disabled();
-	}
+void cpu_idle (void) {
+    /* endless idle loop with no priority at all */
+    while (1) {
+        while (!need_resched()) {
+            void (*idle)(void);
+            /*
+             * Mark this as an RCU critical section so that
+             * synchronize_kernel() in the unload path waits
+             * for our completion.
+             */
+            idle = pm_idle;
+            if (!idle)
+                idle = default_idle;
+            idle();
+        }
+        schedule_preempt_disabled();
+    }
 }
 
 void hard_reset_now (void);
 
-void machine_restart(char *cmd)
-{
-	hard_reset_now();
+void machine_restart(char *cmd) {
+    hard_reset_now();
 }
 
 /*
@@ -131,14 +127,12 @@ void machine_restart(char *cmd)
  * possible.  This halt has nothing to do with the idle halt.
  */
 
-void machine_halt(void)
-{
+void machine_halt(void) {
 }
 
 /* If or when software power-off is implemented, add code here.  */
 
-void machine_power_off(void)
-{
+void machine_power_off(void) {
 }
 
 /*
@@ -147,12 +141,10 @@ void machine_power_off(void)
  * Currently we don't have any such state to reset, so this is empty.
  */
 
-void flush_thread(void)
-{
+void flush_thread(void) {
 }
 
 /* Fill in the fpu structure for a core dump. */
-int dump_fpu(struct pt_regs *regs, elf_fpregset_t *fpu)
-{
-        return 0;
+int dump_fpu(struct pt_regs *regs, elf_fpregset_t *fpu) {
+    return 0;
 }

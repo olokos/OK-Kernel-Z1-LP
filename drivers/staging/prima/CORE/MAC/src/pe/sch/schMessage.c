@@ -78,14 +78,12 @@ static void setSchEdcaParams(tpAniSirGlobal pMac, tANI_U32 params[][WNI_CFG_EDCA
  * @return None
  */
 
-void schSetBeaconInterval(tpAniSirGlobal pMac,tpPESession psessionEntry)
-{
+void schSetBeaconInterval(tpAniSirGlobal pMac,tpPESession psessionEntry) {
     tANI_U32 bi;
 
     bi = psessionEntry->beaconParams.beaconInterval;
 
-    if (bi < SCH_BEACON_INTERVAL_MIN || bi > SCH_BEACON_INTERVAL_MAX)
-    {
+    if (bi < SCH_BEACON_INTERVAL_MIN || bi > SCH_BEACON_INTERVAL_MAX) {
         schLog(pMac, LOGE, FL("Invalid beacon interval %d (should be [%d,%d]"),
                bi, SCH_BEACON_INTERVAL_MIN, SCH_BEACON_INTERVAL_MAX);
         return;
@@ -111,8 +109,7 @@ void schSetBeaconInterval(tpAniSirGlobal pMac,tpPESession psessionEntry)
  * @return None
  */
 
-void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
-{
+void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg) {
 #ifdef FIXME_GEN6
     tANI_U32            *pBD;
     tpSirMacMgmtHdr     mh;
@@ -123,8 +120,7 @@ void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
     tpPESession psessionEntry = &pMac->lim.gpSession[0];  //TBD-RAJESH HOW TO GET sessionEntry?????
     PELOG3(schLog(pMac, LOG3, FL("Received message (%x) "), pSchMsg->type);)
 
-    switch (pSchMsg->type)
-    {
+    switch (pSchMsg->type) {
 #ifdef FIXME_GEN6
     case SIR_BB_XPORT_MGMT_MSG:
         pMac->sch.gSchBBXportRcvCnt++;
@@ -138,8 +134,7 @@ void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
         if (mh->fc.type == SIR_MAC_MGMT_FRAME &&
                 mh->fc.subType == SIR_MAC_MGMT_BEACON)
             schBeaconProcess(pMac, pBD);
-        else
-        {
+        else {
             schLog(pMac, LOGE, FL("Unexpected message (%d,%d) rcvd"),
                    mh->fc.type, mh->fc.subType);
             pMac->sch.gSchUnknownRcvCnt++;
@@ -154,21 +149,16 @@ void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
 
     case SIR_SCH_START_SCAN_REQ:
         pMac->sch.gSchScanReqRcvd = true;
-        if (pMac->sch.gSchHcfEnabled)
-        {
+        if (pMac->sch.gSchHcfEnabled) {
             // In HCF mode, wait for TFP to stop before sending a response
             if (pMac->sch.schObject.gSchCFBInitiated ||
-                    pMac->sch.schObject.gSchCFPInitiated)
-            {
+                    pMac->sch.schObject.gSchCFPInitiated) {
                 PELOG1(schLog(pMac, LOG1,
                               FL("Waiting for TFP to halt before sending "
                                  "start scan response"));)
-            }
-            else
+            } else
                 schSendStartScanRsp(pMac);
-        }
-        else
-        {
+        } else {
             // In eDCF mode, send the response right away
             schSendStartScanRsp(pMac);
         }
@@ -185,8 +175,7 @@ void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
         if (wlan_cfgGetInt(pMac, (tANI_U16) pSchMsg->bodyval, &val) != eSIR_SUCCESS)
             schLog(pMac, LOGP, FL("failed to cfg get id %d"), pSchMsg->bodyval);
 
-        switch (pSchMsg->bodyval)
-        {
+        switch (pSchMsg->bodyval) {
         case WNI_CFG_BEACON_INTERVAL:
             // What to do for IBSS ?? - TBD
             if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
@@ -226,8 +215,7 @@ void schProcessMessage(tpAniSirGlobal pMac,tpSirMsgQ pSchMsg)
         case WNI_CFG_EDCA_WME_ACBE:
         case WNI_CFG_EDCA_WME_ACVI:
         case WNI_CFG_EDCA_WME_ACVO:
-            if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
-            {
+            if (psessionEntry->limSystemRole == eLIM_AP_ROLE) {
                 psessionEntry->gLimEdcaParamSetCount++;
                 schQosUpdateBroadcast(pMac, psessionEntry);
             }
@@ -253,8 +241,7 @@ tSirRetStatus
 schGetParams(
     tpAniSirGlobal pMac,
     tANI_U32            params[][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN],
-    tANI_U8           local)
-{
+    tANI_U8           local) {
     tANI_U32 val;
     tANI_U32 i,idx;
     tANI_U32 *prf;
@@ -278,15 +265,13 @@ schGetParams(
                          WNI_CFG_EDCA_TIT_DEMO_ACVI, WNI_CFG_EDCA_TIT_DEMO_ACVO
                         };
 
-    if (wlan_cfgGetInt(pMac, WNI_CFG_EDCA_PROFILE, &val) != eSIR_SUCCESS)
-    {
+    if (wlan_cfgGetInt(pMac, WNI_CFG_EDCA_PROFILE, &val) != eSIR_SUCCESS) {
         schLog(pMac, LOGP, FL("failed to cfg get EDCA_PROFILE id %d"),
                WNI_CFG_EDCA_PROFILE);
         return eSIR_FAILURE;
     }
 
-    if (val >= WNI_CFG_EDCA_PROFILE_MAX)
-    {
+    if (val >= WNI_CFG_EDCA_PROFILE_MAX) {
         schLog(pMac, LOGE, FL("Invalid EDCA_PROFILE %d, using %d instead"),
                val, WNI_CFG_EDCA_PROFILE_ANI);
         val = WNI_CFG_EDCA_PROFILE_ANI;
@@ -296,10 +281,8 @@ schGetParams(
            ((val == WNI_CFG_EDCA_PROFILE_WMM) ? "WMM"
             : ( (val == WNI_CFG_EDCA_PROFILE_TIT_DEMO) ? "Titan" : "HiPerf")));
 
-    if (local)
-    {
-        switch (val)
-        {
+    if (local) {
+        switch (val) {
         case WNI_CFG_EDCA_PROFILE_WMM:
             prf = &wme_l[0];
             break;
@@ -311,11 +294,8 @@ schGetParams(
             prf = &ani_l[0];
             break;
         }
-    }
-    else
-    {
-        switch (val)
-        {
+    } else {
+        switch (val) {
         case WNI_CFG_EDCA_PROFILE_WMM:
             prf = &wme_b[0];
             break;
@@ -329,17 +309,14 @@ schGetParams(
         }
     }
 
-    for (i=0; i < 4; i++)
-    {
+    for (i=0; i < 4; i++) {
         tANI_U8  data[WNI_CFG_EDCA_ANI_ACBK_LEN];
         tANI_U32 len = WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN;
-        if (wlan_cfgGetStr(pMac, (tANI_U16) prf[i], (tANI_U8 *) &data[0], &len) != eSIR_SUCCESS)
-        {
+        if (wlan_cfgGetStr(pMac, (tANI_U16) prf[i], (tANI_U8 *) &data[0], &len) != eSIR_SUCCESS) {
             schLog(pMac, LOGP, FL("cfgGet failed for %d"), prf[i]);
             return eSIR_FAILURE;
         }
-        if (len > WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN)
-        {
+        if (len > WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN) {
             schLog(pMac, LOGE, FL("cfgGet for %d: length is %d instead of %d"),
                    prf[i], len, WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN);
             return eSIR_FAILURE;
@@ -351,23 +328,19 @@ schGetParams(
     return eSIR_SUCCESS;
 }
 
-static void broadcastWMMOfConcurrentSTASession(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+static void broadcastWMMOfConcurrentSTASession(tpAniSirGlobal pMac, tpPESession psessionEntry) {
     tANI_U8         i,j;
     tpPESession     pConcurrentStaSessionEntry;
 
-    for (i =0; i < pMac->lim.maxBssId; i++)
-    {
+    for (i =0; i < pMac->lim.maxBssId; i++) {
         /* Find another INFRA STA AP session on same operating channel. The session entry passed to this API is for GO/SoftAP session that is getting added currently */
         if ( (pMac->lim.gpSession[i].valid == TRUE ) &&
                 (pMac->lim.gpSession[i].peSessionId != psessionEntry->peSessionId) &&
                 (pMac->lim.gpSession[i].currentOperChannel == psessionEntry->currentOperChannel) &&
                 (pMac->lim.gpSession[i].limSystemRole == eLIM_STA_ROLE)
-           )
-        {
+           ) {
             pConcurrentStaSessionEntry = &(pMac->lim.gpSession[i]);
-            for (j=0; j<MAX_NUM_AC; j++)
-            {
+            for (j=0; j<MAX_NUM_AC; j++) {
                 psessionEntry->gLimEdcaParamsBC[j].aci.acm = pConcurrentStaSessionEntry->gLimEdcaParams[j].aci.acm;
                 psessionEntry->gLimEdcaParamsBC[j].aci.aifsn = pConcurrentStaSessionEntry->gLimEdcaParams[j].aci.aifsn;
                 psessionEntry->gLimEdcaParamsBC[j].cw.min =  pConcurrentStaSessionEntry->gLimEdcaParams[j].cw.min;
@@ -390,15 +363,13 @@ static void broadcastWMMOfConcurrentSTASession(tpAniSirGlobal pMac, tpPESession 
 }
 
 void
-schQosUpdateBroadcast(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+schQosUpdateBroadcast(tpAniSirGlobal pMac, tpPESession psessionEntry) {
     tANI_U32        params[4][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN];
     tANI_U32        cwminidx, cwmaxidx, txopidx;
     tANI_U32        phyMode;
     tANI_U8         i;
 
-    if (schGetParams(pMac, params, false) != eSIR_SUCCESS)
-    {
+    if (schGetParams(pMac, params, false) != eSIR_SUCCESS) {
         PELOGE(schLog(pMac, LOGE, FL("QosUpdateBroadcast: failed"));)
         return;
     }
@@ -406,28 +377,22 @@ schQosUpdateBroadcast(tpAniSirGlobal pMac, tpPESession psessionEntry)
 
     PELOG1(schLog(pMac, LOG1, "QosUpdBcast: mode %d", phyMode);)
 
-    if (phyMode == WNI_CFG_PHY_MODE_11G)
-    {
+    if (phyMode == WNI_CFG_PHY_MODE_11G) {
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMING_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXG_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPG_IDX;
-    }
-    else if (phyMode == WNI_CFG_PHY_MODE_11B)
-    {
+    } else if (phyMode == WNI_CFG_PHY_MODE_11B) {
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMINB_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXB_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPB_IDX;
-    }
-    else // This can happen if mode is not set yet, assume 11a mode
-    {
+    } else { // This can happen if mode is not set yet, assume 11a mode
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMINA_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXA_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPA_IDX;
     }
 
 
-    for(i=0; i<MAX_NUM_AC; i++)
-    {
+    for(i=0; i<MAX_NUM_AC; i++) {
         psessionEntry->gLimEdcaParamsBC[i].aci.acm = (tANI_U8) params[i][WNI_CFG_EDCA_PROFILE_ACM_IDX];
         psessionEntry->gLimEdcaParamsBC[i].aci.aifsn = (tANI_U8) params[i][WNI_CFG_EDCA_PROFILE_AIFSN_IDX];
         psessionEntry->gLimEdcaParamsBC[i].cw.min =  convertCW(GET_CW(&params[i][cwminidx]));
@@ -451,29 +416,24 @@ schQosUpdateBroadcast(tpAniSirGlobal pMac, tpPESession psessionEntry)
     }
 
 void
-schQosUpdateLocal(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+schQosUpdateLocal(tpAniSirGlobal pMac, tpPESession psessionEntry) {
 
     tANI_U32 params[4][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN];
     tANI_BOOLEAN highPerformance=eANI_BOOLEAN_TRUE;
 
-    if (schGetParams(pMac, params, true /*local*/) != eSIR_SUCCESS)
-    {
+    if (schGetParams(pMac, params, true /*local*/) != eSIR_SUCCESS) {
         PELOGE(schLog(pMac, LOGE, FL("schGetParams(local) failed"));)
         return;
     }
 
     setSchEdcaParams(pMac, params, psessionEntry);
 
-    if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
-    {
+    if (psessionEntry->limSystemRole == eLIM_AP_ROLE) {
         if (pMac->lim.gLimNumOfAniSTAs)
             highPerformance = eANI_BOOLEAN_TRUE;
         else
             highPerformance = eANI_BOOLEAN_FALSE;
-    }
-    else if (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE)
-    {
+    } else if (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE) {
         highPerformance = eANI_BOOLEAN_TRUE;
     }
 
@@ -489,12 +449,10 @@ schQosUpdateLocal(tpAniSirGlobal pMac, tpPESession psessionEntry)
 \return  none
 \ ------------------------------------------------------------ */
 void
-schSetDefaultEdcaParams(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
+schSetDefaultEdcaParams(tpAniSirGlobal pMac, tpPESession psessionEntry) {
     tANI_U32 params[4][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN];
 
-    if (getWmmLocalParams(pMac, params) != eSIR_SUCCESS)
-    {
+    if (getWmmLocalParams(pMac, params) != eSIR_SUCCESS) {
         PELOGE(schLog(pMac, LOGE, FL("getWmmLocalParams() failed"));)
         return;
     }
@@ -512,8 +470,7 @@ schSetDefaultEdcaParams(tpAniSirGlobal pMac, tpPESession psessionEntry)
 \return  none
 \ ------------------------------------------------------------ */
 static void
-setSchEdcaParams(tpAniSirGlobal pMac, tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN], tpPESession psessionEntry)
-{
+setSchEdcaParams(tpAniSirGlobal pMac, tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN], tpPESession psessionEntry) {
     tANI_U32 i;
     tANI_U32 cwminidx, cwmaxidx, txopidx;
     tANI_U32 phyMode;
@@ -523,28 +480,23 @@ setSchEdcaParams(tpAniSirGlobal pMac, tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LO
     PELOG1(schLog(pMac, LOG1, FL("limGetPhyMode() = %d"), phyMode);)
 
     //if (pMac->lim.gLimPhyMode == WNI_CFG_PHY_MODE_11G)
-    if (phyMode == WNI_CFG_PHY_MODE_11G)
-    {
+    if (phyMode == WNI_CFG_PHY_MODE_11G) {
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMING_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXG_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPG_IDX;
     }
     //else if (pMac->lim.gLimPhyMode == WNI_CFG_PHY_MODE_11B)
-    else if (phyMode == WNI_CFG_PHY_MODE_11B)
-    {
+    else if (phyMode == WNI_CFG_PHY_MODE_11B) {
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMINB_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXB_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPB_IDX;
-    }
-    else // This can happen if mode is not set yet, assume 11a mode
-    {
+    } else { // This can happen if mode is not set yet, assume 11a mode
         cwminidx = WNI_CFG_EDCA_PROFILE_CWMINA_IDX;
         cwmaxidx = WNI_CFG_EDCA_PROFILE_CWMAXA_IDX;
         txopidx  = WNI_CFG_EDCA_PROFILE_TXOPA_IDX;
     }
 
-    for(i=0; i<MAX_NUM_AC; i++)
-    {
+    for(i=0; i<MAX_NUM_AC; i++) {
         psessionEntry->gLimEdcaParams[i].aci.acm = (tANI_U8) params[i][WNI_CFG_EDCA_PROFILE_ACM_IDX];
         psessionEntry->gLimEdcaParams[i].aci.aifsn = (tANI_U8) params[i][WNI_CFG_EDCA_PROFILE_AIFSN_IDX];
         psessionEntry->gLimEdcaParams[i].cw.min =  convertCW(GET_CW(&params[i][cwminidx]));
@@ -570,8 +522,7 @@ setSchEdcaParams(tpAniSirGlobal pMac, tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LO
 \return  none
 \ ------------------------------------------------------------ */
 static tSirRetStatus
-getWmmLocalParams(tpAniSirGlobal  pMac,  tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN])
-{
+getWmmLocalParams(tpAniSirGlobal  pMac,  tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN]) {
     tANI_U32 i,idx;
     tANI_U32 *prf;
     tANI_U32 wme_l[] = {WNI_CFG_EDCA_WME_ACBE_LOCAL, WNI_CFG_EDCA_WME_ACBK_LOCAL,
@@ -579,17 +530,14 @@ getWmmLocalParams(tpAniSirGlobal  pMac,  tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK
                        };
 
     prf = &wme_l[0];
-    for (i=0; i < 4; i++)
-    {
+    for (i=0; i < 4; i++) {
         tANI_U8  data[WNI_CFG_EDCA_ANI_ACBK_LEN];
         tANI_U32 len = WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN;
-        if (wlan_cfgGetStr(pMac, (tANI_U16) prf[i], (tANI_U8 *) &data[0], &len) != eSIR_SUCCESS)
-        {
+        if (wlan_cfgGetStr(pMac, (tANI_U16) prf[i], (tANI_U8 *) &data[0], &len) != eSIR_SUCCESS) {
             schLog(pMac, LOGP, FL("cfgGet failed for %d"), prf[i]);
             return eSIR_FAILURE;
         }
-        if (len > WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN)
-        {
+        if (len > WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN) {
             schLog(pMac, LOGE, FL("cfgGet for %d: length is %d instead of %d"),
                    prf[i], len, WNI_CFG_EDCA_ANI_ACBK_LOCAL_LEN);
             return eSIR_FAILURE;
@@ -610,10 +558,8 @@ getWmmLocalParams(tpAniSirGlobal  pMac,  tANI_U32 params[][WNI_CFG_EDCA_ANI_ACBK
 \return  none
 \ ------------------------------------------------------------ */
 void
-schEdcaProfileUpdate(tpAniSirGlobal pMac, tpPESession psessionEntry)
-{
-    if (psessionEntry->limSystemRole == eLIM_AP_ROLE || psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE)
-    {
+schEdcaProfileUpdate(tpAniSirGlobal pMac, tpPESession psessionEntry) {
+    if (psessionEntry->limSystemRole == eLIM_AP_ROLE || psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE) {
         schQosUpdateLocal(pMac, psessionEntry);
         psessionEntry->gLimEdcaParamSetCount++;
         schQosUpdateBroadcast(pMac, psessionEntry);

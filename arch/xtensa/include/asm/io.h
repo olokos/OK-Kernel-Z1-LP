@@ -31,14 +31,12 @@
  * vice versa.
  */
 
-static inline unsigned short _swapw (unsigned short v)
-{
-	return (v << 8) | (v >> 8);
+static inline unsigned short _swapw (unsigned short v) {
+    return (v << 8) | (v >> 8);
 }
 
-static inline unsigned int _swapl (unsigned int v)
-{
-	return (v << 24) | ((v & 0xff00) << 8) | ((v >> 8) & 0xff00) | (v >> 24);
+static inline unsigned int _swapl (unsigned int v) {
+    return (v << 24) | ((v & 0xff00) << 8) | ((v >> 8) & 0xff00) | (v >> 24);
 }
 
 /*
@@ -46,14 +44,12 @@ static inline unsigned int _swapl (unsigned int v)
  * These are trivial on the 1:1 Linux/Xtensa mapping
  */
 
-static inline unsigned long virt_to_phys(volatile void * address)
-{
-	return __pa(address);
+static inline unsigned long virt_to_phys(volatile void * address) {
+    return __pa(address);
 }
 
-static inline void * phys_to_virt(unsigned long address)
-{
-	return __va(address);
+static inline void * phys_to_virt(unsigned long address) {
+    return __va(address);
 }
 
 /*
@@ -68,34 +64,31 @@ static inline void * phys_to_virt(unsigned long address)
  * Note that we currently don't support any address outside the KIO segment.
  */
 
-static inline void *ioremap(unsigned long offset, unsigned long size)
-{
+static inline void *ioremap(unsigned long offset, unsigned long size) {
 #ifdef CONFIG_MMU
-	if (offset >= XCHAL_KIO_PADDR
-	    && offset < XCHAL_KIO_PADDR + XCHAL_KIO_SIZE)
-		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_BYPASS_VADDR);
-	else
-		BUG();
+    if (offset >= XCHAL_KIO_PADDR
+            && offset < XCHAL_KIO_PADDR + XCHAL_KIO_SIZE)
+        return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_BYPASS_VADDR);
+    else
+        BUG();
 #else
-	return (void *)offset;
+    return (void *)offset;
 #endif
 }
 
-static inline void *ioremap_nocache(unsigned long offset, unsigned long size)
-{
+static inline void *ioremap_nocache(unsigned long offset, unsigned long size) {
 #ifdef CONFIG_MMU
-	if (offset >= XCHAL_KIO_PADDR
-	    && offset < XCHAL_KIO_PADDR + XCHAL_KIO_SIZE)
-		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_CACHED_VADDR);
-	else
-		BUG();
+    if (offset >= XCHAL_KIO_PADDR
+            && offset < XCHAL_KIO_PADDR + XCHAL_KIO_SIZE)
+        return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_CACHED_VADDR);
+    else
+        BUG();
 #else
-	return (void *)offset;
+    return (void *)offset;
 #endif
 }
 
-static inline void iounmap(void *addr)
-{
+static inline void iounmap(void *addr) {
 }
 
 /*
@@ -112,29 +105,23 @@ static inline void iounmap(void *addr)
 #define writew(b, addr) (void)((*(volatile unsigned short *)(addr)) = (b))
 #define writel(b, addr) (void)((*(volatile unsigned int *)(addr)) = (b))
 
-static inline __u8 __raw_readb(const volatile void __iomem *addr)
-{
-          return *(__force volatile __u8 *)(addr);
+static inline __u8 __raw_readb(const volatile void __iomem *addr) {
+    return *(__force volatile __u8 *)(addr);
 }
-static inline __u16 __raw_readw(const volatile void __iomem *addr)
-{
-          return *(__force volatile __u16 *)(addr);
+static inline __u16 __raw_readw(const volatile void __iomem *addr) {
+    return *(__force volatile __u16 *)(addr);
 }
-static inline __u32 __raw_readl(const volatile void __iomem *addr)
-{
-          return *(__force volatile __u32 *)(addr);
+static inline __u32 __raw_readl(const volatile void __iomem *addr) {
+    return *(__force volatile __u32 *)(addr);
 }
-static inline void __raw_writeb(__u8 b, volatile void __iomem *addr)
-{
-          *(__force volatile __u8 *)(addr) = b;
+static inline void __raw_writeb(__u8 b, volatile void __iomem *addr) {
+    *(__force volatile __u8 *)(addr) = b;
 }
-static inline void __raw_writew(__u16 b, volatile void __iomem *addr)
-{
-          *(__force volatile __u16 *)(addr) = b;
+static inline void __raw_writew(__u16 b, volatile void __iomem *addr) {
+    *(__force volatile __u16 *)(addr) = b;
 }
-static inline void __raw_writel(__u32 b, volatile void __iomem *addr)
-{
-          *(__force volatile __u32 *)(addr) = b;
+static inline void __raw_writel(__u32 b, volatile void __iomem *addr) {
+    *(__force volatile __u32 *)(addr) = b;
 }
 
 /* These are the definitions for the x86 IO instructions

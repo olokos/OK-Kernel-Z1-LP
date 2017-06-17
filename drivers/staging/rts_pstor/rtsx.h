@@ -102,72 +102,69 @@ typedef unsigned long DELAY_PARA_T;
 struct rtsx_chip;
 
 struct rtsx_dev {
-	struct pci_dev *pci;
+    struct pci_dev *pci;
 
-	/* pci resources */
-	unsigned long 		addr;
-	void __iomem 		*remap_addr;
-	int irq;
+    /* pci resources */
+    unsigned long 		addr;
+    void __iomem 		*remap_addr;
+    int irq;
 
-	/* locks */
-	spinlock_t 		reg_lock;
+    /* locks */
+    spinlock_t 		reg_lock;
 
-	struct task_struct	*ctl_thread;	 /* the control thread   */
-	struct task_struct	*polling_thread; /* the polling thread   */
+    struct task_struct	*ctl_thread;	 /* the control thread   */
+    struct task_struct	*polling_thread; /* the polling thread   */
 
-	/* mutual exclusion and synchronization structures */
-	struct completion	cmnd_ready;	 /* to sleep thread on	    */
-	struct completion	control_exit;	 /* control thread exit	    */
-	struct completion	polling_exit;	 /* polling thread exit	    */
-	struct completion	notify;		 /* thread begin/end	    */
-	struct completion	scanning_done;	 /* wait for scan thread    */
+    /* mutual exclusion and synchronization structures */
+    struct completion	cmnd_ready;	 /* to sleep thread on	    */
+    struct completion	control_exit;	 /* control thread exit	    */
+    struct completion	polling_exit;	 /* polling thread exit	    */
+    struct completion	notify;		 /* thread begin/end	    */
+    struct completion	scanning_done;	 /* wait for scan thread    */
 
-	wait_queue_head_t	delay_wait;	 /* wait during scan, reset */
-	struct mutex		dev_mutex;
+    wait_queue_head_t	delay_wait;	 /* wait during scan, reset */
+    struct mutex		dev_mutex;
 
-	/* host reserved buffer */
-	void 			*rtsx_resv_buf;
-	dma_addr_t 		rtsx_resv_buf_addr;
+    /* host reserved buffer */
+    void 			*rtsx_resv_buf;
+    dma_addr_t 		rtsx_resv_buf_addr;
 
-	char			trans_result;
-	char			trans_state;
+    char			trans_result;
+    char			trans_state;
 
-	struct completion 	*done;
-	/* Whether interrupt handler should care card cd info */
-	u32 			check_card_cd;
+    struct completion 	*done;
+    /* Whether interrupt handler should care card cd info */
+    u32 			check_card_cd;
 
-	struct rtsx_chip 	*chip;
+    struct rtsx_chip 	*chip;
 };
 
 typedef struct rtsx_dev rtsx_dev_t;
 
 /* Convert between rtsx_dev and the corresponding Scsi_Host */
-static inline struct Scsi_Host *rtsx_to_host(struct rtsx_dev *dev)
-{
-	return container_of((void *) dev, struct Scsi_Host, hostdata);
+static inline struct Scsi_Host *rtsx_to_host(struct rtsx_dev *dev) {
+    return container_of((void *) dev, struct Scsi_Host, hostdata);
 }
-static inline struct rtsx_dev *host_to_rtsx(struct Scsi_Host *host)
-{
-	return (struct rtsx_dev *) host->hostdata;
+static inline struct rtsx_dev *host_to_rtsx(struct Scsi_Host *host) {
+    return (struct rtsx_dev *) host->hostdata;
 }
 
-static inline void get_current_time(u8 *timeval_buf, int buf_len)
-{
-	struct timeval tv;
+static inline void get_current_time(u8 *timeval_buf, int buf_len) {
+    struct timeval tv;
 
-	if (!timeval_buf || (buf_len < 8))
-		return;
+    if (!timeval_buf || (buf_len < 8))
+        return;
 
-	do_gettimeofday(&tv);
+    do_gettimeofday(&tv);
 
-	timeval_buf[0] = (u8)(tv.tv_sec >> 24);
-	timeval_buf[1] = (u8)(tv.tv_sec >> 16);
-	timeval_buf[2] = (u8)(tv.tv_sec >> 8);
-	timeval_buf[3] = (u8)(tv.tv_sec);
-	timeval_buf[4] = (u8)(tv.tv_usec >> 24);
-	timeval_buf[5] = (u8)(tv.tv_usec >> 16);
-	timeval_buf[6] = (u8)(tv.tv_usec >> 8);
-	timeval_buf[7] = (u8)(tv.tv_usec);
+    timeval_buf[0] = (u8)(tv.tv_sec >> 24);
+    timeval_buf[1] = (u8)(tv.tv_sec >> 16);
+    timeval_buf[2] = (u8)(tv.tv_sec >> 8);
+    timeval_buf[3] = (u8)(tv.tv_sec);
+    timeval_buf[4] = (u8)(tv.tv_usec >> 24);
+    timeval_buf[5] = (u8)(tv.tv_usec >> 16);
+    timeval_buf[6] = (u8)(tv.tv_usec >> 8);
+    timeval_buf[7] = (u8)(tv.tv_usec);
 }
 
 /* The scsi_lock() and scsi_unlock() macros protect the sm_state and the

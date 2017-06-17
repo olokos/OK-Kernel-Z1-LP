@@ -15,50 +15,48 @@
 #include <linux/regulator/driver.h>
 
 struct mc13xxx_regulator {
-	struct regulator_desc desc;
-	int reg;
-	int enable_bit;
-	int vsel_reg;
-	int vsel_shift;
-	int vsel_mask;
-	int hi_bit;
-	int const *voltages;
+    struct regulator_desc desc;
+    int reg;
+    int enable_bit;
+    int vsel_reg;
+    int vsel_shift;
+    int vsel_mask;
+    int hi_bit;
+    int const *voltages;
 };
 
 struct mc13xxx_regulator_priv {
-	struct mc13xxx *mc13xxx;
-	u32 powermisc_pwgt_state;
-	struct mc13xxx_regulator *mc13xxx_regulators;
-	int num_regulators;
-	struct regulator_dev *regulators[];
+    struct mc13xxx *mc13xxx;
+    u32 powermisc_pwgt_state;
+    struct mc13xxx_regulator *mc13xxx_regulators;
+    int num_regulators;
+    struct regulator_dev *regulators[];
 };
 
 extern int mc13xxx_sw_regulator(struct regulator_dev *rdev);
 extern int mc13xxx_sw_regulator_is_enabled(struct regulator_dev *rdev);
 extern int mc13xxx_get_best_voltage_index(struct regulator_dev *rdev,
-						int min_uV, int max_uV);
+        int min_uV, int max_uV);
 extern int mc13xxx_regulator_list_voltage(struct regulator_dev *rdev,
-						unsigned selector);
+        unsigned selector);
 extern int mc13xxx_fixed_regulator_set_voltage(struct regulator_dev *rdev,
-		int min_uV, int max_uV, unsigned *selector);
+        int min_uV, int max_uV, unsigned *selector);
 extern int mc13xxx_fixed_regulator_get_voltage(struct regulator_dev *rdev);
 
 #ifdef CONFIG_OF
 extern int mc13xxx_get_num_regulators_dt(struct platform_device *pdev);
 extern struct mc13xxx_regulator_init_data *mc13xxx_parse_regulators_dt(
-	struct platform_device *pdev, struct mc13xxx_regulator *regulators,
-	int num_regulators);
+    struct platform_device *pdev, struct mc13xxx_regulator *regulators,
+    int num_regulators);
 #else
-static inline int mc13xxx_get_num_regulators_dt(struct platform_device *pdev)
-{
-	return -ENODEV;
+static inline int mc13xxx_get_num_regulators_dt(struct platform_device *pdev) {
+    return -ENODEV;
 }
 
 static inline struct mc13xxx_regulator_init_data *mc13xxx_parse_regulators_dt(
-	struct platform_device *pdev, struct mc13xxx_regulator *regulators,
-	int num_regulators)
-{
-	return NULL;
+    struct platform_device *pdev, struct mc13xxx_regulator *regulators,
+    int num_regulators) {
+    return NULL;
 }
 #endif
 

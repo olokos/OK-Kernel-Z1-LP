@@ -99,16 +99,16 @@
  * If data structures change size, must handle as in IOCGETINFO.
  */
 struct mpt_fw_xfer {
-	unsigned int	 iocnum;	/* IOC unit number */
-	unsigned int	 fwlen;
-	void		__user *bufp;	/* Pointer to firmware buffer */
+    unsigned int	 iocnum;	/* IOC unit number */
+    unsigned int	 fwlen;
+    void		__user *bufp;	/* Pointer to firmware buffer */
 };
 
 #if defined(__KERNEL__) && defined(CONFIG_COMPAT)
 struct mpt_fw_xfer32 {
-	unsigned int iocnum;
-	unsigned int fwlen;
-	u32 bufp;
+    unsigned int iocnum;
+    unsigned int fwlen;
+    u32 bufp;
 };
 #endif	/*}*/
 
@@ -125,16 +125,16 @@ struct mpt_fw_xfer32 {
  *			sized commands. (MPTTARGETINFO, MPTEVENTREPORT)
  */
 typedef struct _mpt_ioctl_header {
-	unsigned int	 iocnum;	/* IOC unit number */
-	unsigned int	 port;		/* IOC port number */
-	int		 maxDataSize;	/* Maximum Num. bytes to transfer on read */
+    unsigned int	 iocnum;	/* IOC unit number */
+    unsigned int	 port;		/* IOC port number */
+    int		 maxDataSize;	/* Maximum Num. bytes to transfer on read */
 } mpt_ioctl_header;
 
 /*
  * Issue a diagnostic reset
  */
 struct mpt_ioctl_diag_reset {
-	mpt_ioctl_header hdr;
+    mpt_ioctl_header hdr;
 };
 
 
@@ -142,26 +142,26 @@ struct mpt_ioctl_diag_reset {
  *  PCI bus/device/function information structure.
  */
 struct mpt_ioctl_pci_info {
-	union {
-		struct {
-			unsigned int  deviceNumber   :  5;
-			unsigned int  functionNumber :  3;
-			unsigned int  busNumber      : 24;
-		} bits;
-		unsigned int  asUlong;
-	} u;
+    union {
+        struct {
+            unsigned int  deviceNumber   :  5;
+            unsigned int  functionNumber :  3;
+            unsigned int  busNumber      : 24;
+        } bits;
+        unsigned int  asUlong;
+    } u;
 };
 
 struct mpt_ioctl_pci_info2 {
-	union {
-		struct {
-			unsigned int  deviceNumber   :  5;
-			unsigned int  functionNumber :  3;
-			unsigned int  busNumber      : 24;
-		} bits;
-		unsigned int  asUlong;
-	} u;
-  int segmentID;
+    union {
+        struct {
+            unsigned int  deviceNumber   :  5;
+            unsigned int  functionNumber :  3;
+            unsigned int  busNumber      : 24;
+        } bits;
+        unsigned int  asUlong;
+    } u;
+    int segmentID;
 };
 
 /*
@@ -176,39 +176,39 @@ struct mpt_ioctl_pci_info2 {
 #define MPT_IOCTL_VERSION_LENGTH	(32)
 
 struct mpt_ioctl_iocinfo {
-	mpt_ioctl_header hdr;
-	int		 adapterType;	/* SCSI or FCP */
-	int		 port;		/* port number */
-	int		 pciId;		/* PCI Id. */
-	int		 hwRev;		/* hardware revision */
-	int		 subSystemDevice;	/* PCI subsystem Device ID */
-	int		 subSystemVendor;	/* PCI subsystem Vendor ID */
-	int		 numDevices;		/* number of devices */
-	int		 FWVersion;		/* FW Version (integer) */
-	int		 BIOSVersion;		/* BIOS Version (integer) */
-	char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
-	char		 busChangeEvent;
-	char		 hostId;
-	char		 rsvd[2];
-	struct mpt_ioctl_pci_info2  pciInfo; /* Added Rev 2 */
+    mpt_ioctl_header hdr;
+    int		 adapterType;	/* SCSI or FCP */
+    int		 port;		/* port number */
+    int		 pciId;		/* PCI Id. */
+    int		 hwRev;		/* hardware revision */
+    int		 subSystemDevice;	/* PCI subsystem Device ID */
+    int		 subSystemVendor;	/* PCI subsystem Vendor ID */
+    int		 numDevices;		/* number of devices */
+    int		 FWVersion;		/* FW Version (integer) */
+    int		 BIOSVersion;		/* BIOS Version (integer) */
+    char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
+    char		 busChangeEvent;
+    char		 hostId;
+    char		 rsvd[2];
+    struct mpt_ioctl_pci_info2  pciInfo; /* Added Rev 2 */
 };
 
 struct mpt_ioctl_iocinfo_rev1 {
-	mpt_ioctl_header hdr;
-	int		 adapterType;	/* SCSI or FCP */
-	int		 port;		/* port number */
-	int		 pciId;		/* PCI Id. */
-	int		 hwRev;		/* hardware revision */
-	int		 subSystemDevice;	/* PCI subsystem Device ID */
-	int		 subSystemVendor;	/* PCI subsystem Vendor ID */
-	int		 numDevices;		/* number of devices */
-	int		 FWVersion;		/* FW Version (integer) */
-	int		 BIOSVersion;		/* BIOS Version (integer) */
-	char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
-	char		 busChangeEvent;
-	char		 hostId;
-	char		 rsvd[2];
-	struct mpt_ioctl_pci_info  pciInfo; /* Added Rev 1 */
+    mpt_ioctl_header hdr;
+    int		 adapterType;	/* SCSI or FCP */
+    int		 port;		/* port number */
+    int		 pciId;		/* PCI Id. */
+    int		 hwRev;		/* hardware revision */
+    int		 subSystemDevice;	/* PCI subsystem Device ID */
+    int		 subSystemVendor;	/* PCI subsystem Vendor ID */
+    int		 numDevices;		/* number of devices */
+    int		 FWVersion;		/* FW Version (integer) */
+    int		 BIOSVersion;		/* BIOS Version (integer) */
+    char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
+    char		 busChangeEvent;
+    char		 hostId;
+    char		 rsvd[2];
+    struct mpt_ioctl_pci_info  pciInfo; /* Added Rev 1 */
 };
 
 /* Original structure, must always accept these
@@ -216,20 +216,20 @@ struct mpt_ioctl_iocinfo_rev1 {
  * above structure. Wish to re-align, but cannot.
  */
 struct mpt_ioctl_iocinfo_rev0 {
-	mpt_ioctl_header hdr;
-	int		 adapterType;	/* SCSI or FCP */
-	int		 port;		/* port number */
-	int		 pciId;		/* PCI Id. */
-	int		 hwRev;		/* hardware revision */
-	int		 subSystemDevice;	/* PCI subsystem Device ID */
-	int		 subSystemVendor;	/* PCI subsystem Vendor ID */
-	int		 numDevices;		/* number of devices */
-	int		 FWVersion;		/* FW Version (integer) */
-	int		 BIOSVersion;		/* BIOS Version (integer) */
-	char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
-	char		 busChangeEvent;
-	char		 hostId;
-	char		 rsvd[2];
+    mpt_ioctl_header hdr;
+    int		 adapterType;	/* SCSI or FCP */
+    int		 port;		/* port number */
+    int		 pciId;		/* PCI Id. */
+    int		 hwRev;		/* hardware revision */
+    int		 subSystemDevice;	/* PCI subsystem Device ID */
+    int		 subSystemVendor;	/* PCI subsystem Vendor ID */
+    int		 numDevices;		/* number of devices */
+    int		 FWVersion;		/* FW Version (integer) */
+    int		 BIOSVersion;		/* BIOS Version (integer) */
+    char		 driverVersion[MPT_IOCTL_VERSION_LENGTH];	/* Driver Version (string) */
+    char		 busChangeEvent;
+    char		 hostId;
+    char		 rsvd[2];
 };
 
 /*
@@ -243,9 +243,9 @@ struct mpt_ioctl_iocinfo_rev0 {
  *       7- 0: Target ID
  */
 struct mpt_ioctl_targetinfo {
-	mpt_ioctl_header hdr;
-	int		 numDevices;	/* Num targets on this ioc */
-	int		 targetInfo[1];
+    mpt_ioctl_header hdr;
+    int		 numDevices;	/* Num targets on this ioc */
+    int		 targetInfo[1];
 };
 
 
@@ -254,36 +254,36 @@ struct mpt_ioctl_targetinfo {
  * use the following defines:
  */
 struct mpt_ioctl_eventquery {
-	mpt_ioctl_header hdr;
-	unsigned short	 eventEntries;
-	unsigned short	 reserved;
-	unsigned int	 eventTypes;
+    mpt_ioctl_header hdr;
+    unsigned short	 eventEntries;
+    unsigned short	 reserved;
+    unsigned int	 eventTypes;
 };
 
 struct mpt_ioctl_eventenable {
-	mpt_ioctl_header hdr;
-	unsigned int	 eventTypes;
+    mpt_ioctl_header hdr;
+    unsigned int	 eventTypes;
 };
 
 #ifndef __KERNEL__
 typedef struct {
-	uint	event;
-	uint	eventContext;
-	uint	data[2];
+    uint	event;
+    uint	eventContext;
+    uint	data[2];
 } MPT_IOCTL_EVENTS;
 #endif
 
 struct mpt_ioctl_eventreport {
-	mpt_ioctl_header	hdr;
-	MPT_IOCTL_EVENTS	eventData[1];
+    mpt_ioctl_header	hdr;
+    MPT_IOCTL_EVENTS	eventData[1];
 };
 
 #define MPT_MAX_NAME	32
 struct mpt_ioctl_test {
-	mpt_ioctl_header hdr;
-	u8		 name[MPT_MAX_NAME];
-	int		 chip_type;
-	u8		 product [MPT_PRODUCT_LENGTH];
+    mpt_ioctl_header hdr;
+    u8		 name[MPT_MAX_NAME];
+    int		 chip_type;
+    u8		 product [MPT_PRODUCT_LENGTH];
 };
 
 /* Replace the FW image cached in host driver memory
@@ -291,9 +291,9 @@ struct mpt_ioctl_test {
  * newImage - first byte of the new image
  */
 typedef struct mpt_ioctl_replace_fw {
-	mpt_ioctl_header hdr;
-	int		 newImageSize;
-	u8		 newImage[1];
+    mpt_ioctl_header hdr;
+    int		 newImageSize;
+    u8		 newImage[1];
 } mpt_ioctl_replace_fw_t;
 
 /* General MPT Pass through data strucutre
@@ -318,18 +318,18 @@ typedef struct mpt_ioctl_replace_fw {
  * both of these buffers NULL.
  */
 struct mpt_ioctl_command {
-	mpt_ioctl_header hdr;
-	int		timeout;	/* optional (seconds) */
-	char		__user *replyFrameBufPtr;
-	char		__user *dataInBufPtr;
-	char		__user *dataOutBufPtr;
-	char		__user *senseDataPtr;
-	int		maxReplyBytes;
-	int		dataInSize;
-	int		dataOutSize;
-	int		maxSenseBytes;
-	int		dataSgeOffset;
-	char		MF[1];
+    mpt_ioctl_header hdr;
+    int		timeout;	/* optional (seconds) */
+    char		__user *replyFrameBufPtr;
+    char		__user *dataInBufPtr;
+    char		__user *dataOutBufPtr;
+    char		__user *senseDataPtr;
+    int		maxReplyBytes;
+    int		dataInSize;
+    int		dataOutSize;
+    int		maxSenseBytes;
+    int		dataSgeOffset;
+    char		MF[1];
 };
 
 /*
@@ -337,18 +337,18 @@ struct mpt_ioctl_command {
  */
 #if defined(__KERNEL__) && defined(CONFIG_COMPAT)
 struct mpt_ioctl_command32 {
-	mpt_ioctl_header hdr;
-	int	timeout;
-	u32	replyFrameBufPtr;
-	u32	dataInBufPtr;
-	u32	dataOutBufPtr;
-	u32	senseDataPtr;
-	int	maxReplyBytes;
-	int	dataInSize;
-	int	dataOutSize;
-	int	maxSenseBytes;
-	int	dataSgeOffset;
-	char	MF[1];
+    mpt_ioctl_header hdr;
+    int	timeout;
+    u32	replyFrameBufPtr;
+    u32	dataInBufPtr;
+    u32	dataOutBufPtr;
+    u32	senseDataPtr;
+    int	maxReplyBytes;
+    int	dataInSize;
+    int	dataOutSize;
+    int	maxSenseBytes;
+    int	dataSgeOffset;
+    char	MF[1];
 };
 #endif	/*}*/
 
@@ -362,11 +362,11 @@ struct mpt_ioctl_command32 {
 #define HP_GETTARGETINFO	_IOR(HP_IOC_MAGIC, 21, hp_target_info_t)
 
 typedef struct _hp_header {
-	unsigned int iocnum;
-	unsigned int host;
-	unsigned int channel;
-	unsigned int id;
-	unsigned int lun;
+    unsigned int iocnum;
+    unsigned int host;
+    unsigned int channel;
+    unsigned int id;
+    unsigned int lun;
 } hp_header_t;
 
 /*
@@ -378,46 +378,46 @@ typedef struct _hp_header {
  *  lun		ignored
  */
 typedef struct _hp_host_info {
-	hp_header_t	 hdr;
-	u16		 vendor;
-	u16		 device;
-	u16		 subsystem_vendor;
-	u16		 subsystem_id;
-	u8		 devfn;
-	u8		 bus;
-	ushort		 host_no;		/* SCSI Host number, if scsi driver not loaded*/
-	u8		 fw_version[16];	/* string */
-	u8		 serial_number[24];	/* string */
-	u32		 ioc_status;
-	u32		 bus_phys_width;
-	u32		 base_io_addr;
-	u32		 rsvd;
-	unsigned int	 hard_resets;		/* driver initiated resets */
-	unsigned int	 soft_resets;		/* ioc, external resets */
-	unsigned int	 timeouts;		/* num timeouts */
+    hp_header_t	 hdr;
+    u16		 vendor;
+    u16		 device;
+    u16		 subsystem_vendor;
+    u16		 subsystem_id;
+    u8		 devfn;
+    u8		 bus;
+    ushort		 host_no;		/* SCSI Host number, if scsi driver not loaded*/
+    u8		 fw_version[16];	/* string */
+    u8		 serial_number[24];	/* string */
+    u32		 ioc_status;
+    u32		 bus_phys_width;
+    u32		 base_io_addr;
+    u32		 rsvd;
+    unsigned int	 hard_resets;		/* driver initiated resets */
+    unsigned int	 soft_resets;		/* ioc, external resets */
+    unsigned int	 timeouts;		/* num timeouts */
 } hp_host_info_t;
 
 /* replace ulongs with uints, need to preserve backwards
  * compatibility.
  */
 typedef struct _hp_host_info_rev0 {
-	hp_header_t	 hdr;
-	u16		 vendor;
-	u16		 device;
-	u16		 subsystem_vendor;
-	u16		 subsystem_id;
-	u8		 devfn;
-	u8		 bus;
-	ushort		 host_no;		/* SCSI Host number, if scsi driver not loaded*/
-	u8		 fw_version[16];	/* string */
-	u8		 serial_number[24];	/* string */
-	u32		 ioc_status;
-	u32		 bus_phys_width;
-	u32		 base_io_addr;
-	u32		 rsvd;
-	unsigned long	 hard_resets;		/* driver initiated resets */
-	unsigned long	 soft_resets;		/* ioc, external resets */
-	unsigned long	 timeouts;		/* num timeouts */
+    hp_header_t	 hdr;
+    u16		 vendor;
+    u16		 device;
+    u16		 subsystem_vendor;
+    u16		 subsystem_id;
+    u8		 devfn;
+    u8		 bus;
+    ushort		 host_no;		/* SCSI Host number, if scsi driver not loaded*/
+    u8		 fw_version[16];	/* string */
+    u8		 serial_number[24];	/* string */
+    u32		 ioc_status;
+    u32		 bus_phys_width;
+    u32		 base_io_addr;
+    u32		 rsvd;
+    unsigned long	 hard_resets;		/* driver initiated resets */
+    unsigned long	 soft_resets;		/* ioc, external resets */
+    unsigned long	 timeouts;		/* num timeouts */
 } hp_host_info_rev0_t;
 
 /*
@@ -431,14 +431,14 @@ typedef struct _hp_host_info_rev0 {
  *  All error values between 0 and 0xFFFF in size.
  */
 typedef struct _hp_target_info {
-	hp_header_t	 hdr;
-	u32 parity_errors;
-	u32 phase_errors;
-	u32 select_timeouts;
-	u32 message_rejects;
-	u32 negotiated_speed;
-	u8  negotiated_width;
-	u8  rsvd[7];				/* 8 byte alignment */
+    hp_header_t	 hdr;
+    u32 parity_errors;
+    u32 phase_errors;
+    u32 select_timeouts;
+    u32 message_rejects;
+    u32 negotiated_speed;
+    u8  negotiated_width;
+    u8  rsvd[7];				/* 8 byte alignment */
 } hp_target_info_t;
 
 #define HP_STATUS_OTHER		1

@@ -3,35 +3,35 @@
 
 INT
 InterfaceRDM(PS_INTERFACE_ADAPTER psIntfAdapter,
-			UINT addr,
-			PVOID buff,
-			INT len);
+             UINT addr,
+             PVOID buff,
+             INT len);
 
 INT
 InterfaceWRM(PS_INTERFACE_ADAPTER psIntfAdapter,
-			UINT addr,
-			PVOID buff,
-			INT len);
+             UINT addr,
+             PVOID buff,
+             INT len);
 
 
 int InterfaceFileDownload( PVOID psIntfAdapter,
-                        struct file *flp,
-                        unsigned int on_chip_loc);
+                           struct file *flp,
+                           unsigned int on_chip_loc);
 
 int InterfaceFileReadbackFromChip( PVOID psIntfAdapter,
-                        struct file *flp,
-                        unsigned int on_chip_loc);
+                                   struct file *flp,
+                                   unsigned int on_chip_loc);
 
 
 int BcmRDM(PVOID arg,
-			UINT addr,
-			PVOID buff,
-			INT len);
+           UINT addr,
+           PVOID buff,
+           INT len);
 
 int BcmWRM(PVOID arg,
-			UINT addr,
-			PVOID buff,
-			INT len);
+           UINT addr,
+           PVOID buff,
+           INT len);
 
 INT Bcm_clear_halt_of_endpoints(PMINI_ADAPTER Adapter);
 

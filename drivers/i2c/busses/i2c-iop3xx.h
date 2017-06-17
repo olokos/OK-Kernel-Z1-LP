@@ -40,11 +40,11 @@
  */
 #define IOP3XX_ICR_UE		0x0040	/* 1=Unit Enable */
 /*
- * "NOTE: To avoid I2C bus integrity problems, 
- * the user needs to ensure that the GPIO Output Data Register - 
- * GPOD bits associated with an I2C port are cleared prior to setting 
- * the enable bit for that I2C serial port. 
- * The user prepares to enable I2C port 0 and 
+ * "NOTE: To avoid I2C bus integrity problems,
+ * the user needs to ensure that the GPIO Output Data Register -
+ * GPOD bits associated with an I2C port are cleared prior to setting
+ * the enable bit for that I2C serial port.
+ * The user prepares to enable I2C port 0 and
  * I2C port 1 by clearing GPOD bits 7:6 and GPOD bits 5:4, respectively.
  */
 #define IOP3XX_ICR_SCLEN	0x0020	/* 1=SCL enable for master mode */
@@ -97,11 +97,11 @@
 #define	IOP3XX_I2C_IO_SIZE	0x18
 
 struct i2c_algo_iop3xx_data {
-	void __iomem *ioaddr;
-	wait_queue_head_t waitq;
-	spinlock_t lock;
-	u32 SR_enabled, SR_received;
-	int id;
+    void __iomem *ioaddr;
+    wait_queue_head_t waitq;
+    spinlock_t lock;
+    u32 SR_enabled, SR_received;
+    int id;
 };
 
 #endif /* I2C_IOP3XX_H */

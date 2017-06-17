@@ -34,82 +34,82 @@
  * Save area ptr (clobbered):  ptr  (1 byte aligned)
  * Scratch regs  (clobbered):  at1..at4  (only first XCHAL_NCP_NUM_ATMPS needed)
  */
-	.macro xchal_ncp_store  ptr at1 at2 at3 at4  continue=0 ofs=-1 select=XTHAL_SAS_ALL
-	xchal_sa_start	\continue, \ofs
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-8, 4, 4
-	rsr	\at1, ACCLO		// MAC16 accumulator
-	rsr	\at2, ACCHI
-	s32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	s32i	\at2, \ptr, .Lxchal_ofs_ + 4
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 8
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-16, 4, 4
-	rsr	\at1, M0		// MAC16 registers
-	rsr	\at2, M1
-	s32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	s32i	\at2, \ptr, .Lxchal_ofs_ + 4
-	rsr	\at1, M2
-	rsr	\at2, M3
-	s32i	\at1, \ptr, .Lxchal_ofs_ + 8
-	s32i	\at2, \ptr, .Lxchal_ofs_ + 12
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 16
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-4, 4, 4
-	rsr	\at1, SCOMPARE1		// conditional store option
-	s32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_GLOB) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-4, 4, 4
-	rur	\at1, THREADPTR		// threadptr option
-	s32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
-	.endif
-	.endm	// xchal_ncp_store
+.macro xchal_ncp_store  ptr at1 at2 at3 at4  continue=0 ofs=-1 select=XTHAL_SAS_ALL
+        xchal_sa_start	\continue, \ofs
+        .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_CALR) & ~\select
+        xchal_sa_align	\ptr, 0, 1024-8, 4, 4
+        rsr	\at1, ACCLO		// MAC16 accumulator
+        rsr	\at2, ACCHI
+        s32i	\at1, \ptr, .Lxchal_ofs_ + 0
+        s32i	\at2, \ptr, .Lxchal_ofs_ + 4
+        .set	.Lxchal_ofs_, .Lxchal_ofs_ + 8
+        .endif
+        .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
+        xchal_sa_align	\ptr, 0, 1024-16, 4, 4
+        rsr	\at1, M0		// MAC16 registers
+        rsr	\at2, M1
+        s32i	\at1, \ptr, .Lxchal_ofs_ + 0
+        s32i	\at2, \ptr, .Lxchal_ofs_ + 4
+        rsr	\at1, M2
+        rsr	\at2, M3
+        s32i	\at1, \ptr, .Lxchal_ofs_ + 8
+        s32i	\at2, \ptr, .Lxchal_ofs_ + 12
+        .set	.Lxchal_ofs_, .Lxchal_ofs_ + 16
+        .endif
+        .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
+        xchal_sa_align	\ptr, 0, 1024-4, 4, 4
+        rsr	\at1, SCOMPARE1		// conditional store option
+        s32i	\at1, \ptr, .Lxchal_ofs_ + 0
+        .set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
+        .endif
+        .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_GLOB) & ~\select
+        xchal_sa_align	\ptr, 0, 1024-4, 4, 4
+        rur	\at1, THREADPTR		// threadptr option
+        s32i	\at1, \ptr, .Lxchal_ofs_ + 0
+        .set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
+        .endif
+        .endm	// xchal_ncp_store
 
-/* Macro to save all non-coprocessor (extra) custom TIE and optional state
- * (not including zero-overhead loop registers).
- * Save area ptr (clobbered):  ptr  (1 byte aligned)
- * Scratch regs  (clobbered):  at1..at4  (only first XCHAL_NCP_NUM_ATMPS needed)
- */
-	.macro xchal_ncp_load  ptr at1 at2 at3 at4  continue=0 ofs=-1 select=XTHAL_SAS_ALL
-	xchal_sa_start	\continue, \ofs
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-8, 4, 4
-	l32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	l32i	\at2, \ptr, .Lxchal_ofs_ + 4
-	wsr	\at1, ACCLO		// MAC16 accumulator
-	wsr	\at2, ACCHI
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 8
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-16, 4, 4
-	l32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	l32i	\at2, \ptr, .Lxchal_ofs_ + 4
-	wsr	\at1, M0		// MAC16 registers
-	wsr	\at2, M1
-	l32i	\at1, \ptr, .Lxchal_ofs_ + 8
-	l32i	\at2, \ptr, .Lxchal_ofs_ + 12
-	wsr	\at1, M2
-	wsr	\at2, M3
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 16
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-4, 4, 4
-	l32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	wsr	\at1, SCOMPARE1		// conditional store option
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
-	.endif
-	.ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_GLOB) & ~\select
-	xchal_sa_align	\ptr, 0, 1024-4, 4, 4
-	l32i	\at1, \ptr, .Lxchal_ofs_ + 0
-	wur	\at1, THREADPTR		// threadptr option
-	.set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
-	.endif
-	.endm	// xchal_ncp_load
+        /* Macro to save all non-coprocessor (extra) custom TIE and optional state
+         * (not including zero-overhead loop registers).
+         * Save area ptr (clobbered):  ptr  (1 byte aligned)
+         * Scratch regs  (clobbered):  at1..at4  (only first XCHAL_NCP_NUM_ATMPS needed)
+         */
+        .macro xchal_ncp_load  ptr at1 at2 at3 at4  continue=0 ofs=-1 select=XTHAL_SAS_ALL
+                xchal_sa_start	\continue, \ofs
+                .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_CALR) & ~\select
+                xchal_sa_align	\ptr, 0, 1024-8, 4, 4
+                l32i	\at1, \ptr, .Lxchal_ofs_ + 0
+                l32i	\at2, \ptr, .Lxchal_ofs_ + 4
+                wsr	\at1, ACCLO		// MAC16 accumulator
+                wsr	\at2, ACCHI
+                .set	.Lxchal_ofs_, .Lxchal_ofs_ + 8
+                .endif
+                .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
+                xchal_sa_align	\ptr, 0, 1024-16, 4, 4
+                l32i	\at1, \ptr, .Lxchal_ofs_ + 0
+                l32i	\at2, \ptr, .Lxchal_ofs_ + 4
+                wsr	\at1, M0		// MAC16 registers
+                wsr	\at2, M1
+                l32i	\at1, \ptr, .Lxchal_ofs_ + 8
+                l32i	\at2, \ptr, .Lxchal_ofs_ + 12
+                wsr	\at1, M2
+                wsr	\at2, M3
+                .set	.Lxchal_ofs_, .Lxchal_ofs_ + 16
+                .endif
+                .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_NOCC | XTHAL_SAS_CALR) & ~\select
+                xchal_sa_align	\ptr, 0, 1024-4, 4, 4
+                l32i	\at1, \ptr, .Lxchal_ofs_ + 0
+                wsr	\at1, SCOMPARE1		// conditional store option
+                .set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
+                .endif
+                .ifeq (XTHAL_SAS_OPT | XTHAL_SAS_CC | XTHAL_SAS_GLOB) & ~\select
+                xchal_sa_align	\ptr, 0, 1024-4, 4, 4
+                l32i	\at1, \ptr, .Lxchal_ofs_ + 0
+                wur	\at1, THREADPTR		// threadptr option
+                .set	.Lxchal_ofs_, .Lxchal_ofs_ + 4
+                .endif
+                .endm	// xchal_ncp_load
 
 
 

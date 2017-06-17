@@ -201,260 +201,297 @@ static bool debug;
 #define VENDOR_CONEXANT		0x0572
 
 enum mceusb_model_type {
-	MCE_GEN2 = 0,		/* Most boards */
-	MCE_GEN1,
-	MCE_GEN3,
-	MCE_GEN2_TX_INV,
-	POLARIS_EVK,
-	CX_HYBRID_TV,
-	MULTIFUNCTION,
-	TIVO_KIT,
-	MCE_GEN2_NO_TX,
+    MCE_GEN2 = 0,		/* Most boards */
+    MCE_GEN1,
+    MCE_GEN3,
+    MCE_GEN2_TX_INV,
+    POLARIS_EVK,
+    CX_HYBRID_TV,
+    MULTIFUNCTION,
+    TIVO_KIT,
+    MCE_GEN2_NO_TX,
 };
 
 struct mceusb_model {
-	u32 mce_gen1:1;
-	u32 mce_gen2:1;
-	u32 mce_gen3:1;
-	u32 tx_mask_normal:1;
-	u32 no_tx:1;
+    u32 mce_gen1:1;
+    u32 mce_gen2:1;
+    u32 mce_gen3:1;
+    u32 tx_mask_normal:1;
+    u32 no_tx:1;
 
-	int ir_intfnum;
+    int ir_intfnum;
 
-	const char *rc_map;	/* Allow specify a per-board map */
-	const char *name;	/* per-board name */
+    const char *rc_map;	/* Allow specify a per-board map */
+    const char *name;	/* per-board name */
 };
 
 static const struct mceusb_model mceusb_model[] = {
-	[MCE_GEN1] = {
-		.mce_gen1 = 1,
-		.tx_mask_normal = 1,
-	},
-	[MCE_GEN2] = {
-		.mce_gen2 = 1,
-	},
-	[MCE_GEN2_NO_TX] = {
-		.mce_gen2 = 1,
-		.no_tx = 1,
-	},
-	[MCE_GEN2_TX_INV] = {
-		.mce_gen2 = 1,
-		.tx_mask_normal = 1,
-	},
-	[MCE_GEN3] = {
-		.mce_gen3 = 1,
-		.tx_mask_normal = 1,
-	},
-	[POLARIS_EVK] = {
-		/*
-		 * In fact, the EVK is shipped without
-		 * remotes, but we should have something handy,
-		 * to allow testing it
-		 */
-		.rc_map = RC_MAP_HAUPPAUGE,
-		.name = "Conexant Hybrid TV (cx231xx) MCE IR",
-	},
-	[CX_HYBRID_TV] = {
-		.no_tx = 1, /* tx isn't wired up at all */
-		.name = "Conexant Hybrid TV (cx231xx) MCE IR",
-	},
-	[MULTIFUNCTION] = {
-		.mce_gen2 = 1,
-		.ir_intfnum = 2,
-	},
-	[TIVO_KIT] = {
-		.mce_gen2 = 1,
-		.rc_map = RC_MAP_TIVO,
-	},
+    [MCE_GEN1] = {
+        .mce_gen1 = 1,
+        .tx_mask_normal = 1,
+    },
+    [MCE_GEN2] = {
+        .mce_gen2 = 1,
+    },
+    [MCE_GEN2_NO_TX] = {
+        .mce_gen2 = 1,
+        .no_tx = 1,
+    },
+    [MCE_GEN2_TX_INV] = {
+        .mce_gen2 = 1,
+        .tx_mask_normal = 1,
+    },
+    [MCE_GEN3] = {
+        .mce_gen3 = 1,
+        .tx_mask_normal = 1,
+    },
+    [POLARIS_EVK] = {
+        /*
+         * In fact, the EVK is shipped without
+         * remotes, but we should have something handy,
+         * to allow testing it
+         */
+        .rc_map = RC_MAP_HAUPPAUGE,
+        .name = "Conexant Hybrid TV (cx231xx) MCE IR",
+    },
+    [CX_HYBRID_TV] = {
+        .no_tx = 1, /* tx isn't wired up at all */
+        .name = "Conexant Hybrid TV (cx231xx) MCE IR",
+    },
+    [MULTIFUNCTION] = {
+        .mce_gen2 = 1,
+        .ir_intfnum = 2,
+    },
+    [TIVO_KIT] = {
+        .mce_gen2 = 1,
+        .rc_map = RC_MAP_TIVO,
+    },
 };
 
 static struct usb_device_id mceusb_dev_table[] = {
-	/* Original Microsoft MCE IR Transceiver (often HP-branded) */
-	{ USB_DEVICE(VENDOR_MICROSOFT, 0x006d),
-	  .driver_info = MCE_GEN1 },
-	/* Philips Infrared Transceiver - Sahara branded */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x0608) },
-	/* Philips Infrared Transceiver - HP branded */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x060c),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* Philips SRM5100 */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x060d) },
-	/* Philips Infrared Transceiver - Omaura */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x060f) },
-	/* Philips Infrared Transceiver - Spinel plus */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x0613) },
-	/* Philips eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x0815) },
-	/* Philips/Spinel plus IR transceiver for ASUS */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x206c) },
-	/* Philips/Spinel plus IR transceiver for ASUS */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x2088) },
-	/* Philips IR transceiver (Dell branded) */
-	{ USB_DEVICE(VENDOR_PHILIPS, 0x2093) },
-	/* Realtek MCE IR Receiver and card reader */
-	{ USB_DEVICE(VENDOR_REALTEK, 0x0161),
-	  .driver_info = MULTIFUNCTION },
-	/* SMK/Toshiba G83C0004D410 */
-	{ USB_DEVICE(VENDOR_SMK, 0x031d),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* SMK eHome Infrared Transceiver (Sony VAIO) */
-	{ USB_DEVICE(VENDOR_SMK, 0x0322),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* bundled with Hauppauge PVR-150 */
-	{ USB_DEVICE(VENDOR_SMK, 0x0334),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* SMK eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_SMK, 0x0338) },
-	/* SMK/I-O Data GV-MC7/RCKIT Receiver */
-	{ USB_DEVICE(VENDOR_SMK, 0x0353),
-	  .driver_info = MCE_GEN2_NO_TX },
-	/* Tatung eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TATUNG, 0x9150) },
-	/* Shuttle eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_SHUTTLE, 0xc001) },
-	/* Shuttle eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_SHUTTLE2, 0xc001) },
-	/* Gateway eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_GATEWAY, 0x3009) },
-	/* Mitsumi */
-	{ USB_DEVICE(VENDOR_MITSUMI, 0x2501) },
-	/* Topseed eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x0001),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* Topseed HP eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x0006),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* Topseed eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x0007),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* Topseed eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x0008),
-	  .driver_info = MCE_GEN3 },
-	/* Topseed eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x000a),
-	  .driver_info = MCE_GEN2_TX_INV },
-	/* Topseed eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_TOPSEED, 0x0011),
-	  .driver_info = MCE_GEN3 },
-	/* Ricavision internal Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_RICAVISION, 0x0010) },
-	/* Itron ione Libra Q-11 */
-	{ USB_DEVICE(VENDOR_ITRON, 0x7002) },
-	/* FIC eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_FIC, 0x9242) },
-	/* LG eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_LG, 0x9803) },
-	/* Microsoft MCE Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_MICROSOFT, 0x00a0) },
-	/* Formosa eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe015) },
-	/* Formosa21 / eHome Infrared Receiver */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe016) },
-	/* Formosa aim / Trust MCE Infrared Receiver */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe017),
-	  .driver_info = MCE_GEN2_NO_TX },
-	/* Formosa Industrial Computing / Beanbag Emulation Device */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe018) },
-	/* Formosa21 / eHome Infrared Receiver */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe03a) },
-	/* Formosa Industrial Computing AIM IR605/A */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe03c) },
-	/* Formosa Industrial Computing */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe03e) },
-	/* Formosa Industrial Computing */
-	{ USB_DEVICE(VENDOR_FORMOSA, 0xe042) },
-	/* Fintek eHome Infrared Transceiver (HP branded) */
-	{ USB_DEVICE(VENDOR_FINTEK, 0x5168) },
-	/* Fintek eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_FINTEK, 0x0602) },
-	/* Fintek eHome Infrared Transceiver (in the AOpen MP45) */
-	{ USB_DEVICE(VENDOR_FINTEK, 0x0702) },
-	/* Pinnacle Remote Kit */
-	{ USB_DEVICE(VENDOR_PINNACLE, 0x0225),
-	  .driver_info = MCE_GEN3 },
-	/* Elitegroup Computer Systems IR */
-	{ USB_DEVICE(VENDOR_ECS, 0x0f38) },
-	/* Wistron Corp. eHome Infrared Receiver */
-	{ USB_DEVICE(VENDOR_WISTRON, 0x0002) },
-	/* Compro K100 */
-	{ USB_DEVICE(VENDOR_COMPRO, 0x3020) },
-	/* Compro K100 v2 */
-	{ USB_DEVICE(VENDOR_COMPRO, 0x3082) },
-	/* Northstar Systems, Inc. eHome Infrared Transceiver */
-	{ USB_DEVICE(VENDOR_NORTHSTAR, 0xe004) },
-	/* TiVo PC IR Receiver */
-	{ USB_DEVICE(VENDOR_TIVO, 0x2000),
-	  .driver_info = TIVO_KIT },
-	/* Conexant Hybrid TV "Shelby" Polaris SDK */
-	{ USB_DEVICE(VENDOR_CONEXANT, 0x58a1),
-	  .driver_info = POLARIS_EVK },
-	/* Conexant Hybrid TV RDU253S Polaris */
-	{ USB_DEVICE(VENDOR_CONEXANT, 0x58a5),
-	  .driver_info = CX_HYBRID_TV },
-	/* Terminating entry */
-	{ }
+    /* Original Microsoft MCE IR Transceiver (often HP-branded) */
+    {
+        USB_DEVICE(VENDOR_MICROSOFT, 0x006d),
+        .driver_info = MCE_GEN1
+    },
+    /* Philips Infrared Transceiver - Sahara branded */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x0608) },
+    /* Philips Infrared Transceiver - HP branded */
+    {
+        USB_DEVICE(VENDOR_PHILIPS, 0x060c),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* Philips SRM5100 */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x060d) },
+    /* Philips Infrared Transceiver - Omaura */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x060f) },
+    /* Philips Infrared Transceiver - Spinel plus */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x0613) },
+    /* Philips eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x0815) },
+    /* Philips/Spinel plus IR transceiver for ASUS */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x206c) },
+    /* Philips/Spinel plus IR transceiver for ASUS */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x2088) },
+    /* Philips IR transceiver (Dell branded) */
+    { USB_DEVICE(VENDOR_PHILIPS, 0x2093) },
+    /* Realtek MCE IR Receiver and card reader */
+    {
+        USB_DEVICE(VENDOR_REALTEK, 0x0161),
+        .driver_info = MULTIFUNCTION
+    },
+    /* SMK/Toshiba G83C0004D410 */
+    {
+        USB_DEVICE(VENDOR_SMK, 0x031d),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* SMK eHome Infrared Transceiver (Sony VAIO) */
+    {
+        USB_DEVICE(VENDOR_SMK, 0x0322),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* bundled with Hauppauge PVR-150 */
+    {
+        USB_DEVICE(VENDOR_SMK, 0x0334),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* SMK eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_SMK, 0x0338) },
+    /* SMK/I-O Data GV-MC7/RCKIT Receiver */
+    {
+        USB_DEVICE(VENDOR_SMK, 0x0353),
+        .driver_info = MCE_GEN2_NO_TX
+    },
+    /* Tatung eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_TATUNG, 0x9150) },
+    /* Shuttle eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_SHUTTLE, 0xc001) },
+    /* Shuttle eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_SHUTTLE2, 0xc001) },
+    /* Gateway eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_GATEWAY, 0x3009) },
+    /* Mitsumi */
+    { USB_DEVICE(VENDOR_MITSUMI, 0x2501) },
+    /* Topseed eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x0001),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* Topseed HP eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x0006),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* Topseed eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x0007),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* Topseed eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x0008),
+        .driver_info = MCE_GEN3
+    },
+    /* Topseed eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x000a),
+        .driver_info = MCE_GEN2_TX_INV
+    },
+    /* Topseed eHome Infrared Transceiver */
+    {
+        USB_DEVICE(VENDOR_TOPSEED, 0x0011),
+        .driver_info = MCE_GEN3
+    },
+    /* Ricavision internal Infrared Transceiver */
+    { USB_DEVICE(VENDOR_RICAVISION, 0x0010) },
+    /* Itron ione Libra Q-11 */
+    { USB_DEVICE(VENDOR_ITRON, 0x7002) },
+    /* FIC eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_FIC, 0x9242) },
+    /* LG eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_LG, 0x9803) },
+    /* Microsoft MCE Infrared Transceiver */
+    { USB_DEVICE(VENDOR_MICROSOFT, 0x00a0) },
+    /* Formosa eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe015) },
+    /* Formosa21 / eHome Infrared Receiver */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe016) },
+    /* Formosa aim / Trust MCE Infrared Receiver */
+    {
+        USB_DEVICE(VENDOR_FORMOSA, 0xe017),
+        .driver_info = MCE_GEN2_NO_TX
+    },
+    /* Formosa Industrial Computing / Beanbag Emulation Device */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe018) },
+    /* Formosa21 / eHome Infrared Receiver */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe03a) },
+    /* Formosa Industrial Computing AIM IR605/A */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe03c) },
+    /* Formosa Industrial Computing */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe03e) },
+    /* Formosa Industrial Computing */
+    { USB_DEVICE(VENDOR_FORMOSA, 0xe042) },
+    /* Fintek eHome Infrared Transceiver (HP branded) */
+    { USB_DEVICE(VENDOR_FINTEK, 0x5168) },
+    /* Fintek eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_FINTEK, 0x0602) },
+    /* Fintek eHome Infrared Transceiver (in the AOpen MP45) */
+    { USB_DEVICE(VENDOR_FINTEK, 0x0702) },
+    /* Pinnacle Remote Kit */
+    {
+        USB_DEVICE(VENDOR_PINNACLE, 0x0225),
+        .driver_info = MCE_GEN3
+    },
+    /* Elitegroup Computer Systems IR */
+    { USB_DEVICE(VENDOR_ECS, 0x0f38) },
+    /* Wistron Corp. eHome Infrared Receiver */
+    { USB_DEVICE(VENDOR_WISTRON, 0x0002) },
+    /* Compro K100 */
+    { USB_DEVICE(VENDOR_COMPRO, 0x3020) },
+    /* Compro K100 v2 */
+    { USB_DEVICE(VENDOR_COMPRO, 0x3082) },
+    /* Northstar Systems, Inc. eHome Infrared Transceiver */
+    { USB_DEVICE(VENDOR_NORTHSTAR, 0xe004) },
+    /* TiVo PC IR Receiver */
+    {
+        USB_DEVICE(VENDOR_TIVO, 0x2000),
+        .driver_info = TIVO_KIT
+    },
+    /* Conexant Hybrid TV "Shelby" Polaris SDK */
+    {
+        USB_DEVICE(VENDOR_CONEXANT, 0x58a1),
+        .driver_info = POLARIS_EVK
+    },
+    /* Conexant Hybrid TV RDU253S Polaris */
+    {
+        USB_DEVICE(VENDOR_CONEXANT, 0x58a5),
+        .driver_info = CX_HYBRID_TV
+    },
+    /* Terminating entry */
+    { }
 };
 
 /* data structure for each usb transceiver */
 struct mceusb_dev {
-	/* ir-core bits */
-	struct rc_dev *rc;
+    /* ir-core bits */
+    struct rc_dev *rc;
 
-	/* optional features we can enable */
-	bool carrier_report_enabled;
-	bool learning_enabled;
+    /* optional features we can enable */
+    bool carrier_report_enabled;
+    bool learning_enabled;
 
-	/* core device bits */
-	struct device *dev;
+    /* core device bits */
+    struct device *dev;
 
-	/* usb */
-	struct usb_device *usbdev;
-	struct urb *urb_in;
-	struct usb_endpoint_descriptor *usb_ep_in;
-	struct usb_endpoint_descriptor *usb_ep_out;
+    /* usb */
+    struct usb_device *usbdev;
+    struct urb *urb_in;
+    struct usb_endpoint_descriptor *usb_ep_in;
+    struct usb_endpoint_descriptor *usb_ep_out;
 
-	/* buffers and dma */
-	unsigned char *buf_in;
-	unsigned int len_in;
-	dma_addr_t dma_in;
-	dma_addr_t dma_out;
+    /* buffers and dma */
+    unsigned char *buf_in;
+    unsigned int len_in;
+    dma_addr_t dma_in;
+    dma_addr_t dma_out;
 
-	enum {
-		CMD_HEADER = 0,
-		SUBCMD,
-		CMD_DATA,
-		PARSE_IRDATA,
-	} parser_state;
+    enum {
+        CMD_HEADER = 0,
+        SUBCMD,
+        CMD_DATA,
+        PARSE_IRDATA,
+    } parser_state;
 
-	u8 cmd, rem;		/* Remaining IR data bytes in packet */
+    u8 cmd, rem;		/* Remaining IR data bytes in packet */
 
-	struct {
-		u32 connected:1;
-		u32 tx_mask_normal:1;
-		u32 microsoft_gen1:1;
-		u32 no_tx:1;
-	} flags;
+    struct {
+        u32 connected:1;
+        u32 tx_mask_normal:1;
+        u32 microsoft_gen1:1;
+        u32 no_tx:1;
+    } flags;
 
-	/* transmit support */
-	int send_flags;
-	u32 carrier;
-	unsigned char tx_mask;
+    /* transmit support */
+    int send_flags;
+    u32 carrier;
+    unsigned char tx_mask;
 
-	char name[128];
-	char phys[64];
-	enum mceusb_model_type model;
+    char name[128];
+    char phys[64];
+    enum mceusb_model_type model;
 
-	bool need_reset;	/* flag to issue a device resume cmd */
-	u8 emver;		/* emulator interface version */
-	u8 num_txports;		/* number of transmit ports */
-	u8 num_rxports;		/* number of receive sensors */
-	u8 txports_cabled;	/* bitmask of transmitters with cable */
-	u8 rxports_active;	/* bitmask of active receive sensors */
+    bool need_reset;	/* flag to issue a device resume cmd */
+    u8 emver;		/* emulator interface version */
+    u8 num_txports;		/* number of transmit ports */
+    u8 num_rxports;		/* number of receive sensors */
+    u8 txports_cabled;	/* bitmask of transmitters with cable */
+    u8 rxports_active;	/* bitmask of active receive sensors */
 };
 
 /* MCE Device Command Strings, generally a port and command pair */
 static char DEVICE_RESUME[]	= {MCE_CMD_NULL, MCE_CMD_PORT_SYS,
-				   MCE_CMD_RESUME};
+                               MCE_CMD_RESUME
+                              };
 static char GET_REVISION[]	= {MCE_CMD_PORT_SYS, MCE_CMD_G_REVISION};
 static char GET_EMVER[]		= {MCE_CMD_PORT_SYS, MCE_CMD_GETEMVER};
 static char GET_WAKEVERSION[]	= {MCE_CMD_PORT_SYS, MCE_CMD_GETWAKEVERSION};
@@ -476,450 +513,442 @@ static char SET_RX_SENSOR[]	= {MCE_CMD_PORT_IR,
 				   MCE_RSP_EQIRRXPORTEN, 0x00};
 */
 
-static int mceusb_cmdsize(u8 cmd, u8 subcmd)
-{
-	int datasize = 0;
+static int mceusb_cmdsize(u8 cmd, u8 subcmd) {
+    int datasize = 0;
 
-	switch (cmd) {
-	case MCE_CMD_NULL:
-		if (subcmd == MCE_CMD_PORT_SYS)
-			datasize = 1;
-		break;
-	case MCE_CMD_PORT_SYS:
-		switch (subcmd) {
-		case MCE_RSP_EQWAKEVERSION:
-			datasize = 4;
-			break;
-		case MCE_CMD_G_REVISION:
-			datasize = 2;
-			break;
-		case MCE_RSP_EQWAKESUPPORT:
-			datasize = 1;
-			break;
-		}
-	case MCE_CMD_PORT_IR:
-		switch (subcmd) {
-		case MCE_CMD_UNKNOWN:
-		case MCE_RSP_EQIRCFS:
-		case MCE_RSP_EQIRTIMEOUT:
-		case MCE_RSP_EQIRRXCFCNT:
-			datasize = 2;
-			break;
-		case MCE_CMD_SIG_END:
-		case MCE_RSP_EQIRTXPORTS:
-		case MCE_RSP_EQIRRXPORTEN:
-			datasize = 1;
-			break;
-		}
-	}
-	return datasize;
+    switch (cmd) {
+    case MCE_CMD_NULL:
+        if (subcmd == MCE_CMD_PORT_SYS)
+            datasize = 1;
+        break;
+    case MCE_CMD_PORT_SYS:
+        switch (subcmd) {
+        case MCE_RSP_EQWAKEVERSION:
+            datasize = 4;
+            break;
+        case MCE_CMD_G_REVISION:
+            datasize = 2;
+            break;
+        case MCE_RSP_EQWAKESUPPORT:
+            datasize = 1;
+            break;
+        }
+    case MCE_CMD_PORT_IR:
+        switch (subcmd) {
+        case MCE_CMD_UNKNOWN:
+        case MCE_RSP_EQIRCFS:
+        case MCE_RSP_EQIRTIMEOUT:
+        case MCE_RSP_EQIRRXCFCNT:
+            datasize = 2;
+            break;
+        case MCE_CMD_SIG_END:
+        case MCE_RSP_EQIRTXPORTS:
+        case MCE_RSP_EQIRRXPORTEN:
+            datasize = 1;
+            break;
+        }
+    }
+    return datasize;
 }
 
 static void mceusb_dev_printdata(struct mceusb_dev *ir, char *buf,
-				 int offset, int len, bool out)
-{
-	char codes[USB_BUFLEN * 3 + 1];
-	char inout[9];
-	u8 cmd, subcmd, data1, data2, data3, data4, data5;
-	struct device *dev = ir->dev;
-	int i, start, skip = 0;
-	u32 carrier, period;
+                                 int offset, int len, bool out) {
+    char codes[USB_BUFLEN * 3 + 1];
+    char inout[9];
+    u8 cmd, subcmd, data1, data2, data3, data4, data5;
+    struct device *dev = ir->dev;
+    int i, start, skip = 0;
+    u32 carrier, period;
 
-	if (!debug)
-		return;
+    if (!debug)
+        return;
 
-	/* skip meaningless 0xb1 0x60 header bytes on orig receiver */
-	if (ir->flags.microsoft_gen1 && !out && !offset)
-		skip = 2;
+    /* skip meaningless 0xb1 0x60 header bytes on orig receiver */
+    if (ir->flags.microsoft_gen1 && !out && !offset)
+        skip = 2;
 
-	if (len <= skip)
-		return;
+    if (len <= skip)
+        return;
 
-	for (i = 0; i < len && i < USB_BUFLEN; i++)
-		snprintf(codes + i * 3, 4, "%02x ", buf[i + offset] & 0xff);
+    for (i = 0; i < len && i < USB_BUFLEN; i++)
+        snprintf(codes + i * 3, 4, "%02x ", buf[i + offset] & 0xff);
 
-	dev_info(dev, "%sx data: %s(length=%d)\n",
-		 (out ? "t" : "r"), codes, len);
+    dev_info(dev, "%sx data: %s(length=%d)\n",
+             (out ? "t" : "r"), codes, len);
 
-	if (out)
-		strcpy(inout, "Request\0");
-	else
-		strcpy(inout, "Got\0");
+    if (out)
+        strcpy(inout, "Request\0");
+    else
+        strcpy(inout, "Got\0");
 
-	start  = offset + skip;
-	cmd    = buf[start] & 0xff;
-	subcmd = buf[start + 1] & 0xff;
-	data1  = buf[start + 2] & 0xff;
-	data2  = buf[start + 3] & 0xff;
-	data3  = buf[start + 4] & 0xff;
-	data4  = buf[start + 5] & 0xff;
-	data5  = buf[start + 6] & 0xff;
+    start  = offset + skip;
+    cmd    = buf[start] & 0xff;
+    subcmd = buf[start + 1] & 0xff;
+    data1  = buf[start + 2] & 0xff;
+    data2  = buf[start + 3] & 0xff;
+    data3  = buf[start + 4] & 0xff;
+    data4  = buf[start + 5] & 0xff;
+    data5  = buf[start + 6] & 0xff;
 
-	switch (cmd) {
-	case MCE_CMD_NULL:
-		if (subcmd == MCE_CMD_NULL)
-			break;
-		if ((subcmd == MCE_CMD_PORT_SYS) &&
-		    (data1 == MCE_CMD_RESUME))
-			dev_info(dev, "Device resume requested\n");
-		else
-			dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
-				 cmd, subcmd);
-		break;
-	case MCE_CMD_PORT_SYS:
-		switch (subcmd) {
-		case MCE_RSP_EQEMVER:
-			if (!out)
-				dev_info(dev, "Emulator interface version %x\n",
-					 data1);
-			break;
-		case MCE_CMD_G_REVISION:
-			if (len == 2)
-				dev_info(dev, "Get hw/sw rev?\n");
-			else
-				dev_info(dev, "hw/sw rev 0x%02x 0x%02x "
-					 "0x%02x 0x%02x\n", data1, data2,
-					 buf[start + 4], buf[start + 5]);
-			break;
-		case MCE_CMD_RESUME:
-			dev_info(dev, "Device resume requested\n");
-			break;
-		case MCE_RSP_CMD_ILLEGAL:
-			dev_info(dev, "Illegal PORT_SYS command\n");
-			break;
-		case MCE_RSP_EQWAKEVERSION:
-			if (!out)
-				dev_info(dev, "Wake version, proto: 0x%02x, "
-					 "payload: 0x%02x, address: 0x%02x, "
-					 "version: 0x%02x\n",
-					 data1, data2, data3, data4);
-			break;
-		case MCE_RSP_GETPORTSTATUS:
-			if (!out)
-				/* We use data1 + 1 here, to match hw labels */
-				dev_info(dev, "TX port %d: blaster is%s connected\n",
-					 data1 + 1, data4 ? " not" : "");
-			break;
-		case MCE_CMD_FLASHLED:
-			dev_info(dev, "Attempting to flash LED\n");
-			break;
-		default:
-			dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
-				 cmd, subcmd);
-			break;
-		}
-		break;
-	case MCE_CMD_PORT_IR:
-		switch (subcmd) {
-		case MCE_CMD_SIG_END:
-			dev_info(dev, "End of signal\n");
-			break;
-		case MCE_CMD_PING:
-			dev_info(dev, "Ping\n");
-			break;
-		case MCE_CMD_UNKNOWN:
-			dev_info(dev, "Resp to 9f 05 of 0x%02x 0x%02x\n",
-				 data1, data2);
-			break;
-		case MCE_RSP_EQIRCFS:
-			period = DIV_ROUND_CLOSEST(
-					(1 << data1 * 2) * (data2 + 1), 10);
-			if (!period)
-				break;
-			carrier = (1000 * 1000) / period;
-			dev_info(dev, "%s carrier of %u Hz (period %uus)\n",
-				 inout, carrier, period);
-			break;
-		case MCE_CMD_GETIRCFS:
-			dev_info(dev, "Get carrier mode and freq\n");
-			break;
-		case MCE_RSP_EQIRTXPORTS:
-			dev_info(dev, "%s transmit blaster mask of 0x%02x\n",
-				 inout, data1);
-			break;
-		case MCE_RSP_EQIRTIMEOUT:
-			/* value is in units of 50us, so x*50/1000 ms */
-			period = ((data1 << 8) | data2) * MCE_TIME_UNIT / 1000;
-			dev_info(dev, "%s receive timeout of %d ms\n",
-				 inout, period);
-			break;
-		case MCE_CMD_GETIRTIMEOUT:
-			dev_info(dev, "Get receive timeout\n");
-			break;
-		case MCE_CMD_GETIRTXPORTS:
-			dev_info(dev, "Get transmit blaster mask\n");
-			break;
-		case MCE_RSP_EQIRRXPORTEN:
-			dev_info(dev, "%s %s-range receive sensor in use\n",
-				 inout, data1 == 0x02 ? "short" : "long");
-			break;
-		case MCE_CMD_GETIRRXPORTEN:
-		/* aka MCE_RSP_EQIRRXCFCNT */
-			if (out)
-				dev_info(dev, "Get receive sensor\n");
-			else if (ir->learning_enabled)
-				dev_info(dev, "RX pulse count: %d\n",
-					 ((data1 << 8) | data2));
-			break;
-		case MCE_RSP_EQIRNUMPORTS:
-			if (out)
-				break;
-			dev_info(dev, "Num TX ports: %x, num RX ports: %x\n",
-				 data1, data2);
-			break;
-		case MCE_RSP_CMD_ILLEGAL:
-			dev_info(dev, "Illegal PORT_IR command\n");
-			break;
-		default:
-			dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
-				 cmd, subcmd);
-			break;
-		}
-		break;
-	default:
-		break;
-	}
+    switch (cmd) {
+    case MCE_CMD_NULL:
+        if (subcmd == MCE_CMD_NULL)
+            break;
+        if ((subcmd == MCE_CMD_PORT_SYS) &&
+                (data1 == MCE_CMD_RESUME))
+            dev_info(dev, "Device resume requested\n");
+        else
+            dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
+                     cmd, subcmd);
+        break;
+    case MCE_CMD_PORT_SYS:
+        switch (subcmd) {
+        case MCE_RSP_EQEMVER:
+            if (!out)
+                dev_info(dev, "Emulator interface version %x\n",
+                         data1);
+            break;
+        case MCE_CMD_G_REVISION:
+            if (len == 2)
+                dev_info(dev, "Get hw/sw rev?\n");
+            else
+                dev_info(dev, "hw/sw rev 0x%02x 0x%02x "
+                         "0x%02x 0x%02x\n", data1, data2,
+                         buf[start + 4], buf[start + 5]);
+            break;
+        case MCE_CMD_RESUME:
+            dev_info(dev, "Device resume requested\n");
+            break;
+        case MCE_RSP_CMD_ILLEGAL:
+            dev_info(dev, "Illegal PORT_SYS command\n");
+            break;
+        case MCE_RSP_EQWAKEVERSION:
+            if (!out)
+                dev_info(dev, "Wake version, proto: 0x%02x, "
+                         "payload: 0x%02x, address: 0x%02x, "
+                         "version: 0x%02x\n",
+                         data1, data2, data3, data4);
+            break;
+        case MCE_RSP_GETPORTSTATUS:
+            if (!out)
+                /* We use data1 + 1 here, to match hw labels */
+                dev_info(dev, "TX port %d: blaster is%s connected\n",
+                         data1 + 1, data4 ? " not" : "");
+            break;
+        case MCE_CMD_FLASHLED:
+            dev_info(dev, "Attempting to flash LED\n");
+            break;
+        default:
+            dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
+                     cmd, subcmd);
+            break;
+        }
+        break;
+    case MCE_CMD_PORT_IR:
+        switch (subcmd) {
+        case MCE_CMD_SIG_END:
+            dev_info(dev, "End of signal\n");
+            break;
+        case MCE_CMD_PING:
+            dev_info(dev, "Ping\n");
+            break;
+        case MCE_CMD_UNKNOWN:
+            dev_info(dev, "Resp to 9f 05 of 0x%02x 0x%02x\n",
+                     data1, data2);
+            break;
+        case MCE_RSP_EQIRCFS:
+            period = DIV_ROUND_CLOSEST(
+                         (1 << data1 * 2) * (data2 + 1), 10);
+            if (!period)
+                break;
+            carrier = (1000 * 1000) / period;
+            dev_info(dev, "%s carrier of %u Hz (period %uus)\n",
+                     inout, carrier, period);
+            break;
+        case MCE_CMD_GETIRCFS:
+            dev_info(dev, "Get carrier mode and freq\n");
+            break;
+        case MCE_RSP_EQIRTXPORTS:
+            dev_info(dev, "%s transmit blaster mask of 0x%02x\n",
+                     inout, data1);
+            break;
+        case MCE_RSP_EQIRTIMEOUT:
+            /* value is in units of 50us, so x*50/1000 ms */
+            period = ((data1 << 8) | data2) * MCE_TIME_UNIT / 1000;
+            dev_info(dev, "%s receive timeout of %d ms\n",
+                     inout, period);
+            break;
+        case MCE_CMD_GETIRTIMEOUT:
+            dev_info(dev, "Get receive timeout\n");
+            break;
+        case MCE_CMD_GETIRTXPORTS:
+            dev_info(dev, "Get transmit blaster mask\n");
+            break;
+        case MCE_RSP_EQIRRXPORTEN:
+            dev_info(dev, "%s %s-range receive sensor in use\n",
+                     inout, data1 == 0x02 ? "short" : "long");
+            break;
+        case MCE_CMD_GETIRRXPORTEN:
+            /* aka MCE_RSP_EQIRRXCFCNT */
+            if (out)
+                dev_info(dev, "Get receive sensor\n");
+            else if (ir->learning_enabled)
+                dev_info(dev, "RX pulse count: %d\n",
+                         ((data1 << 8) | data2));
+            break;
+        case MCE_RSP_EQIRNUMPORTS:
+            if (out)
+                break;
+            dev_info(dev, "Num TX ports: %x, num RX ports: %x\n",
+                     data1, data2);
+            break;
+        case MCE_RSP_CMD_ILLEGAL:
+            dev_info(dev, "Illegal PORT_IR command\n");
+            break;
+        default:
+            dev_info(dev, "Unknown command 0x%02x 0x%02x\n",
+                     cmd, subcmd);
+            break;
+        }
+        break;
+    default:
+        break;
+    }
 
-	if (cmd == MCE_IRDATA_TRAILER)
-		dev_info(dev, "End of raw IR data\n");
-	else if ((cmd != MCE_CMD_PORT_IR) &&
-		 ((cmd & MCE_PORT_MASK) == MCE_COMMAND_IRDATA))
-		dev_info(dev, "Raw IR data, %d pulse/space samples\n", ir->rem);
+    if (cmd == MCE_IRDATA_TRAILER)
+        dev_info(dev, "End of raw IR data\n");
+    else if ((cmd != MCE_CMD_PORT_IR) &&
+             ((cmd & MCE_PORT_MASK) == MCE_COMMAND_IRDATA))
+        dev_info(dev, "Raw IR data, %d pulse/space samples\n", ir->rem);
 }
 
-static void mce_async_callback(struct urb *urb, struct pt_regs *regs)
-{
-	struct mceusb_dev *ir;
-	int len;
+static void mce_async_callback(struct urb *urb, struct pt_regs *regs) {
+    struct mceusb_dev *ir;
+    int len;
 
-	if (!urb)
-		return;
+    if (!urb)
+        return;
 
-	ir = urb->context;
-	if (ir) {
-		len = urb->actual_length;
+    ir = urb->context;
+    if (ir) {
+        len = urb->actual_length;
 
-		mceusb_dev_printdata(ir, urb->transfer_buffer, 0, len, true);
-	}
+        mceusb_dev_printdata(ir, urb->transfer_buffer, 0, len, true);
+    }
 
-	/* the transfer buffer and urb were allocated in mce_request_packet */
-	kfree(urb->transfer_buffer);
-	usb_free_urb(urb);
+    /* the transfer buffer and urb were allocated in mce_request_packet */
+    kfree(urb->transfer_buffer);
+    usb_free_urb(urb);
 }
 
 /* request incoming or send outgoing usb packet - used to initialize remote */
 static void mce_request_packet(struct mceusb_dev *ir, unsigned char *data,
-			       int size, int urb_type)
-{
-	int res, pipe;
-	struct urb *async_urb;
-	struct device *dev = ir->dev;
-	unsigned char *async_buf;
+                               int size, int urb_type) {
+    int res, pipe;
+    struct urb *async_urb;
+    struct device *dev = ir->dev;
+    unsigned char *async_buf;
 
-	if (urb_type == MCEUSB_TX) {
-		async_urb = usb_alloc_urb(0, GFP_KERNEL);
-		if (unlikely(!async_urb)) {
-			dev_err(dev, "Error, couldn't allocate urb!\n");
-			return;
-		}
+    if (urb_type == MCEUSB_TX) {
+        async_urb = usb_alloc_urb(0, GFP_KERNEL);
+        if (unlikely(!async_urb)) {
+            dev_err(dev, "Error, couldn't allocate urb!\n");
+            return;
+        }
 
-		async_buf = kzalloc(size, GFP_KERNEL);
-		if (!async_buf) {
-			dev_err(dev, "Error, couldn't allocate buf!\n");
-			usb_free_urb(async_urb);
-			return;
-		}
+        async_buf = kzalloc(size, GFP_KERNEL);
+        if (!async_buf) {
+            dev_err(dev, "Error, couldn't allocate buf!\n");
+            usb_free_urb(async_urb);
+            return;
+        }
 
-		/* outbound data */
-		pipe = usb_sndintpipe(ir->usbdev,
-				      ir->usb_ep_out->bEndpointAddress);
-		usb_fill_int_urb(async_urb, ir->usbdev, pipe,
-			async_buf, size, (usb_complete_t)mce_async_callback,
-			ir, ir->usb_ep_out->bInterval);
-		memcpy(async_buf, data, size);
+        /* outbound data */
+        pipe = usb_sndintpipe(ir->usbdev,
+                              ir->usb_ep_out->bEndpointAddress);
+        usb_fill_int_urb(async_urb, ir->usbdev, pipe,
+                         async_buf, size, (usb_complete_t)mce_async_callback,
+                         ir, ir->usb_ep_out->bInterval);
+        memcpy(async_buf, data, size);
 
-	} else if (urb_type == MCEUSB_RX) {
-		/* standard request */
-		async_urb = ir->urb_in;
-		ir->send_flags = RECV_FLAG_IN_PROGRESS;
+    } else if (urb_type == MCEUSB_RX) {
+        /* standard request */
+        async_urb = ir->urb_in;
+        ir->send_flags = RECV_FLAG_IN_PROGRESS;
 
-	} else {
-		dev_err(dev, "Error! Unknown urb type %d\n", urb_type);
-		return;
-	}
+    } else {
+        dev_err(dev, "Error! Unknown urb type %d\n", urb_type);
+        return;
+    }
 
-	mce_dbg(dev, "receive request called (size=%#x)\n", size);
+    mce_dbg(dev, "receive request called (size=%#x)\n", size);
 
-	async_urb->transfer_buffer_length = size;
-	async_urb->dev = ir->usbdev;
+    async_urb->transfer_buffer_length = size;
+    async_urb->dev = ir->usbdev;
 
-	res = usb_submit_urb(async_urb, GFP_ATOMIC);
-	if (res) {
-		mce_dbg(dev, "receive request FAILED! (res=%d)\n", res);
-		return;
-	}
-	mce_dbg(dev, "receive request complete (res=%d)\n", res);
+    res = usb_submit_urb(async_urb, GFP_ATOMIC);
+    if (res) {
+        mce_dbg(dev, "receive request FAILED! (res=%d)\n", res);
+        return;
+    }
+    mce_dbg(dev, "receive request complete (res=%d)\n", res);
 }
 
-static void mce_async_out(struct mceusb_dev *ir, unsigned char *data, int size)
-{
-	int rsize = sizeof(DEVICE_RESUME);
+static void mce_async_out(struct mceusb_dev *ir, unsigned char *data, int size) {
+    int rsize = sizeof(DEVICE_RESUME);
 
-	if (ir->need_reset) {
-		ir->need_reset = false;
-		mce_request_packet(ir, DEVICE_RESUME, rsize, MCEUSB_TX);
-		msleep(10);
-	}
+    if (ir->need_reset) {
+        ir->need_reset = false;
+        mce_request_packet(ir, DEVICE_RESUME, rsize, MCEUSB_TX);
+        msleep(10);
+    }
 
-	mce_request_packet(ir, data, size, MCEUSB_TX);
-	msleep(10);
+    mce_request_packet(ir, data, size, MCEUSB_TX);
+    msleep(10);
 }
 
-static void mce_flush_rx_buffer(struct mceusb_dev *ir, int size)
-{
-	mce_request_packet(ir, NULL, size, MCEUSB_RX);
+static void mce_flush_rx_buffer(struct mceusb_dev *ir, int size) {
+    mce_request_packet(ir, NULL, size, MCEUSB_RX);
 }
 
 /* Send data out the IR blaster port(s) */
-static int mceusb_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count)
-{
-	struct mceusb_dev *ir = dev->priv;
-	int i, ret = 0;
-	int cmdcount = 0;
-	unsigned char *cmdbuf; /* MCE command buffer */
-	long signal_duration = 0; /* Singnal length in us */
-	struct timeval start_time, end_time;
+static int mceusb_tx_ir(struct rc_dev *dev, unsigned *txbuf, unsigned count) {
+    struct mceusb_dev *ir = dev->priv;
+    int i, ret = 0;
+    int cmdcount = 0;
+    unsigned char *cmdbuf; /* MCE command buffer */
+    long signal_duration = 0; /* Singnal length in us */
+    struct timeval start_time, end_time;
 
-	do_gettimeofday(&start_time);
+    do_gettimeofday(&start_time);
 
-	cmdbuf = kzalloc(sizeof(unsigned) * MCE_CMDBUF_SIZE, GFP_KERNEL);
-	if (!cmdbuf)
-		return -ENOMEM;
+    cmdbuf = kzalloc(sizeof(unsigned) * MCE_CMDBUF_SIZE, GFP_KERNEL);
+    if (!cmdbuf)
+        return -ENOMEM;
 
-	/* MCE tx init header */
-	cmdbuf[cmdcount++] = MCE_CMD_PORT_IR;
-	cmdbuf[cmdcount++] = MCE_CMD_SETIRTXPORTS;
-	cmdbuf[cmdcount++] = ir->tx_mask;
+    /* MCE tx init header */
+    cmdbuf[cmdcount++] = MCE_CMD_PORT_IR;
+    cmdbuf[cmdcount++] = MCE_CMD_SETIRTXPORTS;
+    cmdbuf[cmdcount++] = ir->tx_mask;
 
-	/* Generate mce packet data */
-	for (i = 0; (i < count) && (cmdcount < MCE_CMDBUF_SIZE); i++) {
-		signal_duration += txbuf[i];
-		txbuf[i] = txbuf[i] / MCE_TIME_UNIT;
+    /* Generate mce packet data */
+    for (i = 0; (i < count) && (cmdcount < MCE_CMDBUF_SIZE); i++) {
+        signal_duration += txbuf[i];
+        txbuf[i] = txbuf[i] / MCE_TIME_UNIT;
 
-		do { /* loop to support long pulses/spaces > 127*50us=6.35ms */
+        do { /* loop to support long pulses/spaces > 127*50us=6.35ms */
 
-			/* Insert mce packet header every 4th entry */
-			if ((cmdcount < MCE_CMDBUF_SIZE) &&
-			    (cmdcount - MCE_TX_HEADER_LENGTH) %
-			     MCE_CODE_LENGTH == 0)
-				cmdbuf[cmdcount++] = MCE_IRDATA_HEADER;
+            /* Insert mce packet header every 4th entry */
+            if ((cmdcount < MCE_CMDBUF_SIZE) &&
+                    (cmdcount - MCE_TX_HEADER_LENGTH) %
+                    MCE_CODE_LENGTH == 0)
+                cmdbuf[cmdcount++] = MCE_IRDATA_HEADER;
 
-			/* Insert mce packet data */
-			if (cmdcount < MCE_CMDBUF_SIZE)
-				cmdbuf[cmdcount++] =
-					(txbuf[i] < MCE_PULSE_BIT ?
-					 txbuf[i] : MCE_MAX_PULSE_LENGTH) |
-					 (i & 1 ? 0x00 : MCE_PULSE_BIT);
-			else {
-				ret = -EINVAL;
-				goto out;
-			}
+            /* Insert mce packet data */
+            if (cmdcount < MCE_CMDBUF_SIZE)
+                cmdbuf[cmdcount++] =
+                    (txbuf[i] < MCE_PULSE_BIT ?
+                     txbuf[i] : MCE_MAX_PULSE_LENGTH) |
+                    (i & 1 ? 0x00 : MCE_PULSE_BIT);
+            else {
+                ret = -EINVAL;
+                goto out;
+            }
 
-		} while ((txbuf[i] > MCE_MAX_PULSE_LENGTH) &&
-			 (txbuf[i] -= MCE_MAX_PULSE_LENGTH));
-	}
+        } while ((txbuf[i] > MCE_MAX_PULSE_LENGTH) &&
+                 (txbuf[i] -= MCE_MAX_PULSE_LENGTH));
+    }
 
-	/* Fix packet length in last header */
-	cmdbuf[cmdcount - (cmdcount - MCE_TX_HEADER_LENGTH) % MCE_CODE_LENGTH] =
-		MCE_COMMAND_IRDATA + (cmdcount - MCE_TX_HEADER_LENGTH) %
-		MCE_CODE_LENGTH - 1;
+    /* Fix packet length in last header */
+    cmdbuf[cmdcount - (cmdcount - MCE_TX_HEADER_LENGTH) % MCE_CODE_LENGTH] =
+        MCE_COMMAND_IRDATA + (cmdcount - MCE_TX_HEADER_LENGTH) %
+        MCE_CODE_LENGTH - 1;
 
-	/* Check if we have room for the empty packet at the end */
-	if (cmdcount >= MCE_CMDBUF_SIZE) {
-		ret = -EINVAL;
-		goto out;
-	}
+    /* Check if we have room for the empty packet at the end */
+    if (cmdcount >= MCE_CMDBUF_SIZE) {
+        ret = -EINVAL;
+        goto out;
+    }
 
-	/* All mce commands end with an empty packet (0x80) */
-	cmdbuf[cmdcount++] = MCE_IRDATA_TRAILER;
+    /* All mce commands end with an empty packet (0x80) */
+    cmdbuf[cmdcount++] = MCE_IRDATA_TRAILER;
 
-	/* Transmit the command to the mce device */
-	mce_async_out(ir, cmdbuf, cmdcount);
+    /* Transmit the command to the mce device */
+    mce_async_out(ir, cmdbuf, cmdcount);
 
-	/*
-	 * The lircd gap calculation expects the write function to
-	 * wait the time it takes for the ircommand to be sent before
-	 * it returns.
-	 */
-	do_gettimeofday(&end_time);
-	signal_duration -= (end_time.tv_usec - start_time.tv_usec) +
-			   (end_time.tv_sec - start_time.tv_sec) * 1000000;
+    /*
+     * The lircd gap calculation expects the write function to
+     * wait the time it takes for the ircommand to be sent before
+     * it returns.
+     */
+    do_gettimeofday(&end_time);
+    signal_duration -= (end_time.tv_usec - start_time.tv_usec) +
+                       (end_time.tv_sec - start_time.tv_sec) * 1000000;
 
-	/* delay with the closest number of ticks */
-	set_current_state(TASK_INTERRUPTIBLE);
-	schedule_timeout(usecs_to_jiffies(signal_duration));
+    /* delay with the closest number of ticks */
+    set_current_state(TASK_INTERRUPTIBLE);
+    schedule_timeout(usecs_to_jiffies(signal_duration));
 
 out:
-	kfree(cmdbuf);
-	return ret ? ret : count;
+    kfree(cmdbuf);
+    return ret ? ret : count;
 }
 
 /* Sets active IR outputs -- mce devices typically have two */
-static int mceusb_set_tx_mask(struct rc_dev *dev, u32 mask)
-{
-	struct mceusb_dev *ir = dev->priv;
+static int mceusb_set_tx_mask(struct rc_dev *dev, u32 mask) {
+    struct mceusb_dev *ir = dev->priv;
 
-	if (ir->flags.tx_mask_normal)
-		ir->tx_mask = mask;
-	else
-		ir->tx_mask = (mask != MCE_DEFAULT_TX_MASK ?
-				mask ^ MCE_DEFAULT_TX_MASK : mask) << 1;
+    if (ir->flags.tx_mask_normal)
+        ir->tx_mask = mask;
+    else
+        ir->tx_mask = (mask != MCE_DEFAULT_TX_MASK ?
+                       mask ^ MCE_DEFAULT_TX_MASK : mask) << 1;
 
-	return 0;
+    return 0;
 }
 
 /* Sets the send carrier frequency and mode */
-static int mceusb_set_tx_carrier(struct rc_dev *dev, u32 carrier)
-{
-	struct mceusb_dev *ir = dev->priv;
-	int clk = 10000000;
-	int prescaler = 0, divisor = 0;
-	unsigned char cmdbuf[4] = { MCE_CMD_PORT_IR,
-				    MCE_CMD_SETIRCFS, 0x00, 0x00 };
+static int mceusb_set_tx_carrier(struct rc_dev *dev, u32 carrier) {
+    struct mceusb_dev *ir = dev->priv;
+    int clk = 10000000;
+    int prescaler = 0, divisor = 0;
+    unsigned char cmdbuf[4] = { MCE_CMD_PORT_IR,
+                                MCE_CMD_SETIRCFS, 0x00, 0x00
+                              };
 
-	/* Carrier has changed */
-	if (ir->carrier != carrier) {
+    /* Carrier has changed */
+    if (ir->carrier != carrier) {
 
-		if (carrier == 0) {
-			ir->carrier = carrier;
-			cmdbuf[2] = MCE_CMD_SIG_END;
-			cmdbuf[3] = MCE_IRDATA_TRAILER;
-			mce_dbg(ir->dev, "%s: disabling carrier "
-				"modulation\n", __func__);
-			mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
-			return carrier;
-		}
+        if (carrier == 0) {
+            ir->carrier = carrier;
+            cmdbuf[2] = MCE_CMD_SIG_END;
+            cmdbuf[3] = MCE_IRDATA_TRAILER;
+            mce_dbg(ir->dev, "%s: disabling carrier "
+                    "modulation\n", __func__);
+            mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
+            return carrier;
+        }
 
-		for (prescaler = 0; prescaler < 4; ++prescaler) {
-			divisor = (clk >> (2 * prescaler)) / carrier;
-			if (divisor <= 0xff) {
-				ir->carrier = carrier;
-				cmdbuf[2] = prescaler;
-				cmdbuf[3] = divisor;
-				mce_dbg(ir->dev, "%s: requesting %u HZ "
-					"carrier\n", __func__, carrier);
+        for (prescaler = 0; prescaler < 4; ++prescaler) {
+            divisor = (clk >> (2 * prescaler)) / carrier;
+            if (divisor <= 0xff) {
+                ir->carrier = carrier;
+                cmdbuf[2] = prescaler;
+                cmdbuf[3] = divisor;
+                mce_dbg(ir->dev, "%s: requesting %u HZ "
+                        "carrier\n", __func__, carrier);
 
-				/* Transmit new carrier to mce device */
-				mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
-				return carrier;
-			}
-		}
+                /* Transmit new carrier to mce device */
+                mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
+                return carrier;
+            }
+        }
 
-		return -EINVAL;
+        return -EINVAL;
 
-	}
+    }
 
-	return carrier;
+    return carrier;
 }
 
 /*
@@ -927,527 +956,515 @@ static int mceusb_set_tx_carrier(struct rc_dev *dev, u32 carrier)
  * we receive from the hardware, but some of them are useful information
  * we want to store so that we can use them.
  */
-static void mceusb_handle_command(struct mceusb_dev *ir, int index)
-{
-	u8 hi = ir->buf_in[index + 1] & 0xff;
-	u8 lo = ir->buf_in[index + 2] & 0xff;
+static void mceusb_handle_command(struct mceusb_dev *ir, int index) {
+    u8 hi = ir->buf_in[index + 1] & 0xff;
+    u8 lo = ir->buf_in[index + 2] & 0xff;
 
-	switch (ir->buf_in[index]) {
-	/* the one and only 5-byte return value command */
-	case MCE_RSP_GETPORTSTATUS:
-		if ((ir->buf_in[index + 4] & 0xff) == 0x00)
-			ir->txports_cabled |= 1 << hi;
-		break;
+    switch (ir->buf_in[index]) {
+    /* the one and only 5-byte return value command */
+    case MCE_RSP_GETPORTSTATUS:
+        if ((ir->buf_in[index + 4] & 0xff) == 0x00)
+            ir->txports_cabled |= 1 << hi;
+        break;
 
-	/* 2-byte return value commands */
-	case MCE_RSP_EQIRTIMEOUT:
-		ir->rc->timeout = US_TO_NS((hi << 8 | lo) * MCE_TIME_UNIT);
-		break;
-	case MCE_RSP_EQIRNUMPORTS:
-		ir->num_txports = hi;
-		ir->num_rxports = lo;
-		break;
+    /* 2-byte return value commands */
+    case MCE_RSP_EQIRTIMEOUT:
+        ir->rc->timeout = US_TO_NS((hi << 8 | lo) * MCE_TIME_UNIT);
+        break;
+    case MCE_RSP_EQIRNUMPORTS:
+        ir->num_txports = hi;
+        ir->num_rxports = lo;
+        break;
 
-	/* 1-byte return value commands */
-	case MCE_RSP_EQEMVER:
-		ir->emver = hi;
-		break;
-	case MCE_RSP_EQIRTXPORTS:
-		ir->tx_mask = hi;
-		break;
-	case MCE_RSP_EQIRRXPORTEN:
-		ir->learning_enabled = ((hi & 0x02) == 0x02);
-		ir->rxports_active = hi;
-		break;
-	case MCE_RSP_CMD_ILLEGAL:
-		ir->need_reset = true;
-		break;
-	default:
-		break;
-	}
+    /* 1-byte return value commands */
+    case MCE_RSP_EQEMVER:
+        ir->emver = hi;
+        break;
+    case MCE_RSP_EQIRTXPORTS:
+        ir->tx_mask = hi;
+        break;
+    case MCE_RSP_EQIRRXPORTEN:
+        ir->learning_enabled = ((hi & 0x02) == 0x02);
+        ir->rxports_active = hi;
+        break;
+    case MCE_RSP_CMD_ILLEGAL:
+        ir->need_reset = true;
+        break;
+    default:
+        break;
+    }
 }
 
-static void mceusb_process_ir_data(struct mceusb_dev *ir, int buf_len)
-{
-	DEFINE_IR_RAW_EVENT(rawir);
-	int i = 0;
+static void mceusb_process_ir_data(struct mceusb_dev *ir, int buf_len) {
+    DEFINE_IR_RAW_EVENT(rawir);
+    int i = 0;
 
-	/* skip meaningless 0xb1 0x60 header bytes on orig receiver */
-	if (ir->flags.microsoft_gen1)
-		i = 2;
+    /* skip meaningless 0xb1 0x60 header bytes on orig receiver */
+    if (ir->flags.microsoft_gen1)
+        i = 2;
 
-	/* if there's no data, just return now */
-	if (buf_len <= i)
-		return;
+    /* if there's no data, just return now */
+    if (buf_len <= i)
+        return;
 
-	for (; i < buf_len; i++) {
-		switch (ir->parser_state) {
-		case SUBCMD:
-			ir->rem = mceusb_cmdsize(ir->cmd, ir->buf_in[i]);
-			mceusb_dev_printdata(ir, ir->buf_in, i - 1,
-					     ir->rem + 2, false);
-			mceusb_handle_command(ir, i);
-			ir->parser_state = CMD_DATA;
-			break;
-		case PARSE_IRDATA:
-			ir->rem--;
-			init_ir_raw_event(&rawir);
-			rawir.pulse = ((ir->buf_in[i] & MCE_PULSE_BIT) != 0);
-			rawir.duration = (ir->buf_in[i] & MCE_PULSE_MASK)
-					 * US_TO_NS(MCE_TIME_UNIT);
+    for (; i < buf_len; i++) {
+        switch (ir->parser_state) {
+        case SUBCMD:
+            ir->rem = mceusb_cmdsize(ir->cmd, ir->buf_in[i]);
+            mceusb_dev_printdata(ir, ir->buf_in, i - 1,
+                                 ir->rem + 2, false);
+            mceusb_handle_command(ir, i);
+            ir->parser_state = CMD_DATA;
+            break;
+        case PARSE_IRDATA:
+            ir->rem--;
+            init_ir_raw_event(&rawir);
+            rawir.pulse = ((ir->buf_in[i] & MCE_PULSE_BIT) != 0);
+            rawir.duration = (ir->buf_in[i] & MCE_PULSE_MASK)
+                             * US_TO_NS(MCE_TIME_UNIT);
 
-			mce_dbg(ir->dev, "Storing %s with duration %d\n",
-				rawir.pulse ? "pulse" : "space",
-				rawir.duration);
+            mce_dbg(ir->dev, "Storing %s with duration %d\n",
+                    rawir.pulse ? "pulse" : "space",
+                    rawir.duration);
 
-			ir_raw_event_store_with_filter(ir->rc, &rawir);
-			break;
-		case CMD_DATA:
-			ir->rem--;
-			break;
-		case CMD_HEADER:
-			/* decode mce packets of the form (84),AA,BB,CC,DD */
-			/* IR data packets can span USB messages - rem */
-			ir->cmd = ir->buf_in[i];
-			if ((ir->cmd == MCE_CMD_PORT_IR) ||
-			    ((ir->cmd & MCE_PORT_MASK) !=
-			     MCE_COMMAND_IRDATA)) {
-				ir->parser_state = SUBCMD;
-				continue;
-			}
-			ir->rem = (ir->cmd & MCE_PACKET_LENGTH_MASK);
-			mceusb_dev_printdata(ir, ir->buf_in,
-					     i, ir->rem + 1, false);
-			if (ir->rem)
-				ir->parser_state = PARSE_IRDATA;
-			else
-				ir_raw_event_reset(ir->rc);
-			break;
-		}
+            ir_raw_event_store_with_filter(ir->rc, &rawir);
+            break;
+        case CMD_DATA:
+            ir->rem--;
+            break;
+        case CMD_HEADER:
+            /* decode mce packets of the form (84),AA,BB,CC,DD */
+            /* IR data packets can span USB messages - rem */
+            ir->cmd = ir->buf_in[i];
+            if ((ir->cmd == MCE_CMD_PORT_IR) ||
+                    ((ir->cmd & MCE_PORT_MASK) !=
+                     MCE_COMMAND_IRDATA)) {
+                ir->parser_state = SUBCMD;
+                continue;
+            }
+            ir->rem = (ir->cmd & MCE_PACKET_LENGTH_MASK);
+            mceusb_dev_printdata(ir, ir->buf_in,
+                                 i, ir->rem + 1, false);
+            if (ir->rem)
+                ir->parser_state = PARSE_IRDATA;
+            else
+                ir_raw_event_reset(ir->rc);
+            break;
+        }
 
-		if (ir->parser_state != CMD_HEADER && !ir->rem)
-			ir->parser_state = CMD_HEADER;
-	}
-	mce_dbg(ir->dev, "processed IR data, calling ir_raw_event_handle\n");
-	ir_raw_event_handle(ir->rc);
+        if (ir->parser_state != CMD_HEADER && !ir->rem)
+            ir->parser_state = CMD_HEADER;
+    }
+    mce_dbg(ir->dev, "processed IR data, calling ir_raw_event_handle\n");
+    ir_raw_event_handle(ir->rc);
 }
 
-static void mceusb_dev_recv(struct urb *urb, struct pt_regs *regs)
-{
-	struct mceusb_dev *ir;
-	int buf_len;
+static void mceusb_dev_recv(struct urb *urb, struct pt_regs *regs) {
+    struct mceusb_dev *ir;
+    int buf_len;
 
-	if (!urb)
-		return;
+    if (!urb)
+        return;
 
-	ir = urb->context;
-	if (!ir) {
-		usb_unlink_urb(urb);
-		return;
-	}
+    ir = urb->context;
+    if (!ir) {
+        usb_unlink_urb(urb);
+        return;
+    }
 
-	buf_len = urb->actual_length;
+    buf_len = urb->actual_length;
 
-	if (ir->send_flags == RECV_FLAG_IN_PROGRESS) {
-		ir->send_flags = SEND_FLAG_COMPLETE;
-		mce_dbg(ir->dev, "setup answer received %d bytes\n",
-			buf_len);
-	}
+    if (ir->send_flags == RECV_FLAG_IN_PROGRESS) {
+        ir->send_flags = SEND_FLAG_COMPLETE;
+        mce_dbg(ir->dev, "setup answer received %d bytes\n",
+                buf_len);
+    }
 
-	switch (urb->status) {
-	/* success */
-	case 0:
-		mceusb_process_ir_data(ir, buf_len);
-		break;
+    switch (urb->status) {
+    /* success */
+    case 0:
+        mceusb_process_ir_data(ir, buf_len);
+        break;
 
-	case -ECONNRESET:
-	case -ENOENT:
-	case -ESHUTDOWN:
-		usb_unlink_urb(urb);
-		return;
+    case -ECONNRESET:
+    case -ENOENT:
+    case -ESHUTDOWN:
+        usb_unlink_urb(urb);
+        return;
 
-	case -EPIPE:
-	default:
-		mce_dbg(ir->dev, "Error: urb status = %d\n", urb->status);
-		break;
-	}
+    case -EPIPE:
+    default:
+        mce_dbg(ir->dev, "Error: urb status = %d\n", urb->status);
+        break;
+    }
 
-	usb_submit_urb(urb, GFP_ATOMIC);
+    usb_submit_urb(urb, GFP_ATOMIC);
 }
 
-static void mceusb_get_emulator_version(struct mceusb_dev *ir)
-{
-	/* If we get no reply or an illegal command reply, its ver 1, says MS */
-	ir->emver = 1;
-	mce_async_out(ir, GET_EMVER, sizeof(GET_EMVER));
+static void mceusb_get_emulator_version(struct mceusb_dev *ir) {
+    /* If we get no reply or an illegal command reply, its ver 1, says MS */
+    ir->emver = 1;
+    mce_async_out(ir, GET_EMVER, sizeof(GET_EMVER));
 }
 
-static void mceusb_gen1_init(struct mceusb_dev *ir)
-{
-	int ret;
-	struct device *dev = ir->dev;
-	char *data;
+static void mceusb_gen1_init(struct mceusb_dev *ir) {
+    int ret;
+    struct device *dev = ir->dev;
+    char *data;
 
-	data = kzalloc(USB_CTRL_MSG_SZ, GFP_KERNEL);
-	if (!data) {
-		dev_err(dev, "%s: memory allocation failed!\n", __func__);
-		return;
-	}
+    data = kzalloc(USB_CTRL_MSG_SZ, GFP_KERNEL);
+    if (!data) {
+        dev_err(dev, "%s: memory allocation failed!\n", __func__);
+        return;
+    }
 
-	/*
-	 * This is a strange one. Windows issues a set address to the device
-	 * on the receive control pipe and expect a certain value pair back
-	 */
-	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
-			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
-			      data, USB_CTRL_MSG_SZ, HZ * 3);
-	mce_dbg(dev, "%s - ret = %d\n", __func__, ret);
-	mce_dbg(dev, "%s - data[0] = %d, data[1] = %d\n",
-		__func__, data[0], data[1]);
+    /*
+     * This is a strange one. Windows issues a set address to the device
+     * on the receive control pipe and expect a certain value pair back
+     */
+    ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
+                          USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
+                          data, USB_CTRL_MSG_SZ, HZ * 3);
+    mce_dbg(dev, "%s - ret = %d\n", __func__, ret);
+    mce_dbg(dev, "%s - data[0] = %d, data[1] = %d\n",
+            __func__, data[0], data[1]);
 
-	/* set feature: bit rate 38400 bps */
-	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
-			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
-			      0xc04e, 0x0000, NULL, 0, HZ * 3);
+    /* set feature: bit rate 38400 bps */
+    ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+                          USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
+                          0xc04e, 0x0000, NULL, 0, HZ * 3);
 
-	mce_dbg(dev, "%s - ret = %d\n", __func__, ret);
+    mce_dbg(dev, "%s - ret = %d\n", __func__, ret);
 
-	/* bRequest 4: set char length to 8 bits */
-	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
-			      4, USB_TYPE_VENDOR,
-			      0x0808, 0x0000, NULL, 0, HZ * 3);
-	mce_dbg(dev, "%s - retB = %d\n", __func__, ret);
+    /* bRequest 4: set char length to 8 bits */
+    ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+                          4, USB_TYPE_VENDOR,
+                          0x0808, 0x0000, NULL, 0, HZ * 3);
+    mce_dbg(dev, "%s - retB = %d\n", __func__, ret);
 
-	/* bRequest 2: set handshaking to use DTR/DSR */
-	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
-			      2, USB_TYPE_VENDOR,
-			      0x0000, 0x0100, NULL, 0, HZ * 3);
-	mce_dbg(dev, "%s - retC = %d\n", __func__, ret);
+    /* bRequest 2: set handshaking to use DTR/DSR */
+    ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+                          2, USB_TYPE_VENDOR,
+                          0x0000, 0x0100, NULL, 0, HZ * 3);
+    mce_dbg(dev, "%s - retC = %d\n", __func__, ret);
 
-	/* device resume */
-	mce_async_out(ir, DEVICE_RESUME, sizeof(DEVICE_RESUME));
+    /* device resume */
+    mce_async_out(ir, DEVICE_RESUME, sizeof(DEVICE_RESUME));
 
-	/* get hw/sw revision? */
-	mce_async_out(ir, GET_REVISION, sizeof(GET_REVISION));
+    /* get hw/sw revision? */
+    mce_async_out(ir, GET_REVISION, sizeof(GET_REVISION));
 
-	kfree(data);
+    kfree(data);
 };
 
-static void mceusb_gen2_init(struct mceusb_dev *ir)
-{
-	/* device resume */
-	mce_async_out(ir, DEVICE_RESUME, sizeof(DEVICE_RESUME));
+static void mceusb_gen2_init(struct mceusb_dev *ir) {
+    /* device resume */
+    mce_async_out(ir, DEVICE_RESUME, sizeof(DEVICE_RESUME));
 
-	/* get hw/sw revision? */
-	mce_async_out(ir, GET_REVISION, sizeof(GET_REVISION));
+    /* get hw/sw revision? */
+    mce_async_out(ir, GET_REVISION, sizeof(GET_REVISION));
 
-	/* get wake version (protocol, key, address) */
-	mce_async_out(ir, GET_WAKEVERSION, sizeof(GET_WAKEVERSION));
+    /* get wake version (protocol, key, address) */
+    mce_async_out(ir, GET_WAKEVERSION, sizeof(GET_WAKEVERSION));
 
-	/* unknown what this one actually returns... */
-	mce_async_out(ir, GET_UNKNOWN2, sizeof(GET_UNKNOWN2));
+    /* unknown what this one actually returns... */
+    mce_async_out(ir, GET_UNKNOWN2, sizeof(GET_UNKNOWN2));
 }
 
-static void mceusb_get_parameters(struct mceusb_dev *ir)
-{
-	int i;
-	unsigned char cmdbuf[3] = { MCE_CMD_PORT_SYS,
-				    MCE_CMD_GETPORTSTATUS, 0x00 };
+static void mceusb_get_parameters(struct mceusb_dev *ir) {
+    int i;
+    unsigned char cmdbuf[3] = { MCE_CMD_PORT_SYS,
+                                MCE_CMD_GETPORTSTATUS, 0x00
+                              };
 
-	/* defaults, if the hardware doesn't support querying */
-	ir->num_txports = 2;
-	ir->num_rxports = 2;
+    /* defaults, if the hardware doesn't support querying */
+    ir->num_txports = 2;
+    ir->num_rxports = 2;
 
-	/* get number of tx and rx ports */
-	mce_async_out(ir, GET_NUM_PORTS, sizeof(GET_NUM_PORTS));
+    /* get number of tx and rx ports */
+    mce_async_out(ir, GET_NUM_PORTS, sizeof(GET_NUM_PORTS));
 
-	/* get the carrier and frequency */
-	mce_async_out(ir, GET_CARRIER_FREQ, sizeof(GET_CARRIER_FREQ));
+    /* get the carrier and frequency */
+    mce_async_out(ir, GET_CARRIER_FREQ, sizeof(GET_CARRIER_FREQ));
 
-	if (ir->num_txports && !ir->flags.no_tx)
-		/* get the transmitter bitmask */
-		mce_async_out(ir, GET_TX_BITMASK, sizeof(GET_TX_BITMASK));
+    if (ir->num_txports && !ir->flags.no_tx)
+        /* get the transmitter bitmask */
+        mce_async_out(ir, GET_TX_BITMASK, sizeof(GET_TX_BITMASK));
 
-	/* get receiver timeout value */
-	mce_async_out(ir, GET_RX_TIMEOUT, sizeof(GET_RX_TIMEOUT));
+    /* get receiver timeout value */
+    mce_async_out(ir, GET_RX_TIMEOUT, sizeof(GET_RX_TIMEOUT));
 
-	/* get receiver sensor setting */
-	mce_async_out(ir, GET_RX_SENSOR, sizeof(GET_RX_SENSOR));
+    /* get receiver sensor setting */
+    mce_async_out(ir, GET_RX_SENSOR, sizeof(GET_RX_SENSOR));
 
-	for (i = 0; i < ir->num_txports; i++) {
-		cmdbuf[2] = i;
-		mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
-	}
+    for (i = 0; i < ir->num_txports; i++) {
+        cmdbuf[2] = i;
+        mce_async_out(ir, cmdbuf, sizeof(cmdbuf));
+    }
 }
 
-static void mceusb_flash_led(struct mceusb_dev *ir)
-{
-	if (ir->emver < 2)
-		return;
+static void mceusb_flash_led(struct mceusb_dev *ir) {
+    if (ir->emver < 2)
+        return;
 
-	mce_async_out(ir, FLASH_LED, sizeof(FLASH_LED));
+    mce_async_out(ir, FLASH_LED, sizeof(FLASH_LED));
 }
 
-static struct rc_dev *mceusb_init_rc_dev(struct mceusb_dev *ir)
-{
-	struct device *dev = ir->dev;
-	struct rc_dev *rc;
-	int ret;
+static struct rc_dev *mceusb_init_rc_dev(struct mceusb_dev *ir) {
+    struct device *dev = ir->dev;
+    struct rc_dev *rc;
+    int ret;
 
-	rc = rc_allocate_device();
-	if (!rc) {
-		dev_err(dev, "remote dev allocation failed\n");
-		goto out;
-	}
+    rc = rc_allocate_device();
+    if (!rc) {
+        dev_err(dev, "remote dev allocation failed\n");
+        goto out;
+    }
 
-	snprintf(ir->name, sizeof(ir->name), "%s (%04x:%04x)",
-		 mceusb_model[ir->model].name ?
-			mceusb_model[ir->model].name :
-			"Media Center Ed. eHome Infrared Remote Transceiver",
-		 le16_to_cpu(ir->usbdev->descriptor.idVendor),
-		 le16_to_cpu(ir->usbdev->descriptor.idProduct));
+    snprintf(ir->name, sizeof(ir->name), "%s (%04x:%04x)",
+             mceusb_model[ir->model].name ?
+             mceusb_model[ir->model].name :
+             "Media Center Ed. eHome Infrared Remote Transceiver",
+             le16_to_cpu(ir->usbdev->descriptor.idVendor),
+             le16_to_cpu(ir->usbdev->descriptor.idProduct));
 
-	usb_make_path(ir->usbdev, ir->phys, sizeof(ir->phys));
+    usb_make_path(ir->usbdev, ir->phys, sizeof(ir->phys));
 
-	rc->input_name = ir->name;
-	rc->input_phys = ir->phys;
-	usb_to_input_id(ir->usbdev, &rc->input_id);
-	rc->dev.parent = dev;
-	rc->priv = ir;
-	rc->driver_type = RC_DRIVER_IR_RAW;
-	rc->allowed_protos = RC_TYPE_ALL;
-	rc->timeout = MS_TO_NS(100);
-	if (!ir->flags.no_tx) {
-		rc->s_tx_mask = mceusb_set_tx_mask;
-		rc->s_tx_carrier = mceusb_set_tx_carrier;
-		rc->tx_ir = mceusb_tx_ir;
-	}
-	rc->driver_name = DRIVER_NAME;
-	rc->map_name = mceusb_model[ir->model].rc_map ?
-			mceusb_model[ir->model].rc_map : RC_MAP_RC6_MCE;
+    rc->input_name = ir->name;
+    rc->input_phys = ir->phys;
+    usb_to_input_id(ir->usbdev, &rc->input_id);
+    rc->dev.parent = dev;
+    rc->priv = ir;
+    rc->driver_type = RC_DRIVER_IR_RAW;
+    rc->allowed_protos = RC_TYPE_ALL;
+    rc->timeout = MS_TO_NS(100);
+    if (!ir->flags.no_tx) {
+        rc->s_tx_mask = mceusb_set_tx_mask;
+        rc->s_tx_carrier = mceusb_set_tx_carrier;
+        rc->tx_ir = mceusb_tx_ir;
+    }
+    rc->driver_name = DRIVER_NAME;
+    rc->map_name = mceusb_model[ir->model].rc_map ?
+                   mceusb_model[ir->model].rc_map : RC_MAP_RC6_MCE;
 
-	ret = rc_register_device(rc);
-	if (ret < 0) {
-		dev_err(dev, "remote dev registration failed\n");
-		goto out;
-	}
+    ret = rc_register_device(rc);
+    if (ret < 0) {
+        dev_err(dev, "remote dev registration failed\n");
+        goto out;
+    }
 
-	return rc;
+    return rc;
 
 out:
-	rc_free_device(rc);
-	return NULL;
+    rc_free_device(rc);
+    return NULL;
 }
 
 static int __devinit mceusb_dev_probe(struct usb_interface *intf,
-				      const struct usb_device_id *id)
-{
-	struct usb_device *dev = interface_to_usbdev(intf);
-	struct usb_host_interface *idesc;
-	struct usb_endpoint_descriptor *ep = NULL;
-	struct usb_endpoint_descriptor *ep_in = NULL;
-	struct usb_endpoint_descriptor *ep_out = NULL;
-	struct mceusb_dev *ir = NULL;
-	int pipe, maxp, i;
-	char buf[63], name[128] = "";
-	enum mceusb_model_type model = id->driver_info;
-	bool is_gen3;
-	bool is_microsoft_gen1;
-	bool tx_mask_normal;
-	int ir_intfnum;
+                                      const struct usb_device_id *id) {
+    struct usb_device *dev = interface_to_usbdev(intf);
+    struct usb_host_interface *idesc;
+    struct usb_endpoint_descriptor *ep = NULL;
+    struct usb_endpoint_descriptor *ep_in = NULL;
+    struct usb_endpoint_descriptor *ep_out = NULL;
+    struct mceusb_dev *ir = NULL;
+    int pipe, maxp, i;
+    char buf[63], name[128] = "";
+    enum mceusb_model_type model = id->driver_info;
+    bool is_gen3;
+    bool is_microsoft_gen1;
+    bool tx_mask_normal;
+    int ir_intfnum;
 
-	mce_dbg(&intf->dev, "%s called\n", __func__);
+    mce_dbg(&intf->dev, "%s called\n", __func__);
 
-	idesc  = intf->cur_altsetting;
+    idesc  = intf->cur_altsetting;
 
-	is_gen3 = mceusb_model[model].mce_gen3;
-	is_microsoft_gen1 = mceusb_model[model].mce_gen1;
-	tx_mask_normal = mceusb_model[model].tx_mask_normal;
-	ir_intfnum = mceusb_model[model].ir_intfnum;
+    is_gen3 = mceusb_model[model].mce_gen3;
+    is_microsoft_gen1 = mceusb_model[model].mce_gen1;
+    tx_mask_normal = mceusb_model[model].tx_mask_normal;
+    ir_intfnum = mceusb_model[model].ir_intfnum;
 
-	/* There are multi-function devices with non-IR interfaces */
-	if (idesc->desc.bInterfaceNumber != ir_intfnum)
-		return -ENODEV;
+    /* There are multi-function devices with non-IR interfaces */
+    if (idesc->desc.bInterfaceNumber != ir_intfnum)
+        return -ENODEV;
 
-	/* step through the endpoints to find first bulk in and out endpoint */
-	for (i = 0; i < idesc->desc.bNumEndpoints; ++i) {
-		ep = &idesc->endpoint[i].desc;
+    /* step through the endpoints to find first bulk in and out endpoint */
+    for (i = 0; i < idesc->desc.bNumEndpoints; ++i) {
+        ep = &idesc->endpoint[i].desc;
 
-		if ((ep_in == NULL)
-			&& ((ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK)
-			    == USB_DIR_IN)
-			&& (((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-			    == USB_ENDPOINT_XFER_BULK)
-			|| ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-			    == USB_ENDPOINT_XFER_INT))) {
+        if ((ep_in == NULL)
+                && ((ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK)
+                    == USB_DIR_IN)
+                && (((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+                     == USB_ENDPOINT_XFER_BULK)
+                    || ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+                        == USB_ENDPOINT_XFER_INT))) {
 
-			ep_in = ep;
-			ep_in->bmAttributes = USB_ENDPOINT_XFER_INT;
-			ep_in->bInterval = 1;
-			mce_dbg(&intf->dev, "acceptable inbound endpoint "
-				"found\n");
-		}
+            ep_in = ep;
+            ep_in->bmAttributes = USB_ENDPOINT_XFER_INT;
+            ep_in->bInterval = 1;
+            mce_dbg(&intf->dev, "acceptable inbound endpoint "
+                    "found\n");
+        }
 
-		if ((ep_out == NULL)
-			&& ((ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK)
-			    == USB_DIR_OUT)
-			&& (((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-			    == USB_ENDPOINT_XFER_BULK)
-			|| ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
-			    == USB_ENDPOINT_XFER_INT))) {
+        if ((ep_out == NULL)
+                && ((ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK)
+                    == USB_DIR_OUT)
+                && (((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+                     == USB_ENDPOINT_XFER_BULK)
+                    || ((ep->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
+                        == USB_ENDPOINT_XFER_INT))) {
 
-			ep_out = ep;
-			ep_out->bmAttributes = USB_ENDPOINT_XFER_INT;
-			ep_out->bInterval = 1;
-			mce_dbg(&intf->dev, "acceptable outbound endpoint "
-				"found\n");
-		}
-	}
-	if (ep_in == NULL) {
-		mce_dbg(&intf->dev, "inbound and/or endpoint not found\n");
-		return -ENODEV;
-	}
+            ep_out = ep;
+            ep_out->bmAttributes = USB_ENDPOINT_XFER_INT;
+            ep_out->bInterval = 1;
+            mce_dbg(&intf->dev, "acceptable outbound endpoint "
+                    "found\n");
+        }
+    }
+    if (ep_in == NULL) {
+        mce_dbg(&intf->dev, "inbound and/or endpoint not found\n");
+        return -ENODEV;
+    }
 
-	pipe = usb_rcvintpipe(dev, ep_in->bEndpointAddress);
-	maxp = usb_maxpacket(dev, pipe, usb_pipeout(pipe));
+    pipe = usb_rcvintpipe(dev, ep_in->bEndpointAddress);
+    maxp = usb_maxpacket(dev, pipe, usb_pipeout(pipe));
 
-	ir = kzalloc(sizeof(struct mceusb_dev), GFP_KERNEL);
-	if (!ir)
-		goto mem_alloc_fail;
+    ir = kzalloc(sizeof(struct mceusb_dev), GFP_KERNEL);
+    if (!ir)
+        goto mem_alloc_fail;
 
-	ir->buf_in = usb_alloc_coherent(dev, maxp, GFP_ATOMIC, &ir->dma_in);
-	if (!ir->buf_in)
-		goto buf_in_alloc_fail;
+    ir->buf_in = usb_alloc_coherent(dev, maxp, GFP_ATOMIC, &ir->dma_in);
+    if (!ir->buf_in)
+        goto buf_in_alloc_fail;
 
-	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
-	if (!ir->urb_in)
-		goto urb_in_alloc_fail;
+    ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
+    if (!ir->urb_in)
+        goto urb_in_alloc_fail;
 
-	ir->usbdev = dev;
-	ir->dev = &intf->dev;
-	ir->len_in = maxp;
-	ir->flags.microsoft_gen1 = is_microsoft_gen1;
-	ir->flags.tx_mask_normal = tx_mask_normal;
-	ir->flags.no_tx = mceusb_model[model].no_tx;
-	ir->model = model;
+    ir->usbdev = dev;
+    ir->dev = &intf->dev;
+    ir->len_in = maxp;
+    ir->flags.microsoft_gen1 = is_microsoft_gen1;
+    ir->flags.tx_mask_normal = tx_mask_normal;
+    ir->flags.no_tx = mceusb_model[model].no_tx;
+    ir->model = model;
 
-	/* Saving usb interface data for use by the transmitter routine */
-	ir->usb_ep_in = ep_in;
-	ir->usb_ep_out = ep_out;
+    /* Saving usb interface data for use by the transmitter routine */
+    ir->usb_ep_in = ep_in;
+    ir->usb_ep_out = ep_out;
 
-	if (dev->descriptor.iManufacturer
-	    && usb_string(dev, dev->descriptor.iManufacturer,
-			  buf, sizeof(buf)) > 0)
-		strlcpy(name, buf, sizeof(name));
-	if (dev->descriptor.iProduct
-	    && usb_string(dev, dev->descriptor.iProduct,
-			  buf, sizeof(buf)) > 0)
-		snprintf(name + strlen(name), sizeof(name) - strlen(name),
-			 " %s", buf);
+    if (dev->descriptor.iManufacturer
+            && usb_string(dev, dev->descriptor.iManufacturer,
+                          buf, sizeof(buf)) > 0)
+        strlcpy(name, buf, sizeof(name));
+    if (dev->descriptor.iProduct
+            && usb_string(dev, dev->descriptor.iProduct,
+                          buf, sizeof(buf)) > 0)
+        snprintf(name + strlen(name), sizeof(name) - strlen(name),
+                 " %s", buf);
 
-	ir->rc = mceusb_init_rc_dev(ir);
-	if (!ir->rc)
-		goto rc_dev_fail;
+    ir->rc = mceusb_init_rc_dev(ir);
+    if (!ir->rc)
+        goto rc_dev_fail;
 
-	/* wire up inbound data handler */
-	usb_fill_int_urb(ir->urb_in, dev, pipe, ir->buf_in,
-		maxp, (usb_complete_t) mceusb_dev_recv, ir, ep_in->bInterval);
-	ir->urb_in->transfer_dma = ir->dma_in;
-	ir->urb_in->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+    /* wire up inbound data handler */
+    usb_fill_int_urb(ir->urb_in, dev, pipe, ir->buf_in,
+                     maxp, (usb_complete_t) mceusb_dev_recv, ir, ep_in->bInterval);
+    ir->urb_in->transfer_dma = ir->dma_in;
+    ir->urb_in->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
 
-	/* flush buffers on the device */
-	mce_dbg(&intf->dev, "Flushing receive buffers\n");
-	mce_flush_rx_buffer(ir, maxp);
+    /* flush buffers on the device */
+    mce_dbg(&intf->dev, "Flushing receive buffers\n");
+    mce_flush_rx_buffer(ir, maxp);
 
-	/* figure out which firmware/emulator version this hardware has */
-	mceusb_get_emulator_version(ir);
+    /* figure out which firmware/emulator version this hardware has */
+    mceusb_get_emulator_version(ir);
 
-	/* initialize device */
-	if (ir->flags.microsoft_gen1)
-		mceusb_gen1_init(ir);
-	else if (!is_gen3)
-		mceusb_gen2_init(ir);
+    /* initialize device */
+    if (ir->flags.microsoft_gen1)
+        mceusb_gen1_init(ir);
+    else if (!is_gen3)
+        mceusb_gen2_init(ir);
 
-	mceusb_get_parameters(ir);
+    mceusb_get_parameters(ir);
 
-	mceusb_flash_led(ir);
+    mceusb_flash_led(ir);
 
-	if (!ir->flags.no_tx)
-		mceusb_set_tx_mask(ir->rc, MCE_DEFAULT_TX_MASK);
+    if (!ir->flags.no_tx)
+        mceusb_set_tx_mask(ir->rc, MCE_DEFAULT_TX_MASK);
 
-	usb_set_intfdata(intf, ir);
+    usb_set_intfdata(intf, ir);
 
-	/* enable wake via this device */
-	device_set_wakeup_capable(ir->dev, true);
-	device_set_wakeup_enable(ir->dev, true);
+    /* enable wake via this device */
+    device_set_wakeup_capable(ir->dev, true);
+    device_set_wakeup_enable(ir->dev, true);
 
-	dev_info(&intf->dev, "Registered %s with mce emulator interface "
-		 "version %x\n", name, ir->emver);
-	dev_info(&intf->dev, "%x tx ports (0x%x cabled) and "
-		 "%x rx sensors (0x%x active)\n",
-		 ir->num_txports, ir->txports_cabled,
-		 ir->num_rxports, ir->rxports_active);
+    dev_info(&intf->dev, "Registered %s with mce emulator interface "
+             "version %x\n", name, ir->emver);
+    dev_info(&intf->dev, "%x tx ports (0x%x cabled) and "
+             "%x rx sensors (0x%x active)\n",
+             ir->num_txports, ir->txports_cabled,
+             ir->num_rxports, ir->rxports_active);
 
-	return 0;
+    return 0;
 
-	/* Error-handling path */
+    /* Error-handling path */
 rc_dev_fail:
-	usb_free_urb(ir->urb_in);
+    usb_free_urb(ir->urb_in);
 urb_in_alloc_fail:
-	usb_free_coherent(dev, maxp, ir->buf_in, ir->dma_in);
+    usb_free_coherent(dev, maxp, ir->buf_in, ir->dma_in);
 buf_in_alloc_fail:
-	kfree(ir);
+    kfree(ir);
 mem_alloc_fail:
-	dev_err(&intf->dev, "%s: device setup failed!\n", __func__);
+    dev_err(&intf->dev, "%s: device setup failed!\n", __func__);
 
-	return -ENOMEM;
+    return -ENOMEM;
 }
 
 
-static void __devexit mceusb_dev_disconnect(struct usb_interface *intf)
-{
-	struct usb_device *dev = interface_to_usbdev(intf);
-	struct mceusb_dev *ir = usb_get_intfdata(intf);
+static void __devexit mceusb_dev_disconnect(struct usb_interface *intf) {
+    struct usb_device *dev = interface_to_usbdev(intf);
+    struct mceusb_dev *ir = usb_get_intfdata(intf);
 
-	usb_set_intfdata(intf, NULL);
+    usb_set_intfdata(intf, NULL);
 
-	if (!ir)
-		return;
+    if (!ir)
+        return;
 
-	ir->usbdev = NULL;
-	rc_unregister_device(ir->rc);
-	usb_kill_urb(ir->urb_in);
-	usb_free_urb(ir->urb_in);
-	usb_free_coherent(dev, ir->len_in, ir->buf_in, ir->dma_in);
+    ir->usbdev = NULL;
+    rc_unregister_device(ir->rc);
+    usb_kill_urb(ir->urb_in);
+    usb_free_urb(ir->urb_in);
+    usb_free_coherent(dev, ir->len_in, ir->buf_in, ir->dma_in);
 
-	kfree(ir);
+    kfree(ir);
 }
 
-static int mceusb_dev_suspend(struct usb_interface *intf, pm_message_t message)
-{
-	struct mceusb_dev *ir = usb_get_intfdata(intf);
-	dev_info(ir->dev, "suspend\n");
-	usb_kill_urb(ir->urb_in);
-	return 0;
+static int mceusb_dev_suspend(struct usb_interface *intf, pm_message_t message) {
+    struct mceusb_dev *ir = usb_get_intfdata(intf);
+    dev_info(ir->dev, "suspend\n");
+    usb_kill_urb(ir->urb_in);
+    return 0;
 }
 
-static int mceusb_dev_resume(struct usb_interface *intf)
-{
-	struct mceusb_dev *ir = usb_get_intfdata(intf);
-	dev_info(ir->dev, "resume\n");
-	if (usb_submit_urb(ir->urb_in, GFP_ATOMIC))
-		return -EIO;
-	return 0;
+static int mceusb_dev_resume(struct usb_interface *intf) {
+    struct mceusb_dev *ir = usb_get_intfdata(intf);
+    dev_info(ir->dev, "resume\n");
+    if (usb_submit_urb(ir->urb_in, GFP_ATOMIC))
+        return -EIO;
+    return 0;
 }
 
 static struct usb_driver mceusb_dev_driver = {
-	.name =		DRIVER_NAME,
-	.probe =	mceusb_dev_probe,
-	.disconnect =	mceusb_dev_disconnect,
-	.suspend =	mceusb_dev_suspend,
-	.resume =	mceusb_dev_resume,
-	.reset_resume =	mceusb_dev_resume,
-	.id_table =	mceusb_dev_table
+    .name =		DRIVER_NAME,
+    .probe =	mceusb_dev_probe,
+    .disconnect =	mceusb_dev_disconnect,
+    .suspend =	mceusb_dev_suspend,
+    .resume =	mceusb_dev_resume,
+    .reset_resume =	mceusb_dev_resume,
+    .id_table =	mceusb_dev_table
 };
 
 module_usb_driver(mceusb_dev_driver);

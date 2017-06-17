@@ -41,7 +41,7 @@
 /* Field definitions of registers */
 #define INDYCAM_CONTROL_AGCENA		(1<<0) /* automatic gain control */
 #define INDYCAM_CONTROL_AWBCTL		(1<<1) /* automatic white balance */
-						/* 2-3 are reserved */
+/* 2-3 are reserved */
 #define INDYCAM_CONTROL_EVNFLD		(1<<4)	/* read-only */
 
 #define INDYCAM_SHUTTER_10000		0x02	/* 1/10000 second */

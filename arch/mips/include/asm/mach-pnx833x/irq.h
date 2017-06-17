@@ -37,9 +37,9 @@
  *
  */
 #if defined(CONFIG_SOC_PNX8335)
-	#define PNX833X_PIC_NUM_IRQ			58
+#define PNX833X_PIC_NUM_IRQ			58
 #else
-	#define PNX833X_PIC_NUM_IRQ			37
+#define PNX833X_PIC_NUM_IRQ			37
 #endif
 
 #define MIPS_CPU_NUM_IRQ				8

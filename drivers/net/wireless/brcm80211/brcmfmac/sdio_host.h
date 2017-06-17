@@ -123,27 +123,27 @@
 #define BRCMF_WD_POLL_MS	10
 
 struct brcmf_sdreg {
-	int func;
-	int offset;
-	int value;
+    int func;
+    int offset;
+    int value;
 };
 
 struct brcmf_sdio;
 
 struct brcmf_sdio_dev {
-	struct sdio_func *func[SDIO_MAX_FUNCS];
-	u8 num_funcs;			/* Supported funcs on client */
-	u32 func_cis_ptr[SDIOD_MAX_IOFUNCS];
-	u32 sbwad;			/* Save backplane window address */
-	bool regfail;			/* status of last reg_r/w call */
-	void *bus;
-	atomic_t suspend;		/* suspend flag */
-	wait_queue_head_t request_byte_wait;
-	wait_queue_head_t request_word_wait;
-	wait_queue_head_t request_chain_wait;
-	wait_queue_head_t request_buffer_wait;
-	struct device *dev;
-	struct brcmf_bus *bus_if;
+    struct sdio_func *func[SDIO_MAX_FUNCS];
+    u8 num_funcs;			/* Supported funcs on client */
+    u32 func_cis_ptr[SDIOD_MAX_IOFUNCS];
+    u32 sbwad;			/* Save backplane window address */
+    bool regfail;			/* status of last reg_r/w call */
+    void *bus;
+    atomic_t suspend;		/* suspend flag */
+    wait_queue_head_t request_byte_wait;
+    wait_queue_head_t request_word_wait;
+    wait_queue_head_t request_chain_wait;
+    wait_queue_head_t request_buffer_wait;
+    struct device *dev;
+    struct brcmf_bus *bus_if;
 };
 
 /* Register/deregister device interrupt handler. */
@@ -159,9 +159,9 @@ extern int brcmf_sdcard_intr_dereg(struct brcmf_sdio_dev *sdiodev);
  *   err:  pointer to error code (or NULL)
  */
 extern u8 brcmf_sdcard_cfg_read(struct brcmf_sdio_dev *sdiodev, uint func,
-				u32 addr, int *err);
+                                u32 addr, int *err);
 extern void brcmf_sdcard_cfg_write(struct brcmf_sdio_dev *sdiodev, uint func,
-				   u32 addr, u8 data, int *err);
+                                   u32 addr, u8 data, int *err);
 
 /* Synchronous access to device (client) core registers via CMD53 to F1.
  *   addr: backplane address (i.e. >= regsva from attach)
@@ -173,7 +173,7 @@ brcmf_sdcard_reg_read(struct brcmf_sdio_dev *sdiodev, u32 addr, uint size);
 
 extern u32
 brcmf_sdcard_reg_write(struct brcmf_sdio_dev *sdiodev, u32 addr, uint size,
-		       u32 data);
+                       u32 data);
 
 /* Indicate if last reg read/write failed */
 extern bool brcmf_sdcard_regfail(struct brcmf_sdio_dev *sdiodev);
@@ -192,20 +192,20 @@ extern bool brcmf_sdcard_regfail(struct brcmf_sdio_dev *sdiodev);
  */
 extern int
 brcmf_sdcard_send_pkt(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
-		      uint flags, struct sk_buff *pkt);
+                      uint flags, struct sk_buff *pkt);
 extern int
 brcmf_sdcard_send_buf(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
-		      uint flags, u8 *buf, uint nbytes);
+                      uint flags, u8 *buf, uint nbytes);
 
 extern int
 brcmf_sdcard_recv_pkt(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
-		      uint flags, struct sk_buff *pkt);
+                      uint flags, struct sk_buff *pkt);
 extern int
 brcmf_sdcard_recv_buf(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
-		      uint flags, u8 *buf, uint nbytes);
+                      uint flags, u8 *buf, uint nbytes);
 extern int
 brcmf_sdcard_recv_chain(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
-			uint flags, struct sk_buff_head *pktq);
+                        uint flags, struct sk_buff_head *pktq);
 
 /* Flags bits */
 
@@ -224,7 +224,7 @@ brcmf_sdcard_recv_chain(struct brcmf_sdio_dev *sdiodev, u32 addr, uint fn,
  * Returns 0 or error code.
  */
 extern int brcmf_sdcard_rwdata(struct brcmf_sdio_dev *sdiodev, uint rw,
-			       u32 addr, u8 *buf, uint nbytes);
+                               u32 addr, u8 *buf, uint nbytes);
 
 /* Issue an abort to the specified function */
 extern int brcmf_sdcard_abort(struct brcmf_sdio_dev *sdiodev, uint fn);
@@ -234,7 +234,7 @@ extern int brcmf_sdio_probe(struct brcmf_sdio_dev *sdiodev);
 extern int brcmf_sdio_remove(struct brcmf_sdio_dev *sdiodev);
 
 extern int brcmf_sdcard_set_sbaddr_window(struct brcmf_sdio_dev *sdiodev,
-					  u32 address);
+        u32 address);
 
 /* attach, return handler on success, NULL if failed.
  *  The handler shall be provided by all subsequent calls. No local cache
@@ -245,27 +245,27 @@ extern void brcmf_sdioh_detach(struct brcmf_sdio_dev *sdiodev);
 
 /* read or write one byte using cmd52 */
 extern int brcmf_sdioh_request_byte(struct brcmf_sdio_dev *sdiodev, uint rw,
-				    uint fnc, uint addr, u8 *byte);
+                                    uint fnc, uint addr, u8 *byte);
 
 /* read or write 2/4 bytes using cmd53 */
 extern int
 brcmf_sdioh_request_word(struct brcmf_sdio_dev *sdiodev,
-			 uint rw, uint fnc, uint addr,
-			 u32 *word, uint nbyte);
+                         uint rw, uint fnc, uint addr,
+                         u32 *word, uint nbyte);
 
 /* read or write any buffer using cmd53 */
 extern int
 brcmf_sdioh_request_buffer(struct brcmf_sdio_dev *sdiodev,
-			   uint fix_inc, uint rw, uint fnc_num, u32 addr,
-			   struct sk_buff *pkt);
+                           uint fix_inc, uint rw, uint fnc_num, u32 addr,
+                           struct sk_buff *pkt);
 extern int
 brcmf_sdioh_request_chain(struct brcmf_sdio_dev *sdiodev, uint fix_inc,
-			  uint write, uint func, uint addr,
-			  struct sk_buff_head *pktq);
+                          uint write, uint func, uint addr,
+                          struct sk_buff_head *pktq);
 
 /* Watchdog timer interface for pm ops */
 extern void brcmf_sdio_wdtmr_enable(struct brcmf_sdio_dev *sdiodev,
-				    bool enable);
+                                    bool enable);
 
 extern void *brcmf_sdbrcm_probe(u32 regsva, struct brcmf_sdio_dev *sdiodev);
 extern void brcmf_sdbrcm_disconnect(void *ptr);

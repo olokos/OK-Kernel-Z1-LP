@@ -44,7 +44,7 @@ int fm_rx_get_rds_system(struct fmdev *, u8 *);
 int fm_rx_get_mute_mode(struct fmdev *, u8 *);
 int fm_rx_get_volume(struct fmdev *, u16 *);
 int fm_rx_get_band_freq_range(struct fmdev *,
-					u32 *, u32 *);
+                              u32 *, u32 *);
 int fm_rx_get_stereo_mono(struct fmdev *, u16 *);
 int fm_rx_get_rssi_level(struct fmdev *, u16 *);
 int fm_rx_get_rssi_threshold(struct fmdev *, short *);

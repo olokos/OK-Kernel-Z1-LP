@@ -132,8 +132,7 @@ static const unsigned long s_adwCrc32Table[256] = {
  * Return Value: CRC-32
  *
 -*/
-unsigned long CRCdwCrc32 (unsigned char *pbyData, unsigned int cbByte, unsigned long dwCrcSeed)
-{
+unsigned long CRCdwCrc32 (unsigned char *pbyData, unsigned int cbByte, unsigned long dwCrcSeed) {
     unsigned long dwCrc;
 
     dwCrc = dwCrcSeed;
@@ -164,8 +163,7 @@ unsigned long CRCdwCrc32 (unsigned char *pbyData, unsigned int cbByte, unsigned 
  * Return Value: CRC-32
  *
 -*/
-unsigned long CRCdwGetCrc32 (unsigned char *pbyData, unsigned int cbByte)
-{
+unsigned long CRCdwGetCrc32 (unsigned char *pbyData, unsigned int cbByte) {
     return ~CRCdwCrc32(pbyData, cbByte, 0xFFFFFFFFL);
 }
 
@@ -190,8 +188,7 @@ unsigned long CRCdwGetCrc32 (unsigned char *pbyData, unsigned int cbByte)
  * Return Value: CRC-32
  *
 -*/
-unsigned long CRCdwGetCrc32Ex(unsigned char *pbyData, unsigned int cbByte, unsigned long dwPreCRC)
-{
+unsigned long CRCdwGetCrc32Ex(unsigned char *pbyData, unsigned int cbByte, unsigned long dwPreCRC) {
     return CRCdwCrc32(pbyData, cbByte, dwPreCRC);
 }
 

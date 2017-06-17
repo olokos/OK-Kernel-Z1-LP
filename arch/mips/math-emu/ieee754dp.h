@@ -45,19 +45,18 @@
 #define DPDNORMX	DPDNORMx(xm, xe)
 #define DPDNORMY	DPDNORMx(ym, ye)
 
-static inline ieee754dp builddp(int s, int bx, u64 m)
-{
-	ieee754dp r;
+static inline ieee754dp builddp(int s, int bx, u64 m) {
+    ieee754dp r;
 
-	assert((s) == 0 || (s) == 1);
-	assert((bx) >= DP_EMIN - 1 + DP_EBIAS
-	       && (bx) <= DP_EMAX + 1 + DP_EBIAS);
-	assert(((m) >> DP_MBITS) == 0);
+    assert((s) == 0 || (s) == 1);
+    assert((bx) >= DP_EMIN - 1 + DP_EBIAS
+           && (bx) <= DP_EMAX + 1 + DP_EBIAS);
+    assert(((m) >> DP_MBITS) == 0);
 
-	r.parts.sign = s;
-	r.parts.bexp = bx;
-	r.parts.mant = m;
-	return r;
+    r.parts.sign = s;
+    r.parts.bexp = bx;
+    r.parts.mant = m;
+    return r;
 }
 
 extern int ieee754dp_isnan(ieee754dp);

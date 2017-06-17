@@ -26,22 +26,22 @@
 #include "board-harmony.h"
 
 static struct regulator_consumer_supply tps658621_ldo0_supply[] = {
-	REGULATOR_SUPPLY("pex_clk", NULL),
+    REGULATOR_SUPPLY("pex_clk", NULL),
 };
 
 static struct regulator_init_data ldo0_data = {
-	.constraints = {
-		.min_uV = 3300 * 1000,
-		.max_uV = 3300 * 1000,
-		.valid_modes_mask = (REGULATOR_MODE_NORMAL |
-				     REGULATOR_MODE_STANDBY),
-		.valid_ops_mask = (REGULATOR_CHANGE_MODE |
-				   REGULATOR_CHANGE_STATUS |
-				   REGULATOR_CHANGE_VOLTAGE),
-		.apply_uV = 1,
-	},
-	.num_consumer_supplies = ARRAY_SIZE(tps658621_ldo0_supply),
-	.consumer_supplies = tps658621_ldo0_supply,
+    .constraints = {
+        .min_uV = 3300 * 1000,
+        .max_uV = 3300 * 1000,
+        .valid_modes_mask = (REGULATOR_MODE_NORMAL |
+        REGULATOR_MODE_STANDBY),
+        .valid_ops_mask = (REGULATOR_CHANGE_MODE |
+        REGULATOR_CHANGE_STATUS |
+        REGULATOR_CHANGE_VOLTAGE),
+        .apply_uV = 1,
+    },
+    .num_consumer_supplies = ARRAY_SIZE(tps658621_ldo0_supply),
+    .consumer_supplies = tps658621_ldo0_supply,
 };
 
 #define HARMONY_REGULATOR_INIT(_id, _minmv, _maxmv)			\
@@ -78,39 +78,38 @@ HARMONY_REGULATOR_INIT(ldo9, 1250, 3300);
 	}
 
 static struct tps6586x_subdev_info tps_devs[] = {
-	TPS_REG(SM_0, &sm0_data),
-	TPS_REG(SM_1, &sm1_data),
-	TPS_REG(SM_2, &sm2_data),
-	TPS_REG(LDO_0, &ldo0_data),
-	TPS_REG(LDO_1, &ldo1_data),
-	TPS_REG(LDO_2, &ldo2_data),
-	TPS_REG(LDO_3, &ldo3_data),
-	TPS_REG(LDO_4, &ldo4_data),
-	TPS_REG(LDO_5, &ldo5_data),
-	TPS_REG(LDO_6, &ldo6_data),
-	TPS_REG(LDO_7, &ldo7_data),
-	TPS_REG(LDO_8, &ldo8_data),
-	TPS_REG(LDO_9, &ldo9_data),
+    TPS_REG(SM_0, &sm0_data),
+    TPS_REG(SM_1, &sm1_data),
+    TPS_REG(SM_2, &sm2_data),
+    TPS_REG(LDO_0, &ldo0_data),
+    TPS_REG(LDO_1, &ldo1_data),
+    TPS_REG(LDO_2, &ldo2_data),
+    TPS_REG(LDO_3, &ldo3_data),
+    TPS_REG(LDO_4, &ldo4_data),
+    TPS_REG(LDO_5, &ldo5_data),
+    TPS_REG(LDO_6, &ldo6_data),
+    TPS_REG(LDO_7, &ldo7_data),
+    TPS_REG(LDO_8, &ldo8_data),
+    TPS_REG(LDO_9, &ldo9_data),
 };
 
 static struct tps6586x_platform_data tps_platform = {
-	.irq_base	= TEGRA_NR_IRQS,
-	.num_subdevs	= ARRAY_SIZE(tps_devs),
-	.subdevs	= tps_devs,
-	.gpio_base	= HARMONY_GPIO_TPS6586X(0),
+    .irq_base	= TEGRA_NR_IRQS,
+    .num_subdevs	= ARRAY_SIZE(tps_devs),
+    .subdevs	= tps_devs,
+    .gpio_base	= HARMONY_GPIO_TPS6586X(0),
 };
 
 static struct i2c_board_info __initdata harmony_regulators[] = {
-	{
-		I2C_BOARD_INFO("tps6586x", 0x34),
-		.irq		= INT_EXTERNAL_PMU,
-		.platform_data	= &tps_platform,
-	},
+    {
+        I2C_BOARD_INFO("tps6586x", 0x34),
+        .irq		= INT_EXTERNAL_PMU,
+        .platform_data	= &tps_platform,
+    },
 };
 
-int __init harmony_regulator_init(void)
-{
-	i2c_register_board_info(3, harmony_regulators, 1);
+int __init harmony_regulator_init(void) {
+    i2c_register_board_info(3, harmony_regulators, 1);
 
-	return 0;
+    return 0;
 }

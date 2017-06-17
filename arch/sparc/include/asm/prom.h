@@ -32,16 +32,16 @@
 #define of_node_cmp(s1, s2)		strcmp((s1), (s2))
 
 struct of_irq_controller {
-	unsigned int	(*irq_build)(struct device_node *, unsigned int, void *);
-	void		*data;
+    unsigned int	(*irq_build)(struct device_node *, unsigned int, void *);
+    void		*data;
 };
 
 extern struct device_node *of_find_node_by_cpuid(int cpuid);
 extern int of_set_property(struct device_node *node, const char *name, void *val, int len);
 extern struct mutex of_set_property_mutex;
 extern int of_getintprop_default(struct device_node *np,
-				 const char *name,
-				 int def);
+                                 const char *name,
+                                 int def);
 extern int of_find_in_proplist(const char *list, const char *match, int len);
 #ifdef CONFIG_NUMA
 extern int of_node_to_nid(struct device_node *dp);

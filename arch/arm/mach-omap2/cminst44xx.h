@@ -21,29 +21,26 @@ extern int omap4_cminst_wait_module_ready(u8 part, u16 inst, s16 cdoffs, u16 clk
 
 # ifdef CONFIG_ARCH_OMAP4
 extern int omap4_cminst_wait_module_idle(u8 part, u16 inst, s16 cdoffs,
-					 u16 clkctrl_offs);
+        u16 clkctrl_offs);
 
 extern void omap4_cminst_module_enable(u8 mode, u8 part, u16 inst, s16 cdoffs,
-				       u16 clkctrl_offs);
+                                       u16 clkctrl_offs);
 extern void omap4_cminst_module_disable(u8 part, u16 inst, s16 cdoffs,
-					u16 clkctrl_offs);
+                                        u16 clkctrl_offs);
 
 # else
 
 static inline int omap4_cminst_wait_module_idle(u8 part, u16 inst, s16 cdoffs,
-					u16 clkctrl_offs)
-{
-	return 0;
+        u16 clkctrl_offs) {
+    return 0;
 }
 
 static inline void omap4_cminst_module_enable(u8 mode, u8 part, u16 inst,
-				s16 cdoffs, u16 clkctrl_offs)
-{
+        s16 cdoffs, u16 clkctrl_offs) {
 }
 
 static inline void omap4_cminst_module_disable(u8 part, u16 inst, s16 cdoffs,
-				 u16 clkctrl_offs)
-{
+        u16 clkctrl_offs) {
 }
 
 # endif
@@ -55,12 +52,12 @@ static inline void omap4_cminst_module_disable(u8 part, u16 inst, s16 cdoffs,
 extern u32 omap4_cminst_read_inst_reg(u8 part, s16 inst, u16 idx);
 extern void omap4_cminst_write_inst_reg(u32 val, u8 part, s16 inst, u16 idx);
 extern u32 omap4_cminst_rmw_inst_reg_bits(u32 mask, u32 bits, u8 part,
-					   s16 inst, s16 idx);
+        s16 inst, s16 idx);
 extern u32 omap4_cminst_set_inst_reg_bits(u32 bits, u8 part, s16 inst,
-					   s16 idx);
+        s16 idx);
 extern u32 omap4_cminst_clear_inst_reg_bits(u32 bits, u8 part, s16 inst,
-					   s16 idx);
+        s16 idx);
 extern u32 omap4_cminst_read_inst_reg_bits(u8 part, u16 inst, s16 idx,
-					   u32 mask);
+        u32 mask);
 
 #endif

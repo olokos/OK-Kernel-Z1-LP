@@ -80,25 +80,24 @@ void bfa_isr_unhandled(struct bfa_s *bfa, struct bfi_msg_s *m);
  * Circular queue usage assignments
  */
 enum {
-	BFA_REQQ_IOC	= 0,	/*  all low-priority IOC msgs	*/
-	BFA_REQQ_FCXP	= 0,	/*  all FCXP messages		*/
-	BFA_REQQ_LPS	= 0,	/*  all lport service msgs	*/
-	BFA_REQQ_PORT	= 0,	/*  all port messages		*/
-	BFA_REQQ_FLASH	= 0,	/*  for flash module		*/
-	BFA_REQQ_DIAG	= 0,	/*  for diag module		*/
-	BFA_REQQ_RPORT	= 0,	/*  all port messages		*/
-	BFA_REQQ_SBOOT	= 0,	/*  all san boot messages	*/
-	BFA_REQQ_QOS_LO	= 1,	/*  all low priority IO	*/
-	BFA_REQQ_QOS_MD	= 2,	/*  all medium priority IO	*/
-	BFA_REQQ_QOS_HI	= 3,	/*  all high priority IO	*/
+    BFA_REQQ_IOC	= 0,	/*  all low-priority IOC msgs	*/
+    BFA_REQQ_FCXP	= 0,	/*  all FCXP messages		*/
+    BFA_REQQ_LPS	= 0,	/*  all lport service msgs	*/
+    BFA_REQQ_PORT	= 0,	/*  all port messages		*/
+    BFA_REQQ_FLASH	= 0,	/*  for flash module		*/
+    BFA_REQQ_DIAG	= 0,	/*  for diag module		*/
+    BFA_REQQ_RPORT	= 0,	/*  all port messages		*/
+    BFA_REQQ_SBOOT	= 0,	/*  all san boot messages	*/
+    BFA_REQQ_QOS_LO	= 1,	/*  all low priority IO	*/
+    BFA_REQQ_QOS_MD	= 2,	/*  all medium priority IO	*/
+    BFA_REQQ_QOS_HI	= 3,	/*  all high priority IO	*/
 };
 
 static inline void
 bfa_reqq_winit(struct bfa_reqq_wait_s *wqe, void (*qresume) (void *cbarg),
-	       void *cbarg)
-{
-	wqe->qresume = qresume;
-	wqe->cbarg = cbarg;
+               void *cbarg) {
+    wqe->qresume = qresume;
+    wqe->cbarg = cbarg;
 }
 
 #define bfa_reqq(__bfa, __reqq)	(&(__bfa)->reqq_waitq[__reqq])
@@ -151,21 +150,21 @@ bfa_reqq_winit(struct bfa_reqq_wait_s *wqe, void (*qresume) (void *cbarg),
  * PCI devices supported by the current BFA
  */
 struct bfa_pciid_s {
-	u16	device_id;
-	u16	vendor_id;
+    u16	device_id;
+    u16	vendor_id;
 };
 
 extern char     bfa_version[];
 
 struct bfa_iocfc_regs_s {
-	void __iomem	*intr_status;
-	void __iomem	*intr_mask;
-	void __iomem	*cpe_q_pi[BFI_IOC_MAX_CQS];
-	void __iomem	*cpe_q_ci[BFI_IOC_MAX_CQS];
-	void __iomem	*cpe_q_ctrl[BFI_IOC_MAX_CQS];
-	void __iomem	*rme_q_ci[BFI_IOC_MAX_CQS];
-	void __iomem	*rme_q_pi[BFI_IOC_MAX_CQS];
-	void __iomem	*rme_q_ctrl[BFI_IOC_MAX_CQS];
+    void __iomem	*intr_status;
+    void __iomem	*intr_mask;
+    void __iomem	*cpe_q_pi[BFI_IOC_MAX_CQS];
+    void __iomem	*cpe_q_ci[BFI_IOC_MAX_CQS];
+    void __iomem	*cpe_q_ctrl[BFI_IOC_MAX_CQS];
+    void __iomem	*rme_q_ci[BFI_IOC_MAX_CQS];
+    void __iomem	*rme_q_pi[BFI_IOC_MAX_CQS];
+    void __iomem	*rme_q_ctrl[BFI_IOC_MAX_CQS];
 };
 
 /*
@@ -174,34 +173,34 @@ struct bfa_iocfc_regs_s {
 #define BFA_MSIX_MAX_VECTORS	22
 typedef void (*bfa_msix_handler_t)(struct bfa_s *bfa, int vec);
 struct bfa_msix_s {
-	int	nvecs;
-	bfa_msix_handler_t handler[BFA_MSIX_MAX_VECTORS];
+    int	nvecs;
+    bfa_msix_handler_t handler[BFA_MSIX_MAX_VECTORS];
 };
 
 /*
  * Chip specific interfaces
  */
 struct bfa_hwif_s {
-	void (*hw_reginit)(struct bfa_s *bfa);
-	void (*hw_reqq_ack)(struct bfa_s *bfa, int reqq);
-	void (*hw_rspq_ack)(struct bfa_s *bfa, int rspq, u32 ci);
-	void (*hw_msix_init)(struct bfa_s *bfa, int nvecs);
-	void (*hw_msix_ctrl_install)(struct bfa_s *bfa);
-	void (*hw_msix_queue_install)(struct bfa_s *bfa);
-	void (*hw_msix_uninstall)(struct bfa_s *bfa);
-	void (*hw_isr_mode_set)(struct bfa_s *bfa, bfa_boolean_t msix);
-	void (*hw_msix_getvecs)(struct bfa_s *bfa, u32 *vecmap,
-				u32 *nvecs, u32 *maxvec);
-	void (*hw_msix_get_rme_range) (struct bfa_s *bfa, u32 *start,
-				       u32 *end);
-	int	cpe_vec_q0;
-	int	rme_vec_q0;
+    void (*hw_reginit)(struct bfa_s *bfa);
+    void (*hw_reqq_ack)(struct bfa_s *bfa, int reqq);
+    void (*hw_rspq_ack)(struct bfa_s *bfa, int rspq, u32 ci);
+    void (*hw_msix_init)(struct bfa_s *bfa, int nvecs);
+    void (*hw_msix_ctrl_install)(struct bfa_s *bfa);
+    void (*hw_msix_queue_install)(struct bfa_s *bfa);
+    void (*hw_msix_uninstall)(struct bfa_s *bfa);
+    void (*hw_isr_mode_set)(struct bfa_s *bfa, bfa_boolean_t msix);
+    void (*hw_msix_getvecs)(struct bfa_s *bfa, u32 *vecmap,
+                            u32 *nvecs, u32 *maxvec);
+    void (*hw_msix_get_rme_range) (struct bfa_s *bfa, u32 *start,
+                                   u32 *end);
+    int	cpe_vec_q0;
+    int	rme_vec_q0;
 };
 typedef void (*bfa_cb_iocfc_t) (void *cbarg, enum bfa_status status);
 
 struct bfa_faa_cbfn_s {
-	bfa_cb_iocfc_t	faa_cbfn;
-	void		*faa_cbarg;
+    bfa_cb_iocfc_t	faa_cbfn;
+    void		*faa_cbarg;
 };
 
 #define BFA_FAA_ENABLED		1
@@ -211,54 +210,54 @@ struct bfa_faa_cbfn_s {
  *	FAA attributes
  */
 struct bfa_faa_attr_s {
-	wwn_t	faa;
-	u8	faa_state;
-	u8	pwwn_source;
-	u8	rsvd[6];
+    wwn_t	faa;
+    u8	faa_state;
+    u8	pwwn_source;
+    u8	rsvd[6];
 };
 
 struct bfa_faa_args_s {
-	struct bfa_faa_attr_s	*faa_attr;
-	struct bfa_faa_cbfn_s	faa_cb;
-	u8			faa_state;
-	bfa_boolean_t		busy;
+    struct bfa_faa_attr_s	*faa_attr;
+    struct bfa_faa_cbfn_s	faa_cb;
+    u8			faa_state;
+    bfa_boolean_t		busy;
 };
 
 struct bfa_iocfc_s {
-	bfa_fsm_t		fsm;
-	struct bfa_s		*bfa;
-	struct bfa_iocfc_cfg_s	cfg;
-	u32		req_cq_pi[BFI_IOC_MAX_CQS];
-	u32		rsp_cq_ci[BFI_IOC_MAX_CQS];
-	u8		hw_qid[BFI_IOC_MAX_CQS];
-	struct bfa_cb_qe_s	init_hcb_qe;
-	struct bfa_cb_qe_s	stop_hcb_qe;
-	struct bfa_cb_qe_s	dis_hcb_qe;
-	struct bfa_cb_qe_s	en_hcb_qe;
-	struct bfa_cb_qe_s	stats_hcb_qe;
-	bfa_boolean_t		submod_enabled;
-	bfa_boolean_t		cb_reqd;	/* Driver call back reqd */
-	bfa_status_t		op_status;	/* Status of bfa iocfc op */
+    bfa_fsm_t		fsm;
+    struct bfa_s		*bfa;
+    struct bfa_iocfc_cfg_s	cfg;
+    u32		req_cq_pi[BFI_IOC_MAX_CQS];
+    u32		rsp_cq_ci[BFI_IOC_MAX_CQS];
+    u8		hw_qid[BFI_IOC_MAX_CQS];
+    struct bfa_cb_qe_s	init_hcb_qe;
+    struct bfa_cb_qe_s	stop_hcb_qe;
+    struct bfa_cb_qe_s	dis_hcb_qe;
+    struct bfa_cb_qe_s	en_hcb_qe;
+    struct bfa_cb_qe_s	stats_hcb_qe;
+    bfa_boolean_t		submod_enabled;
+    bfa_boolean_t		cb_reqd;	/* Driver call back reqd */
+    bfa_status_t		op_status;	/* Status of bfa iocfc op */
 
-	struct bfa_dma_s	cfg_info;
-	struct bfi_iocfc_cfg_s *cfginfo;
-	struct bfa_dma_s	cfgrsp_dma;
-	struct bfi_iocfc_cfgrsp_s *cfgrsp;
-	struct bfa_dma_s	req_cq_ba[BFI_IOC_MAX_CQS];
-	struct bfa_dma_s	req_cq_shadow_ci[BFI_IOC_MAX_CQS];
-	struct bfa_dma_s	rsp_cq_ba[BFI_IOC_MAX_CQS];
-	struct bfa_dma_s	rsp_cq_shadow_pi[BFI_IOC_MAX_CQS];
-	struct bfa_iocfc_regs_s	bfa_regs;	/*  BFA device registers */
-	struct bfa_hwif_s	hwif;
-	bfa_cb_iocfc_t		updateq_cbfn; /*  bios callback function */
-	void			*updateq_cbarg;	/*  bios callback arg */
-	u32	intr_mask;
-	struct bfa_faa_args_s	faa_args;
-	struct bfa_mem_dma_s	ioc_dma;
-	struct bfa_mem_dma_s	iocfc_dma;
-	struct bfa_mem_dma_s	reqq_dma[BFI_IOC_MAX_CQS];
-	struct bfa_mem_dma_s	rspq_dma[BFI_IOC_MAX_CQS];
-	struct bfa_mem_kva_s	kva_seg;
+    struct bfa_dma_s	cfg_info;
+    struct bfi_iocfc_cfg_s *cfginfo;
+    struct bfa_dma_s	cfgrsp_dma;
+    struct bfi_iocfc_cfgrsp_s *cfgrsp;
+    struct bfa_dma_s	req_cq_ba[BFI_IOC_MAX_CQS];
+    struct bfa_dma_s	req_cq_shadow_ci[BFI_IOC_MAX_CQS];
+    struct bfa_dma_s	rsp_cq_ba[BFI_IOC_MAX_CQS];
+    struct bfa_dma_s	rsp_cq_shadow_pi[BFI_IOC_MAX_CQS];
+    struct bfa_iocfc_regs_s	bfa_regs;	/*  BFA device registers */
+    struct bfa_hwif_s	hwif;
+    bfa_cb_iocfc_t		updateq_cbfn; /*  bios callback function */
+    void			*updateq_cbarg;	/*  bios callback arg */
+    u32	intr_mask;
+    struct bfa_faa_args_s	faa_args;
+    struct bfa_mem_dma_s	ioc_dma;
+    struct bfa_mem_dma_s	iocfc_dma;
+    struct bfa_mem_dma_s	reqq_dma[BFI_IOC_MAX_CQS];
+    struct bfa_mem_dma_s	rspq_dma[BFI_IOC_MAX_CQS];
+    struct bfa_mem_kva_s	kva_seg;
 };
 
 #define BFA_MEM_IOC_DMA(_bfa)		(&((_bfa)->iocfc.ioc_dma))
@@ -299,11 +298,11 @@ struct bfa_iocfc_s {
  * FC specific IOC functions.
  */
 void bfa_iocfc_meminfo(struct bfa_iocfc_cfg_s *cfg,
-			struct bfa_meminfo_s *meminfo,
-			struct bfa_s *bfa);
+                       struct bfa_meminfo_s *meminfo,
+                       struct bfa_s *bfa);
 void bfa_iocfc_attach(struct bfa_s *bfa, void *bfad,
-		      struct bfa_iocfc_cfg_s *cfg,
-		      struct bfa_pcidev_s *pcidev);
+                      struct bfa_iocfc_cfg_s *cfg,
+                      struct bfa_pcidev_s *pcidev);
 void bfa_iocfc_init(struct bfa_s *bfa);
 void bfa_iocfc_start(struct bfa_s *bfa);
 void bfa_iocfc_stop(struct bfa_s *bfa);
@@ -325,9 +324,9 @@ void bfa_hwcb_msix_queue_install(struct bfa_s *bfa);
 void bfa_hwcb_msix_uninstall(struct bfa_s *bfa);
 void bfa_hwcb_isr_mode_set(struct bfa_s *bfa, bfa_boolean_t msix);
 void bfa_hwcb_msix_getvecs(struct bfa_s *bfa, u32 *vecmap, u32 *nvecs,
-			   u32 *maxvec);
+                           u32 *maxvec);
 void bfa_hwcb_msix_get_rme_range(struct bfa_s *bfa, u32 *start,
-				 u32 *end);
+                                 u32 *end);
 void bfa_hwct_reginit(struct bfa_s *bfa);
 void bfa_hwct2_reginit(struct bfa_s *bfa);
 void bfa_hwct_reqq_ack(struct bfa_s *bfa, int rspq);
@@ -339,12 +338,12 @@ void bfa_hwct_msix_queue_install(struct bfa_s *bfa);
 void bfa_hwct_msix_uninstall(struct bfa_s *bfa);
 void bfa_hwct_isr_mode_set(struct bfa_s *bfa, bfa_boolean_t msix);
 void bfa_hwct_msix_getvecs(struct bfa_s *bfa, u32 *vecmap, u32 *nvecs,
-			   u32 *maxvec);
+                           u32 *maxvec);
 void bfa_hwct_msix_get_rme_range(struct bfa_s *bfa, u32 *start,
-				 u32 *end);
+                                 u32 *end);
 void bfa_iocfc_get_bootwwns(struct bfa_s *bfa, u8 *nwwns, wwn_t *wwns);
 int bfa_iocfc_get_pbc_vports(struct bfa_s *bfa,
-				struct bfi_pbc_vport_s *pbc_vport);
+                             struct bfi_pbc_vport_s *pbc_vport);
 
 
 /*
@@ -402,11 +401,11 @@ void bfa_get_pciids(struct bfa_pciid_s **pciids, int *npciids);
 void bfa_cfg_get_default(struct bfa_iocfc_cfg_s *cfg);
 void bfa_cfg_get_min(struct bfa_iocfc_cfg_s *cfg);
 void bfa_cfg_get_meminfo(struct bfa_iocfc_cfg_s *cfg,
-			struct bfa_meminfo_s *meminfo,
-			struct bfa_s *bfa);
+                         struct bfa_meminfo_s *meminfo,
+                         struct bfa_s *bfa);
 void bfa_attach(struct bfa_s *bfa, void *bfad, struct bfa_iocfc_cfg_s *cfg,
-		struct bfa_meminfo_s *meminfo,
-		struct bfa_pcidev_s *pcidev);
+                struct bfa_meminfo_s *meminfo,
+                struct bfa_pcidev_s *pcidev);
 void bfa_detach(struct bfa_s *bfa);
 void bfa_cb_init(void *bfad, bfa_status_t status);
 void bfa_cb_updateq(void *bfad, bfa_status_t status);
@@ -424,7 +423,7 @@ void bfa_iocfc_get_attr(struct bfa_s *bfa, struct bfa_iocfc_attr_s *attr);
 
 
 bfa_status_t bfa_iocfc_israttr_set(struct bfa_s *bfa,
-				   struct bfa_iocfc_intr_attr_s *attr);
+                                   struct bfa_iocfc_intr_attr_s *attr);
 
 void bfa_iocfc_enable(struct bfa_s *bfa);
 void bfa_iocfc_disable(struct bfa_s *bfa);
@@ -432,8 +431,8 @@ void bfa_iocfc_disable(struct bfa_s *bfa);
 	bfa_timer_begin(&(_bfa)->timer_mod, _timer, _timercb, _arg, _timeout)
 
 struct bfa_cb_pending_q_s {
-	struct bfa_cb_qe_s	hcb_qe;
-	void			*data;  /* Driver buffer */
+    struct bfa_cb_qe_s	hcb_qe;
+    void			*data;  /* Driver buffer */
 };
 
 /* Common macros to operate on pending stats/attr apis */

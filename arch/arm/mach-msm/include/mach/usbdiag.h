@@ -34,51 +34,46 @@
 #define USB_DIAG_READ_DONE	3
 
 struct diag_request {
-	char *buf;
-	int length;
-	int actual;
-	int status;
-	void *context;
+    char *buf;
+    int length;
+    int actual;
+    int status;
+    void *context;
 };
 
 struct usb_diag_ch {
-	const char *name;
-	struct list_head list;
-	void (*notify)(void *priv, unsigned event, struct diag_request *d_req);
-	void *priv;
-	void *priv_usb;
+    const char *name;
+    struct list_head list;
+    void (*notify)(void *priv, unsigned event, struct diag_request *d_req);
+    void *priv;
+    void *priv_usb;
 };
 
 #ifdef CONFIG_USB_G_ANDROID
 struct usb_diag_ch *usb_diag_open(const char *name, void *priv,
-		void (*notify)(void *, unsigned, struct diag_request *));
+                                  void (*notify)(void *, unsigned, struct diag_request *));
 void usb_diag_close(struct usb_diag_ch *ch);
 int usb_diag_alloc_req(struct usb_diag_ch *ch, int n_write, int n_read);
 int usb_diag_read(struct usb_diag_ch *ch, struct diag_request *d_req);
 int usb_diag_write(struct usb_diag_ch *ch, struct diag_request *d_req);
 #else
 static inline struct usb_diag_ch *usb_diag_open(const char *name, void *priv,
-		void (*notify)(void *, unsigned, struct diag_request *))
-{
-	return ERR_PTR(-ENODEV);
+        void (*notify)(void *, unsigned, struct diag_request *)) {
+    return ERR_PTR(-ENODEV);
 }
-static inline void usb_diag_close(struct usb_diag_ch *ch)
-{
+static inline void usb_diag_close(struct usb_diag_ch *ch) {
 }
 static inline
-int usb_diag_alloc_req(struct usb_diag_ch *ch, int n_write, int n_read)
-{
-	return -ENODEV;
+int usb_diag_alloc_req(struct usb_diag_ch *ch, int n_write, int n_read) {
+    return -ENODEV;
 }
 static inline
-int usb_diag_read(struct usb_diag_ch *ch, struct diag_request *d_req)
-{
-	return -ENODEV;
+int usb_diag_read(struct usb_diag_ch *ch, struct diag_request *d_req) {
+    return -ENODEV;
 }
 static inline
-int usb_diag_write(struct usb_diag_ch *ch, struct diag_request *d_req)
-{
-	return -ENODEV;
+int usb_diag_write(struct usb_diag_ch *ch, struct diag_request *d_req) {
+    return -ENODEV;
 }
 #endif /* CONFIG_USB_G_ANDROID */
 #endif /* _DRIVERS_USB_DIAG_H_ */

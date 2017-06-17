@@ -83,131 +83,126 @@ static DEFINE_SPINLOCK(io_lock);
 static void __iomem	*wdt_base;
 struct clk		*wdt_clk;
 
-static int pnx4008_wdt_start(struct watchdog_device *wdd)
-{
-	spin_lock(&io_lock);
+static int pnx4008_wdt_start(struct watchdog_device *wdd) {
+    spin_lock(&io_lock);
 
-	/* stop counter, initiate counter reset */
-	writel(RESET_COUNT, WDTIM_CTRL(wdt_base));
-	/*wait for reset to complete. 100% guarantee event */
-	while (readl(WDTIM_COUNTER(wdt_base)))
-		cpu_relax();
-	/* internal and external reset, stop after that */
-	writel(M_RES2 | STOP_COUNT0 | RESET_COUNT0, WDTIM_MCTRL(wdt_base));
-	/* configure match output */
-	writel(MATCH_OUTPUT_HIGH, WDTIM_EMR(wdt_base));
-	/* clear interrupt, just in case */
-	writel(MATCH_INT, WDTIM_INT(wdt_base));
-	/* the longest pulse period 65541/(13*10^6) seconds ~ 5 ms. */
-	writel(0xFFFF, WDTIM_PULSE(wdt_base));
-	writel(wdd->timeout * WDOG_COUNTER_RATE, WDTIM_MATCH0(wdt_base));
-	/*enable counter, stop when debugger active */
-	writel(COUNT_ENAB | DEBUG_EN, WDTIM_CTRL(wdt_base));
+    /* stop counter, initiate counter reset */
+    writel(RESET_COUNT, WDTIM_CTRL(wdt_base));
+    /*wait for reset to complete. 100% guarantee event */
+    while (readl(WDTIM_COUNTER(wdt_base)))
+        cpu_relax();
+    /* internal and external reset, stop after that */
+    writel(M_RES2 | STOP_COUNT0 | RESET_COUNT0, WDTIM_MCTRL(wdt_base));
+    /* configure match output */
+    writel(MATCH_OUTPUT_HIGH, WDTIM_EMR(wdt_base));
+    /* clear interrupt, just in case */
+    writel(MATCH_INT, WDTIM_INT(wdt_base));
+    /* the longest pulse period 65541/(13*10^6) seconds ~ 5 ms. */
+    writel(0xFFFF, WDTIM_PULSE(wdt_base));
+    writel(wdd->timeout * WDOG_COUNTER_RATE, WDTIM_MATCH0(wdt_base));
+    /*enable counter, stop when debugger active */
+    writel(COUNT_ENAB | DEBUG_EN, WDTIM_CTRL(wdt_base));
 
-	spin_unlock(&io_lock);
-	return 0;
+    spin_unlock(&io_lock);
+    return 0;
 }
 
-static int pnx4008_wdt_stop(struct watchdog_device *wdd)
-{
-	spin_lock(&io_lock);
+static int pnx4008_wdt_stop(struct watchdog_device *wdd) {
+    spin_lock(&io_lock);
 
-	writel(0, WDTIM_CTRL(wdt_base));	/*stop counter */
+    writel(0, WDTIM_CTRL(wdt_base));	/*stop counter */
 
-	spin_unlock(&io_lock);
-	return 0;
+    spin_unlock(&io_lock);
+    return 0;
 }
 
 static int pnx4008_wdt_set_timeout(struct watchdog_device *wdd,
-				    unsigned int new_timeout)
-{
-	wdd->timeout = new_timeout;
-	return 0;
+                                   unsigned int new_timeout) {
+    wdd->timeout = new_timeout;
+    return 0;
 }
 
 static const struct watchdog_info pnx4008_wdt_ident = {
-	.options = WDIOF_CARDRESET | WDIOF_MAGICCLOSE |
-	    WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-	.identity = "PNX4008 Watchdog",
+    .options = WDIOF_CARDRESET | WDIOF_MAGICCLOSE |
+    WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
+    .identity = "PNX4008 Watchdog",
 };
 
 static const struct watchdog_ops pnx4008_wdt_ops = {
-	.owner = THIS_MODULE,
-	.start = pnx4008_wdt_start,
-	.stop = pnx4008_wdt_stop,
-	.set_timeout = pnx4008_wdt_set_timeout,
+    .owner = THIS_MODULE,
+    .start = pnx4008_wdt_start,
+    .stop = pnx4008_wdt_stop,
+    .set_timeout = pnx4008_wdt_set_timeout,
 };
 
 static struct watchdog_device pnx4008_wdd = {
-	.info = &pnx4008_wdt_ident,
-	.ops = &pnx4008_wdt_ops,
-	.min_timeout = 1,
-	.max_timeout = MAX_HEARTBEAT,
+    .info = &pnx4008_wdt_ident,
+    .ops = &pnx4008_wdt_ops,
+    .min_timeout = 1,
+    .max_timeout = MAX_HEARTBEAT,
 };
 
-static int __devinit pnx4008_wdt_probe(struct platform_device *pdev)
-{
-	struct resource *r;
-	int ret = 0;
+static int __devinit pnx4008_wdt_probe(struct platform_device *pdev) {
+    struct resource *r;
+    int ret = 0;
 
-	if (heartbeat < 1 || heartbeat > MAX_HEARTBEAT)
-		heartbeat = DEFAULT_HEARTBEAT;
+    if (heartbeat < 1 || heartbeat > MAX_HEARTBEAT)
+        heartbeat = DEFAULT_HEARTBEAT;
 
-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	wdt_base = devm_request_and_ioremap(&pdev->dev, r);
-	if (!wdt_base)
-		return -EADDRINUSE;
+    r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    wdt_base = devm_request_and_ioremap(&pdev->dev, r);
+    if (!wdt_base)
+        return -EADDRINUSE;
 
-	wdt_clk = clk_get(&pdev->dev, NULL);
-	if (IS_ERR(wdt_clk))
-		return PTR_ERR(wdt_clk);
+    wdt_clk = clk_get(&pdev->dev, NULL);
+    if (IS_ERR(wdt_clk))
+        return PTR_ERR(wdt_clk);
 
-	ret = clk_enable(wdt_clk);
-	if (ret)
-		goto out;
+    ret = clk_enable(wdt_clk);
+    if (ret)
+        goto out;
 
-	pnx4008_wdd.timeout = heartbeat;
-	pnx4008_wdd.bootstatus = (readl(WDTIM_RES(wdt_base)) & WDOG_RESET) ?
-			WDIOF_CARDRESET : 0;
-	watchdog_set_nowayout(&pnx4008_wdd, nowayout);
+    pnx4008_wdd.timeout = heartbeat;
+    pnx4008_wdd.bootstatus = (readl(WDTIM_RES(wdt_base)) & WDOG_RESET) ?
+                             WDIOF_CARDRESET : 0;
+    watchdog_set_nowayout(&pnx4008_wdd, nowayout);
 
-	pnx4008_wdt_stop(&pnx4008_wdd);	/* disable for now */
+    pnx4008_wdt_stop(&pnx4008_wdd);	/* disable for now */
 
-	ret = watchdog_register_device(&pnx4008_wdd);
-	if (ret < 0) {
-		dev_err(&pdev->dev, "cannot register watchdog device\n");
-		goto disable_clk;
-	}
+    ret = watchdog_register_device(&pnx4008_wdd);
+    if (ret < 0) {
+        dev_err(&pdev->dev, "cannot register watchdog device\n");
+        goto disable_clk;
+    }
 
-	dev_info(&pdev->dev, "PNX4008 Watchdog Timer: heartbeat %d sec\n",
-			heartbeat);
+    dev_info(&pdev->dev, "PNX4008 Watchdog Timer: heartbeat %d sec\n",
+             heartbeat);
 
-	return 0;
+    return 0;
 
 disable_clk:
-	clk_disable(wdt_clk);
+    clk_disable(wdt_clk);
 out:
-	clk_put(wdt_clk);
-	return ret;
+    clk_put(wdt_clk);
+    return ret;
 }
 
-static int __devexit pnx4008_wdt_remove(struct platform_device *pdev)
-{
-	watchdog_unregister_device(&pnx4008_wdd);
+static int __devexit pnx4008_wdt_remove(struct platform_device *pdev) {
+    watchdog_unregister_device(&pnx4008_wdd);
 
-	clk_disable(wdt_clk);
-	clk_put(wdt_clk);
+    clk_disable(wdt_clk);
+    clk_put(wdt_clk);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver platform_wdt_driver = {
-	.driver = {
-		.name = "pnx4008-watchdog",
-		.owner	= THIS_MODULE,
-	},
-	.probe = pnx4008_wdt_probe,
-	.remove = __devexit_p(pnx4008_wdt_remove),
+    .driver = {
+        .name = "pnx4008-watchdog",
+        .owner	= THIS_MODULE,
+    },
+    .probe = pnx4008_wdt_probe,
+    .remove = __devexit_p(pnx4008_wdt_remove),
 };
 
 module_platform_driver(platform_wdt_driver);
@@ -218,13 +213,13 @@ MODULE_DESCRIPTION("PNX4008 Watchdog Driver");
 
 module_param(heartbeat, uint, 0);
 MODULE_PARM_DESC(heartbeat,
-		 "Watchdog heartbeat period in seconds from 1 to "
-		 __MODULE_STRING(MAX_HEARTBEAT) ", default "
-		 __MODULE_STRING(DEFAULT_HEARTBEAT));
+                 "Watchdog heartbeat period in seconds from 1 to "
+                 __MODULE_STRING(MAX_HEARTBEAT) ", default "
+                 __MODULE_STRING(DEFAULT_HEARTBEAT));
 
 module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout,
-		 "Set to 1 to keep watchdog running after device release");
+                 "Set to 1 to keep watchdog running after device release");
 
 MODULE_LICENSE("GPL");
 MODULE_ALIAS_MISCDEV(WATCHDOG_MINOR);

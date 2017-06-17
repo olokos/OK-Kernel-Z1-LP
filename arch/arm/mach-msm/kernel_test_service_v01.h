@@ -25,44 +25,44 @@
 #define TEST_DATA_REQ_MAX_MSG_LEN_V01 8456
 
 struct test_name_type_v01 {
-	uint32_t name_len;
-	char name[TEST_MAX_NAME_SIZE_V01];
+    uint32_t name_len;
+    char name[TEST_MAX_NAME_SIZE_V01];
 };
 
 struct test_ping_req_msg_v01 {
-	char ping[4];
+    char ping[4];
 
-	uint8_t client_name_valid;
-	struct test_name_type_v01 client_name;
+    uint8_t client_name_valid;
+    struct test_name_type_v01 client_name;
 };
 
 struct test_ping_resp_msg_v01 {
-	struct qmi_response_type_v01 resp;
+    struct qmi_response_type_v01 resp;
 
-	uint8_t pong_valid;
-	char pong[4];
+    uint8_t pong_valid;
+    char pong[4];
 
-	uint8_t service_name_valid;
-	struct test_name_type_v01 service_name;
+    uint8_t service_name_valid;
+    struct test_name_type_v01 service_name;
 };
 
 struct test_data_req_msg_v01 {
-	uint32_t data_len;
-	uint8_t data[TEST_MED_DATA_SIZE_V01];
+    uint32_t data_len;
+    uint8_t data[TEST_MED_DATA_SIZE_V01];
 
-	uint8_t client_name_valid;
-	struct test_name_type_v01 client_name;
+    uint8_t client_name_valid;
+    struct test_name_type_v01 client_name;
 };
 
 struct test_data_resp_msg_v01 {
-	struct qmi_response_type_v01 resp;
+    struct qmi_response_type_v01 resp;
 
-	uint8_t data_valid;
-	uint32_t data_len;
-	uint8_t data[TEST_MED_DATA_SIZE_V01];
+    uint8_t data_valid;
+    uint32_t data_len;
+    uint8_t data[TEST_MED_DATA_SIZE_V01];
 
-	uint8_t service_name_valid;
-	struct test_name_type_v01 service_name;
+    uint8_t service_name_valid;
+    struct test_name_type_v01 service_name;
 };
 
 extern struct elem_info test_ping_req_msg_v01_ei[];

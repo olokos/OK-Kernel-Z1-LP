@@ -125,13 +125,13 @@
 
 /* check whether reg is a regular register */
 .macro is_rreg_in reg
-	.ifc "\reg", "r0"
-		nop 0
-		.exitm
-	.endif
-	;;
-	mov \reg = r0
-	;;
+.ifc "\reg", "r0"
+nop 0
+.exitm
+.endif
+;;
+mov \reg = r0
+           ;;
 .endm
 #define IS_RREG_IN(reg)	is_rreg_in reg ;
 

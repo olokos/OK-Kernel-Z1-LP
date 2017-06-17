@@ -196,58 +196,58 @@
 #define WINVIEW_PT2254_STROBE 0x80
 
 struct bttv_core {
-	/* device structs */
-	struct v4l2_device   v4l2_dev;
-	struct pci_dev       *pci;
-	struct i2c_adapter   i2c_adap;
-	struct list_head     subs;     /* struct bttv_sub_device */
+    /* device structs */
+    struct v4l2_device   v4l2_dev;
+    struct pci_dev       *pci;
+    struct i2c_adapter   i2c_adap;
+    struct list_head     subs;     /* struct bttv_sub_device */
 
-	/* device config */
-	unsigned int         nr;       /* dev nr (for printk("bttv%d: ...");  */
-	unsigned int         type;     /* card type (pointer into tvcards[])  */
+    /* device config */
+    unsigned int         nr;       /* dev nr (for printk("bttv%d: ...");  */
+    unsigned int         type;     /* card type (pointer into tvcards[])  */
 };
 
 struct bttv;
 
 struct tvcard {
-	char *name;
-	void (*volume_gpio)(struct bttv *btv, __u16 volume);
-	void (*audio_mode_gpio)(struct bttv *btv, struct v4l2_tuner *tuner, int set);
-	void (*muxsel_hook)(struct bttv *btv, unsigned int input);
+    char *name;
+    void (*volume_gpio)(struct bttv *btv, __u16 volume);
+    void (*audio_mode_gpio)(struct bttv *btv, struct v4l2_tuner *tuner, int set);
+    void (*muxsel_hook)(struct bttv *btv, unsigned int input);
 
-	/* MUX bits for each input, two bits per input starting with the LSB */
-	u32 muxsel; /* Use MUXSEL() to set */
+    /* MUX bits for each input, two bits per input starting with the LSB */
+    u32 muxsel; /* Use MUXSEL() to set */
 
-	u32 gpiomask;
-	u32 gpiomux[4];  /* Tuner, Radio, external, internal */
-	u32 gpiomute;    /* GPIO mute setting */
-	u32 gpiomask2;   /* GPIO MUX mask */
+    u32 gpiomask;
+    u32 gpiomux[4];  /* Tuner, Radio, external, internal */
+    u32 gpiomute;    /* GPIO mute setting */
+    u32 gpiomask2;   /* GPIO MUX mask */
 
-	unsigned int tuner_type;
-	u8 tuner_addr;
-	u8 video_inputs;	/* Number of inputs */
-	unsigned int svhs:4;	/* Which input is s-video */
+    unsigned int tuner_type;
+    u8 tuner_addr;
+    u8 video_inputs;	/* Number of inputs */
+    unsigned int svhs:4;	/* Which input is s-video */
 #define NO_SVHS	15
-	unsigned int pll:2;
+    unsigned int pll:2;
 #define PLL_NONE 0
 #define PLL_28   1
 #define PLL_35   2
 
-	/* i2c audio flags */
-	unsigned int no_msp34xx:1;
-	unsigned int no_tda7432:1;
-	unsigned int needs_tvaudio:1;
-	unsigned int msp34xx_alt:1;
-	/* Note: currently no card definition needs to mark the presence
-	   of a RDS saa6588 chip. If this is ever needed, then add a new
-	   'has_saa6588' bit here. */
+    /* i2c audio flags */
+    unsigned int no_msp34xx:1;
+    unsigned int no_tda7432:1;
+    unsigned int needs_tvaudio:1;
+    unsigned int msp34xx_alt:1;
+    /* Note: currently no card definition needs to mark the presence
+       of a RDS saa6588 chip. If this is ever needed, then add a new
+       'has_saa6588' bit here. */
 
-	unsigned int no_video:1; /* video pci function is unused */
-	unsigned int has_dvb:1;
-	unsigned int has_remote:1;
-	unsigned int has_radio:1;
-	unsigned int has_dig_in:1; /* Has digital input (always last input) */
-	unsigned int no_gpioirq:1;
+    unsigned int no_video:1; /* video pci function is unused */
+    unsigned int has_dvb:1;
+    unsigned int has_remote:1;
+    unsigned int has_radio:1;
+    unsigned int has_dig_in:1; /* Has digital input (always last input) */
+    unsigned int no_gpioirq:1;
 };
 
 extern struct tvcard bttv_tvcards[];
@@ -304,7 +304,7 @@ extern struct pci_dev* bttv_get_pcidev(unsigned int card);
    returns negative value if error occurred
 */
 extern int bttv_gpio_enable(unsigned int card,
-			    unsigned long mask, unsigned long data);
+                            unsigned long mask, unsigned long data);
 
 /* fills data with GPDATA register contents
    returns negative value if error occurred
@@ -316,7 +316,7 @@ extern int bttv_read_gpio(unsigned int card, unsigned long *data);
   returns negative value if error occurred
 */
 extern int bttv_write_gpio(unsigned int card,
-			   unsigned long mask, unsigned long data);
+                           unsigned long mask, unsigned long data);
 
 
 
@@ -325,17 +325,17 @@ extern int bttv_write_gpio(unsigned int card,
 /* sysfs/driver-moded based gpio access interface             */
 
 struct bttv_sub_device {
-	struct device    dev;
-	struct bttv_core *core;
-	struct list_head list;
+    struct device    dev;
+    struct bttv_core *core;
+    struct list_head list;
 };
 #define to_bttv_sub_dev(x) container_of((x), struct bttv_sub_device, dev)
 
 struct bttv_sub_driver {
-	struct device_driver   drv;
-	char                   wanted[20];
-	int                    (*probe)(struct bttv_sub_device *sub);
-	void                   (*remove)(struct bttv_sub_device *sub);
+    struct device_driver   drv;
+    char                   wanted[20];
+    int                    (*probe)(struct bttv_sub_device *sub);
+    void                   (*remove)(struct bttv_sub_device *sub);
 };
 #define to_bttv_sub_drv(x) container_of((x), struct bttv_sub_driver, drv)
 
@@ -362,7 +362,7 @@ void bttv_gpio_bits(struct bttv_core *core, u32 mask, u32 bits);
 
 extern int bttv_I2CRead(struct bttv *btv, unsigned char addr, char *probe_for);
 extern int bttv_I2CWrite(struct bttv *btv, unsigned char addr, unsigned char b1,
-			 unsigned char b2, int both);
+                         unsigned char b2, int both);
 extern void bttv_readee(struct bttv *btv, unsigned char *eedata, int addr);
 
 extern int bttv_input_init(struct bttv *dev);

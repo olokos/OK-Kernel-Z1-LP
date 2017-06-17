@@ -15,14 +15,14 @@
 #include "peripheral-loader.h"
 
 struct pil_q6v4_pdata {
-	const unsigned long strap_tcm_base;
-	const unsigned long strap_ahb_upper;
-	const unsigned long strap_ahb_lower;
-	void __iomem *aclk_reg;
-	void __iomem *jtag_clk_reg;
-	const char *name;
-	const unsigned pas_id;
-	int bus_port;
+    const unsigned long strap_tcm_base;
+    const unsigned long strap_ahb_upper;
+    const unsigned long strap_ahb_lower;
+    void __iomem *aclk_reg;
+    void __iomem *jtag_clk_reg;
+    const char *name;
+    const unsigned pas_id;
+    int bus_port;
 };
 
 struct clk;
@@ -33,23 +33,23 @@ struct regulator;
  * struct q6v4_data - Q6 processor
  */
 struct q6v4_data {
-	void __iomem *base;
-	void __iomem *wdog_base;
-	unsigned long strap_tcm_base;
-	unsigned long strap_ahb_upper;
-	unsigned long strap_ahb_lower;
-	void __iomem *aclk_reg;
-	void __iomem *jtag_clk_reg;
-	unsigned pas_id;
-	int bus_port;
-	int wdog_irq;
+    void __iomem *base;
+    void __iomem *wdog_base;
+    unsigned long strap_tcm_base;
+    unsigned long strap_ahb_upper;
+    unsigned long strap_ahb_lower;
+    void __iomem *aclk_reg;
+    void __iomem *jtag_clk_reg;
+    unsigned pas_id;
+    int bus_port;
+    int wdog_irq;
 
-	struct regulator *vreg;
-	struct regulator *pll_supply;
-	bool vreg_enabled;
-	struct clk *xo;
+    struct regulator *vreg;
+    struct regulator *pll_supply;
+    bool vreg_enabled;
+    struct clk *xo;
 
-	struct pil_desc desc;
+    struct pil_desc desc;
 };
 
 #define pil_to_q6v4_data(p) container_of(p, struct q6v4_data, desc)
@@ -62,7 +62,7 @@ extern int pil_q6v4_boot(struct pil_desc *pil);
 extern int pil_q6v4_shutdown(struct pil_desc *pil);
 
 extern int pil_q6v4_init_image_trusted(struct pil_desc *pil,
-		const u8 *metadata, size_t size);
+                                       const u8 *metadata, size_t size);
 extern int pil_q6v4_boot_trusted(struct pil_desc *pil);
 extern int pil_q6v4_shutdown_trusted(struct pil_desc *pil);
 extern void __devinit

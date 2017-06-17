@@ -62,9 +62,8 @@ static inline unsigned sz __in##fnsuffix (unsigned int port)		\
 	return (unsigned sz)value;					\
 }
 
-static inline void __iomem *__ioaddr (unsigned long port)
-{
-	return __PORT_PCIO(port) ? (PCIO_BASE + port) : (void __iomem *)port;
+static inline void __iomem *__ioaddr (unsigned long port) {
+    return __PORT_PCIO(port) ? (PCIO_BASE + port) : (void __iomem *)port;
 }
 
 #define DECLARE_IO(sz,fnsuffix,instr)	\

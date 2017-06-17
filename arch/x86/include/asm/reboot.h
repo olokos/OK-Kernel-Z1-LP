@@ -6,12 +6,12 @@
 struct pt_regs;
 
 struct machine_ops {
-	void (*restart)(char *cmd);
-	void (*halt)(void);
-	void (*power_off)(void);
-	void (*shutdown)(void);
-	void (*crash_shutdown)(struct pt_regs *);
-	void (*emergency_restart)(void);
+    void (*restart)(char *cmd);
+    void (*halt)(void);
+    void (*power_off)(void);
+    void (*shutdown)(void);
+    void (*crash_shutdown)(struct pt_regs *);
+    void (*emergency_restart)(void);
 };
 
 extern struct machine_ops machine_ops;

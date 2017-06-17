@@ -31,5 +31,5 @@ struct lib80211_crypto_ops *rtllib_get_crypto_ops(const char *name);
 void rtllib_crypt_deinit_entries(struct lib80211_crypt_info *info, int force);
 void rtllib_crypt_deinit_handler(unsigned long data);
 void rtllib_crypt_delayed_deinit(struct lib80211_crypt_info *info,
-				 struct lib80211_crypt_data **crypt);
+                                 struct lib80211_crypt_data **crypt);
 #endif

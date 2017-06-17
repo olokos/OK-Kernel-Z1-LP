@@ -28,47 +28,45 @@ extern int trout_wifi_reset(int on);
 
 #ifdef CONFIG_WIFI_MEM_PREALLOC
 typedef struct wifi_mem_prealloc_struct {
-	void *mem_ptr;
-	unsigned long size;
+    void *mem_ptr;
+    unsigned long size;
 } wifi_mem_prealloc_t;
 
 static wifi_mem_prealloc_t wifi_mem_array[WMPA_NUMBER_OF_SECTIONS] = {
-	{ NULL, (WMPA_SECTION_SIZE_0 + WMPA_SECTION_HEADER) },
-	{ NULL, (WMPA_SECTION_SIZE_1 + WMPA_SECTION_HEADER) },
-	{ NULL, (WMPA_SECTION_SIZE_2 + WMPA_SECTION_HEADER) }
+    { NULL, (WMPA_SECTION_SIZE_0 + WMPA_SECTION_HEADER) },
+    { NULL, (WMPA_SECTION_SIZE_1 + WMPA_SECTION_HEADER) },
+    { NULL, (WMPA_SECTION_SIZE_2 + WMPA_SECTION_HEADER) }
 };
 
-static void *trout_wifi_mem_prealloc(int section, unsigned long size)
-{
-	if( (section < 0) || (section >= WMPA_NUMBER_OF_SECTIONS) )
-		return NULL;
-	if( wifi_mem_array[section].size < size )
-		return NULL;
-	return wifi_mem_array[section].mem_ptr;
+static void *trout_wifi_mem_prealloc(int section, unsigned long size) {
+    if( (section < 0) || (section >= WMPA_NUMBER_OF_SECTIONS) )
+        return NULL;
+    if( wifi_mem_array[section].size < size )
+        return NULL;
+    return wifi_mem_array[section].mem_ptr;
 }
 
-int __init trout_init_wifi_mem( void )
-{
-	int i;
+int __init trout_init_wifi_mem( void ) {
+    int i;
 
-	for(i=0;( i < WMPA_NUMBER_OF_SECTIONS );i++) {
-		wifi_mem_array[i].mem_ptr = vmalloc(wifi_mem_array[i].size);
-		if( wifi_mem_array[i].mem_ptr == NULL )
-			return -ENOMEM;
-	}
-	return 0;
+    for(i=0; ( i < WMPA_NUMBER_OF_SECTIONS ); i++) {
+        wifi_mem_array[i].mem_ptr = vmalloc(wifi_mem_array[i].size);
+        if( wifi_mem_array[i].mem_ptr == NULL )
+            return -ENOMEM;
+    }
+    return 0;
 }
 #endif
 
 struct wifi_platform_data trout_wifi_control = {
-	.set_power		= trout_wifi_power,
-	.set_reset		= trout_wifi_reset,
-	.set_carddetect		= trout_wifi_set_carddetect,
+    .set_power		= trout_wifi_power,
+    .set_reset		= trout_wifi_reset,
+    .set_carddetect		= trout_wifi_set_carddetect,
 #ifdef CONFIG_WIFI_MEM_PREALLOC
-	.mem_prealloc		= trout_wifi_mem_prealloc,
+    .mem_prealloc		= trout_wifi_mem_prealloc,
 #else
-	.mem_prealloc		= NULL,
-#endif	
+    .mem_prealloc		= NULL,
+#endif
 };
 
 #endif

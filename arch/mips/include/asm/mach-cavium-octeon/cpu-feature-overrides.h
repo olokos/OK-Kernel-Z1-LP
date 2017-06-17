@@ -73,11 +73,10 @@
 #define ARCH_HAS_USABLE_BUILTIN_POPCOUNT 1
 #endif
 
-static inline int octeon_has_saa(void)
-{
-	int id;
-	asm volatile ("mfc0 %0, $15,0" : "=r" (id));
-	return id >= 0x000d0300;
+static inline int octeon_has_saa(void) {
+    int id;
+    asm volatile ("mfc0 %0, $15,0" : "=r" (id));
+    return id >= 0x000d0300;
 }
 
 /*

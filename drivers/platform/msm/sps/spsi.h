@@ -142,56 +142,56 @@ extern u8 print_limit_option;
 
 /* End point parameters */
 struct sps_conn_end_pt {
-	u32 dev;		/* Device handle of BAM */
-	u32 bam_phys;		/* Physical address of BAM. */
-	u32 pipe_index;		/* Pipe index */
-	u32 event_threshold;	/* Pipe event threshold */
-	u32 lock_group;	/* The lock group this pipe belongs to */
-	void *bam;
+    u32 dev;		/* Device handle of BAM */
+    u32 bam_phys;		/* Physical address of BAM. */
+    u32 pipe_index;		/* Pipe index */
+    u32 event_threshold;	/* Pipe event threshold */
+    u32 lock_group;	/* The lock group this pipe belongs to */
+    void *bam;
 };
 
 /* Connection bookkeeping descriptor struct */
 struct sps_connection {
-	struct list_head list;
+    struct list_head list;
 
-	/* Source end point parameters */
-	struct sps_conn_end_pt src;
+    /* Source end point parameters */
+    struct sps_conn_end_pt src;
 
-	/* Destination end point parameters */
-	struct sps_conn_end_pt dest;
+    /* Destination end point parameters */
+    struct sps_conn_end_pt dest;
 
-	/* Resource parameters */
-	struct sps_mem_buffer desc;	/* Descriptor FIFO */
-	struct sps_mem_buffer data;	/* Data FIFO (BAM-to-BAM mode only) */
-	u32 config;		/* Client specified connection configuration */
+    /* Resource parameters */
+    struct sps_mem_buffer desc;	/* Descriptor FIFO */
+    struct sps_mem_buffer data;	/* Data FIFO (BAM-to-BAM mode only) */
+    u32 config;		/* Client specified connection configuration */
 
-	/* Connection state */
-	void *client_src;
-	void *client_dest;
-	int refs;		/* Reference counter */
+    /* Connection state */
+    void *client_src;
+    void *client_dest;
+    int refs;		/* Reference counter */
 
-	/* Dynamically allocated resouces, if required */
-	u32 alloc_src_pipe;	/* Source pipe index */
-	u32 alloc_dest_pipe;	/* Destination pipe index */
-	/* Physical address of descriptor FIFO */
-	phys_addr_t alloc_desc_base;
-	phys_addr_t alloc_data_base;	/* Physical address of data FIFO */
+    /* Dynamically allocated resouces, if required */
+    u32 alloc_src_pipe;	/* Source pipe index */
+    u32 alloc_dest_pipe;	/* Destination pipe index */
+    /* Physical address of descriptor FIFO */
+    phys_addr_t alloc_desc_base;
+    phys_addr_t alloc_data_base;	/* Physical address of data FIFO */
 };
 
 /* Event bookkeeping descriptor struct */
 struct sps_q_event {
-	struct list_head list;
-	/* Event payload data */
-	struct sps_event_notify notify;
+    struct list_head list;
+    /* Event payload data */
+    struct sps_event_notify notify;
 };
 
 /* Memory heap statistics */
 struct sps_mem_stats {
-	u32 base_addr;
-	u32 size;
-	u32 blocks_used;
-	u32 bytes_used;
-	u32 max_bytes_used;
+    u32 base_addr;
+    u32 size;
+    u32 blocks_used;
+    u32 bytes_used;
+    u32 max_bytes_used;
 };
 
 #ifdef CONFIG_DEBUG_FS

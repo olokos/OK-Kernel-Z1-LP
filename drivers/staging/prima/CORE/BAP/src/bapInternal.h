@@ -172,8 +172,7 @@ extern "C" {
 /*----------------------------------------------------------------------------
  *  Type Declarations - For internal BAP context information
  * -------------------------------------------------------------------------*/
-typedef struct sBtampHCI_Buffer_Size
-{
+typedef struct sBtampHCI_Buffer_Size {
 //    v_U8_t       present;
     /* D9r14 says Max80211PALPDUSize 1492 */
     v_U16_t      HC_ACL_Data_Packet_Length;
@@ -182,8 +181,7 @@ typedef struct sBtampHCI_Buffer_Size
     v_U16_t      HC_Total_Num_SCO_Packets;
 } tBtampHCI_Buffer_Size;
 
-typedef struct sBtampHCI_Data_Block_Size
-{
+typedef struct sBtampHCI_Data_Block_Size {
 //    v_U8_t       present;
     v_U8_t       status;
     /* D9r14 says Max80211PALPDUSize 1492 */
@@ -192,8 +190,7 @@ typedef struct sBtampHCI_Data_Block_Size
     v_U16_t      HC_Total_Num_Data_Blocks;
 } tBtampHCI_Data_Block_Size;
 
-typedef struct sBtampHCI_Version_Info
-{
+typedef struct sBtampHCI_Version_Info {
 //    v_U8_t       present;
     v_U8_t       HC_HCI_Version;
     v_U16_t      HC_HCI_Revision;
@@ -202,14 +199,12 @@ typedef struct sBtampHCI_Version_Info
     v_U16_t      HC_Manufac_Name; /* See BT assigned numbers */
 } tBtampHCI_Version_Info;
 
-typedef struct sBtampHCI_Supported_Cmds
-{
+typedef struct sBtampHCI_Supported_Cmds {
 //    v_U8_t       present;
     v_U8_t       HC_Support_Cmds[64]; /* a bitmask of cmds */
 } tBtampHCI_Supported_Cmds;
 
-typedef struct sBtampHCI_AMP_Info
-{
+typedef struct sBtampHCI_AMP_Info {
 //    v_U8_t       present;
     v_U8_t       HC_AMP_Status;
     v_U32_t      HC_Total_BW; /* combined uplink and downlink */
@@ -224,8 +219,7 @@ typedef struct sBtampHCI_AMP_Info
     v_U16_t      HC_BE_Flush_Timeout;  /* Maximum time BE Tx attempted. 0 is inf retry */
 } tBtampHCI_AMP_Info;
 
-typedef struct sBtampHCI_AMP_Assoc
-{
+typedef struct sBtampHCI_AMP_Assoc {
 //    v_U8_t       present;
     v_U8_t       HC_cnct_country[3];   /* Connected channel */
     v_U8_t       HC_cnct_num_triplets;
@@ -240,8 +234,7 @@ typedef struct sBtampHCI_AMP_Assoc
     v_U16_t      HC_pal_subversion;
 }  tBtampHCI_AMP_Assoc, *tpBtampHCI_AMP_Assoc ;
 
-typedef struct sBtampTLVHCI_Location_Data_Info
-{
+typedef struct sBtampTLVHCI_Location_Data_Info {
     v_U8_t       loc_domain_aware;
     v_U8_t       loc_domain[3];
     v_U8_t       loc_options;
@@ -250,8 +243,7 @@ typedef struct sBtampTLVHCI_Location_Data_Info
 /*----------------------------------------------------------------------------
  *  Type Declarations - For BAP logical link context information
  * -------------------------------------------------------------------------*/
-typedef struct sBtampLogLinkCtx
-{
+typedef struct sBtampLogLinkCtx {
     v_U8_t       present;  /* In use? */
 
     v_U8_t       log_link_index;  /* small integer (<16) value assigned by us */
@@ -279,8 +271,7 @@ typedef struct sBtampLogLinkCtx
  *  Type Declarations - QOS related
  * -------------------------------------------------------------------------*/
 /* BT-AMP QOS config */
-typedef struct sBtampQosCfg
-{
+typedef struct sBtampQosCfg {
     v_U8_t                    bWmmIsEnabled;
 } tBtampQosCfg;
 
@@ -297,30 +288,26 @@ typedef struct sBtampQosCfg
 
 /* Instance data definition of state machine */
 // Moved here from the BTAMP FSM definitions in btampFsm.h
-typedef struct
-{
+typedef struct {
     BTAMPFSM_ENTRY_FLAG_T disconnectedEntry;
     BTAMPFSM_STATEVAR_T stateVar;
     BTAMPFSM_INST_ID_T inst_id;
 } BTAMPFSM_INSTANCEDATA_T;
 
 /* BT-AMP device role */
-typedef enum
-{
+typedef enum {
     BT_RESPONDER,
     BT_INITIATOR
 } tWLAN_BAPRole;
 
 /* BT-AMP device role */
-typedef enum
-{
+typedef enum {
     WLAN_BAPLogLinkClosed,
     WLAN_BAPLogLinkOpen,
     WLAN_BAPLogLinkInProgress,
 } tWLAN_BAPLogLinkState;
 
-typedef struct
-{
+typedef struct {
     v_U8_t       phyLinkHandle;
     v_U8_t       txFlowSpec[18];
     v_U8_t       rxFlowSpec[18];
@@ -330,8 +317,7 @@ typedef struct
  *  BAP context Data Type Declaration
  * -------------------------------------------------------------------------*/
 #undef BTAMP_MULTIPLE_PHY_LINKS
-typedef struct sBtampContext
-{
+typedef struct sBtampContext {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
 
     // Include the enclosing VOSS context here
@@ -470,8 +456,7 @@ typedef struct sBtampContext
 
     tBtampTLVHCI_Location_Data_Info  btamp_Location_Data_Info;
 
-    union
-    {
+    union {
         tAuthRsnFsm authFsm;
         tSuppRsnFsm suppFsm;
     } uFsm;
@@ -565,14 +550,12 @@ typedef struct sBtampContext
  * Type Declarations
  * -------------------------------------------------------------------------*/
 
-typedef struct sBtampLsPktData
-{
+typedef struct sBtampLsPktData {
     v_U32_t    BufLen;
     v_U8_t     pBuf[1]; // ptr to Data Buffer
 } tBtampLsPktData, *ptBtampLsPktData;
 
-typedef struct sBtampLsPkt
-{
+typedef struct sBtampLsPkt {
     v_U8_t     SrcMac[6];
     v_U8_t     DstMac[6];
     tBtampLsPktData Data;
@@ -588,8 +571,7 @@ typedef struct sBtampContext tBtampSessCtx;
  *  BAP state machine event definition
  * -------------------------------------------------------------------------*/
 /* The event structure */
-typedef struct sWLAN_BAPEvent
-{
+typedef struct sWLAN_BAPEvent {
     v_U32_t   event;  /* State machine input event message */
     v_PVOID_t params;  /* A VOID pointer type for all possible inputs */
     v_U32_t   u1;  /* introduced to handle csrRoamCompleteCallback roamStatus */

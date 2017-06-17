@@ -22,13 +22,13 @@
 #define _ASM_HEXAGON_SYSCALL_H
 
 typedef long (*syscall_fn)(unsigned long, unsigned long,
-	unsigned long, unsigned long,
-	unsigned long, unsigned long);
+                           unsigned long, unsigned long,
+                           unsigned long, unsigned long);
 
 asmlinkage int sys_execve(char __user *ufilename, char __user * __user *argv,
-			  char __user * __user *envp);
+                          char __user * __user *envp);
 asmlinkage int sys_clone(unsigned long clone_flags, unsigned long newsp,
-			 unsigned long parent_tidp, unsigned long child_tidp);
+                         unsigned long parent_tidp, unsigned long child_tidp);
 
 #define sys_execve	sys_execve
 #define sys_clone	sys_clone
@@ -38,17 +38,15 @@ asmlinkage int sys_clone(unsigned long clone_flags, unsigned long newsp,
 extern void *sys_call_table[];
 
 static inline long syscall_get_nr(struct task_struct *task,
-				  struct pt_regs *regs)
-{
-	return regs->r06;
+                                  struct pt_regs *regs) {
+    return regs->r06;
 }
 
 static inline void syscall_get_arguments(struct task_struct *task,
-					 struct pt_regs *regs,
-					 unsigned int i, unsigned int n,
-					 unsigned long *args)
-{
-	BUG_ON(i + n > 6);
-	memcpy(args, &(&regs->r00)[i], n * sizeof(args[0]));
+        struct pt_regs *regs,
+        unsigned int i, unsigned int n,
+        unsigned long *args) {
+    BUG_ON(i + n > 6);
+    memcpy(args, &(&regs->r00)[i], n * sizeof(args[0]));
 }
 #endif

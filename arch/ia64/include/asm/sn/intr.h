@@ -35,29 +35,29 @@
 
 // The SN PROM irq struct
 struct sn_irq_info {
-	struct sn_irq_info *irq_next;	/* deprecated DO NOT USE     */
-	short		irq_nasid;	/* Nasid IRQ is assigned to  */
-	int		irq_slice;	/* slice IRQ is assigned to  */
-	int		irq_cpuid;	/* kernel logical cpuid	     */
-	int		irq_irq;	/* the IRQ number */
-	int		irq_int_bit;	/* Bridge interrupt pin */
-					/* <0 means MSI */
-	u64	irq_xtalkaddr;	/* xtalkaddr IRQ is sent to  */
-	int		irq_bridge_type;/* pciio asic type (pciio.h) */
-	void	       *irq_bridge;	/* bridge generating irq     */
-	void	       *irq_pciioinfo;	/* associated pciio_info_t   */
-	int		irq_last_intr;	/* For Shub lb lost intr WAR */
-	int		irq_cookie;	/* unique cookie 	     */
-	int		irq_flags;	/* flags */
-	int		irq_share_cnt;	/* num devices sharing IRQ   */
-	struct list_head	list;	/* list of sn_irq_info structs */
-	struct rcu_head		rcu;	/* rcu callback list */
+    struct sn_irq_info *irq_next;	/* deprecated DO NOT USE     */
+    short		irq_nasid;	/* Nasid IRQ is assigned to  */
+    int		irq_slice;	/* slice IRQ is assigned to  */
+    int		irq_cpuid;	/* kernel logical cpuid	     */
+    int		irq_irq;	/* the IRQ number */
+    int		irq_int_bit;	/* Bridge interrupt pin */
+    /* <0 means MSI */
+    u64	irq_xtalkaddr;	/* xtalkaddr IRQ is sent to  */
+    int		irq_bridge_type;/* pciio asic type (pciio.h) */
+    void	       *irq_bridge;	/* bridge generating irq     */
+    void	       *irq_pciioinfo;	/* associated pciio_info_t   */
+    int		irq_last_intr;	/* For Shub lb lost intr WAR */
+    int		irq_cookie;	/* unique cookie 	     */
+    int		irq_flags;	/* flags */
+    int		irq_share_cnt;	/* num devices sharing IRQ   */
+    struct list_head	list;	/* list of sn_irq_info structs */
+    struct rcu_head		rcu;	/* rcu callback list */
 };
 
 extern void sn_send_IPI_phys(int, long, int, int);
 extern u64 sn_intr_alloc(nasid_t, int,
-			      struct sn_irq_info *,
-			      int, nasid_t, int);
+                         struct sn_irq_info *,
+                         int, nasid_t, int);
 extern void sn_intr_free(nasid_t, int, struct sn_irq_info *);
 extern struct sn_irq_info *sn_retarget_vector(struct sn_irq_info *, nasid_t, int);
 extern void sn_set_err_irq_affinity(unsigned int);

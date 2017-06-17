@@ -134,14 +134,12 @@ extern spinlock_t vpif_lock;
 #define VPIF_IODFT_CTRL			(0x01c0)
 
 /* Functions for bit Manipulation */
-static inline void vpif_set_bit(u32 reg, u32 bit)
-{
-	regw((regr(reg)) | (0x01 << bit), reg);
+static inline void vpif_set_bit(u32 reg, u32 bit) {
+    regw((regr(reg)) | (0x01 << bit), reg);
 }
 
-static inline void vpif_clr_bit(u32 reg, u32 bit)
-{
-	regw(((regr(reg)) & ~(0x01 << bit)), reg);
+static inline void vpif_clr_bit(u32 reg, u32 bit) {
+    regw(((regr(reg)) & ~(0x01 << bit)), reg);
 }
 
 /* Macro for Generating mask */
@@ -262,334 +260,310 @@ static inline void vpif_clr_bit(u32 reg, u32 bit)
 extern u8 irq_vpif_capture_channel[VPIF_NUM_CHANNELS];
 
 /* inline function to enable/disable channel0 */
-static inline void enable_channel0(int enable)
-{
-	if (enable)
-		regw((regr(VPIF_CH0_CTRL) | (VPIF_CH0_EN)), VPIF_CH0_CTRL);
-	else
-		regw((regr(VPIF_CH0_CTRL) & (~VPIF_CH0_EN)), VPIF_CH0_CTRL);
+static inline void enable_channel0(int enable) {
+    if (enable)
+        regw((regr(VPIF_CH0_CTRL) | (VPIF_CH0_EN)), VPIF_CH0_CTRL);
+    else
+        regw((regr(VPIF_CH0_CTRL) & (~VPIF_CH0_EN)), VPIF_CH0_CTRL);
 }
 
 /* inline function to enable/disable channel1 */
-static inline void enable_channel1(int enable)
-{
-	if (enable)
-		regw((regr(VPIF_CH1_CTRL) | (VPIF_CH1_EN)), VPIF_CH1_CTRL);
-	else
-		regw((regr(VPIF_CH1_CTRL) & (~VPIF_CH1_EN)), VPIF_CH1_CTRL);
+static inline void enable_channel1(int enable) {
+    if (enable)
+        regw((regr(VPIF_CH1_CTRL) | (VPIF_CH1_EN)), VPIF_CH1_CTRL);
+    else
+        regw((regr(VPIF_CH1_CTRL) & (~VPIF_CH1_EN)), VPIF_CH1_CTRL);
 }
 
 /* inline function to enable interrupt for channel0 */
-static inline void channel0_intr_enable(int enable)
-{
-	unsigned long flags;
+static inline void channel0_intr_enable(int enable) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&vpif_lock, flags);
+    spin_lock_irqsave(&vpif_lock, flags);
 
-	if (enable) {
-		regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
+    if (enable) {
+        regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
 
-		regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH0), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH0),
-							VPIF_INTEN_SET);
-	} else {
-		regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH0)), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH0),
-							VPIF_INTEN_SET);
-	}
-	spin_unlock_irqrestore(&vpif_lock, flags);
+        regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH0), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH0),
+             VPIF_INTEN_SET);
+    } else {
+        regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH0)), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH0),
+             VPIF_INTEN_SET);
+    }
+    spin_unlock_irqrestore(&vpif_lock, flags);
 }
 
 /* inline function to enable interrupt for channel1 */
-static inline void channel1_intr_enable(int enable)
-{
-	unsigned long flags;
+static inline void channel1_intr_enable(int enable) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&vpif_lock, flags);
+    spin_lock_irqsave(&vpif_lock, flags);
 
-	if (enable) {
-		regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
+    if (enable) {
+        regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
 
-		regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH1), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH1),
-							VPIF_INTEN_SET);
-	} else {
-		regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH1)), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH1),
-							VPIF_INTEN_SET);
-	}
-	spin_unlock_irqrestore(&vpif_lock, flags);
+        regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH1), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH1),
+             VPIF_INTEN_SET);
+    } else {
+        regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH1)), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH1),
+             VPIF_INTEN_SET);
+    }
+    spin_unlock_irqrestore(&vpif_lock, flags);
 }
 
 /* inline function to set buffer addresses in case of Y/C non mux mode */
 static inline void ch0_set_videobuf_addr_yc_nmux(unsigned long top_strt_luma,
-						 unsigned long btm_strt_luma,
-						 unsigned long top_strt_chroma,
-						 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH0_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH0_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH1_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH1_BTM_STRT_ADD_CHROMA);
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH0_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH0_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH1_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH1_BTM_STRT_ADD_CHROMA);
 }
 
 /* inline function to set buffer addresses in VPIF registers for video data */
 static inline void ch0_set_videobuf_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH0_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH0_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH0_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH0_BTM_STRT_ADD_CHROMA);
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH0_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH0_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH0_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH0_BTM_STRT_ADD_CHROMA);
 }
 
 static inline void ch1_set_videobuf_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
 
-	regw(top_strt_luma, VPIF_CH1_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH1_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH1_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH1_BTM_STRT_ADD_CHROMA);
+    regw(top_strt_luma, VPIF_CH1_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH1_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH1_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH1_BTM_STRT_ADD_CHROMA);
 }
 
 static inline void ch0_set_vbi_addr(unsigned long top_vbi,
-	unsigned long btm_vbi, unsigned long a, unsigned long b)
-{
-	regw(top_vbi, VPIF_CH0_TOP_STRT_ADD_VANC);
-	regw(btm_vbi, VPIF_CH0_BTM_STRT_ADD_VANC);
+                                    unsigned long btm_vbi, unsigned long a, unsigned long b) {
+    regw(top_vbi, VPIF_CH0_TOP_STRT_ADD_VANC);
+    regw(btm_vbi, VPIF_CH0_BTM_STRT_ADD_VANC);
 }
 
 static inline void ch0_set_hbi_addr(unsigned long top_vbi,
-	unsigned long btm_vbi, unsigned long a, unsigned long b)
-{
-	regw(top_vbi, VPIF_CH0_TOP_STRT_ADD_HANC);
-	regw(btm_vbi, VPIF_CH0_BTM_STRT_ADD_HANC);
+                                    unsigned long btm_vbi, unsigned long a, unsigned long b) {
+    regw(top_vbi, VPIF_CH0_TOP_STRT_ADD_HANC);
+    regw(btm_vbi, VPIF_CH0_BTM_STRT_ADD_HANC);
 }
 
 static inline void ch1_set_vbi_addr(unsigned long top_vbi,
-	unsigned long btm_vbi, unsigned long a, unsigned long b)
-{
-	regw(top_vbi, VPIF_CH1_TOP_STRT_ADD_VANC);
-	regw(btm_vbi, VPIF_CH1_BTM_STRT_ADD_VANC);
+                                    unsigned long btm_vbi, unsigned long a, unsigned long b) {
+    regw(top_vbi, VPIF_CH1_TOP_STRT_ADD_VANC);
+    regw(btm_vbi, VPIF_CH1_BTM_STRT_ADD_VANC);
 }
 
 static inline void ch1_set_hbi_addr(unsigned long top_vbi,
-	unsigned long btm_vbi, unsigned long a, unsigned long b)
-{
-	regw(top_vbi, VPIF_CH1_TOP_STRT_ADD_HANC);
-	regw(btm_vbi, VPIF_CH1_BTM_STRT_ADD_HANC);
+                                    unsigned long btm_vbi, unsigned long a, unsigned long b) {
+    regw(top_vbi, VPIF_CH1_TOP_STRT_ADD_HANC);
+    regw(btm_vbi, VPIF_CH1_BTM_STRT_ADD_HANC);
 }
 
 /* Inline function to enable raw vbi in the given channel */
-static inline void disable_raw_feature(u8 channel_id, u8 index)
-{
-	u32 ctrl_reg;
-	if (0 == channel_id)
-		ctrl_reg = VPIF_CH0_CTRL;
-	else
-		ctrl_reg = VPIF_CH1_CTRL;
+static inline void disable_raw_feature(u8 channel_id, u8 index) {
+    u32 ctrl_reg;
+    if (0 == channel_id)
+        ctrl_reg = VPIF_CH0_CTRL;
+    else
+        ctrl_reg = VPIF_CH1_CTRL;
 
-	if (1 == index)
-		vpif_clr_bit(ctrl_reg, VPIF_CH_VANC_EN_BIT);
-	else
-		vpif_clr_bit(ctrl_reg, VPIF_CH_HANC_EN_BIT);
+    if (1 == index)
+        vpif_clr_bit(ctrl_reg, VPIF_CH_VANC_EN_BIT);
+    else
+        vpif_clr_bit(ctrl_reg, VPIF_CH_HANC_EN_BIT);
 }
 
-static inline void enable_raw_feature(u8 channel_id, u8 index)
-{
-	u32 ctrl_reg;
-	if (0 == channel_id)
-		ctrl_reg = VPIF_CH0_CTRL;
-	else
-		ctrl_reg = VPIF_CH1_CTRL;
+static inline void enable_raw_feature(u8 channel_id, u8 index) {
+    u32 ctrl_reg;
+    if (0 == channel_id)
+        ctrl_reg = VPIF_CH0_CTRL;
+    else
+        ctrl_reg = VPIF_CH1_CTRL;
 
-	if (1 == index)
-		vpif_set_bit(ctrl_reg, VPIF_CH_VANC_EN_BIT);
-	else
-		vpif_set_bit(ctrl_reg, VPIF_CH_HANC_EN_BIT);
+    if (1 == index)
+        vpif_set_bit(ctrl_reg, VPIF_CH_VANC_EN_BIT);
+    else
+        vpif_set_bit(ctrl_reg, VPIF_CH_HANC_EN_BIT);
 }
 
 /* inline function to enable/disable channel2 */
-static inline void enable_channel2(int enable)
-{
-	if (enable) {
-		regw((regr(VPIF_CH2_CTRL) | (VPIF_CH2_CLK_EN)), VPIF_CH2_CTRL);
-		regw((regr(VPIF_CH2_CTRL) | (VPIF_CH2_EN)), VPIF_CH2_CTRL);
-	} else {
-		regw((regr(VPIF_CH2_CTRL) & (~VPIF_CH2_CLK_EN)), VPIF_CH2_CTRL);
-		regw((regr(VPIF_CH2_CTRL) & (~VPIF_CH2_EN)), VPIF_CH2_CTRL);
-	}
+static inline void enable_channel2(int enable) {
+    if (enable) {
+        regw((regr(VPIF_CH2_CTRL) | (VPIF_CH2_CLK_EN)), VPIF_CH2_CTRL);
+        regw((regr(VPIF_CH2_CTRL) | (VPIF_CH2_EN)), VPIF_CH2_CTRL);
+    } else {
+        regw((regr(VPIF_CH2_CTRL) & (~VPIF_CH2_CLK_EN)), VPIF_CH2_CTRL);
+        regw((regr(VPIF_CH2_CTRL) & (~VPIF_CH2_EN)), VPIF_CH2_CTRL);
+    }
 }
 
 /* inline function to enable/disable channel3 */
-static inline void enable_channel3(int enable)
-{
-	if (enable) {
-		regw((regr(VPIF_CH3_CTRL) | (VPIF_CH3_CLK_EN)), VPIF_CH3_CTRL);
-		regw((regr(VPIF_CH3_CTRL) | (VPIF_CH3_EN)), VPIF_CH3_CTRL);
-	} else {
-		regw((regr(VPIF_CH3_CTRL) & (~VPIF_CH3_CLK_EN)), VPIF_CH3_CTRL);
-		regw((regr(VPIF_CH3_CTRL) & (~VPIF_CH3_EN)), VPIF_CH3_CTRL);
-	}
+static inline void enable_channel3(int enable) {
+    if (enable) {
+        regw((regr(VPIF_CH3_CTRL) | (VPIF_CH3_CLK_EN)), VPIF_CH3_CTRL);
+        regw((regr(VPIF_CH3_CTRL) | (VPIF_CH3_EN)), VPIF_CH3_CTRL);
+    } else {
+        regw((regr(VPIF_CH3_CTRL) & (~VPIF_CH3_CLK_EN)), VPIF_CH3_CTRL);
+        regw((regr(VPIF_CH3_CTRL) & (~VPIF_CH3_EN)), VPIF_CH3_CTRL);
+    }
 }
 
 /* inline function to enable interrupt for channel2 */
-static inline void channel2_intr_enable(int enable)
-{
-	unsigned long flags;
+static inline void channel2_intr_enable(int enable) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&vpif_lock, flags);
+    spin_lock_irqsave(&vpif_lock, flags);
 
-	if (enable) {
-		regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
-		regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH2), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH2),
-							VPIF_INTEN_SET);
-	} else {
-		regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH2)), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH2),
-							VPIF_INTEN_SET);
-	}
-	spin_unlock_irqrestore(&vpif_lock, flags);
+    if (enable) {
+        regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
+        regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH2), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH2),
+             VPIF_INTEN_SET);
+    } else {
+        regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH2)), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH2),
+             VPIF_INTEN_SET);
+    }
+    spin_unlock_irqrestore(&vpif_lock, flags);
 }
 
 /* inline function to enable interrupt for channel3 */
-static inline void channel3_intr_enable(int enable)
-{
-	unsigned long flags;
+static inline void channel3_intr_enable(int enable) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&vpif_lock, flags);
+    spin_lock_irqsave(&vpif_lock, flags);
 
-	if (enable) {
-		regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
+    if (enable) {
+        regw((regr(VPIF_INTEN) | 0x10), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | 0x10), VPIF_INTEN_SET);
 
-		regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH3), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH3),
-							VPIF_INTEN_SET);
-	} else {
-		regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH3)), VPIF_INTEN);
-		regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH3),
-							VPIF_INTEN_SET);
-	}
-	spin_unlock_irqrestore(&vpif_lock, flags);
+        regw((regr(VPIF_INTEN) | VPIF_INTEN_FRAME_CH3), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH3),
+             VPIF_INTEN_SET);
+    } else {
+        regw((regr(VPIF_INTEN) & (~VPIF_INTEN_FRAME_CH3)), VPIF_INTEN);
+        regw((regr(VPIF_INTEN_SET) | VPIF_INTEN_FRAME_CH3),
+             VPIF_INTEN_SET);
+    }
+    spin_unlock_irqrestore(&vpif_lock, flags);
 }
 
 /* inline function to enable raw vbi data for channel2 */
-static inline void channel2_raw_enable(int enable, u8 index)
-{
-	u32 mask;
+static inline void channel2_raw_enable(int enable, u8 index) {
+    u32 mask;
 
-	if (1 == index)
-		mask = VPIF_CH_VANC_EN_BIT;
-	else
-		mask = VPIF_CH_HANC_EN_BIT;
+    if (1 == index)
+        mask = VPIF_CH_VANC_EN_BIT;
+    else
+        mask = VPIF_CH_HANC_EN_BIT;
 
-	if (enable)
-		vpif_set_bit(VPIF_CH2_CTRL, mask);
-	else
-		vpif_clr_bit(VPIF_CH2_CTRL, mask);
+    if (enable)
+        vpif_set_bit(VPIF_CH2_CTRL, mask);
+    else
+        vpif_clr_bit(VPIF_CH2_CTRL, mask);
 }
 
 /* inline function to enable raw vbi data for channel3*/
-static inline void channel3_raw_enable(int enable, u8 index)
-{
-	u32 mask;
+static inline void channel3_raw_enable(int enable, u8 index) {
+    u32 mask;
 
-	if (1 == index)
-		mask = VPIF_CH_VANC_EN_BIT;
-	else
-		mask = VPIF_CH_HANC_EN_BIT;
+    if (1 == index)
+        mask = VPIF_CH_VANC_EN_BIT;
+    else
+        mask = VPIF_CH_HANC_EN_BIT;
 
-	if (enable)
-		vpif_set_bit(VPIF_CH3_CTRL, mask);
-	else
-		vpif_clr_bit(VPIF_CH3_CTRL, mask);
+    if (enable)
+        vpif_set_bit(VPIF_CH3_CTRL, mask);
+    else
+        vpif_clr_bit(VPIF_CH3_CTRL, mask);
 }
 
 /* inline function to set buffer addresses in case of Y/C non mux mode */
 static inline void ch2_set_videobuf_addr_yc_nmux(unsigned long top_strt_luma,
-						 unsigned long btm_strt_luma,
-						 unsigned long top_strt_chroma,
-						 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH3_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH3_BTM_STRT_ADD_CHROMA);
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH3_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH3_BTM_STRT_ADD_CHROMA);
 }
 
 /* inline function to set buffer addresses in VPIF registers for video data */
 static inline void ch2_set_videobuf_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH2_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH2_BTM_STRT_ADD_CHROMA);
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH2_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH2_BTM_STRT_ADD_CHROMA);
 }
 
 static inline void ch3_set_videobuf_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH3_TOP_STRT_ADD_LUMA);
-	regw(btm_strt_luma, VPIF_CH3_BTM_STRT_ADD_LUMA);
-	regw(top_strt_chroma, VPIF_CH3_TOP_STRT_ADD_CHROMA);
-	regw(btm_strt_chroma, VPIF_CH3_BTM_STRT_ADD_CHROMA);
+        unsigned long btm_strt_luma,
+        unsigned long top_strt_chroma,
+        unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH3_TOP_STRT_ADD_LUMA);
+    regw(btm_strt_luma, VPIF_CH3_BTM_STRT_ADD_LUMA);
+    regw(top_strt_chroma, VPIF_CH3_TOP_STRT_ADD_CHROMA);
+    regw(btm_strt_chroma, VPIF_CH3_BTM_STRT_ADD_CHROMA);
 }
 
 /* inline function to set buffer addresses in VPIF registers for vbi data */
 static inline void ch2_set_vbi_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_VANC);
-	regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_VANC);
+                                    unsigned long btm_strt_luma,
+                                    unsigned long top_strt_chroma,
+                                    unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH2_TOP_STRT_ADD_VANC);
+    regw(btm_strt_luma, VPIF_CH2_BTM_STRT_ADD_VANC);
 }
 
 static inline void ch3_set_vbi_addr(unsigned long top_strt_luma,
-					 unsigned long btm_strt_luma,
-					 unsigned long top_strt_chroma,
-					 unsigned long btm_strt_chroma)
-{
-	regw(top_strt_luma, VPIF_CH3_TOP_STRT_ADD_VANC);
-	regw(btm_strt_luma, VPIF_CH3_BTM_STRT_ADD_VANC);
+                                    unsigned long btm_strt_luma,
+                                    unsigned long top_strt_chroma,
+                                    unsigned long btm_strt_chroma) {
+    regw(top_strt_luma, VPIF_CH3_TOP_STRT_ADD_VANC);
+    regw(btm_strt_luma, VPIF_CH3_BTM_STRT_ADD_VANC);
 }
 
 #define VPIF_MAX_NAME	(30)
 
 /* This structure will store size parameters as per the mode selected by user */
 struct vpif_channel_config_params {
-	char name[VPIF_MAX_NAME];	/* Name of the mode */
-	u16 width;			/* Indicates width of the image */
-	u16 height;			/* Indicates height of the image */
-	u8 frm_fmt;			/* Interlaced (0) or progressive (1) */
-	u8 ycmux_mode;			/* This mode requires one (0) or two (1)
+    char name[VPIF_MAX_NAME];	/* Name of the mode */
+    u16 width;			/* Indicates width of the image */
+    u16 height;			/* Indicates height of the image */
+    u8 frm_fmt;			/* Interlaced (0) or progressive (1) */
+    u8 ycmux_mode;			/* This mode requires one (0) or two (1)
 					   channels */
-	u16 eav2sav;			/* length of eav 2 sav */
-	u16 sav2eav;			/* length of sav 2 eav */
-	u16 l1, l3, l5, l7, l9, l11;	/* Other parameter configurations */
-	u16 vsize;			/* Vertical size of the image */
-	u8 capture_format;		/* Indicates whether capture format
+    u16 eav2sav;			/* length of eav 2 sav */
+    u16 sav2eav;			/* length of sav 2 eav */
+    u16 l1, l3, l5, l7, l9, l11;	/* Other parameter configurations */
+    u16 vsize;			/* Vertical size of the image */
+    u8 capture_format;		/* Indicates whether capture format
 					 * is in BT or in CCD/CMOS */
-	u8  vbi_supported;		/* Indicates whether this mode
+    u8  vbi_supported;		/* Indicates whether this mode
 					 * supports capturing vbi or not */
-	u8 hd_sd;			/* HDTV (1) or SDTV (0) format */
-	v4l2_std_id stdid;		/* SDTV format */
-	u32 dv_preset;			/* HDTV format */
+    u8 hd_sd;			/* HDTV (1) or SDTV (0) format */
+    v4l2_std_id stdid;		/* SDTV format */
+    u32 dv_preset;			/* HDTV format */
 };
 
 extern const unsigned int vpif_ch_params_count;
@@ -601,42 +575,42 @@ struct vpif_vbi_params;
 
 int vpif_set_video_params(struct vpif_params *vpifparams, u8 channel_id);
 void vpif_set_vbi_display_params(struct vpif_vbi_params *vbiparams,
-							u8 channel_id);
+                                 u8 channel_id);
 int vpif_channel_getfid(u8 channel_id);
 
 enum data_size {
-	_8BITS = 0,
-	_10BITS,
-	_12BITS,
+    _8BITS = 0,
+    _10BITS,
+    _12BITS,
 };
 
 /* Structure for vpif parameters for raw vbi data */
 struct vpif_vbi_params {
-	__u32 hstart0;  /* Horizontal start of raw vbi data for first field */
-	__u32 vstart0;  /* Vertical start of raw vbi data for first field */
-	__u32 hsize0;   /* Horizontal size of raw vbi data for first field */
-	__u32 vsize0;   /* Vertical size of raw vbi data for first field */
-	__u32 hstart1;  /* Horizontal start of raw vbi data for second field */
-	__u32 vstart1;  /* Vertical start of raw vbi data for second field */
-	__u32 hsize1;   /* Horizontal size of raw vbi data for second field */
-	__u32 vsize1;   /* Vertical size of raw vbi data for second field */
+    __u32 hstart0;  /* Horizontal start of raw vbi data for first field */
+    __u32 vstart0;  /* Vertical start of raw vbi data for first field */
+    __u32 hsize0;   /* Horizontal size of raw vbi data for first field */
+    __u32 vsize0;   /* Vertical size of raw vbi data for first field */
+    __u32 hstart1;  /* Horizontal start of raw vbi data for second field */
+    __u32 vstart1;  /* Vertical start of raw vbi data for second field */
+    __u32 hsize1;   /* Horizontal size of raw vbi data for second field */
+    __u32 vsize1;   /* Vertical size of raw vbi data for second field */
 };
 
 /* structure for vpif parameters */
 struct vpif_video_params {
-	__u8 storage_mode;	/* Indicates field or frame mode */
-	unsigned long hpitch;
-	v4l2_std_id stdid;
+    __u8 storage_mode;	/* Indicates field or frame mode */
+    unsigned long hpitch;
+    v4l2_std_id stdid;
 };
 
 struct vpif_params {
-	struct vpif_interface iface;
-	struct vpif_video_params video_params;
-	struct vpif_channel_config_params std_info;
-	union param {
-		struct vpif_vbi_params	vbi_params;
-		enum data_size data_sz;
-	} params;
+    struct vpif_interface iface;
+    struct vpif_video_params video_params;
+    struct vpif_channel_config_params std_info;
+    union param {
+        struct vpif_vbi_params	vbi_params;
+        enum data_size data_sz;
+    } params;
 };
 
 #endif				/* End of #ifndef VPIF_H */

@@ -104,31 +104,31 @@
 struct yenta_socket;
 
 struct cardbus_type {
-	int	(*override)(struct yenta_socket *);
-	void	(*save_state)(struct yenta_socket *);
-	void	(*restore_state)(struct yenta_socket *);
-	int	(*sock_init)(struct yenta_socket *);
+    int	(*override)(struct yenta_socket *);
+    void	(*save_state)(struct yenta_socket *);
+    void	(*restore_state)(struct yenta_socket *);
+    int	(*sock_init)(struct yenta_socket *);
 };
 
 struct yenta_socket {
-	struct pci_dev *dev;
-	int cb_irq, io_irq;
-	void __iomem *base;
-	struct timer_list poll_timer;
+    struct pci_dev *dev;
+    int cb_irq, io_irq;
+    void __iomem *base;
+    struct timer_list poll_timer;
 
-	struct pcmcia_socket socket;
-	struct cardbus_type *type;
+    struct pcmcia_socket socket;
+    struct cardbus_type *type;
 
-	u32 flags;
+    u32 flags;
 
-	/* for PCI interrupt probing */
-	unsigned int probe_status;
+    /* for PCI interrupt probing */
+    unsigned int probe_status;
 
-	/* A few words of private data for special stuff of overrides... */
-	unsigned int private[8];
+    /* A few words of private data for special stuff of overrides... */
+    unsigned int private[8];
 
-	/* PCI saved state */
-	u32 saved_state[2];
+    /* PCI saved state */
+    u32 saved_state[2];
 };
 
 

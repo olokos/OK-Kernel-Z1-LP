@@ -179,233 +179,233 @@ do { \
 
 #define GCC_PACKED __attribute__((packed))
 typedef struct GCC_PACKED {
-	uint16 packet_length;
-	/* total # of bytes in the packet not including
-		the packet_length field. */
+    uint16 packet_length;
+    /* total # of bytes in the packet not including
+    	the packet_length field. */
 
-	uint16 packet_type;
-	/* A Packet Type of 70 identifies the packet as
-		a Client status Packet. */
+    uint16 packet_type;
+    /* A Packet Type of 70 identifies the packet as
+    	a Client status Packet. */
 
-	uint16 bClient_ID;
-	/* This field is reserved for future use and shall
-		be set to zero. */
+    uint16 bClient_ID;
+    /* This field is reserved for future use and shall
+    	be set to zero. */
 
 } mddi_rev_packet_type;
 
 typedef struct GCC_PACKED {
-	uint16 packet_length;
-	/* total # of bytes in the packet not including
-		the packet_length field. */
+    uint16 packet_length;
+    /* total # of bytes in the packet not including
+    	the packet_length field. */
 
-	uint16 packet_type;
-	/* A Packet Type of 70 identifies the packet as
-		a Client status Packet. */
+    uint16 packet_type;
+    /* A Packet Type of 70 identifies the packet as
+    	a Client status Packet. */
 
-	uint16 bClient_ID;
-	/* This field is reserved for future use and shall
-		be set to zero. */
+    uint16 bClient_ID;
+    /* This field is reserved for future use and shall
+    	be set to zero. */
 
-	uint16 reverse_link_request;
-	/* 16 bit unsigned integer with number of bytes client
-		needs in the * reverse encapsulation message
-		to transmit data. */
+    uint16 reverse_link_request;
+    /* 16 bit unsigned integer with number of bytes client
+    	needs in the * reverse encapsulation message
+    	to transmit data. */
 
-	uint8 crc_error_count;
-	uint8 capability_change;
-	uint16 graphics_busy_flags;
+    uint8 crc_error_count;
+    uint8 capability_change;
+    uint16 graphics_busy_flags;
 
-	uint16 parameter_CRC;
-	/* 16-bit CRC of all the bytes in the packet
-		including Packet Length. */
+    uint16 parameter_CRC;
+    /* 16-bit CRC of all the bytes in the packet
+    	including Packet Length. */
 
 } mddi_client_status_type;
 
 typedef struct GCC_PACKED {
-	uint16 packet_length;
-	/* total # of bytes in the packet not including
-		the packet_length field. */
+    uint16 packet_length;
+    /* total # of bytes in the packet not including
+    	the packet_length field. */
 
-	uint16 packet_type;
-	/* A Packet Type of 66 identifies the packet as
-		a Client Capability Packet. */
+    uint16 packet_type;
+    /* A Packet Type of 66 identifies the packet as
+    	a Client Capability Packet. */
 
-	uint16 bClient_ID;
-	/* This field is reserved for future use and
-		shall be set to zero. */
+    uint16 bClient_ID;
+    /* This field is reserved for future use and
+    	shall be set to zero. */
 
-	uint16 Protocol_Version;
-	uint16 Minimum_Protocol_Version;
-	uint16 Data_Rate_Capability;
-	uint8 Interface_Type_Capability;
-	uint8 Number_of_Alt_Displays;
-	uint16 PostCal_Data_Rate;
-	uint16 Bitmap_Width;
-	uint16 Bitmap_Height;
-	uint16 Display_Window_Width;
-	uint16 Display_Window_Height;
-	uint32 Color_Map_Size;
-	uint16 Color_Map_RGB_Width;
-	uint16 RGB_Capability;
-	uint8 Monochrome_Capability;
-	uint8 Reserved_1;
-	uint16 Y_Cb_Cr_Capability;
-	uint16 Bayer_Capability;
-	uint16 Alpha_Cursor_Image_Planes;
-	uint32 Client_Feature_Capability_Indicators;
-	uint8 Maximum_Video_Frame_Rate_Capability;
-	uint8 Minimum_Video_Frame_Rate_Capability;
-	uint16 Minimum_Sub_frame_Rate;
-	uint16 Audio_Buffer_Depth;
-	uint16 Audio_Channel_Capability;
-	uint16 Audio_Sample_Rate_Capability;
-	uint8 Audio_Sample_Resolution;
-	uint8 Mic_Audio_Sample_Resolution;
-	uint16 Mic_Sample_Rate_Capability;
-	uint8 Keyboard_Data_Format;
-	uint8 pointing_device_data_format;
-	uint16 content_protection_type;
-	uint16 Mfr_Name;
-	uint16 Product_Code;
-	uint16 Reserved_3;
-	uint32 Serial_Number;
-	uint8 Week_of_Manufacture;
-	uint8 Year_of_Manufacture;
+    uint16 Protocol_Version;
+    uint16 Minimum_Protocol_Version;
+    uint16 Data_Rate_Capability;
+    uint8 Interface_Type_Capability;
+    uint8 Number_of_Alt_Displays;
+    uint16 PostCal_Data_Rate;
+    uint16 Bitmap_Width;
+    uint16 Bitmap_Height;
+    uint16 Display_Window_Width;
+    uint16 Display_Window_Height;
+    uint32 Color_Map_Size;
+    uint16 Color_Map_RGB_Width;
+    uint16 RGB_Capability;
+    uint8 Monochrome_Capability;
+    uint8 Reserved_1;
+    uint16 Y_Cb_Cr_Capability;
+    uint16 Bayer_Capability;
+    uint16 Alpha_Cursor_Image_Planes;
+    uint32 Client_Feature_Capability_Indicators;
+    uint8 Maximum_Video_Frame_Rate_Capability;
+    uint8 Minimum_Video_Frame_Rate_Capability;
+    uint16 Minimum_Sub_frame_Rate;
+    uint16 Audio_Buffer_Depth;
+    uint16 Audio_Channel_Capability;
+    uint16 Audio_Sample_Rate_Capability;
+    uint8 Audio_Sample_Resolution;
+    uint8 Mic_Audio_Sample_Resolution;
+    uint16 Mic_Sample_Rate_Capability;
+    uint8 Keyboard_Data_Format;
+    uint8 pointing_device_data_format;
+    uint16 content_protection_type;
+    uint16 Mfr_Name;
+    uint16 Product_Code;
+    uint16 Reserved_3;
+    uint32 Serial_Number;
+    uint8 Week_of_Manufacture;
+    uint8 Year_of_Manufacture;
 
-	uint16 parameter_CRC;
-	/* 16-bit CRC of all the bytes in the packet including Packet Length. */
+    uint16 parameter_CRC;
+    /* 16-bit CRC of all the bytes in the packet including Packet Length. */
 
 } mddi_client_capability_type;
 
 typedef struct GCC_PACKED {
-	uint16 packet_length;
-	/* total # of bytes in the packet not including the packet_length field. */
+    uint16 packet_length;
+    /* total # of bytes in the packet not including the packet_length field. */
 
-	uint16 packet_type;
-	/* A Packet Type of 16 identifies the packet as a Video Stream Packet. */
+    uint16 packet_type;
+    /* A Packet Type of 16 identifies the packet as a Video Stream Packet. */
 
-	uint16 bClient_ID;
-	/* This field is reserved for future use and shall be set to zero. */
+    uint16 bClient_ID;
+    /* This field is reserved for future use and shall be set to zero. */
 
-	uint16 video_data_format_descriptor;
-	/* format of each pixel in the Pixel Data in the present stream in the
-	 * present packet.
-	 * If bits [15:13] = 000 monochrome
-	 * If bits [15:13] = 001 color pixels (palette).
-	 * If bits [15:13] = 010 color pixels in raw RGB
-	 * If bits [15:13] = 011 data in 4:2:2 Y Cb Cr format
-	 * If bits [15:13] = 100 Bayer pixels
-	 */
+    uint16 video_data_format_descriptor;
+    /* format of each pixel in the Pixel Data in the present stream in the
+     * present packet.
+     * If bits [15:13] = 000 monochrome
+     * If bits [15:13] = 001 color pixels (palette).
+     * If bits [15:13] = 010 color pixels in raw RGB
+     * If bits [15:13] = 011 data in 4:2:2 Y Cb Cr format
+     * If bits [15:13] = 100 Bayer pixels
+     */
 
-	uint16 pixel_data_attributes;
-	/* interpreted as follows:
-	 * Bits [1:0] = 11  pixel data is displayed to both eyes
-	 * Bits [1:0] = 10  pixel data is routed to the left eye only.
-	 * Bits [1:0] = 01  pixel data is routed to the right eye only.
-	 * Bits [1:0] = 00  pixel data is routed to the alternate display.
-	 * Bit 2 is 0  Pixel Data is in the standard progressive format.
-	 * Bit 2 is 1  Pixel Data is in interlace format.
-	 * Bit 3 is 0  Pixel Data is in the standard progressive format.
-	 * Bit 3 is 1  Pixel Data is in alternate pixel format.
-	 * Bit 4 is 0  Pixel Data is to or from the display frame buffer.
-	 * Bit 4 is 1  Pixel Data is to or from the camera.
-	 * Bit 5 is 0  pixel data contains the next consecutive row of pixels.
-	 * Bit 5 is 1  X Left Edge, Y Top Edge, X Right Edge, Y Bottom Edge,
-	 *             X Start, and Y Start parameters are not defined and
-	 *             shall be ignored by the client.
-	 * Bits [7:6] = 01  Pixel data is written to the offline image buffer.
-	 * Bits [7:6] = 00  Pixel data is written to the buffer to refresh display.
-	 * Bits [7:6] = 11  Pixel data is written to all image buffers.
-	 * Bits [7:6] = 10  Invalid. Reserved for future use.
-	 * Bits 8 through 11 alternate display number.
-	 * Bits 12 through 14 are reserved for future use and shall be set to zero.
-	 * Bit 15 is 1 the row of pixels is the last row of pixels in a frame.
-	 */
+    uint16 pixel_data_attributes;
+    /* interpreted as follows:
+     * Bits [1:0] = 11  pixel data is displayed to both eyes
+     * Bits [1:0] = 10  pixel data is routed to the left eye only.
+     * Bits [1:0] = 01  pixel data is routed to the right eye only.
+     * Bits [1:0] = 00  pixel data is routed to the alternate display.
+     * Bit 2 is 0  Pixel Data is in the standard progressive format.
+     * Bit 2 is 1  Pixel Data is in interlace format.
+     * Bit 3 is 0  Pixel Data is in the standard progressive format.
+     * Bit 3 is 1  Pixel Data is in alternate pixel format.
+     * Bit 4 is 0  Pixel Data is to or from the display frame buffer.
+     * Bit 4 is 1  Pixel Data is to or from the camera.
+     * Bit 5 is 0  pixel data contains the next consecutive row of pixels.
+     * Bit 5 is 1  X Left Edge, Y Top Edge, X Right Edge, Y Bottom Edge,
+     *             X Start, and Y Start parameters are not defined and
+     *             shall be ignored by the client.
+     * Bits [7:6] = 01  Pixel data is written to the offline image buffer.
+     * Bits [7:6] = 00  Pixel data is written to the buffer to refresh display.
+     * Bits [7:6] = 11  Pixel data is written to all image buffers.
+     * Bits [7:6] = 10  Invalid. Reserved for future use.
+     * Bits 8 through 11 alternate display number.
+     * Bits 12 through 14 are reserved for future use and shall be set to zero.
+     * Bit 15 is 1 the row of pixels is the last row of pixels in a frame.
+     */
 
-	uint16 x_left_edge;
-	uint16 y_top_edge;
-	/* X,Y coordinate of the top left edge of the screen window */
+    uint16 x_left_edge;
+    uint16 y_top_edge;
+    /* X,Y coordinate of the top left edge of the screen window */
 
-	uint16 x_right_edge;
-	uint16 y_bottom_edge;
-	/*  X,Y coordinate of the bottom right edge of the window being updated. */
+    uint16 x_right_edge;
+    uint16 y_bottom_edge;
+    /*  X,Y coordinate of the bottom right edge of the window being updated. */
 
-	uint16 x_start;
-	uint16 y_start;
-	/*  (X Start, Y Start) is the first pixel in the Pixel Data field below. */
+    uint16 x_start;
+    uint16 y_start;
+    /*  (X Start, Y Start) is the first pixel in the Pixel Data field below. */
 
-	uint16 pixel_count;
-	/*  number of pixels in the Pixel Data field below. */
+    uint16 pixel_count;
+    /*  number of pixels in the Pixel Data field below. */
 
-	uint16 parameter_CRC;
-	/*  16-bit CRC of all bytes from the Packet Length to the Pixel Count. */
+    uint16 parameter_CRC;
+    /*  16-bit CRC of all bytes from the Packet Length to the Pixel Count. */
 
-	uint16 reserved;
-	/* 16-bit variable to make structure align on 4 byte boundary */
+    uint16 reserved;
+    /* 16-bit variable to make structure align on 4 byte boundary */
 
 } mddi_video_stream_packet_type;
 
 typedef struct GCC_PACKED {
-	uint16 packet_length;
-	/* total # of bytes in the packet not including the packet_length field. */
+    uint16 packet_length;
+    /* total # of bytes in the packet not including the packet_length field. */
 
-	uint16 packet_type;
-	/* A Packet Type of 146 identifies the packet as a Register Access Packet. */
+    uint16 packet_type;
+    /* A Packet Type of 146 identifies the packet as a Register Access Packet. */
 
-	uint16 bClient_ID;
-	/* This field is reserved for future use and shall be set to zero. */
+    uint16 bClient_ID;
+    /* This field is reserved for future use and shall be set to zero. */
 
-	uint16 read_write_info;
-	/* Bits 13:0  a 14-bit unsigned integer that specifies the number of
-	 *            32-bit Register Data List items to be transferred in the
-	 *            Register Data List field.
-	 * Bits[15:14] = 00  Write to register(s);
-	 * Bits[15:14] = 10  Read from register(s);
-	 * Bits[15:14] = 11  Response to a Read.
-	 * Bits[15:14] = 01  this value is reserved for future use. */
+    uint16 read_write_info;
+    /* Bits 13:0  a 14-bit unsigned integer that specifies the number of
+     *            32-bit Register Data List items to be transferred in the
+     *            Register Data List field.
+     * Bits[15:14] = 00  Write to register(s);
+     * Bits[15:14] = 10  Read from register(s);
+     * Bits[15:14] = 11  Response to a Read.
+     * Bits[15:14] = 01  this value is reserved for future use. */
 
-	uint32 register_address;
-	/* the register address that is to be written to or read from. */
+    uint32 register_address;
+    /* the register address that is to be written to or read from. */
 
-	uint16 parameter_CRC;
-	/* 16-bit CRC of all bytes from the Packet Length to the Register Address. */
+    uint16 parameter_CRC;
+    /* 16-bit CRC of all bytes from the Packet Length to the Register Address. */
 
-	uint32 register_data_list[MDDI_HOST_MAX_CLIENT_REG_IN_SAME_ADDR];
-	/* list of 4-byte register data values for/from client registers */
-	/* For multi-read/write, 512(128 * 4) bytes of data available */
+    uint32 register_data_list[MDDI_HOST_MAX_CLIENT_REG_IN_SAME_ADDR];
+    /* list of 4-byte register data values for/from client registers */
+    /* For multi-read/write, 512(128 * 4) bytes of data available */
 
 } mddi_register_access_packet_type;
 
 typedef union GCC_PACKED {
-	mddi_video_stream_packet_type video_pkt;
-	mddi_register_access_packet_type register_pkt;
+    mddi_video_stream_packet_type video_pkt;
+    mddi_register_access_packet_type register_pkt;
 #ifdef ENABLE_MDDI_MULTI_READ_WRITE
-	/* add 1008 byte pad to ensure 1024 byte llist struct, that can be
-	 * manipulated easily with cache */
-	uint32 alignment_pad[252];	/* 1008 bytes */
+    /* add 1008 byte pad to ensure 1024 byte llist struct, that can be
+     * manipulated easily with cache */
+    uint32 alignment_pad[252];	/* 1008 bytes */
 #else
-	/* add 48 byte pad to ensure 64 byte llist struct, that can be
-	 * manipulated easily with cache */
-	uint32 alignment_pad[12];	/* 48 bytes */
+    /* add 48 byte pad to ensure 64 byte llist struct, that can be
+     * manipulated easily with cache */
+    uint32 alignment_pad[12];	/* 48 bytes */
 #endif
 } mddi_packet_header_type;
 
 typedef struct GCC_PACKED mddi_host_llist_struct {
-	uint16 link_controller_flags;
-	uint16 packet_header_count;
-	uint16 packet_data_count;
-	void *packet_data_pointer;
-	struct mddi_host_llist_struct *next_packet_pointer;
-	uint16 reserved;
-	mddi_packet_header_type packet_header;
+    uint16 link_controller_flags;
+    uint16 packet_header_count;
+    uint16 packet_data_count;
+    void *packet_data_pointer;
+    struct mddi_host_llist_struct *next_packet_pointer;
+    uint16 reserved;
+    mddi_packet_header_type packet_header;
 } mddi_linked_list_type;
 
 typedef struct {
-	struct completion done_comp;
-	mddi_llist_done_cb_type done_cb;
-	uint16 next_idx;
-	boolean waiting;
-	boolean in_use;
+    struct completion done_comp;
+    mddi_llist_done_cb_type done_cb;
+    uint16 next_idx;
+    boolean waiting;
+    boolean in_use;
 } mddi_linked_list_notify_type;
 
 #ifdef ENABLE_MDDI_MULTI_READ_WRITE
@@ -510,10 +510,10 @@ extern void mddi_host_powerdown(mddi_host_type host);
 extern uint16 mddi_get_next_free_llist_item(mddi_host_type host, boolean wait);
 extern uint16 mddi_get_reg_read_llist_item(mddi_host_type host, boolean wait);
 extern void mddi_queue_forward_packets(uint16 first_llist_idx,
-				       uint16 last_llist_idx,
-				       boolean wait,
-				       mddi_llist_done_cb_type llist_done_cb,
-				       mddi_host_type host);
+                                       uint16 last_llist_idx,
+                                       boolean wait,
+                                       mddi_llist_done_cb_type llist_done_cb,
+                                       mddi_host_type host);
 
 extern void mddi_host_write_pix_attr_reg(uint32 value);
 extern void mddi_client_lcd_gpio_poll(uint32 poll_reg_val);
@@ -526,23 +526,23 @@ extern mddi_linked_list_notify_type *llist_extern_notify[];
 extern struct timer_list mddi_host_timer;
 
 typedef struct {
-	uint16 transmitting_start_idx;
-	uint16 transmitting_end_idx;
-	uint16 waiting_start_idx;
-	uint16 waiting_end_idx;
-	uint16 reg_read_idx;
-	uint16 next_free_idx;
-	boolean reg_read_waiting;
+    uint16 transmitting_start_idx;
+    uint16 transmitting_end_idx;
+    uint16 waiting_start_idx;
+    uint16 waiting_end_idx;
+    uint16 reg_read_idx;
+    uint16 next_free_idx;
+    boolean reg_read_waiting;
 } mddi_llist_info_type;
 
 extern mddi_llist_info_type mddi_llist;
 
 #define MDDI_GPIO_DEFAULT_POLLING_INTERVAL 200
 typedef struct {
-	uint32 polling_reg;
-	uint32 polling_val;
-	uint32 polling_interval;
-	boolean polling_enabled;
+    uint32 polling_reg;
+    uint32 polling_val;
+    uint32 polling_interval;
+    boolean polling_enabled;
 } mddi_gpio_info_type;
 
 uint32 mddi_get_client_id(void);

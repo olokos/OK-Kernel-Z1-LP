@@ -9,7 +9,7 @@
  */
 
 #define APPLDATA_MAX_REC_SIZE	  4024	/* Maximum size of the */
-					/* data buffer */
+/* data buffer */
 #define APPLDATA_MAX_PROCS 100
 
 #define APPLDATA_PROC_NAME_LENGTH 16	/* Max. length of /proc name */
@@ -27,23 +27,23 @@
 #define CTL_APPLDATA_PROC	2126
 
 struct appldata_ops {
-	struct list_head list;
-	struct ctl_table_header *sysctl_header;
-	struct ctl_table *ctl_table;
-	int    active;				/* monitoring status */
+    struct list_head list;
+    struct ctl_table_header *sysctl_header;
+    struct ctl_table *ctl_table;
+    int    active;				/* monitoring status */
 
-	/* fill in from here */
-	char name[APPLDATA_PROC_NAME_LENGTH];	/* name of /proc fs node */
-	unsigned char record_nr;		/* Record Nr. for Product ID */
-	void (*callback)(void *data);		/* callback function */
-	void *data;				/* record data */
-	unsigned int size;			/* size of record */
-	struct module *owner;			/* THIS_MODULE */
-	char mod_lvl[2];			/* modification level, EBCDIC */
+    /* fill in from here */
+    char name[APPLDATA_PROC_NAME_LENGTH];	/* name of /proc fs node */
+    unsigned char record_nr;		/* Record Nr. for Product ID */
+    void (*callback)(void *data);		/* callback function */
+    void *data;				/* record data */
+    unsigned int size;			/* size of record */
+    struct module *owner;			/* THIS_MODULE */
+    char mod_lvl[2];			/* modification level, EBCDIC */
 };
 
 extern int appldata_register_ops(struct appldata_ops *ops);
 extern void appldata_unregister_ops(struct appldata_ops *ops);
 extern int appldata_diag(char record_nr, u16 function, unsigned long buffer,
-			 u16 length, char *mod_lvl);
+                         u16 length, char *mod_lvl);
 

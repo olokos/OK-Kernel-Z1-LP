@@ -70,23 +70,23 @@
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16201_state {
-	struct spi_device	*us;
-	struct iio_trigger	*trig;
-	struct mutex		buf_lock;
-	u8			tx[14] ____cacheline_aligned;
-	u8			rx[14];
+    struct spi_device	*us;
+    struct iio_trigger	*trig;
+    struct mutex		buf_lock;
+    u8			tx[14] ____cacheline_aligned;
+    u8			rx[14];
 };
 
 int adis16201_set_irq(struct iio_dev *indio_dev, bool enable);
 
 enum adis16201_scan {
-	ADIS16201_SCAN_SUPPLY,
-	ADIS16201_SCAN_ACC_X,
-	ADIS16201_SCAN_ACC_Y,
-	ADIS16201_SCAN_AUX_ADC,
-	ADIS16201_SCAN_TEMP,
-	ADIS16201_SCAN_INCLI_X,
-	ADIS16201_SCAN_INCLI_Y,
+    ADIS16201_SCAN_SUPPLY,
+    ADIS16201_SCAN_ACC_X,
+    ADIS16201_SCAN_ACC_Y,
+    ADIS16201_SCAN_AUX_ADC,
+    ADIS16201_SCAN_TEMP,
+    ADIS16201_SCAN_INCLI_X,
+    ADIS16201_SCAN_INCLI_Y,
 };
 
 #ifdef CONFIG_IIO_BUFFER
@@ -94,47 +94,40 @@ void adis16201_remove_trigger(struct iio_dev *indio_dev);
 int adis16201_probe_trigger(struct iio_dev *indio_dev);
 
 ssize_t adis16201_read_data_from_ring(struct device *dev,
-				      struct device_attribute *attr,
-				      char *buf);
+                                      struct device_attribute *attr,
+                                      char *buf);
 
 int adis16201_configure_ring(struct iio_dev *indio_dev);
 void adis16201_unconfigure_ring(struct iio_dev *indio_dev);
 
 #else /* CONFIG_IIO_BUFFER */
 
-static inline void adis16201_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void adis16201_remove_trigger(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16201_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int adis16201_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
 static inline ssize_t
 adis16201_read_data_from_ring(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	return 0;
+                              struct device_attribute *attr,
+                              char *buf) {
+    return 0;
 }
 
-static int adis16201_configure_ring(struct iio_dev *indio_dev)
-{
-	return 0;
+static int adis16201_configure_ring(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void adis16201_unconfigure_ring(struct iio_dev *indio_dev)
-{
+static inline void adis16201_unconfigure_ring(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16201_initialize_ring(struct iio_ring_buffer *ring)
-{
-	return 0;
+static inline int adis16201_initialize_ring(struct iio_ring_buffer *ring) {
+    return 0;
 }
 
-static inline void adis16201_uninitialize_ring(struct iio_ring_buffer *ring)
-{
+static inline void adis16201_uninitialize_ring(struct iio_ring_buffer *ring) {
 }
 
 #endif /* CONFIG_IIO_BUFFER */

@@ -1030,60 +1030,53 @@ int check_card_ejected(struct rtsx_chip *chip, unsigned int lun);
 void eject_card(struct rtsx_chip *chip, unsigned int lun);
 u8 get_lun_card(struct rtsx_chip *chip, unsigned int lun);
 
-static inline u32 get_card_size(struct rtsx_chip *chip, unsigned int lun)
-{
+static inline u32 get_card_size(struct rtsx_chip *chip, unsigned int lun) {
 #ifdef SUPPORT_SD_LOCK
-	struct sd_info *sd_card = &(chip->sd_card);
+    struct sd_info *sd_card = &(chip->sd_card);
 
-	if ((get_lun_card(chip, lun) == SD_CARD) && (sd_card->sd_lock_status & SD_LOCKED))
-		return 0;
-	else
-		return chip->capacity[lun];
+    if ((get_lun_card(chip, lun) == SD_CARD) && (sd_card->sd_lock_status & SD_LOCKED))
+        return 0;
+    else
+        return chip->capacity[lun];
 #else
-	return chip->capacity[lun];
+    return chip->capacity[lun];
 #endif
 }
 
-static inline int switch_clock(struct rtsx_chip *chip, int clk)
-{
-	int retval = 0;
+static inline int switch_clock(struct rtsx_chip *chip, int clk) {
+    int retval = 0;
 
-	if (chip->asic_code)
-		retval = switch_ssc_clock(chip, clk);
-	else
-		retval = switch_normal_clock(chip, clk);
+    if (chip->asic_code)
+        retval = switch_ssc_clock(chip, clk);
+    else
+        retval = switch_normal_clock(chip, clk);
 
-	return retval;
+    return retval;
 }
 
 int card_power_on(struct rtsx_chip *chip, u8 card);
 int card_power_off(struct rtsx_chip *chip, u8 card);
 
-static inline int card_power_off_all(struct rtsx_chip *chip)
-{
-	RTSX_WRITE_REG(chip, CARD_PWR_CTL, 0x0F, 0x0F);
+static inline int card_power_off_all(struct rtsx_chip *chip) {
+    RTSX_WRITE_REG(chip, CARD_PWR_CTL, 0x0F, 0x0F);
 
-	return STATUS_SUCCESS;
+    return STATUS_SUCCESS;
 }
 
-static inline void rtsx_clear_xd_error(struct rtsx_chip *chip)
-{
-	rtsx_write_register(chip, CARD_STOP, XD_STOP | XD_CLR_ERR, XD_STOP | XD_CLR_ERR);
+static inline void rtsx_clear_xd_error(struct rtsx_chip *chip) {
+    rtsx_write_register(chip, CARD_STOP, XD_STOP | XD_CLR_ERR, XD_STOP | XD_CLR_ERR);
 }
 
-static inline void rtsx_clear_sd_error(struct rtsx_chip *chip)
-{
-	rtsx_write_register(chip, CARD_STOP, SD_STOP | SD_CLR_ERR, SD_STOP | SD_CLR_ERR);
+static inline void rtsx_clear_sd_error(struct rtsx_chip *chip) {
+    rtsx_write_register(chip, CARD_STOP, SD_STOP | SD_CLR_ERR, SD_STOP | SD_CLR_ERR);
 }
 
-static inline void rtsx_clear_ms_error(struct rtsx_chip *chip)
-{
-	rtsx_write_register(chip, CARD_STOP, MS_STOP | MS_CLR_ERR, MS_STOP | MS_CLR_ERR);
+static inline void rtsx_clear_ms_error(struct rtsx_chip *chip) {
+    rtsx_write_register(chip, CARD_STOP, MS_STOP | MS_CLR_ERR, MS_STOP | MS_CLR_ERR);
 }
 
-static inline void rtsx_clear_spi_error(struct rtsx_chip *chip)
-{
-	rtsx_write_register(chip, CARD_STOP, SPI_STOP | SPI_CLR_ERR, SPI_STOP | SPI_CLR_ERR);
+static inline void rtsx_clear_spi_error(struct rtsx_chip *chip) {
+    rtsx_write_register(chip, CARD_STOP, SPI_STOP | SPI_CLR_ERR, SPI_STOP | SPI_CLR_ERR);
 }
 
 #ifdef SUPPORT_SDIO_ASPM

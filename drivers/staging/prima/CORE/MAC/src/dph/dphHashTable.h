@@ -43,8 +43,7 @@
 #include "aniGlobal.h"
 /// Compare MAC addresses, return true if same
 static inline tANI_U8
-dphCompareMacAddr(tANI_U8 addr1[], tANI_U8 addr2[])
-{
+dphCompareMacAddr(tANI_U8 addr1[], tANI_U8 addr2[]) {
     return((addr1[0] == addr2[0]) &&
            (addr1[1] == addr2[1]) &&
            (addr1[2] == addr2[2]) &&
@@ -54,8 +53,7 @@ dphCompareMacAddr(tANI_U8 addr1[], tANI_U8 addr2[])
 }
 
 /// Hash table class
-typedef struct
-{
+typedef struct {
 
     /// The hash table itself
     tpDphHashNode *pHashTable;

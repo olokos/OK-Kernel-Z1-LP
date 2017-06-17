@@ -6837,16 +6837,16 @@ Theotherbitsarereservedandshouldbezero*/
 #define MDIO_CTL_DEVAD			0x1e
 #define MDIO_CTL_REG_84823_MEDIA		0x401a
 #define MDIO_CTL_REG_84823_MEDIA_MAC_MASK		0x0018
-	/* These pins configure the BCM84823 interface to MAC after reset. */
+/* These pins configure the BCM84823 interface to MAC after reset. */
 #define MDIO_CTL_REG_84823_CTRL_MAC_XFI			0x0008
 #define MDIO_CTL_REG_84823_MEDIA_MAC_XAUI_M		0x0010
-	/* These pins configure the BCM84823 interface to Line after reset. */
+/* These pins configure the BCM84823 interface to Line after reset. */
 #define MDIO_CTL_REG_84823_MEDIA_LINE_MASK		0x0060
 #define MDIO_CTL_REG_84823_MEDIA_LINE_XAUI_L		0x0020
 #define MDIO_CTL_REG_84823_MEDIA_LINE_XFI		0x0040
-	/* When this pin is active high during reset, 10GBASE-T core is power
-	 * down, When it is active low the 10GBASE-T is power up
-	 */
+/* When this pin is active high during reset, 10GBASE-T core is power
+ * down, When it is active low the 10GBASE-T is power up
+ */
 #define MDIO_CTL_REG_84823_MEDIA_COPPER_CORE_DOWN	0x0080
 #define MDIO_CTL_REG_84823_MEDIA_PRIORITY_MASK		0x0100
 #define MDIO_CTL_REG_84823_MEDIA_PRIORITY_COPPER	0x0000
@@ -7127,8 +7127,8 @@ Theotherbitsarereservedandshouldbezero*/
 #define IGU_BC_BASE_DSB_PROD   128
 #define IGU_NORM_BASE_DSB_PROD 136
 
-	/* FID (if VF - [6] = 0; [5:0] = VF number; if PF - [6] = 1; \
-	[5:2] = 0; [1:0] = PF number) */
+/* FID (if VF - [6] = 0; [5:0] = VF number; if PF - [6] = 1; \
+[5:2] = 0; [1:0] = PF number) */
 #define IGU_FID_ENCODE_IS_PF	    (0x1<<6)
 #define IGU_FID_ENCODE_IS_PF_SHIFT  6
 #define IGU_FID_VF_NUM_MASK	    (0x3f)
@@ -7166,57 +7166,56 @@ Theotherbitsarereservedandshouldbezero*/
  *	   Code was translated from Verilog.
  * Return:
  *****************************************************************************/
-static inline u8 calc_crc8(u32 data, u8 crc)
-{
-	u8 D[32];
-	u8 NewCRC[8];
-	u8 C[8];
-	u8 crc_res;
-	u8 i;
+static inline u8 calc_crc8(u32 data, u8 crc) {
+    u8 D[32];
+    u8 NewCRC[8];
+    u8 C[8];
+    u8 crc_res;
+    u8 i;
 
-	/* split the data into 31 bits */
-	for (i = 0; i < 32; i++) {
-		D[i] = (u8)(data & 1);
-		data = data >> 1;
-	}
+    /* split the data into 31 bits */
+    for (i = 0; i < 32; i++) {
+        D[i] = (u8)(data & 1);
+        data = data >> 1;
+    }
 
-	/* split the crc into 8 bits */
-	for (i = 0; i < 8; i++) {
-		C[i] = crc & 1;
-		crc = crc >> 1;
-	}
+    /* split the crc into 8 bits */
+    for (i = 0; i < 8; i++) {
+        C[i] = crc & 1;
+        crc = crc >> 1;
+    }
 
-	NewCRC[0] = D[31] ^ D[30] ^ D[28] ^ D[23] ^ D[21] ^ D[19] ^ D[18] ^
-		    D[16] ^ D[14] ^ D[12] ^ D[8] ^ D[7] ^ D[6] ^ D[0] ^ C[4] ^
-		    C[6] ^ C[7];
-	NewCRC[1] = D[30] ^ D[29] ^ D[28] ^ D[24] ^ D[23] ^ D[22] ^ D[21] ^
-		    D[20] ^ D[18] ^ D[17] ^ D[16] ^ D[15] ^ D[14] ^ D[13] ^
-		    D[12] ^ D[9] ^ D[6] ^ D[1] ^ D[0] ^ C[0] ^ C[4] ^ C[5] ^
-		    C[6];
-	NewCRC[2] = D[29] ^ D[28] ^ D[25] ^ D[24] ^ D[22] ^ D[17] ^ D[15] ^
-		    D[13] ^ D[12] ^ D[10] ^ D[8] ^ D[6] ^ D[2] ^ D[1] ^ D[0] ^
-		    C[0] ^ C[1] ^ C[4] ^ C[5];
-	NewCRC[3] = D[30] ^ D[29] ^ D[26] ^ D[25] ^ D[23] ^ D[18] ^ D[16] ^
-		    D[14] ^ D[13] ^ D[11] ^ D[9] ^ D[7] ^ D[3] ^ D[2] ^ D[1] ^
-		    C[1] ^ C[2] ^ C[5] ^ C[6];
-	NewCRC[4] = D[31] ^ D[30] ^ D[27] ^ D[26] ^ D[24] ^ D[19] ^ D[17] ^
-		    D[15] ^ D[14] ^ D[12] ^ D[10] ^ D[8] ^ D[4] ^ D[3] ^ D[2] ^
-		    C[0] ^ C[2] ^ C[3] ^ C[6] ^ C[7];
-	NewCRC[5] = D[31] ^ D[28] ^ D[27] ^ D[25] ^ D[20] ^ D[18] ^ D[16] ^
-		    D[15] ^ D[13] ^ D[11] ^ D[9] ^ D[5] ^ D[4] ^ D[3] ^ C[1] ^
-		    C[3] ^ C[4] ^ C[7];
-	NewCRC[6] = D[29] ^ D[28] ^ D[26] ^ D[21] ^ D[19] ^ D[17] ^ D[16] ^
-		    D[14] ^ D[12] ^ D[10] ^ D[6] ^ D[5] ^ D[4] ^ C[2] ^ C[4] ^
-		    C[5];
-	NewCRC[7] = D[30] ^ D[29] ^ D[27] ^ D[22] ^ D[20] ^ D[18] ^ D[17] ^
-		    D[15] ^ D[13] ^ D[11] ^ D[7] ^ D[6] ^ D[5] ^ C[3] ^ C[5] ^
-		    C[6];
+    NewCRC[0] = D[31] ^ D[30] ^ D[28] ^ D[23] ^ D[21] ^ D[19] ^ D[18] ^
+                D[16] ^ D[14] ^ D[12] ^ D[8] ^ D[7] ^ D[6] ^ D[0] ^ C[4] ^
+                C[6] ^ C[7];
+    NewCRC[1] = D[30] ^ D[29] ^ D[28] ^ D[24] ^ D[23] ^ D[22] ^ D[21] ^
+                D[20] ^ D[18] ^ D[17] ^ D[16] ^ D[15] ^ D[14] ^ D[13] ^
+                D[12] ^ D[9] ^ D[6] ^ D[1] ^ D[0] ^ C[0] ^ C[4] ^ C[5] ^
+                C[6];
+    NewCRC[2] = D[29] ^ D[28] ^ D[25] ^ D[24] ^ D[22] ^ D[17] ^ D[15] ^
+                D[13] ^ D[12] ^ D[10] ^ D[8] ^ D[6] ^ D[2] ^ D[1] ^ D[0] ^
+                C[0] ^ C[1] ^ C[4] ^ C[5];
+    NewCRC[3] = D[30] ^ D[29] ^ D[26] ^ D[25] ^ D[23] ^ D[18] ^ D[16] ^
+                D[14] ^ D[13] ^ D[11] ^ D[9] ^ D[7] ^ D[3] ^ D[2] ^ D[1] ^
+                C[1] ^ C[2] ^ C[5] ^ C[6];
+    NewCRC[4] = D[31] ^ D[30] ^ D[27] ^ D[26] ^ D[24] ^ D[19] ^ D[17] ^
+                D[15] ^ D[14] ^ D[12] ^ D[10] ^ D[8] ^ D[4] ^ D[3] ^ D[2] ^
+                C[0] ^ C[2] ^ C[3] ^ C[6] ^ C[7];
+    NewCRC[5] = D[31] ^ D[28] ^ D[27] ^ D[25] ^ D[20] ^ D[18] ^ D[16] ^
+                D[15] ^ D[13] ^ D[11] ^ D[9] ^ D[5] ^ D[4] ^ D[3] ^ C[1] ^
+                C[3] ^ C[4] ^ C[7];
+    NewCRC[6] = D[29] ^ D[28] ^ D[26] ^ D[21] ^ D[19] ^ D[17] ^ D[16] ^
+                D[14] ^ D[12] ^ D[10] ^ D[6] ^ D[5] ^ D[4] ^ C[2] ^ C[4] ^
+                C[5];
+    NewCRC[7] = D[30] ^ D[29] ^ D[27] ^ D[22] ^ D[20] ^ D[18] ^ D[17] ^
+                D[15] ^ D[13] ^ D[11] ^ D[7] ^ D[6] ^ D[5] ^ C[3] ^ C[5] ^
+                C[6];
 
-	crc_res = 0;
-	for (i = 0; i < 8; i++)
-		crc_res |= (NewCRC[i] << i);
+    crc_res = 0;
+    for (i = 0; i < 8; i++)
+        crc_res |= (NewCRC[i] << i);
 
-	return crc_res;
+    return crc_res;
 }
 
 

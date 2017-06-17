@@ -20,10 +20,10 @@
  */
 
 struct dma_desc {
-	u32 control;			/* Control. use DMAD_* */
-	u32 ca;				/* Current Address. */
-	u32 devcs;			/* Device control and status. */
-	u32 link;			/* Next descriptor in chain. */
+    u32 control;			/* Control. use DMAD_* */
+    u32 ca;				/* Current Address. */
+    u32 devcs;			/* Device control and status. */
+    u32 link;			/* Next descriptor in chain. */
 };
 
 #define DMA_DESC_SIZ			sizeof(struct dma_desc)
@@ -59,11 +59,11 @@ struct dma_desc {
  */
 
 struct dma_reg {
-	u32 dmac;		/* Control. */
-	u32 dmas;		/* Status. */
-	u32 dmasm;		/* Mask. */
-	u32 dmadptr;		/* Descriptor pointer. */
-	u32 dmandptr;		/* Next descriptor pointer. */
+    u32 dmac;		/* Control. */
+    u32 dmas;		/* Status. */
+    u32 dmasm;		/* Mask. */
+    u32 dmadptr;		/* Descriptor pointer. */
+    u32 dmandptr;		/* Next descriptor pointer. */
 };
 
 /* DMA channels specific registers */
@@ -97,7 +97,7 @@ struct dma_reg {
 #define DMA_CHAN_COUNT			6
 
 struct dma_channel {
-	struct dma_reg ch[DMA_CHAN_COUNT];
+    struct dma_reg ch[DMA_CHAN_COUNT];
 };
 
 #endif  /* __ASM_RC32434_DMA_H */

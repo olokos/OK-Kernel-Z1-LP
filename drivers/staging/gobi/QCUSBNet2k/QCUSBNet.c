@@ -3,8 +3,8 @@ FILE:
    QCUSBNet.c
 
 DESCRIPTION:
-   Qualcomm USB Network device for Gobi 2000 
-   
+   Qualcomm USB Network device for Gobi 2000
+
 FUNCTIONS:
    QCSuspend
    QCResume
@@ -75,73 +75,64 @@ RETURN VALUE:
    int - 0 for success
          negative errno for failure
 ===========================================================================*/
-int QCSuspend( 
-   struct usb_interface *     pIntf,
-   pm_message_t               powerEvent )
-{
-   struct usbnet * pDev;
-   sQCUSBNet * pQCDev;
-   
-   if (pIntf == 0)
-   {
-      return -ENOMEM;
-   }
-   
+int QCSuspend(
+    struct usb_interface *     pIntf,
+    pm_message_t               powerEvent ) {
+    struct usbnet * pDev;
+    sQCUSBNet * pQCDev;
+
+    if (pIntf == 0) {
+        return -ENOMEM;
+    }
+
 #if (LINUX_VERSION_CODE > KERNEL_VERSION( 2,6,23 ))
-   pDev = usb_get_intfdata( pIntf );
+    pDev = usb_get_intfdata( pIntf );
 #else
-   pDev = (struct usbnet *)pIntf->dev.platform_data;
+    pDev = (struct usbnet *)pIntf->dev.platform_data;
 #endif
 
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get netdevice\n" );
-      return -ENXIO;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return -ENXIO;
-   }
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get netdevice\n" );
+        return -ENXIO;
+    }
 
-   // Is this autosuspend or system suspend?
-   //    do we allow remote wakeup?
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return -ENXIO;
+    }
+
+    // Is this autosuspend or system suspend?
+    //    do we allow remote wakeup?
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,33 ))
-   if (pDev->udev->auto_pm == 0)
+    if (pDev->udev->auto_pm == 0)
 #else
-   if ((powerEvent.event & PM_EVENT_AUTO) == 0)
+    if ((powerEvent.event & PM_EVENT_AUTO) == 0)
 #endif
-   {
-      DBG( "device suspended to power level %d\n", 
-           powerEvent.event );
-      QSetDownReason( pQCDev, DRIVER_SUSPENDED );
-   }
-   else
-   {
-      DBG( "device autosuspend\n" );
-   }    
+    {
+        DBG( "device suspended to power level %d\n",
+             powerEvent.event );
+        QSetDownReason( pQCDev, DRIVER_SUSPENDED );
+    } else {
+        DBG( "device autosuspend\n" );
+    }
 
-   if (powerEvent.event & PM_EVENT_SUSPEND)
-   {
-      // Stop QMI read callbacks
-      KillRead( pQCDev );
-      pDev->udev->reset_resume = 0;
-      
-      // Store power state to avoid duplicate resumes
-      pIntf->dev.power.power_state.event = powerEvent.event;
-   }
-   else
-   {
-      // Other power modes cause QMI connection to be lost
-      pDev->udev->reset_resume = 1;
-   }
-   
-   // Run usbnet's suspend function
-   return usbnet_suspend( pIntf, powerEvent );
+    if (powerEvent.event & PM_EVENT_SUSPEND) {
+        // Stop QMI read callbacks
+        KillRead( pQCDev );
+        pDev->udev->reset_resume = 0;
+
+        // Store power state to avoid duplicate resumes
+        pIntf->dev.power.power_state.event = powerEvent.event;
+    } else {
+        // Other power modes cause QMI connection to be lost
+        pDev->udev->reset_resume = 1;
+    }
+
+    // Run usbnet's suspend function
+    return usbnet_suspend( pIntf, powerEvent );
 }
-   
+
 /*===========================================================================
 METHOD:
    QCResume (Public Method)
@@ -156,71 +147,62 @@ RETURN VALUE:
    int - 0 for success
          negative errno for failure
 ===========================================================================*/
-int QCResume( struct usb_interface * pIntf )
-{
-   struct usbnet * pDev;
-   sQCUSBNet * pQCDev;
-   int nRet;
-   int oldPowerState;
-   
-   if (pIntf == 0)
-   {
-      return -ENOMEM;
-   }
-   
+int QCResume( struct usb_interface * pIntf ) {
+    struct usbnet * pDev;
+    sQCUSBNet * pQCDev;
+    int nRet;
+    int oldPowerState;
+
+    if (pIntf == 0) {
+        return -ENOMEM;
+    }
+
 #if (LINUX_VERSION_CODE > KERNEL_VERSION( 2,6,23 ))
-   pDev = usb_get_intfdata( pIntf );
+    pDev = usb_get_intfdata( pIntf );
 #else
-   pDev = (struct usbnet *)pIntf->dev.platform_data;
+    pDev = (struct usbnet *)pIntf->dev.platform_data;
 #endif
 
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get netdevice\n" );
-      return -ENXIO;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return -ENXIO;
-   }
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get netdevice\n" );
+        return -ENXIO;
+    }
 
-   oldPowerState = pIntf->dev.power.power_state.event;
-   pIntf->dev.power.power_state.event = PM_EVENT_ON;
-   DBG( "resuming from power mode %d\n", oldPowerState );
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return -ENXIO;
+    }
 
-   if (oldPowerState & PM_EVENT_SUSPEND)
-   {
-      // It doesn't matter if this is autoresume or system resume
-      QClearDownReason( pQCDev, DRIVER_SUSPENDED );
-   
-      nRet = usbnet_resume( pIntf );
-      if (nRet != 0)
-      {
-         DBG( "usbnet_resume error %d\n", nRet );
-         return nRet;
-      }
+    oldPowerState = pIntf->dev.power.power_state.event;
+    pIntf->dev.power.power_state.event = PM_EVENT_ON;
+    DBG( "resuming from power mode %d\n", oldPowerState );
 
-      // Restart QMI read callbacks
-      nRet = StartRead( pQCDev );
-      if (nRet != 0)
-      {
-         DBG( "StartRead error %d\n", nRet );
-         return nRet;
-      }
+    if (oldPowerState & PM_EVENT_SUSPEND) {
+        // It doesn't matter if this is autoresume or system resume
+        QClearDownReason( pQCDev, DRIVER_SUSPENDED );
 
-      // Kick Auto PM thread to process any queued URBs
-      up( &pQCDev->mAutoPM.mThreadDoWork );
-   }
-   else
-   {
-      DBG( "nothing to resume\n" );
-      return 0;
-   }
-   
-   return nRet;
+        nRet = usbnet_resume( pIntf );
+        if (nRet != 0) {
+            DBG( "usbnet_resume error %d\n", nRet );
+            return nRet;
+        }
+
+        // Restart QMI read callbacks
+        nRet = StartRead( pQCDev );
+        if (nRet != 0) {
+            DBG( "StartRead error %d\n", nRet );
+            return nRet;
+        }
+
+        // Kick Auto PM thread to process any queued URBs
+        up( &pQCDev->mAutoPM.mThreadDoWork );
+    } else {
+        DBG( "nothing to resume\n" );
+        return 0;
+    }
+
+    return nRet;
 }
 
 /*===========================================================================
@@ -238,82 +220,72 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-static int QCNetDriverBind( 
-   struct usbnet *         pDev, 
-   struct usb_interface *  pIntf )
-{
-   int numEndpoints;
-   int endpointIndex;
-   struct usb_host_endpoint * pEndpoint = NULL;
-   struct usb_host_endpoint * pIn = NULL;
-   struct usb_host_endpoint * pOut = NULL;
-   
-   // Verify one altsetting
-   if (pIntf->num_altsetting != 1)
-   {
-      DBG( "invalid num_altsetting %u\n", pIntf->num_altsetting );
-      return -EINVAL;
-   }
+static int QCNetDriverBind(
+    struct usbnet *         pDev,
+    struct usb_interface *  pIntf ) {
+    int numEndpoints;
+    int endpointIndex;
+    struct usb_host_endpoint * pEndpoint = NULL;
+    struct usb_host_endpoint * pIn = NULL;
+    struct usb_host_endpoint * pOut = NULL;
 
-   // Verify correct interface (0)
-   if (pIntf->cur_altsetting->desc.bInterfaceNumber != 0)
-   {
-      DBG( "invalid interface %d\n", 
-           pIntf->cur_altsetting->desc.bInterfaceNumber );
-      return -EINVAL;
-   }
-   
-   // Collect In and Out endpoints
-   numEndpoints = pIntf->cur_altsetting->desc.bNumEndpoints;
-   for (endpointIndex = 0; endpointIndex < numEndpoints; endpointIndex++)
-   {
-      pEndpoint = pIntf->cur_altsetting->endpoint + endpointIndex;
-      if (pEndpoint == NULL)
-      {
-         DBG( "invalid endpoint %u\n", endpointIndex );
-         return -EINVAL;
-      }
-      
-      if (usb_endpoint_dir_in( &pEndpoint->desc ) == true
-      &&  usb_endpoint_xfer_int( &pEndpoint->desc ) == false)
-      {
-         pIn = pEndpoint;
-      }
-      else if (usb_endpoint_dir_out( &pEndpoint->desc ) == true)
-      {
-         pOut = pEndpoint;
-      }
-   }
-   
-   if (pIn == NULL || pOut == NULL)
-   {
-      DBG( "invalid endpoints\n" );
-      return -EINVAL;
-   }
+    // Verify one altsetting
+    if (pIntf->num_altsetting != 1) {
+        DBG( "invalid num_altsetting %u\n", pIntf->num_altsetting );
+        return -EINVAL;
+    }
 
-   if (usb_set_interface( pDev->udev, 
-                          pIntf->cur_altsetting->desc.bInterfaceNumber,
-                          0 ) != 0)
-   {
-      DBG( "unable to set interface\n" );
-      return -EINVAL;
-   }
+    // Verify correct interface (0)
+    if (pIntf->cur_altsetting->desc.bInterfaceNumber != 0) {
+        DBG( "invalid interface %d\n",
+             pIntf->cur_altsetting->desc.bInterfaceNumber );
+        return -EINVAL;
+    }
 
-   pDev->in = usb_rcvbulkpipe( pDev->udev,
-                   pIn->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
-   pDev->out = usb_sndbulkpipe( pDev->udev,
-                   pOut->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
-                   
-   DBG( "in %x, out %x\n", 
-        pIn->desc.bEndpointAddress, 
-        pOut->desc.bEndpointAddress );
+    // Collect In and Out endpoints
+    numEndpoints = pIntf->cur_altsetting->desc.bNumEndpoints;
+    for (endpointIndex = 0; endpointIndex < numEndpoints; endpointIndex++) {
+        pEndpoint = pIntf->cur_altsetting->endpoint + endpointIndex;
+        if (pEndpoint == NULL) {
+            DBG( "invalid endpoint %u\n", endpointIndex );
+            return -EINVAL;
+        }
 
-   // In later versions of the kernel, usbnet helps with this
+        if (usb_endpoint_dir_in( &pEndpoint->desc ) == true
+                &&  usb_endpoint_xfer_int( &pEndpoint->desc ) == false) {
+            pIn = pEndpoint;
+        } else if (usb_endpoint_dir_out( &pEndpoint->desc ) == true) {
+            pOut = pEndpoint;
+        }
+    }
+
+    if (pIn == NULL || pOut == NULL) {
+        DBG( "invalid endpoints\n" );
+        return -EINVAL;
+    }
+
+    if (usb_set_interface( pDev->udev,
+                           pIntf->cur_altsetting->desc.bInterfaceNumber,
+                           0 ) != 0) {
+        DBG( "unable to set interface\n" );
+        return -EINVAL;
+    }
+
+    pDev->in = usb_rcvbulkpipe( pDev->udev,
+                                pIn->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
+    pDev->out = usb_sndbulkpipe( pDev->udev,
+                                 pOut->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
+
+    DBG( "in %x, out %x\n",
+         pIn->desc.bEndpointAddress,
+         pOut->desc.bEndpointAddress );
+
+    // In later versions of the kernel, usbnet helps with this
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION( 2,6,23 ))
-   pIntf->dev.platform_data = (void *)pDev;
+    pIntf->dev.platform_data = (void *)pDev;
 #endif
 
-   return 0;
+    return 0;
 }
 
 /*===========================================================================
@@ -330,28 +302,27 @@ PARAMETERS
 RETURN VALUE:
    None
 ===========================================================================*/
-static void QCNetDriverUnbind( 
-   struct usbnet *         pDev, 
-   struct usb_interface *  pIntf)
-{
-   sQCUSBNet * pQCDev = (sQCUSBNet *)pDev->data[0];
+static void QCNetDriverUnbind(
+    struct usbnet *         pDev,
+    struct usb_interface *  pIntf) {
+    sQCUSBNet * pQCDev = (sQCUSBNet *)pDev->data[0];
 
-   // Should already be down, but just in case...
-   netif_carrier_off( pDev->net );
+    // Should already be down, but just in case...
+    netif_carrier_off( pDev->net );
 
-   DeregisterQMIDevice( pQCDev );
-   
+    DeregisterQMIDevice( pQCDev );
+
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION( 2,6,29 ))
-   kfree( pDev->net->netdev_ops );
-   pDev->net->netdev_ops = NULL;
+    kfree( pDev->net->netdev_ops );
+    pDev->net->netdev_ops = NULL;
 #endif
 
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION( 2,6,23 ))
-   pIntf->dev.platform_data = NULL;
+    pIntf->dev.platform_data = NULL;
 #endif
 
-   kfree( pQCDev );
-   pQCDev = NULL;
+    kfree( pQCDev );
+    pQCDev = NULL;
 }
 
 /*===========================================================================
@@ -367,34 +338,31 @@ PARAMETERS
 RETURN VALUE:
    None
 ===========================================================================*/
-void QCUSBNetURBCallback( struct urb * pURB )
-{
-   unsigned long activeURBflags;
-   sAutoPM * pAutoPM = (sAutoPM *)pURB->context;
-   if (pAutoPM == NULL)
-   {
-      // Should never happen
-      DBG( "bad context\n" );
-      return;
-   }
+void QCUSBNetURBCallback( struct urb * pURB ) {
+    unsigned long activeURBflags;
+    sAutoPM * pAutoPM = (sAutoPM *)pURB->context;
+    if (pAutoPM == NULL) {
+        // Should never happen
+        DBG( "bad context\n" );
+        return;
+    }
 
-   if (pURB->status != 0)
-   {
-      // Note that in case of an error, the behaviour is no different
-      DBG( "urb finished with error %d\n", pURB->status );
-   }
+    if (pURB->status != 0) {
+        // Note that in case of an error, the behaviour is no different
+        DBG( "urb finished with error %d\n", pURB->status );
+    }
 
-   // Remove activeURB (memory to be freed later)
-   spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+    // Remove activeURB (memory to be freed later)
+    spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
 
-   // EAGAIN used to signify callback is done
-   pAutoPM->mpActiveURB = ERR_PTR( -EAGAIN );
+    // EAGAIN used to signify callback is done
+    pAutoPM->mpActiveURB = ERR_PTR( -EAGAIN );
 
-   spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+    spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-   up( &pAutoPM->mThreadDoWork );
-   
-   usb_free_urb( pURB );
+    up( &pAutoPM->mThreadDoWork );
+
+    usb_free_urb( pURB );
 }
 
 /*===========================================================================
@@ -410,57 +378,52 @@ PARAMETERS
 RETURN VALUE:
    None
 ===========================================================================*/
-void QCUSBNetTXTimeout( struct net_device * pNet )
-{
-   struct sQCUSBNet * pQCDev;
-   sAutoPM * pAutoPM;
-   sURBList * pURBListEntry;
-   unsigned long activeURBflags, URBListFlags;
-   struct usbnet * pDev = netdev_priv( pNet );
+void QCUSBNetTXTimeout( struct net_device * pNet ) {
+    struct sQCUSBNet * pQCDev;
+    sAutoPM * pAutoPM;
+    sURBList * pURBListEntry;
+    unsigned long activeURBflags, URBListFlags;
+    struct usbnet * pDev = netdev_priv( pNet );
 
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get usbnet device\n" );
-      return;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return;
-   }
-   pAutoPM = &pQCDev->mAutoPM;
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get usbnet device\n" );
+        return;
+    }
 
-   DBG( "\n" );
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return;
+    }
+    pAutoPM = &pQCDev->mAutoPM;
 
-   // Stop activeURB
-   spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+    DBG( "\n" );
 
-   if (pAutoPM->mpActiveURB != NULL)
-   {
-      usb_kill_urb( pAutoPM->mpActiveURB );
-   }
+    // Stop activeURB
+    spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
 
-   spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+    if (pAutoPM->mpActiveURB != NULL) {
+        usb_kill_urb( pAutoPM->mpActiveURB );
+    }
 
-   // Cleanup URB List
-   spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+    spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-   pURBListEntry = pAutoPM->mpURBList;
-   while (pURBListEntry != NULL)
-   {
-      pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
-      usb_free_urb( pURBListEntry->mpURB );
-      kfree( pURBListEntry );
-      pURBListEntry = pAutoPM->mpURBList;
-   }
+    // Cleanup URB List
+    spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
 
-   spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+    pURBListEntry = pAutoPM->mpURBList;
+    while (pURBListEntry != NULL) {
+        pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
+        usb_free_urb( pURBListEntry->mpURB );
+        kfree( pURBListEntry );
+        pURBListEntry = pAutoPM->mpURBList;
+    }
 
-   up( &pAutoPM->mThreadDoWork );
+    spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
 
-   return;
+    up( &pAutoPM->mThreadDoWork );
+
+    return;
 }
 
 /*===========================================================================
@@ -478,156 +441,144 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-static int QCUSBNetAutoPMThread( void * pData )
-{
-   unsigned long activeURBflags, URBListFlags;
-   sURBList * pURBListEntry;
-   int status;
-   struct usb_device * pUdev;
-   sAutoPM * pAutoPM = (sAutoPM *)pData;
-   if (pAutoPM == NULL)
-   {
-      DBG( "passed null pointer\n" );
-      return -EINVAL;
-   }
-   
-   pUdev = interface_to_usbdev( pAutoPM->mpIntf );
+static int QCUSBNetAutoPMThread( void * pData ) {
+    unsigned long activeURBflags, URBListFlags;
+    sURBList * pURBListEntry;
+    int status;
+    struct usb_device * pUdev;
+    sAutoPM * pAutoPM = (sAutoPM *)pData;
+    if (pAutoPM == NULL) {
+        DBG( "passed null pointer\n" );
+        return -EINVAL;
+    }
 
-   DBG( "traffic thread started\n" );
+    pUdev = interface_to_usbdev( pAutoPM->mpIntf );
 
-   while (pAutoPM->mbExit == false)
-   {
-      // Wait for someone to poke us
-      down( &pAutoPM->mThreadDoWork );
+    DBG( "traffic thread started\n" );
 
-      // Time to exit?
-      if (pAutoPM->mbExit == true)
-      {
-         // Stop activeURB
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+    while (pAutoPM->mbExit == false) {
+        // Wait for someone to poke us
+        down( &pAutoPM->mThreadDoWork );
 
-         if (pAutoPM->mpActiveURB != NULL)
-         {
-            usb_kill_urb( pAutoPM->mpActiveURB );
-         }
-         // Will be freed in callback function
+        // Time to exit?
+        if (pAutoPM->mbExit == true) {
+            // Stop activeURB
+            spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+            if (pAutoPM->mpActiveURB != NULL) {
+                usb_kill_urb( pAutoPM->mpActiveURB );
+            }
+            // Will be freed in callback function
 
-         // Cleanup URB List
-         spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         pURBListEntry = pAutoPM->mpURBList;
-         while (pURBListEntry != NULL)
-         {
-            pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
-            usb_free_urb( pURBListEntry->mpURB );
-            kfree( pURBListEntry );
+            // Cleanup URB List
+            spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+
             pURBListEntry = pAutoPM->mpURBList;
-         }
+            while (pURBListEntry != NULL) {
+                pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
+                usb_free_urb( pURBListEntry->mpURB );
+                kfree( pURBListEntry );
+                pURBListEntry = pAutoPM->mpURBList;
+            }
 
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+            spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
 
-         break;
-      }
-      
-      // Is our URB active?
-      spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+            break;
+        }
 
-      // EAGAIN used to signify callback is done
-      if (IS_ERR( pAutoPM->mpActiveURB ) 
-      &&  PTR_ERR( pAutoPM->mpActiveURB ) == -EAGAIN )
-      {
-         pAutoPM->mpActiveURB = NULL;
+        // Is our URB active?
+        spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         // Restore IRQs so task can sleep
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         
-         // URB is done, decrement the Auto PM usage count
-         usb_autopm_put_interface( pAutoPM->mpIntf );
+        // EAGAIN used to signify callback is done
+        if (IS_ERR( pAutoPM->mpActiveURB )
+                &&  PTR_ERR( pAutoPM->mpActiveURB ) == -EAGAIN ) {
+            pAutoPM->mpActiveURB = NULL;
 
-         // Lock ActiveURB again
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
-      }
+            // Restore IRQs so task can sleep
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-      if (pAutoPM->mpActiveURB != NULL)
-      {
-         // There is already a URB active, go back to sleep
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         continue;
-      }
-      
-      // Is there a URB waiting to be submitted?
-      spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
-      if (pAutoPM->mpURBList == NULL)
-      {
-         // No more URBs to submit, go back to sleep
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         continue;
-      }
+            // URB is done, decrement the Auto PM usage count
+            usb_autopm_put_interface( pAutoPM->mpIntf );
 
-      // Pop an element
-      pURBListEntry = pAutoPM->mpURBList;
-      pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
-      spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+            // Lock ActiveURB again
+            spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+        }
 
-      // Set ActiveURB
-      pAutoPM->mpActiveURB = pURBListEntry->mpURB;
-      spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+        if (pAutoPM->mpActiveURB != NULL) {
+            // There is already a URB active, go back to sleep
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+            continue;
+        }
 
-      // Tell autopm core we need device woken up
-      status = usb_autopm_get_interface( pAutoPM->mpIntf );
-      if (status < 0)
-      {
-         DBG( "unable to autoresume interface: %d\n", status );
+        // Is there a URB waiting to be submitted?
+        spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+        if (pAutoPM->mpURBList == NULL) {
+            // No more URBs to submit, go back to sleep
+            spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+            continue;
+        }
 
-         // likely caused by device going from autosuspend -> full suspend
-         if (status == -EPERM)
-         {
+        // Pop an element
+        pURBListEntry = pAutoPM->mpURBList;
+        pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
+        spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+
+        // Set ActiveURB
+        pAutoPM->mpActiveURB = pURBListEntry->mpURB;
+        spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+
+        // Tell autopm core we need device woken up
+        status = usb_autopm_get_interface( pAutoPM->mpIntf );
+        if (status < 0) {
+            DBG( "unable to autoresume interface: %d\n", status );
+
+            // likely caused by device going from autosuspend -> full suspend
+            if (status == -EPERM) {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,33 ))
-            pUdev->auto_pm = 0;
+                pUdev->auto_pm = 0;
 #endif
-            QCSuspend( pAutoPM->mpIntf, PMSG_SUSPEND );
-         }
+                QCSuspend( pAutoPM->mpIntf, PMSG_SUSPEND );
+            }
 
-         // Add pURBListEntry back onto pAutoPM->mpURBList
-         spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
-         pURBListEntry->mpNext = pAutoPM->mpURBList;
-         pAutoPM->mpURBList = pURBListEntry;
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
-         
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
-         pAutoPM->mpActiveURB = NULL;
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         
-         // Go back to sleep
-         continue;
-      }
+            // Add pURBListEntry back onto pAutoPM->mpURBList
+            spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+            pURBListEntry->mpNext = pAutoPM->mpURBList;
+            pAutoPM->mpURBList = pURBListEntry;
+            spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
 
-      // Submit URB
-      status = usb_submit_urb( pAutoPM->mpActiveURB, GFP_KERNEL );
-      if (status < 0)
-      {
-         // Could happen for a number of reasons
-         DBG( "Failed to submit URB: %d.  Packet dropped\n", status );
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
-         usb_free_urb( pAutoPM->mpActiveURB );
-         pAutoPM->mpActiveURB = NULL;
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         usb_autopm_put_interface( pAutoPM->mpIntf );
+            spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+            pAutoPM->mpActiveURB = NULL;
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         // Loop again
-         up( &pAutoPM->mThreadDoWork );
-      }
-      
-      kfree( pURBListEntry );
-   }   
-   
-   DBG( "traffic thread exiting\n" );
-   pAutoPM->mpThread = NULL;
-   return 0;
-}      
+            // Go back to sleep
+            continue;
+        }
+
+        // Submit URB
+        status = usb_submit_urb( pAutoPM->mpActiveURB, GFP_KERNEL );
+        if (status < 0) {
+            // Could happen for a number of reasons
+            DBG( "Failed to submit URB: %d.  Packet dropped\n", status );
+            spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+            usb_free_urb( pAutoPM->mpActiveURB );
+            pAutoPM->mpActiveURB = NULL;
+            spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+            usb_autopm_put_interface( pAutoPM->mpIntf );
+
+            // Loop again
+            up( &pAutoPM->mThreadDoWork );
+        }
+
+        kfree( pURBListEntry );
+    }
+
+    DBG( "traffic thread exiting\n" );
+    pAutoPM->mpThread = NULL;
+    return 0;
+}
 
 /*===========================================================================
 METHOD:
@@ -643,99 +594,91 @@ RETURN VALUE:
    NETDEV_TX_OK on success
    NETDEV_TX_BUSY on error
 ===========================================================================*/
-int QCUSBNetStartXmit( 
-   struct sk_buff *     pSKB,
-   struct net_device *  pNet )
-{
-   unsigned long URBListFlags;
-   struct sQCUSBNet * pQCDev;
-   sAutoPM * pAutoPM;
-   sURBList * pURBListEntry, ** ppURBListEnd;
-   void * pURBData;
-   struct usbnet * pDev = netdev_priv( pNet );
-   
-   DBG( "\n" );
-   
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get usbnet device\n" );
-      return NETDEV_TX_BUSY;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return NETDEV_TX_BUSY;
-   }
-   pAutoPM = &pQCDev->mAutoPM;
-   
-   if (QTestDownReason( pQCDev, DRIVER_SUSPENDED ) == true)
-   {
-      // Should not happen
-      DBG( "device is suspended\n" );
-      dump_stack();
-      return NETDEV_TX_BUSY;
-   }
-   
-   // Convert the sk_buff into a URB
+int QCUSBNetStartXmit(
+    struct sk_buff *     pSKB,
+    struct net_device *  pNet ) {
+    unsigned long URBListFlags;
+    struct sQCUSBNet * pQCDev;
+    sAutoPM * pAutoPM;
+    sURBList * pURBListEntry, ** ppURBListEnd;
+    void * pURBData;
+    struct usbnet * pDev = netdev_priv( pNet );
 
-   // Allocate URBListEntry
-   pURBListEntry = kmalloc( sizeof( sURBList ), GFP_ATOMIC );
-   if (pURBListEntry == NULL)
-   {
-      DBG( "unable to allocate URBList memory\n" );
-      return NETDEV_TX_BUSY;
-   }
-   pURBListEntry->mpNext = NULL;
+    DBG( "\n" );
 
-   // Allocate URB
-   pURBListEntry->mpURB = usb_alloc_urb( 0, GFP_ATOMIC );
-   if (pURBListEntry->mpURB == NULL)
-   {
-      DBG( "unable to allocate URB\n" );
-      return NETDEV_TX_BUSY;
-   }
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get usbnet device\n" );
+        return NETDEV_TX_BUSY;
+    }
 
-   // Allocate URB transfer_buffer
-   pURBData = kmalloc( pSKB->len, GFP_ATOMIC );
-   if (pURBData == NULL)
-   {
-      DBG( "unable to allocate URB data\n" );
-      return NETDEV_TX_BUSY;
-   }
-   // Fill will SKB's data
-   memcpy( pURBData, pSKB->data, pSKB->len );
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return NETDEV_TX_BUSY;
+    }
+    pAutoPM = &pQCDev->mAutoPM;
 
-   usb_fill_bulk_urb( pURBListEntry->mpURB,
-                      pQCDev->mpNetDev->udev,
-                      pQCDev->mpNetDev->out,
-                      pURBData,
-                      pSKB->len,
-                      QCUSBNetURBCallback,
-                      pAutoPM );
-   
-   // Aquire lock on URBList
-   spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
-   
-   // Add URB to end of list
-   ppURBListEnd = &pAutoPM->mpURBList;
-   while ((*ppURBListEnd) != NULL)
-   {
-      ppURBListEnd = &(*ppURBListEnd)->mpNext;
-   }
-   *ppURBListEnd = pURBListEntry;
+    if (QTestDownReason( pQCDev, DRIVER_SUSPENDED ) == true) {
+        // Should not happen
+        DBG( "device is suspended\n" );
+        dump_stack();
+        return NETDEV_TX_BUSY;
+    }
 
-   spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+    // Convert the sk_buff into a URB
 
-   up( &pAutoPM->mThreadDoWork );
+    // Allocate URBListEntry
+    pURBListEntry = kmalloc( sizeof( sURBList ), GFP_ATOMIC );
+    if (pURBListEntry == NULL) {
+        DBG( "unable to allocate URBList memory\n" );
+        return NETDEV_TX_BUSY;
+    }
+    pURBListEntry->mpNext = NULL;
 
-   // Start transfer timer
-   pNet->trans_start = jiffies;
-   // Free SKB
-   dev_kfree_skb_any( pSKB );
+    // Allocate URB
+    pURBListEntry->mpURB = usb_alloc_urb( 0, GFP_ATOMIC );
+    if (pURBListEntry->mpURB == NULL) {
+        DBG( "unable to allocate URB\n" );
+        return NETDEV_TX_BUSY;
+    }
 
-   return NETDEV_TX_OK;
+    // Allocate URB transfer_buffer
+    pURBData = kmalloc( pSKB->len, GFP_ATOMIC );
+    if (pURBData == NULL) {
+        DBG( "unable to allocate URB data\n" );
+        return NETDEV_TX_BUSY;
+    }
+    // Fill will SKB's data
+    memcpy( pURBData, pSKB->data, pSKB->len );
+
+    usb_fill_bulk_urb( pURBListEntry->mpURB,
+                       pQCDev->mpNetDev->udev,
+                       pQCDev->mpNetDev->out,
+                       pURBData,
+                       pSKB->len,
+                       QCUSBNetURBCallback,
+                       pAutoPM );
+
+    // Aquire lock on URBList
+    spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+
+    // Add URB to end of list
+    ppURBListEnd = &pAutoPM->mpURBList;
+    while ((*ppURBListEnd) != NULL) {
+        ppURBListEnd = &(*ppURBListEnd)->mpNext;
+    }
+    *ppURBListEnd = pURBListEntry;
+
+    spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+
+    up( &pAutoPM->mThreadDoWork );
+
+    // Start transfer timer
+    pNet->trans_start = jiffies;
+    // Free SKB
+    dev_kfree_skb_any( pSKB );
+
+    return NETDEV_TX_OK;
 }
 
 /*===========================================================================
@@ -753,69 +696,61 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-int QCUSBNetOpen( struct net_device * pNet )
-{
-   int status = 0;
-   struct sQCUSBNet * pQCDev;
-   struct usbnet * pDev = netdev_priv( pNet );
-   
-   if (pDev == NULL)
-   {
-      DBG( "failed to get usbnet device\n" );
-      return -ENXIO;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return -ENXIO;
-   }
+int QCUSBNetOpen( struct net_device * pNet ) {
+    int status = 0;
+    struct sQCUSBNet * pQCDev;
+    struct usbnet * pDev = netdev_priv( pNet );
 
-   DBG( "\n" );
+    if (pDev == NULL) {
+        DBG( "failed to get usbnet device\n" );
+        return -ENXIO;
+    }
 
-   // Start the AutoPM thread
-   pQCDev->mAutoPM.mpIntf = pQCDev->mpIntf;
-   pQCDev->mAutoPM.mbExit = false;
-   pQCDev->mAutoPM.mpURBList = NULL;
-   pQCDev->mAutoPM.mpActiveURB = NULL;
-   spin_lock_init( &pQCDev->mAutoPM.mURBListLock );
-   spin_lock_init( &pQCDev->mAutoPM.mActiveURBLock );
-   sema_init( &pQCDev->mAutoPM.mThreadDoWork, 0 );
-   
-   pQCDev->mAutoPM.mpThread = kthread_run( QCUSBNetAutoPMThread, 
-                              &pQCDev->mAutoPM, 
-                              "QCUSBNetAutoPMThread" );
-   if (IS_ERR( pQCDev->mAutoPM.mpThread ))
-   {
-      DBG( "AutoPM thread creation error\n" );
-      return PTR_ERR( pQCDev->mAutoPM.mpThread );
-   }
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return -ENXIO;
+    }
 
-   // Allow traffic
-   QClearDownReason( pQCDev, NET_IFACE_STOPPED );
+    DBG( "\n" );
 
-   // Pass to usbnet_open if defined
-   if (pQCDev->mpUSBNetOpen != NULL)
-   {
-      status = pQCDev->mpUSBNetOpen( pNet );
-   
-      // If usbnet_open was successful enable Auto PM
-      if (status == 0)
-      {
+    // Start the AutoPM thread
+    pQCDev->mAutoPM.mpIntf = pQCDev->mpIntf;
+    pQCDev->mAutoPM.mbExit = false;
+    pQCDev->mAutoPM.mpURBList = NULL;
+    pQCDev->mAutoPM.mpActiveURB = NULL;
+    spin_lock_init( &pQCDev->mAutoPM.mURBListLock );
+    spin_lock_init( &pQCDev->mAutoPM.mActiveURBLock );
+    sema_init( &pQCDev->mAutoPM.mThreadDoWork, 0 );
+
+    pQCDev->mAutoPM.mpThread = kthread_run( QCUSBNetAutoPMThread,
+                                            &pQCDev->mAutoPM,
+                                            "QCUSBNetAutoPMThread" );
+    if (IS_ERR( pQCDev->mAutoPM.mpThread )) {
+        DBG( "AutoPM thread creation error\n" );
+        return PTR_ERR( pQCDev->mAutoPM.mpThread );
+    }
+
+    // Allow traffic
+    QClearDownReason( pQCDev, NET_IFACE_STOPPED );
+
+    // Pass to usbnet_open if defined
+    if (pQCDev->mpUSBNetOpen != NULL) {
+        status = pQCDev->mpUSBNetOpen( pNet );
+
+        // If usbnet_open was successful enable Auto PM
+        if (status == 0) {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,33 ))
-         usb_autopm_enable( pQCDev->mpIntf );
+            usb_autopm_enable( pQCDev->mpIntf );
 #else
-         usb_autopm_put_interface( pQCDev->mpIntf );
+            usb_autopm_put_interface( pQCDev->mpIntf );
 #endif
-      }
-   }
-   else
-   {
-      DBG( "no USBNetOpen defined\n" );
-   }
-   
-   return status;
+        }
+    } else {
+        DBG( "no USBNetOpen defined\n" );
+    }
+
+    return status;
 }
 
 /*===========================================================================
@@ -833,199 +768,190 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-int QCUSBNetStop( struct net_device * pNet )
-{
-   struct sQCUSBNet * pQCDev;
-   struct usbnet * pDev = netdev_priv( pNet );
+int QCUSBNetStop( struct net_device * pNet ) {
+    struct sQCUSBNet * pQCDev;
+    struct usbnet * pDev = netdev_priv( pNet );
 
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get netdevice\n" );
-      return -ENXIO;
-   }
-   
-   pQCDev = (sQCUSBNet *)pDev->data[0];
-   if (pQCDev == NULL)
-   {
-      DBG( "failed to get QMIDevice\n" );
-      return -ENXIO;
-   }
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get netdevice\n" );
+        return -ENXIO;
+    }
 
-   // Stop traffic
-   QSetDownReason( pQCDev, NET_IFACE_STOPPED );
+    pQCDev = (sQCUSBNet *)pDev->data[0];
+    if (pQCDev == NULL) {
+        DBG( "failed to get QMIDevice\n" );
+        return -ENXIO;
+    }
 
-   // Tell traffic thread to exit
-   pQCDev->mAutoPM.mbExit = true;
-   up( &pQCDev->mAutoPM.mThreadDoWork );
-   
-   // Wait for it to exit
-   while( pQCDev->mAutoPM.mpThread != NULL )
-   {
-      msleep( 100 );
-   }
-   DBG( "thread stopped\n" );
+    // Stop traffic
+    QSetDownReason( pQCDev, NET_IFACE_STOPPED );
 
-   // Pass to usbnet_stop, if defined
-   if (pQCDev->mpUSBNetStop != NULL)
-   {
-      return pQCDev->mpUSBNetStop( pNet );
-   }
-   else
-   {
-      return 0;
-   }
+    // Tell traffic thread to exit
+    pQCDev->mAutoPM.mbExit = true;
+    up( &pQCDev->mAutoPM.mThreadDoWork );
+
+    // Wait for it to exit
+    while( pQCDev->mAutoPM.mpThread != NULL ) {
+        msleep( 100 );
+    }
+    DBG( "thread stopped\n" );
+
+    // Pass to usbnet_stop, if defined
+    if (pQCDev->mpUSBNetStop != NULL) {
+        return pQCDev->mpUSBNetStop( pNet );
+    } else {
+        return 0;
+    }
 }
 
 /*=========================================================================*/
 // Struct driver_info
 /*=========================================================================*/
-static const struct driver_info QCNetInfo = 
-{
-   .description   = "QCUSBNet Ethernet Device",
-   .flags         = FLAG_ETHER,
-   .bind          = QCNetDriverBind,
-   .unbind        = QCNetDriverUnbind,
-   .data          = 0,
+static const struct driver_info QCNetInfo = {
+    .description   = "QCUSBNet Ethernet Device",
+    .flags         = FLAG_ETHER,
+    .bind          = QCNetDriverBind,
+    .unbind        = QCNetDriverUnbind,
+    .data          = 0,
 };
 
 /*=========================================================================*/
 // Qualcomm Gobi 2000 VID/PIDs
 /*=========================================================================*/
-static const struct usb_device_id QCVIDPIDTable [] =
-{
-   // Acer Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9215 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Asus Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9265 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // CMOTech Gobi 2000
-   {
-      USB_DEVICE( 0x16d8, 0x8002 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Dell Gobi 2000
-   {
-      USB_DEVICE( 0x413c, 0x8186 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Entourage Gobi 2000
-   {
-      USB_DEVICE( 0x1410, 0xa010 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Entourage Gobi 2000
-   {
-      USB_DEVICE( 0x1410, 0xa011 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Entourage Gobi 2000
-   {
-      USB_DEVICE( 0x1410, 0xa012 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Entourage Gobi 2000
-   {
-      USB_DEVICE( 0x1410, 0xa013 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // HP Gobi 2000
-   { 
-      USB_DEVICE( 0x03f0, 0x251d ),
-      .driver_info = (unsigned long)&QCNetInfo 
-   },
-   // Lenovo Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9205 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Panasonic Gobi 2000
-   {
-      USB_DEVICE( 0x04da, 0x250f ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Samsung Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9245 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9001 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9002 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9003 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9004 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9005 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9006 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9007 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9008 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x9009 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sierra Wireless Gobi 2000
-   {
-      USB_DEVICE( 0x1199, 0x900a ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Sony Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9225 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Top Global Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9235 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // iRex Technologies Gobi 2000
-   {
-      USB_DEVICE( 0x05c6, 0x9275 ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
-   // Generic Gobi 2000
-   {
-      USB_DEVICE( 0x5c6, 0x920B ),
-      .driver_info = (unsigned long)&QCNetInfo
-   },
+static const struct usb_device_id QCVIDPIDTable [] = {
+    // Acer Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9215 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Asus Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9265 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // CMOTech Gobi 2000
+    {
+        USB_DEVICE( 0x16d8, 0x8002 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Dell Gobi 2000
+    {
+        USB_DEVICE( 0x413c, 0x8186 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Entourage Gobi 2000
+    {
+        USB_DEVICE( 0x1410, 0xa010 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Entourage Gobi 2000
+    {
+        USB_DEVICE( 0x1410, 0xa011 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Entourage Gobi 2000
+    {
+        USB_DEVICE( 0x1410, 0xa012 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Entourage Gobi 2000
+    {
+        USB_DEVICE( 0x1410, 0xa013 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // HP Gobi 2000
+    {
+        USB_DEVICE( 0x03f0, 0x251d ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Lenovo Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9205 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Panasonic Gobi 2000
+    {
+        USB_DEVICE( 0x04da, 0x250f ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Samsung Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9245 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9001 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9002 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9003 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9004 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9005 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9006 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9007 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9008 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x9009 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sierra Wireless Gobi 2000
+    {
+        USB_DEVICE( 0x1199, 0x900a ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Sony Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9225 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Top Global Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9235 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // iRex Technologies Gobi 2000
+    {
+        USB_DEVICE( 0x05c6, 0x9275 ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
+    // Generic Gobi 2000
+    {
+        USB_DEVICE( 0x5c6, 0x920B ),
+        .driver_info = (unsigned long)&QCNetInfo
+    },
 
-   //Terminating entry
-   { }
+    //Terminating entry
+    { }
 };
 
 MODULE_DEVICE_TABLE( usb, QCVIDPIDTable );
@@ -1046,123 +972,116 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-int QCUSBNetProbe( 
-   struct usb_interface *        pIntf, 
-   const struct usb_device_id *  pVIDPIDs )
-{
-   int status;
-   struct usbnet * pDev;
-   sQCUSBNet * pQCDev;
+int QCUSBNetProbe(
+    struct usb_interface *        pIntf,
+    const struct usb_device_id *  pVIDPIDs ) {
+    int status;
+    struct usbnet * pDev;
+    sQCUSBNet * pQCDev;
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION( 2,6,29 ))
-   struct net_device_ops * pNetDevOps;
+    struct net_device_ops * pNetDevOps;
 #endif
 
-   status = usbnet_probe( pIntf, pVIDPIDs );
-   if(status < 0 )
-   {
-      DBG( "usbnet_probe failed %d\n", status );
-      return status;
-   }
+    status = usbnet_probe( pIntf, pVIDPIDs );
+    if(status < 0 ) {
+        DBG( "usbnet_probe failed %d\n", status );
+        return status;
+    }
 
 #if (LINUX_VERSION_CODE > KERNEL_VERSION( 2,6,23 ))
-   pDev = usb_get_intfdata( pIntf );
+    pDev = usb_get_intfdata( pIntf );
 #else
-   pDev = (struct usbnet *)pIntf->dev.platform_data;
+    pDev = (struct usbnet *)pIntf->dev.platform_data;
 #endif
 
-   if (pDev == NULL || pDev->net == NULL)
-   {
-      DBG( "failed to get netdevice\n" );
-      return -ENXIO;
-   }
+    if (pDev == NULL || pDev->net == NULL) {
+        DBG( "failed to get netdevice\n" );
+        return -ENXIO;
+    }
 
-   pQCDev = kmalloc( sizeof( sQCUSBNet ), GFP_KERNEL );
-   if (pQCDev == NULL)
-   {
-      DBG( "falied to allocate device buffers" );
-      return -ENOMEM;
-   }
-   
-   pDev->data[0] = (unsigned long)pQCDev;
-   
-   pQCDev->mpNetDev = pDev;
+    pQCDev = kmalloc( sizeof( sQCUSBNet ), GFP_KERNEL );
+    if (pQCDev == NULL) {
+        DBG( "falied to allocate device buffers" );
+        return -ENOMEM;
+    }
 
-   // Overload PM related network functions
+    pDev->data[0] = (unsigned long)pQCDev;
+
+    pQCDev->mpNetDev = pDev;
+
+    // Overload PM related network functions
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,29 ))
-   pQCDev->mpUSBNetOpen = pDev->net->open;
-   pDev->net->open = QCUSBNetOpen;
-   pQCDev->mpUSBNetStop = pDev->net->stop;
-   pDev->net->stop = QCUSBNetStop;
-   pDev->net->hard_start_xmit = QCUSBNetStartXmit;
-   pDev->net->tx_timeout = QCUSBNetTXTimeout;
+    pQCDev->mpUSBNetOpen = pDev->net->open;
+    pDev->net->open = QCUSBNetOpen;
+    pQCDev->mpUSBNetStop = pDev->net->stop;
+    pDev->net->stop = QCUSBNetStop;
+    pDev->net->hard_start_xmit = QCUSBNetStartXmit;
+    pDev->net->tx_timeout = QCUSBNetTXTimeout;
 #else
-   pNetDevOps = kmalloc( sizeof( struct net_device_ops ), GFP_KERNEL );
-   if (pNetDevOps == NULL)
-   {
-      DBG( "falied to allocate net device ops" );
-      return -ENOMEM;
-   }
-   memcpy( pNetDevOps, pDev->net->netdev_ops, sizeof( struct net_device_ops ) );
-   
-   pQCDev->mpUSBNetOpen = pNetDevOps->ndo_open;
-   pNetDevOps->ndo_open = QCUSBNetOpen;
-   pQCDev->mpUSBNetStop = pNetDevOps->ndo_stop;
-   pNetDevOps->ndo_stop = QCUSBNetStop;
-   pNetDevOps->ndo_start_xmit = QCUSBNetStartXmit;
-   pNetDevOps->ndo_tx_timeout = QCUSBNetTXTimeout;
+    pNetDevOps = kmalloc( sizeof( struct net_device_ops ), GFP_KERNEL );
+    if (pNetDevOps == NULL) {
+        DBG( "falied to allocate net device ops" );
+        return -ENOMEM;
+    }
+    memcpy( pNetDevOps, pDev->net->netdev_ops, sizeof( struct net_device_ops ) );
 
-   pDev->net->netdev_ops = pNetDevOps;
+    pQCDev->mpUSBNetOpen = pNetDevOps->ndo_open;
+    pNetDevOps->ndo_open = QCUSBNetOpen;
+    pQCDev->mpUSBNetStop = pNetDevOps->ndo_stop;
+    pNetDevOps->ndo_stop = QCUSBNetStop;
+    pNetDevOps->ndo_start_xmit = QCUSBNetStartXmit;
+    pNetDevOps->ndo_tx_timeout = QCUSBNetTXTimeout;
+
+    pDev->net->netdev_ops = pNetDevOps;
 #endif
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,31 ))
-   memset( &(pQCDev->mpNetDev->stats), 0, sizeof( struct net_device_stats ) );
+    memset( &(pQCDev->mpNetDev->stats), 0, sizeof( struct net_device_stats ) );
 #else
-   memset( &(pQCDev->mpNetDev->net->stats), 0, sizeof( struct net_device_stats ) );
+    memset( &(pQCDev->mpNetDev->net->stats), 0, sizeof( struct net_device_stats ) );
 #endif
 
-   pQCDev->mpIntf = pIntf;
-   memset( &(pQCDev->mMEID), '0', 14 );
-   
-   DBG( "Mac Address:\n" );
-   PrintHex( &pQCDev->mpNetDev->net->dev_addr[0], 6 );
+    pQCDev->mpIntf = pIntf;
+    memset( &(pQCDev->mMEID), '0', 14 );
 
-   pQCDev->mbQMIValid = false;
-   memset( &pQCDev->mQMIDev, 0, sizeof( sQMIDev ) );
+    DBG( "Mac Address:\n" );
+    PrintHex( &pQCDev->mpNetDev->net->dev_addr[0], 6 );
 
-   pQCDev->mQMIDev.mpDevClass = gpClass;
-   
-   sema_init( &pQCDev->mAutoPM.mThreadDoWork, 0 );
-   spin_lock_init( &pQCDev->mQMIDev.mClientMemLock );
+    pQCDev->mbQMIValid = false;
+    memset( &pQCDev->mQMIDev, 0, sizeof( sQMIDev ) );
 
-   // Default to device down
-   pQCDev->mDownReason = 0;
-   QSetDownReason( pQCDev, NO_NDIS_CONNECTION );
-   QSetDownReason( pQCDev, NET_IFACE_STOPPED );
+    pQCDev->mQMIDev.mpDevClass = gpClass;
 
-   // Register QMI
-   status = RegisterQMIDevice( pQCDev );
-   if (status != 0)
-   {
-      // Clean up
-      DeregisterQMIDevice( pQCDev );
-      return status;
-   }
-   
-   // Success
-   return status;
+    sema_init( &pQCDev->mAutoPM.mThreadDoWork, 0 );
+    spin_lock_init( &pQCDev->mQMIDev.mClientMemLock );
+
+    // Default to device down
+    pQCDev->mDownReason = 0;
+    QSetDownReason( pQCDev, NO_NDIS_CONNECTION );
+    QSetDownReason( pQCDev, NET_IFACE_STOPPED );
+
+    // Register QMI
+    status = RegisterQMIDevice( pQCDev );
+    if (status != 0) {
+        // Clean up
+        DeregisterQMIDevice( pQCDev );
+        return status;
+    }
+
+    // Success
+    return status;
 }
 
 EXPORT_SYMBOL_GPL( QCUSBNetProbe );
 
-static struct usb_driver QCUSBNet =
-{
-   .name       = "QCUSBNet2k",
-   .id_table   = QCVIDPIDTable,
-   .probe      = QCUSBNetProbe,
-   .disconnect = usbnet_disconnect,
-   .suspend    = QCSuspend,
-   .resume     = QCResume,
-   .supports_autosuspend = true,
+static struct usb_driver QCUSBNet = {
+    .name       = "QCUSBNet2k",
+    .id_table   = QCVIDPIDTable,
+    .probe      = QCUSBNetProbe,
+    .disconnect = usbnet_disconnect,
+    .suspend    = QCSuspend,
+    .resume     = QCResume,
+    .supports_autosuspend = true,
 };
 
 /*===========================================================================
@@ -1178,20 +1097,18 @@ RETURN VALUE:
    int - 0 for success
          Negative errno for error
 ===========================================================================*/
-static int __init QCUSBNetModInit( void )
-{
-   gpClass = class_create( THIS_MODULE, "QCQMI" );
-   if (IS_ERR( gpClass ) == true)
-   {
-      DBG( "error at class_create %ld\n",
-           PTR_ERR( gpClass ) );
-      return -ENOMEM;
-   }
+static int __init QCUSBNetModInit( void ) {
+    gpClass = class_create( THIS_MODULE, "QCQMI" );
+    if (IS_ERR( gpClass ) == true) {
+        DBG( "error at class_create %ld\n",
+             PTR_ERR( gpClass ) );
+        return -ENOMEM;
+    }
 
-   // This will be shown whenever driver is loaded
-   printk( KERN_INFO "%s: %s\n", DRIVER_DESC, DRIVER_VERSION );
+    // This will be shown whenever driver is loaded
+    printk( KERN_INFO "%s: %s\n", DRIVER_DESC, DRIVER_VERSION );
 
-   return usb_register( &QCUSBNet );
+    return usb_register( &QCUSBNet );
 }
 module_init( QCUSBNetModInit );
 
@@ -1206,11 +1123,10 @@ DESCRIPTION:
 RETURN VALUE:
    void
 ===========================================================================*/
-static void __exit QCUSBNetModExit( void )
-{
-   usb_deregister( &QCUSBNet );
+static void __exit QCUSBNetModExit( void ) {
+    usb_deregister( &QCUSBNet );
 
-   class_destroy( gpClass );
+    class_destroy( gpClass );
 }
 module_exit( QCUSBNetModExit );
 

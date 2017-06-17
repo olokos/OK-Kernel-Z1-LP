@@ -81,10 +81,8 @@
  * or 0 for invalid cipher types.
  */
 int
-aagGetKeyMaterialLen(eCsrEncryptionType cipherType)
-{
-    switch (cipherType)
-    {
+aagGetKeyMaterialLen(eCsrEncryptionType cipherType) {
+    switch (cipherType) {
     case eCSR_ENCRYPT_TYPE_AES:
         return AAG_RSN_KEY_MATERIAL_LEN_CCMP;
         break;
@@ -119,8 +117,7 @@ aagPtkPrf(v_U32_t cryptHandle,
           tAniMacAddr authAddr,
           tAniMacAddr suppAddr,
           v_U8_t aNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE],
-          v_U8_t sNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE])
-{
+          v_U8_t sNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE]) {
     v_U8_t *lowMac;
     v_U8_t *highMac;
     v_U8_t *lowNonce;
@@ -132,24 +129,18 @@ aagPtkPrf(v_U32_t cryptHandle,
     v_U8_t text[AAG_PTK_PRF_TEXT_LEN];
 
     //Cannot use voss function here because vos_mem_compare doesn't tell whihc is larger
-    if (vos_mem_compare2(authAddr, suppAddr, sizeof(tAniMacAddr)) < 0)
-    {
+    if (vos_mem_compare2(authAddr, suppAddr, sizeof(tAniMacAddr)) < 0) {
         lowMac = authAddr;
         highMac = suppAddr;
-    }
-    else
-    {
+    } else {
         lowMac = suppAddr;
         highMac = authAddr;
     }
 
-    if (vos_mem_compare2(aNonce, sNonce, ANI_EAPOL_KEY_RSN_NONCE_SIZE) < 0)
-    {
+    if (vos_mem_compare2(aNonce, sNonce, ANI_EAPOL_KEY_RSN_NONCE_SIZE) < 0) {
         lowNonce = aNonce;
         highNonce = sNonce;
-    }
-    else
-    {
+    } else {
         lowNonce = sNonce;
         highNonce = aNonce;
     }
@@ -160,8 +151,7 @@ aagPtkPrf(v_U32_t cryptHandle,
     vos_mem_copy(text + AAG_PTK_PRF_HN_POS, highNonce, ANI_EAPOL_KEY_RSN_NONCE_SIZE);
 
     keyLen = aniAsfPacketGetBytes(pmk, &keyBytes);
-    if( !ANI_IS_STATUS_SUCCESS( keyLen ) )
-    {
+    if( !ANI_IS_STATUS_SUCCESS( keyLen ) ) {
         return keyLen;
     }
 
@@ -194,8 +184,7 @@ aagGtkPrf(v_U32_t cryptHandle,
           v_U32_t prfLen,
           v_U8_t gmk[AAG_RSN_GMK_SIZE],
           tAniMacAddr authAddr,
-          v_U8_t gNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE])
-{
+          v_U8_t gNonce[ANI_EAPOL_KEY_RSN_NONCE_SIZE]) {
     v_U8_t text[AAG_GTK_PRF_TEXT_LEN];
 
     vos_mem_copy(text + AAG_GTK_PRF_MAC_POS, authAddr, sizeof(tAniMacAddr));
@@ -233,8 +222,7 @@ aagPrf(v_U32_t cryptHandle,
        v_U8_t *key, v_U8_t keyLen,
        v_U8_t *a, v_U8_t aLen,
        v_U8_t *b, v_U8_t bLen,
-       v_U32_t prfLen)
-{
+       v_U32_t prfLen) {
     static v_U8_t y;
 
     v_U8_t *hmacText = NULL;
@@ -244,8 +232,7 @@ aagPrf(v_U32_t cryptHandle,
     int i, retVal=0;
 
     hmacText = vos_mem_malloc( aLen + bLen + 2 );
-    if( NULL == hmacText )
-    {
+    if( NULL == hmacText ) {
         return ANI_E_NULL_VALUE;
     }
 
@@ -257,18 +244,14 @@ aagPrf(v_U32_t cryptHandle,
     numLoops = prfLen + AAG_PTK_PRF_ADD_PARAM;
     numLoops /= AAG_PTK_PRF_DIV_PARAM;
 
-    for (i = 0; i < numLoops; i++)
-    {
+    for (i = 0; i < numLoops; i++) {
         VOS_ASSERT((resultOffset - result + VOS_DIGEST_SHA1_SIZE)
                    <= AAG_PRF_MAX_OUTPUT_SIZE);
         hmacText[loopCtrPos] = i;
-        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, hmacText, loopCtrPos + 1, key, keyLen, resultOffset) ) )
-        {
+        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, hmacText, loopCtrPos + 1, key, keyLen, resultOffset) ) ) {
             resultOffset += VOS_DIGEST_SHA1_SIZE;
             retVal = ANI_OK;
-        }
-        else
-        {
+        } else {
             retVal = ANI_ERROR;
         }
     }

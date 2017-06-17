@@ -93,12 +93,12 @@ extern struct omap_hwmod_sysc_fields omap_hwmod_sysc_type2;
  * Note that this is currently built during init as needed.
  */
 struct omap_hwmod_mux_info {
-	int				nr_pads;
-	struct omap_device_pad		*pads;
-	int				nr_pads_dynamic;
-	struct omap_device_pad		**pads_dynamic;
-	int				*irqs;
-	bool				enabled;
+    int				nr_pads;
+    struct omap_device_pad		*pads;
+    int				nr_pads_dynamic;
+    struct omap_device_pad		**pads_dynamic;
+    int				*irqs;
+    bool				enabled;
 };
 
 /**
@@ -111,8 +111,8 @@ struct omap_hwmod_mux_info {
  * hwmod.
  */
 struct omap_hwmod_irq_info {
-	const char	*name;
-	s16		irq;
+    const char	*name;
+    s16		irq;
 };
 
 /**
@@ -125,8 +125,8 @@ struct omap_hwmod_irq_info {
  * hwmod.
  */
 struct omap_hwmod_dma_info {
-	const char	*name;
-	s16		dma_req;
+    const char	*name;
+    s16		dma_req;
 };
 
 /**
@@ -139,9 +139,9 @@ struct omap_hwmod_dma_info {
  * locally to the hwmod.
  */
 struct omap_hwmod_rst_info {
-	const char	*name;
-	u8		rst_shift;
-	u8		st_shift;
+    const char	*name;
+    u8		rst_shift;
+    u8		st_shift;
 };
 
 /**
@@ -154,9 +154,9 @@ struct omap_hwmod_rst_info {
  * be added as optional clocks.
  */
 struct omap_hwmod_opt_clk {
-	const char	*role;
-	const char	*clk;
-	struct clk	*_clk;
+    const char	*role;
+    const char	*clk;
+    struct clk	*_clk;
 };
 
 
@@ -172,10 +172,10 @@ struct omap_hwmod_opt_clk {
  * @flags: (see omap_hwmod_omap2_firewall.flags macros above)
  */
 struct omap_hwmod_omap2_firewall {
-	u8 l3_perm_bit;
-	u8 l4_fw_region;
-	u8 l4_prot_group;
-	u8 flags;
+    u8 l3_perm_bit;
+    u8 l4_fw_region;
+    u8 l4_prot_group;
+    u8 flags;
 };
 
 
@@ -199,10 +199,10 @@ struct omap_hwmod_omap2_firewall {
  * structure.  GPMC is one example.
  */
 struct omap_hwmod_addr_space {
-	const char *name;
-	u32 pa_start;
-	u32 pa_end;
-	u8 flags;
+    const char *name;
+    u32 pa_start;
+    u32 pa_end;
+    u8 flags;
 };
 
 
@@ -236,17 +236,17 @@ struct omap_hwmod_addr_space {
  * the omap_hwmod code and should not be set during initialization.
  */
 struct omap_hwmod_ocp_if {
-	struct omap_hwmod		*master;
-	struct omap_hwmod		*slave;
-	struct omap_hwmod_addr_space	*addr;
-	const char			*clk;
-	struct clk			*_clk;
-	union {
-		struct omap_hwmod_omap2_firewall omap2;
-	}				fw;
-	u8				width;
-	u8				user;
-	u8				flags;
+    struct omap_hwmod		*master;
+    struct omap_hwmod		*slave;
+    struct omap_hwmod_addr_space	*addr;
+    const char			*clk;
+    struct clk			*_clk;
+    union {
+        struct omap_hwmod_omap2_firewall omap2;
+    }				fw;
+    u8				width;
+    u8				user;
+    u8				flags;
 };
 
 
@@ -292,12 +292,12 @@ struct omap_hwmod_ocp_if {
  * @autoidle_shift: Offset of the autoidle bit
  */
 struct omap_hwmod_sysc_fields {
-	u8 midle_shift;
-	u8 clkact_shift;
-	u8 sidle_shift;
-	u8 enwkup_shift;
-	u8 srst_shift;
-	u8 autoidle_shift;
+    u8 midle_shift;
+    u8 clkact_shift;
+    u8 sidle_shift;
+    u8 enwkup_shift;
+    u8 srst_shift;
+    u8 autoidle_shift;
 };
 
 /**
@@ -327,14 +327,14 @@ struct omap_hwmod_sysc_fields {
  * then this field has to be populated with the correct offset structure.
  */
 struct omap_hwmod_class_sysconfig {
-	u16 rev_offs;
-	u16 sysc_offs;
-	u16 syss_offs;
-	u16 sysc_flags;
-	struct omap_hwmod_sysc_fields *sysc_fields;
-	u8 srst_udelay;
-	u8 idlemodes;
-	u8 clockact;
+    u16 rev_offs;
+    u16 sysc_offs;
+    u16 syss_offs;
+    u16 sysc_flags;
+    struct omap_hwmod_sysc_fields *sysc_fields;
+    u8 srst_udelay;
+    u8 idlemodes;
+    u8 clockact;
 };
 
 /**
@@ -353,12 +353,12 @@ struct omap_hwmod_class_sysconfig {
  * are needed for the IDLEST registers (c.f. 2430 I2CHS, 3430 USBHOST)
  */
 struct omap_hwmod_omap2_prcm {
-	s16 module_offs;
-	u8 prcm_reg_id;
-	u8 module_bit;
-	u8 idlest_reg_id;
-	u8 idlest_idle_bit;
-	u8 idlest_stdby_bit;
+    s16 module_offs;
+    u8 prcm_reg_id;
+    u8 module_bit;
+    u8 idlest_reg_id;
+    u8 idlest_idle_bit;
+    u8 idlest_stdby_bit;
 };
 
 
@@ -369,11 +369,11 @@ struct omap_hwmod_omap2_prcm {
  * @submodule_wkdep_bit: bit shift of the WKDEP range
  */
 struct omap_hwmod_omap4_prcm {
-	u16		clkctrl_offs;
-	u16		rstctrl_offs;
-	u16		context_offs;
-	u8		submodule_wkdep_bit;
-	u8		modulemode;
+    u16		clkctrl_offs;
+    u16		rstctrl_offs;
+    u16		context_offs;
+    u8		submodule_wkdep_bit;
+    u8		modulemode;
 };
 
 
@@ -468,11 +468,11 @@ struct omap_hwmod_omap4_prcm {
  * unusual reset sequences - usually processor IP blocks like the IVA.
  */
 struct omap_hwmod_class {
-	const char				*name;
-	struct omap_hwmod_class_sysconfig	*sysc;
-	u32					rev;
-	int					(*pre_shutdown)(struct omap_hwmod *oh);
-	int					(*reset)(struct omap_hwmod *oh);
+    const char				*name;
+    struct omap_hwmod_class_sysconfig	*sysc;
+    u32					rev;
+    int					(*pre_shutdown)(struct omap_hwmod *oh);
+    int					(*reset)(struct omap_hwmod *oh);
 };
 
 /**
@@ -513,46 +513,46 @@ struct omap_hwmod_class {
  * the omap_hwmod code and should not be set during initialization.
  */
 struct omap_hwmod {
-	const char			*name;
-	struct omap_hwmod_class		*class;
-	struct omap_device		*od;
-	struct omap_hwmod_mux_info	*mux;
-	struct omap_hwmod_irq_info	*mpu_irqs;
-	struct omap_hwmod_dma_info	*sdma_reqs;
-	struct omap_hwmod_rst_info	*rst_lines;
-	union {
-		struct omap_hwmod_omap2_prcm omap2;
-		struct omap_hwmod_omap4_prcm omap4;
-	}				prcm;
-	const char			*main_clk;
-	struct clk			*_clk;
-	struct omap_hwmod_opt_clk	*opt_clks;
-	char				*clkdm_name;
-	struct clockdomain		*clkdm;
-	struct omap_hwmod_ocp_if	**masters; /* connect to *_IA */
-	struct omap_hwmod_ocp_if	**slaves;  /* connect to *_TA */
-	void				*dev_attr;
-	u32				_sysc_cache;
-	void __iomem			*_mpu_rt_va;
-	spinlock_t			_lock;
-	struct list_head		node;
-	u16				flags;
-	u8				_mpu_port_index;
-	u8				response_lat;
-	u8				rst_lines_cnt;
-	u8				opt_clks_cnt;
-	u8				masters_cnt;
-	u8				slaves_cnt;
-	u8				hwmods_cnt;
-	u8				_int_flags;
-	u8				_state;
-	u8				_postsetup_state;
+    const char			*name;
+    struct omap_hwmod_class		*class;
+    struct omap_device		*od;
+    struct omap_hwmod_mux_info	*mux;
+    struct omap_hwmod_irq_info	*mpu_irqs;
+    struct omap_hwmod_dma_info	*sdma_reqs;
+    struct omap_hwmod_rst_info	*rst_lines;
+    union {
+        struct omap_hwmod_omap2_prcm omap2;
+        struct omap_hwmod_omap4_prcm omap4;
+    }				prcm;
+    const char			*main_clk;
+    struct clk			*_clk;
+    struct omap_hwmod_opt_clk	*opt_clks;
+    char				*clkdm_name;
+    struct clockdomain		*clkdm;
+    struct omap_hwmod_ocp_if	**masters; /* connect to *_IA */
+    struct omap_hwmod_ocp_if	**slaves;  /* connect to *_TA */
+    void				*dev_attr;
+    u32				_sysc_cache;
+    void __iomem			*_mpu_rt_va;
+    spinlock_t			_lock;
+    struct list_head		node;
+    u16				flags;
+    u8				_mpu_port_index;
+    u8				response_lat;
+    u8				rst_lines_cnt;
+    u8				opt_clks_cnt;
+    u8				masters_cnt;
+    u8				slaves_cnt;
+    u8				hwmods_cnt;
+    u8				_int_flags;
+    u8				_state;
+    u8				_postsetup_state;
 };
 
 int omap_hwmod_register(struct omap_hwmod **ohs);
 struct omap_hwmod *omap_hwmod_lookup(const char *name);
 int omap_hwmod_for_each(int (*fn)(struct omap_hwmod *oh, void *data),
-			void *data);
+                        void *data);
 
 int __init omap_hwmod_setup_one(const char *name);
 
@@ -586,9 +586,9 @@ struct powerdomain *omap_hwmod_get_pwrdm(struct omap_hwmod *oh);
 void __iomem *omap_hwmod_get_mpu_rt_va(struct omap_hwmod *oh);
 
 int omap_hwmod_add_initiator_dep(struct omap_hwmod *oh,
-				 struct omap_hwmod *init_oh);
+                                 struct omap_hwmod *init_oh);
 int omap_hwmod_del_initiator_dep(struct omap_hwmod *oh,
-				 struct omap_hwmod *init_oh);
+                                 struct omap_hwmod *init_oh);
 
 int omap_hwmod_set_clockact_both(struct omap_hwmod *oh);
 int omap_hwmod_set_clockact_main(struct omap_hwmod *oh);
@@ -599,9 +599,9 @@ int omap_hwmod_enable_wakeup(struct omap_hwmod *oh);
 int omap_hwmod_disable_wakeup(struct omap_hwmod *oh);
 
 int omap_hwmod_for_each_by_class(const char *classname,
-				 int (*fn)(struct omap_hwmod *oh,
-					   void *user),
-				 void *user);
+                                 int (*fn)(struct omap_hwmod *oh,
+                                         void *user),
+                                 void *user);
 
 int omap_hwmod_set_postsetup_state(struct omap_hwmod *oh, u8 state);
 int omap_hwmod_get_context_loss_count(struct omap_hwmod *oh);

@@ -26,40 +26,39 @@
 #include <linux/dvb/frontend.h>
 
 struct hd29l2_config {
-	/*
-	 * demodulator I2C address
-	 */
-	u8 i2c_addr;
+    /*
+     * demodulator I2C address
+     */
+    u8 i2c_addr;
 
-	/*
-	 * tuner I2C address
-	 * only needed when tuner is behind demod I2C-gate
-	 */
-	u8 tuner_i2c_addr;
+    /*
+     * tuner I2C address
+     * only needed when tuner is behind demod I2C-gate
+     */
+    u8 tuner_i2c_addr;
 
-	/*
-	 * TS settings
-	 */
+    /*
+     * TS settings
+     */
 #define HD29L2_TS_SERIAL            0x00
 #define HD29L2_TS_PARALLEL          0x80
 #define HD29L2_TS_CLK_NORMAL        0x40
 #define HD29L2_TS_CLK_INVERTED      0x00
 #define HD29L2_TS_CLK_GATED         0x20
 #define HD29L2_TS_CLK_FREE          0x00
-	u8 ts_mode;
+    u8 ts_mode;
 };
 
 
 #if defined(CONFIG_DVB_HD29L2) || \
 	(defined(CONFIG_DVB_HD29L2_MODULE) && defined(MODULE))
 extern struct dvb_frontend *hd29l2_attach(const struct hd29l2_config *config,
-	struct i2c_adapter *i2c);
+        struct i2c_adapter *i2c);
 #else
 static inline struct dvb_frontend *hd29l2_attach(
-const struct hd29l2_config *config, struct i2c_adapter *i2c)
-{
-	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
-	return NULL;
+    const struct hd29l2_config *config, struct i2c_adapter *i2c) {
+    printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
+    return NULL;
 }
 #endif
 

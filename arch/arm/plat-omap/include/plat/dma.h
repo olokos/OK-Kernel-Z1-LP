@@ -314,186 +314,186 @@
 
 enum omap_reg_offsets {
 
-GCR,		GSCR,		GRST1,		HW_ID,
-PCH2_ID,	PCH0_ID,	PCH1_ID,	PCHG_ID,
-PCHD_ID,	CAPS_0,		CAPS_1,		CAPS_2,
-CAPS_3,		CAPS_4,		PCH2_SR,	PCH0_SR,
-PCH1_SR,	PCHD_SR,	REVISION,	IRQSTATUS_L0,
-IRQSTATUS_L1,	IRQSTATUS_L2,	IRQSTATUS_L3,	IRQENABLE_L0,
-IRQENABLE_L1,	IRQENABLE_L2,	IRQENABLE_L3,	SYSSTATUS,
-OCP_SYSCONFIG,
+    GCR,		GSCR,		GRST1,		HW_ID,
+    PCH2_ID,	PCH0_ID,	PCH1_ID,	PCHG_ID,
+    PCHD_ID,	CAPS_0,		CAPS_1,		CAPS_2,
+    CAPS_3,		CAPS_4,		PCH2_SR,	PCH0_SR,
+    PCH1_SR,	PCHD_SR,	REVISION,	IRQSTATUS_L0,
+    IRQSTATUS_L1,	IRQSTATUS_L2,	IRQSTATUS_L3,	IRQENABLE_L0,
+    IRQENABLE_L1,	IRQENABLE_L2,	IRQENABLE_L3,	SYSSTATUS,
+    OCP_SYSCONFIG,
 
-/* omap1+ specific */
-CPC, CCR2, LCH_CTRL,
+    /* omap1+ specific */
+    CPC, CCR2, LCH_CTRL,
 
-/* Common registers for all omap's */
-CSDP,		CCR,		CICR,		CSR,
-CEN,		CFN,		CSFI,		CSEI,
-CSAC,		CDAC,		CDEI,
-CDFI,		CLNK_CTRL,
+    /* Common registers for all omap's */
+    CSDP,		CCR,		CICR,		CSR,
+    CEN,		CFN,		CSFI,		CSEI,
+    CSAC,		CDAC,		CDEI,
+    CDFI,		CLNK_CTRL,
 
-/* Channel specific registers */
-CSSA,		CDSA,		COLOR,
-CCEN,		CCFN,
+    /* Channel specific registers */
+    CSSA,		CDSA,		COLOR,
+    CCEN,		CCFN,
 
-/* omap3630 and omap4 specific */
-CDP,		CNDP,		CCDN,
+    /* omap3630 and omap4 specific */
+    CDP,		CNDP,		CCDN,
 
 };
 
 enum omap_dma_burst_mode {
-	OMAP_DMA_DATA_BURST_DIS = 0,
-	OMAP_DMA_DATA_BURST_4,
-	OMAP_DMA_DATA_BURST_8,
-	OMAP_DMA_DATA_BURST_16,
+    OMAP_DMA_DATA_BURST_DIS = 0,
+    OMAP_DMA_DATA_BURST_4,
+    OMAP_DMA_DATA_BURST_8,
+    OMAP_DMA_DATA_BURST_16,
 };
 
 enum end_type {
-	OMAP_DMA_LITTLE_ENDIAN = 0,
-	OMAP_DMA_BIG_ENDIAN
+    OMAP_DMA_LITTLE_ENDIAN = 0,
+    OMAP_DMA_BIG_ENDIAN
 };
 
 enum omap_dma_color_mode {
-	OMAP_DMA_COLOR_DIS = 0,
-	OMAP_DMA_CONSTANT_FILL,
-	OMAP_DMA_TRANSPARENT_COPY
+    OMAP_DMA_COLOR_DIS = 0,
+    OMAP_DMA_CONSTANT_FILL,
+    OMAP_DMA_TRANSPARENT_COPY
 };
 
 enum omap_dma_write_mode {
-	OMAP_DMA_WRITE_NON_POSTED = 0,
-	OMAP_DMA_WRITE_POSTED,
-	OMAP_DMA_WRITE_LAST_NON_POSTED
+    OMAP_DMA_WRITE_NON_POSTED = 0,
+    OMAP_DMA_WRITE_POSTED,
+    OMAP_DMA_WRITE_LAST_NON_POSTED
 };
 
 enum omap_dma_channel_mode {
-	OMAP_DMA_LCH_2D = 0,
-	OMAP_DMA_LCH_G,
-	OMAP_DMA_LCH_P,
-	OMAP_DMA_LCH_PD
+    OMAP_DMA_LCH_2D = 0,
+    OMAP_DMA_LCH_G,
+    OMAP_DMA_LCH_P,
+    OMAP_DMA_LCH_PD
 };
 
 struct omap_dma_channel_params {
-	int data_type;		/* data type 8,16,32 */
-	int elem_count;		/* number of elements in a frame */
-	int frame_count;	/* number of frames in a element */
+    int data_type;		/* data type 8,16,32 */
+    int elem_count;		/* number of elements in a frame */
+    int frame_count;	/* number of frames in a element */
 
-	int src_port;		/* Only on OMAP1 REVISIT: Is this needed? */
-	int src_amode;		/* constant, post increment, indexed,
+    int src_port;		/* Only on OMAP1 REVISIT: Is this needed? */
+    int src_amode;		/* constant, post increment, indexed,
 					double indexed */
-	unsigned long src_start;	/* source address : physical */
-	int src_ei;		/* source element index */
-	int src_fi;		/* source frame index */
+    unsigned long src_start;	/* source address : physical */
+    int src_ei;		/* source element index */
+    int src_fi;		/* source frame index */
 
-	int dst_port;		/* Only on OMAP1 REVISIT: Is this needed? */
-	int dst_amode;		/* constant, post increment, indexed,
+    int dst_port;		/* Only on OMAP1 REVISIT: Is this needed? */
+    int dst_amode;		/* constant, post increment, indexed,
 					double indexed */
-	unsigned long dst_start;	/* source address : physical */
-	int dst_ei;		/* source element index */
-	int dst_fi;		/* source frame index */
+    unsigned long dst_start;	/* source address : physical */
+    int dst_ei;		/* source element index */
+    int dst_fi;		/* source frame index */
 
-	int trigger;		/* trigger attached if the channel is
+    int trigger;		/* trigger attached if the channel is
 					synchronized */
-	int sync_mode;		/* sycn on element, frame , block or packet */
-	int src_or_dst_synch;	/* source synch(1) or destination synch(0) */
+    int sync_mode;		/* sycn on element, frame , block or packet */
+    int src_or_dst_synch;	/* source synch(1) or destination synch(0) */
 
-	int ie;			/* interrupt enabled */
+    int ie;			/* interrupt enabled */
 
-	unsigned char read_prio;/* read priority */
-	unsigned char write_prio;/* write priority */
+    unsigned char read_prio;/* read priority */
+    unsigned char write_prio;/* write priority */
 
 #ifndef CONFIG_ARCH_OMAP1
-	enum omap_dma_burst_mode burst_mode; /* Burst mode 4/8/16 words */
+    enum omap_dma_burst_mode burst_mode; /* Burst mode 4/8/16 words */
 #endif
 };
 
 struct omap_dma_lch {
-	int next_lch;
-	int dev_id;
-	u16 saved_csr;
-	u16 enabled_irqs;
-	const char *dev_name;
-	void (*callback)(int lch, u16 ch_status, void *data);
-	void *data;
-	long flags;
-	/* required for Dynamic chaining */
-	int prev_linked_ch;
-	int next_linked_ch;
-	int state;
-	int chain_id;
-	int status;
+    int next_lch;
+    int dev_id;
+    u16 saved_csr;
+    u16 enabled_irqs;
+    const char *dev_name;
+    void (*callback)(int lch, u16 ch_status, void *data);
+    void *data;
+    long flags;
+    /* required for Dynamic chaining */
+    int prev_linked_ch;
+    int next_linked_ch;
+    int state;
+    int chain_id;
+    int status;
 };
 
 struct omap_dma_dev_attr {
-	u32 dev_caps;
-	u16 lch_count;
-	u16 chan_count;
-	struct omap_dma_lch *chan;
+    u32 dev_caps;
+    u16 lch_count;
+    u16 chan_count;
+    struct omap_dma_lch *chan;
 };
 
 /* System DMA platform data structure */
 struct omap_system_dma_plat_info {
-	struct omap_dma_dev_attr *dma_attr;
-	u32 errata;
-	void (*disable_irq_lch)(int lch);
-	void (*show_dma_caps)(void);
-	void (*clear_lch_regs)(int lch);
-	void (*clear_dma)(int lch);
-	void (*dma_write)(u32 val, int reg, int lch);
-	u32 (*dma_read)(int reg, int lch);
+    struct omap_dma_dev_attr *dma_attr;
+    u32 errata;
+    void (*disable_irq_lch)(int lch);
+    void (*show_dma_caps)(void);
+    void (*clear_lch_regs)(int lch);
+    void (*clear_dma)(int lch);
+    void (*dma_write)(u32 val, int reg, int lch);
+    u32 (*dma_read)(int reg, int lch);
 };
 
 extern void omap_set_dma_priority(int lch, int dst_port, int priority);
 extern int omap_request_dma(int dev_id, const char *dev_name,
-			void (*callback)(int lch, u16 ch_status, void *data),
-			void *data, int *dma_ch);
+                            void (*callback)(int lch, u16 ch_status, void *data),
+                            void *data, int *dma_ch);
 extern void omap_enable_dma_irq(int ch, u16 irq_bits);
 extern void omap_disable_dma_irq(int ch, u16 irq_bits);
 extern void omap_free_dma(int ch);
 extern void omap_start_dma(int lch);
 extern void omap_stop_dma(int lch);
 extern void omap_set_dma_transfer_params(int lch, int data_type,
-					 int elem_count, int frame_count,
-					 int sync_mode,
-					 int dma_trigger, int src_or_dst_synch);
+        int elem_count, int frame_count,
+        int sync_mode,
+        int dma_trigger, int src_or_dst_synch);
 extern void omap_set_dma_color_mode(int lch, enum omap_dma_color_mode mode,
-				    u32 color);
+                                    u32 color);
 extern void omap_set_dma_write_mode(int lch, enum omap_dma_write_mode mode);
 extern void omap_set_dma_channel_mode(int lch, enum omap_dma_channel_mode mode);
 
 extern void omap_set_dma_src_params(int lch, int src_port, int src_amode,
-				    unsigned long src_start,
-				    int src_ei, int src_fi);
+                                    unsigned long src_start,
+                                    int src_ei, int src_fi);
 extern void omap_set_dma_src_index(int lch, int eidx, int fidx);
 extern void omap_set_dma_src_data_pack(int lch, int enable);
 extern void omap_set_dma_src_burst_mode(int lch,
-					enum omap_dma_burst_mode burst_mode);
+                                        enum omap_dma_burst_mode burst_mode);
 
 extern void omap_set_dma_dest_params(int lch, int dest_port, int dest_amode,
-				     unsigned long dest_start,
-				     int dst_ei, int dst_fi);
+                                     unsigned long dest_start,
+                                     int dst_ei, int dst_fi);
 extern void omap_set_dma_dest_index(int lch, int eidx, int fidx);
 extern void omap_set_dma_dest_data_pack(int lch, int enable);
 extern void omap_set_dma_dest_burst_mode(int lch,
-					 enum omap_dma_burst_mode burst_mode);
+        enum omap_dma_burst_mode burst_mode);
 
 extern void omap_set_dma_params(int lch,
-				struct omap_dma_channel_params *params);
+                                struct omap_dma_channel_params *params);
 
 extern void omap_dma_link_lch(int lch_head, int lch_queue);
 extern void omap_dma_unlink_lch(int lch_head, int lch_queue);
 
 extern int omap_set_dma_callback(int lch,
-			void (*callback)(int lch, u16 ch_status, void *data),
-			void *data);
+                                 void (*callback)(int lch, u16 ch_status, void *data),
+                                 void *data);
 extern dma_addr_t omap_get_dma_src_pos(int lch);
 extern dma_addr_t omap_get_dma_dst_pos(int lch);
 extern void omap_clear_dma(int lch);
 extern int omap_get_dma_active_status(int lch);
 extern int omap_dma_running(void);
 extern void omap_dma_set_global_params(int arb_rate, int max_fifo_depth,
-				       int tparams);
+                                       int tparams);
 extern int omap_dma_set_prio_lch(int lch, unsigned char read_prio,
-				 unsigned char write_prio);
+                                 unsigned char write_prio);
 extern void omap_set_dma_dst_endian_type(int lch, enum end_type etype);
 extern void omap_set_dma_src_endian_type(int lch, enum end_type etype);
 extern int omap_get_dma_index(int lch, int *ei, int *fi);
@@ -506,15 +506,15 @@ extern void omap_dma_disable_irq(int lch);
 /* Chaining APIs */
 #ifndef CONFIG_ARCH_OMAP1
 extern int omap_request_dma_chain(int dev_id, const char *dev_name,
-				  void (*callback) (int lch, u16 ch_status,
-						    void *data),
-				  int *chain_id, int no_of_chans,
-				  int chain_mode,
-				  struct omap_dma_channel_params params);
+                                  void (*callback) (int lch, u16 ch_status,
+                                          void *data),
+                                  int *chain_id, int no_of_chans,
+                                  int chain_mode,
+                                  struct omap_dma_channel_params params);
 extern int omap_free_dma_chain(int chain_id);
 extern int omap_dma_chain_a_transfer(int chain_id, int src_start,
-				     int dest_start, int elem_count,
-				     int frame_count, void *callbk_data);
+                                     int dest_start, int elem_count,
+                                     int frame_count, void *callbk_data);
 extern int omap_start_dma_chain_transfers(int chain_id);
 extern int omap_stop_dma_chain_transfers(int chain_id);
 extern int omap_get_dma_chain_index(int chain_id, int *ei, int *fi);
@@ -522,16 +522,15 @@ extern int omap_get_dma_chain_dst_pos(int chain_id);
 extern int omap_get_dma_chain_src_pos(int chain_id);
 
 extern int omap_modify_dma_chain_params(int chain_id,
-					struct omap_dma_channel_params params);
+                                        struct omap_dma_channel_params params);
 extern int omap_dma_chain_status(int chain_id);
 #endif
 
 #if defined(CONFIG_ARCH_OMAP1) && defined(CONFIG_FB_OMAP)
 #include <mach/lcd_dma.h>
 #else
-static inline int omap_lcd_dma_running(void)
-{
-	return 0;
+static inline int omap_lcd_dma_running(void) {
+    return 0;
 }
 #endif
 

@@ -14,27 +14,27 @@
 #endif
 
 struct ide_disk_obj {
-	ide_drive_t		*drive;
-	struct ide_driver	*driver;
-	struct gendisk		*disk;
-	struct device		dev;
-	unsigned int		openers;	/* protected by BKL for now */
+    ide_drive_t		*drive;
+    struct ide_driver	*driver;
+    struct gendisk		*disk;
+    struct device		dev;
+    unsigned int		openers;	/* protected by BKL for now */
 
-	/* used for blk_{fs,pc}_request() requests */
-	struct ide_atapi_pc queued_pc;
+    /* used for blk_{fs,pc}_request() requests */
+    struct ide_atapi_pc queued_pc;
 
-	/* Last error information */
-	u8 sense_key, asc, ascq;
+    /* Last error information */
+    u8 sense_key, asc, ascq;
 
-	int progress_indication;
+    int progress_indication;
 
-	/* Device information */
-	/* Current format */
-	int blocks, block_size, bs_factor;
-	/* Last format capacity descriptor */
-	u8 cap_desc[8];
-	/* Copy of the flexible disk page */
-	u8 flexible_disk_page[32];
+    /* Device information */
+    /* Current format */
+    int blocks, block_size, bs_factor;
+    /* Last format capacity descriptor */
+    u8 cap_desc[8];
+    /* Copy of the flexible disk page */
+    u8 flexible_disk_page[32];
 };
 
 sector_t ide_gd_capacity(ide_drive_t *);

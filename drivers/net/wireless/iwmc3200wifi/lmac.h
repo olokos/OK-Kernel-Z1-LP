@@ -40,36 +40,36 @@
 #define __IWM_LMAC_H__
 
 struct iwm_lmac_hdr {
-	u8 id;
-	u8 flags;
-	__le16 seq_num;
+    u8 id;
+    u8 flags;
+    __le16 seq_num;
 } __packed;
 
 /* LMAC commands */
 #define CALIB_CFG_FLAG_SEND_COMPLETE_NTFY_AFTER_MSK  0x1
 
 struct iwm_lmac_cal_cfg_elt {
-	__le32 enable; /* 1 means LMAC needs to do something */
-	__le32 start;  /* 1 to start calibration, 0 to stop */
-	__le32 send_res; /* 1 for sending back results */
-	__le32 apply_res; /* 1 for applying calibration results to HW */
-	__le32 reserved;
+    __le32 enable; /* 1 means LMAC needs to do something */
+    __le32 start;  /* 1 to start calibration, 0 to stop */
+    __le32 send_res; /* 1 for sending back results */
+    __le32 apply_res; /* 1 for applying calibration results to HW */
+    __le32 reserved;
 } __packed;
 
 struct iwm_lmac_cal_cfg_status {
-	struct iwm_lmac_cal_cfg_elt init;
-	struct iwm_lmac_cal_cfg_elt periodic;
-	__le32 flags; /* CALIB_CFG_FLAG_SEND_COMPLETE_NTFY_AFTER_MSK */
+    struct iwm_lmac_cal_cfg_elt init;
+    struct iwm_lmac_cal_cfg_elt periodic;
+    __le32 flags; /* CALIB_CFG_FLAG_SEND_COMPLETE_NTFY_AFTER_MSK */
 } __packed;
 
 struct iwm_lmac_cal_cfg_cmd {
-	struct iwm_lmac_cal_cfg_status ucode_cfg;
-	struct iwm_lmac_cal_cfg_status driver_cfg;
-	__le32 reserved;
+    struct iwm_lmac_cal_cfg_status ucode_cfg;
+    struct iwm_lmac_cal_cfg_status driver_cfg;
+    __le32 reserved;
 } __packed;
 
 struct iwm_lmac_cal_cfg_resp {
-	__le32 status;
+    __le32 status;
 } __packed;
 
 #define IWM_CARD_STATE_SW_HW_ENABLED	0x00
@@ -79,7 +79,7 @@ struct iwm_lmac_cal_cfg_resp {
 #define IWM_CARD_STATE_IS_RXON		0x10
 
 struct iwm_lmac_card_state {
-	__le32 flags;
+    __le32 flags;
 } __packed;
 
 /**
@@ -89,37 +89,37 @@ struct iwm_lmac_card_state {
  * Will keep two tables, for STA and WIPAN
  */
 enum {
-	/* UN-ASSOCIATION PART */
-	COEX_UNASSOC_IDLE = 0,
-	COEX_UNASSOC_MANUAL_SCAN,
-	COEX_UNASSOC_AUTO_SCAN,
+    /* UN-ASSOCIATION PART */
+    COEX_UNASSOC_IDLE = 0,
+    COEX_UNASSOC_MANUAL_SCAN,
+    COEX_UNASSOC_AUTO_SCAN,
 
-	/* CALIBRATION */
-	COEX_CALIBRATION,
-	COEX_PERIODIC_CALIBRATION,
+    /* CALIBRATION */
+    COEX_CALIBRATION,
+    COEX_PERIODIC_CALIBRATION,
 
-	/* CONNECTION */
-	COEX_CONNECTION_ESTAB,
+    /* CONNECTION */
+    COEX_CONNECTION_ESTAB,
 
-	/* ASSOCIATION PART */
-	COEX_ASSOCIATED_IDLE,
-	COEX_ASSOC_MANUAL_SCAN,
-	COEX_ASSOC_AUTO_SCAN,
-	COEX_ASSOC_ACTIVE_LEVEL,
+    /* ASSOCIATION PART */
+    COEX_ASSOCIATED_IDLE,
+    COEX_ASSOC_MANUAL_SCAN,
+    COEX_ASSOC_AUTO_SCAN,
+    COEX_ASSOC_ACTIVE_LEVEL,
 
-	/* RF ON/OFF */
-	COEX_RF_ON,
-	COEX_RF_OFF,
-	COEX_STAND_ALONE_DEBUG,
+    /* RF ON/OFF */
+    COEX_RF_ON,
+    COEX_RF_OFF,
+    COEX_STAND_ALONE_DEBUG,
 
-	/* IPNN */
-	COEX_IPAN_ASSOC_LEVEL,
+    /* IPNN */
+    COEX_IPAN_ASSOC_LEVEL,
 
-	/* RESERVED */
-	COEX_RSRVD1,
-	COEX_RSRVD2,
+    /* RESERVED */
+    COEX_RSRVD1,
+    COEX_RSRVD2,
 
-	COEX_EVENTS_NUM
+    COEX_EVENTS_NUM
 };
 
 #define COEX_EVT_FLAG_MEDIUM_FREE_NTFY_MSK	0x1
@@ -127,10 +127,10 @@ enum {
 #define COEX_EVT_FLAG_DELAY_MEDIUM_FREE_NTFY_MSK	0x4
 
 struct coex_event {
-	u8 req_prio;
-	u8 win_med_prio;
-	u8 reserved;
-	u8 flags;
+    u8 req_prio;
+    u8 win_med_prio;
+    u8 reserved;
+    u8 flags;
 } __packed;
 
 #define COEX_FLAGS_STA_TABLE_VALID_MSK		0x1
@@ -139,9 +139,9 @@ struct coex_event {
 #define COEX_FLAGS_COEX_ENABLE_MSK		0x80
 
 struct iwm_coex_prio_table_cmd {
-	u8 flags;
-	u8 reserved[3];
-	struct coex_event sta_prio[COEX_EVENTS_NUM];
+    u8 flags;
+    u8 reserved[3];
+    struct coex_event sta_prio[COEX_EVENTS_NUM];
 } __packed;
 
 /* Coexistence definitions
@@ -189,9 +189,9 @@ struct iwm_coex_prio_table_cmd {
 
 /* CT kill config command */
 struct iwm_ct_kill_cfg_cmd {
-	u32 exit_threshold;
-	u32 reserved;
-	u32 entry_threshold;
+    u32 exit_threshold;
+    u32 reserved;
+    u32 entry_threshold;
 } __packed;
 
 
@@ -382,40 +382,40 @@ struct iwm_ct_kill_cfg_cmd {
 /* Calibration */
 
 enum {
-	PHY_CALIBRATE_DC_CMD			= 0,
-	PHY_CALIBRATE_LO_CMD			= 1,
-	PHY_CALIBRATE_RX_BB_CMD			= 2,
-	PHY_CALIBRATE_TX_IQ_CMD			= 3,
-	PHY_CALIBRATE_RX_IQ_CMD			= 4,
-	PHY_CALIBRATION_NOISE_CMD		= 5,
-	PHY_CALIBRATE_AGC_TABLE_CMD		= 6,
-	PHY_CALIBRATE_CRYSTAL_FRQ_CMD		= 7,
-	PHY_CALIBRATE_OPCODES_NUM,
-	SHILOH_PHY_CALIBRATE_DC_CMD		= 8,
-	SHILOH_PHY_CALIBRATE_LO_CMD		= 9,
-	SHILOH_PHY_CALIBRATE_RX_BB_CMD		= 10,
-	SHILOH_PHY_CALIBRATE_TX_IQ_CMD		= 11,
-	SHILOH_PHY_CALIBRATE_RX_IQ_CMD		= 12,
-	SHILOH_PHY_CALIBRATION_NOISE_CMD	= 13,
-	SHILOH_PHY_CALIBRATE_AGC_TABLE_CMD	= 14,
-	SHILOH_PHY_CALIBRATE_CRYSTAL_FRQ_CMD	= 15,
-	SHILOH_PHY_CALIBRATE_BASE_BAND_CMD	= 16,
-	SHILOH_PHY_CALIBRATE_TXIQ_PERIODIC_CMD	= 17,
-	CALIBRATION_CMD_NUM,
+    PHY_CALIBRATE_DC_CMD			= 0,
+    PHY_CALIBRATE_LO_CMD			= 1,
+    PHY_CALIBRATE_RX_BB_CMD			= 2,
+    PHY_CALIBRATE_TX_IQ_CMD			= 3,
+    PHY_CALIBRATE_RX_IQ_CMD			= 4,
+    PHY_CALIBRATION_NOISE_CMD		= 5,
+    PHY_CALIBRATE_AGC_TABLE_CMD		= 6,
+    PHY_CALIBRATE_CRYSTAL_FRQ_CMD		= 7,
+    PHY_CALIBRATE_OPCODES_NUM,
+    SHILOH_PHY_CALIBRATE_DC_CMD		= 8,
+    SHILOH_PHY_CALIBRATE_LO_CMD		= 9,
+    SHILOH_PHY_CALIBRATE_RX_BB_CMD		= 10,
+    SHILOH_PHY_CALIBRATE_TX_IQ_CMD		= 11,
+    SHILOH_PHY_CALIBRATE_RX_IQ_CMD		= 12,
+    SHILOH_PHY_CALIBRATION_NOISE_CMD	= 13,
+    SHILOH_PHY_CALIBRATE_AGC_TABLE_CMD	= 14,
+    SHILOH_PHY_CALIBRATE_CRYSTAL_FRQ_CMD	= 15,
+    SHILOH_PHY_CALIBRATE_BASE_BAND_CMD	= 16,
+    SHILOH_PHY_CALIBRATE_TXIQ_PERIODIC_CMD	= 17,
+    CALIBRATION_CMD_NUM,
 };
 
 enum {
-	CALIB_CFG_RX_BB_IDX       = 0,
-	CALIB_CFG_DC_IDX          = 1,
-	CALIB_CFG_LO_IDX          = 2,
-	CALIB_CFG_TX_IQ_IDX       = 3,
-	CALIB_CFG_RX_IQ_IDX       = 4,
-	CALIB_CFG_NOISE_IDX       = 5,
-	CALIB_CFG_CRYSTAL_IDX     = 6,
-	CALIB_CFG_TEMPERATURE_IDX = 7,
-	CALIB_CFG_PAPD_IDX        = 8,
-	CALIB_CFG_LAST_IDX        = CALIB_CFG_PAPD_IDX,
-	CALIB_CFG_MODULE_NUM,
+    CALIB_CFG_RX_BB_IDX       = 0,
+    CALIB_CFG_DC_IDX          = 1,
+    CALIB_CFG_LO_IDX          = 2,
+    CALIB_CFG_TX_IQ_IDX       = 3,
+    CALIB_CFG_RX_IQ_IDX       = 4,
+    CALIB_CFG_NOISE_IDX       = 5,
+    CALIB_CFG_CRYSTAL_IDX     = 6,
+    CALIB_CFG_TEMPERATURE_IDX = 7,
+    CALIB_CFG_PAPD_IDX        = 8,
+    CALIB_CFG_LAST_IDX        = CALIB_CFG_PAPD_IDX,
+    CALIB_CFG_MODULE_NUM,
 };
 
 #define IWM_CALIB_MAP_INIT_MSK		0xFFFF
@@ -424,10 +424,10 @@ enum {
 #define IWM_CALIB_OPCODE_TO_INDEX(op)   (op - PHY_CALIBRATE_OPCODES_NUM)
 
 struct iwm_lmac_calib_hdr {
-	u8 opcode;
-	u8 first_grp;
-	u8 grp_num;
-	u8 all_data_valid;
+    u8 opcode;
+    u8 first_grp;
+    u8 grp_num;
+    u8 all_data_valid;
 } __packed;
 
 #define IWM_LMAC_CALIB_FREQ_GROUPS_NR	7
@@ -435,21 +435,21 @@ struct iwm_lmac_calib_hdr {
 #define IWM_CALIB_DC_MODES_NR		12
 
 struct iwm_calib_rxiq_entry {
-	u16 ptam_postdist_ars;
-	u16 ptam_postdist_arc;
+    u16 ptam_postdist_ars;
+    u16 ptam_postdist_arc;
 } __packed;
 
 struct iwm_calib_rxiq_group {
-	struct iwm_calib_rxiq_entry mode[IWM_CALIB_DC_MODES_NR];
+    struct iwm_calib_rxiq_entry mode[IWM_CALIB_DC_MODES_NR];
 } __packed;
 
 struct iwm_lmac_calib_rxiq {
-	struct iwm_calib_rxiq_group group[IWM_LMAC_CALIB_FREQ_GROUPS_NR];
+    struct iwm_calib_rxiq_group group[IWM_LMAC_CALIB_FREQ_GROUPS_NR];
 } __packed;
 
 struct iwm_calib_rxiq {
-	struct iwm_lmac_calib_hdr hdr;
-	struct iwm_calib_rxiq_group group[IWM_CALIB_FREQ_GROUPS_NR];
+    struct iwm_lmac_calib_hdr hdr;
+    struct iwm_calib_rxiq_group group[IWM_CALIB_FREQ_GROUPS_NR];
 } __packed;
 
 #define LMAC_STA_ID_SEED	0x0f
@@ -459,26 +459,26 @@ struct iwm_calib_rxiq {
 #define LMAC_STA_COLOR_POS	4
 
 struct iwm_lmac_power_report {
-	u8 pa_status;
-	u8 pa_integ_res_A[3];
-	u8 pa_integ_res_B[3];
-	u8 pa_integ_res_C[3];
+    u8 pa_status;
+    u8 pa_integ_res_A[3];
+    u8 pa_integ_res_B[3];
+    u8 pa_integ_res_C[3];
 } __packed;
 
 struct iwm_lmac_tx_resp {
-	u8 frame_cnt; /* 1-no aggregation, greater then 1 - aggregation */
-	u8 bt_kill_cnt;
-	__le16 retry_cnt;
-	__le32 initial_tx_rate;
-	__le16 wireless_media_time;
-	struct iwm_lmac_power_report power_report;
-	__le32 tfd_info;
-	__le16 seq_ctl;
-	__le16 byte_cnt;
-	u8 tlc_rate_info;
-	u8 ra_tid;
-	__le16 frame_ctl;
-	__le32 status;
+    u8 frame_cnt; /* 1-no aggregation, greater then 1 - aggregation */
+    u8 bt_kill_cnt;
+    __le16 retry_cnt;
+    __le32 initial_tx_rate;
+    __le16 wireless_media_time;
+    struct iwm_lmac_power_report power_report;
+    __le32 tfd_info;
+    __le16 seq_ctl;
+    __le16 byte_cnt;
+    u8 tlc_rate_info;
+    u8 ra_tid;
+    __le16 frame_ctl;
+    __le32 status;
 } __packed;
 
 #endif

@@ -51,19 +51,18 @@
  *	Returns true if this is a SATA controller
  */
 
-static int pdev_is_sata(struct pci_dev *pdev)
-{
+static int pdev_is_sata(struct pci_dev *pdev) {
 #ifdef CONFIG_BLK_DEV_IDE_SATA
-	switch (pdev->device) {
-	case PCI_DEVICE_ID_SII_3112:
-	case PCI_DEVICE_ID_SII_1210SA:
-		return 1;
-	case PCI_DEVICE_ID_SII_680:
-		return 0;
-	}
-	BUG();
+    switch (pdev->device) {
+    case PCI_DEVICE_ID_SII_3112:
+    case PCI_DEVICE_ID_SII_1210SA:
+        return 1;
+    case PCI_DEVICE_ID_SII_680:
+        return 0;
+    }
+    BUG();
 #endif
-	return 0;
+    return 0;
 }
 
 /**
@@ -73,9 +72,8 @@ static int pdev_is_sata(struct pci_dev *pdev)
  *	Returns true if this is a SATA controller
  */
 
-static inline int is_sata(ide_hwif_t *hwif)
-{
-	return pdev_is_sata(to_pci_dev(hwif->dev));
+static inline int is_sata(ide_hwif_t *hwif) {
+    return pdev_is_sata(to_pci_dev(hwif->dev));
 }
 
 /**
@@ -89,16 +87,15 @@ static inline int is_sata(ide_hwif_t *hwif)
  *	critical.
  */
 
-static unsigned long siimage_selreg(ide_hwif_t *hwif, int r)
-{
-	unsigned long base = (unsigned long)hwif->hwif_data;
+static unsigned long siimage_selreg(ide_hwif_t *hwif, int r) {
+    unsigned long base = (unsigned long)hwif->hwif_data;
 
-	base += 0xA0 + r;
-	if (hwif->host_flags & IDE_HFLAG_MMIO)
-		base += hwif->channel << 6;
-	else
-		base += hwif->channel << 4;
-	return base;
+    base += 0xA0 + r;
+    if (hwif->host_flags & IDE_HFLAG_MMIO)
+        base += hwif->channel << 6;
+    else
+        base += hwif->channel << 4;
+    return base;
 }
 
 /**
@@ -111,75 +108,69 @@ static unsigned long siimage_selreg(ide_hwif_t *hwif, int r)
  *	including accounting for the unit shift.
  */
 
-static inline unsigned long siimage_seldev(ide_drive_t *drive, int r)
-{
-	ide_hwif_t *hwif	= drive->hwif;
-	unsigned long base	= (unsigned long)hwif->hwif_data;
-	u8 unit			= drive->dn & 1;
+static inline unsigned long siimage_seldev(ide_drive_t *drive, int r) {
+    ide_hwif_t *hwif	= drive->hwif;
+    unsigned long base	= (unsigned long)hwif->hwif_data;
+    u8 unit			= drive->dn & 1;
 
-	base += 0xA0 + r;
-	if (hwif->host_flags & IDE_HFLAG_MMIO)
-		base += hwif->channel << 6;
-	else
-		base += hwif->channel << 4;
-	base |= unit << unit;
-	return base;
+    base += 0xA0 + r;
+    if (hwif->host_flags & IDE_HFLAG_MMIO)
+        base += hwif->channel << 6;
+    else
+        base += hwif->channel << 4;
+    base |= unit << unit;
+    return base;
 }
 
-static u8 sil_ioread8(struct pci_dev *dev, unsigned long addr)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
-	u8 tmp = 0;
+static u8 sil_ioread8(struct pci_dev *dev, unsigned long addr) {
+    struct ide_host *host = pci_get_drvdata(dev);
+    u8 tmp = 0;
 
-	if (host->host_priv)
-		tmp = readb((void __iomem *)addr);
-	else
-		pci_read_config_byte(dev, addr, &tmp);
+    if (host->host_priv)
+        tmp = readb((void __iomem *)addr);
+    else
+        pci_read_config_byte(dev, addr, &tmp);
 
-	return tmp;
+    return tmp;
 }
 
-static u16 sil_ioread16(struct pci_dev *dev, unsigned long addr)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
-	u16 tmp = 0;
+static u16 sil_ioread16(struct pci_dev *dev, unsigned long addr) {
+    struct ide_host *host = pci_get_drvdata(dev);
+    u16 tmp = 0;
 
-	if (host->host_priv)
-		tmp = readw((void __iomem *)addr);
-	else
-		pci_read_config_word(dev, addr, &tmp);
+    if (host->host_priv)
+        tmp = readw((void __iomem *)addr);
+    else
+        pci_read_config_word(dev, addr, &tmp);
 
-	return tmp;
+    return tmp;
 }
 
-static void sil_iowrite8(struct pci_dev *dev, u8 val, unsigned long addr)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
+static void sil_iowrite8(struct pci_dev *dev, u8 val, unsigned long addr) {
+    struct ide_host *host = pci_get_drvdata(dev);
 
-	if (host->host_priv)
-		writeb(val, (void __iomem *)addr);
-	else
-		pci_write_config_byte(dev, addr, val);
+    if (host->host_priv)
+        writeb(val, (void __iomem *)addr);
+    else
+        pci_write_config_byte(dev, addr, val);
 }
 
-static void sil_iowrite16(struct pci_dev *dev, u16 val, unsigned long addr)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
+static void sil_iowrite16(struct pci_dev *dev, u16 val, unsigned long addr) {
+    struct ide_host *host = pci_get_drvdata(dev);
 
-	if (host->host_priv)
-		writew(val, (void __iomem *)addr);
-	else
-		pci_write_config_word(dev, addr, val);
+    if (host->host_priv)
+        writew(val, (void __iomem *)addr);
+    else
+        pci_write_config_word(dev, addr, val);
 }
 
-static void sil_iowrite32(struct pci_dev *dev, u32 val, unsigned long addr)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
+static void sil_iowrite32(struct pci_dev *dev, u32 val, unsigned long addr) {
+    struct ide_host *host = pci_get_drvdata(dev);
 
-	if (host->host_priv)
-		writel(val, (void __iomem *)addr);
-	else
-		pci_write_config_dword(dev, addr, val);
+    if (host->host_priv)
+        writel(val, (void __iomem *)addr);
+    else
+        pci_write_config_dword(dev, addr, val);
 }
 
 /**
@@ -192,39 +183,37 @@ static void sil_iowrite32(struct pci_dev *dev, u32 val, unsigned long addr)
  *	SI3112 SATA controller life is a bit simpler.
  */
 
-static u8 sil_pata_udma_filter(ide_drive_t *drive)
-{
-	ide_hwif_t *hwif	= drive->hwif;
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	unsigned long base	= (unsigned long)hwif->hwif_data;
-	u8 scsc, mask		= 0;
+static u8 sil_pata_udma_filter(ide_drive_t *drive) {
+    ide_hwif_t *hwif	= drive->hwif;
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    unsigned long base	= (unsigned long)hwif->hwif_data;
+    u8 scsc, mask		= 0;
 
-	base += (hwif->host_flags & IDE_HFLAG_MMIO) ? 0x4A : 0x8A;
+    base += (hwif->host_flags & IDE_HFLAG_MMIO) ? 0x4A : 0x8A;
 
-	scsc = sil_ioread8(dev, base);
+    scsc = sil_ioread8(dev, base);
 
-	switch (scsc & 0x30) {
-	case 0x10:	/* 133 */
-		mask = ATA_UDMA6;
-		break;
-	case 0x20:	/* 2xPCI */
-		mask = ATA_UDMA6;
-		break;
-	case 0x00:	/* 100 */
-		mask = ATA_UDMA5;
-		break;
-	default: 	/* Disabled ? */
-		BUG();
-	}
+    switch (scsc & 0x30) {
+    case 0x10:	/* 133 */
+        mask = ATA_UDMA6;
+        break;
+    case 0x20:	/* 2xPCI */
+        mask = ATA_UDMA6;
+        break;
+    case 0x00:	/* 100 */
+        mask = ATA_UDMA5;
+        break;
+    default: 	/* Disabled ? */
+        BUG();
+    }
 
-	return mask;
+    return mask;
 }
 
-static u8 sil_sata_udma_filter(ide_drive_t *drive)
-{
-	char *m = (char *)&drive->id[ATA_ID_PROD];
+static u8 sil_sata_udma_filter(ide_drive_t *drive) {
+    char *m = (char *)&drive->id[ATA_ID_PROD];
 
-	return strstr(m, "Maxtor") ? ATA_UDMA5 : ATA_UDMA6;
+    return strstr(m, "Maxtor") ? ATA_UDMA5 : ATA_UDMA6;
 }
 
 /**
@@ -236,55 +225,54 @@ static u8 sil_sata_udma_filter(ide_drive_t *drive)
  *	controller.
  */
 
-static void sil_set_pio_mode(ide_hwif_t *hwif, ide_drive_t *drive)
-{
-	static const u16 tf_speed[]   = { 0x328a, 0x2283, 0x1281, 0x10c3, 0x10c1 };
-	static const u16 data_speed[] = { 0x328a, 0x2283, 0x1104, 0x10c3, 0x10c1 };
+static void sil_set_pio_mode(ide_hwif_t *hwif, ide_drive_t *drive) {
+    static const u16 tf_speed[]   = { 0x328a, 0x2283, 0x1281, 0x10c3, 0x10c1 };
+    static const u16 data_speed[] = { 0x328a, 0x2283, 0x1104, 0x10c3, 0x10c1 };
 
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	ide_drive_t *pair	= ide_get_pair_dev(drive);
-	u32 speedt		= 0;
-	u16 speedp		= 0;
-	unsigned long addr	= siimage_seldev(drive, 0x04);
-	unsigned long tfaddr	= siimage_selreg(hwif,	0x02);
-	unsigned long base	= (unsigned long)hwif->hwif_data;
-	const u8 pio		= drive->pio_mode - XFER_PIO_0;
-	u8 tf_pio		= pio;
-	u8 mmio			= (hwif->host_flags & IDE_HFLAG_MMIO) ? 1 : 0;
-	u8 addr_mask		= hwif->channel ? (mmio ? 0xF4 : 0x84)
-						: (mmio ? 0xB4 : 0x80);
-	u8 mode			= 0;
-	u8 unit			= drive->dn & 1;
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    ide_drive_t *pair	= ide_get_pair_dev(drive);
+    u32 speedt		= 0;
+    u16 speedp		= 0;
+    unsigned long addr	= siimage_seldev(drive, 0x04);
+    unsigned long tfaddr	= siimage_selreg(hwif,	0x02);
+    unsigned long base	= (unsigned long)hwif->hwif_data;
+    const u8 pio		= drive->pio_mode - XFER_PIO_0;
+    u8 tf_pio		= pio;
+    u8 mmio			= (hwif->host_flags & IDE_HFLAG_MMIO) ? 1 : 0;
+    u8 addr_mask		= hwif->channel ? (mmio ? 0xF4 : 0x84)
+                          : (mmio ? 0xB4 : 0x80);
+    u8 mode			= 0;
+    u8 unit			= drive->dn & 1;
 
-	/* trim *taskfile* PIO to the slowest of the master/slave */
-	if (pair) {
-		u8 pair_pio = pair->pio_mode - XFER_PIO_0;
+    /* trim *taskfile* PIO to the slowest of the master/slave */
+    if (pair) {
+        u8 pair_pio = pair->pio_mode - XFER_PIO_0;
 
-		if (pair_pio < tf_pio)
-			tf_pio = pair_pio;
-	}
+        if (pair_pio < tf_pio)
+            tf_pio = pair_pio;
+    }
 
-	/* cheat for now and use the docs */
-	speedp = data_speed[pio];
-	speedt = tf_speed[tf_pio];
+    /* cheat for now and use the docs */
+    speedp = data_speed[pio];
+    speedt = tf_speed[tf_pio];
 
-	sil_iowrite16(dev, speedp, addr);
-	sil_iowrite16(dev, speedt, tfaddr);
+    sil_iowrite16(dev, speedp, addr);
+    sil_iowrite16(dev, speedt, tfaddr);
 
-	/* now set up IORDY */
-	speedp = sil_ioread16(dev, tfaddr - 2);
-	speedp &= ~0x200;
+    /* now set up IORDY */
+    speedp = sil_ioread16(dev, tfaddr - 2);
+    speedp &= ~0x200;
 
-	mode = sil_ioread8(dev, base + addr_mask);
-	mode &= ~(unit ? 0x30 : 0x03);
+    mode = sil_ioread8(dev, base + addr_mask);
+    mode &= ~(unit ? 0x30 : 0x03);
 
-	if (ide_pio_need_iordy(drive, pio)) {
-		speedp |= 0x200;
-		mode |= unit ? 0x10 : 0x01;
-	}
+    if (ide_pio_need_iordy(drive, pio)) {
+        speedp |= 0x200;
+        mode |= unit ? 0x10 : 0x01;
+    }
 
-	sil_iowrite16(dev, speedp, tfaddr - 2);
-	sil_iowrite8(dev, mode, base + addr_mask);
+    sil_iowrite16(dev, speedp, tfaddr - 2);
+    sil_iowrite8(dev, mode, base + addr_mask);
 }
 
 /**
@@ -295,57 +283,55 @@ static void sil_set_pio_mode(ide_hwif_t *hwif, ide_drive_t *drive)
  *	Tune the SiI chipset for the desired DMA mode.
  */
 
-static void sil_set_dma_mode(ide_hwif_t *hwif, ide_drive_t *drive)
-{
-	static const u8 ultra6[] = { 0x0F, 0x0B, 0x07, 0x05, 0x03, 0x02, 0x01 };
-	static const u8 ultra5[] = { 0x0C, 0x07, 0x05, 0x04, 0x02, 0x01 };
-	static const u16 dma[]	 = { 0x2208, 0x10C2, 0x10C1 };
+static void sil_set_dma_mode(ide_hwif_t *hwif, ide_drive_t *drive) {
+    static const u8 ultra6[] = { 0x0F, 0x0B, 0x07, 0x05, 0x03, 0x02, 0x01 };
+    static const u8 ultra5[] = { 0x0C, 0x07, 0x05, 0x04, 0x02, 0x01 };
+    static const u16 dma[]	 = { 0x2208, 0x10C2, 0x10C1 };
 
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	unsigned long base	= (unsigned long)hwif->hwif_data;
-	u16 ultra = 0, multi	= 0;
-	u8 mode = 0, unit	= drive->dn & 1;
-	u8 mmio			= (hwif->host_flags & IDE_HFLAG_MMIO) ? 1 : 0;
-	u8 scsc = 0, addr_mask	= hwif->channel ? (mmio ? 0xF4 : 0x84)
-						: (mmio ? 0xB4 : 0x80);
-	unsigned long ma	= siimage_seldev(drive, 0x08);
-	unsigned long ua	= siimage_seldev(drive, 0x0C);
-	const u8 speed		= drive->dma_mode;
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    unsigned long base	= (unsigned long)hwif->hwif_data;
+    u16 ultra = 0, multi	= 0;
+    u8 mode = 0, unit	= drive->dn & 1;
+    u8 mmio			= (hwif->host_flags & IDE_HFLAG_MMIO) ? 1 : 0;
+    u8 scsc = 0, addr_mask	= hwif->channel ? (mmio ? 0xF4 : 0x84)
+                              : (mmio ? 0xB4 : 0x80);
+    unsigned long ma	= siimage_seldev(drive, 0x08);
+    unsigned long ua	= siimage_seldev(drive, 0x0C);
+    const u8 speed		= drive->dma_mode;
 
-	scsc  = sil_ioread8 (dev, base + (mmio ? 0x4A : 0x8A));
-	mode  = sil_ioread8 (dev, base + addr_mask);
-	multi = sil_ioread16(dev, ma);
-	ultra = sil_ioread16(dev, ua);
+    scsc  = sil_ioread8 (dev, base + (mmio ? 0x4A : 0x8A));
+    mode  = sil_ioread8 (dev, base + addr_mask);
+    multi = sil_ioread16(dev, ma);
+    ultra = sil_ioread16(dev, ua);
 
-	mode  &= ~(unit ? 0x30 : 0x03);
-	ultra &= ~0x3F;
-	scsc = ((scsc & 0x30) == 0x00) ? 0 : 1;
+    mode  &= ~(unit ? 0x30 : 0x03);
+    ultra &= ~0x3F;
+    scsc = ((scsc & 0x30) == 0x00) ? 0 : 1;
 
-	scsc = is_sata(hwif) ? 1 : scsc;
+    scsc = is_sata(hwif) ? 1 : scsc;
 
-	if (speed >= XFER_UDMA_0) {
-		multi  = dma[2];
-		ultra |= scsc ? ultra6[speed - XFER_UDMA_0] :
-				ultra5[speed - XFER_UDMA_0];
-		mode  |= unit ? 0x30 : 0x03;
-	} else {
-		multi = dma[speed - XFER_MW_DMA_0];
-		mode |= unit ? 0x20 : 0x02;
-	}
+    if (speed >= XFER_UDMA_0) {
+        multi  = dma[2];
+        ultra |= scsc ? ultra6[speed - XFER_UDMA_0] :
+                 ultra5[speed - XFER_UDMA_0];
+        mode  |= unit ? 0x30 : 0x03;
+    } else {
+        multi = dma[speed - XFER_MW_DMA_0];
+        mode |= unit ? 0x20 : 0x02;
+    }
 
-	sil_iowrite8 (dev, mode, base + addr_mask);
-	sil_iowrite16(dev, multi, ma);
-	sil_iowrite16(dev, ultra, ua);
+    sil_iowrite8 (dev, mode, base + addr_mask);
+    sil_iowrite16(dev, multi, ma);
+    sil_iowrite16(dev, ultra, ua);
 }
 
-static int sil_test_irq(ide_hwif_t *hwif)
-{
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	unsigned long addr	= siimage_selreg(hwif, 1);
-	u8 val			= sil_ioread8(dev, addr);
+static int sil_test_irq(ide_hwif_t *hwif) {
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    unsigned long addr	= siimage_selreg(hwif, 1);
+    u8 val			= sil_ioread8(dev, addr);
 
-	/* Return 1 if INTRQ asserted */
-	return (val & 8) ? 1 : 0;
+    /* Return 1 if INTRQ asserted */
+    return (val & 8) ? 1 : 0;
 }
 
 /**
@@ -356,46 +342,44 @@ static int sil_test_irq(ide_hwif_t *hwif)
  *	SATA status interrupts, if so we clean them up and continue.
  */
 
-static int siimage_mmio_dma_test_irq(ide_drive_t *drive)
-{
-	ide_hwif_t *hwif	= drive->hwif;
-	void __iomem *sata_error_addr
-		= (void __iomem *)hwif->sata_scr[SATA_ERROR_OFFSET];
+static int siimage_mmio_dma_test_irq(ide_drive_t *drive) {
+    ide_hwif_t *hwif	= drive->hwif;
+    void __iomem *sata_error_addr
+        = (void __iomem *)hwif->sata_scr[SATA_ERROR_OFFSET];
 
-	if (sata_error_addr) {
-		unsigned long base	= (unsigned long)hwif->hwif_data;
-		u32 ext_stat		= readl((void __iomem *)(base + 0x10));
-		u8 watchdog		= 0;
+    if (sata_error_addr) {
+        unsigned long base	= (unsigned long)hwif->hwif_data;
+        u32 ext_stat		= readl((void __iomem *)(base + 0x10));
+        u8 watchdog		= 0;
 
-		if (ext_stat & ((hwif->channel) ? 0x40 : 0x10)) {
-			u32 sata_error = readl(sata_error_addr);
+        if (ext_stat & ((hwif->channel) ? 0x40 : 0x10)) {
+            u32 sata_error = readl(sata_error_addr);
 
-			writel(sata_error, sata_error_addr);
-			watchdog = (sata_error & 0x00680000) ? 1 : 0;
-			printk(KERN_WARNING "%s: sata_error = 0x%08x, "
-				"watchdog = %d, %s\n",
-				drive->name, sata_error, watchdog, __func__);
-		} else
-			watchdog = (ext_stat & 0x8000) ? 1 : 0;
+            writel(sata_error, sata_error_addr);
+            watchdog = (sata_error & 0x00680000) ? 1 : 0;
+            printk(KERN_WARNING "%s: sata_error = 0x%08x, "
+                   "watchdog = %d, %s\n",
+                   drive->name, sata_error, watchdog, __func__);
+        } else
+            watchdog = (ext_stat & 0x8000) ? 1 : 0;
 
-		ext_stat >>= 16;
-		if (!(ext_stat & 0x0404) && !watchdog)
-			return 0;
-	}
+        ext_stat >>= 16;
+        if (!(ext_stat & 0x0404) && !watchdog)
+            return 0;
+    }
 
-	/* return 1 if INTR asserted */
-	if (readb((void __iomem *)(hwif->dma_base + ATA_DMA_STATUS)) & 4)
-		return 1;
+    /* return 1 if INTR asserted */
+    if (readb((void __iomem *)(hwif->dma_base + ATA_DMA_STATUS)) & 4)
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static int siimage_dma_test_irq(ide_drive_t *drive)
-{
-	if (drive->hwif->host_flags & IDE_HFLAG_MMIO)
-		return siimage_mmio_dma_test_irq(drive);
-	else
-		return ide_dma_test_irq(drive);
+static int siimage_dma_test_irq(ide_drive_t *drive) {
+    if (drive->hwif->host_flags & IDE_HFLAG_MMIO)
+        return siimage_mmio_dma_test_irq(drive);
+    else
+        return ide_dma_test_irq(drive);
 }
 
 /**
@@ -406,24 +390,23 @@ static int siimage_dma_test_irq(ide_drive_t *drive)
  *	yet.
  */
 
-static int sil_sata_reset_poll(ide_drive_t *drive)
-{
-	ide_hwif_t *hwif = drive->hwif;
-	void __iomem *sata_status_addr
-		= (void __iomem *)hwif->sata_scr[SATA_STATUS_OFFSET];
+static int sil_sata_reset_poll(ide_drive_t *drive) {
+    ide_hwif_t *hwif = drive->hwif;
+    void __iomem *sata_status_addr
+        = (void __iomem *)hwif->sata_scr[SATA_STATUS_OFFSET];
 
-	if (sata_status_addr) {
-		/* SATA Status is available only when in MMIO mode */
-		u32 sata_stat = readl(sata_status_addr);
+    if (sata_status_addr) {
+        /* SATA Status is available only when in MMIO mode */
+        u32 sata_stat = readl(sata_status_addr);
 
-		if ((sata_stat & 0x03) != 0x03) {
-			printk(KERN_WARNING "%s: reset phy dead, status=0x%08x\n",
-					    hwif->name, sata_stat);
-			return -ENXIO;
-		}
-	}
+        if ((sata_stat & 0x03) != 0x03) {
+            printk(KERN_WARNING "%s: reset phy dead, status=0x%08x\n",
+                   hwif->name, sata_stat);
+            return -ENXIO;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -434,12 +417,11 @@ static int sil_sata_reset_poll(ide_drive_t *drive)
  *	differently
  */
 
-static void sil_sata_pre_reset(ide_drive_t *drive)
-{
-	if (drive->media == ide_disk) {
-		drive->special_flags &=
-			~(IDE_SFLAG_SET_GEOMETRY | IDE_SFLAG_RECALIBRATE);
-	}
+static void sil_sata_pre_reset(ide_drive_t *drive) {
+    if (drive->media == ide_disk) {
+        drive->special_flags &=
+            ~(IDE_SFLAG_SET_GEOMETRY | IDE_SFLAG_RECALIBRATE);
+    }
 }
 
 /**
@@ -450,88 +432,87 @@ static void sil_sata_pre_reset(ide_drive_t *drive)
  *	to 133 MHz clocking if the system isn't already set up to do it.
  */
 
-static int init_chipset_siimage(struct pci_dev *dev)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
-	void __iomem *ioaddr = host->host_priv;
-	unsigned long base, scsc_addr;
-	u8 rev = dev->revision, tmp;
+static int init_chipset_siimage(struct pci_dev *dev) {
+    struct ide_host *host = pci_get_drvdata(dev);
+    void __iomem *ioaddr = host->host_priv;
+    unsigned long base, scsc_addr;
+    u8 rev = dev->revision, tmp;
 
-	pci_write_config_byte(dev, PCI_CACHE_LINE_SIZE, rev ? 1 : 255);
+    pci_write_config_byte(dev, PCI_CACHE_LINE_SIZE, rev ? 1 : 255);
 
-	if (ioaddr)
-		pci_set_master(dev);
+    if (ioaddr)
+        pci_set_master(dev);
 
-	base = (unsigned long)ioaddr;
+    base = (unsigned long)ioaddr;
 
-	if (ioaddr && pdev_is_sata(dev)) {
-		u32 tmp32, irq_mask;
+    if (ioaddr && pdev_is_sata(dev)) {
+        u32 tmp32, irq_mask;
 
-		/* make sure IDE0/1 interrupts are not masked */
-		irq_mask = (1 << 22) | (1 << 23);
-		tmp32 = readl(ioaddr + 0x48);
-		if (tmp32 & irq_mask) {
-			tmp32 &= ~irq_mask;
-			writel(tmp32, ioaddr + 0x48);
-			readl(ioaddr + 0x48); /* flush */
-		}
-		writel(0, ioaddr + 0x148);
-		writel(0, ioaddr + 0x1C8);
-	}
+        /* make sure IDE0/1 interrupts are not masked */
+        irq_mask = (1 << 22) | (1 << 23);
+        tmp32 = readl(ioaddr + 0x48);
+        if (tmp32 & irq_mask) {
+            tmp32 &= ~irq_mask;
+            writel(tmp32, ioaddr + 0x48);
+            readl(ioaddr + 0x48); /* flush */
+        }
+        writel(0, ioaddr + 0x148);
+        writel(0, ioaddr + 0x1C8);
+    }
 
-	sil_iowrite8(dev, 0, base ? (base + 0xB4) : 0x80);
-	sil_iowrite8(dev, 0, base ? (base + 0xF4) : 0x84);
+    sil_iowrite8(dev, 0, base ? (base + 0xB4) : 0x80);
+    sil_iowrite8(dev, 0, base ? (base + 0xF4) : 0x84);
 
-	scsc_addr = base ? (base + 0x4A) : 0x8A;
-	tmp = sil_ioread8(dev, scsc_addr);
+    scsc_addr = base ? (base + 0x4A) : 0x8A;
+    tmp = sil_ioread8(dev, scsc_addr);
 
-	switch (tmp & 0x30) {
-	case 0x00:
-		/* On 100 MHz clocking, try and switch to 133 MHz */
-		sil_iowrite8(dev, tmp | 0x10, scsc_addr);
-		break;
-	case 0x30:
-		/* Clocking is disabled, attempt to force 133MHz clocking. */
-		sil_iowrite8(dev, tmp & ~0x20, scsc_addr);
-	case 0x10:
-		/* On 133Mhz clocking. */
-		break;
-	case 0x20:
-		/* On PCIx2 clocking. */
-		break;
-	}
+    switch (tmp & 0x30) {
+    case 0x00:
+        /* On 100 MHz clocking, try and switch to 133 MHz */
+        sil_iowrite8(dev, tmp | 0x10, scsc_addr);
+        break;
+    case 0x30:
+        /* Clocking is disabled, attempt to force 133MHz clocking. */
+        sil_iowrite8(dev, tmp & ~0x20, scsc_addr);
+    case 0x10:
+        /* On 133Mhz clocking. */
+        break;
+    case 0x20:
+        /* On PCIx2 clocking. */
+        break;
+    }
 
-	tmp = sil_ioread8(dev, scsc_addr);
+    tmp = sil_ioread8(dev, scsc_addr);
 
-	sil_iowrite8 (dev,       0x72, base + 0xA1);
-	sil_iowrite16(dev,     0x328A, base + 0xA2);
-	sil_iowrite32(dev, 0x62DD62DD, base + 0xA4);
-	sil_iowrite32(dev, 0x43924392, base + 0xA8);
-	sil_iowrite32(dev, 0x40094009, base + 0xAC);
-	sil_iowrite8 (dev,       0x72, base ? (base + 0xE1) : 0xB1);
-	sil_iowrite16(dev,     0x328A, base ? (base + 0xE2) : 0xB2);
-	sil_iowrite32(dev, 0x62DD62DD, base ? (base + 0xE4) : 0xB4);
-	sil_iowrite32(dev, 0x43924392, base ? (base + 0xE8) : 0xB8);
-	sil_iowrite32(dev, 0x40094009, base ? (base + 0xEC) : 0xBC);
+    sil_iowrite8 (dev,       0x72, base + 0xA1);
+    sil_iowrite16(dev,     0x328A, base + 0xA2);
+    sil_iowrite32(dev, 0x62DD62DD, base + 0xA4);
+    sil_iowrite32(dev, 0x43924392, base + 0xA8);
+    sil_iowrite32(dev, 0x40094009, base + 0xAC);
+    sil_iowrite8 (dev,       0x72, base ? (base + 0xE1) : 0xB1);
+    sil_iowrite16(dev,     0x328A, base ? (base + 0xE2) : 0xB2);
+    sil_iowrite32(dev, 0x62DD62DD, base ? (base + 0xE4) : 0xB4);
+    sil_iowrite32(dev, 0x43924392, base ? (base + 0xE8) : 0xB8);
+    sil_iowrite32(dev, 0x40094009, base ? (base + 0xEC) : 0xBC);
 
-	if (base && pdev_is_sata(dev)) {
-		writel(0xFFFF0000, ioaddr + 0x108);
-		writel(0xFFFF0000, ioaddr + 0x188);
-		writel(0x00680000, ioaddr + 0x148);
-		writel(0x00680000, ioaddr + 0x1C8);
-	}
+    if (base && pdev_is_sata(dev)) {
+        writel(0xFFFF0000, ioaddr + 0x108);
+        writel(0xFFFF0000, ioaddr + 0x188);
+        writel(0x00680000, ioaddr + 0x148);
+        writel(0x00680000, ioaddr + 0x1C8);
+    }
 
-	/* report the clocking mode of the controller */
-	if (!pdev_is_sata(dev)) {
-		static const char *clk_str[] =
-			{ "== 100", "== 133", "== 2X PCI", "DISABLED!" };
+    /* report the clocking mode of the controller */
+    if (!pdev_is_sata(dev)) {
+        static const char *clk_str[] =
+        { "== 100", "== 133", "== 2X PCI", "DISABLED!" };
 
-		tmp >>= 4;
-		printk(KERN_INFO DRV_NAME " %s: BASE CLOCK %s\n",
-			pci_name(dev), clk_str[tmp & 3]);
-	}
+        tmp >>= 4;
+        printk(KERN_INFO DRV_NAME " %s: BASE CLOCK %s\n",
+               pci_name(dev), clk_str[tmp & 3]);
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -546,76 +527,74 @@ static int init_chipset_siimage(struct pci_dev *dev)
  *	extended PRD tables. For better SI3112 support use the libata driver
  */
 
-static void __devinit init_mmio_iops_siimage(ide_hwif_t *hwif)
-{
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	struct ide_host *host	= pci_get_drvdata(dev);
-	void *addr		= host->host_priv;
-	u8 ch			= hwif->channel;
-	struct ide_io_ports *io_ports = &hwif->io_ports;
-	unsigned long base;
+static void __devinit init_mmio_iops_siimage(ide_hwif_t *hwif) {
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    struct ide_host *host	= pci_get_drvdata(dev);
+    void *addr		= host->host_priv;
+    u8 ch			= hwif->channel;
+    struct ide_io_ports *io_ports = &hwif->io_ports;
+    unsigned long base;
 
-	/*
-	 *	Fill in the basic hwif bits
-	 */
-	hwif->host_flags |= IDE_HFLAG_MMIO;
+    /*
+     *	Fill in the basic hwif bits
+     */
+    hwif->host_flags |= IDE_HFLAG_MMIO;
 
-	hwif->hwif_data	= addr;
+    hwif->hwif_data	= addr;
 
-	/*
-	 *	Now set up the hw. We have to do this ourselves as the
-	 *	MMIO layout isn't the same as the standard port based I/O.
-	 */
-	memset(io_ports, 0, sizeof(*io_ports));
+    /*
+     *	Now set up the hw. We have to do this ourselves as the
+     *	MMIO layout isn't the same as the standard port based I/O.
+     */
+    memset(io_ports, 0, sizeof(*io_ports));
 
-	base = (unsigned long)addr;
-	if (ch)
-		base += 0xC0;
-	else
-		base += 0x80;
+    base = (unsigned long)addr;
+    if (ch)
+        base += 0xC0;
+    else
+        base += 0x80;
 
-	/*
-	 *	The buffered task file doesn't have status/control, so we
-	 *	can't currently use it sanely since we want to use LBA48 mode.
-	 */
-	io_ports->data_addr	= base;
-	io_ports->error_addr	= base + 1;
-	io_ports->nsect_addr	= base + 2;
-	io_ports->lbal_addr	= base + 3;
-	io_ports->lbam_addr	= base + 4;
-	io_ports->lbah_addr	= base + 5;
-	io_ports->device_addr	= base + 6;
-	io_ports->status_addr	= base + 7;
-	io_ports->ctl_addr	= base + 10;
+    /*
+     *	The buffered task file doesn't have status/control, so we
+     *	can't currently use it sanely since we want to use LBA48 mode.
+     */
+    io_ports->data_addr	= base;
+    io_ports->error_addr	= base + 1;
+    io_ports->nsect_addr	= base + 2;
+    io_ports->lbal_addr	= base + 3;
+    io_ports->lbam_addr	= base + 4;
+    io_ports->lbah_addr	= base + 5;
+    io_ports->device_addr	= base + 6;
+    io_ports->status_addr	= base + 7;
+    io_ports->ctl_addr	= base + 10;
 
-	if (pdev_is_sata(dev)) {
-		base = (unsigned long)addr;
-		if (ch)
-			base += 0x80;
-		hwif->sata_scr[SATA_STATUS_OFFSET]	= base + 0x104;
-		hwif->sata_scr[SATA_ERROR_OFFSET]	= base + 0x108;
-		hwif->sata_scr[SATA_CONTROL_OFFSET]	= base + 0x100;
-	}
+    if (pdev_is_sata(dev)) {
+        base = (unsigned long)addr;
+        if (ch)
+            base += 0x80;
+        hwif->sata_scr[SATA_STATUS_OFFSET]	= base + 0x104;
+        hwif->sata_scr[SATA_ERROR_OFFSET]	= base + 0x108;
+        hwif->sata_scr[SATA_CONTROL_OFFSET]	= base + 0x100;
+    }
 
-	hwif->irq = dev->irq;
+    hwif->irq = dev->irq;
 
-	hwif->dma_base = (unsigned long)addr + (ch ? 0x08 : 0x00);
+    hwif->dma_base = (unsigned long)addr + (ch ? 0x08 : 0x00);
 }
 
-static int is_dev_seagate_sata(ide_drive_t *drive)
-{
-	const char *s	= (const char *)&drive->id[ATA_ID_PROD];
-	unsigned len	= strnlen(s, ATA_ID_PROD_LEN);
+static int is_dev_seagate_sata(ide_drive_t *drive) {
+    const char *s	= (const char *)&drive->id[ATA_ID_PROD];
+    unsigned len	= strnlen(s, ATA_ID_PROD_LEN);
 
-	if ((len > 4) && (!memcmp(s, "ST", 2)))
-		if ((!memcmp(s + len - 2, "AS", 2)) ||
-		    (!memcmp(s + len - 3, "ASL", 3))) {
-			printk(KERN_INFO "%s: applying pessimistic Seagate "
-					 "errata fix\n", drive->name);
-			return 1;
-		}
+    if ((len > 4) && (!memcmp(s, "ST", 2)))
+        if ((!memcmp(s + len - 2, "AS", 2)) ||
+                (!memcmp(s + len - 3, "ASL", 3))) {
+            printk(KERN_INFO "%s: applying pessimistic Seagate "
+                   "errata fix\n", drive->name);
+            return 1;
+        }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -627,13 +606,12 @@ static int is_dev_seagate_sata(ide_drive_t *drive)
  *	that can occur before we know what drives are present.
  */
 
-static void sil_quirkproc(ide_drive_t *drive)
-{
-	ide_hwif_t *hwif = drive->hwif;
+static void sil_quirkproc(ide_drive_t *drive) {
+    ide_hwif_t *hwif = drive->hwif;
 
-	/* Try and rise the rqsize */
-	if (!is_sata(hwif) || !is_dev_seagate_sata(drive))
-		hwif->rqsize = 128;
+    /* Try and rise the rqsize */
+    if (!is_sata(hwif) || !is_dev_seagate_sata(drive))
+        hwif->rqsize = 128;
 }
 
 /**
@@ -646,18 +624,17 @@ static void sil_quirkproc(ide_drive_t *drive)
  *	can get the iops right before using them.
  */
 
-static void __devinit init_iops_siimage(ide_hwif_t *hwif)
-{
-	struct pci_dev *dev = to_pci_dev(hwif->dev);
-	struct ide_host *host = pci_get_drvdata(dev);
+static void __devinit init_iops_siimage(ide_hwif_t *hwif) {
+    struct pci_dev *dev = to_pci_dev(hwif->dev);
+    struct ide_host *host = pci_get_drvdata(dev);
 
-	hwif->hwif_data = NULL;
+    hwif->hwif_data = NULL;
 
-	/* Pessimal until we finish probing */
-	hwif->rqsize = 15;
+    /* Pessimal until we finish probing */
+    hwif->rqsize = 15;
 
-	if (host->host_priv)
-		init_mmio_iops_siimage(hwif);
+    if (host->host_priv)
+        init_mmio_iops_siimage(hwif);
 }
 
 /**
@@ -667,44 +644,43 @@ static void __devinit init_iops_siimage(ide_hwif_t *hwif)
  *	Check for the presence of an ATA66 capable cable on the interface.
  */
 
-static u8 sil_cable_detect(ide_hwif_t *hwif)
-{
-	struct pci_dev *dev	= to_pci_dev(hwif->dev);
-	unsigned long addr	= siimage_selreg(hwif, 0);
-	u8 ata66		= sil_ioread8(dev, addr);
+static u8 sil_cable_detect(ide_hwif_t *hwif) {
+    struct pci_dev *dev	= to_pci_dev(hwif->dev);
+    unsigned long addr	= siimage_selreg(hwif, 0);
+    u8 ata66		= sil_ioread8(dev, addr);
 
-	return (ata66 & 0x01) ? ATA_CBL_PATA80 : ATA_CBL_PATA40;
+    return (ata66 & 0x01) ? ATA_CBL_PATA80 : ATA_CBL_PATA40;
 }
 
 static const struct ide_port_ops sil_pata_port_ops = {
-	.set_pio_mode		= sil_set_pio_mode,
-	.set_dma_mode		= sil_set_dma_mode,
-	.quirkproc		= sil_quirkproc,
-	.test_irq		= sil_test_irq,
-	.udma_filter		= sil_pata_udma_filter,
-	.cable_detect		= sil_cable_detect,
+    .set_pio_mode		= sil_set_pio_mode,
+    .set_dma_mode		= sil_set_dma_mode,
+    .quirkproc		= sil_quirkproc,
+    .test_irq		= sil_test_irq,
+    .udma_filter		= sil_pata_udma_filter,
+    .cable_detect		= sil_cable_detect,
 };
 
 static const struct ide_port_ops sil_sata_port_ops = {
-	.set_pio_mode		= sil_set_pio_mode,
-	.set_dma_mode		= sil_set_dma_mode,
-	.reset_poll		= sil_sata_reset_poll,
-	.pre_reset		= sil_sata_pre_reset,
-	.quirkproc		= sil_quirkproc,
-	.test_irq		= sil_test_irq,
-	.udma_filter		= sil_sata_udma_filter,
-	.cable_detect		= sil_cable_detect,
+    .set_pio_mode		= sil_set_pio_mode,
+    .set_dma_mode		= sil_set_dma_mode,
+    .reset_poll		= sil_sata_reset_poll,
+    .pre_reset		= sil_sata_pre_reset,
+    .quirkproc		= sil_quirkproc,
+    .test_irq		= sil_test_irq,
+    .udma_filter		= sil_sata_udma_filter,
+    .cable_detect		= sil_cable_detect,
 };
 
 static const struct ide_dma_ops sil_dma_ops = {
-	.dma_host_set		= ide_dma_host_set,
-	.dma_setup		= ide_dma_setup,
-	.dma_start		= ide_dma_start,
-	.dma_end		= ide_dma_end,
-	.dma_test_irq		= siimage_dma_test_irq,
-	.dma_timer_expiry	= ide_dma_sff_timer_expiry,
-	.dma_lost_irq		= ide_dma_lost_irq,
-	.dma_sff_read_status	= ide_dma_sff_read_status,
+    .dma_host_set		= ide_dma_host_set,
+    .dma_setup		= ide_dma_setup,
+    .dma_start		= ide_dma_start,
+    .dma_end		= ide_dma_end,
+    .dma_test_irq		= siimage_dma_test_irq,
+    .dma_timer_expiry	= ide_dma_sff_timer_expiry,
+    .dma_lost_irq		= ide_dma_lost_irq,
+    .dma_sff_read_status	= ide_dma_sff_read_status,
 };
 
 #define DECLARE_SII_DEV(p_ops)				\
@@ -720,8 +696,8 @@ static const struct ide_dma_ops sil_dma_ops = {
 	}
 
 static const struct ide_port_info siimage_chipsets[] __devinitdata = {
-	/* 0: SiI680 */  DECLARE_SII_DEV(&sil_pata_port_ops),
-	/* 1: SiI3112 */ DECLARE_SII_DEV(&sil_sata_port_ops)
+    /* 0: SiI680 */  DECLARE_SII_DEV(&sil_pata_port_ops),
+    /* 1: SiI3112 */ DECLARE_SII_DEV(&sil_sata_port_ops)
 };
 
 /**
@@ -734,107 +710,103 @@ static const struct ide_port_info siimage_chipsets[] __devinitdata = {
  */
 
 static int __devinit siimage_init_one(struct pci_dev *dev,
-				      const struct pci_device_id *id)
-{
-	void __iomem *ioaddr = NULL;
-	resource_size_t bar5 = pci_resource_start(dev, 5);
-	unsigned long barsize = pci_resource_len(dev, 5);
-	int rc;
-	struct ide_port_info d;
-	u8 idx = id->driver_data;
-	u8 BA5_EN;
+                                      const struct pci_device_id *id) {
+    void __iomem *ioaddr = NULL;
+    resource_size_t bar5 = pci_resource_start(dev, 5);
+    unsigned long barsize = pci_resource_len(dev, 5);
+    int rc;
+    struct ide_port_info d;
+    u8 idx = id->driver_data;
+    u8 BA5_EN;
 
-	d = siimage_chipsets[idx];
+    d = siimage_chipsets[idx];
 
-	if (idx) {
-		static int first = 1;
+    if (idx) {
+        static int first = 1;
 
-		if (first) {
-			printk(KERN_INFO DRV_NAME ": For full SATA support you "
-				"should use the libata sata_sil module.\n");
-			first = 0;
-		}
+        if (first) {
+            printk(KERN_INFO DRV_NAME ": For full SATA support you "
+                   "should use the libata sata_sil module.\n");
+            first = 0;
+        }
 
-		d.host_flags |= IDE_HFLAG_NO_ATAPI_DMA;
-	}
+        d.host_flags |= IDE_HFLAG_NO_ATAPI_DMA;
+    }
 
-	rc = pci_enable_device(dev);
-	if (rc)
-		return rc;
+    rc = pci_enable_device(dev);
+    if (rc)
+        return rc;
 
-	pci_read_config_byte(dev, 0x8A, &BA5_EN);
-	if ((BA5_EN & 0x01) || bar5) {
-		/*
-		* Drop back to PIO if we can't map the MMIO. Some systems
-		* seem to get terminally confused in the PCI spaces.
-		*/
-		if (!request_mem_region(bar5, barsize, d.name)) {
-			printk(KERN_WARNING DRV_NAME " %s: MMIO ports not "
-				"available\n", pci_name(dev));
-		} else {
-			ioaddr = pci_ioremap_bar(dev, 5);
-			if (ioaddr == NULL)
-				release_mem_region(bar5, barsize);
-		}
-	}
+    pci_read_config_byte(dev, 0x8A, &BA5_EN);
+    if ((BA5_EN & 0x01) || bar5) {
+        /*
+        * Drop back to PIO if we can't map the MMIO. Some systems
+        * seem to get terminally confused in the PCI spaces.
+        */
+        if (!request_mem_region(bar5, barsize, d.name)) {
+            printk(KERN_WARNING DRV_NAME " %s: MMIO ports not "
+                   "available\n", pci_name(dev));
+        } else {
+            ioaddr = pci_ioremap_bar(dev, 5);
+            if (ioaddr == NULL)
+                release_mem_region(bar5, barsize);
+        }
+    }
 
-	rc = ide_pci_init_one(dev, &d, ioaddr);
-	if (rc) {
-		if (ioaddr) {
-			iounmap(ioaddr);
-			release_mem_region(bar5, barsize);
-		}
-		pci_disable_device(dev);
-	}
+    rc = ide_pci_init_one(dev, &d, ioaddr);
+    if (rc) {
+        if (ioaddr) {
+            iounmap(ioaddr);
+            release_mem_region(bar5, barsize);
+        }
+        pci_disable_device(dev);
+    }
 
-	return rc;
+    return rc;
 }
 
-static void __devexit siimage_remove(struct pci_dev *dev)
-{
-	struct ide_host *host = pci_get_drvdata(dev);
-	void __iomem *ioaddr = host->host_priv;
+static void __devexit siimage_remove(struct pci_dev *dev) {
+    struct ide_host *host = pci_get_drvdata(dev);
+    void __iomem *ioaddr = host->host_priv;
 
-	ide_pci_remove(dev);
+    ide_pci_remove(dev);
 
-	if (ioaddr) {
-		resource_size_t bar5 = pci_resource_start(dev, 5);
-		unsigned long barsize = pci_resource_len(dev, 5);
+    if (ioaddr) {
+        resource_size_t bar5 = pci_resource_start(dev, 5);
+        unsigned long barsize = pci_resource_len(dev, 5);
 
-		iounmap(ioaddr);
-		release_mem_region(bar5, barsize);
-	}
+        iounmap(ioaddr);
+        release_mem_region(bar5, barsize);
+    }
 
-	pci_disable_device(dev);
+    pci_disable_device(dev);
 }
 
 static const struct pci_device_id siimage_pci_tbl[] = {
-	{ PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_680),    0 },
+    { PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_680),    0 },
 #ifdef CONFIG_BLK_DEV_IDE_SATA
-	{ PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_3112),   1 },
-	{ PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_1210SA), 1 },
+    { PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_3112),   1 },
+    { PCI_VDEVICE(CMD, PCI_DEVICE_ID_SII_1210SA), 1 },
 #endif
-	{ 0, },
+    { 0, },
 };
 MODULE_DEVICE_TABLE(pci, siimage_pci_tbl);
 
 static struct pci_driver siimage_pci_driver = {
-	.name		= "SiI_IDE",
-	.id_table	= siimage_pci_tbl,
-	.probe		= siimage_init_one,
-	.remove		= __devexit_p(siimage_remove),
-	.suspend	= ide_pci_suspend,
-	.resume		= ide_pci_resume,
+    .name		= "SiI_IDE",
+    .id_table	= siimage_pci_tbl,
+    .probe		= siimage_init_one,
+    .remove		= __devexit_p(siimage_remove),
+    .suspend	= ide_pci_suspend,
+    .resume		= ide_pci_resume,
 };
 
-static int __init siimage_ide_init(void)
-{
-	return ide_pci_register_driver(&siimage_pci_driver);
+static int __init siimage_ide_init(void) {
+    return ide_pci_register_driver(&siimage_pci_driver);
 }
 
-static void __exit siimage_ide_exit(void)
-{
-	pci_unregister_driver(&siimage_pci_driver);
+static void __exit siimage_ide_exit(void) {
+    pci_unregister_driver(&siimage_pci_driver);
 }
 
 module_init(siimage_ide_init);

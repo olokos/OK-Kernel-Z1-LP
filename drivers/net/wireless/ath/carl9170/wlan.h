@@ -180,112 +180,112 @@
 
 #ifdef __CARL9170FW__
 struct ar9170_tx_hw_mac_control {
-	union {
-		struct {
-			/*
-			 * Beware of compiler bugs in all gcc pre 4.4!
-			 */
+    union {
+        struct {
+            /*
+             * Beware of compiler bugs in all gcc pre 4.4!
+             */
 
-			u8 erp_prot:2;
-			u8 no_ack:1;
-			u8 backoff:1;
-			u8 burst:1;
-			u8 ampdu:1;
+            u8 erp_prot:2;
+            u8 no_ack:1;
+            u8 backoff:1;
+            u8 burst:1;
+            u8 ampdu:1;
 
-			u8 enc_mode:2;
+            u8 enc_mode:2;
 
-			u8 hw_mmic:1;
-			u8 hw_duration:1;
+            u8 hw_mmic:1;
+            u8 hw_duration:1;
 
-			u8 qos_queue:2;
+            u8 qos_queue:2;
 
-			u8 disable_txop:1;
-			u8 txop_rifs:1;
+            u8 disable_txop:1;
+            u8 txop_rifs:1;
 
-			u8 ba_end:1;
-			u8 probe:1;
-		} __packed;
+            u8 ba_end:1;
+            u8 probe:1;
+        } __packed;
 
-		__le16 set;
-	} __packed;
+        __le16 set;
+    } __packed;
 } __packed;
 
 struct ar9170_tx_hw_phy_control {
-	union {
-		struct {
-			/*
-			 * Beware of compiler bugs in all gcc pre 4.4!
-			 */
+    union {
+        struct {
+            /*
+             * Beware of compiler bugs in all gcc pre 4.4!
+             */
 
-			u8 modulation:2;
-			u8 preamble:1;
-			u8 bandwidth:2;
-			u8:1;
-			u8 heavy_clip:3;
-			u8 tx_power:6;
-			u8 chains:3;
-			u8 mcs:7;
-			u8:6;
-			u8 short_gi:1;
-		} __packed;
+            u8 modulation:2;
+            u8 preamble:1;
+            u8 bandwidth:2;
+            u8:1;
+            u8 heavy_clip:3;
+            u8 tx_power:6;
+            u8 chains:3;
+            u8 mcs:7;
+            u8:6;
+            u8 short_gi:1;
+        } __packed;
 
-		__le32 set;
-	} __packed;
+        __le32 set;
+    } __packed;
 } __packed;
 
 struct ar9170_tx_rate_info {
-	u8 tries:3;
-	u8 erp_prot:2;
-	u8 ampdu:1;
-	u8 free:2; /* free for use (e.g.:RIFS/TXOP/AMPDU) */
+    u8 tries:3;
+    u8 erp_prot:2;
+    u8 ampdu:1;
+    u8 free:2; /* free for use (e.g.:RIFS/TXOP/AMPDU) */
 } __packed;
 
 struct carl9170_tx_superdesc {
-	__le16 len;
-	u8 rix;
-	u8 cnt;
-	u8 cookie;
-	u8 ampdu_density:3;
-	u8 ampdu_factor:2;
-	u8 ampdu_commit_density:1;
-	u8 ampdu_commit_factor:1;
-	u8 ampdu_unused_bit:1;
-	u8 queue:2;
-	u8 assign_seq:1;
-	u8 vif_id:3;
-	u8 fill_in_tsf:1;
-	u8 cab:1;
-	u8 padding2;
-	struct ar9170_tx_rate_info ri[CARL9170_TX_MAX_RATES];
-	struct ar9170_tx_hw_phy_control rr[CARL9170_TX_MAX_RETRY_RATES];
+    __le16 len;
+    u8 rix;
+    u8 cnt;
+    u8 cookie;
+    u8 ampdu_density:3;
+    u8 ampdu_factor:2;
+    u8 ampdu_commit_density:1;
+    u8 ampdu_commit_factor:1;
+    u8 ampdu_unused_bit:1;
+    u8 queue:2;
+    u8 assign_seq:1;
+    u8 vif_id:3;
+    u8 fill_in_tsf:1;
+    u8 cab:1;
+    u8 padding2;
+    struct ar9170_tx_rate_info ri[CARL9170_TX_MAX_RATES];
+    struct ar9170_tx_hw_phy_control rr[CARL9170_TX_MAX_RETRY_RATES];
 } __packed;
 
 struct ar9170_tx_hwdesc {
-	__le16 length;
-	struct ar9170_tx_hw_mac_control mac;
-	struct ar9170_tx_hw_phy_control phy;
+    __le16 length;
+    struct ar9170_tx_hw_mac_control mac;
+    struct ar9170_tx_hw_phy_control phy;
 } __packed;
 
 struct ar9170_tx_frame {
-	struct ar9170_tx_hwdesc hdr;
+    struct ar9170_tx_hwdesc hdr;
 
-	union {
-		struct ieee80211_hdr i3e;
-		u8 payload[0];
-	} data;
+    union {
+        struct ieee80211_hdr i3e;
+        u8 payload[0];
+    } data;
 } __packed;
 
 struct carl9170_tx_superframe {
-	struct carl9170_tx_superdesc s;
-	struct ar9170_tx_frame f;
+    struct carl9170_tx_superdesc s;
+    struct ar9170_tx_frame f;
 } __packed __aligned(4);
 
 #endif /* __CARL9170FW__ */
 
 struct _ar9170_tx_hwdesc {
-	__le16 length;
-	__le16 mac_control;
-	__le32 phy_control;
+    __le16 length;
+    __le16 mac_control;
+    __le32 phy_control;
 } __packed;
 
 #define	CARL9170_TX_SUPER_AMPDU_DENSITY_S		0
@@ -313,21 +313,21 @@ struct _ar9170_tx_hwdesc {
 #define CARL9170_TX_SUPER_RI_AMPDU_S			5
 
 struct _carl9170_tx_superdesc {
-	__le16 len;
-	u8 rix;
-	u8 cnt;
-	u8 cookie;
-	u8 ampdu_settings;
-	u8 misc;
-	u8 padding;
-	u8 ri[CARL9170_TX_MAX_RATES];
-	__le32 rr[CARL9170_TX_MAX_RETRY_RATES];
+    __le16 len;
+    u8 rix;
+    u8 cnt;
+    u8 cookie;
+    u8 ampdu_settings;
+    u8 misc;
+    u8 padding;
+    u8 ri[CARL9170_TX_MAX_RATES];
+    __le32 rr[CARL9170_TX_MAX_RETRY_RATES];
 } __packed;
 
 struct _carl9170_tx_superframe {
-	struct _carl9170_tx_superdesc s;
-	struct _ar9170_tx_hwdesc f;
-	u8 frame_data[0];
+    struct _carl9170_tx_superdesc s;
+    struct _ar9170_tx_hwdesc f;
+    u8 frame_data[0];
 } __packed __aligned(4);
 
 #define	CARL9170_TX_SUPERDESC_LEN		24
@@ -336,72 +336,71 @@ struct _carl9170_tx_superframe {
 						 AR9170_TX_HWDESC_LEN)
 
 struct ar9170_rx_head {
-	u8 plcp[12];
+    u8 plcp[12];
 } __packed;
 
 #define	AR9170_RX_HEAD_LEN			12
 
 struct ar9170_rx_phystatus {
-	union {
-		struct {
-			u8 rssi_ant0, rssi_ant1, rssi_ant2,
-				rssi_ant0x, rssi_ant1x, rssi_ant2x,
-				rssi_combined;
-		} __packed;
-		u8 rssi[7];
-	} __packed;
+    union {
+        struct {
+            u8 rssi_ant0, rssi_ant1, rssi_ant2,
+            rssi_ant0x, rssi_ant1x, rssi_ant2x,
+            rssi_combined;
+        } __packed;
+        u8 rssi[7];
+    } __packed;
 
-	u8 evm_stream0[6], evm_stream1[6];
-	u8 phy_err;
+    u8 evm_stream0[6], evm_stream1[6];
+    u8 phy_err;
 } __packed;
 
 #define	AR9170_RX_PHYSTATUS_LEN			20
 
 struct ar9170_rx_macstatus {
-	u8 SAidx, DAidx;
-	u8 error;
-	u8 status;
+    u8 SAidx, DAidx;
+    u8 error;
+    u8 status;
 } __packed;
 
 #define	AR9170_RX_MACSTATUS_LEN			4
 
 struct ar9170_rx_frame_single {
-	struct ar9170_rx_head phy_head;
-	struct ieee80211_hdr i3e;
-	struct ar9170_rx_phystatus phy_tail;
-	struct ar9170_rx_macstatus macstatus;
+    struct ar9170_rx_head phy_head;
+    struct ieee80211_hdr i3e;
+    struct ar9170_rx_phystatus phy_tail;
+    struct ar9170_rx_macstatus macstatus;
 } __packed;
 
 struct ar9170_rx_frame_head {
-	struct ar9170_rx_head phy_head;
-	struct ieee80211_hdr i3e;
-	struct ar9170_rx_macstatus macstatus;
+    struct ar9170_rx_head phy_head;
+    struct ieee80211_hdr i3e;
+    struct ar9170_rx_macstatus macstatus;
 } __packed;
 
 struct ar9170_rx_frame_middle {
-	struct ieee80211_hdr i3e;
-	struct ar9170_rx_macstatus macstatus;
+    struct ieee80211_hdr i3e;
+    struct ar9170_rx_macstatus macstatus;
 } __packed;
 
 struct ar9170_rx_frame_tail {
-	struct ieee80211_hdr i3e;
-	struct ar9170_rx_phystatus phy_tail;
-	struct ar9170_rx_macstatus macstatus;
+    struct ieee80211_hdr i3e;
+    struct ar9170_rx_phystatus phy_tail;
+    struct ar9170_rx_macstatus macstatus;
 } __packed;
 
 struct ar9170_rx_frame {
-	union {
-		struct ar9170_rx_frame_single single;
-		struct ar9170_rx_frame_head head;
-		struct ar9170_rx_frame_middle middle;
-		struct ar9170_rx_frame_tail tail;
-	} __packed;
+    union {
+        struct ar9170_rx_frame_single single;
+        struct ar9170_rx_frame_head head;
+        struct ar9170_rx_frame_middle middle;
+        struct ar9170_rx_frame_tail tail;
+    } __packed;
 } __packed;
 
-static inline u8 ar9170_get_decrypt_type(struct ar9170_rx_macstatus *t)
-{
-	return (t->SAidx & 0xc0) >> 4 |
-	       (t->DAidx & 0xc0) >> 6;
+static inline u8 ar9170_get_decrypt_type(struct ar9170_rx_macstatus *t) {
+    return (t->SAidx & 0xc0) >> 4 |
+           (t->DAidx & 0xc0) >> 6;
 }
 
 /*
@@ -422,12 +421,12 @@ static inline u8 ar9170_get_decrypt_type(struct ar9170_rx_macstatus *t)
  * for any serious 802.11n setup.
  */
 enum ar9170_txq {
-	AR9170_TXQ_BK = 0,	/* TXQ0 */
-	AR9170_TXQ_BE,		/* TXQ1	*/
-	AR9170_TXQ_VI,		/* TXQ2	*/
-	AR9170_TXQ_VO,		/* TXQ3 */
+    AR9170_TXQ_BK = 0,	/* TXQ0 */
+    AR9170_TXQ_BE,		/* TXQ1	*/
+    AR9170_TXQ_VI,		/* TXQ2	*/
+    AR9170_TXQ_VO,		/* TXQ3 */
 
-	__AR9170_NUM_TXQ,
+    __AR9170_NUM_TXQ,
 };
 
 #define	AR9170_TXQ_DEPTH			32

@@ -34,9 +34,8 @@
 #define SBAR		IOMEM(0xe6180020)
 #define APARMBAREA	IOMEM(0xe6f10020)
 
-static void __iomem *scu_base_addr(void)
-{
-	return (void __iomem *)0xf0000000;
+static void __iomem *scu_base_addr(void) {
+    return (void __iomem *)0xf0000000;
 }
 
 static DEFINE_SPINLOCK(scu_lock);
@@ -44,63 +43,57 @@ static unsigned long tmp;
 
 #ifdef CONFIG_HAVE_ARM_TWD
 static DEFINE_TWD_LOCAL_TIMER(twd_local_timer, 0xf0000600, 29);
-void __init sh73a0_register_twd(void)
-{
-	twd_local_timer_register(&twd_local_timer);
+void __init sh73a0_register_twd(void) {
+    twd_local_timer_register(&twd_local_timer);
 }
 #endif
 
-static void modify_scu_cpu_psr(unsigned long set, unsigned long clr)
-{
-	void __iomem *scu_base = scu_base_addr();
+static void modify_scu_cpu_psr(unsigned long set, unsigned long clr) {
+    void __iomem *scu_base = scu_base_addr();
 
-	spin_lock(&scu_lock);
-	tmp = __raw_readl(scu_base + 8);
-	tmp &= ~clr;
-	tmp |= set;
-	spin_unlock(&scu_lock);
+    spin_lock(&scu_lock);
+    tmp = __raw_readl(scu_base + 8);
+    tmp &= ~clr;
+    tmp |= set;
+    spin_unlock(&scu_lock);
 
-	/* disable cache coherency after releasing the lock */
-	__raw_writel(tmp, scu_base + 8);
+    /* disable cache coherency after releasing the lock */
+    __raw_writel(tmp, scu_base + 8);
 }
 
-unsigned int __init sh73a0_get_core_count(void)
-{
-	void __iomem *scu_base = scu_base_addr();
+unsigned int __init sh73a0_get_core_count(void) {
+    void __iomem *scu_base = scu_base_addr();
 
-	return scu_get_core_count(scu_base);
+    return scu_get_core_count(scu_base);
 }
 
-void __cpuinit sh73a0_secondary_init(unsigned int cpu)
-{
-	gic_secondary_init(0);
+void __cpuinit sh73a0_secondary_init(unsigned int cpu) {
+    gic_secondary_init(0);
 }
 
-int __cpuinit sh73a0_boot_secondary(unsigned int cpu)
-{
-	cpu = cpu_logical_map(cpu);
+int __cpuinit sh73a0_boot_secondary(unsigned int cpu) {
+    cpu = cpu_logical_map(cpu);
 
-	/* enable cache coherency */
-	modify_scu_cpu_psr(0, 3 << (cpu * 8));
+    /* enable cache coherency */
+    modify_scu_cpu_psr(0, 3 << (cpu * 8));
 
-	if (((__raw_readl(PSTR) >> (4 * cpu)) & 3) == 3)
-		__raw_writel(1 << cpu, WUPCR);	/* wake up */
-	else
-		__raw_writel(1 << cpu, SRESCR);	/* reset */
+    if (((__raw_readl(PSTR) >> (4 * cpu)) & 3) == 3)
+        __raw_writel(1 << cpu, WUPCR);	/* wake up */
+    else
+        __raw_writel(1 << cpu, SRESCR);	/* reset */
 
-	return 0;
+    return 0;
 }
 
-void __init sh73a0_smp_prepare_cpus(void)
-{
-	int cpu = cpu_logical_map(0);
+void __init sh73a0_smp_prepare_cpus(void) {
+    int cpu = cpu_logical_map(0);
 
-	scu_enable(scu_base_addr());
+    scu_enable(scu_base_addr());
 
-	/* Map the reset vector (in headsmp.S) */
-	__raw_writel(0, APARMBAREA);      /* 4k */
-	__raw_writel(__pa(shmobile_secondary_vector), SBAR);
+    /* Map the reset vector (in headsmp.S) */
+    __raw_writel(0, APARMBAREA);      /* 4k */
+    __raw_writel(__pa(shmobile_secondary_vector), SBAR);
 
-	/* enable cache coherency on CPU0 */
-	modify_scu_cpu_psr(0, 3 << (cpu * 8));
+    /* enable cache coherency on CPU0 */
+    modify_scu_cpu_psr(0, 3 << (cpu * 8));
 }

@@ -31,9 +31,8 @@ typedef unsigned long long cycles_t;
 cycles_t get_cycles(void);
 #define get_cycles_low() __insn_mfspr(SPR_CYCLE_LOW)
 #else
-static inline cycles_t get_cycles(void)
-{
-	return __insn_mfspr(SPR_CYCLE);
+static inline cycles_t get_cycles(void) {
+    return __insn_mfspr(SPR_CYCLE);
 }
 #define get_cycles_low() __insn_mfspr(SPR_CYCLE)   /* just get all 64 bits */
 #endif

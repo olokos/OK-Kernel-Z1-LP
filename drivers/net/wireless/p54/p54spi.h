@@ -93,33 +93,33 @@
 #define TARGET_BOOT_SLEEP 50
 
 struct p54s_dma_regs {
-	__le16 cmd;
-	__le16 len;
-	__le32 addr;
+    __le16 cmd;
+    __le16 len;
+    __le32 addr;
 } __packed;
 
 struct p54s_tx_info {
-	struct list_head tx_list;
+    struct list_head tx_list;
 };
 
 struct p54s_priv {
-	/* p54_common has to be the first entry */
-	struct p54_common common;
-	struct ieee80211_hw *hw;
-	struct spi_device *spi;
+    /* p54_common has to be the first entry */
+    struct p54_common common;
+    struct ieee80211_hw *hw;
+    struct spi_device *spi;
 
-	struct work_struct work;
+    struct work_struct work;
 
-	struct mutex mutex;
-	struct completion fw_comp;
+    struct mutex mutex;
+    struct completion fw_comp;
 
-	spinlock_t tx_lock;
+    spinlock_t tx_lock;
 
-	/* protected by tx_lock */
-	struct list_head tx_pending;
+    /* protected by tx_lock */
+    struct list_head tx_pending;
 
-	enum fw_state fw_state;
-	const struct firmware *firmware;
+    enum fw_state fw_state;
+    const struct firmware *firmware;
 };
 
 #endif /* P54SPI_H */

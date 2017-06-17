@@ -29,8 +29,8 @@
  * @disable: pointer to clock disable function
  */
 struct clkops {
-	int (*enable) (struct clk *);
-	void (*disable) (struct clk *);
+    int (*enable) (struct clk *);
+    void (*disable) (struct clk *);
 };
 
 /**
@@ -39,8 +39,8 @@ struct clkops {
  * @pclk_val: value to be written for selecting this parent
  */
 struct pclk_info {
-	struct clk *pclk;
-	u8 pclk_val;
+    struct clk *pclk;
+    u8 pclk_val;
 };
 
 /**
@@ -51,10 +51,10 @@ struct pclk_info {
  * @pclk_sel_mask: mask for selecting parent (can be used to clear bits also)
  */
 struct pclk_sel {
-	struct pclk_info *pclk_info;
-	u8 pclk_count;
-	void __iomem *pclk_sel_reg;
-	unsigned int pclk_sel_mask;
+    struct pclk_info *pclk_info;
+    u8 pclk_count;
+    void __iomem *pclk_sel_reg;
+    unsigned int pclk_sel_mask;
 };
 
 /**
@@ -64,9 +64,9 @@ struct pclk_sel {
  * @default_index: default setting when originally disabled
  */
 struct rate_config {
-	void *tbls;
-	u8 count;
-	u8 default_index;
+    void *tbls;
+    u8 count;
+    u8 default_index;
 };
 
 /**
@@ -93,134 +93,134 @@ struct rate_config {
  * @dent: object for debugfs
  */
 struct clk {
-	unsigned int usage_count;
-	unsigned int flags;
-	unsigned long rate;
-	void __iomem *en_reg;
-	u8 en_reg_bit;
-	const struct clkops *ops;
-	int (*recalc) (struct clk *);
-	int (*set_rate) (struct clk *, unsigned long rate);
-	unsigned long (*calc_rate)(struct clk *, int index);
-	struct rate_config rate_config;
-	unsigned int div_factor;
+    unsigned int usage_count;
+    unsigned int flags;
+    unsigned long rate;
+    void __iomem *en_reg;
+    u8 en_reg_bit;
+    const struct clkops *ops;
+    int (*recalc) (struct clk *);
+    int (*set_rate) (struct clk *, unsigned long rate);
+    unsigned long (*calc_rate)(struct clk *, int index);
+    struct rate_config rate_config;
+    unsigned int div_factor;
 
-	struct clk *pclk;
-	struct pclk_sel *pclk_sel;
-	unsigned int pclk_sel_shift;
+    struct clk *pclk;
+    struct pclk_sel *pclk_sel;
+    unsigned int pclk_sel_shift;
 
-	struct list_head children;
-	struct list_head sibling;
-	void *private_data;
+    struct list_head children;
+    struct list_head sibling;
+    void *private_data;
 #ifdef CONFIG_DEBUG_FS
-	struct list_head node;
-	struct clk_lookup *cl;
-	struct dentry *dent;
+    struct list_head node;
+    struct clk_lookup *cl;
+    struct dentry *dent;
 #endif
 };
 
 /* pll configuration structure */
 struct pll_clk_masks {
-	u32 mode_mask;
-	u32 mode_shift;
+    u32 mode_mask;
+    u32 mode_shift;
 
-	u32 norm_fdbk_m_mask;
-	u32 norm_fdbk_m_shift;
-	u32 dith_fdbk_m_mask;
-	u32 dith_fdbk_m_shift;
-	u32 div_p_mask;
-	u32 div_p_shift;
-	u32 div_n_mask;
-	u32 div_n_shift;
+    u32 norm_fdbk_m_mask;
+    u32 norm_fdbk_m_shift;
+    u32 dith_fdbk_m_mask;
+    u32 dith_fdbk_m_shift;
+    u32 div_p_mask;
+    u32 div_p_shift;
+    u32 div_n_mask;
+    u32 div_n_shift;
 };
 
 struct pll_clk_config {
-	void __iomem *mode_reg;
-	void __iomem *cfg_reg;
-	struct pll_clk_masks *masks;
+    void __iomem *mode_reg;
+    void __iomem *cfg_reg;
+    struct pll_clk_masks *masks;
 };
 
 /* pll clk rate config structure */
 struct pll_rate_tbl {
-	u8 mode;
-	u16 m;
-	u8 n;
-	u8 p;
+    u8 mode;
+    u16 m;
+    u8 n;
+    u8 p;
 };
 
 /* ahb and apb bus configuration structure */
 struct bus_clk_masks {
-	u32 mask;
-	u32 shift;
+    u32 mask;
+    u32 shift;
 };
 
 struct bus_clk_config {
-	void __iomem *reg;
-	struct bus_clk_masks *masks;
+    void __iomem *reg;
+    struct bus_clk_masks *masks;
 };
 
 /* ahb and apb clk bus rate config structure */
 struct bus_rate_tbl {
-	u8 div;
+    u8 div;
 };
 
 /* Aux clk configuration structure: applicable to UART and FIRDA */
 struct aux_clk_masks {
-	u32 eq_sel_mask;
-	u32 eq_sel_shift;
-	u32 eq1_mask;
-	u32 eq2_mask;
-	u32 xscale_sel_mask;
-	u32 xscale_sel_shift;
-	u32 yscale_sel_mask;
-	u32 yscale_sel_shift;
+    u32 eq_sel_mask;
+    u32 eq_sel_shift;
+    u32 eq1_mask;
+    u32 eq2_mask;
+    u32 xscale_sel_mask;
+    u32 xscale_sel_shift;
+    u32 yscale_sel_mask;
+    u32 yscale_sel_shift;
 };
 
 struct aux_clk_config {
-	void __iomem *synth_reg;
-	struct aux_clk_masks *masks;
+    void __iomem *synth_reg;
+    struct aux_clk_masks *masks;
 };
 
 /* aux clk rate config structure */
 struct aux_rate_tbl {
-	u16 xscale;
-	u16 yscale;
-	u8 eq;
+    u16 xscale;
+    u16 yscale;
+    u8 eq;
 };
 
 /* GPT clk configuration structure */
 struct gpt_clk_masks {
-	u32 mscale_sel_mask;
-	u32 mscale_sel_shift;
-	u32 nscale_sel_mask;
-	u32 nscale_sel_shift;
+    u32 mscale_sel_mask;
+    u32 mscale_sel_shift;
+    u32 nscale_sel_mask;
+    u32 nscale_sel_shift;
 };
 
 struct gpt_clk_config {
-	void __iomem *synth_reg;
-	struct gpt_clk_masks *masks;
+    void __iomem *synth_reg;
+    struct gpt_clk_masks *masks;
 };
 
 /* gpt clk rate config structure */
 struct gpt_rate_tbl {
-	u16 mscale;
-	u16 nscale;
+    u16 mscale;
+    u16 nscale;
 };
 
 /* clcd clk configuration structure */
 struct clcd_synth_masks {
-	u32 div_factor_mask;
-	u32 div_factor_shift;
+    u32 div_factor_mask;
+    u32 div_factor_shift;
 };
 
 struct clcd_clk_config {
-	void __iomem *synth_reg;
-	struct clcd_synth_masks *masks;
+    void __iomem *synth_reg;
+    struct clcd_synth_masks *masks;
 };
 
 /* clcd clk rate config structure */
 struct clcd_rate_tbl {
-	u16 div;
+    u16 div;
 };
 
 /* platform specific clock functions */

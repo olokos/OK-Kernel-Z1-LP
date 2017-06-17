@@ -20,18 +20,18 @@ struct task_struct;
 struct exec_domain;
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	__u32			cpu;
-	__s32			preempt_count;	/* 0 => preemptable, <0 => BUG */
-	__u32			rar_saved;	/* return address... */
-	__u32			rsr_saved;	/* ...and status register
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    __u32			cpu;
+    __s32			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    __u32			rar_saved;	/* return address... */
+    __u32			rsr_saved;	/* ...and status register
 						   saved by debug handler
 						   when setting up
 						   trampoline */
-	struct restart_block	restart_block;
-	__u8			supervisor_stack[0];
+    struct restart_block	restart_block;
+    __u8			supervisor_stack[0];
 };
 
 #define INIT_THREAD_INFO(tsk)						\
@@ -53,12 +53,11 @@ struct thread_info {
  * Get the thread information struct from C.
  * We do the usual trick and use the lower end of the stack for this
  */
-static inline struct thread_info *current_thread_info(void)
-{
-	unsigned long addr = ~(THREAD_SIZE - 1);
+static inline struct thread_info *current_thread_info(void) {
+    unsigned long addr = ~(THREAD_SIZE - 1);
 
-	asm("and %0, sp" : "=r"(addr) : "0"(addr));
-	return (struct thread_info *)addr;
+    asm("and %0, sp" : "=r"(addr) : "0"(addr));
+    return (struct thread_info *)addr;
 }
 
 #define get_thread_info(ti) get_task_struct((ti)->task)

@@ -271,120 +271,120 @@
 #define MDP_LV_SIZE		4
 
 enum ppp_lut_type {
-	LUT_PRE_TABLE = 0,
-	LUT_POST_TABLE,
+    LUT_PRE_TABLE = 0,
+    LUT_POST_TABLE,
 };
 
 enum ppp_csc_matrix {
-	CSC_PRIMARY_MATRIX = 0,
-	CSC_SECONDARY_MATRIX,
+    CSC_PRIMARY_MATRIX = 0,
+    CSC_SECONDARY_MATRIX,
 };
 
 /* scale tables */
 enum {
-	PPP_DOWNSCALE_PT2TOPT4,
-	PPP_DOWNSCALE_PT4TOPT6,
-	PPP_DOWNSCALE_PT6TOPT8,
-	PPP_DOWNSCALE_PT8TOPT1,
-	PPP_DOWNSCALE_MAX,
+    PPP_DOWNSCALE_PT2TOPT4,
+    PPP_DOWNSCALE_PT4TOPT6,
+    PPP_DOWNSCALE_PT6TOPT8,
+    PPP_DOWNSCALE_PT8TOPT1,
+    PPP_DOWNSCALE_MAX,
 };
 
 struct ppp_table {
-	uint32_t reg;
-	uint32_t val;
+    uint32_t reg;
+    uint32_t val;
 };
 
 struct ppp_csc_table {
-	int direction;			/* MDP_CCS_RGB2YUV or YUV2RGB */
-	uint16_t fwd_matrix[MDP_CCS_SIZE];	/* 3x3 color coefficients */
-	uint16_t rev_matrix[MDP_CCS_SIZE];	/* 3x3 color coefficients */
-	uint16_t bv[MDP_BV_SIZE];	/* 1x3 bias vector */
-	uint16_t lv[MDP_LV_SIZE];	/* 1x3 limit vector */
+    int direction;			/* MDP_CCS_RGB2YUV or YUV2RGB */
+    uint16_t fwd_matrix[MDP_CCS_SIZE];	/* 3x3 color coefficients */
+    uint16_t rev_matrix[MDP_CCS_SIZE];	/* 3x3 color coefficients */
+    uint16_t bv[MDP_BV_SIZE];	/* 1x3 bias vector */
+    uint16_t lv[MDP_LV_SIZE];	/* 1x3 limit vector */
 };
 
 struct ppp_blend {
-	int const_alpha;
-	int trans_color; /*color keying*/
+    int const_alpha;
+    int trans_color; /*color keying*/
 };
 
 struct ppp_img_prop {
-	int32_t x;
-	int32_t y;
-	uint32_t width;
-	uint32_t height;
+    int32_t x;
+    int32_t y;
+    uint32_t width;
+    uint32_t height;
 };
 
 struct ppp_img_desc {
-	struct ppp_img_prop prop;
-	struct ppp_img_prop roi;
-	int color_fmt;
-	void *p0;  /* plane 0 */
-	void *p1;
-	void *p3;
-	int stride0;
-	int stride1;
-	int stride2;
+    struct ppp_img_prop prop;
+    struct ppp_img_prop roi;
+    int color_fmt;
+    void *p0;  /* plane 0 */
+    void *p1;
+    void *p3;
+    int stride0;
+    int stride1;
+    int stride2;
 };
 
 struct ppp_blit_op {
-	struct ppp_img_desc src;
-	struct ppp_img_desc dst;
-	struct ppp_img_desc bg;
-	struct ppp_blend blend;
-	uint32_t mdp_op; /* Operations */
-	uint32_t solid_fill_color;
-	bool solid_fill;
+    struct ppp_img_desc src;
+    struct ppp_img_desc dst;
+    struct ppp_img_desc bg;
+    struct ppp_blend blend;
+    uint32_t mdp_op; /* Operations */
+    uint32_t solid_fill_color;
+    bool solid_fill;
 };
 
 struct ppp_edge_rep {
-	uint32_t dst_roi_width;
-	uint32_t dst_roi_height;
-	uint32_t is_scale_enabled;
+    uint32_t dst_roi_width;
+    uint32_t dst_roi_height;
+    uint32_t is_scale_enabled;
 
-	/*
-	 * positions of the luma pixel(relative to the image ) required for
-	 * scaling the ROI
-	 */
-	int32_t luma_interp_point_left;
-	int32_t luma_interp_point_right;
-	int32_t luma_interp_point_top;
-	int32_t luma_interp_point_bottom;
+    /*
+     * positions of the luma pixel(relative to the image ) required for
+     * scaling the ROI
+     */
+    int32_t luma_interp_point_left;
+    int32_t luma_interp_point_right;
+    int32_t luma_interp_point_top;
+    int32_t luma_interp_point_bottom;
 
-	/*
-	 * positions of the chroma pixel(relative to the image ) required for
-	 * interpolating a chroma value at all required luma positions
-	 */
-	int32_t chroma_interp_point_left;
-	int32_t chroma_interp_point_right;
-	int32_t chroma_interp_point_top;
-	int32_t chroma_interp_point_bottom;
+    /*
+     * positions of the chroma pixel(relative to the image ) required for
+     * interpolating a chroma value at all required luma positions
+     */
+    int32_t chroma_interp_point_left;
+    int32_t chroma_interp_point_right;
+    int32_t chroma_interp_point_top;
+    int32_t chroma_interp_point_bottom;
 
-	/*
-	 * a rectangular region within the chroma plane of the "image".
-	 * Chroma pixels falling inside of this rectangle belongs to the ROI
-	 */
-	int32_t chroma_bound_left;
-	int32_t chroma_bound_right;
-	int32_t chroma_bound_top;
-	int32_t chroma_bound_bottom;
+    /*
+     * a rectangular region within the chroma plane of the "image".
+     * Chroma pixels falling inside of this rectangle belongs to the ROI
+     */
+    int32_t chroma_bound_left;
+    int32_t chroma_bound_right;
+    int32_t chroma_bound_top;
+    int32_t chroma_bound_bottom;
 
-	/*
-	 * number of chroma pixels to replicate on the left, right,
-	 * top and bottom edge of the ROI.
-	 */
-	int32_t chroma_repeat_left;
-	int32_t chroma_repeat_right;
-	int32_t chroma_repeat_top;
-	int32_t chroma_repeat_bottom;
+    /*
+     * number of chroma pixels to replicate on the left, right,
+     * top and bottom edge of the ROI.
+     */
+    int32_t chroma_repeat_left;
+    int32_t chroma_repeat_right;
+    int32_t chroma_repeat_top;
+    int32_t chroma_repeat_bottom;
 
-	/*
-	 * number of luma pixels to replicate on the left, right,
-	 * top and bottom edge of the ROI.
-	 */
-	int32_t luma_repeat_left;
-	int32_t luma_repeat_right;
-	int32_t luma_repeat_top;
-	int32_t luma_repeat_bottom;
+    /*
+     * number of luma pixels to replicate on the left, right,
+     * top and bottom edge of the ROI.
+     */
+    int32_t luma_repeat_left;
+    int32_t luma_repeat_right;
+    int32_t luma_repeat_top;
+    int32_t luma_repeat_bottom;
 };
 
 /* func for ppp register values */
@@ -410,7 +410,7 @@ int mdp3_ppp_init(void);
 int config_ppp_op_mode(struct ppp_blit_op *blit_op);
 void ppp_enable(void);
 int mdp3_ppp_parse_req(void __user *p,
-	struct mdp_async_blit_req_list *req_list_header,
-	int async);
+                       struct mdp_async_blit_req_list *req_list_header,
+                       int async);
 
 #endif

@@ -48,50 +48,50 @@
 #define	EEPROM_CID_WHQL			0xFE
 
 enum RT_CUSTOMER_ID {
-	RT_CID_DEFAULT = 0,
-	RT_CID_8187_ALPHA0 = 1,
-	RT_CID_8187_SERCOMM_PS = 2,
-	RT_CID_8187_HW_LED = 3,
-	RT_CID_8187_NETGEAR = 4,
-	RT_CID_WHQL = 5,
-	RT_CID_819x_CAMEO  = 6,
-	RT_CID_819x_RUNTOP = 7,
-	RT_CID_819x_Senao = 8,
-	RT_CID_TOSHIBA = 9,
-	RT_CID_819x_Netcore = 10,
-	RT_CID_Nettronix = 11,
-	RT_CID_DLINK = 12,
-	RT_CID_PRONET = 13,
-	RT_CID_COREGA = 14,
-	RT_CID_819x_ALPHA = 15,
-	RT_CID_819x_Sitecom = 16,
-	RT_CID_CCX = 17,
-	RT_CID_819x_Lenovo = 18,
-	RT_CID_819x_QMI = 19,
-	RT_CID_819x_Edimax_Belkin = 20,
-	RT_CID_819x_Sercomm_Belkin = 21,
-	RT_CID_819x_CAMEO1 = 22,
-	RT_CID_819x_MSI = 23,
-	RT_CID_819x_Acer = 24,
-	RT_CID_819x_AzWave_ASUS = 25,
-	RT_CID_819x_AzWave = 26,
-	RT_CID_819x_WNC_COREGA = 27,
-	RT_CID_819x_CLEVO = 28,
+    RT_CID_DEFAULT = 0,
+    RT_CID_8187_ALPHA0 = 1,
+    RT_CID_8187_SERCOMM_PS = 2,
+    RT_CID_8187_HW_LED = 3,
+    RT_CID_8187_NETGEAR = 4,
+    RT_CID_WHQL = 5,
+    RT_CID_819x_CAMEO  = 6,
+    RT_CID_819x_RUNTOP = 7,
+    RT_CID_819x_Senao = 8,
+    RT_CID_TOSHIBA = 9,
+    RT_CID_819x_Netcore = 10,
+    RT_CID_Nettronix = 11,
+    RT_CID_DLINK = 12,
+    RT_CID_PRONET = 13,
+    RT_CID_COREGA = 14,
+    RT_CID_819x_ALPHA = 15,
+    RT_CID_819x_Sitecom = 16,
+    RT_CID_CCX = 17,
+    RT_CID_819x_Lenovo = 18,
+    RT_CID_819x_QMI = 19,
+    RT_CID_819x_Edimax_Belkin = 20,
+    RT_CID_819x_Sercomm_Belkin = 21,
+    RT_CID_819x_CAMEO1 = 22,
+    RT_CID_819x_MSI = 23,
+    RT_CID_819x_Acer = 24,
+    RT_CID_819x_AzWave_ASUS = 25,
+    RT_CID_819x_AzWave = 26,
+    RT_CID_819x_WNC_COREGA = 27,
+    RT_CID_819x_CLEVO = 28,
 };
 
 struct eeprom_priv {
-	u8 bautoload_fail_flag;
-	u8 bempty;
-	u8 sys_config;
-	u8 mac_addr[6];
-	u8 config0;
-	u16 channel_plan;
-	u8 country_string[3];
-	u8 tx_power_b[15];
-	u8 tx_power_g[15];
-	u8 tx_power_a[201];
-	u8 efuse_eeprom_data[EEPROM_MAX_SIZE];
-	enum RT_CUSTOMER_ID CustomerID;
+    u8 bautoload_fail_flag;
+    u8 bempty;
+    u8 sys_config;
+    u8 mac_addr[6];
+    u8 config0;
+    u16 channel_plan;
+    u8 country_string[3];
+    u8 tx_power_b[15];
+    u8 tx_power_g[15];
+    u8 tx_power_a[201];
+    u8 efuse_eeprom_data[EEPROM_MAX_SIZE];
+    enum RT_CUSTOMER_ID CustomerID;
 };
 
 void r8712_eeprom_write16(struct _adapter *padapter, u16 reg, u16 data);

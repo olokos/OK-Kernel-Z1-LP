@@ -13,11 +13,11 @@
 #define PD67_MASK	0x0eb8	/* irq 11,10,9,7,5,4,3 */
 
 struct pd6729_socket {
-	int	number;
-	int	card_irq;
-	unsigned long io_base;	/* base io address of the socket */
-	struct pcmcia_socket socket;
-	struct timer_list poll_timer;
+    int	number;
+    int	card_irq;
+    unsigned long io_base;	/* base io address of the socket */
+    struct pcmcia_socket socket;
+    struct timer_list poll_timer;
 };
 
 #endif

@@ -15,9 +15,9 @@
 
 
 struct bcom_ata_bd {
-	u32	status;
-	u32	src_pa;
-	u32	dst_pa;
+    u32	status;
+    u32	src_pa;
+    u32	dst_pa;
 };
 
 extern struct bcom_task * bcom_ata_init(int queue_len, int maxbufsize);

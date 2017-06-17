@@ -17,14 +17,14 @@
 #include <linux/types.h>
 
 struct msm_rpmrbcpr_design_data {
-	u32 upside_steps;
-	u32 downside_steps;
-	int svs_voltage;
-	int nominal_voltage;
-	int turbo_voltage;
+    u32 upside_steps;
+    u32 downside_steps;
+    int svs_voltage;
+    int nominal_voltage;
+    int turbo_voltage;
 };
 
 struct msm_rpmrbcpr_platform_data {
-	struct msm_rpmrbcpr_design_data rbcpr_data;
+    struct msm_rpmrbcpr_design_data rbcpr_data;
 };
 #endif

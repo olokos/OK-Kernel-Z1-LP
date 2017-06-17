@@ -86,13 +86,13 @@
 
 /* Register rw_cfg, scope strcop, type rw */
 typedef struct {
-  unsigned int td3         : 1;
-  unsigned int td2         : 1;
-  unsigned int td1         : 1;
-  unsigned int ipend       : 1;
-  unsigned int ignore_sync : 1;
-  unsigned int en          : 1;
-  unsigned int dummy1      : 26;
+    unsigned int td3         : 1;
+    unsigned int td2         : 1;
+    unsigned int td1         : 1;
+    unsigned int ipend       : 1;
+    unsigned int ignore_sync : 1;
+    unsigned int en          : 1;
+    unsigned int dummy1      : 26;
 } reg_strcop_rw_cfg;
 #define REG_RD_ADDR_strcop_rw_cfg 0
 #define REG_WR_ADDR_strcop_rw_cfg 0
@@ -100,10 +100,10 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_strcop_big                          = 0x00000001,
-  regk_strcop_d                            = 0x00000001,
-  regk_strcop_e                            = 0x00000000,
-  regk_strcop_little                       = 0x00000000,
-  regk_strcop_rw_cfg_default               = 0x00000002
+    regk_strcop_big                          = 0x00000001,
+    regk_strcop_d                            = 0x00000001,
+    regk_strcop_e                            = 0x00000000,
+    regk_strcop_little                       = 0x00000000,
+    regk_strcop_rw_cfg_default               = 0x00000002
 };
 #endif /* __strcop_defs_h */

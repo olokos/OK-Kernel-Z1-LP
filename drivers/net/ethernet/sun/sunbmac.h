@@ -83,10 +83,10 @@
 
 /* BIGMAC core registers */
 #define BMAC_XIFCFG	0x000UL	/* XIF config register                */
-	/* 0x004-->0x0fc, reserved */
+/* 0x004-->0x0fc, reserved */
 #define BMAC_STATUS	0x100UL	/* Status register, clear on read     */
 #define BMAC_IMASK	0x104UL	/* Interrupt mask register            */
-	/* 0x108-->0x204, reserved */
+/* 0x108-->0x204, reserved */
 #define BMAC_TXSWRESET	0x208UL	/* Transmitter software reset         */
 #define BMAC_TXCFG	0x20cUL	/* Transmitter config register        */
 #define BMAC_IGAP1	0x210UL	/* Inter-packet gap 1                 */
@@ -107,7 +107,7 @@
 #define BMAC_LTCTR	0x24cUL	/* Transmit late-collision counter    */
 #define BMAC_RSEED	0x250UL	/* Transmit random number seed        */
 #define BMAC_TXSMACHINE	0x254UL /* Transmit state machine             */
-	/* 0x258-->0x304, reserved */
+/* 0x258-->0x304, reserved */
 #define BMAC_RXSWRESET	0x308UL	/* Receiver software reset            */
 #define BMAC_RXCFG	0x30cUL	/* Receiver config register           */
 #define BMAC_RXPMAX	0x310UL	/* Receive max pkt size               */
@@ -121,7 +121,7 @@
 #define BMAC_RCRCECTR	0x330UL	/* Receive CRC error counter          */
 #define BMAC_RXSMACHINE	0x334UL	/* Receiver state machine             */
 #define BMAC_RXCVALID	0x338UL	/* Receiver code violation            */
-	/* 0x33c, reserved */
+/* 0x33c, reserved */
 #define BMAC_HTABLE3	0x340UL	/* Hash table 3                       */
 #define BMAC_HTABLE2	0x344UL	/* Hash table 2                       */
 #define BMAC_HTABLE1	0x348UL	/* Hash table 1                       */
@@ -225,8 +225,8 @@
 
 /* Ring descriptors and such, same as Quad Ethernet. */
 struct be_rxd {
-	u32 rx_flags;
-	u32 rx_addr;
+    u32 rx_flags;
+    u32 rx_addr;
 };
 
 #define RXD_OWN      0x80000000 /* Ownership.      */
@@ -234,8 +234,8 @@ struct be_rxd {
 #define RXD_LENGTH   0x000007ff /* Packet Length.  */
 
 struct be_txd {
-	u32 tx_flags;
-	u32 tx_addr;
+    u32 tx_flags;
+    u32 tx_addr;
 };
 
 #define TXD_OWN      0x80000000 /* Ownership.      */
@@ -265,8 +265,8 @@ struct be_txd {
 #define RX_BUF_ALLOC_SIZE  (ETH_FRAME_LEN + (64 * 3))
 
 struct bmac_init_block {
-	struct be_rxd be_rxd[RX_RING_MAXSIZE];
-	struct be_txd be_txd[TX_RING_MAXSIZE];
+    struct be_rxd be_rxd[RX_RING_MAXSIZE];
+    struct be_txd be_txd[TX_RING_MAXSIZE];
 };
 
 #define bib_offset(mem, elem) \
@@ -274,65 +274,64 @@ struct bmac_init_block {
 
 /* Now software state stuff. */
 enum bigmac_transceiver {
-	external = 0,
-	internal = 1,
-	none     = 2,
+    external = 0,
+    internal = 1,
+    none     = 2,
 };
 
 /* Timer state engine. */
 enum bigmac_timer_state {
-	ltrywait = 1,  /* Forcing try of all modes, from fastest to slowest. */
-	asleep   = 2,  /* Timer inactive.                                    */
+    ltrywait = 1,  /* Forcing try of all modes, from fastest to slowest. */
+    asleep   = 2,  /* Timer inactive.                                    */
 };
 
 struct bigmac {
-	void __iomem	*gregs;	/* QEC Global Registers               */
-	void __iomem	*creg;	/* QEC BigMAC Channel Registers       */
-	void __iomem	*bregs;	/* BigMAC Registers                   */
-	void __iomem	*tregs;	/* BigMAC Transceiver                 */
-	struct bmac_init_block	*bmac_block;	/* RX and TX descriptors */
-	__u32			 bblock_dvma;	/* RX and TX descriptors */
+    void __iomem	*gregs;	/* QEC Global Registers               */
+    void __iomem	*creg;	/* QEC BigMAC Channel Registers       */
+    void __iomem	*bregs;	/* BigMAC Registers                   */
+    void __iomem	*tregs;	/* BigMAC Transceiver                 */
+    struct bmac_init_block	*bmac_block;	/* RX and TX descriptors */
+    __u32			 bblock_dvma;	/* RX and TX descriptors */
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	struct sk_buff		*rx_skbs[RX_RING_SIZE];
-	struct sk_buff		*tx_skbs[TX_RING_SIZE];
+    struct sk_buff		*rx_skbs[RX_RING_SIZE];
+    struct sk_buff		*tx_skbs[TX_RING_SIZE];
 
-	int rx_new, tx_new, rx_old, tx_old;
+    int rx_new, tx_new, rx_old, tx_old;
 
-	int board_rev;				/* BigMAC board revision.             */
+    int board_rev;				/* BigMAC board revision.             */
 
-	enum bigmac_transceiver	tcvr_type;
-	unsigned int		bigmac_bursts;
-	unsigned int		paddr;
-	unsigned short		sw_bmsr;         /* SW copy of PHY BMSR               */
-	unsigned short		sw_bmcr;         /* SW copy of PHY BMCR               */
-	struct timer_list	bigmac_timer;
-	enum bigmac_timer_state	timer_state;
-	unsigned int		timer_ticks;
+    enum bigmac_transceiver	tcvr_type;
+    unsigned int		bigmac_bursts;
+    unsigned int		paddr;
+    unsigned short		sw_bmsr;         /* SW copy of PHY BMSR               */
+    unsigned short		sw_bmcr;         /* SW copy of PHY BMCR               */
+    struct timer_list	bigmac_timer;
+    enum bigmac_timer_state	timer_state;
+    unsigned int		timer_ticks;
 
-	struct net_device_stats	enet_stats;
-	struct platform_device	*qec_op;
-	struct platform_device	*bigmac_op;
-	struct net_device	*dev;
+    struct net_device_stats	enet_stats;
+    struct platform_device	*qec_op;
+    struct platform_device	*bigmac_op;
+    struct net_device	*dev;
 };
 
 /* We use this to acquire receive skb's that we can DMA directly into. */
 #define ALIGNED_RX_SKB_ADDR(addr) \
         ((((unsigned long)(addr) + (64 - 1)) & ~(64 - 1)) - (unsigned long)(addr))
 
-static inline struct sk_buff *big_mac_alloc_skb(unsigned int length, gfp_t gfp_flags)
-{
-	struct sk_buff *skb;
+static inline struct sk_buff *big_mac_alloc_skb(unsigned int length, gfp_t gfp_flags) {
+    struct sk_buff *skb;
 
-	skb = alloc_skb(length + 64, gfp_flags);
-	if(skb) {
-		int offset = ALIGNED_RX_SKB_ADDR(skb->data);
+    skb = alloc_skb(length + 64, gfp_flags);
+    if(skb) {
+        int offset = ALIGNED_RX_SKB_ADDR(skb->data);
 
-		if(offset)
-			skb_reserve(skb, offset);
-	}
-	return skb;
+        if(offset)
+            skb_reserve(skb, offset);
+    }
+    return skb;
 }
 
 #endif /* !(_SUNBMAC_H) */

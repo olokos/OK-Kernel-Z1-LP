@@ -28,7 +28,9 @@ extern void decode_address(char *buf, unsigned long address);
 extern bool get_instruction(unsigned int *val, unsigned short *address);
 #else
 static inline void decode_address(char *buf, unsigned long address) { }
-static inline bool get_instruction(unsigned int *val, unsigned short *address) { return false; }
+static inline bool get_instruction(unsigned int *val, unsigned short *address) {
+    return false;
+}
 #endif
 
 /* Trace Macros for C files */

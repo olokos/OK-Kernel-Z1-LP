@@ -17,47 +17,40 @@
  * APIs for calling crypto routines from kernel
  */
 struct crypto_ahash *wcnss_wlan_crypto_alloc_ahash(const char *alg_name,
-							 u32 type, u32 mask)
-{
-	return crypto_alloc_ahash(alg_name, type, mask);
+        u32 type, u32 mask) {
+    return crypto_alloc_ahash(alg_name, type, mask);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_alloc_ahash);
 
-int wcnss_wlan_crypto_ahash_digest(struct ahash_request *req)
-{
-	return crypto_ahash_digest(req);
+int wcnss_wlan_crypto_ahash_digest(struct ahash_request *req) {
+    return crypto_ahash_digest(req);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_ahash_digest);
 
-void wcnss_wlan_crypto_free_ahash(struct crypto_ahash *tfm)
-{
-	crypto_free_ahash(tfm);
+void wcnss_wlan_crypto_free_ahash(struct crypto_ahash *tfm) {
+    crypto_free_ahash(tfm);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_free_ahash);
 
 int wcnss_wlan_crypto_ahash_setkey(struct crypto_ahash *tfm, const u8 *key,
-			unsigned int keylen)
-{
-	return crypto_ahash_setkey(tfm, key, keylen);
+                                   unsigned int keylen) {
+    return crypto_ahash_setkey(tfm, key, keylen);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_ahash_setkey);
 
 struct crypto_ablkcipher *
-wcnss_wlan_crypto_alloc_ablkcipher(const char *alg_name, u32 type, u32 mask)
-{
-	return crypto_alloc_ablkcipher(alg_name, type, mask);
+wcnss_wlan_crypto_alloc_ablkcipher(const char *alg_name, u32 type, u32 mask) {
+    return crypto_alloc_ablkcipher(alg_name, type, mask);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_alloc_ablkcipher);
 
-void wcnss_wlan_ablkcipher_request_free(struct ablkcipher_request *req)
-{
-	ablkcipher_request_free(req);
+void wcnss_wlan_ablkcipher_request_free(struct ablkcipher_request *req) {
+    ablkcipher_request_free(req);
 }
 EXPORT_SYMBOL(wcnss_wlan_ablkcipher_request_free);
 
-void wcnss_wlan_crypto_free_ablkcipher(struct crypto_ablkcipher *tfm)
-{
-	crypto_free_ablkcipher(tfm);
+void wcnss_wlan_crypto_free_ablkcipher(struct crypto_ablkcipher *tfm) {
+    crypto_free_ablkcipher(tfm);
 }
 EXPORT_SYMBOL(wcnss_wlan_crypto_free_ablkcipher);
 

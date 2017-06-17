@@ -47,40 +47,39 @@ extern void init_i8259_irqs(void);
  * cases where no better interrupt acknowledge method is available and we
  * absolutely must touch the i8259.
  */
-static inline int i8259_irq(void)
-{
-	int irq;
+static inline int i8259_irq(void) {
+    int irq;
 
-	raw_spin_lock(&i8259A_lock);
+    raw_spin_lock(&i8259A_lock);
 
-	/* Perform an interrupt acknowledge cycle on controller 1. */
-	outb(0x0C, PIC_MASTER_CMD);		/* prepare for poll */
-	irq = inb(PIC_MASTER_CMD) & 7;
-	if (irq == PIC_CASCADE_IR) {
-		/*
-		 * Interrupt is cascaded so perform interrupt
-		 * acknowledge on controller 2.
-		 */
-		outb(0x0C, PIC_SLAVE_CMD);		/* prepare for poll */
-		irq = (inb(PIC_SLAVE_CMD) & 7) + 8;
-	}
+    /* Perform an interrupt acknowledge cycle on controller 1. */
+    outb(0x0C, PIC_MASTER_CMD);		/* prepare for poll */
+    irq = inb(PIC_MASTER_CMD) & 7;
+    if (irq == PIC_CASCADE_IR) {
+        /*
+         * Interrupt is cascaded so perform interrupt
+         * acknowledge on controller 2.
+         */
+        outb(0x0C, PIC_SLAVE_CMD);		/* prepare for poll */
+        irq = (inb(PIC_SLAVE_CMD) & 7) + 8;
+    }
 
-	if (unlikely(irq == 7)) {
-		/*
-		 * This may be a spurious interrupt.
-		 *
-		 * Read the interrupt status register (ISR). If the most
-		 * significant bit is not set then there is no valid
-		 * interrupt.
-		 */
-		outb(0x0B, PIC_MASTER_ISR);		/* ISR register */
-		if(~inb(PIC_MASTER_ISR) & 0x80)
-			irq = -1;
-	}
+    if (unlikely(irq == 7)) {
+        /*
+         * This may be a spurious interrupt.
+         *
+         * Read the interrupt status register (ISR). If the most
+         * significant bit is not set then there is no valid
+         * interrupt.
+         */
+        outb(0x0B, PIC_MASTER_ISR);		/* ISR register */
+        if(~inb(PIC_MASTER_ISR) & 0x80)
+            irq = -1;
+    }
 
-	raw_spin_unlock(&i8259A_lock);
+    raw_spin_unlock(&i8259A_lock);
 
-	return likely(irq >= 0) ? irq + I8259A_IRQ_BASE : irq;
+    return likely(irq >= 0) ? irq + I8259A_IRQ_BASE : irq;
 }
 
 #endif /* _ASM_I8259_H */

@@ -42,12 +42,12 @@
  */
 
 struct gru_message_queue_desc {
-	void		*mq;			/* message queue vaddress */
-	unsigned long	mq_gpa;			/* global address of mq */
-	int		qlines;			/* queue size in CL */
-	int		interrupt_vector;	/* interrupt vector */
-	int		interrupt_pnode;	/* pnode for interrupt */
-	int		interrupt_apicid;	/* lapicid for interrupt */
+    void		*mq;			/* message queue vaddress */
+    unsigned long	mq_gpa;			/* global address of mq */
+    int		qlines;			/* queue size in CL */
+    int		interrupt_vector;	/* interrupt vector */
+    int		interrupt_pnode;	/* pnode for interrupt */
+    int		interrupt_apicid;	/* lapicid for interrupt */
 };
 
 /*
@@ -72,7 +72,7 @@ struct gru_message_queue_desc {
  *  	>0	error
  */
 extern int gru_create_message_queue(struct gru_message_queue_desc *mqd,
-		void *p, unsigned int bytes, int nasid, int vector, int apicid);
+                                    void *p, unsigned int bytes, int nasid, int vector, int apicid);
 
 /*
  * Send a message to a message queue.
@@ -92,7 +92,7 @@ extern int gru_create_message_queue(struct gru_message_queue_desc *mqd,
  *
  */
 extern int gru_send_message_gpa(struct gru_message_queue_desc *mqd,
-			void *mesg, unsigned int bytes);
+                                void *mesg, unsigned int bytes);
 
 /* Status values for gru_send_message() */
 #define MQE_OK			0	/* message sent successfully */
@@ -112,7 +112,7 @@ extern int gru_send_message_gpa(struct gru_message_queue_desc *mqd,
  * 	mesq	message being freed
  */
 extern void gru_free_message(struct gru_message_queue_desc *mqd,
-			     void *mesq);
+                             void *mesq);
 
 /*
  * Get next message from message queue. Returns pointer to
@@ -158,7 +158,7 @@ int gru_read_gpa(unsigned long *value, unsigned long gpa);
  *	>0		error
  */
 extern int gru_copy_gpa(unsigned long dest_gpa, unsigned long src_gpa,
-							unsigned int bytes);
+                        unsigned int bytes);
 
 /*
  * Reserve GRU resources to be used asynchronously.
@@ -174,7 +174,7 @@ extern int gru_copy_gpa(unsigned long dest_gpa, unsigned long src_gpa,
  *		(0 = no resources)
  */
 extern unsigned long gru_reserve_async_resources(int blade_id, int cbrs, int dsr_bytes,
-				struct completion *cmp);
+        struct completion *cmp);
 
 /*
  * Release async resources previously reserved.

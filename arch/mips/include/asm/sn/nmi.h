@@ -51,12 +51,12 @@
 #ifndef __ASSEMBLY__
 
 typedef struct nmi_s {
-	volatile unsigned long	 magic;		/* Magic number */
-	volatile unsigned long	 flags;		/* Combination of flags above */
-	volatile void *call_addr;	/* Routine for slave to call        */
-	volatile void *call_addr_c;	/* 1's complement of address        */
-	volatile void *call_parm;	/* Single parm passed to call	    */
-	volatile unsigned long	 gmaster;	/* Flag true only on global master*/
+    volatile unsigned long	 magic;		/* Magic number */
+    volatile unsigned long	 flags;		/* Combination of flags above */
+    volatile void *call_addr;	/* Routine for slave to call        */
+    volatile void *call_addr_c;	/* 1's complement of address        */
+    volatile void *call_parm;	/* Single parm passed to call	    */
+    volatile unsigned long	 gmaster;	/* Flag true only on global master*/
 } nmi_t;
 
 #endif /* !__ASSEMBLY__ */
@@ -68,14 +68,14 @@ typedef struct nmi_s {
 #ifndef __ASSEMBLY__
 
 struct reg_struct {
-	unsigned long	gpr[32];
-	unsigned long	sr;
-	unsigned long	cause;
-	unsigned long	epc;
-	unsigned long	badva;
-	unsigned long	error_epc;
-	unsigned long	cache_err;
-	unsigned long	nmi_sr;
+    unsigned long	gpr[32];
+    unsigned long	sr;
+    unsigned long	cause;
+    unsigned long	epc;
+    unsigned long	badva;
+    unsigned long	error_epc;
+    unsigned long	cache_err;
+    unsigned long	nmi_sr;
 };
 
 #endif /* !__ASSEMBLY__ */

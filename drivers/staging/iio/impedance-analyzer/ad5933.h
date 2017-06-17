@@ -21,8 +21,8 @@
  */
 
 struct ad5933_platform_data {
-	unsigned long			ext_clk_Hz;
-	unsigned short			vref_mv;
+    unsigned long			ext_clk_Hz;
+    unsigned short			vref_mv;
 };
 
 #endif /* IIO_ADC_AD5933_H_ */

@@ -221,8 +221,7 @@
  *
  */
 
-typedef enum sBmuWqId
-{
+typedef enum sBmuWqId {
 
     /* ====== In use WQs ====== */
 
@@ -320,8 +319,7 @@ typedef enum sBmuWqId
     */
 } tBmuWqId;
 
-typedef enum
-{
+typedef enum {
     BTQM_QID0 = 0,
     BTQM_QID1,
     BTQM_QID2,

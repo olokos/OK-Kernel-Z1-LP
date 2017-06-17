@@ -55,108 +55,108 @@
 struct clk;
 
 struct clk_mux_sel {
-	struct clk	*input;
-	u32		value;
+    struct clk	*input;
+    u32		value;
 };
 
 struct clk_pll_freq_table {
-	unsigned long	input_rate;
-	unsigned long	output_rate;
-	u16		n;
-	u16		m;
-	u8		p;
-	u8		cpcon;
+    unsigned long	input_rate;
+    unsigned long	output_rate;
+    u16		n;
+    u16		m;
+    u8		p;
+    u8		cpcon;
 };
 
 struct clk_ops {
-	void		(*init)(struct clk *);
-	int		(*enable)(struct clk *);
-	void		(*disable)(struct clk *);
-	int		(*set_parent)(struct clk *, struct clk *);
-	int		(*set_rate)(struct clk *, unsigned long);
-	long		(*round_rate)(struct clk *, unsigned long);
-	void		(*reset)(struct clk *, bool);
-	int		(*clk_cfg_ex)(struct clk *,
-				enum tegra_clk_ex_param, u32);
+    void		(*init)(struct clk *);
+    int		(*enable)(struct clk *);
+    void		(*disable)(struct clk *);
+    int		(*set_parent)(struct clk *, struct clk *);
+    int		(*set_rate)(struct clk *, unsigned long);
+    long		(*round_rate)(struct clk *, unsigned long);
+    void		(*reset)(struct clk *, bool);
+    int		(*clk_cfg_ex)(struct clk *,
+                          enum tegra_clk_ex_param, u32);
 };
 
 enum clk_state {
-	UNINITIALIZED = 0,
-	ON,
-	OFF,
+    UNINITIALIZED = 0,
+    ON,
+    OFF,
 };
 
 struct clk {
-	/* node for master clocks list */
-	struct list_head	node;		/* node for list of all clocks */
-	struct clk_lookup	lookup;
+    /* node for master clocks list */
+    struct list_head	node;		/* node for list of all clocks */
+    struct clk_lookup	lookup;
 
 #ifdef CONFIG_DEBUG_FS
-	struct dentry		*dent;
+    struct dentry		*dent;
 #endif
-	bool			set;
-	struct clk_ops		*ops;
-	unsigned long		rate;
-	unsigned long		max_rate;
-	unsigned long		min_rate;
-	u32			flags;
-	const char		*name;
+    bool			set;
+    struct clk_ops		*ops;
+    unsigned long		rate;
+    unsigned long		max_rate;
+    unsigned long		min_rate;
+    u32			flags;
+    const char		*name;
 
-	u32			refcnt;
-	enum clk_state		state;
-	struct clk		*parent;
-	u32			div;
-	u32			mul;
+    u32			refcnt;
+    enum clk_state		state;
+    struct clk		*parent;
+    u32			div;
+    u32			mul;
 
-	const struct clk_mux_sel	*inputs;
-	u32				reg;
-	u32				reg_shift;
+    const struct clk_mux_sel	*inputs;
+    u32				reg;
+    u32				reg_shift;
 
-	struct list_head		shared_bus_list;
+    struct list_head		shared_bus_list;
 
-	union {
-		struct {
-			unsigned int			clk_num;
-		} periph;
-		struct {
-			unsigned long			input_min;
-			unsigned long			input_max;
-			unsigned long			cf_min;
-			unsigned long			cf_max;
-			unsigned long			vco_min;
-			unsigned long			vco_max;
-			const struct clk_pll_freq_table	*freq_table;
-			int				lock_delay;
-			unsigned long			fixed_rate;
-		} pll;
-		struct {
-			u32				sel;
-			u32				reg_mask;
-		} mux;
-		struct {
-			struct clk			*main;
-			struct clk			*backup;
-		} cpu;
-		struct {
-			struct list_head		node;
-			bool				enabled;
-			unsigned long			rate;
-		} shared_bus_user;
-	} u;
+    union {
+        struct {
+            unsigned int			clk_num;
+        } periph;
+        struct {
+            unsigned long			input_min;
+            unsigned long			input_max;
+            unsigned long			cf_min;
+            unsigned long			cf_max;
+            unsigned long			vco_min;
+            unsigned long			vco_max;
+            const struct clk_pll_freq_table	*freq_table;
+            int				lock_delay;
+            unsigned long			fixed_rate;
+        } pll;
+        struct {
+            u32				sel;
+            u32				reg_mask;
+        } mux;
+        struct {
+            struct clk			*main;
+            struct clk			*backup;
+        } cpu;
+        struct {
+            struct list_head		node;
+            bool				enabled;
+            unsigned long			rate;
+        } shared_bus_user;
+    } u;
 
-	spinlock_t spinlock;
+    spinlock_t spinlock;
 };
 
 struct clk_duplicate {
-	const char *name;
-	struct clk_lookup lookup;
+    const char *name;
+    struct clk_lookup lookup;
 };
 
 struct tegra_clk_init_table {
-	const char *name;
-	const char *parent;
-	unsigned long rate;
-	bool enabled;
+    const char *name;
+    const char *parent;
+    unsigned long rate;
+    bool enabled;
 };
 
 void tegra2_init_clocks(void);

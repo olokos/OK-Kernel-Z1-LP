@@ -16,24 +16,24 @@
 #include <linux/ioctl.h>
 
 struct msm_buspm_map_dev {
-	void            *vaddr;
-	unsigned long   paddr;
-	size_t          buflen;
+    void            *vaddr;
+    unsigned long   paddr;
+    size_t          buflen;
 };
 
 /* Read/write data into kernel buffer */
 struct buspm_xfer_req {
-	unsigned int  size;		/* Size of this request, in bytes */
-	void *data;		/* Data buffer to transfer data to/from */
+    unsigned int  size;		/* Size of this request, in bytes */
+    void *data;		/* Data buffer to transfer data to/from */
 };
 
 struct buspm_alloc_params {
-	int size;
+    int size;
 };
 
 enum msm_buspm_ioc_cmds {
-	MSM_BUSPM_SPDM_CLK_DIS = 0,
-	MSM_BUSPM_SPDM_CLK_EN,
+    MSM_BUSPM_SPDM_CLK_DIS = 0,
+    MSM_BUSPM_SPDM_CLK_EN,
 };
 
 #define MSM_BUSPM_IOC_MAGIC	'p'

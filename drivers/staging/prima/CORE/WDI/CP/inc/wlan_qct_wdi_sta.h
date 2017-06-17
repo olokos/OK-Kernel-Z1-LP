@@ -75,8 +75,7 @@ when        who    what, where, why
 /*----------------------------------------------------------------------------
   WDI_AddStaParams
   -------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8    ucSTAIdx;
     wpt_uint8    ucWmmEnabled;
     wpt_uint8    ucHTCapable;
@@ -114,8 +113,7 @@ typedef struct
 /*----------------------------------------------------------------------------
   WDI_StaStruct
   -------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_macAddr staAddr;                // Sta Addr
 
     wpt_uint8 valid:1;                           // Used/free flag

@@ -26,34 +26,29 @@
 #include "time.h"
 
 void
-xen_mm_pin_all(void)
-{
-	/* nothing */
+xen_mm_pin_all(void) {
+    /* nothing */
 }
 
 void
-xen_mm_unpin_all(void)
-{
-	/* nothing */
+xen_mm_unpin_all(void) {
+    /* nothing */
 }
 
 void
-xen_arch_pre_suspend()
-{
-	/* nothing */
+xen_arch_pre_suspend() {
+    /* nothing */
 }
 
 void
-xen_arch_post_suspend(int suspend_cancelled)
-{
-	if (suspend_cancelled)
-		return;
+xen_arch_post_suspend(int suspend_cancelled) {
+    if (suspend_cancelled)
+        return;
 
-	xen_ia64_enable_opt_feature();
-	/* add more if necessary */
+    xen_ia64_enable_opt_feature();
+    /* add more if necessary */
 }
 
-void xen_arch_resume(void)
-{
-	xen_timer_resume_on_aps();
+void xen_arch_resume(void) {
+    xen_timer_resume_on_aps();
 }

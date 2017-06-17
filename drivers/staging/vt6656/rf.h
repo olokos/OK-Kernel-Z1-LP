@@ -67,18 +67,18 @@ BOOL IFRFbWriteEmbeded(PSDevice pDevice, DWORD dwData);
 BOOL RFbSetPower(PSDevice pDevice, unsigned int uRATE, unsigned int uCH);
 
 BOOL RFbRawSetPower(
-      PSDevice  pDevice,
-      BYTE      byPwr,
-      unsigned int      uRATE
-    );
+    PSDevice  pDevice,
+    BYTE      byPwr,
+    unsigned int      uRATE
+);
 
 void RFvRSSITodBm(PSDevice pDevice, BYTE byCurrRSSI, long *pldBm);
 void RFbRFTableDownload(PSDevice pDevice);
 
 BOOL s_bVT3226D0_11bLoCurrentAdjust(
-      PSDevice    pDevice,
-      BYTE        byChannel,
-      BOOL        b11bMode
-    );
+    PSDevice    pDevice,
+    BYTE        byChannel,
+    BOOL        b11bMode
+);
 
 #endif /* __RF_H__ */

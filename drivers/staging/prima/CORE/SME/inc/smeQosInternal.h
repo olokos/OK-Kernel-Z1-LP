@@ -64,8 +64,7 @@
    Enumeration of the various EDCA Access Categories:
    Based on AC to ACI mapping in 802.11e spec (identical to WMM)
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     SME_QOS_EDCA_AC_BE = 0,  /* Best effort access category             */
     SME_QOS_EDCA_AC_BK = 1,  /* Background access category              */
     SME_QOS_EDCA_AC_VI = 2,  /* Video access category                   */
@@ -79,8 +78,7 @@ typedef enum
    Enumeration of the various CSR event indication types that would be reported
    by CSR
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     SME_QOS_CSR_JOIN_REQ = 0,
     SME_QOS_CSR_ASSOC_COMPLETE,
     SME_QOS_CSR_REASSOC_REQ,
@@ -98,16 +96,14 @@ typedef enum
 } sme_QosCsrEventIndType;
 
 #ifdef FEATURE_WLAN_DIAG_SUPPORT
-typedef enum
-{
+typedef enum {
     SME_QOS_DIAG_ADDTS_REQ = 0,
     SME_QOS_DIAG_ADDTS_RSP,
     SME_QOS_DIAG_DELTS
 
 } sme_QosDiagQosEventSubtype;
 
-typedef enum
-{
+typedef enum {
     SME_QOS_DIAG_ADDTS_ADMISSION_ACCEPTED = 0,
     SME_QOS_DIAG_ADDTS_INVALID_PARAMS,
     SME_QOS_DIAG_ADDTS_RESERVED,
@@ -122,8 +118,7 @@ typedef enum
     The association information structure to be passed by CSR after assoc or
     reassoc is done
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     tSirBssDescription            *pBssDesc;
     tCsrRoamProfile               *pProfile;
 } sme_QosAssocInfo;

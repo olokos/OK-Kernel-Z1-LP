@@ -41,23 +41,23 @@ struct ipw_network;
 struct ipw_tty;
 
 struct ipw_dev {
-	struct pcmcia_device *link;
-	int is_v2_card;
+    struct pcmcia_device *link;
+    int is_v2_card;
 
-	void __iomem *attr_memory;
+    void __iomem *attr_memory;
 
-	void __iomem *common_memory;
+    void __iomem *common_memory;
 
-	/* Reference to attribute memory, containing CIS data */
-	void *attribute_memory;
+    /* Reference to attribute memory, containing CIS data */
+    void *attribute_memory;
 
-	/* Hardware context */
-	struct ipw_hardware *hardware;
-	/* Network layer context */
-	struct ipw_network *network;
-	/* TTY device context */
-	struct ipw_tty *tty;
-	struct work_struct work_reboot;
+    /* Hardware context */
+    struct ipw_hardware *hardware;
+    /* Network layer context */
+    struct ipw_network *network;
+    /* TTY device context */
+    struct ipw_tty *tty;
+    struct work_struct work_reboot;
 };
 
 /* Module parametres */

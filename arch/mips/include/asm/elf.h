@@ -44,10 +44,10 @@
 #define DT_MIPS_ICHECKSUM	0x70000003
 #define DT_MIPS_IVERSION	0x70000004
 #define DT_MIPS_FLAGS		0x70000005
-	#define RHF_NONE	0x00000000
-	#define RHF_HARDWAY	0x00000001
-	#define RHF_NOTPOT	0x00000002
-	#define RHF_SGI_ONLY	0x00000010
+#define RHF_NONE	0x00000000
+#define RHF_HARDWAY	0x00000001
+#define RHF_NOTPOT	0x00000002
+#define RHF_SGI_ONLY	0x00000010
 #define DT_MIPS_BASE_ADDRESS	0x70000006
 #define DT_MIPS_CONFLICT	0x70000008
 #define DT_MIPS_LIBLIST		0x70000009
@@ -375,7 +375,7 @@ extern const char *__elf_platform;
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
 struct linux_binprm;
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-				       int uses_interp);
+                                       int uses_interp);
 
 struct mm_struct;
 extern unsigned long arch_randomize_brk(struct mm_struct *mm);

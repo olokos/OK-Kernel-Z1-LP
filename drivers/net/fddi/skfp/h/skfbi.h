@@ -78,7 +78,7 @@
  * Note: The temperature and voltage sensors are relocated on a different
  *	 I2C bus.
  */
-#define I2C_ADDR_VPD	0xA0	/* I2C address for the VPD EEPROM */ 
+#define I2C_ADDR_VPD	0xA0	/* I2C address for the VPD EEPROM */
 
 /*
  * Define Bits and Values of the registers
@@ -169,30 +169,30 @@
 /* Device Dependent Region */
 /*	PCI_OUR_REG	(DV)	32 bit	Our Register */
 /*	PCI_OUR_REG_1	(ML)	32 bit	Our Register 1 */
-				  /*	 Bit 31..29:	reserved */
+/*	 Bit 31..29:	reserved */
 #define	PCI_PATCH_DIR	(3L<<27)  /*(DV) Bit 28..27:	Ext Patchs direction */
 #define PCI_PATCH_DIR_0	(1L<<27)  /*(DV) Type of the pins EXT_PATCHS<1..0>   */
 #define PCI_PATCH_DIR_1 (1L<<28)  /*	   0 = input			     */
-				  /*	   1 = output			     */
+/*	   1 = output			     */
 #define	PCI_EXT_PATCHS	(3L<<25)  /*(DV) Bit 26..25:	Extended Patches     */
 #define PCI_EXT_PATCH_0 (1L<<25)  /*(DV)				     */
 #define PCI_EXT_PATCH_1 (1L<<26)  /*	 CLK for MicroWire (ML)		     */
 #define PCI_VIO		(1L<<25)  /*(ML)				     */
 #define	PCI_EN_BOOT	(1L<<24)  /*	 Bit 24:	Enable BOOT via ROM  */
-				  /*	   1 = Don't boot with ROM	     */
-				  /*	   0 = Boot with ROM		     */
+/*	   1 = Don't boot with ROM	     */
+/*	   0 = Boot with ROM		     */
 #define	PCI_EN_IO	(1L<<23)  /*	 Bit 23:	Mapping to IO space  */
 #define	PCI_EN_FPROM	(1L<<22)  /*	 Bit 22:	FLASH mapped to mem? */
-				  /*	   1 = Map Flash to Memory	     */
-			  	  /*	   0 = Disable all addr. decoding    */
+/*	   1 = Map Flash to Memory	     */
+/*	   0 = Disable all addr. decoding    */
 #define	PCI_PAGESIZE	(3L<<20)  /*	 Bit 21..20:	FLASH Page Size	     */
 #define	PCI_PAGE_16	(0L<<20)  /*		16 k pages		     */
 #define	PCI_PAGE_32K	(1L<<20)  /*		32 k pages		     */
 #define	PCI_PAGE_64K	(2L<<20)  /*		64 k pages		     */
 #define	PCI_PAGE_128K	(3L<<20)  /*		128 k pages		     */
-				  /*	 Bit 19: reserved (ML) and (DV)	     */
+/*	 Bit 19: reserved (ML) and (DV)	     */
 #define	PCI_PAGEREG	(7L<<16)  /*	 Bit 18..16:	Page Register	     */
-				  /*	 Bit 15:	reserved	     */
+/*	 Bit 15:	reserved	     */
 #define	PCI_FORCE_BE	(1L<<14)  /*	 Bit 14:	Assert all BEs on MR */
 #define	PCI_DIS_MRL	(1L<<13)  /*	 Bit 13:	Disable Mem R Line   */
 #define	PCI_DIS_MRM	(1L<<12)  /*	 Bit 12:	Disable Mem R multip */
@@ -207,7 +207,7 @@
 #define PCI_VPD_WR_TH	(0xffL<<24)	/* Bit 24..31	VPD Write Threshold  */
 #define	PCI_DEV_SEL	(0x7fL<<17)	/* Bit 17..23	EEPROM Device Select */
 #define	PCI_VPD_ROM_SZ	(7L<<14)	/* Bit 14..16	VPD ROM Size	     */
-					/* Bit 12..13	reserved	     */
+/* Bit 12..13	reserved	     */
 #define	PCI_PATCH_DIR2	(0xfL<<8)	/* Bit  8..11	Ext Patchs dir 2..5  */
 #define	PCI_PATCH_DIR_2	(1L<<8)		/* Bit  8	CS for MicroWire     */
 #define	PCI_PATCH_DIR_3	(1L<<9)
@@ -230,7 +230,7 @@
 #define	PCI_PME_SUP	(0x1f<<11)	/* Bit 11..15	PM Manag. Event Support*/
 #define PCI_PM_D2_SUB	(1<<10)		/* Bit 10	D2 Support Bit	     */
 #define PCI_PM_D1_SUB	(1<<9)		/* Bit 9	D1 Support Bit       */
-					/* Bit 6..8 reserved		     */
+/* Bit 6..8 reserved		     */
 #define PCI_PM_DSI	(1<<5)		/* Bit 5	Device Specific Init.*/
 #define PCI_PM_APS	(1<<4)		/* Bit 4	Auxialiary Power Src */
 #define PCI_PME_CLOCK	(1<<3)		/* Bit 3	PM Event Clock       */
@@ -240,7 +240,7 @@
 #define	PCI_PME_STATUS	(1<<15)		/* Bit 15 	PFA doesn't sup. PME#*/
 #define PCI_PM_DAT_SCL	(3<<13)		/* Bit 13..14	dat reg Scaling factor */
 #define PCI_PM_DAT_SEL	(0xf<<9)	/* Bit  9..12	PM data selector field */
-					/* Bit  7.. 2	reserved	     */
+/* Bit  7.. 2	reserved	     */
 #define PCI_PM_STATE	(3<<0)		/* Bit  0.. 1	Power Management State */
 #define PCI_PM_STATE_D0	(0<<0)		/* D0:	Operational (default) */
 #define	PCI_PM_STATE_D1	(1<<0)		/* D1:	not supported */
@@ -261,7 +261,7 @@
  *	Bank 0
  */
 #define	B0_RAP		0x0000	/*  8 bit register address port */
-	/* 0x0001 - 0x0003:	reserved */
+/* 0x0001 - 0x0003:	reserved */
 #define	B0_CTRL		0x0004	/*  8 bit control register */
 #define	B0_DAS		0x0005	/*  8 Bit control register (DAS) */
 #define	B0_LED		0x0006	/*  8 Bit LED register */
@@ -326,28 +326,28 @@
 
 #define B2_CONN_TYP	0x0108	/*  8 bit Connector type */
 #define B2_PMD_TYP	0x0109	/*  8 bit PMD type */
-				/* 0x010a - 0x010b:	reserved */
-	/* Eprom registers are currently of no use */
+/* 0x010a - 0x010b:	reserved */
+/* Eprom registers are currently of no use */
 #define B2_E_0		0x010c	/*  8 bit EPROM Byte 0 */
 #define B2_E_1		0x010d	/*  8 bit EPROM Byte 1 */
 #define B2_E_2		0x010e	/*  8 bit EPROM Byte 2 */
 #define B2_E_3		0x010f	/*  8 bit EPROM Byte 3 */
 #define B2_FAR		0x0110	/* 32 bit Flash-Prom Address Register/Counter */
 #define B2_FDP		0x0114	/*  8 bit Flash-Prom Data Port */
-				/* 0x0115 - 0x0117:	reserved */
+/* 0x0115 - 0x0117:	reserved */
 #define B2_LD_CRTL	0x0118	/*  8 bit loader control */
 #define B2_LD_TEST	0x0119	/*  8 bit loader test */
-				/* 0x011a - 0x011f:	reserved */
+/* 0x011a - 0x011f:	reserved */
 #define B2_TI_INI	0x0120	/* 32 bit Timer init value */
 #define B2_TI_VAL	0x0124	/* 32 bit Timer value */
 #define B2_TI_CRTL	0x0128	/*  8 bit Timer control */
 #define B2_TI_TEST	0x0129	/*  8 Bit Timer Test */
-				/* 0x012a - 0x012f:	reserved */
+/* 0x012a - 0x012f:	reserved */
 #define B2_WDOG_INI	0x0130	/* 32 bit Watchdog init value */
 #define B2_WDOG_VAL	0x0134	/* 32 bit Watchdog value */
 #define B2_WDOG_CRTL	0x0138	/*  8 bit Watchdog control */
 #define B2_WDOG_TEST	0x0139	/*  8 Bit Watchdog Test */
-				/* 0x013a - 0x013f:	reserved */
+/* 0x013a - 0x013f:	reserved */
 #define B2_RTM_INI	0x0140	/* 32 bit RTM init value */
 #define B2_RTM_VAL	0x0144	/* 32 bit RTM value */
 #define B2_RTM_CRTL	0x0148	/*  8 bit RTM control */
@@ -357,7 +357,7 @@
 #define B2_DESC_ADDR_H	0x0150	/* (ML) 32 bit	Desciptor Base Addr Reg High */
 #define B2_CTRL_2	0x0154	/* (ML)	 8 bit	Control Register 2 */
 #define B2_IFACE_REG	0x0155	/* (ML)	 8 bit	Interface Register */
-				/* 0x0156:		reserved */
+/* 0x0156:		reserved */
 #define B2_TST_CTRL_2	0x0157	/* (ML)  8 bit	Test Control Register 2 */
 #define B2_I2C_CTRL	0x0158	/* (ML)	32 bit	I2C Control Register */
 #define B2_I2C_DATA	0x015c	/* (ML) 32 bit	I2C Data Register */
@@ -366,7 +366,7 @@
 #define B2_IRQ_MOD_VAL	0x0164	/* (ML)	32 bit	IRQ Moderation Timer Value */
 #define B2_IRQ_MOD_CTRL	0x0168	/* (ML)  8 bit	IRQ Moderation Timer Control */
 #define B2_IRQ_MOD_TEST	0x0169	/* (ML)	 8 bit	IRQ Moderation Timer Test */
-				/* 0x016a - 0x017f:	reserved */
+/* 0x016a - 0x017f:	reserved */
 
 /*
  *	Bank 3
@@ -394,8 +394,8 @@
 #define B4_R1_T3	0x022c	/* 	32 bit Test Register 3		     */
 #define B4_R1_DA_H	0x0230	/* (ML)	32 bit Curr Rx Desc Address High     */
 #define B4_R1_AC_H	0x0234	/* (ML)	32 bit Curr Addr Counter High dword  */
-				/* 0x0238 - 0x023f:	reserved	  */
-				/* Receive queue 2 is removed on Monalisa */
+/* 0x0238 - 0x023f:	reserved	  */
+/* Receive queue 2 is removed on Monalisa */
 #define B4_R2_D		0x0240	/* 4*32 bit current receive Descriptor	(q2) */
 #define B4_R2_DA	0x0250	/* 32 bit current rec desc address	(q2) */
 #define B4_R2_AC	0x0254	/* 32 bit current receive Address Count	(q2) */
@@ -409,7 +409,7 @@
 #define B4_R2_T1_SV	0x0267	/* 8 bit Test Register 1 SV		(q2) */
 #define B4_R2_T2	0x0268	/* 32 bit Test Register 2		(q2) */
 #define B4_R2_T3	0x026c	/* 32 bit Test Register 3		(q2) */
-				/* 0x0270 - 0x027c:	reserved */
+/* 0x0270 - 0x027c:	reserved */
 
 /*
  *	Bank 5
@@ -429,7 +429,7 @@
 #define B5_XA_T3	0x02ac	/* 32 bit Test Register 3		(xa) */
 #define B5_XA_DA_H	0x02b0	/* (ML)	32 bit Curr Tx Desc Address High     */
 #define B5_XA_AC_H	0x02b4	/* (ML)	32 bit Curr Addr Counter High dword  */
-				/* 0x02b8 - 0x02bc:	reserved */
+/* 0x02b8 - 0x02bc:	reserved */
 #define B5_XS_D		0x02c0	/* 4*32 bit current transmit Descriptor	(xs) */
 #define B5_XS_DA	0x02d0	/* 32 bit current tx desc address	(xs) */
 #define B5_XS_AC	0x02d4	/* 32 bit current transmit Address Count(xs) */
@@ -445,7 +445,7 @@
 #define B5_XS_T3	0x02ec	/* 32 bit Test Register 3		(xs) */
 #define B5_XS_DA_H	0x02f0	/* (ML)	32 bit Curr Tx Desc Address High     */
 #define B5_XS_AC_H	0x02f4	/* (ML)	32 bit Curr Addr Counter High dword  */
-				/* 0x02f8 - 0x02fc:	reserved */
+/* 0x02f8 - 0x02fc:	reserved */
 
 /*
  *	Bank 6
@@ -483,14 +483,14 @@
 /*	B0_DAS		8 Bit control register (DAS) */
 #define BUS_CLOCK	(1<<7)	/* Bit 7: (ML)	Bus Clock 0/1 = 33/66MHz */
 #define BUS_SLOT_SZ	(1<<6)	/* Bit 6: (ML)	Slot Size 0/1 = 32/64 bit slot*/
-				/* Bit 5..4:	reserved */
+/* Bit 5..4:	reserved */
 #define	DAS_AVAIL	(1<<3)	/* Bit 3:	1 = DAS, 0 = SAS */
 #define DAS_BYP_ST	(1<<2)	/* Bit 2:	1 = avail,SAS, 0 = not avail */
 #define DAS_BYP_INS	(1<<1)	/* Bit 1:	1 = insert Bypass */
 #define DAS_BYP_RMV	(1<<0)	/* Bit 0:	1 = remove Bypass */
 
 /*	B0_LED		8 Bit LED register */
-				/* Bit 7..6:	reserved */
+/* Bit 7..6:	reserved */
 #define LED_2_ON	(1<<5)	/* Bit 5:	1 = switch LED_2 on (left,gn)*/
 #define LED_2_OFF	(1<<4)	/* Bit 4:	1 = switch LED_2 off */
 #define LED_1_ON	(1<<3)	/* Bit 3:	1 = switch LED_1 on (mid,yel)*/
@@ -517,14 +517,14 @@
 #define	TST_CFG_WRITE_OFF	(1<<0)	/* Bit 0:  dis configuration reg. WR */
 
 /*	B0_ISRC		32 bit Interrupt source register */
-					/* Bit 31..28:	reserved	     */
+/* Bit 31..28:	reserved	     */
 #define IS_I2C_READY	(1L<<27)	/* Bit 27: (ML)	IRQ on end of I2C tx */
 #define IS_IRQ_SW	(1L<<26)	/* Bit 26: (ML)	SW forced IRQ	     */
 #define IS_EXT_REG	(1L<<25)	/* Bit 25: (ML) IRQ from external reg*/
 #define	IS_IRQ_STAT	(1L<<24)	/* Bit 24:	IRQ status exception */
-					/*   PERR, RMABORT, RTABORT DATAPERR */
+/*   PERR, RMABORT, RTABORT DATAPERR */
 #define	IS_IRQ_MST_ERR	(1L<<23)	/* Bit 23:	IRQ master error     */
-					/*   RMABORT, RTABORT, DATAPERR	     */
+/*   RMABORT, RTABORT, DATAPERR	     */
 #define	IS_TIMINT	(1L<<22)	/* Bit 22:	IRQ_TIMER	*/
 #define	IS_TOKEN	(1L<<21)	/* Bit 21:	IRQ_RTM		*/
 /*
@@ -546,12 +546,12 @@
 #define	IS_R2_F		(1L<<9)		/* Bit	9: (DV)	End of Frame (q2) */
 #define	IS_R2_C		(1L<<8)		/* Bit	8: (DV)	Encoding Error (q2) */
 /* Asynchronous Transmit queue */
-					/* Bit  7:	reserved */
+/* Bit  7:	reserved */
 #define	IS_XA_B		(1L<<6)		/* Bit	6:	End of Buffer (xa) */
 #define	IS_XA_F		(1L<<5)		/* Bit	5:	End of Frame (xa) */
 #define	IS_XA_C		(1L<<4)		/* Bit	4:	Encoding Error (xa) */
 /* Synchronous Transmit queue */
-					/* Bit  3:	reserved */
+/* Bit  3:	reserved */
 #define	IS_XS_B		(1L<<2)		/* Bit	2:	End of Buffer (xs) */
 #define	IS_XS_F		(1L<<1)		/* Bit	1:	End of Frame (xs) */
 #define	IS_XS_C		(1L<<0)		/* Bit	0:	Encoding Error (xs) */
@@ -569,14 +569,14 @@
  * source register. These definition are directly derived from the Hardware
  * spec.
  */
-					/* Bit 31..28:	reserved	     */
+/* Bit 31..28:	reserved	     */
 #define IRQ_I2C_READY	(1L<<27)	/* Bit 27: (ML)	IRQ on end of I2C tx */
 #define IRQ_SW		(1L<<26)	/* Bit 26: (ML)	SW forced IRQ	     */
 #define IRQ_EXT_REG	(1L<<25)	/* Bit 25: (ML) IRQ from external reg*/
 #define	IRQ_STAT	(1L<<24)	/* Bit 24:	IRQ status exception */
-					/*   PERR, RMABORT, RTABORT DATAPERR */
+/*   PERR, RMABORT, RTABORT DATAPERR */
 #define	IRQ_MST_ERR	(1L<<23)	/* Bit 23:	IRQ master error     */
-					/*   RMABORT, RTABORT, DATAPERR	     */
+/*   RMABORT, RTABORT, DATAPERR	     */
 #define	IRQ_TIMER	(1L<<22)	/* Bit 22:	IRQ_TIMER	*/
 #define	IRQ_RTM		(1L<<21)	/* Bit 21:	IRQ_RTM		*/
 #define	IRQ_DAS		(1L<<20)	/* Bit 20:	IRQ_PHY_DAS	*/
@@ -595,12 +595,12 @@
 #define	IRQ_R2_F	(1L<<9)		/* Bit	9: (DV)	End of Frame (q2) */
 #define	IRQ_R2_C	(1L<<8)		/* Bit	8: (DV)	Encoding Error (q2) */
 /* Asynchronous Transmit queue */
-					/* Bit  7:	reserved */
+/* Bit  7:	reserved */
 #define	IRQ_XA_B	(1L<<6)		/* Bit	6:	End of Buffer (xa) */
 #define	IRQ_XA_F	(1L<<5)		/* Bit	5:	End of Frame (xa) */
 #define	IRQ_XA_C	(1L<<4)		/* Bit	4:	Encoding Error (xa) */
 /* Synchronous Transmit queue */
-					/* Bit  3:	reserved */
+/* Bit  3:	reserved */
 #define	IRQ_XS_B	(1L<<2)		/* Bit	2:	End of Buffer (xs) */
 #define	IRQ_XS_F	(1L<<1)		/* Bit	1:	End of Frame (xs) */
 #define	IRQ_XS_C	(1L<<0)		/* Bit	0:	Encoding Error (xs) */
@@ -676,7 +676,7 @@
 /*	B2_TOK_COUNT	0x014c	(ML)	32 bit	Token Counter */
 /*	B2_DESC_ADDR_H	0x0150	(ML)	32 bit	Desciptor Base Addr Reg High */
 /*	B2_CTRL_2	0x0154	(ML)	 8 bit	Control Register 2 */
-				/* Bit 7..5:	reserved		*/
+/* Bit 7..5:	reserved		*/
 #define CTRL_CL_I2C_IRQ (1<<4)	/* Bit 4:	Clear I2C IRQ		*/
 #define CTRL_ST_SW_IRQ	(1<<3)	/* Bit 3:	Set IRQ SW Request	*/
 #define CTRL_CL_SW_IRQ	(1<<2)	/* Bit 2:	Clear IRQ SW Request	*/
@@ -684,16 +684,16 @@
 #define	CTRL_STOP_MAST	(1<<0)	/* Bit 0:	Command Bit to stop the master*/
 
 /*	B2_IFACE_REG	0x0155	(ML)	 8 bit	Interface Register */
-				/* Bit 7..3:	reserved		*/
+/* Bit 7..3:	reserved		*/
 #define	IF_I2C_DATA_DIR	(1<<2)	/* Bit 2:	direction of IF_I2C_DATA*/
 #define IF_I2C_DATA	(1<<1)	/* Bit 1:	I2C Data Port		*/
 #define	IF_I2C_CLK	(1<<0)	/* Bit 0:	I2C Clock Port		*/
 
-				/* 0x0156:		reserved */
+/* 0x0156:		reserved */
 /*	B2_TST_CTRL_2	0x0157	(ML)	 8 bit	Test Control Register 2 */
-					/* Bit 7..4:	reserved */
-					/* force the following error on */
-					/* the next master read/write	*/
+/* Bit 7..4:	reserved */
+/* force the following error on */
+/* the next master read/write	*/
 #define TST_FRC_DPERR_MR64	(1<<3)	/* Bit 3:	DataPERR RD 64	*/
 #define TST_FRC_DPERR_MW64	(1<<2)	/* Bit 2:	DataPERR WR 64	*/
 #define TST_FRC_APERR_1M64	(1<<1)	/* Bit 1:	AddrPERR on 1. phase */
@@ -703,7 +703,7 @@
 #define	I2C_FLAG	(1L<<31)	/* Bit 31:	Start read/write if WR */
 #define I2C_ADDR	(0x7fffL<<16)	/* Bit 30..16:	Addr to be read/written*/
 #define	I2C_DEV_SEL	(0x7fL<<9)	/* Bit  9..15:	I2C Device Select      */
-					/* Bit  5.. 8:	reserved	       */
+/* Bit  5.. 8:	reserved	       */
 #define I2C_BURST_LEN	(1L<<4)		/* Bit  4	Burst Len, 1/4 bytes   */
 #define I2C_DEV_SIZE	(7L<<1)		/* Bit	1.. 3:	I2C Device Size	       */
 #define I2C_025K_DEV	(0L<<1)		/*		0: 256 Bytes or smaller*/
@@ -778,7 +778,7 @@
 #define	CSR_DWRITE_RST	(1L<<10)    /* Bit 10:	Reset Descr Write SM */
 #define	CSR_TRANS_RUN	(1L<<9)     /* Bit 9:	Release Transfer SM */
 #define	CSR_TRANS_RST	(1L<<8)     /* Bit 8:	Reset Transfer SM */
-				    /* Bit 7..5: reserved */
+/* Bit 7..5: reserved */
 #define	CSR_START	(1L<<4)     /* Bit 4:	Start Rec/Xmit Queue */
 #define	CSR_IRQ_CL_P	(1L<<3)     /* Bit 3:	Clear Parity IRQ, Rcv */
 #define	CSR_IRQ_CL_B	(1L<<2)     /* Bit 2:	Clear EOB IRQ */
@@ -792,14 +792,14 @@
 
 
 /*	B5_<xx>_F	32 bit flag register		 (xx) */
-					/* Bit 28..31:	reserved	      */
+/* Bit 28..31:	reserved	      */
 #define F_ALM_FULL	(1L<<27)	/* Bit 27: (ML)	FIFO almost full      */
 #define F_FIFO_EOF	(1L<<26)	/* Bit 26: (ML)	Fag bit in FIFO       */
 #define F_WM_REACHED	(1L<<25)	/* Bit 25: (ML)	Watermark reached     */
 #define F_UP_DW_USED	(1L<<24)	/* Bit 24: (ML) Upper Dword used (bug)*/
-					/* Bit 23: 	reserved	      */
+/* Bit 23: 	reserved	      */
 #define F_FIFO_LEVEL	(0x1fL<<16)	/* Bit 16..22:(ML) # of Qwords in FIFO*/
-					/* Bit  8..15: 	reserved	      */
+/* Bit  8..15: 	reserved	      */
 #define F_ML_WATER_M	0x0000ffL	/* Bit  0.. 7:(ML) Watermark	      */
 #define	FLAG_WATER	0x00001fL	/* Bit 4..0:(DV) Level of req data tr.*/
 
@@ -862,7 +862,7 @@
 
 /*	B5_<xx>_T2	32 bit Test Register 2		 (xx) */
 /* Note: This register is only defined for the transmit queues */
-				/* Bit 31..8:	reserved */
+/* Bit 31..8:	reserved */
 #define	AC_TEST_ON	(1<<7)	/* Bit 7:	Address Counter Test Mode on */
 #define	AC_TEST_OFF	(1<<6)	/* Bit 6:	Address Counter Test Mode off*/
 #define	BC_TEST_ON	(1<<5)	/* Bit 5:	Byte Counter Test Mode on */
@@ -874,7 +874,7 @@
 
 /*	B5_<xx>_T3	32 bit Test Register 3		 (xx) */
 /* Note: This register is only defined for the transmit queues */
-				/* Bit 31..8:	reserved */
+/* Bit 31..8:	reserved */
 #define T3_MUX_2	(1<<7)	/* Bit 7: (ML)	Mux position MSB */
 #define T3_VRAM_2	(1<<6)	/* Bit 6: (ML)	Virtual RAM buffer addr MSB */
 #define	T3_LOOP		(1<<5)	/* Bit 5: 	Set Loopback (Xmit) */
@@ -888,7 +888,7 @@
  */
 #define	PCI_VEND_ID0	0x48		/* PCI vendor ID (SysKonnect) */
 #define	PCI_VEND_ID1	0x11		/* PCI vendor ID (SysKonnect) */
-					/*		 (High byte) */
+/*		 (High byte) */
 #define	PCI_DEV_ID0	0x00		/* PCI device ID */
 #define	PCI_DEV_ID1	0x40		/* PCI device ID (High byte) */
 
@@ -1085,7 +1085,7 @@
 #endif
 
 /* Special timer macro for 82c54 */
-				/* timer access over data bus bit 8..15 */
+/* timer access over data bus bit 8..15 */
 #define	OUT_82c54_TIMER(port,val)	outpw(TI_A(port),(val)<<8)
 #define	IN_82c54_TIMER(port)		((inpw(TI_A(port))>>8) & 0xff)
 

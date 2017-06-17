@@ -7,7 +7,7 @@
 #include <linux/percpu.h>
 
 struct ia64_cpu {
-	struct cpu cpu;
+    struct cpu cpu;
 };
 
 DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);

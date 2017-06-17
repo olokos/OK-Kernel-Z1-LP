@@ -29,95 +29,95 @@
 
 /* Data type for 64 bit little endian register */
 typedef struct {
-	volatile uint32_t lo;	/* Lower 32 bit in little endian mode */
-	volatile uint32_t hi;	/* Upper 32 bit in little endian mode */
+    volatile uint32_t lo;	/* Lower 32 bit in little endian mode */
+    volatile uint32_t hi;	/* Upper 32 bit in little endian mode */
 } dmacHw_REG64_t;
 
 /* Data type representing DMA channel registers */
 typedef struct {
-	dmacHw_REG64_t ChannelSar;	/*  Source Address Register. 64 bits (upper 32 bits are reserved)
+    dmacHw_REG64_t ChannelSar;	/*  Source Address Register. 64 bits (upper 32 bits are reserved)
 					   Address must be aligned to CTLx.SRC_TR_WIDTH.
 					 */
-	dmacHw_REG64_t ChannelDar;	/*  Destination Address Register.64 bits (upper 32 bits are reserved)
+    dmacHw_REG64_t ChannelDar;	/*  Destination Address Register.64 bits (upper 32 bits are reserved)
 					   Address must be aligned to CTLx.DST_TR_WIDTH.
 					 */
-	dmacHw_REG64_t ChannelLlp;	/*  Link List Pointer.64 bits (upper 32 bits are reserved)
+    dmacHw_REG64_t ChannelLlp;	/*  Link List Pointer.64 bits (upper 32 bits are reserved)
 					   LLP contains the pointer to the next LLI for block chaining using linked lists.
 					   If LLPis set to 0x0, then transfers using linked lists are not enabled.
 					   Address MUST be aligned to a 32-bit boundary.
 					 */
-	dmacHw_REG64_t ChannelCtl;	/* Control Register. 64 bits */
-	dmacHw_REG64_t ChannelSstat;	/* Source Status Register */
-	dmacHw_REG64_t ChannelDstat;	/* Destination Status Register */
-	dmacHw_REG64_t ChannelSstatAddr;	/* Source Status Address Register */
-	dmacHw_REG64_t ChannelDstatAddr;	/* Destination Status Address Register */
-	dmacHw_REG64_t ChannelConfig;	/* Channel Configuration Register */
-	dmacHw_REG64_t SrcGather;	/* Source gather register */
-	dmacHw_REG64_t DstScatter;	/* Destination scatter register */
+    dmacHw_REG64_t ChannelCtl;	/* Control Register. 64 bits */
+    dmacHw_REG64_t ChannelSstat;	/* Source Status Register */
+    dmacHw_REG64_t ChannelDstat;	/* Destination Status Register */
+    dmacHw_REG64_t ChannelSstatAddr;	/* Source Status Address Register */
+    dmacHw_REG64_t ChannelDstatAddr;	/* Destination Status Address Register */
+    dmacHw_REG64_t ChannelConfig;	/* Channel Configuration Register */
+    dmacHw_REG64_t SrcGather;	/* Source gather register */
+    dmacHw_REG64_t DstScatter;	/* Destination scatter register */
 } dmacHw_CH_REG_t;
 
 /* Data type for RAW interrupt status registers */
 typedef struct {
-	dmacHw_REG64_t RawTfr;	/* Raw Status for IntTfr Interrupt */
-	dmacHw_REG64_t RawBlock;	/* Raw Status for IntBlock Interrupt */
-	dmacHw_REG64_t RawSrcTran;	/* Raw Status for IntSrcTran Interrupt */
-	dmacHw_REG64_t RawDstTran;	/* Raw Status for IntDstTran Interrupt */
-	dmacHw_REG64_t RawErr;	/* Raw Status for IntErr Interrupt */
+    dmacHw_REG64_t RawTfr;	/* Raw Status for IntTfr Interrupt */
+    dmacHw_REG64_t RawBlock;	/* Raw Status for IntBlock Interrupt */
+    dmacHw_REG64_t RawSrcTran;	/* Raw Status for IntSrcTran Interrupt */
+    dmacHw_REG64_t RawDstTran;	/* Raw Status for IntDstTran Interrupt */
+    dmacHw_REG64_t RawErr;	/* Raw Status for IntErr Interrupt */
 } dmacHw_INT_RAW_t;
 
 /* Data type for interrupt status registers */
 typedef struct {
-	dmacHw_REG64_t StatusTfr;	/* Status for IntTfr Interrupt */
-	dmacHw_REG64_t StatusBlock;	/* Status for IntBlock Interrupt */
-	dmacHw_REG64_t StatusSrcTran;	/* Status for IntSrcTran Interrupt */
-	dmacHw_REG64_t StatusDstTran;	/* Status for IntDstTran Interrupt */
-	dmacHw_REG64_t StatusErr;	/* Status for IntErr Interrupt */
+    dmacHw_REG64_t StatusTfr;	/* Status for IntTfr Interrupt */
+    dmacHw_REG64_t StatusBlock;	/* Status for IntBlock Interrupt */
+    dmacHw_REG64_t StatusSrcTran;	/* Status for IntSrcTran Interrupt */
+    dmacHw_REG64_t StatusDstTran;	/* Status for IntDstTran Interrupt */
+    dmacHw_REG64_t StatusErr;	/* Status for IntErr Interrupt */
 } dmacHw_INT_STATUS_t;
 
 /* Data type for interrupt mask registers*/
 typedef struct {
-	dmacHw_REG64_t MaskTfr;	/* Mask for IntTfr Interrupt */
-	dmacHw_REG64_t MaskBlock;	/* Mask for IntBlock Interrupt */
-	dmacHw_REG64_t MaskSrcTran;	/* Mask for IntSrcTran Interrupt */
-	dmacHw_REG64_t MaskDstTran;	/* Mask for IntDstTran Interrupt */
-	dmacHw_REG64_t MaskErr;	/* Mask for IntErr Interrupt */
+    dmacHw_REG64_t MaskTfr;	/* Mask for IntTfr Interrupt */
+    dmacHw_REG64_t MaskBlock;	/* Mask for IntBlock Interrupt */
+    dmacHw_REG64_t MaskSrcTran;	/* Mask for IntSrcTran Interrupt */
+    dmacHw_REG64_t MaskDstTran;	/* Mask for IntDstTran Interrupt */
+    dmacHw_REG64_t MaskErr;	/* Mask for IntErr Interrupt */
 } dmacHw_INT_MASK_t;
 
 /* Data type for interrupt clear registers */
 typedef struct {
-	dmacHw_REG64_t ClearTfr;	/* Clear for IntTfr Interrupt */
-	dmacHw_REG64_t ClearBlock;	/* Clear for IntBlock Interrupt */
-	dmacHw_REG64_t ClearSrcTran;	/* Clear for IntSrcTran Interrupt */
-	dmacHw_REG64_t ClearDstTran;	/* Clear for IntDstTran Interrupt */
-	dmacHw_REG64_t ClearErr;	/* Clear for IntErr Interrupt */
-	dmacHw_REG64_t StatusInt;	/* Status for each interrupt type */
+    dmacHw_REG64_t ClearTfr;	/* Clear for IntTfr Interrupt */
+    dmacHw_REG64_t ClearBlock;	/* Clear for IntBlock Interrupt */
+    dmacHw_REG64_t ClearSrcTran;	/* Clear for IntSrcTran Interrupt */
+    dmacHw_REG64_t ClearDstTran;	/* Clear for IntDstTran Interrupt */
+    dmacHw_REG64_t ClearErr;	/* Clear for IntErr Interrupt */
+    dmacHw_REG64_t StatusInt;	/* Status for each interrupt type */
 } dmacHw_INT_CLEAR_t;
 
 /* Data type for software handshaking registers */
 typedef struct {
-	dmacHw_REG64_t ReqSrcReg;	/* Source Software Transaction Request Register */
-	dmacHw_REG64_t ReqDstReg;	/* Destination Software Transaction Request Register */
-	dmacHw_REG64_t SglReqSrcReg;	/* Single Source Transaction Request Register */
-	dmacHw_REG64_t SglReqDstReg;	/* Single Destination Transaction Request Register */
-	dmacHw_REG64_t LstSrcReg;	/* Last Source Transaction Request Register */
-	dmacHw_REG64_t LstDstReg;	/* Last Destination Transaction Request Register */
+    dmacHw_REG64_t ReqSrcReg;	/* Source Software Transaction Request Register */
+    dmacHw_REG64_t ReqDstReg;	/* Destination Software Transaction Request Register */
+    dmacHw_REG64_t SglReqSrcReg;	/* Single Source Transaction Request Register */
+    dmacHw_REG64_t SglReqDstReg;	/* Single Destination Transaction Request Register */
+    dmacHw_REG64_t LstSrcReg;	/* Last Source Transaction Request Register */
+    dmacHw_REG64_t LstDstReg;	/* Last Destination Transaction Request Register */
 } dmacHw_SW_HANDSHAKE_t;
 
 /* Data type for misc. registers */
 typedef struct {
-	dmacHw_REG64_t DmaCfgReg;	/* DMA Configuration Register */
-	dmacHw_REG64_t ChEnReg;	/* DMA Channel Enable Register */
-	dmacHw_REG64_t DmaIdReg;	/* DMA ID Register */
-	dmacHw_REG64_t DmaTestReg;	/* DMA Test Register */
-	dmacHw_REG64_t Reserved0;	/* Reserved */
-	dmacHw_REG64_t Reserved1;	/* Reserved */
-	dmacHw_REG64_t CompParm6;	/* Component Parameter 6 */
-	dmacHw_REG64_t CompParm5;	/* Component Parameter 5 */
-	dmacHw_REG64_t CompParm4;	/* Component Parameter 4 */
-	dmacHw_REG64_t CompParm3;	/* Component Parameter 3 */
-	dmacHw_REG64_t CompParm2;	/* Component Parameter 2 */
-	dmacHw_REG64_t CompParm1;	/* Component Parameter 1 */
-	dmacHw_REG64_t CompId;	/* Compoent ID */
+    dmacHw_REG64_t DmaCfgReg;	/* DMA Configuration Register */
+    dmacHw_REG64_t ChEnReg;	/* DMA Channel Enable Register */
+    dmacHw_REG64_t DmaIdReg;	/* DMA ID Register */
+    dmacHw_REG64_t DmaTestReg;	/* DMA Test Register */
+    dmacHw_REG64_t Reserved0;	/* Reserved */
+    dmacHw_REG64_t Reserved1;	/* Reserved */
+    dmacHw_REG64_t CompParm6;	/* Component Parameter 6 */
+    dmacHw_REG64_t CompParm5;	/* Component Parameter 5 */
+    dmacHw_REG64_t CompParm4;	/* Component Parameter 4 */
+    dmacHw_REG64_t CompParm3;	/* Component Parameter 3 */
+    dmacHw_REG64_t CompParm2;	/* Component Parameter 2 */
+    dmacHw_REG64_t CompParm1;	/* Component Parameter 1 */
+    dmacHw_REG64_t CompId;	/* Compoent ID */
 } dmacHw_MISC_t;
 
 /* Base registers */

@@ -19,14 +19,14 @@
 # define NR_BANKS 8
 
 struct membank {
-	unsigned long start;
-	unsigned long size;
-	unsigned int highmem;
+    unsigned long start;
+    unsigned long size;
+    unsigned int highmem;
 };
 
 struct meminfo {
-	int nr_banks;
-	struct membank bank[NR_BANKS];
+    int nr_banks;
+    struct membank bank[NR_BANKS];
 };
 
 extern struct meminfo meminfo;

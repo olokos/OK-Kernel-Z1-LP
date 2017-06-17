@@ -192,13 +192,12 @@ extern void srm_paging_stop(void);
 
 static inline int
 __alpha_remap_area_pages(unsigned long address, unsigned long phys_addr,
-			 unsigned long size, unsigned long flags)
-{
-	pgprot_t prot;
+                         unsigned long size, unsigned long flags) {
+    pgprot_t prot;
 
-	prot = __pgprot(_PAGE_VALID | _PAGE_ASM | _PAGE_KRE
-			| _PAGE_KWE | flags);
-	return ioremap_page_range(address, address + size, phys_addr, prot);
+    prot = __pgprot(_PAGE_VALID | _PAGE_ASM | _PAGE_KRE
+                    | _PAGE_KWE | flags);
+    return ioremap_page_range(address, address + size, phys_addr, prot);
 }
 
 /* irq.c */
@@ -208,11 +207,10 @@ __alpha_remap_area_pages(unsigned long address, unsigned long phys_addr,
 #define mcheck_taken(cpu)	(cpu_data[cpu].mcheck_taken)
 #define mcheck_extra(cpu)	(cpu_data[cpu].mcheck_extra)
 #else
-extern struct mcheck_info
-{
-	unsigned char expected __attribute__((aligned(8)));
-	unsigned char taken;
-	unsigned char extra;
+extern struct mcheck_info {
+    unsigned char expected __attribute__((aligned(8)));
+    unsigned char taken;
+    unsigned char extra;
 } __mcheck_info;
 
 #define mcheck_expected(cpu)	(*((void)(cpu), &__mcheck_info.expected))
@@ -221,4 +219,4 @@ extern struct mcheck_info
 #endif
 
 extern void process_mcheck_info(unsigned long vector, unsigned long la_ptr,
-				const char *machine, int expected);
+                                const char *machine, int expected);

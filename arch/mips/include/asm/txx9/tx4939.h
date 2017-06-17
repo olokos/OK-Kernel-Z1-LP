@@ -48,135 +48,135 @@
 #define TX4939_RNG_REG		(TX4939_CRYPTO_REG + 0xb0)
 
 struct tx4939_le_reg {
-	__u32 r;
-	__u32 unused;
+    __u32 r;
+    __u32 unused;
 };
 
 struct tx4939_ddrc_reg {
-	struct tx4939_le_reg ctl[47];
-	__u64 unused0[17];
-	__u64 winen;
-	__u64 win[4];
+    struct tx4939_le_reg ctl[47];
+    __u64 unused0[17];
+    __u64 winen;
+    __u64 win[4];
 };
 
 struct tx4939_ccfg_reg {
-	__u64 ccfg;
-	__u64 crir;
-	__u64 pcfg;
-	__u64 toea;
-	__u64 clkctr;
-	__u64 unused0;
-	__u64 garbc;
-	__u64 unused1[2];
-	__u64 ramp;
-	__u64 unused2[2];
-	__u64 dskwctrl;
-	__u64 mclkosc;
-	__u64 mclkctl;
-	__u64 unused3[17];
-	struct {
-		__u64 mr;
-		__u64 dr;
-	} gpio[2];
+    __u64 ccfg;
+    __u64 crir;
+    __u64 pcfg;
+    __u64 toea;
+    __u64 clkctr;
+    __u64 unused0;
+    __u64 garbc;
+    __u64 unused1[2];
+    __u64 ramp;
+    __u64 unused2[2];
+    __u64 dskwctrl;
+    __u64 mclkosc;
+    __u64 mclkctl;
+    __u64 unused3[17];
+    struct {
+        __u64 mr;
+        __u64 dr;
+    } gpio[2];
 };
 
 struct tx4939_irc_reg {
-	struct tx4939_le_reg den;
-	struct tx4939_le_reg scipb;
-	struct tx4939_le_reg dm[2];
-	struct tx4939_le_reg lvl[16];
-	struct tx4939_le_reg msk;
-	struct tx4939_le_reg edc;
-	struct tx4939_le_reg pnd0;
-	struct tx4939_le_reg cs;
-	struct tx4939_le_reg pnd1;
-	struct tx4939_le_reg dm2[2];
-	struct tx4939_le_reg dbr[2];
-	struct tx4939_le_reg dben;
-	struct tx4939_le_reg unused0[2];
-	struct tx4939_le_reg flag[2];
-	struct tx4939_le_reg pol;
-	struct tx4939_le_reg cnt;
-	struct tx4939_le_reg maskint;
-	struct tx4939_le_reg maskext;
+    struct tx4939_le_reg den;
+    struct tx4939_le_reg scipb;
+    struct tx4939_le_reg dm[2];
+    struct tx4939_le_reg lvl[16];
+    struct tx4939_le_reg msk;
+    struct tx4939_le_reg edc;
+    struct tx4939_le_reg pnd0;
+    struct tx4939_le_reg cs;
+    struct tx4939_le_reg pnd1;
+    struct tx4939_le_reg dm2[2];
+    struct tx4939_le_reg dbr[2];
+    struct tx4939_le_reg dben;
+    struct tx4939_le_reg unused0[2];
+    struct tx4939_le_reg flag[2];
+    struct tx4939_le_reg pol;
+    struct tx4939_le_reg cnt;
+    struct tx4939_le_reg maskint;
+    struct tx4939_le_reg maskext;
 };
 
 struct tx4939_rtc_reg {
-	__u32 ctl;
-	__u32 adr;
-	__u32 dat;
-	__u32 tbc;
+    __u32 ctl;
+    __u32 adr;
+    __u32 dat;
+    __u32 tbc;
 };
 
 struct tx4939_crypto_reg {
-	struct tx4939_le_reg csr;
-	struct tx4939_le_reg idesptr;
-	struct tx4939_le_reg cdesptr;
-	struct tx4939_le_reg buserr;
-	struct tx4939_le_reg cip_tout;
-	struct tx4939_le_reg cir;
-	union {
-		struct {
-			struct tx4939_le_reg data[8];
-			struct tx4939_le_reg ctrl;
-		} gen;
-		struct {
-			struct {
-				struct tx4939_le_reg l;
-				struct tx4939_le_reg u;
-			} key[3], ini;
-			struct tx4939_le_reg ctrl;
-		} des;
-		struct {
-			struct tx4939_le_reg key[4];
-			struct tx4939_le_reg ini[4];
-			struct tx4939_le_reg ctrl;
-		} aes;
-		struct {
-			struct {
-				struct tx4939_le_reg l;
-				struct tx4939_le_reg u;
-			} cnt;
-			struct tx4939_le_reg ini[5];
-			struct tx4939_le_reg unused;
-			struct tx4939_le_reg ctrl;
-		} hash;
-	} cdr;
-	struct tx4939_le_reg unused0[7];
-	struct tx4939_le_reg rcsr;
-	struct tx4939_le_reg rpr;
-	__u64 rdr;
-	__u64 ror[3];
-	struct tx4939_le_reg unused1[2];
-	struct tx4939_le_reg xorslr;
-	struct tx4939_le_reg xorsur;
+    struct tx4939_le_reg csr;
+    struct tx4939_le_reg idesptr;
+    struct tx4939_le_reg cdesptr;
+    struct tx4939_le_reg buserr;
+    struct tx4939_le_reg cip_tout;
+    struct tx4939_le_reg cir;
+    union {
+        struct {
+            struct tx4939_le_reg data[8];
+            struct tx4939_le_reg ctrl;
+        } gen;
+        struct {
+            struct {
+                struct tx4939_le_reg l;
+                struct tx4939_le_reg u;
+            } key[3], ini;
+            struct tx4939_le_reg ctrl;
+        } des;
+        struct {
+            struct tx4939_le_reg key[4];
+            struct tx4939_le_reg ini[4];
+            struct tx4939_le_reg ctrl;
+        } aes;
+        struct {
+            struct {
+                struct tx4939_le_reg l;
+                struct tx4939_le_reg u;
+            } cnt;
+            struct tx4939_le_reg ini[5];
+            struct tx4939_le_reg unused;
+            struct tx4939_le_reg ctrl;
+        } hash;
+    } cdr;
+    struct tx4939_le_reg unused0[7];
+    struct tx4939_le_reg rcsr;
+    struct tx4939_le_reg rpr;
+    __u64 rdr;
+    __u64 ror[3];
+    struct tx4939_le_reg unused1[2];
+    struct tx4939_le_reg xorslr;
+    struct tx4939_le_reg xorsur;
 };
 
 struct tx4939_crypto_desc {
-	__u32 src;
-	__u32 dst;
-	__u32 next;
-	__u32 ctrl;
-	__u32 index;
-	__u32 xor;
+    __u32 src;
+    __u32 dst;
+    __u32 next;
+    __u32 ctrl;
+    __u32 index;
+    __u32 xor;
 };
 
 struct tx4939_vpc_reg {
-	struct tx4939_le_reg csr;
-	struct {
-		struct tx4939_le_reg ctrlA;
-		struct tx4939_le_reg ctrlB;
-		struct tx4939_le_reg idesptr;
-		struct tx4939_le_reg cdesptr;
-	} port[3];
-	struct tx4939_le_reg buserr;
+    struct tx4939_le_reg csr;
+    struct {
+        struct tx4939_le_reg ctrlA;
+        struct tx4939_le_reg ctrlB;
+        struct tx4939_le_reg idesptr;
+        struct tx4939_le_reg cdesptr;
+    } port[3];
+    struct tx4939_le_reg buserr;
 };
 
 struct tx4939_vpc_desc {
-	__u32 src;
-	__u32 next;
-	__u32 ctrl1;
-	__u32 ctrl2;
+    __u32 src;
+    __u32 next;
+    __u32 ctrl1;
+    __u32 ctrl2;
 };
 
 /*
@@ -545,7 +545,7 @@ void tx4939_mtd_init(int ch);
 void tx4939_ata_init(void);
 void tx4939_rtc_init(void);
 void tx4939_ndfmc_init(unsigned int hold, unsigned int spw,
-		       unsigned char ch_mask, unsigned char wide_mask);
+                       unsigned char ch_mask, unsigned char wide_mask);
 void tx4939_dmac_init(int memcpy_chan0, int memcpy_chan1);
 void tx4939_aclc_init(void);
 void tx4939_sramc_init(void);

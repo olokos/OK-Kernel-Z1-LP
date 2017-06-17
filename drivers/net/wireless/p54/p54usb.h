@@ -66,15 +66,15 @@
 #define P54U_DEV_BASE 0x40000000
 
 struct net2280_tx_hdr {
-	__le32 device_addr;
-	__le16 len;
-	__le16 follower;	/* ? */
-	u8 padding[8];
+    __le32 device_addr;
+    __le16 len;
+    __le16 follower;	/* ? */
+    u8 padding[8];
 } __packed;
 
 struct lm87_tx_hdr {
-	__le32 device_addr;
-	__le32 chksum;
+    __le32 device_addr;
+    __le32 chksum;
 } __packed;
 
 /* Some flags for the isl hardware registers controlling DMA inside the
@@ -85,12 +85,12 @@ struct lm87_tx_hdr {
 #define ISL38XX_DMA_MASTER_CONTROL_TRIGGER	0x00000004
 
 enum net2280_op_type {
-	NET2280_BRG_U32		= 0x001F,
-	NET2280_BRG_CFG_U32	= 0x000F,
-	NET2280_BRG_CFG_U16	= 0x0003,
-	NET2280_DEV_U32		= 0x080F,
-	NET2280_DEV_CFG_U32	= 0x088F,
-	NET2280_DEV_CFG_U16	= 0x0883
+    NET2280_BRG_U32		= 0x001F,
+    NET2280_BRG_CFG_U32	= 0x000F,
+    NET2280_BRG_CFG_U16	= 0x0003,
+    NET2280_DEV_U32		= 0x080F,
+    NET2280_DEV_CFG_U32	= 0x088F,
+    NET2280_DEV_CFG_U16	= 0x0883
 };
 
 #define P54U_FW_BLOCK 2048
@@ -99,50 +99,50 @@ enum net2280_op_type {
 #define X2_SIGNATURE_SIZE 4
 
 struct x2_header {
-	u8 signature[X2_SIGNATURE_SIZE];
-	__le32 fw_load_addr;
-	__le32 fw_length;
-	__le32 crc;
+    u8 signature[X2_SIGNATURE_SIZE];
+    __le32 fw_load_addr;
+    __le32 fw_length;
+    __le32 crc;
 } __packed;
 
 /* pipes 3 and 4 are not used by the driver */
 #define P54U_PIPE_NUMBER 9
 
 enum p54u_pipe_addr {
-        P54U_PIPE_DATA = 0x01,
-        P54U_PIPE_MGMT = 0x02,
-        P54U_PIPE_3 = 0x03,
-        P54U_PIPE_4 = 0x04,
-        P54U_PIPE_BRG = 0x0d,
-        P54U_PIPE_DEV = 0x0e,
-        P54U_PIPE_INT = 0x0f
+    P54U_PIPE_DATA = 0x01,
+    P54U_PIPE_MGMT = 0x02,
+    P54U_PIPE_3 = 0x03,
+    P54U_PIPE_4 = 0x04,
+    P54U_PIPE_BRG = 0x0d,
+    P54U_PIPE_DEV = 0x0e,
+    P54U_PIPE_INT = 0x0f
 };
 
 struct p54u_rx_info {
-	struct urb *urb;
-	struct ieee80211_hw *dev;
+    struct urb *urb;
+    struct ieee80211_hw *dev;
 };
 
 enum p54u_hw_type {
-	P54U_INVALID_HW,
-	P54U_NET2280,
-	P54U_3887,
+    P54U_INVALID_HW,
+    P54U_NET2280,
+    P54U_3887,
 
-	/* keep last */
-	__NUM_P54U_HWTYPES,
+    /* keep last */
+    __NUM_P54U_HWTYPES,
 };
 
 struct p54u_priv {
-	struct p54_common common;
-	struct usb_device *udev;
-	struct usb_interface *intf;
-	int (*upload_fw)(struct ieee80211_hw *dev);
+    struct p54_common common;
+    struct usb_device *udev;
+    struct usb_interface *intf;
+    int (*upload_fw)(struct ieee80211_hw *dev);
 
-	enum p54u_hw_type hw_type;
-	spinlock_t lock;
-	struct sk_buff_head rx_queue;
-	struct usb_anchor submitted;
-	const struct firmware *fw;
+    enum p54u_hw_type hw_type;
+    spinlock_t lock;
+    struct sk_buff_head rx_queue;
+    struct usb_anchor submitted;
+    const struct firmware *fw;
 };
 
 #endif /* P54USB_H */

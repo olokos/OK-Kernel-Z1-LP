@@ -75,27 +75,27 @@
  */
 
 struct ad9832_state {
-	struct spi_device		*spi;
-	struct regulator		*reg;
-	unsigned long			mclk;
-	unsigned short			ctrl_fp;
-	unsigned short			ctrl_ss;
-	unsigned short			ctrl_src;
-	struct spi_transfer		xfer;
-	struct spi_message		msg;
-	struct spi_transfer		freq_xfer[4];
-	struct spi_message		freq_msg;
-	struct spi_transfer		phase_xfer[2];
-	struct spi_message		phase_msg;
-	/*
-	 * DMA (thus cache coherency maintenance) requires the
-	 * transfer buffers to live in their own cache lines.
-	 */
-	union {
-		unsigned short		freq_data[4]____cacheline_aligned;
-		unsigned short		phase_data[2];
-		unsigned short		data;
-	};
+    struct spi_device		*spi;
+    struct regulator		*reg;
+    unsigned long			mclk;
+    unsigned short			ctrl_fp;
+    unsigned short			ctrl_ss;
+    unsigned short			ctrl_src;
+    struct spi_transfer		xfer;
+    struct spi_message		msg;
+    struct spi_transfer		freq_xfer[4];
+    struct spi_message		freq_msg;
+    struct spi_transfer		phase_xfer[2];
+    struct spi_message		phase_msg;
+    /*
+     * DMA (thus cache coherency maintenance) requires the
+     * transfer buffers to live in their own cache lines.
+     */
+    union {
+        unsigned short		freq_data[4]____cacheline_aligned;
+        unsigned short		phase_data[2];
+        unsigned short		data;
+    };
 };
 
 /*
@@ -114,13 +114,13 @@ struct ad9832_state {
  */
 
 struct ad9832_platform_data {
-	unsigned long		mclk;
-	unsigned long		freq0;
-	unsigned long		freq1;
-	unsigned short		phase0;
-	unsigned short		phase1;
-	unsigned short		phase2;
-	unsigned short		phase3;
+    unsigned long		mclk;
+    unsigned long		freq0;
+    unsigned long		freq1;
+    unsigned short		phase0;
+    unsigned short		phase1;
+    unsigned short		phase2;
+    unsigned short		phase3;
 };
 
 #endif /* IIO_DDS_AD9832_H_ */

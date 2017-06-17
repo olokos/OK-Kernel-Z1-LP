@@ -78,274 +78,274 @@
 #define _CMD_N(cmd)              (((cmd) >> _CMD_NSHIFT) & _CMD_NMASK)
 
 enum vnic_devcmd_cmd {
-	CMD_NONE                = _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_NONE, 0),
+    CMD_NONE                = _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_NONE, 0),
 
-	/*
-	 * mcpu fw info in mem:
-	 * in:
-	 *   (u64)a0=paddr to struct vnic_devcmd_fw_info
-	 * action:
-	 *   Fills in struct vnic_devcmd_fw_info (128 bytes)
-	 * note:
-	 *   An old definition of CMD_MCPU_FW_INFO
-	 */
-	CMD_MCPU_FW_INFO_OLD    = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 1),
+    /*
+     * mcpu fw info in mem:
+     * in:
+     *   (u64)a0=paddr to struct vnic_devcmd_fw_info
+     * action:
+     *   Fills in struct vnic_devcmd_fw_info (128 bytes)
+     * note:
+     *   An old definition of CMD_MCPU_FW_INFO
+     */
+    CMD_MCPU_FW_INFO_OLD    = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 1),
 
-	/*
-	 * mcpu fw info in mem:
-	 * in:
-	 *   (u64)a0=paddr to struct vnic_devcmd_fw_info
-	 *   (u16)a1=size of the structure
-	 * out:
-	 *	 (u16)a1=0                          for in:a1 = 0,
-	 *	         data size actually written for other values.
-	 * action:
-	 *   Fills in first 128 bytes of vnic_devcmd_fw_info for in:a1 = 0,
-	 *            first in:a1 bytes               for 0 < in:a1 <= 132,
-	 *            132 bytes                       for other values of in:a1.
-	 * note:
-	 *   CMD_MCPU_FW_INFO and CMD_MCPU_FW_INFO_OLD have the same enum 1
-	 *   for source compatibility.
-	 */
-	CMD_MCPU_FW_INFO        = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 1),
+    /*
+     * mcpu fw info in mem:
+     * in:
+     *   (u64)a0=paddr to struct vnic_devcmd_fw_info
+     *   (u16)a1=size of the structure
+     * out:
+     *	 (u16)a1=0                          for in:a1 = 0,
+     *	         data size actually written for other values.
+     * action:
+     *   Fills in first 128 bytes of vnic_devcmd_fw_info for in:a1 = 0,
+     *            first in:a1 bytes               for 0 < in:a1 <= 132,
+     *            132 bytes                       for other values of in:a1.
+     * note:
+     *   CMD_MCPU_FW_INFO and CMD_MCPU_FW_INFO_OLD have the same enum 1
+     *   for source compatibility.
+     */
+    CMD_MCPU_FW_INFO        = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 1),
 
-	/* dev-specific block member:
-	 *    in: (u16)a0=offset,(u8)a1=size
-	 *    out: a0=value */
-	CMD_DEV_SPEC            = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 2),
+    /* dev-specific block member:
+     *    in: (u16)a0=offset,(u8)a1=size
+     *    out: a0=value */
+    CMD_DEV_SPEC            = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 2),
 
-	/* stats clear */
-	CMD_STATS_CLEAR         = _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 3),
+    /* stats clear */
+    CMD_STATS_CLEAR         = _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 3),
 
-	/* stats dump in mem: (u64)a0=paddr to stats area,
-	 *                    (u16)a1=sizeof stats area */
-	CMD_STATS_DUMP          = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 4),
+    /* stats dump in mem: (u64)a0=paddr to stats area,
+     *                    (u16)a1=sizeof stats area */
+    CMD_STATS_DUMP          = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 4),
 
-	/* set Rx packet filter: (u32)a0=filters (see CMD_PFILTER_*) */
-	CMD_PACKET_FILTER	= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 7),
+    /* set Rx packet filter: (u32)a0=filters (see CMD_PFILTER_*) */
+    CMD_PACKET_FILTER	= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 7),
 
-	/* set Rx packet filter for all: (u32)a0=filters (see CMD_PFILTER_*) */
-	CMD_PACKET_FILTER_ALL   = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 7),
+    /* set Rx packet filter for all: (u32)a0=filters (see CMD_PFILTER_*) */
+    CMD_PACKET_FILTER_ALL   = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 7),
 
-	/* hang detection notification */
-	CMD_HANG_NOTIFY         = _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 8),
+    /* hang detection notification */
+    CMD_HANG_NOTIFY         = _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 8),
 
-	/* MAC address in (u48)a0 */
-	CMD_GET_MAC_ADDR        = _CMDC(_CMD_DIR_READ,
-					_CMD_VTYPE_ENET | _CMD_VTYPE_FC, 9),
+    /* MAC address in (u48)a0 */
+    CMD_GET_MAC_ADDR        = _CMDC(_CMD_DIR_READ,
+                                    _CMD_VTYPE_ENET | _CMD_VTYPE_FC, 9),
 
-	/* add addr from (u48)a0 */
-	CMD_ADDR_ADD            = _CMDCNW(_CMD_DIR_WRITE,
-					_CMD_VTYPE_ENET | _CMD_VTYPE_FC, 12),
+    /* add addr from (u48)a0 */
+    CMD_ADDR_ADD            = _CMDCNW(_CMD_DIR_WRITE,
+                                      _CMD_VTYPE_ENET | _CMD_VTYPE_FC, 12),
 
-	/* del addr from (u48)a0 */
-	CMD_ADDR_DEL            = _CMDCNW(_CMD_DIR_WRITE,
-					_CMD_VTYPE_ENET | _CMD_VTYPE_FC, 13),
+    /* del addr from (u48)a0 */
+    CMD_ADDR_DEL            = _CMDCNW(_CMD_DIR_WRITE,
+                                      _CMD_VTYPE_ENET | _CMD_VTYPE_FC, 13),
 
-	/* add VLAN id in (u16)a0 */
-	CMD_VLAN_ADD            = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 14),
+    /* add VLAN id in (u16)a0 */
+    CMD_VLAN_ADD            = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 14),
 
-	/* del VLAN id in (u16)a0 */
-	CMD_VLAN_DEL            = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 15),
+    /* del VLAN id in (u16)a0 */
+    CMD_VLAN_DEL            = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 15),
 
-	/* nic_cfg in (u32)a0 */
-	CMD_NIC_CFG             = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 16),
+    /* nic_cfg in (u32)a0 */
+    CMD_NIC_CFG             = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 16),
 
-	/* union vnic_rss_key in mem: (u64)a0=paddr, (u16)a1=len */
-	CMD_RSS_KEY             = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 17),
+    /* union vnic_rss_key in mem: (u64)a0=paddr, (u16)a1=len */
+    CMD_RSS_KEY             = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 17),
 
-	/* union vnic_rss_cpu in mem: (u64)a0=paddr, (u16)a1=len */
-	CMD_RSS_CPU             = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 18),
+    /* union vnic_rss_cpu in mem: (u64)a0=paddr, (u16)a1=len */
+    CMD_RSS_CPU             = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 18),
 
-	/* initiate softreset */
-	CMD_SOFT_RESET          = _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 19),
+    /* initiate softreset */
+    CMD_SOFT_RESET          = _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 19),
 
-	/* softreset status:
-	 *    out: a0=0 reset complete, a0=1 reset in progress */
-	CMD_SOFT_RESET_STATUS   = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 20),
+    /* softreset status:
+     *    out: a0=0 reset complete, a0=1 reset in progress */
+    CMD_SOFT_RESET_STATUS   = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 20),
 
-	/* set struct vnic_devcmd_notify buffer in mem:
-	 * in:
-	 *   (u64)a0=paddr to notify (set paddr=0 to unset)
-	 *   (u32)a1 & 0x00000000ffffffff=sizeof(struct vnic_devcmd_notify)
-	 *   (u16)a1 & 0x0000ffff00000000=intr num (-1 for no intr)
-	 * out:
-	 *   (u32)a1 = effective size
-	 */
-	CMD_NOTIFY              = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 21),
+    /* set struct vnic_devcmd_notify buffer in mem:
+     * in:
+     *   (u64)a0=paddr to notify (set paddr=0 to unset)
+     *   (u32)a1 & 0x00000000ffffffff=sizeof(struct vnic_devcmd_notify)
+     *   (u16)a1 & 0x0000ffff00000000=intr num (-1 for no intr)
+     * out:
+     *   (u32)a1 = effective size
+     */
+    CMD_NOTIFY              = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 21),
 
-	/* UNDI API: (u64)a0=paddr to s_PXENV_UNDI_ struct,
-	 *           (u8)a1=PXENV_UNDI_xxx */
-	CMD_UNDI                = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 22),
+    /* UNDI API: (u64)a0=paddr to s_PXENV_UNDI_ struct,
+     *           (u8)a1=PXENV_UNDI_xxx */
+    CMD_UNDI                = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 22),
 
-	/* initiate open sequence (u32)a0=flags (see CMD_OPENF_*) */
-	CMD_OPEN		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 23),
+    /* initiate open sequence (u32)a0=flags (see CMD_OPENF_*) */
+    CMD_OPEN		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 23),
 
-	/* open status:
-	 *    out: a0=0 open complete, a0=1 open in progress */
-	CMD_OPEN_STATUS		= _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 24),
+    /* open status:
+     *    out: a0=0 open complete, a0=1 open in progress */
+    CMD_OPEN_STATUS		= _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 24),
 
-	/* close vnic */
-	CMD_CLOSE		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 25),
+    /* close vnic */
+    CMD_CLOSE		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 25),
 
-	/* initialize virtual link: (u32)a0=flags (see CMD_INITF_*) */
-/***** Replaced by CMD_INIT *****/
-	CMD_INIT_v1		= _CMDCNW(_CMD_DIR_READ, _CMD_VTYPE_ALL, 26),
+    /* initialize virtual link: (u32)a0=flags (see CMD_INITF_*) */
+    /***** Replaced by CMD_INIT *****/
+    CMD_INIT_v1		= _CMDCNW(_CMD_DIR_READ, _CMD_VTYPE_ALL, 26),
 
-	/* variant of CMD_INIT, with provisioning info
-	 *     (u64)a0=paddr of vnic_devcmd_provinfo
-	 *     (u32)a1=sizeof provision info */
-	CMD_INIT_PROV_INFO	= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 27),
+    /* variant of CMD_INIT, with provisioning info
+     *     (u64)a0=paddr of vnic_devcmd_provinfo
+     *     (u32)a1=sizeof provision info */
+    CMD_INIT_PROV_INFO	= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 27),
 
-	/* enable virtual link */
-	CMD_ENABLE		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 28),
+    /* enable virtual link */
+    CMD_ENABLE		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 28),
 
-	/* enable virtual link, waiting variant. */
-	CMD_ENABLE_WAIT		= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 28),
+    /* enable virtual link, waiting variant. */
+    CMD_ENABLE_WAIT		= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 28),
 
-	/* disable virtual link */
-	CMD_DISABLE		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 29),
+    /* disable virtual link */
+    CMD_DISABLE		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 29),
 
-	/* stats dump sum of all vnic stats on same uplink in mem:
-	 *     (u64)a0=paddr
-	 *     (u16)a1=sizeof stats area */
-	CMD_STATS_DUMP_ALL	= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 30),
+    /* stats dump sum of all vnic stats on same uplink in mem:
+     *     (u64)a0=paddr
+     *     (u16)a1=sizeof stats area */
+    CMD_STATS_DUMP_ALL	= _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 30),
 
-	/* init status:
-	 *    out: a0=0 init complete, a0=1 init in progress
-	 *         if a0=0, a1=errno */
-	CMD_INIT_STATUS		= _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 31),
+    /* init status:
+     *    out: a0=0 init complete, a0=1 init in progress
+     *         if a0=0, a1=errno */
+    CMD_INIT_STATUS		= _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 31),
 
-	/* INT13 API: (u64)a0=paddr to vnic_int13_params struct
-	 *            (u32)a1=INT13_CMD_xxx */
-	CMD_INT13               = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_FC, 32),
+    /* INT13 API: (u64)a0=paddr to vnic_int13_params struct
+     *            (u32)a1=INT13_CMD_xxx */
+    CMD_INT13               = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_FC, 32),
 
-	/* logical uplink enable/disable: (u64)a0: 0/1=disable/enable */
-	CMD_LOGICAL_UPLINK      = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 33),
+    /* logical uplink enable/disable: (u64)a0: 0/1=disable/enable */
+    CMD_LOGICAL_UPLINK      = _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 33),
 
-	/* undo initialize of virtual link */
-	CMD_DEINIT		= _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 34),
+    /* undo initialize of virtual link */
+    CMD_DEINIT		= _CMDCNW(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 34),
 
-	/* initialize virtual link: (u32)a0=flags (see CMD_INITF_*) */
-	CMD_INIT		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 35),
+    /* initialize virtual link: (u32)a0=flags (see CMD_INITF_*) */
+    CMD_INIT		= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 35),
 
-	/* check fw capability of a cmd:
-	 * in:  (u32)a0=cmd
-	 * out: (u32)a0=errno, 0:valid cmd, a1=supported VNIC_STF_* bits */
-	CMD_CAPABILITY		= _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 36),
+    /* check fw capability of a cmd:
+     * in:  (u32)a0=cmd
+     * out: (u32)a0=errno, 0:valid cmd, a1=supported VNIC_STF_* bits */
+    CMD_CAPABILITY		= _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 36),
 
-	/* persistent binding info
-	 * in:  (u64)a0=paddr of arg
-	 *      (u32)a1=CMD_PERBI_XXX */
-	CMD_PERBI		= _CMDC(_CMD_DIR_RW, _CMD_VTYPE_FC, 37),
+    /* persistent binding info
+     * in:  (u64)a0=paddr of arg
+     *      (u32)a1=CMD_PERBI_XXX */
+    CMD_PERBI		= _CMDC(_CMD_DIR_RW, _CMD_VTYPE_FC, 37),
 
-	/* Interrupt Assert Register functionality
-	 * in: (u16)a0=interrupt number to assert
-	 */
-	CMD_IAR			= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 38),
+    /* Interrupt Assert Register functionality
+     * in: (u16)a0=interrupt number to assert
+     */
+    CMD_IAR			= _CMDCNW(_CMD_DIR_WRITE, _CMD_VTYPE_ALL, 38),
 
-	/* initiate hangreset, like softreset after hang detected */
-	CMD_HANG_RESET		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 39),
+    /* initiate hangreset, like softreset after hang detected */
+    CMD_HANG_RESET		= _CMDC(_CMD_DIR_NONE, _CMD_VTYPE_ALL, 39),
 
-	/* hangreset status:
-	 *    out: a0=0 reset complete, a0=1 reset in progress */
-	CMD_HANG_RESET_STATUS   = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 40),
+    /* hangreset status:
+     *    out: a0=0 reset complete, a0=1 reset in progress */
+    CMD_HANG_RESET_STATUS   = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 40),
 
-	/*
-	 * Set hw ingress packet vlan rewrite mode:
-	 * in:  (u32)a0=new vlan rewrite mode
-	 * out: (u32)a0=old vlan rewrite mode */
-	CMD_IG_VLAN_REWRITE_MODE = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ENET, 41),
+    /*
+     * Set hw ingress packet vlan rewrite mode:
+     * in:  (u32)a0=new vlan rewrite mode
+     * out: (u32)a0=old vlan rewrite mode */
+    CMD_IG_VLAN_REWRITE_MODE = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ENET, 41),
 
-	/*
-	 * in:  (u16)a0=bdf of target vnic
-	 *      (u32)a1=cmd to proxy
-	 *      a2-a15=args to cmd in a1
-	 * out: (u32)a0=status of proxied cmd
-	 *      a1-a15=out args of proxied cmd */
-	CMD_PROXY_BY_BDF =	_CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 42),
+    /*
+     * in:  (u16)a0=bdf of target vnic
+     *      (u32)a1=cmd to proxy
+     *      a2-a15=args to cmd in a1
+     * out: (u32)a0=status of proxied cmd
+     *      a1-a15=out args of proxied cmd */
+    CMD_PROXY_BY_BDF =	_CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 42),
 
-	/*
-	 * As for BY_BDF except a0 is index of hvnlink subordinate vnic
-	 * or SR-IOV virtual vnic
-	 */
-	CMD_PROXY_BY_INDEX =    _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 43),
+    /*
+     * As for BY_BDF except a0 is index of hvnlink subordinate vnic
+     * or SR-IOV virtual vnic
+     */
+    CMD_PROXY_BY_INDEX =    _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 43),
 
-	/*
-	 * For HPP toggle:
-	 * adapter-info-get
-	 * in:  (u64)a0=phsical address of buffer passed in from caller.
-	 *      (u16)a1=size of buffer specified in a0.
-	 * out: (u64)a0=phsical address of buffer passed in from caller.
-	 *      (u16)a1=actual bytes from VIF-CONFIG-INFO TLV, or
-	 *              0 if no VIF-CONFIG-INFO TLV was ever received. */
-	CMD_CONFIG_INFO_GET     = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 44),
+    /*
+     * For HPP toggle:
+     * adapter-info-get
+     * in:  (u64)a0=phsical address of buffer passed in from caller.
+     *      (u16)a1=size of buffer specified in a0.
+     * out: (u64)a0=phsical address of buffer passed in from caller.
+     *      (u16)a1=actual bytes from VIF-CONFIG-INFO TLV, or
+     *              0 if no VIF-CONFIG-INFO TLV was ever received. */
+    CMD_CONFIG_INFO_GET     = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 44),
 
-	/* init_prov_info2:
-	 * Variant of CMD_INIT_PROV_INFO, where it will not try to enable
-	 * the vnic until CMD_ENABLE2 is issued.
-	 *     (u64)a0=paddr of vnic_devcmd_provinfo
-	 *     (u32)a1=sizeof provision info */
-	CMD_INIT_PROV_INFO2  = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 47),
+    /* init_prov_info2:
+     * Variant of CMD_INIT_PROV_INFO, where it will not try to enable
+     * the vnic until CMD_ENABLE2 is issued.
+     *     (u64)a0=paddr of vnic_devcmd_provinfo
+     *     (u32)a1=sizeof provision info */
+    CMD_INIT_PROV_INFO2  = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 47),
 
-	/* enable2:
-	 *      (u32)a0=0                  ==> standby
-	 *             =CMD_ENABLE2_ACTIVE ==> active
-	 */
-	CMD_ENABLE2 = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 48),
+    /* enable2:
+     *      (u32)a0=0                  ==> standby
+     *             =CMD_ENABLE2_ACTIVE ==> active
+     */
+    CMD_ENABLE2 = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 48),
 
-	/*
-	 * cmd_status:
-	 *     Returns the status of the specified command
-	 * Input:
-	 *     a0 = command for which status is being queried.
-	 *          Possible values are:
-	 *              CMD_SOFT_RESET
-	 *              CMD_HANG_RESET
-	 *              CMD_OPEN
-	 *              CMD_INIT
-	 *              CMD_INIT_PROV_INFO
-	 *              CMD_DEINIT
-	 *              CMD_INIT_PROV_INFO2
-	 *              CMD_ENABLE2
-	 * Output:
-	 *     if status == STAT_ERROR
-	 *        a0 = ERR_ENOTSUPPORTED - status for command in a0 is
-	 *                                 not supported
-	 *     if status == STAT_NONE
-	 *        a0 = status of the devcmd specified in a0 as follows.
-	 *             ERR_SUCCESS   - command in a0 completed successfully
-	 *             ERR_EINPROGRESS - command in a0 is still in progress
-	 */
-	CMD_STATUS = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 49),
+    /*
+     * cmd_status:
+     *     Returns the status of the specified command
+     * Input:
+     *     a0 = command for which status is being queried.
+     *          Possible values are:
+     *              CMD_SOFT_RESET
+     *              CMD_HANG_RESET
+     *              CMD_OPEN
+     *              CMD_INIT
+     *              CMD_INIT_PROV_INFO
+     *              CMD_DEINIT
+     *              CMD_INIT_PROV_INFO2
+     *              CMD_ENABLE2
+     * Output:
+     *     if status == STAT_ERROR
+     *        a0 = ERR_ENOTSUPPORTED - status for command in a0 is
+     *                                 not supported
+     *     if status == STAT_NONE
+     *        a0 = status of the devcmd specified in a0 as follows.
+     *             ERR_SUCCESS   - command in a0 completed successfully
+     *             ERR_EINPROGRESS - command in a0 is still in progress
+     */
+    CMD_STATUS = _CMDC(_CMD_DIR_RW, _CMD_VTYPE_ALL, 49),
 
-	/*
-	 * Returns interrupt coalescing timer conversion factors.
-	 * After calling this devcmd, ENIC driver can convert
-	 * interrupt coalescing timer in usec into CPU cycles as follows:
-	 *
-	 *   intr_timer_cycles = intr_timer_usec * multiplier / divisor
-	 *
-	 * Interrupt coalescing timer in usecs can be obtained from
-	 * CPU cycles as follows:
-	 *
-	 *   intr_timer_usec = intr_timer_cycles * divisor / multiplier
-	 *
-	 * in: none
-	 * out: (u32)a0 = multiplier
-	 *      (u32)a1 = divisor
-	 *      (u32)a2 = maximum timer value in usec
-	 */
-	CMD_INTR_COAL_CONVERT = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 50),
+    /*
+     * Returns interrupt coalescing timer conversion factors.
+     * After calling this devcmd, ENIC driver can convert
+     * interrupt coalescing timer in usec into CPU cycles as follows:
+     *
+     *   intr_timer_cycles = intr_timer_usec * multiplier / divisor
+     *
+     * Interrupt coalescing timer in usecs can be obtained from
+     * CPU cycles as follows:
+     *
+     *   intr_timer_usec = intr_timer_cycles * divisor / multiplier
+     *
+     * in: none
+     * out: (u32)a0 = multiplier
+     *      (u32)a1 = divisor
+     *      (u32)a2 = maximum timer value in usec
+     */
+    CMD_INTR_COAL_CONVERT = _CMDC(_CMD_DIR_READ, _CMD_VTYPE_ALL, 50),
 
-	/*
-	 * cmd_set_mac_addr
-	 *	set mac address
-	 * in:
-	 *   (u48)a0 = mac addr
-	 *
-	 */
-	CMD_SET_MAC_ADDR = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 55),
+    /*
+     * cmd_set_mac_addr
+     *	set mac address
+     * in:
+     *   (u48)a0 = mac addr
+     *
+     */
+    CMD_SET_MAC_ADDR = _CMDC(_CMD_DIR_WRITE, _CMD_VTYPE_ENET, 55),
 };
 
 /* CMD_ENABLE2 flags */
@@ -371,25 +371,25 @@ enum vnic_devcmd_cmd {
 #define IG_VLAN_REWRITE_MODE_PASS_THRU                  3
 
 enum vnic_devcmd_status {
-	STAT_NONE = 0,
-	STAT_BUSY = 1 << 0,	/* cmd in progress */
-	STAT_ERROR = 1 << 1,	/* last cmd caused error (code in a0) */
+    STAT_NONE = 0,
+    STAT_BUSY = 1 << 0,	/* cmd in progress */
+    STAT_ERROR = 1 << 1,	/* last cmd caused error (code in a0) */
 };
 
 enum vnic_devcmd_error {
-	ERR_SUCCESS = 0,
-	ERR_EINVAL = 1,
-	ERR_EFAULT = 2,
-	ERR_EPERM = 3,
-	ERR_EBUSY = 4,
-	ERR_ECMDUNKNOWN = 5,
-	ERR_EBADSTATE = 6,
-	ERR_ENOMEM = 7,
-	ERR_ETIMEDOUT = 8,
-	ERR_ELINKDOWN = 9,
-	ERR_EMAXRES = 10,
-	ERR_ENOTSUPPORTED = 11,
-	ERR_EINPROGRESS = 12,
+    ERR_SUCCESS = 0,
+    ERR_EINVAL = 1,
+    ERR_EFAULT = 2,
+    ERR_EPERM = 3,
+    ERR_EBUSY = 4,
+    ERR_ECMDUNKNOWN = 5,
+    ERR_EBADSTATE = 6,
+    ERR_ENOMEM = 7,
+    ERR_ETIMEDOUT = 8,
+    ERR_ELINKDOWN = 9,
+    ERR_EMAXRES = 10,
+    ERR_ENOTSUPPORTED = 11,
+    ERR_EINPROGRESS = 12,
 };
 
 /*
@@ -399,26 +399,26 @@ enum vnic_devcmd_error {
  *       a 16-bit integer (e.g. 0xA2).
  */
 struct vnic_devcmd_fw_info {
-	char fw_version[32];
-	char fw_build[32];
-	char hw_version[32];
-	char hw_serial_number[32];
-	u16 asic_type;
-	u16 asic_rev;
+    char fw_version[32];
+    char fw_build[32];
+    char hw_version[32];
+    char hw_serial_number[32];
+    u16 asic_type;
+    u16 asic_rev;
 };
 
 struct vnic_devcmd_notify {
-	u32 csum;		/* checksum over following words */
+    u32 csum;		/* checksum over following words */
 
-	u32 link_state;		/* link up == 1 */
-	u32 port_speed;		/* effective port speed (rate limit) */
-	u32 mtu;		/* MTU */
-	u32 msglvl;		/* requested driver msg lvl */
-	u32 uif;		/* uplink interface */
-	u32 status;		/* status bits (see VNIC_STF_*) */
-	u32 error;		/* error code (see ERR_*) for first ERR */
-	u32 link_down_cnt;	/* running count of link down transitions */
-	u32 perbi_rebuild_cnt;	/* running count of perbi rebuilds */
+    u32 link_state;		/* link up == 1 */
+    u32 port_speed;		/* effective port speed (rate limit) */
+    u32 mtu;		/* MTU */
+    u32 msglvl;		/* requested driver msg lvl */
+    u32 uif;		/* uplink interface */
+    u32 status;		/* status bits (see VNIC_STF_*) */
+    u32 error;		/* error code (see ERR_*) for first ERR */
+    u32 link_down_cnt;	/* running count of link down transitions */
+    u32 perbi_rebuild_cnt;	/* running count of perbi rebuilds */
 };
 #define VNIC_STF_FATAL_ERR	0x0001	/* fatal fw error */
 #define VNIC_STF_STD_PAUSE	0x0002	/* standard link-level pause on */
@@ -430,9 +430,9 @@ struct vnic_devcmd_notify {
 				 0)
 
 struct vnic_devcmd_provinfo {
-	u8 oui[3];
-	u8 type;
-	u8 data[0];
+    u8 oui[3];
+    u8 type;
+    u8 data[0];
 };
 
 /*
@@ -451,9 +451,9 @@ struct vnic_devcmd_provinfo {
 /* Make sizeof(vnic_devcmd) a power-of-2 for I/O BAR. */
 #define VNIC_DEVCMD_NARGS 15
 struct vnic_devcmd {
-	u32 status;			/* RO */
-	u32 cmd;			/* RW */
-	u64 args[VNIC_DEVCMD_NARGS];	/* RW cmd args (little-endian) */
+    u32 status;			/* RO */
+    u32 cmd;			/* RW */
+    u64 args[VNIC_DEVCMD_NARGS];	/* RW cmd args (little-endian) */
 };
 
 #endif /* _VNIC_DEVCMD_H_ */

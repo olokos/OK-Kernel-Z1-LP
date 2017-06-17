@@ -28,17 +28,15 @@
 extern unsigned long cr_no_alignment;	/* defined in entry.S */
 extern unsigned long cr_alignment;	/* defined in entry.S */
 
-static inline unsigned int get_cr(void)
-{
-	unsigned int val;
-	asm("movc %0, p0.c1, #0" : "=r" (val) : : "cc");
-	return val;
+static inline unsigned int get_cr(void) {
+    unsigned int val;
+    asm("movc %0, p0.c1, #0" : "=r" (val) : : "cc");
+    return val;
 }
 
-static inline void set_cr(unsigned int val)
-{
-	asm volatile("movc p0.c1, %0, #0" : : "r" (val) : "cc");
-	isb();
+static inline void set_cr(unsigned int val) {
+    asm volatile("movc p0.c1, %0, #0" : : "r" (val) : "cc");
+    isb();
 }
 
 extern void adjust_cr(unsigned long mask, unsigned long set);

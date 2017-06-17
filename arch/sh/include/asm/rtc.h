@@ -20,7 +20,7 @@ int set_rtc_time(struct rtc_time *);
 #define RTC_CAP_4_DIGIT_YEAR	(1 << 0)
 
 struct sh_rtc_platform_info {
-	unsigned long capabilities;
+    unsigned long capabilities;
 };
 
 #include <cpu/rtc.h>

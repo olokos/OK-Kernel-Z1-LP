@@ -6,25 +6,22 @@
 #include <hwregs/reg_rdwr.h>
 #include <hwregs/gio_defs.h>
 
-enum crisv32_io_dir
-{
-  crisv32_io_dir_in = 0,
-  crisv32_io_dir_out = 1
+enum crisv32_io_dir {
+    crisv32_io_dir_in = 0,
+    crisv32_io_dir_out = 1
 };
 
-struct crisv32_ioport
-{
-  volatile unsigned long *oe;
-  volatile unsigned long *data;
-  volatile unsigned long *data_in;
-  unsigned int pin_count;
-  spinlock_t lock;
+struct crisv32_ioport {
+    volatile unsigned long *oe;
+    volatile unsigned long *data;
+    volatile unsigned long *data_in;
+    unsigned int pin_count;
+    spinlock_t lock;
 };
 
-struct crisv32_iopin
-{
-  struct crisv32_ioport* port;
-  int bit;
+struct crisv32_iopin {
+    struct crisv32_ioport* port;
+    int bit;
 };
 
 extern struct crisv32_ioport crisv32_ioports[];
@@ -41,46 +38,43 @@ extern struct crisv32_iopin crisv32_led_net0_red;
 extern struct crisv32_iopin crisv32_led_net1_green;
 extern struct crisv32_iopin crisv32_led_net1_red;
 
-static inline void crisv32_io_set(struct crisv32_iopin *iopin, int val)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&iopin->port->lock, flags);
+static inline void crisv32_io_set(struct crisv32_iopin *iopin, int val) {
+    unsigned long flags;
+    spin_lock_irqsave(&iopin->port->lock, flags);
 
-	if (iopin->port->data) {
-		if (val)
-			*iopin->port->data |= iopin->bit;
-		else
-			*iopin->port->data &= ~iopin->bit;
-	}
+    if (iopin->port->data) {
+        if (val)
+            *iopin->port->data |= iopin->bit;
+        else
+            *iopin->port->data &= ~iopin->bit;
+    }
 
-	spin_unlock_irqrestore(&iopin->port->lock, flags);
+    spin_unlock_irqrestore(&iopin->port->lock, flags);
 }
 
 static inline void crisv32_io_set_dir(struct crisv32_iopin* iopin,
-			       enum crisv32_io_dir dir)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&iopin->port->lock, flags);
+                                      enum crisv32_io_dir dir) {
+    unsigned long flags;
+    spin_lock_irqsave(&iopin->port->lock, flags);
 
-	if (iopin->port->oe) {
-		if (dir == crisv32_io_dir_in)
-			*iopin->port->oe &= ~iopin->bit;
-		else
-			*iopin->port->oe |= iopin->bit;
-	}
+    if (iopin->port->oe) {
+        if (dir == crisv32_io_dir_in)
+            *iopin->port->oe &= ~iopin->bit;
+        else
+            *iopin->port->oe |= iopin->bit;
+    }
 
-	spin_unlock_irqrestore(&iopin->port->lock, flags);
+    spin_unlock_irqrestore(&iopin->port->lock, flags);
 }
 
-static inline int crisv32_io_rd(struct crisv32_iopin* iopin)
-{
-	return ((*iopin->port->data_in & iopin->bit) ? 1 : 0);
+static inline int crisv32_io_rd(struct crisv32_iopin* iopin) {
+    return ((*iopin->port->data_in & iopin->bit) ? 1 : 0);
 }
 
 int crisv32_io_get(struct crisv32_iopin* iopin,
                    unsigned int port, unsigned int pin);
 int crisv32_io_get_name(struct crisv32_iopin* iopin,
-			const char *name);
+                        const char *name);
 
 #define CRIS_LED_OFF    0x00
 #define CRIS_LED_GREEN  0x01

@@ -33,15 +33,15 @@
 
 
 struct vendorname {
-	u8  *sub_vendor_name;
-	u32 sub_vendor_id;
+    u8  *sub_vendor_name;
+    u32 sub_vendor_id;
 };
 
 struct devicetype {
-	u8  *sub_device_name;
-	u32 sub_device_id;
-	u8  device_type;
-	u32 type_flags;
+    u8  *sub_device_name;
+    u32 sub_device_id;
+    u8  device_type;
+    u32 type_flags;
 };
 
 

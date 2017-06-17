@@ -154,9 +154,9 @@ int _name[] = { \
  * keymaps to drivers that implement keyboards.
  */
 struct kbd_platform_data {
-	const struct matrix_keymap_data *keymap;
-	bool rep;
-	unsigned int mode;
+    const struct matrix_keymap_data *keymap;
+    bool rep;
+    unsigned int mode;
 };
 
 #endif /* __PLAT_KEYBOARD_H */

@@ -36,17 +36,17 @@
 /* GAYLE registers */
 
 struct GAYLE {
-	u_char cardstatus;
-	u_char pad0[0x1000-1];
+    u_char cardstatus;
+    u_char pad0[0x1000-1];
 
-	u_char intreq;
-	u_char pad1[0x1000-1];
+    u_char intreq;
+    u_char pad1[0x1000-1];
 
-	u_char inten;
-	u_char pad2[0x1000-1];
+    u_char inten;
+    u_char pad2[0x1000-1];
 
-	u_char config;
-	u_char pad3[0x1000-1];
+    u_char config;
+    u_char pad3[0x1000-1];
 };
 
 #define GAYLE_ADDRESS	(0xda8000)	/* gayle main registers base address */
@@ -105,9 +105,9 @@ struct GAYLE {
 #define GAYLE_CFG_720NS		0x0c
 
 struct gayle_ide_platform_data {
-	unsigned long base;
-	unsigned long irqport;
-	int explicit_ack;	/* A1200 IDE needs explicit ack */
+    unsigned long base;
+    unsigned long irqport;
+    int explicit_ack;	/* A1200 IDE needs explicit ack */
 };
 
 #endif /* asm-m68k/amigayle.h */

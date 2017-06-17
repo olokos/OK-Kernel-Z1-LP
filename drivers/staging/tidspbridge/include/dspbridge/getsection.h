@@ -46,8 +46,8 @@
  * in subsequent operations.
  */
 extern void *dload_module_open(struct dynamic_loader_stream
-					   *module, struct dynamic_loader_sym
-					   *syms);
+                               *module, struct dynamic_loader_sym
+                               *syms);
 
 /*
  * Procedure dload_get_section_info
@@ -65,9 +65,9 @@ extern void *dload_module_open(struct dynamic_loader_stream
  *  TRUE for success, FALSE for section not found
  */
 extern int dload_get_section_info(void *minfo,
-				  const char *section_name,
-				  const struct ldr_section_info
-				  **const section_info);
+                                  const char *section_name,
+                                  const struct ldr_section_info
+                                  **const section_info);
 
 /*
  * Procedure dload_get_section
@@ -85,8 +85,8 @@ extern int dload_get_section_info(void *minfo,
  *  TRUE for success, FALSE for section not found
  */
 extern int dload_get_section(void *minfo,
-			     const struct ldr_section_info *section_info,
-			     void *section_data);
+                             const struct ldr_section_info *section_info,
+                             void *section_data);
 
 /*
  * Procedure dload_module_close

@@ -33,28 +33,26 @@ extern void kernel_fpu_end(void);
  * in interrupt context interacting wrongly with other user/kernel fpu usage, we
  * should use them only in the context of irq_ts_save/restore()
  */
-static inline int irq_ts_save(void)
-{
-	/*
-	 * If in process context and not atomic, we can take a spurious DNA fault.
-	 * Otherwise, doing clts() in process context requires disabling preemption
-	 * or some heavy lifting like kernel_fpu_begin()
-	 */
-	if (!in_atomic())
-		return 0;
+static inline int irq_ts_save(void) {
+    /*
+     * If in process context and not atomic, we can take a spurious DNA fault.
+     * Otherwise, doing clts() in process context requires disabling preemption
+     * or some heavy lifting like kernel_fpu_begin()
+     */
+    if (!in_atomic())
+        return 0;
 
-	if (read_cr0() & X86_CR0_TS) {
-		clts();
-		return 1;
-	}
+    if (read_cr0() & X86_CR0_TS) {
+        clts();
+        return 1;
+    }
 
-	return 0;
+    return 0;
 }
 
-static inline void irq_ts_restore(int TS_state)
-{
-	if (TS_state)
-		stts();
+static inline void irq_ts_restore(int TS_state) {
+    if (TS_state)
+        stts();
 }
 
 /*
@@ -67,9 +65,8 @@ static inline void irq_ts_restore(int TS_state)
  * to save the FP state - we'll just take a #NM
  * fault and get the FPU access back.
  */
-static inline int user_has_fpu(void)
-{
-	return current->thread.fpu.has_fpu;
+static inline int user_has_fpu(void) {
+    return current->thread.fpu.has_fpu;
 }
 
 extern void unlazy_fpu(struct task_struct *tsk);

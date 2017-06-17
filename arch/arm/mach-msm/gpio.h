@@ -23,6 +23,6 @@ void msm_gpio_exit_sleep(void);
  * This function is used by gpiomux-v1 in order to support output transitions.
  */
 void msm_gpio_find_out(const unsigned gpio, void __iomem **out,
-	unsigned *offset);
+                       unsigned *offset);
 
 #endif

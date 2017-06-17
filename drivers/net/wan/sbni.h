@@ -14,7 +14,7 @@
 
 
 /* We don't have official vendor id yet... */
-#define SBNI_PCI_VENDOR 	0x55 
+#define SBNI_PCI_VENDOR 	0x55
 #define SBNI_PCI_DEVICE 	0x9f
 
 #define ISA_MODE 0x00
@@ -23,20 +23,20 @@
 #define	SBNI_IO_EXTENT	4
 
 enum sbni_reg {
-	CSR0 = 0,
-	CSR1 = 1,
-	DAT  = 2
+    CSR0 = 0,
+    CSR1 = 1,
+    DAT  = 2
 };
 
 /* CSR0 mapping */
 enum {
-	BU_EMP = 0x02,
-	RC_CHK = 0x04,
-	CT_ZER = 0x08,
-	TR_REQ = 0x10,
-	TR_RDY = 0x20,
-	EN_INT = 0x40,
-	RC_RDY = 0x80
+    BU_EMP = 0x02,
+    RC_CHK = 0x04,
+    CT_ZER = 0x08,
+    TR_REQ = 0x10,
+    TR_RDY = 0x20,
+    EN_INT = 0x40,
+    RC_RDY = 0x80
 };
 
 
@@ -45,13 +45,13 @@ enum {
 
 struct sbni_csr1 {
 #ifdef __LITTLE_ENDIAN_BITFIELD
-	u8 rxl	: 5;
-	u8 rate	: 2;
-	u8 	: 1;
+    u8 rxl	: 5;
+    u8 rate	: 2;
+    u8 	: 1;
 #else
-	u8 	: 1;
-	u8 rate	: 2;
-	u8 rxl	: 5;
+    u8 	: 1;
+    u8 rate	: 2;
+    u8 rxl	: 5;
 #endif
 };
 
@@ -67,23 +67,23 @@ struct sbni_csr1 {
 
 /* state flags */
 enum {
-	FL_WAIT_ACK    = 0x01,
-	FL_NEED_RESEND = 0x02,
-	FL_PREV_OK     = 0x04,
-	FL_SLOW_MODE   = 0x08,
-	FL_SECONDARY   = 0x10,
+    FL_WAIT_ACK    = 0x01,
+    FL_NEED_RESEND = 0x02,
+    FL_PREV_OK     = 0x04,
+    FL_SLOW_MODE   = 0x08,
+    FL_SECONDARY   = 0x10,
 #ifdef CONFIG_SBNI_MULTILINE
-	FL_SLAVE       = 0x20,
+    FL_SLAVE       = 0x20,
 #endif
-	FL_LINE_DOWN   = 0x40
+    FL_LINE_DOWN   = 0x40
 };
 
 
 enum {
-	DEFAULT_IOBASEADDR = 0x210,
-	DEFAULT_INTERRUPTNUMBER = 5,
-	DEFAULT_RATE = 0,
-	DEFAULT_FRAME_LEN = 1012
+    DEFAULT_IOBASEADDR = 0x210,
+    DEFAULT_INTERRUPTNUMBER = 5,
+    DEFAULT_RATE = 0,
+    DEFAULT_FRAME_LEN = 1012
 };
 
 #define DEF_RXL_DELTA	-1
@@ -104,11 +104,11 @@ enum {
 
 /* internal SBNI-specific statistics */
 struct sbni_in_stats {
-	u32	all_rx_number;
-	u32	bad_rx_number;
-	u32	timeout_number;
-	u32	all_tx_number;
-	u32	resend_tx_number;
+    u32	all_rx_number;
+    u32	bad_rx_number;
+    u32	timeout_number;
+    u32	all_tx_number;
+    u32	resend_tx_number;
 };
 
 /* SBNI ioctl params */
@@ -122,20 +122,20 @@ struct sbni_in_stats {
 
 /* data packet for SIOCDEVGHWSTATE/SIOCDEVSHWSTATE ioctl requests */
 struct sbni_flags {
-	u32	rxl		: 4;
-	u32	rate		: 2;
-	u32	fixed_rxl	: 1;
-	u32	slow_mode	: 1;
-	u32	mac_addr	: 24;
+    u32	rxl		: 4;
+    u32	rate		: 2;
+    u32	fixed_rxl	: 1;
+    u32	slow_mode	: 1;
+    u32	mac_addr	: 24;
 };
 
 /*
  * CRC-32 stuff
  */
 #define CRC32(c,crc) (crc32tab[((size_t)(crc) ^ (c)) & 0xff] ^ (((crc) >> 8) & 0x00FFFFFF))
-      /* CRC generator 0xEDB88320 */
-      /* CRC remainder 0x2144DF1C */
-      /* CRC initial value 0x00000000 */
+/* CRC generator 0xEDB88320 */
+/* CRC remainder 0x2144DF1C */
+/* CRC initial value 0x00000000 */
 #define CRC32_REMAINDER 0x2144DF1C
 #define CRC32_INITIAL 0x00000000
 

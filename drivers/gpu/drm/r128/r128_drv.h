@@ -56,85 +56,85 @@
 #define GET_RING_HEAD(dev_priv)		R128_READ(R128_PM4_BUFFER_DL_RPTR)
 
 typedef struct drm_r128_freelist {
-	unsigned int age;
-	struct drm_buf *buf;
-	struct drm_r128_freelist *next;
-	struct drm_r128_freelist *prev;
+    unsigned int age;
+    struct drm_buf *buf;
+    struct drm_r128_freelist *next;
+    struct drm_r128_freelist *prev;
 } drm_r128_freelist_t;
 
 typedef struct drm_r128_ring_buffer {
-	u32 *start;
-	u32 *end;
-	int size;
-	int size_l2qw;
+    u32 *start;
+    u32 *end;
+    int size;
+    int size_l2qw;
 
-	u32 tail;
-	u32 tail_mask;
-	int space;
+    u32 tail;
+    u32 tail_mask;
+    int space;
 
-	int high_mark;
+    int high_mark;
 } drm_r128_ring_buffer_t;
 
 typedef struct drm_r128_private {
-	drm_r128_ring_buffer_t ring;
-	drm_r128_sarea_t *sarea_priv;
+    drm_r128_ring_buffer_t ring;
+    drm_r128_sarea_t *sarea_priv;
 
-	int cce_mode;
-	int cce_fifo_size;
-	int cce_running;
+    int cce_mode;
+    int cce_fifo_size;
+    int cce_running;
 
-	drm_r128_freelist_t *head;
-	drm_r128_freelist_t *tail;
+    drm_r128_freelist_t *head;
+    drm_r128_freelist_t *tail;
 
-	int usec_timeout;
-	int is_pci;
-	unsigned long cce_buffers_offset;
+    int usec_timeout;
+    int is_pci;
+    unsigned long cce_buffers_offset;
 
-	atomic_t idle_count;
+    atomic_t idle_count;
 
-	int page_flipping;
-	int current_page;
-	u32 crtc_offset;
-	u32 crtc_offset_cntl;
+    int page_flipping;
+    int current_page;
+    u32 crtc_offset;
+    u32 crtc_offset_cntl;
 
-	atomic_t vbl_received;
+    atomic_t vbl_received;
 
-	u32 color_fmt;
-	unsigned int front_offset;
-	unsigned int front_pitch;
-	unsigned int back_offset;
-	unsigned int back_pitch;
+    u32 color_fmt;
+    unsigned int front_offset;
+    unsigned int front_pitch;
+    unsigned int back_offset;
+    unsigned int back_pitch;
 
-	u32 depth_fmt;
-	unsigned int depth_offset;
-	unsigned int depth_pitch;
-	unsigned int span_offset;
+    u32 depth_fmt;
+    unsigned int depth_offset;
+    unsigned int depth_pitch;
+    unsigned int span_offset;
 
-	u32 front_pitch_offset_c;
-	u32 back_pitch_offset_c;
-	u32 depth_pitch_offset_c;
-	u32 span_pitch_offset_c;
+    u32 front_pitch_offset_c;
+    u32 back_pitch_offset_c;
+    u32 depth_pitch_offset_c;
+    u32 span_pitch_offset_c;
 
-	drm_local_map_t *sarea;
-	drm_local_map_t *mmio;
-	drm_local_map_t *cce_ring;
-	drm_local_map_t *ring_rptr;
-	drm_local_map_t *agp_textures;
-	struct drm_ati_pcigart_info gart_info;
+    drm_local_map_t *sarea;
+    drm_local_map_t *mmio;
+    drm_local_map_t *cce_ring;
+    drm_local_map_t *ring_rptr;
+    drm_local_map_t *agp_textures;
+    struct drm_ati_pcigart_info gart_info;
 } drm_r128_private_t;
 
 typedef struct drm_r128_buf_priv {
-	u32 age;
-	int prim;
-	int discard;
-	int dispatched;
-	drm_r128_freelist_t *list_entry;
+    u32 age;
+    int prim;
+    int discard;
+    int dispatched;
+    drm_r128_freelist_t *list_entry;
 } drm_r128_buf_priv_t;
 
 extern struct drm_ioctl_desc r128_ioctls[];
 extern int r128_max_ioctl;
 
-				/* r128_cce.c */
+/* r128_cce.c */
 extern int r128_cce_init(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern int r128_cce_start(struct drm_device *dev, void *data, struct drm_file *file_priv);
 extern int r128_cce_stop(struct drm_device *dev, void *data, struct drm_file *file_priv);
@@ -161,10 +161,10 @@ extern void r128_driver_irq_uninstall(struct drm_device *dev);
 extern void r128_driver_lastclose(struct drm_device *dev);
 extern int r128_driver_load(struct drm_device *dev, unsigned long flags);
 extern void r128_driver_preclose(struct drm_device *dev,
-				 struct drm_file *file_priv);
+                                 struct drm_file *file_priv);
 
 extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
-			      unsigned long arg);
+                              unsigned long arg);
 
 /* Register definitions, register access macros and drmAddMap constants
  * for Rage 128 kernel driver.
@@ -410,12 +410,11 @@ do {									\
 #define CCE_PACKET3(pkt, n)		(R128_CCE_PACKET3 |		\
 					 (pkt) | ((n) << 16))
 
-static __inline__ void r128_update_ring_snapshot(drm_r128_private_t *dev_priv)
-{
-	drm_r128_ring_buffer_t *ring = &dev_priv->ring;
-	ring->space = (GET_RING_HEAD(dev_priv) - ring->tail) * sizeof(u32);
-	if (ring->space <= 0)
-		ring->space += ring->size;
+static __inline__ void r128_update_ring_snapshot(drm_r128_private_t *dev_priv) {
+    drm_r128_ring_buffer_t *ring = &dev_priv->ring;
+    ring->space = (GET_RING_HEAD(dev_priv) - ring->tail) * sizeof(u32);
+    if (ring->space <= 0)
+        ring->space += ring->size;
 }
 
 /* ================================================================

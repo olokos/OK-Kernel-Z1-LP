@@ -23,28 +23,28 @@
 #define SIU_PORTS_MAX 2
 
 typedef enum {
-	SIU_INTERFACE_RS232C,
-	SIU_INTERFACE_IRDA,
+    SIU_INTERFACE_RS232C,
+    SIU_INTERFACE_IRDA,
 } siu_interface_t;
 
 extern void vr41xx_select_siu_interface(siu_interface_t interface);
 
 typedef enum {
-	SIU_USE_IRDA,
-	FIR_USE_IRDA,
+    SIU_USE_IRDA,
+    FIR_USE_IRDA,
 } irda_use_t;
 
 extern void vr41xx_use_irda(irda_use_t use);
 
 typedef enum {
-	SHARP_IRDA,
-	TEMIC_IRDA,
-	HP_IRDA,
+    SHARP_IRDA,
+    TEMIC_IRDA,
+    HP_IRDA,
 } irda_module_t;
 
 typedef enum {
-	IRDA_TX_1_5MBPS,
-	IRDA_TX_4MBPS,
+    IRDA_TX_1_5MBPS,
+    IRDA_TX_4MBPS,
 } irda_speed_t;
 
 extern void vr41xx_select_irda_module(irda_module_t module, irda_speed_t speed);

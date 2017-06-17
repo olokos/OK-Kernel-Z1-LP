@@ -36,9 +36,9 @@
  * memcpy channels %NULL data should be passed.
  */
 struct ep93xx_dma_data {
-	int				port;
-	enum dma_transfer_direction	direction;
-	const char			*name;
+    int				port;
+    enum dma_transfer_direction	direction;
+    const char			*name;
 };
 
 /**
@@ -48,9 +48,9 @@ struct ep93xx_dma_data {
  * @irq: interrupt number used by this channel
  */
 struct ep93xx_dma_chan_data {
-	const char			*name;
-	void __iomem			*base;
-	int				irq;
+    const char			*name;
+    void __iomem			*base;
+    int				irq;
 };
 
 /**
@@ -63,13 +63,12 @@ struct ep93xx_dma_chan_data {
  * There is no requirement for the M2M channels.
  */
 struct ep93xx_dma_platform_data {
-	struct ep93xx_dma_chan_data	*channels;
-	size_t				num_channels;
+    struct ep93xx_dma_chan_data	*channels;
+    size_t				num_channels;
 };
 
-static inline bool ep93xx_dma_chan_is_m2p(struct dma_chan *chan)
-{
-	return !strcmp(dev_name(chan->device->dev), "ep93xx-dma-m2p");
+static inline bool ep93xx_dma_chan_is_m2p(struct dma_chan *chan) {
+    return !strcmp(dev_name(chan->device->dev), "ep93xx-dma-m2p");
 }
 
 /**
@@ -81,13 +80,12 @@ static inline bool ep93xx_dma_chan_is_m2p(struct dma_chan *chan)
  * limitation, for M2M channels the direction is configurable.
  */
 static inline enum dma_transfer_direction
-ep93xx_dma_chan_direction(struct dma_chan *chan)
-{
-	if (!ep93xx_dma_chan_is_m2p(chan))
-		return DMA_NONE;
+ep93xx_dma_chan_direction(struct dma_chan *chan) {
+    if (!ep93xx_dma_chan_is_m2p(chan))
+        return DMA_NONE;
 
-	/* even channels are for TX, odd for RX */
-	return (chan->chan_id % 2 == 0) ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
+    /* even channels are for TX, odd for RX */
+    return (chan->chan_id % 2 == 0) ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
 }
 
 #endif /* __ASM_ARCH_DMA_H */

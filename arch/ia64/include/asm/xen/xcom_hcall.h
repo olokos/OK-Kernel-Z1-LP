@@ -32,7 +32,7 @@ extern int xencomm_hypercall_xen_version(int cmd, void *arg);
 extern int xencomm_hypercall_physdev_op(int cmd, void *op);
 
 extern int xencomm_hypercall_grant_table_op(unsigned int cmd, void *op,
-					    unsigned int count);
+        unsigned int count);
 
 extern int xencomm_hypercall_sched_op(int cmd, void *arg);
 

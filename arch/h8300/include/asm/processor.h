@@ -24,13 +24,13 @@
 #include <asm/current.h>
 
 static inline unsigned long rdusp(void) {
-	extern unsigned int	sw_usp;
-	return(sw_usp);
+    extern unsigned int	sw_usp;
+    return(sw_usp);
 }
 
 static inline void wrusp(unsigned long usp) {
-	extern unsigned int	sw_usp;
-	sw_usp = usp;
+    extern unsigned int	sw_usp;
+    sw_usp = usp;
 }
 
 /*
@@ -51,14 +51,14 @@ static inline void wrusp(unsigned long usp) {
 #define TASK_UNMAPPED_BASE	0
 
 struct thread_struct {
-	unsigned long  ksp;		/* kernel stack pointer */
-	unsigned long  usp;		/* user stack pointer */
-	unsigned long  ccr;		/* saved status register */
-	unsigned long  esp0;            /* points to SR of stack frame */
-	struct {
-		unsigned short *addr;
-		unsigned short inst;
-	} breakinfo;
+    unsigned long  ksp;		/* kernel stack pointer */
+    unsigned long  usp;		/* user stack pointer */
+    unsigned long  ccr;		/* saved status register */
+    unsigned long  esp0;            /* points to SR of stack frame */
+    struct {
+        unsigned short *addr;
+        unsigned short inst;
+    } breakinfo;
 };
 
 #define INIT_THREAD  {						\
@@ -103,8 +103,7 @@ do {							        \
 struct task_struct;
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
+static inline void release_thread(struct task_struct *dead_task) {
 }
 
 extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
@@ -114,8 +113,7 @@ extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
 /*
  * Free current thread data structures etc..
  */
-static inline void exit_thread(void)
-{
+static inline void exit_thread(void) {
 }
 
 /*

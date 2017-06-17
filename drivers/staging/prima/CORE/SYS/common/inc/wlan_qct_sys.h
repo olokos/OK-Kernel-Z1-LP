@@ -73,8 +73,7 @@ typedef v_VOID_t ( * sysResponseCback ) ( v_VOID_t *pUserData );
 
 
 
-typedef enum
-{
+typedef enum {
     SYS_MSG_ID_MC_START,
     SYS_MSG_ID_MC_THR_PROBE,
     SYS_MSG_ID_MC_TIMER,

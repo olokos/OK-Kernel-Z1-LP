@@ -36,9 +36,8 @@ extern unsigned long __nongprelbss memory_end;
 extern unsigned long __nongprelbss rom_length;
 
 /* determine if we're running from ROM */
-static inline int is_in_rom(unsigned long addr)
-{
-	return 0; /* default case: not in ROM */
+static inline int is_in_rom(unsigned long addr) {
+    return 0; /* default case: not in ROM */
 }
 
 #endif

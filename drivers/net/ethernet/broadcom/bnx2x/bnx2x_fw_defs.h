@@ -255,8 +255,8 @@
 #define U_ETH_LOCAL_BD_RING_SIZE 8
 #define U_ETH_LOCAL_SGE_RING_SIZE 10
 #define U_ETH_SGL_SIZE 8
-	/* The fw will padd the buffer with this value, so the IP header \
-	will be align to 4 Byte */
+/* The fw will padd the buffer with this value, so the IP header \
+will be align to 4 Byte */
 #define IP_HEADER_ALIGNMENT_PADDING 2
 
 #define U_ETH_SGES_PER_PAGE_INVERSE_MASK \
@@ -376,8 +376,8 @@
 #define MAX_TRAFFIC_TYPES 8
 #define MAX_PFC_PRIORITIES 8
 
-	/* used by array traffic_type_to_priority[] to mark traffic type \
-	that is not mapped to priority*/
+/* used by array traffic_type_to_priority[] to mark traffic type \
+that is not mapped to priority*/
 #define LLFC_TRAFFIC_TYPE_TO_PRIORITY_UNMAPPED 0xFF
 
 

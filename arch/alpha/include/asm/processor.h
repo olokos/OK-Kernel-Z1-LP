@@ -32,7 +32,7 @@
   ((current->personality & ADDR_LIMIT_32BIT) ? 0x40000000 : TASK_SIZE / 2)
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 /* This is dead.  Everything has been moved to thread_info.  */
@@ -73,20 +73,17 @@ unsigned long get_wchan(struct task_struct *p);
 #define spin_lock_prefetch(lock)  	do { } while (0)
 #endif
 
-extern inline void prefetch(const void *ptr)  
-{ 
-	__builtin_prefetch(ptr, 0, 3);
+extern inline void prefetch(const void *ptr) {
+    __builtin_prefetch(ptr, 0, 3);
 }
 
-extern inline void prefetchw(const void *ptr)  
-{
-	__builtin_prefetch(ptr, 1, 3);
+extern inline void prefetchw(const void *ptr) {
+    __builtin_prefetch(ptr, 1, 3);
 }
 
 #ifdef CONFIG_SMP
-extern inline void spin_lock_prefetch(const void *ptr)  
-{
-	__builtin_prefetch(ptr, 1, 3);
+extern inline void spin_lock_prefetch(const void *ptr) {
+    __builtin_prefetch(ptr, 1, 3);
 }
 #endif
 

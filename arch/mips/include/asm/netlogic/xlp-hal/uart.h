@@ -99,93 +99,89 @@
 			(nlm_get_uart_pcibase(node, inst) + XLP_IO_PCI_HDRSZ)
 
 static inline void
-nlm_uart_set_baudrate(uint64_t base, int baud)
-{
-	uint32_t lcr;
+nlm_uart_set_baudrate(uint64_t base, int baud) {
+    uint32_t lcr;
 
-	lcr = nlm_read_uart_reg(base, UART_LINE_CTL);
+    lcr = nlm_read_uart_reg(base, UART_LINE_CTL);
 
-	/* enable divisor register, and write baud values */
-	nlm_write_uart_reg(base, UART_LINE_CTL, lcr | (1 << 7));
-	nlm_write_uart_reg(base, UART_DIVISOR0,
-			(BAUD_DIVISOR(baud) & 0xff));
-	nlm_write_uart_reg(base, UART_DIVISOR1,
-			((BAUD_DIVISOR(baud) >> 8) & 0xff));
+    /* enable divisor register, and write baud values */
+    nlm_write_uart_reg(base, UART_LINE_CTL, lcr | (1 << 7));
+    nlm_write_uart_reg(base, UART_DIVISOR0,
+                       (BAUD_DIVISOR(baud) & 0xff));
+    nlm_write_uart_reg(base, UART_DIVISOR1,
+                       ((BAUD_DIVISOR(baud) >> 8) & 0xff));
 
-	/* restore default lcr */
-	nlm_write_uart_reg(base, UART_LINE_CTL, lcr);
+    /* restore default lcr */
+    nlm_write_uart_reg(base, UART_LINE_CTL, lcr);
 }
 
 static inline void
-nlm_uart_outbyte(uint64_t base, char c)
-{
-	uint32_t lsr;
+nlm_uart_outbyte(uint64_t base, char c) {
+    uint32_t lsr;
 
-	for (;;) {
-		lsr = nlm_read_uart_reg(base, UART_LINE_STS);
-		if (lsr & 0x20)
-			break;
-	}
+    for (;;) {
+        lsr = nlm_read_uart_reg(base, UART_LINE_STS);
+        if (lsr & 0x20)
+            break;
+    }
 
-	nlm_write_uart_reg(base, UART_TX_DATA, (int)c);
+    nlm_write_uart_reg(base, UART_TX_DATA, (int)c);
 }
 
 static inline char
-nlm_uart_inbyte(uint64_t base)
-{
-	int data, lsr;
+nlm_uart_inbyte(uint64_t base) {
+    int data, lsr;
 
-	for (;;) {
-		lsr = nlm_read_uart_reg(base, UART_LINE_STS);
-		if (lsr & 0x80) { /* parity/frame/break-error - push a zero */
-			data = 0;
-			break;
-		}
-		if (lsr & 0x01) {	/* Rx data */
-			data = nlm_read_uart_reg(base, UART_RX_DATA);
-			break;
-		}
-	}
+    for (;;) {
+        lsr = nlm_read_uart_reg(base, UART_LINE_STS);
+        if (lsr & 0x80) { /* parity/frame/break-error - push a zero */
+            data = 0;
+            break;
+        }
+        if (lsr & 0x01) {	/* Rx data */
+            data = nlm_read_uart_reg(base, UART_RX_DATA);
+            break;
+        }
+    }
 
-	return (char)data;
+    return (char)data;
 }
 
 static inline int
 nlm_uart_init(uint64_t base, int baud, int databits, int stopbits,
-	int parity, int int_en, int loopback)
-{
-	uint32_t lcr;
+              int parity, int int_en, int loopback) {
+    uint32_t lcr;
 
-	lcr = 0;
-	if (databits >= 8)
-		lcr |= LCR_8BITS;
-	else if (databits == 7)
-		lcr |= LCR_7BITS;
-	else if (databits == 6)
-		lcr |= LCR_6BITS;
-	else
-		lcr |= LCR_5BITS;
+    lcr = 0;
+    if (databits >= 8)
+        lcr |= LCR_8BITS;
+    else if (databits == 7)
+        lcr |= LCR_7BITS;
+    else if (databits == 6)
+        lcr |= LCR_6BITS;
+    else
+        lcr |= LCR_5BITS;
 
-	if (stopbits > 1)
-		lcr |= LCR_STOPB;
+    if (stopbits > 1)
+        lcr |= LCR_STOPB;
 
-	lcr |= parity << 3;
+    lcr |= parity << 3;
 
-	/* setup default lcr */
-	nlm_write_uart_reg(base, UART_LINE_CTL, lcr);
+    /* setup default lcr */
+    nlm_write_uart_reg(base, UART_LINE_CTL, lcr);
 
-	/* Reset the FIFOs */
-	nlm_write_uart_reg(base, UART_LINE_CTL, FCR_RCV_RST | FCR_XMT_RST);
+    /* Reset the FIFOs */
+    nlm_write_uart_reg(base, UART_LINE_CTL, FCR_RCV_RST | FCR_XMT_RST);
 
-	nlm_uart_set_baudrate(base, baud);
+    nlm_uart_set_baudrate(base, baud);
 
-	if (loopback)
-		nlm_write_uart_reg(base, UART_MODEM_CTL, 0x1f);
+    if (loopback)
+        nlm_write_uart_reg(base, UART_MODEM_CTL, 0x1f);
 
-	if (int_en)
-		nlm_write_uart_reg(base, UART_INT_EN, IER_ERXRDY | IER_ETXRDY);
+    if (int_en)
+        nlm_write_uart_reg(base, UART_INT_EN, IER_ERXRDY | IER_ETXRDY);
 
-	return 0;
+    return 0;
 }
 #endif /* !LOCORE && !__ASSEMBLY__ */
 #endif /* __XLP_HAL_UART_H__ */

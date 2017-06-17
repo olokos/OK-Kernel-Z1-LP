@@ -75,29 +75,29 @@
 #define SIGNAL_LOW		0
 
 struct qe_ic {
-	/* Control registers offset */
-	volatile u32 __iomem *regs;
+    /* Control registers offset */
+    volatile u32 __iomem *regs;
 
-	/* The remapper for this QEIC */
-	struct irq_domain *irqhost;
+    /* The remapper for this QEIC */
+    struct irq_domain *irqhost;
 
-	/* The "linux" controller struct */
-	struct irq_chip hc_irq;
+    /* The "linux" controller struct */
+    struct irq_chip hc_irq;
 
-	/* VIRQ numbers of QE high/low irqs */
-	unsigned int virq_high;
-	unsigned int virq_low;
+    /* VIRQ numbers of QE high/low irqs */
+    unsigned int virq_high;
+    unsigned int virq_low;
 };
 
 /*
  * QE interrupt controller internal structure
  */
 struct qe_ic_info {
-	u32	mask;	  /* location of this source at the QIMR register. */
-	u32	mask_reg; /* Mask register offset */
-	u8	pri_code; /* for grouped interrupts sources - the interrupt
+    u32	mask;	  /* location of this source at the QIMR register. */
+    u32	mask_reg; /* Mask register offset */
+    u8	pri_code; /* for grouped interrupts sources - the interrupt
 			     code as appears at the group priority register */
-	u32	pri_reg;  /* Group priority register offset */
+    u32	pri_reg;  /* Group priority register offset */
 };
 
 #endif /* _POWERPC_SYSDEV_QE_IC_H */

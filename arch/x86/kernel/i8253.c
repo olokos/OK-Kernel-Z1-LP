@@ -17,27 +17,25 @@
  */
 struct clock_event_device *global_clock_event;
 
-void __init setup_pit_timer(void)
-{
-	clockevent_i8253_init(true);
-	global_clock_event = &i8253_clockevent;
+void __init setup_pit_timer(void) {
+    clockevent_i8253_init(true);
+    global_clock_event = &i8253_clockevent;
 }
 
 #ifndef CONFIG_X86_64
-static int __init init_pit_clocksource(void)
-{
-	 /*
-	  * Several reasons not to register PIT as a clocksource:
-	  *
-	  * - On SMP PIT does not scale due to i8253_lock
-	  * - when HPET is enabled
-	  * - when local APIC timer is active (PIT is switched off)
-	  */
-	if (num_possible_cpus() > 1 || is_hpet_enabled() ||
-	    i8253_clockevent.mode != CLOCK_EVT_MODE_PERIODIC)
-		return 0;
+static int __init init_pit_clocksource(void) {
+    /*
+     * Several reasons not to register PIT as a clocksource:
+     *
+     * - On SMP PIT does not scale due to i8253_lock
+     * - when HPET is enabled
+     * - when local APIC timer is active (PIT is switched off)
+     */
+    if (num_possible_cpus() > 1 || is_hpet_enabled() ||
+            i8253_clockevent.mode != CLOCK_EVT_MODE_PERIODIC)
+        return 0;
 
-	return clocksource_i8253_init();
+    return clocksource_i8253_init();
 }
 arch_initcall(init_pit_clocksource);
 #endif /* !CONFIG_X86_64 */

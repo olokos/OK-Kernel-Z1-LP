@@ -30,30 +30,30 @@
 #define HP49GP_PRODUCT_ID 0x0121
 
 static const struct usb_device_id id_table[] = {
-	{ USB_DEVICE(HP_VENDOR_ID, HP49GP_PRODUCT_ID) },
-	{ }					/* Terminating entry */
+    { USB_DEVICE(HP_VENDOR_ID, HP49GP_PRODUCT_ID) },
+    { }					/* Terminating entry */
 };
 
 MODULE_DEVICE_TABLE(usb, id_table);
 
 static struct usb_driver hp49gp_driver = {
-	.name =		"hp4X",
-	.probe =	usb_serial_probe,
-	.disconnect =	usb_serial_disconnect,
-	.id_table =	id_table,
+    .name =		"hp4X",
+    .probe =	usb_serial_probe,
+    .disconnect =	usb_serial_disconnect,
+    .id_table =	id_table,
 };
 
 static struct usb_serial_driver hp49gp_device = {
-	.driver = {
-		.owner =	THIS_MODULE,
-		.name =		"hp4X",
-	},
-	.id_table =		id_table,
-	.num_ports =		1,
+    .driver = {
+        .owner =	THIS_MODULE,
+        .name =		"hp4X",
+    },
+    .id_table =		id_table,
+    .num_ports =		1,
 };
 
 static struct usb_serial_driver * const serial_drivers[] = {
-	&hp49gp_device, NULL
+    &hp49gp_device, NULL
 };
 
 module_usb_serial_driver(hp49gp_driver, serial_drivers);

@@ -114,34 +114,34 @@ static int sun3scsi_release (struct Scsi_Host *);
 /* additional registers - mainly DMA control regs */
 /* these start at regbase + 8 -- directly after the NCR regs */
 struct sun3_dma_regs {
-	unsigned short dma_addr_hi; /* vme only */
-	unsigned short dma_addr_lo; /* vme only */
-	unsigned short dma_count_hi; /* vme only */
-	unsigned short dma_count_lo; /* vme only */
-	unsigned short udc_data; /* udc dma data reg (obio only) */
-	unsigned short udc_addr; /* uda dma addr reg (obio only) */
-	unsigned short fifo_data; /* fifo data reg, holds extra byte on
+    unsigned short dma_addr_hi; /* vme only */
+    unsigned short dma_addr_lo; /* vme only */
+    unsigned short dma_count_hi; /* vme only */
+    unsigned short dma_count_lo; /* vme only */
+    unsigned short udc_data; /* udc dma data reg (obio only) */
+    unsigned short udc_addr; /* uda dma addr reg (obio only) */
+    unsigned short fifo_data; /* fifo data reg, holds extra byte on
 				     odd dma reads */
-	unsigned short fifo_count; 
-	unsigned short csr; /* control/status reg */
-	unsigned short bpack_hi; /* vme only */
-	unsigned short bpack_lo; /* vme only */
-	unsigned short ivect; /* vme only */
-	unsigned short fifo_count_hi; /* vme only */
+    unsigned short fifo_count;
+    unsigned short csr; /* control/status reg */
+    unsigned short bpack_hi; /* vme only */
+    unsigned short bpack_lo; /* vme only */
+    unsigned short ivect; /* vme only */
+    unsigned short fifo_count_hi; /* vme only */
 };
 
 /* ucd chip specific regs - live in dvma space */
 struct sun3_udc_regs {
-     unsigned short rsel; /* select regs to load */
-     unsigned short addr_hi; /* high word of addr */
-     unsigned short addr_lo; /* low word */
-     unsigned short count; /* words to be xfer'd */
-     unsigned short mode_hi; /* high word of channel mode */
-     unsigned short mode_lo; /* low word of channel mode */
+    unsigned short rsel; /* select regs to load */
+    unsigned short addr_hi; /* high word of addr */
+    unsigned short addr_lo; /* low word */
+    unsigned short count; /* words to be xfer'd */
+    unsigned short mode_hi; /* high word of channel mode */
+    unsigned short mode_lo; /* low word of channel mode */
 };
 
 /* addresses of the udc registers */
-#define UDC_MODE 0x38 
+#define UDC_MODE 0x38
 #define UDC_CSR 0x2e /* command/status */
 #define UDC_CHN_HI 0x26 /* chain high word */
 #define UDC_CHN_LO 0x22 /* chain lo word */
@@ -187,11 +187,11 @@ struct sun3_udc_regs {
 #define CSR_SEND 0x8 /* 1 = send  0 = recv */
 #define CSR_FIFO 0x2 /* reset fifo */
 #define CSR_INTR 0x4 /* interrupt enable */
-#define CSR_SCSI 0x1 
+#define CSR_SCSI 0x1
 
 #define VME_DATA24 0x3d00
 
-// debugging printk's, taken from atari_scsi.h 
+// debugging printk's, taken from atari_scsi.h
 /* Debugging printk definitions:
  *
  *  ARB  -> arbitration

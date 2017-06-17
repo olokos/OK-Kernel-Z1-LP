@@ -58,7 +58,7 @@
  * Returns Zero on success, non-zero if out of memory
  */
 extern int cvmx_helper_initialize_fpa(int packet_buffers,
-				      int work_queue_entries, int pko_buffers,
-				      int tim_buffers, int dfa_buffers);
+                                      int work_queue_entries, int pko_buffers,
+                                      int tim_buffers, int dfa_buffers);
 
 #endif /* __CVMX_HELPER_H__ */

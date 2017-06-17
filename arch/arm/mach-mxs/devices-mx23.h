@@ -32,6 +32,6 @@ extern const struct mxs_mxs_mmc_data mx23_mxs_mmc_data[] __initconst;
 #define mx23_add_mxs_pwm(id)		mxs_add_mxs_pwm(MX23_PWM_BASE_ADDR, id)
 
 struct platform_device *__init mx23_add_mxsfb(
-		const struct mxsfb_platform_data *pdata);
+    const struct mxsfb_platform_data *pdata);
 
 struct platform_device *__init mx23_add_rtc_stmp3xxx(void);

@@ -22,8 +22,8 @@
 #define DM_UEVENT_H
 
 enum dm_uevent_type {
-	DM_UEVENT_PATH_FAILED,
-	DM_UEVENT_PATH_REINSTATED,
+    DM_UEVENT_PATH_FAILED,
+    DM_UEVENT_PATH_REINSTATED,
 };
 
 #ifdef CONFIG_DM_UEVENT
@@ -32,26 +32,22 @@ extern int dm_uevent_init(void);
 extern void dm_uevent_exit(void);
 extern void dm_send_uevents(struct list_head *events, struct kobject *kobj);
 extern void dm_path_uevent(enum dm_uevent_type event_type,
-			   struct dm_target *ti, const char *path,
-			   unsigned nr_valid_paths);
+                           struct dm_target *ti, const char *path,
+                           unsigned nr_valid_paths);
 
 #else
 
-static inline int dm_uevent_init(void)
-{
-	return 0;
+static inline int dm_uevent_init(void) {
+    return 0;
 }
-static inline void dm_uevent_exit(void)
-{
+static inline void dm_uevent_exit(void) {
 }
 static inline void dm_send_uevents(struct list_head *events,
-				   struct kobject *kobj)
-{
+                                   struct kobject *kobj) {
 }
 static inline void dm_path_uevent(enum dm_uevent_type event_type,
-				  struct dm_target *ti, const char *path,
-				  unsigned nr_valid_paths)
-{
+                                  struct dm_target *ti, const char *path,
+                                  unsigned nr_valid_paths) {
 }
 
 #endif	/* CONFIG_DM_UEVENT */

@@ -34,37 +34,33 @@
 
 #define HW_ACCESS_PRAM_MAX_RANGE		0x3c000
 
-static inline u32 wl1251_read32(struct wl1251 *wl, int addr)
-{
-	wl->if_ops->read(wl, addr, &wl->buffer_32, sizeof(wl->buffer_32));
+static inline u32 wl1251_read32(struct wl1251 *wl, int addr) {
+    wl->if_ops->read(wl, addr, &wl->buffer_32, sizeof(wl->buffer_32));
 
-	return le32_to_cpu(wl->buffer_32);
+    return le32_to_cpu(wl->buffer_32);
 }
 
-static inline void wl1251_write32(struct wl1251 *wl, int addr, u32 val)
-{
-	wl->buffer_32 = cpu_to_le32(val);
-	wl->if_ops->write(wl, addr, &wl->buffer_32, sizeof(wl->buffer_32));
+static inline void wl1251_write32(struct wl1251 *wl, int addr, u32 val) {
+    wl->buffer_32 = cpu_to_le32(val);
+    wl->if_ops->write(wl, addr, &wl->buffer_32, sizeof(wl->buffer_32));
 }
 
-static inline u32 wl1251_read_elp(struct wl1251 *wl, int addr)
-{
-	u32 response;
+static inline u32 wl1251_read_elp(struct wl1251 *wl, int addr) {
+    u32 response;
 
-	if (wl->if_ops->read_elp)
-		wl->if_ops->read_elp(wl, addr, &response);
-	else
-		wl->if_ops->read(wl, addr, &response, sizeof(u32));
+    if (wl->if_ops->read_elp)
+        wl->if_ops->read_elp(wl, addr, &response);
+    else
+        wl->if_ops->read(wl, addr, &response, sizeof(u32));
 
-	return response;
+    return response;
 }
 
-static inline void wl1251_write_elp(struct wl1251 *wl, int addr, u32 val)
-{
-	if (wl->if_ops->write_elp)
-		wl->if_ops->write_elp(wl, addr, val);
-	else
-		wl->if_ops->write(wl, addr, &val, sizeof(u32));
+static inline void wl1251_write_elp(struct wl1251 *wl, int addr, u32 val) {
+    if (wl->if_ops->write_elp)
+        wl->if_ops->write_elp(wl, addr, val);
+    else
+        wl->if_ops->write(wl, addr, &val, sizeof(u32));
 }
 
 /* Memory target IO, address is translated to partition 0 */
@@ -77,7 +73,7 @@ u32 wl1251_reg_read32(struct wl1251 *wl, int addr);
 void wl1251_reg_write32(struct wl1251 *wl, int addr, u32 val);
 
 void wl1251_set_partition(struct wl1251 *wl,
-			  u32 part_start, u32 part_size,
-			  u32 reg_start,  u32 reg_size);
+                          u32 part_start, u32 part_size,
+                          u32 reg_start,  u32 reg_size);
 
 #endif

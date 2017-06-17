@@ -18,8 +18,8 @@ int register_control_device_interface(PMINI_ADAPTER ps_adapter);
 void unregister_control_device_interface(PMINI_ADAPTER Adapter);
 
 INT CopyBufferToControlPacket(PMINI_ADAPTER Adapter,/**<Logical Adapter*/
-									  PVOID ioBuffer/**<Control Packet Buffer*/
-									  );
+                              PVOID ioBuffer/**<Control Packet Buffer*/
+                             );
 
 VOID SortPackInfo(PMINI_ADAPTER Adapter);
 
@@ -39,16 +39,16 @@ BOOLEAN MatchProtocol(S_CLASSIFIER_RULE *pstClassifierRule,UCHAR ucProtocol);
 
 
 INT SetupNextSend(PMINI_ADAPTER Adapter, /**<Logical Adapter*/
-					struct sk_buff *Packet, /**<data buffer*/
-					USHORT Vcid)	;
+                  struct sk_buff *Packet, /**<data buffer*/
+                  USHORT Vcid)	;
 
 VOID LinkMessage(PMINI_ADAPTER Adapter);
 
 VOID transmit_packets(PMINI_ADAPTER Adapter);
 
 INT SendControlPacket(PMINI_ADAPTER Adapter, /**<Logical Adapter*/
-							char *pControlPacket/**<Control Packet*/
-							);
+                      char *pControlPacket/**<Control Packet*/
+                     );
 
 
 int register_networkdev(PMINI_ADAPTER Adapter);
@@ -95,7 +95,7 @@ void beceem_parse_target_struct(PMINI_ADAPTER Adapter);
 int bcm_ioctl_fw_download(PMINI_ADAPTER Adapter, FIRMWARE_INFO *psFwInfo);
 
 void CopyMIBSExtendedSFParameters(PMINI_ADAPTER Adapter,
-		CServiceFlowParamSI *psfLocalSet, UINT uiSearchRuleIndex);
+                                  CServiceFlowParamSI *psfLocalSet, UINT uiSearchRuleIndex);
 
 VOID ResetCounters(PMINI_ADAPTER Adapter);
 
@@ -121,10 +121,10 @@ INT flushAllAppQ(VOID);
 
 
 INT BeceemEEPROMBulkRead(
-	PMINI_ADAPTER Adapter,
-	PUINT pBuffer,
-	UINT uiOffset,
-	UINT uiNumBytes);
+    PMINI_ADAPTER Adapter,
+    PUINT pBuffer,
+    UINT uiOffset,
+    UINT uiNumBytes);
 
 
 
@@ -134,28 +134,28 @@ INT PropagateCalParamsFromFlashToMemory(PMINI_ADAPTER Adapter);
 
 
 INT BeceemEEPROMBulkWrite(
-	PMINI_ADAPTER Adapter,
-	PUCHAR pBuffer,
-	UINT uiOffset,
-	UINT uiNumBytes,
-	BOOLEAN bVerify);
+    PMINI_ADAPTER Adapter,
+    PUCHAR pBuffer,
+    UINT uiOffset,
+    UINT uiNumBytes,
+    BOOLEAN bVerify);
 
 
 INT ReadBeceemEEPROM(PMINI_ADAPTER Adapter,UINT dwAddress, UINT *pdwData);
 
 
 INT BeceemNVMRead(
-	PMINI_ADAPTER Adapter,
-	PUINT pBuffer,
-	UINT uiOffset,
-	UINT uiNumBytes);
+    PMINI_ADAPTER Adapter,
+    PUINT pBuffer,
+    UINT uiOffset,
+    UINT uiNumBytes);
 
 INT BeceemNVMWrite(
-	PMINI_ADAPTER Adapter,
-	PUINT pBuffer,
-	UINT uiOffset,
-	UINT uiNumBytes,
-	BOOLEAN bVerify);
+    PMINI_ADAPTER Adapter,
+    PUINT pBuffer,
+    UINT uiOffset,
+    UINT uiNumBytes,
+    BOOLEAN bVerify);
 
 
 INT BcmInitNVM(PMINI_ADAPTER Adapter);
@@ -166,19 +166,19 @@ BOOLEAN IsSectionExistInFlash(PMINI_ADAPTER Adapter, FLASH2X_SECTION_VAL section
 INT BcmGetFlash2xSectionalBitMap(PMINI_ADAPTER Adapter, PFLASH2X_BITMAP psFlash2xBitMap);
 
 INT BcmFlash2xBulkWrite(
-	PMINI_ADAPTER Adapter,
-	PUINT pBuffer,
-	FLASH2X_SECTION_VAL eFlashSectionVal,
-	UINT uiOffset,
-	UINT uiNumBytes,
-	UINT bVerify);
+    PMINI_ADAPTER Adapter,
+    PUINT pBuffer,
+    FLASH2X_SECTION_VAL eFlashSectionVal,
+    UINT uiOffset,
+    UINT uiNumBytes,
+    UINT bVerify);
 
 INT BcmFlash2xBulkRead(
-	PMINI_ADAPTER Adapter,
-	PUINT pBuffer,
-	FLASH2X_SECTION_VAL eFlashSectionVal,
-	UINT uiOffsetWithinSectionVal,
-	UINT uiNumBytes);
+    PMINI_ADAPTER Adapter,
+    PUINT pBuffer,
+    FLASH2X_SECTION_VAL eFlashSectionVal,
+    UINT uiOffsetWithinSectionVal,
+    UINT uiNumBytes);
 
 INT BcmGetSectionValStartOffset(PMINI_ADAPTER Adapter, FLASH2X_SECTION_VAL eFlashSectionVal);
 
@@ -192,10 +192,10 @@ INT BcmFlash2xWriteSig(PMINI_ADAPTER Adapter, FLASH2X_SECTION_VAL eFlashSectionV
 INT	validateFlash2xReadWrite(PMINI_ADAPTER Adapter, PFLASH2X_READWRITE psFlash2xReadWrite);
 INT IsFlash2x(PMINI_ADAPTER Adapter);
 INT	BcmCopySection(PMINI_ADAPTER Adapter,
-						FLASH2X_SECTION_VAL SrcSection,
-						FLASH2X_SECTION_VAL DstSection,
-						UINT offset,
-						UINT numOfBytes);
+                   FLASH2X_SECTION_VAL SrcSection,
+                   FLASH2X_SECTION_VAL DstSection,
+                   UINT offset,
+                   UINT numOfBytes);
 
 
 BOOLEAN IsNonCDLessDevice(PMINI_ADAPTER Adapter);
@@ -208,7 +208,7 @@ int rdmaltWithLock (PMINI_ADAPTER Adapter, UINT uiAddress, PUINT pucBuff, size_t
 
 int wrmWithLock(PMINI_ADAPTER Adapter, UINT uiAddress, PCHAR pucBuff, size_t size);
 INT buffDnldVerify(PMINI_ADAPTER Adapter, unsigned char *mappedbuffer, unsigned int u32FirmwareLength,
-		unsigned long u32StartingAddress);
+                   unsigned long u32StartingAddress);
 
 
 VOID putUsbSuspend(struct work_struct *work);

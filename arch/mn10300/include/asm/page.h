@@ -35,9 +35,15 @@
 /*
  * These are used to make use of C type-checking..
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define PTE_MASK	PAGE_MASK
@@ -75,17 +81,16 @@ typedef struct page *pgtable_t;
 
 /* Pure 2^n version of get_order */
 static inline int get_order(unsigned long size) __attribute__((const));
-static inline int get_order(unsigned long size)
-{
-	int order;
+static inline int get_order(unsigned long size) {
+    int order;
 
-	size = (size - 1) >> (PAGE_SHIFT - 1);
-	order = -1;
-	do {
-		size >>= 1;
-		order++;
-	} while (size);
-	return order;
+    size = (size - 1) >> (PAGE_SHIFT - 1);
+    order = -1;
+    do {
+        size >>= 1;
+        order++;
+    } while (size);
+    return order;
 }
 
 #endif /* __ASSEMBLY__ */

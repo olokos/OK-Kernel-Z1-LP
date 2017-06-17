@@ -22,15 +22,15 @@
 extern void bcm_bt_lpm_exit_lpm_locked(struct uart_port *uport);
 
 struct bcm_bt_lpm_platform_data {
-	unsigned int gpio_wake;   /* CPU -> BCM wakeup gpio */
-	unsigned int gpio_host_wake;  /* BCM -> CPU wakeup gpio */
+    unsigned int gpio_wake;   /* CPU -> BCM wakeup gpio */
+    unsigned int gpio_host_wake;  /* BCM -> CPU wakeup gpio */
 
-	/* Callback to request the uart driver to clock off.
+    /* Callback to request the uart driver to clock off.
          * Called with uart spinlock held. */
-	void (*request_clock_off_locked)(struct uart_port *uport);
-	/* Callback to request the uart driver to clock on.
+    void (*request_clock_off_locked)(struct uart_port *uport);
+    /* Callback to request the uart driver to clock on.
          * Called with uart spinlock held. */
-	void (*request_clock_on_locked)(struct uart_port *uport);
+    void (*request_clock_on_locked)(struct uart_port *uport);
 };
 
 #endif

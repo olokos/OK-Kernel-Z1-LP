@@ -34,10 +34,10 @@
 
 
 struct qfec_buf_desc {
-	uint32_t            status;
-	uint32_t            ctl;
-	void               *p_buf;
-	void               *next;
+    uint32_t            status;
+    uint32_t            ctl;
+    void               *p_buf;
+    void               *next;
 };
 
 /* ownership bit operations */

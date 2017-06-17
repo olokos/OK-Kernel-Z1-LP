@@ -50,146 +50,138 @@ static void __iomem *rng_base;
 static struct clk *rng_ick;
 static struct platform_device *rng_dev;
 
-static inline u32 omap_rng_read_reg(int reg)
-{
-	return __raw_readl(rng_base + reg);
+static inline u32 omap_rng_read_reg(int reg) {
+    return __raw_readl(rng_base + reg);
 }
 
-static inline void omap_rng_write_reg(int reg, u32 val)
-{
-	__raw_writel(val, rng_base + reg);
+static inline void omap_rng_write_reg(int reg, u32 val) {
+    __raw_writel(val, rng_base + reg);
 }
 
-static int omap_rng_data_present(struct hwrng *rng, int wait)
-{
-	int data, i;
+static int omap_rng_data_present(struct hwrng *rng, int wait) {
+    int data, i;
 
-	for (i = 0; i < 20; i++) {
-		data = omap_rng_read_reg(RNG_STAT_REG) ? 0 : 1;
-		if (data || !wait)
-			break;
-		/* RNG produces data fast enough (2+ MBit/sec, even
-		 * during "rngtest" loads, that these delays don't
-		 * seem to trigger.  We *could* use the RNG IRQ, but
-		 * that'd be higher overhead ... so why bother?
-		 */
-		udelay(10);
-	}
-	return data;
+    for (i = 0; i < 20; i++) {
+        data = omap_rng_read_reg(RNG_STAT_REG) ? 0 : 1;
+        if (data || !wait)
+            break;
+        /* RNG produces data fast enough (2+ MBit/sec, even
+         * during "rngtest" loads, that these delays don't
+         * seem to trigger.  We *could* use the RNG IRQ, but
+         * that'd be higher overhead ... so why bother?
+         */
+        udelay(10);
+    }
+    return data;
 }
 
-static int omap_rng_data_read(struct hwrng *rng, u32 *data)
-{
-	*data = omap_rng_read_reg(RNG_OUT_REG);
+static int omap_rng_data_read(struct hwrng *rng, u32 *data) {
+    *data = omap_rng_read_reg(RNG_OUT_REG);
 
-	return 4;
+    return 4;
 }
 
 static struct hwrng omap_rng_ops = {
-	.name		= "omap",
-	.data_present	= omap_rng_data_present,
-	.data_read	= omap_rng_data_read,
+    .name		= "omap",
+    .data_present	= omap_rng_data_present,
+    .data_read	= omap_rng_data_read,
 };
 
-static int __devinit omap_rng_probe(struct platform_device *pdev)
-{
-	struct resource *res;
-	int ret;
+static int __devinit omap_rng_probe(struct platform_device *pdev) {
+    struct resource *res;
+    int ret;
 
-	/*
-	 * A bit ugly, and it will never actually happen but there can
-	 * be only one RNG and this catches any bork
-	 */
-	if (rng_dev)
-		return -EBUSY;
+    /*
+     * A bit ugly, and it will never actually happen but there can
+     * be only one RNG and this catches any bork
+     */
+    if (rng_dev)
+        return -EBUSY;
 
-	if (cpu_is_omap24xx()) {
-		rng_ick = clk_get(&pdev->dev, "ick");
-		if (IS_ERR(rng_ick)) {
-			dev_err(&pdev->dev, "Could not get rng_ick\n");
-			ret = PTR_ERR(rng_ick);
-			return ret;
-		} else
-			clk_enable(rng_ick);
-	}
+    if (cpu_is_omap24xx()) {
+        rng_ick = clk_get(&pdev->dev, "ick");
+        if (IS_ERR(rng_ick)) {
+            dev_err(&pdev->dev, "Could not get rng_ick\n");
+            ret = PTR_ERR(rng_ick);
+            return ret;
+        } else
+            clk_enable(rng_ick);
+    }
 
-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 
-	if (!res) {
-		ret = -ENOENT;
-		goto err_region;
-	}
+    if (!res) {
+        ret = -ENOENT;
+        goto err_region;
+    }
 
-	if (!request_mem_region(res->start, resource_size(res), pdev->name)) {
-		ret = -EBUSY;
-		goto err_region;
-	}
+    if (!request_mem_region(res->start, resource_size(res), pdev->name)) {
+        ret = -EBUSY;
+        goto err_region;
+    }
 
-	dev_set_drvdata(&pdev->dev, res);
-	rng_base = ioremap(res->start, resource_size(res));
-	if (!rng_base) {
-		ret = -ENOMEM;
-		goto err_ioremap;
-	}
+    dev_set_drvdata(&pdev->dev, res);
+    rng_base = ioremap(res->start, resource_size(res));
+    if (!rng_base) {
+        ret = -ENOMEM;
+        goto err_ioremap;
+    }
 
-	ret = hwrng_register(&omap_rng_ops);
-	if (ret)
-		goto err_register;
+    ret = hwrng_register(&omap_rng_ops);
+    if (ret)
+        goto err_register;
 
-	dev_info(&pdev->dev, "OMAP Random Number Generator ver. %02x\n",
-		omap_rng_read_reg(RNG_REV_REG));
-	omap_rng_write_reg(RNG_MASK_REG, 0x1);
+    dev_info(&pdev->dev, "OMAP Random Number Generator ver. %02x\n",
+             omap_rng_read_reg(RNG_REV_REG));
+    omap_rng_write_reg(RNG_MASK_REG, 0x1);
 
-	rng_dev = pdev;
+    rng_dev = pdev;
 
-	return 0;
+    return 0;
 
 err_register:
-	iounmap(rng_base);
-	rng_base = NULL;
+    iounmap(rng_base);
+    rng_base = NULL;
 err_ioremap:
-	release_mem_region(res->start, resource_size(res));
+    release_mem_region(res->start, resource_size(res));
 err_region:
-	if (cpu_is_omap24xx()) {
-		clk_disable(rng_ick);
-		clk_put(rng_ick);
-	}
-	return ret;
+    if (cpu_is_omap24xx()) {
+        clk_disable(rng_ick);
+        clk_put(rng_ick);
+    }
+    return ret;
 }
 
-static int __exit omap_rng_remove(struct platform_device *pdev)
-{
-	struct resource *res = dev_get_drvdata(&pdev->dev);
+static int __exit omap_rng_remove(struct platform_device *pdev) {
+    struct resource *res = dev_get_drvdata(&pdev->dev);
 
-	hwrng_unregister(&omap_rng_ops);
+    hwrng_unregister(&omap_rng_ops);
 
-	omap_rng_write_reg(RNG_MASK_REG, 0x0);
+    omap_rng_write_reg(RNG_MASK_REG, 0x0);
 
-	iounmap(rng_base);
+    iounmap(rng_base);
 
-	if (cpu_is_omap24xx()) {
-		clk_disable(rng_ick);
-		clk_put(rng_ick);
-	}
+    if (cpu_is_omap24xx()) {
+        clk_disable(rng_ick);
+        clk_put(rng_ick);
+    }
 
-	release_mem_region(res->start, resource_size(res));
-	rng_base = NULL;
+    release_mem_region(res->start, resource_size(res));
+    rng_base = NULL;
 
-	return 0;
+    return 0;
 }
 
 #ifdef CONFIG_PM
 
-static int omap_rng_suspend(struct platform_device *pdev, pm_message_t message)
-{
-	omap_rng_write_reg(RNG_MASK_REG, 0x0);
-	return 0;
+static int omap_rng_suspend(struct platform_device *pdev, pm_message_t message) {
+    omap_rng_write_reg(RNG_MASK_REG, 0x0);
+    return 0;
 }
 
-static int omap_rng_resume(struct platform_device *pdev)
-{
-	omap_rng_write_reg(RNG_MASK_REG, 0x1);
-	return 0;
+static int omap_rng_resume(struct platform_device *pdev) {
+    omap_rng_write_reg(RNG_MASK_REG, 0x1);
+    return 0;
 }
 
 #else
@@ -203,27 +195,25 @@ static int omap_rng_resume(struct platform_device *pdev)
 MODULE_ALIAS("platform:omap_rng");
 
 static struct platform_driver omap_rng_driver = {
-	.driver = {
-		.name		= "omap_rng",
-		.owner		= THIS_MODULE,
-	},
-	.probe		= omap_rng_probe,
-	.remove		= __exit_p(omap_rng_remove),
-	.suspend	= omap_rng_suspend,
-	.resume		= omap_rng_resume
+    .driver = {
+        .name		= "omap_rng",
+        .owner		= THIS_MODULE,
+    },
+    .probe		= omap_rng_probe,
+    .remove		= __exit_p(omap_rng_remove),
+    .suspend	= omap_rng_suspend,
+    .resume		= omap_rng_resume
 };
 
-static int __init omap_rng_init(void)
-{
-	if (!cpu_is_omap16xx() && !cpu_is_omap24xx())
-		return -ENODEV;
+static int __init omap_rng_init(void) {
+    if (!cpu_is_omap16xx() && !cpu_is_omap24xx())
+        return -ENODEV;
 
-	return platform_driver_register(&omap_rng_driver);
+    return platform_driver_register(&omap_rng_driver);
 }
 
-static void __exit omap_rng_exit(void)
-{
-	platform_driver_unregister(&omap_rng_driver);
+static void __exit omap_rng_exit(void) {
+    platform_driver_unregister(&omap_rng_driver);
 }
 
 module_init(omap_rng_init);

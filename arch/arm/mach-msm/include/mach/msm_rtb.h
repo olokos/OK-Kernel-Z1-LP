@@ -18,22 +18,22 @@
  * to control filtering. Remove items from here with extreme caution.
  */
 enum logk_event_type {
-	LOGK_NONE = 0,
-	LOGK_READL = 1,
-	LOGK_WRITEL = 2,
-	LOGK_LOGBUF = 3,
-	LOGK_HOTPLUG = 4,
-	LOGK_CTXID = 5,
-	LOGK_TIMESTAMP = 6,
-	LOGK_L2CPREAD = 7,
-	LOGK_L2CPWRITE = 8,
-	LOGK_IRQ = 9,
+    LOGK_NONE = 0,
+    LOGK_READL = 1,
+    LOGK_WRITEL = 2,
+    LOGK_LOGBUF = 3,
+    LOGK_HOTPLUG = 4,
+    LOGK_CTXID = 5,
+    LOGK_TIMESTAMP = 6,
+    LOGK_L2CPREAD = 7,
+    LOGK_L2CPWRITE = 8,
+    LOGK_IRQ = 9,
 };
 
 #define LOGTYPE_NOPC 0x80
 
 struct msm_rtb_platform_data {
-	unsigned int size;
+    unsigned int size;
 };
 
 #if defined(CONFIG_MSM_RTB)
@@ -41,7 +41,7 @@ struct msm_rtb_platform_data {
  * returns 1 if data was logged, 0 otherwise
  */
 int uncached_logk_pc(enum logk_event_type log_type, void *caller,
-				void *data);
+                     void *data);
 
 /*
  * returns 1 if data was logged, 0 otherwise
@@ -67,11 +67,15 @@ int uncached_logk(enum logk_event_type log_type, void *data);
 #else
 
 static inline int uncached_logk_pc(enum logk_event_type log_type,
-					void *caller,
-					void *data) { return 0; }
+                                   void *caller,
+                                   void *data) {
+    return 0;
+}
 
 static inline int uncached_logk(enum logk_event_type log_type,
-					void *data) { return 0; }
+                                void *data) {
+    return 0;
+}
 
 #define ETB_WAYPOINT
 #define BRANCH_TO_NEXT_ISTR

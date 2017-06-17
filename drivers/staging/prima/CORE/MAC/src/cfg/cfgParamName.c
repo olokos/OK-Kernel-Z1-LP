@@ -34,8 +34,7 @@
  */
 #include "cfgPriv.h"
 
-unsigned char *gCfgParamName[] =
-{
+unsigned char *gCfgParamName[] = {
     (unsigned char *)"STA_ID",
     (unsigned char *)"CF_POLLABLE",
     (unsigned char *)"CFP_PERIOD",

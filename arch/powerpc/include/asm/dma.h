@@ -155,13 +155,13 @@
 #define DMA2_EXT_REG		0x4D6
 
 #ifndef __powerpc64__
-    /* in arch/ppc/kernel/setup.c -- Cort */
-    extern unsigned int DMA_MODE_WRITE;
-    extern unsigned int DMA_MODE_READ;
-    extern unsigned long ISA_DMA_THRESHOLD;
+/* in arch/ppc/kernel/setup.c -- Cort */
+extern unsigned int DMA_MODE_WRITE;
+extern unsigned int DMA_MODE_READ;
+extern unsigned long ISA_DMA_THRESHOLD;
 #else
-    #define DMA_MODE_READ	0x44	/* I/O to memory, no autoinit, increment, single mode */
-    #define DMA_MODE_WRITE	0x48	/* memory to I/O, no autoinit, increment, single mode */
+#define DMA_MODE_READ	0x44	/* I/O to memory, no autoinit, increment, single mode */
+#define DMA_MODE_WRITE	0x48	/* memory to I/O, no autoinit, increment, single mode */
 #endif
 
 #define DMA_MODE_CASCADE	0xC0	/* pass thru DREQ->HRQ, DACK<-HLDA only */
@@ -170,41 +170,37 @@
 
 extern spinlock_t dma_spin_lock;
 
-static __inline__ unsigned long claim_dma_lock(void)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&dma_spin_lock, flags);
-	return flags;
+static __inline__ unsigned long claim_dma_lock(void) {
+    unsigned long flags;
+    spin_lock_irqsave(&dma_spin_lock, flags);
+    return flags;
 }
 
-static __inline__ void release_dma_lock(unsigned long flags)
-{
-	spin_unlock_irqrestore(&dma_spin_lock, flags);
+static __inline__ void release_dma_lock(unsigned long flags) {
+    spin_unlock_irqrestore(&dma_spin_lock, flags);
 }
 
 /* enable/disable a specific DMA channel */
-static __inline__ void enable_dma(unsigned int dmanr)
-{
-	unsigned char ucDmaCmd = 0x00;
+static __inline__ void enable_dma(unsigned int dmanr) {
+    unsigned char ucDmaCmd = 0x00;
 
-	if (dmanr != 4) {
-		dma_outb(0, DMA2_MASK_REG);	/* This may not be enabled */
-		dma_outb(ucDmaCmd, DMA2_CMD_REG);	/* Enable group */
-	}
-	if (dmanr <= 3) {
-		dma_outb(dmanr, DMA1_MASK_REG);
-		dma_outb(ucDmaCmd, DMA1_CMD_REG);	/* Enable group */
-	} else {
-		dma_outb(dmanr & 3, DMA2_MASK_REG);
-	}
+    if (dmanr != 4) {
+        dma_outb(0, DMA2_MASK_REG);	/* This may not be enabled */
+        dma_outb(ucDmaCmd, DMA2_CMD_REG);	/* Enable group */
+    }
+    if (dmanr <= 3) {
+        dma_outb(dmanr, DMA1_MASK_REG);
+        dma_outb(ucDmaCmd, DMA1_CMD_REG);	/* Enable group */
+    } else {
+        dma_outb(dmanr & 3, DMA2_MASK_REG);
+    }
 }
 
-static __inline__ void disable_dma(unsigned int dmanr)
-{
-	if (dmanr <= 3)
-		dma_outb(dmanr | 4, DMA1_MASK_REG);
-	else
-		dma_outb((dmanr & 3) | 4, DMA2_MASK_REG);
+static __inline__ void disable_dma(unsigned int dmanr) {
+    if (dmanr <= 3)
+        dma_outb(dmanr | 4, DMA1_MASK_REG);
+    else
+        dma_outb((dmanr & 3) | 4, DMA2_MASK_REG);
 }
 
 /* Clear the 'DMA Pointer Flip Flop'.
@@ -214,21 +210,19 @@ static __inline__ void disable_dma(unsigned int dmanr)
  * --- In order to do that, the DMA routines below should ---
  * --- only be used while interrupts are disabled! ---
  */
-static __inline__ void clear_dma_ff(unsigned int dmanr)
-{
-	if (dmanr <= 3)
-		dma_outb(0, DMA1_CLEAR_FF_REG);
-	else
-		dma_outb(0, DMA2_CLEAR_FF_REG);
+static __inline__ void clear_dma_ff(unsigned int dmanr) {
+    if (dmanr <= 3)
+        dma_outb(0, DMA1_CLEAR_FF_REG);
+    else
+        dma_outb(0, DMA2_CLEAR_FF_REG);
 }
 
 /* set mode (above) for a specific DMA channel */
-static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
-{
-	if (dmanr <= 3)
-		dma_outb(mode | dmanr, DMA1_MODE_REG);
-	else
-		dma_outb(mode | (dmanr & 3), DMA2_MODE_REG);
+static __inline__ void set_dma_mode(unsigned int dmanr, char mode) {
+    if (dmanr <= 3)
+        dma_outb(mode | dmanr, DMA1_MODE_REG);
+    else
+        dma_outb(mode | (dmanr & 3), DMA2_MODE_REG);
 }
 
 /* Set only the page register bits of the transfer address.
@@ -236,57 +230,55 @@ static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
  * the lower 16 bits of the DMA current address register, but a 64k boundary
  * may have been crossed.
  */
-static __inline__ void set_dma_page(unsigned int dmanr, int pagenr)
-{
-	switch (dmanr) {
-	case 0:
-		dma_outb(pagenr, DMA_LO_PAGE_0);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_0);
-		break;
-	case 1:
-		dma_outb(pagenr, DMA_LO_PAGE_1);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_1);
-		break;
-	case 2:
-		dma_outb(pagenr, DMA_LO_PAGE_2);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_2);
-		break;
-	case 3:
-		dma_outb(pagenr, DMA_LO_PAGE_3);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_3);
-		break;
-	case 5:
-		dma_outb(pagenr & 0xfe, DMA_LO_PAGE_5);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_5);
-		break;
-	case 6:
-		dma_outb(pagenr & 0xfe, DMA_LO_PAGE_6);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_6);
-		break;
-	case 7:
-		dma_outb(pagenr & 0xfe, DMA_LO_PAGE_7);
-		dma_outb(pagenr >> 8, DMA_HI_PAGE_7);
-		break;
-	}
+static __inline__ void set_dma_page(unsigned int dmanr, int pagenr) {
+    switch (dmanr) {
+    case 0:
+        dma_outb(pagenr, DMA_LO_PAGE_0);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_0);
+        break;
+    case 1:
+        dma_outb(pagenr, DMA_LO_PAGE_1);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_1);
+        break;
+    case 2:
+        dma_outb(pagenr, DMA_LO_PAGE_2);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_2);
+        break;
+    case 3:
+        dma_outb(pagenr, DMA_LO_PAGE_3);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_3);
+        break;
+    case 5:
+        dma_outb(pagenr & 0xfe, DMA_LO_PAGE_5);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_5);
+        break;
+    case 6:
+        dma_outb(pagenr & 0xfe, DMA_LO_PAGE_6);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_6);
+        break;
+    case 7:
+        dma_outb(pagenr & 0xfe, DMA_LO_PAGE_7);
+        dma_outb(pagenr >> 8, DMA_HI_PAGE_7);
+        break;
+    }
 }
 
 /* Set transfer address & page bits for specific DMA channel.
  * Assumes dma flipflop is clear.
  */
-static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int phys)
-{
-	if (dmanr <= 3) {
-		dma_outb(phys & 0xff,
-			 ((dmanr & 3) << 1) + IO_DMA1_BASE);
-		dma_outb((phys >> 8) & 0xff,
-			 ((dmanr & 3) << 1) + IO_DMA1_BASE);
-	} else {
-		dma_outb((phys >> 1) & 0xff,
-			 ((dmanr & 3) << 2) + IO_DMA2_BASE);
-		dma_outb((phys >> 9) & 0xff,
-			 ((dmanr & 3) << 2) + IO_DMA2_BASE);
-	}
-	set_dma_page(dmanr, phys >> 16);
+static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int phys) {
+    if (dmanr <= 3) {
+        dma_outb(phys & 0xff,
+                 ((dmanr & 3) << 1) + IO_DMA1_BASE);
+        dma_outb((phys >> 8) & 0xff,
+                 ((dmanr & 3) << 1) + IO_DMA1_BASE);
+    } else {
+        dma_outb((phys >> 1) & 0xff,
+                 ((dmanr & 3) << 2) + IO_DMA2_BASE);
+        dma_outb((phys >> 9) & 0xff,
+                 ((dmanr & 3) << 2) + IO_DMA2_BASE);
+    }
+    set_dma_page(dmanr, phys >> 16);
 }
 
 
@@ -298,20 +290,19 @@ static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int phys)
  * Assumes dma flip-flop is clear.
  * NOTE 2: "count" represents _bytes_ and must be even for channels 5-7.
  */
-static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
-{
-	count--;
-	if (dmanr <= 3) {
-		dma_outb(count & 0xff,
-			 ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE);
-		dma_outb((count >> 8) & 0xff,
-			 ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE);
-	} else {
-		dma_outb((count >> 1) & 0xff,
-			 ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE);
-		dma_outb((count >> 9) & 0xff,
-			 ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE);
-	}
+static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count) {
+    count--;
+    if (dmanr <= 3) {
+        dma_outb(count & 0xff,
+                 ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE);
+        dma_outb((count >> 8) & 0xff,
+                 ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE);
+    } else {
+        dma_outb((count >> 1) & 0xff,
+                 ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE);
+        dma_outb((count >> 9) & 0xff,
+                 ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE);
+    }
 }
 
 
@@ -323,19 +314,18 @@ static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
  *
  * Assumes DMA flip-flop is clear.
  */
-static __inline__ int get_dma_residue(unsigned int dmanr)
-{
-	unsigned int io_port = (dmanr <= 3)
-	    ? ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE
-	    : ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE;
+static __inline__ int get_dma_residue(unsigned int dmanr) {
+    unsigned int io_port = (dmanr <= 3)
+                           ? ((dmanr & 3) << 1) + 1 + IO_DMA1_BASE
+                           : ((dmanr & 3) << 2) + 2 + IO_DMA2_BASE;
 
-	/* using short to get 16-bit wrap around */
-	unsigned short count;
+    /* using short to get 16-bit wrap around */
+    unsigned short count;
 
-	count = 1 + dma_inb(io_port);
-	count += dma_inb(io_port) << 8;
+    count = 1 + dma_inb(io_port);
+    count += dma_inb(io_port) << 8;
 
-	return (dmanr <= 3) ? count : (count << 1);
+    return (dmanr <= 3) ? count : (count << 1);
 }
 
 /* These are in kernel/dma.c: */

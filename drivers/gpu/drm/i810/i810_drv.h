@@ -56,74 +56,74 @@
 #define DRIVER_PATCHLEVEL	0
 
 typedef struct drm_i810_buf_priv {
-	u32 *in_use;
-	int my_use_idx;
-	int currently_mapped;
-	void *virtual;
-	void *kernel_virtual;
-	drm_local_map_t map;
+    u32 *in_use;
+    int my_use_idx;
+    int currently_mapped;
+    void *virtual;
+    void *kernel_virtual;
+    drm_local_map_t map;
 } drm_i810_buf_priv_t;
 
 typedef struct _drm_i810_ring_buffer {
-	int tail_mask;
-	unsigned long Start;
-	unsigned long End;
-	unsigned long Size;
-	u8 *virtual_start;
-	int head;
-	int tail;
-	int space;
-	drm_local_map_t map;
+    int tail_mask;
+    unsigned long Start;
+    unsigned long End;
+    unsigned long Size;
+    u8 *virtual_start;
+    int head;
+    int tail;
+    int space;
+    drm_local_map_t map;
 } drm_i810_ring_buffer_t;
 
 typedef struct drm_i810_private {
-	struct drm_local_map *sarea_map;
-	struct drm_local_map *mmio_map;
+    struct drm_local_map *sarea_map;
+    struct drm_local_map *mmio_map;
 
-	drm_i810_sarea_t *sarea_priv;
-	drm_i810_ring_buffer_t ring;
+    drm_i810_sarea_t *sarea_priv;
+    drm_i810_ring_buffer_t ring;
 
-	void *hw_status_page;
-	unsigned long counter;
+    void *hw_status_page;
+    unsigned long counter;
 
-	dma_addr_t dma_status_page;
+    dma_addr_t dma_status_page;
 
-	struct drm_buf *mmap_buffer;
+    struct drm_buf *mmap_buffer;
 
-	u32 front_di1, back_di1, zi1;
+    u32 front_di1, back_di1, zi1;
 
-	int back_offset;
-	int depth_offset;
-	int overlay_offset;
-	int overlay_physical;
-	int w, h;
-	int pitch;
-	int back_pitch;
-	int depth_pitch;
+    int back_offset;
+    int depth_offset;
+    int overlay_offset;
+    int overlay_physical;
+    int w, h;
+    int pitch;
+    int back_pitch;
+    int depth_pitch;
 
-	int do_boxes;
-	int dma_used;
+    int do_boxes;
+    int dma_used;
 
-	int current_page;
-	int page_flipping;
+    int current_page;
+    int page_flipping;
 
-	wait_queue_head_t irq_queue;
-	atomic_t irq_received;
-	atomic_t irq_emitted;
+    wait_queue_head_t irq_queue;
+    atomic_t irq_received;
+    atomic_t irq_emitted;
 
-	int front_offset;
+    int front_offset;
 } drm_i810_private_t;
 
-				/* i810_dma.c */
+/* i810_dma.c */
 extern int i810_driver_dma_quiescent(struct drm_device *dev);
 extern void i810_driver_reclaim_buffers_locked(struct drm_device *dev,
-					       struct drm_file *file_priv);
+        struct drm_file *file_priv);
 extern int i810_driver_load(struct drm_device *, unsigned long flags);
 extern void i810_driver_lastclose(struct drm_device *dev);
 extern void i810_driver_preclose(struct drm_device *dev,
-				 struct drm_file *file_priv);
+                                 struct drm_file *file_priv);
 extern void i810_driver_reclaim_buffers_locked(struct drm_device *dev,
-					       struct drm_file *file_priv);
+        struct drm_file *file_priv);
 extern int i810_driver_device_is_agp(struct drm_device *dev);
 
 extern long i810_ioctl(struct file *file, unsigned int cmd, unsigned long arg);

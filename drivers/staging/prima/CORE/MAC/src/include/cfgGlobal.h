@@ -50,21 +50,18 @@
 /*--------------------------------------------------------------------*/
 /* Configuration Control Structure                                    */
 /*--------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     tANI_U32   control;
 } tCfgCtl;
 
-typedef struct sAniSirCfgStaticString
-{
+typedef struct sAniSirCfgStaticString {
     tANI_U16 cfgId;
     tANI_U8  maxLen;
     tANI_U8  length;
     tANI_U8  data[255];
 } tAniSirCfgStaticString;
 
-typedef struct sAniSirCfgStatic
-{
+typedef struct sAniSirCfgStatic {
     tANI_U16 cfgId;
     tANI_U32 control;
     tANI_U32 cfgIMin;
@@ -73,8 +70,7 @@ typedef struct sAniSirCfgStatic
     void     *pStrData;
 } tAniSirCgStatic;
 
-typedef struct sAniSirCfg
-{
+typedef struct sAniSirCfg {
     // CFG module status
     tANI_U8    gCfgStatus;
 

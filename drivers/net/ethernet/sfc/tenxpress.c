@@ -143,352 +143,334 @@
 #define LNPGA_PDOWN_WAIT	(HZ / 5)
 
 struct tenxpress_phy_data {
-	enum efx_loopback_mode loopback_mode;
-	enum efx_phy_mode phy_mode;
-	int bad_lp_tries;
+    enum efx_loopback_mode loopback_mode;
+    enum efx_phy_mode phy_mode;
+    int bad_lp_tries;
 };
 
-static int tenxpress_init(struct efx_nic *efx)
-{
-	/* Enable 312.5 MHz clock */
-	efx_mdio_write(efx, MDIO_MMD_PCS, PCS_TEST_SELECT_REG,
-		       1 << CLK312_EN_LBN);
+static int tenxpress_init(struct efx_nic *efx) {
+    /* Enable 312.5 MHz clock */
+    efx_mdio_write(efx, MDIO_MMD_PCS, PCS_TEST_SELECT_REG,
+                   1 << CLK312_EN_LBN);
 
-	/* Set the LEDs up as: Green = Link, Amber = Link/Act, Red = Off */
-	efx_mdio_set_flag(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_CTRL_REG,
-			  1 << PMA_PMA_LED_ACTIVITY_LBN, true);
-	efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_OVERR_REG,
-		       SFX7101_PMA_PMD_LED_DEFAULT);
+    /* Set the LEDs up as: Green = Link, Amber = Link/Act, Red = Off */
+    efx_mdio_set_flag(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_CTRL_REG,
+                      1 << PMA_PMA_LED_ACTIVITY_LBN, true);
+    efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_OVERR_REG,
+                   SFX7101_PMA_PMD_LED_DEFAULT);
 
-	return 0;
+    return 0;
 }
 
-static int tenxpress_phy_probe(struct efx_nic *efx)
-{
-	struct tenxpress_phy_data *phy_data;
+static int tenxpress_phy_probe(struct efx_nic *efx) {
+    struct tenxpress_phy_data *phy_data;
 
-	/* Allocate phy private storage */
-	phy_data = kzalloc(sizeof(*phy_data), GFP_KERNEL);
-	if (!phy_data)
-		return -ENOMEM;
-	efx->phy_data = phy_data;
-	phy_data->phy_mode = efx->phy_mode;
+    /* Allocate phy private storage */
+    phy_data = kzalloc(sizeof(*phy_data), GFP_KERNEL);
+    if (!phy_data)
+        return -ENOMEM;
+    efx->phy_data = phy_data;
+    phy_data->phy_mode = efx->phy_mode;
 
-	efx->mdio.mmds = TENXPRESS_REQUIRED_DEVS;
-	efx->mdio.mode_support = MDIO_SUPPORTS_C45;
+    efx->mdio.mmds = TENXPRESS_REQUIRED_DEVS;
+    efx->mdio.mode_support = MDIO_SUPPORTS_C45;
 
-	efx->loopback_modes = SFX7101_LOOPBACKS | FALCON_XMAC_LOOPBACKS;
+    efx->loopback_modes = SFX7101_LOOPBACKS | FALCON_XMAC_LOOPBACKS;
 
-	efx->link_advertising = (ADVERTISED_TP | ADVERTISED_Autoneg |
-				 ADVERTISED_10000baseT_Full);
+    efx->link_advertising = (ADVERTISED_TP | ADVERTISED_Autoneg |
+                             ADVERTISED_10000baseT_Full);
 
-	return 0;
+    return 0;
 }
 
-static int tenxpress_phy_init(struct efx_nic *efx)
-{
-	int rc;
+static int tenxpress_phy_init(struct efx_nic *efx) {
+    int rc;
 
-	falcon_board(efx)->type->init_phy(efx);
+    falcon_board(efx)->type->init_phy(efx);
 
-	if (!(efx->phy_mode & PHY_MODE_SPECIAL)) {
-		rc = efx_mdio_wait_reset_mmds(efx, TENXPRESS_REQUIRED_DEVS);
-		if (rc < 0)
-			return rc;
+    if (!(efx->phy_mode & PHY_MODE_SPECIAL)) {
+        rc = efx_mdio_wait_reset_mmds(efx, TENXPRESS_REQUIRED_DEVS);
+        if (rc < 0)
+            return rc;
 
-		rc = efx_mdio_check_mmds(efx, TENXPRESS_REQUIRED_DEVS);
-		if (rc < 0)
-			return rc;
-	}
+        rc = efx_mdio_check_mmds(efx, TENXPRESS_REQUIRED_DEVS);
+        if (rc < 0)
+            return rc;
+    }
 
-	rc = tenxpress_init(efx);
-	if (rc < 0)
-		return rc;
+    rc = tenxpress_init(efx);
+    if (rc < 0)
+        return rc;
 
-	/* Reinitialise flow control settings */
-	efx_link_set_wanted_fc(efx, efx->wanted_fc);
-	efx_mdio_an_reconfigure(efx);
+    /* Reinitialise flow control settings */
+    efx_link_set_wanted_fc(efx, efx->wanted_fc);
+    efx_mdio_an_reconfigure(efx);
 
-	schedule_timeout_uninterruptible(HZ / 5); /* 200ms */
+    schedule_timeout_uninterruptible(HZ / 5); /* 200ms */
 
-	/* Let XGXS and SerDes out of reset */
-	falcon_reset_xaui(efx);
+    /* Let XGXS and SerDes out of reset */
+    falcon_reset_xaui(efx);
 
-	return 0;
+    return 0;
 }
 
 /* Perform a "special software reset" on the PHY. The caller is
  * responsible for saving and restoring the PHY hardware registers
  * properly, and masking/unmasking LASI */
-static int tenxpress_special_reset(struct efx_nic *efx)
-{
-	int rc, reg;
+static int tenxpress_special_reset(struct efx_nic *efx) {
+    int rc, reg;
 
-	/* The XGMAC clock is driven from the SFX7101 312MHz clock, so
-	 * a special software reset can glitch the XGMAC sufficiently for stats
-	 * requests to fail. */
-	falcon_stop_nic_stats(efx);
+    /* The XGMAC clock is driven from the SFX7101 312MHz clock, so
+     * a special software reset can glitch the XGMAC sufficiently for stats
+     * requests to fail. */
+    falcon_stop_nic_stats(efx);
 
-	/* Initiate reset */
-	reg = efx_mdio_read(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG);
-	reg |= (1 << PMA_PMD_EXT_SSR_LBN);
-	efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG, reg);
+    /* Initiate reset */
+    reg = efx_mdio_read(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG);
+    reg |= (1 << PMA_PMD_EXT_SSR_LBN);
+    efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG, reg);
 
-	mdelay(200);
+    mdelay(200);
 
-	/* Wait for the blocks to come out of reset */
-	rc = efx_mdio_wait_reset_mmds(efx, TENXPRESS_REQUIRED_DEVS);
-	if (rc < 0)
-		goto out;
+    /* Wait for the blocks to come out of reset */
+    rc = efx_mdio_wait_reset_mmds(efx, TENXPRESS_REQUIRED_DEVS);
+    if (rc < 0)
+        goto out;
 
-	/* Try and reconfigure the device */
-	rc = tenxpress_init(efx);
-	if (rc < 0)
-		goto out;
+    /* Try and reconfigure the device */
+    rc = tenxpress_init(efx);
+    if (rc < 0)
+        goto out;
 
-	/* Wait for the XGXS state machine to churn */
-	mdelay(10);
+    /* Wait for the XGXS state machine to churn */
+    mdelay(10);
 out:
-	falcon_start_nic_stats(efx);
-	return rc;
+    falcon_start_nic_stats(efx);
+    return rc;
 }
 
-static void sfx7101_check_bad_lp(struct efx_nic *efx, bool link_ok)
-{
-	struct tenxpress_phy_data *pd = efx->phy_data;
-	bool bad_lp;
-	int reg;
+static void sfx7101_check_bad_lp(struct efx_nic *efx, bool link_ok) {
+    struct tenxpress_phy_data *pd = efx->phy_data;
+    bool bad_lp;
+    int reg;
 
-	if (link_ok) {
-		bad_lp = false;
-	} else {
-		/* Check that AN has started but not completed. */
-		reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_STAT1);
-		if (!(reg & MDIO_AN_STAT1_LPABLE))
-			return; /* LP status is unknown */
-		bad_lp = !(reg & MDIO_AN_STAT1_COMPLETE);
-		if (bad_lp)
-			pd->bad_lp_tries++;
-	}
+    if (link_ok) {
+        bad_lp = false;
+    } else {
+        /* Check that AN has started but not completed. */
+        reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_STAT1);
+        if (!(reg & MDIO_AN_STAT1_LPABLE))
+            return; /* LP status is unknown */
+        bad_lp = !(reg & MDIO_AN_STAT1_COMPLETE);
+        if (bad_lp)
+            pd->bad_lp_tries++;
+    }
 
-	/* Nothing to do if all is well and was previously so. */
-	if (!pd->bad_lp_tries)
-		return;
+    /* Nothing to do if all is well and was previously so. */
+    if (!pd->bad_lp_tries)
+        return;
 
-	/* Use the RX (red) LED as an error indicator once we've seen AN
-	 * failure several times in a row, and also log a message. */
-	if (!bad_lp || pd->bad_lp_tries == MAX_BAD_LP_TRIES) {
-		reg = efx_mdio_read(efx, MDIO_MMD_PMAPMD,
-				    PMA_PMD_LED_OVERR_REG);
-		reg &= ~(PMA_PMD_LED_MASK << PMA_PMD_LED_RX_LBN);
-		if (!bad_lp) {
-			reg |= PMA_PMD_LED_OFF << PMA_PMD_LED_RX_LBN;
-		} else {
-			reg |= PMA_PMD_LED_FLASH << PMA_PMD_LED_RX_LBN;
-			netif_err(efx, link, efx->net_dev,
-				  "appears to be plugged into a port"
-				  " that is not 10GBASE-T capable. The PHY"
-				  " supports 10GBASE-T ONLY, so no link can"
-				  " be established\n");
-		}
-		efx_mdio_write(efx, MDIO_MMD_PMAPMD,
-			       PMA_PMD_LED_OVERR_REG, reg);
-		pd->bad_lp_tries = bad_lp;
-	}
+    /* Use the RX (red) LED as an error indicator once we've seen AN
+     * failure several times in a row, and also log a message. */
+    if (!bad_lp || pd->bad_lp_tries == MAX_BAD_LP_TRIES) {
+        reg = efx_mdio_read(efx, MDIO_MMD_PMAPMD,
+                            PMA_PMD_LED_OVERR_REG);
+        reg &= ~(PMA_PMD_LED_MASK << PMA_PMD_LED_RX_LBN);
+        if (!bad_lp) {
+            reg |= PMA_PMD_LED_OFF << PMA_PMD_LED_RX_LBN;
+        } else {
+            reg |= PMA_PMD_LED_FLASH << PMA_PMD_LED_RX_LBN;
+            netif_err(efx, link, efx->net_dev,
+                      "appears to be plugged into a port"
+                      " that is not 10GBASE-T capable. The PHY"
+                      " supports 10GBASE-T ONLY, so no link can"
+                      " be established\n");
+        }
+        efx_mdio_write(efx, MDIO_MMD_PMAPMD,
+                       PMA_PMD_LED_OVERR_REG, reg);
+        pd->bad_lp_tries = bad_lp;
+    }
 }
 
-static bool sfx7101_link_ok(struct efx_nic *efx)
-{
-	return efx_mdio_links_ok(efx,
-				 MDIO_DEVS_PMAPMD |
-				 MDIO_DEVS_PCS |
-				 MDIO_DEVS_PHYXS);
+static bool sfx7101_link_ok(struct efx_nic *efx) {
+    return efx_mdio_links_ok(efx,
+                             MDIO_DEVS_PMAPMD |
+                             MDIO_DEVS_PCS |
+                             MDIO_DEVS_PHYXS);
 }
 
-static void tenxpress_ext_loopback(struct efx_nic *efx)
-{
-	efx_mdio_set_flag(efx, MDIO_MMD_PHYXS, PHYXS_TEST1,
-			  1 << LOOPBACK_NEAR_LBN,
-			  efx->loopback_mode == LOOPBACK_PHYXS);
+static void tenxpress_ext_loopback(struct efx_nic *efx) {
+    efx_mdio_set_flag(efx, MDIO_MMD_PHYXS, PHYXS_TEST1,
+                      1 << LOOPBACK_NEAR_LBN,
+                      efx->loopback_mode == LOOPBACK_PHYXS);
 }
 
-static void tenxpress_low_power(struct efx_nic *efx)
-{
-	efx_mdio_set_mmds_lpower(
-		efx, !!(efx->phy_mode & PHY_MODE_LOW_POWER),
-		TENXPRESS_REQUIRED_DEVS);
+static void tenxpress_low_power(struct efx_nic *efx) {
+    efx_mdio_set_mmds_lpower(
+        efx, !!(efx->phy_mode & PHY_MODE_LOW_POWER),
+        TENXPRESS_REQUIRED_DEVS);
 }
 
-static int tenxpress_phy_reconfigure(struct efx_nic *efx)
-{
-	struct tenxpress_phy_data *phy_data = efx->phy_data;
-	bool phy_mode_change, loop_reset;
+static int tenxpress_phy_reconfigure(struct efx_nic *efx) {
+    struct tenxpress_phy_data *phy_data = efx->phy_data;
+    bool phy_mode_change, loop_reset;
 
-	if (efx->phy_mode & (PHY_MODE_OFF | PHY_MODE_SPECIAL)) {
-		phy_data->phy_mode = efx->phy_mode;
-		return 0;
-	}
+    if (efx->phy_mode & (PHY_MODE_OFF | PHY_MODE_SPECIAL)) {
+        phy_data->phy_mode = efx->phy_mode;
+        return 0;
+    }
 
-	phy_mode_change = (efx->phy_mode == PHY_MODE_NORMAL &&
-			   phy_data->phy_mode != PHY_MODE_NORMAL);
-	loop_reset = (LOOPBACK_OUT_OF(phy_data, efx, LOOPBACKS_EXTERNAL(efx)) ||
-		      LOOPBACK_CHANGED(phy_data, efx, 1 << LOOPBACK_GPHY));
+    phy_mode_change = (efx->phy_mode == PHY_MODE_NORMAL &&
+                       phy_data->phy_mode != PHY_MODE_NORMAL);
+    loop_reset = (LOOPBACK_OUT_OF(phy_data, efx, LOOPBACKS_EXTERNAL(efx)) ||
+                  LOOPBACK_CHANGED(phy_data, efx, 1 << LOOPBACK_GPHY));
 
-	if (loop_reset || phy_mode_change) {
-		tenxpress_special_reset(efx);
-		falcon_reset_xaui(efx);
-	}
+    if (loop_reset || phy_mode_change) {
+        tenxpress_special_reset(efx);
+        falcon_reset_xaui(efx);
+    }
 
-	tenxpress_low_power(efx);
-	efx_mdio_transmit_disable(efx);
-	efx_mdio_phy_reconfigure(efx);
-	tenxpress_ext_loopback(efx);
-	efx_mdio_an_reconfigure(efx);
+    tenxpress_low_power(efx);
+    efx_mdio_transmit_disable(efx);
+    efx_mdio_phy_reconfigure(efx);
+    tenxpress_ext_loopback(efx);
+    efx_mdio_an_reconfigure(efx);
 
-	phy_data->loopback_mode = efx->loopback_mode;
-	phy_data->phy_mode = efx->phy_mode;
+    phy_data->loopback_mode = efx->loopback_mode;
+    phy_data->phy_mode = efx->phy_mode;
 
-	return 0;
+    return 0;
 }
 
 static void
 tenxpress_get_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd);
 
 /* Poll for link state changes */
-static bool tenxpress_phy_poll(struct efx_nic *efx)
-{
-	struct efx_link_state old_state = efx->link_state;
+static bool tenxpress_phy_poll(struct efx_nic *efx) {
+    struct efx_link_state old_state = efx->link_state;
 
-	efx->link_state.up = sfx7101_link_ok(efx);
-	efx->link_state.speed = 10000;
-	efx->link_state.fd = true;
-	efx->link_state.fc = efx_mdio_get_pause(efx);
+    efx->link_state.up = sfx7101_link_ok(efx);
+    efx->link_state.speed = 10000;
+    efx->link_state.fd = true;
+    efx->link_state.fc = efx_mdio_get_pause(efx);
 
-	sfx7101_check_bad_lp(efx, efx->link_state.up);
+    sfx7101_check_bad_lp(efx, efx->link_state.up);
 
-	return !efx_link_state_equal(&efx->link_state, &old_state);
+    return !efx_link_state_equal(&efx->link_state, &old_state);
 }
 
-static void sfx7101_phy_fini(struct efx_nic *efx)
-{
-	int reg;
+static void sfx7101_phy_fini(struct efx_nic *efx) {
+    int reg;
 
-	/* Power down the LNPGA */
-	reg = (1 << PMA_PMD_LNPGA_POWERDOWN_LBN);
-	efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG, reg);
+    /* Power down the LNPGA */
+    reg = (1 << PMA_PMD_LNPGA_POWERDOWN_LBN);
+    efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_XCONTROL_REG, reg);
 
-	/* Waiting here ensures that the board fini, which can turn
-	 * off the power to the PHY, won't get run until the LNPGA
-	 * powerdown has been given long enough to complete. */
-	schedule_timeout_uninterruptible(LNPGA_PDOWN_WAIT); /* 200 ms */
+    /* Waiting here ensures that the board fini, which can turn
+     * off the power to the PHY, won't get run until the LNPGA
+     * powerdown has been given long enough to complete. */
+    schedule_timeout_uninterruptible(LNPGA_PDOWN_WAIT); /* 200 ms */
 }
 
-static void tenxpress_phy_remove(struct efx_nic *efx)
-{
-	kfree(efx->phy_data);
-	efx->phy_data = NULL;
+static void tenxpress_phy_remove(struct efx_nic *efx) {
+    kfree(efx->phy_data);
+    efx->phy_data = NULL;
 }
 
 
 /* Override the RX, TX and link LEDs */
-void tenxpress_set_id_led(struct efx_nic *efx, enum efx_led_mode mode)
-{
-	int reg;
+void tenxpress_set_id_led(struct efx_nic *efx, enum efx_led_mode mode) {
+    int reg;
 
-	switch (mode) {
-	case EFX_LED_OFF:
-		reg = (PMA_PMD_LED_OFF << PMA_PMD_LED_TX_LBN) |
-			(PMA_PMD_LED_OFF << PMA_PMD_LED_RX_LBN) |
-			(PMA_PMD_LED_OFF << PMA_PMD_LED_LINK_LBN);
-		break;
-	case EFX_LED_ON:
-		reg = (PMA_PMD_LED_ON << PMA_PMD_LED_TX_LBN) |
-			(PMA_PMD_LED_ON << PMA_PMD_LED_RX_LBN) |
-			(PMA_PMD_LED_ON << PMA_PMD_LED_LINK_LBN);
-		break;
-	default:
-		reg = SFX7101_PMA_PMD_LED_DEFAULT;
-		break;
-	}
+    switch (mode) {
+    case EFX_LED_OFF:
+        reg = (PMA_PMD_LED_OFF << PMA_PMD_LED_TX_LBN) |
+              (PMA_PMD_LED_OFF << PMA_PMD_LED_RX_LBN) |
+              (PMA_PMD_LED_OFF << PMA_PMD_LED_LINK_LBN);
+        break;
+    case EFX_LED_ON:
+        reg = (PMA_PMD_LED_ON << PMA_PMD_LED_TX_LBN) |
+              (PMA_PMD_LED_ON << PMA_PMD_LED_RX_LBN) |
+              (PMA_PMD_LED_ON << PMA_PMD_LED_LINK_LBN);
+        break;
+    default:
+        reg = SFX7101_PMA_PMD_LED_DEFAULT;
+        break;
+    }
 
-	efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_OVERR_REG, reg);
+    efx_mdio_write(efx, MDIO_MMD_PMAPMD, PMA_PMD_LED_OVERR_REG, reg);
 }
 
 static const char *const sfx7101_test_names[] = {
-	"bist"
+    "bist"
 };
 
-static const char *sfx7101_test_name(struct efx_nic *efx, unsigned int index)
-{
-	if (index < ARRAY_SIZE(sfx7101_test_names))
-		return sfx7101_test_names[index];
-	return NULL;
+static const char *sfx7101_test_name(struct efx_nic *efx, unsigned int index) {
+    if (index < ARRAY_SIZE(sfx7101_test_names))
+        return sfx7101_test_names[index];
+    return NULL;
 }
 
 static int
-sfx7101_run_tests(struct efx_nic *efx, int *results, unsigned flags)
-{
-	int rc;
+sfx7101_run_tests(struct efx_nic *efx, int *results, unsigned flags) {
+    int rc;
 
-	if (!(flags & ETH_TEST_FL_OFFLINE))
-		return 0;
+    if (!(flags & ETH_TEST_FL_OFFLINE))
+        return 0;
 
-	/* BIST is automatically run after a special software reset */
-	rc = tenxpress_special_reset(efx);
-	results[0] = rc ? -1 : 1;
+    /* BIST is automatically run after a special software reset */
+    rc = tenxpress_special_reset(efx);
+    results[0] = rc ? -1 : 1;
 
-	efx_mdio_an_reconfigure(efx);
+    efx_mdio_an_reconfigure(efx);
 
-	return rc;
+    return rc;
 }
 
 static void
-tenxpress_get_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd)
-{
-	u32 adv = 0, lpa = 0;
-	int reg;
+tenxpress_get_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd) {
+    u32 adv = 0, lpa = 0;
+    int reg;
 
-	reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_AN_10GBT_CTRL);
-	if (reg & MDIO_AN_10GBT_CTRL_ADV10G)
-		adv |= ADVERTISED_10000baseT_Full;
-	reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_AN_10GBT_STAT);
-	if (reg & MDIO_AN_10GBT_STAT_LP10G)
-		lpa |= ADVERTISED_10000baseT_Full;
+    reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_AN_10GBT_CTRL);
+    if (reg & MDIO_AN_10GBT_CTRL_ADV10G)
+        adv |= ADVERTISED_10000baseT_Full;
+    reg = efx_mdio_read(efx, MDIO_MMD_AN, MDIO_AN_10GBT_STAT);
+    if (reg & MDIO_AN_10GBT_STAT_LP10G)
+        lpa |= ADVERTISED_10000baseT_Full;
 
-	mdio45_ethtool_gset_npage(&efx->mdio, ecmd, adv, lpa);
+    mdio45_ethtool_gset_npage(&efx->mdio, ecmd, adv, lpa);
 
-	/* In loopback, the PHY automatically brings up the correct interface,
-	 * but doesn't advertise the correct speed. So override it */
-	if (LOOPBACK_EXTERNAL(efx))
-		ethtool_cmd_speed_set(ecmd, SPEED_10000);
+    /* In loopback, the PHY automatically brings up the correct interface,
+     * but doesn't advertise the correct speed. So override it */
+    if (LOOPBACK_EXTERNAL(efx))
+        ethtool_cmd_speed_set(ecmd, SPEED_10000);
 }
 
-static int tenxpress_set_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd)
-{
-	if (!ecmd->autoneg)
-		return -EINVAL;
+static int tenxpress_set_settings(struct efx_nic *efx, struct ethtool_cmd *ecmd) {
+    if (!ecmd->autoneg)
+        return -EINVAL;
 
-	return efx_mdio_set_settings(efx, ecmd);
+    return efx_mdio_set_settings(efx, ecmd);
 }
 
-static void sfx7101_set_npage_adv(struct efx_nic *efx, u32 advertising)
-{
-	efx_mdio_set_flag(efx, MDIO_MMD_AN, MDIO_AN_10GBT_CTRL,
-			  MDIO_AN_10GBT_CTRL_ADV10G,
-			  advertising & ADVERTISED_10000baseT_Full);
+static void sfx7101_set_npage_adv(struct efx_nic *efx, u32 advertising) {
+    efx_mdio_set_flag(efx, MDIO_MMD_AN, MDIO_AN_10GBT_CTRL,
+                      MDIO_AN_10GBT_CTRL_ADV10G,
+                      advertising & ADVERTISED_10000baseT_Full);
 }
 
 const struct efx_phy_operations falcon_sfx7101_phy_ops = {
-	.probe		  = tenxpress_phy_probe,
-	.init             = tenxpress_phy_init,
-	.reconfigure      = tenxpress_phy_reconfigure,
-	.poll             = tenxpress_phy_poll,
-	.fini             = sfx7101_phy_fini,
-	.remove		  = tenxpress_phy_remove,
-	.get_settings	  = tenxpress_get_settings,
-	.set_settings	  = tenxpress_set_settings,
-	.set_npage_adv    = sfx7101_set_npage_adv,
-	.test_alive	  = efx_mdio_test_alive,
-	.test_name	  = sfx7101_test_name,
-	.run_tests	  = sfx7101_run_tests,
+    .probe		  = tenxpress_phy_probe,
+    .init             = tenxpress_phy_init,
+    .reconfigure      = tenxpress_phy_reconfigure,
+    .poll             = tenxpress_phy_poll,
+    .fini             = sfx7101_phy_fini,
+    .remove		  = tenxpress_phy_remove,
+    .get_settings	  = tenxpress_get_settings,
+    .set_settings	  = tenxpress_set_settings,
+    .set_npage_adv    = sfx7101_set_npage_adv,
+    .test_alive	  = efx_mdio_test_alive,
+    .test_name	  = sfx7101_test_name,
+    .run_tests	  = sfx7101_run_tests,
 };

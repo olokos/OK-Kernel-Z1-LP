@@ -33,8 +33,8 @@
 /* Definitions for new video decoder commands */
 
 struct video_decoder_resolution {
-	unsigned int width;
-	unsigned int height;
+    unsigned int width;
+    unsigned int height;
 };
 
 #define	DECODER_SET_RESOLUTION	_IOW('d', 200, struct video_decoder_resolution)

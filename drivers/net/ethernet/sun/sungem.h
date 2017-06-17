@@ -828,8 +828,8 @@
  * DMA mappings for a transmitted packet.
  */
 struct gem_txd {
-	__le64	control_word;
-	__le64	buffer;
+    __le64	control_word;
+    __le64	buffer;
 };
 
 #define TXDCTRL_BUFSZ	0x0000000000007fffULL	/* Buffer Size		*/
@@ -863,8 +863,8 @@ struct gem_txd {
  * by the host driver just as in the TX descriptor case above.
  */
 struct gem_rxd {
-	__le64	status_word;
-	__le64	buffer;
+    __le64	status_word;
+    __le64	buffer;
 };
 
 #define RXDCTRL_TCPCSUM	0x000000000000ffffULL	/* TCP Pseudo-CSUM	*/
@@ -952,72 +952,72 @@ struct gem_rxd {
 #endif
 
 struct gem_init_block {
-	struct gem_txd	txd[INIT_BLOCK_TX_RING_SIZE];
-	struct gem_rxd	rxd[INIT_BLOCK_RX_RING_SIZE];
+    struct gem_txd	txd[INIT_BLOCK_TX_RING_SIZE];
+    struct gem_rxd	rxd[INIT_BLOCK_RX_RING_SIZE];
 };
 
 enum gem_phy_type {
-	phy_mii_mdio0,
-	phy_mii_mdio1,
-	phy_serialink,
-	phy_serdes,
+    phy_mii_mdio0,
+    phy_mii_mdio1,
+    phy_serialink,
+    phy_serdes,
 };
 
 enum link_state {
-	link_down = 0,	/* No link, will retry */
-	link_aneg,	/* Autoneg in progress */
-	link_force_try,	/* Try Forced link speed */
-	link_force_ret,	/* Forced mode worked, retrying autoneg */
-	link_force_ok,	/* Stay in forced mode */
-	link_up		/* Link is up */
+    link_down = 0,	/* No link, will retry */
+    link_aneg,	/* Autoneg in progress */
+    link_force_try,	/* Try Forced link speed */
+    link_force_ret,	/* Forced mode worked, retrying autoneg */
+    link_force_ok,	/* Stay in forced mode */
+    link_up		/* Link is up */
 };
 
 struct gem {
-	void __iomem		*regs;
-	int			rx_new, rx_old;
-	int			tx_new, tx_old;
+    void __iomem		*regs;
+    int			rx_new, rx_old;
+    int			tx_new, tx_old;
 
-	unsigned int has_wol : 1;	/* chip supports wake-on-lan */
-	unsigned int asleep_wol : 1;	/* was asleep with WOL enabled */
+    unsigned int has_wol : 1;	/* chip supports wake-on-lan */
+    unsigned int asleep_wol : 1;	/* was asleep with WOL enabled */
 
-	int			cell_enabled;
-	u32			msg_enable;
-	u32			status;
+    int			cell_enabled;
+    u32			msg_enable;
+    u32			status;
 
-	struct napi_struct	napi;
+    struct napi_struct	napi;
 
-	int			tx_fifo_sz;
-	int			rx_fifo_sz;
-	int			rx_pause_off;
-	int			rx_pause_on;
-	int			rx_buf_sz;
-	u64			pause_entered;
-	u16			pause_last_time_recvd;
-	u32			mac_rx_cfg;
-	u32			swrst_base;
+    int			tx_fifo_sz;
+    int			rx_fifo_sz;
+    int			rx_pause_off;
+    int			rx_pause_on;
+    int			rx_buf_sz;
+    u64			pause_entered;
+    u16			pause_last_time_recvd;
+    u32			mac_rx_cfg;
+    u32			swrst_base;
 
-	int			want_autoneg;
-	int			last_forced_speed;
-	enum link_state		lstate;
-	struct timer_list	link_timer;
-	int			timer_ticks;
-	int			wake_on_lan;
-	struct work_struct	reset_task;
-	volatile int		reset_task_pending;
+    int			want_autoneg;
+    int			last_forced_speed;
+    enum link_state		lstate;
+    struct timer_list	link_timer;
+    int			timer_ticks;
+    int			wake_on_lan;
+    struct work_struct	reset_task;
+    volatile int		reset_task_pending;
 
-	enum gem_phy_type	phy_type;
-	struct mii_phy		phy_mii;
-	int			mii_phy_addr;
+    enum gem_phy_type	phy_type;
+    struct mii_phy		phy_mii;
+    int			mii_phy_addr;
 
-	struct gem_init_block	*init_block;
-	struct sk_buff		*rx_skbs[RX_RING_SIZE];
-	struct sk_buff		*tx_skbs[TX_RING_SIZE];
-	dma_addr_t		gblock_dvma;
+    struct gem_init_block	*init_block;
+    struct sk_buff		*rx_skbs[RX_RING_SIZE];
+    struct sk_buff		*tx_skbs[TX_RING_SIZE];
+    dma_addr_t		gblock_dvma;
 
-	struct pci_dev		*pdev;
-	struct net_device	*dev;
+    struct pci_dev		*pdev;
+    struct net_device	*dev;
 #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_SPARC)
-	struct device_node	*of_node;
+    struct device_node	*of_node;
 #endif
 };
 

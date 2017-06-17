@@ -78,10 +78,8 @@
   \sa
 
   --------------------------------------------------------------------------*/
-v_VOID_t vos_sleep( v_U32_t msInterval )
-{
-    if (in_interrupt())
-    {
+v_VOID_t vos_sleep( v_U32_t msInterval ) {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return;
     }
@@ -103,11 +101,9 @@ v_VOID_t vos_sleep( v_U32_t msInterval )
   \sa
 
   --------------------------------------------------------------------------*/
-v_VOID_t vos_sleep_us( v_U32_t usInterval )
-{
+v_VOID_t vos_sleep_us( v_U32_t usInterval ) {
     unsigned long timeout = usecs_to_jiffies(usInterval) + 1;
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return;
     }
@@ -131,7 +127,6 @@ v_VOID_t vos_sleep_us( v_U32_t usInterval )
   \sa
 
   --------------------------------------------------------------------------*/
-v_VOID_t vos_busy_wait( v_U32_t usInterval )
-{
+v_VOID_t vos_busy_wait( v_U32_t usInterval ) {
     udelay(usInterval);
 }

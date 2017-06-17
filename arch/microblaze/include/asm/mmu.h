@@ -22,20 +22,20 @@ typedef unsigned long mm_context_t;
 
 /* Hardware Page Table Entry */
 typedef struct _PTE {
-	unsigned long    v:1;	/* Entry is valid */
-	unsigned long vsid:24;	/* Virtual segment identifier */
-	unsigned long    h:1;	/* Hash algorithm indicator */
-	unsigned long  api:6;	/* Abbreviated page index */
-	unsigned long  rpn:20;	/* Real (physical) page number */
-	unsigned long     :3;	/* Unused */
-	unsigned long    r:1;	/* Referenced */
-	unsigned long    c:1;	/* Changed */
-	unsigned long    w:1;	/* Write-thru cache mode */
-	unsigned long    i:1;	/* Cache inhibited */
-	unsigned long    m:1;	/* Memory coherence */
-	unsigned long    g:1;	/* Guarded */
-	unsigned long     :1;	/* Unused */
-	unsigned long   pp:2;	/* Page protection */
+    unsigned long    v:1;	/* Entry is valid */
+    unsigned long vsid:24;	/* Virtual segment identifier */
+    unsigned long    h:1;	/* Hash algorithm indicator */
+    unsigned long  api:6;	/* Abbreviated page index */
+    unsigned long  rpn:20;	/* Real (physical) page number */
+    unsigned long     :3;	/* Unused */
+    unsigned long    r:1;	/* Referenced */
+    unsigned long    c:1;	/* Changed */
+    unsigned long    w:1;	/* Write-thru cache mode */
+    unsigned long    i:1;	/* Cache inhibited */
+    unsigned long    m:1;	/* Memory coherence */
+    unsigned long    g:1;	/* Guarded */
+    unsigned long     :1;	/* Unused */
+    unsigned long   pp:2;	/* Page protection */
 } PTE;
 
 /* Values for PP (assumes Ks=0, Kp=1) */
@@ -46,12 +46,12 @@ typedef struct _PTE {
 
 /* Segment Register */
 typedef struct _SEGREG {
-	unsigned long    t:1;	/* Normal or I/O  type */
-	unsigned long   ks:1;	/* Supervisor 'key' (normally 0) */
-	unsigned long   kp:1;	/* User 'key' (normally 1) */
-	unsigned long    n:1;	/* No-execute */
-	unsigned long     :4;	/* Unused */
-	unsigned long vsid:24;	/* Virtual Segment Identifier */
+    unsigned long    t:1;	/* Normal or I/O  type */
+    unsigned long   ks:1;	/* Supervisor 'key' (normally 0) */
+    unsigned long   kp:1;	/* User 'key' (normally 1) */
+    unsigned long    n:1;	/* No-execute */
+    unsigned long     :4;	/* Unused */
+    unsigned long vsid:24;	/* Virtual Segment Identifier */
 } SEGREG;
 
 extern void _tlbie(unsigned long va);	/* invalidate a TLB entry */

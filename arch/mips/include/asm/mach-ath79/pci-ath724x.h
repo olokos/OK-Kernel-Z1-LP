@@ -12,8 +12,8 @@
 #define __ASM_MACH_ATH79_PCI_ATH724X_H
 
 struct ath724x_pci_data {
-	int irq;
-	void *pdata;
+    int irq;
+    void *pdata;
 };
 
 void ath724x_pci_add_data(struct ath724x_pci_data *data, int size);

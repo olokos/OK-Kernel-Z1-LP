@@ -35,22 +35,36 @@ DEBUGGER_BOILERPLATE(debugger_dabr_match)
 DEBUGGER_BOILERPLATE(debugger_fault_handler)
 
 #else
-static inline int debugger(struct pt_regs *regs) { return 0; }
-static inline int debugger_ipi(struct pt_regs *regs) { return 0; }
-static inline int debugger_bpt(struct pt_regs *regs) { return 0; }
-static inline int debugger_sstep(struct pt_regs *regs) { return 0; }
-static inline int debugger_iabr_match(struct pt_regs *regs) { return 0; }
-static inline int debugger_dabr_match(struct pt_regs *regs) { return 0; }
-static inline int debugger_fault_handler(struct pt_regs *regs) { return 0; }
+static inline int debugger(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_ipi(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_bpt(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_sstep(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_iabr_match(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_dabr_match(struct pt_regs *regs) {
+    return 0;
+}
+static inline int debugger_fault_handler(struct pt_regs *regs) {
+    return 0;
+}
 #endif
 
 extern int set_dabr(unsigned long dabr);
 #ifdef CONFIG_PPC_ADV_DEBUG_REGS
 extern void do_send_trap(struct pt_regs *regs, unsigned long address,
-			 unsigned long error_code, int signal_code, int brkpt);
+                         unsigned long error_code, int signal_code, int brkpt);
 #else
 extern void do_dabr(struct pt_regs *regs, unsigned long address,
-		    unsigned long error_code);
+                    unsigned long error_code);
 #endif
 
 #endif /* _ASM_POWERPC_DEBUG_H */

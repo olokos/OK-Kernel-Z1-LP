@@ -39,12 +39,12 @@
 #define EDLC_RESET	(ioaddr + 0x06)	/* EDLC RESET register */
 #define EDLC_TDR1	(ioaddr + 0x07)	/* "Time Domain Reflectometry" reg1 */
 #define EDLC_ADDR	(ioaddr + 0x08)	/* EDLC station address, 6 bytes */
-	 			/* 0x0E doesn't exist for r/w */
+/* 0x0E doesn't exist for r/w */
 #define EDLC_TDR2	(ioaddr + 0x0f)	/* "Time Domain Reflectometry" reg2 */
 #define IE_GP		(ioaddr + 0x10)	/* GP pointer (word register) */
-				/* 0x11 is 2nd byte of GP Pointer */
+/* 0x11 is 2nd byte of GP Pointer */
 #define IE_RCNT		(ioaddr + 0x10)	/* Count of bytes in rcv'd packet */
- 				/* 0x11 is 2nd byte of "Byte Count" */
+/* 0x11 is 2nd byte of "Byte Count" */
 #define IE_MMODE	(ioaddr + 0x12)	/* Memory Mode register */
 #define IE_DMA_RST	(ioaddr + 0x13)	/* IE DMA Reset.  write only */
 #define IE_ISTAT	(ioaddr + 0x13)	/* IE Interrupt Status.  read only */
@@ -75,7 +75,7 @@
 #define XM_COLL		0x04	/* =1 to enable Xmt Collision ints */
 #define XM_COLL16	0x02	/* =1 to enable Xmt 16th Coll ints */
 #define XM_PERR		0x01	/* =1 to enable Xmt Parity Error ints */
- 				/* note: always clear this bit */
+/* note: always clear this bit */
 #define XM_ALL		(XM_TPOK | XM_RCVD | XM_UFLW | XM_COLL | XM_COLL16)
 
 /* bits in EDLC_RSTAT, interrupt clear on write, status when read */
@@ -86,7 +86,7 @@
 #define RS_CRC_ERR	0x02	/* Bad CRC on rcvd pkt */
 #define RS_OFLW		0x01	/* overflow for rcv FIFO */
 #define RS_VALID_BITS	( RS_PKT_OK | RS_RST_PKT | RS_RUNT | RS_ALIGN | RS_CRC_ERR | RS_OFLW )
- 				/* all valid RSTAT bits */
+/* all valid RSTAT bits */
 
 #define RS_CLR_PKT_OK	0x80	/* clear rcvd packet interrupt */
 #define RS_CLR_RST_PKT	0x10	/* clear RESET packet received */
@@ -131,7 +131,7 @@
 #define MM_BUS_PAGE	0x18	/* =00 ALWAYS.  Used when MUX=1 */
 #define MM_NET_PAGE	0x06	/* =00 ALWAYS.  Used when MUX=0 */
 #define MM_MUX		0x01	/* =1 means Rcv Buff on system bus */
-				/* =0 means Xmt Buff on system bus */
+/* =0 means Xmt Buff on system bus */
 
 /* bits in IE_ISTAT, read only */
 #define IS_TDIAG	0x80	/* =1 if Diagnostic problem */

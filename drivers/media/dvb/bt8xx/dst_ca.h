@@ -50,8 +50,8 @@
 
 
 struct dst_ca_private {
-	struct dst_state *dst;
-	struct dvb_device *dvbdev;
+    struct dst_state *dst;
+    struct dvb_device *dvbdev;
 };
 
 

@@ -50,8 +50,7 @@
 
 #include "oemDataApi.h"
 
-typedef struct tagOemDataStruct
-{
+typedef struct tagOemDataStruct {
     tANI_U32                         nextOemReqId; //a global req id
     tANI_BOOLEAN                     oemDataReqActive; //indicates that currently a request has been posted and
     //waiting for the response
@@ -63,8 +62,7 @@ typedef struct tagOemDataStruct
     tANI_U8                          sessionId; //Session on which oem data req is active
 } tOemDataStruct;
 
-typedef struct tagOemDataCmd
-{
+typedef struct tagOemDataCmd {
     tANI_U32                            oemDataReqID;
     oemData_OemDataReqCompleteCallback      callback;
     void*                               pContext;

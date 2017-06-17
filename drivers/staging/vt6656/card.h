@@ -61,19 +61,19 @@ typedef enum _CARD_OP_MODE {
 /*---------------------  Export Functions  --------------------------*/
 
 void CARDbSetMediaChannel(void *pDeviceHandler,
-			  unsigned int uConnectionChannel);
+                          unsigned int uConnectionChannel);
 void CARDvSetRSPINF(void *pDeviceHandler, BYTE byBBType);
 void vUpdateIFS(void *pDeviceHandler);
 void CARDvUpdateBasicTopRate(void *pDeviceHandler);
 void CARDbAddBasicRate(void *pDeviceHandler, WORD wRateIdx);
 BOOL CARDbIsOFDMinBasicRate(void *pDeviceHandler);
 void CARDvAdjustTSF(void *pDeviceHandler, BYTE byRxRate,
-		    QWORD qwBSSTimestamp, QWORD qwLocalTSF);
+                    QWORD qwBSSTimestamp, QWORD qwLocalTSF);
 BOOL CARDbGetCurrentTSF(void *pDeviceHandler, PQWORD pqwCurrTSF);
 BOOL CARDbClearCurrentTSF(void *pDeviceHandler);
 void CARDvSetFirstNextTBTT(void *pDeviceHandler, WORD wBeaconInterval);
 void CARDvUpdateNextTBTT(void *pDeviceHandler, QWORD qwTSF,
-			 WORD wBeaconInterval);
+                         WORD wBeaconInterval);
 QWORD CARDqGetNextTBTT(QWORD qwTSF, WORD wBeaconInterval);
 QWORD CARDqGetTSFOffset(BYTE byRxRate, QWORD qwTSF1, QWORD qwTSF2);
 BOOL CARDbRadioPowerOff(void *pDeviceHandler);
@@ -82,8 +82,8 @@ BYTE CARDbyGetPktType(void *pDeviceHandler);
 void CARDvSetBSSMode(void *pDeviceHandler);
 
 BOOL CARDbChannelSwitch(void *pDeviceHandler,
-			BYTE byMode,
-			BYTE byNewChannel,
-			BYTE byCount);
+                        BYTE byMode,
+                        BYTE byNewChannel,
+                        BYTE byCount);
 
 #endif /* __CARD_H__ */

@@ -32,9 +32,8 @@ void ppc_enable_pmcs(void);
 #ifdef CONFIG_PPC_BOOK3S_64
 #include <asm/lppaca.h>
 
-static inline void ppc_set_pmu_inuse(int inuse)
-{
-	get_lppaca()->pmcregs_in_use = inuse;
+static inline void ppc_set_pmu_inuse(int inuse) {
+    get_lppaca()->pmcregs_in_use = inuse;
 }
 
 extern void power4_enable_pmcs(void);

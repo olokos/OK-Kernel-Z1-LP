@@ -33,51 +33,51 @@
 #define ETH0_BASE_ADDR		0x18060000
 
 struct eth_regs {
-	u32 ethintfc;
-	u32 ethfifott;
-	u32 etharc;
-	u32 ethhash0;
-	u32 ethhash1;
-	u32 ethu0[4];		/* Reserved. */
-	u32 ethpfs;
-	u32 ethmcp;
-	u32 eth_u1[10];		/* Reserved. */
-	u32 ethspare;
-	u32 eth_u2[42];		/* Reserved. */
-	u32 ethsal0;
-	u32 ethsah0;
-	u32 ethsal1;
-	u32 ethsah1;
-	u32 ethsal2;
-	u32 ethsah2;
-	u32 ethsal3;
-	u32 ethsah3;
-	u32 ethrbc;
-	u32 ethrpc;
-	u32 ethrupc;
-	u32 ethrfc;
-	u32 ethtbc;
-	u32 ethgpf;
-	u32 eth_u9[50];		/* Reserved. */
-	u32 ethmac1;
-	u32 ethmac2;
-	u32 ethipgt;
-	u32 ethipgr;
-	u32 ethclrt;
-	u32 ethmaxf;
-	u32 eth_u10;		/* Reserved. */
-	u32 ethmtest;
-	u32 miimcfg;
-	u32 miimcmd;
-	u32 miimaddr;
-	u32 miimwtd;
-	u32 miimrdd;
-	u32 miimind;
-	u32 eth_u11;		/* Reserved. */
-	u32 eth_u12;		/* Reserved. */
-	u32 ethcfsa0;
-	u32 ethcfsa1;
-	u32 ethcfsa2;
+    u32 ethintfc;
+    u32 ethfifott;
+    u32 etharc;
+    u32 ethhash0;
+    u32 ethhash1;
+    u32 ethu0[4];		/* Reserved. */
+    u32 ethpfs;
+    u32 ethmcp;
+    u32 eth_u1[10];		/* Reserved. */
+    u32 ethspare;
+    u32 eth_u2[42];		/* Reserved. */
+    u32 ethsal0;
+    u32 ethsah0;
+    u32 ethsal1;
+    u32 ethsah1;
+    u32 ethsal2;
+    u32 ethsah2;
+    u32 ethsal3;
+    u32 ethsah3;
+    u32 ethrbc;
+    u32 ethrpc;
+    u32 ethrupc;
+    u32 ethrfc;
+    u32 ethtbc;
+    u32 ethgpf;
+    u32 eth_u9[50];		/* Reserved. */
+    u32 ethmac1;
+    u32 ethmac2;
+    u32 ethipgt;
+    u32 ethipgr;
+    u32 ethclrt;
+    u32 ethmaxf;
+    u32 eth_u10;		/* Reserved. */
+    u32 ethmtest;
+    u32 miimcfg;
+    u32 miimcmd;
+    u32 miimaddr;
+    u32 miimwtd;
+    u32 miimrdd;
+    u32 miimind;
+    u32 eth_u11;		/* Reserved. */
+    u32 eth_u12;		/* Reserved. */
+    u32 ethcfsa0;
+    u32 ethcfsa1;
+    u32 ethcfsa2;
 };
 
 /* Ethernet interrupt registers */

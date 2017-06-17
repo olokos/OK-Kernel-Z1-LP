@@ -46,41 +46,40 @@
 
 #include <asm/delay.h>
 
-__wsum csum_partial(const void *p, int len, __wsum __sum)
-{
-	u32 sum = (__force u32)__sum;
-	const u16 *buff = p;
-	/*
-	* Experiments with ethernet and slip connections show that buff
-	* is aligned on either a 2-byte or 4-byte boundary.
-	*/
-	const void *endMarker = p + len;
-	const void *marker = endMarker - (len % 16);
+__wsum csum_partial(const void *p, int len, __wsum __sum) {
+    u32 sum = (__force u32)__sum;
+    const u16 *buff = p;
+    /*
+    * Experiments with ethernet and slip connections show that buff
+    * is aligned on either a 2-byte or 4-byte boundary.
+    */
+    const void *endMarker = p + len;
+    const void *marker = endMarker - (len % 16);
 #if 0
-	if((int)buff & 0x3)
-		printk("unaligned buff %p\n", buff);
-	__delay(900); /* extra delay of 90 us to test performance hit */
+    if((int)buff & 0x3)
+        printk("unaligned buff %p\n", buff);
+    __delay(900); /* extra delay of 90 us to test performance hit */
 #endif
-	BITON;
-	while (buff < marker) {
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-		sum += *buff++;
-	}
-	marker = endMarker - (len % 2);
-	while (buff < marker)
-		sum += *buff++;
+    BITON;
+    while (buff < marker) {
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+        sum += *buff++;
+    }
+    marker = endMarker - (len % 2);
+    while (buff < marker)
+        sum += *buff++;
 
-	if (endMarker > buff)
-		sum += *(const u8 *)buff;	/* add extra byte separately */
+    if (endMarker > buff)
+        sum += *(const u8 *)buff;	/* add extra byte separately */
 
-	BITOFF;
-	return (__force __wsum)sum;
+    BITOFF;
+    return (__force __wsum)sum;
 }
 
 EXPORT_SYMBOL(csum_partial);

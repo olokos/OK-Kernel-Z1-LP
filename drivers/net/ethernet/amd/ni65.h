@@ -87,35 +87,35 @@
 #define XMIT_BUFF 	0x8000	/* Buffering error (no ENP) */
 
 struct init_block {
-	unsigned short mode;
-	unsigned char eaddr[6];
-	unsigned char filter[8];
-	/* bit 29-31: number of rmd's (power of 2) */
-	u32 rrp;		/* receive ring pointer (align 8) */
-	/* bit 29-31: number of tmd's (power of 2) */
-	u32 trp;		/* transmit ring pointer (align 8) */
+    unsigned short mode;
+    unsigned char eaddr[6];
+    unsigned char filter[8];
+    /* bit 29-31: number of rmd's (power of 2) */
+    u32 rrp;		/* receive ring pointer (align 8) */
+    /* bit 29-31: number of tmd's (power of 2) */
+    u32 trp;		/* transmit ring pointer (align 8) */
 };
 
 struct rmd {			/* Receive Message Descriptor */
-	union {
-		volatile u32 buffer;
-		struct {
-			volatile unsigned char dummy[3];
-			volatile unsigned char status;
-		} s;
-	} u;
-	volatile short blen;
-	volatile unsigned short mlen;
+    union {
+        volatile u32 buffer;
+        struct {
+            volatile unsigned char dummy[3];
+            volatile unsigned char status;
+        } s;
+    } u;
+    volatile short blen;
+    volatile unsigned short mlen;
 };
 
 struct tmd {
-	union {
-		volatile u32 buffer;
-		struct {
-			volatile unsigned char dummy[3];
-			volatile unsigned char status;
-		} s;
-	} u;
-	volatile unsigned short blen;
-	volatile unsigned short status2;
+    union {
+        volatile u32 buffer;
+        struct {
+            volatile unsigned char dummy[3];
+            volatile unsigned char status;
+        } s;
+    } u;
+    volatile unsigned short blen;
+    volatile unsigned short status2;
 };

@@ -37,13 +37,12 @@ extern void frv_cache_invalidate(unsigned long start, unsigned long size);
 extern void frv_icache_invalidate(unsigned long start, unsigned long size);
 extern void frv_cache_wback_inv(unsigned long start, unsigned long size);
 
-static inline void __flush_cache_all(void)
-{
-	asm volatile("	dcef	@(gr0,gr0),#1	\n"
-		     "	icei	@(gr0,gr0),#1	\n"
-		     "	membar			\n"
-		     : : : "memory"
-		     );
+static inline void __flush_cache_all(void) {
+    asm volatile("	dcef	@(gr0,gr0),#1	\n"
+                 "	icei	@(gr0,gr0),#1	\n"
+                 "	membar			\n"
+                 : : : "memory"
+                );
 }
 
 /* dcache/icache coherency... */
@@ -51,42 +50,36 @@ static inline void __flush_cache_all(void)
 #ifdef CONFIG_MMU
 extern void flush_dcache_page(struct page *page);
 #else
-static inline void flush_dcache_page(struct page *page)
-{
-	unsigned long addr = page_to_phys(page);
-	frv_dcache_writeback(addr, addr + PAGE_SIZE);
+static inline void flush_dcache_page(struct page *page) {
+    unsigned long addr = page_to_phys(page);
+    frv_dcache_writeback(addr, addr + PAGE_SIZE);
 }
 #endif
 
-static inline void flush_page_to_ram(struct page *page)
-{
-	flush_dcache_page(page);
+static inline void flush_page_to_ram(struct page *page) {
+    flush_dcache_page(page);
 }
 
-static inline void flush_icache(void)
-{
-	__flush_cache_all();
+static inline void flush_icache(void) {
+    __flush_cache_all();
 }
 
-static inline void flush_icache_range(unsigned long start, unsigned long end)
-{
-	frv_cache_wback_inv(start, end);
+static inline void flush_icache_range(unsigned long start, unsigned long end) {
+    frv_cache_wback_inv(start, end);
 }
 
 #ifdef CONFIG_MMU
 extern void flush_icache_user_range(struct vm_area_struct *vma, struct page *page,
-				    unsigned long start, unsigned long len);
+                                    unsigned long start, unsigned long len);
 #else
 static inline void flush_icache_user_range(struct vm_area_struct *vma, struct page *page,
-					   unsigned long start, unsigned long len)
-{
-	frv_cache_wback_inv(start, start + len);
+        unsigned long start, unsigned long len) {
+    frv_cache_wback_inv(start, start + len);
 }
 #endif
 
-static inline void flush_icache_page(struct vm_area_struct *vma, struct page *page)
-{
-	flush_icache_user_range(vma, page, page_to_phys(page), PAGE_SIZE);
+static inline void flush_icache_page(struct vm_area_struct *vma, struct page *page) {
+    flush_icache_user_range(vma, page, page_to_phys(page), PAGE_SIZE);
 }
 
 /*

@@ -16,32 +16,31 @@
 /*
  * Misc. functions
  */
-static inline unsigned int __xchg(unsigned int x, volatile void *ptr, int size)
-{
-	unsigned int tmp;
-	unsigned long flags;
+static inline unsigned int __xchg(unsigned int x, volatile void *ptr, int size) {
+    unsigned int tmp;
+    unsigned long flags;
 
-	local_irq_save(flags);
+    local_irq_save(flags);
 
-	switch (size) {
-	case 1:
-		tmp = 0;
-		tmp = *((unsigned char *) ptr);
-		*((unsigned char *) ptr) = (unsigned char) x;
-		break;
-	case 2:
-		tmp = 0;
-		tmp = *((unsigned short *) ptr);
-		*((unsigned short *) ptr) = x;
-		break;
-	case 4:
-		tmp = 0;
-		tmp = *((unsigned int *) ptr);
-		*((unsigned int *) ptr) = x;
-		break;
-	}
-	local_irq_restore(flags);
-	return tmp;
+    switch (size) {
+    case 1:
+        tmp = 0;
+        tmp = *((unsigned char *) ptr);
+        *((unsigned char *) ptr) = (unsigned char) x;
+        break;
+    case 2:
+        tmp = 0;
+        tmp = *((unsigned short *) ptr);
+        *((unsigned short *) ptr) = x;
+        break;
+    case 4:
+        tmp = 0;
+        tmp = *((unsigned int *) ptr);
+        *((unsigned int *) ptr) = x;
+        break;
+    }
+    local_irq_restore(flags);
+    return tmp;
 }
 
 #define xchg(ptr, x) \

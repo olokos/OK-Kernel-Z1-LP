@@ -58,21 +58,21 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned char seg;
+    unsigned char seg;
 } mm_segment_t;
 
 /* The Sparc processor specific thread struct. */
 /* XXX This should die, everything can go into thread_info now. */
 struct thread_struct {
 #ifdef CONFIG_DEBUG_SPINLOCK
-	/* How many spinlocks held by this thread.
-	 * Used with spin lock debugging to catch tasks
-	 * sleeping illegally with locks held.
-	 */
-	int smp_lock_count;
-	unsigned int smp_lock_pc;
+    /* How many spinlocks held by this thread.
+     * Used with spin lock debugging to catch tasks
+     * sleeping illegally with locks held.
+     */
+    int smp_lock_count;
+    unsigned int smp_lock_pc;
 #else
-	int dummy; /* f'in gcc bug... */
+    int dummy; /* f'in gcc bug... */
 #endif
 };
 
@@ -207,28 +207,26 @@ extern unsigned long get_wchan(struct task_struct *task);
 #define ARCH_HAS_PREFETCHW
 #define ARCH_HAS_SPINLOCK_PREFETCH
 
-static inline void prefetch(const void *x)
-{
-	/* We do not use the read prefetch mnemonic because that
-	 * prefetches into the prefetch-cache which only is accessible
-	 * by floating point operations in UltraSPARC-III and later.
-	 * By contrast, "#one_write" prefetches into the L2 cache
-	 * in shared state.
-	 */
-	__asm__ __volatile__("prefetch [%0], #one_write"
-			     : /* no outputs */
-			     : "r" (x));
+static inline void prefetch(const void *x) {
+    /* We do not use the read prefetch mnemonic because that
+     * prefetches into the prefetch-cache which only is accessible
+     * by floating point operations in UltraSPARC-III and later.
+     * By contrast, "#one_write" prefetches into the L2 cache
+     * in shared state.
+     */
+    __asm__ __volatile__("prefetch [%0], #one_write"
+                         : /* no outputs */
+                         : "r" (x));
 }
 
-static inline void prefetchw(const void *x)
-{
-	/* The most optimal prefetch to use for writes is
-	 * "#n_writes".  This brings the cacheline into the
-	 * L2 cache in "owned" state.
-	 */
-	__asm__ __volatile__("prefetch [%0], #n_writes"
-			     : /* no outputs */
-			     : "r" (x));
+static inline void prefetchw(const void *x) {
+    /* The most optimal prefetch to use for writes is
+     * "#n_writes".  This brings the cacheline into the
+     * L2 cache in "owned" state.
+     */
+    __asm__ __volatile__("prefetch [%0], #n_writes"
+                         : /* no outputs */
+                         : "r" (x));
 }
 
 #define spin_lock_prefetch(x)	prefetchw(x)

@@ -29,58 +29,56 @@
  * be used in IRQ contexts, so in some (very limited) cases we need
  * it.
  */
-void *kmap_atomic_prot(struct page *page, pgprot_t prot)
-{
-	unsigned long vaddr;
-	int idx, type;
+void *kmap_atomic_prot(struct page *page, pgprot_t prot) {
+    unsigned long vaddr;
+    int idx, type;
 
-	/* even !CONFIG_PREEMPT needs this, for in_atomic in do_page_fault */
-	pagefault_disable();
-	if (!PageHighMem(page))
-		return page_address(page);
+    /* even !CONFIG_PREEMPT needs this, for in_atomic in do_page_fault */
+    pagefault_disable();
+    if (!PageHighMem(page))
+        return page_address(page);
 
-	type = kmap_atomic_idx_push();
-	idx = type + KM_TYPE_NR*smp_processor_id();
-	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
+    type = kmap_atomic_idx_push();
+    idx = type + KM_TYPE_NR*smp_processor_id();
+    vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
 #ifdef CONFIG_DEBUG_HIGHMEM
-	BUG_ON(!pte_none(*(kmap_pte-idx)));
+    BUG_ON(!pte_none(*(kmap_pte-idx)));
 #endif
-	__set_pte_at(&init_mm, vaddr, kmap_pte-idx, mk_pte(page, prot), 1);
-	local_flush_tlb_page(NULL, vaddr);
+    __set_pte_at(&init_mm, vaddr, kmap_pte-idx, mk_pte(page, prot), 1);
+    local_flush_tlb_page(NULL, vaddr);
 
-	return (void*) vaddr;
+    return (void*) vaddr;
 }
 EXPORT_SYMBOL(kmap_atomic_prot);
 
-void __kunmap_atomic(void *kvaddr)
-{
-	unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
-	int type;
+void __kunmap_atomic(void *kvaddr) {
+    unsigned long vaddr = (unsigned long) kvaddr & PAGE_MASK;
+    int type;
 
-	if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
-		pagefault_enable();
-		return;
-	}
+    if (vaddr < __fix_to_virt(FIX_KMAP_END)) {
+        pagefault_enable();
+        return;
+    }
 
-	type = kmap_atomic_idx();
+    type = kmap_atomic_idx();
 
 #ifdef CONFIG_DEBUG_HIGHMEM
-	{
-		unsigned int idx;
+    {
+        unsigned int idx;
 
-		idx = type + KM_TYPE_NR * smp_processor_id();
-		BUG_ON(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
+        idx = type + KM_TYPE_NR * smp_processor_id();
+        BUG_ON(vaddr != __fix_to_virt(FIX_KMAP_BEGIN + idx));
 
-		/*
-		 * force other mappings to Oops if they'll try to access
-		 * this pte without first remap it
-		 */
-		pte_clear(&init_mm, vaddr, kmap_pte-idx);
-		local_flush_tlb_page(NULL, vaddr);
-	}
+        /*
+         * force other mappings to Oops if they'll try to access
+         * this pte without first remap it
+         */
+        pte_clear(&init_mm, vaddr, kmap_pte-idx);
+        local_flush_tlb_page(NULL, vaddr);
+    }
 #endif
 
-	kmap_atomic_idx_pop();
-	pagefault_enable();
+    kmap_atomic_idx_pop();
+    pagefault_enable();
 }
 EXPORT_SYMBOL(__kunmap_atomic);

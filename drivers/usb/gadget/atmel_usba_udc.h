@@ -246,13 +246,13 @@
 	} while (0)
 
 enum usba_ctrl_state {
-	WAIT_FOR_SETUP,
-	DATA_STAGE_IN,
-	DATA_STAGE_OUT,
-	STATUS_STAGE_IN,
-	STATUS_STAGE_OUT,
-	STATUS_STAGE_ADDR,
-	STATUS_STAGE_TEST,
+    WAIT_FOR_SETUP,
+    DATA_STAGE_IN,
+    DATA_STAGE_OUT,
+    STATUS_STAGE_IN,
+    STATUS_STAGE_OUT,
+    STATUS_STAGE_ADDR,
+    STATUS_STAGE_TEST,
 };
 /*
   EP_STATE_IDLE,
@@ -266,91 +266,88 @@ enum usba_ctrl_state {
 */
 
 struct usba_dma_desc {
-	dma_addr_t next;
-	dma_addr_t addr;
-	u32 ctrl;
+    dma_addr_t next;
+    dma_addr_t addr;
+    u32 ctrl;
 };
 
 struct usba_ep {
-	int					state;
-	void __iomem				*ep_regs;
-	void __iomem				*dma_regs;
-	void __iomem				*fifo;
-	struct usb_ep				ep;
-	struct usba_udc				*udc;
+    int					state;
+    void __iomem				*ep_regs;
+    void __iomem				*dma_regs;
+    void __iomem				*fifo;
+    struct usb_ep				ep;
+    struct usba_udc				*udc;
 
-	struct list_head			queue;
-	const struct usb_endpoint_descriptor	*desc;
+    struct list_head			queue;
+    const struct usb_endpoint_descriptor	*desc;
 
-	u16					fifo_size;
-	u8					nr_banks;
-	u8					index;
-	unsigned int				can_dma:1;
-	unsigned int				can_isoc:1;
-	unsigned int				is_isoc:1;
-	unsigned int				is_in:1;
+    u16					fifo_size;
+    u8					nr_banks;
+    u8					index;
+    unsigned int				can_dma:1;
+    unsigned int				can_isoc:1;
+    unsigned int				is_isoc:1;
+    unsigned int				is_in:1;
 
 #ifdef CONFIG_USB_GADGET_DEBUG_FS
-	u32					last_dma_status;
-	struct dentry				*debugfs_dir;
-	struct dentry				*debugfs_queue;
-	struct dentry				*debugfs_dma_status;
-	struct dentry				*debugfs_state;
+    u32					last_dma_status;
+    struct dentry				*debugfs_dir;
+    struct dentry				*debugfs_queue;
+    struct dentry				*debugfs_dma_status;
+    struct dentry				*debugfs_state;
 #endif
 };
 
 struct usba_request {
-	struct usb_request			req;
-	struct list_head			queue;
+    struct usb_request			req;
+    struct list_head			queue;
 
-	u32					ctrl;
+    u32					ctrl;
 
-	unsigned int				submitted:1;
-	unsigned int				last_transaction:1;
-	unsigned int				using_dma:1;
-	unsigned int				mapped:1;
+    unsigned int				submitted:1;
+    unsigned int				last_transaction:1;
+    unsigned int				using_dma:1;
+    unsigned int				mapped:1;
 };
 
 struct usba_udc {
-	/* Protect hw registers from concurrent modifications */
-	spinlock_t lock;
+    /* Protect hw registers from concurrent modifications */
+    spinlock_t lock;
 
-	void __iomem *regs;
-	void __iomem *fifo;
+    void __iomem *regs;
+    void __iomem *fifo;
 
-	struct usb_gadget gadget;
-	struct usb_gadget_driver *driver;
-	struct platform_device *pdev;
-	int irq;
-	int vbus_pin;
-	int vbus_pin_inverted;
-	struct clk *pclk;
-	struct clk *hclk;
+    struct usb_gadget gadget;
+    struct usb_gadget_driver *driver;
+    struct platform_device *pdev;
+    int irq;
+    int vbus_pin;
+    int vbus_pin_inverted;
+    struct clk *pclk;
+    struct clk *hclk;
 
-	u16 devstatus;
+    u16 devstatus;
 
-	u16 test_mode;
-	int vbus_prev;
+    u16 test_mode;
+    int vbus_prev;
 
 #ifdef CONFIG_USB_GADGET_DEBUG_FS
-	struct dentry *debugfs_root;
-	struct dentry *debugfs_regs;
+    struct dentry *debugfs_root;
+    struct dentry *debugfs_regs;
 #endif
 };
 
-static inline struct usba_ep *to_usba_ep(struct usb_ep *ep)
-{
-	return container_of(ep, struct usba_ep, ep);
+static inline struct usba_ep *to_usba_ep(struct usb_ep *ep) {
+    return container_of(ep, struct usba_ep, ep);
 }
 
-static inline struct usba_request *to_usba_req(struct usb_request *req)
-{
-	return container_of(req, struct usba_request, req);
+static inline struct usba_request *to_usba_req(struct usb_request *req) {
+    return container_of(req, struct usba_request, req);
 }
 
-static inline struct usba_udc *to_usba_udc(struct usb_gadget *gadget)
-{
-	return container_of(gadget, struct usba_udc, gadget);
+static inline struct usba_udc *to_usba_udc(struct usb_gadget *gadget) {
+    return container_of(gadget, struct usba_udc, gadget);
 }
 
 #define ep_is_control(ep)	((ep)->index == 0)

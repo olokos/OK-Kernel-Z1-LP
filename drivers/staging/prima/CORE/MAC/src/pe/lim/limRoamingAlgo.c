@@ -58,12 +58,10 @@
 \param   tpAniSirGlobal  pMac
 \return  none
 \ ------------------------------------------------------------------------- */
-tSirBackgroundScanMode limSelectsBackgroundScanMode(tpAniSirGlobal pMac)
-{
+tSirBackgroundScanMode limSelectsBackgroundScanMode(tpAniSirGlobal pMac) {
     tANI_U32    cfgVal;
 
-    if (wlan_cfgGetInt(pMac, WNI_CFG_MAX_CONSECUTIVE_BACKGROUND_SCAN_FAILURE, &cfgVal) != eSIR_SUCCESS)
-    {
+    if (wlan_cfgGetInt(pMac, WNI_CFG_MAX_CONSECUTIVE_BACKGROUND_SCAN_FAILURE, &cfgVal) != eSIR_SUCCESS) {
         limLog(pMac, LOGP, FL("Fail to get WNI_CFG_MAX_CONSECUTIVE_BACKGROUND_SCAN_FAILURE value"));
         return eSIR_NORMAL_BACKGROUND_SCAN;
     }
@@ -75,8 +73,7 @@ tSirBackgroundScanMode limSelectsBackgroundScanMode(tpAniSirGlobal pMac)
      * exceeds the maximum allowed, then LIM shall trigger an
      * aggressive background scan.
      */
-    if (pMac->lim.gLimNumOfConsecutiveBkgndScanFailure >= cfgVal)
-    {
+    if (pMac->lim.gLimNumOfConsecutiveBkgndScanFailure >= cfgVal) {
         pMac->lim.gLimNumOfForcedBkgndScan += 1;
         limLog(pMac, LOGE,
                FL("Had %d consec scan fail(when expect < %d). Trigger AGGRESSIVE bkgnd scan."),
@@ -95,8 +92,7 @@ tSirBackgroundScanMode limSelectsBackgroundScanMode(tpAniSirGlobal pMac)
 \param   tpAniSirGlobal  pMac
 \return  none
 \ ------------------------------------------------------------- */
-static tANI_U8  limIsBackgroundScanAllowed(tpAniSirGlobal pMac)
-{
+static tANI_U8  limIsBackgroundScanAllowed(tpAniSirGlobal pMac) {
     // if we are in the middle of a scan already, skip the background scan
     if (limIsSystemInScanState(pMac) ||
             (pMac->lim.gLimBackgroundScanDisable) ||
@@ -105,8 +101,7 @@ static tANI_U8  limIsBackgroundScanAllowed(tpAniSirGlobal pMac)
         return false;
 
     //need to do background scan in IBSS mode.
-    if (pMac->lim.gLimSystemRole == eLIM_STA_IN_IBSS_ROLE)
-    {
+    if (pMac->lim.gLimSystemRole == eLIM_STA_IN_IBSS_ROLE) {
         if (pMac->lim.gLimSmeState != eLIM_SME_NORMAL_STATE)
             return false;
         return true;
@@ -143,8 +138,7 @@ static tANI_U8  limIsBackgroundScanAllowed(tpAniSirGlobal pMac)
 \param   tpAniSirGlobal  pMac
 \return  none
 \ ----------------------------------------------------------------- */
-void limTriggerBackgroundScan(tpAniSirGlobal pMac)
-{
+void limTriggerBackgroundScan(tpAniSirGlobal pMac) {
     tANI_U32    len   = WNI_CFG_BG_SCAN_CHANNEL_LIST_LEN;
     tANI_U32    ssidLen = SIR_MAC_MAX_SSID_LENGTH;
     tSirMacChanNum   bgScanChannelList[WNI_CFG_BG_SCAN_CHANNEL_LIST_LEN];
@@ -155,8 +149,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     PELOG1(limLog(pMac, LOG1, FL("Background Scan: %d success, %d consec fail "),
                   pMac->lim.gLimNumOfBackgroundScanSuccess,  pMac->lim.gLimNumOfConsecutiveBkgndScanFailure);)
 
-    if (! limIsBackgroundScanAllowed(pMac))
-    {
+    if (! limIsBackgroundScanAllowed(pMac)) {
         PELOG1(limLog(pMac, LOG1, FL("Skipping Background Scan "));)
         return;
     }
@@ -164,8 +157,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     // Get background scan channel list from CFG
     if (wlan_cfgGetStr(pMac, WNI_CFG_BG_SCAN_CHANNEL_LIST,
                        (tANI_U8 *) bgScanChannelList,
-                       (tANI_U32 *) &len) != eSIR_SUCCESS)
-    {
+                       (tANI_U32 *) &len) != eSIR_SUCCESS) {
         /**
          * Could not get Valid channel list from CFG.
          * Log error.
@@ -185,8 +177,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
 
     if (wlan_cfgGetStr(pMac, WNI_CFG_SSID,
                        (tANI_U8 *) (smeScanReq.ssId[0].ssId),
-                       (tANI_U32 *) &ssidLen) != eSIR_SUCCESS)
-    {
+                       (tANI_U32 *) &ssidLen) != eSIR_SUCCESS) {
         /// Could not get SSID from CFG. Log error.
         limLog(pMac, LOGP, FL("could not retrieve SSID"));
     }
@@ -197,8 +188,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     smeScanReq.sessionId = 0;
 
     if (wlan_cfgGetInt(pMac, WNI_CFG_ACTIVE_MINIMUM_CHANNEL_TIME,
-                       &smeScanReq.minChannelTime) != eSIR_SUCCESS)
-    {
+                       &smeScanReq.minChannelTime) != eSIR_SUCCESS) {
         /// Could not get minChlTime value from CFG. Log error.
         PELOGE(limLog(pMac, LOGE, FL("could not retrieve minChlTime value"));)
 
@@ -206,8 +196,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     }
 
     if (wlan_cfgGetInt(pMac, WNI_CFG_ACTIVE_MAXIMUM_CHANNEL_TIME,
-                       &smeScanReq.maxChannelTime) != eSIR_SUCCESS)
-    {
+                       &smeScanReq.maxChannelTime) != eSIR_SUCCESS) {
         /// Could not get maxChlTime value from CFG. Log error.
         PELOGE(limLog(pMac, LOGE, FL("could not retrieve maxChlTime value"));)
 
@@ -218,19 +207,15 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     smeScanReq.returnUniqueResults   = 1;
 
     //At the first channel scan, clear the cached results
-    if(pMac->lim.gLimBackgroundScanChannelId == 0)
-    {
+    if(pMac->lim.gLimBackgroundScanChannelId == 0) {
         smeScanReq.returnFreshResults    = SIR_BG_SCAN_PURGE_RESUTLS|SIR_BG_SCAN_RETURN_FRESH_RESULTS;
-    }
-    else
-    {
+    } else {
         smeScanReq.returnFreshResults    = SIR_BG_SCAN_RETURN_FRESH_RESULTS;
     }
 
 
     smeScanReq.channelList.numChannels = 1;
-    if (pMac->lim.gLimBackgroundScanChannelId >= len)
-    {
+    if (pMac->lim.gLimBackgroundScanChannelId >= len) {
         pMac->lim.gLimBackgroundScanChannelId = 0;
 
         PELOGE(limLog(pMac, LOGE, FL("Skipping Background Scan since the channel list is exhausted."));)
@@ -239,12 +224,10 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
         /* Stop the BG scan timer here. SME should send WNI_CFG_BACKGROUND_SCAN_PERIOD
          * indication to start the background scan again.
          */
-        if (TX_TIMER_VALID(pMac->lim.limTimers.gLimBackgroundScanTimer))
-        {
+        if (TX_TIMER_VALID(pMac->lim.limTimers.gLimBackgroundScanTimer)) {
             MTRACE(macTrace(pMac, TRACE_CODE_TIMER_DEACTIVATE, NO_SESSION, eLIM_BACKGROUND_SCAN_TIMER));
             if (tx_timer_deactivate(&pMac->lim.limTimers.gLimBackgroundScanTimer)
-                    != TX_SUCCESS)
-            {
+                    != TX_SUCCESS) {
                 // Could not deactivate BackgroundScanTimer timer.
                 // Log error
                 limLog(pMac, LOGP,
@@ -270,8 +253,7 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
     smeScanReq.backgroundScanMode = backgroundScan;
 
     //determine whether to send the results or not, If so, notify the BG scan results to SME
-    if (pMac->lim.gLimBackgroundScanChannelId >= len)
-    {
+    if (pMac->lim.gLimBackgroundScanChannelId >= len) {
         pMac->lim.gLimReportBackgroundScanResults = TRUE;
     }
 
@@ -288,15 +270,12 @@ void limTriggerBackgroundScan(tpAniSirGlobal pMac)
 \param   tpAniSirGlobal  pMac
 \return  none
 \ ------------------------------------------------------------------------- */
-void limAbortBackgroundScan(tpAniSirGlobal pMac)
-{
+void limAbortBackgroundScan(tpAniSirGlobal pMac) {
     tANI_U16  scanRspLen = 8;
 
-    if(pMac->lim.gLimBackgroundScanTerminate == FALSE)
-    {
+    if(pMac->lim.gLimBackgroundScanTerminate == FALSE) {
         limLog(pMac, LOGE, FL("Abort Background Scan "));
-        if (TX_TIMER_VALID(pMac->lim.limTimers.gLimBackgroundScanTimer))
-        {
+        if (TX_TIMER_VALID(pMac->lim.limTimers.gLimBackgroundScanTimer)) {
             limDeactivateAndChangeTimer(pMac, eLIM_BACKGROUND_SCAN_TIMER);
         }
 
@@ -305,8 +284,7 @@ void limAbortBackgroundScan(tpAniSirGlobal pMac)
 
         if (pMac->lim.gLimSmeScanResultLength == 0)
             limSendSmeScanRsp(pMac, scanRspLen, eSIR_SME_SUCCESS, 0, 0);
-        else
-        {
+        else {
             scanRspLen = sizeof(tSirSmeScanRsp) +
                          pMac->lim.gLimSmeScanResultLength -
                          sizeof(tSirBssDescription);

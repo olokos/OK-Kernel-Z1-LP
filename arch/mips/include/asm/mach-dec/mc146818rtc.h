@@ -28,14 +28,12 @@ extern volatile u8 *dec_rtc_base;
 
 #define RTC_DEC_YEAR	0x3f	/* Where we store the real year on DECs.  */
 
-static inline unsigned char CMOS_READ(unsigned long addr)
-{
-	return dec_rtc_base[addr * 4];
+static inline unsigned char CMOS_READ(unsigned long addr) {
+    return dec_rtc_base[addr * 4];
 }
 
-static inline void CMOS_WRITE(unsigned char data, unsigned long addr)
-{
-	dec_rtc_base[addr * 4] = data;
+static inline void CMOS_WRITE(unsigned char data, unsigned long addr) {
+    dec_rtc_base[addr * 4] = data;
 }
 
 #define RTC_ALWAYS_BCD	0

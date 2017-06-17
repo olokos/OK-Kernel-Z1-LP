@@ -38,10 +38,10 @@
 #ifndef _LANGUAGE_ASSEMBLY
 
 typedef volatile struct dbdma_global {
-	u32	ddma_config;
-	u32	ddma_intstat;
-	u32	ddma_throttle;
-	u32	ddma_inten;
+    u32	ddma_config;
+    u32	ddma_intstat;
+    u32	ddma_throttle;
+    u32	ddma_inten;
 } dbdma_global_t;
 
 /* General Configuration. */
@@ -53,14 +53,14 @@ typedef volatile struct dbdma_global {
 
 /* The structure of a DMA Channel. */
 typedef volatile struct au1xxx_dma_channel {
-	u32	ddma_cfg;	/* See below */
-	u32	ddma_desptr;	/* 32-byte aligned pointer to descriptor */
-	u32	ddma_statptr;	/* word aligned pointer to status word */
-	u32	ddma_dbell;	/* A write activates channel operation */
-	u32	ddma_irq;	/* If bit 0 set, interrupt pending */
-	u32	ddma_stat;	/* See below */
-	u32	ddma_bytecnt;	/* Byte count, valid only when chan idle */
-	/* Remainder, up to the 256 byte boundary, is reserved. */
+    u32	ddma_cfg;	/* See below */
+    u32	ddma_desptr;	/* 32-byte aligned pointer to descriptor */
+    u32	ddma_statptr;	/* word aligned pointer to status word */
+    u32	ddma_dbell;	/* A write activates channel operation */
+    u32	ddma_irq;	/* If bit 0 set, interrupt pending */
+    u32	ddma_stat;	/* See below */
+    u32	ddma_bytecnt;	/* Byte count, valid only when chan idle */
+    /* Remainder, up to the 256 byte boundary, is reserved. */
 } au1x_dma_chan_t;
 
 #define DDMA_CFG_SED	(1 << 9)	/* source DMA level/edge detect */
@@ -90,21 +90,21 @@ typedef volatile struct au1xxx_dma_channel {
  * Must be 32-byte aligned.
  */
 typedef volatile struct au1xxx_ddma_desc {
-	u32	dscr_cmd0;		/* See below */
-	u32	dscr_cmd1;		/* See below */
-	u32	dscr_source0;		/* source phys address */
-	u32	dscr_source1;		/* See below */
-	u32	dscr_dest0;		/* Destination address */
-	u32	dscr_dest1;		/* See below */
-	u32	dscr_stat;		/* completion status */
-	u32	dscr_nxtptr;		/* Next descriptor pointer (mostly) */
-	/*
-	 * First 32 bytes are HW specific!!!
-	 * Lets have some SW data following -- make sure it's 32 bytes.
-	 */
-	u32	sw_status;
-	u32 	sw_context;
-	u32	sw_reserved[6];
+    u32	dscr_cmd0;		/* See below */
+    u32	dscr_cmd1;		/* See below */
+    u32	dscr_source0;		/* source phys address */
+    u32	dscr_source1;		/* See below */
+    u32	dscr_dest0;		/* Destination address */
+    u32	dscr_dest1;		/* See below */
+    u32	dscr_stat;		/* completion status */
+    u32	dscr_nxtptr;		/* Next descriptor pointer (mostly) */
+    /*
+     * First 32 bytes are HW specific!!!
+     * Lets have some SW data following -- make sure it's 32 bytes.
+     */
+    u32	sw_status;
+    u32 	sw_context;
+    u32	sw_reserved[6];
 } au1x_ddma_desc_t;
 
 #define DSCR_CMD0_V		(1 << 31)	/* Descriptor valid */
@@ -305,29 +305,29 @@ typedef volatile struct au1xxx_ddma_desc {
  * FIXME: may not fit to this header file
  */
 typedef struct dbdma_device_table {
-	u32	dev_id;
-	u32	dev_flags;
-	u32	dev_tsize;
-	u32	dev_devwidth;
-	u32	dev_physaddr;		/* If FIFO */
-	u32	dev_intlevel;
-	u32	dev_intpolarity;
+    u32	dev_id;
+    u32	dev_flags;
+    u32	dev_tsize;
+    u32	dev_devwidth;
+    u32	dev_physaddr;		/* If FIFO */
+    u32	dev_intlevel;
+    u32	dev_intpolarity;
 } dbdev_tab_t;
 
 
 typedef struct dbdma_chan_config {
-	spinlock_t      lock;
+    spinlock_t      lock;
 
-	u32			chan_flags;
-	u32			chan_index;
-	dbdev_tab_t		*chan_src;
-	dbdev_tab_t		*chan_dest;
-	au1x_dma_chan_t		*chan_ptr;
-	au1x_ddma_desc_t	*chan_desc_base;
-	u32			cdb_membase; /* kmalloc base of above */
-	au1x_ddma_desc_t	*get_ptr, *put_ptr, *cur_ptr;
-	void			*chan_callparam;
-	void			(*chan_callback)(int, void *);
+    u32			chan_flags;
+    u32			chan_index;
+    dbdev_tab_t		*chan_src;
+    dbdev_tab_t		*chan_dest;
+    au1x_dma_chan_t		*chan_ptr;
+    au1x_ddma_desc_t	*chan_desc_base;
+    u32			cdb_membase; /* kmalloc base of above */
+    au1x_ddma_desc_t	*get_ptr, *put_ptr, *cur_ptr;
+    void			*chan_callparam;
+    void			(*chan_callback)(int, void *);
 } chan_tab_t;
 
 #define DEV_FLAGS_INUSE		(1 << 0)
@@ -346,8 +346,8 @@ typedef struct dbdma_chan_config {
  * interrupt.
  */
 extern u32 au1xxx_dbdma_chan_alloc(u32 srcid, u32 destid,
-				   void (*callback)(int, void *),
-				   void *callparam);
+                                   void (*callback)(int, void *),
+                                   void *callparam);
 
 #define DBDMA_MEM_CHAN	DSCR_CMD0_ALWAYS
 

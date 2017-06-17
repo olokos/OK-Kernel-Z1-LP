@@ -55,180 +55,173 @@
 /* MANTIS_BUF_SIZE / MANTIS_DMA_TR_UNITS must not exceed MANTIS_RISC_SIZE (4k RISC cmd buffer) */
 #define MANTIS_RISC_SIZE	PAGE_SIZE /* RISC program must fit here. */
 
-int mantis_dma_exit(struct mantis_pci *mantis)
-{
-	if (mantis->buf_cpu) {
-		dprintk(MANTIS_ERROR, 1,
-			"DMA=0x%lx cpu=0x%p size=%d",
-			(unsigned long) mantis->buf_dma,
-			 mantis->buf_cpu,
-			 MANTIS_BUF_SIZE);
+int mantis_dma_exit(struct mantis_pci *mantis) {
+    if (mantis->buf_cpu) {
+        dprintk(MANTIS_ERROR, 1,
+                "DMA=0x%lx cpu=0x%p size=%d",
+                (unsigned long) mantis->buf_dma,
+                mantis->buf_cpu,
+                MANTIS_BUF_SIZE);
 
-		pci_free_consistent(mantis->pdev, MANTIS_BUF_SIZE,
-				    mantis->buf_cpu, mantis->buf_dma);
+        pci_free_consistent(mantis->pdev, MANTIS_BUF_SIZE,
+                            mantis->buf_cpu, mantis->buf_dma);
 
-		mantis->buf_cpu = NULL;
-	}
-	if (mantis->risc_cpu) {
-		dprintk(MANTIS_ERROR, 1,
-			"RISC=0x%lx cpu=0x%p size=%lx",
-			(unsigned long) mantis->risc_dma,
-			mantis->risc_cpu,
-			MANTIS_RISC_SIZE);
+        mantis->buf_cpu = NULL;
+    }
+    if (mantis->risc_cpu) {
+        dprintk(MANTIS_ERROR, 1,
+                "RISC=0x%lx cpu=0x%p size=%lx",
+                (unsigned long) mantis->risc_dma,
+                mantis->risc_cpu,
+                MANTIS_RISC_SIZE);
 
-		pci_free_consistent(mantis->pdev, MANTIS_RISC_SIZE,
-				    mantis->risc_cpu, mantis->risc_dma);
+        pci_free_consistent(mantis->pdev, MANTIS_RISC_SIZE,
+                            mantis->risc_cpu, mantis->risc_dma);
 
-		mantis->risc_cpu = NULL;
-	}
+        mantis->risc_cpu = NULL;
+    }
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL_GPL(mantis_dma_exit);
 
-static inline int mantis_alloc_buffers(struct mantis_pci *mantis)
-{
-	if (!mantis->buf_cpu) {
-		mantis->buf_cpu = pci_alloc_consistent(mantis->pdev,
-						       MANTIS_BUF_SIZE,
-						       &mantis->buf_dma);
-		if (!mantis->buf_cpu) {
-			dprintk(MANTIS_ERROR, 1,
-				"DMA buffer allocation failed");
+static inline int mantis_alloc_buffers(struct mantis_pci *mantis) {
+    if (!mantis->buf_cpu) {
+        mantis->buf_cpu = pci_alloc_consistent(mantis->pdev,
+                                               MANTIS_BUF_SIZE,
+                                               &mantis->buf_dma);
+        if (!mantis->buf_cpu) {
+            dprintk(MANTIS_ERROR, 1,
+                    "DMA buffer allocation failed");
 
-			goto err;
-		}
-		dprintk(MANTIS_ERROR, 1,
-			"DMA=0x%lx cpu=0x%p size=%d",
-			(unsigned long) mantis->buf_dma,
-			mantis->buf_cpu, MANTIS_BUF_SIZE);
-	}
-	if (!mantis->risc_cpu) {
-		mantis->risc_cpu = pci_alloc_consistent(mantis->pdev,
-							MANTIS_RISC_SIZE,
-							&mantis->risc_dma);
+            goto err;
+        }
+        dprintk(MANTIS_ERROR, 1,
+                "DMA=0x%lx cpu=0x%p size=%d",
+                (unsigned long) mantis->buf_dma,
+                mantis->buf_cpu, MANTIS_BUF_SIZE);
+    }
+    if (!mantis->risc_cpu) {
+        mantis->risc_cpu = pci_alloc_consistent(mantis->pdev,
+                                                MANTIS_RISC_SIZE,
+                                                &mantis->risc_dma);
 
-		if (!mantis->risc_cpu) {
-			dprintk(MANTIS_ERROR, 1,
-				"RISC program allocation failed");
+        if (!mantis->risc_cpu) {
+            dprintk(MANTIS_ERROR, 1,
+                    "RISC program allocation failed");
 
-			mantis_dma_exit(mantis);
+            mantis_dma_exit(mantis);
 
-			goto err;
-		}
-		dprintk(MANTIS_ERROR, 1,
-			"RISC=0x%lx cpu=0x%p size=%lx",
-			(unsigned long) mantis->risc_dma,
-			mantis->risc_cpu, MANTIS_RISC_SIZE);
-	}
+            goto err;
+        }
+        dprintk(MANTIS_ERROR, 1,
+                "RISC=0x%lx cpu=0x%p size=%lx",
+                (unsigned long) mantis->risc_dma,
+                mantis->risc_cpu, MANTIS_RISC_SIZE);
+    }
 
-	return 0;
+    return 0;
 err:
-	dprintk(MANTIS_ERROR, 1, "Out of memory (?) .....");
-	return -ENOMEM;
+    dprintk(MANTIS_ERROR, 1, "Out of memory (?) .....");
+    return -ENOMEM;
 }
 
-int mantis_dma_init(struct mantis_pci *mantis)
-{
-	int err = 0;
+int mantis_dma_init(struct mantis_pci *mantis) {
+    int err = 0;
 
-	dprintk(MANTIS_DEBUG, 1, "Mantis DMA init");
-	if (mantis_alloc_buffers(mantis) < 0) {
-		dprintk(MANTIS_ERROR, 1, "Error allocating DMA buffer");
+    dprintk(MANTIS_DEBUG, 1, "Mantis DMA init");
+    if (mantis_alloc_buffers(mantis) < 0) {
+        dprintk(MANTIS_ERROR, 1, "Error allocating DMA buffer");
 
-		/* Stop RISC Engine */
-		mmwrite(0, MANTIS_DMA_CTL);
+        /* Stop RISC Engine */
+        mmwrite(0, MANTIS_DMA_CTL);
 
-		goto err;
-	}
+        goto err;
+    }
 
-	return 0;
+    return 0;
 err:
-	return err;
+    return err;
 }
 EXPORT_SYMBOL_GPL(mantis_dma_init);
 
-static inline void mantis_risc_program(struct mantis_pci *mantis)
-{
-	u32 buf_pos = 0;
-	u32 line, step;
-	u32 risc_pos;
+static inline void mantis_risc_program(struct mantis_pci *mantis) {
+    u32 buf_pos = 0;
+    u32 line, step;
+    u32 risc_pos;
 
-	dprintk(MANTIS_DEBUG, 1, "Mantis create RISC program");
-	RISC_FLUSH(risc_pos);
+    dprintk(MANTIS_DEBUG, 1, "Mantis create RISC program");
+    RISC_FLUSH(risc_pos);
 
-	dprintk(MANTIS_DEBUG, 1, "risc len lines %u, bytes per line %u, bytes per DMA tr %u",
-		MANTIS_BLOCK_COUNT, MANTIS_BLOCK_BYTES, MANTIS_DMA_TR_BYTES);
+    dprintk(MANTIS_DEBUG, 1, "risc len lines %u, bytes per line %u, bytes per DMA tr %u",
+            MANTIS_BLOCK_COUNT, MANTIS_BLOCK_BYTES, MANTIS_DMA_TR_BYTES);
 
-	for (line = 0; line < MANTIS_BLOCK_COUNT; line++) {
-		for (step = 0; step < MANTIS_DMA_TR_UNITS; step++) {
-			dprintk(MANTIS_DEBUG, 1, "RISC PROG line=[%d], step=[%d]", line, step);
-			if (step == 0) {
-				RISC_INSTR(risc_pos, RISC_WRITE	|
-					   RISC_IRQ	|
-					   RISC_STATUS(line) |
-					   MANTIS_DMA_TR_BYTES);
-			} else {
-				RISC_INSTR(risc_pos, RISC_WRITE | MANTIS_DMA_TR_BYTES);
-			}
-			RISC_INSTR(risc_pos, mantis->buf_dma + buf_pos);
-			buf_pos += MANTIS_DMA_TR_BYTES;
-		  }
-	}
-	RISC_INSTR(risc_pos, RISC_JUMP);
-	RISC_INSTR(risc_pos, mantis->risc_dma);
+    for (line = 0; line < MANTIS_BLOCK_COUNT; line++) {
+        for (step = 0; step < MANTIS_DMA_TR_UNITS; step++) {
+            dprintk(MANTIS_DEBUG, 1, "RISC PROG line=[%d], step=[%d]", line, step);
+            if (step == 0) {
+                RISC_INSTR(risc_pos, RISC_WRITE	|
+                           RISC_IRQ	|
+                           RISC_STATUS(line) |
+                           MANTIS_DMA_TR_BYTES);
+            } else {
+                RISC_INSTR(risc_pos, RISC_WRITE | MANTIS_DMA_TR_BYTES);
+            }
+            RISC_INSTR(risc_pos, mantis->buf_dma + buf_pos);
+            buf_pos += MANTIS_DMA_TR_BYTES;
+        }
+    }
+    RISC_INSTR(risc_pos, RISC_JUMP);
+    RISC_INSTR(risc_pos, mantis->risc_dma);
 }
 
-void mantis_dma_start(struct mantis_pci *mantis)
-{
-	dprintk(MANTIS_DEBUG, 1, "Mantis Start DMA engine");
+void mantis_dma_start(struct mantis_pci *mantis) {
+    dprintk(MANTIS_DEBUG, 1, "Mantis Start DMA engine");
 
-	mantis_risc_program(mantis);
-	mmwrite(mantis->risc_dma, MANTIS_RISC_START);
-	mmwrite(mmread(MANTIS_GPIF_ADDR) | MANTIS_GPIF_HIFRDWRN, MANTIS_GPIF_ADDR);
+    mantis_risc_program(mantis);
+    mmwrite(mantis->risc_dma, MANTIS_RISC_START);
+    mmwrite(mmread(MANTIS_GPIF_ADDR) | MANTIS_GPIF_HIFRDWRN, MANTIS_GPIF_ADDR);
 
-	mmwrite(0, MANTIS_DMA_CTL);
-	mantis->last_block = mantis->busy_block = 0;
+    mmwrite(0, MANTIS_DMA_CTL);
+    mantis->last_block = mantis->busy_block = 0;
 
-	mmwrite(mmread(MANTIS_INT_MASK) | MANTIS_INT_RISCI, MANTIS_INT_MASK);
+    mmwrite(mmread(MANTIS_INT_MASK) | MANTIS_INT_RISCI, MANTIS_INT_MASK);
 
-	mmwrite(MANTIS_FIFO_EN | MANTIS_DCAP_EN
-			       | MANTIS_RISC_EN, MANTIS_DMA_CTL);
+    mmwrite(MANTIS_FIFO_EN | MANTIS_DCAP_EN
+            | MANTIS_RISC_EN, MANTIS_DMA_CTL);
 
 }
 
-void mantis_dma_stop(struct mantis_pci *mantis)
-{
-	u32 stat = 0, mask = 0;
+void mantis_dma_stop(struct mantis_pci *mantis) {
+    u32 stat = 0, mask = 0;
 
-	stat = mmread(MANTIS_INT_STAT);
-	mask = mmread(MANTIS_INT_MASK);
-	dprintk(MANTIS_DEBUG, 1, "Mantis Stop DMA engine");
+    stat = mmread(MANTIS_INT_STAT);
+    mask = mmread(MANTIS_INT_MASK);
+    dprintk(MANTIS_DEBUG, 1, "Mantis Stop DMA engine");
 
-	mmwrite((mmread(MANTIS_GPIF_ADDR) & (~(MANTIS_GPIF_HIFRDWRN))), MANTIS_GPIF_ADDR);
+    mmwrite((mmread(MANTIS_GPIF_ADDR) & (~(MANTIS_GPIF_HIFRDWRN))), MANTIS_GPIF_ADDR);
 
-	mmwrite((mmread(MANTIS_DMA_CTL) & ~(MANTIS_FIFO_EN |
-					    MANTIS_DCAP_EN |
-					    MANTIS_RISC_EN)), MANTIS_DMA_CTL);
+    mmwrite((mmread(MANTIS_DMA_CTL) & ~(MANTIS_FIFO_EN |
+                                        MANTIS_DCAP_EN |
+                                        MANTIS_RISC_EN)), MANTIS_DMA_CTL);
 
-	mmwrite(mmread(MANTIS_INT_STAT), MANTIS_INT_STAT);
+    mmwrite(mmread(MANTIS_INT_STAT), MANTIS_INT_STAT);
 
-	mmwrite(mmread(MANTIS_INT_MASK) & ~(MANTIS_INT_RISCI |
-					    MANTIS_INT_RISCEN), MANTIS_INT_MASK);
+    mmwrite(mmread(MANTIS_INT_MASK) & ~(MANTIS_INT_RISCI |
+                                        MANTIS_INT_RISCEN), MANTIS_INT_MASK);
 }
 
 
-void mantis_dma_xfer(unsigned long data)
-{
-	struct mantis_pci *mantis = (struct mantis_pci *) data;
-	struct mantis_hwconfig *config = mantis->hwconfig;
+void mantis_dma_xfer(unsigned long data) {
+    struct mantis_pci *mantis = (struct mantis_pci *) data;
+    struct mantis_hwconfig *config = mantis->hwconfig;
 
-	while (mantis->last_block != mantis->busy_block) {
-		dprintk(MANTIS_DEBUG, 1, "last block=[%d] finished block=[%d]",
-			mantis->last_block, mantis->busy_block);
+    while (mantis->last_block != mantis->busy_block) {
+        dprintk(MANTIS_DEBUG, 1, "last block=[%d] finished block=[%d]",
+                mantis->last_block, mantis->busy_block);
 
-		(config->ts_size ? dvb_dmx_swfilter_204 : dvb_dmx_swfilter)
-		(&mantis->demux, &mantis->buf_cpu[mantis->last_block * MANTIS_BLOCK_BYTES], MANTIS_BLOCK_BYTES);
-		mantis->last_block = (mantis->last_block + 1) % MANTIS_BLOCK_COUNT;
-	}
+        (config->ts_size ? dvb_dmx_swfilter_204 : dvb_dmx_swfilter)
+        (&mantis->demux, &mantis->buf_cpu[mantis->last_block * MANTIS_BLOCK_BYTES], MANTIS_BLOCK_BYTES);
+        mantis->last_block = (mantis->last_block + 1) % MANTIS_BLOCK_COUNT;
+    }
 }

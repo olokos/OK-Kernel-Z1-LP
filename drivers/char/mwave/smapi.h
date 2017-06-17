@@ -54,21 +54,21 @@
 #define BOOLEAN int
 
 typedef struct {
-	int bDSPPresent;
-	int bDSPEnabled;
-	int bModemEnabled;
-	int bMIDIEnabled;
-	int bSblstEnabled;
-	unsigned short usDspIRQ;
-	unsigned short usDspDMA;
-	unsigned short usDspBaseIO;
-	unsigned short usUartIRQ;
-	unsigned short usUartBaseIO;
-	unsigned short usMidiIRQ;
-	unsigned short usMidiBaseIO;
-	unsigned short usSndblstIRQ;
-	unsigned short usSndblstDMA;
-	unsigned short usSndblstBaseIO;
+    int bDSPPresent;
+    int bDSPEnabled;
+    int bModemEnabled;
+    int bMIDIEnabled;
+    int bSblstEnabled;
+    unsigned short usDspIRQ;
+    unsigned short usDspDMA;
+    unsigned short usDspBaseIO;
+    unsigned short usUartIRQ;
+    unsigned short usUartBaseIO;
+    unsigned short usMidiIRQ;
+    unsigned short usMidiBaseIO;
+    unsigned short usSndblstIRQ;
+    unsigned short usSndblstDMA;
+    unsigned short usSndblstBaseIO;
 } SMAPI_DSP_SETTINGS;
 
 int smapi_init(void);

@@ -89,33 +89,31 @@ extern unsigned long tsi108_get_mem_size(void);
 extern unsigned long tsi108_get_cpu_clk(void);
 extern unsigned long tsi108_get_sdc_clk(void);
 extern int tsi108_direct_write_config(struct pci_bus *bus, unsigned int devfn,
-				      int offset, int len, u32 val);
+                                      int offset, int len, u32 val);
 extern int tsi108_direct_read_config(struct pci_bus *bus, unsigned int devfn,
-				     int offset, int len, u32 * val);
+                                     int offset, int len, u32 * val);
 extern void tsi108_clear_pci_error(u32 pci_cfg_base);
 
 extern phys_addr_t get_csrbase(void);
 
 typedef struct {
-	u32 regs;		/* hw registers base address */
-	u32 phyregs;		/* phy registers base address */
-	u16 phy;		/* phy address */
-	u16 irq_num;		/* irq number */
-	u8 mac_addr[6];		/* phy mac address */
-	u16 phy_type;	/* type of phy on board */
+    u32 regs;		/* hw registers base address */
+    u32 phyregs;		/* phy registers base address */
+    u16 phy;		/* phy address */
+    u16 irq_num;		/* irq number */
+    u8 mac_addr[6];		/* phy mac address */
+    u16 phy_type;	/* type of phy on board */
 } hw_info;
 
 extern u32 get_vir_csrbase(void);
 extern u32 tsi108_csr_vir_base;
 
-static inline u32 tsi108_read_reg(u32 reg_offset)
-{
-	return in_be32((volatile u32 *)(tsi108_csr_vir_base + reg_offset));
+static inline u32 tsi108_read_reg(u32 reg_offset) {
+    return in_be32((volatile u32 *)(tsi108_csr_vir_base + reg_offset));
 }
 
-static inline void tsi108_write_reg(u32 reg_offset, u32 val)
-{
-	out_be32((volatile u32 *)(tsi108_csr_vir_base + reg_offset), val);
+static inline void tsi108_write_reg(u32 reg_offset, u32 val) {
+    out_be32((volatile u32 *)(tsi108_csr_vir_base + reg_offset), val);
 }
 
 #endif				/* __PPC_KERNEL_TSI108_H */

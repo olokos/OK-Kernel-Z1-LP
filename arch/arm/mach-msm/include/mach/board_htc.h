@@ -18,30 +18,30 @@
 #include <linux/list.h>
 #include <asm/setup.h>
 
-struct msm_pmem_setting{
-	resource_size_t pmem_start;
-	resource_size_t pmem_size;
-	resource_size_t pmem_adsp_start;
-	resource_size_t pmem_adsp_size;
-	resource_size_t pmem_gpu0_start;
-	resource_size_t pmem_gpu0_size;
-	resource_size_t pmem_gpu1_start;
-	resource_size_t pmem_gpu1_size;
-	resource_size_t pmem_camera_start;
-	resource_size_t pmem_camera_size;
-	resource_size_t ram_console_start;
-	resource_size_t ram_console_size;
+struct msm_pmem_setting {
+    resource_size_t pmem_start;
+    resource_size_t pmem_size;
+    resource_size_t pmem_adsp_start;
+    resource_size_t pmem_adsp_size;
+    resource_size_t pmem_gpu0_start;
+    resource_size_t pmem_gpu0_size;
+    resource_size_t pmem_gpu1_start;
+    resource_size_t pmem_gpu1_size;
+    resource_size_t pmem_camera_start;
+    resource_size_t pmem_camera_size;
+    resource_size_t ram_console_start;
+    resource_size_t ram_console_size;
 };
 
 enum {
-	MSM_SERIAL_UART1	= 0,
-	MSM_SERIAL_UART2,
-	MSM_SERIAL_UART3,
+    MSM_SERIAL_UART1	= 0,
+    MSM_SERIAL_UART2,
+    MSM_SERIAL_UART3,
 #ifdef CONFIG_SERIAL_MSM_HS
-	MSM_SERIAL_UART1DM,
-	MSM_SERIAL_UART2DM,
+    MSM_SERIAL_UART1DM,
+    MSM_SERIAL_UART2DM,
 #endif
-	MSM_SERIAL_NUM,
+    MSM_SERIAL_NUM,
 };
 
 
@@ -57,13 +57,13 @@ int __init msm_add_serial_devices(unsigned uart);
 
 #if defined(CONFIG_USB_FUNCTION_MSM_HSUSB)
 /* START: add USB connected notify function */
-struct t_usb_status_notifier{
-	struct list_head notifier_link;
-	const char *name;
-	void (*func)(int online);
+struct t_usb_status_notifier {
+    struct list_head notifier_link;
+    const char *name;
+    void (*func)(int online);
 };
-	int usb_register_notifier(struct t_usb_status_notifier *);
-	static LIST_HEAD(g_lh_usb_notifier_list);
+int usb_register_notifier(struct t_usb_status_notifier *);
+static LIST_HEAD(g_lh_usb_notifier_list);
 /* END: add USB connected notify function */
 #endif
 

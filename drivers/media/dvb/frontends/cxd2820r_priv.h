@@ -41,23 +41,23 @@
 #define warn(f, arg...) printk(KERN_WARNING LOG_PREFIX": " f "\n" , ## arg)
 
 struct reg_val_mask {
-	u32 reg;
-	u8  val;
-	u8  mask;
+    u32 reg;
+    u8  val;
+    u8  mask;
 };
 
 struct cxd2820r_priv {
-	struct i2c_adapter *i2c;
-	struct dvb_frontend fe;
-	struct cxd2820r_config cfg;
+    struct i2c_adapter *i2c;
+    struct dvb_frontend fe;
+    struct cxd2820r_config cfg;
 
-	bool ber_running;
+    bool ber_running;
 
-	u8 bank[2];
-	u8 gpio[3];
+    u8 bank[2];
+    u8 gpio[3];
 
-	fe_delivery_system_t delivery_system;
-	bool last_tune_failed; /* for switch between T and T2 tune */
+    fe_delivery_system_t delivery_system;
+    bool last_tune_failed; /* for switch between T and T2 tune */
 };
 
 /* cxd2820r_core.c */
@@ -67,18 +67,18 @@ extern int cxd2820r_debug;
 int cxd2820r_gpio(struct dvb_frontend *fe);
 
 int cxd2820r_wr_reg_mask(struct cxd2820r_priv *priv, u32 reg, u8 val,
-	u8 mask);
+                         u8 mask);
 
 int cxd2820r_wr_regs(struct cxd2820r_priv *priv, u32 reginfo, u8 *val,
-	int len);
+                     int len);
 
 u32 cxd2820r_div_u64_round_closest(u64 dividend, u32 divisor);
 
 int cxd2820r_wr_regs(struct cxd2820r_priv *priv, u32 reginfo, u8 *val,
-	int len);
+                     int len);
 
 int cxd2820r_rd_regs(struct cxd2820r_priv *priv, u32 reginfo, u8 *val,
-	int len);
+                     int len);
 
 int cxd2820r_wr_reg(struct cxd2820r_priv *priv, u32 reg, u8 val);
 
@@ -105,7 +105,7 @@ int cxd2820r_init_c(struct dvb_frontend *fe);
 int cxd2820r_sleep_c(struct dvb_frontend *fe);
 
 int cxd2820r_get_tune_settings_c(struct dvb_frontend *fe,
-	struct dvb_frontend_tune_settings *s);
+                                 struct dvb_frontend_tune_settings *s);
 
 /* cxd2820r_t.c */
 
@@ -128,7 +128,7 @@ int cxd2820r_init_t(struct dvb_frontend *fe);
 int cxd2820r_sleep_t(struct dvb_frontend *fe);
 
 int cxd2820r_get_tune_settings_t(struct dvb_frontend *fe,
-	struct dvb_frontend_tune_settings *s);
+                                 struct dvb_frontend_tune_settings *s);
 
 /* cxd2820r_t2.c */
 
@@ -151,6 +151,6 @@ int cxd2820r_init_t2(struct dvb_frontend *fe);
 int cxd2820r_sleep_t2(struct dvb_frontend *fe);
 
 int cxd2820r_get_tune_settings_t2(struct dvb_frontend *fe,
-	struct dvb_frontend_tune_settings *s);
+                                  struct dvb_frontend_tune_settings *s);
 
 #endif /* CXD2820R_PRIV_H */

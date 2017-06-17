@@ -25,23 +25,22 @@
 
 #include "whcd.h"
 
-struct whc_qset *qset_alloc(struct whc *whc, gfp_t mem_flags)
-{
-	struct whc_qset *qset;
-	dma_addr_t dma;
+struct whc_qset *qset_alloc(struct whc *whc, gfp_t mem_flags) {
+    struct whc_qset *qset;
+    dma_addr_t dma;
 
-	qset = dma_pool_alloc(whc->qset_pool, mem_flags, &dma);
-	if (qset == NULL)
-		return NULL;
-	memset(qset, 0, sizeof(struct whc_qset));
+    qset = dma_pool_alloc(whc->qset_pool, mem_flags, &dma);
+    if (qset == NULL)
+        return NULL;
+    memset(qset, 0, sizeof(struct whc_qset));
 
-	qset->qset_dma = dma;
-	qset->whc = whc;
+    qset->qset_dma = dma;
+    qset->whc = whc;
 
-	INIT_LIST_HEAD(&qset->list_node);
-	INIT_LIST_HEAD(&qset->stds);
+    INIT_LIST_HEAD(&qset->list_node);
+    INIT_LIST_HEAD(&qset->stds);
 
-	return qset;
+    return qset;
 }
 
 /**
@@ -50,67 +49,66 @@ struct whc_qset *qset_alloc(struct whc *whc, gfp_t mem_flags)
  *        state
  * @urb:  an urb for a transfer to this endpoint
  */
-static void qset_fill_qh(struct whc *whc, struct whc_qset *qset, struct urb *urb)
-{
-	struct usb_device *usb_dev = urb->dev;
-	struct wusb_dev *wusb_dev = usb_dev->wusb_dev;
-	struct usb_wireless_ep_comp_descriptor *epcd;
-	bool is_out;
-	uint8_t phy_rate;
+static void qset_fill_qh(struct whc *whc, struct whc_qset *qset, struct urb *urb) {
+    struct usb_device *usb_dev = urb->dev;
+    struct wusb_dev *wusb_dev = usb_dev->wusb_dev;
+    struct usb_wireless_ep_comp_descriptor *epcd;
+    bool is_out;
+    uint8_t phy_rate;
 
-	is_out = usb_pipeout(urb->pipe);
+    is_out = usb_pipeout(urb->pipe);
 
-	qset->max_packet = le16_to_cpu(urb->ep->desc.wMaxPacketSize);
+    qset->max_packet = le16_to_cpu(urb->ep->desc.wMaxPacketSize);
 
-	epcd = (struct usb_wireless_ep_comp_descriptor *)qset->ep->extra;
-	if (epcd) {
-		qset->max_seq = epcd->bMaxSequence;
-		qset->max_burst = epcd->bMaxBurst;
-	} else {
-		qset->max_seq = 2;
-		qset->max_burst = 1;
-	}
+    epcd = (struct usb_wireless_ep_comp_descriptor *)qset->ep->extra;
+    if (epcd) {
+        qset->max_seq = epcd->bMaxSequence;
+        qset->max_burst = epcd->bMaxBurst;
+    } else {
+        qset->max_seq = 2;
+        qset->max_burst = 1;
+    }
 
-	/*
-	 * Initial PHY rate is 53.3 Mbit/s for control endpoints or
-	 * the maximum supported by the device for other endpoints
-	 * (unless limited by the user).
-	 */
-	if (usb_pipecontrol(urb->pipe))
-		phy_rate = UWB_PHY_RATE_53;
-	else {
-		uint16_t phy_rates;
+    /*
+     * Initial PHY rate is 53.3 Mbit/s for control endpoints or
+     * the maximum supported by the device for other endpoints
+     * (unless limited by the user).
+     */
+    if (usb_pipecontrol(urb->pipe))
+        phy_rate = UWB_PHY_RATE_53;
+    else {
+        uint16_t phy_rates;
 
-		phy_rates = le16_to_cpu(wusb_dev->wusb_cap_descr->wPHYRates);
-		phy_rate = fls(phy_rates) - 1;
-		if (phy_rate > whc->wusbhc.phy_rate)
-			phy_rate = whc->wusbhc.phy_rate;
-	}
+        phy_rates = le16_to_cpu(wusb_dev->wusb_cap_descr->wPHYRates);
+        phy_rate = fls(phy_rates) - 1;
+        if (phy_rate > whc->wusbhc.phy_rate)
+            phy_rate = whc->wusbhc.phy_rate;
+    }
 
-	qset->qh.info1 = cpu_to_le32(
-		QH_INFO1_EP(usb_pipeendpoint(urb->pipe))
-		| (is_out ? QH_INFO1_DIR_OUT : QH_INFO1_DIR_IN)
-		| usb_pipe_to_qh_type(urb->pipe)
-		| QH_INFO1_DEV_INFO_IDX(wusb_port_no_to_idx(usb_dev->portnum))
-		| QH_INFO1_MAX_PKT_LEN(qset->max_packet)
-		);
-	qset->qh.info2 = cpu_to_le32(
-		QH_INFO2_BURST(qset->max_burst)
-		| QH_INFO2_DBP(0)
-		| QH_INFO2_MAX_COUNT(3)
-		| QH_INFO2_MAX_RETRY(3)
-		| QH_INFO2_MAX_SEQ(qset->max_seq - 1)
-		);
-	/* FIXME: where can we obtain these Tx parameters from?  Why
-	 * doesn't the chip know what Tx power to use? It knows the Rx
-	 * strength and can presumably guess the Tx power required
-	 * from that? */
-	qset->qh.info3 = cpu_to_le32(
-		QH_INFO3_TX_RATE(phy_rate)
-		| QH_INFO3_TX_PWR(0) /* 0 == max power */
-		);
+    qset->qh.info1 = cpu_to_le32(
+                         QH_INFO1_EP(usb_pipeendpoint(urb->pipe))
+                         | (is_out ? QH_INFO1_DIR_OUT : QH_INFO1_DIR_IN)
+                         | usb_pipe_to_qh_type(urb->pipe)
+                         | QH_INFO1_DEV_INFO_IDX(wusb_port_no_to_idx(usb_dev->portnum))
+                         | QH_INFO1_MAX_PKT_LEN(qset->max_packet)
+                     );
+    qset->qh.info2 = cpu_to_le32(
+                         QH_INFO2_BURST(qset->max_burst)
+                         | QH_INFO2_DBP(0)
+                         | QH_INFO2_MAX_COUNT(3)
+                         | QH_INFO2_MAX_RETRY(3)
+                         | QH_INFO2_MAX_SEQ(qset->max_seq - 1)
+                     );
+    /* FIXME: where can we obtain these Tx parameters from?  Why
+     * doesn't the chip know what Tx power to use? It knows the Rx
+     * strength and can presumably guess the Tx power required
+     * from that? */
+    qset->qh.info3 = cpu_to_le32(
+                         QH_INFO3_TX_RATE(phy_rate)
+                         | QH_INFO3_TX_PWR(0) /* 0 == max power */
+                     );
 
-	qset->qh.cur_window = cpu_to_le32((1 << qset->max_burst) - 1);
+    qset->qh.cur_window = cpu_to_le32((1 << qset->max_burst) - 1);
 }
 
 /**
@@ -120,20 +118,19 @@ static void qset_fill_qh(struct whc *whc, struct whc_qset *qset, struct urb *urb
  * The sequence number and current window are not cleared (see
  * qset_reset()).
  */
-void qset_clear(struct whc *whc, struct whc_qset *qset)
-{
-	qset->td_start = qset->td_end = qset->ntds = 0;
+void qset_clear(struct whc *whc, struct whc_qset *qset) {
+    qset->td_start = qset->td_end = qset->ntds = 0;
 
-	qset->qh.link = cpu_to_le64(QH_LINK_NTDS(8) | QH_LINK_T);
-	qset->qh.status = qset->qh.status & QH_STATUS_SEQ_MASK;
-	qset->qh.err_count = 0;
-	qset->qh.scratch[0] = 0;
-	qset->qh.scratch[1] = 0;
-	qset->qh.scratch[2] = 0;
+    qset->qh.link = cpu_to_le64(QH_LINK_NTDS(8) | QH_LINK_T);
+    qset->qh.status = qset->qh.status & QH_STATUS_SEQ_MASK;
+    qset->qh.err_count = 0;
+    qset->qh.scratch[0] = 0;
+    qset->qh.scratch[1] = 0;
+    qset->qh.scratch[2] = 0;
 
-	memset(&qset->qh.overlay, 0, sizeof(qset->qh.overlay));
+    memset(&qset->qh.overlay, 0, sizeof(qset->qh.overlay));
 
-	init_completion(&qset->remove_complete);
+    init_completion(&qset->remove_complete);
 }
 
 /**
@@ -142,12 +139,11 @@ void qset_clear(struct whc *whc, struct whc_qset *qset)
  * Clears the sequence number and current window.  This qset must not
  * be in the ASL or PZL.
  */
-void qset_reset(struct whc *whc, struct whc_qset *qset)
-{
-	qset->reset = 0;
+void qset_reset(struct whc *whc, struct whc_qset *qset) {
+    qset->reset = 0;
 
-	qset->qh.status &= ~QH_STATUS_SEQ_MASK;
-	qset->qh.cur_window = cpu_to_le32((1 << qset->max_burst) - 1);
+    qset->qh.status &= ~QH_STATUS_SEQ_MASK;
+    qset->qh.cur_window = cpu_to_le32((1 << qset->max_burst) - 1);
 }
 
 /**
@@ -156,28 +152,26 @@ void qset_reset(struct whc *whc, struct whc_qset *qset)
  * A new qset is created if one does not already exist.
  */
 struct whc_qset *get_qset(struct whc *whc, struct urb *urb,
-				 gfp_t mem_flags)
-{
-	struct whc_qset *qset;
+                          gfp_t mem_flags) {
+    struct whc_qset *qset;
 
-	qset = urb->ep->hcpriv;
-	if (qset == NULL) {
-		qset = qset_alloc(whc, mem_flags);
-		if (qset == NULL)
-			return NULL;
+    qset = urb->ep->hcpriv;
+    if (qset == NULL) {
+        qset = qset_alloc(whc, mem_flags);
+        if (qset == NULL)
+            return NULL;
 
-		qset->ep = urb->ep;
-		urb->ep->hcpriv = qset;
-		qset_fill_qh(whc, qset, urb);
-	}
-	return qset;
+        qset->ep = urb->ep;
+        urb->ep->hcpriv = qset;
+        qset_fill_qh(whc, qset, urb);
+    }
+    return qset;
 }
 
-void qset_remove_complete(struct whc *whc, struct whc_qset *qset)
-{
-	qset->remove = 0;
-	list_del_init(&qset->list_node);
-	complete(&qset->remove_complete);
+void qset_remove_complete(struct whc *whc, struct whc_qset *qset) {
+    qset->remove = 0;
+    list_del_init(&qset->list_node);
+    complete(&qset->remove_complete);
 }
 
 /**
@@ -186,64 +180,63 @@ void qset_remove_complete(struct whc *whc, struct whc_qset *qset)
  * Returns true if the list (ASL/PZL) must be updated because (for a
  * WHCI 0.95 controller) an activated qTD was pointed to be iCur.
  */
-enum whc_update qset_add_qtds(struct whc *whc, struct whc_qset *qset)
-{
-	struct whc_std *std;
-	enum whc_update update = 0;
+enum whc_update qset_add_qtds(struct whc *whc, struct whc_qset *qset) {
+    struct whc_std *std;
+    enum whc_update update = 0;
 
-	list_for_each_entry(std, &qset->stds, list_node) {
-		struct whc_qtd *qtd;
-		uint32_t status;
+    list_for_each_entry(std, &qset->stds, list_node) {
+        struct whc_qtd *qtd;
+        uint32_t status;
 
-		if (qset->ntds >= WHCI_QSET_TD_MAX
-		    || (qset->pause_after_urb && std->urb != qset->pause_after_urb))
-			break;
+        if (qset->ntds >= WHCI_QSET_TD_MAX
+                || (qset->pause_after_urb && std->urb != qset->pause_after_urb))
+            break;
 
-		if (std->qtd)
-			continue; /* already has a qTD */
+        if (std->qtd)
+            continue; /* already has a qTD */
 
-		qtd = std->qtd = &qset->qtd[qset->td_end];
+        qtd = std->qtd = &qset->qtd[qset->td_end];
 
-		/* Fill in setup bytes for control transfers. */
-		if (usb_pipecontrol(std->urb->pipe))
-			memcpy(qtd->setup, std->urb->setup_packet, 8);
+        /* Fill in setup bytes for control transfers. */
+        if (usb_pipecontrol(std->urb->pipe))
+            memcpy(qtd->setup, std->urb->setup_packet, 8);
 
-		status = QTD_STS_ACTIVE | QTD_STS_LEN(std->len);
+        status = QTD_STS_ACTIVE | QTD_STS_LEN(std->len);
 
-		if (whc_std_last(std) && usb_pipeout(std->urb->pipe))
-			status |= QTD_STS_LAST_PKT;
+        if (whc_std_last(std) && usb_pipeout(std->urb->pipe))
+            status |= QTD_STS_LAST_PKT;
 
-		/*
-		 * For an IN transfer the iAlt field should be set so
-		 * the h/w will automatically advance to the next
-		 * transfer. However, if there are 8 or more TDs
-		 * remaining in this transfer then iAlt cannot be set
-		 * as it could point to somewhere in this transfer.
-		 */
-		if (std->ntds_remaining < WHCI_QSET_TD_MAX) {
-			int ialt;
-			ialt = (qset->td_end + std->ntds_remaining) % WHCI_QSET_TD_MAX;
-			status |= QTD_STS_IALT(ialt);
-		} else if (usb_pipein(std->urb->pipe))
-			qset->pause_after_urb = std->urb;
+        /*
+         * For an IN transfer the iAlt field should be set so
+         * the h/w will automatically advance to the next
+         * transfer. However, if there are 8 or more TDs
+         * remaining in this transfer then iAlt cannot be set
+         * as it could point to somewhere in this transfer.
+         */
+        if (std->ntds_remaining < WHCI_QSET_TD_MAX) {
+            int ialt;
+            ialt = (qset->td_end + std->ntds_remaining) % WHCI_QSET_TD_MAX;
+            status |= QTD_STS_IALT(ialt);
+        } else if (usb_pipein(std->urb->pipe))
+            qset->pause_after_urb = std->urb;
 
-		if (std->num_pointers)
-			qtd->options = cpu_to_le32(QTD_OPT_IOC);
-		else
-			qtd->options = cpu_to_le32(QTD_OPT_IOC | QTD_OPT_SMALL);
-		qtd->page_list_ptr = cpu_to_le64(std->dma_addr);
+        if (std->num_pointers)
+            qtd->options = cpu_to_le32(QTD_OPT_IOC);
+        else
+            qtd->options = cpu_to_le32(QTD_OPT_IOC | QTD_OPT_SMALL);
+        qtd->page_list_ptr = cpu_to_le64(std->dma_addr);
 
-		qtd->status = cpu_to_le32(status);
+        qtd->status = cpu_to_le32(status);
 
-		if (QH_STATUS_TO_ICUR(qset->qh.status) == qset->td_end)
-			update = WHC_UPDATE_UPDATED;
+        if (QH_STATUS_TO_ICUR(qset->qh.status) == qset->td_end)
+            update = WHC_UPDATE_UPDATED;
 
-		if (++qset->td_end >= WHCI_QSET_TD_MAX)
-			qset->td_end = 0;
-		qset->ntds++;
-	}
+        if (++qset->td_end >= WHCI_QSET_TD_MAX)
+            qset->td_end = 0;
+        qset->ntds++;
+    }
 
-	return update;
+    return update;
 }
 
 /**
@@ -252,42 +245,40 @@ enum whc_update qset_add_qtds(struct whc *whc, struct whc_qset *qset)
  * The qTD might be still active (if it's part of a IN URB that
  * resulted in a short read) so ensure it's deactivated.
  */
-static void qset_remove_qtd(struct whc *whc, struct whc_qset *qset)
-{
-	qset->qtd[qset->td_start].status = 0;
+static void qset_remove_qtd(struct whc *whc, struct whc_qset *qset) {
+    qset->qtd[qset->td_start].status = 0;
 
-	if (++qset->td_start >= WHCI_QSET_TD_MAX)
-		qset->td_start = 0;
-	qset->ntds--;
+    if (++qset->td_start >= WHCI_QSET_TD_MAX)
+        qset->td_start = 0;
+    qset->ntds--;
 }
 
-static void qset_copy_bounce_to_sg(struct whc *whc, struct whc_std *std)
-{
-	struct scatterlist *sg;
-	void *bounce;
-	size_t remaining, offset;
+static void qset_copy_bounce_to_sg(struct whc *whc, struct whc_std *std) {
+    struct scatterlist *sg;
+    void *bounce;
+    size_t remaining, offset;
 
-	bounce = std->bounce_buf;
-	remaining = std->len;
+    bounce = std->bounce_buf;
+    remaining = std->len;
 
-	sg = std->bounce_sg;
-	offset = std->bounce_offset;
+    sg = std->bounce_sg;
+    offset = std->bounce_offset;
 
-	while (remaining) {
-		size_t len;
+    while (remaining) {
+        size_t len;
 
-		len = min(sg->length - offset, remaining);
-		memcpy(sg_virt(sg) + offset, bounce, len);
+        len = min(sg->length - offset, remaining);
+        memcpy(sg_virt(sg) + offset, bounce, len);
 
-		bounce += len;
-		remaining -= len;
+        bounce += len;
+        remaining -= len;
 
-		offset += len;
-		if (offset >= sg->length) {
-			sg = sg_next(sg);
-			offset = 0;
-		}
-	}
+        offset += len;
+        if (offset >= sg->length) {
+            sg = sg_next(sg);
+            offset = 0;
+        }
+    }
 
 }
 
@@ -296,245 +287,238 @@ static void qset_copy_bounce_to_sg(struct whc *whc, struct whc_std *std)
  * @whc: the WHCI host controller
  * @std: the sTD to remove and free.
  */
-void qset_free_std(struct whc *whc, struct whc_std *std)
-{
-	list_del(&std->list_node);
-	if (std->bounce_buf) {
-		bool is_out = usb_pipeout(std->urb->pipe);
-		dma_addr_t dma_addr;
+void qset_free_std(struct whc *whc, struct whc_std *std) {
+    list_del(&std->list_node);
+    if (std->bounce_buf) {
+        bool is_out = usb_pipeout(std->urb->pipe);
+        dma_addr_t dma_addr;
 
-		if (std->num_pointers)
-			dma_addr = le64_to_cpu(std->pl_virt[0].buf_ptr);
-		else
-			dma_addr = std->dma_addr;
+        if (std->num_pointers)
+            dma_addr = le64_to_cpu(std->pl_virt[0].buf_ptr);
+        else
+            dma_addr = std->dma_addr;
 
-		dma_unmap_single(whc->wusbhc.dev, dma_addr,
-				 std->len, is_out ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
-		if (!is_out)
-			qset_copy_bounce_to_sg(whc, std);
-		kfree(std->bounce_buf);
-	}
-	if (std->pl_virt) {
-		if (std->dma_addr)
-			dma_unmap_single(whc->wusbhc.dev, std->dma_addr,
-					 std->num_pointers * sizeof(struct whc_page_list_entry),
-					 DMA_TO_DEVICE);
-		kfree(std->pl_virt);
-		std->pl_virt = NULL;
-	}
-	kfree(std);
+        dma_unmap_single(whc->wusbhc.dev, dma_addr,
+                         std->len, is_out ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
+        if (!is_out)
+            qset_copy_bounce_to_sg(whc, std);
+        kfree(std->bounce_buf);
+    }
+    if (std->pl_virt) {
+        if (std->dma_addr)
+            dma_unmap_single(whc->wusbhc.dev, std->dma_addr,
+                             std->num_pointers * sizeof(struct whc_page_list_entry),
+                             DMA_TO_DEVICE);
+        kfree(std->pl_virt);
+        std->pl_virt = NULL;
+    }
+    kfree(std);
 }
 
 /**
  * qset_remove_qtds - remove an URB's qTDs (and sTDs).
  */
 static void qset_remove_qtds(struct whc *whc, struct whc_qset *qset,
-			     struct urb *urb)
-{
-	struct whc_std *std, *t;
+                             struct urb *urb) {
+    struct whc_std *std, *t;
 
-	list_for_each_entry_safe(std, t, &qset->stds, list_node) {
-		if (std->urb != urb)
-			break;
-		if (std->qtd != NULL)
-			qset_remove_qtd(whc, qset);
-		qset_free_std(whc, std);
-	}
+    list_for_each_entry_safe(std, t, &qset->stds, list_node) {
+        if (std->urb != urb)
+            break;
+        if (std->qtd != NULL)
+            qset_remove_qtd(whc, qset);
+        qset_free_std(whc, std);
+    }
 }
 
 /**
  * qset_free_stds - free any remaining sTDs for an URB.
  */
-static void qset_free_stds(struct whc_qset *qset, struct urb *urb)
-{
-	struct whc_std *std, *t;
+static void qset_free_stds(struct whc_qset *qset, struct urb *urb) {
+    struct whc_std *std, *t;
 
-	list_for_each_entry_safe(std, t, &qset->stds, list_node) {
-		if (std->urb == urb)
-			qset_free_std(qset->whc, std);
-	}
+    list_for_each_entry_safe(std, t, &qset->stds, list_node) {
+        if (std->urb == urb)
+            qset_free_std(qset->whc, std);
+    }
 }
 
-static int qset_fill_page_list(struct whc *whc, struct whc_std *std, gfp_t mem_flags)
-{
-	dma_addr_t dma_addr = std->dma_addr;
-	dma_addr_t sp, ep;
-	size_t pl_len;
-	int p;
+static int qset_fill_page_list(struct whc *whc, struct whc_std *std, gfp_t mem_flags) {
+    dma_addr_t dma_addr = std->dma_addr;
+    dma_addr_t sp, ep;
+    size_t pl_len;
+    int p;
 
-	/* Short buffers don't need a page list. */
-	if (std->len <= WHCI_PAGE_SIZE) {
-		std->num_pointers = 0;
-		return 0;
-	}
+    /* Short buffers don't need a page list. */
+    if (std->len <= WHCI_PAGE_SIZE) {
+        std->num_pointers = 0;
+        return 0;
+    }
 
-	sp = dma_addr & ~(WHCI_PAGE_SIZE-1);
-	ep = dma_addr + std->len;
-	std->num_pointers = DIV_ROUND_UP(ep - sp, WHCI_PAGE_SIZE);
+    sp = dma_addr & ~(WHCI_PAGE_SIZE-1);
+    ep = dma_addr + std->len;
+    std->num_pointers = DIV_ROUND_UP(ep - sp, WHCI_PAGE_SIZE);
 
-	pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
-	std->pl_virt = kmalloc(pl_len, mem_flags);
-	if (std->pl_virt == NULL)
-		return -ENOMEM;
-	std->dma_addr = dma_map_single(whc->wusbhc.dev, std->pl_virt, pl_len, DMA_TO_DEVICE);
+    pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
+    std->pl_virt = kmalloc(pl_len, mem_flags);
+    if (std->pl_virt == NULL)
+        return -ENOMEM;
+    std->dma_addr = dma_map_single(whc->wusbhc.dev, std->pl_virt, pl_len, DMA_TO_DEVICE);
 
-	for (p = 0; p < std->num_pointers; p++) {
-		std->pl_virt[p].buf_ptr = cpu_to_le64(dma_addr);
-		dma_addr = (dma_addr + WHCI_PAGE_SIZE) & ~(WHCI_PAGE_SIZE-1);
-	}
+    for (p = 0; p < std->num_pointers; p++) {
+        std->pl_virt[p].buf_ptr = cpu_to_le64(dma_addr);
+        dma_addr = (dma_addr + WHCI_PAGE_SIZE) & ~(WHCI_PAGE_SIZE-1);
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
  * urb_dequeue_work - executes asl/pzl update and gives back the urb to the system.
  */
-static void urb_dequeue_work(struct work_struct *work)
-{
-	struct whc_urb *wurb = container_of(work, struct whc_urb, dequeue_work);
-	struct whc_qset *qset = wurb->qset;
-	struct whc *whc = qset->whc;
-	unsigned long flags;
+static void urb_dequeue_work(struct work_struct *work) {
+    struct whc_urb *wurb = container_of(work, struct whc_urb, dequeue_work);
+    struct whc_qset *qset = wurb->qset;
+    struct whc *whc = qset->whc;
+    unsigned long flags;
 
-	if (wurb->is_async == true)
-		asl_update(whc, WUSBCMD_ASYNC_UPDATED
-			   | WUSBCMD_ASYNC_SYNCED_DB
-			   | WUSBCMD_ASYNC_QSET_RM);
-	else
-		pzl_update(whc, WUSBCMD_PERIODIC_UPDATED
-			   | WUSBCMD_PERIODIC_SYNCED_DB
-			   | WUSBCMD_PERIODIC_QSET_RM);
+    if (wurb->is_async == true)
+        asl_update(whc, WUSBCMD_ASYNC_UPDATED
+                   | WUSBCMD_ASYNC_SYNCED_DB
+                   | WUSBCMD_ASYNC_QSET_RM);
+    else
+        pzl_update(whc, WUSBCMD_PERIODIC_UPDATED
+                   | WUSBCMD_PERIODIC_SYNCED_DB
+                   | WUSBCMD_PERIODIC_QSET_RM);
 
-	spin_lock_irqsave(&whc->lock, flags);
-	qset_remove_urb(whc, qset, wurb->urb, wurb->status);
-	spin_unlock_irqrestore(&whc->lock, flags);
+    spin_lock_irqsave(&whc->lock, flags);
+    qset_remove_urb(whc, qset, wurb->urb, wurb->status);
+    spin_unlock_irqrestore(&whc->lock, flags);
 }
 
 static struct whc_std *qset_new_std(struct whc *whc, struct whc_qset *qset,
-				    struct urb *urb, gfp_t mem_flags)
-{
-	struct whc_std *std;
+                                    struct urb *urb, gfp_t mem_flags) {
+    struct whc_std *std;
 
-	std = kzalloc(sizeof(struct whc_std), mem_flags);
-	if (std == NULL)
-		return NULL;
+    std = kzalloc(sizeof(struct whc_std), mem_flags);
+    if (std == NULL)
+        return NULL;
 
-	std->urb = urb;
-	std->qtd = NULL;
+    std->urb = urb;
+    std->qtd = NULL;
 
-	INIT_LIST_HEAD(&std->list_node);
-	list_add_tail(&std->list_node, &qset->stds);
+    INIT_LIST_HEAD(&std->list_node);
+    list_add_tail(&std->list_node, &qset->stds);
 
-	return std;
+    return std;
 }
 
 static int qset_add_urb_sg(struct whc *whc, struct whc_qset *qset, struct urb *urb,
-			   gfp_t mem_flags)
-{
-	size_t remaining;
-	struct scatterlist *sg;
-	int i;
-	int ntds = 0;
-	struct whc_std *std = NULL;
-	struct whc_page_list_entry *entry;
-	dma_addr_t prev_end = 0;
-	size_t pl_len;
-	int p = 0;
+                           gfp_t mem_flags) {
+    size_t remaining;
+    struct scatterlist *sg;
+    int i;
+    int ntds = 0;
+    struct whc_std *std = NULL;
+    struct whc_page_list_entry *entry;
+    dma_addr_t prev_end = 0;
+    size_t pl_len;
+    int p = 0;
 
-	remaining = urb->transfer_buffer_length;
+    remaining = urb->transfer_buffer_length;
 
-	for_each_sg(urb->sg, sg, urb->num_mapped_sgs, i) {
-		dma_addr_t dma_addr;
-		size_t dma_remaining;
-		dma_addr_t sp, ep;
-		int num_pointers;
+    for_each_sg(urb->sg, sg, urb->num_mapped_sgs, i) {
+        dma_addr_t dma_addr;
+        size_t dma_remaining;
+        dma_addr_t sp, ep;
+        int num_pointers;
 
-		if (remaining == 0) {
-			break;
-		}
+        if (remaining == 0) {
+            break;
+        }
 
-		dma_addr = sg_dma_address(sg);
-		dma_remaining = min_t(size_t, sg_dma_len(sg), remaining);
+        dma_addr = sg_dma_address(sg);
+        dma_remaining = min_t(size_t, sg_dma_len(sg), remaining);
 
-		while (dma_remaining) {
-			size_t dma_len;
+        while (dma_remaining) {
+            size_t dma_len;
 
-			/*
-			 * We can use the previous std (if it exists) provided that:
-			 * - the previous one ended on a page boundary.
-			 * - the current one begins on a page boundary.
-			 * - the previous one isn't full.
-			 *
-			 * If a new std is needed but the previous one
-			 * was not a whole number of packets then this
-			 * sg list cannot be mapped onto multiple
-			 * qTDs.  Return an error and let the caller
-			 * sort it out.
-			 */
-			if (!std
-			    || (prev_end & (WHCI_PAGE_SIZE-1))
-			    || (dma_addr & (WHCI_PAGE_SIZE-1))
-			    || std->len + WHCI_PAGE_SIZE > QTD_MAX_XFER_SIZE) {
-				if (std && std->len % qset->max_packet != 0)
-					return -EINVAL;
-				std = qset_new_std(whc, qset, urb, mem_flags);
-				if (std == NULL) {
-					return -ENOMEM;
-				}
-				ntds++;
-				p = 0;
-			}
+            /*
+             * We can use the previous std (if it exists) provided that:
+             * - the previous one ended on a page boundary.
+             * - the current one begins on a page boundary.
+             * - the previous one isn't full.
+             *
+             * If a new std is needed but the previous one
+             * was not a whole number of packets then this
+             * sg list cannot be mapped onto multiple
+             * qTDs.  Return an error and let the caller
+             * sort it out.
+             */
+            if (!std
+                    || (prev_end & (WHCI_PAGE_SIZE-1))
+                    || (dma_addr & (WHCI_PAGE_SIZE-1))
+                    || std->len + WHCI_PAGE_SIZE > QTD_MAX_XFER_SIZE) {
+                if (std && std->len % qset->max_packet != 0)
+                    return -EINVAL;
+                std = qset_new_std(whc, qset, urb, mem_flags);
+                if (std == NULL) {
+                    return -ENOMEM;
+                }
+                ntds++;
+                p = 0;
+            }
 
-			dma_len = dma_remaining;
+            dma_len = dma_remaining;
 
-			/*
-			 * If the remainder of this element doesn't
-			 * fit in a single qTD, limit the qTD to a
-			 * whole number of packets.  This allows the
-			 * remainder to go into the next qTD.
-			 */
-			if (std->len + dma_len > QTD_MAX_XFER_SIZE) {
-				dma_len = (QTD_MAX_XFER_SIZE / qset->max_packet)
-					* qset->max_packet - std->len;
-			}
+            /*
+             * If the remainder of this element doesn't
+             * fit in a single qTD, limit the qTD to a
+             * whole number of packets.  This allows the
+             * remainder to go into the next qTD.
+             */
+            if (std->len + dma_len > QTD_MAX_XFER_SIZE) {
+                dma_len = (QTD_MAX_XFER_SIZE / qset->max_packet)
+                          * qset->max_packet - std->len;
+            }
 
-			std->len += dma_len;
-			std->ntds_remaining = -1; /* filled in later */
+            std->len += dma_len;
+            std->ntds_remaining = -1; /* filled in later */
 
-			sp = dma_addr & ~(WHCI_PAGE_SIZE-1);
-			ep = dma_addr + dma_len;
-			num_pointers = DIV_ROUND_UP(ep - sp, WHCI_PAGE_SIZE);
-			std->num_pointers += num_pointers;
+            sp = dma_addr & ~(WHCI_PAGE_SIZE-1);
+            ep = dma_addr + dma_len;
+            num_pointers = DIV_ROUND_UP(ep - sp, WHCI_PAGE_SIZE);
+            std->num_pointers += num_pointers;
 
-			pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
+            pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
 
-			std->pl_virt = krealloc(std->pl_virt, pl_len, mem_flags);
-			if (std->pl_virt == NULL) {
-				return -ENOMEM;
-			}
+            std->pl_virt = krealloc(std->pl_virt, pl_len, mem_flags);
+            if (std->pl_virt == NULL) {
+                return -ENOMEM;
+            }
 
-			for (;p < std->num_pointers; p++, entry++) {
-				std->pl_virt[p].buf_ptr = cpu_to_le64(dma_addr);
-				dma_addr = (dma_addr + WHCI_PAGE_SIZE) & ~(WHCI_PAGE_SIZE-1);
-			}
+            for (; p < std->num_pointers; p++, entry++) {
+                std->pl_virt[p].buf_ptr = cpu_to_le64(dma_addr);
+                dma_addr = (dma_addr + WHCI_PAGE_SIZE) & ~(WHCI_PAGE_SIZE-1);
+            }
 
-			prev_end = dma_addr = ep;
-			dma_remaining -= dma_len;
-			remaining -= dma_len;
-		}
-	}
+            prev_end = dma_addr = ep;
+            dma_remaining -= dma_len;
+            remaining -= dma_len;
+        }
+    }
 
-	/* Now the number of stds is know, go back and fill in
-	   std->ntds_remaining. */
-	list_for_each_entry(std, &qset->stds, list_node) {
-		if (std->ntds_remaining == -1) {
-			pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
-			std->ntds_remaining = ntds--;
-			std->dma_addr = dma_map_single(whc->wusbhc.dev, std->pl_virt,
-						       pl_len, DMA_TO_DEVICE);
-		}
-	}
-	return 0;
+    /* Now the number of stds is know, go back and fill in
+       std->ntds_remaining. */
+    list_for_each_entry(std, &qset->stds, list_node) {
+        if (std->ntds_remaining == -1) {
+            pl_len = std->num_pointers * sizeof(struct whc_page_list_entry);
+            std->ntds_remaining = ntds--;
+            std->dma_addr = dma_map_single(whc->wusbhc.dev, std->pl_virt,
+                                           pl_len, DMA_TO_DEVICE);
+        }
+    }
+    return 0;
 }
 
 /**
@@ -545,81 +529,80 @@ static int qset_add_urb_sg(struct whc *whc, struct whc_qset *qset, struct urb *u
  * buffers.
  */
 static int qset_add_urb_sg_linearize(struct whc *whc, struct whc_qset *qset,
-				     struct urb *urb, gfp_t mem_flags)
-{
-	bool is_out = usb_pipeout(urb->pipe);
-	size_t max_std_len;
-	size_t remaining;
-	int ntds = 0;
-	struct whc_std *std = NULL;
-	void *bounce = NULL;
-	struct scatterlist *sg;
-	int i;
+                                     struct urb *urb, gfp_t mem_flags) {
+    bool is_out = usb_pipeout(urb->pipe);
+    size_t max_std_len;
+    size_t remaining;
+    int ntds = 0;
+    struct whc_std *std = NULL;
+    void *bounce = NULL;
+    struct scatterlist *sg;
+    int i;
 
-	/* limit maximum bounce buffer to 16 * 3.5 KiB ~= 28 k */
-	max_std_len = qset->max_burst * qset->max_packet;
+    /* limit maximum bounce buffer to 16 * 3.5 KiB ~= 28 k */
+    max_std_len = qset->max_burst * qset->max_packet;
 
-	remaining = urb->transfer_buffer_length;
+    remaining = urb->transfer_buffer_length;
 
-	for_each_sg(urb->sg, sg, urb->num_mapped_sgs, i) {
-		size_t len;
-		size_t sg_remaining;
-		void *orig;
+    for_each_sg(urb->sg, sg, urb->num_mapped_sgs, i) {
+        size_t len;
+        size_t sg_remaining;
+        void *orig;
 
-		if (remaining == 0) {
-			break;
-		}
+        if (remaining == 0) {
+            break;
+        }
 
-		sg_remaining = min_t(size_t, remaining, sg->length);
-		orig = sg_virt(sg);
+        sg_remaining = min_t(size_t, remaining, sg->length);
+        orig = sg_virt(sg);
 
-		while (sg_remaining) {
-			if (!std || std->len == max_std_len) {
-				std = qset_new_std(whc, qset, urb, mem_flags);
-				if (std == NULL)
-					return -ENOMEM;
-				std->bounce_buf = kmalloc(max_std_len, mem_flags);
-				if (std->bounce_buf == NULL)
-					return -ENOMEM;
-				std->bounce_sg = sg;
-				std->bounce_offset = orig - sg_virt(sg);
-				bounce = std->bounce_buf;
-				ntds++;
-			}
+        while (sg_remaining) {
+            if (!std || std->len == max_std_len) {
+                std = qset_new_std(whc, qset, urb, mem_flags);
+                if (std == NULL)
+                    return -ENOMEM;
+                std->bounce_buf = kmalloc(max_std_len, mem_flags);
+                if (std->bounce_buf == NULL)
+                    return -ENOMEM;
+                std->bounce_sg = sg;
+                std->bounce_offset = orig - sg_virt(sg);
+                bounce = std->bounce_buf;
+                ntds++;
+            }
 
-			len = min(sg_remaining, max_std_len - std->len);
+            len = min(sg_remaining, max_std_len - std->len);
 
-			if (is_out)
-				memcpy(bounce, orig, len);
+            if (is_out)
+                memcpy(bounce, orig, len);
 
-			std->len += len;
-			std->ntds_remaining = -1; /* filled in later */
+            std->len += len;
+            std->ntds_remaining = -1; /* filled in later */
 
-			bounce += len;
-			orig += len;
-			sg_remaining -= len;
-			remaining -= len;
-		}
-	}
+            bounce += len;
+            orig += len;
+            sg_remaining -= len;
+            remaining -= len;
+        }
+    }
 
-	/*
-	 * For each of the new sTDs, map the bounce buffers, create
-	 * page lists (if necessary), and fill in std->ntds_remaining.
-	 */
-	list_for_each_entry(std, &qset->stds, list_node) {
-		if (std->ntds_remaining != -1)
-			continue;
+    /*
+     * For each of the new sTDs, map the bounce buffers, create
+     * page lists (if necessary), and fill in std->ntds_remaining.
+     */
+    list_for_each_entry(std, &qset->stds, list_node) {
+        if (std->ntds_remaining != -1)
+            continue;
 
-		std->dma_addr = dma_map_single(&whc->umc->dev, std->bounce_buf, std->len,
-					       is_out ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
+        std->dma_addr = dma_map_single(&whc->umc->dev, std->bounce_buf, std->len,
+                                       is_out ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
 
-		if (qset_fill_page_list(whc, std, mem_flags) < 0)
-			return -ENOMEM;
+        if (qset_fill_page_list(whc, std, mem_flags) < 0)
+            return -ENOMEM;
 
-		std->ntds_remaining = ntds--;
-	}
+        std->ntds_remaining = ntds--;
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -630,66 +613,65 @@ static int qset_add_urb_sg_linearize(struct whc *whc, struct whc_qset *qset,
  * data (e.g., for some control transfers).
  */
 int qset_add_urb(struct whc *whc, struct whc_qset *qset, struct urb *urb,
-	gfp_t mem_flags)
-{
-	struct whc_urb *wurb;
-	int remaining = urb->transfer_buffer_length;
-	u64 transfer_dma = urb->transfer_dma;
-	int ntds_remaining;
-	int ret;
+                 gfp_t mem_flags) {
+    struct whc_urb *wurb;
+    int remaining = urb->transfer_buffer_length;
+    u64 transfer_dma = urb->transfer_dma;
+    int ntds_remaining;
+    int ret;
 
-	wurb = kzalloc(sizeof(struct whc_urb), mem_flags);
-	if (wurb == NULL)
-		goto err_no_mem;
-	urb->hcpriv = wurb;
-	wurb->qset = qset;
-	wurb->urb = urb;
-	INIT_WORK(&wurb->dequeue_work, urb_dequeue_work);
+    wurb = kzalloc(sizeof(struct whc_urb), mem_flags);
+    if (wurb == NULL)
+        goto err_no_mem;
+    urb->hcpriv = wurb;
+    wurb->qset = qset;
+    wurb->urb = urb;
+    INIT_WORK(&wurb->dequeue_work, urb_dequeue_work);
 
-	if (urb->num_sgs) {
-		ret = qset_add_urb_sg(whc, qset, urb, mem_flags);
-		if (ret == -EINVAL) {
-			qset_free_stds(qset, urb);
-			ret = qset_add_urb_sg_linearize(whc, qset, urb, mem_flags);
-		}
-		if (ret < 0)
-			goto err_no_mem;
-		return 0;
-	}
+    if (urb->num_sgs) {
+        ret = qset_add_urb_sg(whc, qset, urb, mem_flags);
+        if (ret == -EINVAL) {
+            qset_free_stds(qset, urb);
+            ret = qset_add_urb_sg_linearize(whc, qset, urb, mem_flags);
+        }
+        if (ret < 0)
+            goto err_no_mem;
+        return 0;
+    }
 
-	ntds_remaining = DIV_ROUND_UP(remaining, QTD_MAX_XFER_SIZE);
-	if (ntds_remaining == 0)
-		ntds_remaining = 1;
+    ntds_remaining = DIV_ROUND_UP(remaining, QTD_MAX_XFER_SIZE);
+    if (ntds_remaining == 0)
+        ntds_remaining = 1;
 
-	while (ntds_remaining) {
-		struct whc_std *std;
-		size_t std_len;
+    while (ntds_remaining) {
+        struct whc_std *std;
+        size_t std_len;
 
-		std_len = remaining;
-		if (std_len > QTD_MAX_XFER_SIZE)
-			std_len = QTD_MAX_XFER_SIZE;
+        std_len = remaining;
+        if (std_len > QTD_MAX_XFER_SIZE)
+            std_len = QTD_MAX_XFER_SIZE;
 
-		std = qset_new_std(whc, qset, urb, mem_flags);
-		if (std == NULL)
-			goto err_no_mem;
+        std = qset_new_std(whc, qset, urb, mem_flags);
+        if (std == NULL)
+            goto err_no_mem;
 
-		std->dma_addr = transfer_dma;
-		std->len = std_len;
-		std->ntds_remaining = ntds_remaining;
+        std->dma_addr = transfer_dma;
+        std->len = std_len;
+        std->ntds_remaining = ntds_remaining;
 
-		if (qset_fill_page_list(whc, std, mem_flags) < 0)
-			goto err_no_mem;
+        if (qset_fill_page_list(whc, std, mem_flags) < 0)
+            goto err_no_mem;
 
-		ntds_remaining--;
-		remaining -= std_len;
-		transfer_dma += std_len;
-	}
+        ntds_remaining--;
+        remaining -= std_len;
+        transfer_dma += std_len;
+    }
 
-	return 0;
+    return 0;
 
 err_no_mem:
-	qset_free_stds(qset, urb);
-	return -ENOMEM;
+    qset_free_stds(qset, urb);
+    return -ENOMEM;
 }
 
 /**
@@ -698,18 +680,17 @@ err_no_mem:
  * The URB is returned to the USB subsystem.
  */
 void qset_remove_urb(struct whc *whc, struct whc_qset *qset,
-			    struct urb *urb, int status)
-{
-	struct wusbhc *wusbhc = &whc->wusbhc;
-	struct whc_urb *wurb = urb->hcpriv;
+                     struct urb *urb, int status) {
+    struct wusbhc *wusbhc = &whc->wusbhc;
+    struct whc_urb *wurb = urb->hcpriv;
 
-	usb_hcd_unlink_urb_from_ep(&wusbhc->usb_hcd, urb);
-	/* Drop the lock as urb->complete() may enqueue another urb. */
-	spin_unlock(&whc->lock);
-	wusbhc_giveback_urb(wusbhc, urb, status);
-	spin_lock(&whc->lock);
+    usb_hcd_unlink_urb_from_ep(&wusbhc->usb_hcd, urb);
+    /* Drop the lock as urb->complete() may enqueue another urb. */
+    spin_unlock(&whc->lock);
+    wusbhc_giveback_urb(wusbhc, urb, status);
+    spin_lock(&whc->lock);
 
-	kfree(wurb);
+    kfree(wurb);
 }
 
 /**
@@ -717,22 +698,21 @@ void qset_remove_urb(struct whc *whc, struct whc_qset *qset,
  * @urb:    completed urb
  * @status: qTD status
  */
-static int get_urb_status_from_qtd(struct urb *urb, u32 status)
-{
-	if (status & QTD_STS_HALTED) {
-		if (status & QTD_STS_DBE)
-			return usb_pipein(urb->pipe) ? -ENOSR : -ECOMM;
-		else if (status & QTD_STS_BABBLE)
-			return -EOVERFLOW;
-		else if (status & QTD_STS_RCE)
-			return -ETIME;
-		return -EPIPE;
-	}
-	if (usb_pipein(urb->pipe)
-	    && (urb->transfer_flags & URB_SHORT_NOT_OK)
-	    && urb->actual_length < urb->transfer_buffer_length)
-		return -EREMOTEIO;
-	return 0;
+static int get_urb_status_from_qtd(struct urb *urb, u32 status) {
+    if (status & QTD_STS_HALTED) {
+        if (status & QTD_STS_DBE)
+            return usb_pipein(urb->pipe) ? -ENOSR : -ECOMM;
+        else if (status & QTD_STS_BABBLE)
+            return -EOVERFLOW;
+        else if (status & QTD_STS_RCE)
+            return -ETIME;
+        return -EPIPE;
+    }
+    if (usb_pipein(urb->pipe)
+            && (urb->transfer_flags & URB_SHORT_NOT_OK)
+            && urb->actual_length < urb->transfer_buffer_length)
+        return -EREMOTEIO;
+    return 0;
 }
 
 /**
@@ -744,43 +724,42 @@ static int get_urb_status_from_qtd(struct urb *urb, u32 status)
  * to the system.
  */
 void process_inactive_qtd(struct whc *whc, struct whc_qset *qset,
-				 struct whc_qtd *qtd)
-{
-	struct whc_std *std = list_first_entry(&qset->stds, struct whc_std, list_node);
-	struct urb *urb = std->urb;
-	uint32_t status;
-	bool complete;
+                          struct whc_qtd *qtd) {
+    struct whc_std *std = list_first_entry(&qset->stds, struct whc_std, list_node);
+    struct urb *urb = std->urb;
+    uint32_t status;
+    bool complete;
 
-	status = le32_to_cpu(qtd->status);
+    status = le32_to_cpu(qtd->status);
 
-	urb->actual_length += std->len - QTD_STS_TO_LEN(status);
+    urb->actual_length += std->len - QTD_STS_TO_LEN(status);
 
-	if (usb_pipein(urb->pipe) && (status & QTD_STS_LAST_PKT))
-		complete = true;
-	else
-		complete = whc_std_last(std);
+    if (usb_pipein(urb->pipe) && (status & QTD_STS_LAST_PKT))
+        complete = true;
+    else
+        complete = whc_std_last(std);
 
-	qset_remove_qtd(whc, qset);
-	qset_free_std(whc, std);
+    qset_remove_qtd(whc, qset);
+    qset_free_std(whc, std);
 
-	/*
-	 * Transfers for this URB are complete?  Then return it to the
-	 * USB subsystem.
-	 */
-	if (complete) {
-		qset_remove_qtds(whc, qset, urb);
-		qset_remove_urb(whc, qset, urb, get_urb_status_from_qtd(urb, status));
+    /*
+     * Transfers for this URB are complete?  Then return it to the
+     * USB subsystem.
+     */
+    if (complete) {
+        qset_remove_qtds(whc, qset, urb);
+        qset_remove_urb(whc, qset, urb, get_urb_status_from_qtd(urb, status));
 
-		/*
-		 * If iAlt isn't valid then the hardware didn't
-		 * advance iCur. Adjust the start and end pointers to
-		 * match iCur.
-		 */
-		if (!(status & QTD_STS_IALT_VALID))
-			qset->td_start = qset->td_end
-				= QH_STATUS_TO_ICUR(le16_to_cpu(qset->qh.status));
-		qset->pause_after_urb = NULL;
-	}
+        /*
+         * If iAlt isn't valid then the hardware didn't
+         * advance iCur. Adjust the start and end pointers to
+         * match iCur.
+         */
+        if (!(status & QTD_STS_IALT_VALID))
+            qset->td_start = qset->td_end
+                             = QH_STATUS_TO_ICUR(le16_to_cpu(qset->qh.status));
+        qset->pause_after_urb = NULL;
+    }
 }
 
 /**
@@ -796,37 +775,34 @@ void process_inactive_qtd(struct whc *whc, struct whc_qset *qset,
  * remove the qset.
  */
 void process_halted_qtd(struct whc *whc, struct whc_qset *qset,
-			       struct whc_qtd *qtd)
-{
-	struct whc_std *std = list_first_entry(&qset->stds, struct whc_std, list_node);
-	struct urb *urb = std->urb;
-	int urb_status;
+                        struct whc_qtd *qtd) {
+    struct whc_std *std = list_first_entry(&qset->stds, struct whc_std, list_node);
+    struct urb *urb = std->urb;
+    int urb_status;
 
-	urb_status = get_urb_status_from_qtd(urb, le32_to_cpu(qtd->status));
+    urb_status = get_urb_status_from_qtd(urb, le32_to_cpu(qtd->status));
 
-	qset_remove_qtds(whc, qset, urb);
-	qset_remove_urb(whc, qset, urb, urb_status);
+    qset_remove_qtds(whc, qset, urb);
+    qset_remove_urb(whc, qset, urb, urb_status);
 
-	list_for_each_entry(std, &qset->stds, list_node) {
-		if (qset->ntds == 0)
-			break;
-		qset_remove_qtd(whc, qset);
-		std->qtd = NULL;
-	}
+    list_for_each_entry(std, &qset->stds, list_node) {
+        if (qset->ntds == 0)
+            break;
+        qset_remove_qtd(whc, qset);
+        std->qtd = NULL;
+    }
 
-	qset->remove = 1;
+    qset->remove = 1;
 }
 
-void qset_free(struct whc *whc, struct whc_qset *qset)
-{
-	dma_pool_free(whc->qset_pool, qset, qset->qset_dma);
+void qset_free(struct whc *whc, struct whc_qset *qset) {
+    dma_pool_free(whc->qset_pool, qset, qset->qset_dma);
 }
 
 /**
  * qset_delete - wait for a qset to be unused, then free it.
  */
-void qset_delete(struct whc *whc, struct whc_qset *qset)
-{
-	wait_for_completion(&qset->remove_complete);
-	qset_free(whc, qset);
+void qset_delete(struct whc *whc, struct whc_qset *qset) {
+    wait_for_completion(&qset->remove_complete);
+    qset_free(whc, qset);
 }

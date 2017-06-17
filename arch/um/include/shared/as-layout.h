@@ -38,8 +38,8 @@
 #include "sysdep/ptrace.h"
 
 struct cpu_task {
-	int pid;
-	void *task;
+    int pid;
+    void *task;
 };
 
 extern struct cpu_task cpu_tasks[];

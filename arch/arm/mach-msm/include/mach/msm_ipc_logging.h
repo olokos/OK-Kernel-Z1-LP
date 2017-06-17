@@ -18,27 +18,27 @@
 #define MAX_MSG_SIZE 255
 
 enum {
-	TSV_TYPE_MSG_START = 1,
-	TSV_TYPE_SKB = TSV_TYPE_MSG_START,
-	TSV_TYPE_STRING,
-	TSV_TYPE_MSG_END = TSV_TYPE_STRING,
+    TSV_TYPE_MSG_START = 1,
+    TSV_TYPE_SKB = TSV_TYPE_MSG_START,
+    TSV_TYPE_STRING,
+    TSV_TYPE_MSG_END = TSV_TYPE_STRING,
 };
 
 struct tsv_header {
-	unsigned char type;
-	unsigned char size; /* size of data field */
+    unsigned char type;
+    unsigned char size; /* size of data field */
 };
 
 struct encode_context {
-	struct tsv_header hdr;
-	char buff[MAX_MSG_SIZE];
-	int offset;
+    struct tsv_header hdr;
+    char buff[MAX_MSG_SIZE];
+    int offset;
 };
 
 struct decode_context {
-	int output_format;      /* 0 = debugfs */
-	char *buff;             /* output buffer */
-	int size;               /* size of output buffer */
+    int output_format;      /* 0 = debugfs */
+    char *buff;             /* output buffer */
+    int size;               /* size of output buffer */
 };
 
 #if defined(CONFIG_MSM_IPC_LOGGING)
@@ -53,7 +53,7 @@ struct decode_context {
  * returns context id on success, NULL on failure
  */
 void *ipc_log_context_create(int max_num_pages, const char *modname,
-		uint16_t user_version);
+                             uint16_t user_version);
 
 /*
  * msg_encode_start: Start encoding a log message
@@ -93,7 +93,7 @@ int tsv_int32_write(struct encode_context *ectxt, int32_t n);
  * @n:     Integer to write
  */
 int tsv_byte_array_write(struct encode_context *ectxt,
-			 void *data, int data_size);
+                         void *data, int data_size);
 
 /*
  * msg_encode_end: Complete the message encode process
@@ -152,7 +152,7 @@ do { \
  * @format: Output format while dumping through DEBUGFS
  */
 void tsv_timestamp_read(struct encode_context *ectxt,
-			struct decode_context *dctxt, const char *format);
+                        struct decode_context *dctxt, const char *format);
 
 /*
  * tsv_pointer_read: Reads a data pointer
@@ -162,7 +162,7 @@ void tsv_timestamp_read(struct encode_context *ectxt,
  * @format: Output format while dumping through DEBUGFS
  */
 void tsv_pointer_read(struct encode_context *ectxt,
-		      struct decode_context *dctxt, const char *format);
+                      struct decode_context *dctxt, const char *format);
 
 /*
  * tsv_int32_read: Reads a 32-bit integer value
@@ -172,7 +172,7 @@ void tsv_pointer_read(struct encode_context *ectxt,
  * @format: Output format while dumping through DEBUGFS
  */
 int32_t tsv_int32_read(struct encode_context *ectxt,
-		       struct decode_context *dctxt, const char *format);
+                       struct decode_context *dctxt, const char *format);
 
 /*
  * tsv_int32_read: Reads a 32-bit integer value
@@ -182,7 +182,7 @@ int32_t tsv_int32_read(struct encode_context *ectxt,
  * @format: Output format while dumping through DEBUGFS
  */
 void tsv_byte_array_read(struct encode_context *ectxt,
-			 struct decode_context *dctxt, const char *format);
+                         struct decode_context *dctxt, const char *format);
 
 /*
  * add_deserialization_func: Register a deserialization function to
@@ -197,8 +197,8 @@ void tsv_byte_array_read(struct encode_context *ectxt,
  * return 0 on success, -ve value on FAILURE
  */
 int add_deserialization_func(void *ctxt, int type,
-			void (*dfunc)(struct encode_context *,
-				      struct decode_context *));
+                             void (*dfunc)(struct encode_context *,
+                                     struct decode_context *));
 
 /*
  * ipc_log_context_destroy: Destroy debug log context
@@ -210,57 +210,67 @@ int ipc_log_context_destroy(void *ctxt);
 #else
 
 static inline void *ipc_log_context_create(int max_num_pages,
-	const char *modname, uint16_t user_version)
-{ return NULL; }
+        const char *modname, uint16_t user_version) {
+    return NULL;
+}
 
 static inline void msg_encode_start(struct encode_context *ectxt,
-	uint32_t type) { }
+                                    uint32_t type) { }
 
-static inline int tsv_timestamp_write(struct encode_context *ectxt)
-{ return -EINVAL; }
+static inline int tsv_timestamp_write(struct encode_context *ectxt) {
+    return -EINVAL;
+}
 
-static inline int tsv_pointer_write(struct encode_context *ectxt, void *pointer)
-{ return -EINVAL; }
+static inline int tsv_pointer_write(struct encode_context *ectxt, void *pointer) {
+    return -EINVAL;
+}
 
-static inline int tsv_int32_write(struct encode_context *ectxt, int32_t n)
-{ return -EINVAL; }
+static inline int tsv_int32_write(struct encode_context *ectxt, int32_t n) {
+    return -EINVAL;
+}
 
 static inline int tsv_byte_array_write(struct encode_context *ectxt,
-			 void *data, int data_size)
-{ return -EINVAL; }
+                                       void *data, int data_size) {
+    return -EINVAL;
+}
 
 static inline void msg_encode_end(struct encode_context *ectxt) { }
 
 static inline void ipc_log_write(void *ctxt, struct encode_context *ectxt) { }
 
-static inline int ipc_log_string(void *ilctxt, const char *fmt, ...)
-{ return -EINVAL; }
+static inline int ipc_log_string(void *ilctxt, const char *fmt, ...) {
+    return -EINVAL;
+}
 
-static inline int ipc_log_extract(void *ilctxt, char *buff, int size)
-{ return -EINVAL; }
+static inline int ipc_log_extract(void *ilctxt, char *buff, int size) {
+    return -EINVAL;
+}
 
 #define IPC_SPRINTF_DECODE(dctxt, args...) do { } while (0)
 
 static inline void tsv_timestamp_read(struct encode_context *ectxt,
-			struct decode_context *dctxt, const char *format) { }
+                                      struct decode_context *dctxt, const char *format) { }
 
 static inline void tsv_pointer_read(struct encode_context *ectxt,
-		      struct decode_context *dctxt, const char *format) { }
+                                    struct decode_context *dctxt, const char *format) { }
 
 static inline int32_t tsv_int32_read(struct encode_context *ectxt,
-		       struct decode_context *dctxt, const char *format)
-{ return 0; }
+                                     struct decode_context *dctxt, const char *format) {
+    return 0;
+}
 
 static inline void tsv_byte_array_read(struct encode_context *ectxt,
-			 struct decode_context *dctxt, const char *format) { }
+                                       struct decode_context *dctxt, const char *format) { }
 
 static inline int add_deserialization_func(void *ctxt, int type,
-			void (*dfunc)(struct encode_context *,
-				      struct decode_context *))
-{ return 0; }
+        void (*dfunc)(struct encode_context *,
+                      struct decode_context *)) {
+    return 0;
+}
 
-static inline int ipc_log_context_destroy(void *ctxt)
-{ return 0; }
+static inline int ipc_log_context_destroy(void *ctxt) {
+    return 0;
+}
 
 #endif
 

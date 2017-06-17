@@ -87,11 +87,11 @@
 #define PREFETCH_FIFOTHRESHOLD(val)	((val) << 8)
 
 enum omap_ecc {
-		/* 1-bit ecc: stored at end of spare area */
-	OMAP_ECC_HAMMING_CODE_DEFAULT = 0, /* Default, s/w method */
-	OMAP_ECC_HAMMING_CODE_HW, /* gpmc to detect the error */
-		/* 1-bit ecc: stored at beginning of spare area as romcode */
-	OMAP_ECC_HAMMING_CODE_HW_ROMCODE, /* gpmc method & romcode layout */
+    /* 1-bit ecc: stored at end of spare area */
+    OMAP_ECC_HAMMING_CODE_DEFAULT = 0, /* Default, s/w method */
+    OMAP_ECC_HAMMING_CODE_HW, /* gpmc to detect the error */
+    /* 1-bit ecc: stored at beginning of spare area as romcode */
+    OMAP_ECC_HAMMING_CODE_HW_ROMCODE, /* gpmc method & romcode layout */
 };
 
 /*
@@ -99,36 +99,36 @@ enum omap_ecc {
  * (which is in picoseconds), while the register values are in gpmc_fck cycles.
  */
 struct gpmc_timings {
-	/* Minimum clock period for synchronous mode (in picoseconds) */
-	u32 sync_clk;
+    /* Minimum clock period for synchronous mode (in picoseconds) */
+    u32 sync_clk;
 
-	/* Chip-select signal timings corresponding to GPMC_CS_CONFIG2 */
-	u16 cs_on;		/* Assertion time */
-	u16 cs_rd_off;		/* Read deassertion time */
-	u16 cs_wr_off;		/* Write deassertion time */
+    /* Chip-select signal timings corresponding to GPMC_CS_CONFIG2 */
+    u16 cs_on;		/* Assertion time */
+    u16 cs_rd_off;		/* Read deassertion time */
+    u16 cs_wr_off;		/* Write deassertion time */
 
-	/* ADV signal timings corresponding to GPMC_CONFIG3 */
-	u16 adv_on;		/* Assertion time */
-	u16 adv_rd_off;		/* Read deassertion time */
-	u16 adv_wr_off;		/* Write deassertion time */
+    /* ADV signal timings corresponding to GPMC_CONFIG3 */
+    u16 adv_on;		/* Assertion time */
+    u16 adv_rd_off;		/* Read deassertion time */
+    u16 adv_wr_off;		/* Write deassertion time */
 
-	/* WE signals timings corresponding to GPMC_CONFIG4 */
-	u16 we_on;		/* WE assertion time */
-	u16 we_off;		/* WE deassertion time */
+    /* WE signals timings corresponding to GPMC_CONFIG4 */
+    u16 we_on;		/* WE assertion time */
+    u16 we_off;		/* WE deassertion time */
 
-	/* OE signals timings corresponding to GPMC_CONFIG4 */
-	u16 oe_on;		/* OE assertion time */
-	u16 oe_off;		/* OE deassertion time */
+    /* OE signals timings corresponding to GPMC_CONFIG4 */
+    u16 oe_on;		/* OE assertion time */
+    u16 oe_off;		/* OE deassertion time */
 
-	/* Access time and cycle time timings corresponding to GPMC_CONFIG5 */
-	u16 page_burst_access;	/* Multiple access word delay */
-	u16 access;		/* Start-cycle to first data valid delay */
-	u16 rd_cycle;		/* Total read cycle time */
-	u16 wr_cycle;		/* Total write cycle time */
+    /* Access time and cycle time timings corresponding to GPMC_CONFIG5 */
+    u16 page_burst_access;	/* Multiple access word delay */
+    u16 access;		/* Start-cycle to first data valid delay */
+    u16 rd_cycle;		/* Total read cycle time */
+    u16 wr_cycle;		/* Total write cycle time */
 
-	/* The following are only on OMAP3430 */
-	u16 wr_access;		/* WRACCESSTIME */
-	u16 wr_data_mux_bus;	/* WRDATAONADMUXBUS */
+    /* The following are only on OMAP3430 */
+    u16 wr_access;		/* WRACCESSTIME */
+    u16 wr_data_mux_bus;	/* WRDATAONADMUXBUS */
 };
 
 extern unsigned int gpmc_ns_to_ticks(unsigned int time_ns);
@@ -146,7 +146,7 @@ extern void gpmc_cs_free(int cs);
 extern int gpmc_cs_set_reserved(int cs, int reserved);
 extern int gpmc_cs_reserved(int cs);
 extern int gpmc_prefetch_enable(int cs, int fifo_th, int dma_mode,
-					unsigned int u32_count, int is_write);
+                                unsigned int u32_count, int is_write);
 extern int gpmc_prefetch_reset(int cs);
 extern void omap3_gpmc_save_context(void);
 extern void omap3_gpmc_restore_context(void);

@@ -110,11 +110,11 @@
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16209_state {
-	struct spi_device	*us;
-	struct iio_trigger	*trig;
-	struct mutex		buf_lock;
-	u8			tx[ADIS16209_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADIS16209_MAX_RX];
+    struct spi_device	*us;
+    struct iio_trigger	*trig;
+    struct mutex		buf_lock;
+    u8			tx[ADIS16209_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADIS16209_MAX_RX];
 };
 
 int adis16209_set_irq(struct iio_dev *indio_dev, bool enable);
@@ -134,38 +134,33 @@ void adis16209_remove_trigger(struct iio_dev *indio_dev);
 int adis16209_probe_trigger(struct iio_dev *indio_dev);
 
 ssize_t adis16209_read_data_from_ring(struct device *dev,
-				      struct device_attribute *attr,
-				      char *buf);
+                                      struct device_attribute *attr,
+                                      char *buf);
 
 int adis16209_configure_ring(struct iio_dev *indio_dev);
 void adis16209_unconfigure_ring(struct iio_dev *indio_dev);
 
 #else /* CONFIG_IIO_BUFFER */
 
-static inline void adis16209_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void adis16209_remove_trigger(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16209_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int adis16209_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
 static inline ssize_t
 adis16209_read_data_from_ring(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	return 0;
+                              struct device_attribute *attr,
+                              char *buf) {
+    return 0;
 }
 
-static int adis16209_configure_ring(struct iio_dev *indio_dev)
-{
-	return 0;
+static int adis16209_configure_ring(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void adis16209_unconfigure_ring(struct iio_dev *indio_dev)
-{
+static inline void adis16209_unconfigure_ring(struct iio_dev *indio_dev) {
 }
 
 #endif /* CONFIG_IIO_BUFFER */

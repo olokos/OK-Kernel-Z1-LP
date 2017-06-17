@@ -137,18 +137,17 @@ extern struct atari_hw_present atari_hw_present;
 #include <asm/cacheflush.h>
 
 static inline void dma_cache_maintenance( unsigned long paddr,
-					  unsigned long len,
-					  int writeflag )
+        unsigned long len,
+        int writeflag )
 
 {
-	if (writeflag) {
-		if (!MACH_IS_MEDUSA || CPU_IS_060)
-			cache_push( paddr, len );
-	}
-	else {
-		if (!MACH_IS_MEDUSA)
-			cache_clear( paddr, len );
-	}
+    if (writeflag) {
+        if (!MACH_IS_MEDUSA || CPU_IS_060)
+            cache_push( paddr, len );
+    } else {
+        if (!MACH_IS_MEDUSA)
+            cache_clear( paddr, len );
+    }
 }
 
 
@@ -163,55 +162,53 @@ static inline void dma_cache_maintenance( unsigned long paddr,
 #define TT_HIGH 6
 
 #define SHF_BAS (0xffff8200)
-struct SHIFTER
- {
-	u_char pad1;
-	u_char bas_hi;
-	u_char pad2;
-	u_char bas_md;
-	u_char pad3;
-	u_char volatile vcounthi;
-	u_char pad4;
-	u_char volatile vcountmid;
-	u_char pad5;
-	u_char volatile vcountlow;
-	u_char volatile syncmode;
-	u_char pad6;
-	u_char pad7;
-	u_char bas_lo;
- };
+struct SHIFTER {
+    u_char pad1;
+    u_char bas_hi;
+    u_char pad2;
+    u_char bas_md;
+    u_char pad3;
+    u_char volatile vcounthi;
+    u_char pad4;
+    u_char volatile vcountmid;
+    u_char pad5;
+    u_char volatile vcountlow;
+    u_char volatile syncmode;
+    u_char pad6;
+    u_char pad7;
+    u_char bas_lo;
+};
 # define shifter ((*(volatile struct SHIFTER *)SHF_BAS))
 
 #define SHF_FBAS (0xffff820e)
-struct SHIFTER_F030
- {
-  u_short off_next;
-  u_short scn_width;
- };
+struct SHIFTER_F030 {
+    u_short off_next;
+    u_short scn_width;
+};
 # define shifter_f030 ((*(volatile struct SHIFTER_F030 *)SHF_FBAS))
 
 
 #define	SHF_TBAS (0xffff8200)
 struct SHIFTER_TT {
-	u_char	char_dummy0;
-	u_char	bas_hi;			/* video mem base addr, high and mid byte */
-	u_char	char_dummy1;
-	u_char	bas_md;
-	u_char	char_dummy2;
-	u_char	vcount_hi;		/* pointer to currently displayed byte */
-	u_char	char_dummy3;
-	u_char	vcount_md;
-	u_char	char_dummy4;
-	u_char	vcount_lo;
-	u_short	st_sync;		/* ST compatible sync mode register, unused */
-	u_char	char_dummy5;
-	u_char	bas_lo;			/* video mem addr, low byte */
-	u_char	char_dummy6[2+3*16];
-	/* $ffff8240: */
-	u_short	color_reg[16];	/* 16 color registers */
-	u_char	st_shiftmode;	/* ST compatible shift mode register, unused */
-	u_char  char_dummy7;
-	u_short tt_shiftmode;	/* TT shift mode register */
+    u_char	char_dummy0;
+    u_char	bas_hi;			/* video mem base addr, high and mid byte */
+    u_char	char_dummy1;
+    u_char	bas_md;
+    u_char	char_dummy2;
+    u_char	vcount_hi;		/* pointer to currently displayed byte */
+    u_char	char_dummy3;
+    u_char	vcount_md;
+    u_char	char_dummy4;
+    u_char	vcount_lo;
+    u_short	st_sync;		/* ST compatible sync mode register, unused */
+    u_char	char_dummy5;
+    u_char	bas_lo;			/* video mem addr, low byte */
+    u_char	char_dummy6[2+3*16];
+    /* $ffff8240: */
+    u_short	color_reg[16];	/* 16 color registers */
+    u_char	st_shiftmode;	/* ST compatible shift mode register, unused */
+    u_char  char_dummy7;
+    u_short tt_shiftmode;	/* TT shift mode register */
 
 
 };
@@ -252,28 +249,28 @@ struct SHIFTER_TT {
 
 #define VIDEL_BAS (0xffff8260)
 struct VIDEL {
-	u_short st_shift;
-	u_short pad1;
-	u_char  xoffset_s;
-	u_char  xoffset;
-	u_short f_shift;
-	u_char  pad2[0x1a];
-	u_short hht;
-	u_short hbb;
-	u_short hbe;
-	u_short hdb;
-	u_short hde;
-	u_short hss;
-	u_char  pad3[0x14];
-	u_short vft;
-	u_short vbb;
-	u_short vbe;
-	u_short vdb;
-	u_short vde;
-	u_short vss;
-	u_char  pad4[0x12];
-	u_short control;
-	u_short mode;
+    u_short st_shift;
+    u_short pad1;
+    u_char  xoffset_s;
+    u_char  xoffset;
+    u_short f_shift;
+    u_char  pad2[0x1a];
+    u_short hht;
+    u_short hbb;
+    u_short hbe;
+    u_short hdb;
+    u_short hde;
+    u_short hss;
+    u_char  pad3[0x14];
+    u_short vft;
+    u_short vbb;
+    u_short vbe;
+    u_short vdb;
+    u_short vde;
+    u_short vss;
+    u_char  pad4[0x12];
+    u_short control;
+    u_short mode;
 };
 #define	videl	((*(volatile struct VIDEL *)VIDEL_BAS))
 
@@ -282,18 +279,17 @@ struct VIDEL {
  */
 
 #define FWD_BAS (0xffff8604)
-struct DMA_WD
- {
-  u_short fdc_acces_seccount;
-  u_short dma_mode_status;
-  u_char dma_vhi;	/* Some extended ST-DMAs can handle 32 bit addresses */
-  u_char dma_hi;
-  u_char char_dummy2;
-  u_char dma_md;
-  u_char char_dummy3;
-  u_char dma_lo;
-  u_short fdc_speed;
- };
+struct DMA_WD {
+    u_short fdc_acces_seccount;
+    u_short dma_mode_status;
+    u_char dma_vhi;	/* Some extended ST-DMAs can handle 32 bit addresses */
+    u_char dma_hi;
+    u_char char_dummy2;
+    u_char dma_md;
+    u_char char_dummy3;
+    u_char dma_lo;
+    u_short fdc_speed;
+};
 # define dma_wd ((*(volatile struct DMA_WD *)FWD_BAS))
 /* alias */
 #define	st_dma dma_wd
@@ -308,36 +304,35 @@ struct DMA_WD
  */
 
 #define YM_BAS (0xffff8800)
-struct SOUND_YM
- {
-  u_char rd_data_reg_sel;
-  u_char char_dummy1;
-  u_char wd_data;
- };
+struct SOUND_YM {
+    u_char rd_data_reg_sel;
+    u_char char_dummy1;
+    u_char wd_data;
+};
 #define sound_ym ((*(volatile struct SOUND_YM *)YM_BAS))
 
 /* TT SCSI DMA */
 
 #define	TT_SCSI_DMA_BAS	(0xffff8700)
 struct TT_DMA {
-	u_char	char_dummy0;
-	u_char	dma_addr_hi;
-	u_char	char_dummy1;
-	u_char	dma_addr_hmd;
-	u_char	char_dummy2;
-	u_char	dma_addr_lmd;
-	u_char	char_dummy3;
-	u_char	dma_addr_lo;
-	u_char	char_dummy4;
-	u_char	dma_cnt_hi;
-	u_char	char_dummy5;
-	u_char	dma_cnt_hmd;
-	u_char	char_dummy6;
-	u_char	dma_cnt_lmd;
-	u_char	char_dummy7;
-	u_char	dma_cnt_lo;
-	u_long	dma_restdata;
-	u_short	dma_ctrl;
+    u_char	char_dummy0;
+    u_char	dma_addr_hi;
+    u_char	char_dummy1;
+    u_char	dma_addr_hmd;
+    u_char	char_dummy2;
+    u_char	dma_addr_lmd;
+    u_char	char_dummy3;
+    u_char	dma_addr_lo;
+    u_char	char_dummy4;
+    u_char	dma_cnt_hi;
+    u_char	char_dummy5;
+    u_char	dma_cnt_hmd;
+    u_char	char_dummy6;
+    u_char	dma_cnt_lmd;
+    u_char	char_dummy7;
+    u_char	dma_cnt_lo;
+    u_long	dma_restdata;
+    u_short	dma_ctrl;
 };
 #define	tt_scsi_dma	((*(volatile struct TT_DMA *)TT_SCSI_DMA_BAS))
 
@@ -345,21 +340,21 @@ struct TT_DMA {
 
 #define	TT_5380_BAS	(0xffff8781)
 struct TT_5380 {
-	u_char	scsi_data;
-	u_char	char_dummy1;
-	u_char	scsi_icr;
-	u_char	char_dummy2;
-	u_char	scsi_mode;
-	u_char	char_dummy3;
-	u_char	scsi_tcr;
-	u_char	char_dummy4;
-	u_char	scsi_idstat;
-	u_char	char_dummy5;
-	u_char	scsi_dmastat;
-	u_char	char_dummy6;
-	u_char	scsi_targrcv;
-	u_char	char_dummy7;
-	u_char	scsi_inircv;
+    u_char	scsi_data;
+    u_char	char_dummy1;
+    u_char	scsi_icr;
+    u_char	char_dummy2;
+    u_char	scsi_mode;
+    u_char	char_dummy3;
+    u_char	scsi_tcr;
+    u_char	char_dummy4;
+    u_char	scsi_idstat;
+    u_char	char_dummy5;
+    u_char	scsi_dmastat;
+    u_char	char_dummy6;
+    u_char	scsi_targrcv;
+    u_char	char_dummy7;
+    u_char	scsi_inircv;
 };
 #define	tt_scsi			((*(volatile struct TT_5380 *)TT_5380_BAS))
 #define	tt_scsi_regp	((volatile char *)TT_5380_BAS)
@@ -370,41 +365,39 @@ struct TT_5380 {
  */
 
 #define MATRIX_BASE (0xffff8930)
-struct MATRIX
-{
-  u_short source;
-  u_short destination;
-  u_char external_frequency_divider;
-  u_char internal_frequency_divider;
+struct MATRIX {
+    u_short source;
+    u_short destination;
+    u_char external_frequency_divider;
+    u_char internal_frequency_divider;
 };
 #define falcon_matrix (*(volatile struct MATRIX *)MATRIX_BASE)
 
 #define CODEC_BASE (0xffff8936)
-struct CODEC
-{
-  u_char tracks;
-  u_char input_source;
+struct CODEC {
+    u_char tracks;
+    u_char input_source;
 #define CODEC_SOURCE_ADC        1
 #define CODEC_SOURCE_MATRIX     2
-  u_char adc_source;
+    u_char adc_source;
 #define ADC_SOURCE_RIGHT_PSG    1
 #define ADC_SOURCE_LEFT_PSG     2
-  u_char gain;
+    u_char gain;
 #define CODEC_GAIN_RIGHT        0x0f
 #define CODEC_GAIN_LEFT         0xf0
-  u_char attenuation;
+    u_char attenuation;
 #define CODEC_ATTENUATION_RIGHT 0x0f
 #define CODEC_ATTENUATION_LEFT  0xf0
-  u_char unused1;
-  u_char status;
+    u_char unused1;
+    u_char status;
 #define CODEC_OVERFLOW_RIGHT    1
 #define CODEC_OVERFLOW_LEFT     2
-  u_char unused2, unused3, unused4, unused5;
-  u_char gpio_directions;
+    u_char unused2, unused3, unused4, unused5;
+    u_char gpio_directions;
 #define CODEC_GPIO_IN           0
 #define CODEC_GPIO_OUT          1
-  u_char unused6;
-  u_char gpio_data;
+    u_char unused6;
+    u_char gpio_data;
 };
 #define falcon_codec (*(volatile struct CODEC *)CODEC_BASE)
 
@@ -414,25 +407,24 @@ struct CODEC
 
 #define BLT_BAS (0xffff8a00)
 
-struct BLITTER
- {
-  u_short halftone[16];
-  u_short src_x_inc;
-  u_short src_y_inc;
-  u_long src_address;
-  u_short endmask1;
-  u_short endmask2;
-  u_short endmask3;
-  u_short dst_x_inc;
-  u_short dst_y_inc;
-  u_long dst_address;
-  u_short wd_per_line;
-  u_short ln_per_bb;
-  u_short hlf_op_reg;
-  u_short log_op_reg;
-  u_short lin_nm_reg;
-  u_short skew_reg;
- };
+struct BLITTER {
+    u_short halftone[16];
+    u_short src_x_inc;
+    u_short src_y_inc;
+    u_long src_address;
+    u_short endmask1;
+    u_short endmask2;
+    u_short endmask3;
+    u_short dst_x_inc;
+    u_short dst_y_inc;
+    u_long dst_address;
+    u_short wd_per_line;
+    u_short ln_per_bb;
+    u_short hlf_op_reg;
+    u_short log_op_reg;
+    u_short lin_nm_reg;
+    u_short skew_reg;
+};
 # define blitter ((*(volatile struct BLITTER *)BLT_BAS))
 
 
@@ -441,16 +433,15 @@ struct BLITTER
  */
 
 #define SCC_BAS (0xffff8c81)
-struct SCC
- {
-  u_char cha_a_ctrl;
-  u_char char_dummy1;
-  u_char cha_a_data;
-  u_char char_dummy2;
-  u_char cha_b_ctrl;
-  u_char char_dummy3;
-  u_char cha_b_data;
- };
+struct SCC {
+    u_char cha_a_ctrl;
+    u_char char_dummy1;
+    u_char cha_a_data;
+    u_char char_dummy2;
+    u_char cha_b_ctrl;
+    u_char char_dummy3;
+    u_char cha_b_data;
+};
 # define atari_scc ((*(volatile struct SCC*)SCC_BAS))
 
 /* The ESCC (Z85230) in an Atari ST. The channels are reversed! */
@@ -467,10 +458,9 @@ struct SCC
  */
 
 #define FPL_BAS (0xffff9800)
-struct VIDEL_PALETTE
- {
-  u_long reg[256];
- };
+struct VIDEL_PALETTE {
+    u_long reg[256];
+};
 # define videl_palette ((*(volatile struct VIDEL_PALETTE*)FPL_BAS))
 
 
@@ -480,7 +470,7 @@ struct VIDEL_PALETTE
 
 #define DSP56K_HOST_INTERFACE_BASE (0xffffa200)
 struct DSP56K_HOST_INTERFACE {
-  u_char icr;
+    u_char icr;
 #define DSP56K_ICR_RREQ	0x01
 #define DSP56K_ICR_TREQ	0x02
 #define DSP56K_ICR_HF0	0x08
@@ -489,11 +479,11 @@ struct DSP56K_HOST_INTERFACE {
 #define DSP56K_ICR_HM1	0x40
 #define DSP56K_ICR_INIT	0x80
 
-  u_char cvr;
+    u_char cvr;
 #define DSP56K_CVR_HV_MASK 0x1f
 #define DSP56K_CVR_HC	0x80
 
-  u_char isr;
+    u_char isr;
 #define DSP56K_ISR_RXDF	0x01
 #define DSP56K_ISR_TXDE	0x02
 #define DSP56K_ISR_TRDY	0x04
@@ -502,13 +492,13 @@ struct DSP56K_HOST_INTERFACE {
 #define DSP56K_ISR_DMA	0x40
 #define DSP56K_ISR_HREQ	0x80
 
-  u_char ivr;
+    u_char ivr;
 
-  union {
-    u_char b[4];
-    u_short w[2];
-    u_long l;
-  } data;
+    union {
+        u_char b[4];
+        u_short w[2];
+        u_long l;
+    } data;
 };
 #define dsp56k_host_interface ((*(volatile struct DSP56K_HOST_INTERFACE *)DSP56K_HOST_INTERFACE_BASE))
 
@@ -517,56 +507,55 @@ struct DSP56K_HOST_INTERFACE {
  */
 
 #define MFP_BAS (0xfffffa01)
-struct MFP
- {
-  u_char par_dt_reg;
-  u_char char_dummy1;
-  u_char active_edge;
-  u_char char_dummy2;
-  u_char data_dir;
-  u_char char_dummy3;
-  u_char int_en_a;
-  u_char char_dummy4;
-  u_char int_en_b;
-  u_char char_dummy5;
-  u_char int_pn_a;
-  u_char char_dummy6;
-  u_char int_pn_b;
-  u_char char_dummy7;
-  u_char int_sv_a;
-  u_char char_dummy8;
-  u_char int_sv_b;
-  u_char char_dummy9;
-  u_char int_mk_a;
-  u_char char_dummy10;
-  u_char int_mk_b;
-  u_char char_dummy11;
-  u_char vec_adr;
-  u_char char_dummy12;
-  u_char tim_ct_a;
-  u_char char_dummy13;
-  u_char tim_ct_b;
-  u_char char_dummy14;
-  u_char tim_ct_cd;
-  u_char char_dummy15;
-  u_char tim_dt_a;
-  u_char char_dummy16;
-  u_char tim_dt_b;
-  u_char char_dummy17;
-  u_char tim_dt_c;
-  u_char char_dummy18;
-  u_char tim_dt_d;
-  u_char char_dummy19;
-  u_char sync_char;
-  u_char char_dummy20;
-  u_char usart_ctr;
-  u_char char_dummy21;
-  u_char rcv_stat;
-  u_char char_dummy22;
-  u_char trn_stat;
-  u_char char_dummy23;
-  u_char usart_dta;
- };
+struct MFP {
+    u_char par_dt_reg;
+    u_char char_dummy1;
+    u_char active_edge;
+    u_char char_dummy2;
+    u_char data_dir;
+    u_char char_dummy3;
+    u_char int_en_a;
+    u_char char_dummy4;
+    u_char int_en_b;
+    u_char char_dummy5;
+    u_char int_pn_a;
+    u_char char_dummy6;
+    u_char int_pn_b;
+    u_char char_dummy7;
+    u_char int_sv_a;
+    u_char char_dummy8;
+    u_char int_sv_b;
+    u_char char_dummy9;
+    u_char int_mk_a;
+    u_char char_dummy10;
+    u_char int_mk_b;
+    u_char char_dummy11;
+    u_char vec_adr;
+    u_char char_dummy12;
+    u_char tim_ct_a;
+    u_char char_dummy13;
+    u_char tim_ct_b;
+    u_char char_dummy14;
+    u_char tim_ct_cd;
+    u_char char_dummy15;
+    u_char tim_dt_a;
+    u_char char_dummy16;
+    u_char tim_dt_b;
+    u_char char_dummy17;
+    u_char tim_dt_c;
+    u_char char_dummy18;
+    u_char tim_dt_d;
+    u_char char_dummy19;
+    u_char sync_char;
+    u_char char_dummy20;
+    u_char usart_ctr;
+    u_char char_dummy21;
+    u_char rcv_stat;
+    u_char char_dummy22;
+    u_char trn_stat;
+    u_char char_dummy23;
+    u_char usart_dta;
+};
 # define st_mfp ((*(volatile struct MFP*)MFP_BAS))
 
 /* TT's second MFP */
@@ -579,21 +568,21 @@ struct MFP
 
 #define	TT_SCU_BAS	(0xffff8e01)
 struct TT_SCU {
-	u_char	sys_mask;
-	u_char	char_dummy1;
-	u_char	sys_stat;
-	u_char	char_dummy2;
-	u_char	softint;
-	u_char	char_dummy3;
-	u_char	vmeint;
-	u_char	char_dummy4;
-	u_char	gp_reg1;
-	u_char	char_dummy5;
-	u_char	gp_reg2;
-	u_char	char_dummy6;
-	u_char	vme_mask;
-	u_char	char_dummy7;
-	u_char	vme_stat;
+    u_char	sys_mask;
+    u_char	char_dummy1;
+    u_char	sys_stat;
+    u_char	char_dummy2;
+    u_char	softint;
+    u_char	char_dummy3;
+    u_char	vmeint;
+    u_char	char_dummy4;
+    u_char	gp_reg1;
+    u_char	char_dummy5;
+    u_char	gp_reg2;
+    u_char	char_dummy6;
+    u_char	vme_mask;
+    u_char	char_dummy7;
+    u_char	vme_stat;
 };
 #define	tt_scu	((*(volatile struct TT_SCU *)TT_SCU_BAS))
 
@@ -601,9 +590,9 @@ struct TT_SCU {
 
 #define	TT_RTC_BAS	(0xffff8961)
 struct TT_RTC {
-	u_char	regsel;
-	u_char	dummy;
-	u_char	data;
+    u_char	regsel;
+    u_char	dummy;
+    u_char	data;
 };
 #define	tt_rtc	((*(volatile struct TT_RTC *)TT_RTC_BAS))
 
@@ -650,54 +639,53 @@ struct TT_RTC {
 #define ACIA_IRQ  (1<<7)	/* Interrupt Request */
 
 #define ACIA_BAS (0xfffffc00)
-struct ACIA
- {
-  u_char key_ctrl;
-  u_char char_dummy1;
-  u_char key_data;
-  u_char char_dummy2;
-  u_char mid_ctrl;
-  u_char char_dummy3;
-  u_char mid_data;
- };
+struct ACIA {
+    u_char key_ctrl;
+    u_char char_dummy1;
+    u_char key_data;
+    u_char char_dummy2;
+    u_char mid_ctrl;
+    u_char char_dummy3;
+    u_char mid_data;
+};
 # define acia ((*(volatile struct ACIA*)ACIA_BAS))
 
 #define	TT_DMASND_BAS (0xffff8900)
 struct TT_DMASND {
-	u_char	int_ctrl;	/* Falcon: Interrupt control */
-	u_char	ctrl;
-	u_char	pad2;
-	u_char	bas_hi;
-	u_char	pad3;
-	u_char	bas_mid;
-	u_char	pad4;
-	u_char	bas_low;
-	u_char	pad5;
-	u_char	addr_hi;
-	u_char	pad6;
-	u_char	addr_mid;
-	u_char	pad7;
-	u_char	addr_low;
-	u_char	pad8;
-	u_char	end_hi;
-	u_char	pad9;
-	u_char	end_mid;
-	u_char	pad10;
-	u_char	end_low;
-	u_char	pad11[12];
-	u_char	track_select;	/* Falcon */
-	u_char	mode;
-	u_char	pad12[14];
-	/* Falcon only: */
-	u_short	cbar_src;
-	u_short cbar_dst;
-	u_char	ext_div;
-	u_char	int_div;
-	u_char	rec_track_select;
-	u_char	dac_src;
-	u_char	adc_src;
-	u_char	input_gain;
-	u_short	output_atten;
+    u_char	int_ctrl;	/* Falcon: Interrupt control */
+    u_char	ctrl;
+    u_char	pad2;
+    u_char	bas_hi;
+    u_char	pad3;
+    u_char	bas_mid;
+    u_char	pad4;
+    u_char	bas_low;
+    u_char	pad5;
+    u_char	addr_hi;
+    u_char	pad6;
+    u_char	addr_mid;
+    u_char	pad7;
+    u_char	addr_low;
+    u_char	pad8;
+    u_char	end_hi;
+    u_char	pad9;
+    u_char	end_mid;
+    u_char	pad10;
+    u_char	end_low;
+    u_char	pad11[12];
+    u_char	track_select;	/* Falcon */
+    u_char	mode;
+    u_char	pad12[14];
+    /* Falcon only: */
+    u_short	cbar_src;
+    u_short cbar_dst;
+    u_char	ext_div;
+    u_char	int_div;
+    u_char	rec_track_select;
+    u_char	dac_src;
+    u_char	adc_src;
+    u_char	input_gain;
+    u_short	output_atten;
 };
 # define tt_dmasnd ((*(volatile struct TT_DMASND *)TT_DMASND_BAS))
 
@@ -745,8 +733,8 @@ struct TT_DMASND {
 
 #define	TT_MICROWIRE_BAS	(0xffff8922)
 struct TT_MICROWIRE {
-	u_short	data;
-	u_short	mask;
+    u_short	data;
+    u_short	mask;
 };
 # define tt_microwire ((*(volatile struct TT_MICROWIRE *)TT_MICROWIRE_BAS))
 
@@ -770,37 +758,37 @@ struct TT_MICROWIRE {
 #define MSTE_RTC_BAS	(0xfffffc21)
 
 struct MSTE_RTC {
-	u_char sec_ones;
-	u_char dummy1;
-	u_char sec_tens;
-	u_char dummy2;
-	u_char min_ones;
-	u_char dummy3;
-	u_char min_tens;
-	u_char dummy4;
-	u_char hr_ones;
-	u_char dummy5;
-	u_char hr_tens;
-	u_char dummy6;
-	u_char weekday;
-	u_char dummy7;
-	u_char day_ones;
-	u_char dummy8;
-	u_char day_tens;
-	u_char dummy9;
-	u_char mon_ones;
-	u_char dummy10;
-	u_char mon_tens;
-	u_char dummy11;
-	u_char year_ones;
-	u_char dummy12;
-	u_char year_tens;
-	u_char dummy13;
-	u_char mode;
-	u_char dummy14;
-	u_char test;
-	u_char dummy15;
-	u_char reset;
+    u_char sec_ones;
+    u_char dummy1;
+    u_char sec_tens;
+    u_char dummy2;
+    u_char min_ones;
+    u_char dummy3;
+    u_char min_tens;
+    u_char dummy4;
+    u_char hr_ones;
+    u_char dummy5;
+    u_char hr_tens;
+    u_char dummy6;
+    u_char weekday;
+    u_char dummy7;
+    u_char day_ones;
+    u_char dummy8;
+    u_char day_tens;
+    u_char dummy9;
+    u_char mon_ones;
+    u_char dummy10;
+    u_char mon_tens;
+    u_char dummy11;
+    u_char year_ones;
+    u_char dummy12;
+    u_char year_tens;
+    u_char dummy13;
+    u_char mode;
+    u_char dummy14;
+    u_char test;
+    u_char dummy15;
+    u_char reset;
 };
 
 #define mste_rtc ((*(volatile struct MSTE_RTC *)MSTE_RTC_BAS))

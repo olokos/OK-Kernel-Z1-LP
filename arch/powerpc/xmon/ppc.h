@@ -24,30 +24,29 @@ Software Foundation, 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, US
 
 /* The opcode table is an array of struct powerpc_opcode.  */
 
-struct powerpc_opcode
-{
-  /* The opcode name.  */
-  const char *name;
+struct powerpc_opcode {
+    /* The opcode name.  */
+    const char *name;
 
-  /* The opcode itself.  Those bits which will be filled in with
-     operands are zeroes.  */
-  unsigned long opcode;
+    /* The opcode itself.  Those bits which will be filled in with
+       operands are zeroes.  */
+    unsigned long opcode;
 
-  /* The opcode mask.  This is used by the disassembler.  This is a
-     mask containing ones indicating those bits which must match the
-     opcode field, and zeroes indicating those bits which need not
-     match (and are presumably filled in by operands).  */
-  unsigned long mask;
+    /* The opcode mask.  This is used by the disassembler.  This is a
+       mask containing ones indicating those bits which must match the
+       opcode field, and zeroes indicating those bits which need not
+       match (and are presumably filled in by operands).  */
+    unsigned long mask;
 
-  /* One bit flags for the opcode.  These are used to indicate which
-     specific processors support the instructions.  The defined values
-     are listed below.  */
-  unsigned long flags;
+    /* One bit flags for the opcode.  These are used to indicate which
+       specific processors support the instructions.  The defined values
+       are listed below.  */
+    unsigned long flags;
 
-  /* An array of operand codes.  Each code is an index into the
-     operand table.  They appear in the order which the operands must
-     appear in assembly code, and are terminated by a zero.  */
-  unsigned char operands[8];
+    /* An array of operand codes.  Each code is an index into the
+       operand table.  They appear in the order which the operands must
+       appear in assembly code, and are terminated by a zero.  */
+    unsigned char operands[8];
 };
 
 /* The table itself is sorted by major opcode number, and is otherwise
@@ -151,54 +150,53 @@ extern const int powerpc_num_opcodes;
 
 /* The operands table is an array of struct powerpc_operand.  */
 
-struct powerpc_operand
-{
-  /* The number of bits in the operand.  */
-  int bits;
+struct powerpc_operand {
+    /* The number of bits in the operand.  */
+    int bits;
 
-  /* How far the operand is left shifted in the instruction.  */
-  int shift;
+    /* How far the operand is left shifted in the instruction.  */
+    int shift;
 
-  /* Insertion function.  This is used by the assembler.  To insert an
-     operand value into an instruction, check this field.
+    /* Insertion function.  This is used by the assembler.  To insert an
+       operand value into an instruction, check this field.
 
-     If it is NULL, execute
-         i |= (op & ((1 << o->bits) - 1)) << o->shift;
-     (i is the instruction which we are filling in, o is a pointer to
-     this structure, and op is the opcode value; this assumes twos
-     complement arithmetic).
+       If it is NULL, execute
+           i |= (op & ((1 << o->bits) - 1)) << o->shift;
+       (i is the instruction which we are filling in, o is a pointer to
+       this structure, and op is the opcode value; this assumes twos
+       complement arithmetic).
 
-     If this field is not NULL, then simply call it with the
-     instruction and the operand value.  It will return the new value
-     of the instruction.  If the ERRMSG argument is not NULL, then if
-     the operand value is illegal, *ERRMSG will be set to a warning
-     string (the operand will be inserted in any case).  If the
-     operand value is legal, *ERRMSG will be unchanged (most operands
-     can accept any value).  */
-  unsigned long (*insert)
+       If this field is not NULL, then simply call it with the
+       instruction and the operand value.  It will return the new value
+       of the instruction.  If the ERRMSG argument is not NULL, then if
+       the operand value is illegal, *ERRMSG will be set to a warning
+       string (the operand will be inserted in any case).  If the
+       operand value is legal, *ERRMSG will be unchanged (most operands
+       can accept any value).  */
+    unsigned long (*insert)
     (unsigned long instruction, long op, int dialect, const char **errmsg);
 
-  /* Extraction function.  This is used by the disassembler.  To
-     extract this operand type from an instruction, check this field.
+    /* Extraction function.  This is used by the disassembler.  To
+       extract this operand type from an instruction, check this field.
 
-     If it is NULL, compute
-         op = ((i) >> o->shift) & ((1 << o->bits) - 1);
-	 if ((o->flags & PPC_OPERAND_SIGNED) != 0
-	     && (op & (1 << (o->bits - 1))) != 0)
-	   op -= 1 << o->bits;
-     (i is the instruction, o is a pointer to this structure, and op
-     is the result; this assumes twos complement arithmetic).
+       If it is NULL, compute
+           op = ((i) >> o->shift) & ((1 << o->bits) - 1);
+     if ((o->flags & PPC_OPERAND_SIGNED) != 0
+         && (op & (1 << (o->bits - 1))) != 0)
+       op -= 1 << o->bits;
+       (i is the instruction, o is a pointer to this structure, and op
+       is the result; this assumes twos complement arithmetic).
 
-     If this field is not NULL, then simply call it with the
-     instruction value.  It will return the value of the operand.  If
-     the INVALID argument is not NULL, *INVALID will be set to
-     non-zero if this operand type can not actually be extracted from
-     this operand (i.e., the instruction does not match).  If the
-     operand is valid, *INVALID will not be changed.  */
-  long (*extract) (unsigned long instruction, int dialect, int *invalid);
+       If this field is not NULL, then simply call it with the
+       instruction value.  It will return the value of the operand.  If
+       the INVALID argument is not NULL, *INVALID will be set to
+       non-zero if this operand type can not actually be extracted from
+       this operand (i.e., the instruction does not match).  If the
+       operand is valid, *INVALID will not be changed.  */
+    long (*extract) (unsigned long instruction, int dialect, int *invalid);
 
-  /* One bit syntax flags.  */
-  unsigned long flags;
+    /* One bit syntax flags.  */
+    unsigned long flags;
 };
 
 /* Elements in the table are retrieved by indexing with values from
@@ -297,23 +295,22 @@ extern const struct powerpc_operand powerpc_operands[];
    with the operands table for simplicity.  The macro table is an
    array of struct powerpc_macro.  */
 
-struct powerpc_macro
-{
-  /* The macro name.  */
-  const char *name;
+struct powerpc_macro {
+    /* The macro name.  */
+    const char *name;
 
-  /* The number of operands the macro takes.  */
-  unsigned int operands;
+    /* The number of operands the macro takes.  */
+    unsigned int operands;
 
-  /* One bit flags for the opcode.  These are used to indicate which
-     specific processors support the instructions.  The values are the
-     same as those for the struct powerpc_opcode flags field.  */
-  unsigned long flags;
+    /* One bit flags for the opcode.  These are used to indicate which
+       specific processors support the instructions.  The values are the
+       same as those for the struct powerpc_opcode flags field.  */
+    unsigned long flags;
 
-  /* A format string to turn the macro into a normal instruction.
-     Each %N in the string is replaced with operand number N (zero
-     based).  */
-  const char *format;
+    /* A format string to turn the macro into a normal instruction.
+       Each %N in the string is replaced with operand number N (zero
+       based).  */
+    const char *format;
 };
 
 extern const struct powerpc_macro powerpc_macros[];

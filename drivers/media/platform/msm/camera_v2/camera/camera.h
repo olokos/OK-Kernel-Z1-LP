@@ -14,8 +14,8 @@
 #define _CAMERA_H
 
 enum stream_state {
-	START_STREAM = 0,
-	STOP_STREAM,
+    START_STREAM = 0,
+    STOP_STREAM,
 };
 
 int camera_init_v4l2(struct device *dev, unsigned int *session);

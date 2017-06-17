@@ -92,25 +92,25 @@ typedef unsigned int reg_iop_mpu_rw_r;
 
 /* Register rw_ctrl, scope iop_mpu, type rw */
 typedef struct {
-  unsigned int en : 1;
-  unsigned int dummy1 : 31;
+    unsigned int en : 1;
+    unsigned int dummy1 : 31;
 } reg_iop_mpu_rw_ctrl;
 #define REG_RD_ADDR_iop_mpu_rw_ctrl 128
 #define REG_WR_ADDR_iop_mpu_rw_ctrl 128
 
 /* Register r_pc, scope iop_mpu, type r */
 typedef struct {
-  unsigned int addr : 12;
-  unsigned int dummy1 : 20;
+    unsigned int addr : 12;
+    unsigned int dummy1 : 20;
 } reg_iop_mpu_r_pc;
 #define REG_RD_ADDR_iop_mpu_r_pc 132
 
 /* Register r_stat, scope iop_mpu, type r */
 typedef struct {
-  unsigned int instr_reg_busy : 1;
-  unsigned int intr_busy      : 1;
-  unsigned int intr_vect      : 16;
-  unsigned int dummy1         : 14;
+    unsigned int instr_reg_busy : 1;
+    unsigned int intr_busy      : 1;
+    unsigned int intr_vect      : 16;
+    unsigned int dummy1         : 14;
 } reg_iop_mpu_r_stat;
 #define REG_RD_ADDR_iop_mpu_r_stat 136
 
@@ -126,42 +126,42 @@ typedef unsigned int reg_iop_mpu_rw_immediate;
 
 /* Register r_trace, scope iop_mpu, type r */
 typedef struct {
-  unsigned int intr_vect      : 16;
-  unsigned int pc             : 12;
-  unsigned int en             : 1;
-  unsigned int instr_reg_busy : 1;
-  unsigned int intr_busy      : 1;
-  unsigned int dummy1         : 1;
+    unsigned int intr_vect      : 16;
+    unsigned int pc             : 12;
+    unsigned int en             : 1;
+    unsigned int instr_reg_busy : 1;
+    unsigned int intr_busy      : 1;
+    unsigned int dummy1         : 1;
 } reg_iop_mpu_r_trace;
 #define REG_RD_ADDR_iop_mpu_r_trace 148
 
 /* Register r_wr_stat, scope iop_mpu, type r */
 typedef struct {
-  unsigned int r0  : 1;
-  unsigned int r1  : 1;
-  unsigned int r2  : 1;
-  unsigned int r3  : 1;
-  unsigned int r4  : 1;
-  unsigned int r5  : 1;
-  unsigned int r6  : 1;
-  unsigned int r7  : 1;
-  unsigned int r8  : 1;
-  unsigned int r9  : 1;
-  unsigned int r10 : 1;
-  unsigned int r11 : 1;
-  unsigned int r12 : 1;
-  unsigned int r13 : 1;
-  unsigned int r14 : 1;
-  unsigned int r15 : 1;
-  unsigned int dummy1 : 16;
+    unsigned int r0  : 1;
+    unsigned int r1  : 1;
+    unsigned int r2  : 1;
+    unsigned int r3  : 1;
+    unsigned int r4  : 1;
+    unsigned int r5  : 1;
+    unsigned int r6  : 1;
+    unsigned int r7  : 1;
+    unsigned int r8  : 1;
+    unsigned int r9  : 1;
+    unsigned int r10 : 1;
+    unsigned int r11 : 1;
+    unsigned int r12 : 1;
+    unsigned int r13 : 1;
+    unsigned int r14 : 1;
+    unsigned int r15 : 1;
+    unsigned int dummy1 : 16;
 } reg_iop_mpu_r_wr_stat;
 #define REG_RD_ADDR_iop_mpu_r_wr_stat 152
 
 #define STRIDE_iop_mpu_rw_thread 4
 /* Register rw_thread, scope iop_mpu, type rw */
 typedef struct {
-  unsigned int addr : 12;
-  unsigned int dummy1 : 20;
+    unsigned int addr : 12;
+    unsigned int dummy1 : 20;
 } reg_iop_mpu_rw_thread;
 #define REG_RD_ADDR_iop_mpu_rw_thread 156
 #define REG_WR_ADDR_iop_mpu_rw_thread 156
@@ -169,8 +169,8 @@ typedef struct {
 #define STRIDE_iop_mpu_rw_intr 4
 /* Register rw_intr, scope iop_mpu, type rw */
 typedef struct {
-  unsigned int addr : 12;
-  unsigned int dummy1 : 20;
+    unsigned int addr : 12;
+    unsigned int dummy1 : 20;
 } reg_iop_mpu_rw_intr;
 #define REG_RD_ADDR_iop_mpu_rw_intr 196
 #define REG_WR_ADDR_iop_mpu_rw_intr 196
@@ -178,13 +178,13 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_iop_mpu_no                          = 0x00000000,
-  regk_iop_mpu_r_pc_default                = 0x00000000,
-  regk_iop_mpu_rw_ctrl_default             = 0x00000000,
-  regk_iop_mpu_rw_intr_size                = 0x00000010,
-  regk_iop_mpu_rw_r_size                   = 0x00000010,
-  regk_iop_mpu_rw_thread_default           = 0x00000000,
-  regk_iop_mpu_rw_thread_size              = 0x00000004,
-  regk_iop_mpu_yes                         = 0x00000001
+    regk_iop_mpu_no                          = 0x00000000,
+    regk_iop_mpu_r_pc_default                = 0x00000000,
+    regk_iop_mpu_rw_ctrl_default             = 0x00000000,
+    regk_iop_mpu_rw_intr_size                = 0x00000010,
+    regk_iop_mpu_rw_r_size                   = 0x00000010,
+    regk_iop_mpu_rw_thread_default           = 0x00000000,
+    regk_iop_mpu_rw_thread_size              = 0x00000004,
+    regk_iop_mpu_yes                         = 0x00000001
 };
 #endif /* __iop_mpu_defs_h */

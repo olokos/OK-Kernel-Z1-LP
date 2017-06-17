@@ -31,22 +31,20 @@
  * a pull-down mode if they're an active low chip select, and we're
  * just entering standby.
  */
-static int pxa3xx_mfp_suspend(void)
-{
-	mfp_config_lpm();
-	return 0;
+static int pxa3xx_mfp_suspend(void) {
+    mfp_config_lpm();
+    return 0;
 }
 
-static void pxa3xx_mfp_resume(void)
-{
-	mfp_config_run();
+static void pxa3xx_mfp_resume(void) {
+    mfp_config_run();
 
-	/* clear RDH bit when MFP settings are restored
-	 *
-	 * NOTE: the last 3 bits DxS are write-1-to-clear so carefully
-	 * preserve them here in case they will be referenced later
-	 */
-	ASCR &= ~(ASCR_RDH | ASCR_D1S | ASCR_D2S | ASCR_D3S);
+    /* clear RDH bit when MFP settings are restored
+     *
+     * NOTE: the last 3 bits DxS are write-1-to-clear so carefully
+     * preserve them here in case they will be referenced later
+     */
+    ASCR &= ~(ASCR_RDH | ASCR_D1S | ASCR_D2S | ASCR_D3S);
 }
 #else
 #define pxa3xx_mfp_suspend	NULL
@@ -54,6 +52,6 @@ static void pxa3xx_mfp_resume(void)
 #endif
 
 struct syscore_ops pxa3xx_mfp_syscore_ops = {
-	.suspend	= pxa3xx_mfp_suspend,
-	.resume		= pxa3xx_mfp_resume,
+    .suspend	= pxa3xx_mfp_suspend,
+    .resume		= pxa3xx_mfp_resume,
 };

@@ -63,35 +63,35 @@
 
 typedef struct mimd {
 
-	uint32_t inlen;
-	uint32_t outlen;
+    uint32_t inlen;
+    uint32_t outlen;
 
-	union {
-		uint8_t fca[16];
-		struct {
-			uint8_t opcode;
-			uint8_t subopcode;
-			uint16_t adapno;
+    union {
+        uint8_t fca[16];
+        struct {
+            uint8_t opcode;
+            uint8_t subopcode;
+            uint16_t adapno;
 #if BITS_PER_LONG == 32
-			uint8_t __user *buffer;
-			uint8_t pad[4];
+            uint8_t __user *buffer;
+            uint8_t pad[4];
 #endif
 #if BITS_PER_LONG == 64
-			uint8_t __user *buffer;
+            uint8_t __user *buffer;
 #endif
-			uint32_t length;
-		} __attribute__ ((packed)) fcs;
-	} __attribute__ ((packed)) ui;
+            uint32_t length;
+        } __attribute__ ((packed)) fcs;
+    } __attribute__ ((packed)) ui;
 
-	uint8_t mbox[18];		/* 16 bytes + 2 status bytes */
-	mraid_passthru_t pthru;
+    uint8_t mbox[18];		/* 16 bytes + 2 status bytes */
+    mraid_passthru_t pthru;
 
 #if BITS_PER_LONG == 32
-	char __user *data;		/* buffer <= 4096 for 0x80 commands */
-	char pad[4];
+    char __user *data;		/* buffer <= 4096 for 0x80 commands */
+    char pad[4];
 #endif
 #if BITS_PER_LONG == 64
-	char __user *data;
+    char __user *data;
 #endif
 
 } __attribute__ ((packed))mimd_t;

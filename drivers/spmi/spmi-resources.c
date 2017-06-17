@@ -34,22 +34,21 @@
  *  NULL on failure.
  */
 struct resource *spmi_get_resource(struct spmi_device *dev,
-				   struct spmi_resource *node,
-				   unsigned int type, unsigned int res_num)
-{
-	int i;
+                                   struct spmi_resource *node,
+                                   unsigned int type, unsigned int res_num) {
+    int i;
 
-	/* if a node is not specified, default to the first node */
-	if (!node)
-		node = &dev->res;
+    /* if a node is not specified, default to the first node */
+    if (!node)
+        node = &dev->res;
 
-	for (i = 0; i < node->num_resources; i++) {
-		struct resource *r = &node->resource[i];
+    for (i = 0; i < node->num_resources; i++) {
+        struct resource *r = &node->resource[i];
 
-		if (type == resource_type(r) && res_num-- == 0)
-			return r;
-	}
-	return NULL;
+        if (type == resource_type(r) && res_num-- == 0)
+            return r;
+    }
+    return NULL;
 }
 EXPORT_SYMBOL_GPL(spmi_get_resource);
 
@@ -63,24 +62,23 @@ EXPORT_SYMBOL_GPL(spmi_get_resource);
  * @name: resource name to lookup
  */
 struct resource *spmi_get_resource_byname(struct spmi_device *dev,
-					  struct spmi_resource *node,
-					  unsigned int type,
-					  const char *name)
-{
-	int i;
+        struct spmi_resource *node,
+        unsigned int type,
+        const char *name) {
+    int i;
 
-	/* if a node is not specified, default to the first node */
-	if (!node)
-		node = &dev->res;
+    /* if a node is not specified, default to the first node */
+    if (!node)
+        node = &dev->res;
 
-	for (i = 0; i < node->num_resources; i++) {
-		struct resource *r = &node->resource[i];
+    for (i = 0; i < node->num_resources; i++) {
+        struct resource *r = &node->resource[i];
 
-		if (type == resource_type(r) && r->name &&
-				!strncmp(r->name, name, SPMI_MAX_RES_NAME))
-			return r;
-	}
-	return NULL;
+        if (type == resource_type(r) && r->name &&
+                !strncmp(r->name, name, SPMI_MAX_RES_NAME))
+            return r;
+    }
+    return NULL;
 }
 EXPORT_SYMBOL_GPL(spmi_get_resource_byname);
 
@@ -94,12 +92,11 @@ EXPORT_SYMBOL_GPL(spmi_get_resource_byname);
  *  -ENXIO on failure.
  */
 int spmi_get_irq(struct spmi_device *dev, struct spmi_resource *node,
-					  unsigned int res_num)
-{
-	struct resource *r = spmi_get_resource(dev, node,
-						IORESOURCE_IRQ, res_num);
+                 unsigned int res_num) {
+    struct resource *r = spmi_get_resource(dev, node,
+                                           IORESOURCE_IRQ, res_num);
 
-	return r ? r->start : -ENXIO;
+    return r ? r->start : -ENXIO;
 }
 EXPORT_SYMBOL_GPL(spmi_get_irq);
 
@@ -112,11 +109,10 @@ EXPORT_SYMBOL_GPL(spmi_get_irq);
  * Returns -ENXIO on failure
  */
 int spmi_get_irq_byname(struct spmi_device *dev,
-			struct spmi_resource *node, const char *name)
-{
-	struct resource *r = spmi_get_resource_byname(dev, node,
-							IORESOURCE_IRQ, name);
-	return r ? r->start : -ENXIO;
+                        struct spmi_resource *node, const char *name) {
+    struct resource *r = spmi_get_resource_byname(dev, node,
+                         IORESOURCE_IRQ, name);
+    return r ? r->start : -ENXIO;
 }
 EXPORT_SYMBOL_GPL(spmi_get_irq_byname);
 
@@ -132,20 +128,19 @@ EXPORT_SYMBOL_GPL(spmi_get_irq_byname);
  * or if the lookup fails.
  */
 struct spmi_resource *spmi_get_dev_container_byname(struct spmi_device *dev,
-						    const char *label)
-{
-	int i;
+        const char *label) {
+    int i;
 
-	if (!label)
-		return NULL;
+    if (!label)
+        return NULL;
 
-	for (i = 0; i < dev->num_dev_node; i++) {
-		struct spmi_resource *r = &dev->dev_node[i];
+    for (i = 0; i < dev->num_dev_node; i++) {
+        struct spmi_resource *r = &dev->dev_node[i];
 
-		if (r && r->label && !strncmp(r->label,
-					label, SPMI_MAX_RES_NAME))
-			return r;
-	}
-	return NULL;
+        if (r && r->label && !strncmp(r->label,
+                                      label, SPMI_MAX_RES_NAME))
+            return r;
+    }
+    return NULL;
 }
 EXPORT_SYMBOL(spmi_get_dev_container_byname);

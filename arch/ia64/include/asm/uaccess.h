@@ -128,7 +128,9 @@ extern long __get_user_unaligned_unknown (void);
 })
 
 #ifdef ASM_SUPPORTED
-  struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 # define __m(x) (*(struct __large_struct __user *)(x))
 
 /* We need to declare the __ex_table section before we can use it in .xdata.  */
@@ -235,18 +237,16 @@ extern void __put_user_unknown (void);
  * Complex access routines
  */
 extern unsigned long __must_check __copy_user (void __user *to, const void __user *from,
-					       unsigned long count);
+        unsigned long count);
 
 static inline unsigned long
-__copy_to_user (void __user *to, const void *from, unsigned long count)
-{
-	return __copy_user(to, (__force void __user *) from, count);
+__copy_to_user (void __user *to, const void *from, unsigned long count) {
+    return __copy_user(to, (__force void __user *) from, count);
 }
 
 static inline unsigned long
-__copy_from_user (void *to, const void __user *from, unsigned long count)
-{
-	return __copy_user((__force void __user *) to, from, count);
+__copy_from_user (void *to, const void __user *from, unsigned long count) {
+    return __copy_user((__force void __user *) to, from, count);
 }
 
 #define __copy_to_user_inatomic		__copy_to_user
@@ -277,11 +277,10 @@ __copy_from_user (void *to, const void __user *from, unsigned long count)
 #define __copy_in_user(to, from, size)	__copy_user((to), (from), (size))
 
 static inline unsigned long
-copy_in_user (void __user *to, const void __user *from, unsigned long n)
-{
-	if (likely(access_ok(VERIFY_READ, from, n) && access_ok(VERIFY_WRITE, to, n)))
-		n = __copy_user(to, from, n);
-	return n;
+copy_in_user (void __user *to, const void __user *from, unsigned long n) {
+    if (likely(access_ok(VERIFY_READ, from, n) && access_ok(VERIFY_WRITE, to, n)))
+        n = __copy_user(to, from, n);
+    return n;
 }
 
 extern unsigned long __do_clear_user (void __user *, unsigned long);
@@ -345,57 +344,54 @@ extern unsigned long __strnlen_user (const char __user *, long);
 #define ARCH_HAS_SEARCH_EXTABLE
 
 struct exception_table_entry {
-	int addr;	/* location-relative address of insn this fixup is for */
-	int cont;	/* location-relative continuation addr.; if bit 2 is set, r9 is set to 0 */
+    int addr;	/* location-relative address of insn this fixup is for */
+    int cont;	/* location-relative continuation addr.; if bit 2 is set, r9 is set to 0 */
 };
 
 extern void ia64_handle_exception (struct pt_regs *regs, const struct exception_table_entry *e);
 extern const struct exception_table_entry *search_exception_tables (unsigned long addr);
 
 static inline int
-ia64_done_with_exception (struct pt_regs *regs)
-{
-	const struct exception_table_entry *e;
-	e = search_exception_tables(regs->cr_iip + ia64_psr(regs)->ri);
-	if (e) {
-		ia64_handle_exception(regs, e);
-		return 1;
-	}
-	return 0;
+ia64_done_with_exception (struct pt_regs *regs) {
+    const struct exception_table_entry *e;
+    e = search_exception_tables(regs->cr_iip + ia64_psr(regs)->ri);
+    if (e) {
+        ia64_handle_exception(regs, e);
+        return 1;
+    }
+    return 0;
 }
 
 #define ARCH_HAS_TRANSLATE_MEM_PTR	1
 static __inline__ char *
-xlate_dev_mem_ptr (unsigned long p)
-{
-	struct page *page;
-	char * ptr;
+xlate_dev_mem_ptr (unsigned long p) {
+    struct page *page;
+    char * ptr;
 
-	page = pfn_to_page(p >> PAGE_SHIFT);
-	if (PageUncached(page))
-		ptr = (char *)p + __IA64_UNCACHED_OFFSET;
-	else
-		ptr = __va(p);
+    page = pfn_to_page(p >> PAGE_SHIFT);
+    if (PageUncached(page))
+        ptr = (char *)p + __IA64_UNCACHED_OFFSET;
+    else
+        ptr = __va(p);
 
-	return ptr;
+    return ptr;
 }
 
 /*
  * Convert a virtual cached kernel memory pointer to an uncached pointer
  */
 static __inline__ char *
-xlate_dev_kmem_ptr (char * p)
-{
-	struct page *page;
-	char * ptr;
+xlate_dev_kmem_ptr (char * p) {
+    struct page *page;
+    char * ptr;
 
-	page = virt_to_page((unsigned long)p);
-	if (PageUncached(page))
-		ptr = (char *)__pa(p) + __IA64_UNCACHED_OFFSET;
-	else
-		ptr = p;
+    page = virt_to_page((unsigned long)p);
+    if (PageUncached(page))
+        ptr = (char *)__pa(p) + __IA64_UNCACHED_OFFSET;
+    else
+        ptr = p;
 
-	return ptr;
+    return ptr;
 }
 
 #endif /* _ASM_IA64_UACCESS_H */

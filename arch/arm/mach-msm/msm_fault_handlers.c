@@ -24,61 +24,59 @@
 } while (0)
 
 static int msm_imp_ext_abort(unsigned long addr, unsigned int fsr,
-			     struct pt_regs *regs)
-{
-	int cpu;
-	unsigned int regval;
-	static unsigned char flush_toggle;
+                             struct pt_regs *regs) {
+    int cpu;
+    unsigned int regval;
+    static unsigned char flush_toggle;
 
-	asm("mrc p15, 7, %0, c15, c0, 1\n" /* read EFSR for fault status */
-	    : "=r" (regval));
-	if (regval == 0x2) {
-		/* Fault was caused by icache parity error. Alternate
-		 * simply retrying the access and flushing the icache. */
-		flush_toggle ^= 1;
-		if (flush_toggle)
-			asm("mcr p15, 0, %0, c7, c5, 0\n"
-				:
-				: "r" (regval)); /* input value is ignored */
-		/* Clear fault in EFSR. */
-		asm("mcr p15, 7, %0, c15, c0, 1\n"
-			:
-			: "r" (regval));
-		/* Clear fault in ADFSR. */
-		regval = 0;
-		asm("mcr p15, 0, %0, c5, c1, 0\n"
-			:
-			: "r" (regval));
-		return 0;
-	}
+    asm("mrc p15, 7, %0, c15, c0, 1\n" /* read EFSR for fault status */
+        : "=r" (regval));
+    if (regval == 0x2) {
+        /* Fault was caused by icache parity error. Alternate
+         * simply retrying the access and flushing the icache. */
+        flush_toggle ^= 1;
+        if (flush_toggle)
+            asm("mcr p15, 0, %0, c7, c5, 0\n"
+                :
+                : "r" (regval)); /* input value is ignored */
+        /* Clear fault in EFSR. */
+        asm("mcr p15, 7, %0, c15, c0, 1\n"
+            :
+            : "r" (regval));
+        /* Clear fault in ADFSR. */
+        regval = 0;
+        asm("mcr p15, 0, %0, c5, c1, 0\n"
+            :
+            : "r" (regval));
+        return 0;
+    }
 
-	MRC(ADFSR,    p15, 0,  c5, c1, 0);
-	MRC(DFSR,     p15, 0,  c5, c0, 0);
-	MRC(ACTLR,    p15, 0,  c1, c0, 1);
-	MRC(EFSR,     p15, 7, c15, c0, 1);
-	MRC(L2SR,     p15, 3, c15, c1, 0);
-	MRC(L2CR0,    p15, 3, c15, c0, 1);
-	MRC(L2CPUESR, p15, 3, c15, c1, 1);
-	MRC(L2CPUCR,  p15, 3, c15, c0, 2);
-	MRC(SPESR,    p15, 1,  c9, c7, 0);
-	MRC(SPCR,     p15, 0,  c9, c7, 0);
-	MRC(DMACHSR,  p15, 1, c11, c0, 0);
-	MRC(DMACHESR, p15, 1, c11, c0, 1);
-	MRC(DMACHCR,  p15, 0, c11, c0, 2);
-	for_each_online_cpu(cpu)
-		pr_info("cpu %d, acpuclk rate: %lu kHz\n", cpu,
-			acpuclk_get_rate(cpu));
+    MRC(ADFSR,    p15, 0,  c5, c1, 0);
+    MRC(DFSR,     p15, 0,  c5, c0, 0);
+    MRC(ACTLR,    p15, 0,  c1, c0, 1);
+    MRC(EFSR,     p15, 7, c15, c0, 1);
+    MRC(L2SR,     p15, 3, c15, c1, 0);
+    MRC(L2CR0,    p15, 3, c15, c0, 1);
+    MRC(L2CPUESR, p15, 3, c15, c1, 1);
+    MRC(L2CPUCR,  p15, 3, c15, c0, 2);
+    MRC(SPESR,    p15, 1,  c9, c7, 0);
+    MRC(SPCR,     p15, 0,  c9, c7, 0);
+    MRC(DMACHSR,  p15, 1, c11, c0, 0);
+    MRC(DMACHESR, p15, 1, c11, c0, 1);
+    MRC(DMACHCR,  p15, 0, c11, c0, 2);
+    for_each_online_cpu(cpu)
+    pr_info("cpu %d, acpuclk rate: %lu kHz\n", cpu,
+            acpuclk_get_rate(cpu));
 
-	return 1;
+    return 1;
 }
 
-static int __init msm_register_fault_handlers(void)
-{
-	/* hook in our handler for imprecise abort for when we get
-	   i-cache parity errors */
-	hook_fault_code(22, msm_imp_ext_abort, SIGBUS, 0,
-			"imprecise external abort");
+static int __init msm_register_fault_handlers(void) {
+    /* hook in our handler for imprecise abort for when we get
+       i-cache parity errors */
+    hook_fault_code(22, msm_imp_ext_abort, SIGBUS, 0,
+                    "imprecise external abort");
 
-	return 0;
+    return 0;
 }
 arch_initcall(msm_register_fault_handlers);

@@ -27,16 +27,16 @@
  * @sbbuf_len - shared buffer size
  */
 struct qseecom_handle {
-	void *dev; /* in/out */
-	unsigned char *sbuf; /* in/out */
-	uint32_t sbuf_len; /* in/out */
+    void *dev; /* in/out */
+    unsigned char *sbuf; /* in/out */
+    uint32_t sbuf_len; /* in/out */
 };
 
 int qseecom_start_app(struct qseecom_handle **handle,
-						char *app_name, uint32_t size);
+                      char *app_name, uint32_t size);
 int qseecom_shutdown_app(struct qseecom_handle **handle);
 int qseecom_send_command(struct qseecom_handle *handle, void *send_buf,
-			uint32_t sbuf_len, void *resp_buf, uint32_t rbuf_len);
+                         uint32_t sbuf_len, void *resp_buf, uint32_t rbuf_len);
 int qseecom_set_bandwidth(struct qseecom_handle *handle, bool high);
 
 #endif /* __QSEECOM_KERNEL_H_ */

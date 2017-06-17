@@ -17,21 +17,21 @@
 #include <media/v4l2-subdev.h>
 
 struct i2c_mux_device {
-	struct platform_device *pdev;
-	struct v4l2_subdev subdev;
-	struct resource *ctl_mem;
-	struct resource *ctl_io;
-	void __iomem *ctl_base;
-	struct resource *rw_mem;
-	struct resource *rw_io;
-	void __iomem *rw_base;
-	struct mutex mutex;
-	unsigned use_count;
+    struct platform_device *pdev;
+    struct v4l2_subdev subdev;
+    struct resource *ctl_mem;
+    struct resource *ctl_io;
+    void __iomem *ctl_base;
+    struct resource *rw_mem;
+    struct resource *rw_io;
+    void __iomem *rw_base;
+    struct mutex mutex;
+    unsigned use_count;
 };
 
 struct i2c_mux_cfg_params {
-	struct v4l2_subdev *subdev;
-	void *parms;
+    struct v4l2_subdev *subdev;
+    void *parms;
 };
 
 #define VIDIOC_MSM_I2C_MUX_CFG \

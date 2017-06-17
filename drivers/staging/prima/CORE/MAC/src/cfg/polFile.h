@@ -110,8 +110,7 @@
 #pragma pack( push )
 #pragma pack( 1 )
 
-typedef struct sPolFileVersion
-{
+typedef struct sPolFileVersion {
 
     unsigned char  MajorVersion;
     unsigned char  MinorVersion;
@@ -121,8 +120,7 @@ typedef struct sPolFileVersion
 } tPolFileVersion;
 
 
-typedef struct sPolFileHeader
-{
+typedef struct sPolFileHeader {
 
     tPolFileVersion FileVersion;
     tPolFileVersion HWCapabilities;
@@ -132,8 +130,7 @@ typedef struct sPolFileHeader
 } tPolFileHeader;
 
 
-typedef enum ePolFileDirTypes
-{
+typedef enum ePolFileDirTypes {
 
     ePOL_DIR_TYPE_BOOTLOADER = 0,
     ePOL_DIR_TYPE_STA_FIRMWARE,
@@ -145,8 +142,7 @@ typedef enum ePolFileDirTypes
 } tPolFileDirTypes;
 
 
-typedef struct sPolFileDirEntry
-{
+typedef struct sPolFileDirEntry {
 
     unsigned int DirEntryType;
     unsigned int DirEntryFileOffset;
@@ -158,12 +154,10 @@ typedef struct sPolFileDirEntry
 #pragma pack( pop )
 
 
-__inline unsigned short polFileChkSum( unsigned short *FileData, unsigned long NumWords )
-{
+__inline unsigned short polFileChkSum( unsigned short *FileData, unsigned long NumWords ) {
     unsigned long Sum;
 
-    for ( Sum = 0; NumWords > 0; NumWords-- )
-    {
+    for ( Sum = 0; NumWords > 0; NumWords-- ) {
 
         Sum += *FileData++;
     }

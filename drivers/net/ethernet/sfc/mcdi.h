@@ -21,14 +21,14 @@
  *	MCDI_STATE_RUNNING.
  */
 enum efx_mcdi_state {
-	MCDI_STATE_QUIESCENT,
-	MCDI_STATE_RUNNING,
-	MCDI_STATE_COMPLETED,
+    MCDI_STATE_QUIESCENT,
+    MCDI_STATE_RUNNING,
+    MCDI_STATE_COMPLETED,
 };
 
 enum efx_mcdi_mode {
-	MCDI_MODE_POLL,
-	MCDI_MODE_EVENTS,
+    MCDI_MODE_POLL,
+    MCDI_MODE_EVENTS,
 };
 
 /**
@@ -46,37 +46,37 @@ enum efx_mcdi_mode {
  * @resplen: Returned payload length
  */
 struct efx_mcdi_iface {
-	atomic_t state;
-	wait_queue_head_t wq;
-	spinlock_t iface_lock;
-	enum efx_mcdi_mode mode;
-	unsigned int credits;
-	unsigned int seqno;
-	unsigned int resprc;
-	size_t resplen;
+    atomic_t state;
+    wait_queue_head_t wq;
+    spinlock_t iface_lock;
+    enum efx_mcdi_mode mode;
+    unsigned int credits;
+    unsigned int seqno;
+    unsigned int resprc;
+    size_t resplen;
 };
 
 struct efx_mcdi_mon {
-	struct efx_buffer dma_buf;
-	struct mutex update_lock;
-	unsigned long last_update;
-	struct device *device;
-	struct efx_mcdi_mon_attribute *attrs;
-	unsigned int n_attrs;
+    struct efx_buffer dma_buf;
+    struct mutex update_lock;
+    unsigned long last_update;
+    struct device *device;
+    struct efx_mcdi_mon_attribute *attrs;
+    unsigned int n_attrs;
 };
 
 extern void efx_mcdi_init(struct efx_nic *efx);
 
 extern int efx_mcdi_rpc(struct efx_nic *efx, unsigned cmd, const u8 *inbuf,
-			size_t inlen, u8 *outbuf, size_t outlen,
-			size_t *outlen_actual);
+                        size_t inlen, u8 *outbuf, size_t outlen,
+                        size_t *outlen_actual);
 
 extern int efx_mcdi_poll_reboot(struct efx_nic *efx);
 extern void efx_mcdi_mode_poll(struct efx_nic *efx);
 extern void efx_mcdi_mode_event(struct efx_nic *efx);
 
 extern void efx_mcdi_process_event(struct efx_channel *channel,
-				   efx_qword_t *event);
+                                   efx_qword_t *event);
 extern void efx_mcdi_sensor_event(struct efx_nic *efx, efx_qword_t *ev);
 
 #define MCDI_PTR2(_buf, _ofst)						\
@@ -115,41 +115,41 @@ extern void efx_mcdi_sensor_event(struct efx_nic *efx, efx_qword_t *ev);
 
 extern void efx_mcdi_print_fwver(struct efx_nic *efx, char *buf, size_t len);
 extern int efx_mcdi_drv_attach(struct efx_nic *efx, bool driver_operating,
-			       bool *was_attached_out);
+                               bool *was_attached_out);
 extern int efx_mcdi_get_board_cfg(struct efx_nic *efx, u8 *mac_address,
-				  u16 *fw_subtype_list, u32 *capabilities);
+                                  u16 *fw_subtype_list, u32 *capabilities);
 extern int efx_mcdi_log_ctrl(struct efx_nic *efx, bool evq, bool uart,
-			     u32 dest_evq);
+                             u32 dest_evq);
 extern int efx_mcdi_nvram_types(struct efx_nic *efx, u32 *nvram_types_out);
 extern int efx_mcdi_nvram_info(struct efx_nic *efx, unsigned int type,
-			       size_t *size_out, size_t *erase_size_out,
-			       bool *protected_out);
+                               size_t *size_out, size_t *erase_size_out,
+                               bool *protected_out);
 extern int efx_mcdi_nvram_update_start(struct efx_nic *efx,
-				       unsigned int type);
+                                       unsigned int type);
 extern int efx_mcdi_nvram_read(struct efx_nic *efx, unsigned int type,
-			       loff_t offset, u8 *buffer, size_t length);
+                               loff_t offset, u8 *buffer, size_t length);
 extern int efx_mcdi_nvram_write(struct efx_nic *efx, unsigned int type,
-				loff_t offset, const u8 *buffer,
-				size_t length);
+                                loff_t offset, const u8 *buffer,
+                                size_t length);
 #define EFX_MCDI_NVRAM_LEN_MAX 128
 extern int efx_mcdi_nvram_erase(struct efx_nic *efx, unsigned int type,
-				loff_t offset, size_t length);
+                                loff_t offset, size_t length);
 extern int efx_mcdi_nvram_update_finish(struct efx_nic *efx,
-					unsigned int type);
+                                        unsigned int type);
 extern int efx_mcdi_nvram_test_all(struct efx_nic *efx);
 extern int efx_mcdi_handle_assertion(struct efx_nic *efx);
 extern void efx_mcdi_set_id_led(struct efx_nic *efx, enum efx_led_mode mode);
 extern int efx_mcdi_reset_port(struct efx_nic *efx);
 extern int efx_mcdi_reset_mc(struct efx_nic *efx);
 extern int efx_mcdi_wol_filter_set_magic(struct efx_nic *efx,
-					 const u8 *mac, int *id_out);
+        const u8 *mac, int *id_out);
 extern int efx_mcdi_wol_filter_get_magic(struct efx_nic *efx, int *id_out);
 extern int efx_mcdi_wol_filter_remove(struct efx_nic *efx, int id);
 extern int efx_mcdi_wol_filter_reset(struct efx_nic *efx);
 extern int efx_mcdi_flush_rxqs(struct efx_nic *efx);
 extern int efx_mcdi_set_mac(struct efx_nic *efx);
 extern int efx_mcdi_mac_stats(struct efx_nic *efx, dma_addr_t dma_addr,
-			      u32 dma_len, int enable, int clear);
+                              u32 dma_len, int enable, int clear);
 extern int efx_mcdi_mac_reconfigure(struct efx_nic *efx);
 extern bool efx_mcdi_mac_check_fault(struct efx_nic *efx);
 
@@ -157,7 +157,9 @@ extern bool efx_mcdi_mac_check_fault(struct efx_nic *efx);
 extern int efx_mcdi_mon_probe(struct efx_nic *efx);
 extern void efx_mcdi_mon_remove(struct efx_nic *efx);
 #else
-static inline int efx_mcdi_mon_probe(struct efx_nic *efx) { return 0; }
+static inline int efx_mcdi_mon_probe(struct efx_nic *efx) {
+    return 0;
+}
 static inline void efx_mcdi_mon_remove(struct efx_nic *efx) {}
 #endif
 

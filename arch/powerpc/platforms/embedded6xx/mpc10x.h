@@ -158,18 +158,18 @@ extern unsigned long			ioremap_base;
 #define	MPC10X_MAPB_EUMB_BASE		MPC10X_MAPA_EUMB_BASE
 
 enum ppc_sys_devices {
-	MPC10X_IIC1,
-	MPC10X_DMA0,
-	MPC10X_DMA1,
-	MPC10X_UART0,
-	MPC10X_UART1,
-	NUM_PPC_SYS_DEVS,
+    MPC10X_IIC1,
+    MPC10X_DMA0,
+    MPC10X_DMA1,
+    MPC10X_UART0,
+    MPC10X_UART1,
+    NUM_PPC_SYS_DEVS,
 };
 
 int mpc10x_bridge_init(struct pci_controller *hose,
-		       uint current_map,
-		       uint new_map,
-		       uint phys_eumb_base);
+                       uint current_map,
+                       uint new_map,
+                       uint phys_eumb_base);
 unsigned long mpc10x_get_mem_size(uint mem_map);
 int mpc10x_enable_store_gathering(struct pci_controller *hose);
 int mpc10x_disable_store_gathering(struct pci_controller *hose);

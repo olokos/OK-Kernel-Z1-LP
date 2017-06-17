@@ -39,8 +39,8 @@ extern unsigned long ppc_tb_freq;
 #define DEFAULT_TB_FREQ		125000000UL
 
 struct div_result {
-	u64 result_high;
-	u64 result_low;
+    u64 result_high;
+    u64 result_low;
 };
 
 /* Accessor functions for the timebase (RTC on 601) registers. */
@@ -58,78 +58,70 @@ struct div_result {
 
 #else
 
-static inline unsigned long get_tbl(void)
-{
+static inline unsigned long get_tbl(void) {
 #if defined(CONFIG_403GCX)
-	unsigned long tbl;
-	asm volatile("mfspr %0, 0x3dd" : "=r" (tbl));
-	return tbl;
+    unsigned long tbl;
+    asm volatile("mfspr %0, 0x3dd" : "=r" (tbl));
+    return tbl;
 #else
-	return mftbl();
+    return mftbl();
 #endif
 }
 
-static inline unsigned int get_tbu(void)
-{
+static inline unsigned int get_tbu(void) {
 #ifdef CONFIG_403GCX
-	unsigned int tbu;
-	asm volatile("mfspr %0, 0x3dc" : "=r" (tbu));
-	return tbu;
+    unsigned int tbu;
+    asm volatile("mfspr %0, 0x3dc" : "=r" (tbu));
+    return tbu;
 #else
-	return mftbu();
+    return mftbu();
 #endif
 }
 #endif /* !CONFIG_PPC64 */
 
-static inline unsigned int get_rtcl(void)
-{
-	unsigned int rtcl;
+static inline unsigned int get_rtcl(void) {
+    unsigned int rtcl;
 
-	asm volatile("mfrtcl %0" : "=r" (rtcl));
-	return rtcl;
+    asm volatile("mfrtcl %0" : "=r" (rtcl));
+    return rtcl;
 }
 
-static inline u64 get_rtc(void)
-{
-	unsigned int hi, lo, hi2;
+static inline u64 get_rtc(void) {
+    unsigned int hi, lo, hi2;
 
-	do {
-		asm volatile("mfrtcu %0; mfrtcl %1; mfrtcu %2"
-			     : "=r" (hi), "=r" (lo), "=r" (hi2));
-	} while (hi2 != hi);
-	return (u64)hi * 1000000000 + lo;
+    do {
+        asm volatile("mfrtcu %0; mfrtcl %1; mfrtcu %2"
+                     : "=r" (hi), "=r" (lo), "=r" (hi2));
+    } while (hi2 != hi);
+    return (u64)hi * 1000000000 + lo;
 }
 
 #ifdef CONFIG_PPC64
-static inline u64 get_tb(void)
-{
-	return mftb();
+static inline u64 get_tb(void) {
+    return mftb();
 }
 #else /* CONFIG_PPC64 */
-static inline u64 get_tb(void)
-{
-	unsigned int tbhi, tblo, tbhi2;
+static inline u64 get_tb(void) {
+    unsigned int tbhi, tblo, tbhi2;
 
-	do {
-		tbhi = get_tbu();
-		tblo = get_tbl();
-		tbhi2 = get_tbu();
-	} while (tbhi != tbhi2);
+    do {
+        tbhi = get_tbu();
+        tblo = get_tbl();
+        tbhi2 = get_tbu();
+    } while (tbhi != tbhi2);
 
-	return ((u64)tbhi << 32) | tblo;
+    return ((u64)tbhi << 32) | tblo;
 }
 #endif /* !CONFIG_PPC64 */
 
-static inline u64 get_tb_or_rtc(void)
-{
-	return __USE_RTC() ? get_rtc() : get_tb();
+static inline u64 get_tb_or_rtc(void) {
+    return __USE_RTC() ? get_rtc() : get_tb();
 }
 
-static inline void set_tb(unsigned int upper, unsigned int lower)
-{
-	mtspr(SPRN_TBWL, 0);
-	mtspr(SPRN_TBWU, upper);
-	mtspr(SPRN_TBWL, lower);
+static inline void set_tb(unsigned int upper, unsigned int lower) {
+    mtspr(SPRN_TBWL, 0);
+    mtspr(SPRN_TBWU, upper);
+    mtspr(SPRN_TBWL, lower);
 }
 
 /* Accessor functions for the decrementer register.
@@ -138,12 +130,11 @@ static inline void set_tb(unsigned int upper, unsigned int lower)
  * in auto-reload mode.  The problem is PIT stops counting when it
  * hits zero.  If it would wrap, we could use it just like a decrementer.
  */
-static inline unsigned int get_dec(void)
-{
+static inline unsigned int get_dec(void) {
 #if defined(CONFIG_40x)
-	return (mfspr(SPRN_PIT));
+    return (mfspr(SPRN_PIT));
 #else
-	return (mfspr(SPRN_DEC));
+    return (mfspr(SPRN_DEC));
 #endif
 }
 
@@ -152,27 +143,25 @@ static inline unsigned int get_dec(void)
  * in when the decrementer generates its interrupt: on the 1 to 0
  * transition for Book E/4xx, but on the 0 to -1 transition for others.
  */
-static inline void set_dec(int val)
-{
+static inline void set_dec(int val) {
 #if defined(CONFIG_40x)
-	mtspr(SPRN_PIT, val);
+    mtspr(SPRN_PIT, val);
 #elif defined(CONFIG_8xx_CPU6)
-	set_dec_cpu6(val - 1);
+    set_dec_cpu6(val - 1);
 #else
 #ifndef CONFIG_BOOKE
-	--val;
+    --val;
 #endif
-	mtspr(SPRN_DEC, val);
+    mtspr(SPRN_DEC, val);
 #endif /* not 40x or 8xx_CPU6 */
 }
 
-static inline unsigned long tb_ticks_since(unsigned long tstamp)
-{
-	if (__USE_RTC()) {
-		int delta = get_rtcl() - (unsigned int) tstamp;
-		return delta < 0 ? delta + 1000000000 : delta;
-	}
-	return get_tbl() - tstamp;
+static inline unsigned long tb_ticks_since(unsigned long tstamp) {
+    if (__USE_RTC()) {
+        int delta = get_rtcl() - (unsigned int) tstamp;
+        return delta < 0 ? delta + 1000000000 : delta;
+    }
+    return get_tbl() - tstamp;
 }
 
 #define mulhwu(x,y) \
@@ -186,12 +175,12 @@ extern u64 mulhdu(u64, u64);
 #endif
 
 extern void div128_by_32(u64 dividend_high, u64 dividend_low,
-			 unsigned divisor, struct div_result *dr);
+                         unsigned divisor, struct div_result *dr);
 
 /* Used to store Processor Utilization register (purr) values */
 
 struct cpu_usage {
-        u64 current_tb;  /* Holds the current purr register values */
+    u64 current_tb;  /* Holds the current purr register values */
 };
 
 DECLARE_PER_CPU(struct cpu_usage, cpu_usage_array);

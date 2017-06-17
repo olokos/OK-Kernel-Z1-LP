@@ -130,18 +130,18 @@
  * command control block specific to the mailbox based controllers
  */
 typedef struct {
-	uint8_t			*raw_mbox;
-	mbox_t			*mbox;
-	mbox64_t		*mbox64;
-	dma_addr_t		mbox_dma_h;
-	mbox_sgl64		*sgl64;
-	mbox_sgl32		*sgl32;
-	dma_addr_t		sgl_dma_h;
-	mraid_passthru_t	*pthru;
-	dma_addr_t		pthru_dma_h;
-	mraid_epassthru_t	*epthru;
-	dma_addr_t		epthru_dma_h;
-	dma_addr_t		buf_dma_h;
+    uint8_t			*raw_mbox;
+    mbox_t			*mbox;
+    mbox64_t		*mbox64;
+    dma_addr_t		mbox_dma_h;
+    mbox_sgl64		*sgl64;
+    mbox_sgl32		*sgl32;
+    dma_addr_t		sgl_dma_h;
+    mraid_passthru_t	*pthru;
+    dma_addr_t		pthru_dma_h;
+    mraid_epassthru_t	*epthru;
+    dma_addr_t		epthru_dma_h;
+    dma_addr_t		buf_dma_h;
 } mbox_ccb_t;
 
 
@@ -186,37 +186,37 @@ typedef struct {
  */
 #define MAX_LD_EXTENDED64	64
 typedef struct {
-	mbox64_t			*una_mbox64;
-	dma_addr_t			una_mbox64_dma;
-	mbox_t				*mbox;
-	mbox64_t			*mbox64;
-	dma_addr_t			mbox_dma;
-	spinlock_t			mailbox_lock;
-	unsigned long			baseport;
-	void __iomem *			baseaddr;
-	struct mraid_pci_blk		mbox_pool[MBOX_MAX_SCSI_CMDS];
-	struct dma_pool			*mbox_pool_handle;
-	struct mraid_pci_blk		epthru_pool[MBOX_MAX_SCSI_CMDS];
-	struct dma_pool			*epthru_pool_handle;
-	struct mraid_pci_blk		sg_pool[MBOX_MAX_SCSI_CMDS];
-	struct dma_pool			*sg_pool_handle;
-	mbox_ccb_t			ccb_list[MBOX_MAX_SCSI_CMDS];
-	mbox_ccb_t			uccb_list[MBOX_MAX_USER_CMDS];
-	mbox64_t			umbox64[MBOX_MAX_USER_CMDS];
+    mbox64_t			*una_mbox64;
+    dma_addr_t			una_mbox64_dma;
+    mbox_t				*mbox;
+    mbox64_t			*mbox64;
+    dma_addr_t			mbox_dma;
+    spinlock_t			mailbox_lock;
+    unsigned long			baseport;
+    void __iomem *			baseaddr;
+    struct mraid_pci_blk		mbox_pool[MBOX_MAX_SCSI_CMDS];
+    struct dma_pool			*mbox_pool_handle;
+    struct mraid_pci_blk		epthru_pool[MBOX_MAX_SCSI_CMDS];
+    struct dma_pool			*epthru_pool_handle;
+    struct mraid_pci_blk		sg_pool[MBOX_MAX_SCSI_CMDS];
+    struct dma_pool			*sg_pool_handle;
+    mbox_ccb_t			ccb_list[MBOX_MAX_SCSI_CMDS];
+    mbox_ccb_t			uccb_list[MBOX_MAX_USER_CMDS];
+    mbox64_t			umbox64[MBOX_MAX_USER_CMDS];
 
-	uint8_t				pdrv_state[MBOX_MAX_PHYSICAL_DRIVES];
-	uint32_t			last_disp;
-	int				hw_error;
-	int				fast_load;
-	uint8_t				channel_class;
-	struct mutex			sysfs_mtx;
-	uioc_t				*sysfs_uioc;
-	mbox64_t			*sysfs_mbox64;
-	caddr_t				sysfs_buffer;
-	dma_addr_t			sysfs_buffer_dma;
-	wait_queue_head_t		sysfs_wait_q;
-	int				random_del_supported;
-	uint16_t			curr_ldmap[MAX_LD_EXTENDED64];
+    uint8_t				pdrv_state[MBOX_MAX_PHYSICAL_DRIVES];
+    uint32_t			last_disp;
+    int				hw_error;
+    int				fast_load;
+    uint8_t				channel_class;
+    struct mutex			sysfs_mtx;
+    uioc_t				*sysfs_uioc;
+    mbox64_t			*sysfs_mbox64;
+    caddr_t				sysfs_buffer;
+    dma_addr_t			sysfs_buffer_dma;
+    wait_queue_head_t		sysfs_wait_q;
+    int				random_del_supported;
+    uint16_t			curr_ldmap[MAX_LD_EXTENDED64];
 } mraid_device_t;
 
 // route to raid device from adapter

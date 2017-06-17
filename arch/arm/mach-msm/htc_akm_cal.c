@@ -1,6 +1,6 @@
 /* arch/arm/mach-msm/htc_akm_cal.c
  *
- * Code to extract compass calibration information from ATAG set up 
+ * Code to extract compass calibration information from ATAG set up
  * by the bootloader.
  *
  * Copyright (C) 2007-2008 HTC Corporation
@@ -30,35 +30,33 @@
 
 static char akm_cal_ram[MAX_CALI_SIZE];
 
-char *get_akm_cal_ram(void)
-{
-	return(akm_cal_ram);
+char *get_akm_cal_ram(void) {
+    return(akm_cal_ram);
 }
 EXPORT_SYMBOL(get_akm_cal_ram);
 
-static int __init parse_tag_akm(const struct tag *tag)
-{
-	unsigned char *dptr = (unsigned char *)(&tag->u);
-	unsigned size;
+static int __init parse_tag_akm(const struct tag *tag) {
+    unsigned char *dptr = (unsigned char *)(&tag->u);
+    unsigned size;
 
-	size = min((tag->hdr.size - 2) * sizeof(__u32), MAX_CALI_SIZE);
+    size = min((tag->hdr.size - 2) * sizeof(__u32), MAX_CALI_SIZE);
 
-	printk(KERN_INFO "AKM Data size = %d , 0x%x, size = %d\n",
-			tag->hdr.size, tag->hdr.tag, size);
+    printk(KERN_INFO "AKM Data size = %d , 0x%x, size = %d\n",
+           tag->hdr.size, tag->hdr.tag, size);
 
 #ifdef ATAG_COMPASS_DEBUG
-	unsigned i;
-	unsigned char *ptr;
+    unsigned i;
+    unsigned char *ptr;
 
-	ptr = dptr;
-	printk(KERN_INFO
-	       "AKM Data size = %d , 0x%x\n",
-	       tag->hdr.size, tag->hdr.tag);
-	for (i = 0; i < size; i++)
-		printk(KERN_INFO "%02x ", *ptr++);
+    ptr = dptr;
+    printk(KERN_INFO
+           "AKM Data size = %d , 0x%x\n",
+           tag->hdr.size, tag->hdr.tag);
+    for (i = 0; i < size; i++)
+        printk(KERN_INFO "%02x ", *ptr++);
 #endif
-	memcpy((void *)akm_cal_ram, (void *)dptr, size);
-	return 0;
+    memcpy((void *)akm_cal_ram, (void *)dptr, size);
+    return 0;
 }
 
 __tagtable(ATAG_AKM8976, parse_tag_akm);

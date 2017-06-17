@@ -16,7 +16,7 @@
 #define SH7760_I2C1_IRQ		63
 
 struct sh7760_i2c_platdata {
-	unsigned int speed_khz;
+    unsigned int speed_khz;
 };
 
 #endif

@@ -96,8 +96,7 @@
 
 #define HDD_WMM_UP_TO_AC_MAP_SIZE 8
 
-const v_U8_t hddWmmUpToAcMap[] =
-{
+const v_U8_t hddWmmUpToAcMap[] = {
     WLANTL_AC_BE,
     WLANTL_AC_BK,
     WLANTL_AC_BK,
@@ -109,8 +108,7 @@ const v_U8_t hddWmmUpToAcMap[] =
 };
 
 //Linux based UP -> AC Mapping
-const v_U8_t hddLinuxUpToAcMap[8] =
-{
+const v_U8_t hddLinuxUpToAcMap[8] = {
     HDD_LINUX_AC_BE,
     HDD_LINUX_AC_BK,
     HDD_LINUX_AC_BK,
@@ -131,8 +129,7 @@ const v_U8_t hddLinuxUpToAcMap[8] =
   @return
   None
 */
-static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
-{
+static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext) {
     hdd_adapter_t* pAdapter = pQosContext->pAdapter;
     WLANTL_ACEnumType acType = pQosContext->acType;
     hdd_wmm_ac_status_t *pAc = NULL;
@@ -142,8 +139,7 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     sme_QosWmmDirType direction;
     v_BOOL_t psb;
 
-    if (acType >= WLANTL_MAX_AC)
-    {
+    if (acType >= WLANTL_MAX_AC) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invalid AC: %d", __func__, acType);
         return;
@@ -152,8 +148,7 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     pAc = &pAdapter->hddWmmStatus.wmmAcStatus[acType];
 
     // The TSPEC must be valid
-    if (pAc->wmmAcTspecValid == VOS_FALSE)
-    {
+    if (pAc->wmmAcTspecValid == VOS_FALSE) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invoked with invalid TSPEC",
                   __func__);
@@ -161,16 +156,11 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     }
 
     // determine the service interval
-    if (pAc->wmmAcTspecInfo.min_service_interval)
-    {
+    if (pAc->wmmAcTspecInfo.min_service_interval) {
         service_interval = pAc->wmmAcTspecInfo.min_service_interval;
-    }
-    else if (pAc->wmmAcTspecInfo.max_service_interval)
-    {
+    } else if (pAc->wmmAcTspecInfo.max_service_interval) {
         service_interval = pAc->wmmAcTspecInfo.max_service_interval;
-    }
-    else
-    {
+    } else {
         // no service interval is present in the TSPEC
         // this is OK, there just won't be U-APSD
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
@@ -189,8 +179,7 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
             (pAc->wmmAcUapsdServiceInterval == service_interval) &&
             (pAc->wmmAcUapsdSuspensionInterval == suspension_interval) &&
             (pAc->wmmAcUapsdDirection == direction) &&
-            (pAc->wmmAcIsUapsdEnabled == psb))
-    {
+            (pAc->wmmAcIsUapsdEnabled == psb)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: No change in U-APSD parameters",
                   __func__);
@@ -198,16 +187,14 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     }
 
     // are we in the appropriate power save modes?
-    if (!sme_IsPowerSaveEnabled(WLAN_HDD_GET_HAL_CTX(pAdapter), ePMC_BEACON_MODE_POWER_SAVE))
-    {
+    if (!sme_IsPowerSaveEnabled(WLAN_HDD_GET_HAL_CTX(pAdapter), ePMC_BEACON_MODE_POWER_SAVE)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: BMPS is not enabled",
                   __func__);
         return;
     }
 
-    if (!sme_IsPowerSaveEnabled(WLAN_HDD_GET_HAL_CTX(pAdapter), ePMC_UAPSD_MODE_POWER_SAVE))
-    {
+    if (!sme_IsPowerSaveEnabled(WLAN_HDD_GET_HAL_CTX(pAdapter), ePMC_UAPSD_MODE_POWER_SAVE)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: U-APSD is not enabled",
                   __func__);
@@ -224,8 +211,7 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
                                      suspension_interval,
                                      direction);
 
-    if ( !VOS_IS_STATUS_SUCCESS( status ) )
-    {
+    if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
         VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                    "%s: Failed to enable U-APSD for AC=%d",
                    __func__, acType );
@@ -259,8 +245,7 @@ static void hdd_wmm_enable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
   @return
   None
 */
-static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
-{
+static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext) {
     hdd_adapter_t* pAdapter = pQosContext->pAdapter;
     WLANTL_ACEnumType acType = pQosContext->acType;
     hdd_wmm_ac_status_t *pAc = NULL;
@@ -270,8 +255,7 @@ static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     v_U8_t uapsd_mask;
     v_U8_t ActiveTspec = INVALID_TSPEC;
 
-    if (acType >= WLANTL_MAX_AC)
-    {
+    if (acType >= WLANTL_MAX_AC) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invalid AC: %d", __func__, acType);
         return;
@@ -280,8 +264,7 @@ static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
     pAc = &pAdapter->hddWmmStatus.wmmAcStatus[acType];
 
     // have we previously enabled UAPSD?
-    if (pAc->wmmAcUapsdInfoValid == VOS_TRUE)
-    {
+    if (pAc->wmmAcUapsdInfoValid == VOS_TRUE) {
         uapsd_mask = (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask;
 
         //Finding uapsd_mask as per AC
@@ -295,10 +278,8 @@ static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
         // UAPSD function is called in hdd_wmm_disable_tl_uapsd. Purpose of
         // calling WLANTL_EnableUAPSDForAC is to update UAPSD intervals to fw
 
-        if(uapsd_mask && !ActiveTspec)
-        {
-            switch(acType)
-            {
+        if(uapsd_mask && !ActiveTspec) {
+            switch(acType) {
             case WLANTL_AC_VO:
                 service_interval = (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdVoSrvIntv;
                 suspension_interval = (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdVoSuspIntv;
@@ -330,14 +311,11 @@ static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
                                              suspension_interval,
                                              pAc->wmmAcTspecInfo.ts_info.direction);
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to update U-APSD params for AC=%d",
                            __func__, acType );
-            }
-            else
-            {
+            } else {
                 // TL no longer has valid UAPSD info
                 pAc->wmmAcUapsdInfoValid = VOS_FALSE;
                 VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
@@ -359,8 +337,7 @@ static void hdd_wmm_disable_tl_uapsd (hdd_wmm_qos_context_t* pQosContext)
   @return
   None
 */
-static void hdd_wmm_free_context (hdd_wmm_qos_context_t* pQosContext)
-{
+static void hdd_wmm_free_context (hdd_wmm_qos_context_t* pQosContext) {
     hdd_adapter_t* pAdapter;
 
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
@@ -368,8 +345,7 @@ static void hdd_wmm_free_context (hdd_wmm_qos_context_t* pQosContext)
               __func__, pQosContext);
 
     if (unlikely((NULL == pQosContext) ||
-                 (HDD_WMM_CTX_MAGIC != pQosContext->magic)))
-    {
+                 (HDD_WMM_CTX_MAGIC != pQosContext->magic))) {
         // must have been freed in another thread
         return;
     }
@@ -405,8 +381,7 @@ static void hdd_wmm_free_context (hdd_wmm_qos_context_t* pQosContext)
   None
 */
 #define MAX_NOTIFY_LEN 50
-static void hdd_wmm_notify_app (hdd_wmm_qos_context_t* pQosContext)
-{
+static void hdd_wmm_notify_app (hdd_wmm_qos_context_t* pQosContext) {
     hdd_adapter_t* pAdapter;
     union iwreq_data wrqu;
     char buf[MAX_NOTIFY_LEN+1];
@@ -416,8 +391,7 @@ static void hdd_wmm_notify_app (hdd_wmm_qos_context_t* pQosContext)
               __func__, pQosContext);
 
     if (unlikely((NULL == pQosContext) ||
-                 (HDD_WMM_CTX_MAGIC != pQosContext->magic)))
-    {
+                 (HDD_WMM_CTX_MAGIC != pQosContext->magic))) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invalid QoS Context",
                   __func__);
@@ -459,23 +433,20 @@ static void hdd_wmm_notify_app (hdd_wmm_qos_context_t* pQosContext)
   None
 */
 static v_BOOL_t hdd_wmm_is_access_allowed(hdd_adapter_t* pAdapter,
-        hdd_wmm_ac_status_t* pAc)
-{
+        hdd_wmm_ac_status_t* pAc) {
     // if we don't want QoS or the AP doesn't support QoS
     // or we don't want to do implicit QoS
     // or if AP doesn't require admission for this AC
     // then we have access
     if (!hdd_wmm_is_active(pAdapter) ||
             !(WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->bImplicitQosEnabled ||
-            !pAc->wmmAcAccessRequired)
-    {
+            !pAc->wmmAcAccessRequired) {
         return VOS_TRUE;
     }
 
     // if implicit QoS has already completed, successfully or not,
     // then access is allowed
-    if (pAc->wmmAcAccessGranted || pAc->wmmAcAccessFailed)
-    {
+    if (pAc->wmmAcAccessGranted || pAc->wmmAcAccessFailed) {
         return VOS_TRUE;
     }
 
@@ -483,15 +454,13 @@ static v_BOOL_t hdd_wmm_is_access_allowed(hdd_adapter_t* pAdapter,
     // however explicit QoS may have completed and we'll have
     // a Tspec
     // if we don't have a Tspec then access is not allowed
-    if (!pAc->wmmAcTspecValid)
-    {
+    if (!pAc->wmmAcTspecValid) {
         return VOS_FALSE;
     }
 
     // we have a Tspec -- does it allow upstream or bidirectional traffic?
     // if it only allows downstream traffic then access is not allowed
-    if (pAc->wmmAcTspecInfo.ts_info.direction == SME_QOS_WMM_TS_DIR_DOWNLINK)
-    {
+    if (pAc->wmmAcTspecInfo.ts_info.direction == SME_QOS_WMM_TS_DIR_DOWNLINK) {
         return VOS_FALSE;
     }
 
@@ -511,8 +480,7 @@ static v_BOOL_t hdd_wmm_is_access_allowed(hdd_adapter_t* pAdapter,
 
   @return            : NONE
 */
-void hdd_wmm_inactivity_timer_cb( v_PVOID_t pUserData )
-{
+void hdd_wmm_inactivity_timer_cb( v_PVOID_t pUserData ) {
     hdd_wmm_qos_context_t* pQosContext = (hdd_wmm_qos_context_t*)pUserData;
     hdd_adapter_t* pAdapter;
     hdd_wmm_ac_status_t *pAc;
@@ -530,29 +498,22 @@ void hdd_wmm_inactivity_timer_cb( v_PVOID_t pUserData )
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_WARN,
               FL("WMM inactivity Timer for AC=%d, currentCnt=%d, prevCnt=%d"),
               acType, (int)currentTrafficCnt, (int)pAc->wmmPrevTrafficCnt);
-    if (pAc->wmmPrevTrafficCnt == currentTrafficCnt)
-    {
+    if (pAc->wmmPrevTrafficCnt == currentTrafficCnt) {
         // If there is no traffic activity, delete the TSPEC for this AC
         status = hdd_wmm_delts(pAdapter, pQosContext->handle);
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_WARN,
                    FL("Deleted TS on AC %d, due to inactivity with status = %d!!!"),
                    acType, status);
-    }
-    else
-    {
+    } else {
         pAc->wmmPrevTrafficCnt = currentTrafficCnt;
-        if (pAc->wmmInactivityTimer.state == VOS_TIMER_STATE_STOPPED)
-        {
+        if (pAc->wmmInactivityTimer.state == VOS_TIMER_STATE_STOPPED) {
             // Restart the timer
             vos_status = vos_timer_start(&pAc->wmmInactivityTimer, pAc->wmmInactivityTime);
-            if (!VOS_IS_STATUS_SUCCESS(vos_status))
-            {
+            if (!VOS_IS_STATUS_SUCCESS(vos_status)) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                            FL("Restarting inactivity timer failed on AC %d"), acType);
             }
-        }
-        else
-        {
+        } else {
             VOS_ASSERT(vos_timer_getCurrentState(
                            &pAc->wmmInactivityTimer) == VOS_TIMER_STATE_STOPPED);
         }
@@ -573,8 +534,7 @@ void hdd_wmm_inactivity_timer_cb( v_PVOID_t pUserData )
   @return              : VOS_STATUS_E_FAILURE
                          VOS_STATUS_SUCCESS
 */
-VOS_STATUS hdd_wmm_enable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext, v_U32_t inactivityTime)
-{
+VOS_STATUS hdd_wmm_enable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext, v_U32_t inactivityTime) {
     VOS_STATUS vos_status = VOS_STATUS_E_FAILURE;
     hdd_adapter_t* pAdapter = pQosContext->pAdapter;
     WLANTL_ACEnumType acType = pQosContext->acType;
@@ -591,8 +551,7 @@ VOS_STATUS hdd_wmm_enable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext, v
                      VOS_TIMER_TYPE_SW,
                      hdd_wmm_inactivity_timer_cb,
                      (v_PVOID_t)pQosContext );
-    if ( !VOS_IS_STATUS_SUCCESS(vos_status))
-    {
+    if ( !VOS_IS_STATUS_SUCCESS(vos_status)) {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    FL("Initializing inactivity timer failed on AC %d"), acType);
         return vos_status;
@@ -602,8 +561,7 @@ VOS_STATUS hdd_wmm_enable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext, v
     vos_status = vos_timer_start(
                      &pAc->wmmInactivityTimer,
                      inactivityTime);
-    if ( !VOS_IS_STATUS_SUCCESS(vos_status))
-    {
+    if ( !VOS_IS_STATUS_SUCCESS(vos_status)) {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    FL("Starting inactivity timer failed on AC %d"), acType);
         return vos_status;
@@ -625,8 +583,7 @@ VOS_STATUS hdd_wmm_enable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext, v
   @return              : VOS_STATUS_E_FAILURE
                          VOS_STATUS_SUCCESS
 */
-VOS_STATUS hdd_wmm_disable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext)
-{
+VOS_STATUS hdd_wmm_disable_inactivity_timer(hdd_wmm_qos_context_t* pQosContext) {
     hdd_adapter_t* pAdapter = pQosContext->pAdapter;
     WLANTL_ACEnumType acType = pQosContext->acType;
     hdd_wmm_ac_status_t *pAc  = &pAdapter->hddWmmStatus.wmmAcStatus[acType];
@@ -660,8 +617,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                         void * hddCtx,
                                         sme_QosWmmTspecInfo* pCurrentQosInfo,
                                         sme_QosStatusType smeStatus,
-                                        v_U32_t qosFlowId)
-{
+                                        v_U32_t qosFlowId) {
     hdd_wmm_qos_context_t* pQosContext = hddCtx;
     hdd_adapter_t* pAdapter;
     WLANTL_ACEnumType acType;
@@ -673,8 +629,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
               __func__, pQosContext);
 
     if (unlikely((NULL == pQosContext) ||
-                 (HDD_WMM_CTX_MAGIC != pQosContext->magic)))
-    {
+                 (HDD_WMM_CTX_MAGIC != pQosContext->magic))) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invalid QoS Context",
                   __func__);
@@ -689,8 +644,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
               "%s: status %d flowid %d info %p",
               __func__, smeStatus, qosFlowId, pCurrentQosInfo);
 
-    switch (smeStatus)
-    {
+    switch (smeStatus) {
 
     case SME_QOS_STATUS_SETUP_SUCCESS_IND:
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
@@ -699,16 +653,14 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
         // there will always be a TSPEC returned with this status, even if
         // a TSPEC is not exchanged OTA
-        if (pCurrentQosInfo)
-        {
+        if (pCurrentQosInfo) {
             pAc->wmmAcTspecValid = VOS_TRUE;
             memcpy(&pAc->wmmAcTspecInfo,
                    pCurrentQosInfo,
                    sizeof(pAc->wmmAcTspecInfo));
         }
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL for TL AC %d",
@@ -725,15 +677,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -745,8 +694,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
 #ifdef FEATURE_WLAN_ESE
         // Check if the inactivity interval is specified
-        if (pCurrentQosInfo && pCurrentQosInfo->inactivity_interval)
-        {
+        if (pCurrentQosInfo && pCurrentQosInfo->inactivity_interval) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Inactivity timer value = %d for AC=%d",
                       __func__, pCurrentQosInfo->inactivity_interval, acType);
@@ -764,8 +712,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   "%s: Setup is complete (U-APSD set previously)",
                   __func__);
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL",
@@ -782,15 +729,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -808,8 +752,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   __func__);
         // QoS setup failed
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL",
@@ -826,15 +769,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -859,8 +799,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   __func__);
         // QoS setup failed
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL",
@@ -877,15 +816,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -900,8 +836,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                    "%s: Setup failed, not a QoS AP",
                    __func__);
-        if ((!HDD_WMM_HANDLE_IMPLICIT) == pQosContext->handle)
-        {
+        if ((!HDD_WMM_HANDLE_IMPLICIT) == pQosContext->handle) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -923,16 +858,14 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: Setup modified",
                   __func__);
-        if (pCurrentQosInfo)
-        {
+        if (pCurrentQosInfo) {
             // update the TSPEC
             pAc->wmmAcTspecValid = VOS_TRUE;
             memcpy(&pAc->wmmAcTspecInfo,
                    pCurrentQosInfo,
                    sizeof(pAc->wmmAcTspecInfo));
 
-            if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-            {
+            if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
                 VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                           "%s: Explicit Qos, notifying userspace",
                           __func__);
@@ -948,8 +881,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         break;
 
     case SME_QOS_STATUS_SETUP_SUCCESS_NO_ACM_NO_APSD_RSP:
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL",
@@ -965,15 +897,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -993,8 +922,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   "%s: Setup successful but U-APSD failed",
                   __func__);
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
 
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Implicit Qos, notifying TL",
@@ -1014,15 +942,12 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                                            (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                            acType );
 
-            if ( !VOS_IS_STATUS_SUCCESS( status ) )
-            {
+            if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                            "%s: Failed to signal TL for AC=%d",
                            __func__, acType );
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -1042,8 +967,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   "%s: Release is complete",
                   __func__);
 
-        if (pCurrentQosInfo)
-        {
+        if (pCurrentQosInfo) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: flows still active",
                       __func__);
@@ -1056,9 +980,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
             // need to tell TL to update its UAPSD handling
             hdd_wmm_enable_tl_uapsd(pQosContext);
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: last flow",
                       __func__);
@@ -1070,8 +992,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
             hdd_wmm_disable_tl_uapsd(pQosContext);
         }
 
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -1091,8 +1012,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
                   __func__);
 
         // we don't need to update our state or TL since nothing has changed
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -1115,14 +1035,11 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         // need to tell TL to update its UAPSD handling
         hdd_wmm_disable_tl_uapsd(pQosContext);
 
-        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT == pQosContext->handle) {
             // we no longer have implicit access granted
             pAc->wmmAcAccessGranted = VOS_FALSE;
             pAc->wmmAcAccessFailed = VOS_FALSE;
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                       "%s: Explicit Qos, notifying userspace",
                       __func__);
@@ -1147,8 +1064,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Release Invalid Params",
                   __func__);
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_RELEASE_FAILED_BAD_PARAM;
             hdd_wmm_notify_app(pQosContext);
@@ -1162,16 +1078,14 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
         // there will always be a TSPEC returned with this status, even if
         // a TSPEC is not exchanged OTA
-        if (pCurrentQosInfo)
-        {
+        if (pCurrentQosInfo) {
             pAc->wmmAcTspecValid = VOS_TRUE;
             memcpy(&pAc->wmmAcTspecInfo,
                    pCurrentQosInfo,
                    sizeof(pAc->wmmAcTspecInfo));
         }
 
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_SUCCESS;
             hdd_wmm_notify_app(pQosContext);
@@ -1183,8 +1097,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         break;
 
     case SME_QOS_STATUS_MODIFY_SETUP_SUCCESS_APSD_SET_ALREADY:
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_SUCCESS_NO_ACM_UAPSD_EXISTING;
             hdd_wmm_notify_app(pQosContext);
@@ -1195,8 +1108,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         // the flow modification failed so we'll leave in place
         // whatever existed beforehand
 
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_FAILED;
             hdd_wmm_notify_app(pQosContext);
@@ -1213,8 +1125,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
     case SME_QOS_STATUS_MODIFY_SETUP_SUCCESS_NO_ACM_NO_APSD_RSP:
         // the flow modification was successful but no QoS changes required
 
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_SUCCESS_NO_ACM_NO_UAPSD;
             hdd_wmm_notify_app(pQosContext);
@@ -1223,8 +1134,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
     case SME_QOS_STATUS_MODIFY_SETUP_INVALID_PARAMS_RSP:
         // invalid params -- notify the application
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_FAILED_BAD_PARAM;
             hdd_wmm_notify_app(pQosContext);
@@ -1243,8 +1153,7 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
         // QoS modification was successful but setting U=APSD failed.
         // This will always be an explicit QoS instance, so all we can
         // do is notify the application and let it clean up.
-        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle)
-        {
+        if (HDD_WMM_HANDLE_IMPLICIT != pQosContext->handle) {
             // this was triggered by an application
             pQosContext->lastStatus = HDD_WLAN_WMM_STATUS_MODIFY_UAPSD_SET_FAILED;
             hdd_wmm_notify_app(pQosContext);
@@ -1301,16 +1210,13 @@ static eHalStatus hdd_wmm_sme_callback (tHalHandle hHal,
 
   @return             : Zero on success, appropriate error on failure.
   =======================================================================*/
-int hdd_wmmps_helper(hdd_adapter_t *pAdapter, tANI_U8 *ptr)
-{
-    if (NULL == pAdapter)
-    {
+int hdd_wmmps_helper(hdd_adapter_t *pAdapter, tANI_U8 *ptr) {
+    if (NULL == pAdapter) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: pAdapter is NULL", __func__);
         return -EINVAL;
     }
-    if (NULL == ptr)
-    {
+    if (NULL == ptr) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: ptr is NULL", __func__);
         return -EINVAL;
@@ -1330,8 +1236,7 @@ int hdd_wmmps_helper(hdd_adapter_t *pAdapter, tANI_U8 *ptr)
 
   @return         : void
   ===========================================================================*/
-static void hdd_wmm_do_implicit_qos(struct work_struct *work)
-{
+static void hdd_wmm_do_implicit_qos(struct work_struct *work) {
     hdd_wmm_qos_context_t* pQosContext =
         container_of(work, hdd_wmm_qos_context_t, wmmAcSetupImplicitQos);
     hdd_adapter_t* pAdapter;
@@ -1347,8 +1252,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
               "%s: Entered, context %p",
               __func__, pQosContext);
 
-    if (unlikely(HDD_WMM_CTX_MAGIC != pQosContext->magic))
-    {
+    if (unlikely(HDD_WMM_CTX_MAGIC != pQosContext->magic)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Invalid QoS Context",
                   __func__);
@@ -1363,8 +1267,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
               "%s: pAdapter %p acType %d",
               __func__, pAdapter, acType);
 
-    if (!pAc->wmmAcAccessNeeded)
-    {
+    if (!pAc->wmmAcAccessNeeded) {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: AC %d doesn't need service",
                   __func__, acType);
@@ -1380,13 +1283,11 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
 
     qosInfo.ts_info.psb = pAdapter->configuredPsb;
 
-    switch (acType)
-    {
+    switch (acType) {
     case WLANTL_AC_VO:
         qosInfo.ts_info.up = SME_QOS_WMM_UP_VO;
         /* Check if there is any valid configuration from framework */
-        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb)
-        {
+        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb) {
             qosInfo.ts_info.psb = ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask &
                                    SME_QOS_UAPSD_VO) ? 1 : 0;
         }
@@ -1402,8 +1303,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
     case WLANTL_AC_VI:
         qosInfo.ts_info.up = SME_QOS_WMM_UP_VI;
         /* Check if there is any valid configuration from framework */
-        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb)
-        {
+        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb) {
             qosInfo.ts_info.psb = ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask &
                                    SME_QOS_UAPSD_VI) ? 1 : 0;
         }
@@ -1419,8 +1319,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
     case WLANTL_AC_BE:
         qosInfo.ts_info.up = SME_QOS_WMM_UP_BE;
         /* Check if there is any valid configuration from framework */
-        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb)
-        {
+        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb) {
             qosInfo.ts_info.psb = ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask &
                                    SME_QOS_UAPSD_BE) ? 1 : 0;
         }
@@ -1436,8 +1335,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
     case WLANTL_AC_BK:
         qosInfo.ts_info.up = SME_QOS_WMM_UP_BK;
         /* Check if there is any valid configuration from framework */
-        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb)
-        {
+        if (HDD_PSB_CFG_INVALID == pAdapter->configuredPsb) {
             qosInfo.ts_info.psb = ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask &
                                    SME_QOS_UAPSD_BK) ? 1 : 0;
         }
@@ -1460,8 +1358,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
 #endif
     qosInfo.ts_info.burst_size_defn = (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->burstSizeDefinition;
 
-    switch ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->tsInfoAckPolicy)
-    {
+    switch ((WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->tsInfoAckPolicy) {
     case HDD_WLAN_WMM_TS_INFO_ACK_POLICY_NORMAL_ACK:
         qosInfo.ts_info.ack_policy = SME_QOS_WMM_TS_ACK_POLICY_NORMAL_ACK;
         break;
@@ -1475,10 +1372,8 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
         qosInfo.ts_info.ack_policy = SME_QOS_WMM_TS_ACK_POLICY_NORMAL_ACK;
     }
 
-    if(qosInfo.ts_info.ack_policy == SME_QOS_WMM_TS_ACK_POLICY_HT_IMMEDIATE_BLOCK_ACK)
-    {
-        if(!sme_QosIsTSInfoAckPolicyValid((tpAniSirGlobal)WLAN_HDD_GET_HAL_CTX(pAdapter), &qosInfo, pAdapter->sessionId))
-        {
+    if(qosInfo.ts_info.ack_policy == SME_QOS_WMM_TS_ACK_POLICY_HT_IMMEDIATE_BLOCK_ACK) {
+        if(!sme_QosIsTSInfoAckPolicyValid((tpAniSirGlobal)WLAN_HDD_GET_HAL_CTX(pAdapter), &qosInfo, pAdapter->sessionId)) {
             qosInfo.ts_info.ack_policy = SME_QOS_WMM_TS_ACK_POLICY_NORMAL_ACK;
         }
     }
@@ -1501,8 +1396,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
               __func__, smeStatus, pQosContext->qosFlowId);
 
     // need to check the return values and act appropriately
-    switch (smeStatus)
-    {
+    switch (smeStatus) {
     case SME_QOS_STATUS_SETUP_REQ_PENDING_RSP:
     case SME_QOS_STATUS_SETUP_SUCCESS_IND_APSD_PENDING:
         // setup is pending, so no more work to do now.
@@ -1542,8 +1436,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
                                        (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                        acType );
 
-        if ( !VOS_IS_STATUS_SUCCESS( status ) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
             VOS_TRACE( VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                        "%s: Failed to signal TL for AC=%d",
                        __func__, acType );
@@ -1573,8 +1466,7 @@ static void hdd_wmm_do_implicit_qos(struct work_struct *work)
                   : other values if failure
 
   ===========================================================================*/
-VOS_STATUS hdd_wmm_init ( hdd_adapter_t *pAdapter )
-{
+VOS_STATUS hdd_wmm_init ( hdd_adapter_t *pAdapter ) {
     sme_QosWmmUpType* hddWmmDscpToUpMap = pAdapter->hddWmmDscpToUpMap;
     v_U8_t dscp;
 
@@ -1582,8 +1474,7 @@ VOS_STATUS hdd_wmm_init ( hdd_adapter_t *pAdapter )
               "%s: Entered", __func__);
 
     // DSCP to User Priority Lookup Table
-    for (dscp = 0; dscp <= WLAN_HDD_MAX_DSCP; dscp++)
-    {
+    for (dscp = 0; dscp <= WLAN_HDD_MAX_DSCP; dscp++) {
         hddWmmDscpToUpMap[dscp] = SME_QOS_WMM_UP_BE;
     }
     hddWmmDscpToUpMap[8]  = SME_QOS_WMM_UP_BK;
@@ -1607,8 +1498,7 @@ VOS_STATUS hdd_wmm_init ( hdd_adapter_t *pAdapter )
                   : other values if failure
 
   ===========================================================================*/
-VOS_STATUS hdd_wmm_adapter_init( hdd_adapter_t *pAdapter )
-{
+VOS_STATUS hdd_wmm_adapter_init( hdd_adapter_t *pAdapter ) {
     hdd_wmm_ac_status_t *pAcStatus;
     WLANTL_ACEnumType acType;
 
@@ -1619,8 +1509,7 @@ VOS_STATUS hdd_wmm_adapter_init( hdd_adapter_t *pAdapter )
     INIT_LIST_HEAD(&pAdapter->hddWmmStatus.wmmContextList);
     mutex_init(&pAdapter->hddWmmStatus.wmmLock);
 
-    for (acType = 0; acType < WLANTL_MAX_AC; acType++)
-    {
+    for (acType = 0; acType < WLANTL_MAX_AC; acType++) {
         pAcStatus = &pAdapter->hddWmmStatus.wmmAcStatus[acType];
         pAcStatus->wmmAcAccessRequired = VOS_FALSE;
         pAcStatus->wmmAcAccessNeeded = VOS_FALSE;
@@ -1647,14 +1536,12 @@ VOS_STATUS hdd_wmm_adapter_init( hdd_adapter_t *pAdapter )
                   : other values if failure
 
   ===========================================================================*/
-VOS_STATUS hdd_wmm_adapter_clear( hdd_adapter_t *pAdapter )
-{
+VOS_STATUS hdd_wmm_adapter_clear( hdd_adapter_t *pAdapter ) {
     hdd_wmm_ac_status_t *pAcStatus;
     WLANTL_ACEnumType acType;
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
               "%s: Entered", __func__);
-    for (acType = 0; acType < WLANTL_MAX_AC; acType++)
-    {
+    for (acType = 0; acType < WLANTL_MAX_AC; acType++) {
         pAcStatus = &pAdapter->hddWmmStatus.wmmAcStatus[acType];
         pAcStatus->wmmAcAccessRequired = VOS_FALSE;
         pAcStatus->wmmAcAccessNeeded = VOS_FALSE;
@@ -1678,16 +1565,14 @@ VOS_STATUS hdd_wmm_adapter_clear( hdd_adapter_t *pAdapter )
                   : other values if failure
 
   ===========================================================================*/
-VOS_STATUS hdd_wmm_adapter_close ( hdd_adapter_t* pAdapter )
-{
+VOS_STATUS hdd_wmm_adapter_close ( hdd_adapter_t* pAdapter ) {
     hdd_wmm_qos_context_t* pQosContext;
 
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
               "%s: Entered", __func__);
 
     // free any context records that we still have linked
-    while (!list_empty(&pAdapter->hddWmmStatus.wmmContextList))
-    {
+    while (!list_empty(&pAdapter->hddWmmStatus.wmmContextList)) {
         pQosContext = list_first_entry(&pAdapter->hddWmmStatus.wmmContextList,
                                        hdd_wmm_qos_context_t, node);
 #ifdef FEATURE_WLAN_ESE
@@ -1695,8 +1580,7 @@ VOS_STATUS hdd_wmm_adapter_close ( hdd_adapter_t* pAdapter )
 #endif
 #ifdef WLAN_OPEN_SOURCE
         if (pQosContext->handle == HDD_WMM_HANDLE_IMPLICIT
-                && pQosContext->magic == HDD_WMM_CTX_MAGIC)
-        {
+                && pQosContext->magic == HDD_WMM_CTX_MAGIC) {
 
             cancel_work_sync(&pQosContext->wmmAcSetupImplicitQos);
         }
@@ -1715,8 +1599,7 @@ VOS_STATUS hdd_wmm_adapter_close ( hdd_adapter_t* pAdapter )
   @return         : VOS_TRUE if the OS packet is DHCP packet
                   : otherwise VOS_FALSE
   ===========================================================================*/
-v_BOOL_t hdd_is_dhcp_packet(struct sk_buff *skb)
-{
+v_BOOL_t hdd_is_dhcp_packet(struct sk_buff *skb) {
     if (*((u16*)((u8*)skb->data+34)) == DHCP_SOURCE_PORT ||
             *((u16*)((u8*)skb->data+34)) == DHCP_DESTINATION_PORT)
         return VOS_TRUE;
@@ -1732,8 +1615,7 @@ v_BOOL_t hdd_is_dhcp_packet(struct sk_buff *skb)
   @return         : VOS_TRUE if the OS packet is an Eapol or a Wapi packet
                   : otherwise VOS_FALSE
   ===========================================================================*/
-v_BOOL_t hdd_skb_is_eapol_or_wai_packet(struct sk_buff *skb)
-{
+v_BOOL_t hdd_skb_is_eapol_or_wai_packet(struct sk_buff *skb) {
     if ((*((u16*)((u8*)skb->data+HDD_ETHERTYPE_802_1_X_FRAME_OFFSET))
             == vos_cpu_to_be16(HDD_ETHERTYPE_802_1_X))
 #ifdef FEATURE_WLAN_WAPI
@@ -1759,8 +1641,7 @@ v_BOOL_t hdd_skb_is_eapol_or_wai_packet(struct sk_buff *skb)
 v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                                 struct sk_buff *skb,
                                 WLANTL_ACEnumType* pAcType,
-                                sme_QosWmmUpType *pUserPri)
-{
+                                sme_QosWmmUpType *pUserPri) {
     unsigned char * pPkt;
     union generic_ethhdr *pHdr;
     struct iphdr *pIpHdr;
@@ -1786,10 +1667,8 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
               __func__, pHdr->eth_II.h_proto);
 #endif // HDD_WMM_DEBUG
 
-    if (HDD_WMM_CLASSIFICATION_DSCP == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->PktClassificationBasis)
-    {
-        if (pHdr->eth_II.h_proto == htons(ETH_P_IP))
-        {
+    if (HDD_WMM_CLASSIFICATION_DSCP == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->PktClassificationBasis) {
+        if (pHdr->eth_II.h_proto == htons(ETH_P_IP)) {
             // case 1: Ethernet II IP packet
             pIpHdr = (struct iphdr *)&pPkt[sizeof(pHdr->eth_II)];
             tos = pIpHdr->tos;
@@ -1799,13 +1678,11 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                       __func__, tos);
 #endif // HDD_WMM_DEBUG
 
-        }
-        else if ((ntohs(pHdr->eth_II.h_proto) < WLAN_MIN_PROTO) &&
-                 (pHdr->eth_8023.h_snap.dsap == WLAN_SNAP_DSAP) &&
-                 (pHdr->eth_8023.h_snap.ssap == WLAN_SNAP_SSAP) &&
-                 (pHdr->eth_8023.h_snap.ctrl == WLAN_SNAP_CTRL) &&
-                 (pHdr->eth_8023.h_proto == htons(ETH_P_IP)))
-        {
+        } else if ((ntohs(pHdr->eth_II.h_proto) < WLAN_MIN_PROTO) &&
+                   (pHdr->eth_8023.h_snap.dsap == WLAN_SNAP_DSAP) &&
+                   (pHdr->eth_8023.h_snap.ssap == WLAN_SNAP_SSAP) &&
+                   (pHdr->eth_8023.h_snap.ctrl == WLAN_SNAP_CTRL) &&
+                   (pHdr->eth_8023.h_proto == htons(ETH_P_IP))) {
             // case 2: 802.3 LLC/SNAP IP packet
             pIpHdr = (struct iphdr *)&pPkt[sizeof(pHdr->eth_8023)];
             tos = pIpHdr->tos;
@@ -1814,13 +1691,10 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                       "%s: 802.3 LLC/SNAP IP Packet, tos is %d",
                       __func__, tos);
 #endif // HDD_WMM_DEBUG
-        }
-        else if (pHdr->eth_II.h_proto == htons(ETH_P_8021Q))
-        {
+        } else if (pHdr->eth_II.h_proto == htons(ETH_P_8021Q)) {
             // VLAN tagged
 
-            if (pHdr->eth_IIv.h_vlan_encapsulated_proto == htons(ETH_P_IP))
-            {
+            if (pHdr->eth_IIv.h_vlan_encapsulated_proto == htons(ETH_P_IP)) {
                 // case 3: Ethernet II vlan-tagged IP packet
                 pIpHdr = (struct iphdr *)&pPkt[sizeof(pHdr->eth_IIv)];
                 tos = pIpHdr->tos;
@@ -1829,13 +1703,11 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                           "%s: Ethernet II VLAN tagged IP Packet, tos is %d",
                           __func__, tos);
 #endif // HDD_WMM_DEBUG
-            }
-            else if ((ntohs(pHdr->eth_IIv.h_vlan_encapsulated_proto) < WLAN_MIN_PROTO) &&
-                     (pHdr->eth_8023v.h_snap.dsap == WLAN_SNAP_DSAP) &&
-                     (pHdr->eth_8023v.h_snap.ssap == WLAN_SNAP_SSAP) &&
-                     (pHdr->eth_8023v.h_snap.ctrl == WLAN_SNAP_CTRL) &&
-                     (pHdr->eth_8023v.h_proto == htons(ETH_P_IP)))
-            {
+            } else if ((ntohs(pHdr->eth_IIv.h_vlan_encapsulated_proto) < WLAN_MIN_PROTO) &&
+                       (pHdr->eth_8023v.h_snap.dsap == WLAN_SNAP_DSAP) &&
+                       (pHdr->eth_8023v.h_snap.ssap == WLAN_SNAP_SSAP) &&
+                       (pHdr->eth_8023v.h_snap.ctrl == WLAN_SNAP_CTRL) &&
+                       (pHdr->eth_8023v.h_proto == htons(ETH_P_IP))) {
                 // case 4: 802.3 LLC/SNAP vlan-tagged IP packet
                 pIpHdr = (struct iphdr *)&pPkt[sizeof(pHdr->eth_8023v)];
                 tos = pIpHdr->tos;
@@ -1844,9 +1716,7 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                           "%s: 802.3 LLC/SNAP VLAN tagged IP Packet, tos is %d",
                           __func__, tos);
 #endif // HDD_WMM_DEBUG
-            }
-            else
-            {
+            } else {
                 // default
 #ifdef HDD_WMM_DEBUG
                 VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_WARN,
@@ -1855,9 +1725,7 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
 #endif // HDD_WMM_DEBUG
                 tos = 0;
             }
-        }
-        else
-        {
+        } else {
             // default
 #ifdef HDD_WMM_DEBUG
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_WARN,
@@ -1880,11 +1748,8 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                   __func__, tos, dscp, userPri);
 #endif // HDD_WMM_DEBUG
 
-    }
-    else if (HDD_WMM_CLASSIFICATION_802_1Q == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->PktClassificationBasis)
-    {
-        if (pHdr->eth_IIv.h_vlan_proto == htons(ETH_P_8021Q))
-        {
+    } else if (HDD_WMM_CLASSIFICATION_802_1Q == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->PktClassificationBasis) {
+        if (pHdr->eth_IIv.h_vlan_proto == htons(ETH_P_8021Q)) {
             // VLAN tagged
             userPri = (ntohs(pHdr->eth_IIv.h_vlan_TCI)>>13) & 0x7;
 #ifdef HDD_WMM_DEBUG
@@ -1892,9 +1757,7 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
                       "%s: Tagged frame, UP is %d",
                       __func__, userPri);
 #endif // HDD_WMM_DEBUG
-        }
-        else
-        {
+        } else {
             // not VLAN tagged, use default
 #ifdef HDD_WMM_DEBUG
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_WARN,
@@ -1907,9 +1770,7 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
             else
                 userPri = SME_QOS_WMM_UP_BE;
         }
-    }
-    else
-    {
+    } else {
         // default
 #ifdef HDD_WMM_DEBUG
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
@@ -1943,8 +1804,7 @@ v_VOID_t hdd_wmm_classify_pkt ( hdd_adapter_t* pAdapter,
 
   @return         : Qdisc queue index
   ===========================================================================*/
-v_U16_t hdd_hostapd_select_queue(struct net_device * dev, struct sk_buff *skb)
-{
+v_U16_t hdd_hostapd_select_queue(struct net_device * dev, struct sk_buff *skb) {
     WLANTL_ACEnumType ac;
     sme_QosWmmUpType up = SME_QOS_WMM_UP_BE;
     v_USHORT_t queueIndex;
@@ -1956,16 +1816,14 @@ v_U16_t hdd_hostapd_select_queue(struct net_device * dev, struct sk_buff *skb)
     v_CONTEXT_t pVosContext = ( WLAN_HDD_GET_CTX(pAdapter))->pvosContext;
     ptSapContext pSapCtx = NULL;
     pSapCtx = VOS_GET_SAP_CB(pVosContext);
-    if(pSapCtx == NULL)
-    {
+    if(pSapCtx == NULL) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                   FL("psapCtx is NULL"));
         *pSTAId = HDD_WLAN_INVALID_STA_ID;
         goto done;
     }
     /*Get the Station ID*/
-    if (VOS_STATUS_SUCCESS != hdd_softap_GetStaId(pAdapter, pDestMacAddress, &STAId))
-    {
+    if (VOS_STATUS_SUCCESS != hdd_softap_GetStaId(pAdapter, pDestMacAddress, &STAId)) {
         VOS_TRACE( VOS_MODULE_ID_HDD_SOFTAP, VOS_TRACE_LEVEL_INFO,
                    "%s: Failed to find right station", __func__);
         *pSTAId = HDD_WLAN_INVALID_STA_ID;
@@ -1973,21 +1831,18 @@ v_U16_t hdd_hostapd_select_queue(struct net_device * dev, struct sk_buff *skb)
     }
 
     spin_lock_bh( &pSapCtx->staInfo_lock );
-    if (FALSE == vos_is_macaddr_equal(&pSapCtx->aStaInfo[STAId].macAddrSTA, pDestMacAddress))
-    {
+    if (FALSE == vos_is_macaddr_equal(&pSapCtx->aStaInfo[STAId].macAddrSTA, pDestMacAddress)) {
         VOS_TRACE( VOS_MODULE_ID_HDD_SOFTAP, VOS_TRACE_LEVEL_INFO,
                    "%s: Station MAC address does not matching", __func__);
 
         *pSTAId = HDD_WLAN_INVALID_STA_ID;
         goto release_lock;
     }
-    if (pSapCtx->aStaInfo[STAId].isUsed && pSapCtx->aStaInfo[STAId].isQosEnabled && (HDD_WMM_USER_MODE_NO_QOS != pHddCtx->cfg_ini->WmmMode))
-    {
+    if (pSapCtx->aStaInfo[STAId].isUsed && pSapCtx->aStaInfo[STAId].isQosEnabled && (HDD_WMM_USER_MODE_NO_QOS != pHddCtx->cfg_ini->WmmMode)) {
         /* Get the user priority from IP header & corresponding AC */
         hdd_wmm_classify_pkt (pAdapter, skb, &ac, &up);
         //If 3/4th of Tx queue is used then place the DHCP packet in VOICE AC queue
-        if (pSapCtx->aStaInfo[STAId].vosLowResource && hdd_is_dhcp_packet(skb))
-        {
+        if (pSapCtx->aStaInfo[STAId].vosLowResource && hdd_is_dhcp_packet(skb)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_WARN,
                       "%s: Making priority of DHCP packet as VOICE", __func__);
             up = SME_QOS_WMM_UP_VO;
@@ -2002,8 +1857,7 @@ done:
     skb->priority = up;
     if(skb->priority < SME_QOS_WMM_UP_MAX)
         queueIndex = hddLinuxUpToAcMap[skb->priority];
-    else
-    {
+    else {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: up=%d is going beyond max value", __func__, up);
         queueIndex = hddLinuxUpToAcMap[SME_QOS_WMM_UP_BE];
@@ -2022,15 +1876,13 @@ done:
 
   @return         : Qdisc queue index
   ===========================================================================*/
-v_U16_t hdd_wmm_select_queue(struct net_device * dev, struct sk_buff *skb)
-{
+v_U16_t hdd_wmm_select_queue(struct net_device * dev, struct sk_buff *skb) {
     WLANTL_ACEnumType ac;
     sme_QosWmmUpType up = SME_QOS_WMM_UP_BE;
     v_USHORT_t queueIndex;
     hdd_adapter_t *pAdapter =  WLAN_HDD_GET_PRIV_PTR(dev);
 
-    if (vos_is_logp_in_progress(VOS_MODULE_ID_HDD, NULL))
-    {
+    if (vos_is_logp_in_progress(VOS_MODULE_ID_HDD, NULL)) {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_WARN,
                    FL("called during WDReset"));
         skb->priority = SME_QOS_WMM_UP_BE;
@@ -2038,19 +1890,16 @@ v_U16_t hdd_wmm_select_queue(struct net_device * dev, struct sk_buff *skb)
     }
 
     /*Get the Station ID*/
-    if (WLAN_HDD_IBSS == pAdapter->device_mode)
-    {
+    if (WLAN_HDD_IBSS == pAdapter->device_mode) {
         v_U8_t *pSTAId = (v_U8_t *)(((v_U8_t *)(skb->data)) - 1);
         v_MACADDR_t *pDestMacAddress = (v_MACADDR_t*)skb->data;
 
         if ( VOS_STATUS_SUCCESS !=
                 hdd_Ibss_GetStaId(&pAdapter->sessionCtx.station,
-                                  pDestMacAddress, pSTAId))
-        {
+                                  pDestMacAddress, pSTAId)) {
             *pSTAId = HDD_WLAN_INVALID_STA_ID;
             if ( !vos_is_macaddr_broadcast( pDestMacAddress ) &&
-                    !vos_is_macaddr_group(pDestMacAddress))
-            {
+                    !vos_is_macaddr_group(pDestMacAddress)) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
                            "%s: Failed to find right station pDestMacAddress: "
                            MAC_ADDRESS_STR , __func__,
@@ -2061,16 +1910,14 @@ v_U16_t hdd_wmm_select_queue(struct net_device * dev, struct sk_buff *skb)
     }
     // if we don't want QoS or the AP doesn't support Qos
     // All traffic will get equal opportuniy to transmit data frames.
-    if( hdd_wmm_is_active(pAdapter) )
-    {
+    if( hdd_wmm_is_active(pAdapter) ) {
         /* Get the user priority from IP header & corresponding AC */
         hdd_wmm_classify_pkt (pAdapter, skb, &ac, &up);
         //If 3/4th of BE AC Tx queue is full, then place the DHCP packet in VOICE AC queue
         //Doing this for IBSS alone, since for STA interface
         //types, these packets will be queued to the new queue.
         if ((WLAN_HDD_IBSS == pAdapter->device_mode) &&
-                pAdapter->isVosLowResource && hdd_is_dhcp_packet(skb))
-        {
+                pAdapter->isVosLowResource && hdd_is_dhcp_packet(skb)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_WARN,
                       "%s: BestEffort Tx Queue is 3/4th full"
                       " Make DHCP packet's pri as VO", __func__);
@@ -2083,8 +1930,7 @@ done:
     skb->priority = up;
     if(skb->priority < SME_QOS_WMM_UP_MAX)
         queueIndex = hddLinuxUpToAcMap[skb->priority];
-    else
-    {
+    else {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO,
                   "%s: up=%d is going beyond max value", __func__, up);
         queueIndex = hddLinuxUpToAcMap[SME_QOS_WMM_UP_BE];
@@ -2092,8 +1938,7 @@ done:
 
     if ((WLAN_HDD_IBSS != pAdapter->device_mode) &&
             (hdd_is_dhcp_packet(skb) ||
-             hdd_skb_is_eapol_or_wai_packet(skb)))
-    {
+             hdd_skb_is_eapol_or_wai_packet(skb))) {
         /* If the packet is a DHCP packet or a Eapol packet or
          * a Wapi packet, then queue it to the new queue for
          * STA interfaces alone.
@@ -2118,14 +1963,12 @@ done:
   @return        : void
   ===========================================================================*/
 void hdd_wmm_acquire_access_required(hdd_adapter_t *pAdapter,
-                                     WLANTL_ACEnumType acType)
-{
+                                     WLANTL_ACEnumType acType) {
     /* Each bit in the LSB nibble indicates 1 AC.
      * Clearing the particular bit in LSB nibble to indicate
      * access required
      */
-    switch(acType)
-    {
+    switch(acType) {
     case WLANTL_AC_BK:
         pAdapter->psbChanged &= ~SME_QOS_UAPSD_CFG_BK_CHANGED_MASK; /* clear first bit */
         break;
@@ -2159,15 +2002,13 @@ void hdd_wmm_acquire_access_required(hdd_adapter_t *pAdapter,
   ===========================================================================*/
 VOS_STATUS hdd_wmm_acquire_access( hdd_adapter_t* pAdapter,
                                    WLANTL_ACEnumType acType,
-                                   v_BOOL_t * pGranted )
-{
+                                   v_BOOL_t * pGranted ) {
     hdd_wmm_qos_context_t *pQosContext;
 
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
               "%s: Entered for AC %d", __func__, acType);
 
-    if (!hdd_wmm_is_active(pAdapter) || !(WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->bImplicitQosEnabled)
-    {
+    if (!hdd_wmm_is_active(pAdapter) || !(WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->bImplicitQosEnabled) {
         // either we don't want QoS or the AP doesn't support QoS
         // or we don't want to do implicit QoS
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
@@ -2180,8 +2021,7 @@ VOS_STATUS hdd_wmm_acquire_access( hdd_adapter_t* pAdapter,
 
     // do we already have an implicit QoS request pending for this AC?
     if ((pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessNeeded) ||
-            (pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessPending))
-    {
+            (pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessPending)) {
         // request already pending so we need to wait for that response
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                   "%s: Implicit QoS for TL AC %d already scheduled",
@@ -2193,8 +2033,7 @@ VOS_STATUS hdd_wmm_acquire_access( hdd_adapter_t* pAdapter,
 
     // did we already fail to establish implicit QoS for this AC?
     // (if so, access should have been granted when the failure was handled)
-    if (pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessFailed)
-    {
+    if (pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessFailed) {
         // request previously failed
         // allow access, but we'll be downgraded
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
@@ -2214,8 +2053,7 @@ VOS_STATUS hdd_wmm_acquire_access( hdd_adapter_t* pAdapter,
     pAdapter->hddWmmStatus.wmmAcStatus[acType].wmmAcAccessNeeded = VOS_TRUE;
 
     pQosContext = kmalloc(sizeof(*pQosContext), GFP_ATOMIC);
-    if (NULL == pQosContext)
-    {
+    if (NULL == pQosContext) {
         // no memory for QoS context.  Nothing we can do but let data flow
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Unable to allocate context", __func__);
@@ -2257,8 +2095,7 @@ VOS_STATUS hdd_wmm_acquire_access( hdd_adapter_t* pAdapter,
   ===========================================================================*/
 VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
                           tCsrRoamInfo *pRoamInfo,
-                          eCsrRoamBssType eBssType )
-{
+                          eCsrRoamBssType eBssType ) {
     tANI_U8 uapsdMask;
     VOS_STATUS status;
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
@@ -2269,8 +2106,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
               "%s: Entered", __func__);
 
-    if (pRoamInfo->fReassocReq)
-    {
+    if (pRoamInfo->fReassocReq) {
         // when we reassociate we should continue to use whatever
         // parameters were previously established.  if we are
         // reassociating due to a U-APSD change for a particular
@@ -2290,8 +2126,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
     VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
               "%s: U-APSD mask is 0x%02x", __func__, (int) uapsdMask);
 
-    if (uapsdMask & HDD_AC_VO)
-    {
+    if (uapsdMask & HDD_AC_VO) {
         status = WLANTL_EnableUAPSDForAC( (WLAN_HDD_GET_CTX(pAdapter))->pvosContext,
                                           (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                           WLANTL_AC_VO,
@@ -2304,8 +2139,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
         VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ));
     }
 
-    if (uapsdMask & HDD_AC_VI)
-    {
+    if (uapsdMask & HDD_AC_VI) {
         status = WLANTL_EnableUAPSDForAC( (WLAN_HDD_GET_CTX(pAdapter))->pvosContext,
                                           (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                           WLANTL_AC_VI,
@@ -2318,8 +2152,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
         VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ));
     }
 
-    if (uapsdMask & HDD_AC_BK)
-    {
+    if (uapsdMask & HDD_AC_BK) {
         status = WLANTL_EnableUAPSDForAC( (WLAN_HDD_GET_CTX(pAdapter))->pvosContext,
                                           (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                           WLANTL_AC_BK,
@@ -2332,8 +2165,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
         VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ));
     }
 
-    if (uapsdMask & HDD_AC_BE)
-    {
+    if (uapsdMask & HDD_AC_BE) {
         status = WLANTL_EnableUAPSDForAC( (WLAN_HDD_GET_CTX(pAdapter))->pvosContext,
                                           (WLAN_HDD_GET_STATION_CTX_PTR(pAdapter))->conn_info.staId[0],
                                           WLANTL_AC_BE,
@@ -2349,8 +2181,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
     status = sme_UpdateDSCPtoUPMapping(pHddCtx->hHal,
                                        pAdapter->hddWmmDscpToUpMap, pAdapter->sessionId);
 
-    if (!VOS_IS_STATUS_SUCCESS( status ))
-    {
+    if (!VOS_IS_STATUS_SUCCESS( status )) {
         hdd_wmm_init( pAdapter );
     }
 
@@ -2362,8 +2193,7 @@ VOS_STATUS hdd_wmm_assoc( hdd_adapter_t* pAdapter,
 
 
 
-static const v_U8_t acmMaskBit[WLANTL_MAX_AC] =
-{
+static const v_U8_t acmMaskBit[WLANTL_MAX_AC] = {
     0x4, /* WLANTL_AC_BK */
     0x8, /* WLANTL_AC_BE */
     0x2, /* WLANTL_AC_VI */
@@ -2383,8 +2213,7 @@ static const v_U8_t acmMaskBit[WLANTL_MAX_AC] =
   ===========================================================================*/
 VOS_STATUS hdd_wmm_connect( hdd_adapter_t* pAdapter,
                             tCsrRoamInfo *pRoamInfo,
-                            eCsrRoamBssType eBssType )
-{
+                            eCsrRoamBssType eBssType ) {
     int ac;
     v_BOOL_t qap;
     v_BOOL_t qosConnection;
@@ -2395,14 +2224,11 @@ VOS_STATUS hdd_wmm_connect( hdd_adapter_t* pAdapter,
 
     if ((eCSR_BSS_TYPE_INFRASTRUCTURE == eBssType) &&
             pRoamInfo &&
-            pRoamInfo->u.pConnectedProfile)
-    {
+            pRoamInfo->u.pConnectedProfile) {
         qap = pRoamInfo->u.pConnectedProfile->qap;
         qosConnection = pRoamInfo->u.pConnectedProfile->qosConnection;
         acmMask = pRoamInfo->u.pConnectedProfile->acm_mask;
-    }
-    else
-    {
+    } else {
         /* TODO: if a non-qos IBSS peer joins the group make qap and qosConnection false.
          */
         qap = VOS_TRUE;
@@ -2417,12 +2243,10 @@ VOS_STATUS hdd_wmm_connect( hdd_adapter_t* pAdapter,
     pAdapter->hddWmmStatus.wmmQap = qap;
     pAdapter->hddWmmStatus.wmmQosConnection = qosConnection;
 
-    for (ac = 0; ac < WLANTL_MAX_AC; ac++)
-    {
+    for (ac = 0; ac < WLANTL_MAX_AC; ac++) {
         if (qap &&
                 qosConnection &&
-                (acmMask & acmMaskBit[ac]))
-        {
+                (acmMask & acmMaskBit[ac])) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                       "%s: ac %d on",
                       __func__, ac);
@@ -2464,13 +2288,10 @@ VOS_STATUS hdd_wmm_connect( hdd_adapter_t* pAdapter,
                     &&
                     !pRoamInfo->isESEAssoc
 #endif
-               )
-            {
+               ) {
                 pAdapter->hddWmmStatus.wmmAcStatus[ac].wmmAcTspecValid = VOS_FALSE;
             }
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                       "%s: ac %d off",
                       __func__, ac);
@@ -2498,38 +2319,30 @@ VOS_STATUS hdd_wmm_connect( hdd_adapter_t* pAdapter,
                   : other values if failure
   ===========================================================================*/
 VOS_STATUS hdd_wmm_get_uapsd_mask( hdd_adapter_t* pAdapter,
-                                   tANI_U8 *pUapsdMask )
-{
+                                   tANI_U8 *pUapsdMask ) {
     tANI_U8 uapsdMask;
 
-    if (HDD_WMM_USER_MODE_NO_QOS == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->WmmMode)
-    {
+    if (HDD_WMM_USER_MODE_NO_QOS == (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->WmmMode) {
         // no QOS then no UAPSD
         uapsdMask = 0;
-    }
-    else
-    {
+    } else {
         // start with the default mask
         uapsdMask = (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->UapsdMask;
 
         // disable UAPSD for any ACs with a 0 Service Interval
-        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdVoSrvIntv == 0 )
-        {
+        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdVoSrvIntv == 0 ) {
             uapsdMask &= ~HDD_AC_VO;
         }
 
-        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdViSrvIntv == 0 )
-        {
+        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdViSrvIntv == 0 ) {
             uapsdMask &= ~HDD_AC_VI;
         }
 
-        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdBkSrvIntv == 0 )
-        {
+        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdBkSrvIntv == 0 ) {
             uapsdMask &= ~HDD_AC_BK;
         }
 
-        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdBeSrvIntv == 0 )
-        {
+        if( (WLAN_HDD_GET_CTX(pAdapter))->cfg_ini->InfraUapsdBeSrvIntv == 0 ) {
             uapsdMask &= ~HDD_AC_BE;
         }
     }
@@ -2549,15 +2362,11 @@ VOS_STATUS hdd_wmm_get_uapsd_mask( hdd_adapter_t* pAdapter,
   @return         : VOS_TRUE if WMM is enabled
                   : VOS_FALSE if WMM is not enabled
   ===========================================================================*/
-v_BOOL_t hdd_wmm_is_active( hdd_adapter_t* pAdapter )
-{
+v_BOOL_t hdd_wmm_is_active( hdd_adapter_t* pAdapter ) {
     if ((!pAdapter->hddWmmStatus.wmmQosConnection) ||
-            (!pAdapter->hddWmmStatus.wmmQap))
-    {
+            (!pAdapter->hddWmmStatus.wmmQap)) {
         return VOS_FALSE;
-    }
-    else
-    {
+    } else {
         return VOS_TRUE;
     }
 }
@@ -2574,8 +2383,7 @@ v_BOOL_t hdd_wmm_is_active( hdd_adapter_t* pAdapter )
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
                                      v_U32_t handle,
-                                     sme_QosWmmTspecInfo* pTspec )
-{
+                                     sme_QosWmmTspecInfo* pTspec ) {
     hdd_wmm_qos_context_t *pQosContext;
     hdd_wlan_wmm_status_e status = HDD_WLAN_WMM_STATUS_SETUP_SUCCESS ;
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
@@ -2590,17 +2398,14 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
     mutex_lock(&pAdapter->hddWmmStatus.wmmLock);
     list_for_each_entry(pQosContext,
                         &pAdapter->hddWmmStatus.wmmContextList,
-                        node)
-    {
-        if (pQosContext->handle == handle)
-        {
+                        node) {
+        if (pQosContext->handle == handle) {
             found = VOS_TRUE;
             break;
         }
     }
     mutex_unlock(&pAdapter->hddWmmStatus.wmmLock);
-    if (found)
-    {
+    if (found) {
         // record with that handle already exists
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Record already exists with handle 0x%x",
@@ -2612,8 +2417,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
                                      pQosContext->qosFlowId);
 
         // need to check the return value and act appropriately
-        switch (smeStatus)
-        {
+        switch (smeStatus) {
         case SME_QOS_STATUS_MODIFY_SETUP_PENDING_RSP:
             status = HDD_WLAN_WMM_STATUS_MODIFY_PENDING;
             break;
@@ -2646,8 +2450,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
     }
 
     pQosContext = kmalloc(sizeof(*pQosContext), GFP_KERNEL);
-    if (NULL == pQosContext)
-    {
+    if (NULL == pQosContext) {
         // no memory for QoS context.  Nothing we can do
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: Unable to allocate QoS context", __func__);
@@ -2659,8 +2462,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
     pQosContext->handle = handle;
     if (pTspec->ts_info.up < HDD_WMM_UP_TO_AC_MAP_SIZE)
         pQosContext->acType = hddWmmUpToAcMap[pTspec->ts_info.up];
-    else
-    {
+    else {
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_ERROR,
                   "%s: ts_info.up (%d) larger than max value (%d), "
                   "use default acType (%d)",
@@ -2694,8 +2496,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
               __func__, smeStatus, pQosContext->qosFlowId);
 
     // need to check the return value and act appropriately
-    switch (smeStatus)
-    {
+    switch (smeStatus) {
     case SME_QOS_STATUS_SETUP_REQ_PENDING_RSP:
         status = HDD_WLAN_WMM_STATUS_SETUP_PENDING;
         break;
@@ -2745,8 +2546,7 @@ hdd_wlan_wmm_status_e hdd_wmm_addts( hdd_adapter_t* pAdapter,
   @return          : HDD_WLAN_WMM_STATUS_*
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
-                                     v_U32_t handle )
-{
+                                     v_U32_t handle ) {
     hdd_wmm_qos_context_t *pQosContext;
     v_BOOL_t found = VOS_FALSE;
     WLANTL_ACEnumType acType = 0;
@@ -2763,10 +2563,8 @@ hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
     mutex_lock(&pAdapter->hddWmmStatus.wmmLock);
     list_for_each_entry(pQosContext,
                         &pAdapter->hddWmmStatus.wmmContextList,
-                        node)
-    {
-        if (pQosContext->handle == handle)
-        {
+                        node) {
+        if (pQosContext->handle == handle) {
             found = VOS_TRUE;
             acType = pQosContext->acType;
             qosFlowId = pQosContext->qosFlowId;
@@ -2775,8 +2573,7 @@ hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
     }
     mutex_unlock(&pAdapter->hddWmmStatus.wmmLock);
 
-    if (VOS_FALSE == found)
-    {
+    if (VOS_FALSE == found) {
         // we didn't find the handle
         VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                   "%s: handle 0x%x not found", __func__, handle);
@@ -2795,8 +2592,7 @@ hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
               "%s: SME flow %d released, SME status %d",
               __func__, qosFlowId, smeStatus);
 
-    switch(smeStatus)
-    {
+    switch(smeStatus) {
     case SME_QOS_STATUS_RELEASE_SUCCESS_RSP:
         // this flow is the only one on that AC, so go ahead and update
         // our TSPEC state for the AC
@@ -2854,8 +2650,7 @@ hdd_wlan_wmm_status_e hdd_wmm_delts( hdd_adapter_t* pAdapter,
   @return          : HDD_WLAN_WMM_STATUS_*
   ===========================================================================*/
 hdd_wlan_wmm_status_e hdd_wmm_checkts( hdd_adapter_t* pAdapter,
-                                       v_U32_t handle )
-{
+                                       v_U32_t handle ) {
     hdd_wmm_qos_context_t *pQosContext;
     hdd_wlan_wmm_status_e status = HDD_WLAN_WMM_STATUS_LOST;
 
@@ -2866,10 +2661,8 @@ hdd_wlan_wmm_status_e hdd_wmm_checkts( hdd_adapter_t* pAdapter,
     mutex_lock(&pAdapter->hddWmmStatus.wmmLock);
     list_for_each_entry(pQosContext,
                         &pAdapter->hddWmmStatus.wmmContextList,
-                        node)
-    {
-        if (pQosContext->handle == handle)
-        {
+                        node) {
+        if (pQosContext->handle == handle) {
             VOS_TRACE(VOS_MODULE_ID_HDD, WMM_TRACE_LEVEL_INFO_LOW,
                       "%s: found handle 0x%x, context %p",
                       __func__, handle, pQosContext);

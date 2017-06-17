@@ -32,9 +32,8 @@ extern unsigned short *irq_mask_register;
 void init_IRQ_pint(void);
 void make_imask_irq(unsigned int irq);
 
-static inline int generic_irq_demux(int irq)
-{
-	return irq;
+static inline int generic_irq_demux(int irq) {
+    return irq;
 }
 
 #define irq_demux(irq)		sh_mv.mv_irq_demux(irq)

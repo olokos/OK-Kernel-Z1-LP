@@ -20,13 +20,13 @@
 #endif
 
 enum {
-	FPGA_LAN_IRQ	= NR_CPU_IRQS,
-	FPGA_UART_IRQ,
-	FPGA_I2C_IRQ,
-	FPGA_USB_IRQ,
-	FPGA_RESERVED_IRQ,
-	FPGA_FPGA_IRQ,
-	NR_IRQS
+    FPGA_LAN_IRQ	= NR_CPU_IRQS,
+    FPGA_UART_IRQ,
+    FPGA_I2C_IRQ,
+    FPGA_USB_IRQ,
+    FPGA_RESERVED_IRQ,
+    FPGA_FPGA_IRQ,
+    NR_IRQS
 };
 
 extern void __init irq_fpga_init(void);

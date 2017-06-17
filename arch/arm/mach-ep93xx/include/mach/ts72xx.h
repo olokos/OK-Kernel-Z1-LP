@@ -54,45 +54,37 @@
 
 #ifndef __ASSEMBLY__
 
-static inline int ts72xx_model(void)
-{
-	return __raw_readb(TS72XX_MODEL_VIRT_BASE) & TS72XX_MODEL_MASK;
+static inline int ts72xx_model(void) {
+    return __raw_readb(TS72XX_MODEL_VIRT_BASE) & TS72XX_MODEL_MASK;
 }
 
-static inline int board_is_ts7200(void)
-{
-	return ts72xx_model() == TS72XX_MODEL_TS7200;
+static inline int board_is_ts7200(void) {
+    return ts72xx_model() == TS72XX_MODEL_TS7200;
 }
 
-static inline int board_is_ts7250(void)
-{
-	return ts72xx_model() == TS72XX_MODEL_TS7250;
+static inline int board_is_ts7250(void) {
+    return ts72xx_model() == TS72XX_MODEL_TS7250;
 }
 
-static inline int board_is_ts7260(void)
-{
-	return ts72xx_model() == TS72XX_MODEL_TS7260;
+static inline int board_is_ts7260(void) {
+    return ts72xx_model() == TS72XX_MODEL_TS7260;
 }
 
-static inline int board_is_ts7300(void)
-{
-	return ts72xx_model()  == TS72XX_MODEL_TS7300;
+static inline int board_is_ts7300(void) {
+    return ts72xx_model()  == TS72XX_MODEL_TS7300;
 }
 
-static inline int board_is_ts7400(void)
-{
-	return ts72xx_model() == TS72XX_MODEL_TS7400;
+static inline int board_is_ts7400(void) {
+    return ts72xx_model() == TS72XX_MODEL_TS7400;
 }
 
-static inline int is_max197_installed(void)
-{
-	return !!(__raw_readb(TS72XX_OPTIONS_VIRT_BASE) &
-					TS72XX_OPTIONS_MAX197);
+static inline int is_max197_installed(void) {
+    return !!(__raw_readb(TS72XX_OPTIONS_VIRT_BASE) &
+              TS72XX_OPTIONS_MAX197);
 }
 
-static inline int is_ts9420_installed(void)
-{
-	return !!(__raw_readb(TS72XX_OPTIONS2_VIRT_BASE) &
-					TS72XX_OPTIONS2_TS9420);
+static inline int is_ts9420_installed(void) {
+    return !!(__raw_readb(TS72XX_OPTIONS2_VIRT_BASE) &
+              TS72XX_OPTIONS2_TS9420);
 }
 #endif

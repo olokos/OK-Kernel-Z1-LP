@@ -254,11 +254,11 @@ typedef enum {					/* Data direction			*/
  * This is used to dump the previous states of the SBIC
  */
 struct status_entry {
-	unsigned long	when;
-	unsigned char	ssr;
-	unsigned char	ph;
-	unsigned char	irq;
-	unsigned char	unused;
+    unsigned long	when;
+    unsigned char	ssr;
+    unsigned char	ph;
+    unsigned char	irq;
+    unsigned char	unused;
 };
 
 #define ADD_STATUS(_q,_ssr,_ph,_irq) \
@@ -283,67 +283,67 @@ typedef struct acornscsi_hostdata {
 
     /* driver information */
     struct {
-	unsigned int	irq;			/* interrupt				*/
-	phase_t		phase;			/* current phase			*/
+        unsigned int	irq;			/* interrupt				*/
+        phase_t		phase;			/* current phase			*/
 
-	struct {
-	    unsigned char	target;		/* reconnected target			*/
-	    unsigned char	lun;		/* reconnected lun			*/
-	    unsigned char	tag;		/* reconnected tag			*/
-	} reconnected;
+        struct {
+            unsigned char	target;		/* reconnected target			*/
+            unsigned char	lun;		/* reconnected lun			*/
+            unsigned char	tag;		/* reconnected tag			*/
+        } reconnected;
 
-	struct scsi_pointer	SCp;			/* current commands data pointer	*/
+        struct scsi_pointer	SCp;			/* current commands data pointer	*/
 
-	MsgQueue_t	msgs;
+        MsgQueue_t	msgs;
 
-	unsigned short	last_message;		/* last message to be sent		*/
-	unsigned char	disconnectable:1;	/* this command can be disconnected	*/
+        unsigned short	last_message;		/* last message to be sent		*/
+        unsigned char	disconnectable:1;	/* this command can be disconnected	*/
     } scsi;
 
     /* statistics information */
     struct {
-	unsigned int	queues;
-	unsigned int	removes;
-	unsigned int	fins;
-	unsigned int	reads;
-	unsigned int	writes;
-	unsigned int	miscs;
-	unsigned int	disconnects;
-	unsigned int	aborts;
-	unsigned int	resets;
+        unsigned int	queues;
+        unsigned int	removes;
+        unsigned int	fins;
+        unsigned int	reads;
+        unsigned int	writes;
+        unsigned int	miscs;
+        unsigned int	disconnects;
+        unsigned int	aborts;
+        unsigned int	resets;
     } stats;
 
     /* queue handling */
     struct {
-	Queue_t		issue;			/* issue queue				*/
-	Queue_t		disconnected;		/* disconnected command queue		*/
+        Queue_t		issue;			/* issue queue				*/
+        Queue_t		disconnected;		/* disconnected command queue		*/
     } queues;
 
     /* per-device info */
     struct {
-	unsigned char	sync_xfer;		/* synchronous transfer (SBIC value)	*/
-	syncxfer_t	sync_state;		/* sync xfer negotiation state		*/
-	unsigned char	disconnect_ok:1;	/* device can disconnect		*/
+        unsigned char	sync_xfer;		/* synchronous transfer (SBIC value)	*/
+        syncxfer_t	sync_state;		/* sync xfer negotiation state		*/
+        unsigned char	disconnect_ok:1;	/* device can disconnect		*/
     } device[8];
     unsigned long	busyluns[64 / sizeof(unsigned long)];/* array of bits indicating LUNs busy	*/
 
     /* DMA info */
     struct {
-	unsigned int	free_addr;		/* next free address			*/
-	unsigned int	start_addr;		/* start address of current transfer	*/
-	dmadir_t	direction;		/* dma direction			*/
-	unsigned int	transferred;		/* number of bytes transferred		*/
-	unsigned int	xfer_start;		/* scheduled DMA transfer start		*/
-	unsigned int	xfer_length;		/* scheduled DMA transfer length	*/
-	char		*xfer_ptr;		/* pointer to area			*/
-	unsigned char	xfer_required:1;	/* set if we need to transfer something	*/
-	unsigned char	xfer_setup:1;		/* set if DMA is setup			*/
-	unsigned char	xfer_done:1;		/* set if DMA reached end of BH list	*/
+        unsigned int	free_addr;		/* next free address			*/
+        unsigned int	start_addr;		/* start address of current transfer	*/
+        dmadir_t	direction;		/* dma direction			*/
+        unsigned int	transferred;		/* number of bytes transferred		*/
+        unsigned int	xfer_start;		/* scheduled DMA transfer start		*/
+        unsigned int	xfer_length;		/* scheduled DMA transfer length	*/
+        char		*xfer_ptr;		/* pointer to area			*/
+        unsigned char	xfer_required:1;	/* set if we need to transfer something	*/
+        unsigned char	xfer_setup:1;		/* set if DMA is setup			*/
+        unsigned char	xfer_done:1;		/* set if DMA reached end of BH list	*/
     } dma;
 
     /* card info */
     struct {
-	unsigned char	page_reg;		/* current setting of page reg		*/
+        unsigned char	page_reg;		/* current setting of page reg		*/
     } card;
 
     unsigned char status_ptr[9];

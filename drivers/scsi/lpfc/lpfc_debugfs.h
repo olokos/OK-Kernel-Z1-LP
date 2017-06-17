@@ -186,30 +186,30 @@
 #define SIZE_U32 sizeof(uint32_t)
 
 struct lpfc_debug {
-	char *i_private;
-	char op;
+    char *i_private;
+    char op;
 #define LPFC_IDIAG_OP_RD 1
 #define LPFC_IDIAG_OP_WR 2
-	char *buffer;
-	int  len;
+    char *buffer;
+    int  len;
 };
 
 struct lpfc_debugfs_trc {
-	char *fmt;
-	uint32_t data1;
-	uint32_t data2;
-	uint32_t data3;
-	uint32_t seq_cnt;
-	unsigned long jif;
+    char *fmt;
+    uint32_t data1;
+    uint32_t data2;
+    uint32_t data3;
+    uint32_t seq_cnt;
+    unsigned long jif;
 };
 
 struct lpfc_idiag_offset {
-	uint32_t last_rd;
+    uint32_t last_rd;
 };
 
 #define LPFC_IDIAG_CMD_DATA_SIZE 8
 struct lpfc_idiag_cmd {
-	uint32_t opcode;
+    uint32_t opcode;
 #define LPFC_IDIAG_CMD_PCICFG_RD 0x00000001
 #define LPFC_IDIAG_CMD_PCICFG_WR 0x00000002
 #define LPFC_IDIAG_CMD_PCICFG_ST 0x00000003
@@ -240,14 +240,14 @@ struct lpfc_idiag_cmd {
 
 #define LPFC_IDIAG_CMD_EXTACC_RD 0x00000051
 
-	uint32_t data[LPFC_IDIAG_CMD_DATA_SIZE];
+    uint32_t data[LPFC_IDIAG_CMD_DATA_SIZE];
 };
 
 struct lpfc_idiag {
-	uint32_t active;
-	struct lpfc_idiag_cmd cmd;
-	struct lpfc_idiag_offset offset;
-	void *ptr_private;
+    uint32_t active;
+    struct lpfc_idiag_cmd cmd;
+    struct lpfc_idiag_offset offset;
+    void *ptr_private;
 };
 #endif
 

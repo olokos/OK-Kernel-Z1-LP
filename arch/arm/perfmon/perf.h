@@ -46,7 +46,7 @@ extern void pm_reset_all(void);
 extern void l2_pm_reset_all(void);
 extern void pm_set_event(unsigned long monitorIndex, unsigned long eventIndex);
 extern void l2_pm_set_event(unsigned long monitorIndex,
-	unsigned long eventIndex);
+                            unsigned long eventIndex);
 extern unsigned long pm_get_count(unsigned long monitorIndex);
 extern unsigned long l2_pm_get_count(unsigned long monitorIndex);
 extern unsigned long pm_get_cycle_count(void);
@@ -72,13 +72,13 @@ extern void l2_pm_free_irq(void);
 extern int per_process_perf_init(void);
 extern void per_process_perf_exit(void);
 int per_process_read(char *page, char **start, off_t off, int count,
-   int *eof, void *data);
+                     int *eof, void *data);
 int per_process_write_hex(struct file *file, const char *buff,
-    unsigned long cnt, void *data);
+                          unsigned long cnt, void *data);
 int per_process_read_decimal(char *page, char **start, off_t off, int count,
-   int *eof, void *data);
+                             int *eof, void *data);
 int per_process_write_dec(struct file *file, const char *buff,
-    unsigned long cnt, void *data);
+                          unsigned long cnt, void *data);
 void perfmon_register_callback(void);
 void _per_process_switch(unsigned long oldPid, unsigned long newPid);
 extern unsigned int pp_loaded;

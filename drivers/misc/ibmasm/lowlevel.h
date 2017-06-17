@@ -52,86 +52,73 @@
 #define SCOUT_COM_C_BASE         0x0200
 #define SCOUT_COM_D_BASE         0x0300
 
-static inline int sp_interrupt_pending(void __iomem *base_address)
-{
-	return SP_INTR_MASK & readl(base_address + INTR_STATUS_REGISTER);
+static inline int sp_interrupt_pending(void __iomem *base_address) {
+    return SP_INTR_MASK & readl(base_address + INTR_STATUS_REGISTER);
 }
 
-static inline int uart_interrupt_pending(void __iomem *base_address)
-{
-	return UART_INTR_MASK & readl(base_address + INTR_STATUS_REGISTER);
+static inline int uart_interrupt_pending(void __iomem *base_address) {
+    return UART_INTR_MASK & readl(base_address + INTR_STATUS_REGISTER);
 }
 
-static inline void ibmasm_enable_interrupts(void __iomem *base_address, int mask)
-{
-	void __iomem *ctrl_reg = base_address + INTR_CONTROL_REGISTER;
-	writel( readl(ctrl_reg) & ~mask, ctrl_reg);
+static inline void ibmasm_enable_interrupts(void __iomem *base_address, int mask) {
+    void __iomem *ctrl_reg = base_address + INTR_CONTROL_REGISTER;
+    writel( readl(ctrl_reg) & ~mask, ctrl_reg);
 }
 
-static inline void ibmasm_disable_interrupts(void __iomem *base_address, int mask)
-{
-	void __iomem *ctrl_reg = base_address + INTR_CONTROL_REGISTER;
-	writel( readl(ctrl_reg) | mask, ctrl_reg);
+static inline void ibmasm_disable_interrupts(void __iomem *base_address, int mask) {
+    void __iomem *ctrl_reg = base_address + INTR_CONTROL_REGISTER;
+    writel( readl(ctrl_reg) | mask, ctrl_reg);
 }
 
-static inline void enable_sp_interrupts(void __iomem *base_address)
-{
-	ibmasm_enable_interrupts(base_address, SP_INTR_MASK);
+static inline void enable_sp_interrupts(void __iomem *base_address) {
+    ibmasm_enable_interrupts(base_address, SP_INTR_MASK);
 }
 
-static inline void disable_sp_interrupts(void __iomem *base_address)
-{
-	ibmasm_disable_interrupts(base_address, SP_INTR_MASK);
+static inline void disable_sp_interrupts(void __iomem *base_address) {
+    ibmasm_disable_interrupts(base_address, SP_INTR_MASK);
 }
 
-static inline void enable_uart_interrupts(void __iomem *base_address)
-{
-	ibmasm_enable_interrupts(base_address, UART_INTR_MASK);
+static inline void enable_uart_interrupts(void __iomem *base_address) {
+    ibmasm_enable_interrupts(base_address, UART_INTR_MASK);
 }
 
-static inline void disable_uart_interrupts(void __iomem *base_address)
-{
-	ibmasm_disable_interrupts(base_address, UART_INTR_MASK);
+static inline void disable_uart_interrupts(void __iomem *base_address) {
+    ibmasm_disable_interrupts(base_address, UART_INTR_MASK);
 }
 
 #define valid_mfa(mfa)	( (mfa) != NO_MFAS_AVAILABLE )
 
-static inline u32 get_mfa_outbound(void __iomem *base_address)
-{
-	int retry;
-	u32 mfa;
+static inline u32 get_mfa_outbound(void __iomem *base_address) {
+    int retry;
+    u32 mfa;
 
-	for (retry=0; retry<=10; retry++) {
-		mfa = readl(base_address + OUTBOUND_QUEUE_PORT);
-		if (valid_mfa(mfa))
-			break;
-	}
-	return mfa;
+    for (retry=0; retry<=10; retry++) {
+        mfa = readl(base_address + OUTBOUND_QUEUE_PORT);
+        if (valid_mfa(mfa))
+            break;
+    }
+    return mfa;
 }
 
-static inline void set_mfa_outbound(void __iomem *base_address, u32 mfa)
-{
-	writel(mfa, base_address + OUTBOUND_QUEUE_PORT);
+static inline void set_mfa_outbound(void __iomem *base_address, u32 mfa) {
+    writel(mfa, base_address + OUTBOUND_QUEUE_PORT);
 }
 
-static inline u32 get_mfa_inbound(void __iomem *base_address)
-{
-	u32 mfa = readl(base_address + INBOUND_QUEUE_PORT);
+static inline u32 get_mfa_inbound(void __iomem *base_address) {
+    u32 mfa = readl(base_address + INBOUND_QUEUE_PORT);
 
-	if (MAILBOX_FULL(mfa))
-		return 0;
+    if (MAILBOX_FULL(mfa))
+        return 0;
 
-	return mfa;
+    return mfa;
 }
 
-static inline void set_mfa_inbound(void __iomem *base_address, u32 mfa)
-{
-	writel(mfa, base_address + INBOUND_QUEUE_PORT);
+static inline void set_mfa_inbound(void __iomem *base_address, u32 mfa) {
+    writel(mfa, base_address + INBOUND_QUEUE_PORT);
 }
 
-static inline struct i2o_message *get_i2o_message(void __iomem *base_address, u32 mfa)
-{
-	return (struct i2o_message *)(GET_MFA_ADDR(mfa) + base_address);
+static inline struct i2o_message *get_i2o_message(void __iomem *base_address, u32 mfa) {
+    return (struct i2o_message *)(GET_MFA_ADDR(mfa) + base_address);
 }
 
 #endif /* __IBMASM_CONDOR_H__ */

@@ -30,36 +30,36 @@
 #if XTENSA_HAVE_COPROCESSORS
 
 typedef struct xtregs_coprocessor {
-	xtregs_cp0_t cp0;
-	xtregs_cp1_t cp1;
-	xtregs_cp2_t cp2;
-	xtregs_cp3_t cp3;
-	xtregs_cp4_t cp4;
-	xtregs_cp5_t cp5;
-	xtregs_cp6_t cp6;
-	xtregs_cp7_t cp7;
+    xtregs_cp0_t cp0;
+    xtregs_cp1_t cp1;
+    xtregs_cp2_t cp2;
+    xtregs_cp3_t cp3;
+    xtregs_cp4_t cp4;
+    xtregs_cp5_t cp5;
+    xtregs_cp6_t cp6;
+    xtregs_cp7_t cp7;
 } xtregs_coprocessor_t;
 
 #endif
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	unsigned long		status;		/* thread-synchronous flags */
-	__u32			cpu;		/* current CPU */
-	__s32			preempt_count;	/* 0 => preemptable,< 0 => BUG*/
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    unsigned long		status;		/* thread-synchronous flags */
+    __u32			cpu;		/* current CPU */
+    __s32			preempt_count;	/* 0 => preemptable,< 0 => BUG*/
 
-	mm_segment_t		addr_limit;	/* thread address space */
-	struct restart_block    restart_block;
+    mm_segment_t		addr_limit;	/* thread address space */
+    struct restart_block    restart_block;
 
-	unsigned long		cpenable;
+    unsigned long		cpenable;
 
-	/* Allocate storage for extra user states and coprocessor states. */
+    /* Allocate storage for extra user states and coprocessor states. */
 #if XTENSA_HAVE_COPROCESSORS
-	xtregs_coprocessor_t	xtregs_cp;
+    xtregs_coprocessor_t	xtregs_cp;
 #endif
-	xtregs_user_t		xtregs_user;
+    xtregs_user_t		xtregs_user;
 };
 
 #else /* !__ASSEMBLY__ */
@@ -101,12 +101,11 @@ struct thread_info {
 #define init_stack		(init_thread_union.stack)
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	 __asm__("extui %0,a1,0,13\n\t"
-	         "xor %0, a1, %0" : "=&r" (ti) : );
-	return ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    __asm__("extui %0,a1,0,13\n\t"
+            "xor %0, a1, %0" : "=&r" (ti) : );
+    return ti;
 }
 
 #else /* !__ASSEMBLY__ */

@@ -24,9 +24,8 @@
 #ifdef CONFIG_MSM_SCM
 int scm_set_boot_addr(phys_addr_t addr, unsigned int flags);
 #else
-static inline int scm_set_boot_addr(phys_addr_t addr, unsigned int flags)
-{
-	return 0;
+static inline int scm_set_boot_addr(phys_addr_t addr, unsigned int flags) {
+    return 0;
 }
 #endif
 

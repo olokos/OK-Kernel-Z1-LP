@@ -29,9 +29,8 @@ extern const unsigned char trampoline_status[];
 		  ((const unsigned char *)(x) - x86_trampoline_start)))
 
 /* Address of the SMP trampoline */
-static inline unsigned long trampoline_address(void)
-{
-	return virt_to_phys(TRAMPOLINE_SYM(trampoline_data));
+static inline unsigned long trampoline_address(void) {
+    return virt_to_phys(TRAMPOLINE_SYM(trampoline_data));
 }
 
 #endif /* __ASSEMBLY__ */

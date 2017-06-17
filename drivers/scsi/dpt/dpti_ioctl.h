@@ -79,60 +79,59 @@
 #define DPT_TARGET_BUSY	_IOR('D',79, TARGET_BUSY_T)
 
 
-  /* Structure Returned From Get Controller Info                             */
+/* Structure Returned From Get Controller Info                             */
 
 typedef struct {
-	uCHAR    state;            /* Operational state               */
-	uCHAR    id;               /* Host adapter SCSI id            */
-	int      vect;             /* Interrupt vector number         */
-	int      base;             /* Base I/O address                */
-	int      njobs;            /* # of jobs sent to HA            */
-	int      qdepth;           /* Controller queue depth.         */
-	int      wakebase;         /* mpx wakeup base index.          */
-	uINT     SGsize;           /* Scatter/Gather list size.       */
-	unsigned heads;            /* heads for drives on cntlr.      */
-	unsigned sectors;          /* sectors for drives on cntlr.    */
-	uCHAR    do_drive32;       /* Flag for Above 16 MB Ability    */
-	uCHAR    BusQuiet;         /* SCSI Bus Quiet Flag             */
-	char     idPAL[4];         /* 4 Bytes Of The ID Pal           */
-	uCHAR    primary;          /* 1 For Primary, 0 For Secondary  */
-	uCHAR    eataVersion;      /* EATA Version                    */
-	uINT     cpLength;         /* EATA Command Packet Length      */
-	uINT     spLength;         /* EATA Status Packet Length       */
-	uCHAR    drqNum;           /* DRQ Index (0,5,6,7)             */
-	uCHAR    flag1;            /* EATA Flags 1 (Byte 9)           */
-	uCHAR    flag2;            /* EATA Flags 2 (Byte 30)          */
+    uCHAR    state;            /* Operational state               */
+    uCHAR    id;               /* Host adapter SCSI id            */
+    int      vect;             /* Interrupt vector number         */
+    int      base;             /* Base I/O address                */
+    int      njobs;            /* # of jobs sent to HA            */
+    int      qdepth;           /* Controller queue depth.         */
+    int      wakebase;         /* mpx wakeup base index.          */
+    uINT     SGsize;           /* Scatter/Gather list size.       */
+    unsigned heads;            /* heads for drives on cntlr.      */
+    unsigned sectors;          /* sectors for drives on cntlr.    */
+    uCHAR    do_drive32;       /* Flag for Above 16 MB Ability    */
+    uCHAR    BusQuiet;         /* SCSI Bus Quiet Flag             */
+    char     idPAL[4];         /* 4 Bytes Of The ID Pal           */
+    uCHAR    primary;          /* 1 For Primary, 0 For Secondary  */
+    uCHAR    eataVersion;      /* EATA Version                    */
+    uINT     cpLength;         /* EATA Command Packet Length      */
+    uINT     spLength;         /* EATA Status Packet Length       */
+    uCHAR    drqNum;           /* DRQ Index (0,5,6,7)             */
+    uCHAR    flag1;            /* EATA Flags 1 (Byte 9)           */
+    uCHAR    flag2;            /* EATA Flags 2 (Byte 30)          */
 } CtrlInfo;
 
 typedef struct {
-	uSHORT length;		// Remaining length of this
-	uSHORT drvrHBAnum;	// Relative HBA # used by the driver
-	uINT baseAddr;		// Base I/O address
-	uSHORT blinkState;	// Blink LED state (0=Not in blink LED)
-	uCHAR pciBusNum;	// PCI Bus # (Optional)
-	uCHAR pciDeviceNum;	// PCI Device # (Optional)
-	uSHORT hbaFlags;	// Miscellaneous HBA flags
-	uSHORT Interrupt;	// Interrupt set for this device.
+    uSHORT length;		// Remaining length of this
+    uSHORT drvrHBAnum;	// Relative HBA # used by the driver
+    uINT baseAddr;		// Base I/O address
+    uSHORT blinkState;	// Blink LED state (0=Not in blink LED)
+    uCHAR pciBusNum;	// PCI Bus # (Optional)
+    uCHAR pciDeviceNum;	// PCI Device # (Optional)
+    uSHORT hbaFlags;	// Miscellaneous HBA flags
+    uSHORT Interrupt;	// Interrupt set for this device.
 #   if (defined(_DPT_ARC))
-	uINT baseLength;
-	ADAPTER_OBJECT *AdapterObject;
-	LARGE_INTEGER DmaLogicalAddress;
-	PVOID DmaVirtualAddress;
-	LARGE_INTEGER ReplyLogicalAddress;
-	PVOID ReplyVirtualAddress;
+    uINT baseLength;
+    ADAPTER_OBJECT *AdapterObject;
+    LARGE_INTEGER DmaLogicalAddress;
+    PVOID DmaVirtualAddress;
+    LARGE_INTEGER ReplyLogicalAddress;
+    PVOID ReplyVirtualAddress;
 #   else
-	uINT reserved1;		// Reserved for future expansion
-	uINT reserved2;		// Reserved for future expansion
-	uINT reserved3;		// Reserved for future expansion
+    uINT reserved1;		// Reserved for future expansion
+    uINT reserved2;		// Reserved for future expansion
+    uINT reserved3;		// Reserved for future expansion
 #   endif
 } drvrHBAinfo_S;
 
-typedef struct TARGET_BUSY
-{
-  uLONG channel;
-  uLONG id;
-  uLONG lun;
-  uLONG isBusy;
+typedef struct TARGET_BUSY {
+    uLONG channel;
+    uLONG id;
+    uLONG lun;
+    uLONG isBusy;
 } TARGET_BUSY_T;
 
 #endif

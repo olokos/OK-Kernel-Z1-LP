@@ -15,11 +15,10 @@
 #include "debug.h"
 
 int mobicore_map_vmem(struct mc_instance *instance, void *addr,
-	uint32_t len, uint32_t *handle)
-{
-	phys_addr_t phys;
-	return mc_register_wsm_mmu(instance, addr, len,
-		handle, &phys);
+                      uint32_t len, uint32_t *handle) {
+    phys_addr_t phys;
+    return mc_register_wsm_mmu(instance, addr, len,
+                               handle, &phys);
 }
 EXPORT_SYMBOL(mobicore_map_vmem);
 
@@ -31,9 +30,8 @@ EXPORT_SYMBOL(mobicore_map_vmem);
  * @return 0 if no error
  *
  */
-int mobicore_unmap_vmem(struct mc_instance *instance, uint32_t handle)
-{
-	return mc_unregister_wsm_mmu(instance, handle);
+int mobicore_unmap_vmem(struct mc_instance *instance, uint32_t handle) {
+    return mc_unregister_wsm_mmu(instance, handle);
 }
 EXPORT_SYMBOL(mobicore_unmap_vmem);
 
@@ -45,9 +43,8 @@ EXPORT_SYMBOL(mobicore_unmap_vmem);
  * @return 0 if no error
  *
  */
-int mobicore_free_wsm(struct mc_instance *instance, uint32_t handle)
-{
-	return mc_free_buffer(instance, handle);
+int mobicore_free_wsm(struct mc_instance *instance, uint32_t handle) {
+    return mc_free_buffer(instance, handle);
 }
 EXPORT_SYMBOL(mobicore_free_wsm);
 
@@ -63,17 +60,16 @@ EXPORT_SYMBOL(mobicore_free_wsm);
  * @return error code or 0 for success
  */
 int mobicore_allocate_wsm(struct mc_instance *instance,
-	unsigned long requested_size, uint32_t *handle, void **virt_kernel_addr)
-{
-	struct mc_buffer *buffer = NULL;
+                          unsigned long requested_size, uint32_t *handle, void **virt_kernel_addr) {
+    struct mc_buffer *buffer = NULL;
 
-	/* Setup the WSM buffer structure! */
-	if (mc_get_buffer(instance, &buffer, requested_size))
-		return -EFAULT;
+    /* Setup the WSM buffer structure! */
+    if (mc_get_buffer(instance, &buffer, requested_size))
+        return -EFAULT;
 
-	*handle = buffer->handle;
-	*virt_kernel_addr = buffer->addr;
-	return 0;
+    *handle = buffer->handle;
+    *virt_kernel_addr = buffer->addr;
+    return 0;
 }
 EXPORT_SYMBOL(mobicore_allocate_wsm);
 
@@ -82,13 +78,12 @@ EXPORT_SYMBOL(mobicore_allocate_wsm);
  *
  * @return Instance or NULL if no allocation was possible.
  */
-struct mc_instance *mobicore_open(void)
-{
-	struct mc_instance *instance = mc_alloc_instance();
-	if(instance) {
-		instance->admin = true;
-	}
-	return instance;
+struct mc_instance *mobicore_open(void) {
+    struct mc_instance *instance = mc_alloc_instance();
+    if(instance) {
+        instance->admin = true;
+    }
+    return instance;
 }
 EXPORT_SYMBOL(mobicore_open);
 
@@ -97,9 +92,8 @@ EXPORT_SYMBOL(mobicore_open);
  * @param instance instance
  * @return 0 if Ok or -E ERROR
  */
-int mobicore_release(struct mc_instance *instance)
-{
-	return mc_release_instance(instance);
+int mobicore_release(struct mc_instance *instance) {
+    return mc_release_instance(instance);
 }
 EXPORT_SYMBOL(mobicore_release);
 
@@ -108,9 +102,8 @@ EXPORT_SYMBOL(mobicore_release);
  *
  * @return true if mobicore can sleep, false if it can't sleep
  */
-bool mobicore_sleep_ready(void)
-{
-	return mc_sleep_ready();
+bool mobicore_sleep_ready(void) {
+    return mc_sleep_ready();
 }
 EXPORT_SYMBOL(mobicore_sleep_ready);
 

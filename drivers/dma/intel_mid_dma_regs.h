@@ -86,75 +86,75 @@
 
 /*DMA channel control registers*/
 union intel_mid_dma_ctl_lo {
-	struct {
-		u32	int_en:1;	/*enable or disable interrupts*/
-					/*should be 0*/
-		u32	dst_tr_width:3;	/*destination transfer width*/
-					/*usually 32 bits = 010*/
-		u32	src_tr_width:3; /*source transfer width*/
-					/*usually 32 bits = 010*/
-		u32	dinc:2;		/*destination address inc/dec*/
-					/*For mem:INC=00, Periphral NoINC=11*/
-		u32	sinc:2;		/*source address inc or dec, as above*/
-		u32	dst_msize:3;	/*destination burst transaction length*/
-					/*always = 16 ie 011*/
-		u32	src_msize:3;	/*source burst transaction length*/
-					/*always = 16 ie 011*/
-		u32	reser1:3;
-		u32	tt_fc:3;	/*transfer type and flow controller*/
-					/*M-M = 000
-					  P-M = 010
-					  M-P = 001*/
-		u32	dms:2;		/*destination master select = 0*/
-		u32	sms:2;		/*source master select = 0*/
-		u32	llp_dst_en:1;	/*enable/disable destination LLP = 0*/
-		u32	llp_src_en:1;	/*enable/disable source LLP = 0*/
-		u32	reser2:3;
-	} ctlx;
-	u32	ctl_lo;
+    struct {
+        u32	int_en:1;	/*enable or disable interrupts*/
+        /*should be 0*/
+        u32	dst_tr_width:3;	/*destination transfer width*/
+        /*usually 32 bits = 010*/
+        u32	src_tr_width:3; /*source transfer width*/
+        /*usually 32 bits = 010*/
+        u32	dinc:2;		/*destination address inc/dec*/
+        /*For mem:INC=00, Periphral NoINC=11*/
+        u32	sinc:2;		/*source address inc or dec, as above*/
+        u32	dst_msize:3;	/*destination burst transaction length*/
+        /*always = 16 ie 011*/
+        u32	src_msize:3;	/*source burst transaction length*/
+        /*always = 16 ie 011*/
+        u32	reser1:3;
+        u32	tt_fc:3;	/*transfer type and flow controller*/
+        /*M-M = 000
+          P-M = 010
+          M-P = 001*/
+        u32	dms:2;		/*destination master select = 0*/
+        u32	sms:2;		/*source master select = 0*/
+        u32	llp_dst_en:1;	/*enable/disable destination LLP = 0*/
+        u32	llp_src_en:1;	/*enable/disable source LLP = 0*/
+        u32	reser2:3;
+    } ctlx;
+    u32	ctl_lo;
 };
 
 union intel_mid_dma_ctl_hi {
-	struct {
-		u32	block_ts:12;	/*block transfer size*/
-		u32	done:1;		/*Done - updated by DMAC*/
-		u32	reser:19;	/*configured by DMAC*/
-	} ctlx;
-	u32	ctl_hi;
+    struct {
+        u32	block_ts:12;	/*block transfer size*/
+        u32	done:1;		/*Done - updated by DMAC*/
+        u32	reser:19;	/*configured by DMAC*/
+    } ctlx;
+    u32	ctl_hi;
 
 };
 
 /*DMA channel configuration registers*/
 union intel_mid_dma_cfg_lo {
-	struct {
-		u32	reser1:5;
-		u32	ch_prior:3;	/*channel priority = 0*/
-		u32	ch_susp:1;	/*channel suspend = 0*/
-		u32	fifo_empty:1;	/*FIFO empty or not R bit = 0*/
-		u32	hs_sel_dst:1;	/*select HW/SW destn handshaking*/
-					/*HW = 0, SW = 1*/
-		u32	hs_sel_src:1;	/*select HW/SW src handshaking*/
-		u32	reser2:6;
-		u32	dst_hs_pol:1;	/*dest HS interface polarity*/
-		u32	src_hs_pol:1;	/*src HS interface polarity*/
-		u32	max_abrst:10;	/*max AMBA burst len = 0 (no sw limit*/
-		u32	reload_src:1;	/*auto reload src addr =1 if src is P*/
-		u32	reload_dst:1;	/*AR destn addr =1 if dstn is P*/
-	} cfgx;
-	u32	cfg_lo;
+    struct {
+        u32	reser1:5;
+        u32	ch_prior:3;	/*channel priority = 0*/
+        u32	ch_susp:1;	/*channel suspend = 0*/
+        u32	fifo_empty:1;	/*FIFO empty or not R bit = 0*/
+        u32	hs_sel_dst:1;	/*select HW/SW destn handshaking*/
+        /*HW = 0, SW = 1*/
+        u32	hs_sel_src:1;	/*select HW/SW src handshaking*/
+        u32	reser2:6;
+        u32	dst_hs_pol:1;	/*dest HS interface polarity*/
+        u32	src_hs_pol:1;	/*src HS interface polarity*/
+        u32	max_abrst:10;	/*max AMBA burst len = 0 (no sw limit*/
+        u32	reload_src:1;	/*auto reload src addr =1 if src is P*/
+        u32	reload_dst:1;	/*AR destn addr =1 if dstn is P*/
+    } cfgx;
+    u32	cfg_lo;
 };
 
 union intel_mid_dma_cfg_hi {
-	struct {
-		u32	fcmode:1;	/*flow control mode = 1*/
-		u32	fifo_mode:1;	/*FIFO mode select = 1*/
-		u32	protctl:3;	/*protection control = 0*/
-		u32	rsvd:2;
-		u32	src_per:4;	/*src hw HS interface*/
-		u32	dst_per:4;	/*dstn hw HS interface*/
-		u32	reser2:17;
-	} cfgx;
-	u32	cfg_hi;
+    struct {
+        u32	fcmode:1;	/*flow control mode = 1*/
+        u32	fifo_mode:1;	/*FIFO mode select = 1*/
+        u32	protctl:3;	/*protection control = 0*/
+        u32	rsvd:2;
+        u32	src_per:4;	/*src hw HS interface*/
+        u32	dst_per:4;	/*dstn hw HS interface*/
+        u32	reser2:17;
+    } cfgx;
+    u32	cfg_hi;
 };
 
 
@@ -177,32 +177,31 @@ union intel_mid_dma_cfg_hi {
  * @raw_block: raw block interrupt received
  */
 struct intel_mid_dma_chan {
-	struct dma_chan		chan;
-	void __iomem		*ch_regs;
-	void __iomem		*dma_base;
-	int			ch_id;
-	spinlock_t		lock;
-	struct list_head	active_list;
-	struct list_head	queue;
-	struct list_head	free_list;
-	unsigned int		descs_allocated;
-	struct middma_device	*dma;
-	bool			busy;
-	bool			in_use;
-	u32			raw_tfr;
-	u32			raw_block;
-	struct intel_mid_dma_slave *mid_slave;
+    struct dma_chan		chan;
+    void __iomem		*ch_regs;
+    void __iomem		*dma_base;
+    int			ch_id;
+    spinlock_t		lock;
+    struct list_head	active_list;
+    struct list_head	queue;
+    struct list_head	free_list;
+    unsigned int		descs_allocated;
+    struct middma_device	*dma;
+    bool			busy;
+    bool			in_use;
+    u32			raw_tfr;
+    u32			raw_block;
+    struct intel_mid_dma_slave *mid_slave;
 };
 
 static inline struct intel_mid_dma_chan *to_intel_mid_dma_chan(
-						struct dma_chan *chan)
-{
-	return container_of(chan, struct intel_mid_dma_chan, chan);
+    struct dma_chan *chan) {
+    return container_of(chan, struct intel_mid_dma_chan, chan);
 }
 
 enum intel_mid_dma_state {
-	RUNNING = 0,
-	SUSPENDED,
+    RUNNING = 0,
+    SUSPENDED,
 };
 /**
  * struct middma_device - internal representation of a DMA device
@@ -222,75 +221,71 @@ enum intel_mid_dma_state {
  * @state: dma PM device state
  */
 struct middma_device {
-	struct pci_dev		*pdev;
-	void __iomem		*dma_base;
-	struct pci_pool		*dma_pool;
-	struct dma_device	common;
-	struct tasklet_struct   tasklet;
-	struct intel_mid_dma_chan ch[MAX_CHAN];
-	unsigned int		pci_id;
-	unsigned int		intr_mask;
-	void __iomem		*mask_reg;
-	int			chan_base;
-	int			max_chan;
-	int			block_size;
-	unsigned int		pimr_mask;
-	enum intel_mid_dma_state state;
+    struct pci_dev		*pdev;
+    void __iomem		*dma_base;
+    struct pci_pool		*dma_pool;
+    struct dma_device	common;
+    struct tasklet_struct   tasklet;
+    struct intel_mid_dma_chan ch[MAX_CHAN];
+    unsigned int		pci_id;
+    unsigned int		intr_mask;
+    void __iomem		*mask_reg;
+    int			chan_base;
+    int			max_chan;
+    int			block_size;
+    unsigned int		pimr_mask;
+    enum intel_mid_dma_state state;
 };
 
-static inline struct middma_device *to_middma_device(struct dma_device *common)
-{
-	return container_of(common, struct middma_device, common);
+static inline struct middma_device *to_middma_device(struct dma_device *common) {
+    return container_of(common, struct middma_device, common);
 }
 
 struct intel_mid_dma_desc {
-	void __iomem			*block; /*ch ptr*/
-	struct list_head		desc_node;
-	struct dma_async_tx_descriptor	txd;
-	size_t				len;
-	dma_addr_t			sar;
-	dma_addr_t			dar;
-	u32				cfg_hi;
-	u32				cfg_lo;
-	u32				ctl_lo;
-	u32				ctl_hi;
-	struct pci_pool			*lli_pool;
-	struct intel_mid_dma_lli	*lli;
-	dma_addr_t			lli_phys;
-	unsigned int			lli_length;
-	unsigned int			current_lli;
-	dma_addr_t			next;
-	enum dma_transfer_direction		dirn;
-	enum dma_status			status;
-	enum dma_slave_buswidth		width; /*width of DMA txn*/
-	enum intel_mid_dma_mode		cfg_mode; /*mode configuration*/
+    void __iomem			*block; /*ch ptr*/
+    struct list_head		desc_node;
+    struct dma_async_tx_descriptor	txd;
+    size_t				len;
+    dma_addr_t			sar;
+    dma_addr_t			dar;
+    u32				cfg_hi;
+    u32				cfg_lo;
+    u32				ctl_lo;
+    u32				ctl_hi;
+    struct pci_pool			*lli_pool;
+    struct intel_mid_dma_lli	*lli;
+    dma_addr_t			lli_phys;
+    unsigned int			lli_length;
+    unsigned int			current_lli;
+    dma_addr_t			next;
+    enum dma_transfer_direction		dirn;
+    enum dma_status			status;
+    enum dma_slave_buswidth		width; /*width of DMA txn*/
+    enum intel_mid_dma_mode		cfg_mode; /*mode configuration*/
 
 };
 
 struct intel_mid_dma_lli {
-	dma_addr_t			sar;
-	dma_addr_t			dar;
-	dma_addr_t			llp;
-	u32				ctl_lo;
-	u32				ctl_hi;
+    dma_addr_t			sar;
+    dma_addr_t			dar;
+    dma_addr_t			llp;
+    u32				ctl_lo;
+    u32				ctl_hi;
 } __attribute__ ((packed));
 
-static inline int test_ch_en(void __iomem *dma, u32 ch_no)
-{
-	u32 en_reg = ioread32(dma + DMA_CHAN_EN);
-	return (en_reg >> ch_no) & 0x1;
+static inline int test_ch_en(void __iomem *dma, u32 ch_no) {
+    u32 en_reg = ioread32(dma + DMA_CHAN_EN);
+    return (en_reg >> ch_no) & 0x1;
 }
 
 static inline struct intel_mid_dma_desc *to_intel_mid_dma_desc
-		(struct dma_async_tx_descriptor *txd)
-{
-	return container_of(txd, struct intel_mid_dma_desc, txd);
+(struct dma_async_tx_descriptor *txd) {
+    return container_of(txd, struct intel_mid_dma_desc, txd);
 }
 
 static inline struct intel_mid_dma_slave *to_intel_mid_dma_slave
-		(struct dma_slave_config *slave)
-{
-	return container_of(slave, struct intel_mid_dma_slave, dma_slave);
+(struct dma_slave_config *slave) {
+    return container_of(slave, struct intel_mid_dma_slave, dma_slave);
 }
 
 

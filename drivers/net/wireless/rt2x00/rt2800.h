@@ -1593,18 +1593,18 @@
 	(SHARED_KEY_MODE_BASE + ((__idx) * sizeof(u32)))
 
 struct mac_wcid_entry {
-	u8 mac[6];
-	u8 reserved[2];
+    u8 mac[6];
+    u8 reserved[2];
 } __packed;
 
 struct hw_key_entry {
-	u8 key[16];
-	u8 tx_mic[8];
-	u8 rx_mic[8];
+    u8 key[16];
+    u8 tx_mic[8];
+    u8 rx_mic[8];
 } __packed;
 
 struct mac_iveiv_entry {
-	u8 iv[8];
+    u8 iv[8];
 } __packed;
 
 /*
@@ -2484,13 +2484,13 @@ struct mac_iveiv_entry {
  * RT2800 driver data structure
  */
 struct rt2800_drv_data {
-	u8 calibration_bw20;
-	u8 calibration_bw40;
-	u8 bbp25;
-	u8 bbp26;
-	u8 txmixer_gain_24g;
-	u8 txmixer_gain_5g;
-	unsigned int tbtt_tick;
+    u8 calibration_bw20;
+    u8 calibration_bw40;
+    u8 bbp25;
+    u8 bbp26;
+    u8 txmixer_gain_24g;
+    u8 txmixer_gain_5g;
+    unsigned int tbtt_tick;
 };
 
 #endif /* RT2800_H */

@@ -42,40 +42,39 @@
 
 #define ESDHC_HOST_CONTROL_RES	0x05
 
-static inline void esdhc_set_clock(struct sdhci_host *host, unsigned int clock)
-{
-	int pre_div = 2;
-	int div = 1;
-	u32 temp;
+static inline void esdhc_set_clock(struct sdhci_host *host, unsigned int clock) {
+    int pre_div = 2;
+    int div = 1;
+    u32 temp;
 
-	temp = sdhci_readl(host, ESDHC_SYSTEM_CONTROL);
-	temp &= ~(ESDHC_CLOCK_IPGEN | ESDHC_CLOCK_HCKEN | ESDHC_CLOCK_PEREN
-		| ESDHC_CLOCK_MASK);
-	sdhci_writel(host, temp, ESDHC_SYSTEM_CONTROL);
+    temp = sdhci_readl(host, ESDHC_SYSTEM_CONTROL);
+    temp &= ~(ESDHC_CLOCK_IPGEN | ESDHC_CLOCK_HCKEN | ESDHC_CLOCK_PEREN
+              | ESDHC_CLOCK_MASK);
+    sdhci_writel(host, temp, ESDHC_SYSTEM_CONTROL);
 
-	if (clock == 0)
-		goto out;
+    if (clock == 0)
+        goto out;
 
-	while (host->max_clk / pre_div / 16 > clock && pre_div < 256)
-		pre_div *= 2;
+    while (host->max_clk / pre_div / 16 > clock && pre_div < 256)
+        pre_div *= 2;
 
-	while (host->max_clk / pre_div / div > clock && div < 16)
-		div++;
+    while (host->max_clk / pre_div / div > clock && div < 16)
+        div++;
 
-	dev_dbg(mmc_dev(host->mmc), "desired SD clock: %d, actual: %d\n",
-		clock, host->max_clk / pre_div / div);
+    dev_dbg(mmc_dev(host->mmc), "desired SD clock: %d, actual: %d\n",
+            clock, host->max_clk / pre_div / div);
 
-	pre_div >>= 1;
-	div--;
+    pre_div >>= 1;
+    div--;
 
-	temp = sdhci_readl(host, ESDHC_SYSTEM_CONTROL);
-	temp |= (ESDHC_CLOCK_IPGEN | ESDHC_CLOCK_HCKEN | ESDHC_CLOCK_PEREN
-		| (div << ESDHC_DIVIDER_SHIFT)
-		| (pre_div << ESDHC_PREDIV_SHIFT));
-	sdhci_writel(host, temp, ESDHC_SYSTEM_CONTROL);
-	mdelay(1);
+    temp = sdhci_readl(host, ESDHC_SYSTEM_CONTROL);
+    temp |= (ESDHC_CLOCK_IPGEN | ESDHC_CLOCK_HCKEN | ESDHC_CLOCK_PEREN
+             | (div << ESDHC_DIVIDER_SHIFT)
+             | (pre_div << ESDHC_PREDIV_SHIFT));
+    sdhci_writel(host, temp, ESDHC_SYSTEM_CONTROL);
+    mdelay(1);
 out:
-	host->clock = clock;
+    host->clock = clock;
 }
 
 #endif /* _DRIVERS_MMC_SDHCI_ESDHC_H */

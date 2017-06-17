@@ -21,34 +21,34 @@
  */
 struct thread_info;
 struct trap_per_cpu {
-/* D-cache line 1: Basic thread information, cpu and device mondo queues */
-	struct thread_info	*thread;
-	unsigned long		pgd_paddr;
-	unsigned long		cpu_mondo_pa;
-	unsigned long		dev_mondo_pa;
+    /* D-cache line 1: Basic thread information, cpu and device mondo queues */
+    struct thread_info	*thread;
+    unsigned long		pgd_paddr;
+    unsigned long		cpu_mondo_pa;
+    unsigned long		dev_mondo_pa;
 
-/* D-cache line 2: Error Mondo Queue and kernel buffer pointers */
-	unsigned long		resum_mondo_pa;
-	unsigned long		resum_kernel_buf_pa;
-	unsigned long		nonresum_mondo_pa;
-	unsigned long		nonresum_kernel_buf_pa;
+    /* D-cache line 2: Error Mondo Queue and kernel buffer pointers */
+    unsigned long		resum_mondo_pa;
+    unsigned long		resum_kernel_buf_pa;
+    unsigned long		nonresum_mondo_pa;
+    unsigned long		nonresum_kernel_buf_pa;
 
-/* Dcache lines 3, 4, 5, and 6: Hypervisor Fault Status */
-	struct hv_fault_status	fault_info;
+    /* Dcache lines 3, 4, 5, and 6: Hypervisor Fault Status */
+    struct hv_fault_status	fault_info;
 
-/* Dcache line 7: Physical addresses of CPU send mondo block and CPU list.  */
-	unsigned long		cpu_mondo_block_pa;
-	unsigned long		cpu_list_pa;
-	unsigned long		tsb_huge;
-	unsigned long		tsb_huge_temp;
+    /* Dcache line 7: Physical addresses of CPU send mondo block and CPU list.  */
+    unsigned long		cpu_mondo_block_pa;
+    unsigned long		cpu_list_pa;
+    unsigned long		tsb_huge;
+    unsigned long		tsb_huge_temp;
 
-/* Dcache line 8: IRQ work list, and keep trap_block a power-of-2 in size.  */
-	unsigned long		irq_worklist_pa;
-	unsigned int		cpu_mondo_qmask;
-	unsigned int		dev_mondo_qmask;
-	unsigned int		resum_qmask;
-	unsigned int		nonresum_qmask;
-	unsigned long		__per_cpu_base;
+    /* Dcache line 8: IRQ work list, and keep trap_block a power-of-2 in size.  */
+    unsigned long		irq_worklist_pa;
+    unsigned int		cpu_mondo_qmask;
+    unsigned int		dev_mondo_qmask;
+    unsigned int		resum_qmask;
+    unsigned int		nonresum_qmask;
+    unsigned long		__per_cpu_base;
 } __attribute__((aligned(64)));
 extern struct trap_per_cpu trap_block[NR_CPUS];
 extern void init_cur_cpu_trap(struct thread_info *);
@@ -58,27 +58,27 @@ extern int ncpus_probed;
 extern unsigned long real_hard_smp_processor_id(void);
 
 struct cpuid_patch_entry {
-	unsigned int	addr;
-	unsigned int	cheetah_safari[4];
-	unsigned int	cheetah_jbus[4];
-	unsigned int	starfire[4];
-	unsigned int	sun4v[4];
+    unsigned int	addr;
+    unsigned int	cheetah_safari[4];
+    unsigned int	cheetah_jbus[4];
+    unsigned int	starfire[4];
+    unsigned int	sun4v[4];
 };
 extern struct cpuid_patch_entry __cpuid_patch, __cpuid_patch_end;
 
 struct sun4v_1insn_patch_entry {
-	unsigned int	addr;
-	unsigned int	insn;
+    unsigned int	addr;
+    unsigned int	insn;
 };
 extern struct sun4v_1insn_patch_entry __sun4v_1insn_patch,
-	__sun4v_1insn_patch_end;
+           __sun4v_1insn_patch_end;
 
 struct sun4v_2insn_patch_entry {
-	unsigned int	addr;
-	unsigned int	insns[2];
+    unsigned int	addr;
+    unsigned int	insns[2];
 };
 extern struct sun4v_2insn_patch_entry __sun4v_2insn_patch,
-	__sun4v_2insn_patch_end;
+           __sun4v_2insn_patch_end;
 
 
 #endif /* !(__ASSEMBLY__) */

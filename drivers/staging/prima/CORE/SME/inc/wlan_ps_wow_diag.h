@@ -34,8 +34,7 @@
 
 #ifdef FEATURE_WLAN_DIAG_SUPPORT
 
-typedef enum
-{
+typedef enum {
     WLAN_BMPS_ENTER_REQ =0,
     WLAN_UAPSD_START_REQ =1,
     WLAN_UAPSD_STOP_REQ =2,
@@ -56,8 +55,7 @@ typedef enum
 } wlan_ps_evt_subtype_t;
 
 // maps directly to eRequestFullPowerReason
-typedef enum
-{
+typedef enum {
     WLAN_MISSED_BEACON_IND_RCVD,    /* PE received a MAX_MISSED_BEACON_IND */
     WLAN_BMPS_STATUS_IND_RCVD,      /* PE received a SIR_HAL_BMPS_STATUS_IND */
     WLAN_BMPS_MODE_DISABLED,        /* BMPS mode was disabled by HDD in SME */
@@ -72,8 +70,7 @@ typedef enum
 } wlan_ps_full_power_request_reason_t;
 
 // maps directly to ePmcState
-typedef enum
-{
+typedef enum {
     WLAN_PMC_STOPPED, /* PMC is stopped */
     WLAN_PMC_FULL_POWER, /* full power */
     WLAN_PMC_LOW_POWER, /* low power */
@@ -94,8 +91,7 @@ typedef enum
 } wlan_ps_pmc_current_state_t;
 
 // maps directly to ePmcPowerSavingMode
-typedef enum
-{
+typedef enum {
     WLAN_IDLE_MODE_POWER_SAVE,  /* Idle Mode Power Save (IMPS) */
     WLAN_BEACON_MODE_POWER_SAVE,  /* Beacon Mode Power Save (BMPS) */
     WLAN_SPATIAL_MULTIPLEX_POWER_SAVE,  /* Spatial Multiplexing Power Save (SMPS) */
@@ -105,8 +101,7 @@ typedef enum
 
 } wlan_ps_enable_disable_ps_mode_t;
 
-typedef enum
-{
+typedef enum {
     WLAN_D0,
     WLAN_D1,
     WLAN_D2,
@@ -115,8 +110,7 @@ typedef enum
 
 } wlan_ps_winmob_d_power_state_t;
 
-typedef enum
-{
+typedef enum {
     WLAN_WOW_ENTER_REQ =0,
     WLAN_WOW_EXIT_REQ =1,
     WLAN_WOW_DEL_PTRN_REQ =2,
@@ -124,8 +118,7 @@ typedef enum
 
 } wlan_ps_wow_evt_subtype_t;
 
-typedef enum
-{
+typedef enum {
     WLAN_WOW_TYPE_NONE,
     WLAN_WOW_TYPE_MAGIC_PKT_ONLY,
     WLAN_WOW_TYPE_PTRN_BYTE_MATCH_ONLY,
@@ -133,8 +126,7 @@ typedef enum
 
 } wlan_ps_wow_type_t;
 
-typedef enum
-{
+typedef enum {
     WLAN_WOW_MAGIC_PKT_MATCH,
     WLAN_WOW_PTRN_BYTE_MATCH
 

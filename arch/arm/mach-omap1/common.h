@@ -31,24 +31,21 @@
 #if defined(CONFIG_ARCH_OMAP730) || defined(CONFIG_ARCH_OMAP850)
 void omap7xx_map_io(void);
 #else
-static inline void omap7xx_map_io(void)
-{
+static inline void omap7xx_map_io(void) {
 }
 #endif
 
 #ifdef CONFIG_ARCH_OMAP15XX
 void omap15xx_map_io(void);
 #else
-static inline void omap15xx_map_io(void)
-{
+static inline void omap15xx_map_io(void) {
 }
 #endif
 
 #ifdef CONFIG_ARCH_OMAP16XX
 void omap16xx_map_io(void);
 #else
-static inline void omap16xx_map_io(void)
-{
+static inline void omap16xx_map_io(void) {
 }
 #endif
 

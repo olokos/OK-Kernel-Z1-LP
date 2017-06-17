@@ -64,7 +64,7 @@
 #endif /* CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR */
 
 asmlinkage void full_exception(struct pt_regs *regs, unsigned int type,
-							int fsr, int addr);
+                               int fsr, int addr);
 
 asmlinkage void sw_exception(struct pt_regs *regs);
 void bad_page_fault(struct pt_regs *regs, unsigned long address, int sig);

@@ -466,65 +466,65 @@ do {								\
 	 GET_RX_STATUS_DESC_RX_MCS(_pdesc) == DESC92_RATE11M)
 
 enum rf_optype {
-	RF_OP_BY_SW_3WIRE = 0,
-	RF_OP_BY_FW,
-	RF_OP_MAX
+    RF_OP_BY_SW_3WIRE = 0,
+    RF_OP_BY_FW,
+    RF_OP_MAX
 };
 
 enum ic_inferiority {
-	IC_INFERIORITY_A = 0,
-	IC_INFERIORITY_B = 1,
+    IC_INFERIORITY_A = 0,
+    IC_INFERIORITY_B = 1,
 };
 
 enum fwcmd_iotype {
-	/* For DIG DM */
-	FW_CMD_DIG_ENABLE = 0,
-	FW_CMD_DIG_DISABLE = 1,
-	FW_CMD_DIG_HALT = 2,
-	FW_CMD_DIG_RESUME = 3,
-	/* For High Power DM */
-	FW_CMD_HIGH_PWR_ENABLE = 4,
-	FW_CMD_HIGH_PWR_DISABLE = 5,
-	/* For Rate adaptive DM */
-	FW_CMD_RA_RESET = 6,
-	FW_CMD_RA_ACTIVE = 7,
-	FW_CMD_RA_REFRESH_N = 8,
-	FW_CMD_RA_REFRESH_BG = 9,
-	FW_CMD_RA_INIT = 10,
-	/* For FW supported IQK */
-	FW_CMD_IQK_INIT = 11,
-	/* Tx power tracking switch,
-	 * MP driver only */
-	FW_CMD_TXPWR_TRACK_ENABLE = 12,
-	/* Tx power tracking switch,
-	 * MP driver only */
-	FW_CMD_TXPWR_TRACK_DISABLE = 13,
-	/* Tx power tracking with thermal
-	 * indication, for Normal driver */
-	FW_CMD_TXPWR_TRACK_THERMAL = 14,
-	FW_CMD_PAUSE_DM_BY_SCAN = 15,
-	FW_CMD_RESUME_DM_BY_SCAN = 16,
-	FW_CMD_RA_REFRESH_N_COMB = 17,
-	FW_CMD_RA_REFRESH_BG_COMB = 18,
-	FW_CMD_ANTENNA_SW_ENABLE = 19,
-	FW_CMD_ANTENNA_SW_DISABLE = 20,
-	/* Tx Status report for CCX from FW */
-	FW_CMD_TX_FEEDBACK_CCX_ENABLE = 21,
-	/* Indifate firmware that driver
-	 * enters LPS, For PS-Poll issue */
-	FW_CMD_LPS_ENTER = 22,
-	/* Indicate firmware that driver
-	 * leave LPS*/
-	FW_CMD_LPS_LEAVE = 23,
-	/* Set DIG mode to signal strength */
-	FW_CMD_DIG_MODE_SS = 24,
-	/* Set DIG mode to false alarm. */
-	FW_CMD_DIG_MODE_FA = 25,
-	FW_CMD_ADD_A2_ENTRY = 26,
-	FW_CMD_CTRL_DM_BY_DRIVER = 27,
-	FW_CMD_CTRL_DM_BY_DRIVER_NEW = 28,
-	FW_CMD_PAPE_CONTROL = 29,
-	FW_CMD_IQK_ENABLE = 30,
+    /* For DIG DM */
+    FW_CMD_DIG_ENABLE = 0,
+    FW_CMD_DIG_DISABLE = 1,
+    FW_CMD_DIG_HALT = 2,
+    FW_CMD_DIG_RESUME = 3,
+    /* For High Power DM */
+    FW_CMD_HIGH_PWR_ENABLE = 4,
+    FW_CMD_HIGH_PWR_DISABLE = 5,
+    /* For Rate adaptive DM */
+    FW_CMD_RA_RESET = 6,
+    FW_CMD_RA_ACTIVE = 7,
+    FW_CMD_RA_REFRESH_N = 8,
+    FW_CMD_RA_REFRESH_BG = 9,
+    FW_CMD_RA_INIT = 10,
+    /* For FW supported IQK */
+    FW_CMD_IQK_INIT = 11,
+    /* Tx power tracking switch,
+     * MP driver only */
+    FW_CMD_TXPWR_TRACK_ENABLE = 12,
+    /* Tx power tracking switch,
+     * MP driver only */
+    FW_CMD_TXPWR_TRACK_DISABLE = 13,
+    /* Tx power tracking with thermal
+     * indication, for Normal driver */
+    FW_CMD_TXPWR_TRACK_THERMAL = 14,
+    FW_CMD_PAUSE_DM_BY_SCAN = 15,
+    FW_CMD_RESUME_DM_BY_SCAN = 16,
+    FW_CMD_RA_REFRESH_N_COMB = 17,
+    FW_CMD_RA_REFRESH_BG_COMB = 18,
+    FW_CMD_ANTENNA_SW_ENABLE = 19,
+    FW_CMD_ANTENNA_SW_DISABLE = 20,
+    /* Tx Status report for CCX from FW */
+    FW_CMD_TX_FEEDBACK_CCX_ENABLE = 21,
+    /* Indifate firmware that driver
+     * enters LPS, For PS-Poll issue */
+    FW_CMD_LPS_ENTER = 22,
+    /* Indicate firmware that driver
+     * leave LPS*/
+    FW_CMD_LPS_LEAVE = 23,
+    /* Set DIG mode to signal strength */
+    FW_CMD_DIG_MODE_SS = 24,
+    /* Set DIG mode to false alarm. */
+    FW_CMD_DIG_MODE_FA = 25,
+    FW_CMD_ADD_A2_ENTRY = 26,
+    FW_CMD_CTRL_DM_BY_DRIVER = 27,
+    FW_CMD_CTRL_DM_BY_DRIVER_NEW = 28,
+    FW_CMD_PAPE_CONTROL = 29,
+    FW_CMD_IQK_ENABLE = 30,
 };
 
 /*
@@ -533,34 +533,34 @@ enum fwcmd_iotype {
  * PHY Status content as below
  */
 struct  rx_fwinfo {
-	/* DWORD 0 */
-	u8 gain_trsw[4];
-	/* DWORD 1 */
-	u8 pwdb_all;
-	u8 cfosho[4];
-	/* DWORD 2 */
-	u8 cfotail[4];
-	/* DWORD 3 */
-	s8 rxevm[2];
-	s8 rxsnr[4];
-	/* DWORD 4 */
-	u8 pdsnr[2];
-	/* DWORD 5 */
-	u8 csi_current[2];
-	u8 csi_target[2];
-	/* DWORD 6 */
-	u8 sigevm;
-	u8 max_ex_pwr;
-	u8 ex_intf_flag:1;
-	u8 sgi_en:1;
-	u8 rxsc:2;
-	u8 reserve:4;
+    /* DWORD 0 */
+    u8 gain_trsw[4];
+    /* DWORD 1 */
+    u8 pwdb_all;
+    u8 cfosho[4];
+    /* DWORD 2 */
+    u8 cfotail[4];
+    /* DWORD 3 */
+    s8 rxevm[2];
+    s8 rxsnr[4];
+    /* DWORD 4 */
+    u8 pdsnr[2];
+    /* DWORD 5 */
+    u8 csi_current[2];
+    u8 csi_target[2];
+    /* DWORD 6 */
+    u8 sigevm;
+    u8 max_ex_pwr;
+    u8 ex_intf_flag:1;
+    u8 sgi_en:1;
+    u8 rxsc:2;
+    u8 reserve:4;
 };
 
 struct phy_sts_cck_8192s_t {
-	u8 adc_pwdb_x[4];
-	u8 sq_rpt;
-	u8 cck_agc_rpt;
+    u8 adc_pwdb_x[4];
+    u8 sq_rpt;
+    u8 cck_agc_rpt;
 };
 
 #endif

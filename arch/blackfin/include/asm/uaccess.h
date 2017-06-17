@@ -22,9 +22,8 @@
 #define get_ds()        (KERNEL_DS)
 #define get_fs()        (current_thread_info()->addr_limit)
 
-static inline void set_fs(mm_segment_t fs)
-{
-	current_thread_info()->addr_limit = fs;
+static inline void set_fs(mm_segment_t fs) {
+    current_thread_info()->addr_limit = fs;
 }
 
 #define segment_eq(a,b) ((a) == (b))
@@ -34,21 +33,20 @@ static inline void set_fs(mm_segment_t fs)
 
 #define access_ok(type, addr, size) _access_ok((unsigned long)(addr), (size))
 
-static inline int is_in_rom(unsigned long addr)
-{
-	/*
-	 * What we are really trying to do is determine if addr is
-	 * in an allocated kernel memory region. If not then assume
-	 * we cannot free it or otherwise de-allocate it. Ideally
-	 * we could restrict this to really being in a ROM or flash,
-	 * but that would need to be done on a board by board basis,
-	 * not globally.
-	 */
-	if ((addr < _ramstart) || (addr >= _ramend))
-		return (1);
+static inline int is_in_rom(unsigned long addr) {
+    /*
+     * What we are really trying to do is determine if addr is
+     * in an allocated kernel memory region. If not then assume
+     * we cannot free it or otherwise de-allocate it. Ideally
+     * we could restrict this to really being in a ROM or flash,
+     * but that would need to be done on a board by board basis,
+     * not globally.
+     */
+    if ((addr < _ramstart) || (addr >= _ramend))
+        return (1);
 
-	/* Default case, not in ROM */
-	return (0);
+    /* Default case, not in ROM */
+    return (0);
 }
 
 /*
@@ -58,7 +56,9 @@ static inline int is_in_rom(unsigned long addr)
  */
 
 #ifndef CONFIG_ACCESS_CHECK
-static inline int _access_ok(unsigned long addr, unsigned long size) { return 1; }
+static inline int _access_ok(unsigned long addr, unsigned long size) {
+    return 1;
+}
 #else
 extern int _access_ok(unsigned long addr, unsigned long size);
 #endif
@@ -77,7 +77,7 @@ extern int _access_ok(unsigned long addr, unsigned long size);
  */
 
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 /*
@@ -120,10 +120,9 @@ struct exception_table_entry {
 	})
 
 #define __put_user(x,p) put_user(x,p)
-static inline int bad_user_access_length(void)
-{
-	panic("bad_user_access_length");
-	return -1;
+static inline int bad_user_access_length(void) {
+    panic("bad_user_access_length");
+    return -1;
 }
 
 #define __put_user_bad() (printk(KERN_INFO "put_user_bad %s:%d %s\n",\
@@ -192,23 +191,21 @@ static inline int bad_user_access_length(void)
                                                    return retval; })
 
 static inline unsigned long __must_check
-copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (access_ok(VERIFY_READ, from, n))
-		memcpy(to, (const void __force *)from, n);
-	else
-		return n;
-	return 0;
+copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (access_ok(VERIFY_READ, from, n))
+        memcpy(to, (const void __force *)from, n);
+    else
+        return n;
+    return 0;
 }
 
 static inline unsigned long __must_check
-copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		memcpy((void __force *)to, from, n);
-	else
-		return n;
-	return 0;
+copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        memcpy((void __force *)to, from, n);
+    else
+        return n;
+    return 0;
 }
 
 /*
@@ -216,14 +213,13 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
  */
 
 static inline long __must_check
-strncpy_from_user(char *dst, const char *src, long count)
-{
-	char *tmp;
-	if (!access_ok(VERIFY_READ, src, 1))
-		return -EFAULT;
-	strncpy(dst, src, count);
-	for (tmp = dst; *tmp && count > 0; tmp++, count--) ;
-	return (tmp - dst);
+strncpy_from_user(char *dst, const char *src, long count) {
+    char *tmp;
+    if (!access_ok(VERIFY_READ, src, 1))
+        return -EFAULT;
+    strncpy(dst, src, count);
+    for (tmp = dst; *tmp && count > 0; tmp++, count--) ;
+    return (tmp - dst);
 }
 
 /*
@@ -237,18 +233,16 @@ strncpy_from_user(char *dst, const char *src, long count)
  * On exception, returns 0.
  * If the string is too long, returns a value greater than n.
  */
-static inline long __must_check strnlen_user(const char *src, long n)
-{
-	if (!access_ok(VERIFY_READ, src, 1))
-		return 0;
-	return strnlen(src, n) + 1;
+static inline long __must_check strnlen_user(const char *src, long n) {
+    if (!access_ok(VERIFY_READ, src, 1))
+        return 0;
+    return strnlen(src, n) + 1;
 }
 
-static inline long __must_check strlen_user(const char *src)
-{
-	if (!access_ok(VERIFY_READ, src, 1))
-		return 0;
-	return strlen(src) + 1;
+static inline long __must_check strlen_user(const char *src) {
+    if (!access_ok(VERIFY_READ, src, 1))
+        return 0;
+    return strlen(src) + 1;
 }
 
 /*
@@ -256,12 +250,11 @@ static inline long __must_check strlen_user(const char *src)
  */
 
 static inline unsigned long __must_check
-__clear_user(void *to, unsigned long n)
-{
-	if (!access_ok(VERIFY_WRITE, to, n))
-		return n;
-	memset(to, 0, n);
-	return 0;
+__clear_user(void *to, unsigned long n) {
+    if (!access_ok(VERIFY_WRITE, to, n))
+        return n;
+    memset(to, 0, n);
+    return 0;
 }
 
 #define clear_user(to, n) __clear_user(to, n)
@@ -274,11 +267,11 @@ __clear_user(void *to, unsigned long n)
  *	ITEST:     can be accessed by isram memcpy or dma memcpy
  */
 enum {
-	BFIN_MEM_ACCESS_CORE = 0,
-	BFIN_MEM_ACCESS_CORE_ONLY,
-	BFIN_MEM_ACCESS_DMA,
-	BFIN_MEM_ACCESS_IDMA,
-	BFIN_MEM_ACCESS_ITEST,
+    BFIN_MEM_ACCESS_CORE = 0,
+    BFIN_MEM_ACCESS_CORE_ONLY,
+    BFIN_MEM_ACCESS_DMA,
+    BFIN_MEM_ACCESS_IDMA,
+    BFIN_MEM_ACCESS_ITEST,
 };
 /**
  *	bfin_mem_access_type() - what kind of memory access is required

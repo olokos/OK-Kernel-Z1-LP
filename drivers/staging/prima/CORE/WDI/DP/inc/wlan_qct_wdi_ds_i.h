@@ -91,8 +91,7 @@
 
 
 
-typedef enum
-{
+typedef enum {
     DTI_TRACE_LEVEL_FATAL,
     DTI_TRACE_LEVEL_ERROR,
     DTI_TRACE_LEVEL_WARN,
@@ -118,8 +117,7 @@ WPT_STATIC WPT_INLINE void DTI_TRACE ( DTI_TRACE_LEVEL level, ...) { };
 #define WDI_DS_INDEX_INVALID       0xFF
 
 /* Mem Pool resorce count per STA data type */
-typedef struct
-{
+typedef struct {
     wpt_uint8    validIdx;
     wpt_uint8    STAIndex;
     wpt_uint32   numChunkReservedBySTA;
@@ -130,8 +128,7 @@ typedef struct
     wpt_mutex    resourceCountLock;
 } WDI_DS_BdMemPoolSTAType;
 
-typedef struct
-{
+typedef struct {
     void *pVirtBaseAddress;
     void *pPhysBaseAddress;
     wpt_uint32 poolSize;
@@ -142,8 +139,7 @@ typedef struct
 } WDI_DS_BdMemPoolType;
 
 /* STA index associated with BSS index data type */
-typedef struct
-{
+typedef struct {
     wpt_uint8   isUsed;
     wpt_uint8   bssIdx;
     wpt_uint8   staIdx;
@@ -154,8 +150,7 @@ void *WDI_DS_MemPoolAlloc(WDI_DS_BdMemPoolType *memPool, void **pPhysAddress, WD
 void  WDI_DS_MemPoolFree(WDI_DS_BdMemPoolType *memPool, void *pVirtAddress, void *pPhysAddress);
 void WDI_DS_MemPoolDestroy(WDI_DS_BdMemPoolType *memPool);
 
-typedef struct
-{
+typedef struct {
     void                            *pcontext;
     void                            *pCallbackContext;
     wpt_uint8                        suspend;
@@ -167,15 +162,13 @@ typedef struct
     WDI_DS_staIdxPerBssIdxType       staIdxPerBssIdxTable[WDI_DS_MAX_SUPPORTED_BSS];
 } WDI_DS_ClientDataType;
 
-WPT_STATIC WPT_INLINE void WDI_GetBDPointers(wpt_packet *pFrame, void **pVirt, void **pPhys)
-{
+WPT_STATIC WPT_INLINE void WDI_GetBDPointers(wpt_packet *pFrame, void **pVirt, void **pPhys) {
     *pVirt = WPAL_PACKET_GET_BD_POINTER(pFrame);
     *pPhys = WPAL_PACKET_GET_BD_PHYS(pFrame);
 }
 
 
-WPT_STATIC WPT_INLINE void WDI_SetBDPointers(wpt_packet *pFrame, void *pVirt, void *pPhys)
-{
+WPT_STATIC WPT_INLINE void WDI_SetBDPointers(wpt_packet *pFrame, void *pVirt, void *pPhys) {
     WPAL_PACKET_SET_BD_POINTER(pFrame, pVirt);
     WPAL_PACKET_SET_BD_PHYS(pFrame, pPhys);
 }

@@ -16,59 +16,59 @@
 #define G2D_NAME "s5p-g2d"
 
 struct g2d_dev {
-	struct v4l2_device	v4l2_dev;
-	struct v4l2_m2m_dev	*m2m_dev;
-	struct video_device	*vfd;
-	struct mutex		mutex;
-	spinlock_t		ctrl_lock;
-	atomic_t		num_inst;
-	struct vb2_alloc_ctx	*alloc_ctx;
-	struct resource		*res_regs;
-	void __iomem		*regs;
-	struct clk		*clk;
-	struct clk		*gate;
-	struct g2d_ctx		*curr;
-	int irq;
-	wait_queue_head_t	irq_queue;
+    struct v4l2_device	v4l2_dev;
+    struct v4l2_m2m_dev	*m2m_dev;
+    struct video_device	*vfd;
+    struct mutex		mutex;
+    spinlock_t		ctrl_lock;
+    atomic_t		num_inst;
+    struct vb2_alloc_ctx	*alloc_ctx;
+    struct resource		*res_regs;
+    void __iomem		*regs;
+    struct clk		*clk;
+    struct clk		*gate;
+    struct g2d_ctx		*curr;
+    int irq;
+    wait_queue_head_t	irq_queue;
 };
 
 struct g2d_frame {
-	/* Original dimensions */
-	u32	width;
-	u32	height;
-	/* Crop size */
-	u32	c_width;
-	u32	c_height;
-	/* Offset */
-	u32	o_width;
-	u32	o_height;
-	/* Image format */
-	struct g2d_fmt *fmt;
-	/* Variables that can calculated once and reused */
-	u32	stride;
-	u32	bottom;
-	u32	right;
-	u32	size;
+    /* Original dimensions */
+    u32	width;
+    u32	height;
+    /* Crop size */
+    u32	c_width;
+    u32	c_height;
+    /* Offset */
+    u32	o_width;
+    u32	o_height;
+    /* Image format */
+    struct g2d_fmt *fmt;
+    /* Variables that can calculated once and reused */
+    u32	stride;
+    u32	bottom;
+    u32	right;
+    u32	size;
 };
 
 struct g2d_ctx {
-	struct v4l2_fh fh;
-	struct g2d_dev		*dev;
-	struct v4l2_m2m_ctx     *m2m_ctx;
-	struct g2d_frame	in;
-	struct g2d_frame	out;
-	struct v4l2_ctrl	*ctrl_hflip;
-	struct v4l2_ctrl	*ctrl_vflip;
-	struct v4l2_ctrl_handler ctrl_handler;
-	u32 rop;
-	u32 flip;
+    struct v4l2_fh fh;
+    struct g2d_dev		*dev;
+    struct v4l2_m2m_ctx     *m2m_ctx;
+    struct g2d_frame	in;
+    struct g2d_frame	out;
+    struct v4l2_ctrl	*ctrl_hflip;
+    struct v4l2_ctrl	*ctrl_vflip;
+    struct v4l2_ctrl_handler ctrl_handler;
+    u32 rop;
+    u32 flip;
 };
 
 struct g2d_fmt {
-	char	*name;
-	u32	fourcc;
-	int	depth;
-	u32	hw;
+    char	*name;
+    u32	fourcc;
+    int	depth;
+    u32	hw;
 };
 
 

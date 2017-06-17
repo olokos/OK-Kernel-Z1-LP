@@ -2,19 +2,19 @@
  *
  * Copyright (c) 2007-2009, 2012-2014,The Linux Foundation. All rights reserved.
  * Copyright (C) 2013 Sony Mobile Communications AB.
- * 
+ *
  * All source code in this file is licensed under the following license
  * except where indicated.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * version 2 as published by the Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can find it at http://www.fsf.org
  */
@@ -38,52 +38,52 @@
 #define MSM_GET_UART_CLOCK_STATUS 15
 
 enum msm_hsl_regs {
-	UARTDM_MR1,
-	UARTDM_MR2,
-	UARTDM_IMR,
-	UARTDM_SR,
-	UARTDM_CR,
-	UARTDM_CSR,
-	UARTDM_IPR,
-	UARTDM_ISR,
-	UARTDM_RX_TOTAL_SNAP,
-	UARTDM_RFWR,
-	UARTDM_TFWR,
-	UARTDM_RF,
-	UARTDM_TF,
-	UARTDM_MISR,
-	UARTDM_DMRX,
-	UARTDM_NCF_TX,
-	UARTDM_DMEN,
-	UARTDM_BCR,
-	UARTDM_TXFS,
-	UARTDM_RXFS,
-	UARTDM_IRDA,
-	UARTDM_LAST,
+    UARTDM_MR1,
+    UARTDM_MR2,
+    UARTDM_IMR,
+    UARTDM_SR,
+    UARTDM_CR,
+    UARTDM_CSR,
+    UARTDM_IPR,
+    UARTDM_ISR,
+    UARTDM_RX_TOTAL_SNAP,
+    UARTDM_RFWR,
+    UARTDM_TFWR,
+    UARTDM_RF,
+    UARTDM_TF,
+    UARTDM_MISR,
+    UARTDM_DMRX,
+    UARTDM_NCF_TX,
+    UARTDM_DMEN,
+    UARTDM_BCR,
+    UARTDM_TXFS,
+    UARTDM_RXFS,
+    UARTDM_IRDA,
+    UARTDM_LAST,
 };
 
 enum msm_hs_regs {
-	UART_DM_MR1 = 0x0,
-	UART_DM_MR2 = 0x4,
-	UART_DM_IMR = 0xb0,
-	UART_DM_SR = 0xa4,
-	UART_DM_CR = 0xa8,
-	UART_DM_CSR = 0xa0,
-	UART_DM_IPR = 0x18,
-	UART_DM_ISR = 0xb4,
-	UART_DM_RX_TOTAL_SNAP = 0xbc,
-	UART_DM_TFWR = 0x1c,
-	UART_DM_RFWR = 0x20,
-	UART_DM_RF = 0x140,
-	UART_DM_TF = 0x100,
-	UART_DM_MISR = 0xac,
-	UART_DM_DMRX = 0x34,
-	UART_DM_NCF_TX = 0x40,
-	UART_DM_DMEN = 0x3c,
-	UART_DM_TXFS = 0x4c,
-	UART_DM_RXFS = 0x50,
-	UART_DM_RX_TRANS_CTRL = 0xcc,
-	UART_DM_BCR = 0xc8,
+    UART_DM_MR1 = 0x0,
+    UART_DM_MR2 = 0x4,
+    UART_DM_IMR = 0xb0,
+    UART_DM_SR = 0xa4,
+    UART_DM_CR = 0xa8,
+    UART_DM_CSR = 0xa0,
+    UART_DM_IPR = 0x18,
+    UART_DM_ISR = 0xb4,
+    UART_DM_RX_TOTAL_SNAP = 0xbc,
+    UART_DM_TFWR = 0x1c,
+    UART_DM_RFWR = 0x20,
+    UART_DM_RF = 0x140,
+    UART_DM_TF = 0x100,
+    UART_DM_MISR = 0xac,
+    UART_DM_DMRX = 0x34,
+    UART_DM_NCF_TX = 0x40,
+    UART_DM_DMEN = 0x3c,
+    UART_DM_TXFS = 0x4c,
+    UART_DM_RXFS = 0x50,
+    UART_DM_RX_TRANS_CTRL = 0xcc,
+    UART_DM_BCR = 0xc8,
 };
 
 #define UARTDM_MR1_ADDR 0x0

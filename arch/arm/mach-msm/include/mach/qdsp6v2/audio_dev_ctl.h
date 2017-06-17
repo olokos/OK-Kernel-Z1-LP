@@ -38,34 +38,34 @@
 #define MANY_TO_ONE 2
 
 struct msm_snddev_info {
-	const char *name;
-	u32 capability;
-	u32 copp_id;
-	u32 acdb_id;
-	u32 dev_volume;
-	struct msm_snddev_ops {
-		int (*open)(struct msm_snddev_info *);
-		int (*close)(struct msm_snddev_info *);
-		int (*set_freq)(struct msm_snddev_info *, u32);
-		int (*enable_sidetone)(struct msm_snddev_info *, u32, uint16_t);
-		int (*set_device_volume)(struct msm_snddev_info *, u32);
-		int (*enable_anc)(struct msm_snddev_info *, u32);
-	} dev_ops;
-	u8 opened;
-	void *private_data;
-	bool state;
-	u32 sample_rate;
-	u32 channel_mode;
-	u32 set_sample_rate;
-	u64 sessions;
-	int usage_count;
-	s32 max_voc_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* [0] is for NB,[1] for WB */
-	s32 min_voc_rx_vol[VOC_RX_VOL_ARRAY_NUM];
+    const char *name;
+    u32 capability;
+    u32 copp_id;
+    u32 acdb_id;
+    u32 dev_volume;
+    struct msm_snddev_ops {
+        int (*open)(struct msm_snddev_info *);
+        int (*close)(struct msm_snddev_info *);
+        int (*set_freq)(struct msm_snddev_info *, u32);
+        int (*enable_sidetone)(struct msm_snddev_info *, u32, uint16_t);
+        int (*set_device_volume)(struct msm_snddev_info *, u32);
+        int (*enable_anc)(struct msm_snddev_info *, u32);
+    } dev_ops;
+    u8 opened;
+    void *private_data;
+    bool state;
+    u32 sample_rate;
+    u32 channel_mode;
+    u32 set_sample_rate;
+    u64 sessions;
+    int usage_count;
+    s32 max_voc_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* [0] is for NB,[1] for WB */
+    s32 min_voc_rx_vol[VOC_RX_VOL_ARRAY_NUM];
 };
 
 struct msm_volume {
-	int volume; /* Volume parameter, in % Scale */
-	int pan;
+    int volume; /* Volume parameter, in % Scale */
+    int pan;
 };
 
 extern struct msm_volume msm_vol_ctl;
@@ -78,14 +78,14 @@ unsigned short msm_snddev_route_dec(int popp_id);
 unsigned short msm_snddev_route_enc(int enc_id);
 
 int msm_snddev_set_dec(int popp_id, int copp_id, int set,
-					int rate, int channel_mode);
+                       int rate, int channel_mode);
 int msm_snddev_set_enc(int popp_id, int copp_id, int set,
-					int rate, int channel_mode);
+                       int rate, int channel_mode);
 
 int msm_snddev_is_set(int popp_id, int copp_id);
 int msm_get_voc_route(u32 *rx_id, u32 *tx_id);
 int msm_set_voc_route(struct msm_snddev_info *dev_info, int stream_type,
-			int dev_id);
+                      int dev_id);
 int msm_snddev_enable_sidetone(u32 dev_id, u32 enable, uint16_t gain);
 
 int msm_set_copp_id(int session_id, int copp_id);
@@ -107,56 +107,56 @@ void msm_release_voc_thread(void);
 int snddev_voice_set_volume(int vol, int path);
 
 struct auddev_evt_voc_devinfo {
-	u32 dev_type; /* Rx or Tx */
-	u32 acdb_dev_id; /* acdb id of device */
-	u32 dev_sample;  /* Sample rate of device */
-	s32 max_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* unit is mb (milibel),
+    u32 dev_type; /* Rx or Tx */
+    u32 acdb_dev_id; /* acdb id of device */
+    u32 dev_sample;  /* Sample rate of device */
+    s32 max_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* unit is mb (milibel),
 						[0] is for NB, other for WB */
-	s32 min_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* unit is mb */
-	u32 dev_id; /* registered device id */
-	u32 dev_port_id;
+    s32 min_rx_vol[VOC_RX_VOL_ARRAY_NUM]; /* unit is mb */
+    u32 dev_id; /* registered device id */
+    u32 dev_port_id;
 };
 
 struct auddev_evt_audcal_info {
-	u32 dev_id;
-	u32 acdb_id;
-	u32 sample_rate;
-	u32 dev_type;
-	u32 sessions;
+    u32 dev_id;
+    u32 acdb_id;
+    u32 sample_rate;
+    u32 dev_type;
+    u32 sessions;
 };
 
 union msm_vol_mute {
-	int vol;
-	bool mute;
+    int vol;
+    bool mute;
 };
 
 struct auddev_evt_voc_mute_info {
-	u32 dev_type;
-	u32 acdb_dev_id;
-	u32 voice_session_id;
-	union msm_vol_mute dev_vm_val;
+    u32 dev_type;
+    u32 acdb_dev_id;
+    u32 voice_session_id;
+    union msm_vol_mute dev_vm_val;
 };
 
 struct auddev_evt_freq_info {
-	u32 dev_type;
-	u32 acdb_dev_id;
-	u32 sample_rate;
+    u32 dev_type;
+    u32 acdb_dev_id;
+    u32 sample_rate;
 };
 
 union auddev_evt_data {
-	struct auddev_evt_voc_devinfo voc_devinfo;
-	struct auddev_evt_voc_mute_info voc_vm_info;
-	struct auddev_evt_freq_info freq_info;
-	u32 routing_id;
-	s32 session_vol;
-	s32 voice_state;
-	struct auddev_evt_audcal_info audcal_info;
-	u32 voice_session_id;
+    struct auddev_evt_voc_devinfo voc_devinfo;
+    struct auddev_evt_voc_mute_info voc_vm_info;
+    struct auddev_evt_freq_info freq_info;
+    u32 routing_id;
+    s32 session_vol;
+    s32 voice_state;
+    struct auddev_evt_audcal_info audcal_info;
+    u32 voice_session_id;
 };
 
 struct message_header {
-	uint32_t id;
-	uint32_t data_len;
+    uint32_t id;
+    uint32_t data_len;
 };
 
 #define AUDDEV_EVT_DEV_CHG_VOICE 0x01 /* device change event */
@@ -178,37 +178,37 @@ struct message_header {
 #define AUDIO_DEV_CTL_MAX_LISTNER 20 /* Max Listeners Supported */
 
 struct msm_snd_evt_listner {
-	uint32_t evt_id;
-	uint32_t clnt_type;
-	uint32_t clnt_id;
-	void *private_data;
-	void (*auddev_evt_listener)(u32 evt_id,
-		union auddev_evt_data *evt_payload,
-		void *private_data);
-	struct msm_snd_evt_listner *cb_next;
-	struct msm_snd_evt_listner *cb_prev;
+    uint32_t evt_id;
+    uint32_t clnt_type;
+    uint32_t clnt_id;
+    void *private_data;
+    void (*auddev_evt_listener)(u32 evt_id,
+                                union auddev_evt_data *evt_payload,
+                                void *private_data);
+    struct msm_snd_evt_listner *cb_next;
+    struct msm_snd_evt_listner *cb_prev;
 };
 
 struct event_listner {
-	struct msm_snd_evt_listner *cb;
-	u32 num_listner;
-	int state; /* Call state */ /* TODO remove this if not req*/
+    struct msm_snd_evt_listner *cb;
+    u32 num_listner;
+    int state; /* Call state */ /* TODO remove this if not req*/
 };
 
 extern struct event_listner event;
 int auddev_register_evt_listner(u32 evt_id, u32 clnt_type, u32 clnt_id,
-		void (*listner)(u32 evt_id,
-			union auddev_evt_data *evt_payload,
-			void *private_data),
-		void *private_data);
+                                void (*listner)(u32 evt_id,
+                                        union auddev_evt_data *evt_payload,
+                                        void *private_data),
+                                void *private_data);
 int auddev_unregister_evt_listner(u32 clnt_type, u32 clnt_id);
 void mixer_post_event(u32 evt_id, u32 dev_id);
 void broadcast_event(u32 evt_id, u32 dev_id, u64 session_id);
 int auddev_cfg_tx_copp_topology(int session_id, int cfg);
 int msm_snddev_request_freq(int *freq, u32 session_id,
-			u32 capability, u32 clnt_type);
+                            u32 capability, u32 clnt_type);
 int msm_snddev_withdraw_freq(u32 session_id,
-			u32 capability, u32 clnt_type);
+                             u32 capability, u32 clnt_type);
 int msm_device_is_voice(int dev_id);
 int msm_get_voc_freq(int *tx_freq, int *rx_freq);
 int msm_snddev_get_enc_freq(int session_id);
@@ -216,6 +216,6 @@ int msm_set_voice_vol(int dir, s32 volume, u32 session_id);
 int msm_set_voice_mute(int dir, int mute, u32 session_id);
 int msm_get_voice_state(void);
 int msm_enable_incall_recording(int popp_id, int rec_mode, int rate,
-				int channel_mode);
+                                int channel_mode);
 int msm_disable_incall_recording(uint32_t popp_id, uint32_t rec_mode);
 #endif

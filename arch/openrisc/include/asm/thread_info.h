@@ -47,21 +47,21 @@
 typedef unsigned long mm_segment_t;
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	__u32			cpu;		/* current CPU */
-	__s32			preempt_count; /* 0 => preemptable, <0 => BUG */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    __u32			cpu;		/* current CPU */
+    __s32			preempt_count; /* 0 => preemptable, <0 => BUG */
 
-	mm_segment_t		addr_limit; /* thread address space:
+    mm_segment_t		addr_limit; /* thread address space:
 					       0-0x7FFFFFFF for user-thead
 					       0-0xFFFFFFFF for kernel-thread
 					     */
-	struct restart_block    restart_block;
-	__u8			supervisor_stack[0];
+    struct restart_block    restart_block;
+    __u8			supervisor_stack[0];
 
-	/* saved context data */
-	unsigned long           ksp;
+    /* saved context data */
+    unsigned long           ksp;
 };
 #endif
 

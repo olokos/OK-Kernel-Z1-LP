@@ -23,8 +23,8 @@
 #endif
 
 struct versatile_led {
-	struct led_classdev	cdev;
-	u8			mask;
+    struct led_classdev	cdev;
+    u8			mask;
 };
 
 /*
@@ -32,68 +32,65 @@ struct versatile_led {
  * LED triggers are compiled in.
  */
 static const struct {
-	const char *name;
-	const char *trigger;
+    const char *name;
+    const char *trigger;
 } versatile_leds[] = {
-	{ "versatile:0", "heartbeat", },
-	{ "versatile:1", "mmc0", },
-	{ "versatile:2", },
-	{ "versatile:3", },
-	{ "versatile:4", },
-	{ "versatile:5", },
-	{ "versatile:6", },
-	{ "versatile:7", },
+    { "versatile:0", "heartbeat", },
+    { "versatile:1", "mmc0", },
+    { "versatile:2", },
+    { "versatile:3", },
+    { "versatile:4", },
+    { "versatile:5", },
+    { "versatile:6", },
+    { "versatile:7", },
 };
 
 static void versatile_led_set(struct led_classdev *cdev,
-			      enum led_brightness b)
-{
-	struct versatile_led *led = container_of(cdev,
-						 struct versatile_led, cdev);
-	u32 reg = readl(LEDREG);
+                              enum led_brightness b) {
+    struct versatile_led *led = container_of(cdev,
+                                struct versatile_led, cdev);
+    u32 reg = readl(LEDREG);
 
-	if (b != LED_OFF)
-		reg |= led->mask;
-	else
-		reg &= ~led->mask;
-	writel(reg, LEDREG);
+    if (b != LED_OFF)
+        reg |= led->mask;
+    else
+        reg &= ~led->mask;
+    writel(reg, LEDREG);
 }
 
-static enum led_brightness versatile_led_get(struct led_classdev *cdev)
-{
-	struct versatile_led *led = container_of(cdev,
-						 struct versatile_led, cdev);
-	u32 reg = readl(LEDREG);
+static enum led_brightness versatile_led_get(struct led_classdev *cdev) {
+    struct versatile_led *led = container_of(cdev,
+                                struct versatile_led, cdev);
+    u32 reg = readl(LEDREG);
 
-	return (reg & led->mask) ? LED_FULL : LED_OFF;
+    return (reg & led->mask) ? LED_FULL : LED_OFF;
 }
 
-static int __init versatile_leds_init(void)
-{
-	int i;
+static int __init versatile_leds_init(void) {
+    int i;
 
-	/* All ON */
-	writel(0xff, LEDREG);
-	for (i = 0; i < ARRAY_SIZE(versatile_leds); i++) {
-		struct versatile_led *led;
+    /* All ON */
+    writel(0xff, LEDREG);
+    for (i = 0; i < ARRAY_SIZE(versatile_leds); i++) {
+        struct versatile_led *led;
 
-		led = kzalloc(sizeof(*led), GFP_KERNEL);
-		if (!led)
-			break;
+        led = kzalloc(sizeof(*led), GFP_KERNEL);
+        if (!led)
+            break;
 
-		led->cdev.name = versatile_leds[i].name;
-		led->cdev.brightness_set = versatile_led_set;
-		led->cdev.brightness_get = versatile_led_get;
-		led->cdev.default_trigger = versatile_leds[i].trigger;
-		led->mask = BIT(i);
+        led->cdev.name = versatile_leds[i].name;
+        led->cdev.brightness_set = versatile_led_set;
+        led->cdev.brightness_get = versatile_led_get;
+        led->cdev.default_trigger = versatile_leds[i].trigger;
+        led->mask = BIT(i);
 
-		if (led_classdev_register(NULL, &led->cdev) < 0) {
-			kfree(led);
-			break;
-		}
-	}
+        if (led_classdev_register(NULL, &led->cdev) < 0) {
+            kfree(led);
+            break;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 /*

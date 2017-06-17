@@ -20,13 +20,11 @@
 #ifndef __ASM_KVM_BOOK3S_32_H__
 #define __ASM_KVM_BOOK3S_32_H__
 
-static inline struct kvmppc_book3s_shadow_vcpu *svcpu_get(struct kvm_vcpu *vcpu)
-{
-	return to_book3s(vcpu)->shadow_vcpu;
+static inline struct kvmppc_book3s_shadow_vcpu *svcpu_get(struct kvm_vcpu *vcpu) {
+    return to_book3s(vcpu)->shadow_vcpu;
 }
 
-static inline void svcpu_put(struct kvmppc_book3s_shadow_vcpu *svcpu)
-{
+static inline void svcpu_put(struct kvmppc_book3s_shadow_vcpu *svcpu) {
 }
 
 #define PTE_SIZE	12

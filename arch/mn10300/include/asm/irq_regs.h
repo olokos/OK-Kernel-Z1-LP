@@ -19,9 +19,8 @@
 
 #ifndef __ASSEMBLY__
 static inline __attribute__((const))
-struct pt_regs *get_irq_regs(void)
-{
-	return current_frame();
+struct pt_regs *get_irq_regs(void) {
+    return current_frame();
 }
 #endif
 

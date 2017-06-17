@@ -118,14 +118,14 @@
  */
 
 struct ethhdr {
-	unsigned char	h_dest[ETH_ALEN];	/* destination eth addr	*/
-	unsigned char	h_source[ETH_ALEN];	/* source ether addr	*/
-	unsigned short	h_proto;		/* packet type ID field	*/
+    unsigned char	h_dest[ETH_ALEN];	/* destination eth addr	*/
+    unsigned char	h_source[ETH_ALEN];	/* source ether addr	*/
+    unsigned short	h_proto;		/* packet type ID field	*/
 };
 
 struct _vlan {
-	unsigned short  h_vlan_TCI;	/* Encapsulates priority and VLAN ID*/
-	unsigned short  h_vlan_encapsulated_proto;
+    unsigned short  h_vlan_TCI;	/* Encapsulates priority and VLAN ID*/
+    unsigned short  h_vlan_encapsulated_proto;
 };
 
 

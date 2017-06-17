@@ -24,15 +24,15 @@
 
 
 struct chnl_txpow_triple {
-	u8 FirstChnl;
-	u8  NumChnls;
-	u8  MaxTxPowerInDbm;
+    u8 FirstChnl;
+    u8  NumChnls;
+    u8  MaxTxPowerInDbm;
 };
 
 enum dot11d_state {
-	DOT11D_STATE_NONE = 0,
-	DOT11D_STATE_LEARNED,
-	DOT11D_STATE_DONE,
+    DOT11D_STATE_NONE = 0,
+    DOT11D_STATE_LEARNED,
+    DOT11D_STATE_DONE,
 };
 
 /**
@@ -47,22 +47,21 @@ enum dot11d_state {
 
 struct rt_dot11d_info {
 
-	bool bEnabled;
+    bool bEnabled;
 
-	u16 CountryIeLen;
-	u8  CountryIeBuf[MAX_IE_LEN];
-	u8  CountryIeSrcAddr[6];
-	u8  CountryIeWatchdog;
+    u16 CountryIeLen;
+    u8  CountryIeBuf[MAX_IE_LEN];
+    u8  CountryIeSrcAddr[6];
+    u8  CountryIeWatchdog;
 
-	u8  channel_map[MAX_CHANNEL_NUMBER+1];
-	u8  MaxTxPwrDbmList[MAX_CHANNEL_NUMBER+1];
+    u8  channel_map[MAX_CHANNEL_NUMBER+1];
+    u8  MaxTxPwrDbmList[MAX_CHANNEL_NUMBER+1];
 
-	enum dot11d_state State;
+    enum dot11d_state State;
 };
 
-static inline void cpMacAddr(unsigned char *des, unsigned char *src)
-{
-	memcpy(des, src, 6);
+static inline void cpMacAddr(unsigned char *des, unsigned char *src) {
+    memcpy(des, src, 6);
 }
 
 #define GET_DOT11D_INFO(__pIeeeDev)			\
@@ -97,7 +96,7 @@ void dot11d_init(struct rtllib_device *dev);
 void Dot11d_Channelmap(u8 channel_plan, struct rtllib_device *ieee);
 void Dot11d_Reset(struct rtllib_device *dev);
 void Dot11d_UpdateCountryIe(struct rtllib_device *dev, u8 *pTaddr,
-			    u16 CoutryIeLen, u8 *pCoutryIe);
+                            u16 CoutryIeLen, u8 *pCoutryIe);
 u8 DOT11D_GetMaxTxPwrInDbm(struct rtllib_device *dev, u8 Channel);
 void DOT11D_ScanComplete(struct rtllib_device *dev);
 int ToLegalChannel(struct rtllib_device *dev, u8 channel);

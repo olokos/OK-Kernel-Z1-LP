@@ -53,8 +53,7 @@
 #include "vos_utils.h"
 #endif
 
-static WDTS_TransportDriverTrype gTransportDriver =
-{
+static WDTS_TransportDriverTrype gTransportDriver = {
     WLANDXE_Open,
     WLANDXE_Start,
     WLANDXE_ClientRegistration,
@@ -69,8 +68,7 @@ static WDTS_TransportDriverTrype gTransportDriver =
 
 static WDTS_SetPowerStateCbInfoType gSetPowerStateCbInfo;
 
-typedef struct
-{
+typedef struct {
     uint32 phyRate;   //unit in Mega bits per sec X 10
     uint32 tputRate;  //unit in Mega bits per sec X 10
     uint32 tputBpms;  //unit in Bytes per msec = (tputRateX1024x1024)/(8x10X1000) ~= (tputRate*13)
@@ -81,8 +79,7 @@ typedef struct
 #define WDTS_MAX_11B_RATE_NUM           8
 #define MB_PER_SEC_TO_BYTES_PER_MSEC    13
 
-WDTS_RateInfo g11bRateInfo[WDTS_MAX_11B_RATE_NUM]  =
-{
+WDTS_RateInfo g11bRateInfo[WDTS_MAX_11B_RATE_NUM]  = {
     //11b rates
     {  10,  9,  117, 8}, //index 0
     {  20,  17, 221, 5}, //index 1
@@ -96,8 +93,7 @@ WDTS_RateInfo g11bRateInfo[WDTS_MAX_11B_RATE_NUM]  =
     { 110,  77, 1001, 1}, //index 7
 };
 
-WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  =
-{
+WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  = {
     //11b rates
     {  10,  9,  117, 0}, //index 0
     {  20,  17, 221, 0}, //index 1
@@ -257,21 +253,18 @@ WDTS_RateInfo gRateInfo[WDTS_MAX_RATE_NUM]  =
 };
 
 /* TX stats */
-typedef struct
-{
+typedef struct {
     wpt_uint32 txBytesPushed;
     wpt_uint32 txPacketsPushed; //Can be removed to optimize memory
 } WDI_DTS_TX_TrafficStatsType;
 
 /* RX stats */
-typedef struct
-{
+typedef struct {
     wpt_uint32 rxBytesRcvd;
     wpt_uint32 rxPacketsRcvd;  //Can be removed to optimize memory
 } WDI_DTS_RX_TrafficStatsType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8 running;
     WDI_DTS_RX_TrafficStatsType rxStats[HAL_NUM_STA][WDTS_MAX_RATE_NUM];
     WDI_DTS_TX_TrafficStatsType txStats[HAL_NUM_STA];
@@ -292,14 +285,12 @@ static WDI_DTS_TrafficStatsType gDsTrafficStats;
  * The start and end Rate Index are the other arguments to this API - the new mac
  * efficiency passed to this API (Arg1)  is only applied between startRateIndex (arg2) and endRateIndex (arg3).
  */
-void WDTS_FillRateInfo(wpt_uint8 macEff, wpt_int16 startRateIndex, wpt_int16 endRateIndex)
-{
+void WDTS_FillRateInfo(wpt_uint8 macEff, wpt_int16 startRateIndex, wpt_int16 endRateIndex) {
     int i;
 
     DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Change only 11ac rates");
 
-    for (i=startRateIndex; i<=endRateIndex; i++)
-    {
+    for (i=startRateIndex; i<=endRateIndex; i++) {
         // tputRate --> unit in Mega bits per sec X 10
         gRateInfo[i].tputRate = ((gRateInfo[i].phyRate * macEff)/100);
         // tputBmps --> unit in Bytes per msec = (tputRateX1024x1024)/(8x10X1000) ~= (tputRate*13)
@@ -324,20 +315,16 @@ void WDTS_FillRateInfo(wpt_uint8 macEff, wpt_int16 startRateIndex, wpt_int16 end
  *  len: length of buffer pointed to by pStats
  *  Return Status: None
  */
-void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
-{
-    if(gDsTrafficStats.running)
-    {
+void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len) {
+    if(gDsTrafficStats.running) {
         uint8 staIdx, rate;
         WDI_TrafficStatsType *pNetTxRxStats = gDsTrafficStats.netTxRxStats;
         wpalMemoryZero(pNetTxRxStats, sizeof(gDsTrafficStats.netTxRxStats));
 
-        for(staIdx = 0; staIdx < HAL_NUM_STA; staIdx++, pNetTxRxStats++)
-        {
+        for(staIdx = 0; staIdx < HAL_NUM_STA; staIdx++, pNetTxRxStats++) {
             pNetTxRxStats->txBytesPushed += gDsTrafficStats.txStats[staIdx].txBytesPushed;
             pNetTxRxStats->txPacketsPushed+= gDsTrafficStats.txStats[staIdx].txPacketsPushed;
-            for(rate = 0; rate < WDTS_MAX_11B_RATE_NUM; rate++)
-            {
+            for(rate = 0; rate < WDTS_MAX_11B_RATE_NUM; rate++) {
                 pNetTxRxStats->rxBytesRcvd +=
                     gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
                 pNetTxRxStats->rxPacketsRcvd +=
@@ -345,8 +332,7 @@ void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
                 pNetTxRxStats->rxTimeTotal +=
                     gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd*DTS_11BRATE_TPUT_MULTIPLIER(rate);
             }
-            for(rate = WDTS_MAX_11B_RATE_NUM; rate < WDTS_MAX_RATE_NUM; rate++)
-            {
+            for(rate = WDTS_MAX_11B_RATE_NUM; rate < WDTS_MAX_RATE_NUM; rate++) {
                 pNetTxRxStats->rxBytesRcvd +=
                     gDsTrafficStats.rxStats[staIdx][rate].rxBytesRcvd;
                 pNetTxRxStats->rxPacketsRcvd +=
@@ -360,9 +346,7 @@ void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
         }
         *pStats = gDsTrafficStats.netTxRxStats;
         *len = sizeof(gDsTrafficStats.netTxRxStats);
-    }
-    else
-    {
+    } else {
         *pStats = NULL;
         *len = 0;
     }
@@ -373,8 +357,7 @@ void WDTS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_DeactivateTrafficStats(void)
-{
+void WDTS_DeactivateTrafficStats(void) {
     gDsTrafficStats.running = eWLAN_PAL_FALSE;
 }
 
@@ -383,8 +366,7 @@ void WDTS_DeactivateTrafficStats(void)
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_ActivateTrafficStats(void)
-{
+void WDTS_ActivateTrafficStats(void) {
     gDsTrafficStats.running = eWLAN_PAL_TRUE;
 }
 
@@ -393,8 +375,7 @@ void WDTS_ActivateTrafficStats(void)
   * Parameters: None
  *  Return Status: None
  */
-void WDTS_ClearTrafficStats(void)
-{
+void WDTS_ClearTrafficStats(void) {
     wpalMemoryZero(gDsTrafficStats.rxStats, sizeof(gDsTrafficStats.rxStats));
     wpalMemoryZero(gDsTrafficStats.txStats, sizeof(gDsTrafficStats.txStats));
 }
@@ -409,16 +390,14 @@ void WDTS_ClearTrafficStats(void)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status status)
-{
+wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status status) {
     WDI_DS_ClientDataType *pClientData = (WDI_DS_ClientDataType*)(pContext);
     WDI_DS_TxMetaInfoType     *pTxMetadata;
     void *pvBDHeader, *physBDHeader;
     wpt_uint8 staIndex;
 
     // Do Sanity checks
-    if(NULL == pContext || NULL == pFrame)
-    {
+    if(NULL == pContext || NULL == pFrame) {
         return eWLAN_PAL_STATUS_E_FAILURE;
     }
 
@@ -429,8 +408,7 @@ wpt_status WDTS_TxPacketComplete(void *pContext, wpt_packet *pFrame, wpt_status 
 
     // Free BD header from pool
     WDI_GetBDPointers(pFrame, &pvBDHeader,  &physBDHeader);
-    switch(pTxMetadata->frmType)
-    {
+    switch(pTxMetadata->frmType) {
     case WDI_MAC_DATA_FRAME:
         /* note that EAPOL frame hasn't incremented ReserveCount. see
            WDI_DS_TxPacket() in wlan_qct_wdi_ds.c
@@ -486,8 +464,7 @@ v_U64_t
 WDTS_GetReplayCounterFromRxBD
 (
     v_U8_t *pucRxBDHeader
-)
-{
+) {
     v_U64_t ullcurrentReplayCounter = 0;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     /* 48-bit replay counter is created as follows
@@ -527,8 +504,7 @@ WDTS_GetReplayCounterFromRxBD
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType channel)
-{
+wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType channel) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType*)(pContext);
     wpt_boolean       bASF, bFSF, bLSF, bAEF;
@@ -540,8 +516,7 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
 
     tpSirMacFrameCtl  pMacFrameCtl;
     // Do Sanity checks
-    if(NULL == pContext || NULL == pFrame)
-    {
+    if(NULL == pContext || NULL == pFrame) {
         return eWLAN_PAL_STATUS_E_FAILURE;
     }
 
@@ -549,8 +524,7 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
       Extract BD header and check if valid
       ------------------------------------------------------------------------*/
     pBDHeader = (wpt_uint8*)wpalPacketGetRawBuf(pFrame);
-    if(NULL == pBDHeader)
-    {
+    if(NULL == pBDHeader) {
         DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
                    "WLAN TL:BD header received NULL - dropping packet");
         wpalPacketFree(pFrame);
@@ -571,8 +545,7 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
      * within host side, if frame size is smaller that threshold.
      * This is SW work around, to fix HW problem
      * Throughput and SnS test done successfully */
-    if (usMPDULen < DTS_RX_DELAY_FRAMESIZE_THRESHOLD)
-    {
+    if (usMPDULen < DTS_RX_DELAY_FRAMESIZE_THRESHOLD) {
         wpalBusyWait(1);
     }
 
@@ -591,10 +564,8 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
                ucMPDUHOffset, usMPDUDOffset, usMPDULen, ucMPDUHLen, ucTid,
                WDI_RX_BD_HEADER_SIZE);
 
-    if(!isFcBd)
-    {
-        if(usMPDUDOffset <= ucMPDUHOffset || usMPDULen < ucMPDUHLen)
-        {
+    if(!isFcBd) {
+        if(usMPDUDOffset <= ucMPDUHOffset || usMPDULen < ucMPDUHLen) {
             DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
                        "WLAN TL:BD header corrupted - dropping packet");
             /* Drop packet ???? */
@@ -602,8 +573,7 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
             return eWLAN_PAL_STATUS_SUCCESS;
         }
 
-        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) &&  (!(bASF && !bFSF)))
-        {
+        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) &&  (!(bASF && !bFSF))) {
             /* AMSDU case, ucMPDUHOffset = 0  it should be hancdled seperatly */
             /* Drop packet ???? */
             wpalPacketFree(pFrame);
@@ -613,13 +583,11 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
         /* AMSDU frame, but not first sub-frame
          * No MPDU header, MPDU header offset is 0
          * Total frame size is actual frame size + MPDU data offset */
-        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) && (bASF && !bFSF))
-        {
+        if((ucMPDUHOffset < WDI_RX_BD_HEADER_SIZE) && (bASF && !bFSF)) {
             ucMPDUHOffset = usMPDUDOffset;
         }
 
-        if(VPKT_SIZE_BUFFER_ALIGNED < (usMPDULen+ucMPDUHOffset))
-        {
+        if(VPKT_SIZE_BUFFER_ALIGNED < (usMPDULen+ucMPDUHOffset)) {
             WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_FATAL,
                        "Invalid Frame size, might memory corrupted(%d+%d/%d)",
                        usMPDULen, ucMPDUHOffset, VPKT_SIZE_BUFFER_ALIGNED);
@@ -632,14 +600,12 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
             wpalPacketFree(pFrame);
             return eWLAN_PAL_STATUS_SUCCESS;
         }
-        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset))
-        {
+        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset)) {
             DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Invalid Frame Length, Frame dropped..");
             wpalPacketFree(pFrame);
             return eWLAN_PAL_STATUS_SUCCESS;
         }
-        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketRawTrimHead(pFrame, ucMPDUHOffset))
-        {
+        if(eWLAN_PAL_STATUS_SUCCESS != wpalPacketRawTrimHead(pFrame, ucMPDUHOffset)) {
             DTI_TRACE( DTI_TRACE_LEVEL_ERROR, "Failed to trim Raw Packet Head, Frame dropped..");
             wpalPacketFree(pFrame);
             return eWLAN_PAL_STATUS_SUCCESS;
@@ -678,22 +644,16 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
 #endif
         /* typeSubtype in BD doesn't look like correct. Fill from frame ctrl
            TL does it for Volans but TL does not know BD for Prima. WDI should do it */
-        if ( 0 == WDI_RX_BD_GET_FT(pBDHeader) )
-        {
-            if ( bASF )
-            {
+        if ( 0 == WDI_RX_BD_GET_FT(pBDHeader) ) {
+            if ( bASF ) {
                 pRxMetadata->subtype = WDI_MAC_DATA_QOS_DATA;
                 pRxMetadata->type    = WDI_MAC_DATA_FRAME;
-            }
-            else
-            {
+            } else {
                 pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + ucMPDUHOffset);
                 pRxMetadata->subtype = pMacFrameCtl->subType;
                 pRxMetadata->type    = pMacFrameCtl->type;
             }
-        }
-        else
-        {
+        } else {
             pMacFrameCtl = (tpSirMacFrameCtl)(((wpt_uint8*)pBDHeader) + WDI_RX_BD_HEADER_SIZE);
             pRxMetadata->subtype = pMacFrameCtl->subType;
             pRxMetadata->type    = pMacFrameCtl->type;
@@ -758,9 +718,7 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
 #endif
         // Invoke Rx complete callback
         pClientData->receiveFrameCB(pClientData->pCallbackContext, pFrame);
-    }
-    else
-    {
+    } else {
         wpalPacketSetRxLength(pFrame, usMPDULen+ucMPDUHOffset);
         wpalPacketRawTrimHead(pFrame, ucMPDUHOffset);
 
@@ -775,12 +733,9 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
     }
 
     //Log the RX Stats
-    if(gDsTrafficStats.running && pRxMetadata->staId < HAL_NUM_STA)
-    {
-        if(pRxMetadata->rateIndex < WDTS_MAX_RATE_NUM)
-        {
-            if(pRxMetadata->type == WDI_MAC_DATA_FRAME)
-            {
+    if(gDsTrafficStats.running && pRxMetadata->staId < HAL_NUM_STA) {
+        if(pRxMetadata->rateIndex < WDTS_MAX_RATE_NUM) {
+            if(pRxMetadata->type == WDI_MAC_DATA_FRAME) {
                 gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxBytesRcvd +=
                     pRxMetadata->mpduLength;
                 gDsTrafficStats.rxStats[pRxMetadata->staId][pRxMetadata->rateIndex].rxPacketsRcvd++;
@@ -801,24 +756,19 @@ wpt_status WDTS_RxPacket (void *pContext, wpt_packet *pFrame, WDTS_ChannelType c
  * Return Value: SUCCESS  Completed successfully.
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  */
-wpt_status WDTS_OOResourceNotification(void *pContext, WDTS_ChannelType channel, wpt_boolean on)
-{
+wpt_status WDTS_OOResourceNotification(void *pContext, WDTS_ChannelType channel, wpt_boolean on) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) pContext;
     static wpt_uint8 ac_mask = 0x1f;
 
     // Do Sanity checks
-    if(NULL == pContext)
-    {
+    if(NULL == pContext) {
         return eWLAN_PAL_STATUS_E_FAILURE;
     }
 
-    if(on)
-    {
+    if(on) {
         ac_mask |=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x0f : 0x10;
-    }
-    else
-    {
+    } else {
         ac_mask &=  channel == WDTS_CHANNEL_TX_LOW_PRI?  0x10 : 0x0f;
     }
 
@@ -839,15 +789,13 @@ wpt_status WDTS_OOResourceNotification(void *pContext, WDTS_ChannelType channel,
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_openTransport( void *pContext)
-{
+wpt_status WDTS_openTransport( void *pContext) {
     void *pDTDriverContext;
     WDI_DS_ClientDataType *pClientData;
     WDI_Status sWdiStatus = WDI_STATUS_SUCCESS;
 
     pClientData = (WDI_DS_ClientDataType*) wpalMemoryAllocate(sizeof(WDI_DS_ClientDataType));
-    if (!pClientData)
-    {
+    if (!pClientData) {
         return eWLAN_PAL_STATUS_E_NOMEM;
     }
 
@@ -855,8 +803,7 @@ wpt_status WDTS_openTransport( void *pContext)
     WDI_DS_AssignDatapathContext(pContext, (void*)pClientData);
 
     pDTDriverContext = gTransportDriver.open();
-    if( NULL == pDTDriverContext )
-    {
+    if( NULL == pDTDriverContext ) {
         DTI_TRACE( DTI_TRACE_LEVEL_ERROR, " %s fail from transport open", __func__);
         return eWLAN_PAL_STATUS_E_FAILURE;
     }
@@ -867,16 +814,14 @@ wpt_status WDTS_openTransport( void *pContext)
     /* Create a memory pool for Mgmt BDheaders.*/
     sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->mgmtMemPool, WDI_DS_MAX_CHUNK_SIZE,
                                       WDI_DS_HI_PRI_RES_NUM);
-    if (WDI_STATUS_SUCCESS != sWdiStatus)
-    {
+    if (WDI_STATUS_SUCCESS != sWdiStatus) {
         return eWLAN_PAL_STATUS_E_NOMEM;
     }
 
     /* Create a memory pool for Data BDheaders.*/
     sWdiStatus = WDI_DS_MemPoolCreate(&pClientData->dataMemPool, WDI_DS_MAX_CHUNK_SIZE,
                                       WDI_DS_LO_PRI_RES_NUM);
-    if (WDI_STATUS_SUCCESS != sWdiStatus)
-    {
+    if (WDI_STATUS_SUCCESS != sWdiStatus) {
         return eWLAN_PAL_STATUS_E_NOMEM;
     }
 
@@ -898,8 +843,7 @@ wpt_status WDTS_openTransport( void *pContext)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_startTransport( void *pContext)
-{
+wpt_status WDTS_startTransport( void *pContext) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
     gTransportDriver.start(pDTDriverContext);
     return eWLAN_PAL_STATUS_SUCCESS;
@@ -916,8 +860,7 @@ wpt_status WDTS_startTransport( void *pContext)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame)
-{
+wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
     WDI_DS_TxMetaInfoType     *pTxMetadata;
     WDTS_ChannelType channel = WDTS_CHANNEL_TX_LOW_PRI;
@@ -927,10 +870,8 @@ wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame)
     pTxMetadata = WDI_DS_ExtractTxMetaData(pFrame);
 
     //Log the TX Stats
-    if(gDsTrafficStats.running && pTxMetadata->staIdx < HAL_NUM_STA)
-    {
-        if(pTxMetadata->frmType & WDI_MAC_DATA_FRAME)
-        {
+    if(gDsTrafficStats.running && pTxMetadata->staIdx < HAL_NUM_STA) {
+        if(pTxMetadata->frmType & WDI_MAC_DATA_FRAME) {
             gDsTrafficStats.txStats[pTxMetadata->staIdx].txBytesPushed +=
                 pTxMetadata->fPktlen;
             gDsTrafficStats.txStats[pTxMetadata->staIdx].txPacketsPushed += 1;
@@ -978,8 +919,7 @@ wpt_status WDTS_TxPacket(void *pContext, wpt_packet *pFrame)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq)
-{
+wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
 
     // Notify completion to  Transport Driver.
@@ -994,11 +934,9 @@ wpt_status WDTS_CompleteTx(void *pContext, wpt_uint32 ucTxResReq)
  * Return Value: None.
  *
  */
-void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr)
-{
+void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr) {
     //print a msg
-    if(NULL != gSetPowerStateCbInfo.cback)
-    {
+    if(NULL != gSetPowerStateCbInfo.cback) {
         gSetPowerStateCbInfo.cback(status, dxePhyAddr, gSetPowerStateCbInfo.pUserData);
     }
 }
@@ -1014,21 +952,17 @@ void  WDTS_SetPowerStateCb(wpt_status   status, unsigned int dxePhyAddr)
  *
  */
 wpt_status WDTS_SetPowerState(void *pContext, WDTS_PowerStateType  powerState,
-                              WDTS_SetPowerStateCbType cback)
-{
+                              WDTS_SetPowerStateCbType cback) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
     wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
-    if( cback )
-    {
+    if( cback ) {
         //save the cback & cookie
         gSetPowerStateCbInfo.pUserData = pContext;
         gSetPowerStateCbInfo.cback = cback;
         status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
                                                 WDTS_SetPowerStateCb);
-    }
-    else
-    {
+    } else {
         status = gTransportDriver.setPowerState(pDTDriverContext, powerState,
                                                 NULL);
     }
@@ -1048,8 +982,7 @@ wpt_status WDTS_SetPowerState(void *pContext, WDTS_PowerStateType  powerState,
  * Return Value: NONE
  *
  */
-void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_uint8 debugFlags)
-{
+void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_uint8 debugFlags) {
     gTransportDriver.channelDebug(displaySnapshot, debugFlags);
     return;
 }
@@ -1062,8 +995,7 @@ void WDTS_ChannelDebug(wpt_boolean displaySnapshot, wpt_uint8 debugFlags)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_Stop(void *pContext)
-{
+wpt_status WDTS_Stop(void *pContext) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
     wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
 
@@ -1082,8 +1014,7 @@ wpt_status WDTS_Stop(void *pContext)
  *     FAILURE_XXX  Request was rejected due XXX Reason.
  *
  */
-wpt_status WDTS_Close(void *pContext)
-{
+wpt_status WDTS_Close(void *pContext) {
     void *pDTDriverContext = WDT_GetTransportDriverContext(pContext);
     WDI_DS_ClientDataType *pClientData = WDI_DS_GetDatapathContext(pContext);
     wpt_status status = eWLAN_PAL_STATUS_SUCCESS;
@@ -1107,8 +1038,7 @@ wpt_status WDTS_Close(void *pContext)
  * Return Value: number of free descriptors for TX data channel
  *
  */
-wpt_uint32 WDTS_GetFreeTxDataResNumber(void *pContext)
-{
+wpt_uint32 WDTS_GetFreeTxDataResNumber(void *pContext) {
     return
         gTransportDriver.getFreeTxDataResNumber(WDT_GetTransportDriverContext(pContext));
 }

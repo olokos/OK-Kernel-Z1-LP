@@ -68,91 +68,91 @@
  * of linux/drivers/video/pxafb.c
  */
 struct pxafb_mode_info {
-	u_long		pixclock;
+    u_long		pixclock;
 
-	u_short		xres;
-	u_short		yres;
+    u_short		xres;
+    u_short		yres;
 
-	u_char		bpp;
-	u_int		cmap_greyscale:1,
-			depth:8,
-			transparency:1,
-			unused:22;
+    u_char		bpp;
+    u_int		cmap_greyscale:1,
+                depth:8,
+                transparency:1,
+                unused:22;
 
-	/* Parallel Mode Timing */
-	u_char		hsync_len;
-	u_char		left_margin;
-	u_char		right_margin;
+    /* Parallel Mode Timing */
+    u_char		hsync_len;
+    u_char		left_margin;
+    u_char		right_margin;
 
-	u_char		vsync_len;
-	u_char		upper_margin;
-	u_char		lower_margin;
-	u_char		sync;
+    u_char		vsync_len;
+    u_char		upper_margin;
+    u_char		lower_margin;
+    u_char		sync;
 
-	/* Smart Panel Mode Timing - see PXA27x DM 7.4.15.0.3 for details
-	 * Note:
-	 * 1. all parameters in nanosecond (ns)
-	 * 2. a0cs{rd,wr}_set_hld are controlled by the same register bits
-	 *    in pxa27x and pxa3xx, initialize them to the same value or
-	 *    the larger one will be used
-	 * 3. same to {rd,wr}_pulse_width
-	 *
-	 * 4. LCD_PCLK_EDGE_{RISE,FALL} controls the L_PCLK_WR polarity
-	 * 5. sync & FB_SYNC_HOR_HIGH_ACT controls the L_LCLK_A0
-	 * 6. sync & FB_SYNC_VERT_HIGH_ACT controls the L_LCLK_RD
-	 */
-	unsigned	a0csrd_set_hld;	/* A0 and CS Setup/Hold Time before/after L_FCLK_RD */
-	unsigned	a0cswr_set_hld;	/* A0 and CS Setup/Hold Time before/after L_PCLK_WR */
-	unsigned	wr_pulse_width;	/* L_PCLK_WR pulse width */
-	unsigned	rd_pulse_width;	/* L_FCLK_RD pulse width */
-	unsigned	cmd_inh_time;	/* Command Inhibit time between two writes */
-	unsigned	op_hold_time;	/* Output Hold time from L_FCLK_RD negation */
+    /* Smart Panel Mode Timing - see PXA27x DM 7.4.15.0.3 for details
+     * Note:
+     * 1. all parameters in nanosecond (ns)
+     * 2. a0cs{rd,wr}_set_hld are controlled by the same register bits
+     *    in pxa27x and pxa3xx, initialize them to the same value or
+     *    the larger one will be used
+     * 3. same to {rd,wr}_pulse_width
+     *
+     * 4. LCD_PCLK_EDGE_{RISE,FALL} controls the L_PCLK_WR polarity
+     * 5. sync & FB_SYNC_HOR_HIGH_ACT controls the L_LCLK_A0
+     * 6. sync & FB_SYNC_VERT_HIGH_ACT controls the L_LCLK_RD
+     */
+    unsigned	a0csrd_set_hld;	/* A0 and CS Setup/Hold Time before/after L_FCLK_RD */
+    unsigned	a0cswr_set_hld;	/* A0 and CS Setup/Hold Time before/after L_PCLK_WR */
+    unsigned	wr_pulse_width;	/* L_PCLK_WR pulse width */
+    unsigned	rd_pulse_width;	/* L_FCLK_RD pulse width */
+    unsigned	cmd_inh_time;	/* Command Inhibit time between two writes */
+    unsigned	op_hold_time;	/* Output Hold time from L_FCLK_RD negation */
 };
 
 struct pxafb_mach_info {
-	struct pxafb_mode_info *modes;
-	unsigned int num_modes;
+    struct pxafb_mode_info *modes;
+    unsigned int num_modes;
 
-	unsigned int	lcd_conn;
-	unsigned long	video_mem_size;
+    unsigned int	lcd_conn;
+    unsigned long	video_mem_size;
 
-	u_int		fixed_modes:1,
-			cmap_inverse:1,
-			cmap_static:1,
-			acceleration_enabled:1,
-			unused:28;
+    u_int		fixed_modes:1,
+                cmap_inverse:1,
+                cmap_static:1,
+                acceleration_enabled:1,
+                unused:28;
 
-	/* The following should be defined in LCCR0
-	 *      LCCR0_Act or LCCR0_Pas          Active or Passive
-	 *      LCCR0_Sngl or LCCR0_Dual        Single/Dual panel
-	 *      LCCR0_Mono or LCCR0_Color       Mono/Color
-	 *      LCCR0_4PixMono or LCCR0_8PixMono (in mono single mode)
-	 *      LCCR0_DMADel(Tcpu) (optional)   DMA request delay
-	 *
-	 * The following should not be defined in LCCR0:
-	 *      LCCR0_OUM, LCCR0_BM, LCCR0_QDM, LCCR0_DIS, LCCR0_EFM
-	 *      LCCR0_IUM, LCCR0_SFM, LCCR0_LDM, LCCR0_ENB
-	 */
-	u_int		lccr0;
-	/* The following should be defined in LCCR3
-	 *      LCCR3_OutEnH or LCCR3_OutEnL    Output enable polarity
-	 *      LCCR3_PixRsEdg or LCCR3_PixFlEdg Pixel clock edge type
-	 *      LCCR3_Acb(X)                    AB Bias pin frequency
-	 *      LCCR3_DPC (optional)            Double Pixel Clock mode (untested)
-	 *
-	 * The following should not be defined in LCCR3
-	 *      LCCR3_HSP, LCCR3_VSP, LCCR0_Pcd(x), LCCR3_Bpp
-	 */
-	u_int		lccr3;
-	/* The following should be defined in LCCR4
-	 *	LCCR4_PAL_FOR_0 or LCCR4_PAL_FOR_1 or LCCR4_PAL_FOR_2
-	 *
-	 * All other bits in LCCR4 should be left alone.
-	 */
-	u_int		lccr4;
-	void (*pxafb_backlight_power)(int);
-	void (*pxafb_lcd_power)(int, struct fb_var_screeninfo *);
-	void (*smart_update)(struct fb_info *);
+    /* The following should be defined in LCCR0
+     *      LCCR0_Act or LCCR0_Pas          Active or Passive
+     *      LCCR0_Sngl or LCCR0_Dual        Single/Dual panel
+     *      LCCR0_Mono or LCCR0_Color       Mono/Color
+     *      LCCR0_4PixMono or LCCR0_8PixMono (in mono single mode)
+     *      LCCR0_DMADel(Tcpu) (optional)   DMA request delay
+     *
+     * The following should not be defined in LCCR0:
+     *      LCCR0_OUM, LCCR0_BM, LCCR0_QDM, LCCR0_DIS, LCCR0_EFM
+     *      LCCR0_IUM, LCCR0_SFM, LCCR0_LDM, LCCR0_ENB
+     */
+    u_int		lccr0;
+    /* The following should be defined in LCCR3
+     *      LCCR3_OutEnH or LCCR3_OutEnL    Output enable polarity
+     *      LCCR3_PixRsEdg or LCCR3_PixFlEdg Pixel clock edge type
+     *      LCCR3_Acb(X)                    AB Bias pin frequency
+     *      LCCR3_DPC (optional)            Double Pixel Clock mode (untested)
+     *
+     * The following should not be defined in LCCR3
+     *      LCCR3_HSP, LCCR3_VSP, LCCR0_Pcd(x), LCCR3_Bpp
+     */
+    u_int		lccr3;
+    /* The following should be defined in LCCR4
+     *	LCCR4_PAL_FOR_0 or LCCR4_PAL_FOR_1 or LCCR4_PAL_FOR_2
+     *
+     * All other bits in LCCR4 should be left alone.
+     */
+    u_int		lccr4;
+    void (*pxafb_backlight_power)(int);
+    void (*pxafb_lcd_power)(int, struct fb_var_screeninfo *);
+    void (*smart_update)(struct fb_info *);
 };
 
 void pxa_set_fb_info(struct device *, struct pxafb_mach_info *);
@@ -163,13 +163,11 @@ extern int pxafb_smart_queue(struct fb_info *info, uint16_t *cmds, int);
 extern int pxafb_smart_flush(struct fb_info *info);
 #else
 static inline int pxafb_smart_queue(struct fb_info *info,
-				    uint16_t *cmds, int n)
-{
-	return 0;
+                                    uint16_t *cmds, int n) {
+    return 0;
 }
 
-static inline int pxafb_smart_flush(struct fb_info *info)
-{
-	return 0;
+static inline int pxafb_smart_flush(struct fb_info *info) {
+    return 0;
 }
 #endif

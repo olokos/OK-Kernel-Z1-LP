@@ -34,15 +34,14 @@ extern void (*__flush_cache_all)(void);
 extern void (*flush_cache_mm)(struct mm_struct *mm);
 #define flush_cache_dup_mm(mm)	do { (void) (mm); } while (0)
 extern void (*flush_cache_range)(struct vm_area_struct *vma,
-	unsigned long start, unsigned long end);
+                                 unsigned long start, unsigned long end);
 extern void (*flush_cache_page)(struct vm_area_struct *vma, unsigned long page, unsigned long pfn);
 extern void __flush_dcache_page(struct page *page);
 
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-static inline void flush_dcache_page(struct page *page)
-{
-	if (cpu_has_dc_aliases || !cpu_has_ic_fills_f_dc)
-		__flush_dcache_page(page);
+static inline void flush_dcache_page(struct page *page) {
+    if (cpu_has_dc_aliases || !cpu_has_ic_fills_f_dc)
+        __flush_dcache_page(page);
 
 }
 
@@ -52,15 +51,13 @@ static inline void flush_dcache_page(struct page *page)
 #define ARCH_HAS_FLUSH_ANON_PAGE
 extern void __flush_anon_page(struct page *, unsigned long);
 static inline void flush_anon_page(struct vm_area_struct *vma,
-	struct page *page, unsigned long vmaddr)
-{
-	if (cpu_has_dc_aliases && PageAnon(page))
-		__flush_anon_page(page, vmaddr);
+                                   struct page *page, unsigned long vmaddr) {
+    if (cpu_has_dc_aliases && PageAnon(page))
+        __flush_anon_page(page, vmaddr);
 }
 
 static inline void flush_icache_page(struct vm_area_struct *vma,
-	struct page *page)
-{
+                                     struct page *page) {
 }
 
 extern void (*flush_icache_range)(unsigned long start, unsigned long end);
@@ -68,27 +65,25 @@ extern void (*local_flush_icache_range)(unsigned long start, unsigned long end);
 
 extern void (*__flush_cache_vmap)(void);
 
-static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-{
-	if (cpu_has_dc_aliases)
-		__flush_cache_vmap();
+static inline void flush_cache_vmap(unsigned long start, unsigned long end) {
+    if (cpu_has_dc_aliases)
+        __flush_cache_vmap();
 }
 
 extern void (*__flush_cache_vunmap)(void);
 
-static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-{
-	if (cpu_has_dc_aliases)
-		__flush_cache_vunmap();
+static inline void flush_cache_vunmap(unsigned long start, unsigned long end) {
+    if (cpu_has_dc_aliases)
+        __flush_cache_vunmap();
 }
 
 extern void copy_to_user_page(struct vm_area_struct *vma,
-	struct page *page, unsigned long vaddr, void *dst, const void *src,
-	unsigned long len);
+                              struct page *page, unsigned long vaddr, void *dst, const void *src,
+                              unsigned long len);
 
 extern void copy_from_user_page(struct vm_area_struct *vma,
-	struct page *page, unsigned long vaddr, void *dst, const void *src,
-	unsigned long len);
+                                struct page *page, unsigned long vaddr, void *dst, const void *src,
+                                unsigned long len);
 
 extern void (*flush_cache_sigtramp)(unsigned long addr);
 extern void (*flush_icache_all)(void);
@@ -115,9 +110,8 @@ extern void *kmap_coherent(struct page *page, unsigned long addr);
 extern void kunmap_coherent(void);
 
 #define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-static inline void flush_kernel_dcache_page(struct page *page)
-{
-	BUG_ON(cpu_has_dc_aliases && PageHighMem(page));
+static inline void flush_kernel_dcache_page(struct page *page) {
+    BUG_ON(cpu_has_dc_aliases && PageHighMem(page));
 }
 
 /*
@@ -126,16 +120,14 @@ static inline void flush_kernel_dcache_page(struct page *page)
  */
 extern void (*__flush_kernel_vmap_range)(unsigned long vaddr, int size);
 
-static inline void flush_kernel_vmap_range(void *vaddr, int size)
-{
-	if (cpu_has_dc_aliases)
-		__flush_kernel_vmap_range((unsigned long) vaddr, size);
+static inline void flush_kernel_vmap_range(void *vaddr, int size) {
+    if (cpu_has_dc_aliases)
+        __flush_kernel_vmap_range((unsigned long) vaddr, size);
 }
 
-static inline void invalidate_kernel_vmap_range(void *vaddr, int size)
-{
-	if (cpu_has_dc_aliases)
-		__flush_kernel_vmap_range((unsigned long) vaddr, size);
+static inline void invalidate_kernel_vmap_range(void *vaddr, int size) {
+    if (cpu_has_dc_aliases)
+        __flush_kernel_vmap_range((unsigned long) vaddr, size);
 }
 
 #endif /* _ASM_CACHEFLUSH_H */

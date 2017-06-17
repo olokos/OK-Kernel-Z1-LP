@@ -39,18 +39,15 @@
 #include "sme_Trace.h"
 #include "smeInternal.h"
 #ifndef SME_TRACE_RECORD
-void smeTraceInit(tpAniSirGlobal pMac)
-{
+void smeTraceInit(tpAniSirGlobal pMac) {
     return;
 }
 #endif
 #ifdef SME_TRACE_RECORD
 
 
-static tANI_U8* smeTraceGetRxMsgString( tANI_U32 code )
-{
-    switch(code)
-    {
+static tANI_U8* smeTraceGetRxMsgString( tANI_U32 code ) {
+    switch(code) {
         CASE_RETURN_STRING(TRACE_CODE_SME_RX_HDD_MSG_SCAN_REQ);
         CASE_RETURN_STRING(TRACE_CODE_SME_RX_HDD_MSG_SCAN_GET_RESULTS);
         CASE_RETURN_STRING(TRACE_CODE_SME_RX_HDD_MSG_CONNECT);
@@ -139,10 +136,8 @@ static tANI_U8* smeTraceGetRxMsgString( tANI_U32 code )
         break;
     }
 }
-static tANI_U8* smeTraceGetCommandString( tANI_U32 command )
-{
-    switch(command)
-    {
+static tANI_U8* smeTraceGetCommandString( tANI_U32 command ) {
+    switch(command) {
         CASE_RETURN_STRING(eSmeNoCommand);
         CASE_RETURN_STRING(eSmeDropCommand);
         CASE_RETURN_STRING(eSmeCsrCommandMask);
@@ -177,24 +172,19 @@ static tANI_U8* smeTraceGetCommandString( tANI_U32 command )
     }
 }
 static void smeTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord,
-                         tANI_U16 recIndex)
-{
-    if (TRACE_CODE_SME_COMMAND == pRecord->code)
-    {
+                         tANI_U16 recIndex) {
+    if (TRACE_CODE_SME_COMMAND == pRecord->code) {
         smsLog(pMac, LOGE, "%04d %012u S%d %-14s %-30s(0x%x)", recIndex,
                pRecord->time, pRecord->session, "SME COMMAND:",
                smeTraceGetCommandString(pRecord->data), pRecord->data );
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOGE, "%04d %012u S%d %-14s %-30s(0x%x)", recIndex,
                pRecord->time, pRecord->session, "RX HDD MSG:",
                smeTraceGetRxMsgString(pRecord->code), pRecord->data );
     }
 }
 
-void smeTraceInit(tpAniSirGlobal pMac)
-{
+void smeTraceInit(tpAniSirGlobal pMac) {
     vosTraceRegister(VOS_MODULE_ID_SME, (tpvosTraceCb)&smeTraceDump);
 }
 #endif

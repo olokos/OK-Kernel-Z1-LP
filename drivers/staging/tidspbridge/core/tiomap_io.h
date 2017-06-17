@@ -48,15 +48,15 @@
  * is configured by the combination of DSP MMU and shm Memory manager in the CDB
  */
 extern int read_ext_dsp_data(struct bridge_dev_context *dev_ctxt,
-				    u8 *host_buff, u32 dsp_addr,
-				    u32 ul_num_bytes, u32 mem_type);
+                             u8 *host_buff, u32 dsp_addr,
+                             u32 ul_num_bytes, u32 mem_type);
 
 /*
  *  ======== write_dsp_data ========
  */
 extern int write_dsp_data(struct bridge_dev_context *dev_context,
-				 u8 *host_buff, u32 dsp_addr,
-				 u32 ul_num_bytes, u32 mem_type);
+                          u8 *host_buff, u32 dsp_addr,
+                          u32 ul_num_bytes, u32 mem_type);
 
 /*
  *  ======== write_ext_dsp_data ========
@@ -65,23 +65,22 @@ extern int write_dsp_data(struct bridge_dev_context *dev_context,
  *  shm Memory manager in the CDB
  */
 extern int write_ext_dsp_data(struct bridge_dev_context *dev_context,
-				     u8 *host_buff, u32 dsp_addr,
-				     u32 ul_num_bytes, u32 mem_type,
-				     bool dynamic_load);
+                              u8 *host_buff, u32 dsp_addr,
+                              u32 ul_num_bytes, u32 mem_type,
+                              bool dynamic_load);
 
 /*
  * ======== write_ext32_bit_dsp_data ========
  * Writes 32 bit data to the external memory
  */
 extern inline void write_ext32_bit_dsp_data(const
-					struct bridge_dev_context *dev_context,
-					u32 dsp_addr, u32 val)
-{
-	*(u32 *) dsp_addr = ((dev_context->tc_word_swap_on) ? (((val << 16) &
-								 0xFFFF0000) |
-								((val >> 16) &
-								 0x0000FFFF)) :
-			      val);
+        struct bridge_dev_context *dev_context,
+        u32 dsp_addr, u32 val) {
+    *(u32 *) dsp_addr = ((dev_context->tc_word_swap_on) ? (((val << 16) &
+                         0xFFFF0000) |
+                         ((val >> 16) &
+                          0x0000FFFF)) :
+                         val);
 }
 
 /*
@@ -89,16 +88,15 @@ extern inline void write_ext32_bit_dsp_data(const
  * Reads 32 bit data from the external memory
  */
 extern inline u32 read_ext32_bit_dsp_data(const struct bridge_dev_context
-					  *dev_context, u32 dsp_addr)
-{
-	u32 ret;
-	ret = *(u32 *) dsp_addr;
+        *dev_context, u32 dsp_addr) {
+    u32 ret;
+    ret = *(u32 *) dsp_addr;
 
-	ret = ((dev_context->tc_word_swap_on) ? (((ret << 16)
-						  & 0xFFFF0000) | ((ret >> 16) &
-								   0x0000FFFF))
-	       : ret);
-	return ret;
+    ret = ((dev_context->tc_word_swap_on) ? (((ret << 16)
+            & 0xFFFF0000) | ((ret >> 16) &
+                             0x0000FFFF))
+           : ret);
+    return ret;
 }
 
 #endif /* _TIOMAP_IO_ */

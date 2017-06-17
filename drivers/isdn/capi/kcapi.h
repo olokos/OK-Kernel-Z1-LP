@@ -24,10 +24,10 @@
 #endif
 
 enum {
-	CAPI_CTR_DETACHED = 0,
-	CAPI_CTR_DETECTED = 1,
-	CAPI_CTR_LOADING  = 2,
-	CAPI_CTR_RUNNING  = 3,
+    CAPI_CTR_DETACHED = 0,
+    CAPI_CTR_DETECTED = 1,
+    CAPI_CTR_LOADING  = 2,
+    CAPI_CTR_RUNNING  = 3,
 };
 
 extern struct list_head capi_drivers;

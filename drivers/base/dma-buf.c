@@ -30,48 +30,45 @@
 
 static inline int is_dma_buf_file(struct file *);
 
-static int dma_buf_release(struct inode *inode, struct file *file)
-{
-	struct dma_buf *dmabuf;
+static int dma_buf_release(struct inode *inode, struct file *file) {
+    struct dma_buf *dmabuf;
 
-	if (!is_dma_buf_file(file))
-		return -EINVAL;
+    if (!is_dma_buf_file(file))
+        return -EINVAL;
 
-	dmabuf = file->private_data;
+    dmabuf = file->private_data;
 
-	dmabuf->ops->release(dmabuf);
-	kfree(dmabuf);
-	return 0;
+    dmabuf->ops->release(dmabuf);
+    kfree(dmabuf);
+    return 0;
 }
 
-static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
-{
-	struct dma_buf *dmabuf;
+static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma) {
+    struct dma_buf *dmabuf;
 
-	if (!is_dma_buf_file(file))
-		return -EINVAL;
+    if (!is_dma_buf_file(file))
+        return -EINVAL;
 
-	dmabuf = file->private_data;
+    dmabuf = file->private_data;
 
-	/* check for overflowing the buffer's size */
-	if (vma->vm_pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) >
-	    dmabuf->size >> PAGE_SHIFT)
-		return -EINVAL;
+    /* check for overflowing the buffer's size */
+    if (vma->vm_pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) >
+            dmabuf->size >> PAGE_SHIFT)
+        return -EINVAL;
 
-	return dmabuf->ops->mmap(dmabuf, vma);
+    return dmabuf->ops->mmap(dmabuf, vma);
 }
 
 static const struct file_operations dma_buf_fops = {
-	.release	= dma_buf_release,
-	.mmap		= dma_buf_mmap_internal,
+    .release	= dma_buf_release,
+    .mmap		= dma_buf_mmap_internal,
 };
 
 /*
  * is_dma_buf_file - Check if struct file* is associated with dma_buf
  */
-static inline int is_dma_buf_file(struct file *file)
-{
-	return file->f_op == &dma_buf_fops;
+static inline int is_dma_buf_file(struct file *file) {
+    return file->f_op == &dma_buf_fops;
 }
 
 /**
@@ -90,37 +87,36 @@ static inline int is_dma_buf_file(struct file *file)
  *
  */
 struct dma_buf *dma_buf_export(void *priv, const struct dma_buf_ops *ops,
-				size_t size, int flags)
-{
-	struct dma_buf *dmabuf;
-	struct file *file;
+                               size_t size, int flags) {
+    struct dma_buf *dmabuf;
+    struct file *file;
 
-	if (WARN_ON(!priv || !ops
-			  || !ops->map_dma_buf
-			  || !ops->unmap_dma_buf
-			  || !ops->release
-			  || !ops->kmap_atomic
-			  || !ops->kmap
-			  || !ops->mmap)) {
-		return ERR_PTR(-EINVAL);
-	}
+    if (WARN_ON(!priv || !ops
+                || !ops->map_dma_buf
+                || !ops->unmap_dma_buf
+                || !ops->release
+                || !ops->kmap_atomic
+                || !ops->kmap
+                || !ops->mmap)) {
+        return ERR_PTR(-EINVAL);
+    }
 
-	dmabuf = kzalloc(sizeof(struct dma_buf), GFP_KERNEL);
-	if (dmabuf == NULL)
-		return ERR_PTR(-ENOMEM);
+    dmabuf = kzalloc(sizeof(struct dma_buf), GFP_KERNEL);
+    if (dmabuf == NULL)
+        return ERR_PTR(-ENOMEM);
 
-	dmabuf->priv = priv;
-	dmabuf->ops = ops;
-	dmabuf->size = size;
+    dmabuf->priv = priv;
+    dmabuf->ops = ops;
+    dmabuf->size = size;
 
-	file = anon_inode_getfile("dmabuf", &dma_buf_fops, dmabuf, flags);
+    file = anon_inode_getfile("dmabuf", &dma_buf_fops, dmabuf, flags);
 
-	dmabuf->file = file;
+    dmabuf->file = file;
 
-	mutex_init(&dmabuf->lock);
-	INIT_LIST_HEAD(&dmabuf->attachments);
+    mutex_init(&dmabuf->lock);
+    INIT_LIST_HEAD(&dmabuf->attachments);
 
-	return dmabuf;
+    return dmabuf;
 }
 EXPORT_SYMBOL_GPL(dma_buf_export);
 
@@ -132,21 +128,20 @@ EXPORT_SYMBOL_GPL(dma_buf_export);
  *
  * On success, returns an associated 'fd'. Else, returns error.
  */
-int dma_buf_fd(struct dma_buf *dmabuf, int flags)
-{
-	int error, fd;
+int dma_buf_fd(struct dma_buf *dmabuf, int flags) {
+    int error, fd;
 
-	if (!dmabuf || !dmabuf->file)
-		return -EINVAL;
+    if (!dmabuf || !dmabuf->file)
+        return -EINVAL;
 
-	error = get_unused_fd_flags(flags);
-	if (error < 0)
-		return error;
-	fd = error;
+    error = get_unused_fd_flags(flags);
+    if (error < 0)
+        return error;
+    fd = error;
 
-	fd_install(fd, dmabuf->file);
+    fd_install(fd, dmabuf->file);
 
-	return fd;
+    return fd;
 }
 EXPORT_SYMBOL_GPL(dma_buf_fd);
 
@@ -158,21 +153,20 @@ EXPORT_SYMBOL_GPL(dma_buf_fd);
  * file's refcounting done by fget to increase refcount. returns ERR_PTR
  * otherwise.
  */
-struct dma_buf *dma_buf_get(int fd)
-{
-	struct file *file;
+struct dma_buf *dma_buf_get(int fd) {
+    struct file *file;
 
-	file = fget(fd);
+    file = fget(fd);
 
-	if (!file)
-		return ERR_PTR(-EBADF);
+    if (!file)
+        return ERR_PTR(-EBADF);
 
-	if (!is_dma_buf_file(file)) {
-		fput(file);
-		return ERR_PTR(-EINVAL);
-	}
+    if (!is_dma_buf_file(file)) {
+        fput(file);
+        return ERR_PTR(-EINVAL);
+    }
 
-	return file->private_data;
+    return file->private_data;
 }
 EXPORT_SYMBOL_GPL(dma_buf_get);
 
@@ -182,12 +176,11 @@ EXPORT_SYMBOL_GPL(dma_buf_get);
  *
  * Uses file's refcounting done implicitly by fput()
  */
-void dma_buf_put(struct dma_buf *dmabuf)
-{
-	if (WARN_ON(!dmabuf || !dmabuf->file))
-		return;
+void dma_buf_put(struct dma_buf *dmabuf) {
+    if (WARN_ON(!dmabuf || !dmabuf->file))
+        return;
 
-	fput(dmabuf->file);
+    fput(dmabuf->file);
 }
 EXPORT_SYMBOL_GPL(dma_buf_put);
 
@@ -202,37 +195,36 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
  *
  */
 struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-					  struct device *dev)
-{
-	struct dma_buf_attachment *attach;
-	int ret;
+        struct device *dev) {
+    struct dma_buf_attachment *attach;
+    int ret;
 
-	if (WARN_ON(!dmabuf || !dev))
-		return ERR_PTR(-EINVAL);
+    if (WARN_ON(!dmabuf || !dev))
+        return ERR_PTR(-EINVAL);
 
-	attach = kzalloc(sizeof(struct dma_buf_attachment), GFP_KERNEL);
-	if (attach == NULL)
-		return ERR_PTR(-ENOMEM);
+    attach = kzalloc(sizeof(struct dma_buf_attachment), GFP_KERNEL);
+    if (attach == NULL)
+        return ERR_PTR(-ENOMEM);
 
-	attach->dev = dev;
-	attach->dmabuf = dmabuf;
+    attach->dev = dev;
+    attach->dmabuf = dmabuf;
 
-	mutex_lock(&dmabuf->lock);
+    mutex_lock(&dmabuf->lock);
 
-	if (dmabuf->ops->attach) {
-		ret = dmabuf->ops->attach(dmabuf, dev, attach);
-		if (ret)
-			goto err_attach;
-	}
-	list_add(&attach->node, &dmabuf->attachments);
+    if (dmabuf->ops->attach) {
+        ret = dmabuf->ops->attach(dmabuf, dev, attach);
+        if (ret)
+            goto err_attach;
+    }
+    list_add(&attach->node, &dmabuf->attachments);
 
-	mutex_unlock(&dmabuf->lock);
-	return attach;
+    mutex_unlock(&dmabuf->lock);
+    return attach;
 
 err_attach:
-	kfree(attach);
-	mutex_unlock(&dmabuf->lock);
-	return ERR_PTR(ret);
+    kfree(attach);
+    mutex_unlock(&dmabuf->lock);
+    return ERR_PTR(ret);
 }
 EXPORT_SYMBOL_GPL(dma_buf_attach);
 
@@ -243,18 +235,17 @@ EXPORT_SYMBOL_GPL(dma_buf_attach);
  * @attach:	[in]	attachment to be detached; is free'd after this call.
  *
  */
-void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
-{
-	if (WARN_ON(!dmabuf || !attach))
-		return;
+void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach) {
+    if (WARN_ON(!dmabuf || !attach))
+        return;
 
-	mutex_lock(&dmabuf->lock);
-	list_del(&attach->node);
-	if (dmabuf->ops->detach)
-		dmabuf->ops->detach(dmabuf, attach);
+    mutex_lock(&dmabuf->lock);
+    list_del(&attach->node);
+    if (dmabuf->ops->detach)
+        dmabuf->ops->detach(dmabuf, attach);
 
-	mutex_unlock(&dmabuf->lock);
-	kfree(attach);
+    mutex_unlock(&dmabuf->lock);
+    kfree(attach);
 }
 EXPORT_SYMBOL_GPL(dma_buf_detach);
 
@@ -270,18 +261,17 @@ EXPORT_SYMBOL_GPL(dma_buf_detach);
  *
  */
 struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
-					enum dma_data_direction direction)
-{
-	struct sg_table *sg_table = ERR_PTR(-EINVAL);
+                                        enum dma_data_direction direction) {
+    struct sg_table *sg_table = ERR_PTR(-EINVAL);
 
-	might_sleep();
+    might_sleep();
 
-	if (WARN_ON(!attach || !attach->dmabuf))
-		return ERR_PTR(-EINVAL);
+    if (WARN_ON(!attach || !attach->dmabuf))
+        return ERR_PTR(-EINVAL);
 
-	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
+    sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
 
-	return sg_table;
+    return sg_table;
 }
 EXPORT_SYMBOL_GPL(dma_buf_map_attachment);
 
@@ -295,14 +285,13 @@ EXPORT_SYMBOL_GPL(dma_buf_map_attachment);
  *
  */
 void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
-				struct sg_table *sg_table,
-				enum dma_data_direction direction)
-{
-	if (WARN_ON(!attach || !attach->dmabuf || !sg_table))
-		return;
+                              struct sg_table *sg_table,
+                              enum dma_data_direction direction) {
+    if (WARN_ON(!attach || !attach->dmabuf || !sg_table))
+        return;
 
-	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
-						direction);
+    attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
+                                       direction);
 }
 EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
 
@@ -320,17 +309,16 @@ EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
  * Can return negative error values, returns 0 on success.
  */
 int dma_buf_begin_cpu_access(struct dma_buf *dmabuf, size_t start, size_t len,
-			     enum dma_data_direction direction)
-{
-	int ret = 0;
+                             enum dma_data_direction direction) {
+    int ret = 0;
 
-	if (WARN_ON(!dmabuf))
-		return -EINVAL;
+    if (WARN_ON(!dmabuf))
+        return -EINVAL;
 
-	if (dmabuf->ops->begin_cpu_access)
-		ret = dmabuf->ops->begin_cpu_access(dmabuf, start, len, direction);
+    if (dmabuf->ops->begin_cpu_access)
+        ret = dmabuf->ops->begin_cpu_access(dmabuf, start, len, direction);
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL_GPL(dma_buf_begin_cpu_access);
 
@@ -347,12 +335,11 @@ EXPORT_SYMBOL_GPL(dma_buf_begin_cpu_access);
  * This call must always succeed.
  */
 void dma_buf_end_cpu_access(struct dma_buf *dmabuf, size_t start, size_t len,
-			    enum dma_data_direction direction)
-{
-	WARN_ON(!dmabuf);
+                            enum dma_data_direction direction) {
+    WARN_ON(!dmabuf);
 
-	if (dmabuf->ops->end_cpu_access)
-		dmabuf->ops->end_cpu_access(dmabuf, start, len, direction);
+    if (dmabuf->ops->end_cpu_access)
+        dmabuf->ops->end_cpu_access(dmabuf, start, len, direction);
 }
 EXPORT_SYMBOL_GPL(dma_buf_end_cpu_access);
 
@@ -365,11 +352,10 @@ EXPORT_SYMBOL_GPL(dma_buf_end_cpu_access);
  * This call must always succeed, any necessary preparations that might fail
  * need to be done in begin_cpu_access.
  */
-void *dma_buf_kmap_atomic(struct dma_buf *dmabuf, unsigned long page_num)
-{
-	WARN_ON(!dmabuf);
+void *dma_buf_kmap_atomic(struct dma_buf *dmabuf, unsigned long page_num) {
+    WARN_ON(!dmabuf);
 
-	return dmabuf->ops->kmap_atomic(dmabuf, page_num);
+    return dmabuf->ops->kmap_atomic(dmabuf, page_num);
 }
 EXPORT_SYMBOL_GPL(dma_buf_kmap_atomic);
 
@@ -382,12 +368,11 @@ EXPORT_SYMBOL_GPL(dma_buf_kmap_atomic);
  * This call must always succeed.
  */
 void dma_buf_kunmap_atomic(struct dma_buf *dmabuf, unsigned long page_num,
-			   void *vaddr)
-{
-	WARN_ON(!dmabuf);
+                           void *vaddr) {
+    WARN_ON(!dmabuf);
 
-	if (dmabuf->ops->kunmap_atomic)
-		dmabuf->ops->kunmap_atomic(dmabuf, page_num, vaddr);
+    if (dmabuf->ops->kunmap_atomic)
+        dmabuf->ops->kunmap_atomic(dmabuf, page_num, vaddr);
 }
 EXPORT_SYMBOL_GPL(dma_buf_kunmap_atomic);
 
@@ -400,11 +385,10 @@ EXPORT_SYMBOL_GPL(dma_buf_kunmap_atomic);
  * This call must always succeed, any necessary preparations that might fail
  * need to be done in begin_cpu_access.
  */
-void *dma_buf_kmap(struct dma_buf *dmabuf, unsigned long page_num)
-{
-	WARN_ON(!dmabuf);
+void *dma_buf_kmap(struct dma_buf *dmabuf, unsigned long page_num) {
+    WARN_ON(!dmabuf);
 
-	return dmabuf->ops->kmap(dmabuf, page_num);
+    return dmabuf->ops->kmap(dmabuf, page_num);
 }
 EXPORT_SYMBOL_GPL(dma_buf_kmap);
 
@@ -417,12 +401,11 @@ EXPORT_SYMBOL_GPL(dma_buf_kmap);
  * This call must always succeed.
  */
 void dma_buf_kunmap(struct dma_buf *dmabuf, unsigned long page_num,
-		    void *vaddr)
-{
-	WARN_ON(!dmabuf);
+                    void *vaddr) {
+    WARN_ON(!dmabuf);
 
-	if (dmabuf->ops->kunmap)
-		dmabuf->ops->kunmap(dmabuf, page_num, vaddr);
+    if (dmabuf->ops->kunmap)
+        dmabuf->ops->kunmap(dmabuf, page_num, vaddr);
 }
 EXPORT_SYMBOL_GPL(dma_buf_kunmap);
 
@@ -442,29 +425,28 @@ EXPORT_SYMBOL_GPL(dma_buf_kunmap);
  * Can return negative error values, returns 0 on success.
  */
 int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
-		 unsigned long pgoff)
-{
-	if (WARN_ON(!dmabuf || !vma))
-		return -EINVAL;
+                 unsigned long pgoff) {
+    if (WARN_ON(!dmabuf || !vma))
+        return -EINVAL;
 
-	/* check for offset overflow */
-	if (pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) < pgoff)
-		return -EOVERFLOW;
+    /* check for offset overflow */
+    if (pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) < pgoff)
+        return -EOVERFLOW;
 
-	/* check for overflowing the buffer's size */
-	if (pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) >
-	    dmabuf->size >> PAGE_SHIFT)
-		return -EINVAL;
+    /* check for overflowing the buffer's size */
+    if (pgoff + ((vma->vm_end - vma->vm_start) >> PAGE_SHIFT) >
+            dmabuf->size >> PAGE_SHIFT)
+        return -EINVAL;
 
-	/* readjust the vma */
-	if (vma->vm_file)
-		fput(vma->vm_file);
+    /* readjust the vma */
+    if (vma->vm_file)
+        fput(vma->vm_file);
 
-	vma->vm_file = dmabuf->file;
-	get_file(vma->vm_file);
+    vma->vm_file = dmabuf->file;
+    get_file(vma->vm_file);
 
-	vma->vm_pgoff = pgoff;
+    vma->vm_pgoff = pgoff;
 
-	return dmabuf->ops->mmap(dmabuf, vma);
+    return dmabuf->ops->mmap(dmabuf, vma);
 }
 EXPORT_SYMBOL_GPL(dma_buf_mmap);

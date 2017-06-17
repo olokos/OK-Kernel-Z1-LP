@@ -20,34 +20,33 @@
 #define MDP_MAGIC_IOCTL 'M'
 
 struct mdp_buf_info {
-	void *inst;
-	void *cookie;
-	u32 fd;
-	u32 offset;
-	u32 kvaddr;
-	u32 paddr;
+    void *inst;
+    void *cookie;
+    u32 fd;
+    u32 offset;
+    u32 kvaddr;
+    u32 paddr;
 };
 
 struct mdp_prop {
-	void *inst;
-	u32 height;
-	u32 width;
+    void *inst;
+    u32 height;
+    u32 width;
 };
 
 struct mdp_msg_ops {
-	void *cookie;
-	bool secure;
-	bool iommu_split_domain;
+    void *cookie;
+    bool secure;
+    bool iommu_split_domain;
 };
 
 static inline bool mdp_buf_info_equals(struct mdp_buf_info *a,
-		struct mdp_buf_info *b)
-{
-	return a->inst == b->inst
-		&& a->fd == b->fd
-		&& a->offset == b->offset
-		&& a->kvaddr == b->kvaddr
-		&& a->paddr == b->paddr;
+                                       struct mdp_buf_info *b) {
+    return a->inst == b->inst
+           && a->fd == b->fd
+           && a->offset == b->offset
+           && a->kvaddr == b->kvaddr
+           && a->paddr == b->paddr;
 }
 
 #define MDP_Q_BUFFER  _IOW(MDP_MAGIC_IOCTL, 1, struct mdp_buf_info *)

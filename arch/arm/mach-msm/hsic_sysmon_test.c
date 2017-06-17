@@ -28,100 +28,94 @@
 #define RD_BUF_SIZE	4096
 
 struct sysmon_test_dev {
-	int			buflen;
-	char			buf[RD_BUF_SIZE];
+    int			buflen;
+    char			buf[RD_BUF_SIZE];
 };
 static struct sysmon_test_dev *sysmon_dev;
 
 static ssize_t sysmon_test_read(struct file *file, char __user *ubuf,
-				 size_t count, loff_t *ppos)
-{
-	struct sysmon_test_dev *dev = sysmon_dev;
-	enum hsic_sysmon_device_id id =
-				(enum hsic_sysmon_device_id)file->private_data;
-	int ret;
+                                size_t count, loff_t *ppos) {
+    struct sysmon_test_dev *dev = sysmon_dev;
+    enum hsic_sysmon_device_id id =
+        (enum hsic_sysmon_device_id)file->private_data;
+    int ret;
 
-	if (!dev)
-		return -ENODEV;
+    if (!dev)
+        return -ENODEV;
 
-	ret = hsic_sysmon_read(id, dev->buf, RD_BUF_SIZE, &dev->buflen, 3000);
-	if (!ret)
-		return simple_read_from_buffer(ubuf, count, ppos,
-					dev->buf, dev->buflen);
+    ret = hsic_sysmon_read(id, dev->buf, RD_BUF_SIZE, &dev->buflen, 3000);
+    if (!ret)
+        return simple_read_from_buffer(ubuf, count, ppos,
+                                       dev->buf, dev->buflen);
 
-	return 0;
+    return 0;
 }
 
 static ssize_t sysmon_test_write(struct file *file, const char __user *ubuf,
-				 size_t count, loff_t *ppos)
-{
-	struct sysmon_test_dev *dev = sysmon_dev;
-	enum hsic_sysmon_device_id id =
-				(enum hsic_sysmon_device_id)file->private_data;
-	int ret;
+                                 size_t count, loff_t *ppos) {
+    struct sysmon_test_dev *dev = sysmon_dev;
+    enum hsic_sysmon_device_id id =
+        (enum hsic_sysmon_device_id)file->private_data;
+    int ret;
 
-	if (!dev)
-		return -ENODEV;
+    if (!dev)
+        return -ENODEV;
 
-	/* Add check for user buf count greater than RD_BUF_SIZE */
-	if (count > RD_BUF_SIZE)
-		count = RD_BUF_SIZE;
+    /* Add check for user buf count greater than RD_BUF_SIZE */
+    if (count > RD_BUF_SIZE)
+        count = RD_BUF_SIZE;
 
-	if (copy_from_user(dev->buf, ubuf, count)) {
-		pr_err("error copying for writing");
-		return -EFAULT;
-	}
+    if (copy_from_user(dev->buf, ubuf, count)) {
+        pr_err("error copying for writing");
+        return -EFAULT;
+    }
 
-	ret = hsic_sysmon_write(id, dev->buf, count, 1000);
-	if (ret < 0) {
-		pr_err("error writing to hsic_sysmon");
-		return ret;
-	}
+    ret = hsic_sysmon_write(id, dev->buf, count, 1000);
+    if (ret < 0) {
+        pr_err("error writing to hsic_sysmon");
+        return ret;
+    }
 
-	return count;
+    return count;
 }
 
-static int sysmon_test_open(struct inode *inode, struct file *file)
-{
-	file->private_data = inode->i_private;
-	return hsic_sysmon_open((enum hsic_sysmon_device_id)inode->i_private);
+static int sysmon_test_open(struct inode *inode, struct file *file) {
+    file->private_data = inode->i_private;
+    return hsic_sysmon_open((enum hsic_sysmon_device_id)inode->i_private);
 }
 
-static int sysmon_test_release(struct inode *inode, struct file *file)
-{
-	hsic_sysmon_close((enum hsic_sysmon_device_id)inode->i_private);
-	return 0;
+static int sysmon_test_release(struct inode *inode, struct file *file) {
+    hsic_sysmon_close((enum hsic_sysmon_device_id)inode->i_private);
+    return 0;
 }
 
 static const struct file_operations sysmon_test_ops = {
-	.read = sysmon_test_read,
-	.write = sysmon_test_write,
-	.open = sysmon_test_open,
-	.release = sysmon_test_release
+    .read = sysmon_test_read,
+    .write = sysmon_test_write,
+    .open = sysmon_test_open,
+    .release = sysmon_test_release
 };
 
 static struct dentry *dfile0, *dfile1;
 
-static int __init sysmon_test_init(void)
-{
-	sysmon_dev = kzalloc(sizeof(*sysmon_dev), GFP_KERNEL);
-	if (!sysmon_dev)
-		return -ENOMEM;
+static int __init sysmon_test_init(void) {
+    sysmon_dev = kzalloc(sizeof(*sysmon_dev), GFP_KERNEL);
+    if (!sysmon_dev)
+        return -ENOMEM;
 
-	dfile0 = debugfs_create_file("hsic_sysmon_test.0", 0666, NULL,
-			(void *)HSIC_SYSMON_DEV_EXT_MODEM, &sysmon_test_ops);
-	dfile1 = debugfs_create_file("hsic_sysmon_test.1", 0666, NULL,
-			(void *)HSIC_SYSMON_DEV_EXT_MODEM_2, &sysmon_test_ops);
-	return 0;
+    dfile0 = debugfs_create_file("hsic_sysmon_test.0", 0666, NULL,
+                                 (void *)HSIC_SYSMON_DEV_EXT_MODEM, &sysmon_test_ops);
+    dfile1 = debugfs_create_file("hsic_sysmon_test.1", 0666, NULL,
+                                 (void *)HSIC_SYSMON_DEV_EXT_MODEM_2, &sysmon_test_ops);
+    return 0;
 }
 
-static void __exit sysmon_test_exit(void)
-{
-	if (dfile0)
-		debugfs_remove(dfile0);
-	if (dfile1)
-		debugfs_remove(dfile1);
-	kfree(sysmon_dev);
+static void __exit sysmon_test_exit(void) {
+    if (dfile0)
+        debugfs_remove(dfile0);
+    if (dfile1)
+        debugfs_remove(dfile1);
+    kfree(sysmon_dev);
 }
 
 module_init(sysmon_test_init);

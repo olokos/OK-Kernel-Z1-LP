@@ -49,20 +49,20 @@ typedef	void (*cpu_setup_t)(unsigned long offset, struct cpu_spec* spec);
 typedef	void (*cpu_restore_t)(void);
 
 enum powerpc_oprofile_type {
-	PPC_OPROFILE_INVALID = 0,
-	PPC_OPROFILE_RS64 = 1,
-	PPC_OPROFILE_POWER4 = 2,
-	PPC_OPROFILE_G4 = 3,
-	PPC_OPROFILE_FSL_EMB = 4,
-	PPC_OPROFILE_CELL = 5,
-	PPC_OPROFILE_PA6T = 6,
+    PPC_OPROFILE_INVALID = 0,
+    PPC_OPROFILE_RS64 = 1,
+    PPC_OPROFILE_POWER4 = 2,
+    PPC_OPROFILE_G4 = 3,
+    PPC_OPROFILE_FSL_EMB = 4,
+    PPC_OPROFILE_CELL = 5,
+    PPC_OPROFILE_PA6T = 6,
 };
 
 enum powerpc_pmc_type {
-	PPC_PMC_DEFAULT = 0,
-	PPC_PMC_IBM = 1,
-	PPC_PMC_PA6T = 2,
-	PPC_PMC_G4 = 3,
+    PPC_PMC_DEFAULT = 0,
+    PPC_PMC_IBM = 1,
+    PPC_PMC_PA6T = 2,
+    PPC_PMC_G4 = 3,
 };
 
 struct pt_regs;
@@ -77,50 +77,50 @@ extern int machine_check_47x(struct pt_regs *regs);
 
 /* NOTE WELL: Update identify_cpu() if fields are added or removed! */
 struct cpu_spec {
-	/* CPU is matched via (PVR & pvr_mask) == pvr_value */
-	unsigned int	pvr_mask;
-	unsigned int	pvr_value;
+    /* CPU is matched via (PVR & pvr_mask) == pvr_value */
+    unsigned int	pvr_mask;
+    unsigned int	pvr_value;
 
-	char		*cpu_name;
-	unsigned long	cpu_features;		/* Kernel features */
-	unsigned int	cpu_user_features;	/* Userland features */
-	unsigned int	mmu_features;		/* MMU features */
+    char		*cpu_name;
+    unsigned long	cpu_features;		/* Kernel features */
+    unsigned int	cpu_user_features;	/* Userland features */
+    unsigned int	mmu_features;		/* MMU features */
 
-	/* cache line sizes */
-	unsigned int	icache_bsize;
-	unsigned int	dcache_bsize;
+    /* cache line sizes */
+    unsigned int	icache_bsize;
+    unsigned int	dcache_bsize;
 
-	/* number of performance monitor counters */
-	unsigned int	num_pmcs;
-	enum powerpc_pmc_type pmc_type;
+    /* number of performance monitor counters */
+    unsigned int	num_pmcs;
+    enum powerpc_pmc_type pmc_type;
 
-	/* this is called to initialize various CPU bits like L1 cache,
-	 * BHT, SPD, etc... from head.S before branching to identify_machine
-	 */
-	cpu_setup_t	cpu_setup;
-	/* Used to restore cpu setup on secondary processors and at resume */
-	cpu_restore_t	cpu_restore;
+    /* this is called to initialize various CPU bits like L1 cache,
+     * BHT, SPD, etc... from head.S before branching to identify_machine
+     */
+    cpu_setup_t	cpu_setup;
+    /* Used to restore cpu setup on secondary processors and at resume */
+    cpu_restore_t	cpu_restore;
 
-	/* Used by oprofile userspace to select the right counters */
-	char		*oprofile_cpu_type;
+    /* Used by oprofile userspace to select the right counters */
+    char		*oprofile_cpu_type;
 
-	/* Processor specific oprofile operations */
-	enum powerpc_oprofile_type oprofile_type;
+    /* Processor specific oprofile operations */
+    enum powerpc_oprofile_type oprofile_type;
 
-	/* Bit locations inside the mmcra change */
-	unsigned long	oprofile_mmcra_sihv;
-	unsigned long	oprofile_mmcra_sipr;
+    /* Bit locations inside the mmcra change */
+    unsigned long	oprofile_mmcra_sihv;
+    unsigned long	oprofile_mmcra_sipr;
 
-	/* Bits to clear during an oprofile exception */
-	unsigned long	oprofile_mmcra_clear;
+    /* Bits to clear during an oprofile exception */
+    unsigned long	oprofile_mmcra_clear;
 
-	/* Name of processor class, for the ELF AT_PLATFORM entry */
-	char		*platform;
+    /* Name of processor class, for the ELF AT_PLATFORM entry */
+    char		*platform;
 
-	/* Processor specific machine check handling. Return negative
-	 * if the error is fatal, 1 if it was fully recovered and 0 to
-	 * pass up (not CPU originated) */
-	int		(*machine_check)(struct pt_regs *regs);
+    /* Processor specific machine check handling. Return negative
+     * if the error is fatal, 1 if it was fully recovered and 0 to
+     * pass up (not CPU originated) */
+    int		(*machine_check)(struct pt_regs *regs);
 };
 
 extern struct cpu_spec		*cur_cpu_spec;
@@ -129,7 +129,7 @@ extern unsigned int __start___ftr_fixup, __stop___ftr_fixup;
 
 extern struct cpu_spec *identify_cpu(unsigned long offset, unsigned int pvr);
 extern void do_feature_fixups(unsigned long value, void *fixup_start,
-			      void *fixup_end);
+                              void *fixup_end);
 
 extern const char *powerpc_base_platform;
 
@@ -456,40 +456,40 @@ extern const char *powerpc_base_platform;
 #endif
 #else
 enum {
-	CPU_FTRS_POSSIBLE =
+    CPU_FTRS_POSSIBLE =
 #if CLASSIC_PPC
-	    CPU_FTRS_PPC601 | CPU_FTRS_603 | CPU_FTRS_604 | CPU_FTRS_740_NOTAU |
-	    CPU_FTRS_740 | CPU_FTRS_750 | CPU_FTRS_750FX1 |
-	    CPU_FTRS_750FX2 | CPU_FTRS_750FX | CPU_FTRS_750GX |
-	    CPU_FTRS_7400_NOTAU | CPU_FTRS_7400 | CPU_FTRS_7450_20 |
-	    CPU_FTRS_7450_21 | CPU_FTRS_7450_23 | CPU_FTRS_7455_1 |
-	    CPU_FTRS_7455_20 | CPU_FTRS_7455 | CPU_FTRS_7447_10 |
-	    CPU_FTRS_7447 | CPU_FTRS_7447A | CPU_FTRS_82XX |
-	    CPU_FTRS_G2_LE | CPU_FTRS_E300 | CPU_FTRS_E300C2 |
-	    CPU_FTRS_CLASSIC32 |
+        CPU_FTRS_PPC601 | CPU_FTRS_603 | CPU_FTRS_604 | CPU_FTRS_740_NOTAU |
+        CPU_FTRS_740 | CPU_FTRS_750 | CPU_FTRS_750FX1 |
+        CPU_FTRS_750FX2 | CPU_FTRS_750FX | CPU_FTRS_750GX |
+        CPU_FTRS_7400_NOTAU | CPU_FTRS_7400 | CPU_FTRS_7450_20 |
+        CPU_FTRS_7450_21 | CPU_FTRS_7450_23 | CPU_FTRS_7455_1 |
+        CPU_FTRS_7455_20 | CPU_FTRS_7455 | CPU_FTRS_7447_10 |
+        CPU_FTRS_7447 | CPU_FTRS_7447A | CPU_FTRS_82XX |
+        CPU_FTRS_G2_LE | CPU_FTRS_E300 | CPU_FTRS_E300C2 |
+        CPU_FTRS_CLASSIC32 |
 #else
-	    CPU_FTRS_GENERIC_32 |
+        CPU_FTRS_GENERIC_32 |
 #endif
 #ifdef CONFIG_8xx
-	    CPU_FTRS_8XX |
+        CPU_FTRS_8XX |
 #endif
 #ifdef CONFIG_40x
-	    CPU_FTRS_40X |
+        CPU_FTRS_40X |
 #endif
 #ifdef CONFIG_44x
-	    CPU_FTRS_44X | CPU_FTRS_440x6 |
+        CPU_FTRS_44X | CPU_FTRS_440x6 |
 #endif
 #ifdef CONFIG_PPC_47x
-	    CPU_FTRS_47X | CPU_FTR_476_DD2 |
+        CPU_FTRS_47X | CPU_FTR_476_DD2 |
 #endif
 #ifdef CONFIG_E200
-	    CPU_FTRS_E200 |
+        CPU_FTRS_E200 |
 #endif
 #ifdef CONFIG_E500
-	    CPU_FTRS_E500 | CPU_FTRS_E500_2 | CPU_FTRS_E500MC |
-	    CPU_FTRS_E5500 | CPU_FTRS_E6500 |
+        CPU_FTRS_E500 | CPU_FTRS_E500_2 | CPU_FTRS_E500MC |
+        CPU_FTRS_E5500 | CPU_FTRS_E6500 |
 #endif
-	    0,
+        0,
 };
 #endif /* __powerpc64__ */
 
@@ -504,46 +504,45 @@ enum {
 #endif
 #else
 enum {
-	CPU_FTRS_ALWAYS =
+    CPU_FTRS_ALWAYS =
 #if CLASSIC_PPC
-	    CPU_FTRS_PPC601 & CPU_FTRS_603 & CPU_FTRS_604 & CPU_FTRS_740_NOTAU &
-	    CPU_FTRS_740 & CPU_FTRS_750 & CPU_FTRS_750FX1 &
-	    CPU_FTRS_750FX2 & CPU_FTRS_750FX & CPU_FTRS_750GX &
-	    CPU_FTRS_7400_NOTAU & CPU_FTRS_7400 & CPU_FTRS_7450_20 &
-	    CPU_FTRS_7450_21 & CPU_FTRS_7450_23 & CPU_FTRS_7455_1 &
-	    CPU_FTRS_7455_20 & CPU_FTRS_7455 & CPU_FTRS_7447_10 &
-	    CPU_FTRS_7447 & CPU_FTRS_7447A & CPU_FTRS_82XX &
-	    CPU_FTRS_G2_LE & CPU_FTRS_E300 & CPU_FTRS_E300C2 &
-	    CPU_FTRS_CLASSIC32 &
+        CPU_FTRS_PPC601 & CPU_FTRS_603 & CPU_FTRS_604 & CPU_FTRS_740_NOTAU &
+        CPU_FTRS_740 & CPU_FTRS_750 & CPU_FTRS_750FX1 &
+        CPU_FTRS_750FX2 & CPU_FTRS_750FX & CPU_FTRS_750GX &
+        CPU_FTRS_7400_NOTAU & CPU_FTRS_7400 & CPU_FTRS_7450_20 &
+        CPU_FTRS_7450_21 & CPU_FTRS_7450_23 & CPU_FTRS_7455_1 &
+        CPU_FTRS_7455_20 & CPU_FTRS_7455 & CPU_FTRS_7447_10 &
+        CPU_FTRS_7447 & CPU_FTRS_7447A & CPU_FTRS_82XX &
+        CPU_FTRS_G2_LE & CPU_FTRS_E300 & CPU_FTRS_E300C2 &
+        CPU_FTRS_CLASSIC32 &
 #else
-	    CPU_FTRS_GENERIC_32 &
+        CPU_FTRS_GENERIC_32 &
 #endif
 #ifdef CONFIG_8xx
-	    CPU_FTRS_8XX &
+        CPU_FTRS_8XX &
 #endif
 #ifdef CONFIG_40x
-	    CPU_FTRS_40X &
+        CPU_FTRS_40X &
 #endif
 #ifdef CONFIG_44x
-	    CPU_FTRS_44X & CPU_FTRS_440x6 &
+        CPU_FTRS_44X & CPU_FTRS_440x6 &
 #endif
 #ifdef CONFIG_E200
-	    CPU_FTRS_E200 &
+        CPU_FTRS_E200 &
 #endif
 #ifdef CONFIG_E500
-	    CPU_FTRS_E500 & CPU_FTRS_E500_2 & CPU_FTRS_E500MC &
-	    CPU_FTRS_E5500 & CPU_FTRS_E6500 &
+        CPU_FTRS_E500 & CPU_FTRS_E500_2 & CPU_FTRS_E500MC &
+        CPU_FTRS_E5500 & CPU_FTRS_E6500 &
 #endif
-	    CPU_FTRS_POSSIBLE,
+        CPU_FTRS_POSSIBLE,
 };
 #endif /* __powerpc64__ */
 
-static inline int cpu_has_feature(unsigned long feature)
-{
-	return (CPU_FTRS_ALWAYS & feature) ||
-	       (CPU_FTRS_POSSIBLE
-		& cur_cpu_spec->cpu_features
-		& feature);
+static inline int cpu_has_feature(unsigned long feature) {
+    return (CPU_FTRS_ALWAYS & feature) ||
+           (CPU_FTRS_POSSIBLE
+            & cur_cpu_spec->cpu_features
+            & feature);
 }
 
 #ifdef CONFIG_HAVE_HW_BREAKPOINT

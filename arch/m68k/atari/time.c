@@ -25,16 +25,15 @@ DEFINE_SPINLOCK(rtc_lock);
 EXPORT_SYMBOL_GPL(rtc_lock);
 
 void __init
-atari_sched_init(irq_handler_t timer_routine)
-{
+atari_sched_init(irq_handler_t timer_routine) {
     /* set Timer C data Register */
     st_mfp.tim_dt_c = INT_TICKS;
     /* start timer C, div = 1:100 */
     st_mfp.tim_ct_cd = (st_mfp.tim_ct_cd & 15) | 0x60;
     /* install interrupt service routine for MFP Timer C */
     if (request_irq(IRQ_MFP_TIMC, timer_routine, IRQ_TYPE_SLOW,
-		    "timer", timer_routine))
-	pr_err("Couldn't register timer interrupt\n");
+                    "timer", timer_routine))
+        pr_err("Couldn't register timer interrupt\n");
 }
 
 /* ++andreas: gettimeoffset fixed to check for pending interrupt */
@@ -42,50 +41,63 @@ atari_sched_init(irq_handler_t timer_routine)
 #define TICK_SIZE 10000
 
 /* This is always executed with interrupts disabled.  */
-unsigned long atari_gettimeoffset (void)
-{
-  unsigned long ticks, offset = 0;
+unsigned long atari_gettimeoffset (void) {
+    unsigned long ticks, offset = 0;
 
-  /* read MFP timer C current value */
-  ticks = st_mfp.tim_dt_c;
-  /* The probability of underflow is less than 2% */
-  if (ticks > INT_TICKS - INT_TICKS / 50)
-    /* Check for pending timer interrupt */
-    if (st_mfp.int_pn_b & (1 << 5))
-      offset = TICK_SIZE;
+    /* read MFP timer C current value */
+    ticks = st_mfp.tim_dt_c;
+    /* The probability of underflow is less than 2% */
+    if (ticks > INT_TICKS - INT_TICKS / 50)
+        /* Check for pending timer interrupt */
+        if (st_mfp.int_pn_b & (1 << 5))
+            offset = TICK_SIZE;
 
-  ticks = INT_TICKS - ticks;
-  ticks = ticks * 10000L / INT_TICKS;
+    ticks = INT_TICKS - ticks;
+    ticks = ticks * 10000L / INT_TICKS;
 
-  return ticks + offset;
+    return ticks + offset;
 }
 
 
-static void mste_read(struct MSTE_RTC *val)
-{
+static void mste_read(struct MSTE_RTC *val) {
 #define COPY(v) val->v=(mste_rtc.v & 0xf)
-	do {
-		COPY(sec_ones) ; COPY(sec_tens) ; COPY(min_ones) ;
-		COPY(min_tens) ; COPY(hr_ones) ; COPY(hr_tens) ;
-		COPY(weekday) ; COPY(day_ones) ; COPY(day_tens) ;
-		COPY(mon_ones) ; COPY(mon_tens) ; COPY(year_ones) ;
-		COPY(year_tens) ;
-	/* prevent from reading the clock while it changed */
-	} while (val->sec_ones != (mste_rtc.sec_ones & 0xf));
+    do {
+        COPY(sec_ones) ;
+        COPY(sec_tens) ;
+        COPY(min_ones) ;
+        COPY(min_tens) ;
+        COPY(hr_ones) ;
+        COPY(hr_tens) ;
+        COPY(weekday) ;
+        COPY(day_ones) ;
+        COPY(day_tens) ;
+        COPY(mon_ones) ;
+        COPY(mon_tens) ;
+        COPY(year_ones) ;
+        COPY(year_tens) ;
+        /* prevent from reading the clock while it changed */
+    } while (val->sec_ones != (mste_rtc.sec_ones & 0xf));
 #undef COPY
 }
 
-static void mste_write(struct MSTE_RTC *val)
-{
+static void mste_write(struct MSTE_RTC *val) {
 #define COPY(v) mste_rtc.v=val->v
-	do {
-		COPY(sec_ones) ; COPY(sec_tens) ; COPY(min_ones) ;
-		COPY(min_tens) ; COPY(hr_ones) ; COPY(hr_tens) ;
-		COPY(weekday) ; COPY(day_ones) ; COPY(day_tens) ;
-		COPY(mon_ones) ; COPY(mon_tens) ; COPY(year_ones) ;
-		COPY(year_tens) ;
-	/* prevent from writing the clock while it changed */
-	} while (val->sec_ones != (mste_rtc.sec_ones & 0xf));
+    do {
+        COPY(sec_ones) ;
+        COPY(sec_tens) ;
+        COPY(min_ones) ;
+        COPY(min_tens) ;
+        COPY(hr_ones) ;
+        COPY(hr_tens) ;
+        COPY(weekday) ;
+        COPY(day_ones) ;
+        COPY(day_tens) ;
+        COPY(mon_ones) ;
+        COPY(mon_tens) ;
+        COPY(year_ones) ;
+        COPY(year_tens) ;
+        /* prevent from writing the clock while it changed */
+    } while (val->sec_ones != (mste_rtc.sec_ones & 0xf));
 #undef COPY
 }
 
@@ -105,8 +117,7 @@ static void mste_write(struct MSTE_RTC *val)
 
 #define HWCLK_POLL_INTERVAL	5
 
-int atari_mste_hwclk( int op, struct rtc_time *t )
-{
+int atari_mste_hwclk( int op, struct rtc_time *t ) {
     int hour, year;
     int hr24=0;
     struct MSTE_RTC val;
@@ -124,10 +135,10 @@ int atari_mste_hwclk( int op, struct rtc_time *t )
         val.min_tens = t->tm_min / 10;
         hour = t->tm_hour;
         if (!hr24) {
-	    if (hour > 11)
-		hour += 20 - 12;
-	    if (hour == 0 || hour == 20)
-		hour += 12;
+            if (hour > 11)
+                hour += 20 - 12;
+            if (hour == 0 || hour == 20)
+                hour += 12;
         }
         val.hr_ones = hour % 10;
         val.hr_tens = hour / 10;
@@ -143,20 +154,19 @@ int atari_mste_hwclk( int op, struct rtc_time *t )
         mste_rtc.mode=(mste_rtc.mode | 1);
         val.year_ones = (year % 4);	/* leap year register */
         mste_rtc.mode=(mste_rtc.mode & ~1);
-    }
-    else {
+    } else {
         mste_read(&val);
         t->tm_sec = val.sec_ones + val.sec_tens * 10;
         t->tm_min = val.min_ones + val.min_tens * 10;
         hour = val.hr_ones + val.hr_tens * 10;
-	if (!hr24) {
-	    if (hour == 12 || hour == 12 + 20)
-		hour -= 12;
-	    if (hour >= 20)
+        if (!hr24) {
+            if (hour == 12 || hour == 12 + 20)
+                hour -= 12;
+            if (hour >= 20)
                 hour += 12 - 20;
         }
-	t->tm_hour = hour;
-	t->tm_mday = val.day_ones + val.day_tens * 10;
+        t->tm_hour = hour;
+        t->tm_mday = val.day_ones + val.day_tens * 10;
         t->tm_mon  = val.mon_ones + val.mon_tens * 10 - 1;
         t->tm_year = val.year_ones + val.year_tens * 10 + 80;
         t->tm_wday = val.weekday;
@@ -164,8 +174,7 @@ int atari_mste_hwclk( int op, struct rtc_time *t )
     return 0;
 }
 
-int atari_tt_hwclk( int op, struct rtc_time *t )
-{
+int atari_tt_hwclk( int op, struct rtc_time *t ) {
     int sec=0, min=0, hour=0, day=0, mon=0, year=0, wday=0;
     unsigned long	flags;
     unsigned char	ctrl;
@@ -186,24 +195,23 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
         wday = t->tm_wday + (t->tm_wday >= 0);
 
         if (!(ctrl & RTC_24H)) {
-	    if (hour > 11) {
-		pm = 0x80;
-		if (hour != 12)
-		    hour -= 12;
-	    }
-	    else if (hour == 0)
-		hour = 12;
+            if (hour > 11) {
+                pm = 0x80;
+                if (hour != 12)
+                    hour -= 12;
+            } else if (hour == 0)
+                hour = 12;
         }
 
         if (!(ctrl & RTC_DM_BINARY)) {
-	    sec = bin2bcd(sec);
-	    min = bin2bcd(min);
-	    hour = bin2bcd(hour);
-	    day = bin2bcd(day);
-	    mon = bin2bcd(mon);
-	    year = bin2bcd(year);
-	    if (wday >= 0)
-		wday = bin2bcd(wday);
+            sec = bin2bcd(sec);
+            min = bin2bcd(min);
+            hour = bin2bcd(hour);
+            day = bin2bcd(day);
+            mon = bin2bcd(mon);
+            year = bin2bcd(year);
+            if (wday >= 0)
+                wday = bin2bcd(wday);
         }
     }
 
@@ -220,10 +228,10 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
      */
 
     while( RTC_READ(RTC_FREQ_SELECT) & RTC_UIP ) {
-	if (in_atomic() || irqs_disabled())
-	    mdelay(1);
-	else
-	    schedule_timeout_interruptible(HWCLK_POLL_INTERVAL);
+        if (in_atomic() || irqs_disabled())
+            mdelay(1);
+        else
+            schedule_timeout_interruptible(HWCLK_POLL_INTERVAL);
     }
 
     local_irq_save(flags);
@@ -236,8 +244,7 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
         mon  = RTC_READ( RTC_MONTH );
         year = RTC_READ( RTC_YEAR );
         wday = RTC_READ( RTC_DAY_OF_WEEK );
-    }
-    else {
+    } else {
         RTC_WRITE( RTC_SECONDS, sec );
         RTC_WRITE( RTC_MINUTES, min );
         RTC_WRITE( RTC_HOURS, hour + pm);
@@ -253,25 +260,25 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
         /* read: adjust values */
 
         if (hour & 0x80) {
-	    hour &= ~0x80;
-	    pm = 1;
-	}
+            hour &= ~0x80;
+            pm = 1;
+        }
 
-	if (!(ctrl & RTC_DM_BINARY)) {
-	    sec = bcd2bin(sec);
-	    min = bcd2bin(min);
-	    hour = bcd2bin(hour);
-	    day = bcd2bin(day);
-	    mon = bcd2bin(mon);
-	    year = bcd2bin(year);
-	    wday = bcd2bin(wday);
+        if (!(ctrl & RTC_DM_BINARY)) {
+            sec = bcd2bin(sec);
+            min = bcd2bin(min);
+            hour = bcd2bin(hour);
+            day = bcd2bin(day);
+            mon = bcd2bin(mon);
+            year = bcd2bin(year);
+            wday = bcd2bin(wday);
         }
 
         if (!(ctrl & RTC_24H)) {
-	    if (!pm && hour == 12)
-		hour = 0;
-	    else if (pm && hour != 12)
-		hour += 12;
+            if (!pm && hour == 12)
+                hour = 0;
+            else if (pm && hour != 12)
+                hour += 12;
         }
 
         t->tm_sec  = sec;
@@ -287,8 +294,7 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
 }
 
 
-int atari_mste_set_clock_mmss (unsigned long nowtime)
-{
+int atari_mste_set_clock_mmss (unsigned long nowtime) {
     short real_seconds = nowtime % 60, real_minutes = (nowtime / 60) % 60;
     struct MSTE_RTC val;
     unsigned char rtc_minutes;
@@ -296,22 +302,19 @@ int atari_mste_set_clock_mmss (unsigned long nowtime)
     mste_read(&val);
     rtc_minutes= val.min_ones + val.min_tens * 10;
     if ((rtc_minutes < real_minutes
-         ? real_minutes - rtc_minutes
-         : rtc_minutes - real_minutes) < 30)
-    {
+            ? real_minutes - rtc_minutes
+            : rtc_minutes - real_minutes) < 30) {
         val.sec_ones = real_seconds % 10;
         val.sec_tens = real_seconds / 10;
         val.min_ones = real_minutes % 10;
         val.min_tens = real_minutes / 10;
         mste_write(&val);
-    }
-    else
+    } else
         return -1;
     return 0;
 }
 
-int atari_tt_set_clock_mmss (unsigned long nowtime)
-{
+int atari_tt_set_clock_mmss (unsigned long nowtime) {
     int retval = 0;
     short real_seconds = nowtime % 60, real_minutes = (nowtime / 60) % 60;
     unsigned char save_control, save_freq_select, rtc_minutes;
@@ -324,24 +327,21 @@ int atari_tt_set_clock_mmss (unsigned long nowtime)
 
     rtc_minutes = RTC_READ (RTC_MINUTES);
     if (!(save_control & RTC_DM_BINARY))
-	rtc_minutes = bcd2bin(rtc_minutes);
+        rtc_minutes = bcd2bin(rtc_minutes);
 
     /* Since we're only adjusting minutes and seconds, don't interfere
        with hour overflow.  This avoids messing with unknown time zones
        but requires your RTC not to be off by more than 30 minutes.  */
     if ((rtc_minutes < real_minutes
-         ? real_minutes - rtc_minutes
-         : rtc_minutes - real_minutes) < 30)
-        {
-            if (!(save_control & RTC_DM_BINARY))
-                {
-		    real_seconds = bin2bcd(real_seconds);
-		    real_minutes = bin2bcd(real_minutes);
-                }
-            RTC_WRITE (RTC_SECONDS, real_seconds);
-            RTC_WRITE (RTC_MINUTES, real_minutes);
+            ? real_minutes - rtc_minutes
+            : rtc_minutes - real_minutes) < 30) {
+        if (!(save_control & RTC_DM_BINARY)) {
+            real_seconds = bin2bcd(real_seconds);
+            real_minutes = bin2bcd(real_minutes);
         }
-    else
+        RTC_WRITE (RTC_SECONDS, real_seconds);
+        RTC_WRITE (RTC_MINUTES, real_minutes);
+    } else
         retval = -1;
 
     RTC_WRITE (RTC_FREQ_SELECT, save_freq_select);

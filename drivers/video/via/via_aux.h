@@ -31,22 +31,22 @@
 
 
 struct via_aux_bus {
-	struct i2c_adapter *adap;	/* the I2C device to access the bus */
-	struct list_head drivers;	/* drivers for devices on this bus */
+    struct i2c_adapter *adap;	/* the I2C device to access the bus */
+    struct list_head drivers;	/* drivers for devices on this bus */
 };
 
 struct via_aux_drv {
-	struct list_head chain;		/* chain to support multiple drivers */
+    struct list_head chain;		/* chain to support multiple drivers */
 
-	struct via_aux_bus *bus;	/* the I2C bus used */
-	u8 addr;			/* the I2C slave address */
+    struct via_aux_bus *bus;	/* the I2C bus used */
+    u8 addr;			/* the I2C slave address */
 
-	const char *name;	/* human readable name of the driver */
-	void *data;		/* private data of this driver */
+    const char *name;	/* human readable name of the driver */
+    void *data;		/* private data of this driver */
 
-	void (*cleanup)(struct via_aux_drv *drv);
-	const struct fb_videomode* (*get_preferred_mode)
-		(struct via_aux_drv *drv);
+    void (*cleanup)(struct via_aux_drv *drv);
+    const struct fb_videomode* (*get_preferred_mode)
+    (struct via_aux_drv *drv);
 };
 
 
@@ -55,26 +55,25 @@ void via_aux_free(struct via_aux_bus *bus);
 const struct fb_videomode *via_aux_get_preferred_mode(struct via_aux_bus *bus);
 
 
-static inline bool via_aux_add(struct via_aux_drv *drv)
-{
-	struct via_aux_drv *data = kmalloc(sizeof(*data), GFP_KERNEL);
+static inline bool via_aux_add(struct via_aux_drv *drv) {
+    struct via_aux_drv *data = kmalloc(sizeof(*data), GFP_KERNEL);
 
-	if (!data)
-		return false;
+    if (!data)
+        return false;
 
-	*data = *drv;
-	list_add_tail(&data->chain, &data->bus->drivers);
-	return true;
+    *data = *drv;
+    list_add_tail(&data->chain, &data->bus->drivers);
+    return true;
 }
 
 static inline bool via_aux_read(struct via_aux_drv *drv, u8 start, u8 *buf,
-	u8 len)
-{
-	struct i2c_msg msg[2] = {
-		{.addr = drv->addr, .flags = 0, .len = 1, .buf = &start},
-		{.addr = drv->addr, .flags = I2C_M_RD, .len = len, .buf = buf} };
+                                u8 len) {
+    struct i2c_msg msg[2] = {
+        {.addr = drv->addr, .flags = 0, .len = 1, .buf = &start},
+        {.addr = drv->addr, .flags = I2C_M_RD, .len = len, .buf = buf}
+    };
 
-	return i2c_transfer(drv->bus->adap, msg, 2) == 2;
+    return i2c_transfer(drv->bus->adap, msg, 2) == 2;
 }
 
 

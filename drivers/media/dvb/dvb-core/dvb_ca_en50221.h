@@ -42,38 +42,38 @@
 /* Structure describing a CA interface */
 struct dvb_ca_en50221 {
 
-	/* the module owning this structure */
-	struct module* owner;
+    /* the module owning this structure */
+    struct module* owner;
 
-	/* NOTE: the read_*, write_* and poll_slot_status functions will be
-	 * called for different slots concurrently and need to use locks where
-	 * and if appropriate. There will be no concurrent access to one slot.
-	 */
+    /* NOTE: the read_*, write_* and poll_slot_status functions will be
+     * called for different slots concurrently and need to use locks where
+     * and if appropriate. There will be no concurrent access to one slot.
+     */
 
-	/* functions for accessing attribute memory on the CAM */
-	int (*read_attribute_mem)(struct dvb_ca_en50221* ca, int slot, int address);
-	int (*write_attribute_mem)(struct dvb_ca_en50221* ca, int slot, int address, u8 value);
+    /* functions for accessing attribute memory on the CAM */
+    int (*read_attribute_mem)(struct dvb_ca_en50221* ca, int slot, int address);
+    int (*write_attribute_mem)(struct dvb_ca_en50221* ca, int slot, int address, u8 value);
 
-	/* functions for accessing the control interface on the CAM */
-	int (*read_cam_control)(struct dvb_ca_en50221* ca, int slot, u8 address);
-	int (*write_cam_control)(struct dvb_ca_en50221* ca, int slot, u8 address, u8 value);
+    /* functions for accessing the control interface on the CAM */
+    int (*read_cam_control)(struct dvb_ca_en50221* ca, int slot, u8 address);
+    int (*write_cam_control)(struct dvb_ca_en50221* ca, int slot, u8 address, u8 value);
 
-	/* Functions for controlling slots */
-	int (*slot_reset)(struct dvb_ca_en50221* ca, int slot);
-	int (*slot_shutdown)(struct dvb_ca_en50221* ca, int slot);
-	int (*slot_ts_enable)(struct dvb_ca_en50221* ca, int slot);
+    /* Functions for controlling slots */
+    int (*slot_reset)(struct dvb_ca_en50221* ca, int slot);
+    int (*slot_shutdown)(struct dvb_ca_en50221* ca, int slot);
+    int (*slot_ts_enable)(struct dvb_ca_en50221* ca, int slot);
 
-	/*
-	* Poll slot status.
-	* Only necessary if DVB_CA_FLAG_EN50221_IRQ_CAMCHANGE is not set
-	*/
-	int (*poll_slot_status)(struct dvb_ca_en50221* ca, int slot, int open);
+    /*
+    * Poll slot status.
+    * Only necessary if DVB_CA_FLAG_EN50221_IRQ_CAMCHANGE is not set
+    */
+    int (*poll_slot_status)(struct dvb_ca_en50221* ca, int slot, int open);
 
-	/* private data, used by caller */
-	void* data;
+    /* private data, used by caller */
+    void* data;
 
-	/* Opaque data used by the dvb_ca core. Do not modify! */
-	void* private;
+    /* Opaque data used by the dvb_ca core. Do not modify! */
+    void* private;
 };
 
 

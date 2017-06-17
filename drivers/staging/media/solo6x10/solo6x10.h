@@ -121,153 +121,151 @@
 #endif
 
 enum SOLO_I2C_STATE {
-	IIC_STATE_IDLE,
-	IIC_STATE_START,
-	IIC_STATE_READ,
-	IIC_STATE_WRITE,
-	IIC_STATE_STOP
+    IIC_STATE_IDLE,
+    IIC_STATE_START,
+    IIC_STATE_READ,
+    IIC_STATE_WRITE,
+    IIC_STATE_STOP
 };
 
 struct p2m_desc {
-	u32 ctrl;
-	u32 ext;
-	u32 ta;
-	u32 fa;
+    u32 ctrl;
+    u32 ext;
+    u32 ta;
+    u32 fa;
 };
 
 struct solo_p2m_dev {
-	struct mutex		mutex;
-	struct completion	completion;
-	int			error;
+    struct mutex		mutex;
+    struct completion	completion;
+    int			error;
 };
 
 #define OSD_TEXT_MAX		30
 
 enum solo_enc_types {
-	SOLO_ENC_TYPE_STD,
-	SOLO_ENC_TYPE_EXT,
+    SOLO_ENC_TYPE_STD,
+    SOLO_ENC_TYPE_EXT,
 };
 
 struct solo_enc_dev {
-	struct solo_dev		*solo_dev;
-	/* V4L2 Items */
-	struct video_device	*vfd;
-	/* General accounting */
-	wait_queue_head_t	thread_wait;
-	spinlock_t		lock;
-	atomic_t		readers;
-	u8			ch;
-	u8			mode, gop, qp, interlaced, interval;
-	u8			reset_gop;
-	u8			bw_weight;
-	u8			motion_detected;
-	u16			motion_thresh;
-	u16			width;
-	u16			height;
-	char			osd_text[OSD_TEXT_MAX + 1];
+    struct solo_dev		*solo_dev;
+    /* V4L2 Items */
+    struct video_device	*vfd;
+    /* General accounting */
+    wait_queue_head_t	thread_wait;
+    spinlock_t		lock;
+    atomic_t		readers;
+    u8			ch;
+    u8			mode, gop, qp, interlaced, interval;
+    u8			reset_gop;
+    u8			bw_weight;
+    u8			motion_detected;
+    u16			motion_thresh;
+    u16			width;
+    u16			height;
+    char			osd_text[OSD_TEXT_MAX + 1];
 };
 
 struct solo_enc_buf {
-	u8			vop;
-	u8			ch;
-	enum solo_enc_types	type;
-	u32			off;
-	u32			size;
-	u32			jpeg_off;
-	u32			jpeg_size;
-	struct timeval		ts;
+    u8			vop;
+    u8			ch;
+    enum solo_enc_types	type;
+    u32			off;
+    u32			size;
+    u32			jpeg_off;
+    u32			jpeg_size;
+    struct timeval		ts;
 };
 
 /* The SOLO6x10 PCI Device */
 struct solo_dev {
-	/* General stuff */
-	struct pci_dev		*pdev;
-	u8 __iomem		*reg_base;
-	int			nr_chans;
-	int			nr_ext;
-	u32			flags;
-	u32			irq_mask;
-	u32			motion_mask;
-	spinlock_t		reg_io_lock;
+    /* General stuff */
+    struct pci_dev		*pdev;
+    u8 __iomem		*reg_base;
+    int			nr_chans;
+    int			nr_ext;
+    u32			flags;
+    u32			irq_mask;
+    u32			motion_mask;
+    spinlock_t		reg_io_lock;
 
-	/* tw28xx accounting */
-	u8			tw2865, tw2864, tw2815;
-	u8			tw28_cnt;
+    /* tw28xx accounting */
+    u8			tw2865, tw2864, tw2815;
+    u8			tw28_cnt;
 
-	/* i2c related items */
-	struct i2c_adapter	i2c_adap[SOLO_I2C_ADAPTERS];
-	enum SOLO_I2C_STATE	i2c_state;
-	struct mutex		i2c_mutex;
-	int			i2c_id;
-	wait_queue_head_t	i2c_wait;
-	struct i2c_msg		*i2c_msg;
-	unsigned int		i2c_msg_num;
-	unsigned int		i2c_msg_ptr;
+    /* i2c related items */
+    struct i2c_adapter	i2c_adap[SOLO_I2C_ADAPTERS];
+    enum SOLO_I2C_STATE	i2c_state;
+    struct mutex		i2c_mutex;
+    int			i2c_id;
+    wait_queue_head_t	i2c_wait;
+    struct i2c_msg		*i2c_msg;
+    unsigned int		i2c_msg_num;
+    unsigned int		i2c_msg_ptr;
 
-	/* P2M DMA Engine */
-	struct solo_p2m_dev	p2m_dev[SOLO_NR_P2M];
+    /* P2M DMA Engine */
+    struct solo_p2m_dev	p2m_dev[SOLO_NR_P2M];
 
-	/* V4L2 Display items */
-	struct video_device	*vfd;
-	unsigned int		erasing;
-	unsigned int		frame_blank;
-	u8			cur_disp_ch;
-	wait_queue_head_t	disp_thread_wait;
+    /* V4L2 Display items */
+    struct video_device	*vfd;
+    unsigned int		erasing;
+    unsigned int		frame_blank;
+    u8			cur_disp_ch;
+    wait_queue_head_t	disp_thread_wait;
 
-	/* V4L2 Encoder items */
-	struct solo_enc_dev	*v4l2_enc[SOLO_MAX_CHANNELS];
-	u16			enc_bw_remain;
-	/* IDX into hw mp4 encoder */
-	u8			enc_idx;
-	/* Our software ring of enc buf references */
-	u16			enc_wr_idx;
-	struct solo_enc_buf	enc_buf[SOLO_NR_RING_BUFS];
+    /* V4L2 Encoder items */
+    struct solo_enc_dev	*v4l2_enc[SOLO_MAX_CHANNELS];
+    u16			enc_bw_remain;
+    /* IDX into hw mp4 encoder */
+    u8			enc_idx;
+    /* Our software ring of enc buf references */
+    u16			enc_wr_idx;
+    struct solo_enc_buf	enc_buf[SOLO_NR_RING_BUFS];
 
-	/* Current video settings */
-	u32			video_type;
-	u16			video_hsize, video_vsize;
-	u16			vout_hstart, vout_vstart;
-	u16			vin_hstart, vin_vstart;
-	u8			fps;
+    /* Current video settings */
+    u32			video_type;
+    u16			video_hsize, video_vsize;
+    u16			vout_hstart, vout_vstart;
+    u16			vin_hstart, vin_vstart;
+    u8			fps;
 
-	/* Audio components */
-	struct snd_card		*snd_card;
-	struct snd_pcm		*snd_pcm;
-	atomic_t		snd_users;
-	int			g723_hw_idx;
+    /* Audio components */
+    struct snd_card		*snd_card;
+    struct snd_pcm		*snd_pcm;
+    atomic_t		snd_users;
+    int			g723_hw_idx;
 };
 
-static inline u32 solo_reg_read(struct solo_dev *solo_dev, int reg)
-{
-	unsigned long flags;
-	u32 ret;
-	u16 val;
+static inline u32 solo_reg_read(struct solo_dev *solo_dev, int reg) {
+    unsigned long flags;
+    u32 ret;
+    u16 val;
 
-	spin_lock_irqsave(&solo_dev->reg_io_lock, flags);
+    spin_lock_irqsave(&solo_dev->reg_io_lock, flags);
 
-	ret = readl(solo_dev->reg_base + reg);
-	rmb();
-	pci_read_config_word(solo_dev->pdev, PCI_STATUS, &val);
-	rmb();
+    ret = readl(solo_dev->reg_base + reg);
+    rmb();
+    pci_read_config_word(solo_dev->pdev, PCI_STATUS, &val);
+    rmb();
 
-	spin_unlock_irqrestore(&solo_dev->reg_io_lock, flags);
+    spin_unlock_irqrestore(&solo_dev->reg_io_lock, flags);
 
-	return ret;
+    return ret;
 }
 
-static inline void solo_reg_write(struct solo_dev *solo_dev, int reg, u32 data)
-{
-	unsigned long flags;
-	u16 val;
+static inline void solo_reg_write(struct solo_dev *solo_dev, int reg, u32 data) {
+    unsigned long flags;
+    u16 val;
 
-	spin_lock_irqsave(&solo_dev->reg_io_lock, flags);
+    spin_lock_irqsave(&solo_dev->reg_io_lock, flags);
 
-	writel(data, solo_dev->reg_base + reg);
-	wmb();
-	pci_read_config_word(solo_dev->pdev, PCI_STATUS, &val);
-	rmb();
+    writel(data, solo_dev->reg_base + reg);
+    wmb();
+    pci_read_config_word(solo_dev->pdev, PCI_STATUS, &val);
+    rmb();
 
-	spin_unlock_irqrestore(&solo_dev->reg_io_lock, flags);
+    spin_unlock_irqrestore(&solo_dev->reg_io_lock, flags);
 }
 
 void solo_irq_on(struct solo_dev *solo_dev, u32 mask);
@@ -310,21 +308,21 @@ void solo_video_in_isr(struct solo_dev *solo_dev);
 /* i2c read/write */
 u8 solo_i2c_readbyte(struct solo_dev *solo_dev, int id, u8 addr, u8 off);
 void solo_i2c_writebyte(struct solo_dev *solo_dev, int id, u8 addr, u8 off,
-			u8 data);
+                        u8 data);
 
 /* P2M DMA */
 int solo_p2m_dma_t(struct solo_dev *solo_dev, u8 id, int wr,
-		   dma_addr_t dma_addr, u32 ext_addr, u32 size);
+                   dma_addr_t dma_addr, u32 ext_addr, u32 size);
 int solo_p2m_dma(struct solo_dev *solo_dev, u8 id, int wr,
-		 void *sys_addr, u32 ext_addr, u32 size);
+                 void *sys_addr, u32 ext_addr, u32 size);
 int solo_p2m_dma_sg(struct solo_dev *solo_dev, u8 id,
-		    struct p2m_desc *pdesc, int wr,
-		    struct scatterlist *sglist, u32 sg_off,
-		    u32 ext_addr, u32 size);
+                    struct p2m_desc *pdesc, int wr,
+                    struct scatterlist *sglist, u32 sg_off,
+                    u32 ext_addr, u32 size);
 void solo_p2m_push_desc(struct p2m_desc *desc, int wr, dma_addr_t dma_addr,
-			u32 ext_addr, u32 size, int repeat, u32 ext_size);
+                        u32 ext_addr, u32 size, int repeat, u32 ext_size);
 int solo_p2m_dma_desc(struct solo_dev *solo_dev, u8 id,
-		      struct p2m_desc *desc, int desc_count);
+                      struct p2m_desc *desc, int desc_count);
 
 /* Set the threshold for motion detection */
 void solo_set_motion_threshold(struct solo_dev *solo_dev, u8 ch, u16 val);

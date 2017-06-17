@@ -28,7 +28,7 @@
 
 /* Translate a DMA address from device space to CPU space */
 extern u64 of_translate_dma_address(struct device_node *dev,
-				    const __be32 *in_addr);
+                                    const __be32 *in_addr);
 
 #ifdef CONFIG_PCI
 extern unsigned long pci_address_to_pio(phys_addr_t address);
@@ -39,7 +39,7 @@ extern unsigned long pci_address_to_pio(phys_addr_t address);
  * size parameters.
  */
 void of_parse_dma_window(struct device_node *dn, const void *dma_window_prop,
-		unsigned long *busno, unsigned long *phys, unsigned long *size);
+                         unsigned long *busno, unsigned long *phys, unsigned long *size);
 
 extern void kdump_move_device_tree(void);
 
@@ -52,7 +52,9 @@ struct device_node *of_find_next_cache_node(struct device_node *np);
 #ifdef CONFIG_NUMA
 extern int of_node_to_nid(struct device_node *device);
 #else
-static inline int of_node_to_nid(struct device_node *device) { return 0; }
+static inline int of_node_to_nid(struct device_node *device) {
+    return 0;
+}
 #endif
 #define of_node_to_nid of_node_to_nid
 

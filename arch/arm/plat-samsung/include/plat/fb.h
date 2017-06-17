@@ -29,12 +29,12 @@
  * @virtual_y: The virtual Y size.
  */
 struct s3c_fb_pd_win {
-	struct fb_videomode	win_mode;
+    struct fb_videomode	win_mode;
 
-	unsigned short		default_bpp;
-	unsigned short		max_bpp;
-	unsigned short		virtual_x;
-	unsigned short		virtual_y;
+    unsigned short		default_bpp;
+    unsigned short		max_bpp;
+    unsigned short		virtual_x;
+    unsigned short		virtual_y;
 };
 
 /**
@@ -55,14 +55,14 @@ struct s3c_fb_pd_win {
  *
  */
 struct s3c_fb_platdata {
-	void	(*setup_gpio)(void);
+    void	(*setup_gpio)(void);
 
-	struct s3c_fb_pd_win	*win[S3C_FB_MAX_WIN];
+    struct s3c_fb_pd_win	*win[S3C_FB_MAX_WIN];
 
-	u32			 default_win;
+    u32			 default_win;
 
-	u32			 vidcon0;
-	u32			 vidcon1;
+    u32			 vidcon0;
+    u32			 vidcon1;
 };
 
 /**

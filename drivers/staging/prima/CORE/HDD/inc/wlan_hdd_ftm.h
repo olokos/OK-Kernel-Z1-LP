@@ -103,29 +103,25 @@
 
 #define MAX_NV_TABLE_SIZE  40000
 
-typedef enum
-{
+typedef enum {
     WLAN_FTM_CMD_START = 1,
     WLAN_FTM_CMD_STOP,
     WLAN_FTM_CMD_CMD
 } wlan_hdd_ftm_cmds;
-typedef struct ftm_hdr_s
-{
+typedef struct ftm_hdr_s {
     v_U16_t cmd_id;
     v_U16_t data_len;
     v_U16_t respPktSize;
 } ftm_hdr_t;
 
 /* The request buffer of FTM which contains a byte of command and the request */
-typedef struct wlan_hdd_ftm_payload_s
-{
+typedef struct wlan_hdd_ftm_payload_s {
     v_U16_t    ftm_cmd_type;
     v_U8_t    pFtmCmd[1];
 } wlan_hdd_ftm_payload;
 #define SIZE_OF_FTM_DIAG_HEADER_LEN 12
 /* the FTM command/response structure */
-typedef struct wlan_hdd_ftm_request_s
-{
+typedef struct wlan_hdd_ftm_request_s {
     v_U8_t    cmd_code;
     v_U8_t    sub_sys_id;
     v_U16_t   mode_id;
@@ -134,8 +130,7 @@ typedef struct wlan_hdd_ftm_request_s
     wlan_hdd_ftm_payload ftmpkt;
 } wlan_hdd_ftm_request_t;
 
-typedef struct wlan_hdd_ftm_response_s
-{
+typedef struct wlan_hdd_ftm_response_s {
     v_U8_t    cmd_code;
     v_U8_t    sub_sys_id;
     v_U16_t   mode_id;
@@ -144,15 +139,13 @@ typedef struct wlan_hdd_ftm_response_s
     wlan_hdd_ftm_payload ftmpkt;
 } wlan_hdd_ftm_response_t;
 
-typedef enum
-{
+typedef enum {
     WLAN_FTM_INITIALIZED,
     WLAN_FTM_STOPPED,
     WLAN_FTM_STARTED,
     WLAN_FTM_STARTING,
 } wlan_hdd_ftm_state;
-typedef struct wlan_hdd_ftm_status_s
-{
+typedef struct wlan_hdd_ftm_status_s {
     v_U8_t ftm_state;
     wlan_hdd_ftm_request_t    *pRequestBuf;
     wlan_hdd_ftm_response_t   *pResponseBuf;
@@ -174,8 +167,7 @@ typedef struct wlan_hdd_ftm_status_s
     struct completion startCmpVar;
 
 } wlan_hdd_ftm_status_t;
-typedef struct ftm_msg_s
-{
+typedef struct ftm_msg_s {
     /* This field can be used as sequence
         number/dialogue token for matching request/response */
     v_U16_t type;
@@ -184,27 +176,23 @@ typedef struct ftm_msg_s
     void *cmd_ptr;
     v_U32_t bodyval;
 } ftm_msg_t;
-typedef struct ftm_rsp_msg_s
-{
+typedef struct ftm_rsp_msg_s {
     v_U16_t   msgId;
     v_U16_t   msgBodyLength;
     v_U32_t   respStatus;
     v_U8_t   *msgResponse;
 } ftm_rsp_msg_t;
 
-typedef struct rateIndex2Preamble
-{
+typedef struct rateIndex2Preamble {
     v_U16_t   rate_index;
     v_U16_t   Preamble;
 } rateIndex2Preamble_t;
-typedef struct freq_chan_s
-{
+typedef struct freq_chan_s {
     v_U16_t   freq;
     v_U16_t   chan;
 } freq_chan_t;
 
-typedef struct rateStr2rateIndex_s
-{
+typedef struct rateStr2rateIndex_s {
     v_U16_t   rate_index;
     char      rate_str[30];
 } rateStr2rateIndex_t;

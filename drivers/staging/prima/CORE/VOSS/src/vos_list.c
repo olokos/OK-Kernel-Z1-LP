@@ -60,17 +60,14 @@
 /**-----------------------------------------------------------------------------
   Function declarations and documenation
   ----------------------------------------------------------------------------*/
-VOS_STATUS vos_list_init( vos_list_t *pList )
-{
-    if ( pList == NULL)
-    {
+VOS_STATUS vos_list_init( vos_list_t *pList ) {
+    if ( pList == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie == VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie == VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: already initialized list", __func__);
         return VOS_STATUS_E_BUSY;
@@ -87,33 +84,28 @@ VOS_STATUS vos_list_init( vos_list_t *pList )
 }
 
 
-VOS_STATUS vos_list_destroy( vos_list_t *pList )
-{
+VOS_STATUS vos_list_destroy( vos_list_t *pList ) {
     int rc;
-    if (pList == NULL)
-    {
+    if (pList == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->count !=0 )
-    {
+    if ( pList->count !=0 ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list length not equal to zero", __func__);
         mutex_unlock(&pList->lock);
@@ -128,27 +120,23 @@ VOS_STATUS vos_list_destroy( vos_list_t *pList )
 }
 
 
-VOS_STATUS vos_list_insert_front( vos_list_t *pList, vos_list_node_t *pNode )
-{
+VOS_STATUS vos_list_insert_front( vos_list_t *pList, vos_list_node_t *pNode ) {
     int rc;
 
-    if ( ( pList == NULL) || ( pNode == NULL) )
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
@@ -162,27 +150,23 @@ VOS_STATUS vos_list_insert_front( vos_list_t *pList, vos_list_node_t *pNode )
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS vos_list_insert_back( vos_list_t *pList, vos_list_node_t *pNode )
-{
+VOS_STATUS vos_list_insert_back( vos_list_t *pList, vos_list_node_t *pNode ) {
     int rc;
 
-    if ( ( pList == NULL) || ( pNode == NULL) )
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
@@ -197,26 +181,22 @@ VOS_STATUS vos_list_insert_back( vos_list_t *pList, vos_list_node_t *pNode )
 }
 
 
-VOS_STATUS vos_list_insert_back_size( vos_list_t *pList, vos_list_node_t *pNode, v_SIZE_t *pSize )
-{
+VOS_STATUS vos_list_insert_back_size( vos_list_t *pList, vos_list_node_t *pNode, v_SIZE_t *pSize ) {
     int rc;
-    if ( ( pList == NULL) || ( pNode == NULL) || (pSize == NULL) )
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (pSize == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
@@ -232,37 +212,32 @@ VOS_STATUS vos_list_insert_back_size( vos_list_t *pList, vos_list_node_t *pNode,
 }
 
 
-VOS_STATUS vos_list_remove_front( vos_list_t *pList, vos_list_node_t **ppNode )
-{
+VOS_STATUS vos_list_remove_front( vos_list_t *pList, vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc;
 
     // the assumption here is that pList is the head of the list (dummy
     // node) and points to first and last element in circular linked list
-    if ( ( pList == NULL ) || ( ppNode == NULL) )
-    {
+    if ( ( pList == NULL ) || ( ppNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO_HIGH,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -282,37 +257,32 @@ VOS_STATUS vos_list_remove_front( vos_list_t *pList, vos_list_node_t **ppNode )
 
 
 
-VOS_STATUS vos_list_remove_back( vos_list_t *pList, vos_list_node_t **ppNode )
-{
+VOS_STATUS vos_list_remove_back( vos_list_t *pList, vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc;
 
     // the assumption here is that pList is the head of the list (dummy node) and points to first and
     // last element in circular linked list
-    if ( ( pList == NULL ) || ( ppNode == NULL) )
-    {
+    if ( ( pList == NULL ) || ( ppNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty( &pList->anchor ) )
-    {
+    if ( list_empty( &pList->anchor ) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -331,26 +301,22 @@ VOS_STATUS vos_list_remove_back( vos_list_t *pList, vos_list_node_t **ppNode )
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS vos_list_size( vos_list_t *pList, v_SIZE_t *pSize )
-{
+VOS_STATUS vos_list_size( vos_list_t *pList, v_SIZE_t *pSize ) {
     int rc;
-    if ( ( pList ==NULL) || ( pSize == NULL) )
-    {
+    if ( ( pList ==NULL) || ( pSize == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
@@ -391,35 +357,30 @@ VOS_STATUS vos_list_size( vos_list_t *pList, v_SIZE_t *pSize )
 
   --------------------------------------------------------------------------*/
 
-VOS_STATUS vos_list_peek_front( vos_list_t *pList, vos_list_node_t **ppNode )
-{
+VOS_STATUS vos_list_peek_front( vos_list_t *pList, vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc;
 
-    if ( ( pList == NULL) || ( ppNode == NULL) )
-    {
+    if ( ( pList == NULL) || ( ppNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -461,35 +422,30 @@ VOS_STATUS vos_list_peek_front( vos_list_t *pList, vos_list_node_t **ppNode )
 
   --------------------------------------------------------------------------*/
 
-VOS_STATUS vos_list_peek_back( vos_list_t *pList, vos_list_node_t **ppNode )
-{
+VOS_STATUS vos_list_peek_back( vos_list_t *pList, vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc;
 
-    if ( ( pList == NULL) || ( ppNode == NULL) )
-    {
+    if ( ( pList == NULL) || ( ppNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -533,36 +489,31 @@ VOS_STATUS vos_list_peek_back( vos_list_t *pList, vos_list_node_t **ppNode )
   --------------------------------------------------------------------------*/
 
 VOS_STATUS vos_list_peek_next( vos_list_t *pList, vos_list_node_t *pNode,
-                               vos_list_node_t **ppNode )
-{
+                               vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc, found = 0;
     vos_list_node_t *tmp;
 
-    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL))
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -570,10 +521,8 @@ VOS_STATUS vos_list_peek_next( vos_list_t *pList, vos_list_node_t *pNode,
     }
 
     // verify that pNode is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNode)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNode) {
             found = 1;
             break;
         }
@@ -582,8 +531,7 @@ VOS_STATUS vos_list_peek_next( vos_list_t *pList, vos_list_node_t *pNode,
         return VOS_STATUS_E_INVAL;
 
     listptr = pNode->next;
-    if (listptr == &pList->anchor)
-    {
+    if (listptr == &pList->anchor) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -627,36 +575,31 @@ VOS_STATUS vos_list_peek_next( vos_list_t *pList, vos_list_node_t *pNode,
   --------------------------------------------------------------------------*/
 
 VOS_STATUS vos_list_peek_prev( vos_list_t *pList, vos_list_node_t *pNode,
-                               vos_list_node_t **ppNode )
-{
+                               vos_list_node_t **ppNode ) {
     struct list_head * listptr;
     int rc, found = 0;
     vos_list_node_t *tmp;
 
-    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL) )
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (ppNode == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -664,10 +607,8 @@ VOS_STATUS vos_list_peek_prev( vos_list_t *pList, vos_list_node_t *pNode,
     }
 
     // verify that pNode is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNode)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNode) {
             found = 1;
             break;
         }
@@ -677,8 +618,7 @@ VOS_STATUS vos_list_peek_prev( vos_list_t *pList, vos_list_node_t *pNode,
 
     listptr = pNode->prev;
 
-    if (listptr == &pList->anchor)
-    {
+    if (listptr == &pList->anchor) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -719,44 +659,37 @@ VOS_STATUS vos_list_peek_prev( vos_list_t *pList, vos_list_node_t *pNode,
 
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_list_insert_before( vos_list_t *pList, vos_list_node_t *pNodeToInsert,
-                                   vos_list_node_t *pNode )
-{
+                                   vos_list_node_t *pNode ) {
     int rc, found = 0;
     vos_list_node_t *tmp;
 
-    if ( ( pList == NULL) || ( pNode == NULL) || (pNodeToInsert == NULL))
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (pNodeToInsert == NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
         return VOS_STATUS_E_EMPTY;
     }
 
     // verify that pNode is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNode)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNode) {
             found = 1;
             break;
         }
@@ -799,36 +732,31 @@ VOS_STATUS vos_list_insert_before( vos_list_t *pList, vos_list_node_t *pNodeToIn
 
   --------------------------------------------------------------------------*/
 VOS_STATUS vos_list_insert_after( vos_list_t *pList, vos_list_node_t *pNodeToInsert,
-                                  vos_list_node_t *pNode )
-{
+                                  vos_list_node_t *pNode ) {
     int rc, found = 0;
     vos_list_node_t *tmp;
 
-    if ( ( pList == NULL) || ( pNode == NULL) || (pNodeToInsert == NULL))
-    {
+    if ( ( pList == NULL) || ( pNode == NULL) || (pNodeToInsert == NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -836,10 +764,8 @@ VOS_STATUS vos_list_insert_after( vos_list_t *pList, vos_list_node_t *pNodeToIns
     }
 
     // verify that pNode is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNode)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNode) {
             found = 1;
             break;
         }
@@ -880,35 +806,30 @@ VOS_STATUS vos_list_insert_after( vos_list_t *pList, vos_list_node_t *pNodeToIns
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_STATUS vos_list_remove_node( vos_list_t *pList, vos_list_node_t *pNodeToRemove )
-{
+VOS_STATUS vos_list_remove_node( vos_list_t *pList, vos_list_node_t *pNodeToRemove ) {
     int rc, found = 0;
     vos_list_node_t *tmp;
 
-    if ( ( pList == NULL ) || ( pNodeToRemove == NULL) )
-    {
+    if ( ( pList == NULL ) || ( pNodeToRemove == NULL) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( pList->cookie != VOS_LIST_COOKIE )
-    {
+    if ( pList->cookie != VOS_LIST_COOKIE ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list not initialized", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
     rc = mutex_lock_interruptible(&pList->lock);
-    if (rc)
-    {
+    if (rc) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock list", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( list_empty(&pList->anchor) )
-    {
+    if ( list_empty(&pList->anchor) ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: list empty", __func__);
         mutex_unlock(&pList->lock);
@@ -916,10 +837,8 @@ VOS_STATUS vos_list_remove_node( vos_list_t *pList, vos_list_node_t *pNodeToRemo
     }
 
     // verify that pNodeToRemove is indeed part of list pList
-    list_for_each(tmp, &pList->anchor)
-    {
-        if (tmp == pNodeToRemove)
-        {
+    list_for_each(tmp, &pList->anchor) {
+        if (tmp == pNodeToRemove) {
             found = 1;
             break;
         }

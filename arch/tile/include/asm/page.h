@@ -45,26 +45,22 @@
 
 struct page;
 
-static inline void clear_page(void *page)
-{
-	memset(page, 0, PAGE_SIZE);
+static inline void clear_page(void *page) {
+    memset(page, 0, PAGE_SIZE);
 }
 
-static inline void copy_page(void *to, void *from)
-{
-	memcpy(to, from, PAGE_SIZE);
+static inline void copy_page(void *to, void *from) {
+    memcpy(to, from, PAGE_SIZE);
 }
 
 static inline void clear_user_page(void *page, unsigned long vaddr,
-				struct page *pg)
-{
-	clear_page(page);
+                                   struct page *pg) {
+    clear_page(page);
 }
 
 static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
-				struct page *topage)
-{
-	copy_page(to, from);
+                                  struct page *topage) {
+    copy_page(to, from);
 }
 
 /*
@@ -91,19 +87,16 @@ typedef struct page *pgtable_t;
 #define __pte(x) hv_pte(x)
 #define __pgd(x) hv_pte(x)
 
-static inline u64 pgprot_val(pgprot_t pgprot)
-{
-	return hv_pte_val(pgprot);
+static inline u64 pgprot_val(pgprot_t pgprot) {
+    return hv_pte_val(pgprot);
 }
 
-static inline u64 pte_val(pte_t pte)
-{
-	return hv_pte_val(pte);
+static inline u64 pte_val(pte_t pte) {
+    return hv_pte_val(pte);
 }
 
-static inline u64 pgd_val(pgd_t pgd)
-{
-	return hv_pte_val(pgd);
+static inline u64 pgd_val(pgd_t pgd) {
+    return hv_pte_val(pgd);
 }
 
 #ifdef __tilegx__
@@ -112,16 +105,14 @@ typedef HV_PTE pmd_t;
 
 #define __pmd(x) hv_pte(x)
 
-static inline u64 pmd_val(pmd_t pmd)
-{
-	return hv_pte_val(pmd);
+static inline u64 pmd_val(pmd_t pmd) {
+    return hv_pte_val(pmd);
 }
 
 #endif
 
-static inline __attribute_const__ int get_order(unsigned long size)
-{
-	return BITS_PER_LONG - __builtin_clzl((size - 1) >> PAGE_SHIFT);
+static inline __attribute_const__ int get_order(unsigned long size) {
+    return BITS_PER_LONG - __builtin_clzl((size - 1) >> PAGE_SHIFT);
 }
 
 #endif /* !__ASSEMBLY__ */
@@ -247,57 +238,48 @@ static inline __attribute_const__ int get_order(unsigned long size)
 extern unsigned long pbase_map[];
 extern void *vbase_map[];
 
-static inline unsigned long kaddr_to_pfn(const volatile void *_kaddr)
-{
-	unsigned long kaddr = (unsigned long)_kaddr;
-	return pbase_map[kaddr >> HPAGE_SHIFT] +
-		((kaddr & (HPAGE_SIZE - 1)) >> PAGE_SHIFT);
+static inline unsigned long kaddr_to_pfn(const volatile void *_kaddr) {
+    unsigned long kaddr = (unsigned long)_kaddr;
+    return pbase_map[kaddr >> HPAGE_SHIFT] +
+           ((kaddr & (HPAGE_SIZE - 1)) >> PAGE_SHIFT);
 }
 
-static inline void *pfn_to_kaddr(unsigned long pfn)
-{
-	return vbase_map[__pfn_to_highbits(pfn)] + (pfn << PAGE_SHIFT);
+static inline void *pfn_to_kaddr(unsigned long pfn) {
+    return vbase_map[__pfn_to_highbits(pfn)] + (pfn << PAGE_SHIFT);
 }
 
-static inline phys_addr_t virt_to_phys(const volatile void *kaddr)
-{
-	unsigned long pfn = kaddr_to_pfn(kaddr);
-	return ((phys_addr_t)pfn << PAGE_SHIFT) +
-		((unsigned long)kaddr & (PAGE_SIZE-1));
+static inline phys_addr_t virt_to_phys(const volatile void *kaddr) {
+    unsigned long pfn = kaddr_to_pfn(kaddr);
+    return ((phys_addr_t)pfn << PAGE_SHIFT) +
+           ((unsigned long)kaddr & (PAGE_SIZE-1));
 }
 
-static inline void *phys_to_virt(phys_addr_t paddr)
-{
-	return pfn_to_kaddr(paddr >> PAGE_SHIFT) + (paddr & (PAGE_SIZE-1));
+static inline void *phys_to_virt(phys_addr_t paddr) {
+    return pfn_to_kaddr(paddr >> PAGE_SHIFT) + (paddr & (PAGE_SIZE-1));
 }
 
 /* With HIGHMEM, we pack PAGE_OFFSET through high_memory with all valid VAs. */
-static inline int virt_addr_valid(const volatile void *kaddr)
-{
-	extern void *high_memory;  /* copied from <linux/mm.h> */
-	return ((unsigned long)kaddr >= PAGE_OFFSET && kaddr < high_memory);
+static inline int virt_addr_valid(const volatile void *kaddr) {
+    extern void *high_memory;  /* copied from <linux/mm.h> */
+    return ((unsigned long)kaddr >= PAGE_OFFSET && kaddr < high_memory);
 }
 
 #else /* !CONFIG_HIGHMEM */
 
-static inline unsigned long kaddr_to_pfn(const volatile void *kaddr)
-{
-	return ((unsigned long)kaddr - PAGE_OFFSET) >> PAGE_SHIFT;
+static inline unsigned long kaddr_to_pfn(const volatile void *kaddr) {
+    return ((unsigned long)kaddr - PAGE_OFFSET) >> PAGE_SHIFT;
 }
 
-static inline void *pfn_to_kaddr(unsigned long pfn)
-{
-	return (void *)((pfn << PAGE_SHIFT) + PAGE_OFFSET);
+static inline void *pfn_to_kaddr(unsigned long pfn) {
+    return (void *)((pfn << PAGE_SHIFT) + PAGE_OFFSET);
 }
 
-static inline phys_addr_t virt_to_phys(const volatile void *kaddr)
-{
-	return (phys_addr_t)((unsigned long)kaddr - PAGE_OFFSET);
+static inline phys_addr_t virt_to_phys(const volatile void *kaddr) {
+    return (phys_addr_t)((unsigned long)kaddr - PAGE_OFFSET);
 }
 
-static inline void *phys_to_virt(phys_addr_t paddr)
-{
-	return (void *)((unsigned long)paddr + PAGE_OFFSET);
+static inline void *phys_to_virt(phys_addr_t paddr) {
+    return (void *)((unsigned long)paddr + PAGE_OFFSET);
 }
 
 /* Check that the given address is within some mapped range of PAs. */
@@ -312,9 +294,8 @@ static inline void *phys_to_virt(phys_addr_t paddr)
 extern int devmem_is_allowed(unsigned long pagenr);
 
 #ifdef CONFIG_FLATMEM
-static inline int pfn_valid(unsigned long pfn)
-{
-	return pfn < max_mapnr;
+static inline int pfn_valid(unsigned long pfn) {
+    return pfn < max_mapnr;
 }
 #endif
 

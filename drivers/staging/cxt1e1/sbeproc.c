@@ -38,12 +38,10 @@ extern struct s_hdw_info hdw_info[MAX_BOARDS];
 
 
 void
-sbecom_proc_brd_cleanup (ci_t * ci)
-{
-    if (ci->dir_dev)
-    {
-	char dir[7 + SBE_IFACETMPL_SIZE + 1];
-	snprintf(dir, sizeof(dir), "driver/%s", ci->devname);
+sbecom_proc_brd_cleanup (ci_t * ci) {
+    if (ci->dir_dev) {
+        char dir[7 + SBE_IFACETMPL_SIZE + 1];
+        snprintf(dir, sizeof(dir), "driver/%s", ci->devname);
         remove_proc_entry("info", ci->dir_dev);
         remove_proc_entry(dir, NULL);
         ci->dir_dev = NULL;
@@ -53,15 +51,13 @@ sbecom_proc_brd_cleanup (ci_t * ci)
 
 static int
 sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
-                          int length, int *eof, void *priv)
-{
+                          int length, int *eof, void *priv) {
     ci_t       *ci = (ci_t *) priv;
     int         len = 0;
     char       *spd;
     struct sbe_brd_info *bip;
 
-    if (!(bip = OS_kmalloc (sizeof (struct sbe_brd_info))))
-    {
+    if (!(bip = OS_kmalloc (sizeof (struct sbe_brd_info)))) {
         return -ENOMEM;
     }
 #if 0
@@ -75,8 +71,7 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
 
         u_int8_t *bsn = 0;
 
-        switch (hi->promfmt)
-        {
+        switch (hi->promfmt) {
         case PROM_FORMAT_TYPE1:
             bsn = (u_int8_t *) hi->mfg_info.pft1.Serial;
             break;
@@ -95,8 +90,7 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
             (char *) &bip->last_iname, (char *) &bip->last_iname);
 #endif
     len += sprintf (buffer + len, "Board Type:    ");
-    switch (bip->brd_id)
-    {
+    switch (bip->brd_id) {
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C1T3):
         len += sprintf (buffer + len, "wanPMC-C1T3");
         break;
@@ -142,8 +136,8 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
     len += sprintf (buffer + len, "Board Number:  %d\n", bip->brdno);
     len += sprintf (buffer + len, "Hardware ID:   0x%02X\n", ci->hdw_bid);
     len += sprintf (buffer + len, "Board SN:      %06X\n", bip->brd_sn);
-	len += sprintf(buffer + len, "Board MAC:     %pMF\n",
-		bip->brd_mac_addr);
+    len += sprintf(buffer + len, "Board MAC:     %pMF\n",
+                   bip->brd_mac_addr);
     len += sprintf (buffer + len, "Ports:         %d\n", ci->max_port);
     len += sprintf (buffer + len, "Channels:      %d\n", bip->brd_chan_cnt);
 #if 1
@@ -154,8 +148,7 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
                     (char *) &bip->first_iname, (char *) &bip->last_iname);
 #endif
 
-    switch (bip->brd_pci_speed)
-    {
+    switch (bip->brd_pci_speed) {
     case BINFO_PCI_SPEED_33:
         spd = "33Mhz";
         break;
@@ -171,7 +164,7 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
 
 #ifdef SBE_PMCC4_ENABLE
     {
-               extern int cxt1e1_max_mru;
+        extern int cxt1e1_max_mru;
 #if 0
         extern int max_chans_used;
         extern int cxt1e1_max_mtu;
@@ -269,8 +262,7 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
 
         size = len;
         pos = begin + size;
-        if (pos < offset)
-        {
+        if (pos < offset) {
             len = 0;
             begin = pos;
         }
@@ -295,13 +287,13 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
     pr_info(">> proc_fs: returned len = %d., start %p\n", len, start);  /* RLD DEBUG */
 #endif
 
-/***
-   using NONE: returns = 314.314.314.
-   using #1  : returns = 314, 0.
-   using #2  : returns = 314, 0, 0.
-   using #3  : returns = 314, 314.
-   using #4  : returns = 314, 314.
-***/
+    /***
+       using NONE: returns = 314.314.314.
+       using #1  : returns = 314, 0.
+       using #2  : returns = 314, 0, 0.
+       using #3  : returns = 314, 314.
+       using #4  : returns = 314, 314.
+    ***/
 
     return len;
 }
@@ -309,23 +301,20 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
 /* initialize the /proc subsystem for the specific SBE driver */
 
 int         __init
-sbecom_proc_brd_init (ci_t * ci)
-{
+sbecom_proc_brd_init (ci_t * ci) {
     struct proc_dir_entry *e;
     char dir[7 + SBE_IFACETMPL_SIZE + 1];
 
     /* create a directory in the root procfs */
     snprintf(dir, sizeof(dir), "driver/%s", ci->devname);
     ci->dir_dev = proc_mkdir(dir, NULL);
-    if (!ci->dir_dev)
-    {
+    if (!ci->dir_dev) {
         pr_err("Unable to create directory /proc/driver/%s\n", ci->devname);
         goto fail;
     }
     e = create_proc_read_entry ("info", S_IFREG | S_IRUGO,
                                 ci->dir_dev, sbecom_proc_get_sbe_info, ci);
-    if (!e)
-    {
+    if (!e) {
         pr_err("Unable to create entry /proc/driver/%s/info\n", ci->devname);
         goto fail;
     }
@@ -341,13 +330,11 @@ fail:
 /* stubbed off dummy routines */
 
 void
-sbecom_proc_brd_cleanup (ci_t * ci)
-{
+sbecom_proc_brd_cleanup (ci_t * ci) {
 }
 
 int         __init
-sbecom_proc_brd_init (ci_t * ci)
-{
+sbecom_proc_brd_init (ci_t * ci) {
     return 0;
 }
 

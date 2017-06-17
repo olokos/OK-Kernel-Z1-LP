@@ -31,15 +31,14 @@ extern void flush_dcache_page(struct page *page);
 #define flush_dcache_mmap_unlock(mapping)	do { } while (0)
 
 extern void __flush_icache_range(unsigned long, unsigned long);
-static inline void flush_icache_range(unsigned long start, unsigned long stop)
-{
-	if (!cpu_has_feature(CPU_FTR_COHERENT_ICACHE))
-		__flush_icache_range(start, stop);
+static inline void flush_icache_range(unsigned long start, unsigned long stop) {
+    if (!cpu_has_feature(CPU_FTR_COHERENT_ICACHE))
+        __flush_icache_range(start, stop);
 }
 
 extern void flush_icache_user_range(struct vm_area_struct *vma,
-				    struct page *page, unsigned long addr,
-				    int len);
+                                    struct page *page, unsigned long addr,
+                                    int len);
 extern void __flush_dcache_icache(void *page_va);
 extern void flush_dcache_icache_page(struct page *page);
 #if defined(CONFIG_PPC32) && !defined(CONFIG_BOOKE)

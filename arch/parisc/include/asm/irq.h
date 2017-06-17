@@ -26,9 +26,8 @@
 
 #define NR_IRQS		(CPU_IRQ_MAX + 1)
 
-static __inline__ int irq_canonicalize(int irq)
-{
-	return (irq == 2) ? 9 : irq;
+static __inline__ int irq_canonicalize(int irq) {
+    return (irq == 2) ? 9 : irq;
 }
 
 struct irq_chip;

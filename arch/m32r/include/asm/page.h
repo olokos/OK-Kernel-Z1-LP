@@ -23,13 +23,21 @@ extern void copy_page(void *to, void *from);
 /*
  * These are used to make use of C type-checking..
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pmd; } pmd_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #define pte_val(x)	((x).pte)
 #define PTE_MASK	PAGE_MASK
 
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define pmd_val(x)	((x).pmd)

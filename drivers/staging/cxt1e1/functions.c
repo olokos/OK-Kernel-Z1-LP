@@ -60,8 +60,7 @@ extern int  drvr_state;
 
 #if 1
 u_int32_t
-pci_read_32 (u_int32_t *p)
-{
+pci_read_32 (u_int32_t *p) {
 #ifdef FLOW_DEBUG
     u_int32_t   v;
 
@@ -77,8 +76,7 @@ pci_read_32 (u_int32_t *p)
 }
 
 void
-pci_write_32 (u_int32_t *p, u_int32_t v)
-{
+pci_write_32 (u_int32_t *p, u_int32_t v) {
 #ifdef FLOW_DEBUG
     if (cxt1e1_log_level >= LOG_DEBUG)
         pr_info("pci_write: %x = %x\n", (u_int32_t) p, v);
@@ -97,8 +95,7 @@ pci_write_32 (u_int32_t *p, u_int32_t v)
 
 
 void
-pci_flush_write (ci_t * ci)
-{
+pci_flush_write (ci_t * ci) {
     volatile u_int32_t v;
 
     /* issue a PCI read to flush PCI write thru bridge */
@@ -112,12 +109,10 @@ pci_flush_write (ci_t * ci)
 
 
 STATIC void
-watchdog_func (unsigned long arg)
-{
+watchdog_func (unsigned long arg) {
     struct watchdog *wd = (void *) arg;
 
-    if (drvr_state != SBE_DRVR_AVAILABLE)
-    {
+    if (drvr_state != SBE_DRVR_AVAILABLE) {
         if (cxt1e1_log_level >= LOG_MONITOR)
             pr_warning("%s: drvr not available (%x)\n", __func__, drvr_state);
         return;
@@ -126,8 +121,7 @@ watchdog_func (unsigned long arg)
     mod_timer (&wd->h, jiffies + wd->ticks);
 }
 
-int OS_init_watchdog(struct watchdog *wdp, void (*f) (void *), void *c, int usec)
-{
+int OS_init_watchdog(struct watchdog *wdp, void (*f) (void *), void *c, int usec) {
     wdp->func = f;
     wdp->softc = c;
     wdp->ticks = (HZ) * (usec / 1000) / 1000;
@@ -143,22 +137,19 @@ int OS_init_watchdog(struct watchdog *wdp, void (*f) (void *), void *c, int usec
 }
 
 void
-OS_uwait (int usec, char *description)
-{
+OS_uwait (int usec, char *description) {
     int         tmp;
 
-    if (usec >= 1000)
-    {
+    if (usec >= 1000) {
         mdelay (usec / 1000);
         /* now delay residual */
         tmp = (usec / 1000) * 1000; /* round */
         tmp = usec - tmp;           /* residual */
-        if (tmp)
-        {                           /* wait on residual */
+        if (tmp) {
+            /* wait on residual */
             udelay (tmp);
         }
-    } else
-    {
+    } else {
         udelay (usec);
     }
 }
@@ -168,8 +159,7 @@ OS_uwait (int usec, char *description)
  */
 
 void
-OS_uwait_dummy (void)
-{
+OS_uwait_dummy (void) {
 #ifndef USE_MAX_INT_DELAY
     dummy++;
 #else
@@ -179,15 +169,13 @@ OS_uwait_dummy (void)
 
 
 void
-OS_sem_init (void *sem, int state)
-{
-    switch (state)
-    {
-        case SEM_TAKEN:
-		sema_init((struct semaphore *) sem, 0);
+OS_sem_init (void *sem, int state) {
+    switch (state) {
+    case SEM_TAKEN:
+        sema_init((struct semaphore *) sem, 0);
         break;
     case SEM_AVAILABLE:
-	    sema_init((struct semaphore *) sem, 1);
+        sema_init((struct semaphore *) sem, 1);
         break;
     default:                        /* otherwise, set sem.count to state's
                                      * value */
@@ -198,16 +186,14 @@ OS_sem_init (void *sem, int state)
 
 
 int
-sd_line_is_ok (void *user)
-{
+sd_line_is_ok (void *user) {
     struct net_device *ndev = (struct net_device *) user;
 
     return (netif_carrier_ok (ndev));
 }
 
 void
-sd_line_is_up (void *user)
-{
+sd_line_is_up (void *user) {
     struct net_device *ndev = (struct net_device *) user;
 
     netif_carrier_on (ndev);
@@ -215,8 +201,7 @@ sd_line_is_up (void *user)
 }
 
 void
-sd_line_is_down (void *user)
-{
+sd_line_is_down (void *user) {
     struct net_device *ndev = (struct net_device *) user;
 
     netif_carrier_off (ndev);
@@ -224,8 +209,7 @@ sd_line_is_down (void *user)
 }
 
 void
-sd_disable_xmit (void *user)
-{
+sd_disable_xmit (void *user) {
     struct net_device *dev = (struct net_device *) user;
 
     netif_stop_queue (dev);
@@ -233,8 +217,7 @@ sd_disable_xmit (void *user)
 }
 
 void
-sd_enable_xmit (void *user)
-{
+sd_enable_xmit (void *user) {
     struct net_device *dev = (struct net_device *) user;
 
     netif_wake_queue (dev);
@@ -242,15 +225,13 @@ sd_enable_xmit (void *user)
 }
 
 int
-sd_queue_stopped (void *user)
-{
+sd_queue_stopped (void *user) {
     struct net_device *ndev = (struct net_device *) user;
 
     return (netif_queue_stopped (ndev));
 }
 
-void sd_recv_consume(void *token, size_t len, void *user)
-{
+void sd_recv_consume(void *token, size_t len, void *user) {
     struct net_device *ndev = user;
     struct sk_buff *skb = token;
 
@@ -270,8 +251,7 @@ void sd_recv_consume(void *token, size_t len, void *user)
 
 extern ci_t *CI;                /* dummy pointer to board ZERO's data */
 void
-VMETRO_TRACE (void *x)
-{
+VMETRO_TRACE (void *x) {
     u_int32_t   y = (u_int32_t) x;
 
     pci_write_32 ((u_int32_t *) &CI->cpldbase->leds, y);
@@ -279,15 +259,13 @@ VMETRO_TRACE (void *x)
 
 
 void
-VMETRO_TRIGGER (ci_t * ci, int x)
-{
+VMETRO_TRIGGER (ci_t * ci, int x) {
     comet_t    *comet;
     volatile u_int32_t data;
 
     comet = ci->port[0].cometbase;  /* default to COMET # 0 */
 
-    switch (x)
-    {
+    switch (x) {
     default:
     case 0:
         data = pci_read_32 ((u_int32_t *) &comet->__res24);     /* 0x90 */

@@ -42,21 +42,20 @@
 
 typedef unsigned long pte_basic_t;
 
-static __inline__ void clear_page(void *addr)
-{
-	unsigned long lines, line_size;
+static __inline__ void clear_page(void *addr) {
+    unsigned long lines, line_size;
 
-	line_size = ppc64_caches.dline_size;
-	lines = ppc64_caches.dlines_per_page;
+    line_size = ppc64_caches.dline_size;
+    lines = ppc64_caches.dlines_per_page;
 
-	__asm__ __volatile__(
-	"mtctr	%1	# clear_page\n\
+    __asm__ __volatile__(
+        "mtctr	%1	# clear_page\n\
 1:      dcbz	0,%0\n\
 	add	%0,%0,%3\n\
 	bdnz+	1b"
         : "=r" (addr)
         : "r" (lines), "0" (addr), "r" (line_size)
-	: "ctr", "memory");
+        : "ctr", "memory");
 }
 
 extern void copy_page(void *to, void *from);
@@ -81,26 +80,26 @@ extern u64 ppc64_pft_size;
 #ifndef __ASSEMBLY__
 
 struct slice_mask {
-	u16 low_slices;
-	u16 high_slices;
+    u16 low_slices;
+    u16 high_slices;
 };
 
 struct mm_struct;
 
 extern unsigned long slice_get_unmapped_area(unsigned long addr,
-					     unsigned long len,
-					     unsigned long flags,
-					     unsigned int psize,
-					     int topdown,
-					     int use_cache);
+        unsigned long len,
+        unsigned long flags,
+        unsigned int psize,
+        int topdown,
+        int use_cache);
 
 extern unsigned int get_slice_psize(struct mm_struct *mm,
-				    unsigned long addr);
+                                    unsigned long addr);
 
 extern void slice_init_context(struct mm_struct *mm, unsigned int psize);
 extern void slice_set_user_psize(struct mm_struct *mm, unsigned int psize);
 extern void slice_set_range_psize(struct mm_struct *mm, unsigned long start,
-				  unsigned long len, unsigned int psize);
+                                  unsigned long len, unsigned int psize);
 
 #define slice_mm_new_context(mm)	((mm)->context.id == MMU_NO_CONTEXT)
 

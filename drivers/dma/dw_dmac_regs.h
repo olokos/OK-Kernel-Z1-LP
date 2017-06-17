@@ -15,14 +15,14 @@
 
 /* flow controller */
 enum dw_dma_fc {
-	DW_DMA_FC_D_M2M,
-	DW_DMA_FC_D_M2P,
-	DW_DMA_FC_D_P2M,
-	DW_DMA_FC_D_P2P,
-	DW_DMA_FC_P_P2M,
-	DW_DMA_FC_SP_P2P,
-	DW_DMA_FC_P_M2P,
-	DW_DMA_FC_DP_P2P,
+    DW_DMA_FC_D_M2M,
+    DW_DMA_FC_D_M2P,
+    DW_DMA_FC_D_P2M,
+    DW_DMA_FC_D_P2P,
+    DW_DMA_FC_P_P2M,
+    DW_DMA_FC_SP_P2P,
+    DW_DMA_FC_P_M2P,
+    DW_DMA_FC_DP_P2P,
 };
 
 /*
@@ -33,56 +33,56 @@ enum dw_dma_fc {
 
 /* Hardware register definitions. */
 struct dw_dma_chan_regs {
-	DW_REG(SAR);		/* Source Address Register */
-	DW_REG(DAR);		/* Destination Address Register */
-	DW_REG(LLP);		/* Linked List Pointer */
-	u32	CTL_LO;		/* Control Register Low */
-	u32	CTL_HI;		/* Control Register High */
-	DW_REG(SSTAT);
-	DW_REG(DSTAT);
-	DW_REG(SSTATAR);
-	DW_REG(DSTATAR);
-	u32	CFG_LO;		/* Configuration Register Low */
-	u32	CFG_HI;		/* Configuration Register High */
-	DW_REG(SGR);
-	DW_REG(DSR);
+    DW_REG(SAR);		/* Source Address Register */
+    DW_REG(DAR);		/* Destination Address Register */
+    DW_REG(LLP);		/* Linked List Pointer */
+    u32	CTL_LO;		/* Control Register Low */
+    u32	CTL_HI;		/* Control Register High */
+    DW_REG(SSTAT);
+    DW_REG(DSTAT);
+    DW_REG(SSTATAR);
+    DW_REG(DSTATAR);
+    u32	CFG_LO;		/* Configuration Register Low */
+    u32	CFG_HI;		/* Configuration Register High */
+    DW_REG(SGR);
+    DW_REG(DSR);
 };
 
 struct dw_dma_irq_regs {
-	DW_REG(XFER);
-	DW_REG(BLOCK);
-	DW_REG(SRC_TRAN);
-	DW_REG(DST_TRAN);
-	DW_REG(ERROR);
+    DW_REG(XFER);
+    DW_REG(BLOCK);
+    DW_REG(SRC_TRAN);
+    DW_REG(DST_TRAN);
+    DW_REG(ERROR);
 };
 
 struct dw_dma_regs {
-	/* per-channel registers */
-	struct dw_dma_chan_regs	CHAN[DW_DMA_MAX_NR_CHANNELS];
+    /* per-channel registers */
+    struct dw_dma_chan_regs	CHAN[DW_DMA_MAX_NR_CHANNELS];
 
-	/* irq handling */
-	struct dw_dma_irq_regs	RAW;		/* r */
-	struct dw_dma_irq_regs	STATUS;		/* r (raw & mask) */
-	struct dw_dma_irq_regs	MASK;		/* rw (set = irq enabled) */
-	struct dw_dma_irq_regs	CLEAR;		/* w (ack, affects "raw") */
+    /* irq handling */
+    struct dw_dma_irq_regs	RAW;		/* r */
+    struct dw_dma_irq_regs	STATUS;		/* r (raw & mask) */
+    struct dw_dma_irq_regs	MASK;		/* rw (set = irq enabled) */
+    struct dw_dma_irq_regs	CLEAR;		/* w (ack, affects "raw") */
 
-	DW_REG(STATUS_INT);			/* r */
+    DW_REG(STATUS_INT);			/* r */
 
-	/* software handshaking */
-	DW_REG(REQ_SRC);
-	DW_REG(REQ_DST);
-	DW_REG(SGL_REQ_SRC);
-	DW_REG(SGL_REQ_DST);
-	DW_REG(LAST_SRC);
-	DW_REG(LAST_DST);
+    /* software handshaking */
+    DW_REG(REQ_SRC);
+    DW_REG(REQ_DST);
+    DW_REG(SGL_REQ_SRC);
+    DW_REG(SGL_REQ_DST);
+    DW_REG(LAST_SRC);
+    DW_REG(LAST_DST);
 
-	/* miscellaneous */
-	DW_REG(CFG);
-	DW_REG(CH_EN);
-	DW_REG(ID);
-	DW_REG(TEST);
+    /* miscellaneous */
+    DW_REG(CFG);
+    DW_REG(CH_EN);
+    DW_REG(ID);
+    DW_REG(TEST);
 
-	/* optional encoded params, 0x3c8..0x3 */
+    /* optional encoded params, 0x3c8..0x3 */
 };
 
 /* Bitfields in CTL_LO */
@@ -143,36 +143,35 @@ struct dw_dma_regs {
 #define DW_REGLEN		0x400
 
 enum dw_dmac_flags {
-	DW_DMA_IS_CYCLIC = 0,
+    DW_DMA_IS_CYCLIC = 0,
 };
 
 struct dw_dma_chan {
-	struct dma_chan		chan;
-	void __iomem		*ch_regs;
-	u8			mask;
-	u8			priority;
-	bool			paused;
-	bool			initialized;
+    struct dma_chan		chan;
+    void __iomem		*ch_regs;
+    u8			mask;
+    u8			priority;
+    bool			paused;
+    bool			initialized;
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	/* these other elements are all protected by lock */
-	unsigned long		flags;
-	struct list_head	active_list;
-	struct list_head	queue;
-	struct list_head	free_list;
-	struct dw_cyclic_desc	*cdesc;
+    /* these other elements are all protected by lock */
+    unsigned long		flags;
+    struct list_head	active_list;
+    struct list_head	queue;
+    struct list_head	free_list;
+    struct dw_cyclic_desc	*cdesc;
 
-	unsigned int		descs_allocated;
+    unsigned int		descs_allocated;
 
-	/* configuration passed via DMA_SLAVE_CONFIG */
-	struct dma_slave_config dma_sconfig;
+    /* configuration passed via DMA_SLAVE_CONFIG */
+    struct dma_slave_config dma_sconfig;
 };
 
 static inline struct dw_dma_chan_regs __iomem *
-__dwc_regs(struct dw_dma_chan *dwc)
-{
-	return dwc->ch_regs;
+__dwc_regs(struct dw_dma_chan *dwc) {
+    return dwc->ch_regs;
 }
 
 #define channel_readl(dwc, name) \
@@ -180,25 +179,23 @@ __dwc_regs(struct dw_dma_chan *dwc)
 #define channel_writel(dwc, name, val) \
 	writel((val), &(__dwc_regs(dwc)->name))
 
-static inline struct dw_dma_chan *to_dw_dma_chan(struct dma_chan *chan)
-{
-	return container_of(chan, struct dw_dma_chan, chan);
+static inline struct dw_dma_chan *to_dw_dma_chan(struct dma_chan *chan) {
+    return container_of(chan, struct dw_dma_chan, chan);
 }
 
 struct dw_dma {
-	struct dma_device	dma;
-	void __iomem		*regs;
-	struct tasklet_struct	tasklet;
-	struct clk		*clk;
+    struct dma_device	dma;
+    void __iomem		*regs;
+    struct tasklet_struct	tasklet;
+    struct clk		*clk;
 
-	u8			all_chan_mask;
+    u8			all_chan_mask;
 
-	struct dw_dma_chan	chan[0];
+    struct dw_dma_chan	chan[0];
 };
 
-static inline struct dw_dma_regs __iomem *__dw_regs(struct dw_dma *dw)
-{
-	return dw->regs;
+static inline struct dw_dma_regs __iomem *__dw_regs(struct dw_dma *dw) {
+    return dw->regs;
 }
 
 #define dma_readl(dw, name) \
@@ -211,40 +208,38 @@ static inline struct dw_dma_regs __iomem *__dw_regs(struct dw_dma *dw)
 #define channel_clear_bit(dw, reg, mask) \
 	dma_writel(dw, reg, ((mask) << 8) | 0)
 
-static inline struct dw_dma *to_dw_dma(struct dma_device *ddev)
-{
-	return container_of(ddev, struct dw_dma, dma);
+static inline struct dw_dma *to_dw_dma(struct dma_device *ddev) {
+    return container_of(ddev, struct dw_dma, dma);
 }
 
 /* LLI == Linked List Item; a.k.a. DMA block descriptor */
 struct dw_lli {
-	/* values that are not changed by hardware */
-	dma_addr_t	sar;
-	dma_addr_t	dar;
-	dma_addr_t	llp;		/* chain to next lli */
-	u32		ctllo;
-	/* values that may get written back: */
-	u32		ctlhi;
-	/* sstat and dstat can snapshot peripheral register state.
-	 * silicon config may discard either or both...
-	 */
-	u32		sstat;
-	u32		dstat;
+    /* values that are not changed by hardware */
+    dma_addr_t	sar;
+    dma_addr_t	dar;
+    dma_addr_t	llp;		/* chain to next lli */
+    u32		ctllo;
+    /* values that may get written back: */
+    u32		ctlhi;
+    /* sstat and dstat can snapshot peripheral register state.
+     * silicon config may discard either or both...
+     */
+    u32		sstat;
+    u32		dstat;
 };
 
 struct dw_desc {
-	/* FIRST values the hardware uses */
-	struct dw_lli			lli;
+    /* FIRST values the hardware uses */
+    struct dw_lli			lli;
 
-	/* THEN values for driver housekeeping */
-	struct list_head		desc_node;
-	struct list_head		tx_list;
-	struct dma_async_tx_descriptor	txd;
-	size_t				len;
+    /* THEN values for driver housekeeping */
+    struct list_head		desc_node;
+    struct list_head		tx_list;
+    struct dma_async_tx_descriptor	txd;
+    size_t				len;
 };
 
 static inline struct dw_desc *
-txd_to_dw_desc(struct dma_async_tx_descriptor *txd)
-{
-	return container_of(txd, struct dw_desc, txd);
+txd_to_dw_desc(struct dma_async_tx_descriptor *txd) {
+    return container_of(txd, struct dw_desc, txd);
 }

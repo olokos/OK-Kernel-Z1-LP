@@ -22,18 +22,17 @@
  * ffz = Find First Zero in word. Undefined if no zero exists,
  * so code should check against ~0UL first..
  */
-static __inline__ unsigned long ffz(unsigned long word)
-{
-	unsigned long result;
+static __inline__ unsigned long ffz(unsigned long word) {
+    unsigned long result;
 
-	result = -1;
-	__asm__("1:\n\t"
-		"shlr.l %2\n\t"
-		"adds #1,%0\n\t"
-		"bcs 1b"
-		: "=r" (result)
-		: "0"  (result),"r" (word));
-	return result;
+    result = -1;
+    __asm__("1:\n\t"
+            "shlr.l %2\n\t"
+            "adds #1,%0\n\t"
+            "bcs 1b"
+            : "=r" (result)
+            : "0"  (result),"r" (word));
+    return result;
 }
 
 #define H8300_GEN_BITOP_CONST(OP,BIT)			    \
@@ -78,10 +77,9 @@ H8300_GEN_BITOP(change_bit,"bnot")
 #undef H8300_GEN_BITOP
 #undef H8300_GEN_BITOP_CONST
 
-static __inline__ int test_bit(int nr, const unsigned long* addr)
-{
-	return (*((volatile unsigned char *)addr + 
-               ((nr >> 3) ^ 3)) & (1UL << (nr & 7))) != 0;
+static __inline__ int test_bit(int nr, const unsigned long* addr) {
+    return (*((volatile unsigned char *)addr +
+              ((nr >> 3) ^ 3)) & (1UL << (nr & 7))) != 0;
 }
 
 #define __test_bit(nr, addr) test_bit(nr, addr)
@@ -181,18 +179,17 @@ H8300_GEN_TEST_BITOP(test_and_change_bit,"bnot")
 
 #include <asm-generic/bitops/ffs.h>
 
-static __inline__ unsigned long __ffs(unsigned long word)
-{
-	unsigned long result;
+static __inline__ unsigned long __ffs(unsigned long word) {
+    unsigned long result;
 
-	result = -1;
-	__asm__("1:\n\t"
-		"shlr.l %2\n\t"
-		"adds #1,%0\n\t"
-		"bcc 1b"
-		: "=r" (result)
-		: "0"(result),"r"(word));
-	return result;
+    result = -1;
+    __asm__("1:\n\t"
+            "shlr.l %2\n\t"
+            "adds #1,%0\n\t"
+            "bcc 1b"
+            : "=r" (result)
+            : "0"(result),"r"(word));
+    return result;
 }
 
 #include <asm-generic/bitops/find.h>

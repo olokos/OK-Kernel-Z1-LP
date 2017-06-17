@@ -51,8 +51,7 @@ typedef VOS_TIMER_STATE WPAL_TIMER_STATE;
 
 typedef void (*wpal_timer_callback)(void *pUserData);
 
-typedef struct
-{
+typedef struct {
     wpt_os_timer timer;
     wpal_timer_callback callback;
     void *pUserData;

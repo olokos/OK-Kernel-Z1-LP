@@ -14,39 +14,37 @@
 #ifndef __ASSEMBLY__
 
 /* SSYNC implementation for C file */
-static inline void SSYNC(void)
-{
-	int _tmp;
-	if (ANOMALY_05000312 || ANOMALY_05000244)
-		__asm__ __volatile__(
-			"cli %0;"
-			"nop;"
-			"nop;"
-			"nop;"
-			"ssync;"
-			"sti %0;"
-			: "=d" (_tmp)
-		);
-	else
-		__asm__ __volatile__("ssync;");
+static inline void SSYNC(void) {
+    int _tmp;
+    if (ANOMALY_05000312 || ANOMALY_05000244)
+        __asm__ __volatile__(
+            "cli %0;"
+            "nop;"
+            "nop;"
+            "nop;"
+            "ssync;"
+            "sti %0;"
+            : "=d" (_tmp)
+        );
+    else
+        __asm__ __volatile__("ssync;");
 }
 
 /* CSYNC implementation for C file */
-static inline void CSYNC(void)
-{
-	int _tmp;
-	if (ANOMALY_05000312 || ANOMALY_05000244)
-		__asm__ __volatile__(
-			"cli %0;"
-			"nop;"
-			"nop;"
-			"nop;"
-			"csync;"
-			"sti %0;"
-			: "=d" (_tmp)
-		);
-	else
-		__asm__ __volatile__("csync;");
+static inline void CSYNC(void) {
+    int _tmp;
+    if (ANOMALY_05000312 || ANOMALY_05000244)
+        __asm__ __volatile__(
+            "cli %0;"
+            "nop;"
+            "nop;"
+            "nop;"
+            "csync;"
+            "sti %0;"
+            : "=d" (_tmp)
+        );
+    else
+        __asm__ __volatile__("csync;");
 }
 
 #else  /* __ASSEMBLY__ */

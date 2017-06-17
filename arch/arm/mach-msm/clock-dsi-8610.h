@@ -16,11 +16,11 @@
 #include <mach/clk-provider.h>
 
 struct dsi_pll_vco_clk {
-	const unsigned long vco_clk_min;
-	const unsigned long vco_clk_max;
-	const unsigned pref_div_ratio;
-	int factor;
-	struct clk c;
+    const unsigned long vco_clk_min;
+    const unsigned long vco_clk_max;
+    const unsigned pref_div_ratio;
+    int factor;
+    struct clk c;
 };
 
 extern struct clk_ops clk_ops_dsi_vco;

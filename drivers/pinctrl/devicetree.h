@@ -23,13 +23,11 @@ int pinctrl_dt_to_map(struct pinctrl *p);
 
 #else
 
-static inline int pinctrl_dt_to_map(struct pinctrl *p)
-{
-	return 0;
+static inline int pinctrl_dt_to_map(struct pinctrl *p) {
+    return 0;
 }
 
-static inline void pinctrl_dt_free_maps(struct pinctrl *p)
-{
+static inline void pinctrl_dt_free_maps(struct pinctrl *p) {
 }
 
 #endif

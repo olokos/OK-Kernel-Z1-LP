@@ -30,17 +30,17 @@ struct exec_domain;
 typedef unsigned long mm_segment_t;
 
 struct cpu_context_save {
-	__u32	r4;
-	__u32	r5;
-	__u32	r6;
-	__u32	r7;
-	__u32	r8;
-	__u32	r9;
-	__u32	sl;
-	__u32	fp;
-	__u32	sp;
-	__u32	pc;
-	__u32	extra[2];		/* Xscale 'acc' register, etc */
+    __u32	r4;
+    __u32	r5;
+    __u32	r6;
+    __u32	r7;
+    __u32	r8;
+    __u32	r9;
+    __u32	sl;
+    __u32	fp;
+    __u32	sp;
+    __u32	pc;
+    __u32	extra[2];		/* Xscale 'acc' register, etc */
 };
 
 /*
@@ -48,24 +48,24 @@ struct cpu_context_save {
  * __switch_to() assumes cpu_context follows immediately after cpu_domain.
  */
 struct thread_info {
-	unsigned long		flags;		/* low level flags */
-	int			preempt_count;	/* 0 => preemptable, <0 => bug */
-	mm_segment_t		addr_limit;	/* address limit */
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	__u32			cpu;		/* cpu */
-	__u32			cpu_domain;	/* cpu domain */
-	struct cpu_context_save	cpu_context;	/* cpu context */
-	__u32			syscall;	/* syscall number */
-	__u8			used_cp[16];	/* thread used copro */
-	unsigned long		tp_value[2];	/* TLS registers */
-	struct crunch_state	crunchstate;
-	union fp_state		fpstate __attribute__((aligned(8)));
-	union vfp_state		vfpstate;
+    unsigned long		flags;		/* low level flags */
+    int			preempt_count;	/* 0 => preemptable, <0 => bug */
+    mm_segment_t		addr_limit;	/* address limit */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    __u32			cpu;		/* cpu */
+    __u32			cpu_domain;	/* cpu domain */
+    struct cpu_context_save	cpu_context;	/* cpu context */
+    __u32			syscall;	/* syscall number */
+    __u8			used_cp[16];	/* thread used copro */
+    unsigned long		tp_value[2];	/* TLS registers */
+    struct crunch_state	crunchstate;
+    union fp_state		fpstate __attribute__((aligned(8)));
+    union vfp_state		vfpstate;
 #ifdef CONFIG_ARM_THUMBEE
-	unsigned long		thumbee_state;	/* ThumbEE Handler Base register */
+    unsigned long		thumbee_state;	/* ThumbEE Handler Base register */
 #endif
-	struct restart_block	restart_block;
+    struct restart_block	restart_block;
 };
 
 #define INIT_THREAD_INFO(tsk)						\
@@ -91,10 +91,9 @@ struct thread_info {
  */
 static inline struct thread_info *current_thread_info(void) __attribute_const__;
 
-static inline struct thread_info *current_thread_info(void)
-{
-	register unsigned long sp asm ("sp");
-	return (struct thread_info *)(sp & ~(THREAD_SIZE - 1));
+static inline struct thread_info *current_thread_info(void) {
+    register unsigned long sp asm ("sp");
+    return (struct thread_info *)(sp & ~(THREAD_SIZE - 1));
 }
 
 #define thread_saved_pc(tsk)	\
@@ -122,9 +121,9 @@ struct user_vfp;
 struct user_vfp_exc;
 
 extern int vfp_preserve_user_clear_hwstate(struct user_vfp __user *,
-					   struct user_vfp_exc __user *);
+        struct user_vfp_exc __user *);
 extern int vfp_restore_user_hwstate(struct user_vfp __user *,
-				    struct user_vfp_exc __user *);
+                                    struct user_vfp_exc __user *);
 #endif
 
 /*

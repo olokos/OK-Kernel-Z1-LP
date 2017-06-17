@@ -86,37 +86,37 @@
 
 /* Register r_bootsel, scope config, type r */
 typedef struct {
-  unsigned int boot_mode   : 3;
-  unsigned int full_duplex : 1;
-  unsigned int user        : 1;
-  unsigned int pll         : 1;
-  unsigned int flash_bw    : 1;
-  unsigned int dummy1      : 25;
+    unsigned int boot_mode   : 3;
+    unsigned int full_duplex : 1;
+    unsigned int user        : 1;
+    unsigned int pll         : 1;
+    unsigned int flash_bw    : 1;
+    unsigned int dummy1      : 25;
 } reg_config_r_bootsel;
 #define REG_RD_ADDR_config_r_bootsel 0
 
 /* Register rw_clk_ctrl, scope config, type rw */
 typedef struct {
-  unsigned int pll          : 1;
-  unsigned int cpu          : 1;
-  unsigned int iop          : 1;
-  unsigned int dma01_eth0   : 1;
-  unsigned int dma23        : 1;
-  unsigned int dma45        : 1;
-  unsigned int dma67        : 1;
-  unsigned int dma89_strcop : 1;
-  unsigned int bif          : 1;
-  unsigned int fix_io       : 1;
-  unsigned int dummy1       : 22;
+    unsigned int pll          : 1;
+    unsigned int cpu          : 1;
+    unsigned int iop          : 1;
+    unsigned int dma01_eth0   : 1;
+    unsigned int dma23        : 1;
+    unsigned int dma45        : 1;
+    unsigned int dma67        : 1;
+    unsigned int dma89_strcop : 1;
+    unsigned int bif          : 1;
+    unsigned int fix_io       : 1;
+    unsigned int dummy1       : 22;
 } reg_config_rw_clk_ctrl;
 #define REG_RD_ADDR_config_rw_clk_ctrl 4
 #define REG_WR_ADDR_config_rw_clk_ctrl 4
 
 /* Register rw_pad_ctrl, scope config, type rw */
 typedef struct {
-  unsigned int usb_susp : 1;
-  unsigned int phyrst_n : 1;
-  unsigned int dummy1   : 30;
+    unsigned int usb_susp : 1;
+    unsigned int phyrst_n : 1;
+    unsigned int dummy1   : 30;
 } reg_config_rw_pad_ctrl;
 #define REG_RD_ADDR_config_rw_pad_ctrl 8
 #define REG_WR_ADDR_config_rw_pad_ctrl 8
@@ -124,19 +124,19 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_config_bw16                         = 0x00000000,
-  regk_config_bw32                         = 0x00000001,
-  regk_config_master                       = 0x00000005,
-  regk_config_nand                         = 0x00000003,
-  regk_config_net_rx                       = 0x00000001,
-  regk_config_net_tx_rx                    = 0x00000002,
-  regk_config_no                           = 0x00000000,
-  regk_config_none                         = 0x00000007,
-  regk_config_nor                          = 0x00000000,
-  regk_config_rw_clk_ctrl_default          = 0x00000002,
-  regk_config_rw_pad_ctrl_default          = 0x00000000,
-  regk_config_ser                          = 0x00000004,
-  regk_config_slave                        = 0x00000006,
-  regk_config_yes                          = 0x00000001
+    regk_config_bw16                         = 0x00000000,
+    regk_config_bw32                         = 0x00000001,
+    regk_config_master                       = 0x00000005,
+    regk_config_nand                         = 0x00000003,
+    regk_config_net_rx                       = 0x00000001,
+    regk_config_net_tx_rx                    = 0x00000002,
+    regk_config_no                           = 0x00000000,
+    regk_config_none                         = 0x00000007,
+    regk_config_nor                          = 0x00000000,
+    regk_config_rw_clk_ctrl_default          = 0x00000002,
+    regk_config_rw_pad_ctrl_default          = 0x00000000,
+    regk_config_ser                          = 0x00000004,
+    regk_config_slave                        = 0x00000006,
+    regk_config_yes                          = 0x00000001
 };
 #endif /* __config_defs_h */

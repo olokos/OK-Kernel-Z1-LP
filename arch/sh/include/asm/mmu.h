@@ -42,14 +42,14 @@ typedef unsigned long mm_context_id_t[NR_CPUS];
 
 typedef struct {
 #ifdef CONFIG_MMU
-	mm_context_id_t		id;
-	void			*vdso;
+    mm_context_id_t		id;
+    void			*vdso;
 #else
-	unsigned long		end_brk;
+    unsigned long		end_brk;
 #endif
 #ifdef CONFIG_BINFMT_ELF_FDPIC
-	unsigned long		exec_fdpic_loadmap;
-	unsigned long		interp_fdpic_loadmap;
+    unsigned long		exec_fdpic_loadmap;
+    unsigned long		interp_fdpic_loadmap;
 #endif
 } mm_context_t;
 
@@ -59,30 +59,27 @@ bool __in_29bit_mode(void);
 
 void pmb_init(void);
 int pmb_bolt_mapping(unsigned long virt, phys_addr_t phys,
-		     unsigned long size, pgprot_t prot);
+                     unsigned long size, pgprot_t prot);
 void __iomem *pmb_remap_caller(phys_addr_t phys, unsigned long size,
-			       pgprot_t prot, void *caller);
+                               pgprot_t prot, void *caller);
 int pmb_unmap(void __iomem *addr);
 
 #else
 
 static inline int
 pmb_bolt_mapping(unsigned long virt, phys_addr_t phys,
-		 unsigned long size, pgprot_t prot)
-{
-	return -EINVAL;
+                 unsigned long size, pgprot_t prot) {
+    return -EINVAL;
 }
 
 static inline void __iomem *
 pmb_remap_caller(phys_addr_t phys, unsigned long size,
-		 pgprot_t prot, void *caller)
-{
-	return NULL;
+                 pgprot_t prot, void *caller) {
+    return NULL;
 }
 
-static inline int pmb_unmap(void __iomem *addr)
-{
-	return -EINVAL;
+static inline int pmb_unmap(void __iomem *addr) {
+    return -EINVAL;
 }
 
 #define pmb_init(addr)		do { } while (0)
@@ -96,9 +93,8 @@ static inline int pmb_unmap(void __iomem *addr)
 #endif /* CONFIG_PMB */
 
 static inline void __iomem *
-pmb_remap(phys_addr_t phys, unsigned long size, pgprot_t prot)
-{
-	return pmb_remap_caller(phys, size, prot, __builtin_return_address(0));
+pmb_remap(phys_addr_t phys, unsigned long size, pgprot_t prot) {
+    return pmb_remap_caller(phys, size, prot, __builtin_return_address(0));
 }
 
 #endif /* __ASSEMBLY__ */

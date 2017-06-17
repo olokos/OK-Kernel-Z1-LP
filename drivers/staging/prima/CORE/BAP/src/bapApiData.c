@@ -172,8 +172,7 @@ static v_U8_t WLANBAP_LLC_HEADER[] =  {0xAA, 0xAA, 0x03, 0x00, 0x00, 0x00 };
 // Don't we have this type defined somewhere?
 #if 0
 /* 802.3 header */
-typedef struct
-{
+typedef struct {
     /* Destination address field */
     v_U8_t   vDA[VOS_MAC_ADDR_SIZE];
 
@@ -211,8 +210,7 @@ typedef struct
  *
  */
 
-typedef struct
-{
+typedef struct {
 
 #ifndef BAP_LITTLE_BIT_ENDIAN
 
@@ -303,8 +301,7 @@ WLANBAP_XlateTxDataPkt
     WLANTL_ACEnumType    *pucAC,        /* Return the AC here */
     WLANTL_MetaInfoType  *tlMetaInfo, /* Return the MetaInfo here. An assist to WLANBAP_STAFetchPktCBType */
     vos_pkt_t        *vosDataBuff
-)
-{
+) {
     ptBtampContext           pBtampCtx = (ptBtampContext) btampHandle;
     tpBtampLogLinkCtx        pLogLinkContext;
     WLANBAP_8023HeaderType   w8023Header;
@@ -322,8 +319,7 @@ WLANBAP_XlateTxDataPkt
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -333,8 +329,7 @@ WLANBAP_XlateTxDataPkt
     // HCI ACL Data packet that I am being handed.
     vosStatus = vos_pkt_pop_head( vosDataBuff, &hciACLHeader, WLANBAP_HCI_ACL_HEADER_LEN);
 
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Failed to pop HCI ACL header from packet %d",
                    vosStatus);
@@ -345,8 +340,7 @@ WLANBAP_XlateTxDataPkt
     // JEZ081003: Remove this after debugging
     // Sanity check the phy_link_handle value
 
-    if ( phy_link_handle != hciACLHeader.phyLinkHandle )
-    {
+    if ( phy_link_handle != hciACLHeader.phyLinkHandle ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: phy_link_handle mismatch in %s phy_link_handle=%d hciACLHeader.phyLinkHandle=%d",
                    __func__, phy_link_handle, hciACLHeader.phyLinkHandle);
@@ -361,8 +355,7 @@ WLANBAP_XlateTxDataPkt
                     phy_link_handle,  /* phy_link_handle value in */
                     &ucSTAId,  /* The StaId (used by TL, PE, and HAL) */
                     &pHddHdl); /* Handle to return BSL context */
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Unable to retrieve STA Id from BAP context and phy_link_handle in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -370,8 +363,7 @@ WLANBAP_XlateTxDataPkt
 
     // JEZ081003: Remove this after debugging
     // Sanity check the log_link_handle value
-    if (!BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle))
-    {
+    if (!BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Invalid logical link handle (%d) in %s. Corrected.",
                    hciACLHeader.logLinkHandle,
@@ -389,8 +381,7 @@ WLANBAP_XlateTxDataPkt
     // JEZ081003: Remove this after debugging
     // Sanity check the log_link_handle value
     // JEZ081113: I changed this to fail on an UNOCCUPIED entry
-    if ( pLogLinkContext->present != VOS_TRUE)
-    {
+    if ( pLogLinkContext->present != VOS_TRUE) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Invalid logical link entry in %s",
                    __func__);
@@ -493,16 +484,14 @@ WLANBAP_GetAcFromTxDataPkt
                                     and therefore addresses */
     void              *pHciData,     /* Pointer to the HCI data frame */
     WLANTL_ACEnumType *pucAC        /* Return the AC here */
-)
-{
+) {
     ptBtampContext           pBtampCtx;
     tpBtampLogLinkCtx        pLogLinkContext;
     WLANBAP_HCIACLHeaderType hciACLHeader;
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if (( NULL == btampHandle) || (NULL == pHciData) || (NULL == pucAC))
-    {
+    if (( NULL == btampHandle) || (NULL == pHciData) || (NULL == pucAC)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid params in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -511,8 +500,7 @@ WLANBAP_GetAcFromTxDataPkt
 
     vos_mem_copy( &hciACLHeader, pHciData, WLANBAP_HCI_ACL_HEADER_LEN);
     // Sanity check the log_link_handle value
-    if (!BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle))
-    {
+    if (!BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Invalid logical link handle (%d) in %s",
                    hciACLHeader.logLinkHandle,
@@ -527,8 +515,7 @@ WLANBAP_GetAcFromTxDataPkt
 
     // Sanity check the log_link_handle value
     // JEZ081113: I changed this to fail on an UNOCCUPIED entry
-    if ( pLogLinkContext->present != VOS_TRUE)
-    {
+    if ( pLogLinkContext->present != VOS_TRUE) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Invalid logical link entry in %s",
                    __func__);
@@ -580,8 +567,7 @@ WLANBAP_XlateRxDataPkt
     v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
     WLANTL_ACEnumType  *pucAC,        /* Return the AC here. I don't think this is needed */
     vos_pkt_t        *vosDataBuff
-)
-{
+) {
     WLANBAP_8023HeaderType  w8023Header;
     WLANBAP_HCIACLHeaderType hciACLHeader;
     v_U8_t                   aucLLCHeader[WLANBAP_LLC_HEADER_LEN];
@@ -595,8 +581,7 @@ WLANBAP_XlateRxDataPkt
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -607,8 +592,7 @@ WLANBAP_XlateRxDataPkt
     vos_mem_set( &w8023Header, sizeof(w8023Header), 0 );
     vosStatus = vos_pkt_pop_head( vosDataBuff, &w8023Header, sizeof(w8023Header));
 
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Failed to pop 802.3 header from packet %d",
                    vosStatus);
@@ -621,8 +605,7 @@ WLANBAP_XlateRxDataPkt
     vos_mem_set( aucLLCHeader, WLANBAP_LLC_HEADER_LEN, 0 );
     vosStatus = vos_pkt_pop_head( vosDataBuff, aucLLCHeader, WLANBAP_LLC_HEADER_LEN);
 
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Failed to pop LLC/SNAP header from packet %d",
                    vosStatus);
@@ -639,8 +622,7 @@ WLANBAP_XlateRxDataPkt
                             - WLANBAP_LLC_OUI_SIZE)  /* Don't check the last three bytes here */
             && vos_mem_compare( &aucLLCHeader[WLANBAP_LLC_OUI_OFFSET],
                                 (v_VOID_t*)WLANBAP_BT_AMP_OUI,
-                                WLANBAP_LLC_OUI_SIZE)))  /* check them here */
-    {
+                                WLANBAP_LLC_OUI_SIZE))) { /* check them here */
 
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid LLC header for BT-AMP packet in %s", __func__);
@@ -656,8 +638,7 @@ WLANBAP_XlateRxDataPkt
     // (Verify with TL)
     if ( !(vos_mem_compare( &aucLLCHeader[WLANBAP_LLC_PROTO_TYPE_OFFSET],
                             &protoType,  //WLANBAP_BT_AMP_TYPE_DATA
-                            WLANBAP_LLC_PROTO_TYPE_SIZE)))
-    {
+                            WLANBAP_LLC_PROTO_TYPE_SIZE))) {
 
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid (non-data) frame type in %s", __func__);
@@ -671,8 +652,7 @@ WLANBAP_XlateRxDataPkt
         against the value in the incoming Rx Frame.
       ------------------------------------------------------------------------*/
     if ( !(vos_mem_compare( w8023Header.vDA, pBtampCtx->self_mac_addr, VOS_MAC_ADDR_SIZE)
-            && vos_mem_compare( w8023Header.vSA, pBtampCtx->peer_mac_addr, VOS_MAC_ADDR_SIZE)))
-    {
+            && vos_mem_compare( w8023Header.vSA, pBtampCtx->peer_mac_addr, VOS_MAC_ADDR_SIZE))) {
 
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "MAC address mismatch in %s", __func__);
@@ -760,8 +740,7 @@ WLANBAP_STAFetchPktCB
     v_U8_t                ucAC,
     vos_pkt_t**           vosDataBuff,
     WLANTL_MetaInfoType*  tlMetaInfo
-)
-{
+) {
     VOS_STATUS    vosStatus;
     ptBtampHandle bapHdl;  /* holds ptBtampHandle value returned  */
     ptBtampContext bapContext; /* Holds the btampContext value returned */
@@ -774,8 +753,7 @@ WLANBAP_STAFetchPktCB
                     &bapHdl,  /* "handle" to return ptBtampHandle value in  */
                     &bapContext,  /* "handle" to return ptBtampContext value in  */
                     &pHddHdl); /* "handle" to return BSL context in */
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Unable to retrieve BSL or BAP context from STA Id in WLANBAP_STAFetchPktCB");
         return VOS_STATUS_E_FAULT;
@@ -787,8 +765,7 @@ WLANBAP_STAFetchPktCB
                     (WLANTL_ACEnumType)   ucAC, /* typecast it for now */
                     vosDataBuff,
                     tlMetaInfo);
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Callback registered by BSL failed to fetch pkt in WLANNBAP_STAFetchPktCB");
         return VOS_STATUS_E_FAULT;
@@ -829,8 +806,7 @@ WLANBAP_STARxCB
     vos_pkt_t*         vosDataBuff,
     v_U8_t             ucSTAId,
     WLANTL_RxMetaInfoType* pRxMetaInfo
-)
-{
+) {
     VOS_STATUS    vosStatus;
     ptBtampHandle bapHdl;  /* holds ptBtampHandle value returned  */
     ptBtampContext bapContext; /* Holds the btampContext value returned */
@@ -851,8 +827,7 @@ WLANBAP_STARxCB
                     &bapHdl,  /* "handle" to return ptBtampHandle value in  */
                     &bapContext,  /* "handle" to return ptBtampContext value in  */
                     &pHddHdl); /* "handle" to return BSL context in */
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Unable to retrieve BSL or BAP context from STA Id in WLANBAP_STARxCB");
         /* Drop packet */
@@ -864,8 +839,7 @@ WLANBAP_STARxCB
     vosStatus = vos_pkt_extract_data( vosDataBuff, sizeof(w8023Header), (v_VOID_t *)aucLLCHeader,
                                       &llcHeaderLen);
 
-    if ( NULL == aucLLCHeader/*LLC Header*/ )
-    {
+    if ( NULL == aucLLCHeader/*LLC Header*/ ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WLANBAP_STARxCB:Cannot extract LLC header");
         /* Drop packet */
@@ -880,10 +854,8 @@ WLANBAP_STARxCB
                "%s: received : %d, => BAP",__func__,
                protoType);
 
-    if(WLANBAP_BT_AMP_TYPE_DATA == protoType)
-    {
-        if (bapContext->bapLinkSupervisionTimerInterval)
-        {
+    if(WLANBAP_BT_AMP_TYPE_DATA == protoType) {
+        if (bapContext->bapLinkSupervisionTimerInterval) {
             /* Reset Link Supervision timer */
             //vosStatus = WLANBAP_StopLinkSupervisionTimer(bapContext);
             //vosStatus = WLANBAP_StartLinkSupervisionTimer(bapContext,7000);
@@ -893,17 +865,13 @@ WLANBAP_STARxCB
                             pHddHdl,
                             vosDataBuff,
                             pRxMetaInfo);
-        }
-        else
-        {
+        } else {
             VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_FATAL,
                        "WLANBAP_STARxCB:bapLinkSupervisionTimerInterval is 0");
             /* Drop packet */
             vos_pkt_return_packet(vosDataBuff);
         }
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "%s: link Supervision packet received over TL: %d, => BAP",
                    __func__,protoType);
@@ -950,8 +918,7 @@ WLANBAP_TxCompCB
     v_PVOID_t      pvosGCtx,
     vos_pkt_t*     vosDataBuff,
     VOS_STATUS     wTxSTAtus
-)
-{
+) {
     VOS_STATUS    vosStatus;
     ptBtampHandle bapHdl;  /* holds ptBtampHandle value returned  */
     ptBtampContext bapContext; /* Holds the btampContext value returned */
@@ -981,15 +948,13 @@ WLANBAP_TxCompCB
     /*------------------------------------------------------------------------
       Sanity check params
     ------------------------------------------------------------------------*/
-    if ( NULL == vosDataBuff)
-    {
+    if ( NULL == vosDataBuff) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid vosDataBuff value in %s", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( NULL == bapContext)
-    {
+    if ( NULL == bapContext) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid bapContext value in %s", __func__);
         vos_pkt_return_packet( vosDataBuff );
@@ -998,8 +963,7 @@ WLANBAP_TxCompCB
 
     pHddHdl = bapContext->pHddHdl;
     vosStatus = VOS_STATUS_SUCCESS;
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Unable to retrieve BSL or BAP context from STA Id in WLANBAP_TxCompCB");
         vos_pkt_return_packet( vosDataBuff );
@@ -1021,16 +985,13 @@ WLANBAP_TxCompCB
 
     // Sanity check the log_link_handle value
 // JEZ100722: Temporary changes.
-    if (BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle))
-    {
+    if (BTAMP_VALID_LOG_LINK( hciACLHeader.logLinkHandle)) {
         vos_atomic_increment_U32(
             &bapContext->btampLogLinkCtx[hciACLHeader.logLinkHandle].uTxPktCompleted);
 //           &bapContext->btampLogLinkCtx[0].uTxPktCompleted);
 //       vos_atomic_increment_U32(
 //           &bapContext->btampLogLinkCtx[1].uTxPktCompleted);
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "In %s:%d: Invalid logical link handle: %d", __func__, __LINE__, hciACLHeader.logLinkHandle);
     }
@@ -1085,16 +1046,14 @@ WLANBAP_RegisterDataPlane
     WLANBAP_TxCompCBType pfnBtampTxCompCB,
     // phy_link_handle, of course, doesn't come until much later.  At Physical Link create.
     v_PVOID_t      pHddHdl   /* BSL specific context */
-)
-{
+) {
     ptBtampContext pBtampCtx = (ptBtampContext) btampHandle;
 
 
     /*------------------------------------------------------------------------
       Sanity check params
      ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in WLANBAP_RegisterDataPlane");
         return VOS_STATUS_E_FAULT;
@@ -1156,8 +1115,7 @@ WLANBAP_STAPktPending
     ptBtampHandle  btampHandle,  /* Used by BAP to identify the app context and VOSS ctx (!?) */
     v_U8_t         phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
     WLANTL_ACEnumType ucAc   /* This is the first instance of a TL type in bapApi.h */
-)
-{
+) {
     VOS_STATUS     vosStatus;
     ptBtampContext pBtampCtx = (ptBtampContext) btampHandle;
     v_PVOID_t      pvosGCtx;
@@ -1174,8 +1132,7 @@ WLANBAP_STAPktPending
     /*------------------------------------------------------------------------
       Sanity check params
      ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in WLANBAP_STAPktPending");
         return VOS_STATUS_E_FAULT;
@@ -1191,8 +1148,7 @@ WLANBAP_STAPktPending
                     phy_link_handle,  /* phy_link_handle value in */
                     &ucSTAId,  /* The StaId (used by TL, PE, and HAL) */
                     &pHddHdl); /* Handle to return BSL context */
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "Unable to retrieve STA Id from BAP context and phy_link_handle in WLANBAP_STAPktPending");
         return VOS_STATUS_E_FAULT;
@@ -1204,8 +1160,7 @@ WLANBAP_STAPktPending
                     pvosGCtx,
                     ucSTAId,
                     ucAc);
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Tx: Packet rejected by TL in WLANBAP_STAPktPending");
         return vosStatus;
@@ -1251,16 +1206,14 @@ WLAN_BAPRegisterBAPCallbacks
     /* guys reference when invoking him. */
     tpWLAN_BAPEventCB       pBapHCIEventCB, /*Implements the callback for ALL asynchronous events. */
     v_PVOID_t               pAppHdl  // Per-app BSL context
-)
-{
+) {
     ptBtampContext pBtampCtx = (ptBtampContext) btampHandle;
 
 
     /*------------------------------------------------------------------------
       Sanity check params
      ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in WLAN_BAPRegisterBAPCallbacks");
         return VOS_STATUS_E_FAULT;

@@ -66,8 +66,7 @@
  * @param *timLength pointer to limLength, which needs to be returned.
  * @return None
  */
-void pmmGenerateTIM(tpAniSirGlobal pMac, tANI_U8 **pPtr, tANI_U16 *timLength, tANI_U8 dtimPeriod)
-{
+void pmmGenerateTIM(tpAniSirGlobal pMac, tANI_U8 **pPtr, tANI_U16 *timLength, tANI_U8 dtimPeriod) {
     tANI_U8 *ptr = *pPtr;
     tANI_U32 val = 0;
     tANI_U32 minAid = 1; // Always start with AID 1 as minimum

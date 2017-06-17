@@ -10,7 +10,7 @@
 #define VCLOCK_HPET 2  /* vDSO should use vread_hpet.	*/
 
 struct arch_clocksource_data {
-	int vclock_mode;
+    int vclock_mode;
 };
 
 #endif /* CONFIG_X86_64 */

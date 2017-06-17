@@ -39,9 +39,9 @@
 
 #define MSI_ADDR_REDIRECTION_SHIFT	3
 #define  MSI_ADDR_REDIRECTION_CPU	(0 << MSI_ADDR_REDIRECTION_SHIFT)
-					/* dedicated cpu */
+/* dedicated cpu */
 #define  MSI_ADDR_REDIRECTION_LOWPRI	(1 << MSI_ADDR_REDIRECTION_SHIFT)
-					/* lowest priority */
+/* lowest priority */
 
 #define MSI_ADDR_DEST_ID_SHIFT		12
 #define	 MSI_ADDR_DEST_ID_MASK		0x00ffff0

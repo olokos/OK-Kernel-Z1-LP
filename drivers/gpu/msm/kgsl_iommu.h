@@ -65,26 +65,26 @@
 #define KGSL_IOMMU_SCTLR_HUPCF_SHIFT		8
 
 enum kgsl_iommu_reg_map {
-	KGSL_IOMMU_GLOBAL_BASE = 0,
-	KGSL_IOMMU_CTX_SCTLR,
-	KGSL_IOMMU_CTX_TTBR0,
-	KGSL_IOMMU_CTX_TTBR1,
-	KGSL_IOMMU_CTX_FSR,
-	KGSL_IOMMU_CTX_TLBIALL,
-	KGSL_IOMMU_CTX_RESUME,
-	KGSL_IOMMU_CTX_TLBLKCR,
-	KGSL_IOMMU_CTX_V2PUR,
-	KGSL_IOMMU_CTX_FSYNR0,
-	KGSL_IOMMU_CTX_FSYNR1,
-	KGSL_IOMMU_CTX_TLBSYNC,
-	KGSL_IOMMU_CTX_TLBSTATUS,
-	KGSL_IOMMU_IMPLDEF_MICRO_MMU_CTRL,
-	KGSL_IOMMU_REG_MAX
+    KGSL_IOMMU_GLOBAL_BASE = 0,
+    KGSL_IOMMU_CTX_SCTLR,
+    KGSL_IOMMU_CTX_TTBR0,
+    KGSL_IOMMU_CTX_TTBR1,
+    KGSL_IOMMU_CTX_FSR,
+    KGSL_IOMMU_CTX_TLBIALL,
+    KGSL_IOMMU_CTX_RESUME,
+    KGSL_IOMMU_CTX_TLBLKCR,
+    KGSL_IOMMU_CTX_V2PUR,
+    KGSL_IOMMU_CTX_FSYNR0,
+    KGSL_IOMMU_CTX_FSYNR1,
+    KGSL_IOMMU_CTX_TLBSYNC,
+    KGSL_IOMMU_CTX_TLBSTATUS,
+    KGSL_IOMMU_IMPLDEF_MICRO_MMU_CTRL,
+    KGSL_IOMMU_REG_MAX
 };
 
 struct kgsl_iommu_register_list {
-	unsigned int reg_offset;
-	int ctx_reg;
+    unsigned int reg_offset;
+    int ctx_reg;
 };
 
 /*
@@ -146,14 +146,14 @@ struct kgsl_iommu_register_list {
  * @clk_enable_count: The ref count of clock enable calls
  */
 struct kgsl_iommu_device {
-	struct device *dev;
-	bool attached;
-	phys_addr_t default_ttbr0;
-	enum kgsl_iommu_context_id ctx_id;
-	bool clk_enabled;
-	struct kgsl_device *kgsldev;
-	int fault;
-	atomic_t clk_enable_count;
+    struct device *dev;
+    bool attached;
+    phys_addr_t default_ttbr0;
+    enum kgsl_iommu_context_id ctx_id;
+    bool clk_enabled;
+    struct kgsl_device *kgsldev;
+    int fault;
+    atomic_t clk_enable_count;
 };
 
 /*
@@ -171,11 +171,11 @@ struct kgsl_iommu_device {
  * the IOMMU registers for synchronization
  */
 struct kgsl_iommu_unit {
-	struct kgsl_iommu_device dev[KGSL_IOMMU_MAX_DEVS_PER_UNIT];
-	unsigned int dev_count;
-	struct kgsl_memdesc reg_map;
-	unsigned int ahb_base;
-	int iommu_halt_enable;
+    struct kgsl_iommu_device dev[KGSL_IOMMU_MAX_DEVS_PER_UNIT];
+    unsigned int dev_count;
+    struct kgsl_memdesc reg_map;
+    unsigned int ahb_base;
+    int iommu_halt_enable;
 };
 
 /*
@@ -197,15 +197,15 @@ struct kgsl_iommu_unit {
  * @sync_lock_initialized: True if the sync_lock feature is enabled
  */
 struct kgsl_iommu {
-	struct kgsl_iommu_unit iommu_units[KGSL_IOMMU_MAX_UNITS];
-	unsigned int unit_count;
-	struct kgsl_device *device;
-	unsigned int ctx_offset;
-	struct kgsl_iommu_register_list *iommu_reg_list;
-	struct remote_iommu_petersons_spinlock *sync_lock_vars;
-	struct kgsl_memdesc sync_lock_desc;
-	unsigned int sync_lock_offset;
-	bool sync_lock_initialized;
+    struct kgsl_iommu_unit iommu_units[KGSL_IOMMU_MAX_UNITS];
+    unsigned int unit_count;
+    struct kgsl_device *device;
+    unsigned int ctx_offset;
+    struct kgsl_iommu_register_list *iommu_reg_list;
+    struct remote_iommu_petersons_spinlock *sync_lock_vars;
+    struct kgsl_memdesc sync_lock_desc;
+    unsigned int sync_lock_offset;
+    bool sync_lock_initialized;
 };
 
 /*
@@ -214,8 +214,8 @@ struct kgsl_iommu {
  * @iommu: Pointer to iommu structure
  */
 struct kgsl_iommu_pt {
-	struct iommu_domain *domain;
-	struct kgsl_iommu *iommu;
+    struct iommu_domain *domain;
+    struct kgsl_iommu *iommu;
 };
 
 /*
@@ -226,10 +226,10 @@ struct kgsl_iommu_pt {
  * @ts: Timestamp on which clock is to be disabled
  */
 struct kgsl_iommu_disable_clk_param {
-	struct kgsl_mmu *mmu;
-	int rb_level;
-	int ctx_id;
-	unsigned int ts;
+    struct kgsl_mmu *mmu;
+    int rb_level;
+    int ctx_id;
+    unsigned int ts;
 };
 
 #endif

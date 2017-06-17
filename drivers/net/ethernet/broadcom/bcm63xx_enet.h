@@ -34,8 +34,8 @@
  * rx/tx dma descriptor
  */
 struct bcm_enet_desc {
-	u32 len_stat;
-	u32 address;
+    u32 len_stat;
+    u32 address;
 };
 
 #define DMADESC_LENGTH_SHIFT	16
@@ -113,190 +113,190 @@ struct bcm_enet_desc {
 
 
 struct bcm_enet_mib_counters {
-	u64 tx_gd_octets;
-	u32 tx_gd_pkts;
-	u32 tx_all_octets;
-	u32 tx_all_pkts;
-	u32 tx_brdcast;
-	u32 tx_mult;
-	u32 tx_64;
-	u32 tx_65_127;
-	u32 tx_128_255;
-	u32 tx_256_511;
-	u32 tx_512_1023;
-	u32 tx_1024_max;
-	u32 tx_jab;
-	u32 tx_ovr;
-	u32 tx_frag;
-	u32 tx_underrun;
-	u32 tx_col;
-	u32 tx_1_col;
-	u32 tx_m_col;
-	u32 tx_ex_col;
-	u32 tx_late;
-	u32 tx_def;
-	u32 tx_crs;
-	u32 tx_pause;
-	u64 rx_gd_octets;
-	u32 rx_gd_pkts;
-	u32 rx_all_octets;
-	u32 rx_all_pkts;
-	u32 rx_brdcast;
-	u32 rx_mult;
-	u32 rx_64;
-	u32 rx_65_127;
-	u32 rx_128_255;
-	u32 rx_256_511;
-	u32 rx_512_1023;
-	u32 rx_1024_max;
-	u32 rx_jab;
-	u32 rx_ovr;
-	u32 rx_frag;
-	u32 rx_drop;
-	u32 rx_crc_align;
-	u32 rx_und;
-	u32 rx_crc;
-	u32 rx_align;
-	u32 rx_sym;
-	u32 rx_pause;
-	u32 rx_cntrl;
+    u64 tx_gd_octets;
+    u32 tx_gd_pkts;
+    u32 tx_all_octets;
+    u32 tx_all_pkts;
+    u32 tx_brdcast;
+    u32 tx_mult;
+    u32 tx_64;
+    u32 tx_65_127;
+    u32 tx_128_255;
+    u32 tx_256_511;
+    u32 tx_512_1023;
+    u32 tx_1024_max;
+    u32 tx_jab;
+    u32 tx_ovr;
+    u32 tx_frag;
+    u32 tx_underrun;
+    u32 tx_col;
+    u32 tx_1_col;
+    u32 tx_m_col;
+    u32 tx_ex_col;
+    u32 tx_late;
+    u32 tx_def;
+    u32 tx_crs;
+    u32 tx_pause;
+    u64 rx_gd_octets;
+    u32 rx_gd_pkts;
+    u32 rx_all_octets;
+    u32 rx_all_pkts;
+    u32 rx_brdcast;
+    u32 rx_mult;
+    u32 rx_64;
+    u32 rx_65_127;
+    u32 rx_128_255;
+    u32 rx_256_511;
+    u32 rx_512_1023;
+    u32 rx_1024_max;
+    u32 rx_jab;
+    u32 rx_ovr;
+    u32 rx_frag;
+    u32 rx_drop;
+    u32 rx_crc_align;
+    u32 rx_und;
+    u32 rx_crc;
+    u32 rx_align;
+    u32 rx_sym;
+    u32 rx_pause;
+    u32 rx_cntrl;
 };
 
 
 struct bcm_enet_priv {
 
-	/* mac id (from platform device id) */
-	int mac_id;
+    /* mac id (from platform device id) */
+    int mac_id;
 
-	/* base remapped address of device */
-	void __iomem *base;
+    /* base remapped address of device */
+    void __iomem *base;
 
-	/* mac irq, rx_dma irq, tx_dma irq */
-	int irq;
-	int irq_rx;
-	int irq_tx;
+    /* mac irq, rx_dma irq, tx_dma irq */
+    int irq;
+    int irq_rx;
+    int irq_tx;
 
-	/* hw view of rx & tx dma ring */
-	dma_addr_t rx_desc_dma;
-	dma_addr_t tx_desc_dma;
+    /* hw view of rx & tx dma ring */
+    dma_addr_t rx_desc_dma;
+    dma_addr_t tx_desc_dma;
 
-	/* allocated size (in bytes) for rx & tx dma ring */
-	unsigned int rx_desc_alloc_size;
-	unsigned int tx_desc_alloc_size;
-
-
-	struct napi_struct napi;
-
-	/* dma channel id for rx */
-	int rx_chan;
-
-	/* number of dma desc in rx ring */
-	int rx_ring_size;
-
-	/* cpu view of rx dma ring */
-	struct bcm_enet_desc *rx_desc_cpu;
-
-	/* current number of armed descriptor given to hardware for rx */
-	int rx_desc_count;
-
-	/* next rx descriptor to fetch from hardware */
-	int rx_curr_desc;
-
-	/* next dirty rx descriptor to refill */
-	int rx_dirty_desc;
-
-	/* size of allocated rx skbs */
-	unsigned int rx_skb_size;
-
-	/* list of skb given to hw for rx */
-	struct sk_buff **rx_skb;
-
-	/* used when rx skb allocation failed, so we defer rx queue
-	 * refill */
-	struct timer_list rx_timeout;
-
-	/* lock rx_timeout against rx normal operation */
-	spinlock_t rx_lock;
+    /* allocated size (in bytes) for rx & tx dma ring */
+    unsigned int rx_desc_alloc_size;
+    unsigned int tx_desc_alloc_size;
 
 
-	/* dma channel id for tx */
-	int tx_chan;
+    struct napi_struct napi;
 
-	/* number of dma desc in tx ring */
-	int tx_ring_size;
+    /* dma channel id for rx */
+    int rx_chan;
 
-	/* cpu view of rx dma ring */
-	struct bcm_enet_desc *tx_desc_cpu;
+    /* number of dma desc in rx ring */
+    int rx_ring_size;
 
-	/* number of available descriptor for tx */
-	int tx_desc_count;
+    /* cpu view of rx dma ring */
+    struct bcm_enet_desc *rx_desc_cpu;
 
-	/* next tx descriptor avaiable */
-	int tx_curr_desc;
+    /* current number of armed descriptor given to hardware for rx */
+    int rx_desc_count;
 
-	/* next dirty tx descriptor to reclaim */
-	int tx_dirty_desc;
+    /* next rx descriptor to fetch from hardware */
+    int rx_curr_desc;
 
-	/* list of skb given to hw for tx */
-	struct sk_buff **tx_skb;
+    /* next dirty rx descriptor to refill */
+    int rx_dirty_desc;
 
-	/* lock used by tx reclaim and xmit */
-	spinlock_t tx_lock;
+    /* size of allocated rx skbs */
+    unsigned int rx_skb_size;
+
+    /* list of skb given to hw for rx */
+    struct sk_buff **rx_skb;
+
+    /* used when rx skb allocation failed, so we defer rx queue
+     * refill */
+    struct timer_list rx_timeout;
+
+    /* lock rx_timeout against rx normal operation */
+    spinlock_t rx_lock;
 
 
-	/* set if internal phy is ignored and external mii interface
-	 * is selected */
-	int use_external_mii;
+    /* dma channel id for tx */
+    int tx_chan;
 
-	/* set if a phy is connected, phy address must be known,
-	 * probing is not possible */
-	int has_phy;
-	int phy_id;
+    /* number of dma desc in tx ring */
+    int tx_ring_size;
 
-	/* set if connected phy has an associated irq */
-	int has_phy_interrupt;
-	int phy_interrupt;
+    /* cpu view of rx dma ring */
+    struct bcm_enet_desc *tx_desc_cpu;
 
-	/* used when a phy is connected (phylib used) */
-	struct mii_bus *mii_bus;
-	struct phy_device *phydev;
-	int old_link;
-	int old_duplex;
-	int old_pause;
+    /* number of available descriptor for tx */
+    int tx_desc_count;
 
-	/* used when no phy is connected */
-	int force_speed_100;
-	int force_duplex_full;
+    /* next tx descriptor avaiable */
+    int tx_curr_desc;
 
-	/* pause parameters */
-	int pause_auto;
-	int pause_rx;
-	int pause_tx;
+    /* next dirty tx descriptor to reclaim */
+    int tx_dirty_desc;
 
-	/* stats */
-	struct bcm_enet_mib_counters mib;
+    /* list of skb given to hw for tx */
+    struct sk_buff **tx_skb;
 
-	/* after mib interrupt, mib registers update is done in this
-	 * work queue */
-	struct work_struct mib_update_task;
+    /* lock used by tx reclaim and xmit */
+    spinlock_t tx_lock;
 
-	/* lock mib update between userspace request and workqueue */
-	struct mutex mib_update_lock;
 
-	/* mac clock */
-	struct clk *mac_clk;
+    /* set if internal phy is ignored and external mii interface
+     * is selected */
+    int use_external_mii;
 
-	/* phy clock if internal phy is used */
-	struct clk *phy_clk;
+    /* set if a phy is connected, phy address must be known,
+     * probing is not possible */
+    int has_phy;
+    int phy_id;
 
-	/* network device reference */
-	struct net_device *net_dev;
+    /* set if connected phy has an associated irq */
+    int has_phy_interrupt;
+    int phy_interrupt;
 
-	/* platform device reference */
-	struct platform_device *pdev;
+    /* used when a phy is connected (phylib used) */
+    struct mii_bus *mii_bus;
+    struct phy_device *phydev;
+    int old_link;
+    int old_duplex;
+    int old_pause;
 
-	/* maximum hardware transmit/receive size */
-	unsigned int hw_mtu;
+    /* used when no phy is connected */
+    int force_speed_100;
+    int force_duplex_full;
+
+    /* pause parameters */
+    int pause_auto;
+    int pause_rx;
+    int pause_tx;
+
+    /* stats */
+    struct bcm_enet_mib_counters mib;
+
+    /* after mib interrupt, mib registers update is done in this
+     * work queue */
+    struct work_struct mib_update_task;
+
+    /* lock mib update between userspace request and workqueue */
+    struct mutex mib_update_lock;
+
+    /* mac clock */
+    struct clk *mac_clk;
+
+    /* phy clock if internal phy is used */
+    struct clk *phy_clk;
+
+    /* network device reference */
+    struct net_device *net_dev;
+
+    /* platform device reference */
+    struct platform_device *pdev;
+
+    /* maximum hardware transmit/receive size */
+    unsigned int hw_mtu;
 };
 
 #endif /* ! BCM63XX_ENET_H_ */

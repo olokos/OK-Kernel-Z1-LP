@@ -57,296 +57,296 @@ struct cpumask;
  * calling convention.  See PV_CALL_SAVE_REGS_THUNK below.
  */
 struct paravirt_callee_save {
-	void *func;
+    void *func;
 };
 
 /* general info */
 struct pv_info {
-	unsigned int kernel_rpl;
-	int shared_kernel_pmd;
+    unsigned int kernel_rpl;
+    int shared_kernel_pmd;
 
 #ifdef CONFIG_X86_64
-	u16 extra_user_64bit_cs;  /* __USER_CS if none */
+    u16 extra_user_64bit_cs;  /* __USER_CS if none */
 #endif
 
-	int paravirt_enabled;
-	const char *name;
+    int paravirt_enabled;
+    const char *name;
 };
 
 struct pv_init_ops {
-	/*
-	 * Patch may replace one of the defined code sequences with
-	 * arbitrary code, subject to the same register constraints.
-	 * This generally means the code is not free to clobber any
-	 * registers other than EAX.  The patch function should return
-	 * the number of bytes of code generated, as we nop pad the
-	 * rest in generic code.
-	 */
-	unsigned (*patch)(u8 type, u16 clobber, void *insnbuf,
-			  unsigned long addr, unsigned len);
+    /*
+     * Patch may replace one of the defined code sequences with
+     * arbitrary code, subject to the same register constraints.
+     * This generally means the code is not free to clobber any
+     * registers other than EAX.  The patch function should return
+     * the number of bytes of code generated, as we nop pad the
+     * rest in generic code.
+     */
+    unsigned (*patch)(u8 type, u16 clobber, void *insnbuf,
+                      unsigned long addr, unsigned len);
 };
 
 
 struct pv_lazy_ops {
-	/* Set deferred update mode, used for batching operations. */
-	void (*enter)(void);
-	void (*leave)(void);
+    /* Set deferred update mode, used for batching operations. */
+    void (*enter)(void);
+    void (*leave)(void);
 };
 
 struct pv_time_ops {
-	unsigned long long (*sched_clock)(void);
-	unsigned long long (*steal_clock)(int cpu);
-	unsigned long (*get_tsc_khz)(void);
+    unsigned long long (*sched_clock)(void);
+    unsigned long long (*steal_clock)(int cpu);
+    unsigned long (*get_tsc_khz)(void);
 };
 
 struct pv_cpu_ops {
-	/* hooks for various privileged instructions */
-	unsigned long (*get_debugreg)(int regno);
-	void (*set_debugreg)(int regno, unsigned long value);
+    /* hooks for various privileged instructions */
+    unsigned long (*get_debugreg)(int regno);
+    void (*set_debugreg)(int regno, unsigned long value);
 
-	void (*clts)(void);
+    void (*clts)(void);
 
-	unsigned long (*read_cr0)(void);
-	void (*write_cr0)(unsigned long);
+    unsigned long (*read_cr0)(void);
+    void (*write_cr0)(unsigned long);
 
-	unsigned long (*read_cr4_safe)(void);
-	unsigned long (*read_cr4)(void);
-	void (*write_cr4)(unsigned long);
+    unsigned long (*read_cr4_safe)(void);
+    unsigned long (*read_cr4)(void);
+    void (*write_cr4)(unsigned long);
 
 #ifdef CONFIG_X86_64
-	unsigned long (*read_cr8)(void);
-	void (*write_cr8)(unsigned long);
+    unsigned long (*read_cr8)(void);
+    void (*write_cr8)(unsigned long);
 #endif
 
-	/* Segment descriptor handling */
-	void (*load_tr_desc)(void);
-	void (*load_gdt)(const struct desc_ptr *);
-	void (*load_idt)(const struct desc_ptr *);
-	void (*store_gdt)(struct desc_ptr *);
-	void (*store_idt)(struct desc_ptr *);
-	void (*set_ldt)(const void *desc, unsigned entries);
-	unsigned long (*store_tr)(void);
-	void (*load_tls)(struct thread_struct *t, unsigned int cpu);
+    /* Segment descriptor handling */
+    void (*load_tr_desc)(void);
+    void (*load_gdt)(const struct desc_ptr *);
+    void (*load_idt)(const struct desc_ptr *);
+    void (*store_gdt)(struct desc_ptr *);
+    void (*store_idt)(struct desc_ptr *);
+    void (*set_ldt)(const void *desc, unsigned entries);
+    unsigned long (*store_tr)(void);
+    void (*load_tls)(struct thread_struct *t, unsigned int cpu);
 #ifdef CONFIG_X86_64
-	void (*load_gs_index)(unsigned int idx);
+    void (*load_gs_index)(unsigned int idx);
 #endif
-	void (*write_ldt_entry)(struct desc_struct *ldt, int entrynum,
-				const void *desc);
-	void (*write_gdt_entry)(struct desc_struct *,
-				int entrynum, const void *desc, int size);
-	void (*write_idt_entry)(gate_desc *,
-				int entrynum, const gate_desc *gate);
-	void (*alloc_ldt)(struct desc_struct *ldt, unsigned entries);
-	void (*free_ldt)(struct desc_struct *ldt, unsigned entries);
+    void (*write_ldt_entry)(struct desc_struct *ldt, int entrynum,
+                            const void *desc);
+    void (*write_gdt_entry)(struct desc_struct *,
+                            int entrynum, const void *desc, int size);
+    void (*write_idt_entry)(gate_desc *,
+                            int entrynum, const gate_desc *gate);
+    void (*alloc_ldt)(struct desc_struct *ldt, unsigned entries);
+    void (*free_ldt)(struct desc_struct *ldt, unsigned entries);
 
-	void (*load_sp0)(struct tss_struct *tss, struct thread_struct *t);
+    void (*load_sp0)(struct tss_struct *tss, struct thread_struct *t);
 
-	void (*set_iopl_mask)(unsigned mask);
+    void (*set_iopl_mask)(unsigned mask);
 
-	void (*wbinvd)(void);
-	void (*io_delay)(void);
+    void (*wbinvd)(void);
+    void (*io_delay)(void);
 
-	/* cpuid emulation, mostly so that caps bits can be disabled */
-	void (*cpuid)(unsigned int *eax, unsigned int *ebx,
-		      unsigned int *ecx, unsigned int *edx);
+    /* cpuid emulation, mostly so that caps bits can be disabled */
+    void (*cpuid)(unsigned int *eax, unsigned int *ebx,
+                  unsigned int *ecx, unsigned int *edx);
 
-	/* MSR, PMC and TSR operations.
-	   err = 0/-EFAULT.  wrmsr returns 0/-EFAULT. */
-	u64 (*read_msr)(unsigned int msr, int *err);
-	int (*rdmsr_regs)(u32 *regs);
-	int (*write_msr)(unsigned int msr, unsigned low, unsigned high);
-	int (*wrmsr_regs)(u32 *regs);
+    /* MSR, PMC and TSR operations.
+       err = 0/-EFAULT.  wrmsr returns 0/-EFAULT. */
+    u64 (*read_msr)(unsigned int msr, int *err);
+    int (*rdmsr_regs)(u32 *regs);
+    int (*write_msr)(unsigned int msr, unsigned low, unsigned high);
+    int (*wrmsr_regs)(u32 *regs);
 
-	u64 (*read_tsc)(void);
-	u64 (*read_pmc)(int counter);
-	unsigned long long (*read_tscp)(unsigned int *aux);
+    u64 (*read_tsc)(void);
+    u64 (*read_pmc)(int counter);
+    unsigned long long (*read_tscp)(unsigned int *aux);
 
-	/*
-	 * Atomically enable interrupts and return to userspace.  This
-	 * is only ever used to return to 32-bit processes; in a
-	 * 64-bit kernel, it's used for 32-on-64 compat processes, but
-	 * never native 64-bit processes.  (Jump, not call.)
-	 */
-	void (*irq_enable_sysexit)(void);
+    /*
+     * Atomically enable interrupts and return to userspace.  This
+     * is only ever used to return to 32-bit processes; in a
+     * 64-bit kernel, it's used for 32-on-64 compat processes, but
+     * never native 64-bit processes.  (Jump, not call.)
+     */
+    void (*irq_enable_sysexit)(void);
 
-	/*
-	 * Switch to usermode gs and return to 64-bit usermode using
-	 * sysret.  Only used in 64-bit kernels to return to 64-bit
-	 * processes.  Usermode register state, including %rsp, must
-	 * already be restored.
-	 */
-	void (*usergs_sysret64)(void);
+    /*
+     * Switch to usermode gs and return to 64-bit usermode using
+     * sysret.  Only used in 64-bit kernels to return to 64-bit
+     * processes.  Usermode register state, including %rsp, must
+     * already be restored.
+     */
+    void (*usergs_sysret64)(void);
 
-	/*
-	 * Switch to usermode gs and return to 32-bit usermode using
-	 * sysret.  Used to return to 32-on-64 compat processes.
-	 * Other usermode register state, including %esp, must already
-	 * be restored.
-	 */
-	void (*usergs_sysret32)(void);
+    /*
+     * Switch to usermode gs and return to 32-bit usermode using
+     * sysret.  Used to return to 32-on-64 compat processes.
+     * Other usermode register state, including %esp, must already
+     * be restored.
+     */
+    void (*usergs_sysret32)(void);
 
-	/* Normal iret.  Jump to this with the standard iret stack
-	   frame set up. */
-	void (*iret)(void);
+    /* Normal iret.  Jump to this with the standard iret stack
+       frame set up. */
+    void (*iret)(void);
 
-	void (*swapgs)(void);
+    void (*swapgs)(void);
 
-	void (*start_context_switch)(struct task_struct *prev);
-	void (*end_context_switch)(struct task_struct *next);
+    void (*start_context_switch)(struct task_struct *prev);
+    void (*end_context_switch)(struct task_struct *next);
 };
 
 struct pv_irq_ops {
-	/*
-	 * Get/set interrupt state.  save_fl and restore_fl are only
-	 * expected to use X86_EFLAGS_IF; all other bits
-	 * returned from save_fl are undefined, and may be ignored by
-	 * restore_fl.
-	 *
-	 * NOTE: These functions callers expect the callee to preserve
-	 * more registers than the standard C calling convention.
-	 */
-	struct paravirt_callee_save save_fl;
-	struct paravirt_callee_save restore_fl;
-	struct paravirt_callee_save irq_disable;
-	struct paravirt_callee_save irq_enable;
+    /*
+     * Get/set interrupt state.  save_fl and restore_fl are only
+     * expected to use X86_EFLAGS_IF; all other bits
+     * returned from save_fl are undefined, and may be ignored by
+     * restore_fl.
+     *
+     * NOTE: These functions callers expect the callee to preserve
+     * more registers than the standard C calling convention.
+     */
+    struct paravirt_callee_save save_fl;
+    struct paravirt_callee_save restore_fl;
+    struct paravirt_callee_save irq_disable;
+    struct paravirt_callee_save irq_enable;
 
-	void (*safe_halt)(void);
-	void (*halt)(void);
+    void (*safe_halt)(void);
+    void (*halt)(void);
 
 #ifdef CONFIG_X86_64
-	void (*adjust_exception_frame)(void);
+    void (*adjust_exception_frame)(void);
 #endif
 };
 
 struct pv_apic_ops {
 #ifdef CONFIG_X86_LOCAL_APIC
-	void (*startup_ipi_hook)(int phys_apicid,
-				 unsigned long start_eip,
-				 unsigned long start_esp);
+    void (*startup_ipi_hook)(int phys_apicid,
+                             unsigned long start_eip,
+                             unsigned long start_esp);
 #endif
 };
 
 struct pv_mmu_ops {
-	unsigned long (*read_cr2)(void);
-	void (*write_cr2)(unsigned long);
+    unsigned long (*read_cr2)(void);
+    void (*write_cr2)(unsigned long);
 
-	unsigned long (*read_cr3)(void);
-	void (*write_cr3)(unsigned long);
+    unsigned long (*read_cr3)(void);
+    void (*write_cr3)(unsigned long);
 
-	/*
-	 * Hooks for intercepting the creation/use/destruction of an
-	 * mm_struct.
-	 */
-	void (*activate_mm)(struct mm_struct *prev,
-			    struct mm_struct *next);
-	void (*dup_mmap)(struct mm_struct *oldmm,
-			 struct mm_struct *mm);
-	void (*exit_mmap)(struct mm_struct *mm);
+    /*
+     * Hooks for intercepting the creation/use/destruction of an
+     * mm_struct.
+     */
+    void (*activate_mm)(struct mm_struct *prev,
+                        struct mm_struct *next);
+    void (*dup_mmap)(struct mm_struct *oldmm,
+                     struct mm_struct *mm);
+    void (*exit_mmap)(struct mm_struct *mm);
 
 
-	/* TLB operations */
-	void (*flush_tlb_user)(void);
-	void (*flush_tlb_kernel)(void);
-	void (*flush_tlb_single)(unsigned long addr);
-	void (*flush_tlb_others)(const struct cpumask *cpus,
-				 struct mm_struct *mm,
-				 unsigned long va);
+    /* TLB operations */
+    void (*flush_tlb_user)(void);
+    void (*flush_tlb_kernel)(void);
+    void (*flush_tlb_single)(unsigned long addr);
+    void (*flush_tlb_others)(const struct cpumask *cpus,
+                             struct mm_struct *mm,
+                             unsigned long va);
 
-	/* Hooks for allocating and freeing a pagetable top-level */
-	int  (*pgd_alloc)(struct mm_struct *mm);
-	void (*pgd_free)(struct mm_struct *mm, pgd_t *pgd);
+    /* Hooks for allocating and freeing a pagetable top-level */
+    int  (*pgd_alloc)(struct mm_struct *mm);
+    void (*pgd_free)(struct mm_struct *mm, pgd_t *pgd);
 
-	/*
-	 * Hooks for allocating/releasing pagetable pages when they're
-	 * attached to a pagetable
-	 */
-	void (*alloc_pte)(struct mm_struct *mm, unsigned long pfn);
-	void (*alloc_pmd)(struct mm_struct *mm, unsigned long pfn);
-	void (*alloc_pud)(struct mm_struct *mm, unsigned long pfn);
-	void (*release_pte)(unsigned long pfn);
-	void (*release_pmd)(unsigned long pfn);
-	void (*release_pud)(unsigned long pfn);
+    /*
+     * Hooks for allocating/releasing pagetable pages when they're
+     * attached to a pagetable
+     */
+    void (*alloc_pte)(struct mm_struct *mm, unsigned long pfn);
+    void (*alloc_pmd)(struct mm_struct *mm, unsigned long pfn);
+    void (*alloc_pud)(struct mm_struct *mm, unsigned long pfn);
+    void (*release_pte)(unsigned long pfn);
+    void (*release_pmd)(unsigned long pfn);
+    void (*release_pud)(unsigned long pfn);
 
-	/* Pagetable manipulation functions */
-	void (*set_pte)(pte_t *ptep, pte_t pteval);
-	void (*set_pte_at)(struct mm_struct *mm, unsigned long addr,
-			   pte_t *ptep, pte_t pteval);
-	void (*set_pmd)(pmd_t *pmdp, pmd_t pmdval);
-	void (*set_pmd_at)(struct mm_struct *mm, unsigned long addr,
-			   pmd_t *pmdp, pmd_t pmdval);
-	void (*pte_update)(struct mm_struct *mm, unsigned long addr,
-			   pte_t *ptep);
-	void (*pte_update_defer)(struct mm_struct *mm,
-				 unsigned long addr, pte_t *ptep);
-	void (*pmd_update)(struct mm_struct *mm, unsigned long addr,
-			   pmd_t *pmdp);
-	void (*pmd_update_defer)(struct mm_struct *mm,
-				 unsigned long addr, pmd_t *pmdp);
+    /* Pagetable manipulation functions */
+    void (*set_pte)(pte_t *ptep, pte_t pteval);
+    void (*set_pte_at)(struct mm_struct *mm, unsigned long addr,
+                       pte_t *ptep, pte_t pteval);
+    void (*set_pmd)(pmd_t *pmdp, pmd_t pmdval);
+    void (*set_pmd_at)(struct mm_struct *mm, unsigned long addr,
+                       pmd_t *pmdp, pmd_t pmdval);
+    void (*pte_update)(struct mm_struct *mm, unsigned long addr,
+                       pte_t *ptep);
+    void (*pte_update_defer)(struct mm_struct *mm,
+                             unsigned long addr, pte_t *ptep);
+    void (*pmd_update)(struct mm_struct *mm, unsigned long addr,
+                       pmd_t *pmdp);
+    void (*pmd_update_defer)(struct mm_struct *mm,
+                             unsigned long addr, pmd_t *pmdp);
 
-	pte_t (*ptep_modify_prot_start)(struct mm_struct *mm, unsigned long addr,
-					pte_t *ptep);
-	void (*ptep_modify_prot_commit)(struct mm_struct *mm, unsigned long addr,
-					pte_t *ptep, pte_t pte);
+    pte_t (*ptep_modify_prot_start)(struct mm_struct *mm, unsigned long addr,
+                                    pte_t *ptep);
+    void (*ptep_modify_prot_commit)(struct mm_struct *mm, unsigned long addr,
+                                    pte_t *ptep, pte_t pte);
 
-	struct paravirt_callee_save pte_val;
-	struct paravirt_callee_save make_pte;
+    struct paravirt_callee_save pte_val;
+    struct paravirt_callee_save make_pte;
 
-	struct paravirt_callee_save pgd_val;
-	struct paravirt_callee_save make_pgd;
+    struct paravirt_callee_save pgd_val;
+    struct paravirt_callee_save make_pgd;
 
 #if PAGETABLE_LEVELS >= 3
 #ifdef CONFIG_X86_PAE
-	void (*set_pte_atomic)(pte_t *ptep, pte_t pteval);
-	void (*pte_clear)(struct mm_struct *mm, unsigned long addr,
-			  pte_t *ptep);
-	void (*pmd_clear)(pmd_t *pmdp);
+    void (*set_pte_atomic)(pte_t *ptep, pte_t pteval);
+    void (*pte_clear)(struct mm_struct *mm, unsigned long addr,
+                      pte_t *ptep);
+    void (*pmd_clear)(pmd_t *pmdp);
 
 #endif	/* CONFIG_X86_PAE */
 
-	void (*set_pud)(pud_t *pudp, pud_t pudval);
+    void (*set_pud)(pud_t *pudp, pud_t pudval);
 
-	struct paravirt_callee_save pmd_val;
-	struct paravirt_callee_save make_pmd;
+    struct paravirt_callee_save pmd_val;
+    struct paravirt_callee_save make_pmd;
 
 #if PAGETABLE_LEVELS == 4
-	struct paravirt_callee_save pud_val;
-	struct paravirt_callee_save make_pud;
+    struct paravirt_callee_save pud_val;
+    struct paravirt_callee_save make_pud;
 
-	void (*set_pgd)(pgd_t *pudp, pgd_t pgdval);
+    void (*set_pgd)(pgd_t *pudp, pgd_t pgdval);
 #endif	/* PAGETABLE_LEVELS == 4 */
 #endif	/* PAGETABLE_LEVELS >= 3 */
 
-	struct pv_lazy_ops lazy_mode;
+    struct pv_lazy_ops lazy_mode;
 
-	/* dom0 ops */
+    /* dom0 ops */
 
-	/* Sometimes the physical address is a pfn, and sometimes its
-	   an mfn.  We can tell which is which from the index. */
-	void (*set_fixmap)(unsigned /* enum fixed_addresses */ idx,
-			   phys_addr_t phys, pgprot_t flags);
+    /* Sometimes the physical address is a pfn, and sometimes its
+       an mfn.  We can tell which is which from the index. */
+    void (*set_fixmap)(unsigned /* enum fixed_addresses */ idx,
+                       phys_addr_t phys, pgprot_t flags);
 };
 
 struct arch_spinlock;
 struct pv_lock_ops {
-	int (*spin_is_locked)(struct arch_spinlock *lock);
-	int (*spin_is_contended)(struct arch_spinlock *lock);
-	void (*spin_lock)(struct arch_spinlock *lock);
-	void (*spin_lock_flags)(struct arch_spinlock *lock, unsigned long flags);
-	int (*spin_trylock)(struct arch_spinlock *lock);
-	void (*spin_unlock)(struct arch_spinlock *lock);
+    int (*spin_is_locked)(struct arch_spinlock *lock);
+    int (*spin_is_contended)(struct arch_spinlock *lock);
+    void (*spin_lock)(struct arch_spinlock *lock);
+    void (*spin_lock_flags)(struct arch_spinlock *lock, unsigned long flags);
+    int (*spin_trylock)(struct arch_spinlock *lock);
+    void (*spin_unlock)(struct arch_spinlock *lock);
 };
 
 /* This contains all the paravirt structures: we get a convenient
  * number for each function using the offset which we use to indicate
  * what to patch. */
 struct paravirt_patch_template {
-	struct pv_init_ops pv_init_ops;
-	struct pv_time_ops pv_time_ops;
-	struct pv_cpu_ops pv_cpu_ops;
-	struct pv_irq_ops pv_irq_ops;
-	struct pv_apic_ops pv_apic_ops;
-	struct pv_mmu_ops pv_mmu_ops;
-	struct pv_lock_ops pv_lock_ops;
+    struct pv_init_ops pv_init_ops;
+    struct pv_time_ops pv_time_ops;
+    struct pv_cpu_ops pv_cpu_ops;
+    struct pv_irq_ops pv_irq_ops;
+    struct pv_apic_ops pv_apic_ops;
+    struct pv_mmu_ops pv_mmu_ops;
+    struct pv_lock_ops pv_lock_ops;
 };
 
 extern struct pv_info pv_info;
@@ -395,19 +395,19 @@ unsigned paravirt_patch_ident_32(void *insnbuf, unsigned len);
 unsigned paravirt_patch_ident_64(void *insnbuf, unsigned len);
 unsigned paravirt_patch_ignore(unsigned len);
 unsigned paravirt_patch_call(void *insnbuf,
-			     const void *target, u16 tgt_clobbers,
-			     unsigned long addr, u16 site_clobbers,
-			     unsigned len);
+                             const void *target, u16 tgt_clobbers,
+                             unsigned long addr, u16 site_clobbers,
+                             unsigned len);
 unsigned paravirt_patch_jmp(void *insnbuf, const void *target,
-			    unsigned long addr, unsigned len);
+                            unsigned long addr, unsigned len);
 unsigned paravirt_patch_default(u8 type, u16 clobbers, void *insnbuf,
-				unsigned long addr, unsigned len);
+                                unsigned long addr, unsigned len);
 
 unsigned paravirt_patch_insns(void *insnbuf, unsigned len,
-			      const char *start, const char *end);
+                              const char *start, const char *end);
 
 unsigned native_patch(u8 type, u16 clobbers, void *ibuf,
-		      unsigned long addr, unsigned len);
+                      unsigned long addr, unsigned len);
 
 int paravirt_disable_iospace(void);
 
@@ -669,9 +669,9 @@ int paravirt_disable_iospace(void);
 
 /* Lazy mode for batching updates / context switch */
 enum paravirt_lazy_mode {
-	PARAVIRT_LAZY_NONE,
-	PARAVIRT_LAZY_MMU,
-	PARAVIRT_LAZY_CPU,
+    PARAVIRT_LAZY_NONE,
+    PARAVIRT_LAZY_MMU,
+    PARAVIRT_LAZY_CPU,
 };
 
 enum paravirt_lazy_mode paravirt_get_lazy_mode(void);
@@ -689,14 +689,14 @@ u64 _paravirt_ident_64(u64);
 
 /* These all sit in the .parainstructions section to tell us what to patch. */
 struct paravirt_patch_site {
-	u8 *instr; 		/* original instructions */
-	u8 instrtype;		/* type of this instruction */
-	u8 len;			/* length of original instruction */
-	u16 clobbers;		/* what registers you may clobber */
+    u8 *instr; 		/* original instructions */
+    u8 instrtype;		/* type of this instruction */
+    u8 len;			/* length of original instruction */
+    u16 clobbers;		/* what registers you may clobber */
 };
 
 extern struct paravirt_patch_site __parainstructions[],
-	__parainstructions_end[];
+           __parainstructions_end[];
 
 #endif	/* __ASSEMBLY__ */
 

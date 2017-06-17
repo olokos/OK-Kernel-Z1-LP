@@ -357,78 +357,78 @@
 
 
 struct baud_table {
-	int baud;
-	u32 new_brg;
+    int baud;
+    u32 new_brg;
 };
 
 struct max3107_port {
-	/* UART port structure */
-	struct uart_port port;
+    /* UART port structure */
+    struct uart_port port;
 
-	/* SPI device structure */
-	struct spi_device *spi;
+    /* SPI device structure */
+    struct spi_device *spi;
 
 #if defined(CONFIG_GPIOLIB)
-	/* GPIO chip structure */
-	struct gpio_chip chip;
+    /* GPIO chip structure */
+    struct gpio_chip chip;
 #endif
 
-	/* Workqueue that does all the magic */
-	struct workqueue_struct *workqueue;
-	struct work_struct work;
+    /* Workqueue that does all the magic */
+    struct workqueue_struct *workqueue;
+    struct work_struct work;
 
-	/* Lock for shared data */
-	spinlock_t data_lock;
+    /* Lock for shared data */
+    spinlock_t data_lock;
 
-	/* Device configuration */
-	int ext_clk;		/* 1 if external clock used */
-	int loopback;		/* Current loopback mode state */
-	int baud;			/* Current baud rate */
+    /* Device configuration */
+    int ext_clk;		/* 1 if external clock used */
+    int loopback;		/* Current loopback mode state */
+    int baud;			/* Current baud rate */
 
-	/* State flags */
-	int suspended;		/* Indicates suspend mode */
-	int tx_fifo_empty;	/* Flag for TX FIFO state */
-	int rx_enabled;		/* Flag for receiver state */
-	int tx_enabled;		/* Flag for transmitter state */
+    /* State flags */
+    int suspended;		/* Indicates suspend mode */
+    int tx_fifo_empty;	/* Flag for TX FIFO state */
+    int rx_enabled;		/* Flag for receiver state */
+    int tx_enabled;		/* Flag for transmitter state */
 
-	u16 irqen_reg;		/* Current IRQ enable register value */
-	/* Shared data */
-	u16 mode1_reg;		/* Current mode1 register value*/
-	int mode1_commit;	/* Flag for setting new mode1 register value */
-	u16 lcr_reg;		/* Current LCR register value */
-	int lcr_commit;		/* Flag for setting new LCR register value */
-	u32 brg_cfg;		/* Current Baud rate generator config  */
-	int brg_commit;		/* Flag for setting new baud rate generator
+    u16 irqen_reg;		/* Current IRQ enable register value */
+    /* Shared data */
+    u16 mode1_reg;		/* Current mode1 register value*/
+    int mode1_commit;	/* Flag for setting new mode1 register value */
+    u16 lcr_reg;		/* Current LCR register value */
+    int lcr_commit;		/* Flag for setting new LCR register value */
+    u32 brg_cfg;		/* Current Baud rate generator config  */
+    int brg_commit;		/* Flag for setting new baud rate generator
 				 * config
 				 */
-	struct baud_table *baud_tbl;
-	int handle_irq;		/* Indicates that IRQ should be handled */
+    struct baud_table *baud_tbl;
+    int handle_irq;		/* Indicates that IRQ should be handled */
 
-	/* Rx buffer and str*/
-	u16 *rxbuf;
-	u8  *rxstr;
-	/* Tx buffer*/
-	u16 *txbuf;
+    /* Rx buffer and str*/
+    u16 *rxbuf;
+    u8  *rxstr;
+    /* Tx buffer*/
+    u16 *txbuf;
 
-	struct max3107_plat *pdata;	/* Platform data */
+    struct max3107_plat *pdata;	/* Platform data */
 };
 
 /* Platform data structure */
 struct max3107_plat {
-	/* Loopback mode enable */
-	int loopback;
-	/* External clock enable */
-	int ext_clk;
-	/* Called during the register initialisation */
-	void (*init)(struct max3107_port *s);
-	/* Called when the port is found and configured */
-	int (*configure)(struct max3107_port *s);
-	/* HW suspend function */
-	void (*hw_suspend) (struct max3107_port *s, int suspend);
-	/* Polling mode enable */
-	int polled_mode;
-	/* Polling period if polling mode enabled */
-	int poll_time;
+    /* Loopback mode enable */
+    int loopback;
+    /* External clock enable */
+    int ext_clk;
+    /* Called during the register initialisation */
+    void (*init)(struct max3107_port *s);
+    /* Called when the port is found and configured */
+    int (*configure)(struct max3107_port *s);
+    /* HW suspend function */
+    void (*hw_suspend) (struct max3107_port *s, int suspend);
+    /* Polling mode enable */
+    int polled_mode;
+    /* Polling period if polling mode enabled */
+    int poll_time;
 };
 
 extern int max3107_rw(struct max3107_port *s, u8 *tx, u8 *rx, int len);

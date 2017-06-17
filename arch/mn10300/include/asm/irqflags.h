@@ -30,34 +30,31 @@
 
 #ifndef __ASSEMBLY__
 
-static inline unsigned long arch_local_save_flags(void)
-{
-	unsigned long flags;
+static inline unsigned long arch_local_save_flags(void) {
+    unsigned long flags;
 
-	asm volatile("mov epsw,%0" : "=d"(flags));
-	return flags;
+    asm volatile("mov epsw,%0" : "=d"(flags));
+    return flags;
 }
 
-static inline void arch_local_irq_disable(void)
-{
-	asm volatile(
-		"	and %0,epsw	\n"
-		"	or %1,epsw	\n"
-		"	nop		\n"
-		"	nop		\n"
-		"	nop		\n"
-		:
-		: "i"(~EPSW_IM), "i"(EPSW_IE | MN10300_CLI_LEVEL)
-		: "memory");
+static inline void arch_local_irq_disable(void) {
+    asm volatile(
+        "	and %0,epsw	\n"
+        "	or %1,epsw	\n"
+        "	nop		\n"
+        "	nop		\n"
+        "	nop		\n"
+        :
+        : "i"(~EPSW_IM), "i"(EPSW_IE | MN10300_CLI_LEVEL)
+        : "memory");
 }
 
-static inline unsigned long arch_local_irq_save(void)
-{
-	unsigned long flags;
+static inline unsigned long arch_local_irq_save(void) {
+    unsigned long flags;
 
-	flags = arch_local_save_flags();
-	arch_local_irq_disable();
-	return flags;
+    flags = arch_local_save_flags();
+    arch_local_irq_disable();
+    return flags;
 }
 
 /*
@@ -65,41 +62,37 @@ static inline unsigned long arch_local_irq_save(void)
  */
 extern unsigned long __mn10300_irq_enabled_epsw[];
 
-static inline void arch_local_irq_enable(void)
-{
-	unsigned long tmp;
-	int cpu = raw_smp_processor_id();
+static inline void arch_local_irq_enable(void) {
+    unsigned long tmp;
+    int cpu = raw_smp_processor_id();
 
-	asm volatile(
-		"	mov	epsw,%0		\n"
-		"	and	%1,%0		\n"
-		"	or	%2,%0		\n"
-		"	mov	%0,epsw		\n"
-		: "=&d"(tmp)
-		: "i"(~EPSW_IM), "r"(__mn10300_irq_enabled_epsw[cpu])
-		: "memory", "cc");
+    asm volatile(
+        "	mov	epsw,%0		\n"
+        "	and	%1,%0		\n"
+        "	or	%2,%0		\n"
+        "	mov	%0,epsw		\n"
+        : "=&d"(tmp)
+        : "i"(~EPSW_IM), "r"(__mn10300_irq_enabled_epsw[cpu])
+        : "memory", "cc");
 }
 
-static inline void arch_local_irq_restore(unsigned long flags)
-{
-	asm volatile(
-		"	mov %0,epsw	\n"
-		"	nop		\n"
-		"	nop		\n"
-		"	nop		\n"
-		:
-		: "d"(flags)
-		: "memory", "cc");
+static inline void arch_local_irq_restore(unsigned long flags) {
+    asm volatile(
+        "	mov %0,epsw	\n"
+        "	nop		\n"
+        "	nop		\n"
+        "	nop		\n"
+        :
+        : "d"(flags)
+        : "memory", "cc");
 }
 
-static inline bool arch_irqs_disabled_flags(unsigned long flags)
-{
-	return (flags & (EPSW_IE | EPSW_IM)) != (EPSW_IE | EPSW_IM_7);
+static inline bool arch_irqs_disabled_flags(unsigned long flags) {
+    return (flags & (EPSW_IE | EPSW_IM)) != (EPSW_IE | EPSW_IM_7);
 }
 
-static inline bool arch_irqs_disabled(void)
-{
-	return arch_irqs_disabled_flags(arch_local_save_flags());
+static inline bool arch_irqs_disabled(void) {
+    return arch_irqs_disabled_flags(arch_local_save_flags());
 }
 
 /*
@@ -107,19 +100,18 @@ static inline bool arch_irqs_disabled(void)
  * - called from the idle loop
  * - must reenable interrupts (which takes three instruction cycles to complete)
  */
-static inline void arch_safe_halt(void)
-{
+static inline void arch_safe_halt(void) {
 #ifdef CONFIG_SMP
-	arch_local_irq_enable();
+    arch_local_irq_enable();
 #else
-	asm volatile(
-		"	or	%0,epsw	\n"
-		"	nop		\n"
-		"	nop		\n"
-		"	bset	%2,(%1)	\n"
-		:
-		: "i"(EPSW_IE|EPSW_IM), "n"(&CPUM), "i"(CPUM_SLEEP)
-		: "cc");
+    asm volatile(
+        "	or	%0,epsw	\n"
+        "	nop		\n"
+        "	nop		\n"
+        "	bset	%2,(%1)	\n"
+        :
+        : "i"(EPSW_IE|EPSW_IM), "n"(&CPUM), "i"(CPUM_SLEEP)
+        : "cc");
 #endif
 }
 
@@ -135,43 +127,39 @@ do {						\
 		);				\
 } while (0)
 
-static inline void arch_local_cli(void)
-{
-	asm volatile(
-		"	and	%0,epsw		\n"
-		"	nop			\n"
-		"	nop			\n"
-		"	nop			\n"
-		:
-		: "i"(~EPSW_IE)
-		: "memory"
-		);
+static inline void arch_local_cli(void) {
+    asm volatile(
+        "	and	%0,epsw		\n"
+        "	nop			\n"
+        "	nop			\n"
+        "	nop			\n"
+        :
+        : "i"(~EPSW_IE)
+        : "memory"
+    );
 }
 
-static inline unsigned long arch_local_cli_save(void)
-{
-	unsigned long flags = arch_local_save_flags();
-	arch_local_cli();
-	return flags;
+static inline unsigned long arch_local_cli_save(void) {
+    unsigned long flags = arch_local_save_flags();
+    arch_local_cli();
+    return flags;
 }
 
-static inline void arch_local_sti(void)
-{
-	asm volatile(
-		"	or	%0,epsw		\n"
-		:
-		: "i"(EPSW_IE)
-		: "memory");
+static inline void arch_local_sti(void) {
+    asm volatile(
+        "	or	%0,epsw		\n"
+        :
+        : "i"(EPSW_IE)
+        : "memory");
 }
 
-static inline void arch_local_change_intr_mask_level(unsigned long level)
-{
-	asm volatile(
-		"	and	%0,epsw		\n"
-		"	or	%1,epsw		\n"
-		:
-		: "i"(~EPSW_IM), "i"(EPSW_IE | level)
-		: "cc", "memory");
+static inline void arch_local_change_intr_mask_level(unsigned long level) {
+    asm volatile(
+        "	and	%0,epsw		\n"
+        "	or	%1,epsw		\n"
+        :
+        : "i"(~EPSW_IM), "i"(EPSW_IE | level)
+        : "cc", "memory");
 }
 
 #else /* !__ASSEMBLY__ */

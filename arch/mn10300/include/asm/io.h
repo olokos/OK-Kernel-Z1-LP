@@ -24,19 +24,16 @@
  * differently. On the x86 architecture, we just read/write the
  * memory location directly.
  */
-static inline u8 readb(const volatile void __iomem *addr)
-{
-	return *(const volatile u8 *) addr;
+static inline u8 readb(const volatile void __iomem *addr) {
+    return *(const volatile u8 *) addr;
 }
 
-static inline u16 readw(const volatile void __iomem *addr)
-{
-	return *(const volatile u16 *) addr;
+static inline u16 readw(const volatile void __iomem *addr) {
+    return *(const volatile u16 *) addr;
 }
 
-static inline u32 readl(const volatile void __iomem *addr)
-{
-	return *(const volatile u32 *) addr;
+static inline u32 readl(const volatile void __iomem *addr) {
+    return *(const volatile u32 *) addr;
 }
 
 #define __raw_readb readb
@@ -47,19 +44,16 @@ static inline u32 readl(const volatile void __iomem *addr)
 #define readw_relaxed readw
 #define readl_relaxed readl
 
-static inline void writeb(u8 b, volatile void __iomem *addr)
-{
-	*(volatile u8 *) addr = b;
+static inline void writeb(u8 b, volatile void __iomem *addr) {
+    *(volatile u8 *) addr = b;
 }
 
-static inline void writew(u16 b, volatile void __iomem *addr)
-{
-	*(volatile u16 *) addr = b;
+static inline void writew(u16 b, volatile void __iomem *addr) {
+    *(volatile u16 *) addr = b;
 }
 
-static inline void writel(u32 b, volatile void __iomem *addr)
-{
-	*(volatile u32 *) addr = b;
+static inline void writel(u32 b, volatile void __iomem *addr) {
+    *(volatile u32 *) addr = b;
 }
 
 #define __raw_writeb writeb
@@ -70,44 +64,36 @@ static inline void writel(u32 b, volatile void __iomem *addr)
 /*
  * traditional input/output functions
  */
-static inline u8 inb_local(unsigned long addr)
-{
-	return readb((volatile void __iomem *) addr);
+static inline u8 inb_local(unsigned long addr) {
+    return readb((volatile void __iomem *) addr);
 }
 
-static inline void outb_local(u8 b, unsigned long addr)
-{
-	return writeb(b, (volatile void __iomem *) addr);
+static inline void outb_local(u8 b, unsigned long addr) {
+    return writeb(b, (volatile void __iomem *) addr);
 }
 
-static inline u8 inb(unsigned long addr)
-{
-	return readb((volatile void __iomem *) addr);
+static inline u8 inb(unsigned long addr) {
+    return readb((volatile void __iomem *) addr);
 }
 
-static inline u16 inw(unsigned long addr)
-{
-	return readw((volatile void __iomem *) addr);
+static inline u16 inw(unsigned long addr) {
+    return readw((volatile void __iomem *) addr);
 }
 
-static inline u32 inl(unsigned long addr)
-{
-	return readl((volatile void __iomem *) addr);
+static inline u32 inl(unsigned long addr) {
+    return readl((volatile void __iomem *) addr);
 }
 
-static inline void outb(u8 b, unsigned long addr)
-{
-	return writeb(b, (volatile void __iomem *) addr);
+static inline void outb(u8 b, unsigned long addr) {
+    return writeb(b, (volatile void __iomem *) addr);
 }
 
-static inline void outw(u16 b, unsigned long addr)
-{
-	return writew(b, (volatile void __iomem *) addr);
+static inline void outw(u16 b, unsigned long addr) {
+    return writew(b, (volatile void __iomem *) addr);
 }
 
-static inline void outl(u32 b, unsigned long addr)
-{
-	return writel(b, (volatile void __iomem *) addr);
+static inline void outl(u32 b, unsigned long addr) {
+    return writel(b, (volatile void __iomem *) addr);
 }
 
 #define inb_p(addr)	inb(addr)
@@ -117,71 +103,65 @@ static inline void outl(u32 b, unsigned long addr)
 #define outw_p(x, addr)	outw((x), (addr))
 #define outl_p(x, addr)	outl((x), (addr))
 
-static inline void insb(unsigned long addr, void *buffer, int count)
-{
-	if (count) {
-		u8 *buf = buffer;
-		do {
-			u8 x = inb(addr);
-			*buf++ = x;
-		} while (--count);
-	}
+static inline void insb(unsigned long addr, void *buffer, int count) {
+    if (count) {
+        u8 *buf = buffer;
+        do {
+            u8 x = inb(addr);
+            *buf++ = x;
+        } while (--count);
+    }
 }
 
-static inline void insw(unsigned long addr, void *buffer, int count)
-{
-	if (count) {
-		u16 *buf = buffer;
-		do {
-			u16 x = inw(addr);
-			*buf++ = x;
-		} while (--count);
-	}
+static inline void insw(unsigned long addr, void *buffer, int count) {
+    if (count) {
+        u16 *buf = buffer;
+        do {
+            u16 x = inw(addr);
+            *buf++ = x;
+        } while (--count);
+    }
 }
 
-static inline void insl(unsigned long addr, void *buffer, int count)
-{
-	if (count) {
-		u32 *buf = buffer;
-		do {
-			u32 x = inl(addr);
-			*buf++ = x;
-		} while (--count);
-	}
+static inline void insl(unsigned long addr, void *buffer, int count) {
+    if (count) {
+        u32 *buf = buffer;
+        do {
+            u32 x = inl(addr);
+            *buf++ = x;
+        } while (--count);
+    }
 }
 
-static inline void outsb(unsigned long addr, const void *buffer, int count)
-{
-	if (count) {
-		const u8 *buf = buffer;
-		do {
-			outb(*buf++, addr);
-		} while (--count);
-	}
+static inline void outsb(unsigned long addr, const void *buffer, int count) {
+    if (count) {
+        const u8 *buf = buffer;
+        do {
+            outb(*buf++, addr);
+        } while (--count);
+    }
 }
 
-static inline void outsw(unsigned long addr, const void *buffer, int count)
-{
-	if (count) {
-		const u16 *buf = buffer;
-		do {
-			outw(*buf++, addr);
-		} while (--count);
-	}
+static inline void outsw(unsigned long addr, const void *buffer, int count) {
+    if (count) {
+        const u16 *buf = buffer;
+        do {
+            outw(*buf++, addr);
+        } while (--count);
+    }
 }
 
 extern void __outsl(unsigned long addr, const void *buffer, int count);
-static inline void outsl(unsigned long addr, const void *buffer, int count)
-{
-	if ((unsigned long) buffer & 0x3)
-		return __outsl(addr, buffer, count);
+static inline void outsl(unsigned long addr, const void *buffer, int count) {
+    if ((unsigned long) buffer & 0x3)
+        return __outsl(addr, buffer, count);
 
-	if (count) {
-		const u32 *buf = buffer;
-		do {
-			outl(*buf++, addr);
-		} while (--count);
-	}
+    if (count) {
+        const u32 *buf = buffer;
+        do {
+            outl(*buf++, addr);
+        } while (--count);
+    }
 }
 
 #define ioread8(addr)		readb(addr)
@@ -229,36 +209,31 @@ static inline void outsl(unsigned long addr, const void *buffer, int count)
 
 /* Create a virtual mapping cookie for a PCI BAR (memory or IO) */
 struct pci_dev;
-static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-{
+static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p) {
 }
 
 /*
  * Change virtual addresses to physical addresses and vv.
  * These are pretty trivial
  */
-static inline unsigned long virt_to_phys(volatile void *address)
-{
-	return __pa(address);
+static inline unsigned long virt_to_phys(volatile void *address) {
+    return __pa(address);
 }
 
-static inline void *phys_to_virt(unsigned long address)
-{
-	return __va(address);
+static inline void *phys_to_virt(unsigned long address) {
+    return __va(address);
 }
 
 /*
  * Change "struct page" to physical address.
  */
 static inline void __iomem *__ioremap(unsigned long offset, unsigned long size,
-				      unsigned long flags)
-{
-	return (void __iomem *) offset;
+                                      unsigned long flags) {
+    return (void __iomem *) offset;
 }
 
-static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
-{
-	return (void __iomem *) offset;
+static inline void __iomem *ioremap(unsigned long offset, unsigned long size) {
+    return (void __iomem *) offset;
 }
 
 /*
@@ -266,24 +241,20 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
  * area.  it's useful if some control registers are in such an area and write
  * combining or read caching is not desirable:
  */
-static inline void __iomem *ioremap_nocache(unsigned long offset, unsigned long size)
-{
-	return (void __iomem *) (offset | 0x20000000);
+static inline void __iomem *ioremap_nocache(unsigned long offset, unsigned long size) {
+    return (void __iomem *) (offset | 0x20000000);
 }
 
 #define ioremap_wc ioremap_nocache
 
-static inline void iounmap(void __iomem *addr)
-{
+static inline void iounmap(void __iomem *addr) {
 }
 
-static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
-{
-	return (void __iomem *) port;
+static inline void __iomem *ioport_map(unsigned long port, unsigned int nr) {
+    return (void __iomem *) port;
 }
 
-static inline void ioport_unmap(void __iomem *p)
-{
+static inline void ioport_unmap(void __iomem *p) {
 }
 
 #define xlate_dev_kmem_ptr(p)	((void *) (p))
@@ -292,14 +263,12 @@ static inline void ioport_unmap(void __iomem *p)
 /*
  * PCI bus iomem addresses must be in the region 0x80000000-0x9fffffff
  */
-static inline unsigned long virt_to_bus(volatile void *address)
-{
-	return ((unsigned long) address) & ~0x20000000;
+static inline unsigned long virt_to_bus(volatile void *address) {
+    return ((unsigned long) address) & ~0x20000000;
 }
 
-static inline void *bus_to_virt(unsigned long address)
-{
-	return (void *) address;
+static inline void *bus_to_virt(unsigned long address) {
+    return (void *) address;
 }
 
 #define page_to_bus page_to_phys

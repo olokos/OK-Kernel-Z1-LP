@@ -28,30 +28,29 @@ unsigned char ledbank = 0xff;
 
 /***************************************************************************/
 
-void __init config_BSP(char *commandp, int size)
-{
+void __init config_BSP(char *commandp, int size) {
 #if defined(CONFIG_NETtel) || \
     defined(CONFIG_SECUREEDGEMP3) || defined(CONFIG_CLEOPATRA)
-	/* Copy command line from FLASH to local buffer... */
-	memcpy(commandp, (char *) 0xf0004000, size);
-	commandp[size-1] = 0;
+    /* Copy command line from FLASH to local buffer... */
+    memcpy(commandp, (char *) 0xf0004000, size);
+    commandp[size-1] = 0;
 #endif
 
-	mach_sched_init = hw_timer_init;
+    mach_sched_init = hw_timer_init;
 
-	/* Only support the external interrupts on their primary level */
-	mcf_mapirq2imr(25, MCFINTC_EINT1);
-	mcf_mapirq2imr(27, MCFINTC_EINT3);
-	mcf_mapirq2imr(29, MCFINTC_EINT5);
-	mcf_mapirq2imr(31, MCFINTC_EINT7);
+    /* Only support the external interrupts on their primary level */
+    mcf_mapirq2imr(25, MCFINTC_EINT1);
+    mcf_mapirq2imr(27, MCFINTC_EINT3);
+    mcf_mapirq2imr(29, MCFINTC_EINT5);
+    mcf_mapirq2imr(31, MCFINTC_EINT7);
 
 #ifdef CONFIG_BDM_DISABLE
-	/*
-	 * Disable the BDM clocking.  This also turns off most of the rest of
-	 * the BDM device.  This is good for EMC reasons. This option is not
-	 * incompatible with the memory protection option.
-	 */
-	wdebug(MCFDEBUG_CSR, MCFDEBUG_CSR_PSTCLK);
+    /*
+     * Disable the BDM clocking.  This also turns off most of the rest of
+     * the BDM device.  This is good for EMC reasons. This option is not
+     * incompatible with the memory protection option.
+     */
+    wdebug(MCFDEBUG_CSR, MCFDEBUG_CSR_PSTCLK);
 #endif
 }
 

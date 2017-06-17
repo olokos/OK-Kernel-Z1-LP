@@ -62,15 +62,15 @@ extern int mx27_clocks_init(unsigned long fref);
 extern int mx31_clocks_init(unsigned long fref);
 extern int mx35_clocks_init(void);
 extern int mx51_clocks_init(unsigned long ckil, unsigned long osc,
-			unsigned long ckih1, unsigned long ckih2);
+                            unsigned long ckih1, unsigned long ckih2);
 extern int mx53_clocks_init(unsigned long ckil, unsigned long osc,
-			unsigned long ckih1, unsigned long ckih2);
+                            unsigned long ckih1, unsigned long ckih2);
 extern int mx27_clocks_init_dt(void);
 extern int mx51_clocks_init_dt(void);
 extern int mx53_clocks_init_dt(void);
 extern int mx6q_clocks_init(void);
 extern struct platform_device *mxc_register_gpio(char *name, int id,
-	resource_size_t iobase, resource_size_t iosize, int irq, int irq_high);
+        resource_size_t iobase, resource_size_t iosize, int irq, int irq_high);
 extern void mxc_set_cpu_type(unsigned int type);
 extern void mxc_restart(char, const char *);
 extern void mxc_arch_reset_init(void __iomem *);
@@ -79,18 +79,18 @@ extern int mx53_display_revision(void);
 extern void imx_set_aips(void __iomem *);
 
 enum mxc_cpu_pwr_mode {
-	WAIT_CLOCKED,		/* wfi only */
-	WAIT_UNCLOCKED,		/* WAIT */
-	WAIT_UNCLOCKED_POWER_OFF,	/* WAIT + SRPG */
-	STOP_POWER_ON,		/* just STOP */
-	STOP_POWER_OFF,		/* STOP + SRPG */
+    WAIT_CLOCKED,		/* wfi only */
+    WAIT_UNCLOCKED,		/* WAIT */
+    WAIT_UNCLOCKED_POWER_OFF,	/* WAIT + SRPG */
+    STOP_POWER_ON,		/* just STOP */
+    STOP_POWER_OFF,		/* STOP + SRPG */
 };
 
 enum mx3_cpu_pwr_mode {
-	MX3_RUN,
-	MX3_WAIT,
-	MX3_DOZE,
-	MX3_SLEEP,
+    MX3_RUN,
+    MX3_WAIT,
+    MX3_DOZE,
+    MX3_SLEEP,
 };
 
 extern void mx3_cpu_lp_set(enum mx3_cpu_pwr_mode mode);

@@ -70,8 +70,7 @@ when        who          what, where, why
 
 /* Config format required by HAL for each CFG item*/
 WPT_PACK_START
-typedef WPT_PACK_PRE struct
-{
+typedef WPT_PACK_PRE struct {
     /* Cfg Id. The Id required by HAL is exported by HAL
      * in shared header file between UMAC and HAL.*/
     tANI_U16   type;

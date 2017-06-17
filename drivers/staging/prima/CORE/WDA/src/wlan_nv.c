@@ -44,8 +44,7 @@
 #include "wlan_nv2.h"
 #include "wlan_hal_msg.h"
 
-const sHalNv nvDefaults =
-{
+const sHalNv nvDefaults = {
     {
         0,                                                              // tANI_U16  productId;
         1,                                                              // tANI_U8   productBands;
@@ -5188,8 +5187,7 @@ const sHalNv nvDefaults =
     } // tables
 };
 
-const sHalNvV2 nvDefaultsV2 =
-{
+const sHalNvV2 nvDefaultsV2 = {
     {
         0,                                                              // tANI_U16  productId;
         1,                                                              // tANI_U8   productBands;

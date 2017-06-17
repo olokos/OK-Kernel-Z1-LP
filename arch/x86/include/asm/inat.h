@@ -99,123 +99,102 @@
 extern insn_attr_t inat_get_opcode_attribute(insn_byte_t opcode);
 extern int inat_get_last_prefix_id(insn_byte_t last_pfx);
 extern insn_attr_t inat_get_escape_attribute(insn_byte_t opcode,
-					     int lpfx_id,
-					     insn_attr_t esc_attr);
+        int lpfx_id,
+        insn_attr_t esc_attr);
 extern insn_attr_t inat_get_group_attribute(insn_byte_t modrm,
-					    int lpfx_id,
-					    insn_attr_t esc_attr);
+        int lpfx_id,
+        insn_attr_t esc_attr);
 extern insn_attr_t inat_get_avx_attribute(insn_byte_t opcode,
-					  insn_byte_t vex_m,
-					  insn_byte_t vex_pp);
+        insn_byte_t vex_m,
+        insn_byte_t vex_pp);
 
 /* Attribute checking functions */
-static inline int inat_is_legacy_prefix(insn_attr_t attr)
-{
-	attr &= INAT_PFX_MASK;
-	return attr && attr <= INAT_LGCPFX_MAX;
+static inline int inat_is_legacy_prefix(insn_attr_t attr) {
+    attr &= INAT_PFX_MASK;
+    return attr && attr <= INAT_LGCPFX_MAX;
 }
 
-static inline int inat_is_address_size_prefix(insn_attr_t attr)
-{
-	return (attr & INAT_PFX_MASK) == INAT_PFX_ADDRSZ;
+static inline int inat_is_address_size_prefix(insn_attr_t attr) {
+    return (attr & INAT_PFX_MASK) == INAT_PFX_ADDRSZ;
 }
 
-static inline int inat_is_operand_size_prefix(insn_attr_t attr)
-{
-	return (attr & INAT_PFX_MASK) == INAT_PFX_OPNDSZ;
+static inline int inat_is_operand_size_prefix(insn_attr_t attr) {
+    return (attr & INAT_PFX_MASK) == INAT_PFX_OPNDSZ;
 }
 
-static inline int inat_is_rex_prefix(insn_attr_t attr)
-{
-	return (attr & INAT_PFX_MASK) == INAT_PFX_REX;
+static inline int inat_is_rex_prefix(insn_attr_t attr) {
+    return (attr & INAT_PFX_MASK) == INAT_PFX_REX;
 }
 
-static inline int inat_last_prefix_id(insn_attr_t attr)
-{
-	if ((attr & INAT_PFX_MASK) > INAT_LSTPFX_MAX)
-		return 0;
-	else
-		return attr & INAT_PFX_MASK;
+static inline int inat_last_prefix_id(insn_attr_t attr) {
+    if ((attr & INAT_PFX_MASK) > INAT_LSTPFX_MAX)
+        return 0;
+    else
+        return attr & INAT_PFX_MASK;
 }
 
-static inline int inat_is_vex_prefix(insn_attr_t attr)
-{
-	attr &= INAT_PFX_MASK;
-	return attr == INAT_PFX_VEX2 || attr == INAT_PFX_VEX3;
+static inline int inat_is_vex_prefix(insn_attr_t attr) {
+    attr &= INAT_PFX_MASK;
+    return attr == INAT_PFX_VEX2 || attr == INAT_PFX_VEX3;
 }
 
-static inline int inat_is_vex3_prefix(insn_attr_t attr)
-{
-	return (attr & INAT_PFX_MASK) == INAT_PFX_VEX3;
+static inline int inat_is_vex3_prefix(insn_attr_t attr) {
+    return (attr & INAT_PFX_MASK) == INAT_PFX_VEX3;
 }
 
-static inline int inat_is_escape(insn_attr_t attr)
-{
-	return attr & INAT_ESC_MASK;
+static inline int inat_is_escape(insn_attr_t attr) {
+    return attr & INAT_ESC_MASK;
 }
 
-static inline int inat_escape_id(insn_attr_t attr)
-{
-	return (attr & INAT_ESC_MASK) >> INAT_ESC_OFFS;
+static inline int inat_escape_id(insn_attr_t attr) {
+    return (attr & INAT_ESC_MASK) >> INAT_ESC_OFFS;
 }
 
-static inline int inat_is_group(insn_attr_t attr)
-{
-	return attr & INAT_GRP_MASK;
+static inline int inat_is_group(insn_attr_t attr) {
+    return attr & INAT_GRP_MASK;
 }
 
-static inline int inat_group_id(insn_attr_t attr)
-{
-	return (attr & INAT_GRP_MASK) >> INAT_GRP_OFFS;
+static inline int inat_group_id(insn_attr_t attr) {
+    return (attr & INAT_GRP_MASK) >> INAT_GRP_OFFS;
 }
 
-static inline int inat_group_common_attribute(insn_attr_t attr)
-{
-	return attr & ~INAT_GRP_MASK;
+static inline int inat_group_common_attribute(insn_attr_t attr) {
+    return attr & ~INAT_GRP_MASK;
 }
 
-static inline int inat_has_immediate(insn_attr_t attr)
-{
-	return attr & INAT_IMM_MASK;
+static inline int inat_has_immediate(insn_attr_t attr) {
+    return attr & INAT_IMM_MASK;
 }
 
-static inline int inat_immediate_size(insn_attr_t attr)
-{
-	return (attr & INAT_IMM_MASK) >> INAT_IMM_OFFS;
+static inline int inat_immediate_size(insn_attr_t attr) {
+    return (attr & INAT_IMM_MASK) >> INAT_IMM_OFFS;
 }
 
-static inline int inat_has_modrm(insn_attr_t attr)
-{
-	return attr & INAT_MODRM;
+static inline int inat_has_modrm(insn_attr_t attr) {
+    return attr & INAT_MODRM;
 }
 
-static inline int inat_is_force64(insn_attr_t attr)
-{
-	return attr & INAT_FORCE64;
+static inline int inat_is_force64(insn_attr_t attr) {
+    return attr & INAT_FORCE64;
 }
 
-static inline int inat_has_second_immediate(insn_attr_t attr)
-{
-	return attr & INAT_SCNDIMM;
+static inline int inat_has_second_immediate(insn_attr_t attr) {
+    return attr & INAT_SCNDIMM;
 }
 
-static inline int inat_has_moffset(insn_attr_t attr)
-{
-	return attr & INAT_MOFFSET;
+static inline int inat_has_moffset(insn_attr_t attr) {
+    return attr & INAT_MOFFSET;
 }
 
-static inline int inat_has_variant(insn_attr_t attr)
-{
-	return attr & INAT_VARIANT;
+static inline int inat_has_variant(insn_attr_t attr) {
+    return attr & INAT_VARIANT;
 }
 
-static inline int inat_accept_vex(insn_attr_t attr)
-{
-	return attr & INAT_VEXOK;
+static inline int inat_accept_vex(insn_attr_t attr) {
+    return attr & INAT_VEXOK;
 }
 
-static inline int inat_must_vex(insn_attr_t attr)
-{
-	return attr & INAT_VEXONLY;
+static inline int inat_must_vex(insn_attr_t attr) {
+    return attr & INAT_VEXONLY;
 }
 #endif

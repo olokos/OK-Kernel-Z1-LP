@@ -90,34 +90,34 @@
 #define RSVD6_SHT (21)
 
 struct tx_desc {
-	/*DWORD 0*/
-	unsigned int txdw0;
-	unsigned int txdw1;
-	unsigned int txdw2;
-	unsigned int txdw3;
-	unsigned int txdw4;
-	unsigned int txdw5;
-	unsigned int txdw6;
-	unsigned int txdw7;
+    /*DWORD 0*/
+    unsigned int txdw0;
+    unsigned int txdw1;
+    unsigned int txdw2;
+    unsigned int txdw3;
+    unsigned int txdw4;
+    unsigned int txdw5;
+    unsigned int txdw6;
+    unsigned int txdw7;
 };
 
 
 union txdesc {
-	struct tx_desc txdesc;
-	unsigned int value[TXDESC_SIZE>>2];
+    struct tx_desc txdesc;
+    unsigned int value[TXDESC_SIZE>>2];
 };
 
 int r8712_xmitframe_complete(struct _adapter *padapter,
-			     struct xmit_priv *pxmitpriv,
-			     struct xmit_buf *pxmitbuf);
+                             struct xmit_priv *pxmitpriv,
+                             struct xmit_buf *pxmitbuf);
 void r8712_do_queue_select(struct _adapter *padapter,
-			   struct pkt_attrib *pattrib);
+                           struct pkt_attrib *pattrib);
 
 #ifdef CONFIG_R8712_TX_AGGR
 u8 r8712_xmitframe_aggr_1st(struct xmit_buf *pxmitbuf,
-			struct xmit_frame *pxmitframe);
+                            struct xmit_frame *pxmitframe);
 u8 r8712_dump_aggr_xframe(struct xmit_buf *pxmitbuf,
-			struct xmit_frame *pxmitframe);
+                          struct xmit_frame *pxmitframe);
 #endif
 
 #endif

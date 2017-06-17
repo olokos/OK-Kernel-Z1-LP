@@ -239,44 +239,44 @@
 #define EQ_ENTRY_RES_ID_SHIFT 		16
 
 struct be_eq_entry {
-	u32 evt;
+    u32 evt;
 };
 
 /* TX Queue Descriptor */
 #define ETH_WRB_FRAG_LEN_MASK		0xFFFF
 struct be_eth_wrb {
-	u32 frag_pa_hi;		/* dword 0 */
-	u32 frag_pa_lo;		/* dword 1 */
-	u32 rsvd0;		/* dword 2 */
-	u32 frag_len;		/* dword 3: bits 0 - 15 */
+    u32 frag_pa_hi;		/* dword 0 */
+    u32 frag_pa_lo;		/* dword 1 */
+    u32 rsvd0;		/* dword 2 */
+    u32 frag_len;		/* dword 3: bits 0 - 15 */
 } __packed;
 
 /* Pseudo amap definition for eth_hdr_wrb in which each bit of the
  * actual structure is defined as a byte : used to calculate
  * offset/shift/mask of each field */
 struct amap_eth_hdr_wrb {
-	u8 rsvd0[32];		/* dword 0 */
-	u8 rsvd1[32];		/* dword 1 */
-	u8 complete;		/* dword 2 */
-	u8 event;
-	u8 crc;
-	u8 forward;
-	u8 lso6;
-	u8 mgmt;
-	u8 ipcs;
-	u8 udpcs;
-	u8 tcpcs;
-	u8 lso;
-	u8 vlan;
-	u8 gso[2];
-	u8 num_wrb[5];
-	u8 lso_mss[14];
-	u8 len[16];		/* dword 3 */
-	u8 vlan_tag[16];
+    u8 rsvd0[32];		/* dword 0 */
+    u8 rsvd1[32];		/* dword 1 */
+    u8 complete;		/* dword 2 */
+    u8 event;
+    u8 crc;
+    u8 forward;
+    u8 lso6;
+    u8 mgmt;
+    u8 ipcs;
+    u8 udpcs;
+    u8 tcpcs;
+    u8 lso;
+    u8 vlan;
+    u8 gso[2];
+    u8 num_wrb[5];
+    u8 lso_mss[14];
+    u8 len[16];		/* dword 3 */
+    u8 vlan_tag[16];
 } __packed;
 
 struct be_eth_hdr_wrb {
-	u32 dw[4];
+    u32 dw[4];
 };
 
 /* TX Compl Queue Descriptor */
@@ -285,31 +285,31 @@ struct be_eth_hdr_wrb {
  * actual structure is defined as a byte: used to calculate
  * offset/shift/mask of each field */
 struct amap_eth_tx_compl {
-	u8 wrb_index[16];	/* dword 0 */
-	u8 ct[2]; 		/* dword 0 */
-	u8 port[2];		/* dword 0 */
-	u8 rsvd0[8];		/* dword 0 */
-	u8 status[4];		/* dword 0 */
-	u8 user_bytes[16];	/* dword 1 */
-	u8 nwh_bytes[8];	/* dword 1 */
-	u8 lso;			/* dword 1 */
-	u8 cast_enc[2];		/* dword 1 */
-	u8 rsvd1[5];		/* dword 1 */
-	u8 rsvd2[32];		/* dword 2 */
-	u8 pkts[16];		/* dword 3 */
-	u8 ringid[11];		/* dword 3 */
-	u8 hash_val[4];		/* dword 3 */
-	u8 valid;		/* dword 3 */
+    u8 wrb_index[16];	/* dword 0 */
+    u8 ct[2]; 		/* dword 0 */
+    u8 port[2];		/* dword 0 */
+    u8 rsvd0[8];		/* dword 0 */
+    u8 status[4];		/* dword 0 */
+    u8 user_bytes[16];	/* dword 1 */
+    u8 nwh_bytes[8];	/* dword 1 */
+    u8 lso;			/* dword 1 */
+    u8 cast_enc[2];		/* dword 1 */
+    u8 rsvd1[5];		/* dword 1 */
+    u8 rsvd2[32];		/* dword 2 */
+    u8 pkts[16];		/* dword 3 */
+    u8 ringid[11];		/* dword 3 */
+    u8 hash_val[4];		/* dword 3 */
+    u8 valid;		/* dword 3 */
 } __packed;
 
 struct be_eth_tx_compl {
-	u32 dw[4];
+    u32 dw[4];
 };
 
 /* RX Queue Descriptor */
 struct be_eth_rx_d {
-	u32 fragpa_hi;
-	u32 fragpa_lo;
+    u32 fragpa_hi;
+    u32 fragpa_lo;
 };
 
 /* RX Compl Queue Descriptor */
@@ -318,195 +318,195 @@ struct be_eth_rx_d {
  * each bit of the actual structure is defined as a byte: used to calculate
  * offset/shift/mask of each field */
 struct amap_eth_rx_compl_v0 {
-	u8 vlan_tag[16];	/* dword 0 */
-	u8 pktsize[14];		/* dword 0 */
-	u8 port;		/* dword 0 */
-	u8 ip_opt;		/* dword 0 */
-	u8 err;			/* dword 1 */
-	u8 rsshp;		/* dword 1 */
-	u8 ipf;			/* dword 1 */
-	u8 tcpf;		/* dword 1 */
-	u8 udpf;		/* dword 1 */
-	u8 ipcksm;		/* dword 1 */
-	u8 l4_cksm;		/* dword 1 */
-	u8 ip_version;		/* dword 1 */
-	u8 macdst[6];		/* dword 1 */
-	u8 vtp;			/* dword 1 */
-	u8 rsvd0;		/* dword 1 */
-	u8 fragndx[10];		/* dword 1 */
-	u8 ct[2];		/* dword 1 */
-	u8 sw;			/* dword 1 */
-	u8 numfrags[3];		/* dword 1 */
-	u8 rss_flush;		/* dword 2 */
-	u8 cast_enc[2];		/* dword 2 */
-	u8 vtm;			/* dword 2 */
-	u8 rss_bank;		/* dword 2 */
-	u8 rsvd1[23];		/* dword 2 */
-	u8 lro_pkt;		/* dword 2 */
-	u8 rsvd2[2];		/* dword 2 */
-	u8 valid;		/* dword 2 */
-	u8 rsshash[32];		/* dword 3 */
+    u8 vlan_tag[16];	/* dword 0 */
+    u8 pktsize[14];		/* dword 0 */
+    u8 port;		/* dword 0 */
+    u8 ip_opt;		/* dword 0 */
+    u8 err;			/* dword 1 */
+    u8 rsshp;		/* dword 1 */
+    u8 ipf;			/* dword 1 */
+    u8 tcpf;		/* dword 1 */
+    u8 udpf;		/* dword 1 */
+    u8 ipcksm;		/* dword 1 */
+    u8 l4_cksm;		/* dword 1 */
+    u8 ip_version;		/* dword 1 */
+    u8 macdst[6];		/* dword 1 */
+    u8 vtp;			/* dword 1 */
+    u8 rsvd0;		/* dword 1 */
+    u8 fragndx[10];		/* dword 1 */
+    u8 ct[2];		/* dword 1 */
+    u8 sw;			/* dword 1 */
+    u8 numfrags[3];		/* dword 1 */
+    u8 rss_flush;		/* dword 2 */
+    u8 cast_enc[2];		/* dword 2 */
+    u8 vtm;			/* dword 2 */
+    u8 rss_bank;		/* dword 2 */
+    u8 rsvd1[23];		/* dword 2 */
+    u8 lro_pkt;		/* dword 2 */
+    u8 rsvd2[2];		/* dword 2 */
+    u8 valid;		/* dword 2 */
+    u8 rsshash[32];		/* dword 3 */
 } __packed;
 
 /* Pseudo amap definition for BE3 native mode eth_rx_compl in which
  * each bit of the actual structure is defined as a byte: used to calculate
  * offset/shift/mask of each field */
 struct amap_eth_rx_compl_v1 {
-	u8 vlan_tag[16];	/* dword 0 */
-	u8 pktsize[14];		/* dword 0 */
-	u8 vtp;			/* dword 0 */
-	u8 ip_opt;		/* dword 0 */
-	u8 err;			/* dword 1 */
-	u8 rsshp;		/* dword 1 */
-	u8 ipf;			/* dword 1 */
-	u8 tcpf;		/* dword 1 */
-	u8 udpf;		/* dword 1 */
-	u8 ipcksm;		/* dword 1 */
-	u8 l4_cksm;		/* dword 1 */
-	u8 ip_version;		/* dword 1 */
-	u8 macdst[7];		/* dword 1 */
-	u8 rsvd0;		/* dword 1 */
-	u8 fragndx[10];		/* dword 1 */
-	u8 ct[2];		/* dword 1 */
-	u8 sw;			/* dword 1 */
-	u8 numfrags[3];		/* dword 1 */
-	u8 rss_flush;		/* dword 2 */
-	u8 cast_enc[2];		/* dword 2 */
-	u8 vtm;			/* dword 2 */
-	u8 rss_bank;		/* dword 2 */
-	u8 port[2];		/* dword 2 */
-	u8 vntagp;		/* dword 2 */
-	u8 header_len[8];	/* dword 2 */
-	u8 header_split[2];	/* dword 2 */
-	u8 rsvd1[13];		/* dword 2 */
-	u8 valid;		/* dword 2 */
-	u8 rsshash[32];		/* dword 3 */
+    u8 vlan_tag[16];	/* dword 0 */
+    u8 pktsize[14];		/* dword 0 */
+    u8 vtp;			/* dword 0 */
+    u8 ip_opt;		/* dword 0 */
+    u8 err;			/* dword 1 */
+    u8 rsshp;		/* dword 1 */
+    u8 ipf;			/* dword 1 */
+    u8 tcpf;		/* dword 1 */
+    u8 udpf;		/* dword 1 */
+    u8 ipcksm;		/* dword 1 */
+    u8 l4_cksm;		/* dword 1 */
+    u8 ip_version;		/* dword 1 */
+    u8 macdst[7];		/* dword 1 */
+    u8 rsvd0;		/* dword 1 */
+    u8 fragndx[10];		/* dword 1 */
+    u8 ct[2];		/* dword 1 */
+    u8 sw;			/* dword 1 */
+    u8 numfrags[3];		/* dword 1 */
+    u8 rss_flush;		/* dword 2 */
+    u8 cast_enc[2];		/* dword 2 */
+    u8 vtm;			/* dword 2 */
+    u8 rss_bank;		/* dword 2 */
+    u8 port[2];		/* dword 2 */
+    u8 vntagp;		/* dword 2 */
+    u8 header_len[8];	/* dword 2 */
+    u8 header_split[2];	/* dword 2 */
+    u8 rsvd1[13];		/* dword 2 */
+    u8 valid;		/* dword 2 */
+    u8 rsshash[32];		/* dword 3 */
 } __packed;
 
 struct be_eth_rx_compl {
-	u32 dw[4];
+    u32 dw[4];
 };
 
 struct mgmt_hba_attribs {
-	u8 flashrom_version_string[32];
-	u8 manufacturer_name[32];
-	u32 supported_modes;
-	u32 rsvd0[3];
-	u8 ncsi_ver_string[12];
-	u32 default_extended_timeout;
-	u8 controller_model_number[32];
-	u8 controller_description[64];
-	u8 controller_serial_number[32];
-	u8 ip_version_string[32];
-	u8 firmware_version_string[32];
-	u8 bios_version_string[32];
-	u8 redboot_version_string[32];
-	u8 driver_version_string[32];
-	u8 fw_on_flash_version_string[32];
-	u32 functionalities_supported;
-	u16 max_cdblength;
-	u8 asic_revision;
-	u8 generational_guid[16];
-	u8 hba_port_count;
-	u16 default_link_down_timeout;
-	u8 iscsi_ver_min_max;
-	u8 multifunction_device;
-	u8 cache_valid;
-	u8 hba_status;
-	u8 max_domains_supported;
-	u8 phy_port;
-	u32 firmware_post_status;
-	u32 hba_mtu[8];
-	u32 rsvd1[4];
+    u8 flashrom_version_string[32];
+    u8 manufacturer_name[32];
+    u32 supported_modes;
+    u32 rsvd0[3];
+    u8 ncsi_ver_string[12];
+    u32 default_extended_timeout;
+    u8 controller_model_number[32];
+    u8 controller_description[64];
+    u8 controller_serial_number[32];
+    u8 ip_version_string[32];
+    u8 firmware_version_string[32];
+    u8 bios_version_string[32];
+    u8 redboot_version_string[32];
+    u8 driver_version_string[32];
+    u8 fw_on_flash_version_string[32];
+    u32 functionalities_supported;
+    u16 max_cdblength;
+    u8 asic_revision;
+    u8 generational_guid[16];
+    u8 hba_port_count;
+    u16 default_link_down_timeout;
+    u8 iscsi_ver_min_max;
+    u8 multifunction_device;
+    u8 cache_valid;
+    u8 hba_status;
+    u8 max_domains_supported;
+    u8 phy_port;
+    u32 firmware_post_status;
+    u32 hba_mtu[8];
+    u32 rsvd1[4];
 };
 
 struct mgmt_controller_attrib {
-	struct mgmt_hba_attribs hba_attribs;
-	u16 pci_vendor_id;
-	u16 pci_device_id;
-	u16 pci_sub_vendor_id;
-	u16 pci_sub_system_id;
-	u8 pci_bus_number;
-	u8 pci_device_number;
-	u8 pci_function_number;
-	u8 interface_type;
-	u64 unique_identifier;
-	u32 rsvd0[5];
+    struct mgmt_hba_attribs hba_attribs;
+    u16 pci_vendor_id;
+    u16 pci_device_id;
+    u16 pci_sub_vendor_id;
+    u16 pci_sub_system_id;
+    u8 pci_bus_number;
+    u8 pci_device_number;
+    u8 pci_function_number;
+    u8 interface_type;
+    u64 unique_identifier;
+    u32 rsvd0[5];
 };
 
 struct controller_id {
-	u32 vendor;
-	u32 device;
-	u32 subvendor;
-	u32 subdevice;
+    u32 vendor;
+    u32 device;
+    u32 subvendor;
+    u32 subdevice;
 };
 
 struct flash_comp {
-	unsigned long offset;
-	int optype;
-	int size;
+    unsigned long offset;
+    int optype;
+    int size;
 };
 
 struct image_hdr {
-	u32 imageid;
-	u32 imageoffset;
-	u32 imagelength;
-	u32 image_checksum;
-	u8 image_version[32];
+    u32 imageid;
+    u32 imageoffset;
+    u32 imagelength;
+    u32 image_checksum;
+    u8 image_version[32];
 };
 struct flash_file_hdr_g2 {
-	u8 sign[32];
-	u32 cksum;
-	u32 antidote;
-	struct controller_id cont_id;
-	u32 file_len;
-	u32 chunk_num;
-	u32 total_chunks;
-	u32 num_imgs;
-	u8 build[24];
+    u8 sign[32];
+    u32 cksum;
+    u32 antidote;
+    struct controller_id cont_id;
+    u32 file_len;
+    u32 chunk_num;
+    u32 total_chunks;
+    u32 num_imgs;
+    u8 build[24];
 };
 
 struct flash_file_hdr_g3 {
-	u8 sign[52];
-	u8 ufi_version[4];
-	u32 file_len;
-	u32 cksum;
-	u32 antidote;
-	u32 num_imgs;
-	u8 build[24];
-	u8 rsvd[32];
+    u8 sign[52];
+    u8 ufi_version[4];
+    u32 file_len;
+    u32 cksum;
+    u32 antidote;
+    u32 num_imgs;
+    u8 build[24];
+    u8 rsvd[32];
 };
 
 struct flash_section_hdr {
-	u32 format_rev;
-	u32 cksum;
-	u32 antidote;
-	u32 build_no;
-	u8 id_string[64];
-	u32 active_entry_mask;
-	u32 valid_entry_mask;
-	u32 org_content_mask;
-	u32 rsvd0;
-	u32 rsvd1;
-	u32 rsvd2;
-	u32 rsvd3;
-	u32 rsvd4;
+    u32 format_rev;
+    u32 cksum;
+    u32 antidote;
+    u32 build_no;
+    u8 id_string[64];
+    u32 active_entry_mask;
+    u32 valid_entry_mask;
+    u32 org_content_mask;
+    u32 rsvd0;
+    u32 rsvd1;
+    u32 rsvd2;
+    u32 rsvd3;
+    u32 rsvd4;
 };
 
 struct flash_section_entry {
-	u32 type;
-	u32 offset;
-	u32 pad_size;
-	u32 image_size;
-	u32 cksum;
-	u32 entry_point;
-	u32 rsvd0;
-	u32 rsvd1;
-	u8 ver_data[32];
+    u32 type;
+    u32 offset;
+    u32 pad_size;
+    u32 image_size;
+    u32 cksum;
+    u32 entry_point;
+    u32 rsvd0;
+    u32 rsvd1;
+    u8 ver_data[32];
 };
 
 struct flash_section_info {
-	u8 cookie[32];
-	struct flash_section_hdr fsec_hdr;
-	struct flash_section_entry fsec_entry[32];
+    u8 cookie[32];
+    struct flash_section_hdr fsec_hdr;
+    struct flash_section_entry fsec_entry[32];
 };

@@ -56,30 +56,30 @@ extern int kprobe_test_cc_position;
 #define ARG_FLAG_ARM		0x20	/* Must be 32 so TEST_ISA can be used */
 
 struct test_arg {
-	u8	type;		/* ARG_TYPE_x */
-	u8	_padding[7];
+    u8	type;		/* ARG_TYPE_x */
+    u8	_padding[7];
 };
 
 struct test_arg_regptr {
-	u8	type;		/* ARG_TYPE_REG or ARG_TYPE_PTR */
-	u8	reg;
-	u8	_padding[2];
-	u32	val;
+    u8	type;		/* ARG_TYPE_REG or ARG_TYPE_PTR */
+    u8	reg;
+    u8	_padding[2];
+    u32	val;
 };
 
 struct test_arg_mem {
-	u8	type;		/* ARG_TYPE_MEM */
-	u8	index;
-	u8	_padding[2];
-	u32	val;
+    u8	type;		/* ARG_TYPE_MEM */
+    u8	index;
+    u8	_padding[2];
+    u32	val;
 };
 
 struct test_arg_end {
-	u8	type;		/* ARG_TYPE_END */
-	u8	flags;		/* ARG_FLAG_x */
-	u16	code_offset;
-	u16	branch_offset;
-	u16	end_offset;
+    u8	type;		/* ARG_TYPE_END */
+    u8	flags;		/* ARG_FLAG_x */
+    u16	code_offset;
+    u16	branch_offset;
+    u16	end_offset;
 };
 
 

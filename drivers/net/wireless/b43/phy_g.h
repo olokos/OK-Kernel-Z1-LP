@@ -66,44 +66,42 @@ void b43_gtab_write(struct b43_wldev *dev, u16 table, u16 offset, u16 value);
 
 /* Radio Attenuation (RF Attenuation) */
 struct b43_rfatt {
-	u8 att;			/* Attenuation value */
-	bool with_padmix;	/* Flag, PAD Mixer enabled. */
+    u8 att;			/* Attenuation value */
+    bool with_padmix;	/* Flag, PAD Mixer enabled. */
 };
 struct b43_rfatt_list {
-	/* Attenuation values list */
-	const struct b43_rfatt *list;
-	u8 len;
-	/* Minimum/Maximum attenuation values */
-	u8 min_val;
-	u8 max_val;
+    /* Attenuation values list */
+    const struct b43_rfatt *list;
+    u8 len;
+    /* Minimum/Maximum attenuation values */
+    u8 min_val;
+    u8 max_val;
 };
 
 /* Returns true, if the values are the same. */
 static inline bool b43_compare_rfatt(const struct b43_rfatt *a,
-				     const struct b43_rfatt *b)
-{
-	return ((a->att == b->att) &&
-		(a->with_padmix == b->with_padmix));
+                                     const struct b43_rfatt *b) {
+    return ((a->att == b->att) &&
+            (a->with_padmix == b->with_padmix));
 }
 
 /* Baseband Attenuation */
 struct b43_bbatt {
-	u8 att;			/* Attenuation value */
+    u8 att;			/* Attenuation value */
 };
 struct b43_bbatt_list {
-	/* Attenuation values list */
-	const struct b43_bbatt *list;
-	u8 len;
-	/* Minimum/Maximum attenuation values */
-	u8 min_val;
-	u8 max_val;
+    /* Attenuation values list */
+    const struct b43_bbatt *list;
+    u8 len;
+    /* Minimum/Maximum attenuation values */
+    u8 min_val;
+    u8 max_val;
 };
 
 /* Returns true, if the values are the same. */
 static inline bool b43_compare_bbatt(const struct b43_bbatt *a,
-				     const struct b43_bbatt *b)
-{
-	return (a->att == b->att);
+                                     const struct b43_bbatt *b) {
+    return (a->att == b->att);
 }
 
 /* tx_control bits. */
@@ -114,93 +112,93 @@ static inline bool b43_compare_bbatt(const struct b43_bbatt *a,
 struct b43_txpower_lo_control;
 
 struct b43_phy_g {
-	/* ACI (adjacent channel interference) flags. */
-	bool aci_enable;
-	bool aci_wlan_automatic;
-	bool aci_hw_rssi;
+    /* ACI (adjacent channel interference) flags. */
+    bool aci_enable;
+    bool aci_wlan_automatic;
+    bool aci_hw_rssi;
 
-	/* Radio switched on/off */
-	bool radio_on;
-	struct {
-		/* Values saved when turning the radio off.
-		 * They are needed when turning it on again. */
-		bool valid;
-		u16 rfover;
-		u16 rfoverval;
-	} radio_off_context;
+    /* Radio switched on/off */
+    bool radio_on;
+    struct {
+        /* Values saved when turning the radio off.
+         * They are needed when turning it on again. */
+        bool valid;
+        u16 rfover;
+        u16 rfoverval;
+    } radio_off_context;
 
-	u16 minlowsig[2];
-	u16 minlowsigpos[2];
+    u16 minlowsig[2];
+    u16 minlowsigpos[2];
 
-	/* Pointer to the table used to convert a
-	 * TSSI value to dBm-Q5.2 */
-	const s8 *tssi2dbm;
-	/* tssi2dbm is kmalloc()ed. Only used for free()ing. */
-	bool dyn_tssi_tbl;
-	/* Target idle TSSI */
-	int tgt_idle_tssi;
-	/* Current idle TSSI */
-	int cur_idle_tssi;
-	/* The current average TSSI. */
-	u8 average_tssi;
-	/* Current TX power level attenuation control values */
-	struct b43_bbatt bbatt;
-	struct b43_rfatt rfatt;
-	u8 tx_control;		/* B43_TXCTL_XXX */
-	/* The calculated attenuation deltas that are used later
-	 * when adjusting the actual power output. */
-	int bbatt_delta;
-	int rfatt_delta;
+    /* Pointer to the table used to convert a
+     * TSSI value to dBm-Q5.2 */
+    const s8 *tssi2dbm;
+    /* tssi2dbm is kmalloc()ed. Only used for free()ing. */
+    bool dyn_tssi_tbl;
+    /* Target idle TSSI */
+    int tgt_idle_tssi;
+    /* Current idle TSSI */
+    int cur_idle_tssi;
+    /* The current average TSSI. */
+    u8 average_tssi;
+    /* Current TX power level attenuation control values */
+    struct b43_bbatt bbatt;
+    struct b43_rfatt rfatt;
+    u8 tx_control;		/* B43_TXCTL_XXX */
+    /* The calculated attenuation deltas that are used later
+     * when adjusting the actual power output. */
+    int bbatt_delta;
+    int rfatt_delta;
 
-	/* LocalOscillator control values. */
-	struct b43_txpower_lo_control *lo_control;
-	/* Values from b43_calc_loopback_gain() */
-	s16 max_lb_gain;	/* Maximum Loopback gain in hdB */
-	s16 trsw_rx_gain;	/* TRSW RX gain in hdB */
-	s16 lna_lod_gain;	/* LNA lod */
-	s16 lna_gain;		/* LNA */
-	s16 pga_gain;		/* PGA */
+    /* LocalOscillator control values. */
+    struct b43_txpower_lo_control *lo_control;
+    /* Values from b43_calc_loopback_gain() */
+    s16 max_lb_gain;	/* Maximum Loopback gain in hdB */
+    s16 trsw_rx_gain;	/* TRSW RX gain in hdB */
+    s16 lna_lod_gain;	/* LNA lod */
+    s16 lna_gain;		/* LNA */
+    s16 pga_gain;		/* PGA */
 
-	/* Current Interference Mitigation mode */
-	int interfmode;
-	/* Stack of saved values from the Interference Mitigation code.
-	 * Each value in the stack is laid out as follows:
-	 * bit 0-11:  offset
-	 * bit 12-15: register ID
-	 * bit 16-32: value
-	 * register ID is: 0x1 PHY, 0x2 Radio, 0x3 ILT
-	 */
+    /* Current Interference Mitigation mode */
+    int interfmode;
+    /* Stack of saved values from the Interference Mitigation code.
+     * Each value in the stack is laid out as follows:
+     * bit 0-11:  offset
+     * bit 12-15: register ID
+     * bit 16-32: value
+     * register ID is: 0x1 PHY, 0x2 Radio, 0x3 ILT
+     */
 #define B43_INTERFSTACK_SIZE	26
-	u32 interfstack[B43_INTERFSTACK_SIZE];	//FIXME: use a data structure
+    u32 interfstack[B43_INTERFSTACK_SIZE];	//FIXME: use a data structure
 
-	/* Saved values from the NRSSI Slope calculation */
-	s16 nrssi[2];
-	s32 nrssislope;
-	/* In memory nrssi lookup table. */
-	s8 nrssi_lt[64];
+    /* Saved values from the NRSSI Slope calculation */
+    s16 nrssi[2];
+    s32 nrssislope;
+    /* In memory nrssi lookup table. */
+    s8 nrssi_lt[64];
 
-	u16 lofcal;
+    u16 lofcal;
 
-	u16 initval;		//FIXME rename?
+    u16 initval;		//FIXME rename?
 
-	/* The device does address auto increment for the OFDM tables.
-	 * We cache the previously used address here and omit the address
-	 * write on the next table access, if possible. */
-	u16 ofdmtab_addr; /* The address currently set in hardware. */
-	enum { /* The last data flow direction. */
-		B43_OFDMTAB_DIRECTION_UNKNOWN = 0,
-		B43_OFDMTAB_DIRECTION_READ,
-		B43_OFDMTAB_DIRECTION_WRITE,
-	} ofdmtab_addr_direction;
+    /* The device does address auto increment for the OFDM tables.
+     * We cache the previously used address here and omit the address
+     * write on the next table access, if possible. */
+    u16 ofdmtab_addr; /* The address currently set in hardware. */
+    enum { /* The last data flow direction. */
+        B43_OFDMTAB_DIRECTION_UNKNOWN = 0,
+        B43_OFDMTAB_DIRECTION_READ,
+        B43_OFDMTAB_DIRECTION_WRITE,
+    } ofdmtab_addr_direction;
 };
 
 void b43_gphy_set_baseband_attenuation(struct b43_wldev *dev,
-				       u16 baseband_attenuation);
+                                       u16 baseband_attenuation);
 void b43_gphy_channel_switch(struct b43_wldev *dev,
-			     unsigned int channel,
-			     bool synthetic_pu_workaround);
+                             unsigned int channel,
+                             bool synthetic_pu_workaround);
 u8 * b43_generate_dyn_tssi2dbm_tab(struct b43_wldev *dev,
-				   s16 pab0, s16 pab1, s16 pab2);
+                                   s16 pab0, s16 pab1, s16 pab2);
 
 struct b43_phy_operations;
 extern const struct b43_phy_operations b43_phyops_g;

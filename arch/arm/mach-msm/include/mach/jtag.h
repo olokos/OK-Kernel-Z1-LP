@@ -20,7 +20,9 @@ extern bool msm_jtag_fuse_apps_access_disabled(void);
 #else
 static inline void msm_jtag_save_state(void) {}
 static inline void msm_jtag_restore_state(void) {}
-static inline bool msm_jtag_fuse_apps_access_disabled(void) { return false; }
+static inline bool msm_jtag_fuse_apps_access_disabled(void) {
+    return false;
+}
 #endif
 
 #endif

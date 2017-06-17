@@ -28,7 +28,7 @@
 #define R852_CTL_COMMAND 	0x01	/* send command (#CLE)*/
 #define R852_CTL_DATA		0x02	/* read/write data (#ALE)*/
 #define R852_CTL_ON		0x04	/* only seem to controls the hd led, */
-					/* but has to be set on start...*/
+/* but has to be set on start...*/
 #define R852_CTL_RESET		0x08	/* unknown, set only on start once*/
 #define R852_CTL_CARDENABLE	0x10	/* probably (#CE) - always set*/
 #define R852_CTL_ECC_ENABLE	0x20	/* enable ecc engine */
@@ -66,7 +66,7 @@
 /* dma capabilities */
 #define R852_DMA_CAP		0x09
 #define R852_SMBIT		0x20	/* if set with bit #6 or bit #7, then */
-					/* hw is smartmedia */
+/* hw is smartmedia */
 #define R852_DMA1		0x40	/* if set w/bit #7, dma is supported */
 #define R852_DMA2		0x80	/* if set w/bit #6, dma is supported */
 
@@ -107,42 +107,42 @@
 #define DMA_MEMORY	1
 
 struct r852_device {
-	void __iomem *mmio;		/* mmio */
-	struct mtd_info *mtd;		/* mtd backpointer */
-	struct nand_chip *chip;		/* nand chip backpointer */
-	struct pci_dev *pci_dev;	/* pci backpointer */
+    void __iomem *mmio;		/* mmio */
+    struct mtd_info *mtd;		/* mtd backpointer */
+    struct nand_chip *chip;		/* nand chip backpointer */
+    struct pci_dev *pci_dev;	/* pci backpointer */
 
-	/* dma area */
-	dma_addr_t phys_dma_addr;	/* bus address of buffer*/
-	struct completion dma_done;	/* data transfer done */
+    /* dma area */
+    dma_addr_t phys_dma_addr;	/* bus address of buffer*/
+    struct completion dma_done;	/* data transfer done */
 
-	dma_addr_t phys_bounce_buffer;	/* bus address of bounce buffer */
-	uint8_t *bounce_buffer;		/* virtual address of bounce buffer */
+    dma_addr_t phys_bounce_buffer;	/* bus address of bounce buffer */
+    uint8_t *bounce_buffer;		/* virtual address of bounce buffer */
 
-	int dma_dir;			/* 1 = read, 0 = write */
-	int dma_stage;			/* 0 - idle, 1 - first step,
+    int dma_dir;			/* 1 = read, 0 = write */
+    int dma_stage;			/* 0 - idle, 1 - first step,
 					   2 - second step */
 
-	int dma_state;			/* 0 = internal, 1 = memory */
-	int dma_error;			/* dma errors */
-	int dma_usable;			/* is it possible to use dma */
+    int dma_state;			/* 0 = internal, 1 = memory */
+    int dma_error;			/* dma errors */
+    int dma_usable;			/* is it possible to use dma */
 
-	/* card status area */
-	struct delayed_work card_detect_work;
-	struct workqueue_struct *card_workqueue;
-	int card_registred;		/* card registered with mtd */
-	int card_detected;		/* card detected in slot */
-	int card_unstable;		/* whenever the card is inserted,
+    /* card status area */
+    struct delayed_work card_detect_work;
+    struct workqueue_struct *card_workqueue;
+    int card_registred;		/* card registered with mtd */
+    int card_detected;		/* card detected in slot */
+    int card_unstable;		/* whenever the card is inserted,
 					   is not known yet */
-	int readonly;			/* card is readonly */
-	int sm;				/* Is card smartmedia */
+    int readonly;			/* card is readonly */
+    int sm;				/* Is card smartmedia */
 
-	/* interrupt handling */
-	spinlock_t irqlock;		/* IRQ protecting lock */
-	int irq;			/* irq num */
-	/* misc */
-	void *tmp_buffer;		/* temporary buffer */
-	uint8_t ctlreg;			/* cached contents of control reg */
+    /* interrupt handling */
+    spinlock_t irqlock;		/* IRQ protecting lock */
+    int irq;			/* irq num */
+    /* misc */
+    void *tmp_buffer;		/* temporary buffer */
+    uint8_t ctlreg;			/* cached contents of control reg */
 };
 
 #define DRV_NAME "r852"

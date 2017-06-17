@@ -54,40 +54,39 @@
 /*
  * Get MMU context if needed.
  */
-static inline void get_mmu_context(struct mm_struct *mm, unsigned int cpu)
-{
-	unsigned long asid = asid_cache(cpu);
+static inline void get_mmu_context(struct mm_struct *mm, unsigned int cpu) {
+    unsigned long asid = asid_cache(cpu);
 
-	/* Check if we have old version of context. */
-	if (((cpu_context(cpu, mm) ^ asid) & MMU_CONTEXT_VERSION_MASK) == 0)
-		/* It's up to date, do nothing */
-		return;
+    /* Check if we have old version of context. */
+    if (((cpu_context(cpu, mm) ^ asid) & MMU_CONTEXT_VERSION_MASK) == 0)
+        /* It's up to date, do nothing */
+        return;
 
-	/* It's old, we need to get new context with new version. */
-	if (!(++asid & MMU_CONTEXT_ASID_MASK)) {
-		/*
-		 * We exhaust ASID of this version.
-		 * Flush all TLB and start new cycle.
-		 */
-		local_flush_tlb_all();
+    /* It's old, we need to get new context with new version. */
+    if (!(++asid & MMU_CONTEXT_ASID_MASK)) {
+        /*
+         * We exhaust ASID of this version.
+         * Flush all TLB and start new cycle.
+         */
+        local_flush_tlb_all();
 
 #ifdef CONFIG_SUPERH64
-		/*
-		 * The SH-5 cache uses the ASIDs, requiring both the I and D
-		 * cache to be flushed when the ASID is exhausted. Weak.
-		 */
-		flush_cache_all();
+        /*
+         * The SH-5 cache uses the ASIDs, requiring both the I and D
+         * cache to be flushed when the ASID is exhausted. Weak.
+         */
+        flush_cache_all();
 #endif
 
-		/*
-		 * Fix version; Note that we avoid version #0
-		 * to distingush NO_CONTEXT.
-		 */
-		if (!asid)
-			asid = MMU_CONTEXT_FIRST_VERSION;
-	}
+        /*
+         * Fix version; Note that we avoid version #0
+         * to distingush NO_CONTEXT.
+         */
+        if (!asid)
+            asid = MMU_CONTEXT_FIRST_VERSION;
+    }
 
-	cpu_context(cpu, mm) = asid_cache(cpu) = asid;
+    cpu_context(cpu, mm) = asid_cache(cpu) = asid;
 }
 
 /*
@@ -95,39 +94,35 @@ static inline void get_mmu_context(struct mm_struct *mm, unsigned int cpu)
  * instance.
  */
 static inline int init_new_context(struct task_struct *tsk,
-				   struct mm_struct *mm)
-{
-	int i;
+                                   struct mm_struct *mm) {
+    int i;
 
-	for (i = 0; i < num_online_cpus(); i++)
-		cpu_context(i, mm) = NO_CONTEXT;
+    for (i = 0; i < num_online_cpus(); i++)
+        cpu_context(i, mm) = NO_CONTEXT;
 
-	return 0;
+    return 0;
 }
 
 /*
  * After we have set current->mm to a new value, this activates
  * the context for the new mm so we see the new mappings.
  */
-static inline void activate_context(struct mm_struct *mm, unsigned int cpu)
-{
-	get_mmu_context(mm, cpu);
-	set_asid(cpu_asid(cpu, mm));
+static inline void activate_context(struct mm_struct *mm, unsigned int cpu) {
+    get_mmu_context(mm, cpu);
+    set_asid(cpu_asid(cpu, mm));
 }
 
 static inline void switch_mm(struct mm_struct *prev,
-			     struct mm_struct *next,
-			     struct task_struct *tsk)
-{
-	unsigned int cpu = smp_processor_id();
+                             struct mm_struct *next,
+                             struct task_struct *tsk) {
+    unsigned int cpu = smp_processor_id();
 
-	if (likely(prev != next)) {
-		cpumask_set_cpu(cpu, mm_cpumask(next));
-		set_TTB(next->pgd);
-		activate_context(next, cpu);
-	} else
-		if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next)))
-			activate_context(next, cpu);
+    if (likely(prev != next)) {
+        cpumask_set_cpu(cpu, mm_cpumask(next));
+        set_TTB(next->pgd);
+        activate_context(next, cpu);
+    } else if (!cpumask_test_and_set_cpu(cpu, mm_cpumask(next)))
+        activate_context(next, cpu);
 }
 
 #define activate_mm(prev, next)		switch_mm((prev),(next),NULL)
@@ -153,29 +148,27 @@ static inline void switch_mm(struct mm_struct *prev,
  * paging_init() will also have to be updated for the processor in
  * question.
  */
-static inline void enable_mmu(void)
-{
-	unsigned int cpu = smp_processor_id();
+static inline void enable_mmu(void) {
+    unsigned int cpu = smp_processor_id();
 
-	/* Enable MMU */
-	__raw_writel(MMU_CONTROL_INIT, MMUCR);
-	ctrl_barrier();
+    /* Enable MMU */
+    __raw_writel(MMU_CONTROL_INIT, MMUCR);
+    ctrl_barrier();
 
-	if (asid_cache(cpu) == NO_CONTEXT)
-		asid_cache(cpu) = MMU_CONTEXT_FIRST_VERSION;
+    if (asid_cache(cpu) == NO_CONTEXT)
+        asid_cache(cpu) = MMU_CONTEXT_FIRST_VERSION;
 
-	set_asid(asid_cache(cpu) & MMU_CONTEXT_ASID_MASK);
+    set_asid(asid_cache(cpu) & MMU_CONTEXT_ASID_MASK);
 }
 
-static inline void disable_mmu(void)
-{
-	unsigned long cr;
+static inline void disable_mmu(void) {
+    unsigned long cr;
 
-	cr = __raw_readl(MMUCR);
-	cr &= ~MMU_CONTROL_INIT;
-	__raw_writel(cr, MMUCR);
+    cr = __raw_readl(MMUCR);
+    cr &= ~MMU_CONTROL_INIT;
+    __raw_writel(cr, MMUCR);
 
-	ctrl_barrier();
+    ctrl_barrier();
 }
 #else
 /*

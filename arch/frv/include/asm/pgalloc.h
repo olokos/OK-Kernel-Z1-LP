@@ -38,15 +38,13 @@ extern pte_t *pte_alloc_one_kernel(struct mm_struct *, unsigned long);
 
 extern pgtable_t pte_alloc_one(struct mm_struct *, unsigned long);
 
-static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	free_page((unsigned long)pte);
+static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    free_page((unsigned long)pte);
 }
 
-static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
-{
-	pgtable_page_dtor(pte);
-	__free_page(pte);
+static inline void pte_free(struct mm_struct *mm, pgtable_t pte) {
+    pgtable_page_dtor(pte);
+    __free_page(pte);
 }
 
 #define __pte_free_tlb(tlb,pte,address)			\

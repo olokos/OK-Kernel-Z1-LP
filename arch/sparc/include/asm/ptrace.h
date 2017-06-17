@@ -19,73 +19,73 @@
 #include <linux/types.h>
 
 struct pt_regs {
-	unsigned long u_regs[16]; /* globals and ins */
-	unsigned long tstate;
-	unsigned long tpc;
-	unsigned long tnpc;
-	unsigned int y;
+    unsigned long u_regs[16]; /* globals and ins */
+    unsigned long tstate;
+    unsigned long tpc;
+    unsigned long tnpc;
+    unsigned int y;
 
-	/* We encode a magic number, PT_REGS_MAGIC, along
-	 * with the %tt (trap type) register value at trap
-	 * entry time.  The magic number allows us to identify
-	 * accurately a trap stack frame in the stack
-	 * unwinder, and the %tt value allows us to test
-	 * things like "in a system call" etc. for an arbitray
-	 * process.
-	 *
-	 * The PT_REGS_MAGIC is chosen such that it can be
-	 * loaded completely using just a sethi instruction.
-	 */
-	unsigned int magic;
+    /* We encode a magic number, PT_REGS_MAGIC, along
+     * with the %tt (trap type) register value at trap
+     * entry time.  The magic number allows us to identify
+     * accurately a trap stack frame in the stack
+     * unwinder, and the %tt value allows us to test
+     * things like "in a system call" etc. for an arbitray
+     * process.
+     *
+     * The PT_REGS_MAGIC is chosen such that it can be
+     * loaded completely using just a sethi instruction.
+     */
+    unsigned int magic;
 };
 
 struct pt_regs32 {
-	unsigned int psr;
-	unsigned int pc;
-	unsigned int npc;
-	unsigned int y;
-	unsigned int u_regs[16]; /* globals and ins */
+    unsigned int psr;
+    unsigned int pc;
+    unsigned int npc;
+    unsigned int y;
+    unsigned int u_regs[16]; /* globals and ins */
 };
 
 /* A V9 register window */
 struct reg_window {
-	unsigned long locals[8];
-	unsigned long ins[8];
+    unsigned long locals[8];
+    unsigned long ins[8];
 };
 
 /* A 32-bit register window. */
 struct reg_window32 {
-	unsigned int locals[8];
-	unsigned int ins[8];
+    unsigned int locals[8];
+    unsigned int ins[8];
 };
 
 /* A V9 Sparc stack frame */
 struct sparc_stackf {
-	unsigned long locals[8];
-        unsigned long ins[6];
-	struct sparc_stackf *fp;
-	unsigned long callers_pc;
-	char *structptr;
-	unsigned long xargs[6];
-	unsigned long xxargs[1];
+    unsigned long locals[8];
+    unsigned long ins[6];
+    struct sparc_stackf *fp;
+    unsigned long callers_pc;
+    char *structptr;
+    unsigned long xargs[6];
+    unsigned long xxargs[1];
 };
 
 /* A 32-bit Sparc stack frame */
 struct sparc_stackf32 {
-	unsigned int locals[8];
-        unsigned int ins[6];
-	unsigned int fp;
-	unsigned int callers_pc;
-	unsigned int structptr;
-	unsigned int xargs[6];
-	unsigned int xxargs[1];
+    unsigned int locals[8];
+    unsigned int ins[6];
+    unsigned int fp;
+    unsigned int callers_pc;
+    unsigned int structptr;
+    unsigned int xargs[6];
+    unsigned int xxargs[1];
 };
 
 struct sparc_trapf {
-	unsigned long locals[8];
-	unsigned long ins[8];
-	unsigned long _unused;
-	struct pt_regs *regs;
+    unsigned long locals[8];
+    unsigned long ins[8];
+    unsigned long _unused;
+    struct pt_regs *regs;
 };
 #endif /* (!__ASSEMBLY__) */
 #else
@@ -101,28 +101,28 @@ struct sparc_trapf {
 #include <linux/types.h>
 
 struct pt_regs {
-	unsigned long psr;
-	unsigned long pc;
-	unsigned long npc;
-	unsigned long y;
-	unsigned long u_regs[16]; /* globals and ins */
+    unsigned long psr;
+    unsigned long pc;
+    unsigned long npc;
+    unsigned long y;
+    unsigned long u_regs[16]; /* globals and ins */
 };
 
 /* A 32-bit register window. */
 struct reg_window32 {
-	unsigned long locals[8];
-	unsigned long ins[8];
+    unsigned long locals[8];
+    unsigned long ins[8];
 };
 
 /* A Sparc stack frame */
 struct sparc_stackf {
-	unsigned long locals[8];
-        unsigned long ins[6];
-	struct sparc_stackf *fp;
-	unsigned long callers_pc;
-	char *structptr;
-	unsigned long xargs[6];
-	unsigned long xxargs[1];
+    unsigned long locals[8];
+    unsigned long ins[6];
+    struct sparc_stackf *fp;
+    unsigned long callers_pc;
+    char *structptr;
+    unsigned long xargs[6];
+    unsigned long xxargs[1];
 };
 #endif /* (!__ASSEMBLY__) */
 
@@ -167,19 +167,16 @@ struct sparc_stackf {
 #include <linux/threads.h>
 #include <asm/switch_to.h>
 
-static inline int pt_regs_trap_type(struct pt_regs *regs)
-{
-	return regs->magic & 0x1ff;
+static inline int pt_regs_trap_type(struct pt_regs *regs) {
+    return regs->magic & 0x1ff;
 }
 
-static inline bool pt_regs_is_syscall(struct pt_regs *regs)
-{
-	return (regs->tstate & TSTATE_SYSCALL);
+static inline bool pt_regs_is_syscall(struct pt_regs *regs) {
+    return (regs->tstate & TSTATE_SYSCALL);
 }
 
-static inline bool pt_regs_clear_syscall(struct pt_regs *regs)
-{
-	return (regs->tstate &= ~TSTATE_SYSCALL);
+static inline bool pt_regs_clear_syscall(struct pt_regs *regs) {
+    return (regs->tstate &= ~TSTATE_SYSCALL);
 }
 
 #define arch_ptrace_stop_needed(exit_code, info) \
@@ -191,14 +188,14 @@ static inline bool pt_regs_clear_syscall(struct pt_regs *regs)
 	synchronize_user_stack()
 
 struct global_reg_snapshot {
-	unsigned long		tstate;
-	unsigned long		tpc;
-	unsigned long		tnpc;
-	unsigned long		o7;
-	unsigned long		i7;
-	unsigned long		rpc;
-	struct thread_info	*thread;
-	unsigned long		pad1;
+    unsigned long		tstate;
+    unsigned long		tpc;
+    unsigned long		tnpc;
+    unsigned long		o7;
+    unsigned long		i7;
+    unsigned long		rpc;
+    struct thread_info	*thread;
+    unsigned long		pad1;
 };
 extern struct global_reg_snapshot global_reg_snapshot[NR_CPUS];
 
@@ -209,14 +206,12 @@ do {	current_thread_info()->syscall_noerror = 1; \
 #define instruction_pointer(regs) ((regs)->tpc)
 #define instruction_pointer_set(regs, val) ((regs)->tpc = (val))
 #define user_stack_pointer(regs) ((regs)->u_regs[UREG_FP])
-static inline int is_syscall_success(struct pt_regs *regs)
-{
-	return !(regs->tstate & (TSTATE_XCARRY | TSTATE_ICARRY));
+static inline int is_syscall_success(struct pt_regs *regs) {
+    return !(regs->tstate & (TSTATE_XCARRY | TSTATE_ICARRY));
 }
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	return regs->u_regs[UREG_I0];
+static inline long regs_return_value(struct pt_regs *regs) {
+    return regs->u_regs[UREG_I0];
 }
 #ifdef CONFIG_SMP
 extern unsigned long profile_pc(struct pt_regs *);
@@ -243,14 +238,12 @@ extern unsigned long profile_pc(struct pt_regs *);
 #ifdef __KERNEL__
 #include <asm/switch_to.h>
 
-static inline bool pt_regs_is_syscall(struct pt_regs *regs)
-{
-	return (regs->psr & PSR_SYSCALL);
+static inline bool pt_regs_is_syscall(struct pt_regs *regs) {
+    return (regs->psr & PSR_SYSCALL);
 }
 
-static inline bool pt_regs_clear_syscall(struct pt_regs *regs)
-{
-	return (regs->psr &= ~PSR_SYSCALL);
+static inline bool pt_regs_clear_syscall(struct pt_regs *regs) {
+    return (regs->psr &= ~PSR_SYSCALL);
 }
 
 #define arch_ptrace_stop_needed(exit_code, info) \

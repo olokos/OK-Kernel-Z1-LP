@@ -166,73 +166,67 @@ void ne2000_outsw(unsigned int addr, void *vbuf, unsigned long len);
 #define	NE2000_DATA_PTR(addr)	(addr)
 
 
-void ne2000_outb(unsigned int val, unsigned int addr)
-{
-	NE2000_BYTE	*rp;
+void ne2000_outb(unsigned int val, unsigned int addr) {
+    NE2000_BYTE	*rp;
 
-	rp = (NE2000_BYTE *) NE2000_PTR(addr);
-	*rp = RSWAP(val);
+    rp = (NE2000_BYTE *) NE2000_PTR(addr);
+    *rp = RSWAP(val);
 }
 
-int ne2000_inb(unsigned int addr)
-{
-	NE2000_BYTE	*rp, val;
+int ne2000_inb(unsigned int addr) {
+    NE2000_BYTE	*rp, val;
 
-	rp = (NE2000_BYTE *) NE2000_PTR(addr);
-	val = *rp;
-	return((int) ((NE2000_BYTE) RSWAP(val)));
+    rp = (NE2000_BYTE *) NE2000_PTR(addr);
+    val = *rp;
+    return((int) ((NE2000_BYTE) RSWAP(val)));
 }
 
-void ne2000_insb(unsigned int addr, void *vbuf, int unsigned long len)
-{
-	NE2000_BYTE	*rp, val;
-	unsigned char	*buf;
+void ne2000_insb(unsigned int addr, void *vbuf, int unsigned long len) {
+    NE2000_BYTE	*rp, val;
+    unsigned char	*buf;
 
-	buf = (unsigned char *) vbuf;
-	rp = (NE2000_BYTE *) NE2000_DATA_PTR(addr);
-	for (; (len > 0); len--) {
-		val = *rp;
-		*buf++ = RSWAP(val);
-	}
+    buf = (unsigned char *) vbuf;
+    rp = (NE2000_BYTE *) NE2000_DATA_PTR(addr);
+    for (; (len > 0); len--) {
+        val = *rp;
+        *buf++ = RSWAP(val);
+    }
 }
 
-void ne2000_insw(unsigned int addr, void *vbuf, unsigned long len)
-{
-	volatile unsigned short	*rp;
-	unsigned short		w, *buf;
+void ne2000_insw(unsigned int addr, void *vbuf, unsigned long len) {
+    volatile unsigned short	*rp;
+    unsigned short		w, *buf;
 
-	buf = (unsigned short *) vbuf;
-	rp = (volatile unsigned short *) NE2000_DATA_PTR(addr);
-	for (; (len > 0); len--) {
-		w = *rp;
-		*buf++ = BSWAP(w);
-	}
+    buf = (unsigned short *) vbuf;
+    rp = (volatile unsigned short *) NE2000_DATA_PTR(addr);
+    for (; (len > 0); len--) {
+        w = *rp;
+        *buf++ = BSWAP(w);
+    }
 }
 
-void ne2000_outsb(unsigned int addr, const void *vbuf, unsigned long len)
-{
-	NE2000_BYTE	*rp, val;
-	unsigned char	*buf;
+void ne2000_outsb(unsigned int addr, const void *vbuf, unsigned long len) {
+    NE2000_BYTE	*rp, val;
+    unsigned char	*buf;
 
-	buf = (unsigned char *) vbuf;
-	rp = (NE2000_BYTE *) NE2000_DATA_PTR(addr);
-	for (; (len > 0); len--) {
-		val = *buf++;
-		*rp = RSWAP(val);
-	}
+    buf = (unsigned char *) vbuf;
+    rp = (NE2000_BYTE *) NE2000_DATA_PTR(addr);
+    for (; (len > 0); len--) {
+        val = *buf++;
+        *rp = RSWAP(val);
+    }
 }
 
-void ne2000_outsw(unsigned int addr, const void *vbuf, unsigned long len)
-{
-	volatile unsigned short	*rp;
-	unsigned short		w, *buf;
+void ne2000_outsw(unsigned int addr, const void *vbuf, unsigned long len) {
+    volatile unsigned short	*rp;
+    unsigned short		w, *buf;
 
-	buf = (unsigned short *) vbuf;
-	rp = (volatile unsigned short *) NE2000_DATA_PTR(addr);
-	for (; (len > 0); len--) {
-		w = *buf++;
-		*rp = BSWAP(w);
-	}
+    buf = (unsigned short *) vbuf;
+    rp = (volatile unsigned short *) NE2000_DATA_PTR(addr);
+    for (; (len > 0); len--) {
+        w = *buf++;
+        *rp = BSWAP(w);
+    }
 }
 
 #endif /* COLDFIRE_NE2000_FUNCS */

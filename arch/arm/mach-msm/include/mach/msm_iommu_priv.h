@@ -20,8 +20,8 @@
  * redirect: Set to 1 if L2 redirect for page tables are enabled, 0 otherwise.
  */
 struct msm_iommu_pt {
-	unsigned long *fl_table;
-	int redirect;
+    unsigned long *fl_table;
+    int redirect;
 };
 
 /**
@@ -33,9 +33,9 @@ struct msm_iommu_pt {
  * client_name: Name of the domain client.
  */
 struct msm_iommu_priv {
-	struct msm_iommu_pt pt;
-	struct list_head list_attached;
-	const char *client_name;
+    struct msm_iommu_pt pt;
+    struct list_head list_attached;
+    const char *client_name;
 };
 
 #endif

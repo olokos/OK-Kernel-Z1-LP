@@ -24,27 +24,24 @@
 #define smp_send_stop()
 #endif
 
-void machine_halt(void)
-{
-	warn_early_printk();
-	arch_local_irq_disable_all();
-	smp_send_stop();
-	hv_halt();
+void machine_halt(void) {
+    warn_early_printk();
+    arch_local_irq_disable_all();
+    smp_send_stop();
+    hv_halt();
 }
 
-void machine_power_off(void)
-{
-	warn_early_printk();
-	arch_local_irq_disable_all();
-	smp_send_stop();
-	hv_power_off();
+void machine_power_off(void) {
+    warn_early_printk();
+    arch_local_irq_disable_all();
+    smp_send_stop();
+    hv_power_off();
 }
 
-void machine_restart(char *cmd)
-{
-	arch_local_irq_disable_all();
-	smp_send_stop();
-	hv_restart((HV_VirtAddr) "vmlinux", (HV_VirtAddr) cmd);
+void machine_restart(char *cmd) {
+    arch_local_irq_disable_all();
+    smp_send_stop();
+    hv_restart((HV_VirtAddr) "vmlinux", (HV_VirtAddr) cmd);
 }
 
 /* No interesting distinction to be made here. */

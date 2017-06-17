@@ -61,50 +61,50 @@ do { \
 #define TAPEBLOCK_RETRIES	5
 
 enum tape_medium_state {
-	MS_UNKNOWN,
-	MS_LOADED,
-	MS_UNLOADED,
-	MS_SIZE
+    MS_UNKNOWN,
+    MS_LOADED,
+    MS_UNLOADED,
+    MS_SIZE
 };
 
 enum tape_state {
-	TS_UNUSED=0,
-	TS_IN_USE,
-	TS_BLKUSE,
-	TS_INIT,
-	TS_NOT_OPER,
-	TS_SIZE
+    TS_UNUSED=0,
+    TS_IN_USE,
+    TS_BLKUSE,
+    TS_INIT,
+    TS_NOT_OPER,
+    TS_SIZE
 };
 
 enum tape_op {
-	TO_BLOCK,	/* Block read */
-	TO_BSB,		/* Backward space block */
-	TO_BSF,		/* Backward space filemark */
-	TO_DSE,		/* Data security erase */
-	TO_FSB,		/* Forward space block */
-	TO_FSF,		/* Forward space filemark */
-	TO_LBL,		/* Locate block label */
-	TO_NOP,		/* No operation */
-	TO_RBA,		/* Read backward */
-	TO_RBI,		/* Read block information */
-	TO_RFO,		/* Read forward */
-	TO_REW,		/* Rewind tape */
-	TO_RUN,		/* Rewind and unload tape */
-	TO_WRI,		/* Write block */
-	TO_WTM,		/* Write tape mark */
-	TO_MSEN,	/* Medium sense */
-	TO_LOAD,	/* Load tape */
-	TO_READ_CONFIG, /* Read configuration data */
-	TO_READ_ATTMSG, /* Read attention message */
-	TO_DIS,		/* Tape display */
-	TO_ASSIGN,	/* Assign tape to channel path */
-	TO_UNASSIGN,	/* Unassign tape from channel path */
-	TO_CRYPT_ON,	/* Enable encrpytion */
-	TO_CRYPT_OFF,	/* Disable encrpytion */
-	TO_KEKL_SET,	/* Set KEK label */
-	TO_KEKL_QUERY,	/* Query KEK label */
-	TO_RDC,		/* Read device characteristics */
-	TO_SIZE,	/* #entries in tape_op_t */
+    TO_BLOCK,	/* Block read */
+    TO_BSB,		/* Backward space block */
+    TO_BSF,		/* Backward space filemark */
+    TO_DSE,		/* Data security erase */
+    TO_FSB,		/* Forward space block */
+    TO_FSF,		/* Forward space filemark */
+    TO_LBL,		/* Locate block label */
+    TO_NOP,		/* No operation */
+    TO_RBA,		/* Read backward */
+    TO_RBI,		/* Read block information */
+    TO_RFO,		/* Read forward */
+    TO_REW,		/* Rewind tape */
+    TO_RUN,		/* Rewind and unload tape */
+    TO_WRI,		/* Write block */
+    TO_WTM,		/* Write tape mark */
+    TO_MSEN,	/* Medium sense */
+    TO_LOAD,	/* Load tape */
+    TO_READ_CONFIG, /* Read configuration data */
+    TO_READ_ATTMSG, /* Read attention message */
+    TO_DIS,		/* Tape display */
+    TO_ASSIGN,	/* Assign tape to channel path */
+    TO_UNASSIGN,	/* Unassign tape from channel path */
+    TO_CRYPT_ON,	/* Enable encrpytion */
+    TO_CRYPT_OFF,	/* Disable encrpytion */
+    TO_KEKL_SET,	/* Set KEK label */
+    TO_KEKL_QUERY,	/* Query KEK label */
+    TO_RDC,		/* Read device characteristics */
+    TO_SIZE,	/* #entries in tape_op_t */
 };
 
 /* Forward declaration */
@@ -112,31 +112,31 @@ struct tape_device;
 
 /* tape_request->status can be: */
 enum tape_request_status {
-	TAPE_REQUEST_INIT,	/* request is ready to be processed */
-	TAPE_REQUEST_QUEUED,	/* request is queued to be processed */
-	TAPE_REQUEST_IN_IO,	/* request is currently in IO */
-	TAPE_REQUEST_DONE,	/* request is completed. */
-	TAPE_REQUEST_CANCEL,	/* request should be canceled. */
-	TAPE_REQUEST_LONG_BUSY, /* request has to be restarted after long busy */
+    TAPE_REQUEST_INIT,	/* request is ready to be processed */
+    TAPE_REQUEST_QUEUED,	/* request is queued to be processed */
+    TAPE_REQUEST_IN_IO,	/* request is currently in IO */
+    TAPE_REQUEST_DONE,	/* request is completed. */
+    TAPE_REQUEST_CANCEL,	/* request should be canceled. */
+    TAPE_REQUEST_LONG_BUSY, /* request has to be restarted after long busy */
 };
 
 /* Tape CCW request */
 struct tape_request {
-	struct list_head list;		/* list head for request queueing. */
-	struct tape_device *device;	/* tape device of this request */
-	struct ccw1 *cpaddr;		/* address of the channel program. */
-	void *cpdata;			/* pointer to ccw data. */
-	enum tape_request_status status;/* status of this request */
-	int options;			/* options for execution. */
-	int retries;			/* retry counter for error recovery. */
-	int rescnt;			/* residual count from devstat. */
+    struct list_head list;		/* list head for request queueing. */
+    struct tape_device *device;	/* tape device of this request */
+    struct ccw1 *cpaddr;		/* address of the channel program. */
+    void *cpdata;			/* pointer to ccw data. */
+    enum tape_request_status status;/* status of this request */
+    int options;			/* options for execution. */
+    int retries;			/* retry counter for error recovery. */
+    int rescnt;			/* residual count from devstat. */
 
-	/* Callback for delivering final status. */
-	void (*callback)(struct tape_request *, void *);
-	void *callback_data;
+    /* Callback for delivering final status. */
+    void (*callback)(struct tape_request *, void *);
+    void *callback_data;
 
-	enum tape_op op;
-	int rc;
+    enum tape_op op;
+    int rc;
 };
 
 /* Function type for magnetic tape commands */
@@ -147,23 +147,23 @@ typedef int (*tape_mtop_fn)(struct tape_device *, int);
 
 /* Tape Discipline */
 struct tape_discipline {
-	struct module *owner;
-	int  (*setup_device)(struct tape_device *);
-	void (*cleanup_device)(struct tape_device *);
-	int (*irq)(struct tape_device *, struct tape_request *, struct irb *);
-	struct tape_request *(*read_block)(struct tape_device *, size_t);
-	struct tape_request *(*write_block)(struct tape_device *, size_t);
-	void (*process_eov)(struct tape_device*);
+    struct module *owner;
+    int  (*setup_device)(struct tape_device *);
+    void (*cleanup_device)(struct tape_device *);
+    int (*irq)(struct tape_device *, struct tape_request *, struct irb *);
+    struct tape_request *(*read_block)(struct tape_device *, size_t);
+    struct tape_request *(*write_block)(struct tape_device *, size_t);
+    void (*process_eov)(struct tape_device*);
 #ifdef CONFIG_S390_TAPE_BLOCK
-	/* Block device stuff. */
-	struct tape_request *(*bread)(struct tape_device *, struct request *);
-	void (*check_locate)(struct tape_device *, struct tape_request *);
-	void (*free_bread)(struct tape_request *);
+    /* Block device stuff. */
+    struct tape_request *(*bread)(struct tape_device *, struct request *);
+    void (*check_locate)(struct tape_device *, struct tape_request *);
+    void (*free_bread)(struct tape_request *);
 #endif
-	/* ioctl function for additional ioctls. */
-	int (*ioctl_fn)(struct tape_device *, unsigned int, unsigned long);
-	/* Array of tape commands with TAPE_NR_MTOPS entries */
-	tape_mtop_fn *mtop_array;
+    /* ioctl function for additional ioctls. */
+    int (*ioctl_fn)(struct tape_device *, unsigned int, unsigned long);
+    /* Array of tape commands with TAPE_NR_MTOPS entries */
+    tape_mtop_fn *mtop_array;
 };
 
 /*
@@ -178,86 +178,85 @@ struct tape_discipline {
 
 /* Char Frontend Data */
 struct tape_char_data {
-	struct idal_buffer *idal_buf;	/* idal buffer for user char data */
-	int block_size;			/*   of size block_size. */
+    struct idal_buffer *idal_buf;	/* idal buffer for user char data */
+    int block_size;			/*   of size block_size. */
 };
 
 #ifdef CONFIG_S390_TAPE_BLOCK
 /* Block Frontend Data */
-struct tape_blk_data
-{
-	struct tape_device *	device;
-	/* Block device request queue. */
-	struct request_queue *	request_queue;
-	spinlock_t		request_queue_lock;
+struct tape_blk_data {
+    struct tape_device *	device;
+    /* Block device request queue. */
+    struct request_queue *	request_queue;
+    spinlock_t		request_queue_lock;
 
-	/* Task to move entries from block request to CCS request queue. */
-	struct work_struct	requeue_task;
-	atomic_t		requeue_scheduled;
+    /* Task to move entries from block request to CCS request queue. */
+    struct work_struct	requeue_task;
+    atomic_t		requeue_scheduled;
 
-	/* Current position on the tape. */
-	long			block_position;
-	int			medium_changed;
-	struct gendisk *	disk;
+    /* Current position on the tape. */
+    long			block_position;
+    int			medium_changed;
+    struct gendisk *	disk;
 };
 #endif
 
 /* Tape Info */
 struct tape_device {
-	/* entry in tape_device_list */
-	struct list_head		node;
+    /* entry in tape_device_list */
+    struct list_head		node;
 
-	int				cdev_id;
-	struct ccw_device *		cdev;
-	struct tape_class_device *	nt;
-	struct tape_class_device *	rt;
+    int				cdev_id;
+    struct ccw_device *		cdev;
+    struct tape_class_device *	nt;
+    struct tape_class_device *	rt;
 
-	/* Device mutex to serialize tape commands. */
-	struct mutex			mutex;
+    /* Device mutex to serialize tape commands. */
+    struct mutex			mutex;
 
-	/* Device discipline information. */
-	struct tape_discipline *	discipline;
-	void *				discdata;
+    /* Device discipline information. */
+    struct tape_discipline *	discipline;
+    void *				discdata;
 
-	/* Generic status flags */
-	long				tape_generic_status;
+    /* Generic status flags */
+    long				tape_generic_status;
 
-	/* Device state information. */
-	wait_queue_head_t		state_change_wq;
-	enum tape_state			tape_state;
-	enum tape_medium_state		medium_state;
-	unsigned char *			modeset_byte;
+    /* Device state information. */
+    wait_queue_head_t		state_change_wq;
+    enum tape_state			tape_state;
+    enum tape_medium_state		medium_state;
+    unsigned char *			modeset_byte;
 
-	/* Reference count. */
-	atomic_t			ref_count;
+    /* Reference count. */
+    atomic_t			ref_count;
 
-	/* Request queue. */
-	struct list_head		req_queue;
+    /* Request queue. */
+    struct list_head		req_queue;
 
-	/* Request wait queue. */
-	wait_queue_head_t		wait_queue;
+    /* Request wait queue. */
+    wait_queue_head_t		wait_queue;
 
-	/* Each tape device has (currently) two minor numbers. */
-	int				first_minor;
+    /* Each tape device has (currently) two minor numbers. */
+    int				first_minor;
 
-	/* Number of tapemarks required for correct termination. */
-	int				required_tapemarks;
+    /* Number of tapemarks required for correct termination. */
+    int				required_tapemarks;
 
-	/* Block ID of the BOF */
-	unsigned int			bof;
+    /* Block ID of the BOF */
+    unsigned int			bof;
 
-	/* Character device frontend data */
-	struct tape_char_data		char_data;
+    /* Character device frontend data */
+    struct tape_char_data		char_data;
 #ifdef CONFIG_S390_TAPE_BLOCK
-	/* Block dev frontend data */
-	struct tape_blk_data		blk_data;
+    /* Block dev frontend data */
+    struct tape_blk_data		blk_data;
 #endif
 
-	/* Function to start or stop the next request later. */
-	struct delayed_work		tape_dnr;
+    /* Function to start or stop the next request later. */
+    struct delayed_work		tape_dnr;
 
-	/* Timer for long busy */
-	struct timer_list		lb_timeout;
+    /* Timer for long busy */
+    struct timer_list		lb_timeout;
 
 };
 
@@ -271,21 +270,19 @@ extern int tape_cancel_io(struct tape_device *, struct tape_request *);
 void tape_hotplug_event(struct tape_device *, int major, int action);
 
 static inline int
-tape_do_io_free(struct tape_device *device, struct tape_request *request)
-{
-	int rc;
+tape_do_io_free(struct tape_device *device, struct tape_request *request) {
+    int rc;
 
-	rc = tape_do_io(device, request);
-	tape_free_request(request);
-	return rc;
+    rc = tape_do_io(device, request);
+    tape_free_request(request);
+    return rc;
 }
 
 static inline void
-tape_do_io_async_free(struct tape_device *device, struct tape_request *request)
-{
-	request->callback = (void *) tape_free_request;
-	request->callback_data = NULL;
-	tape_do_io_async(device, request);
+tape_do_io_async_free(struct tape_device *device, struct tape_request *request) {
+    request->callback = (void *) tape_free_request;
+    request->callback_data = NULL;
+    tape_do_io_async(device, request);
 }
 
 extern int tape_oper_handler(int irq, int status);
@@ -320,10 +317,18 @@ extern void tapeblock_exit(void);
 extern int tapeblock_setup_device(struct tape_device *);
 extern void tapeblock_cleanup_device(struct tape_device *);
 #else
-static inline int tapeblock_init (void) {return 0;}
-static inline void tapeblock_exit (void) {;}
-static inline int tapeblock_setup_device(struct tape_device *t) {return 0;}
-static inline void tapeblock_cleanup_device (struct tape_device *t) {;}
+static inline int tapeblock_init (void) {
+    return 0;
+}
+static inline void tapeblock_exit (void) {
+    ;
+}
+static inline int tapeblock_setup_device(struct tape_device *t) {
+    return 0;
+}
+static inline void tapeblock_cleanup_device (struct tape_device *t) {
+    ;
+}
 #endif
 
 /* tape initialisation functions */
@@ -331,13 +336,17 @@ static inline void tapeblock_cleanup_device (struct tape_device *t) {;}
 extern void tape_proc_init (void);
 extern void tape_proc_cleanup (void);
 #else
-static inline void tape_proc_init (void) {;}
-static inline void tape_proc_cleanup (void) {;}
+static inline void tape_proc_init (void) {
+    ;
+}
+static inline void tape_proc_cleanup (void) {
+    ;
+}
 #endif
 
 /* a function for dumping device sense info */
 extern void tape_dump_sense_dbf(struct tape_device *, struct tape_request *,
-				struct irb *);
+                                struct irb *);
 
 /* functions for handling the status of a device */
 extern void tape_med_state_set(struct tape_device *, enum tape_medium_state);
@@ -347,64 +356,58 @@ extern debug_info_t *TAPE_DBF_AREA;
 
 /* functions for building ccws */
 static inline struct ccw1 *
-tape_ccw_cc(struct ccw1 *ccw, __u8 cmd_code, __u16 memsize, void *cda)
-{
-	ccw->cmd_code = cmd_code;
-	ccw->flags = CCW_FLAG_CC;
-	ccw->count = memsize;
-	ccw->cda = (__u32)(addr_t) cda;
-	return ccw + 1;
+tape_ccw_cc(struct ccw1 *ccw, __u8 cmd_code, __u16 memsize, void *cda) {
+    ccw->cmd_code = cmd_code;
+    ccw->flags = CCW_FLAG_CC;
+    ccw->count = memsize;
+    ccw->cda = (__u32)(addr_t) cda;
+    return ccw + 1;
 }
 
 static inline struct ccw1 *
-tape_ccw_end(struct ccw1 *ccw, __u8 cmd_code, __u16 memsize, void *cda)
-{
-	ccw->cmd_code = cmd_code;
-	ccw->flags = 0;
-	ccw->count = memsize;
-	ccw->cda = (__u32)(addr_t) cda;
-	return ccw + 1;
+tape_ccw_end(struct ccw1 *ccw, __u8 cmd_code, __u16 memsize, void *cda) {
+    ccw->cmd_code = cmd_code;
+    ccw->flags = 0;
+    ccw->count = memsize;
+    ccw->cda = (__u32)(addr_t) cda;
+    return ccw + 1;
 }
 
 static inline struct ccw1 *
-tape_ccw_cmd(struct ccw1 *ccw, __u8 cmd_code)
-{
-	ccw->cmd_code = cmd_code;
-	ccw->flags = 0;
-	ccw->count = 0;
-	ccw->cda = (__u32)(addr_t) &ccw->cmd_code;
-	return ccw + 1;
+tape_ccw_cmd(struct ccw1 *ccw, __u8 cmd_code) {
+    ccw->cmd_code = cmd_code;
+    ccw->flags = 0;
+    ccw->count = 0;
+    ccw->cda = (__u32)(addr_t) &ccw->cmd_code;
+    return ccw + 1;
 }
 
 static inline struct ccw1 *
-tape_ccw_repeat(struct ccw1 *ccw, __u8 cmd_code, int count)
-{
-	while (count-- > 0) {
-		ccw->cmd_code = cmd_code;
-		ccw->flags = CCW_FLAG_CC;
-		ccw->count = 0;
-		ccw->cda = (__u32)(addr_t) &ccw->cmd_code;
-		ccw++;
-	}
-	return ccw;
+tape_ccw_repeat(struct ccw1 *ccw, __u8 cmd_code, int count) {
+    while (count-- > 0) {
+        ccw->cmd_code = cmd_code;
+        ccw->flags = CCW_FLAG_CC;
+        ccw->count = 0;
+        ccw->cda = (__u32)(addr_t) &ccw->cmd_code;
+        ccw++;
+    }
+    return ccw;
 }
 
 static inline struct ccw1 *
-tape_ccw_cc_idal(struct ccw1 *ccw, __u8 cmd_code, struct idal_buffer *idal)
-{
-	ccw->cmd_code = cmd_code;
-	ccw->flags    = CCW_FLAG_CC;
-	idal_buffer_set_cda(idal, ccw);
-	return ccw++;
+tape_ccw_cc_idal(struct ccw1 *ccw, __u8 cmd_code, struct idal_buffer *idal) {
+    ccw->cmd_code = cmd_code;
+    ccw->flags    = CCW_FLAG_CC;
+    idal_buffer_set_cda(idal, ccw);
+    return ccw++;
 }
 
 static inline struct ccw1 *
-tape_ccw_end_idal(struct ccw1 *ccw, __u8 cmd_code, struct idal_buffer *idal)
-{
-	ccw->cmd_code = cmd_code;
-	ccw->flags    = 0;
-	idal_buffer_set_cda(idal, ccw);
-	return ccw++;
+tape_ccw_end_idal(struct ccw1 *ccw, __u8 cmd_code, struct idal_buffer *idal) {
+    ccw->cmd_code = cmd_code;
+    ccw->flags    = 0;
+    idal_buffer_set_cda(idal, ccw);
+    return ccw++;
 }
 
 /* Global vars */

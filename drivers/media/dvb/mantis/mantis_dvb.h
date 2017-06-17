@@ -22,8 +22,8 @@
 #define __MANTIS_DVB_H
 
 enum mantis_power {
-	POWER_OFF	= 0,
-	POWER_ON	= 1
+    POWER_OFF	= 0,
+    POWER_ON	= 1
 };
 
 extern int mantis_frontend_power(struct mantis_pci *mantis, enum mantis_power power);

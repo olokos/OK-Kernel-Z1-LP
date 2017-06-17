@@ -46,8 +46,7 @@ extern const unsigned long relocate_new_kernel_size;
 extern void relocate_new_kernel_end(void);
 
 /* Provide a dummy definition to avoid build failures. */
-static inline void crash_setup_regs(struct pt_regs *n, struct pt_regs *o)
-{
+static inline void crash_setup_regs(struct pt_regs *n, struct pt_regs *o) {
 }
 
 #endif /* _ASM_TILE_KEXEC_H */

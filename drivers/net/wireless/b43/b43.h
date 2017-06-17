@@ -221,11 +221,11 @@
 
 /* SHM Routing */
 enum {
-	B43_SHM_UCODE,		/* Microcode memory */
-	B43_SHM_SHARED,		/* Shared memory */
-	B43_SHM_SCRATCH,	/* Scratch memory */
-	B43_SHM_HW,		/* Internal hardware register */
-	B43_SHM_RCMTA,		/* Receive match transmitter address (rev >= 5 only) */
+    B43_SHM_UCODE,		/* Microcode memory */
+    B43_SHM_SHARED,		/* Shared memory */
+    B43_SHM_SCRATCH,	/* Scratch memory */
+    B43_SHM_HW,		/* Internal hardware register */
+    B43_SHM_RCMTA,		/* Receive match transmitter address (rev >= 5 only) */
 };
 /* SHM Routing modifiers */
 #define B43_SHM_AUTOINC_R		0x0200	/* Auto-increment address on read */
@@ -592,12 +592,12 @@ enum {
 #define B43_NR_PAIRWISE_KEYS		50
 /* Security algorithms. */
 enum {
-	B43_SEC_ALGO_NONE = 0,	/* unencrypted, as of TX header. */
-	B43_SEC_ALGO_WEP40,
-	B43_SEC_ALGO_TKIP,
-	B43_SEC_ALGO_AES,
-	B43_SEC_ALGO_WEP104,
-	B43_SEC_ALGO_AES_LEGACY,
+    B43_SEC_ALGO_NONE = 0,	/* unencrypted, as of TX header. */
+    B43_SEC_ALGO_WEP40,
+    B43_SEC_ALGO_TKIP,
+    B43_SEC_ALGO_AES,
+    B43_SEC_ALGO_WEP104,
+    B43_SEC_ALGO_AES_LEGACY,
 };
 
 struct b43_dmaring;
@@ -607,41 +607,41 @@ struct b43_dmaring;
 #define B43_FW_TYPE_PCM		'p'
 #define B43_FW_TYPE_IV		'i'
 struct b43_fw_header {
-	/* File type */
-	u8 type;
-	/* File format version */
-	u8 ver;
-	u8 __padding[2];
-	/* Size of the data. For ucode and PCM this is in bytes.
-	 * For IV this is number-of-ivs. */
-	__be32 size;
+    /* File type */
+    u8 type;
+    /* File format version */
+    u8 ver;
+    u8 __padding[2];
+    /* Size of the data. For ucode and PCM this is in bytes.
+     * For IV this is number-of-ivs. */
+    __be32 size;
 } __packed;
 
 /* Initial Value file format */
 #define B43_IV_OFFSET_MASK	0x7FFF
 #define B43_IV_32BIT		0x8000
 struct b43_iv {
-	__be16 offset_size;
-	union {
-		__be16 d16;
-		__be32 d32;
-	} data __packed;
+    __be16 offset_size;
+    union {
+        __be16 d16;
+        __be32 d32;
+    } data __packed;
 } __packed;
 
 
 /* Data structures for DMA transmission, per 80211 core. */
 struct b43_dma {
-	struct b43_dmaring *tx_ring_AC_BK; /* Background */
-	struct b43_dmaring *tx_ring_AC_BE; /* Best Effort */
-	struct b43_dmaring *tx_ring_AC_VI; /* Video */
-	struct b43_dmaring *tx_ring_AC_VO; /* Voice */
-	struct b43_dmaring *tx_ring_mcast; /* Multicast */
+    struct b43_dmaring *tx_ring_AC_BK; /* Background */
+    struct b43_dmaring *tx_ring_AC_BE; /* Best Effort */
+    struct b43_dmaring *tx_ring_AC_VI; /* Video */
+    struct b43_dmaring *tx_ring_AC_VO; /* Voice */
+    struct b43_dmaring *tx_ring_mcast; /* Multicast */
 
-	struct b43_dmaring *rx_ring;
+    struct b43_dmaring *rx_ring;
 
-	u32 translation; /* Routing bits */
-	bool translation_in_low; /* Should translation bit go into low addr? */
-	bool parity; /* Check for parity */
+    u32 translation; /* Routing bits */
+    bool translation_in_low; /* Should translation bit go into low addr? */
+    bool parity; /* Check for parity */
 };
 
 struct b43_pio_txqueue;
@@ -649,32 +649,32 @@ struct b43_pio_rxqueue;
 
 /* Data structures for PIO transmission, per 80211 core. */
 struct b43_pio {
-	struct b43_pio_txqueue *tx_queue_AC_BK; /* Background */
-	struct b43_pio_txqueue *tx_queue_AC_BE; /* Best Effort */
-	struct b43_pio_txqueue *tx_queue_AC_VI; /* Video */
-	struct b43_pio_txqueue *tx_queue_AC_VO; /* Voice */
-	struct b43_pio_txqueue *tx_queue_mcast; /* Multicast */
+    struct b43_pio_txqueue *tx_queue_AC_BK; /* Background */
+    struct b43_pio_txqueue *tx_queue_AC_BE; /* Best Effort */
+    struct b43_pio_txqueue *tx_queue_AC_VI; /* Video */
+    struct b43_pio_txqueue *tx_queue_AC_VO; /* Voice */
+    struct b43_pio_txqueue *tx_queue_mcast; /* Multicast */
 
-	struct b43_pio_rxqueue *rx_queue;
+    struct b43_pio_rxqueue *rx_queue;
 };
 
 /* Context information for a noise calculation (Link Quality). */
 struct b43_noise_calculation {
-	bool calculation_running;
-	u8 nr_samples;
-	s8 samples[8][4];
+    bool calculation_running;
+    u8 nr_samples;
+    s8 samples[8][4];
 };
 
 struct b43_stats {
-	u8 link_noise;
+    u8 link_noise;
 };
 
 struct b43_key {
-	/* If keyconf is NULL, this key is disabled.
-	 * keyconf is a cookie. Don't derefenrence it outside of the set_key
-	 * path, because b43 doesn't own it. */
-	struct ieee80211_key_conf *keyconf;
-	u8 algorithm;
+    /* If keyconf is NULL, this key is disabled.
+     * keyconf is a cookie. Don't derefenrence it outside of the set_key
+     * path, because b43 doesn't own it. */
+    struct ieee80211_key_conf *keyconf;
+    u8 algorithm;
 };
 
 /* SHM offsets to the QOS data structures for the 4 different queues. */
@@ -689,98 +689,98 @@ struct b43_key {
 /* QOS parameter hardware data structure offsets. */
 #define B43_NR_QOSPARAMS	16
 enum {
-	B43_QOSPARAM_TXOP = 0,
-	B43_QOSPARAM_CWMIN,
-	B43_QOSPARAM_CWMAX,
-	B43_QOSPARAM_CWCUR,
-	B43_QOSPARAM_AIFS,
-	B43_QOSPARAM_BSLOTS,
-	B43_QOSPARAM_REGGAP,
-	B43_QOSPARAM_STATUS,
+    B43_QOSPARAM_TXOP = 0,
+    B43_QOSPARAM_CWMIN,
+    B43_QOSPARAM_CWMAX,
+    B43_QOSPARAM_CWCUR,
+    B43_QOSPARAM_AIFS,
+    B43_QOSPARAM_BSLOTS,
+    B43_QOSPARAM_REGGAP,
+    B43_QOSPARAM_STATUS,
 };
 
 /* QOS parameters for a queue. */
 struct b43_qos_params {
-	/* The QOS parameters */
-	struct ieee80211_tx_queue_params p;
+    /* The QOS parameters */
+    struct ieee80211_tx_queue_params p;
 };
 
 struct b43_wl;
 
 /* The type of the firmware file. */
 enum b43_firmware_file_type {
-	B43_FWTYPE_PROPRIETARY,
-	B43_FWTYPE_OPENSOURCE,
-	B43_NR_FWTYPES,
+    B43_FWTYPE_PROPRIETARY,
+    B43_FWTYPE_OPENSOURCE,
+    B43_NR_FWTYPES,
 };
 
 /* Context data for fetching firmware. */
 struct b43_request_fw_context {
-	/* The device we are requesting the fw for. */
-	struct b43_wldev *dev;
-	/* The type of firmware to request. */
-	enum b43_firmware_file_type req_type;
-	/* Error messages for each firmware type. */
-	char errors[B43_NR_FWTYPES][128];
-	/* Temporary buffer for storing the firmware name. */
-	char fwname[64];
-	/* A fatal error occurred while requesting. Firmware request
-	 * can not continue, as any other request will also fail. */
-	int fatal_failure;
+    /* The device we are requesting the fw for. */
+    struct b43_wldev *dev;
+    /* The type of firmware to request. */
+    enum b43_firmware_file_type req_type;
+    /* Error messages for each firmware type. */
+    char errors[B43_NR_FWTYPES][128];
+    /* Temporary buffer for storing the firmware name. */
+    char fwname[64];
+    /* A fatal error occurred while requesting. Firmware request
+     * can not continue, as any other request will also fail. */
+    int fatal_failure;
 };
 
 /* In-memory representation of a cached microcode file. */
 struct b43_firmware_file {
-	const char *filename;
-	const struct firmware *data;
-	/* Type of the firmware file name. Note that this does only indicate
-	 * the type by the firmware name. NOT the file contents.
-	 * If you want to check for proprietary vs opensource, use (struct b43_firmware)->opensource
-	 * instead! The (struct b43_firmware)->opensource flag is derived from the actual firmware
-	 * binary code, not just the filename.
-	 */
-	enum b43_firmware_file_type type;
+    const char *filename;
+    const struct firmware *data;
+    /* Type of the firmware file name. Note that this does only indicate
+     * the type by the firmware name. NOT the file contents.
+     * If you want to check for proprietary vs opensource, use (struct b43_firmware)->opensource
+     * instead! The (struct b43_firmware)->opensource flag is derived from the actual firmware
+     * binary code, not just the filename.
+     */
+    enum b43_firmware_file_type type;
 };
 
 enum b43_firmware_hdr_format {
-	B43_FW_HDR_598,
-	B43_FW_HDR_410,
-	B43_FW_HDR_351,
+    B43_FW_HDR_598,
+    B43_FW_HDR_410,
+    B43_FW_HDR_351,
 };
 
 /* Pointers to the firmware data and meta information about it. */
 struct b43_firmware {
-	/* Microcode */
-	struct b43_firmware_file ucode;
-	/* PCM code */
-	struct b43_firmware_file pcm;
-	/* Initial MMIO values for the firmware */
-	struct b43_firmware_file initvals;
-	/* Initial MMIO values for the firmware, band-specific */
-	struct b43_firmware_file initvals_band;
+    /* Microcode */
+    struct b43_firmware_file ucode;
+    /* PCM code */
+    struct b43_firmware_file pcm;
+    /* Initial MMIO values for the firmware */
+    struct b43_firmware_file initvals;
+    /* Initial MMIO values for the firmware, band-specific */
+    struct b43_firmware_file initvals_band;
 
-	/* Firmware revision */
-	u16 rev;
-	/* Firmware patchlevel */
-	u16 patch;
+    /* Firmware revision */
+    u16 rev;
+    /* Firmware patchlevel */
+    u16 patch;
 
-	/* Format of header used by firmware */
-	enum b43_firmware_hdr_format hdr_format;
+    /* Format of header used by firmware */
+    enum b43_firmware_hdr_format hdr_format;
 
-	/* Set to true, if we are using an opensource firmware.
-	 * Use this to check for proprietary vs opensource. */
-	bool opensource;
-	/* Set to true, if the core needs a PCM firmware, but
-	 * we failed to load one. This is always false for
-	 * core rev > 10, as these don't need PCM firmware. */
-	bool pcm_request_failed;
+    /* Set to true, if we are using an opensource firmware.
+     * Use this to check for proprietary vs opensource. */
+    bool opensource;
+    /* Set to true, if the core needs a PCM firmware, but
+     * we failed to load one. This is always false for
+     * core rev > 10, as these don't need PCM firmware. */
+    bool pcm_request_failed;
 };
 
 /* Device (802.11 core) initialization status. */
 enum {
-	B43_STAT_UNINIT = 0,	/* Uninitialized. */
-	B43_STAT_INITIALIZED = 1,	/* Initialized, but not started, yet. */
-	B43_STAT_STARTED = 2,	/* Up and running. */
+    B43_STAT_UNINIT = 0,	/* Uninitialized. */
+    B43_STAT_INITIALIZED = 1,	/* Initialized, but not started, yet. */
+    B43_STAT_STARTED = 2,	/* Up and running. */
 };
 #define b43_status(wldev)		atomic_read(&(wldev)->__init_status)
 #define b43_set_status(wldev, stat)	do {			\
@@ -790,255 +790,237 @@ enum {
 
 /* Data structure for one wireless device (802.11 core) */
 struct b43_wldev {
-	struct b43_bus_dev *dev;
-	struct b43_wl *wl;
+    struct b43_bus_dev *dev;
+    struct b43_wl *wl;
 
-	/* The device initialization status.
-	 * Use b43_status() to query. */
-	atomic_t __init_status;
+    /* The device initialization status.
+     * Use b43_status() to query. */
+    atomic_t __init_status;
 
-	bool bad_frames_preempt;	/* Use "Bad Frames Preemption" (default off) */
-	bool dfq_valid;		/* Directed frame queue valid (IBSS PS mode, ATIM) */
-	bool radio_hw_enable;	/* saved state of radio hardware enabled state */
-	bool qos_enabled;		/* TRUE, if QoS is used. */
-	bool hwcrypto_enabled;		/* TRUE, if HW crypto acceleration is enabled. */
-	bool use_pio;			/* TRUE if next init should use PIO */
+    bool bad_frames_preempt;	/* Use "Bad Frames Preemption" (default off) */
+    bool dfq_valid;		/* Directed frame queue valid (IBSS PS mode, ATIM) */
+    bool radio_hw_enable;	/* saved state of radio hardware enabled state */
+    bool qos_enabled;		/* TRUE, if QoS is used. */
+    bool hwcrypto_enabled;		/* TRUE, if HW crypto acceleration is enabled. */
+    bool use_pio;			/* TRUE if next init should use PIO */
 
-	/* PHY/Radio device. */
-	struct b43_phy phy;
+    /* PHY/Radio device. */
+    struct b43_phy phy;
 
-	union {
-		/* DMA engines. */
-		struct b43_dma dma;
-		/* PIO engines. */
-		struct b43_pio pio;
-	};
-	/* Use b43_using_pio_transfers() to check whether we are using
-	 * DMA or PIO data transfers. */
-	bool __using_pio_transfers;
+    union {
+        /* DMA engines. */
+        struct b43_dma dma;
+        /* PIO engines. */
+        struct b43_pio pio;
+    };
+    /* Use b43_using_pio_transfers() to check whether we are using
+     * DMA or PIO data transfers. */
+    bool __using_pio_transfers;
 
-	/* Various statistics about the physical device. */
-	struct b43_stats stats;
+    /* Various statistics about the physical device. */
+    struct b43_stats stats;
 
-	/* Reason code of the last interrupt. */
-	u32 irq_reason;
-	u32 dma_reason[6];
-	/* The currently active generic-interrupt mask. */
-	u32 irq_mask;
+    /* Reason code of the last interrupt. */
+    u32 irq_reason;
+    u32 dma_reason[6];
+    /* The currently active generic-interrupt mask. */
+    u32 irq_mask;
 
-	/* Link Quality calculation context. */
-	struct b43_noise_calculation noisecalc;
-	/* if > 0 MAC is suspended. if == 0 MAC is enabled. */
-	int mac_suspended;
+    /* Link Quality calculation context. */
+    struct b43_noise_calculation noisecalc;
+    /* if > 0 MAC is suspended. if == 0 MAC is enabled. */
+    int mac_suspended;
 
-	/* Periodic tasks */
-	struct delayed_work periodic_work;
-	unsigned int periodic_state;
+    /* Periodic tasks */
+    struct delayed_work periodic_work;
+    unsigned int periodic_state;
 
-	struct work_struct restart_work;
+    struct work_struct restart_work;
 
-	/* encryption/decryption */
-	u16 ktp;		/* Key table pointer */
-	struct b43_key key[B43_NR_GROUP_KEYS * 2 + B43_NR_PAIRWISE_KEYS];
+    /* encryption/decryption */
+    u16 ktp;		/* Key table pointer */
+    struct b43_key key[B43_NR_GROUP_KEYS * 2 + B43_NR_PAIRWISE_KEYS];
 
-	/* Firmware data */
-	struct b43_firmware fw;
+    /* Firmware data */
+    struct b43_firmware fw;
 
-	/* Devicelist in struct b43_wl (all 802.11 cores) */
-	struct list_head list;
+    /* Devicelist in struct b43_wl (all 802.11 cores) */
+    struct list_head list;
 
-	/* Debugging stuff follows. */
+    /* Debugging stuff follows. */
 #ifdef CONFIG_B43_DEBUG
-	struct b43_dfsentry *dfsentry;
-	unsigned int irq_count;
-	unsigned int irq_bit_count[32];
-	unsigned int tx_count;
-	unsigned int rx_count;
+    struct b43_dfsentry *dfsentry;
+    unsigned int irq_count;
+    unsigned int irq_bit_count[32];
+    unsigned int tx_count;
+    unsigned int rx_count;
 #endif
 };
 
 /* Data structure for the WLAN parts (802.11 cores) of the b43 chip. */
 struct b43_wl {
-	/* Pointer to the active wireless device on this chip */
-	struct b43_wldev *current_dev;
-	/* Pointer to the ieee80211 hardware data structure */
-	struct ieee80211_hw *hw;
+    /* Pointer to the active wireless device on this chip */
+    struct b43_wldev *current_dev;
+    /* Pointer to the ieee80211 hardware data structure */
+    struct ieee80211_hw *hw;
 
-	/* Global driver mutex. Every operation must run with this mutex locked. */
-	struct mutex mutex;
-	/* Hard-IRQ spinlock. This lock protects things used in the hard-IRQ
-	 * handler, only. This basically is just the IRQ mask register. */
-	spinlock_t hardirq_lock;
+    /* Global driver mutex. Every operation must run with this mutex locked. */
+    struct mutex mutex;
+    /* Hard-IRQ spinlock. This lock protects things used in the hard-IRQ
+     * handler, only. This basically is just the IRQ mask register. */
+    spinlock_t hardirq_lock;
 
-	/* The number of queues that were registered with the mac80211 subsystem
-	 * initially. This is a backup copy of hw->queues in case hw->queues has
-	 * to be dynamically lowered at runtime (Firmware does not support QoS).
-	 * hw->queues has to be restored to the original value before unregistering
-	 * from the mac80211 subsystem. */
-	u16 mac80211_initially_registered_queues;
+    /* The number of queues that were registered with the mac80211 subsystem
+     * initially. This is a backup copy of hw->queues in case hw->queues has
+     * to be dynamically lowered at runtime (Firmware does not support QoS).
+     * hw->queues has to be restored to the original value before unregistering
+     * from the mac80211 subsystem. */
+    u16 mac80211_initially_registered_queues;
 
-	/* We can only have one operating interface (802.11 core)
-	 * at a time. General information about this interface follows.
-	 */
+    /* We can only have one operating interface (802.11 core)
+     * at a time. General information about this interface follows.
+     */
 
-	struct ieee80211_vif *vif;
-	/* The MAC address of the operating interface. */
-	u8 mac_addr[ETH_ALEN];
-	/* Current BSSID */
-	u8 bssid[ETH_ALEN];
-	/* Interface type. (NL80211_IFTYPE_XXX) */
-	int if_type;
-	/* Is the card operating in AP, STA or IBSS mode? */
-	bool operating;
-	/* filter flags */
-	unsigned int filter_flags;
-	/* Stats about the wireless interface */
-	struct ieee80211_low_level_stats ieee_stats;
+    struct ieee80211_vif *vif;
+    /* The MAC address of the operating interface. */
+    u8 mac_addr[ETH_ALEN];
+    /* Current BSSID */
+    u8 bssid[ETH_ALEN];
+    /* Interface type. (NL80211_IFTYPE_XXX) */
+    int if_type;
+    /* Is the card operating in AP, STA or IBSS mode? */
+    bool operating;
+    /* filter flags */
+    unsigned int filter_flags;
+    /* Stats about the wireless interface */
+    struct ieee80211_low_level_stats ieee_stats;
 
 #ifdef CONFIG_B43_HWRNG
-	struct hwrng rng;
-	bool rng_initialized;
-	char rng_name[30 + 1];
+    struct hwrng rng;
+    bool rng_initialized;
+    char rng_name[30 + 1];
 #endif /* CONFIG_B43_HWRNG */
 
-	/* List of all wireless devices on this chip */
-	struct list_head devlist;
-	u8 nr_devs;
+    /* List of all wireless devices on this chip */
+    struct list_head devlist;
+    u8 nr_devs;
 
-	bool radiotap_enabled;
-	bool radio_enabled;
+    bool radiotap_enabled;
+    bool radio_enabled;
 
-	/* The beacon we are currently using (AP or IBSS mode). */
-	struct sk_buff *current_beacon;
-	bool beacon0_uploaded;
-	bool beacon1_uploaded;
-	bool beacon_templates_virgin; /* Never wrote the templates? */
-	struct work_struct beacon_update_trigger;
+    /* The beacon we are currently using (AP or IBSS mode). */
+    struct sk_buff *current_beacon;
+    bool beacon0_uploaded;
+    bool beacon1_uploaded;
+    bool beacon_templates_virgin; /* Never wrote the templates? */
+    struct work_struct beacon_update_trigger;
 
-	/* The current QOS parameters for the 4 queues. */
-	struct b43_qos_params qos_params[B43_QOS_QUEUE_NUM];
+    /* The current QOS parameters for the 4 queues. */
+    struct b43_qos_params qos_params[B43_QOS_QUEUE_NUM];
 
-	/* Work for adjustment of the transmission power.
-	 * This is scheduled when we determine that the actual TX output
-	 * power doesn't match what we want. */
-	struct work_struct txpower_adjust_work;
+    /* Work for adjustment of the transmission power.
+     * This is scheduled when we determine that the actual TX output
+     * power doesn't match what we want. */
+    struct work_struct txpower_adjust_work;
 
-	/* Packet transmit work */
-	struct work_struct tx_work;
+    /* Packet transmit work */
+    struct work_struct tx_work;
 
-	/* Queue of packets to be transmitted. */
-	struct sk_buff_head tx_queue[B43_QOS_QUEUE_NUM];
+    /* Queue of packets to be transmitted. */
+    struct sk_buff_head tx_queue[B43_QOS_QUEUE_NUM];
 
-	/* Flag that implement the queues stopping. */
-	bool tx_queue_stopped[B43_QOS_QUEUE_NUM];
+    /* Flag that implement the queues stopping. */
+    bool tx_queue_stopped[B43_QOS_QUEUE_NUM];
 
-	/* firmware loading work */
-	struct work_struct firmware_load;
+    /* firmware loading work */
+    struct work_struct firmware_load;
 
-	/* The device LEDs. */
-	struct b43_leds leds;
+    /* The device LEDs. */
+    struct b43_leds leds;
 
-	/* Kmalloc'ed scratch space for PIO TX/RX. Protected by wl->mutex. */
-	u8 pio_scratchspace[118] __attribute__((__aligned__(8)));
-	u8 pio_tailspace[4] __attribute__((__aligned__(8)));
+    /* Kmalloc'ed scratch space for PIO TX/RX. Protected by wl->mutex. */
+    u8 pio_scratchspace[118] __attribute__((__aligned__(8)));
+    u8 pio_tailspace[4] __attribute__((__aligned__(8)));
 };
 
-static inline struct b43_wl *hw_to_b43_wl(struct ieee80211_hw *hw)
-{
-	return hw->priv;
+static inline struct b43_wl *hw_to_b43_wl(struct ieee80211_hw *hw) {
+    return hw->priv;
 }
 
-static inline struct b43_wldev *dev_to_b43_wldev(struct device *dev)
-{
-	struct ssb_device *ssb_dev = dev_to_ssb_dev(dev);
-	return ssb_get_drvdata(ssb_dev);
+static inline struct b43_wldev *dev_to_b43_wldev(struct device *dev) {
+    struct ssb_device *ssb_dev = dev_to_ssb_dev(dev);
+    return ssb_get_drvdata(ssb_dev);
 }
 
 /* Is the device operating in a specified mode (NL80211_IFTYPE_XXX). */
-static inline int b43_is_mode(struct b43_wl *wl, int type)
-{
-	return (wl->operating && wl->if_type == type);
+static inline int b43_is_mode(struct b43_wl *wl, int type) {
+    return (wl->operating && wl->if_type == type);
 }
 
 /**
  * b43_current_band - Returns the currently used band.
  * Returns one of IEEE80211_BAND_2GHZ and IEEE80211_BAND_5GHZ.
  */
-static inline enum ieee80211_band b43_current_band(struct b43_wl *wl)
-{
-	return wl->hw->conf.channel->band;
+static inline enum ieee80211_band b43_current_band(struct b43_wl *wl) {
+    return wl->hw->conf.channel->band;
 }
 
-static inline int b43_bus_may_powerdown(struct b43_wldev *wldev)
-{
-	return wldev->dev->bus_may_powerdown(wldev->dev);
+static inline int b43_bus_may_powerdown(struct b43_wldev *wldev) {
+    return wldev->dev->bus_may_powerdown(wldev->dev);
 }
-static inline int b43_bus_powerup(struct b43_wldev *wldev, bool dynamic_pctl)
-{
-	return wldev->dev->bus_powerup(wldev->dev, dynamic_pctl);
+static inline int b43_bus_powerup(struct b43_wldev *wldev, bool dynamic_pctl) {
+    return wldev->dev->bus_powerup(wldev->dev, dynamic_pctl);
 }
-static inline int b43_device_is_enabled(struct b43_wldev *wldev)
-{
-	return wldev->dev->device_is_enabled(wldev->dev);
+static inline int b43_device_is_enabled(struct b43_wldev *wldev) {
+    return wldev->dev->device_is_enabled(wldev->dev);
 }
 static inline void b43_device_enable(struct b43_wldev *wldev,
-				     u32 core_specific_flags)
-{
-	wldev->dev->device_enable(wldev->dev, core_specific_flags);
+                                     u32 core_specific_flags) {
+    wldev->dev->device_enable(wldev->dev, core_specific_flags);
 }
 static inline void b43_device_disable(struct b43_wldev *wldev,
-				      u32 core_specific_flags)
-{
-	wldev->dev->device_disable(wldev->dev, core_specific_flags);
+                                      u32 core_specific_flags) {
+    wldev->dev->device_disable(wldev->dev, core_specific_flags);
 }
 
-static inline u16 b43_read16(struct b43_wldev *dev, u16 offset)
-{
-	return dev->dev->read16(dev->dev, offset);
+static inline u16 b43_read16(struct b43_wldev *dev, u16 offset) {
+    return dev->dev->read16(dev->dev, offset);
 }
 
-static inline void b43_write16(struct b43_wldev *dev, u16 offset, u16 value)
-{
-	dev->dev->write16(dev->dev, offset, value);
+static inline void b43_write16(struct b43_wldev *dev, u16 offset, u16 value) {
+    dev->dev->write16(dev->dev, offset, value);
 }
 
 static inline void b43_maskset16(struct b43_wldev *dev, u16 offset, u16 mask,
-				 u16 set)
-{
-	b43_write16(dev, offset, (b43_read16(dev, offset) & mask) | set);
+                                 u16 set) {
+    b43_write16(dev, offset, (b43_read16(dev, offset) & mask) | set);
 }
 
-static inline u32 b43_read32(struct b43_wldev *dev, u16 offset)
-{
-	return dev->dev->read32(dev->dev, offset);
+static inline u32 b43_read32(struct b43_wldev *dev, u16 offset) {
+    return dev->dev->read32(dev->dev, offset);
 }
 
-static inline void b43_write32(struct b43_wldev *dev, u16 offset, u32 value)
-{
-	dev->dev->write32(dev->dev, offset, value);
+static inline void b43_write32(struct b43_wldev *dev, u16 offset, u32 value) {
+    dev->dev->write32(dev->dev, offset, value);
 }
 
 static inline void b43_maskset32(struct b43_wldev *dev, u16 offset, u32 mask,
-				 u32 set)
-{
-	b43_write32(dev, offset, (b43_read32(dev, offset) & mask) | set);
+                                 u32 set) {
+    b43_write32(dev, offset, (b43_read32(dev, offset) & mask) | set);
 }
 
 static inline void b43_block_read(struct b43_wldev *dev, void *buffer,
-				 size_t count, u16 offset, u8 reg_width)
-{
-	dev->dev->block_read(dev->dev, buffer, count, offset, reg_width);
+                                  size_t count, u16 offset, u8 reg_width) {
+    dev->dev->block_read(dev->dev, buffer, count, offset, reg_width);
 }
 
 static inline void b43_block_write(struct b43_wldev *dev, const void *buffer,
-				   size_t count, u16 offset, u8 reg_width)
-{
-	dev->dev->block_write(dev->dev, buffer, count, offset, reg_width);
+                                   size_t count, u16 offset, u8 reg_width) {
+    dev->dev->block_write(dev->dev, buffer, count, offset, reg_width);
 }
 
-static inline bool b43_using_pio_transfers(struct b43_wldev *dev)
-{
-	return dev->__using_pio_transfers;
+static inline bool b43_using_pio_transfers(struct b43_wldev *dev) {
+    return dev->__using_pio_transfers;
 }
 
 /* Message printing */
@@ -1053,7 +1035,9 @@ __printf(2, 3) void b43dbg(struct b43_wl *wl, const char *fmt, ...);
 #if B43_DEBUG
 # define B43_WARN_ON(x)	WARN_ON(x)
 #else
-static inline bool __b43_warn_on_dummy(bool x) { return x; }
+static inline bool __b43_warn_on_dummy(bool x) {
+    return x;
+}
 # define B43_WARN_ON(x)	__b43_warn_on_dummy(unlikely(!!(x)))
 #endif
 

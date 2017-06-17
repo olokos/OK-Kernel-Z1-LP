@@ -405,19 +405,19 @@ label:
 
 #ifndef __ASSEMBLY__
 struct exception_regs {
-	unsigned long mas0;
-	unsigned long mas1;
-	unsigned long mas2;
-	unsigned long mas3;
-	unsigned long mas6;
-	unsigned long mas7;
-	unsigned long srr0;
-	unsigned long srr1;
-	unsigned long csrr0;
-	unsigned long csrr1;
-	unsigned long dsrr0;
-	unsigned long dsrr1;
-	unsigned long saved_ksp_limit;
+    unsigned long mas0;
+    unsigned long mas1;
+    unsigned long mas2;
+    unsigned long mas3;
+    unsigned long mas6;
+    unsigned long mas7;
+    unsigned long srr0;
+    unsigned long srr1;
+    unsigned long csrr0;
+    unsigned long csrr1;
+    unsigned long dsrr0;
+    unsigned long dsrr1;
+    unsigned long saved_ksp_limit;
 };
 
 /* ensure this structure is always sized to a multiple of the stack alignment */

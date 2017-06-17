@@ -109,8 +109,7 @@
 /*
 ** vOSS Message queue definition.
 */
-typedef struct _VosMqType
-{
+typedef struct _VosMqType {
     /* Lock use to synchronize access to this message queue */
     spinlock_t       mqLock;
 
@@ -128,8 +127,7 @@ typedef struct _VosMqType
 **   ** pointer to the events that gracefully shutdown the MC and Tx threads
 **
 */
-typedef struct _VosSchedContext
-{
+typedef struct _VosSchedContext {
     /* Place holder to the VOSS Context */
     v_PVOID_t           pVContext;
     /* WDA Message queue on the Main thread*/
@@ -235,8 +233,7 @@ typedef struct _VosSchedContext
 ** The handle to the thread
 **
 */
-typedef struct _VosWatchdogContext
-{
+typedef struct _VosWatchdogContext {
 
     /* Place holder to the VOSS Context */
     v_PVOID_t pVContext;
@@ -271,8 +268,7 @@ typedef struct _VosWatchdogContext
 ** Wrapper messages so that they can be chained to their respective queue
 ** in the scheduler.
 */
-typedef struct _VosMsgWrapper
-{
+typedef struct _VosMsgWrapper {
     /* Message node */
     struct list_head  msgNode;
 
@@ -283,8 +279,7 @@ typedef struct _VosMsgWrapper
 
 
 
-typedef struct _VosContextType
-{
+typedef struct _VosContextType {
     /* Messages buffers */
     vos_msg_t           aMsgBuffers[VOS_CORE_MAX_MESSAGES];
 

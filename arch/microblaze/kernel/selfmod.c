@@ -44,38 +44,37 @@
  * self-modified part of code for improvement of interrupt controller
  * save instruction in interrupt rutine
  */
-void selfmod_function(const int *arr_fce, const unsigned int base)
-{
-	unsigned int flags, i, j, *addr = NULL;
+void selfmod_function(const int *arr_fce, const unsigned int base) {
+    unsigned int flags, i, j, *addr = NULL;
 
-	local_irq_save(flags);
-	__disable_icache();
+    local_irq_save(flags);
+    __disable_icache();
 
-	/* zero terminated array */
-	for (j = 0; arr_fce[j] != 0; j++) {
-		/* get start address of function */
-		addr = (unsigned int *) arr_fce[j];
-		pr_debug("%s: func(%d) at 0x%x\n",
-					__func__, j, (unsigned int) addr);
-		for (i = 0; ; i++) {
-			pr_debug("%s: instruction code at %d: 0x%x\n",
-						__func__, i, addr[i]);
-			if (addr[i] == IMM_BASE) {
-				/* detecting of lwi (0xE8) or swi (0xF8) instr
-				 * I can detect both opcode with one mask */
-				if ((addr[i + 1] & LWI_BASE_MASK) == LWI_BASE) {
-					MODIFY_INSTR;
-				} else /* detection addik for ack */
-				if ((addr[i + 1] & ADDIK_BASE_MASK) ==
-								ADDIK_BASE) {
-					MODIFY_INSTR;
-				}
-			} else if (addr[i] == OPCODE_RTSD) {
-				/* return from function means end of function */
-				pr_debug("%s: end of array %d\n", __func__, i);
-				break;
-			}
-		}
-	}
-	local_irq_restore(flags);
+    /* zero terminated array */
+    for (j = 0; arr_fce[j] != 0; j++) {
+        /* get start address of function */
+        addr = (unsigned int *) arr_fce[j];
+        pr_debug("%s: func(%d) at 0x%x\n",
+                 __func__, j, (unsigned int) addr);
+        for (i = 0; ; i++) {
+            pr_debug("%s: instruction code at %d: 0x%x\n",
+                     __func__, i, addr[i]);
+            if (addr[i] == IMM_BASE) {
+                /* detecting of lwi (0xE8) or swi (0xF8) instr
+                 * I can detect both opcode with one mask */
+                if ((addr[i + 1] & LWI_BASE_MASK) == LWI_BASE) {
+                    MODIFY_INSTR;
+                } else /* detection addik for ack */
+                    if ((addr[i + 1] & ADDIK_BASE_MASK) ==
+                            ADDIK_BASE) {
+                        MODIFY_INSTR;
+                    }
+            } else if (addr[i] == OPCODE_RTSD) {
+                /* return from function means end of function */
+                pr_debug("%s: end of array %d\n", __func__, i);
+                break;
+            }
+        }
+    }
+    local_irq_restore(flags);
 } /* end of self-modified code */

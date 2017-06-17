@@ -18,9 +18,8 @@
 #define NUMREGBYTES	(57 * 4)
 
 #define BREAK_INSTR_SIZE	4
-static inline void arch_kgdb_breakpoint(void)
-{
-	__asm__ __volatile__("brki r16, 0x18;");
+static inline void arch_kgdb_breakpoint(void) {
+    __asm__ __volatile__("brki r16, 0x18;");
 }
 
 #endif /* __ASSEMBLY__ */

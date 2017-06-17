@@ -37,20 +37,18 @@
 #define RING_TX_DONE_HEAD	SCRATCH_REG(0x34)
 #define RING_TX_DONE_TAIL	SCRATCH_REG(0x38)
 
-struct ixpdev_rx_desc
-{
-	u32	buf_addr;
-	u32	buf_length;
-	u32	channel;
-	u32	pkt_length;
+struct ixpdev_rx_desc {
+    u32	buf_addr;
+    u32	buf_length;
+    u32	channel;
+    u32	pkt_length;
 };
 
-struct ixpdev_tx_desc
-{
-	u32	buf_addr;
-	u32	pkt_length;
-	u32	channel;
-	u32	unused;
+struct ixpdev_tx_desc {
+    u32	buf_addr;
+    u32	pkt_length;
+    u32	channel;
+    u32	unused;
 };
 
 

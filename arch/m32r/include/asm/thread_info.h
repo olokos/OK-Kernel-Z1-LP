@@ -23,20 +23,20 @@
 #ifndef __ASSEMBLY__
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	unsigned long		status;		/* thread-synchronous flags */
-	__u32			cpu;		/* current CPU */
-	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    unsigned long		status;		/* thread-synchronous flags */
+    __u32			cpu;		/* current CPU */
+    int			preempt_count;	/* 0 => preemptable, <0 => BUG */
 
-	mm_segment_t		addr_limit;	/* thread address space:
+    mm_segment_t		addr_limit;	/* thread address space:
 					 	   0-0xBFFFFFFF for user-thread
 						   0-0xFFFFFFFF for kernel-thread
 						*/
-	struct restart_block    restart_block;
+    struct restart_block    restart_block;
 
-	__u8			supervisor_stack[0];
+    __u8			supervisor_stack[0];
 };
 
 #else /* !__ASSEMBLY__ */
@@ -79,17 +79,16 @@ struct thread_info {
 #define init_stack		(init_thread_union.stack)
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
 
-	__asm__ __volatile__ (
-		"ldi	%0, #%1			\n\t"
-		"and	%0, sp			\n\t"
-		: "=r" (ti) : "i" (~(THREAD_SIZE - 1))
-	);
+    __asm__ __volatile__ (
+        "ldi	%0, #%1			\n\t"
+        "and	%0, sp			\n\t"
+        : "=r" (ti) : "i" (~(THREAD_SIZE - 1))
+    );
 
-	return ti;
+    return ti;
 }
 
 #define __HAVE_ARCH_THREAD_INFO_ALLOCATOR
@@ -107,17 +106,15 @@ static inline struct thread_info *current_thread_info(void)
 
 #define TI_FLAG_FAULT_CODE_SHIFT	28
 
-static inline void set_thread_fault_code(unsigned int val)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->flags = (ti->flags & (~0 >> (32 - TI_FLAG_FAULT_CODE_SHIFT)))
-		| (val << TI_FLAG_FAULT_CODE_SHIFT);
+static inline void set_thread_fault_code(unsigned int val) {
+    struct thread_info *ti = current_thread_info();
+    ti->flags = (ti->flags & (~0 >> (32 - TI_FLAG_FAULT_CODE_SHIFT)))
+                | (val << TI_FLAG_FAULT_CODE_SHIFT);
 }
 
-static inline unsigned int get_thread_fault_code(void)
-{
-	struct thread_info *ti = current_thread_info();
-	return ti->flags >> TI_FLAG_FAULT_CODE_SHIFT;
+static inline unsigned int get_thread_fault_code(void) {
+    struct thread_info *ti = current_thread_info();
+    return ti->flags >> TI_FLAG_FAULT_CODE_SHIFT;
 }
 
 #endif

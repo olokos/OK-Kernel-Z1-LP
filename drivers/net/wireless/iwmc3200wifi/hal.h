@@ -134,104 +134,104 @@ do {									  \
 #define IWM_HAL_CONCATENATE_BUF_SIZE	(32 * 1024)
 
 struct iwm_wifi_cmd_buff {
-	u16 len;
-	u8 *start;
-	u8 hdr[IWM_MAX_WIFI_HEADERS_SIZE];
-	u8 payload[IWM_MAX_WIFI_CMD_BUFF_SIZE];
+    u16 len;
+    u8 *start;
+    u8 hdr[IWM_MAX_WIFI_HEADERS_SIZE];
+    u8 payload[IWM_MAX_WIFI_CMD_BUFF_SIZE];
 };
 
 struct iwm_nonwifi_cmd_buff {
-	u16 len;
-	u8 *start;
-	u8 hdr[IWM_MAX_NONWIFI_HEADERS_SIZE];
-	u8 payload[IWM_MAX_NONWIFI_CMD_BUFF_SIZE];
+    u16 len;
+    u8 *start;
+    u8 hdr[IWM_MAX_NONWIFI_HEADERS_SIZE];
+    u8 payload[IWM_MAX_NONWIFI_CMD_BUFF_SIZE];
 };
 
 struct iwm_udma_nonwifi_cmd {
-	u8 opcode;
-	u8 eop;
-	u8 resp;
-	u8 handle_by_hw;
-	__le32 addr;
-	__le32 op1_sz;
-	__le32 op2;
-	__le16 seq_num;
+    u8 opcode;
+    u8 eop;
+    u8 resp;
+    u8 handle_by_hw;
+    __le32 addr;
+    __le32 op1_sz;
+    __le32 op2;
+    __le16 seq_num;
 };
 
 struct iwm_udma_wifi_cmd {
-	__le16 count;
-	u8 eop;
-	u8 credit_group;
-	u8 ra_tid;
-	u8 lmac_offset;
+    __le16 count;
+    u8 eop;
+    u8 credit_group;
+    u8 ra_tid;
+    u8 lmac_offset;
 };
 
 struct iwm_umac_cmd {
-	u8 id;
-	__le16 count;
-	u8 resp;
-	__le16 seq_num;
-	u8 color;
+    u8 id;
+    __le16 count;
+    u8 resp;
+    __le16 seq_num;
+    u8 color;
 };
 
 struct iwm_lmac_cmd {
-	u8 id;
-	__le16 count;
-	u8 resp;
-	__le16 seq_num;
+    u8 id;
+    __le16 count;
+    u8 resp;
+    __le16 seq_num;
 };
 
 struct iwm_nonwifi_cmd {
-	u16 seq_num;
-	bool resp_received;
-	struct list_head pending;
-	struct iwm_udma_nonwifi_cmd udma_cmd;
-	struct iwm_umac_cmd umac_cmd;
-	struct iwm_lmac_cmd lmac_cmd;
-	struct iwm_nonwifi_cmd_buff buf;
-	u32 flags;
+    u16 seq_num;
+    bool resp_received;
+    struct list_head pending;
+    struct iwm_udma_nonwifi_cmd udma_cmd;
+    struct iwm_umac_cmd umac_cmd;
+    struct iwm_lmac_cmd lmac_cmd;
+    struct iwm_nonwifi_cmd_buff buf;
+    u32 flags;
 };
 
 struct iwm_wifi_cmd {
-	u16 seq_num;
-	struct list_head pending;
-	struct iwm_udma_wifi_cmd udma_cmd;
-	struct iwm_umac_cmd umac_cmd;
-	struct iwm_lmac_cmd lmac_cmd;
-	struct iwm_wifi_cmd_buff buf;
-	u32 flags;
+    u16 seq_num;
+    struct list_head pending;
+    struct iwm_udma_wifi_cmd udma_cmd;
+    struct iwm_umac_cmd umac_cmd;
+    struct iwm_lmac_cmd lmac_cmd;
+    struct iwm_wifi_cmd_buff buf;
+    u32 flags;
 };
 
 void iwm_cmd_flush(struct iwm_priv *iwm);
 
 struct iwm_wifi_cmd *iwm_get_pending_wifi_cmd(struct iwm_priv *iwm,
-					      u16 seq_num);
+        u16 seq_num);
 struct iwm_nonwifi_cmd *iwm_get_pending_nonwifi_cmd(struct iwm_priv *iwm,
-						    u8 seq_num, u8 cmd_opcode);
+        u8 seq_num, u8 cmd_opcode);
 
 
 int iwm_hal_send_target_cmd(struct iwm_priv *iwm,
-			    struct iwm_udma_nonwifi_cmd *ucmd,
-			    const void *payload);
+                            struct iwm_udma_nonwifi_cmd *ucmd,
+                            const void *payload);
 
 int iwm_hal_send_host_cmd(struct iwm_priv *iwm,
-			  struct iwm_udma_wifi_cmd *udma_cmd,
-			  struct iwm_umac_cmd *umac_cmd,
-			  struct iwm_lmac_cmd *lmac_cmd,
-			  const void *payload, u16 payload_size);
+                          struct iwm_udma_wifi_cmd *udma_cmd,
+                          struct iwm_umac_cmd *umac_cmd,
+                          struct iwm_lmac_cmd *lmac_cmd,
+                          const void *payload, u16 payload_size);
 
 int iwm_hal_send_umac_cmd(struct iwm_priv *iwm,
-			  struct iwm_udma_wifi_cmd *udma_cmd,
-			  struct iwm_umac_cmd *umac_cmd,
-			  const void *payload, u16 payload_size);
+                          struct iwm_udma_wifi_cmd *udma_cmd,
+                          struct iwm_umac_cmd *umac_cmd,
+                          const void *payload, u16 payload_size);
 
 u16 iwm_alloc_wifi_cmd_seq(struct iwm_priv *iwm);
 
 void iwm_udma_wifi_hdr_set_eop(struct iwm_priv *iwm, u8 *buf, u8 eop);
 void iwm_build_udma_wifi_hdr(struct iwm_priv *iwm,
-			     struct iwm_udma_out_wifi_hdr *hdr,
-			     struct iwm_udma_wifi_cmd *cmd);
+                             struct iwm_udma_out_wifi_hdr *hdr,
+                             struct iwm_udma_wifi_cmd *cmd);
 void iwm_build_umac_hdr(struct iwm_priv *iwm,
-			struct iwm_umac_fw_cmd_hdr *hdr,
-			struct iwm_umac_cmd *cmd);
+                        struct iwm_umac_fw_cmd_hdr *hdr,
+                        struct iwm_umac_cmd *cmd);
 #endif /* _IWM_HAL_H_ */

@@ -11,24 +11,24 @@
 
 /* SBI */
 struct sbi_regs {
-/* 0x0000 */	u32		cid;		/* Component ID */
-/* 0x0004 */	u32		ctl;		/* Control */
-/* 0x0008 */	u32		status;		/* Status */
-		u32		_unused1;
-		
-/* 0x0010 */	u32		cfg0;		/* Slot0 config reg */
-/* 0x0014 */	u32		cfg1;		/* Slot1 config reg */
-/* 0x0018 */	u32		cfg2;		/* Slot2 config reg */
-/* 0x001c */	u32		cfg3;		/* Slot3 config reg */
+    /* 0x0000 */	u32		cid;		/* Component ID */
+    /* 0x0004 */	u32		ctl;		/* Control */
+    /* 0x0008 */	u32		status;		/* Status */
+    u32		_unused1;
 
-/* 0x0020 */	u32		stb0;		/* Streaming buf control for slot 0 */
-/* 0x0024 */	u32		stb1;		/* Streaming buf control for slot 1 */
-/* 0x0028 */	u32		stb2;		/* Streaming buf control for slot 2 */
-/* 0x002c */	u32		stb3;		/* Streaming buf control for slot 3 */
+    /* 0x0010 */	u32		cfg0;		/* Slot0 config reg */
+    /* 0x0014 */	u32		cfg1;		/* Slot1 config reg */
+    /* 0x0018 */	u32		cfg2;		/* Slot2 config reg */
+    /* 0x001c */	u32		cfg3;		/* Slot3 config reg */
 
-/* 0x0030 */	u32		intr_state;	/* Interrupt state */
-/* 0x0034 */	u32		intr_tid;	/* Interrupt target ID */
-/* 0x0038 */	u32		intr_diag;	/* Interrupt diagnostics */
+    /* 0x0020 */	u32		stb0;		/* Streaming buf control for slot 0 */
+    /* 0x0024 */	u32		stb1;		/* Streaming buf control for slot 1 */
+    /* 0x0028 */	u32		stb2;		/* Streaming buf control for slot 2 */
+    /* 0x002c */	u32		stb3;		/* Streaming buf control for slot 3 */
+
+    /* 0x0030 */	u32		intr_state;	/* Interrupt state */
+    /* 0x0034 */	u32		intr_tid;	/* Interrupt target ID */
+    /* 0x0038 */	u32		intr_diag;	/* Interrupt diagnostics */
 };
 
 #define SBI_CID			0x02800000
@@ -65,49 +65,44 @@ struct sbi_regs {
 
 #ifndef __ASSEMBLY__
 
-static inline int acquire_sbi(int devid, int mask)
-{
-	__asm__ __volatile__ ("swapa [%2] %3, %0" :
-			      "=r" (mask) :
-			      "0" (mask),
-			      "r" (ECSR_DEV_BASE(devid) | SBI_INTR_STATE),
-			      "i" (ASI_M_CTL));
-	return mask;
+static inline int acquire_sbi(int devid, int mask) {
+    __asm__ __volatile__ ("swapa [%2] %3, %0" :
+                          "=r" (mask) :
+                          "0" (mask),
+                          "r" (ECSR_DEV_BASE(devid) | SBI_INTR_STATE),
+                          "i" (ASI_M_CTL));
+    return mask;
 }
 
-static inline void release_sbi(int devid, int mask)
-{
-	__asm__ __volatile__ ("sta %0, [%1] %2" : :
-			      "r" (mask),
-			      "r" (ECSR_DEV_BASE(devid) | SBI_INTR_STATE),
-			      "i" (ASI_M_CTL));
+static inline void release_sbi(int devid, int mask) {
+    __asm__ __volatile__ ("sta %0, [%1] %2" : :
+                          "r" (mask),
+                          "r" (ECSR_DEV_BASE(devid) | SBI_INTR_STATE),
+                          "i" (ASI_M_CTL));
 }
 
-static inline void set_sbi_tid(int devid, int targetid)
-{
-	__asm__ __volatile__ ("sta %0, [%1] %2" : :
-			      "r" (targetid),
-			      "r" (ECSR_DEV_BASE(devid) | SBI_INTR_TID),
-			      "i" (ASI_M_CTL));
+static inline void set_sbi_tid(int devid, int targetid) {
+    __asm__ __volatile__ ("sta %0, [%1] %2" : :
+                          "r" (targetid),
+                          "r" (ECSR_DEV_BASE(devid) | SBI_INTR_TID),
+                          "i" (ASI_M_CTL));
 }
 
-static inline int get_sbi_ctl(int devid, int cfgno)
-{
-	int cfg;
-	
-	__asm__ __volatile__ ("lda [%1] %2, %0" :
-			      "=r" (cfg) :
-			      "r" ((ECSR_DEV_BASE(devid) | SBI_CFG0) + (cfgno<<2)),
-			      "i" (ASI_M_CTL));
-	return cfg;
+static inline int get_sbi_ctl(int devid, int cfgno) {
+    int cfg;
+
+    __asm__ __volatile__ ("lda [%1] %2, %0" :
+                          "=r" (cfg) :
+                          "r" ((ECSR_DEV_BASE(devid) | SBI_CFG0) + (cfgno<<2)),
+                          "i" (ASI_M_CTL));
+    return cfg;
 }
 
-static inline void set_sbi_ctl(int devid, int cfgno, int cfg)
-{
-	__asm__ __volatile__ ("sta %0, [%1] %2" : :
-			      "r" (cfg),
-			      "r" ((ECSR_DEV_BASE(devid) | SBI_CFG0) + (cfgno<<2)),
-			      "i" (ASI_M_CTL));
+static inline void set_sbi_ctl(int devid, int cfgno, int cfg) {
+    __asm__ __volatile__ ("sta %0, [%1] %2" : :
+                          "r" (cfg),
+                          "r" ((ECSR_DEV_BASE(devid) | SBI_CFG0) + (cfgno<<2)),
+                          "i" (ASI_M_CTL));
 }
 
 #endif /* !__ASSEMBLY__ */

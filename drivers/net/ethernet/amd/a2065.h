@@ -38,8 +38,8 @@
  */
 
 struct lance_regs {
-	unsigned short rdp;		/* Register Data Port */
-	unsigned short rap;		/* Register Address Port */
+    unsigned short rdp;		/* Register Data Port */
+    unsigned short rap;		/* Register Address Port */
 };
 
 
@@ -101,21 +101,21 @@ struct lance_regs {
 
 
 struct lance_rx_desc {
-	unsigned short rmd0;        /* low address of packet */
-	unsigned char  rmd1_bits;   /* descriptor bits */
-	unsigned char  rmd1_hadr;   /* high address of packet */
-	short    length;    	    /* This length is 2s complement (negative)!
+    unsigned short rmd0;        /* low address of packet */
+    unsigned char  rmd1_bits;   /* descriptor bits */
+    unsigned char  rmd1_hadr;   /* high address of packet */
+    short    length;    	    /* This length is 2s complement (negative)!
 				     * Buffer length
 				     */
-	unsigned short mblength;    /* Aactual number of bytes received */
+    unsigned short mblength;    /* Aactual number of bytes received */
 };
 
 struct lance_tx_desc {
-	unsigned short tmd0;        /* low address of packet */
-	unsigned char  tmd1_bits;   /* descriptor bits */
-	unsigned char  tmd1_hadr;   /* high address of packet */
-	short    length;       	    /* Length is 2s complement (negative)! */
-	unsigned short misc;
+    unsigned short tmd0;        /* low address of packet */
+    unsigned char  tmd1_bits;   /* descriptor bits */
+    unsigned char  tmd1_hadr;   /* high address of packet */
+    short    length;       	    /* Length is 2s complement (negative)! */
+    unsigned short misc;
 };
 
 

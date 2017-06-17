@@ -52,13 +52,11 @@
 asmlinkage void __raw_smp_mark_barrier_asm(void);
 asmlinkage void __raw_smp_check_barrier_asm(void);
 
-static inline void smp_mark_barrier(void)
-{
-	__raw_smp_mark_barrier_asm();
+static inline void smp_mark_barrier(void) {
+    __raw_smp_mark_barrier_asm();
 }
-static inline void smp_check_barrier(void)
-{
-	__raw_smp_check_barrier_asm();
+static inline void smp_check_barrier(void) {
+    __raw_smp_check_barrier_asm();
 }
 
 void resync_core_dcache(void);

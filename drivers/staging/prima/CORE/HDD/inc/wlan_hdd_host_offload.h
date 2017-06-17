@@ -50,12 +50,10 @@
 #define WLAN_OFFLOAD_ARP_AND_BC_FILTER_ENABLE    (WLAN_OFFLOAD_ENABLE | WLAN_OFFLOAD_BC_FILTER_ENABLE)
 
 /* Offload request. */
-typedef struct
-{
+typedef struct {
     v_U8_t offloadType;
     v_U8_t enableOrDisable;
-    union
-    {
+    union {
         v_U8_t hostIpv4Addr [4];
         v_U8_t hostIpv6Addr [16];
     } params;

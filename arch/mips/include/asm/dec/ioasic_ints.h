@@ -25,7 +25,7 @@
  * the Maxine, which makes use of the FLOPPY and ISDN bits (otherwise
  * unused) and has a different SCC wiring.
  */
-					/* all systems */
+/* all systems */
 #define IO_INR_SCC0A_TXDMA	31	/* SCC0A transmit page end */
 #define IO_INR_SCC0A_TXERR	30	/* SCC0A transmit memory read error */
 #define IO_INR_SCC0A_RXDMA	29	/* SCC0A receive half page */
@@ -35,7 +35,7 @@
 #define IO_INR_ASC_MERR		17	/* ASC memory read error */
 #define IO_INR_LANCE_MERR	16	/* LANCE memory read error */
 
-					/* except Maxine */
+/* except Maxine */
 #define IO_INR_SCC1A_TXDMA	27	/* SCC1A transmit page end */
 #define IO_INR_SCC1A_TXERR	26	/* SCC1A transmit memory read error */
 #define IO_INR_SCC1A_RXDMA	25	/* SCC1A receive half page */
@@ -45,7 +45,7 @@
 #define IO_INR_RES_21		21	/* unused */
 #define IO_INR_RES_20		20	/* unused */
 
-					/* Maxine */
+/* Maxine */
 #define IO_INR_AB_TXDMA		27	/* ACCESS.bus transmit page end */
 #define IO_INR_AB_TXERR		26	/* ACCESS.bus xmit memory read error */
 #define IO_INR_AB_RXDMA		25	/* ACCESS.bus receive half page */

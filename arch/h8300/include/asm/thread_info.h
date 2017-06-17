@@ -19,12 +19,12 @@
  * If you change this, change the TI_* offsets below to match.
  */
 struct thread_info {
-	struct task_struct *task;		/* main task structure */
-	struct exec_domain *exec_domain;	/* execution domain */
-	unsigned long	   flags;		/* low level flags */
-	int		   cpu;			/* cpu we're on */
-	int		   preempt_count;	/* 0 => preemptable, <0 => BUG */
-	struct restart_block restart_block;
+    struct task_struct *task;		/* main task structure */
+    struct exec_domain *exec_domain;	/* execution domain */
+    unsigned long	   flags;		/* low level flags */
+    int		   cpu;			/* cpu we're on */
+    int		   preempt_count;	/* 0 => preemptable, <0 => BUG */
+    struct restart_block restart_block;
 };
 
 /*
@@ -54,16 +54,15 @@ struct thread_info {
 
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	__asm__(
-		"mov.l	sp, %0 \n\t"
-		"and.l	%1, %0"
-		: "=&r"(ti)
-		: "i" (~(THREAD_SIZE-1))
-		);
-	return ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    __asm__(
+        "mov.l	sp, %0 \n\t"
+        "and.l	%1, %0"
+        : "=&r"(ti)
+        : "i" (~(THREAD_SIZE-1))
+    );
+    return ti;
 }
 
 #endif /* __ASSEMBLY__ */

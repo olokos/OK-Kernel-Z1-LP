@@ -58,33 +58,33 @@
 #define NUM_GPIOS	(GPIO_RI+1)
 
 struct uart_cpm_port {
-	struct uart_port	port;
-	u16			rx_nrfifos;
-	u16			rx_fifosize;
-	u16			tx_nrfifos;
-	u16			tx_fifosize;
-	smc_t __iomem		*smcp;
-	smc_uart_t __iomem	*smcup;
-	scc_t __iomem		*sccp;
-	scc_uart_t __iomem	*sccup;
-	cbd_t __iomem		*rx_bd_base;
-	cbd_t __iomem		*rx_cur;
-	cbd_t __iomem		*tx_bd_base;
-	cbd_t __iomem		*tx_cur;
-	unsigned char		*tx_buf;
-	unsigned char		*rx_buf;
-	u32			flags;
-	struct clk		*clk;
-	u8			brg;
-	uint			 dp_addr;
-	void			*mem_addr;
-	dma_addr_t		 dma_addr;
-	u32			mem_size;
-	/* wait on close if needed */
-	int			wait_closing;
-	/* value to combine with opcode to form cpm command */
-	u32			command;
-	int			gpios[NUM_GPIOS];
+    struct uart_port	port;
+    u16			rx_nrfifos;
+    u16			rx_fifosize;
+    u16			tx_nrfifos;
+    u16			tx_fifosize;
+    smc_t __iomem		*smcp;
+    smc_uart_t __iomem	*smcup;
+    scc_t __iomem		*sccp;
+    scc_uart_t __iomem	*sccup;
+    cbd_t __iomem		*rx_bd_base;
+    cbd_t __iomem		*rx_cur;
+    cbd_t __iomem		*tx_bd_base;
+    cbd_t __iomem		*tx_cur;
+    unsigned char		*tx_buf;
+    unsigned char		*rx_buf;
+    u32			flags;
+    struct clk		*clk;
+    u8			brg;
+    uint			 dp_addr;
+    void			*mem_addr;
+    dma_addr_t		 dma_addr;
+    u32			mem_size;
+    /* wait on close if needed */
+    int			wait_closing;
+    /* value to combine with opcode to form cpm command */
+    u32			command;
+    int			gpios[NUM_GPIOS];
 };
 
 extern int cpm_uart_nr;
@@ -93,7 +93,7 @@ extern struct uart_cpm_port cpm_uart_ports[UART_NR];
 /* these are located in their respective files */
 void cpm_line_cr_cmd(struct uart_cpm_port *port, int cmd);
 void __iomem *cpm_uart_map_pram(struct uart_cpm_port *port,
-				struct device_node *np);
+                                struct device_node *np);
 void cpm_uart_unmap_pram(struct uart_cpm_port *port, void __iomem *pram);
 int cpm_uart_init_portdesc(void);
 int cpm_uart_allocbuf(struct uart_cpm_port *pinfo, unsigned int is_con);
@@ -110,35 +110,33 @@ void scc4_lineif(struct uart_cpm_port *pinfo);
    virtual to phys transtalion
 */
 static inline unsigned long cpu2cpm_addr(void *addr,
-                                         struct uart_cpm_port *pinfo)
-{
-	int offset;
-	u32 val = (u32)addr;
-	u32 mem = (u32)pinfo->mem_addr;
-	/* sane check */
-	if (likely(val >= mem && val < mem + pinfo->mem_size)) {
-		offset = val - mem;
-		return pinfo->dma_addr + offset;
-	}
-	/* something nasty happened */
-	BUG();
-	return 0;
+        struct uart_cpm_port *pinfo) {
+    int offset;
+    u32 val = (u32)addr;
+    u32 mem = (u32)pinfo->mem_addr;
+    /* sane check */
+    if (likely(val >= mem && val < mem + pinfo->mem_size)) {
+        offset = val - mem;
+        return pinfo->dma_addr + offset;
+    }
+    /* something nasty happened */
+    BUG();
+    return 0;
 }
 
 static inline void *cpm2cpu_addr(unsigned long addr,
-                                 struct uart_cpm_port *pinfo)
-{
-	int offset;
-	u32 val = addr;
-	u32 dma = (u32)pinfo->dma_addr;
-	/* sane check */
-	if (likely(val >= dma && val < dma + pinfo->mem_size)) {
-		offset = val - dma;
-		return pinfo->mem_addr + offset;
-	}
-	/* something nasty happened */
-	BUG();
-	return NULL;
+                                 struct uart_cpm_port *pinfo) {
+    int offset;
+    u32 val = addr;
+    u32 dma = (u32)pinfo->dma_addr;
+    /* sane check */
+    if (likely(val >= dma && val < dma + pinfo->mem_size)) {
+        offset = val - dma;
+        return pinfo->mem_addr + offset;
+    }
+    /* something nasty happened */
+    BUG();
+    return NULL;
 }
 
 

@@ -2037,8 +2037,7 @@ when       who     what, where, why
  * Log Equipment IDs.
  * The number is represented by 4 bits.
  * ------------------------------------------------------------------------- */
-typedef enum
-{
+typedef enum {
     LOG_EQUIP_ID_OEM   = 0, /* 3rd party OEM (licensee) use */
     LOG_EQUIP_ID_1X    = 1, /* Traditional 1X line of products */
     LOG_EQUIP_ID_RSVD2 = 2,

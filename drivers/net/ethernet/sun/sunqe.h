@@ -145,16 +145,16 @@
 #define MREGS_CHIPID1	0x10UL	/* Chip-ID, low bits              */
 #define MREGS_CHIPID2	0x11UL	/* Chip-ID, high bits             */
 #define MREGS_IACONFIG	0x12UL	/* Internal Address Config        */
-	/* 0x13UL, reserved */
+/* 0x13UL, reserved */
 #define MREGS_FILTER	0x14UL	/* Logical Address Filter         */
 #define MREGS_ETHADDR	0x15UL	/* Our Ethernet Address           */
-	/* 0x16UL, reserved */
-	/* 0x17UL, reserved */
+/* 0x16UL, reserved */
+/* 0x17UL, reserved */
 #define MREGS_MPCNT	0x18UL	/* Missed Packet Count            */
-	/* 0x19UL, reserved */
+/* 0x19UL, reserved */
 #define MREGS_RPCNT	0x1aUL	/* Runt Packet Count              */
 #define MREGS_RCCNT	0x1bUL	/* RX Collision Count             */
-	/* 0x1cUL, reserved */
+/* 0x1cUL, reserved */
 #define MREGS_UTEST	0x1dUL	/* User Test                      */
 #define MREGS_RTEST1	0x1eUL	/* Reserved Test 1                */
 #define MREGS_RTEST2	0x1fUL	/* Reserved Test 2                */
@@ -265,8 +265,8 @@
 #define MREGS_UTEST_NOLOOP          0x00 /* No loopback                    */
 
 struct qe_rxd {
-	u32 rx_flags;
-	u32 rx_addr;
+    u32 rx_flags;
+    u32 rx_addr;
 };
 
 #define RXD_OWN      0x80000000 /* Ownership.      */
@@ -274,8 +274,8 @@ struct qe_rxd {
 #define RXD_LENGTH   0x000007ff /* Packet Length.  */
 
 struct qe_txd {
-	u32 tx_flags;
-	u32 tx_addr;
+    u32 tx_flags;
+    u32 tx_addr;
 };
 
 #define TXD_OWN      0x80000000 /* Ownership.      */
@@ -301,8 +301,8 @@ struct qe_txd {
 			    (qp)->tx_old - (qp)->tx_new - 1)
 
 struct qe_init_block {
-	struct qe_rxd qe_rxd[RX_RING_MAXSIZE];
-	struct qe_txd qe_txd[TX_RING_MAXSIZE];
+    struct qe_rxd qe_rxd[RX_RING_MAXSIZE];
+    struct qe_txd qe_txd[TX_RING_MAXSIZE];
 };
 
 #define qib_offset(mem, elem) \
@@ -311,40 +311,40 @@ struct qe_init_block {
 struct sunqe;
 
 struct sunqec {
-	void __iomem		*gregs;		/* QEC Global Registers         */
-	struct sunqe		*qes[4];	/* Each child MACE              */
-	unsigned int            qec_bursts;	/* Support burst sizes          */
-	struct platform_device	*op;		/* QEC's OF device              */
-	struct sunqec		*next_module;	/* List of all QECs in system   */
+    void __iomem		*gregs;		/* QEC Global Registers         */
+    struct sunqe		*qes[4];	/* Each child MACE              */
+    unsigned int            qec_bursts;	/* Support burst sizes          */
+    struct platform_device	*op;		/* QEC's OF device              */
+    struct sunqec		*next_module;	/* List of all QECs in system   */
 };
 
 #define PKT_BUF_SZ	1664
 #define RXD_PKT_SZ	1664
 
 struct sunqe_buffers {
-	u8	tx_buf[TX_RING_SIZE][PKT_BUF_SZ];
-	u8	__pad[2];
-	u8	rx_buf[RX_RING_SIZE][PKT_BUF_SZ];
+    u8	tx_buf[TX_RING_SIZE][PKT_BUF_SZ];
+    u8	__pad[2];
+    u8	rx_buf[RX_RING_SIZE][PKT_BUF_SZ];
 };
 
 #define qebuf_offset(mem, elem) \
 ((__u32)((unsigned long)(&(((struct sunqe_buffers *)0)->mem[elem][0]))))
 
 struct sunqe {
-	void __iomem			*qcregs;		/* QEC per-channel Registers   */
-	void __iomem			*mregs;		/* Per-channel MACE Registers  */
-	struct qe_init_block      	*qe_block;	/* RX and TX descriptors       */
-	__u32                      	qblock_dvma;	/* RX and TX descriptors       */
-	spinlock_t			lock;		/* Protects txfull state       */
-	int                        	rx_new, rx_old;	/* RX ring extents	       */
-	int			   	tx_new, tx_old;	/* TX ring extents	       */
-	struct sunqe_buffers		*buffers;	/* CPU visible address.        */
-	__u32				buffers_dvma;	/* DVMA visible address.       */
-	struct sunqec			*parent;
-	u8				mconfig;	/* Base MACE mconfig value     */
-	struct platform_device		*op;		/* QE's OF device struct       */
-	struct net_device		*dev;		/* QE's netdevice struct       */
-	int				channel;	/* Who am I?                   */
+    void __iomem			*qcregs;		/* QEC per-channel Registers   */
+    void __iomem			*mregs;		/* Per-channel MACE Registers  */
+    struct qe_init_block      	*qe_block;	/* RX and TX descriptors       */
+    __u32                      	qblock_dvma;	/* RX and TX descriptors       */
+    spinlock_t			lock;		/* Protects txfull state       */
+    int                        	rx_new, rx_old;	/* RX ring extents	       */
+    int			   	tx_new, tx_old;	/* TX ring extents	       */
+    struct sunqe_buffers		*buffers;	/* CPU visible address.        */
+    __u32				buffers_dvma;	/* DVMA visible address.       */
+    struct sunqec			*parent;
+    u8				mconfig;	/* Base MACE mconfig value     */
+    struct platform_device		*op;		/* QE's OF device struct       */
+    struct net_device		*dev;		/* QE's netdevice struct       */
+    int				channel;	/* Who am I?                   */
 };
 
 #endif /* !(_SUNQE_H) */

@@ -33,11 +33,11 @@
 #include "ispvideo.h"
 
 enum ccdc_input_entity {
-	CCDC_INPUT_NONE,
-	CCDC_INPUT_PARALLEL,
-	CCDC_INPUT_CSI2A,
-	CCDC_INPUT_CCP2B,
-	CCDC_INPUT_CSI2C
+    CCDC_INPUT_NONE,
+    CCDC_INPUT_PARALLEL,
+    CCDC_INPUT_CSI2A,
+    CCDC_INPUT_CCP2B,
+    CCDC_INPUT_CSI2C
 };
 
 #define CCDC_OUTPUT_MEMORY	(1 << 0)
@@ -64,20 +64,20 @@ enum ccdc_input_entity {
  * @bt_r656_en: 1 - Enable ITU-R BT656 mode, 0 - Sync mode.
  */
 struct ispccdc_syncif {
-	u8 ccdc_mastermode;
-	u8 fldstat;
-	u8 datsz;
-	u8 fldmode;
-	u8 datapol;
-	u8 fldpol;
-	u8 hdpol;
-	u8 vdpol;
-	u8 fldout;
-	u8 hs_width;
-	u8 vs_width;
-	u8 ppln;
-	u8 hlprf;
-	u8 bt_r656_en;
+    u8 ccdc_mastermode;
+    u8 fldstat;
+    u8 datsz;
+    u8 fldmode;
+    u8 datapol;
+    u8 fldpol;
+    u8 hdpol;
+    u8 vdpol;
+    u8 fldout;
+    u8 hs_width;
+    u8 vs_width;
+    u8 ppln;
+    u8 hlprf;
+    u8 bt_r656_en;
 };
 
 /*
@@ -85,22 +85,22 @@ struct ispccdc_syncif {
  * @pixelclk: Input pixel clock in Hz
  */
 struct ispccdc_vp {
-	unsigned int pixelclk;
+    unsigned int pixelclk;
 };
 
 enum ispccdc_lsc_state {
-	LSC_STATE_STOPPED = 0,
-	LSC_STATE_STOPPING = 1,
-	LSC_STATE_RUNNING = 2,
-	LSC_STATE_RECONFIG = 3,
+    LSC_STATE_STOPPED = 0,
+    LSC_STATE_STOPPING = 1,
+    LSC_STATE_RUNNING = 2,
+    LSC_STATE_RECONFIG = 3,
 };
 
 struct ispccdc_lsc_config_req {
-	struct list_head list;
-	struct omap3isp_ccdc_lsc_config config;
-	unsigned char enable;
-	u32 table;
-	struct iovm_struct *iovm;
+    struct list_head list;
+    struct omap3isp_ccdc_lsc_config config;
+    unsigned char enable;
+    u32 table;
+    struct iovm_struct *iovm;
 };
 
 /*
@@ -113,14 +113,14 @@ struct ispccdc_lsc_config_req {
  * @table_inuse: LSC table currently in use, ISP address
  */
 struct ispccdc_lsc {
-	enum ispccdc_lsc_state state;
-	struct work_struct table_work;
+    enum ispccdc_lsc_state state;
+    struct work_struct table_work;
 
-	/* LSC queue of configurations */
-	spinlock_t req_lock;
-	struct ispccdc_lsc_config_req *request;	/* requested configuration */
-	struct ispccdc_lsc_config_req *active;	/* active configuration */
-	struct list_head free_queue;	/* configurations for freeing */
+    /* LSC queue of configurations */
+    spinlock_t req_lock;
+    struct ispccdc_lsc_config_req *request;	/* requested configuration */
+    struct ispccdc_lsc_config_req *active;	/* active configuration */
+    struct list_head free_queue;	/* configurations for freeing */
 };
 
 #define CCDC_STOP_NOT_REQUESTED		0x00
@@ -170,34 +170,34 @@ struct ispccdc_lsc {
  * @ioctl_lock: Serializes ioctl calls and LSC requests freeing
  */
 struct isp_ccdc_device {
-	struct v4l2_subdev subdev;
-	struct media_pad pads[CCDC_PADS_NUM];
-	struct v4l2_mbus_framefmt formats[CCDC_PADS_NUM];
+    struct v4l2_subdev subdev;
+    struct media_pad pads[CCDC_PADS_NUM];
+    struct v4l2_mbus_framefmt formats[CCDC_PADS_NUM];
 
-	enum ccdc_input_entity input;
-	unsigned int output;
-	struct isp_video video_out;
+    enum ccdc_input_entity input;
+    unsigned int output;
+    struct isp_video video_out;
 
-	unsigned int alaw:1,
-		     lpf:1,
-		     obclamp:1,
-		     fpc_en:1;
-	struct omap3isp_ccdc_blcomp blcomp;
-	struct omap3isp_ccdc_bclamp clamp;
-	struct omap3isp_ccdc_fpc fpc;
-	struct ispccdc_lsc lsc;
-	unsigned int update;
-	unsigned int shadow_update;
+    unsigned int alaw:1,
+             lpf:1,
+             obclamp:1,
+             fpc_en:1;
+    struct omap3isp_ccdc_blcomp blcomp;
+    struct omap3isp_ccdc_bclamp clamp;
+    struct omap3isp_ccdc_fpc fpc;
+    struct ispccdc_lsc lsc;
+    unsigned int update;
+    unsigned int shadow_update;
 
-	struct ispccdc_syncif syncif;
-	struct ispccdc_vp vpcfg;
+    struct ispccdc_syncif syncif;
+    struct ispccdc_vp vpcfg;
 
-	unsigned int underrun:1;
-	enum isp_pipeline_stream_state state;
-	spinlock_t lock;
-	wait_queue_head_t wait;
-	unsigned int stopping;
-	struct mutex ioctl_lock;
+    unsigned int underrun:1;
+    enum isp_pipeline_stream_state state;
+    spinlock_t lock;
+    wait_queue_head_t wait;
+    unsigned int stopping;
+    struct mutex ioctl_lock;
 };
 
 struct isp_device;
@@ -205,13 +205,13 @@ struct isp_device;
 int omap3isp_ccdc_init(struct isp_device *isp);
 void omap3isp_ccdc_cleanup(struct isp_device *isp);
 int omap3isp_ccdc_register_entities(struct isp_ccdc_device *ccdc,
-	struct v4l2_device *vdev);
+                                    struct v4l2_device *vdev);
 void omap3isp_ccdc_unregister_entities(struct isp_ccdc_device *ccdc);
 
 int omap3isp_ccdc_busy(struct isp_ccdc_device *isp_ccdc);
 int omap3isp_ccdc_isr(struct isp_ccdc_device *isp_ccdc, u32 events);
 void omap3isp_ccdc_restore_context(struct isp_device *isp);
 void omap3isp_ccdc_max_rate(struct isp_ccdc_device *ccdc,
-	unsigned int *max_rate);
+                            unsigned int *max_rate);
 
 #endif	/* OMAP3_ISP_CCDC_H */

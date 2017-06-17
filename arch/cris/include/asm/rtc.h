@@ -3,7 +3,7 @@
 #define __RTC_H__
 
 #ifdef CONFIG_ETRAX_DS1302
-   /* Dallas DS1302 clock/calendar register numbers. */
+/* Dallas DS1302 clock/calendar register numbers. */
 #  define RTC_SECONDS      0
 #  define RTC_MINUTES      1
 #  define RTC_HOURS        2
@@ -13,11 +13,11 @@
 #  define RTC_YEAR         6
 #  define RTC_CONTROL      7
 
-   /* Bits in CONTROL register. */
+/* Bits in CONTROL register. */
 #  define RTC_CONTROL_WRITEPROTECT	0x80
 #  define RTC_TRICKLECHARGER		8
 
-  /* Bits in TRICKLECHARGER register TCS TCS TCS TCS DS DS RS RS. */
+/* Bits in TRICKLECHARGER register TCS TCS TCS TCS DS DS RS RS. */
 #  define RTC_TCR_PATTERN	0xA0	/* 1010xxxx */
 #  define RTC_TCR_1DIOD		0x04	/* xxxx01xx */
 #  define RTC_TCR_2DIOD		0x08	/* xxxx10xx */
@@ -27,18 +27,18 @@
 #  define RTC_TCR_8KOHM		0x03	/* xxxxxx11 8kOhm */
 
 #elif defined(CONFIG_ETRAX_PCF8563)
-   /* I2C bus slave registers. */
+/* I2C bus slave registers. */
 #  define RTC_I2C_READ		0xa3
 #  define RTC_I2C_WRITE		0xa2
 
-   /* Phillips PCF8563 registers. */
+/* Phillips PCF8563 registers. */
 #  define RTC_CONTROL1		0x00		/* Control/Status register 1. */
 #  define RTC_CONTROL2		0x01		/* Control/Status register 2. */
 #  define RTC_CLOCKOUT_FREQ	0x0d		/* CLKOUT frequency. */
 #  define RTC_TIMER_CONTROL	0x0e		/* Timer control. */
 #  define RTC_TIMER_CNTDOWN	0x0f		/* Timer countdown. */
 
-   /* BCD encoded clock registers. */
+/* BCD encoded clock registers. */
 #  define RTC_SECONDS		0x02
 #  define RTC_MINUTES		0x03
 #  define RTC_HOURS		0x04
@@ -68,7 +68,7 @@ extern int pcf8563_init(void);
 #  define CMOS_WRITE(val,reg) pcf8563_writereg(reg,val)
 #  define RTC_INIT() pcf8563_init()
 #else
-  /* No RTC configured so we shouldn't try to access any. */
+/* No RTC configured so we shouldn't try to access any. */
 #  define CMOS_READ(x) 42
 #  define CMOS_WRITE(x,y)
 #  define RTC_INIT() (-1)
@@ -80,15 +80,15 @@ extern int pcf8563_init(void);
  * source is self contained, allowing cross-compiles, etc. etc.
  */
 struct rtc_time {
-	int tm_sec;
-	int tm_min;
-	int tm_hour;
-	int tm_mday;
-	int tm_mon;
-	int tm_year;
-	int tm_wday;
-	int tm_yday;
-	int tm_isdst;
+    int tm_sec;
+    int tm_min;
+    int tm_hour;
+    int tm_mday;
+    int tm_mon;
+    int tm_year;
+    int tm_wday;
+    int tm_yday;
+    int tm_isdst;
 };
 
 /* ioctl() calls that are permitted to the /dev/rtc interface. */

@@ -15,7 +15,7 @@
  *
  **/
 struct imxi2c_platform_data {
-	int bitrate;
+    int bitrate;
 };
 
 #endif /* __ASM_ARCH_I2C_H_ */

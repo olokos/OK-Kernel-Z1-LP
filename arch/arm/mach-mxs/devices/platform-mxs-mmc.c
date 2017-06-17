@@ -32,44 +32,43 @@
 
 #ifdef CONFIG_SOC_IMX23
 const struct mxs_mxs_mmc_data mx23_mxs_mmc_data[] __initconst = {
-	mxs_mxs_mmc_data_entry(MX23, 0, 1),
-	mxs_mxs_mmc_data_entry(MX23, 1, 2),
+    mxs_mxs_mmc_data_entry(MX23, 0, 1),
+    mxs_mxs_mmc_data_entry(MX23, 1, 2),
 };
 #endif
 
 #ifdef CONFIG_SOC_IMX28
 const struct mxs_mxs_mmc_data mx28_mxs_mmc_data[] __initconst = {
-	mxs_mxs_mmc_data_entry(MX28, 0, 0),
-	mxs_mxs_mmc_data_entry(MX28, 1, 1),
-	mxs_mxs_mmc_data_entry(MX28, 2, 2),
-	mxs_mxs_mmc_data_entry(MX28, 3, 3),
+    mxs_mxs_mmc_data_entry(MX28, 0, 0),
+    mxs_mxs_mmc_data_entry(MX28, 1, 1),
+    mxs_mxs_mmc_data_entry(MX28, 2, 2),
+    mxs_mxs_mmc_data_entry(MX28, 3, 3),
 };
 #endif
 
 struct platform_device *__init mxs_add_mxs_mmc(
-		const struct mxs_mxs_mmc_data *data,
-		const struct mxs_mmc_platform_data *pdata)
-{
-	struct resource res[] = {
-		{
-			.start	= data->iobase,
-			.end	= data->iobase + SZ_8K - 1,
-			.flags	= IORESOURCE_MEM,
-		}, {
-			.start	= data->dma,
-			.end	= data->dma,
-			.flags	= IORESOURCE_DMA,
-		}, {
-			.start	= data->irq_err,
-			.end	= data->irq_err,
-			.flags	= IORESOURCE_IRQ,
-		}, {
-			.start	= data->irq_dma,
-			.end	= data->irq_dma,
-			.flags	= IORESOURCE_IRQ,
-		},
-	};
+    const struct mxs_mxs_mmc_data *data,
+    const struct mxs_mmc_platform_data *pdata) {
+    struct resource res[] = {
+        {
+            .start	= data->iobase,
+            .end	= data->iobase + SZ_8K - 1,
+            .flags	= IORESOURCE_MEM,
+        }, {
+            .start	= data->dma,
+            .end	= data->dma,
+            .flags	= IORESOURCE_DMA,
+        }, {
+            .start	= data->irq_err,
+            .end	= data->irq_err,
+            .flags	= IORESOURCE_IRQ,
+        }, {
+            .start	= data->irq_dma,
+            .end	= data->irq_dma,
+            .flags	= IORESOURCE_IRQ,
+        },
+    };
 
-	return mxs_add_platform_device("mxs-mmc", data->id,
-			res, ARRAY_SIZE(res), pdata, sizeof(*pdata));
+    return mxs_add_platform_device("mxs-mmc", data->id,
+                                   res, ARRAY_SIZE(res), pdata, sizeof(*pdata));
 }

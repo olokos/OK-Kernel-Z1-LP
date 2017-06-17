@@ -52,31 +52,30 @@
  *	Write commands are limited to blocks with this size and alignment.
  */
 struct efx_spi_device {
-	int device_id;
-	unsigned int size;
-	unsigned int addr_len;
-	unsigned int munge_address:1;
-	u8 erase_command;
-	unsigned int erase_size;
-	unsigned int block_size;
+    int device_id;
+    unsigned int size;
+    unsigned int addr_len;
+    unsigned int munge_address:1;
+    u8 erase_command;
+    unsigned int erase_size;
+    unsigned int block_size;
 };
 
-static inline bool efx_spi_present(const struct efx_spi_device *spi)
-{
-	return spi->size != 0;
+static inline bool efx_spi_present(const struct efx_spi_device *spi) {
+    return spi->size != 0;
 }
 
 int falcon_spi_cmd(struct efx_nic *efx,
-		   const struct efx_spi_device *spi, unsigned int command,
-		   int address, const void *in, void *out, size_t len);
+                   const struct efx_spi_device *spi, unsigned int command,
+                   int address, const void *in, void *out, size_t len);
 int falcon_spi_wait_write(struct efx_nic *efx,
-			  const struct efx_spi_device *spi);
+                          const struct efx_spi_device *spi);
 int falcon_spi_read(struct efx_nic *efx,
-		    const struct efx_spi_device *spi, loff_t start,
-		    size_t len, size_t *retlen, u8 *buffer);
+                    const struct efx_spi_device *spi, loff_t start,
+                    size_t len, size_t *retlen, u8 *buffer);
 int falcon_spi_write(struct efx_nic *efx,
-		     const struct efx_spi_device *spi, loff_t start,
-		     size_t len, size_t *retlen, const u8 *buffer);
+                     const struct efx_spi_device *spi, loff_t start,
+                     size_t len, size_t *retlen, const u8 *buffer);
 
 /*
  * SFC4000 flash is partitioned into:

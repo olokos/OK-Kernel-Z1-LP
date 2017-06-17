@@ -42,146 +42,146 @@
 struct ocmem_zone;
 
 struct ocmem_zone_ops {
-	int (*allocate) (struct ocmem_zone *, unsigned long, unsigned long *);
-	int (*free) (struct ocmem_zone *, unsigned long, unsigned long);
+    int (*allocate) (struct ocmem_zone *, unsigned long, unsigned long *);
+    int (*free) (struct ocmem_zone *, unsigned long, unsigned long);
 };
 
 /* OCMEM Zone specific counters */
 /* Must be in sync with zstat_names */
 enum ocmem_zstat_item {
-	NR_REQUESTS = 0x0,
-	NR_SYNC_ALLOCATIONS,
-	NR_RANGE_ALLOCATIONS,
-	NR_ASYNC_ALLOCATIONS,
-	NR_ALLOCATION_FAILS,
-	NR_GROWTHS,
-	NR_FREES,
-	NR_SHRINKS,
-	NR_MAPS,
-	NR_MAP_FAILS,
-	NR_UNMAPS,
-	NR_UNMAP_FAILS,
-	NR_TRANSFERS_TO_OCMEM,
-	NR_TRANSFERS_TO_DDR,
-	NR_TRANSFER_FAILS,
-	NR_EVICTIONS,
-	NR_RESTORES,
-	NR_DUMP_REQUESTS,
-	NR_DUMP_COMPLETE,
-	NR_OCMEM_ZSTAT_ITEMS,
+    NR_REQUESTS = 0x0,
+    NR_SYNC_ALLOCATIONS,
+    NR_RANGE_ALLOCATIONS,
+    NR_ASYNC_ALLOCATIONS,
+    NR_ALLOCATION_FAILS,
+    NR_GROWTHS,
+    NR_FREES,
+    NR_SHRINKS,
+    NR_MAPS,
+    NR_MAP_FAILS,
+    NR_UNMAPS,
+    NR_UNMAP_FAILS,
+    NR_TRANSFERS_TO_OCMEM,
+    NR_TRANSFERS_TO_DDR,
+    NR_TRANSFER_FAILS,
+    NR_EVICTIONS,
+    NR_RESTORES,
+    NR_DUMP_REQUESTS,
+    NR_DUMP_COMPLETE,
+    NR_OCMEM_ZSTAT_ITEMS,
 };
 
 struct ocmem_zone {
-	bool active;
-	int owner;
-	int active_regions;
-	int max_regions;
-	struct list_head req_list;
-	unsigned long z_start;
-	unsigned long z_end;
-	unsigned long z_head;
-	unsigned long z_tail;
-	unsigned long z_free;
-	atomic_long_t z_stat[NR_OCMEM_ZSTAT_ITEMS];
-	struct gen_pool *z_pool;
-	struct ocmem_zone_ops *z_ops;
-	unsigned int max_alloc_time;
-	unsigned int min_alloc_time;
-	u64 total_alloc_time;
-	unsigned int max_free_time;
-	unsigned int min_free_time;
-	u64 total_free_time;
+    bool active;
+    int owner;
+    int active_regions;
+    int max_regions;
+    struct list_head req_list;
+    unsigned long z_start;
+    unsigned long z_end;
+    unsigned long z_head;
+    unsigned long z_tail;
+    unsigned long z_free;
+    atomic_long_t z_stat[NR_OCMEM_ZSTAT_ITEMS];
+    struct gen_pool *z_pool;
+    struct ocmem_zone_ops *z_ops;
+    unsigned int max_alloc_time;
+    unsigned int min_alloc_time;
+    u64 total_alloc_time;
+    unsigned int max_free_time;
+    unsigned int min_free_time;
+    u64 total_free_time;
 };
 
 enum op_code {
-	SCHED_NOP = 0x0,
-	SCHED_ALLOCATE,
-	SCHED_FREE,
-	SCHED_GROW,
-	SCHED_SHRINK,
-	SCHED_MAP,
-	SCHED_UNMAP,
-	SCHED_EVICT,
-	SCHED_RESTORE,
-	SCHED_DUMP,
+    SCHED_NOP = 0x0,
+    SCHED_ALLOCATE,
+    SCHED_FREE,
+    SCHED_GROW,
+    SCHED_SHRINK,
+    SCHED_MAP,
+    SCHED_UNMAP,
+    SCHED_EVICT,
+    SCHED_RESTORE,
+    SCHED_DUMP,
 };
 
 /* Operational modes of each region */
 enum region_mode {
-	MODE_NOT_SET = 0x0,
-	WIDE_MODE,
-	THIN_MODE,
-	MODE_DEFAULT = MODE_NOT_SET,
+    MODE_NOT_SET = 0x0,
+    WIDE_MODE,
+    THIN_MODE,
+    MODE_DEFAULT = MODE_NOT_SET,
 };
 
 struct ocmem_plat_data {
-	void __iomem *vbase;
-	unsigned long size;
-	unsigned long base;
-	struct clk *core_clk;
-	struct clk *iface_clk;
-	struct clk *br_clk;
-	struct ocmem_partition *parts;
-	int nr_parts;
-	void __iomem *reg_base;
-	void __iomem *br_base;
-	void __iomem *dm_base;
-	struct dentry *debug_node;
-	unsigned nr_regions;
-	unsigned nr_macros;
-	unsigned nr_ports;
-	int ocmem_irq;
-	int dm_irq;
-	bool interleaved;
-	bool rpm_pwr_ctrl;
-	unsigned rpm_rsc_type;
+    void __iomem *vbase;
+    unsigned long size;
+    unsigned long base;
+    struct clk *core_clk;
+    struct clk *iface_clk;
+    struct clk *br_clk;
+    struct ocmem_partition *parts;
+    int nr_parts;
+    void __iomem *reg_base;
+    void __iomem *br_base;
+    void __iomem *dm_base;
+    struct dentry *debug_node;
+    unsigned nr_regions;
+    unsigned nr_macros;
+    unsigned nr_ports;
+    int ocmem_irq;
+    int dm_irq;
+    bool interleaved;
+    bool rpm_pwr_ctrl;
+    unsigned rpm_rsc_type;
 };
 
 struct ocmem_eviction_data {
-	struct completion completion;
-	struct list_head victim_list;
-	struct list_head req_list;
-	struct work_struct work;
-	int prio;
-	atomic_t pending;
-	bool passive;
+    struct completion completion;
+    struct list_head victim_list;
+    struct list_head req_list;
+    struct work_struct work;
+    int prio;
+    atomic_t pending;
+    bool passive;
 };
 
 struct ocmem_req {
-	struct rw_semaphore rw_sem;
-	/* Chain in sched queue */
-	struct list_head sched_list;
-	/* Chain in zone list */
-	struct list_head zone_list;
-	/* Chain in eviction list */
-	struct list_head eviction_list;
-	int owner;
-	int prio;
-	uint32_t req_id;
-	unsigned long req_min;
-	unsigned long req_max;
-	unsigned long req_step;
-	/* reverse pointers */
-	struct ocmem_zone *zone;
-	struct ocmem_buf *buffer;
-	struct ocmem_map_list *mlist;
-	enum op_code op;
-	unsigned long state;
-	/* Request assignments */
-	unsigned long req_start;
-	unsigned long req_end;
-	unsigned long req_sz;
-	/* Request Power State */
-	unsigned power_state;
-	struct ocmem_eviction_data *edata;
-	/* Eviction data of the request being evicted */
-	struct ocmem_eviction_data *eviction_info;
+    struct rw_semaphore rw_sem;
+    /* Chain in sched queue */
+    struct list_head sched_list;
+    /* Chain in zone list */
+    struct list_head zone_list;
+    /* Chain in eviction list */
+    struct list_head eviction_list;
+    int owner;
+    int prio;
+    uint32_t req_id;
+    unsigned long req_min;
+    unsigned long req_max;
+    unsigned long req_step;
+    /* reverse pointers */
+    struct ocmem_zone *zone;
+    struct ocmem_buf *buffer;
+    struct ocmem_map_list *mlist;
+    enum op_code op;
+    unsigned long state;
+    /* Request assignments */
+    unsigned long req_start;
+    unsigned long req_end;
+    unsigned long req_sz;
+    /* Request Power State */
+    unsigned power_state;
+    struct ocmem_eviction_data *edata;
+    /* Eviction data of the request being evicted */
+    struct ocmem_eviction_data *eviction_info;
 };
 
 struct ocmem_handle {
-	struct ocmem_buf buffer;
-	struct mutex handle_mutex;
-	struct ocmem_req *req;
+    struct ocmem_buf buffer;
+    struct mutex handle_mutex;
+    struct ocmem_req *req;
 };
 
 struct ocmem_buf *handle_to_buffer(struct ocmem_handle *);
@@ -192,7 +192,7 @@ int ocmem_read(void *);
 int ocmem_write(unsigned long, void *);
 void inc_ocmem_stat(struct ocmem_zone *, enum ocmem_zstat_item);
 unsigned long get_ocmem_stat(struct ocmem_zone *z,
-				enum ocmem_zstat_item item);
+                             enum ocmem_zstat_item item);
 struct ocmem_zone *get_zone(unsigned);
 int zone_active(int);
 unsigned long offset_to_phys(unsigned long);
@@ -216,7 +216,7 @@ int ocmem_sched_init(struct platform_device *);
 int ocmem_rdm_init(struct platform_device *);
 int ocmem_core_init(struct platform_device *);
 int process_allocate(int, struct ocmem_handle *, unsigned long, unsigned long,
-			unsigned long, bool, bool);
+                     unsigned long, bool, bool);
 int process_free(int, struct ocmem_handle *);
 int process_xfer(int, struct ocmem_handle *, struct ocmem_map_list *, int);
 int process_drop(int, struct ocmem_handle *, struct ocmem_map_list *);
@@ -225,7 +225,7 @@ int process_restore(int);
 int process_shrink(int, struct ocmem_handle *, unsigned long);
 int process_dump(int, struct ocmem_handle *, unsigned long);
 int ocmem_rdm_transfer(int, struct ocmem_map_list *,
-				unsigned long, int);
+                       unsigned long, int);
 unsigned long process_quota(int);
 int ocmem_memory_off(int, unsigned long, unsigned long);
 int ocmem_memory_on(int, unsigned long, unsigned long);
@@ -236,6 +236,6 @@ void ocmem_disable_core_clock(void);
 void ocmem_disable_iface_clock(void);
 void ocmem_disable_br_clock(void);
 int ocmem_lock(enum ocmem_client, unsigned long, unsigned long,
-				enum region_mode);
+               enum region_mode);
 int ocmem_unlock(enum ocmem_client, unsigned long, unsigned long);
 #endif

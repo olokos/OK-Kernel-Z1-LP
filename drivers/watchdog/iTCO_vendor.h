@@ -11,5 +11,5 @@ extern int iTCO_vendor_check_noreboot_on(void);
 #define iTCO_vendor_pre_keepalive(acpibase, heartbeat)	{}
 #define iTCO_vendor_pre_set_heartbeat(heartbeat)	{}
 #define iTCO_vendor_check_noreboot_on()			1
-				/* 1=check noreboot; 0=don't check */
+/* 1=check noreboot; 0=don't check */
 #endif

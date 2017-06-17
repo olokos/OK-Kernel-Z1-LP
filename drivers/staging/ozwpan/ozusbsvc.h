@@ -12,12 +12,12 @@
  * still in use.
  */
 struct oz_usb_ctx {
-	atomic_t ref_count;
-	u8 tx_seq_num;
-	u8 rx_seq_num;
-	struct oz_pd *pd;
-	void *hport;
-	int stopped;
+    atomic_t ref_count;
+    u8 tx_seq_num;
+    u8 rx_seq_num;
+    struct oz_pd *pd;
+    void *hport;
+    int stopped;
 };
 
 int oz_usb_init(void);

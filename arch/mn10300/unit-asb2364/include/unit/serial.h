@@ -48,8 +48,7 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void __debug_to_serial(const char *p, int n)
-{
+static inline void __debug_to_serial(const char *p, int n) {
 }
 
 #endif /* !__ASSEMBLY__ */
@@ -79,9 +78,8 @@ static inline void __debug_to_serial(const char *p, int n)
 
 #ifndef __ASSEMBLY__
 
-static inline void __debug_to_serial(const char *p, int n)
-{
-	char ch;
+static inline void __debug_to_serial(const char *p, int n) {
+    char ch;
 
 #define LSR_WAIT_FOR(STATE)	\
 	do {} while (!(GDBPORT_SERIAL_LSR & UART_LSR_##STATE))
@@ -94,22 +92,22 @@ static inline void __debug_to_serial(const char *p, int n)
 #define FLOWCTL_SET(LINE)	\
 	do { GDBPORT_SERIAL_MCR |= UART_MCR_##LINE; } while (0)
 
-	FLOWCTL_SET(DTR);
+    FLOWCTL_SET(DTR);
 
-	for (; n > 0; n--) {
-		LSR_WAIT_FOR(THRE);
-		FLOWCTL_WAIT_FOR(CTS);
+    for (; n > 0; n--) {
+        LSR_WAIT_FOR(THRE);
+        FLOWCTL_WAIT_FOR(CTS);
 
-		ch = *p++;
-		if (ch == 0x0a) {
-			GDBPORT_SERIAL_TX = 0x0d;
-			LSR_WAIT_FOR(THRE);
-			FLOWCTL_WAIT_FOR(CTS);
-		}
-		GDBPORT_SERIAL_TX = ch;
-	}
+        ch = *p++;
+        if (ch == 0x0a) {
+            GDBPORT_SERIAL_TX = 0x0d;
+            LSR_WAIT_FOR(THRE);
+            FLOWCTL_WAIT_FOR(CTS);
+        }
+        GDBPORT_SERIAL_TX = ch;
+    }
 
-	FLOWCTL_CLEAR(DTR);
+    FLOWCTL_CLEAR(DTR);
 }
 
 #endif /* !__ASSEMBLY__ */

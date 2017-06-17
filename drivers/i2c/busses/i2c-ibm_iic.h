@@ -25,31 +25,31 @@
 #include <linux/i2c.h>
 
 struct iic_regs {
-	u16 mdbuf;
-	u16 sbbuf;
-	u8 lmadr;
-	u8 hmadr;
-	u8 cntl;
-	u8 mdcntl;
-	u8 sts;
-	u8 extsts;
-	u8 lsadr;
-	u8 hsadr;
-	u8 clkdiv;
-	u8 intmsk;
-	u8 xfrcnt;
-	u8 xtcntlss;
-	u8 directcntl;
+    u16 mdbuf;
+    u16 sbbuf;
+    u8 lmadr;
+    u8 hmadr;
+    u8 cntl;
+    u8 mdcntl;
+    u8 sts;
+    u8 extsts;
+    u8 lsadr;
+    u8 hsadr;
+    u8 clkdiv;
+    u8 intmsk;
+    u8 xfrcnt;
+    u8 xtcntlss;
+    u8 directcntl;
 };
 
 struct ibm_iic_private {
-	struct i2c_adapter adap;
-	volatile struct iic_regs __iomem *vaddr;
-	wait_queue_head_t wq;
-	int idx;
-	int irq;
-	int fast_mode;
-	u8  clckdiv;
+    struct i2c_adapter adap;
+    volatile struct iic_regs __iomem *vaddr;
+    wait_queue_head_t wq;
+    int idx;
+    int irq;
+    int fast_mode;
+    u8  clckdiv;
 };
 
 /* IICx_CNTL register */

@@ -15,25 +15,23 @@
 /*
  * Helper functions to find the end of a string
  */
-static inline char *__strend(const char *s)
-{
-	register unsigned long r0 asm("0") = 0;
+static inline char *__strend(const char *s) {
+    register unsigned long r0 asm("0") = 0;
 
-	asm volatile ("0: srst  %0,%1\n"
-		      "   jo    0b"
-		      : "+d" (r0), "+a" (s) :  : "cc" );
-	return (char *) r0;
+    asm volatile ("0: srst  %0,%1\n"
+                  "   jo    0b"
+                  : "+d" (r0), "+a" (s) :  : "cc" );
+    return (char *) r0;
 }
 
-static inline char *__strnend(const char *s, size_t n)
-{
-	register unsigned long r0 asm("0") = 0;
-	const char *p = s + n;
+static inline char *__strnend(const char *s, size_t n) {
+    register unsigned long r0 asm("0") = 0;
+    const char *p = s + n;
 
-	asm volatile ("0: srst  %0,%1\n"
-		      "   jo    0b"
-		      : "+d" (p), "+a" (s) : "d" (r0) : "cc" );
-	return (char *) p;
+    asm volatile ("0: srst  %0,%1\n"
+                  "   jo    0b"
+                  : "+d" (p), "+a" (s) : "d" (r0) : "cc" );
+    return (char *) p;
 }
 
 /**
@@ -42,12 +40,11 @@ static inline char *__strnend(const char *s, size_t n)
  *
  * returns the length of @s
  */
-size_t strlen(const char *s)
-{
+size_t strlen(const char *s) {
 #if __GNUC__ < 4
-	return __strend(s) - s;
+    return __strend(s) - s;
 #else
-	return __builtin_strlen(s);
+    return __builtin_strlen(s);
 #endif
 }
 EXPORT_SYMBOL(strlen);
@@ -59,9 +56,8 @@ EXPORT_SYMBOL(strlen);
  *
  * returns the minimum of the length of @s and @n
  */
-size_t strnlen(const char * s, size_t n)
-{
-	return __strnend(s, n) - s;
+size_t strnlen(const char * s, size_t n) {
+    return __strnend(s, n) - s;
 }
 EXPORT_SYMBOL(strnlen);
 
@@ -72,19 +68,18 @@ EXPORT_SYMBOL(strnlen);
  *
  * returns a pointer to @dest
  */
-char *strcpy(char *dest, const char *src)
-{
+char *strcpy(char *dest, const char *src) {
 #if __GNUC__ < 4
-	register int r0 asm("0") = 0;
-	char *ret = dest;
+    register int r0 asm("0") = 0;
+    char *ret = dest;
 
-	asm volatile ("0: mvst  %0,%1\n"
-		      "   jo    0b"
-		      : "+&a" (dest), "+&a" (src) : "d" (r0)
-		      : "cc", "memory" );
-	return ret;
+    asm volatile ("0: mvst  %0,%1\n"
+                  "   jo    0b"
+                  : "+&a" (dest), "+&a" (src) : "d" (r0)
+                  : "cc", "memory" );
+    return ret;
 #else
-	return __builtin_strcpy(dest, src);
+    return __builtin_strcpy(dest, src);
 #endif
 }
 EXPORT_SYMBOL(strcpy);
@@ -100,16 +95,15 @@ EXPORT_SYMBOL(strcpy);
  * of course, the buffer size is zero). It does not pad
  * out the result like strncpy() does.
  */
-size_t strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t ret = __strend(src) - src;
+size_t strlcpy(char *dest, const char *src, size_t size) {
+    size_t ret = __strend(src) - src;
 
-	if (size) {
-		size_t len = (ret >= size) ? size-1 : ret;
-		dest[len] = '\0';
-		__builtin_memcpy(dest, src, len);
-	}
-	return ret;
+    if (size) {
+        size_t len = (ret >= size) ? size-1 : ret;
+        dest[len] = '\0';
+        __builtin_memcpy(dest, src, len);
+    }
+    return ret;
 }
 EXPORT_SYMBOL(strlcpy);
 
@@ -122,12 +116,11 @@ EXPORT_SYMBOL(strlcpy);
  * The result is not %NUL-terminated if the source exceeds
  * @n bytes.
  */
-char *strncpy(char *dest, const char *src, size_t n)
-{
-	size_t len = __strnend(src, n) - src;
-	__builtin_memset(dest + len, 0, n - len);
-	__builtin_memcpy(dest, src, len);
-	return dest;
+char *strncpy(char *dest, const char *src, size_t n) {
+    size_t len = __strnend(src, n) - src;
+    __builtin_memset(dest + len, 0, n - len);
+    __builtin_memcpy(dest, src, len);
+    return dest;
 }
 EXPORT_SYMBOL(strncpy);
 
@@ -138,19 +131,18 @@ EXPORT_SYMBOL(strncpy);
  *
  * returns a pointer to @dest
  */
-char *strcat(char *dest, const char *src)
-{
-	register int r0 asm("0") = 0;
-	unsigned long dummy;
-	char *ret = dest;
+char *strcat(char *dest, const char *src) {
+    register int r0 asm("0") = 0;
+    unsigned long dummy;
+    char *ret = dest;
 
-	asm volatile ("0: srst  %0,%1\n"
-		      "   jo    0b\n"
-		      "1: mvst  %0,%2\n"
-		      "   jo    1b"
-		      : "=&a" (dummy), "+a" (dest), "+a" (src)
-		      : "d" (r0), "0" (0UL) : "cc", "memory" );
-	return ret;
+    asm volatile ("0: srst  %0,%1\n"
+                  "   jo    0b\n"
+                  "1: mvst  %0,%2\n"
+                  "   jo    1b"
+                  : "=&a" (dummy), "+a" (dest), "+a" (src)
+                  : "d" (r0), "0" (0UL) : "cc", "memory" );
+    return ret;
 }
 EXPORT_SYMBOL(strcat);
 
@@ -160,21 +152,20 @@ EXPORT_SYMBOL(strcat);
  * @src: The string to append to it
  * @n: The size of the destination buffer.
  */
-size_t strlcat(char *dest, const char *src, size_t n)
-{
-	size_t dsize = __strend(dest) - dest;
-	size_t len = __strend(src) - src;
-	size_t res = dsize + len;
+size_t strlcat(char *dest, const char *src, size_t n) {
+    size_t dsize = __strend(dest) - dest;
+    size_t len = __strend(src) - src;
+    size_t res = dsize + len;
 
-	if (dsize < n) {
-		dest += dsize;
-		n -= dsize;
-		if (len >= n)
-			len = n - 1;
-		dest[len] = '\0';
-		__builtin_memcpy(dest, src, len);
-	}
-	return res;
+    if (dsize < n) {
+        dest += dsize;
+        n -= dsize;
+        if (len >= n)
+            len = n - 1;
+        dest[len] = '\0';
+        __builtin_memcpy(dest, src, len);
+    }
+    return res;
 }
 EXPORT_SYMBOL(strlcat);
 
@@ -189,14 +180,13 @@ EXPORT_SYMBOL(strlcat);
  * Note that in contrast to strncpy, strncat ensures the result is
  * terminated.
  */
-char *strncat(char *dest, const char *src, size_t n)
-{
-	size_t len = __strnend(src, n) - src;
-	char *p = __strend(dest);
+char *strncat(char *dest, const char *src, size_t n) {
+    size_t len = __strnend(src, n) - src;
+    char *p = __strend(dest);
 
-	p[len] = '\0';
-	__builtin_memcpy(p, src, len);
-	return dest;
+    p[len] = '\0';
+    __builtin_memcpy(p, src, len);
+    return dest;
 }
 EXPORT_SYMBOL(strncat);
 
@@ -209,21 +199,20 @@ EXPORT_SYMBOL(strncat);
  *         < 0 if @cs is less than @ct
  *         > 0 if @cs is greater than @ct
  */
-int strcmp(const char *cs, const char *ct)
-{
-	register int r0 asm("0") = 0;
-	int ret = 0;
+int strcmp(const char *cs, const char *ct) {
+    register int r0 asm("0") = 0;
+    int ret = 0;
 
-	asm volatile ("0: clst %2,%3\n"
-		      "   jo   0b\n"
-		      "   je   1f\n"
-		      "   ic   %0,0(%2)\n"
-		      "   ic   %1,0(%3)\n"
-		      "   sr   %0,%1\n"
-		      "1:"
-		      : "+d" (ret), "+d" (r0), "+a" (cs), "+a" (ct)
-		      : : "cc" );
-	return ret;
+    asm volatile ("0: clst %2,%3\n"
+                  "   jo   0b\n"
+                  "   je   1f\n"
+                  "   ic   %0,0(%2)\n"
+                  "   ic   %1,0(%3)\n"
+                  "   sr   %0,%1\n"
+                  "1:"
+                  : "+d" (ret), "+d" (r0), "+a" (cs), "+a" (ct)
+                  : : "cc" );
+    return ret;
 }
 EXPORT_SYMBOL(strcmp);
 
@@ -232,16 +221,15 @@ EXPORT_SYMBOL(strcmp);
  * @s: The string to be searched
  * @c: The character to search for
  */
-char * strrchr(const char * s, int c)
-{
-       size_t len = __strend(s) - s;
+char * strrchr(const char * s, int c) {
+    size_t len = __strend(s) - s;
 
-       if (len)
-	       do {
-		       if (s[len] == (char) c)
-			       return (char *) s + len;
-	       } while (--len > 0);
-       return NULL;
+    if (len)
+        do {
+            if (s[len] == (char) c)
+                return (char *) s + len;
+        } while (--len > 0);
+    return NULL;
 }
 EXPORT_SYMBOL(strrchr);
 
@@ -250,32 +238,31 @@ EXPORT_SYMBOL(strrchr);
  * @s1: The string to be searched
  * @s2: The string to search for
  */
-char * strstr(const char * s1,const char * s2)
-{
-	int l1, l2;
+char * strstr(const char * s1,const char * s2) {
+    int l1, l2;
 
-	l2 = __strend(s2) - s2;
-	if (!l2)
-		return (char *) s1;
-	l1 = __strend(s1) - s1;
-	while (l1-- >= l2) {
-		register unsigned long r2 asm("2") = (unsigned long) s1;
-		register unsigned long r3 asm("3") = (unsigned long) l2;
-		register unsigned long r4 asm("4") = (unsigned long) s2;
-		register unsigned long r5 asm("5") = (unsigned long) l2;
-		int cc;
+    l2 = __strend(s2) - s2;
+    if (!l2)
+        return (char *) s1;
+    l1 = __strend(s1) - s1;
+    while (l1-- >= l2) {
+        register unsigned long r2 asm("2") = (unsigned long) s1;
+        register unsigned long r3 asm("3") = (unsigned long) l2;
+        register unsigned long r4 asm("4") = (unsigned long) s2;
+        register unsigned long r5 asm("5") = (unsigned long) l2;
+        int cc;
 
-		asm volatile ("0: clcle %1,%3,0\n"
-			      "   jo    0b\n"
-			      "   ipm   %0\n"
-			      "   srl   %0,28"
-			      : "=&d" (cc), "+a" (r2), "+a" (r3),
-			        "+a" (r4), "+a" (r5) : : "cc" );
-		if (!cc)
-			return (char *) s1;
-		s1++;
-	}
-	return NULL;
+        asm volatile ("0: clcle %1,%3,0\n"
+                      "   jo    0b\n"
+                      "   ipm   %0\n"
+                      "   srl   %0,28"
+                      : "=&d" (cc), "+a" (r2), "+a" (r3),
+                      "+a" (r4), "+a" (r5) : : "cc" );
+        if (!cc)
+            return (char *) s1;
+        s1++;
+    }
+    return NULL;
 }
 EXPORT_SYMBOL(strstr);
 
@@ -288,18 +275,17 @@ EXPORT_SYMBOL(strstr);
  * returns the address of the first occurrence of @c, or %NULL
  * if @c is not found
  */
-void *memchr(const void *s, int c, size_t n)
-{
-	register int r0 asm("0") = (char) c;
-	const void *ret = s + n;
+void *memchr(const void *s, int c, size_t n) {
+    register int r0 asm("0") = (char) c;
+    const void *ret = s + n;
 
-	asm volatile ("0: srst  %0,%1\n"
-		      "   jo    0b\n"
-		      "   jl	1f\n"
-		      "   la    %0,0\n"
-		      "1:"
-		      : "+a" (ret), "+&a" (s) : "d" (r0) : "cc" );
-	return (void *) ret;
+    asm volatile ("0: srst  %0,%1\n"
+                  "   jo    0b\n"
+                  "   jl	1f\n"
+                  "   la    %0,0\n"
+                  "1:"
+                  : "+a" (ret), "+&a" (s) : "d" (r0) : "cc" );
+    return (void *) ret;
 }
 EXPORT_SYMBOL(memchr);
 
@@ -309,23 +295,22 @@ EXPORT_SYMBOL(memchr);
  * @ct: Another area of memory
  * @count: The size of the area.
  */
-int memcmp(const void *cs, const void *ct, size_t n)
-{
-	register unsigned long r2 asm("2") = (unsigned long) cs;
-	register unsigned long r3 asm("3") = (unsigned long) n;
-	register unsigned long r4 asm("4") = (unsigned long) ct;
-	register unsigned long r5 asm("5") = (unsigned long) n;
-	int ret;
+int memcmp(const void *cs, const void *ct, size_t n) {
+    register unsigned long r2 asm("2") = (unsigned long) cs;
+    register unsigned long r3 asm("3") = (unsigned long) n;
+    register unsigned long r4 asm("4") = (unsigned long) ct;
+    register unsigned long r5 asm("5") = (unsigned long) n;
+    int ret;
 
-	asm volatile ("0: clcle %1,%3,0\n"
-		      "   jo    0b\n"
-		      "   ipm   %0\n"
-		      "   srl   %0,28"
-		      : "=&d" (ret), "+a" (r2), "+a" (r3), "+a" (r4), "+a" (r5)
-		      : : "cc" );
-	if (ret)
-		ret = *(char *) r2 - *(char *) r4;
-	return ret;
+    asm volatile ("0: clcle %1,%3,0\n"
+                  "   jo    0b\n"
+                  "   ipm   %0\n"
+                  "   srl   %0,28"
+                  : "=&d" (ret), "+a" (r2), "+a" (r3), "+a" (r4), "+a" (r5)
+                  : : "cc" );
+    if (ret)
+        ret = *(char *) r2 - *(char *) r4;
+    return ret;
 }
 EXPORT_SYMBOL(memcmp);
 
@@ -338,15 +323,14 @@ EXPORT_SYMBOL(memcmp);
  * returns the address of the first occurrence of @c, or 1 byte past
  * the area if @c is not found
  */
-void *memscan(void *s, int c, size_t n)
-{
-	register int r0 asm("0") = (char) c;
-	const void *ret = s + n;
+void *memscan(void *s, int c, size_t n) {
+    register int r0 asm("0") = (char) c;
+    const void *ret = s + n;
 
-	asm volatile ("0: srst  %0,%1\n"
-		      "   jo    0b\n"
-		      : "+a" (ret), "+&a" (s) : "d" (r0) : "cc" );
-	return (void *) ret;
+    asm volatile ("0: srst  %0,%1\n"
+                  "   jo    0b\n"
+                  : "+a" (ret), "+&a" (s) : "d" (r0) : "cc" );
+    return (void *) ret;
 }
 EXPORT_SYMBOL(memscan);
 
@@ -358,9 +342,8 @@ EXPORT_SYMBOL(memscan);
  *
  * returns a pointer to @dest
  */
-void *memcpy(void *dest, const void *src, size_t n)
-{
-	return __builtin_memcpy(dest, src, n);
+void *memcpy(void *dest, const void *src, size_t n) {
+    return __builtin_memcpy(dest, src, n);
 }
 EXPORT_SYMBOL(memcpy);
 
@@ -372,18 +355,17 @@ EXPORT_SYMBOL(memcpy);
  *
  * returns a pointer to @s
  */
-void *memset(void *s, int c, size_t n)
-{
-	char *xs;
+void *memset(void *s, int c, size_t n) {
+    char *xs;
 
-	if (c == 0)
-		return __builtin_memset(s, 0, n);
+    if (c == 0)
+        return __builtin_memset(s, 0, n);
 
-	xs = (char *) s;
-	if (n > 0)
-		do {
-			*xs++ = c;
-		} while (--n > 0);
-	return s;
+    xs = (char *) s;
+    if (n > 0)
+        do {
+            *xs++ = c;
+        } while (--n > 0);
+    return s;
 }
 EXPORT_SYMBOL(memset);

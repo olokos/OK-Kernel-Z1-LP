@@ -76,7 +76,7 @@
 
 #define MCPCIA_MID(m)		((unsigned long)(m) << 33)
 
-/* Dodge has PCI0 and PCI1 at MID 4 and 5 respectively. 
+/* Dodge has PCI0 and PCI1 at MID 4 and 5 respectively.
    Durango adds PCI2 and PCI3 at MID 6 and 7 respectively.  */
 #define MCPCIA_HOSE2MID(h)	((h) + 4)
 
@@ -174,7 +174,7 @@
 #endif
 #define MCPCIA_IACK_SC		_MCPCIA_IACK_SC(4)
 
-/* 
+/*
  * The canonical non-remaped I/O and MEM addresses have these values
  * subtracted out.  This is arranged so that folks manipulating ISA
  * devices can use their familiar numbers and have them map to bus 0.
@@ -190,8 +190,8 @@
  * Data structure for handling MCPCIA machine checks:
  */
 struct el_MCPCIA_uncorrected_frame_mcheck {
-	struct el_common header;
-	struct el_common_EV5_uncorrectable_mcheck procdata;
+    struct el_common header;
+    struct el_common_EV5_uncorrectable_mcheck procdata;
 };
 
 
@@ -261,100 +261,89 @@ struct el_MCPCIA_uncorrected_frame_mcheck {
 	}
 #endif
 
-extern inline int __mcpcia_is_mmio(unsigned long addr)
-{
-	return (addr & 0x80000000UL) == 0;
+extern inline int __mcpcia_is_mmio(unsigned long addr) {
+    return (addr & 0x80000000UL) == 0;
 }
 
-__EXTERN_INLINE unsigned int mcpcia_ioread8(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
-	unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
-	unsigned long result;
+__EXTERN_INLINE unsigned int mcpcia_ioread8(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
+    unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
+    unsigned long result;
 
-	MCPCIA_FROB_MMIO;
+    MCPCIA_FROB_MMIO;
 
-	result = *(vip) ((addr << 5) + hose + 0x00);
-	return __kernel_extbl(result, addr & 3);
+    result = *(vip) ((addr << 5) + hose + 0x00);
+    return __kernel_extbl(result, addr & 3);
 }
 
-__EXTERN_INLINE void mcpcia_iowrite8(u8 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
-	unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
-	unsigned long w;
+__EXTERN_INLINE void mcpcia_iowrite8(u8 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
+    unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
+    unsigned long w;
 
-	MCPCIA_FROB_MMIO;
+    MCPCIA_FROB_MMIO;
 
-	w = __kernel_insbl(b, addr & 3);
-	*(vuip) ((addr << 5) + hose + 0x00) = w;
+    w = __kernel_insbl(b, addr & 3);
+    *(vuip) ((addr << 5) + hose + 0x00) = w;
 }
 
-__EXTERN_INLINE unsigned int mcpcia_ioread16(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
-	unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
-	unsigned long result;
+__EXTERN_INLINE unsigned int mcpcia_ioread16(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
+    unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
+    unsigned long result;
 
-	MCPCIA_FROB_MMIO;
+    MCPCIA_FROB_MMIO;
 
-	result = *(vip) ((addr << 5) + hose + 0x08);
-	return __kernel_extwl(result, addr & 3);
+    result = *(vip) ((addr << 5) + hose + 0x08);
+    return __kernel_extwl(result, addr & 3);
 }
 
-__EXTERN_INLINE void mcpcia_iowrite16(u16 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
-	unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
-	unsigned long w;
+__EXTERN_INLINE void mcpcia_iowrite16(u16 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr & MCPCIA_MEM_MASK;
+    unsigned long hose = (unsigned long)xaddr & ~MCPCIA_MEM_MASK;
+    unsigned long w;
 
-	MCPCIA_FROB_MMIO;
+    MCPCIA_FROB_MMIO;
 
-	w = __kernel_inswl(b, addr & 3);
-	*(vuip) ((addr << 5) + hose + 0x08) = w;
+    w = __kernel_inswl(b, addr & 3);
+    *(vuip) ((addr << 5) + hose + 0x08) = w;
 }
 
-__EXTERN_INLINE unsigned int mcpcia_ioread32(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr;
+__EXTERN_INLINE unsigned int mcpcia_ioread32(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr;
 
-	if (!__mcpcia_is_mmio(addr))
-		addr = ((addr & 0xffff) << 5) + (addr & ~0xfffful) + 0x18;
+    if (!__mcpcia_is_mmio(addr))
+        addr = ((addr & 0xffff) << 5) + (addr & ~0xfffful) + 0x18;
 
-	return *(vuip)addr;
+    return *(vuip)addr;
 }
 
-__EXTERN_INLINE void mcpcia_iowrite32(u32 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long)xaddr;
+__EXTERN_INLINE void mcpcia_iowrite32(u32 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long)xaddr;
 
-	if (!__mcpcia_is_mmio(addr))
-		addr = ((addr & 0xffff) << 5) + (addr & ~0xfffful) + 0x18;
+    if (!__mcpcia_is_mmio(addr))
+        addr = ((addr & 0xffff) << 5) + (addr & ~0xfffful) + 0x18;
 
-	*(vuip)addr = b;
+    *(vuip)addr = b;
 }
 
 
-__EXTERN_INLINE void __iomem *mcpcia_ioportmap(unsigned long addr)
-{
-	return (void __iomem *)(addr + MCPCIA_IO_BIAS);
+__EXTERN_INLINE void __iomem *mcpcia_ioportmap(unsigned long addr) {
+    return (void __iomem *)(addr + MCPCIA_IO_BIAS);
 }
 
 __EXTERN_INLINE void __iomem *mcpcia_ioremap(unsigned long addr,
-					     unsigned long size)
-{
-	return (void __iomem *)(addr + MCPCIA_MEM_BIAS);
+        unsigned long size) {
+    return (void __iomem *)(addr + MCPCIA_MEM_BIAS);
 }
 
-__EXTERN_INLINE int mcpcia_is_ioaddr(unsigned long addr)
-{
-	return addr >= MCPCIA_SPARSE(0);
+__EXTERN_INLINE int mcpcia_is_ioaddr(unsigned long addr) {
+    return addr >= MCPCIA_SPARSE(0);
 }
 
-__EXTERN_INLINE int mcpcia_is_mmio(const volatile void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	return __mcpcia_is_mmio(addr);
+__EXTERN_INLINE int mcpcia_is_mmio(const volatile void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    return __mcpcia_is_mmio(addr);
 }
 
 #undef MCPCIA_FROB_MMIO

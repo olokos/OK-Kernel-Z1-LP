@@ -427,7 +427,7 @@ void MACvSetBBType(PSDevice pDevice, BYTE byType);
 void MACvSetMISCFifo(PSDevice pDevice, WORD wOffset, DWORD dwData);
 void MACvDisableKeyEntry(PSDevice pDevice, unsigned int uEntryIdx);
 void MACvSetKeyEntry(PSDevice pDevice, WORD wKeyCtl, unsigned int uEntryIdx,
-		     unsigned int uKeyIdx, PBYTE pbyAddr, PDWORD pdwKey);
+                     unsigned int uKeyIdx, PBYTE pbyAddr, PDWORD pdwKey);
 
 void MACvRegBitsOff(PSDevice pDevice, BYTE byRegOfs, BYTE byBits);
 void MACvRegBitsOn(PSDevice pDevice, BYTE byRegOfs, BYTE byBits);

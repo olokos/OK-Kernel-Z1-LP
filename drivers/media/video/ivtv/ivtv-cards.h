@@ -180,27 +180,27 @@
 			  V4L2_CAP_SLICED_VBI_OUTPUT | V4L2_CAP_VIDEO_OUTPUT_OVERLAY)
 
 struct ivtv_card_video_input {
-	u8  video_type; 	/* video input type */
-	u8  audio_index;	/* index in ivtv_card_audio_input array */
-	u16 video_input;	/* hardware video input */
+    u8  video_type; 	/* video input type */
+    u8  audio_index;	/* index in ivtv_card_audio_input array */
+    u16 video_input;	/* hardware video input */
 };
 
 struct ivtv_card_audio_input {
-	u8  audio_type;		/* audio input type */
-	u32 audio_input;	/* hardware audio input */
-	u16 muxer_input;	/* hardware muxer input for boards with a
+    u8  audio_type;		/* audio input type */
+    u32 audio_input;	/* hardware audio input */
+    u16 muxer_input;	/* hardware muxer input for boards with a
 				   multiplexer chip */
 };
 
 struct ivtv_card_output {
-	u8  name[32];
-	u16 video_output;  /* hardware video output */
+    u8  name[32];
+    u16 video_output;  /* hardware video output */
 };
 
 struct ivtv_card_pci_info {
-	u16 device;
-	u16 subsystem_vendor;
-	u16 subsystem_device;
+    u16 device;
+    u16 subsystem_vendor;
+    u16 subsystem_device;
 };
 
 /* GPIO definitions */
@@ -208,96 +208,96 @@ struct ivtv_card_pci_info {
 /* The mask is the set of bits used by the operation */
 
 struct ivtv_gpio_init { 	/* set initial GPIO DIR and OUT values */
-	u16 direction; 		/* DIR setting. Leave to 0 if no init is needed */
-	u16 initial_value;
+    u16 direction; 		/* DIR setting. Leave to 0 if no init is needed */
+    u16 initial_value;
 };
 
 struct ivtv_gpio_video_input { 	/* select tuner/line in input */
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 tuner;
-	u16 composite;
-	u16 svideo;
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 tuner;
+    u16 composite;
+    u16 svideo;
 };
 
 struct ivtv_gpio_audio_input { 	/* select tuner/line in input */
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 tuner;
-	u16 linein;
-	u16 radio;
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 tuner;
+    u16 linein;
+    u16 radio;
 };
 
 struct ivtv_gpio_audio_mute {
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 mute;		/* set this value to mute, 0 to unmute */
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 mute;		/* set this value to mute, 0 to unmute */
 };
 
 struct ivtv_gpio_audio_mode {
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 mono; 		/* set audio to mono */
-	u16 stereo; 		/* set audio to stereo */
-	u16 lang1;		/* set audio to the first language */
-	u16 lang2;		/* set audio to the second language */
-	u16 both; 		/* both languages are output */
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 mono; 		/* set audio to mono */
+    u16 stereo; 		/* set audio to stereo */
+    u16 lang1;		/* set audio to the first language */
+    u16 lang2;		/* set audio to the second language */
+    u16 both; 		/* both languages are output */
 };
 
 struct ivtv_gpio_audio_freq {
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 f32000;
-	u16 f44100;
-	u16 f48000;
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 f32000;
+    u16 f44100;
+    u16 f48000;
 };
 
 struct ivtv_gpio_audio_detect {
-	u16 mask; 		/* leave to 0 if not supported */
-	u16 stereo; 		/* if the input matches this value then
+    u16 mask; 		/* leave to 0 if not supported */
+    u16 stereo; 		/* if the input matches this value then
 				   stereo is detected */
 };
 
 struct ivtv_card_tuner {
-	v4l2_std_id std; 	/* standard for which the tuner is suitable */
-	int 	    tuner; 	/* tuner ID (from tuner.h) */
+    v4l2_std_id std; 	/* standard for which the tuner is suitable */
+    int 	    tuner; 	/* tuner ID (from tuner.h) */
 };
 
 struct ivtv_card_tuner_i2c {
-	unsigned short radio[2];/* radio tuner i2c address to probe */
-	unsigned short demod[2];/* demodulator i2c address to probe */
-	unsigned short tv[4];	/* tv tuner i2c addresses to probe */
+    unsigned short radio[2];/* radio tuner i2c address to probe */
+    unsigned short demod[2];/* demodulator i2c address to probe */
+    unsigned short tv[4];	/* tv tuner i2c addresses to probe */
 };
 
 /* for card information/parameters */
 struct ivtv_card {
-	int type;
-	char *name;
-	char *comment;
-	u32 v4l2_capabilities;
-	u32 hw_video;		/* hardware used to process video */
-	u32 hw_audio;		/* hardware used to process audio */
-	u32 hw_audio_ctrl;	/* hardware used for the V4L2 controls (only 1 dev allowed) */
-	u32 hw_muxer;		/* hardware used to multiplex audio input */
-	u32 hw_all;		/* all hardware used by the board */
-	struct ivtv_card_video_input video_inputs[IVTV_CARD_MAX_VIDEO_INPUTS];
-	struct ivtv_card_audio_input audio_inputs[IVTV_CARD_MAX_AUDIO_INPUTS];
-	struct ivtv_card_audio_input radio_input;
-	int nof_outputs;
-	const struct ivtv_card_output *video_outputs;
-	u8 gr_config; 		/* config byte for the ghost reduction device */
-	u8 xceive_pin; 		/* XCeive tuner GPIO reset pin */
+    int type;
+    char *name;
+    char *comment;
+    u32 v4l2_capabilities;
+    u32 hw_video;		/* hardware used to process video */
+    u32 hw_audio;		/* hardware used to process audio */
+    u32 hw_audio_ctrl;	/* hardware used for the V4L2 controls (only 1 dev allowed) */
+    u32 hw_muxer;		/* hardware used to multiplex audio input */
+    u32 hw_all;		/* all hardware used by the board */
+    struct ivtv_card_video_input video_inputs[IVTV_CARD_MAX_VIDEO_INPUTS];
+    struct ivtv_card_audio_input audio_inputs[IVTV_CARD_MAX_AUDIO_INPUTS];
+    struct ivtv_card_audio_input radio_input;
+    int nof_outputs;
+    const struct ivtv_card_output *video_outputs;
+    u8 gr_config; 		/* config byte for the ghost reduction device */
+    u8 xceive_pin; 		/* XCeive tuner GPIO reset pin */
 
-	/* GPIO card-specific settings */
-	struct ivtv_gpio_init 		gpio_init;
-	struct ivtv_gpio_video_input	gpio_video_input;
-	struct ivtv_gpio_audio_input 	gpio_audio_input;
-	struct ivtv_gpio_audio_mute 	gpio_audio_mute;
-	struct ivtv_gpio_audio_mode 	gpio_audio_mode;
-	struct ivtv_gpio_audio_freq 	gpio_audio_freq;
-	struct ivtv_gpio_audio_detect 	gpio_audio_detect;
+    /* GPIO card-specific settings */
+    struct ivtv_gpio_init 		gpio_init;
+    struct ivtv_gpio_video_input	gpio_video_input;
+    struct ivtv_gpio_audio_input 	gpio_audio_input;
+    struct ivtv_gpio_audio_mute 	gpio_audio_mute;
+    struct ivtv_gpio_audio_mode 	gpio_audio_mode;
+    struct ivtv_gpio_audio_freq 	gpio_audio_freq;
+    struct ivtv_gpio_audio_detect 	gpio_audio_detect;
 
-	struct ivtv_card_tuner tuners[IVTV_CARD_MAX_TUNERS];
-	struct ivtv_card_tuner_i2c *i2c;
+    struct ivtv_card_tuner tuners[IVTV_CARD_MAX_TUNERS];
+    struct ivtv_card_tuner_i2c *i2c;
 
-	/* list of device and subsystem vendor/devices that
-	   correspond to this card type. */
-	const struct ivtv_card_pci_info *pci_list;
+    /* list of device and subsystem vendor/devices that
+       correspond to this card type. */
+    const struct ivtv_card_pci_info *pci_list;
 };
 
 int ivtv_get_input(struct ivtv *itv, u16 index, struct v4l2_input *input);

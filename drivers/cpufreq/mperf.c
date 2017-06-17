@@ -10,11 +10,10 @@
 static DEFINE_PER_CPU(struct aperfmperf, acfreq_old_perf);
 
 /* Called via smp_call_function_single(), on the target CPU */
-static void read_measured_perf_ctrs(void *_cur)
-{
-	struct aperfmperf *am = _cur;
+static void read_measured_perf_ctrs(void *_cur) {
+    struct aperfmperf *am = _cur;
 
-	get_aperfmperf(am);
+    get_aperfmperf(am);
 }
 
 /*
@@ -31,21 +30,20 @@ static void read_measured_perf_ctrs(void *_cur)
  * no meaning should be associated with absolute values of these MSRs.
  */
 unsigned int cpufreq_get_measured_perf(struct cpufreq_policy *policy,
-					unsigned int cpu)
-{
-	struct aperfmperf perf;
-	unsigned long ratio;
-	unsigned int retval;
+                                       unsigned int cpu) {
+    struct aperfmperf perf;
+    unsigned long ratio;
+    unsigned int retval;
 
-	if (smp_call_function_single(cpu, read_measured_perf_ctrs, &perf, 1))
-		return 0;
+    if (smp_call_function_single(cpu, read_measured_perf_ctrs, &perf, 1))
+        return 0;
 
-	ratio = calc_aperfmperf_ratio(&per_cpu(acfreq_old_perf, cpu), &perf);
-	per_cpu(acfreq_old_perf, cpu) = perf;
+    ratio = calc_aperfmperf_ratio(&per_cpu(acfreq_old_perf, cpu), &perf);
+    per_cpu(acfreq_old_perf, cpu) = perf;
 
-	retval = (policy->cpuinfo.max_freq * ratio) >> APERFMPERF_SHIFT;
+    retval = (policy->cpuinfo.max_freq * ratio) >> APERFMPERF_SHIFT;
 
-	return retval;
+    return retval;
 }
 EXPORT_SYMBOL_GPL(cpufreq_get_measured_perf);
 MODULE_LICENSE("GPL");

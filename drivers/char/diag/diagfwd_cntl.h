@@ -48,7 +48,7 @@
 /* Denotes we support diag over stm */
 #define F_DIAG_OVER_STM			0x02
 
- /* Perform hdlc encoding of data coming from smd channel */
+/* Perform hdlc encoding of data coming from smd channel */
 #define F_DIAG_HDLC_ENCODE_IN_APPS_MASK	0x40
 
 #define ENABLE_SEPARATE_CMDRSP	1
@@ -65,78 +65,78 @@
 #define DISABLE_APPS_HDLC_ENCODING	0
 
 struct cmd_code_range {
-	uint16_t cmd_code_lo;
-	uint16_t cmd_code_hi;
-	uint32_t data;
+    uint16_t cmd_code_lo;
+    uint16_t cmd_code_hi;
+    uint32_t data;
 };
 
 struct diag_ctrl_msg {
-	uint32_t version;
-	uint16_t cmd_code;
-	uint16_t subsysid;
-	uint16_t count_entries;
-	uint16_t port;
+    uint32_t version;
+    uint16_t cmd_code;
+    uint16_t subsysid;
+    uint16_t count_entries;
+    uint16_t port;
 };
 
 struct diag_ctrl_event_mask {
-	uint32_t cmd_type;
-	uint32_t data_len;
-	uint8_t stream_id;
-	uint8_t status;
-	uint8_t event_config;
-	uint32_t event_mask_size;
-	/* Copy event mask here */
+    uint32_t cmd_type;
+    uint32_t data_len;
+    uint8_t stream_id;
+    uint8_t status;
+    uint8_t event_config;
+    uint32_t event_mask_size;
+    /* Copy event mask here */
 } __packed;
 
 struct diag_ctrl_log_mask {
-	uint32_t cmd_type;
-	uint32_t data_len;
-	uint8_t stream_id;
-	uint8_t status;
-	uint8_t equip_id;
-	uint32_t num_items; /* Last log code for this equip_id */
-	uint32_t log_mask_size; /* Size of log mask stored in log_mask[] */
-	/* Copy log mask here */
+    uint32_t cmd_type;
+    uint32_t data_len;
+    uint8_t stream_id;
+    uint8_t status;
+    uint8_t equip_id;
+    uint32_t num_items; /* Last log code for this equip_id */
+    uint32_t log_mask_size; /* Size of log mask stored in log_mask[] */
+    /* Copy log mask here */
 } __packed;
 
 struct diag_ctrl_msg_mask {
-	uint32_t cmd_type;
-	uint32_t data_len;
-	uint8_t stream_id;
-	uint8_t status;
-	uint8_t msg_mode;
-	uint16_t ssid_first; /* Start of range of supported SSIDs */
-	uint16_t ssid_last; /* Last SSID in range */
-	uint32_t msg_mask_size; /* ssid_last - ssid_first + 1 */
-	/* Copy msg mask here */
+    uint32_t cmd_type;
+    uint32_t data_len;
+    uint8_t stream_id;
+    uint8_t status;
+    uint8_t msg_mode;
+    uint16_t ssid_first; /* Start of range of supported SSIDs */
+    uint16_t ssid_last; /* Last SSID in range */
+    uint32_t msg_mask_size; /* ssid_last - ssid_first + 1 */
+    /* Copy msg mask here */
 } __packed;
 
 struct diag_ctrl_feature_mask {
-	uint32_t ctrl_pkt_id;
-	uint32_t ctrl_pkt_data_len;
-	uint32_t feature_mask_len;
-	/* Copy feature mask here */
+    uint32_t ctrl_pkt_id;
+    uint32_t ctrl_pkt_data_len;
+    uint32_t feature_mask_len;
+    /* Copy feature mask here */
 } __packed;
 
 struct diag_ctrl_msg_diagmode {
-	uint32_t ctrl_pkt_id;
-	uint32_t ctrl_pkt_data_len;
-	uint32_t version;
-	uint32_t sleep_vote;
-	uint32_t real_time;
-	uint32_t use_nrt_values;
-	uint32_t commit_threshold;
-	uint32_t sleep_threshold;
-	uint32_t sleep_time;
-	uint32_t drain_timer_val;
-	uint32_t event_stale_timer_val;
+    uint32_t ctrl_pkt_id;
+    uint32_t ctrl_pkt_data_len;
+    uint32_t version;
+    uint32_t sleep_vote;
+    uint32_t real_time;
+    uint32_t use_nrt_values;
+    uint32_t commit_threshold;
+    uint32_t sleep_threshold;
+    uint32_t sleep_time;
+    uint32_t drain_timer_val;
+    uint32_t event_stale_timer_val;
 } __packed;
 
 struct diag_ctrl_msg_stm {
-	uint32_t ctrl_pkt_id;
-	uint32_t ctrl_pkt_data_len;
-	uint32_t version;
-	uint8_t  control_data;
+    uint32_t ctrl_pkt_id;
+    uint32_t ctrl_pkt_data_len;
+    uint32_t version;
+    uint8_t  control_data;
 } __packed;
 
 void diagfwd_cntl_init(void);
@@ -146,14 +146,14 @@ void diag_notify_ctrl_update_fn(struct work_struct *work);
 void diag_clean_reg_fn(struct work_struct *work);
 void diag_cntl_smd_work_fn(struct work_struct *work);
 int diag_process_smd_cntl_read_data(struct diag_smd_info *smd_info, void *buf,
-								int total_recd);
+                                    int total_recd);
 void diag_send_diag_mode_update_by_smd(struct diag_smd_info *smd_info,
-							int real_time);
+                                       int real_time);
 void diag_update_proc_vote(uint16_t proc, uint8_t vote);
 void diag_update_real_time_vote(uint16_t proc, uint8_t real_time);
 void diag_real_time_work_fn(struct work_struct *work);
 int diag_send_stm_state(struct diag_smd_info *smd_info,
-				uint8_t stm_control_data);
+                        uint8_t stm_control_data);
 void diag_cntl_stm_notify(struct diag_smd_info *smd_info, int action);
 
 #endif

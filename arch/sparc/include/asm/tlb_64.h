@@ -9,7 +9,7 @@
 
 #ifdef CONFIG_SMP
 extern void smp_flush_tlb_pending(struct mm_struct *,
-				  unsigned long, unsigned long *);
+                                  unsigned long, unsigned long *);
 #endif
 
 #ifdef CONFIG_SMP

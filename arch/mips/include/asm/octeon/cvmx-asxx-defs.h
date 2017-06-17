@@ -82,394 +82,394 @@
 	 CVMX_ADD_IO_SEG(0x00011800B0000008ull + (((block_id) & 1) * 0x8000000ull))
 
 union cvmx_asxx_gmii_rx_clk_set {
-	uint64_t u64;
-	struct cvmx_asxx_gmii_rx_clk_set_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_gmii_rx_clk_set_s cn30xx;
-	struct cvmx_asxx_gmii_rx_clk_set_s cn31xx;
-	struct cvmx_asxx_gmii_rx_clk_set_s cn50xx;
+    uint64_t u64;
+    struct cvmx_asxx_gmii_rx_clk_set_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_gmii_rx_clk_set_s cn30xx;
+    struct cvmx_asxx_gmii_rx_clk_set_s cn31xx;
+    struct cvmx_asxx_gmii_rx_clk_set_s cn50xx;
 };
 
 union cvmx_asxx_gmii_rx_dat_set {
-	uint64_t u64;
-	struct cvmx_asxx_gmii_rx_dat_set_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_gmii_rx_dat_set_s cn30xx;
-	struct cvmx_asxx_gmii_rx_dat_set_s cn31xx;
-	struct cvmx_asxx_gmii_rx_dat_set_s cn50xx;
+    uint64_t u64;
+    struct cvmx_asxx_gmii_rx_dat_set_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_gmii_rx_dat_set_s cn30xx;
+    struct cvmx_asxx_gmii_rx_dat_set_s cn31xx;
+    struct cvmx_asxx_gmii_rx_dat_set_s cn50xx;
 };
 
 union cvmx_asxx_int_en {
-	uint64_t u64;
-	struct cvmx_asxx_int_en_s {
-		uint64_t reserved_12_63:52;
-		uint64_t txpsh:4;
-		uint64_t txpop:4;
-		uint64_t ovrflw:4;
-	} s;
-	struct cvmx_asxx_int_en_cn30xx {
-		uint64_t reserved_11_63:53;
-		uint64_t txpsh:3;
-		uint64_t reserved_7_7:1;
-		uint64_t txpop:3;
-		uint64_t reserved_3_3:1;
-		uint64_t ovrflw:3;
-	} cn30xx;
-	struct cvmx_asxx_int_en_cn30xx cn31xx;
-	struct cvmx_asxx_int_en_s cn38xx;
-	struct cvmx_asxx_int_en_s cn38xxp2;
-	struct cvmx_asxx_int_en_cn30xx cn50xx;
-	struct cvmx_asxx_int_en_s cn58xx;
-	struct cvmx_asxx_int_en_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_int_en_s {
+        uint64_t reserved_12_63:52;
+        uint64_t txpsh:4;
+        uint64_t txpop:4;
+        uint64_t ovrflw:4;
+    } s;
+    struct cvmx_asxx_int_en_cn30xx {
+        uint64_t reserved_11_63:53;
+        uint64_t txpsh:3;
+        uint64_t reserved_7_7:1;
+        uint64_t txpop:3;
+        uint64_t reserved_3_3:1;
+        uint64_t ovrflw:3;
+    } cn30xx;
+    struct cvmx_asxx_int_en_cn30xx cn31xx;
+    struct cvmx_asxx_int_en_s cn38xx;
+    struct cvmx_asxx_int_en_s cn38xxp2;
+    struct cvmx_asxx_int_en_cn30xx cn50xx;
+    struct cvmx_asxx_int_en_s cn58xx;
+    struct cvmx_asxx_int_en_s cn58xxp1;
 };
 
 union cvmx_asxx_int_reg {
-	uint64_t u64;
-	struct cvmx_asxx_int_reg_s {
-		uint64_t reserved_12_63:52;
-		uint64_t txpsh:4;
-		uint64_t txpop:4;
-		uint64_t ovrflw:4;
-	} s;
-	struct cvmx_asxx_int_reg_cn30xx {
-		uint64_t reserved_11_63:53;
-		uint64_t txpsh:3;
-		uint64_t reserved_7_7:1;
-		uint64_t txpop:3;
-		uint64_t reserved_3_3:1;
-		uint64_t ovrflw:3;
-	} cn30xx;
-	struct cvmx_asxx_int_reg_cn30xx cn31xx;
-	struct cvmx_asxx_int_reg_s cn38xx;
-	struct cvmx_asxx_int_reg_s cn38xxp2;
-	struct cvmx_asxx_int_reg_cn30xx cn50xx;
-	struct cvmx_asxx_int_reg_s cn58xx;
-	struct cvmx_asxx_int_reg_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_int_reg_s {
+        uint64_t reserved_12_63:52;
+        uint64_t txpsh:4;
+        uint64_t txpop:4;
+        uint64_t ovrflw:4;
+    } s;
+    struct cvmx_asxx_int_reg_cn30xx {
+        uint64_t reserved_11_63:53;
+        uint64_t txpsh:3;
+        uint64_t reserved_7_7:1;
+        uint64_t txpop:3;
+        uint64_t reserved_3_3:1;
+        uint64_t ovrflw:3;
+    } cn30xx;
+    struct cvmx_asxx_int_reg_cn30xx cn31xx;
+    struct cvmx_asxx_int_reg_s cn38xx;
+    struct cvmx_asxx_int_reg_s cn38xxp2;
+    struct cvmx_asxx_int_reg_cn30xx cn50xx;
+    struct cvmx_asxx_int_reg_s cn58xx;
+    struct cvmx_asxx_int_reg_s cn58xxp1;
 };
 
 union cvmx_asxx_mii_rx_dat_set {
-	uint64_t u64;
-	struct cvmx_asxx_mii_rx_dat_set_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_mii_rx_dat_set_s cn30xx;
-	struct cvmx_asxx_mii_rx_dat_set_s cn50xx;
+    uint64_t u64;
+    struct cvmx_asxx_mii_rx_dat_set_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_mii_rx_dat_set_s cn30xx;
+    struct cvmx_asxx_mii_rx_dat_set_s cn50xx;
 };
 
 union cvmx_asxx_prt_loop {
-	uint64_t u64;
-	struct cvmx_asxx_prt_loop_s {
-		uint64_t reserved_8_63:56;
-		uint64_t ext_loop:4;
-		uint64_t int_loop:4;
-	} s;
-	struct cvmx_asxx_prt_loop_cn30xx {
-		uint64_t reserved_7_63:57;
-		uint64_t ext_loop:3;
-		uint64_t reserved_3_3:1;
-		uint64_t int_loop:3;
-	} cn30xx;
-	struct cvmx_asxx_prt_loop_cn30xx cn31xx;
-	struct cvmx_asxx_prt_loop_s cn38xx;
-	struct cvmx_asxx_prt_loop_s cn38xxp2;
-	struct cvmx_asxx_prt_loop_cn30xx cn50xx;
-	struct cvmx_asxx_prt_loop_s cn58xx;
-	struct cvmx_asxx_prt_loop_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_prt_loop_s {
+        uint64_t reserved_8_63:56;
+        uint64_t ext_loop:4;
+        uint64_t int_loop:4;
+    } s;
+    struct cvmx_asxx_prt_loop_cn30xx {
+        uint64_t reserved_7_63:57;
+        uint64_t ext_loop:3;
+        uint64_t reserved_3_3:1;
+        uint64_t int_loop:3;
+    } cn30xx;
+    struct cvmx_asxx_prt_loop_cn30xx cn31xx;
+    struct cvmx_asxx_prt_loop_s cn38xx;
+    struct cvmx_asxx_prt_loop_s cn38xxp2;
+    struct cvmx_asxx_prt_loop_cn30xx cn50xx;
+    struct cvmx_asxx_prt_loop_s cn58xx;
+    struct cvmx_asxx_prt_loop_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_bypass {
-	uint64_t u64;
-	struct cvmx_asxx_rld_bypass_s {
-		uint64_t reserved_1_63:63;
-		uint64_t bypass:1;
-	} s;
-	struct cvmx_asxx_rld_bypass_s cn38xx;
-	struct cvmx_asxx_rld_bypass_s cn38xxp2;
-	struct cvmx_asxx_rld_bypass_s cn58xx;
-	struct cvmx_asxx_rld_bypass_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_bypass_s {
+        uint64_t reserved_1_63:63;
+        uint64_t bypass:1;
+    } s;
+    struct cvmx_asxx_rld_bypass_s cn38xx;
+    struct cvmx_asxx_rld_bypass_s cn38xxp2;
+    struct cvmx_asxx_rld_bypass_s cn58xx;
+    struct cvmx_asxx_rld_bypass_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_bypass_setting {
-	uint64_t u64;
-	struct cvmx_asxx_rld_bypass_setting_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_rld_bypass_setting_s cn38xx;
-	struct cvmx_asxx_rld_bypass_setting_s cn38xxp2;
-	struct cvmx_asxx_rld_bypass_setting_s cn58xx;
-	struct cvmx_asxx_rld_bypass_setting_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_bypass_setting_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_rld_bypass_setting_s cn38xx;
+    struct cvmx_asxx_rld_bypass_setting_s cn38xxp2;
+    struct cvmx_asxx_rld_bypass_setting_s cn58xx;
+    struct cvmx_asxx_rld_bypass_setting_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_comp {
-	uint64_t u64;
-	struct cvmx_asxx_rld_comp_s {
-		uint64_t reserved_9_63:55;
-		uint64_t pctl:5;
-		uint64_t nctl:4;
-	} s;
-	struct cvmx_asxx_rld_comp_cn38xx {
-		uint64_t reserved_8_63:56;
-		uint64_t pctl:4;
-		uint64_t nctl:4;
-	} cn38xx;
-	struct cvmx_asxx_rld_comp_cn38xx cn38xxp2;
-	struct cvmx_asxx_rld_comp_s cn58xx;
-	struct cvmx_asxx_rld_comp_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_comp_s {
+        uint64_t reserved_9_63:55;
+        uint64_t pctl:5;
+        uint64_t nctl:4;
+    } s;
+    struct cvmx_asxx_rld_comp_cn38xx {
+        uint64_t reserved_8_63:56;
+        uint64_t pctl:4;
+        uint64_t nctl:4;
+    } cn38xx;
+    struct cvmx_asxx_rld_comp_cn38xx cn38xxp2;
+    struct cvmx_asxx_rld_comp_s cn58xx;
+    struct cvmx_asxx_rld_comp_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_data_drv {
-	uint64_t u64;
-	struct cvmx_asxx_rld_data_drv_s {
-		uint64_t reserved_8_63:56;
-		uint64_t pctl:4;
-		uint64_t nctl:4;
-	} s;
-	struct cvmx_asxx_rld_data_drv_s cn38xx;
-	struct cvmx_asxx_rld_data_drv_s cn38xxp2;
-	struct cvmx_asxx_rld_data_drv_s cn58xx;
-	struct cvmx_asxx_rld_data_drv_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_data_drv_s {
+        uint64_t reserved_8_63:56;
+        uint64_t pctl:4;
+        uint64_t nctl:4;
+    } s;
+    struct cvmx_asxx_rld_data_drv_s cn38xx;
+    struct cvmx_asxx_rld_data_drv_s cn38xxp2;
+    struct cvmx_asxx_rld_data_drv_s cn58xx;
+    struct cvmx_asxx_rld_data_drv_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_fcram_mode {
-	uint64_t u64;
-	struct cvmx_asxx_rld_fcram_mode_s {
-		uint64_t reserved_1_63:63;
-		uint64_t mode:1;
-	} s;
-	struct cvmx_asxx_rld_fcram_mode_s cn38xx;
-	struct cvmx_asxx_rld_fcram_mode_s cn38xxp2;
+    uint64_t u64;
+    struct cvmx_asxx_rld_fcram_mode_s {
+        uint64_t reserved_1_63:63;
+        uint64_t mode:1;
+    } s;
+    struct cvmx_asxx_rld_fcram_mode_s cn38xx;
+    struct cvmx_asxx_rld_fcram_mode_s cn38xxp2;
 };
 
 union cvmx_asxx_rld_nctl_strong {
-	uint64_t u64;
-	struct cvmx_asxx_rld_nctl_strong_s {
-		uint64_t reserved_5_63:59;
-		uint64_t nctl:5;
-	} s;
-	struct cvmx_asxx_rld_nctl_strong_s cn38xx;
-	struct cvmx_asxx_rld_nctl_strong_s cn38xxp2;
-	struct cvmx_asxx_rld_nctl_strong_s cn58xx;
-	struct cvmx_asxx_rld_nctl_strong_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_nctl_strong_s {
+        uint64_t reserved_5_63:59;
+        uint64_t nctl:5;
+    } s;
+    struct cvmx_asxx_rld_nctl_strong_s cn38xx;
+    struct cvmx_asxx_rld_nctl_strong_s cn38xxp2;
+    struct cvmx_asxx_rld_nctl_strong_s cn58xx;
+    struct cvmx_asxx_rld_nctl_strong_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_nctl_weak {
-	uint64_t u64;
-	struct cvmx_asxx_rld_nctl_weak_s {
-		uint64_t reserved_5_63:59;
-		uint64_t nctl:5;
-	} s;
-	struct cvmx_asxx_rld_nctl_weak_s cn38xx;
-	struct cvmx_asxx_rld_nctl_weak_s cn38xxp2;
-	struct cvmx_asxx_rld_nctl_weak_s cn58xx;
-	struct cvmx_asxx_rld_nctl_weak_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_nctl_weak_s {
+        uint64_t reserved_5_63:59;
+        uint64_t nctl:5;
+    } s;
+    struct cvmx_asxx_rld_nctl_weak_s cn38xx;
+    struct cvmx_asxx_rld_nctl_weak_s cn38xxp2;
+    struct cvmx_asxx_rld_nctl_weak_s cn58xx;
+    struct cvmx_asxx_rld_nctl_weak_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_pctl_strong {
-	uint64_t u64;
-	struct cvmx_asxx_rld_pctl_strong_s {
-		uint64_t reserved_5_63:59;
-		uint64_t pctl:5;
-	} s;
-	struct cvmx_asxx_rld_pctl_strong_s cn38xx;
-	struct cvmx_asxx_rld_pctl_strong_s cn38xxp2;
-	struct cvmx_asxx_rld_pctl_strong_s cn58xx;
-	struct cvmx_asxx_rld_pctl_strong_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_pctl_strong_s {
+        uint64_t reserved_5_63:59;
+        uint64_t pctl:5;
+    } s;
+    struct cvmx_asxx_rld_pctl_strong_s cn38xx;
+    struct cvmx_asxx_rld_pctl_strong_s cn38xxp2;
+    struct cvmx_asxx_rld_pctl_strong_s cn58xx;
+    struct cvmx_asxx_rld_pctl_strong_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_pctl_weak {
-	uint64_t u64;
-	struct cvmx_asxx_rld_pctl_weak_s {
-		uint64_t reserved_5_63:59;
-		uint64_t pctl:5;
-	} s;
-	struct cvmx_asxx_rld_pctl_weak_s cn38xx;
-	struct cvmx_asxx_rld_pctl_weak_s cn38xxp2;
-	struct cvmx_asxx_rld_pctl_weak_s cn58xx;
-	struct cvmx_asxx_rld_pctl_weak_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_pctl_weak_s {
+        uint64_t reserved_5_63:59;
+        uint64_t pctl:5;
+    } s;
+    struct cvmx_asxx_rld_pctl_weak_s cn38xx;
+    struct cvmx_asxx_rld_pctl_weak_s cn38xxp2;
+    struct cvmx_asxx_rld_pctl_weak_s cn58xx;
+    struct cvmx_asxx_rld_pctl_weak_s cn58xxp1;
 };
 
 union cvmx_asxx_rld_setting {
-	uint64_t u64;
-	struct cvmx_asxx_rld_setting_s {
-		uint64_t reserved_13_63:51;
-		uint64_t dfaset:5;
-		uint64_t dfalag:1;
-		uint64_t dfalead:1;
-		uint64_t dfalock:1;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_rld_setting_cn38xx {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} cn38xx;
-	struct cvmx_asxx_rld_setting_cn38xx cn38xxp2;
-	struct cvmx_asxx_rld_setting_s cn58xx;
-	struct cvmx_asxx_rld_setting_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rld_setting_s {
+        uint64_t reserved_13_63:51;
+        uint64_t dfaset:5;
+        uint64_t dfalag:1;
+        uint64_t dfalead:1;
+        uint64_t dfalock:1;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_rld_setting_cn38xx {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } cn38xx;
+    struct cvmx_asxx_rld_setting_cn38xx cn38xxp2;
+    struct cvmx_asxx_rld_setting_s cn58xx;
+    struct cvmx_asxx_rld_setting_s cn58xxp1;
 };
 
 union cvmx_asxx_rx_clk_setx {
-	uint64_t u64;
-	struct cvmx_asxx_rx_clk_setx_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_rx_clk_setx_s cn30xx;
-	struct cvmx_asxx_rx_clk_setx_s cn31xx;
-	struct cvmx_asxx_rx_clk_setx_s cn38xx;
-	struct cvmx_asxx_rx_clk_setx_s cn38xxp2;
-	struct cvmx_asxx_rx_clk_setx_s cn50xx;
-	struct cvmx_asxx_rx_clk_setx_s cn58xx;
-	struct cvmx_asxx_rx_clk_setx_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rx_clk_setx_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_rx_clk_setx_s cn30xx;
+    struct cvmx_asxx_rx_clk_setx_s cn31xx;
+    struct cvmx_asxx_rx_clk_setx_s cn38xx;
+    struct cvmx_asxx_rx_clk_setx_s cn38xxp2;
+    struct cvmx_asxx_rx_clk_setx_s cn50xx;
+    struct cvmx_asxx_rx_clk_setx_s cn58xx;
+    struct cvmx_asxx_rx_clk_setx_s cn58xxp1;
 };
 
 union cvmx_asxx_rx_prt_en {
-	uint64_t u64;
-	struct cvmx_asxx_rx_prt_en_s {
-		uint64_t reserved_4_63:60;
-		uint64_t prt_en:4;
-	} s;
-	struct cvmx_asxx_rx_prt_en_cn30xx {
-		uint64_t reserved_3_63:61;
-		uint64_t prt_en:3;
-	} cn30xx;
-	struct cvmx_asxx_rx_prt_en_cn30xx cn31xx;
-	struct cvmx_asxx_rx_prt_en_s cn38xx;
-	struct cvmx_asxx_rx_prt_en_s cn38xxp2;
-	struct cvmx_asxx_rx_prt_en_cn30xx cn50xx;
-	struct cvmx_asxx_rx_prt_en_s cn58xx;
-	struct cvmx_asxx_rx_prt_en_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_rx_prt_en_s {
+        uint64_t reserved_4_63:60;
+        uint64_t prt_en:4;
+    } s;
+    struct cvmx_asxx_rx_prt_en_cn30xx {
+        uint64_t reserved_3_63:61;
+        uint64_t prt_en:3;
+    } cn30xx;
+    struct cvmx_asxx_rx_prt_en_cn30xx cn31xx;
+    struct cvmx_asxx_rx_prt_en_s cn38xx;
+    struct cvmx_asxx_rx_prt_en_s cn38xxp2;
+    struct cvmx_asxx_rx_prt_en_cn30xx cn50xx;
+    struct cvmx_asxx_rx_prt_en_s cn58xx;
+    struct cvmx_asxx_rx_prt_en_s cn58xxp1;
 };
 
 union cvmx_asxx_rx_wol {
-	uint64_t u64;
-	struct cvmx_asxx_rx_wol_s {
-		uint64_t reserved_2_63:62;
-		uint64_t status:1;
-		uint64_t enable:1;
-	} s;
-	struct cvmx_asxx_rx_wol_s cn38xx;
-	struct cvmx_asxx_rx_wol_s cn38xxp2;
+    uint64_t u64;
+    struct cvmx_asxx_rx_wol_s {
+        uint64_t reserved_2_63:62;
+        uint64_t status:1;
+        uint64_t enable:1;
+    } s;
+    struct cvmx_asxx_rx_wol_s cn38xx;
+    struct cvmx_asxx_rx_wol_s cn38xxp2;
 };
 
 union cvmx_asxx_rx_wol_msk {
-	uint64_t u64;
-	struct cvmx_asxx_rx_wol_msk_s {
-		uint64_t msk:64;
-	} s;
-	struct cvmx_asxx_rx_wol_msk_s cn38xx;
-	struct cvmx_asxx_rx_wol_msk_s cn38xxp2;
+    uint64_t u64;
+    struct cvmx_asxx_rx_wol_msk_s {
+        uint64_t msk:64;
+    } s;
+    struct cvmx_asxx_rx_wol_msk_s cn38xx;
+    struct cvmx_asxx_rx_wol_msk_s cn38xxp2;
 };
 
 union cvmx_asxx_rx_wol_powok {
-	uint64_t u64;
-	struct cvmx_asxx_rx_wol_powok_s {
-		uint64_t reserved_1_63:63;
-		uint64_t powerok:1;
-	} s;
-	struct cvmx_asxx_rx_wol_powok_s cn38xx;
-	struct cvmx_asxx_rx_wol_powok_s cn38xxp2;
+    uint64_t u64;
+    struct cvmx_asxx_rx_wol_powok_s {
+        uint64_t reserved_1_63:63;
+        uint64_t powerok:1;
+    } s;
+    struct cvmx_asxx_rx_wol_powok_s cn38xx;
+    struct cvmx_asxx_rx_wol_powok_s cn38xxp2;
 };
 
 union cvmx_asxx_rx_wol_sig {
-	uint64_t u64;
-	struct cvmx_asxx_rx_wol_sig_s {
-		uint64_t reserved_32_63:32;
-		uint64_t sig:32;
-	} s;
-	struct cvmx_asxx_rx_wol_sig_s cn38xx;
-	struct cvmx_asxx_rx_wol_sig_s cn38xxp2;
+    uint64_t u64;
+    struct cvmx_asxx_rx_wol_sig_s {
+        uint64_t reserved_32_63:32;
+        uint64_t sig:32;
+    } s;
+    struct cvmx_asxx_rx_wol_sig_s cn38xx;
+    struct cvmx_asxx_rx_wol_sig_s cn38xxp2;
 };
 
 union cvmx_asxx_tx_clk_setx {
-	uint64_t u64;
-	struct cvmx_asxx_tx_clk_setx_s {
-		uint64_t reserved_5_63:59;
-		uint64_t setting:5;
-	} s;
-	struct cvmx_asxx_tx_clk_setx_s cn30xx;
-	struct cvmx_asxx_tx_clk_setx_s cn31xx;
-	struct cvmx_asxx_tx_clk_setx_s cn38xx;
-	struct cvmx_asxx_tx_clk_setx_s cn38xxp2;
-	struct cvmx_asxx_tx_clk_setx_s cn50xx;
-	struct cvmx_asxx_tx_clk_setx_s cn58xx;
-	struct cvmx_asxx_tx_clk_setx_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_tx_clk_setx_s {
+        uint64_t reserved_5_63:59;
+        uint64_t setting:5;
+    } s;
+    struct cvmx_asxx_tx_clk_setx_s cn30xx;
+    struct cvmx_asxx_tx_clk_setx_s cn31xx;
+    struct cvmx_asxx_tx_clk_setx_s cn38xx;
+    struct cvmx_asxx_tx_clk_setx_s cn38xxp2;
+    struct cvmx_asxx_tx_clk_setx_s cn50xx;
+    struct cvmx_asxx_tx_clk_setx_s cn58xx;
+    struct cvmx_asxx_tx_clk_setx_s cn58xxp1;
 };
 
 union cvmx_asxx_tx_comp_byp {
-	uint64_t u64;
-	struct cvmx_asxx_tx_comp_byp_s {
-		uint64_t reserved_0_63:64;
-	} s;
-	struct cvmx_asxx_tx_comp_byp_cn30xx {
-		uint64_t reserved_9_63:55;
-		uint64_t bypass:1;
-		uint64_t pctl:4;
-		uint64_t nctl:4;
-	} cn30xx;
-	struct cvmx_asxx_tx_comp_byp_cn30xx cn31xx;
-	struct cvmx_asxx_tx_comp_byp_cn38xx {
-		uint64_t reserved_8_63:56;
-		uint64_t pctl:4;
-		uint64_t nctl:4;
-	} cn38xx;
-	struct cvmx_asxx_tx_comp_byp_cn38xx cn38xxp2;
-	struct cvmx_asxx_tx_comp_byp_cn50xx {
-		uint64_t reserved_17_63:47;
-		uint64_t bypass:1;
-		uint64_t reserved_13_15:3;
-		uint64_t pctl:5;
-		uint64_t reserved_5_7:3;
-		uint64_t nctl:5;
-	} cn50xx;
-	struct cvmx_asxx_tx_comp_byp_cn58xx {
-		uint64_t reserved_13_63:51;
-		uint64_t pctl:5;
-		uint64_t reserved_5_7:3;
-		uint64_t nctl:5;
-	} cn58xx;
-	struct cvmx_asxx_tx_comp_byp_cn58xx cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_tx_comp_byp_s {
+        uint64_t reserved_0_63:64;
+    } s;
+    struct cvmx_asxx_tx_comp_byp_cn30xx {
+        uint64_t reserved_9_63:55;
+        uint64_t bypass:1;
+        uint64_t pctl:4;
+        uint64_t nctl:4;
+    } cn30xx;
+    struct cvmx_asxx_tx_comp_byp_cn30xx cn31xx;
+    struct cvmx_asxx_tx_comp_byp_cn38xx {
+        uint64_t reserved_8_63:56;
+        uint64_t pctl:4;
+        uint64_t nctl:4;
+    } cn38xx;
+    struct cvmx_asxx_tx_comp_byp_cn38xx cn38xxp2;
+    struct cvmx_asxx_tx_comp_byp_cn50xx {
+        uint64_t reserved_17_63:47;
+        uint64_t bypass:1;
+        uint64_t reserved_13_15:3;
+        uint64_t pctl:5;
+        uint64_t reserved_5_7:3;
+        uint64_t nctl:5;
+    } cn50xx;
+    struct cvmx_asxx_tx_comp_byp_cn58xx {
+        uint64_t reserved_13_63:51;
+        uint64_t pctl:5;
+        uint64_t reserved_5_7:3;
+        uint64_t nctl:5;
+    } cn58xx;
+    struct cvmx_asxx_tx_comp_byp_cn58xx cn58xxp1;
 };
 
 union cvmx_asxx_tx_hi_waterx {
-	uint64_t u64;
-	struct cvmx_asxx_tx_hi_waterx_s {
-		uint64_t reserved_4_63:60;
-		uint64_t mark:4;
-	} s;
-	struct cvmx_asxx_tx_hi_waterx_cn30xx {
-		uint64_t reserved_3_63:61;
-		uint64_t mark:3;
-	} cn30xx;
-	struct cvmx_asxx_tx_hi_waterx_cn30xx cn31xx;
-	struct cvmx_asxx_tx_hi_waterx_s cn38xx;
-	struct cvmx_asxx_tx_hi_waterx_s cn38xxp2;
-	struct cvmx_asxx_tx_hi_waterx_cn30xx cn50xx;
-	struct cvmx_asxx_tx_hi_waterx_s cn58xx;
-	struct cvmx_asxx_tx_hi_waterx_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_tx_hi_waterx_s {
+        uint64_t reserved_4_63:60;
+        uint64_t mark:4;
+    } s;
+    struct cvmx_asxx_tx_hi_waterx_cn30xx {
+        uint64_t reserved_3_63:61;
+        uint64_t mark:3;
+    } cn30xx;
+    struct cvmx_asxx_tx_hi_waterx_cn30xx cn31xx;
+    struct cvmx_asxx_tx_hi_waterx_s cn38xx;
+    struct cvmx_asxx_tx_hi_waterx_s cn38xxp2;
+    struct cvmx_asxx_tx_hi_waterx_cn30xx cn50xx;
+    struct cvmx_asxx_tx_hi_waterx_s cn58xx;
+    struct cvmx_asxx_tx_hi_waterx_s cn58xxp1;
 };
 
 union cvmx_asxx_tx_prt_en {
-	uint64_t u64;
-	struct cvmx_asxx_tx_prt_en_s {
-		uint64_t reserved_4_63:60;
-		uint64_t prt_en:4;
-	} s;
-	struct cvmx_asxx_tx_prt_en_cn30xx {
-		uint64_t reserved_3_63:61;
-		uint64_t prt_en:3;
-	} cn30xx;
-	struct cvmx_asxx_tx_prt_en_cn30xx cn31xx;
-	struct cvmx_asxx_tx_prt_en_s cn38xx;
-	struct cvmx_asxx_tx_prt_en_s cn38xxp2;
-	struct cvmx_asxx_tx_prt_en_cn30xx cn50xx;
-	struct cvmx_asxx_tx_prt_en_s cn58xx;
-	struct cvmx_asxx_tx_prt_en_s cn58xxp1;
+    uint64_t u64;
+    struct cvmx_asxx_tx_prt_en_s {
+        uint64_t reserved_4_63:60;
+        uint64_t prt_en:4;
+    } s;
+    struct cvmx_asxx_tx_prt_en_cn30xx {
+        uint64_t reserved_3_63:61;
+        uint64_t prt_en:3;
+    } cn30xx;
+    struct cvmx_asxx_tx_prt_en_cn30xx cn31xx;
+    struct cvmx_asxx_tx_prt_en_s cn38xx;
+    struct cvmx_asxx_tx_prt_en_s cn38xxp2;
+    struct cvmx_asxx_tx_prt_en_cn30xx cn50xx;
+    struct cvmx_asxx_tx_prt_en_s cn58xx;
+    struct cvmx_asxx_tx_prt_en_s cn58xxp1;
 };
 
 #endif

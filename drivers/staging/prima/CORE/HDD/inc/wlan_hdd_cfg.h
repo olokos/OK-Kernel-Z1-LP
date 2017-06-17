@@ -289,8 +289,7 @@
 #define CFG_ENABLE_ADAPT_RX_DRAIN_MAX       WNI_CFG_ENABLE_ADAPT_RX_DRAIN_STAMAX
 #define CFG_ENABLE_ADAPT_RX_DRAIN_DEFAULT   WNI_CFG_ENABLE_ADAPT_RX_DRAIN_STADEF
 
-typedef enum
-{
+typedef enum {
     eHDD_DOT11_MODE_AUTO = 0, //covers all things we support
     eHDD_DOT11_MODE_abg,      //11a/b/g only, no HT, no proprietary
     eHDD_DOT11_MODE_11b,
@@ -1416,8 +1415,7 @@ typedef enum
 #define CFG_ENABLE_DFS_PNO_CHNL_SCAN_MAX               ( 1 )
 #define CFG_ENABLE_DFS_PNO_CHNL_SCAN_DEFAULT           ( 1 )
 
-typedef enum
-{
+typedef enum {
     eHDD_LINK_SPEED_REPORT_ACTUAL = 0,
     eHDD_LINK_SPEED_REPORT_MAX = 1,
     eHDD_LINK_SPEED_REPORT_MAX_SCALED = 2,
@@ -1527,10 +1525,8 @@ typedef enum
 #define CFG_DEFAULT_RATE_INDEX_24GH_MAX           ( 7 )
 #define CFG_DEFAULT_RATE_INDEX_24GH_DEFAULT       ( 1 )
 
-static __inline tANI_U32 defHddRateToDefCfgRate( tANI_U32 defRateIndex )
-{
-    switch(defRateIndex)
-    {
+static __inline tANI_U32 defHddRateToDefCfgRate( tANI_U32 defRateIndex ) {
+    switch(defRateIndex) {
     case HDD_DEFAULT_RATE_12MBPS:
         return CFG_DEFAULT_RATE_12MBPS;
         break;
@@ -2412,8 +2408,7 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
   Type declarations
   -------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     //Bitmap to track what is explicitly configured
     DECLARE_BITMAP(bExplicitCfg, MAX_CFG_INI_ITEMS);
 
@@ -2932,8 +2927,7 @@ tANI_BOOLEAN hdd_is_okc_mode_enabled(hdd_context_t *pHddCtx);
 // modified dynamicially
 // on a running system
 
-typedef enum
-{
+typedef enum {
     WLAN_PARAM_Integer,
     WLAN_PARAM_SignedInteger,
     WLAN_PARAM_HexInteger,
@@ -2987,8 +2981,7 @@ typedef enum
   0                                                              \
 }
 
-typedef struct tREG_TABLE_ENTRY
-{
+typedef struct tREG_TABLE_ENTRY {
 
     char*               RegName;            // variable name in the qcom_cfg.ini file
     WLAN_PARAMETER_TYPE RegType;            // variable type in the hdd_config_t structure
@@ -3003,8 +2996,7 @@ typedef struct tREG_TABLE_ENTRY
     unsigned long       NotifyId;           // Dynamic modification identifier
 } REG_TABLE_ENTRY;
 
-static __inline unsigned long utilMin( unsigned long a, unsigned long b )
-{
+static __inline unsigned long utilMin( unsigned long a, unsigned long b ) {
     return( ( a < b ) ? a : b );
 }
 

@@ -25,28 +25,28 @@
 #include <linux/miscdevice.h>
 
 struct nfc_device {
-	struct cdev cdev;
-	struct class *char_class;
+    struct cdev cdev;
+    struct class *char_class;
 };
 
 enum ehandler_mode {
-	UNSOLICITED_MODE = 0,
-	SOLICITED_MODE,
-	UNSOLICITED_FTM_RAW_MODE,
-	SOLICITED_FTM_RAW_MODE
+    UNSOLICITED_MODE = 0,
+    SOLICITED_MODE,
+    UNSOLICITED_FTM_RAW_MODE,
+    SOLICITED_FTM_RAW_MODE
 };
 
 enum ekernel_logging_mode {
-	LEVEL_0 = 0,	/* For Basic Comms, such asNCI TX/TX to NFCC */
-	LEVEL_1,	/* Other Debug e.g. Notifications, ISR hit, etc ..*/
-	LEVEL_2,
-	LEVEL_3,
-	LEVEL_4,
-	LEVEL_5
+    LEVEL_0 = 0,	/* For Basic Comms, such asNCI TX/TX to NFCC */
+    LEVEL_1,	/* Other Debug e.g. Notifications, ISR hit, etc ..*/
+    LEVEL_2,
+    LEVEL_3,
+    LEVEL_4,
+    LEVEL_5
 };
 
 struct devicemode {
-	enum ehandler_mode	handle_flavour;
+    enum ehandler_mode	handle_flavour;
 } tdevicemode;
 
 #define NFC_DRIVER_NAME		"nfc-nci"
@@ -148,11 +148,11 @@ struct devicemode {
 
 /* board config */
 struct nfc_platform_data {
-	int (*request_resources) (struct i2c_client *client);
-	void (*free_resources) (void);
-	void (*enable) (int fw);
-	int (*test) (void);
-	void (*disable) (void);
+    int (*request_resources) (struct i2c_client *client);
+    void (*free_resources) (void);
+    void (*enable) (int fw);
+    int (*test) (void);
+    void (*disable) (void);
 };
 /*
  * Internal NFCC Hardware states. At present these may not be possible to
@@ -160,73 +160,73 @@ struct nfc_platform_data {
  * in monitor state! Also, need to detect DISABLE control GPIO from PMIC.
  */
 enum nfcc_hardware_state {
-	NFCC_STATE_MONITOR,	/* VBAT < h/w Critcal Voltage */
-	/* VBAT > H/W Critical Voltage;
-	Lowest Power Mode - DISABLE = 1; only
-	possible when phone is ON */
-	NFCC_STATE_HPD,
-	/* VBAT > H/W Critical Voltage; DISABLE = 0;
-	Only possible when phone is ON */
-	NFCC_STSTE_ULPM,
-	/* VBAT > H/W Critical Voltage; DISABLE = 0;
-	Powered by PMIC & VBAT; 1.8V I/O supply on; VDDPX available, boot is
-	initiated by host over I2C */
-	NFCC_STATE_NORMAL_REGION1,
-	/* VBAT > H/W Critical Voltage; DISABLE = 0;
-	Powered by VBAT; 1.8V I/O supply on; VDDPX available, boot is initiated
-	by host over I2C */
-	NFCC_STATE_NORMAL_REGION2,
+    NFCC_STATE_MONITOR,	/* VBAT < h/w Critcal Voltage */
+    /* VBAT > H/W Critical Voltage;
+    Lowest Power Mode - DISABLE = 1; only
+    possible when phone is ON */
+    NFCC_STATE_HPD,
+    /* VBAT > H/W Critical Voltage; DISABLE = 0;
+    Only possible when phone is ON */
+    NFCC_STSTE_ULPM,
+    /* VBAT > H/W Critical Voltage; DISABLE = 0;
+    Powered by PMIC & VBAT; 1.8V I/O supply on; VDDPX available, boot is
+    initiated by host over I2C */
+    NFCC_STATE_NORMAL_REGION1,
+    /* VBAT > H/W Critical Voltage; DISABLE = 0;
+    Powered by VBAT; 1.8V I/O supply on; VDDPX available, boot is initiated
+    by host over I2C */
+    NFCC_STATE_NORMAL_REGION2,
 };
 
 /* We assume here that VBATT > h/w Critical Voltage */
 enum nfcc_state {
-	/* Assume In ULPM state, ready for initialisation, cannot detect for
-	Monitor or HPD states */
-	NFCC_STATE_COLD,
-	/* (VDDPX==1) && (Following I2C initialisation). In Region 1 or Region2
-	state WAKE */
-	NFCC_STATE_NORMAL_WAKE,
-	/* (VDDPX==1) && (Following I2C initialisation). In Region 1 or Region2
-	state SLEEP */
-	NFCC_STATE_NORMAL_SLEEP,
+    /* Assume In ULPM state, ready for initialisation, cannot detect for
+    Monitor or HPD states */
+    NFCC_STATE_COLD,
+    /* (VDDPX==1) && (Following I2C initialisation). In Region 1 or Region2
+    state WAKE */
+    NFCC_STATE_NORMAL_WAKE,
+    /* (VDDPX==1) && (Following I2C initialisation). In Region 1 or Region2
+    state SLEEP */
+    NFCC_STATE_NORMAL_SLEEP,
 };
 
 
 enum nfcc_irq {
-	NFCC_NO_INT,
-	NFCC_INT,
+    NFCC_NO_INT,
+    NFCC_INT,
 };
 
 enum nfcc_initial_core_reset_ntf {
-	TIMEDOUT_INITIAL_CORE_RESET_NTF = 0, /* 0*/
-	ARRIVED_INITIAL_CORE_RESET_NTF, /* 1 */
-	DEFAULT_INITIAL_CORE_RESET_NTF, /*2*/
+    TIMEDOUT_INITIAL_CORE_RESET_NTF = 0, /* 0*/
+    ARRIVED_INITIAL_CORE_RESET_NTF, /* 1 */
+    DEFAULT_INITIAL_CORE_RESET_NTF, /*2*/
 };
 
 struct nfc_info {
-	struct	miscdevice			miscdev;
-	struct	i2c_client			*i2c_dev;
-	struct	regulator_bulk_data		regs[3];
-	enum	nfcc_state			state;
-	wait_queue_head_t			read_wait;
-	loff_t					read_offset;
-	struct	mutex				read_mutex;
-	struct	mutex				mutex;
-	u8					*buf;
-	size_t					buflen;
-	spinlock_t				irq_enabled_lock;
-	unsigned int				count_irq;
-	enum	nfcc_irq			read_irq;
+    struct	miscdevice			miscdev;
+    struct	i2c_client			*i2c_dev;
+    struct	regulator_bulk_data		regs[3];
+    enum	nfcc_state			state;
+    wait_queue_head_t			read_wait;
+    loff_t					read_offset;
+    struct	mutex				read_mutex;
+    struct	mutex				mutex;
+    u8					*buf;
+    size_t					buflen;
+    spinlock_t				irq_enabled_lock;
+    unsigned int				count_irq;
+    enum	nfcc_irq			read_irq;
 };
 
 
 struct nfc_i2c_platform_data {
-	unsigned int	nfc_irq_gpio;
-	unsigned int	nfc_clk_en_gpio;
-	unsigned int	dis_gpio;
-	unsigned int	irq_gpio;
-	unsigned int	ven_gpio;
-	unsigned int	firm_gpio;
-	unsigned int	reg;
+    unsigned int	nfc_irq_gpio;
+    unsigned int	nfc_clk_en_gpio;
+    unsigned int	dis_gpio;
+    unsigned int	irq_gpio;
+    unsigned int	ven_gpio;
+    unsigned int	firm_gpio;
+    unsigned int	reg;
 };
 #endif

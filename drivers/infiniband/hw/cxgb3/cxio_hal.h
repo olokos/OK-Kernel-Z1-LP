@@ -65,69 +65,67 @@
 #define CXIO_FW_MAJ 7
 
 struct cxio_hal_ctrl_qp {
-	u32 wptr;
-	u32 rptr;
-	struct mutex lock;	/* for the wtpr, can sleep */
-	wait_queue_head_t waitq;/* wait for RspQ/CQE msg */
-	union t3_wr *workq;	/* the work request queue */
-	dma_addr_t dma_addr;	/* pci bus address of the workq */
-	DEFINE_DMA_UNMAP_ADDR(mapping);
-	void __iomem *doorbell;
+    u32 wptr;
+    u32 rptr;
+    struct mutex lock;	/* for the wtpr, can sleep */
+    wait_queue_head_t waitq;/* wait for RspQ/CQE msg */
+    union t3_wr *workq;	/* the work request queue */
+    dma_addr_t dma_addr;	/* pci bus address of the workq */
+    DEFINE_DMA_UNMAP_ADDR(mapping);
+    void __iomem *doorbell;
 };
 
 struct cxio_hal_resource {
-	struct kfifo tpt_fifo;
-	spinlock_t tpt_fifo_lock;
-	struct kfifo qpid_fifo;
-	spinlock_t qpid_fifo_lock;
-	struct kfifo cqid_fifo;
-	spinlock_t cqid_fifo_lock;
-	struct kfifo pdid_fifo;
-	spinlock_t pdid_fifo_lock;
+    struct kfifo tpt_fifo;
+    spinlock_t tpt_fifo_lock;
+    struct kfifo qpid_fifo;
+    spinlock_t qpid_fifo_lock;
+    struct kfifo cqid_fifo;
+    spinlock_t cqid_fifo_lock;
+    struct kfifo pdid_fifo;
+    spinlock_t pdid_fifo_lock;
 };
 
 struct cxio_qpid_list {
-	struct list_head entry;
-	u32 qpid;
+    struct list_head entry;
+    u32 qpid;
 };
 
 struct cxio_ucontext {
-	struct list_head qpids;
-	struct mutex lock;
+    struct list_head qpids;
+    struct mutex lock;
 };
 
 struct cxio_rdev {
-	char dev_name[T3_MAX_DEV_NAME_LEN];
-	struct t3cdev *t3cdev_p;
-	struct rdma_info rnic_info;
-	struct adap_ports port_info;
-	struct cxio_hal_resource *rscp;
-	struct cxio_hal_ctrl_qp ctrl_qp;
-	void *ulp;
-	unsigned long qpshift;
-	u32 qpnr;
-	u32 qpmask;
-	struct cxio_ucontext uctx;
-	struct gen_pool *pbl_pool;
-	struct gen_pool *rqt_pool;
-	struct list_head entry;
-	struct ch_embedded_info fw_info;
-	u32	flags;
+    char dev_name[T3_MAX_DEV_NAME_LEN];
+    struct t3cdev *t3cdev_p;
+    struct rdma_info rnic_info;
+    struct adap_ports port_info;
+    struct cxio_hal_resource *rscp;
+    struct cxio_hal_ctrl_qp ctrl_qp;
+    void *ulp;
+    unsigned long qpshift;
+    u32 qpnr;
+    u32 qpmask;
+    struct cxio_ucontext uctx;
+    struct gen_pool *pbl_pool;
+    struct gen_pool *rqt_pool;
+    struct list_head entry;
+    struct ch_embedded_info fw_info;
+    u32	flags;
 #define	CXIO_ERROR_FATAL	1
 };
 
-static inline int cxio_fatal_error(struct cxio_rdev *rdev_p)
-{
-	return rdev_p->flags & CXIO_ERROR_FATAL;
+static inline int cxio_fatal_error(struct cxio_rdev *rdev_p) {
+    return rdev_p->flags & CXIO_ERROR_FATAL;
 }
 
-static inline int cxio_num_stags(struct cxio_rdev *rdev_p)
-{
-	return min((int)T3_MAX_NUM_STAG, (int)((rdev_p->rnic_info.tpt_top - rdev_p->rnic_info.tpt_base) >> 5));
+static inline int cxio_num_stags(struct cxio_rdev *rdev_p) {
+    return min((int)T3_MAX_NUM_STAG, (int)((rdev_p->rnic_info.tpt_top - rdev_p->rnic_info.tpt_base) >> 5));
 }
 
 typedef void (*cxio_hal_ev_callback_func_t) (struct cxio_rdev * rdev_p,
-					     struct sk_buff * skb);
+        struct sk_buff * skb);
 
 #define RSPQ_CQID(rsp) (be32_to_cpu(rsp->cq_ptrid) & 0xffff)
 #define RSPQ_CQPTR(rsp) ((be32_to_cpu(rsp->cq_ptrid) >> 16) & 0xffff)
@@ -140,43 +138,43 @@ typedef void (*cxio_hal_ev_callback_func_t) (struct cxio_rdev * rdev_p,
 #define RSPQ_CREDIT_THRESH(rsp) ((be32_to_cpu(rsp->flags) >> 22) & 1)
 
 struct respQ_msg_t {
-	__be32 flags;		/* flit 0 */
-	__be32 cq_ptrid;
-	__be64 rsvd;		/* flit 1 */
-	struct t3_cqe cqe;	/* flits 2-3 */
+    __be32 flags;		/* flit 0 */
+    __be32 cq_ptrid;
+    __be64 rsvd;		/* flit 1 */
+    struct t3_cqe cqe;	/* flits 2-3 */
 };
 
 enum t3_cq_opcode {
-	CQ_ARM_AN = 0x2,
-	CQ_ARM_SE = 0x6,
-	CQ_FORCE_AN = 0x3,
-	CQ_CREDIT_UPDATE = 0x7
+    CQ_ARM_AN = 0x2,
+    CQ_ARM_SE = 0x6,
+    CQ_FORCE_AN = 0x3,
+    CQ_CREDIT_UPDATE = 0x7
 };
 
 int cxio_rdev_open(struct cxio_rdev *rdev);
 void cxio_rdev_close(struct cxio_rdev *rdev);
 int cxio_hal_cq_op(struct cxio_rdev *rdev, struct t3_cq *cq,
-		   enum t3_cq_opcode op, u32 credit);
+                   enum t3_cq_opcode op, u32 credit);
 int cxio_create_cq(struct cxio_rdev *rdev, struct t3_cq *cq, int kernel);
 int cxio_destroy_cq(struct cxio_rdev *rdev, struct t3_cq *cq);
 int cxio_resize_cq(struct cxio_rdev *rdev, struct t3_cq *cq);
 void cxio_release_ucontext(struct cxio_rdev *rdev, struct cxio_ucontext *uctx);
 void cxio_init_ucontext(struct cxio_rdev *rdev, struct cxio_ucontext *uctx);
 int cxio_create_qp(struct cxio_rdev *rdev, u32 kernel_domain, struct t3_wq *wq,
-		   struct cxio_ucontext *uctx);
+                   struct cxio_ucontext *uctx);
 int cxio_destroy_qp(struct cxio_rdev *rdev, struct t3_wq *wq,
-		    struct cxio_ucontext *uctx);
+                    struct cxio_ucontext *uctx);
 int cxio_peek_cq(struct t3_wq *wr, struct t3_cq *cq, int opcode);
 int cxio_write_pbl(struct cxio_rdev *rdev_p, __be64 *pbl,
-		   u32 pbl_addr, u32 pbl_size);
+                   u32 pbl_addr, u32 pbl_size);
 int cxio_register_phys_mem(struct cxio_rdev *rdev, u32 * stag, u32 pdid,
-			   enum tpt_mem_perm perm, u32 zbva, u64 to, u32 len,
-			   u8 page_size, u32 pbl_size, u32 pbl_addr);
+                           enum tpt_mem_perm perm, u32 zbva, u64 to, u32 len,
+                           u8 page_size, u32 pbl_size, u32 pbl_addr);
 int cxio_reregister_phys_mem(struct cxio_rdev *rdev, u32 * stag, u32 pdid,
-			   enum tpt_mem_perm perm, u32 zbva, u64 to, u32 len,
-			   u8 page_size, u32 pbl_size, u32 pbl_addr);
+                             enum tpt_mem_perm perm, u32 zbva, u64 to, u32 len,
+                             u8 page_size, u32 pbl_size, u32 pbl_addr);
 int cxio_dereg_mem(struct cxio_rdev *rdev, u32 stag, u32 pbl_size,
-		   u32 pbl_addr);
+                   u32 pbl_addr);
 int cxio_allocate_window(struct cxio_rdev *rdev, u32 * stag, u32 pdid);
 int cxio_allocate_stag(struct cxio_rdev *rdev, u32 *stag, u32 pdid, u32 pbl_size, u32 pbl_addr);
 int cxio_deallocate_window(struct cxio_rdev *rdev, u32 stag);
@@ -193,7 +191,7 @@ void cxio_count_rcqes(struct t3_cq *cq, struct t3_wq *wq, int *count);
 void cxio_count_scqes(struct t3_cq *cq, struct t3_wq *wq, int *count);
 void cxio_flush_hw_cq(struct t3_cq *cq);
 int cxio_poll_cq(struct t3_wq *wq, struct t3_cq *cq, struct t3_cqe *cqe,
-		     u8 *cqe_flushed, u64 *cookie, u32 *credit);
+                 u8 *cqe_flushed, u64 *cookie, u32 *credit);
 int iwch_cxgb3_ofld_send(struct t3cdev *tdev, struct sk_buff *skb);
 
 #define MOD "iw_cxgb3: "

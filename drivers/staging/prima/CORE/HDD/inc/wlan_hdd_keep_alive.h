@@ -48,8 +48,7 @@
 #define WLAN_KEEP_ALIVE_ENABLE    0x1
 
 /* Offload request. */
-typedef struct
-{
+typedef struct {
     v_U8_t packetType;
     v_U32_t timePeriod;
     v_U8_t  hostIpv4Addr[4];

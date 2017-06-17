@@ -28,7 +28,7 @@
     and other provisions required by the GPL.  If you do not delete
     the provisions above, a recipient may use your version of this
     file under either the MPL or the GPL.
-    
+
 ======================================================================*/
 
 #include <linux/module.h>
@@ -60,7 +60,7 @@ MODULE_LICENSE("Dual MPL/GPL");
 /*====================================================================*/
 
 typedef struct scsi_info_t {
-	struct pcmcia_device	*p_dev;
+    struct pcmcia_device	*p_dev;
     struct Scsi_Host	*host;
 } scsi_info_t;
 
@@ -69,50 +69,46 @@ static void fdomain_release(struct pcmcia_device *link);
 static void fdomain_detach(struct pcmcia_device *p_dev);
 static int fdomain_config(struct pcmcia_device *link);
 
-static int fdomain_probe(struct pcmcia_device *link)
-{
-	scsi_info_t *info;
+static int fdomain_probe(struct pcmcia_device *link) {
+    scsi_info_t *info;
 
-	dev_dbg(&link->dev, "fdomain_attach()\n");
+    dev_dbg(&link->dev, "fdomain_attach()\n");
 
-	/* Create new SCSI device */
-	info = kzalloc(sizeof(*info), GFP_KERNEL);
-	if (!info)
-		return -ENOMEM;
+    /* Create new SCSI device */
+    info = kzalloc(sizeof(*info), GFP_KERNEL);
+    if (!info)
+        return -ENOMEM;
 
-	info->p_dev = link;
-	link->priv = info;
-	link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
-	link->config_regs = PRESENT_OPTION;
+    info->p_dev = link;
+    link->priv = info;
+    link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
+    link->config_regs = PRESENT_OPTION;
 
-	return fdomain_config(link);
+    return fdomain_config(link);
 } /* fdomain_attach */
 
 /*====================================================================*/
 
-static void fdomain_detach(struct pcmcia_device *link)
-{
-	dev_dbg(&link->dev, "fdomain_detach\n");
+static void fdomain_detach(struct pcmcia_device *link) {
+    dev_dbg(&link->dev, "fdomain_detach\n");
 
-	fdomain_release(link);
+    fdomain_release(link);
 
-	kfree(link->priv);
+    kfree(link->priv);
 } /* fdomain_detach */
 
 /*====================================================================*/
 
-static int fdomain_config_check(struct pcmcia_device *p_dev, void *priv_data)
-{
-	p_dev->io_lines = 10;
-	p_dev->resource[0]->end = 0x10;
-	p_dev->resource[0]->flags &= ~IO_DATA_PATH_WIDTH;
-	p_dev->resource[0]->flags |= IO_DATA_PATH_WIDTH_AUTO;
-	return pcmcia_request_io(p_dev);
+static int fdomain_config_check(struct pcmcia_device *p_dev, void *priv_data) {
+    p_dev->io_lines = 10;
+    p_dev->resource[0]->end = 0x10;
+    p_dev->resource[0]->flags &= ~IO_DATA_PATH_WIDTH;
+    p_dev->resource[0]->flags |= IO_DATA_PATH_WIDTH_AUTO;
+    return pcmcia_request_io(p_dev);
 }
 
 
-static int fdomain_config(struct pcmcia_device *link)
-{
+static int fdomain_config(struct pcmcia_device *link) {
     scsi_info_t *info = link->priv;
     int ret;
     char str[22];
@@ -122,13 +118,13 @@ static int fdomain_config(struct pcmcia_device *link)
 
     ret = pcmcia_loop_config(link, fdomain_config_check, NULL);
     if (ret)
-	    goto failed;
+        goto failed;
 
     if (!link->irq)
-	    goto failed;
+        goto failed;
     ret = pcmcia_enable_device(link);
     if (ret)
-	    goto failed;
+        goto failed;
 
     /* A bad hack... */
     release_region(link->resource[0]->start, resource_size(link->resource[0]));
@@ -140,11 +136,11 @@ static int fdomain_config(struct pcmcia_device *link)
     host = __fdomain_16x0_detect(&fdomain_driver_template);
     if (!host) {
         printk(KERN_INFO "fdomain_cs: no SCSI devices found\n");
-	goto failed;
+        goto failed;
     }
 
     if (scsi_add_host(host, NULL))
-	    goto failed;
+        goto failed;
     scsi_scan_host(host);
 
     info->host = host;
@@ -158,51 +154,47 @@ failed:
 
 /*====================================================================*/
 
-static void fdomain_release(struct pcmcia_device *link)
-{
-	scsi_info_t *info = link->priv;
+static void fdomain_release(struct pcmcia_device *link) {
+    scsi_info_t *info = link->priv;
 
-	dev_dbg(&link->dev, "fdomain_release\n");
+    dev_dbg(&link->dev, "fdomain_release\n");
 
-	scsi_remove_host(info->host);
-	pcmcia_disable_device(link);
-	scsi_unregister(info->host);
+    scsi_remove_host(info->host);
+    pcmcia_disable_device(link);
+    scsi_unregister(info->host);
 }
 
 /*====================================================================*/
 
-static int fdomain_resume(struct pcmcia_device *link)
-{
-	fdomain_16x0_bus_reset(NULL);
+static int fdomain_resume(struct pcmcia_device *link) {
+    fdomain_16x0_bus_reset(NULL);
 
-	return 0;
+    return 0;
 }
 
 static const struct pcmcia_device_id fdomain_ids[] = {
-	PCMCIA_DEVICE_PROD_ID12("IBM Corp.", "SCSI PCMCIA Card", 0xe3736c88, 0x859cad20),
-	PCMCIA_DEVICE_PROD_ID1("SCSI PCMCIA Adapter Card", 0x8dacb57e),
-	PCMCIA_DEVICE_PROD_ID12(" SIMPLE TECHNOLOGY Corporation", "SCSI PCMCIA Credit Card Controller", 0x182bdafe, 0xc80d106f),
-	PCMCIA_DEVICE_NULL,
+    PCMCIA_DEVICE_PROD_ID12("IBM Corp.", "SCSI PCMCIA Card", 0xe3736c88, 0x859cad20),
+    PCMCIA_DEVICE_PROD_ID1("SCSI PCMCIA Adapter Card", 0x8dacb57e),
+    PCMCIA_DEVICE_PROD_ID12(" SIMPLE TECHNOLOGY Corporation", "SCSI PCMCIA Credit Card Controller", 0x182bdafe, 0xc80d106f),
+    PCMCIA_DEVICE_NULL,
 };
 MODULE_DEVICE_TABLE(pcmcia, fdomain_ids);
 
 static struct pcmcia_driver fdomain_cs_driver = {
-	.owner		= THIS_MODULE,
-	.name		= "fdomain_cs",
-	.probe		= fdomain_probe,
-	.remove		= fdomain_detach,
-	.id_table       = fdomain_ids,
-	.resume		= fdomain_resume,
+    .owner		= THIS_MODULE,
+    .name		= "fdomain_cs",
+    .probe		= fdomain_probe,
+    .remove		= fdomain_detach,
+    .id_table       = fdomain_ids,
+    .resume		= fdomain_resume,
 };
 
-static int __init init_fdomain_cs(void)
-{
-	return pcmcia_register_driver(&fdomain_cs_driver);
+static int __init init_fdomain_cs(void) {
+    return pcmcia_register_driver(&fdomain_cs_driver);
 }
 
-static void __exit exit_fdomain_cs(void)
-{
-	pcmcia_unregister_driver(&fdomain_cs_driver);
+static void __exit exit_fdomain_cs(void) {
+    pcmcia_unregister_driver(&fdomain_cs_driver);
 }
 
 module_init(init_fdomain_cs);

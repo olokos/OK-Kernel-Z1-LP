@@ -24,76 +24,68 @@
 
 /* UPA I/O space accessors */
 #if defined(__KERNEL__) && !defined(__ASSEMBLY__)
-static inline unsigned char _upa_readb(unsigned long addr)
-{
-	unsigned char ret;
+static inline unsigned char _upa_readb(unsigned long addr) {
+    unsigned char ret;
 
-	__asm__ __volatile__("lduba\t[%1] %2, %0\t/* upa_readb */"
-			     : "=r" (ret)
-			     : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+    __asm__ __volatile__("lduba\t[%1] %2, %0\t/* upa_readb */"
+                         : "=r" (ret)
+                         : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned short _upa_readw(unsigned long addr)
-{
-	unsigned short ret;
+static inline unsigned short _upa_readw(unsigned long addr) {
+    unsigned short ret;
 
-	__asm__ __volatile__("lduha\t[%1] %2, %0\t/* upa_readw */"
-			     : "=r" (ret)
-			     : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+    __asm__ __volatile__("lduha\t[%1] %2, %0\t/* upa_readw */"
+                         : "=r" (ret)
+                         : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned int _upa_readl(unsigned long addr)
-{
-	unsigned int ret;
+static inline unsigned int _upa_readl(unsigned long addr) {
+    unsigned int ret;
 
-	__asm__ __volatile__("lduwa\t[%1] %2, %0\t/* upa_readl */"
-			     : "=r" (ret)
-			     : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+    __asm__ __volatile__("lduwa\t[%1] %2, %0\t/* upa_readl */"
+                         : "=r" (ret)
+                         : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned long _upa_readq(unsigned long addr)
-{
-	unsigned long ret;
+static inline unsigned long _upa_readq(unsigned long addr) {
+    unsigned long ret;
 
-	__asm__ __volatile__("ldxa\t[%1] %2, %0\t/* upa_readq */"
-			     : "=r" (ret)
-			     : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+    __asm__ __volatile__("ldxa\t[%1] %2, %0\t/* upa_readq */"
+                         : "=r" (ret)
+                         : "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 
-	return ret;
+    return ret;
 }
 
-static inline void _upa_writeb(unsigned char b, unsigned long addr)
-{
-	__asm__ __volatile__("stba\t%0, [%1] %2\t/* upa_writeb */"
-			     : /* no outputs */
-			     : "r" (b), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+static inline void _upa_writeb(unsigned char b, unsigned long addr) {
+    __asm__ __volatile__("stba\t%0, [%1] %2\t/* upa_writeb */"
+                         : /* no outputs */
+                         : "r" (b), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 }
 
-static inline void _upa_writew(unsigned short w, unsigned long addr)
-{
-	__asm__ __volatile__("stha\t%0, [%1] %2\t/* upa_writew */"
-			     : /* no outputs */
-			     : "r" (w), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+static inline void _upa_writew(unsigned short w, unsigned long addr) {
+    __asm__ __volatile__("stha\t%0, [%1] %2\t/* upa_writew */"
+                         : /* no outputs */
+                         : "r" (w), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 }
 
-static inline void _upa_writel(unsigned int l, unsigned long addr)
-{
-	__asm__ __volatile__("stwa\t%0, [%1] %2\t/* upa_writel */"
-			     : /* no outputs */
-			     : "r" (l), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+static inline void _upa_writel(unsigned int l, unsigned long addr) {
+    __asm__ __volatile__("stwa\t%0, [%1] %2\t/* upa_writel */"
+                         : /* no outputs */
+                         : "r" (l), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 }
 
-static inline void _upa_writeq(unsigned long q, unsigned long addr)
-{
-	__asm__ __volatile__("stxa\t%0, [%1] %2\t/* upa_writeq */"
-			     : /* no outputs */
-			     : "r" (q), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
+static inline void _upa_writeq(unsigned long q, unsigned long addr) {
+    __asm__ __volatile__("stxa\t%0, [%1] %2\t/* upa_writeq */"
+                         : /* no outputs */
+                         : "r" (q), "r" (addr), "i" (ASI_PHYS_BYPASS_EC_E));
 }
 
 #define upa_readb(__addr)		(_upa_readb((unsigned long)(__addr)))

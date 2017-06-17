@@ -76,22 +76,22 @@ struct dll_sect;
  * its address is contained in the global _DLModules pointer */
 struct modules_header {
 
-	/*
-	 * Address of the first dll_module record in the list or NULL.
-	 * Note: for C55x this is a word address (C55x data is
-	 * word-addressable)
-	 */
-	u32 first_module;
+    /*
+     * Address of the first dll_module record in the list or NULL.
+     * Note: for C55x this is a word address (C55x data is
+     * word-addressable)
+     */
+    u32 first_module;
 
-	/* Combined storage size (in target addressable units) of the
-	 * dll_module record which follows this header record, or zero
-	 * if the list is empty.  This size includes the module's string table.
-	 * Note: for C55x the unit is a 16-bit word */
-	u16 first_module_size;
+    /* Combined storage size (in target addressable units) of the
+     * dll_module record which follows this header record, or zero
+     * if the list is empty.  This size includes the module's string table.
+     * Note: for C55x the unit is a 16-bit word */
+    u16 first_module_size;
 
-	/* Counter is incremented whenever a module record is removed from
-	 * the list */
-	u16 update_flag;
+    /* Counter is incremented whenever a module record is removed from
+     * the list */
+    u16 update_flag;
 
 };
 
@@ -103,53 +103,53 @@ struct modules_header {
 /* information recorded about each section in a module */
 struct dll_sect {
 
-	/* Load-time address of the section.
-	 * Note: for C55x this is a byte address for program sections, and
-	 * a word address for data sections.  C55x program memory is
-	 * byte-addressable, while data memory is word-addressable. */
-	u32 sect_load_adr;
+    /* Load-time address of the section.
+     * Note: for C55x this is a byte address for program sections, and
+     * a word address for data sections.  C55x program memory is
+     * byte-addressable, while data memory is word-addressable. */
+    u32 sect_load_adr;
 
-	/* Run-time address of the section.
-	 * Note 1: for C55x this is a byte address for program sections, and
-	 * a word address for data sections.
-	 * Note 2: for C55x two most significant bits of this field indicate
-	 * the section type: '00' for a code section, '11' for a data section
-	 * (C55 addresses are really only 24-bits wide). */
-	u32 sect_run_adr;
+    /* Run-time address of the section.
+     * Note 1: for C55x this is a byte address for program sections, and
+     * a word address for data sections.
+     * Note 2: for C55x two most significant bits of this field indicate
+     * the section type: '00' for a code section, '11' for a data section
+     * (C55 addresses are really only 24-bits wide). */
+    u32 sect_run_adr;
 
 };
 
 /* the rest of the entries in the list are module records */
 struct dll_module {
 
-	/* Address of the next dll_module record in the list, or 0 if this is
-	 * the last record in the list.
-	 * Note: for C55x this is a word address (C55x data is
-	 * word-addressable) */
-	u32 next_module;
+    /* Address of the next dll_module record in the list, or 0 if this is
+     * the last record in the list.
+     * Note: for C55x this is a word address (C55x data is
+     * word-addressable) */
+    u32 next_module;
 
-	/* Combined storage size (in target addressable units) of the
-	 * dll_module record which follows this one, or zero if this is the
-	 * last record in the list.  This size includes the module's string
-	 * table.
-	 * Note: for C55x the unit is a 16-bit word. */
-	u16 next_module_size;
+    /* Combined storage size (in target addressable units) of the
+     * dll_module record which follows this one, or zero if this is the
+     * last record in the list.  This size includes the module's string
+     * table.
+     * Note: for C55x the unit is a 16-bit word. */
+    u16 next_module_size;
 
-	/* version number of the tooling; set to INIT_VERSION for Phase 1 */
-	u16 version;
+    /* version number of the tooling; set to INIT_VERSION for Phase 1 */
+    u16 version;
 
-	/* the verification word; set to VERIFICATION */
-	u16 verification;
+    /* the verification word; set to VERIFICATION */
+    u16 verification;
 
-	/* Number of sections in the sects array */
-	u16 num_sects;
+    /* Number of sections in the sects array */
+    u16 num_sects;
 
-	/* Module's "unique" id; copy of the timestamp from the host
-	 * COFF file */
-	u32 timestamp;
+    /* Module's "unique" id; copy of the timestamp from the host
+     * COFF file */
+    u32 timestamp;
 
-	/* Array of num_sects elements of the module's section records */
-	struct dll_sect sects[1];
+    /* Array of num_sects elements of the module's section records */
+    struct dll_sect sects[1];
 };
 
 /* for each 32 bits in above structure, a bitmap, LSB first, whose bits are:

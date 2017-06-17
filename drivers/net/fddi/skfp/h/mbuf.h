@@ -32,13 +32,13 @@
 #endif
 
 struct s_mbuf {
-	struct s_mbuf	*sm_next ;		/* low level linked list */
-	short		sm_off ;			/* offset in m_data */
-	u_int		sm_len ;			/* len of data */
+    struct s_mbuf	*sm_next ;		/* low level linked list */
+    short		sm_off ;			/* offset in m_data */
+    u_int		sm_len ;			/* len of data */
 #ifdef	PCI
-	int		sm_use_count ;
+    int		sm_use_count ;
 #endif
-	char		sm_data[M_SIZE] ;
+    char		sm_data[M_SIZE] ;
 } ;
 
 typedef struct s_mbuf SMbuf ;

@@ -41,164 +41,137 @@ extern struct boot_params boot_params;
 #define cpu_relax()	asm volatile("rep; nop")
 
 /* Basic port I/O */
-static inline void outb(u8 v, u16 port)
-{
-	asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
+static inline void outb(u8 v, u16 port) {
+    asm volatile("outb %0,%1" : : "a" (v), "dN" (port));
 }
-static inline u8 inb(u16 port)
-{
-	u8 v;
-	asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+static inline u8 inb(u16 port) {
+    u8 v;
+    asm volatile("inb %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
-static inline void outw(u16 v, u16 port)
-{
-	asm volatile("outw %0,%1" : : "a" (v), "dN" (port));
+static inline void outw(u16 v, u16 port) {
+    asm volatile("outw %0,%1" : : "a" (v), "dN" (port));
 }
-static inline u16 inw(u16 port)
-{
-	u16 v;
-	asm volatile("inw %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+static inline u16 inw(u16 port) {
+    u16 v;
+    asm volatile("inw %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
-static inline void outl(u32 v, u16 port)
-{
-	asm volatile("outl %0,%1" : : "a" (v), "dN" (port));
+static inline void outl(u32 v, u16 port) {
+    asm volatile("outl %0,%1" : : "a" (v), "dN" (port));
 }
-static inline u32 inl(u16 port)
-{
-	u32 v;
-	asm volatile("inl %1,%0" : "=a" (v) : "dN" (port));
-	return v;
+static inline u32 inl(u16 port) {
+    u32 v;
+    asm volatile("inl %1,%0" : "=a" (v) : "dN" (port));
+    return v;
 }
 
-static inline void io_delay(void)
-{
-	const u16 DELAY_PORT = 0x80;
-	asm volatile("outb %%al,%0" : : "dN" (DELAY_PORT));
+static inline void io_delay(void) {
+    const u16 DELAY_PORT = 0x80;
+    asm volatile("outb %%al,%0" : : "dN" (DELAY_PORT));
 }
 
 /* These functions are used to reference data in other segments. */
 
-static inline u16 ds(void)
-{
-	u16 seg;
-	asm("movw %%ds,%0" : "=rm" (seg));
-	return seg;
+static inline u16 ds(void) {
+    u16 seg;
+    asm("movw %%ds,%0" : "=rm" (seg));
+    return seg;
 }
 
-static inline void set_fs(u16 seg)
-{
-	asm volatile("movw %0,%%fs" : : "rm" (seg));
+static inline void set_fs(u16 seg) {
+    asm volatile("movw %0,%%fs" : : "rm" (seg));
 }
-static inline u16 fs(void)
-{
-	u16 seg;
-	asm volatile("movw %%fs,%0" : "=rm" (seg));
-	return seg;
+static inline u16 fs(void) {
+    u16 seg;
+    asm volatile("movw %%fs,%0" : "=rm" (seg));
+    return seg;
 }
 
-static inline void set_gs(u16 seg)
-{
-	asm volatile("movw %0,%%gs" : : "rm" (seg));
+static inline void set_gs(u16 seg) {
+    asm volatile("movw %0,%%gs" : : "rm" (seg));
 }
-static inline u16 gs(void)
-{
-	u16 seg;
-	asm volatile("movw %%gs,%0" : "=rm" (seg));
-	return seg;
+static inline u16 gs(void) {
+    u16 seg;
+    asm volatile("movw %%gs,%0" : "=rm" (seg));
+    return seg;
 }
 
 typedef unsigned int addr_t;
 
-static inline u8 rdfs8(addr_t addr)
-{
-	u8 v;
-	asm volatile("movb %%fs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
-	return v;
+static inline u8 rdfs8(addr_t addr) {
+    u8 v;
+    asm volatile("movb %%fs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
+    return v;
 }
-static inline u16 rdfs16(addr_t addr)
-{
-	u16 v;
-	asm volatile("movw %%fs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
-	return v;
+static inline u16 rdfs16(addr_t addr) {
+    u16 v;
+    asm volatile("movw %%fs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
+    return v;
 }
-static inline u32 rdfs32(addr_t addr)
-{
-	u32 v;
-	asm volatile("movl %%fs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
-	return v;
+static inline u32 rdfs32(addr_t addr) {
+    u32 v;
+    asm volatile("movl %%fs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
+    return v;
 }
 
-static inline void wrfs8(u8 v, addr_t addr)
-{
-	asm volatile("movb %1,%%fs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
+static inline void wrfs8(u8 v, addr_t addr) {
+    asm volatile("movb %1,%%fs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
 }
-static inline void wrfs16(u16 v, addr_t addr)
-{
-	asm volatile("movw %1,%%fs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
+static inline void wrfs16(u16 v, addr_t addr) {
+    asm volatile("movw %1,%%fs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
 }
-static inline void wrfs32(u32 v, addr_t addr)
-{
-	asm volatile("movl %1,%%fs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
+static inline void wrfs32(u32 v, addr_t addr) {
+    asm volatile("movl %1,%%fs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
 }
 
-static inline u8 rdgs8(addr_t addr)
-{
-	u8 v;
-	asm volatile("movb %%gs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
-	return v;
+static inline u8 rdgs8(addr_t addr) {
+    u8 v;
+    asm volatile("movb %%gs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
+    return v;
 }
-static inline u16 rdgs16(addr_t addr)
-{
-	u16 v;
-	asm volatile("movw %%gs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
-	return v;
+static inline u16 rdgs16(addr_t addr) {
+    u16 v;
+    asm volatile("movw %%gs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
+    return v;
 }
-static inline u32 rdgs32(addr_t addr)
-{
-	u32 v;
-	asm volatile("movl %%gs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
-	return v;
+static inline u32 rdgs32(addr_t addr) {
+    u32 v;
+    asm volatile("movl %%gs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
+    return v;
 }
 
-static inline void wrgs8(u8 v, addr_t addr)
-{
-	asm volatile("movb %1,%%gs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
+static inline void wrgs8(u8 v, addr_t addr) {
+    asm volatile("movb %1,%%gs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
 }
-static inline void wrgs16(u16 v, addr_t addr)
-{
-	asm volatile("movw %1,%%gs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
+static inline void wrgs16(u16 v, addr_t addr) {
+    asm volatile("movw %1,%%gs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
 }
-static inline void wrgs32(u32 v, addr_t addr)
-{
-	asm volatile("movl %1,%%gs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
+static inline void wrgs32(u32 v, addr_t addr) {
+    asm volatile("movl %1,%%gs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
 }
 
 /* Note: these only return true/false, not a signed return value! */
-static inline int memcmp(const void *s1, const void *s2, size_t len)
-{
-	u8 diff;
-	asm("repe; cmpsb; setnz %0"
-	    : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
-	return diff;
+static inline int memcmp(const void *s1, const void *s2, size_t len) {
+    u8 diff;
+    asm("repe; cmpsb; setnz %0"
+        : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
+    return diff;
 }
 
-static inline int memcmp_fs(const void *s1, addr_t s2, size_t len)
-{
-	u8 diff;
-	asm volatile("fs; repe; cmpsb; setnz %0"
-		     : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
-	return diff;
+static inline int memcmp_fs(const void *s1, addr_t s2, size_t len) {
+    u8 diff;
+    asm volatile("fs; repe; cmpsb; setnz %0"
+                 : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
+    return diff;
 }
-static inline int memcmp_gs(const void *s1, addr_t s2, size_t len)
-{
-	u8 diff;
-	asm volatile("gs; repe; cmpsb; setnz %0"
-		     : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
-	return diff;
+static inline int memcmp_gs(const void *s1, addr_t s2, size_t len) {
+    u8 diff;
+    asm volatile("gs; repe; cmpsb; setnz %0"
+                 : "=qm" (diff), "+D" (s1), "+S" (s2), "+c" (len));
+    return diff;
 }
 
 /* Heap -- available for dynamic lists. */
@@ -206,21 +179,19 @@ extern char _end[];
 extern char *HEAP;
 extern char *heap_end;
 #define RESET_HEAP() ((void *)( HEAP = _end ))
-static inline char *__get_heap(size_t s, size_t a, size_t n)
-{
-	char *tmp;
+static inline char *__get_heap(size_t s, size_t a, size_t n) {
+    char *tmp;
 
-	HEAP = (char *)(((size_t)HEAP+(a-1)) & ~(a-1));
-	tmp = HEAP;
-	HEAP += s*n;
-	return tmp;
+    HEAP = (char *)(((size_t)HEAP+(a-1)) & ~(a-1));
+    tmp = HEAP;
+    HEAP += s*n;
+    return tmp;
 }
 #define GET_HEAP(type, n) \
 	((type *)__get_heap(sizeof(type),__alignof__(type),(n)))
 
-static inline bool heap_free(size_t n)
-{
-	return (int)(heap_end-HEAP) >= (int)n;
+static inline bool heap_free(size_t n) {
+    return (int)(heap_end-HEAP) >= (int)n;
 }
 
 /* copy.S */
@@ -243,66 +214,64 @@ int query_apm_bios(void);
 
 /* bioscall.c */
 struct biosregs {
-	union {
-		struct {
-			u32 edi;
-			u32 esi;
-			u32 ebp;
-			u32 _esp;
-			u32 ebx;
-			u32 edx;
-			u32 ecx;
-			u32 eax;
-			u32 _fsgs;
-			u32 _dses;
-			u32 eflags;
-		};
-		struct {
-			u16 di, hdi;
-			u16 si, hsi;
-			u16 bp, hbp;
-			u16 _sp, _hsp;
-			u16 bx, hbx;
-			u16 dx, hdx;
-			u16 cx, hcx;
-			u16 ax, hax;
-			u16 gs, fs;
-			u16 es, ds;
-			u16 flags, hflags;
-		};
-		struct {
-			u8 dil, dih, edi2, edi3;
-			u8 sil, sih, esi2, esi3;
-			u8 bpl, bph, ebp2, ebp3;
-			u8 _spl, _sph, _esp2, _esp3;
-			u8 bl, bh, ebx2, ebx3;
-			u8 dl, dh, edx2, edx3;
-			u8 cl, ch, ecx2, ecx3;
-			u8 al, ah, eax2, eax3;
-		};
-	};
+    union {
+        struct {
+            u32 edi;
+            u32 esi;
+            u32 ebp;
+            u32 _esp;
+            u32 ebx;
+            u32 edx;
+            u32 ecx;
+            u32 eax;
+            u32 _fsgs;
+            u32 _dses;
+            u32 eflags;
+        };
+        struct {
+            u16 di, hdi;
+            u16 si, hsi;
+            u16 bp, hbp;
+            u16 _sp, _hsp;
+            u16 bx, hbx;
+            u16 dx, hdx;
+            u16 cx, hcx;
+            u16 ax, hax;
+            u16 gs, fs;
+            u16 es, ds;
+            u16 flags, hflags;
+        };
+        struct {
+            u8 dil, dih, edi2, edi3;
+            u8 sil, sih, esi2, esi3;
+            u8 bpl, bph, ebp2, ebp3;
+            u8 _spl, _sph, _esp2, _esp3;
+            u8 bl, bh, ebx2, ebx3;
+            u8 dl, dh, edx2, edx3;
+            u8 cl, ch, ecx2, ecx3;
+            u8 al, ah, eax2, eax3;
+        };
+    };
 };
 void intcall(u8 int_no, const struct biosregs *ireg, struct biosregs *oreg);
 
 /* cmdline.c */
 int __cmdline_find_option(u32 cmdline_ptr, const char *option, char *buffer, int bufsize);
 int __cmdline_find_option_bool(u32 cmdline_ptr, const char *option);
-static inline int cmdline_find_option(const char *option, char *buffer, int bufsize)
-{
-	return __cmdline_find_option(boot_params.hdr.cmd_line_ptr, option, buffer, bufsize);
+static inline int cmdline_find_option(const char *option, char *buffer, int bufsize) {
+    return __cmdline_find_option(boot_params.hdr.cmd_line_ptr, option, buffer, bufsize);
 }
 
-static inline int cmdline_find_option_bool(const char *option)
-{
-	return __cmdline_find_option_bool(boot_params.hdr.cmd_line_ptr, option);
+static inline int cmdline_find_option_bool(const char *option) {
+    return __cmdline_find_option_bool(boot_params.hdr.cmd_line_ptr, option);
 }
 
 
 /* cpu.c, cpucheck.c */
 struct cpu_features {
-	int level;		/* Family, or 64 for x86-64 */
-	int model;
-	u32 flags[NCAPINTS];
+    int level;		/* Family, or 64 for x86-64 */
+    int model;
+    u32 flags[NCAPINTS];
 };
 extern struct cpu_features cpu;
 int check_cpu(int *cpu_level_ptr, int *req_level_ptr, u32 **err_flags_ptr);
@@ -329,7 +298,7 @@ void __attribute__((noreturn)) go_to_protected_mode(void);
 
 /* pmjump.S */
 void __attribute__((noreturn))
-	protected_mode_jump(u32 entrypoint, u32 bootparams);
+protected_mode_jump(u32 entrypoint, u32 bootparams);
 
 /* printf.c */
 int sprintf(char *buf, const char *fmt, ...);

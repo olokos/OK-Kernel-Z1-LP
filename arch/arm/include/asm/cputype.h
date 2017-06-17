@@ -56,24 +56,20 @@ extern unsigned int processor_id;
  * compiler that it's constant.  Use this function to read the CPU ID
  * rather than directly reading processor_id or read_cpuid() directly.
  */
-static inline unsigned int __attribute_const__ read_cpuid_id(void)
-{
-	return read_cpuid(CPUID_ID);
+static inline unsigned int __attribute_const__ read_cpuid_id(void) {
+    return read_cpuid(CPUID_ID);
 }
 
-static inline unsigned int __attribute_const__ read_cpuid_cachetype(void)
-{
-	return read_cpuid(CPUID_CACHETYPE);
+static inline unsigned int __attribute_const__ read_cpuid_cachetype(void) {
+    return read_cpuid(CPUID_CACHETYPE);
 }
 
-static inline unsigned int __attribute_const__ read_cpuid_tcmstatus(void)
-{
-	return read_cpuid(CPUID_TCM);
+static inline unsigned int __attribute_const__ read_cpuid_tcmstatus(void) {
+    return read_cpuid(CPUID_TCM);
 }
 
-static inline unsigned int __attribute_const__ read_cpuid_mpidr(void)
-{
-	return read_cpuid(CPUID_MPIDR);
+static inline unsigned int __attribute_const__ read_cpuid_mpidr(void) {
+    return read_cpuid(CPUID_MPIDR);
 }
 
 /*
@@ -84,15 +80,14 @@ static inline unsigned int __attribute_const__ read_cpuid_mpidr(void)
 #ifndef CONFIG_CPU_XSC3
 #define cpu_is_xsc3()	0
 #else
-static inline int cpu_is_xsc3(void)
-{
-	unsigned int id;
-	id = read_cpuid_id() & 0xffffe000;
-	/* It covers both Intel ID and Marvell ID */
-	if ((id == 0x69056000) || (id == 0x56056000))
-		return 1;
+static inline int cpu_is_xsc3(void) {
+    unsigned int id;
+    id = read_cpuid_id() & 0xffffe000;
+    /* It covers both Intel ID and Marvell ID */
+    if ((id == 0x69056000) || (id == 0x56056000))
+        return 1;
 
-	return 0;
+    return 0;
 }
 #endif
 

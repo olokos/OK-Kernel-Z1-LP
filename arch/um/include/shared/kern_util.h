@@ -25,9 +25,9 @@ extern void interrupt_end(void);
 extern void relay_signal(int sig, struct uml_pt_regs *regs);
 
 extern unsigned long segv(struct faultinfo fi, unsigned long ip,
-			  int is_user, struct uml_pt_regs *regs);
+                          int is_user, struct uml_pt_regs *regs);
 extern int handle_page_fault(unsigned long address, unsigned long ip,
-			     int is_write, int is_user, int *code_out);
+                             int is_write, int is_user, int *code_out);
 
 extern unsigned int do_IRQ(int irq, struct uml_pt_regs *regs);
 extern int smp_sigio_handler(void);

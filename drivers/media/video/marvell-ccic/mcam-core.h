@@ -34,11 +34,11 @@
 
 
 enum mcam_state {
-	S_NOTREADY,	/* Not yet initialized */
-	S_IDLE,		/* Just hanging around */
-	S_FLAKED,	/* Some sort of problem */
-	S_STREAMING,	/* Streaming data */
-	S_BUFWAIT	/* streaming requested but no buffers yet */
+    S_NOTREADY,	/* Not yet initialized */
+    S_IDLE,		/* Just hanging around */
+    S_FLAKED,	/* Some sort of problem */
+    S_STREAMING,	/* Streaming data */
+    S_BUFWAIT	/* streaming requested but no buffers yet */
 };
 #define MAX_DMA_BUFS 3
 
@@ -47,30 +47,29 @@ enum mcam_state {
  * let the platform pick.
  */
 enum mcam_buffer_mode {
-	B_vmalloc = 0,
-	B_DMA_contig = 1,
-	B_DMA_sg = 2
+    B_vmalloc = 0,
+    B_DMA_contig = 1,
+    B_DMA_sg = 2
 };
 
 /*
  * Is a given buffer mode supported by the current kernel configuration?
  */
-static inline int mcam_buffer_mode_supported(enum mcam_buffer_mode mode)
-{
-	switch (mode) {
+static inline int mcam_buffer_mode_supported(enum mcam_buffer_mode mode) {
+    switch (mode) {
 #ifdef MCAM_MODE_VMALLOC
-	case B_vmalloc:
+    case B_vmalloc:
 #endif
 #ifdef MCAM_MODE_DMA_CONTIG
-	case B_DMA_contig:
+    case B_DMA_contig:
 #endif
 #ifdef MCAM_MODE_DMA_SG
-	case B_DMA_sg:
+    case B_DMA_sg:
 #endif
-		return 1;
-	default:
-		return 0;
-	}
+        return 1;
+    default:
+        return 0;
+    }
 }
 
 
@@ -81,72 +80,72 @@ static inline int mcam_buffer_mode_supported(enum mcam_buffer_mode mode)
  *          dev_lock is also required for access to device registers.
  */
 struct mcam_camera {
-	/*
-	 * These fields should be set by the platform code prior to
-	 * calling mcam_register().
-	 */
-	struct i2c_adapter *i2c_adapter;
-	unsigned char __iomem *regs;
-	spinlock_t dev_lock;
-	struct device *dev; /* For messages, dma alloc */
-	unsigned int chip_id;
-	short int clock_speed;	/* Sensor clock speed, default 30 */
-	short int use_smbus;	/* SMBUS or straight I2c? */
-	enum mcam_buffer_mode buffer_mode;
-	/*
-	 * Callbacks from the core to the platform code.
-	 */
-	void (*plat_power_up) (struct mcam_camera *cam);
-	void (*plat_power_down) (struct mcam_camera *cam);
+    /*
+     * These fields should be set by the platform code prior to
+     * calling mcam_register().
+     */
+    struct i2c_adapter *i2c_adapter;
+    unsigned char __iomem *regs;
+    spinlock_t dev_lock;
+    struct device *dev; /* For messages, dma alloc */
+    unsigned int chip_id;
+    short int clock_speed;	/* Sensor clock speed, default 30 */
+    short int use_smbus;	/* SMBUS or straight I2c? */
+    enum mcam_buffer_mode buffer_mode;
+    /*
+     * Callbacks from the core to the platform code.
+     */
+    void (*plat_power_up) (struct mcam_camera *cam);
+    void (*plat_power_down) (struct mcam_camera *cam);
 
-	/*
-	 * Everything below here is private to the mcam core and
-	 * should not be touched by the platform code.
-	 */
-	struct v4l2_device v4l2_dev;
-	enum mcam_state state;
-	unsigned long flags;		/* Buffer status, mainly (dev_lock) */
-	int users;			/* How many open FDs */
+    /*
+     * Everything below here is private to the mcam core and
+     * should not be touched by the platform code.
+     */
+    struct v4l2_device v4l2_dev;
+    enum mcam_state state;
+    unsigned long flags;		/* Buffer status, mainly (dev_lock) */
+    int users;			/* How many open FDs */
 
-	/*
-	 * Subsystem structures.
-	 */
-	struct video_device vdev;
-	struct v4l2_subdev *sensor;
-	unsigned short sensor_addr;
+    /*
+     * Subsystem structures.
+     */
+    struct video_device vdev;
+    struct v4l2_subdev *sensor;
+    unsigned short sensor_addr;
 
-	/* Videobuf2 stuff */
-	struct vb2_queue vb_queue;
-	struct list_head buffers;	/* Available frames */
+    /* Videobuf2 stuff */
+    struct vb2_queue vb_queue;
+    struct list_head buffers;	/* Available frames */
 
-	unsigned int nbufs;		/* How many are alloc'd */
-	int next_buf;			/* Next to consume (dev_lock) */
+    unsigned int nbufs;		/* How many are alloc'd */
+    int next_buf;			/* Next to consume (dev_lock) */
 
-	/* DMA buffers - vmalloc mode */
+    /* DMA buffers - vmalloc mode */
 #ifdef MCAM_MODE_VMALLOC
-	unsigned int dma_buf_size;	/* allocated size */
-	void *dma_bufs[MAX_DMA_BUFS];	/* Internal buffer addresses */
-	dma_addr_t dma_handles[MAX_DMA_BUFS]; /* Buffer bus addresses */
-	struct tasklet_struct s_tasklet;
+    unsigned int dma_buf_size;	/* allocated size */
+    void *dma_bufs[MAX_DMA_BUFS];	/* Internal buffer addresses */
+    dma_addr_t dma_handles[MAX_DMA_BUFS]; /* Buffer bus addresses */
+    struct tasklet_struct s_tasklet;
 #endif
-	unsigned int sequence;		/* Frame sequence number */
-	unsigned int buf_seq[MAX_DMA_BUFS]; /* Sequence for individual bufs */
+    unsigned int sequence;		/* Frame sequence number */
+    unsigned int buf_seq[MAX_DMA_BUFS]; /* Sequence for individual bufs */
 
-	/* DMA buffers - DMA modes */
-	struct mcam_vb_buffer *vb_bufs[MAX_DMA_BUFS];
-	struct vb2_alloc_ctx *vb_alloc_ctx;
+    /* DMA buffers - DMA modes */
+    struct mcam_vb_buffer *vb_bufs[MAX_DMA_BUFS];
+    struct vb2_alloc_ctx *vb_alloc_ctx;
 
-	/* Mode-specific ops, set at open time */
-	void (*dma_setup)(struct mcam_camera *cam);
-	void (*frame_complete)(struct mcam_camera *cam, int frame);
+    /* Mode-specific ops, set at open time */
+    void (*dma_setup)(struct mcam_camera *cam);
+    void (*frame_complete)(struct mcam_camera *cam, int frame);
 
-	/* Current operating parameters */
-	u32 sensor_type;		/* Currently ov7670 only */
-	struct v4l2_pix_format pix_format;
-	enum v4l2_mbus_pixelcode mbus_code;
+    /* Current operating parameters */
+    u32 sensor_type;		/* Currently ov7670 only */
+    struct v4l2_pix_format pix_format;
+    enum v4l2_mbus_pixelcode mbus_code;
 
-	/* Locks */
-	struct mutex s_mutex; /* Access to this structure */
+    /* Locks */
+    struct mutex s_mutex; /* Access to this structure */
 };
 
 
@@ -158,37 +157,32 @@ struct mcam_camera {
  * Device register I/O
  */
 static inline void mcam_reg_write(struct mcam_camera *cam, unsigned int reg,
-		unsigned int val)
-{
-	iowrite32(val, cam->regs + reg);
+                                  unsigned int val) {
+    iowrite32(val, cam->regs + reg);
 }
 
 static inline unsigned int mcam_reg_read(struct mcam_camera *cam,
-		unsigned int reg)
-{
-	return ioread32(cam->regs + reg);
+        unsigned int reg) {
+    return ioread32(cam->regs + reg);
 }
 
 
 static inline void mcam_reg_write_mask(struct mcam_camera *cam, unsigned int reg,
-		unsigned int val, unsigned int mask)
-{
-	unsigned int v = mcam_reg_read(cam, reg);
+                                       unsigned int val, unsigned int mask) {
+    unsigned int v = mcam_reg_read(cam, reg);
 
-	v = (v & ~mask) | (val & mask);
-	mcam_reg_write(cam, reg, v);
+    v = (v & ~mask) | (val & mask);
+    mcam_reg_write(cam, reg, v);
 }
 
 static inline void mcam_reg_clear_bit(struct mcam_camera *cam,
-		unsigned int reg, unsigned int val)
-{
-	mcam_reg_write_mask(cam, reg, 0, val);
+                                      unsigned int reg, unsigned int val) {
+    mcam_reg_write_mask(cam, reg, 0, val);
 }
 
 static inline void mcam_reg_set_bit(struct mcam_camera *cam,
-		unsigned int reg, unsigned int val)
-{
-	mcam_reg_write_mask(cam, reg, val, val);
+                                    unsigned int reg, unsigned int val) {
+    mcam_reg_write_mask(cam, reg, val, val);
 }
 
 /*

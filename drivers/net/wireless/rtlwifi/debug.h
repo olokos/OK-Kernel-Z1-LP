@@ -134,26 +134,26 @@
 #define	PHY_PWRDIFF			BIT(9)
 
 enum dbgp_flag_e {
-	FQOS = 0,
-	FTX = 1,
-	FRX = 2,
-	FSEC = 3,
-	FMGNT = 4,
-	FMLME = 5,
-	FRESOURCE = 6,
-	FBEACON = 7,
-	FISR = 8,
-	FPHY = 9,
-	FMP = 10,
-	FEEPROM = 11,
-	FPWR = 12,
-	FDM = 13,
-	FDBGCtrl = 14,
-	FC2H = 15,
-	FBT = 16,
-	FINIT = 17,
-	FIOCTL = 18,
-	DBGP_TYPE_MAX
+    FQOS = 0,
+    FTX = 1,
+    FRX = 2,
+    FSEC = 3,
+    FMGNT = 4,
+    FMLME = 5,
+    FRESOURCE = 6,
+    FBEACON = 7,
+    FISR = 8,
+    FPHY = 9,
+    FMP = 10,
+    FEEPROM = 11,
+    FPWR = 12,
+    FDM = 13,
+    FDBGCtrl = 14,
+    FC2H = 15,
+    FBT = 16,
+    FINIT = 17,
+    FIOCTL = 18,
+    DBGP_TYPE_MAX
 };
 
 #ifdef CONFIG_RTLWIFI_DEBUG
@@ -202,29 +202,25 @@ do {									\
 struct rtl_priv;
 
 __printf(2, 3)
-static inline void RT_ASSERT(int exp, const char *fmt, ...)
-{
+static inline void RT_ASSERT(int exp, const char *fmt, ...) {
 }
 
 __printf(4, 5)
 static inline void RT_TRACE(struct rtl_priv *rtlpriv,
-			    int comp, int level,
-			    const char *fmt, ...)
-{
+                            int comp, int level,
+                            const char *fmt, ...) {
 }
 
 __printf(4, 5)
 static inline void RTPRINT(struct rtl_priv *rtlpriv,
-			   int dbgtype, int dbgflag,
-			   const char *fmt, ...)
-{
+                           int dbgtype, int dbgflag,
+                           const char *fmt, ...) {
 }
 
 static inline void RT_PRINT_DATA(struct rtl_priv *rtlpriv,
-				 int comp, int level,
-				 const char *titlestring,
-				 const void *hexdata, size_t hexdatalen)
-{
+                                 int comp, int level,
+                                 const char *titlestring,
+                                 const void *hexdata, size_t hexdatalen) {
 }
 
 #endif

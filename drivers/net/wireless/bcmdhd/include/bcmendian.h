@@ -2,13 +2,13 @@
  * Byte order utilities
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -67,7 +67,7 @@
 #define htol16(i) (i)
 #define HTOL32(i) (i)
 #define htol32(i) (i)
-#endif 
+#endif
 
 #define ltoh16_buf(buf, i)
 #define htol16_buf(buf, i)
@@ -175,104 +175,92 @@
 	_NTOH32_UA(_bytes); \
 })
 
-#else 
+#else
 
 
 static INLINE uint16
-bcmswap16(uint16 val)
-{
-	return BCMSWAP16(val);
+bcmswap16(uint16 val) {
+    return BCMSWAP16(val);
 }
 
 static INLINE uint32
-bcmswap32(uint32 val)
-{
-	return BCMSWAP32(val);
+bcmswap32(uint32 val) {
+    return BCMSWAP32(val);
 }
 
 static INLINE uint32
-bcmswap32by16(uint32 val)
-{
-	return BCMSWAP32BY16(val);
+bcmswap32by16(uint32 val) {
+    return BCMSWAP32BY16(val);
 }
 
 
 
 
 static INLINE void
-bcmswap16_buf(uint16 *buf, uint len)
-{
-	len = len / 2;
+bcmswap16_buf(uint16 *buf, uint len) {
+    len = len / 2;
 
-	while (len--) {
-		*buf = bcmswap16(*buf);
-		buf++;
-	}
+    while (len--) {
+        *buf = bcmswap16(*buf);
+        buf++;
+    }
 }
 
 
 static INLINE void
-htol16_ua_store(uint16 val, uint8 *bytes)
-{
-	bytes[0] = val & 0xff;
-	bytes[1] = val >> 8;
+htol16_ua_store(uint16 val, uint8 *bytes) {
+    bytes[0] = val & 0xff;
+    bytes[1] = val >> 8;
 }
 
 
 static INLINE void
-htol32_ua_store(uint32 val, uint8 *bytes)
-{
-	bytes[0] = val & 0xff;
-	bytes[1] = (val >> 8) & 0xff;
-	bytes[2] = (val >> 16) & 0xff;
-	bytes[3] = val >> 24;
+htol32_ua_store(uint32 val, uint8 *bytes) {
+    bytes[0] = val & 0xff;
+    bytes[1] = (val >> 8) & 0xff;
+    bytes[2] = (val >> 16) & 0xff;
+    bytes[3] = val >> 24;
 }
 
 
 static INLINE void
-hton16_ua_store(uint16 val, uint8 *bytes)
-{
-	bytes[0] = val >> 8;
-	bytes[1] = val & 0xff;
+hton16_ua_store(uint16 val, uint8 *bytes) {
+    bytes[0] = val >> 8;
+    bytes[1] = val & 0xff;
 }
 
 
 static INLINE void
-hton32_ua_store(uint32 val, uint8 *bytes)
-{
-	bytes[0] = val >> 24;
-	bytes[1] = (val >> 16) & 0xff;
-	bytes[2] = (val >> 8) & 0xff;
-	bytes[3] = val & 0xff;
+hton32_ua_store(uint32 val, uint8 *bytes) {
+    bytes[0] = val >> 24;
+    bytes[1] = (val >> 16) & 0xff;
+    bytes[2] = (val >> 8) & 0xff;
+    bytes[3] = val & 0xff;
 }
 
 
 static INLINE uint16
-ltoh16_ua(const void *bytes)
-{
-	return _LTOH16_UA((const uint8 *)bytes);
+ltoh16_ua(const void *bytes) {
+    return _LTOH16_UA((const uint8 *)bytes);
 }
 
 
 static INLINE uint32
-ltoh32_ua(const void *bytes)
-{
-	return _LTOH32_UA((const uint8 *)bytes);
+ltoh32_ua(const void *bytes) {
+    return _LTOH32_UA((const uint8 *)bytes);
 }
 
 
 static INLINE uint16
-ntoh16_ua(const void *bytes)
-{
-	return _NTOH16_UA((const uint8 *)bytes);
+ntoh16_ua(const void *bytes) {
+    return _NTOH16_UA((const uint8 *)bytes);
 }
 
 
 static INLINE uint32
-ntoh32_ua(const void *bytes)
-{
-	return _NTOH32_UA((const uint8 *)bytes);
+ntoh32_ua(const void *bytes) {
+    return _NTOH32_UA((const uint8 *)bytes);
 }
 
-#endif 
-#endif 
+#endif
+#endif

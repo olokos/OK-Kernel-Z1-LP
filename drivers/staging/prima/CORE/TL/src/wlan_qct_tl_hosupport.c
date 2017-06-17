@@ -118,8 +118,7 @@ const v_U8_t  WLANTL_HO_TID_2_AC[WLAN_MAX_TID] = {WLANTL_AC_BE,
  *  Type Declarations
  * -------------------------------------------------------------------------*/
 /* Temporary threshold store place for BMPS */
-typedef struct
-{
+typedef struct {
     v_S7_t  rssi;
     v_U8_t  event;
 } WLANTL_HSTempPSIndType;
@@ -145,14 +144,10 @@ int  dumpCmdRSSI = -48;
 ============================================================================*/
 static v_S7_t   rssi;
 static v_S7_t   direction;
-void TLHS_UtestHandleNewRSSI(v_S7_t *newRSSI, v_PVOID_t pAdapter)
-{
-    if(0 == rssi)
-    {
+void TLHS_UtestHandleNewRSSI(v_S7_t *newRSSI, v_PVOID_t pAdapter) {
+    if(0 == rssi) {
         direction = -1;
-    }
-    else if(-90 == rssi)
-    {
+    } else if(-90 == rssi) {
         direction = 1;
     }
 
@@ -179,8 +174,7 @@ void WLANTL_StatDebugDisplay
 (
     v_U8_t                    STAid,
     WLANTL_TRANSFER_STA_TYPE *statistics
-)
-{
+) {
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"================================================="));
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Statistics for STA %d", STAid));
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"RX UC Fcnt %5d, MC Fcnt %5d, BC Fcnt %5d",
@@ -199,32 +193,27 @@ void WLANTL_StatDebugDisplay
 #endif /* WLANTL_HO_DEBUG_MSG */
 
 #ifdef WLANTL_DEBUG
-void WLANTLPrintPktsRcvdPerRateIdx(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush)
-{
+void WLANTLPrintPktsRcvdPerRateIdx(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush) {
     v_U16_t  ii;
     WLANTL_CbType  *tlCtxt = VOS_GET_TL_CB(pAdapter);
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return;
     }
 
-    if(NULL == tlCtxt->atlSTAClients[staId])
-    {
+    if(NULL == tlCtxt->atlSTAClients[staId]) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return;
     }
 
-    if(0 == tlCtxt->atlSTAClients[staId]->ucExists )
-    {
+    if(0 == tlCtxt->atlSTAClients[staId]->ucExists ) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLAN TL: %d STA ID does not exist", staId));
         return;
     }
 
-    if(flush)
-    {
+    if(flush) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                          "flushed rateIdx counters"));
 
@@ -236,8 +225,7 @@ void WLANTLPrintPktsRcvdPerRateIdx(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t fl
 
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR, "pkts per rate Index"));
 
-    for(ii = 0; ii < MAX_RATE_INDEX; ii++)
-    {
+    for(ii = 0; ii < MAX_RATE_INDEX; ii++) {
         /* printing int the below format
          * " rateIndex = pktCount "*/
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
@@ -248,33 +236,28 @@ void WLANTLPrintPktsRcvdPerRateIdx(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t fl
     return;
 }
 
-void WLANTLPrintPktsRcvdPerRssi(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush)
-{
+void WLANTLPrintPktsRcvdPerRssi(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush) {
     v_U16_t ii,jj;
     v_U32_t count = 0;
     WLANTL_CbType  *tlCtxt = VOS_GET_TL_CB(pAdapter);
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return;
     }
 
-    if(NULL == tlCtxt->atlSTAClients[staId])
-    {
+    if(NULL == tlCtxt->atlSTAClients[staId]) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return;
     }
 
-    if(0 == tlCtxt->atlSTAClients[staId]->ucExists)
-    {
+    if(0 == tlCtxt->atlSTAClients[staId]->ucExists) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLAN TL: %d STA ID does not exist", staId));
         return;
     }
 
-    if(flush)
-    {
+    if(flush) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                          "flushed rssi counters"));
 
@@ -286,8 +269,7 @@ void WLANTLPrintPktsRcvdPerRssi(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush
 
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR, "pkts per RSSI"));
 
-    for(ii = 0; ii < MAX_NUM_RSSI; ii += MAX_RSSI_INTERVAL)
-    {
+    for(ii = 0; ii < MAX_NUM_RSSI; ii += MAX_RSSI_INTERVAL) {
         count = 0;
 
         for(jj = ii; jj < (ii + MAX_RSSI_INTERVAL); jj++)
@@ -317,16 +299,14 @@ void WLANTLPrintPktsRcvdPerRssi(v_PVOID_t pAdapter, v_U8_t staId, v_BOOL_t flush
 void WLANTL_HSDebugDisplay
 (
     v_PVOID_t pAdapter
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     v_U8_t                          idx, sIdx;
     v_BOOL_t                        regionFound = VOS_FALSE;
     WLANTL_CURRENT_HO_STATE_TYPE   *currentHO;
     WLANTL_HO_SUPPORT_TYPE         *hoSupport;
 
-    if (NULL == tlCtxt)
-    {
+    if (NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                          "%s: Invalid TL Context",
                          __func__));
@@ -337,37 +317,27 @@ void WLANTL_HSDebugDisplay
     hoSupport = &(tlCtxt->hoSupport);
 
 
-    for(idx = 0; idx < currentHO->numThreshold; idx++)
-    {
-        if(idx == currentHO->regionNumber)
-        {
+    for(idx = 0; idx < currentHO->numThreshold; idx++) {
+        if(idx == currentHO->regionNumber) {
             regionFound = VOS_TRUE;
-            if(VOS_TRUE == tlCtxt->isBMPS)
-            {
+            if(VOS_TRUE == tlCtxt->isBMPS) {
                 TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO," ----> CRegion %d, hRSSI:NA, BMPS, Alpha %d",
                                  currentHO->regionNumber, currentHO->alpha));
-            }
-            else
-            {
+            } else {
                 TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO," ----> CRegion %d, hRSSI %d, Alpha %d",
                                  currentHO->regionNumber,
                                  currentHO->historyRSSI,
                                  currentHO->alpha));
             }
         }
-        for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-        {
-            if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-            {
-                if(VOS_MODULE_ID_HDD == hoSupport->registeredInd[idx].whoIsClient[sIdx])
-                {
+        for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
+            if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
+                if(VOS_MODULE_ID_HDD == hoSupport->registeredInd[idx].whoIsClient[sIdx]) {
                     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Client HDD pCB %p, triggerEvt %d, RSSI %d",
                                      hoSupport->registeredInd[idx].crossCBFunction[sIdx],
                                      hoSupport->registeredInd[idx].triggerEvent[sIdx],
                                      hoSupport->registeredInd[idx].rssiValue));
-                }
-                else
-                {
+                } else {
                     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Client SME pCB %p, triggerEvt %d, RSSI %d",
                                      hoSupport->registeredInd[idx].crossCBFunction[sIdx],
                                      hoSupport->registeredInd[idx].triggerEvent[sIdx],
@@ -377,15 +347,11 @@ void WLANTL_HSDebugDisplay
         }
     }
 
-    if(VOS_FALSE == regionFound)
-    {
-        if(VOS_TRUE == tlCtxt->isBMPS)
-        {
+    if(VOS_FALSE == regionFound) {
+        if(VOS_TRUE == tlCtxt->isBMPS) {
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR," ----> CRegion %d, hRSSI:NA, BMPS, Alpha %d",
                              currentHO->regionNumber, currentHO->alpha));
-        }
-        else
-        {
+        } else {
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR," ----> CRegion %d, hRSSI %d, Alpha %d",
                              currentHO->regionNumber,
                              currentHO->historyRSSI,
@@ -410,8 +376,7 @@ void WLANTL_HSDebugDisplay
 VOS_STATUS WLANTL_SetFWRSSIThresholds
 (
     v_PVOID_t                       pAdapter
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
     WLANTL_HO_SUPPORT_TYPE         *hoSupport;
@@ -422,8 +387,7 @@ VOS_STATUS WLANTL_SetFWRSSIThresholds
     v_U8_t                          bmpsInd;
     v_U8_t                          clientLoop;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
@@ -436,14 +400,10 @@ VOS_STATUS WLANTL_SetFWRSSIThresholds
     memset(&bmpsThresholds, 0, sizeof(tSirRSSIThresholds));
 
     bmpsInd = 0;
-    for(bmpsLoop = 0; bmpsLoop < WLANTL_MAX_AVAIL_THRESHOLD; bmpsLoop++)
-    {
-        for(clientLoop = 0; clientLoop < WLANTL_HS_NUM_CLIENT; clientLoop++)
-        {
-            if(0 != hoSupport->registeredInd[bmpsLoop].triggerEvent[clientLoop])
-            {
-                if(bmpsInd == WLANTL_SINGLE_CLNT_THRESHOLD)
-                {
+    for(bmpsLoop = 0; bmpsLoop < WLANTL_MAX_AVAIL_THRESHOLD; bmpsLoop++) {
+        for(clientLoop = 0; clientLoop < WLANTL_HS_NUM_CLIENT; clientLoop++) {
+            if(0 != hoSupport->registeredInd[bmpsLoop].triggerEvent[clientLoop]) {
+                if(bmpsInd == WLANTL_SINGLE_CLNT_THRESHOLD) {
                     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Single Client Threshold should be less than %d", WLANTL_SINGLE_CLNT_THRESHOLD));
                     break;
                 }
@@ -457,37 +417,31 @@ VOS_STATUS WLANTL_SetFWRSSIThresholds
 
     bmpsThresholds.ucRssiThreshold1 = tempIndSet[0].rssi;
     if((WLANTL_HO_THRESHOLD_DOWN == tempIndSet[0].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[0].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[0].event)) {
         bmpsThresholds.bRssiThres1NegNotify = 1;
     }
     if((WLANTL_HO_THRESHOLD_UP == tempIndSet[0].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[0].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[0].event)) {
         bmpsThresholds.bRssiThres1PosNotify = 1;
     }
 
     bmpsThresholds.ucRssiThreshold2 = tempIndSet[1].rssi;
     if((WLANTL_HO_THRESHOLD_DOWN == tempIndSet[1].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[1].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[1].event)) {
         bmpsThresholds.bRssiThres2NegNotify = 1;
     }
     if((WLANTL_HO_THRESHOLD_UP == tempIndSet[1].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[1].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[1].event)) {
         bmpsThresholds.bRssiThres2PosNotify = 1;
     }
 
     bmpsThresholds.ucRssiThreshold3 = tempIndSet[2].rssi;
     if((WLANTL_HO_THRESHOLD_DOWN == tempIndSet[2].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[2].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[2].event)) {
         bmpsThresholds.bRssiThres3NegNotify = 1;
     }
     if((WLANTL_HO_THRESHOLD_UP == tempIndSet[2].event) ||
-            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[2].event))
-    {
+            (WLANTL_HO_THRESHOLD_CROSS == tempIndSet[2].event)) {
         bmpsThresholds.bRssiThres3PosNotify = 1;
     }
 
@@ -513,35 +467,30 @@ VOS_STATUS WLANTL_StatHandleRXFrame
     v_U8_t           STAid,
     v_BOOL_t         isBroadcast,
     vos_pkt_t       *dataBuffer
-)
-{
+) {
     WLANTL_CbType            *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                status = VOS_STATUS_SUCCESS;
     WLANTL_TRANSFER_STA_TYPE *statistics;
     v_U16_t                   packetSize;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if ( NULL == tlCtxt->atlSTAClients[STAid] )
-    {
+    if ( NULL == tlCtxt->atlSTAClients[STAid] ) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return VOS_STATUS_E_FAILURE;
     }
 
 
-    if(NULL == dataBuffer)
-    {
+    if(NULL == dataBuffer) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Management Frame, not need to handle with Stat"));
         return status;
     }
 
-    if(0 == tlCtxt->atlSTAClients[STAid]->ucExists)
-    {
+    if(0 == tlCtxt->atlSTAClients[STAid]->ucExists) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLAN TL: %d STA ID is not exist", STAid));
         return VOS_STATUS_E_INVAL;
     }
@@ -549,8 +498,7 @@ VOS_STATUS WLANTL_StatHandleRXFrame
     statistics = &tlCtxt->atlSTAClients[STAid]->trafficStatistics;
     vos_pkt_get_packet_length(dataBuffer, &packetSize);
 
-    if(isBroadcast)
-    {
+    if(isBroadcast) {
         /* Above flag is set for both broadcast and multicast frame. So
            find frame type to distinguish between multicast and broadcast.
            Ideally, it would be better if BD header has a field to indicate
@@ -561,14 +509,12 @@ VOS_STATUS WLANTL_StatHandleRXFrame
         status = WLANTL_FindFrameTypeBcMcUc(tlCtxt, STAid, dataBuffer,
                                             &ucFrameCastType);
 
-        if (VOS_STATUS_SUCCESS != status)
-        {
+        if (VOS_STATUS_SUCCESS != status) {
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLAN TL: failed to distinguish if Rx frame is broadcast or multicast"));
             return status;
         }
 
-        switch (ucFrameCastType)
-        {
+        switch (ucFrameCastType) {
         case WLANTL_FRAME_TYPE_BCAST:
             TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This is RX BC frame"));
             statistics->rxBCFcnt++;
@@ -592,9 +538,7 @@ VOS_STATUS WLANTL_StatHandleRXFrame
             return VOS_STATUS_E_INVAL;
             break;
         }
-    }
-    else
-    {
+    } else {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This is RX UC frame"));
         statistics->rxUCFcnt++;
         statistics->rxUCBcnt += (packetSize - WLANHAL_RX_BD_HEADER_SIZE);
@@ -643,28 +587,24 @@ VOS_STATUS WLANTL_StatHandleTXFrame
     vos_pkt_t       *dataBuffer,
     v_PVOID_t        pBDHeader,
     WLANTL_MetaInfoType *txMetaInfo
-)
-{
+) {
     WLANTL_CbType            *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                status = VOS_STATUS_SUCCESS;
     WLANTL_TRANSFER_STA_TYPE *statistics;
     v_U16_t                   packetSize;
 
-    if((NULL == tlCtxt) || (NULL == dataBuffer))
-    {
+    if((NULL == tlCtxt) || (NULL == dataBuffer)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if ( NULL == tlCtxt->atlSTAClients[STAid] )
-    {
+    if ( NULL == tlCtxt->atlSTAClients[STAid] ) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return VOS_STATUS_E_FAILURE;
     }
 
-    if(0 == tlCtxt->atlSTAClients[STAid]->ucExists)
-    {
+    if(0 == tlCtxt->atlSTAClients[STAid]->ucExists) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLAN TL: %d STA ID is not exist", STAid));
         return VOS_STATUS_E_INVAL;
     }
@@ -672,20 +612,15 @@ VOS_STATUS WLANTL_StatHandleTXFrame
     /* TODO : BC/MC/UC have to be determined by MAC address */
     statistics = &tlCtxt->atlSTAClients[STAid]->trafficStatistics;
     vos_pkt_get_packet_length(dataBuffer, &packetSize);
-    if(txMetaInfo->ucBcast)
-    {
+    if(txMetaInfo->ucBcast) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This TX is BC frame"));
         statistics->txBCFcnt++;
         statistics->txBCBcnt += packetSize;
-    }
-    else if(txMetaInfo->ucMcast)
-    {
+    } else if(txMetaInfo->ucMcast) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This TX is MC frame"));
         statistics->txMCFcnt++;
         statistics->txMCBcnt += packetSize;
-    }
-    else
-    {
+    } else {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This is TX UC frame"));
         statistics->txUCFcnt++;
         statistics->txUCBcnt += packetSize;
@@ -716,8 +651,7 @@ VOS_STATUS WLANTL_StatHandleTXFrame
 v_VOID_t WLANTL_HSTrafficStatusTimerExpired
 (
     v_PVOID_t pAdapter
-)
-{
+) {
     WLANTL_CbType                        *tlCtxt = VOS_GET_TL_CB(pAdapter);
     WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE *trafficHandle = NULL;
     WLANTL_HO_TRAFFIC_STATUS_TYPE         newTraffic;
@@ -725,8 +659,7 @@ v_VOID_t WLANTL_HSTrafficStatusTimerExpired
     v_U32_t                               nrtFrameCount;
     v_BOOL_t                              trafficStatusChanged = VOS_FALSE;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return;
     }
@@ -739,34 +672,26 @@ v_VOID_t WLANTL_HSTrafficStatusTimerExpired
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Traffic status timer expired RT FC %d, NRT FC %d", rtFrameCount, nrtFrameCount));
 
     /* Get current traffic status */
-    if(rtFrameCount > trafficHandle->idleThreshold)
-    {
+    if(rtFrameCount > trafficHandle->idleThreshold) {
         newTraffic.rtTrafficStatus = WLANTL_HO_RT_TRAFFIC_STATUS_ON;
-    }
-    else
-    {
+    } else {
         newTraffic.rtTrafficStatus = WLANTL_HO_RT_TRAFFIC_STATUS_OFF;
     }
 
-    if(nrtFrameCount > trafficHandle->idleThreshold)
-    {
+    if(nrtFrameCount > trafficHandle->idleThreshold) {
         newTraffic.nrtTrafficStatus = WLANTL_HO_NRT_TRAFFIC_STATUS_ON;
-    }
-    else
-    {
+    } else {
         newTraffic.nrtTrafficStatus = WLANTL_HO_NRT_TRAFFIC_STATUS_OFF;
     }
 
     /* Differentiate with old traffic status */
-    if(trafficHandle->trafficStatus.rtTrafficStatus != newTraffic.rtTrafficStatus)
-    {
+    if(trafficHandle->trafficStatus.rtTrafficStatus != newTraffic.rtTrafficStatus) {
         TLLOGW(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,"RT Traffic status changed from %d to %d",
                          trafficHandle->trafficStatus.rtTrafficStatus,
                          newTraffic.rtTrafficStatus));
         trafficStatusChanged = VOS_TRUE;
     }
-    if(trafficHandle->trafficStatus.nrtTrafficStatus != newTraffic.nrtTrafficStatus)
-    {
+    if(trafficHandle->trafficStatus.nrtTrafficStatus != newTraffic.nrtTrafficStatus) {
         TLLOGW(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,"NRT Traffic status changed from %d to %d",
                          trafficHandle->trafficStatus.nrtTrafficStatus,
                          newTraffic.nrtTrafficStatus));
@@ -774,14 +699,11 @@ v_VOID_t WLANTL_HSTrafficStatusTimerExpired
     }
 
     /* If traffic status is changed send notification to client */
-    if((VOS_TRUE == trafficStatusChanged) && (NULL != trafficHandle->trafficCB))
-    {
+    if((VOS_TRUE == trafficStatusChanged) && (NULL != trafficHandle->trafficCB)) {
         trafficHandle->trafficCB(pAdapter, newTraffic, trafficHandle->usrCtxt);
         trafficHandle->trafficStatus.rtTrafficStatus = newTraffic.rtTrafficStatus;
         trafficHandle->trafficStatus.nrtTrafficStatus = newTraffic.nrtTrafficStatus;
-    }
-    else if((VOS_TRUE == trafficStatusChanged) && (NULL == trafficHandle->trafficCB))
-    {
+    } else if((VOS_TRUE == trafficStatusChanged) && (NULL == trafficHandle->trafficCB)) {
         TLLOGW(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,"Traffic status is changed but not need to report"));
     }
 
@@ -791,8 +713,7 @@ v_VOID_t WLANTL_HSTrafficStatusTimerExpired
     trafficHandle->nrtRXFrameCount = 0;
     trafficHandle->nrtTXFrameCount = 0;
 
-    if(NULL != trafficHandle->trafficCB)
-    {
+    if(NULL != trafficHandle->trafficCB) {
         /* restart timer  only when the callback is not NULL */
         vos_timer_start(&trafficHandle->trafficTimer, trafficHandle->measurePeriod);
     }
@@ -818,22 +739,19 @@ VOS_STATUS WLANTL_HSGetRSSI
     v_PVOID_t        pBDHeader,
     v_U8_t           STAid,
     v_S7_t          *currentAvgRSSI
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
     v_S7_t           currentRSSI, currentRSSI0, currentRSSI1;
     WLANTL_CURRENT_HO_STATE_TYPE *currentHO = NULL;
 
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if ( NULL == tlCtxt->atlSTAClients[STAid] )
-    {
+    if ( NULL == tlCtxt->atlSTAClients[STAid] ) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return VOS_STATUS_E_FAILURE;
@@ -843,10 +761,8 @@ VOS_STATUS WLANTL_HSGetRSSI
        Compute RSSI only for the last MPDU of an AMPDU.
        Only last MPDU carries the Phy Stats Values
     */
-    if (WDA_IS_RX_AN_AMPDU (pBDHeader))
-    {
-        if (!WDA_IS_RX_LAST_MPDU(pBDHeader))
-        {
+    if (WDA_IS_RX_AN_AMPDU (pBDHeader)) {
+        if (!WDA_IS_RX_LAST_MPDU(pBDHeader)) {
             return VOS_STATUS_E_FAILURE;
         }
     }
@@ -864,12 +780,9 @@ VOS_STATUS WLANTL_HSGetRSSI
     TLHS_UtestHandleNewRSSI(&currentRSSI, pAdapter);
 #endif /* WLANTL_HO_UTEST */
 
-    if(0 == tlCtxt->atlSTAClients[STAid]->rssiAvg)
-    {
+    if(0 == tlCtxt->atlSTAClients[STAid]->rssiAvg) {
         *currentAvgRSSI = currentRSSI;
-    }
-    else
-    {
+    } else {
         *currentAvgRSSI = ((tlCtxt->atlSTAClients[STAid]->rssiAvg  *
                             tlCtxt->atlSTAClients[STAid]->rssiAlpha) +
                            (currentRSSI * (10 - tlCtxt->atlSTAClients[STAid]->rssiAlpha))) / 10;
@@ -904,23 +817,20 @@ VOS_STATUS WLANTL_HSGetDataRSSI
     v_PVOID_t        pBDHeader,
     v_U8_t           STAid,
     v_S7_t          *currentAvgRSSI
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
     v_S7_t           currentRSSI, currentRSSI0, currentRSSI1;
     WLANTL_CURRENT_HO_STATE_TYPE *currentHO = NULL;
 
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                          "Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if ( NULL == tlCtxt->atlSTAClients[STAid] )
-    {
+    if ( NULL == tlCtxt->atlSTAClients[STAid] ) {
         TLLOGE(VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                           "WLAN TL:Client Memory was not allocated on %s", __func__));
         return VOS_STATUS_E_FAILURE;
@@ -930,10 +840,8 @@ VOS_STATUS WLANTL_HSGetDataRSSI
      * Compute RSSI only for the last MPDU of an AMPDU.
      * Only last MPDU carries the Phy Stats Values
      */
-    if (WDA_IS_RX_AN_AMPDU (pBDHeader))
-    {
-        if (!WDA_IS_RX_LAST_MPDU(pBDHeader))
-        {
+    if (WDA_IS_RX_AN_AMPDU (pBDHeader)) {
+        if (!WDA_IS_RX_LAST_MPDU(pBDHeader)) {
             return VOS_STATUS_E_FAILURE;
         }
     }
@@ -951,12 +859,9 @@ VOS_STATUS WLANTL_HSGetDataRSSI
     TLHS_UtestHandleNewRSSI(&currentRSSI, pAdapter);
 #endif /* WLANTL_HO_UTEST */
 
-    if(0 == tlCtxt->atlSTAClients[STAid]->rssiDataAvg)
-    {
+    if(0 == tlCtxt->atlSTAClients[STAid]->rssiDataAvg) {
         *currentAvgRSSI = currentRSSI;
-    }
-    else
-    {
+    } else {
         *currentAvgRSSI = ((tlCtxt->atlSTAClients[STAid]->rssiDataAvg  *
                             tlCtxt->atlSTAClients[STAid]->rssiDataAlpha) +
                            (currentRSSI *
@@ -988,8 +893,7 @@ VOS_STATUS WLANTL_HSBMPSRSSIRegionChangedNotification
 (
     v_PVOID_t             pAdapter,
     tpSirRSSINotification pRSSINotification
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
     WLANTL_CURRENT_HO_STATE_TYPE   *currentHO;
@@ -1005,14 +909,12 @@ VOS_STATUS WLANTL_HSBMPSRSSIRegionChangedNotification
     v_U8_t                          idx, sIdx;
 
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if(NULL == pRSSINotification)
-    {
+    if(NULL == pRSSINotification) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid FW RSSI Notification"));
         VOS_ASSERT(0);
         return VOS_STATUS_E_INVAL;
@@ -1040,71 +942,51 @@ VOS_STATUS WLANTL_HSBMPSRSSIRegionChangedNotification
 
     currentHO->fwNotification = curFWNotification;
 
-    if(0 == preFWNotification)
-    {
+    if(0 == preFWNotification) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"This is the first time notification from FW Value is 0x%x", curFWNotification));
         preFWNotification = curFWNotification;
-    }
-    else if(preFWNotification == curFWNotification)
-    {
+    } else if(preFWNotification == curFWNotification) {
         THSRELEASELOCK("WLANTL_HSBMPSRSSIRegionChangedNotification",
                        &tlCtxt->hoSupport.hosLock);
         return status;
     }
 
-    if(1 == pRSSINotification->bRssiThres1PosCross)
-    {
+    if(1 == pRSSINotification->bRssiThres1PosCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"POS Cross to Region 0"));
         pRegionNumber = 0;
-    }
-    else if(1 == pRSSINotification->bRssiThres2PosCross)
-    {
+    } else if(1 == pRSSINotification->bRssiThres2PosCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"POS Cross to Region 1"));
         pRegionNumber = 1;
-    }
-    else if(1 == pRSSINotification->bRssiThres3PosCross)
-    {
+    } else if(1 == pRSSINotification->bRssiThres3PosCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"POS Cross to Region 2"));
         pRegionNumber = 2;
     }
 
-    if(1 == pRSSINotification->bRssiThres3NegCross)
-    {
+    if(1 == pRSSINotification->bRssiThres3NegCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"NEG Cross to Region 3"));
         nRegionNumber = 3;
-    }
-    else if(1 == pRSSINotification->bRssiThres2NegCross)
-    {
+    } else if(1 == pRSSINotification->bRssiThres2NegCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"NEG Cross to Region 2"));
         nRegionNumber = 2;
-    }
-    else if(1 == pRSSINotification->bRssiThres1NegCross)
-    {
+    } else if(1 == pRSSINotification->bRssiThres1NegCross) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"NEG Cross to Region 1"));
         nRegionNumber = 1;
     }
 
     newRegionNumber = (nRegionNumber > pRegionNumber) ? nRegionNumber : pRegionNumber;
-    if((currentHO->regionNumber) && (newRegionNumber == currentHO->regionNumber))
-    {
+    if((currentHO->regionNumber) && (newRegionNumber == currentHO->regionNumber)) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"No Region Change with BMPS mode"));
         preFWNotification = curFWNotification;
         THSRELEASELOCK("WLANTL_HSBMPSRSSIRegionChangedNotification",
                        &tlCtxt->hoSupport.hosLock);
         return status;
-    }
-    else if(newRegionNumber > currentHO->regionNumber)
-    {
+    } else if(newRegionNumber > currentHO->regionNumber) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Region Increase Worse RSSI"));
-        for(idx = currentHO->regionNumber; idx < newRegionNumber; idx++)
-        {
-            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-            {
+        for(idx = currentHO->regionNumber; idx < newRegionNumber; idx++) {
+            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
                 if((WLANTL_HO_THRESHOLD_DOWN == hoSupport->registeredInd[idx].triggerEvent[sIdx]) ||
-                        (WLANTL_HO_THRESHOLD_CROSS == hoSupport->registeredInd[idx].triggerEvent[sIdx]))
-                {
-                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-                    {
+                        (WLANTL_HO_THRESHOLD_CROSS == hoSupport->registeredInd[idx].triggerEvent[sIdx])) {
+                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
                         cbFunction = hoSupport->registeredInd[idx].crossCBFunction[sIdx];
                         usrCtxt = hoSupport->registeredInd[idx].usrCtxt[sIdx];
 
@@ -1116,20 +998,14 @@ VOS_STATUS WLANTL_HSBMPSRSSIRegionChangedNotification
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Region Decrease Better RSSI"));
         idx = (currentHO->regionNumber)?(currentHO->regionNumber-1):0;
-        while (idx >= newRegionNumber)
-        {
-            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-            {
+        while (idx >= newRegionNumber) {
+            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
                 if((WLANTL_HO_THRESHOLD_UP & hoSupport->registeredInd[idx].triggerEvent[sIdx]) ||
-                        (WLANTL_HO_THRESHOLD_CROSS & hoSupport->registeredInd[idx].triggerEvent[sIdx]))
-                {
-                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-                    {
+                        (WLANTL_HO_THRESHOLD_CROSS & hoSupport->registeredInd[idx].triggerEvent[sIdx])) {
+                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
                         cbFunction = hoSupport->registeredInd[idx].crossCBFunction[sIdx];
                         usrCtxt = hoSupport->registeredInd[idx].usrCtxt[sIdx];
 
@@ -1168,8 +1044,7 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
 (
     v_PVOID_t   pAdapter,
     v_S7_t      currentRSSI
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
     v_U8_t                          currentRegion = 0;
@@ -1180,8 +1055,7 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
     v_PVOID_t                       usrCtxt = NULL;
     v_U8_t                          evtType = WLANTL_HO_THRESHOLD_NA;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1194,10 +1068,8 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
                      currentHO->historyRSSI));
 
     /* Find where is current region */
-    for(idx = 0; idx < currentHO->numThreshold; idx++)
-    {
-        if(hoSupport->registeredInd[idx].rssiValue < currentRSSI)
-        {
+    for(idx = 0; idx < currentHO->numThreshold; idx++) {
+        if(hoSupport->registeredInd[idx].rssiValue < currentRSSI) {
             currentRegion = idx;
             TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Found region %d, not bottom", currentRegion));
             break;
@@ -1205,8 +1077,7 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
     }
 
     /* If could not find then new RSSI is belong to bottom region */
-    if(idx == currentHO->numThreshold)
-    {
+    if(idx == currentHO->numThreshold) {
         currentRegion = idx;
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Current region is bottom %d", idx));
     }
@@ -1215,23 +1086,16 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
        posts message and nothing else in the callback indicating UP/DOWN event to the registered module */
     currentHO->historyRSSI = currentRSSI;
 
-    if(currentRegion == currentHO->regionNumber)
-    {
+    if(currentRegion == currentHO->regionNumber) {
         currentHO->historyRSSI = currentRSSI;
         return status;
-    }
-    else if(currentRegion > currentHO->regionNumber)
-    {
+    } else if(currentRegion > currentHO->regionNumber) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Region Increase Worse RSSI"));
-        for(idx = currentHO->regionNumber; idx < currentRegion; idx++)
-        {
-            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-            {
+        for(idx = currentHO->regionNumber; idx < currentRegion; idx++) {
+            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
                 if((WLANTL_HO_THRESHOLD_DOWN == hoSupport->registeredInd[idx].triggerEvent[sIdx]) ||
-                        (WLANTL_HO_THRESHOLD_CROSS == hoSupport->registeredInd[idx].triggerEvent[sIdx]))
-                {
-                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-                    {
+                        (WLANTL_HO_THRESHOLD_CROSS == hoSupport->registeredInd[idx].triggerEvent[sIdx])) {
+                    if(NULL != hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
                         cbFunction = hoSupport->registeredInd[idx].crossCBFunction[sIdx];
                         usrCtxt = hoSupport->registeredInd[idx].usrCtxt[sIdx];
 
@@ -1242,19 +1106,13 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Region Decrease Better RSSI"));
-        for(idx = currentHO->regionNumber; idx > currentRegion; idx--)
-        {
-            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-            {
+        for(idx = currentHO->regionNumber; idx > currentRegion; idx--) {
+            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
                 if((WLANTL_HO_THRESHOLD_UP & hoSupport->registeredInd[idx - 1].triggerEvent[sIdx]) ||
-                        (WLANTL_HO_THRESHOLD_CROSS & hoSupport->registeredInd[idx - 1].triggerEvent[sIdx]))
-                {
-                    if(NULL != hoSupport->registeredInd[idx - 1].crossCBFunction[sIdx])
-                    {
+                        (WLANTL_HO_THRESHOLD_CROSS & hoSupport->registeredInd[idx - 1].triggerEvent[sIdx])) {
+                    if(NULL != hoSupport->registeredInd[idx - 1].crossCBFunction[sIdx]) {
                         cbFunction = hoSupport->registeredInd[idx - 1].crossCBFunction[sIdx];
                         usrCtxt = hoSupport->registeredInd[idx - 1].usrCtxt[sIdx];
 
@@ -1271,8 +1129,7 @@ VOS_STATUS WLANTL_HSHandleRSSIChange
     currentHO->regionNumber = currentRegion;
     WLANTL_HSDebugDisplay(pAdapter);
 
-    if(!VOS_IS_STATUS_SUCCESS(status))
-    {
+    if(!VOS_IS_STATUS_SUCCESS(status)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Client fail to handle region change in normal mode %d", status));
     }
     return VOS_STATUS_SUCCESS;
@@ -1297,8 +1154,7 @@ VOS_STATUS WLANTL_HSHandleRXFrame
     v_U8_t           STAid,
     v_BOOL_t         isBroadcast,
     vos_pkt_t       *dataBuffer
-)
-{
+) {
     WLANTL_CURRENT_HO_STATE_TYPE *currentHO = NULL;
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
@@ -1307,8 +1163,7 @@ VOS_STATUS WLANTL_HSHandleRXFrame
     v_U32_t          currentTimestamp;
     v_U8_t           tid;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1318,18 +1173,14 @@ VOS_STATUS WLANTL_HSHandleRXFrame
 
     /* If this frame is not management frame increase frame count */
     if((0 != tlCtxt->hoSupport.currentTraffic.idleThreshold) &&
-            (WLANTL_MGMT_FRAME_TYPE != frameType))
-    {
+            (WLANTL_MGMT_FRAME_TYPE != frameType)) {
         tid = WDA_GET_RX_TID( pBDHeader );
         ac = WLANTL_HO_TID_2_AC[(v_U8_t)tid];
 
         /* Only Voice traffic is handled as real time traffic */
-        if(WLANTL_AC_VO == ac)
-        {
+        if(WLANTL_AC_VO == ac) {
             tlCtxt->hoSupport.currentTraffic.rtRXFrameCount++;
-        }
-        else
-        {
+        } else {
             tlCtxt->hoSupport.currentTraffic.nrtRXFrameCount++;
         }
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"RX frame AC %d, RT Frame Count %d, NRT Frame Count %d",
@@ -1339,8 +1190,7 @@ VOS_STATUS WLANTL_HSHandleRXFrame
     }
 
     currentHO = &tlCtxt->hoSupport.currentHOState;
-    if(VOS_TRUE == tlCtxt->isBMPS)
-    {
+    if(VOS_TRUE == tlCtxt->isBMPS) {
         WLANTL_HSGetRSSI(pAdapter, pBDHeader, STAid, &currentAvgRSSI);
         currentHO->historyRSSI = currentAvgRSSI;
         THSRELEASELOCK("WLANTL_HSHandleRXFrame", &tlCtxt->hoSupport.hosLock);
@@ -1348,8 +1198,7 @@ VOS_STATUS WLANTL_HSHandleRXFrame
     }
 
     currentTimestamp = WDA_GET_RX_TIMESTAMP(pBDHeader);
-    if((currentTimestamp - currentHO->sampleTime) < WLANTL_HO_SAMPLING_PERIOD)
-    {
+    if((currentTimestamp - currentHO->sampleTime) < WLANTL_HO_SAMPLING_PERIOD) {
         THSRELEASELOCK("WLANTL_HSHandleRXFrame", &tlCtxt->hoSupport.hosLock);
         return status;
     }
@@ -1357,8 +1206,7 @@ VOS_STATUS WLANTL_HSHandleRXFrame
 
     /* Get Current RSSI from BD Heaser */
     status = WLANTL_HSGetRSSI(pAdapter, pBDHeader, STAid, &currentAvgRSSI);
-    if(!VOS_IS_STATUS_SUCCESS(status))
-    {
+    if(!VOS_IS_STATUS_SUCCESS(status)) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Get RSSI Fail"));
         THSRELEASELOCK("WLANTL_HSHandleRXFrame", &tlCtxt->hoSupport.hosLock);
         return status;
@@ -1368,16 +1216,12 @@ VOS_STATUS WLANTL_HSHandleRXFrame
 #endif
     {
         /* If any threshold is not registerd, DO NOTHING! */
-        if(0 == tlCtxt->hoSupport.currentHOState.numThreshold)
-        {
+        if(0 == tlCtxt->hoSupport.currentHOState.numThreshold) {
             TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"There is no thresholds pass"));
-        }
-        else
-        {
+        } else {
             /* Handle current RSSI value, region, notification, etc */
             status = WLANTL_HSHandleRSSIChange(pAdapter, currentAvgRSSI);
-            if(!VOS_IS_STATUS_SUCCESS(status))
-            {
+            if(!VOS_IS_STATUS_SUCCESS(status)) {
                 TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Handle new RSSI fail"));
                 THSRELEASELOCK("WLANTL_HSHandleRXFrame",
                                &tlCtxt->hoSupport.hosLock);
@@ -1408,31 +1252,25 @@ VOS_STATUS WLANTL_HSHandleTXFrame
     v_U8_t           STAid,
     vos_pkt_t       *dataBuffer,
     v_PVOID_t        bdHeader
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
     /* Traffic status report is not registered, JUST DO NOTHING */
-    if(0 == tlCtxt->hoSupport.currentTraffic.idleThreshold)
-    {
+    if(0 == tlCtxt->hoSupport.currentTraffic.idleThreshold) {
         return VOS_STATUS_SUCCESS;
     }
 
 
     /* Only Voice traffic is handled as real time traffic */
-    if(WLANTL_AC_VO == ac)
-    {
+    if(WLANTL_AC_VO == ac) {
         tlCtxt->hoSupport.currentTraffic.rtTXFrameCount++;
-    }
-    else
-    {
+    } else {
         tlCtxt->hoSupport.currentTraffic.nrtTXFrameCount++;
     }
     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"TX frame AC %d, RT Frame Count %d, NRT Frame Count %d",
@@ -1462,8 +1300,7 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
     WLANTL_RSSICrossThresholdCBType crossCBFunction,
     VOS_MODULE_ID                   moduleID,
     v_PVOID_t                       usrCtxt
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
     v_U8_t                          idx, sIdx;
@@ -1471,14 +1308,12 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
     WLANTL_CURRENT_HO_STATE_TYPE   *currentHO;
     v_U8_t                          clientOrder = 0;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if((-1 < rssiValue) || (NULL == crossCBFunction))
-    {
+    if((-1 < rssiValue) || (NULL == crossCBFunction)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Reg Invalid Argument"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1490,16 +1325,14 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Make Registration Module %d, Event %d, RSSI %d", moduleID, triggerEvent, rssiValue));
 
     if((WLANTL_MAX_AVAIL_THRESHOLD < currentHO->numThreshold) ||
-            (WLANTL_MAX_AVAIL_THRESHOLD == currentHO->numThreshold))
-    {
+            (WLANTL_MAX_AVAIL_THRESHOLD == currentHO->numThreshold)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"No more available slot, please DEL first %d",
                          currentHO->numThreshold));
         THSRELEASELOCK("WLANTL_HSRegRSSIIndicationCB", &tlCtxt->hoSupport.hosLock);
         return VOS_STATUS_E_RESOURCES;
     }
 
-    if(0 == currentHO->numThreshold)
-    {
+    if(0 == currentHO->numThreshold) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"First Registration"));
         hoSupport->registeredInd[0].rssiValue    = rssiValue;
         hoSupport->registeredInd[0].triggerEvent[0]    = triggerEvent;
@@ -1507,20 +1340,14 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
         hoSupport->registeredInd[0].usrCtxt[0]         = usrCtxt;
         hoSupport->registeredInd[0].whoIsClient[0]     = moduleID;
         hoSupport->registeredInd[0].numClient++;
-    }
-    else
-    {
-        for(idx = 0; idx < currentHO->numThreshold; idx++)
-        {
-            if(rssiValue == hoSupport->registeredInd[idx].rssiValue)
-            {
-                for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-                {
+    } else {
+        for(idx = 0; idx < currentHO->numThreshold; idx++) {
+            if(rssiValue == hoSupport->registeredInd[idx].rssiValue) {
+                for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
                     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Reg CB P %p, registered CB P %p",
                                      crossCBFunction,
                                      hoSupport->registeredInd[idx].crossCBFunction[sIdx]));
-                    if(crossCBFunction == hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-                    {
+                    if(crossCBFunction == hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
                         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Same RSSI %d, Same CB %p already registered",
                                          rssiValue, crossCBFunction));
                         WLANTL_HSDebugDisplay(pAdapter);
@@ -1529,10 +1356,8 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
                     }
                 }
 
-                for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-                {
-                    if(NULL == hoSupport->registeredInd[idx].crossCBFunction[sIdx])
-                    {
+                for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
+                    if(NULL == hoSupport->registeredInd[idx].crossCBFunction[sIdx]) {
                         clientOrder = sIdx;
                         break;
                     }
@@ -1547,17 +1372,13 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
                 return status;
             }
         }
-        for(idx = 0; idx < currentHO->numThreshold; idx++)
-        {
-            if(rssiValue > hoSupport->registeredInd[idx].rssiValue)
-            {
-                for(sIdx = (currentHO->numThreshold - 1); (sIdx > idx) || (sIdx == idx); sIdx--)
-                {
+        for(idx = 0; idx < currentHO->numThreshold; idx++) {
+            if(rssiValue > hoSupport->registeredInd[idx].rssiValue) {
+                for(sIdx = (currentHO->numThreshold - 1); (sIdx > idx) || (sIdx == idx); sIdx--) {
                     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO, "Shift %d array to %d", sIdx, sIdx + 1));
                     vos_mem_copy(&hoSupport->registeredInd[sIdx + 1], &hoSupport->registeredInd[sIdx], sizeof(WLANTL_HO_RSSI_INDICATION_TYPE));
                     memset(&hoSupport->registeredInd[sIdx], 0, sizeof(WLANTL_HO_RSSI_INDICATION_TYPE));
-                    if(0 == sIdx)
-                    {
+                    if(0 == sIdx) {
                         break;
                     }
                 }
@@ -1571,8 +1392,7 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
                 break;
             }
         }
-        if(currentHO->numThreshold == idx)
-        {
+        if(currentHO->numThreshold == idx) {
             TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO, "New threshold put in bottom"));
 
             hoSupport->registeredInd[currentHO->numThreshold].rssiValue    = rssiValue;
@@ -1585,48 +1405,32 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
     }
 
     currentHO->numThreshold++;
-    if((VOS_FALSE == tlCtxt->isBMPS) && (rssiValue > currentHO->historyRSSI))
-    {
+    if((VOS_FALSE == tlCtxt->isBMPS) && (rssiValue > currentHO->historyRSSI)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Added Threshold above current RSSI level, old RN %d", currentHO->regionNumber));
-        if(4 > currentHO->regionNumber)
-        {
+        if(4 > currentHO->regionNumber) {
             currentHO->regionNumber++;
-        }
-        else
-        {
+        } else {
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Current region number is max %d, cannot increase anymore", currentHO->regionNumber));
         }
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"increase region number without notification %d", currentHO->regionNumber));
-    }
-    else if(VOS_TRUE == tlCtxt->isBMPS)
-    {
-        if(0 != currentHO->regionNumber)
-        {
-            if(hoSupport->registeredInd[currentHO->regionNumber].rssiValue < rssiValue)
-            {
+    } else if(VOS_TRUE == tlCtxt->isBMPS) {
+        if(0 != currentHO->regionNumber) {
+            if(hoSupport->registeredInd[currentHO->regionNumber].rssiValue < rssiValue) {
                 currentHO->regionNumber++;
-                if((WLANTL_HO_THRESHOLD_DOWN == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent))
-                {
+                if((WLANTL_HO_THRESHOLD_DOWN == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent)) {
                     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Registered RSSI value larger than Current RSSI, and DOWN event, Send Notification"));
                     WLANTL_HSSerializeTlIndication(pAdapter, WLANTL_HO_THRESHOLD_DOWN, usrCtxt, crossCBFunction,
                                                    hoSupport->registeredInd[currentHO->regionNumber].rssiValue);
                 }
-            }
-            else if((currentHO->regionNumber < (currentHO->numThreshold - 1)) &&
-                    (hoSupport->registeredInd[currentHO->regionNumber + 1].rssiValue > rssiValue))
-            {
-                if((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent))
-                {
+            } else if((currentHO->regionNumber < (currentHO->numThreshold - 1)) &&
+                      (hoSupport->registeredInd[currentHO->regionNumber + 1].rssiValue > rssiValue)) {
+                if((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent)) {
                     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Registered RSSI value smaller than Current RSSI"));
                 }
             }
-        }
-        else
-        {
-            if(hoSupport->registeredInd[currentHO->regionNumber].rssiValue > rssiValue)
-            {
-                if((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent))
-                {
+        } else {
+            if(hoSupport->registeredInd[currentHO->regionNumber].rssiValue > rssiValue) {
+                if((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent)) {
                     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Registered RSSI value smaller than Current RSSI"));
                 }
             }
@@ -1635,21 +1439,17 @@ VOS_STATUS WLANTL_HSRegRSSIIndicationCB
 
     if((VOS_FALSE == tlCtxt->isBMPS) &&
             (rssiValue >= currentHO->historyRSSI) && (0 != currentHO->historyRSSI) &&
-            ((WLANTL_HO_THRESHOLD_DOWN == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent)))
-    {
+            ((WLANTL_HO_THRESHOLD_DOWN == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent))) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Registered RSSI value larger than Current RSSI, and DOWN event, Send Notification"));
         WLANTL_HSSerializeTlIndication(pAdapter, WLANTL_HO_THRESHOLD_DOWN, usrCtxt, crossCBFunction, currentHO->historyRSSI);
-    }
-    else if((VOS_FALSE == tlCtxt->isBMPS) &&
-            (rssiValue < currentHO->historyRSSI) && (0 != currentHO->historyRSSI) &&
-            ((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent)))
-    {
+    } else if((VOS_FALSE == tlCtxt->isBMPS) &&
+              (rssiValue < currentHO->historyRSSI) && (0 != currentHO->historyRSSI) &&
+              ((WLANTL_HO_THRESHOLD_UP == triggerEvent) || (WLANTL_HO_THRESHOLD_CROSS == triggerEvent))) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Registered RSSI value smaller than Current RSSI, and UP event, Send Notification"));
         WLANTL_HSSerializeTlIndication(pAdapter, WLANTL_HO_THRESHOLD_UP, usrCtxt, crossCBFunction, currentHO->historyRSSI);
     }
 
-    if((VOS_TRUE == tlCtxt->isBMPS) || (IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE))
-    {
+    if((VOS_TRUE == tlCtxt->isBMPS) || (IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Register into FW, now BMPS"));
         /* this function holds the lock across a downstream WDA function call, this is violates some lock
            ordering checks done on some HLOS see CR323221*/
@@ -1681,8 +1481,7 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     v_U8_t                          triggerEvent,
     WLANTL_RSSICrossThresholdCBType crossCBFunction,
     VOS_MODULE_ID                   moduleID
-)
-{
+) {
     WLANTL_CbType                  *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS                      status = VOS_STATUS_SUCCESS;
     v_U8_t                          idx, sIdx;
@@ -1690,14 +1489,12 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     WLANTL_CURRENT_HO_STATE_TYPE   *currentHO;
     v_BOOL_t                        bmpsAbove = VOS_FALSE;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if(0 == tlCtxt->hoSupport.currentHOState.numThreshold)
-    {
+    if(0 == tlCtxt->hoSupport.currentHOState.numThreshold) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Empty list, can not remove"));
         return VOS_STATUS_E_EMPTY;
     }
@@ -1708,23 +1505,17 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
 
     TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"DEL target RSSI %d, event %d", rssiValue, triggerEvent));
 
-    if((VOS_TRUE == tlCtxt->isBMPS) && (0 < currentHO->regionNumber))
-    {
-        if(rssiValue >= hoSupport->registeredInd[currentHO->regionNumber - 1].rssiValue)
-        {
+    if((VOS_TRUE == tlCtxt->isBMPS) && (0 < currentHO->regionNumber)) {
+        if(rssiValue >= hoSupport->registeredInd[currentHO->regionNumber - 1].rssiValue) {
             bmpsAbove = VOS_TRUE;
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Remove Threshold larger than current region"));
         }
     }
 
-    for(idx = 0; idx < currentHO->numThreshold; idx++)
-    {
-        if(rssiValue == hoSupport->registeredInd[idx].rssiValue)
-        {
-            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-            {
-                if(crossCBFunction == tlCtxt->hoSupport.registeredInd[idx].crossCBFunction[sIdx])
-                {
+    for(idx = 0; idx < currentHO->numThreshold; idx++) {
+        if(rssiValue == hoSupport->registeredInd[idx].rssiValue) {
+            for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
+                if(crossCBFunction == tlCtxt->hoSupport.registeredInd[idx].crossCBFunction[sIdx]) {
                     tlCtxt->hoSupport.registeredInd[idx].triggerEvent[sIdx]    = 0;
                     tlCtxt->hoSupport.registeredInd[idx].crossCBFunction[sIdx] = NULL;
                     tlCtxt->hoSupport.registeredInd[idx].usrCtxt[sIdx]         = NULL;
@@ -1732,40 +1523,30 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
                     tlCtxt->hoSupport.registeredInd[idx].numClient--;
                 }
             }
-            if(0 != tlCtxt->hoSupport.registeredInd[idx].numClient)
-            {
+            if(0 != tlCtxt->hoSupport.registeredInd[idx].numClient) {
                 TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Found Multiple idx is %d", idx));
                 WLANTL_HSDebugDisplay(pAdapter);
                 THSRELEASELOCK("WLANTL_HSDeregRSSIIndicationCB", &tlCtxt->hoSupport.hosLock);
                 return status;
-            }
-            else
-            {
+            } else {
                 TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Found Single idx is %d", idx));
                 break;
             }
         }
     }
-    if(idx == currentHO->numThreshold)
-    {
+    if(idx == currentHO->numThreshold) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Could not find entry, maybe invalid arg"));
         THSRELEASELOCK("WLANTL_HSDeregRSSIIndicationCB", &tlCtxt->hoSupport.hosLock);
         return VOS_STATUS_E_INVAL;
     }
 
-    for(idx = 0; idx < currentHO->numThreshold; idx++)
-    {
-        if(rssiValue == hoSupport->registeredInd[idx].rssiValue)
-        {
-            if((currentHO->numThreshold - 1) == idx)
-            {
+    for(idx = 0; idx < currentHO->numThreshold; idx++) {
+        if(rssiValue == hoSupport->registeredInd[idx].rssiValue) {
+            if((currentHO->numThreshold - 1) == idx) {
                 TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Remove target is last one"));
                 /* Does not need move any element, just remove last array entry */
-            }
-            else
-            {
-                for(sIdx = idx; sIdx < (currentHO->numThreshold - 1); sIdx++)
-                {
+            } else {
+                for(sIdx = idx; sIdx < (currentHO->numThreshold - 1); sIdx++) {
                     TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Shift up from %d to %d", sIdx + 1, sIdx));
                     vos_mem_copy(&hoSupport->registeredInd[sIdx], &hoSupport->registeredInd[sIdx + 1], sizeof(WLANTL_HO_RSSI_INDICATION_TYPE));
                 }
@@ -1775,8 +1556,7 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     }
     /* Common remove last array entry */
     tlCtxt->hoSupport.registeredInd[currentHO->numThreshold - 1].rssiValue    = WLANTL_HO_DEFAULT_RSSI;
-    for(idx = 0; idx < WLANTL_HS_NUM_CLIENT; idx++)
-    {
+    for(idx = 0; idx < WLANTL_HS_NUM_CLIENT; idx++) {
         tlCtxt->hoSupport.registeredInd[currentHO->numThreshold - 1].triggerEvent[idx]    = WLANTL_HO_THRESHOLD_NA;
         tlCtxt->hoSupport.registeredInd[currentHO->numThreshold - 1].crossCBFunction[idx] = NULL;
         tlCtxt->hoSupport.registeredInd[currentHO->numThreshold - 1].usrCtxt[idx]         = NULL;
@@ -1785,17 +1565,13 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     }
 
     if( ((VOS_FALSE == tlCtxt->isBMPS) && (rssiValue >= currentHO->historyRSSI))
-            || ((VOS_TRUE == tlCtxt->isBMPS) && (VOS_TRUE == bmpsAbove)) )
-    {
+            || ((VOS_TRUE == tlCtxt->isBMPS) && (VOS_TRUE == bmpsAbove)) ) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,
                          "Removed Threshold above current RSSI level, old RN %d",
                          currentHO->regionNumber));
-        if(0 < currentHO->regionNumber)
-        {
+        if(0 < currentHO->regionNumber) {
             currentHO->regionNumber--;
-        }
-        else
-        {
+        } else {
             TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                              "Current Region number is 0, cannot decrease anymore"));
         }
@@ -1809,8 +1585,7 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     /*Reset the FW notification*/
     tlCtxt->hoSupport.currentHOState.fwNotification=0;
 
-    if((VOS_TRUE == tlCtxt->isBMPS) || (IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE))
-    {
+    if((VOS_TRUE == tlCtxt->isBMPS) || (IS_ACTIVEMODE_OFFLOAD_FEATURE_ENABLE)) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Register into FW, now BMPS"));
         /* this function holds the lock across a downstream WDA function call, this is violates some lock
           ordering checks done on some HLOS see CR323221*/
@@ -1820,11 +1595,8 @@ VOS_STATUS WLANTL_HSDeregRSSIIndicationCB
     }
 
     /* Based on new threshold set recalculated current RSSI status */
-    if(0 < tlCtxt->hoSupport.currentHOState.numThreshold)
-    {
-    }
-    else if(0 == tlCtxt->hoSupport.currentHOState.numThreshold)
-    {
+    if(0 < tlCtxt->hoSupport.currentHOState.numThreshold) {
+    } else if(0 == tlCtxt->hoSupport.currentHOState.numThreshold) {
         currentHO->regionNumber = 0;
         TLLOGW(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,"No registered Threshold"));
         /* What should do? */
@@ -1850,13 +1622,11 @@ VOS_STATUS WLANTL_HSSetAlpha
 (
     v_PVOID_t pAdapter,
     int       valueAlpha
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1885,19 +1655,16 @@ VOS_STATUS WLANTL_HSRegGetTrafficStatus
     v_U32_t                            period,
     WLANTL_TrafficStatusChangedCBType  trfficStatusCB,
     v_PVOID_t                          usrCtxt
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
-    if((0 == idleThreshold) || (0 == period) || (NULL == trfficStatusCB))
-    {
+    if((0 == idleThreshold) || (0 == period) || (NULL == trfficStatusCB)) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid Argument Passed from SME"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1927,14 +1694,12 @@ VOS_STATUS WLANTL_HSRegGetTrafficStatus
 VOS_STATUS WLANTL_HSInit
 (
     v_PVOID_t   pAdapter
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
     v_U8_t           idx, sIdx;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
@@ -1964,10 +1729,8 @@ VOS_STATUS WLANTL_HSInit
     tlCtxt->hoSupport.currentTraffic.trafficCB       = NULL;
 
     /* Initialize indication array */
-    for(idx = 0; idx < WLANTL_MAX_AVAIL_THRESHOLD; idx++)
-    {
-        for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++)
-        {
+    for(idx = 0; idx < WLANTL_MAX_AVAIL_THRESHOLD; idx++) {
+        for(sIdx = 0; sIdx < WLANTL_HS_NUM_CLIENT; sIdx++) {
             tlCtxt->hoSupport.registeredInd[idx].triggerEvent[sIdx]    = WLANTL_HO_THRESHOLD_NA;
             tlCtxt->hoSupport.registeredInd[idx].crossCBFunction[sIdx] = NULL;
             tlCtxt->hoSupport.registeredInd[idx].usrCtxt[sIdx]         = NULL;
@@ -2005,21 +1768,18 @@ VOS_STATUS WLANTL_HSInit
 VOS_STATUS WLANTL_HSDeInit
 (
     v_PVOID_t   pAdapter
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
     // Destroy the timer...
     status = vos_timer_destroy( &tlCtxt->hoSupport.currentTraffic.trafficTimer );
-    if ( !VOS_IS_STATUS_SUCCESS( status ) )
-    {
+    if ( !VOS_IS_STATUS_SUCCESS( status ) ) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"WLANTL_HSStop: Timer Destroy Fail Status %d", status));
     }
     return status;
@@ -2040,26 +1800,22 @@ VOS_STATUS WLANTL_HSDeInit
 VOS_STATUS WLANTL_HSStop
 (
     v_PVOID_t   pAdapter
-)
-{
+) {
     WLANTL_CbType   *tlCtxt = VOS_GET_TL_CB(pAdapter);
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
     VOS_TIMER_STATE  timerState;
 
-    if(NULL == tlCtxt)
-    {
+    if(NULL == tlCtxt) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Invalid TL handle"));
         return VOS_STATUS_E_INVAL;
     }
 
     timerState = vos_timer_getCurrentState(&tlCtxt->hoSupport.currentTraffic.trafficTimer);
-    if(VOS_TIMER_STATE_RUNNING == timerState)
-    {
+    if(VOS_TIMER_STATE_RUNNING == timerState) {
         TLLOG1(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_INFO,"Stop Traffic status monitoring timer"));
         status = vos_timer_stop(&tlCtxt->hoSupport.currentTraffic.trafficTimer);
     }
-    if(VOS_STATUS_SUCCESS != status)
-    {
+    if(VOS_STATUS_SUCCESS != status) {
         TLLOGE(VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,"Timer Stop Failed, Status %d", status));
     }
 
@@ -2090,15 +1846,13 @@ VOS_STATUS WLANTL_HSSerializeTlIndication
     v_PVOID_t   pUserCtxt,
     WLANTL_RSSICrossThresholdCBType cbFunction,
     v_U8_t      avgRssi
-)
-{
+) {
     VOS_STATUS       status = VOS_STATUS_SUCCESS;
     vos_msg_t        msg;
     WLANTL_TlIndicationReq *pMsg;
 
     pMsg = vos_mem_malloc(sizeof(WLANTL_TlIndicationReq));
-    if ( NULL == pMsg )
-    {
+    if ( NULL == pMsg ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR, "In %s, failed to allocate mem for req", __func__);
         return VOS_STATUS_E_NOMEM;
     }
@@ -2117,8 +1871,7 @@ VOS_STATUS WLANTL_HSSerializeTlIndication
     msg.bodyptr = pMsg;
     msg.reserved = 0;
 
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg)) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR, "In %s, failed to post msg to self", __func__);
         vos_mem_free(pMsg);
         status = VOS_STATUS_E_FAILURE;

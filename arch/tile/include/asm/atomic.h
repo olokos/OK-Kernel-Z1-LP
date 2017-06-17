@@ -32,9 +32,8 @@
  *
  * Atomically reads the value of @v.
  */
-static inline int atomic_read(const atomic_t *v)
-{
-	return ACCESS_ONCE(v->counter);
+static inline int atomic_read(const atomic_t *v) {
+    return ACCESS_ONCE(v->counter);
 }
 
 /**

@@ -72,60 +72,60 @@
 /*---------------------------------------------------------------------*/
 
 struct tda18271_rf_tracking_filter_cal {
-	u32 rfmax;
-	u8  rfband;
-	u32 rf1_def;
-	u32 rf2_def;
-	u32 rf3_def;
-	u32 rf1;
-	u32 rf2;
-	u32 rf3;
-	s32 rf_a1;
-	s32 rf_b1;
-	s32 rf_a2;
-	s32 rf_b2;
+    u32 rfmax;
+    u8  rfband;
+    u32 rf1_def;
+    u32 rf2_def;
+    u32 rf3_def;
+    u32 rf1;
+    u32 rf2;
+    u32 rf3;
+    s32 rf_a1;
+    s32 rf_b1;
+    s32 rf_a2;
+    s32 rf_b2;
 };
 
 enum tda18271_pll {
-	TDA18271_MAIN_PLL,
-	TDA18271_CAL_PLL,
+    TDA18271_MAIN_PLL,
+    TDA18271_CAL_PLL,
 };
 
 struct tda18271_map_layout;
 
 enum tda18271_ver {
-	TDA18271HDC1,
-	TDA18271HDC2,
+    TDA18271HDC1,
+    TDA18271HDC2,
 };
 
 struct tda18271_priv {
-	unsigned char tda18271_regs[TDA18271_NUM_REGS];
+    unsigned char tda18271_regs[TDA18271_NUM_REGS];
 
-	struct list_head	hybrid_tuner_instance_list;
-	struct tuner_i2c_props	i2c_props;
+    struct list_head	hybrid_tuner_instance_list;
+    struct tuner_i2c_props	i2c_props;
 
-	enum tda18271_mode mode;
-	enum tda18271_role role;
-	enum tda18271_i2c_gate gate;
-	enum tda18271_ver id;
-	enum tda18271_output_options output_opt;
-	enum tda18271_small_i2c small_i2c;
+    enum tda18271_mode mode;
+    enum tda18271_role role;
+    enum tda18271_i2c_gate gate;
+    enum tda18271_ver id;
+    enum tda18271_output_options output_opt;
+    enum tda18271_small_i2c small_i2c;
 
-	unsigned int config; /* interface to saa713x / tda829x */
-	unsigned int cal_initialized:1;
+    unsigned int config; /* interface to saa713x / tda829x */
+    unsigned int cal_initialized:1;
 
-	u8 tm_rfcal;
+    u8 tm_rfcal;
 
-	struct tda18271_map_layout *maps;
-	struct tda18271_std_map std;
-	struct tda18271_rf_tracking_filter_cal rf_cal_state[8];
+    struct tda18271_map_layout *maps;
+    struct tda18271_std_map std;
+    struct tda18271_rf_tracking_filter_cal rf_cal_state[8];
 
-	struct mutex lock;
+    struct mutex lock;
 
-	u16 if_freq;
+    u16 if_freq;
 
-	u32 frequency;
-	u32 bandwidth;
+    u32 frequency;
+    u32 bandwidth;
 };
 
 /*---------------------------------------------------------------------*/
@@ -140,7 +140,7 @@ extern int tda18271_debug;
 
 __attribute__((format(printf, 4, 5)))
 int _tda_printk(struct tda18271_priv *state, const char *level,
-		const char *func, const char *fmt, ...);
+                const char *func, const char *fmt, ...);
 
 #define tda_printk(st, lvl, fmt, arg...)			\
 	_tda_printk(st, lvl, __func__, fmt, ##arg)
@@ -172,34 +172,34 @@ do {								\
 /*---------------------------------------------------------------------*/
 
 enum tda18271_map_type {
-	/* tda18271_pll_map */
-	MAIN_PLL,
-	CAL_PLL,
-	/* tda18271_map */
-	RF_CAL,
-	RF_CAL_KMCO,
-	RF_CAL_DC_OVER_DT,
-	BP_FILTER,
-	RF_BAND,
-	GAIN_TAPER,
-	IR_MEASURE,
+    /* tda18271_pll_map */
+    MAIN_PLL,
+    CAL_PLL,
+    /* tda18271_map */
+    RF_CAL,
+    RF_CAL_KMCO,
+    RF_CAL_DC_OVER_DT,
+    BP_FILTER,
+    RF_BAND,
+    GAIN_TAPER,
+    IR_MEASURE,
 };
 
 extern int tda18271_lookup_pll_map(struct dvb_frontend *fe,
-				   enum tda18271_map_type map_type,
-				   u32 *freq, u8 *post_div, u8 *div);
+                                   enum tda18271_map_type map_type,
+                                   u32 *freq, u8 *post_div, u8 *div);
 extern int tda18271_lookup_map(struct dvb_frontend *fe,
-			       enum tda18271_map_type map_type,
-			       u32 *freq, u8 *val);
+                               enum tda18271_map_type map_type,
+                               u32 *freq, u8 *val);
 
 extern int tda18271_lookup_thermometer(struct dvb_frontend *fe);
 
 extern int tda18271_lookup_rf_band(struct dvb_frontend *fe,
-				   u32 *freq, u8 *rf_band);
+                                   u32 *freq, u8 *rf_band);
 
 extern int tda18271_lookup_cid_target(struct dvb_frontend *fe,
-				      u32 *freq, u8 *cid_target,
-				      u16 *count_limit);
+                                      u32 *freq, u8 *cid_target,
+                                      u16 *count_limit);
 
 extern int tda18271_assign_map_layout(struct dvb_frontend *fe);
 
@@ -211,9 +211,9 @@ extern int tda18271_write_regs(struct dvb_frontend *fe, int idx, int len);
 extern int tda18271_init_regs(struct dvb_frontend *fe);
 
 extern int tda18271_charge_pump_source(struct dvb_frontend *fe,
-				       enum tda18271_pll pll, int force);
+                                       enum tda18271_pll pll, int force);
 extern int tda18271_set_standby_mode(struct dvb_frontend *fe,
-				     int sm, int sm_lt, int sm_xt);
+                                     int sm, int sm_lt, int sm_xt);
 
 extern int tda18271_calc_main_pll(struct dvb_frontend *fe, u32 freq);
 extern int tda18271_calc_cal_pll(struct dvb_frontend *fe, u32 freq);

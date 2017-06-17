@@ -38,21 +38,21 @@
 #include <linux/in.h>
 
 struct r2net_msg {
-	__be16 magic;
-	__be16 data_len;
-	__be16 msg_type;
-	__be16 pad1;
-	__be32 sys_status;
-	__be32 status;
-	__be32 key;
-	__be32 msg_num;
-	__u8  buf[0];
+    __be16 magic;
+    __be16 data_len;
+    __be16 msg_type;
+    __be16 pad1;
+    __be32 sys_status;
+    __be32 status;
+    __be32 key;
+    __be32 msg_num;
+    __u8  buf[0];
 };
 
 typedef int (r2net_msg_handler_func)(struct r2net_msg *msg, u32 len, void *data,
-				     void **ret_data);
+                                     void **ret_data);
 typedef void (r2net_post_msg_handler_func)(int status, void *data,
-					   void *ret_data);
+        void *ret_data);
 
 #define R2NET_MAX_PAYLOAD_BYTES  (4096 - sizeof(struct r2net_msg))
 
@@ -64,47 +64,46 @@ typedef void (r2net_post_msg_handler_func)(int status, void *data,
 
 
 /* TODO: figure this out.... */
-static inline int r2net_link_down(int err, struct socket *sock)
-{
-	if (sock) {
-		if (sock->sk->sk_state != TCP_ESTABLISHED &&
-			sock->sk->sk_state != TCP_CLOSE_WAIT)
-			return 1;
-	}
+static inline int r2net_link_down(int err, struct socket *sock) {
+    if (sock) {
+        if (sock->sk->sk_state != TCP_ESTABLISHED &&
+                sock->sk->sk_state != TCP_CLOSE_WAIT)
+            return 1;
+    }
 
-	if (err >= 0)
-		return 0;
-	switch (err) {
+    if (err >= 0)
+        return 0;
+    switch (err) {
 
-	/* ????????????????????????? */
-	case -ERESTARTSYS:
-	case -EBADF:
-	/* When the server has died, an ICMP port unreachable
-	 * message prompts ECONNREFUSED. */
-	case -ECONNREFUSED:
-	case -ENOTCONN:
-	case -ECONNRESET:
-	case -EPIPE:
-		return 1;
+    /* ????????????????????????? */
+    case -ERESTARTSYS:
+    case -EBADF:
+    /* When the server has died, an ICMP port unreachable
+     * message prompts ECONNREFUSED. */
+    case -ECONNREFUSED:
+    case -ENOTCONN:
+    case -ECONNRESET:
+    case -EPIPE:
+        return 1;
 
-	}
-	return 0;
+    }
+    return 0;
 }
 
 enum {
-	R2NET_DRIVER_UNINITED,
-	R2NET_DRIVER_READY,
+    R2NET_DRIVER_UNINITED,
+    R2NET_DRIVER_READY,
 };
 
 int r2net_send_message(u32 msg_type, u32 key, void *data, u32 len,
-		       u8 target_node, int *status);
+                       u8 target_node, int *status);
 int r2net_send_message_vec(u32 msg_type, u32 key, struct kvec *vec,
-			   size_t veclen, u8 target_node, int *status);
+                           size_t veclen, u8 target_node, int *status);
 
 int r2net_register_handler(u32 msg_type, u32 key, u32 max_len,
-			   r2net_msg_handler_func *func, void *data,
-			   r2net_post_msg_handler_func *post_func,
-			   struct list_head *unreg_list);
+                           r2net_msg_handler_func *func, void *data,
+                           r2net_post_msg_handler_func *post_func,
+                           struct list_head *unreg_list);
 void r2net_unregister_handler_list(struct list_head *list);
 
 void r2net_fill_node_map(unsigned long *map, unsigned bytes);
@@ -135,24 +134,18 @@ void r2net_debug_del_nst(struct r2net_send_tracking *nst);
 void r2net_debug_add_sc(struct r2net_sock_container *sc);
 void r2net_debug_del_sc(struct r2net_sock_container *sc);
 #else
-static inline int r2net_debugfs_init(void)
-{
-	return 0;
+static inline int r2net_debugfs_init(void) {
+    return 0;
 }
-static inline void r2net_debugfs_exit(void)
-{
+static inline void r2net_debugfs_exit(void) {
 }
-static inline void r2net_debug_add_nst(struct r2net_send_tracking *nst)
-{
+static inline void r2net_debug_add_nst(struct r2net_send_tracking *nst) {
 }
-static inline void r2net_debug_del_nst(struct r2net_send_tracking *nst)
-{
+static inline void r2net_debug_del_nst(struct r2net_send_tracking *nst) {
 }
-static inline void r2net_debug_add_sc(struct r2net_sock_container *sc)
-{
+static inline void r2net_debug_add_sc(struct r2net_sock_container *sc) {
 }
-static inline void r2net_debug_del_sc(struct r2net_sock_container *sc)
-{
+static inline void r2net_debug_del_sc(struct r2net_sock_container *sc) {
 }
 #endif	/* CONFIG_DEBUG_FS */
 

@@ -14,12 +14,12 @@
 #define __MACH_QDSP6_V2_SNDDEV_MI2S_H
 
 struct snddev_mi2s_data {
-	u32 capability; /* RX or TX */
-	const char *name;
-	u32 copp_id; /* audpp routing */
-	u16 channel_mode;
-	u16 sd_lines;
-	u32 sample_rate;
+    u32 capability; /* RX or TX */
+    const char *name;
+    u32 copp_id; /* audpp routing */
+    u16 channel_mode;
+    u16 sd_lines;
+    u32 sample_rate;
 };
 
 #define MI2S_SD0 (1 << 0)

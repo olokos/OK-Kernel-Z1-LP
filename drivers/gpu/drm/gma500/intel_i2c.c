@@ -30,66 +30,62 @@
 
 #define I2C_RISEFALL_TIME 20
 
-static int get_clock(void *data)
-{
-	struct psb_intel_i2c_chan *chan = data;
-	struct drm_device *dev = chan->drm_dev;
-	u32 val;
+static int get_clock(void *data) {
+    struct psb_intel_i2c_chan *chan = data;
+    struct drm_device *dev = chan->drm_dev;
+    u32 val;
 
-	val = REG_READ(chan->reg);
-	return (val & GPIO_CLOCK_VAL_IN) != 0;
+    val = REG_READ(chan->reg);
+    return (val & GPIO_CLOCK_VAL_IN) != 0;
 }
 
-static int get_data(void *data)
-{
-	struct psb_intel_i2c_chan *chan = data;
-	struct drm_device *dev = chan->drm_dev;
-	u32 val;
+static int get_data(void *data) {
+    struct psb_intel_i2c_chan *chan = data;
+    struct drm_device *dev = chan->drm_dev;
+    u32 val;
 
-	val = REG_READ(chan->reg);
-	return (val & GPIO_DATA_VAL_IN) != 0;
+    val = REG_READ(chan->reg);
+    return (val & GPIO_DATA_VAL_IN) != 0;
 }
 
-static void set_clock(void *data, int state_high)
-{
-	struct psb_intel_i2c_chan *chan = data;
-	struct drm_device *dev = chan->drm_dev;
-	u32 reserved = 0, clock_bits;
+static void set_clock(void *data, int state_high) {
+    struct psb_intel_i2c_chan *chan = data;
+    struct drm_device *dev = chan->drm_dev;
+    u32 reserved = 0, clock_bits;
 
-	/* On most chips, these bits must be preserved in software. */
-	reserved =
-		    REG_READ(chan->reg) & (GPIO_DATA_PULLUP_DISABLE |
-					   GPIO_CLOCK_PULLUP_DISABLE);
+    /* On most chips, these bits must be preserved in software. */
+    reserved =
+        REG_READ(chan->reg) & (GPIO_DATA_PULLUP_DISABLE |
+                               GPIO_CLOCK_PULLUP_DISABLE);
 
-	if (state_high)
-		clock_bits = GPIO_CLOCK_DIR_IN | GPIO_CLOCK_DIR_MASK;
-	else
-		clock_bits = GPIO_CLOCK_DIR_OUT | GPIO_CLOCK_DIR_MASK |
-		    GPIO_CLOCK_VAL_MASK;
-	REG_WRITE(chan->reg, reserved | clock_bits);
-	udelay(I2C_RISEFALL_TIME);	/* wait for the line to change state */
+    if (state_high)
+        clock_bits = GPIO_CLOCK_DIR_IN | GPIO_CLOCK_DIR_MASK;
+    else
+        clock_bits = GPIO_CLOCK_DIR_OUT | GPIO_CLOCK_DIR_MASK |
+                     GPIO_CLOCK_VAL_MASK;
+    REG_WRITE(chan->reg, reserved | clock_bits);
+    udelay(I2C_RISEFALL_TIME);	/* wait for the line to change state */
 }
 
-static void set_data(void *data, int state_high)
-{
-	struct psb_intel_i2c_chan *chan = data;
-	struct drm_device *dev = chan->drm_dev;
-	u32 reserved = 0, data_bits;
+static void set_data(void *data, int state_high) {
+    struct psb_intel_i2c_chan *chan = data;
+    struct drm_device *dev = chan->drm_dev;
+    u32 reserved = 0, data_bits;
 
-	/* On most chips, these bits must be preserved in software. */
-	reserved =
-		    REG_READ(chan->reg) & (GPIO_DATA_PULLUP_DISABLE |
-					   GPIO_CLOCK_PULLUP_DISABLE);
+    /* On most chips, these bits must be preserved in software. */
+    reserved =
+        REG_READ(chan->reg) & (GPIO_DATA_PULLUP_DISABLE |
+                               GPIO_CLOCK_PULLUP_DISABLE);
 
-	if (state_high)
-		data_bits = GPIO_DATA_DIR_IN | GPIO_DATA_DIR_MASK;
-	else
-		data_bits =
-		    GPIO_DATA_DIR_OUT | GPIO_DATA_DIR_MASK |
-		    GPIO_DATA_VAL_MASK;
+    if (state_high)
+        data_bits = GPIO_DATA_DIR_IN | GPIO_DATA_DIR_MASK;
+    else
+        data_bits =
+            GPIO_DATA_DIR_OUT | GPIO_DATA_DIR_MASK |
+            GPIO_DATA_VAL_MASK;
 
-	REG_WRITE(chan->reg, reserved | data_bits);
-	udelay(I2C_RISEFALL_TIME);	/* wait for the line to change state */
+    REG_WRITE(chan->reg, reserved | data_bits);
+    udelay(I2C_RISEFALL_TIME);	/* wait for the line to change state */
 }
 
 /**
@@ -114,43 +110,42 @@ static void set_data(void *data, int state_high)
  * see PRM for details on how these different busses are used.
  */
 struct psb_intel_i2c_chan *psb_intel_i2c_create(struct drm_device *dev,
-					const u32 reg, const char *name)
-{
-	struct psb_intel_i2c_chan *chan;
+        const u32 reg, const char *name) {
+    struct psb_intel_i2c_chan *chan;
 
-	chan = kzalloc(sizeof(struct psb_intel_i2c_chan), GFP_KERNEL);
-	if (!chan)
-		goto out_free;
+    chan = kzalloc(sizeof(struct psb_intel_i2c_chan), GFP_KERNEL);
+    if (!chan)
+        goto out_free;
 
-	chan->drm_dev = dev;
-	chan->reg = reg;
-	snprintf(chan->adapter.name, I2C_NAME_SIZE, "intel drm %s", name);
-	chan->adapter.owner = THIS_MODULE;
-	chan->adapter.algo_data = &chan->algo;
-	chan->adapter.dev.parent = &dev->pdev->dev;
-	chan->algo.setsda = set_data;
-	chan->algo.setscl = set_clock;
-	chan->algo.getsda = get_data;
-	chan->algo.getscl = get_clock;
-	chan->algo.udelay = 20;
-	chan->algo.timeout = usecs_to_jiffies(2200);
-	chan->algo.data = chan;
+    chan->drm_dev = dev;
+    chan->reg = reg;
+    snprintf(chan->adapter.name, I2C_NAME_SIZE, "intel drm %s", name);
+    chan->adapter.owner = THIS_MODULE;
+    chan->adapter.algo_data = &chan->algo;
+    chan->adapter.dev.parent = &dev->pdev->dev;
+    chan->algo.setsda = set_data;
+    chan->algo.setscl = set_clock;
+    chan->algo.getsda = get_data;
+    chan->algo.getscl = get_clock;
+    chan->algo.udelay = 20;
+    chan->algo.timeout = usecs_to_jiffies(2200);
+    chan->algo.data = chan;
 
-	i2c_set_adapdata(&chan->adapter, chan);
+    i2c_set_adapdata(&chan->adapter, chan);
 
-	if (i2c_bit_add_bus(&chan->adapter))
-		goto out_free;
+    if (i2c_bit_add_bus(&chan->adapter))
+        goto out_free;
 
-	/* JJJ:  raise SCL and SDA? */
-	set_data(chan, 1);
-	set_clock(chan, 1);
-	udelay(20);
+    /* JJJ:  raise SCL and SDA? */
+    set_data(chan, 1);
+    set_clock(chan, 1);
+    udelay(20);
 
-	return chan;
+    return chan;
 
 out_free:
-	kfree(chan);
-	return NULL;
+    kfree(chan);
+    return NULL;
 }
 
 /**
@@ -159,11 +154,10 @@ out_free:
  *
  * Unregister the adapter from the i2c layer, then free the structure.
  */
-void psb_intel_i2c_destroy(struct psb_intel_i2c_chan *chan)
-{
-	if (!chan)
-		return;
+void psb_intel_i2c_destroy(struct psb_intel_i2c_chan *chan) {
+    if (!chan)
+        return;
 
-	i2c_del_adapter(&chan->adapter);
-	kfree(chan);
+    i2c_del_adapter(&chan->adapter);
+    kfree(chan);
 }

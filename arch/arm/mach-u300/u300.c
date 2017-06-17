@@ -24,9 +24,8 @@
 #include <asm/mach/arch.h>
 #include <asm/memory.h>
 
-static void __init u300_init_machine(void)
-{
-	u300_init_devices();
+static void __init u300_init_machine(void) {
+    u300_init_devices();
 }
 
 #ifdef CONFIG_MACH_U300_BS2X
@@ -46,12 +45,12 @@ static void __init u300_init_machine(void)
 #endif
 
 MACHINE_START(U300, MACH_U300_STRING)
-	/* Maintainer: Linus Walleij <linus.walleij@stericsson.com> */
-	.atag_offset	= 0x100,
-	.map_io		= u300_map_io,
-	.init_irq	= u300_init_irq,
-	.handle_irq	= vic_handle_irq,
-	.timer		= &u300_timer,
-	.init_machine	= u300_init_machine,
-	.restart	= u300_restart,
-MACHINE_END
+/* Maintainer: Linus Walleij <linus.walleij@stericsson.com> */
+.atag_offset	= 0x100,
+    .map_io		= u300_map_io,
+        .init_irq	= u300_init_irq,
+           .handle_irq	= vic_handle_irq,
+            .timer		= &u300_timer,
+                 .init_machine	= u300_init_machine,
+                    .restart	= u300_restart,
+                        MACHINE_END

@@ -35,21 +35,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 struct smscore_device_t;
 
 struct ir_t {
-	struct rc_dev *dev;
-	char name[40];
-	char phys[32];
+    struct rc_dev *dev;
+    char name[40];
+    char phys[32];
 
-	char *rc_codes;
-	u64 protocol;
+    char *rc_codes;
+    u64 protocol;
 
-	u32 timeout;
-	u32 controller;
+    u32 timeout;
+    u32 controller;
 };
 
 int sms_ir_init(struct smscore_device_t *coredev);
 void sms_ir_exit(struct smscore_device_t *coredev);
 void sms_ir_event(struct smscore_device_t *coredev,
-			const char *buf, int len);
+                  const char *buf, int len);
 
 #endif /* __SMS_IR_H__ */
 

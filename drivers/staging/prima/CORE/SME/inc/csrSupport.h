@@ -109,8 +109,7 @@
 #endif /* FEATURE_WLAN_WAPI */
 
 
-typedef enum
-{
+typedef enum {
     // 11b rates
     eCsrSuppRate_1Mbps   =   1 * 2,
     eCsrSuppRate_2Mbps   =   2 * 2,
@@ -151,8 +150,7 @@ typedef enum
     eCsrSuppRate_240Mbps = 240 * 2
 } eCsrSupportedRates;
 
-typedef enum
-{
+typedef enum {
     eCsrPassiveScanNot,     //can be scanned actively on the whole 5GHz band
     eCsrPassiveScanCat1,    //always passive scan from 5250 to 5350MHz
     eCsrPassiveScanCat2,    //always passive scan from 5250 to 5350MHz, and from 5470 to 5725MHz
@@ -161,8 +159,7 @@ typedef enum
 
 
 //Please donot insert in the middle of the enum here because they tie to the indiex
-typedef enum
-{
+typedef enum {
     eCSR_COUNTRY_INDEX_US = 0,  //Always set US as index 0
     eCSR_COUNTRY_INDEX_ANDORRA,
     eCSR_COUNTRY_INDEX_UAE,     //United Arab Emirates
@@ -419,15 +416,13 @@ typedef enum
 //Please donot insert in the middle of the enum above because they tie to the indiex
 
 
-typedef struct tagCsrSirMBMsgHdr
-{
+typedef struct tagCsrSirMBMsgHdr {
     tANI_U16 type;
     tANI_U16 msgLen;
 
 } tCsrSirMBMsgHdr;
 
-typedef struct tagCsrCfgMsgTlvHdr
-{
+typedef struct tagCsrCfgMsgTlvHdr {
     tANI_U32 type;
     tANI_U32 length;
 
@@ -435,15 +430,13 @@ typedef struct tagCsrCfgMsgTlvHdr
 
 
 
-typedef struct tagCsrCfgMsgTlv
-{
+typedef struct tagCsrCfgMsgTlv {
     tCsrCfgMsgTlvHdr Hdr;
     tANI_U32 variable[ 1 ];    // placeholder for the data
 
 } tCsrCfgMsgTlv;
 
-typedef struct tagCsrCfgGetRsp
-{
+typedef struct tagCsrCfgGetRsp {
     tCsrSirMBMsgHdr hdr;
     tANI_U32    respStatus;
     tANI_U32    paramId;
@@ -451,8 +444,7 @@ typedef struct tagCsrCfgGetRsp
     tANI_U32    attribVal[1];
 } tCsrCfgGetRsp;
 
-typedef struct tagCsrCfgSetRsp
-{
+typedef struct tagCsrCfgSetRsp {
 
     tCsrSirMBMsgHdr hdr;
     tANI_U32    respStatus;
@@ -460,8 +452,7 @@ typedef struct tagCsrCfgSetRsp
 } tCsrCfgSetRsp;
 
 
-typedef struct tagCsrDomainChnScanInfo
-{
+typedef struct tagCsrDomainChnScanInfo {
     tANI_U8 chnId;
     tSirScanType scanType;  //whether this channel must be scan passively
 } tCsrDomainChnScanInfo;
@@ -475,14 +466,12 @@ typedef struct tagCsrDomainChnScanInfo
 #endif
 
 // Generic Information Element Structure
-typedef __ani_attr_pre_packed struct sDot11IEHeader
-{
+typedef __ani_attr_pre_packed struct sDot11IEHeader {
     tANI_U8 ElementID;
     tANI_U8 Length;
 } __ani_attr_packed tDot11IEHeader;
 
-typedef __ani_attr_pre_packed struct tagCsrWmeInfoIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWmeInfoIe {
     tDot11IEHeader IeHeader;
     tANI_U8    Oui[ CSR_WME_OUI_SIZE ];  // includes the 3 byte OUI + 1 byte Type
     tANI_U8    Subtype;
@@ -491,16 +480,14 @@ typedef __ani_attr_pre_packed struct tagCsrWmeInfoIe
 
 } __ani_attr_packed tCsrWmeInfoIe;
 
-typedef __ani_attr_pre_packed struct tagCsrWmeAcParms
-{
+typedef __ani_attr_pre_packed struct tagCsrWmeAcParms {
     tANI_U8  AciAifsn;
     tANI_U8  EcwMinEcwMax;
     tANI_U16 TxOpLimit;
 
 } __ani_attr_packed tCsrWmeAcParms;
 
-typedef __ani_attr_pre_packed struct tagCsrWmeParmIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWmeParmIe {
     tDot11IEHeader IeHeader;
     tANI_U8    Oui[ CSR_WME_OUI_SIZE ];  // includes the 3 byte OUI + 1 byte Type
     tANI_U8    Subtype;
@@ -514,16 +501,14 @@ typedef __ani_attr_pre_packed struct tagCsrWmeParmIe
 
 } __ani_attr_packed tCsrWmeParmIe;
 
-typedef __ani_attr_pre_packed struct tagCsrWpaIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWpaIe {
     tDot11IEHeader IeHeader;
     tANI_U8    Oui[ CSR_WPA_OUI_SIZE ];
     tANI_U16   Version;
     tANI_U8    MulticastOui[ CSR_WPA_OUI_SIZE ];
     tANI_U16   cUnicastCyphers;
 
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_WPA_OUI_SIZE ];
 
@@ -531,13 +516,11 @@ typedef __ani_attr_pre_packed struct tagCsrWpaIe
 
 } __ani_attr_packed tCsrWpaIe;
 
-typedef __ani_attr_pre_packed struct tagCsrWpaAuthIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWpaAuthIe {
 
     tANI_U16 cAuthenticationSuites;
 
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_WPA_OUI_SIZE ];
 
@@ -546,15 +529,13 @@ typedef __ani_attr_pre_packed struct tagCsrWpaAuthIe
 } __ani_attr_packed tCsrWpaAuthIe;
 
 
-typedef __ani_attr_pre_packed struct tagCsrRSNIe
-{
+typedef __ani_attr_pre_packed struct tagCsrRSNIe {
     tDot11IEHeader IeHeader;
     tANI_U16   Version;
     tANI_U8    MulticastOui[ CSR_RSN_OUI_SIZE ];
     tANI_U16   cUnicastCyphers;
 
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_RSN_OUI_SIZE ];
 
@@ -562,11 +543,9 @@ typedef __ani_attr_pre_packed struct tagCsrRSNIe
 
 } __ani_attr_packed tCsrRSNIe;
 
-typedef __ani_attr_pre_packed struct tagCsrRSNAuthIe
-{
+typedef __ani_attr_pre_packed struct tagCsrRSNAuthIe {
     tANI_U16 cAuthenticationSuites;
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_RSN_OUI_SIZE ];
 
@@ -574,8 +553,7 @@ typedef __ani_attr_pre_packed struct tagCsrRSNAuthIe
 
 } __ani_attr_packed tCsrRSNAuthIe;
 
-typedef __ani_attr_pre_packed struct tagCsrRSNCapabilities
-{
+typedef __ani_attr_pre_packed struct tagCsrRSNCapabilities {
     tANI_U16 PreAuthSupported:1;
     tANI_U16 NoPairwise:1;
     tANI_U16 PTKSAReplayCounter:2;
@@ -585,12 +563,10 @@ typedef __ani_attr_pre_packed struct tagCsrRSNCapabilities
     tANI_U16 Reserved:8;
 } __ani_attr_packed tCsrRSNCapabilities;
 
-typedef __ani_attr_pre_packed struct tagCsrRSNPMKIe
-{
+typedef __ani_attr_pre_packed struct tagCsrRSNPMKIe {
     tANI_U16 cPMKIDs;
 
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 PMKID[ CSR_RSN_PMKID_SIZE ];
 
@@ -599,29 +575,25 @@ typedef __ani_attr_pre_packed struct tagCsrRSNPMKIe
 
 } __ani_attr_packed tCsrRSNPMKIe;
 
-typedef __ani_attr_pre_packed struct tCsrIELenInfo
-{
+typedef __ani_attr_pre_packed struct tCsrIELenInfo {
     tANI_U8 min;
     tANI_U8 max;
 } __ani_attr_packed tCsrIELenInfo;
 
 #ifdef FEATURE_WLAN_WAPI
-typedef __ani_attr_pre_packed struct tagCsrWapiIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWapiIe {
     tDot11IEHeader IeHeader;
     tANI_U16   Version;
 
     tANI_U16 cAuthenticationSuites;
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_WAPI_OUI_SIZE ];
 
     } __ani_attr_packed AuthOui[ 1 ];
 
     tANI_U16   cUnicastCyphers;
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 Oui[ CSR_WAPI_OUI_SIZE ];
 
@@ -629,8 +601,7 @@ typedef __ani_attr_pre_packed struct tagCsrWapiIe
 
     tANI_U8    MulticastOui[ CSR_WAPI_OUI_SIZE ];
 
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
         tANI_U16 PreAuthSupported:1;
         tANI_U16 Reserved:15;
     } __ani_attr_packed tCsrWapiCapabilities;
@@ -638,11 +609,9 @@ typedef __ani_attr_pre_packed struct tagCsrWapiIe
 
 } __ani_attr_packed tCsrWapiIe;
 
-typedef __ani_attr_pre_packed struct tagCsrWAPIBKIe
-{
+typedef __ani_attr_pre_packed struct tagCsrWAPIBKIe {
     tANI_U16 cBKIDs;
-    __ani_attr_pre_packed struct
-    {
+    __ani_attr_pre_packed struct {
 
         tANI_U8 BKID[ CSR_WAPI_BKID_SIZE ];
 
@@ -658,8 +627,7 @@ typedef __ani_attr_pre_packed struct tagCsrWAPIBKIe
 
 // Structure used to describe a group of continuous channels and hook it into the
 // corresponding channel list
-typedef struct tagCsrChannelSet
-{
+typedef struct tagCsrChannelSet {
     tListElem      channelListLink;
     tANI_U8   firstChannel;
     tANI_U8   interChannelOffset;
@@ -668,44 +636,38 @@ typedef struct tagCsrChannelSet
 } tCsrChannelSet;
 
 
-typedef struct sDot11InfoIBSSParmSet
-{
+typedef struct sDot11InfoIBSSParmSet {
     tDot11IEHeader dot11IEHeader;
     tANI_U8 ATIMWindow;
 } tDot11InfoIBSSParmSet;
 
 
-typedef struct sDot11IECountry
-{
+typedef struct sDot11IECountry {
     tDot11IEHeader dot11IEHeader;
     tANI_U8 countryString[3];
     tSirMacChanInfo chanInfo[1];
 } tDot11IECountry;
 
 
-typedef struct sDot11IEExtenedSupportedRates
-{
+typedef struct sDot11IEExtenedSupportedRates {
     tDot11IEHeader dot11IEHeader;
     tANI_U8 ExtendedSupportedRates[ CSR_DOT11_EXTENDED_SUPPORTED_RATES_MAX ];
 } tDot11IEExtenedSupportedRates;
 
 #define CSR_DOT11_AP_NAME_MAX_LENGTH ( 32 )
 
-typedef struct tagDot11IEAPName
-{
+typedef struct tagDot11IEAPName {
     tDot11IEHeader dot11IEHeader;
     tANI_U8 ApName[ CSR_DOT11_AP_NAME_MAX_LENGTH ];
 } tDot11IEAPName;
 
-typedef struct tagDot11IE11HLocalPowerConstraint
-{
+typedef struct tagDot11IE11HLocalPowerConstraint {
     tDot11IEHeader dot11IEHeader;
     tANI_U8 localPowerConstraint;
 
 } tDot11IE11HLocalPowerConstraint;
 
-typedef struct tagRoamingTimerInfo
-{
+typedef struct tagRoamingTimerInfo {
     tpAniSirGlobal pMac;
     tANI_U8 sessionId;
 } tCsrTimerInfo;

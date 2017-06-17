@@ -17,14 +17,14 @@ extern __sum16 ip_fast_csum(const void *iph, unsigned int ihl);
  * checksum, already complemented
  */
 extern __sum16 csum_tcpudp_magic (__be32 saddr, __be32 daddr,
-					     unsigned short len,
-					     unsigned short proto,
-					     __wsum sum);
+                                  unsigned short len,
+                                  unsigned short proto,
+                                  __wsum sum);
 
 extern __wsum csum_tcpudp_nofold (__be32 saddr, __be32 daddr,
-					unsigned short len,
-					unsigned short proto,
-					__wsum sum);
+                                  unsigned short len,
+                                  unsigned short proto,
+                                  __wsum sum);
 
 /*
  * Computes the checksum of a memory block at buff, length len,
@@ -47,11 +47,11 @@ extern __wsum csum_partial(const void *buff, int len, __wsum sum);
  * even better 64-bit) boundary.
  */
 extern __wsum csum_partial_copy_from_user(const void __user *src, void *dst,
-						 int len, __wsum sum,
-						 int *errp);
+        int len, __wsum sum,
+        int *errp);
 
 extern __wsum csum_partial_copy_nocheck(const void *src, void *dst,
-					       int len, __wsum sum);
+                                        int len, __wsum sum);
 
 /*
  * This routine is used for miscellaneous IP-like checksums, mainly in
@@ -62,18 +62,17 @@ extern __sum16 ip_compute_csum(const void *buff, int len);
 /*
  * Fold a partial checksum without adding pseudo headers.
  */
-static inline __sum16 csum_fold(__wsum csum)
-{
-	u32 sum = (__force u32)csum;
-	sum = (sum & 0xffff) + (sum >> 16);
-	sum = (sum & 0xffff) + (sum >> 16);
-	return (__force __sum16)~sum;
+static inline __sum16 csum_fold(__wsum csum) {
+    u32 sum = (__force u32)csum;
+    sum = (sum & 0xffff) + (sum >> 16);
+    sum = (sum & 0xffff) + (sum >> 16);
+    return (__force __sum16)~sum;
 }
 
 #define _HAVE_ARCH_IPV6_CSUM	1
 struct in6_addr;
 extern __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-	const struct in6_addr *daddr, __u32 len, unsigned short proto,
-	__wsum csum);
+                               const struct in6_addr *daddr, __u32 len, unsigned short proto,
+                               __wsum csum);
 
 #endif /* _ASM_IA64_CHECKSUM_H */

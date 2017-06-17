@@ -144,8 +144,7 @@
 
 // enums used by LIM are as follows
 
-enum eLimDisassocTrigger
-{
+enum eLimDisassocTrigger {
     eLIM_HOST_DISASSOC,
     eLIM_PEER_ENTITY_DISASSOC,
     eLIM_LINK_MONITORING_DISASSOC,
@@ -160,21 +159,18 @@ enum eLimDisassocTrigger
 /* Reason code to determine the channel change context while sending
  * WDA_CHNL_SWITCH_REQ message to HAL
  */
-enum eChannelChangeReasonCodes
-{
+enum eChannelChangeReasonCodes {
     LIM_SWITCH_CHANNEL_REASSOC,
     LIM_SWITCH_CHANNEL_JOIN,
     LIM_SWITCH_CHANNEL_OPERATION, // Generic change channel
     LIM_SWITCH_CHANNEL_CSA,
 };
 
-typedef struct sLimAuthRspTimeout
-{
+typedef struct sLimAuthRspTimeout {
     tSirMacAddr    peerMacAddr;
 } tLimAuthRspTimeout;
 
-typedef struct sLimMlmStartReq
-{
+typedef struct sLimMlmStartReq {
     tSirMacSSid           ssId;
     tSirBssType           bssType;
     tSirMacAddr           bssId;
@@ -198,35 +194,30 @@ typedef struct sLimMlmStartReq
     tANI_U8              obssProtEnabled;
 } tLimMlmStartReq, *tpLimMlmStartReq;
 
-typedef struct sLimMlmStartCnf
-{
+typedef struct sLimMlmStartCnf {
     tSirResultCodes resultCode;
     tANI_U8         sessionId;
 } tLimMlmStartCnf, *tpLimMlmStartCnf;
 
-typedef struct sLimMlmScanCnf
-{
+typedef struct sLimMlmScanCnf {
     tSirResultCodes         resultCode;
     tANI_U16                scanResultLength;
     tSirBssDescription      bssDescription[1];
     tANI_U8                 sessionId;
 } tLimMlmScanCnf, *tpLimMlmScanCnf;
 
-typedef struct sLimScanResult
-{
+typedef struct sLimScanResult {
     tANI_U16                numBssDescriptions;
     tSirBssDescription bssDescription[1];
 } tLimScanResult;
 
-typedef struct sLimMlmJoinCnf
-{
+typedef struct sLimMlmJoinCnf {
     tSirResultCodes resultCode;
     tANI_U16 protStatusCode;
     tANI_U8  sessionId;
 } tLimMlmJoinCnf, *tpLimMlmJoinCnf;
 
-typedef struct sLimMlmAssocReq
-{
+typedef struct sLimMlmAssocReq {
     tSirMacAddr           peerMacAddr;
     tANI_U32                   assocFailureTimeout;
     tANI_U16                   capabilityInfo;
@@ -234,15 +225,13 @@ typedef struct sLimMlmAssocReq
     tANI_U8             sessionId;
 } tLimMlmAssocReq, *tpLimMlmAssocReq;
 
-typedef struct sLimMlmAssocCnf
-{
+typedef struct sLimMlmAssocCnf {
     tSirResultCodes resultCode; //Internal status code.
     tANI_U16 protStatusCode; //Protocol Status code.
     tANI_U8  sessionId;
 } tLimMlmAssocCnf, *tpLimMlmAssocCnf;
 
-typedef struct sLimMlmAssocInd
-{
+typedef struct sLimMlmAssocInd {
     tSirMacAddr          peerMacAddr;
     tANI_U16                  aid;
     tAniAuthType         authType;
@@ -265,8 +254,7 @@ typedef struct sLimMlmAssocInd
     tANI_U8*             assocReqPtr;
 } tLimMlmAssocInd, *tpLimMlmAssocInd;
 
-typedef struct sLimMlmReassocReq
-{
+typedef struct sLimMlmReassocReq {
     tSirMacAddr           peerMacAddr;
     tANI_U32                   reassocFailureTimeout;
     tANI_U16                   capabilityInfo;
@@ -274,15 +262,13 @@ typedef struct sLimMlmReassocReq
     tANI_U8                sessionId;
 } tLimMlmReassocReq, *tpLimMlmReassocReq;
 
-typedef struct sLimMlmReassocCnf
-{
+typedef struct sLimMlmReassocCnf {
     tSirResultCodes resultCode;
     tANI_U16 protStatusCode; //Protocol Status code.
     tANI_U8  sessionId;
 } tLimMlmReassocCnf, *tpLimMlmReassocCnf;
 
-typedef struct sLimMlmReassocInd
-{
+typedef struct sLimMlmReassocInd {
     tSirMacAddr          peerMacAddr;
     tSirMacAddr          currentApAddr;
     tANI_U16             aid;
@@ -304,8 +290,7 @@ typedef struct sLimMlmReassocInd
     tANI_U8*             assocReqPtr;
 } tLimMlmReassocInd, *tpLimMlmReassocInd;
 
-typedef struct sLimMlmAuthCnf
-{
+typedef struct sLimMlmAuthCnf {
     tSirMacAddr     peerMacAddr;
     tAniAuthType    authType;
     tSirResultCodes resultCode;
@@ -313,15 +298,13 @@ typedef struct sLimMlmAuthCnf
     tANI_U8         sessionId;
 } tLimMlmAuthCnf, *tpLimMlmAuthCnf;
 
-typedef struct sLimMlmAuthInd
-{
+typedef struct sLimMlmAuthInd {
     tSirMacAddr    peerMacAddr;
     tAniAuthType   authType;
     tANI_U8        sessionId;
 } tLimMlmAuthInd, *tpLimMlmAuthInd;
 
-typedef struct sLimMlmDeauthReq
-{
+typedef struct sLimMlmDeauthReq {
     tSirMacAddr peerMacAddr;
     tANI_U16         reasonCode;
     tANI_U16         deauthTrigger;
@@ -330,8 +313,7 @@ typedef struct sLimMlmDeauthReq
 
 } tLimMlmDeauthReq, *tpLimMlmDeauthReq;
 
-typedef struct sLimMlmDeauthCnf
-{
+typedef struct sLimMlmDeauthCnf {
     tSirMacAddr     peerMacAddr;
     tSirResultCodes resultCode;
     tANI_U16        deauthTrigger;
@@ -339,16 +321,14 @@ typedef struct sLimMlmDeauthCnf
     tANI_U8         sessionId;
 } tLimMlmDeauthCnf, *tpLimMLmDeauthCnf;
 
-typedef struct sLimMlmDeauthInd
-{
+typedef struct sLimMlmDeauthInd {
     tSirMacAddr peerMacAddr;
     tANI_U16         reasonCode;
     tANI_U16         deauthTrigger;
     tANI_U16         aid;
 } tLimMlmDeauthInd, *tpLimMlmDeauthInd;
 
-typedef struct sLimMlmDisassocReq
-{
+typedef struct sLimMlmDisassocReq {
     tSirMacAddr peerMacAddr;
     tANI_U16         reasonCode;
     tANI_U16         disassocTrigger;
@@ -356,8 +336,7 @@ typedef struct sLimMlmDisassocReq
     tANI_U8         sessionId;
 } tLimMlmDisassocReq, *tpLimMlmDisassocReq;
 
-typedef struct sLimMlmDisassocCnf
-{
+typedef struct sLimMlmDisassocCnf {
     tSirMacAddr     peerMacAddr;
     tSirResultCodes resultCode;
     tANI_U16             disassocTrigger;
@@ -365,8 +344,7 @@ typedef struct sLimMlmDisassocCnf
     tANI_U8         sessionId;
 } tLimMlmDisassocCnf, *tpLimMlmDisassocCnf;
 
-typedef struct sLimMlmDisassocInd
-{
+typedef struct sLimMlmDisassocInd {
     tSirMacAddr     peerMacAddr;
     tANI_U16        reasonCode;
     tANI_U16        disassocTrigger;
@@ -374,15 +352,13 @@ typedef struct sLimMlmDisassocInd
     tANI_U8         sessionId;
 } tLimMlmDisassocInd, *tpLimMlmDisassocInd;
 
-typedef struct sLimMlmPurgeStaReq
-{
+typedef struct sLimMlmPurgeStaReq {
     tSirMacAddr     peerMacAddr;
     tANI_U16        aid;
     tANI_U8         sessionId;//Added For BT-AMP Support
 } tLimMlmPurgeStaReq, *tpLimMlmPurgeStaReq;
 
-typedef struct sLimMlmPurgeStaInd
-{
+typedef struct sLimMlmPurgeStaInd {
     tSirMacAddr     peerMacAddr;
     tANI_U16        reasonCode;
     tANI_U16        purgeTrigger;
@@ -390,8 +366,7 @@ typedef struct sLimMlmPurgeStaInd
     tANI_U8         sessionId;
 } tLimMlmPurgeStaInd, *tpLimMlmPurgeStaInd;
 
-typedef struct sLimMlmSetKeysReq
-{
+typedef struct sLimMlmSetKeysReq {
     tSirMacAddr     peerMacAddr;
     tANI_U8         sessionId;      //Added For BT-AMP Support
     tANI_U16        aid;
@@ -400,16 +375,14 @@ typedef struct sLimMlmSetKeysReq
     tSirKeys        key[SIR_MAC_MAX_NUM_OF_DEFAULT_KEYS];
 } tLimMlmSetKeysReq, *tpLimMlmSetKeysReq;
 
-typedef struct sLimMlmSetKeysCnf
-{
+typedef struct sLimMlmSetKeysCnf {
     tSirMacAddr     peerMacAddr;
     tANI_U16        resultCode;
     tANI_U16        aid;
     tANI_U8         sessionId;
 } tLimMlmSetKeysCnf, *tpLimMlmSetKeysCnf;
 
-typedef struct sLimMlmRemoveKeyReq
-{
+typedef struct sLimMlmRemoveKeyReq {
     tSirMacAddr     peerMacAddr;
     tANI_U8         sessionId; //Added FOr BT-AMP Support
     tAniEdType      edType;    // Encryption/Decryption type
@@ -418,31 +391,27 @@ typedef struct sLimMlmRemoveKeyReq
     tANI_BOOLEAN    unicast;
 } tLimMlmRemoveKeyReq, *tpLimMlmRemoveKeyReq;
 
-typedef struct sLimMlmRemoveKeyCnf
-{
+typedef struct sLimMlmRemoveKeyCnf {
     tSirMacAddr     peerMacAddr;
     tANI_U16        resultCode;
     tANI_U8         sessionId;
 } tLimMlmRemoveKeyCnf, *tpLimMlmRemoveKeyCnf;
 
 
-typedef struct sLimMlmResetReq
-{
+typedef struct sLimMlmResetReq {
     tSirMacAddr macAddr;
     tANI_U8        performCleanup;
     tANI_U8       sessionId;
 } tLimMlmResetReq, *tpLimMlmResetReq;
 
-typedef struct sLimMlmResetCnf
-{
+typedef struct sLimMlmResetCnf {
     tSirMacAddr macAddr;
     tSirResultCodes resultCode;
     tANI_U8         sessionId;
 } tLimMlmResetCnf, *tpLimMlmResetCnf;
 
 
-typedef struct sLimMlmLinkTestStopReq
-{
+typedef struct sLimMlmLinkTestStopReq {
     tSirMacAddr    peerMacAddr;
     tANI_U8       sessionId;
 } tLimMlmLinkTestStopReq, *tpLimMlmLinkTestStopReq;
@@ -452,8 +421,7 @@ typedef struct sLimMlmLinkTestStopReq
 // Block ACK related MLME data structures
 //
 
-typedef struct sLimMlmAddBAReq
-{
+typedef struct sLimMlmAddBAReq {
 
     // ADDBA recipient
     tSirMacAddr peerMacAddr;
@@ -487,8 +455,7 @@ typedef struct sLimMlmAddBAReq
 
 } tLimMlmAddBAReq, *tpLimMlmAddBAReq;
 
-typedef struct sLimMlmAddBACnf
-{
+typedef struct sLimMlmAddBACnf {
 
     // ADDBA recipient
     tSirMacAddr peerMacAddr;
@@ -523,8 +490,7 @@ typedef struct sLimMlmAddBACnf
 
 } tLimMlmAddBACnf, *tpLimMlmAddBACnf;
 
-typedef struct sLimMlmAddBAInd
-{
+typedef struct sLimMlmAddBAInd {
 
     // ADDBA recipient
     tSirMacAddr peerMacAddr;
@@ -549,8 +515,7 @@ typedef struct sLimMlmAddBAInd
 
 } tLimMlmAddBAInd, *tpLimMlmAddBAInd;
 
-typedef struct sLimMlmAddBARsp
-{
+typedef struct sLimMlmAddBARsp {
 
     // ADDBA recipient
     tSirMacAddr peerMacAddr;
@@ -589,8 +554,7 @@ typedef struct sLimMlmAddBARsp
 // to use the same data structure as DELBA REQ
 // as the parameters do not vary too much.
 //
-typedef struct sLimMlmDelBAReq
-{
+typedef struct sLimMlmDelBAReq {
 
     // ADDBA recipient
     tSirMacAddr peerMacAddr;
@@ -898,12 +862,10 @@ tSirRetStatus limSendSaQueryResponseFrame( tpAniSirGlobal pMac,
  * @return None
  */
 static inline void
-limPostSmeMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
-{
+limPostSmeMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf) {
     tSirMsgQ msg;
 
-    if(pMsgBuf == NULL)
-    {
+    if(pMsgBuf == NULL) {
         limLog(pMac, LOGE,FL("Buffer is Pointing to NULL"));
         return;
     }
@@ -943,12 +905,10 @@ limPostSmeMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
  * @return None
  */
 static inline void
-limPostMlmMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
-{
+limPostMlmMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf) {
 
     tSirMsgQ msg;
-    if(pMsgBuf == NULL)
-    {
+    if(pMsgBuf == NULL) {
         limLog(pMac, LOGE,FL("Buffer is Pointing to NULL"));
         return;
     }
@@ -981,8 +941,7 @@ limPostMlmMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
  * @return Channel number
  */
 static inline tANI_U8
-limGetCurrentScanChannel(tpAniSirGlobal pMac)
-{
+limGetCurrentScanChannel(tpAniSirGlobal pMac) {
     tANI_U8 *pChanNum = pMac->lim.gpLimMlmScanReq->channelList.channelNumber;
 
     return (*(pChanNum + pMac->lim.gLimCurrentScanChannelId));
@@ -1013,8 +972,7 @@ limGetCurrentScanChannel(tpAniSirGlobal pMac)
  */
 
 static inline tANI_U16
-limGetIElenFromBssDescription(tpSirBssDescription pBssDescr)
-{
+limGetIElenFromBssDescription(tpSirBssDescription pBssDescr) {
     if (!pBssDescr)
         return 0;
 
@@ -1096,8 +1054,7 @@ eHalStatus limSendDisassocCnf(tpAniSirGlobal pMac);
 eHalStatus limSendDeauthCnf(tpAniSirGlobal pMac);
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
-typedef struct sSetLinkCbackParams
-{
+typedef struct sSetLinkCbackParams {
     void * cbackDataPtr;
 } tSetLinkCbackParams;
 #endif

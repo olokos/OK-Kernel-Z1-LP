@@ -42,40 +42,40 @@
 #define DDL_I_FRAME_PROC_UNITS    (VCD_I_CUSTOM_DDL_BASE + 0x9)
 
 struct vcd_property_rc_level {
-	u32 frame_level_rc;
-	u32 mb_level_rc;
+    u32 frame_level_rc;
+    u32 mb_level_rc;
 };
 
 struct vcd_property_frame_level_rc_params {
-	u32 reaction_coeff;
+    u32 reaction_coeff;
 };
 
 struct vcd_property_adaptive_rc_params {
-	u32 dark_region_as_flag;
-	u32 smooth_region_as_flag;
-	u32 static_region_as_flag;
-	u32 activity_region_flag;
+    u32 dark_region_as_flag;
+    u32 smooth_region_as_flag;
+    u32 static_region_as_flag;
+    u32 activity_region_flag;
 };
 
 struct vcd_property_slice_delivery_info {
-	u32  enable;
-	u32  num_slices;
-	u32  num_slices_enc;
+    u32  enable;
+    u32  num_slices;
+    u32  num_slices_enc;
 };
 
 struct ddl_frame_data_tag;
 
 struct ddl_property_dec_pic_buffers {
-	struct ddl_frame_data_tag *dec_pic_buffers;
-	u32 no_of_dec_pic_buf;
+    struct ddl_frame_data_tag *dec_pic_buffers;
+    u32 no_of_dec_pic_buf;
 };
 
 struct ddl_property_capability {
-	u32 max_num_client;
-	u32 general_command_depth;
-	u32 frame_command_depth;
-	u32 exclusive;
-	u32   ddl_time_out_in_ms;
+    u32 max_num_client;
+    u32 general_command_depth;
+    u32 frame_command_depth;
+    u32 exclusive;
+    u32   ddl_time_out_in_ms;
 };
 
 #endif

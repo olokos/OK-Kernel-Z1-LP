@@ -82,22 +82,19 @@ static _ENUM_META_DATA enumMetaDataFromBin[INDEX_ENUM_MAX];
  * This data copy logic ignores the enum or int data types,
  * but simply copy the whole chunk to the NV data structure
  */
-typedef struct
-{
+typedef struct {
     int idxSubFromBin;
     int idxSubBuiltin;
 } _SUBTABLES_QUEUE;
 
-pF_NumElemBasedOnStorageType numElemBasedOnStorageType[] =
-{
+pF_NumElemBasedOnStorageType numElemBasedOnStorageType[] = {
     numElemSingular,     // SINGULAR=0
     numElemArray1,       // ARRAY_1=1
     numElemArray2,       // ARRAY_2=2
     numElemArray3,       // ARRAY_3=3
 };
 
-static int sizeOneElemBasedOnFieldIdBasicDataType[] =
-{
+static int sizeOneElemBasedOnFieldIdBasicDataType[] = {
     1,  // _FIELD_ID_DATA_TYPE_U8 =0
     4,  // _FIELD_ID_DATA_TYPE_U32
     1,  // _FIELD_ID_DATA_TYPE_S8
@@ -126,21 +123,18 @@ static _SUBTABLES_QUEUE subTablesQueue[_SUBTABLES_MAX];
  * All entries are initialized to 0, pointers to NULL
 */
 
-_NV_TEMPLATE_TABLE NvTablesFromBin[TABLES_MAX][TABLE_ENTRIES_MAX] =
-{
-    { /* TABLE_LAST*/
+_NV_TEMPLATE_TABLE NvTablesFromBin[TABLES_MAX][TABLE_ENTRIES_MAX] = {
+    {
+        /* TABLE_LAST*/
         {{nul}, 0, 0, 0, 0, 0, 0, {nul}},
     },
 };
 
-static void initNvTablesFromBin(void)
-{
+static void initNvTablesFromBin(void) {
     int i, j;
 
-    for (i = 0; i < TABLES_MAX; i++)
-    {
-        for (j = 0; j < TABLE_ENTRIES_MAX; j++)
-        {
+    for (i = 0; i < TABLES_MAX; i++) {
+        for (j = 0; j < TABLE_ENTRIES_MAX; j++) {
             NvTablesFromBin[i][j].fieldName[0] = nul;
             NvTablesFromBin[i][j].fieldName[1] = nul;
             NvTablesFromBin[i][j].fieldName[2] = nul;
@@ -172,21 +166,18 @@ static void initNvTablesFromBin(void)
  * All entries are initialized to 0, pointers to NULL
  */
 
-_NV_TEMPLATE_ENUM NvEnumsFromBin[INDEX_ENUM_MAX][ENUM_ENTRIES_MAX] =
-{
-    { /* INDEX_ENUM_LAST */
+_NV_TEMPLATE_ENUM NvEnumsFromBin[INDEX_ENUM_MAX][ENUM_ENTRIES_MAX] = {
+    {
+        /* INDEX_ENUM_LAST */
         {{nul}, 0, 0, {nul}},
     },
 };
 
-static void initNvEnumsFromBin(void)
-{
+static void initNvEnumsFromBin(void) {
     int i, j;
 
-    for(i = 0; i < INDEX_ENUM_MAX; i++)
-    {
-        for(j = 0; j < ENUM_ENTRIES_MAX; j++)
-        {
+    for(i = 0; i < INDEX_ENUM_MAX; i++) {
+        for(j = 0; j < ENUM_ENTRIES_MAX; j++) {
             NvEnumsFromBin[i][j].enumName[0] = nul;
             NvEnumsFromBin[i][j].enumName[1] = nul;
             NvEnumsFromBin[i][j].enumName[2] = nul;
@@ -279,8 +270,7 @@ static void initNvEnumsFromBin(void)
 -----------------------------------------------------------------------------*/
 
 VOS_STATUS nvParser(tANI_U8 *pnvEncodedBuf, tANI_U32 nvReadBufSize,
-                    sHalNv *hal_nv)
-{
+                    sHalNv *hal_nv) {
     _STREAM_RC streamRc;
     _NV_STREAM_BUF *pStream = &nvStream[0];
     tANI_U32 len;
@@ -296,35 +286,27 @@ VOS_STATUS nvParser(tANI_U8 *pnvEncodedBuf, tANI_U32 nvReadBufSize,
     initReadStream(pnvEncodedBuf, nvReadBufSize);
 
     // get and process streams one by one
-    while (RC_FAIL != (streamRc = NEXT_STREAM(&len, &nvStream[0])) )
-    {
+    while (RC_FAIL != (streamRc = NEXT_STREAM(&len, &nvStream[0])) ) {
         // need to copy, stream layer is freeing it
-        if (len > _NV_STREAM_LEN_MAX)
-        {
+        if (len > _NV_STREAM_LEN_MAX) {
             errCode = _STREAM_NOT_FIT_BUF;
             goto _error;
         }
         // template or data
-        if (IsStreamTemplate(pStream[_NV_BIN_STREAM_HEADER_BYTE]))
-        {
-            if (_MIS_MATCH == processNvTemplate(pStream, len))
-            {
-                if (_FLAG_AND_ABORT(gNVParsingControlLo) )
-                {
+        if (IsStreamTemplate(pStream[_NV_BIN_STREAM_HEADER_BYTE])) {
+            if (_MIS_MATCH == processNvTemplate(pStream, len)) {
+                if (_FLAG_AND_ABORT(gNVParsingControlLo) ) {
                     errCode = _SW_BIN_MISMATCH;
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             processNvData(pStream, len);
         }
     }
 
 _error:
-    if (_OK != errCode)
-    {
+    if (_OK != errCode) {
         ret = VOS_STATUS_E_INVAL;
     }
 
@@ -333,15 +315,11 @@ _error:
 }
 
 static _NV_TEMPLATE_PROCESS_RC processNvTemplate(_NV_STREAM_BUF *pStream,
-        int len)
-{
+        int len) {
     // Table or enum
-    if (IsTemplateStreamTable(pStream[_NV_BIN_STREAM_HEADER_BYTE]))
-    {
+    if (IsTemplateStreamTable(pStream[_NV_BIN_STREAM_HEADER_BYTE])) {
         return processNvTemplateTable(pStream, len);
-    }
-    else
-    {
+    } else {
         return processNvTemplateEnum(pStream, len);
     }
 }
@@ -354,8 +332,7 @@ static _NV_TEMPLATE_PROCESS_RC processNvTemplate(_NV_STREAM_BUF *pStream,
  */
 
 static _NV_TEMPLATE_PROCESS_RC processNvTemplateTable(_NV_STREAM_BUF *pStream,
-        int len)
-{
+        int len) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
     char tableNameFromBin[_TABLE_NAME_LEN +1];
     int tableIdxFromBin;
@@ -366,29 +343,24 @@ static _NV_TEMPLATE_PROCESS_RC processNvTemplateTable(_NV_STREAM_BUF *pStream,
 
     // fetch the table name from the first entry, the Table of all tables
     // search for the corresponding table in NvDataBuiltIn
-    if (tableIdxFromBin)
-    {
+    if (tableIdxFromBin) {
         rc = compareWithBuiltinTable(tableIdxFromBin, tableNameFromBin);
     }
     // done
     return rc;
 }
 
-static int getOffsetFromBuiltIn(char *tableNameFromBin)
-{
+static int getOffsetFromBuiltIn(char *tableNameFromBin) {
     int offset = _OFFSET_NOT_SET;
     int i;
 
     _NV_TEMPLATE_TABLE (*pTableBuiltin)[TABLE_ENTRIES_MAX] = NvTablesBuiltIn;
     // search NvTablesBuiltIn for the same string named table, and its idx
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTableBuiltin[0][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTableBuiltin[0][i].fieldName[0]) {
             break;
         }
-        if (!strcmp(tableNameFromBin, pTableBuiltin[0][i].fieldName))
-        {
+        if (!strcmp(tableNameFromBin, pTableBuiltin[0][i].fieldName)) {
             offset = pTableBuiltin[0][i].offset;
             break;
         }
@@ -401,8 +373,7 @@ static int getOffsetFromBuiltIn(char *tableNameFromBin)
  * it returns the newly constructed table, for comparison with NvTablesBuiltIn
  */
 static int constructATemplateTable(_NV_STREAM_BUF *pStream, int len,
-                                   char *tableStrName)
-{
+                                   char *tableStrName) {
     int pos = 0;
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX] = NvTablesFromBin;
     int tableIdx, entryIdx;
@@ -412,27 +383,20 @@ static int constructATemplateTable(_NV_STREAM_BUF *pStream, int len,
     tableIdx = (pStream[_NV_BIN_STREAM_TABLE_ID_BYTE] &
                 FIELD_ID_TABLE_OR_ENUM_IDX_MASK);
 
-    if (IsIdxTableOfAllTables(tableIdx))
-    {
-    }
-    else
-    {
+    if (IsIdxTableOfAllTables(tableIdx)) {
+    } else {
         // find the string name of the table
-        for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-        {
-            if (nul == pTable[0][i].fieldName[0])
-            {
+        for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+            if (nul == pTable[0][i].fieldName[0]) {
                 break;
             }
             if ((pTable[0][i].fieldId & FIELD_ID_TABLE_OR_ENUM_IDX_MASK) ==
-                    tableIdx)
-            {
+                    tableIdx) {
                 strlcpy(tableStrName, pTable[0][i].fieldName, (_TABLE_NAME_LEN +1));
                 break;
             }
         }
-        if (TABLE_ENTRIES_MAX == i)
-        {
+        if (TABLE_ENTRIES_MAX == i) {
             // if string name not found, don't know what to do
             errCode = _TABLE_NON_EXIST_IN_TABLE_OF_ALL_TABLES;
             goto _error;
@@ -440,18 +404,15 @@ static int constructATemplateTable(_NV_STREAM_BUF *pStream, int len,
     }
 
     // check if the table is already populated
-    if (nul != pTable[tableIdx][0].fieldName[0])    // there is data in that enty
-    {
+    if (nul != pTable[tableIdx][0].fieldName[0]) {  // there is data in that enty
         // tbd: decision logic based on Parsing Control (bitmap)
     }
 
     // overwrite table entry, tableIdx
     pos = _TABLE_FIELDS_POS;
     entryIdx = 0;
-    while (pos < len)
-    {
-        if (!(pos <= (len - _TABLE_FIELD_MIN_LEN)))
-        {
+    while (pos < len) {
+        if (!(pos <= (len - _TABLE_FIELD_MIN_LEN))) {
             // error condition
             errCode = _INSUFFICIENT_FOR_FIELD_PARSER_ERROR;
             break;
@@ -473,23 +434,16 @@ static int constructATemplateTable(_NV_STREAM_BUF *pStream, int len,
             getOffsetFromBuiltIn(pTable[tableIdx][entryIdx].fieldName);
 
         if (SINGULAR ==
-                _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType))
-        {
-        }
-        else if (ARRAY_1 ==
-                 _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType))
-        {
+                _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType)) {
+        } else if (ARRAY_1 ==
+                   _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType)) {
             pTable[tableIdx][entryIdx].fieldStorageSize1 = pStream[pos++];
-        }
-        else if (ARRAY_2 ==
-                 _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType))
-        {
+        } else if (ARRAY_2 ==
+                   _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType)) {
             pTable[tableIdx][entryIdx].fieldStorageSize1 = pStream[pos++];
             pTable[tableIdx][entryIdx].fieldStorageSize2 = pStream[pos++];
-        }
-        else if (ARRAY_3 ==
-                 _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType))
-        {
+        } else if (ARRAY_3 ==
+                   _STORAGE_TYPE(pTable[tableIdx][entryIdx].fieldStorageType)) {
             pTable[tableIdx][entryIdx].fieldStorageSize1 = pStream[pos++];
             pTable[tableIdx][entryIdx].fieldStorageSize2 = pStream[pos++];
             pTable[tableIdx][entryIdx].fieldStorageSize3 = pStream[pos++];
@@ -499,8 +453,7 @@ static int constructATemplateTable(_NV_STREAM_BUF *pStream, int len,
     }
 
 _error:
-    if (_OK != errCode)
-    {
+    if (_OK != errCode) {
     }
 
     // all done
@@ -527,8 +480,7 @@ _error:
  */
 
 static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
-        char *tableNameFromBin)
-{
+        char *tableNameFromBin) {
     int i;
     _NV_TEMPLATE_TABLE (*pTableBuiltin)[TABLE_ENTRIES_MAX] = NvTablesBuiltIn;
     int tableIdxBuiltin = 0;
@@ -536,14 +488,11 @@ static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
     _ErrorCode errCode = _OK;
 
     // search NvTablesBuiltIn for the same string named table, and its idx
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTableBuiltin[0][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTableBuiltin[0][i].fieldName[0]) {
             break;
         }
-        if (!strcmp(tableNameFromBin, pTableBuiltin[0][i].fieldName))
-        {
+        if (!strcmp(tableNameFromBin, pTableBuiltin[0][i].fieldName)) {
             tableIdxBuiltin = (pTableBuiltin[0][i].fieldId &
                                FIELD_ID_TABLE_OR_ENUM_IDX_MASK);
             break;
@@ -551,19 +500,15 @@ static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
     }
 
     // compare and copy values
-    if (!tableIdxBuiltin)
-    {
+    if (!tableIdxBuiltin) {
         errCode = _TABLE_NON_EXIST_IN_TABLE_OF_ALL_TABLES;
         rc = _MIS_MATCH;
-    }
-    else
-    {
+    } else {
         subTableRd = 0;
         subTableWr = 0;
 
         // fire the comparison logic
-        if (_MIS_MATCH == compare2Tables(idxFromBin, tableIdxBuiltin))
-        {
+        if (_MIS_MATCH == compare2Tables(idxFromBin, tableIdxBuiltin)) {
             rc = _MIS_MATCH;
         }
 
@@ -573,12 +518,10 @@ static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
 #if !defined(_RECURSIVE_VERSION)
         {
             int idxSubFromBin, idxSubBuiltin;
-            while (subTableRd != subTableWr)
-            {
+            while (subTableRd != subTableWr) {
                 idxSubFromBin = subTablesQueue[subTableRd].idxSubFromBin;
                 idxSubBuiltin = subTablesQueue[subTableRd].idxSubBuiltin;
-                if (_MIS_MATCH == compare2Tables(idxSubFromBin, idxSubBuiltin))
-                {
+                if (_MIS_MATCH == compare2Tables(idxSubFromBin, idxSubBuiltin)) {
                     rc = _MIS_MATCH;
                 }
                 // increment read pointer
@@ -589,8 +532,7 @@ static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
     }
 
 //_error:
-    if (_OK != errCode)
-    {
+    if (_OK != errCode) {
         //printf("Error %d \n", errCode);
     }
 
@@ -598,8 +540,7 @@ static _NV_TEMPLATE_PROCESS_RC compareWithBuiltinTable(int idxFromBin,
     return rc;
 }
 
-static _NV_TEMPLATE_PROCESS_RC compare2Tables(int idxFromBin, int idxBuiltin)
-{
+static _NV_TEMPLATE_PROCESS_RC compare2Tables(int idxFromBin, int idxBuiltin) {
     int i, j;
     _NV_TEMPLATE_TABLE (*pTableBuiltIn)[TABLE_ENTRIES_MAX];
     _NV_TEMPLATE_TABLE (*pTableFromBin)[TABLE_ENTRIES_MAX];
@@ -608,33 +549,25 @@ static _NV_TEMPLATE_PROCESS_RC compare2Tables(int idxFromBin, int idxBuiltin)
     pTableBuiltIn = NvTablesBuiltIn;
     pTableFromBin = NvTablesFromBin;
 
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
         if ((nul == pTableBuiltIn[idxBuiltin][i].fieldName[0]) ||
                 // end of table occurs in either table
-                (nul == pTableFromBin[idxFromBin][i].fieldName[0]))
-        {
+                (nul == pTableFromBin[idxFromBin][i].fieldName[0])) {
             // end of table occurs in either table
             if ((nul == pTableBuiltIn[idxBuiltin][i].fieldName[0]) &&
-                    (nul == pTableFromBin[idxFromBin][i].fieldName[0]))
-            {
+                    (nul == pTableFromBin[idxFromBin][i].fieldName[0])) {
                 rc = _MATCH;
-            }
-            else
-            {
+            } else {
                 rc = _MIS_MATCH;
 
-                for (j=0; j<TABLE_ENTRIES_MAX; j++)
-                {
-                    if (nul == pTableBuiltIn[idxBuiltin][j].fieldName[0])
-                    {
+                for (j=0; j<TABLE_ENTRIES_MAX; j++) {
+                    if (nul == pTableBuiltIn[idxBuiltin][j].fieldName[0]) {
                         // end of bin table
                         break;
                     }
                     if (!strcmp(
                                 (const char*) pTableBuiltIn[idxBuiltin][j].fieldName,
-                                (const char*) pTableFromBin[idxFromBin][i].fieldName))
-                    {
+                                (const char*) pTableFromBin[idxFromBin][i].fieldName)) {
                         // found matching field in bin table
                         // DO NOT check return code, it's already a mismatch
                         compare2FieldsAndCopyFromBin(
@@ -646,50 +579,37 @@ static _NV_TEMPLATE_PROCESS_RC compare2Tables(int idxFromBin, int idxBuiltin)
                 }
             }
             break; // end of table, either table, condition
-        }
-        else
-        {
+        } else {
             if (!strcmp(pTableBuiltIn[idxBuiltin][i].fieldName,
-                        pTableFromBin[idxFromBin][i].fieldName))
-            {
+                        pTableFromBin[idxFromBin][i].fieldName)) {
                 // two field names match
                 if (_MATCH == compare2FieldsAndCopyFromBin(
                             &(pTableBuiltIn[idxBuiltin][i]),
                             &(pTableFromBin[idxFromBin][i]),
-                            idxBuiltin, idxFromBin))
-                {
+                            idxBuiltin, idxFromBin)) {
                     rc = _MATCH;
-                }
-                else
-                {
+                } else {
                     rc = _MIS_MATCH;
-                    if ( _FLAG_AND_ABORT(gNVParsingControlLo) )
-                    {
+                    if ( _FLAG_AND_ABORT(gNVParsingControlLo) ) {
                         break;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 rc = _MIS_MATCH;
-                if ( _FLAG_AND_ABORT(gNVParsingControlLo) )
-                {
+                if ( _FLAG_AND_ABORT(gNVParsingControlLo) ) {
                     break;
                 }
                 // else
                 // loop through the WHOLE bin tables, looking for a matching field.
                 // this would take care of both cases where bin table field is
                 // either "ahead" or "behind"
-                for (j = 0; j < TABLE_ENTRIES_MAX; j++)
-                {
+                for (j = 0; j < TABLE_ENTRIES_MAX; j++) {
                     // end of bin table
-                    if (nul == pTableFromBin[idxBuiltin][j].fieldName[0])
-                    {
+                    if (nul == pTableFromBin[idxBuiltin][j].fieldName[0]) {
                         break;
                     }
                     if (!strcmp(pTableBuiltIn[idxBuiltin][j].fieldName,
-                                pTableFromBin[idxFromBin][i].fieldName))
-                    {
+                                pTableFromBin[idxFromBin][i].fieldName)) {
                         // found matching field in bin table
                         // DO NOT check return code, it's already a mismatch
                         compare2FieldsAndCopyFromBin(&(pTableBuiltIn[idxBuiltin][j]),
@@ -706,8 +626,7 @@ static _NV_TEMPLATE_PROCESS_RC compare2Tables(int idxFromBin, int idxBuiltin)
 
 static _NV_TEMPLATE_PROCESS_RC compare2FieldsAndCopyFromBin(
     _NV_TEMPLATE_TABLE*pTableBuiltIn,
-    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltin, int idxFromBin)
-{
+    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltin, int idxFromBin) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
 
     // Verified already the fieldNames match
@@ -717,8 +636,7 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldsAndCopyFromBin(
      * else if it's a table, need to compare 2 tables, don't call recursively
      */
     if (_MIS_MATCH == compare2FieldIDType(pTableBuiltIn, pTableFromBin,
-                                          idxBuiltin, idxFromBin))
-    {
+                                          idxBuiltin, idxFromBin)) {
         rc = _MIS_MATCH;
         goto _end;
     }
@@ -729,8 +647,7 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldsAndCopyFromBin(
     //     else if sizes are INDEX_ENUM, need to loop through enums
     //
     if (_MIS_MATCH == compare2FieldStorageTypeAndSizes(pTableBuiltIn,
-            pTableFromBin, idxBuiltin, idxFromBin))
-    {
+            pTableFromBin, idxBuiltin, idxFromBin)) {
         rc = _MIS_MATCH;
         goto _end;
     }
@@ -745,23 +662,16 @@ _end:
 
 static _NV_TEMPLATE_PROCESS_RC compare2FieldIDType(
     _NV_TEMPLATE_TABLE *pTableBuiltIn,
-    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltin, int idxFromBin)
-{
+    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltin, int idxFromBin) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
 
-    if (IsFieldTypeBasicData(pTableBuiltIn->fieldId))
-    {
-        if (pTableBuiltIn->fieldId == pTableFromBin->fieldId)
-        {
+    if (IsFieldTypeBasicData(pTableBuiltIn->fieldId)) {
+        if (pTableBuiltIn->fieldId == pTableFromBin->fieldId) {
             rc = _MATCH;
-        }
-        else
-        {
+        } else {
             rc = _MIS_MATCH;
         }
-    }
-    else   // field is a table
-    {
+    } else { // field is a table
         int idxSubBuiltin = pTableBuiltIn->fieldId &
                             FIELD_ID_TABLE_OR_ENUM_IDX_MASK;
         int idxSubFromBin = pTableFromBin->fieldId &
@@ -783,33 +693,25 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldIDType(
 
 static _NV_TEMPLATE_PROCESS_RC compare2FieldStorageTypeAndSizes(
     _NV_TEMPLATE_TABLE *pTableBuiltIn,
-    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltIn, int idxFromBin)
-{
+    _NV_TEMPLATE_TABLE *pTableFromBin, int idxBuiltIn, int idxFromBin) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
 
     if (_STORAGE_TYPE(pTableBuiltIn->fieldStorageType) ==
-            _STORAGE_TYPE(pTableFromBin->fieldStorageType))
-    {
-        if (SINGULAR == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType))
-        {
+            _STORAGE_TYPE(pTableFromBin->fieldStorageType)) {
+        if (SINGULAR == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType)) {
             rc = _MATCH;
-        }
-        else if (ARRAY_1 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType))
-        {
+        } else if (ARRAY_1 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType)) {
             if ((_MATCH == compare2StorageSize(idxBuiltIn, idxFromBin,
                                                _STORAGE_SIZE1(pTableBuiltIn->fieldStorageSize1,
                                                        pTableBuiltIn->fieldStorageType),
                                                _STORAGE_SIZE1(pTableFromBin->fieldStorageSize1,
                                                        pTableFromBin->fieldStorageType),
                                                pTableBuiltIn->fieldStorageSize1,
-                                               pTableFromBin->fieldStorageSize1)) )
-            {
+                                               pTableFromBin->fieldStorageSize1)) ) {
 
                 rc = _MATCH;
             }
-        }
-        else if (ARRAY_2 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType))
-        {
+        } else if (ARRAY_2 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType)) {
             if ((_MATCH == compare2StorageSize(idxBuiltIn, idxFromBin,
                                                _STORAGE_SIZE1(pTableBuiltIn->fieldStorageSize1,
                                                        pTableBuiltIn->fieldStorageType),
@@ -823,13 +725,10 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldStorageTypeAndSizes(
                                                    _STORAGE_SIZE2(pTableFromBin->fieldStorageSize2,
                                                            pTableFromBin->fieldStorageType),
                                                    pTableBuiltIn->fieldStorageSize2,
-                                                   pTableFromBin->fieldStorageSize2)) )
-            {
+                                                   pTableFromBin->fieldStorageSize2)) ) {
                 rc = _MATCH;
             }
-        }
-        else if (ARRAY_3 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType))
-        {
+        } else if (ARRAY_3 == _STORAGE_TYPE(pTableBuiltIn->fieldStorageType)) {
             if ((_MATCH == compare2StorageSize(idxBuiltIn, idxFromBin,
                                                _STORAGE_SIZE1(pTableBuiltIn->fieldStorageSize1,
                                                        pTableBuiltIn->fieldStorageType),
@@ -850,14 +749,11 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldStorageTypeAndSizes(
                                                    _STORAGE_SIZE3(pTableFromBin->fieldStorageSize3,
                                                            pTableFromBin->fieldStorageType),
                                                    pTableBuiltIn->fieldStorageSize3,
-                                                   pTableFromBin->fieldStorageSize3)) )
-            {
+                                                   pTableFromBin->fieldStorageSize3)) ) {
                 rc = _MATCH;
             }
         }
-    }
-    else
-    {
+    } else {
         rc = _MIS_MATCH;
     }
     return rc;
@@ -865,31 +761,22 @@ static _NV_TEMPLATE_PROCESS_RC compare2FieldStorageTypeAndSizes(
 
 static _NV_TEMPLATE_PROCESS_RC compare2StorageSize(int idxBuiltIn,
         int idxFromBin, int sizeBuiltIn,
-        int sizeFromBin, tANI_U8 sizeBuiltInLowByte, tANI_U8 sizeFromBinLowByte)
-{
+        int sizeFromBin, tANI_U8 sizeBuiltInLowByte, tANI_U8 sizeFromBinLowByte) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
 
     if (IsFieldSizeInt(sizeBuiltInLowByte) &&
-            IsFieldSizeInt(sizeFromBinLowByte))
-    {
-        if (sizeBuiltIn == sizeFromBin)
-        {
+            IsFieldSizeInt(sizeFromBinLowByte)) {
+        if (sizeBuiltIn == sizeFromBin) {
             rc = _MATCH;
-        }
-        else
-        {
+        } else {
             rc = _MIS_MATCH;
         }
-    }
-    else if (!IsFieldSizeInt(sizeBuiltInLowByte) &&
-             !IsFieldSizeInt(sizeFromBinLowByte))
-    {
+    } else if (!IsFieldSizeInt(sizeBuiltInLowByte) &&
+               !IsFieldSizeInt(sizeFromBinLowByte)) {
         // enums should have been compared when enum streams are parsed
         // The implication is that the enum streams should go before tables'
         rc = enumMetaDataFromBin[idxFromBin].match;
-    }
-    else
-    {
+    } else {
         rc = _MIS_MATCH;
     }
 
@@ -902,8 +789,7 @@ static _NV_TEMPLATE_PROCESS_RC compare2StorageSize(int idxBuiltIn,
  * Parse one enum template stream in nv.bin
  */
 static _NV_TEMPLATE_PROCESS_RC processNvTemplateEnum(_NV_STREAM_BUF *pStream,
-        int len)
-{
+        int len) {
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
     char enumStr[_ENUM_NAME_LEN + 1];
     //_NV_TEMPLATE_ENUM *pEnum;
@@ -919,46 +805,37 @@ static _NV_TEMPLATE_PROCESS_RC processNvTemplateEnum(_NV_STREAM_BUF *pStream,
     // the fields may be indexed by enums
     // if enumIdx ==0, didn't construct any entry,
     // (or only the first entry)
-    if (enumIdx)
-    {
+    if (enumIdx) {
         compareEnumWithBuiltin(enumStr, enumIdx);
     }
 
     return rc;
 }
 
-static void compareEnumWithBuiltin(char *enumStr, int enumIdxFromBin)
-{
+static void compareEnumWithBuiltin(char *enumStr, int enumIdxFromBin) {
     int i;
     int enumIdxBuiltin = 0;
     _NV_TEMPLATE_ENUM (*pEnumBuiltin)[ENUM_ENTRIES_MAX] = NvEnumsBuiltIn;
     _ErrorCode errCode = _OK;
 
-    for (i = 0; i < ENUM_ENTRIES_MAX; i++)
-    {
-        if (nul == pEnumBuiltin[0][i].enumName[0])
-        {
+    for (i = 0; i < ENUM_ENTRIES_MAX; i++) {
+        if (nul == pEnumBuiltin[0][i].enumName[0]) {
             break;
         }
-        if (!strcmp(enumStr, pEnumBuiltin[0][i].enumName))
-        {
+        if (!strcmp(enumStr, pEnumBuiltin[0][i].enumName)) {
             enumIdxBuiltin = pEnumBuiltin[0][i].enumValue;
             break;
         }
     }
-    if (!enumIdxBuiltin)
-    {
+    if (!enumIdxBuiltin) {
         errCode = _ENUM_NOT_FOUND_IN_BUILT_IN;
         return;
-    }
-    else
-    {
+    } else {
         compare2EnumEntriesAndCopy(enumIdxFromBin, enumIdxBuiltin);
     }
 
 //_error:
-    if (_OK != errCode)
-    {
+    if (_OK != errCode) {
         //printf("Error %d\n", errCode);
     }
 
@@ -966,40 +843,31 @@ static void compareEnumWithBuiltin(char *enumStr, int enumIdxFromBin)
 }
 
 static _NV_TEMPLATE_PROCESS_RC compare2EnumEntriesAndCopy(int idxFromBin,
-        int idxBuiltin)
-{
+        int idxBuiltin) {
     int i,j;
     _NV_TEMPLATE_PROCESS_RC rc = _MATCH;
     _NV_TEMPLATE_ENUM (*enumsFromBin)[ENUM_ENTRIES_MAX] = NvEnumsFromBin;
     _NV_TEMPLATE_ENUM (*enumsBuiltin)[ENUM_ENTRIES_MAX] = NvEnumsBuiltIn;
 
     // need to go through all enums
-    for (i = 0; i < ENUM_ENTRIES_MAX; i++)
-    {
+    for (i = 0; i < ENUM_ENTRIES_MAX; i++) {
         // end conditions: either both reach the end (match),
         // or one of them reaching the end (mismatch)
         if ((nul == enumsBuiltin[idxBuiltin][i].enumName[0]) ||
-                (nul == enumsFromBin[idxFromBin][i].enumName[0]))
-        {
+                (nul == enumsFromBin[idxFromBin][i].enumName[0])) {
             if ((nul == enumsBuiltin[idxBuiltin][i].enumName[0]) &&
-                    (nul == enumsFromBin[idxFromBin][i].enumName[0]))
-            {
+                    (nul == enumsFromBin[idxFromBin][i].enumName[0])) {
                 // fully matched
                 rc = _MATCH;
                 break;
-            }
-            else
-            {
+            } else {
                 rc = _MIS_MATCH;
-                for (j = 0; j < ENUM_ENTRIES_MAX; j++)
-                {
-                    if (nul == enumsBuiltin[idxBuiltin][j].enumName[0])
-                    {
+                for (j = 0; j < ENUM_ENTRIES_MAX; j++) {
+                    if (nul == enumsBuiltin[idxBuiltin][j].enumName[0]) {
                         break;
                     }
                     if (!strcmp((const char*)enumsFromBin[idxFromBin][i].enumName,
-                                (const char*)enumsBuiltin[idxBuiltin][j].enumName))
-                    {
+                                (const char*)enumsBuiltin[idxBuiltin][j].enumName)) {
                         enumsFromBin[idxFromBin][i].enumValuePeer =
                             enumsBuiltin[idxBuiltin][j].enumValue;
                         break;
@@ -1007,30 +875,22 @@ static _NV_TEMPLATE_PROCESS_RC compare2EnumEntriesAndCopy(int idxFromBin,
                 }
                 break;
             }
-        }
-        else
-        {
+        } else {
             if (!strcmp(enumsBuiltin[idxBuiltin][i].enumName,
-                        enumsFromBin[idxFromBin][i].enumName))
-            {
+                        enumsFromBin[idxFromBin][i].enumName)) {
                 // copy builtIn enum value to fromBin
                 enumsFromBin[idxFromBin][i].enumValuePeer =
                     enumsBuiltin[idxBuiltin][i].enumValue;
-            }
-            else
-            {
+            } else {
                 // mismatch, but still loop through the whole enum list
                 // for the "ahead" and "behind" scenarios
                 rc = _MIS_MATCH;
-                for (j = 0; j < ENUM_ENTRIES_MAX; j++)
-                {
-                    if (nul == enumsBuiltin[idxBuiltin][j].enumName[0])
-                    {
+                for (j = 0; j < ENUM_ENTRIES_MAX; j++) {
+                    if (nul == enumsBuiltin[idxBuiltin][j].enumName[0]) {
                         break;
                     }
                     if (!strcmp(enumsFromBin[idxFromBin][i].enumName,
-                                enumsBuiltin[idxBuiltin][j].enumName))
-                    {
+                                enumsBuiltin[idxBuiltin][j].enumName)) {
                         enumsFromBin[idxFromBin][i].enumValuePeer =
                             enumsBuiltin[idxBuiltin][j].enumValue;
                         break;
@@ -1048,8 +908,7 @@ static _NV_TEMPLATE_PROCESS_RC compare2EnumEntriesAndCopy(int idxFromBin,
 }
 
 static int constructATemplateEnum(_NV_STREAM_BUF *pStream, int len,
-                                  char *enumStr)
-{
+                                  char *enumStr) {
     int pos = 0;
     _NV_TEMPLATE_ENUM (*pEnum)[ENUM_ENTRIES_MAX];
     int enumIdx = 0;
@@ -1066,25 +925,18 @@ static int constructATemplateEnum(_NV_STREAM_BUF *pStream, int len,
     // since the nv.bin doesn't encode the enum string name in the actual enum
     // stream, only the first "enum of all enums"
     //    has the names of all enums.
-    if (IsIdxEnumOfAllEnums(enumIdx))
-    {
-    }
-    else
-    {
-        for (i = 0; i < ENUM_ENTRIES_MAX; i++)
-        {
-            if (nul == pEnum[0][i].enumName[0])
-            {
+    if (IsIdxEnumOfAllEnums(enumIdx)) {
+    } else {
+        for (i = 0; i < ENUM_ENTRIES_MAX; i++) {
+            if (nul == pEnum[0][i].enumName[0]) {
                 break;
             }
-            if (pEnum[0][i].enumValue == enumIdx)
-            {
+            if (pEnum[0][i].enumValue == enumIdx) {
                 strlcpy(enumStr, pEnum[0][i].enumName,(_ENUM_NAME_LEN + 1));
                 break;
             }
         }
-        if (ENUM_ENTRIES_MAX == i)
-        {
+        if (ENUM_ENTRIES_MAX == i) {
             // without a string name, don't know what to do with the enum indexed
             errCode = _ENUM_NOT_FOUND_IN_BUILT_IN;
             goto _error;
@@ -1093,8 +945,7 @@ static int constructATemplateEnum(_NV_STREAM_BUF *pStream, int len,
 
     // Found the enum string name, now parsing decision time ...
     // Is the entry already populated?
-    if (nul != pEnum[enumIdx][0].enumName[0])    // there is data in that entry
-    {
+    if (nul != pEnum[enumIdx][0].enumName[0]) {  // there is data in that entry
         // TBD:
         // the logic here depends on how we support "parsing data based on the
         // latest template".
@@ -1114,10 +965,8 @@ static int constructATemplateEnum(_NV_STREAM_BUF *pStream, int len,
     // overwrite entry, enumIdx
     pos = _ENUM_START_POS;
     entryIdx = 0;
-    while (pos < len)
-    {
-        if (!(pos <= (len - _ENUM_MIN_LEN)))
-        {
+    while (pos < len) {
+        if (!(pos <= (len - _ENUM_MIN_LEN))) {
             // error condition
             errCode = _INSUFFICIENT_FOR_FIELD_PARSER_ERROR;
             break;
@@ -1135,8 +984,7 @@ static int constructATemplateEnum(_NV_STREAM_BUF *pStream, int len,
     }
 
 _error:
-    if (_OK != errCode)
-    {
+    if (_OK != errCode) {
         //printf("Error %d\n", errCode);
     }
 
@@ -1166,8 +1014,7 @@ _error:
 // Recursive table parsing, which is naturally depth-first
 // If iterative, a bit hard to implement
 
-static void parseSubDataTable4Size(int tableIdx, int numElem)
-{
+static void parseSubDataTable4Size(int tableIdx, int numElem) {
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX] = NvTablesFromBin;
     int idxSubTable;
     int i;
@@ -1175,19 +1022,14 @@ static void parseSubDataTable4Size(int tableIdx, int numElem)
 
     // "apply" template to data -- parsing the actual NV data,
     //     so far we have been parsing and building templates
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTable[tableIdx][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTable[tableIdx][i].fieldName[0]) {
             // data parsing done for this stream
             break;
         }
-        if (IsFieldTypeBasicData(pTable[tableIdx][i].fieldId))
-        {
+        if (IsFieldTypeBasicData(pTable[tableIdx][i].fieldId)) {
             getBasicDataSize(&(pTable[tableIdx][i]));
-        }
-        else
-        {
+        } else {
             // number of element
             idx =
                 _STORAGE_TYPE(pTable[tableIdx][i].fieldStorageType);
@@ -1207,8 +1049,7 @@ static void parseSubDataTable4Size(int tableIdx, int numElem)
 }
 
 static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
-                                     _NV_STREAM_BUF *pStream, int *pos, int addOffset, int tableBaseOffset)
-{
+                                     _NV_STREAM_BUF *pStream, int *pos, int addOffset, int tableBaseOffset) {
     int i,j,k,storageType;
     int idx=0, size1=0, size2=0, size3=0;
     int enumIdx1=0, enumIdx2=0, enumIdx3=0, sizeOneElem=0;
@@ -1235,13 +1076,11 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
     sizeOneElemBuiltIn = sizeOneElemBasedOnFieldIdBasicDataType[field &
                          FIELD_ID_TABLE_OR_ENUM_IDX_MASK];
 
-    if (storageType == SINGULAR )
-    {
+    if (storageType == SINGULAR ) {
         ptr = ((unsigned char*)gpnvData_t) + tableBaseOffset + addOffset;
         dptr = (unsigned char *)&pStream[*pos];
 
-        if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId))
-        {
+        if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId)) {
             idx = _STORAGE_TYPE(pTable[tableIdx][fieldId].fieldStorageType);
             size1Bin = numElemBasedOnStorageType[idx](
                            &(pTable[tableIdx][fieldId]), 1);
@@ -1255,26 +1094,21 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
                                &(pTableBuiltIn[tableIdxBuiltIn][fieldIdBuiltIn]), 0);
 
             size1 = size1Bin;
-            if (size1 > size1BuiltIn)
-            {
+            if (size1 > size1BuiltIn) {
                 size1 = size1BuiltIn;
             }
         }
         totalSize = size1 * sizeOneElem;
 
         offset = 0;
-        for (i = 0; i < size1; i++)
-        {
+        for (i = 0; i < size1; i++) {
             vos_mem_copy(&ptr[offset], &dptr[offset], sizeOneElem);
             offset = offset + sizeOneElem;
         }
 
         *pos = *pos + (size1Bin * sizeOneElem);
-    }
-    else
-    {
-        if (ARRAY_1 == storageType)
-        {
+    } else {
+        if (ARRAY_1 == storageType) {
             ptr = ((unsigned char*)gpnvData_t) + tableBaseOffset + addOffset;
             dptr = (unsigned char *)&pStream[*pos];
 
@@ -1292,28 +1126,21 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
 
             size1 = size1Bin;
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isFirstFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isFirstFieldEnum = 0;
-                if (size1 > size1BuiltIn)
-                {
+                if (size1 > size1BuiltIn) {
                     size1 = size1BuiltIn;
                 }
             }
 
             offset = 0;
-            for (i = 0; i < size1; i++)
-            {
-                if (isFirstFieldEnum)
-                {
-                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer != 0xFF)
-                    {
+            for (i = 0; i < size1; i++) {
+                if (isFirstFieldEnum) {
+                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer != 0xFF) {
                         index = NvEnumsFromBin[enumIdx1][i].enumValuePeer;
                         dindex = NvEnumsFromBin[enumIdx1][i].enumValue;
 
@@ -1322,18 +1149,14 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
 
                         vos_mem_copy(&ptr[index], &dptr[dindex], sizeOneElem);
                     }
-                }
-                else
-                {
+                } else {
                     vos_mem_copy(&ptr[offset], &dptr[offset], sizeOneElem);
                     offset = offset + sizeOneElem;
                 }
             }
 
             *pos = *pos + (size1Bin * sizeOneElem);
-        }
-        else if (ARRAY_2 == storageType)
-        {
+        } else if (ARRAY_2 == storageType) {
             ptr = ((unsigned char*)gpnvData_t) + tableBaseOffset + addOffset;
             dptr = (unsigned char *)&pStream[*pos];
 
@@ -1365,69 +1188,51 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
             size1 = size1Bin;
             size2 = size2Bin;
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isFirstFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isFirstFieldEnum = 0;
-                if (size1 > size1BuiltIn)
-                {
+                if (size1 > size1BuiltIn) {
                     size1 = size1BuiltIn;
                 }
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2)) {
                 enumIdx2 = ((pTable[tableIdx][fieldId].fieldStorageSize2 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isSecondFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isSecondFieldEnum = 0;
-                if (size2 > size2BuiltIn)
-                {
+                if (size2 > size2BuiltIn) {
                     size2 = size2BuiltIn;
                 }
             }
 
             offset = 0;
 
-            for (i = 0; i < size1; i++)
-            {
-                if (isFirstFieldEnum)
-                {
-                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer == 0xFF)
-                    {
+            for (i = 0; i < size1; i++) {
+                if (isFirstFieldEnum) {
+                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer == 0xFF) {
                         continue;
                     }
 
                     index = NvEnumsFromBin[enumIdx1][i].enumValuePeer;
                     dindex = NvEnumsFromBin[enumIdx1][i].enumValue;
-                }
-                else
-                {
+                } else {
                     index = dindex = i;
                 }
 
-                for (j = 0; j < size2; j++)
-                {
-                    if (isSecondFieldEnum)
-                    {
-                        if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF)
-                        {
+                for (j = 0; j < size2; j++) {
+                    if (isSecondFieldEnum) {
+                        if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF) {
                             continue;
                         }
 
                         index1 = NvEnumsFromBin[enumIdx2][j].enumValuePeer;
                         dindex1 = NvEnumsFromBin[enumIdx2][j].enumValue;
-                    }
-                    else
-                    {
+                    } else {
                         index1 = dindex1 = j;
                     }
 
@@ -1438,9 +1243,7 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
             }
 
             *pos = *pos + size2Bin * size1Bin * sizeOneElem;
-        }
-        else if (ARRAY_3 == storageType)
-        {
+        } else if (ARRAY_3 == storageType) {
             ptr = ((unsigned char*)gpnvData_t) + tableBaseOffset + addOffset;
             dptr = (unsigned char *)&pStream[*pos];
 
@@ -1487,100 +1290,73 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
             size2 = size2Bin;
             size3 = size3Bin;
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isFirstFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isFirstFieldEnum = 0;
-                if (size1 > size1BuiltIn)
-                {
+                if (size1 > size1BuiltIn) {
                     size1 = size1BuiltIn;
                 }
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2)) {
                 enumIdx2 = ((pTable[tableIdx][fieldId].fieldStorageSize2 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isSecondFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isSecondFieldEnum = 0;
-                if (size2 > size2BuiltIn)
-                {
+                if (size2 > size2BuiltIn) {
                     size2 = size2BuiltIn;
                 }
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3)) {
                 enumIdx3 = ((pTable[tableIdx][fieldId].fieldStorageSize3 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
                 isThirdFieldEnum = 1;
-            }
-            else
-            {
+            } else {
                 isThirdFieldEnum = 0;
-                if (size3 > size3BuiltIn)
-                {
+                if (size3 > size3BuiltIn) {
                     size3 = size3BuiltIn;
                 }
             }
 
             offset = 0;
-            for (i = 0; i < size1; i++)
-            {
-                if (isFirstFieldEnum)
-                {
-                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer == 0xFF)
-                    {
+            for (i = 0; i < size1; i++) {
+                if (isFirstFieldEnum) {
+                    if (NvEnumsFromBin[enumIdx1][i].enumValuePeer == 0xFF) {
                         continue;
                     }
 
                     index = NvEnumsFromBin[enumIdx1][i].enumValuePeer;
                     dindex = NvEnumsFromBin[enumIdx1][i].enumValue;
-                }
-                else
-                {
+                } else {
                     index = dindex = i;
                 }
 
-                for (j = 0; j < size2; j++)
-                {
-                    if (isSecondFieldEnum)
-                    {
-                        if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF)
-                        {
+                for (j = 0; j < size2; j++) {
+                    if (isSecondFieldEnum) {
+                        if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF) {
                             continue;
                         }
 
                         index1 = NvEnumsFromBin[enumIdx2][j].enumValuePeer;
                         dindex1 = NvEnumsFromBin[enumIdx2][j].enumValue;
-                    }
-                    else
-                    {
+                    } else {
                         index1 = dindex1 = j;
                     }
 
-                    for (k = 0; k < size3; k++)
-                    {
-                        if (isThirdFieldEnum)
-                        {
-                            if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF)
-                            {
+                    for (k = 0; k < size3; k++) {
+                        if (isThirdFieldEnum) {
+                            if (NvEnumsFromBin[enumIdx2][j].enumValuePeer == 0xFF) {
                                 continue;
                             }
 
                             index2 = NvEnumsFromBin[enumIdx3][k].enumValuePeer;
                             dindex2 = NvEnumsFromBin[enumIdx3][k].enumValue;
-                        }
-                        else
-                        {
+                        } else {
                             index2 = dindex2 = k;
                         }
 
@@ -1596,39 +1372,32 @@ static void copyDataToBuiltInFromBin(int tableIdx,int fieldId,
             }
 
             *pos = *pos + size1Bin * size2Bin * size3Bin * sizeOneElem;
-        }
-        else
-        {
+        } else {
         }
     }
 }
 
 // search NvTablesBuiltIn for the same string named table, and its idx
 static int getBuiltInFieldCount (int tableIdxBin, char *tableNameFromBin,
-                                 int *tblIdBuiltIn, int *fieldIdBuitIn, int *numElements)
-{
+                                 int *tblIdBuiltIn, int *fieldIdBuitIn, int *numElements) {
     int i,idx,numElem,tableIdxBuiltin=0,fieldCnt;
     _NV_TEMPLATE_TABLE (*pTableBin)[TABLE_ENTRIES_MAX] = NvTablesFromBin;
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX] = NvTablesBuiltIn;
     int found=0, fieldIndex = 0;
 
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTableBin[0][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTableBin[0][i].fieldName[0]) {
             break;
         }
 
         if ((pTableBin[0][i].fieldId &
-                FIELD_ID_TABLE_OR_ENUM_IDX_MASK) == tableIdxBin)
-        {
+                FIELD_ID_TABLE_OR_ENUM_IDX_MASK) == tableIdxBin) {
             found = 1;
             break;
         }
     }
 
-    if (!found)
-    {
+    if (!found) {
         return -1;
     }
 
@@ -1636,23 +1405,19 @@ static int getBuiltInFieldCount (int tableIdxBin, char *tableNameFromBin,
     fieldIndex = i;
     found = 0;
 
-    for (i=0; i<TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTable[0][i].fieldName[0])
-        {
+    for (i=0; i<TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTable[0][i].fieldName[0]) {
             break;
         }
 
         if (!strcmp((const char*)pTableBin[0][fieldIndex].fieldName,
-                    (const char*)pTable[0][i].fieldName))
-        {
+                    (const char*)pTable[0][i].fieldName)) {
             found = 1;
             break;
         }
     }
 
-    if (!found)
-    {
+    if (!found) {
         return -1;
     }
 
@@ -1661,23 +1426,19 @@ static int getBuiltInFieldCount (int tableIdxBin, char *tableNameFromBin,
                           (pTable[0][i].fieldId & FIELD_ID_TABLE_OR_ENUM_IDX_MASK);
     found = 0;
 
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTable[tableIdxBuiltin][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTable[tableIdxBuiltin][i].fieldName[0]) {
             break;
         }
 
         if (!strcmp((const char*)tableNameFromBin,
-                    (const char*)pTable[tableIdxBuiltin][i].fieldName))
-        {
+                    (const char*)pTable[tableIdxBuiltin][i].fieldName)) {
             found = 1;
             break;
         }
     }
 
-    if (!found)
-    {
+    if (!found) {
         return -1;
     }
 
@@ -1694,54 +1455,40 @@ static int getBuiltInFieldCount (int tableIdxBin, char *tableNameFromBin,
     return fieldCnt;
 }
 
-static int getFieldCount(int tableIdx, int fieldId, int numElem, int nvBin)
-{
+static int getFieldCount(int tableIdx, int fieldId, int numElem, int nvBin) {
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX];
     int idxSubTable;
     int i, j, storageType, field;
     int numSubElem=0, idx =0, size1=0, size2=0, size3=0, sizeOneElem=0;
     int enumIdx1=0, enumIdx2=0, enumIdx3=0;
 
-    if ( nvBin )
-    {
+    if ( nvBin ) {
         pTable = NvTablesFromBin;
-    }
-    else
-    {
+    } else {
         pTable = NvTablesBuiltIn;
     }
 
     storageType = _STORAGE_TYPE(pTable[tableIdx][fieldId].fieldStorageType);
 
-    if (SINGULAR == storageType)
-    {
-        if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId))
-        {
+    if (SINGULAR == storageType) {
+        if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId)) {
             idx = _STORAGE_TYPE(pTable[tableIdx][fieldId].fieldStorageType);
             size1 = numElemBasedOnStorageType[idx](&(pTable[tableIdx][fieldId]),
                                                    nvBin);
+        } else {
         }
-        else
-        {
-        }
-    }
-    else
-    {
-        if (ARRAY_1 == storageType)
-        {
+    } else {
+        if (ARRAY_1 == storageType) {
             idx = _STORAGE_SIZE1(pTable[tableIdx][fieldId].fieldStorageSize1,
                                  pTable[tableIdx][fieldId].fieldStorageType);
             size1 = getNumElemOutOfStorageSize(idx,
                                                pTable[tableIdx][fieldId].fieldStorageSize1,nvBin);
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
-        }
-        else if (ARRAY_2 == storageType)
-        {
+        } else if (ARRAY_2 == storageType) {
             idx = _STORAGE_SIZE1(pTable[tableIdx][fieldId].fieldStorageSize1,
                                  pTable[tableIdx][fieldId].fieldStorageType);
             size1 = getNumElemOutOfStorageSize(idx,
@@ -1753,20 +1500,16 @@ static int getFieldCount(int tableIdx, int fieldId, int numElem, int nvBin)
             size2 = getNumElemOutOfStorageSize(idx,
                                                pTable[tableIdx][fieldId].fieldStorageSize2,nvBin);
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2)) {
                 enumIdx2 = ((pTable[tableIdx][fieldId].fieldStorageSize2 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
-        }
-        else if (ARRAY_3 == storageType)
-        {
+        } else if (ARRAY_3 == storageType) {
             idx = _STORAGE_SIZE1(pTable[tableIdx][fieldId].fieldStorageSize1,
                                  pTable[tableIdx][fieldId].fieldStorageType);
             size1 = getNumElemOutOfStorageSize(idx,
@@ -1782,61 +1525,43 @@ static int getFieldCount(int tableIdx, int fieldId, int numElem, int nvBin)
             size3 = getNumElemOutOfStorageSize(idx,
                                                pTable[tableIdx][fieldId].fieldStorageSize3,nvBin);
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize1)) {
                 enumIdx1 = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize2)) {
                 enumIdx2 = ((pTable[tableIdx][fieldId].fieldStorageSize2 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
 
-            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3))
-            {
+            if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3)) {
                 enumIdx3 = ((pTable[tableIdx][fieldId].fieldStorageSize3 &
                              FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
             }
-        }
-        else
-        {
+        } else {
         }
     }
 
-    if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId))
-    {
+    if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId)) {
         field = pTable[tableIdx][fieldId].fieldId;
         sizeOneElem = sizeOneElemBasedOnFieldIdBasicDataType[field &
                       FIELD_ID_TABLE_OR_ENUM_IDX_MASK];
-        if ( size3 )
-        {
+        if ( size3 ) {
             fieldSize = fieldSize + size3  * size2 * size1 * sizeOneElem;
-        }
-        else if ( size2 )
-        {
+        } else if ( size2 ) {
             fieldSize = fieldSize + size2 * size1 * sizeOneElem;
-        }
-        else if ( size1 )
-        {
+        } else if ( size1 ) {
             fieldSize = fieldSize + size1 * sizeOneElem;
+        } else {
         }
-        else
-        {
-        }
-    }
-    else
-    {
+    } else {
         idxSubTable = (pTable[tableIdx][fieldId].fieldId &
                        FIELD_ID_TABLE_OR_ENUM_IDX_MASK);
 
-        for (j=0; j<numElem; j++)
-        {
-            for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-            {
-                if (nul == pTable[idxSubTable][i].fieldName[0])
-                {
+        for (j=0; j<numElem; j++) {
+            for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+                if (nul == pTable[idxSubTable][i].fieldName[0]) {
                     // data parsing done for this stream
                     break;
                 }
@@ -1855,8 +1580,7 @@ static int getFieldCount(int tableIdx, int fieldId, int numElem, int nvBin)
 
 static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                      int numElem3, int fieldId, _NV_STREAM_BUF *pStream, int *pos, int addOffset,
-                                     int tableBaseOffset, int localAddOffset)
-{
+                                     int tableBaseOffset, int localAddOffset) {
     int idxSubTable, i, j, l, m, idx1, storageType, fieldCount=0;
     int size1BuiltIn, size2BuiltIn, size3BuiltIn;
     int tableIdxBuiltIn, fieldIdBuiltIn, numElemBuiltIn, incAddOffset=0;
@@ -1867,24 +1591,18 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
 
     // "apply" template to data -- parsing the actual NV data,
     //     so far we have been parsing and building templates
-    if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId))
-    {
+    if (IsFieldTypeBasicData(pTable[tableIdx][fieldId].fieldId)) {
         // First Entry, same as off addOffset just increment localOffset
-        if (pTable[tableIdx][fieldId].offset == addOffset)
-        {
+        if (pTable[tableIdx][fieldId].offset == addOffset) {
             totalOffset = localAddOffset + pTable[tableIdx][fieldId].offset;
-        }
-        else
-        {
+        } else {
             // Multiple  Entry next index array, addOffset and localOffset
             totalOffset = localAddOffset + pTable[tableIdx][fieldId].offset +
                           addOffset;
         }
         copyDataToBuiltInFromBin(tableIdx, fieldId, pStream, pos, totalOffset,
                                  tableBaseOffset);
-    }
-    else
-    {
+    } else {
         // number of element
         // get size of the sub-table
         idxSubTable = (pTable[tableIdx][fieldId].fieldId &
@@ -1896,8 +1614,7 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                            &tableIdxBuiltIn, &fieldIdBuiltIn, &numElemBuiltIn);
         incAddOffset = 0;
 
-        if (numElemBuiltIn)
-        {
+        if (numElemBuiltIn) {
             incAddOffset = sizeBuiltIn/numElemBuiltIn;
         }
 
@@ -1911,10 +1628,8 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
         size1Bin = getNumElemOutOfStorageSize(idx1,
                                               pTable[tableIdx][fieldId].fieldStorageSize1, 1);
 
-        for (l=0; l < numElem3; l++)
-        {
-            if (storageType == ARRAY_3)
-            {
+        for (l=0; l < numElem3; l++) {
+            if (storageType == ARRAY_3) {
                 idx1 = _STORAGE_SIZE3(pTable[tableIdx][fieldId].fieldStorageSize3,
                                       pTable[tableIdx][fieldId].fieldStorageType);
 
@@ -1933,29 +1648,22 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                pTableBuiltIn[tableIdxBuiltIn][fieldIdBuiltIn].fieldStorageSize3,
                                0);
 
-                if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3))
-                {
+                if (!IsFieldSizeInt(pTable[tableIdx][fieldId].fieldStorageSize3)) {
                     enumIdx = ((pTable[tableIdx][fieldId].fieldStorageSize3 &
                                 FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
-                    if (NvEnumsFromBin[enumIdx][l].enumValuePeer == 0xFF)
-                    {
+                    if (NvEnumsFromBin[enumIdx][l].enumValuePeer == 0xFF) {
                         *pos = *pos + (fieldCount/size1Bin) * numElem * numElem2;
                         continue;
                     }
-                }
-                else
-                {
-                    if ((l+1) > size3BuiltIn)
-                    {
+                } else {
+                    if ((l+1) > size3BuiltIn) {
                         *pos = *pos + (fieldCount/size1Bin) * numElem * numElem2;
                         continue;
                     }
                 }
             }
-            for (m=0; m < numElem2; m++)
-            {
-                if (storageType == ARRAY_2)
-                {
+            for (m=0; m < numElem2; m++) {
+                if (storageType == ARRAY_2) {
                     idx1 = _STORAGE_SIZE2(
                                pTable[tableIdx][fieldId].fieldStorageSize2,
                                pTable[tableIdx][fieldId].fieldStorageType);
@@ -1976,29 +1684,22 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                    0);
 
                     if (!IsFieldSizeInt(
-                                pTable[tableIdx][fieldId].fieldStorageSize2))
-                    {
+                                pTable[tableIdx][fieldId].fieldStorageSize2)) {
                         enumIdx = ((pTable[tableIdx][fieldId].fieldStorageSize2 &
                                     FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
-                        if (NvEnumsFromBin[enumIdx][m].enumValuePeer == 0xFF)
-                        {
+                        if (NvEnumsFromBin[enumIdx][m].enumValuePeer == 0xFF) {
                             *pos = *pos + (fieldCount/size1Bin) * numElem;
                             continue;
                         }
-                    }
-                    else
-                    {
-                        if ((m+1) > size2BuiltIn)
-                        {
+                    } else {
+                        if ((m+1) > size2BuiltIn) {
                             *pos = *pos + (fieldCount/size1Bin) * numElem;
                             continue;
                         }
                     }
                 }
-                for (j=0; j < numElem; j++)
-                {
-                    if (storageType == ARRAY_1)
-                    {
+                for (j=0; j < numElem; j++) {
+                    if (storageType == ARRAY_1) {
                         fieldSize = 0;
                         getBuiltInFieldCount(tableIdx,
                                              pTable[tableIdx][fieldId].fieldName, &tableIdxBuiltIn,
@@ -2013,30 +1714,23 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                        0);
 
                         if (!IsFieldSizeInt(
-                                    pTable[tableIdx][fieldId].fieldStorageSize1))
-                        {
+                                    pTable[tableIdx][fieldId].fieldStorageSize1)) {
                             enumIdx = ((pTable[tableIdx][fieldId].fieldStorageSize1 &
                                         FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
-                            if (NvEnumsFromBin[enumIdx][j].enumValuePeer == 0xFF)
-                            {
+                            if (NvEnumsFromBin[enumIdx][j].enumValuePeer == 0xFF) {
                                 *pos = *pos + (fieldCount/size1Bin);
                                 continue;
                             }
-                        }
-                        else
-                        {
-                            if ((j+1) > size1BuiltIn)
-                            {
+                        } else {
+                            if ((j+1) > size1BuiltIn) {
                                 *pos = *pos + (fieldCount/size1Bin);
                                 continue;
                             }
                         }
                     }
 
-                    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-                    {
-                        if (nul == pTable[idxSubTable][i].fieldName[0])
-                        {
+                    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+                        if (nul == pTable[idxSubTable][i].fieldName[0]) {
                             // data parsing done for this stream
                             break;
                         }
@@ -2046,16 +1740,13 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                          &(pTable[idxSubTable][i]),1);
                         numSubElem2 = numSubElem3 = 1;
 
-                        if (idx == ARRAY_1)
-                        {
+                        if (idx == ARRAY_1) {
                             idx1 = _STORAGE_SIZE1(
                                        pTable[idxSubTable][i].fieldStorageSize1,
                                        pTable[idxSubTable][i].fieldStorageType);
                             numSubElem = getNumElemOutOfStorageSize(idx1,
                                                                     pTable[idxSubTable][i].fieldStorageSize1, 1);
-                        }
-                        else if (idx == ARRAY_2)
-                        {
+                        } else if (idx == ARRAY_2) {
                             idx1 = _STORAGE_SIZE1(
                                        pTable[idxSubTable][i].fieldStorageSize1,
                                        pTable[idxSubTable][i].fieldStorageType);
@@ -2067,9 +1758,7 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                        pTable[idxSubTable][i].fieldStorageType);
                             numSubElem2 = getNumElemOutOfStorageSize(idx1,
                                           pTable[idxSubTable][i].fieldStorageSize2, 1);
-                        }
-                        else if (idx == ARRAY_3)
-                        {
+                        } else if (idx == ARRAY_3) {
                             idx1 = _STORAGE_SIZE1(
                                        pTable[idxSubTable][i].fieldStorageSize1,
                                        pTable[idxSubTable][i].fieldStorageType);
@@ -2089,25 +1778,18 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                           pTable[idxSubTable][i].fieldStorageSize3, 1);
                         }
 
-                        if (_OFFSET_NOT_SET != pTable[idxSubTable][i].offset)
-                        {
-                            if ( pTable[tableIdx][fieldId].offset == addOffset )
-                            {
+                        if (_OFFSET_NOT_SET != pTable[idxSubTable][i].offset) {
+                            if ( pTable[tableIdx][fieldId].offset == addOffset ) {
                                 parseSubDataTableAndCopy(idxSubTable, numSubElem,
                                                          numSubElem2, numSubElem3, i, pStream, pos,
                                                          addOffset, tableBaseOffset, localAddOffset);
-                            }
-                            else
-                            {
+                            } else {
                                 // NOT the first Entry in the table..
-                                if ( !pTable[tableIdx][fieldId].offset )
-                                {
+                                if ( !pTable[tableIdx][fieldId].offset ) {
                                     parseSubDataTableAndCopy(idxSubTable, numSubElem,
                                                              numSubElem2, numSubElem3, i, pStream, pos,
                                                              addOffset, tableBaseOffset, localAddOffset);
-                                }
-                                else
-                                {
+                                } else {
                                     //First Entry in the the table..
                                     //(Sending parent offset..)
                                     parseSubDataTableAndCopy(idxSubTable, numSubElem,
@@ -2116,9 +1798,7 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
                                                              pTable[tableIdx][fieldId].offset);
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             fieldSize = 0;
                             fieldCount = getFieldCount(idxSubTable, i, numSubElem, 1);
                             *pos += fieldCount;
@@ -2134,8 +1814,7 @@ static void parseSubDataTableAndCopy(int tableIdx, int numElem, int numElem2,
     return;
 }
 
-static void processNvData(_NV_STREAM_BUF *pStream, int len)
-{
+static void processNvData(_NV_STREAM_BUF *pStream, int len) {
     int tableIdx, pos, idx = 0, addOffset = 0, i;
     int numElem = 0, additionalOffset = 0, tableBaseOffset = 0;
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX] = NvTablesFromBin;
@@ -2148,14 +1827,11 @@ static void processNvData(_NV_STREAM_BUF *pStream, int len)
     pos++;
 
     // call the table parsing
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTable[0][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTable[0][i].fieldName[0]) {
             break;
         }
-        if (tableIdx == _TABLE_IDX(pTable[0][i].fieldId))
-        {
+        if (tableIdx == _TABLE_IDX(pTable[0][i].fieldId)) {
             // Table base offset, stored in the "table of all tables" (index 0),
             // will be added to
             // fields relative offset in all tables.
@@ -2178,10 +1854,8 @@ static void processNvData(_NV_STREAM_BUF *pStream, int len)
         }
     }
 
-    if (numElem)
-    {
-        for (i = 0; i < numElem; i++)
-        {
+    if (numElem) {
+        for (i = 0; i < numElem; i++) {
             addOffset = (i * additionalOffset);
             parseDataTable_new(pStream, &pos, tableIdx, addOffset,
                                tableBaseOffset);
@@ -2194,18 +1868,15 @@ static void processNvData(_NV_STREAM_BUF *pStream, int len)
 }
 
 static void parseDataTable_new(_NV_STREAM_BUF *pStream, int* pos, int tableIdx,
-                               int addOffset, int tableBaseOffset)
-{
+                               int addOffset, int tableBaseOffset) {
     _NV_TEMPLATE_TABLE (*pTable)[TABLE_ENTRIES_MAX] = NvTablesFromBin;
     int i, idx, fieldCount;
     int numElem, numElem2, numElem3, storageType, idxSubTable;
 
     // "apply" template to data -- parsing the actual NV data,
     //     so far we have been parsing and building templates
-    for (i = 0; i < TABLE_ENTRIES_MAX; i++)
-    {
-        if (nul == pTable[tableIdx][i].fieldName[0])
-        {
+    for (i = 0; i < TABLE_ENTRIES_MAX; i++) {
+        if (nul == pTable[tableIdx][i].fieldName[0]) {
             // data parsing done for this stream
             break;
         }
@@ -2225,15 +1896,12 @@ static void parseDataTable_new(_NV_STREAM_BUF *pStream, int* pos, int tableIdx,
 
         numElem2 = numElem3 = 1;
 
-        if (idx == ARRAY_1 )
-        {
+        if (idx == ARRAY_1 ) {
             storageType = _STORAGE_SIZE1(pTable[tableIdx][i].fieldStorageSize1,
                                          pTable[tableIdx][i].fieldStorageType);
             numElem = getNumElemOutOfStorageSize(storageType,
                                                  pTable[tableIdx][i].fieldStorageSize1, 1);
-        }
-        else if (idx == ARRAY_2)
-        {
+        } else if (idx == ARRAY_2) {
             storageType = _STORAGE_SIZE1(pTable[tableIdx][i].fieldStorageSize1,
                                          pTable[tableIdx][i].fieldStorageType);
 
@@ -2245,9 +1913,7 @@ static void parseDataTable_new(_NV_STREAM_BUF *pStream, int* pos, int tableIdx,
 
             numElem2 = getNumElemOutOfStorageSize(storageType,
                                                   pTable[tableIdx][i].fieldStorageSize2, 1);
-        }
-        else if (idx == ARRAY_3)
-        {
+        } else if (idx == ARRAY_3) {
             storageType = _STORAGE_SIZE1(pTable[tableIdx][i].fieldStorageSize1,
                                          pTable[tableIdx][i].fieldStorageType);
 
@@ -2267,20 +1933,16 @@ static void parseDataTable_new(_NV_STREAM_BUF *pStream, int* pos, int tableIdx,
                                                   pTable[tableIdx][i].fieldStorageSize3, 1);
         }
 
-        if (_OFFSET_NOT_SET != pTable[tableIdx][i].offset)
-        {
+        if (_OFFSET_NOT_SET != pTable[tableIdx][i].offset) {
             parseSubDataTableAndCopy(tableIdx, numElem, numElem2, numElem3, i,
                                      pStream, pos, addOffset, tableBaseOffset, 0);
-        }
-        else
-        {
+        } else {
             *pos += fieldCount;
         }
     }
 }
 
-static void getBasicDataSize(_NV_TEMPLATE_TABLE *pTableEntry)
-{
+static void getBasicDataSize(_NV_TEMPLATE_TABLE *pTableEntry) {
     int numElem, sizeOneElem, totalSize;
     int idx, idx1;
 
@@ -2301,45 +1963,32 @@ static void getBasicDataSize(_NV_TEMPLATE_TABLE *pTableEntry)
     return;
 }
 
-static int numElemSingular(_NV_TEMPLATE_TABLE *pTableEntry, int unused)
-{
+static int numElemSingular(_NV_TEMPLATE_TABLE *pTableEntry, int unused) {
     return 1;
 }
 
 static int getNumElemOutOfStorageSize(int fieldStorageSize,
-                                      uint8 fieldStorageSizeLowByte, int nvBin)
-{
+                                      uint8 fieldStorageSizeLowByte, int nvBin) {
     int ret = 0;
-    if (IsFieldSizeInt(fieldStorageSizeLowByte))
-    {
+    if (IsFieldSizeInt(fieldStorageSizeLowByte)) {
         return fieldStorageSize;
-    }
-    else
-    {
+    } else {
         int maxEnumVal=0, i;
         _NV_TEMPLATE_ENUM (*pEnum)[ENUM_ENTRIES_MAX];
         int enumIdx = ((fieldStorageSizeLowByte &
                         FIELD_SIZE_VALUE_MASK) >> FIELD_SIZE_VALUE_LSB);
 
-        if (nvBin)
-        {
+        if (nvBin) {
             pEnum = NvEnumsFromBin;
-        }
-        else
-        {
+        } else {
             pEnum = NvEnumsBuiltIn;
         }
 
-        for (i = 0; i < ENUM_ENTRIES_MAX; i++)
-        {
-            if (nul == pEnum[enumIdx][i].enumName[0])
-            {
-                if ( i == 0 )
-                {
+        for (i = 0; i < ENUM_ENTRIES_MAX; i++) {
+            if (nul == pEnum[enumIdx][i].enumName[0]) {
+                if ( i == 0 ) {
                     maxEnumVal = 0;
-                }
-                else
-                {
+                } else {
                     maxEnumVal = pEnum[enumIdx][i-1].enumValue;
                 }
                 break;
@@ -2350,8 +1999,7 @@ static int getNumElemOutOfStorageSize(int fieldStorageSize,
     }
 }
 
-static int numElemArray1(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin)
-{
+static int numElemArray1(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin) {
     int fieldStorageSize = 0;
 
     fieldStorageSize = getNumElemOutOfStorageSize(_STORAGE_SIZE1(
@@ -2361,8 +2009,7 @@ static int numElemArray1(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin)
     return fieldStorageSize;
 }
 
-static int numElemArray2(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin)
-{
+static int numElemArray2(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin) {
     int fieldStorageSize1,fieldStorageSize2,fieldStorageSize;
 
     fieldStorageSize1 = getNumElemOutOfStorageSize(_STORAGE_SIZE1(
@@ -2380,8 +2027,7 @@ static int numElemArray2(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin)
     return fieldStorageSize;
 }
 
-static int numElemArray3(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin)
-{
+static int numElemArray3(_NV_TEMPLATE_TABLE *pTableEntry, int nvBin) {
     int fieldStorageSize1,fieldStorageSize2,fieldStorageSize3,fieldStorageSize;
 
     fieldStorageSize1 = getNumElemOutOfStorageSize(_STORAGE_SIZE1(

@@ -18,15 +18,15 @@
 #include <linux/input/matrix_keypad.h>
 
 struct omap_kp_platform_data {
-	int rows;
-	int cols;
-	const struct matrix_keymap_data *keymap_data;
-	bool rep;
-	unsigned long delay;
-	bool dbounce;
-	/* specific to OMAP242x*/
-	unsigned int *row_gpios;
-	unsigned int *col_gpios;
+    int rows;
+    int cols;
+    const struct matrix_keymap_data *keymap_data;
+    bool rep;
+    unsigned long delay;
+    bool dbounce;
+    /* specific to OMAP242x*/
+    unsigned int *row_gpios;
+    unsigned int *col_gpios;
 };
 
 /* Group (0..3) -- when multiple keys are pressed, only the

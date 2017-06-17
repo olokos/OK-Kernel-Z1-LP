@@ -72,10 +72,10 @@ typedef enum tagWMAC_CMD {
 } WMAC_CMD, *PWMAC_CMD;
 
 typedef enum tagWZONETYPE {
-  ZoneType_USA=0,
-  ZoneType_Japan=1,
-  ZoneType_Europe=2
-}WZONETYPE;
+    ZoneType_USA=0,
+    ZoneType_Japan=1,
+    ZoneType_Europe=2
+} WZONETYPE;
 
 #define ADHOC	0
 #define INFRA	1
@@ -104,10 +104,10 @@ typedef enum tagWZONETYPE {
 //
 #pragma pack(1)
 typedef struct tagSCmdRequest {
-	u8	    name[16];
-	void	*data;
-	u16	    wResult;
-	u16     wCmdCode;
+    u8	    name[16];
+    void	*data;
+    u16	    wResult;
+    u16     wCmdCode;
 } SCmdRequest, *PSCmdRequest;
 
 //
@@ -116,7 +116,7 @@ typedef struct tagSCmdRequest {
 
 typedef struct tagSCmdScan {
 
-	u8 ssid[SSID_MAXLEN + 2];
+    u8 ssid[SSID_MAXLEN + 2];
 
 } SCmdScan, *PSCmdScan;
 
@@ -142,18 +142,18 @@ typedef struct tagSCmdBSSJoin {
 
 typedef struct tagSCmdZoneTypeSet {
 
- bool bWrite;
- WZONETYPE  ZoneType;
+    bool bWrite;
+    WZONETYPE  ZoneType;
 
 } SCmdZoneTypeSet, *PSCmdZoneTypeSet;
 
 #ifdef WPA_SM_Transtatus
 typedef struct tagSWPAResult {
-         char	ifname[100];
-         u8 proto;
-         u8 key_mgmt;
-         u8 eap_type;
-         bool authenticated;
+    char	ifname[100];
+    u8 proto;
+    u8 key_mgmt;
+    u8 eap_type;
+    bool authenticated;
 } SWPAResult, *PSWPAResult;
 #endif
 
@@ -184,7 +184,7 @@ typedef struct tagSCmdSetWEP {
 
 typedef struct tagSBSSIDItem {
 
-	u32	    uChannel;
+    u32	    uChannel;
     u8      abyBSSID[BSSID_LEN];
     u8      abySSID[SSID_MAXLEN + 1];
     //2006-1116-01,<Modify> by NomadZhao
@@ -203,16 +203,16 @@ typedef struct tagSBSSIDItem {
 
 typedef struct tagSBSSIDList {
 
-	u32		    uItem;
-	SBSSIDItem	sBSSIDList[0];
+    u32		    uItem;
+    SBSSIDItem	sBSSIDList[0];
 } SBSSIDList, *PSBSSIDList;
 
 
 typedef struct tagSCmdLinkStatus {
 
     bool bLink;
-	u16   wBSSType;
-	u8      byState;
+    u16   wBSSType;
+    u8      byState;
     u8      abyBSSID[BSSID_LEN];
     u8      abySSID[SSID_MAXLEN + 2];
     u32     uChannel;
@@ -224,18 +224,18 @@ typedef struct tagSCmdLinkStatus {
 // 802.11 counter
 //
 typedef struct tagSDot11MIBCount {
-	u32 TransmittedFragmentCount;
-	u32 MulticastTransmittedFrameCount;
-	u32 FailedCount;
-	u32 RetryCount;
-	u32 MultipleRetryCount;
-	u32 RTSSuccessCount;
-	u32 RTSFailureCount;
-	u32 ACKFailureCount;
-	u32 FrameDuplicateCount;
-	u32 ReceivedFragmentCount;
-	u32 MulticastReceivedFrameCount;
-	u32 FCSErrorCount;
+    u32 TransmittedFragmentCount;
+    u32 MulticastTransmittedFrameCount;
+    u32 FailedCount;
+    u32 RetryCount;
+    u32 MultipleRetryCount;
+    u32 RTSSuccessCount;
+    u32 RTSFailureCount;
+    u32 ACKFailureCount;
+    u32 FrameDuplicateCount;
+    u32 ReceivedFragmentCount;
+    u32 MulticastReceivedFrameCount;
+    u32 FCSErrorCount;
 } SDot11MIBCount, *PSDot11MIBCount;
 
 
@@ -247,102 +247,102 @@ typedef struct tagSStatMIBCount {
     //
     // ISR status count
     //
-	u32   dwIsrTx0OK;
-	u32   dwIsrTx1OK;
-	u32   dwIsrBeaconTxOK;
-	u32   dwIsrRxOK;
-	u32   dwIsrTBTTInt;
-	u32   dwIsrSTIMERInt;
-	u32   dwIsrUnrecoverableError;
-	u32   dwIsrSoftInterrupt;
-	u32   dwIsrRxNoBuf;
+    u32   dwIsrTx0OK;
+    u32   dwIsrTx1OK;
+    u32   dwIsrBeaconTxOK;
+    u32   dwIsrRxOK;
+    u32   dwIsrTBTTInt;
+    u32   dwIsrSTIMERInt;
+    u32   dwIsrUnrecoverableError;
+    u32   dwIsrSoftInterrupt;
+    u32   dwIsrRxNoBuf;
     /////////////////////////////////////
 
-	u32   dwIsrUnknown;               // unknown interrupt count
+    u32   dwIsrUnknown;               // unknown interrupt count
 
     // RSR status count
     //
-	u32   dwRsrFrmAlgnErr;
-	u32   dwRsrErr;
-	u32   dwRsrCRCErr;
-	u32   dwRsrCRCOk;
-	u32   dwRsrBSSIDOk;
-	u32   dwRsrADDROk;
-	u32   dwRsrICVOk;
-	u32   dwNewRsrShortPreamble;
-	u32   dwRsrLong;
-	u32   dwRsrRunt;
+    u32   dwRsrFrmAlgnErr;
+    u32   dwRsrErr;
+    u32   dwRsrCRCErr;
+    u32   dwRsrCRCOk;
+    u32   dwRsrBSSIDOk;
+    u32   dwRsrADDROk;
+    u32   dwRsrICVOk;
+    u32   dwNewRsrShortPreamble;
+    u32   dwRsrLong;
+    u32   dwRsrRunt;
 
-	u32   dwRsrRxControl;
-	u32   dwRsrRxData;
-	u32   dwRsrRxManage;
+    u32   dwRsrRxControl;
+    u32   dwRsrRxData;
+    u32   dwRsrRxManage;
 
-	u32   dwRsrRxPacket;
-	u32   dwRsrRxOctet;
-	u32   dwRsrBroadcast;
-	u32   dwRsrMulticast;
-	u32   dwRsrDirected;
+    u32   dwRsrRxPacket;
+    u32   dwRsrRxOctet;
+    u32   dwRsrBroadcast;
+    u32   dwRsrMulticast;
+    u32   dwRsrDirected;
     // 64-bit OID
-	u32   ullRsrOK;
+    u32   ullRsrOK;
 
     // for some optional OIDs (64 bits) and DMI support
-	u32   ullRxBroadcastBytes;
-	u32   ullRxMulticastBytes;
-	u32   ullRxDirectedBytes;
-	u32   ullRxBroadcastFrames;
-	u32   ullRxMulticastFrames;
-	u32   ullRxDirectedFrames;
+    u32   ullRxBroadcastBytes;
+    u32   ullRxMulticastBytes;
+    u32   ullRxDirectedBytes;
+    u32   ullRxBroadcastFrames;
+    u32   ullRxMulticastFrames;
+    u32   ullRxDirectedFrames;
 
-	u32   dwRsrRxFragment;
-	u32   dwRsrRxFrmLen64;
-	u32   dwRsrRxFrmLen65_127;
-	u32   dwRsrRxFrmLen128_255;
-	u32   dwRsrRxFrmLen256_511;
-	u32   dwRsrRxFrmLen512_1023;
-	u32   dwRsrRxFrmLen1024_1518;
+    u32   dwRsrRxFragment;
+    u32   dwRsrRxFrmLen64;
+    u32   dwRsrRxFrmLen65_127;
+    u32   dwRsrRxFrmLen128_255;
+    u32   dwRsrRxFrmLen256_511;
+    u32   dwRsrRxFrmLen512_1023;
+    u32   dwRsrRxFrmLen1024_1518;
 
     // TSR0,1 status count
     //
-	u32   dwTsrTotalRetry[2];        // total collision retry count
-	u32   dwTsrOnceRetry[2];         // this packet only occur one collision
-	u32   dwTsrMoreThanOnceRetry[2]; // this packet occur more than one collision
-	u32   dwTsrRetry[2];             // this packet has ever occur collision,
-                                       // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
-	u32   dwTsrACKData[2];
-	u32   dwTsrErr[2];
-	u32   dwAllTsrOK[2];
-	u32   dwTsrRetryTimeout[2];
-	u32   dwTsrTransmitTimeout[2];
+    u32   dwTsrTotalRetry[2];        // total collision retry count
+    u32   dwTsrOnceRetry[2];         // this packet only occur one collision
+    u32   dwTsrMoreThanOnceRetry[2]; // this packet occur more than one collision
+    u32   dwTsrRetry[2];             // this packet has ever occur collision,
+    // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
+    u32   dwTsrACKData[2];
+    u32   dwTsrErr[2];
+    u32   dwAllTsrOK[2];
+    u32   dwTsrRetryTimeout[2];
+    u32   dwTsrTransmitTimeout[2];
 
-	u32   dwTsrTxPacket[2];
-	u32   dwTsrTxOctet[2];
-	u32   dwTsrBroadcast[2];
-	u32   dwTsrMulticast[2];
-	u32   dwTsrDirected[2];
+    u32   dwTsrTxPacket[2];
+    u32   dwTsrTxOctet[2];
+    u32   dwTsrBroadcast[2];
+    u32   dwTsrMulticast[2];
+    u32   dwTsrDirected[2];
 
     // RD/TD count
-	u32   dwCntRxFrmLength;
-	u32   dwCntTxBufLength;
+    u32   dwCntRxFrmLength;
+    u32   dwCntTxBufLength;
 
-	u8    abyCntRxPattern[16];
-	u8    abyCntTxPattern[16];
+    u8    abyCntRxPattern[16];
+    u8    abyCntTxPattern[16];
 
     // Software check....
-	u32   dwCntRxDataErr;             // rx buffer data software compare CRC err count
-	u32   dwCntDecryptErr;            // rx buffer data software compare CRC err count
-	u32   dwCntRxICVErr;              // rx buffer data software compare CRC err count
-	u32    idxRxErrorDesc;             // index for rx data error RD
+    u32   dwCntRxDataErr;             // rx buffer data software compare CRC err count
+    u32   dwCntDecryptErr;            // rx buffer data software compare CRC err count
+    u32   dwCntRxICVErr;              // rx buffer data software compare CRC err count
+    u32    idxRxErrorDesc;             // index for rx data error RD
 
     // 64-bit OID
-	u32   ullTsrOK[2];
+    u32   ullTsrOK[2];
 
     // for some optional OIDs (64 bits) and DMI support
-	u32   ullTxBroadcastFrames[2];
-	u32   ullTxMulticastFrames[2];
-	u32   ullTxDirectedFrames[2];
-	u32   ullTxBroadcastBytes[2];
-	u32   ullTxMulticastBytes[2];
-	u32   ullTxDirectedBytes[2];
+    u32   ullTxBroadcastFrames[2];
+    u32   ullTxMulticastFrames[2];
+    u32   ullTxDirectedFrames[2];
+    u32   ullTxBroadcastBytes[2];
+    u32   ullTxMulticastBytes[2];
+    u32   ullTxDirectedBytes[2];
 } SStatMIBCount, *PSStatMIBCount;
 
 
@@ -369,8 +369,8 @@ typedef struct tagSNodeItem {
 
 typedef struct tagSNodeList {
 
-	u32		    uItem;
-	SNodeItem	sNodeList[0];
+    u32		    uItem;
+    SNodeItem	sNodeList[0];
 
 } SNodeList, *PSNodeList;
 
@@ -378,7 +378,7 @@ typedef struct tagSNodeList {
 
 typedef struct tagSCmdValue {
 
-	u32 dwValue;
+    u32 dwValue;
 
 } SCmdValue,  *PSCmdValue;
 
@@ -390,18 +390,18 @@ typedef struct tagSCmdValue {
 
 // VIAGWET_IOCTL_HOSTAPD ioctl() cmd:
 enum {
-	VIAWGET_HOSTAPD_FLUSH = 1,
-	VIAWGET_HOSTAPD_ADD_STA = 2,
-	VIAWGET_HOSTAPD_REMOVE_STA = 3,
-	VIAWGET_HOSTAPD_GET_INFO_STA = 4,
-	VIAWGET_HOSTAPD_SET_ENCRYPTION = 5,
-	VIAWGET_HOSTAPD_GET_ENCRYPTION = 6,
-	VIAWGET_HOSTAPD_SET_FLAGS_STA = 7,
-	VIAWGET_HOSTAPD_SET_ASSOC_AP_ADDR = 8,
-	VIAWGET_HOSTAPD_SET_GENERIC_ELEMENT = 9,
-	VIAWGET_HOSTAPD_MLME = 10,
-	VIAWGET_HOSTAPD_SCAN_REQ = 11,
-	VIAWGET_HOSTAPD_STA_CLEAR_STATS = 12,
+    VIAWGET_HOSTAPD_FLUSH = 1,
+    VIAWGET_HOSTAPD_ADD_STA = 2,
+    VIAWGET_HOSTAPD_REMOVE_STA = 3,
+    VIAWGET_HOSTAPD_GET_INFO_STA = 4,
+    VIAWGET_HOSTAPD_SET_ENCRYPTION = 5,
+    VIAWGET_HOSTAPD_GET_ENCRYPTION = 6,
+    VIAWGET_HOSTAPD_SET_FLAGS_STA = 7,
+    VIAWGET_HOSTAPD_SET_ASSOC_AP_ADDR = 8,
+    VIAWGET_HOSTAPD_SET_GENERIC_ELEMENT = 9,
+    VIAWGET_HOSTAPD_MLME = 10,
+    VIAWGET_HOSTAPD_SCAN_REQ = 11,
+    VIAWGET_HOSTAPD_STA_CLEAR_STATS = 12,
 };
 
 
@@ -413,48 +413,48 @@ enum {
 
 
 struct viawget_hostapd_param {
-	u32 cmd;
-	u8 sta_addr[6];
-	union {
-		struct {
-			u16 aid;
-			u16 capability;
-			u8 tx_supp_rates;
-		} add_sta;
-		struct {
-			u32 inactive_sec;
-		} get_info_sta;
-		struct {
-			u8 alg;
-			u32 flags;
-			u32 err;
-			u8 idx;
-			u8 seq[8];
-			u16 key_len;
-			u8 key[0];
-		} crypt;
-		struct {
-			u32 flags_and;
-			u32 flags_or;
-		} set_flags_sta;
-		struct {
-			u16 rid;
-			u16 len;
-			u8 data[0];
-		} rid;
-		struct {
-			u8 len;
-			u8 data[0];
-		} generic_elem;
-		struct {
-			u16 cmd;
-			u16 reason_code;
-		} mlme;
-		struct {
-			u8 ssid_len;
-			u8 ssid[32];
-		} scan_req;
-	} u;
+    u32 cmd;
+    u8 sta_addr[6];
+    union {
+        struct {
+            u16 aid;
+            u16 capability;
+            u8 tx_supp_rates;
+        } add_sta;
+        struct {
+            u32 inactive_sec;
+        } get_info_sta;
+        struct {
+            u8 alg;
+            u32 flags;
+            u32 err;
+            u8 idx;
+            u8 seq[8];
+            u16 key_len;
+            u8 key[0];
+        } crypt;
+        struct {
+            u32 flags_and;
+            u32 flags_or;
+        } set_flags_sta;
+        struct {
+            u16 rid;
+            u16 len;
+            u8 data[0];
+        } rid;
+        struct {
+            u8 len;
+            u8 data[0];
+        } generic_elem;
+        struct {
+            u16 cmd;
+            u16 reason_code;
+        } mlme;
+        struct {
+            u8 ssid_len;
+            u8 ssid[32];
+        } scan_req;
+    } u;
 };
 
 //2006-1116-01,<Add> by NomadZhao

@@ -2,17 +2,17 @@
 #define _ASM_M68K_MODULE_H
 
 enum m68k_fixup_type {
-	m68k_fixup_memoffset,
-	m68k_fixup_vnode_shift,
+    m68k_fixup_memoffset,
+    m68k_fixup_vnode_shift,
 };
 
 struct m68k_fixup_info {
-	enum m68k_fixup_type type;
-	void *addr;
+    enum m68k_fixup_type type;
+    void *addr;
 };
 
 struct mod_arch_specific {
-	struct m68k_fixup_info *fixup_start, *fixup_end;
+    struct m68k_fixup_info *fixup_start, *fixup_end;
 };
 
 #ifdef CONFIG_MMU
@@ -34,7 +34,7 @@ extern struct m68k_fixup_info __start_fixup[], __stop_fixup[];
 
 struct module;
 extern void module_fixup(struct module *mod, struct m68k_fixup_info *start,
-			 struct m68k_fixup_info *end);
+                         struct m68k_fixup_info *end);
 
 #define Elf_Shdr Elf32_Shdr
 #define Elf_Sym Elf32_Sym

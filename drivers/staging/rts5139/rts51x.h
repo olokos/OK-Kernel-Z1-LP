@@ -81,66 +81,65 @@ do {						\
 struct rts51x_chip;
 
 struct rts51x_usb {
-	/* The device we're working with
-	 * It's important to note:
-	 *    (o) you must hold dev_mutex to change pusb_dev
-	 */
-	struct mutex dev_mutex;	/* protect pusb_dev */
-	struct usb_device *pusb_dev;	/* this usb_device */
-	struct usb_interface *pusb_intf;	/* this interface */
+    /* The device we're working with
+     * It's important to note:
+     *    (o) you must hold dev_mutex to change pusb_dev
+     */
+    struct mutex dev_mutex;	/* protect pusb_dev */
+    struct usb_device *pusb_dev;	/* this usb_device */
+    struct usb_interface *pusb_intf;	/* this interface */
 
-	unsigned long dflags;	/* dynamic atomic bitflags */
+    unsigned long dflags;	/* dynamic atomic bitflags */
 
-	unsigned int send_bulk_pipe;	/* cached pipe values */
-	unsigned int recv_bulk_pipe;
-	unsigned int send_ctrl_pipe;
-	unsigned int recv_ctrl_pipe;
-	unsigned int recv_intr_pipe;
+    unsigned int send_bulk_pipe;	/* cached pipe values */
+    unsigned int recv_bulk_pipe;
+    unsigned int send_ctrl_pipe;
+    unsigned int recv_ctrl_pipe;
+    unsigned int recv_intr_pipe;
 
-	u8 ifnum;		/* interface number   */
-	u8 ep_bInterval;	/* interrupt interval */
+    u8 ifnum;		/* interface number   */
+    u8 ep_bInterval;	/* interrupt interval */
 
-	/* control and bulk communications data */
-	struct urb *current_urb;	/* USB requests         */
-	struct urb *intr_urb;	/* Interrupt USB request */
-	struct usb_ctrlrequest *cr;	/* control requests     */
-	struct usb_sg_request current_sg;	/* scatter-gather req.  */
-	unsigned char *iobuf;	/* I/O buffer           */
-	dma_addr_t cr_dma;	/* buffer DMA addresses */
-	dma_addr_t iobuf_dma;
-	struct task_struct *ctl_thread;	/* the control thread   */
-	struct task_struct *polling_thread;	/* the polling thread   */
+    /* control and bulk communications data */
+    struct urb *current_urb;	/* USB requests         */
+    struct urb *intr_urb;	/* Interrupt USB request */
+    struct usb_ctrlrequest *cr;	/* control requests     */
+    struct usb_sg_request current_sg;	/* scatter-gather req.  */
+    unsigned char *iobuf;	/* I/O buffer           */
+    dma_addr_t cr_dma;	/* buffer DMA addresses */
+    dma_addr_t iobuf_dma;
+    struct task_struct *ctl_thread;	/* the control thread   */
+    struct task_struct *polling_thread;	/* the polling thread   */
 
-	/* mutual exclusion and synchronization structures */
-	struct completion cmnd_ready;	/* to sleep thread on      */
-	struct completion control_exit;	/* control thread exit     */
-	struct completion polling_exit;	/* polling thread exit     */
-	struct completion notify;	/* thread begin/end        */
+    /* mutual exclusion and synchronization structures */
+    struct completion cmnd_ready;	/* to sleep thread on      */
+    struct completion control_exit;	/* control thread exit     */
+    struct completion polling_exit;	/* polling thread exit     */
+    struct completion notify;	/* thread begin/end        */
 #ifdef SCSI_SCAN_DELAY
-	wait_queue_head_t delay_wait;	/* wait during scan, reset */
-	struct completion scanning_done;	/* wait for scan thread    */
+    wait_queue_head_t delay_wait;	/* wait during scan, reset */
+    struct completion scanning_done;	/* wait for scan thread    */
 #endif
 };
 
 extern struct usb_driver rts51x_driver;
 
-static inline void get_current_time(u8 *timeval_buf, int buf_len)
-{
-	struct timeval tv;
+static inline void get_current_time(u8 *timeval_buf, int buf_len) {
+    struct timeval tv;
 
-	if (!timeval_buf || (buf_len < 8))
-		return;
+    if (!timeval_buf || (buf_len < 8))
+        return;
 
-	do_gettimeofday(&tv);
+    do_gettimeofday(&tv);
 
-	timeval_buf[0] = (u8) (tv.tv_sec >> 24);
-	timeval_buf[1] = (u8) (tv.tv_sec >> 16);
-	timeval_buf[2] = (u8) (tv.tv_sec >> 8);
-	timeval_buf[3] = (u8) (tv.tv_sec);
-	timeval_buf[4] = (u8) (tv.tv_usec >> 24);
-	timeval_buf[5] = (u8) (tv.tv_usec >> 16);
-	timeval_buf[6] = (u8) (tv.tv_usec >> 8);
-	timeval_buf[7] = (u8) (tv.tv_usec);
+    timeval_buf[0] = (u8) (tv.tv_sec >> 24);
+    timeval_buf[1] = (u8) (tv.tv_sec >> 16);
+    timeval_buf[2] = (u8) (tv.tv_sec >> 8);
+    timeval_buf[3] = (u8) (tv.tv_sec);
+    timeval_buf[4] = (u8) (tv.tv_usec >> 24);
+    timeval_buf[5] = (u8) (tv.tv_usec >> 16);
+    timeval_buf[6] = (u8) (tv.tv_usec >> 8);
+    timeval_buf[7] = (u8) (tv.tv_usec);
 }
 
 #define SND_CTRL_PIPE(chip)	((chip)->usb->send_ctrl_pipe)
@@ -161,26 +160,22 @@ static inline void get_current_time(u8 *timeval_buf, int buf_len)
 
 /* Compatible macros while we switch over */
 static inline void *usb_buffer_alloc(struct usb_device *dev, size_t size,
-				     gfp_t mem_flags, dma_addr_t *dma)
-{
-	return usb_alloc_coherent(dev, size, mem_flags, dma);
+                                     gfp_t mem_flags, dma_addr_t *dma) {
+    return usb_alloc_coherent(dev, size, mem_flags, dma);
 }
 
 static inline void usb_buffer_free(struct usb_device *dev, size_t size,
-				   void *addr, dma_addr_t dma)
-{
-	return usb_free_coherent(dev, size, addr, dma);
+                                   void *addr, dma_addr_t dma) {
+    return usb_free_coherent(dev, size, addr, dma);
 }
 
 /* Convert between us_data and the corresponding Scsi_Host */
-static inline struct Scsi_Host *rts51x_to_host(struct rts51x_chip *chip)
-{
-	return container_of((void *)chip, struct Scsi_Host, hostdata);
+static inline struct Scsi_Host *rts51x_to_host(struct rts51x_chip *chip) {
+    return container_of((void *)chip, struct Scsi_Host, hostdata);
 }
 
-static inline struct rts51x_chip *host_to_rts51x(struct Scsi_Host *host)
-{
-	return (struct rts51x_chip *)(host->hostdata);
+static inline struct rts51x_chip *host_to_rts51x(struct Scsi_Host *host) {
+    return (struct rts51x_chip *)(host->hostdata);
 }
 
 /* struct scsi_cmnd transfer buffer access utilities */

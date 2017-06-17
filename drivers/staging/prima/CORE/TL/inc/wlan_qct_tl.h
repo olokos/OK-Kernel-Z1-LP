@@ -154,8 +154,7 @@ extern "C" {
   Access category enum used by TL
   - order must be kept as these values are used to setup the AC mask
  --------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* The values from 0-3 correspond both to the TL tx queue
      * id and the also the AC corresponding to the packets queued
      */
@@ -173,8 +172,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   STA Type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Indicates a link to an AP*/
     WLAN_STA_INFRA  = 0,
 
@@ -201,8 +199,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   BAP Management frame type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* BT-AMP packet of type data */
     WLANTL_BT_AMP_TYPE_DATA = 0x0001,
 
@@ -224,8 +221,7 @@ typedef enum
 } WLANTL_BAPFrameEnumType;
 
 /* Type used to specify LWM threshold unit */
-typedef enum
-{
+typedef enum {
     WLAN_LWM_THRESHOLD_BYTE = 0,
 
     WLAN_LWM_THRESHOLD_PACKET
@@ -234,8 +230,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   TL States
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Transition in this state made upon creation*/
     WLANTL_STA_INIT = 0,
 
@@ -257,8 +252,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   STA Descriptor Type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA unique identifier, originating from HAL*/
     v_U8_t         ucSTAId;
 
@@ -311,8 +305,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   TL Configuration
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*AC weight for WFQ*/
     v_U8_t   ucAcWeights[WLANTL_NUM_TX_QUEUES];
 
@@ -330,8 +323,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   TSPEC Direction Enum Type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* uplink */
     WLANTL_TX_DIR = 0,
 
@@ -355,8 +347,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   TL Error Type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Generic error */
     WLANTL_ERROR = 0,
 
@@ -377,8 +368,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   STA priority type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* STA gets to tx every second round*/
     WLANTL_STA_PRI_VERY_LOW  = -2,
 
@@ -399,8 +389,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   Meta information requested from HDD by TL
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Save the AC of the packet */
     WLANTL_ACEnumType ac;
 
@@ -440,8 +429,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   Meta information provided by TL to HDD on rx path
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* UP of the packet being sent */
     v_U8_t    ucUP;
     /* Address 3 Index of the received packet */
@@ -456,8 +444,7 @@ typedef struct
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
 /* per interface per access category statistics */
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     /* access category (VI, VO, BE, BK) */
     v_U8_t            ac;
 
@@ -508,8 +495,7 @@ typedef PACKED_PRE struct PACKED_POST
 } WLANTL_AccessCategoryStatsType;
 
 /* per interface statistics */
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     /* access point beacon received count from connected AP */
     v_U32_t               beaconRx;
 
@@ -550,22 +536,19 @@ typedef PACKED_PRE struct PACKED_POST
 #define WLANTL_HO_THRESHOLD_CROSS 0x04
 
 /* Realtime traffic status */
-typedef enum
-{
+typedef enum {
     WLANTL_HO_RT_TRAFFIC_STATUS_OFF,
     WLANTL_HO_RT_TRAFFIC_STATUS_ON
 } WLANTL_HO_RT_TRAFFIC_STATUS_TYPE;
 
 /* Non-Realtime traffic status */
-typedef enum
-{
+typedef enum {
     WLANTL_HO_NRT_TRAFFIC_STATUS_OFF,
     WLANTL_HO_NRT_TRAFFIC_STATUS_ON
 } WLANTL_HO_NRT_TRAFFIC_STATUS_TYPE;
 
 /* Statistics type TL supported */
-typedef enum
-{
+typedef enum {
     WLANTL_STATIC_TX_UC_FCNT,
     WLANTL_STATIC_TX_MC_FCNT,
     WLANTL_STATIC_TX_BC_FCNT,
@@ -586,8 +569,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   Handoff support and statistics structures
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WLANTL_HO_RT_TRAFFIC_STATUS_TYPE   rtTrafficStatus;
     WLANTL_HO_NRT_TRAFFIC_STATUS_TYPE  nrtTrafficStatus;
 } WLANTL_HO_TRAFFIC_STATUS_TYPE;
@@ -600,8 +582,7 @@ typedef tSap_SoftapStats WLANTL_TRANSFER_STA_TYPE;
 #define WLANTL_HS_NUM_CLIENT         2
 #define WLANTL_SINGLE_CLNT_THRESHOLD 4
 
-typedef enum
-{
+typedef enum {
     WLANTL_DEBUG_TX_SNAPSHOT = 1<<0,
 
     WLANTL_DEBUG_FW_CLEANUP = 1<<1,
@@ -879,8 +860,7 @@ typedef VOS_STATUS (*WLANTL_RSSICrossThresholdCBType)
     v_S7_t                          avgRssi
 );
 
-typedef struct
-{
+typedef struct {
     // Common for all types are requests
     v_U16_t                         msgType;    // message type is same as the request type
     v_U16_t                         msgLen;  // length of the entire request

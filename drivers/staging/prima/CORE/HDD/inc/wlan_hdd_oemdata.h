@@ -51,8 +51,7 @@
 #define OEM_DATA_RSP_SIZE 1968
 #endif
 
-struct iw_oem_data_req
-{
+struct iw_oem_data_req {
     v_U8_t                  oemDataReq[OEM_DATA_REQ_SIZE];
 };
 
@@ -68,8 +67,7 @@ int iw_get_oem_data_rsp(
     union iwreq_data *wrqu,
     char *extra);
 
-struct iw_oem_data_rsp
-{
+struct iw_oem_data_rsp {
     tANI_U8           oemDataRsp[OEM_DATA_RSP_SIZE];
 };
 

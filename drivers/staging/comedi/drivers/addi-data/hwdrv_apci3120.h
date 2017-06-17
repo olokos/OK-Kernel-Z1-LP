@@ -22,22 +22,22 @@
 
 /* ANALOG INPUT RANGE */
 static const struct comedi_lrange range_apci3120_ai = { 8, {
-						     BIP_RANGE(10),
-						     BIP_RANGE(5),
-						     BIP_RANGE(2),
-						     BIP_RANGE(1),
-						     UNI_RANGE(10),
-						     UNI_RANGE(5),
-						     UNI_RANGE(2),
-						     UNI_RANGE(1)
-						     }
+        BIP_RANGE(10),
+        BIP_RANGE(5),
+        BIP_RANGE(2),
+        BIP_RANGE(1),
+        UNI_RANGE(10),
+        UNI_RANGE(5),
+        UNI_RANGE(2),
+        UNI_RANGE(1)
+    }
 };
 
 /* ANALOG OUTPUT RANGE */
 static const struct comedi_lrange range_apci3120_ao = { 2, {
-						     BIP_RANGE(10),
-						     UNI_RANGE(10)
-						     }
+        BIP_RANGE(10),
+        UNI_RANGE(10)
+    }
 };
 
 #define APCI3120_BIPOLAR_RANGES	4	/*  used for test on mixture of BIP/UNI ranges */
@@ -167,12 +167,12 @@ static const struct comedi_lrange range_apci3120_ao = { 2, {
 
 struct str_AnalogReadInformation {
 
-	unsigned char b_Type;		/* EOC or EOS */
-	unsigned char b_InterruptFlag;	/* Interrupt use or not                    */
-	unsigned int ui_ConvertTiming;	/* Selection of the conversion time        */
-	unsigned char b_NbrOfChannel;	/* Number of channel to read               */
-	unsigned int ui_ChannelList[MAX_ANALOGINPUT_CHANNELS];	/* Number of the channel to be read        */
-	unsigned int ui_RangeList[MAX_ANALOGINPUT_CHANNELS];	/* Gain of each channel                    */
+    unsigned char b_Type;		/* EOC or EOS */
+    unsigned char b_InterruptFlag;	/* Interrupt use or not                    */
+    unsigned int ui_ConvertTiming;	/* Selection of the conversion time        */
+    unsigned char b_NbrOfChannel;	/* Number of channel to read               */
+    unsigned int ui_ChannelList[MAX_ANALOGINPUT_CHANNELS];	/* Number of the channel to be read        */
+    unsigned int ui_RangeList[MAX_ANALOGINPUT_CHANNELS];	/* Gain of each channel                    */
 
 };
 
@@ -181,52 +181,52 @@ struct str_AnalogReadInformation {
 
 /* Internal functions */
 int i_APCI3120_SetupChannelList(struct comedi_device *dev, struct comedi_subdevice *s,
-				int n_chan, unsigned int *chanlist, char check);
+                                int n_chan, unsigned int *chanlist, char check);
 int i_APCI3120_ExttrigEnable(struct comedi_device *dev);
 int i_APCI3120_ExttrigDisable(struct comedi_device *dev);
 int i_APCI3120_StopCyclicAcquisition(struct comedi_device *dev, struct comedi_subdevice *s);
 int i_APCI3120_Reset(struct comedi_device *dev);
 int i_APCI3120_CyclicAnalogInput(int mode, struct comedi_device *dev,
-				 struct comedi_subdevice *s);
+                                 struct comedi_subdevice *s);
 /* Interrupt functions */
 void v_APCI3120_Interrupt(int irq, void *d);
 /* UPDATE-0.7.57->0.7.68 void v_APCI3120_InterruptDmaMoveBlock16bit(struct comedi_device *dev,struct comedi_subdevice *s,short *dma,short *data,int n); */
 void v_APCI3120_InterruptDmaMoveBlock16bit(struct comedi_device *dev,
-					   struct comedi_subdevice *s,
-					   short *dma_buffer,
-					   unsigned int num_samples);
+        struct comedi_subdevice *s,
+        short *dma_buffer,
+        unsigned int num_samples);
 int i_APCI3120_InterruptHandleEos(struct comedi_device *dev);
 void v_APCI3120_InterruptDma(int irq, void *d);
 
 /* TIMER */
 
 int i_APCI3120_InsnConfigTimer(struct comedi_device *dev, struct comedi_subdevice *s,
-			       struct comedi_insn *insn, unsigned int *data);
+                               struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_InsnWriteTimer(struct comedi_device *dev, struct comedi_subdevice *s,
-			      struct comedi_insn *insn, unsigned int *data);
+                              struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_InsnReadTimer(struct comedi_device *dev, struct comedi_subdevice *s,
-			     struct comedi_insn *insn, unsigned int *data);
+                             struct comedi_insn *insn, unsigned int *data);
 
 /*
 * DI for di read
 */
 
 int i_APCI3120_InsnBitsDigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				    struct comedi_insn *insn, unsigned int *data);
+                                    struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_InsnReadDigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				    struct comedi_insn *insn, unsigned int *data);
+                                    struct comedi_insn *insn, unsigned int *data);
 
 /* DO */
 /* int i_APCI3120_WriteDigitalOutput(struct comedi_device *dev,
  * unsigned char data);
  */
 int i_APCI3120_InsnConfigDigitalOutput(struct comedi_device *dev,
-				       struct comedi_subdevice *s, struct comedi_insn *insn,
-				       unsigned int *data);
+                                       struct comedi_subdevice *s, struct comedi_insn *insn,
+                                       unsigned int *data);
 int i_APCI3120_InsnBitsDigitalOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				     struct comedi_insn *insn, unsigned int *data);
+                                     struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_InsnWriteDigitalOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				      struct comedi_insn *insn, unsigned int *data);
+                                      struct comedi_insn *insn, unsigned int *data);
 
 /* AO */
 /* int i_APCI3120_Write1AnalogValue(struct comedi_device *dev,UINT ui_Range,
@@ -234,16 +234,16 @@ int i_APCI3120_InsnWriteDigitalOutput(struct comedi_device *dev, struct comedi_s
  */
 
 int i_APCI3120_InsnWriteAnalogOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				     struct comedi_insn *insn, unsigned int *data);
+                                     struct comedi_insn *insn, unsigned int *data);
 
 /* AI HArdware layer */
 
 int i_APCI3120_InsnConfigAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				     struct comedi_insn *insn, unsigned int *data);
+                                     struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_InsnReadAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				   struct comedi_insn *insn, unsigned int *data);
+                                   struct comedi_insn *insn, unsigned int *data);
 int i_APCI3120_CommandTestAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				      struct comedi_cmd *cmd);
+                                      struct comedi_cmd *cmd);
 int i_APCI3120_CommandAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s);
 /* int i_APCI3120_CancelAnalogInput(struct comedi_device *dev, struct comedi_subdevice *s); */
 int i_APCI3120_StopCyclicAcquisition(struct comedi_device *dev, struct comedi_subdevice *s);

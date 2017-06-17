@@ -92,21 +92,21 @@
 #	define  R300_VAP_VF_CNTL__PRIM_POLYGON                  (15<<0)
 
 #	define	R300_VAP_VF_CNTL__PRIM_WALK__SHIFT              4
-	/* State based - direct writes to registers trigger vertex
-           generation */
+/* State based - direct writes to registers trigger vertex
+       generation */
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_STATE_BASED         (0<<4)
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_INDICES             (1<<4)
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_VERTEX_LIST         (2<<4)
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_VERTEX_EMBEDDED     (3<<4)
 
-	/* I don't think I saw these three used.. */
+/* I don't think I saw these three used.. */
 #	define	R300_VAP_VF_CNTL__COLOR_ORDER__SHIFT            6
 #	define	R300_VAP_VF_CNTL__TCL_OUTPUT_CTL_ENA__SHIFT     9
 #	define	R300_VAP_VF_CNTL__PROG_STREAM_ENA__SHIFT        10
 
-	/* index size - when not set the indices are assumed to be 16 bit */
+/* index size - when not set the indices are assumed to be 16 bit */
 #	define	R300_VAP_VF_CNTL__INDEX_SIZE_32bit              (1<<11)
-	/* number of vertices */
+/* number of vertices */
 #	define	R300_VAP_VF_CNTL__NUM_VERTICES__SHIFT           16
 
 /* BEGIN: Wild guesses */
@@ -119,8 +119,8 @@
 #       define R300_VAP_OUTPUT_VTX_FMT_0__PT_SIZE_PRESENT (1<<16) /* GUESS */
 
 #define R300_VAP_OUTPUT_VTX_FMT_1           0x2094
-	/* each of the following is 3 bits wide, specifies number
-	   of components */
+/* each of the following is 3 bits wide, specifies number
+   of components */
 #       define R300_VAP_OUTPUT_VTX_FMT_1__TEX_0_COMP_CNT_SHIFT 0
 #       define R300_VAP_OUTPUT_VTX_FMT_1__TEX_1_COMP_CNT_SHIFT 3
 #       define R300_VAP_OUTPUT_VTX_FMT_1__TEX_2_COMP_CNT_SHIFT 6
@@ -392,8 +392,8 @@
 #	define R300_GB_VAP_RASTER_VTX_FMT_0__PT_SIZE_PRESENT	(0x1<<16)
 
 #define R300_GB_VAP_RASTER_VTX_FMT_1	0x4004
-	/* each of the following is 3 bits wide, specifies number
-	   of components */
+/* each of the following is 3 bits wide, specifies number
+   of components */
 #	define R300_GB_VAP_RASTER_VTX_FMT_1__TEX_0_COMP_CNT_SHIFT	0
 #	define R300_GB_VAP_RASTER_VTX_FMT_1__TEX_1_COMP_CNT_SHIFT	3
 #	define R300_GB_VAP_RASTER_VTX_FMT_1__TEX_2_COMP_CNT_SHIFT	6
@@ -414,7 +414,7 @@
 #	define R300_GB_TRIANGLE_STUFF_ENABLE	(1<<2)
 #	define R300_GB_STENCIL_AUTO_ENABLE	(1<<4)
 #	define R300_GB_UNK31			(1<<31)
-	/* each of the following is 2 bits wide */
+/* each of the following is 2 bits wide */
 #define R300_GB_TEX_REPLICATE	0
 #define R300_GB_TEX_ST		1
 #define R300_GB_TEX_STR		2
@@ -429,7 +429,7 @@
 
 /* MSPOS - positions for multisample antialiasing (?) */
 #define R300_GB_MSPOS0	0x4010
-	/* shifts - each of the fields is 4 bits */
+/* shifts - each of the fields is 4 bits */
 #	define R300_GB_MSPOS0__MS_X0_SHIFT	0
 #	define R300_GB_MSPOS0__MS_Y0_SHIFT	4
 #	define R300_GB_MSPOS0__MS_X1_SHIFT	8
@@ -474,7 +474,7 @@
 #	define R300_GB_SUBPIXEL_1_16		(1<<16)
 
 #define R300_GB_FIFO_SIZE	0x4024
-	/* each of the following is 2 bits wide */
+/* each of the following is 2 bits wide */
 #define R300_GB_FIFO_SIZE_32	0
 #define R300_GB_FIFO_SIZE_64	1
 #define R300_GB_FIFO_SIZE_128	2
@@ -485,12 +485,12 @@
 
 #	define R300_US_OFIFO_SIZE_SHIFT	12
 #	define R300_US_WFIFO_SIZE_SHIFT	14
-	/* the following use the same constants as above, but meaning is
-	   is times 2 (i.e. instead of 32 words it means 64 */
+/* the following use the same constants as above, but meaning is
+   is times 2 (i.e. instead of 32 words it means 64 */
 #	define R300_RS_TFIFO_SIZE_SHIFT	6
 #	define R300_RS_CFIFO_SIZE_SHIFT	8
 #	define R300_US_RAM_SIZE_SHIFT		10
-	/* watermarks, 3 bits wide */
+/* watermarks, 3 bits wide */
 #	define R300_RS_HIGHWATER_COL_SHIFT	16
 #	define R300_RS_HIGHWATER_TEX_SHIFT	19
 #	define R300_OFIFO_HIGHWATER_SHIFT	22	/* two bits only */
@@ -629,11 +629,11 @@
 #define R300_RS_CNTL_0                      0x4300
 #       define R300_RS_CNTL_TC_CNT_SHIFT         2
 #       define R300_RS_CNTL_TC_CNT_MASK          (7 << 2)
-	/* number of color interpolators used */
+/* number of color interpolators used */
 #	define R300_RS_CNTL_CI_CNT_SHIFT         7
 #       define R300_RS_CNTL_0_UNKNOWN_18         (1 << 18)
-	/* Guess: RS_CNTL_1 holds the index of the highest used RS_ROUTE_n
-	   register. */
+/* Guess: RS_CNTL_1 holds the index of the highest used RS_ROUTE_n
+   register. */
 #define R300_RS_CNTL_1                      0x4304
 
 /* gap */
@@ -861,10 +861,10 @@
 #       define R300_TX_SIZE_PROJECTED            (1<<30)
 #       define R300_TX_SIZE_TXPITCH_EN           (1<<31)
 #define R300_TX_FORMAT_0                    0x44C0
-	/* The interpretation of the format word by Wladimir van der Laan */
-	/* The X, Y, Z and W refer to the layout of the components.
-	   They are given meanings as R, G, B and Alpha by the swizzle
-	   specification */
+/* The interpretation of the format word by Wladimir van der Laan */
+/* The X, Y, Z and W refer to the layout of the components.
+   They are given meanings as R, G, B and Alpha by the swizzle
+   specification */
 #	define R300_TX_FORMAT_X8		    0x0
 #	define R300_TX_FORMAT_X16		    0x1
 #	define R300_TX_FORMAT_Y4X4		    0x2
@@ -887,13 +887,13 @@
 #	define R300_TX_FORMAT_A8R8G8B8		    0x13     /* no swizzle */
 #	define R300_TX_FORMAT_B8G8_B8G8		    0x14     /* no swizzle */
 #	define R300_TX_FORMAT_G8R8_G8B8		    0x15     /* no swizzle */
-	/* 0x16 - some 16 bit green format.. ?? */
+/* 0x16 - some 16 bit green format.. ?? */
 #	define R300_TX_FORMAT_UNK25		   (1 << 25) /* no swizzle */
 #	define R300_TX_FORMAT_CUBIC_MAP		   (1 << 26)
 
-	/* gap */
-	/* Floating point formats */
-	/* Note - hardware supports both 16 and 32 bit floating point */
+/* gap */
+/* Floating point formats */
+/* Note - hardware supports both 16 and 32 bit floating point */
 #	define R300_TX_FORMAT_FL_I16		    0x18
 #	define R300_TX_FORMAT_FL_I16A16		    0x19
 #	define R300_TX_FORMAT_FL_R16G16B16A16	    0x1A
@@ -901,31 +901,31 @@
 #	define R300_TX_FORMAT_FL_I32A32		    0x1C
 #	define R300_TX_FORMAT_FL_R32G32B32A32	    0x1D
 #	define R300_TX_FORMAT_ATI2N		    0x1F
-	/* alpha modes, convenience mostly */
-	/* if you have alpha, pick constant appropriate to the
-	   number of channels (1 for I8, 2 for I8A8, 4 for R8G8B8A8, etc */
+/* alpha modes, convenience mostly */
+/* if you have alpha, pick constant appropriate to the
+   number of channels (1 for I8, 2 for I8A8, 4 for R8G8B8A8, etc */
 #	define R300_TX_FORMAT_ALPHA_1CH		    0x000
 #	define R300_TX_FORMAT_ALPHA_2CH		    0x200
 #	define R300_TX_FORMAT_ALPHA_4CH		    0x600
 #	define R300_TX_FORMAT_ALPHA_NONE	    0xA00
-	/* Swizzling */
-	/* constants */
+/* Swizzling */
+/* constants */
 #	define R300_TX_FORMAT_X		0
 #	define R300_TX_FORMAT_Y		1
 #	define R300_TX_FORMAT_Z		2
 #	define R300_TX_FORMAT_W		3
 #	define R300_TX_FORMAT_ZERO	4
 #	define R300_TX_FORMAT_ONE	5
-	/* 2.0*Z, everything above 1.0 is set to 0.0 */
+/* 2.0*Z, everything above 1.0 is set to 0.0 */
 #	define R300_TX_FORMAT_CUT_Z	6
-	/* 2.0*W, everything above 1.0 is set to 0.0 */
+/* 2.0*W, everything above 1.0 is set to 0.0 */
 #	define R300_TX_FORMAT_CUT_W	7
 
 #	define R300_TX_FORMAT_B_SHIFT	18
 #	define R300_TX_FORMAT_G_SHIFT	15
 #	define R300_TX_FORMAT_R_SHIFT	12
 #	define R300_TX_FORMAT_A_SHIFT	9
-	/* Convenience macro to take care of layout and swizzling */
+/* Convenience macro to take care of layout and swizzling */
 #	define R300_EASY_TX_FORMAT(B, G, R, A, FMT)	(		\
 		((R300_TX_FORMAT_##B)<<R300_TX_FORMAT_B_SHIFT)		\
 		| ((R300_TX_FORMAT_##G)<<R300_TX_FORMAT_G_SHIFT)	\
@@ -933,9 +933,9 @@
 		| ((R300_TX_FORMAT_##A)<<R300_TX_FORMAT_A_SHIFT)	\
 		| (R300_TX_FORMAT_##FMT)				\
 		)
-	/* These can be ORed with result of R300_EASY_TX_FORMAT()
-	   We don't really know what they do. Take values from a
-           constant color ? */
+/* These can be ORed with result of R300_EASY_TX_FORMAT()
+   We don't really know what they do. Take values from a
+       constant color ? */
 #	define R300_TX_FORMAT_CONST_X		(1<<5)
 #	define R300_TX_FORMAT_CONST_Y		(2<<5)
 #	define R300_TX_FORMAT_CONST_Z		(4<<5)
@@ -945,7 +945,7 @@
 
 #define R300_TX_PITCH_0			    0x4500 /* obvious missing in gap */
 #define R300_TX_OFFSET_0                    0x4540
-	/* BEGIN: Guess from R200 */
+/* BEGIN: Guess from R200 */
 #       define R300_TXO_ENDIAN_NO_SWAP           (0 << 0)
 #       define R300_TXO_ENDIAN_BYTE_SWAP         (1 << 0)
 #       define R300_TXO_ENDIAN_WORD_SWAP         (2 << 0)
@@ -955,7 +955,7 @@
 #       define R300_TXO_MICRO_TILE_SQUARE        (2 << 3)
 #       define R300_TXO_OFFSET_MASK              0xffffffe0
 #       define R300_TXO_OFFSET_SHIFT             5
-	/* END: Guess from R200 */
+/* END: Guess from R200 */
 
 /* 32 bit chroma key */
 #define R300_TX_CHROMA_KEY_0                      0x4580
@@ -1033,12 +1033,12 @@
 #define R300_PFS_TEXI_0                     0x4620
 #	define R300_FPITX_SRC_SHIFT              0
 #	define R300_FPITX_SRC_MASK               (31 << 0)
-	/* GUESS */
+/* GUESS */
 #	define R300_FPITX_SRC_CONST              (1 << 5)
 #	define R300_FPITX_DST_SHIFT              6
 #	define R300_FPITX_DST_MASK               (31 << 6)
 #	define R300_FPITX_IMAGE_SHIFT            11
-	/* GUESS based on layout and native limits */
+/* GUESS based on layout and native limits */
 #       define R300_FPITX_IMAGE_MASK             (15 << 11)
 /* Unsure if these are opcodes, or some kind of bitfield, but this is how
  * they were set when I checked
@@ -1172,7 +1172,7 @@
 #       define R300_FPI0_ARGC_SRC1C_LRP          15
 #       define R300_FPI0_ARGC_ZERO               20
 #       define R300_FPI0_ARGC_ONE                21
-	/* GUESS */
+/* GUESS */
 #       define R300_FPI0_ARGC_HALF               22
 #       define R300_FPI0_ARGC_SRC0C_YZX          23
 #       define R300_FPI0_ARGC_SRC1C_YZX          24
@@ -1225,22 +1225,22 @@
 #       define R300_FPI2_ARGA_SRC1A_LRP          15
 #       define R300_FPI2_ARGA_ZERO               16
 #       define R300_FPI2_ARGA_ONE                17
-	/* GUESS */
+/* GUESS */
 #       define R300_FPI2_ARGA_HALF               18
 #       define R300_FPI2_ARG0A_SHIFT             0
 #       define R300_FPI2_ARG0A_MASK              (31 << 0)
 #       define R300_FPI2_ARG0A_NEG               (1 << 5)
-	/* GUESS */
+/* GUESS */
 #	define R300_FPI2_ARG0A_ABS		 (1 << 6)
 #       define R300_FPI2_ARG1A_SHIFT             7
 #       define R300_FPI2_ARG1A_MASK              (31 << 7)
 #       define R300_FPI2_ARG1A_NEG               (1 << 12)
-	/* GUESS */
+/* GUESS */
 #	define R300_FPI2_ARG1A_ABS		 (1 << 13)
 #       define R300_FPI2_ARG2A_SHIFT             14
 #       define R300_FPI2_ARG2A_MASK              (31 << 14)
 #       define R300_FPI2_ARG2A_NEG               (1 << 19)
-	/* GUESS */
+/* GUESS */
 #	define R300_FPI2_ARG2A_ABS		 (1 << 20)
 #       define R300_FPI2_SPECIAL_LRP             (1 << 21)
 #       define R300_FPI2_OUTA_MAD                (0 << 23)
@@ -1396,7 +1396,7 @@
 #	define R300_STENCIL_FRONT_BACK		 (1 << 4)
 
 #define R300_ZB_ZSTENCILCNTL                   0x4f04
-	/* functions */
+/* functions */
 #	define R300_ZS_NEVER			0
 #	define R300_ZS_LESS			1
 #	define R300_ZS_LEQUAL			2
@@ -1406,7 +1406,7 @@
 #	define R300_ZS_NOTEQUAL			6
 #	define R300_ZS_ALWAYS			7
 #       define R300_ZS_MASK                     7
-	/* operations */
+/* operations */
 #	define R300_ZS_KEEP			0
 #	define R300_ZS_ZERO			1
 #	define R300_ZS_REPLACE			2
@@ -1416,8 +1416,8 @@
 #	define R300_ZS_INCR_WRAP		6
 #	define R300_ZS_DECR_WRAP		7
 #	define R300_Z_FUNC_SHIFT		0
-	/* front and back refer to operations done for front
-	   and back faces, i.e. separate stencil function support */
+/* front and back refer to operations done for front
+   and back faces, i.e. separate stencil function support */
 #	define R300_S_FRONT_FUNC_SHIFT	        3
 #	define R300_S_FRONT_SFAIL_OP_SHIFT	6
 #	define R300_S_FRONT_ZPASS_OP_SHIFT	9
@@ -1620,23 +1620,23 @@
 #define R300_VPI_OUT_OP_MIN                     (8 << 0)
 #define R300_VPI_OUT_OP_SGE                     (9 << 0)
 #define R300_VPI_OUT_OP_SLT                     (10 << 0)
-	/* Used in GL_POINT_DISTANCE_ATTENUATION_ARB, vector(scalar, vector) */
+/* Used in GL_POINT_DISTANCE_ATTENUATION_ARB, vector(scalar, vector) */
 #define R300_VPI_OUT_OP_UNK12                   (12 << 0)
 #define R300_VPI_OUT_OP_ARL                     (13 << 0)
 #define R300_VPI_OUT_OP_EXP                     (65 << 0)
 #define R300_VPI_OUT_OP_LOG                     (66 << 0)
-	/* Used in fog computations, scalar(scalar) */
+/* Used in fog computations, scalar(scalar) */
 #define R300_VPI_OUT_OP_UNK67                   (67 << 0)
 #define R300_VPI_OUT_OP_LIT                     (68 << 0)
 #define R300_VPI_OUT_OP_POW                     (69 << 0)
 #define R300_VPI_OUT_OP_RCP                     (70 << 0)
 #define R300_VPI_OUT_OP_RSQ                     (72 << 0)
-	/* Used in GL_POINT_DISTANCE_ATTENUATION_ARB, scalar(scalar) */
+/* Used in GL_POINT_DISTANCE_ATTENUATION_ARB, scalar(scalar) */
 #define R300_VPI_OUT_OP_UNK73                   (73 << 0)
 #define R300_VPI_OUT_OP_EX2                     (75 << 0)
 #define R300_VPI_OUT_OP_LG2                     (76 << 0)
 #define R300_VPI_OUT_OP_MAD_2                   (128 << 0)
-	/* all temps, vector(scalar, vector, vector) */
+/* all temps, vector(scalar, vector, vector) */
 #define R300_VPI_OUT_OP_UNK129                  (129 << 0)
 
 #define R300_VPI_OUT_REG_CLASS_TEMPORARY        (0 << 8)
@@ -1645,7 +1645,7 @@
 #define R300_VPI_OUT_REG_CLASS_MASK             (31 << 8)
 
 #define R300_VPI_OUT_REG_INDEX_SHIFT            13
-	/* GUESS based on fglrx native limits */
+/* GUESS based on fglrx native limits */
 #define R300_VPI_OUT_REG_INDEX_MASK             (31 << 13)
 
 #define R300_VPI_OUT_WRITE_X                    (1 << 20)
@@ -1660,7 +1660,7 @@
 #define R300_VPI_IN_REG_CLASS_MASK              (31 << 0)
 
 #define R300_VPI_IN_REG_INDEX_SHIFT             5
-	/* GUESS based on fglrx native limits */
+/* GUESS based on fglrx native limits */
 #define R300_VPI_IN_REG_INDEX_MASK              (255 << 5)
 
 /* The R300 can select components from the input register arbitrarily.
@@ -1700,7 +1700,7 @@
 #define R300_PRIM_TYPE_RECT_LIST                (8 << 0)
 #define R300_PRIM_TYPE_3VRT_POINT_LIST          (9 << 0)
 #define R300_PRIM_TYPE_3VRT_LINE_LIST           (10 << 0)
-	/* GUESS (based on r200) */
+/* GUESS (based on r200) */
 #define R300_PRIM_TYPE_POINT_SPRITES            (11 << 0)
 #define R300_PRIM_TYPE_LINE_LOOP                (12 << 0)
 #define R300_PRIM_TYPE_QUADS                    (13 << 0)
@@ -1711,7 +1711,7 @@
 #define R300_PRIM_WALK_LIST                     (2 << 4)
 #define R300_PRIM_WALK_RING                     (3 << 4)
 #define R300_PRIM_WALK_MASK                     (3 << 4)
-	/* GUESS (based on r200) */
+/* GUESS (based on r200) */
 #define R300_PRIM_COLOR_ORDER_BGRA              (0 << 6)
 #define R300_PRIM_COLOR_ORDER_RGBA              (1 << 6)
 #define R300_PRIM_NUM_VERTICES_SHIFT            16

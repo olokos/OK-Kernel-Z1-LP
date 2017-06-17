@@ -51,7 +51,7 @@
 /*---------------------  Static Classes  ----------------------------*/
 
 
- extern unsigned short TxRate_iwconfig; //2008-5-8 <add> by chester
+extern unsigned short TxRate_iwconfig; //2008-5-8 <add> by chester
 /*---------------------  Static Variables  --------------------------*/
 //static int          msglevel                =MSG_LEVEL_DEBUG;
 static int          msglevel                =MSG_LEVEL_INFO;
@@ -66,19 +66,18 @@ const unsigned char acbyIERate[MAX_RATE] =
 
 void s_vResetCounter (
     PKnownNodeDB psNodeDBTable
-    );
+);
 
 
 
 void
 s_vResetCounter (
     PKnownNodeDB psNodeDBTable
-    )
-{
+) {
     unsigned char ii;
 
     // clear statistic counter for auto_rate
-    for(ii=0;ii<=MAX_RATE;ii++) {
+    for(ii=0; ii<=MAX_RATE; ii++) {
         psNodeDBTable->uTxOk[ii] = 0;
         psNodeDBTable->uTxFail[ii] = 0;
     }
@@ -107,8 +106,7 @@ s_vResetCounter (
 unsigned char
 DATARATEbyGetRateIdx (
     unsigned char byRate
-    )
-{
+) {
     unsigned char ii;
 
     //Erase basicRate flag.
@@ -161,8 +159,7 @@ DATARATEbyGetRateIdx (
 unsigned short
 wGetRateIdx(
     unsigned char byRate
-    )
-{
+) {
     unsigned short ii;
 
     //Erase basicRate flag.
@@ -205,14 +202,13 @@ RATEvParseMaxRate (
     unsigned short *pwSuppRate,
     unsigned char *pbyTopCCKRate,
     unsigned char *pbyTopOFDMRate
-    )
-{
-PSDevice  pDevice = (PSDevice) pDeviceHandler;
-unsigned int ii;
-unsigned char byHighSuppRate = 0;
-unsigned char byRate = 0;
-unsigned short wOldBasicRate = pDevice->wBasicRate;
-unsigned int uRateLen;
+) {
+    PSDevice  pDevice = (PSDevice) pDeviceHandler;
+    unsigned int ii;
+    unsigned char byHighSuppRate = 0;
+    unsigned char byRate = 0;
+    unsigned short wOldBasicRate = pDevice->wBasicRate;
+    unsigned int uRateLen;
 
 
     if (pItemRates == NULL)
@@ -231,9 +227,9 @@ unsigned int uRateLen;
     }
 
     for (ii = 0; ii < uRateLen; ii++) {
-    	byRate = (unsigned char)(pItemRates->abyRates[ii]);
+        byRate = (unsigned char)(pItemRates->abyRates[ii]);
         if (WLAN_MGMT_IS_BASICRATE(byRate) &&
-            (bUpdateBasicRate == true))  {
+                (bUpdateBasicRate == true))  {
             // Add to basic rate set, update pDevice->byTopCCKBasicRate and pDevice->byTopOFDMBasicRate
             CARDbAddBasicRate((void *)pDevice, wGetRateIdx(byRate));
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"ParseMaxRate AddBasicRate: %d\n", wGetRateIdx(byRate));
@@ -246,7 +242,7 @@ unsigned int uRateLen;
         *pwSuppRate |= (1<<wGetRateIdx(byRate));
     }
     if ((pItemExtRates != NULL) && (pItemExtRates->byElementID == WLAN_EID_EXTSUPP_RATES) &&
-        (pDevice->eCurrentPHYType != PHY_TYPE_11B)) {
+            (pDevice->eCurrentPHYType != PHY_TYPE_11B)) {
 
         unsigned int uExtRateLen = pItemExtRates->len;
 
@@ -257,7 +253,7 @@ unsigned int uRateLen;
             byRate = (unsigned char)(pItemExtRates->abyRates[ii]);
             // select highest basic rate
             if (WLAN_MGMT_IS_BASICRATE(pItemExtRates->abyRates[ii])) {
-            	// Add to basic rate set, update pDevice->byTopCCKBasicRate and pDevice->byTopOFDMBasicRate
+                // Add to basic rate set, update pDevice->byTopCCKBasicRate and pDevice->byTopOFDMBasicRate
                 CARDbAddBasicRate((void *)pDevice, wGetRateIdx(byRate));
                 DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"ParseMaxRate AddBasicRate: %d\n", wGetRateIdx(byRate));
             }
@@ -279,13 +275,13 @@ unsigned int uRateLen;
     *pbyTopOFDMRate = pDevice->byTopOFDMBasicRate;
     *pwMaxSuppRate = wGetRateIdx(byHighSuppRate);
     if ((pDevice->byPacketType==PK_TYPE_11B) || (pDevice->byPacketType==PK_TYPE_11GB))
-       *pwMaxBasicRate = pDevice->byTopCCKBasicRate;
+        *pwMaxBasicRate = pDevice->byTopCCKBasicRate;
     else
-       *pwMaxBasicRate = pDevice->byTopOFDMBasicRate;
+        *pwMaxBasicRate = pDevice->byTopOFDMBasicRate;
     if (wOldBasicRate != pDevice->wBasicRate)
         CARDvSetRSPINF((void *)pDevice, pDevice->eCurrentPHYType);
 
-     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Exit ParseMaxRate\n");
+    DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Exit ParseMaxRate\n");
 }
 
 
@@ -311,17 +307,16 @@ void
 RATEvTxRateFallBack (
     void *pDeviceHandler,
     PKnownNodeDB psNodeDBTable
-    )
-{
-PSDevice        pDevice = (PSDevice) pDeviceHandler;
-unsigned short wIdxDownRate = 0;
-unsigned int ii;
+) {
+    PSDevice        pDevice = (PSDevice) pDeviceHandler;
+    unsigned short wIdxDownRate = 0;
+    unsigned int ii;
 //unsigned long dwRateTable[MAX_RATE]  = {1,   2,   5,   11,  6,    9,    12,   18,  24,  36,  48,  54};
-bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,true,true,true};
-	unsigned long dwThroughputTbl[MAX_RATE] = {10, 20, 55, 110, 60, 90, 120, 180, 240, 360, 480, 540};
-	unsigned long dwThroughput = 0;
-	unsigned short wIdxUpRate = 0;
-	unsigned long dwTxDiff = 0;
+    bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,true,true,true};
+    unsigned long dwThroughputTbl[MAX_RATE] = {10, 20, 55, 110, 60, 90, 120, 180, 240, 360, 480, 540};
+    unsigned long dwThroughput = 0;
+    unsigned short wIdxUpRate = 0;
+    unsigned long dwTxDiff = 0;
 
     if (pDevice->pMgmt->eScanState != WMAC_NO_SCANNING) {
         // Don't do Fallback when scanning Channel
@@ -334,8 +329,8 @@ bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,tr
         dwTxDiff = psNodeDBTable->uTxFail[MAX_RATE] - psNodeDBTable->uTxOk[MAX_RATE];
 
     if ((psNodeDBTable->uTxOk[MAX_RATE] < AUTORATE_TXOK_CNT) &&
-        (dwTxDiff < AUTORATE_TXFAIL_CNT) &&
-        (psNodeDBTable->uTimeCount < AUTORATE_TIMEOUT)) {
+            (dwTxDiff < AUTORATE_TXFAIL_CNT) &&
+            (psNodeDBTable->uTimeCount < AUTORATE_TIMEOUT)) {
         return;
     }
 
@@ -344,7 +339,7 @@ bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,tr
     }
 
 
-    for(ii=0;ii<MAX_RATE;ii++) {
+    for(ii=0; ii<MAX_RATE; ii++) {
         if (psNodeDBTable->wSuppRate & (0x0001<<ii)) {
             if (bAutoRate[ii] == true) {
                 wIdxUpRate = (unsigned short) ii;
@@ -354,9 +349,9 @@ bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,tr
         }
     }
 
-    for(ii=0;ii<=psNodeDBTable->wTxDataRate;ii++) {
+    for(ii=0; ii<=psNodeDBTable->wTxDataRate; ii++) {
         if ( (psNodeDBTable->uTxOk[ii] != 0) ||
-             (psNodeDBTable->uTxFail[ii] != 0) ) {
+                (psNodeDBTable->uTxFail[ii] != 0) ) {
             dwThroughputTbl[ii] *= psNodeDBTable->uTxOk[ii];
             if (ii < RATE_11M) {
                 psNodeDBTable->uTxFail[ii] *= 4;
@@ -372,7 +367,7 @@ bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,tr
     for(ii = psNodeDBTable->wTxDataRate; ii > 0;) {
         ii--;
         if ( (dwThroughputTbl[ii] > dwThroughput) &&
-             (bAutoRate[ii]==true) ) {
+                (bAutoRate[ii]==true) ) {
             dwThroughput = dwThroughputTbl[ii];
             wIdxDownRate = (unsigned short) ii;
         }
@@ -380,15 +375,15 @@ bool bAutoRate[MAX_RATE]    = {true,true,true,true,false,false,true,true,true,tr
     psNodeDBTable->wTxDataRate = wIdxDownRate;
     if (psNodeDBTable->uTxOk[MAX_RATE]) {
         if (psNodeDBTable->uTxOk[MAX_RATE] >
-           (psNodeDBTable->uTxFail[MAX_RATE] * 4) ) {
+                (psNodeDBTable->uTxFail[MAX_RATE] * 4) ) {
             psNodeDBTable->wTxDataRate = wIdxUpRate;
         }
-    }else { // adhoc, if uTxOk =0 & uTxFail = 0
+    } else { // adhoc, if uTxOk =0 & uTxFail = 0
         if (psNodeDBTable->uTxFail[MAX_RATE] == 0)
             psNodeDBTable->wTxDataRate = wIdxUpRate;
     }
 //2008-5-8 <add> by chester
-TxRate_iwconfig=psNodeDBTable->wTxDataRate;
+    TxRate_iwconfig=psNodeDBTable->wTxDataRate;
     s_vResetCounter(psNodeDBTable);
 //    DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Rate: %d, U:%d, D:%d\n", psNodeDBTable->wTxDataRate, wIdxUpRate, wIdxDownRate);
 
@@ -414,8 +409,7 @@ RATEuSetIE (
     PWLAN_IE_SUPP_RATES pSrcRates,
     PWLAN_IE_SUPP_RATES pDstRates,
     unsigned int uRateLen
-    )
-{
+) {
     unsigned int ii, uu, uRateCnt = 0;
 
     if ((pSrcRates == NULL) || (pDstRates == NULL))

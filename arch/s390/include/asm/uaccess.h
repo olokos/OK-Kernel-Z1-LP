@@ -71,22 +71,21 @@
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-        unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 struct uaccess_ops {
-	size_t (*copy_from_user)(size_t, const void __user *, void *);
-	size_t (*copy_from_user_small)(size_t, const void __user *, void *);
-	size_t (*copy_to_user)(size_t, void __user *, const void *);
-	size_t (*copy_to_user_small)(size_t, void __user *, const void *);
-	size_t (*copy_in_user)(size_t, void __user *, const void __user *);
-	size_t (*clear_user)(size_t, void __user *);
-	size_t (*strnlen_user)(size_t, const char __user *);
-	size_t (*strncpy_from_user)(size_t, const char __user *, char *);
-	int (*futex_atomic_op)(int op, u32 __user *, int oparg, int *old);
-	int (*futex_atomic_cmpxchg)(u32 *, u32 __user *, u32 old, u32 new);
+    size_t (*copy_from_user)(size_t, const void __user *, void *);
+    size_t (*copy_from_user_small)(size_t, const void __user *, void *);
+    size_t (*copy_to_user)(size_t, void __user *, const void *);
+    size_t (*copy_to_user_small)(size_t, void __user *, const void *);
+    size_t (*copy_in_user)(size_t, void __user *, const void __user *);
+    size_t (*clear_user)(size_t, void __user *);
+    size_t (*strnlen_user)(size_t, const char __user *);
+    size_t (*strncpy_from_user)(size_t, const char __user *, char *);
+    int (*futex_atomic_op)(int op, u32 __user *, int oparg, int *old);
+    int (*futex_atomic_cmpxchg)(u32 *, u32 __user *, u32 old, u32 new);
 };
 
 extern struct uaccess_ops uaccess;
@@ -97,16 +96,14 @@ extern struct uaccess_ops uaccess_pt;
 
 extern int __handle_fault(unsigned long, unsigned long, int);
 
-static inline int __put_user_fn(size_t size, void __user *ptr, void *x)
-{
-	size = uaccess.copy_to_user_small(size, ptr, x);
-	return size ? -EFAULT : size;
+static inline int __put_user_fn(size_t size, void __user *ptr, void *x) {
+    size = uaccess.copy_to_user_small(size, ptr, x);
+    return size ? -EFAULT : size;
 }
 
-static inline int __get_user_fn(size_t size, const void __user *ptr, void *x)
-{
-	size = uaccess.copy_from_user_small(size, ptr, x);
-	return size ? -EFAULT : size;
+static inline int __get_user_fn(size_t size, const void __user *ptr, void *x) {
+    size = uaccess.copy_from_user_small(size, ptr, x);
+    return size ? -EFAULT : size;
 }
 
 /*
@@ -208,12 +205,11 @@ extern int __get_user_bad(void) __attribute__((noreturn));
  * On success, this will be zero.
  */
 static inline unsigned long __must_check
-__copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (__builtin_constant_p(n) && (n <= 256))
-		return uaccess.copy_to_user_small(n, to, from);
-	else
-		return uaccess.copy_to_user(n, to, from);
+__copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (__builtin_constant_p(n) && (n <= 256))
+        return uaccess.copy_to_user_small(n, to, from);
+    else
+        return uaccess.copy_to_user(n, to, from);
 }
 
 #define __copy_to_user_inatomic __copy_to_user
@@ -233,12 +229,11 @@ __copy_to_user(void __user *to, const void *from, unsigned long n)
  * On success, this will be zero.
  */
 static inline unsigned long __must_check
-copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	might_fault();
-	if (access_ok(VERIFY_WRITE, to, n))
-		n = __copy_to_user(to, from, n);
-	return n;
+copy_to_user(void __user *to, const void *from, unsigned long n) {
+    might_fault();
+    if (access_ok(VERIFY_WRITE, to, n))
+        n = __copy_to_user(to, from, n);
+    return n;
 }
 
 /**
@@ -259,12 +254,11 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
  * data to the requested size using zero bytes.
  */
 static inline unsigned long __must_check
-__copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (__builtin_constant_p(n) && (n <= 256))
-		return uaccess.copy_from_user_small(n, from, to);
-	else
-		return uaccess.copy_from_user(n, from, to);
+__copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (__builtin_constant_p(n) && (n <= 256))
+        return uaccess.copy_from_user_small(n, from, to);
+    else
+        return uaccess.copy_from_user(n, from, to);
 }
 
 extern void copy_from_user_overflow(void)
@@ -290,55 +284,50 @@ __compiletime_warning("copy_from_user() buffer size is not provably correct")
  * data to the requested size using zero bytes.
  */
 static inline unsigned long __must_check
-copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	unsigned int sz = __compiletime_object_size(to);
+copy_from_user(void *to, const void __user *from, unsigned long n) {
+    unsigned int sz = __compiletime_object_size(to);
 
-	might_fault();
-	if (unlikely(sz != -1 && sz < n)) {
-		copy_from_user_overflow();
-		return n;
-	}
-	if (access_ok(VERIFY_READ, from, n))
-		n = __copy_from_user(to, from, n);
-	else
-		memset(to, 0, n);
-	return n;
+    might_fault();
+    if (unlikely(sz != -1 && sz < n)) {
+        copy_from_user_overflow();
+        return n;
+    }
+    if (access_ok(VERIFY_READ, from, n))
+        n = __copy_from_user(to, from, n);
+    else
+        memset(to, 0, n);
+    return n;
 }
 
 static inline unsigned long __must_check
-__copy_in_user(void __user *to, const void __user *from, unsigned long n)
-{
-	return uaccess.copy_in_user(n, to, from);
+__copy_in_user(void __user *to, const void __user *from, unsigned long n) {
+    return uaccess.copy_in_user(n, to, from);
 }
 
 static inline unsigned long __must_check
-copy_in_user(void __user *to, const void __user *from, unsigned long n)
-{
-	might_fault();
-	if (__access_ok(from,n) && __access_ok(to,n))
-		n = __copy_in_user(to, from, n);
-	return n;
+copy_in_user(void __user *to, const void __user *from, unsigned long n) {
+    might_fault();
+    if (__access_ok(from,n) && __access_ok(to,n))
+        n = __copy_in_user(to, from, n);
+    return n;
 }
 
 /*
  * Copy a null terminated string from userspace.
  */
 static inline long __must_check
-strncpy_from_user(char *dst, const char __user *src, long count)
-{
-        long res = -EFAULT;
-	might_fault();
-        if (access_ok(VERIFY_READ, src, 1))
-		res = uaccess.strncpy_from_user(count, src, dst);
-        return res;
+strncpy_from_user(char *dst, const char __user *src, long count) {
+    long res = -EFAULT;
+    might_fault();
+    if (access_ok(VERIFY_READ, src, 1))
+        res = uaccess.strncpy_from_user(count, src, dst);
+    return res;
 }
 
 static inline unsigned long
-strnlen_user(const char __user * src, unsigned long n)
-{
-	might_fault();
-	return uaccess.strnlen_user(n, src);
+strnlen_user(const char __user * src, unsigned long n) {
+    might_fault();
+    return uaccess.strnlen_user(n, src);
 }
 
 /**
@@ -362,18 +351,16 @@ strnlen_user(const char __user * src, unsigned long n)
  */
 
 static inline unsigned long __must_check
-__clear_user(void __user *to, unsigned long n)
-{
-	return uaccess.clear_user(n, to);
+__clear_user(void __user *to, unsigned long n) {
+    return uaccess.clear_user(n, to);
 }
 
 static inline unsigned long __must_check
-clear_user(void __user *to, unsigned long n)
-{
-	might_fault();
-	if (access_ok(VERIFY_WRITE, to, n))
-		n = uaccess.clear_user(n, to);
-	return n;
+clear_user(void __user *to, unsigned long n) {
+    might_fault();
+    if (access_ok(VERIFY_WRITE, to, n))
+        n = uaccess.clear_user(n, to);
+    return n;
 }
 
 extern int memcpy_real(void *, void *, size_t);

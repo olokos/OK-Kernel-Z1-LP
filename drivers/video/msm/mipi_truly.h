@@ -16,6 +16,6 @@
 /* #define MIPI_TRULY_FAKE_PANEL */	/* FAKE PANEL for test */
 
 int mipi_truly_device_register(struct msm_panel_info *pinfo,
-		u32 channel, u32 panel);
+                               u32 channel, u32 panel);
 
 #endif  /* MIPI_TRULY_H */

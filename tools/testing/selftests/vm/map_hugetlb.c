@@ -31,49 +31,45 @@
 #define FLAGS (MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB)
 #endif
 
-static void check_bytes(char *addr)
-{
-	printf("First hex is %x\n", *((unsigned int *)addr));
+static void check_bytes(char *addr) {
+    printf("First hex is %x\n", *((unsigned int *)addr));
 }
 
-static void write_bytes(char *addr)
-{
-	unsigned long i;
+static void write_bytes(char *addr) {
+    unsigned long i;
 
-	for (i = 0; i < LENGTH; i++)
-		*(addr + i) = (char)i;
+    for (i = 0; i < LENGTH; i++)
+        *(addr + i) = (char)i;
 }
 
-static int read_bytes(char *addr)
-{
-	unsigned long i;
+static int read_bytes(char *addr) {
+    unsigned long i;
 
-	check_bytes(addr);
-	for (i = 0; i < LENGTH; i++)
-		if (*(addr + i) != (char)i) {
-			printf("Mismatch at %lu\n", i);
-			return 1;
-		}
-	return 0;
+    check_bytes(addr);
+    for (i = 0; i < LENGTH; i++)
+        if (*(addr + i) != (char)i) {
+            printf("Mismatch at %lu\n", i);
+            return 1;
+        }
+    return 0;
 }
 
-int main(void)
-{
-	void *addr;
-	int ret;
+int main(void) {
+    void *addr;
+    int ret;
 
-	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
-	if (addr == MAP_FAILED) {
-		perror("mmap");
-		exit(1);
-	}
+    addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
+    if (addr == MAP_FAILED) {
+        perror("mmap");
+        exit(1);
+    }
 
-	printf("Returned address is %p\n", addr);
-	check_bytes(addr);
-	write_bytes(addr);
-	ret = read_bytes(addr);
+    printf("Returned address is %p\n", addr);
+    check_bytes(addr);
+    write_bytes(addr);
+    ret = read_bytes(addr);
 
-	munmap(addr, LENGTH);
+    munmap(addr, LENGTH);
 
-	return ret;
+    return ret;
 }

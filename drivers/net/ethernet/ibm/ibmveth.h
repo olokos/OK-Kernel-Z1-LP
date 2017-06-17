@@ -58,34 +58,32 @@
   plpar_hcall_norets(H_ADD_LOGICAL_LAN_BUFFER, ua, buf)
 
 static inline long h_send_logical_lan(unsigned long unit_address,
-		unsigned long desc1, unsigned long desc2, unsigned long desc3,
-		unsigned long desc4, unsigned long desc5, unsigned long desc6,
-		unsigned long corellator_in, unsigned long *corellator_out)
-{
-	long rc;
-	unsigned long retbuf[PLPAR_HCALL9_BUFSIZE];
+                                      unsigned long desc1, unsigned long desc2, unsigned long desc3,
+                                      unsigned long desc4, unsigned long desc5, unsigned long desc6,
+                                      unsigned long corellator_in, unsigned long *corellator_out) {
+    long rc;
+    unsigned long retbuf[PLPAR_HCALL9_BUFSIZE];
 
-	rc = plpar_hcall9(H_SEND_LOGICAL_LAN, retbuf, unit_address, desc1,
-			desc2, desc3, desc4, desc5, desc6, corellator_in);
+    rc = plpar_hcall9(H_SEND_LOGICAL_LAN, retbuf, unit_address, desc1,
+                      desc2, desc3, desc4, desc5, desc6, corellator_in);
 
-	*corellator_out = retbuf[0];
+    *corellator_out = retbuf[0];
 
-	return rc;
+    return rc;
 }
 
 static inline long h_illan_attributes(unsigned long unit_address,
-				      unsigned long reset_mask, unsigned long set_mask,
-				      unsigned long *ret_attributes)
-{
-	long rc;
-	unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
+                                      unsigned long reset_mask, unsigned long set_mask,
+                                      unsigned long *ret_attributes) {
+    long rc;
+    unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
 
-	rc = plpar_hcall(H_ILLAN_ATTRIBUTES, retbuf, unit_address,
-			 reset_mask, set_mask);
+    rc = plpar_hcall(H_ILLAN_ATTRIBUTES, retbuf, unit_address,
+                     reset_mask, set_mask);
 
-	*ret_attributes = retbuf[0];
+    *ret_attributes = retbuf[0];
 
-	return rc;
+    return rc;
 }
 
 #define h_multicast_ctrl(ua, cmd, mac) \
@@ -165,13 +163,13 @@ struct ibmveth_adapter {
 };
 
 struct ibmveth_buf_desc_fields {
-	u32 flags_len;
+    u32 flags_len;
 #define IBMVETH_BUF_VALID	0x80000000
 #define IBMVETH_BUF_TOGGLE	0x40000000
 #define IBMVETH_BUF_NO_CSUM	0x02000000
 #define IBMVETH_BUF_CSUM_GOOD	0x01000000
 #define IBMVETH_BUF_LEN_MASK	0x00FFFFFF
-	u32 address;
+    u32 address;
 };
 
 union ibmveth_buf_desc {
@@ -180,7 +178,7 @@ union ibmveth_buf_desc {
 };
 
 struct ibmveth_rx_q_entry {
-	u32 flags_off;
+    u32 flags_off;
 #define IBMVETH_RXQ_TOGGLE		0x80000000
 #define IBMVETH_RXQ_TOGGLE_SHIFT	31
 #define IBMVETH_RXQ_VALID		0x40000000
@@ -188,8 +186,8 @@ struct ibmveth_rx_q_entry {
 #define IBMVETH_RXQ_CSUM_GOOD		0x01000000
 #define IBMVETH_RXQ_OFF_MASK		0x0000FFFF
 
-	u32 length;
-	u64 correlator;
+    u32 length;
+    u64 correlator;
 };
 
 #endif /* _IBMVETH_H */

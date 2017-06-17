@@ -13,26 +13,24 @@
 #include <linux/module.h>
 
 static struct rc_map_table lirc[] = {
-	{ },
+    { },
 };
 
 static struct rc_map_list lirc_map = {
-	.map = {
-		.scan    = lirc,
-		.size    = ARRAY_SIZE(lirc),
-		.rc_type = RC_TYPE_LIRC,
-		.name    = RC_MAP_LIRC,
-	}
+    .map = {
+        .scan    = lirc,
+        .size    = ARRAY_SIZE(lirc),
+        .rc_type = RC_TYPE_LIRC,
+        .name    = RC_MAP_LIRC,
+    }
 };
 
-static int __init init_rc_map_lirc(void)
-{
-	return rc_map_register(&lirc_map);
+static int __init init_rc_map_lirc(void) {
+    return rc_map_register(&lirc_map);
 }
 
-static void __exit exit_rc_map_lirc(void)
-{
-	rc_map_unregister(&lirc_map);
+static void __exit exit_rc_map_lirc(void) {
+    rc_map_unregister(&lirc_map);
 }
 
 module_init(init_rc_map_lirc)

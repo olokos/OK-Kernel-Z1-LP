@@ -179,8 +179,7 @@ typedef v_U32_t tBTAMP_U64[2];
  ********************************************************************/
 
 // ID 3 (0x0003)
-typedef struct sBtampTLVAMP_Assoc_Connected_Channel
-{
+typedef struct sBtampTLVAMP_Assoc_Connected_Channel {
     v_U8_t       present;
     v_U8_t       country[3];
     v_U8_t       num_triplets;
@@ -207,8 +206,7 @@ v_U32_t btampGetPackedTlvAMP_Assoc_Connected_Channel(void *, tBtampTLVAMP_Assoc_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1 (0x0001)
-typedef struct sBtampTLVAMP_Assoc_MAC_Addr
-{
+typedef struct sBtampTLVAMP_Assoc_MAC_Addr {
     v_U8_t       present;
     v_U8_t       mac_addr[6];
 } tBtampTLVAMP_Assoc_MAC_Addr;
@@ -233,8 +231,7 @@ v_U32_t btampGetPackedTlvAMP_Assoc_MAC_Addr(void *, tBtampTLVAMP_Assoc_MAC_Addr*
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4 (0x0004)
-typedef struct sBtampTLVAMP_Assoc_PAL_Capabilities
-{
+typedef struct sBtampTLVAMP_Assoc_PAL_Capabilities {
     v_U8_t       present;
     v_U32_t      pal_capabilities;
 } tBtampTLVAMP_Assoc_PAL_Capabilities;
@@ -259,8 +256,7 @@ v_U32_t btampGetPackedTlvAMP_Assoc_PAL_Capabilities(void *, tBtampTLVAMP_Assoc_P
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5 (0x0005)
-typedef struct sBtampTLVAMP_Assoc_PAL_Version
-{
+typedef struct sBtampTLVAMP_Assoc_PAL_Version {
     v_U8_t       present;
     v_U8_t       pal_version;
     v_U16_t      pal_CompanyID;
@@ -287,8 +283,7 @@ v_U32_t btampGetPackedTlvAMP_Assoc_PAL_Version(void *, tBtampTLVAMP_Assoc_PAL_Ve
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 2 (0x0002)
-typedef struct sBtampTLVAMP_Assoc_Preferred_Channel_List
-{
+typedef struct sBtampTLVAMP_Assoc_Preferred_Channel_List {
     v_U8_t       present;
     v_U8_t       country[3];
     v_U8_t       num_triplets;
@@ -315,8 +310,7 @@ v_U32_t btampGetPackedTlvAMP_Assoc_Preferred_Channel_List(void *, tBtampTLVAMP_A
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 6 (0x0006)
-typedef struct sBtampTLVFlow_Spec
-{
+typedef struct sBtampTLVFlow_Spec {
     v_U8_t       present;
     v_U8_t       flow_spec_id;
     v_U8_t       service_type;
@@ -346,8 +340,7 @@ v_U32_t btampGetPackedTlvFlow_Spec(void *, tBtampTLVFlow_Spec*, v_U32_t*);
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1081 (0x0439)
-typedef struct sBtampTLVHCI_Accept_Logical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Accept_Logical_Link_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       tx_flow_spec[18];
@@ -374,8 +367,7 @@ v_U32_t btampGetPackedTlvHCI_Accept_Logical_Link_Cmd(void *, tBtampTLVHCI_Accept
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1078 (0x0436)
-typedef struct sBtampTLVHCI_Accept_Physical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Accept_Physical_Link_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       key_length;
@@ -403,8 +395,7 @@ v_U32_t btampGetPackedTlvHCI_Accept_Physical_Link_Cmd(void *, tBtampTLVHCI_Accep
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 65 (0x0041)
-typedef struct sBtampTLVHCI_Channel_Selected_Event
-{
+typedef struct sBtampTLVHCI_Channel_Selected_Event {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
 } tBtampTLVHCI_Channel_Selected_Event;
@@ -429,100 +420,79 @@ v_U32_t btampGetPackedTlvHCI_Channel_Selected_Event(void *, tBtampTLVHCI_Channel
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 14 (0x000e)
-typedef struct sBtampTLVHCI_Command_Complete_Event
-{
+typedef struct sBtampTLVHCI_Command_Complete_Event {
     v_U8_t       present;
     v_U8_t       num_hci_command_packets;
     v_U16_t      command_opcode;
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             v_U8_t status;
         } Reset; /* command_opcode = c03 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Flush; /* command_opcode = c08 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
             v_U8_t tx_flow_spec_id;
         } Logical_Link_Cancel; /* command_opcode = 43b */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Event_Mask; /* command_opcode = c05 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t connection_accept_timeout;
         } Read_Connection_Accept_TO; /* command_opcode = c15 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Connection_Accept_TO; /* command_opcode = c16 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U16_t link_supervision_timeout;
         } Read_Link_Supervision_TO; /* command_opcode = c36 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Write_Link_Supervision_TO; /* command_opcode = c37 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t logical_link_accept_timeout;
         } Read_Logical_Link_Accept_TO; /* command_opcode = c61 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Logical_Link_Accept_TO; /* command_opcode = c62 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Event_Mask_Page_2; /* command_opcode = c63 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t loc_domain_aware;
             v_U8_t loc_domain[3];
             v_U8_t loc_options;
         } Read_Location_Data; /* command_opcode = 3172 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Location_Data; /* command_opcode = 3173 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t flow_control_mode;
         } Read_Flow_Control_Mode; /* command_opcode = 3174 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Flow_Control_Mode; /* command_opcode = 3175 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U32_t best_effort_flush_timeout;
         } Read_BE_Flush_TO; /* command_opcode = 3177 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_BE_Flush_TO; /* command_opcode = 3178 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Set_Short_Range_Mode; /* command_opcode = 3179 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_HCI_Version;
             v_U16_t HC_HCI_Revision;
@@ -530,52 +500,44 @@ typedef struct sBtampTLVHCI_Command_Complete_Event
             v_U16_t HC_Manufac_Name;
             v_U16_t HC_PAL_Sub_Version;
         } Read_Local_Version_Info; /* command_opcode = 4097 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_Support_Cmds[64];
         } Read_Local_Supported_Cmds; /* command_opcode = 4098 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t HC_ACL_Data_Packet_Length;
             v_U8_t HC_SCO_Packet_Length;
             v_U16_t HC_Total_Num_ACL_Packets;
             v_U16_t HC_Total_Num_SCO_Packets;
         } Read_Buffer_Size; /* command_opcode = 4101 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t HC_Max_ACL_Data_Packet_Length;
             v_U16_t HC_Data_Block_Length;
             v_U16_t HC_Total_Num_Data_Blocks;
         } Read_Data_Block_Size; /* command_opcode = 4106 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U16_t failed_contact_counter;
         } Read_Failed_Contact_Counter; /* command_opcode = 5121 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
         } Reset_Failed_Contact_Counter; /* command_opcode = 5122 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U16_t log_link_handle;
             v_U8_t link_quality;
         } Read_Link_Quality; /* command_opcode = 5123 */
-        struct
-        {
+        struct {
             v_U8_t status;
             /* 2 bytes handle to comply with spec, (lower byte valid) */
             v_U16_t phy_link_handle;
             v_S7_t rssi;
         } Read_RSSI; /* command_opcode = 5125 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t HC_AMP_Status;
             v_U32_t HC_Total_BW;
@@ -588,33 +550,27 @@ typedef struct sBtampTLVHCI_Command_Complete_Event
             v_U32_t HC_Max_Flush_Timeout;
             v_U32_t HC_BE_Flush_Timeout;
         } Read_Local_AMP_Info; /* command_opcode = 5129 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
             v_U16_t remaining_length;
             v_U8_t AMP_assoc_fragment[248];
         } Read_Read_Local_AMP_Assoc; /* command_opcode = 5130 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t phy_link_handle;
         } Write_Remote_AMP_Assoc; /* command_opcode = 5131 */
-        struct
-        {
+        struct {
             v_U8_t status;
             v_U8_t loopback_mode;
         } Read_Loopback_Mode; /* command_opcode = 6145 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Write_Loopback_Mode; /* command_opcode = 6146 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Vendor_Specific_Cmd_0; /* command_opcode = fc00 */
-        struct
-        {
+        struct {
             v_U8_t status;
         } Vendor_Specific_Cmd_1; /* command_opcode = fc01 */
     } cc_event;
@@ -640,8 +596,7 @@ v_U32_t btampGetPackedTlvHCI_Command_Complete_Event(void *, tBtampTLVHCI_Command
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 15 (0x000f)
-typedef struct sBtampTLVHCI_Command_Status_Event
-{
+typedef struct sBtampTLVHCI_Command_Status_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U8_t       num_hci_command_packets;
@@ -668,8 +623,7 @@ v_U32_t btampGetPackedTlvHCI_Command_Status_Event(void *, tBtampTLVHCI_Command_S
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1080 (0x0438)
-typedef struct sBtampTLVHCI_Create_Logical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Create_Logical_Link_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       tx_flow_spec[18];
@@ -696,8 +650,7 @@ v_U32_t btampGetPackedTlvHCI_Create_Logical_Link_Cmd(void *, tBtampTLVHCI_Create
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1077 (0x0435)
-typedef struct sBtampTLVHCI_Create_Physical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Create_Physical_Link_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       key_length;
@@ -725,8 +678,7 @@ v_U32_t btampGetPackedTlvHCI_Create_Physical_Link_Cmd(void *, tBtampTLVHCI_Creat
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 26 (0x001a)
-typedef struct sBtampTLVHCI_Data_Buffer_Overflow_Event
-{
+typedef struct sBtampTLVHCI_Data_Buffer_Overflow_Event {
     v_U8_t       present;
     v_U8_t       link_type;
 } tBtampTLVHCI_Data_Buffer_Overflow_Event;
@@ -751,8 +703,7 @@ v_U32_t btampGetPackedTlvHCI_Data_Buffer_Overflow_Event(void *, tBtampTLVHCI_Dat
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1082 (0x043a)
-typedef struct sBtampTLVHCI_Disconnect_Logical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Disconnect_Logical_Link_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Disconnect_Logical_Link_Cmd;
@@ -777,8 +728,7 @@ v_U32_t btampGetPackedTlvHCI_Disconnect_Logical_Link_Cmd(void *, tBtampTLVHCI_Di
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 70 (0x0046)
-typedef struct sBtampTLVHCI_Disconnect_Logical_Link_Complete_Event
-{
+typedef struct sBtampTLVHCI_Disconnect_Logical_Link_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U16_t      log_link_handle;
@@ -805,8 +755,7 @@ v_U32_t btampGetPackedTlvHCI_Disconnect_Logical_Link_Complete_Event(void *, tBta
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1079 (0x0437)
-typedef struct sBtampTLVHCI_Disconnect_Physical_Link_Cmd
-{
+typedef struct sBtampTLVHCI_Disconnect_Physical_Link_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       reason;
@@ -832,8 +781,7 @@ v_U32_t btampGetPackedTlvHCI_Disconnect_Physical_Link_Cmd(void *, tBtampTLVHCI_D
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 66 (0x0042)
-typedef struct sBtampTLVHCI_Disconnect_Physical_Link_Complete_Event
-{
+typedef struct sBtampTLVHCI_Disconnect_Physical_Link_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U8_t       phy_link_handle;
@@ -860,8 +808,7 @@ v_U32_t btampGetPackedTlvHCI_Disconnect_Physical_Link_Complete_Event(void *, tBt
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1084 (0x043c)
-typedef struct sBtampTLVHCI_Flow_Spec_Modify_Cmd
-{
+typedef struct sBtampTLVHCI_Flow_Spec_Modify_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
     v_U8_t       be_aggr_counter;
@@ -889,8 +836,7 @@ v_U32_t btampGetPackedTlvHCI_Flow_Spec_Modify_Cmd(void *, tBtampTLVHCI_Flow_Spec
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 71 (0x0047)
-typedef struct sBtampTLVHCI_Flow_Spec_Modify_Complete_Event
-{
+typedef struct sBtampTLVHCI_Flow_Spec_Modify_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U16_t      log_link_handle;
@@ -916,8 +862,7 @@ v_U32_t btampGetPackedTlvHCI_Flow_Spec_Modify_Complete_Event(void *, tBtampTLVHC
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3080 (0x0c08)
-typedef struct sBtampTLVHCI_Flush_Cmd
-{
+typedef struct sBtampTLVHCI_Flush_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Flush_Cmd;
@@ -942,8 +887,7 @@ v_U32_t btampGetPackedTlvHCI_Flush_Cmd(void *, tBtampTLVHCI_Flush_Cmd*, v_U32_t*
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 17 (0x0011)
-typedef struct sBtampTLVHCI_Flush_Occurred_Event
-{
+typedef struct sBtampTLVHCI_Flush_Occurred_Event {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Flush_Occurred_Event;
@@ -968,8 +912,7 @@ v_U32_t btampGetPackedTlvHCI_Flush_Occurred_Event(void *, tBtampTLVHCI_Flush_Occ
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3167 (0x0C5F)
-typedef struct sBtampTLVHCI_Enhanced_Flush_Cmd
-{
+typedef struct sBtampTLVHCI_Enhanced_Flush_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
     v_U8_t       packet_type;
@@ -995,8 +938,7 @@ v_U32_t btampGetPackedTlvHCI_Enhanced_Flush_Cmd(void *, tBtampTLVHCI_Enhanced_Fl
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 57 (0x0039)
-typedef struct sBtampTLVHCI_Enhanced_Flush_Complete_Event
-{
+typedef struct sBtampTLVHCI_Enhanced_Flush_Complete_Event {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Enhanced_Flush_Complete_Event;
@@ -1022,8 +964,7 @@ v_U32_t btampGetPackedTlvHCI_Enhanced_Flush_Complete_Event(void *, tBtampTLVHCI_
 #endif /* C++ */
 
 // ID 62 (0x003e)
-typedef struct sBtampTLVHCI_Generic_AMP_Link_Key_Notification_Event
-{
+typedef struct sBtampTLVHCI_Generic_AMP_Link_Key_Notification_Event {
     v_U8_t       present;
     v_U8_t       bd_addr[6];
     v_U8_t       generic_amp_link_key[32];
@@ -1050,8 +991,7 @@ v_U32_t btampGetPackedTlvHCI_Generic_AMP_Link_Key_Notification_Event(void *, tBt
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 16 (0x0010)
-typedef struct sBtampTLVHCI_Hardware_Error_Event
-{
+typedef struct sBtampTLVHCI_Hardware_Error_Event {
     v_U8_t       present;
     v_U8_t       hardware_code;
 } tBtampTLVHCI_Hardware_Error_Event;
@@ -1076,8 +1016,7 @@ v_U32_t btampGetPackedTlvHCI_Hardware_Error_Event(void *, tBtampTLVHCI_Hardware_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 1083 (0x043b)
-typedef struct sBtampTLVHCI_Logical_Link_Cancel_Cmd
-{
+typedef struct sBtampTLVHCI_Logical_Link_Cancel_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       tx_flow_spec_id;
@@ -1103,8 +1042,7 @@ v_U32_t btampGetPackedTlvHCI_Logical_Link_Cancel_Cmd(void *, tBtampTLVHCI_Logica
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 69 (0x0045)
-typedef struct sBtampTLVHCI_Logical_Link_Complete_Event
-{
+typedef struct sBtampTLVHCI_Logical_Link_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U16_t      log_link_handle;
@@ -1132,8 +1070,7 @@ v_U32_t btampGetPackedTlvHCI_Logical_Link_Complete_Event(void *, tBtampTLVHCI_Lo
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 25 (0x0019)
-typedef struct sBtampTLVHCI_Loopback_Command_Event
-{
+typedef struct sBtampTLVHCI_Loopback_Command_Event {
     v_U8_t       present;
     v_U8_t       hci_command_packet[64];
 } tBtampTLVHCI_Loopback_Command_Event;
@@ -1158,8 +1095,7 @@ v_U32_t btampGetPackedTlvHCI_Loopback_Command_Event(void *, tBtampTLVHCI_Loopbac
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 64 (0x0040)
-typedef struct sBtampTLVHCI_Physical_Link_Complete_Event
-{
+typedef struct sBtampTLVHCI_Physical_Link_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U8_t       phy_link_handle;
@@ -1186,8 +1122,7 @@ v_U32_t btampGetPackedTlvHCI_Physical_Link_Complete_Event(void *, tBtampTLVHCI_P
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 67 (0x0043)
-typedef struct sBtampTLVHCI_Physical_Link_Loss_Warning_Event
-{
+typedef struct sBtampTLVHCI_Physical_Link_Loss_Warning_Event {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       reason;
@@ -1213,8 +1148,7 @@ v_U32_t btampGetPackedTlvHCI_Physical_Link_Loss_Warning_Event(void *, tBtampTLVH
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 68 (0x0044)
-typedef struct sBtampTLVHCI_Physical_Link_Recovery_Event
-{
+typedef struct sBtampTLVHCI_Physical_Link_Recovery_Event {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
 } tBtampTLVHCI_Physical_Link_Recovery_Event;
@@ -1239,8 +1173,7 @@ v_U32_t btampGetPackedTlvHCI_Physical_Link_Recovery_Event(void *, tBtampTLVHCI_P
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 30 (0x001e)
-typedef struct sBtampTLVHCI_Qos_Violation_Event
-{
+typedef struct sBtampTLVHCI_Qos_Violation_Event {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Qos_Violation_Event;
@@ -1265,8 +1198,7 @@ v_U32_t btampGetPackedTlvHCI_Qos_Violation_Event(void *, tBtampTLVHCI_Qos_Violat
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3177 (0x0c69)
-typedef struct sBtampTLVHCI_Read_Best_Effort_Flush_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Best_Effort_Flush_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Read_Best_Effort_Flush_Timeout_Cmd;
@@ -1291,8 +1223,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Best_Effort_Flush_Timeout_Cmd(void *, tBtampTL
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4101 (0x1005)
-typedef struct sBtampTLVHCI_Read_Buffer_Size_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Buffer_Size_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Buffer_Size_Cmd;
 
@@ -1316,8 +1247,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Buffer_Size_Cmd(void *, tBtampTLVHCI_Read_Buff
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3093 (0x0c15)
-typedef struct sBtampTLVHCI_Read_Connection_Accept_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Connection_Accept_Timeout_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Connection_Accept_Timeout_Cmd;
 
@@ -1341,8 +1271,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Connection_Accept_Timeout_Cmd(void *, tBtampTL
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4106 (0x100a)
-typedef struct sBtampTLVHCI_Read_Data_Block_Size_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Data_Block_Size_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Data_Block_Size_Cmd;
 
@@ -1366,8 +1295,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Data_Block_Size_Cmd(void *, tBtampTLVHCI_Read_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5121 (0x1401)
-typedef struct sBtampTLVHCI_Read_Failed_Contact_Counter_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Failed_Contact_Counter_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Read_Failed_Contact_Counter_Cmd;
@@ -1392,8 +1320,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Failed_Contact_Counter_Cmd(void *, tBtampTLVHC
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3174 (0x0c66)
-typedef struct sBtampTLVHCI_Read_Flow_Control_Mode_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Flow_Control_Mode_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Flow_Control_Mode_Cmd;
 
@@ -1417,8 +1344,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Flow_Control_Mode_Cmd(void *, tBtampTLVHCI_Rea
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5123 (0x1403)
-typedef struct sBtampTLVHCI_Read_Link_Quality_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Link_Quality_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Read_Link_Quality_Cmd;
@@ -1443,8 +1369,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Link_Quality_Cmd(void *, tBtampTLVHCI_Read_Lin
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3126 (0x0c36)
-typedef struct sBtampTLVHCI_Read_Link_Supervision_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Link_Supervision_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Read_Link_Supervision_Timeout_Cmd;
@@ -1469,8 +1394,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Link_Supervision_Timeout_Cmd(void *, tBtampTLV
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5130 (0x140a)
-typedef struct sBtampTLVHCI_Read_Local_AMP_Assoc_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Local_AMP_Assoc_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U16_t      length_so_far;
@@ -1497,8 +1421,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Local_AMP_Assoc_Cmd(void *, tBtampTLVHCI_Read_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5129 (0x1409)
-typedef struct sBtampTLVHCI_Read_Local_AMP_Information_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Local_AMP_Information_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Local_AMP_Information_Cmd;
 
@@ -1522,8 +1445,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Local_AMP_Information_Cmd(void *, tBtampTLVHCI
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4098 (0x1002)
-typedef struct sBtampTLVHCI_Read_Local_Supported_Cmds_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Local_Supported_Cmds_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Local_Supported_Cmds_Cmd;
 
@@ -1547,8 +1469,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Local_Supported_Cmds_Cmd(void *, tBtampTLVHCI_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 4097 (0x1001)
-typedef struct sBtampTLVHCI_Read_Local_Version_Info_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Local_Version_Info_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Local_Version_Info_Cmd;
 
@@ -1572,8 +1493,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Local_Version_Info_Cmd(void *, tBtampTLVHCI_Re
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3172 (0x0c64)
-typedef struct sBtampTLVHCI_Read_Location_Data_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Location_Data_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Location_Data_Cmd;
 
@@ -1597,8 +1517,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Location_Data_Cmd(void *, tBtampTLVHCI_Read_Lo
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3169 (0x0c61)
-typedef struct sBtampTLVHCI_Read_Logical_Link_Accept_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Logical_Link_Accept_Timeout_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Logical_Link_Accept_Timeout_Cmd;
 
@@ -1622,8 +1541,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Logical_Link_Accept_Timeout_Cmd(void *, tBtamp
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 6145 (0x1801)
-typedef struct sBtampTLVHCI_Read_Loopback_Mode_Cmd
-{
+typedef struct sBtampTLVHCI_Read_Loopback_Mode_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Read_Loopback_Mode_Cmd;
 
@@ -1647,8 +1565,7 @@ v_U32_t btampGetPackedTlvHCI_Read_Loopback_Mode_Cmd(void *, tBtampTLVHCI_Read_Lo
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5125 (0x1405)
-typedef struct sBtampTLVHCI_Read_RSSI_Cmd
-{
+typedef struct sBtampTLVHCI_Read_RSSI_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Read_RSSI_Cmd;
@@ -1673,8 +1590,7 @@ v_U32_t btampGetPackedTlvHCI_Read_RSSI_Cmd(void *, tBtampTLVHCI_Read_RSSI_Cmd*, 
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3075 (0x0c03)
-typedef struct sBtampTLVHCI_Reset_Cmd
-{
+typedef struct sBtampTLVHCI_Reset_Cmd {
     v_U8_t       present;
 } tBtampTLVHCI_Reset_Cmd;
 
@@ -1698,8 +1614,7 @@ v_U32_t btampGetPackedTlvHCI_Reset_Cmd(void *, tBtampTLVHCI_Reset_Cmd*, v_U32_t*
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5122 (0x1402)
-typedef struct sBtampTLVHCI_Reset_Failed_Contact_Counter_Cmd
-{
+typedef struct sBtampTLVHCI_Reset_Failed_Contact_Counter_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
 } tBtampTLVHCI_Reset_Failed_Contact_Counter_Cmd;
@@ -1724,8 +1639,7 @@ v_U32_t btampGetPackedTlvHCI_Reset_Failed_Contact_Counter_Cmd(void *, tBtampTLVH
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3077 (0x0c05)
-typedef struct sBtampTLVHCI_Set_Event_Mask_Cmd
-{
+typedef struct sBtampTLVHCI_Set_Event_Mask_Cmd {
     v_U8_t       present;
     v_U8_t       event_mask[8];
 } tBtampTLVHCI_Set_Event_Mask_Cmd;
@@ -1750,8 +1664,7 @@ v_U32_t btampGetPackedTlvHCI_Set_Event_Mask_Cmd(void *, tBtampTLVHCI_Set_Event_M
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3171 (0x0c63)
-typedef struct sBtampTLVHCI_Set_Event_Mask_Page_2_Cmd
-{
+typedef struct sBtampTLVHCI_Set_Event_Mask_Page_2_Cmd {
     v_U8_t       present;
     v_U8_t       event_mask_page_2[8];
 } tBtampTLVHCI_Set_Event_Mask_Page_2_Cmd;
@@ -1776,8 +1689,7 @@ v_U32_t btampGetPackedTlvHCI_Set_Event_Mask_Page_2_Cmd(void *, tBtampTLVHCI_Set_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3179 (0x0c6b)
-typedef struct sBtampTLVHCI_Set_Short_Range_Mode_Cmd
-{
+typedef struct sBtampTLVHCI_Set_Short_Range_Mode_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U8_t       short_range_mode;
@@ -1803,8 +1715,7 @@ v_U32_t btampGetPackedTlvHCI_Set_Short_Range_Mode_Cmd(void *, tBtampTLVHCI_Set_S
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 76 (0x004c)
-typedef struct sBtampTLVHCI_Short_Range_Mode_Change_Complete_Event
-{
+typedef struct sBtampTLVHCI_Short_Range_Mode_Change_Complete_Event {
     v_U8_t       present;
     v_U8_t       status;
     v_U8_t       phy_link_handle;
@@ -1831,8 +1742,7 @@ v_U32_t btampGetPackedTlvHCI_Short_Range_Mode_Change_Complete_Event(void *, tBta
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3178 (0x0c6a)
-typedef struct sBtampTLVHCI_Write_Best_Effort_Flush_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Best_Effort_Flush_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
     v_U32_t      best_effort_flush_timeout;
@@ -1858,8 +1768,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Best_Effort_Flush_Timeout_Cmd(void *, tBtampT
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3094 (0x0c16)
-typedef struct sBtampTLVHCI_Write_Connection_Accept_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Connection_Accept_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      connection_accept_timeout;
 } tBtampTLVHCI_Write_Connection_Accept_Timeout_Cmd;
@@ -1884,8 +1793,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Connection_Accept_Timeout_Cmd(void *, tBtampT
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3175 (0x0c67)
-typedef struct sBtampTLVHCI_Write_Flow_Control_Mode_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Flow_Control_Mode_Cmd {
     v_U8_t       present;
     v_U8_t       flow_control_mode;
 } tBtampTLVHCI_Write_Flow_Control_Mode_Cmd;
@@ -1910,8 +1818,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Flow_Control_Mode_Cmd(void *, tBtampTLVHCI_Wr
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3127 (0x0c37)
-typedef struct sBtampTLVHCI_Write_Link_Supervision_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Link_Supervision_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      log_link_handle;
     v_U16_t      link_supervision_timeout;
@@ -1937,8 +1844,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Link_Supervision_Timeout_Cmd(void *, tBtampTL
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3173 (0x0c65)
-typedef struct sBtampTLVHCI_Write_Location_Data_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Location_Data_Cmd {
     v_U8_t       present;
     v_U8_t       loc_domain_aware;
     v_U8_t       loc_domain[3];
@@ -1965,8 +1871,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Location_Data_Cmd(void *, tBtampTLVHCI_Write_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 3170 (0x0c62)
-typedef struct sBtampTLVHCI_Write_Logical_Link_Accept_Timeout_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Logical_Link_Accept_Timeout_Cmd {
     v_U8_t       present;
     v_U16_t      logical_link_accept_timeout;
 } tBtampTLVHCI_Write_Logical_Link_Accept_Timeout_Cmd;
@@ -1991,8 +1896,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Logical_Link_Accept_Timeout_Cmd(void *, tBtam
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 6146 (0x1802)
-typedef struct sBtampTLVHCI_Write_Loopback_Mode_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Loopback_Mode_Cmd {
     v_U8_t       present;
     v_U8_t       loopback_mode;
 } tBtampTLVHCI_Write_Loopback_Mode_Cmd;
@@ -2017,8 +1921,7 @@ v_U32_t btampGetPackedTlvHCI_Write_Loopback_Mode_Cmd(void *, tBtampTLVHCI_Write_
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 5131 (0x140b)
-typedef struct sBtampTLVHCI_Write_Remote_AMP_ASSOC_Cmd
-{
+typedef struct sBtampTLVHCI_Write_Remote_AMP_ASSOC_Cmd {
     v_U8_t       present;
     v_U8_t       phy_link_handle;
     v_U16_t      length_so_far;
@@ -2046,16 +1949,14 @@ v_U32_t btampGetPackedTlvHCI_Write_Remote_AMP_ASSOC_Cmd(void *, tBtampTLVHCI_Wri
 }; /* End extern "C". */
 #endif /* C++ */
 // ID 64512 (0xfc00)
-typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_0
-{
+typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_0 {
     v_U8_t       present;
 } tBtampTLVHCI_Vendor_Specific_0_Cmd;
 
 #define BTAMP_TLV_HCI_VENDOR_SPECIFIC_CMD_0 ( 64512 )
 
 // ID 64513 (0xfc01)
-typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_1
-{
+typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_1 {
     v_U8_t       present;
 } tBtampTLVHCI_Vendor_Specific_1_Cmd;
 
@@ -2069,8 +1970,7 @@ typedef struct sBtampTLVHCI_Vendor_Specific_Cmd_1
  * Frames
  **********************************************************************/
 
-typedef struct sBtampAMP_ASSOC
-{
+typedef struct sBtampAMP_ASSOC {
     tBtampTLVAMP_Assoc_MAC_Addr AMP_Assoc_MAC_Addr;
     tBtampTLVAMP_Assoc_Preferred_Channel_List AMP_Assoc_Preferred_Channel_List;
     tBtampTLVAMP_Assoc_Connected_Channel AMP_Assoc_Connected_Channel;
@@ -2098,8 +1998,7 @@ extern "C" {
 #endif /* C++ */
 
 /* HCI Number of Completed Packets Event*/
-typedef struct sBtampTLVHCI_Num_Completed_Pkts_Event
-{
+typedef struct sBtampTLVHCI_Num_Completed_Pkts_Event {
     v_U8_t       present;
     /*
       The number of Connection Handles and Num_Data_Packets
@@ -2139,8 +2038,7 @@ extern "C" {
 #endif /* C++ */
 
 /* HCI Number of Completed Data Blocks Event*/
-typedef struct sBtampTLVHCI_Num_Completed_Data_Blocks_Event
-{
+typedef struct sBtampTLVHCI_Num_Completed_Data_Blocks_Event {
     v_U8_t       present;
     /*
       Total number of data block buffers available in the Controller for the

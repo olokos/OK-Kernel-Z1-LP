@@ -28,18 +28,18 @@
 /* Values returned via lpfc_vport_getinfo() */
 struct vport_info {
 
-	uint32_t api_versions;
-	uint8_t linktype;
+    uint32_t api_versions;
+    uint8_t linktype;
 #define  VPORT_TYPE_PHYSICAL	0
 #define  VPORT_TYPE_VIRTUAL	1
 
-	uint8_t state;
+    uint8_t state;
 #define  VPORT_STATE_OFFLINE	0
 #define  VPORT_STATE_ACTIVE	1
 #define  VPORT_STATE_FAILED	2
 
-	uint8_t fail_reason;
-	uint8_t prev_fail_reason;
+    uint8_t fail_reason;
+    uint8_t prev_fail_reason;
 #define  VPORT_FAIL_UNKNOWN	0
 #define  VPORT_FAIL_LINKDOWN	1
 #define  VPORT_FAIL_FAB_UNSUPPORTED	2
@@ -47,34 +47,34 @@ struct vport_info {
 #define  VPORT_FAIL_FAB_LOGOUT	4
 #define  VPORT_FAIL_ADAP_NORESOURCES	5
 
-	uint8_t node_name[8];	/* WWNN */
-	uint8_t port_name[8];	/* WWPN */
+    uint8_t node_name[8];	/* WWNN */
+    uint8_t port_name[8];	/* WWPN */
 
-	struct Scsi_Host *shost;
+    struct Scsi_Host *shost;
 
-/* Following values are valid only on physical links */
-	uint32_t vports_max;
-	uint32_t vports_inuse;
-	uint32_t rpi_max;
-	uint32_t rpi_inuse;
+    /* Following values are valid only on physical links */
+    uint32_t vports_max;
+    uint32_t vports_inuse;
+    uint32_t rpi_max;
+    uint32_t rpi_inuse;
 #define  VPORT_CNT_INVALID	0xFFFFFFFF
 };
 
 /* data used  in link creation */
 struct vport_data {
-	uint32_t api_version;
+    uint32_t api_version;
 
-	uint32_t options;
+    uint32_t options;
 #define  VPORT_OPT_AUTORETRY	0x01
 
-	uint8_t node_name[8];	/* WWNN */
-	uint8_t port_name[8];	/* WWPN */
+    uint8_t node_name[8];	/* WWNN */
+    uint8_t port_name[8];	/* WWPN */
 
-/*
- *  Upon successful creation, vport_shost will point to the new Scsi_Host
- *  structure for the new virtual link.
- */
-	struct Scsi_Host *vport_shost;
+    /*
+     *  Upon successful creation, vport_shost will point to the new Scsi_Host
+     *  structure for the new virtual link.
+     */
+    struct Scsi_Host *vport_shost;
 };
 
 /* API function return codes */
@@ -102,15 +102,15 @@ void lpfc_destroy_vport_work_array(struct lpfc_hba *, struct lpfc_vport **);
 #define VPORT_DELETE	0x4
 
 struct vport_cmd_tag {
-	uint32_t cmd;
-	struct vport_data cdata;
-	struct vport_info cinfo;
-	void *vport;
-	int vport_num;
+    uint32_t cmd;
+    struct vport_data cdata;
+    struct vport_info cinfo;
+    void *vport;
+    int vport_num;
 };
 
 void lpfc_vport_set_state(struct lpfc_vport *vport,
-			  enum fc_vport_state new_state);
+                          enum fc_vport_state new_state);
 
 void lpfc_vport_reset_stat_data(struct lpfc_vport *);
 void lpfc_alloc_bucket(struct lpfc_vport *);

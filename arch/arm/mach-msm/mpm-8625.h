@@ -19,12 +19,12 @@ void msm_gic_irq_extn_init(void);
 unsigned int msm_gic_spi_ppi_pending(void);
 int msm_gic_irq_idle_sleep_allowed(void);
 void msm_gic_irq_enter_sleep1(bool modem_wake, int from_idle, uint32_t
-		*irq_mask);
+                              *irq_mask);
 int msm_gic_irq_enter_sleep2(bool modem_wake, int from_idle);
 void msm_gic_irq_exit_sleep1(uint32_t irq_mask, uint32_t wakeup_reason,
-		uint32_t pending_irqs);
+                             uint32_t pending_irqs);
 void msm_gic_irq_exit_sleep2(uint32_t irq_mask, uint32_t wakeup_reason,
-		uint32_t pending);
+                             uint32_t pending);
 void msm_gic_irq_exit_sleep3(uint32_t irq_mask, uint32_t wakeup_reason,
-		uint32_t pending_irqs);
+                             uint32_t pending_irqs);
 #endif

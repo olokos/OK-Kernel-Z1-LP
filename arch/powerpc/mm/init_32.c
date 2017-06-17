@@ -103,19 +103,18 @@ unsigned long __max_low_memory = MAX_LOW_MEM;
 /*
  * Check for command-line options that affect what MMU_init will do.
  */
-void MMU_setup(void)
-{
-	/* Check for nobats option (used in mapin_ram). */
-	if (strstr(cmd_line, "nobats")) {
-		__map_without_bats = 1;
-	}
+void MMU_setup(void) {
+    /* Check for nobats option (used in mapin_ram). */
+    if (strstr(cmd_line, "nobats")) {
+        __map_without_bats = 1;
+    }
 
-	if (strstr(cmd_line, "noltlbs")) {
-		__map_without_ltlbs = 1;
-	}
+    if (strstr(cmd_line, "noltlbs")) {
+        __map_without_ltlbs = 1;
+    }
 #ifdef CONFIG_DEBUG_PAGEALLOC
-	__map_without_bats = 1;
-	__map_without_ltlbs = 1;
+    __map_without_bats = 1;
+    __map_without_ltlbs = 1;
 #endif
 }
 
@@ -124,96 +123,93 @@ void MMU_setup(void)
  * including both RAM and possibly some I/O regions,
  * and sets up the page tables and the MMU hardware ready to go.
  */
-void __init MMU_init(void)
-{
-	if (ppc_md.progress)
-		ppc_md.progress("MMU:enter", 0x111);
+void __init MMU_init(void) {
+    if (ppc_md.progress)
+        ppc_md.progress("MMU:enter", 0x111);
 
-	/* parse args from command line */
-	MMU_setup();
+    /* parse args from command line */
+    MMU_setup();
 
-	/*
-	 * Reserve gigantic pages for hugetlb.  This MUST occur before
-	 * lowmem_end_addr is initialized below.
-	 */
-	reserve_hugetlb_gpages();
+    /*
+     * Reserve gigantic pages for hugetlb.  This MUST occur before
+     * lowmem_end_addr is initialized below.
+     */
+    reserve_hugetlb_gpages();
 
-	if (memblock.memory.cnt > 1) {
+    if (memblock.memory.cnt > 1) {
 #ifndef CONFIG_WII
-		memblock_enforce_memory_limit(memblock.memory.regions[0].size);
-		printk(KERN_WARNING "Only using first contiguous memory region");
+        memblock_enforce_memory_limit(memblock.memory.regions[0].size);
+        printk(KERN_WARNING "Only using first contiguous memory region");
 #else
-		wii_memory_fixups();
+        wii_memory_fixups();
 #endif
-	}
+    }
 
-	total_lowmem = total_memory = memblock_end_of_DRAM() - memstart_addr;
-	lowmem_end_addr = memstart_addr + total_lowmem;
+    total_lowmem = total_memory = memblock_end_of_DRAM() - memstart_addr;
+    lowmem_end_addr = memstart_addr + total_lowmem;
 
 #ifdef CONFIG_FSL_BOOKE
-	/* Freescale Book-E parts expect lowmem to be mapped by fixed TLB
-	 * entries, so we need to adjust lowmem to match the amount we can map
-	 * in the fixed entries */
-	adjust_total_lowmem();
+    /* Freescale Book-E parts expect lowmem to be mapped by fixed TLB
+     * entries, so we need to adjust lowmem to match the amount we can map
+     * in the fixed entries */
+    adjust_total_lowmem();
 #endif /* CONFIG_FSL_BOOKE */
 
-	if (total_lowmem > __max_low_memory) {
-		total_lowmem = __max_low_memory;
-		lowmem_end_addr = memstart_addr + total_lowmem;
+    if (total_lowmem > __max_low_memory) {
+        total_lowmem = __max_low_memory;
+        lowmem_end_addr = memstart_addr + total_lowmem;
 #ifndef CONFIG_HIGHMEM
-		total_memory = total_lowmem;
-		memblock_enforce_memory_limit(total_lowmem);
+        total_memory = total_lowmem;
+        memblock_enforce_memory_limit(total_lowmem);
 #endif /* CONFIG_HIGHMEM */
-	}
+    }
 
-	/* Initialize the MMU hardware */
-	if (ppc_md.progress)
-		ppc_md.progress("MMU:hw init", 0x300);
-	MMU_init_hw();
+    /* Initialize the MMU hardware */
+    if (ppc_md.progress)
+        ppc_md.progress("MMU:hw init", 0x300);
+    MMU_init_hw();
 
-	/* Map in all of RAM starting at KERNELBASE */
-	if (ppc_md.progress)
-		ppc_md.progress("MMU:mapin", 0x301);
-	mapin_ram();
+    /* Map in all of RAM starting at KERNELBASE */
+    if (ppc_md.progress)
+        ppc_md.progress("MMU:mapin", 0x301);
+    mapin_ram();
 
-	/* Initialize early top-down ioremap allocator */
-	ioremap_bot = IOREMAP_TOP;
+    /* Initialize early top-down ioremap allocator */
+    ioremap_bot = IOREMAP_TOP;
 
-	/* Map in I/O resources */
-	if (ppc_md.progress)
-		ppc_md.progress("MMU:setio", 0x302);
+    /* Map in I/O resources */
+    if (ppc_md.progress)
+        ppc_md.progress("MMU:setio", 0x302);
 
-	if (ppc_md.progress)
-		ppc_md.progress("MMU:exit", 0x211);
+    if (ppc_md.progress)
+        ppc_md.progress("MMU:exit", 0x211);
 
-	/* From now on, btext is no longer BAT mapped if it was at all */
+    /* From now on, btext is no longer BAT mapped if it was at all */
 #ifdef CONFIG_BOOTX_TEXT
-	btext_unmap();
+    btext_unmap();
 #endif
 
-	/* Shortly after that, the entire linear mapping will be available */
-	memblock_set_current_limit(lowmem_end_addr);
+    /* Shortly after that, the entire linear mapping will be available */
+    memblock_set_current_limit(lowmem_end_addr);
 }
 
 /* This is only called until mem_init is done. */
-void __init *early_get_page(void)
-{
-	if (init_bootmem_done)
-		return alloc_bootmem_pages(PAGE_SIZE);
-	else
-		return __va(memblock_alloc(PAGE_SIZE, PAGE_SIZE));
+void __init *early_get_page(void) {
+    if (init_bootmem_done)
+        return alloc_bootmem_pages(PAGE_SIZE);
+    else
+        return __va(memblock_alloc(PAGE_SIZE, PAGE_SIZE));
 }
 
 #ifdef CONFIG_8xx /* No 8xx specific .c file to put that in ... */
 void setup_initial_memory_limit(phys_addr_t first_memblock_base,
-				phys_addr_t first_memblock_size)
-{
-	/* We don't currently support the first MEMBLOCK not mapping 0
-	 * physical on those processors
-	 */
-	BUG_ON(first_memblock_base != 0);
+                                phys_addr_t first_memblock_size) {
+    /* We don't currently support the first MEMBLOCK not mapping 0
+     * physical on those processors
+     */
+    BUG_ON(first_memblock_base != 0);
 
-	/* 8xx can only access 8MB at the moment */
-	memblock_set_current_limit(min_t(u64, first_memblock_size, 0x00800000));
+    /* 8xx can only access 8MB at the moment */
+    memblock_set_current_limit(min_t(u64, first_memblock_size, 0x00800000));
 }
 #endif /* CONFIG_8xx */

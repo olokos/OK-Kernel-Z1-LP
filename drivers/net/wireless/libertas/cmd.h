@@ -12,18 +12,18 @@
 /* Command & response transfer between host and card */
 
 struct cmd_ctrl_node {
-	struct list_head list;
-	int result;
-	/* command response */
-	int (*callback)(struct lbs_private *,
-			unsigned long,
-			struct cmd_header *);
-	unsigned long callback_arg;
-	/* command data */
-	struct cmd_header *cmdbuf;
-	/* wait queue */
-	u16 cmdwaitqwoken;
-	wait_queue_head_t cmdwait_q;
+    struct list_head list;
+    int result;
+    /* command response */
+    int (*callback)(struct lbs_private *,
+                    unsigned long,
+                    struct cmd_header *);
+    unsigned long callback_arg;
+    /* command data */
+    struct cmd_header *cmdbuf;
+    /* wait queue */
+    u16 cmdwaitqwoken;
+    wait_queue_head_t cmdwait_q;
 };
 
 
@@ -40,29 +40,29 @@ struct cmd_ctrl_node {
 	lbs_cmd(priv, cmdnr, cmd, lbs_cmd_copyback, (unsigned long) (cmd))
 
 void lbs_cmd_async(struct lbs_private *priv, uint16_t command,
-	struct cmd_header *in_cmd, int in_cmd_size);
+                   struct cmd_header *in_cmd, int in_cmd_size);
 
 int __lbs_cmd(struct lbs_private *priv, uint16_t command,
-	      struct cmd_header *in_cmd, int in_cmd_size,
-	      int (*callback)(struct lbs_private *, unsigned long, struct cmd_header *),
-	      unsigned long callback_arg);
+              struct cmd_header *in_cmd, int in_cmd_size,
+              int (*callback)(struct lbs_private *, unsigned long, struct cmd_header *),
+              unsigned long callback_arg);
 
 struct cmd_ctrl_node *__lbs_cmd_async(struct lbs_private *priv,
-	uint16_t command, struct cmd_header *in_cmd, int in_cmd_size,
-	int (*callback)(struct lbs_private *, unsigned long, struct cmd_header *),
-	unsigned long callback_arg);
+                                      uint16_t command, struct cmd_header *in_cmd, int in_cmd_size,
+                                      int (*callback)(struct lbs_private *, unsigned long, struct cmd_header *),
+                                      unsigned long callback_arg);
 
 int lbs_cmd_copyback(struct lbs_private *priv, unsigned long extra,
-		     struct cmd_header *resp);
+                     struct cmd_header *resp);
 
 int lbs_allocate_cmd_buffer(struct lbs_private *priv);
 int lbs_free_cmd_buffer(struct lbs_private *priv);
 
 int lbs_execute_next_command(struct lbs_private *priv);
 void __lbs_complete_command(struct lbs_private *priv, struct cmd_ctrl_node *cmd,
-			    int result);
+                            int result);
 void lbs_complete_command(struct lbs_private *priv, struct cmd_ctrl_node *cmd,
-			  int result);
+                          int result);
 int lbs_process_command_response(struct lbs_private *priv, u8 *data, u32 len);
 
 
@@ -86,10 +86,10 @@ int lbs_set_channel(struct lbs_private *priv, u8 channel);
 int lbs_update_channel(struct lbs_private *priv);
 
 int lbs_host_sleep_cfg(struct lbs_private *priv, uint32_t criteria,
-		struct wol_config *p_wol_config);
+                       struct wol_config *p_wol_config);
 
 int lbs_cmd_802_11_sleep_params(struct lbs_private *priv, uint16_t cmd_action,
-				struct sleep_params *sp);
+                                struct sleep_params *sp);
 
 void lbs_ps_confirm_sleep(struct lbs_private *priv);
 
@@ -98,7 +98,7 @@ int lbs_set_radio(struct lbs_private *priv, u8 preamble, u8 radio_on);
 void lbs_set_mac_control(struct lbs_private *priv);
 
 int lbs_get_tx_power(struct lbs_private *priv, s16 *curlevel, s16 *minlevel,
-		     s16 *maxlevel);
+                     s16 *maxlevel);
 
 int lbs_set_snmp_mib(struct lbs_private *priv, u32 oid, u16 val);
 
@@ -108,15 +108,15 @@ int lbs_get_snmp_mib(struct lbs_private *priv, u32 oid, u16 *out_val);
 /* Commands only used in wext.c, assoc. and scan.c */
 
 int lbs_set_power_adapt_cfg(struct lbs_private *priv, int enable, int8_t p0,
-		int8_t p1, int8_t p2);
+                            int8_t p1, int8_t p2);
 
 int lbs_set_tpc_cfg(struct lbs_private *priv, int enable, int8_t p0, int8_t p1,
-		int8_t p2, int usesnr);
+                    int8_t p2, int usesnr);
 
 int lbs_set_data_rate(struct lbs_private *priv, u8 rate);
 
 int lbs_cmd_802_11_rate_adapt_rateset(struct lbs_private *priv,
-				      uint16_t cmd_action);
+                                      uint16_t cmd_action);
 
 int lbs_set_tx_power(struct lbs_private *priv, s16 dbm);
 
@@ -129,8 +129,8 @@ int lbs_set_monitor_mode(struct lbs_private *priv, int enable);
 int lbs_get_rssi(struct lbs_private *priv, s8 *snr, s8 *nf);
 
 int lbs_set_11d_domain_info(struct lbs_private *priv,
-			    struct regulatory_request *request,
-			    struct ieee80211_supported_band **bands);
+                            struct regulatory_request *request,
+                            struct ieee80211_supported_band **bands);
 
 int lbs_get_reg(struct lbs_private *priv, u16 reg, u16 offset, u32 *value);
 

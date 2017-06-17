@@ -75,8 +75,7 @@ tSirRetStatus limUpdateAPWPARSNIEsReqSerDes(tpAniSirGlobal pMac, tpSirUpdateAPWP
 
 
 // Byte String <--> tANI_U16/tANI_U32 copy functions
-static inline void limCopyU16(tANI_U8 *ptr, tANI_U16 u16Val)
-{
+static inline void limCopyU16(tANI_U8 *ptr, tANI_U16 u16Val) {
 #if ((defined(ANI_OS_TYPE_QNX) && defined(ANI_LITTLE_BYTE_ENDIAN)) ||   \
      (defined(ANI_OS_TYPE_ANDROID) && defined(ANI_LITTLE_BYTE_ENDIAN)))
     *ptr++ = (tANI_U8) (u16Val & 0xff);
@@ -86,8 +85,7 @@ static inline void limCopyU16(tANI_U8 *ptr, tANI_U16 u16Val)
 #endif
 }
 
-static inline tANI_U16 limGetU16(tANI_U8 *ptr)
-{
+static inline tANI_U16 limGetU16(tANI_U8 *ptr) {
 #if ((defined(ANI_OS_TYPE_QNX) && defined(ANI_LITTLE_BYTE_ENDIAN)) ||   \
      (defined(ANI_OS_TYPE_ANDROID) && defined(ANI_LITTLE_BYTE_ENDIAN)))
     return (((tANI_U16) (*(ptr+1) << 8)) |
@@ -97,8 +95,7 @@ static inline tANI_U16 limGetU16(tANI_U8 *ptr)
 #endif
 }
 
-static inline void limCopyU32(tANI_U8 *ptr, tANI_U32 u32Val)
-{
+static inline void limCopyU32(tANI_U8 *ptr, tANI_U32 u32Val) {
 #if ((defined(ANI_OS_TYPE_QNX) && defined(ANI_LITTLE_BYTE_ENDIAN)) ||   \
      (defined(ANI_OS_TYPE_ANDROID) && defined(ANI_LITTLE_BYTE_ENDIAN)))
     *ptr++ = (tANI_U8) (u32Val & 0xff);
@@ -110,8 +107,7 @@ static inline void limCopyU32(tANI_U8 *ptr, tANI_U32 u32Val)
 #endif
 }
 
-static inline tANI_U32 limGetU32(tANI_U8 *ptr)
-{
+static inline tANI_U32 limGetU32(tANI_U8 *ptr) {
 #if ((defined(ANI_OS_TYPE_QNX) && defined(ANI_LITTLE_BYTE_ENDIAN)) ||   \
      (defined(ANI_OS_TYPE_ANDROID) && defined(ANI_LITTLE_BYTE_ENDIAN)))
     return ((*(ptr+3) << 24) |

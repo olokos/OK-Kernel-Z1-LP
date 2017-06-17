@@ -47,27 +47,27 @@
 				   128K x 32bit SRAM will limit the maximum
 				   VCI. */
 
-				/*#define NS_PCI_LATENCY 64*//* Must be a multiple of 32 */
+/*#define NS_PCI_LATENCY 64*//* Must be a multiple of 32 */
 
-	/* Number of buffers initially allocated */
+/* Number of buffers initially allocated */
 #define NUM_SB 32		/* Must be even */
 #define NUM_LB 24		/* Must be even */
 #define NUM_HB 8		/* Pre-allocated huge buffers */
 #define NUM_IOVB 48		/* Iovec buffers */
 
-	/* Lower level for count of buffers */
+/* Lower level for count of buffers */
 #define MIN_SB 8		/* Must be even */
 #define MIN_LB 8		/* Must be even */
 #define MIN_HB 6
 #define MIN_IOVB 8
 
-	/* Upper level for count of buffers */
+/* Upper level for count of buffers */
 #define MAX_SB 64		/* Must be even, <= 508 */
 #define MAX_LB 48		/* Must be even, <= 508 */
 #define MAX_HB 10
 #define MAX_IOVB 80
 
-	/* These are the absolute maximum allowed for the ioctl() */
+/* These are the absolute maximum allowed for the ioctl() */
 #define TOP_SB 256		/* Must be even, <= 508 */
 #define TOP_LB 128		/* Must be even, <= 508 */
 #define TOP_HB 64
@@ -124,10 +124,10 @@
  */
 
 typedef struct ns_rsqe {
-	u32 word_1;
-	u32 buffer_handle;
-	u32 final_aal5_crc32;
-	u32 word_4;
+    u32 word_1;
+    u32 buffer_handle;
+    u32 final_aal5_crc32;
+    u32 word_4;
 } ns_rsqe;
 
 #define ns_rsqe_vpi(ns_rsqep) \
@@ -176,15 +176,15 @@ typedef struct ns_rsqe {
  */
 
 typedef struct cell_payload {
-	u32 word[12];
+    u32 word[12];
 } cell_payload;
 
 typedef struct ns_rcqe {
-	u32 word_1;
-	u32 word_2;
-	u32 word_3;
-	u32 word_4;
-	cell_payload payload;
+    u32 word_1;
+    u32 word_2;
+    u32 word_3;
+    u32 word_4;
+    cell_payload payload;
 } ns_rcqe;
 
 #define NS_RCQE_SIZE 64		/* bytes */
@@ -203,14 +203,14 @@ typedef struct ns_rcqe {
  */
 
 typedef struct ns_scqe {
-	u32 word_1;
-	u32 word_2;
-	u32 word_3;
-	u32 word_4;
+    u32 word_1;
+    u32 word_2;
+    u32 word_3;
+    u32 word_4;
 } ns_scqe;
 
-   /* NOTE: SCQ entries can be either a TBD (Transmit Buffer Descriptors)
-      or TSR (Transmit Status Requests) */
+/* NOTE: SCQ entries can be either a TBD (Transmit Buffer Descriptors)
+   or TSR (Transmit Status Requests) */
 
 #define NS_SCQE_TYPE_TBD 0x00000000
 #define NS_SCQE_TYPE_TSR 0x80000000
@@ -262,13 +262,13 @@ typedef struct ns_scqe {
  */
 
 typedef struct ns_tsi {
-	u32 word_1;
-	u32 word_2;
+    u32 word_1;
+    u32 word_2;
 } ns_tsi;
 
-   /* NOTE: The first word can be a status word copied from the TSR which
-      originated the TSI, or a timer overflow indicator. In this last
-      case, the value of the first word is all zeroes. */
+/* NOTE: The first word can be a status word copied from the TSR which
+   originated the TSI, or a timer overflow indicator. In this last
+   case, the value of the first word is all zeroes. */
 
 #define NS_TSI_EMPTY          0x80000000
 #define NS_TSI_TIMESTAMP_MASK 0x00FFFFFF
@@ -303,10 +303,10 @@ typedef struct ns_tsi {
  */
 
 typedef struct ns_rcte {
-	u32 word_1;
-	u32 buffer_handle;
-	u32 dma_address;
-	u32 aal5_crc32;
+    u32 word_1;
+    u32 buffer_handle;
+    u32 dma_address;
+    u32 aal5_crc32;
 } ns_rcte;
 
 #define NS_RCTE_BSFB            0x00200000	/* Rev. D only */
@@ -331,8 +331,8 @@ typedef struct ns_rcte {
 
 #define NS_RCT_ENTRY_SIZE 4	/* Number of dwords */
 
-   /* NOTE: We could make macros to contruct the first word of the RCTE,
-      but that doesn't seem to make much sense... */
+/* NOTE: We could make macros to contruct the first word of the RCTE,
+   but that doesn't seem to make much sense... */
 
 /*
  * FBD - Free Buffer Descriptor
@@ -341,8 +341,8 @@ typedef struct ns_rcte {
  */
 
 typedef struct ns_fbd {
-	u32 buffer_handle;
-	u32 dma_address;
+    u32 buffer_handle;
+    u32 dma_address;
 } ns_fbd;
 
 /*
@@ -362,13 +362,13 @@ typedef u32 ns_tste;
 
 #define ns_tste_make(opcode, sramad) (opcode | sramad)
 
-   /* NOTE:
+/* NOTE:
 
-      - When the opcode is FIXED, sramad specifies the SRAM address of the
-      SCD for that fixed rate channel.
-      - When the opcode is END, sramad specifies the SRAM address of the
-      location of the next TST entry to read.
-    */
+   - When the opcode is FIXED, sramad specifies the SRAM address of the
+   SCD for that fixed rate channel.
+   - When the opcode is END, sramad specifies the SRAM address of the
+   location of the next TST entry to read.
+ */
 
 /*
  * SCD - Segmentation Channel Descriptor
@@ -377,12 +377,12 @@ typedef u32 ns_tste;
  */
 
 typedef struct ns_scd {
-	u32 word_1;
-	u32 word_2;
-	u32 partial_aal5_crc;
-	u32 reserved;
-	ns_scqe cache_a;
-	ns_scqe cache_b;
+    u32 word_1;
+    u32 word_2;
+    u32 partial_aal5_crc;
+    u32 reserved;
+    ns_scqe cache_a;
+    ns_scqe cache_b;
 } ns_scd;
 
 #define NS_SCD_BASE_MASK_VAR 0xFFFFE000	/* Variable rate */
@@ -393,8 +393,8 @@ typedef struct ns_scd {
 #define NS_SCD_HEAD_MASK_FIX 0x000003F0
 #define NS_SCD_XMITFOREVER   0x02000000
 
-   /* NOTE: There are other fields in word 2 of the SCD, but as they should
-      not be needed in the device driver they are not defined here. */
+/* NOTE: There are other fields in word 2 of the SCD, but as they should
+   not be needed in the device driver they are not defined here. */
 
 /* NICStAR local SRAM memory map */
 
@@ -424,27 +424,27 @@ typedef struct ns_scd {
 /* See Section 3.4 of `IDT77211 NICStAR User Manual' from www.idt.com */
 
 enum ns_regs {
-	DR0 = 0x00,		/* Data Register 0 R/W */
-	DR1 = 0x04,		/* Data Register 1 W */
-	DR2 = 0x08,		/* Data Register 2 W */
-	DR3 = 0x0C,		/* Data Register 3 W */
-	CMD = 0x10,		/* Command W */
-	CFG = 0x14,		/* Configuration R/W */
-	STAT = 0x18,		/* Status R/W */
-	RSQB = 0x1C,		/* Receive Status Queue Base W */
-	RSQT = 0x20,		/* Receive Status Queue Tail R */
-	RSQH = 0x24,		/* Receive Status Queue Head W */
-	CDC = 0x28,		/* Cell Drop Counter R/clear */
-	VPEC = 0x2C,		/* VPI/VCI Lookup Error Count R/clear */
-	ICC = 0x30,		/* Invalid Cell Count R/clear */
-	RAWCT = 0x34,		/* Raw Cell Tail R */
-	TMR = 0x38,		/* Timer R */
-	TSTB = 0x3C,		/* Transmit Schedule Table Base R/W */
-	TSQB = 0x40,		/* Transmit Status Queue Base W */
-	TSQT = 0x44,		/* Transmit Status Queue Tail R */
-	TSQH = 0x48,		/* Transmit Status Queue Head W */
-	GP = 0x4C,		/* General Purpose R/W */
-	VPM = 0x50		/* VPI/VCI Mask W */
+    DR0 = 0x00,		/* Data Register 0 R/W */
+    DR1 = 0x04,		/* Data Register 1 W */
+    DR2 = 0x08,		/* Data Register 2 W */
+    DR3 = 0x0C,		/* Data Register 3 W */
+    CMD = 0x10,		/* Command W */
+    CFG = 0x14,		/* Configuration R/W */
+    STAT = 0x18,		/* Status R/W */
+    RSQB = 0x1C,		/* Receive Status Queue Base W */
+    RSQT = 0x20,		/* Receive Status Queue Tail R */
+    RSQH = 0x24,		/* Receive Status Queue Head W */
+    CDC = 0x28,		/* Cell Drop Counter R/clear */
+    VPEC = 0x2C,		/* VPI/VCI Lookup Error Count R/clear */
+    ICC = 0x30,		/* Invalid Cell Count R/clear */
+    RAWCT = 0x34,		/* Raw Cell Tail R */
+    TMR = 0x38,		/* Timer R */
+    TSTB = 0x3C,		/* Transmit Schedule Table Base R/W */
+    TSQB = 0x40,		/* Transmit Status Queue Base W */
+    TSQT = 0x44,		/* Transmit Status Queue Tail R */
+    TSQH = 0x48,		/* Transmit Status Queue Head W */
+    GP = 0x4C,		/* General Purpose R/W */
+    VPM = 0x50		/* VPI/VCI Mask W */
 };
 
 /* NICStAR commands issued to the CMD register */
@@ -452,25 +452,25 @@ enum ns_regs {
 /* Top 4 bits are command opcode, lower 28 are parameters. */
 
 #define NS_CMD_NO_OPERATION         0x00000000
-	/* params always 0 */
+/* params always 0 */
 
 #define NS_CMD_OPENCLOSE_CONNECTION 0x20000000
-	/* b19{1=open,0=close} b18-2{SRAM addr} */
+/* b19{1=open,0=close} b18-2{SRAM addr} */
 
 #define NS_CMD_WRITE_SRAM           0x40000000
-	/* b18-2{SRAM addr} b1-0{burst size} */
+/* b18-2{SRAM addr} b1-0{burst size} */
 
 #define NS_CMD_READ_SRAM            0x50000000
-	/* b18-2{SRAM addr} */
+/* b18-2{SRAM addr} */
 
 #define NS_CMD_WRITE_FREEBUFQ       0x60000000
-	/* b0{large buf indicator} */
+/* b0{large buf indicator} */
 
 #define NS_CMD_READ_UTILITY         0x80000000
-	/* b8{1=select UTL_CS1} b9{1=select UTL_CS0} b7-0{bus addr} */
+/* b8{1=select UTL_CS1} b9{1=select UTL_CS0} b7-0{bus addr} */
 
 #define NS_CMD_WRITE_UTILITY        0x90000000
-	/* b8{1=select UTL_CS1} b9{1=select UTL_CS0} b7-0{bus addr} */
+/* b8{1=select UTL_CS1} b9{1=select UTL_CS0} b7-0{bus addr} */
 
 #define NS_CMD_OPEN_CONNECTION (NS_CMD_OPENCLOSE_CONNECTION | 0x00080000)
 #define NS_CMD_CLOSE_CONNECTION NS_CMD_OPENCLOSE_CONNECTION
@@ -638,9 +638,9 @@ enum ns_regs {
 /* Device driver structures */
 
 struct ns_skb_prv {
-	u32 buf_type;		/* BUF_SM/BUF_LG/BUF_NONE */
-	u32 dma;
-	int iovcnt;
+    u32 buf_type;		/* BUF_SM/BUF_LG/BUF_NONE */
+    u32 dma;
+    int iovcnt;
 };
 
 #define NS_PRV_BUFTYPE(skb)   \
@@ -651,42 +651,42 @@ struct ns_skb_prv {
         (((struct ns_skb_prv *)(ATM_SKB(skb)+1))->iovcnt)
 
 typedef struct tsq_info {
-	void *org;
-        dma_addr_t dma;
-	ns_tsi *base;
-	ns_tsi *next;
-	ns_tsi *last;
+    void *org;
+    dma_addr_t dma;
+    ns_tsi *base;
+    ns_tsi *next;
+    ns_tsi *last;
 } tsq_info;
 
 typedef struct scq_info {
-	void *org;
-	dma_addr_t dma;
-	ns_scqe *base;
-	ns_scqe *last;
-	ns_scqe *next;
-	volatile ns_scqe *tail;	/* Not related to the nicstar register */
-	unsigned num_entries;
-	struct sk_buff **skb;	/* Pointer to an array of pointers
+    void *org;
+    dma_addr_t dma;
+    ns_scqe *base;
+    ns_scqe *last;
+    ns_scqe *next;
+    volatile ns_scqe *tail;	/* Not related to the nicstar register */
+    unsigned num_entries;
+    struct sk_buff **skb;	/* Pointer to an array of pointers
 				   to the sk_buffs used for tx */
-	u32 scd;		/* SRAM address of the corresponding
+    u32 scd;		/* SRAM address of the corresponding
 				   SCD */
-	int tbd_count;		/* Only meaningful on variable rate */
-	wait_queue_head_t scqfull_waitq;
-	volatile char full;	/* SCQ full indicator */
-	spinlock_t lock;	/* SCQ spinlock */
+    int tbd_count;		/* Only meaningful on variable rate */
+    wait_queue_head_t scqfull_waitq;
+    volatile char full;	/* SCQ full indicator */
+    spinlock_t lock;	/* SCQ spinlock */
 } scq_info;
 
 typedef struct rsq_info {
-	void *org;
-        dma_addr_t dma;
-	ns_rsqe *base;
-	ns_rsqe *next;
-	ns_rsqe *last;
+    void *org;
+    dma_addr_t dma;
+    ns_rsqe *base;
+    ns_rsqe *next;
+    ns_rsqe *last;
 } rsq_info;
 
 typedef struct skb_pool {
-	volatile int count;	/* number of buffers in the queue */
-	struct sk_buff_head queue;
+    volatile int count;	/* number of buffers in the queue */
+    struct sk_buff_head queue;
 } skb_pool;
 
 /* NOTE: for small and large buffer pools, the count is not used, as the
@@ -694,65 +694,65 @@ typedef struct skb_pool {
 	 card. */
 
 typedef struct vc_map {
-	volatile unsigned int tx:1;	/* TX vc? */
-	volatile unsigned int rx:1;	/* RX vc? */
-	struct atm_vcc *tx_vcc, *rx_vcc;
-	struct sk_buff *rx_iov;	/* RX iovector skb */
-	scq_info *scq;		/* To keep track of the SCQ */
-	u32 cbr_scd;		/* SRAM address of the corresponding
+    volatile unsigned int tx:1;	/* TX vc? */
+        volatile unsigned int rx:1;	/* RX vc? */
+        struct atm_vcc *tx_vcc, *rx_vcc;
+        struct sk_buff *rx_iov;	/* RX iovector skb */
+        scq_info *scq;		/* To keep track of the SCQ */
+        u32 cbr_scd;		/* SRAM address of the corresponding
 				   SCD. 0x00000000 for UBR/VBR/ABR */
-	int tbd_count;
-} vc_map;
+        int tbd_count;
+    } vc_map;
 
-typedef struct ns_dev {
-	int index;		/* Card ID to the device driver */
-	int sram_size;		/* In k x 32bit words. 32 or 128 */
-	void __iomem *membase;	/* Card's memory base address */
-	unsigned long max_pcr;
-	int rct_size;		/* Number of entries */
-	int vpibits;
-	int vcibits;
-	struct pci_dev *pcidev;
-	struct idr idr;
-	struct atm_dev *atmdev;
-	tsq_info tsq;
-	rsq_info rsq;
-	scq_info *scq0, *scq1, *scq2;	/* VBR SCQs */
-	skb_pool sbpool;	/* Small buffers */
-	skb_pool lbpool;	/* Large buffers */
-	skb_pool hbpool;	/* Pre-allocated huge buffers */
-	skb_pool iovpool;	/* iovector buffers */
-	volatile int efbie;	/* Empty free buf. queue int. enabled */
-	volatile u32 tst_addr;	/* SRAM address of the TST in use */
-	volatile int tst_free_entries;
-	vc_map vcmap[NS_MAX_RCTSIZE];
-	vc_map *tste2vc[NS_TST_NUM_ENTRIES];
-	vc_map *scd2vc[NS_FRSCD_NUM];
-	buf_nr sbnr;
-	buf_nr lbnr;
-	buf_nr hbnr;
-	buf_nr iovnr;
-	int sbfqc;
-	int lbfqc;
-	struct sk_buff *sm_handle;
-	u32 sm_addr;
-	struct sk_buff *lg_handle;
-	u32 lg_addr;
-	struct sk_buff *rcbuf;	/* Current raw cell buffer */
-        struct ns_rcqe *rawcell;
-	u32 rawch;		/* Raw cell queue head */
-	unsigned intcnt;	/* Interrupt counter */
-	spinlock_t int_lock;	/* Interrupt lock */
-	spinlock_t res_lock;	/* Card resource lock */
+    typedef struct ns_dev {
+    int index;		/* Card ID to the device driver */
+    int sram_size;		/* In k x 32bit words. 32 or 128 */
+    void __iomem *membase;	/* Card's memory base address */
+    unsigned long max_pcr;
+    int rct_size;		/* Number of entries */
+    int vpibits;
+    int vcibits;
+    struct pci_dev *pcidev;
+    struct idr idr;
+    struct atm_dev *atmdev;
+    tsq_info tsq;
+    rsq_info rsq;
+    scq_info *scq0, *scq1, *scq2;	/* VBR SCQs */
+    skb_pool sbpool;	/* Small buffers */
+    skb_pool lbpool;	/* Large buffers */
+    skb_pool hbpool;	/* Pre-allocated huge buffers */
+    skb_pool iovpool;	/* iovector buffers */
+    volatile int efbie;	/* Empty free buf. queue int. enabled */
+    volatile u32 tst_addr;	/* SRAM address of the TST in use */
+    volatile int tst_free_entries;
+    vc_map vcmap[NS_MAX_RCTSIZE];
+    vc_map *tste2vc[NS_TST_NUM_ENTRIES];
+    vc_map *scd2vc[NS_FRSCD_NUM];
+    buf_nr sbnr;
+    buf_nr lbnr;
+    buf_nr hbnr;
+    buf_nr iovnr;
+    int sbfqc;
+    int lbfqc;
+    struct sk_buff *sm_handle;
+    u32 sm_addr;
+    struct sk_buff *lg_handle;
+    u32 lg_addr;
+    struct sk_buff *rcbuf;	/* Current raw cell buffer */
+    struct ns_rcqe *rawcell;
+    u32 rawch;		/* Raw cell queue head */
+    unsigned intcnt;	/* Interrupt counter */
+    spinlock_t int_lock;	/* Interrupt lock */
+    spinlock_t res_lock;	/* Card resource lock */
 } ns_dev;
 
-   /* NOTE: Each tste2vc entry relates a given TST entry to the corresponding
-      CBR vc. If the entry is not allocated, it must be NULL.
+/* NOTE: Each tste2vc entry relates a given TST entry to the corresponding
+   CBR vc. If the entry is not allocated, it must be NULL.
 
-      There are two TSTs so the driver can modify them on the fly
-      without stopping the transmission.
+   There are two TSTs so the driver can modify them on the fly
+   without stopping the transmission.
 
-      scd2vc allows us to find out unused fixed rate SCDs, because
-      they must have a NULL pointer here. */
+   scd2vc allows us to find out unused fixed rate SCDs, because
+   they must have a NULL pointer here. */
 
 #endif /* _LINUX_NICSTAR_H_ */

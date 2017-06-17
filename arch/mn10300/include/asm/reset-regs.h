@@ -40,10 +40,9 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void mn10300_proc_hard_reset(void)
-{
-	RSTCTR &= ~RSTCTR_CHIPRST;
-	RSTCTR |= RSTCTR_CHIPRST;
+static inline void mn10300_proc_hard_reset(void) {
+    RSTCTR &= ~RSTCTR_CHIPRST;
+    RSTCTR |= RSTCTR_CHIPRST;
 }
 
 extern unsigned int watchdog_alert_counter[];

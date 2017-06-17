@@ -42,8 +42,7 @@
 #include "sme_Api.h"
 
 /* Enumeration of various states in neighbor roam algorithm */
-typedef enum
-{
+typedef enum {
     eCSR_NEIGHBOR_ROAM_STATE_CLOSED,
     eCSR_NEIGHBOR_ROAM_STATE_INIT,
     eCSR_NEIGHBOR_ROAM_STATE_CONNECTED,
@@ -59,8 +58,7 @@ typedef enum
 } eCsrNeighborRoamState;
 
 /* Parameters that are obtained from CFG */
-typedef struct sCsrNeighborRoamCfgParams
-{
+typedef struct sCsrNeighborRoamCfgParams {
     tANI_U8         maxNeighborRetries;
     tANI_U32        neighborScanPeriod;
     tCsrChannelInfo channelInfo;
@@ -74,16 +72,14 @@ typedef struct sCsrNeighborRoamCfgParams
 } tCsrNeighborRoamCfgParams, *tpCsrNeighborRoamCfgParams;
 
 #define CSR_NEIGHBOR_ROAM_INVALID_CHANNEL_INDEX    255
-typedef struct sCsrNeighborRoamChannelInfo
-{
+typedef struct sCsrNeighborRoamChannelInfo {
     tANI_BOOLEAN    IAPPNeighborListReceived; // Flag to mark reception of IAPP Neighbor list
     tANI_BOOLEAN    chanListScanInProgress;
     tANI_U8         currentChanIndex;       //Current channel index that is being scanned
     tCsrChannelInfo currentChannelListInfo; //Max number of channels in channel list and the list of channels
 } tCsrNeighborRoamChannelInfo, *tpCsrNeighborRoamChannelInfo;
 
-typedef struct sCsrNeighborRoamBSSInfo
-{
+typedef struct sCsrNeighborRoamBSSInfo {
     tListElem           List;
     tANI_U8             apPreferenceVal;
 //    tCsrScanResultInfo  *scanResultInfo;
@@ -99,21 +95,18 @@ typedef struct sCsrNeighborRoamBSSInfo
 #define INITIAL_FORCED_ROAM_TO_5G_TIMER_PERIOD    5000 //in msecs
 
 /* Black listed APs. List of MAC Addresses with which the Preauthentication was failed. */
-typedef struct sCsrPreauthFailListInfo
-{
+typedef struct sCsrPreauthFailListInfo {
     tANI_U8     numMACAddress;
     tSirMacAddr macAddress[MAX_NUM_PREAUTH_FAIL_LIST_ADDRESS];
 } tCsrPreauthFailListInfo, *tpCsrPreauthFailListInfo;
 
-typedef struct sCsrNeighborReportBssInfo
-{
+typedef struct sCsrNeighborReportBssInfo {
     tANI_U8 channelNum;
     tANI_U8 neighborScore;
     tSirMacAddr neighborBssId;
 } tCsrNeighborReportBssInfo, *tpCsrNeighborReportBssInfo;
 
-typedef struct sCsr11rAssocNeighborInfo
-{
+typedef struct sCsr11rAssocNeighborInfo {
     tANI_BOOLEAN                preauthRspPending;
     tANI_BOOLEAN                neighborRptPending;
     tANI_U8                     currentNeighborRptRetryNum;
@@ -141,8 +134,7 @@ typedef struct sCsr11rAssocNeighborInfo
 #define NEIGHBOR_ROAM_LOOKUP_UP_THRESHOLD \
     (pNeighborRoamInfo->cfgParams.neighborLookupThreshold-5)
 #ifdef FEATURE_WLAN_LFR
-typedef enum
-{
+typedef enum {
     eFirstEmptyScan=1,
     eSecondEmptyScan,
     eThirdEmptyScan,
@@ -151,16 +143,14 @@ typedef enum
     eMaxEmptyScan=eFifthEmptyScan,
 } eNeighborRoamEmptyScanCount;
 
-typedef enum
-{
+typedef enum {
     DEFAULT_SCAN=0,
     SPLIT_SCAN_OCCUPIED_LIST=1,
 } eNeighborRoamScanMode;
 #endif
 
 /* Complete control information for neighbor roam algorithm */
-typedef struct sCsrNeighborRoamControlInfo
-{
+typedef struct sCsrNeighborRoamControlInfo {
     eCsrNeighborRoamState       neighborRoamState;
     eCsrNeighborRoamState       prevNeighborRoamState;
     tCsrNeighborRoamCfgParams   cfgParams;

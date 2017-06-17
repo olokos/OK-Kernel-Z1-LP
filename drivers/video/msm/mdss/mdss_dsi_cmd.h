@@ -33,14 +33,14 @@ struct mdss_dsi_ctrl_pdata;
 #define MDSS_DSI_LEN 10 /* 4 x 4 - 4 - 2, bytes dcs header+crc-align  */
 
 struct dsi_buf {
-	u32 *hdr;	/* dsi host header */
-	char *start;	/* buffer start addr */
-	char *end;	/* buffer end addr */
-	int size;	/* size of buffer */
-	char *data;	/* buffer */
-	int len;	/* data length */
-	dma_addr_t dmap; /* mapped dma addr */
-	int read_cnt;
+    u32 *hdr;	/* dsi host header */
+    char *start;	/* buffer start addr */
+    char *end;	/* buffer end addr */
+    int size;	/* size of buffer */
+    char *data;	/* buffer */
+    int len;	/* data length */
+    dma_addr_t dmap; /* mapped dma addr */
+    int read_cnt;
 };
 
 /* dcs read/write */
@@ -81,17 +81,17 @@ struct dsi_buf {
 #define DTYPE_DCS_READ2_RESP    0x22    /* 2 parameter, short */
 
 struct dsi_ctrl_hdr {
-	char dtype;	/* data type */
-	char last;	/* last in chain */
-	char vc;	/* virtual chan */
-	char ack;	/* ask ACK from peripheral */
-	char wait;	/* ms */
-	short dlen;	/* 16 bits */
+    char dtype;	/* data type */
+    char last;	/* last in chain */
+    char vc;	/* virtual chan */
+    char ack;	/* ask ACK from peripheral */
+    char wait;	/* ms */
+    short dlen;	/* 16 bits */
 } __packed;
 
 struct dsi_cmd_desc {
-	struct dsi_ctrl_hdr dchdr;
-	char *payload;
+    struct dsi_ctrl_hdr dchdr;
+    char *payload;
 };
 
 #define CMD_REQ_MAX     4
@@ -103,19 +103,19 @@ struct dsi_cmd_desc {
 #define CMD_REQ_HS_MODE 0x0020
 
 struct dcs_cmd_req {
-	struct dsi_cmd_desc *cmds;
-	int cmds_cnt;
-	u32 flags;
-	int rlen;       /* rx length */
-	char *rbuf;	/* rx buf */
-	void (*cb)(int data);
+    struct dsi_cmd_desc *cmds;
+    int cmds_cnt;
+    u32 flags;
+    int rlen;       /* rx length */
+    char *rbuf;	/* rx buf */
+    void (*cb)(int data);
 };
 
 struct dcs_cmd_list {
-	int put;
-	int get;
-	int tot;
-	struct dcs_cmd_req list[CMD_REQ_MAX];
+    int put;
+    int get;
+    int tot;
+    struct dcs_cmd_req list[CMD_REQ_MAX];
 };
 
 char *mdss_dsi_buf_reserve(struct dsi_buf *dp, int len);
@@ -132,5 +132,5 @@ void mdss_dsi_set_tear_on(struct mdss_dsi_ctrl_pdata *ctrl);
 void mdss_dsi_set_tear_off(struct mdss_dsi_ctrl_pdata *ctrl);
 struct dcs_cmd_req *mdss_dsi_cmdlist_get(struct mdss_dsi_ctrl_pdata *ctrl);
 int mdss_dsi_cmdlist_put(struct mdss_dsi_ctrl_pdata *ctrl,
-				struct dcs_cmd_req *cmdreq);
+                         struct dcs_cmd_req *cmdreq);
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  * Authors:    Bjorn Wesen (bjornw@axis.com)
  *	       Hans-Peter Nilsson (hp@axis.com)
  */
@@ -35,7 +35,7 @@
 #define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })
 
 /* addr_limit is the maximum accessible address for the task. we misuse
- * the KERNEL_DS and USER_DS values to both assign and compare the 
+ * the KERNEL_DS and USER_DS values to both assign and compare the
  * addr_limit values through the equally misnamed get/set_fs macros.
  * (see above)
  */
@@ -69,9 +69,8 @@
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /*
@@ -144,7 +143,9 @@ do {								\
 	__pu_err;						\
 })
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct *)(x))
 
 
@@ -177,42 +178,37 @@ extern unsigned long __copy_user_zeroing(void *to, const void __user *from, unsi
 extern unsigned long __do_clear_user(void __user *to, unsigned long n);
 
 static inline unsigned long
-__generic_copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __copy_user(to,from,n);
-	return n;
+__generic_copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __copy_user(to,from,n);
+    return n;
 }
 
 static inline unsigned long
-__generic_copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (access_ok(VERIFY_READ, from, n))
-		return __copy_user_zeroing(to,from,n);
-	return n;
+__generic_copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (access_ok(VERIFY_READ, from, n))
+        return __copy_user_zeroing(to,from,n);
+    return n;
 }
 
 static inline unsigned long
-__generic_clear_user(void __user *to, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __do_clear_user(to,n);
-	return n;
+__generic_clear_user(void __user *to, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __do_clear_user(to,n);
+    return n;
 }
 
 static inline long
-__strncpy_from_user(char *dst, const char __user *src, long count)
-{
-	return __do_strncpy_from_user(dst, src, count);
+__strncpy_from_user(char *dst, const char __user *src, long count) {
+    return __do_strncpy_from_user(dst, src, count);
 }
 
 static inline long
-strncpy_from_user(char *dst, const char __user *src, long count)
-{
-	long res = -EFAULT;
-	if (access_ok(VERIFY_READ, src, 1))
-		res = __do_strncpy_from_user(dst, src, count);
-	return res;
+strncpy_from_user(char *dst, const char __user *src, long count) {
+    long res = -EFAULT;
+    if (access_ok(VERIFY_READ, src, 1))
+        res = __do_strncpy_from_user(dst, src, count);
+    return res;
 }
 
 
@@ -220,133 +216,130 @@ strncpy_from_user(char *dst, const char __user *src, long count)
    don't do that.  */
 
 static inline unsigned long
-__constant_copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	unsigned long ret = 0;
-	if (n == 0)
-		;
-	else if (n == 1)
-		__asm_copy_from_user_1(to, from, ret);
-	else if (n == 2)
-		__asm_copy_from_user_2(to, from, ret);
-	else if (n == 3)
-		__asm_copy_from_user_3(to, from, ret);
-	else if (n == 4)
-		__asm_copy_from_user_4(to, from, ret);
-	else if (n == 5)
-		__asm_copy_from_user_5(to, from, ret);
-	else if (n == 6)
-		__asm_copy_from_user_6(to, from, ret);
-	else if (n == 7)
-		__asm_copy_from_user_7(to, from, ret);
-	else if (n == 8)
-		__asm_copy_from_user_8(to, from, ret);
-	else if (n == 9)
-		__asm_copy_from_user_9(to, from, ret);
-	else if (n == 10)
-		__asm_copy_from_user_10(to, from, ret);
-	else if (n == 11)
-		__asm_copy_from_user_11(to, from, ret);
-	else if (n == 12)
-		__asm_copy_from_user_12(to, from, ret);
-	else if (n == 13)
-		__asm_copy_from_user_13(to, from, ret);
-	else if (n == 14)
-		__asm_copy_from_user_14(to, from, ret);
-	else if (n == 15)
-		__asm_copy_from_user_15(to, from, ret);
-	else if (n == 16)
-		__asm_copy_from_user_16(to, from, ret);
-	else if (n == 20)
-		__asm_copy_from_user_20(to, from, ret);
-	else if (n == 24)
-		__asm_copy_from_user_24(to, from, ret);
-	else
-		ret = __generic_copy_from_user(to, from, n);
+__constant_copy_from_user(void *to, const void __user *from, unsigned long n) {
+    unsigned long ret = 0;
+    if (n == 0)
+        ;
+    else if (n == 1)
+        __asm_copy_from_user_1(to, from, ret);
+    else if (n == 2)
+        __asm_copy_from_user_2(to, from, ret);
+    else if (n == 3)
+        __asm_copy_from_user_3(to, from, ret);
+    else if (n == 4)
+        __asm_copy_from_user_4(to, from, ret);
+    else if (n == 5)
+        __asm_copy_from_user_5(to, from, ret);
+    else if (n == 6)
+        __asm_copy_from_user_6(to, from, ret);
+    else if (n == 7)
+        __asm_copy_from_user_7(to, from, ret);
+    else if (n == 8)
+        __asm_copy_from_user_8(to, from, ret);
+    else if (n == 9)
+        __asm_copy_from_user_9(to, from, ret);
+    else if (n == 10)
+        __asm_copy_from_user_10(to, from, ret);
+    else if (n == 11)
+        __asm_copy_from_user_11(to, from, ret);
+    else if (n == 12)
+        __asm_copy_from_user_12(to, from, ret);
+    else if (n == 13)
+        __asm_copy_from_user_13(to, from, ret);
+    else if (n == 14)
+        __asm_copy_from_user_14(to, from, ret);
+    else if (n == 15)
+        __asm_copy_from_user_15(to, from, ret);
+    else if (n == 16)
+        __asm_copy_from_user_16(to, from, ret);
+    else if (n == 20)
+        __asm_copy_from_user_20(to, from, ret);
+    else if (n == 24)
+        __asm_copy_from_user_24(to, from, ret);
+    else
+        ret = __generic_copy_from_user(to, from, n);
 
-	return ret;
+    return ret;
 }
 
 /* Ditto, don't make a switch out of this.  */
 
 static inline unsigned long
-__constant_copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	unsigned long ret = 0;
-	if (n == 0)
-		;
-	else if (n == 1)
-		__asm_copy_to_user_1(to, from, ret);
-	else if (n == 2)
-		__asm_copy_to_user_2(to, from, ret);
-	else if (n == 3)
-		__asm_copy_to_user_3(to, from, ret);
-	else if (n == 4)
-		__asm_copy_to_user_4(to, from, ret);
-	else if (n == 5)
-		__asm_copy_to_user_5(to, from, ret);
-	else if (n == 6)
-		__asm_copy_to_user_6(to, from, ret);
-	else if (n == 7)
-		__asm_copy_to_user_7(to, from, ret);
-	else if (n == 8)
-		__asm_copy_to_user_8(to, from, ret);
-	else if (n == 9)
-		__asm_copy_to_user_9(to, from, ret);
-	else if (n == 10)
-		__asm_copy_to_user_10(to, from, ret);
-	else if (n == 11)
-		__asm_copy_to_user_11(to, from, ret);
-	else if (n == 12)
-		__asm_copy_to_user_12(to, from, ret);
-	else if (n == 13)
-		__asm_copy_to_user_13(to, from, ret);
-	else if (n == 14)
-		__asm_copy_to_user_14(to, from, ret);
-	else if (n == 15)
-		__asm_copy_to_user_15(to, from, ret);
-	else if (n == 16)
-		__asm_copy_to_user_16(to, from, ret);
-	else if (n == 20)
-		__asm_copy_to_user_20(to, from, ret);
-	else if (n == 24)
-		__asm_copy_to_user_24(to, from, ret);
-	else
-		ret = __generic_copy_to_user(to, from, n);
+__constant_copy_to_user(void __user *to, const void *from, unsigned long n) {
+    unsigned long ret = 0;
+    if (n == 0)
+        ;
+    else if (n == 1)
+        __asm_copy_to_user_1(to, from, ret);
+    else if (n == 2)
+        __asm_copy_to_user_2(to, from, ret);
+    else if (n == 3)
+        __asm_copy_to_user_3(to, from, ret);
+    else if (n == 4)
+        __asm_copy_to_user_4(to, from, ret);
+    else if (n == 5)
+        __asm_copy_to_user_5(to, from, ret);
+    else if (n == 6)
+        __asm_copy_to_user_6(to, from, ret);
+    else if (n == 7)
+        __asm_copy_to_user_7(to, from, ret);
+    else if (n == 8)
+        __asm_copy_to_user_8(to, from, ret);
+    else if (n == 9)
+        __asm_copy_to_user_9(to, from, ret);
+    else if (n == 10)
+        __asm_copy_to_user_10(to, from, ret);
+    else if (n == 11)
+        __asm_copy_to_user_11(to, from, ret);
+    else if (n == 12)
+        __asm_copy_to_user_12(to, from, ret);
+    else if (n == 13)
+        __asm_copy_to_user_13(to, from, ret);
+    else if (n == 14)
+        __asm_copy_to_user_14(to, from, ret);
+    else if (n == 15)
+        __asm_copy_to_user_15(to, from, ret);
+    else if (n == 16)
+        __asm_copy_to_user_16(to, from, ret);
+    else if (n == 20)
+        __asm_copy_to_user_20(to, from, ret);
+    else if (n == 24)
+        __asm_copy_to_user_24(to, from, ret);
+    else
+        ret = __generic_copy_to_user(to, from, n);
 
-	return ret;
+    return ret;
 }
 
 /* No switch, please.  */
 
 static inline unsigned long
-__constant_clear_user(void __user *to, unsigned long n)
-{
-	unsigned long ret = 0;
-	if (n == 0)
-		;
-	else if (n == 1)
-		__asm_clear_1(to, ret);
-	else if (n == 2)
-		__asm_clear_2(to, ret);
-	else if (n == 3)
-		__asm_clear_3(to, ret);
-	else if (n == 4)
-		__asm_clear_4(to, ret);
-	else if (n == 8)
-		__asm_clear_8(to, ret);
-	else if (n == 12)
-		__asm_clear_12(to, ret);
-	else if (n == 16)
-		__asm_clear_16(to, ret);
-	else if (n == 20)
-		__asm_clear_20(to, ret);
-	else if (n == 24)
-		__asm_clear_24(to, ret);
-	else
-		ret = __generic_clear_user(to, n);
+__constant_clear_user(void __user *to, unsigned long n) {
+    unsigned long ret = 0;
+    if (n == 0)
+        ;
+    else if (n == 1)
+        __asm_clear_1(to, ret);
+    else if (n == 2)
+        __asm_clear_2(to, ret);
+    else if (n == 3)
+        __asm_clear_3(to, ret);
+    else if (n == 4)
+        __asm_clear_4(to, ret);
+    else if (n == 8)
+        __asm_clear_8(to, ret);
+    else if (n == 12)
+        __asm_clear_12(to, ret);
+    else if (n == 16)
+        __asm_clear_16(to, ret);
+    else if (n == 20)
+        __asm_clear_20(to, ret);
+    else if (n == 24)
+        __asm_clear_24(to, ret);
+    else
+        ret = __generic_clear_user(to, n);
 
-	return ret;
+    return ret;
 }
 
 
@@ -371,22 +364,19 @@ __constant_clear_user(void __user *to, unsigned long n)
 
 static inline unsigned long
 __generic_copy_from_user_nocheck(void *to, const void __user *from,
-				 unsigned long n)
-{
-	return __copy_user_zeroing(to,from,n);
+                                 unsigned long n) {
+    return __copy_user_zeroing(to,from,n);
 }
 
 static inline unsigned long
 __generic_copy_to_user_nocheck(void __user *to, const void *from,
-			       unsigned long n)
-{
-	return __copy_user(to,from,n);
+                               unsigned long n) {
+    return __copy_user(to,from,n);
 }
 
 static inline unsigned long
-__generic_clear_user_nocheck(void __user *to, unsigned long n)
-{
-	return __do_clear_user(to,n);
+__generic_clear_user_nocheck(void __user *to, unsigned long n) {
+    return __do_clear_user(to,n);
 }
 
 /* without checking */

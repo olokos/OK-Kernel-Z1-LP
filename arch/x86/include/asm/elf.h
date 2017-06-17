@@ -163,15 +163,14 @@ do {						\
 #endif
 
 static inline void elf_common_init(struct thread_struct *t,
-				   struct pt_regs *regs, const u16 ds)
-{
-	regs->ax = regs->bx = regs->cx = regs->dx = 0;
-	regs->si = regs->di = regs->bp = 0;
-	regs->r8 = regs->r9 = regs->r10 = regs->r11 = 0;
-	regs->r12 = regs->r13 = regs->r14 = regs->r15 = 0;
-	t->fs = t->gs = 0;
-	t->fsindex = t->gsindex = 0;
-	t->ds = t->es = ds;
+                                   struct pt_regs *regs, const u16 ds) {
+    regs->ax = regs->bx = regs->cx = regs->dx = 0;
+    regs->si = regs->di = regs->bp = 0;
+    regs->r8 = regs->r9 = regs->r10 = regs->r11 = 0;
+    regs->r12 = regs->r13 = regs->r14 = regs->r15 = 0;
+    t->fs = t->gs = 0;
+    t->fsindex = t->gsindex = 0;
+    t->ds = t->es = ds;
 }
 
 #define ELF_PLAT_INIT(_r, load_addr)			\
@@ -329,9 +328,9 @@ struct linux_binprm;
 
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-				       int uses_interp);
+                                       int uses_interp);
 extern int x32_setup_additional_pages(struct linux_binprm *bprm,
-				      int uses_interp);
+                                      int uses_interp);
 
 extern int syscall32_setup_pages(struct linux_binprm *, int exstack);
 #define compat_arch_setup_additional_pages	syscall32_setup_pages
@@ -342,29 +341,28 @@ extern unsigned long arch_randomize_brk(struct mm_struct *mm);
 /*
  * True on X86_32 or when emulating IA32 on X86_64
  */
-static inline int mmap_is_ia32(void)
-{
+static inline int mmap_is_ia32(void) {
 #ifdef CONFIG_X86_32
-	return 1;
+    return 1;
 #endif
 #ifdef CONFIG_IA32_EMULATION
-	if (test_thread_flag(TIF_ADDR32))
-		return 1;
+    if (test_thread_flag(TIF_ADDR32))
+        return 1;
 #endif
-	return 0;
+    return 0;
 }
 
 /* The first two values are special, do not change. See align_addr() */
 enum align_flags {
-	ALIGN_VA_32	= BIT(0),
-	ALIGN_VA_64	= BIT(1),
-	ALIGN_VDSO	= BIT(2),
-	ALIGN_TOPDOWN	= BIT(3),
+    ALIGN_VA_32	= BIT(0),
+    ALIGN_VA_64	= BIT(1),
+    ALIGN_VDSO	= BIT(2),
+    ALIGN_TOPDOWN	= BIT(3),
 };
 
 struct va_alignment {
-	int flags;
-	unsigned long mask;
+    int flags;
+    unsigned long mask;
 } ____cacheline_aligned;
 
 extern struct va_alignment va_align;

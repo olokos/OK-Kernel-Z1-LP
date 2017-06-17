@@ -81,7 +81,7 @@
 
 /*
  * Convert the software IEEE trap enable and status bits into the
- * hardware fpcr format. 
+ * hardware fpcr format.
  *
  * Digital Unix engineers receive my thanks for not defining the
  * software bits identical to the hardware bits.  The chip designers
@@ -90,34 +90,32 @@
  */
 
 static inline unsigned long
-ieee_swcr_to_fpcr(unsigned long sw)
-{
-	unsigned long fp;
-	fp = (sw & IEEE_STATUS_MASK) << 35;
-	fp |= (sw & IEEE_MAP_DMZ) << 36;
-	fp |= (sw & IEEE_STATUS_MASK ? FPCR_SUM : 0);
-	fp |= (~sw & (IEEE_TRAP_ENABLE_INV
-		      | IEEE_TRAP_ENABLE_DZE
-		      | IEEE_TRAP_ENABLE_OVF)) << 48;
-	fp |= (~sw & (IEEE_TRAP_ENABLE_UNF | IEEE_TRAP_ENABLE_INE)) << 57;
-	fp |= (sw & IEEE_MAP_UMZ ? FPCR_UNDZ | FPCR_UNFD : 0);
-	fp |= (~sw & IEEE_TRAP_ENABLE_DNO) << 41;
-	return fp;
+ieee_swcr_to_fpcr(unsigned long sw) {
+    unsigned long fp;
+    fp = (sw & IEEE_STATUS_MASK) << 35;
+    fp |= (sw & IEEE_MAP_DMZ) << 36;
+    fp |= (sw & IEEE_STATUS_MASK ? FPCR_SUM : 0);
+    fp |= (~sw & (IEEE_TRAP_ENABLE_INV
+                  | IEEE_TRAP_ENABLE_DZE
+                  | IEEE_TRAP_ENABLE_OVF)) << 48;
+    fp |= (~sw & (IEEE_TRAP_ENABLE_UNF | IEEE_TRAP_ENABLE_INE)) << 57;
+    fp |= (sw & IEEE_MAP_UMZ ? FPCR_UNDZ | FPCR_UNFD : 0);
+    fp |= (~sw & IEEE_TRAP_ENABLE_DNO) << 41;
+    return fp;
 }
 
 static inline unsigned long
-ieee_fpcr_to_swcr(unsigned long fp)
-{
-	unsigned long sw;
-	sw = (fp >> 35) & IEEE_STATUS_MASK;
-	sw |= (fp >> 36) & IEEE_MAP_DMZ;
-	sw |= (~fp >> 48) & (IEEE_TRAP_ENABLE_INV
-			     | IEEE_TRAP_ENABLE_DZE
-			     | IEEE_TRAP_ENABLE_OVF);
-	sw |= (~fp >> 57) & (IEEE_TRAP_ENABLE_UNF | IEEE_TRAP_ENABLE_INE);
-	sw |= (fp >> 47) & IEEE_MAP_UMZ;
-	sw |= (~fp >> 41) & IEEE_TRAP_ENABLE_DNO;
-	return sw;
+ieee_fpcr_to_swcr(unsigned long fp) {
+    unsigned long sw;
+    sw = (fp >> 35) & IEEE_STATUS_MASK;
+    sw |= (fp >> 36) & IEEE_MAP_DMZ;
+    sw |= (~fp >> 48) & (IEEE_TRAP_ENABLE_INV
+                         | IEEE_TRAP_ENABLE_DZE
+                         | IEEE_TRAP_ENABLE_OVF);
+    sw |= (~fp >> 57) & (IEEE_TRAP_ENABLE_UNF | IEEE_TRAP_ENABLE_INE);
+    sw |= (fp >> 47) & IEEE_MAP_UMZ;
+    sw |= (~fp >> 41) & IEEE_TRAP_ENABLE_DNO;
+    return sw;
 }
 
 #ifdef __KERNEL__
@@ -128,61 +126,58 @@ ieee_fpcr_to_swcr(unsigned long fp)
    are implied trap barriers.  */
 
 static inline unsigned long
-rdfpcr(void)
-{
-	unsigned long tmp, ret;
+rdfpcr(void) {
+    unsigned long tmp, ret;
 
 #if defined(CONFIG_ALPHA_EV6) || defined(CONFIG_ALPHA_EV67)
-	__asm__ __volatile__ (
-		"ftoit $f0,%0\n\t"
-		"mf_fpcr $f0\n\t"
-		"ftoit $f0,%1\n\t"
-		"itoft %0,$f0"
-		: "=r"(tmp), "=r"(ret));
+    __asm__ __volatile__ (
+        "ftoit $f0,%0\n\t"
+        "mf_fpcr $f0\n\t"
+        "ftoit $f0,%1\n\t"
+        "itoft %0,$f0"
+        : "=r"(tmp), "=r"(ret));
 #else
-	__asm__ __volatile__ (
-		"stt $f0,%0\n\t"
-		"mf_fpcr $f0\n\t"
-		"stt $f0,%1\n\t"
-		"ldt $f0,%0"
-		: "=m"(tmp), "=m"(ret));
+    __asm__ __volatile__ (
+        "stt $f0,%0\n\t"
+        "mf_fpcr $f0\n\t"
+        "stt $f0,%1\n\t"
+        "ldt $f0,%0"
+        : "=m"(tmp), "=m"(ret));
 #endif
 
-	return ret;
+    return ret;
 }
 
 static inline void
-wrfpcr(unsigned long val)
-{
-	unsigned long tmp;
+wrfpcr(unsigned long val) {
+    unsigned long tmp;
 
 #if defined(CONFIG_ALPHA_EV6) || defined(CONFIG_ALPHA_EV67)
-	__asm__ __volatile__ (
-		"ftoit $f0,%0\n\t"
-		"itoft %1,$f0\n\t"
-		"mt_fpcr $f0\n\t"
-		"itoft %0,$f0"
-		: "=&r"(tmp) : "r"(val));
+    __asm__ __volatile__ (
+        "ftoit $f0,%0\n\t"
+        "itoft %1,$f0\n\t"
+        "mt_fpcr $f0\n\t"
+        "itoft %0,$f0"
+        : "=&r"(tmp) : "r"(val));
 #else
-	__asm__ __volatile__ (
-		"stt $f0,%0\n\t"
-		"ldt $f0,%1\n\t"
-		"mt_fpcr $f0\n\t"
-		"ldt $f0,%0"
-		: "=m"(tmp) : "m"(val));
+    __asm__ __volatile__ (
+        "stt $f0,%0\n\t"
+        "ldt $f0,%1\n\t"
+        "mt_fpcr $f0\n\t"
+        "ldt $f0,%0"
+        : "=m"(tmp) : "m"(val));
 #endif
 }
 
 static inline unsigned long
-swcr_update_status(unsigned long swcr, unsigned long fpcr)
-{
-	/* EV6 implements most of the bits in hardware.  Collect
-	   the acrued exception bits from the real fpcr.  */
-	if (implver() == IMPLVER_EV6) {
-		swcr &= ~IEEE_STATUS_MASK;
-		swcr |= (fpcr >> 35) & IEEE_STATUS_MASK;
-	}
-	return swcr;
+swcr_update_status(unsigned long swcr, unsigned long fpcr) {
+    /* EV6 implements most of the bits in hardware.  Collect
+       the acrued exception bits from the real fpcr.  */
+    if (implver() == IMPLVER_EV6) {
+        swcr &= ~IEEE_STATUS_MASK;
+        swcr |= (fpcr >> 35) & IEEE_STATUS_MASK;
+    }
+    return swcr;
 }
 
 extern unsigned long alpha_read_fp_reg (unsigned long reg);

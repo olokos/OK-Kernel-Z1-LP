@@ -175,117 +175,117 @@
 
 /* Freescale USB Host controller registers */
 struct fhci_regs {
-	u8 usb_mod;		/* mode register */
-	u8 usb_addr;		/* address register */
-	u8 usb_comm;		/* command register */
-	u8 reserved1[1];
-	__be16 usb_ep[4];	/* endpoint register */
-	u8 reserved2[4];
-	__be16 usb_event;	/* event register */
-	u8 reserved3[2];
-	__be16 usb_mask;	/* mask register */
-	u8 reserved4[1];
-	u8 usb_status;		/* status register */
-	__be16 usb_sof_tmr;	/* Start Of Frame timer */
-	u8 reserved5[2];
-	__be16 usb_frame_num;	/* frame number register */
-	u8 reserved6[1];
+    u8 usb_mod;		/* mode register */
+    u8 usb_addr;		/* address register */
+    u8 usb_comm;		/* command register */
+    u8 reserved1[1];
+    __be16 usb_ep[4];	/* endpoint register */
+    u8 reserved2[4];
+    __be16 usb_event;	/* event register */
+    u8 reserved3[2];
+    __be16 usb_mask;	/* mask register */
+    u8 reserved4[1];
+    u8 usb_status;		/* status register */
+    __be16 usb_sof_tmr;	/* Start Of Frame timer */
+    u8 reserved5[2];
+    __be16 usb_frame_num;	/* frame number register */
+    u8 reserved6[1];
 };
 
 /* Freescale USB HOST */
 struct fhci_pram {
-	__be16 ep_ptr[4];	/* Endpoint porter reg */
-	__be32 rx_state;	/* Rx internal state */
-	__be32 rx_ptr;		/* Rx internal data pointer */
-	__be16 frame_num;	/* Frame number */
-	__be16 rx_cnt;		/* Rx byte count */
-	__be32 rx_temp;		/* Rx temp */
-	__be32 rx_data_temp;	/* Rx data temp */
-	__be16 rx_u_ptr;	/* Rx microcode return address temp */
-	u8 reserved1[2];	/* reserved area */
-	__be32 sof_tbl;		/* SOF lookup table pointer */
-	u8 sof_u_crc_temp;	/* SOF micorcode CRC5 temp reg */
-	u8 reserved2[0xdb];
+    __be16 ep_ptr[4];	/* Endpoint porter reg */
+    __be32 rx_state;	/* Rx internal state */
+    __be32 rx_ptr;		/* Rx internal data pointer */
+    __be16 frame_num;	/* Frame number */
+    __be16 rx_cnt;		/* Rx byte count */
+    __be32 rx_temp;		/* Rx temp */
+    __be32 rx_data_temp;	/* Rx data temp */
+    __be16 rx_u_ptr;	/* Rx microcode return address temp */
+    u8 reserved1[2];	/* reserved area */
+    __be32 sof_tbl;		/* SOF lookup table pointer */
+    u8 sof_u_crc_temp;	/* SOF micorcode CRC5 temp reg */
+    u8 reserved2[0xdb];
 };
 
 /* Freescale USB Endpoint*/
 struct fhci_ep_pram {
-	__be16 rx_base;		/* Rx BD base address */
-	__be16 tx_base;		/* Tx BD base address */
-	u8 rx_func_code;	/* Rx function code */
-	u8 tx_func_code;	/* Tx function code */
-	__be16 rx_buff_len;	/* Rx buffer length */
-	__be16 rx_bd_ptr;	/* Rx BD pointer */
-	__be16 tx_bd_ptr;	/* Tx BD pointer */
-	__be32 tx_state;	/* Tx internal state */
-	__be32 tx_ptr;		/* Tx internal data pointer */
-	__be16 tx_crc;		/* temp transmit CRC */
-	__be16 tx_cnt;		/* Tx byte count */
-	__be32 tx_temp;		/* Tx temp */
-	__be16 tx_u_ptr;	/* Tx microcode return address temp */
-	__be16 reserved;
+    __be16 rx_base;		/* Rx BD base address */
+    __be16 tx_base;		/* Tx BD base address */
+    u8 rx_func_code;	/* Rx function code */
+    u8 tx_func_code;	/* Tx function code */
+    __be16 rx_buff_len;	/* Rx buffer length */
+    __be16 rx_bd_ptr;	/* Rx BD pointer */
+    __be16 tx_bd_ptr;	/* Tx BD pointer */
+    __be32 tx_state;	/* Tx internal state */
+    __be32 tx_ptr;		/* Tx internal data pointer */
+    __be16 tx_crc;		/* temp transmit CRC */
+    __be16 tx_cnt;		/* Tx byte count */
+    __be32 tx_temp;		/* Tx temp */
+    __be16 tx_u_ptr;	/* Tx microcode return address temp */
+    __be16 reserved;
 };
 
 struct fhci_controller_list {
-	struct list_head ctrl_list;	/* control endpoints */
-	struct list_head bulk_list;	/* bulk endpoints */
-	struct list_head iso_list;	/* isochronous endpoints */
-	struct list_head intr_list;	/* interruput endpoints */
-	struct list_head done_list;	/* done transfers */
+    struct list_head ctrl_list;	/* control endpoints */
+    struct list_head bulk_list;	/* bulk endpoints */
+    struct list_head iso_list;	/* isochronous endpoints */
+    struct list_head intr_list;	/* interruput endpoints */
+    struct list_head done_list;	/* done transfers */
 };
 
 struct virtual_root_hub {
-	int dev_num;	/* USB address of the root hub */
-	u32 feature;	/* indicates what feature has been set */
-	struct usb_hub_status hub;
-	struct usb_port_status port;
+    int dev_num;	/* USB address of the root hub */
+    u32 feature;	/* indicates what feature has been set */
+    struct usb_hub_status hub;
+    struct usb_port_status port;
 };
 
 enum fhci_gpios {
-	GPIO_USBOE = 0,
-	GPIO_USBTP,
-	GPIO_USBTN,
-	GPIO_USBRP,
-	GPIO_USBRN,
-	/* these are optional */
-	GPIO_SPEED,
-	GPIO_POWER,
-	NUM_GPIOS,
+    GPIO_USBOE = 0,
+    GPIO_USBTP,
+    GPIO_USBTN,
+    GPIO_USBRP,
+    GPIO_USBRN,
+    /* these are optional */
+    GPIO_SPEED,
+    GPIO_POWER,
+    NUM_GPIOS,
 };
 
 enum fhci_pins {
-	PIN_USBOE = 0,
-	PIN_USBTP,
-	PIN_USBTN,
-	NUM_PINS,
+    PIN_USBOE = 0,
+    PIN_USBTP,
+    PIN_USBTN,
+    NUM_PINS,
 };
 
 struct fhci_hcd {
-	enum qe_clock fullspeed_clk;
-	enum qe_clock lowspeed_clk;
-	struct qe_pin *pins[NUM_PINS];
-	int gpios[NUM_GPIOS];
-	bool alow_gpios[NUM_GPIOS];
+    enum qe_clock fullspeed_clk;
+    enum qe_clock lowspeed_clk;
+    struct qe_pin *pins[NUM_PINS];
+    int gpios[NUM_GPIOS];
+    bool alow_gpios[NUM_GPIOS];
 
-	struct fhci_regs __iomem *regs;	/* I/O memory used to communicate */
-	struct fhci_pram __iomem *pram;	/* Parameter RAM */
-	struct gtm_timer *timer;
+    struct fhci_regs __iomem *regs;	/* I/O memory used to communicate */
+    struct fhci_pram __iomem *pram;	/* Parameter RAM */
+    struct gtm_timer *timer;
 
-	spinlock_t lock;
-	struct fhci_usb *usb_lld; /* Low-level driver */
-	struct virtual_root_hub *vroot_hub; /* the virtual root hub */
-	int active_urbs;
-	struct fhci_controller_list *hc_list;
-	struct tasklet_struct *process_done_task; /* tasklet for done list */
+    spinlock_t lock;
+    struct fhci_usb *usb_lld; /* Low-level driver */
+    struct virtual_root_hub *vroot_hub; /* the virtual root hub */
+    int active_urbs;
+    struct fhci_controller_list *hc_list;
+    struct tasklet_struct *process_done_task; /* tasklet for done list */
 
-	struct list_head empty_eds;
-	struct list_head empty_tds;
+    struct list_head empty_eds;
+    struct list_head empty_tds;
 
 #ifdef CONFIG_FHCI_DEBUG
-	int usb_irq_stat[13];
-	struct dentry *dfs_root;
-	struct dentry *dfs_regs;
-	struct dentry *dfs_irq_stat;
+    int usb_irq_stat[13];
+    struct dentry *dfs_root;
+    struct dentry *dfs_regs;
+    struct dentry *dfs_irq_stat;
 #endif
 };
 
@@ -297,47 +297,47 @@ struct fhci_hcd {
 
 /* transaction type */
 enum fhci_ta_type {
-	FHCI_TA_IN = 0,	/* input transaction */
-	FHCI_TA_OUT,	/* output transaction */
-	FHCI_TA_SETUP,	/* setup transaction */
+    FHCI_TA_IN = 0,	/* input transaction */
+    FHCI_TA_OUT,	/* output transaction */
+    FHCI_TA_SETUP,	/* setup transaction */
 };
 
 /* transfer mode */
 enum fhci_tf_mode {
-	FHCI_TF_CTRL = 0,
-	FHCI_TF_ISO,
-	FHCI_TF_BULK,
-	FHCI_TF_INTR,
+    FHCI_TF_CTRL = 0,
+    FHCI_TF_ISO,
+    FHCI_TF_BULK,
+    FHCI_TF_INTR,
 };
 
 enum fhci_speed {
-	FHCI_FULL_SPEED,
-	FHCI_LOW_SPEED,
+    FHCI_FULL_SPEED,
+    FHCI_LOW_SPEED,
 };
 
 /* endpoint state */
 enum fhci_ed_state {
-	FHCI_ED_NEW = 0, /* pipe is new */
-	FHCI_ED_OPER,    /* pipe is operating */
-	FHCI_ED_URB_DEL, /* pipe is in hold because urb is being deleted */
-	FHCI_ED_SKIP,    /* skip this pipe */
-	FHCI_ED_HALTED,  /* pipe is halted */
+    FHCI_ED_NEW = 0, /* pipe is new */
+    FHCI_ED_OPER,    /* pipe is operating */
+    FHCI_ED_URB_DEL, /* pipe is in hold because urb is being deleted */
+    FHCI_ED_SKIP,    /* skip this pipe */
+    FHCI_ED_HALTED,  /* pipe is halted */
 };
 
 enum fhci_port_status {
-	FHCI_PORT_POWER_OFF = 0,
-	FHCI_PORT_DISABLED,
-	FHCI_PORT_DISCONNECTING,
-	FHCI_PORT_WAITING,	/* waiting for connection */
-	FHCI_PORT_FULL,		/* full speed connected */
-	FHCI_PORT_LOW,		/* low speed connected */
+    FHCI_PORT_POWER_OFF = 0,
+    FHCI_PORT_DISABLED,
+    FHCI_PORT_DISCONNECTING,
+    FHCI_PORT_WAITING,	/* waiting for connection */
+    FHCI_PORT_FULL,		/* full speed connected */
+    FHCI_PORT_LOW,		/* low speed connected */
 };
 
 enum fhci_mem_alloc {
-	MEM_CACHABLE_SYS = 0x00000001,	/* primary DDR,cachable */
-	MEM_NOCACHE_SYS = 0x00000004,	/* primary DDR,non-cachable */
-	MEM_SECONDARY = 0x00000002,	/* either secondary DDR or SDRAM */
-	MEM_PRAM = 0x00000008,		/* multi-user RAM identifier */
+    MEM_CACHABLE_SYS = 0x00000001,	/* primary DDR,cachable */
+    MEM_NOCACHE_SYS = 0x00000004,	/* primary DDR,non-cachable */
+    MEM_SECONDARY = 0x00000002,	/* either secondary DDR or SDRAM */
+    MEM_PRAM = 0x00000008,		/* multi-user RAM identifier */
 };
 
 /* USB default parameters*/
@@ -345,50 +345,50 @@ enum fhci_mem_alloc {
 #define DEFAULT_DATA_MEM	MEM_CACHABLE_SYS
 
 struct ed {
-	u8 dev_addr;		/* device address */
-	u8 ep_addr;		/* endpoint address */
-	enum fhci_tf_mode mode;	/* USB transfer mode */
-	enum fhci_speed speed;
-	unsigned int max_pkt_size;
-	enum fhci_ed_state state;
-	struct list_head td_list; /* a list of all queued TD to this pipe */
-	struct list_head node;
+    u8 dev_addr;		/* device address */
+    u8 ep_addr;		/* endpoint address */
+    enum fhci_tf_mode mode;	/* USB transfer mode */
+    enum fhci_speed speed;
+    unsigned int max_pkt_size;
+    enum fhci_ed_state state;
+    struct list_head td_list; /* a list of all queued TD to this pipe */
+    struct list_head node;
 
-	/* read only parameters, should be cleared upon initialization */
-	u8 toggle_carry;	/* toggle carry from the last TD submitted */
-	u32 last_iso;		/* time stamp of last queued ISO transfer */
-	struct td *td_head;	/* a pointer to the current TD handled */
+    /* read only parameters, should be cleared upon initialization */
+    u8 toggle_carry;	/* toggle carry from the last TD submitted */
+    u32 last_iso;		/* time stamp of last queued ISO transfer */
+    struct td *td_head;	/* a pointer to the current TD handled */
 };
 
 struct td {
-	void *data;		 /* a pointer to the data buffer */
-	unsigned int len;	 /* length of the data to be submitted */
-	unsigned int actual_len; /* actual bytes transferred on this td */
-	enum fhci_ta_type type;	 /* transaction type */
-	u8 toggle;		 /* toggle for next trans. within this TD */
-	u16 iso_index;		 /* ISO transaction index */
-	u16 start_frame;	 /* start frame time stamp */
-	u16 interval;		 /* interval between trans. (for ISO/Intr) */
-	u32 status;		 /* status of the TD */
-	struct ed *ed;		 /* a handle to the corresponding ED */
-	struct urb *urb;	 /* a handle to the corresponding URB */
-	bool ioc;		 /* Inform On Completion */
-	struct list_head node;
+    void *data;		 /* a pointer to the data buffer */
+    unsigned int len;	 /* length of the data to be submitted */
+    unsigned int actual_len; /* actual bytes transferred on this td */
+    enum fhci_ta_type type;	 /* transaction type */
+    u8 toggle;		 /* toggle for next trans. within this TD */
+    u16 iso_index;		 /* ISO transaction index */
+    u16 start_frame;	 /* start frame time stamp */
+    u16 interval;		 /* interval between trans. (for ISO/Intr) */
+    u32 status;		 /* status of the TD */
+    struct ed *ed;		 /* a handle to the corresponding ED */
+    struct urb *urb;	 /* a handle to the corresponding URB */
+    bool ioc;		 /* Inform On Completion */
+    struct list_head node;
 
-	/* read only parameters should be cleared upon initialization */
-	struct packet *pkt;
-	int nak_cnt;
-	int error_cnt;
-	struct list_head frame_lh;
+    /* read only parameters should be cleared upon initialization */
+    struct packet *pkt;
+    int nak_cnt;
+    int error_cnt;
+    struct list_head frame_lh;
 };
 
 struct packet {
-	u8 *data;	/* packet data */
-	u32 len;	/* packet length */
-	u32 status;	/* status of the packet - equivalent to the status
+    u8 *data;	/* packet data */
+    u32 len;	/* packet length */
+    u32 status;	/* status of the packet - equivalent to the status
 			 * field for the corresponding structure td */
-	u32 info;	/* packet information */
-	void __iomem *priv_data; /* private data of the driver (TDs or BDs) */
+    u32 info;	/* packet information */
+    void __iomem *priv_data; /* private data of the driver (TDs or BDs) */
 };
 
 /* struct for each URB */
@@ -407,28 +407,28 @@ struct packet {
 #define EP_ZERO	0
 
 struct urb_priv {
-	int num_of_tds;
-	int tds_cnt;
-	int state;
+    int num_of_tds;
+    int tds_cnt;
+    int state;
 
-	struct td **tds;
-	struct ed *ed;
-	struct timer_list time_out;
+    struct td **tds;
+    struct ed *ed;
+    struct timer_list time_out;
 };
 
 struct endpoint {
-	/* Pointer to ep parameter RAM */
-	struct fhci_ep_pram __iomem *ep_pram_ptr;
+    /* Pointer to ep parameter RAM */
+    struct fhci_ep_pram __iomem *ep_pram_ptr;
 
-	/* Host transactions */
-	struct usb_td __iomem *td_base; /* first TD in the ring */
-	struct usb_td __iomem *conf_td; /* next TD for confirm after transac */
-	struct usb_td __iomem *empty_td;/* next TD for new transaction req. */
-	struct kfifo empty_frame_Q;  /* Empty frames list to use */
-	struct kfifo conf_frame_Q;   /* frames passed to TDs,waiting for tx */
-	struct kfifo dummy_packets_Q;/* dummy packets for the CRC overun */
+    /* Host transactions */
+    struct usb_td __iomem *td_base; /* first TD in the ring */
+    struct usb_td __iomem *conf_td; /* next TD for confirm after transac */
+    struct usb_td __iomem *empty_td;/* next TD for new transaction req. */
+    struct kfifo empty_frame_Q;  /* Empty frames list to use */
+    struct kfifo conf_frame_Q;   /* frames passed to TDs,waiting for tx */
+    struct kfifo dummy_packets_Q;/* dummy packets for the CRC overun */
 
-	bool already_pushed_dummy_bd;
+    bool already_pushed_dummy_bd;
 };
 
 /* struct for each 1mSec frame time */
@@ -439,37 +439,36 @@ struct endpoint {
 #define FRAME_IS_PREPARED		0x04
 
 struct fhci_time_frame {
-	u16 frame_num;	 /* frame number */
-	u16 total_bytes; /* total bytes submitted within this frame */
-	u8 frame_status; /* flag that indicates to stop fill this frame */
-	struct list_head tds_list; /* all tds of this frame */
+    u16 frame_num;	 /* frame number */
+    u16 total_bytes; /* total bytes submitted within this frame */
+    u8 frame_status; /* flag that indicates to stop fill this frame */
+    struct list_head tds_list; /* all tds of this frame */
 };
 
 /* internal driver structure*/
 struct fhci_usb {
-	u16 saved_msk;		 /* saving of the USB mask register */
-	struct endpoint *ep0;	 /* pointer for endpoint0 structure */
-	int intr_nesting_cnt;	 /* interrupt nesting counter */
-	u16 max_frame_usage;	 /* max frame time usage,in micro-sec */
-	u16 max_bytes_per_frame; /* max byte can be tx in one time frame */
-	u32 sw_transaction_time; /* sw complete trans time,in micro-sec */
-	struct fhci_time_frame *actual_frame;
-	struct fhci_controller_list *hc_list;	/* main structure for hc */
-	struct virtual_root_hub *vroot_hub;
-	enum fhci_port_status port_status;	/* v_rh port status */
+    u16 saved_msk;		 /* saving of the USB mask register */
+    struct endpoint *ep0;	 /* pointer for endpoint0 structure */
+    int intr_nesting_cnt;	 /* interrupt nesting counter */
+    u16 max_frame_usage;	 /* max frame time usage,in micro-sec */
+    u16 max_bytes_per_frame; /* max byte can be tx in one time frame */
+    u32 sw_transaction_time; /* sw complete trans time,in micro-sec */
+    struct fhci_time_frame *actual_frame;
+    struct fhci_controller_list *hc_list;	/* main structure for hc */
+    struct virtual_root_hub *vroot_hub;
+    enum fhci_port_status port_status;	/* v_rh port status */
 
-	u32 (*transfer_confirm)(struct fhci_hcd *fhci);
+    u32 (*transfer_confirm)(struct fhci_hcd *fhci);
 
-	struct fhci_hcd *fhci;
+    struct fhci_hcd *fhci;
 };
 
 /*
  * Various helpers and prototypes below.
  */
 
-static inline u16 get_frame_num(struct fhci_hcd *fhci)
-{
-	return in_be16(&fhci->pram->frame_num) & 0x07ff;
+static inline u16 get_frame_num(struct fhci_hcd *fhci) {
+    return in_be16(&fhci->pram->frame_num) & 0x07ff;
 }
 
 #define fhci_dbg(fhci, fmt, args...) \
@@ -483,47 +482,40 @@ static inline u16 get_frame_num(struct fhci_hcd *fhci)
 #define fhci_warn(fhci, fmt, args...) \
 		dev_warn(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
 
-static inline struct fhci_hcd *hcd_to_fhci(struct usb_hcd *hcd)
-{
-	return (struct fhci_hcd *)hcd->hcd_priv;
+static inline struct fhci_hcd *hcd_to_fhci(struct usb_hcd *hcd) {
+    return (struct fhci_hcd *)hcd->hcd_priv;
 }
 
-static inline struct usb_hcd *fhci_to_hcd(struct fhci_hcd *fhci)
-{
-	return container_of((void *)fhci, struct usb_hcd, hcd_priv);
+static inline struct usb_hcd *fhci_to_hcd(struct fhci_hcd *fhci) {
+    return container_of((void *)fhci, struct usb_hcd, hcd_priv);
 }
 
 /* fifo of pointers */
-static inline int cq_new(struct kfifo *fifo, int size)
-{
-	return kfifo_alloc(fifo, size * sizeof(void *), GFP_KERNEL);
+static inline int cq_new(struct kfifo *fifo, int size) {
+    return kfifo_alloc(fifo, size * sizeof(void *), GFP_KERNEL);
 }
 
-static inline void cq_delete(struct kfifo *kfifo)
-{
-	kfifo_free(kfifo);
+static inline void cq_delete(struct kfifo *kfifo) {
+    kfifo_free(kfifo);
 }
 
-static inline unsigned int cq_howmany(struct kfifo *kfifo)
-{
-	return kfifo_len(kfifo) / sizeof(void *);
+static inline unsigned int cq_howmany(struct kfifo *kfifo) {
+    return kfifo_len(kfifo) / sizeof(void *);
 }
 
-static inline int cq_put(struct kfifo *kfifo, void *p)
-{
-	return kfifo_in(kfifo, (void *)&p, sizeof(p));
+static inline int cq_put(struct kfifo *kfifo, void *p) {
+    return kfifo_in(kfifo, (void *)&p, sizeof(p));
 }
 
-static inline void *cq_get(struct kfifo *kfifo)
-{
-	unsigned int sz;
-	void *p;
+static inline void *cq_get(struct kfifo *kfifo) {
+    unsigned int sz;
+    void *p;
 
-	sz = kfifo_out(kfifo, (void *)&p, sizeof(p));
-	if (sz != sizeof(p))
-		return NULL;
+    sz = kfifo_out(kfifo, (void *)&p, sizeof(p));
+    if (sz != sizeof(p))
+        return NULL;
 
-	return p;
+    return p;
 }
 
 /* fhci-hcd.c */
@@ -539,37 +531,37 @@ void fhci_recycle_empty_td(struct fhci_hcd *fhci, struct td *td);
 void fhci_recycle_empty_ed(struct fhci_hcd *fhci, struct ed *ed);
 struct ed *fhci_get_empty_ed(struct fhci_hcd *fhci);
 struct td *fhci_td_fill(struct fhci_hcd *fhci, struct urb *urb,
-			struct urb_priv *urb_priv, struct ed *ed, u16 index,
-			enum fhci_ta_type type, int toggle, u8 *data, u32 len,
-			u16 interval, u16 start_frame, bool ioc);
+                        struct urb_priv *urb_priv, struct ed *ed, u16 index,
+                        enum fhci_ta_type type, int toggle, u8 *data, u32 len,
+                        u16 interval, u16 start_frame, bool ioc);
 void fhci_add_tds_to_ed(struct ed *ed, struct td **td_list, int number);
 
 /* fhci-hub.c */
 void fhci_config_transceiver(struct fhci_hcd *fhci,
-			enum fhci_port_status status);
+                             enum fhci_port_status status);
 void fhci_port_disable(struct fhci_hcd *fhci);
 void fhci_port_enable(void *lld);
 void fhci_io_port_generate_reset(struct fhci_hcd *fhci);
 void fhci_port_reset(void *lld);
 int fhci_hub_status_data(struct usb_hcd *hcd, char *buf);
 int fhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
-		     u16 wIndex, char *buf, u16 wLength);
+                     u16 wIndex, char *buf, u16 wLength);
 
 /* fhci-tds.c */
 void fhci_flush_bds(struct fhci_usb *usb);
 void fhci_flush_actual_frame(struct fhci_usb *usb);
 u32 fhci_host_transaction(struct fhci_usb *usb, struct packet *pkt,
-			  enum fhci_ta_type trans_type, u8 dest_addr,
-			  u8 dest_ep, enum fhci_tf_mode trans_mode,
-			  enum fhci_speed dest_speed, u8 data_toggle);
+                          enum fhci_ta_type trans_type, u8 dest_addr,
+                          u8 dest_ep, enum fhci_tf_mode trans_mode,
+                          enum fhci_speed dest_speed, u8 data_toggle);
 void fhci_host_transmit_actual_frame(struct fhci_usb *usb);
 void fhci_tx_conf_interrupt(struct fhci_usb *usb);
 void fhci_push_dummy_bd(struct endpoint *ep);
 u32 fhci_create_ep(struct fhci_usb *usb, enum fhci_mem_alloc data_mem,
-		   u32 ring_len);
+                   u32 ring_len);
 void fhci_init_ep_registers(struct fhci_usb *usb,
-			    struct endpoint *ep,
-			    enum fhci_mem_alloc data_mem);
+                            struct endpoint *ep,
+                            enum fhci_mem_alloc data_mem);
 void fhci_ep0_free(struct fhci_usb *usb);
 
 /* fhci-sched.c */

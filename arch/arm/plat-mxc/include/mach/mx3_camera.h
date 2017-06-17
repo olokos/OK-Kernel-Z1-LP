@@ -40,9 +40,9 @@
  * @dma_dev:	IPU DMA device to match against in channel allocation
  */
 struct mx3_camera_pdata {
-	unsigned long flags;
-	unsigned long mclk_10khz;
-	struct device *dma_dev;
+    unsigned long flags;
+    unsigned long mclk_10khz;
+    struct device *dma_dev;
 };
 
 #endif

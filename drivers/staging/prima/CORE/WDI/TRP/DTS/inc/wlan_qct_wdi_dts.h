@@ -68,8 +68,7 @@
  *        In TX thread it will invoke WDTS_OOResourceNotification API
  */
 
-typedef enum
-{
+typedef enum {
 WDTS_CHANNEL_TX_LOW_PRI,
 WDTS_CHANNEL_TX_HIGH_PRI,
 WDTS_CHANNEL_RX_LOW_PRI,
@@ -77,8 +76,7 @@ WDTS_CHANNEL_RX_HIGH_PRI,
 WDTS_CHANNEL_MAX
 }  WDTS_ChannelType;
 
-typedef enum
-{
+typedef enum {
     WDTS_POWER_STATE_FULL,
     WDTS_POWER_STATE_IMPS,
     WDTS_POWER_STATE_BMPS,
@@ -104,8 +102,7 @@ typedef void  (*WDTS_SetPowerStateCbType)(wpt_status   status,
         unsigned int dxePhyAddr,
         void*        pUserData);
 
-typedef struct
-{
+typedef struct {
     void * (*open)(void);
     wpt_status (*start) (void *pContext);
     wpt_status (*register_client)(void *pContext, WDTS_RxFrameReadyCbType,
@@ -121,8 +118,7 @@ typedef struct
     wpt_uint32 (*getFreeTxDataResNumber) (void *pContext);
 } WDTS_TransportDriverTrype;
 
-typedef struct
-{
+typedef struct {
     WDTS_SetPowerStateCbType cback;
     void*        pUserData;
 } WDTS_SetPowerStateCbInfoType;

@@ -15,11 +15,11 @@
 extern void local_flush_tlb_all(void);
 extern void local_flush_tlb_mm(struct mm_struct *mm);
 extern void local_flush_tlb_range(struct vm_area_struct *vma,
-	unsigned long start, unsigned long end);
+                                  unsigned long start, unsigned long end);
 extern void local_flush_tlb_kernel_range(unsigned long start,
-	unsigned long end);
+        unsigned long end);
 extern void local_flush_tlb_page(struct vm_area_struct *vma,
-	unsigned long page);
+                                 unsigned long page);
 extern void local_flush_tlb_one(unsigned long vaddr);
 
 #ifdef CONFIG_SMP
@@ -27,7 +27,7 @@ extern void local_flush_tlb_one(unsigned long vaddr);
 extern void flush_tlb_all(void);
 extern void flush_tlb_mm(struct mm_struct *);
 extern void flush_tlb_range(struct vm_area_struct *vma, unsigned long,
-	unsigned long);
+                            unsigned long);
 extern void flush_tlb_kernel_range(unsigned long, unsigned long);
 extern void flush_tlb_page(struct vm_area_struct *, unsigned long);
 extern void flush_tlb_one(unsigned long vaddr);

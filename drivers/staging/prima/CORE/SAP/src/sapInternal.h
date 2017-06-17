@@ -124,8 +124,7 @@ typedef struct sSapContext tSapContext;
 
 
 /* SAP FSM states for Access Point role */
-typedef enum
-{
+typedef enum {
     eSAP_DISCONNECTED,
     eSAP_CH_SELECT,
     eSAP_STARTING,
@@ -140,19 +139,16 @@ typedef enum
 *  Type Declarations - QOS related
 * -------------------------------------------------------------------------*/
 /* SAP QOS config */
-typedef struct sSapQosCfg
-{
+typedef struct sSapQosCfg {
     v_U8_t              WmmIsEnabled;
 } tSapQosCfg;
 
-typedef struct sSapAcsChannelInfo
-{
+typedef struct sSapAcsChannelInfo {
     v_U32_t             channelNum;
     v_U32_t             weight;
 } tSapAcsChannelInfo;
 
-typedef struct
-{
+typedef struct {
     /** The station entry is used or not  */
     v_BOOL_t isUsed;
 
@@ -186,8 +182,7 @@ typedef struct
     v_BOOL_t isDeauthInProgress;
 } hdd_station_info_t;
 
-typedef struct sSapContext
-{
+typedef struct sSapContext {
 
     vos_lock_t          SapGlobalLock;
 
@@ -277,8 +272,7 @@ extern ptSapContext  gpSapCtx;
  *  SAP state machine event definition
  * -------------------------------------------------------------------------*/
 /* The event structure */
-typedef struct sWLAN_SAPEvent
-{
+typedef struct sWLAN_SAPEvent {
     v_PVOID_t params;   /* A VOID pointer type for all possible inputs */
     v_U32_t   event;    /* State machine input event message */
     v_U32_t   u1;       /* introduced to handle csrRoamCompleteCallback roamStatus */

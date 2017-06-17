@@ -636,7 +636,8 @@ typedef hcf_16 hcf_io;
 #endif
 
 #if defined HCF_HSI_VAR_4
-err: HSI variants 4 correspond with HII;
+err:
+HSI variants 4 correspond with HII;
 #endif // HCF_HSI_VAR_4
 
 #else
@@ -660,11 +661,13 @@ err: HSI variants 4 correspond with HII;
 #endif //		HCF_PRI_VAR_3
 
 #if defined HCF_HSI_VAR_1 || defined HCF_HSI_VAR_2 || defined HCF_HSI_VAR_3
-err: HSI variants 1, 2 and 3 correspond with H-I only;
+err:
+HSI variants 1, 2 and 3 correspond with H-I only;
 #endif // HCF_HSI_VAR_1, HCF_HSI_VAR_2, HCF_HSI_VAR_3
 
 #if defined HCF_PRI_VAR_1 || defined HCF_PRI_VAR_2
-err: primary variants 1 and 2 correspond with H-I only;
+err:
+primary variants 1 and 2 correspond with H-I only;
 #endif // HCF_PRI_VAR_1 / HCF_PRI_VAR_2
 
 
@@ -706,62 +709,76 @@ err: primary variants 1 and 2 correspond with H-I only;
 /*********************** C O N F L I C T   D E T E C T I O N  &  R E S O L U T I O N ************************/
 /************************************************************************************************************/
 #if HCF_ALIGN != 1 && HCF_ALIGN != 2 && HCF_ALIGN != 4 && HCF_ALIGN != 8
-err: invalid value for HCF_ALIGN;
+err:
+invalid value for HCF_ALIGN;
 #endif // HCF_ALIGN
 
 #if (HCF_ASSERT) & ~( HCF_ASSERT_PRINTF | HCF_ASSERT_SW_SUP | HCF_ASSERT_MB | HCF_ASSERT_RT_MSF_RTN | \
 					  HCF_ASSERT_LNK_MSF_RTN )
-err: invalid value for HCF_ASSERT;
+err:
+invalid value for HCF_ASSERT;
 #endif // HCF_ASSERT
 
 #if (HCF_ASSERT) & HCF_ASSERT_MB && ! ( (HCF_EXT) & HCF_EXT_MB )		//detect potential conflict
-err: these macros are not used consistently;
+err:
+these macros are not used consistently;
 #endif // HCF_ASSERT_MB / HCF_EXT_MB
 
 #if HCF_BIG_ENDIAN != 0 && HCF_BIG_ENDIAN != 1
-err: invalid value for HCF_BIG_ENDIAN;
+err:
+invalid value for HCF_BIG_ENDIAN;
 #endif // HCF_BIG_ENDIAN
 
 #if HCF_DMA != 0 && HCF_DMA != 1
-err: invalid value for HCF_DMA;
+err:
+invalid value for HCF_DMA;
 #endif // HCF_DMA
 
 #if (HCF_ENCAP) & ~( HCF_ENC | HCF_ENC_SUP )
-err: invalid value for HCF_ENCAP;
+err:
+invalid value for HCF_ENCAP;
 #endif // HCF_ENCAP
 
 #if (HCF_EXT) & ~( HCF_EXT_INFO_LOG | HCF_EXT_INT_TX_EX | HCF_EXT_TALLIES_FW | HCF_EXT_TALLIES_HCF	| \
 				   HCF_EXT_NIC_ACCESS | HCF_EXT_MB | HCF_EXT_INT_TICK | \
 				   HCF_EXT_IFB_STRCT | HCF_EXT_DESC_STRCT | HCF_EXT_TX_CONT )
-err: invalid value for HCF_EXT;
+err:
+invalid value for HCF_EXT;
 #endif // HCF_EXT
 
 #if HCF_INT_ON != 0 && HCF_INT_ON != 1
-err: invalid value for HCF_INT_ON;
+err:
+invalid value for HCF_INT_ON;
 #endif // HCF_INT_ON
 
 #if (HCF_IO) & ~( HCF_IO_MEM | HCF_IO_32BITS )
-err: invalid value for HCF_IO;
+err:
+invalid value for HCF_IO;
 #endif // HCF_IO
 
 #if HCF_LEGACY != 0 && HCF_LEGACY != 1
-err: invalid value for HCF_LEGACY;
+err:
+invalid value for HCF_LEGACY;
 #endif // HCF_LEGACY
 
 #if HCF_MAX_LTV < 16 || HCF_MAX_LTV > 2304
-err: invalid value for HCF_MAX_LTV;
+err:
+invalid value for HCF_MAX_LTV;
 #endif // HCF_MAX_LTV
 
 #if HCF_PROT_TIME != 0 && ( HCF_PROT_TIME < 19 || 256 < HCF_PROT_TIME )
-err: below minimum .08 second required by Hermes or possibly above hcf_32 capacity;
+err:
+below minimum .08 second required by Hermes or possibly above hcf_32 capacity;
 #endif // HCF_PROT_TIME
 
 #if (HCF_SLEEP) & ~( HCF_CDS | HCF_DDS )
-err: invalid value for HCF_SLEEP;
+err:
+invalid value for HCF_SLEEP;
 #endif // HCF_SLEEP
 
 #if (HCF_SLEEP) && ! (HCF_INT_ON)
-err: these macros are not used consistently;
+err:
+these macros are not used consistently;
 #endif // HCF_SLEEP / HCF_INT_ON
 
 #if (HCF_SLEEP) && ! ( (HCF_EXT) & HCF_EXT_INT_TICK )
@@ -770,16 +787,19 @@ err: these macros are not used consistently;
 
 #if (HCF_TALLIES) & ~( HCF_TALLIES_HCF | HCF_TALLIES_NIC | HCF_TALLIES_RESET ) || \
 	(HCF_TALLIES) == HCF_TALLIES_RESET
-err: invalid value for HCF_TALLIES;
+err:
+invalid value for HCF_TALLIES;
 #endif // HCF_TALLIES
 
 #if (HCF_TYPE) & ~(HCF_TYPE_WPA | HCF_TYPE_USB | HCF_TYPE_PRELOADED | HCF_TYPE_HII5 | HCF_TYPE_WARP | \
 		HCF_TYPE_CCX /* | HCF_TYPE_TX_DELAY */ )
-err: invalid value for HCF_TYPE;
+err:
+invalid value for HCF_TYPE;
 #endif //HCF_TYPE
 
 #if (HCF_TYPE) & HCF_TYPE_WARP && (HCF_TYPE) & HCF_TYPE_WPA
-err: at most 1 of these macros should be defined;
+err:
+at most 1 of these macros should be defined;
 #endif //HCF_TYPE_WARP / HCF_TYPE_WPA
 
 #endif //HCFCFG_H

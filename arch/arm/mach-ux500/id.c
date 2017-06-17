@@ -19,44 +19,41 @@
 
 struct dbx500_asic_id dbx500_id;
 
-static unsigned int ux500_read_asicid(phys_addr_t addr)
-{
-	phys_addr_t base = addr & ~0xfff;
-	struct map_desc desc = {
-		.virtual	= IO_ADDRESS(base),
-		.pfn		= __phys_to_pfn(base),
-		.length		= SZ_16K,
-		.type		= MT_DEVICE,
-	};
+static unsigned int ux500_read_asicid(phys_addr_t addr) {
+    phys_addr_t base = addr & ~0xfff;
+    struct map_desc desc = {
+        .virtual	= IO_ADDRESS(base),
+        .pfn		= __phys_to_pfn(base),
+        .length		= SZ_16K,
+        .type		= MT_DEVICE,
+    };
 
-	iotable_init(&desc, 1);
+    iotable_init(&desc, 1);
 
-	/* As in devicemaps_init() */
-	local_flush_tlb_all();
-	flush_cache_all();
+    /* As in devicemaps_init() */
+    local_flush_tlb_all();
+    flush_cache_all();
 
-	return readl(__io_address(addr));
+    return readl(__io_address(addr));
 }
 
-static void ux500_print_soc_info(unsigned int asicid)
-{
-	unsigned int rev = dbx500_revision();
+static void ux500_print_soc_info(unsigned int asicid) {
+    unsigned int rev = dbx500_revision();
 
-	pr_info("DB%4x ", dbx500_partnumber());
+    pr_info("DB%4x ", dbx500_partnumber());
 
-	if (rev == 0x01)
-		pr_cont("Early Drop");
-	else if (rev >= 0xA0)
-		pr_cont("v%d.%d" , (rev >> 4) - 0xA + 1, rev & 0xf);
-	else
-		pr_cont("Unknown");
+    if (rev == 0x01)
+        pr_cont("Early Drop");
+    else if (rev >= 0xA0)
+        pr_cont("v%d.%d" , (rev >> 4) - 0xA + 1, rev & 0xf);
+    else
+        pr_cont("Unknown");
 
-	pr_cont(" [%#010x]\n", asicid);
+    pr_cont(" [%#010x]\n", asicid);
 }
 
-static unsigned int partnumber(unsigned int asicid)
-{
-	return (asicid >> 8) & 0xffff;
+static unsigned int partnumber(unsigned int asicid) {
+    return (asicid >> 8) & 0xffff;
 }
 
 /*
@@ -69,41 +66,40 @@ static unsigned int partnumber(unsigned int asicid)
  * DB5500v1	0x412fc091	0x9001FFF4		0x005500A0
  */
 
-void __init ux500_map_io(void)
-{
-	unsigned int cpuid = read_cpuid_id();
-	unsigned int asicid = 0;
-	phys_addr_t addr = 0;
+void __init ux500_map_io(void) {
+    unsigned int cpuid = read_cpuid_id();
+    unsigned int asicid = 0;
+    phys_addr_t addr = 0;
 
-	switch (cpuid) {
-	case 0x410fc090: /* DB8500ed */
-	case 0x411fc091: /* DB8500v1 */
-		addr = 0x9001FFF4;
-		break;
+    switch (cpuid) {
+    case 0x410fc090: /* DB8500ed */
+    case 0x411fc091: /* DB8500v1 */
+        addr = 0x9001FFF4;
+        break;
 
-	case 0x412fc091: /* DB8520 / DB8500v2 / DB5500v1 */
-		asicid = ux500_read_asicid(0x9001DBF4);
-		if (partnumber(asicid) == 0x8500 ||
-		    partnumber(asicid) == 0x8520)
-			/* DB8500v2 */
-			break;
+    case 0x412fc091: /* DB8520 / DB8500v2 / DB5500v1 */
+        asicid = ux500_read_asicid(0x9001DBF4);
+        if (partnumber(asicid) == 0x8500 ||
+                partnumber(asicid) == 0x8520)
+            /* DB8500v2 */
+            break;
 
-		/* DB5500v1 */
-		addr = 0x9001FFF4;
-		break;
-	}
+        /* DB5500v1 */
+        addr = 0x9001FFF4;
+        break;
+    }
 
-	if (addr)
-		asicid = ux500_read_asicid(addr);
+    if (addr)
+        asicid = ux500_read_asicid(addr);
 
-	if (!asicid) {
-		pr_err("Unable to identify SoC\n");
-		ux500_unknown_soc();
-	}
+    if (!asicid) {
+        pr_err("Unable to identify SoC\n");
+        ux500_unknown_soc();
+    }
 
-	dbx500_id.process = asicid >> 24;
-	dbx500_id.partnumber = partnumber(asicid);
-	dbx500_id.revision = asicid & 0xff;
+    dbx500_id.process = asicid >> 24;
+    dbx500_id.partnumber = partnumber(asicid);
+    dbx500_id.revision = asicid & 0xff;
 
-	ux500_print_soc_info(asicid);
+    ux500_print_soc_info(asicid);
 }

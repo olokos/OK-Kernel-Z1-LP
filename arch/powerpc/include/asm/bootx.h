@@ -52,8 +52,7 @@
 /* This is the format of an element in the physical memory map. Note that
    the map is optional and current BootX will only build it for pre-PCI
    machines */
-typedef struct boot_info_map_entry
-{
+typedef struct boot_info_map_entry {
     __u32       physAddr;                /* Physical starting address */
     __u32       size;                    /* Size in bytes */
 } boot_info_map_entry_t;
@@ -62,8 +61,7 @@ typedef struct boot_info_map_entry
 /* Here are the boot informations that are passed to the bootstrap
  * Note that the kernel arguments and the device tree are appended
  * at the end of this structure. */
-typedef struct boot_infos
-{
+typedef struct boot_infos {
     /* Version of this structure */
     __u32       version;
     /* backward compatible down to version: */
@@ -95,7 +93,7 @@ typedef struct boot_infos
     __u32       dispDeviceColorsOffset;  /* Colormap (8 bits only) or 0 (*) */
     /* Optional offset in the registry to the current
      * MacOS display. (Can be 0 when not detected) */
-     __u32      dispDeviceRegEntryOffset;
+    __u32      dispDeviceRegEntryOffset;
 
     /* Optional pointer to boot ramdisk (offset from this structure) */
     __u32       ramDisk;
@@ -110,7 +108,7 @@ typedef struct boot_infos
        (non-PCI) only. On PCI, memory is contiguous and it's size is in the
        device-tree. */
     boot_info_map_entry_t
-    	        physMemoryMap[MAX_MEM_MAP_SIZE]; /* Where the phys memory is */
+    physMemoryMap[MAX_MEM_MAP_SIZE]; /* Where the phys memory is */
     __u32       physMemoryMapSize;               /* How many entries in map */
 
 
@@ -137,27 +135,27 @@ typedef struct boot_infos
  * so we now define it here
  */
 struct bootx_dt_prop {
-	u32	name;
-	int	length;
-	u32	value;
-	u32	next;
+    u32	name;
+    int	length;
+    u32	value;
+    u32	next;
 };
 
 struct bootx_dt_node {
-	u32	unused0;
-	u32	unused1;
-	u32	phandle;	/* not really available */
-	u32	unused2;
-	u32	unused3;
-	u32	unused4;
-	u32	unused5;
-	u32	full_name;
-	u32	properties;
-	u32	parent;
-	u32	child;
-	u32	sibling;
-	u32	next;
-	u32	allnext;
+    u32	unused0;
+    u32	unused1;
+    u32	phandle;	/* not really available */
+    u32	unused2;
+    u32	unused3;
+    u32	unused4;
+    u32	unused5;
+    u32	full_name;
+    u32	properties;
+    u32	parent;
+    u32	child;
+    u32	sibling;
+    u32	next;
+    u32	allnext;
 };
 
 extern void bootx_init(unsigned long r4, unsigned long phys);

@@ -20,16 +20,16 @@
  * %MSM_RPM_CTX_SET_SLEEP: Set resource parameters for sleep.
  */
 enum msm_rpm_set {
-	MSM_RPM_CTX_ACTIVE_SET,
-	MSM_RPM_CTX_SLEEP_SET,
+    MSM_RPM_CTX_ACTIVE_SET,
+    MSM_RPM_CTX_SLEEP_SET,
 };
 
 struct msm_rpm_request;
 
 struct msm_rpm_kvp {
-	uint32_t key;
-	uint32_t length;
-	uint8_t *data;
+    uint32_t key;
+    uint32_t length;
+    uint8_t *data;
 };
 #ifdef CONFIG_MSM_RPM_SMD
 /**
@@ -46,8 +46,8 @@ struct msm_rpm_kvp {
  * returns pointer to a msm_rpm_request on success, NULL on error
  */
 struct msm_rpm_request *msm_rpm_create_request(
-		enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, int num_elements);
+    enum msm_rpm_set set, uint32_t rsc_type,
+    uint32_t rsc_id, int num_elements);
 
 /**
  * msm_rpm_request_noirq() - Creates a parent element to identify the
@@ -64,8 +64,8 @@ struct msm_rpm_request *msm_rpm_create_request(
  * returns pointer to a msm_rpm_request on success, NULL on error
  */
 struct msm_rpm_request *msm_rpm_create_request_noirq(
-		enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, int num_elements);
+    enum msm_rpm_set set, uint32_t rsc_type,
+    uint32_t rsc_id, int num_elements);
 
 /**
  * msm_rpm_add_kvp_data() - Adds a Key value pair to a existing RPM resource.
@@ -78,7 +78,7 @@ struct msm_rpm_request *msm_rpm_create_request_noirq(
  * returns 0 on success or errno
  */
 int msm_rpm_add_kvp_data(struct msm_rpm_request *handle,
-		uint32_t key, const uint8_t *data, int size);
+                         uint32_t key, const uint8_t *data, int size);
 
 /**
  * msm_rpm_add_kvp_data_noirq() - Adds a Key value pair to a existing RPM
@@ -93,7 +93,7 @@ int msm_rpm_add_kvp_data(struct msm_rpm_request *handle,
  * returns 0 on success or errno
  */
 int msm_rpm_add_kvp_data_noirq(struct msm_rpm_request *handle,
-		uint32_t key, const uint8_t *data, int size);
+                               uint32_t key, const uint8_t *data, int size);
 
 /** msm_rpm_free_request() - clean up the RPM request handle created with
  * msm_rpm_create_request
@@ -164,7 +164,7 @@ int msm_rpm_wait_for_ack_noirq(uint32_t msg_id);
  * returns  0 on success and errno on failure.
  */
 int msm_rpm_send_message(enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems);
+                         uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems);
 
 /**
  * msm_rpm_send_message_noirq() -Wrapper function for clients to send data
@@ -183,7 +183,7 @@ int msm_rpm_send_message(enum msm_rpm_set set, uint32_t rsc_type,
  * returns  0 on success and errno on failure.
  */
 int msm_rpm_send_message_noirq(enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems);
+                               uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems);
 
 /**
  * msm_rpm_driver_init() - Initialization function that registers for a
@@ -196,73 +196,61 @@ int __init msm_rpm_driver_init(void);
 #else
 
 static inline struct msm_rpm_request *msm_rpm_create_request(
-		enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, int num_elements)
-{
-	return NULL;
+    enum msm_rpm_set set, uint32_t rsc_type,
+    uint32_t rsc_id, int num_elements) {
+    return NULL;
 }
 
 static inline struct msm_rpm_request *msm_rpm_create_request_noirq(
-		enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, int num_elements)
-{
-	return NULL;
+    enum msm_rpm_set set, uint32_t rsc_type,
+    uint32_t rsc_id, int num_elements) {
+    return NULL;
 
 }
 static inline uint32_t msm_rpm_add_kvp_data(struct msm_rpm_request *handle,
-		uint32_t key, const uint8_t *data, int count)
-{
-	return 0;
+        uint32_t key, const uint8_t *data, int count) {
+    return 0;
 }
 static inline uint32_t msm_rpm_add_kvp_data_noirq(
-		struct msm_rpm_request *handle, uint32_t key,
-		const uint8_t *data, int count)
-{
-	return 0;
+    struct msm_rpm_request *handle, uint32_t key,
+    const uint8_t *data, int count) {
+    return 0;
 }
 
-static inline void msm_rpm_free_request(struct msm_rpm_request *handle)
-{
-	return ;
+static inline void msm_rpm_free_request(struct msm_rpm_request *handle) {
+    return ;
 }
 
-static inline int msm_rpm_send_request(struct msm_rpm_request *handle)
-{
-	return 0;
+static inline int msm_rpm_send_request(struct msm_rpm_request *handle) {
+    return 0;
 }
 
-static inline int msm_rpm_send_request_noirq(struct msm_rpm_request *handle)
-{
-	return 0;
+static inline int msm_rpm_send_request_noirq(struct msm_rpm_request *handle) {
+    return 0;
 
 }
 
 static inline int msm_rpm_send_message(enum msm_rpm_set set, uint32_t rsc_type,
-		uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems)
-{
-	return 0;
+                                       uint32_t rsc_id, struct msm_rpm_kvp *kvp, int nelems) {
+    return 0;
 }
 
 static inline int msm_rpm_send_message_noirq(enum msm_rpm_set set,
-		uint32_t rsc_type, uint32_t rsc_id, struct msm_rpm_kvp *kvp,
-		int nelems)
-{
-	return 0;
+        uint32_t rsc_type, uint32_t rsc_id, struct msm_rpm_kvp *kvp,
+        int nelems) {
+    return 0;
 }
 
-static inline int msm_rpm_wait_for_ack(uint32_t msg_id)
-{
-	return 0;
+static inline int msm_rpm_wait_for_ack(uint32_t msg_id) {
+    return 0;
 
 }
-static inline int msm_rpm_wait_for_ack_noirq(uint32_t msg_id)
-{
-	return 0;
+static inline int msm_rpm_wait_for_ack_noirq(uint32_t msg_id) {
+    return 0;
 }
 
-static inline int __init msm_rpm_driver_init(void)
-{
-	return 0;
+static inline int __init msm_rpm_driver_init(void) {
+    return 0;
 }
 #endif
 #endif /*__ARCH_ARM_MACH_MSM_RPM_SMD_H*/

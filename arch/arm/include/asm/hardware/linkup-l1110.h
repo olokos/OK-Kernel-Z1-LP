@@ -44,5 +44,5 @@
 #define LINKUP_PRC_MBZ	(1 << 15) /* must be zero */
 
 struct linkup_l1110 {
-	volatile short prc;
+    volatile short prc;
 };

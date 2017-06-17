@@ -15,7 +15,6 @@
 #define OFFSET(sym, str, mem) \
 	DEFINE(sym, offsetof(struct str, mem));
 
-void foo(void)
-{
+void foo(void) {
 #include <common-offsets.h>
 }

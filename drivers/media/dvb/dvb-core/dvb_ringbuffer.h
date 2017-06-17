@@ -33,14 +33,14 @@
 #include <linux/wait.h>
 
 struct dvb_ringbuffer {
-	u8               *data;
-	ssize_t           size;
-	ssize_t           pread;
-	ssize_t           pwrite;
-	int               error;
+    u8               *data;
+    ssize_t           size;
+    ssize_t           pread;
+    ssize_t           pwrite;
+    int               error;
 
-	wait_queue_head_t queue;
-	spinlock_t        lock;
+    wait_queue_head_t queue;
+    spinlock_t        lock;
 };
 
 #define DVB_RINGBUFFER_PKTHDRSIZE 3
@@ -121,9 +121,9 @@ extern void dvb_ringbuffer_flush_spinlock_wakeup(struct dvb_ringbuffer *rbuf);
 ** returns number of bytes transferred or -EFAULT
 */
 extern ssize_t dvb_ringbuffer_read_user(struct dvb_ringbuffer *rbuf,
-				   u8 __user *buf, size_t len);
+                                        u8 __user *buf, size_t len);
 extern void dvb_ringbuffer_read(struct dvb_ringbuffer *rbuf,
-				   u8 *buf, size_t len);
+                                u8 *buf, size_t len);
 
 
 /* write routines & macros */
@@ -138,10 +138,10 @@ extern void dvb_ringbuffer_read(struct dvb_ringbuffer *rbuf,
 ** returns number of bytes transferred or -EFAULT
 */
 extern ssize_t dvb_ringbuffer_write(struct dvb_ringbuffer *rbuf, const u8 *buf,
-				    size_t len);
+                                    size_t len);
 
 extern ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
-					const u8 *buf, size_t len);
+        const u8 *buf, size_t len);
 
 /**
  * Write a packet into the ringbuffer.
@@ -152,7 +152,7 @@ extern ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
  * returns Number of bytes written, or -EFAULT, -ENOMEM, -EVINAL.
  */
 extern ssize_t dvb_ringbuffer_pkt_write(struct dvb_ringbuffer *rbuf, u8* buf,
-					size_t len);
+                                        size_t len);
 
 /**
  * Read from a packet in the ringbuffer. Note: unlike dvb_ringbuffer_read(), this
@@ -168,9 +168,9 @@ extern ssize_t dvb_ringbuffer_pkt_write(struct dvb_ringbuffer *rbuf, u8* buf,
  * returns Number of bytes read, or -EFAULT.
  */
 extern ssize_t dvb_ringbuffer_pkt_read_user(struct dvb_ringbuffer *rbuf, size_t idx,
-				       int offset, u8 __user *buf, size_t len);
+        int offset, u8 __user *buf, size_t len);
 extern ssize_t dvb_ringbuffer_pkt_read(struct dvb_ringbuffer *rbuf, size_t idx,
-				       int offset, u8 *buf, size_t len);
+                                       int offset, u8 *buf, size_t len);
 
 /**
  * Dispose of a packet in the ring buffer.
@@ -204,7 +204,7 @@ extern ssize_t dvb_ringbuffer_pkt_next(struct dvb_ringbuffer *rbuf, size_t idx, 
  * returns Index of the packet's header that was started.
  */
 extern ssize_t dvb_ringbuffer_pkt_start(struct dvb_ringbuffer *rbuf,
-						size_t len);
+                                        size_t len);
 
 /**
  * Close a packet that was started using dvb_ringbuffer_pkt_start.

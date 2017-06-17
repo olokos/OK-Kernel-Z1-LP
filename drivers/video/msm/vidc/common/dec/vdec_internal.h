@@ -21,25 +21,25 @@
 #define NUM_OF_DRIVER_NODES 2
 
 struct vid_dec_msg {
-	struct list_head list;
-	struct vdec_msginfo vdec_msg_info;
+    struct list_head list;
+    struct vdec_msginfo vdec_msg_info;
 };
 
 struct vid_dec_dev {
-	struct cdev cdev[NUM_OF_DRIVER_NODES];
-	struct device *device[NUM_OF_DRIVER_NODES];
-	resource_size_t phys_base;
-	void __iomem *virt_base;
-	unsigned int irq;
-	struct clk *hclk;
-	struct clk *hclk_div2;
-	struct clk *pclk;
-	unsigned long hclk_rate;
-	struct mutex lock;
-	s32 device_handle;
-	struct video_client_ctx vdec_clients[VIDC_MAX_NUM_CLIENTS];
-	u32 num_clients;
-	void(*timer_handler)(void *);
+    struct cdev cdev[NUM_OF_DRIVER_NODES];
+    struct device *device[NUM_OF_DRIVER_NODES];
+    resource_size_t phys_base;
+    void __iomem *virt_base;
+    unsigned int irq;
+    struct clk *hclk;
+    struct clk *hclk_div2;
+    struct clk *pclk;
+    unsigned long hclk_rate;
+    struct mutex lock;
+    s32 device_handle;
+    struct video_client_ctx vdec_clients[VIDC_MAX_NUM_CLIENTS];
+    u32 num_clients;
+    void(*timer_handler)(void *);
 };
 
 #endif

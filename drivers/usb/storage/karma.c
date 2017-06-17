@@ -43,8 +43,8 @@ MODULE_LICENSE("GPL");
 #define RIO_RESET 0xC
 
 struct karma_data {
-	int in_storage;
-	char *recv;
+    int in_storage;
+    char *recv;
 };
 
 static int rio_karma_init(struct us_data *us);
@@ -61,7 +61,7 @@ static int rio_karma_init(struct us_data *us);
 
 static struct usb_device_id karma_usb_ids[] = {
 #	include "unusual_karma.h"
-	{ }		/* Terminating entry */
+    { }		/* Terminating entry */
 };
 MODULE_DEVICE_TABLE(usb, karma_usb_ids);
 
@@ -83,7 +83,7 @@ MODULE_DEVICE_TABLE(usb, karma_usb_ids);
 
 static struct us_unusual_dev karma_unusual_dev_list[] = {
 #	include "unusual_karma.h"
-	{ }		/* Terminating entry */
+    { }		/* Terminating entry */
 };
 
 #undef UNUSUAL_DEV
@@ -99,138 +99,133 @@ static struct us_unusual_dev karma_unusual_dev_list[] = {
  * sequence number, until byte 5 in the response repeats the sequence
  * number.
  */
-static int rio_karma_send_command(char cmd, struct us_data *us)
-{
-	int result, partial;
-	unsigned long timeout;
-	static unsigned char seq = 1;
-	struct karma_data *data = (struct karma_data *) us->extra;
+static int rio_karma_send_command(char cmd, struct us_data *us) {
+    int result, partial;
+    unsigned long timeout;
+    static unsigned char seq = 1;
+    struct karma_data *data = (struct karma_data *) us->extra;
 
-	US_DEBUGP("karma: sending command %04x\n", cmd);
-	memset(us->iobuf, 0, RIO_SEND_LEN);
-	memcpy(us->iobuf, RIO_PREFIX, RIO_PREFIX_LEN);
-	us->iobuf[5] = cmd;
-	us->iobuf[6] = seq;
+    US_DEBUGP("karma: sending command %04x\n", cmd);
+    memset(us->iobuf, 0, RIO_SEND_LEN);
+    memcpy(us->iobuf, RIO_PREFIX, RIO_PREFIX_LEN);
+    us->iobuf[5] = cmd;
+    us->iobuf[6] = seq;
 
-	timeout = jiffies + msecs_to_jiffies(6000);
-	for (;;) {
-		result = usb_stor_bulk_transfer_buf(us, us->send_bulk_pipe,
-			us->iobuf, RIO_SEND_LEN, &partial);
-		if (result != USB_STOR_XFER_GOOD)
-			goto err;
+    timeout = jiffies + msecs_to_jiffies(6000);
+    for (;;) {
+        result = usb_stor_bulk_transfer_buf(us, us->send_bulk_pipe,
+                                            us->iobuf, RIO_SEND_LEN, &partial);
+        if (result != USB_STOR_XFER_GOOD)
+            goto err;
 
-		result = usb_stor_bulk_transfer_buf(us, us->recv_bulk_pipe,
-			data->recv, RIO_RECV_LEN, &partial);
-		if (result != USB_STOR_XFER_GOOD)
-			goto err;
+        result = usb_stor_bulk_transfer_buf(us, us->recv_bulk_pipe,
+                                            data->recv, RIO_RECV_LEN, &partial);
+        if (result != USB_STOR_XFER_GOOD)
+            goto err;
 
-		if (data->recv[5] == seq)
-			break;
+        if (data->recv[5] == seq)
+            break;
 
-		if (time_after(jiffies, timeout))
-			goto err;
+        if (time_after(jiffies, timeout))
+            goto err;
 
-		us->iobuf[4] = 0x80;
-		us->iobuf[5] = 0;
-		msleep(50);
-	}
+        us->iobuf[4] = 0x80;
+        us->iobuf[5] = 0;
+        msleep(50);
+    }
 
-	seq++;
-	if (seq == 0)
-		seq = 1;
+    seq++;
+    if (seq == 0)
+        seq = 1;
 
-	US_DEBUGP("karma: sent command %04x\n", cmd);
-	return 0;
+    US_DEBUGP("karma: sent command %04x\n", cmd);
+    return 0;
 err:
-	US_DEBUGP("karma: command %04x failed\n", cmd);
-	return USB_STOR_TRANSPORT_FAILED;
+    US_DEBUGP("karma: command %04x failed\n", cmd);
+    return USB_STOR_TRANSPORT_FAILED;
 }
 
 /*
  * Trap START_STOP and READ_10 to leave/re-enter storage mode.
  * Everything else is propagated to the normal bulk layer.
  */
-static int rio_karma_transport(struct scsi_cmnd *srb, struct us_data *us)
-{
-	int ret;
-	struct karma_data *data = (struct karma_data *) us->extra;
+static int rio_karma_transport(struct scsi_cmnd *srb, struct us_data *us) {
+    int ret;
+    struct karma_data *data = (struct karma_data *) us->extra;
 
-	if (srb->cmnd[0] == READ_10 && !data->in_storage) {
-		ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
-		if (ret)
-			return ret;
+    if (srb->cmnd[0] == READ_10 && !data->in_storage) {
+        ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
+        if (ret)
+            return ret;
 
-		data->in_storage = 1;
-		return usb_stor_Bulk_transport(srb, us);
-	} else if (srb->cmnd[0] == START_STOP) {
-		ret = rio_karma_send_command(RIO_LEAVE_STORAGE, us);
-		if (ret)
-			return ret;
+        data->in_storage = 1;
+        return usb_stor_Bulk_transport(srb, us);
+    } else if (srb->cmnd[0] == START_STOP) {
+        ret = rio_karma_send_command(RIO_LEAVE_STORAGE, us);
+        if (ret)
+            return ret;
 
-		data->in_storage = 0;
-		return rio_karma_send_command(RIO_RESET, us);
-	}
-	return usb_stor_Bulk_transport(srb, us);
+        data->in_storage = 0;
+        return rio_karma_send_command(RIO_RESET, us);
+    }
+    return usb_stor_Bulk_transport(srb, us);
 }
 
-static void rio_karma_destructor(void *extra)
-{
-	struct karma_data *data = (struct karma_data *) extra;
-	kfree(data->recv);
+static void rio_karma_destructor(void *extra) {
+    struct karma_data *data = (struct karma_data *) extra;
+    kfree(data->recv);
 }
 
-static int rio_karma_init(struct us_data *us)
-{
-	int ret = 0;
-	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
-	if (!data)
-		goto out;
+static int rio_karma_init(struct us_data *us) {
+    int ret = 0;
+    struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
+    if (!data)
+        goto out;
 
-	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
-	if (!data->recv) {
-		kfree(data);
-		goto out;
-	}
+    data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
+    if (!data->recv) {
+        kfree(data);
+        goto out;
+    }
 
-	us->extra = data;
-	us->extra_destructor = rio_karma_destructor;
-	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
-	data->in_storage = (ret == 0);
+    us->extra = data;
+    us->extra_destructor = rio_karma_destructor;
+    ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
+    data->in_storage = (ret == 0);
 out:
-	return ret;
+    return ret;
 }
 
 static int karma_probe(struct usb_interface *intf,
-			 const struct usb_device_id *id)
-{
-	struct us_data *us;
-	int result;
+                       const struct usb_device_id *id) {
+    struct us_data *us;
+    int result;
 
-	result = usb_stor_probe1(&us, intf, id,
-			(id - karma_usb_ids) + karma_unusual_dev_list);
-	if (result)
-		return result;
+    result = usb_stor_probe1(&us, intf, id,
+                             (id - karma_usb_ids) + karma_unusual_dev_list);
+    if (result)
+        return result;
 
-	us->transport_name = "Rio Karma/Bulk";
-	us->transport = rio_karma_transport;
-	us->transport_reset = usb_stor_Bulk_reset;
+    us->transport_name = "Rio Karma/Bulk";
+    us->transport = rio_karma_transport;
+    us->transport_reset = usb_stor_Bulk_reset;
 
-	result = usb_stor_probe2(us);
-	return result;
+    result = usb_stor_probe2(us);
+    return result;
 }
 
 static struct usb_driver karma_driver = {
-	.name =		"ums-karma",
-	.probe =	karma_probe,
-	.disconnect =	usb_stor_disconnect,
-	.suspend =	usb_stor_suspend,
-	.resume =	usb_stor_resume,
-	.reset_resume =	usb_stor_reset_resume,
-	.pre_reset =	usb_stor_pre_reset,
-	.post_reset =	usb_stor_post_reset,
-	.id_table =	karma_usb_ids,
-	.soft_unbind =	1,
-	.no_dynamic_id = 1,
+    .name =		"ums-karma",
+    .probe =	karma_probe,
+    .disconnect =	usb_stor_disconnect,
+    .suspend =	usb_stor_suspend,
+    .resume =	usb_stor_resume,
+    .reset_resume =	usb_stor_reset_resume,
+    .pre_reset =	usb_stor_pre_reset,
+    .post_reset =	usb_stor_post_reset,
+    .id_table =	karma_usb_ids,
+    .soft_unbind =	1,
+    .no_dynamic_id = 1,
 };
 
 module_usb_driver(karma_driver);

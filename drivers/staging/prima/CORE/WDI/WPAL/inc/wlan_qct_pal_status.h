@@ -42,8 +42,7 @@
 
   ========================================================================*/
 
-typedef enum
-{
+typedef enum {
     /// Request succeeded!
     eWLAN_PAL_STATUS_SUCCESS,
 

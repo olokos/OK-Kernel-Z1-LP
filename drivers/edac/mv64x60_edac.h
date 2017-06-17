@@ -80,35 +80,35 @@
 				MV64X60_PCI_ERR_MRdPerr)
 
 struct mv64x60_pci_pdata {
-	int pci_hose;
-	void __iomem *pci_vbase;
-	char *name;
-	int irq;
-	int edac_idx;
+    int pci_hose;
+    void __iomem *pci_vbase;
+    char *name;
+    int irq;
+    int edac_idx;
 };
 
 #endif				/* CONFIG_PCI */
 
 struct mv64x60_mc_pdata {
-	void __iomem *mc_vbase;
-	int total_mem;
-	char *name;
-	int irq;
-	int edac_idx;
+    void __iomem *mc_vbase;
+    int total_mem;
+    char *name;
+    int irq;
+    int edac_idx;
 };
 
 struct mv64x60_cpu_pdata {
-	void __iomem *cpu_vbase[2];
-	char *name;
-	int irq;
-	int edac_idx;
+    void __iomem *cpu_vbase[2];
+    char *name;
+    int irq;
+    int edac_idx;
 };
 
 struct mv64x60_sram_pdata {
-	void __iomem *sram_vbase;
-	char *name;
-	int irq;
-	int edac_idx;
+    void __iomem *sram_vbase;
+    char *name;
+    int irq;
+    int edac_idx;
 };
 
 #endif

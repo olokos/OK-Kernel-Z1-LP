@@ -46,17 +46,15 @@ struct pci_dev;
 #define pcibios_assign_all_busses() \
 	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
 
-static inline void pcibios_penalize_isa_irq(int irq, int active)
-{
-	/* We don't do dynamic PCI IRQ allocation */
+static inline void pcibios_penalize_isa_irq(int irq, int active) {
+    /* We don't do dynamic PCI IRQ allocation */
 }
 
 #define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-{
-	if (ppc_md.pci_get_legacy_ide_irq)
-		return ppc_md.pci_get_legacy_ide_irq(dev, channel);
-	return channel ? 15 : 14;
+static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel) {
+    if (ppc_md.pci_get_legacy_ide_irq)
+        return ppc_md.pci_get_legacy_ide_irq(dev, channel);
+    return channel ? 15 : 14;
 }
 
 #ifdef CONFIG_PCI
@@ -78,20 +76,19 @@ extern struct dma_map_ops *get_pci_dma_ops(void);
 
 #ifdef CONFIG_PCI
 static inline void pci_dma_burst_advice(struct pci_dev *pdev,
-					enum pci_dma_burst_strategy *strat,
-					unsigned long *strategy_parameter)
-{
-	unsigned long cacheline_size;
-	u8 byte;
+                                        enum pci_dma_burst_strategy *strat,
+                                        unsigned long *strategy_parameter) {
+    unsigned long cacheline_size;
+    u8 byte;
 
-	pci_read_config_byte(pdev, PCI_CACHE_LINE_SIZE, &byte);
-	if (byte == 0)
-		cacheline_size = 1024;
-	else
-		cacheline_size = (int) byte * 4;
+    pci_read_config_byte(pdev, PCI_CACHE_LINE_SIZE, &byte);
+    if (byte == 0)
+        cacheline_size = 1024;
+    else
+        cacheline_size = (int) byte * 4;
 
-	*strat = PCI_DMA_BURST_MULTIPLE;
-	*strategy_parameter = cacheline_size;
+    *strat = PCI_DMA_BURST_MULTIPLE;
+    *strategy_parameter = cacheline_size;
 }
 #endif
 
@@ -99,11 +96,10 @@ static inline void pci_dma_burst_advice(struct pci_dev *pdev,
 
 #ifdef CONFIG_PCI
 static inline void pci_dma_burst_advice(struct pci_dev *pdev,
-					enum pci_dma_burst_strategy *strat,
-					unsigned long *strategy_parameter)
-{
-	*strat = PCI_DMA_BURST_INFINITY;
-	*strategy_parameter = ~0UL;
+                                        enum pci_dma_burst_strategy *strat,
+                                        unsigned long *strategy_parameter) {
+    *strat = PCI_DMA_BURST_INFINITY;
+    *strategy_parameter = ~0UL;
 }
 #endif
 #endif /* CONFIG_PPC64 */
@@ -121,18 +117,18 @@ extern int pci_proc_domain(struct pci_bus *bus);
 struct vm_area_struct;
 /* Map a range of PCI memory or I/O space for a device into user space */
 int pci_mmap_page_range(struct pci_dev *pdev, struct vm_area_struct *vma,
-			enum pci_mmap_state mmap_state, int write_combine);
+                        enum pci_mmap_state mmap_state, int write_combine);
 
 /* Tell drivers/pci/proc.c that we have pci_mmap_page_range() */
 #define HAVE_PCI_MMAP	1
 
 extern int pci_legacy_read(struct pci_bus *bus, loff_t port, u32 *val,
-			   size_t count);
+                           size_t count);
 extern int pci_legacy_write(struct pci_bus *bus, loff_t port, u32 val,
-			   size_t count);
+                            size_t count);
 extern int pci_mmap_legacy_page_range(struct pci_bus *bus,
-				      struct vm_area_struct *vma,
-				      enum pci_mmap_state mmap_state);
+                                      struct vm_area_struct *vma,
+                                      enum pci_mmap_state mmap_state);
 
 #define HAVE_PCI_LEGACY	1
 
@@ -164,7 +160,7 @@ extern struct pci_controller *init_phb_dynamic(struct device_node *dn);
 extern int remove_phb_dynamic(struct pci_controller *phb);
 
 extern struct pci_dev *of_create_pci_dev(struct device_node *node,
-					struct pci_bus *bus, int devfn);
+        struct pci_bus *bus, int devfn);
 
 extern void of_scan_pci_bridge(struct pci_dev *dev);
 
@@ -173,14 +169,14 @@ extern void of_rescan_bus(struct device_node *node, struct pci_bus *bus);
 
 struct file;
 extern pgprot_t	pci_phys_mem_access_prot(struct file *file,
-					 unsigned long pfn,
-					 unsigned long size,
-					 pgprot_t prot);
+        unsigned long pfn,
+        unsigned long size,
+        pgprot_t prot);
 
 #define HAVE_ARCH_PCI_RESOURCE_TO_USER
 extern void pci_resource_to_user(const struct pci_dev *dev, int bar,
-				 const struct resource *rsrc,
-				 resource_size_t *start, resource_size_t *end);
+                                 const struct resource *rsrc,
+                                 resource_size_t *start, resource_size_t *end);
 
 extern resource_size_t pcibios_io_space_offset(struct pci_controller *hose);
 extern void pcibios_setup_bus_devices(struct pci_bus *bus);

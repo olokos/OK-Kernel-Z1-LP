@@ -94,42 +94,42 @@ unsigned int bcm63xx_get_cpu_freq(void);
  * address of these sets do change.
  */
 enum bcm63xx_regs_set {
-	RSET_DSL_LMEM = 0,
-	RSET_PERF,
-	RSET_TIMER,
-	RSET_WDT,
-	RSET_UART0,
-	RSET_UART1,
-	RSET_GPIO,
-	RSET_SPI,
-	RSET_SPI2,
-	RSET_UDC0,
-	RSET_OHCI0,
-	RSET_OHCI_PRIV,
-	RSET_USBH_PRIV,
-	RSET_MPI,
-	RSET_PCMCIA,
-	RSET_DSL,
-	RSET_ENET0,
-	RSET_ENET1,
-	RSET_ENETDMA,
-	RSET_ENETDMAC,
-	RSET_ENETDMAS,
-	RSET_ENETSW,
-	RSET_EHCI0,
-	RSET_SDRAM,
-	RSET_MEMC,
-	RSET_DDR,
-	RSET_M2M,
-	RSET_ATM,
-	RSET_XTM,
-	RSET_XTMDMA,
-	RSET_XTMDMAC,
-	RSET_XTMDMAS,
-	RSET_PCM,
-	RSET_PCMDMA,
-	RSET_PCMDMAC,
-	RSET_PCMDMAS,
+    RSET_DSL_LMEM = 0,
+    RSET_PERF,
+    RSET_TIMER,
+    RSET_WDT,
+    RSET_UART0,
+    RSET_UART1,
+    RSET_GPIO,
+    RSET_SPI,
+    RSET_SPI2,
+    RSET_UDC0,
+    RSET_OHCI0,
+    RSET_OHCI_PRIV,
+    RSET_USBH_PRIV,
+    RSET_MPI,
+    RSET_PCMCIA,
+    RSET_DSL,
+    RSET_ENET0,
+    RSET_ENET1,
+    RSET_ENETDMA,
+    RSET_ENETDMAC,
+    RSET_ENETDMAS,
+    RSET_ENETSW,
+    RSET_EHCI0,
+    RSET_SDRAM,
+    RSET_MEMC,
+    RSET_DDR,
+    RSET_M2M,
+    RSET_ATM,
+    RSET_XTM,
+    RSET_XTMDMA,
+    RSET_XTMDMAC,
+    RSET_XTMDMAS,
+    RSET_PCM,
+    RSET_PCMDMA,
+    RSET_PCMDMAC,
+    RSET_PCMDMAS,
 };
 
 #define RSET_DSL_LMEM_SIZE		(64 * 1024 * 4)
@@ -448,61 +448,60 @@ extern const unsigned long *bcm63xx_regs_base;
 	[RSET_PCMDMAS]		= BCM_## __cpu ##_PCMDMAS_BASE,		\
 
 
-static inline unsigned long bcm63xx_regset_address(enum bcm63xx_regs_set set)
-{
+static inline unsigned long bcm63xx_regset_address(enum bcm63xx_regs_set set) {
 #ifdef BCMCPU_RUNTIME_DETECT
-	return bcm63xx_regs_base[set];
+    return bcm63xx_regs_base[set];
 #else
 #ifdef CONFIG_BCM63XX_CPU_6338
-	__GEN_RSET(6338)
+    __GEN_RSET(6338)
 #endif
 #ifdef CONFIG_BCM63XX_CPU_6345
-	__GEN_RSET(6345)
+    __GEN_RSET(6345)
 #endif
 #ifdef CONFIG_BCM63XX_CPU_6348
-	__GEN_RSET(6348)
+    __GEN_RSET(6348)
 #endif
 #ifdef CONFIG_BCM63XX_CPU_6358
-	__GEN_RSET(6358)
+    __GEN_RSET(6358)
 #endif
 #ifdef CONFIG_BCM63XX_CPU_6368
-	__GEN_RSET(6368)
+    __GEN_RSET(6368)
 #endif
 #endif
-	/* unreached */
-	return 0;
+    /* unreached */
+    return 0;
 }
 
 /*
  * IRQ number changes across CPU too
  */
 enum bcm63xx_irq {
-	IRQ_TIMER = 0,
-	IRQ_UART0,
-	IRQ_UART1,
-	IRQ_DSL,
-	IRQ_ENET0,
-	IRQ_ENET1,
-	IRQ_ENET_PHY,
-	IRQ_OHCI0,
-	IRQ_EHCI0,
-	IRQ_ENET0_RXDMA,
-	IRQ_ENET0_TXDMA,
-	IRQ_ENET1_RXDMA,
-	IRQ_ENET1_TXDMA,
-	IRQ_PCI,
-	IRQ_PCMCIA,
-	IRQ_ATM,
-	IRQ_ENETSW_RXDMA0,
-	IRQ_ENETSW_RXDMA1,
-	IRQ_ENETSW_RXDMA2,
-	IRQ_ENETSW_RXDMA3,
-	IRQ_ENETSW_TXDMA0,
-	IRQ_ENETSW_TXDMA1,
-	IRQ_ENETSW_TXDMA2,
-	IRQ_ENETSW_TXDMA3,
-	IRQ_XTM,
-	IRQ_XTM_DMA0,
+    IRQ_TIMER = 0,
+    IRQ_UART0,
+    IRQ_UART1,
+    IRQ_DSL,
+    IRQ_ENET0,
+    IRQ_ENET1,
+    IRQ_ENET_PHY,
+    IRQ_OHCI0,
+    IRQ_EHCI0,
+    IRQ_ENET0_RXDMA,
+    IRQ_ENET0_TXDMA,
+    IRQ_ENET1_RXDMA,
+    IRQ_ENET1_TXDMA,
+    IRQ_PCI,
+    IRQ_PCMCIA,
+    IRQ_ATM,
+    IRQ_ENETSW_RXDMA0,
+    IRQ_ENETSW_RXDMA1,
+    IRQ_ENETSW_RXDMA2,
+    IRQ_ENETSW_RXDMA3,
+    IRQ_ENETSW_TXDMA0,
+    IRQ_ENETSW_TXDMA1,
+    IRQ_ENETSW_TXDMA2,
+    IRQ_ENETSW_TXDMA3,
+    IRQ_XTM,
+    IRQ_XTM_DMA0,
 };
 
 /*
@@ -703,9 +702,8 @@ extern const int *bcm63xx_irqs;
 	[IRQ_XTM]		= BCM_## __cpu ##_XTM_IRQ,		\
 	[IRQ_XTM_DMA0]		= BCM_## __cpu ##_XTM_DMA0_IRQ,		\
 
-static inline int bcm63xx_get_irq_number(enum bcm63xx_irq irq)
-{
-	return bcm63xx_irqs[irq];
+static inline int bcm63xx_get_irq_number(enum bcm63xx_irq irq) {
+    return bcm63xx_irqs[irq];
 }
 
 /*

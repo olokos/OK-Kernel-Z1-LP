@@ -59,31 +59,28 @@ extern arch_spinlock_t __atomic_hash[ATOMIC_HASH_SIZE] __lock_aligned;
  * is there only for consistency).
  */
 
-static __inline__ int __atomic_add_return(int i, atomic_t *v)
-{
-	int ret;
-	unsigned long flags;
-	_atomic_spin_lock_irqsave(v, flags);
+static __inline__ int __atomic_add_return(int i, atomic_t *v) {
+    int ret;
+    unsigned long flags;
+    _atomic_spin_lock_irqsave(v, flags);
 
-	ret = (v->counter += i);
+    ret = (v->counter += i);
 
-	_atomic_spin_unlock_irqrestore(v, flags);
-	return ret;
+    _atomic_spin_unlock_irqrestore(v, flags);
+    return ret;
 }
 
-static __inline__ void atomic_set(atomic_t *v, int i) 
-{
-	unsigned long flags;
-	_atomic_spin_lock_irqsave(v, flags);
+static __inline__ void atomic_set(atomic_t *v, int i) {
+    unsigned long flags;
+    _atomic_spin_lock_irqsave(v, flags);
 
-	v->counter = i;
+    v->counter = i;
 
-	_atomic_spin_unlock_irqrestore(v, flags);
+    _atomic_spin_unlock_irqrestore(v, flags);
 }
 
-static __inline__ int atomic_read(const atomic_t *v)
-{
-	return (*(volatile int *)&(v)->counter);
+static __inline__ int atomic_read(const atomic_t *v) {
+    return (*(volatile int *)&(v)->counter);
 }
 
 /* exported interface */
@@ -99,19 +96,18 @@ static __inline__ int atomic_read(const atomic_t *v)
  * Atomically adds @a to @v, so long as it was not @u.
  * Returns the old value of @v.
  */
-static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	int c, old;
-	c = atomic_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
-	return c;
+static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u) {
+    int c, old;
+    c = atomic_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
+    return c;
 }
 
 
@@ -153,33 +149,30 @@ static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u)
 #define ATOMIC64_INIT(i) ((atomic64_t) { (i) })
 
 static __inline__ s64
-__atomic64_add_return(s64 i, atomic64_t *v)
-{
-	s64 ret;
-	unsigned long flags;
-	_atomic_spin_lock_irqsave(v, flags);
+__atomic64_add_return(s64 i, atomic64_t *v) {
+    s64 ret;
+    unsigned long flags;
+    _atomic_spin_lock_irqsave(v, flags);
 
-	ret = (v->counter += i);
+    ret = (v->counter += i);
 
-	_atomic_spin_unlock_irqrestore(v, flags);
-	return ret;
+    _atomic_spin_unlock_irqrestore(v, flags);
+    return ret;
 }
 
 static __inline__ void
-atomic64_set(atomic64_t *v, s64 i)
-{
-	unsigned long flags;
-	_atomic_spin_lock_irqsave(v, flags);
+atomic64_set(atomic64_t *v, s64 i) {
+    unsigned long flags;
+    _atomic_spin_lock_irqsave(v, flags);
 
-	v->counter = i;
+    v->counter = i;
 
-	_atomic_spin_unlock_irqrestore(v, flags);
+    _atomic_spin_unlock_irqrestore(v, flags);
 }
 
 static __inline__ s64
-atomic64_read(const atomic64_t *v)
-{
-	return (*(volatile long *)&(v)->counter);
+atomic64_read(const atomic64_t *v) {
+    return (*(volatile long *)&(v)->counter);
 }
 
 #define atomic64_add(i,v)	((void)(__atomic64_add_return( ((s64)(i)),(v))))
@@ -212,19 +205,18 @@ atomic64_read(const atomic64_t *v)
  * Atomically adds @a to @v, so long as it was not @u.
  * Returns the old value of @v.
  */
-static __inline__ int atomic64_add_unless(atomic64_t *v, long a, long u)
-{
-	long c, old;
-	c = atomic64_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic64_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
-	return c != (u);
+static __inline__ int atomic64_add_unless(atomic64_t *v, long a, long u) {
+    long c, old;
+    c = atomic64_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic64_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
+    return c != (u);
 }
 
 #define atomic64_inc_not_zero(v) atomic64_add_unless((v), 1, 0)

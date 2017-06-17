@@ -22,22 +22,22 @@
  * Structure of a PCI controller (host bridge)
  */
 struct pci_controller {
-	int index;		/* PCI domain number */
-	struct pci_bus *root_bus;
+    int index;		/* PCI domain number */
+    struct pci_bus *root_bus;
 
-	int first_busno;
-	int last_busno;
+    int first_busno;
+    int last_busno;
 
-	int hv_cfg_fd[2];	/* config{0,1} fds for this PCIe controller */
-	int hv_mem_fd;		/* fd to Hypervisor for MMIO operations */
+    int hv_cfg_fd[2];	/* config{0,1} fds for this PCIe controller */
+    int hv_mem_fd;		/* fd to Hypervisor for MMIO operations */
 
-	struct pci_ops *ops;
+    struct pci_ops *ops;
 
-	int irq_base;		/* Base IRQ from the Hypervisor	*/
-	int plx_gen1;		/* flag for PLX Gen 1 configuration */
+    int irq_base;		/* Base IRQ from the Hypervisor	*/
+    int plx_gen1;		/* flag for PLX Gen 1 configuration */
 
-	/* Address ranges that are routed to this controller/bridge. */
-	struct resource mem_resources[3];
+    /* Address ranges that are routed to this controller/bridge. */
+    struct resource mem_resources[3];
 };
 
 /*
@@ -61,9 +61,8 @@ void __devinit pcibios_fixup_bus(struct pci_bus *bus);
 /*
  * This decides whether to display the domain number in /proc.
  */
-static inline int pci_proc_domain(struct pci_bus *bus)
-{
-	return 1;
+static inline int pci_proc_domain(struct pci_bus *bus) {
+    return 1;
 }
 
 /*
@@ -71,9 +70,8 @@ static inline int pci_proc_domain(struct pci_bus *bus)
  * should be reassigned, in case the BIOS didn't do it correctly, or
  * in case we don't have a BIOS and we want to let Linux do it.
  */
-static inline int pcibios_assign_all_busses(void)
-{
-	return 1;
+static inline int pcibios_assign_all_busses(void) {
+    return 1;
 }
 
 #define PCIBIOS_MIN_MEM		0

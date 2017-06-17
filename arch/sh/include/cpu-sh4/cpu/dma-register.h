@@ -43,14 +43,14 @@
 
 /* Transmit sizes and respective CHCR register values */
 enum {
-	XMIT_SZ_8BIT		= 0,
-	XMIT_SZ_16BIT		= 1,
-	XMIT_SZ_32BIT		= 2,
-	XMIT_SZ_64BIT		= 7,
-	XMIT_SZ_128BIT		= 3,
-	XMIT_SZ_256BIT		= 4,
-	XMIT_SZ_128BIT_BLK	= 0xb,
-	XMIT_SZ_256BIT_BLK	= 0xc,
+    XMIT_SZ_8BIT		= 0,
+    XMIT_SZ_16BIT		= 1,
+    XMIT_SZ_32BIT		= 2,
+    XMIT_SZ_64BIT		= 7,
+    XMIT_SZ_128BIT		= 3,
+    XMIT_SZ_256BIT		= 4,
+    XMIT_SZ_128BIT_BLK	= 0xb,
+    XMIT_SZ_256BIT_BLK	= 0xc,
 };
 
 /* log2(size / 8) - used to calculate number of transfers */
@@ -79,11 +79,11 @@ enum {
 
 /* Transmit sizes and respective CHCR register values */
 enum {
-	XMIT_SZ_8BIT	= 1,
-	XMIT_SZ_16BIT	= 2,
-	XMIT_SZ_32BIT	= 3,
-	XMIT_SZ_64BIT	= 0,
-	XMIT_SZ_256BIT	= 4,
+    XMIT_SZ_8BIT	= 1,
+    XMIT_SZ_16BIT	= 2,
+    XMIT_SZ_32BIT	= 3,
+    XMIT_SZ_64BIT	= 0,
+    XMIT_SZ_256BIT	= 4,
 };
 
 /* log2(size / 8) - used to calculate number of transfers */

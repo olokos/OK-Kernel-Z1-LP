@@ -159,24 +159,24 @@
 
 /* Philips transfer descriptor */
 struct ptd {
-	u16 count;
+    u16 count;
 #define	PTD_COUNT_MSK	(0x3ff << 0)
 #define	PTD_TOGGLE_MSK	(1 << 10)
 #define	PTD_ACTIVE_MSK	(1 << 11)
 #define	PTD_CC_MSK	(0xf << 12)
-	u16 mps;
+    u16 mps;
 #define	PTD_MPS_MSK	(0x3ff << 0)
 #define	PTD_SPD_MSK	(1 << 10)
 #define	PTD_LAST_MSK	(1 << 11)
 #define	PTD_EP_MSK	(0xf << 12)
-	u16 len;
+    u16 len;
 #define	PTD_LEN_MSK	(0x3ff << 0)
 #define	PTD_DIR_MSK	(3 << 10)
 #define	PTD_DIR_SETUP	(0)
 #define	PTD_DIR_OUT	(1)
 #define	PTD_DIR_IN	(2)
 #define	PTD_B5_5_MSK	(1 << 13)
-	u16 faddr;
+    u16 faddr;
 #define	PTD_FA_MSK	(0x7f << 0)
 #define	PTD_FMT_MSK	(1 << 7)
 } __attribute__ ((packed, aligned(2)));
@@ -220,30 +220,30 @@ struct ptd {
 #define TD_UNEXPECTEDPID   0x07
 #define TD_DATAOVERRUN     0x08
 #define TD_DATAUNDERRUN    0x09
-    /* 0x0A, 0x0B reserved for hardware */
+/* 0x0A, 0x0B reserved for hardware */
 #define TD_BUFFEROVERRUN   0x0C
 #define TD_BUFFERUNDERRUN  0x0D
-    /* 0x0E, 0x0F reserved for HCD */
+/* 0x0E, 0x0F reserved for HCD */
 #define TD_NOTACCESSED     0x0F
 
 /* map PTD status codes (CC) to errno values */
 static const int cc_to_error[16] = {
-	/* No  Error  */ 0,
-	/* CRC Error  */ -EILSEQ,
-	/* Bit Stuff  */ -EPROTO,
-	/* Data Togg  */ -EILSEQ,
-	/* Stall      */ -EPIPE,
-	/* DevNotResp */ -ETIME,
-	/* PIDCheck   */ -EPROTO,
-	/* UnExpPID   */ -EPROTO,
-	/* DataOver   */ -EOVERFLOW,
-	/* DataUnder  */ -EREMOTEIO,
-	/* (for hw)   */ -EIO,
-	/* (for hw)   */ -EIO,
-	/* BufferOver */ -ECOMM,
-	/* BuffUnder  */ -ENOSR,
-	/* (for HCD)  */ -EALREADY,
-	/* (for HCD)  */ -EALREADY
+    /* No  Error  */ 0,
+    /* CRC Error  */ -EILSEQ,
+    /* Bit Stuff  */ -EPROTO,
+    /* Data Togg  */ -EILSEQ,
+    /* Stall      */ -EPIPE,
+    /* DevNotResp */ -ETIME,
+    /* PIDCheck   */ -EPROTO,
+    /* UnExpPID   */ -EPROTO,
+    /* DataOver   */ -EOVERFLOW,
+    /* DataUnder  */ -EREMOTEIO,
+    /* (for hw)   */ -EIO,
+    /* (for hw)   */ -EIO,
+    /* BufferOver */ -ECOMM,
+    /* BuffUnder  */ -ENOSR,
+    /* (for HCD)  */ -EALREADY,
+    /* (for HCD)  */ -EALREADY
 };
 
 /*--------------------------------------------------------------*/
@@ -252,75 +252,73 @@ static const int cc_to_error[16] = {
 #define	PERIODIC_SIZE		(1 << LOG2_PERIODIC_SIZE)
 
 struct isp116x {
-	spinlock_t lock;
+    spinlock_t lock;
 
-	void __iomem *addr_reg;
-	void __iomem *data_reg;
+    void __iomem *addr_reg;
+    void __iomem *data_reg;
 
-	struct isp116x_platform_data *board;
+    struct isp116x_platform_data *board;
 
-	struct dentry *dentry;
-	unsigned long stat1, stat2, stat4, stat8, stat16;
+    struct dentry *dentry;
+    unsigned long stat1, stat2, stat4, stat8, stat16;
 
-	/* HC registers */
-	u32 intenb;		/* "OHCI" interrupts */
-	u16 irqenb;		/* uP interrupts */
+    /* HC registers */
+    u32 intenb;		/* "OHCI" interrupts */
+    u16 irqenb;		/* uP interrupts */
 
-	/* Root hub registers */
-	u32 rhdesca;
-	u32 rhdescb;
-	u32 rhstatus;
+    /* Root hub registers */
+    u32 rhdesca;
+    u32 rhdescb;
+    u32 rhstatus;
 
-	/* async schedule: control, bulk */
-	struct list_head async;
+    /* async schedule: control, bulk */
+    struct list_head async;
 
-	/* periodic schedule: int */
-	u16 load[PERIODIC_SIZE];
-	struct isp116x_ep *periodic[PERIODIC_SIZE];
-	unsigned periodic_count;
-	u16 fmindex;
+    /* periodic schedule: int */
+    u16 load[PERIODIC_SIZE];
+    struct isp116x_ep *periodic[PERIODIC_SIZE];
+    unsigned periodic_count;
+    u16 fmindex;
 
-	/* Schedule for the current frame */
-	struct isp116x_ep *atl_active;
-	int atl_buflen;
-	int atl_bufshrt;
-	int atl_last_dir;
-	atomic_t atl_finishing;
+    /* Schedule for the current frame */
+    struct isp116x_ep *atl_active;
+    int atl_buflen;
+    int atl_bufshrt;
+    int atl_last_dir;
+    atomic_t atl_finishing;
 };
 
-static inline struct isp116x *hcd_to_isp116x(struct usb_hcd *hcd)
-{
-	return (struct isp116x *)(hcd->hcd_priv);
+static inline struct isp116x *hcd_to_isp116x(struct usb_hcd *hcd) {
+    return (struct isp116x *)(hcd->hcd_priv);
 }
 
-static inline struct usb_hcd *isp116x_to_hcd(struct isp116x *isp116x)
-{
-	return container_of((void *)isp116x, struct usb_hcd, hcd_priv);
+static inline struct usb_hcd *isp116x_to_hcd(struct isp116x *isp116x) {
+    return container_of((void *)isp116x, struct usb_hcd, hcd_priv);
 }
 
 struct isp116x_ep {
-	struct usb_host_endpoint *hep;
-	struct usb_device *udev;
-	struct ptd ptd;
+    struct usb_host_endpoint *hep;
+    struct usb_device *udev;
+    struct ptd ptd;
 
-	u8 maxpacket;
-	u8 epnum;
-	u8 nextpid;
-	u16 error_count;
-	u16 length;		/* of current packet */
-	unsigned char *data;	/* to databuf */
-	/* queue of active EP's (the ones scheduled for the
-	   current frame) */
-	struct isp116x_ep *active;
+    u8 maxpacket;
+    u8 epnum;
+    u8 nextpid;
+    u16 error_count;
+    u16 length;		/* of current packet */
+    unsigned char *data;	/* to databuf */
+    /* queue of active EP's (the ones scheduled for the
+       current frame) */
+    struct isp116x_ep *active;
 
-	/* periodic schedule */
-	u16 period;
-	u16 branch;
-	u16 load;
-	struct isp116x_ep *next;
+    /* periodic schedule */
+    u16 period;
+    u16 branch;
+    u16 load;
+    struct isp116x_ep *next;
 
-	/* async schedule */
-	struct list_head schedule;
+    /* async schedule */
+    struct list_head schedule;
 };
 
 /*-------------------------------------------------------------------------*/
@@ -364,89 +362,78 @@ struct isp116x_ep {
 #define	IRQ_TEST()	do{}while(0)
 #endif
 
-static inline void isp116x_write_addr(struct isp116x *isp116x, unsigned reg)
-{
-	IRQ_TEST();
-	writew(reg & 0xff, isp116x->addr_reg);
-	isp116x_delay(isp116x, 300);
+static inline void isp116x_write_addr(struct isp116x *isp116x, unsigned reg) {
+    IRQ_TEST();
+    writew(reg & 0xff, isp116x->addr_reg);
+    isp116x_delay(isp116x, 300);
 }
 
-static inline void isp116x_write_data16(struct isp116x *isp116x, u16 val)
-{
-	writew(val, isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
+static inline void isp116x_write_data16(struct isp116x *isp116x, u16 val) {
+    writew(val, isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
 }
 
-static inline void isp116x_raw_write_data16(struct isp116x *isp116x, u16 val)
-{
-	__raw_writew(val, isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
+static inline void isp116x_raw_write_data16(struct isp116x *isp116x, u16 val) {
+    __raw_writew(val, isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
 }
 
-static inline u16 isp116x_read_data16(struct isp116x *isp116x)
-{
-	u16 val;
+static inline u16 isp116x_read_data16(struct isp116x *isp116x) {
+    u16 val;
 
-	val = readw(isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
-	return val;
+    val = readw(isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
+    return val;
 }
 
-static inline u16 isp116x_raw_read_data16(struct isp116x *isp116x)
-{
-	u16 val;
+static inline u16 isp116x_raw_read_data16(struct isp116x *isp116x) {
+    u16 val;
 
-	val = __raw_readw(isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
-	return val;
+    val = __raw_readw(isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
+    return val;
 }
 
-static inline void isp116x_write_data32(struct isp116x *isp116x, u32 val)
-{
-	writew(val & 0xffff, isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
-	writew(val >> 16, isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
+static inline void isp116x_write_data32(struct isp116x *isp116x, u32 val) {
+    writew(val & 0xffff, isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
+    writew(val >> 16, isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
 }
 
-static inline u32 isp116x_read_data32(struct isp116x *isp116x)
-{
-	u32 val;
+static inline u32 isp116x_read_data32(struct isp116x *isp116x) {
+    u32 val;
 
-	val = (u32) readw(isp116x->data_reg);
-	isp116x_delay(isp116x, 150);
-	val |= ((u32) readw(isp116x->data_reg)) << 16;
-	isp116x_delay(isp116x, 150);
-	return val;
+    val = (u32) readw(isp116x->data_reg);
+    isp116x_delay(isp116x, 150);
+    val |= ((u32) readw(isp116x->data_reg)) << 16;
+    isp116x_delay(isp116x, 150);
+    return val;
 }
 
 /* Let's keep register access functions out of line. Hint:
    we wait at least 150 ns at every access.
 */
-static u16 isp116x_read_reg16(struct isp116x *isp116x, unsigned reg)
-{
-	isp116x_write_addr(isp116x, reg);
-	return isp116x_read_data16(isp116x);
+static u16 isp116x_read_reg16(struct isp116x *isp116x, unsigned reg) {
+    isp116x_write_addr(isp116x, reg);
+    return isp116x_read_data16(isp116x);
 }
 
-static u32 isp116x_read_reg32(struct isp116x *isp116x, unsigned reg)
-{
-	isp116x_write_addr(isp116x, reg);
-	return isp116x_read_data32(isp116x);
+static u32 isp116x_read_reg32(struct isp116x *isp116x, unsigned reg) {
+    isp116x_write_addr(isp116x, reg);
+    return isp116x_read_data32(isp116x);
 }
 
 static void isp116x_write_reg16(struct isp116x *isp116x, unsigned reg,
-				unsigned val)
-{
-	isp116x_write_addr(isp116x, reg | ISP116x_WRITE_OFFSET);
-	isp116x_write_data16(isp116x, (u16) (val & 0xffff));
+                                unsigned val) {
+    isp116x_write_addr(isp116x, reg | ISP116x_WRITE_OFFSET);
+    isp116x_write_data16(isp116x, (u16) (val & 0xffff));
 }
 
 static void isp116x_write_reg32(struct isp116x *isp116x, unsigned reg,
-				unsigned val)
-{
-	isp116x_write_addr(isp116x, reg | ISP116x_WRITE_OFFSET);
-	isp116x_write_data32(isp116x, (u32) val);
+                                unsigned val) {
+    isp116x_write_addr(isp116x, reg | ISP116x_WRITE_OFFSET);
+    isp116x_write_data32(isp116x, (u32) val);
 }
 
 #define isp116x_show_reg_log(d,r,s) {				\
@@ -501,17 +488,15 @@ static void isp116x_write_reg32(struct isp116x *isp116x, unsigned reg,
    Dump registers for debugfs.
 */
 static inline void isp116x_show_regs_seq(struct isp116x *isp116x,
-					  struct seq_file *s)
-{
-	isp116x_show_regs(isp116x, seq, s);
+        struct seq_file *s) {
+    isp116x_show_regs(isp116x, seq, s);
 }
 
 /*
    Dump registers to syslog.
 */
-static inline void isp116x_show_regs_log(struct isp116x *isp116x)
-{
-	isp116x_show_regs(isp116x, log, NULL);
+static inline void isp116x_show_regs_log(struct isp116x *isp116x) {
+    isp116x_show_regs(isp116x, log, NULL);
 }
 
 #if defined(URB_TRACE)
@@ -527,19 +512,18 @@ static inline void isp116x_show_regs_log(struct isp116x *isp116x)
 	"short_not_ok" : ""; })
 
 /* print debug info about the URB */
-static void urb_dbg(struct urb *urb, char *msg)
-{
-	unsigned int pipe;
+static void urb_dbg(struct urb *urb, char *msg) {
+    unsigned int pipe;
 
-	if (!urb) {
-		DBG("%s: zero urb\n", msg);
-		return;
-	}
-	pipe = urb->pipe;
-	DBG("%s: FA %d ep%d%s %s: len %d/%d %s\n", msg,
-	    usb_pipedevice(pipe), usb_pipeendpoint(pipe),
-	    PIPEDIR(pipe), PIPETYPE(pipe),
-	    urb->transfer_buffer_length, urb->actual_length, URB_NOTSHORT(urb));
+    if (!urb) {
+        DBG("%s: zero urb\n", msg);
+        return;
+    }
+    pipe = urb->pipe;
+    DBG("%s: FA %d ep%d%s %s: len %d/%d %s\n", msg,
+        usb_pipedevice(pipe), usb_pipeendpoint(pipe),
+        PIPEDIR(pipe), PIPETYPE(pipe),
+        urb->transfer_buffer_length, urb->actual_length, URB_NOTSHORT(urb));
 }
 
 #else
@@ -561,40 +545,37 @@ static void urb_dbg(struct urb *urb, char *msg)
   Dump PTD info. The code documents the format
   perfectly, right :)
 */
-static inline void dump_ptd(struct ptd *ptd)
-{
-	printk(KERN_WARNING "td: %x %d%c%d %d,%d,%d  %x %x%x%x\n",
-	       PTD_GET_CC(ptd), PTD_GET_FA(ptd),
-	       PTD_DIR_STR(ptd), PTD_GET_EP(ptd),
-	       PTD_GET_COUNT(ptd), PTD_GET_LEN(ptd), PTD_GET_MPS(ptd),
-	       PTD_GET_TOGGLE(ptd), PTD_GET_ACTIVE(ptd),
-	       PTD_GET_SPD(ptd), PTD_GET_LAST(ptd));
+static inline void dump_ptd(struct ptd *ptd) {
+    printk(KERN_WARNING "td: %x %d%c%d %d,%d,%d  %x %x%x%x\n",
+           PTD_GET_CC(ptd), PTD_GET_FA(ptd),
+           PTD_DIR_STR(ptd), PTD_GET_EP(ptd),
+           PTD_GET_COUNT(ptd), PTD_GET_LEN(ptd), PTD_GET_MPS(ptd),
+           PTD_GET_TOGGLE(ptd), PTD_GET_ACTIVE(ptd),
+           PTD_GET_SPD(ptd), PTD_GET_LAST(ptd));
 }
 
-static inline void dump_ptd_out_data(struct ptd *ptd, u8 * buf)
-{
-	int k;
+static inline void dump_ptd_out_data(struct ptd *ptd, u8 * buf) {
+    int k;
 
-	if (PTD_GET_DIR(ptd) != PTD_DIR_IN && PTD_GET_LEN(ptd)) {
-		printk(KERN_WARNING "-> ");
-		for (k = 0; k < PTD_GET_LEN(ptd); ++k)
-			printk("%02x ", ((u8 *) buf)[k]);
-		printk("\n");
-	}
+    if (PTD_GET_DIR(ptd) != PTD_DIR_IN && PTD_GET_LEN(ptd)) {
+        printk(KERN_WARNING "-> ");
+        for (k = 0; k < PTD_GET_LEN(ptd); ++k)
+            printk("%02x ", ((u8 *) buf)[k]);
+        printk("\n");
+    }
 }
 
-static inline void dump_ptd_in_data(struct ptd *ptd, u8 * buf)
-{
-	int k;
+static inline void dump_ptd_in_data(struct ptd *ptd, u8 * buf) {
+    int k;
 
-	if (PTD_GET_DIR(ptd) == PTD_DIR_IN && PTD_GET_COUNT(ptd)) {
-		printk(KERN_WARNING "<- ");
-		for (k = 0; k < PTD_GET_COUNT(ptd); ++k)
-			printk("%02x ", ((u8 *) buf)[k]);
-		printk("\n");
-	}
-	if (PTD_GET_LAST(ptd))
-		printk(KERN_WARNING "-\n");
+    if (PTD_GET_DIR(ptd) == PTD_DIR_IN && PTD_GET_COUNT(ptd)) {
+        printk(KERN_WARNING "<- ");
+        for (k = 0; k < PTD_GET_COUNT(ptd); ++k)
+            printk("%02x ", ((u8 *) buf)[k]);
+        printk("\n");
+    }
+    if (PTD_GET_LAST(ptd))
+        printk(KERN_WARNING "-\n");
 }
 
 #else

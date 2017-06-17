@@ -232,15 +232,13 @@
 /* ---- Public Variable Externs ------------------------------------------ */
 /* ---- Public Function Prototypes --------------------------------------- */
 /* Clear one or more IRQ interrupts. */
-static inline void intcHw_irq_disable(void *basep, uint32_t mask)
-{
-	__REG32(basep + INTCHW_INTENCLEAR) = mask;
+static inline void intcHw_irq_disable(void *basep, uint32_t mask) {
+    __REG32(basep + INTCHW_INTENCLEAR) = mask;
 }
 
 /* Enables one or more IRQ interrupts. */
-static inline void intcHw_irq_enable(void *basep, uint32_t mask)
-{
-	__REG32(basep + INTCHW_INTENABLE) = mask;
+static inline void intcHw_irq_enable(void *basep, uint32_t mask) {
+    __REG32(basep + INTCHW_INTENABLE) = mask;
 }
 
 #endif /* _INTCHW_REG_H */

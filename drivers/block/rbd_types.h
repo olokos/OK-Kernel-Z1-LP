@@ -42,27 +42,27 @@
 #define RBD_HEADER_VERSION	"001.005"
 
 struct rbd_image_snap_ondisk {
-	__le64 id;
-	__le64 image_size;
+    __le64 id;
+    __le64 image_size;
 } __attribute__((packed));
 
 struct rbd_image_header_ondisk {
-	char text[40];
-	char block_name[24];
-	char signature[4];
-	char version[8];
-	struct {
-		__u8 order;
-		__u8 crypt_type;
-		__u8 comp_type;
-		__u8 unused;
-	} __attribute__((packed)) options;
-	__le64 image_size;
-	__le64 snap_seq;
-	__le32 snap_count;
-	__le32 reserved;
-	__le64 snap_names_len;
-	struct rbd_image_snap_ondisk snaps[0];
+    char text[40];
+    char block_name[24];
+    char signature[4];
+    char version[8];
+    struct {
+        __u8 order;
+        __u8 crypt_type;
+        __u8 comp_type;
+        __u8 unused;
+    } __attribute__((packed)) options;
+    __le64 image_size;
+    __le64 snap_seq;
+    __le32 snap_count;
+    __le32 reserved;
+    __le64 snap_names_len;
+    struct rbd_image_snap_ondisk snaps[0];
 } __attribute__((packed));
 
 

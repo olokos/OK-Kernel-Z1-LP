@@ -10,10 +10,9 @@
  * were chosen to be exactly equal to the SunOS equivalents.
  */
 
-struct openpromio
-{
-	u_int	oprom_size;		/* Actual size of the oprom_array. */
-	char	oprom_array[1];		/* Holds property names and values. */
+struct openpromio {
+    u_int	oprom_size;		/* Actual size of the oprom_array. */
+    char	oprom_array[1];		/* Holds property names and values. */
 };
 
 #define	OPROMMAXPARAM	4096		/* Maximum size of oprom_array. */
@@ -49,13 +48,12 @@ struct openpromio
  *  NetBSD/OpenBSD /dev/openprom definitions.
  */
 
-struct opiocdesc
-{
-	int	op_nodeid;		/* PROM Node ID (value-result) */
-	int	op_namelen;		/* Length of op_name. */
-	char	__user *op_name;	/* Pointer to the property name. */
-	int	op_buflen;		/* Length of op_buf (value-result) */
-	char	__user *op_buf;		/* Pointer to buffer. */
+struct opiocdesc {
+    int	op_nodeid;		/* PROM Node ID (value-result) */
+    int	op_namelen;		/* Length of op_name. */
+    char	__user *op_name;	/* Pointer to the property name. */
+    int	op_buflen;		/* Length of op_buf (value-result) */
+    char	__user *op_buf;		/* Pointer to buffer. */
 };
 
 #define	OPIOCGET	_IOWR('O', 1, struct opiocdesc)

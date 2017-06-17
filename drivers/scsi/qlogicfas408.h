@@ -75,15 +75,15 @@
 /*----------------------------------------------------------------*/
 
 struct qlogicfas408_priv {
-	int qbase;		/* Port */
-	int qinitid;		/* initiator ID */
-	int qabort;		/* Flag to cause an abort */
-	int qlirq;		/* IRQ being used */
-	int int_type;		/* type of irq, 2 for ISA board, 0 for PCMCIA */
-	char qinfo[80];		/* description */
-	struct scsi_cmnd *qlcmd;	/* current command being processed */
-	struct Scsi_Host *shost;	/* pointer back to host */
-	struct qlogicfas408_priv *next; /* next private struct */
+    int qbase;		/* Port */
+    int qinitid;		/* initiator ID */
+    int qabort;		/* Flag to cause an abort */
+    int qlirq;		/* IRQ being used */
+    int int_type;		/* type of irq, 2 for ISA board, 0 for PCMCIA */
+    char qinfo[80];		/* description */
+    struct scsi_cmnd *qlcmd;	/* current command being processed */
+    struct Scsi_Host *shost;	/* pointer back to host */
+    struct qlogicfas408_priv *next; /* next private struct */
 };
 
 /* The qlogic card uses two register maps - These macros select which one */
@@ -105,8 +105,8 @@ struct qlogicfas408_priv {
 irqreturn_t qlogicfas408_ihandl(int irq, void *dev_id);
 int qlogicfas408_queuecommand(struct Scsi_Host *h, struct scsi_cmnd * cmd);
 int qlogicfas408_biosparam(struct scsi_device * disk,
-			   struct block_device *dev,
-			   sector_t capacity, int ip[]);
+                           struct block_device *dev,
+                           sector_t capacity, int ip[]);
 int qlogicfas408_abort(struct scsi_cmnd * cmd);
 int qlogicfas408_bus_reset(struct scsi_cmnd * cmd);
 const char *qlogicfas408_info(struct Scsi_Host *host);

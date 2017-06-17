@@ -402,140 +402,140 @@ struct omap24xxcam_sgdma;
 struct omap24xxcam_dma;
 
 typedef void (*sgdma_callback_t)(struct omap24xxcam_sgdma *cam,
-				 u32 status, void *arg);
+                                 u32 status, void *arg);
 typedef void (*dma_callback_t)(struct omap24xxcam_dma *cam,
-			       u32 status, void *arg);
+                               u32 status, void *arg);
 
 struct channel_state {
-	dma_callback_t callback;
-	void *arg;
+    dma_callback_t callback;
+    void *arg;
 };
 
 /* sgdma state for each of the possible videobuf_buffers + 2 overlays */
 struct sgdma_state {
-	const struct scatterlist *sglist;
-	int sglen;		 /* number of sglist entries */
-	int next_sglist;	 /* index of next sglist entry to process */
-	unsigned int bytes_read; /* number of bytes read */
-	unsigned int len;        /* total length of sglist (excluding
+    const struct scatterlist *sglist;
+    int sglen;		 /* number of sglist entries */
+    int next_sglist;	 /* index of next sglist entry to process */
+    unsigned int bytes_read; /* number of bytes read */
+    unsigned int len;        /* total length of sglist (excluding
 				  * bytes due to page alignment) */
-	int queued_sglist;	 /* number of sglist entries queued for DMA */
-	u32 csr;		 /* DMA return code */
-	sgdma_callback_t callback;
-	void *arg;
+    int queued_sglist;	 /* number of sglist entries queued for DMA */
+    u32 csr;		 /* DMA return code */
+    sgdma_callback_t callback;
+    void *arg;
 };
 
 /* physical DMA channel management */
 struct omap24xxcam_dma {
-	spinlock_t lock;	/* Lock for the whole structure. */
+    spinlock_t lock;	/* Lock for the whole structure. */
 
-	unsigned long base;	/* base address for dma controller */
+    unsigned long base;	/* base address for dma controller */
 
-	/* While dma_stop!=0, an attempt to start a new DMA transfer will
-	 * fail.
-	 */
-	atomic_t dma_stop;
-	int free_dmach;		/* number of dma channels free */
-	int next_dmach;		/* index of next dma channel to use */
-	struct channel_state ch_state[NUM_CAMDMA_CHANNELS];
+    /* While dma_stop!=0, an attempt to start a new DMA transfer will
+     * fail.
+     */
+    atomic_t dma_stop;
+    int free_dmach;		/* number of dma channels free */
+    int next_dmach;		/* index of next dma channel to use */
+    struct channel_state ch_state[NUM_CAMDMA_CHANNELS];
 };
 
 /* scatter-gather DMA (scatterlist stuff) management */
 struct omap24xxcam_sgdma {
-	struct omap24xxcam_dma dma;
+    struct omap24xxcam_dma dma;
 
-	spinlock_t lock;	/* Lock for the fields below. */
-	int free_sgdma;		/* number of free sg dma slots */
-	int next_sgdma;		/* index of next sg dma slot to use */
-	struct sgdma_state sg_state[NUM_SG_DMA];
+    spinlock_t lock;	/* Lock for the fields below. */
+    int free_sgdma;		/* number of free sg dma slots */
+    int next_sgdma;		/* index of next sg dma slot to use */
+    struct sgdma_state sg_state[NUM_SG_DMA];
 
-	/* Reset timer data */
-	struct timer_list reset_timer;
+    /* Reset timer data */
+    struct timer_list reset_timer;
 };
 
 /* per-device data structure */
 struct omap24xxcam_device {
-	/*** mutex  ***/
-	/*
-	 * mutex serialises access to this structure. Also camera
-	 * opening and releasing is synchronised by this.
-	 */
-	struct mutex mutex;
+    /*** mutex  ***/
+    /*
+     * mutex serialises access to this structure. Also camera
+     * opening and releasing is synchronised by this.
+     */
+    struct mutex mutex;
 
-	/*** general driver state information ***/
-	atomic_t users;
-	/*
-	 * Lock to serialise core enabling and disabling and access to
-	 * sgdma_in_queue.
-	 */
-	spinlock_t core_enable_disable_lock;
-	/*
-	 * Number or sgdma requests in scatter-gather queue, protected
-	 * by the lock above.
-	 */
-	int sgdma_in_queue;
-	/*
-	 * Sensor interface parameters: interface type, CC_CTRL
-	 * register value and interface specific data.
-	 */
-	int if_type;
-	union {
-		struct parallel {
-			u32 xclk;
-		} bt656;
-	} if_u;
-	u32 cc_ctrl;
+    /*** general driver state information ***/
+    atomic_t users;
+    /*
+     * Lock to serialise core enabling and disabling and access to
+     * sgdma_in_queue.
+     */
+    spinlock_t core_enable_disable_lock;
+    /*
+     * Number or sgdma requests in scatter-gather queue, protected
+     * by the lock above.
+     */
+    int sgdma_in_queue;
+    /*
+     * Sensor interface parameters: interface type, CC_CTRL
+     * register value and interface specific data.
+     */
+    int if_type;
+    union {
+        struct parallel {
+            u32 xclk;
+        } bt656;
+    } if_u;
+    u32 cc_ctrl;
 
-	/*** subsystem structures ***/
-	struct omap24xxcam_sgdma sgdma;
+    /*** subsystem structures ***/
+    struct omap24xxcam_sgdma sgdma;
 
-	/*** hardware resources ***/
-	unsigned int irq;
-	unsigned long mmio_base;
-	unsigned long mmio_base_phys;
-	unsigned long mmio_size;
+    /*** hardware resources ***/
+    unsigned int irq;
+    unsigned long mmio_base;
+    unsigned long mmio_base_phys;
+    unsigned long mmio_size;
 
-	/*** interfaces and device ***/
-	struct v4l2_int_device *sdev;
-	struct device *dev;
-	struct video_device *vfd;
+    /*** interfaces and device ***/
+    struct v4l2_int_device *sdev;
+    struct device *dev;
+    struct video_device *vfd;
 
-	/*** camera and sensor reset related stuff ***/
-	struct work_struct sensor_reset_work;
-	/*
-	 * We're in the middle of a reset. Don't enable core if this
-	 * is non-zero! This exists to help decisionmaking in a case
-	 * where videobuf_qbuf is called while we are in the middle of
-	 * a reset.
-	 */
-	atomic_t in_reset;
-	/*
-	 * Non-zero if we don't want any resets for now. Used to
-	 * prevent reset work to run when we're about to stop
-	 * streaming.
-	 */
-	atomic_t reset_disable;
+    /*** camera and sensor reset related stuff ***/
+    struct work_struct sensor_reset_work;
+    /*
+     * We're in the middle of a reset. Don't enable core if this
+     * is non-zero! This exists to help decisionmaking in a case
+     * where videobuf_qbuf is called while we are in the middle of
+     * a reset.
+     */
+    atomic_t in_reset;
+    /*
+     * Non-zero if we don't want any resets for now. Used to
+     * prevent reset work to run when we're about to stop
+     * streaming.
+     */
+    atomic_t reset_disable;
 
-	/*** video device parameters ***/
-	int capture_mem;
+    /*** video device parameters ***/
+    int capture_mem;
 
-	/*** camera module clocks ***/
-	struct clk *fck;
-	struct clk *ick;
+    /*** camera module clocks ***/
+    struct clk *fck;
+    struct clk *ick;
 
-	/*** capture data ***/
-	/* file handle, if streaming is on */
-	struct file *streaming;
+    /*** capture data ***/
+    /* file handle, if streaming is on */
+    struct file *streaming;
 };
 
 /* Per-file handle data. */
 struct omap24xxcam_fh {
-	spinlock_t vbq_lock; /* spinlock for the videobuf queue */
-	struct videobuf_queue vbq;
-	struct v4l2_pix_format pix; /* serialise pix by vbq->lock */
-	atomic_t field_count; /* field counter for videobuf_buffer */
-	/* accessing cam here doesn't need serialisation: it's constant */
-	struct omap24xxcam_device *cam;
+    spinlock_t vbq_lock; /* spinlock for the videobuf queue */
+    struct videobuf_queue vbq;
+    struct v4l2_pix_format pix; /* serialise pix by vbq->lock */
+    atomic_t field_count; /* field counter for videobuf_buffer */
+    /* accessing cam here doesn't need serialisation: it's constant */
+    struct omap24xxcam_device *cam;
 };
 
 /*
@@ -544,26 +544,23 @@ struct omap24xxcam_fh {
  *
  */
 
-static inline u32 omap24xxcam_reg_in(unsigned long base, u32 offset)
-{
-	return readl(base + offset);
+static inline u32 omap24xxcam_reg_in(unsigned long base, u32 offset) {
+    return readl(base + offset);
 }
 
 static inline u32 omap24xxcam_reg_out(unsigned long base, u32 offset,
-					  u32 val)
-{
-	writel(val, base + offset);
-	return val;
+                                      u32 val) {
+    writel(val, base + offset);
+    return val;
 }
 
 static inline u32 omap24xxcam_reg_merge(unsigned long base, u32 offset,
-					    u32 val, u32 mask)
-{
-	u32 addr = base + offset;
-	u32 new_val = (readl(addr) & ~mask) | (val & mask);
+                                        u32 val, u32 mask) {
+    u32 addr = base + offset;
+    u32 new_val = (readl(addr) & ~mask) | (val & mask);
 
-	writel(new_val, addr);
-	return new_val;
+    writel(new_val, addr);
+    return new_val;
 }
 
 /*
@@ -581,13 +578,13 @@ void omap24xxcam_dma_isr(struct omap24xxcam_dma *dma);
 
 void omap24xxcam_sgdma_process(struct omap24xxcam_sgdma *sgdma);
 int omap24xxcam_sgdma_queue(struct omap24xxcam_sgdma *sgdma,
-			    const struct scatterlist *sglist, int sglen,
-			    int len, sgdma_callback_t callback, void *arg);
+                            const struct scatterlist *sglist, int sglen,
+                            int len, sgdma_callback_t callback, void *arg);
 void omap24xxcam_sgdma_sync(struct omap24xxcam_sgdma *sgdma);
 void omap24xxcam_sgdma_init(struct omap24xxcam_sgdma *sgdma,
-			    unsigned long base,
-			    void (*reset_callback)(unsigned long data),
-			    unsigned long reset_callback_data);
+                            unsigned long base,
+                            void (*reset_callback)(unsigned long data),
+                            unsigned long reset_callback_data);
 void omap24xxcam_sgdma_exit(struct omap24xxcam_sgdma *sgdma);
 
 #endif

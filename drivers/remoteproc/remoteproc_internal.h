@@ -35,7 +35,7 @@ void rproc_remove_virtio_dev(struct rproc_vdev *rvdev);
 /* from remoteproc_debugfs.c */
 void rproc_remove_trace_file(struct dentry *tfile);
 struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
-					struct rproc_mem_entry *trace);
+                                       struct rproc_mem_entry *trace);
 void rproc_delete_debug_dir(struct rproc *rproc);
 void rproc_create_debug_dir(struct rproc *rproc);
 void rproc_init_debugfs(void);

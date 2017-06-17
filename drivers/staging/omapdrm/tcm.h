@@ -43,34 +43,34 @@ struct tcm;
 
 /* point */
 struct tcm_pt {
-	u16 x;
-	u16 y;
+    u16 x;
+    u16 y;
 };
 
 /* 1d or 2d area */
 struct tcm_area {
-	bool is2d;		/* whether area is 1d or 2d */
-	struct tcm    *tcm;	/* parent */
-	struct tcm_pt  p0;
-	struct tcm_pt  p1;
+    bool is2d;		/* whether area is 1d or 2d */
+    struct tcm    *tcm;	/* parent */
+    struct tcm_pt  p0;
+    struct tcm_pt  p1;
 };
 
 struct tcm {
-	u16 width, height;	/* container dimensions */
-	int lut_id;		/* Lookup table identifier */
+    u16 width, height;	/* container dimensions */
+    int lut_id;		/* Lookup table identifier */
 
-	/* 'pvt' structure shall contain any tcm details (attr) along with
-	linked list of allocated areas and mutex for mutually exclusive access
-	to the list.  It may also contain copies of width and height to notice
-	any changes to the publicly available width and height fields. */
-	void *pvt;
+    /* 'pvt' structure shall contain any tcm details (attr) along with
+    linked list of allocated areas and mutex for mutually exclusive access
+    to the list.  It may also contain copies of width and height to notice
+    any changes to the publicly available width and height fields. */
+    void *pvt;
 
-	/* function table */
-	s32 (*reserve_2d)(struct tcm *tcm, u16 height, u16 width, u8 align,
-			  struct tcm_area *area);
-	s32 (*reserve_1d)(struct tcm *tcm, u32 slots, struct tcm_area *area);
-	s32 (*free)      (struct tcm *tcm, struct tcm_area *area);
-	void (*deinit)   (struct tcm *tcm);
+    /* function table */
+    s32 (*reserve_2d)(struct tcm *tcm, u16 height, u16 width, u8 align,
+                      struct tcm_area *area);
+    s32 (*reserve_1d)(struct tcm *tcm, u32 slots, struct tcm_area *area);
+    s32 (*free)      (struct tcm *tcm, struct tcm_area *area);
+    void (*deinit)   (struct tcm *tcm);
 };
 
 /*=============================================================================
@@ -102,10 +102,9 @@ struct tcm *sita_init(u16 width, u16 height, struct tcm_pt *attr);
  *	   even on failure.  Some error codes: -ENODEV: invalid
  *	   manager.
  */
-static inline void tcm_deinit(struct tcm *tcm)
-{
-	if (tcm)
-		tcm->deinit(tcm);
+static inline void tcm_deinit(struct tcm *tcm) {
+    if (tcm)
+        tcm->deinit(tcm);
 }
 
 /**
@@ -127,22 +126,21 @@ static inline void tcm_deinit(struct tcm *tcm)
  *	    allocation.
  */
 static inline s32 tcm_reserve_2d(struct tcm *tcm, u16 width, u16 height,
-				 u16 align, struct tcm_area *area)
-{
-	/* perform rudimentary error checking */
-	s32 res = tcm  == NULL ? -ENODEV :
-		(area == NULL || width == 0 || height == 0 ||
-		 /* align must be a 2 power */
-		 (align & (align - 1))) ? -EINVAL :
-		(height > tcm->height || width > tcm->width) ? -ENOMEM : 0;
+                                 u16 align, struct tcm_area *area) {
+    /* perform rudimentary error checking */
+    s32 res = tcm  == NULL ? -ENODEV :
+              (area == NULL || width == 0 || height == 0 ||
+               /* align must be a 2 power */
+               (align & (align - 1))) ? -EINVAL :
+              (height > tcm->height || width > tcm->width) ? -ENOMEM : 0;
 
-	if (!res) {
-		area->is2d = true;
-		res = tcm->reserve_2d(tcm, height, width, align, area);
-		area->tcm = res ? NULL : tcm;
-	}
+    if (!res) {
+        area->is2d = true;
+        res = tcm->reserve_2d(tcm, height, width, align, area);
+        area->tcm = res ? NULL : tcm;
+    }
 
-	return res;
+    return res;
 }
 
 /**
@@ -159,20 +157,19 @@ static inline s32 tcm_reserve_2d(struct tcm *tcm, u16 width, u16 height,
  *	    allocation.
  */
 static inline s32 tcm_reserve_1d(struct tcm *tcm, u32 slots,
-				 struct tcm_area *area)
-{
-	/* perform rudimentary error checking */
-	s32 res = tcm  == NULL ? -ENODEV :
-		(area == NULL || slots == 0) ? -EINVAL :
-		slots > (tcm->width * (u32) tcm->height) ? -ENOMEM : 0;
+                                 struct tcm_area *area) {
+    /* perform rudimentary error checking */
+    s32 res = tcm  == NULL ? -ENODEV :
+              (area == NULL || slots == 0) ? -EINVAL :
+              slots > (tcm->width * (u32) tcm->height) ? -ENOMEM : 0;
 
-	if (!res) {
-		area->is2d = false;
-		res = tcm->reserve_1d(tcm, slots, area);
-		area->tcm = res ? NULL : tcm;
-	}
+    if (!res) {
+        area->is2d = false;
+        res = tcm->reserve_1d(tcm, slots, area);
+        area->tcm = res ? NULL : tcm;
+    }
 
-	return res;
+    return res;
 }
 
 /**
@@ -188,17 +185,16 @@ static inline s32 tcm_reserve_1d(struct tcm *tcm, u32 slots,
  *	   freeing.  This call will succeed even if supplying
  *	   the area from a failed reserved call.
  */
-static inline s32 tcm_free(struct tcm_area *area)
-{
-	s32 res = 0; /* free succeeds by default */
+static inline s32 tcm_free(struct tcm_area *area) {
+    s32 res = 0; /* free succeeds by default */
 
-	if (area && area->tcm) {
-		res = area->tcm->free(area->tcm, area);
-		if (res == 0)
-			area->tcm = NULL;
-	}
+    if (area && area->tcm) {
+        res = area->tcm->free(area->tcm, area);
+        if (res == 0)
+            area->tcm = NULL;
+    }
 
-	return res;
+    return res;
 }
 
 /*=============================================================================
@@ -215,78 +211,72 @@ static inline s32 tcm_free(struct tcm_area *area)
  * @param parent	Pointer to a VALID parent area that will get modified
  * @param slice		Pointer to the slice area that will get modified
  */
-static inline void tcm_slice(struct tcm_area *parent, struct tcm_area *slice)
-{
-	*slice = *parent;
+static inline void tcm_slice(struct tcm_area *parent, struct tcm_area *slice) {
+    *slice = *parent;
 
-	/* check if we need to slice */
-	if (slice->tcm && !slice->is2d &&
-		slice->p0.y != slice->p1.y &&
-		(slice->p0.x || (slice->p1.x != slice->tcm->width - 1))) {
-		/* set end point of slice (start always remains) */
-		slice->p1.x = slice->tcm->width - 1;
-		slice->p1.y = (slice->p0.x) ? slice->p0.y : slice->p1.y - 1;
-		/* adjust remaining area */
-		parent->p0.x = 0;
-		parent->p0.y = slice->p1.y + 1;
-	} else {
-		/* mark this as the last slice */
-		parent->tcm = NULL;
-	}
+    /* check if we need to slice */
+    if (slice->tcm && !slice->is2d &&
+            slice->p0.y != slice->p1.y &&
+            (slice->p0.x || (slice->p1.x != slice->tcm->width - 1))) {
+        /* set end point of slice (start always remains) */
+        slice->p1.x = slice->tcm->width - 1;
+        slice->p1.y = (slice->p0.x) ? slice->p0.y : slice->p1.y - 1;
+        /* adjust remaining area */
+        parent->p0.x = 0;
+        parent->p0.y = slice->p1.y + 1;
+    } else {
+        /* mark this as the last slice */
+        parent->tcm = NULL;
+    }
 }
 
 /* Verify if a tcm area is logically valid */
-static inline bool tcm_area_is_valid(struct tcm_area *area)
-{
-	return area && area->tcm &&
-		/* coordinate bounds */
-		area->p1.x < area->tcm->width &&
-		area->p1.y < area->tcm->height &&
-		area->p0.y <= area->p1.y &&
-		/* 1D coordinate relationship + p0.x check */
-		((!area->is2d &&
-		  area->p0.x < area->tcm->width &&
-		  area->p0.x + area->p0.y * area->tcm->width <=
-		  area->p1.x + area->p1.y * area->tcm->width) ||
-		 /* 2D coordinate relationship */
-		 (area->is2d &&
-		  area->p0.x <= area->p1.x));
+static inline bool tcm_area_is_valid(struct tcm_area *area) {
+    return area && area->tcm &&
+           /* coordinate bounds */
+           area->p1.x < area->tcm->width &&
+           area->p1.y < area->tcm->height &&
+           area->p0.y <= area->p1.y &&
+           /* 1D coordinate relationship + p0.x check */
+           ((!area->is2d &&
+             area->p0.x < area->tcm->width &&
+             area->p0.x + area->p0.y * area->tcm->width <=
+             area->p1.x + area->p1.y * area->tcm->width) ||
+            /* 2D coordinate relationship */
+            (area->is2d &&
+             area->p0.x <= area->p1.x));
 }
 
 /* see if a coordinate is within an area */
-static inline bool __tcm_is_in(struct tcm_pt *p, struct tcm_area *a)
-{
-	u16 i;
+static inline bool __tcm_is_in(struct tcm_pt *p, struct tcm_area *a) {
+    u16 i;
 
-	if (a->is2d) {
-		return p->x >= a->p0.x && p->x <= a->p1.x &&
-		       p->y >= a->p0.y && p->y <= a->p1.y;
-	} else {
-		i = p->x + p->y * a->tcm->width;
-		return i >= a->p0.x + a->p0.y * a->tcm->width &&
-		       i <= a->p1.x + a->p1.y * a->tcm->width;
-	}
+    if (a->is2d) {
+        return p->x >= a->p0.x && p->x <= a->p1.x &&
+               p->y >= a->p0.y && p->y <= a->p1.y;
+    } else {
+        i = p->x + p->y * a->tcm->width;
+        return i >= a->p0.x + a->p0.y * a->tcm->width &&
+               i <= a->p1.x + a->p1.y * a->tcm->width;
+    }
 }
 
 /* calculate area width */
-static inline u16 __tcm_area_width(struct tcm_area *area)
-{
-	return area->p1.x - area->p0.x + 1;
+static inline u16 __tcm_area_width(struct tcm_area *area) {
+    return area->p1.x - area->p0.x + 1;
 }
 
 /* calculate area height */
-static inline u16 __tcm_area_height(struct tcm_area *area)
-{
-	return area->p1.y - area->p0.y + 1;
+static inline u16 __tcm_area_height(struct tcm_area *area) {
+    return area->p1.y - area->p0.y + 1;
 }
 
 /* calculate number of slots in an area */
-static inline u16 __tcm_sizeof(struct tcm_area *area)
-{
-	return area->is2d ?
-		__tcm_area_width(area) * __tcm_area_height(area) :
-		(area->p1.x - area->p0.x + 1) + (area->p1.y - area->p0.y) *
-							area->tcm->width;
+static inline u16 __tcm_sizeof(struct tcm_area *area) {
+    return area->is2d ?
+           __tcm_area_width(area) * __tcm_area_height(area) :
+           (area->p1.x - area->p0.x + 1) + (area->p1.y - area->p0.y) *
+           area->tcm->width;
 }
 #define tcm_sizeof(area) __tcm_sizeof(&(area))
 #define tcm_awidth(area) __tcm_area_width(&(area))
@@ -294,16 +284,15 @@ static inline u16 __tcm_sizeof(struct tcm_area *area)
 #define tcm_is_in(pt, area) __tcm_is_in(&(pt), &(area))
 
 /* limit a 1D area to the first N pages */
-static inline s32 tcm_1d_limit(struct tcm_area *a, u32 num_pg)
-{
-	if (__tcm_sizeof(a) < num_pg)
-		return -ENOMEM;
-	if (!num_pg)
-		return -EINVAL;
+static inline s32 tcm_1d_limit(struct tcm_area *a, u32 num_pg) {
+    if (__tcm_sizeof(a) < num_pg)
+        return -ENOMEM;
+    if (!num_pg)
+        return -EINVAL;
 
-	a->p1.x = (a->p0.x + num_pg - 1) % a->tcm->width;
-	a->p1.y = a->p0.y + ((a->p0.x + num_pg - 1) / a->tcm->width);
-	return 0;
+    a->p1.x = (a->p0.x + num_pg - 1) % a->tcm->width;
+    a->p1.y = a->p0.y + ((a->p0.x + num_pg - 1) / a->tcm->width);
+    return 0;
 }
 
 /**

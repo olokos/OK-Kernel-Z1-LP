@@ -42,13 +42,13 @@
 	 ((_pa) & 0xFF))
 
 enum kgsl_iommu_context_id {
-	KGSL_IOMMU_CONTEXT_USER = 0,
-	KGSL_IOMMU_CONTEXT_PRIV = 1,
+    KGSL_IOMMU_CONTEXT_USER = 0,
+    KGSL_IOMMU_CONTEXT_PRIV = 1,
 };
 
 struct kgsl_iommu_ctx {
-	const char *iommu_ctx_name;
-	enum kgsl_iommu_context_id ctx_id;
+    const char *iommu_ctx_name;
+    enum kgsl_iommu_context_id ctx_id;
 };
 
 /*
@@ -61,37 +61,37 @@ struct kgsl_iommu_ctx {
  * @physend:		End of iommu registers physical address
  */
 struct kgsl_device_iommu_data {
-	const struct kgsl_iommu_ctx *iommu_ctxs;
-	int iommu_ctx_count;
-	int iommu_halt_enable;
-	unsigned int physstart;
-	unsigned int physend;
+    const struct kgsl_iommu_ctx *iommu_ctxs;
+    int iommu_ctx_count;
+    int iommu_halt_enable;
+    unsigned int physstart;
+    unsigned int physend;
 };
 
 struct kgsl_pwrlevel {
-	unsigned int gpu_freq;
-	unsigned int bus_freq;
-	unsigned int io_fraction;
+    unsigned int gpu_freq;
+    unsigned int bus_freq;
+    unsigned int io_fraction;
 };
 
 struct kgsl_device_platform_data {
-	struct kgsl_pwrlevel pwrlevel[KGSL_MAX_PWRLEVELS];
-	int init_level;
-	int num_levels;
-	int (*set_grp_async)(void);
-	unsigned int idle_timeout;
-	bool strtstp_sleepwake;
-	bool bus_control;
-	unsigned int clk_map;
-	unsigned int idle_needed;
-	struct msm_bus_scale_pdata *bus_scale_table;
-	struct kgsl_device_iommu_data *iommu_data;
-	int iommu_count;
-	struct msm_dcvs_core_info *core_info;
-	struct coresight_device *csdev;
-	struct coresight_platform_data *coresight_pdata;
-	unsigned int chipid;
-	unsigned int pm_qos_latency;
+    struct kgsl_pwrlevel pwrlevel[KGSL_MAX_PWRLEVELS];
+    int init_level;
+    int num_levels;
+    int (*set_grp_async)(void);
+    unsigned int idle_timeout;
+    bool strtstp_sleepwake;
+    bool bus_control;
+    unsigned int clk_map;
+    unsigned int idle_needed;
+    struct msm_bus_scale_pdata *bus_scale_table;
+    struct kgsl_device_iommu_data *iommu_data;
+    int iommu_count;
+    struct msm_dcvs_core_info *core_info;
+    struct coresight_device *csdev;
+    struct coresight_platform_data *coresight_pdata;
+    unsigned int chipid;
+    unsigned int pm_qos_latency;
 };
 
 #endif

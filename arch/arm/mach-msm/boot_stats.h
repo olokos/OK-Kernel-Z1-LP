@@ -11,14 +11,16 @@
  */
 
 struct boot_stats {
-	uint32_t bootloader_start;
-	uint32_t bootloader_end;
-	uint32_t bootloader_display;
-	uint32_t bootloader_load_kernel;
+    uint32_t bootloader_start;
+    uint32_t bootloader_end;
+    uint32_t bootloader_display;
+    uint32_t bootloader_load_kernel;
 };
 
 #ifdef CONFIG_MSM_BOOT_STATS
 int boot_stats_init(void);
 #else
-static inline int boot_stats_init(void) { return 0; }
+static inline int boot_stats_init(void) {
+    return 0;
+}
 #endif

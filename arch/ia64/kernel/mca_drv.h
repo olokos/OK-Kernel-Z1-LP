@@ -34,9 +34,9 @@
 
 /* peidx: index of processor error section */
 typedef struct peidx_table {
-	sal_log_processor_info_t        *info;
-	struct sal_cpuid_info           *id;
-	sal_processor_static_info_t     *regs;
+    sal_log_processor_info_t        *info;
+    struct sal_cpuid_info           *id;
+    sal_processor_static_info_t     *regs;
 } peidx_table_t;
 
 #define peidx_head(p)   (((p)->info))
@@ -82,23 +82,23 @@ typedef struct peidx_table {
 /* slidx: index of SAL log error record */
 
 typedef struct slidx_list {
-	struct list_head list;
-	sal_log_section_hdr_t *hdr;
+    struct list_head list;
+    sal_log_section_hdr_t *hdr;
 } slidx_list_t;
 
 typedef struct slidx_table {
-	sal_log_record_header_t *header;
-	int n_sections;			/* # of section headers */
-	struct list_head proc_err;
-	struct list_head mem_dev_err;
-	struct list_head sel_dev_err;
-	struct list_head pci_bus_err;
-	struct list_head smbios_dev_err;
-	struct list_head pci_comp_err;
-	struct list_head plat_specific_err;
-	struct list_head host_ctlr_err;
-	struct list_head plat_bus_err;
-	struct list_head unsupported;	/* list of unsupported sections */
+    sal_log_record_header_t *header;
+    int n_sections;			/* # of section headers */
+    struct list_head proc_err;
+    struct list_head mem_dev_err;
+    struct list_head sel_dev_err;
+    struct list_head pci_bus_err;
+    struct list_head smbios_dev_err;
+    struct list_head pci_comp_err;
+    struct list_head plat_specific_err;
+    struct list_head host_ctlr_err;
+    struct list_head plat_bus_err;
+    struct list_head unsupported;	/* list of unsupported sections */
 } slidx_table_t;
 
 #define slidx_foreach_entry(pos, head) \
@@ -112,8 +112,8 @@ typedef struct slidx_table {
 	__count; })
 
 struct mca_table_entry {
-	int start_addr;	/* location-relative starting address of MCA recoverable range */
-	int end_addr;	/* location-relative ending address of MCA recoverable range */
+    int start_addr;	/* location-relative starting address of MCA recoverable range */
+    int end_addr;	/* location-relative ending address of MCA recoverable range */
 };
 
 extern const struct mca_table_entry *search_mca_tables (unsigned long addr);

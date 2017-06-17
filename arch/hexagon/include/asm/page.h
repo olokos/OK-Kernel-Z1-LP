@@ -79,9 +79,15 @@
  * Null intermediate page table level (pmd, pud) definitions will come from
  * asm-generic/pagetable-nopmd.h and asm-generic/pagetable-nopud.h
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define pte_val(x)     ((x).pte)
@@ -113,17 +119,16 @@ struct page;
 #define virt_addr_valid(kaddr) pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
 
 /*  Need to not use a define for linesize; may move this to another file.  */
-static inline void clear_page(void *page)
-{
-	/*  This can only be done on pages with L1 WB cache */
-	asm volatile(
-		"	loop0(1f,%1);\n"
-		"1:	{ dczeroa(%0);\n"
-		"	  %0 = add(%0,#32); }:endloop0\n"
-		: "+r" (page)
-		: "r" (PAGE_SIZE/32)
-		: "lc0", "sa0", "memory"
-	);
+static inline void clear_page(void *page) {
+    /*  This can only be done on pages with L1 WB cache */
+    asm volatile(
+        "	loop0(1f,%1);\n"
+        "1:	{ dczeroa(%0);\n"
+        "	  %0 = add(%0,#32); }:endloop0\n"
+        : "+r" (page)
+        : "r" (PAGE_SIZE/32)
+        : "lc0", "sa0", "memory"
+    );
 }
 
 #define copy_page(to, from)	memcpy((to), (from), PAGE_SIZE)

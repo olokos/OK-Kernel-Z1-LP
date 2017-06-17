@@ -28,12 +28,12 @@
  * the following mappings at the moment.
  */
 enum disp_data_mapping {
-	/* blue -> d[0..5], green -> d[6..11], red -> d[12..17] */
-	IPU_DISP_DATA_MAPPING_RGB666,
-	/* blue -> d[0..4], green -> d[5..10], red -> d[11..15] */
-	IPU_DISP_DATA_MAPPING_RGB565,
-	/* blue -> d[0..7], green -> d[8..15], red -> d[16..23] */
-	IPU_DISP_DATA_MAPPING_RGB888,
+    /* blue -> d[0..5], green -> d[6..11], red -> d[12..17] */
+    IPU_DISP_DATA_MAPPING_RGB666,
+    /* blue -> d[0..4], green -> d[5..10], red -> d[11..15] */
+    IPU_DISP_DATA_MAPPING_RGB565,
+    /* blue -> d[0..7], green -> d[8..15], red -> d[16..23] */
+    IPU_DISP_DATA_MAPPING_RGB888,
 };
 
 /**
@@ -43,11 +43,11 @@ enum disp_data_mapping {
  * @mode:	pointer to a platform-provided per mxc_register_fb() videomode
  */
 struct mx3fb_platform_data {
-	struct device			*dma_dev;
-	const char			*name;
-	const struct fb_videomode	*mode;
-	int				num_modes;
-	enum disp_data_mapping		disp_data_fmt;
+    struct device			*dma_dev;
+    const char			*name;
+    const struct fb_videomode	*mode;
+    int				num_modes;
+    enum disp_data_mapping		disp_data_fmt;
 };
 
 #endif

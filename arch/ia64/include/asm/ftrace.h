@@ -12,10 +12,9 @@ extern void _mcount(unsigned long pfs, unsigned long r1, unsigned long b0, unsig
 #define MCOUNT_ADDR (((struct fnptr *)mcount)->ip)
 #define FTRACE_ADDR (((struct fnptr *)ftrace_caller)->ip)
 
-static inline unsigned long ftrace_call_adjust(unsigned long addr)
-{
-	/* second bundle, insn 2 */
-	return addr - 0x12;
+static inline unsigned long ftrace_call_adjust(unsigned long addr) {
+    /* second bundle, insn 2 */
+    return addr - 0x12;
 }
 
 struct dyn_arch_ftrace {

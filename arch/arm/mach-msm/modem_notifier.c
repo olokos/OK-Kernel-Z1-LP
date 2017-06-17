@@ -28,134 +28,119 @@
 static struct srcu_notifier_head modem_notifier_list;
 static struct workqueue_struct *modem_notifier_wq;
 
-static void notify_work_smsm_init(struct work_struct *work)
-{
-	modem_notify(0, MODEM_NOTIFIER_SMSM_INIT);
+static void notify_work_smsm_init(struct work_struct *work) {
+    modem_notify(0, MODEM_NOTIFIER_SMSM_INIT);
 }
 static DECLARE_WORK(modem_notifier_smsm_init_work, &notify_work_smsm_init);
 
-void modem_queue_smsm_init_notify(void)
-{
-	int ret;
+void modem_queue_smsm_init_notify(void) {
+    int ret;
 
-	ret = queue_work(modem_notifier_wq, &modem_notifier_smsm_init_work);
+    ret = queue_work(modem_notifier_wq, &modem_notifier_smsm_init_work);
 
-	if (!ret)
-		printk(KERN_ERR "%s\n", __func__);
+    if (!ret)
+        printk(KERN_ERR "%s\n", __func__);
 }
 EXPORT_SYMBOL(modem_queue_smsm_init_notify);
 
-static void notify_work_start_reset(struct work_struct *work)
-{
-	modem_notify(0, MODEM_NOTIFIER_START_RESET);
+static void notify_work_start_reset(struct work_struct *work) {
+    modem_notify(0, MODEM_NOTIFIER_START_RESET);
 }
 static DECLARE_WORK(modem_notifier_start_reset_work, &notify_work_start_reset);
 
-void modem_queue_start_reset_notify(void)
-{
-	int ret;
+void modem_queue_start_reset_notify(void) {
+    int ret;
 
-	ret = queue_work(modem_notifier_wq, &modem_notifier_start_reset_work);
+    ret = queue_work(modem_notifier_wq, &modem_notifier_start_reset_work);
 
-	if (!ret)
-		printk(KERN_ERR "%s\n", __func__);
+    if (!ret)
+        printk(KERN_ERR "%s\n", __func__);
 }
 EXPORT_SYMBOL(modem_queue_start_reset_notify);
 
-static void notify_work_end_reset(struct work_struct *work)
-{
-	modem_notify(0, MODEM_NOTIFIER_END_RESET);
+static void notify_work_end_reset(struct work_struct *work) {
+    modem_notify(0, MODEM_NOTIFIER_END_RESET);
 }
 static DECLARE_WORK(modem_notifier_end_reset_work, &notify_work_end_reset);
 
-void modem_queue_end_reset_notify(void)
-{
-	int ret;
+void modem_queue_end_reset_notify(void) {
+    int ret;
 
-	ret = queue_work(modem_notifier_wq, &modem_notifier_end_reset_work);
+    ret = queue_work(modem_notifier_wq, &modem_notifier_end_reset_work);
 
-	if (!ret)
-		printk(KERN_ERR "%s\n", __func__);
+    if (!ret)
+        printk(KERN_ERR "%s\n", __func__);
 }
 EXPORT_SYMBOL(modem_queue_end_reset_notify);
 
-int modem_register_notifier(struct notifier_block *nb)
-{
-	int ret;
+int modem_register_notifier(struct notifier_block *nb) {
+    int ret;
 
-	ret = srcu_notifier_chain_register(
-		&modem_notifier_list, nb);
+    ret = srcu_notifier_chain_register(
+              &modem_notifier_list, nb);
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(modem_register_notifier);
 
-int modem_unregister_notifier(struct notifier_block *nb)
-{
-	int ret;
+int modem_unregister_notifier(struct notifier_block *nb) {
+    int ret;
 
-	ret = srcu_notifier_chain_unregister(
-		&modem_notifier_list, nb);
+    ret = srcu_notifier_chain_unregister(
+              &modem_notifier_list, nb);
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(modem_unregister_notifier);
 
-void modem_notify(void *data, unsigned int state)
-{
-	srcu_notifier_call_chain(&modem_notifier_list, state, data);
+void modem_notify(void *data, unsigned int state) {
+    srcu_notifier_call_chain(&modem_notifier_list, state, data);
 }
 EXPORT_SYMBOL(modem_notify);
 
 #if defined(CONFIG_DEBUG_FS)
-static int debug_reset_start(const char __user *buf, int count)
-{
-	modem_queue_start_reset_notify();
-	return 0;
+static int debug_reset_start(const char __user *buf, int count) {
+    modem_queue_start_reset_notify();
+    return 0;
 }
 
-static int debug_reset_end(const char __user *buf, int count)
-{
-	modem_queue_end_reset_notify();
-	return 0;
+static int debug_reset_end(const char __user *buf, int count) {
+    modem_queue_end_reset_notify();
+    return 0;
 }
 
 static ssize_t debug_write(struct file *file, const char __user *buf,
-			   size_t count, loff_t *ppos)
-{
-	int (*fling)(const char __user *buf, int max) = file->private_data;
-	fling(buf, count);
-	return count;
+                           size_t count, loff_t *ppos) {
+    int (*fling)(const char __user *buf, int max) = file->private_data;
+    fling(buf, count);
+    return count;
 }
 
-static int debug_open(struct inode *inode, struct file *file)
-{
-	file->private_data = inode->i_private;
-	return 0;
+static int debug_open(struct inode *inode, struct file *file) {
+    file->private_data = inode->i_private;
+    return 0;
 }
 
 static const struct file_operations debug_ops = {
-	.write = debug_write,
-	.open = debug_open,
+    .write = debug_write,
+    .open = debug_open,
 };
 
 static void debug_create(const char *name, mode_t mode,
-			 struct dentry *dent,
-			 int (*fling)(const char __user *buf, int max))
-{
-	debugfs_create_file(name, mode, dent, fling, &debug_ops);
+                         struct dentry *dent,
+                         int (*fling)(const char __user *buf, int max)) {
+    debugfs_create_file(name, mode, dent, fling, &debug_ops);
 }
 
-static void modem_notifier_debugfs_init(void)
-{
-	struct dentry *dent;
+static void modem_notifier_debugfs_init(void) {
+    struct dentry *dent;
 
-	dent = debugfs_create_dir("modem_notifier", 0);
-	if (IS_ERR(dent))
-		return;
+    dent = debugfs_create_dir("modem_notifier", 0);
+    if (IS_ERR(dent))
+        return;
 
-	debug_create("reset_start", 0444, dent, debug_reset_start);
-	debug_create("reset_end", 0444, dent, debug_reset_end);
+    debug_create("reset_start", 0444, dent, debug_reset_start);
+    debug_create("reset_end", 0444, dent, debug_reset_end);
 }
 #else
 static void modem_notifier_debugfs_init(void) {}
@@ -163,58 +148,55 @@ static void modem_notifier_debugfs_init(void) {}
 
 #if defined(DEBUG)
 static int modem_notifier_test_call(struct notifier_block *this,
-				  unsigned long code,
-				  void *_cmd)
-{
-	switch (code) {
-	case MODEM_NOTIFIER_START_RESET:
-		printk(KERN_ERR "Notify: start reset\n");
-		break;
-	case MODEM_NOTIFIER_END_RESET:
-		printk(KERN_ERR "Notify: end reset\n");
-		break;
-	case MODEM_NOTIFIER_SMSM_INIT:
-		printk(KERN_ERR "Notify: smsm init\n");
-		break;
-	default:
-		printk(KERN_ERR "Notify: general\n");
-		break;
-	}
-	return NOTIFY_DONE;
+                                    unsigned long code,
+                                    void *_cmd) {
+    switch (code) {
+    case MODEM_NOTIFIER_START_RESET:
+        printk(KERN_ERR "Notify: start reset\n");
+        break;
+    case MODEM_NOTIFIER_END_RESET:
+        printk(KERN_ERR "Notify: end reset\n");
+        break;
+    case MODEM_NOTIFIER_SMSM_INIT:
+        printk(KERN_ERR "Notify: smsm init\n");
+        break;
+    default:
+        printk(KERN_ERR "Notify: general\n");
+        break;
+    }
+    return NOTIFY_DONE;
 }
 
 static struct notifier_block nb = {
-	.notifier_call = modem_notifier_test_call,
+    .notifier_call = modem_notifier_test_call,
 };
 
-static void register_test_notifier(void)
-{
-	modem_register_notifier(&nb);
+static void register_test_notifier(void) {
+    modem_register_notifier(&nb);
 }
 #endif
 
-int __init msm_init_modem_notifier_list(void)
-{
-	static bool registered;
+int __init msm_init_modem_notifier_list(void) {
+    static bool registered;
 
-	if (registered)
-		return 0;
+    if (registered)
+        return 0;
 
-	registered = true;
+    registered = true;
 
-	srcu_init_notifier_head(&modem_notifier_list);
-	modem_notifier_debugfs_init();
+    srcu_init_notifier_head(&modem_notifier_list);
+    modem_notifier_debugfs_init();
 #if defined(DEBUG)
-	register_test_notifier();
+    register_test_notifier();
 #endif
 
-	/* Create the workqueue */
-	modem_notifier_wq = create_singlethread_workqueue("modem_notifier");
-	if (!modem_notifier_wq) {
-		srcu_cleanup_notifier_head(&modem_notifier_list);
-		return -ENOMEM;
-	}
+    /* Create the workqueue */
+    modem_notifier_wq = create_singlethread_workqueue("modem_notifier");
+    if (!modem_notifier_wq) {
+        srcu_cleanup_notifier_head(&modem_notifier_list);
+        return -ENOMEM;
+    }
 
-	return 0;
+    return 0;
 }
 module_init(msm_init_modem_notifier_list);

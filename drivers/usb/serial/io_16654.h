@@ -19,15 +19,15 @@
  *
  ************************************************************************/
 
-	//
-	// UART register numbers
-	// Numbers 0-7 are passed to the Edgeport directly. Numbers 8 and
-	// above are used internally to indicate that we must enable access
-	// to them via LCR bit 0x80 or LCR = 0xBF.
-	// The register number sent to the Edgeport is then (x & 0x7).
-	//
-	// Driver must not access registers that affect operation of the
-	// the EdgePort firmware -- that includes THR, RHR, IER, FCR.
+//
+// UART register numbers
+// Numbers 0-7 are passed to the Edgeport directly. Numbers 8 and
+// above are used internally to indicate that we must enable access
+// to them via LCR bit 0x80 or LCR = 0xBF.
+// The register number sent to the Edgeport is then (x & 0x7).
+//
+// Driver must not access registers that affect operation of the
+// the EdgePort firmware -- that includes THR, RHR, IER, FCR.
 
 
 #define THR			0	// ! Transmit Holding Register (Write)
@@ -53,9 +53,9 @@
 
 #define IS_REG_2ND_BANK(x)	((x) >= 8)
 
-	//
-	// Bit definitions for each register
-	//
+//
+// Bit definitions for each register
+//
 
 #define IER_RX			0x01	// Enable receive interrupt
 #define IER_TX			0x02	// Enable transmit interrupt
@@ -118,8 +118,8 @@
 #define LCR_DL_ENABLE		0x80	// Enable access to divisor latch
 
 #define LCR_ACCESS_EFR		0xBF	// Load this value to access DLL,DLM,
-					// and also the '654-only registers
-					// EFR, XON1, XON2, XOFF1, XOFF2
+// and also the '654-only registers
+// EFR, XON1, XON2, XOFF1, XOFF2
 
 
 #define MCR_DTR			0x01	// Assert DTR
@@ -153,8 +153,8 @@
 
 
 
-					//	Tx		Rx
-					//-------------------------------
+//	Tx		Rx
+//-------------------------------
 #define EFR_SWFC_NONE		0x00	//	None		None
 #define EFR_SWFC_RX1		0x02 	//	None		XOFF1
 #define EFR_SWFC_RX2		0x01 	//	None		XOFF2

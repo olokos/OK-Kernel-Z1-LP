@@ -104,8 +104,8 @@
 /* needed by dhf_wrap.c */
 
 typedef struct {
-	LTVP 	ltvp;
-	hcf_16	len;
+    LTVP 	ltvp;
+    hcf_16	len;
 } LTV_INFO_STRUCT , *LTV_INFO_STRUCT_PTR;
 
 
@@ -119,9 +119,9 @@ typedef struct {
  */
 
 typedef struct {
-	hcf_32	code;      	/* Code to plug */
-	hcf_32	addr;      	/* Address within the memory image to plug it in */
-	hcf_32	len;       	/* The # of bytes which are available to store it */
+    hcf_32	code;      	/* Code to plug */
+    hcf_32	addr;      	/* Address within the memory image to plug it in */
+    hcf_32	len;       	/* The # of bytes which are available to store it */
 } plugrecord;
 
 /*
@@ -138,8 +138,8 @@ typedef struct {
 #define MAX_DEBUGSTRING_LEN 	  82
 
 typedef struct {
-	hcf_32	id;
-	char 	str[MAX_DEBUGSTRING_LEN];
+    hcf_32	id;
+    char 	str[MAX_DEBUGSTRING_LEN];
 } stringrecord;
 
 /*
@@ -155,8 +155,8 @@ typedef struct {
 #define MAX_DEBUGEXPORT_LEN 	  12
 
 typedef struct {
-	hcf_32	id;
-	char 	str[MAX_DEBUGEXPORT_LEN];
+    hcf_32	id;
+    char 	str[MAX_DEBUGEXPORT_LEN];
 } exportrecord;
 
 /* Offsets in memimage array p[] */
@@ -188,14 +188,14 @@ typedef struct {
  * 	The end of the array is indicated by a plug record of which all fields are zero.
  */
 typedef struct {
-	char					signature[14+1+1];	/* signature (see DHF.C) + C/LE-Bin/BE-Bin-flag + format version */
-	CFG_PROG_STRCT FAR *codep;				/* */
-	hcf_32           	 	execution;    		/* Execution address of the firmware */
-	void FAR *place_holder_1;
-	void FAR  		     	*place_holder_2;
-	CFG_RANGE20_STRCT FAR  	*compat;      		/* Pointer to the compatibility info records */
-	CFG_IDENTITY_STRCT FAR 	*identity;    		/* Pointer to the identity info records */
-	void FAR				*p[2];				/* (Up to 9) pointers for (future) expansion
+    char					signature[14+1+1];	/* signature (see DHF.C) + C/LE-Bin/BE-Bin-flag + format version */
+    CFG_PROG_STRCT FAR *codep;				/* */
+    hcf_32           	 	execution;    		/* Execution address of the firmware */
+    void FAR *place_holder_1;
+    void FAR  		     	*place_holder_2;
+    CFG_RANGE20_STRCT FAR  	*compat;      		/* Pointer to the compatibility info records */
+    CFG_IDENTITY_STRCT FAR 	*identity;    		/* Pointer to the identity info records */
+    void FAR				*p[2];				/* (Up to 9) pointers for (future) expansion
 												 * currently in use:
 												 *  - F/W printf information
 												 */

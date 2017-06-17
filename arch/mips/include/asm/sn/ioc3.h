@@ -9,24 +9,24 @@
 
 /* SUPERIO uart register map */
 typedef volatile struct ioc3_uartregs {
-	union {
-		volatile u8	rbr;	/* read only, DLAB == 0 */
-		volatile u8	thr;	/* write only, DLAB == 0 */
-		volatile u8	dll;	/* DLAB == 1 */
-	} u1;
-	union {
-		volatile u8	ier;	/* DLAB == 0 */
-		volatile u8	dlm;	/* DLAB == 1 */
-	} u2;
-	union {
-		volatile u8	iir;	/* read only */
-		volatile u8	fcr;	/* write only */
-	} u3;
-	volatile u8	    iu_lcr;
-	volatile u8	    iu_mcr;
-	volatile u8	    iu_lsr;
-	volatile u8	    iu_msr;
-	volatile u8	    iu_scr;
+    union {
+        volatile u8	rbr;	/* read only, DLAB == 0 */
+        volatile u8	thr;	/* write only, DLAB == 0 */
+        volatile u8	dll;	/* DLAB == 1 */
+    } u1;
+    union {
+        volatile u8	ier;	/* DLAB == 0 */
+        volatile u8	dlm;	/* DLAB == 1 */
+    } u2;
+    union {
+        volatile u8	iir;	/* read only */
+        volatile u8	fcr;	/* write only */
+    } u3;
+    volatile u8	    iu_lcr;
+    volatile u8	    iu_mcr;
+    volatile u8	    iu_lsr;
+    volatile u8	    iu_msr;
+    volatile u8	    iu_scr;
 } ioc3_uregs_t;
 
 #define iu_rbr u1.rbr
@@ -38,153 +38,153 @@ typedef volatile struct ioc3_uartregs {
 #define iu_fcr u3.fcr
 
 struct ioc3_sioregs {
-	volatile u8		fill[0x141];	/* starts at 0x141 */
+    volatile u8		fill[0x141];	/* starts at 0x141 */
 
-	volatile u8		uartc;
-	volatile u8		kbdcg;
+    volatile u8		uartc;
+    volatile u8		kbdcg;
 
-	volatile u8		fill0[0x150 - 0x142 - 1];
+    volatile u8		fill0[0x150 - 0x142 - 1];
 
-	volatile u8		pp_data;
-	volatile u8		pp_dsr;
-	volatile u8		pp_dcr;
+    volatile u8		pp_data;
+    volatile u8		pp_dsr;
+    volatile u8		pp_dcr;
 
-	volatile u8		fill1[0x158 - 0x152 - 1];
+    volatile u8		fill1[0x158 - 0x152 - 1];
 
-	volatile u8		pp_fifa;
-	volatile u8		pp_cfgb;
-	volatile u8		pp_ecr;
+    volatile u8		pp_fifa;
+    volatile u8		pp_cfgb;
+    volatile u8		pp_ecr;
 
-	volatile u8		fill2[0x168 - 0x15a - 1];
+    volatile u8		fill2[0x168 - 0x15a - 1];
 
-	volatile u8		rtcad;
-	volatile u8		rtcdat;
+    volatile u8		rtcad;
+    volatile u8		rtcdat;
 
-	volatile u8		fill3[0x170 - 0x169 - 1];
+    volatile u8		fill3[0x170 - 0x169 - 1];
 
-	struct ioc3_uartregs    uartb;	/* 0x20170  */
-	struct ioc3_uartregs    uarta;	/* 0x20178  */
+    struct ioc3_uartregs    uartb;	/* 0x20170  */
+    struct ioc3_uartregs    uarta;	/* 0x20178  */
 };
 
 /* Register layout of IOC3 in configuration space.  */
 struct ioc3 {
-	volatile u32	pad0[7];	/* 0x00000  */
-	volatile u32	sio_ir;		/* 0x0001c  */
-	volatile u32	sio_ies;	/* 0x00020  */
-	volatile u32	sio_iec;	/* 0x00024  */
-	volatile u32	sio_cr;		/* 0x00028  */
-	volatile u32	int_out;	/* 0x0002c  */
-	volatile u32	mcr;		/* 0x00030  */
+    volatile u32	pad0[7];	/* 0x00000  */
+    volatile u32	sio_ir;		/* 0x0001c  */
+    volatile u32	sio_ies;	/* 0x00020  */
+    volatile u32	sio_iec;	/* 0x00024  */
+    volatile u32	sio_cr;		/* 0x00028  */
+    volatile u32	int_out;	/* 0x0002c  */
+    volatile u32	mcr;		/* 0x00030  */
 
-	/* General Purpose I/O registers  */
-	volatile u32	gpcr_s;		/* 0x00034  */
-	volatile u32	gpcr_c;		/* 0x00038  */
-	volatile u32	gpdr;		/* 0x0003c  */
-	volatile u32	gppr_0;		/* 0x00040  */
-	volatile u32	gppr_1;		/* 0x00044  */
-	volatile u32	gppr_2;		/* 0x00048  */
-	volatile u32	gppr_3;		/* 0x0004c  */
-	volatile u32	gppr_4;		/* 0x00050  */
-	volatile u32	gppr_5;		/* 0x00054  */
-	volatile u32	gppr_6;		/* 0x00058  */
-	volatile u32	gppr_7;		/* 0x0005c  */
-	volatile u32	gppr_8;		/* 0x00060  */
-	volatile u32	gppr_9;		/* 0x00064  */
-	volatile u32	gppr_10;	/* 0x00068  */
-	volatile u32	gppr_11;	/* 0x0006c  */
-	volatile u32	gppr_12;	/* 0x00070  */
-	volatile u32	gppr_13;	/* 0x00074  */
-	volatile u32	gppr_14;	/* 0x00078  */
-	volatile u32	gppr_15;	/* 0x0007c  */
+    /* General Purpose I/O registers  */
+    volatile u32	gpcr_s;		/* 0x00034  */
+    volatile u32	gpcr_c;		/* 0x00038  */
+    volatile u32	gpdr;		/* 0x0003c  */
+    volatile u32	gppr_0;		/* 0x00040  */
+    volatile u32	gppr_1;		/* 0x00044  */
+    volatile u32	gppr_2;		/* 0x00048  */
+    volatile u32	gppr_3;		/* 0x0004c  */
+    volatile u32	gppr_4;		/* 0x00050  */
+    volatile u32	gppr_5;		/* 0x00054  */
+    volatile u32	gppr_6;		/* 0x00058  */
+    volatile u32	gppr_7;		/* 0x0005c  */
+    volatile u32	gppr_8;		/* 0x00060  */
+    volatile u32	gppr_9;		/* 0x00064  */
+    volatile u32	gppr_10;	/* 0x00068  */
+    volatile u32	gppr_11;	/* 0x0006c  */
+    volatile u32	gppr_12;	/* 0x00070  */
+    volatile u32	gppr_13;	/* 0x00074  */
+    volatile u32	gppr_14;	/* 0x00078  */
+    volatile u32	gppr_15;	/* 0x0007c  */
 
-	/* Parallel Port Registers  */
-	volatile u32	ppbr_h_a;	/* 0x00080  */
-	volatile u32	ppbr_l_a;	/* 0x00084  */
-	volatile u32	ppcr_a;		/* 0x00088  */
-	volatile u32	ppcr;		/* 0x0008c  */
-	volatile u32	ppbr_h_b;	/* 0x00090  */
-	volatile u32	ppbr_l_b;	/* 0x00094  */
-	volatile u32	ppcr_b;		/* 0x00098  */
+    /* Parallel Port Registers  */
+    volatile u32	ppbr_h_a;	/* 0x00080  */
+    volatile u32	ppbr_l_a;	/* 0x00084  */
+    volatile u32	ppcr_a;		/* 0x00088  */
+    volatile u32	ppcr;		/* 0x0008c  */
+    volatile u32	ppbr_h_b;	/* 0x00090  */
+    volatile u32	ppbr_l_b;	/* 0x00094  */
+    volatile u32	ppcr_b;		/* 0x00098  */
 
-	/* Keyboard and Mouse Registers  */
-	volatile u32	km_csr;		/* 0x0009c  */
-	volatile u32	k_rd;		/* 0x000a0  */
-	volatile u32	m_rd;		/* 0x000a4  */
-	volatile u32	k_wd;		/* 0x000a8  */
-	volatile u32	m_wd;		/* 0x000ac  */
+    /* Keyboard and Mouse Registers  */
+    volatile u32	km_csr;		/* 0x0009c  */
+    volatile u32	k_rd;		/* 0x000a0  */
+    volatile u32	m_rd;		/* 0x000a4  */
+    volatile u32	k_wd;		/* 0x000a8  */
+    volatile u32	m_wd;		/* 0x000ac  */
 
-	/* Serial Port Registers  */
-	volatile u32	sbbr_h;		/* 0x000b0  */
-	volatile u32	sbbr_l;		/* 0x000b4  */
-	volatile u32	sscr_a;		/* 0x000b8  */
-	volatile u32	stpir_a;	/* 0x000bc  */
-	volatile u32	stcir_a;	/* 0x000c0  */
-	volatile u32	srpir_a;	/* 0x000c4  */
-	volatile u32	srcir_a;	/* 0x000c8  */
-	volatile u32	srtr_a;		/* 0x000cc  */
-	volatile u32	shadow_a;	/* 0x000d0  */
-	volatile u32	sscr_b;		/* 0x000d4  */
-	volatile u32	stpir_b;	/* 0x000d8  */
-	volatile u32	stcir_b;	/* 0x000dc  */
-	volatile u32	srpir_b;	/* 0x000e0  */
-	volatile u32	srcir_b;	/* 0x000e4  */
-	volatile u32	srtr_b;		/* 0x000e8  */
-	volatile u32	shadow_b;	/* 0x000ec  */
+    /* Serial Port Registers  */
+    volatile u32	sbbr_h;		/* 0x000b0  */
+    volatile u32	sbbr_l;		/* 0x000b4  */
+    volatile u32	sscr_a;		/* 0x000b8  */
+    volatile u32	stpir_a;	/* 0x000bc  */
+    volatile u32	stcir_a;	/* 0x000c0  */
+    volatile u32	srpir_a;	/* 0x000c4  */
+    volatile u32	srcir_a;	/* 0x000c8  */
+    volatile u32	srtr_a;		/* 0x000cc  */
+    volatile u32	shadow_a;	/* 0x000d0  */
+    volatile u32	sscr_b;		/* 0x000d4  */
+    volatile u32	stpir_b;	/* 0x000d8  */
+    volatile u32	stcir_b;	/* 0x000dc  */
+    volatile u32	srpir_b;	/* 0x000e0  */
+    volatile u32	srcir_b;	/* 0x000e4  */
+    volatile u32	srtr_b;		/* 0x000e8  */
+    volatile u32	shadow_b;	/* 0x000ec  */
 
-	/* Ethernet Registers  */
-	volatile u32	emcr;		/* 0x000f0  */
-	volatile u32	eisr;		/* 0x000f4  */
-	volatile u32	eier;		/* 0x000f8  */
-	volatile u32	ercsr;		/* 0x000fc  */
-	volatile u32	erbr_h;		/* 0x00100  */
-	volatile u32	erbr_l;		/* 0x00104  */
-	volatile u32	erbar;		/* 0x00108  */
-	volatile u32	ercir;		/* 0x0010c  */
-	volatile u32	erpir;		/* 0x00110  */
-	volatile u32	ertr;		/* 0x00114  */
-	volatile u32	etcsr;		/* 0x00118  */
-	volatile u32	ersr;		/* 0x0011c  */
-	volatile u32	etcdc;		/* 0x00120  */
-	volatile u32	ebir;		/* 0x00124  */
-	volatile u32	etbr_h;		/* 0x00128  */
-	volatile u32	etbr_l;		/* 0x0012c  */
-	volatile u32	etcir;		/* 0x00130  */
-	volatile u32	etpir;		/* 0x00134  */
-	volatile u32	emar_h;		/* 0x00138  */
-	volatile u32	emar_l;		/* 0x0013c  */
-	volatile u32	ehar_h;		/* 0x00140  */
-	volatile u32	ehar_l;		/* 0x00144  */
-	volatile u32	micr;		/* 0x00148  */
-	volatile u32	midr_r;		/* 0x0014c  */
-	volatile u32	midr_w;		/* 0x00150  */
-	volatile u32	pad1[(0x20000 - 0x00154) / 4];
+    /* Ethernet Registers  */
+    volatile u32	emcr;		/* 0x000f0  */
+    volatile u32	eisr;		/* 0x000f4  */
+    volatile u32	eier;		/* 0x000f8  */
+    volatile u32	ercsr;		/* 0x000fc  */
+    volatile u32	erbr_h;		/* 0x00100  */
+    volatile u32	erbr_l;		/* 0x00104  */
+    volatile u32	erbar;		/* 0x00108  */
+    volatile u32	ercir;		/* 0x0010c  */
+    volatile u32	erpir;		/* 0x00110  */
+    volatile u32	ertr;		/* 0x00114  */
+    volatile u32	etcsr;		/* 0x00118  */
+    volatile u32	ersr;		/* 0x0011c  */
+    volatile u32	etcdc;		/* 0x00120  */
+    volatile u32	ebir;		/* 0x00124  */
+    volatile u32	etbr_h;		/* 0x00128  */
+    volatile u32	etbr_l;		/* 0x0012c  */
+    volatile u32	etcir;		/* 0x00130  */
+    volatile u32	etpir;		/* 0x00134  */
+    volatile u32	emar_h;		/* 0x00138  */
+    volatile u32	emar_l;		/* 0x0013c  */
+    volatile u32	ehar_h;		/* 0x00140  */
+    volatile u32	ehar_l;		/* 0x00144  */
+    volatile u32	micr;		/* 0x00148  */
+    volatile u32	midr_r;		/* 0x0014c  */
+    volatile u32	midr_w;		/* 0x00150  */
+    volatile u32	pad1[(0x20000 - 0x00154) / 4];
 
-	/* SuperIO Registers  XXX */
-	struct ioc3_sioregs	sregs;	/* 0x20000 */
-	volatile u32	pad2[(0x40000 - 0x20180) / 4];
+    /* SuperIO Registers  XXX */
+    struct ioc3_sioregs	sregs;	/* 0x20000 */
+    volatile u32	pad2[(0x40000 - 0x20180) / 4];
 
-	/* SSRAM Diagnostic Access */
-	volatile u32	ssram[(0x80000 - 0x40000) / 4];
+    /* SSRAM Diagnostic Access */
+    volatile u32	ssram[(0x80000 - 0x40000) / 4];
 
-	/* Bytebus device offsets
-	   0x80000 -   Access to the generic devices selected with   DEV0
-	   0x9FFFF     bytebus DEV_SEL_0
-	   0xA0000 -   Access to the generic devices selected with   DEV1
-	   0xBFFFF     bytebus DEV_SEL_1
-	   0xC0000 -   Access to the generic devices selected with   DEV2
-	   0xDFFFF     bytebus DEV_SEL_2
-	   0xE0000 -   Access to the generic devices selected with   DEV3
-	   0xFFFFF     bytebus DEV_SEL_3  */
+    /* Bytebus device offsets
+       0x80000 -   Access to the generic devices selected with   DEV0
+       0x9FFFF     bytebus DEV_SEL_0
+       0xA0000 -   Access to the generic devices selected with   DEV1
+       0xBFFFF     bytebus DEV_SEL_1
+       0xC0000 -   Access to the generic devices selected with   DEV2
+       0xDFFFF     bytebus DEV_SEL_2
+       0xE0000 -   Access to the generic devices selected with   DEV3
+       0xFFFFF     bytebus DEV_SEL_3  */
 };
 
 /*
  * Ethernet RX Buffer
  */
 struct ioc3_erxbuf {
-	u32	w0;			/* first word (valid,bcnt,cksum) */
-	u32	err;			/* second word various errors */
-	/* next comes n bytes of padding */
-	/* then the received ethernet frame itself */
+    u32	w0;			/* first word (valid,bcnt,cksum) */
+    u32	err;			/* second word various errors */
+    /* next comes n bytes of padding */
+    /* then the received ethernet frame itself */
 };
 
 #define ERXBUF_IPCKSUM_MASK	0x0000ffff
@@ -210,11 +210,11 @@ struct ioc3_erxbuf {
  */
 #define ETXD_DATALEN    104
 struct ioc3_etxd {
-	u32	cmd;				/* command field */
-	u32	bufcnt;				/* buffer counts field */
-	u64	p1;				/* buffer pointer 1 */
-	u64	p2;				/* buffer pointer 2 */
-	u8	data[ETXD_DATALEN];		/* opt. tx data */
+    u32	cmd;				/* command field */
+    u32	bufcnt;				/* buffer counts field */
+    u64	p1;				/* buffer pointer 1 */
+    u64	p2;				/* buffer pointer 2 */
+    u8	data[ETXD_DATALEN];		/* opt. tx data */
 };
 
 #define ETXD_BYTECNT_MASK	0x000007ff	/* total byte count */

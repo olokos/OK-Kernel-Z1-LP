@@ -14,10 +14,10 @@
 #include <linux/list.h>
 
 struct wsm {
-	void			*virt_addr;
-	uint32_t		len;
-	uint32_t		handle;
-	struct list_head	list;
+    void			*virt_addr;
+    uint32_t		len;
+    uint32_t		handle;
+    struct list_head	list;
 };
 
 #endif /* _MC_KAPI_WSM_H_ */

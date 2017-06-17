@@ -65,7 +65,7 @@
 
 #ifdef WHEN_I_LEARN_THIS
 #define BELKIN_SA_SET_MAGIC_REQUEST	17 /* I don't know, possibly flush */
-					   /* (always in Wininit sequence before flow control) */
+/* (always in Wininit sequence before flow control) */
 #define BELKIN_SA_RESET			xx /* Reset the port */
 #define BELKIN_SA_GET_MODEM_STATUS	xx /* Force return of modem status register */
 #endif

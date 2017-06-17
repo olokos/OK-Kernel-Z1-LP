@@ -15,55 +15,51 @@
  * any data needed by arch specific code for tlb_remove_page.
  */
 struct mmu_gather {
-	struct mm_struct	*mm;
-	unsigned int		need_flush; /* Really unmapped some ptes? */
-	unsigned long		start;
-	unsigned long		end;
-	unsigned int		fullmm; /* non-zero means full mm flush */
+    struct mm_struct	*mm;
+    unsigned int		need_flush; /* Really unmapped some ptes? */
+    unsigned long		start;
+    unsigned long		end;
+    unsigned int		fullmm; /* non-zero means full mm flush */
 };
 
 static inline void __tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep,
-					  unsigned long address)
-{
-	if (tlb->start > address)
-		tlb->start = address;
-	if (tlb->end < address + PAGE_SIZE)
-		tlb->end = address + PAGE_SIZE;
+        unsigned long address) {
+    if (tlb->start > address)
+        tlb->start = address;
+    if (tlb->end < address + PAGE_SIZE)
+        tlb->end = address + PAGE_SIZE;
 }
 
-static inline void init_tlb_gather(struct mmu_gather *tlb)
-{
-	tlb->need_flush = 0;
+static inline void init_tlb_gather(struct mmu_gather *tlb) {
+    tlb->need_flush = 0;
 
-	tlb->start = TASK_SIZE;
-	tlb->end = 0;
+    tlb->start = TASK_SIZE;
+    tlb->end = 0;
 
-	if (tlb->fullmm) {
-		tlb->start = 0;
-		tlb->end = TASK_SIZE;
-	}
+    if (tlb->fullmm) {
+        tlb->start = 0;
+        tlb->end = TASK_SIZE;
+    }
 }
 
 static inline void
-tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm, unsigned int full_mm_flush)
-{
-	tlb->mm = mm;
-	tlb->fullmm = full_mm_flush;
+tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm, unsigned int full_mm_flush) {
+    tlb->mm = mm;
+    tlb->fullmm = full_mm_flush;
 
-	init_tlb_gather(tlb);
+    init_tlb_gather(tlb);
 }
 
 extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
-			       unsigned long end);
+                               unsigned long end);
 
 static inline void
-tlb_flush_mmu(struct mmu_gather *tlb)
-{
-	if (!tlb->need_flush)
-		return;
+tlb_flush_mmu(struct mmu_gather *tlb) {
+    if (!tlb->need_flush)
+        return;
 
-	flush_tlb_mm_range(tlb->mm, tlb->start, tlb->end);
-	init_tlb_gather(tlb);
+    flush_tlb_mm_range(tlb->mm, tlb->start, tlb->end);
+    init_tlb_gather(tlb);
 }
 
 /* tlb_finish_mmu
@@ -71,12 +67,11 @@ tlb_flush_mmu(struct mmu_gather *tlb)
  *	that were required.
  */
 static inline void
-tlb_finish_mmu(struct mmu_gather *tlb, unsigned long start, unsigned long end)
-{
-	tlb_flush_mmu(tlb);
+tlb_finish_mmu(struct mmu_gather *tlb, unsigned long start, unsigned long end) {
+    tlb_flush_mmu(tlb);
 
-	/* keep the page table cache within bounds */
-	check_pgt_cache();
+    /* keep the page table cache within bounds */
+    check_pgt_cache();
 }
 
 /* tlb_remove_page
@@ -84,16 +79,14 @@ tlb_finish_mmu(struct mmu_gather *tlb, unsigned long start, unsigned long end)
  *	while handling the additional races in SMP caused by other CPUs
  *	caching valid mappings in their TLBs.
  */
-static inline int __tlb_remove_page(struct mmu_gather *tlb, struct page *page)
-{
-	tlb->need_flush = 1;
-	free_page_and_swap_cache(page);
-	return 1; /* avoid calling tlb_flush_mmu */
+static inline int __tlb_remove_page(struct mmu_gather *tlb, struct page *page) {
+    tlb->need_flush = 1;
+    free_page_and_swap_cache(page);
+    return 1; /* avoid calling tlb_flush_mmu */
 }
 
-static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
-{
-	__tlb_remove_page(tlb, page);
+static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page) {
+    __tlb_remove_page(tlb, page);
 }
 
 /**

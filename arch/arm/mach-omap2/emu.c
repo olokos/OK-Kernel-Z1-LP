@@ -37,15 +37,14 @@ MODULE_AUTHOR("Alexander Shishkin");
 static AMBA_APB_DEVICE(omap3_etb, "etb", 0x000bb907, ETB_BASE, { }, NULL);
 static AMBA_APB_DEVICE(omap3_etm, "etm", 0x102bb921, ETM_BASE, { }, NULL);
 
-static int __init emu_init(void)
-{
-	if (!cpu_is_omap34xx())
-		return -ENODEV;
+static int __init emu_init(void) {
+    if (!cpu_is_omap34xx())
+        return -ENODEV;
 
-	amba_device_register(&omap3_etb_device, &iomem_resource);
-	amba_device_register(&omap3_etm_device, &iomem_resource);
+    amba_device_register(&omap3_etb_device, &iomem_resource);
+    amba_device_register(&omap3_etm_device, &iomem_resource);
 
-	return 0;
+    return 0;
 }
 
 subsys_initcall(emu_init);

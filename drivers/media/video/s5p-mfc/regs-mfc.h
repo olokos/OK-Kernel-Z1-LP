@@ -57,23 +57,23 @@
 
 /* H.264 decoding */
 #define S5P_FIMV_H264_VERT_NB_MV_ADR	(S5P_FIMV_COMMON_BASE_A + 0x8c)
-					/* vertical neighbor motion vector */
+/* vertical neighbor motion vector */
 #define S5P_FIMV_H264_NB_IP_ADR		(S5P_FIMV_COMMON_BASE_A + 0x90)
-					/* neighbor pixels for intra pred */
+/* neighbor pixels for intra pred */
 #define S5P_FIMV_H264_MV_ADR		(S5P_FIMV_COMMON_BASE_B + 0x80)
-					/* H264 motion vector */
+/* H264 motion vector */
 
 /* MPEG4 decoding */
 #define S5P_FIMV_MPEG4_NB_DCAC_ADR	(S5P_FIMV_COMMON_BASE_A + 0x8c)
-					/* neighbor AC/DC coeff. */
+/* neighbor AC/DC coeff. */
 #define S5P_FIMV_MPEG4_UP_NB_MV_ADR	(S5P_FIMV_COMMON_BASE_A + 0x90)
-					/* upper neighbor motion vector */
+/* upper neighbor motion vector */
 #define S5P_FIMV_MPEG4_SA_MV_ADR	(S5P_FIMV_COMMON_BASE_A + 0x94)
-					/* subseq. anchor motion vector */
+/* subseq. anchor motion vector */
 #define S5P_FIMV_MPEG4_OT_LINE_ADR	(S5P_FIMV_COMMON_BASE_A + 0x98)
-					/* overlap transform line */
+/* overlap transform line */
 #define S5P_FIMV_MPEG4_SP_ADR		(S5P_FIMV_COMMON_BASE_A + 0xa8)
-					/* syntax parser */
+/* syntax parser */
 
 /* H.263 decoding */
 #define S5P_FIMV_H263_NB_DCAC_ADR	(S5P_FIMV_COMMON_BASE_A + 0x8c)
@@ -87,19 +87,19 @@
 #define S5P_FIMV_VC1_SA_MV_ADR		(S5P_FIMV_COMMON_BASE_A + 0x94)
 #define S5P_FIMV_VC1_OT_LINE_ADR	(S5P_FIMV_COMMON_BASE_A + 0x98)
 #define S5P_FIMV_VC1_BITPLANE3_ADR	(S5P_FIMV_COMMON_BASE_A + 0x9c)
-					/* bitplane3 */
+/* bitplane3 */
 #define S5P_FIMV_VC1_BITPLANE2_ADR	(S5P_FIMV_COMMON_BASE_A + 0xa0)
-					/* bitplane2 */
+/* bitplane2 */
 #define S5P_FIMV_VC1_BITPLANE1_ADR	(S5P_FIMV_COMMON_BASE_A + 0xa4)
-					/* bitplane1 */
+/* bitplane1 */
 
 /* Encoder */
 #define S5P_FIMV_ENC_REF0_LUMA_ADR	(S5P_FIMV_COMMON_BASE_A + 0x1c)
 #define S5P_FIMV_ENC_REF1_LUMA_ADR	(S5P_FIMV_COMMON_BASE_A + 0x20)
-					/* reconstructed luma */
+/* reconstructed luma */
 #define S5P_FIMV_ENC_REF0_CHROMA_ADR	(S5P_FIMV_COMMON_BASE_B)
 #define S5P_FIMV_ENC_REF1_CHROMA_ADR	(S5P_FIMV_COMMON_BASE_B + 0x04)
-					/* reconstructed chroma */
+/* reconstructed chroma */
 #define S5P_FIMV_ENC_REF2_LUMA_ADR	(S5P_FIMV_COMMON_BASE_B + 0x10)
 #define S5P_FIMV_ENC_REF2_CHROMA_ADR	(S5P_FIMV_COMMON_BASE_B + 0x08)
 #define S5P_FIMV_ENC_REF3_LUMA_ADR	(S5P_FIMV_COMMON_BASE_B + 0x14)
@@ -107,29 +107,29 @@
 
 /* H.264 encoding */
 #define S5P_FIMV_H264_UP_MV_ADR		(S5P_FIMV_COMMON_BASE_A)
-					/* upper motion vector */
+/* upper motion vector */
 #define S5P_FIMV_H264_NBOR_INFO_ADR	(S5P_FIMV_COMMON_BASE_A + 0x04)
-					/* entropy engine's neighbor info. */
+/* entropy engine's neighbor info. */
 #define S5P_FIMV_H264_UP_INTRA_MD_ADR	(S5P_FIMV_COMMON_BASE_A + 0x08)
-					/* upper intra MD */
+/* upper intra MD */
 #define S5P_FIMV_H264_COZERO_FLAG_ADR	(S5P_FIMV_COMMON_BASE_A + 0x10)
-					/* direct cozero flag */
+/* direct cozero flag */
 #define S5P_FIMV_H264_UP_INTRA_PRED_ADR	(S5P_FIMV_COMMON_BASE_B + 0x40)
-					/* upper intra PRED */
+/* upper intra PRED */
 
 /* H.263 encoding */
 #define S5P_FIMV_H263_UP_MV_ADR		(S5P_FIMV_COMMON_BASE_A)
-					/* upper motion vector */
+/* upper motion vector */
 #define S5P_FIMV_H263_ACDC_COEF_ADR	(S5P_FIMV_COMMON_BASE_A + 0x04)
-					/* upper Q coeff. */
+/* upper Q coeff. */
 
 /* MPEG4 encoding */
 #define S5P_FIMV_MPEG4_UP_MV_ADR	(S5P_FIMV_COMMON_BASE_A)
-					/* upper motion vector */
+/* upper motion vector */
 #define S5P_FIMV_MPEG4_ACDC_COEF_ADR	(S5P_FIMV_COMMON_BASE_A + 0x04)
-					/* upper Q coeff. */
+/* upper Q coeff. */
 #define S5P_FIMV_MPEG4_COZERO_FLAG_ADR	(S5P_FIMV_COMMON_BASE_A + 0x10)
-					/* direct cozero flag */
+/* direct cozero flag */
 
 #define S5P_FIMV_ENC_REF_B_LUMA_ADR     0x062c /* ref B Luma addr */
 #define S5P_FIMV_ENC_REF_B_CHROMA_ADR   0x0630 /* ref B Chroma addr */

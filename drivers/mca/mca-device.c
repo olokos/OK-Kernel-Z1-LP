@@ -8,7 +8,7 @@
  * (C) 2002 James Bottomley <James.Bottomley@HansenPartnership.com>
  *
 **-----------------------------------------------------------------------------
-**  
+**
 **  This program is free software; you can redistribute it and/or modify
 **  it under the terms of the GNU General Public License as published by
 **  the Free Software Foundation; either version 2 of the License, or
@@ -40,12 +40,11 @@
  *	when it scanned the MCA space. The register value is returned.
  *	Missing or invalid registers report 0.
  */
-unsigned char mca_device_read_stored_pos(struct mca_device *mca_dev, int reg)
-{
-	if(reg < 0 || reg >= 8)
-		return 0;
+unsigned char mca_device_read_stored_pos(struct mca_device *mca_dev, int reg) {
+    if(reg < 0 || reg >= 8)
+        return 0;
 
-	return mca_dev->pos[reg];
+    return mca_dev->pos[reg];
 }
 EXPORT_SYMBOL(mca_device_read_stored_pos);
 
@@ -60,13 +59,12 @@ EXPORT_SYMBOL(mca_device_read_stored_pos);
  *	interrupt context. It handles the deep magic required for
  *	onboard devices transparently.
  */
-unsigned char mca_device_read_pos(struct mca_device *mca_dev, int reg)
-{
-	struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
+unsigned char mca_device_read_pos(struct mca_device *mca_dev, int reg) {
+    struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
 
-	return mca_bus->f.mca_read_pos(mca_dev, reg);
+    return mca_bus->f.mca_read_pos(mca_dev, reg);
 
-	return 	mca_dev->pos[reg];
+    return 	mca_dev->pos[reg];
 }
 EXPORT_SYMBOL(mca_device_read_pos);
 
@@ -86,11 +84,10 @@ EXPORT_SYMBOL(mca_device_read_pos);
  *
  */
 void mca_device_write_pos(struct mca_device *mca_dev, int reg,
-			  unsigned char byte)
-{
-	struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
+                          unsigned char byte) {
+    struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
 
-	mca_bus->f.mca_write_pos(mca_dev, reg, byte);
+    mca_bus->f.mca_write_pos(mca_dev, reg, byte);
 }
 EXPORT_SYMBOL(mca_device_write_pos);
 
@@ -107,11 +104,10 @@ EXPORT_SYMBOL(mca_device_write_pos);
  *	This function transforms the interrupt number and returns the
  *	transformed system global interrupt
  */
-int mca_device_transform_irq(struct mca_device *mca_dev, int irq)
-{
-	struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
+int mca_device_transform_irq(struct mca_device *mca_dev, int irq) {
+    struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
 
-	return mca_bus->f.mca_transform_irq(mca_dev, irq);
+    return mca_bus->f.mca_transform_irq(mca_dev, irq);
 }
 EXPORT_SYMBOL(mca_device_transform_irq);
 
@@ -130,11 +126,10 @@ EXPORT_SYMBOL(mca_device_transform_irq);
  *
  *	This transformation can be assumed to be linear for port ranges.
  */
-int mca_device_transform_ioport(struct mca_device *mca_dev, int port)
-{
-	struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
+int mca_device_transform_ioport(struct mca_device *mca_dev, int port) {
+    struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
 
-	return mca_bus->f.mca_transform_ioport(mca_dev, port);
+    return mca_bus->f.mca_transform_ioport(mca_dev, port);
 }
 EXPORT_SYMBOL(mca_device_transform_ioport);
 
@@ -153,11 +148,10 @@ EXPORT_SYMBOL(mca_device_transform_ioport);
  *
  *	This transformation can be assumed to be linear for region ranges.
  */
-void *mca_device_transform_memory(struct mca_device *mca_dev, void *mem)
-{
-	struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
+void *mca_device_transform_memory(struct mca_device *mca_dev, void *mem) {
+    struct mca_bus *mca_bus = to_mca_bus(mca_dev->dev.parent);
 
-	return mca_bus->f.mca_transform_memory(mca_dev, mem);
+    return mca_bus->f.mca_transform_memory(mca_dev, mem);
 }
 EXPORT_SYMBOL(mca_device_transform_memory);
 
@@ -169,9 +163,8 @@ EXPORT_SYMBOL(mca_device_transform_memory);
  *	Returns 1 if the slot has been claimed by a driver
  */
 
-int mca_device_claimed(struct mca_device *mca_dev)
-{
-	return mca_dev->driver_loaded;
+int mca_device_claimed(struct mca_device *mca_dev) {
+    return mca_dev->driver_loaded;
 }
 EXPORT_SYMBOL(mca_device_claimed);
 
@@ -180,9 +173,8 @@ EXPORT_SYMBOL(mca_device_claimed);
  *	@mca_dev:	device to set value for
  *	@val:		claim value to set (1 claimed, 0 unclaimed)
  */
-void mca_device_set_claim(struct mca_device *mca_dev, int val)
-{
-	mca_dev->driver_loaded = val;
+void mca_device_set_claim(struct mca_device *mca_dev, int val) {
+    mca_dev->driver_loaded = val;
 }
 EXPORT_SYMBOL(mca_device_set_claim);
 
@@ -197,9 +189,8 @@ EXPORT_SYMBOL(mca_device_set_claim);
  *	MCA_ADAPTER_DISABLED	adapter is disabled.
  *	MCA_ADAPTER_ERROR	adapter cannot be initialised.
  */
-enum MCA_AdapterStatus mca_device_status(struct mca_device *mca_dev)
-{
-	return mca_dev->status;
+enum MCA_AdapterStatus mca_device_status(struct mca_device *mca_dev) {
+    return mca_dev->status;
 }
 EXPORT_SYMBOL(mca_device_status);
 
@@ -208,11 +199,10 @@ EXPORT_SYMBOL(mca_device_status);
  *	@mca_device:	device to set the name of
  *	@name:		name to set
  */
-void mca_device_set_name(struct mca_device *mca_dev, const char *name)
-{
-	if(!mca_dev)
-		return;
+void mca_device_set_name(struct mca_device *mca_dev, const char *name) {
+    if(!mca_dev)
+        return;
 
-	strlcpy(mca_dev->name, name, sizeof(mca_dev->name));
+    strlcpy(mca_dev->name, name, sizeof(mca_dev->name));
 }
 EXPORT_SYMBOL(mca_device_set_name);

@@ -58,33 +58,33 @@
    has been read in. */
 extern int
 perform_cris_aout_relocations(unsigned long text, unsigned long tlength,
-			      unsigned long data, unsigned long dlength,
-			      unsigned long baddr, unsigned long blength,
+                              unsigned long data, unsigned long dlength,
+                              unsigned long baddr, unsigned long blength,
 
-			      /* These may be zero when there's "perfect"
-				 position-independent code. */
-			      unsigned char *trel, unsigned long tsrel,
-			      unsigned long dsrel,
+                              /* These may be zero when there's "perfect"
+                              position-independent code. */
+                              unsigned char *trel, unsigned long tsrel,
+                              unsigned long dsrel,
 
-			      /* These will be zero at a first try, to see
-				 if code is statically linked.  Else a
-				 second try, with the symbol table and
-				 string table nonzero should be done. */
-			      unsigned char *symbols, unsigned long symlength,
-			      unsigned char *strings, unsigned long stringlength,
+                              /* These will be zero at a first try, to see
+                              if code is statically linked.  Else a
+                               second try, with the symbol table and
+                               string table nonzero should be done. */
+                              unsigned char *symbols, unsigned long symlength,
+                              unsigned char *strings, unsigned long stringlength,
 
-			      /* These will only be used when symbol table
-			       information is present. */
-			      char **env, int envc,
-			      int euid, int is_suid);
+                              /* These will only be used when symbol table
+                               information is present. */
+                              char **env, int envc,
+                              int euid, int is_suid);
 
 
 #ifdef RELOC_DEBUG
 /* Task-specific debug stuff. */
 struct task_reloc_debug {
-	struct memdebug *alloclast;
-	unsigned long alloc_total;
-	unsigned long export_total;
+    struct memdebug *alloclast;
+    unsigned long alloc_total;
+    unsigned long export_total;
 };
 #endif /* RELOC_DEBUG */
 

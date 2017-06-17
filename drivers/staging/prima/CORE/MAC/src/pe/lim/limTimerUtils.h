@@ -42,8 +42,7 @@
 
 
 // Timer related functions
-enum
-{
+enum {
     eLIM_MIN_CHANNEL_TIMER,
     eLIM_MAX_CHANNEL_TIMER,
     eLIM_JOIN_FAIL_TIMER,

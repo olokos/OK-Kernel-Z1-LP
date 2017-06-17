@@ -88,31 +88,31 @@ extern void arch_remove_kprobe(struct kprobe *p);
 
 /* Architecture specific copy of original instruction */
 struct arch_specific_insn {
-	/* copy of original instruction */
-	kprobe_opcode_t *insn;
-	/*
-	 * Set in kprobes code, initially to 0. If the instruction can be
-	 * eumulated, this is set to 1, if not, to -1.
-	 */
-	int boostable;
+    /* copy of original instruction */
+    kprobe_opcode_t *insn;
+    /*
+     * Set in kprobes code, initially to 0. If the instruction can be
+     * eumulated, this is set to 1, if not, to -1.
+     */
+    int boostable;
 };
 
 struct prev_kprobe {
-	struct kprobe *kp;
-	unsigned long status;
-	unsigned long saved_msr;
+    struct kprobe *kp;
+    unsigned long status;
+    unsigned long saved_msr;
 };
 
 /* per-cpu kprobe control block */
 struct kprobe_ctlblk {
-	unsigned long kprobe_status;
-	unsigned long kprobe_saved_msr;
-	struct pt_regs jprobe_saved_regs;
-	struct prev_kprobe prev_kprobe;
+    unsigned long kprobe_status;
+    unsigned long kprobe_saved_msr;
+    struct pt_regs jprobe_saved_regs;
+    struct prev_kprobe prev_kprobe;
 };
 
 extern int kprobe_exceptions_notify(struct notifier_block *self,
-					unsigned long val, void *data);
+                                    unsigned long val, void *data);
 extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
 #endif /* __KERNEL__ */
 #endif	/* _ASM_POWERPC_KPROBES_H */

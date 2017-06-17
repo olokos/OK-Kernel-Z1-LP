@@ -61,48 +61,46 @@ extern cpumask_t bmips_booted_mask;
 extern void bmips_ebase_setup(void);
 extern asmlinkage void plat_wired_tlb_setup(void);
 
-static inline unsigned long bmips_read_zscm_reg(unsigned int offset)
-{
-	unsigned long ret;
+static inline unsigned long bmips_read_zscm_reg(unsigned int offset) {
+    unsigned long ret;
 
-	__asm__ __volatile__(
-		".set push\n"
-		".set noreorder\n"
-		"cache %1, 0(%2)\n"
-		"sync\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"mfc0 %0, $28, 3\n"
-		"_ssnop\n"
-		".set pop\n"
-		: "=&r" (ret)
-		: "i" (Index_Load_Tag_S), "r" (ZSCM_REG_BASE + offset)
-		: "memory");
-	return ret;
+    __asm__ __volatile__(
+        ".set push\n"
+        ".set noreorder\n"
+        "cache %1, 0(%2)\n"
+        "sync\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "mfc0 %0, $28, 3\n"
+        "_ssnop\n"
+        ".set pop\n"
+        : "=&r" (ret)
+        : "i" (Index_Load_Tag_S), "r" (ZSCM_REG_BASE + offset)
+        : "memory");
+    return ret;
 }
 
-static inline void bmips_write_zscm_reg(unsigned int offset, unsigned long data)
-{
-	__asm__ __volatile__(
-		".set push\n"
-		".set noreorder\n"
-		"mtc0 %0, $28, 3\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"cache %1, 0(%2)\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		"_ssnop\n"
-		: /* no outputs */
-		: "r" (data),
-		  "i" (Index_Store_Tag_S), "r" (ZSCM_REG_BASE + offset)
-		: "memory");
+static inline void bmips_write_zscm_reg(unsigned int offset, unsigned long data) {
+    __asm__ __volatile__(
+        ".set push\n"
+        ".set noreorder\n"
+        "mtc0 %0, $28, 3\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "cache %1, 0(%2)\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        "_ssnop\n"
+        : /* no outputs */
+        : "r" (data),
+        "i" (Index_Store_Tag_S), "r" (ZSCM_REG_BASE + offset)
+        : "memory");
 }
 
 #endif /* !defined(__ASSEMBLY__) */

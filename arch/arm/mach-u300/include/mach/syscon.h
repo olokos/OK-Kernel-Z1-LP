@@ -507,18 +507,18 @@
 #define SYSCON_AHB_CLOCK_LOW       7  /* i.e 13/2=6.5MHz */
 
 enum syscon_busmaster {
-  SYSCON_BM_DMAC,
-  SYSCON_BM_XGAM,
-  SYSCON_BM_VIDEO_ENC
+    SYSCON_BM_DMAC,
+    SYSCON_BM_XGAM,
+    SYSCON_BM_VIDEO_ENC
 };
 
 /* Selectr a resistor or a set of resistors */
 enum syscon_pull_up_down {
-  SYSCON_PU_KEY_IN_EN,
-  SYSCON_PU_EMIF_1_8_BIT_EN,
-  SYSCON_PU_EMIF_1_16_BIT_EN,
-  SYSCON_PU_EMIF_1_NFIF_READY_EN,
-  SYSCON_PU_EMIF_1_NFIF_WAIT_N_EN,
+    SYSCON_PU_KEY_IN_EN,
+    SYSCON_PU_EMIF_1_8_BIT_EN,
+    SYSCON_PU_EMIF_1_16_BIT_EN,
+    SYSCON_PU_EMIF_1_NFIF_READY_EN,
+    SYSCON_PU_EMIF_1_NFIF_WAIT_N_EN,
 };
 
 /*
@@ -526,83 +526,83 @@ enum syscon_pull_up_down {
  * in syscon.c
  */
 enum syscon_clk {
-  SYSCON_CLKCONTROL_SLOW_BRIDGE,
-  SYSCON_CLKCONTROL_UART,
-  SYSCON_CLKCONTROL_BTR,
-  SYSCON_CLKCONTROL_EH,
-  SYSCON_CLKCONTROL_GPIO,
-  SYSCON_CLKCONTROL_KEYPAD,
-  SYSCON_CLKCONTROL_APP_TIMER,
-  SYSCON_CLKCONTROL_ACC_TIMER,
-  SYSCON_CLKCONTROL_FAST_BRIDGE,
-  SYSCON_CLKCONTROL_I2C0,
-  SYSCON_CLKCONTROL_I2C1,
-  SYSCON_CLKCONTROL_I2S0,
-  SYSCON_CLKCONTROL_I2S1,
-  SYSCON_CLKCONTROL_MMC,
-  SYSCON_CLKCONTROL_SPI,
-  SYSCON_CLKCONTROL_I2S0_CORE,
-  SYSCON_CLKCONTROL_I2S1_CORE,
-  SYSCON_CLKCONTROL_UART1,
-  SYSCON_CLKCONTROL_AAIF,
-  SYSCON_CLKCONTROL_AHB,
-  SYSCON_CLKCONTROL_APEX,
-  SYSCON_CLKCONTROL_CPU,
-  SYSCON_CLKCONTROL_DMA,
-  SYSCON_CLKCONTROL_EMIF,
-  SYSCON_CLKCONTROL_NAND_IF,
-  SYSCON_CLKCONTROL_VIDEO_ENC,
-  SYSCON_CLKCONTROL_XGAM,
-  SYSCON_CLKCONTROL_SEMI,
-  SYSCON_CLKCONTROL_AHB_SUBSYS,
-  SYSCON_CLKCONTROL_MSPRO
+    SYSCON_CLKCONTROL_SLOW_BRIDGE,
+    SYSCON_CLKCONTROL_UART,
+    SYSCON_CLKCONTROL_BTR,
+    SYSCON_CLKCONTROL_EH,
+    SYSCON_CLKCONTROL_GPIO,
+    SYSCON_CLKCONTROL_KEYPAD,
+    SYSCON_CLKCONTROL_APP_TIMER,
+    SYSCON_CLKCONTROL_ACC_TIMER,
+    SYSCON_CLKCONTROL_FAST_BRIDGE,
+    SYSCON_CLKCONTROL_I2C0,
+    SYSCON_CLKCONTROL_I2C1,
+    SYSCON_CLKCONTROL_I2S0,
+    SYSCON_CLKCONTROL_I2S1,
+    SYSCON_CLKCONTROL_MMC,
+    SYSCON_CLKCONTROL_SPI,
+    SYSCON_CLKCONTROL_I2S0_CORE,
+    SYSCON_CLKCONTROL_I2S1_CORE,
+    SYSCON_CLKCONTROL_UART1,
+    SYSCON_CLKCONTROL_AAIF,
+    SYSCON_CLKCONTROL_AHB,
+    SYSCON_CLKCONTROL_APEX,
+    SYSCON_CLKCONTROL_CPU,
+    SYSCON_CLKCONTROL_DMA,
+    SYSCON_CLKCONTROL_EMIF,
+    SYSCON_CLKCONTROL_NAND_IF,
+    SYSCON_CLKCONTROL_VIDEO_ENC,
+    SYSCON_CLKCONTROL_XGAM,
+    SYSCON_CLKCONTROL_SEMI,
+    SYSCON_CLKCONTROL_AHB_SUBSYS,
+    SYSCON_CLKCONTROL_MSPRO
 };
 
 enum syscon_sysclk_mode {
-  SYSCON_SYSCLK_DISABLED,
-  SYSCON_SYSCLK_M_CLK,
-  SYSCON_SYSCLK_ACC_FSM,
-  SYSCON_SYSCLK_PLL60_48,
-  SYSCON_SYSCLK_PLL60_60,
-  SYSCON_SYSCLK_ACC_PLL208,
-  SYSCON_SYSCLK_APP_PLL13,
-  SYSCON_SYSCLK_APP_FSM,
-  SYSCON_SYSCLK_RTC,
-  SYSCON_SYSCLK_APP_PLL208
+    SYSCON_SYSCLK_DISABLED,
+    SYSCON_SYSCLK_M_CLK,
+    SYSCON_SYSCLK_ACC_FSM,
+    SYSCON_SYSCLK_PLL60_48,
+    SYSCON_SYSCLK_PLL60_60,
+    SYSCON_SYSCLK_ACC_PLL208,
+    SYSCON_SYSCLK_APP_PLL13,
+    SYSCON_SYSCLK_APP_FSM,
+    SYSCON_SYSCLK_RTC,
+    SYSCON_SYSCLK_APP_PLL208
 };
 
 enum syscon_sysclk_req {
-  SYSCON_SYSCLKREQ_DISABLED,
-  SYSCON_SYSCLKREQ_ACTIVE_LOW,
-  SYSCON_SYSCLKREQ_MONITOR
+    SYSCON_SYSCLKREQ_DISABLED,
+    SYSCON_SYSCLKREQ_ACTIVE_LOW,
+    SYSCON_SYSCLKREQ_MONITOR
 };
 
 enum syscon_clk_mode {
-  SYSCON_CLKMODE_OFF,
-  SYSCON_CLKMODE_DEFAULT,
-  SYSCON_CLKMODE_LOW,
-  SYSCON_CLKMODE_MEDIUM,
-  SYSCON_CLKMODE_HIGH,
-  SYSCON_CLKMODE_PERMANENT,
-  SYSCON_CLKMODE_ON,
+    SYSCON_CLKMODE_OFF,
+    SYSCON_CLKMODE_DEFAULT,
+    SYSCON_CLKMODE_LOW,
+    SYSCON_CLKMODE_MEDIUM,
+    SYSCON_CLKMODE_HIGH,
+    SYSCON_CLKMODE_PERMANENT,
+    SYSCON_CLKMODE_ON,
 };
 
 enum syscon_call_mode {
-  SYSCON_CLKCALL_NOWAIT,
-  SYSCON_CLKCALL_WAIT,
+    SYSCON_CLKCALL_NOWAIT,
+    SYSCON_CLKCALL_WAIT,
 };
 
 int syscon_dc_on(bool keep_power_on);
 int syscon_set_busmaster_active_state(enum syscon_busmaster busmaster,
-				      bool active);
+                                      bool active);
 bool syscon_get_busmaster_active_state(void);
 int syscon_set_sleep_mask(enum syscon_clk,
-			  bool sleep_ctrl);
+                          bool sleep_ctrl);
 int syscon_config_sysclk(u32 sysclk,
-			 enum syscon_sysclk_mode sysclkmode,
-			 bool inverse,
-			 u32 divisor,
-			 enum syscon_sysclk_req sysclkreq);
+                         enum syscon_sysclk_mode sysclkmode,
+                         bool inverse,
+                         u32 divisor,
+                         enum syscon_sysclk_req sysclkreq);
 bool syscon_can_turn_off_semi_clock(void);
 
 /* This function is restricted to core.c */
@@ -610,5 +610,5 @@ int syscon_request_normal_power(bool req);
 
 /* This function is restricted to be used by platform_speed.c */
 int syscon_speed_request(enum syscon_call_mode wait_mode,
-			 enum syscon_clk_mode req_clk_mode);
+                         enum syscon_clk_mode req_clk_mode);
 #endif /* __MACH_SYSCON_H */

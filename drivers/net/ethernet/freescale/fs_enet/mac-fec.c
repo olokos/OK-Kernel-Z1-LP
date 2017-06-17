@@ -80,33 +80,31 @@
  */
 #define FEC_RESET_DELAY		50
 
-static int whack_reset(struct fec __iomem *fecp)
-{
-	int i;
+static int whack_reset(struct fec __iomem *fecp) {
+    int i;
 
-	FW(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_RESET);
-	for (i = 0; i < FEC_RESET_DELAY; i++) {
-		if ((FR(fecp, ecntrl) & FEC_ECNTRL_RESET) == 0)
-			return 0;	/* OK */
-		udelay(1);
-	}
+    FW(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_RESET);
+    for (i = 0; i < FEC_RESET_DELAY; i++) {
+        if ((FR(fecp, ecntrl) & FEC_ECNTRL_RESET) == 0)
+            return 0;	/* OK */
+        udelay(1);
+    }
 
-	return -1;
+    return -1;
 }
 
-static int do_pd_setup(struct fs_enet_private *fep)
-{
-	struct platform_device *ofdev = to_platform_device(fep->dev);
+static int do_pd_setup(struct fs_enet_private *fep) {
+    struct platform_device *ofdev = to_platform_device(fep->dev);
 
-	fep->interrupt = of_irq_to_resource(ofdev->dev.of_node, 0, NULL);
-	if (fep->interrupt == NO_IRQ)
-		return -EINVAL;
+    fep->interrupt = of_irq_to_resource(ofdev->dev.of_node, 0, NULL);
+    if (fep->interrupt == NO_IRQ)
+        return -EINVAL;
 
-	fep->fec.fecp = of_iomap(ofdev->dev.of_node, 0);
-	if (!fep->fcc.fccp)
-		return -EINVAL;
+    fep->fec.fecp = of_iomap(ofdev->dev.of_node, 0);
+    if (!fep->fcc.fccp)
+        return -EINVAL;
 
-	return 0;
+    return 0;
 }
 
 #define FEC_NAPI_RX_EVENT_MSK	(FEC_ENET_RXF | FEC_ENET_RXB)
@@ -115,387 +113,365 @@ static int do_pd_setup(struct fs_enet_private *fep)
 #define FEC_ERR_EVENT_MSK	(FEC_ENET_HBERR | FEC_ENET_BABR | \
 				 FEC_ENET_BABT | FEC_ENET_EBERR)
 
-static int setup_data(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
+static int setup_data(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
 
-	if (do_pd_setup(fep) != 0)
-		return -EINVAL;
+    if (do_pd_setup(fep) != 0)
+        return -EINVAL;
 
-	fep->fec.hthi = 0;
-	fep->fec.htlo = 0;
+    fep->fec.hthi = 0;
+    fep->fec.htlo = 0;
 
-	fep->ev_napi_rx = FEC_NAPI_RX_EVENT_MSK;
-	fep->ev_rx = FEC_RX_EVENT;
-	fep->ev_tx = FEC_TX_EVENT;
-	fep->ev_err = FEC_ERR_EVENT_MSK;
+    fep->ev_napi_rx = FEC_NAPI_RX_EVENT_MSK;
+    fep->ev_rx = FEC_RX_EVENT;
+    fep->ev_tx = FEC_TX_EVENT;
+    fep->ev_err = FEC_ERR_EVENT_MSK;
 
-	return 0;
+    return 0;
 }
 
-static int allocate_bd(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	const struct fs_platform_info *fpi = fep->fpi;
+static int allocate_bd(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    const struct fs_platform_info *fpi = fep->fpi;
 
-	fep->ring_base = (void __force __iomem *)dma_alloc_coherent(fep->dev,
-					    (fpi->tx_ring + fpi->rx_ring) *
-					    sizeof(cbd_t), &fep->ring_mem_addr,
-					    GFP_KERNEL);
-	if (fep->ring_base == NULL)
-		return -ENOMEM;
+    fep->ring_base = (void __force __iomem *)dma_alloc_coherent(fep->dev,
+                     (fpi->tx_ring + fpi->rx_ring) *
+                     sizeof(cbd_t), &fep->ring_mem_addr,
+                     GFP_KERNEL);
+    if (fep->ring_base == NULL)
+        return -ENOMEM;
 
-	return 0;
+    return 0;
 }
 
-static void free_bd(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	const struct fs_platform_info *fpi = fep->fpi;
+static void free_bd(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    const struct fs_platform_info *fpi = fep->fpi;
 
-	if(fep->ring_base)
-		dma_free_coherent(fep->dev, (fpi->tx_ring + fpi->rx_ring)
-					* sizeof(cbd_t),
-					(void __force *)fep->ring_base,
-					fep->ring_mem_addr);
+    if(fep->ring_base)
+        dma_free_coherent(fep->dev, (fpi->tx_ring + fpi->rx_ring)
+                          * sizeof(cbd_t),
+                          (void __force *)fep->ring_base,
+                          fep->ring_mem_addr);
 }
 
-static void cleanup_data(struct net_device *dev)
-{
-	/* nothing */
+static void cleanup_data(struct net_device *dev) {
+    /* nothing */
 }
 
-static void set_promiscuous_mode(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void set_promiscuous_mode(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FS(fecp, r_cntrl, FEC_RCNTRL_PROM);
+    FS(fecp, r_cntrl, FEC_RCNTRL_PROM);
 }
 
-static void set_multicast_start(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
+static void set_multicast_start(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
 
-	fep->fec.hthi = 0;
-	fep->fec.htlo = 0;
+    fep->fec.hthi = 0;
+    fep->fec.htlo = 0;
 }
 
-static void set_multicast_one(struct net_device *dev, const u8 *mac)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	int temp, hash_index, i, j;
-	u32 crc, csrVal;
-	u8 byte, msb;
+static void set_multicast_one(struct net_device *dev, const u8 *mac) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    int temp, hash_index, i, j;
+    u32 crc, csrVal;
+    u8 byte, msb;
 
-	crc = 0xffffffff;
-	for (i = 0; i < 6; i++) {
-		byte = mac[i];
-		for (j = 0; j < 8; j++) {
-			msb = crc >> 31;
-			crc <<= 1;
-			if (msb ^ (byte & 0x1))
-				crc ^= FEC_CRC_POLY;
-			byte >>= 1;
-		}
-	}
+    crc = 0xffffffff;
+    for (i = 0; i < 6; i++) {
+        byte = mac[i];
+        for (j = 0; j < 8; j++) {
+            msb = crc >> 31;
+            crc <<= 1;
+            if (msb ^ (byte & 0x1))
+                crc ^= FEC_CRC_POLY;
+            byte >>= 1;
+        }
+    }
 
-	temp = (crc & 0x3f) >> 1;
-	hash_index = ((temp & 0x01) << 4) |
-		     ((temp & 0x02) << 2) |
-		     ((temp & 0x04)) |
-		     ((temp & 0x08) >> 2) |
-		     ((temp & 0x10) >> 4);
-	csrVal = 1 << hash_index;
-	if (crc & 1)
-		fep->fec.hthi |= csrVal;
-	else
-		fep->fec.htlo |= csrVal;
+    temp = (crc & 0x3f) >> 1;
+    hash_index = ((temp & 0x01) << 4) |
+                 ((temp & 0x02) << 2) |
+                 ((temp & 0x04)) |
+                 ((temp & 0x08) >> 2) |
+                 ((temp & 0x10) >> 4);
+    csrVal = 1 << hash_index;
+    if (crc & 1)
+        fep->fec.hthi |= csrVal;
+    else
+        fep->fec.htlo |= csrVal;
 }
 
-static void set_multicast_finish(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void set_multicast_finish(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	/* if all multi or too many multicasts; just enable all */
-	if ((dev->flags & IFF_ALLMULTI) != 0 ||
-	    netdev_mc_count(dev) > FEC_MAX_MULTICAST_ADDRS) {
-		fep->fec.hthi = 0xffffffffU;
-		fep->fec.htlo = 0xffffffffU;
-	}
+    /* if all multi or too many multicasts; just enable all */
+    if ((dev->flags & IFF_ALLMULTI) != 0 ||
+            netdev_mc_count(dev) > FEC_MAX_MULTICAST_ADDRS) {
+        fep->fec.hthi = 0xffffffffU;
+        fep->fec.htlo = 0xffffffffU;
+    }
 
-	FC(fecp, r_cntrl, FEC_RCNTRL_PROM);
-	FW(fecp, grp_hash_table_high, fep->fec.hthi);
-	FW(fecp, grp_hash_table_low, fep->fec.htlo);
+    FC(fecp, r_cntrl, FEC_RCNTRL_PROM);
+    FW(fecp, grp_hash_table_high, fep->fec.hthi);
+    FW(fecp, grp_hash_table_low, fep->fec.htlo);
 }
 
-static void set_multicast_list(struct net_device *dev)
-{
-	struct netdev_hw_addr *ha;
+static void set_multicast_list(struct net_device *dev) {
+    struct netdev_hw_addr *ha;
 
-	if ((dev->flags & IFF_PROMISC) == 0) {
-		set_multicast_start(dev);
-		netdev_for_each_mc_addr(ha, dev)
-			set_multicast_one(dev, ha->addr);
-		set_multicast_finish(dev);
-	} else
-		set_promiscuous_mode(dev);
+    if ((dev->flags & IFF_PROMISC) == 0) {
+        set_multicast_start(dev);
+        netdev_for_each_mc_addr(ha, dev)
+        set_multicast_one(dev, ha->addr);
+        set_multicast_finish(dev);
+    } else
+        set_promiscuous_mode(dev);
 }
 
-static void restart(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
-	const struct fs_platform_info *fpi = fep->fpi;
-	dma_addr_t rx_bd_base_phys, tx_bd_base_phys;
-	int r;
-	u32 addrhi, addrlo;
+static void restart(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
+    const struct fs_platform_info *fpi = fep->fpi;
+    dma_addr_t rx_bd_base_phys, tx_bd_base_phys;
+    int r;
+    u32 addrhi, addrlo;
 
-	struct mii_bus* mii = fep->phydev->bus;
-	struct fec_info* fec_inf = mii->priv;
+    struct mii_bus* mii = fep->phydev->bus;
+    struct fec_info* fec_inf = mii->priv;
 
-	r = whack_reset(fep->fec.fecp);
-	if (r != 0)
-		dev_err(fep->dev, "FEC Reset FAILED!\n");
-	/*
-	 * Set station address.
-	 */
-	addrhi = ((u32) dev->dev_addr[0] << 24) |
-		 ((u32) dev->dev_addr[1] << 16) |
-		 ((u32) dev->dev_addr[2] <<  8) |
-		  (u32) dev->dev_addr[3];
-	addrlo = ((u32) dev->dev_addr[4] << 24) |
-		 ((u32) dev->dev_addr[5] << 16);
-	FW(fecp, addr_low, addrhi);
-	FW(fecp, addr_high, addrlo);
+    r = whack_reset(fep->fec.fecp);
+    if (r != 0)
+        dev_err(fep->dev, "FEC Reset FAILED!\n");
+    /*
+     * Set station address.
+     */
+    addrhi = ((u32) dev->dev_addr[0] << 24) |
+             ((u32) dev->dev_addr[1] << 16) |
+             ((u32) dev->dev_addr[2] <<  8) |
+             (u32) dev->dev_addr[3];
+    addrlo = ((u32) dev->dev_addr[4] << 24) |
+             ((u32) dev->dev_addr[5] << 16);
+    FW(fecp, addr_low, addrhi);
+    FW(fecp, addr_high, addrlo);
 
-	/*
-	 * Reset all multicast.
-	 */
-	FW(fecp, grp_hash_table_high, fep->fec.hthi);
-	FW(fecp, grp_hash_table_low, fep->fec.htlo);
+    /*
+     * Reset all multicast.
+     */
+    FW(fecp, grp_hash_table_high, fep->fec.hthi);
+    FW(fecp, grp_hash_table_low, fep->fec.htlo);
 
-	/*
-	 * Set maximum receive buffer size.
-	 */
-	FW(fecp, r_buff_size, PKT_MAXBLR_SIZE);
+    /*
+     * Set maximum receive buffer size.
+     */
+    FW(fecp, r_buff_size, PKT_MAXBLR_SIZE);
 #ifdef CONFIG_FS_ENET_MPC5121_FEC
-	FW(fecp, r_cntrl, PKT_MAXBUF_SIZE << 16);
+    FW(fecp, r_cntrl, PKT_MAXBUF_SIZE << 16);
 #else
-	FW(fecp, r_hash, PKT_MAXBUF_SIZE);
+    FW(fecp, r_hash, PKT_MAXBUF_SIZE);
 #endif
 
-	/* get physical address */
-	rx_bd_base_phys = fep->ring_mem_addr;
-	tx_bd_base_phys = rx_bd_base_phys + sizeof(cbd_t) * fpi->rx_ring;
+    /* get physical address */
+    rx_bd_base_phys = fep->ring_mem_addr;
+    tx_bd_base_phys = rx_bd_base_phys + sizeof(cbd_t) * fpi->rx_ring;
 
-	/*
-	 * Set receive and transmit descriptor base.
-	 */
-	FW(fecp, r_des_start, rx_bd_base_phys);
-	FW(fecp, x_des_start, tx_bd_base_phys);
+    /*
+     * Set receive and transmit descriptor base.
+     */
+    FW(fecp, r_des_start, rx_bd_base_phys);
+    FW(fecp, x_des_start, tx_bd_base_phys);
 
-	fs_init_bds(dev);
+    fs_init_bds(dev);
 
-	/*
-	 * Enable big endian and don't care about SDMA FC.
-	 */
+    /*
+     * Enable big endian and don't care about SDMA FC.
+     */
 #ifdef CONFIG_FS_ENET_MPC5121_FEC
-	FS(fecp, dma_control, 0xC0000000);
+    FS(fecp, dma_control, 0xC0000000);
 #else
-	FW(fecp, fun_code, 0x78000000);
+    FW(fecp, fun_code, 0x78000000);
 #endif
 
-	/*
-	 * Set MII speed.
-	 */
-	FW(fecp, mii_speed, fec_inf->mii_speed);
+    /*
+     * Set MII speed.
+     */
+    FW(fecp, mii_speed, fec_inf->mii_speed);
 
-	/*
-	 * Clear any outstanding interrupt.
-	 */
-	FW(fecp, ievent, 0xffc0);
+    /*
+     * Clear any outstanding interrupt.
+     */
+    FW(fecp, ievent, 0xffc0);
 #ifndef CONFIG_FS_ENET_MPC5121_FEC
-	FW(fecp, ivec, (virq_to_hw(fep->interrupt) / 2) << 29);
+    FW(fecp, ivec, (virq_to_hw(fep->interrupt) / 2) << 29);
 
-	FW(fecp, r_cntrl, FEC_RCNTRL_MII_MODE);	/* MII enable */
+    FW(fecp, r_cntrl, FEC_RCNTRL_MII_MODE);	/* MII enable */
 #else
-	/*
-	 * Only set MII/RMII mode - do not touch maximum frame length
-	 * configured before.
-	 */
-	FS(fecp, r_cntrl, fpi->use_rmii ?
-			FEC_RCNTRL_RMII_MODE : FEC_RCNTRL_MII_MODE);
+    /*
+     * Only set MII/RMII mode - do not touch maximum frame length
+     * configured before.
+     */
+    FS(fecp, r_cntrl, fpi->use_rmii ?
+       FEC_RCNTRL_RMII_MODE : FEC_RCNTRL_MII_MODE);
 #endif
-	/*
-	 * adjust to duplex mode
-	 */
-	if (fep->phydev->duplex) {
-		FC(fecp, r_cntrl, FEC_RCNTRL_DRT);
-		FS(fecp, x_cntrl, FEC_TCNTRL_FDEN);	/* FD enable */
-	} else {
-		FS(fecp, r_cntrl, FEC_RCNTRL_DRT);
-		FC(fecp, x_cntrl, FEC_TCNTRL_FDEN);	/* FD disable */
-	}
+    /*
+     * adjust to duplex mode
+     */
+    if (fep->phydev->duplex) {
+        FC(fecp, r_cntrl, FEC_RCNTRL_DRT);
+        FS(fecp, x_cntrl, FEC_TCNTRL_FDEN);	/* FD enable */
+    } else {
+        FS(fecp, r_cntrl, FEC_RCNTRL_DRT);
+        FC(fecp, x_cntrl, FEC_TCNTRL_FDEN);	/* FD disable */
+    }
 
-	/*
-	 * Enable interrupts we wish to service.
-	 */
-	FW(fecp, imask, FEC_ENET_TXF | FEC_ENET_TXB |
-	   FEC_ENET_RXF | FEC_ENET_RXB);
+    /*
+     * Enable interrupts we wish to service.
+     */
+    FW(fecp, imask, FEC_ENET_TXF | FEC_ENET_TXB |
+       FEC_ENET_RXF | FEC_ENET_RXB);
 
-	/*
-	 * And last, enable the transmit and receive processing.
-	 */
-	FW(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_ETHER_EN);
-	FW(fecp, r_des_active, 0x01000000);
+    /*
+     * And last, enable the transmit and receive processing.
+     */
+    FW(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_ETHER_EN);
+    FW(fecp, r_des_active, 0x01000000);
 }
 
-static void stop(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	const struct fs_platform_info *fpi = fep->fpi;
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void stop(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    const struct fs_platform_info *fpi = fep->fpi;
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	struct fec_info* feci= fep->phydev->bus->priv;
+    struct fec_info* feci= fep->phydev->bus->priv;
 
-	int i;
+    int i;
 
-	if ((FR(fecp, ecntrl) & FEC_ECNTRL_ETHER_EN) == 0)
-		return;		/* already down */
+    if ((FR(fecp, ecntrl) & FEC_ECNTRL_ETHER_EN) == 0)
+        return;		/* already down */
 
-	FW(fecp, x_cntrl, 0x01);	/* Graceful transmit stop */
-	for (i = 0; ((FR(fecp, ievent) & 0x10000000) == 0) &&
-	     i < FEC_RESET_DELAY; i++)
-		udelay(1);
+    FW(fecp, x_cntrl, 0x01);	/* Graceful transmit stop */
+    for (i = 0; ((FR(fecp, ievent) & 0x10000000) == 0) &&
+            i < FEC_RESET_DELAY; i++)
+        udelay(1);
 
-	if (i == FEC_RESET_DELAY)
-		dev_warn(fep->dev, "FEC timeout on graceful transmit stop\n");
-	/*
-	 * Disable FEC. Let only MII interrupts.
-	 */
-	FW(fecp, imask, 0);
-	FC(fecp, ecntrl, FEC_ECNTRL_ETHER_EN);
+    if (i == FEC_RESET_DELAY)
+        dev_warn(fep->dev, "FEC timeout on graceful transmit stop\n");
+    /*
+     * Disable FEC. Let only MII interrupts.
+     */
+    FW(fecp, imask, 0);
+    FC(fecp, ecntrl, FEC_ECNTRL_ETHER_EN);
 
-	fs_cleanup_bds(dev);
+    fs_cleanup_bds(dev);
 
-	/* shut down FEC1? that's where the mii bus is */
-	if (fpi->has_phy) {
-		FS(fecp, r_cntrl, fpi->use_rmii ?
-				FEC_RCNTRL_RMII_MODE :
-				FEC_RCNTRL_MII_MODE);	/* MII/RMII enable */
-		FS(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_ETHER_EN);
-		FW(fecp, ievent, FEC_ENET_MII);
-		FW(fecp, mii_speed, feci->mii_speed);
-	}
+    /* shut down FEC1? that's where the mii bus is */
+    if (fpi->has_phy) {
+        FS(fecp, r_cntrl, fpi->use_rmii ?
+           FEC_RCNTRL_RMII_MODE :
+           FEC_RCNTRL_MII_MODE);	/* MII/RMII enable */
+        FS(fecp, ecntrl, FEC_ECNTRL_PINMUX | FEC_ECNTRL_ETHER_EN);
+        FW(fecp, ievent, FEC_ENET_MII);
+        FW(fecp, mii_speed, feci->mii_speed);
+    }
 }
 
-static void napi_clear_rx_event(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void napi_clear_rx_event(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FW(fecp, ievent, FEC_NAPI_RX_EVENT_MSK);
+    FW(fecp, ievent, FEC_NAPI_RX_EVENT_MSK);
 }
 
-static void napi_enable_rx(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void napi_enable_rx(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FS(fecp, imask, FEC_NAPI_RX_EVENT_MSK);
+    FS(fecp, imask, FEC_NAPI_RX_EVENT_MSK);
 }
 
-static void napi_disable_rx(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void napi_disable_rx(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FC(fecp, imask, FEC_NAPI_RX_EVENT_MSK);
+    FC(fecp, imask, FEC_NAPI_RX_EVENT_MSK);
 }
 
-static void rx_bd_done(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void rx_bd_done(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FW(fecp, r_des_active, 0x01000000);
+    FW(fecp, r_des_active, 0x01000000);
 }
 
-static void tx_kickstart(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void tx_kickstart(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FW(fecp, x_des_active, 0x01000000);
+    FW(fecp, x_des_active, 0x01000000);
 }
 
-static u32 get_int_events(struct net_device *dev)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static u32 get_int_events(struct net_device *dev) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	return FR(fecp, ievent) & FR(fecp, imask);
+    return FR(fecp, ievent) & FR(fecp, imask);
 }
 
-static void clear_int_events(struct net_device *dev, u32 int_events)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
-	struct fec __iomem *fecp = fep->fec.fecp;
+static void clear_int_events(struct net_device *dev, u32 int_events) {
+    struct fs_enet_private *fep = netdev_priv(dev);
+    struct fec __iomem *fecp = fep->fec.fecp;
 
-	FW(fecp, ievent, int_events);
+    FW(fecp, ievent, int_events);
 }
 
-static void ev_error(struct net_device *dev, u32 int_events)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
+static void ev_error(struct net_device *dev, u32 int_events) {
+    struct fs_enet_private *fep = netdev_priv(dev);
 
-	dev_warn(fep->dev, "FEC ERROR(s) 0x%x\n", int_events);
+    dev_warn(fep->dev, "FEC ERROR(s) 0x%x\n", int_events);
 }
 
-static int get_regs(struct net_device *dev, void *p, int *sizep)
-{
-	struct fs_enet_private *fep = netdev_priv(dev);
+static int get_regs(struct net_device *dev, void *p, int *sizep) {
+    struct fs_enet_private *fep = netdev_priv(dev);
 
-	if (*sizep < sizeof(struct fec))
-		return -EINVAL;
+    if (*sizep < sizeof(struct fec))
+        return -EINVAL;
 
-	memcpy_fromio(p, fep->fec.fecp, sizeof(struct fec));
+    memcpy_fromio(p, fep->fec.fecp, sizeof(struct fec));
 
-	return 0;
+    return 0;
 }
 
-static int get_regs_len(struct net_device *dev)
-{
-	return sizeof(struct fec);
+static int get_regs_len(struct net_device *dev) {
+    return sizeof(struct fec);
 }
 
-static void tx_restart(struct net_device *dev)
-{
-	/* nothing */
+static void tx_restart(struct net_device *dev) {
+    /* nothing */
 }
 
 /*************************************************************************/
 
 const struct fs_ops fs_fec_ops = {
-	.setup_data		= setup_data,
-	.cleanup_data		= cleanup_data,
-	.set_multicast_list	= set_multicast_list,
-	.restart		= restart,
-	.stop			= stop,
-	.napi_clear_rx_event	= napi_clear_rx_event,
-	.napi_enable_rx		= napi_enable_rx,
-	.napi_disable_rx	= napi_disable_rx,
-	.rx_bd_done		= rx_bd_done,
-	.tx_kickstart		= tx_kickstart,
-	.get_int_events		= get_int_events,
-	.clear_int_events	= clear_int_events,
-	.ev_error		= ev_error,
-	.get_regs		= get_regs,
-	.get_regs_len		= get_regs_len,
-	.tx_restart		= tx_restart,
-	.allocate_bd		= allocate_bd,
-	.free_bd		= free_bd,
+    .setup_data		= setup_data,
+    .cleanup_data		= cleanup_data,
+    .set_multicast_list	= set_multicast_list,
+    .restart		= restart,
+    .stop			= stop,
+    .napi_clear_rx_event	= napi_clear_rx_event,
+    .napi_enable_rx		= napi_enable_rx,
+    .napi_disable_rx	= napi_disable_rx,
+    .rx_bd_done		= rx_bd_done,
+    .tx_kickstart		= tx_kickstart,
+    .get_int_events		= get_int_events,
+    .clear_int_events	= clear_int_events,
+    .ev_error		= ev_error,
+    .get_regs		= get_regs,
+    .get_regs_len		= get_regs_len,
+    .tx_restart		= tx_restart,
+    .allocate_bd		= allocate_bd,
+    .free_bd		= free_bd,
 };
 

@@ -132,8 +132,7 @@
 int allocNvBinTable(int tblIdx, int numEntries);
 int allocNvBinEnum(int enumIdx, int numEntries);
 
-typedef enum _nvFieldSizeEnums
-{
+typedef enum _nvFieldSizeEnums {
     INDEX_ENUM_ALL = 0,
     INDEX_ENUM_NUM_PHY_MAX_TX_CHAINS,
     INDEX_ENUM_NUM_REG_DOMAINS,
@@ -151,8 +150,7 @@ typedef enum _nvFieldSizeEnums
 int getEnumNoOfFields(int enumIdx);
 extern _NV_TEMPLATE_ENUM NvEnumsBuiltIn[/*INDEX_ENUM_MAX*/][ENUM_ENTRIES_MAX];
 
-typedef enum _nvTableIDs
-{
+typedef enum _nvTableIDs {
     TABLE_sHalNv,
     TABLE_sNvFields,
     TABLE_sRegulatoryChannel,

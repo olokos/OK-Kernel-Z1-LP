@@ -16,25 +16,22 @@
 #include <asm/ptrace.h>
 #include <mach/blackfin.h>
 
-static inline unsigned long rdusp(void)
-{
-	unsigned long usp;
+static inline unsigned long rdusp(void) {
+    unsigned long usp;
 
-	__asm__ __volatile__("%0 = usp;\n\t":"=da"(usp));
-	return usp;
+    __asm__ __volatile__("%0 = usp;\n\t":"=da"(usp));
+    return usp;
 }
 
-static inline void wrusp(unsigned long usp)
-{
-	__asm__ __volatile__("usp = %0;\n\t"::"da"(usp));
+static inline void wrusp(unsigned long usp) {
+    __asm__ __volatile__("usp = %0;\n\t"::"da"(usp));
 }
 
-static inline unsigned long __get_SP(void)
-{
-	unsigned long sp;
+static inline unsigned long __get_SP(void) {
+    unsigned long sp;
 
-	__asm__ __volatile__("%0 = sp;\n\t" : "=da"(sp));
-	return sp;
+    __asm__ __volatile__("%0 = sp;\n\t" : "=da"(sp));
+    return sp;
 }
 
 /*
@@ -51,12 +48,12 @@ static inline unsigned long __get_SP(void)
 #define TASK_UNMAPPED_BASE	0
 
 struct thread_struct {
-	unsigned long ksp;	/* kernel stack pointer */
-	unsigned long usp;	/* user stack pointer */
-	unsigned short seqstat;	/* saved status register */
-	unsigned long esp0;	/* points to SR of stack frame pt_regs */
-	unsigned long pc;	/* instruction pointer */
-	void *        debuggerinfo;
+    unsigned long ksp;	/* kernel stack pointer */
+    unsigned long usp;	/* user stack pointer */
+    unsigned short seqstat;	/* saved status register */
+    unsigned long esp0;	/* points to SR of stack frame pt_regs */
+    unsigned long pc;	/* instruction pointer */
+    void *        debuggerinfo;
 };
 
 #define INIT_THREAD  {						\
@@ -65,14 +62,13 @@ struct thread_struct {
 }
 
 extern void start_thread(struct pt_regs *regs, unsigned long new_ip,
-					       unsigned long new_sp);
+                         unsigned long new_sp);
 
 /* Forward declaration, a strange C thing */
 struct task_struct;
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
+static inline void release_thread(struct task_struct *dead_task) {
 }
 
 #define prepare_to_copy(tsk)	do { } while (0)
@@ -82,8 +78,7 @@ extern int kernel_thread(int (*fn) (void *), void *arg, unsigned long flags);
 /*
  * Free current thread data structures etc..
  */
-static inline void exit_thread(void)
-{
+static inline void exit_thread(void) {
 }
 
 /*
@@ -106,56 +101,52 @@ unsigned long get_wchan(struct task_struct *p);
 
 
 /* Get the Silicon Revision of the chip */
-static inline uint32_t __pure bfin_revid(void)
-{
-	/* Always use CHIPID, to work around ANOMALY_05000234 */
-	uint32_t revid = (bfin_read_CHIPID() & CHIPID_VERSION) >> 28;
+static inline uint32_t __pure bfin_revid(void) {
+    /* Always use CHIPID, to work around ANOMALY_05000234 */
+    uint32_t revid = (bfin_read_CHIPID() & CHIPID_VERSION) >> 28;
 
 #ifdef _BOOTROM_GET_DXE_ADDRESS_TWI
-	/*
-	 * ANOMALY_05000364
-	 * Incorrect Revision Number in DSPID Register
-	 */
-	if (ANOMALY_05000364 &&
-	    bfin_read16(_BOOTROM_GET_DXE_ADDRESS_TWI) == 0x2796)
-		revid = 1;
+    /*
+     * ANOMALY_05000364
+     * Incorrect Revision Number in DSPID Register
+     */
+    if (ANOMALY_05000364 &&
+            bfin_read16(_BOOTROM_GET_DXE_ADDRESS_TWI) == 0x2796)
+        revid = 1;
 #endif
 
-	return revid;
+    return revid;
 }
 
-static inline uint16_t __pure bfin_cpuid(void)
-{
-	return (bfin_read_CHIPID() & CHIPID_FAMILY) >> 12;
+static inline uint16_t __pure bfin_cpuid(void) {
+    return (bfin_read_CHIPID() & CHIPID_FAMILY) >> 12;
 }
 
-static inline uint32_t __pure bfin_dspid(void)
-{
-	return bfin_read_DSPID();
+static inline uint32_t __pure bfin_dspid(void) {
+    return bfin_read_DSPID();
 }
 
 #define blackfin_core_id() (bfin_dspid() & 0xff)
 
-static inline uint32_t __pure bfin_compiled_revid(void)
-{
+static inline uint32_t __pure bfin_compiled_revid(void) {
 #if defined(CONFIG_BF_REV_0_0)
-	return 0;
+    return 0;
 #elif defined(CONFIG_BF_REV_0_1)
-	return 1;
+    return 1;
 #elif defined(CONFIG_BF_REV_0_2)
-	return 2;
+    return 2;
 #elif defined(CONFIG_BF_REV_0_3)
-	return 3;
+    return 3;
 #elif defined(CONFIG_BF_REV_0_4)
-	return 4;
+    return 4;
 #elif defined(CONFIG_BF_REV_0_5)
-	return 5;
+    return 5;
 #elif defined(CONFIG_BF_REV_0_6)
-	return 6;
+    return 6;
 #elif defined(CONFIG_BF_REV_ANY)
-	return 0xffff;
+    return 0xffff;
 #else
-	return -1;
+    return -1;
 #endif
 }
 

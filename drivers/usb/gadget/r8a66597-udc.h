@@ -45,80 +45,80 @@
 
 #define r8a66597_is_sudmac(r8a66597)	(r8a66597->pdata->sudmac)
 struct r8a66597_pipe_info {
-	u16	pipe;
-	u16	epnum;
-	u16	maxpacket;
-	u16	type;
-	u16	interval;
-	u16	dir_in;
+    u16	pipe;
+    u16	epnum;
+    u16	maxpacket;
+    u16	type;
+    u16	interval;
+    u16	dir_in;
 };
 
 struct r8a66597_request {
-	struct usb_request	req;
-	struct list_head	queue;
+    struct usb_request	req;
+    struct list_head	queue;
 };
 
 struct r8a66597_ep {
-	struct usb_ep		ep;
-	struct r8a66597		*r8a66597;
-	struct r8a66597_dma	*dma;
+    struct usb_ep		ep;
+    struct r8a66597		*r8a66597;
+    struct r8a66597_dma	*dma;
 
-	struct list_head	queue;
-	unsigned		busy:1;
-	unsigned		wedge:1;
-	unsigned		internal_ccpl:1;	/* use only control */
+    struct list_head	queue;
+    unsigned		busy:1;
+    unsigned		wedge:1;
+    unsigned		internal_ccpl:1;	/* use only control */
 
-	/* this member can able to after r8a66597_enable */
-	unsigned		use_dma:1;
-	u16			pipenum;
-	u16			type;
-	const struct usb_endpoint_descriptor	*desc;
-	/* register address */
-	unsigned char		fifoaddr;
-	unsigned char		fifosel;
-	unsigned char		fifoctr;
-	unsigned char		pipectr;
-	unsigned char		pipetre;
-	unsigned char		pipetrn;
+    /* this member can able to after r8a66597_enable */
+    unsigned		use_dma:1;
+    u16			pipenum;
+    u16			type;
+    const struct usb_endpoint_descriptor	*desc;
+    /* register address */
+    unsigned char		fifoaddr;
+    unsigned char		fifosel;
+    unsigned char		fifoctr;
+    unsigned char		pipectr;
+    unsigned char		pipetre;
+    unsigned char		pipetrn;
 };
 
 struct r8a66597_dma {
-	unsigned		used:1;
-	unsigned		dir:1;	/* 1 = IN(write), 0 = OUT(read) */
+    unsigned		used:1;
+    unsigned		dir:1;	/* 1 = IN(write), 0 = OUT(read) */
 };
 
 struct r8a66597 {
-	spinlock_t		lock;
-	void __iomem		*reg;
-	void __iomem		*sudmac_reg;
+    spinlock_t		lock;
+    void __iomem		*reg;
+    void __iomem		*sudmac_reg;
 
 #ifdef CONFIG_HAVE_CLK
-	struct clk *clk;
+    struct clk *clk;
 #endif
-	struct r8a66597_platdata	*pdata;
+    struct r8a66597_platdata	*pdata;
 
-	struct usb_gadget		gadget;
-	struct usb_gadget_driver	*driver;
+    struct usb_gadget		gadget;
+    struct usb_gadget_driver	*driver;
 
-	struct r8a66597_ep	ep[R8A66597_MAX_NUM_PIPE];
-	struct r8a66597_ep	*pipenum2ep[R8A66597_MAX_NUM_PIPE];
-	struct r8a66597_ep	*epaddr2ep[16];
-	struct r8a66597_dma	dma;
+    struct r8a66597_ep	ep[R8A66597_MAX_NUM_PIPE];
+    struct r8a66597_ep	*pipenum2ep[R8A66597_MAX_NUM_PIPE];
+    struct r8a66597_ep	*epaddr2ep[16];
+    struct r8a66597_dma	dma;
 
-	struct timer_list	timer;
-	struct usb_request	*ep0_req;	/* for internal request */
-	u16			ep0_data;	/* for internal request */
-	u16			old_vbus;
-	u16			scount;
-	u16			old_dvsq;
+    struct timer_list	timer;
+    struct usb_request	*ep0_req;	/* for internal request */
+    u16			ep0_data;	/* for internal request */
+    u16			old_vbus;
+    u16			scount;
+    u16			old_dvsq;
 
-	/* pipe config */
-	unsigned char bulk;
-	unsigned char interrupt;
-	unsigned char isochronous;
-	unsigned char num_dma;
+    /* pipe config */
+    unsigned char bulk;
+    unsigned char interrupt;
+    unsigned char isochronous;
+    unsigned char num_dma;
 
-	unsigned irq_sense_low:1;
+    unsigned irq_sense_low:1;
 };
 
 #define gadget_to_r8a66597(_gadget)	\
@@ -126,71 +126,67 @@ struct r8a66597 {
 #define r8a66597_to_gadget(r8a66597) (&r8a66597->gadget)
 #define r8a66597_to_dev(r8a66597)	(r8a66597->gadget.dev.parent)
 
-static inline u16 r8a66597_read(struct r8a66597 *r8a66597, unsigned long offset)
-{
-	return ioread16(r8a66597->reg + offset);
+static inline u16 r8a66597_read(struct r8a66597 *r8a66597, unsigned long offset) {
+    return ioread16(r8a66597->reg + offset);
 }
 
 static inline void r8a66597_read_fifo(struct r8a66597 *r8a66597,
-				      unsigned long offset,
-				      unsigned char *buf,
-				      int len)
-{
-	void __iomem *fifoaddr = r8a66597->reg + offset;
-	unsigned int data = 0;
-	int i;
+                                      unsigned long offset,
+                                      unsigned char *buf,
+                                      int len) {
+    void __iomem *fifoaddr = r8a66597->reg + offset;
+    unsigned int data = 0;
+    int i;
 
-	if (r8a66597->pdata->on_chip) {
-		/* 32-bit accesses for on_chip controllers */
+    if (r8a66597->pdata->on_chip) {
+        /* 32-bit accesses for on_chip controllers */
 
-		/* aligned buf case */
-		if (len >= 4 && !((unsigned long)buf & 0x03)) {
-			ioread32_rep(fifoaddr, buf, len / 4);
-			buf += len & ~0x03;
-			len &= 0x03;
-		}
+        /* aligned buf case */
+        if (len >= 4 && !((unsigned long)buf & 0x03)) {
+            ioread32_rep(fifoaddr, buf, len / 4);
+            buf += len & ~0x03;
+            len &= 0x03;
+        }
 
-		/* unaligned buf case */
-		for (i = 0; i < len; i++) {
-			if (!(i & 0x03))
-				data = ioread32(fifoaddr);
+        /* unaligned buf case */
+        for (i = 0; i < len; i++) {
+            if (!(i & 0x03))
+                data = ioread32(fifoaddr);
 
-			buf[i] = (data >> ((i & 0x03) * 8)) & 0xff;
-		}
-	} else {
-		/* 16-bit accesses for external controllers */
+            buf[i] = (data >> ((i & 0x03) * 8)) & 0xff;
+        }
+    } else {
+        /* 16-bit accesses for external controllers */
 
-		/* aligned buf case */
-		if (len >= 2 && !((unsigned long)buf & 0x01)) {
-			ioread16_rep(fifoaddr, buf, len / 2);
-			buf += len & ~0x01;
-			len &= 0x01;
-		}
+        /* aligned buf case */
+        if (len >= 2 && !((unsigned long)buf & 0x01)) {
+            ioread16_rep(fifoaddr, buf, len / 2);
+            buf += len & ~0x01;
+            len &= 0x01;
+        }
 
-		/* unaligned buf case */
-		for (i = 0; i < len; i++) {
-			if (!(i & 0x01))
-				data = ioread16(fifoaddr);
+        /* unaligned buf case */
+        for (i = 0; i < len; i++) {
+            if (!(i & 0x01))
+                data = ioread16(fifoaddr);
 
-			buf[i] = (data >> ((i & 0x01) * 8)) & 0xff;
-		}
-	}
+            buf[i] = (data >> ((i & 0x01) * 8)) & 0xff;
+        }
+    }
 }
 
 static inline void r8a66597_write(struct r8a66597 *r8a66597, u16 val,
-				  unsigned long offset)
-{
-	iowrite16(val, r8a66597->reg + offset);
+                                  unsigned long offset) {
+    iowrite16(val, r8a66597->reg + offset);
 }
 
 static inline void r8a66597_mdfy(struct r8a66597 *r8a66597,
-				 u16 val, u16 pat, unsigned long offset)
-{
-	u16 tmp;
-	tmp = r8a66597_read(r8a66597, offset);
-	tmp = tmp & (~pat);
-	tmp = tmp | val;
-	r8a66597_write(r8a66597, tmp, offset);
+                                 u16 val, u16 pat, unsigned long offset) {
+    u16 tmp;
+    tmp = r8a66597_read(r8a66597, offset);
+    tmp = tmp & (~pat);
+    tmp = tmp | val;
+    r8a66597_write(r8a66597, tmp, offset);
 }
 
 #define r8a66597_bclr(r8a66597, val, offset)	\
@@ -199,78 +195,74 @@ static inline void r8a66597_mdfy(struct r8a66597 *r8a66597,
 			r8a66597_mdfy(r8a66597, val, 0, offset)
 
 static inline void r8a66597_write_fifo(struct r8a66597 *r8a66597,
-				       struct r8a66597_ep *ep,
-				       unsigned char *buf,
-				       int len)
-{
-	void __iomem *fifoaddr = r8a66597->reg + ep->fifoaddr;
-	int adj = 0;
-	int i;
+                                       struct r8a66597_ep *ep,
+                                       unsigned char *buf,
+                                       int len) {
+    void __iomem *fifoaddr = r8a66597->reg + ep->fifoaddr;
+    int adj = 0;
+    int i;
 
-	if (r8a66597->pdata->on_chip) {
-		/* 32-bit access only if buf is 32-bit aligned */
-		if (len >= 4 && !((unsigned long)buf & 0x03)) {
-			iowrite32_rep(fifoaddr, buf, len / 4);
-			buf += len & ~0x03;
-			len &= 0x03;
-		}
-	} else {
-		/* 16-bit access only if buf is 16-bit aligned */
-		if (len >= 2 && !((unsigned long)buf & 0x01)) {
-			iowrite16_rep(fifoaddr, buf, len / 2);
-			buf += len & ~0x01;
-			len &= 0x01;
-		}
-	}
+    if (r8a66597->pdata->on_chip) {
+        /* 32-bit access only if buf is 32-bit aligned */
+        if (len >= 4 && !((unsigned long)buf & 0x03)) {
+            iowrite32_rep(fifoaddr, buf, len / 4);
+            buf += len & ~0x03;
+            len &= 0x03;
+        }
+    } else {
+        /* 16-bit access only if buf is 16-bit aligned */
+        if (len >= 2 && !((unsigned long)buf & 0x01)) {
+            iowrite16_rep(fifoaddr, buf, len / 2);
+            buf += len & ~0x01;
+            len &= 0x01;
+        }
+    }
 
-	/* adjust fifo address in the little endian case */
-	if (!(r8a66597_read(r8a66597, CFIFOSEL) & BIGEND)) {
-		if (r8a66597->pdata->on_chip)
-			adj = 0x03; /* 32-bit wide */
-		else
-			adj = 0x01; /* 16-bit wide */
-	}
+    /* adjust fifo address in the little endian case */
+    if (!(r8a66597_read(r8a66597, CFIFOSEL) & BIGEND)) {
+        if (r8a66597->pdata->on_chip)
+            adj = 0x03; /* 32-bit wide */
+        else
+            adj = 0x01; /* 16-bit wide */
+    }
 
-	if (r8a66597->pdata->wr0_shorted_to_wr1)
-		r8a66597_bclr(r8a66597, MBW_16, ep->fifosel);
-	for (i = 0; i < len; i++)
-		iowrite8(buf[i], fifoaddr + adj - (i & adj));
-	if (r8a66597->pdata->wr0_shorted_to_wr1)
-		r8a66597_bclr(r8a66597, MBW_16, ep->fifosel);
+    if (r8a66597->pdata->wr0_shorted_to_wr1)
+        r8a66597_bclr(r8a66597, MBW_16, ep->fifosel);
+    for (i = 0; i < len; i++)
+        iowrite8(buf[i], fifoaddr + adj - (i & adj));
+    if (r8a66597->pdata->wr0_shorted_to_wr1)
+        r8a66597_bclr(r8a66597, MBW_16, ep->fifosel);
 }
 
-static inline u16 get_xtal_from_pdata(struct r8a66597_platdata *pdata)
-{
-	u16 clock = 0;
+static inline u16 get_xtal_from_pdata(struct r8a66597_platdata *pdata) {
+    u16 clock = 0;
 
-	switch (pdata->xtal) {
-	case R8A66597_PLATDATA_XTAL_12MHZ:
-		clock = XTAL12;
-		break;
-	case R8A66597_PLATDATA_XTAL_24MHZ:
-		clock = XTAL24;
-		break;
-	case R8A66597_PLATDATA_XTAL_48MHZ:
-		clock = XTAL48;
-		break;
-	default:
-		printk(KERN_ERR "r8a66597: platdata clock is wrong.\n");
-		break;
-	}
+    switch (pdata->xtal) {
+    case R8A66597_PLATDATA_XTAL_12MHZ:
+        clock = XTAL12;
+        break;
+    case R8A66597_PLATDATA_XTAL_24MHZ:
+        clock = XTAL24;
+        break;
+    case R8A66597_PLATDATA_XTAL_48MHZ:
+        clock = XTAL48;
+        break;
+    default:
+        printk(KERN_ERR "r8a66597: platdata clock is wrong.\n");
+        break;
+    }
 
-	return clock;
+    return clock;
 }
 
 static inline u32 r8a66597_sudmac_read(struct r8a66597 *r8a66597,
-				       unsigned long offset)
-{
-	return ioread32(r8a66597->sudmac_reg + offset);
+                                       unsigned long offset) {
+    return ioread32(r8a66597->sudmac_reg + offset);
 }
 
 static inline void r8a66597_sudmac_write(struct r8a66597 *r8a66597, u32 val,
-					 unsigned long offset)
-{
-	iowrite32(val, r8a66597->sudmac_reg + offset);
+        unsigned long offset) {
+    iowrite32(val, r8a66597->sudmac_reg + offset);
 }
 
 #define get_pipectr_addr(pipenum)	(PIPE1CTR + (pipenum - 1) * 2)

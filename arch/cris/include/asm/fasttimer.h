@@ -12,19 +12,19 @@
 typedef void fast_timer_function_type(unsigned long);
 
 struct fasttime_t {
-	unsigned long tv_jiff;  /* jiffies */
-	unsigned long tv_usec;  /* microseconds */
+    unsigned long tv_jiff;  /* jiffies */
+    unsigned long tv_usec;  /* microseconds */
 };
 
-struct fast_timer{ /* Close to timer_list */
-  struct fast_timer *next;
-  struct fast_timer *prev;
-	struct fasttime_t tv_set;
-	struct fasttime_t tv_expires;
-  unsigned long delay_us;
-  fast_timer_function_type *function;
-  unsigned long data;
-  const char *name;
+struct fast_timer { /* Close to timer_list */
+    struct fast_timer *next;
+    struct fast_timer *prev;
+    struct fasttime_t tv_set;
+    struct fasttime_t tv_expires;
+    unsigned long delay_us;
+    fast_timer_function_type *function;
+    unsigned long data;
+    const char *name;
 };
 
 extern struct fast_timer *fast_timer_list;

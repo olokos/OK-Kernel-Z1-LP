@@ -14,43 +14,37 @@ void iop13xx_init_irq(void);
 void iop13xx_restart(char, const char *);
 
 /* CPUID CP6 R0 Page 0 */
-static inline int iop13xx_cpu_id(void)
-{
-	int id;
-	asm volatile("mrc p6, 0, %0, c0, c0, 0":"=r" (id));
-	return id;
+static inline int iop13xx_cpu_id(void) {
+    int id;
+    asm volatile("mrc p6, 0, %0, c0, c0, 0":"=r" (id));
+    return id;
 }
 
 /* WDTCR CP6 R7 Page 9 */
-static inline u32 read_wdtcr(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c7, c9, 0":"=r" (val));
-	return val;
+static inline u32 read_wdtcr(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c7, c9, 0":"=r" (val));
+    return val;
 }
-static inline void write_wdtcr(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c7, c9, 0"::"r" (val));
+static inline void write_wdtcr(u32 val) {
+    asm volatile("mcr p6, 0, %0, c7, c9, 0"::"r" (val));
 }
 
 /* WDTSR CP6 R8 Page 9 */
-static inline u32 read_wdtsr(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c8, c9, 0":"=r" (val));
-	return val;
+static inline u32 read_wdtsr(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c8, c9, 0":"=r" (val));
+    return val;
 }
-static inline void write_wdtsr(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c8, c9, 0"::"r" (val));
+static inline void write_wdtsr(u32 val) {
+    asm volatile("mcr p6, 0, %0, c8, c9, 0"::"r" (val));
 }
 
 /* RCSR - Reset Cause Status Register  */
-static inline u32 read_rcsr(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c0, c1, 0":"=r" (val));
-	return val;
+static inline u32 read_rcsr(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c0, c1, 0":"=r" (val));
+    return val;
 }
 
 extern unsigned long get_iop_tick_rate(void);

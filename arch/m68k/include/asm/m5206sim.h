@@ -4,7 +4,7 @@
  *	m5206sim.h -- ColdFire 5206 System Integration Module support.
  *
  *	(C) Copyright 1999, Greg Ungerer (gerg@snapgear.com)
- * 	(C) Copyright 2000, Lineo Inc. (www.lineo.com) 
+ * 	(C) Copyright 2000, Lineo Inc. (www.lineo.com)
  */
 
 /****************************************************************************/
@@ -127,9 +127,9 @@
  */
 #ifdef CONFIG_M5206e
 #define MCFSIM_PAR_DREQ0        0x100           /* Set to select DREQ0 input */
-                                                /* Clear to select T0 input */
+/* Clear to select T0 input */
 #define MCFSIM_PAR_DREQ1        0x200           /* Select DREQ1 input */
-                                                /* Clear to select T0 output */
+/* Clear to select T0 output */
 #endif
 
 /*

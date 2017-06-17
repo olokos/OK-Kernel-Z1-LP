@@ -264,143 +264,128 @@
 
 /* IRT and h/w interrupt routines */
 static inline int
-nlm_pic_read_irt(uint64_t base, int irt_index)
-{
-	return nlm_read_pic_reg(base, PIC_IRT(irt_index));
+nlm_pic_read_irt(uint64_t base, int irt_index) {
+    return nlm_read_pic_reg(base, PIC_IRT(irt_index));
 }
 
 static inline uint64_t
-nlm_pic_read_control(uint64_t base)
-{
-	return nlm_read_pic_reg(base, PIC_CTRL);
+nlm_pic_read_control(uint64_t base) {
+    return nlm_read_pic_reg(base, PIC_CTRL);
 }
 
 static inline void
-nlm_pic_write_control(uint64_t base, uint64_t control)
-{
-	nlm_write_pic_reg(base, PIC_CTRL, control);
+nlm_pic_write_control(uint64_t base, uint64_t control) {
+    nlm_write_pic_reg(base, PIC_CTRL, control);
 }
 
 static inline void
-nlm_pic_update_control(uint64_t base, uint64_t control)
-{
-	uint64_t val;
+nlm_pic_update_control(uint64_t base, uint64_t control) {
+    uint64_t val;
 
-	val = nlm_read_pic_reg(base, PIC_CTRL);
-	nlm_write_pic_reg(base, PIC_CTRL, control | val);
+    val = nlm_read_pic_reg(base, PIC_CTRL);
+    nlm_write_pic_reg(base, PIC_CTRL, control | val);
 }
 
 static inline void
-nlm_set_irt_to_cpu(uint64_t base, int irt, int cpu)
-{
-	uint64_t val;
+nlm_set_irt_to_cpu(uint64_t base, int irt, int cpu) {
+    uint64_t val;
 
-	val = nlm_read_pic_reg(base, PIC_IRT(irt));
-	val |= cpu & 0xf;
-	if (cpu > 15)
-		val |= 1 << 16;
-	nlm_write_pic_reg(base, PIC_IRT(irt), val);
+    val = nlm_read_pic_reg(base, PIC_IRT(irt));
+    val |= cpu & 0xf;
+    if (cpu > 15)
+        val |= 1 << 16;
+    nlm_write_pic_reg(base, PIC_IRT(irt), val);
 }
 
 static inline void
 nlm_pic_write_irt(uint64_t base, int irt_num, int en, int nmi,
-	int sch, int vec, int dt, int db, int dte)
-{
-	uint64_t val;
+                  int sch, int vec, int dt, int db, int dte) {
+    uint64_t val;
 
-	val = (((uint64_t)en & 0x1) << 31) | ((nmi & 0x1) << 29) |
-			((sch & 0x1) << 28) | ((vec & 0x3f) << 20) |
-			((dt & 0x1) << 19) | ((db & 0x7) << 16) |
-			(dte & 0xffff);
+    val = (((uint64_t)en & 0x1) << 31) | ((nmi & 0x1) << 29) |
+          ((sch & 0x1) << 28) | ((vec & 0x3f) << 20) |
+          ((dt & 0x1) << 19) | ((db & 0x7) << 16) |
+          (dte & 0xffff);
 
-	nlm_write_pic_reg(base, PIC_IRT(irt_num), val);
+    nlm_write_pic_reg(base, PIC_IRT(irt_num), val);
 }
 
 static inline void
 nlm_pic_write_irt_direct(uint64_t base, int irt_num, int en, int nmi,
-	int sch, int vec, int cpu)
-{
-	nlm_pic_write_irt(base, irt_num, en, nmi, sch, vec, 1,
-		(cpu >> 4),		/* thread group */
-		1 << (cpu & 0xf));	/* thread mask */
+                         int sch, int vec, int cpu) {
+    nlm_pic_write_irt(base, irt_num, en, nmi, sch, vec, 1,
+                      (cpu >> 4),		/* thread group */
+                      1 << (cpu & 0xf));	/* thread mask */
 }
 
 static inline uint64_t
-nlm_pic_read_timer(uint64_t base, int timer)
-{
-	return nlm_read_pic_reg(base, PIC_TIMER_COUNT(timer));
+nlm_pic_read_timer(uint64_t base, int timer) {
+    return nlm_read_pic_reg(base, PIC_TIMER_COUNT(timer));
 }
 
 static inline void
-nlm_pic_write_timer(uint64_t base, int timer, uint64_t value)
-{
-	nlm_write_pic_reg(base, PIC_TIMER_COUNT(timer), value);
+nlm_pic_write_timer(uint64_t base, int timer, uint64_t value) {
+    nlm_write_pic_reg(base, PIC_TIMER_COUNT(timer), value);
 }
 
 static inline void
-nlm_pic_set_timer(uint64_t base, int timer, uint64_t value, int irq, int cpu)
-{
-	uint64_t pic_ctrl = nlm_read_pic_reg(base, PIC_CTRL);
-	int en;
+nlm_pic_set_timer(uint64_t base, int timer, uint64_t value, int irq, int cpu) {
+    uint64_t pic_ctrl = nlm_read_pic_reg(base, PIC_CTRL);
+    int en;
 
-	en = (irq > 0);
-	nlm_write_pic_reg(base, PIC_TIMER_MAXVAL(timer), value);
-	nlm_pic_write_irt_direct(base, PIC_IRT_TIMER_INDEX(timer),
-		en, 0, 0, irq, cpu);
+    en = (irq > 0);
+    nlm_write_pic_reg(base, PIC_TIMER_MAXVAL(timer), value);
+    nlm_pic_write_irt_direct(base, PIC_IRT_TIMER_INDEX(timer),
+                             en, 0, 0, irq, cpu);
 
-	/* enable the timer */
-	pic_ctrl |= (1 << (PIC_CTRL_STE + timer));
-	nlm_write_pic_reg(base, PIC_CTRL, pic_ctrl);
+    /* enable the timer */
+    pic_ctrl |= (1 << (PIC_CTRL_STE + timer));
+    nlm_write_pic_reg(base, PIC_CTRL, pic_ctrl);
 }
 
 static inline void
-nlm_pic_enable_irt(uint64_t base, int irt)
-{
-	uint64_t reg;
+nlm_pic_enable_irt(uint64_t base, int irt) {
+    uint64_t reg;
 
-	reg = nlm_read_pic_reg(base, PIC_IRT(irt));
-	nlm_write_pic_reg(base, PIC_IRT(irt), reg | (1u << 31));
+    reg = nlm_read_pic_reg(base, PIC_IRT(irt));
+    nlm_write_pic_reg(base, PIC_IRT(irt), reg | (1u << 31));
 }
 
 static inline void
-nlm_pic_disable_irt(uint64_t base, int irt)
-{
-	uint32_t reg;
+nlm_pic_disable_irt(uint64_t base, int irt) {
+    uint32_t reg;
 
-	reg = nlm_read_pic_reg(base, PIC_IRT(irt));
-	nlm_write_pic_reg(base, PIC_IRT(irt), reg & ~((uint64_t)1 << 31));
+    reg = nlm_read_pic_reg(base, PIC_IRT(irt));
+    nlm_write_pic_reg(base, PIC_IRT(irt), reg & ~((uint64_t)1 << 31));
 }
 
 static inline void
-nlm_pic_send_ipi(uint64_t base, int hwt, int irq, int nmi)
-{
-	uint64_t ipi;
-	int	node, ncpu;
+nlm_pic_send_ipi(uint64_t base, int hwt, int irq, int nmi) {
+    uint64_t ipi;
+    int	node, ncpu;
 
-	node = hwt / 32;
-	ncpu = hwt & 0x1f;
-	ipi = ((uint64_t)nmi << 31) | (irq << 20) | (node << 17) |
-		(1 << (ncpu & 0xf));
-	if (ncpu > 15)
-		ipi |= 0x10000; /* Setting bit 16 to select cpus 16-31 */
+    node = hwt / 32;
+    ncpu = hwt & 0x1f;
+    ipi = ((uint64_t)nmi << 31) | (irq << 20) | (node << 17) |
+          (1 << (ncpu & 0xf));
+    if (ncpu > 15)
+        ipi |= 0x10000; /* Setting bit 16 to select cpus 16-31 */
 
-	nlm_write_pic_reg(base, PIC_IPI_CTL, ipi);
+    nlm_write_pic_reg(base, PIC_IPI_CTL, ipi);
 }
 
 static inline void
-nlm_pic_ack(uint64_t base, int irt_num)
-{
-	nlm_write_pic_reg(base, PIC_INT_ACK, irt_num);
+nlm_pic_ack(uint64_t base, int irt_num) {
+    nlm_write_pic_reg(base, PIC_INT_ACK, irt_num);
 
-	/* Ack the Status register for Watchdog & System timers */
-	if (irt_num < 12)
-		nlm_write_pic_reg(base, PIC_STATUS, (1 << irt_num));
+    /* Ack the Status register for Watchdog & System timers */
+    if (irt_num < 12)
+        nlm_write_pic_reg(base, PIC_STATUS, (1 << irt_num));
 }
 
 static inline void
-nlm_pic_init_irt(uint64_t base, int irt, int irq, int hwt)
-{
-	nlm_pic_write_irt_direct(base, irt, 0, 0, 0, irq, 0);
+nlm_pic_init_irt(uint64_t base, int irt, int irq, int hwt) {
+    nlm_pic_write_irt_direct(base, irt, 0, 0, 0, irq, 0);
 }
 
 extern uint64_t nlm_pic_base;

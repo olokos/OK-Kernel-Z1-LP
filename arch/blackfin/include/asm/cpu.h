@@ -11,11 +11,11 @@
 #include <linux/percpu.h>
 
 struct blackfin_cpudata {
-	struct cpu cpu;
-	unsigned int imemctl;
-	unsigned int dmemctl;
+    struct cpu cpu;
+    unsigned int imemctl;
+    unsigned int dmemctl;
 #ifdef CONFIG_SMP
-	struct task_struct *idle;
+    struct task_struct *idle;
 #endif
 };
 

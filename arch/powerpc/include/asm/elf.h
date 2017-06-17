@@ -125,12 +125,12 @@ typedef elf_gregset_t32 compat_elf_gregset_t;
 # define ELF_ARCH	EM_PPC64
 # define ELF_CLASS	ELFCLASS64
 # define ELF_DATA	ELFDATA2MSB
-  typedef elf_greg_t64 elf_greg_t;
-  typedef elf_gregset_t64 elf_gregset_t;
+typedef elf_greg_t64 elf_greg_t;
+typedef elf_gregset_t64 elf_gregset_t;
 #else
-  /* Assumption: ELF_ARCH == EM_PPC and ELF_CLASS == ELFCLASS32 */
-  typedef elf_greg_t32 elf_greg_t;
-  typedef elf_gregset_t32 elf_gregset_t;
+/* Assumption: ELF_ARCH == EM_PPC and ELF_CLASS == ELFCLASS32 */
+typedef elf_greg_t32 elf_greg_t;
+typedef elf_gregset_t32 elf_gregset_t;
 #endif /* ELF_ARCH */
 
 /* Floating point registers */
@@ -139,18 +139,18 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
 
 /* Altivec registers */
 /*
- * The entries with indexes 0-31 contain the corresponding vector registers. 
- * The entry with index 32 contains the vscr as the last word (offset 12) 
- * within the quadword.  This allows the vscr to be stored as either a 
- * quadword (since it must be copied via a vector register to/from storage) 
- * or as a word.  
+ * The entries with indexes 0-31 contain the corresponding vector registers.
+ * The entry with index 32 contains the vscr as the last word (offset 12)
+ * within the quadword.  This allows the vscr to be stored as either a
+ * quadword (since it must be copied via a vector register to/from storage)
+ * or as a word.
  *
- * 64-bit kernel notes: The entry at index 33 contains the vrsave as the first  
+ * 64-bit kernel notes: The entry at index 33 contains the vrsave as the first
  * word (offset 0) within the quadword.
  *
- * This definition of the VMX state is compatible with the current PPC32 
- * ptrace interface.  This allows signal handling and ptrace to use the same 
- * structures.  This also simplifies the implementation of a bi-arch 
+ * This definition of the VMX state is compatible with the current PPC32
+ * ptrace interface.  This allows signal handling and ptrace to use the same
+ * structures.  This also simplifies the implementation of a bi-arch
  * (combined (32- and 64-bit) gdb.
  *
  * Note that it's _not_ compatible with 32 bits ucontext which stuffs the
@@ -199,9 +199,8 @@ extern unsigned long randomize_et_dyn(unsigned long base);
 
 /* Common routine for both 32-bit and 64-bit native processes */
 static inline void ppc_elf_core_copy_regs(elf_gregset_t elf_regs,
-					  struct pt_regs *regs)
-{
-	PPC_ELF_CORE_COPY_REGS(elf_regs, regs);
+        struct pt_regs *regs) {
+    PPC_ELF_CORE_COPY_REGS(elf_regs, regs);
 }
 #define ELF_CORE_COPY_REGS(gregs, regs) ppc_elf_core_copy_regs(gregs, regs);
 
@@ -252,7 +251,7 @@ do {								\
  */
 # define elf_read_implies_exec(ex, exec_stk) (is_32bit_task() ? \
 		(exec_stk == EXSTACK_DEFAULT) : 0)
-#else 
+#else
 # define SET_PERSONALITY(ex) \
   set_personality(PER_LINUX | (current->personality & (~PER_MASK)))
 # define elf_read_implies_exec(ex, exec_stk) (exec_stk == EXSTACK_DEFAULT)
@@ -266,7 +265,7 @@ extern int ucache_bsize;
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES
 struct linux_binprm;
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-				       int uses_interp);
+                                       int uses_interp);
 #define VDSO_AUX_ENT(a,b) NEW_AUX_ENT(a,b)
 
 /* 1GB for 64bit, 8MB for 32bit */
@@ -417,10 +416,9 @@ do {									\
 #define R_PPC64_NUM		107
 
 /* There's actually a third entry here, but it's unused */
-struct ppc64_opd_entry
-{
-	unsigned long funcaddr;
-	unsigned long r2;
+struct ppc64_opd_entry {
+    unsigned long funcaddr;
+    unsigned long r2;
 };
 
 #ifdef  __KERNEL__

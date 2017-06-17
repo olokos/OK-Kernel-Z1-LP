@@ -76,8 +76,7 @@ static vos_pkt_context_t *gpVosPacketContext;
   ------------------------------------------------------------------------*/
 
 static VOS_STATUS vos_pkti_packet_init( struct vos_pkt_t *pPkt,
-                                        VOS_PKT_TYPE pktType )
-{
+                                        VOS_PKT_TYPE pktType ) {
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
 
     // fixed fields
@@ -85,20 +84,16 @@ static VOS_STATUS vos_pkti_packet_init( struct vos_pkt_t *pPkt,
     pPkt->magic = VPKT_MAGIC_NUMBER;
 
     // some packet types need an attached skb
-    switch (pktType)
-    {
+    switch (pktType) {
     case VOS_PKT_TYPE_RX_RAW:
     case VOS_PKT_TYPE_TX_802_11_MGMT:
         // these need an attached skb.
         // we preallocate a fixed-size skb and reserve the entire buffer
         // as headroom since that is what other components expect
         pPkt->pSkb = alloc_skb(VPKT_SIZE_BUFFER , in_interrupt()? GFP_ATOMIC : GFP_KERNEL);
-        if (likely(pPkt->pSkb))
-        {
+        if (likely(pPkt->pSkb)) {
             skb_reserve(pPkt->pSkb, VPKT_SIZE_BUFFER);
-        }
-        else
-        {
+        } else {
             vosStatus = VOS_STATUS_E_NOMEM;
         }
 
@@ -119,12 +114,10 @@ static VOS_STATUS vos_pkti_packet_init( struct vos_pkt_t *pPkt,
 
 
 
-static VOS_STATUS vos_pkti_list_destroy( struct list_head *pList )
-{
+static VOS_STATUS vos_pkti_list_destroy( struct list_head *pList ) {
     struct vos_pkt_t *pVosPacket;
 
-    if (unlikely(NULL == pList))
-    {
+    if (unlikely(NULL == pList)) {
         // something is fishy -- don't even bother trying
         // clean up this list since it is apparently hosed
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
@@ -133,12 +126,10 @@ static VOS_STATUS vos_pkti_list_destroy( struct list_head *pList )
         return VOS_STATUS_E_INVAL;
     }
 
-    list_for_each_entry(pVosPacket, pList, node)
-    {
+    list_for_each_entry(pVosPacket, pList, node) {
 
         // is this really an initialized vos packet?
-        if (unlikely(VPKT_MAGIC_NUMBER != pVosPacket->magic))
-        {
+        if (unlikely(VPKT_MAGIC_NUMBER != pVosPacket->magic)) {
             // no, so don't try any deinitialization on it, and
             // since we can't trust the linkages, stop trying
             // to destroy the list
@@ -149,8 +140,7 @@ static VOS_STATUS vos_pkti_list_destroy( struct list_head *pList )
         }
 
         // does this vos packet have an skb attached?
-        if (pVosPacket->pSkb)
-        {
+        if (pVosPacket->pSkb) {
             // yes, so give it back to the kernel
             kfree_skb(pVosPacket->pSkb);
             pVosPacket->pSkb = NULL;
@@ -170,8 +160,7 @@ static VOS_STATUS vos_pkti_list_destroy( struct list_head *pList )
 }
 
 
-static void vos_pkti_replenish_raw_pool(void)
-{
+static void vos_pkti_replenish_raw_pool(void) {
     struct sk_buff * pSkb;
     struct vos_pkt_t *pVosPacket;
     v_BOOL_t didOne = VOS_FALSE;
@@ -179,8 +168,7 @@ static void vos_pkti_replenish_raw_pool(void)
 
     // if there are no packets in the replenish pool then we can't do anything
     mutex_lock(&gpVosPacketContext->rxReplenishListLock);
-    if (likely(0 == gpVosPacketContext->rxReplenishListCount))
-    {
+    if (likely(0 == gpVosPacketContext->rxReplenishListCount)) {
         mutex_unlock(&gpVosPacketContext->rxReplenishListLock);
         return;
     }
@@ -191,8 +179,7 @@ static void vos_pkti_replenish_raw_pool(void)
 
     if ((gpVosPacketContext->rxReplenishListCount <
             gpVosPacketContext->numOfRxRawPackets/4) &&
-            (!list_empty(&gpVosPacketContext->rxRawFreeList)))
-    {
+            (!list_empty(&gpVosPacketContext->rxRawFreeList))) {
         mutex_unlock(&gpVosPacketContext->rxRawFreeListLock);
         mutex_unlock(&gpVosPacketContext->rxReplenishListLock);
         return;
@@ -202,13 +189,11 @@ static void vos_pkti_replenish_raw_pool(void)
               "VPKT [%d]: Packet replenish activated", __LINE__);
 
     // try to replenish all of the packets in the replenish pool
-    while (gpVosPacketContext->rxReplenishListCount)
-    {
+    while (gpVosPacketContext->rxReplenishListCount) {
         // we preallocate a fixed-size skb and reserve the entire buffer
         // as headroom since that is what other components expect
         pSkb = alloc_skb(VPKT_SIZE_BUFFER, GFP_ATOMIC);
-        if (unlikely(NULL == pSkb))
-        {
+        if (unlikely(NULL == pSkb)) {
             gpVosPacketContext->rxReplenishFailCount++;
             break;
         }
@@ -238,8 +223,7 @@ static void vos_pkti_replenish_raw_pool(void)
     // if we replenished anything and if there is a callback waiting
     // then invoke the callback
     if ((VOS_TRUE == didOne) &&
-            (gpVosPacketContext->rxRawLowResourceInfo.callback))
-    {
+            (gpVosPacketContext->rxRawLowResourceInfo.callback)) {
         // remove the first record from the free pool
         pVosPacket = list_first_entry(&gpVosPacketContext->rxRawFreeList,
                                       struct vos_pkt_t, node);
@@ -264,9 +248,7 @@ static void vos_pkti_replenish_raw_pool(void)
         mutex_unlock(&gpVosPacketContext->rxRawFreeListLock);
         mutex_unlock(&gpVosPacketContext->rxReplenishListLock);
         callback(pVosPacket, gpVosPacketContext->rxRawLowResourceInfo.userData);
-    }
-    else
-    {
+    } else {
         mutex_unlock(&gpVosPacketContext->rxRawFreeListLock);
         mutex_unlock(&gpVosPacketContext->rxReplenishListLock);
     }
@@ -274,10 +256,8 @@ static void vos_pkti_replenish_raw_pool(void)
 
 
 #if defined( WLAN_DEBUG )
-static char *vos_pkti_packet_type_str(VOS_PKT_TYPE pktType)
-{
-    switch (pktType)
-    {
+static char *vos_pkti_packet_type_str(VOS_PKT_TYPE pktType) {
+    switch (pktType) {
     case VOS_PKT_TYPE_TX_802_11_MGMT:
         return "TX_802_11_MGMT";
         break;
@@ -336,8 +316,7 @@ static char *vos_pkti_packet_type_str(VOS_PKT_TYPE pktType)
   -------------------------------------------------------------------------*/
 VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
                             vos_pkt_context_t *pVosPacketContext,
-                            v_SIZE_t vosPacketContextSize )
-{
+                            v_SIZE_t vosPacketContextSize ) {
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     unsigned int freePacketIndex;
     unsigned int idx;
@@ -346,27 +325,23 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
 
     VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO, "Enter:%s",__func__);
 
-    do
-    {
+    do {
 
-        if (NULL == pVosContext)
-        {
+        if (NULL == pVosContext) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: NULL pVosContext", __LINE__);
             vosStatus = VOS_STATUS_E_INVAL;
             break;
         }
 
-        if (NULL == pVosPacketContext)
-        {
+        if (NULL == pVosPacketContext) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: NULL pVosPacketContext", __LINE__);
             vosStatus = VOS_STATUS_E_INVAL;
             break;
         }
 
-        if (sizeof(vos_pkt_context_t) != vosPacketContextSize)
-        {
+        if (sizeof(vos_pkt_context_t) != vosPacketContextSize) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: invalid vosPacketContextSize, %zu vs %d",
                       __LINE__, sizeof(vos_pkt_context_t), vosPacketContextSize);
@@ -401,8 +376,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         pVosPacketContext->numOfRxRawPackets = vos_pkt_get_num_of_rx_raw_pkts();
 
         // fill the rxRaw free list
-        for (idx = 0; idx < pVosPacketContext->numOfRxRawPackets; idx++)
-        {
+        for (idx = 0; idx < pVosPacketContext->numOfRxRawPackets; idx++) {
             pPkt = &pVosPacketContext->vosPktBuffers[freePacketIndex++];
             vosStatus = vos_pkti_packet_init(pPkt, VOS_PKT_TYPE_RX_RAW);
 
@@ -411,8 +385,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
             WPAL_PACKET_SET_TYPE(&(pPkt->palPacket),
                                  eWLAN_PAL_PKT_TYPE_RX_RAW);
 
-            if (VOS_STATUS_SUCCESS != vosStatus)
-            {
+            if (VOS_STATUS_SUCCESS != vosStatus) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "VPKT [%d]: Packet init failure", __LINE__);
                 break;
@@ -422,8 +395,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         }
 
         // exit if any problems so far
-        if (VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if (VOS_STATUS_SUCCESS != vosStatus) {
             break;
         }
 
@@ -433,16 +405,14 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         INIT_LIST_HEAD(pFreeList);
 
         // fill the txData free list
-        for (idx = 0; idx < VPKT_NUM_TX_DATA_PACKETS; idx++)
-        {
+        for (idx = 0; idx < VPKT_NUM_TX_DATA_PACKETS; idx++) {
             pPkt = &pVosPacketContext->vosPktBuffers[freePacketIndex++];
             vosStatus = vos_pkti_packet_init(pPkt, VOS_PKT_TYPE_TX_802_3_DATA);
             WPAL_PACKET_SET_METAINFO_POINTER(&(pPkt->palPacket),
                                              (void*)&pVosPacketContext->txDataMetaInfo[idx]);
             WPAL_PACKET_SET_TYPE(&(pPkt->palPacket),
                                  eWLAN_PAL_PKT_TYPE_TX_802_3_DATA);
-            if (VOS_STATUS_SUCCESS != vosStatus)
-            {
+            if (VOS_STATUS_SUCCESS != vosStatus) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "VPKT [%d]: Packet init failure", __LINE__);
                 break;
@@ -452,8 +422,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         }
 
         // exit if any problems so far
-        if (VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if (VOS_STATUS_SUCCESS != vosStatus) {
             break;
         }
 
@@ -463,8 +432,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         INIT_LIST_HEAD(pFreeList);
 
         // fill the txMgmt free list
-        for (idx = 0; idx < VPKT_NUM_TX_MGMT_PACKETS; idx++)
-        {
+        for (idx = 0; idx < VPKT_NUM_TX_MGMT_PACKETS; idx++) {
             pPkt = &pVosPacketContext->vosPktBuffers[freePacketIndex++];
 
             vosStatus = vos_pkti_packet_init(pPkt, VOS_PKT_TYPE_TX_802_11_MGMT);
@@ -474,8 +442,7 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
             WPAL_PACKET_SET_TYPE(&(pPkt->palPacket),
                                  eWLAN_PAL_PKT_TYPE_TX_802_11_MGMT);
 
-            if (VOS_STATUS_SUCCESS != vosStatus)
-            {
+            if (VOS_STATUS_SUCCESS != vosStatus) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "VPKT [%d]: Packet init failure", __LINE__);
                 break;
@@ -484,13 +451,11 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
         }
 
         // exit if any problems so far
-        if (VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if (VOS_STATUS_SUCCESS != vosStatus) {
             break;
         }
 
-    }
-    while (0);
+    } while (0);
 
     return vosStatus;
 }
@@ -517,20 +482,17 @@ VOS_STATUS vos_packet_open( v_VOID_t *pVosContext,
   \sa vos_packet_open()
 
   ---------------------------------------------------------------------------*/
-VOS_STATUS vos_packet_close( v_PVOID_t pVosContext )
-{
+VOS_STATUS vos_packet_close( v_PVOID_t pVosContext ) {
 
     VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO, "Enter:%s",__func__);
 
-    if (unlikely(NULL == pVosContext))
-    {
+    if (unlikely(NULL == pVosContext)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pVosContext", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
-    if (unlikely(gpVosPacketContext->vosContext != pVosContext))
-    {
+    if (unlikely(gpVosPacketContext->vosContext != pVosContext)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: invalid pVosContext", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -645,8 +607,7 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
                                v_SIZE_t numPackets,
                                v_BOOL_t zeroBuffer,
                                vos_pkt_get_packet_callback callback,
-                               v_VOID_t *userData )
-{
+                               v_VOID_t *userData ) {
     struct list_head *pPktFreeList;
     vos_pkt_low_resource_info *pLowResourceInfo;
     struct vos_pkt_t *pVosPacket;
@@ -654,24 +615,21 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
     struct mutex *mlock;
 
     // Validate the return parameter pointer
-    if (unlikely(NULL == ppPacket))
-    {
+    if (unlikely(NULL == ppPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL ppPacket", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // we only support getting 1 packet at this time (as do WM & AMSS)
-    if (unlikely(1 != numPackets))
-    {
+    if (unlikely(1 != numPackets)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: invalid numPackets, %d", __LINE__, numPackets);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate the dataSize is within range
-    if (unlikely((0 == dataSize) || (dataSize > VPKT_SIZE_BUFFER)))
-    {
+    if (unlikely((0 == dataSize) || (dataSize > VPKT_SIZE_BUFFER))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: invalid dataSize, %d", __LINE__, dataSize);
         return VOS_STATUS_E_INVAL;
@@ -680,8 +638,7 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
     // determine which packet pool and low resource block we should use.
     // this API is only valid for TX MGMT and RX RAW packets
     // (TX DATA will use vos_pkt_wrap_data_packet())
-    switch (pktType)
-    {
+    switch (pktType) {
 
     case VOS_PKT_TYPE_RX_RAW:
         pPktFreeList = &gpVosPacketContext->rxRawFreeList;
@@ -710,8 +667,7 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
     // is there already a low resource callback registered for this pool?
     // we only support one callback per pool, so if one is already registered
     // then we know we are already in a low-resource condition
-    if (unlikely(pLowResourceInfo->callback))
-    {
+    if (unlikely(pLowResourceInfo->callback)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: Low resource handler already registered",
                   __LINE__);
@@ -720,12 +676,10 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
 
     mutex_lock(mlock);
     // are there vos packets on the associated free pool?
-    if (unlikely(list_empty(pPktFreeList)))
-    {
+    if (unlikely(list_empty(pPktFreeList))) {
         // allocation failed
         // did the caller specify a callback?
-        if (unlikely(NULL == callback))
-        {
+        if (unlikely(NULL == callback)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                       "VPKT [%d]: Low resource condition and no callback provided",
                       __LINE__);
@@ -749,8 +703,7 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
     // remove the first record from the free pool
     pVosPacket = list_first_entry(pPktFreeList, struct vos_pkt_t, node);
     list_del(&pVosPacket->node);
-    if (NULL != pCount)
-    {
+    if (NULL != pCount) {
         (*pCount)--;
     }
     mutex_unlock(mlock);
@@ -768,8 +721,7 @@ VOS_STATUS vos_pkt_get_packet( vos_pkt_t **ppPacket,
     pVosPacket->timestamp = vos_timer_get_system_ticks();
 
     // zero the data buffer if the user asked for it to be cleared.
-    if (unlikely(zeroBuffer))
-    {
+    if (unlikely(zeroBuffer)) {
         memset(pVosPacket->pSkb->head,
                0,
                skb_end_pointer(pVosPacket->pSkb) - pVosPacket->pSkb->head);
@@ -869,16 +821,14 @@ VOS_STATUS vos_pkt_wrap_data_packet( vos_pkt_t **ppPacket,
                                      VOS_PKT_TYPE pktType,
                                      v_VOID_t *pOSPacket,
                                      vos_pkt_get_packet_callback callback,
-                                     v_VOID_t *userData )
-{
+                                     v_VOID_t *userData ) {
     struct list_head *pPktFreeList;
     vos_pkt_low_resource_info *pLowResourceInfo;
     struct vos_pkt_t *pVosPacket;
     struct mutex *mlock;
 
     // Validate the return parameter pointer
-    if (unlikely(NULL == ppPacket))
-    {
+    if (unlikely(NULL == ppPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL ppPacket", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -887,8 +837,7 @@ VOS_STATUS vos_pkt_wrap_data_packet( vos_pkt_t **ppPacket,
     // Validate the packet type.  Only Tx Data packets can have an OS
     // packet attached to them (Tx Mgmt and Rx Raw have OS packets
     // pre-attached to them)
-    if (unlikely(VOS_PKT_TYPE_TX_802_3_DATA != pktType))
-    {
+    if (unlikely(VOS_PKT_TYPE_TX_802_3_DATA != pktType)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: invalid pktType %d", __LINE__, pktType);
         return VOS_STATUS_E_INVAL;
@@ -904,8 +853,7 @@ VOS_STATUS vos_pkt_wrap_data_packet( vos_pkt_t **ppPacket,
     // is there already a low resource callback registered for this pool?
     // we only support one callback per pool, so if one is already registered
     // then we know we are already in a low-resource condition
-    if (unlikely(pLowResourceInfo->callback))
-    {
+    if (unlikely(pLowResourceInfo->callback)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: Low resource handler already registered",
                   __LINE__);
@@ -914,12 +862,10 @@ VOS_STATUS vos_pkt_wrap_data_packet( vos_pkt_t **ppPacket,
     }
 
     // are there vos packets on the associated free pool?
-    if (unlikely(list_empty(pPktFreeList)))
-    {
+    if (unlikely(list_empty(pPktFreeList))) {
         // allocation failed
         // did the caller specify a callback?
-        if (unlikely(NULL == callback))
-        {
+        if (unlikely(NULL == callback)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                       "VPKT [%d]: Low resource condition and no callback provided",
                       __LINE__);
@@ -1014,19 +960,16 @@ VOS_STATUS vos_pkt_wrap_data_packet( vos_pkt_t **ppPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_set_os_packet( vos_pkt_t *pPacket,
-                                  v_VOID_t *pOSPacket )
-{
+                                  v_VOID_t *pOSPacket ) {
     // Validate the input parameter pointers
-    if (unlikely((NULL == pPacket)||(NULL == pOSPacket)))
-    {
+    if (unlikely((NULL == pPacket)||(NULL == pOSPacket))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1035,8 +978,7 @@ VOS_STATUS vos_pkt_set_os_packet( vos_pkt_t *pPacket,
     // Validate the packet type.  Only Tx Data packets can have an OS
     // packet attached to them (Tx Mgmt and Rx Raw have OS packets
     // pre-attached to them)
-    if (unlikely(VOS_PKT_TYPE_TX_802_3_DATA != pPacket->packetType))
-    {
+    if (unlikely(VOS_PKT_TYPE_TX_802_3_DATA != pPacket->packetType)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: invalid packet type %d[%s]",
                   __LINE__, pPacket->packetType,
@@ -1045,8 +987,7 @@ VOS_STATUS vos_pkt_set_os_packet( vos_pkt_t *pPacket,
     }
 
     // Is there already a packet attached?  If so, just warn and continue
-    if (unlikely(pPacket->pSkb))
-    {
+    if (unlikely(pPacket->pSkb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: Packet previously attached", __LINE__);
     }
@@ -1096,19 +1037,16 @@ VOS_STATUS vos_pkt_set_os_packet( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_os_packet( vos_pkt_t *pPacket,
                                   v_VOID_t **ppOSPacket,
-                                  v_BOOL_t clearOSPacket )
-{
+                                  v_BOOL_t clearOSPacket ) {
     // Validate the input and output parameter pointers
-    if (unlikely((NULL == pPacket)||(NULL == ppOSPacket)))
-    {
+    if (unlikely((NULL == pPacket)||(NULL == ppOSPacket))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1118,8 +1056,7 @@ VOS_STATUS vos_pkt_get_os_packet( vos_pkt_t *pPacket,
     *ppOSPacket = (v_VOID_t *) pPacket->pSkb;
 
     // clear it?
-    if (clearOSPacket)
-    {
+    if (clearOSPacket) {
         pPacket->pSkb = NULL;
     }
 
@@ -1159,23 +1096,19 @@ VOS_STATUS vos_pkt_get_os_packet( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 v_VOID_t vos_pkt_get_user_data_ptr( vos_pkt_t *pPacket,
                                     VOS_PKT_USER_DATA_ID userID,
-                                    v_VOID_t **ppUserData )
-{
+                                    v_VOID_t **ppUserData ) {
     // Validate the input and output parameter pointers
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
-        if (ppUserData != NULL)
-        {
+        if (ppUserData != NULL) {
             *ppUserData = NULL;
         }
         return;
     }
 
     // Validate that this really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         *ppUserData = NULL;
@@ -1183,8 +1116,7 @@ v_VOID_t vos_pkt_get_user_data_ptr( vos_pkt_t *pPacket,
     }
 
     // Validate userID
-    if (unlikely(userID >= VOS_PKT_USER_DATA_ID_MAX))
-    {
+    if (unlikely(userID >= VOS_PKT_USER_DATA_ID_MAX)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: Invalid user ID [%d]", __LINE__, userID);
         *ppUserData = NULL;
@@ -1235,27 +1167,23 @@ v_VOID_t vos_pkt_get_user_data_ptr( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 v_VOID_t vos_pkt_set_user_data_ptr( vos_pkt_t *pPacket,
                                     VOS_PKT_USER_DATA_ID userID,
-                                    v_VOID_t *pUserData )
-{
+                                    v_VOID_t *pUserData ) {
     // Validate the input parameter pointer
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return;
     }
 
     // Validate userID
-    if (unlikely(userID >= VOS_PKT_USER_DATA_ID_MAX))
-    {
+    if (unlikely(userID >= VOS_PKT_USER_DATA_ID_MAX)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: Invalid user ID [%d]", __LINE__, userID);
         return;
@@ -1287,8 +1215,7 @@ v_VOID_t vos_pkt_set_user_data_ptr( vos_pkt_t *pPacket,
   \sa
 
   ---------------------------------------------------------------------------*/
-VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
-{
+VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket ) {
     vos_pkt_t *pNext;
     struct list_head *pPktFreeList;
     vos_pkt_low_resource_info *pLowResourceInfo;
@@ -1299,30 +1226,26 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
     struct mutex * mlock;
 
     // Validate the input parameter pointer
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         return VOS_STATUS_E_INVAL;
     }
 
     // iterate though all packets in the chain
-    while (pPacket)
-    {
+    while (pPacket) {
         // unlink this packet from the chain
         pNext = pPacket->pNext;
         pPacket->pNext = NULL;
 
         lowResource = VOS_FALSE;
         // Validate that this really an initialized vos packet
-        if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-        {
+        if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: Invalid magic", __LINE__);
             return VOS_STATUS_E_INVAL;
         }
 
         //If an skb is attached then reset the pointers
-        if (pPacket->pSkb)
-        {
+        if (pPacket->pSkb) {
             pPacket->pSkb->len = 0;
             pPacket->pSkb->data = pPacket->pSkb->head;
             skb_reset_tail_pointer(pPacket->pSkb);
@@ -1331,21 +1254,17 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
 
         pCount = NULL;
         // determine which packet pool and low resource block we should use.
-        switch (pPacket->packetType)
-        {
+        switch (pPacket->packetType) {
         case VOS_PKT_TYPE_RX_RAW:
             // if this packet still has an skb attached, we can put it
             // back in the free pool, otherwise we need to put it in the
             // replenish pool
-            if (pPacket->pSkb)
-            {
+            if (pPacket->pSkb) {
                 pPktFreeList = &gpVosPacketContext->rxRawFreeList;
                 pLowResourceInfo = &gpVosPacketContext->rxRawLowResourceInfo;
                 pCount = &gpVosPacketContext->rxRawFreeListCount;
                 mlock = &gpVosPacketContext->rxRawFreeListLock;
-            }
-            else
-            {
+            } else {
                 pPktFreeList = &gpVosPacketContext->rxReplenishList;
                 pLowResourceInfo = NULL;
                 pCount = &gpVosPacketContext->rxReplenishListCount;
@@ -1380,8 +1299,7 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
 
 
         // is there a low resource condition pending for this packet type?
-        if (pLowResourceInfo && pLowResourceInfo->callback)
-        {
+        if (pLowResourceInfo && pLowResourceInfo->callback) {
             // pLowResourceInfo->callback is modified from threads (different CPU's).
             // So a mutex is enough to protect is against a race condition.
             // mutex is SMP safe
@@ -1391,8 +1309,7 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
             mutex_unlock(mlock);
 
             // only one context can get a valid callback
-            if(callback)
-            {
+            if(callback) {
                 // [DEBUG]
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,"VPKT [%d]: recycle %p",  __LINE__, pPacket);
 
@@ -1420,8 +1337,7 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
         }
 
 
-        if(!lowResource)
-        {
+        if(!lowResource) {
             // this packet does not satisfy a low resource condition
             // so put it back in the appropriate free pool
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,
@@ -1431,8 +1347,7 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
             mutex_lock(mlock);
             list_add_tail(&pPacket->node, pPktFreeList);
 
-            if (pCount)
-            {
+            if (pCount) {
                 (*pCount)++;
             }
             mutex_unlock(mlock);
@@ -1444,8 +1359,7 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
     } // while (pPacket)
 
     // see if we need to replenish the Rx Raw pool
-    if (VOS_PKT_TYPE_RX_RAW == packetType)
-    {
+    if (VOS_PKT_TYPE_RX_RAW == packetType) {
         vos_pkti_replenish_raw_pool();
     }
     return VOS_STATUS_SUCCESS;
@@ -1477,11 +1391,9 @@ VOS_STATUS vos_pkt_return_packet( vos_pkt_t *pPacket )
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_chain_packet( vos_pkt_t *pPacket,
                                  vos_pkt_t *pChainPacket,
-                                 v_BOOL_t chainAfter )
-{
+                                 v_BOOL_t chainAfter ) {
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == pChainPacket)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == pChainPacket))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1489,24 +1401,21 @@ VOS_STATUS vos_pkt_chain_packet( vos_pkt_t *pPacket,
 
     // Validate that these are really initialized vos packets
     if (unlikely((VPKT_MAGIC_NUMBER != pPacket->magic) ||
-                 (VPKT_MAGIC_NUMBER != pChainPacket->magic)))
-    {
+                 (VPKT_MAGIC_NUMBER != pChainPacket->magic))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // swap pointers if we chain before
-    if (unlikely(VOS_FALSE == chainAfter))
-    {
+    if (unlikely(VOS_FALSE == chainAfter)) {
         vos_pkt_t *pTmp = pPacket;
         pPacket = pChainPacket;
         pChainPacket = pTmp;
     }
 
     // find the end of the chain
-    while (pPacket->pNext)
-    {
+    while (pPacket->pNext) {
         pPacket = pPacket->pNext;
     }
 
@@ -1560,19 +1469,16 @@ VOS_STATUS vos_pkt_chain_packet( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_walk_packet_chain( vos_pkt_t *pPacket,
                                       vos_pkt_t **ppChainedPacket,
-                                      v_BOOL_t unchainPacket )
-{
+                                      v_BOOL_t unchainPacket ) {
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == ppChainedPacket)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == ppChainedPacket))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1582,18 +1488,14 @@ VOS_STATUS vos_pkt_walk_packet_chain( vos_pkt_t *pPacket,
     *ppChainedPacket = pPacket->pNext;
 
     // if asked to unchain, then unchain it
-    if (VOS_FALSE != unchainPacket)
-    {
+    if (VOS_FALSE != unchainPacket) {
         pPacket->pNext = NULL;
     }
 
     // if end of the chain, indicate empty to the caller
-    if (*ppChainedPacket)
-    {
+    if (*ppChainedPacket) {
         return VOS_STATUS_SUCCESS;
-    }
-    else
-    {
+    } else {
         return VOS_STATUS_E_EMPTY;
     }
 }
@@ -1627,8 +1529,7 @@ VOS_STATUS vos_pkt_walk_packet_chain( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_data_vector( vos_pkt_t *pPacket,
                                     vos_pkt_data_vector_t *pVector,
-                                    v_SIZE_t *pNumVectors )
-{
+                                    v_SIZE_t *pNumVectors ) {
     // not supported
 
     VOS_ASSERT(0);
@@ -1669,24 +1570,21 @@ VOS_STATUS vos_pkt_get_data_vector( vos_pkt_t *pPacket,
 VOS_STATUS vos_pkt_extract_data( vos_pkt_t *pPacket,
                                  v_SIZE_t pktOffset,
                                  v_VOID_t *pOutputBuffer,
-                                 v_SIZE_t *pOutputBufferSize )
-{
+                                 v_SIZE_t *pOutputBufferSize ) {
     v_SIZE_t len;
     struct sk_buff *skb;
 
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
                  (NULL == pOutputBuffer) ||
-                 (NULL == pOutputBufferSize)))
-    {
+                 (NULL == pOutputBufferSize))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1696,8 +1594,7 @@ VOS_STATUS vos_pkt_extract_data( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1716,18 +1613,14 @@ VOS_STATUS vos_pkt_extract_data( vos_pkt_t *pPacket,
     // buffer size on input so this API is not going to cause crashes
     // because buffers are too small and the caller inputs 0 == don't care
     // to check the size... !!
-    if (0 == len)
-    {
+    if (0 == len) {
         len = skb->len - pktOffset;
 
         // return # of bytes copied
         *pOutputBufferSize = len;
-    }
-    else
-    {
+    } else {
         // make sure we aren't extracting past the end of the packet
-        if (len > (skb->len - pktOffset))
-        {
+        if (len > (skb->len - pktOffset)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                       "VPKT [%d]: Request overrun, "
                       "req offset %d, req size %d, packet size %d",
@@ -1777,8 +1670,7 @@ VOS_STATUS vos_pkt_extract_data( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_extract_data_chain( vos_pkt_t *pPacket,
                                        v_VOID_t *pOutputBuffer,
-                                       v_SIZE_t *pOutputBufferSize )
-{
+                                       v_SIZE_t *pOutputBufferSize ) {
     VOS_STATUS vosStatus;
     v_SIZE_t len;
     struct sk_buff *skb;
@@ -1786,16 +1678,14 @@ VOS_STATUS vos_pkt_extract_data_chain( vos_pkt_t *pPacket,
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
                  (NULL == pOutputBuffer) ||
-                 (NULL == pOutputBufferSize)))
-    {
+                 (NULL == pOutputBufferSize))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1803,8 +1693,7 @@ VOS_STATUS vos_pkt_extract_data_chain( vos_pkt_t *pPacket,
 
     // get the length of the entire packet chain.
     vosStatus = vos_pkt_get_packet_chain_length(pPacket, &len);
-    if (unlikely(VOS_STATUS_SUCCESS != vosStatus))
-    {
+    if (unlikely(VOS_STATUS_SUCCESS != vosStatus)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: Unable to get packet chain length", __LINE__);
         return VOS_STATUS_E_FAILURE;
@@ -1812,21 +1701,18 @@ VOS_STATUS vos_pkt_extract_data_chain( vos_pkt_t *pPacket,
 
     // if the output buffer size is too small, return NOMEM and update
     // the actual size needed in *pOutputBufferSize
-    if (len > *pOutputBufferSize)
-    {
+    if (len > *pOutputBufferSize) {
         *pOutputBufferSize = len;
         return VOS_STATUS_E_NOMEM;
     }
 
     // walk through each packet in the chain, copying the data
-    while (pPacket)
-    {
+    while (pPacket) {
         // get pointer to the skb
         skb = pPacket->pSkb;
 
         // Validate the skb
-        if (unlikely(NULL == skb))
-        {
+        if (unlikely(NULL == skb)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: NULL skb", __LINE__);
             return VOS_STATUS_E_INVAL;
@@ -1872,30 +1758,26 @@ VOS_STATUS vos_pkt_extract_data_chain( vos_pkt_t *pPacket,
 VOS_STATUS vos_pkt_peek_data( vos_pkt_t *pPacket,
                               v_SIZE_t pktOffset,
                               v_VOID_t **ppPacketData,
-                              v_SIZE_t numBytes )
-{
+                              v_SIZE_t numBytes ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
-                 (NULL == ppPacketData)))
-    {
+                 (NULL == ppPacketData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate numBytes
-    if (unlikely(0 == numBytes))
-    {
+    if (unlikely(0 == numBytes)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid numBytes", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1905,16 +1787,14 @@ VOS_STATUS vos_pkt_peek_data( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // check for overflow
-    if (unlikely((pktOffset + numBytes) > skb->len))
-    {
+    if (unlikely((pktOffset + numBytes) > skb->len)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "VPKT [%d]: Packet overflow, offset %d size %d len %d",
                   __LINE__, pktOffset, numBytes, skb->len);
@@ -1943,20 +1823,17 @@ VOS_STATUS vos_pkt_peek_data( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_packet_type( vos_pkt_t *pPacket,
-                                    VOS_PKT_TYPE *pPacketType )
-{
+                                    VOS_PKT_TYPE *pPacketType ) {
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
-                 (NULL == pPacketType)))
-    {
+                 (NULL == pPacketType))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -1985,28 +1862,24 @@ VOS_STATUS vos_pkt_get_packet_type( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_packet_length( vos_pkt_t *pPacket,
-                                      v_U16_t *pPacketSize )
-{
+                                      v_U16_t *pPacketSize ) {
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
-                 (NULL == pPacketSize)))
-    {
+                 (NULL == pPacketSize))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate the skb
-    if (unlikely(NULL == pPacket->pSkb))
-    {
+    if (unlikely(NULL == pPacket->pSkb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2036,34 +1909,29 @@ VOS_STATUS vos_pkt_get_packet_length( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_packet_chain_length( vos_pkt_t *pPacketChain,
-        v_SIZE_t *pPacketChainSize )
-{
+        v_SIZE_t *pPacketChainSize ) {
     v_SIZE_t chainSize = 0;
 
     // Validate the parameter pointers
     if (unlikely((NULL == pPacketChain) ||
-                 (NULL == pPacketChainSize)))
-    {
+                 (NULL == pPacketChainSize))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // walk through each packet in the chain, adding its length
-    while (pPacketChain)
-    {
+    while (pPacketChain) {
 
         // Validate that this is really an initialized vos packet
-        if (unlikely(VPKT_MAGIC_NUMBER != pPacketChain->magic))
-        {
+        if (unlikely(VPKT_MAGIC_NUMBER != pPacketChain->magic)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: Invalid magic", __LINE__);
             return VOS_STATUS_E_INVAL;
         }
 
         // Validate the skb
-        if (unlikely(NULL == pPacketChain->pSkb))
-        {
+        if (unlikely(NULL == pPacketChain->pSkb)) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: NULL skb", __LINE__);
             return VOS_STATUS_E_INVAL;
@@ -2100,21 +1968,18 @@ VOS_STATUS vos_pkt_get_packet_chain_length( vos_pkt_t *pPacketChain,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_push_head( vos_pkt_t *pPacket,
                               v_VOID_t *pData,
-                              v_SIZE_t dataSize )
-{
+                              v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == pData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == pData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2124,8 +1989,7 @@ VOS_STATUS vos_pkt_push_head( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2134,8 +1998,7 @@ VOS_STATUS vos_pkt_push_head( vos_pkt_t *pPacket,
     // Make sure there is headroom.  As a performance optimization we
     // can omit this check later since skb_push() will also perform the
     // check (except skb_push() will panic the kernel)
-    if (unlikely(skb_headroom(skb) < dataSize))
-    {
+    if (unlikely(skb_headroom(skb) < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Insufficient headroom, "
                   "head[%p], data[%p], req[%d]",
@@ -2181,22 +2044,19 @@ VOS_STATUS vos_pkt_push_head( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_reserve_head( vos_pkt_t *pPacket,
                                  v_VOID_t **ppData,
-                                 v_SIZE_t dataSize )
-{
+                                 v_SIZE_t dataSize ) {
     struct sk_buff *skb;
     struct sk_buff *newskb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == ppData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == ppData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2206,8 +2066,7 @@ VOS_STATUS vos_pkt_reserve_head( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2216,15 +2075,13 @@ VOS_STATUS vos_pkt_reserve_head( vos_pkt_t *pPacket,
     // Make sure there is headroom.  As a performance optimization we
     // can omit this check later since skb_push() will also perform the
     // check (except skb_push() will panic the kernel)
-    if (unlikely(skb_headroom(skb) < dataSize))
-    {
+    if (unlikely(skb_headroom(skb) < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: Insufficient headroom, "
                   "head[%p], data[%p], req[%d]",
                   __LINE__, skb->head, skb->data, dataSize);
 
-        if ((newskb = skb_realloc_headroom(skb, dataSize)) == NULL)
-        {
+        if ((newskb = skb_realloc_headroom(skb, dataSize)) == NULL) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: Failed to realloc headroom", __LINE__);
             return VOS_STATUS_E_INVAL;
@@ -2280,8 +2137,7 @@ VOS_STATUS vos_pkt_reserve_head( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_reserve_head_fast( vos_pkt_t *pPacket,
                                       v_VOID_t **ppData,
-                                      v_SIZE_t dataSize )
-{
+                                      v_SIZE_t dataSize ) {
     struct sk_buff *skb;
     struct sk_buff *newskb;
 
@@ -2289,8 +2145,7 @@ VOS_STATUS vos_pkt_reserve_head_fast( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2299,15 +2154,13 @@ VOS_STATUS vos_pkt_reserve_head_fast( vos_pkt_t *pPacket,
     // Make sure there is headroom.  As a performance optimization we
     // can omit this check later since skb_push() will also perform the
     // check (except skb_push() will panic the kernel)
-    if (unlikely(skb_headroom(skb) < dataSize))
-    {
+    if (unlikely(skb_headroom(skb) < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: Insufficient headroom, "
                   "head[%p], data[%p], req[%d]",
                   __LINE__, skb->head, skb->data, dataSize);
 
-        if ((newskb = skb_realloc_headroom(skb, dataSize)) == NULL)
-        {
+        if ((newskb = skb_realloc_headroom(skb, dataSize)) == NULL) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "VPKT [%d]: Failed to realloc headroom", __LINE__);
             return VOS_STATUS_E_INVAL;
@@ -2351,21 +2204,18 @@ VOS_STATUS vos_pkt_reserve_head_fast( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_pop_head( vos_pkt_t *pPacket,
                              v_VOID_t *pData,
-                             v_SIZE_t dataSize )
-{
+                             v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == pData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == pData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2375,16 +2225,14 @@ VOS_STATUS vos_pkt_pop_head( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Make sure there is enough data to pop
-    if (unlikely(skb->len < dataSize))
-    {
+    if (unlikely(skb->len < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: pop exceeds packet size, len[%d], req[%d]",
                   __LINE__, skb->len, dataSize);
@@ -2427,21 +2275,18 @@ VOS_STATUS vos_pkt_pop_head( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_trim_head( vos_pkt_t *pPacket,
-                              v_SIZE_t dataSize )
-{
+                              v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2451,16 +2296,14 @@ VOS_STATUS vos_pkt_trim_head( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Make sure there is enough data to trim
-    if (unlikely(skb->len < dataSize))
-    {
+    if (unlikely(skb->len < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: trim exceeds packet size, len[%d], req[%d]",
                   __LINE__, skb->len, dataSize);
@@ -2493,21 +2336,18 @@ VOS_STATUS vos_pkt_trim_head( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_push_tail( vos_pkt_t *pPacket,
                               v_VOID_t *pData,
-                              v_SIZE_t dataSize )
-{
+                              v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == pData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == pData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2517,8 +2357,7 @@ VOS_STATUS vos_pkt_push_tail( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2527,8 +2366,7 @@ VOS_STATUS vos_pkt_push_tail( vos_pkt_t *pPacket,
     // Make sure there is tailroom.  As a performance optimization we
     // can omit this check later since skb_put() will also perform the
     // check (except skb_put() will panic the kernel)
-    if (unlikely(skb_tailroom(skb) < dataSize))
-    {
+    if (unlikely(skb_tailroom(skb) < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Insufficient tailroom, "
                   "tail[%p], end[%p], req[%d]",
@@ -2574,21 +2412,18 @@ VOS_STATUS vos_pkt_push_tail( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_reserve_tail( vos_pkt_t *pPacket,
                                  v_VOID_t **ppData,
-                                 v_SIZE_t dataSize )
-{
+                                 v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == ppData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == ppData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2598,8 +2433,7 @@ VOS_STATUS vos_pkt_reserve_tail( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2608,8 +2442,7 @@ VOS_STATUS vos_pkt_reserve_tail( vos_pkt_t *pPacket,
     // Make sure there is tailroom.  As a performance optimization we
     // can omit this check later since skb_put() will also perform the
     // check (except skb_put() will panic the kernel)
-    if (unlikely(skb_tailroom(skb) < dataSize))
-    {
+    if (unlikely(skb_tailroom(skb) < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Insufficient tailroom, "
                   "tail[%p], end[%p], req[%d]",
@@ -2649,21 +2482,18 @@ VOS_STATUS vos_pkt_reserve_tail( vos_pkt_t *pPacket,
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_pop_tail( vos_pkt_t *pPacket,
                              v_VOID_t *pData,
-                             v_SIZE_t dataSize )
-{
+                             v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely((NULL == pPacket) || (NULL == pData)))
-    {
+    if (unlikely((NULL == pPacket) || (NULL == pData))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2673,16 +2503,14 @@ VOS_STATUS vos_pkt_pop_tail( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Make sure there is enough data to pop
-    if (unlikely(skb->len < dataSize))
-    {
+    if (unlikely(skb->len < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: pop exceeds packet size, len[%d], req[%d]",
                   __LINE__, skb->len, dataSize);
@@ -2726,21 +2554,18 @@ VOS_STATUS vos_pkt_pop_tail( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_trim_tail( vos_pkt_t *pPacket,
-                              v_SIZE_t dataSize )
-{
+                              v_SIZE_t dataSize ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2750,16 +2575,14 @@ VOS_STATUS vos_pkt_trim_tail( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Make sure there is enough data to pop
-    if (unlikely(skb->len < dataSize))
-    {
+    if (unlikely(skb->len < dataSize)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_WARN,
                   "VPKT [%d]: pop exceeds packet size, len[%d], req[%d]",
                   __LINE__, skb->len, dataSize);
@@ -2791,20 +2614,17 @@ VOS_STATUS vos_pkt_trim_tail( vos_pkt_t *pPacket,
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_timestamp( vos_pkt_t *pPacket,
-                                  v_TIME_t* pTstamp )
-{
+                                  v_TIME_t* pTstamp ) {
     // Validate the parameter pointers
     if (unlikely((NULL == pPacket) ||
-                 (NULL == pTstamp)))
-    {
+                 (NULL == pTstamp))) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2844,8 +2664,7 @@ VOS_STATUS vos_pkt_get_timestamp( vos_pkt_t *pPacket,
   \sa
 
   ----------------------------------------------------------------------------*/
-VOS_STATUS vos_pkt_flatten_rx_pkt( vos_pkt_t **ppPacket )
-{
+VOS_STATUS vos_pkt_flatten_rx_pkt( vos_pkt_t **ppPacket ) {
     // Linux/Android skbs are already flat, no work required
     return VOS_STATUS_SUCCESS;
 }
@@ -2868,21 +2687,18 @@ VOS_STATUS vos_pkt_flatten_rx_pkt( vos_pkt_t **ppPacket )
 
   ---------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_set_rx_length( vos_pkt_t *pPacket,
-                                  v_SIZE_t pktLen )
-{
+                                  v_SIZE_t pktLen ) {
     struct sk_buff *skb;
 
     // Validate the parameter pointers
-    if (unlikely(NULL == pPacket))
-    {
+    if (unlikely(NULL == pPacket)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL pointer", __LINE__);
         return VOS_STATUS_E_INVAL;
     }
 
     // Validate that this is really an initialized vos packet
-    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic))
-    {
+    if (unlikely(VPKT_MAGIC_NUMBER != pPacket->magic)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: Invalid magic", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2892,8 +2708,7 @@ VOS_STATUS vos_pkt_set_rx_length( vos_pkt_t *pPacket,
     skb = pPacket->pSkb;
 
     // Validate the skb
-    if (unlikely(NULL == skb))
-    {
+    if (unlikely(NULL == skb)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                   "VPKT [%d]: NULL skb", __LINE__);
         return VOS_STATUS_E_INVAL;
@@ -2930,20 +2745,17 @@ VOS_STATUS vos_pkt_set_rx_length( vos_pkt_t *pPacket,
 
   ----------------------------------------------------------------------------*/
 VOS_STATUS vos_pkt_get_available_buffer_pool (VOS_PKT_TYPE  pktType,
-        v_SIZE_t     *vosFreeBuffer)
-{
+        v_SIZE_t     *vosFreeBuffer) {
     struct list_head *pList;
     struct list_head *pNode;
     v_SIZE_t count;
     struct mutex *mlock;
 
-    if (NULL == vosFreeBuffer)
-    {
+    if (NULL == vosFreeBuffer) {
         return VOS_STATUS_E_INVAL;
     }
 
-    switch (pktType)
-    {
+    switch (pktType) {
     case VOS_PKT_TYPE_TX_802_11_MGMT:
         pList = &gpVosPacketContext->txMgmtFreeList;
         mlock = &gpVosPacketContext->txMgmtFreeListLock;
@@ -2951,13 +2763,10 @@ VOS_STATUS vos_pkt_get_available_buffer_pool (VOS_PKT_TYPE  pktType,
 
     case VOS_PKT_TYPE_TX_802_11_DATA:
     case VOS_PKT_TYPE_TX_802_3_DATA:
-        if (VOS_STA_SAP_MODE == hdd_get_conparam())
-        {
+        if (VOS_STA_SAP_MODE == hdd_get_conparam()) {
             *vosFreeBuffer = gpVosPacketContext->uctxDataFreeListCount;
             return VOS_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             pList = &gpVosPacketContext->txDataFreeList;
             mlock = &gpVosPacketContext->txDataFreeListLock;
         }
@@ -2979,8 +2788,7 @@ VOS_STATUS vos_pkt_get_available_buffer_pool (VOS_PKT_TYPE  pktType,
 
     count = 0;
     mutex_lock(mlock);
-    list_for_each(pNode, pList)
-    {
+    list_for_each(pNode, pList) {
         count++;
     }
     mutex_unlock(mlock);
@@ -3002,8 +2810,7 @@ VOS_STATUS vos_pkt_get_available_buffer_pool (VOS_PKT_TYPE  pktType,
        v_SIZE_t the number of packets to allocate
 
 */
-v_SIZE_t vos_pkt_get_num_of_rx_raw_pkts(void)
-{
+v_SIZE_t vos_pkt_get_num_of_rx_raw_pkts(void) {
 #ifdef HAVE_WCNSS_RX_BUFF_COUNT
     v_SIZE_t buffCount;
 
@@ -3026,8 +2833,7 @@ v_SIZE_t vos_pkt_get_num_of_rx_raw_pkts(void)
        v_SIZE_t the number of times packet allocation failed
 
 */
-v_SIZE_t vos_pkt_get_num_of_rx_pkt_alloc_failures(void)
-{
+v_SIZE_t vos_pkt_get_num_of_rx_pkt_alloc_failures(void) {
     v_SIZE_t failCount;
 
     mutex_lock(&gpVosPacketContext->rxReplenishListLock);
@@ -3045,8 +2851,7 @@ v_U8_t vos_pkt_get_proto_type
 (
     void  *pskb,
     v_U8_t tracking_map
-)
-{
+) {
     v_U8_t     pkt_proto_type = 0;
     v_U16_t    ether_type;
     v_U16_t    SPort;
@@ -3054,28 +2859,22 @@ v_U8_t vos_pkt_get_proto_type
     struct sk_buff *skb = NULL;
 
 
-    if (NULL == pskb)
-    {
+    if (NULL == pskb) {
         return pkt_proto_type;
-    }
-    else
-    {
+    } else {
         skb = (struct sk_buff *)pskb;
     }
 
     /* EAPOL Tracking enabled */
-    if (VOS_PKT_PROTO_TYPE_EAPOL & tracking_map)
-    {
+    if (VOS_PKT_PROTO_TYPE_EAPOL & tracking_map) {
         ether_type = (v_U16_t)(*(v_U16_t *)(skb->data + VOS_PKT_PROT_ETH_TYPE_OFFSET));
-        if (VOS_PKT_PROT_EAPOL_ETH_TYPE == VOS_SWAP_U16(ether_type))
-        {
+        if (VOS_PKT_PROT_EAPOL_ETH_TYPE == VOS_SWAP_U16(ether_type)) {
             pkt_proto_type |= VOS_PKT_PROTO_TYPE_EAPOL;
         }
     }
 
     /* DHCP Tracking enabled */
-    if (VOS_PKT_PROTO_TYPE_DHCP & tracking_map)
-    {
+    if (VOS_PKT_PROTO_TYPE_DHCP & tracking_map) {
         SPort = (v_U16_t)(*(v_U16_t *)(skb->data + VOS_PKT_PROT_IP_OFFSET +
                                        VOS_PKT_PROT_IP_HEADER_SIZE));
         DPort = (v_U16_t)(*(v_U16_t *)(skb->data + VOS_PKT_PROT_IP_OFFSET +
@@ -3083,8 +2882,7 @@ v_U8_t vos_pkt_get_proto_type
         if (((VOS_PKT_PROT_DHCP_SRV_PORT == VOS_SWAP_U16(SPort)) &&
                 (VOS_PKT_PROT_DHCP_CLI_PORT == VOS_SWAP_U16(DPort))) ||
                 ((VOS_PKT_PROT_DHCP_CLI_PORT == VOS_SWAP_U16(SPort)) &&
-                 (VOS_PKT_PROT_DHCP_SRV_PORT == VOS_SWAP_U16(DPort))))
-        {
+                 (VOS_PKT_PROT_DHCP_SRV_PORT == VOS_SWAP_U16(DPort)))) {
             pkt_proto_type |= VOS_PKT_PROTO_TYPE_DHCP;
         }
     }

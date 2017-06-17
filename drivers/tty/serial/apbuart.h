@@ -7,15 +7,15 @@
 static int grlib_apbuart_port_nr;
 
 struct grlib_apbuart_regs_map {
-	u32 data;
-	u32 status;
-	u32 ctrl;
-	u32 scaler;
+    u32 data;
+    u32 status;
+    u32 ctrl;
+    u32 scaler;
 };
 
 struct amba_prom_registers {
-	unsigned int phys_addr;
-	unsigned int reg_size;
+    unsigned int phys_addr;
+    unsigned int reg_size;
 };
 
 /*

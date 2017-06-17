@@ -94,21 +94,18 @@
 #define NUM_BC_STA        1
 #define NUM_ASSOC_STA     (NUM_STA - NUM_RESV_SELFSTA - NUM_BC_STA)
 
-typedef enum
-{
+typedef enum {
     HDD_WLAN_WMM_DIRECTION_UPSTREAM      = 0,
     HDD_WLAN_WMM_DIRECTION_DOWNSTREAM    = 1,
     HDD_WLAN_WMM_DIRECTION_BIDIRECTIONAL = 2,
 } hdd_wlan_wmm_direction_e;
 
-typedef enum
-{
+typedef enum {
     HDD_WLAN_WMM_POWER_SAVE_LEGACY       = 0,
     HDD_WLAN_WMM_POWER_SAVE_UAPSD        = 1,
 } hdd_wlan_wmm_power_save_e;
 
-typedef enum
-{
+typedef enum {
     // TSPEC/re-assoc done, async
     HDD_WLAN_WMM_STATUS_SETUP_SUCCESS = 0,
     // no need to setup TSPEC since ACM=0 and no UAPSD desired, sync + async
@@ -163,8 +160,7 @@ typedef enum
 } hdd_wlan_wmm_status_e;
 
 /** TS Info Ack Policy */
-typedef enum
-{
+typedef enum {
     HDD_WLAN_WMM_TS_INFO_ACK_POLICY_NORMAL_ACK      = 0,
     HDD_WLAN_WMM_TS_INFO_ACK_POLICY_HT_IMMEDIATE_BLOCK_ACK    = 1,
 } hdd_wlan_wmm_ts_info_ack_policy_e;
@@ -254,20 +250,17 @@ typedef enum
 #define WFD_OUI_TYPE_SIZE  4
 #endif
 
-typedef enum
-{
+typedef enum {
     eWEXT_WPS_OFF = 0,
     eWEXT_WPS_ON = 1,
 } hdd_wps_mode_e;
 
-typedef enum
-{
+typedef enum {
     DRIVER_POWER_MODE_AUTO = 0,
     DRIVER_POWER_MODE_ACTIVE = 1,
 } hdd_power_mode_e;
 
-typedef enum
-{
+typedef enum {
     WEXT_SCAN_PENDING_GIVEUP = 0,
     WEXT_SCAN_PENDING_PIGGYBACK = 1,
     WEXT_SCAN_PENDING_DELAY = 2,
@@ -278,8 +271,7 @@ typedef enum
  * This structure contains the interface level (granularity)
  * configuration information in support of wireless extensions.
  */
-typedef struct hdd_wext_state_s
-{
+typedef struct hdd_wext_state_s {
     /** The CSR "desired" Profile */
     tCsrRoamProfile roamProfile;
 
@@ -330,8 +322,7 @@ typedef struct hdd_wext_state_s
 #endif
 } hdd_wext_state_t;
 
-typedef struct ccp_freq_chan_map_s
-{
+typedef struct ccp_freq_chan_map_s {
     // List of frequencies
     v_U32_t freq;
     v_U32_t chan;

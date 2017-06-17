@@ -3,11 +3,11 @@
 
 #include <asm/pstate.h>
 
-	/* wrpr	%g0, val, %gl */
+/* wrpr	%g0, val, %gl */
 #define SET_GL(val)	\
 	.word	0xa1902000 | val
 
-	/* rdpr %gl, %gN */
+/* rdpr %gl, %gN */
 #define GET_GL_GLOBAL(N)	\
 	.word	0x81540000 | (N << 25)
 

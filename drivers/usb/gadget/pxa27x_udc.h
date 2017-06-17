@@ -107,7 +107,7 @@
 /* Host Port 2 field bits */
 #define UP2OCR_CPVEN	(1 << 0)	/* Charge Pump Vbus Enable */
 #define UP2OCR_CPVPE	(1 << 1)	/* Charge Pump Vbus Pulse Enable */
-					/* Transceiver enablers */
+/* Transceiver enablers */
 #define UP2OCR_DPPDE	(1 << 2)	/*   D+ Pull Down Enable */
 #define UP2OCR_DMPDE	(1 << 3)	/*   D- Pull Down Enable */
 #define UP2OCR_DPPUE	(1 << 4)	/*   D+ Pull Up Enable */
@@ -282,11 +282,11 @@
 struct pxa27x_udc;
 
 struct stats {
-	unsigned long in_ops;
-	unsigned long out_ops;
-	unsigned long in_bytes;
-	unsigned long out_bytes;
-	unsigned long irqs;
+    unsigned long in_ops;
+    unsigned long out_ops;
+    unsigned long in_bytes;
+    unsigned long out_bytes;
+    unsigned long irqs;
 };
 
 /**
@@ -297,10 +297,10 @@ struct stats {
  * @pxa_ep: matching pxa_ep (cache of find_pxa_ep() call)
  */
 struct udc_usb_ep {
-	struct usb_ep usb_ep;
-	struct usb_endpoint_descriptor desc;
-	struct pxa_udc *dev;
-	struct pxa_ep *pxa_ep;
+    struct usb_ep usb_ep;
+    struct usb_endpoint_descriptor desc;
+    struct pxa_udc *dev;
+    struct pxa_ep *pxa_ep;
 };
 
 /**
@@ -336,33 +336,33 @@ struct udc_usb_ep {
  * gadget which may work with this udc driver.
  */
 struct pxa_ep {
-	struct pxa_udc		*dev;
+    struct pxa_udc		*dev;
 
-	struct list_head	queue;
-	spinlock_t		lock;		/* Protects this structure */
-						/* (queues, stats) */
-	unsigned		enabled:1;
-	unsigned		in_handle_ep:1;
+    struct list_head	queue;
+    spinlock_t		lock;		/* Protects this structure */
+    /* (queues, stats) */
+    unsigned		enabled:1;
+    unsigned		in_handle_ep:1;
 
-	unsigned		idx:5;
-	char			*name;
+    unsigned		idx:5;
+    char			*name;
 
-	/*
-	 * Specific pxa endpoint data, needed for hardware initialization
-	 */
-	unsigned		dir_in:1;
-	unsigned		addr:4;
-	unsigned		config:2;
-	unsigned		interface:3;
-	unsigned		alternate:3;
-	unsigned		fifo_size;
-	unsigned		type;
+    /*
+     * Specific pxa endpoint data, needed for hardware initialization
+     */
+    unsigned		dir_in:1;
+    unsigned		addr:4;
+    unsigned		config:2;
+    unsigned		interface:3;
+    unsigned		alternate:3;
+    unsigned		fifo_size;
+    unsigned		type;
 
 #ifdef CONFIG_PM
-	u32			udccsr_value;
-	u32			udccr_value;
+    u32			udccsr_value;
+    u32			udccr_value;
 #endif
-	struct stats		stats;
+    struct stats		stats;
 };
 
 /**
@@ -373,27 +373,27 @@ struct pxa_ep {
  * @queue: linked list of requests, linked on pxa_ep->queue
  */
 struct pxa27x_request {
-	struct usb_request			req;
-	struct udc_usb_ep			*udc_usb_ep;
-	unsigned				in_use:1;
-	struct list_head			queue;
+    struct usb_request			req;
+    struct udc_usb_ep			*udc_usb_ep;
+    unsigned				in_use:1;
+    struct list_head			queue;
 };
 
 enum ep0_state {
-	WAIT_FOR_SETUP,
-	SETUP_STAGE,
-	IN_DATA_STAGE,
-	OUT_DATA_STAGE,
-	IN_STATUS_STAGE,
-	OUT_STATUS_STAGE,
-	STALL,
-	WAIT_ACK_SET_CONF_INTERF
+    WAIT_FOR_SETUP,
+    SETUP_STAGE,
+    IN_DATA_STAGE,
+    OUT_DATA_STAGE,
+    IN_STATUS_STAGE,
+    OUT_STATUS_STAGE,
+    STALL,
+    WAIT_ACK_SET_CONF_INTERF
 };
 
 static char *ep0_state_name[] = {
-	"WAIT_FOR_SETUP", "SETUP_STAGE", "IN_DATA_STAGE", "OUT_DATA_STAGE",
-	"IN_STATUS_STAGE", "OUT_STATUS_STAGE", "STALL",
-	"WAIT_ACK_SET_CONF_INTERF"
+    "WAIT_FOR_SETUP", "SETUP_STAGE", "IN_DATA_STAGE", "OUT_DATA_STAGE",
+    "IN_STATUS_STAGE", "OUT_STATUS_STAGE", "STALL",
+    "WAIT_ACK_SET_CONF_INTERF"
 };
 #define EP0_STNAME(udc) ep0_state_name[(udc)->ep0state]
 
@@ -403,10 +403,10 @@ static char *ep0_state_name[] = {
 #define INT_FIFO_SIZE	16U
 
 struct udc_stats {
-	unsigned long	irqs_reset;
-	unsigned long	irqs_suspend;
-	unsigned long	irqs_resume;
-	unsigned long	irqs_reconfig;
+    unsigned long	irqs_reset;
+    unsigned long	irqs_suspend;
+    unsigned long	irqs_resume;
+    unsigned long	irqs_reconfig;
 };
 
 #define NR_USB_ENDPOINTS (1 + 5)	/* ep0 + ep1in-bulk + .. + ep3in-iso */
@@ -439,44 +439,43 @@ struct udc_stats {
  * @debugfs_eps: debugfs entry for "epstate"
  */
 struct pxa_udc {
-	void __iomem				*regs;
-	int					irq;
-	struct clk				*clk;
+    void __iomem				*regs;
+    int					irq;
+    struct clk				*clk;
 
-	struct usb_gadget			gadget;
-	struct usb_gadget_driver		*driver;
-	struct device				*dev;
-	struct pxa2xx_udc_mach_info		*mach;
-	struct usb_phy				*transceiver;
+    struct usb_gadget			gadget;
+    struct usb_gadget_driver		*driver;
+    struct device				*dev;
+    struct pxa2xx_udc_mach_info		*mach;
+    struct usb_phy				*transceiver;
 
-	enum ep0_state				ep0state;
-	struct udc_stats			stats;
+    enum ep0_state				ep0state;
+    struct udc_stats			stats;
 
-	struct udc_usb_ep			udc_usb_ep[NR_USB_ENDPOINTS];
-	struct pxa_ep				pxa_ep[NR_PXA_ENDPOINTS];
+    struct udc_usb_ep			udc_usb_ep[NR_USB_ENDPOINTS];
+    struct pxa_ep				pxa_ep[NR_PXA_ENDPOINTS];
 
-	unsigned				enabled:1;
-	unsigned				pullup_on:1;
-	unsigned				pullup_resume:1;
-	unsigned				vbus_sensed:1;
-	unsigned				config:2;
-	unsigned				last_interface:3;
-	unsigned				last_alternate:3;
+    unsigned				enabled:1;
+    unsigned				pullup_on:1;
+    unsigned				pullup_resume:1;
+    unsigned				vbus_sensed:1;
+    unsigned				config:2;
+    unsigned				last_interface:3;
+    unsigned				last_alternate:3;
 
 #ifdef CONFIG_PM
-	unsigned				udccsr0;
+    unsigned				udccsr0;
 #endif
 #ifdef CONFIG_USB_GADGET_DEBUG_FS
-	struct dentry				*debugfs_root;
-	struct dentry				*debugfs_state;
-	struct dentry				*debugfs_queues;
-	struct dentry				*debugfs_eps;
+    struct dentry				*debugfs_root;
+    struct dentry				*debugfs_state;
+    struct dentry				*debugfs_queues;
+    struct dentry				*debugfs_eps;
 #endif
 };
 
-static inline struct pxa_udc *to_gadget_udc(struct usb_gadget *gadget)
-{
-	return container_of(gadget, struct pxa_udc, gadget);
+static inline struct pxa_udc *to_gadget_udc(struct usb_gadget *gadget) {
+    return container_of(gadget, struct pxa_udc, gadget);
 }
 
 /*

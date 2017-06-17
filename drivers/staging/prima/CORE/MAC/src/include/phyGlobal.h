@@ -63,8 +63,7 @@
 typedef void (*funcHalSetChanCB)(tpAniSirGlobal, void*, tANI_U32, tANI_U16);
 
 // Structure to save the context from where the set channel is called
-typedef struct sPhySetChanCntx
-{
+typedef struct sPhySetChanCntx {
     tANI_U8 newChannel;
     tANI_U8 newRfBand;
     tANI_U8 newCbState;
@@ -75,8 +74,7 @@ typedef struct sPhySetChanCntx
 } tPhySetChanCntx, *tpPhySetChanCntx;
 
 
-typedef struct
-{
+typedef struct {
     sHalNv nvCache;
     void *nvTables[NUM_NV_TABLE_IDS];
 

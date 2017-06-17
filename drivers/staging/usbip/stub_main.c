@@ -36,259 +36,247 @@ struct kmem_cache *stub_priv_cache;
 static struct bus_id_priv busid_table[MAX_BUSID];
 static spinlock_t busid_table_lock;
 
-static void init_busid_table(void)
-{
-	int i;
+static void init_busid_table(void) {
+    int i;
 
-	memset(busid_table, 0, sizeof(busid_table));
-	for (i = 0; i < MAX_BUSID; i++)
-		busid_table[i].status = STUB_BUSID_OTHER;
+    memset(busid_table, 0, sizeof(busid_table));
+    for (i = 0; i < MAX_BUSID; i++)
+        busid_table[i].status = STUB_BUSID_OTHER;
 
-	spin_lock_init(&busid_table_lock);
+    spin_lock_init(&busid_table_lock);
 }
 
 /*
  * Find the index of the busid by name.
  * Must be called with busid_table_lock held.
  */
-static int get_busid_idx(const char *busid)
-{
-	int i;
-	int idx = -1;
+static int get_busid_idx(const char *busid) {
+    int i;
+    int idx = -1;
 
-	for (i = 0; i < MAX_BUSID; i++)
-		if (busid_table[i].name[0])
-			if (!strncmp(busid_table[i].name, busid, BUSID_SIZE)) {
-				idx = i;
-				break;
-			}
-	return idx;
+    for (i = 0; i < MAX_BUSID; i++)
+        if (busid_table[i].name[0])
+            if (!strncmp(busid_table[i].name, busid, BUSID_SIZE)) {
+                idx = i;
+                break;
+            }
+    return idx;
 }
 
-struct bus_id_priv *get_busid_priv(const char *busid)
-{
-	int idx;
-	struct bus_id_priv *bid = NULL;
+struct bus_id_priv *get_busid_priv(const char *busid) {
+    int idx;
+    struct bus_id_priv *bid = NULL;
 
-	spin_lock(&busid_table_lock);
-	idx = get_busid_idx(busid);
-	if (idx >= 0)
-		bid = &(busid_table[idx]);
-	spin_unlock(&busid_table_lock);
+    spin_lock(&busid_table_lock);
+    idx = get_busid_idx(busid);
+    if (idx >= 0)
+        bid = &(busid_table[idx]);
+    spin_unlock(&busid_table_lock);
 
-	return bid;
+    return bid;
 }
 
-static int add_match_busid(char *busid)
-{
-	int i;
-	int ret = -1;
+static int add_match_busid(char *busid) {
+    int i;
+    int ret = -1;
 
-	spin_lock(&busid_table_lock);
-	/* already registered? */
-	if (get_busid_idx(busid) >= 0) {
-		ret = 0;
-		goto out;
-	}
+    spin_lock(&busid_table_lock);
+    /* already registered? */
+    if (get_busid_idx(busid) >= 0) {
+        ret = 0;
+        goto out;
+    }
 
-	for (i = 0; i < MAX_BUSID; i++)
-		if (!busid_table[i].name[0]) {
-			strncpy(busid_table[i].name, busid, BUSID_SIZE);
-			if ((busid_table[i].status != STUB_BUSID_ALLOC) &&
-			    (busid_table[i].status != STUB_BUSID_REMOV))
-				busid_table[i].status = STUB_BUSID_ADDED;
-			ret = 0;
-			break;
-		}
+    for (i = 0; i < MAX_BUSID; i++)
+        if (!busid_table[i].name[0]) {
+            strncpy(busid_table[i].name, busid, BUSID_SIZE);
+            if ((busid_table[i].status != STUB_BUSID_ALLOC) &&
+                    (busid_table[i].status != STUB_BUSID_REMOV))
+                busid_table[i].status = STUB_BUSID_ADDED;
+            ret = 0;
+            break;
+        }
 
 out:
-	spin_unlock(&busid_table_lock);
+    spin_unlock(&busid_table_lock);
 
-	return ret;
+    return ret;
 }
 
-int del_match_busid(char *busid)
-{
-	int idx;
-	int ret = -1;
+int del_match_busid(char *busid) {
+    int idx;
+    int ret = -1;
 
-	spin_lock(&busid_table_lock);
-	idx = get_busid_idx(busid);
-	if (idx < 0)
-		goto out;
+    spin_lock(&busid_table_lock);
+    idx = get_busid_idx(busid);
+    if (idx < 0)
+        goto out;
 
-	/* found */
-	ret = 0;
+    /* found */
+    ret = 0;
 
-	if (busid_table[idx].status == STUB_BUSID_OTHER)
-		memset(busid_table[idx].name, 0, BUSID_SIZE);
+    if (busid_table[idx].status == STUB_BUSID_OTHER)
+        memset(busid_table[idx].name, 0, BUSID_SIZE);
 
-	if ((busid_table[idx].status != STUB_BUSID_OTHER) &&
-	    (busid_table[idx].status != STUB_BUSID_ADDED))
-		busid_table[idx].status = STUB_BUSID_REMOV;
+    if ((busid_table[idx].status != STUB_BUSID_OTHER) &&
+            (busid_table[idx].status != STUB_BUSID_ADDED))
+        busid_table[idx].status = STUB_BUSID_REMOV;
 
 out:
-	spin_unlock(&busid_table_lock);
+    spin_unlock(&busid_table_lock);
 
-	return ret;
+    return ret;
 }
 
-static ssize_t show_match_busid(struct device_driver *drv, char *buf)
-{
-	int i;
-	char *out = buf;
+static ssize_t show_match_busid(struct device_driver *drv, char *buf) {
+    int i;
+    char *out = buf;
 
-	spin_lock(&busid_table_lock);
-	for (i = 0; i < MAX_BUSID; i++)
-		if (busid_table[i].name[0])
-			out += sprintf(out, "%s ", busid_table[i].name);
-	spin_unlock(&busid_table_lock);
-	out += sprintf(out, "\n");
+    spin_lock(&busid_table_lock);
+    for (i = 0; i < MAX_BUSID; i++)
+        if (busid_table[i].name[0])
+            out += sprintf(out, "%s ", busid_table[i].name);
+    spin_unlock(&busid_table_lock);
+    out += sprintf(out, "\n");
 
-	return out - buf;
+    return out - buf;
 }
 
 static ssize_t store_match_busid(struct device_driver *dev, const char *buf,
-				 size_t count)
-{
-	int len;
-	char busid[BUSID_SIZE];
+                                 size_t count) {
+    int len;
+    char busid[BUSID_SIZE];
 
-	if (count < 5)
-		return -EINVAL;
+    if (count < 5)
+        return -EINVAL;
 
-	/* strnlen() does not include \0 */
-	len = strnlen(buf + 4, BUSID_SIZE);
+    /* strnlen() does not include \0 */
+    len = strnlen(buf + 4, BUSID_SIZE);
 
-	/* busid needs to include \0 termination */
-	if (!(len < BUSID_SIZE))
-		return -EINVAL;
+    /* busid needs to include \0 termination */
+    if (!(len < BUSID_SIZE))
+        return -EINVAL;
 
-	strncpy(busid, buf + 4, BUSID_SIZE);
+    strncpy(busid, buf + 4, BUSID_SIZE);
 
-	if (!strncmp(buf, "add ", 4)) {
-		if (add_match_busid(busid) < 0) {
-			return -ENOMEM;
-		} else {
-			pr_debug("add busid %s\n", busid);
-			return count;
-		}
-	} else if (!strncmp(buf, "del ", 4)) {
-		if (del_match_busid(busid) < 0) {
-			return -ENODEV;
-		} else {
-			pr_debug("del busid %s\n", busid);
-			return count;
-		}
-	} else {
-		return -EINVAL;
-	}
+    if (!strncmp(buf, "add ", 4)) {
+        if (add_match_busid(busid) < 0) {
+            return -ENOMEM;
+        } else {
+            pr_debug("add busid %s\n", busid);
+            return count;
+        }
+    } else if (!strncmp(buf, "del ", 4)) {
+        if (del_match_busid(busid) < 0) {
+            return -ENODEV;
+        } else {
+            pr_debug("del busid %s\n", busid);
+            return count;
+        }
+    } else {
+        return -EINVAL;
+    }
 }
 static DRIVER_ATTR(match_busid, S_IRUSR | S_IWUSR, show_match_busid,
-		   store_match_busid);
+                   store_match_busid);
 
-static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead)
-{
-	struct stub_priv *priv, *tmp;
+static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead) {
+    struct stub_priv *priv, *tmp;
 
-	list_for_each_entry_safe(priv, tmp, listhead, list) {
-		list_del(&priv->list);
-		return priv;
-	}
+    list_for_each_entry_safe(priv, tmp, listhead, list) {
+        list_del(&priv->list);
+        return priv;
+    }
 
-	return NULL;
+    return NULL;
 }
 
-static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
-{
-	unsigned long flags;
-	struct stub_priv *priv;
+static struct stub_priv *stub_priv_pop(struct stub_device *sdev) {
+    unsigned long flags;
+    struct stub_priv *priv;
 
-	spin_lock_irqsave(&sdev->priv_lock, flags);
+    spin_lock_irqsave(&sdev->priv_lock, flags);
 
-	priv = stub_priv_pop_from_listhead(&sdev->priv_init);
-	if (priv)
-		goto done;
+    priv = stub_priv_pop_from_listhead(&sdev->priv_init);
+    if (priv)
+        goto done;
 
-	priv = stub_priv_pop_from_listhead(&sdev->priv_tx);
-	if (priv)
-		goto done;
+    priv = stub_priv_pop_from_listhead(&sdev->priv_tx);
+    if (priv)
+        goto done;
 
-	priv = stub_priv_pop_from_listhead(&sdev->priv_free);
+    priv = stub_priv_pop_from_listhead(&sdev->priv_free);
 
 done:
-	spin_unlock_irqrestore(&sdev->priv_lock, flags);
+    spin_unlock_irqrestore(&sdev->priv_lock, flags);
 
-	return priv;
+    return priv;
 }
 
-void stub_device_cleanup_urbs(struct stub_device *sdev)
-{
-	struct stub_priv *priv;
-	struct urb *urb;
+void stub_device_cleanup_urbs(struct stub_device *sdev) {
+    struct stub_priv *priv;
+    struct urb *urb;
 
-	dev_dbg(&sdev->udev->dev, "free sdev %p\n", sdev);
+    dev_dbg(&sdev->udev->dev, "free sdev %p\n", sdev);
 
-	while ((priv = stub_priv_pop(sdev))) {
-		urb = priv->urb;
-		dev_dbg(&sdev->udev->dev, "free urb %p\n", urb);
-		usb_kill_urb(urb);
+    while ((priv = stub_priv_pop(sdev))) {
+        urb = priv->urb;
+        dev_dbg(&sdev->udev->dev, "free urb %p\n", urb);
+        usb_kill_urb(urb);
 
-		kmem_cache_free(stub_priv_cache, priv);
+        kmem_cache_free(stub_priv_cache, priv);
 
-		kfree(urb->transfer_buffer);
-		kfree(urb->setup_packet);
-		usb_free_urb(urb);
-	}
+        kfree(urb->transfer_buffer);
+        kfree(urb->setup_packet);
+        usb_free_urb(urb);
+    }
 }
 
-static int __init usbip_host_init(void)
-{
-	int ret;
+static int __init usbip_host_init(void) {
+    int ret;
 
-	init_busid_table();
+    init_busid_table();
 
-	stub_priv_cache = KMEM_CACHE(stub_priv, SLAB_HWCACHE_ALIGN);
-	if (!stub_priv_cache) {
-		pr_err("kmem_cache_create failed\n");
-		return -ENOMEM;
-	}
+    stub_priv_cache = KMEM_CACHE(stub_priv, SLAB_HWCACHE_ALIGN);
+    if (!stub_priv_cache) {
+        pr_err("kmem_cache_create failed\n");
+        return -ENOMEM;
+    }
 
-	ret = usb_register(&stub_driver);
-	if (ret < 0) {
-		pr_err("usb_register failed %d\n", ret);
-		goto err_usb_register;
-	}
+    ret = usb_register(&stub_driver);
+    if (ret < 0) {
+        pr_err("usb_register failed %d\n", ret);
+        goto err_usb_register;
+    }
 
-	ret = driver_create_file(&stub_driver.drvwrap.driver,
-				 &driver_attr_match_busid);
-	if (ret < 0) {
-		pr_err("driver_create_file failed\n");
-		goto err_create_file;
-	}
+    ret = driver_create_file(&stub_driver.drvwrap.driver,
+                             &driver_attr_match_busid);
+    if (ret < 0) {
+        pr_err("driver_create_file failed\n");
+        goto err_create_file;
+    }
 
-	pr_info(DRIVER_DESC " v" USBIP_VERSION "\n");
-	return ret;
+    pr_info(DRIVER_DESC " v" USBIP_VERSION "\n");
+    return ret;
 
 err_create_file:
-	usb_deregister(&stub_driver);
+    usb_deregister(&stub_driver);
 err_usb_register:
-	kmem_cache_destroy(stub_priv_cache);
-	return ret;
+    kmem_cache_destroy(stub_priv_cache);
+    return ret;
 }
 
-static void __exit usbip_host_exit(void)
-{
-	driver_remove_file(&stub_driver.drvwrap.driver,
-			   &driver_attr_match_busid);
+static void __exit usbip_host_exit(void) {
+    driver_remove_file(&stub_driver.drvwrap.driver,
+                       &driver_attr_match_busid);
 
-	/*
-	 * deregister() calls stub_disconnect() for all devices. Device
-	 * specific data is cleared in stub_disconnect().
-	 */
-	usb_deregister(&stub_driver);
+    /*
+     * deregister() calls stub_disconnect() for all devices. Device
+     * specific data is cleared in stub_disconnect().
+     */
+    usb_deregister(&stub_driver);
 
-	kmem_cache_destroy(stub_priv_cache);
+    kmem_cache_destroy(stub_priv_cache);
 }
 
 module_init(usbip_host_init);

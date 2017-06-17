@@ -239,8 +239,8 @@
 #define  MII_TLEDCTRL_ENABLE	0x0040
 
 struct dma_desc {
-	__le32	ctrl;
-	__le32	addr;
+    __le32	ctrl;
+    __le32	addr;
 };
 
 /* There are only 12 bits in the DMA engine for descriptor offsetting
@@ -258,9 +258,9 @@ struct dma_desc {
 #define RX_COPY_THRESHOLD  	256
 
 struct rx_header {
-	__le16	len;
-	__le16	flags;
-	__le16	pad[12];
+    __le16	len;
+    __le16	flags;
+    __le16	pad[12];
 };
 #define RX_HEADER_LEN	28
 
@@ -276,8 +276,8 @@ struct rx_header {
 #define RX_FLAG_ERRORS	(RX_FLAG_ODD | RX_FLAG_SERR | RX_FLAG_CRCERR | RX_FLAG_OFIFO)
 
 struct ring_info {
-	struct sk_buff		*skb;
-	dma_addr_t	mapping;
+    struct sk_buff		*skb;
+    dma_addr_t	mapping;
 };
 
 #define B44_MCAST_TABLE_SIZE	32
@@ -339,29 +339,29 @@ struct ring_info {
  */
 struct b44_hw_stats {
 #define _B44(x)	u32 x;
-B44_STAT_REG_DECLARE
+    B44_STAT_REG_DECLARE
 #undef _B44
 };
 
 struct ssb_device;
 
 struct b44 {
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	u32			imask, istat;
+    u32			imask, istat;
 
-	struct dma_desc		*rx_ring, *tx_ring;
+    struct dma_desc		*rx_ring, *tx_ring;
 
-	u32			tx_prod, tx_cons;
-	u32			rx_prod, rx_cons;
+    u32			tx_prod, tx_cons;
+    u32			rx_prod, rx_cons;
 
-	struct ring_info	*rx_buffers;
-	struct ring_info	*tx_buffers;
+    struct ring_info	*rx_buffers;
+    struct ring_info	*tx_buffers;
 
-	struct napi_struct	napi;
+    struct napi_struct	napi;
 
-	u32			dma_offset;
-	u32			flags;
+    u32			dma_offset;
+    u32			flags;
 #define B44_FLAG_B0_ANDLATER	0x00000001
 #define B44_FLAG_BUGGY_TXPTR	0x00000002
 #define B44_FLAG_REORDER_BUG	0x00000004
@@ -380,22 +380,22 @@ struct b44 {
 #define B44_FLAG_TX_RING_HACK	0x40000000
 #define B44_FLAG_WOL_ENABLE	0x80000000
 
-	u32			msg_enable;
+    u32			msg_enable;
 
-	struct timer_list	timer;
+    struct timer_list	timer;
 
-	struct b44_hw_stats	hw_stats;
+    struct b44_hw_stats	hw_stats;
 
-	struct ssb_device	*sdev;
-	struct net_device	*dev;
+    struct ssb_device	*sdev;
+    struct net_device	*dev;
 
-	dma_addr_t		rx_ring_dma, tx_ring_dma;
+    dma_addr_t		rx_ring_dma, tx_ring_dma;
 
-	u32			rx_pending;
-	u32			tx_pending;
-	u8			phy_addr;
-	u8			force_copybreak;
-	struct mii_if_info	mii_if;
+    u32			rx_pending;
+    u32			tx_pending;
+    u8			phy_addr;
+    u8			force_copybreak;
+    struct mii_if_info	mii_if;
 };
 
 #endif /* _B44_H */

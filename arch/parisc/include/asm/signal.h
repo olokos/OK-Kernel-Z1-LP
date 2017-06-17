@@ -71,7 +71,7 @@
 
 #define SA_RESTORER	0x04000000 /* obsolete -- ignored */
 
-/* 
+/*
  * sigaltstack controls
  */
 #define SS_ONSTACK	1
@@ -117,9 +117,9 @@ typedef __signalfn_t __user *__sighandler_t;
 #endif
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
@@ -130,18 +130,18 @@ typedef struct sigaltstack {
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 
 typedef struct {
-	/* next_signal() assumes this is a long - no choice */
-	unsigned long sig[_NSIG_WORDS];
+    /* next_signal() assumes this is a long - no choice */
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 #define ptrace_signal_deliver(regs, cookie) do { } while (0)

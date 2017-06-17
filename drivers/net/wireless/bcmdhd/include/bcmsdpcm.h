@@ -3,13 +3,13 @@
  * Software-specific definitions shared between device and host side
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -17,7 +17,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -165,33 +165,33 @@
  */
 
 typedef volatile struct {
-	uint32 cmd52rd;		/* Cmd52RdCount, SDIO: cmd52 reads */
-	uint32 cmd52wr;		/* Cmd52WrCount, SDIO: cmd52 writes */
-	uint32 cmd53rd;		/* Cmd53RdCount, SDIO: cmd53 reads */
-	uint32 cmd53wr;		/* Cmd53WrCount, SDIO: cmd53 writes */
-	uint32 abort;		/* AbortCount, SDIO: aborts */
-	uint32 datacrcerror;	/* DataCrcErrorCount, SDIO: frames w/CRC error */
-	uint32 rdoutofsync;	/* RdOutOfSyncCount, SDIO/PCMCIA: Rd Frm out of sync */
-	uint32 wroutofsync;	/* RdOutOfSyncCount, SDIO/PCMCIA: Wr Frm out of sync */
-	uint32 writebusy;	/* WriteBusyCount, SDIO: device asserted "busy" */
-	uint32 readwait;	/* ReadWaitCount, SDIO: no data ready for a read cmd */
-	uint32 readterm;	/* ReadTermCount, SDIO: read frame termination cmds */
-	uint32 writeterm;	/* WriteTermCount, SDIO: write frames termination cmds */
-	uint32 rxdescuflo;	/* receive descriptor underflows */
-	uint32 rxfifooflo;	/* receive fifo overflows */
-	uint32 txfifouflo;	/* transmit fifo underflows */
-	uint32 runt;		/* runt (too short) frames recv'd from bus */
-	uint32 badlen;		/* frame's rxh len does not match its hw tag len */
-	uint32 badcksum;	/* frame's hw tag chksum doesn't agree with len value */
-	uint32 seqbreak;	/* break in sequence # space from one rx frame to the next */
-	uint32 rxfcrc;		/* frame rx header indicates crc error */
-	uint32 rxfwoos;		/* frame rx header indicates write out of sync */
-	uint32 rxfwft;		/* frame rx header indicates write frame termination */
-	uint32 rxfabort;	/* frame rx header indicates frame aborted */
-	uint32 woosint;		/* write out of sync interrupt */
-	uint32 roosint;		/* read out of sync interrupt */
-	uint32 rftermint;	/* read frame terminate interrupt */
-	uint32 wftermint;	/* write frame terminate interrupt */
+    uint32 cmd52rd;		/* Cmd52RdCount, SDIO: cmd52 reads */
+    uint32 cmd52wr;		/* Cmd52WrCount, SDIO: cmd52 writes */
+    uint32 cmd53rd;		/* Cmd53RdCount, SDIO: cmd53 reads */
+    uint32 cmd53wr;		/* Cmd53WrCount, SDIO: cmd53 writes */
+    uint32 abort;		/* AbortCount, SDIO: aborts */
+    uint32 datacrcerror;	/* DataCrcErrorCount, SDIO: frames w/CRC error */
+    uint32 rdoutofsync;	/* RdOutOfSyncCount, SDIO/PCMCIA: Rd Frm out of sync */
+    uint32 wroutofsync;	/* RdOutOfSyncCount, SDIO/PCMCIA: Wr Frm out of sync */
+    uint32 writebusy;	/* WriteBusyCount, SDIO: device asserted "busy" */
+    uint32 readwait;	/* ReadWaitCount, SDIO: no data ready for a read cmd */
+    uint32 readterm;	/* ReadTermCount, SDIO: read frame termination cmds */
+    uint32 writeterm;	/* WriteTermCount, SDIO: write frames termination cmds */
+    uint32 rxdescuflo;	/* receive descriptor underflows */
+    uint32 rxfifooflo;	/* receive fifo overflows */
+    uint32 txfifouflo;	/* transmit fifo underflows */
+    uint32 runt;		/* runt (too short) frames recv'd from bus */
+    uint32 badlen;		/* frame's rxh len does not match its hw tag len */
+    uint32 badcksum;	/* frame's hw tag chksum doesn't agree with len value */
+    uint32 seqbreak;	/* break in sequence # space from one rx frame to the next */
+    uint32 rxfcrc;		/* frame rx header indicates crc error */
+    uint32 rxfwoos;		/* frame rx header indicates write out of sync */
+    uint32 rxfwft;		/* frame rx header indicates write frame termination */
+    uint32 rxfabort;	/* frame rx header indicates frame aborted */
+    uint32 woosint;		/* write out of sync interrupt */
+    uint32 roosint;		/* read out of sync interrupt */
+    uint32 rftermint;	/* read frame terminate interrupt */
+    uint32 wftermint;	/* write frame terminate interrupt */
 } sdpcmd_cnt_t;
 
 /*
@@ -256,14 +256,14 @@ typedef volatile struct {
 #define SDPCM_SHARED_PENDING_BRPT  0x2000
 
 typedef struct {
-	uint32	flags;
-	uint32  trap_addr;
-	uint32  assert_exp_addr;
-	uint32  assert_file_addr;
-	uint32  assert_line;
-	uint32	console_addr;		/* Address of hndrte_cons_t */
-	uint32  msgtrace_addr;
-	uint32  brpt_addr;
+    uint32	flags;
+    uint32  trap_addr;
+    uint32  assert_exp_addr;
+    uint32  assert_file_addr;
+    uint32  assert_line;
+    uint32	console_addr;		/* Address of hndrte_cons_t */
+    uint32  msgtrace_addr;
+    uint32  brpt_addr;
 } sdpcm_shared_t;
 
 extern sdpcm_shared_t sdpcm_shared;

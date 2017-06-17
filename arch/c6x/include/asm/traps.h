@@ -26,9 +26,9 @@
 #define EXCEPT_CAUSE_IFX  (1 << 0) /* instruction fetch exception */
 
 struct exception_info {
-	char *kernel_str;
-	int  signo;
-	int  code;
+    char *kernel_str;
+    int  signo;
+    int  code;
 };
 
 extern int (*c6x_nmi_handler)(struct pt_regs *regs);

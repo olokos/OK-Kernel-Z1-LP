@@ -20,29 +20,28 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void *current_text_addr(void)
-{
-	register void *pc asm("pc");
-	return pc;
+static inline void *current_text_addr(void) {
+    register void *pc asm("pc");
+    return pc;
 }
 
 enum arch_type {
-	ARCH_AVR32A,
-	ARCH_AVR32B,
-	ARCH_MAX
+    ARCH_AVR32A,
+    ARCH_AVR32B,
+    ARCH_MAX
 };
 
 enum cpu_type {
-	CPU_MORGAN,
-	CPU_AT32AP,
-	CPU_MAX
+    CPU_MORGAN,
+    CPU_AT32AP,
+    CPU_MAX
 };
 
 enum tlb_config {
-	TLB_NONE,
-	TLB_SPLIT,
-	TLB_UNIFIED,
-	TLB_INVALID
+    TLB_NONE,
+    TLB_SPLIT,
+    TLB_UNIFIED,
+    TLB_INVALID
 };
 
 #define AVR32_FEATURE_RMW	(1 << 0)
@@ -54,31 +53,28 @@ enum tlb_config {
 #define AVR32_FEATURE_FPU	(1 << 6)
 
 struct avr32_cpuinfo {
-	struct clk *clk;
-	unsigned long loops_per_jiffy;
-	enum arch_type arch_type;
-	enum cpu_type cpu_type;
-	unsigned short arch_revision;
-	unsigned short cpu_revision;
-	enum tlb_config tlb_config;
-	unsigned long features;
-	u32 device_id;
+    struct clk *clk;
+    unsigned long loops_per_jiffy;
+    enum arch_type arch_type;
+    enum cpu_type cpu_type;
+    unsigned short arch_revision;
+    unsigned short cpu_revision;
+    enum tlb_config tlb_config;
+    unsigned long features;
+    u32 device_id;
 
-	struct cache_info icache;
-	struct cache_info dcache;
+    struct cache_info icache;
+    struct cache_info dcache;
 };
 
-static inline unsigned int avr32_get_manufacturer_id(struct avr32_cpuinfo *cpu)
-{
-	return (cpu->device_id >> 1) & 0x7f;
+static inline unsigned int avr32_get_manufacturer_id(struct avr32_cpuinfo *cpu) {
+    return (cpu->device_id >> 1) & 0x7f;
 }
-static inline unsigned int avr32_get_product_number(struct avr32_cpuinfo *cpu)
-{
-	return (cpu->device_id >> 12) & 0xffff;
+static inline unsigned int avr32_get_product_number(struct avr32_cpuinfo *cpu) {
+    return (cpu->device_id >> 12) & 0xffff;
 }
-static inline unsigned int avr32_get_chip_revision(struct avr32_cpuinfo *cpu)
-{
-	return (cpu->device_id >> 28) & 0x0f;
+static inline unsigned int avr32_get_chip_revision(struct avr32_cpuinfo *cpu) {
+    return (cpu->device_id >> 28) & 0x0f;
 }
 
 extern struct avr32_cpuinfo boot_cpu_data;
@@ -100,24 +96,24 @@ extern struct avr32_cpuinfo cpu_data[];
 #define cpu_sync_pipeline()	asm volatile("sub pc, -2" : : : "memory")
 
 struct cpu_context {
-	unsigned long sr;
-	unsigned long pc;
-	unsigned long ksp;	/* Kernel stack pointer */
-	unsigned long r7;
-	unsigned long r6;
-	unsigned long r5;
-	unsigned long r4;
-	unsigned long r3;
-	unsigned long r2;
-	unsigned long r1;
-	unsigned long r0;
+    unsigned long sr;
+    unsigned long pc;
+    unsigned long ksp;	/* Kernel stack pointer */
+    unsigned long r7;
+    unsigned long r6;
+    unsigned long r5;
+    unsigned long r4;
+    unsigned long r3;
+    unsigned long r2;
+    unsigned long r1;
+    unsigned long r0;
 };
 
 /* This struct contains the CPU context as stored by switch_to() */
 struct thread_struct {
-	struct cpu_context cpu_context;
-	unsigned long single_step_addr;
-	u16 single_step_insn;
+    struct cpu_context cpu_context;
+    unsigned long single_step_addr;
+    u16 single_step_insn;
 };
 
 #define INIT_THREAD {						\
@@ -155,7 +151,7 @@ struct pt_regs;
 extern unsigned long get_wchan(struct task_struct *p);
 extern void show_regs_log_lvl(struct pt_regs *regs, const char *log_lvl);
 extern void show_stack_log_lvl(struct task_struct *tsk, unsigned long sp,
-			       struct pt_regs *regs, const char *log_lvl);
+                               struct pt_regs *regs, const char *log_lvl);
 
 #define task_pt_regs(p) \
 	((struct pt_regs *)(THREAD_SIZE + task_stack_page(p)) - 1)
@@ -165,10 +161,9 @@ extern void show_stack_log_lvl(struct task_struct *tsk, unsigned long sp,
 
 #define ARCH_HAS_PREFETCH
 
-static inline void prefetch(const void *x)
-{
-	const char *c = x;
-	asm volatile("pref %0" : : "r"(c));
+static inline void prefetch(const void *x) {
+    const char *c = x;
+    asm volatile("pref %0" : : "r"(c));
 }
 #define PREFETCH_STRIDE	L1_CACHE_BYTES
 

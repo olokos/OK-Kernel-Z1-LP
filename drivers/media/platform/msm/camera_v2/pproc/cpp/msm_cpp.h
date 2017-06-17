@@ -84,143 +84,143 @@
 #define MSM_CPP_TX_FIFO_LEVEL		16
 
 struct cpp_subscribe_info {
-	struct v4l2_fh *vfh;
-	uint32_t active;
+    struct v4l2_fh *vfh;
+    uint32_t active;
 };
 
 enum cpp_state {
-	CPP_STATE_BOOT,
-	CPP_STATE_IDLE,
-	CPP_STATE_ACTIVE,
-	CPP_STATE_OFF,
+    CPP_STATE_BOOT,
+    CPP_STATE_IDLE,
+    CPP_STATE_ACTIVE,
+    CPP_STATE_OFF,
 };
 
 enum msm_queue {
-	MSM_CAM_Q_CTRL,     /* control command or control command status */
-	MSM_CAM_Q_VFE_EVT,  /* adsp event */
-	MSM_CAM_Q_VFE_MSG,  /* adsp message */
-	MSM_CAM_Q_V4L2_REQ, /* v4l2 request */
-	MSM_CAM_Q_VPE_MSG,  /* vpe message */
-	MSM_CAM_Q_PP_MSG,  /* pp message */
+    MSM_CAM_Q_CTRL,     /* control command or control command status */
+    MSM_CAM_Q_VFE_EVT,  /* adsp event */
+    MSM_CAM_Q_VFE_MSG,  /* adsp message */
+    MSM_CAM_Q_V4L2_REQ, /* v4l2 request */
+    MSM_CAM_Q_VPE_MSG,  /* vpe message */
+    MSM_CAM_Q_PP_MSG,  /* pp message */
 };
 
 struct msm_queue_cmd {
-	struct list_head list_config;
-	struct list_head list_control;
-	struct list_head list_frame;
-	struct list_head list_pict;
-	struct list_head list_vpe_frame;
-	struct list_head list_eventdata;
-	enum msm_queue type;
-	void *command;
-	atomic_t on_heap;
-	struct timespec ts;
-	uint32_t error_code;
-	uint32_t trans_code;
+    struct list_head list_config;
+    struct list_head list_control;
+    struct list_head list_frame;
+    struct list_head list_pict;
+    struct list_head list_vpe_frame;
+    struct list_head list_eventdata;
+    enum msm_queue type;
+    void *command;
+    atomic_t on_heap;
+    struct timespec ts;
+    uint32_t error_code;
+    uint32_t trans_code;
 };
 
 struct msm_device_queue {
-	struct list_head list;
-	spinlock_t lock;
-	wait_queue_head_t wait;
-	int max;
-	int len;
-	const char *name;
+    struct list_head list;
+    spinlock_t lock;
+    wait_queue_head_t wait;
+    int max;
+    int len;
+    const char *name;
 };
 
 struct msm_cpp_tasklet_queue_cmd {
-	struct list_head list;
-	uint32_t irq_status;
-	uint32_t tx_fifo[MSM_CPP_TX_FIFO_LEVEL];
-	uint32_t tx_level;
-	uint8_t cmd_used;
+    struct list_head list;
+    uint32_t irq_status;
+    uint32_t tx_fifo[MSM_CPP_TX_FIFO_LEVEL];
+    uint32_t tx_level;
+    uint8_t cmd_used;
 };
 
 struct msm_cpp_buffer_map_info_t {
-	unsigned long len;
-	unsigned long phy_addr;
-	struct ion_handle *ion_handle;
-	struct msm_cpp_buffer_info_t buff_info;
+    unsigned long len;
+    unsigned long phy_addr;
+    struct ion_handle *ion_handle;
+    struct msm_cpp_buffer_info_t buff_info;
 };
 
 struct msm_cpp_buffer_map_list_t {
-	struct msm_cpp_buffer_map_info_t map_info;
-	struct list_head entry;
+    struct msm_cpp_buffer_map_info_t map_info;
+    struct list_head entry;
 };
 
 struct msm_cpp_buff_queue_info_t {
-	uint32_t used;
-	uint16_t session_id;
-	uint16_t stream_id;
-	struct list_head vb2_buff_head;
-	struct list_head native_buff_head;
+    uint32_t used;
+    uint16_t session_id;
+    uint16_t stream_id;
+    struct list_head vb2_buff_head;
+    struct list_head native_buff_head;
 };
 
 struct msm_cpp_work_t {
-	struct work_struct my_work;
-	struct cpp_device *cpp_dev;
+    struct work_struct my_work;
+    struct cpp_device *cpp_dev;
 };
 
 struct msm_cpp_clock_settings_t {
-	long clock_rate;
-	uint64_t avg;
-	uint64_t inst;
+    long clock_rate;
+    uint64_t avg;
+    uint64_t inst;
 };
 
 
 struct cpp_device {
-	struct platform_device *pdev;
-	struct msm_sd_subdev msm_sd;
-	struct v4l2_subdev subdev;
-	struct resource *mem;
-	struct resource *irq;
-	struct resource *io;
-	struct resource	*vbif_mem;
-	struct resource *vbif_io;
-	struct resource	*cpp_hw_mem;
-	void __iomem *vbif_base;
-	void __iomem *base;
-	void __iomem *cpp_hw_base;
-	struct clk **cpp_clk;
-	struct regulator *fs_cpp;
-	struct mutex mutex;
-	enum cpp_state state;
-	uint8_t is_firmware_loaded;
-	char *fw_name_bin;
-	struct workqueue_struct *timer_wq;
-	struct msm_cpp_work_t *work;
-	uint32_t fw_version;
-	uint8_t stream_cnt;
-	uint8_t timeout_trial_cnt;
+    struct platform_device *pdev;
+    struct msm_sd_subdev msm_sd;
+    struct v4l2_subdev subdev;
+    struct resource *mem;
+    struct resource *irq;
+    struct resource *io;
+    struct resource	*vbif_mem;
+    struct resource *vbif_io;
+    struct resource	*cpp_hw_mem;
+    void __iomem *vbif_base;
+    void __iomem *base;
+    void __iomem *cpp_hw_base;
+    struct clk **cpp_clk;
+    struct regulator *fs_cpp;
+    struct mutex mutex;
+    enum cpp_state state;
+    uint8_t is_firmware_loaded;
+    char *fw_name_bin;
+    struct workqueue_struct *timer_wq;
+    struct msm_cpp_work_t *work;
+    uint32_t fw_version;
+    uint8_t stream_cnt;
+    uint8_t timeout_trial_cnt;
 
-	int domain_num;
-	struct iommu_domain *domain;
-	struct device *iommu_ctx;
-	struct ion_client *client;
-	struct kref refcount;
+    int domain_num;
+    struct iommu_domain *domain;
+    struct device *iommu_ctx;
+    struct ion_client *client;
+    struct kref refcount;
 
-	/* Reusing proven tasklet from msm isp */
-	atomic_t irq_cnt;
-	uint8_t taskletq_idx;
-	spinlock_t  tasklet_lock;
-	struct list_head tasklet_q;
-	struct tasklet_struct cpp_tasklet;
-	struct msm_cpp_tasklet_queue_cmd
-		tasklet_queue_cmd[MSM_CPP_TASKLETQ_SIZE];
+    /* Reusing proven tasklet from msm isp */
+    atomic_t irq_cnt;
+    uint8_t taskletq_idx;
+    spinlock_t  tasklet_lock;
+    struct list_head tasklet_q;
+    struct tasklet_struct cpp_tasklet;
+    struct msm_cpp_tasklet_queue_cmd
+        tasklet_queue_cmd[MSM_CPP_TASKLETQ_SIZE];
 
-	struct cpp_subscribe_info cpp_subscribe_list[MAX_ACTIVE_CPP_INSTANCE];
-	uint32_t cpp_open_cnt;
-	struct cpp_hw_info hw_info;
+    struct cpp_subscribe_info cpp_subscribe_list[MAX_ACTIVE_CPP_INSTANCE];
+    uint32_t cpp_open_cnt;
+    struct cpp_hw_info hw_info;
 
-	struct msm_device_queue eventData_q; /* V4L2 Event Payload Queue */
+    struct msm_device_queue eventData_q; /* V4L2 Event Payload Queue */
 
-	/* Processing Queue
-	 * store frame info for frames sent to microcontroller
-	 */
-	struct msm_device_queue processing_q;
+    /* Processing Queue
+     * store frame info for frames sent to microcontroller
+     */
+    struct msm_device_queue processing_q;
 
-	struct msm_cpp_buff_queue_info_t *buff_queue;
-	uint32_t num_buffq;
-	struct v4l2_subdev *buf_mgr_subdev;
+    struct msm_cpp_buff_queue_info_t *buff_queue;
+    uint32_t num_buffq;
+    struct v4l2_subdev *buf_mgr_subdev;
 };
 #endif /* __MSM_CPP_H__ */

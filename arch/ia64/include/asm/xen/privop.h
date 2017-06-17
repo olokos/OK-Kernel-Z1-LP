@@ -124,8 +124,8 @@ extern void xen_eoi(unsigned long);
 extern unsigned long xen_get_rr(unsigned long index);
 extern void xen_set_rr(unsigned long index, unsigned long val);
 extern void xen_set_rr0_to_rr4(unsigned long val0, unsigned long val1,
-			       unsigned long val2, unsigned long val3,
-			       unsigned long val4);
+                               unsigned long val2, unsigned long val3,
+                               unsigned long val4);
 extern void xen_set_kr(unsigned long index, unsigned long val);
 extern void xen_ptcga(unsigned long addr, unsigned long size);
 #endif /* !ASM_SUPPORTED */

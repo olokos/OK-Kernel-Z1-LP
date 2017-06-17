@@ -40,41 +40,41 @@ typedef u32		compat_ulong_t;
 typedef u64		compat_u64;
 
 struct compat_timespec {
-	compat_time_t	tv_sec;
-	s32		tv_nsec;
+    compat_time_t	tv_sec;
+    s32		tv_nsec;
 };
 
 struct compat_timeval {
-	compat_time_t	tv_sec;
-	s32		tv_usec;
+    compat_time_t	tv_sec;
+    s32		tv_usec;
 };
 
 struct compat_stat {
-	compat_dev_t	st_dev;
-	compat_ino_t	st_ino;
-	compat_mode_t	st_mode;
-	compat_nlink_t	st_nlink;
-	__compat_uid32_t	st_uid;
-	__compat_gid32_t	st_gid;
-	compat_dev_t	st_rdev;
-	compat_off_t	st_size;
-	compat_off_t	st_blksize;
-	compat_off_t	st_blocks;
-	compat_time_t	st_atime;
-	u32		st_atime_nsec;
-	compat_time_t	st_mtime;
-	u32		st_mtime_nsec;
-	compat_time_t	st_ctime;
-	u32		st_ctime_nsec;
-	u32		__unused4[2];
+    compat_dev_t	st_dev;
+    compat_ino_t	st_ino;
+    compat_mode_t	st_mode;
+    compat_nlink_t	st_nlink;
+    __compat_uid32_t	st_uid;
+    __compat_gid32_t	st_gid;
+    compat_dev_t	st_rdev;
+    compat_off_t	st_size;
+    compat_off_t	st_blksize;
+    compat_off_t	st_blocks;
+    compat_time_t	st_atime;
+    u32		st_atime_nsec;
+    compat_time_t	st_mtime;
+    u32		st_mtime_nsec;
+    compat_time_t	st_ctime;
+    u32		st_ctime_nsec;
+    u32		__unused4[2];
 };
 
 struct compat_flock {
-	short		l_type;
-	short		l_whence;
-	compat_off_t	l_start;
-	compat_off_t	l_len;
-	compat_pid_t	l_pid;
+    short		l_type;
+    short		l_whence;
+    compat_off_t	l_start;
+    compat_off_t	l_len;
+    compat_pid_t	l_pid;
 };
 
 #define F_GETLK64	12	/*  using 'struct flock64' */
@@ -82,26 +82,26 @@ struct compat_flock {
 #define F_SETLKW64	14
 
 struct compat_flock64 {
-	short		l_type;
-	short		l_whence;
-	compat_loff_t	l_start;
-	compat_loff_t	l_len;
-	compat_pid_t	l_pid;
+    short		l_type;
+    short		l_whence;
+    compat_loff_t	l_start;
+    compat_loff_t	l_len;
+    compat_pid_t	l_pid;
 };
 
 struct compat_statfs {
-	int		f_type;
-	int		f_bsize;
-	int		f_blocks;
-	int		f_bfree;
-	int		f_bavail;
-	int		f_files;
-	int		f_ffree;
-	compat_fsid_t	f_fsid;
-	int		f_namelen;	/* SunOS ignores this field. */
-	int		f_frsize;
-	int		f_flags;
-	int		f_spare[4];
+    int		f_type;
+    int		f_bsize;
+    int		f_blocks;
+    int		f_bfree;
+    int		f_bavail;
+    int		f_files;
+    int		f_ffree;
+    compat_fsid_t	f_fsid;
+    int		f_namelen;	/* SunOS ignores this field. */
+    int		f_frsize;
+    int		f_flags;
+    int		f_spare[4];
 };
 
 #define COMPAT_RLIM_OLD_INFINITY	0x7fffffff
@@ -125,29 +125,26 @@ typedef u32		compat_sigset_word;
  */
 typedef	u32		compat_uptr_t;
 
-static inline void __user *compat_ptr(compat_uptr_t uptr)
-{
-	return (void __user *)(unsigned long)uptr;
+static inline void __user *compat_ptr(compat_uptr_t uptr) {
+    return (void __user *)(unsigned long)uptr;
 }
 
-static inline compat_uptr_t ptr_to_compat(void __user *uptr)
-{
-	return (u32)(unsigned long)uptr;
+static inline compat_uptr_t ptr_to_compat(void __user *uptr) {
+    return (u32)(unsigned long)uptr;
 }
 
-static inline void __user *arch_compat_alloc_user_space(long len)
-{
-	struct pt_regs *regs = current->thread.regs;
-	unsigned long usp = regs->gpr[1];
+static inline void __user *arch_compat_alloc_user_space(long len) {
+    struct pt_regs *regs = current->thread.regs;
+    unsigned long usp = regs->gpr[1];
 
-	/*
-	 * We can't access below the stack pointer in the 32bit ABI and
-	 * can access 288 bytes in the 64bit ABI
-	 */
-	if (!is_32bit_task())
-		usp -= 288;
+    /*
+     * We can't access below the stack pointer in the 32bit ABI and
+     * can access 288 bytes in the 64bit ABI
+     */
+    if (!is_32bit_task())
+        usp -= 288;
 
-	return (void __user *) (usp - len);
+    return (void __user *) (usp - len);
 }
 
 /*
@@ -155,66 +152,65 @@ static inline void __user *arch_compat_alloc_user_space(long len)
  * it we may as well define it.
  */
 struct compat_ipc64_perm {
-	compat_key_t key;
-	__compat_uid_t uid;
-	__compat_gid_t gid;
-	__compat_uid_t cuid;
-	__compat_gid_t cgid;
-	compat_mode_t mode;
-	unsigned int seq;
-	unsigned int __pad2;
-	unsigned long __unused1;	/* yes they really are 64bit pads */
-	unsigned long __unused2;
+    compat_key_t key;
+    __compat_uid_t uid;
+    __compat_gid_t gid;
+    __compat_uid_t cuid;
+    __compat_gid_t cgid;
+    compat_mode_t mode;
+    unsigned int seq;
+    unsigned int __pad2;
+    unsigned long __unused1;	/* yes they really are 64bit pads */
+    unsigned long __unused2;
 };
 
 struct compat_semid64_ds {
-	struct compat_ipc64_perm sem_perm;
-	unsigned int __unused1;
-	compat_time_t sem_otime;
-	unsigned int __unused2;
-	compat_time_t sem_ctime;
-	compat_ulong_t sem_nsems;
-	compat_ulong_t __unused3;
-	compat_ulong_t __unused4;
+    struct compat_ipc64_perm sem_perm;
+    unsigned int __unused1;
+    compat_time_t sem_otime;
+    unsigned int __unused2;
+    compat_time_t sem_ctime;
+    compat_ulong_t sem_nsems;
+    compat_ulong_t __unused3;
+    compat_ulong_t __unused4;
 };
 
 struct compat_msqid64_ds {
-	struct compat_ipc64_perm msg_perm;
-	unsigned int __unused1;
-	compat_time_t msg_stime;
-	unsigned int __unused2;
-	compat_time_t msg_rtime;
-	unsigned int __unused3;
-	compat_time_t msg_ctime;
-	compat_ulong_t msg_cbytes;
-	compat_ulong_t msg_qnum;
-	compat_ulong_t msg_qbytes;
-	compat_pid_t msg_lspid;
-	compat_pid_t msg_lrpid;
-	compat_ulong_t __unused4;
-	compat_ulong_t __unused5;
+    struct compat_ipc64_perm msg_perm;
+    unsigned int __unused1;
+    compat_time_t msg_stime;
+    unsigned int __unused2;
+    compat_time_t msg_rtime;
+    unsigned int __unused3;
+    compat_time_t msg_ctime;
+    compat_ulong_t msg_cbytes;
+    compat_ulong_t msg_qnum;
+    compat_ulong_t msg_qbytes;
+    compat_pid_t msg_lspid;
+    compat_pid_t msg_lrpid;
+    compat_ulong_t __unused4;
+    compat_ulong_t __unused5;
 };
 
 struct compat_shmid64_ds {
-	struct compat_ipc64_perm shm_perm;
-	unsigned int __unused1;
-	compat_time_t shm_atime;
-	unsigned int __unused2;
-	compat_time_t shm_dtime;
-	unsigned int __unused3;
-	compat_time_t shm_ctime;
-	unsigned int __unused4;
-	compat_size_t shm_segsz;
-	compat_pid_t shm_cpid;
-	compat_pid_t shm_lpid;
-	compat_ulong_t shm_nattch;
-	compat_ulong_t __unused5;
-	compat_ulong_t __unused6;
+    struct compat_ipc64_perm shm_perm;
+    unsigned int __unused1;
+    compat_time_t shm_atime;
+    unsigned int __unused2;
+    compat_time_t shm_dtime;
+    unsigned int __unused3;
+    compat_time_t shm_ctime;
+    unsigned int __unused4;
+    compat_size_t shm_segsz;
+    compat_pid_t shm_cpid;
+    compat_pid_t shm_lpid;
+    compat_ulong_t shm_nattch;
+    compat_ulong_t __unused5;
+    compat_ulong_t __unused6;
 };
 
-static inline int is_compat_task(void)
-{
-	return is_32bit_task();
+static inline int is_compat_task(void) {
+    return is_32bit_task();
 }
 
 #endif /* __KERNEL__ */

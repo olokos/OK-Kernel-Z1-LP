@@ -237,6 +237,6 @@
 #define PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_GT2_IG		0x016A
 
 int intel_gmch_probe(struct pci_dev *pdev,
-			       struct agp_bridge_data *bridge);
+                     struct agp_bridge_data *bridge);
 void intel_gmch_remove(struct pci_dev *pdev);
 #endif

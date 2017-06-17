@@ -40,26 +40,26 @@ extern struct videobuf_queue_ops cx231xx_vbi_qops;
 
 /* stream functions */
 int cx231xx_init_vbi_isoc(struct cx231xx *dev, int max_packets,
-			  int num_bufs, int max_pkt_size,
-			  int (*bulk_copy) (struct cx231xx *dev,
-					    struct urb *urb));
+                          int num_bufs, int max_pkt_size,
+                          int (*bulk_copy) (struct cx231xx *dev,
+                                  struct urb *urb));
 
 void cx231xx_uninit_vbi_isoc(struct cx231xx *dev);
 
 /* vbi data copy functions */
 u32 cx231xx_get_vbi_line(struct cx231xx *dev, struct cx231xx_dmaqueue *dma_q,
-			 u8 sav_eav, u8 *p_buffer, u32 buffer_size);
+                         u8 sav_eav, u8 *p_buffer, u32 buffer_size);
 
 u32 cx231xx_copy_vbi_line(struct cx231xx *dev, struct cx231xx_dmaqueue *dma_q,
-			  u8 *p_line, u32 length, int field_number);
+                          u8 *p_line, u32 length, int field_number);
 
 void cx231xx_reset_vbi_buffer(struct cx231xx *dev,
-			      struct cx231xx_dmaqueue *dma_q);
+                              struct cx231xx_dmaqueue *dma_q);
 
 int cx231xx_do_vbi_copy(struct cx231xx *dev, struct cx231xx_dmaqueue *dma_q,
-			u8 *p_buffer, u32 bytes_to_copy);
+                        u8 *p_buffer, u32 bytes_to_copy);
 
 u8 cx231xx_is_vbi_buffer_done(struct cx231xx *dev,
-			      struct cx231xx_dmaqueue *dma_q);
+                              struct cx231xx_dmaqueue *dma_q);
 
 #endif

@@ -165,7 +165,7 @@ extern unsigned int __mxc_cpu_type;
 #ifndef __ASSEMBLY__
 
 struct cpu_op {
-	u32 cpu_rate;
+    u32 cpu_rate;
 };
 
 int tzic_enable_wake(void);

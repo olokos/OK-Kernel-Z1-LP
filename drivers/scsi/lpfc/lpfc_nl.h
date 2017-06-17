@@ -56,17 +56,17 @@
 
 /* RSCN event header */
 struct lpfc_rscn_event_header {
-	uint32_t event_type;
-	uint32_t payload_length; /* RSCN data length in bytes */
-	uint32_t rscn_payload[];
+    uint32_t event_type;
+    uint32_t payload_length; /* RSCN data length in bytes */
+    uint32_t rscn_payload[];
 };
 
 /* els event header */
 struct lpfc_els_event_header {
-	uint32_t event_type;
-	uint32_t subcategory;
-	uint8_t wwpn[8];
-	uint8_t wwnn[8];
+    uint32_t event_type;
+    uint32_t subcategory;
+    uint8_t wwpn[8];
+    uint8_t wwnn[8];
 };
 
 /* subcategory codes for FC_REG_ELS_EVENT */
@@ -78,24 +78,24 @@ struct lpfc_els_event_header {
 
 /* special els lsrjt event */
 struct lpfc_lsrjt_event {
-	struct lpfc_els_event_header header;
-	uint32_t command;
-	uint32_t reason_code;
-	uint32_t explanation;
+    struct lpfc_els_event_header header;
+    uint32_t command;
+    uint32_t reason_code;
+    uint32_t explanation;
 };
 
 /* special els logo event */
 struct lpfc_logo_event {
-	struct lpfc_els_event_header header;
-	uint8_t logo_wwpn[8];
+    struct lpfc_els_event_header header;
+    uint8_t logo_wwpn[8];
 };
 
 /* fabric event header */
 struct lpfc_fabric_event_header {
-	uint32_t event_type;
-	uint32_t subcategory;
-	uint8_t wwpn[8];
-	uint8_t wwnn[8];
+    uint32_t event_type;
+    uint32_t subcategory;
+    uint8_t wwpn[8];
+    uint8_t wwnn[8];
 };
 
 /* subcategory codes for FC_REG_FABRIC_EVENT */
@@ -105,20 +105,20 @@ struct lpfc_fabric_event_header {
 
 /* special case fabric fcprdchkerr event */
 struct lpfc_fcprdchkerr_event {
-	struct lpfc_fabric_event_header header;
-	uint32_t lun;
-	uint32_t opcode;
-	uint32_t fcpiparam;
+    struct lpfc_fabric_event_header header;
+    uint32_t lun;
+    uint32_t opcode;
+    uint32_t fcpiparam;
 };
 
 
 /* scsi event header */
 struct lpfc_scsi_event_header {
-	uint32_t event_type;
-	uint32_t subcategory;
-	uint32_t lun;
-	uint8_t wwpn[8];
-	uint8_t wwnn[8];
+    uint32_t event_type;
+    uint32_t subcategory;
+    uint32_t lun;
+    uint8_t wwpn[8];
+    uint8_t wwnn[8];
 };
 
 /* subcategory codes for FC_REG_SCSI_EVENT */
@@ -132,18 +132,18 @@ struct lpfc_scsi_event_header {
 
 /* special case scsi varqueuedepth event */
 struct lpfc_scsi_varqueuedepth_event {
-	struct lpfc_scsi_event_header scsi_event;
-	uint32_t oldval;
-	uint32_t newval;
+    struct lpfc_scsi_event_header scsi_event;
+    uint32_t oldval;
+    uint32_t newval;
 };
 
 /* special case scsi check condition event */
 struct lpfc_scsi_check_condition_event {
-	struct lpfc_scsi_event_header scsi_event;
-	uint8_t opcode;
-	uint8_t sense_key;
-	uint8_t asc;
-	uint8_t ascq;
+    struct lpfc_scsi_event_header scsi_event;
+    uint8_t opcode;
+    uint8_t sense_key;
+    uint8_t asc;
+    uint8_t ascq;
 };
 
 /* event codes for FC_REG_BOARD_EVENT */
@@ -151,8 +151,8 @@ struct lpfc_scsi_check_condition_event {
 
 /* board event header */
 struct lpfc_board_event_header {
-	uint32_t event_type;
-	uint32_t subcategory;
+    uint32_t event_type;
+    uint32_t subcategory;
 };
 
 
@@ -161,8 +161,8 @@ struct lpfc_board_event_header {
 
 /* adapter event header */
 struct lpfc_adapter_event_header {
-	uint32_t event_type;
-	uint32_t subcategory;
+    uint32_t event_type;
+    uint32_t subcategory;
 };
 
 
@@ -172,8 +172,8 @@ struct lpfc_adapter_event_header {
 #define LPFC_NORMAL_TEMP	0x3
 
 struct temp_event {
-	uint32_t event_type;
-	uint32_t event_code;
-	uint32_t data;
+    uint32_t event_type;
+    uint32_t event_code;
+    uint32_t data;
 };
 

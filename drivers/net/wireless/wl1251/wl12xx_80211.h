@@ -58,98 +58,98 @@
 
 /* Headers */
 struct ieee80211_header {
-	__le16 frame_ctl;
-	__le16 duration_id;
-	u8 da[ETH_ALEN];
-	u8 sa[ETH_ALEN];
-	u8 bssid[ETH_ALEN];
-	__le16 seq_ctl;
-	u8 payload[0];
+    __le16 frame_ctl;
+    __le16 duration_id;
+    u8 da[ETH_ALEN];
+    u8 sa[ETH_ALEN];
+    u8 bssid[ETH_ALEN];
+    __le16 seq_ctl;
+    u8 payload[0];
 } __packed;
 
 struct wl12xx_ie_header {
-	u8 id;
-	u8 len;
+    u8 id;
+    u8 len;
 } __packed;
 
 /* IEs */
 
 struct wl12xx_ie_ssid {
-	struct wl12xx_ie_header header;
-	char ssid[IEEE80211_MAX_SSID_LEN];
+    struct wl12xx_ie_header header;
+    char ssid[IEEE80211_MAX_SSID_LEN];
 } __packed;
 
 struct wl12xx_ie_rates {
-	struct wl12xx_ie_header header;
-	u8 rates[MAX_SUPPORTED_RATES];
+    struct wl12xx_ie_header header;
+    u8 rates[MAX_SUPPORTED_RATES];
 } __packed;
 
 struct wl12xx_ie_ds_params {
-	struct wl12xx_ie_header header;
-	u8 channel;
+    struct wl12xx_ie_header header;
+    u8 channel;
 } __packed;
 
 struct country_triplet {
-	u8 channel;
-	u8 num_channels;
-	u8 max_tx_power;
+    u8 channel;
+    u8 num_channels;
+    u8 max_tx_power;
 } __packed;
 
 struct wl12xx_ie_country {
-	struct wl12xx_ie_header header;
-	u8 country_string[IEEE80211_COUNTRY_STRING_LEN];
-	struct country_triplet triplets[MAX_COUNTRY_TRIPLETS];
+    struct wl12xx_ie_header header;
+    u8 country_string[IEEE80211_COUNTRY_STRING_LEN];
+    struct country_triplet triplets[MAX_COUNTRY_TRIPLETS];
 } __packed;
 
 
 /* Templates */
 
 struct wl12xx_beacon_template {
-	struct ieee80211_header header;
-	__le32 time_stamp[2];
-	__le16 beacon_interval;
-	__le16 capability;
-	struct wl12xx_ie_ssid ssid;
-	struct wl12xx_ie_rates rates;
-	struct wl12xx_ie_rates ext_rates;
-	struct wl12xx_ie_ds_params ds_params;
-	struct wl12xx_ie_country country;
+    struct ieee80211_header header;
+    __le32 time_stamp[2];
+    __le16 beacon_interval;
+    __le16 capability;
+    struct wl12xx_ie_ssid ssid;
+    struct wl12xx_ie_rates rates;
+    struct wl12xx_ie_rates ext_rates;
+    struct wl12xx_ie_ds_params ds_params;
+    struct wl12xx_ie_country country;
 } __packed;
 
 struct wl12xx_null_data_template {
-	struct ieee80211_header header;
+    struct ieee80211_header header;
 } __packed;
 
 struct wl12xx_ps_poll_template {
-	__le16 fc;
-	__le16 aid;
-	u8 bssid[ETH_ALEN];
-	u8 ta[ETH_ALEN];
+    __le16 fc;
+    __le16 aid;
+    u8 bssid[ETH_ALEN];
+    u8 ta[ETH_ALEN];
 } __packed;
 
 struct wl12xx_qos_null_data_template {
-	struct ieee80211_header header;
-	__le16 qos_ctl;
+    struct ieee80211_header header;
+    __le16 qos_ctl;
 } __packed;
 
 struct wl12xx_probe_req_template {
-	struct ieee80211_header header;
-	struct wl12xx_ie_ssid ssid;
-	struct wl12xx_ie_rates rates;
-	struct wl12xx_ie_rates ext_rates;
+    struct ieee80211_header header;
+    struct wl12xx_ie_ssid ssid;
+    struct wl12xx_ie_rates rates;
+    struct wl12xx_ie_rates ext_rates;
 } __packed;
 
 
 struct wl12xx_probe_resp_template {
-	struct ieee80211_header header;
-	__le32 time_stamp[2];
-	__le16 beacon_interval;
-	__le16 capability;
-	struct wl12xx_ie_ssid ssid;
-	struct wl12xx_ie_rates rates;
-	struct wl12xx_ie_rates ext_rates;
-	struct wl12xx_ie_ds_params ds_params;
-	struct wl12xx_ie_country country;
+    struct ieee80211_header header;
+    __le32 time_stamp[2];
+    __le16 beacon_interval;
+    __le16 capability;
+    struct wl12xx_ie_ssid ssid;
+    struct wl12xx_ie_rates rates;
+    struct wl12xx_ie_rates ext_rates;
+    struct wl12xx_ie_ds_params ds_params;
+    struct wl12xx_ie_country country;
 } __packed;
 
 #endif

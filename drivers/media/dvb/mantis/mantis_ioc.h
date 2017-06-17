@@ -39,8 +39,8 @@
 #define GPIF_A14		0x0e
 
 enum mantis_stream_control {
-	STREAM_TO_HIF = 0,
-	STREAM_TO_CAM
+    STREAM_TO_HIF = 0,
+    STREAM_TO_CAM
 };
 
 extern int mantis_get_mac(struct mantis_pci *mantis);

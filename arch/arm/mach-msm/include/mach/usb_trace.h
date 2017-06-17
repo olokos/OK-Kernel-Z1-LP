@@ -19,9 +19,9 @@
 #include <linux/tracepoint.h>
 
 DECLARE_TRACE(usb_daytona_invalid_access,
-	TP_PROTO(unsigned int ebi_addr,
-	 unsigned int ebi_apacket0, unsigned int ebi_apacket1),
-	TP_ARGS(ebi_addr, ebi_apacket0, ebi_apacket1));
+              TP_PROTO(unsigned int ebi_addr,
+                       unsigned int ebi_apacket0, unsigned int ebi_apacket1),
+              TP_ARGS(ebi_addr, ebi_apacket0, ebi_apacket1));
 
 #endif
 

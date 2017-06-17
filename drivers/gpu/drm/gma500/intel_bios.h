@@ -25,41 +25,41 @@
 #include <drm/drmP.h>
 
 struct vbt_header {
-	u8 signature[20];		/**< Always starts with 'VBT$' */
-	u16 version;			/**< decimal */
-	u16 header_size;		/**< in bytes */
-	u16 vbt_size;			/**< in bytes */
-	u8 vbt_checksum;
-	u8 reserved0;
-	u32 bdb_offset;			/**< from beginning of VBT */
-	u32 aim_offset[4];		/**< from beginning of VBT */
+    u8 signature[20];		/**< Always starts with 'VBT$' */
+    u16 version;			/**< decimal */
+    u16 header_size;		/**< in bytes */
+    u16 vbt_size;			/**< in bytes */
+    u8 vbt_checksum;
+    u8 reserved0;
+    u32 bdb_offset;			/**< from beginning of VBT */
+    u32 aim_offset[4];		/**< from beginning of VBT */
 } __attribute__((packed));
 
 
 struct bdb_header {
-	u8 signature[16];		/**< Always 'BIOS_DATA_BLOCK' */
-	u16 version;			/**< decimal */
-	u16 header_size;		/**< in bytes */
-	u16 bdb_size;			/**< in bytes */
+    u8 signature[16];		/**< Always 'BIOS_DATA_BLOCK' */
+    u16 version;			/**< decimal */
+    u16 header_size;		/**< in bytes */
+    u16 bdb_size;			/**< in bytes */
 };
 
 /* strictly speaking, this is a "skip" block, but it has interesting info */
 struct vbios_data {
-	u8 type; /* 0 == desktop, 1 == mobile */
-	u8 relstage;
-	u8 chipset;
-	u8 lvds_present:1;
-	u8 tv_present:1;
-	u8 rsvd2:6; /* finish byte */
-	u8 rsvd3[4];
-	u8 signon[155];
-	u8 copyright[61];
-	u16 code_segment;
-	u8 dos_boot_mode;
-	u8 bandwidth_percent;
-	u8 rsvd4; /* popup memory size */
-	u8 resize_pci_bios;
-	u8 rsvd5; /* is crt already on ddc2 */
+    u8 type; /* 0 == desktop, 1 == mobile */
+    u8 relstage;
+    u8 chipset;
+    u8 lvds_present:1;
+    u8 tv_present:1;
+    u8 rsvd2:6; /* finish byte */
+    u8 rsvd3[4];
+    u8 signon[155];
+    u8 copyright[61];
+    u16 code_segment;
+    u8 dos_boot_mode;
+    u8 bandwidth_percent;
+    u8 rsvd4; /* popup memory size */
+    u8 resize_pci_bios;
+    u8 rsvd5; /* is crt already on ddc2 */
 } __attribute__((packed));
 
 /*
@@ -101,205 +101,205 @@ struct vbios_data {
 #define BDB_SKIP		254 /* VBIOS private block, ignore */
 
 struct bdb_general_features {
-	/* bits 1 */
-	u8 panel_fitting:2;
-	u8 flexaim:1;
-	u8 msg_enable:1;
-	u8 clear_screen:3;
-	u8 color_flip:1;
+    /* bits 1 */
+    u8 panel_fitting:2;
+    u8 flexaim:1;
+    u8 msg_enable:1;
+    u8 clear_screen:3;
+    u8 color_flip:1;
 
-	/* bits 2 */
-	u8 download_ext_vbt:1;
-	u8 enable_ssc:1;
-	u8 ssc_freq:1;
-	u8 enable_lfp_on_override:1;
-	u8 disable_ssc_ddt:1;
-	u8 rsvd8:3; /* finish byte */
+    /* bits 2 */
+    u8 download_ext_vbt:1;
+    u8 enable_ssc:1;
+    u8 ssc_freq:1;
+    u8 enable_lfp_on_override:1;
+    u8 disable_ssc_ddt:1;
+    u8 rsvd8:3; /* finish byte */
 
-	/* bits 3 */
-	u8 disable_smooth_vision:1;
-	u8 single_dvi:1;
-	u8 rsvd9:6; /* finish byte */
+    /* bits 3 */
+    u8 disable_smooth_vision:1;
+    u8 single_dvi:1;
+    u8 rsvd9:6; /* finish byte */
 
-	/* bits 4 */
-	u8 legacy_monitor_detect;
+    /* bits 4 */
+    u8 legacy_monitor_detect;
 
-	/* bits 5 */
-	u8 int_crt_support:1;
-	u8 int_tv_support:1;
-	u8 rsvd11:6; /* finish byte */
+    /* bits 5 */
+    u8 int_crt_support:1;
+    u8 int_tv_support:1;
+    u8 rsvd11:6; /* finish byte */
 } __attribute__((packed));
 
 struct bdb_general_definitions {
-	/* DDC GPIO */
-	u8 crt_ddc_gmbus_pin;
+    /* DDC GPIO */
+    u8 crt_ddc_gmbus_pin;
 
-	/* DPMS bits */
-	u8 dpms_acpi:1;
-	u8 skip_boot_crt_detect:1;
-	u8 dpms_aim:1;
-	u8 rsvd1:5; /* finish byte */
+    /* DPMS bits */
+    u8 dpms_acpi:1;
+    u8 skip_boot_crt_detect:1;
+    u8 dpms_aim:1;
+    u8 rsvd1:5; /* finish byte */
 
-	/* boot device bits */
-	u8 boot_display[2];
-	u8 child_dev_size;
+    /* boot device bits */
+    u8 boot_display[2];
+    u8 child_dev_size;
 
-	/* device info */
-	u8 tv_or_lvds_info[33];
-	u8 dev1[33];
-	u8 dev2[33];
-	u8 dev3[33];
-	u8 dev4[33];
-	/* may be another device block here on some platforms */
+    /* device info */
+    u8 tv_or_lvds_info[33];
+    u8 dev1[33];
+    u8 dev2[33];
+    u8 dev3[33];
+    u8 dev4[33];
+    /* may be another device block here on some platforms */
 };
 
 struct bdb_lvds_options {
-	u8 panel_type;
-	u8 rsvd1;
-	/* LVDS capabilities, stored in a dword */
-	u8 pfit_mode:2;
-	u8 pfit_text_mode_enhanced:1;
-	u8 pfit_gfx_mode_enhanced:1;
-	u8 pfit_ratio_auto:1;
-	u8 pixel_dither:1;
-	u8 lvds_edid:1;
-	u8 rsvd2:1;
-	u8 rsvd4;
+    u8 panel_type;
+    u8 rsvd1;
+    /* LVDS capabilities, stored in a dword */
+    u8 pfit_mode:2;
+    u8 pfit_text_mode_enhanced:1;
+    u8 pfit_gfx_mode_enhanced:1;
+    u8 pfit_ratio_auto:1;
+    u8 pixel_dither:1;
+    u8 lvds_edid:1;
+    u8 rsvd2:1;
+    u8 rsvd4;
 } __attribute__((packed));
 
 struct bdb_lvds_backlight {
-	u8 type:2;
-	u8 pol:1;
-	u8 gpio:3;
-	u8 gmbus:2;
-	u16 freq;
-	u8 minbrightness;
-	u8 i2caddr;
-	u8 brightnesscmd;
-	/*FIXME: more...*/
+    u8 type:2;
+    u8 pol:1;
+    u8 gpio:3;
+    u8 gmbus:2;
+    u16 freq;
+    u8 minbrightness;
+    u8 i2caddr;
+    u8 brightnesscmd;
+    /*FIXME: more...*/
 } __attribute__((packed));
 
 /* LFP pointer table contains entries to the struct below */
 struct bdb_lvds_lfp_data_ptr {
-	u16 fp_timing_offset; /* offsets are from start of bdb */
-	u8 fp_table_size;
-	u16 dvo_timing_offset;
-	u8 dvo_table_size;
-	u16 panel_pnp_id_offset;
-	u8 pnp_table_size;
+    u16 fp_timing_offset; /* offsets are from start of bdb */
+    u8 fp_table_size;
+    u16 dvo_timing_offset;
+    u8 dvo_table_size;
+    u16 panel_pnp_id_offset;
+    u8 pnp_table_size;
 } __attribute__((packed));
 
 struct bdb_lvds_lfp_data_ptrs {
-	u8 lvds_entries; /* followed by one or more lvds_data_ptr structs */
-	struct bdb_lvds_lfp_data_ptr ptr[16];
+    u8 lvds_entries; /* followed by one or more lvds_data_ptr structs */
+    struct bdb_lvds_lfp_data_ptr ptr[16];
 } __attribute__((packed));
 
 /* LFP data has 3 blocks per entry */
 struct lvds_fp_timing {
-	u16 x_res;
-	u16 y_res;
-	u32 lvds_reg;
-	u32 lvds_reg_val;
-	u32 pp_on_reg;
-	u32 pp_on_reg_val;
-	u32 pp_off_reg;
-	u32 pp_off_reg_val;
-	u32 pp_cycle_reg;
-	u32 pp_cycle_reg_val;
-	u32 pfit_reg;
-	u32 pfit_reg_val;
-	u16 terminator;
+    u16 x_res;
+    u16 y_res;
+    u32 lvds_reg;
+    u32 lvds_reg_val;
+    u32 pp_on_reg;
+    u32 pp_on_reg_val;
+    u32 pp_off_reg;
+    u32 pp_off_reg_val;
+    u32 pp_cycle_reg;
+    u32 pp_cycle_reg_val;
+    u32 pfit_reg;
+    u32 pfit_reg_val;
+    u16 terminator;
 } __attribute__((packed));
 
 struct lvds_dvo_timing {
-	u16 clock;		/**< In 10khz */
-	u8 hactive_lo;
-	u8 hblank_lo;
-	u8 hblank_hi:4;
-	u8 hactive_hi:4;
-	u8 vactive_lo;
-	u8 vblank_lo;
-	u8 vblank_hi:4;
-	u8 vactive_hi:4;
-	u8 hsync_off_lo;
-	u8 hsync_pulse_width;
-	u8 vsync_pulse_width:4;
-	u8 vsync_off:4;
-	u8 rsvd0:6;
-	u8 hsync_off_hi:2;
-	u8 h_image;
-	u8 v_image;
-	u8 max_hv;
-	u8 h_border;
-	u8 v_border;
-	u8 rsvd1:3;
-	u8 digital:2;
-	u8 vsync_positive:1;
-	u8 hsync_positive:1;
-	u8 rsvd2:1;
+    u16 clock;		/**< In 10khz */
+    u8 hactive_lo;
+    u8 hblank_lo;
+    u8 hblank_hi:4;
+    u8 hactive_hi:4;
+    u8 vactive_lo;
+    u8 vblank_lo;
+    u8 vblank_hi:4;
+    u8 vactive_hi:4;
+    u8 hsync_off_lo;
+    u8 hsync_pulse_width;
+    u8 vsync_pulse_width:4;
+    u8 vsync_off:4;
+    u8 rsvd0:6;
+    u8 hsync_off_hi:2;
+    u8 h_image;
+    u8 v_image;
+    u8 max_hv;
+    u8 h_border;
+    u8 v_border;
+    u8 rsvd1:3;
+    u8 digital:2;
+    u8 vsync_positive:1;
+    u8 hsync_positive:1;
+    u8 rsvd2:1;
 } __attribute__((packed));
 
 struct lvds_pnp_id {
-	u16 mfg_name;
-	u16 product_code;
-	u32 serial;
-	u8 mfg_week;
-	u8 mfg_year;
+    u16 mfg_name;
+    u16 product_code;
+    u32 serial;
+    u8 mfg_week;
+    u8 mfg_year;
 } __attribute__((packed));
 
 struct bdb_lvds_lfp_data_entry {
-	struct lvds_fp_timing fp_timing;
-	struct lvds_dvo_timing dvo_timing;
-	struct lvds_pnp_id pnp_id;
+    struct lvds_fp_timing fp_timing;
+    struct lvds_dvo_timing dvo_timing;
+    struct lvds_pnp_id pnp_id;
 } __attribute__((packed));
 
 struct bdb_lvds_lfp_data {
-	struct bdb_lvds_lfp_data_entry data[16];
+    struct bdb_lvds_lfp_data_entry data[16];
 } __attribute__((packed));
 
 struct aimdb_header {
-	char signature[16];
-	char oem_device[20];
-	u16 aimdb_version;
-	u16 aimdb_header_size;
-	u16 aimdb_size;
+    char signature[16];
+    char oem_device[20];
+    u16 aimdb_version;
+    u16 aimdb_header_size;
+    u16 aimdb_size;
 } __attribute__((packed));
 
 struct aimdb_block {
-	u8 aimdb_id;
-	u16 aimdb_size;
+    u8 aimdb_id;
+    u16 aimdb_size;
 } __attribute__((packed));
 
 struct vch_panel_data {
-	u16 fp_timing_offset;
-	u8 fp_timing_size;
-	u16 dvo_timing_offset;
-	u8 dvo_timing_size;
-	u16 text_fitting_offset;
-	u8 text_fitting_size;
-	u16 graphics_fitting_offset;
-	u8 graphics_fitting_size;
+    u16 fp_timing_offset;
+    u8 fp_timing_size;
+    u16 dvo_timing_offset;
+    u8 dvo_timing_size;
+    u16 text_fitting_offset;
+    u8 text_fitting_size;
+    u16 graphics_fitting_offset;
+    u8 graphics_fitting_size;
 } __attribute__((packed));
 
 struct vch_bdb_22 {
-	struct aimdb_block aimdb_block;
-	struct vch_panel_data panels[16];
+    struct aimdb_block aimdb_block;
+    struct vch_panel_data panels[16];
 } __attribute__((packed));
 
 struct bdb_sdvo_lvds_options {
-	u8 panel_backlight;
-	u8 h40_set_panel_type;
-	u8 panel_type;
-	u8 ssc_clk_freq;
-	u16 als_low_trip;
-	u16 als_high_trip;
-	u8 sclalarcoeff_tab_row_num;
-	u8 sclalarcoeff_tab_row_size;
-	u8 coefficient[8];
-	u8 panel_misc_bits_1;
-	u8 panel_misc_bits_2;
-	u8 panel_misc_bits_3;
-	u8 panel_misc_bits_4;
+    u8 panel_backlight;
+    u8 h40_set_panel_type;
+    u8 panel_type;
+    u8 ssc_clk_freq;
+    u16 als_low_trip;
+    u16 als_high_trip;
+    u8 sclalarcoeff_tab_row_num;
+    u8 sclalarcoeff_tab_row_size;
+    u8 coefficient[8];
+    u8 panel_misc_bits_1;
+    u8 panel_misc_bits_2;
+    u8 panel_misc_bits_3;
+    u8 panel_misc_bits_4;
 } __attribute__((packed));
 
 
@@ -402,7 +402,7 @@ extern void psb_intel_destroy_bios(struct drm_device *dev);
 #define   SWF14_PM_APM_12	(0x2 << 16)
 #define   SWF14_PM_APM_11	(0x1 << 16)
 #define SWF14_HK_REQUEST_MASK	0x0000ffff /* see GR18 6:3 for event type */
-	  /* if GR18 indicates a display switch */
+/* if GR18 indicates a display switch */
 #define   SWF14_DS_PIPEB_LFP2_EN (1<<15)
 #define   SWF14_DS_PIPEB_EFP2_EN (1<<14)
 #define   SWF14_DS_PIPEB_TV2_EN  (1<<13)
@@ -419,9 +419,9 @@ extern void psb_intel_destroy_bios(struct drm_device *dev);
 #define   SWF14_DS_PIPEA_EFP_EN  (1<<2)
 #define   SWF14_DS_PIPEA_TV_EN	 (1<<1)
 #define   SWF14_DS_PIPEA_CRT_EN  (1<<0)
-	  /* if GR18 indicates a panel fitting request */
+/* if GR18 indicates a panel fitting request */
 #define   SWF14_PFIT_EN		(1<<0) /* 0 means disable */
-	  /* if GR18 indicates an APM change request */
+/* if GR18 indicates an APM change request */
 #define   SWF14_APM_HIBERNATE	0x4
 #define   SWF14_APM_SUSPEND	0x3
 #define   SWF14_APM_STANDBY	0x1

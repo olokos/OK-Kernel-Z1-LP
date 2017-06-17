@@ -235,7 +235,7 @@
 #define __NR_statfs64		219
 #define __NR_fstatfs64		220
 #define __NR_tgkill		221
-				/* 222 reserved for tux */
+/* 222 reserved for tux */
 #define __NR_utimes		223
 #define __NR_fadvise64_64	224
 

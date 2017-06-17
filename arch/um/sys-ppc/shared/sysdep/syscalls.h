@@ -1,11 +1,11 @@
-/* 
+/*
  * Copyright (C) 2000 Jeff Dike (jdike@karaya.com)
  * Licensed under the GPL
  */
 
 typedef long syscall_handler_t(unsigned long arg1, unsigned long arg2,
-			       unsigned long arg3, unsigned long arg4,
-			       unsigned long arg5, unsigned long arg6);
+                               unsigned long arg3, unsigned long arg4,
+                               unsigned long arg5, unsigned long arg6);
 
 #define EXECUTE_SYSCALL(syscall, regs) \
         (*sys_call_table[syscall])(UM_SYSCALL_ARG1(&regs), \
@@ -22,8 +22,8 @@ extern syscall_handler_t sys_madvise;
  * this file.
  */
 int old_mmap(unsigned long addr, unsigned long len,
-	     unsigned long prot, unsigned long flags,
-	     unsigned long fd, unsigned long offset);
+             unsigned long prot, unsigned long flags,
+             unsigned long fd, unsigned long offset);
 
 #define ARCH_SYSCALLS \
 	[ __NR_modify_ldt ] = sys_ni_syscall, \

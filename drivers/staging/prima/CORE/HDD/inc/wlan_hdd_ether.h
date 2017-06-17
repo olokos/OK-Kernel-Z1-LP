@@ -58,16 +58,14 @@
 /*----------------------------------------------------------------------------
  * Type Declarations
  * -------------------------------------------------------------------------*/
-struct wlan_snap_hdr
-{
+struct wlan_snap_hdr {
     unsigned char dsap;
     unsigned char ssap;
     unsigned char ctrl;
     unsigned char oui[WLAN_SNAP_OUI_LEN];
 } __packed;
 
-struct wlan_8023
-{
+struct wlan_8023 {
     unsigned char        h_dest[ETH_ALEN];
     unsigned char        h_source[ETH_ALEN];
     __be16               h_len;
@@ -75,8 +73,7 @@ struct wlan_8023
     __be16               h_proto;
 } __packed;
 
-struct wlan_8023_vlan
-{
+struct wlan_8023_vlan {
     unsigned char        h_dest[ETH_ALEN];
     unsigned char        h_source[ETH_ALEN];
     __be16               h_vlan_proto;
@@ -86,8 +83,7 @@ struct wlan_8023_vlan
     __be16               h_proto;
 } __packed;
 
-union generic_ethhdr
-{
+union generic_ethhdr {
     struct ethhdr eth_II;
     struct vlan_ethhdr eth_IIv;
     struct wlan_8023 eth_8023;

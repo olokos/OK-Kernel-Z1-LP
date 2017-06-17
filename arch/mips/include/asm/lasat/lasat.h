@@ -25,18 +25,18 @@
 #ifndef _LANGUAGE_ASSEMBLY
 
 extern struct lasat_misc {
-	volatile u32 *reset_reg;
-	volatile u32 *flash_wp_reg;
-	u32 flash_wp_bit;
+    volatile u32 *reset_reg;
+    volatile u32 *flash_wp_reg;
+    u32 flash_wp_bit;
 } *lasat_misc;
 
 enum lasat_mtdparts {
-	LASAT_MTD_BOOTLOADER,
-	LASAT_MTD_SERVICE,
-	LASAT_MTD_NORMAL,
-	LASAT_MTD_CONFIG,
-	LASAT_MTD_FS,
-	LASAT_MTD_LAST
+    LASAT_MTD_BOOTLOADER,
+    LASAT_MTD_SERVICE,
+    LASAT_MTD_NORMAL,
+    LASAT_MTD_CONFIG,
+    LASAT_MTD_FS,
+    LASAT_MTD_LAST
 };
 
 /*
@@ -48,54 +48,54 @@ enum lasat_mtdparts {
 
 #define LASAT_EEPROM_VERSION 7
 struct lasat_eeprom_struct {
-	unsigned int  version;
-	unsigned int  cfg[3];
-	unsigned char hwaddr[6];
-	unsigned char print_partno[12];
-	unsigned char term0;
-	unsigned char print_serial[14];
-	unsigned char term1;
-	unsigned char prod_partno[12];
-	unsigned char term2;
-	unsigned char prod_serial[14];
-	unsigned char term3;
-	unsigned char passwd_hash[16];
-	unsigned char pwdnull;
-	unsigned char vendid;
-	unsigned char ts_ref;
-	unsigned char ts_signoff;
-	unsigned char reserved[11];
-	unsigned char debugaccess;
-	unsigned short prid;
-	unsigned int  serviceflag;
-	unsigned int  ipaddr;
-	unsigned int  netmask;
-	unsigned int  crc32;
+    unsigned int  version;
+    unsigned int  cfg[3];
+    unsigned char hwaddr[6];
+    unsigned char print_partno[12];
+    unsigned char term0;
+    unsigned char print_serial[14];
+    unsigned char term1;
+    unsigned char prod_partno[12];
+    unsigned char term2;
+    unsigned char prod_serial[14];
+    unsigned char term3;
+    unsigned char passwd_hash[16];
+    unsigned char pwdnull;
+    unsigned char vendid;
+    unsigned char ts_ref;
+    unsigned char ts_signoff;
+    unsigned char reserved[11];
+    unsigned char debugaccess;
+    unsigned short prid;
+    unsigned int  serviceflag;
+    unsigned int  ipaddr;
+    unsigned int  netmask;
+    unsigned int  crc32;
 };
 
 struct lasat_eeprom_struct_pre7 {
-	unsigned int  version;
-	unsigned int  flags[3];
-	unsigned char hwaddr0[6];
-	unsigned char hwaddr1[6];
-	unsigned char print_partno[9];
-	unsigned char term0;
-	unsigned char print_serial[14];
-	unsigned char term1;
-	unsigned char prod_partno[9];
-	unsigned char term2;
-	unsigned char prod_serial[14];
-	unsigned char term3;
-	unsigned char passwd_hash[24];
-	unsigned char pwdnull;
-	unsigned char vendor;
-	unsigned char ts_ref;
-	unsigned char ts_signoff;
-	unsigned char reserved[6];
-	unsigned int  writecount;
-	unsigned int  ipaddr;
-	unsigned int  netmask;
-	unsigned int  crc32;
+    unsigned int  version;
+    unsigned int  flags[3];
+    unsigned char hwaddr0[6];
+    unsigned char hwaddr1[6];
+    unsigned char print_partno[9];
+    unsigned char term0;
+    unsigned char print_serial[14];
+    unsigned char term1;
+    unsigned char prod_partno[9];
+    unsigned char term2;
+    unsigned char prod_serial[14];
+    unsigned char term3;
+    unsigned char passwd_hash[24];
+    unsigned char pwdnull;
+    unsigned char vendor;
+    unsigned char ts_ref;
+    unsigned char ts_signoff;
+    unsigned char reserved[6];
+    unsigned int  writecount;
+    unsigned int  ipaddr;
+    unsigned int  netmask;
+    unsigned int  crc32;
 };
 
 /* Configuration descriptor encoding - see the doc for details */
@@ -175,40 +175,38 @@ struct lasat_eeprom_struct_pre7 {
 #define LASAT_PRID_SAFEPIPE1060		22
 
 struct lasat_info {
-	unsigned int  li_cpu_hz;
-	unsigned int  li_bus_hz;
-	unsigned int  li_bmid;
-	unsigned int  li_memsize;
-	unsigned int  li_flash_size;
-	unsigned int  li_prid;
-	unsigned char li_bmstr[16];
-	unsigned char li_namestr[32];
-	unsigned char li_typestr[16];
-	/* Info on the Flash layout */
-	unsigned int  li_flash_base;
-	unsigned long li_flashpart_base[LASAT_MTD_LAST];
-	unsigned long li_flashpart_size[LASAT_MTD_LAST];
-	struct lasat_eeprom_struct li_eeprom_info;
-	unsigned int  li_eeprom_upgrade_version;
-	unsigned int  li_debugaccess;
+    unsigned int  li_cpu_hz;
+    unsigned int  li_bus_hz;
+    unsigned int  li_bmid;
+    unsigned int  li_memsize;
+    unsigned int  li_flash_size;
+    unsigned int  li_prid;
+    unsigned char li_bmstr[16];
+    unsigned char li_namestr[32];
+    unsigned char li_typestr[16];
+    /* Info on the Flash layout */
+    unsigned int  li_flash_base;
+    unsigned long li_flashpart_base[LASAT_MTD_LAST];
+    unsigned long li_flashpart_size[LASAT_MTD_LAST];
+    struct lasat_eeprom_struct li_eeprom_info;
+    unsigned int  li_eeprom_upgrade_version;
+    unsigned int  li_debugaccess;
 };
 
 extern struct lasat_info lasat_board_info;
 
-static inline unsigned long lasat_flash_partition_start(int partno)
-{
-	if (partno < 0 || partno >= LASAT_MTD_LAST)
-		return 0;
+static inline unsigned long lasat_flash_partition_start(int partno) {
+    if (partno < 0 || partno >= LASAT_MTD_LAST)
+        return 0;
 
-	return lasat_board_info.li_flashpart_base[partno];
+    return lasat_board_info.li_flashpart_base[partno];
 }
 
-static inline unsigned long lasat_flash_partition_size(int partno)
-{
-	if (partno < 0 || partno >= LASAT_MTD_LAST)
-		return 0;
+static inline unsigned long lasat_flash_partition_size(int partno) {
+    if (partno < 0 || partno >= LASAT_MTD_LAST)
+        return 0;
 
-	return lasat_board_info.li_flashpart_size[partno];
+    return lasat_board_info.li_flashpart_size[partno];
 }
 
 /* Called from setup() to initialize the global board_info struct */
@@ -234,9 +232,8 @@ extern void lasat_write_eeprom_info(void);
 
 extern unsigned int lasat_ndelay_divider;
 
-static inline void lasat_ndelay(unsigned int ns)
-{
-	__delay(ns / lasat_ndelay_divider);
+static inline void lasat_ndelay(unsigned int ns) {
+    __delay(ns / lasat_ndelay_divider);
 }
 
 #define IS_LASAT_200()     (current_cpu_data.cputype == CPU_R5000)

@@ -68,27 +68,24 @@ extern void __init ia64_native_iosapic_pcat_compat_init(void);
 extern struct irq_chip *ia64_native_iosapic_get_irq_chip(unsigned long trigger);
 
 static inline unsigned int
-__ia64_native_iosapic_read(char __iomem *iosapic, unsigned int reg)
-{
-	writel(reg, iosapic + IOSAPIC_REG_SELECT);
-	return readl(iosapic + IOSAPIC_WINDOW);
+__ia64_native_iosapic_read(char __iomem *iosapic, unsigned int reg) {
+    writel(reg, iosapic + IOSAPIC_REG_SELECT);
+    return readl(iosapic + IOSAPIC_WINDOW);
 }
 
 static inline void
-__ia64_native_iosapic_write(char __iomem *iosapic, unsigned int reg, u32 val)
-{
-	writel(reg, iosapic + IOSAPIC_REG_SELECT);
-	writel(val, iosapic + IOSAPIC_WINDOW);
+__ia64_native_iosapic_write(char __iomem *iosapic, unsigned int reg, u32 val) {
+    writel(reg, iosapic + IOSAPIC_REG_SELECT);
+    writel(val, iosapic + IOSAPIC_WINDOW);
 }
 
-static inline void iosapic_eoi(char __iomem *iosapic, u32 vector)
-{
-	writel(vector, iosapic + IOSAPIC_EOI);
+static inline void iosapic_eoi(char __iomem *iosapic, u32 vector) {
+    writel(vector, iosapic + IOSAPIC_EOI);
 }
 
 extern void __init iosapic_system_init (int pcat_compat);
 extern int __devinit iosapic_init (unsigned long address,
-				    unsigned int gsi_base);
+                                   unsigned int gsi_base);
 #ifdef CONFIG_HOTPLUG
 extern int iosapic_remove (unsigned int gsi_base);
 #else
@@ -96,17 +93,17 @@ extern int iosapic_remove (unsigned int gsi_base);
 #endif /* CONFIG_HOTPLUG */
 extern int gsi_to_irq (unsigned int gsi);
 extern int iosapic_register_intr (unsigned int gsi, unsigned long polarity,
-				  unsigned long trigger);
+                                  unsigned long trigger);
 extern void iosapic_unregister_intr (unsigned int irq);
 extern void __devinit iosapic_override_isa_irq (unsigned int isa_irq, unsigned int gsi,
-				      unsigned long polarity,
-				      unsigned long trigger);
+        unsigned long polarity,
+        unsigned long trigger);
 extern int __init iosapic_register_platform_intr (u32 int_type,
-					   unsigned int gsi,
-					   int pmi_vector,
-					   u16 eid, u16 id,
-					   unsigned long polarity,
-					   unsigned long trigger);
+        unsigned int gsi,
+        int pmi_vector,
+        u16 eid, u16 id,
+        unsigned long polarity,
+        unsigned long trigger);
 
 #ifdef CONFIG_NUMA
 extern void __devinit map_iosapic_to_node (unsigned int, int);

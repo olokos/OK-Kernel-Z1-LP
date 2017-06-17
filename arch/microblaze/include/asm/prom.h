@@ -27,8 +27,8 @@
 
 /* Other Prototypes */
 enum early_consoles {
-	UARTLITE = 1,
-	UART16550 = 2,
+    UARTLITE = 1,
+    UART16550 = 2,
 };
 
 extern int of_early_console(void *version);
@@ -46,7 +46,7 @@ extern unsigned long pci_address_to_pio(phys_addr_t address);
  * size parameters.
  */
 void of_parse_dma_window(struct device_node *dn, const void *dma_window_prop,
-		unsigned long *busno, unsigned long *phys, unsigned long *size);
+                         unsigned long *busno, unsigned long *phys, unsigned long *size);
 
 extern void kdump_move_device_tree(void);
 

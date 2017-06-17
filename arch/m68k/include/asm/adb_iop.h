@@ -34,11 +34,11 @@
 #ifndef __ASSEMBLY__
 
 struct adb_iopmsg {
-	__u8 flags;		/* ADB flags         */
-	__u8 count;		/* no. of data bytes */
-	__u8 cmd;		/* ADB command       */
-	__u8 data[8];		/* ADB data          */
-	__u8 spare[21];		/* spare             */
+    __u8 flags;		/* ADB flags         */
+    __u8 count;		/* no. of data bytes */
+    __u8 cmd;		/* ADB command       */
+    __u8 data[8];		/* ADB data          */
+    __u8 spare[21];		/* spare             */
 };
 
 #endif /* __ASSEMBLY__ */

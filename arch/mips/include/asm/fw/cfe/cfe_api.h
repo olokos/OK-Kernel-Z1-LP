@@ -76,13 +76,13 @@ typedef long intptr_t;
 #define CFE_FWI_RTLSIM		0x00000040
 
 typedef struct {
-	int64_t fwi_version;		/* major, minor, eco version */
-	int64_t fwi_totalmem;		/* total installed mem */
-	int64_t fwi_flags;		/* various flags */
-	int64_t fwi_boardid;		/* board ID */
-	int64_t fwi_bootarea_va;	/* VA of boot area */
-	int64_t fwi_bootarea_pa;	/* PA of boot area */
-	int64_t fwi_bootarea_size;	/* size of boot area */
+    int64_t fwi_version;		/* major, minor, eco version */
+    int64_t fwi_totalmem;		/* total installed mem */
+    int64_t fwi_flags;		/* various flags */
+    int64_t fwi_boardid;		/* board ID */
+    int64_t fwi_bootarea_va;	/* VA of boot area */
+    int64_t fwi_bootarea_pa;	/* PA of boot area */
+    int64_t fwi_bootarea_size;	/* size of boot area */
 } cfe_fwinfo_t;
 
 
@@ -99,7 +99,7 @@ int cfe_cpu_start(int cpu, void (*fn) (void), long sp, long gp, long a1);
 int cfe_cpu_stop(int cpu);
 int cfe_enumenv(int idx, char *name, int namelen, char *val, int vallen);
 int cfe_enummem(int idx, int flags, uint64_t * start, uint64_t * length,
-		uint64_t * type);
+                uint64_t * type);
 int cfe_exit(int warm, int status);
 int cfe_flushcache(int flg);
 int cfe_getdevinfo(char *name);
@@ -109,14 +109,14 @@ int cfe_getstdhandle(int flg);
 int cfe_init(uint64_t handle, uint64_t ept);
 int cfe_inpstat(int handle);
 int cfe_ioctl(int handle, unsigned int ioctlnum, unsigned char *buffer,
-	      int length, int *retlen, uint64_t offset);
+              int length, int *retlen, uint64_t offset);
 int cfe_open(char *name);
 int cfe_read(int handle, unsigned char *buffer, int length);
 int cfe_readblk(int handle, int64_t offset, unsigned char *buffer,
-		int length);
+                int length);
 int cfe_setenv(char *name, char *val);
 int cfe_write(int handle, unsigned char *buffer, int length);
 int cfe_writeblk(int handle, int64_t offset, unsigned char *buffer,
-		 int length);
+                 int length);
 
 #endif				/* CFE_API_H */

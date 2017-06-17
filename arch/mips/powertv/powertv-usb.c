@@ -140,57 +140,57 @@
  */
 
 static struct resource ehci_resources[] = {
-	{
-		.parent = &asic_resource,
-		.start  = 0,
-		.end    = 0xff,
-		.flags  = IORESOURCE_MEM,
-	},
-	{
-		.start  = irq_usbehci,
-		.end    = irq_usbehci,
-		.flags  = IORESOURCE_IRQ,
-	},
+    {
+        .parent = &asic_resource,
+        .start  = 0,
+        .end    = 0xff,
+        .flags  = IORESOURCE_MEM,
+    },
+    {
+        .start  = irq_usbehci,
+        .end    = irq_usbehci,
+        .flags  = IORESOURCE_IRQ,
+    },
 };
 
 static u64 ehci_dmamask = 0xffffffffULL;
 
 static struct platform_device ehci_device = {
-	.name = "powertv-ehci",
-	.id = 0,
-	.num_resources = 2,
-	.resource = ehci_resources,
-	.dev = {
-		.dma_mask = &ehci_dmamask,
-		.coherent_dma_mask = 0xffffffff,
-	},
+    .name = "powertv-ehci",
+    .id = 0,
+    .num_resources = 2,
+    .resource = ehci_resources,
+    .dev = {
+        .dma_mask = &ehci_dmamask,
+        .coherent_dma_mask = 0xffffffff,
+    },
 };
 
 static struct resource ohci_resources[] = {
-	{
-		.parent = &asic_resource,
-		.start  = 0,
-		.end    = 0xff,
-		.flags  = IORESOURCE_MEM,
-	},
-	{
-		.start  = irq_usbohci,
-		.end    = irq_usbohci,
-		.flags  = IORESOURCE_IRQ,
-	},
+    {
+        .parent = &asic_resource,
+        .start  = 0,
+        .end    = 0xff,
+        .flags  = IORESOURCE_MEM,
+    },
+    {
+        .start  = irq_usbohci,
+        .end    = irq_usbohci,
+        .flags  = IORESOURCE_IRQ,
+    },
 };
 
 static u64 ohci_dmamask = 0xffffffffULL;
 
 static struct platform_device ohci_device = {
-	.name = "powertv-ohci",
-	.id = 0,
-	.num_resources = 2,
-	.resource = ohci_resources,
-	.dev = {
-		.dma_mask = &ohci_dmamask,
-		.coherent_dma_mask = 0xffffffff,
-	},
+    .name = "powertv-ohci",
+    .id = 0,
+    .num_resources = 2,
+    .resource = ohci_resources,
+    .dev = {
+        .dma_mask = &ohci_dmamask,
+        .coherent_dma_mask = 0xffffffff,
+    },
 };
 
 static unsigned usb_users;
@@ -219,20 +219,19 @@ static DEFINE_SPINLOCK(usb_regs_lock);
  *		is the lower 5 bits of md_bits.
  */
 static void fs_update(u32 pe_bits, int md_bits, u32 sdiv_bits,
-	u32 disable_div_by_3, u32 standby)
-{
-	u32 val;
+                      u32 disable_div_by_3, u32 standby) {
+    u32 val;
 
-	val = ((sdiv_bits << QAM_FS_SDIV_SHIFT) |
-		((md_bits & QAM_FS_MD_MASK) << QAM_FS_MD_SHIFT) |
-		(pe_bits << QAM_FS_PE_SHIFT) |
-		QAM_FS_ENABLE_OUTPUT |
-		standby |
-		disable_div_by_3);
-	asic_write(val, fs432x4b4_usb_ctl);
-	asic_write(val | QAM_FS_ENABLE_PROGRAM, fs432x4b4_usb_ctl);
-	asic_write(val | QAM_FS_ENABLE_PROGRAM | QAM_FS_CHOOSE_FS,
-		fs432x4b4_usb_ctl);
+    val = ((sdiv_bits << QAM_FS_SDIV_SHIFT) |
+           ((md_bits & QAM_FS_MD_MASK) << QAM_FS_MD_SHIFT) |
+           (pe_bits << QAM_FS_PE_SHIFT) |
+           QAM_FS_ENABLE_OUTPUT |
+           standby |
+           disable_div_by_3);
+    asic_write(val, fs432x4b4_usb_ctl);
+    asic_write(val | QAM_FS_ENABLE_PROGRAM, fs432x4b4_usb_ctl);
+    asic_write(val | QAM_FS_ENABLE_PROGRAM | QAM_FS_CHOOSE_FS,
+               fs432x4b4_usb_ctl);
 }
 
 /*
@@ -241,148 +240,141 @@ static void fs_update(u32 pe_bits, int md_bits, u32 sdiv_bits,
  * @clear:	Bits to clear in the register; each bit with a one will
  *		be set in the register, zero bits will not be modified
  */
-static void usb_eye_configure(u32 set, u32 clear)
-{
-	u32 old;
+static void usb_eye_configure(u32 set, u32 clear) {
+    u32 old;
 
-	old = asic_read(crt_spare);
-	old |= set;
-	old &= ~clear;
-	asic_write(old, crt_spare);
+    old = asic_read(crt_spare);
+    old |= set;
+    old &= ~clear;
+    asic_write(old, crt_spare);
 }
 
 /*
  * platform_configure_usb - usb configuration based on platform type.
  */
-static void platform_configure_usb(void)
-{
-	u32 bcm1_usb2_ctl_value;
-	enum asic_type asic_type;
-	unsigned long flags;
+static void platform_configure_usb(void) {
+    u32 bcm1_usb2_ctl_value;
+    enum asic_type asic_type;
+    unsigned long flags;
 
-	spin_lock_irqsave(&usb_regs_lock, flags);
-	usb_users++;
+    spin_lock_irqsave(&usb_regs_lock, flags);
+    usb_users++;
 
-	if (usb_users != 1) {
-		spin_unlock_irqrestore(&usb_regs_lock, flags);
-		return;
-	}
+    if (usb_users != 1) {
+        spin_unlock_irqrestore(&usb_regs_lock, flags);
+        return;
+    }
 
-	asic_type = platform_get_asic();
+    asic_type = platform_get_asic();
 
-	switch (asic_type) {
-	case ASIC_ZEUS:
-		fs_update(0x0000, -15, 0x02, 0, 0);
-		bcm1_usb2_ctl_value = BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
-			BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
-		break;
+    switch (asic_type) {
+    case ASIC_ZEUS:
+        fs_update(0x0000, -15, 0x02, 0, 0);
+        bcm1_usb2_ctl_value = BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
+                              BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
+        break;
 
-	case ASIC_CRONUS:
-	case ASIC_CRONUSLITE:
-		usb_eye_configure(0, CRT_SPARE_USB_DIVIDE_BY_9);
-		fs_update(0x8000, -14, 0x03, QAM_FS_DISABLE_DIVIDE_BY_3,
-			QAM_FS_DISABLE_DIGITAL_STANDBY);
-		bcm1_usb2_ctl_value = BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
-			BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
-		break;
+    case ASIC_CRONUS:
+    case ASIC_CRONUSLITE:
+        usb_eye_configure(0, CRT_SPARE_USB_DIVIDE_BY_9);
+        fs_update(0x8000, -14, 0x03, QAM_FS_DISABLE_DIVIDE_BY_3,
+                  QAM_FS_DISABLE_DIGITAL_STANDBY);
+        bcm1_usb2_ctl_value = BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
+                              BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
+        break;
 
-	case ASIC_CALLIOPE:
-		fs_update(0x0000, -15, 0x02, QAM_FS_DISABLE_DIVIDE_BY_3,
-			QAM_FS_DISABLE_DIGITAL_STANDBY);
+    case ASIC_CALLIOPE:
+        fs_update(0x0000, -15, 0x02, QAM_FS_DISABLE_DIVIDE_BY_3,
+                  QAM_FS_DISABLE_DIGITAL_STANDBY);
 
-		switch (platform_get_family()) {
-		case FAMILY_1500VZE:
-			break;
+        switch (platform_get_family()) {
+        case FAMILY_1500VZE:
+            break;
 
-		case FAMILY_1500VZF:
-			usb_eye_configure(CRT_SPARE_PORT2_SHIFT_JK |
-				CRT_SPARE_PORT1_SHIFT_JK |
-				CRT_SPARE_PORT2_FAST_EDGE |
-				CRT_SPARE_PORT1_FAST_EDGE, 0);
-			break;
+        case FAMILY_1500VZF:
+            usb_eye_configure(CRT_SPARE_PORT2_SHIFT_JK |
+                              CRT_SPARE_PORT1_SHIFT_JK |
+                              CRT_SPARE_PORT2_FAST_EDGE |
+                              CRT_SPARE_PORT1_FAST_EDGE, 0);
+            break;
 
-		default:
-			usb_eye_configure(CRT_SPARE_PORT2_SHIFT_JK |
-				CRT_SPARE_PORT1_SHIFT_JK, 0);
-			break;
-		}
+        default:
+            usb_eye_configure(CRT_SPARE_PORT2_SHIFT_JK |
+                              CRT_SPARE_PORT1_SHIFT_JK, 0);
+            break;
+        }
 
-		bcm1_usb2_ctl_value = BCM1_USB2_CTL_BISTOK |
-			BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
-			BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
-		break;
+        bcm1_usb2_ctl_value = BCM1_USB2_CTL_BISTOK |
+                              BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
+                              BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
+        break;
 
-	case ASIC_GAIA:
-		fs_update(0x8000, -14, 0x03, QAM_FS_DISABLE_DIVIDE_BY_3,
-			QAM_FS_DISABLE_DIGITAL_STANDBY);
-		bcm1_usb2_ctl_value = BCM1_USB2_CTL_BISTOK |
-			BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
-			BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
-		break;
+    case ASIC_GAIA:
+        fs_update(0x8000, -14, 0x03, QAM_FS_DISABLE_DIVIDE_BY_3,
+                  QAM_FS_DISABLE_DIGITAL_STANDBY);
+        bcm1_usb2_ctl_value = BCM1_USB2_CTL_BISTOK |
+                              BCM1_USB2_CTL_EHCI_PRT_PWR_ACTIVE_HIGH |
+                              BCM1_USB2_CTL_APP_PRT_OVRCUR_IN_ACTIVE_HIGH;
+        break;
 
-	default:
-		pr_err("Unknown ASIC type: %d\n", asic_type);
-		bcm1_usb2_ctl_value = 0;
-		break;
-	}
+    default:
+        pr_err("Unknown ASIC type: %d\n", asic_type);
+        bcm1_usb2_ctl_value = 0;
+        break;
+    }
 
-	/* turn on USB power */
-	asic_write(0, usb2_strap);
-	/* Enable all OHCI interrupts */
-	asic_write(bcm1_usb2_ctl_value, usb2_control);
-	/* usb2_stbus_obc store32/load32 */
-	asic_write(USB_STBUS_OBC_STORE32_LOAD32, usb2_stbus_obc);
-	/* usb2_stbus_mess_size 2 packets */
-	asic_write(USB2_STBUS_MESS_SIZE_2, usb2_stbus_mess_size);
-	/* usb2_stbus_chunk_size 2 packets */
-	asic_write(USB2_STBUS_CHUNK_SIZE_2, usb2_stbus_chunk_size);
-	spin_unlock_irqrestore(&usb_regs_lock, flags);
+    /* turn on USB power */
+    asic_write(0, usb2_strap);
+    /* Enable all OHCI interrupts */
+    asic_write(bcm1_usb2_ctl_value, usb2_control);
+    /* usb2_stbus_obc store32/load32 */
+    asic_write(USB_STBUS_OBC_STORE32_LOAD32, usb2_stbus_obc);
+    /* usb2_stbus_mess_size 2 packets */
+    asic_write(USB2_STBUS_MESS_SIZE_2, usb2_stbus_mess_size);
+    /* usb2_stbus_chunk_size 2 packets */
+    asic_write(USB2_STBUS_CHUNK_SIZE_2, usb2_stbus_chunk_size);
+    spin_unlock_irqrestore(&usb_regs_lock, flags);
 }
 
-static void platform_unconfigure_usb(void)
-{
-	unsigned long flags;
+static void platform_unconfigure_usb(void) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&usb_regs_lock, flags);
-	usb_users--;
-	if (usb_users == 0)
-		asic_write(USB2_STRAP_HFREQ_SELECT, usb2_strap);
-	spin_unlock_irqrestore(&usb_regs_lock, flags);
+    spin_lock_irqsave(&usb_regs_lock, flags);
+    usb_users--;
+    if (usb_users == 0)
+        asic_write(USB2_STRAP_HFREQ_SELECT, usb2_strap);
+    spin_unlock_irqrestore(&usb_regs_lock, flags);
 }
 
 /*
  * Set up the USB EHCI interface
  */
-void platform_configure_usb_ehci()
-{
-	platform_configure_usb();
+void platform_configure_usb_ehci() {
+    platform_configure_usb();
 }
 EXPORT_SYMBOL(platform_configure_usb_ehci);
 
 /*
  * Set up the USB OHCI interface
  */
-void platform_configure_usb_ohci()
-{
-	platform_configure_usb();
+void platform_configure_usb_ohci() {
+    platform_configure_usb();
 }
 EXPORT_SYMBOL(platform_configure_usb_ohci);
 
 /*
  * Shut the USB EHCI interface down
  */
-void platform_unconfigure_usb_ehci()
-{
-	platform_unconfigure_usb();
+void platform_unconfigure_usb_ehci() {
+    platform_unconfigure_usb();
 }
 EXPORT_SYMBOL(platform_unconfigure_usb_ehci);
 
 /*
  * Shut the USB OHCI interface down
  */
-void platform_unconfigure_usb_ohci()
-{
-	platform_unconfigure_usb();
+void platform_unconfigure_usb_ohci() {
+    platform_unconfigure_usb();
 }
 EXPORT_SYMBOL(platform_unconfigure_usb_ohci);
 
@@ -390,15 +382,14 @@ EXPORT_SYMBOL(platform_unconfigure_usb_ohci);
  * platform_devices_init - sets up USB device resourse.
  */
 int __init platform_usb_devices_init(struct platform_device **ehci_dev,
-	struct platform_device **ohci_dev)
-{
-	*ehci_dev = &ehci_device;
-	ehci_resources[0].start = asic_reg_phys_addr(ehci_hcapbase);
-	ehci_resources[0].end += ehci_resources[0].start;
+                                     struct platform_device **ohci_dev) {
+    *ehci_dev = &ehci_device;
+    ehci_resources[0].start = asic_reg_phys_addr(ehci_hcapbase);
+    ehci_resources[0].end += ehci_resources[0].start;
 
-	*ohci_dev = &ohci_device;
-	ohci_resources[0].start = asic_reg_phys_addr(ohci_hc_revision);
-	ohci_resources[0].end += ohci_resources[0].start;
+    *ohci_dev = &ohci_device;
+    ohci_resources[0].start = asic_reg_phys_addr(ohci_hc_revision);
+    ohci_resources[0].end += ohci_resources[0].start;
 
-	return 0;
+    return 0;
 }

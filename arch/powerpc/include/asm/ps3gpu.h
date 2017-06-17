@@ -44,43 +44,38 @@ extern struct mutex ps3_gpu_mutex;
 
 
 static inline int lv1_gpu_display_sync(u64 context_handle, u64 head,
-				       u64 ddr_offset)
-{
-	return lv1_gpu_context_attribute(context_handle,
-					 L1GPU_CONTEXT_ATTRIBUTE_DISPLAY_SYNC,
-					 head, ddr_offset, 0, 0);
+                                       u64 ddr_offset) {
+    return lv1_gpu_context_attribute(context_handle,
+                                     L1GPU_CONTEXT_ATTRIBUTE_DISPLAY_SYNC,
+                                     head, ddr_offset, 0, 0);
 }
 
 static inline int lv1_gpu_display_flip(u64 context_handle, u64 head,
-				       u64 ddr_offset)
-{
-	return lv1_gpu_context_attribute(context_handle,
-					 L1GPU_CONTEXT_ATTRIBUTE_DISPLAY_FLIP,
-					 head, ddr_offset, 0, 0);
+                                       u64 ddr_offset) {
+    return lv1_gpu_context_attribute(context_handle,
+                                     L1GPU_CONTEXT_ATTRIBUTE_DISPLAY_FLIP,
+                                     head, ddr_offset, 0, 0);
 }
 
 static inline int lv1_gpu_fb_setup(u64 context_handle, u64 xdr_lpar,
-				   u64 xdr_size, u64 ioif_offset)
-{
-	return lv1_gpu_context_attribute(context_handle,
-					 L1GPU_CONTEXT_ATTRIBUTE_FB_SETUP,
-					 xdr_lpar, xdr_size, ioif_offset, 0);
+                                   u64 xdr_size, u64 ioif_offset) {
+    return lv1_gpu_context_attribute(context_handle,
+                                     L1GPU_CONTEXT_ATTRIBUTE_FB_SETUP,
+                                     xdr_lpar, xdr_size, ioif_offset, 0);
 }
 
 static inline int lv1_gpu_fb_blit(u64 context_handle, u64 ddr_offset,
-				  u64 ioif_offset, u64 sync_width, u64 pitch)
-{
-	return lv1_gpu_context_attribute(context_handle,
-					 L1GPU_CONTEXT_ATTRIBUTE_FB_BLIT,
-					 ddr_offset, ioif_offset, sync_width,
-					 pitch);
+                                  u64 ioif_offset, u64 sync_width, u64 pitch) {
+    return lv1_gpu_context_attribute(context_handle,
+                                     L1GPU_CONTEXT_ATTRIBUTE_FB_BLIT,
+                                     ddr_offset, ioif_offset, sync_width,
+                                     pitch);
 }
 
-static inline int lv1_gpu_fb_close(u64 context_handle)
-{
-	return lv1_gpu_context_attribute(context_handle,
-					 L1GPU_CONTEXT_ATTRIBUTE_FB_CLOSE, 0,
-					 0, 0, 0);
+static inline int lv1_gpu_fb_close(u64 context_handle) {
+    return lv1_gpu_context_attribute(context_handle,
+                                     L1GPU_CONTEXT_ATTRIBUTE_FB_CLOSE, 0,
+                                     0, 0, 0);
 }
 
 #endif /* _ASM_POWERPC_PS3GPU_H */

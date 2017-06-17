@@ -20,38 +20,38 @@
 #define SMD_HEAP_SIZE 512
 
 struct smem_heap_info {
-	unsigned initialized;
-	unsigned free_offset;
-	unsigned heap_remaining;
-	unsigned reserved;
+    unsigned initialized;
+    unsigned free_offset;
+    unsigned heap_remaining;
+    unsigned reserved;
 };
 
 struct smem_heap_entry {
-	unsigned allocated;
-	unsigned offset;
-	unsigned size;
-	unsigned reserved; /* bits 1:0 reserved, bits 31:2 aux smem base addr */
+    unsigned allocated;
+    unsigned offset;
+    unsigned size;
+    unsigned reserved; /* bits 1:0 reserved, bits 31:2 aux smem base addr */
 };
 #define BASE_ADDR_MASK 0xfffffffc
 
 struct smem_proc_comm {
-	unsigned command;
-	unsigned status;
-	unsigned data1;
-	unsigned data2;
+    unsigned command;
+    unsigned status;
+    unsigned data1;
+    unsigned data2;
 };
 
 struct smem_shared {
-	struct smem_proc_comm proc_comm[4];
-	unsigned version[32];
-	struct smem_heap_info heap_info;
-	struct smem_heap_entry heap_toc[SMD_HEAP_SIZE];
+    struct smem_proc_comm proc_comm[4];
+    unsigned version[32];
+    struct smem_heap_info heap_info;
+    struct smem_heap_entry heap_toc[SMD_HEAP_SIZE];
 };
 
 struct smem_area {
-	phys_addr_t phys_addr;
-	resource_size_t size;
-	void __iomem *virt_addr;
+    phys_addr_t phys_addr;
+    resource_size_t size;
+    void __iomem *virt_addr;
 };
 
 /* used for unit testing spinlocks */

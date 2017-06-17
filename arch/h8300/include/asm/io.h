@@ -32,39 +32,37 @@
  * swap functions are sometimes needed to interface little-endian hardware
  */
 
-static inline unsigned short _swapw(volatile unsigned short v)
-{
+static inline unsigned short _swapw(volatile unsigned short v) {
 #ifndef H8300_IO_NOSWAP
-	unsigned short r;
-	__asm__("xor.b %w0,%x0\n\t"
-		"xor.b %x0,%w0\n\t"
-		"xor.b %w0,%x0"
-		:"=r"(r)
-		:"0"(v));
-	return r;
+    unsigned short r;
+    __asm__("xor.b %w0,%x0\n\t"
+            "xor.b %x0,%w0\n\t"
+            "xor.b %w0,%x0"
+            :"=r"(r)
+            :"0"(v));
+    return r;
 #else
-	return v;
+    return v;
 #endif
 }
 
-static inline unsigned long _swapl(volatile unsigned long v)
-{
+static inline unsigned long _swapl(volatile unsigned long v) {
 #ifndef H8300_IO_NOSWAP
-	unsigned long r;
-	__asm__("xor.b %w0,%x0\n\t"
-		"xor.b %x0,%w0\n\t"
-		"xor.b %w0,%x0\n\t"
-		"xor.w %e0,%f0\n\t"
-		"xor.w %f0,%e0\n\t"
-		"xor.w %e0,%f0\n\t"
-		"xor.b %w0,%x0\n\t"
-		"xor.b %x0,%w0\n\t"
-		"xor.b %w0,%x0"
-		:"=r"(r)
-		:"0"(v));
-	return r;
+    unsigned long r;
+    __asm__("xor.b %w0,%x0\n\t"
+            "xor.b %x0,%w0\n\t"
+            "xor.b %w0,%x0\n\t"
+            "xor.w %e0,%f0\n\t"
+            "xor.w %f0,%e0\n\t"
+            "xor.w %e0,%f0\n\t"
+            "xor.b %w0,%x0\n\t"
+            "xor.b %x0,%w0\n\t"
+            "xor.b %w0,%x0"
+            :"=r"(r)
+            :"0"(v));
+    return r;
 #else
-	return v;
+    return v;
 #endif
 }
 
@@ -98,105 +96,94 @@ static inline unsigned long _swapl(volatile unsigned long v)
 #define __raw_writew writew
 #define __raw_writel writel
 
-static inline int h8300_buswidth(unsigned int addr)
-{
-	return (*(volatile unsigned char *)ABWCR & (1 << ((addr >> 21) & 7))) == 0;
+static inline int h8300_buswidth(unsigned int addr) {
+    return (*(volatile unsigned char *)ABWCR & (1 << ((addr >> 21) & 7))) == 0;
 }
 
-static inline void io_outsb(unsigned int addr, const void *buf, int len)
-{
-	volatile unsigned char  *ap_b = (volatile unsigned char *) addr;
-	volatile unsigned short *ap_w = (volatile unsigned short *) addr;
-	unsigned char *bp = (unsigned char *) buf;
+static inline void io_outsb(unsigned int addr, const void *buf, int len) {
+    volatile unsigned char  *ap_b = (volatile unsigned char *) addr;
+    volatile unsigned short *ap_w = (volatile unsigned short *) addr;
+    unsigned char *bp = (unsigned char *) buf;
 
-	if(h8300_buswidth(addr) && (addr & 1)) {
-		while (len--)
-			*ap_w = *bp++;
-	} else {
-		while (len--)
-			*ap_b = *bp++;
-	}
+    if(h8300_buswidth(addr) && (addr & 1)) {
+        while (len--)
+            *ap_w = *bp++;
+    } else {
+        while (len--)
+            *ap_b = *bp++;
+    }
 }
 
-static inline void io_outsw(unsigned int addr, const void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*ap = _swapw(*bp++);
+static inline void io_outsw(unsigned int addr, const void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *ap = _swapw(*bp++);
 }
 
-static inline void io_outsl(unsigned int addr, const void *buf, int len)
-{
-	volatile unsigned long *ap = (volatile unsigned long *) addr;
-	unsigned long *bp = (unsigned long *) buf;
-	while (len--)
-		*ap = _swapl(*bp++);
+static inline void io_outsl(unsigned int addr, const void *buf, int len) {
+    volatile unsigned long *ap = (volatile unsigned long *) addr;
+    unsigned long *bp = (unsigned long *) buf;
+    while (len--)
+        *ap = _swapl(*bp++);
 }
 
-static inline void io_outsw_noswap(unsigned int addr, const void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*ap = *bp++;
+static inline void io_outsw_noswap(unsigned int addr, const void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *ap = *bp++;
 }
 
-static inline void io_outsl_noswap(unsigned int addr, const void *buf, int len)
-{
-	volatile unsigned long *ap = (volatile unsigned long *) addr;
-	unsigned long *bp = (unsigned long *) buf;
-	while (len--)
-		*ap = *bp++;
+static inline void io_outsl_noswap(unsigned int addr, const void *buf, int len) {
+    volatile unsigned long *ap = (volatile unsigned long *) addr;
+    unsigned long *bp = (unsigned long *) buf;
+    while (len--)
+        *ap = *bp++;
 }
 
-static inline void io_insb(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned char  *ap_b;
-	volatile unsigned short *ap_w;
-	unsigned char *bp = (unsigned char *) buf;
+static inline void io_insb(unsigned int addr, void *buf, int len) {
+    volatile unsigned char  *ap_b;
+    volatile unsigned short *ap_w;
+    unsigned char *bp = (unsigned char *) buf;
 
-	if(h8300_buswidth(addr)) {
-		ap_w = (volatile unsigned short *)(addr & ~1);
-		while (len--)
-			*bp++ = *ap_w & 0xff;
-	} else {
-		ap_b = (volatile unsigned char *)addr;
-		while (len--)
-			*bp++ = *ap_b;
-	}
+    if(h8300_buswidth(addr)) {
+        ap_w = (volatile unsigned short *)(addr & ~1);
+        while (len--)
+            *bp++ = *ap_w & 0xff;
+    } else {
+        ap_b = (volatile unsigned char *)addr;
+        while (len--)
+            *bp++ = *ap_b;
+    }
 }
 
-static inline void io_insw(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*bp++ = _swapw(*ap);
+static inline void io_insw(unsigned int addr, void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *bp++ = _swapw(*ap);
 }
 
-static inline void io_insl(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned long *ap = (volatile unsigned long *) addr;
-	unsigned long *bp = (unsigned long *) buf;
-	while (len--)
-		*bp++ = _swapl(*ap);
+static inline void io_insl(unsigned int addr, void *buf, int len) {
+    volatile unsigned long *ap = (volatile unsigned long *) addr;
+    unsigned long *bp = (unsigned long *) buf;
+    while (len--)
+        *bp++ = _swapl(*ap);
 }
 
-static inline void io_insw_noswap(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*bp++ = *ap;
+static inline void io_insw_noswap(unsigned int addr, void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *bp++ = *ap;
 }
 
-static inline void io_insl_noswap(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned long *ap = (volatile unsigned long *) addr;
-	unsigned long *bp = (unsigned long *) buf;
-	while (len--)
-		*bp++ = *ap;
+static inline void io_insl_noswap(unsigned int addr, void *buf, int len) {
+    volatile unsigned long *ap = (volatile unsigned long *) addr;
+    unsigned long *bp = (unsigned long *) buf;
+    while (len--)
+        *bp++ = *ap;
 }
 
 /*
@@ -245,88 +232,108 @@ static inline void io_insl_noswap(unsigned int addr, void *buf, int len)
 extern void *__ioremap(unsigned long physaddr, unsigned long size, int cacheflag);
 extern void __iounmap(void *addr, unsigned long size);
 
-static inline void *ioremap(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void *ioremap(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
-static inline void *ioremap_nocache(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void *ioremap_nocache(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
-static inline void *ioremap_writethrough(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
+static inline void *ioremap_writethrough(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
 }
-static inline void *ioremap_fullcache(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
+static inline void *ioremap_fullcache(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
 }
 
 extern void iounmap(void *addr);
 
 /* H8/300 internal I/O functions */
-static __inline__ unsigned char ctrl_inb(unsigned long addr)
-{
-	return *(volatile unsigned char*)addr;
+static __inline__ unsigned char ctrl_inb(unsigned long addr) {
+    return *(volatile unsigned char*)addr;
 }
 
-static __inline__ unsigned short ctrl_inw(unsigned long addr)
-{
-	return *(volatile unsigned short*)addr;
+static __inline__ unsigned short ctrl_inw(unsigned long addr) {
+    return *(volatile unsigned short*)addr;
 }
 
-static __inline__ unsigned long ctrl_inl(unsigned long addr)
-{
-	return *(volatile unsigned long*)addr;
+static __inline__ unsigned long ctrl_inl(unsigned long addr) {
+    return *(volatile unsigned long*)addr;
 }
 
-static __inline__ void ctrl_outb(unsigned char b, unsigned long addr)
-{
-	*(volatile unsigned char*)addr = b;
+static __inline__ void ctrl_outb(unsigned char b, unsigned long addr) {
+    *(volatile unsigned char*)addr = b;
 }
 
-static __inline__ void ctrl_outw(unsigned short b, unsigned long addr)
-{
-	*(volatile unsigned short*)addr = b;
+static __inline__ void ctrl_outw(unsigned short b, unsigned long addr) {
+    *(volatile unsigned short*)addr = b;
 }
 
-static __inline__ void ctrl_outl(unsigned long b, unsigned long addr)
-{
-        *(volatile unsigned long*)addr = b;
+static __inline__ void ctrl_outl(unsigned long b, unsigned long addr) {
+    *(volatile unsigned long*)addr = b;
 }
 
-static __inline__ void ctrl_bclr(int b, unsigned long addr)
-{
-	if (__builtin_constant_p(b))
-		switch (b) {
-		case 0: __asm__("bclr #0,@%0"::"r"(addr)); break;
-		case 1: __asm__("bclr #1,@%0"::"r"(addr)); break;
-		case 2: __asm__("bclr #2,@%0"::"r"(addr)); break;
-		case 3: __asm__("bclr #3,@%0"::"r"(addr)); break;
-		case 4: __asm__("bclr #4,@%0"::"r"(addr)); break;
-		case 5: __asm__("bclr #5,@%0"::"r"(addr)); break;
-		case 6: __asm__("bclr #6,@%0"::"r"(addr)); break;
-		case 7: __asm__("bclr #7,@%0"::"r"(addr)); break;
-		}
-	else
-		__asm__("bclr %w0,@%1"::"r"(b), "r"(addr));
+static __inline__ void ctrl_bclr(int b, unsigned long addr) {
+    if (__builtin_constant_p(b))
+        switch (b) {
+        case 0:
+            __asm__("bclr #0,@%0"::"r"(addr));
+            break;
+        case 1:
+            __asm__("bclr #1,@%0"::"r"(addr));
+            break;
+        case 2:
+            __asm__("bclr #2,@%0"::"r"(addr));
+            break;
+        case 3:
+            __asm__("bclr #3,@%0"::"r"(addr));
+            break;
+        case 4:
+            __asm__("bclr #4,@%0"::"r"(addr));
+            break;
+        case 5:
+            __asm__("bclr #5,@%0"::"r"(addr));
+            break;
+        case 6:
+            __asm__("bclr #6,@%0"::"r"(addr));
+            break;
+        case 7:
+            __asm__("bclr #7,@%0"::"r"(addr));
+            break;
+        }
+    else
+        __asm__("bclr %w0,@%1"::"r"(b), "r"(addr));
 }
 
-static __inline__ void ctrl_bset(int b, unsigned long addr)
-{
-	if (__builtin_constant_p(b))
-		switch (b) {
-		case 0: __asm__("bset #0,@%0"::"r"(addr)); break;
-		case 1: __asm__("bset #1,@%0"::"r"(addr)); break;
-		case 2: __asm__("bset #2,@%0"::"r"(addr)); break;
-		case 3: __asm__("bset #3,@%0"::"r"(addr)); break;
-		case 4: __asm__("bset #4,@%0"::"r"(addr)); break;
-		case 5: __asm__("bset #5,@%0"::"r"(addr)); break;
-		case 6: __asm__("bset #6,@%0"::"r"(addr)); break;
-		case 7: __asm__("bset #7,@%0"::"r"(addr)); break;
-		}
-	else
-		__asm__("bset %w0,@%1"::"r"(b), "r"(addr));
+static __inline__ void ctrl_bset(int b, unsigned long addr) {
+    if (__builtin_constant_p(b))
+        switch (b) {
+        case 0:
+            __asm__("bset #0,@%0"::"r"(addr));
+            break;
+        case 1:
+            __asm__("bset #1,@%0"::"r"(addr));
+            break;
+        case 2:
+            __asm__("bset #2,@%0"::"r"(addr));
+            break;
+        case 3:
+            __asm__("bset #3,@%0"::"r"(addr));
+            break;
+        case 4:
+            __asm__("bset #4,@%0"::"r"(addr));
+            break;
+        case 5:
+            __asm__("bset #5,@%0"::"r"(addr));
+            break;
+        case 6:
+            __asm__("bset #6,@%0"::"r"(addr));
+            break;
+        case 7:
+            __asm__("bset #7,@%0"::"r"(addr));
+            break;
+        }
+    else
+        __asm__("bset %w0,@%1"::"r"(b), "r"(addr));
 }
 
 /* Pages to physical address... */

@@ -191,8 +191,8 @@
 #define HFI_BUFFER_INTERNAL_PERSIST_1		(HFI_COMMON_BASE + 0x5)
 
 struct hfi_buffer_info {
-	u32 buffer_addr;
-	u32 extra_data_addr;
+    u32 buffer_addr;
+    u32 extra_data_addr;
 };
 
 #define HFI_PROPERTY_SYS_COMMON_START		\
@@ -357,8 +357,8 @@ struct hfi_buffer_info {
 	(HFI_PROPERTY_CONFIG_VPE_COMMON_START + 0x002)
 
 struct hfi_bitrate {
-	u32 bit_rate;
-	u32 layer_id;
+    u32 bit_rate;
+    u32 layer_id;
 };
 
 #define HFI_CAPABILITY_FRAME_WIDTH			(HFI_COMMON_BASE + 0x1)
@@ -374,15 +374,15 @@ struct hfi_bitrate {
 #define  HFI_CAPABILITY_ENC_LTR_COUNT      (HFI_COMMON_BASE + 0x11)
 
 struct hfi_capability_supported {
-	u32 capability_type;
-	u32 min;
-	u32 max;
-	u32 step_size;
+    u32 capability_type;
+    u32 min;
+    u32 max;
+    u32 step_size;
 };
 
 struct hfi_capability_supported_info {
-	u32 num_capabilities;
-	struct hfi_capability_supported rg_data[1];
+    u32 num_capabilities;
+    struct hfi_capability_supported rg_data[1];
 };
 
 #define HFI_DEBUG_MSG_LOW					0x00000001
@@ -396,12 +396,12 @@ struct hfi_capability_supported_info {
 #define HFI_DEBUG_MODE_QDSS					0x00000002
 
 struct hfi_debug_config {
-	u32 debug_config;
-	u32 debug_mode;
+    u32 debug_config;
+    u32 debug_mode;
 };
 
 struct hfi_enable {
-	int enable;
+    int enable;
 };
 
 #define HFI_H264_DB_MODE_DISABLE			(HFI_COMMON_BASE + 0x1)
@@ -410,9 +410,9 @@ struct hfi_enable {
 #define HFI_H264_DB_MODE_ALL_BOUNDARY		(HFI_COMMON_BASE + 0x3)
 
 struct hfi_h264_db_control {
-	u32 mode;
-	int slice_alpha_offset;
-	int slice_beta_offset;
+    u32 mode;
+    int slice_alpha_offset;
+    int slice_beta_offset;
 };
 
 #define HFI_H264_ENTROPY_CAVLC				(HFI_COMMON_BASE + 0x1)
@@ -423,13 +423,13 @@ struct hfi_h264_db_control {
 #define HFI_H264_CABAC_MODEL_2				(HFI_COMMON_BASE + 0x3)
 
 struct hfi_h264_entropy_control {
-	u32 entropy_mode;
-	u32 cabac_model;
+    u32 entropy_mode;
+    u32 cabac_model;
 };
 
 struct hfi_frame_rate {
-	u32 buffer_type;
-	u32 frame_rate;
+    u32 buffer_type;
+    u32 frame_rate;
 };
 
 #define HFI_INTRA_REFRESH_NONE				(HFI_COMMON_BASE + 0x1)
@@ -439,52 +439,52 @@ struct hfi_frame_rate {
 #define HFI_INTRA_REFRESH_RANDOM			(HFI_COMMON_BASE + 0x5)
 
 struct hfi_intra_refresh {
-	u32 mode;
-	u32 air_mbs;
-	u32 air_ref;
-	u32 cir_mbs;
+    u32 mode;
+    u32 air_mbs;
+    u32 air_ref;
+    u32 cir_mbs;
 };
 
 struct hfi_idr_period {
-	u32 idr_period;
+    u32 idr_period;
 };
 
 struct hfi_operations_type {
-	u32 rotation;
-	u32 flip;
+    u32 rotation;
+    u32 flip;
 };
 
 struct hfi_max_num_b_frames {
-	u32 max_num_b_frames;
+    u32 max_num_b_frames;
 };
 
 struct hfi_conceal_color {
-	u32 conceal_color;
+    u32 conceal_color;
 };
 
 struct hfi_intra_period {
-	u32 pframes;
-	u32 bframes;
+    u32 pframes;
+    u32 bframes;
 };
 
 struct hfi_mpeg4_header_extension {
-	u32 header_extension;
+    u32 header_extension;
 };
 
 struct hfi_mpeg4_time_resolution {
-	u32 time_increment_resolution;
+    u32 time_increment_resolution;
 };
 
 struct hfi_multi_stream {
-	u32 buffer_type;
-	u32 enable;
-	u32 width;
-	u32 height;
+    u32 buffer_type;
+    u32 enable;
+    u32 width;
+    u32 height;
 };
 
 struct hfi_multi_view_format {
-	u32 views;
-	u32 rg_view_order[1];
+    u32 views;
+    u32 rg_view_order[1];
 };
 
 #define HFI_MULTI_SLICE_OFF				(HFI_COMMON_BASE + 0x1)
@@ -493,8 +493,8 @@ struct hfi_multi_view_format {
 #define HFI_MULTI_SLICE_GOB				(HFI_COMMON_BASE + 0x4)
 
 struct hfi_multi_slice_control {
-	u32 multi_slice;
-	u32 slice_size;
+    u32 multi_slice;
+    u32 slice_size;
 };
 
 #define HFI_NAL_FORMAT_STARTCODES			0x00000001
@@ -504,11 +504,11 @@ struct hfi_multi_slice_control {
 #define HFI_NAL_FORMAT_FOUR_BYTE_LENGTH		0x00000010
 
 struct hfi_nal_stream_format_supported {
-	u32 nal_stream_format_supported;
+    u32 nal_stream_format_supported;
 };
 
 struct hfi_nal_stream_format_select {
-	u32 nal_stream_format_select;
+    u32 nal_stream_format_select;
 };
 #define HFI_PICTURE_TYPE_I					0x01
 #define HFI_PICTURE_TYPE_P					0x02
@@ -516,37 +516,37 @@ struct hfi_nal_stream_format_select {
 #define HFI_PICTURE_TYPE_IDR				0x08
 
 struct hfi_profile_level {
-	u32 profile;
-	u32 level;
+    u32 profile;
+    u32 level;
 };
 
 struct hfi_profile_level_supported {
-	u32 profile_count;
-	struct hfi_profile_level rg_profile_level[1];
+    u32 profile_count;
+    struct hfi_profile_level rg_profile_level[1];
 };
 
 struct hfi_quality_vs_speed {
-	u32 quality_vs_speed;
+    u32 quality_vs_speed;
 };
 
 struct hfi_quantization {
-	u32 qp_i;
-	u32 qp_p;
-	u32 qp_b;
-	u32 layer_id;
+    u32 qp_i;
+    u32 qp_p;
+    u32 qp_b;
+    u32 layer_id;
 };
 
 struct hfi_initial_quantization {
-	u32 qp_i;
-	u32 qp_p;
-	u32 qp_b;
-	u32 init_qp_enable;
+    u32 qp_i;
+    u32 qp_p;
+    u32 qp_b;
+    u32 init_qp_enable;
 };
 
 struct hfi_quantization_range {
-	u32 min_qp;
-	u32 max_qp;
-	u32 layer_id;
+    u32 min_qp;
+    u32 max_qp;
+    u32 layer_id;
 };
 
 #define HFI_LTR_MODE_DISABLE	0x0
@@ -554,31 +554,31 @@ struct hfi_quantization_range {
 #define HFI_LTR_MODE_PERIODIC	0x2
 
 struct hfi_ltrmode {
-	u32 ltrmode;
-	u32 ltrcount;
-	u32 trustmode;
+    u32 ltrmode;
+    u32 ltrcount;
+    u32 trustmode;
 };
 
 struct hfi_ltruse {
-	u32 refltr;
-	u32 useconstrnt;
-	u32 frames;
+    u32 refltr;
+    u32 useconstrnt;
+    u32 frames;
 };
 
 struct hfi_ltrmark {
-	u32 markframe;
+    u32 markframe;
 };
 
 struct hfi_frame_size {
-	u32 buffer_type;
-	u32 width;
-	u32 height;
+    u32 buffer_type;
+    u32 width;
+    u32 height;
 };
 
 struct hfi_h264_vui_timing_info {
-	u32 enable;
-	u32 fixed_frame_rate;
-	u32 time_scale;
+    u32 enable;
+    u32 fixed_frame_rate;
+    u32 time_scale;
 };
 
 #define HFI_COLOR_FORMAT_MONOCHROME			(HFI_COMMON_BASE + 0x1)
@@ -596,48 +596,48 @@ struct hfi_h264_vui_timing_info {
 #define HFI_COLOR_FORMAT_BGR888				(HFI_COMMON_BASE + 0xD)
 
 struct hfi_uncompressed_format_select {
-	u32 buffer_type;
-	u32 format;
+    u32 buffer_type;
+    u32 format;
 };
 
 struct hfi_uncompressed_format_supported {
-	u32 buffer_type;
-	u32 format_entries;
-	u32 rg_format_info[1];
+    u32 buffer_type;
+    u32 format_entries;
+    u32 rg_format_info[1];
 };
 
 struct hfi_uncompressed_plane_actual {
-	int actual_stride;
-	u32 actual_plane_buffer_height;
+    int actual_stride;
+    u32 actual_plane_buffer_height;
 };
 
 struct hfi_uncompressed_plane_actual_info {
-	u32 buffer_type;
-	u32 num_planes;
-	struct hfi_uncompressed_plane_actual rg_plane_format[1];
+    u32 buffer_type;
+    u32 num_planes;
+    struct hfi_uncompressed_plane_actual rg_plane_format[1];
 };
 
 struct hfi_uncompressed_plane_constraints {
-	u32 stride_multiples;
-	u32 max_stride;
-	u32 min_plane_buffer_height_multiple;
-	u32 buffer_alignment;
+    u32 stride_multiples;
+    u32 max_stride;
+    u32 min_plane_buffer_height_multiple;
+    u32 buffer_alignment;
 };
 
 struct hfi_uncompressed_plane_info {
-	u32 format;
-	u32 num_planes;
-	struct hfi_uncompressed_plane_constraints rg_plane_format[1];
+    u32 format;
+    u32 num_planes;
+    struct hfi_uncompressed_plane_constraints rg_plane_format[1];
 };
 
 struct hfi_codec_supported {
-	u32 decoder_codec_supported;
-	u32 encoder_codec_supported;
+    u32 decoder_codec_supported;
+    u32 encoder_codec_supported;
 };
 
 struct hfi_properties_supported {
-	u32 num_properties;
-	u32 rg_properties[1];
+    u32 num_properties;
+    u32 rg_properties[1];
 };
 
 #define HFI_ROTATE_NONE					(HFI_COMMON_BASE + 0x1)
@@ -650,85 +650,85 @@ struct hfi_properties_supported {
 #define HFI_FLIP_VERTICAL				(HFI_COMMON_BASE + 0x3)
 
 struct hfi_operations {
-	u32 rotate;
-	u32 flip;
+    u32 rotate;
+    u32 flip;
 };
 
 #define HFI_RESOURCE_OCMEM 0x00000001
 
 struct hfi_resource_ocmem {
-	u32 size;
-	u8 *mem;
+    u32 size;
+    u8 *mem;
 };
 
 struct hfi_resource_ocmem_requirement {
-	u32 session_domain;
-	u32 width;
-	u32 height;
-	u32 size;
+    u32 session_domain;
+    u32 width;
+    u32 height;
+    u32 size;
 };
 
 struct hfi_resource_ocmem_requirement_info {
-	u32 num_entries;
-	struct hfi_resource_ocmem_requirement rg_requirements[1];
+    u32 num_entries;
+    struct hfi_resource_ocmem_requirement rg_requirements[1];
 };
 
 struct hfi_property_sys_image_version_info_type {
-	u32 string_size;
-	u8  str_image_version[1];
+    u32 string_size;
+    u8  str_image_version[1];
 };
 
 struct hfi_venc_config_advanced {
-	u8 pipe2d;
-	u8 hw_mode;
-	u8 low_delay_enforce;
-	u8 worker_vppsg_delay;
-	int close_gop;
-	int h264_constrain_intra_pred;
-	int h264_transform_8x8_flag;
-	int mpeg4_qpel_enable;
-	int multi_refp_en;
-	int qmatrix_en;
-	u8 vpp_info_packet_mode;
-	u8 ref_tile_mode;
-	u8 bitstream_flush_mode;
-	u32 vppsg_vspap_fb_sync_delay;
-	u32 rc_initial_delay;
-	u32 peak_bitrate_constraint;
-	u32 ds_display_frame_width;
-	u32 ds_display_frame_height;
-	u32 perf_tune_param_ptr;
-	u32 input_x_offset;
-	u32 input_y_offset;
-	u32 input_roi_width;
-	u32 input_roi_height;
-	u32 vsp_fifo_dma_sel;
-	u32 h264_num_ref_frames;
+    u8 pipe2d;
+    u8 hw_mode;
+    u8 low_delay_enforce;
+    u8 worker_vppsg_delay;
+    int close_gop;
+    int h264_constrain_intra_pred;
+    int h264_transform_8x8_flag;
+    int mpeg4_qpel_enable;
+    int multi_refp_en;
+    int qmatrix_en;
+    u8 vpp_info_packet_mode;
+    u8 ref_tile_mode;
+    u8 bitstream_flush_mode;
+    u32 vppsg_vspap_fb_sync_delay;
+    u32 rc_initial_delay;
+    u32 peak_bitrate_constraint;
+    u32 ds_display_frame_width;
+    u32 ds_display_frame_height;
+    u32 perf_tune_param_ptr;
+    u32 input_x_offset;
+    u32 input_y_offset;
+    u32 input_roi_width;
+    u32 input_roi_height;
+    u32 vsp_fifo_dma_sel;
+    u32 h264_num_ref_frames;
 };
 
 struct hfi_vbv_hrd_bufsize {
-	u32 buffer_size;
+    u32 buffer_size;
 };
 
 struct hfi_codec_mask_supported {
-	u32 codecs;
-	u32 video_domains;
+    u32 codecs;
+    u32 video_domains;
 };
 
 struct hfi_seq_header_info {
-	u32 max_hader_len;
+    u32 max_hader_len;
 };
 struct hfi_aspect_ratio {
-	u32 aspect_width;
-	u32 aspect_height;
+    u32 aspect_width;
+    u32 aspect_height;
 };
 #define HFI_MVC_BUFFER_LAYOUT_TOP_BOTTOM  (0)
 #define HFI_MVC_BUFFER_LAYOUT_SIDEBYSIDE  (1)
 #define HFI_MVC_BUFFER_LAYOUT_SEQ         (2)
 struct hfi_mvc_buffer_lauout_descp_type {
-	u32    layout_type;
-	u32    bright_view_first;
-	u32    ngap;
+    u32    layout_type;
+    u32    bright_view_first;
+    u32    ngap;
 };
 
 
@@ -781,205 +781,205 @@ struct hfi_mvc_buffer_lauout_descp_type {
 #define HFI_TEST_SSR_HW_WDOG_IRQ	0x3
 
 struct vidc_hal_cmd_pkt_hdr {
-	u32 size;
-	u32 packet_type;
+    u32 size;
+    u32 packet_type;
 };
 
 struct vidc_hal_msg_pkt_hdr {
-	u32 size;
-	u32 packet;
+    u32 size;
+    u32 packet;
 };
 
 struct vidc_hal_session_cmd_pkt {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_sys_init_packet {
-	u32 size;
-	u32 packet_type;
-	u32 arch_type;
+    u32 size;
+    u32 packet_type;
+    u32 arch_type;
 };
 
 struct hfi_cmd_sys_pc_prep_packet {
-	u32 size;
-	u32 packet_type;
+    u32 size;
+    u32 packet_type;
 };
 
 struct hfi_cmd_sys_set_resource_packet {
-	u32 size;
-	u32 packet_type;
-	u32 resource_handle;
-	u32 resource_type;
-	u32 rg_resource_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 resource_handle;
+    u32 resource_type;
+    u32 rg_resource_data[1];
 };
 
 struct hfi_cmd_sys_release_resource_packet {
-	u32 size;
-	u32 packet_type;
-	u32 resource_type;
-	u32 resource_handle;
+    u32 size;
+    u32 packet_type;
+    u32 resource_type;
+    u32 resource_handle;
 };
 
 struct hfi_cmd_sys_set_property_packet {
-	u32 size;
-	u32 packet_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_cmd_sys_get_property_packet {
-	u32 size;
-	u32 packet_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_cmd_sys_session_init_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 session_domain;
-	u32 session_codec;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 session_domain;
+    u32 session_codec;
 };
 
 struct hfi_cmd_sys_session_end_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_sys_set_buffers_packet {
-	u32 size;
-	u32 packet_type;
-	u32 buffer_type;
-	u32 buffer_size;
-	u32 num_buffers;
-	u32 rg_buffer_addr[1];
+    u32 size;
+    u32 packet_type;
+    u32 buffer_type;
+    u32 buffer_size;
+    u32 num_buffers;
+    u32 rg_buffer_addr[1];
 };
 
 struct hfi_cmd_session_set_property_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 num_properties;
-	u32 rg_property_data[0];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 num_properties;
+    u32 rg_property_data[0];
 };
 
 struct hfi_cmd_session_set_buffers_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 buffer_type;
-	u32 buffer_size;
-	u32 extra_data_size;
-	u32 min_buffer_size;
-	u32 num_buffers;
-	u32 rg_buffer_info[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 buffer_type;
+    u32 buffer_size;
+    u32 extra_data_size;
+    u32 min_buffer_size;
+    u32 num_buffers;
+    u32 rg_buffer_info[1];
 };
 
 struct hfi_cmd_session_get_sequence_header_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 buffer_len;
-	u8 *packet_buffer;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 buffer_len;
+    u8 *packet_buffer;
 };
 
 struct hfi_msg_event_notify_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 event_id;
-	u32 event_data1;
-	u32 event_data2;
-	u32 rg_ext_event_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 event_id;
+    u32 event_data1;
+    u32 event_data2;
+    u32 rg_ext_event_data[1];
 };
 
 struct hfi_msg_release_buffer_ref_event_packet {
-	u8 *packet_buffer;
-	u8 *exra_data_buffer;
-	u32 output_tag;
+    u8 *packet_buffer;
+    u8 *exra_data_buffer;
+    u32 output_tag;
 };
 
 struct hfi_msg_sys_init_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 error_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 error_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_msg_sys_pc_prep_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 error_type;
 };
 
 struct hfi_msg_sys_release_resource_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 resource_handle;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 resource_handle;
+    u32 error_type;
 };
 
 struct hfi_msg_sys_session_init_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_msg_sys_session_end_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_get_sequence_header_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 header_len;
-	u8 *sequence_header;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 header_len;
+    u8 *sequence_header;
 };
 
 struct hfi_msg_sys_debug_packet {
-	u32 size;
-	u32 packet_type;
-	u32 msg_type;
-	u32 msg_size;
-	u32 time_stamp_hi;
-	u32 time_stamp_lo;
-	u8 rg_msg_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 msg_type;
+    u32 msg_size;
+    u32 time_stamp_hi;
+    u32 time_stamp_lo;
+    u8 rg_msg_data[1];
 };
 
 enum HFI_VENUS_QTBL_STATUS {
-	HFI_VENUS_QTBL_DISABLED = 0x00,
-	HFI_VENUS_QTBL_ENABLED = 0x01,
-	HFI_VENUS_QTBL_INITIALIZING = 0x02,
-	HFI_VENUS_QTBL_DEINITIALIZING = 0x03
+    HFI_VENUS_QTBL_DISABLED = 0x00,
+    HFI_VENUS_QTBL_ENABLED = 0x01,
+    HFI_VENUS_QTBL_INITIALIZING = 0x02,
+    HFI_VENUS_QTBL_DEINITIALIZING = 0x03
 };
 
 enum HFI_VENUS_CTRL_INIT_STATUS {
-	HFI_VENUS_CTRL_NOT_INIT = 0x0,
-	HFI_VENUS_CTRL_READY = 0x1,
-	HFI_VENUS_CTRL_ERROR_FATAL = 0x2
+    HFI_VENUS_CTRL_NOT_INIT = 0x0,
+    HFI_VENUS_CTRL_READY = 0x1,
+    HFI_VENUS_CTRL_ERROR_FATAL = 0x2
 };
 
 struct hfi_sfr_struct {
-	u32 bufSize;
-	u8 rg_data[1];
+    u32 bufSize;
+    u8 rg_data[1];
 };
 
 struct hfi_cmd_sys_test_ssr_packet {
-	u32 size;
-	u32 packet_type;
-	u32 trigger_type;
+    u32 size;
+    u32 packet_type;
+    u32 trigger_type;
 };
 #endif

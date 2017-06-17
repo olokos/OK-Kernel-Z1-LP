@@ -48,18 +48,18 @@
  * Offsets for I/O ASIC registers
  * (relative to (dec_kn_slot_base + IOASIC_IOCTL)).
  */
-					/* all systems */
+/* all systems */
 #define IO_REG_SCSI_DMA_P	0x00	/* SCSI DMA Pointer */
 #define IO_REG_SCSI_DMA_BP	0x10	/* SCSI DMA Buffer Pointer */
 #define IO_REG_LANCE_DMA_P	0x20	/* LANCE DMA Pointer */
 #define IO_REG_SCC0A_T_DMA_P	0x30	/* SCC0A Transmit DMA Pointer */
 #define IO_REG_SCC0A_R_DMA_P	0x40	/* SCC0A Receive DMA Pointer */
 
-					/* except Maxine */
+/* except Maxine */
 #define IO_REG_SCC1A_T_DMA_P	0x50	/* SCC1A Transmit DMA Pointer */
 #define IO_REG_SCC1A_R_DMA_P	0x60	/* SCC1A Receive DMA Pointer */
 
-					/* Maxine */
+/* Maxine */
 #define IO_REG_AB_T_DMA_P	0x50	/* ACCESS.bus Transmit DMA Pointer */
 #define IO_REG_AB_R_DMA_P	0x60	/* ACCESS.bus Receive DMA Pointer */
 #define IO_REG_FLOPPY_DMA_P	0x70	/* Floppy DMA Pointer */
@@ -68,35 +68,35 @@
 #define IO_REG_ISDN_R_DMA_P	0xa0	/* ISDN Receive DMA Pointer */
 #define IO_REG_ISDN_R_DMA_BP	0xb0	/* ISDN Receive DMA Buffer Pointer */
 
-					/* all systems */
+/* all systems */
 #define IO_REG_DATA_0		0xc0	/* System Data Buffer 0 */
 #define IO_REG_DATA_1		0xd0	/* System Data Buffer 1 */
 #define IO_REG_DATA_2		0xe0	/* System Data Buffer 2 */
 #define IO_REG_DATA_3		0xf0	/* System Data Buffer 3 */
 
-					/* all systems */
+/* all systems */
 #define IO_REG_SSR		0x100	/* System Support Register */
 #define IO_REG_SIR		0x110	/* System Interrupt Register */
 #define IO_REG_SIMR		0x120	/* System Interrupt Mask Reg. */
 #define IO_REG_SAR		0x130	/* System Address Register */
 
-					/* Maxine */
+/* Maxine */
 #define IO_REG_ISDN_T_DATA	0x140	/* ISDN Xmit Data Register */
 #define IO_REG_ISDN_R_DATA	0x150	/* ISDN Receive Data Register */
 
-					/* all systems */
+/* all systems */
 #define IO_REG_LANCE_SLOT	0x160	/* LANCE I/O Slot Register */
 #define IO_REG_SCSI_SLOT	0x170	/* SCSI Slot Register */
 #define IO_REG_SCC0A_SLOT	0x180	/* SCC0A DMA Slot Register */
 
-					/* except Maxine */
+/* except Maxine */
 #define IO_REG_SCC1A_SLOT	0x190	/* SCC1A DMA Slot Register */
 
-					/* Maxine */
+/* Maxine */
 #define IO_REG_AB_SLOT		0x190	/* ACCESS.bus DMA Slot Register */
 #define IO_REG_FLOPPY_SLOT	0x1a0	/* Floppy Slot Register */
 
-					/* all systems */
+/* all systems */
 #define IO_REG_SCSI_SCR		0x1b0	/* SCSI Partial-Word DMA Control */
 #define IO_REG_SCSI_SDR0	0x1c0	/* SCSI DMA Partial Word 0 */
 #define IO_REG_SCSI_SDR1	0x1d0	/* SCSI DMA Partial Word 1 */
@@ -111,7 +111,7 @@
  * FLOPPY and ISDN bits (otherwise unused) and has a different SCC
  * wiring.
  */
-						/* all systems */
+/* all systems */
 #define IO_SSR_SCC0A_TX_DMA_EN	(1<<31)		/* SCC0A transmit DMA enable */
 #define IO_SSR_SCC0A_RX_DMA_EN	(1<<30)		/* SCC0A receive DMA enable */
 #define IO_SSR_RES_27		(1<<27)		/* unused */
@@ -123,7 +123,7 @@
 #define IO_SSR_SCSI_DMA_EN	(1<<17)		/* SCSI DMA enable */
 #define IO_SSR_LANCE_DMA_EN	(1<<16)		/* LANCE DMA enable */
 
-						/* except Maxine */
+/* except Maxine */
 #define IO_SSR_SCC1A_TX_DMA_EN	(1<<29)		/* SCC1A transmit DMA enable */
 #define IO_SSR_SCC1A_RX_DMA_EN	(1<<28)		/* SCC1A receive DMA enable */
 #define IO_SSR_RES_22		(1<<22)		/* unused */
@@ -131,7 +131,7 @@
 #define IO_SSR_RES_20		(1<<20)		/* unused */
 #define IO_SSR_RES_19		(1<<19)		/* unused */
 
-						/* Maxine */
+/* Maxine */
 #define IO_SSR_AB_TX_DMA_EN	(1<<29)		/* ACCESS.bus xmit DMA enable */
 #define IO_SSR_AB_RX_DMA_EN	(1<<28)		/* ACCESS.bus recv DMA enable */
 #define IO_SSR_FLOPPY_DMA_DIR	(1<<22)		/* Floppy DMA direction */

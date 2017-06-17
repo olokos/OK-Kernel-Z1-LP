@@ -38,33 +38,29 @@ extern volatile unsigned long cmos_lock;
  * disabled, etc.
  */
 
-static inline void lock_cmos(unsigned char reg)
-{
-	unsigned long new;
-	new = ((smp_processor_id() + 1) << 8) | reg;
-	for (;;) {
-		if (cmos_lock) {
-			cpu_relax();
-			continue;
-		}
-		if (__cmpxchg(&cmos_lock, 0, new, sizeof(cmos_lock)) == 0)
-			return;
-	}
+static inline void lock_cmos(unsigned char reg) {
+    unsigned long new;
+    new = ((smp_processor_id() + 1) << 8) | reg;
+    for (;;) {
+        if (cmos_lock) {
+            cpu_relax();
+            continue;
+        }
+        if (__cmpxchg(&cmos_lock, 0, new, sizeof(cmos_lock)) == 0)
+            return;
+    }
 }
 
-static inline void unlock_cmos(void)
-{
-	cmos_lock = 0;
+static inline void unlock_cmos(void) {
+    cmos_lock = 0;
 }
 
-static inline int do_i_have_lock_cmos(void)
-{
-	return (cmos_lock >> 8) == (smp_processor_id() + 1);
+static inline int do_i_have_lock_cmos(void) {
+    return (cmos_lock >> 8) == (smp_processor_id() + 1);
 }
 
-static inline unsigned char current_lock_cmos_reg(void)
-{
-	return cmos_lock & 0xff;
+static inline unsigned char current_lock_cmos_reg(void) {
+    return cmos_lock & 0xff;
 }
 
 #define lock_cmos_prefix(reg)			\

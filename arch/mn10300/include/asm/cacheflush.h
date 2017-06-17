@@ -136,9 +136,8 @@ extern void flush_icache_page(struct vm_area_struct *vma, struct page *page);
 extern void flush_icache_range(unsigned long start, unsigned long end);
 #elif defined(CONFIG_MN10300_CACHE_INV_ICACHE)
 static inline void flush_icache_page(struct vm_area_struct *vma,
-				     struct page *page)
-{
-	mn10300_icache_inv_page(page_to_phys(page));
+                                     struct page *page) {
+    mn10300_icache_inv_page(page_to_phys(page));
 }
 extern void flush_icache_range(unsigned long start, unsigned long end);
 #else

@@ -55,8 +55,7 @@
 #define HDD_WLAN_MAC_ADDR_LEN             6
 #define HDD_MAX_NUM_MULTICAST_ADDRESS     10
 
-typedef enum
-{
+typedef enum {
     HDD_FILTER_PROTO_TYPE_INVALID = 0,
     HDD_FILTER_PROTO_TYPE_MAC = 1,
     HDD_FILTER_PROTO_TYPE_ARP = 2,
@@ -66,16 +65,14 @@ typedef enum
     HDD_FILTER_PROTO_TYPE_MAX
 } eProtoLayer;
 
-typedef enum
-{
+typedef enum {
     HDD_RCV_FILTER_INVALID = 0,
     HDD_RCV_FILTER_SET = 1,
     HDD_RCV_FILTER_CLEAR = 2,
     HDD_RCV_FILTER_MAX
 } eFilterAction;
 
-typedef enum
-{
+typedef enum {
     HDD_FILTER_CMP_TYPE_INVALID = 0,
     HDD_FILTER_CMP_TYPE_EQUAL = 1,
     HDD_FILTER_CMP_TYPE_MASK_EQUAL = 2,
@@ -84,8 +81,7 @@ typedef enum
     HDD_FILTER_CMP_TYPE_MAX
 } eCompareFlag;
 
-struct PacketFilterParamsCfg
-{
+struct PacketFilterParamsCfg {
     v_U8_t              protocolLayer;
     v_U8_t              cmpFlag;
     v_U8_t              dataOffset;
@@ -94,8 +90,7 @@ struct PacketFilterParamsCfg
     v_U8_t              dataMask[8];
 };
 
-typedef struct
-{
+typedef struct {
     v_U8_t            filterAction;
     v_U8_t            filterId;
     v_U8_t            numParams;
@@ -104,8 +99,7 @@ typedef struct
 
 typedef v_U8_t tHddMacAddr[HDD_WLAN_MAC_ADDR_LEN];
 
-typedef struct
-{
+typedef struct {
     v_U8_t         mcastBcastFilterSetting;
     v_U8_t         mcast_addr_cnt;
     tHddMacAddr    multicastAddr[HDD_MAX_NUM_MULTICAST_ADDRESS];

@@ -13,20 +13,20 @@
 
 
 struct serial_struct {
-	int	type;
-	int	line;
-	int	port;
-	int	irq;
-	int	flags;
-	int	xmit_fifo_size;
-	int	custom_divisor;
-	int	baud_base;
-	unsigned short	close_delay;
-	char	reserved_char[2];
-	int	hub6;  /* FIXME: We don't have AT&T Hub6 boards! */
-	unsigned short	closing_wait; /* time to wait before closing */
-	unsigned short	closing_wait2; /* no longer used... */
-	int	reserved[4];
+    int	type;
+    int	line;
+    int	port;
+    int	irq;
+    int	flags;
+    int	xmit_fifo_size;
+    int	custom_divisor;
+    int	baud_base;
+    unsigned short	close_delay;
+    char	reserved_char[2];
+    int	hub6;  /* FIXME: We don't have AT&T Hub6 boards! */
+    unsigned short	closing_wait; /* time to wait before closing */
+    unsigned short	closing_wait2; /* no longer used... */
+    int	reserved[4];
 };
 
 /*
@@ -77,7 +77,7 @@ struct serial_struct {
 /*
  * I believe this is the optimal setting that reduces the number of interrupts.
  * At high speeds the output might become a little "bursted" (use USTCNT_TXHE
- * if that bothers you), but in most cases it will not, since we try to 
+ * if that bothers you), but in most cases it will not, since we try to
  * transmit characters every time rs_interrupt is called. Thus, quite often
  * you'll see that a receive interrupt occures before the transmit one.
  *                                  -- Vladimir Gurevich
@@ -115,7 +115,7 @@ struct serial_struct {
 
 /*
  * This is our internal structure for each serial port's state.
- * 
+ *
  * Many fields are paralleled by the structure used by the serial_struct
  * structure.
  *
@@ -123,43 +123,43 @@ struct serial_struct {
  */
 
 struct m68k_serial {
-	char soft_carrier;  /* Use soft carrier on this channel */
-	char break_abort;   /* Is serial console in, so process brk/abrt */
-	char is_cons;       /* Is this our console. */
+    char soft_carrier;  /* Use soft carrier on this channel */
+    char break_abort;   /* Is serial console in, so process brk/abrt */
+    char is_cons;       /* Is this our console. */
 
-	/* We need to know the current clock divisor
-	 * to read the bps rate the chip has currently
-	 * loaded.
-	 */
-	unsigned char clk_divisor;  /* May be 1, 16, 32, or 64 */
-	int baud;
-	int			magic;
-	int			baud_base;
-	int			port;
-	int			irq;
-	int			flags; 		/* defined in tty.h */
-	int			type; 		/* UART type */
-	struct tty_struct 	*tty;
-	int			read_status_mask;
-	int			ignore_status_mask;
-	int			timeout;
-	int			xmit_fifo_size;
-	int			custom_divisor;
-	int			x_char;	/* xon/xoff character */
-	int			close_delay;
-	unsigned short		closing_wait;
-	unsigned short		closing_wait2;
-	unsigned long		event;
-	unsigned long		last_active;
-	int			line;
-	int			count;	    /* # of fd on device */
-	int			blocked_open; /* # of blocked opens */
-	unsigned char 		*xmit_buf;
-	int			xmit_head;
-	int			xmit_tail;
-	int			xmit_cnt;
-	wait_queue_head_t	open_wait;
-	wait_queue_head_t	close_wait;
+    /* We need to know the current clock divisor
+     * to read the bps rate the chip has currently
+     * loaded.
+     */
+    unsigned char clk_divisor;  /* May be 1, 16, 32, or 64 */
+    int baud;
+    int			magic;
+    int			baud_base;
+    int			port;
+    int			irq;
+    int			flags; 		/* defined in tty.h */
+    int			type; 		/* UART type */
+    struct tty_struct 	*tty;
+    int			read_status_mask;
+    int			ignore_status_mask;
+    int			timeout;
+    int			xmit_fifo_size;
+    int			custom_divisor;
+    int			x_char;	/* xon/xoff character */
+    int			close_delay;
+    unsigned short		closing_wait;
+    unsigned short		closing_wait2;
+    unsigned long		event;
+    unsigned long		last_active;
+    int			line;
+    int			count;	    /* # of fd on device */
+    int			blocked_open; /* # of blocked opens */
+    unsigned char 		*xmit_buf;
+    int			xmit_head;
+    int			xmit_tail;
+    int			xmit_cnt;
+    wait_queue_head_t	open_wait;
+    wait_queue_head_t	close_wait;
 };
 
 
@@ -176,7 +176,7 @@ struct m68k_serial {
  */
 #define RS_EVENT_WRITE_WAKEUP	0
 
-/* 
+/*
  * Define the number of ports supported and their irqs.
  */
 #define NR_PORTS 1

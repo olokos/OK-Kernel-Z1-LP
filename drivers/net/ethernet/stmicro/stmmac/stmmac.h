@@ -30,57 +30,57 @@
 #endif
 
 struct stmmac_priv {
-	/* Frequently used values are kept adjacent for cache effect */
-	struct dma_desc *dma_tx ____cacheline_aligned;
-	dma_addr_t dma_tx_phy;
-	struct sk_buff **tx_skbuff;
-	unsigned int cur_tx;
-	unsigned int dirty_tx;
-	unsigned int dma_tx_size;
-	int tx_coalesce;
+    /* Frequently used values are kept adjacent for cache effect */
+    struct dma_desc *dma_tx ____cacheline_aligned;
+    dma_addr_t dma_tx_phy;
+    struct sk_buff **tx_skbuff;
+    unsigned int cur_tx;
+    unsigned int dirty_tx;
+    unsigned int dma_tx_size;
+    int tx_coalesce;
 
-	struct dma_desc *dma_rx ;
-	unsigned int cur_rx;
-	unsigned int dirty_rx;
-	struct sk_buff **rx_skbuff;
-	dma_addr_t *rx_skbuff_dma;
-	struct sk_buff_head rx_recycle;
+    struct dma_desc *dma_rx ;
+    unsigned int cur_rx;
+    unsigned int dirty_rx;
+    struct sk_buff **rx_skbuff;
+    dma_addr_t *rx_skbuff_dma;
+    struct sk_buff_head rx_recycle;
 
-	struct net_device *dev;
-	dma_addr_t dma_rx_phy;
-	unsigned int dma_rx_size;
-	unsigned int dma_buf_sz;
-	struct device *device;
-	struct mac_device_info *hw;
-	void __iomem *ioaddr;
+    struct net_device *dev;
+    dma_addr_t dma_rx_phy;
+    unsigned int dma_rx_size;
+    unsigned int dma_buf_sz;
+    struct device *device;
+    struct mac_device_info *hw;
+    void __iomem *ioaddr;
 
-	struct stmmac_extra_stats xstats;
-	struct napi_struct napi;
+    struct stmmac_extra_stats xstats;
+    struct napi_struct napi;
 
-	int rx_coe;
-	int no_csum_insertion;
+    int rx_coe;
+    int no_csum_insertion;
 
-	struct phy_device *phydev;
-	int oldlink;
-	int speed;
-	int oldduplex;
-	unsigned int flow_ctrl;
-	unsigned int pause;
-	struct mii_bus *mii;
-	int mii_irq[PHY_MAX_ADDR];
+    struct phy_device *phydev;
+    int oldlink;
+    int speed;
+    int oldduplex;
+    unsigned int flow_ctrl;
+    unsigned int pause;
+    struct mii_bus *mii;
+    int mii_irq[PHY_MAX_ADDR];
 
-	u32 msg_enable;
-	spinlock_t lock;
-	spinlock_t tx_lock;
-	int wolopts;
-	int wol_irq;
+    u32 msg_enable;
+    spinlock_t lock;
+    spinlock_t tx_lock;
+    int wolopts;
+    int wol_irq;
 #ifdef CONFIG_STMMAC_TIMER
-	struct stmmac_timer *tm;
+    struct stmmac_timer *tm;
 #endif
-	struct plat_stmmacenet_data *plat;
-	struct stmmac_counters mmc;
-	struct dma_features dma_cap;
-	int hw_cap_support;
+    struct plat_stmmacenet_data *plat;
+    struct stmmac_counters mmc;
+    struct dma_features dma_cap;
+    int hw_cap_support;
 };
 
 extern int phyaddr;
@@ -97,5 +97,5 @@ int stmmac_resume(struct net_device *ndev);
 int stmmac_suspend(struct net_device *ndev);
 int stmmac_dvr_remove(struct net_device *ndev);
 struct stmmac_priv *stmmac_dvr_probe(struct device *device,
-				     struct plat_stmmacenet_data *plat_dat,
-				     void __iomem *addr);
+                                     struct plat_stmmacenet_data *plat_dat,
+                                     void __iomem *addr);

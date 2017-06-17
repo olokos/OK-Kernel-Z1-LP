@@ -26,21 +26,21 @@
 #define GVP11_XFER_MASK		(0xff000001)
 
 struct gvp11_scsiregs {
-		 unsigned char	pad1[64];
-	volatile unsigned short	CNTR;
-		 unsigned char	pad2[31];
-	volatile unsigned char	SASR;
-		 unsigned char	pad3;
-	volatile unsigned char	SCMD;
-		 unsigned char	pad4[4];
-	volatile unsigned short	BANK;
-		 unsigned char	pad5[6];
-	volatile unsigned long	ACR;
-	volatile unsigned short	secret1; /* store 0 here */
-	volatile unsigned short	ST_DMA;
-	volatile unsigned short	SP_DMA;
-	volatile unsigned short	secret2; /* store 1 here */
-	volatile unsigned short	secret3; /* store 15 here */
+    unsigned char	pad1[64];
+    volatile unsigned short	CNTR;
+    unsigned char	pad2[31];
+    volatile unsigned char	SASR;
+    unsigned char	pad3;
+    volatile unsigned char	SCMD;
+    unsigned char	pad4[4];
+    volatile unsigned short	BANK;
+    unsigned char	pad5[6];
+    volatile unsigned long	ACR;
+    volatile unsigned short	secret1; /* store 0 here */
+    volatile unsigned short	ST_DMA;
+    volatile unsigned short	SP_DMA;
+    volatile unsigned short	secret2; /* store 1 here */
+    volatile unsigned short	secret3; /* store 15 here */
 };
 
 /* bits in CNTR */

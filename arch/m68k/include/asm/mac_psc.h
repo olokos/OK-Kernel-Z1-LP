@@ -219,34 +219,28 @@ extern void psc_irq_disable(int);
  *	Access functions
  */
 
-static inline void psc_write_byte(int offset, __u8 data)
-{
-	*((volatile __u8 *)(psc + offset)) = data;
+static inline void psc_write_byte(int offset, __u8 data) {
+    *((volatile __u8 *)(psc + offset)) = data;
 }
 
-static inline void psc_write_word(int offset, __u16 data)
-{
-	*((volatile __u16 *)(psc + offset)) = data;
+static inline void psc_write_word(int offset, __u16 data) {
+    *((volatile __u16 *)(psc + offset)) = data;
 }
 
-static inline void psc_write_long(int offset, __u32 data)
-{
-	*((volatile __u32 *)(psc + offset)) = data;
+static inline void psc_write_long(int offset, __u32 data) {
+    *((volatile __u32 *)(psc + offset)) = data;
 }
 
-static inline u8 psc_read_byte(int offset)
-{
-	return *((volatile __u8 *)(psc + offset));
+static inline u8 psc_read_byte(int offset) {
+    return *((volatile __u8 *)(psc + offset));
 }
 
-static inline u16 psc_read_word(int offset)
-{
-	return *((volatile __u16 *)(psc + offset));
+static inline u16 psc_read_word(int offset) {
+    return *((volatile __u16 *)(psc + offset));
 }
 
-static inline u32 psc_read_long(int offset)
-{
-	return *((volatile __u32 *)(psc + offset));
+static inline u32 psc_read_long(int offset) {
+    return *((volatile __u32 *)(psc + offset));
 }
 
 #endif /* __ASSEMBLY__ */

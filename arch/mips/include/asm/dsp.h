@@ -23,21 +23,19 @@ do {									\
 	asm("_ehb");							\
 } while (0)
 
-static inline void __init_dsp(void)
-{
-	mthi1(0);
-	mtlo1(0);
-	mthi2(0);
-	mtlo2(0);
-	mthi3(0);
-	mtlo3(0);
-	wrdsp(DSP_DEFAULT, DSP_MASK);
+static inline void __init_dsp(void) {
+    mthi1(0);
+    mtlo1(0);
+    mthi2(0);
+    mtlo2(0);
+    mthi3(0);
+    mtlo3(0);
+    wrdsp(DSP_DEFAULT, DSP_MASK);
 }
 
-static inline void init_dsp(void)
-{
-	if (cpu_has_dsp)
-		__init_dsp();
+static inline void init_dsp(void) {
+    if (cpu_has_dsp)
+        __init_dsp();
 }
 
 #define __save_dsp(tsk)							\

@@ -26,14 +26,12 @@ extern __init int s3c64xx_pm_init(void);
 
 #else
 
-static inline int s3c_pm_init(void)
-{
-	return 0;
+static inline int s3c_pm_init(void) {
+    return 0;
 }
 
-static inline int s3c64xx_pm_init(void)
-{
-	return 0;
+static inline int s3c64xx_pm_init(void) {
+    return 0;
 }
 #endif
 
@@ -73,8 +71,8 @@ extern int s3c2410_cpu_suspend(unsigned long);
  * other subsystem to save and restore register values over suspend.
  */
 struct sleep_save {
-	void __iomem	*reg;
-	unsigned long	val;
+    void __iomem	*reg;
+    unsigned long	val;
 };
 
 #define SAVE_ITEM(x) \
@@ -92,12 +90,12 @@ struct sleep_save {
  * are needed (say by debug).
 */
 struct pm_uart_save {
-	u32	ulcon;
-	u32	ucon;
-	u32	ufcon;
-	u32	umcon;
-	u32	ubrdiv;
-	u32	udivslot;
+    u32	ulcon;
+    u32	ucon;
+    u32	ufcon;
+    u32	umcon;
+    u32	ubrdiv;
+    u32	udivslot;
 };
 
 /* helper functions to save/restore lists of registers. */

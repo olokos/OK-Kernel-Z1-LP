@@ -22,14 +22,13 @@
  * the cntlz instruction for much better code efficiency.
  */
 
-static inline int fls(int x)
-{
-	int ret;
+static inline int fls(int x) {
+    int ret;
 
-	asm("cntlz\t%0, %1" : "=r" (ret) : "r" (x) : "cc");
-	ret = 32 - ret;
+    asm("cntlz\t%0, %1" : "=r" (ret) : "r" (x) : "cc");
+    ret = 32 - ret;
 
-	return ret;
+    return ret;
 }
 
 #define __fls(x) (fls(x) - 1)

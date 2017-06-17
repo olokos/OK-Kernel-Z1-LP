@@ -321,9 +321,8 @@ typedef unsigned long HV_PageSize;
 
 /** A page table entry.
  */
-typedef struct
-{
-  __hv64 val;                /**< Value of PTE */
+typedef struct {
+    __hv64 val;                /**< Value of PTE */
 } HV_PTE;
 
 /** Hypervisor error code. */
@@ -372,36 +371,36 @@ void hv_init(HV_VersionNumber interface_version_number,
  * These numbers are part of the binary API and guaranteed not to change.
  */
 typedef enum {
-  /** An invalid value; do not use. */
-  _HV_SYSCONF_RESERVED       = 0,
+    /** An invalid value; do not use. */
+    _HV_SYSCONF_RESERVED       = 0,
 
-  /** The length of the glue section containing the hv_ procs, in bytes. */
-  HV_SYSCONF_GLUE_SIZE       = 1,
+    /** The length of the glue section containing the hv_ procs, in bytes. */
+    HV_SYSCONF_GLUE_SIZE       = 1,
 
-  /** The size of small pages, in bytes. */
-  HV_SYSCONF_PAGE_SIZE_SMALL = 2,
+    /** The size of small pages, in bytes. */
+    HV_SYSCONF_PAGE_SIZE_SMALL = 2,
 
-  /** The size of large pages, in bytes. */
-  HV_SYSCONF_PAGE_SIZE_LARGE = 3,
+    /** The size of large pages, in bytes. */
+    HV_SYSCONF_PAGE_SIZE_LARGE = 3,
 
-  /** Processor clock speed, in hertz. */
-  HV_SYSCONF_CPU_SPEED       = 4,
+    /** Processor clock speed, in hertz. */
+    HV_SYSCONF_CPU_SPEED       = 4,
 
-  /** Processor temperature, in degrees Kelvin.  The value
-   *  HV_SYSCONF_TEMP_KTOC may be subtracted from this to get degrees
-   *  Celsius.  If that Celsius value is HV_SYSCONF_OVERTEMP, this indicates
-   *  that the temperature has hit an upper limit and is no longer being
-   *  accurately tracked.
-   */
-  HV_SYSCONF_CPU_TEMP        = 5,
+    /** Processor temperature, in degrees Kelvin.  The value
+     *  HV_SYSCONF_TEMP_KTOC may be subtracted from this to get degrees
+     *  Celsius.  If that Celsius value is HV_SYSCONF_OVERTEMP, this indicates
+     *  that the temperature has hit an upper limit and is no longer being
+     *  accurately tracked.
+     */
+    HV_SYSCONF_CPU_TEMP        = 5,
 
-  /** Board temperature, in degrees Kelvin.  The value
-   *  HV_SYSCONF_TEMP_KTOC may be subtracted from this to get degrees
-   *  Celsius.  If that Celsius value is HV_SYSCONF_OVERTEMP, this indicates
-   *  that the temperature has hit an upper limit and is no longer being
-   *  accurately tracked.
-   */
-  HV_SYSCONF_BOARD_TEMP      = 6
+    /** Board temperature, in degrees Kelvin.  The value
+     *  HV_SYSCONF_TEMP_KTOC may be subtracted from this to get degrees
+     *  Celsius.  If that Celsius value is HV_SYSCONF_OVERTEMP, this indicates
+     *  that the temperature has hit an upper limit and is no longer being
+     *  accurately tracked.
+     */
+    HV_SYSCONF_BOARD_TEMP      = 6
 
 } HV_SysconfQuery;
 
@@ -427,54 +426,54 @@ long hv_sysconf(HV_SysconfQuery query);
  * These numbers are part of the binary API and guaranteed not to change.
  */
 typedef enum {
-  /** An invalid value; do not use. */
-  _HV_CONFSTR_RESERVED        = 0,
+    /** An invalid value; do not use. */
+    _HV_CONFSTR_RESERVED        = 0,
 
-  /** Board part number. */
-  HV_CONFSTR_BOARD_PART_NUM   = 1,
+    /** Board part number. */
+    HV_CONFSTR_BOARD_PART_NUM   = 1,
 
-  /** Board serial number. */
-  HV_CONFSTR_BOARD_SERIAL_NUM = 2,
+    /** Board serial number. */
+    HV_CONFSTR_BOARD_SERIAL_NUM = 2,
 
-  /** Chip serial number. */
-  HV_CONFSTR_CHIP_SERIAL_NUM  = 3,
+    /** Chip serial number. */
+    HV_CONFSTR_CHIP_SERIAL_NUM  = 3,
 
-  /** Board revision level. */
-  HV_CONFSTR_BOARD_REV        = 4,
+    /** Board revision level. */
+    HV_CONFSTR_BOARD_REV        = 4,
 
-  /** Hypervisor software version. */
-  HV_CONFSTR_HV_SW_VER        = 5,
+    /** Hypervisor software version. */
+    HV_CONFSTR_HV_SW_VER        = 5,
 
-  /** The name for this chip model. */
-  HV_CONFSTR_CHIP_MODEL       = 6,
+    /** The name for this chip model. */
+    HV_CONFSTR_CHIP_MODEL       = 6,
 
-  /** Human-readable board description. */
-  HV_CONFSTR_BOARD_DESC       = 7,
+    /** Human-readable board description. */
+    HV_CONFSTR_BOARD_DESC       = 7,
 
-  /** Human-readable description of the hypervisor configuration. */
-  HV_CONFSTR_HV_CONFIG        = 8,
+    /** Human-readable description of the hypervisor configuration. */
+    HV_CONFSTR_HV_CONFIG        = 8,
 
-  /** Human-readable version string for the boot image (for instance,
-   *  who built it and when, what configuration file was used). */
-  HV_CONFSTR_HV_CONFIG_VER    = 9,
+    /** Human-readable version string for the boot image (for instance,
+     *  who built it and when, what configuration file was used). */
+    HV_CONFSTR_HV_CONFIG_VER    = 9,
 
-  /** Mezzanine part number. */
-  HV_CONFSTR_MEZZ_PART_NUM   = 10,
+    /** Mezzanine part number. */
+    HV_CONFSTR_MEZZ_PART_NUM   = 10,
 
-  /** Mezzanine serial number. */
-  HV_CONFSTR_MEZZ_SERIAL_NUM = 11,
+    /** Mezzanine serial number. */
+    HV_CONFSTR_MEZZ_SERIAL_NUM = 11,
 
-  /** Mezzanine revision level. */
-  HV_CONFSTR_MEZZ_REV        = 12,
+    /** Mezzanine revision level. */
+    HV_CONFSTR_MEZZ_REV        = 12,
 
-  /** Human-readable mezzanine description. */
-  HV_CONFSTR_MEZZ_DESC       = 13,
+    /** Human-readable mezzanine description. */
+    HV_CONFSTR_MEZZ_DESC       = 13,
 
-  /** Control path for the onboard network switch. */
-  HV_CONFSTR_SWITCH_CONTROL  = 14,
+    /** Control path for the onboard network switch. */
+    HV_CONFSTR_SWITCH_CONTROL  = 14,
 
-  /** Chip revision level. */
-  HV_CONFSTR_CHIP_REV        = 15
+    /** Chip revision level. */
+    HV_CONFSTR_CHIP_REV        = 15
 
 } HV_ConfstrQuery;
 
@@ -492,13 +491,12 @@ typedef enum {
 int hv_confstr(HV_ConfstrQuery query, HV_VirtAddr buf, int len);
 
 /** Tile coordinate */
-typedef struct
-{
-  /** X coordinate, relative to supervisor's top-left coordinate */
-  int x;
+typedef struct {
+    /** X coordinate, relative to supervisor's top-left coordinate */
+    int x;
 
-  /** Y coordinate, relative to supervisor's top-left coordinate */
-  int y;
+    /** Y coordinate, relative to supervisor's top-left coordinate */
+    int y;
 } HV_Coord;
 
 
@@ -588,21 +586,21 @@ HV_PhysAddr hv_inquire_realpa(HV_PhysAddr cpa, unsigned int len);
 /** Date/Time of day */
 typedef struct {
 #if CHIP_WORD_SIZE() > 32
-  __hv64 tm_sec;   /**< Seconds, 0-59 */
-  __hv64 tm_min;   /**< Minutes, 0-59 */
-  __hv64 tm_hour;  /**< Hours, 0-23 */
-  __hv64 tm_mday;  /**< Day of month, 0-30 */
-  __hv64 tm_mon;   /**< Month, 0-11 */
-  __hv64 tm_year;  /**< Years since 1900, 0-199 */
-  __hv64 flags;    /**< Return flags, 0 if no error */
+    __hv64 tm_sec;   /**< Seconds, 0-59 */
+    __hv64 tm_min;   /**< Minutes, 0-59 */
+    __hv64 tm_hour;  /**< Hours, 0-23 */
+    __hv64 tm_mday;  /**< Day of month, 0-30 */
+    __hv64 tm_mon;   /**< Month, 0-11 */
+    __hv64 tm_year;  /**< Years since 1900, 0-199 */
+    __hv64 flags;    /**< Return flags, 0 if no error */
 #else
-  __hv32 tm_sec;   /**< Seconds, 0-59 */
-  __hv32 tm_min;   /**< Minutes, 0-59 */
-  __hv32 tm_hour;  /**< Hours, 0-23 */
-  __hv32 tm_mday;  /**< Day of month, 0-30 */
-  __hv32 tm_mon;   /**< Month, 0-11 */
-  __hv32 tm_year;  /**< Years since 1900, 0-199 */
-  __hv32 flags;    /**< Return flags, 0 if no error */
+    __hv32 tm_sec;   /**< Seconds, 0-59 */
+    __hv32 tm_min;   /**< Minutes, 0-59 */
+    __hv32 tm_hour;  /**< Hours, 0-23 */
+    __hv32 tm_mday;  /**< Day of month, 0-30 */
+    __hv32 tm_mon;   /**< Month, 0-11 */
+    __hv32 tm_year;  /**< Years since 1900, 0-199 */
+    __hv32 flags;    /**< Return flags, 0 if no error */
 #endif
 } HV_RTCTime;
 
@@ -670,19 +668,18 @@ int hv_install_context(HV_PhysAddr page_table, HV_PTE access, HV_ASID asid,
 #ifndef __ASSEMBLER__
 
 /** Value returned from hv_inquire_context(). */
-typedef struct
-{
-  /** Physical address of page table */
-  HV_PhysAddr page_table;
+typedef struct {
+    /** Physical address of page table */
+    HV_PhysAddr page_table;
 
-  /** PTE which defines access method for top of page table */
-  HV_PTE access;
+    /** PTE which defines access method for top of page table */
+    HV_PTE access;
 
-  /** ASID associated with this page table */
-  HV_ASID asid;
+    /** ASID associated with this page table */
+    HV_ASID asid;
 
-  /** Context flags */
-  __hv32 flags;
+    /** Context flags */
+    __hv32 flags;
 } HV_Context;
 
 /** Retrieve information about the currently installed context.
@@ -780,16 +777,15 @@ int hv_reexec(HV_PhysAddr entry);
 
 
 /** Chip topology */
-typedef struct
-{
-  /** Relative coordinates of the querying tile */
-  HV_Coord coord;
+typedef struct {
+    /** Relative coordinates of the querying tile */
+    HV_Coord coord;
 
-  /** Width of the querying supervisor's tile rectangle. */
-  int width;
+    /** Width of the querying supervisor's tile rectangle. */
+    int width;
 
-  /** Height of the querying supervisor's tile rectangle. */
-  int height;
+    /** Height of the querying supervisor's tile rectangle. */
+    int height;
 
 } HV_Topology;
 
@@ -813,17 +809,17 @@ HV_Topology hv_inquire_topology(void);
  * These numbers are part of the binary API and guaranteed not to change.
  */
 typedef enum {
-  /** An invalid value; do not use. */
-  _HV_INQ_TILES_RESERVED       = 0,
+    /** An invalid value; do not use. */
+    _HV_INQ_TILES_RESERVED       = 0,
 
-  /** All available tiles within the supervisor's tile rectangle. */
-  HV_INQ_TILES_AVAIL           = 1,
+    /** All available tiles within the supervisor's tile rectangle. */
+    HV_INQ_TILES_AVAIL           = 1,
 
-  /** The set of tiles used for hash-for-home caching. */
-  HV_INQ_TILES_HFH_CACHE       = 2,
+    /** The set of tiles used for hash-for-home caching. */
+    HV_INQ_TILES_HFH_CACHE       = 2,
 
-  /** The set of tiles that can be legally used as a LOTAR for a PTE. */
-  HV_INQ_TILES_LOTAR           = 3
+    /** The set of tiles that can be legally used as a LOTAR for a PTE. */
+    HV_INQ_TILES_LOTAR           = 3
 } HV_InqTileSet;
 
 /** Returns specific information about various sets of tiles within the
@@ -846,11 +842,10 @@ HV_Errno hv_inquire_tiles(HV_InqTileSet set, HV_VirtAddr cpumask, int length);
 typedef int HV_MemoryController;
 
 /** A range of physical memory. */
-typedef struct
-{
-  HV_PhysAddr start;   /**< Starting address. */
-  __hv64 size;         /**< Size in bytes. */
-  HV_MemoryController controller;  /**< Which memory controller owns this. */
+typedef struct {
+    HV_PhysAddr start;   /**< Starting address. */
+    __hv64 size;         /**< Size in bytes. */
+    HV_MemoryController controller;  /**< Which memory controller owns this. */
 } HV_PhysAddrRange;
 
 /** Returns information about a range of physical memory.
@@ -877,11 +872,10 @@ typedef struct
 HV_PhysAddrRange hv_inquire_physical(int idx);
 
 /** Possible DIMM types. */
-typedef enum
-{
-  NO_DIMM                    = 0,  /**< No DIMM */
-  DDR2                       = 1,  /**< DDR2 */
-  DDR3                       = 2   /**< DDR3 */
+typedef enum {
+    NO_DIMM                    = 0,  /**< No DIMM */
+    DDR2                       = 1,  /**< DDR2 */
+    DDR3                       = 2   /**< DDR3 */
 } HV_DIMM_Type;
 
 #ifdef __tilegx__
@@ -915,11 +909,10 @@ typedef enum
 #define HV_DIMM_SIZE_MASK 0xf
 
 /** Memory controller information. */
-typedef struct
-{
-  HV_Coord coord;   /**< Relative tile coordinates of the port used by a
+typedef struct {
+    HV_Coord coord;   /**< Relative tile coordinates of the port used by a
                          specified tile to communicate with this controller. */
-  __hv64 speed;     /**< Speed of this controller in bytes per second. */
+    __hv64 speed;     /**< Speed of this controller in bytes per second. */
 } HV_MemoryControllerInfo;
 
 /** Returns information about a particular memory controller.
@@ -944,14 +937,13 @@ typedef struct
  * @return Information about the controller.
  */
 HV_MemoryControllerInfo hv_inquire_memory_controller(HV_Coord coord,
-                                                     int controller);
+        int controller);
 
 
 /** A range of virtual memory. */
-typedef struct
-{
-  HV_VirtAddr start;   /**< Starting address. */
-  __hv64 size;         /**< Size in bytes. */
+typedef struct {
+    HV_VirtAddr start;   /**< Starting address. */
+    __hv64 size;         /**< Size in bytes. */
 } HV_VirtAddrRange;
 
 /** Returns information about a range of virtual memory.
@@ -984,10 +976,9 @@ HV_VirtAddrRange hv_inquire_virtual(int idx);
 
 
 /** A range of ASID values. */
-typedef struct
-{
-  HV_ASID start;        /**< First ASID in the range. */
-  unsigned int size;    /**< Number of ASIDs. Zero for an invalid range. */
+typedef struct {
+    HV_ASID start;        /**< First ASID in the range. */
+    unsigned int size;    /**< Number of ASIDs. Zero for an invalid range. */
 } HV_ASIDRange;
 
 /** Returns information about a range of ASIDs.
@@ -1131,16 +1122,14 @@ int hv_fs_findfile(HV_VirtAddr filename);
  * Note that this structure should be no more than 40 bytes in size so
  * that it can always be returned completely in registers.
  */
-typedef struct
-{
-  int size;             /**< Size of file (or HV_Errno on error) */
-  unsigned int flags;   /**< Flags (see HV_FS_FSTAT_FLAGS) */
+typedef struct {
+    int size;             /**< Size of file (or HV_Errno on error) */
+    unsigned int flags;   /**< Flags (see HV_FS_FSTAT_FLAGS) */
 } HV_FS_StatInfo;
 
 /** Bitmask flags for fstat request */
-typedef enum
-{
-  HV_FS_ISDIR    = 0x0001   /**< Is the entry a directory? */
+typedef enum {
+    HV_FS_ISDIR    = 0x0001   /**< Is the entry a directory? */
 } HV_FS_FSTAT_FLAGS;
 
 /** Get stat information on a given file inode.
@@ -1258,12 +1247,11 @@ void hv_bzero_page(HV_VirtAddr va, unsigned int size);
 
 
 /** State object for the hypervisor messaging subsystem. */
-typedef struct
-{
+typedef struct {
 #if CHIP_VA_WIDTH() > 32
-  __hv64 opaque[2]; /**< No user-serviceable parts inside */
+    __hv64 opaque[2]; /**< No user-serviceable parts inside */
 #else
-  __hv32 opaque[2]; /**< No user-serviceable parts inside */
+    __hv32 opaque[2]; /**< No user-serviceable parts inside */
 #endif
 }
 HV_MsgState;
@@ -1298,24 +1286,22 @@ HV_MsgState;
 HV_Errno hv_register_message_state(HV_MsgState* msgstate);
 
 /** Possible message recipient states. */
-typedef enum
-{
-  HV_TO_BE_SENT,    /**< Not sent (not attempted, or recipient not ready) */
-  HV_SENT,          /**< Successfully sent */
-  HV_BAD_RECIP      /**< Bad recipient coordinates (permanent error) */
+typedef enum {
+    HV_TO_BE_SENT,    /**< Not sent (not attempted, or recipient not ready) */
+    HV_SENT,          /**< Successfully sent */
+    HV_BAD_RECIP      /**< Bad recipient coordinates (permanent error) */
 } HV_Recip_State;
 
 /** Message recipient. */
-typedef struct
-{
-  /** X coordinate, relative to supervisor's top-left coordinate */
-  unsigned int x:11;
+typedef struct {
+    /** X coordinate, relative to supervisor's top-left coordinate */
+    unsigned int x:11;
 
-  /** Y coordinate, relative to supervisor's top-left coordinate */
-  unsigned int y:11;
+    /** Y coordinate, relative to supervisor's top-left coordinate */
+    unsigned int y:11;
 
-  /** Status of this recipient */
-  HV_Recip_State state:10;
+    /** Status of this recipient */
+    HV_Recip_State state:10;
 } HV_Recipient;
 
 /** Send a message to a set of recipients.
@@ -1391,10 +1377,9 @@ int hv_send_message(HV_Recipient *recips, int nrecip,
 
 
 /** Return value from hv_receive_message() */
-typedef struct
-{
-  int msglen;     /**< Message length in bytes, or an error code */
-  __hv32 source;  /**< Code identifying message sender (HV_MSG_xxx) */
+typedef struct {
+    int msglen;     /**< Message length in bytes, or an error code */
+    __hv32 source;  /**< Code identifying message sender (HV_MSG_xxx) */
 } HV_RcvMsgInfo;
 
 #define HV_MSG_TILE 0x0         /**< Message source is another tile */
@@ -1570,11 +1555,10 @@ typedef __hv32 HV_IntArg;
  *  as an HV_IntrMsg structure.
  */
 
-typedef struct
-{
-  HV_IntArg intarg;  /**< Interrupt argument, passed to the poll/preada/pwritea
+typedef struct {
+    HV_IntArg intarg;  /**< Interrupt argument, passed to the poll/preada/pwritea
                           services */
-  HV_IntArg intdata; /**< Interrupt-specific interrupt data */
+    HV_IntArg intdata; /**< Interrupt-specific interrupt data */
 } HV_IntrMsg;
 
 /** Request an interrupt message when a device condition is satisfied.
@@ -1641,13 +1625,14 @@ typedef struct
 __attribute__ ((packed, aligned(4)))
 #endif
 {
-  HV_PhysAddr pa;  /**< Client physical address of the buffer segment. */
-  HV_PTE pte;      /**< Page table entry describing the caching and location
+    HV_PhysAddr pa;  /**< Client physical address of the buffer segment. */
+    HV_PTE pte;      /**< Page table entry describing the caching and location
                         override characteristics of the buffer segment.  Some
                         drivers ignore this element and will require that
                         the NOCACHE flag be set on their requests. */
-  __hv32 len;      /**< Length of the buffer segment. */
-} HV_SGL;
+    __hv32 len;      /**< Length of the buffer segment. */
+}
+HV_SGL;
 
 #define HV_SGL_MAXLEN 16  /**< Maximum number of entries in a scatter-gather
                                list */
@@ -1744,16 +1729,15 @@ int hv_dev_pwritea(int devhdl, __hv32 flags, __hv32 sgl_len,
 
 
 /** Define a pair of tile and ASID to identify a user process context. */
-typedef struct
-{
-  /** X coordinate, relative to supervisor's top-left coordinate */
-  unsigned int x:11;
+typedef struct {
+    /** X coordinate, relative to supervisor's top-left coordinate */
+    unsigned int x:11;
 
-  /** Y coordinate, relative to supervisor's top-left coordinate */
-  unsigned int y:11;
+    /** Y coordinate, relative to supervisor's top-left coordinate */
+    unsigned int y:11;
 
-  /** ASID of the process on this x,y tile */
-  HV_ASID asid:10;
+    /** ASID of the process on this x,y tile */
+    HV_ASID asid:10;
 } HV_Remote_ASID;
 
 /** Flush cache and/or TLB state on remote tiles.
@@ -1851,12 +1835,12 @@ int hv_flush_remote(HV_PhysAddr cache_pa, unsigned long cache_control,
 #define HV_PTE_INDEX_USER            10  /**< Page is user-accessible */
 #define HV_PTE_INDEX_ACCESSED        11  /**< Page has been accessed */
 #define HV_PTE_INDEX_DIRTY           12  /**< Page has been written */
-                                         /*   Bits 13-15 are reserved for
-                                              future use. */
+/*   Bits 13-15 are reserved for
+     future use. */
 #define HV_PTE_INDEX_MODE            16  /**< Page mode; see HV_PTE_MODE_xxx */
 #define HV_PTE_MODE_BITS              3  /**< Number of bits in mode */
-                                         /*   Bit 19 is reserved for
-                                              future use. */
+/*   Bit 19 is reserved for
+     future use. */
 #define HV_PTE_INDEX_LOTAR           20  /**< Page's LOTAR; must be high bits
                                               of word */
 #define HV_PTE_LOTAR_BITS            12  /**< Number of bits in a LOTAR */
@@ -2203,19 +2187,17 @@ _HV_BIT(user,            USER)
  * general policy.
  */
 static __inline unsigned int
-hv_pte_get_mode(const HV_PTE pte)
-{
-  return (((__hv32) pte.val) >> HV_PTE_INDEX_MODE) &
-         ((1 << HV_PTE_MODE_BITS) - 1);
+hv_pte_get_mode(const HV_PTE pte) {
+    return (((__hv32) pte.val) >> HV_PTE_INDEX_MODE) &
+           ((1 << HV_PTE_MODE_BITS) - 1);
 }
 
 /** Set the page mode into a PTE.  See hv_pte_get_mode. */
 static __inline HV_PTE
-hv_pte_set_mode(HV_PTE pte, unsigned int val)
-{
-  pte.val &= ~(((1ULL << HV_PTE_MODE_BITS) - 1) << HV_PTE_INDEX_MODE);
-  pte.val |= val << HV_PTE_INDEX_MODE;
-  return pte;
+hv_pte_set_mode(HV_PTE pte, unsigned int val) {
+    pte.val &= ~(((1ULL << HV_PTE_MODE_BITS) - 1) << HV_PTE_INDEX_MODE);
+    pte.val |= val << HV_PTE_INDEX_MODE;
+    return pte;
 }
 
 /** Get the page frame number from the PTE.
@@ -2228,23 +2210,21 @@ hv_pte_set_mode(HV_PTE pte, unsigned int val)
  * CPA must be aligned modulo the large page size.
  */
 static __inline unsigned int
-hv_pte_get_pfn(const HV_PTE pte)
-{
-  return pte.val >> HV_PTE_INDEX_PFN;
+hv_pte_get_pfn(const HV_PTE pte) {
+    return pte.val >> HV_PTE_INDEX_PFN;
 }
 
 
 /** Set the page frame number into a PTE.  See hv_pte_get_pfn. */
 static __inline HV_PTE
-hv_pte_set_pfn(HV_PTE pte, unsigned int val)
-{
-  /*
-   * Note that the use of "PTFN" in the next line is intentional; we
-   * don't want any garbage lower bits left in that field.
-   */
-  pte.val &= ~(((1ULL << HV_PTE_PTFN_BITS) - 1) << HV_PTE_INDEX_PTFN);
-  pte.val |= (__hv64) val << HV_PTE_INDEX_PFN;
-  return pte;
+hv_pte_set_pfn(HV_PTE pte, unsigned int val) {
+    /*
+     * Note that the use of "PTFN" in the next line is intentional; we
+     * don't want any garbage lower bits left in that field.
+     */
+    pte.val &= ~(((1ULL << HV_PTE_PTFN_BITS) - 1) << HV_PTE_INDEX_PTFN);
+    pte.val |= (__hv64) val << HV_PTE_INDEX_PFN;
+    return pte;
 }
 
 /** Get the page table frame number from the PTE.
@@ -2258,19 +2238,17 @@ hv_pte_set_pfn(HV_PTE pte, unsigned int val)
  * the level-2 page table size.
  */
 static __inline unsigned long
-hv_pte_get_ptfn(const HV_PTE pte)
-{
-  return pte.val >> HV_PTE_INDEX_PTFN;
+hv_pte_get_ptfn(const HV_PTE pte) {
+    return pte.val >> HV_PTE_INDEX_PTFN;
 }
 
 
 /** Set the page table frame number into a PTE.  See hv_pte_get_ptfn. */
 static __inline HV_PTE
-hv_pte_set_ptfn(HV_PTE pte, unsigned long val)
-{
-  pte.val &= ~(((1ULL << HV_PTE_PTFN_BITS)-1) << HV_PTE_INDEX_PTFN);
-  pte.val |= (__hv64) val << HV_PTE_INDEX_PTFN;
-  return pte;
+hv_pte_set_ptfn(HV_PTE pte, unsigned long val) {
+    pte.val &= ~(((1ULL << HV_PTE_PTFN_BITS)-1) << HV_PTE_INDEX_PTFN);
+    pte.val |= (__hv64) val << HV_PTE_INDEX_PTFN;
+    return pte;
 }
 
 
@@ -2284,26 +2262,24 @@ hv_pte_set_ptfn(HV_PTE pte, unsigned long val)
  * level-2 page table is accessed.
  */
 static __inline unsigned int
-hv_pte_get_lotar(const HV_PTE pte)
-{
-  unsigned int lotar = ((__hv32) pte.val) >> HV_PTE_INDEX_LOTAR;
+hv_pte_get_lotar(const HV_PTE pte) {
+    unsigned int lotar = ((__hv32) pte.val) >> HV_PTE_INDEX_LOTAR;
 
-  return HV_XY_TO_LOTAR( (lotar >> (HV_PTE_LOTAR_BITS / 2)),
-                         (lotar & ((1 << (HV_PTE_LOTAR_BITS / 2)) - 1)) );
+    return HV_XY_TO_LOTAR( (lotar >> (HV_PTE_LOTAR_BITS / 2)),
+                           (lotar & ((1 << (HV_PTE_LOTAR_BITS / 2)) - 1)) );
 }
 
 
 /** Set the remote tile caching a page into a PTE.  See hv_pte_get_lotar. */
 static __inline HV_PTE
-hv_pte_set_lotar(HV_PTE pte, unsigned int val)
-{
-  unsigned int x = HV_LOTAR_X(val);
-  unsigned int y = HV_LOTAR_Y(val);
+hv_pte_set_lotar(HV_PTE pte, unsigned int val) {
+    unsigned int x = HV_LOTAR_X(val);
+    unsigned int y = HV_LOTAR_Y(val);
 
-  pte.val &= ~(((1ULL << HV_PTE_LOTAR_BITS)-1) << HV_PTE_INDEX_LOTAR);
-  pte.val |= (x << (HV_PTE_INDEX_LOTAR + HV_PTE_LOTAR_BITS / 2)) |
-             (y << HV_PTE_INDEX_LOTAR);
-  return pte;
+    pte.val &= ~(((1ULL << HV_PTE_LOTAR_BITS)-1) << HV_PTE_INDEX_LOTAR);
+    pte.val |= (x << (HV_PTE_INDEX_LOTAR + HV_PTE_LOTAR_BITS / 2)) |
+               (y << HV_PTE_INDEX_LOTAR);
+    return pte;
 }
 
 #endif  /* !__ASSEMBLER__ */

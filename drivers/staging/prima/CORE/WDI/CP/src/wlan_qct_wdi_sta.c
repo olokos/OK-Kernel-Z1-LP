@@ -91,8 +91,7 @@
 WDI_Status WDI_STATableInit
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     wpt_uint8  ucMaxStations;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -103,8 +102,7 @@ WDI_Status WDI_STATableInit
     ------------------------------------------------------------------------*/
     pWDICtx->staTable = wpalMemoryAllocate(ucMaxStations * sizeof(WDI_StaStruct));
 
-    if (NULL == pWDICtx->staTable)
-    {
+    if (NULL == pWDICtx->staTable) {
 
         WDI_STATableClose(pWDICtx);
 
@@ -137,8 +135,7 @@ WDI_Status
 WDI_STATableStart
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     wpt_uint8 ucMaxStations;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -160,8 +157,7 @@ WDI_Status
 WDI_STATableStop
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     wpt_uint8 ucMaxStations;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -192,8 +188,7 @@ WDI_Status
 WDI_STATableClose
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     WDI_Status status = WDI_STATUS_SUCCESS;
 
     // Free memory
@@ -220,8 +215,7 @@ WDI_STATableAddSta
 (
     WDI_ControlBlockType*  pWDICtx,
     WDI_AddStaParams*      pwdiParam
-)
-{
+) {
     wpt_uint8        ucSTAIdx  = 0;
     WDI_StaStruct*   pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
     /*- - - -  - - - - - - - - - - - -  - - - - - - - - - - - -  - - - - - */
@@ -232,8 +226,7 @@ WDI_STATableAddSta
       always be valid
     -----------------------------------------------------------------------*/
     if (( pwdiParam->ucSTAIdx  == WDI_STA_INVALID_IDX) ||
-            ( pwdiParam->ucSTAIdx >= pWDICtx->ucMaxStations ))
-    {
+            ( pwdiParam->ucSTAIdx >= pWDICtx->ucMaxStations )) {
         WPAL_TRACE(eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "Station id sent by HAL is invalid - not OK");
         WDI_ASSERT(0);
@@ -279,8 +272,7 @@ WDI_STATableAddSta
     /* Now update the STA entry with the new MAC address */
     if(WDI_STATUS_SUCCESS != WDI_STATableSetStaAddr( pWDICtx,
             ucSTAIdx,
-            pwdiParam->staMacAddr))
-    {
+            pwdiParam->staMacAddr)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "Failed to update station entry - internal failure");
         WDI_ASSERT(0);
@@ -290,8 +282,7 @@ WDI_STATableAddSta
     /* Now update the STA entry with the new BSSID address */
     if(WDI_STATUS_SUCCESS != WDI_STATableSetBSSID( pWDICtx,
             ucSTAIdx,
-            pwdiParam->macBSSID))
-    {
+            pwdiParam->macBSSID)) {
         WPAL_TRACE(eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "Failed to update station entry - internal failure");
         WDI_ASSERT(0);
@@ -316,8 +307,7 @@ WDI_STATableDelSta
 (
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx
-)
-{
+) {
     WDI_StaStruct*   pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
     /*- - - -  - - - - - - - - - - - -  - - - - - - - - - - - -  - - - - - */
 
@@ -327,8 +317,7 @@ WDI_STATableDelSta
       always be valid
     -----------------------------------------------------------------------*/
     if(( ucSTAIdx  == WDI_STA_INVALID_IDX )||
-            ( ucSTAIdx >= pWDICtx->ucMaxStations ))
-    {
+            ( ucSTAIdx >= pWDICtx->ucMaxStations )) {
         WPAL_TRACE(eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_ERROR,
                    "STA Id invalid on Del STA - internal failure");
         WDI_ASSERT(0);
@@ -355,17 +344,14 @@ WDI_STATableBSSDelSta
 (
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucBSSIdx
-)
-{
+) {
     WDI_StaStruct*   pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
     wpt_uint8        ucSTAIdx;
     /*- - - -  - - - - - - - - - - - -  - - - - - - - - - - - -  - - - - - */
 
-    for (ucSTAIdx = 0; (ucSTAIdx < pWDICtx->ucMaxStations); ucSTAIdx++)
-    {
+    for (ucSTAIdx = 0; (ucSTAIdx < pWDICtx->ucMaxStations); ucSTAIdx++) {
         if( (pSTATable[ucSTAIdx].ucStaType == WDI_STA_ENTRY_PEER) &&
-                (pSTATable[ucSTAIdx].bssIdx == ucBSSIdx))
-        {
+                (pSTATable[ucSTAIdx].bssIdx == ucBSSIdx)) {
             WDI_STATableDelSta(pWDICtx, ucSTAIdx);
         }
     }
@@ -392,17 +378,14 @@ WDI_STATableGetStaBSSIDAddr
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_macAddr*           pmacBSSID
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         wpalMemoryCopy(*pmacBSSID, pSTATable[ucSTAIdx].macBSSID, WDI_MAC_ADDR_LEN);
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableGetStaQosEnabled*/
 
@@ -425,17 +408,14 @@ WDI_STATableGetStaQosEnabled
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8*             qosEnabled
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid) && qosEnabled)
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid) && qosEnabled) {
         *qosEnabled = pSTATable[ucSTAIdx].qosEnabled;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableGetStaQosEnabled*/
 
@@ -456,15 +436,12 @@ WDI_STATableSetStaQosEnabled
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8              qosEnabled
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         pSTATable[ucSTAIdx].qosEnabled = qosEnabled;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableSetStaQosEnabled*/
 
@@ -485,15 +462,12 @@ WDI_STATableGetStaType
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8*             pStaType
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         *pStaType = pSTATable[ucSTAIdx].ucStaType;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableGetStaType*/
 
@@ -514,15 +488,12 @@ WDI_STATableSetStaType
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8              staType
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         pSTATable[ucSTAIdx].ucStaType = staType;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableSetStaType*/
 
@@ -542,24 +513,18 @@ WDI_CompareMacAddr
 (
     wpt_uint8 addr1[],
     wpt_uint8 addr2[]
-)
-{
+) {
 #if defined( _X86_ )
     wpt_uint32 align = (0x3 & ((wpt_uint32) addr1 | (wpt_uint32) addr2 ));
 
-    if( align ==0)
-    {
+    if( align ==0) {
         return ((*((wpt_uint16 *) &(addr1[4])) == *((wpt_uint16 *) &(addr2[4])))&&
                 (*((wpt_uint32 *) addr1) == *((wpt_uint32 *) addr2)));
-    }
-    else if(align == 2)
-    {
+    } else if(align == 2) {
         return ((*((wpt_uint16 *) &addr1[4]) == *((wpt_uint16 *) &addr2[4])) &&
                 (*((wpt_uint16 *) &addr1[2]) == *((wpt_uint16 *) &addr2[2])) &&
                 (*((wpt_uint16 *) &addr1[0]) == *((wpt_uint16 *) &addr2[0])));
-    }
-    else
-    {
+    } else {
         return ( (addr1[5]==addr2[5])&&
                  (addr1[4]==addr2[4])&&
                  (addr1[3]==addr2[3])&&
@@ -595,16 +560,13 @@ WDI_STATableFindStaidByAddr
     WDI_ControlBlockType*  pWDICtx,
     wpt_macAddr            staAddr,
     wpt_uint8*             pucStaId
-)
-{
+) {
     WDI_Status wdiStatus = WDI_STATUS_E_FAILURE;
     wpt_uint8 i;
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
 
-    for (i=0; i < pWDICtx->ucMaxStations; i++, pSTATable++)
-    {
-        if ( (pSTATable->valid == 1) && (WDI_CompareMacAddr(pSTATable->staAddr, staAddr)) )
-        {
+    for (i=0; i < pWDICtx->ucMaxStations; i++, pSTATable++) {
+        if ( (pSTATable->valid == 1) && (WDI_CompareMacAddr(pSTATable->staAddr, staAddr)) ) {
             *pucStaId = i;
             wdiStatus = WDI_STATUS_SUCCESS;
             break;
@@ -629,15 +591,12 @@ WDI_STATableGetStaAddr
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8**            pStaAddr
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         *pStaAddr = pSTATable[ucSTAIdx].staAddr;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableGetStaAddr*/
 
@@ -657,16 +616,13 @@ WDI_STATableGetStaMacAddr
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_macAddr*           staMacAddr
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         wpalMemoryCopy(staMacAddr, pSTATable[ucSTAIdx].staAddr,
                        WDI_MAC_ADDR_LEN);
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableGetStaMacAddr*/
 
@@ -686,15 +642,12 @@ WDI_STATableSetStaAddr
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_macAddr            staAddr
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         wpalMemoryCopy (pSTATable[ucSTAIdx].staAddr, staAddr, 6);
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableSetStaAddr*/
 
@@ -714,15 +667,12 @@ WDI_STATableSetBSSID
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_macAddr            macBSSID
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         wpalMemoryCopy (pSTATable[ucSTAIdx].macBSSID, macBSSID, 6);
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableSetBSSID*/
 
@@ -742,15 +692,12 @@ WDI_STATableSetBSSIdx
     WDI_ControlBlockType*  pWDICtx,
     wpt_uint8              ucSTAIdx,
     wpt_uint8              ucBSSIdx
-)
-{
+) {
     WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
-    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid))
-    {
+    if ((ucSTAIdx < pWDICtx->ucMaxStations) && (pSTATable[ucSTAIdx].valid)) {
         pSTATable[ucSTAIdx].bssIdx = ucBSSIdx;
         return WDI_STATUS_SUCCESS;
-    }
-    else
+    } else
         return WDI_STATUS_E_FAILURE;
 }/*WDI_STATableSetBSSIdx*/
 

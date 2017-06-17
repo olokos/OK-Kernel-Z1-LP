@@ -72,7 +72,7 @@
 /* #define TIOCSETAF	_IOW('t', 22, struct termios) drn out, fls in, set */
 /* #define TIOCGETD	_IOR('t', 26, int)	get line discipline */
 /* #define TIOCSETD	_IOW('t', 27, int)	set line discipline */
-						/* 127-124 compat */
+/* 127-124 compat */
 
 #define TIOCSBRK	0x5427  /* BSD compatibility */
 #define TIOCCBRK	0x5428  /* BSD compatibility */

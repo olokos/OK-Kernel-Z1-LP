@@ -14,8 +14,8 @@
 #define HUB_NUM_BIG_WINDOW	(IIO_NUM_ITTES - 1)
 
 #define		IIO_WID			0x00400000	/* Crosstalk Widget Identification */
-							/* This register is also accessible from
-							 * Crosstalk at address 0x0.  */
+/* This register is also accessible from
+ * Crosstalk at address 0x0.  */
 #define		IIO_WSTAT		0x00400008	/* Crosstalk Widget Status */
 #define		IIO_WCR			0x00400020	/* Crosstalk Widget Control Register */
 #define		IIO_ILAPR		0x00400100	/* IO Local Access Protection Register */
@@ -227,14 +227,14 @@
  ************************************************************************/
 
 typedef union ii_wid_u {
-	u64 ii_wid_regval;
-	struct {
-		u64 w_rsvd_1:1;
-		u64 w_mfg_num:11;
-		u64 w_part_num:16;
-		u64 w_rev_num:4;
-		u64 w_rsvd:32;
-	} ii_wid_fld_s;
+    u64 ii_wid_regval;
+    struct {
+        u64 w_rsvd_1:1;
+        u64 w_mfg_num:11;
+        u64 w_part_num:16;
+        u64 w_rev_num:4;
+        u64 w_rsvd:32;
+    } ii_wid_fld_s;
 } ii_wid_u_t;
 
 /************************************************************************
@@ -246,19 +246,19 @@ typedef union ii_wid_u {
  ************************************************************************/
 
 typedef union ii_wstat_u {
-	u64 ii_wstat_regval;
-	struct {
-		u64 w_pending:4;
-		u64 w_xt_crd_to:1;
-		u64 w_xt_tail_to:1;
-		u64 w_rsvd_3:3;
-		u64 w_tx_mx_rty:1;
-		u64 w_rsvd_2:6;
-		u64 w_llp_tx_cnt:8;
-		u64 w_rsvd_1:8;
-		u64 w_crazy:1;
-		u64 w_rsvd:31;
-	} ii_wstat_fld_s;
+    u64 ii_wstat_regval;
+    struct {
+        u64 w_pending:4;
+        u64 w_xt_crd_to:1;
+        u64 w_xt_tail_to:1;
+        u64 w_rsvd_3:3;
+        u64 w_tx_mx_rty:1;
+        u64 w_rsvd_2:6;
+        u64 w_llp_tx_cnt:8;
+        u64 w_rsvd_1:8;
+        u64 w_crazy:1;
+        u64 w_rsvd:31;
+    } ii_wstat_fld_s;
 } ii_wstat_u_t;
 
 /************************************************************************
@@ -269,17 +269,17 @@ typedef union ii_wstat_u {
  ************************************************************************/
 
 typedef union ii_wcr_u {
-	u64 ii_wcr_regval;
-	struct {
-		u64 w_wid:4;
-		u64 w_tag:1;
-		u64 w_rsvd_1:8;
-		u64 w_dst_crd:3;
-		u64 w_f_bad_pkt:1;
-		u64 w_dir_con:1;
-		u64 w_e_thresh:5;
-		u64 w_rsvd:41;
-	} ii_wcr_fld_s;
+    u64 ii_wcr_regval;
+    struct {
+        u64 w_wid:4;
+        u64 w_tag:1;
+        u64 w_rsvd_1:8;
+        u64 w_dst_crd:3;
+        u64 w_f_bad_pkt:1;
+        u64 w_dir_con:1;
+        u64 w_e_thresh:5;
+        u64 w_rsvd:41;
+    } ii_wcr_fld_s;
 } ii_wcr_u_t;
 
 /************************************************************************
@@ -310,10 +310,10 @@ typedef union ii_wcr_u {
  ************************************************************************/
 
 typedef union ii_ilapr_u {
-	u64 ii_ilapr_regval;
-	struct {
-		u64 i_region:64;
-	} ii_ilapr_fld_s;
+    u64 ii_ilapr_regval;
+    struct {
+        u64 i_region:64;
+    } ii_ilapr_fld_s;
 } ii_ilapr_u_t;
 
 /************************************************************************
@@ -330,10 +330,10 @@ typedef union ii_ilapr_u {
  ************************************************************************/
 
 typedef union ii_ilapo_u {
-	u64 ii_ilapo_regval;
-	struct {
-		u64 i_io_ovrride:64;
-	} ii_ilapo_fld_s;
+    u64 ii_ilapo_regval;
+    struct {
+        u64 i_io_ovrride:64;
+    } ii_ilapo_fld_s;
 } ii_ilapo_u_t;
 
 /************************************************************************
@@ -344,13 +344,13 @@ typedef union ii_ilapo_u {
  ************************************************************************/
 
 typedef union ii_iowa_u {
-	u64 ii_iowa_regval;
-	struct {
-		u64 i_w0_oac:1;
-		u64 i_rsvd_1:7;
-		u64 i_wx_oac:8;
-		u64 i_rsvd:48;
-	} ii_iowa_fld_s;
+    u64 ii_iowa_regval;
+    struct {
+        u64 i_w0_oac:1;
+        u64 i_rsvd_1:7;
+        u64 i_wx_oac:8;
+        u64 i_rsvd:48;
+    } ii_iowa_fld_s;
 } ii_iowa_u_t;
 
 /************************************************************************
@@ -363,13 +363,13 @@ typedef union ii_iowa_u {
  ************************************************************************/
 
 typedef union ii_iiwa_u {
-	u64 ii_iiwa_regval;
-	struct {
-		u64 i_w0_iac:1;
-		u64 i_rsvd_1:7;
-		u64 i_wx_iac:8;
-		u64 i_rsvd:48;
-	} ii_iiwa_fld_s;
+    u64 ii_iiwa_regval;
+    struct {
+        u64 i_w0_iac:1;
+        u64 i_rsvd_1:7;
+        u64 i_wx_iac:8;
+        u64 i_rsvd:48;
+    } ii_iiwa_fld_s;
 } ii_iiwa_u_t;
 
 /************************************************************************
@@ -392,17 +392,17 @@ typedef union ii_iiwa_u {
  ************************************************************************/
 
 typedef union ii_iidem_u {
-	u64 ii_iidem_regval;
-	struct {
-		u64 i_w8_dxs:8;
-		u64 i_w9_dxs:8;
-		u64 i_wa_dxs:8;
-		u64 i_wb_dxs:8;
-		u64 i_wc_dxs:8;
-		u64 i_wd_dxs:8;
-		u64 i_we_dxs:8;
-		u64 i_wf_dxs:8;
-	} ii_iidem_fld_s;
+    u64 ii_iidem_regval;
+    struct {
+        u64 i_w8_dxs:8;
+        u64 i_w9_dxs:8;
+        u64 i_wa_dxs:8;
+        u64 i_wb_dxs:8;
+        u64 i_wc_dxs:8;
+        u64 i_wd_dxs:8;
+        u64 i_we_dxs:8;
+        u64 i_wf_dxs:8;
+    } ii_iidem_fld_s;
 } ii_iidem_u_t;
 
 /************************************************************************
@@ -413,24 +413,24 @@ typedef union ii_iidem_u {
  ************************************************************************/
 
 typedef union ii_ilcsr_u {
-	u64 ii_ilcsr_regval;
-	struct {
-		u64 i_nullto:6;
-		u64 i_rsvd_4:2;
-		u64 i_wrmrst:1;
-		u64 i_rsvd_3:1;
-		u64 i_llp_en:1;
-		u64 i_bm8:1;
-		u64 i_llp_stat:2;
-		u64 i_remote_power:1;
-		u64 i_rsvd_2:1;
-		u64 i_maxrtry:10;
-		u64 i_d_avail_sel:2;
-		u64 i_rsvd_1:4;
-		u64 i_maxbrst:10;
-		u64 i_rsvd:22;
+    u64 ii_ilcsr_regval;
+    struct {
+        u64 i_nullto:6;
+        u64 i_rsvd_4:2;
+        u64 i_wrmrst:1;
+        u64 i_rsvd_3:1;
+        u64 i_llp_en:1;
+        u64 i_bm8:1;
+        u64 i_llp_stat:2;
+        u64 i_remote_power:1;
+        u64 i_rsvd_2:1;
+        u64 i_maxrtry:10;
+        u64 i_d_avail_sel:2;
+        u64 i_rsvd_1:4;
+        u64 i_maxbrst:10;
+        u64 i_rsvd:22;
 
-	} ii_ilcsr_fld_s;
+    } ii_ilcsr_fld_s;
 } ii_ilcsr_u_t;
 
 /************************************************************************
@@ -441,12 +441,12 @@ typedef union ii_ilcsr_u {
  ************************************************************************/
 
 typedef union ii_illr_u {
-	u64 ii_illr_regval;
-	struct {
-		u64 i_sn_cnt:16;
-		u64 i_cb_cnt:16;
-		u64 i_rsvd:32;
-	} ii_illr_fld_s;
+    u64 ii_illr_regval;
+    struct {
+        u64 i_sn_cnt:16;
+        u64 i_cb_cnt:16;
+        u64 i_rsvd:32;
+    } ii_illr_fld_s;
 } ii_illr_u_t;
 
 /************************************************************************
@@ -464,20 +464,20 @@ typedef union ii_illr_u {
  ************************************************************************/
 
 typedef union ii_iidsr_u {
-	u64 ii_iidsr_regval;
-	struct {
-		u64 i_level:8;
-		u64 i_pi_id:1;
-		u64 i_node:11;
-		u64 i_rsvd_3:4;
-		u64 i_enable:1;
-		u64 i_rsvd_2:3;
-		u64 i_int_sent:2;
-		u64 i_rsvd_1:2;
-		u64 i_pi0_forward_int:1;
-		u64 i_pi1_forward_int:1;
-		u64 i_rsvd:30;
-	} ii_iidsr_fld_s;
+    u64 ii_iidsr_regval;
+    struct {
+        u64 i_level:8;
+        u64 i_pi_id:1;
+        u64 i_node:11;
+        u64 i_rsvd_3:4;
+        u64 i_enable:1;
+        u64 i_rsvd_2:3;
+        u64 i_int_sent:2;
+        u64 i_rsvd_1:2;
+        u64 i_pi0_forward_int:1;
+        u64 i_pi1_forward_int:1;
+        u64 i_rsvd:30;
+    } ii_iidsr_fld_s;
 } ii_iidsr_u_t;
 
 /************************************************************************
@@ -492,14 +492,14 @@ typedef union ii_iidsr_u {
  ************************************************************************/
 
 typedef union ii_igfx0_u {
-	u64 ii_igfx0_regval;
-	struct {
-		u64 i_w_num:4;
-		u64 i_pi_id:1;
-		u64 i_n_num:12;
-		u64 i_p_num:1;
-		u64 i_rsvd:46;
-	} ii_igfx0_fld_s;
+    u64 ii_igfx0_regval;
+    struct {
+        u64 i_w_num:4;
+        u64 i_pi_id:1;
+        u64 i_n_num:12;
+        u64 i_p_num:1;
+        u64 i_rsvd:46;
+    } ii_igfx0_fld_s;
 } ii_igfx0_u_t;
 
 /************************************************************************
@@ -514,14 +514,14 @@ typedef union ii_igfx0_u {
  ************************************************************************/
 
 typedef union ii_igfx1_u {
-	u64 ii_igfx1_regval;
-	struct {
-		u64 i_w_num:4;
-		u64 i_pi_id:1;
-		u64 i_n_num:12;
-		u64 i_p_num:1;
-		u64 i_rsvd:46;
-	} ii_igfx1_fld_s;
+    u64 ii_igfx1_regval;
+    struct {
+        u64 i_w_num:4;
+        u64 i_pi_id:1;
+        u64 i_n_num:12;
+        u64 i_p_num:1;
+        u64 i_rsvd:46;
+    } ii_igfx1_fld_s;
 } ii_igfx1_u_t;
 
 /************************************************************************
@@ -532,10 +532,10 @@ typedef union ii_igfx1_u {
  ************************************************************************/
 
 typedef union ii_iscr0_u {
-	u64 ii_iscr0_regval;
-	struct {
-		u64 i_scratch:64;
-	} ii_iscr0_fld_s;
+    u64 ii_iscr0_regval;
+    struct {
+        u64 i_scratch:64;
+    } ii_iscr0_fld_s;
 } ii_iscr0_u_t;
 
 /************************************************************************
@@ -546,10 +546,10 @@ typedef union ii_iscr0_u {
  ************************************************************************/
 
 typedef union ii_iscr1_u {
-	u64 ii_iscr1_regval;
-	struct {
-		u64 i_scratch:64;
-	} ii_iscr1_fld_s;
+    u64 ii_iscr1_regval;
+    struct {
+        u64 i_scratch:64;
+    } ii_iscr1_fld_s;
 } ii_iscr1_u_t;
 
 /************************************************************************
@@ -563,7 +563,7 @@ typedef union ii_iscr1_u {
  * a Crosstalk packet. The 5 bits of OFFSET are concatenated with       *
  * SysAD[28:0] to form Crosstalk[33:0]. The upper Crosstalk[47:34]      *
  * are padded with zeros. Although the maximum Crosstalk space          *
- * addressable by the SHub is thus the lower 16 GBytes per widget       * 
+ * addressable by the SHub is thus the lower 16 GBytes per widget       *
  * (M-mode), however only <SUP >7</SUP>/<SUB >32nds</SUB> of this       *
  * space can be accessed.                                               *
  * For the N-mode (256 nodes, 4 GBytes/node), SysAD[30:28] (Big         *
@@ -580,14 +580,14 @@ typedef union ii_iscr1_u {
  ************************************************************************/
 
 typedef union ii_itte1_u {
-	u64 ii_itte1_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte1_fld_s;
+    u64 ii_itte1_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte1_fld_s;
 } ii_itte1_u_t;
 
 /************************************************************************
@@ -618,14 +618,14 @@ typedef union ii_itte1_u {
  ************************************************************************/
 
 typedef union ii_itte2_u {
-	u64 ii_itte2_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte2_fld_s;
+    u64 ii_itte2_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte2_fld_s;
 } ii_itte2_u_t;
 
 /************************************************************************
@@ -656,14 +656,14 @@ typedef union ii_itte2_u {
  ************************************************************************/
 
 typedef union ii_itte3_u {
-	u64 ii_itte3_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte3_fld_s;
+    u64 ii_itte3_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte3_fld_s;
 } ii_itte3_u_t;
 
 /************************************************************************
@@ -694,14 +694,14 @@ typedef union ii_itte3_u {
  ************************************************************************/
 
 typedef union ii_itte4_u {
-	u64 ii_itte4_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte4_fld_s;
+    u64 ii_itte4_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte4_fld_s;
 } ii_itte4_u_t;
 
 /************************************************************************
@@ -732,14 +732,14 @@ typedef union ii_itte4_u {
  ************************************************************************/
 
 typedef union ii_itte5_u {
-	u64 ii_itte5_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte5_fld_s;
+    u64 ii_itte5_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte5_fld_s;
 } ii_itte5_u_t;
 
 /************************************************************************
@@ -770,14 +770,14 @@ typedef union ii_itte5_u {
  ************************************************************************/
 
 typedef union ii_itte6_u {
-	u64 ii_itte6_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte6_fld_s;
+    u64 ii_itte6_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte6_fld_s;
 } ii_itte6_u_t;
 
 /************************************************************************
@@ -808,14 +808,14 @@ typedef union ii_itte6_u {
  ************************************************************************/
 
 typedef union ii_itte7_u {
-	u64 ii_itte7_regval;
-	struct {
-		u64 i_offset:5;
-		u64 i_rsvd_1:3;
-		u64 i_w_num:4;
-		u64 i_iosp:1;
-		u64 i_rsvd:51;
-	} ii_itte7_fld_s;
+    u64 ii_itte7_regval;
+    struct {
+        u64 i_offset:5;
+        u64 i_rsvd_1:3;
+        u64 i_w_num:4;
+        u64 i_iosp:1;
+        u64 i_rsvd:51;
+    } ii_itte7_fld_s;
 } ii_itte7_u_t;
 
 /************************************************************************
@@ -843,23 +843,23 @@ typedef union ii_itte7_u {
  ************************************************************************/
 
 typedef union ii_iprb0_u {
-	u64 ii_iprb0_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprb0_fld_s;
+    u64 ii_iprb0_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprb0_fld_s;
 } ii_iprb0_u_t;
 
 /************************************************************************
@@ -887,23 +887,23 @@ typedef union ii_iprb0_u {
  ************************************************************************/
 
 typedef union ii_iprb8_u {
-	u64 ii_iprb8_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprb8_fld_s;
+    u64 ii_iprb8_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprb8_fld_s;
 } ii_iprb8_u_t;
 
 /************************************************************************
@@ -931,23 +931,23 @@ typedef union ii_iprb8_u {
  ************************************************************************/
 
 typedef union ii_iprb9_u {
-	u64 ii_iprb9_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprb9_fld_s;
+    u64 ii_iprb9_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprb9_fld_s;
 } ii_iprb9_u_t;
 
 /************************************************************************
@@ -975,23 +975,23 @@ typedef union ii_iprb9_u {
  ************************************************************************/
 
 typedef union ii_iprba_u {
-	u64 ii_iprba_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprba_fld_s;
+    u64 ii_iprba_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprba_fld_s;
 } ii_iprba_u_t;
 
 /************************************************************************
@@ -1019,23 +1019,23 @@ typedef union ii_iprba_u {
  ************************************************************************/
 
 typedef union ii_iprbb_u {
-	u64 ii_iprbb_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprbb_fld_s;
+    u64 ii_iprbb_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprbb_fld_s;
 } ii_iprbb_u_t;
 
 /************************************************************************
@@ -1063,23 +1063,23 @@ typedef union ii_iprbb_u {
  ************************************************************************/
 
 typedef union ii_iprbc_u {
-	u64 ii_iprbc_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprbc_fld_s;
+    u64 ii_iprbc_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprbc_fld_s;
 } ii_iprbc_u_t;
 
 /************************************************************************
@@ -1107,23 +1107,23 @@ typedef union ii_iprbc_u {
  ************************************************************************/
 
 typedef union ii_iprbd_u {
-	u64 ii_iprbd_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprbd_fld_s;
+    u64 ii_iprbd_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprbd_fld_s;
 } ii_iprbd_u_t;
 
 /************************************************************************
@@ -1151,23 +1151,23 @@ typedef union ii_iprbd_u {
  ************************************************************************/
 
 typedef union ii_iprbe_u {
-	u64 ii_iprbe_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprbe_fld_s;
+    u64 ii_iprbe_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprbe_fld_s;
 } ii_iprbe_u_t;
 
 /************************************************************************
@@ -1195,23 +1195,23 @@ typedef union ii_iprbe_u {
  ************************************************************************/
 
 typedef union ii_iprbf_u {
-	u64 ii_iprbf_regval;
-	struct {
-		u64 i_c:8;
-		u64 i_na:14;
-		u64 i_rsvd_2:2;
-		u64 i_nb:14;
-		u64 i_rsvd_1:2;
-		u64 i_m:2;
-		u64 i_f:1;
-		u64 i_of_cnt:5;
-		u64 i_error:1;
-		u64 i_rd_to:1;
-		u64 i_spur_wr:1;
-		u64 i_spur_rd:1;
-		u64 i_rsvd:11;
-		u64 i_mult_err:1;
-	} ii_iprbe_fld_s;
+    u64 ii_iprbf_regval;
+    struct {
+        u64 i_c:8;
+        u64 i_na:14;
+        u64 i_rsvd_2:2;
+        u64 i_nb:14;
+        u64 i_rsvd_1:2;
+        u64 i_m:2;
+        u64 i_f:1;
+        u64 i_of_cnt:5;
+        u64 i_error:1;
+        u64 i_rd_to:1;
+        u64 i_spur_wr:1;
+        u64 i_spur_rd:1;
+        u64 i_rsvd:11;
+        u64 i_mult_err:1;
+    } ii_iprbe_fld_s;
 } ii_iprbf_u_t;
 
 /************************************************************************
@@ -1232,11 +1232,11 @@ typedef union ii_iprbf_u {
  ************************************************************************/
 
 typedef union ii_ixcc_u {
-	u64 ii_ixcc_regval;
-	struct {
-		u64 i_time_out:26;
-		u64 i_rsvd:38;
-	} ii_ixcc_fld_s;
+    u64 ii_ixcc_regval;
+    struct {
+        u64 i_time_out:26;
+        u64 i_rsvd:38;
+    } ii_ixcc_fld_s;
 } ii_ixcc_u_t;
 
 /************************************************************************
@@ -1256,17 +1256,17 @@ typedef union ii_ixcc_u {
  ************************************************************************/
 
 typedef union ii_imem_u {
-	u64 ii_imem_regval;
-	struct {
-		u64 i_w0_esd:1;
-		u64 i_rsvd_3:3;
-		u64 i_b0_esd:1;
-		u64 i_rsvd_2:3;
-		u64 i_b1_esd:1;
-		u64 i_rsvd_1:3;
-		u64 i_clr_precise:1;
-		u64 i_rsvd:51;
-	} ii_imem_fld_s;
+    u64 ii_imem_regval;
+    struct {
+        u64 i_w0_esd:1;
+        u64 i_rsvd_3:3;
+        u64 i_b0_esd:1;
+        u64 i_rsvd_2:3;
+        u64 i_b1_esd:1;
+        u64 i_rsvd_1:3;
+        u64 i_clr_precise:1;
+        u64 i_rsvd:51;
+    } ii_imem_fld_s;
 } ii_imem_u_t;
 
 /************************************************************************
@@ -1294,14 +1294,14 @@ typedef union ii_imem_u {
  ************************************************************************/
 
 typedef union ii_ixtt_u {
-	u64 ii_ixtt_regval;
-	struct {
-		u64 i_tail_to:26;
-		u64 i_rsvd_1:6;
-		u64 i_rrsp_ps:23;
-		u64 i_rrsp_to:5;
-		u64 i_rsvd:4;
-	} ii_ixtt_fld_s;
+    u64 ii_ixtt_regval;
+    struct {
+        u64 i_tail_to:26;
+        u64 i_rsvd_1:6;
+        u64 i_rrsp_ps:23;
+        u64 i_rrsp_to:5;
+        u64 i_rsvd:4;
+    } ii_ixtt_fld_s;
 } ii_ixtt_u_t;
 
 /************************************************************************
@@ -1316,38 +1316,38 @@ typedef union ii_ixtt_u {
  ************************************************************************/
 
 typedef union ii_ieclr_u {
-	u64 ii_ieclr_regval;
-	struct {
-		u64 i_e_prb_0:1;
-		u64 i_rsvd:7;
-		u64 i_e_prb_8:1;
-		u64 i_e_prb_9:1;
-		u64 i_e_prb_a:1;
-		u64 i_e_prb_b:1;
-		u64 i_e_prb_c:1;
-		u64 i_e_prb_d:1;
-		u64 i_e_prb_e:1;
-		u64 i_e_prb_f:1;
-		u64 i_e_crazy:1;
-		u64 i_e_bte_0:1;
-		u64 i_e_bte_1:1;
-		u64 i_reserved_1:10;
-		u64 i_spur_rd_hdr:1;
-		u64 i_cam_intr_to:1;
-		u64 i_cam_overflow:1;
-		u64 i_cam_read_miss:1;
-		u64 i_ioq_rep_underflow:1;
-		u64 i_ioq_req_underflow:1;
-		u64 i_ioq_rep_overflow:1;
-		u64 i_ioq_req_overflow:1;
-		u64 i_iiq_rep_overflow:1;
-		u64 i_iiq_req_overflow:1;
-		u64 i_ii_xn_rep_cred_overflow:1;
-		u64 i_ii_xn_req_cred_overflow:1;
-		u64 i_ii_xn_invalid_cmd:1;
-		u64 i_xn_ii_invalid_cmd:1;
-		u64 i_reserved_2:21;
-	} ii_ieclr_fld_s;
+    u64 ii_ieclr_regval;
+    struct {
+        u64 i_e_prb_0:1;
+        u64 i_rsvd:7;
+        u64 i_e_prb_8:1;
+        u64 i_e_prb_9:1;
+        u64 i_e_prb_a:1;
+        u64 i_e_prb_b:1;
+        u64 i_e_prb_c:1;
+        u64 i_e_prb_d:1;
+        u64 i_e_prb_e:1;
+        u64 i_e_prb_f:1;
+        u64 i_e_crazy:1;
+        u64 i_e_bte_0:1;
+        u64 i_e_bte_1:1;
+        u64 i_reserved_1:10;
+        u64 i_spur_rd_hdr:1;
+        u64 i_cam_intr_to:1;
+        u64 i_cam_overflow:1;
+        u64 i_cam_read_miss:1;
+        u64 i_ioq_rep_underflow:1;
+        u64 i_ioq_req_underflow:1;
+        u64 i_ioq_rep_overflow:1;
+        u64 i_ioq_req_overflow:1;
+        u64 i_iiq_rep_overflow:1;
+        u64 i_iiq_req_overflow:1;
+        u64 i_ii_xn_rep_cred_overflow:1;
+        u64 i_ii_xn_req_cred_overflow:1;
+        u64 i_ii_xn_invalid_cmd:1;
+        u64 i_xn_ii_invalid_cmd:1;
+        u64 i_reserved_2:21;
+    } ii_ieclr_fld_s;
 } ii_ieclr_u_t;
 
 /************************************************************************
@@ -1360,13 +1360,13 @@ typedef union ii_ieclr_u {
  ************************************************************************/
 
 typedef union ii_ibcr_u {
-	u64 ii_ibcr_regval;
-	struct {
-		u64 i_count:4;
-		u64 i_rsvd_1:4;
-		u64 i_soft_reset:1;
-		u64 i_rsvd:55;
-	} ii_ibcr_fld_s;
+    u64 ii_ibcr_regval;
+    struct {
+        u64 i_count:4;
+        u64 i_rsvd_1:4;
+        u64 i_soft_reset:1;
+        u64 i_rsvd:55;
+    } ii_ibcr_fld_s;
 } ii_ibcr_u_t;
 
 /************************************************************************
@@ -1399,23 +1399,23 @@ typedef union ii_ibcr_u {
  ************************************************************************/
 
 typedef union ii_ixsm_u {
-	u64 ii_ixsm_regval;
-	struct {
-		u64 i_byte_en:32;
-		u64 i_reserved:1;
-		u64 i_tag:3;
-		u64 i_alt_pactyp:4;
-		u64 i_bo:1;
-		u64 i_error:1;
-		u64 i_vbpm:1;
-		u64 i_gbr:1;
-		u64 i_ds:2;
-		u64 i_ct:1;
-		u64 i_tnum:5;
-		u64 i_pactyp:4;
-		u64 i_sidn:4;
-		u64 i_didn:4;
-	} ii_ixsm_fld_s;
+    u64 ii_ixsm_regval;
+    struct {
+        u64 i_byte_en:32;
+        u64 i_reserved:1;
+        u64 i_tag:3;
+        u64 i_alt_pactyp:4;
+        u64 i_bo:1;
+        u64 i_error:1;
+        u64 i_vbpm:1;
+        u64 i_gbr:1;
+        u64 i_ds:2;
+        u64 i_ct:1;
+        u64 i_tnum:5;
+        u64 i_pactyp:4;
+        u64 i_sidn:4;
+        u64 i_didn:4;
+    } ii_ixsm_fld_s;
 } ii_ixsm_u_t;
 
 /************************************************************************
@@ -1426,12 +1426,12 @@ typedef union ii_ixsm_u {
  ************************************************************************/
 
 typedef union ii_ixss_u {
-	u64 ii_ixss_regval;
-	struct {
-		u64 i_sideband:8;
-		u64 i_rsvd:55;
-		u64 i_valid:1;
-	} ii_ixss_fld_s;
+    u64 ii_ixss_regval;
+    struct {
+        u64 i_sideband:8;
+        u64 i_rsvd:55;
+        u64 i_valid:1;
+    } ii_ixss_fld_s;
 } ii_ixss_u_t;
 
 /************************************************************************
@@ -1447,18 +1447,18 @@ typedef union ii_ixss_u {
  ************************************************************************/
 
 typedef union ii_ilct_u {
-	u64 ii_ilct_regval;
-	struct {
-		u64 i_test_seed:20;
-		u64 i_test_mask:8;
-		u64 i_test_data:20;
-		u64 i_test_valid:1;
-		u64 i_test_cberr:1;
-		u64 i_test_flit:3;
-		u64 i_test_clear:1;
-		u64 i_test_err_capture:1;
-		u64 i_rsvd:9;
-	} ii_ilct_fld_s;
+    u64 ii_ilct_regval;
+    struct {
+        u64 i_test_seed:20;
+        u64 i_test_mask:8;
+        u64 i_test_data:20;
+        u64 i_test_valid:1;
+        u64 i_test_cberr:1;
+        u64 i_test_flit:3;
+        u64 i_test_clear:1;
+        u64 i_test_err_capture:1;
+        u64 i_rsvd:9;
+    } ii_ilct_fld_s;
 } ii_ilct_u_t;
 
 /************************************************************************
@@ -1482,21 +1482,21 @@ typedef union ii_ilct_u {
  ************************************************************************/
 
 typedef union ii_iieph1_u {
-	u64 ii_iieph1_regval;
-	struct {
-		u64 i_command:7;
-		u64 i_rsvd_5:1;
-		u64 i_suppl:14;
-		u64 i_rsvd_4:1;
-		u64 i_source:14;
-		u64 i_rsvd_3:1;
-		u64 i_err_type:4;
-		u64 i_rsvd_2:4;
-		u64 i_overrun:1;
-		u64 i_rsvd_1:3;
-		u64 i_valid:1;
-		u64 i_rsvd:13;
-	} ii_iieph1_fld_s;
+    u64 ii_iieph1_regval;
+    struct {
+        u64 i_command:7;
+        u64 i_rsvd_5:1;
+        u64 i_suppl:14;
+        u64 i_rsvd_4:1;
+        u64 i_source:14;
+        u64 i_rsvd_3:1;
+        u64 i_err_type:4;
+        u64 i_rsvd_2:4;
+        u64 i_overrun:1;
+        u64 i_rsvd_1:3;
+        u64 i_valid:1;
+        u64 i_rsvd:13;
+    } ii_iieph1_fld_s;
 } ii_iieph1_u_t;
 
 /************************************************************************
@@ -1511,14 +1511,14 @@ typedef union ii_iieph1_u {
  ************************************************************************/
 
 typedef union ii_iieph2_u {
-	u64 ii_iieph2_regval;
-	struct {
-		u64 i_rsvd_0:3;
-		u64 i_address:47;
-		u64 i_rsvd_1:10;
-		u64 i_tail:1;
-		u64 i_rsvd:3;
-	} ii_iieph2_fld_s;
+    u64 ii_iieph2_regval;
+    struct {
+        u64 i_rsvd_0:3;
+        u64 i_address:47;
+        u64 i_rsvd_1:10;
+        u64 i_tail:1;
+        u64 i_rsvd:3;
+    } ii_iieph2_fld_s;
 } ii_iieph2_u_t;
 
 /******************************/
@@ -1532,10 +1532,10 @@ typedef union ii_iieph2_u {
  ************************************************************************/
 
 typedef union ii_islapr_u {
-	u64 ii_islapr_regval;
-	struct {
-		u64 i_region:64;
-	} ii_islapr_fld_s;
+    u64 ii_islapr_regval;
+    struct {
+        u64 i_region:64;
+    } ii_islapr_fld_s;
 } ii_islapr_u_t;
 
 /************************************************************************
@@ -1547,104 +1547,104 @@ typedef union ii_islapr_u {
  ************************************************************************/
 
 typedef union ii_islapo_u {
-	u64 ii_islapo_regval;
-	struct {
-		u64 i_io_sbx_ovrride:56;
-		u64 i_rsvd:8;
-	} ii_islapo_fld_s;
+    u64 ii_islapo_regval;
+    struct {
+        u64 i_io_sbx_ovrride:56;
+        u64 i_rsvd:8;
+    } ii_islapo_fld_s;
 } ii_islapo_u_t;
 
 /************************************************************************
  *									*
  *  Determines how long the wrapper will wait aftr an interrupt is	*
  * initially issued from the II before it times out the outstanding	*
- * interrupt and drops it from the interrupt queue.			* 
+ * interrupt and drops it from the interrupt queue.			*
  *									*
  ************************************************************************/
 
 typedef union ii_iwi_u {
-	u64 ii_iwi_regval;
-	struct {
-		u64 i_prescale:24;
-		u64 i_rsvd:8;
-		u64 i_timeout:8;
-		u64 i_rsvd1:8;
-		u64 i_intrpt_retry_period:8;
-		u64 i_rsvd2:8;
-	} ii_iwi_fld_s;
+    u64 ii_iwi_regval;
+    struct {
+        u64 i_prescale:24;
+        u64 i_rsvd:8;
+        u64 i_timeout:8;
+        u64 i_rsvd1:8;
+        u64 i_intrpt_retry_period:8;
+        u64 i_rsvd2:8;
+    } ii_iwi_fld_s;
 } ii_iwi_u_t;
 
 /************************************************************************
  *									*
  *  Log errors which have occurred in the II wrapper. The errors are	*
- * cleared by writing to the IECLR register.				* 
+ * cleared by writing to the IECLR register.				*
  *									*
  ************************************************************************/
 
 typedef union ii_iwel_u {
-	u64 ii_iwel_regval;
-	struct {
-		u64 i_intr_timed_out:1;
-		u64 i_rsvd:7;
-		u64 i_cam_overflow:1;
-		u64 i_cam_read_miss:1;
-		u64 i_rsvd1:2;
-		u64 i_ioq_rep_underflow:1;
-		u64 i_ioq_req_underflow:1;
-		u64 i_ioq_rep_overflow:1;
-		u64 i_ioq_req_overflow:1;
-		u64 i_iiq_rep_overflow:1;
-		u64 i_iiq_req_overflow:1;
-		u64 i_rsvd2:6;
-		u64 i_ii_xn_rep_cred_over_under:1;
-		u64 i_ii_xn_req_cred_over_under:1;
-		u64 i_rsvd3:6;
-		u64 i_ii_xn_invalid_cmd:1;
-		u64 i_xn_ii_invalid_cmd:1;
-		u64 i_rsvd4:30;
-	} ii_iwel_fld_s;
+    u64 ii_iwel_regval;
+    struct {
+        u64 i_intr_timed_out:1;
+        u64 i_rsvd:7;
+        u64 i_cam_overflow:1;
+        u64 i_cam_read_miss:1;
+        u64 i_rsvd1:2;
+        u64 i_ioq_rep_underflow:1;
+        u64 i_ioq_req_underflow:1;
+        u64 i_ioq_rep_overflow:1;
+        u64 i_ioq_req_overflow:1;
+        u64 i_iiq_rep_overflow:1;
+        u64 i_iiq_req_overflow:1;
+        u64 i_rsvd2:6;
+        u64 i_ii_xn_rep_cred_over_under:1;
+        u64 i_ii_xn_req_cred_over_under:1;
+        u64 i_rsvd3:6;
+        u64 i_ii_xn_invalid_cmd:1;
+        u64 i_xn_ii_invalid_cmd:1;
+        u64 i_rsvd4:30;
+    } ii_iwel_fld_s;
 } ii_iwel_u_t;
 
 /************************************************************************
  *									*
- *  Controls the II wrapper.						* 
+ *  Controls the II wrapper.						*
  *									*
  ************************************************************************/
 
 typedef union ii_iwc_u {
-	u64 ii_iwc_regval;
-	struct {
-		u64 i_dma_byte_swap:1;
-		u64 i_rsvd:3;
-		u64 i_cam_read_lines_reset:1;
-		u64 i_rsvd1:3;
-		u64 i_ii_xn_cred_over_under_log:1;
-		u64 i_rsvd2:19;
-		u64 i_xn_rep_iq_depth:5;
-		u64 i_rsvd3:3;
-		u64 i_xn_req_iq_depth:5;
-		u64 i_rsvd4:3;
-		u64 i_iiq_depth:6;
-		u64 i_rsvd5:12;
-		u64 i_force_rep_cred:1;
-		u64 i_force_req_cred:1;
-	} ii_iwc_fld_s;
+    u64 ii_iwc_regval;
+    struct {
+        u64 i_dma_byte_swap:1;
+        u64 i_rsvd:3;
+        u64 i_cam_read_lines_reset:1;
+        u64 i_rsvd1:3;
+        u64 i_ii_xn_cred_over_under_log:1;
+        u64 i_rsvd2:19;
+        u64 i_xn_rep_iq_depth:5;
+        u64 i_rsvd3:3;
+        u64 i_xn_req_iq_depth:5;
+        u64 i_rsvd4:3;
+        u64 i_iiq_depth:6;
+        u64 i_rsvd5:12;
+        u64 i_force_rep_cred:1;
+        u64 i_force_req_cred:1;
+    } ii_iwc_fld_s;
 } ii_iwc_u_t;
 
 /************************************************************************
  *									*
- *  Status in the II wrapper.						* 
+ *  Status in the II wrapper.						*
  *									*
  ************************************************************************/
 
 typedef union ii_iws_u {
-	u64 ii_iws_regval;
-	struct {
-		u64 i_xn_rep_iq_credits:5;
-		u64 i_rsvd:3;
-		u64 i_xn_req_iq_credits:5;
-		u64 i_rsvd1:51;
-	} ii_iws_fld_s;
+    u64 ii_iws_regval;
+    struct {
+        u64 i_xn_rep_iq_credits:5;
+        u64 i_rsvd:3;
+        u64 i_xn_req_iq_credits:5;
+        u64 i_rsvd1:51;
+    } ii_iws_fld_s;
 } ii_iws_u_t;
 
 /************************************************************************
@@ -1654,27 +1654,27 @@ typedef union ii_iws_u {
  ************************************************************************/
 
 typedef union ii_iweim_u {
-	u64 ii_iweim_regval;
-	struct {
-		u64 i_intr_timed_out:1;
-		u64 i_rsvd:7;
-		u64 i_cam_overflow:1;
-		u64 i_cam_read_miss:1;
-		u64 i_rsvd1:2;
-		u64 i_ioq_rep_underflow:1;
-		u64 i_ioq_req_underflow:1;
-		u64 i_ioq_rep_overflow:1;
-		u64 i_ioq_req_overflow:1;
-		u64 i_iiq_rep_overflow:1;
-		u64 i_iiq_req_overflow:1;
-		u64 i_rsvd2:6;
-		u64 i_ii_xn_rep_cred_overflow:1;
-		u64 i_ii_xn_req_cred_overflow:1;
-		u64 i_rsvd3:6;
-		u64 i_ii_xn_invalid_cmd:1;
-		u64 i_xn_ii_invalid_cmd:1;
-		u64 i_rsvd4:30;
-	} ii_iweim_fld_s;
+    u64 ii_iweim_regval;
+    struct {
+        u64 i_intr_timed_out:1;
+        u64 i_rsvd:7;
+        u64 i_cam_overflow:1;
+        u64 i_cam_read_miss:1;
+        u64 i_rsvd1:2;
+        u64 i_ioq_rep_underflow:1;
+        u64 i_ioq_req_underflow:1;
+        u64 i_ioq_rep_overflow:1;
+        u64 i_ioq_req_overflow:1;
+        u64 i_iiq_rep_overflow:1;
+        u64 i_iiq_req_overflow:1;
+        u64 i_rsvd2:6;
+        u64 i_ii_xn_rep_cred_overflow:1;
+        u64 i_ii_xn_req_cred_overflow:1;
+        u64 i_rsvd3:6;
+        u64 i_ii_xn_invalid_cmd:1;
+        u64 i_xn_ii_invalid_cmd:1;
+        u64 i_rsvd4:30;
+    } ii_iweim_fld_s;
 } ii_iweim_u_t;
 
 /************************************************************************
@@ -1688,14 +1688,14 @@ typedef union ii_iweim_u {
  ************************************************************************/
 
 typedef union ii_ipca_u {
-	u64 ii_ipca_regval;
-	struct {
-		u64 i_wid:4;
-		u64 i_adjust:1;
-		u64 i_rsvd_1:3;
-		u64 i_field:2;
-		u64 i_rsvd:54;
-	} ii_ipca_fld_s;
+    u64 ii_ipca_regval;
+    struct {
+        u64 i_wid:4;
+        u64 i_adjust:1;
+        u64 i_rsvd_1:3;
+        u64 i_field:2;
+        u64 i_rsvd:54;
+    } ii_ipca_fld_s;
 } ii_ipca_u_t;
 
 /************************************************************************
@@ -1709,13 +1709,13 @@ typedef union ii_ipca_u {
  ************************************************************************/
 
 typedef union ii_iprte0a_u {
-	u64 ii_iprte0a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte0a_fld_s;
+    u64 ii_iprte0a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte0a_fld_s;
 } ii_iprte0a_u_t;
 
 /************************************************************************
@@ -1729,13 +1729,13 @@ typedef union ii_iprte0a_u {
  ************************************************************************/
 
 typedef union ii_iprte1a_u {
-	u64 ii_iprte1a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte1a_fld_s;
+    u64 ii_iprte1a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte1a_fld_s;
 } ii_iprte1a_u_t;
 
 /************************************************************************
@@ -1749,13 +1749,13 @@ typedef union ii_iprte1a_u {
  ************************************************************************/
 
 typedef union ii_iprte2a_u {
-	u64 ii_iprte2a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte2a_fld_s;
+    u64 ii_iprte2a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte2a_fld_s;
 } ii_iprte2a_u_t;
 
 /************************************************************************
@@ -1769,13 +1769,13 @@ typedef union ii_iprte2a_u {
  ************************************************************************/
 
 typedef union ii_iprte3a_u {
-	u64 ii_iprte3a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte3a_fld_s;
+    u64 ii_iprte3a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte3a_fld_s;
 } ii_iprte3a_u_t;
 
 /************************************************************************
@@ -1789,13 +1789,13 @@ typedef union ii_iprte3a_u {
  ************************************************************************/
 
 typedef union ii_iprte4a_u {
-	u64 ii_iprte4a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte4a_fld_s;
+    u64 ii_iprte4a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte4a_fld_s;
 } ii_iprte4a_u_t;
 
 /************************************************************************
@@ -1809,13 +1809,13 @@ typedef union ii_iprte4a_u {
  ************************************************************************/
 
 typedef union ii_iprte5a_u {
-	u64 ii_iprte5a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte5a_fld_s;
+    u64 ii_iprte5a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte5a_fld_s;
 } ii_iprte5a_u_t;
 
 /************************************************************************
@@ -1829,13 +1829,13 @@ typedef union ii_iprte5a_u {
  ************************************************************************/
 
 typedef union ii_iprte6a_u {
-	u64 ii_iprte6a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprte6a_fld_s;
+    u64 ii_iprte6a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprte6a_fld_s;
 } ii_iprte6a_u_t;
 
 /************************************************************************
@@ -1849,13 +1849,13 @@ typedef union ii_iprte6a_u {
  ************************************************************************/
 
 typedef union ii_iprte7a_u {
-	u64 ii_iprte7a_regval;
-	struct {
-		u64 i_rsvd_1:54;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} ii_iprtea7_fld_s;
+    u64 ii_iprte7a_regval;
+    struct {
+        u64 i_rsvd_1:54;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } ii_iprtea7_fld_s;
 } ii_iprte7a_u_t;
 
 /************************************************************************
@@ -1869,13 +1869,13 @@ typedef union ii_iprte7a_u {
  ************************************************************************/
 
 typedef union ii_iprte0b_u {
-	u64 ii_iprte0b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte0b_fld_s;
+    u64 ii_iprte0b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte0b_fld_s;
 } ii_iprte0b_u_t;
 
 /************************************************************************
@@ -1889,13 +1889,13 @@ typedef union ii_iprte0b_u {
  ************************************************************************/
 
 typedef union ii_iprte1b_u {
-	u64 ii_iprte1b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte1b_fld_s;
+    u64 ii_iprte1b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte1b_fld_s;
 } ii_iprte1b_u_t;
 
 /************************************************************************
@@ -1909,13 +1909,13 @@ typedef union ii_iprte1b_u {
  ************************************************************************/
 
 typedef union ii_iprte2b_u {
-	u64 ii_iprte2b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte2b_fld_s;
+    u64 ii_iprte2b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte2b_fld_s;
 } ii_iprte2b_u_t;
 
 /************************************************************************
@@ -1929,13 +1929,13 @@ typedef union ii_iprte2b_u {
  ************************************************************************/
 
 typedef union ii_iprte3b_u {
-	u64 ii_iprte3b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte3b_fld_s;
+    u64 ii_iprte3b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte3b_fld_s;
 } ii_iprte3b_u_t;
 
 /************************************************************************
@@ -1949,13 +1949,13 @@ typedef union ii_iprte3b_u {
  ************************************************************************/
 
 typedef union ii_iprte4b_u {
-	u64 ii_iprte4b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte4b_fld_s;
+    u64 ii_iprte4b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte4b_fld_s;
 } ii_iprte4b_u_t;
 
 /************************************************************************
@@ -1969,13 +1969,13 @@ typedef union ii_iprte4b_u {
  ************************************************************************/
 
 typedef union ii_iprte5b_u {
-	u64 ii_iprte5b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte5b_fld_s;
+    u64 ii_iprte5b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte5b_fld_s;
 } ii_iprte5b_u_t;
 
 /************************************************************************
@@ -1989,14 +1989,14 @@ typedef union ii_iprte5b_u {
  ************************************************************************/
 
 typedef union ii_iprte6b_u {
-	u64 ii_iprte6b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
+    u64 ii_iprte6b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
 
-	} ii_iprte6b_fld_s;
+    } ii_iprte6b_fld_s;
 } ii_iprte6b_u_t;
 
 /************************************************************************
@@ -2010,13 +2010,13 @@ typedef union ii_iprte6b_u {
  ************************************************************************/
 
 typedef union ii_iprte7b_u {
-	u64 ii_iprte7b_regval;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_address:47;
-		u64 i_init:3;
-		u64 i_source:11;
-	} ii_iprte7b_fld_s;
+    u64 ii_iprte7b_regval;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_address:47;
+        u64 i_init:3;
+        u64 i_source:11;
+    } ii_iprte7b_fld_s;
 } ii_iprte7b_u_t;
 
 /************************************************************************
@@ -2038,14 +2038,14 @@ typedef union ii_iprte7b_u {
  ************************************************************************/
 
 typedef union ii_ipdr_u {
-	u64 ii_ipdr_regval;
-	struct {
-		u64 i_te:3;
-		u64 i_rsvd_1:1;
-		u64 i_pnd:1;
-		u64 i_init_rpcnt:1;
-		u64 i_rsvd:58;
-	} ii_ipdr_fld_s;
+    u64 ii_ipdr_regval;
+    struct {
+        u64 i_te:3;
+        u64 i_rsvd_1:1;
+        u64 i_pnd:1;
+        u64 i_init_rpcnt:1;
+        u64 i_rsvd:58;
+    } ii_ipdr_fld_s;
 } ii_ipdr_u_t;
 
 /************************************************************************
@@ -2066,12 +2066,12 @@ typedef union ii_ipdr_u {
  ************************************************************************/
 
 typedef union ii_icdr_u {
-	u64 ii_icdr_regval;
-	struct {
-		u64 i_crb_num:4;
-		u64 i_pnd:1;
-		u64 i_rsvd:59;
-	} ii_icdr_fld_s;
+    u64 ii_icdr_regval;
+    struct {
+        u64 i_crb_num:4;
+        u64 i_pnd:1;
+        u64 i_rsvd:59;
+    } ii_icdr_fld_s;
 } ii_icdr_u_t;
 
 /************************************************************************
@@ -2092,14 +2092,14 @@ typedef union ii_icdr_u {
  ************************************************************************/
 
 typedef union ii_ifdr_u {
-	u64 ii_ifdr_regval;
-	struct {
-		u64 i_ioq_max_rq:7;
-		u64 i_set_ioq_rq:1;
-		u64 i_ioq_max_rp:7;
-		u64 i_set_ioq_rp:1;
-		u64 i_rsvd:48;
-	} ii_ifdr_fld_s;
+    u64 ii_ifdr_regval;
+    struct {
+        u64 i_ioq_max_rq:7;
+        u64 i_set_ioq_rq:1;
+        u64 i_ioq_max_rp:7;
+        u64 i_set_ioq_rp:1;
+        u64 i_rsvd:48;
+    } ii_ifdr_fld_s;
 } ii_ifdr_u_t;
 
 /************************************************************************
@@ -2114,13 +2114,13 @@ typedef union ii_ifdr_u {
  ************************************************************************/
 
 typedef union ii_iiap_u {
-	u64 ii_iiap_regval;
-	struct {
-		u64 i_rq_mls:6;
-		u64 i_rsvd_1:2;
-		u64 i_rp_mls:6;
-		u64 i_rsvd:50;
-	} ii_iiap_fld_s;
+    u64 ii_iiap_regval;
+    struct {
+        u64 i_rq_mls:6;
+        u64 i_rsvd_1:2;
+        u64 i_rp_mls:6;
+        u64 i_rsvd:50;
+    } ii_iiap_fld_s;
 } ii_iiap_u_t;
 
 /************************************************************************
@@ -2133,23 +2133,23 @@ typedef union ii_iiap_u {
  ************************************************************************/
 
 typedef union ii_icmr_u {
-	u64 ii_icmr_regval;
-	struct {
-		u64 i_sp_msg:1;
-		u64 i_rd_hdr:1;
-		u64 i_rsvd_4:2;
-		u64 i_c_cnt:4;
-		u64 i_rsvd_3:4;
-		u64 i_clr_rqpd:1;
-		u64 i_clr_rppd:1;
-		u64 i_rsvd_2:2;
-		u64 i_fc_cnt:4;
-		u64 i_crb_vld:15;
-		u64 i_crb_mark:15;
-		u64 i_rsvd_1:2;
-		u64 i_precise:1;
-		u64 i_rsvd:11;
-	} ii_icmr_fld_s;
+    u64 ii_icmr_regval;
+    struct {
+        u64 i_sp_msg:1;
+        u64 i_rd_hdr:1;
+        u64 i_rsvd_4:2;
+        u64 i_c_cnt:4;
+        u64 i_rsvd_3:4;
+        u64 i_clr_rqpd:1;
+        u64 i_clr_rppd:1;
+        u64 i_rsvd_2:2;
+        u64 i_fc_cnt:4;
+        u64 i_crb_vld:15;
+        u64 i_crb_mark:15;
+        u64 i_rsvd_1:2;
+        u64 i_precise:1;
+        u64 i_rsvd:11;
+    } ii_icmr_fld_s;
 } ii_icmr_u_t;
 
 /************************************************************************
@@ -2161,14 +2161,14 @@ typedef union ii_icmr_u {
  ************************************************************************/
 
 typedef union ii_iccr_u {
-	u64 ii_iccr_regval;
-	struct {
-		u64 i_crb_num:4;
-		u64 i_rsvd_1:4;
-		u64 i_cmd:8;
-		u64 i_pending:1;
-		u64 i_rsvd:47;
-	} ii_iccr_fld_s;
+    u64 ii_iccr_regval;
+    struct {
+        u64 i_crb_num:4;
+        u64 i_rsvd_1:4;
+        u64 i_cmd:8;
+        u64 i_pending:1;
+        u64 i_rsvd:47;
+    } ii_iccr_fld_s;
 } ii_iccr_u_t;
 
 /************************************************************************
@@ -2178,11 +2178,11 @@ typedef union ii_iccr_u {
  ************************************************************************/
 
 typedef union ii_icto_u {
-	u64 ii_icto_regval;
-	struct {
-		u64 i_timeout:8;
-		u64 i_rsvd:56;
-	} ii_icto_fld_s;
+    u64 ii_icto_regval;
+    struct {
+        u64 i_timeout:8;
+        u64 i_rsvd:56;
+    } ii_icto_fld_s;
 } ii_icto_u_t;
 
 /************************************************************************
@@ -2197,11 +2197,11 @@ typedef union ii_icto_u {
  ************************************************************************/
 
 typedef union ii_ictp_u {
-	u64 ii_ictp_regval;
-	struct {
-		u64 i_prescale:24;
-		u64 i_rsvd:40;
-	} ii_ictp_fld_s;
+    u64 ii_ictp_regval;
+    struct {
+        u64 i_prescale:24;
+        u64 i_rsvd:40;
+    } ii_ictp_fld_s;
 } ii_ictp_u_t;
 
 /************************************************************************
@@ -2228,15 +2228,15 @@ typedef union ii_ictp_u {
  ************************************************************************/
 
 typedef union ii_icrb0_a_u {
-	u64 ii_icrb0_a_regval;
-	struct {
-		u64 ia_iow:1;
-		u64 ia_vld:1;
-		u64 ia_addr:47;
-		u64 ia_tnum:5;
-		u64 ia_sidn:4;
-		u64 ia_rsvd:6;
-	} ii_icrb0_a_fld_s;
+    u64 ii_icrb0_a_regval;
+    struct {
+        u64 ia_iow:1;
+        u64 ia_vld:1;
+        u64 ia_addr:47;
+        u64 ia_tnum:5;
+        u64 ia_sidn:4;
+        u64 ia_rsvd:6;
+    } ii_icrb0_a_fld_s;
 } ii_icrb0_a_u_t;
 
 /************************************************************************
@@ -2249,31 +2249,31 @@ typedef union ii_icrb0_a_u {
  ************************************************************************/
 
 typedef union ii_icrb0_b_u {
-	u64 ii_icrb0_b_regval;
-	struct {
-		u64 ib_xt_err:1;
-		u64 ib_mark:1;
-		u64 ib_ln_uce:1;
-		u64 ib_errcode:3;
-		u64 ib_error:1;
-		u64 ib_stall__bte_1:1;
-		u64 ib_stall__bte_0:1;
-		u64 ib_stall__intr:1;
-		u64 ib_stall_ib:1;
-		u64 ib_intvn:1;
-		u64 ib_wb:1;
-		u64 ib_hold:1;
-		u64 ib_ack:1;
-		u64 ib_resp:1;
-		u64 ib_ack_cnt:11;
-		u64 ib_rsvd:7;
-		u64 ib_exc:5;
-		u64 ib_init:3;
-		u64 ib_imsg:8;
-		u64 ib_imsgtype:2;
-		u64 ib_use_old:1;
-		u64 ib_rsvd_1:11;
-	} ii_icrb0_b_fld_s;
+    u64 ii_icrb0_b_regval;
+    struct {
+        u64 ib_xt_err:1;
+        u64 ib_mark:1;
+        u64 ib_ln_uce:1;
+        u64 ib_errcode:3;
+        u64 ib_error:1;
+        u64 ib_stall__bte_1:1;
+        u64 ib_stall__bte_0:1;
+        u64 ib_stall__intr:1;
+        u64 ib_stall_ib:1;
+        u64 ib_intvn:1;
+        u64 ib_wb:1;
+        u64 ib_hold:1;
+        u64 ib_ack:1;
+        u64 ib_resp:1;
+        u64 ib_ack_cnt:11;
+        u64 ib_rsvd:7;
+        u64 ib_exc:5;
+        u64 ib_init:3;
+        u64 ib_imsg:8;
+        u64 ib_imsgtype:2;
+        u64 ib_use_old:1;
+        u64 ib_rsvd_1:11;
+    } ii_icrb0_b_fld_s;
 } ii_icrb0_b_u_t;
 
 /************************************************************************
@@ -2286,18 +2286,18 @@ typedef union ii_icrb0_b_u {
  ************************************************************************/
 
 typedef union ii_icrb0_c_u {
-	u64 ii_icrb0_c_regval;
-	struct {
-		u64 ic_source:15;
-		u64 ic_size:2;
-		u64 ic_ct:1;
-		u64 ic_bte_num:1;
-		u64 ic_gbr:1;
-		u64 ic_resprqd:1;
-		u64 ic_bo:1;
-		u64 ic_suppl:15;
-		u64 ic_rsvd:27;
-	} ii_icrb0_c_fld_s;
+    u64 ii_icrb0_c_regval;
+    struct {
+        u64 ic_source:15;
+        u64 ic_size:2;
+        u64 ic_ct:1;
+        u64 ic_bte_num:1;
+        u64 ic_gbr:1;
+        u64 ic_resprqd:1;
+        u64 ic_bo:1;
+        u64 ic_suppl:15;
+        u64 ic_rsvd:27;
+    } ii_icrb0_c_fld_s;
 } ii_icrb0_c_u_t;
 
 /************************************************************************
@@ -2310,15 +2310,15 @@ typedef union ii_icrb0_c_u {
  ************************************************************************/
 
 typedef union ii_icrb0_d_u {
-	u64 ii_icrb0_d_regval;
-	struct {
-		u64 id_pa_be:43;
-		u64 id_bte_op:1;
-		u64 id_pr_psc:4;
-		u64 id_pr_cnt:4;
-		u64 id_sleep:1;
-		u64 id_rsvd:11;
-	} ii_icrb0_d_fld_s;
+    u64 ii_icrb0_d_regval;
+    struct {
+        u64 id_pa_be:43;
+        u64 id_bte_op:1;
+        u64 id_pr_psc:4;
+        u64 id_pr_cnt:4;
+        u64 id_sleep:1;
+        u64 id_rsvd:11;
+    } ii_icrb0_d_fld_s;
 } ii_icrb0_d_u_t;
 
 /************************************************************************
@@ -2331,15 +2331,15 @@ typedef union ii_icrb0_d_u {
  ************************************************************************/
 
 typedef union ii_icrb0_e_u {
-	u64 ii_icrb0_e_regval;
-	struct {
-		u64 ie_timeout:8;
-		u64 ie_context:15;
-		u64 ie_rsvd:1;
-		u64 ie_tvld:1;
-		u64 ie_cvld:1;
-		u64 ie_rsvd_0:38;
-	} ii_icrb0_e_fld_s;
+    u64 ii_icrb0_e_regval;
+    struct {
+        u64 ie_timeout:8;
+        u64 ie_context:15;
+        u64 ie_rsvd:1;
+        u64 ie_tvld:1;
+        u64 ie_cvld:1;
+        u64 ie_rsvd_0:38;
+    } ii_icrb0_e_fld_s;
 } ii_icrb0_e_u_t;
 
 /************************************************************************
@@ -2351,13 +2351,13 @@ typedef union ii_icrb0_e_u {
  ************************************************************************/
 
 typedef union ii_icsml_u {
-	u64 ii_icsml_regval;
-	struct {
-		u64 i_tt_addr:47;
-		u64 i_newsuppl_ex:14;
-		u64 i_reserved:2;
-		u64 i_overflow:1;
-	} ii_icsml_fld_s;
+    u64 ii_icsml_regval;
+    struct {
+        u64 i_tt_addr:47;
+        u64 i_newsuppl_ex:14;
+        u64 i_reserved:2;
+        u64 i_overflow:1;
+    } ii_icsml_fld_s;
 } ii_icsml_u_t;
 
 /************************************************************************
@@ -2369,11 +2369,11 @@ typedef union ii_icsml_u {
  ************************************************************************/
 
 typedef union ii_icsmm_u {
-	u64 ii_icsmm_regval;
-	struct {
-		u64 i_tt_ack_cnt:11;
-		u64 i_reserved:53;
-	} ii_icsmm_fld_s;
+    u64 ii_icsmm_regval;
+    struct {
+        u64 i_tt_ack_cnt:11;
+        u64 i_reserved:53;
+    } ii_icsmm_fld_s;
 } ii_icsmm_u_t;
 
 /************************************************************************
@@ -2385,49 +2385,49 @@ typedef union ii_icsmm_u {
  ************************************************************************/
 
 typedef union ii_icsmh_u {
-	u64 ii_icsmh_regval;
-	struct {
-		u64 i_tt_vld:1;
-		u64 i_xerr:1;
-		u64 i_ft_cwact_o:1;
-		u64 i_ft_wact_o:1;
-		u64 i_ft_active_o:1;
-		u64 i_sync:1;
-		u64 i_mnusg:1;
-		u64 i_mnusz:1;
-		u64 i_plusz:1;
-		u64 i_plusg:1;
-		u64 i_tt_exc:5;
-		u64 i_tt_wb:1;
-		u64 i_tt_hold:1;
-		u64 i_tt_ack:1;
-		u64 i_tt_resp:1;
-		u64 i_tt_intvn:1;
-		u64 i_g_stall_bte1:1;
-		u64 i_g_stall_bte0:1;
-		u64 i_g_stall_il:1;
-		u64 i_g_stall_ib:1;
-		u64 i_tt_imsg:8;
-		u64 i_tt_imsgtype:2;
-		u64 i_tt_use_old:1;
-		u64 i_tt_respreqd:1;
-		u64 i_tt_bte_num:1;
-		u64 i_cbn:1;
-		u64 i_match:1;
-		u64 i_rpcnt_lt_34:1;
-		u64 i_rpcnt_ge_34:1;
-		u64 i_rpcnt_lt_18:1;
-		u64 i_rpcnt_ge_18:1;
-		u64 i_rpcnt_lt_2:1;
-		u64 i_rpcnt_ge_2:1;
-		u64 i_rqcnt_lt_18:1;
-		u64 i_rqcnt_ge_18:1;
-		u64 i_rqcnt_lt_2:1;
-		u64 i_rqcnt_ge_2:1;
-		u64 i_tt_device:7;
-		u64 i_tt_init:3;
-		u64 i_reserved:5;
-	} ii_icsmh_fld_s;
+    u64 ii_icsmh_regval;
+    struct {
+        u64 i_tt_vld:1;
+        u64 i_xerr:1;
+        u64 i_ft_cwact_o:1;
+        u64 i_ft_wact_o:1;
+        u64 i_ft_active_o:1;
+        u64 i_sync:1;
+        u64 i_mnusg:1;
+        u64 i_mnusz:1;
+        u64 i_plusz:1;
+        u64 i_plusg:1;
+        u64 i_tt_exc:5;
+        u64 i_tt_wb:1;
+        u64 i_tt_hold:1;
+        u64 i_tt_ack:1;
+        u64 i_tt_resp:1;
+        u64 i_tt_intvn:1;
+        u64 i_g_stall_bte1:1;
+        u64 i_g_stall_bte0:1;
+        u64 i_g_stall_il:1;
+        u64 i_g_stall_ib:1;
+        u64 i_tt_imsg:8;
+        u64 i_tt_imsgtype:2;
+        u64 i_tt_use_old:1;
+        u64 i_tt_respreqd:1;
+        u64 i_tt_bte_num:1;
+        u64 i_cbn:1;
+        u64 i_match:1;
+        u64 i_rpcnt_lt_34:1;
+        u64 i_rpcnt_ge_34:1;
+        u64 i_rpcnt_lt_18:1;
+        u64 i_rpcnt_ge_18:1;
+        u64 i_rpcnt_lt_2:1;
+        u64 i_rpcnt_ge_2:1;
+        u64 i_rqcnt_lt_18:1;
+        u64 i_rqcnt_ge_18:1;
+        u64 i_rqcnt_lt_2:1;
+        u64 i_rqcnt_ge_2:1;
+        u64 i_tt_device:7;
+        u64 i_tt_init:3;
+        u64 i_reserved:5;
+    } ii_icsmh_fld_s;
 } ii_icsmh_u_t;
 
 /************************************************************************
@@ -2439,15 +2439,15 @@ typedef union ii_icsmh_u {
  ************************************************************************/
 
 typedef union ii_idbss_u {
-	u64 ii_idbss_regval;
-	struct {
-		u64 i_iioclk_core_submenu:3;
-		u64 i_rsvd:5;
-		u64 i_fsbclk_wrapper_submenu:3;
-		u64 i_rsvd_1:5;
-		u64 i_iioclk_menu:5;
-		u64 i_rsvd_2:43;
-	} ii_idbss_fld_s;
+    u64 ii_idbss_regval;
+    struct {
+        u64 i_iioclk_core_submenu:3;
+        u64 i_rsvd:5;
+        u64 i_fsbclk_wrapper_submenu:3;
+        u64 i_rsvd_1:5;
+        u64 i_iioclk_menu:5;
+        u64 i_rsvd_2:43;
+    } ii_idbss_fld_s;
 } ii_idbss_u_t;
 
 /************************************************************************
@@ -2466,14 +2466,14 @@ typedef union ii_idbss_u {
  ************************************************************************/
 
 typedef union ii_ibls0_u {
-	u64 ii_ibls0_regval;
-	struct {
-		u64 i_length:16;
-		u64 i_error:1;
-		u64 i_rsvd_1:3;
-		u64 i_busy:1;
-		u64 i_rsvd:43;
-	} ii_ibls0_fld_s;
+    u64 ii_ibls0_regval;
+    struct {
+        u64 i_length:16;
+        u64 i_error:1;
+        u64 i_rsvd_1:3;
+        u64 i_busy:1;
+        u64 i_rsvd:43;
+    } ii_ibls0_fld_s;
 } ii_ibls0_u_t;
 
 /************************************************************************
@@ -2487,12 +2487,12 @@ typedef union ii_ibls0_u {
  ************************************************************************/
 
 typedef union ii_ibsa0_u {
-	u64 ii_ibsa0_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:42;
-		u64 i_rsvd:15;
-	} ii_ibsa0_fld_s;
+    u64 ii_ibsa0_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:42;
+        u64 i_rsvd:15;
+    } ii_ibsa0_fld_s;
 } ii_ibsa0_u_t;
 
 /************************************************************************
@@ -2506,12 +2506,12 @@ typedef union ii_ibsa0_u {
  ************************************************************************/
 
 typedef union ii_ibda0_u {
-	u64 ii_ibda0_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:42;
-		u64 i_rsvd:15;
-	} ii_ibda0_fld_s;
+    u64 ii_ibda0_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:42;
+        u64 i_rsvd:15;
+    } ii_ibda0_fld_s;
 } ii_ibda0_u_t;
 
 /************************************************************************
@@ -2527,15 +2527,15 @@ typedef union ii_ibda0_u {
  ************************************************************************/
 
 typedef union ii_ibct0_u {
-	u64 ii_ibct0_regval;
-	struct {
-		u64 i_zerofill:1;
-		u64 i_rsvd_2:3;
-		u64 i_notify:1;
-		u64 i_rsvd_1:3;
-		u64 i_poison:1;
-		u64 i_rsvd:55;
-	} ii_ibct0_fld_s;
+    u64 ii_ibct0_regval;
+    struct {
+        u64 i_zerofill:1;
+        u64 i_rsvd_2:3;
+        u64 i_notify:1;
+        u64 i_rsvd_1:3;
+        u64 i_poison:1;
+        u64 i_rsvd:55;
+    } ii_ibct0_fld_s;
 } ii_ibct0_u_t;
 
 /************************************************************************
@@ -2546,12 +2546,12 @@ typedef union ii_ibct0_u {
  ************************************************************************/
 
 typedef union ii_ibna0_u {
-	u64 ii_ibna0_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:42;
-		u64 i_rsvd:15;
-	} ii_ibna0_fld_s;
+    u64 ii_ibna0_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:42;
+        u64 i_rsvd:15;
+    } ii_ibna0_fld_s;
 } ii_ibna0_u_t;
 
 /************************************************************************
@@ -2563,14 +2563,14 @@ typedef union ii_ibna0_u {
  ************************************************************************/
 
 typedef union ii_ibia0_u {
-	u64 ii_ibia0_regval;
-	struct {
-		u64 i_rsvd_2:1;
-		u64 i_node_id:11;
-		u64 i_rsvd_1:4;
-		u64 i_level:7;
-		u64 i_rsvd:41;
-	} ii_ibia0_fld_s;
+    u64 ii_ibia0_regval;
+    struct {
+        u64 i_rsvd_2:1;
+        u64 i_node_id:11;
+        u64 i_rsvd_1:4;
+        u64 i_level:7;
+        u64 i_rsvd:41;
+    } ii_ibia0_fld_s;
 } ii_ibia0_u_t;
 
 /************************************************************************
@@ -2589,14 +2589,14 @@ typedef union ii_ibia0_u {
  ************************************************************************/
 
 typedef union ii_ibls1_u {
-	u64 ii_ibls1_regval;
-	struct {
-		u64 i_length:16;
-		u64 i_error:1;
-		u64 i_rsvd_1:3;
-		u64 i_busy:1;
-		u64 i_rsvd:43;
-	} ii_ibls1_fld_s;
+    u64 ii_ibls1_regval;
+    struct {
+        u64 i_length:16;
+        u64 i_error:1;
+        u64 i_rsvd_1:3;
+        u64 i_busy:1;
+        u64 i_rsvd:43;
+    } ii_ibls1_fld_s;
 } ii_ibls1_u_t;
 
 /************************************************************************
@@ -2610,12 +2610,12 @@ typedef union ii_ibls1_u {
  ************************************************************************/
 
 typedef union ii_ibsa1_u {
-	u64 ii_ibsa1_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:33;
-		u64 i_rsvd:24;
-	} ii_ibsa1_fld_s;
+    u64 ii_ibsa1_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:33;
+        u64 i_rsvd:24;
+    } ii_ibsa1_fld_s;
 } ii_ibsa1_u_t;
 
 /************************************************************************
@@ -2629,12 +2629,12 @@ typedef union ii_ibsa1_u {
  ************************************************************************/
 
 typedef union ii_ibda1_u {
-	u64 ii_ibda1_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:33;
-		u64 i_rsvd:24;
-	} ii_ibda1_fld_s;
+    u64 ii_ibda1_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:33;
+        u64 i_rsvd:24;
+    } ii_ibda1_fld_s;
 } ii_ibda1_u_t;
 
 /************************************************************************
@@ -2650,15 +2650,15 @@ typedef union ii_ibda1_u {
  ************************************************************************/
 
 typedef union ii_ibct1_u {
-	u64 ii_ibct1_regval;
-	struct {
-		u64 i_zerofill:1;
-		u64 i_rsvd_2:3;
-		u64 i_notify:1;
-		u64 i_rsvd_1:3;
-		u64 i_poison:1;
-		u64 i_rsvd:55;
-	} ii_ibct1_fld_s;
+    u64 ii_ibct1_regval;
+    struct {
+        u64 i_zerofill:1;
+        u64 i_rsvd_2:3;
+        u64 i_notify:1;
+        u64 i_rsvd_1:3;
+        u64 i_poison:1;
+        u64 i_rsvd:55;
+    } ii_ibct1_fld_s;
 } ii_ibct1_u_t;
 
 /************************************************************************
@@ -2669,12 +2669,12 @@ typedef union ii_ibct1_u {
  ************************************************************************/
 
 typedef union ii_ibna1_u {
-	u64 ii_ibna1_regval;
-	struct {
-		u64 i_rsvd_1:7;
-		u64 i_addr:33;
-		u64 i_rsvd:24;
-	} ii_ibna1_fld_s;
+    u64 ii_ibna1_regval;
+    struct {
+        u64 i_rsvd_1:7;
+        u64 i_addr:33;
+        u64 i_rsvd:24;
+    } ii_ibna1_fld_s;
 } ii_ibna1_u_t;
 
 /************************************************************************
@@ -2686,14 +2686,14 @@ typedef union ii_ibna1_u {
  ************************************************************************/
 
 typedef union ii_ibia1_u {
-	u64 ii_ibia1_regval;
-	struct {
-		u64 i_pi_id:1;
-		u64 i_node_id:8;
-		u64 i_rsvd_1:7;
-		u64 i_level:7;
-		u64 i_rsvd:41;
-	} ii_ibia1_fld_s;
+    u64 ii_ibia1_regval;
+    struct {
+        u64 i_pi_id:1;
+        u64 i_node_id:8;
+        u64 i_rsvd_1:7;
+        u64 i_level:7;
+        u64 i_rsvd:41;
+    } ii_ibia1_fld_s;
 } ii_ibia1_u_t;
 
 /************************************************************************
@@ -2712,13 +2712,13 @@ typedef union ii_ibia1_u {
  ************************************************************************/
 
 typedef union ii_ipcr_u {
-	u64 ii_ipcr_regval;
-	struct {
-		u64 i_ippr0_c:4;
-		u64 i_ippr1_c:4;
-		u64 i_icct:8;
-		u64 i_rsvd:48;
-	} ii_ipcr_fld_s;
+    u64 ii_ipcr_regval;
+    struct {
+        u64 i_ippr0_c:4;
+        u64 i_ippr1_c:4;
+        u64 i_icct:8;
+        u64 i_rsvd:48;
+    } ii_ipcr_fld_s;
 } ii_ipcr_u_t;
 
 /************************************************************************
@@ -2728,11 +2728,11 @@ typedef union ii_ipcr_u {
  ************************************************************************/
 
 typedef union ii_ippr_u {
-	u64 ii_ippr_regval;
-	struct {
-		u64 i_ippr0:32;
-		u64 i_ippr1:32;
-	} ii_ippr_fld_s;
+    u64 ii_ippr_regval;
+    struct {
+        u64 i_ippr0:32;
+        u64 i_ippr1:32;
+    } ii_ippr_fld_s;
 } ii_ippr_u_t;
 
 /************************************************************************
@@ -2937,7 +2937,7 @@ typedef union ii_ippr_u {
 #define IIO_SCRATCH_BIT1_1      0x0000000000000002UL
 /* IO Translation Table Entries */
 #define IIO_NUM_ITTES   7	/* ITTEs numbered 0..6 */
-					/* Hw manuals number them 1..7! */
+/* Hw manuals number them 1..7! */
 /*
  * IIO_IMEM Register fields.
  */
@@ -3039,7 +3039,7 @@ typedef union ii_ippr_u {
 
  Some of the IIO field masks and shifts are defined here.
  This is in order to maintain compatibility in SN0 and SN1 code
- 
+
 **************************************************************************/
 
 /*
@@ -3072,7 +3072,7 @@ typedef union ii_ippr_u {
  */
 #define IIO_ICDR_PND    	(1 << 4)
 
-/* 
+/*
  * IO BTE Length/Status (IIO_IBLS) register bit field definitions
  */
 #define IBLS_BUSY		(0x1UL << 20)
@@ -3130,7 +3130,7 @@ typedef union ii_ippr_u {
 #define IECLR_PRB_0		(1UL << 0)	/* clear err bit in PRB_0 reg */
 
 /*
- * IIO CRB control register Fields: IIO_ICCR 
+ * IIO CRB control register Fields: IIO_ICCR
  */
 #define	IIO_ICCR_PENDING	0x10000
 #define	IIO_ICCR_CMD_MASK	0xFF
@@ -3302,17 +3302,17 @@ typedef ii_icrb0_e_u_t icrbe_t;
  */
 
 typedef union hubii_wcr_u {
-	u64 wcr_reg_value;
-	struct {
-		u64 wcr_widget_id:4,	/* LLP crossbar credit */
-		 wcr_tag_mode:1,	/* Tag mode */
-		 wcr_rsvd1:8,	/* Reserved */
-		 wcr_xbar_crd:3,	/* LLP crossbar credit */
-		 wcr_f_bad_pkt:1,	/* Force bad llp pkt enable */
-		 wcr_dir_con:1,	/* widget direct connect */
-		 wcr_e_thresh:5,	/* elasticity threshold */
-		 wcr_rsvd:41;	/* unused */
-	} wcr_fields_s;
+    u64 wcr_reg_value;
+    struct {
+        u64 wcr_widget_id:4,	/* LLP crossbar credit */
+            wcr_tag_mode:1,	/* Tag mode */
+            wcr_rsvd1:8,	/* Reserved */
+            wcr_xbar_crd:3,	/* LLP crossbar credit */
+            wcr_f_bad_pkt:1,	/* Force bad llp pkt enable */
+            wcr_dir_con:1,	/* widget direct connect */
+            wcr_e_thresh:5,	/* elasticity threshold */
+            wcr_rsvd:41;	/* unused */
+    } wcr_fields_s;
 } hubii_wcr_t;
 
 #define iwcr_dir_con    wcr_fields_s.wcr_dir_con
@@ -3324,35 +3324,35 @@ performance registers */
    performed */
 
 typedef union io_perf_sel {
-	u64 perf_sel_reg;
-	struct {
-		u64 perf_ippr0:4, perf_ippr1:4, perf_icct:8, perf_rsvd:48;
-	} perf_sel_bits;
+    u64 perf_sel_reg;
+    struct {
+        u64 perf_ippr0:4, perf_ippr1:4, perf_icct:8, perf_rsvd:48;
+    } perf_sel_bits;
 } io_perf_sel_t;
 
 /* io_perf_cnt is to extract the count from the shub registers. Due to
    hardware problems there is only one counter, not two. */
 
 typedef union io_perf_cnt {
-	u64 perf_cnt;
-	struct {
-		u64 perf_cnt:20, perf_rsvd2:12, perf_rsvd1:32;
-	} perf_cnt_bits;
+    u64 perf_cnt;
+    struct {
+        u64 perf_cnt:20, perf_rsvd2:12, perf_rsvd1:32;
+    } perf_cnt_bits;
 
 } io_perf_cnt_t;
 
 typedef union iprte_a {
-	u64 entry;
-	struct {
-		u64 i_rsvd_1:3;
-		u64 i_addr:38;
-		u64 i_init:3;
-		u64 i_source:8;
-		u64 i_rsvd:2;
-		u64 i_widget:4;
-		u64 i_to_cnt:5;
-		u64 i_vld:1;
-	} iprte_fields;
+    u64 entry;
+    struct {
+        u64 i_rsvd_1:3;
+        u64 i_addr:38;
+        u64 i_init:3;
+        u64 i_source:8;
+        u64 i_rsvd:2;
+        u64 i_widget:4;
+        u64 i_to_cnt:5;
+        u64 i_vld:1;
+    } iprte_fields;
 } iprte_a_t;
 
 #endif				/* _ASM_IA64_SN_SHUBIO_H */

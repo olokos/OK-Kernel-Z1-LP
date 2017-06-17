@@ -24,31 +24,31 @@
 
 /* TAH */
 struct tah_regs {
-	u32 revid;
-	u32 pad[3];
-	u32 mr;
-	u32 ssr0;
-	u32 ssr1;
-	u32 ssr2;
-	u32 ssr3;
-	u32 ssr4;
-	u32 ssr5;
-	u32 tsr;
+    u32 revid;
+    u32 pad[3];
+    u32 mr;
+    u32 ssr0;
+    u32 ssr1;
+    u32 ssr2;
+    u32 ssr3;
+    u32 ssr4;
+    u32 ssr5;
+    u32 tsr;
 };
 
 
 /* TAH device */
 struct tah_instance {
-	struct tah_regs __iomem		*base;
+    struct tah_regs __iomem		*base;
 
-	/* Only one EMAC whacks us at a time */
-	struct mutex			lock;
+    /* Only one EMAC whacks us at a time */
+    struct mutex			lock;
 
-	/* number of EMACs using this TAH */
-	int				users;
+    /* number of EMACs using this TAH */
+    int				users;
 
-	/* OF device instance */
-	struct platform_device		*ofdev;
+    /* OF device instance */
+    struct platform_device		*ofdev;
 };
 
 

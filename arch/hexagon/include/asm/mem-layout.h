@@ -50,9 +50,9 @@
 
 #ifndef __ASSEMBLY__
 enum fixed_addresses {
-	FIX_KMAP_BEGIN,
-	FIX_KMAP_END,  /*  check for per-cpuism  */
-	__end_of_fixed_addresses
+    FIX_KMAP_BEGIN,
+    FIX_KMAP_END,  /*  check for per-cpuism  */
+    __end_of_fixed_addresses
 };
 
 #define MIN_KERNEL_SEG 0x300   /* From 0xc0000000 */

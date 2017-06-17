@@ -39,12 +39,12 @@ void _prepare_arch_switch(struct task_struct *next);
 struct task_struct;
 #define switch_to(prev, next, last) ((last) = _switch_to((prev), (next)))
 extern struct task_struct *_switch_to(struct task_struct *prev,
-				      struct task_struct *next);
+                                      struct task_struct *next);
 
 /* Helper function for _switch_to(). */
 extern struct task_struct *__switch_to(struct task_struct *prev,
-				       struct task_struct *next,
-				       unsigned long new_system_save_k_0);
+                                       struct task_struct *next,
+                                       unsigned long new_system_save_k_0);
 
 /* Address that switched-away from tasks are at. */
 extern unsigned long get_switch_to_pc(void);

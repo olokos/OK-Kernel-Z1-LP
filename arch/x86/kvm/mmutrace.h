@@ -53,195 +53,195 @@
  * A pagetable walk has started
  */
 TRACE_EVENT(
-	kvm_mmu_pagetable_walk,
-	TP_PROTO(u64 addr, int write_fault, int user_fault, int fetch_fault),
-	TP_ARGS(addr, write_fault, user_fault, fetch_fault),
+    kvm_mmu_pagetable_walk,
+    TP_PROTO(u64 addr, int write_fault, int user_fault, int fetch_fault),
+    TP_ARGS(addr, write_fault, user_fault, fetch_fault),
 
-	TP_STRUCT__entry(
-		__field(__u64, addr)
-		__field(__u32, pferr)
-	),
+    TP_STRUCT__entry(
+        __field(__u64, addr)
+        __field(__u32, pferr)
+    ),
 
-	TP_fast_assign(
-		__entry->addr = addr;
-		__entry->pferr = (!!write_fault << 1) | (!!user_fault << 2)
-		                 | (!!fetch_fault << 4);
-	),
+    TP_fast_assign(
+        __entry->addr = addr;
+        __entry->pferr = (!!write_fault << 1) | (!!user_fault << 2)
+                         | (!!fetch_fault << 4);
+    ),
 
-	TP_printk("addr %llx pferr %x %s", __entry->addr, __entry->pferr,
-		  __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
+    TP_printk("addr %llx pferr %x %s", __entry->addr, __entry->pferr,
+              __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
 );
 
 
 /* We just walked a paging element */
 TRACE_EVENT(
-	kvm_mmu_paging_element,
-	TP_PROTO(u64 pte, int level),
-	TP_ARGS(pte, level),
+    kvm_mmu_paging_element,
+    TP_PROTO(u64 pte, int level),
+    TP_ARGS(pte, level),
 
-	TP_STRUCT__entry(
-		__field(__u64, pte)
-		__field(__u32, level)
-		),
+    TP_STRUCT__entry(
+        __field(__u64, pte)
+        __field(__u32, level)
+    ),
 
-	TP_fast_assign(
-		__entry->pte = pte;
-		__entry->level = level;
-		),
+    TP_fast_assign(
+        __entry->pte = pte;
+        __entry->level = level;
+    ),
 
-	TP_printk("pte %llx level %u", __entry->pte, __entry->level)
+    TP_printk("pte %llx level %u", __entry->pte, __entry->level)
 );
 
 DECLARE_EVENT_CLASS(kvm_mmu_set_bit_class,
 
-	TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
+                    TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
 
-	TP_ARGS(table_gfn, index, size),
+                    TP_ARGS(table_gfn, index, size),
 
-	TP_STRUCT__entry(
-		__field(__u64, gpa)
-	),
+                    TP_STRUCT__entry(
+                        __field(__u64, gpa)
+                    ),
 
-	TP_fast_assign(
-		__entry->gpa = ((u64)table_gfn << PAGE_SHIFT)
-				+ index * size;
-		),
+                    TP_fast_assign(
+                        __entry->gpa = ((u64)table_gfn << PAGE_SHIFT)
+                                       + index * size;
+                    ),
 
-	TP_printk("gpa %llx", __entry->gpa)
-);
+                    TP_printk("gpa %llx", __entry->gpa)
+                   );
 
 /* We set a pte accessed bit */
 DEFINE_EVENT(kvm_mmu_set_bit_class, kvm_mmu_set_accessed_bit,
 
-	TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
+             TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
 
-	TP_ARGS(table_gfn, index, size)
-);
+             TP_ARGS(table_gfn, index, size)
+            );
 
 /* We set a pte dirty bit */
 DEFINE_EVENT(kvm_mmu_set_bit_class, kvm_mmu_set_dirty_bit,
 
-	TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
+             TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
 
-	TP_ARGS(table_gfn, index, size)
+             TP_ARGS(table_gfn, index, size)
+            );
+
+TRACE_EVENT(
+    kvm_mmu_walker_error,
+    TP_PROTO(u32 pferr),
+    TP_ARGS(pferr),
+
+    TP_STRUCT__entry(
+        __field(__u32, pferr)
+    ),
+
+    TP_fast_assign(
+        __entry->pferr = pferr;
+    ),
+
+    TP_printk("pferr %x %s", __entry->pferr,
+              __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
 );
 
 TRACE_EVENT(
-	kvm_mmu_walker_error,
-	TP_PROTO(u32 pferr),
-	TP_ARGS(pferr),
+    kvm_mmu_get_page,
+    TP_PROTO(struct kvm_mmu_page *sp, bool created),
+    TP_ARGS(sp, created),
 
-	TP_STRUCT__entry(
-		__field(__u32, pferr)
-		),
+    TP_STRUCT__entry(
+        KVM_MMU_PAGE_FIELDS
+        __field(bool, created)
+    ),
 
-	TP_fast_assign(
-		__entry->pferr = pferr;
-		),
+    TP_fast_assign(
+        KVM_MMU_PAGE_ASSIGN(sp)
+        __entry->created = created;
+    ),
 
-	TP_printk("pferr %x %s", __entry->pferr,
-		  __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
-);
-
-TRACE_EVENT(
-	kvm_mmu_get_page,
-	TP_PROTO(struct kvm_mmu_page *sp, bool created),
-	TP_ARGS(sp, created),
-
-	TP_STRUCT__entry(
-		KVM_MMU_PAGE_FIELDS
-		__field(bool, created)
-		),
-
-	TP_fast_assign(
-		KVM_MMU_PAGE_ASSIGN(sp)
-		__entry->created = created;
-		),
-
-	TP_printk("%s %s", KVM_MMU_PAGE_PRINTK(),
-		  __entry->created ? "new" : "existing")
+    TP_printk("%s %s", KVM_MMU_PAGE_PRINTK(),
+              __entry->created ? "new" : "existing")
 );
 
 DECLARE_EVENT_CLASS(kvm_mmu_page_class,
 
-	TP_PROTO(struct kvm_mmu_page *sp),
-	TP_ARGS(sp),
+                    TP_PROTO(struct kvm_mmu_page *sp),
+                    TP_ARGS(sp),
 
-	TP_STRUCT__entry(
-		KVM_MMU_PAGE_FIELDS
-	),
+                    TP_STRUCT__entry(
+                        KVM_MMU_PAGE_FIELDS
+                    ),
 
-	TP_fast_assign(
-		KVM_MMU_PAGE_ASSIGN(sp)
-	),
+                    TP_fast_assign(
+                        KVM_MMU_PAGE_ASSIGN(sp)
+                    ),
 
-	TP_printk("%s", KVM_MMU_PAGE_PRINTK())
-);
+                    TP_printk("%s", KVM_MMU_PAGE_PRINTK())
+                   );
 
 DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_sync_page,
-	TP_PROTO(struct kvm_mmu_page *sp),
+             TP_PROTO(struct kvm_mmu_page *sp),
 
-	TP_ARGS(sp)
-);
+             TP_ARGS(sp)
+            );
 
 DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_unsync_page,
-	TP_PROTO(struct kvm_mmu_page *sp),
+             TP_PROTO(struct kvm_mmu_page *sp),
 
-	TP_ARGS(sp)
-);
+             TP_ARGS(sp)
+            );
 
 DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_prepare_zap_page,
-	TP_PROTO(struct kvm_mmu_page *sp),
+             TP_PROTO(struct kvm_mmu_page *sp),
 
-	TP_ARGS(sp)
-);
+             TP_ARGS(sp)
+            );
 
 DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_delay_free_pages,
-	TP_PROTO(struct kvm_mmu_page *sp),
+             TP_PROTO(struct kvm_mmu_page *sp),
 
-	TP_ARGS(sp)
+             TP_ARGS(sp)
+            );
+
+TRACE_EVENT(
+    mark_mmio_spte,
+    TP_PROTO(u64 *sptep, gfn_t gfn, unsigned access),
+    TP_ARGS(sptep, gfn, access),
+
+    TP_STRUCT__entry(
+        __field(void *, sptep)
+        __field(gfn_t, gfn)
+        __field(unsigned, access)
+    ),
+
+    TP_fast_assign(
+        __entry->sptep = sptep;
+        __entry->gfn = gfn;
+        __entry->access = access;
+    ),
+
+    TP_printk("sptep:%p gfn %llx access %x", __entry->sptep, __entry->gfn,
+              __entry->access)
 );
 
 TRACE_EVENT(
-	mark_mmio_spte,
-	TP_PROTO(u64 *sptep, gfn_t gfn, unsigned access),
-	TP_ARGS(sptep, gfn, access),
+    handle_mmio_page_fault,
+    TP_PROTO(u64 addr, gfn_t gfn, unsigned access),
+    TP_ARGS(addr, gfn, access),
 
-	TP_STRUCT__entry(
-		__field(void *, sptep)
-		__field(gfn_t, gfn)
-		__field(unsigned, access)
-	),
+    TP_STRUCT__entry(
+        __field(u64, addr)
+        __field(gfn_t, gfn)
+        __field(unsigned, access)
+    ),
 
-	TP_fast_assign(
-		__entry->sptep = sptep;
-		__entry->gfn = gfn;
-		__entry->access = access;
-	),
+    TP_fast_assign(
+        __entry->addr = addr;
+        __entry->gfn = gfn;
+        __entry->access = access;
+    ),
 
-	TP_printk("sptep:%p gfn %llx access %x", __entry->sptep, __entry->gfn,
-		  __entry->access)
-);
-
-TRACE_EVENT(
-	handle_mmio_page_fault,
-	TP_PROTO(u64 addr, gfn_t gfn, unsigned access),
-	TP_ARGS(addr, gfn, access),
-
-	TP_STRUCT__entry(
-		__field(u64, addr)
-		__field(gfn_t, gfn)
-		__field(unsigned, access)
-	),
-
-	TP_fast_assign(
-		__entry->addr = addr;
-		__entry->gfn = gfn;
-		__entry->access = access;
-	),
-
-	TP_printk("addr:%llx gfn %llx access %x", __entry->addr, __entry->gfn,
-		  __entry->access)
+    TP_printk("addr:%llx gfn %llx access %x", __entry->addr, __entry->gfn,
+              __entry->access)
 );
 #endif /* _TRACE_KVMMMU_H */
 

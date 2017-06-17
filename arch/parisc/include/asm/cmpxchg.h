@@ -21,17 +21,19 @@ extern unsigned long __xchg64(unsigned long, unsigned long *);
 
 /* optimizer better get rid of switch since size is a constant */
 static inline unsigned long
-__xchg(unsigned long x, __volatile__ void *ptr, int size)
-{
-	switch (size) {
+__xchg(unsigned long x, __volatile__ void *ptr, int size) {
+    switch (size) {
 #ifdef CONFIG_64BIT
-	case 8: return __xchg64(x, (unsigned long *) ptr);
+    case 8:
+        return __xchg64(x, (unsigned long *) ptr);
 #endif
-	case 4: return __xchg32((int) x, (int *) ptr);
-	case 1: return __xchg8((char) x, (char *) ptr);
-	}
-	__xchg_called_with_bad_pointer();
-	return x;
+    case 4:
+        return __xchg32((int) x, (int *) ptr);
+    case 1:
+        return __xchg8((char) x, (char *) ptr);
+    }
+    __xchg_called_with_bad_pointer();
+    return x;
 }
 
 /*
@@ -53,23 +55,24 @@ extern void __cmpxchg_called_with_bad_pointer(void);
 
 /* __cmpxchg_u32/u64 defined in arch/parisc/lib/bitops.c */
 extern unsigned long __cmpxchg_u32(volatile unsigned int *m, unsigned int old,
-				   unsigned int new_);
+                                   unsigned int new_);
 extern unsigned long __cmpxchg_u64(volatile unsigned long *ptr,
-				   unsigned long old, unsigned long new_);
+                                   unsigned long old, unsigned long new_);
 
 /* don't worry...optimizer will get rid of most of this */
 static inline unsigned long
-__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new_, int size)
-{
-	switch (size) {
+__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new_, int size) {
+    switch (size) {
 #ifdef CONFIG_64BIT
-	case 8: return __cmpxchg_u64((unsigned long *)ptr, old, new_);
+    case 8:
+        return __cmpxchg_u64((unsigned long *)ptr, old, new_);
 #endif
-	case 4: return __cmpxchg_u32((unsigned int *)ptr,
-				     (unsigned int)old, (unsigned int)new_);
-	}
-	__cmpxchg_called_with_bad_pointer();
-	return old;
+    case 4:
+        return __cmpxchg_u32((unsigned int *)ptr,
+                             (unsigned int)old, (unsigned int)new_);
+    }
+    __cmpxchg_called_with_bad_pointer();
+    return old;
 }
 
 #define cmpxchg(ptr, o, n)						 \
@@ -83,17 +86,18 @@ __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new_, int size)
 #include <asm-generic/cmpxchg-local.h>
 
 static inline unsigned long __cmpxchg_local(volatile void *ptr,
-				      unsigned long old,
-				      unsigned long new_, int size)
-{
-	switch (size) {
+        unsigned long old,
+        unsigned long new_, int size) {
+    switch (size) {
 #ifdef CONFIG_64BIT
-	case 8:	return __cmpxchg_u64((unsigned long *)ptr, old, new_);
+    case 8:
+        return __cmpxchg_u64((unsigned long *)ptr, old, new_);
 #endif
-	case 4:	return __cmpxchg_u32(ptr, old, new_);
-	default:
-		return __cmpxchg_local_generic(ptr, old, new_, size);
-	}
+    case 4:
+        return __cmpxchg_u32(ptr, old, new_);
+    default:
+        return __cmpxchg_local_generic(ptr, old, new_, size);
+    }
 }
 
 /*

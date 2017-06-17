@@ -39,12 +39,11 @@
  *
  *	Reads back the RSTCSR value.
  */
-static inline __u8 sh_wdt_read_rstcsr(void)
-{
-	/*
-	 * Same read/write brain-damage as for WTCNT here..
-	 */
-	return __raw_readb(RSTCSR_R);
+static inline __u8 sh_wdt_read_rstcsr(void) {
+    /*
+     * Same read/write brain-damage as for WTCNT here..
+     */
+    return __raw_readb(RSTCSR_R);
 }
 
 /**
@@ -55,14 +54,13 @@ static inline __u8 sh_wdt_read_rstcsr(void)
  * 	Writes the given value @val to the lower byte of the control/status
  * 	register. The upper byte is set manually on each write.
  */
-static inline void sh_wdt_write_rstcsr(__u8 val)
-{
-	/*
-	 * Note: Due to the brain-damaged nature of this register,
-	 * we can't presently touch the WOVF bit, since the upper byte
-	 * has to be swapped for this. So just leave it alone..
-	 */
-	__raw_writeb((WTCNT_HIGH << 8) | (__u16)val, RSTCSR);
+static inline void sh_wdt_write_rstcsr(__u8 val) {
+    /*
+     * Note: Due to the brain-damaged nature of this register,
+     * we can't presently touch the WOVF bit, since the upper byte
+     * has to be swapped for this. So just leave it alone..
+     */
+    __raw_writeb((WTCNT_HIGH << 8) | (__u16)val, RSTCSR);
 }
 
 #endif /* __ASM_CPU_SH2_WATCHDOG_H */

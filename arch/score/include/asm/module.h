@@ -5,10 +5,10 @@
 #include <asm/uaccess.h>
 
 struct mod_arch_specific {
-	/* Data Bus Error exception tables */
-	struct list_head dbe_list;
-	const struct exception_table_entry *dbe_start;
-	const struct exception_table_entry *dbe_end;
+    /* Data Bus Error exception tables */
+    struct list_head dbe_list;
+    const struct exception_table_entry *dbe_start;
+    const struct exception_table_entry *dbe_end;
 };
 
 typedef uint8_t Elf64_Byte;		/* Type for a 8-bit quantity. */
@@ -23,9 +23,8 @@ typedef uint8_t Elf64_Byte;		/* Type for a 8-bit quantity. */
 const struct exception_table_entry *search_module_dbetables(unsigned long addr);
 #else
 static inline const struct exception_table_entry
-*search_module_dbetables(unsigned long addr)
-{
-	return NULL;
+*search_module_dbetables(unsigned long addr) {
+    return NULL;
 }
 #endif
 

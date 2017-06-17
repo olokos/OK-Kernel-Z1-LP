@@ -33,17 +33,17 @@
 
 /* DDR register structure */
 struct ddr_ram {
-	u32 ddrbase;
-	u32 ddrmask;
-	u32 res1;
-	u32 res2;
-	u32 ddrc;
-	u32 ddrabase;
-	u32 ddramask;
-	u32 ddramap;
-	u32 ddrcust;
-	u32 ddrrdc;
-	u32 ddrspare;
+    u32 ddrbase;
+    u32 ddrmask;
+    u32 res1;
+    u32 res2;
+    u32 ddrc;
+    u32 ddrabase;
+    u32 ddramask;
+    u32 ddramap;
+    u32 ddrcust;
+    u32 ddrrdc;
+    u32 ddrspare;
 };
 
 #define DDR0_PHYS_ADDR		0x18018000

@@ -34,36 +34,36 @@ struct task_struct;
 struct exec_domain;
 
 struct thread_info {
-	/* D$ line 1 */
-	struct task_struct	*task;
-	unsigned long		flags;
-	__u8			fpsaved[7];
-	__u8			status;
-	unsigned long		ksp;
+    /* D$ line 1 */
+    struct task_struct	*task;
+    unsigned long		flags;
+    __u8			fpsaved[7];
+    __u8			status;
+    unsigned long		ksp;
 
-	/* D$ line 2 */
-	unsigned long		fault_address;
-	struct pt_regs		*kregs;
-	struct exec_domain	*exec_domain;
-	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
-	__u8			new_child;
-	__u8			syscall_noerror;
-	__u16			cpu;
+    /* D$ line 2 */
+    unsigned long		fault_address;
+    struct pt_regs		*kregs;
+    struct exec_domain	*exec_domain;
+    int			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    __u8			new_child;
+    __u8			syscall_noerror;
+    __u16			cpu;
 
-	unsigned long		*utraps;
+    unsigned long		*utraps;
 
-	struct reg_window 	reg_window[NSWINS];
-	unsigned long 		rwbuf_stkptrs[NSWINS];
+    struct reg_window 	reg_window[NSWINS];
+    unsigned long 		rwbuf_stkptrs[NSWINS];
 
-	unsigned long		gsr[7];
-	unsigned long		xfsr[7];
+    unsigned long		gsr[7];
+    unsigned long		xfsr[7];
 
-	struct restart_block	restart_block;
+    struct restart_block	restart_block;
 
-	struct pt_regs		*kern_una_regs;
-	unsigned int		kern_una_insn;
+    struct pt_regs		*kern_una_regs;
+    unsigned int		kern_una_insn;
 
-	unsigned long		fpregs[0] __attribute__ ((aligned(64)));
+    unsigned long		fpregs[0] __attribute__ ((aligned(64)));
 };
 
 #endif /* !(__ASSEMBLY__) */
@@ -255,11 +255,10 @@ register struct thread_info *current_thread_info_reg asm("g6");
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK	1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->status |= TS_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, &ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->status |= TS_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, &ti->flags);
 }
 #endif	/* !__ASSEMBLY__ */
 

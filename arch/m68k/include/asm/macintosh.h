@@ -19,18 +19,17 @@ extern void mac_irq_disable(struct irq_data *data);
  *	Macintosh Table
  */
 
-struct mac_model
-{
-	short ident;
-	char *name;
-	char adb_type;
-	char via_type;
-	char scsi_type;
-	char ide_type;
-	char scc_type;
-	char ether_type;
-	char nubus_type;
-	char floppy_type;
+struct mac_model {
+    short ident;
+    char *name;
+    char adb_type;
+    char via_type;
+    char scsi_type;
+    char ide_type;
+    char scc_type;
+    char ether_type;
+    char nubus_type;
+    char floppy_type;
 };
 
 #define MAC_ADB_NONE		0

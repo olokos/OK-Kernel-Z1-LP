@@ -117,22 +117,22 @@
  */
 
 struct cpu_cache_fns {
-	void (*flush_icache_all)(void);
-	void (*flush_kern_all)(void);
-	void (*flush_kern_louis)(void);
-	void (*flush_user_all)(void);
-	void (*flush_user_range)(unsigned long, unsigned long, unsigned int);
+    void (*flush_icache_all)(void);
+    void (*flush_kern_all)(void);
+    void (*flush_kern_louis)(void);
+    void (*flush_user_all)(void);
+    void (*flush_user_range)(unsigned long, unsigned long, unsigned int);
 
-	void (*coherent_kern_range)(unsigned long, unsigned long);
-	void (*coherent_user_range)(unsigned long, unsigned long);
-	void (*flush_kern_dcache_area)(void *, size_t);
+    void (*coherent_kern_range)(unsigned long, unsigned long);
+    void (*coherent_user_range)(unsigned long, unsigned long);
+    void (*flush_kern_dcache_area)(void *, size_t);
 
-	void (*dma_map_area)(const void *, size_t, int);
-	void (*dma_unmap_area)(const void *, size_t, int);
+    void (*dma_map_area)(const void *, size_t, int);
+    void (*dma_unmap_area)(const void *, size_t, int);
 
-	void (*dma_inv_range)(const void *, const void *);
-	void (*dma_clean_range)(const void *, const void *);
-	void (*dma_flush_range)(const void *, const void *);
+    void (*dma_inv_range)(const void *, const void *);
+    void (*dma_clean_range)(const void *, const void *);
+    void (*dma_flush_range)(const void *, const void *);
 };
 
 /*
@@ -194,7 +194,7 @@ extern void dmac_flush_range(const void *, const void *);
  * space" model to handle this.
  */
 extern void copy_to_user_page(struct vm_area_struct *, struct page *,
-	unsigned long, void *, const void *, unsigned long);
+                              unsigned long, void *, const void *, unsigned long);
 #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
 	do {							\
 		memcpy(dst, src, len);				\
@@ -230,9 +230,8 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
 #define __flush_icache_preferred	__flush_icache_all_generic
 #endif
 
-static inline void __flush_icache_all(void)
-{
-	__flush_icache_preferred();
+static inline void __flush_icache_all(void) {
+    __flush_icache_preferred();
 }
 
 /*
@@ -242,27 +241,24 @@ static inline void __flush_icache_all(void)
 
 #define flush_cache_all()		__cpuc_flush_kern_all()
 
-static inline void vivt_flush_cache_mm(struct mm_struct *mm)
-{
-	if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm)))
-		__cpuc_flush_user_all();
+static inline void vivt_flush_cache_mm(struct mm_struct *mm) {
+    if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm)))
+        __cpuc_flush_user_all();
 }
 
 static inline void
-vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end)
-{
-	if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm)))
-		__cpuc_flush_user_range(start & PAGE_MASK, PAGE_ALIGN(end),
-					vma->vm_flags);
+vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end) {
+    if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm)))
+        __cpuc_flush_user_range(start & PAGE_MASK, PAGE_ALIGN(end),
+                                vma->vm_flags);
 }
 
 static inline void
-vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
-{
-	if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm))) {
-		unsigned long addr = user_addr & PAGE_MASK;
-		__cpuc_flush_user_range(addr, addr + PAGE_SIZE, vma->vm_flags);
-	}
+vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn) {
+    if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm))) {
+        unsigned long addr = user_addr & PAGE_MASK;
+        __cpuc_flush_user_range(addr, addr + PAGE_SIZE, vma->vm_flags);
+    }
 }
 
 #ifndef CONFIG_CPU_CACHE_VIPT
@@ -315,30 +311,26 @@ extern void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
 extern void flush_dcache_page(struct page *);
 
-static inline void flush_kernel_vmap_range(void *addr, int size)
-{
-	if ((cache_is_vivt() || cache_is_vipt_aliasing()))
-	  __cpuc_flush_dcache_area(addr, (size_t)size);
+static inline void flush_kernel_vmap_range(void *addr, int size) {
+    if ((cache_is_vivt() || cache_is_vipt_aliasing()))
+        __cpuc_flush_dcache_area(addr, (size_t)size);
 }
-static inline void invalidate_kernel_vmap_range(void *addr, int size)
-{
-	if ((cache_is_vivt() || cache_is_vipt_aliasing()))
-	  __cpuc_flush_dcache_area(addr, (size_t)size);
+static inline void invalidate_kernel_vmap_range(void *addr, int size) {
+    if ((cache_is_vivt() || cache_is_vipt_aliasing()))
+        __cpuc_flush_dcache_area(addr, (size_t)size);
 }
 
 #define ARCH_HAS_FLUSH_ANON_PAGE
 static inline void flush_anon_page(struct vm_area_struct *vma,
-			 struct page *page, unsigned long vmaddr)
-{
-	extern void __flush_anon_page(struct vm_area_struct *vma,
-				struct page *, unsigned long);
-	if (PageAnon(page))
-		__flush_anon_page(vma, page, vmaddr);
+                                   struct page *page, unsigned long vmaddr) {
+    extern void __flush_anon_page(struct vm_area_struct *vma,
+                                  struct page *, unsigned long);
+    if (PageAnon(page))
+        __flush_anon_page(vma, page, vmaddr);
 }
 
 #define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-static inline void flush_kernel_dcache_page(struct page *page)
-{
+static inline void flush_kernel_dcache_page(struct page *page) {
 }
 
 #define flush_dcache_mmap_lock(mapping) \
@@ -362,22 +354,20 @@ static inline void flush_kernel_dcache_page(struct page *page)
  * data, we need to do a full cache flush to ensure that writebacks
  * don't corrupt data placed into these pages via the new mappings.
  */
-static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-{
-	if (!cache_is_vipt_nonaliasing())
-		flush_cache_all();
-	else
-		/*
-		 * set_pte_at() called from vmap_pte_range() does not
-		 * have a DSB after cleaning the cache line.
-		 */
-		dsb();
+static inline void flush_cache_vmap(unsigned long start, unsigned long end) {
+    if (!cache_is_vipt_nonaliasing())
+        flush_cache_all();
+    else
+        /*
+         * set_pte_at() called from vmap_pte_range() does not
+         * have a DSB after cleaning the cache line.
+         */
+        dsb();
 }
 
-static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-{
-	if (!cache_is_vipt_nonaliasing())
-		flush_cache_all();
+static inline void flush_cache_vunmap(unsigned long start, unsigned long end) {
+    if (!cache_is_vipt_nonaliasing())
+        flush_cache_all();
 }
 
 int set_memory_ro(unsigned long addr, int numpages);

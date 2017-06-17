@@ -25,16 +25,16 @@
 #include "msm_sd.h"
 
 struct msm_get_bufs {
-	struct list_head entry;
-	struct vb2_buffer *vb2_buf;
-	uint32_t session_id;
-	uint32_t stream_id;
+    struct list_head entry;
+    struct vb2_buffer *vb2_buf;
+    uint32_t session_id;
+    uint32_t stream_id;
 };
 
 struct msm_buf_mngr_device {
-	struct list_head buf_qhead;
-	spinlock_t buf_q_spinlock;
-	struct msm_sd_subdev subdev;
-	struct msm_sd_req_vb2_q vb2_ops;
+    struct list_head buf_qhead;
+    spinlock_t buf_q_spinlock;
+    struct msm_sd_subdev subdev;
+    struct msm_sd_req_vb2_q vb2_ops;
 };
 #endif

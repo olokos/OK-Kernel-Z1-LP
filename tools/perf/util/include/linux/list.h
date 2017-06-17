@@ -13,10 +13,9 @@
  * the entries is in an undefined state.
  */
 static inline void list_del_range(struct list_head *begin,
-				  struct list_head *end)
-{
-	begin->prev->next = end->next;
-	end->next->prev = begin->prev;
+                                  struct list_head *end) {
+    begin->prev->next = end->next;
+    end->next->prev = begin->prev;
 }
 
 /**

@@ -54,81 +54,76 @@ typedef wait_queue_t adpt_wait_queue_t;
  * message structures
  */
 
-struct i2o_message
-{
-	u8	version_offset;
-	u8	flags;
-	u16	size;
-	u32	target_tid:12;
-	u32	init_tid:12;
-	u32	function:8;
-	u32	initiator_context;
-	/* List follows */
+struct i2o_message {
+    u8	version_offset;
+    u8	flags;
+    u16	size;
+    u32	target_tid:12;
+    u32	init_tid:12;
+    u32	function:8;
+    u32	initiator_context;
+    /* List follows */
 };
 
 struct adpt_device;
 struct _adpt_hba;
-struct i2o_device
-{
-	struct i2o_device *next;	/* Chain */
-	struct i2o_device *prev;
+struct i2o_device {
+    struct i2o_device *next;	/* Chain */
+    struct i2o_device *prev;
 
-	char dev_name[8];		/* linux /dev name if available */
-	i2o_lct_entry lct_data;/* Device LCT information */
-	u32 flags;
-	struct proc_dir_entry* proc_entry;	/* /proc dir */
-	struct adpt_device *owner;
-	struct _adpt_hba *controller;	/* Controlling IOP */
+    char dev_name[8];		/* linux /dev name if available */
+    i2o_lct_entry lct_data;/* Device LCT information */
+    u32 flags;
+    struct proc_dir_entry* proc_entry;	/* /proc dir */
+    struct adpt_device *owner;
+    struct _adpt_hba *controller;	/* Controlling IOP */
 };
 
 /*
  *	Each I2O controller has one of these objects
  */
 
-struct i2o_controller
-{
-	char name[16];
-	int unit;
-	int type;
-	int enabled;
+struct i2o_controller {
+    char name[16];
+    int unit;
+    int type;
+    int enabled;
 
-	struct notifier_block *event_notifer;	/* Events */
-	atomic_t users;
-	struct i2o_device *devices;		/* I2O device chain */
-	struct i2o_controller *next;		/* Controller chain */
+    struct notifier_block *event_notifer;	/* Events */
+    atomic_t users;
+    struct i2o_device *devices;		/* I2O device chain */
+    struct i2o_controller *next;		/* Controller chain */
 
 };
 
 /*
  * I2O System table entry
  */
-struct i2o_sys_tbl_entry
-{
-	u16	org_id;
-	u16	reserved1;
-	u32	iop_id:12;
-	u32	reserved2:20;
-	u16	seg_num:12;
-	u16	i2o_version:4;
-	u8	iop_state;
-	u8	msg_type;
-	u16	frame_size;
-	u16	reserved3;
-	u32	last_changed;
-	u32	iop_capabilities;
-	u32	inbound_low;
-	u32	inbound_high;
+struct i2o_sys_tbl_entry {
+    u16	org_id;
+    u16	reserved1;
+    u32	iop_id:12;
+    u32	reserved2:20;
+    u16	seg_num:12;
+    u16	i2o_version:4;
+    u8	iop_state;
+    u8	msg_type;
+    u16	frame_size;
+    u16	reserved3;
+    u32	last_changed;
+    u32	iop_capabilities;
+    u32	inbound_low;
+    u32	inbound_high;
 };
 
-struct i2o_sys_tbl
-{
-	u8	num_entries;
-	u8	version;
-	u16	reserved1;
-	u32	change_ind;
-	u32	reserved2;
-	u32	reserved3;
-	struct i2o_sys_tbl_entry iops[0];
+struct i2o_sys_tbl {
+    u8	num_entries;
+    u8	version;
+    u16	reserved1;
+    u32	change_ind;
+    u32	reserved2;
+    u32	reserved3;
+    struct i2o_sys_tbl_entry iops[0];
 };
 
 /*
@@ -407,7 +402,7 @@ struct i2o_sys_tbl
 #define TRL_OFFSET_5    (0x0050 | I2OVERSION)
 #define TRL_OFFSET_6    (0x0060 | I2OVERSION)
 
- /* msg header defines for MsgFlags */
+/* msg header defines for MsgFlags */
 #define MSG_STATIC	0x0100
 #define MSG_64BIT_CNTXT	0x0200
 #define MSG_MULTI_TRANS	0x1000
@@ -415,7 +410,7 @@ struct i2o_sys_tbl
 #define MSG_LAST	0x4000
 #define MSG_REPLY	0x8000
 
- /* minimum size msg */
+/* minimum size msg */
 #define THREE_WORD_MSG_SIZE	0x00030000
 #define FOUR_WORD_MSG_SIZE	0x00040000
 #define FIVE_WORD_MSG_SIZE	0x00050000

@@ -28,51 +28,46 @@
 #include <linux/types.h>
 #include <linux/pci.h>
 
-static inline void NdisRawWritePortUlong(u32 port,  u32 val)
-{
-	outl(val, port);
+static inline void NdisRawWritePortUlong(u32 port,  u32 val) {
+    outl(val, port);
 }
 
-static inline void NdisRawWritePortUchar(u32 port,  u8 val)
-{
-	outb(val, port);
+static inline void NdisRawWritePortUchar(u32 port,  u8 val) {
+    outb(val, port);
 }
 
-static inline void NdisRawReadPortUchar(u32 port, u8 *pval)
-{
-	*pval = inb(port);
+static inline void NdisRawReadPortUchar(u32 port, u8 *pval) {
+    *pval = inb(port);
 }
 
-static inline void NdisRawReadPortUshort(u32 port, u16 *pval)
-{
-	*pval = inw(port);
+static inline void NdisRawReadPortUshort(u32 port, u16 *pval) {
+    *pval = inw(port);
 }
 
-static inline void NdisRawReadPortUlong(u32 port, u32 *pval)
-{
-	*pval = inl(port);
+static inline void NdisRawReadPortUlong(u32 port, u32 *pval) {
+    *pval = inl(port);
 }
 
 struct mp_adapter {
-	u8		LinkCtrlReg;
+    u8		LinkCtrlReg;
 
-	u8		BusNumber;
-	u8		DevNumber;
-	u8		FuncNumber;
+    u8		BusNumber;
+    u8		DevNumber;
+    u8		FuncNumber;
 
-	u8		PciBridgeBusNum;
-	u8		PciBridgeDevNum;
-	u8		PciBridgeFuncNum;
-	u8		PciBridgeVendor;
-	u16		PciBridgeVendorId;
-	u16		PciBridgeDeviceId;
-	u8		PciBridgePCIeHdrOffset;
-	u8		PciBridgeLinkCtrlReg;
+    u8		PciBridgeBusNum;
+    u8		PciBridgeDevNum;
+    u8		PciBridgeFuncNum;
+    u8		PciBridgeVendor;
+    u16		PciBridgeVendorId;
+    u16		PciBridgeDeviceId;
+    u8		PciBridgePCIeHdrOffset;
+    u8		PciBridgeLinkCtrlReg;
 };
 
 struct rt_pci_capab_header {
-	unsigned char   CapabilityID;
-	unsigned char   Next;
+    unsigned char   CapabilityID;
+    unsigned char   Next;
 };
 
 #define PCI_MAX_BRIDGE_NUMBER				255

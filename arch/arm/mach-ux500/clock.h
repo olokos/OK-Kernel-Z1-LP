@@ -18,10 +18,10 @@
  * NULL, the rate in the struct clk will be used.
  */
 struct clkops {
-	void (*enable) (struct clk *);
-	void (*disable) (struct clk *);
-	unsigned long (*get_rate) (struct clk *);
-	int (*set_parent)(struct clk *, struct clk *);
+    void (*enable) (struct clk *);
+    void (*disable) (struct clk *);
+    unsigned long (*get_rate) (struct clk *);
+    int (*set_parent)(struct clk *, struct clk *);
 };
 
 /**
@@ -68,32 +68,32 @@ struct clkops {
  * prcc, and parent pointers are only used for the PRCC-level clocks.
  */
 struct clk {
-	const struct clkops	*ops;
-	const char 		*name;
-	unsigned int		enabled;
-	unsigned long		(*get_rate)(struct clk *);
-	void			*data;
+    const struct clkops	*ops;
+    const char 		*name;
+    unsigned int		enabled;
+    unsigned long		(*get_rate)(struct clk *);
+    void			*data;
 
-	unsigned long		rate;
-	struct list_head	list;
+    unsigned long		rate;
+    struct list_head	list;
 
-	/* These three are only for PRCMU clks */
+    /* These three are only for PRCMU clks */
 
-	unsigned int		prcmu_cg_off;
-	unsigned int		prcmu_cg_bit;
-	unsigned int		prcmu_cg_mgt;
+    unsigned int		prcmu_cg_off;
+    unsigned int		prcmu_cg_bit;
+    unsigned int		prcmu_cg_mgt;
 
-	/* The rest are only for PRCC clks */
+    /* The rest are only for PRCC clks */
 
-	int			cluster;
-	unsigned int		prcc_bus;
-	unsigned int		prcc_kernel;
+    int			cluster;
+    unsigned int		prcc_bus;
+    unsigned int		prcc_kernel;
 
-	struct clk		*parent_cluster;
-	struct clk		*parent_periph;
+    struct clk		*parent_cluster;
+    struct clk		*parent_periph;
 #if defined(CONFIG_DEBUG_FS)
-	struct dentry		*dent;		/* For visible tree hierarchy */
-	struct dentry		*dent_bus;	/* For visible tree hierarchy */
+    struct dentry		*dent;		/* For visible tree hierarchy */
+    struct dentry		*dent_bus;	/* For visible tree hierarchy */
 #endif
 };
 

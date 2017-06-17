@@ -22,34 +22,34 @@ typedef int (*ad714x_read_t)(struct ad714x_chip *, unsigned short, unsigned shor
 typedef int (*ad714x_write_t)(struct ad714x_chip *, unsigned short, unsigned short);
 
 struct ad714x_chip {
-	unsigned short l_state;
-	unsigned short h_state;
-	unsigned short c_state;
-	unsigned short adc_reg[STAGE_NUM];
-	unsigned short amb_reg[STAGE_NUM];
-	unsigned short sensor_val[STAGE_NUM];
+    unsigned short l_state;
+    unsigned short h_state;
+    unsigned short c_state;
+    unsigned short adc_reg[STAGE_NUM];
+    unsigned short amb_reg[STAGE_NUM];
+    unsigned short sensor_val[STAGE_NUM];
 
-	struct ad714x_platform_data *hw;
-	struct ad714x_driver_data *sw;
+    struct ad714x_platform_data *hw;
+    struct ad714x_driver_data *sw;
 
-	int irq;
-	struct device *dev;
-	ad714x_read_t read;
-	ad714x_write_t write;
+    int irq;
+    struct device *dev;
+    ad714x_read_t read;
+    ad714x_write_t write;
 
-	struct mutex mutex;
+    struct mutex mutex;
 
-	unsigned product;
-	unsigned version;
+    unsigned product;
+    unsigned version;
 
-	__be16 xfer_buf[16] ____cacheline_aligned;
+    __be16 xfer_buf[16] ____cacheline_aligned;
 
 };
 
 int ad714x_disable(struct ad714x_chip *ad714x);
 int ad714x_enable(struct ad714x_chip *ad714x);
 struct ad714x_chip *ad714x_probe(struct device *dev, u16 bus_type, int irq,
-				 ad714x_read_t read, ad714x_write_t write);
+                                 ad714x_read_t read, ad714x_write_t write);
 void ad714x_remove(struct ad714x_chip *ad714x);
 
 #endif

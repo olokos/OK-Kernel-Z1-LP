@@ -22,200 +22,200 @@
 #define CHIPCREGOFFS(field)	offsetof(struct chipcregs, field)
 
 struct chipcregs {
-	u32 chipid;		/* 0x0 */
-	u32 capabilities;
-	u32 corecontrol;	/* corerev >= 1 */
-	u32 bist;
+    u32 chipid;		/* 0x0 */
+    u32 capabilities;
+    u32 corecontrol;	/* corerev >= 1 */
+    u32 bist;
 
-	/* OTP */
-	u32 otpstatus;	/* 0x10, corerev >= 10 */
-	u32 otpcontrol;
-	u32 otpprog;
-	u32 otplayout;	/* corerev >= 23 */
+    /* OTP */
+    u32 otpstatus;	/* 0x10, corerev >= 10 */
+    u32 otpcontrol;
+    u32 otpprog;
+    u32 otplayout;	/* corerev >= 23 */
 
-	/* Interrupt control */
-	u32 intstatus;	/* 0x20 */
-	u32 intmask;
+    /* Interrupt control */
+    u32 intstatus;	/* 0x20 */
+    u32 intmask;
 
-	/* Chip specific regs */
-	u32 chipcontrol;	/* 0x28, rev >= 11 */
-	u32 chipstatus;	/* 0x2c, rev >= 11 */
+    /* Chip specific regs */
+    u32 chipcontrol;	/* 0x28, rev >= 11 */
+    u32 chipstatus;	/* 0x2c, rev >= 11 */
 
-	/* Jtag Master */
-	u32 jtagcmd;		/* 0x30, rev >= 10 */
-	u32 jtagir;
-	u32 jtagdr;
-	u32 jtagctrl;
+    /* Jtag Master */
+    u32 jtagcmd;		/* 0x30, rev >= 10 */
+    u32 jtagir;
+    u32 jtagdr;
+    u32 jtagctrl;
 
-	/* serial flash interface registers */
-	u32 flashcontrol;	/* 0x40 */
-	u32 flashaddress;
-	u32 flashdata;
-	u32 PAD[1];
+    /* serial flash interface registers */
+    u32 flashcontrol;	/* 0x40 */
+    u32 flashaddress;
+    u32 flashdata;
+    u32 PAD[1];
 
-	/* Silicon backplane configuration broadcast control */
-	u32 broadcastaddress;	/* 0x50 */
-	u32 broadcastdata;
+    /* Silicon backplane configuration broadcast control */
+    u32 broadcastaddress;	/* 0x50 */
+    u32 broadcastdata;
 
-	/* gpio - cleared only by power-on-reset */
-	u32 gpiopullup;	/* 0x58, corerev >= 20 */
-	u32 gpiopulldown;	/* 0x5c, corerev >= 20 */
-	u32 gpioin;		/* 0x60 */
-	u32 gpioout;		/* 0x64 */
-	u32 gpioouten;	/* 0x68 */
-	u32 gpiocontrol;	/* 0x6C */
-	u32 gpiointpolarity;	/* 0x70 */
-	u32 gpiointmask;	/* 0x74 */
+    /* gpio - cleared only by power-on-reset */
+    u32 gpiopullup;	/* 0x58, corerev >= 20 */
+    u32 gpiopulldown;	/* 0x5c, corerev >= 20 */
+    u32 gpioin;		/* 0x60 */
+    u32 gpioout;		/* 0x64 */
+    u32 gpioouten;	/* 0x68 */
+    u32 gpiocontrol;	/* 0x6C */
+    u32 gpiointpolarity;	/* 0x70 */
+    u32 gpiointmask;	/* 0x74 */
 
-	/* GPIO events corerev >= 11 */
-	u32 gpioevent;
-	u32 gpioeventintmask;
+    /* GPIO events corerev >= 11 */
+    u32 gpioevent;
+    u32 gpioeventintmask;
 
-	/* Watchdog timer */
-	u32 watchdog;	/* 0x80 */
+    /* Watchdog timer */
+    u32 watchdog;	/* 0x80 */
 
-	/* GPIO events corerev >= 11 */
-	u32 gpioeventintpolarity;
+    /* GPIO events corerev >= 11 */
+    u32 gpioeventintpolarity;
 
-	/* GPIO based LED powersave registers corerev >= 16 */
-	u32 gpiotimerval;	/* 0x88 */
-	u32 gpiotimeroutmask;
+    /* GPIO based LED powersave registers corerev >= 16 */
+    u32 gpiotimerval;	/* 0x88 */
+    u32 gpiotimeroutmask;
 
-	/* clock control */
-	u32 clockcontrol_n;	/* 0x90 */
-	u32 clockcontrol_sb;	/* aka m0 */
-	u32 clockcontrol_pci;	/* aka m1 */
-	u32 clockcontrol_m2;	/* mii/uart/mipsref */
-	u32 clockcontrol_m3;	/* cpu */
-	u32 clkdiv;		/* corerev >= 3 */
-	u32 gpiodebugsel;	/* corerev >= 28 */
-	u32 capabilities_ext;	/* 0xac  */
+    /* clock control */
+    u32 clockcontrol_n;	/* 0x90 */
+    u32 clockcontrol_sb;	/* aka m0 */
+    u32 clockcontrol_pci;	/* aka m1 */
+    u32 clockcontrol_m2;	/* mii/uart/mipsref */
+    u32 clockcontrol_m3;	/* cpu */
+    u32 clkdiv;		/* corerev >= 3 */
+    u32 gpiodebugsel;	/* corerev >= 28 */
+    u32 capabilities_ext;	/* 0xac  */
 
-	/* pll delay registers (corerev >= 4) */
-	u32 pll_on_delay;	/* 0xb0 */
-	u32 fref_sel_delay;
-	u32 slow_clk_ctl;	/* 5 < corerev < 10 */
-	u32 PAD;
+    /* pll delay registers (corerev >= 4) */
+    u32 pll_on_delay;	/* 0xb0 */
+    u32 fref_sel_delay;
+    u32 slow_clk_ctl;	/* 5 < corerev < 10 */
+    u32 PAD;
 
-	/* Instaclock registers (corerev >= 10) */
-	u32 system_clk_ctl;	/* 0xc0 */
-	u32 clkstatestretch;
-	u32 PAD[2];
+    /* Instaclock registers (corerev >= 10) */
+    u32 system_clk_ctl;	/* 0xc0 */
+    u32 clkstatestretch;
+    u32 PAD[2];
 
-	/* Indirect backplane access (corerev >= 22) */
-	u32 bp_addrlow;	/* 0xd0 */
-	u32 bp_addrhigh;
-	u32 bp_data;
-	u32 PAD;
-	u32 bp_indaccess;
-	u32 PAD[3];
+    /* Indirect backplane access (corerev >= 22) */
+    u32 bp_addrlow;	/* 0xd0 */
+    u32 bp_addrhigh;
+    u32 bp_data;
+    u32 PAD;
+    u32 bp_indaccess;
+    u32 PAD[3];
 
-	/* More clock dividers (corerev >= 32) */
-	u32 clkdiv2;
-	u32 PAD[2];
+    /* More clock dividers (corerev >= 32) */
+    u32 clkdiv2;
+    u32 PAD[2];
 
-	/* In AI chips, pointer to erom */
-	u32 eromptr;		/* 0xfc */
+    /* In AI chips, pointer to erom */
+    u32 eromptr;		/* 0xfc */
 
-	/* ExtBus control registers (corerev >= 3) */
-	u32 pcmcia_config;	/* 0x100 */
-	u32 pcmcia_memwait;
-	u32 pcmcia_attrwait;
-	u32 pcmcia_iowait;
-	u32 ide_config;
-	u32 ide_memwait;
-	u32 ide_attrwait;
-	u32 ide_iowait;
-	u32 prog_config;
-	u32 prog_waitcount;
-	u32 flash_config;
-	u32 flash_waitcount;
-	u32 SECI_config;	/* 0x130 SECI configuration */
-	u32 PAD[3];
+    /* ExtBus control registers (corerev >= 3) */
+    u32 pcmcia_config;	/* 0x100 */
+    u32 pcmcia_memwait;
+    u32 pcmcia_attrwait;
+    u32 pcmcia_iowait;
+    u32 ide_config;
+    u32 ide_memwait;
+    u32 ide_attrwait;
+    u32 ide_iowait;
+    u32 prog_config;
+    u32 prog_waitcount;
+    u32 flash_config;
+    u32 flash_waitcount;
+    u32 SECI_config;	/* 0x130 SECI configuration */
+    u32 PAD[3];
 
-	/* Enhanced Coexistence Interface (ECI) registers (corerev >= 21) */
-	u32 eci_output;	/* 0x140 */
-	u32 eci_control;
-	u32 eci_inputlo;
-	u32 eci_inputmi;
-	u32 eci_inputhi;
-	u32 eci_inputintpolaritylo;
-	u32 eci_inputintpolaritymi;
-	u32 eci_inputintpolarityhi;
-	u32 eci_intmasklo;
-	u32 eci_intmaskmi;
-	u32 eci_intmaskhi;
-	u32 eci_eventlo;
-	u32 eci_eventmi;
-	u32 eci_eventhi;
-	u32 eci_eventmasklo;
-	u32 eci_eventmaskmi;
-	u32 eci_eventmaskhi;
-	u32 PAD[3];
+    /* Enhanced Coexistence Interface (ECI) registers (corerev >= 21) */
+    u32 eci_output;	/* 0x140 */
+    u32 eci_control;
+    u32 eci_inputlo;
+    u32 eci_inputmi;
+    u32 eci_inputhi;
+    u32 eci_inputintpolaritylo;
+    u32 eci_inputintpolaritymi;
+    u32 eci_inputintpolarityhi;
+    u32 eci_intmasklo;
+    u32 eci_intmaskmi;
+    u32 eci_intmaskhi;
+    u32 eci_eventlo;
+    u32 eci_eventmi;
+    u32 eci_eventhi;
+    u32 eci_eventmasklo;
+    u32 eci_eventmaskmi;
+    u32 eci_eventmaskhi;
+    u32 PAD[3];
 
-	/* SROM interface (corerev >= 32) */
-	u32 sromcontrol;	/* 0x190 */
-	u32 sromaddress;
-	u32 sromdata;
-	u32 PAD[17];
+    /* SROM interface (corerev >= 32) */
+    u32 sromcontrol;	/* 0x190 */
+    u32 sromaddress;
+    u32 sromdata;
+    u32 PAD[17];
 
-	/* Clock control and hardware workarounds (corerev >= 20) */
-	u32 clk_ctl_st;	/* 0x1e0 */
-	u32 hw_war;
-	u32 PAD[70];
+    /* Clock control and hardware workarounds (corerev >= 20) */
+    u32 clk_ctl_st;	/* 0x1e0 */
+    u32 hw_war;
+    u32 PAD[70];
 
-	/* UARTs */
-	u8 uart0data;	/* 0x300 */
-	u8 uart0imr;
-	u8 uart0fcr;
-	u8 uart0lcr;
-	u8 uart0mcr;
-	u8 uart0lsr;
-	u8 uart0msr;
-	u8 uart0scratch;
-	u8 PAD[248];		/* corerev >= 1 */
+    /* UARTs */
+    u8 uart0data;	/* 0x300 */
+    u8 uart0imr;
+    u8 uart0fcr;
+    u8 uart0lcr;
+    u8 uart0mcr;
+    u8 uart0lsr;
+    u8 uart0msr;
+    u8 uart0scratch;
+    u8 PAD[248];		/* corerev >= 1 */
 
-	u8 uart1data;	/* 0x400 */
-	u8 uart1imr;
-	u8 uart1fcr;
-	u8 uart1lcr;
-	u8 uart1mcr;
-	u8 uart1lsr;
-	u8 uart1msr;
-	u8 uart1scratch;
-	u32 PAD[126];
+    u8 uart1data;	/* 0x400 */
+    u8 uart1imr;
+    u8 uart1fcr;
+    u8 uart1lcr;
+    u8 uart1mcr;
+    u8 uart1lsr;
+    u8 uart1msr;
+    u8 uart1scratch;
+    u32 PAD[126];
 
-	/* PMU registers (corerev >= 20) */
-	u32 pmucontrol;	/* 0x600 */
-	u32 pmucapabilities;
-	u32 pmustatus;
-	u32 res_state;
-	u32 res_pending;
-	u32 pmutimer;
-	u32 min_res_mask;
-	u32 max_res_mask;
-	u32 res_table_sel;
-	u32 res_dep_mask;
-	u32 res_updn_timer;
-	u32 res_timer;
-	u32 clkstretch;
-	u32 pmuwatchdog;
-	u32 gpiosel;		/* 0x638, rev >= 1 */
-	u32 gpioenable;	/* 0x63c, rev >= 1 */
-	u32 res_req_timer_sel;
-	u32 res_req_timer;
-	u32 res_req_mask;
-	u32 PAD;
-	u32 chipcontrol_addr;	/* 0x650 */
-	u32 chipcontrol_data;	/* 0x654 */
-	u32 regcontrol_addr;
-	u32 regcontrol_data;
-	u32 pllcontrol_addr;
-	u32 pllcontrol_data;
-	u32 pmustrapopt;	/* 0x668, corerev >= 28 */
-	u32 pmu_xtalfreq;	/* 0x66C, pmurev >= 10 */
-	u32 PAD[100];
-	u16 sromotp[768];
+    /* PMU registers (corerev >= 20) */
+    u32 pmucontrol;	/* 0x600 */
+    u32 pmucapabilities;
+    u32 pmustatus;
+    u32 res_state;
+    u32 res_pending;
+    u32 pmutimer;
+    u32 min_res_mask;
+    u32 max_res_mask;
+    u32 res_table_sel;
+    u32 res_dep_mask;
+    u32 res_updn_timer;
+    u32 res_timer;
+    u32 clkstretch;
+    u32 pmuwatchdog;
+    u32 gpiosel;		/* 0x638, rev >= 1 */
+    u32 gpioenable;	/* 0x63c, rev >= 1 */
+    u32 res_req_timer_sel;
+    u32 res_req_timer;
+    u32 res_req_mask;
+    u32 PAD;
+    u32 chipcontrol_addr;	/* 0x650 */
+    u32 chipcontrol_data;	/* 0x654 */
+    u32 regcontrol_addr;
+    u32 regcontrol_data;
+    u32 pllcontrol_addr;
+    u32 pllcontrol_data;
+    u32 pmustrapopt;	/* 0x668, corerev >= 28 */
+    u32 pmu_xtalfreq;	/* 0x66C, pmurev >= 10 */
+    u32 PAD[100];
+    u16 sromotp[768];
 };
 
 /* chipid */

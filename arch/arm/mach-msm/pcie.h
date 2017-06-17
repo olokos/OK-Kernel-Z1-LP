@@ -30,49 +30,49 @@
 
 /* voltage regulator info structrue */
 struct msm_pcie_vreg_info_t {
-	struct regulator  *hdl;
-	char              *name;
-	uint32_t           max_v;
-	uint32_t           min_v;
-	uint32_t           opt_mode;
+    struct regulator  *hdl;
+    char              *name;
+    uint32_t           max_v;
+    uint32_t           min_v;
+    uint32_t           opt_mode;
 };
 
 /* clock info structure */
 struct msm_pcie_clk_info_t {
-	struct clk  *hdl;
-	char        *name;
+    struct clk  *hdl;
+    char        *name;
 };
 
 /* resource info structure */
 struct msm_pcie_res_info_t {
-	char            *name;
-	struct resource *resource;
-	void __iomem    *base;
+    char            *name;
+    struct resource *resource;
+    void __iomem    *base;
 };
 
 /* msm pcie device structure */
 struct msm_pcie_dev_t {
-	struct platform_device       *pdev;
+    struct platform_device       *pdev;
 
-	struct msm_pcie_vreg_info_t  *vreg;
-	struct msm_pcie_gpio_info_t  *gpio;
-	struct msm_pcie_clk_info_t   *clk;
-	struct msm_pcie_res_info_t   *res;
+    struct msm_pcie_vreg_info_t  *vreg;
+    struct msm_pcie_gpio_info_t  *gpio;
+    struct msm_pcie_clk_info_t   *clk;
+    struct msm_pcie_res_info_t   *res;
 
-	void __iomem                 *parf;
-	void __iomem                 *elbi;
-	void __iomem                 *pcie20;
-	void __iomem                 *axi_conf;
+    void __iomem                 *parf;
+    void __iomem                 *elbi;
+    void __iomem                 *pcie20;
+    void __iomem                 *axi_conf;
 
-	uint32_t                      axi_bar_start;
-	uint32_t                      axi_bar_end;
+    uint32_t                      axi_bar_start;
+    uint32_t                      axi_bar_end;
 
-	struct resource               dev_mem_res;
+    struct resource               dev_mem_res;
 
-	uint32_t                      wake_n;
-	uint32_t                      vreg_n;
-	uint32_t                      parf_deemph;
-	uint32_t                      parf_swing;
+    uint32_t                      wake_n;
+    uint32_t                      vreg_n;
+    uint32_t                      parf_deemph;
+    uint32_t                      parf_swing;
 };
 
 extern uint32_t msm_pcie_irq_init(struct msm_pcie_dev_t *dev);

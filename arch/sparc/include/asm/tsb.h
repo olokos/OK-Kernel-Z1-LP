@@ -60,16 +60,16 @@
  */
 #ifndef __ASSEMBLY__
 struct tsb_ldquad_phys_patch_entry {
-	unsigned int	addr;
-	unsigned int	sun4u_insn;
-	unsigned int	sun4v_insn;
+    unsigned int	addr;
+    unsigned int	sun4u_insn;
+    unsigned int	sun4v_insn;
 };
 extern struct tsb_ldquad_phys_patch_entry __tsb_ldquad_phys_patch,
-	__tsb_ldquad_phys_patch_end;
+           __tsb_ldquad_phys_patch_end;
 
 struct tsb_phys_patch_entry {
-	unsigned int	addr;
-	unsigned int	insn;
+    unsigned int	addr;
+    unsigned int	insn;
 };
 extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 #endif
@@ -133,10 +133,10 @@ extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 	sub	TSB, 0x8, TSB;   \
 	TSB_STORE(TSB, TAG);
 
-	/* Do a kernel page table walk.  Leaves physical PTE pointer in
-	 * REG1.  Jumps to FAIL_LABEL on early page table walk termination.
-	 * VADDR will not be clobbered, but REG2 will.
-	 */
+/* Do a kernel page table walk.  Leaves physical PTE pointer in
+ * REG1.  Jumps to FAIL_LABEL on early page table walk termination.
+ * VADDR will not be clobbered, but REG2 will.
+ */
 #define KERN_PGTABLE_WALK(VADDR, REG1, REG2, FAIL_LABEL)	\
 	sethi		%hi(swapper_pg_dir), REG1; \
 	or		REG1, %lo(swapper_pg_dir), REG1; \
@@ -157,13 +157,13 @@ extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 	andn		REG2, 0x7, REG2; \
 	add		REG1, REG2, REG1;
 
-	/* Do a user page table walk in MMU globals.  Leaves physical PTE
-	 * pointer in REG1.  Jumps to FAIL_LABEL on early page table walk
-	 * termination.  Physical base of page tables is in PHYS_PGD which
-	 * will not be modified.
-	 *
-	 * VADDR will not be clobbered, but REG1 and REG2 will.
-	 */
+/* Do a user page table walk in MMU globals.  Leaves physical PTE
+ * pointer in REG1.  Jumps to FAIL_LABEL on early page table walk
+ * termination.  Physical base of page tables is in PHYS_PGD which
+ * will not be modified.
+ *
+ * VADDR will not be clobbered, but REG1 and REG2 will.
+ */
 #define USER_PGTABLE_WALK_TL1(VADDR, PHYS_PGD, REG1, REG2, FAIL_LABEL)	\
 	sllx		VADDR, 64 - (PGDIR_SHIFT + PGDIR_BITS), REG2; \
 	srlx		REG2, 64 - PAGE_SHIFT, REG2; \
@@ -207,10 +207,10 @@ extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 	 add		REG1, (3 * 8), REG1; \
 99:
 
-	/* We use a 32K TSB for the whole kernel, this allows to
-	 * handle about 16MB of modules and vmalloc mappings without
-	 * incurring many hash conflicts.
-	 */
+/* We use a 32K TSB for the whole kernel, this allows to
+ * handle about 16MB of modules and vmalloc mappings without
+ * incurring many hash conflicts.
+ */
 #define KERNEL_TSB_SIZE_BYTES	(32 * 1024)
 #define KERNEL_TSB_NENTRIES	\
 	(KERNEL_TSB_SIZE_BYTES / 16)
@@ -218,13 +218,13 @@ extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 
 #define KTSB_PHYS_SHIFT		15
 
-	/* Do a kernel TSB lookup at tl>0 on VADDR+TAG, branch to OK_LABEL
-	 * on TSB hit.  REG1, REG2, REG3, and REG4 are used as temporaries
-	 * and the found TTE will be left in REG1.  REG3 and REG4 must
-	 * be an even/odd pair of registers.
-	 *
-	 * VADDR and TAG will be preserved and not clobbered by this macro.
-	 */
+/* Do a kernel TSB lookup at tl>0 on VADDR+TAG, branch to OK_LABEL
+ * on TSB hit.  REG1, REG2, REG3, and REG4 are used as temporaries
+ * and the found TTE will be left in REG1.  REG3 and REG4 must
+ * be an even/odd pair of registers.
+ *
+ * VADDR and TAG will be preserved and not clobbered by this macro.
+ */
 #define KERN_TSB_LOOKUP_TL1(VADDR, TAG, REG1, REG2, REG3, REG4, OK_LABEL) \
 661:	sethi		%hi(swapper_tsb), REG1;			\
 	or		REG1, %lo(swapper_tsb), REG1; \
@@ -247,9 +247,9 @@ extern struct tsb_phys_patch_entry __tsb_phys_patch, __tsb_phys_patch_end;
 	 mov		REG4, REG1;
 
 #ifndef CONFIG_DEBUG_PAGEALLOC
-	/* This version uses a trick, the TAG is already (VADDR >> 22) so
-	 * we can make use of that for the index computation.
-	 */
+/* This version uses a trick, the TAG is already (VADDR >> 22) so
+ * we can make use of that for the index computation.
+ */
 #define KERN_TSB4M_LOOKUP_TL1(TAG, REG1, REG2, REG3, REG4, OK_LABEL) \
 661:	sethi		%hi(swapper_4m_tsb), REG1;	     \
 	or		REG1, %lo(swapper_4m_tsb), REG1; \

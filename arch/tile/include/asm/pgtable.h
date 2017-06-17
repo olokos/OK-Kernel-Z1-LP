@@ -169,15 +169,14 @@ extern void set_page_homes(void);
  * clearing a page table entry, so clear the bottom half first and
  * enforce ordering with a barrier.
  */
-static inline void __pte_clear(pte_t *ptep)
-{
+static inline void __pte_clear(pte_t *ptep) {
 #ifdef __tilegx__
-	ptep->val = 0;
+    ptep->val = 0;
 #else
-	u32 *tmp = (u32 *)ptep;
-	tmp[0] = 0;
-	barrier();
-	tmp[1] = 0;
+    u32 *tmp = (u32 *)ptep;
+    tmp[0] = 0;
+    barrier();
+    tmp[1] = 0;
 #endif
 }
 #define pte_clear(mm, addr, ptep) __pte_clear(ptep)
@@ -254,23 +253,20 @@ extern void set_pte(pte_t *ptep, pte_t pte);
 
 #define pte_page(x)		pfn_to_page(pte_pfn(x))
 
-static inline int pte_none(pte_t pte)
-{
-	return !pte.val;
+static inline int pte_none(pte_t pte) {
+    return !pte.val;
 }
 
-static inline unsigned long pte_pfn(pte_t pte)
-{
-	return hv_pte_get_pfn(pte);
+static inline unsigned long pte_pfn(pte_t pte) {
+    return hv_pte_get_pfn(pte);
 }
 
 /* Set or get the remote cache cpu in a pgprot with remote caching. */
 extern pgprot_t set_remote_cache_cpu(pgprot_t prot, int cpu);
 extern int get_remote_cache_cpu(pgprot_t prot);
 
-static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
-{
-	return hv_pte_set_pfn(prot, pfn);
+static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot) {
+    return hv_pte_set_pfn(prot, pfn);
 }
 
 /* Support for priority mappings. */
@@ -310,9 +306,8 @@ extern void check_mm_caching(struct mm_struct *prev, struct mm_struct *next);
  * If we are doing an mprotect(), just accept the new vma->vm_page_prot
  * value and combine it with the PFN from the old PTE to get a new PTE.
  */
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	return pfn_pte(hv_pte_get_pfn(pte), newprot);
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    return pfn_pte(hv_pte_get_pfn(pte), newprot);
 }
 
 /*
@@ -375,28 +370,24 @@ extern void vmalloc_sync_all(void);
 
 #ifndef __ASSEMBLY__
 
-static inline int pmd_none(pmd_t pmd)
-{
-	/*
-	 * Only check low word on 32-bit platforms, since it might be
-	 * out of sync with upper half.
-	 */
-	return (unsigned long)pmd_val(pmd) == 0;
+static inline int pmd_none(pmd_t pmd) {
+    /*
+     * Only check low word on 32-bit platforms, since it might be
+     * out of sync with upper half.
+     */
+    return (unsigned long)pmd_val(pmd) == 0;
 }
 
-static inline int pmd_present(pmd_t pmd)
-{
-	return pmd_val(pmd) & _PAGE_PRESENT;
+static inline int pmd_present(pmd_t pmd) {
+    return pmd_val(pmd) & _PAGE_PRESENT;
 }
 
-static inline int pmd_bad(pmd_t pmd)
-{
-	return ((pmd_val(pmd) & _PAGE_ALL) != _PAGE_TABLE);
+static inline int pmd_bad(pmd_t pmd) {
+    return ((pmd_val(pmd) & _PAGE_ALL) != _PAGE_TABLE);
 }
 
-static inline unsigned long pages_to_mb(unsigned long npg)
-{
-	return npg >> (20 - PAGE_SHIFT);
+static inline unsigned long pages_to_mb(unsigned long npg) {
+    return npg >> (20 - PAGE_SHIFT);
 }
 
 /*
@@ -405,9 +396,8 @@ static inline unsigned long pages_to_mb(unsigned long npg)
  * This function returns the index of the entry in the pmd which would
  * control the given virtual address.
  */
-static inline unsigned long pmd_index(unsigned long address)
-{
-	return (address >> PMD_SHIFT) & (PTRS_PER_PMD - 1);
+static inline unsigned long pmd_index(unsigned long address) {
+    return (address >> PMD_SHIFT) & (PTRS_PER_PMD - 1);
 }
 
 /*
@@ -416,11 +406,10 @@ static inline unsigned long pmd_index(unsigned long address)
  * tables can be aligned at sub-page granularity, this function can
  * return non-page-aligned pointers, despite its name.
  */
-static inline unsigned long pmd_page_vaddr(pmd_t pmd)
-{
-	phys_addr_t pa =
-		(phys_addr_t)pmd_ptfn(pmd) << HV_LOG2_PAGE_TABLE_ALIGN;
-	return (unsigned long)__va(pa);
+static inline unsigned long pmd_page_vaddr(pmd_t pmd) {
+    phys_addr_t pa =
+        (phys_addr_t)pmd_ptfn(pmd) << HV_LOG2_PAGE_TABLE_ALIGN;
+    return (unsigned long)__va(pa);
 }
 
 /*
@@ -438,19 +427,16 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
  * This macro returns the index of the entry in the pte page which would
  * control the given virtual address.
  */
-static inline unsigned long pte_index(unsigned long address)
-{
-	return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
+static inline unsigned long pte_index(unsigned long address) {
+    return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
 }
 
-static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
-{
-       return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
+static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address) {
+    return (pte_t *)pmd_page_vaddr(*pmd) + pte_index(address);
 }
 
-static inline int pmd_huge_page(pmd_t pmd)
-{
-	return pmd_val(pmd) & _PAGE_HUGE_PAGE;
+static inline int pmd_huge_page(pmd_t pmd) {
+    return pmd_val(pmd) & _PAGE_HUGE_PAGE;
 }
 
 #include <asm-generic/pgtable.h>
@@ -458,7 +444,7 @@ static inline int pmd_huge_page(pmd_t pmd)
 /* Support /proc/NN/pgtable API. */
 struct seq_file;
 int arch_proc_pgtable_show(struct seq_file *m, struct mm_struct *mm,
-			   unsigned long vaddr, pte_t *ptep, void **datap);
+                           unsigned long vaddr, pte_t *ptep, void **datap);
 
 #endif /* !__ASSEMBLY__ */
 

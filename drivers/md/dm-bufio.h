@@ -22,9 +22,9 @@ struct dm_buffer;
  */
 struct dm_bufio_client *
 dm_bufio_client_create(struct block_device *bdev, unsigned block_size,
-		       unsigned reserved_buffers, unsigned aux_size,
-		       void (*alloc_callback)(struct dm_buffer *),
-		       void (*write_callback)(struct dm_buffer *));
+                       unsigned reserved_buffers, unsigned aux_size,
+                       void (*alloc_callback)(struct dm_buffer *),
+                       void (*write_callback)(struct dm_buffer *));
 
 /*
  * Release a buffered IO cache.
@@ -46,21 +46,21 @@ void dm_bufio_client_destroy(struct dm_bufio_client *c);
  * it dirty.
  */
 void *dm_bufio_read(struct dm_bufio_client *c, sector_t block,
-		    struct dm_buffer **bp);
+                    struct dm_buffer **bp);
 
 /*
  * Like dm_bufio_read, but return buffer from cache, don't read
  * it. If the buffer is not in the cache, return NULL.
  */
 void *dm_bufio_get(struct dm_bufio_client *c, sector_t block,
-		   struct dm_buffer **bp);
+                   struct dm_buffer **bp);
 
 /*
  * Like dm_bufio_read, but don't read anything from the disk.  It is
  * expected that the caller initializes the buffer and marks it dirty.
  */
 void *dm_bufio_new(struct dm_bufio_client *c, sector_t block,
-		   struct dm_buffer **bp);
+                   struct dm_buffer **bp);
 
 /*
  * Prefetch the specified blocks to the cache.
@@ -68,7 +68,7 @@ void *dm_bufio_new(struct dm_bufio_client *c, sector_t block,
  * I/O to finish.
  */
 void dm_bufio_prefetch(struct dm_bufio_client *c,
-		       sector_t block, unsigned n_blocks);
+                       sector_t block, unsigned n_blocks);
 
 /*
  * Release a reference obtained with dm_bufio_{read,get,new}. The data

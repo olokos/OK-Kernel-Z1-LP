@@ -67,8 +67,7 @@ typedef struct tagSMICHDR {
 } SMICHDR, *PSMICHDR;
 
 
-typedef struct tagSTX_NAF_G_RTS
-{
+typedef struct tagSTX_NAF_G_RTS {
     //RsvTime
     WORD            wRTSTxRrvTime_ba;
     WORD            wRTSTxRrvTime_aa;
@@ -104,8 +103,7 @@ typedef struct tagSTX_NAF_G_RTS
 
 } TX_NAF_G_RTS, *PTX_NAF_G_RTS;
 
-typedef struct tagSTX_NAF_G_RTS_MIC
-{
+typedef struct tagSTX_NAF_G_RTS_MIC {
     //RsvTime
     WORD            wRTSTxRrvTime_ba;
     WORD            wRTSTxRrvTime_aa;
@@ -143,8 +141,7 @@ typedef struct tagSTX_NAF_G_RTS_MIC
 
 } TX_NAF_G_RTS_MIC, *PTX_NAF_G_RTS_MIC;
 
-typedef struct tagSTX_NAF_G_CTS
-{
+typedef struct tagSTX_NAF_G_CTS {
     //RsvTime
     WORD            wCTSTxRrvTime_ba;
     WORD            wReserved2;
@@ -174,8 +171,7 @@ typedef struct tagSTX_NAF_G_CTS
 } TX_NAF_G_CTS, *PTX_NAF_G_CTS;
 
 
-typedef struct tagSTX_NAF_G_CTS_MIC
-{
+typedef struct tagSTX_NAF_G_CTS_MIC {
     //RsvTime
     WORD            wCTSTxRrvTime_ba;
     WORD            wReserved2;
@@ -208,8 +204,7 @@ typedef struct tagSTX_NAF_G_CTS_MIC
 } TX_NAF_G_CTS_MIC, *PTX_NAF_G_CTS_MIC;
 
 
-typedef struct tagSTX_NAF_G_BEACON
-{
+typedef struct tagSTX_NAF_G_BEACON {
     WORD            wFIFOCtl;
     WORD            wTimeStamp;
 
@@ -232,8 +227,7 @@ typedef struct tagSTX_NAF_G_BEACON
 } TX_NAF_G_BEACON, *PTX_NAF_G_BEACON;
 
 
-typedef struct tagSTX_NAF_AB_RTS
-{
+typedef struct tagSTX_NAF_AB_RTS {
     //RsvTime
     WORD            wRTSTxRrvTime_ab;
     WORD            wTxRrvTime_ab;
@@ -257,8 +251,7 @@ typedef struct tagSTX_NAF_AB_RTS
 } TX_NAF_AB_RTS, *PTX_NAF_AB_RTS;
 
 
-typedef struct tagSTX_NAF_AB_RTS_MIC
-{
+typedef struct tagSTX_NAF_AB_RTS_MIC {
     //RsvTime
     WORD            wRTSTxRrvTime_ab;
     WORD            wTxRrvTime_ab;
@@ -285,8 +278,7 @@ typedef struct tagSTX_NAF_AB_RTS_MIC
 
 
 
-typedef struct tagSTX_NAF_AB_CTS
-{
+typedef struct tagSTX_NAF_AB_CTS {
     //RsvTime
     WORD            wReserved2;
     WORD            wTxRrvTime_ab;
@@ -300,8 +292,7 @@ typedef struct tagSTX_NAF_AB_CTS
 
 } TX_NAF_AB_CTS, *PTX_NAF_AB_CTS;
 
-typedef struct tagSTX_NAF_AB_CTS_MIC
-{
+typedef struct tagSTX_NAF_AB_CTS_MIC {
     //RsvTime
     WORD            wReserved2;
     WORD            wTxRrvTime_ab;
@@ -318,12 +309,11 @@ typedef struct tagSTX_NAF_AB_CTS_MIC
 } TX_NAF_AB_CTS_MIC, *PTX_NAF_AB_CTS_MIC;
 
 
-typedef struct tagSTX_NAF_AB_BEACON
-{
+typedef struct tagSTX_NAF_AB_BEACON {
     WORD            wFIFOCtl;
     WORD            wTimeStamp;
 
-   //Data
+    //Data
     BYTE            bySignalField_ab;
     BYTE            byServiceField_ab;
     WORD            wTransmitLength_ab;
@@ -332,8 +322,7 @@ typedef struct tagSTX_NAF_AB_BEACON
 
 } TX_NAF_AB_BEACON, *PTX_NAF_AB_BEACON;
 
-typedef struct tagSTX_AF_G_RTS
-{
+typedef struct tagSTX_AF_G_RTS {
     //RsvTime
     WORD            wRTSTxRrvTime_ba;
     WORD            wRTSTxRrvTime_aa;
@@ -376,8 +365,7 @@ typedef struct tagSTX_AF_G_RTS
 } TX_AF_G_RTS, *PTX_AF_G_RTS;
 
 
-typedef struct tagSTX_AF_G_RTS_MIC
-{
+typedef struct tagSTX_AF_G_RTS_MIC {
     //RsvTime
     WORD            wRTSTxRrvTime_ba;
     WORD            wRTSTxRrvTime_aa;
@@ -423,8 +411,7 @@ typedef struct tagSTX_AF_G_RTS_MIC
 
 
 
-typedef struct tagSTX_AF_G_CTS
-{
+typedef struct tagSTX_AF_G_CTS {
     //RsvTime
     WORD            wCTSTxRrvTime_ba;
     WORD            wReserved2;
@@ -458,8 +445,7 @@ typedef struct tagSTX_AF_G_CTS
 } TX_AF_G_CTS, *PTX_AF_G_CTS;
 
 
-typedef struct tagSTX_AF_G_CTS_MIC
-{
+typedef struct tagSTX_AF_G_CTS_MIC {
     //RsvTime
     WORD            wCTSTxRrvTime_ba;
     WORD            wReserved2;
@@ -497,8 +483,7 @@ typedef struct tagSTX_AF_G_CTS_MIC
 
 
 
-typedef struct tagSTX_AF_A_RTS
-{
+typedef struct tagSTX_AF_A_RTS {
     //RsvTime
     WORD            wRTSTxRrvTime_a;
     WORD            wTxRrvTime_a;
@@ -525,8 +510,7 @@ typedef struct tagSTX_AF_A_RTS
 } TX_AF_A_RTS, *PTX_AF_A_RTS;
 
 
-typedef struct tagSTX_AF_A_RTS_MIC
-{
+typedef struct tagSTX_AF_A_RTS_MIC {
     //RsvTime
     WORD            wRTSTxRrvTime_a;
     WORD            wTxRrvTime_a;
@@ -556,8 +540,7 @@ typedef struct tagSTX_AF_A_RTS_MIC
 
 
 
-typedef struct tagSTX_AF_A_CTS
-{
+typedef struct tagSTX_AF_A_CTS {
     //RsvTime
     WORD            wReserved2;
     WORD            wTxRrvTime_a;
@@ -574,8 +557,7 @@ typedef struct tagSTX_AF_A_CTS
 } TX_AF_A_CTS, *PTX_AF_A_CTS;
 
 
-typedef struct tagSTX_AF_A_CTS_MIC
-{
+typedef struct tagSTX_AF_A_CTS_MIC {
     //RsvTime
     WORD            wReserved2;
     WORD            wTxRrvTime_a;
@@ -597,8 +579,7 @@ typedef struct tagSTX_AF_A_CTS_MIC
 //
 // union with all of the TX Buffer Type
 //
-typedef union tagUTX_BUFFER_CONTAINER
-{
+typedef union tagUTX_BUFFER_CONTAINER {
     TX_NAF_G_RTS                    RTS_G;
     TX_NAF_G_RTS_MIC                RTS_G_MIC;
     TX_NAF_G_CTS                    CTS_G;
@@ -624,8 +605,7 @@ typedef union tagUTX_BUFFER_CONTAINER
 //
 // Remote NDIS message format
 //
-typedef struct tagSTX_BUFFER
-{
+typedef struct tagSTX_BUFFER {
     BYTE                            byType;
     BYTE                            byPKTNO;
     WORD                            wTxByteCount;
@@ -646,8 +626,7 @@ typedef struct tagSTX_BUFFER
 //
 // Remote NDIS message format
 //
-typedef struct tagSBEACON_BUFFER
-{
+typedef struct tagSBEACON_BUFFER {
     BYTE                            byType;
     BYTE                            byPKTNO;
     WORD                            wTxByteCount;
@@ -667,28 +646,28 @@ typedef struct tagSBEACON_BUFFER
 
 BOOL
 bPacketToWirelessUsb(
-      PSDevice         pDevice,
-      BYTE             byPktType,
-      PBYTE            usbPacketBuf,
-      BOOL             bNeedEncrypt,
-      unsigned int             cbPayloadSize,
-      unsigned int             uDMAIdx,
-      PSEthernetHeader psEthHeader,
-      PBYTE            pPacket,
-      PSKeyItem        pTransmitKey,
-      unsigned int             uNodeIndex,
-      WORD             wCurrentRate,
-     unsigned int             *pcbHeaderLen,
-     unsigned int             *pcbTotalLen
-    );
+    PSDevice         pDevice,
+    BYTE             byPktType,
+    PBYTE            usbPacketBuf,
+    BOOL             bNeedEncrypt,
+    unsigned int             cbPayloadSize,
+    unsigned int             uDMAIdx,
+    PSEthernetHeader psEthHeader,
+    PBYTE            pPacket,
+    PSKeyItem        pTransmitKey,
+    unsigned int             uNodeIndex,
+    WORD             wCurrentRate,
+    unsigned int             *pcbHeaderLen,
+    unsigned int             *pcbTotalLen
+);
 
 void vDMA0_tx_80211(PSDevice  pDevice, struct sk_buff *skb);
 int nsDMA_tx_packet(PSDevice pDevice,
-		    unsigned int uDMAIdx,
-		    struct sk_buff *skb);
+                    unsigned int uDMAIdx,
+                    struct sk_buff *skb);
 CMD_STATUS csMgmt_xmit(PSDevice pDevice, PSTxMgmtPacket pPacket);
 CMD_STATUS csBeacon_xmit(PSDevice pDevice, PSTxMgmtPacket pPacket);
 BOOL bRelayPacketSend(PSDevice pDevice, PBYTE pbySkbData,
-		      unsigned int uDataLen, unsigned int uNodeIndex);
+                      unsigned int uDataLen, unsigned int uNodeIndex);
 
 #endif /* __RXTX_H__ */

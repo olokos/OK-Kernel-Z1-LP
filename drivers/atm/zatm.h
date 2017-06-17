@@ -40,52 +40,52 @@
 #define MBX_TX_1	3
 
 struct zatm_vcc {
-	/*-------------------------------- RX part */
-	int rx_chan;			/* RX channel, 0 if none */
-	int pool;			/* free buffer pool */
-	/*-------------------------------- TX part */
-	int tx_chan;			/* TX channel, 0 if none */
-	int shaper;			/* shaper, <0 if none */
-	struct sk_buff_head tx_queue;	/* list of buffers in transit */
-	wait_queue_head_t tx_wait;	/* for close */
-	u32 *ring;			/* transmit ring */
-	int ring_curr;			/* current write position */
-	int txing;			/* number of transmits in progress */
-	struct sk_buff_head backlog;	/* list of buffers waiting for ring */
+    /*-------------------------------- RX part */
+    int rx_chan;			/* RX channel, 0 if none */
+    int pool;			/* free buffer pool */
+    /*-------------------------------- TX part */
+    int tx_chan;			/* TX channel, 0 if none */
+    int shaper;			/* shaper, <0 if none */
+    struct sk_buff_head tx_queue;	/* list of buffers in transit */
+    wait_queue_head_t tx_wait;	/* for close */
+    u32 *ring;			/* transmit ring */
+    int ring_curr;			/* current write position */
+    int txing;			/* number of transmits in progress */
+    struct sk_buff_head backlog;	/* list of buffers waiting for ring */
 };
 
 struct zatm_dev {
-	/*-------------------------------- TX part */
-	int tx_bw;			/* remaining bandwidth */
-	u32 free_shapers;		/* bit set */
-	int ubr;			/* UBR shaper; -1 if none */
-	int ubr_ref_cnt;		/* number of VCs using UBR shaper */
-	/*-------------------------------- RX part */
-	int pool_ref[NR_POOLS];		/* free buffer pool usage counters */
-	volatile struct sk_buff *last_free[NR_POOLS];
-					/* last entry in respective pool */
-	struct sk_buff_head pool[NR_POOLS];/* free buffer pools */
-	struct zatm_pool_info pool_info[NR_POOLS]; /* pool information */
-	/*-------------------------------- maps */
-	struct atm_vcc **tx_map;	/* TX VCCs */
-	struct atm_vcc **rx_map;	/* RX VCCs */
-	int chans;			/* map size, must be 2^n */
-	/*-------------------------------- mailboxes */
-	unsigned long mbx_start[NR_MBX];/* start addresses */
-	dma_addr_t mbx_dma[NR_MBX];
-	u16 mbx_end[NR_MBX];		/* end offset (in bytes) */
-	/*-------------------------------- other pointers */
-	u32 pool_base;			/* Free buffer pool dsc (word addr) */
-	/*-------------------------------- ZATM links */
-	struct atm_dev *more;		/* other ZATM devices */
-	/*-------------------------------- general information */
-	int mem;			/* RAM on board (in bytes) */
-	int khz;			/* timer clock */
-	int copper;			/* PHY type */
-	unsigned char irq;		/* IRQ */
-	unsigned int base;		/* IO base address */
-	struct pci_dev *pci_dev;	/* PCI stuff */
-	spinlock_t lock;
+    /*-------------------------------- TX part */
+    int tx_bw;			/* remaining bandwidth */
+    u32 free_shapers;		/* bit set */
+    int ubr;			/* UBR shaper; -1 if none */
+    int ubr_ref_cnt;		/* number of VCs using UBR shaper */
+    /*-------------------------------- RX part */
+    int pool_ref[NR_POOLS];		/* free buffer pool usage counters */
+    volatile struct sk_buff *last_free[NR_POOLS];
+    /* last entry in respective pool */
+    struct sk_buff_head pool[NR_POOLS];/* free buffer pools */
+    struct zatm_pool_info pool_info[NR_POOLS]; /* pool information */
+    /*-------------------------------- maps */
+    struct atm_vcc **tx_map;	/* TX VCCs */
+    struct atm_vcc **rx_map;	/* RX VCCs */
+    int chans;			/* map size, must be 2^n */
+    /*-------------------------------- mailboxes */
+    unsigned long mbx_start[NR_MBX];/* start addresses */
+    dma_addr_t mbx_dma[NR_MBX];
+    u16 mbx_end[NR_MBX];		/* end offset (in bytes) */
+    /*-------------------------------- other pointers */
+    u32 pool_base;			/* Free buffer pool dsc (word addr) */
+    /*-------------------------------- ZATM links */
+    struct atm_dev *more;		/* other ZATM devices */
+    /*-------------------------------- general information */
+    int mem;			/* RAM on board (in bytes) */
+    int khz;			/* timer clock */
+    int copper;			/* PHY type */
+    unsigned char irq;		/* IRQ */
+    unsigned int base;		/* IO base address */
+    struct pci_dev *pci_dev;	/* PCI stuff */
+    spinlock_t lock;
 };
 
 
@@ -94,8 +94,8 @@ struct zatm_dev {
 
 
 struct zatm_skb_prv {
-	struct atm_skb_data _;		/* reserved */
-	u32 *dsc;			/* pointer to skb's descriptor */
+    struct atm_skb_data _;		/* reserved */
+    u32 *dsc;			/* pointer to skb's descriptor */
 };
 
 #define ZATM_PRV_DSC(skb) (((struct zatm_skb_prv *) (skb)->cb)->dsc)

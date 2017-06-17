@@ -22,31 +22,28 @@
 
 #define DMA_HALT_TIMEOUT	500
 
-static inline int rc32434_halt_dma(struct dma_reg *ch)
-{
-	int timeout = 1;
-	if (__raw_readl(&ch->dmac) & DMA_CHAN_RUN_BIT) {
-		__raw_writel(0, &ch->dmac);
-		for (timeout = DMA_HALT_TIMEOUT; timeout > 0; timeout--) {
-			if (__raw_readl(&ch->dmas) & DMA_STAT_HALT) {
-				__raw_writel(0, &ch->dmas);
-				break;
-			}
-		}
-	}
+static inline int rc32434_halt_dma(struct dma_reg *ch) {
+    int timeout = 1;
+    if (__raw_readl(&ch->dmac) & DMA_CHAN_RUN_BIT) {
+        __raw_writel(0, &ch->dmac);
+        for (timeout = DMA_HALT_TIMEOUT; timeout > 0; timeout--) {
+            if (__raw_readl(&ch->dmas) & DMA_STAT_HALT) {
+                __raw_writel(0, &ch->dmas);
+                break;
+            }
+        }
+    }
 
-	return timeout ? 0 : 1;
+    return timeout ? 0 : 1;
 }
 
-static inline void rc32434_start_dma(struct dma_reg *ch, u32 dma_addr)
-{
-	__raw_writel(0, &ch->dmandptr);
-	__raw_writel(dma_addr, &ch->dmadptr);
+static inline void rc32434_start_dma(struct dma_reg *ch, u32 dma_addr) {
+    __raw_writel(0, &ch->dmandptr);
+    __raw_writel(dma_addr, &ch->dmadptr);
 }
 
-static inline void rc32434_chain_dma(struct dma_reg *ch, u32 dma_addr)
-{
-	__raw_writel(dma_addr, &ch->dmandptr);
+static inline void rc32434_chain_dma(struct dma_reg *ch, u32 dma_addr) {
+    __raw_writel(dma_addr, &ch->dmandptr);
 }
 
 #endif  /* _ASM_RC32434_DMA_V_H_ */

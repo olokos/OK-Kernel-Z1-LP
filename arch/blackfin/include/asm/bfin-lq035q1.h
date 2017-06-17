@@ -30,11 +30,11 @@
 
 struct bfin_lq035q1fb_disp_info {
 
-	unsigned	mode;
-	unsigned	ppi_mode;
-	/* GPIOs */
-	int		use_bl;
-	unsigned 	gpio_bl;
+    unsigned	mode;
+    unsigned	ppi_mode;
+    /* GPIOs */
+    int		use_bl;
+    unsigned 	gpio_bl;
 };
 
 #endif /* BFIN_LQ035Q1_H */

@@ -273,10 +273,10 @@
 /* SD Tuning Data Structure */
 /* Record continuous timing phase path */
 struct timing_phase_path {
-	int start;
-	int end;
-	int mid;
-	int len;
+    int start;
+    int end;
+    int mid;
+    int len;
 };
 
 int sd_select_card(struct rts51x_chip *chip, int select);
@@ -284,7 +284,7 @@ int reset_sd_card(struct rts51x_chip *chip);
 int sd_switch_clock(struct rts51x_chip *chip);
 void sd_stop_seq_mode(struct rts51x_chip *chip);
 int sd_rw(struct scsi_cmnd *srb, struct rts51x_chip *chip, u32 start_sector,
-	  u16 sector_cnt);
+          u16 sector_cnt);
 void sd_cleanup_work(struct rts51x_chip *chip);
 int sd_power_off_card3v3(struct rts51x_chip *chip);
 int release_sd_card(struct rts51x_chip *chip);
@@ -297,8 +297,8 @@ int sd_update_lock_status(struct rts51x_chip *chip);
 extern int reset_sd(struct rts51x_chip *chip);
 extern int sd_check_data0_status(struct rts51x_chip *chip);
 extern int sd_read_data(struct rts51x_chip *chip, u8 trans_mode, u8 *cmd,
-		int cmd_len, u16 byte_cnt, u16 blk_cnt, u8 bus_width,
-		u8 *buf, int buf_len, int timeout);
+                        int cmd_len, u16 byte_cnt, u16 blk_cnt, u8 bus_width,
+                        u8 *buf, int buf_len, int timeout);
 #endif
 
 #endif /* __RTS51X_SD_H */

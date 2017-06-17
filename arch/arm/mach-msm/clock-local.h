@@ -86,29 +86,29 @@
  * Generic frequency-definition structs and macros
  */
 struct clk_freq_tbl {
-	const uint32_t	freq_hz;
-	struct clk	*const src_clk;
-	const uint32_t	md_val;
-	const uint32_t	ns_val;
-	const uint32_t	ctl_val;
-	void		*const extra_freq_data;
+    const uint32_t	freq_hz;
+    struct clk	*const src_clk;
+    const uint32_t	md_val;
+    const uint32_t	ns_val;
+    const uint32_t	ctl_val;
+    void		*const extra_freq_data;
 };
 
 /* Some clocks have two banks to avoid glitches when switching frequencies.
  * The unused bank is programmed while running on the other bank, and
  * switched to afterwards. The following two structs describe the banks. */
 struct bank_mask_info {
-	void *const md_reg;
-	const uint32_t	ns_mask;
-	const uint32_t	rst_mask;
-	const uint32_t	mnd_en_mask;
-	const uint32_t	mode_mask;
+    void *const md_reg;
+    const uint32_t	ns_mask;
+    const uint32_t	rst_mask;
+    const uint32_t	mnd_en_mask;
+    const uint32_t	mode_mask;
 };
 
 struct bank_masks {
-	const uint32_t			bank_sel_mask;
-	const struct bank_mask_info	bank0_mask;
-	const struct bank_mask_info	bank1_mask;
+    const uint32_t			bank_sel_mask;
+    const struct bank_mask_info	bank0_mask;
+    const struct bank_mask_info	bank1_mask;
 };
 
 #define F_RAW(f, sc, m_v, n_v, c_v, e) { \
@@ -135,21 +135,21 @@ struct bank_masks {
  * @reset_mask: ORed with @reset_reg to reset the clock domain
  */
 struct branch {
-	void __iomem *const ctl_reg;
-	const u32 en_mask;
+    void __iomem *const ctl_reg;
+    const u32 en_mask;
 
-	void __iomem *hwcg_reg;
-	u32 hwcg_mask;
+    void __iomem *hwcg_reg;
+    u32 hwcg_mask;
 
-	void __iomem *const halt_reg;
-	const u16 halt_check;
-	const u16 halt_bit;
+    void __iomem *const halt_reg;
+    const u16 halt_check;
+    const u16 halt_bit;
 
-	void __iomem *const reset_reg;
-	const u32 reset_mask;
+    void __iomem *const reset_reg;
+    const u32 reset_mask;
 
-	void __iomem *const retain_reg;
-	const u32 retain_mask;
+    void __iomem *const retain_reg;
+    const u32 retain_mask;
 };
 
 extern struct clk_ops clk_ops_branch;
@@ -165,29 +165,28 @@ enum handoff branch_handoff(struct branch *b, struct clk *c);
  * Generic clock-definition struct and macros
  */
 struct rcg_clk {
-	bool		prepared;
-	bool		enabled;
-	void		*const ns_reg;
-	void		*const md_reg;
+    bool		prepared;
+    bool		enabled;
+    void		*const ns_reg;
+    void		*const md_reg;
 
-	const uint32_t	root_en_mask;
-	uint32_t	ns_mask;
-	const uint32_t	ctl_mask;
-	uint32_t	mnd_en_mask;
+    const uint32_t	root_en_mask;
+    uint32_t	ns_mask;
+    const uint32_t	ctl_mask;
+    uint32_t	mnd_en_mask;
 
-	void		*bank_info;
-	void   (*set_rate)(struct rcg_clk *, struct clk_freq_tbl *);
+    void		*bank_info;
+    void   (*set_rate)(struct rcg_clk *, struct clk_freq_tbl *);
 
-	struct clk_freq_tbl *freq_tbl;
-	struct clk_freq_tbl *current_freq;
+    struct clk_freq_tbl *freq_tbl;
+    struct clk_freq_tbl *current_freq;
 
-	struct branch	b;
-	struct clk	c;
+    struct branch	b;
+    struct clk	c;
 };
 
-static inline struct rcg_clk *to_rcg_clk(struct clk *c)
-{
-	return container_of(c, struct rcg_clk, c);
+static inline struct rcg_clk *to_rcg_clk(struct clk *c) {
+    return container_of(c, struct rcg_clk, c);
 }
 
 extern struct clk_ops clk_ops_rcg;
@@ -205,20 +204,19 @@ extern struct clk_freq_tbl rcg_dummy_freq;
  * @c: clock
  */
 struct cdiv_clk {
-	void __iomem *const ns_reg;
-	u32 ext_mask;
+    void __iomem *const ns_reg;
+    u32 ext_mask;
 
-	unsigned long cur_div;
-	u8 div_offset;
-	u32 max_div;
+    unsigned long cur_div;
+    u8 div_offset;
+    u32 max_div;
 
-	struct branch b;
-	struct clk c;
+    struct branch b;
+    struct clk c;
 };
 
-static inline struct cdiv_clk *to_cdiv_clk(struct clk *c)
-{
-	return container_of(c, struct cdiv_clk, c);
+static inline struct cdiv_clk *to_cdiv_clk(struct clk *c) {
+    return container_of(c, struct cdiv_clk, c);
 }
 
 extern struct clk_ops clk_ops_cdiv;
@@ -228,7 +226,7 @@ extern struct clk_ops clk_ops_cdiv;
  * @c: clk
  */
 struct fixed_clk {
-	struct clk c;
+    struct clk c;
 };
 
 /**
@@ -240,14 +238,13 @@ struct fixed_clk {
  * An on/off switch with a rate derived from the parent.
  */
 struct branch_clk {
-	bool enabled;
-	struct branch b;
-	struct clk c;
+    bool enabled;
+    struct branch b;
+    struct clk c;
 };
 
-static inline struct branch_clk *to_branch_clk(struct clk *c)
-{
-	return container_of(c, struct branch_clk, c);
+static inline struct branch_clk *to_branch_clk(struct clk *c) {
+    return container_of(c, struct branch_clk, c);
 }
 
 /**
@@ -258,17 +255,16 @@ static inline struct branch_clk *to_branch_clk(struct clk *c)
  * @c: clock
 */
 struct measure_clk {
-	u64 sample_ticks;
-	u32 multiplier;
-	u32 divider;
-	struct clk c;
+    u64 sample_ticks;
+    u32 multiplier;
+    u32 divider;
+    struct clk c;
 };
 
 extern struct clk_ops clk_ops_empty;
 
-static inline struct measure_clk *to_measure_clk(struct clk *c)
-{
-	return container_of(c, struct measure_clk, c);
+static inline struct measure_clk *to_measure_clk(struct clk *c) {
+    return container_of(c, struct measure_clk, c);
 }
 
 /*

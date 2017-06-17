@@ -62,8 +62,7 @@ extern "C" {
   Type declarations
   ------------------------------------------------------------------------*/
 
-typedef struct vos_timer_platform_s
-{
+typedef struct vos_timer_platform_s {
     struct timer_list Timer;
     int threadID;
     v_U32_t cookie;

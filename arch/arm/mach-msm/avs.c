@@ -18,83 +18,75 @@
 #include "avs.h"
 #include "spm.h"
 
-u32 avs_get_avscsr(void)
-{
-	u32 val = 0;
+u32 avs_get_avscsr(void) {
+    u32 val = 0;
 
-	asm volatile ("mrc p15, 7, %[avscsr], c15, c1, 7\n\t"
-			: [avscsr]"=r" (val)
-	);
+    asm volatile ("mrc p15, 7, %[avscsr], c15, c1, 7\n\t"
+                  : [avscsr]"=r" (val)
+                 );
 
-	return val;
+    return val;
 }
 EXPORT_SYMBOL(avs_get_avscsr);
 
-void avs_set_avscsr(u32 avscsr)
-{
-	asm volatile ("mcr p15, 7, %[avscsr], c15, c1, 7\n\t"
-		      "isb\n\t"
-			:
-			: [avscsr]"r" (avscsr)
-	);
+void avs_set_avscsr(u32 avscsr) {
+    asm volatile ("mcr p15, 7, %[avscsr], c15, c1, 7\n\t"
+                  "isb\n\t"
+                  :
+                  : [avscsr]"r" (avscsr)
+                 );
 }
 EXPORT_SYMBOL(avs_set_avscsr);
 
-u32 avs_get_avsdscr(void)
-{
-	u32 val = 0;
+u32 avs_get_avsdscr(void) {
+    u32 val = 0;
 
-	asm volatile ("mrc p15, 7, %[avsdscr], c15, c0, 6\n\t"
-			: [avsdscr]"=r" (val)
-	);
+    asm volatile ("mrc p15, 7, %[avsdscr], c15, c0, 6\n\t"
+                  : [avsdscr]"=r" (val)
+                 );
 
-	return val;
+    return val;
 }
 EXPORT_SYMBOL(avs_get_avsdscr);
 
-void avs_set_avsdscr(u32 avsdscr)
-{
-	asm volatile("mcr p15, 7, %[avsdscr], c15, c0, 6\n\t"
-		     "isb\n\t"
-			:
-			: [avsdscr]"r" (avsdscr)
-	);
+void avs_set_avsdscr(u32 avsdscr) {
+    asm volatile("mcr p15, 7, %[avsdscr], c15, c0, 6\n\t"
+                 "isb\n\t"
+                 :
+                 : [avsdscr]"r" (avsdscr)
+                );
 }
 EXPORT_SYMBOL(avs_set_avsdscr);
 
-static void avs_enable_local(void *data)
-{
-	u32 avsdscr = (u32) data;
-	u32 avscsr_enable = 0x61;
+static void avs_enable_local(void *data) {
+    u32 avsdscr = (u32) data;
+    u32 avscsr_enable = 0x61;
 
-	avs_set_avsdscr(avsdscr);
-	avs_set_avscsr(avscsr_enable);
+    avs_set_avsdscr(avsdscr);
+    avs_set_avscsr(avscsr_enable);
 }
 
-static void avs_disable_local(void *data)
-{
-	int cpu = smp_processor_id();
+static void avs_disable_local(void *data) {
+    int cpu = smp_processor_id();
 
-	avs_set_avscsr(0);
-	msm_spm_set_vdd(cpu, msm_spm_get_vdd(cpu));
+    avs_set_avscsr(0);
+    msm_spm_set_vdd(cpu, msm_spm_get_vdd(cpu));
 }
 
-void avs_enable(int cpu, u32 avsdscr)
-{
-	int ret;
+void avs_enable(int cpu, u32 avsdscr) {
+    int ret;
 
-	ret = smp_call_function_single(cpu, avs_enable_local,
-			(void *)avsdscr, true);
-	WARN_ON(ret);
+    ret = smp_call_function_single(cpu, avs_enable_local,
+                                   (void *)avsdscr, true);
+    WARN_ON(ret);
 }
 EXPORT_SYMBOL(avs_enable);
 
-void avs_disable(int cpu)
-{
-	int ret;
+void avs_disable(int cpu) {
+    int ret;
 
-	ret = smp_call_function_single(cpu, avs_disable_local,
-			(void *) 0, true);
-	WARN_ON(ret);
+    ret = smp_call_function_single(cpu, avs_disable_local,
+                                   (void *) 0, true);
+    WARN_ON(ret);
 }
 EXPORT_SYMBOL(avs_disable);

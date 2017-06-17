@@ -13,7 +13,7 @@
 #define _IIO_TRIGGER_H_
 
 struct iio_subirq {
-	bool enabled;
+    bool enabled;
 };
 
 /**
@@ -29,11 +29,11 @@ struct iio_subirq {
  * instances of a given device.
  **/
 struct iio_trigger_ops {
-	struct module			*owner;
-	int (*set_trigger_state)(struct iio_trigger *trig, bool state);
-	int (*try_reenable)(struct iio_trigger *trig);
-	int (*validate_device)(struct iio_trigger *trig,
-			       struct iio_dev *indio_dev);
+    struct module			*owner;
+    int (*set_trigger_state)(struct iio_trigger *trig, bool state);
+    int (*try_reenable)(struct iio_trigger *trig);
+    int (*validate_device)(struct iio_trigger *trig,
+                           struct iio_dev *indio_dev);
 };
 
 
@@ -54,40 +54,37 @@ struct iio_trigger_ops {
  * @pool_lock:		[INTERN] protection of the irq pool.
  **/
 struct iio_trigger {
-	const struct iio_trigger_ops	*ops;
-	int				id;
-	const char			*name;
-	struct device			dev;
+    const struct iio_trigger_ops	*ops;
+    int				id;
+    const char			*name;
+    struct device			dev;
 
-	void				*private_data;
-	struct list_head		list;
-	struct list_head		alloc_list;
-	int use_count;
+    void				*private_data;
+    struct list_head		list;
+    struct list_head		alloc_list;
+    int use_count;
 
-	struct irq_chip			subirq_chip;
-	int				subirq_base;
+    struct irq_chip			subirq_chip;
+    int				subirq_base;
 
-	struct iio_subirq subirqs[CONFIG_IIO_CONSUMERS_PER_TRIGGER];
-	unsigned long pool[BITS_TO_LONGS(CONFIG_IIO_CONSUMERS_PER_TRIGGER)];
-	struct mutex			pool_lock;
+    struct iio_subirq subirqs[CONFIG_IIO_CONSUMERS_PER_TRIGGER];
+    unsigned long pool[BITS_TO_LONGS(CONFIG_IIO_CONSUMERS_PER_TRIGGER)];
+    struct mutex			pool_lock;
 };
 
 
-static inline struct iio_trigger *to_iio_trigger(struct device *d)
-{
-	return container_of(d, struct iio_trigger, dev);
+static inline struct iio_trigger *to_iio_trigger(struct device *d) {
+    return container_of(d, struct iio_trigger, dev);
 };
 
-static inline void iio_put_trigger(struct iio_trigger *trig)
-{
-	module_put(trig->ops->owner);
-	put_device(&trig->dev);
+static inline void iio_put_trigger(struct iio_trigger *trig) {
+    module_put(trig->ops->owner);
+    put_device(&trig->dev);
 };
 
-static inline void iio_get_trigger(struct iio_trigger *trig)
-{
-	get_device(&trig->dev);
-	__module_get(trig->ops->owner);
+static inline void iio_get_trigger(struct iio_trigger *trig) {
+    get_device(&trig->dev);
+    __module_get(trig->ops->owner);
 };
 
 /**

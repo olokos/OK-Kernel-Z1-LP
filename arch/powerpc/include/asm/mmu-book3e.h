@@ -213,17 +213,17 @@
 extern unsigned int tlbcam_index;
 
 typedef struct {
-	unsigned int	id;
-	unsigned int	active;
-	unsigned long	vdso_base;
+    unsigned int	id;
+    unsigned int	active;
+    unsigned long	vdso_base;
 #ifdef CONFIG_PPC_ICSWX
-	struct spinlock *cop_lockp;	/* guard cop related stuff */
-	unsigned long acop;		/* mask of enabled coprocessor types */
+    struct spinlock *cop_lockp;	/* guard cop related stuff */
+    unsigned long acop;		/* mask of enabled coprocessor types */
 #endif /* CONFIG_PPC_ICSWX */
 #ifdef CONFIG_PPC_MM_SLICES
-	u64 low_slices_psize;   /* SLB page size encodings */
-	u64 high_slices_psize;  /* 4 bits per slice for now */
-	u16 user_psize;         /* page size index */
+    u64 low_slices_psize;   /* SLB page size encodings */
+    u64 high_slices_psize;  /* 4 bits per slice for now */
+    u16 user_psize;         /* page size index */
 #endif
 } mm_context_t;
 
@@ -233,12 +233,11 @@ typedef struct {
  *    penc  : is the pte encoding mask
  *
  */
-struct mmu_psize_def
-{
-	unsigned int	shift;	/* number of bits */
-	unsigned int	enc;	/* PTE encoding */
-	unsigned int    ind;    /* Corresponding indirect page size shift */
-	unsigned int	flags;
+struct mmu_psize_def {
+    unsigned int	shift;	/* number of bits */
+    unsigned int	enc;	/* PTE encoding */
+    unsigned int    ind;    /* Corresponding indirect page size shift */
+    unsigned int	flags;
 #define MMU_PAGE_SIZE_DIRECT	0x1	/* Supported as a direct size */
 #define MMU_PAGE_SIZE_INDIRECT	0x2	/* Supported as an indirect size */
 };

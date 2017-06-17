@@ -40,33 +40,30 @@ extern int wmt_gpio_ext_irq[8] __initdata;
 
 extern struct map_desc wmt_io_desc[2] __initdata;
 
-static inline struct resource wmt_mmio_res(u32 start, u32 size)
-{
-	struct resource tmp = {
-		.flags = IORESOURCE_MEM,
-		.start = start,
-		.end = start + size - 1,
-	};
+static inline struct resource wmt_mmio_res(u32 start, u32 size) {
+    struct resource tmp = {
+        .flags = IORESOURCE_MEM,
+        .start = start,
+        .end = start + size - 1,
+    };
 
-	return tmp;
+    return tmp;
 }
 
-static inline struct resource wmt_irq_res(int irq)
-{
-	struct resource tmp = {
-		.flags = IORESOURCE_IRQ,
-		.start = irq,
-		.end = irq,
-	};
+static inline struct resource wmt_irq_res(int irq) {
+    struct resource tmp = {
+        .flags = IORESOURCE_IRQ,
+        .start = irq,
+        .end = irq,
+    };
 
-	return tmp;
+    return tmp;
 }
 
 static inline void wmt_res_add(struct platform_device *pdev,
-			       const struct resource *res, unsigned int num)
-{
-	if (unlikely(platform_device_add_resources(pdev, res, num)))
-		pr_err("Failed to assign resources\n");
+                               const struct resource *res, unsigned int num) {
+    if (unlikely(platform_device_add_resources(pdev, res, num)))
+        pr_err("Failed to assign resources\n");
 }
 
 extern struct sys_timer vt8500_timer;

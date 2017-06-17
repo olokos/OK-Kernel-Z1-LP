@@ -72,81 +72,81 @@ extern unsigned long __FIXADDR_TOP;
  */
 enum fixed_addresses {
 #ifdef CONFIG_X86_32
-	FIX_HOLE,
-	FIX_VDSO,
+    FIX_HOLE,
+    FIX_VDSO,
 #else
-	VSYSCALL_LAST_PAGE,
-	VSYSCALL_FIRST_PAGE = VSYSCALL_LAST_PAGE
-			    + ((VSYSCALL_END-VSYSCALL_START) >> PAGE_SHIFT) - 1,
-	VVAR_PAGE,
-	VSYSCALL_HPET,
+    VSYSCALL_LAST_PAGE,
+    VSYSCALL_FIRST_PAGE = VSYSCALL_LAST_PAGE
+                          + ((VSYSCALL_END-VSYSCALL_START) >> PAGE_SHIFT) - 1,
+    VVAR_PAGE,
+    VSYSCALL_HPET,
 #endif
-	FIX_DBGP_BASE,
-	FIX_EARLYCON_MEM_BASE,
+    FIX_DBGP_BASE,
+    FIX_EARLYCON_MEM_BASE,
 #ifdef CONFIG_PROVIDE_OHCI1394_DMA_INIT
-	FIX_OHCI1394_BASE,
+    FIX_OHCI1394_BASE,
 #endif
 #ifdef CONFIG_X86_LOCAL_APIC
-	FIX_APIC_BASE,	/* local (CPU) APIC) -- required for SMP or not */
+    FIX_APIC_BASE,	/* local (CPU) APIC) -- required for SMP or not */
 #endif
 #ifdef CONFIG_X86_IO_APIC
-	FIX_IO_APIC_BASE_0,
-	FIX_IO_APIC_BASE_END = FIX_IO_APIC_BASE_0 + MAX_IO_APICS - 1,
+    FIX_IO_APIC_BASE_0,
+    FIX_IO_APIC_BASE_END = FIX_IO_APIC_BASE_0 + MAX_IO_APICS - 1,
 #endif
 #ifdef CONFIG_X86_VISWS_APIC
-	FIX_CO_CPU,	/* Cobalt timer */
-	FIX_CO_APIC,	/* Cobalt APIC Redirection Table */
-	FIX_LI_PCIA,	/* Lithium PCI Bridge A */
-	FIX_LI_PCIB,	/* Lithium PCI Bridge B */
+    FIX_CO_CPU,	/* Cobalt timer */
+    FIX_CO_APIC,	/* Cobalt APIC Redirection Table */
+    FIX_LI_PCIA,	/* Lithium PCI Bridge A */
+    FIX_LI_PCIB,	/* Lithium PCI Bridge B */
 #endif
 #ifdef CONFIG_X86_F00F_BUG
-	FIX_F00F_IDT,	/* Virtual mapping for IDT */
+    FIX_F00F_IDT,	/* Virtual mapping for IDT */
 #endif
 #ifdef CONFIG_X86_CYCLONE_TIMER
-	FIX_CYCLONE_TIMER, /*cyclone timer register*/
+    FIX_CYCLONE_TIMER, /*cyclone timer register*/
 #endif
 #ifdef CONFIG_X86_32
-	FIX_KMAP_BEGIN,	/* reserved pte's for temporary kernel mappings */
-	FIX_KMAP_END = FIX_KMAP_BEGIN+(KM_TYPE_NR*NR_CPUS)-1,
+    FIX_KMAP_BEGIN,	/* reserved pte's for temporary kernel mappings */
+    FIX_KMAP_END = FIX_KMAP_BEGIN+(KM_TYPE_NR*NR_CPUS)-1,
 #ifdef CONFIG_PCI_MMCONFIG
-	FIX_PCIE_MCFG,
+    FIX_PCIE_MCFG,
 #endif
 #endif
 #ifdef CONFIG_PARAVIRT
-	FIX_PARAVIRT_BOOTMAP,
+    FIX_PARAVIRT_BOOTMAP,
 #endif
-	FIX_TEXT_POKE1,	/* reserve 2 pages for text_poke() */
-	FIX_TEXT_POKE0, /* first page is last, because allocation is backward */
+    FIX_TEXT_POKE1,	/* reserve 2 pages for text_poke() */
+    FIX_TEXT_POKE0, /* first page is last, because allocation is backward */
 #ifdef	CONFIG_X86_INTEL_MID
-	FIX_LNW_VRTC,
+    FIX_LNW_VRTC,
 #endif
-	__end_of_permanent_fixed_addresses,
+    __end_of_permanent_fixed_addresses,
 
-	/*
-	 * 256 temporary boot-time mappings, used by early_ioremap(),
-	 * before ioremap() is functional.
-	 *
-	 * If necessary we round it up to the next 256 pages boundary so
-	 * that we can have a single pgd entry and a single pte table:
-	 */
+    /*
+     * 256 temporary boot-time mappings, used by early_ioremap(),
+     * before ioremap() is functional.
+     *
+     * If necessary we round it up to the next 256 pages boundary so
+     * that we can have a single pgd entry and a single pte table:
+     */
 #define NR_FIX_BTMAPS		64
 #define FIX_BTMAPS_SLOTS	4
 #define TOTAL_FIX_BTMAPS	(NR_FIX_BTMAPS * FIX_BTMAPS_SLOTS)
-	FIX_BTMAP_END =
-	 (__end_of_permanent_fixed_addresses ^
-	  (__end_of_permanent_fixed_addresses + TOTAL_FIX_BTMAPS - 1)) &
-	 -PTRS_PER_PTE
-	 ? __end_of_permanent_fixed_addresses + TOTAL_FIX_BTMAPS -
-	   (__end_of_permanent_fixed_addresses & (TOTAL_FIX_BTMAPS - 1))
-	 : __end_of_permanent_fixed_addresses,
-	FIX_BTMAP_BEGIN = FIX_BTMAP_END + TOTAL_FIX_BTMAPS - 1,
+    FIX_BTMAP_END =
+        (__end_of_permanent_fixed_addresses ^
+         (__end_of_permanent_fixed_addresses + TOTAL_FIX_BTMAPS - 1)) &
+        -PTRS_PER_PTE
+        ? __end_of_permanent_fixed_addresses + TOTAL_FIX_BTMAPS -
+        (__end_of_permanent_fixed_addresses & (TOTAL_FIX_BTMAPS - 1))
+        : __end_of_permanent_fixed_addresses,
+    FIX_BTMAP_BEGIN = FIX_BTMAP_END + TOTAL_FIX_BTMAPS - 1,
 #ifdef CONFIG_X86_32
-	FIX_WP_TEST,
+    FIX_WP_TEST,
 #endif
 #ifdef CONFIG_INTEL_TXT
-	FIX_TBOOT_BASE,
+    FIX_TBOOT_BASE,
 #endif
-	__end_of_fixed_addresses
+    __end_of_fixed_addresses
 };
 
 
@@ -165,13 +165,12 @@ extern pte_t *pkmap_page_table;
 
 void __native_set_fixmap(enum fixed_addresses idx, pte_t pte);
 void native_set_fixmap(enum fixed_addresses idx,
-		       phys_addr_t phys, pgprot_t flags);
+                       phys_addr_t phys, pgprot_t flags);
 
 #ifndef CONFIG_PARAVIRT
 static inline void __set_fixmap(enum fixed_addresses idx,
-				phys_addr_t phys, pgprot_t flags)
-{
-	native_set_fixmap(idx, phys, flags);
+                                phys_addr_t phys, pgprot_t flags) {
+    native_set_fixmap(idx, phys, flags);
 }
 #endif
 
@@ -197,35 +196,32 @@ extern void __this_fixmap_does_not_exist(void);
  * directly without translation, we catch the bug with a NULL-deference
  * kernel oops. Illegal ranges of incoming indices are caught too.
  */
-static __always_inline unsigned long fix_to_virt(const unsigned int idx)
-{
-	/*
-	 * this branch gets completely eliminated after inlining,
-	 * except when someone tries to use fixaddr indices in an
-	 * illegal way. (such as mixing up address types or using
-	 * out-of-range indices).
-	 *
-	 * If it doesn't get removed, the linker will complain
-	 * loudly with a reasonably clear error message..
-	 */
-	if (idx >= __end_of_fixed_addresses)
-		__this_fixmap_does_not_exist();
+static __always_inline unsigned long fix_to_virt(const unsigned int idx) {
+    /*
+     * this branch gets completely eliminated after inlining,
+     * except when someone tries to use fixaddr indices in an
+     * illegal way. (such as mixing up address types or using
+     * out-of-range indices).
+     *
+     * If it doesn't get removed, the linker will complain
+     * loudly with a reasonably clear error message..
+     */
+    if (idx >= __end_of_fixed_addresses)
+        __this_fixmap_does_not_exist();
 
-	return __fix_to_virt(idx);
+    return __fix_to_virt(idx);
 }
 
-static inline unsigned long virt_to_fix(const unsigned long vaddr)
-{
-	BUG_ON(vaddr >= FIXADDR_TOP || vaddr < FIXADDR_START);
-	return __virt_to_fix(vaddr);
+static inline unsigned long virt_to_fix(const unsigned long vaddr) {
+    BUG_ON(vaddr >= FIXADDR_TOP || vaddr < FIXADDR_START);
+    return __virt_to_fix(vaddr);
 }
 
 /* Return an pointer with offset calculated */
 static __always_inline unsigned long
-__set_fixmap_offset(enum fixed_addresses idx, phys_addr_t phys, pgprot_t flags)
-{
-	__set_fixmap(idx, phys, flags);
-	return fix_to_virt(idx) + (phys & (PAGE_SIZE - 1));
+__set_fixmap_offset(enum fixed_addresses idx, phys_addr_t phys, pgprot_t flags) {
+    __set_fixmap(idx, phys, flags);
+    return fix_to_virt(idx) + (phys & (PAGE_SIZE - 1));
 }
 
 #define set_fixmap_offset(idx, phys)			\

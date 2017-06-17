@@ -101,14 +101,14 @@ struct iwl_trans;
  */
 #define IWL_NUM_TX_CALIB_GROUPS 5
 enum {
-	EEPROM_CHANNEL_VALID = (1 << 0),	/* usable for this SKU/geo */
-	EEPROM_CHANNEL_IBSS = (1 << 1),		/* usable as an IBSS channel */
-	/* Bit 2 Reserved */
-	EEPROM_CHANNEL_ACTIVE = (1 << 3),	/* active scanning allowed */
-	EEPROM_CHANNEL_RADAR = (1 << 4),	/* radar detection required */
-	EEPROM_CHANNEL_WIDE = (1 << 5),		/* 20 MHz channel okay */
-	/* Bit 6 Reserved (was Narrow Channel) */
-	EEPROM_CHANNEL_DFS = (1 << 7),	/* dynamic freq selection candidate */
+    EEPROM_CHANNEL_VALID = (1 << 0),	/* usable for this SKU/geo */
+    EEPROM_CHANNEL_IBSS = (1 << 1),		/* usable as an IBSS channel */
+    /* Bit 2 Reserved */
+    EEPROM_CHANNEL_ACTIVE = (1 << 3),	/* active scanning allowed */
+    EEPROM_CHANNEL_RADAR = (1 << 4),	/* radar detection required */
+    EEPROM_CHANNEL_WIDE = (1 << 5),		/* 20 MHz channel okay */
+    /* Bit 6 Reserved (was Narrow Channel) */
+    EEPROM_CHANNEL_DFS = (1 << 7),	/* dynamic freq selection candidate */
 };
 
 /* SKU Capabilities */
@@ -121,19 +121,19 @@ enum {
 /* *regulatory* channel data format in eeprom, one for each channel.
  * There are separate entries for HT40 (40 MHz) vs. normal (20 MHz) channels. */
 struct iwl_eeprom_channel {
-	u8 flags;		/* EEPROM_CHANNEL_* flags copied from EEPROM */
-	s8 max_power_avg;	/* max power (dBm) on this chnl, limit 31 */
+    u8 flags;		/* EEPROM_CHANNEL_* flags copied from EEPROM */
+    s8 max_power_avg;	/* max power (dBm) on this chnl, limit 31 */
 } __packed;
 
 enum iwl_eeprom_enhanced_txpwr_flags {
-	IWL_EEPROM_ENH_TXP_FL_VALID		= BIT(0),
-	IWL_EEPROM_ENH_TXP_FL_BAND_52G		= BIT(1),
-	IWL_EEPROM_ENH_TXP_FL_OFDM		= BIT(2),
-	IWL_EEPROM_ENH_TXP_FL_40MHZ		= BIT(3),
-	IWL_EEPROM_ENH_TXP_FL_HT_AP		= BIT(4),
-	IWL_EEPROM_ENH_TXP_FL_RES1		= BIT(5),
-	IWL_EEPROM_ENH_TXP_FL_RES2		= BIT(6),
-	IWL_EEPROM_ENH_TXP_FL_COMMON_TYPE	= BIT(7),
+    IWL_EEPROM_ENH_TXP_FL_VALID		= BIT(0),
+    IWL_EEPROM_ENH_TXP_FL_BAND_52G		= BIT(1),
+    IWL_EEPROM_ENH_TXP_FL_OFDM		= BIT(2),
+    IWL_EEPROM_ENH_TXP_FL_40MHZ		= BIT(3),
+    IWL_EEPROM_ENH_TXP_FL_HT_AP		= BIT(4),
+    IWL_EEPROM_ENH_TXP_FL_RES1		= BIT(5),
+    IWL_EEPROM_ENH_TXP_FL_RES2		= BIT(6),
+    IWL_EEPROM_ENH_TXP_FL_COMMON_TYPE	= BIT(7),
 };
 
 /**
@@ -154,21 +154,21 @@ enum iwl_eeprom_enhanced_txpwr_flags {
  *
  */
 struct iwl_eeprom_enhanced_txpwr {
-	u8 flags;
-	u8 channel;
-	s8 chain_a_max;
-	s8 chain_b_max;
-	s8 chain_c_max;
-	u8 delta_20_in_40;
-	s8 mimo2_max;
-	s8 mimo3_max;
+    u8 flags;
+    u8 channel;
+    s8 chain_a_max;
+    s8 chain_b_max;
+    s8 chain_c_max;
+    u8 delta_20_in_40;
+    s8 mimo2_max;
+    s8 mimo3_max;
 } __packed;
 
 /* calibration */
 struct iwl_eeprom_calib_hdr {
-	u8 version;
-	u8 pa_type;
-	__le16 voltage;
+    u8 version;
+    u8 pa_type;
+    __le16 voltage;
 } __packed;
 
 #define EEPROM_CALIB_ALL	(INDIRECT_ADDRESS | INDIRECT_CALIBRATION)
@@ -301,8 +301,8 @@ extern const u8 iwl_eeprom_band_1[14];
 #define EEPROM_REGULATORY_BAND_NO_HT40			(0)
 
 struct iwl_eeprom_ops {
-	const u32 regulatory_bands[7];
-	bool enhanced_txpower;
+    const u32 regulatory_bands[7];
+    bool enhanced_txpower;
 };
 
 
@@ -315,8 +315,8 @@ u16 iwl_eeprom_query16(const struct iwl_shared *shrd, size_t offset);
 int iwl_init_channel_map(struct iwl_priv *priv);
 void iwl_free_channel_map(struct iwl_priv *priv);
 const struct iwl_channel_info *iwl_get_channel_info(
-		const struct iwl_priv *priv,
-		enum ieee80211_band band, u16 channel);
+    const struct iwl_priv *priv,
+    enum ieee80211_band band, u16 channel);
 void iwl_rf_config(struct iwl_priv *priv);
 
 #endif  /* __iwl_eeprom_h__ */

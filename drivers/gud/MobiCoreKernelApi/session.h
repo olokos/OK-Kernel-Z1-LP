@@ -15,18 +15,18 @@
 
 
 struct bulk_buffer_descriptor {
-	void		*virt_addr;	/* The VA of the Bulk buffer */
-	uint32_t	len;		/* Length of the Bulk buffer */
-	uint32_t	handle;
+    void		*virt_addr;	/* The VA of the Bulk buffer */
+    uint32_t	len;		/* Length of the Bulk buffer */
+    uint32_t	handle;
 
-	/* The list param for using the kernel lists*/
-	struct list_head list;
+    /* The list param for using the kernel lists*/
+    struct list_head list;
 };
 
 struct bulk_buffer_descriptor *bulk_buffer_descriptor_create(
-	void		*virt_addr,
-	uint32_t	len,
-	uint32_t	handle
+    void		*virt_addr,
+    uint32_t	len,
+    uint32_t	handle
 );
 
 /*
@@ -34,9 +34,9 @@ struct bulk_buffer_descriptor *bulk_buffer_descriptor_create(
  * At the moment not used !!
  */
 enum session_state {
-	SESSION_STATE_INITIAL,
-	SESSION_STATE_OPEN,
-	SESSION_STATE_TRUSTLET_DEAD
+    SESSION_STATE_INITIAL,
+    SESSION_STATE_OPEN,
+    SESSION_STATE_TRUSTLET_DEAD
 };
 
 #define SESSION_ERR_NO	0		/* No session error */
@@ -48,31 +48,31 @@ enum session_state {
  * Also the last error code will be stored till it's read.
  */
 struct session_information {
-	enum session_state state;	/* Session state */
-	int32_t		last_error;	/* Last error of session */
+    enum session_state state;	/* Session state */
+    int32_t		last_error;	/* Last error of session */
 };
 
 
 struct session {
-	struct mc_instance		*instance;
+    struct mc_instance		*instance;
 
-	/* Descriptors of additional bulk buffer of a session */
-	struct list_head		bulk_buffer_descriptors;
+    /* Descriptors of additional bulk buffer of a session */
+    struct list_head		bulk_buffer_descriptors;
 
-	/* Information about session */
-	struct session_information	session_info;
+    /* Information about session */
+    struct session_information	session_info;
 
-	uint32_t			session_id;
-	struct connection		*notification_connection;
+    uint32_t			session_id;
+    struct connection		*notification_connection;
 
-	/* The list param for using the kernel lists */
-	struct list_head		list;
+    /* The list param for using the kernel lists */
+    struct list_head		list;
 };
 
 struct session *session_create(
-	uint32_t		session_id,
-	void			*instance,
-	struct connection	*connection
+    uint32_t		session_id,
+    void			*instance,
+    struct connection	*connection
 );
 
 void session_cleanup(struct session *session);
@@ -92,7 +92,7 @@ void session_cleanup(struct session *session);
  * is returned, NULL if an error occurs.
  */
 struct bulk_buffer_descriptor *session_add_bulk_buf(
-	struct session *session, void *buf, uint32_t len);
+    struct session *session, void *buf, uint32_t len);
 
 /*
  * session_remove_bulk_buf() -	Remove address information of additional bulk

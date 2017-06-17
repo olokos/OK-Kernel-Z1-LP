@@ -1,5 +1,5 @@
 /*
- * Device driver for the SYMBIOS/LSILOGIC 53C8XX and 53C1010 family 
+ * Device driver for the SYMBIOS/LSILOGIC 53C8XX and 53C1010 family
  * of PCI-SCSI IO processors.
  *
  * Copyright (C) 1999-2001  Gerard Roudier <groudier@free.fr>
@@ -7,7 +7,7 @@
  * This driver is derived from the Linux sym53c8xx driver.
  * Copyright (C) 1998-2000  Gerard Roudier
  *
- * The sym53c8xx driver is derived from the ncr53c8xx driver that had been 
+ * The sym53c8xx driver is derived from the ncr53c8xx driver that had been
  * a port of the FreeBSD ncr driver to Linux-1.2.13.
  *
  * The original ncr driver has been written for 386bsd and FreeBSD by
@@ -81,38 +81,38 @@
 	SYM_GEN_Z(s, snooptest)		SYM_GEN_Z(s, snoopend)
 
 /*
- *  Generates structure interface that contains 
+ *  Generates structure interface that contains
  *  offsets within script A, B and Z.
  */
 #define	SYM_GEN_A(s, label)	s label;
 #define	SYM_GEN_B(s, label)	s label;
 #define	SYM_GEN_Z(s, label)	s label;
 struct sym_fwa_ofs {
-	SYM_GEN_FW_A(u_short)
+    SYM_GEN_FW_A(u_short)
 };
 struct sym_fwb_ofs {
-	SYM_GEN_FW_B(u_short)
-	SYM_GEN_B(u_short, start64)
-	SYM_GEN_B(u_short, pm_handle)
+    SYM_GEN_FW_B(u_short)
+    SYM_GEN_B(u_short, start64)
+    SYM_GEN_B(u_short, pm_handle)
 };
 struct sym_fwz_ofs {
-	SYM_GEN_FW_Z(u_short)
+    SYM_GEN_FW_Z(u_short)
 };
 
 /*
- *  Generates structure interface that contains 
+ *  Generates structure interface that contains
  *  bus addresses within script A, B and Z.
  */
 struct sym_fwa_ba {
-	SYM_GEN_FW_A(u32)
+    SYM_GEN_FW_A(u32)
 };
 struct sym_fwb_ba {
-	SYM_GEN_FW_B(u32)
-	SYM_GEN_B(u32, start64);
-	SYM_GEN_B(u32, pm_handle);
+    SYM_GEN_FW_B(u32)
+    SYM_GEN_B(u32, start64);
+    SYM_GEN_B(u32, pm_handle);
 };
 struct sym_fwz_ba {
-	SYM_GEN_FW_Z(u32)
+    SYM_GEN_FW_Z(u32)
 };
 #undef	SYM_GEN_A
 #undef	SYM_GEN_B
@@ -126,24 +126,24 @@ struct sym_hcb;
 
 /*
  *  Generic structure that defines a firmware.
- */ 
+ */
 struct sym_fw {
-	char	*name;		/* Name we want to print out	*/
-	u32	*a_base;	/* Pointer to script A template	*/
-	int	a_size;		/* Size of script A		*/
-	struct	sym_fwa_ofs
-		*a_ofs;		/* Useful offsets in script A	*/
-	u32	*b_base;	/* Pointer to script B template	*/
-	int	b_size;		/* Size of script B		*/
-	struct	sym_fwb_ofs
-		*b_ofs;		/* Useful offsets in script B	*/
-	u32	*z_base;	/* Pointer to script Z template	*/
-	int	z_size;		/* Size of script Z		*/
-	struct	sym_fwz_ofs
-		*z_ofs;		/* Useful offsets in script Z	*/
-	/* Setup and patch methods for this firmware */
-	void	(*setup)(struct sym_hcb *, struct sym_fw *);
-	void	(*patch)(struct Scsi_Host *);
+    char	*name;		/* Name we want to print out	*/
+    u32	*a_base;	/* Pointer to script A template	*/
+    int	a_size;		/* Size of script A		*/
+    struct	sym_fwa_ofs
+        *a_ofs;		/* Useful offsets in script A	*/
+    u32	*b_base;	/* Pointer to script B template	*/
+    int	b_size;		/* Size of script B		*/
+    struct	sym_fwb_ofs
+        *b_ofs;		/* Useful offsets in script B	*/
+    u32	*z_base;	/* Pointer to script Z template	*/
+    int	z_size;		/* Size of script Z		*/
+    struct	sym_fwz_ofs
+        *z_ofs;		/* Useful offsets in script Z	*/
+    /* Setup and patch methods for this firmware */
+    void	(*setup)(struct sym_hcb *, struct sym_fw *);
+    void	(*patch)(struct Scsi_Host *);
 };
 
 /*
@@ -178,8 +178,8 @@ struct sym_fw {
  *  PADDR_A generates a reference to another part of script A.
  *  PADDR_B generates a reference to another part of script B.
  *
- *  SYM_GEN_PADDR_A and SYM_GEN_PADDR_B are used to define respectively 
- *  the PADDR_A and PADDR_B macros for each firmware by setting argument 
+ *  SYM_GEN_PADDR_A and SYM_GEN_PADDR_B are used to define respectively
+ *  the PADDR_A and PADDR_B macros for each firmware by setting argument
  *  `s' to the name of the corresponding structure.
  *
  *  SCR_DATA_ZERO is used to allocate a DWORD of data in scripts areas.

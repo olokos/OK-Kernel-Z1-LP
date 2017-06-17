@@ -16,6 +16,6 @@
 #define RENESAS_FWVGA_TWO_LANE
 
 int mipi_renesas_device_register(struct msm_panel_info *pinfo,
-					u32 channel, u32 panel);
+                                 u32 channel, u32 panel);
 
 #endif  /* MIPI_RENESAS_H */

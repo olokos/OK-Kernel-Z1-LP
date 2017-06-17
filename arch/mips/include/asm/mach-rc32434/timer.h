@@ -35,16 +35,16 @@
 #define TIMER_COUNT			3
 
 struct timer_counter {
-	u32 count;
-	u32 compare;
-	u32 ctc;		/*use CTC_ */
+    u32 count;
+    u32 compare;
+    u32 ctc;		/*use CTC_ */
 };
 
 struct timer {
-	struct timer_counter tim[TIMER_COUNT];
-	u32 rcount;	/* use RCOUNT_ */
-	u32 rcompare;	/* use RCOMPARE_ */
-	u32 rtc;	/* use RTC_ */
+    struct timer_counter tim[TIMER_COUNT];
+    u32 rcount;	/* use RCOUNT_ */
+    u32 rcompare;	/* use RCOMPARE_ */
+    u32 rtc;	/* use RTC_ */
 };
 
 #define RC32434_CTC_EN_BIT		0

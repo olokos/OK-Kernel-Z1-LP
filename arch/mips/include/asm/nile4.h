@@ -16,9 +16,9 @@
 #define NILE4_SIZE		0x00200000		/* 2 MB */
 
 
-    /*
-     *  Physical Device Address Registers (PDARs)
-     */
+/*
+ *  Physical Device Address Registers (PDARs)
+ */
 
 #define NILE4_SDRAM0	0x0000	/* SDRAM Bank 0 [R/W] */
 #define NILE4_SDRAM1	0x0008	/* SDRAM Bank 1 [R/W] */
@@ -32,35 +32,35 @@
 #define NILE4_PCIW0	0x0060	/* PCI Address Window 0 [R/W] */
 #define NILE4_PCIW1	0x0068	/* PCI Address Window 1 [R/W] */
 #define NILE4_INTCS	0x0070	/* Controller Internal Registers and Devices */
-				/* [R/W] */
+/* [R/W] */
 #define NILE4_BOOTCS	0x0078	/* Boot ROM Chip-Select [R/W] */
 
 
-    /*
-     *  CPU Interface Registers
-     */
+/*
+ *  CPU Interface Registers
+ */
 
 #define NILE4_CPUSTAT	0x0080	/* CPU Status [R/W] */
 #define NILE4_INTCTRL	0x0088	/* Interrupt Control [R/W] */
 #define NILE4_INTSTAT0	0x0090	/* Interrupt Status 0 [R] */
 #define NILE4_INTSTAT1	0x0098	/* Interrupt Status 1 and CPU Interrupt */
-				/* Enable [R/W] */
+/* Enable [R/W] */
 #define NILE4_INTCLR	0x00A0	/* Interrupt Clear [R/W] */
 #define NILE4_INTPPES	0x00A8	/* PCI Interrupt Control [R/W] */
 
 
-    /*
-     *  Memory-Interface Registers
-     */
+/*
+ *  Memory-Interface Registers
+ */
 
 #define NILE4_MEMCTRL	0x00C0	/* Memory Control */
 #define NILE4_ACSTIME	0x00C8	/* Memory Access Timing [R/W] */
 #define NILE4_CHKERR	0x00D0	/* Memory Check Error Status [R] */
 
 
-    /*
-     *  PCI-Bus Registers
-     */
+/*
+ *  PCI-Bus Registers
+ */
 
 #define NILE4_PCICTRL	0x00E0	/* PCI Control [R/W] */
 #define NILE4_PCIARB	0x00E8	/* PCI Arbiter [R/W] */
@@ -69,9 +69,9 @@
 #define NILE4_PCIERR	0x00B8	/* PCI Error [R/W] */
 
 
-    /*
-     *  Local-Bus Registers
-     */
+/*
+ *  Local-Bus Registers
+ */
 
 #define NILE4_LCNFG	0x0100	/* Local Bus Configuration [R/W] */
 #define NILE4_LCST2	0x0110	/* Local Bus Chip-Select Timing 2 [R/W] */
@@ -82,14 +82,14 @@
 #define NILE4_LCST7	0x0138	/* Local Bus Chip-Select Timing 7 [R/W] */
 #define NILE4_LCST8	0x0140	/* Local Bus Chip-Select Timing 8 [R/W] */
 #define NILE4_DCSFN	0x0150	/* Device Chip-Select Muxing and Output */
-				/* Enables [R/W] */
+/* Enables [R/W] */
 #define NILE4_DCSIO	0x0158	/* Device Chip-Selects As I/O Bits [R/W] */
 #define NILE4_BCST	0x0178	/* Local Boot Chip-Select Timing [R/W] */
 
 
-    /*
-     *  DMA Registers
-     */
+/*
+ *  DMA Registers
+ */
 
 #define NILE4_DMACTRL0	0x0180	/* DMA Control 0 [R/W] */
 #define NILE4_DMASRCA0	0x0188	/* DMA Source Address 0 [R/W] */
@@ -99,9 +99,9 @@
 #define NILE4_DMADESA1	0x01A8	/* DMA Destination Address 1 [R/W] */
 
 
-    /*
-     *  Timer Registers
-     */
+/*
+ *  Timer Registers
+ */
 
 #define NILE4_T0CTRL	0x01C0	/* SDRAM Refresh Control [R/W] */
 #define NILE4_T0CNTR	0x01C8	/* SDRAM Refresh Counter [R/W] */
@@ -113,9 +113,9 @@
 #define NILE4_T3CNTR	0x01F8	/* Watchdog Timer Counter [R/W] */
 
 
-    /*
-     *  PCI Configuration Space Registers
-     */
+/*
+ *  PCI Configuration Space Registers
+ */
 
 #define NILE4_PCI_BASE	0x0200
 
@@ -133,11 +133,11 @@
 #define NILE4_BAR0	0x0218	/* PCI Base Address Register 0 [R/W] */
 #define NILE4_BAR1	0x0220	/* PCI Base Address Register 1 [R/W] */
 #define NILE4_CIS	0x0228	/* PCI Cardbus CIS Pointer [R] */
-				/* (unimplemented) */
+/* (unimplemented) */
 #define NILE4_SSVID	0x022C	/* PCI Sub-System Vendor ID [R/W] */
 #define NILE4_SSID	0x022E	/* PCI Sub-System ID [R/W] */
 #define NILE4_ROM	0x0230	/* Expansion ROM Base Address [R] */
-				/* (unimplemented) */
+/* (unimplemented) */
 #define NILE4_INTLIN	0x023C	/* PCI Interrupt Line [R/W] */
 #define NILE4_INTPIN	0x023D	/* PCI Interrupt Pin [R] */
 #define NILE4_MINGNT	0x023E	/* PCI Min_Gnt [R] (unimplemented) */
@@ -152,9 +152,9 @@
 #define NILE4_BARB	0x0278	/* PCI Base Address Register BOOT [R/W] */
 
 
-    /*
-     *  Serial-Port Registers
-     */
+/*
+ *  Serial-Port Registers
+ */
 
 #define NILE4_UART_BASE	0x0300
 
@@ -174,9 +174,9 @@
 #define NILE4_UART_BASE_BAUD	520833	/* 100 MHz / 12 / 16 */
 
 
-    /*
-     *  Interrupt Lines
-     */
+/*
+ *  Interrupt Lines
+ */
 
 #define NILE4_INT_CPCE	0	/* CPU-Interface Parity-Error Interrupt */
 #define NILE4_INT_CNTD	1	/* CPU No-Target Decode Interrupt */
@@ -196,67 +196,60 @@
 #define NILE4_INT_PCIE	15	/* PCI Internal Error Interrupt */
 
 
-    /*
-     *  Nile 4 Register Access
-     */
+/*
+ *  Nile 4 Register Access
+ */
 
-static inline void nile4_sync(void)
-{
+static inline void nile4_sync(void) {
     volatile u32 *p = (volatile u32 *)0xbfc00000;
     (void)(*p);
 }
 
-static inline void nile4_out32(u32 offset, u32 val)
-{
+static inline void nile4_out32(u32 offset, u32 val) {
     *(volatile u32 *)(NILE4_BASE+offset) = val;
     nile4_sync();
 }
 
-static inline u32 nile4_in32(u32 offset)
-{
+static inline u32 nile4_in32(u32 offset) {
     u32 val = *(volatile u32 *)(NILE4_BASE+offset);
     nile4_sync();
     return val;
 }
 
-static inline void nile4_out16(u32 offset, u16 val)
-{
+static inline void nile4_out16(u32 offset, u16 val) {
     *(volatile u16 *)(NILE4_BASE+offset) = val;
     nile4_sync();
 }
 
-static inline u16 nile4_in16(u32 offset)
-{
+static inline u16 nile4_in16(u32 offset) {
     u16 val = *(volatile u16 *)(NILE4_BASE+offset);
     nile4_sync();
     return val;
 }
 
-static inline void nile4_out8(u32 offset, u8 val)
-{
+static inline void nile4_out8(u32 offset, u8 val) {
     *(volatile u8 *)(NILE4_BASE+offset) = val;
     nile4_sync();
 }
 
-static inline u8 nile4_in8(u32 offset)
-{
+static inline u8 nile4_in8(u32 offset) {
     u8 val = *(volatile u8 *)(NILE4_BASE+offset);
     nile4_sync();
     return val;
 }
 
 
-    /*
-     *  Physical Device Address Registers
-     */
+/*
+ *  Physical Device Address Registers
+ */
 
 extern void nile4_set_pdar(u32 pdar, u32 phys, u32 size, int width,
-			   int on_memory_bus, int visible);
+                           int on_memory_bus, int visible);
 
 
-    /*
-     *  PCI Master Registers
-     */
+/*
+ *  PCI Master Registers
+ */
 
 #define NILE4_PCICMD_IACK	0	/* PCI Interrupt Acknowledge */
 #define NILE4_PCICMD_IO		1	/* PCI I/O Space */
@@ -264,11 +257,11 @@ extern void nile4_set_pdar(u32 pdar, u32 phys, u32 size, int width,
 #define NILE4_PCICMD_CFG	5	/* PCI Configuration Space */
 
 
-    /*
-     *  PCI Address Spaces
-     *
-     *  Note that these are multiplexed using PCIINIT[01]!
-     */
+/*
+ *  PCI Address Spaces
+ *
+ *  Note that these are multiplexed using PCIINIT[01]!
+ */
 
 #define NILE4_PCI_IO_BASE	0xa6000000
 #define NILE4_PCI_MEM_BASE	0xa8000000
@@ -279,9 +272,9 @@ extern void nile4_set_pdar(u32 pdar, u32 phys, u32 size, int width,
 extern void nile4_set_pmr(u32 pmr, u32 type, u32 addr);
 
 
-    /*
-     *  Interrupt Programming
-     */
+/*
+ *  Interrupt Programming
+ */
 
 #define NUM_I8259_INTERRUPTS	16
 #define NUM_NILE4_INTERRUPTS	16

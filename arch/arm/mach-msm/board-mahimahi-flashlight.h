@@ -9,10 +9,10 @@
 #define FLASHLIGHT_NUM   3
 
 struct flashlight_platform_data {
-	int (*gpio_init) (void);
-	int torch;
-	int flash;
-	int flash_duration_ms;
+    int (*gpio_init) (void);
+    int torch;
+    int flash;
+    int flash_duration_ms;
 };
 
 int flashlight_control(int level);

@@ -35,10 +35,9 @@ int _atomic_cmpxchg(atomic_t *v, int o, int n);
  *
  * Atomically sets @v to @i and returns old @v
  */
-static inline int atomic_xchg(atomic_t *v, int n)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic_xchg(v, n);
+static inline int atomic_xchg(atomic_t *v, int n) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic_xchg(v, n);
 }
 
 /**
@@ -50,10 +49,9 @@ static inline int atomic_xchg(atomic_t *v, int n)
  * Atomically checks if @v holds @o and replaces it with @n if so.
  * Returns the old value at @v.
  */
-static inline int atomic_cmpxchg(atomic_t *v, int o, int n)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic_cmpxchg(v, o, n);
+static inline int atomic_cmpxchg(atomic_t *v, int o, int n) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic_cmpxchg(v, o, n);
 }
 
 /**
@@ -63,9 +61,8 @@ static inline int atomic_cmpxchg(atomic_t *v, int o, int n)
  *
  * Atomically adds @i to @v.
  */
-static inline void atomic_add(int i, atomic_t *v)
-{
-	_atomic_xchg_add(v, i);
+static inline void atomic_add(int i, atomic_t *v) {
+    _atomic_xchg_add(v, i);
 }
 
 /**
@@ -75,10 +72,9 @@ static inline void atomic_add(int i, atomic_t *v)
  *
  * Atomically adds @i to @v and returns @i + @v
  */
-static inline int atomic_add_return(int i, atomic_t *v)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic_xchg_add(v, i) + i;
+static inline int atomic_add_return(int i, atomic_t *v) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic_xchg_add(v, i) + i;
 }
 
 /**
@@ -90,10 +86,9 @@ static inline int atomic_add_return(int i, atomic_t *v)
  * Atomically adds @a to @v, so long as @v was not already @u.
  * Returns the old value of @v.
  */
-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic_xchg_add_unless(v, a, u);
+static inline int __atomic_add_unless(atomic_t *v, int a, int u) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic_xchg_add_unless(v, a, u);
 }
 
 /**
@@ -106,15 +101,14 @@ static inline int __atomic_add_unless(atomic_t *v, int a, int u)
  * atomic_set() can't be just a raw store, since it would be lost if it
  * fell between the load and store of one of the other atomic ops.
  */
-static inline void atomic_set(atomic_t *v, int n)
-{
-	_atomic_xchg(v, n);
+static inline void atomic_set(atomic_t *v, int n) {
+    _atomic_xchg(v, n);
 }
 
 /* A 64bit atomic type */
 
 typedef struct {
-	u64 __aligned(8) counter;
+    u64 __aligned(8) counter;
 } atomic64_t;
 
 #define ATOMIC64_INIT(val) { (val) }
@@ -130,14 +124,13 @@ u64 _atomic64_cmpxchg(atomic64_t *v, u64 o, u64 n);
  *
  * Atomically reads the value of @v.
  */
-static inline u64 atomic64_read(const atomic64_t *v)
-{
-	/*
-	 * Requires an atomic op to read both 32-bit parts consistently.
-	 * Casting away const is safe since the atomic support routines
-	 * do not write to memory if the value has not been modified.
-	 */
-	return _atomic64_xchg_add((atomic64_t *)v, 0);
+static inline u64 atomic64_read(const atomic64_t *v) {
+    /*
+     * Requires an atomic op to read both 32-bit parts consistently.
+     * Casting away const is safe since the atomic support routines
+     * do not write to memory if the value has not been modified.
+     */
+    return _atomic64_xchg_add((atomic64_t *)v, 0);
 }
 
 /**
@@ -147,10 +140,9 @@ static inline u64 atomic64_read(const atomic64_t *v)
  *
  * Atomically sets @v to @i and returns old @v
  */
-static inline u64 atomic64_xchg(atomic64_t *v, u64 n)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic64_xchg(v, n);
+static inline u64 atomic64_xchg(atomic64_t *v, u64 n) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic64_xchg(v, n);
 }
 
 /**
@@ -162,10 +154,9 @@ static inline u64 atomic64_xchg(atomic64_t *v, u64 n)
  * Atomically checks if @v holds @o and replaces it with @n if so.
  * Returns the old value at @v.
  */
-static inline u64 atomic64_cmpxchg(atomic64_t *v, u64 o, u64 n)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic64_cmpxchg(v, o, n);
+static inline u64 atomic64_cmpxchg(atomic64_t *v, u64 o, u64 n) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic64_cmpxchg(v, o, n);
 }
 
 /**
@@ -175,9 +166,8 @@ static inline u64 atomic64_cmpxchg(atomic64_t *v, u64 o, u64 n)
  *
  * Atomically adds @i to @v.
  */
-static inline void atomic64_add(u64 i, atomic64_t *v)
-{
-	_atomic64_xchg_add(v, i);
+static inline void atomic64_add(u64 i, atomic64_t *v) {
+    _atomic64_xchg_add(v, i);
 }
 
 /**
@@ -187,10 +177,9 @@ static inline void atomic64_add(u64 i, atomic64_t *v)
  *
  * Atomically adds @i to @v and returns @i + @v
  */
-static inline u64 atomic64_add_return(u64 i, atomic64_t *v)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic64_xchg_add(v, i) + i;
+static inline u64 atomic64_add_return(u64 i, atomic64_t *v) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic64_xchg_add(v, i) + i;
 }
 
 /**
@@ -202,10 +191,9 @@ static inline u64 atomic64_add_return(u64 i, atomic64_t *v)
  * Atomically adds @a to @v, so long as @v was not already @u.
  * Returns non-zero if @v was not @u, and zero otherwise.
  */
-static inline u64 atomic64_add_unless(atomic64_t *v, u64 a, u64 u)
-{
-	smp_mb();  /* barrier for proper semantics */
-	return _atomic64_xchg_add_unless(v, a, u) != u;
+static inline u64 atomic64_add_unless(atomic64_t *v, u64 a, u64 u) {
+    smp_mb();  /* barrier for proper semantics */
+    return _atomic64_xchg_add_unless(v, a, u) != u;
 }
 
 /**
@@ -218,9 +206,8 @@ static inline u64 atomic64_add_unless(atomic64_t *v, u64 a, u64 u)
  * atomic64_set() can't be just a raw store, since it would be lost if it
  * fell between the load and store of one of the other atomic ops.
  */
-static inline void atomic64_set(atomic64_t *v, u64 n)
-{
-	_atomic64_xchg(v, n);
+static inline void atomic64_set(atomic64_t *v, u64 n) {
+    _atomic64_xchg(v, n);
 }
 
 #define atomic64_add_negative(a, v)	(atomic64_add_return((a), (v)) < 0)
@@ -305,11 +292,11 @@ void __atomic_fault_unlock(int *lock_ptr);
 
 /* Private helper routines in lib/atomic_asm_32.S */
 extern struct __get_user __atomic_cmpxchg(volatile int *p,
-					  int *lock, int o, int n);
+        int *lock, int o, int n);
 extern struct __get_user __atomic_xchg(volatile int *p, int *lock, int n);
 extern struct __get_user __atomic_xchg_add(volatile int *p, int *lock, int n);
 extern struct __get_user __atomic_xchg_add_unless(volatile int *p,
-						  int *lock, int o, int n);
+        int *lock, int o, int n);
 extern struct __get_user __atomic_or(volatile int *p, int *lock, int n);
 extern struct __get_user __atomic_andn(volatile int *p, int *lock, int n);
 extern struct __get_user __atomic_xor(volatile int *p, int *lock, int n);
@@ -317,7 +304,7 @@ extern u64 __atomic64_cmpxchg(volatile u64 *p, int *lock, u64 o, u64 n);
 extern u64 __atomic64_xchg(volatile u64 *p, int *lock, u64 n);
 extern u64 __atomic64_xchg_add(volatile u64 *p, int *lock, u64 n);
 extern u64 __atomic64_xchg_add_unless(volatile u64 *p,
-				      int *lock, u64 o, u64 n);
+                                      int *lock, u64 o, u64 n);
 
 #endif /* !__ASSEMBLY__ */
 

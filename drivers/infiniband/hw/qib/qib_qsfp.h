@@ -151,21 +151,21 @@ extern const char *const qib_qsfp_devtech[16];
  * coonstantly bit-boffing
  */
 struct qib_qsfp_cache {
-	u8 id;	/* must be 0x0C or 0x0D; 0 indicates invalid EEPROM read */
-	u8 pwr; /* in D6,7 */
-	u8 len;	/* in meters, Cu only */
-	u8 tech;
-	char vendor[QSFP_VEND_LEN];
-	u8 xt_xcv; /* Ext. tranceiver codes, 4 lsbs are IB speed supported */
-	u8 oui[QSFP_VOUI_LEN];
-	u8 partnum[QSFP_PN_LEN];
-	u8 rev[QSFP_REV_LEN];
-	u8 atten[QSFP_ATTEN_LEN];
-	u8 cks1;	/* Checksum of bytes 128..190 */
-	u8 serial[QSFP_SN_LEN];
-	u8 date[QSFP_DATE_LEN];
-	u8 lot[QSFP_LOT_LEN];
-	u8 cks2;	/* Checsum of bytes 192..222 */
+    u8 id;	/* must be 0x0C or 0x0D; 0 indicates invalid EEPROM read */
+    u8 pwr; /* in D6,7 */
+    u8 len;	/* in meters, Cu only */
+    u8 tech;
+    char vendor[QSFP_VEND_LEN];
+    u8 xt_xcv; /* Ext. tranceiver codes, 4 lsbs are IB speed supported */
+    u8 oui[QSFP_VOUI_LEN];
+    u8 partnum[QSFP_PN_LEN];
+    u8 rev[QSFP_REV_LEN];
+    u8 atten[QSFP_ATTEN_LEN];
+    u8 cks1;	/* Checksum of bytes 128..190 */
+    u8 serial[QSFP_SN_LEN];
+    u8 date[QSFP_DATE_LEN];
+    u8 lot[QSFP_LOT_LEN];
+    u8 cks2;	/* Checsum of bytes 192..222 */
 };
 
 #define QSFP_PWR(pbyte) (((pbyte) >> 6) & 3)
@@ -173,17 +173,17 @@ struct qib_qsfp_cache {
 #define QSFP_ATTEN_DDR(attenarray) (attenarray[1])
 
 struct qib_qsfp_data {
-	/* Helps to find our way */
-	struct qib_pportdata *ppd;
-	struct work_struct work;
-	struct qib_qsfp_cache cache;
-	unsigned long t_insert;
-	u8 modpresent;
+    /* Helps to find our way */
+    struct qib_pportdata *ppd;
+    struct work_struct work;
+    struct qib_qsfp_cache cache;
+    unsigned long t_insert;
+    u8 modpresent;
 };
 
 extern int qib_refresh_qsfp_cache(struct qib_pportdata *ppd,
-				  struct qib_qsfp_cache *cp);
+                                  struct qib_qsfp_cache *cp);
 extern int qib_qsfp_mod_present(struct qib_pportdata *ppd);
 extern void qib_qsfp_init(struct qib_qsfp_data *qd,
-			  void (*fevent)(struct work_struct *));
+                          void (*fevent)(struct work_struct *));
 extern void qib_qsfp_deinit(struct qib_qsfp_data *qd);

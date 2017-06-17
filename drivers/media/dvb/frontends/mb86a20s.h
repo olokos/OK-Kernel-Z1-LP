@@ -25,27 +25,25 @@
  */
 
 struct mb86a20s_config {
-	u8 demod_address;
-	bool is_serial;
+    u8 demod_address;
+    bool is_serial;
 };
 
 #if defined(CONFIG_DVB_MB86A20S) || (defined(CONFIG_DVB_MB86A20S_MODULE) \
 	&& defined(MODULE))
 extern struct dvb_frontend *mb86a20s_attach(const struct mb86a20s_config *config,
-					   struct i2c_adapter *i2c);
+        struct i2c_adapter *i2c);
 extern struct i2c_adapter *mb86a20s_get_tuner_i2c_adapter(struct dvb_frontend *);
 #else
 static inline struct dvb_frontend *mb86a20s_attach(
-	const struct mb86a20s_config *config, struct i2c_adapter *i2c)
-{
-	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
-	return NULL;
+    const struct mb86a20s_config *config, struct i2c_adapter *i2c) {
+    printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
+    return NULL;
 }
 static struct i2c_adapter *
-	mb86a20s_get_tuner_i2c_adapter(struct dvb_frontend *fe)
-{
-	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
-	return NULL;
+mb86a20s_get_tuner_i2c_adapter(struct dvb_frontend *fe) {
+    printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
+    return NULL;
 }
 #endif
 

@@ -47,8 +47,7 @@
  * ********************************************** */
 
 /// Return status type
-typedef enum eSirRetStatus
-{
+typedef enum eSirRetStatus {
     eSIR_SUCCESS,
     eSIR_FAILURE,
 

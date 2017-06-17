@@ -120,12 +120,12 @@ bool CARDbSetBSSID(void *pDeviceHandler, unsigned char *pbyBSSID, CARD_OP_MODE e
 bool
 CARDbPowerDown(
     void *pDeviceHandler
-    );
+);
 
 bool CARDbSetTxDataRate(
     void *pDeviceHandler,
     unsigned short wDataRate
-    );
+);
 
 
 bool CARDbRemoveKey (void *pDeviceHandler, unsigned char *pbyBSSID);
@@ -136,19 +136,19 @@ CARDbAdd_PMKID_Candidate (
     unsigned char *pbyBSSID,
     bool bRSNCapExist,
     unsigned short wRSNCap
-    );
+);
 
 void *
 CARDpGetCurrentAddress (
     void *pDeviceHandler
-    );
+);
 
 bool
 CARDbStartMeasure (
     void *pDeviceHandler,
     void *pvMeasureEIDs,
     unsigned int uNumOfMeasureEIDs
-    );
+);
 
 bool
 CARDbChannelSwitch (
@@ -156,7 +156,7 @@ CARDbChannelSwitch (
     unsigned char byMode,
     unsigned char byNewChannel,
     unsigned char byCount
-    );
+);
 
 bool
 CARDbSetQuiet (
@@ -166,31 +166,31 @@ CARDbSetQuiet (
     unsigned char byQuietPeriod,
     unsigned short wQuietDuration,
     unsigned short wQuietOffset
-    );
+);
 
 bool
 CARDbStartQuiet (
     void *pDeviceHandler
-    );
+);
 
 void
 CARDvSetPowerConstraint (
     void *pDeviceHandler,
     unsigned char byChannel,
     char byPower
-    );
+);
 
 void
 CARDvGetPowerCapability (
     void *pDeviceHandler,
     unsigned char *pbyMinPower,
     unsigned char *pbyMaxPower
-    );
+);
 
 char
 CARDbyGetTransmitPower (
     void *pDeviceHandler
-    );
+);
 
 #endif // __CARD_H__
 

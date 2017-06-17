@@ -38,37 +38,37 @@
 #define AU8522_DIGITAL_MODE 1
 
 struct au8522_state {
-	struct i2c_client *c;
-	struct i2c_adapter *i2c;
+    struct i2c_client *c;
+    struct i2c_adapter *i2c;
 
-	u8 operational_mode;
+    u8 operational_mode;
 
-	/* Used for sharing of the state between analog and digital mode */
-	struct tuner_i2c_props i2c_props;
-	struct list_head hybrid_tuner_instance_list;
+    /* Used for sharing of the state between analog and digital mode */
+    struct tuner_i2c_props i2c_props;
+    struct list_head hybrid_tuner_instance_list;
 
-	/* configuration settings */
-	const struct au8522_config *config;
+    /* configuration settings */
+    const struct au8522_config *config;
 
-	struct dvb_frontend frontend;
+    struct dvb_frontend frontend;
 
-	u32 current_frequency;
-	fe_modulation_t current_modulation;
+    u32 current_frequency;
+    fe_modulation_t current_modulation;
 
-	u32 fe_status;
-	unsigned int led_state;
+    u32 fe_status;
+    unsigned int led_state;
 
-	/* Analog settings */
-	struct v4l2_subdev sd;
-	v4l2_std_id std;
-	int vid_input;
-	int aud_input;
-	u32 id;
-	u32 rev;
-	u8 brightness;
-	u8 contrast;
-	u8 saturation;
-	s16 hue;
+    /* Analog settings */
+    struct v4l2_subdev sd;
+    v4l2_std_id std;
+    int vid_input;
+    int aud_input;
+    u32 id;
+    u32 rev;
+    u8 brightness;
+    u8 contrast;
+    u8 saturation;
+    s16 hue;
 };
 
 /* These are routines shared by both the VSB/QAM demodulator and the analog
@@ -79,7 +79,7 @@ int au8522_init(struct dvb_frontend *fe);
 int au8522_sleep(struct dvb_frontend *fe);
 
 int au8522_get_state(struct au8522_state **state, struct i2c_adapter *i2c,
-		     u8 client_address);
+                     u8 client_address);
 void au8522_release_state(struct au8522_state *state);
 
 /* REGISTERS */

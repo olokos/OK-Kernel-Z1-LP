@@ -65,59 +65,53 @@
 #define ETHER_ADDR_STR_LEN	18
 
 struct pktq_prec {
-	struct sk_buff_head skblist;
-	u16 max;		/* maximum number of queued packets */
+    struct sk_buff_head skblist;
+    u16 max;		/* maximum number of queued packets */
 };
 
 /* multi-priority pkt queue */
 struct pktq {
-	u16 num_prec;	/* number of precedences in use */
-	u16 hi_prec;	/* rapid dequeue hint (>= highest non-empty prec) */
-	u16 max;	/* total max packets */
-	u16 len;	/* total number of packets */
-	/*
-	 * q array must be last since # of elements can be either
-	 * PKTQ_MAX_PREC or 1
-	 */
-	struct pktq_prec q[PKTQ_MAX_PREC];
+    u16 num_prec;	/* number of precedences in use */
+    u16 hi_prec;	/* rapid dequeue hint (>= highest non-empty prec) */
+    u16 max;	/* total max packets */
+    u16 len;	/* total number of packets */
+    /*
+     * q array must be last since # of elements can be either
+     * PKTQ_MAX_PREC or 1
+     */
+    struct pktq_prec q[PKTQ_MAX_PREC];
 };
 
 /* operations on a specific precedence in packet queue */
 
-static inline int pktq_plen(struct pktq *pq, int prec)
-{
-	return pq->q[prec].skblist.qlen;
+static inline int pktq_plen(struct pktq *pq, int prec) {
+    return pq->q[prec].skblist.qlen;
 }
 
-static inline int pktq_pavail(struct pktq *pq, int prec)
-{
-	return pq->q[prec].max - pq->q[prec].skblist.qlen;
+static inline int pktq_pavail(struct pktq *pq, int prec) {
+    return pq->q[prec].max - pq->q[prec].skblist.qlen;
 }
 
-static inline bool pktq_pfull(struct pktq *pq, int prec)
-{
-	return pq->q[prec].skblist.qlen >= pq->q[prec].max;
+static inline bool pktq_pfull(struct pktq *pq, int prec) {
+    return pq->q[prec].skblist.qlen >= pq->q[prec].max;
 }
 
-static inline bool pktq_pempty(struct pktq *pq, int prec)
-{
-	return skb_queue_empty(&pq->q[prec].skblist);
+static inline bool pktq_pempty(struct pktq *pq, int prec) {
+    return skb_queue_empty(&pq->q[prec].skblist);
 }
 
-static inline struct sk_buff *pktq_ppeek(struct pktq *pq, int prec)
-{
-	return skb_peek(&pq->q[prec].skblist);
+static inline struct sk_buff *pktq_ppeek(struct pktq *pq, int prec) {
+    return skb_peek(&pq->q[prec].skblist);
 }
 
-static inline struct sk_buff *pktq_ppeek_tail(struct pktq *pq, int prec)
-{
-	return skb_peek_tail(&pq->q[prec].skblist);
+static inline struct sk_buff *pktq_ppeek_tail(struct pktq *pq, int prec) {
+    return skb_peek_tail(&pq->q[prec].skblist);
 }
 
 extern struct sk_buff *brcmu_pktq_penq(struct pktq *pq, int prec,
-				 struct sk_buff *p);
+                                       struct sk_buff *p);
 extern struct sk_buff *brcmu_pktq_penq_head(struct pktq *pq, int prec,
-				      struct sk_buff *p);
+        struct sk_buff *p);
 extern struct sk_buff *brcmu_pktq_pdeq(struct pktq *pq, int prec);
 extern struct sk_buff *brcmu_pktq_pdeq_tail(struct pktq *pq, int prec);
 
@@ -128,46 +122,41 @@ extern void brcmu_pkt_buf_free_skb(struct sk_buff *skb);
 /* Empty the queue at particular precedence level */
 /* callback function fn(pkt, arg) returns true if pkt belongs to if */
 extern void brcmu_pktq_pflush(struct pktq *pq, int prec,
-	bool dir, bool (*fn)(struct sk_buff *, void *), void *arg);
+                              bool dir, bool (*fn)(struct sk_buff *, void *), void *arg);
 
 /* operations on a set of precedences in packet queue */
 
 extern int brcmu_pktq_mlen(struct pktq *pq, uint prec_bmp);
 extern struct sk_buff *brcmu_pktq_mdeq(struct pktq *pq, uint prec_bmp,
-	int *prec_out);
+                                       int *prec_out);
 
 /* operations on packet queue as a whole */
 
-static inline int pktq_len(struct pktq *pq)
-{
-	return (int)pq->len;
+static inline int pktq_len(struct pktq *pq) {
+    return (int)pq->len;
 }
 
-static inline int pktq_max(struct pktq *pq)
-{
-	return (int)pq->max;
+static inline int pktq_max(struct pktq *pq) {
+    return (int)pq->max;
 }
 
-static inline int pktq_avail(struct pktq *pq)
-{
-	return (int)(pq->max - pq->len);
+static inline int pktq_avail(struct pktq *pq) {
+    return (int)(pq->max - pq->len);
 }
 
-static inline bool pktq_full(struct pktq *pq)
-{
-	return pq->len >= pq->max;
+static inline bool pktq_full(struct pktq *pq) {
+    return pq->len >= pq->max;
 }
 
-static inline bool pktq_empty(struct pktq *pq)
-{
-	return pq->len == 0;
+static inline bool pktq_empty(struct pktq *pq) {
+    return pq->len == 0;
 }
 
 extern void brcmu_pktq_init(struct pktq *pq, int num_prec, int max_len);
 /* prec_out may be NULL if caller is not interested in return value */
 extern struct sk_buff *brcmu_pktq_peek_tail(struct pktq *pq, int *prec_out);
 extern void brcmu_pktq_flush(struct pktq *pq, bool dir,
-		bool (*fn)(struct sk_buff *, void *), void *arg);
+                             bool (*fn)(struct sk_buff *, void *), void *arg);
 
 /* externs */
 /* ip address */
@@ -188,8 +177,7 @@ void brcmu_dbg_hex_dump(const void *data, size_t size, const char *fmt, ...);
 #else
 __printf(3, 4)
 static inline
-void brcmu_dbg_hex_dump(const void *data, size_t size, const char *fmt, ...)
-{
+void brcmu_dbg_hex_dump(const void *data, size_t size, const char *fmt, ...) {
 }
 #endif
 

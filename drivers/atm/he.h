@@ -86,7 +86,7 @@
 /* 2.9.3.3 interrupt encodings */
 
 struct he_irq {
-	volatile u32 isw;
+    volatile u32 isw;
 };
 
 #define IRQ_ALIGNMENT		0x1000
@@ -115,25 +115,25 @@ struct he_irq {
 
 struct he_tpd {
 
-	/* read by the adapter */
+    /* read by the adapter */
 
-	volatile u32 status;
-	volatile u32 reserved;
+    volatile u32 status;
+    volatile u32 reserved;
 
 #define TPD_MAXIOV	3
-	struct {
-		u32 addr, len;
-	} iovec[TPD_MAXIOV];
+    struct {
+        u32 addr, len;
+    } iovec[TPD_MAXIOV];
 
 #define address0 iovec[0].addr
 #define length0 iovec[0].len
 
-	/* linux-atm extensions */
+    /* linux-atm extensions */
 
-	struct sk_buff *skb;
-	struct atm_vcc *vcc;
+    struct sk_buff *skb;
+    struct atm_vcc *vcc;
 
-	struct list_head entry;
+    struct list_head entry;
 };
 
 #define TPD_ALIGNMENT	64
@@ -148,7 +148,7 @@ struct he_tpd {
 /* table 2.3 transmit buffer return elements */
 
 struct he_tbrq {
-	volatile u32 tbre;
+    volatile u32 tbre;
 };
 
 #define TBRQ_ALIGNMENT	CONFIG_TBRQ_SIZE
@@ -160,8 +160,8 @@ struct he_tbrq {
 /* table 2.21 receive buffer return queue element field organization */
 
 struct he_rbrq {
-	volatile u32 addr;
-	volatile u32 cidlen;
+    volatile u32 addr;
+    volatile u32 cidlen;
 };
 
 #define RBRQ_ALIGNMENT	CONFIG_RBRQ_SIZE
@@ -179,8 +179,8 @@ struct he_rbrq {
 /* figure 2.3 transmit packet descriptor ready queue */
 
 struct he_tpdrq {
-	volatile u32 tpd;
-	volatile u32 cid;
+    volatile u32 tpd;
+    volatile u32 cid;
 };
 
 #define TPDRQ_ALIGNMENT CONFIG_TPDRQ_SIZE
@@ -190,12 +190,12 @@ struct he_tpdrq {
 #define HSP_ALIGNMENT	0x400		/* must align on 1k boundary */
 
 struct he_hsp {
-	struct he_hsp_entry {
-		volatile u32 tbrq_tail; 
-		volatile u32 reserved1[15];
-		volatile u32 rbrq_tail; 
-		volatile u32 reserved2[15];
-	} group[HE_NUM_GROUPS];
+    struct he_hsp_entry {
+        volatile u32 tbrq_tail;
+        volatile u32 reserved1[15];
+        volatile u32 rbrq_tail;
+        volatile u32 reserved2[15];
+    } group[HE_NUM_GROUPS];
 };
 
 /*
@@ -207,8 +207,8 @@ struct he_hsp {
  */
 
 struct he_rbp {
-	volatile u32 phys;
-	volatile u32 idx;	/* virt */
+    volatile u32 phys;
+    volatile u32 idx;	/* virt */
 };
 
 #define RBP_IDX_OFFSET 6
@@ -221,109 +221,106 @@ struct he_rbp {
 #define RBPL_TABLE_SIZE (CONFIG_RBPL_SIZE + 16 + 2)
 
 struct he_buff {
-	struct list_head entry;
-	dma_addr_t mapping;
-	unsigned long len;
-	u8 data[];
+    struct list_head entry;
+    dma_addr_t mapping;
+    unsigned long len;
+    u8 data[];
 };
 
 #ifdef notyet
 struct he_group {
-	u32 rpbl_size, rpbl_qsize;
-	struct he_rpb_entry *rbpl_ba;
+    u32 rpbl_size, rpbl_qsize;
+    struct he_rpb_entry *rbpl_ba;
 };
 #endif
 
 #define HE_LOOKUP_VCC(dev, cid) ((dev)->he_vcc_table[(cid)].vcc)
 
-struct he_vcc_table 
-{
-	struct atm_vcc *vcc;
+struct he_vcc_table {
+    struct atm_vcc *vcc;
 };
 
-struct he_cs_stper
-{
-	long pcr;
-	int inuse;
+struct he_cs_stper {
+    long pcr;
+    int inuse;
 };
 
 #define HE_NUM_CS_STPER		16
 
 struct he_dev {
-	unsigned int number;
-	unsigned int irq;
-	void __iomem *membase;
+    unsigned int number;
+    unsigned int irq;
+    void __iomem *membase;
 
-	char prod_id[30];
-	char mac_addr[6];
-	int media;
+    char prod_id[30];
+    char mac_addr[6];
+    int media;
 
-	unsigned int vcibits, vpibits;
-	unsigned int cells_per_row;
-	unsigned int bytes_per_row;
-	unsigned int cells_per_lbuf;
-	unsigned int r0_numrows, r0_startrow, r0_numbuffs;
-	unsigned int r1_numrows, r1_startrow, r1_numbuffs;
-	unsigned int tx_numrows, tx_startrow, tx_numbuffs;
-	unsigned int buffer_limit;
+    unsigned int vcibits, vpibits;
+    unsigned int cells_per_row;
+    unsigned int bytes_per_row;
+    unsigned int cells_per_lbuf;
+    unsigned int r0_numrows, r0_startrow, r0_numbuffs;
+    unsigned int r1_numrows, r1_startrow, r1_numbuffs;
+    unsigned int tx_numrows, tx_startrow, tx_numbuffs;
+    unsigned int buffer_limit;
 
-	struct he_vcc_table *he_vcc_table;
+    struct he_vcc_table *he_vcc_table;
 
 #ifdef notyet
-	struct he_group group[HE_NUM_GROUPS];
+    struct he_group group[HE_NUM_GROUPS];
 #endif
-	struct he_cs_stper cs_stper[HE_NUM_CS_STPER];
-	unsigned total_bw;
+    struct he_cs_stper cs_stper[HE_NUM_CS_STPER];
+    unsigned total_bw;
 
-	dma_addr_t irq_phys;
-	struct he_irq *irq_base, *irq_head, *irq_tail;
-	volatile unsigned *irq_tailoffset;
-	int irq_peak;
+    dma_addr_t irq_phys;
+    struct he_irq *irq_base, *irq_head, *irq_tail;
+    volatile unsigned *irq_tailoffset;
+    int irq_peak;
 
-	struct tasklet_struct tasklet;
-	struct pci_pool *tpd_pool;
-	struct list_head outstanding_tpds;
+    struct tasklet_struct tasklet;
+    struct pci_pool *tpd_pool;
+    struct list_head outstanding_tpds;
 
-	dma_addr_t tpdrq_phys;
-	struct he_tpdrq *tpdrq_base, *tpdrq_tail, *tpdrq_head;
+    dma_addr_t tpdrq_phys;
+    struct he_tpdrq *tpdrq_base, *tpdrq_tail, *tpdrq_head;
 
-	spinlock_t global_lock;		/* 8.1.5 pci transaction ordering
+    spinlock_t global_lock;		/* 8.1.5 pci transaction ordering
 					  error problem */
-	dma_addr_t rbrq_phys;
-	struct he_rbrq *rbrq_base, *rbrq_head;
-	int rbrq_peak;
+    dma_addr_t rbrq_phys;
+    struct he_rbrq *rbrq_base, *rbrq_head;
+    int rbrq_peak;
 
-	struct he_buff **rbpl_virt;
-	unsigned long *rbpl_table;
-	unsigned long rbpl_hint;
-	struct pci_pool *rbpl_pool;
-	dma_addr_t rbpl_phys;
-	struct he_rbp *rbpl_base, *rbpl_tail;
-	struct list_head rbpl_outstanding;
-	int rbpl_peak;
+    struct he_buff **rbpl_virt;
+    unsigned long *rbpl_table;
+    unsigned long rbpl_hint;
+    struct pci_pool *rbpl_pool;
+    dma_addr_t rbpl_phys;
+    struct he_rbp *rbpl_base, *rbpl_tail;
+    struct list_head rbpl_outstanding;
+    int rbpl_peak;
 
-	dma_addr_t tbrq_phys;
-	struct he_tbrq *tbrq_base, *tbrq_head;
-	int tbrq_peak;
+    dma_addr_t tbrq_phys;
+    struct he_tbrq *tbrq_base, *tbrq_head;
+    int tbrq_peak;
 
-	dma_addr_t hsp_phys;
-	struct he_hsp *hsp;
+    dma_addr_t hsp_phys;
+    struct he_hsp *hsp;
 
-	struct pci_dev *pci_dev;
-	struct atm_dev *atm_dev;
-	struct he_dev *next;
+    struct pci_dev *pci_dev;
+    struct atm_dev *atm_dev;
+    struct he_dev *next;
 };
 
 #define HE_MAXIOV 20
 
-struct he_vcc
-{
-	struct list_head buffers;
-	int pdu_len;
-	int rc_index;
+struct he_vcc {
+    struct list_head buffers;
+    int pdu_len;
+    int rc_index;
 
-	wait_queue_head_t rx_waitq;
-	wait_queue_head_t tx_waitq;
+    wait_queue_head_t rx_waitq;
+    wait_queue_head_t tx_waitq;
 };
 
 #define HE_VCC(vcc)	((struct he_vcc *)(vcc->dev_data))
@@ -457,7 +454,7 @@ struct he_vcc
 #define G0_RBPS_BS	0x8040c
 #define G0_RBPL_S	0x80410
 #define G0_RBPL_T	0x80414
-#define G0_RBPL_QI	0x80418 
+#define G0_RBPL_QI	0x80418
 #define G0_RBPL_BS	0x8041c
 
 #define	G1_RBPS_S	0x80420
@@ -616,11 +613,11 @@ struct he_vcc
 #define  TM_RW_WAIT(x)		(x<<2)
 #define  TM_SRAM_TYPE(x)	(x)
 
-#define TSRB_BA		0x80744	
-#define TSRC_BA		0x80748	
-#define TMABR_BA	0x8074c	
-#define TPD_BA		0x80750	
-#define TSRD_BA		0x80758	
+#define TSRB_BA		0x80744
+#define TSRC_BA		0x80748
+#define TMABR_BA	0x8074c
+#define TPD_BA		0x80750
+#define TSRD_BA		0x80758
 
 #define TX_CONFIG	0x80760
 #define  DRF_THRESH(x)		(x<<22)
@@ -681,15 +678,15 @@ struct he_vcc
 /* 3.3 network controller (internal) mailbox registers */
 
 #define CS_STPER0	0x0
-	/* ... */
+/* ... */
 #define CS_STPER31	0x01f
 
 #define CS_STTIM0	0x020
-	/* ... */
+/* ... */
 #define CS_STTIM31	0x03f
 
 #define CS_TGRLD0	0x040
-	/* ... */
+/* ... */
 #define CS_TGRLD15	0x04f
 
 #define CS_ERTHR0	0x050
@@ -727,7 +724,7 @@ struct he_vcc
 #define CS_OTTCNT	0x083
 
 #define CS_HGRRT0	0x090
-	/* ... */
+/* ... */
 #define CS_HGRRT7	0x097
 
 #define CS_ORPTRS	0x0a0

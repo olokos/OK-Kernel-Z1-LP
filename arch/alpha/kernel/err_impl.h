@@ -14,19 +14,19 @@ struct el_subpacket;
 struct ev7_lf_subpackets;
 
 struct el_subpacket_annotation {
-	struct el_subpacket_annotation *next;
-	u16 class;
-	u16 type;
-	u16 revision;
-	char *description;
-	char **annotation;
+    struct el_subpacket_annotation *next;
+    u16 class;
+    u16 type;
+    u16 revision;
+    char *description;
+    char **annotation;
 };
 #define SUBPACKET_ANNOTATION(c, t, r, d, a) {NULL, (c), (t), (r), (d), (a)}
 
 struct el_subpacket_handler {
-	struct el_subpacket_handler *next;
-	u16 class;
-	struct el_subpacket *(*handler)(struct el_subpacket *);
+    struct el_subpacket_handler *next;
+    u16 class;
+    struct el_subpacket *(*handler)(struct el_subpacket *);
 };
 #define SUBPACKET_HANDLER_INIT(c, h) {NULL, (c), (h)}
 
@@ -60,7 +60,7 @@ extern int cdl_register_subpacket_handler(struct el_subpacket_handler *);
  */
 extern struct ev7_lf_subpackets *
 ev7_collect_logout_frame_subpackets(struct el_subpacket *,
-				    struct ev7_lf_subpackets *);
+                                    struct ev7_lf_subpackets *);
 extern void ev7_register_error_handlers(void);
 extern void ev7_machine_check(unsigned long, unsigned long);
 

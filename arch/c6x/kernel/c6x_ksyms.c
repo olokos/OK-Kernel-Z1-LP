@@ -35,7 +35,7 @@ extern unsigned __c6xabi_divremu(unsigned  dividend, unsigned divisor);
 EXPORT_SYMBOL(__c6xabi_divremu);
 
 extern unsigned long long __c6xabi_mpyll(unsigned long long src1,
-					 unsigned long long src2);
+        unsigned long long src2);
 EXPORT_SYMBOL(__c6xabi_mpyll);
 
 extern long long __c6xabi_negll(long long src);

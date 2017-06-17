@@ -37,10 +37,8 @@
 #include "wlan_qct_tl_trace.h"
 #include "tlDebug.h"
 
-static v_U8_t* tlTraceGetEventString(v_U32_t code)
-{
-    switch(code)
-    {
+static v_U8_t* tlTraceGetEventString(v_U32_t code) {
+    switch(code) {
         CASE_RETURN_STRING(TRACE_CODE_TL_STA_STATE);
         CASE_RETURN_STRING(TRACE_CODE_TL_EAPOL_PKT_PENDING);
         CASE_RETURN_STRING(TRACE_CODE_TL_GET_FRAMES_EAPOL);
@@ -58,15 +56,13 @@ static v_U8_t* tlTraceGetEventString(v_U32_t code)
     }
 }
 
-void tlTraceDump(void *pMac, tpvosTraceRecord pRecord, v_U16_t recIndex)
-{
+void tlTraceDump(void *pMac, tpvosTraceRecord pRecord, v_U16_t recIndex) {
     TLLOGE( VOS_TRACE (VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                        "%04d    %012u  S%-3d    %-14s  %-30s(0x%x)",
                        recIndex, pRecord->time, pRecord->session, "  TL Event:  ",
                        tlTraceGetEventString (pRecord->code), pRecord->data));
 }
 
-void tlTraceInit()
-{
+void tlTraceInit() {
     vosTraceRegister(VOS_MODULE_ID_TL, (tpvosTraceCb)&tlTraceDump);
 }

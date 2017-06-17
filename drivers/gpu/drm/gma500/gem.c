@@ -28,23 +28,20 @@
 #include "gma_drm.h"
 #include "psb_drv.h"
 
-int psb_gem_init_object(struct drm_gem_object *obj)
-{
-	return -EINVAL;
+int psb_gem_init_object(struct drm_gem_object *obj) {
+    return -EINVAL;
 }
 
-void psb_gem_free_object(struct drm_gem_object *obj)
-{
-	struct gtt_range *gtt = container_of(obj, struct gtt_range, gem);
-	drm_gem_object_release_wrap(obj);
-	/* This must occur last as it frees up the memory of the GEM object */
-	psb_gtt_free_range(obj->dev, gtt);
+void psb_gem_free_object(struct drm_gem_object *obj) {
+    struct gtt_range *gtt = container_of(obj, struct gtt_range, gem);
+    drm_gem_object_release_wrap(obj);
+    /* This must occur last as it frees up the memory of the GEM object */
+    psb_gtt_free_range(obj->dev, gtt);
 }
 
 int psb_gem_get_aperture(struct drm_device *dev, void *data,
-				struct drm_file *file)
-{
-	return -EINVAL;
+                         struct drm_file *file) {
+    return -EINVAL;
 }
 
 /**
@@ -57,37 +54,36 @@ int psb_gem_get_aperture(struct drm_device *dev, void *data,
  *	into user memory. We don't have to do much here at the moment.
  */
 int psb_gem_dumb_map_gtt(struct drm_file *file, struct drm_device *dev,
-			 uint32_t handle, uint64_t *offset)
-{
-	int ret = 0;
-	struct drm_gem_object *obj;
+                         uint32_t handle, uint64_t *offset) {
+    int ret = 0;
+    struct drm_gem_object *obj;
 
-	if (!(dev->driver->driver_features & DRIVER_GEM))
-		return -ENODEV;
+    if (!(dev->driver->driver_features & DRIVER_GEM))
+        return -ENODEV;
 
-	mutex_lock(&dev->struct_mutex);
+    mutex_lock(&dev->struct_mutex);
 
-	/* GEM does all our handle to object mapping */
-	obj = drm_gem_object_lookup(dev, file, handle);
-	if (obj == NULL) {
-		ret = -ENOENT;
-		goto unlock;
-	}
-	/* What validation is needed here ? */
+    /* GEM does all our handle to object mapping */
+    obj = drm_gem_object_lookup(dev, file, handle);
+    if (obj == NULL) {
+        ret = -ENOENT;
+        goto unlock;
+    }
+    /* What validation is needed here ? */
 
-	/* Make it mmapable */
-	if (!obj->map_list.map) {
-		ret = gem_create_mmap_offset(obj);
-		if (ret)
-			goto out;
-	}
-	/* GEM should really work out the hash offsets for us */
-	*offset = (u64)obj->map_list.hash.key << PAGE_SHIFT;
+    /* Make it mmapable */
+    if (!obj->map_list.map) {
+        ret = gem_create_mmap_offset(obj);
+        if (ret)
+            goto out;
+    }
+    /* GEM should really work out the hash offsets for us */
+    *offset = (u64)obj->map_list.hash.key << PAGE_SHIFT;
 out:
-	drm_gem_object_unreference(obj);
+    drm_gem_object_unreference(obj);
 unlock:
-	mutex_unlock(&dev->struct_mutex);
-	return ret;
+    mutex_unlock(&dev->struct_mutex);
+    return ret;
 }
 
 /**
@@ -102,41 +98,40 @@ unlock:
  *	for the various methods that do/will create GEM objects for things
  */
 static int psb_gem_create(struct drm_file *file,
-	struct drm_device *dev, uint64_t size, uint32_t *handlep)
-{
-	struct gtt_range *r;
-	int ret;
-	u32 handle;
+                          struct drm_device *dev, uint64_t size, uint32_t *handlep) {
+    struct gtt_range *r;
+    int ret;
+    u32 handle;
 
-	size = roundup(size, PAGE_SIZE);
+    size = roundup(size, PAGE_SIZE);
 
-	/* Allocate our object - for now a direct gtt range which is not
-	   stolen memory backed */
-	r = psb_gtt_alloc_range(dev, size, "gem", 0);
-	if (r == NULL) {
-		dev_err(dev->dev, "no memory for %lld byte GEM object\n", size);
-		return -ENOSPC;
-	}
-	/* Initialize the extra goodies GEM needs to do all the hard work */
-	if (drm_gem_object_init(dev, &r->gem, size) != 0) {
-		psb_gtt_free_range(dev, r);
-		/* GEM doesn't give an error code so use -ENOMEM */
-		dev_err(dev->dev, "GEM init failed for %lld\n", size);
-		return -ENOMEM;
-	}
-	/* Give the object a handle so we can carry it more easily */
-	ret = drm_gem_handle_create(file, &r->gem, &handle);
-	if (ret) {
-		dev_err(dev->dev, "GEM handle failed for %p, %lld\n",
-							&r->gem, size);
-		drm_gem_object_release(&r->gem);
-		psb_gtt_free_range(dev, r);
-		return ret;
-	}
-	/* We have the initial and handle reference but need only one now */
-	drm_gem_object_unreference(&r->gem);
-	*handlep = handle;
-	return 0;
+    /* Allocate our object - for now a direct gtt range which is not
+       stolen memory backed */
+    r = psb_gtt_alloc_range(dev, size, "gem", 0);
+    if (r == NULL) {
+        dev_err(dev->dev, "no memory for %lld byte GEM object\n", size);
+        return -ENOSPC;
+    }
+    /* Initialize the extra goodies GEM needs to do all the hard work */
+    if (drm_gem_object_init(dev, &r->gem, size) != 0) {
+        psb_gtt_free_range(dev, r);
+        /* GEM doesn't give an error code so use -ENOMEM */
+        dev_err(dev->dev, "GEM init failed for %lld\n", size);
+        return -ENOMEM;
+    }
+    /* Give the object a handle so we can carry it more easily */
+    ret = drm_gem_handle_create(file, &r->gem, &handle);
+    if (ret) {
+        dev_err(dev->dev, "GEM handle failed for %p, %lld\n",
+                &r->gem, size);
+        drm_gem_object_release(&r->gem);
+        psb_gtt_free_range(dev, r);
+        return ret;
+    }
+    /* We have the initial and handle reference but need only one now */
+    drm_gem_object_unreference(&r->gem);
+    *handlep = handle;
+    return 0;
 }
 
 /**
@@ -150,11 +145,10 @@ static int psb_gem_create(struct drm_file *file,
  *	to reference it.
  */
 int psb_gem_dumb_create(struct drm_file *file, struct drm_device *dev,
-			struct drm_mode_create_dumb *args)
-{
-	args->pitch = ALIGN(args->width * ((args->bpp + 7) / 8), 64);
-	args->size = args->pitch * args->height;
-	return psb_gem_create(file, dev, args->size, &args->handle);
+                        struct drm_mode_create_dumb *args) {
+    args->pitch = ALIGN(args->width * ((args->bpp + 7) / 8), 64);
+    args->size = args->pitch * args->height;
+    return psb_gem_create(file, dev, args->size, &args->handle);
 }
 
 /**
@@ -168,10 +162,9 @@ int psb_gem_dumb_create(struct drm_file *file, struct drm_device *dev,
  *	does the checking but that might be worth review ! FIXME
  */
 int psb_gem_dumb_destroy(struct drm_file *file, struct drm_device *dev,
-			uint32_t handle)
-{
-	/* No special work needed, drop the reference and see what falls out */
-	return drm_gem_handle_delete(file, handle);
+                         uint32_t handle) {
+    /* No special work needed, drop the reference and see what falls out */
+    return drm_gem_handle_delete(file, handle);
 }
 
 /**
@@ -191,102 +184,98 @@ int psb_gem_dumb_destroy(struct drm_file *file, struct drm_device *dev,
  *	vma->vm_private_data points to the GEM object that is backing this
  *	mapping.
  */
-int psb_gem_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
-{
-	struct drm_gem_object *obj;
-	struct gtt_range *r;
-	int ret;
-	unsigned long pfn;
-	pgoff_t page_offset;
-	struct drm_device *dev;
-	struct drm_psb_private *dev_priv;
+int psb_gem_fault(struct vm_area_struct *vma, struct vm_fault *vmf) {
+    struct drm_gem_object *obj;
+    struct gtt_range *r;
+    int ret;
+    unsigned long pfn;
+    pgoff_t page_offset;
+    struct drm_device *dev;
+    struct drm_psb_private *dev_priv;
 
-	obj = vma->vm_private_data;	/* GEM object */
-	dev = obj->dev;
-	dev_priv = dev->dev_private;
+    obj = vma->vm_private_data;	/* GEM object */
+    dev = obj->dev;
+    dev_priv = dev->dev_private;
 
-	r = container_of(obj, struct gtt_range, gem);	/* Get the gtt range */
+    r = container_of(obj, struct gtt_range, gem);	/* Get the gtt range */
 
-	/* Make sure we don't parallel update on a fault, nor move or remove
-	   something from beneath our feet */
-	mutex_lock(&dev->struct_mutex);
+    /* Make sure we don't parallel update on a fault, nor move or remove
+       something from beneath our feet */
+    mutex_lock(&dev->struct_mutex);
 
-	/* For now the mmap pins the object and it stays pinned. As things
-	   stand that will do us no harm */
-	if (r->mmapping == 0) {
-		ret = psb_gtt_pin(r);
-		if (ret < 0) {
-			dev_err(dev->dev, "gma500: pin failed: %d\n", ret);
-			goto fail;
-		}
-		r->mmapping = 1;
-	}
+    /* For now the mmap pins the object and it stays pinned. As things
+       stand that will do us no harm */
+    if (r->mmapping == 0) {
+        ret = psb_gtt_pin(r);
+        if (ret < 0) {
+            dev_err(dev->dev, "gma500: pin failed: %d\n", ret);
+            goto fail;
+        }
+        r->mmapping = 1;
+    }
 
-	/* Page relative to the VMA start - we must calculate this ourselves
-	   because vmf->pgoff is the fake GEM offset */
-	page_offset = ((unsigned long) vmf->virtual_address - vma->vm_start)
-				>> PAGE_SHIFT;
+    /* Page relative to the VMA start - we must calculate this ourselves
+       because vmf->pgoff is the fake GEM offset */
+    page_offset = ((unsigned long) vmf->virtual_address - vma->vm_start)
+                  >> PAGE_SHIFT;
 
-	/* CPU view of the page, don't go via the GART for CPU writes */
-	if (r->stolen)
-		pfn = (dev_priv->stolen_base + r->offset) >> PAGE_SHIFT;
-	else
-		pfn = page_to_pfn(r->pages[page_offset]);
-	ret = vm_insert_pfn(vma, (unsigned long)vmf->virtual_address, pfn);
+    /* CPU view of the page, don't go via the GART for CPU writes */
+    if (r->stolen)
+        pfn = (dev_priv->stolen_base + r->offset) >> PAGE_SHIFT;
+    else
+        pfn = page_to_pfn(r->pages[page_offset]);
+    ret = vm_insert_pfn(vma, (unsigned long)vmf->virtual_address, pfn);
 
 fail:
-	mutex_unlock(&dev->struct_mutex);
-	switch (ret) {
-	case 0:
-	case -ERESTARTSYS:
-	case -EINTR:
-		return VM_FAULT_NOPAGE;
-	case -ENOMEM:
-		return VM_FAULT_OOM;
-	default:
-		return VM_FAULT_SIGBUS;
-	}
+    mutex_unlock(&dev->struct_mutex);
+    switch (ret) {
+    case 0:
+    case -ERESTARTSYS:
+    case -EINTR:
+        return VM_FAULT_NOPAGE;
+    case -ENOMEM:
+        return VM_FAULT_OOM;
+    default:
+        return VM_FAULT_SIGBUS;
+    }
 }
 
 static int psb_gem_create_stolen(struct drm_file *file, struct drm_device *dev,
-						int size, u32 *handle)
-{
-	struct gtt_range *gtt = psb_gtt_alloc_range(dev, size, "gem", 1);
-	if (gtt == NULL)
-		return -ENOMEM;
-	if (drm_gem_private_object_init(dev, &gtt->gem, size) != 0)
-		goto free_gtt;
-	if (drm_gem_handle_create(file, &gtt->gem, handle) == 0)
-		return 0;
+                                 int size, u32 *handle) {
+    struct gtt_range *gtt = psb_gtt_alloc_range(dev, size, "gem", 1);
+    if (gtt == NULL)
+        return -ENOMEM;
+    if (drm_gem_private_object_init(dev, &gtt->gem, size) != 0)
+        goto free_gtt;
+    if (drm_gem_handle_create(file, &gtt->gem, handle) == 0)
+        return 0;
 free_gtt:
-	psb_gtt_free_range(dev, gtt);
-	return -ENOMEM;
+    psb_gtt_free_range(dev, gtt);
+    return -ENOMEM;
 }
 
 /*
  *	GEM interfaces for our specific client
  */
 int psb_gem_create_ioctl(struct drm_device *dev, void *data,
-					struct drm_file *file)
-{
-	struct drm_psb_gem_create *args = data;
-	int ret;
-	if (args->flags & GMA_GEM_CREATE_STOLEN) {
-		ret = psb_gem_create_stolen(file, dev, args->size,
-							&args->handle);
-		if (ret == 0)
-			return 0;
-		/* Fall throguh */
-		args->flags &= ~GMA_GEM_CREATE_STOLEN;
-	}
-	return psb_gem_create(file, dev, args->size, &args->handle);
+                         struct drm_file *file) {
+    struct drm_psb_gem_create *args = data;
+    int ret;
+    if (args->flags & GMA_GEM_CREATE_STOLEN) {
+        ret = psb_gem_create_stolen(file, dev, args->size,
+                                    &args->handle);
+        if (ret == 0)
+            return 0;
+        /* Fall throguh */
+        args->flags &= ~GMA_GEM_CREATE_STOLEN;
+    }
+    return psb_gem_create(file, dev, args->size, &args->handle);
 }
 
 int psb_gem_mmap_ioctl(struct drm_device *dev, void *data,
-					struct drm_file *file)
-{
-	struct drm_psb_gem_mmap *args = data;
-	return dev->driver->dumb_map_offset(file, dev,
-						args->handle, &args->offset);
+                       struct drm_file *file) {
+    struct drm_psb_gem_mmap *args = data;
+    return dev->driver->dumb_map_offset(file, dev,
+                                        args->handle, &args->offset);
 }
 

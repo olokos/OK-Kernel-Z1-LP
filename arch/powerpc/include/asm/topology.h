@@ -26,9 +26,8 @@ struct device_node;
 
 #include <asm/mmzone.h>
 
-static inline int cpu_to_node(int cpu)
-{
-	return numa_cpu_lookup_table[cpu];
+static inline int cpu_to_node(int cpu) {
+    return numa_cpu_lookup_table[cpu];
 }
 
 #define parent_node(node)	(node)
@@ -41,9 +40,8 @@ struct pci_bus;
 #ifdef CONFIG_PCI
 extern int pcibus_to_node(struct pci_bus *bus);
 #else
-static inline int pcibus_to_node(struct pci_bus *bus)
-{
-	return -1;
+static inline int pcibus_to_node(struct pci_bus *bus) {
+    return -1;
 }
 #endif
 
@@ -93,14 +91,12 @@ extern void sysfs_remove_device_from_node(struct device *dev, int nid);
 
 static inline void dump_numa_cpu_topology(void) {}
 
-static inline int sysfs_add_device_to_node(struct device *dev, int nid)
-{
-	return 0;
+static inline int sysfs_add_device_to_node(struct device *dev, int nid) {
+    return 0;
 }
 
 static inline void sysfs_remove_device_from_node(struct device *dev,
-						int nid)
-{
+        int nid) {
 }
 #endif /* CONFIG_NUMA */
 
@@ -108,13 +104,11 @@ static inline void sysfs_remove_device_from_node(struct device *dev,
 extern int start_topology_update(void);
 extern int stop_topology_update(void);
 #else
-static inline int start_topology_update(void)
-{
-	return 0;
+static inline int start_topology_update(void) {
+    return 0;
 }
-static inline int stop_topology_update(void)
-{
-	return 0;
+static inline int stop_topology_update(void) {
+    return 0;
 }
 #endif /* CONFIG_NUMA && CONFIG_PPC_SPLPAR */
 

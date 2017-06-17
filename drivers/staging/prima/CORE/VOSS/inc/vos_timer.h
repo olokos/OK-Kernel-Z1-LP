@@ -68,8 +68,7 @@
 /// a pointer to this callback function)
 typedef v_VOID_t ( *vos_timer_callback_t )( v_PVOID_t userData );
 
-typedef enum
-{
+typedef enum {
     /// pure software timer.  No guarantee the apps processor will
     /// awaken when these timers expire.
     VOS_TIMER_TYPE_SW,
@@ -81,8 +80,7 @@ typedef enum
 
 } VOS_TIMER_TYPE;
 
-typedef enum
-{
+typedef enum {
     VOS_TIMER_STATE_UNUSED = VOS_TIMER_STATE_COOKIE,
     VOS_TIMER_STATE_STOPPED,
     VOS_TIMER_STATE_STARTING,
@@ -91,8 +89,7 @@ typedef enum
 
 #ifdef TIMER_MANAGER
 struct vos_timer_s;
-typedef struct timer_node_s
-{
+typedef struct timer_node_s {
     hdd_list_node_t pNode;
     char* fileName;
     unsigned int lineNum;
@@ -100,8 +97,7 @@ typedef struct timer_node_s
 } timer_node_t;
 #endif
 
-typedef struct vos_timer_s
-{
+typedef struct vos_timer_s {
 #ifdef TIMER_MANAGER
     timer_node_t *ptimerNode;
 #endif

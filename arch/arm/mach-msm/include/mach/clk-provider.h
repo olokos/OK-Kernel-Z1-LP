@@ -43,8 +43,8 @@
 #define DELAY		5	/* No bit to check, just delay */
 
 struct clk_register_data {
-	char *name;
-	u32 offset;
+    char *name;
+    u32 offset;
 };
 #ifdef CONFIG_DEBUG_FS
 void clk_debug_print_hw(struct clk *clk, struct seq_file *f);
@@ -74,16 +74,16 @@ static inline void clk_debug_print_hw(struct clk *clk, struct seq_file *f) {}
  * @lock: lock to protect this struct
  */
 struct clk_vdd_class {
-	const char *class_name;
-	struct regulator **regulator;
-	int num_regulators;
-	int (*set_vdd)(struct clk_vdd_class *v_class, int level);
-	int *vdd_uv;
-	int *vdd_ua;
-	int *level_votes;
-	int num_levels;
-	unsigned long cur_level;
-	struct mutex lock;
+    const char *class_name;
+    struct regulator **regulator;
+    int num_regulators;
+    int (*set_vdd)(struct clk_vdd_class *v_class, int level);
+    int *vdd_uv;
+    int *vdd_ua;
+    int *level_votes;
+    int num_levels;
+    unsigned long cur_level;
+    struct mutex lock;
 };
 
 #define DEFINE_VDD_CLASS(_name, _set_vdd, _num_levels) \
@@ -119,34 +119,34 @@ struct clk_vdd_class {
 	}
 
 enum handoff {
-	HANDOFF_ENABLED_CLK,
-	HANDOFF_DISABLED_CLK,
+    HANDOFF_ENABLED_CLK,
+    HANDOFF_DISABLED_CLK,
 };
 
 struct clk_ops {
-	int (*prepare)(struct clk *clk);
-	int (*enable)(struct clk *clk);
-	void (*disable)(struct clk *clk);
-	void (*unprepare)(struct clk *clk);
-	void (*enable_hwcg)(struct clk *clk);
-	void (*disable_hwcg)(struct clk *clk);
-	int (*in_hwcg_mode)(struct clk *clk);
-	enum handoff (*handoff)(struct clk *clk);
-	int (*reset)(struct clk *clk, enum clk_reset_action action);
-	int (*pre_set_rate)(struct clk *clk, unsigned long new_rate);
-	int (*set_rate)(struct clk *clk, unsigned long rate);
-	void (*post_set_rate)(struct clk *clk, unsigned long old_rate);
-	int (*set_max_rate)(struct clk *clk, unsigned long rate);
-	int (*set_flags)(struct clk *clk, unsigned flags);
-	unsigned long (*get_rate)(struct clk *clk);
-	long (*list_rate)(struct clk *clk, unsigned n);
-	int (*is_enabled)(struct clk *clk);
-	long (*round_rate)(struct clk *clk, unsigned long rate);
-	int (*set_parent)(struct clk *clk, struct clk *parent);
-	struct clk *(*get_parent)(struct clk *clk);
-	bool (*is_local)(struct clk *clk);
-	void __iomem *(*list_registers)(struct clk *clk, int n,
-				struct clk_register_data **regs, u32 *size);
+    int (*prepare)(struct clk *clk);
+    int (*enable)(struct clk *clk);
+    void (*disable)(struct clk *clk);
+    void (*unprepare)(struct clk *clk);
+    void (*enable_hwcg)(struct clk *clk);
+    void (*disable_hwcg)(struct clk *clk);
+    int (*in_hwcg_mode)(struct clk *clk);
+    enum handoff (*handoff)(struct clk *clk);
+    int (*reset)(struct clk *clk, enum clk_reset_action action);
+    int (*pre_set_rate)(struct clk *clk, unsigned long new_rate);
+    int (*set_rate)(struct clk *clk, unsigned long rate);
+    void (*post_set_rate)(struct clk *clk, unsigned long old_rate);
+    int (*set_max_rate)(struct clk *clk, unsigned long rate);
+    int (*set_flags)(struct clk *clk, unsigned flags);
+    unsigned long (*get_rate)(struct clk *clk);
+    long (*list_rate)(struct clk *clk, unsigned n);
+    int (*is_enabled)(struct clk *clk);
+    long (*round_rate)(struct clk *clk, unsigned long rate);
+    int (*set_parent)(struct clk *clk, struct clk *parent);
+    struct clk *(*get_parent)(struct clk *clk);
+    bool (*is_local)(struct clk *clk);
+    void __iomem *(*list_registers)(struct clk *clk, int n,
+                                    struct clk_register_data **regs, u32 *size);
 };
 
 /**
@@ -161,23 +161,23 @@ struct clk_ops {
  * @parent: the current source of this clock
  */
 struct clk {
-	uint32_t flags;
-	struct clk_ops *ops;
-	const char *dbg_name;
-	struct clk *depends;
-	struct clk_vdd_class *vdd_class;
-	unsigned long *fmax;
-	int num_fmax;
-	unsigned long rate;
-	struct clk *parent;
+    uint32_t flags;
+    struct clk_ops *ops;
+    const char *dbg_name;
+    struct clk *depends;
+    struct clk_vdd_class *vdd_class;
+    unsigned long *fmax;
+    int num_fmax;
+    unsigned long rate;
+    struct clk *parent;
 
-	struct list_head children;
-	struct list_head siblings;
+    struct list_head children;
+    struct list_head siblings;
 
-	unsigned count;
-	spinlock_t lock;
-	unsigned prepare_count;
-	struct mutex prepare_lock;
+    unsigned count;
+    spinlock_t lock;
+    unsigned prepare_count;
+    struct mutex prepare_lock;
 };
 
 #define CLK_INIT(name) \
@@ -216,12 +216,11 @@ extern struct clk_ops clk_ops_dummy;
 #define CLK_LOOKUP(con, c, dev) { .con_id = con, .clk = &c, .dev_id = dev }
 
 static inline bool is_better_rate(unsigned long req, unsigned long best,
-				  unsigned long new)
-{
-	if (IS_ERR_VALUE(new))
-		return false;
+                                  unsigned long new) {
+    if (IS_ERR_VALUE(new))
+        return false;
 
-	return (req <= new && new < best) || (best < req && best < new);
+    return (req <= new && new < best) || (best < req && best < new);
 }
 
 #endif

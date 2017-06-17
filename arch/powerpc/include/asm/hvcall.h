@@ -296,35 +296,35 @@ long plpar_hcall9_raw(unsigned long opcode, unsigned long *retbuf, ...);
 
 /* For hcall instrumentation.  One structure per-hcall, per-CPU */
 struct hcall_stats {
-	unsigned long	num_calls;	/* number of calls (on this CPU) */
-	unsigned long	tb_total;	/* total wall time (mftb) of calls. */
-	unsigned long	purr_total;	/* total cpu time (PURR) of calls. */
-	unsigned long	tb_start;
-	unsigned long	purr_start;
+    unsigned long	num_calls;	/* number of calls (on this CPU) */
+    unsigned long	tb_total;	/* total wall time (mftb) of calls. */
+    unsigned long	purr_total;	/* total cpu time (PURR) of calls. */
+    unsigned long	tb_start;
+    unsigned long	purr_start;
 };
 #define HCALL_STAT_ARRAY_SIZE	((MAX_HCALL_OPCODE >> 2) + 1)
 
 struct hvcall_mpp_data {
-	unsigned long entitled_mem;
-	unsigned long mapped_mem;
-	unsigned short group_num;
-	unsigned short pool_num;
-	unsigned char mem_weight;
-	unsigned char unallocated_mem_weight;
-	unsigned long unallocated_entitlement;  /* value in bytes */
-	unsigned long pool_size;
-	signed long loan_request;
-	unsigned long backing_mem;
+    unsigned long entitled_mem;
+    unsigned long mapped_mem;
+    unsigned short group_num;
+    unsigned short pool_num;
+    unsigned char mem_weight;
+    unsigned char unallocated_mem_weight;
+    unsigned long unallocated_entitlement;  /* value in bytes */
+    unsigned long pool_size;
+    signed long loan_request;
+    unsigned long backing_mem;
 };
 
 int h_get_mpp(struct hvcall_mpp_data *);
 
 struct hvcall_mpp_x_data {
-	unsigned long coalesced_bytes;
-	unsigned long pool_coalesced_bytes;
-	unsigned long pool_purr_cycles;
-	unsigned long pool_spurr_cycles;
-	unsigned long reserved[3];
+    unsigned long coalesced_bytes;
+    unsigned long pool_coalesced_bytes;
+    unsigned long pool_purr_cycles;
+    unsigned long pool_spurr_cycles;
+    unsigned long reserved[3];
 };
 
 int h_get_mpp_x(struct hvcall_mpp_x_data *mpp_x_data);
@@ -334,19 +334,16 @@ extern int CMO_PrPSP;
 extern int CMO_SecPSP;
 extern unsigned long CMO_PageSize;
 
-static inline int cmo_get_primary_psp(void)
-{
-	return CMO_PrPSP;
+static inline int cmo_get_primary_psp(void) {
+    return CMO_PrPSP;
 }
 
-static inline int cmo_get_secondary_psp(void)
-{
-	return CMO_SecPSP;
+static inline int cmo_get_secondary_psp(void) {
+    return CMO_SecPSP;
 }
 
-static inline unsigned long cmo_get_page_size(void)
-{
-	return CMO_PageSize;
+static inline unsigned long cmo_get_page_size(void) {
+    return CMO_PageSize;
 }
 #endif /* CONFIG_PPC_PSERIES */
 

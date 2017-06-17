@@ -48,51 +48,51 @@
 
 /* I/O register offsets. */
 enum ipg_regs {
-	DMA_CTRL		= 0x00,
-	RX_DMA_STATUS		= 0x08, /* Unused + reserved */
-	TFD_LIST_PTR_0		= 0x10,
-	TFD_LIST_PTR_1		= 0x14,
-	TX_DMA_BURST_THRESH	= 0x18,
-	TX_DMA_URGENT_THRESH	= 0x19,
-	TX_DMA_POLL_PERIOD	= 0x1a,
-	RFD_LIST_PTR_0		= 0x1c,
-	RFD_LIST_PTR_1		= 0x20,
-	RX_DMA_BURST_THRESH	= 0x24,
-	RX_DMA_URGENT_THRESH	= 0x25,
-	RX_DMA_POLL_PERIOD	= 0x26,
-	DEBUG_CTRL		= 0x2c,
-	ASIC_CTRL		= 0x30,
-	FIFO_CTRL		= 0x38, /* Unused */
-	FLOW_OFF_THRESH		= 0x3c,
-	FLOW_ON_THRESH		= 0x3e,
-	EEPROM_DATA		= 0x48,
-	EEPROM_CTRL		= 0x4a,
-	EXPROM_ADDR		= 0x4c, /* Unused */
-	EXPROM_DATA		= 0x50, /* Unused */
-	WAKE_EVENT		= 0x51, /* Unused */
-	COUNTDOWN		= 0x54, /* Unused */
-	INT_STATUS_ACK		= 0x5a,
-	INT_ENABLE		= 0x5c,
-	INT_STATUS		= 0x5e, /* Unused */
-	TX_STATUS		= 0x60,
-	MAC_CTRL		= 0x6c,
-	VLAN_TAG		= 0x70, /* Unused */
-	PHY_SET			= 0x75,
-	PHY_CTRL		= 0x76,
-	STATION_ADDRESS_0	= 0x78,
-	STATION_ADDRESS_1	= 0x7a,
-	STATION_ADDRESS_2	= 0x7c,
-	MAX_FRAME_SIZE		= 0x86,
-	RECEIVE_MODE		= 0x88,
-	HASHTABLE_0		= 0x8c,
-	HASHTABLE_1		= 0x90,
-	RMON_STATISTICS_MASK	= 0x98,
-	STATISTICS_MASK		= 0x9c,
-	RX_JUMBO_FRAMES		= 0xbc, /* Unused */
-	TCP_CHECKSUM_ERRORS	= 0xc0, /* Unused */
-	IP_CHECKSUM_ERRORS	= 0xc2, /* Unused */
-	UDP_CHECKSUM_ERRORS	= 0xc4, /* Unused */
-	TX_JUMBO_FRAMES		= 0xf4  /* Unused */
+    DMA_CTRL		= 0x00,
+    RX_DMA_STATUS		= 0x08, /* Unused + reserved */
+    TFD_LIST_PTR_0		= 0x10,
+    TFD_LIST_PTR_1		= 0x14,
+    TX_DMA_BURST_THRESH	= 0x18,
+    TX_DMA_URGENT_THRESH	= 0x19,
+    TX_DMA_POLL_PERIOD	= 0x1a,
+    RFD_LIST_PTR_0		= 0x1c,
+    RFD_LIST_PTR_1		= 0x20,
+    RX_DMA_BURST_THRESH	= 0x24,
+    RX_DMA_URGENT_THRESH	= 0x25,
+    RX_DMA_POLL_PERIOD	= 0x26,
+    DEBUG_CTRL		= 0x2c,
+    ASIC_CTRL		= 0x30,
+    FIFO_CTRL		= 0x38, /* Unused */
+    FLOW_OFF_THRESH		= 0x3c,
+    FLOW_ON_THRESH		= 0x3e,
+    EEPROM_DATA		= 0x48,
+    EEPROM_CTRL		= 0x4a,
+    EXPROM_ADDR		= 0x4c, /* Unused */
+    EXPROM_DATA		= 0x50, /* Unused */
+    WAKE_EVENT		= 0x51, /* Unused */
+    COUNTDOWN		= 0x54, /* Unused */
+    INT_STATUS_ACK		= 0x5a,
+    INT_ENABLE		= 0x5c,
+    INT_STATUS		= 0x5e, /* Unused */
+    TX_STATUS		= 0x60,
+    MAC_CTRL		= 0x6c,
+    VLAN_TAG		= 0x70, /* Unused */
+    PHY_SET			= 0x75,
+    PHY_CTRL		= 0x76,
+    STATION_ADDRESS_0	= 0x78,
+    STATION_ADDRESS_1	= 0x7a,
+    STATION_ADDRESS_2	= 0x7c,
+    MAX_FRAME_SIZE		= 0x86,
+    RECEIVE_MODE		= 0x88,
+    HASHTABLE_0		= 0x8c,
+    HASHTABLE_1		= 0x90,
+    RMON_STATISTICS_MASK	= 0x98,
+    STATISTICS_MASK		= 0x9c,
+    RX_JUMBO_FRAMES		= 0xbc, /* Unused */
+    TCP_CHECKSUM_ERRORS	= 0xc0, /* Unused */
+    IP_CHECKSUM_ERRORS	= 0xc2, /* Unused */
+    UDP_CHECKSUM_ERRORS	= 0xc4, /* Unused */
+    TX_JUMBO_FRAMES		= 0xf4  /* Unused */
 };
 
 /* Ethernet MIB statistic register offsets. */
@@ -688,62 +688,62 @@ do {							\
  * TFD field is 64 bits wide.
  */
 struct ipg_tx {
-	__le64 next_desc;
-	__le64 tfc;
-	__le64 frag_info;
+    __le64 next_desc;
+    __le64 tfc;
+    __le64 frag_info;
 };
 
 /* Receive Frame Descriptor. Note, each RFD field is 64 bits wide.
  */
 struct ipg_rx {
-	__le64 next_desc;
-	__le64 rfs;
-	__le64 frag_info;
+    __le64 next_desc;
+    __le64 rfs;
+    __le64 frag_info;
 };
 
 struct ipg_jumbo {
-	int found_start;
-	int current_size;
-	struct sk_buff *skb;
+    int found_start;
+    int current_size;
+    struct sk_buff *skb;
 };
 
 /* Structure of IPG NIC specific data. */
 struct ipg_nic_private {
-	void __iomem *ioaddr;
-	struct ipg_tx *txd;
-	struct ipg_rx *rxd;
-	dma_addr_t txd_map;
-	dma_addr_t rxd_map;
-	struct sk_buff *tx_buff[IPG_TFDLIST_LENGTH];
-	struct sk_buff *rx_buff[IPG_RFDLIST_LENGTH];
-	unsigned int tx_current;
-	unsigned int tx_dirty;
-	unsigned int rx_current;
-	unsigned int rx_dirty;
-	bool is_jumbo;
-	struct ipg_jumbo jumbo;
-	unsigned long rxfrag_size;
-	unsigned long rxsupport_size;
-	unsigned long max_rxframe_size;
-	unsigned int rx_buf_sz;
-	struct pci_dev *pdev;
-	struct net_device *dev;
-	struct net_device_stats stats;
-	spinlock_t lock;
-	int tenmbpsmode;
+    void __iomem *ioaddr;
+    struct ipg_tx *txd;
+    struct ipg_rx *rxd;
+    dma_addr_t txd_map;
+    dma_addr_t rxd_map;
+    struct sk_buff *tx_buff[IPG_TFDLIST_LENGTH];
+    struct sk_buff *rx_buff[IPG_RFDLIST_LENGTH];
+    unsigned int tx_current;
+    unsigned int tx_dirty;
+    unsigned int rx_current;
+    unsigned int rx_dirty;
+    bool is_jumbo;
+    struct ipg_jumbo jumbo;
+    unsigned long rxfrag_size;
+    unsigned long rxsupport_size;
+    unsigned long max_rxframe_size;
+    unsigned int rx_buf_sz;
+    struct pci_dev *pdev;
+    struct net_device *dev;
+    struct net_device_stats stats;
+    spinlock_t lock;
+    int tenmbpsmode;
 
-	u16 led_mode;
-	u16 station_addr[3];	/* Station Address in EEPROM Reg 0x10..0x12 */
+    u16 led_mode;
+    u16 station_addr[3];	/* Station Address in EEPROM Reg 0x10..0x12 */
 
-	struct mutex		mii_mutex;
-	struct mii_if_info	mii_if;
-	int reset_current_tfd;
+    struct mutex		mii_mutex;
+    struct mii_if_info	mii_if;
+    int reset_current_tfd;
 #ifdef IPG_DEBUG
-	int RFDlistendCount;
-	int RFDListCheckedCount;
-	int EmptyRFDListCount;
+    int RFDlistendCount;
+    int RFDListCheckedCount;
+    int EmptyRFDListCount;
 #endif
-	struct delayed_work task;
+    struct delayed_work task;
 };
 
 #endif				/* __LINUX_IPG_H */

@@ -17,16 +17,16 @@
 /* baud rates */
 
 enum {
-	kl5kusb105a_sio_b115200 = 0,
-	kl5kusb105a_sio_b57600  = 1,
-	kl5kusb105a_sio_b38400  = 2,
-	kl5kusb105a_sio_b19200  = 4,
-	kl5kusb105a_sio_b14400  = 5,
-	kl5kusb105a_sio_b9600   = 6,
-	kl5kusb105a_sio_b4800   = 8,	/* unchecked */
-	kl5kusb105a_sio_b2400   = 9,	/* unchecked */
-	kl5kusb105a_sio_b1200   = 0xa,	/* unchecked */
-	kl5kusb105a_sio_b600    = 0xb	/* unchecked */
+    kl5kusb105a_sio_b115200 = 0,
+    kl5kusb105a_sio_b57600  = 1,
+    kl5kusb105a_sio_b38400  = 2,
+    kl5kusb105a_sio_b19200  = 4,
+    kl5kusb105a_sio_b14400  = 5,
+    kl5kusb105a_sio_b9600   = 6,
+    kl5kusb105a_sio_b4800   = 8,	/* unchecked */
+    kl5kusb105a_sio_b2400   = 9,	/* unchecked */
+    kl5kusb105a_sio_b1200   = 0xa,	/* unchecked */
+    kl5kusb105a_sio_b600    = 0xb	/* unchecked */
 };
 
 /* data bits */

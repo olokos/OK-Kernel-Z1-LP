@@ -27,9 +27,9 @@ extern int m5mols_debug;
 	(&container_of(__ctrl->handler, struct m5mols_info, handle)->sd)
 
 enum m5mols_restype {
-	M5MOLS_RESTYPE_MONITOR,
-	M5MOLS_RESTYPE_CAPTURE,
-	M5MOLS_RESTYPE_MAX,
+    M5MOLS_RESTYPE_MONITOR,
+    M5MOLS_RESTYPE_CAPTURE,
+    M5MOLS_RESTYPE_MAX,
 };
 
 /**
@@ -40,10 +40,10 @@ enum m5mols_restype {
  * @reg: resolution preset register value
  */
 struct m5mols_resolution {
-	u8 reg;
-	enum m5mols_restype type;
-	u16 width;
-	u16 height;
+    u8 reg;
+    enum m5mols_restype type;
+    u16 width;
+    u16 height;
 };
 
 /**
@@ -58,15 +58,15 @@ struct m5mols_resolution {
  * @qval: not written exact meaning in document
  */
 struct m5mols_exif {
-	u32 exposure_time;
-	u32 shutter_speed;
-	u32 aperture;
-	u32 brightness;
-	u32 exposure_bias;
-	u16 iso_speed;
-	u16 flash;
-	u16 sdr;
-	u16 qval;
+    u32 exposure_time;
+    u32 shutter_speed;
+    u32 aperture;
+    u32 brightness;
+    u32 exposure_bias;
+    u16 iso_speed;
+    u16 flash;
+    u16 sdr;
+    u16 qval;
 };
 
 /**
@@ -77,10 +77,10 @@ struct m5mols_exif {
  * @total: total size in bytes of the produced image
  */
 struct m5mols_capture {
-	struct m5mols_exif exif;
-	u32 main;
-	u32 thumb;
-	u32 total;
+    struct m5mols_exif exif;
+    u32 main;
+    u32 thumb;
+    u32 total;
 };
 
 /**
@@ -106,23 +106,23 @@ struct m5mols_capture {
  * The each value according to each scenemode is recommended in the documents.
  */
 struct m5mols_scenemode {
-	u8 metering;
-	u8 ev_bias;
-	u8 wb_mode;
-	u8 wb_preset;
-	u8 chroma_en;
-	u8 chroma_lvl;
-	u8 edge_en;
-	u8 edge_lvl;
-	u8 af_range;
-	u8 fd_mode;
-	u8 mcc;
-	u8 light;
-	u8 flash;
-	u8 tone;
-	u8 iso;
-	u8 capt_mode;
-	u8 wdr;
+    u8 metering;
+    u8 ev_bias;
+    u8 wb_mode;
+    u8 wb_preset;
+    u8 chroma_en;
+    u8 chroma_lvl;
+    u8 edge_en;
+    u8 edge_lvl;
+    u8 af_range;
+    u8 fd_mode;
+    u8 mcc;
+    u8 light;
+    u8 flash;
+    u8 tone;
+    u8 iso;
+    u8 capt_mode;
+    u8 wdr;
 };
 
 /**
@@ -145,14 +145,14 @@ struct m5mols_scenemode {
  */
 #define VERSION_STRING_SIZE	22
 struct m5mols_version {
-	u8	customer;
-	u8	project;
-	u16	fw;
-	u16	hw;
-	u16	param;
-	u16	awb;
-	u8	str[VERSION_STRING_SIZE];
-	u8	af;
+    u8	customer;
+    u8	project;
+    u16	fw;
+    u16	hw;
+    u16	param;
+    u16	awb;
+    u8	str[VERSION_STRING_SIZE];
+    u8	af;
 };
 
 /**
@@ -183,39 +183,39 @@ struct m5mols_version {
  * @set_power: optional power callback to the board code
  */
 struct m5mols_info {
-	const struct m5mols_platform_data *pdata;
-	struct v4l2_subdev sd;
-	struct media_pad pad;
-	struct v4l2_mbus_framefmt ffmt[M5MOLS_RESTYPE_MAX];
-	int res_type;
+    const struct m5mols_platform_data *pdata;
+    struct v4l2_subdev sd;
+    struct media_pad pad;
+    struct v4l2_mbus_framefmt ffmt[M5MOLS_RESTYPE_MAX];
+    int res_type;
 
-	wait_queue_head_t irq_waitq;
-	atomic_t irq_done;
+    wait_queue_head_t irq_waitq;
+    atomic_t irq_done;
 
-	struct v4l2_ctrl_handler handle;
+    struct v4l2_ctrl_handler handle;
 
-	/* Autoexposure/exposure control cluster */
-	struct v4l2_ctrl *autoexposure;
-	struct v4l2_ctrl *exposure;
+    /* Autoexposure/exposure control cluster */
+    struct v4l2_ctrl *autoexposure;
+    struct v4l2_ctrl *exposure;
 
-	struct v4l2_ctrl *autowb;
-	struct v4l2_ctrl *colorfx;
-	struct v4l2_ctrl *saturation;
-	struct v4l2_ctrl *zoom;
+    struct v4l2_ctrl *autowb;
+    struct v4l2_ctrl *colorfx;
+    struct v4l2_ctrl *saturation;
+    struct v4l2_ctrl *zoom;
 
-	struct m5mols_version ver;
-	struct m5mols_capture cap;
+    struct m5mols_version ver;
+    struct m5mols_capture cap;
 
-	unsigned int isp_ready:1;
-	unsigned int power:1;
-	unsigned int ctrl_sync:1;
+    unsigned int isp_ready:1;
+    unsigned int power:1;
+    unsigned int ctrl_sync:1;
 
-	bool lock_ae;
-	bool lock_awb;
-	u8 resolution;
-	u8 mode;
+    bool lock_ae;
+    bool lock_awb;
+    u8 resolution;
+    u8 mode;
 
-	int (*set_power)(struct device *dev, int on);
+    int (*set_power)(struct device *dev, int on);
 };
 
 #define is_available_af(__info)	(__info->ver.af)
@@ -254,7 +254,7 @@ int m5mols_read_u32(struct v4l2_subdev *sd, u32 reg_comb, u32 *val);
 int m5mols_write(struct v4l2_subdev *sd, u32 reg_comb, u32 val);
 
 int m5mols_busy_wait(struct v4l2_subdev *sd, u32 reg, u32 value, u32 mask,
-		     int timeout);
+                     int timeout);
 
 /* Mask value for busy waiting until M-5MOLS I2C interface is initialized */
 #define M5MOLS_I2C_RDY_WAIT_FL		(1 << 16)
@@ -294,6 +294,6 @@ int m5mols_set_ctrl(struct v4l2_ctrl *ctrl);
 
 /* The firmware function */
 int m5mols_update_fw(struct v4l2_subdev *sd,
-		     int (*set_power)(struct m5mols_info *, bool));
+                     int (*set_power)(struct m5mols_info *, bool));
 
 #endif	/* M5MOLS_H */

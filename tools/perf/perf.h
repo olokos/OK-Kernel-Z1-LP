@@ -111,29 +111,27 @@ void get_term_dimensions(struct winsize *ws);
 #include <stdbool.h>
 
 struct perf_mmap {
-	void			*base;
-	int			mask;
-	unsigned int		prev;
+    void			*base;
+    int			mask;
+    unsigned int		prev;
 };
 
-static inline unsigned int perf_mmap__read_head(struct perf_mmap *mm)
-{
-	struct perf_event_mmap_page *pc = mm->base;
-	int head = pc->data_head;
-	rmb();
-	return head;
+static inline unsigned int perf_mmap__read_head(struct perf_mmap *mm) {
+    struct perf_event_mmap_page *pc = mm->base;
+    int head = pc->data_head;
+    rmb();
+    return head;
 }
 
 static inline void perf_mmap__write_tail(struct perf_mmap *md,
-					 unsigned long tail)
-{
-	struct perf_event_mmap_page *pc = md->base;
+        unsigned long tail) {
+    struct perf_event_mmap_page *pc = md->base;
 
-	/*
-	 * ensure all reads are done before we write the tail out.
-	 */
-	/* mb(); */
-	pc->data_tail = tail;
+    /*
+     * ensure all reads are done before we write the tail out.
+     */
+    /* mb(); */
+    pc->data_tail = tail;
 }
 
 /*
@@ -147,12 +145,11 @@ static inline void perf_mmap__write_tail(struct perf_mmap *md,
 # define NSEC_PER_SEC			1000000000ULL
 #endif
 
-static inline unsigned long long rdclock(void)
-{
-	struct timespec ts;
+static inline unsigned long long rdclock(void) {
+    struct timespec ts;
 
-	clock_gettime(CLOCK_MONOTONIC, &ts);
-	return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
 }
 
 /*
@@ -170,36 +167,35 @@ static inline unsigned long long rdclock(void)
 
 static inline int
 sys_perf_event_open(struct perf_event_attr *attr,
-		      pid_t pid, int cpu, int group_fd,
-		      unsigned long flags)
-{
-	return syscall(__NR_perf_event_open, attr, pid, cpu,
-		       group_fd, flags);
+                    pid_t pid, int cpu, int group_fd,
+                    unsigned long flags) {
+    return syscall(__NR_perf_event_open, attr, pid, cpu,
+                   group_fd, flags);
 }
 
 #define MAX_COUNTERS			256
 #define MAX_NR_CPUS			256
 
 struct ip_callchain {
-	u64 nr;
-	u64 ips[0];
+    u64 nr;
+    u64 ips[0];
 };
 
 struct branch_flags {
-	u64 mispred:1;
-	u64 predicted:1;
-	u64 reserved:62;
+    u64 mispred:1;
+    u64 predicted:1;
+    u64 reserved:62;
 };
 
 struct branch_entry {
-	u64				from;
-	u64				to;
-	struct branch_flags flags;
+    u64				from;
+    u64				to;
+    struct branch_flags flags;
 };
 
 struct branch_stack {
-	u64				nr;
-	struct branch_entry	entries[0];
+    u64				nr;
+    struct branch_entry	entries[0];
 };
 
 extern bool perf_host, perf_guest;
@@ -208,30 +204,30 @@ extern const char perf_version_string[];
 void pthread__unblock_sigwinch(void);
 
 struct perf_record_opts {
-	const char   *target_pid;
-	const char   *target_tid;
-	uid_t	     uid;
-	bool	     call_graph;
-	bool	     group;
-	bool	     inherit_stat;
-	bool	     no_delay;
-	bool	     no_inherit;
-	bool	     no_samples;
-	bool	     pipe_output;
-	bool	     raw_samples;
-	bool	     sample_address;
-	bool	     sample_time;
-	bool	     sample_id_all_missing;
-	bool	     exclude_guest_missing;
-	bool	     system_wide;
-	bool	     period;
-	unsigned int freq;
-	unsigned int mmap_pages;
-	unsigned int user_freq;
-	int	     branch_stack;
-	u64	     default_interval;
-	u64	     user_interval;
-	const char   *cpu_list;
+    const char   *target_pid;
+    const char   *target_tid;
+    uid_t	     uid;
+    bool	     call_graph;
+    bool	     group;
+    bool	     inherit_stat;
+    bool	     no_delay;
+    bool	     no_inherit;
+    bool	     no_samples;
+    bool	     pipe_output;
+    bool	     raw_samples;
+    bool	     sample_address;
+    bool	     sample_time;
+    bool	     sample_id_all_missing;
+    bool	     exclude_guest_missing;
+    bool	     system_wide;
+    bool	     period;
+    unsigned int freq;
+    unsigned int mmap_pages;
+    unsigned int user_freq;
+    int	     branch_stack;
+    u64	     default_interval;
+    u64	     user_interval;
+    const char   *cpu_list;
 };
 
 #endif

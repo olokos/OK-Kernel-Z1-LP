@@ -132,24 +132,22 @@
 #define MAL_MAX_TX_SIZE		4080
 #define MAL_MAX_RX_SIZE		4080
 
-static inline int mal_rx_size(int len)
-{
-	len = (len + 0xf) & ~0xf;
-	return len > MAL_MAX_RX_SIZE ? MAL_MAX_RX_SIZE : len;
+static inline int mal_rx_size(int len) {
+    len = (len + 0xf) & ~0xf;
+    return len > MAL_MAX_RX_SIZE ? MAL_MAX_RX_SIZE : len;
 }
 
-static inline int mal_tx_chunks(int len)
-{
-	return (len + MAL_MAX_TX_SIZE - 1) / MAL_MAX_TX_SIZE;
+static inline int mal_tx_chunks(int len) {
+    return (len + MAL_MAX_TX_SIZE - 1) / MAL_MAX_TX_SIZE;
 }
 
 #define MAL_CHAN_MASK(n)	(0x80000000 >> (n))
 
 /* MAL Buffer Descriptor structure */
 struct mal_descriptor {
-	u16 ctrl;		/* MAL / Commac status control bits */
-	u16 data_len;		/* Max length is 4K-1 (12 bits)     */
-	u32 data_ptr;		/* pointer to actual data buffer    */
+    u16 ctrl;		/* MAL / Commac status control bits */
+    u16 data_len;		/* Max length is 4K-1 (12 bits)     */
+    u32 data_ptr;		/* pointer to actual data buffer    */
 };
 
 /* the following defines are for the MadMAL status and control registers. */
@@ -170,63 +168,61 @@ struct mal_descriptor {
 #define MAL_TX_CTRL_INTR	0x0400
 
 struct mal_commac_ops {
-	void	(*poll_tx) (void *dev);
-	int	(*poll_rx) (void *dev, int budget);
-	int	(*peek_rx) (void *dev);
-	void	(*rxde) (void *dev);
+    void	(*poll_tx) (void *dev);
+    int	(*poll_rx) (void *dev, int budget);
+    int	(*peek_rx) (void *dev);
+    void	(*rxde) (void *dev);
 };
 
 struct mal_commac {
-	struct mal_commac_ops	*ops;
-	void			*dev;
-	struct list_head	poll_list;
-	long       		flags;
+    struct mal_commac_ops	*ops;
+    void			*dev;
+    struct list_head	poll_list;
+    long       		flags;
 #define MAL_COMMAC_RX_STOPPED		0
 #define MAL_COMMAC_POLL_DISABLED	1
-	u32			tx_chan_mask;
-	u32			rx_chan_mask;
-	struct list_head	list;
+    u32			tx_chan_mask;
+    u32			rx_chan_mask;
+    struct list_head	list;
 };
 
 struct mal_instance {
-	int			version;
-	dcr_host_t		dcr_host;
+    int			version;
+    dcr_host_t		dcr_host;
 
-	int			num_tx_chans;	/* Number of TX channels */
-	int			num_rx_chans;	/* Number of RX channels */
-	int 			txeob_irq;	/* TX End Of Buffer IRQ  */
-	int 			rxeob_irq;	/* RX End Of Buffer IRQ  */
-	int			txde_irq;	/* TX Descriptor Error IRQ */
-	int			rxde_irq;	/* RX Descriptor Error IRQ */
-	int			serr_irq;	/* MAL System Error IRQ    */
+    int			num_tx_chans;	/* Number of TX channels */
+    int			num_rx_chans;	/* Number of RX channels */
+    int 			txeob_irq;	/* TX End Of Buffer IRQ  */
+    int 			rxeob_irq;	/* RX End Of Buffer IRQ  */
+    int			txde_irq;	/* TX Descriptor Error IRQ */
+    int			rxde_irq;	/* RX Descriptor Error IRQ */
+    int			serr_irq;	/* MAL System Error IRQ    */
 
-	struct list_head	poll_list;
-	struct napi_struct	napi;
+    struct list_head	poll_list;
+    struct napi_struct	napi;
 
-	struct list_head	list;
-	u32			tx_chan_mask;
-	u32			rx_chan_mask;
+    struct list_head	list;
+    u32			tx_chan_mask;
+    u32			rx_chan_mask;
 
-	dma_addr_t		bd_dma;
-	struct mal_descriptor	*bd_virt;
+    dma_addr_t		bd_dma;
+    struct mal_descriptor	*bd_virt;
 
-	struct platform_device	*ofdev;
-	int			index;
-	spinlock_t		lock;
+    struct platform_device	*ofdev;
+    int			index;
+    spinlock_t		lock;
 
-	struct net_device	dummy_dev;
+    struct net_device	dummy_dev;
 
-	unsigned int features;
+    unsigned int features;
 };
 
-static inline u32 get_mal_dcrn(struct mal_instance *mal, int reg)
-{
-	return dcr_read(mal->dcr_host, reg);
+static inline u32 get_mal_dcrn(struct mal_instance *mal, int reg) {
+    return dcr_read(mal->dcr_host, reg);
 }
 
-static inline void set_mal_dcrn(struct mal_instance *mal, int reg, u32 val)
-{
-	dcr_write(mal->dcr_host, reg, val);
+static inline void set_mal_dcrn(struct mal_instance *mal, int reg, u32 val) {
+    dcr_write(mal->dcr_host, reg, val);
 }
 
 /* Features of various MAL implementations */
@@ -242,23 +238,22 @@ static inline void set_mal_dcrn(struct mal_instance *mal, int reg, u32 val)
 #define MAL_FTR_COMMON_ERR_INT	0x00000002
 
 enum {
-	MAL_FTRS_ALWAYS = 0,
+    MAL_FTRS_ALWAYS = 0,
 
-	MAL_FTRS_POSSIBLE =
+    MAL_FTRS_POSSIBLE =
 #ifdef CONFIG_IBM_EMAC_MAL_CLR_ICINTSTAT
-		MAL_FTR_CLEAR_ICINTSTAT |
+        MAL_FTR_CLEAR_ICINTSTAT |
 #endif
 #ifdef CONFIG_IBM_EMAC_MAL_COMMON_ERR
-		MAL_FTR_COMMON_ERR_INT |
+        MAL_FTR_COMMON_ERR_INT |
 #endif
-		0,
+        0,
 };
 
 static inline int mal_has_feature(struct mal_instance *dev,
-		unsigned long feature)
-{
-	return (MAL_FTRS_ALWAYS & feature) ||
-		(MAL_FTRS_POSSIBLE & dev->features & feature);
+                                  unsigned long feature) {
+    return (MAL_FTRS_ALWAYS & feature) ||
+           (MAL_FTRS_POSSIBLE & dev->features & feature);
 }
 
 /* Register MAL devices */
@@ -266,9 +261,9 @@ int mal_init(void);
 void mal_exit(void);
 
 int mal_register_commac(struct mal_instance *mal,
-			struct mal_commac *commac);
+                        struct mal_commac *commac);
 void mal_unregister_commac(struct mal_instance *mal,
-			   struct mal_commac *commac);
+                           struct mal_commac *commac);
 int mal_set_rcbs(struct mal_instance *mal, int channel, unsigned long size);
 
 /* Returns BD ring offset for a particular channel
@@ -291,23 +286,23 @@ void mal_poll_del(struct mal_instance *mal, struct mal_commac *commac);
 
 /* Ethtool MAL registers */
 struct mal_regs {
-	u32 tx_count;
-	u32 rx_count;
+    u32 tx_count;
+    u32 rx_count;
 
-	u32 cfg;
-	u32 esr;
-	u32 ier;
-	u32 tx_casr;
-	u32 tx_carr;
-	u32 tx_eobisr;
-	u32 tx_deir;
-	u32 rx_casr;
-	u32 rx_carr;
-	u32 rx_eobisr;
-	u32 rx_deir;
-	u32 tx_ctpr[32];
-	u32 rx_ctpr[32];
-	u32 rcbs[32];
+    u32 cfg;
+    u32 esr;
+    u32 ier;
+    u32 tx_casr;
+    u32 tx_carr;
+    u32 tx_eobisr;
+    u32 tx_deir;
+    u32 rx_casr;
+    u32 rx_carr;
+    u32 rx_eobisr;
+    u32 rx_deir;
+    u32 tx_ctpr[32];
+    u32 rx_ctpr[32];
+    u32 rcbs[32];
 };
 
 int mal_get_regs_len(struct mal_instance *mal);

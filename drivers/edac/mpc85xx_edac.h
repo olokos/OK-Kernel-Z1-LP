@@ -143,24 +143,24 @@
 #define MPC85XX_PCI_PCIX_TIMR		0x0024
 
 struct mpc85xx_mc_pdata {
-	char *name;
-	int edac_idx;
-	void __iomem *mc_vbase;
-	int irq;
+    char *name;
+    int edac_idx;
+    void __iomem *mc_vbase;
+    int irq;
 };
 
 struct mpc85xx_l2_pdata {
-	char *name;
-	int edac_idx;
-	void __iomem *l2_vbase;
-	int irq;
+    char *name;
+    int edac_idx;
+    void __iomem *l2_vbase;
+    int irq;
 };
 
 struct mpc85xx_pci_pdata {
-	char *name;
-	int edac_idx;
-	void __iomem *pci_vbase;
-	int irq;
+    char *name;
+    int edac_idx;
+    void __iomem *pci_vbase;
+    int irq;
 };
 
 #endif

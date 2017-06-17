@@ -22,45 +22,45 @@
 #define _PGMT_MASK		(1UL << PG_uncached | 1UL << PG_arch_1)
 #define _PGMT_CLEAR_MASK	(~_PGMT_MASK)
 
-static inline unsigned long get_page_memtype(struct page *pg)
-{
-	unsigned long pg_flags = pg->flags & _PGMT_MASK;
+static inline unsigned long get_page_memtype(struct page *pg) {
+    unsigned long pg_flags = pg->flags & _PGMT_MASK;
 
-	if (pg_flags == _PGMT_DEFAULT)
-		return -1;
-	else if (pg_flags == _PGMT_WC)
-		return _PAGE_CACHE_WC;
-	else if (pg_flags == _PGMT_UC_MINUS)
-		return _PAGE_CACHE_UC_MINUS;
-	else
-		return _PAGE_CACHE_WB;
+    if (pg_flags == _PGMT_DEFAULT)
+        return -1;
+    else if (pg_flags == _PGMT_WC)
+        return _PAGE_CACHE_WC;
+    else if (pg_flags == _PGMT_UC_MINUS)
+        return _PAGE_CACHE_UC_MINUS;
+    else
+        return _PAGE_CACHE_WB;
 }
 
-static inline void set_page_memtype(struct page *pg, unsigned long memtype)
-{
-	unsigned long memtype_flags = _PGMT_DEFAULT;
-	unsigned long old_flags;
-	unsigned long new_flags;
+static inline void set_page_memtype(struct page *pg, unsigned long memtype) {
+    unsigned long memtype_flags = _PGMT_DEFAULT;
+    unsigned long old_flags;
+    unsigned long new_flags;
 
-	switch (memtype) {
-	case _PAGE_CACHE_WC:
-		memtype_flags = _PGMT_WC;
-		break;
-	case _PAGE_CACHE_UC_MINUS:
-		memtype_flags = _PGMT_UC_MINUS;
-		break;
-	case _PAGE_CACHE_WB:
-		memtype_flags = _PGMT_WB;
-		break;
-	}
+    switch (memtype) {
+    case _PAGE_CACHE_WC:
+        memtype_flags = _PGMT_WC;
+        break;
+    case _PAGE_CACHE_UC_MINUS:
+        memtype_flags = _PGMT_UC_MINUS;
+        break;
+    case _PAGE_CACHE_WB:
+        memtype_flags = _PGMT_WB;
+        break;
+    }
 
-	do {
-		old_flags = pg->flags;
-		new_flags = (old_flags & _PGMT_CLEAR_MASK) | memtype_flags;
-	} while (cmpxchg(&pg->flags, old_flags, new_flags) != old_flags);
+    do {
+        old_flags = pg->flags;
+        new_flags = (old_flags & _PGMT_CLEAR_MASK) | memtype_flags;
+    } while (cmpxchg(&pg->flags, old_flags, new_flags) != old_flags);
 }
 #else
-static inline unsigned long get_page_memtype(struct page *pg) { return -1; }
+static inline unsigned long get_page_memtype(struct page *pg) {
+    return -1;
+}
 static inline void set_page_memtype(struct page *pg, unsigned long memtype) { }
 #endif
 
@@ -157,9 +157,8 @@ static inline void set_kernel_text_ro(void) { }
 #ifdef CONFIG_DEBUG_RODATA_TEST
 int rodata_test(void);
 #else
-static inline int rodata_test(void)
-{
-	return 0;
+static inline int rodata_test(void) {
+    return 0;
 }
 #endif
 

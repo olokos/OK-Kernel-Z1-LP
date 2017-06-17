@@ -24,39 +24,37 @@
 
 extern cxgb3_cpl_handler_func cxgb3i_cpl_handlers[NUM_CPL_CMDS];
 
-static inline unsigned int cxgb3i_get_private_ipv4addr(struct net_device *ndev)
-{
-	return ((struct port_info *)(netdev_priv(ndev)))->iscsi_ipv4addr;
+static inline unsigned int cxgb3i_get_private_ipv4addr(struct net_device *ndev) {
+    return ((struct port_info *)(netdev_priv(ndev)))->iscsi_ipv4addr;
 }
 
 static inline void cxgb3i_set_private_ipv4addr(struct net_device *ndev,
-						unsigned int addr)
-{
-	struct port_info *pi =  (struct port_info *)netdev_priv(ndev);
+        unsigned int addr) {
+    struct port_info *pi =  (struct port_info *)netdev_priv(ndev);
 
-	pi->iscsic.flags = addr ? 1 : 0;
-	pi->iscsi_ipv4addr = addr;
-	if (addr)
-		memcpy(pi->iscsic.mac_addr, ndev->dev_addr, ETH_ALEN);
+    pi->iscsic.flags = addr ? 1 : 0;
+    pi->iscsi_ipv4addr = addr;
+    if (addr)
+        memcpy(pi->iscsic.mac_addr, ndev->dev_addr, ETH_ALEN);
 }
 
 struct cpl_iscsi_hdr_norss {
-	union opcode_tid ot;
-	u16 pdu_len_ddp;
-	u16 len;
-	u32 seq;
-	u16 urg;
-	u8 rsvd;
-	u8 status;
+    union opcode_tid ot;
+    u16 pdu_len_ddp;
+    u16 len;
+    u32 seq;
+    u16 urg;
+    u8 rsvd;
+    u8 status;
 };
 
 struct cpl_rx_data_ddp_norss {
-	union opcode_tid ot;
-	u16 urg;
-	u16 len;
-	u32 seq;
-	u32 nxt_seq;
-	u32 ulp_crc;
-	u32 ddp_status;
+    union opcode_tid ot;
+    u16 urg;
+    u16 len;
+    u32 seq;
+    u32 nxt_seq;
+    u32 ulp_crc;
+    u32 ddp_status;
 };
 #endif

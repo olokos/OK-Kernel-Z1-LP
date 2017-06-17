@@ -17,9 +17,9 @@
 #include <linux/switch.h>
 
 struct mdss_wb_ctrl {
-	struct platform_device *pdev;
-	struct mdss_panel_data pdata;
-	struct switch_dev sdev;
+    struct platform_device *pdev;
+    struct mdss_panel_data pdata;
+    struct switch_dev sdev;
 };
 
 #endif

@@ -79,64 +79,64 @@
 
 /* GRETH APB registers */
 struct greth_regs {
-	u32 control;
-	u32 status;
-	u32 esa_msb;
-	u32 esa_lsb;
-	u32 mdio;
-	u32 tx_desc_p;
-	u32 rx_desc_p;
-	u32 edclip;
-	u32 hash_msb;
-	u32 hash_lsb;
+    u32 control;
+    u32 status;
+    u32 esa_msb;
+    u32 esa_lsb;
+    u32 mdio;
+    u32 tx_desc_p;
+    u32 rx_desc_p;
+    u32 edclip;
+    u32 hash_msb;
+    u32 hash_lsb;
 };
 
 /* GRETH buffer descriptor */
 struct greth_bd {
-	u32 stat;
-	u32 addr;
+    u32 stat;
+    u32 addr;
 };
 
 struct greth_private {
-	struct sk_buff *rx_skbuff[GRETH_RXBD_NUM];
-	struct sk_buff *tx_skbuff[GRETH_TXBD_NUM];
+    struct sk_buff *rx_skbuff[GRETH_RXBD_NUM];
+    struct sk_buff *tx_skbuff[GRETH_TXBD_NUM];
 
-	unsigned char *tx_bufs[GRETH_TXBD_NUM];
-	unsigned char *rx_bufs[GRETH_RXBD_NUM];
-	u16 tx_bufs_length[GRETH_TXBD_NUM];
+    unsigned char *tx_bufs[GRETH_TXBD_NUM];
+    unsigned char *rx_bufs[GRETH_RXBD_NUM];
+    u16 tx_bufs_length[GRETH_TXBD_NUM];
 
-	u16 tx_next;
-	u16 tx_last;
-	u16 tx_free;
-	u16 rx_cur;
+    u16 tx_next;
+    u16 tx_last;
+    u16 tx_free;
+    u16 rx_cur;
 
-	struct greth_regs *regs;	/* Address of controller registers. */
-	struct greth_bd *rx_bd_base;	/* Address of Rx BDs. */
-	struct greth_bd *tx_bd_base;	/* Address of Tx BDs. */
-	dma_addr_t rx_bd_base_phys;
-	dma_addr_t tx_bd_base_phys;
+    struct greth_regs *regs;	/* Address of controller registers. */
+    struct greth_bd *rx_bd_base;	/* Address of Rx BDs. */
+    struct greth_bd *tx_bd_base;	/* Address of Tx BDs. */
+    dma_addr_t rx_bd_base_phys;
+    dma_addr_t tx_bd_base_phys;
 
-	int irq;
+    int irq;
 
-	struct device *dev;	        /* Pointer to platform_device->dev */
-	struct net_device *netdev;
-	struct napi_struct napi;
-	spinlock_t devlock;
+    struct device *dev;	        /* Pointer to platform_device->dev */
+    struct net_device *netdev;
+    struct napi_struct napi;
+    spinlock_t devlock;
 
-	struct phy_device *phy;
-	struct mii_bus *mdio;
-	int mdio_irqs[PHY_MAX_ADDR];
-	unsigned int link;
-	unsigned int speed;
-	unsigned int duplex;
+    struct phy_device *phy;
+    struct mii_bus *mdio;
+    int mdio_irqs[PHY_MAX_ADDR];
+    unsigned int link;
+    unsigned int speed;
+    unsigned int duplex;
 
-	u32 msg_enable;
+    u32 msg_enable;
 
-	u8 phyaddr;
-	u8 multicast;
-	u8 gbit_mac;
-	u8 mdio_int_en;
-	u8 edcl;
+    u8 phyaddr;
+    u8 multicast;
+    u8 gbit_mac;
+    u8 mdio_int_en;
+    u8 edcl;
 };
 
 #endif

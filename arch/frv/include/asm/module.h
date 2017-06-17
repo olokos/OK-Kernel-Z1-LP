@@ -11,8 +11,7 @@
 #ifndef _ASM_MODULE_H
 #define _ASM_MODULE_H
 
-struct mod_arch_specific
-{
+struct mod_arch_specific {
 };
 
 #define Elf_Shdr	Elf32_Shdr

@@ -15,6 +15,6 @@
 #define MIPI_TRULY_H
 
 int mipi_truly_tft540960_1_e_device_register(struct msm_panel_info *pinfo,
-					u32 channel, u32 panel);
+        u32 channel, u32 panel);
 
 #endif  /* MIPI_TRULY_H */

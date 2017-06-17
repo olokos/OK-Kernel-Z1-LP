@@ -47,14 +47,12 @@ do {										\
 	__asm__ __volatile__ ("wr %%g0, %0, %%asi" : : "r" ((val).seg));	\
 } while(0)
 
-static inline int __access_ok(const void __user * addr, unsigned long size)
-{
-	return 1;
+static inline int __access_ok(const void __user * addr, unsigned long size) {
+    return 1;
 }
 
-static inline int access_ok(int type, const void __user * addr, unsigned long size)
-{
-	return 1;
+static inline int access_ok(int type, const void __user * addr, unsigned long size) {
+    return 1;
 }
 
 /*
@@ -71,7 +69,7 @@ static inline int access_ok(int type, const void __user * addr, unsigned long si
  */
 
 struct exception_table_entry {
-        unsigned int insn, fixup;
+    unsigned int insn, fixup;
 };
 
 extern void __ret_efault(void);
@@ -99,7 +97,9 @@ __get_user_nocheck((x),__gu_addr,sizeof(*(ptr)),__typeof__(*(ptr))); })
 #define __put_user(x,ptr) put_user(x,ptr)
 #define __get_user(x,ptr) get_user(x,ptr)
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) ((struct __large_struct *)(x))
 
 #define __put_user_nocheck(data,addr,size) ({ \
@@ -205,51 +205,48 @@ __asm__ __volatile__(							\
 extern int __get_user_bad(void);
 
 extern unsigned long __must_check ___copy_from_user(void *to,
-						    const void __user *from,
-						    unsigned long size);
+        const void __user *from,
+        unsigned long size);
 extern unsigned long copy_from_user_fixup(void *to, const void __user *from,
-					  unsigned long size);
+        unsigned long size);
 static inline unsigned long __must_check
-copy_from_user(void *to, const void __user *from, unsigned long size)
-{
-	unsigned long ret = ___copy_from_user(to, from, size);
+copy_from_user(void *to, const void __user *from, unsigned long size) {
+    unsigned long ret = ___copy_from_user(to, from, size);
 
-	if (unlikely(ret))
-		ret = copy_from_user_fixup(to, from, size);
+    if (unlikely(ret))
+        ret = copy_from_user_fixup(to, from, size);
 
-	return ret;
+    return ret;
 }
 #define __copy_from_user copy_from_user
 
 extern unsigned long __must_check ___copy_to_user(void __user *to,
-						  const void *from,
-						  unsigned long size);
+        const void *from,
+        unsigned long size);
 extern unsigned long copy_to_user_fixup(void __user *to, const void *from,
-					unsigned long size);
+                                        unsigned long size);
 static inline unsigned long __must_check
-copy_to_user(void __user *to, const void *from, unsigned long size)
-{
-	unsigned long ret = ___copy_to_user(to, from, size);
+copy_to_user(void __user *to, const void *from, unsigned long size) {
+    unsigned long ret = ___copy_to_user(to, from, size);
 
-	if (unlikely(ret))
-		ret = copy_to_user_fixup(to, from, size);
-	return ret;
+    if (unlikely(ret))
+        ret = copy_to_user_fixup(to, from, size);
+    return ret;
 }
 #define __copy_to_user copy_to_user
 
 extern unsigned long __must_check ___copy_in_user(void __user *to,
-						  const void __user *from,
-						  unsigned long size);
+        const void __user *from,
+        unsigned long size);
 extern unsigned long copy_in_user_fixup(void __user *to, void __user *from,
-					unsigned long size);
+                                        unsigned long size);
 static inline unsigned long __must_check
-copy_in_user(void __user *to, void __user *from, unsigned long size)
-{
-	unsigned long ret = ___copy_in_user(to, from, size);
+copy_in_user(void __user *to, void __user *from, unsigned long size) {
+    unsigned long ret = ___copy_in_user(to, from, size);
 
-	if (unlikely(ret))
-		ret = copy_in_user_fixup(to, from, size);
-	return ret;
+    if (unlikely(ret))
+        ret = copy_in_user_fixup(to, from, size);
+    return ret;
 }
 #define __copy_in_user copy_in_user
 

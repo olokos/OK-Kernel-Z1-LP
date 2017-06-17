@@ -2,9 +2,9 @@
 #define __ALPHA_SPECIAL_INSNS_H
 
 enum implver_enum {
-	IMPLVER_EV4,
-	IMPLVER_EV5,
-	IMPLVER_EV6
+    IMPLVER_EV4,
+    IMPLVER_EV5,
+    IMPLVER_EV6
 };
 
 #ifdef CONFIG_ALPHA_GENERIC
@@ -26,11 +26,11 @@ enum implver_enum {
 #endif
 
 enum amask_enum {
-	AMASK_BWX = (1UL << 0),
-	AMASK_FIX = (1UL << 1),
-	AMASK_CIX = (1UL << 2),
-	AMASK_MAX = (1UL << 8),
-	AMASK_PRECISE_TRAP = (1UL << 9),
+    AMASK_BWX = (1UL << 0),
+    AMASK_FIX = (1UL << 1),
+    AMASK_CIX = (1UL << 2),
+    AMASK_MAX = (1UL << 8),
+    AMASK_PRECISE_TRAP = (1UL << 9),
 };
 
 #define amask(mask)						\

@@ -8,10 +8,10 @@
 
 struct dev_archdata {
 #ifdef CONFIG_ACPI
-	void	*acpi_handle;
+    void	*acpi_handle;
 #endif
 #ifdef CONFIG_INTEL_IOMMU
-	void *iommu; /* hook for IOMMU specific extension */
+    void *iommu; /* hook for IOMMU specific extension */
 #endif
 };
 

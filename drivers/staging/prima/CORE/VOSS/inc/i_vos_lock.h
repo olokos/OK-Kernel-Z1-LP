@@ -60,8 +60,7 @@ extern "C" {
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct vos_lock_s
-{
+typedef struct vos_lock_s {
     struct mutex m_lock;
     v_U32_t cookie;
     int processID;

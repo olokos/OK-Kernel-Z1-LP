@@ -22,12 +22,12 @@
 #include <linux/kobject.h>
 
 struct pscsi_plugin_task {
-	struct se_task pscsi_task;
-	unsigned char pscsi_sense[SCSI_SENSE_BUFFERSIZE];
-	int	pscsi_direction;
-	int	pscsi_result;
-	u32	pscsi_resid;
-	unsigned char pscsi_cdb[0];
+    struct se_task pscsi_task;
+    unsigned char pscsi_sense[SCSI_SENSE_BUFFERSIZE];
+    int	pscsi_direction;
+    int	pscsi_result;
+    u32	pscsi_resid;
+    unsigned char pscsi_cdb[0];
 } ____cacheline_aligned;
 
 #define PDF_HAS_CHANNEL_ID	0x01
@@ -38,25 +38,25 @@ struct pscsi_plugin_task {
 #define PDF_HAS_VIRT_HOST_ID	0x20
 
 struct pscsi_dev_virt {
-	int	pdv_flags;
-	int	pdv_host_id;
-	int	pdv_channel_id;
-	int	pdv_target_id;
-	int	pdv_lun_id;
-	struct block_device *pdv_bd;
-	struct scsi_device *pdv_sd;
-	struct se_hba *pdv_se_hba;
+    int	pdv_flags;
+    int	pdv_host_id;
+    int	pdv_channel_id;
+    int	pdv_target_id;
+    int	pdv_lun_id;
+    struct block_device *pdv_bd;
+    struct scsi_device *pdv_sd;
+    struct se_hba *pdv_se_hba;
 } ____cacheline_aligned;
 
 typedef enum phv_modes {
-	PHV_VIRTUAL_HOST_ID,
-	PHV_LLD_SCSI_HOST_NO
+    PHV_VIRTUAL_HOST_ID,
+    PHV_LLD_SCSI_HOST_NO
 } phv_modes_t;
 
 struct pscsi_hba_virt {
-	int			phv_host_id;
-	phv_modes_t		phv_mode;
-	struct Scsi_Host	*phv_lld_host;
+    int			phv_host_id;
+    phv_modes_t		phv_mode;
+    struct Scsi_Host	*phv_lld_host;
 } ____cacheline_aligned;
 
 #endif   /*** TARGET_CORE_PSCSI_H ***/

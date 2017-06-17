@@ -44,7 +44,9 @@ extern int mem_init_done;
 #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
 
 #ifndef __ASSEMBLY__
-static inline int pte_file(pte_t pte) { return 0; }
+static inline int pte_file(pte_t pte) {
+    return 0;
+}
 #endif /* __ASSEMBLY__ */
 
 #define ZERO_PAGE(vaddr)	({ BUG(); NULL; })
@@ -87,9 +89,13 @@ extern pte_t *va_to_pte(unsigned long address);
  * Undefined behaviour if not..
  */
 
-static inline int pte_special(pte_t pte)	{ return 0; }
+static inline int pte_special(pte_t pte)	{
+    return 0;
+}
 
-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    return pte;
+}
 
 /* Start and end of the vmalloc area. */
 /* Make sure to map the vmalloc area above the pinned kernel memory area
@@ -330,9 +336,15 @@ extern unsigned long empty_zero_page[1024];
  * setup: the pgd is never bad, and a pmd always exists (as it's folded
  * into the pgd entry)
  */
-static inline int pgd_none(pgd_t pgd)		{ return 0; }
-static inline int pgd_bad(pgd_t pgd)		{ return 0; }
-static inline int pgd_present(pgd_t pgd)	{ return 1; }
+static inline int pgd_none(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd)		{
+    return 0;
+}
+static inline int pgd_present(pgd_t pgd)	{
+    return 1;
+}
 #define pgd_clear(xp)				do { } while (0)
 #define pgd_page(pgd) \
 	((unsigned long) __va(pgd_val(pgd) & PAGE_MASK))
@@ -341,48 +353,63 @@ static inline int pgd_present(pgd_t pgd)	{ return 1; }
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_read(pte_t pte)  { return pte_val(pte) & _PAGE_USER; }
-static inline int pte_write(pte_t pte) { return pte_val(pte) & _PAGE_RW; }
-static inline int pte_exec(pte_t pte)  { return pte_val(pte) & _PAGE_EXEC; }
-static inline int pte_dirty(pte_t pte) { return pte_val(pte) & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte) { return pte_val(pte) & _PAGE_ACCESSED; }
-static inline int pte_file(pte_t pte)  { return pte_val(pte) & _PAGE_FILE; }
+static inline int pte_read(pte_t pte)  {
+    return pte_val(pte) & _PAGE_USER;
+}
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_RW;
+}
+static inline int pte_exec(pte_t pte)  {
+    return pte_val(pte) & _PAGE_EXEC;
+}
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
+}
+static inline int pte_file(pte_t pte)  {
+    return pte_val(pte) & _PAGE_FILE;
+}
 
-static inline void pte_uncache(pte_t pte) { pte_val(pte) |= _PAGE_NO_CACHE; }
-static inline void pte_cache(pte_t pte)   { pte_val(pte) &= ~_PAGE_NO_CACHE; }
+static inline void pte_uncache(pte_t pte) {
+    pte_val(pte) |= _PAGE_NO_CACHE;
+}
+static inline void pte_cache(pte_t pte)   {
+    pte_val(pte) &= ~_PAGE_NO_CACHE;
+}
 
 static inline pte_t pte_rdprotect(pte_t pte) \
-		{ pte_val(pte) &= ~_PAGE_USER; return pte; }
+{ pte_val(pte) &= ~_PAGE_USER; return pte; }
 static inline pte_t pte_wrprotect(pte_t pte) \
-	{ pte_val(pte) &= ~(_PAGE_RW | _PAGE_HWWRITE); return pte; }
+{ pte_val(pte) &= ~(_PAGE_RW | _PAGE_HWWRITE); return pte; }
 static inline pte_t pte_exprotect(pte_t pte) \
-	{ pte_val(pte) &= ~_PAGE_EXEC; return pte; }
+{ pte_val(pte) &= ~_PAGE_EXEC; return pte; }
 static inline pte_t pte_mkclean(pte_t pte) \
-	{ pte_val(pte) &= ~(_PAGE_DIRTY | _PAGE_HWWRITE); return pte; }
+{ pte_val(pte) &= ~(_PAGE_DIRTY | _PAGE_HWWRITE); return pte; }
 static inline pte_t pte_mkold(pte_t pte) \
-	{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
+{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
 
 static inline pte_t pte_mkread(pte_t pte) \
-	{ pte_val(pte) |= _PAGE_USER; return pte; }
+{ pte_val(pte) |= _PAGE_USER; return pte; }
 static inline pte_t pte_mkexec(pte_t pte) \
-	{ pte_val(pte) |= _PAGE_USER | _PAGE_EXEC; return pte; }
+{ pte_val(pte) |= _PAGE_USER | _PAGE_EXEC; return pte; }
 static inline pte_t pte_mkwrite(pte_t pte) \
-	{ pte_val(pte) |= _PAGE_RW; return pte; }
+{ pte_val(pte) |= _PAGE_RW; return pte; }
 static inline pte_t pte_mkdirty(pte_t pte) \
-	{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
+{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
 static inline pte_t pte_mkyoung(pte_t pte) \
-	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
+{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
 
 /*
  * Conversion functions: convert a page and protection to a page entry,
  * and a page entry and page directory to the page they refer to.
  */
 
-static inline pte_t mk_pte_phys(phys_addr_t physpage, pgprot_t pgprot)
-{
-	pte_t pte;
-	pte_val(pte) = physpage | pgprot_val(pgprot);
-	return pte;
+static inline pte_t mk_pte_phys(phys_addr_t physpage, pgprot_t pgprot) {
+    pte_t pte;
+    pte_val(pte) = physpage | pgprot_val(pgprot);
+    return pte;
 }
 
 #define mk_pte(page, pgprot) \
@@ -393,10 +420,9 @@ static inline pte_t mk_pte_phys(phys_addr_t physpage, pgprot_t pgprot)
 	pte;								   \
 })
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_val(pte) = (pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) = (pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot);
+    return pte;
 }
 
 /*
@@ -408,59 +434,53 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
  * 32 bits of the PTE regardless of whether PTEs are 32 or 64 bits.
  */
 static inline unsigned long pte_update(pte_t *p, unsigned long clr,
-				unsigned long set)
-{
-	unsigned long flags, old, tmp;
+                                       unsigned long set) {
+    unsigned long flags, old, tmp;
 
-	raw_local_irq_save(flags);
+    raw_local_irq_save(flags);
 
-	__asm__ __volatile__(	"lw	%0, %2, r0	\n"
-				"andn	%1, %0, %3	\n"
-				"or	%1, %1, %4	\n"
-				"sw	%1, %2, r0	\n"
-			: "=&r" (old), "=&r" (tmp)
-			: "r" ((unsigned long)(p + 1) - 4), "r" (clr), "r" (set)
-			: "cc");
+    __asm__ __volatile__(	"lw	%0, %2, r0	\n"
+                            "andn	%1, %0, %3	\n"
+                            "or	%1, %1, %4	\n"
+                            "sw	%1, %2, r0	\n"
+                            : "=&r" (old), "=&r" (tmp)
+                            : "r" ((unsigned long)(p + 1) - 4), "r" (clr), "r" (set)
+                            : "cc");
 
-	raw_local_irq_restore(flags);
+    raw_local_irq_restore(flags);
 
-	return old;
+    return old;
 }
 
 /*
  * set_pte stores a linux PTE into the linux page table.
  */
 static inline void set_pte(struct mm_struct *mm, unsigned long addr,
-		pte_t *ptep, pte_t pte)
-{
-	*ptep = pte;
+                           pte_t *ptep, pte_t pte) {
+    *ptep = pte;
 }
 
 static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-		pte_t *ptep, pte_t pte)
-{
-	*ptep = pte;
+                              pte_t *ptep, pte_t pte) {
+    *ptep = pte;
 }
 
 #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
 static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
-		unsigned long address, pte_t *ptep)
-{
-	return (pte_update(ptep, _PAGE_ACCESSED, 0) & _PAGE_ACCESSED) != 0;
+        unsigned long address, pte_t *ptep) {
+    return (pte_update(ptep, _PAGE_ACCESSED, 0) & _PAGE_ACCESSED) != 0;
 }
 
 static inline int ptep_test_and_clear_dirty(struct mm_struct *mm,
-		unsigned long addr, pte_t *ptep)
-{
-	return (pte_update(ptep, \
-		(_PAGE_DIRTY | _PAGE_HWWRITE), 0) & _PAGE_DIRTY) != 0;
+        unsigned long addr, pte_t *ptep) {
+    return (pte_update(ptep, \
+                       (_PAGE_DIRTY | _PAGE_HWWRITE), 0) & _PAGE_DIRTY) != 0;
 }
 
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-		unsigned long addr, pte_t *ptep)
-{
-	return __pte(pte_update(ptep, ~_PAGE_HASHPTE, 0));
+                                       unsigned long addr, pte_t *ptep) {
+    return __pte(pte_update(ptep, ~_PAGE_HASHPTE, 0));
 }
 
 /*static inline void ptep_set_wrprotect(struct mm_struct *mm,
@@ -470,9 +490,8 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
 }*/
 
 static inline void ptep_mkdirty(struct mm_struct *mm,
-		unsigned long addr, pte_t *ptep)
-{
-	pte_update(ptep, 0, _PAGE_DIRTY);
+                                unsigned long addr, pte_t *ptep) {
+    pte_update(ptep, 0, _PAGE_DIRTY);
 }
 
 /*#define pte_same(A,B)	(((pte_val(A) ^ pte_val(B)) & ~_PAGE_HASHPTE) == 0)*/
@@ -493,9 +512,8 @@ static inline void ptep_mkdirty(struct mm_struct *mm,
 #define pgd_offset(mm, address)	 ((mm)->pgd + pgd_index(address))
 
 /* Find an entry in the second-level page table.. */
-static inline pmd_t *pmd_offset(pgd_t *dir, unsigned long address)
-{
-	return (pmd_t *) dir;
+static inline pmd_t *pmd_offset(pgd_t *dir, unsigned long address) {
+    return (pmd_t *) dir;
 }
 
 /* Find an entry in the third-level page table.. */
@@ -548,7 +566,7 @@ extern unsigned long iopa(unsigned long addr);
 #define pgtable_cache_init()	do { } while (0)
 
 void do_page_fault(struct pt_regs *regs, unsigned long address,
-		   unsigned long error_code);
+                   unsigned long error_code);
 
 void mapin_ram(void);
 int map_page(unsigned long va, phys_addr_t pa, int flags);
@@ -573,7 +591,7 @@ void *consistent_alloc(gfp_t gfp, size_t size, dma_addr_t *dma_handle);
 void consistent_free(size_t size, void *vaddr);
 void consistent_sync(void *vaddr, size_t size, int direction);
 void consistent_sync_page(struct page *page, unsigned long offset,
-	size_t size, int direction);
+                          size_t size, int direction);
 
 void setup_memory(void);
 #endif /* __ASSEMBLY__ */

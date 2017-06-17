@@ -120,25 +120,24 @@ extern void __init l2x0_init(void __iomem *base, u32 aux_val, u32 aux_mask);
 #if defined(CONFIG_CACHE_L2X0) && defined(CONFIG_OF)
 extern int l2x0_of_init(u32 aux_val, u32 aux_mask);
 #else
-static inline int l2x0_of_init(u32 aux_val, u32 aux_mask)
-{
-	return -ENODEV;
+static inline int l2x0_of_init(u32 aux_val, u32 aux_mask) {
+    return -ENODEV;
 }
 #endif
 
 struct l2x0_regs {
-	unsigned long phy_base;
-	unsigned long aux_ctrl;
-	/*
-	 * Whether the following registers need to be saved/restored
-	 * depends on platform
-	 */
-	unsigned long tag_latency;
-	unsigned long data_latency;
-	unsigned long filter_start;
-	unsigned long filter_end;
-	unsigned long prefetch_ctrl;
-	unsigned long pwr_ctrl;
+    unsigned long phy_base;
+    unsigned long aux_ctrl;
+    /*
+     * Whether the following registers need to be saved/restored
+     * depends on platform
+     */
+    unsigned long tag_latency;
+    unsigned long data_latency;
+    unsigned long filter_start;
+    unsigned long filter_end;
+    unsigned long prefetch_ctrl;
+    unsigned long pwr_ctrl;
 };
 
 extern struct l2x0_regs l2x0_saved_regs;

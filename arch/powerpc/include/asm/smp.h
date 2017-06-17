@@ -1,4 +1,4 @@
-/* 
+/*
  * smp.h: PowerPC-specific SMP code.
  *
  * Original was a copy of sparc smp.h.  Now heavily modified
@@ -37,19 +37,19 @@ extern void cpu_die(void);
 #ifdef CONFIG_SMP
 
 struct smp_ops_t {
-	void  (*message_pass)(int cpu, int msg);
+    void  (*message_pass)(int cpu, int msg);
 #ifdef CONFIG_PPC_SMP_MUXED_IPI
-	void  (*cause_ipi)(int cpu, unsigned long data);
+    void  (*cause_ipi)(int cpu, unsigned long data);
 #endif
-	int   (*probe)(void);
-	int   (*kick_cpu)(int nr);
-	void  (*setup_cpu)(int nr);
-	void  (*bringup_done)(void);
-	void  (*take_timebase)(void);
-	void  (*give_timebase)(void);
-	int   (*cpu_disable)(void);
-	void  (*cpu_die)(unsigned int nr);
-	int   (*cpu_bootable)(unsigned int nr);
+    int   (*probe)(void);
+    int   (*kick_cpu)(int nr);
+    void  (*setup_cpu)(int nr);
+    void  (*bringup_done)(void);
+    void  (*take_timebase)(void);
+    void  (*give_timebase)(void);
+    int   (*cpu_disable)(void);
+    void  (*cpu_die)(unsigned int nr);
+    int   (*cpu_bootable)(unsigned int nr);
 };
 
 extern void smp_send_debugger_break(void);
@@ -78,28 +78,24 @@ extern int smp_hw_index[];
 #define raw_smp_processor_id()	(current_thread_info()->cpu)
 #define hard_smp_processor_id() 	(smp_hw_index[smp_processor_id()])
 
-static inline int get_hard_smp_processor_id(int cpu)
-{
-	return smp_hw_index[cpu];
+static inline int get_hard_smp_processor_id(int cpu) {
+    return smp_hw_index[cpu];
 }
 
-static inline void set_hard_smp_processor_id(int cpu, int phys)
-{
-	smp_hw_index[cpu] = phys;
+static inline void set_hard_smp_processor_id(int cpu, int phys) {
+    smp_hw_index[cpu] = phys;
 }
 #endif
 
 DECLARE_PER_CPU(cpumask_var_t, cpu_sibling_map);
 DECLARE_PER_CPU(cpumask_var_t, cpu_core_map);
 
-static inline struct cpumask *cpu_sibling_mask(int cpu)
-{
-	return per_cpu(cpu_sibling_map, cpu);
+static inline struct cpumask *cpu_sibling_mask(int cpu) {
+    return per_cpu(cpu_sibling_map, cpu);
 }
 
-static inline struct cpumask *cpu_core_mask(int cpu)
-{
-	return per_cpu(cpu_core_map, cpu);
+static inline struct cpumask *cpu_core_mask(int cpu) {
+    return per_cpu(cpu_core_map, cpu);
 }
 
 extern int cpu_to_core_id(int cpu);
@@ -138,14 +134,12 @@ extern void __cpu_die(unsigned int cpu);
 #endif /* CONFIG_SMP */
 
 #ifdef CONFIG_PPC64
-static inline int get_hard_smp_processor_id(int cpu)
-{
-	return paca[cpu].hw_cpu_id;
+static inline int get_hard_smp_processor_id(int cpu) {
+    return paca[cpu].hw_cpu_id;
 }
 
-static inline void set_hard_smp_processor_id(int cpu, int phys)
-{
-	paca[cpu].hw_cpu_id = phys;
+static inline void set_hard_smp_processor_id(int cpu, int phys) {
+    paca[cpu].hw_cpu_id = phys;
 }
 
 extern void smp_release_cpus(void);
@@ -154,14 +148,12 @@ extern void smp_release_cpus(void);
 /* 32-bit */
 #ifndef CONFIG_SMP
 extern int boot_cpuid_phys;
-static inline int get_hard_smp_processor_id(int cpu)
-{
-	return boot_cpuid_phys;
+static inline int get_hard_smp_processor_id(int cpu) {
+    return boot_cpuid_phys;
 }
 
-static inline void set_hard_smp_processor_id(int cpu, int phys)
-{
-	boot_cpuid_phys = phys;
+static inline void set_hard_smp_processor_id(int cpu, int phys) {
+    boot_cpuid_phys = phys;
 }
 #endif /* !CONFIG_SMP */
 #endif /* !CONFIG_PPC64 */

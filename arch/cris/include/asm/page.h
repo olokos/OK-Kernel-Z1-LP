@@ -23,9 +23,15 @@
  * These are used to make use of C type-checking..
  */
 #ifndef __ASSEMBLY__
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 #endif
 
@@ -48,7 +54,7 @@ typedef struct page *pgtable_t;
  * use __pa instead. in our system both the physical and virtual address of DRAM
  * is too high to let mem_map start at 0, so we do it this way instead (similar
  * to arm and m68k I think)
- */ 
+ */
 
 #define virt_to_page(kaddr)    (mem_map + (((unsigned long)(kaddr) - PAGE_OFFSET) >> PAGE_SHIFT))
 #define VALID_PAGE(page)       (((page) - mem_map) < max_mapnr)

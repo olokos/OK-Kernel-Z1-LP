@@ -43,116 +43,116 @@
 extern struct agp_bridge_data *agp_bridge;
 
 enum aper_size_type {
-	U8_APER_SIZE,
-	U16_APER_SIZE,
-	U32_APER_SIZE,
-	LVL2_APER_SIZE,
-	FIXED_APER_SIZE
+    U8_APER_SIZE,
+    U16_APER_SIZE,
+    U32_APER_SIZE,
+    LVL2_APER_SIZE,
+    FIXED_APER_SIZE
 };
 
 struct gatt_mask {
-	unsigned long mask;
-	u32 type;
-	/* totally device specific, for integrated chipsets that
-	 * might have different types of memory masks.  For other
-	 * devices this will probably be ignored */
+    unsigned long mask;
+    u32 type;
+    /* totally device specific, for integrated chipsets that
+     * might have different types of memory masks.  For other
+     * devices this will probably be ignored */
 };
 
 #define AGP_PAGE_DESTROY_UNMAP 1
 #define AGP_PAGE_DESTROY_FREE 2
 
 struct aper_size_info_8 {
-	int size;
-	int num_entries;
-	int page_order;
-	u8 size_value;
+    int size;
+    int num_entries;
+    int page_order;
+    u8 size_value;
 };
 
 struct aper_size_info_16 {
-	int size;
-	int num_entries;
-	int page_order;
-	u16 size_value;
+    int size;
+    int num_entries;
+    int page_order;
+    u16 size_value;
 };
 
 struct aper_size_info_32 {
-	int size;
-	int num_entries;
-	int page_order;
-	u32 size_value;
+    int size;
+    int num_entries;
+    int page_order;
+    u32 size_value;
 };
 
 struct aper_size_info_lvl2 {
-	int size;
-	int num_entries;
-	u32 size_value;
+    int size;
+    int num_entries;
+    u32 size_value;
 };
 
 struct aper_size_info_fixed {
-	int size;
-	int num_entries;
-	int page_order;
+    int size;
+    int num_entries;
+    int page_order;
 };
 
 struct agp_bridge_driver {
-	struct module *owner;
-	const void *aperture_sizes;
-	int num_aperture_sizes;
-	enum aper_size_type size_type;
-	bool cant_use_aperture;
-	bool needs_scratch_page;
-	const struct gatt_mask *masks;
-	int (*fetch_size)(void);
-	int (*configure)(void);
-	void (*agp_enable)(struct agp_bridge_data *, u32);
-	void (*cleanup)(void);
-	void (*tlb_flush)(struct agp_memory *);
-	unsigned long (*mask_memory)(struct agp_bridge_data *, dma_addr_t, int);
-	void (*cache_flush)(void);
-	int (*create_gatt_table)(struct agp_bridge_data *);
-	int (*free_gatt_table)(struct agp_bridge_data *);
-	int (*insert_memory)(struct agp_memory *, off_t, int);
-	int (*remove_memory)(struct agp_memory *, off_t, int);
-	struct agp_memory *(*alloc_by_type) (size_t, int);
-	void (*free_by_type)(struct agp_memory *);
-	struct page *(*agp_alloc_page)(struct agp_bridge_data *);
-	int (*agp_alloc_pages)(struct agp_bridge_data *, struct agp_memory *, size_t);
-	void (*agp_destroy_page)(struct page *, int flags);
-	void (*agp_destroy_pages)(struct agp_memory *);
-	int (*agp_type_to_mask_type) (struct agp_bridge_data *, int);
+    struct module *owner;
+    const void *aperture_sizes;
+    int num_aperture_sizes;
+    enum aper_size_type size_type;
+    bool cant_use_aperture;
+    bool needs_scratch_page;
+    const struct gatt_mask *masks;
+    int (*fetch_size)(void);
+    int (*configure)(void);
+    void (*agp_enable)(struct agp_bridge_data *, u32);
+    void (*cleanup)(void);
+    void (*tlb_flush)(struct agp_memory *);
+    unsigned long (*mask_memory)(struct agp_bridge_data *, dma_addr_t, int);
+    void (*cache_flush)(void);
+    int (*create_gatt_table)(struct agp_bridge_data *);
+    int (*free_gatt_table)(struct agp_bridge_data *);
+    int (*insert_memory)(struct agp_memory *, off_t, int);
+    int (*remove_memory)(struct agp_memory *, off_t, int);
+    struct agp_memory *(*alloc_by_type) (size_t, int);
+    void (*free_by_type)(struct agp_memory *);
+    struct page *(*agp_alloc_page)(struct agp_bridge_data *);
+    int (*agp_alloc_pages)(struct agp_bridge_data *, struct agp_memory *, size_t);
+    void (*agp_destroy_page)(struct page *, int flags);
+    void (*agp_destroy_pages)(struct agp_memory *);
+    int (*agp_type_to_mask_type) (struct agp_bridge_data *, int);
 };
 
 struct agp_bridge_data {
-	const struct agp_version *version;
-	const struct agp_bridge_driver *driver;
-	const struct vm_operations_struct *vm_ops;
-	void *previous_size;
-	void *current_size;
-	void *dev_private_data;
-	struct pci_dev *dev;
-	u32 __iomem *gatt_table;
-	u32 *gatt_table_real;
-	unsigned long scratch_page;
-	struct page *scratch_page_page;
-	dma_addr_t scratch_page_dma;
-	unsigned long gart_bus_addr;
-	unsigned long gatt_bus_addr;
-	u32 mode;
-	enum chipset_type type;
-	unsigned long *key_list;
-	atomic_t current_memory_agp;
-	atomic_t agp_in_use;
-	int max_memory_agp;	/* in number of pages */
-	int aperture_size_idx;
-	int capndx;
-	int flags;
-	char major_version;
-	char minor_version;
-	struct list_head list;
-	u32 apbase_config;
-	/* list of agp_memory mapped to the aperture */
-	struct list_head mapped_list;
-	spinlock_t mapped_lock;
+    const struct agp_version *version;
+    const struct agp_bridge_driver *driver;
+    const struct vm_operations_struct *vm_ops;
+    void *previous_size;
+    void *current_size;
+    void *dev_private_data;
+    struct pci_dev *dev;
+    u32 __iomem *gatt_table;
+    u32 *gatt_table_real;
+    unsigned long scratch_page;
+    struct page *scratch_page_page;
+    dma_addr_t scratch_page_dma;
+    unsigned long gart_bus_addr;
+    unsigned long gatt_bus_addr;
+    u32 mode;
+    enum chipset_type type;
+    unsigned long *key_list;
+    atomic_t current_memory_agp;
+    atomic_t agp_in_use;
+    int max_memory_agp;	/* in number of pages */
+    int aperture_size_idx;
+    int capndx;
+    int flags;
+    char major_version;
+    char minor_version;
+    struct list_head list;
+    u32 apbase_config;
+    /* list of agp_memory mapped to the aperture */
+    struct list_head mapped_list;
+    spinlock_t mapped_lock;
 };
 
 #define KB(x)	((x) * 1024)
@@ -173,10 +173,10 @@ struct agp_bridge_data {
 
 
 struct agp_device_ids {
-	unsigned short device_id; /* first, to make table easier to read */
-	enum chipset_type chipset;
-	const char *chipset_name;
-	int (*chipset_setup) (struct pci_dev *pdev);	/* used to override generic */
+    unsigned short device_id; /* first, to make table easier to read */
+    enum chipset_type chipset;
+    const char *chipset_name;
+    int (*chipset_setup) (struct pci_dev *pdev);	/* used to override generic */
 };
 
 /* Driver registration */
@@ -200,7 +200,7 @@ struct agp_memory *agp_generic_alloc_by_type(size_t page_count, int type);
 void agp_generic_free_by_type(struct agp_memory *curr);
 struct page *agp_generic_alloc_page(struct agp_bridge_data *bridge);
 int agp_generic_alloc_pages(struct agp_bridge_data *agp_bridge,
-			    struct agp_memory *memory, size_t page_count);
+                            struct agp_memory *memory, size_t page_count);
 void agp_generic_destroy_page(struct page *page, int flags);
 void agp_generic_destroy_pages(struct agp_memory *memory);
 void agp_free_key(int key);
@@ -211,9 +211,9 @@ int agp_3_5_enable(struct agp_bridge_data *bridge);
 void global_cache_flush(void);
 void get_agp_version(struct agp_bridge_data *bridge);
 unsigned long agp_generic_mask_memory(struct agp_bridge_data *bridge,
-				      dma_addr_t phys, int type);
+                                      dma_addr_t phys, int type);
 int agp_generic_type_to_mask_type(struct agp_bridge_data *bridge,
-				  int type);
+                                  int type);
 struct agp_bridge_data *agp_generic_find_bridge(struct pci_dev *pdev);
 
 /* generic functions for user-populated AGP memory types */

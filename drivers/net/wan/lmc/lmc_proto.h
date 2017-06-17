@@ -10,9 +10,8 @@ void lmc_proto_close(lmc_softc_t *sc);
 __be16 lmc_proto_type(lmc_softc_t *sc, struct sk_buff *skb);
 void lmc_proto_netif(lmc_softc_t *sc, struct sk_buff *skb);
 
-static inline lmc_softc_t* dev_to_sc(struct net_device *dev)
-{
-	return (lmc_softc_t *)dev_to_hdlc(dev)->priv;
+static inline lmc_softc_t* dev_to_sc(struct net_device *dev) {
+    return (lmc_softc_t *)dev_to_hdlc(dev)->priv;
 }
 
 #endif

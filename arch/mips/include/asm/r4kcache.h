@@ -140,54 +140,46 @@ extern void mt_cflush_release(void);
 
 #endif /* CONFIG_MIPS_MT */
 
-static inline void flush_icache_line_indexed(unsigned long addr)
-{
-	__iflush_prologue
-	cache_op(Index_Invalidate_I, addr);
-	__iflush_epilogue
+static inline void flush_icache_line_indexed(unsigned long addr) {
+    __iflush_prologue
+    cache_op(Index_Invalidate_I, addr);
+    __iflush_epilogue
 }
 
-static inline void flush_dcache_line_indexed(unsigned long addr)
-{
-	__dflush_prologue
-	cache_op(Index_Writeback_Inv_D, addr);
-	__dflush_epilogue
+static inline void flush_dcache_line_indexed(unsigned long addr) {
+    __dflush_prologue
+    cache_op(Index_Writeback_Inv_D, addr);
+    __dflush_epilogue
 }
 
-static inline void flush_scache_line_indexed(unsigned long addr)
-{
-	cache_op(Index_Writeback_Inv_SD, addr);
+static inline void flush_scache_line_indexed(unsigned long addr) {
+    cache_op(Index_Writeback_Inv_SD, addr);
 }
 
-static inline void flush_icache_line(unsigned long addr)
-{
-	__iflush_prologue
-	cache_op(Hit_Invalidate_I, addr);
-	__iflush_epilogue
+static inline void flush_icache_line(unsigned long addr) {
+    __iflush_prologue
+    cache_op(Hit_Invalidate_I, addr);
+    __iflush_epilogue
 }
 
-static inline void flush_dcache_line(unsigned long addr)
-{
-	__dflush_prologue
-	cache_op(Hit_Writeback_Inv_D, addr);
-	__dflush_epilogue
+static inline void flush_dcache_line(unsigned long addr) {
+    __dflush_prologue
+    cache_op(Hit_Writeback_Inv_D, addr);
+    __dflush_epilogue
 }
 
-static inline void invalidate_dcache_line(unsigned long addr)
-{
-	__dflush_prologue
-	cache_op(Hit_Invalidate_D, addr);
-	__dflush_epilogue
+static inline void invalidate_dcache_line(unsigned long addr) {
+    __dflush_prologue
+    cache_op(Hit_Invalidate_D, addr);
+    __dflush_epilogue
 }
 
-static inline void invalidate_scache_line(unsigned long addr)
-{
-	cache_op(Hit_Invalidate_SD, addr);
+static inline void invalidate_scache_line(unsigned long addr) {
+    cache_op(Hit_Invalidate_SD, addr);
 }
 
-static inline void flush_scache_line(unsigned long addr)
-{
-	cache_op(Hit_Writeback_Inv_SD, addr);
+static inline void flush_scache_line(unsigned long addr) {
+    cache_op(Hit_Writeback_Inv_SD, addr);
 }
 
 #define protected_cache_op(op,addr)				\
@@ -206,9 +198,8 @@ static inline void flush_scache_line(unsigned long addr)
 /*
  * The next two are for badland addresses like signal trampolines.
  */
-static inline void protected_flush_icache_line(unsigned long addr)
-{
-	protected_cache_op(Hit_Invalidate_I, addr);
+static inline void protected_flush_icache_line(unsigned long addr) {
+    protected_cache_op(Hit_Invalidate_I, addr);
 }
 
 /*
@@ -217,22 +208,19 @@ static inline void protected_flush_icache_line(unsigned long addr)
  * caches.  We're talking about one cacheline unnecessarily getting invalidated
  * here so the penalty isn't overly hard.
  */
-static inline void protected_writeback_dcache_line(unsigned long addr)
-{
-	protected_cache_op(Hit_Writeback_Inv_D, addr);
+static inline void protected_writeback_dcache_line(unsigned long addr) {
+    protected_cache_op(Hit_Writeback_Inv_D, addr);
 }
 
-static inline void protected_writeback_scache_line(unsigned long addr)
-{
-	protected_cache_op(Hit_Writeback_Inv_SD, addr);
+static inline void protected_writeback_scache_line(unsigned long addr) {
+    protected_cache_op(Hit_Writeback_Inv_SD, addr);
 }
 
 /*
  * This one is RM7000-specific
  */
-static inline void invalidate_tcache_page(unsigned long addr)
-{
-	cache_op(Page_Invalidate_T, addr);
+static inline void invalidate_tcache_page(unsigned long addr) {
+    cache_op(Page_Invalidate_T, addr);
 }
 
 #define cache16_unroll32(base,op)					\

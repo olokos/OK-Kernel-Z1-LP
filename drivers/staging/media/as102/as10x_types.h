@@ -112,83 +112,83 @@
 #define CFG_MODE_AUTO	2
 
 struct as10x_tps {
-	uint8_t modulation;
-	uint8_t hierarchy;
-	uint8_t interleaving_mode;
-	uint8_t code_rate_HP;
-	uint8_t code_rate_LP;
-	uint8_t guard_interval;
-	uint8_t transmission_mode;
-	uint8_t DVBH_mask_HP;
-	uint8_t DVBH_mask_LP;
-	uint16_t cell_ID;
+    uint8_t modulation;
+    uint8_t hierarchy;
+    uint8_t interleaving_mode;
+    uint8_t code_rate_HP;
+    uint8_t code_rate_LP;
+    uint8_t guard_interval;
+    uint8_t transmission_mode;
+    uint8_t DVBH_mask_HP;
+    uint8_t DVBH_mask_LP;
+    uint16_t cell_ID;
 } __packed;
 
 struct as10x_tune_args {
-	/* frequency */
-	uint32_t freq;
-	/* bandwidth */
-	uint8_t bandwidth;
-	/* hierarchy selection */
-	uint8_t hier_select;
-	/* constellation */
-	uint8_t modulation;
-	/* hierarchy */
-	uint8_t hierarchy;
-	/* interleaving mode */
-	uint8_t interleaving_mode;
-	/* code rate */
-	uint8_t code_rate;
-	/* guard interval */
-	uint8_t guard_interval;
-	/* transmission mode */
-	uint8_t transmission_mode;
+    /* frequency */
+    uint32_t freq;
+    /* bandwidth */
+    uint8_t bandwidth;
+    /* hierarchy selection */
+    uint8_t hier_select;
+    /* constellation */
+    uint8_t modulation;
+    /* hierarchy */
+    uint8_t hierarchy;
+    /* interleaving mode */
+    uint8_t interleaving_mode;
+    /* code rate */
+    uint8_t code_rate;
+    /* guard interval */
+    uint8_t guard_interval;
+    /* transmission mode */
+    uint8_t transmission_mode;
 } __packed;
 
 struct as10x_tune_status {
-	/* tune status */
-	uint8_t tune_state;
-	/* signal strength */
-	int16_t signal_strength;
-	/* packet error rate 10^-4 */
-	uint16_t PER;
-	/* bit error rate 10^-4 */
-	uint16_t BER;
+    /* tune status */
+    uint8_t tune_state;
+    /* signal strength */
+    int16_t signal_strength;
+    /* packet error rate 10^-4 */
+    uint16_t PER;
+    /* bit error rate 10^-4 */
+    uint16_t BER;
 } __packed;
 
 struct as10x_demod_stats {
-	/* frame counter */
-	uint32_t frame_count;
-	/* Bad frame counter */
-	uint32_t bad_frame_count;
-	/* Number of wrong bytes fixed by Reed-Solomon */
-	uint32_t bytes_fixed_by_rs;
-	/* Averaged MER */
-	uint16_t mer;
-	/* statistics calculation state indicator (started or not) */
-	uint8_t has_started;
+    /* frame counter */
+    uint32_t frame_count;
+    /* Bad frame counter */
+    uint32_t bad_frame_count;
+    /* Number of wrong bytes fixed by Reed-Solomon */
+    uint32_t bytes_fixed_by_rs;
+    /* Averaged MER */
+    uint16_t mer;
+    /* statistics calculation state indicator (started or not) */
+    uint8_t has_started;
 } __packed;
 
 struct as10x_ts_filter {
-	uint16_t pid;  /* valid PID value 0x00 : 0x2000 */
-	uint8_t  type; /* Red TS_PID_TYPE_<N> values */
-	uint8_t  idx;  /* index in filtering table */
+    uint16_t pid;  /* valid PID value 0x00 : 0x2000 */
+    uint8_t  type; /* Red TS_PID_TYPE_<N> values */
+    uint8_t  idx;  /* index in filtering table */
 } __packed;
 
 struct as10x_register_value {
-	uint8_t mode;
-	union {
-		uint8_t  value8;   /* 8 bit value */
-		uint16_t value16;  /* 16 bit value */
-		uint32_t value32;  /* 32 bit value */
-	} __packed u;
+    uint8_t mode;
+    union {
+        uint8_t  value8;   /* 8 bit value */
+        uint16_t value16;  /* 16 bit value */
+        uint32_t value32;  /* 32 bit value */
+    } __packed u;
 } __packed;
 
 struct as10x_register_addr {
-	/* register addr */
-	uint32_t addr;
-	/* register mode access */
-	uint8_t mode;
+    /* register addr */
+    uint32_t addr;
+    /* register mode access */
+    uint8_t mode;
 };
 
 #endif

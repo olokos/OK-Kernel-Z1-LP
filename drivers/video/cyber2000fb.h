@@ -19,17 +19,16 @@
 #define NR_PALETTE	256
 
 #if defined(DEBUG) && defined(CONFIG_DEBUG_LL)
-static void debug_printf(char *fmt, ...)
-{
-	extern void printascii(const char *);
-	char buffer[128];
-	va_list ap;
+static void debug_printf(char *fmt, ...) {
+    extern void printascii(const char *);
+    char buffer[128];
+    va_list ap;
 
-	va_start(ap, fmt);
-	vsprintf(buffer, fmt, ap);
-	va_end(ap);
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
 
-	printascii(buffer);
+    printascii(buffer);
 }
 #else
 #define debug_printf(x...) do { } while (0)
@@ -464,22 +463,22 @@ static void debug_printf(char *fmt, ...)
 struct cfb_info;
 
 struct cyberpro_info {
-	struct device	*dev;
-	struct i2c_adapter *i2c;
-	unsigned char	__iomem *regs;
-	char		__iomem *fb;
-	char		dev_name[32];
-	unsigned int	fb_size;
-	unsigned int	chip_id;
-	unsigned int	irq;
+    struct device	*dev;
+    struct i2c_adapter *i2c;
+    unsigned char	__iomem *regs;
+    char		__iomem *fb;
+    char		dev_name[32];
+    unsigned int	fb_size;
+    unsigned int	chip_id;
+    unsigned int	irq;
 
-	/*
-	 * The following is a pointer to be passed into the
-	 * functions below.  The modules outside the main
-	 * cyber2000fb.c driver have no knowledge as to what
-	 * is within this structure.
-	 */
-	struct cfb_info *info;
+    /*
+     * The following is a pointer to be passed into the
+     * functions below.  The modules outside the main
+     * cyber2000fb.c driver have no knowledge as to what
+     * is within this structure.
+     */
+    struct cfb_info *info;
 };
 
 #define ID_IGA_1682		0

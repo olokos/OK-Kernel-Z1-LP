@@ -49,8 +49,7 @@
 #define MAX_PAYLOAD_SIZE 2400
 #define MAX_TX_PAYLOAD_SIZE 4096
 
-typedef enum
-{
+typedef enum {
     TEST_PAYLOAD_NONE,
     TEST_PAYLOAD_FILL_BYTE,
     TEST_PAYLOAD_RANDOM,
@@ -62,8 +61,7 @@ typedef enum
 
 #define MAC_ADDR_SIZE ( 6 )
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 numTestPackets;
     tANI_U32 interFrameSpace;
     eHalPhyRates rate;
@@ -83,8 +81,7 @@ typedef PACKED_PRE struct PACKED_POST
 } sPttFrameGenParams;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 legacy;             //11g OFDM preamble
     tANI_U32 gfSimo20;           //greenfield preamble
     tANI_U32 mmSimo20;           //mixed mode preamble

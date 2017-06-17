@@ -55,27 +55,25 @@
 #undef memset
 #undef memcpy
 
-static inline void *memset(const void *s, int c, size_t n)
-{
-	int i;
-	char *ss = (char *) s;
+static inline void *memset(const void *s, int c, size_t n) {
+    int i;
+    char *ss = (char *) s;
 
-	for (i = 0; i < n; i++)
-		ss[i] = c;
-	return (void *)s;
+    for (i = 0; i < n; i++)
+        ss[i] = c;
+    return (void *)s;
 }
 
 #define memzero(s, n) memset((s), 0, (n))
 
-static inline void *memcpy(void *__dest, const void *__src, size_t __n)
-{
-	int i;
-	const char *s = __src;
-	char *d = __dest;
+static inline void *memcpy(void *__dest, const void *__src, size_t __n) {
+    int i;
+    const char *s = __src;
+    char *d = __dest;
 
-	for (i = 0; i < __n; i++)
-		d[i] = s[i];
-	return __dest;
+    for (i = 0; i < __n; i++)
+        d[i] = s[i];
+    return __dest;
 }
 
 typedef unsigned char  uch;
@@ -123,20 +121,19 @@ static void flush_window(void);
 static void error(const char *) __attribute__((noreturn));
 static void kputs(const char *);
 
-static inline unsigned char get_byte(void)
-{
-	unsigned char ch = inptr < insize ? inbuf[inptr++] : fill_inbuf();
+static inline unsigned char get_byte(void) {
+    unsigned char ch = inptr < insize ? inbuf[inptr++] : fill_inbuf();
 
 #if 0
-	char hex[3];
-	hex[0] = ((ch & 0x0f) > 9) ?
-		((ch & 0x0f) + 'A' - 0xa) : ((ch & 0x0f) + '0');
-	hex[1] = ((ch >> 4) > 9) ?
-		((ch >> 4) + 'A' - 0xa) : ((ch >> 4) + '0');
-	hex[2] = 0;
-	kputs(hex);
+    char hex[3];
+    hex[0] = ((ch & 0x0f) > 9) ?
+             ((ch & 0x0f) + 'A' - 0xa) : ((ch & 0x0f) + '0');
+    hex[1] = ((ch >> 4) > 9) ?
+             ((ch >> 4) + 'A' - 0xa) : ((ch >> 4) + '0');
+    hex[2] = 0;
+    kputs(hex);
 #endif
-	return ch;
+    return ch;
 }
 
 /*
@@ -170,68 +167,65 @@ static int lines, cols;
 #define BOOTLOADER_INFLATE
 #include "../../../../lib/inflate.c"
 
-static inline void scroll(void)
-{
-	int i;
+static inline void scroll(void) {
+    int i;
 
-	memcpy(vidmem, vidmem + cols * 2, (lines - 1) * cols * 2);
-	for (i = (lines - 1) * cols * 2; i < lines * cols * 2; i += 2)
-		vidmem[i] = ' ';
+    memcpy(vidmem, vidmem + cols * 2, (lines - 1) * cols * 2);
+    for (i = (lines - 1) * cols * 2; i < lines * cols * 2; i += 2)
+        vidmem[i] = ' ';
 }
 
-static inline void kputchar(unsigned char ch)
-{
+static inline void kputchar(unsigned char ch) {
 #ifdef CONFIG_MN10300_UNIT_ASB2305
-	while (SC0STR & SC01STR_TBF)
-		continue;
+    while (SC0STR & SC01STR_TBF)
+        continue;
 
-	if (ch == 0x0a) {
-		SC0TXB = 0x0d;
-		while (SC0STR & SC01STR_TBF)
-			continue;
-	}
+    if (ch == 0x0a) {
+        SC0TXB = 0x0d;
+        while (SC0STR & SC01STR_TBF)
+            continue;
+    }
 
-	SC0TXB = ch;
+    SC0TXB = ch;
 
 #else
-	while (SC1STR & SC01STR_TBF)
-		continue;
+    while (SC1STR & SC01STR_TBF)
+        continue;
 
-	if (ch == 0x0a) {
-		SC1TXB = 0x0d;
-		while (SC1STR & SC01STR_TBF)
-			continue;
-	}
+    if (ch == 0x0a) {
+        SC1TXB = 0x0d;
+        while (SC1STR & SC01STR_TBF)
+            continue;
+    }
 
-	SC1TXB = ch;
+    SC1TXB = ch;
 
 #endif
 }
 
-static void kputs(const char *s)
-{
+static void kputs(const char *s) {
 #ifdef CONFIG_DEBUG_DECOMPRESS_KERNEL
 #ifndef CONFIG_GDBSTUB_ON_TTYSx
-	char ch;
+    char ch;
 
-	FLOWCTL_SET(DTR);
+    FLOWCTL_SET(DTR);
 
-	while (*s) {
-		LSR_WAIT_FOR(THRE);
+    while (*s) {
+        LSR_WAIT_FOR(THRE);
 
-		ch = *s++;
-		if (ch == 0x0a) {
-			CYG_DEV_THR = 0x0d;
-			LSR_WAIT_FOR(THRE);
-		}
-		CYG_DEV_THR = ch;
-	}
+        ch = *s++;
+        if (ch == 0x0a) {
+            CYG_DEV_THR = 0x0d;
+            LSR_WAIT_FOR(THRE);
+        }
+        CYG_DEV_THR = ch;
+    }
 
-	FLOWCTL_CLEAR(DTR);
+    FLOWCTL_CLEAR(DTR);
 #else
 
-	for (; *s; s++)
-		kputchar(*s);
+    for (; *s; s++)
+        kputchar(*s);
 
 #endif
 #endif /* CONFIG_DEBUG_DECOMPRESS_KERNEL */
@@ -241,23 +235,21 @@ static void kputs(const char *s)
  * Fill the input buffer. This is called only when the buffer is empty
  * and at least one byte is really needed.
  */
-static int fill_inbuf()
-{
-	if (insize != 0)
-		error("ran out of input data\n");
+static int fill_inbuf() {
+    if (insize != 0)
+        error("ran out of input data\n");
 
-	inbuf = input_data;
-	insize = input_len;
-	inptr = 1;
-	return inbuf[0];
+    inbuf = input_data;
+    insize = input_len;
+    inptr = 1;
+    return inbuf[0];
 }
 
 /* ===========================================================================
  * Write the output window window[0..outcnt-1] and update crc and bytes_out.
  * (Used for the decompressed data only.)
  */
-static void flush_window_low(void)
-{
+static void flush_window_low(void) {
     ulg c = crc;         /* temporary variable */
     unsigned n;
     uch *in, *out, ch;
@@ -265,8 +257,8 @@ static void flush_window_low(void)
     in = window;
     out = &output_data[output_ptr];
     for (n = 0; n < outcnt; n++) {
-	    ch = *out++ = *in++;
-	    c = crc_32_tab[((int)c ^ ch) & 0xff] ^ (c >> 8);
+        ch = *out++ = *in++;
+        c = crc_32_tab[((int)c ^ ch) & 0xff] ^ (c >> 8);
     }
     crc = c;
     bytes_out += (ulg)outcnt;
@@ -274,39 +266,36 @@ static void flush_window_low(void)
     outcnt = 0;
 }
 
-static void flush_window_high(void)
-{
+static void flush_window_high(void) {
     ulg c = crc;         /* temporary variable */
     unsigned n;
     uch *in,  ch;
     in = window;
     for (n = 0; n < outcnt; n++) {
-	ch = *output_data++ = *in++;
-	if ((ulg) output_data == LOW_BUFFER_END)
-		output_data = high_buffer_start;
-	c = crc_32_tab[((int)c ^ ch) & 0xff] ^ (c >> 8);
+        ch = *output_data++ = *in++;
+        if ((ulg) output_data == LOW_BUFFER_END)
+            output_data = high_buffer_start;
+        c = crc_32_tab[((int)c ^ ch) & 0xff] ^ (c >> 8);
     }
     crc = c;
     bytes_out += (ulg)outcnt;
     outcnt = 0;
 }
 
-static void flush_window(void)
-{
-	if (high_loaded)
-		flush_window_high();
-	else
-		flush_window_low();
+static void flush_window(void) {
+    if (high_loaded)
+        flush_window_high();
+    else
+        flush_window_low();
 }
 
-static void error(const char *x)
-{
-	kputs("\n\n");
-	kputs(x);
-	kputs("\n\n -- System halted");
+static void error(const char *x) {
+    kputs("\n\n");
+    kputs(x);
+    kputs("\n\n -- System halted");
 
-	while (1)
-		/* Halt */;
+    while (1)
+        /* Halt */;
 }
 
 #define STACK_SIZE (4096)
@@ -314,61 +303,58 @@ static void error(const char *x)
 long user_stack[STACK_SIZE];
 
 struct {
-	long *a;
-	short b;
+    long *a;
+    short b;
 } stack_start = { &user_stack[STACK_SIZE], 0 };
 
-void setup_normal_output_buffer(void)
-{
+void setup_normal_output_buffer(void) {
 #ifdef STANDARD_MEMORY_BIOS_CALL
-	if (EXT_MEM_K < 1024)
-		error("Less than 2MB of memory.\n");
+    if (EXT_MEM_K < 1024)
+        error("Less than 2MB of memory.\n");
 #else
-	if ((ALT_MEM_K > EXT_MEM_K ? ALT_MEM_K : EXT_MEM_K) < 1024)
-		error("Less than 2MB of memory.\n");
+    if ((ALT_MEM_K > EXT_MEM_K ? ALT_MEM_K : EXT_MEM_K) < 1024)
+        error("Less than 2MB of memory.\n");
 #endif
-	output_data = (char *) 0x100000; /* Points to 1M */
+    output_data = (char *) 0x100000; /* Points to 1M */
 }
 
 struct moveparams {
-	uch *low_buffer_start;
-	int lcount;
-	uch *high_buffer_start;
-	int hcount;
+    uch *low_buffer_start;
+    int lcount;
+    uch *high_buffer_start;
+    int hcount;
 };
 
-void setup_output_buffer_if_we_run_high(struct moveparams *mv)
-{
-	high_buffer_start = (uch *)(((ulg) &end) + HEAP_SIZE);
+void setup_output_buffer_if_we_run_high(struct moveparams *mv) {
+    high_buffer_start = (uch *)(((ulg) &end) + HEAP_SIZE);
 #ifdef STANDARD_MEMORY_BIOS_CALL
-	if (EXT_MEM_K < (3 * 1024))
-		error("Less than 4MB of memory.\n");
+    if (EXT_MEM_K < (3 * 1024))
+        error("Less than 4MB of memory.\n");
 #else
-	if ((ALT_MEM_K > EXT_MEM_K ? ALT_MEM_K : EXT_MEM_K) < (3 * 1024))
-		error("Less than 4MB of memory.\n");
+    if ((ALT_MEM_K > EXT_MEM_K ? ALT_MEM_K : EXT_MEM_K) < (3 * 1024))
+        error("Less than 4MB of memory.\n");
 #endif
-	mv->low_buffer_start = output_data = (char *) LOW_BUFFER_START;
-	high_loaded = 1;
-	free_mem_end_ptr = (long) high_buffer_start;
-	if (0x100000 + LOW_BUFFER_SIZE > (ulg) high_buffer_start) {
-		high_buffer_start = (uch *)(0x100000 + LOW_BUFFER_SIZE);
-		mv->hcount = 0; /* say: we need not to move high_buffer */
-	} else {
-		mv->hcount = -1;
-	}
-	mv->high_buffer_start = high_buffer_start;
+    mv->low_buffer_start = output_data = (char *) LOW_BUFFER_START;
+    high_loaded = 1;
+    free_mem_end_ptr = (long) high_buffer_start;
+    if (0x100000 + LOW_BUFFER_SIZE > (ulg) high_buffer_start) {
+        high_buffer_start = (uch *)(0x100000 + LOW_BUFFER_SIZE);
+        mv->hcount = 0; /* say: we need not to move high_buffer */
+    } else {
+        mv->hcount = -1;
+    }
+    mv->high_buffer_start = high_buffer_start;
 }
 
-void close_output_buffer_if_we_run_high(struct moveparams *mv)
-{
-	mv->lcount = bytes_out;
-	if (bytes_out > LOW_BUFFER_SIZE) {
-		mv->lcount = LOW_BUFFER_SIZE;
-		if (mv->hcount)
-			mv->hcount = bytes_out - LOW_BUFFER_SIZE;
-	} else {
-		mv->hcount = 0;
-	}
+void close_output_buffer_if_we_run_high(struct moveparams *mv) {
+    mv->lcount = bytes_out;
+    if (bytes_out > LOW_BUFFER_SIZE) {
+        mv->lcount = LOW_BUFFER_SIZE;
+        if (mv->hcount)
+            mv->hcount = bytes_out - LOW_BUFFER_SIZE;
+    } else {
+        mv->hcount = 0;
+    }
 }
 
 #undef DEBUGFLAG
@@ -376,18 +362,17 @@ void close_output_buffer_if_we_run_high(struct moveparams *mv)
 int debugflag;
 #endif
 
-int decompress_kernel(struct moveparams *mv)
-{
+int decompress_kernel(struct moveparams *mv) {
 #ifdef DEBUGFLAG
-	while (!debugflag)
-		barrier();
+    while (!debugflag)
+        barrier();
 #endif
 
-	output_data = (char *) CONFIG_KERNEL_TEXT_ADDRESS;
+    output_data = (char *) CONFIG_KERNEL_TEXT_ADDRESS;
 
-	makecrc();
-	kputs("Uncompressing Linux... ");
-	gunzip();
-	kputs("Ok, booting the kernel.\n");
-	return 0;
+    makecrc();
+    kputs("Uncompressing Linux... ");
+    gunzip();
+    kputs("Ok, booting the kernel.\n");
+    return 0;
 }

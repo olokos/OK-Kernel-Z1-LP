@@ -64,11 +64,11 @@ do {						\
 struct ipipe_domain;
 
 struct ipipe_sysinfo {
-	int sys_nr_cpus;	/* Number of CPUs on board */
-	int sys_hrtimer_irq;	/* hrtimer device IRQ */
-	u64 sys_hrtimer_freq;	/* hrtimer device frequency */
-	u64 sys_hrclock_freq;	/* hrclock device frequency */
-	u64 sys_cpu_freq;	/* CPU frequency (Hz) */
+    int sys_nr_cpus;	/* Number of CPUs on board */
+    int sys_hrtimer_irq;	/* hrtimer device IRQ */
+    u64 sys_hrtimer_freq;	/* hrtimer device frequency */
+    u64 sys_hrclock_freq;	/* hrclock device frequency */
+    u64 sys_cpu_freq;	/* CPU frequency (Hz) */
 };
 
 #define ipipe_read_tsc(t)					\
@@ -105,10 +105,10 @@ extern struct ipipe_domain ipipe_root;
 /* enable/disable_irqdesc _must_ be used in pairs. */
 
 void __ipipe_enable_irqdesc(struct ipipe_domain *ipd,
-			    unsigned irq);
+                            unsigned irq);
 
 void __ipipe_disable_irqdesc(struct ipipe_domain *ipd,
-			     unsigned irq);
+                             unsigned irq);
 
 #define __ipipe_enable_irq(irq)						\
 	do {								\
@@ -124,9 +124,8 @@ void __ipipe_disable_irqdesc(struct ipipe_domain *ipd,
 		chip->irq_mask(&desc->irq_data);			\
 	} while (0)
 
-static inline int __ipipe_check_tickdev(const char *devname)
-{
-	return 1;
+static inline int __ipipe_check_tickdev(const char *devname) {
+    return 1;
 }
 
 void __ipipe_enable_pipeline(void);
@@ -151,9 +150,8 @@ extern unsigned long __ipipe_freq_scale;
 
 extern unsigned long __ipipe_irq_tail_hook;
 
-static inline unsigned long __ipipe_ffnz(unsigned long ul)
-{
-	return ffs(ul) - 1;
+static inline unsigned long __ipipe_ffnz(unsigned long ul) {
+    return ffs(ul) - 1;
 }
 
 #define __ipipe_do_root_xirq(ipd, irq)					\

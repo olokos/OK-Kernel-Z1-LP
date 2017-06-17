@@ -45,23 +45,21 @@
 # error MTM tick timer interval value is overflow.
 #endif
 
-static inline void stop_jiffies_counter(void)
-{
-	u16 tmp;
-	TMTMD = 0;
-	tmp = TMTMD;
+static inline void stop_jiffies_counter(void) {
+    u16 tmp;
+    TMTMD = 0;
+    tmp = TMTMD;
 }
 
-static inline void reload_jiffies_counter(u32 cnt)
-{
-	u32 tmp;
+static inline void reload_jiffies_counter(u32 cnt) {
+    u32 tmp;
 
-	TMTBR = cnt;
-	tmp = TMTBR;
+    TMTBR = cnt;
+    tmp = TMTBR;
 
-	TMTMD = TMTMD_TMTLDE;
-	TMTMD = TMTMD_TMTCNE;
-	tmp = TMTMD;
+    TMTMD = TMTMD_TMTLDE;
+    TMTMD = TMTMD_TMTCNE;
+    tmp = TMTMD;
 }
 
 #if defined(CONFIG_SMP) && defined(CONFIG_GENERIC_CLOCKEVENTS) && \
@@ -75,31 +73,29 @@ static inline void reload_jiffies_counter(u32 cnt)
 
 #define	TMJC1IRQ		TM5IRQ
 
-static inline void stop_jiffies_counter1(void)
-{
-	u8 tmp;
-	TM4MD = 0;
-	TM5MD = 0;
-	tmp = TM4MD;
-	tmp = TM5MD;
+static inline void stop_jiffies_counter1(void) {
+    u8 tmp;
+    TM4MD = 0;
+    TM5MD = 0;
+    tmp = TM4MD;
+    tmp = TM5MD;
 }
 
-static inline void reload_jiffies_counter1(u32 cnt)
-{
-	u32 tmp;
+static inline void reload_jiffies_counter1(u32 cnt) {
+    u32 tmp;
 
-	TM45BR = cnt;
-	tmp = TM45BR;
+    TM45BR = cnt;
+    tmp = TM45BR;
 
-	TM4MD = TM4MD_INIT_COUNTER;
-	tmp = TM4MD;
+    TM4MD = TM4MD_INIT_COUNTER;
+    tmp = TM4MD;
 
-	TM5MD = TM5MD_SRC_TM4CASCADE | TM5MD_INIT_COUNTER;
-	TM5MD = TM5MD_SRC_TM4CASCADE | TM5MD_COUNT_ENABLE;
-	tmp = TM5MD;
+    TM5MD = TM5MD_SRC_TM4CASCADE | TM5MD_INIT_COUNTER;
+    TM5MD = TM5MD_SRC_TM4CASCADE | TM5MD_COUNT_ENABLE;
+    tmp = TM5MD;
 
-	TM4MD = TM4MD_COUNT_ENABLE;
-	tmp = TM4MD;
+    TM4MD = TM4MD_COUNT_ENABLE;
+    tmp = TM4MD;
 }
 #endif /* CONFIG_SMP&GENERIC_CLOCKEVENTS&!GENERIC_CLOCKEVENTS_BROADCAST */
 
@@ -119,28 +115,26 @@ static inline void reload_jiffies_counter1(u32 cnt)
 #define	TMTSCBC		TMSBC
 #define	TMTSCICR	TMSICR
 
-static inline void startup_timestamp_counter(void)
-{
-	u32 sync;
+static inline void startup_timestamp_counter(void) {
+    u32 sync;
 
-	/* set up TMS(Timestamp) 32bit timer register to count real time
-	 * - count down from 4Gig-1 to 0 and wrap at IOBCLK rate
-	 */
+    /* set up TMS(Timestamp) 32bit timer register to count real time
+     * - count down from 4Gig-1 to 0 and wrap at IOBCLK rate
+     */
 
-	TMTSCBR = TMTSCBR_MAX;
-	sync = TMTSCBR;
+    TMTSCBR = TMTSCBR_MAX;
+    sync = TMTSCBR;
 
-	TMTSCICR = 0;
-	sync = TMTSCICR;
+    TMTSCICR = 0;
+    sync = TMTSCICR;
 
-	TMTSCMD = TMTMD_TMTLDE;
-	TMTSCMD = TMTMD_TMTCNE;
-	sync = TMTSCMD;
+    TMTSCMD = TMTMD_TMTLDE;
+    TMTSCMD = TMTMD_TMTCNE;
+    sync = TMTSCMD;
 }
 
-static inline void shutdown_timestamp_counter(void)
-{
-	TMTSCMD = 0;
+static inline void shutdown_timestamp_counter(void) {
+    TMTSCMD = 0;
 }
 
 /*
@@ -149,9 +143,8 @@ static inline void shutdown_timestamp_counter(void)
  */
 typedef unsigned long cycles_t;
 
-static inline cycles_t read_timestamp_counter(void)
-{
-	return (cycles_t)~TMTSCBC;
+static inline cycles_t read_timestamp_counter(void) {
+    return (cycles_t)~TMTSCBC;
 }
 
 #endif /* !__ASSEMBLY__ */

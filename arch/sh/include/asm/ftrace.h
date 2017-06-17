@@ -21,15 +21,14 @@ extern void mcount(void);
 #define GRAPH_INSN_OFFSET	((CALLER_ADDR - GRAPH_ADDR) - 4)
 
 struct dyn_arch_ftrace {
-	/* No extra data needed on sh */
+    /* No extra data needed on sh */
 };
 
 #endif /* CONFIG_DYNAMIC_FTRACE */
 
-static inline unsigned long ftrace_call_adjust(unsigned long addr)
-{
-	/* 'addr' is the memory table address. */
-	return addr;
+static inline unsigned long ftrace_call_adjust(unsigned long addr) {
+    /* 'addr' is the memory table address. */
+    return addr;
 }
 
 #endif /* __ASSEMBLY__ */

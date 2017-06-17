@@ -167,15 +167,15 @@
 
 /* PSC in I2S Mode. */
 typedef struct	psc_i2s {
-	u32	psc_sel;
-	u32	psc_ctrl;
-	u32	psc_i2scfg;
-	u32	psc_i2smsk;
-	u32	psc_i2spcr;
-	u32	psc_i2sstat;
-	u32	psc_i2sevent;
-	u32	psc_i2stxrx;
-	u32	psc_i2sudf;
+    u32	psc_sel;
+    u32	psc_ctrl;
+    u32	psc_i2scfg;
+    u32	psc_i2smsk;
+    u32	psc_i2spcr;
+    u32	psc_i2sstat;
+    u32	psc_i2sevent;
+    u32	psc_i2stxrx;
+    u32	psc_i2sudf;
 } psc_i2s_t;
 
 #define PSC_I2SCFG_OFFSET	0x08
@@ -272,14 +272,14 @@ typedef struct	psc_i2s {
 
 /* PSC in SPI Mode. */
 typedef struct	psc_spi {
-	u32	psc_sel;
-	u32	psc_ctrl;
-	u32	psc_spicfg;
-	u32	psc_spimsk;
-	u32	psc_spipcr;
-	u32	psc_spistat;
-	u32	psc_spievent;
-	u32	psc_spitxrx;
+    u32	psc_sel;
+    u32	psc_ctrl;
+    u32	psc_spicfg;
+    u32	psc_spimsk;
+    u32	psc_spipcr;
+    u32	psc_spistat;
+    u32	psc_spievent;
+    u32	psc_spitxrx;
 } psc_spi_t;
 
 /* SPI Config Register. */

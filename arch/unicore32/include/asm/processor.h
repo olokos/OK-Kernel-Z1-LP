@@ -30,22 +30,22 @@
 #endif
 
 struct debug_entry {
-	u32			address;
-	u32			insn;
+    u32			address;
+    u32			insn;
 };
 
 struct debug_info {
-	int			nsaved;
-	struct debug_entry	bp[2];
+    int			nsaved;
+    struct debug_entry	bp[2];
 };
 
 struct thread_struct {
-							/* fault info	  */
-	unsigned long		address;
-	unsigned long		trap_no;
-	unsigned long		error_code;
-							/* debugging	  */
-	struct debug_info	debug;
+    /* fault info	  */
+    unsigned long		address;
+    unsigned long		trap_no;
+    unsigned long		error_code;
+    /* debugging	  */
+    struct debug_info	debug;
 };
 
 #define INIT_THREAD  {	}

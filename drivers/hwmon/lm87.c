@@ -154,122 +154,119 @@ static u8 LM87_REG_TEMP_LOW[3] = { 0x3A, 0x38, 0x2C };
  */
 
 struct lm87_data {
-	struct device *hwmon_dev;
-	struct mutex update_lock;
-	char valid; /* zero until following fields are valid */
-	unsigned long last_updated; /* In jiffies */
+    struct device *hwmon_dev;
+    struct mutex update_lock;
+    char valid; /* zero until following fields are valid */
+    unsigned long last_updated; /* In jiffies */
 
-	u8 channel;		/* register value */
-	u8 config;		/* original register value */
+    u8 channel;		/* register value */
+    u8 config;		/* original register value */
 
-	u8 in[8];		/* register value */
-	u8 in_max[8];		/* register value */
-	u8 in_min[8];		/* register value */
-	u16 in_scale[8];
+    u8 in[8];		/* register value */
+    u8 in_max[8];		/* register value */
+    u8 in_min[8];		/* register value */
+    u16 in_scale[8];
 
-	s8 temp[3];		/* register value */
-	s8 temp_high[3];	/* register value */
-	s8 temp_low[3];		/* register value */
-	s8 temp_crit_int;	/* min of two register values */
-	s8 temp_crit_ext;	/* min of two register values */
+    s8 temp[3];		/* register value */
+    s8 temp_high[3];	/* register value */
+    s8 temp_low[3];		/* register value */
+    s8 temp_crit_int;	/* min of two register values */
+    s8 temp_crit_ext;	/* min of two register values */
 
-	u8 fan[2];		/* register value */
-	u8 fan_min[2];		/* register value */
-	u8 fan_div[2];		/* register value, shifted right */
-	u8 aout;		/* register value */
+    u8 fan[2];		/* register value */
+    u8 fan_min[2];		/* register value */
+    u8 fan_div[2];		/* register value, shifted right */
+    u8 aout;		/* register value */
 
-	u16 alarms;		/* register values, combined */
-	u8 vid;			/* register values, combined */
-	u8 vrm;
+    u16 alarms;		/* register values, combined */
+    u8 vid;			/* register values, combined */
+    u8 vrm;
 };
 
-static inline int lm87_read_value(struct i2c_client *client, u8 reg)
-{
-	return i2c_smbus_read_byte_data(client, reg);
+static inline int lm87_read_value(struct i2c_client *client, u8 reg) {
+    return i2c_smbus_read_byte_data(client, reg);
 }
 
-static inline int lm87_write_value(struct i2c_client *client, u8 reg, u8 value)
-{
-	return i2c_smbus_write_byte_data(client, reg, value);
+static inline int lm87_write_value(struct i2c_client *client, u8 reg, u8 value) {
+    return i2c_smbus_write_byte_data(client, reg, value);
 }
 
-static struct lm87_data *lm87_update_device(struct device *dev)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
+static struct lm87_data *lm87_update_device(struct device *dev) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
 
-	mutex_lock(&data->update_lock);
+    mutex_lock(&data->update_lock);
 
-	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-		int i, j;
+    if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+        int i, j;
 
-		dev_dbg(&client->dev, "Updating data.\n");
+        dev_dbg(&client->dev, "Updating data.\n");
 
-		i = (data->channel & CHAN_TEMP3) ? 1 : 0;
-		j = (data->channel & CHAN_TEMP3) ? 5 : 6;
-		for (; i < j; i++) {
-			data->in[i] = lm87_read_value(client,
-				      LM87_REG_IN(i));
-			data->in_min[i] = lm87_read_value(client,
-					  LM87_REG_IN_MIN(i));
-			data->in_max[i] = lm87_read_value(client,
-					  LM87_REG_IN_MAX(i));
-		}
+        i = (data->channel & CHAN_TEMP3) ? 1 : 0;
+        j = (data->channel & CHAN_TEMP3) ? 5 : 6;
+        for (; i < j; i++) {
+            data->in[i] = lm87_read_value(client,
+                                          LM87_REG_IN(i));
+            data->in_min[i] = lm87_read_value(client,
+                                              LM87_REG_IN_MIN(i));
+            data->in_max[i] = lm87_read_value(client,
+                                              LM87_REG_IN_MAX(i));
+        }
 
-		for (i = 0; i < 2; i++) {
-			if (data->channel & CHAN_NO_FAN(i)) {
-				data->in[6+i] = lm87_read_value(client,
-						LM87_REG_AIN(i));
-				data->in_max[6+i] = lm87_read_value(client,
-						    LM87_REG_AIN_MAX(i));
-				data->in_min[6+i] = lm87_read_value(client,
-						    LM87_REG_AIN_MIN(i));
+        for (i = 0; i < 2; i++) {
+            if (data->channel & CHAN_NO_FAN(i)) {
+                data->in[6+i] = lm87_read_value(client,
+                                                LM87_REG_AIN(i));
+                data->in_max[6+i] = lm87_read_value(client,
+                                                    LM87_REG_AIN_MAX(i));
+                data->in_min[6+i] = lm87_read_value(client,
+                                                    LM87_REG_AIN_MIN(i));
 
-			} else {
-				data->fan[i] = lm87_read_value(client,
-					       LM87_REG_FAN(i));
-				data->fan_min[i] = lm87_read_value(client,
-						   LM87_REG_FAN_MIN(i));
-			}
-		}
+            } else {
+                data->fan[i] = lm87_read_value(client,
+                                               LM87_REG_FAN(i));
+                data->fan_min[i] = lm87_read_value(client,
+                                                   LM87_REG_FAN_MIN(i));
+            }
+        }
 
-		j = (data->channel & CHAN_TEMP3) ? 3 : 2;
-		for (i = 0 ; i < j; i++) {
-			data->temp[i] = lm87_read_value(client,
-					LM87_REG_TEMP[i]);
-			data->temp_high[i] = lm87_read_value(client,
-					     LM87_REG_TEMP_HIGH[i]);
-			data->temp_low[i] = lm87_read_value(client,
-					    LM87_REG_TEMP_LOW[i]);
-		}
+        j = (data->channel & CHAN_TEMP3) ? 3 : 2;
+        for (i = 0 ; i < j; i++) {
+            data->temp[i] = lm87_read_value(client,
+                                            LM87_REG_TEMP[i]);
+            data->temp_high[i] = lm87_read_value(client,
+                                                 LM87_REG_TEMP_HIGH[i]);
+            data->temp_low[i] = lm87_read_value(client,
+                                                LM87_REG_TEMP_LOW[i]);
+        }
 
-		i = lm87_read_value(client, LM87_REG_TEMP_HW_INT_LOCK);
-		j = lm87_read_value(client, LM87_REG_TEMP_HW_INT);
-		data->temp_crit_int = min(i, j);
+        i = lm87_read_value(client, LM87_REG_TEMP_HW_INT_LOCK);
+        j = lm87_read_value(client, LM87_REG_TEMP_HW_INT);
+        data->temp_crit_int = min(i, j);
 
-		i = lm87_read_value(client, LM87_REG_TEMP_HW_EXT_LOCK);
-		j = lm87_read_value(client, LM87_REG_TEMP_HW_EXT);
-		data->temp_crit_ext = min(i, j);
+        i = lm87_read_value(client, LM87_REG_TEMP_HW_EXT_LOCK);
+        j = lm87_read_value(client, LM87_REG_TEMP_HW_EXT);
+        data->temp_crit_ext = min(i, j);
 
-		i = lm87_read_value(client, LM87_REG_VID_FAN_DIV);
-		data->fan_div[0] = (i >> 4) & 0x03;
-		data->fan_div[1] = (i >> 6) & 0x03;
-		data->vid = (i & 0x0F)
-			  | (lm87_read_value(client, LM87_REG_VID4) & 0x01)
-			     << 4;
+        i = lm87_read_value(client, LM87_REG_VID_FAN_DIV);
+        data->fan_div[0] = (i >> 4) & 0x03;
+        data->fan_div[1] = (i >> 6) & 0x03;
+        data->vid = (i & 0x0F)
+                    | (lm87_read_value(client, LM87_REG_VID4) & 0x01)
+                    << 4;
 
-		data->alarms = lm87_read_value(client, LM87_REG_ALARMS1)
-			     | (lm87_read_value(client, LM87_REG_ALARMS2)
-				<< 8);
-		data->aout = lm87_read_value(client, LM87_REG_AOUT);
+        data->alarms = lm87_read_value(client, LM87_REG_ALARMS1)
+                       | (lm87_read_value(client, LM87_REG_ALARMS2)
+                          << 8);
+        data->aout = lm87_read_value(client, LM87_REG_AOUT);
 
-		data->last_updated = jiffies;
-		data->valid = 1;
-	}
+        data->last_updated = jiffies;
+        data->valid = 1;
+    }
 
-	mutex_unlock(&data->update_lock);
+    mutex_unlock(&data->update_lock);
 
-	return data;
+    return data;
 }
 
 /*
@@ -277,75 +274,70 @@ static struct lm87_data *lm87_update_device(struct device *dev)
  */
 
 static ssize_t show_in_input(struct device *dev, struct device_attribute *attr,
-			     char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                             char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%u\n", IN_FROM_REG(data->in[nr],
-		       data->in_scale[nr]));
+    return sprintf(buf, "%u\n", IN_FROM_REG(data->in[nr],
+                                            data->in_scale[nr]));
 }
 
 static ssize_t show_in_min(struct device *dev,
-				     struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                           struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%u\n", IN_FROM_REG(data->in_min[nr],
-		       data->in_scale[nr]));
+    return sprintf(buf, "%u\n", IN_FROM_REG(data->in_min[nr],
+                                            data->in_scale[nr]));
 }
 
 static ssize_t show_in_max(struct device *dev,
-				     struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                           struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%u\n", IN_FROM_REG(data->in_max[nr],
-		       data->in_scale[nr]));
+    return sprintf(buf, "%u\n", IN_FROM_REG(data->in_max[nr],
+                                            data->in_scale[nr]));
 }
 
 static ssize_t set_in_min(struct device *dev, struct device_attribute *attr,
-			  const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
+                          const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->in_min[nr] = IN_TO_REG(val, data->in_scale[nr]);
-	lm87_write_value(client, nr < 6 ? LM87_REG_IN_MIN(nr) :
-			 LM87_REG_AIN_MIN(nr - 6), data->in_min[nr]);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->in_min[nr] = IN_TO_REG(val, data->in_scale[nr]);
+    lm87_write_value(client, nr < 6 ? LM87_REG_IN_MIN(nr) :
+                     LM87_REG_AIN_MIN(nr - 6), data->in_min[nr]);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 
 static ssize_t set_in_max(struct device *dev,  struct device_attribute *attr,
-			  const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
+                          const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->in_max[nr] = IN_TO_REG(val, data->in_scale[nr]);
-	lm87_write_value(client, nr < 6 ? LM87_REG_IN_MAX(nr) :
-			 LM87_REG_AIN_MAX(nr - 6), data->in_max[nr]);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->in_max[nr] = IN_TO_REG(val, data->in_scale[nr]);
+    lm87_write_value(client, nr < 6 ? LM87_REG_IN_MAX(nr) :
+                     LM87_REG_AIN_MAX(nr - 6), data->in_max[nr]);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 
 #define set_in(offset) \
@@ -365,72 +357,67 @@ set_in(6);
 set_in(7);
 
 static ssize_t show_temp_input(struct device *dev,
-			       struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                               struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr]));
+    return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr]));
 }
 
 static ssize_t show_temp_low(struct device *dev,
-			     struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                             struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n",
-		       TEMP_FROM_REG(data->temp_low[nr]));
+    return sprintf(buf, "%d\n",
+                   TEMP_FROM_REG(data->temp_low[nr]));
 }
 
 static ssize_t show_temp_high(struct device *dev,
-			      struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                              struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n",
-		       TEMP_FROM_REG(data->temp_high[nr]));
+    return sprintf(buf, "%d\n",
+                   TEMP_FROM_REG(data->temp_high[nr]));
 }
 
 static ssize_t set_temp_low(struct device *dev, struct device_attribute *attr,
-			    const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
+                            const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->temp_low[nr] = TEMP_TO_REG(val);
-	lm87_write_value(client, LM87_REG_TEMP_LOW[nr], data->temp_low[nr]);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->temp_low[nr] = TEMP_TO_REG(val);
+    lm87_write_value(client, LM87_REG_TEMP_LOW[nr], data->temp_low[nr]);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 
 static ssize_t set_temp_high(struct device *dev, struct device_attribute *attr,
-			     const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
+                             const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->temp_high[nr] = TEMP_TO_REG(val);
-	lm87_write_value(client, LM87_REG_TEMP_HIGH[nr], data->temp_high[nr]);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->temp_high[nr] = TEMP_TO_REG(val);
+    lm87_write_value(client, LM87_REG_TEMP_HIGH[nr], data->temp_high[nr]);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 
 #define set_temp(offset) \
@@ -445,17 +432,15 @@ set_temp(2);
 set_temp(3);
 
 static ssize_t show_temp_crit_int(struct device *dev,
-				  struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_int));
+                                  struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_int));
 }
 
 static ssize_t show_temp_crit_ext(struct device *dev,
-				  struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_ext));
+                                  struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp_crit_ext));
 }
 
 static DEVICE_ATTR(temp1_crit, S_IRUGO, show_temp_crit_int, NULL);
@@ -463,54 +448,50 @@ static DEVICE_ATTR(temp2_crit, S_IRUGO, show_temp_crit_ext, NULL);
 static DEVICE_ATTR(temp3_crit, S_IRUGO, show_temp_crit_ext, NULL);
 
 static ssize_t show_fan_input(struct device *dev,
-			      struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                              struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[nr],
-		       FAN_DIV_FROM_REG(data->fan_div[nr])));
+    return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[nr],
+                   FAN_DIV_FROM_REG(data->fan_div[nr])));
 }
 
 static ssize_t show_fan_min(struct device *dev,
-			    struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                            struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan_min[nr],
-		       FAN_DIV_FROM_REG(data->fan_div[nr])));
+    return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan_min[nr],
+                   FAN_DIV_FROM_REG(data->fan_div[nr])));
 }
 
 static ssize_t show_fan_div(struct device *dev,
-			    struct device_attribute *attr, char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int nr = to_sensor_dev_attr(attr)->index;
+                            struct device_attribute *attr, char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int nr = to_sensor_dev_attr(attr)->index;
 
-	return sprintf(buf, "%d\n",
-		       FAN_DIV_FROM_REG(data->fan_div[nr]));
+    return sprintf(buf, "%d\n",
+                   FAN_DIV_FROM_REG(data->fan_div[nr]));
 }
 
 static ssize_t set_fan_min(struct device *dev, struct device_attribute *attr,
-			   const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
+                           const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->fan_min[nr] = FAN_TO_REG(val,
-			    FAN_DIV_FROM_REG(data->fan_div[nr]));
-	lm87_write_value(client, LM87_REG_FAN_MIN(nr), data->fan_min[nr]);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->fan_min[nr] = FAN_TO_REG(val,
+                                   FAN_DIV_FROM_REG(data->fan_div[nr]));
+    lm87_write_value(client, LM87_REG_FAN_MIN(nr), data->fan_min[nr]);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 
 /*
@@ -520,59 +501,58 @@ static ssize_t set_fan_min(struct device *dev, struct device_attribute *attr,
  * because the divider changed.
  */
 static ssize_t set_fan_div(struct device *dev, struct device_attribute *attr,
-			   const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	int nr = to_sensor_dev_attr(attr)->index;
-	long val;
-	int err;
-	unsigned long min;
-	u8 reg;
+                           const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    int nr = to_sensor_dev_attr(attr)->index;
+    long val;
+    int err;
+    unsigned long min;
+    u8 reg;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	min = FAN_FROM_REG(data->fan_min[nr],
-			   FAN_DIV_FROM_REG(data->fan_div[nr]));
+    mutex_lock(&data->update_lock);
+    min = FAN_FROM_REG(data->fan_min[nr],
+                       FAN_DIV_FROM_REG(data->fan_div[nr]));
 
-	switch (val) {
-	case 1:
-		data->fan_div[nr] = 0;
-		break;
-	case 2:
-		data->fan_div[nr] = 1;
-		break;
-	case 4:
-		data->fan_div[nr] = 2;
-		break;
-	case 8:
-		data->fan_div[nr] = 3;
-		break;
-	default:
-		mutex_unlock(&data->update_lock);
-		return -EINVAL;
-	}
+    switch (val) {
+    case 1:
+        data->fan_div[nr] = 0;
+        break;
+    case 2:
+        data->fan_div[nr] = 1;
+        break;
+    case 4:
+        data->fan_div[nr] = 2;
+        break;
+    case 8:
+        data->fan_div[nr] = 3;
+        break;
+    default:
+        mutex_unlock(&data->update_lock);
+        return -EINVAL;
+    }
 
-	reg = lm87_read_value(client, LM87_REG_VID_FAN_DIV);
-	switch (nr) {
-	case 0:
-	    reg = (reg & 0xCF) | (data->fan_div[0] << 4);
-	    break;
-	case 1:
-	    reg = (reg & 0x3F) | (data->fan_div[1] << 6);
-	    break;
-	}
-	lm87_write_value(client, LM87_REG_VID_FAN_DIV, reg);
+    reg = lm87_read_value(client, LM87_REG_VID_FAN_DIV);
+    switch (nr) {
+    case 0:
+        reg = (reg & 0xCF) | (data->fan_div[0] << 4);
+        break;
+    case 1:
+        reg = (reg & 0x3F) | (data->fan_div[1] << 6);
+        break;
+    }
+    lm87_write_value(client, LM87_REG_VID_FAN_DIV, reg);
 
-	data->fan_min[nr] = FAN_TO_REG(min, val);
-	lm87_write_value(client, LM87_REG_FAN_MIN(nr),
-			 data->fan_min[nr]);
-	mutex_unlock(&data->update_lock);
+    data->fan_min[nr] = FAN_TO_REG(min, val);
+    lm87_write_value(client, LM87_REG_FAN_MIN(nr),
+                     data->fan_min[nr]);
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 #define set_fan(offset) \
@@ -586,74 +566,67 @@ set_fan(1);
 set_fan(2);
 
 static ssize_t show_alarms(struct device *dev, struct device_attribute *attr,
-			   char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	return sprintf(buf, "%d\n", data->alarms);
+                           char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    return sprintf(buf, "%d\n", data->alarms);
 }
 static DEVICE_ATTR(alarms, S_IRUGO, show_alarms, NULL);
 
 static ssize_t show_vid(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
+                        char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
 }
 static DEVICE_ATTR(cpu0_vid, S_IRUGO, show_vid, NULL);
 
 static ssize_t show_vrm(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct lm87_data *data = dev_get_drvdata(dev);
-	return sprintf(buf, "%d\n", data->vrm);
+                        char *buf) {
+    struct lm87_data *data = dev_get_drvdata(dev);
+    return sprintf(buf, "%d\n", data->vrm);
 }
 static ssize_t set_vrm(struct device *dev, struct device_attribute *attr,
-		       const char *buf, size_t count)
-{
-	struct lm87_data *data = dev_get_drvdata(dev);
-	unsigned long val;
-	int err;
+                       const char *buf, size_t count) {
+    struct lm87_data *data = dev_get_drvdata(dev);
+    unsigned long val;
+    int err;
 
-	err = kstrtoul(buf, 10, &val);
-	if (err)
-		return err;
-	data->vrm = val;
-	return count;
+    err = kstrtoul(buf, 10, &val);
+    if (err)
+        return err;
+    data->vrm = val;
+    return count;
 }
 static DEVICE_ATTR(vrm, S_IRUGO | S_IWUSR, show_vrm, set_vrm);
 
 static ssize_t show_aout(struct device *dev, struct device_attribute *attr,
-			 char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	return sprintf(buf, "%d\n", AOUT_FROM_REG(data->aout));
+                         char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    return sprintf(buf, "%d\n", AOUT_FROM_REG(data->aout));
 }
 static ssize_t set_aout(struct device *dev, struct device_attribute *attr,
-			const char *buf, size_t count)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct lm87_data *data = i2c_get_clientdata(client);
-	long val;
-	int err;
+                        const char *buf, size_t count) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct lm87_data *data = i2c_get_clientdata(client);
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	data->aout = AOUT_TO_REG(val);
-	lm87_write_value(client, LM87_REG_AOUT, data->aout);
-	mutex_unlock(&data->update_lock);
-	return count;
+    mutex_lock(&data->update_lock);
+    data->aout = AOUT_TO_REG(val);
+    lm87_write_value(client, LM87_REG_AOUT, data->aout);
+    mutex_unlock(&data->update_lock);
+    return count;
 }
 static DEVICE_ATTR(aout_output, S_IRUGO | S_IWUSR, show_aout, set_aout);
 
 static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
-			  char *buf)
-{
-	struct lm87_data *data = lm87_update_device(dev);
-	int bitnr = to_sensor_dev_attr(attr)->index;
-	return sprintf(buf, "%u\n", (data->alarms >> bitnr) & 1);
+                          char *buf) {
+    struct lm87_data *data = lm87_update_device(dev);
+    int bitnr = to_sensor_dev_attr(attr)->index;
+    return sprintf(buf, "%u\n", (data->alarms >> bitnr) & 1);
 }
 static SENSOR_DEVICE_ATTR(in0_alarm, S_IRUGO, show_alarm, NULL, 0);
 static SENSOR_DEVICE_ATTR(in1_alarm, S_IRUGO, show_alarm, NULL, 1);
@@ -676,319 +649,314 @@ static SENSOR_DEVICE_ATTR(temp3_fault, S_IRUGO, show_alarm, NULL, 15);
  */
 
 static struct attribute *lm87_attributes[] = {
-	&sensor_dev_attr_in1_input.dev_attr.attr,
-	&sensor_dev_attr_in1_min.dev_attr.attr,
-	&sensor_dev_attr_in1_max.dev_attr.attr,
-	&sensor_dev_attr_in1_alarm.dev_attr.attr,
-	&sensor_dev_attr_in2_input.dev_attr.attr,
-	&sensor_dev_attr_in2_min.dev_attr.attr,
-	&sensor_dev_attr_in2_max.dev_attr.attr,
-	&sensor_dev_attr_in2_alarm.dev_attr.attr,
-	&sensor_dev_attr_in3_input.dev_attr.attr,
-	&sensor_dev_attr_in3_min.dev_attr.attr,
-	&sensor_dev_attr_in3_max.dev_attr.attr,
-	&sensor_dev_attr_in3_alarm.dev_attr.attr,
-	&sensor_dev_attr_in4_input.dev_attr.attr,
-	&sensor_dev_attr_in4_min.dev_attr.attr,
-	&sensor_dev_attr_in4_max.dev_attr.attr,
-	&sensor_dev_attr_in4_alarm.dev_attr.attr,
+    &sensor_dev_attr_in1_input.dev_attr.attr,
+    &sensor_dev_attr_in1_min.dev_attr.attr,
+    &sensor_dev_attr_in1_max.dev_attr.attr,
+    &sensor_dev_attr_in1_alarm.dev_attr.attr,
+    &sensor_dev_attr_in2_input.dev_attr.attr,
+    &sensor_dev_attr_in2_min.dev_attr.attr,
+    &sensor_dev_attr_in2_max.dev_attr.attr,
+    &sensor_dev_attr_in2_alarm.dev_attr.attr,
+    &sensor_dev_attr_in3_input.dev_attr.attr,
+    &sensor_dev_attr_in3_min.dev_attr.attr,
+    &sensor_dev_attr_in3_max.dev_attr.attr,
+    &sensor_dev_attr_in3_alarm.dev_attr.attr,
+    &sensor_dev_attr_in4_input.dev_attr.attr,
+    &sensor_dev_attr_in4_min.dev_attr.attr,
+    &sensor_dev_attr_in4_max.dev_attr.attr,
+    &sensor_dev_attr_in4_alarm.dev_attr.attr,
 
-	&sensor_dev_attr_temp1_input.dev_attr.attr,
-	&sensor_dev_attr_temp1_max.dev_attr.attr,
-	&sensor_dev_attr_temp1_min.dev_attr.attr,
-	&dev_attr_temp1_crit.attr,
-	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp2_input.dev_attr.attr,
-	&sensor_dev_attr_temp2_max.dev_attr.attr,
-	&sensor_dev_attr_temp2_min.dev_attr.attr,
-	&dev_attr_temp2_crit.attr,
-	&sensor_dev_attr_temp2_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp2_fault.dev_attr.attr,
+    &sensor_dev_attr_temp1_input.dev_attr.attr,
+    &sensor_dev_attr_temp1_max.dev_attr.attr,
+    &sensor_dev_attr_temp1_min.dev_attr.attr,
+    &dev_attr_temp1_crit.attr,
+    &sensor_dev_attr_temp1_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp2_input.dev_attr.attr,
+    &sensor_dev_attr_temp2_max.dev_attr.attr,
+    &sensor_dev_attr_temp2_min.dev_attr.attr,
+    &dev_attr_temp2_crit.attr,
+    &sensor_dev_attr_temp2_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp2_fault.dev_attr.attr,
 
-	&dev_attr_alarms.attr,
-	&dev_attr_aout_output.attr,
+    &dev_attr_alarms.attr,
+    &dev_attr_aout_output.attr,
 
-	NULL
+    NULL
 };
 
 static const struct attribute_group lm87_group = {
-	.attrs = lm87_attributes,
+    .attrs = lm87_attributes,
 };
 
 static struct attribute *lm87_attributes_in6[] = {
-	&sensor_dev_attr_in6_input.dev_attr.attr,
-	&sensor_dev_attr_in6_min.dev_attr.attr,
-	&sensor_dev_attr_in6_max.dev_attr.attr,
-	&sensor_dev_attr_in6_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_in6_input.dev_attr.attr,
+    &sensor_dev_attr_in6_min.dev_attr.attr,
+    &sensor_dev_attr_in6_max.dev_attr.attr,
+    &sensor_dev_attr_in6_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_in6 = {
-	.attrs = lm87_attributes_in6,
+    .attrs = lm87_attributes_in6,
 };
 
 static struct attribute *lm87_attributes_fan1[] = {
-	&sensor_dev_attr_fan1_input.dev_attr.attr,
-	&sensor_dev_attr_fan1_min.dev_attr.attr,
-	&sensor_dev_attr_fan1_div.dev_attr.attr,
-	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan1_input.dev_attr.attr,
+    &sensor_dev_attr_fan1_min.dev_attr.attr,
+    &sensor_dev_attr_fan1_div.dev_attr.attr,
+    &sensor_dev_attr_fan1_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_fan1 = {
-	.attrs = lm87_attributes_fan1,
+    .attrs = lm87_attributes_fan1,
 };
 
 static struct attribute *lm87_attributes_in7[] = {
-	&sensor_dev_attr_in7_input.dev_attr.attr,
-	&sensor_dev_attr_in7_min.dev_attr.attr,
-	&sensor_dev_attr_in7_max.dev_attr.attr,
-	&sensor_dev_attr_in7_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_in7_input.dev_attr.attr,
+    &sensor_dev_attr_in7_min.dev_attr.attr,
+    &sensor_dev_attr_in7_max.dev_attr.attr,
+    &sensor_dev_attr_in7_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_in7 = {
-	.attrs = lm87_attributes_in7,
+    .attrs = lm87_attributes_in7,
 };
 
 static struct attribute *lm87_attributes_fan2[] = {
-	&sensor_dev_attr_fan2_input.dev_attr.attr,
-	&sensor_dev_attr_fan2_min.dev_attr.attr,
-	&sensor_dev_attr_fan2_div.dev_attr.attr,
-	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan2_input.dev_attr.attr,
+    &sensor_dev_attr_fan2_min.dev_attr.attr,
+    &sensor_dev_attr_fan2_div.dev_attr.attr,
+    &sensor_dev_attr_fan2_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_fan2 = {
-	.attrs = lm87_attributes_fan2,
+    .attrs = lm87_attributes_fan2,
 };
 
 static struct attribute *lm87_attributes_temp3[] = {
-	&sensor_dev_attr_temp3_input.dev_attr.attr,
-	&sensor_dev_attr_temp3_max.dev_attr.attr,
-	&sensor_dev_attr_temp3_min.dev_attr.attr,
-	&dev_attr_temp3_crit.attr,
-	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp3_fault.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_temp3_input.dev_attr.attr,
+    &sensor_dev_attr_temp3_max.dev_attr.attr,
+    &sensor_dev_attr_temp3_min.dev_attr.attr,
+    &dev_attr_temp3_crit.attr,
+    &sensor_dev_attr_temp3_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp3_fault.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_temp3 = {
-	.attrs = lm87_attributes_temp3,
+    .attrs = lm87_attributes_temp3,
 };
 
 static struct attribute *lm87_attributes_in0_5[] = {
-	&sensor_dev_attr_in0_input.dev_attr.attr,
-	&sensor_dev_attr_in0_min.dev_attr.attr,
-	&sensor_dev_attr_in0_max.dev_attr.attr,
-	&sensor_dev_attr_in0_alarm.dev_attr.attr,
-	&sensor_dev_attr_in5_input.dev_attr.attr,
-	&sensor_dev_attr_in5_min.dev_attr.attr,
-	&sensor_dev_attr_in5_max.dev_attr.attr,
-	&sensor_dev_attr_in5_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_in0_input.dev_attr.attr,
+    &sensor_dev_attr_in0_min.dev_attr.attr,
+    &sensor_dev_attr_in0_max.dev_attr.attr,
+    &sensor_dev_attr_in0_alarm.dev_attr.attr,
+    &sensor_dev_attr_in5_input.dev_attr.attr,
+    &sensor_dev_attr_in5_min.dev_attr.attr,
+    &sensor_dev_attr_in5_max.dev_attr.attr,
+    &sensor_dev_attr_in5_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_in0_5 = {
-	.attrs = lm87_attributes_in0_5,
+    .attrs = lm87_attributes_in0_5,
 };
 
 static struct attribute *lm87_attributes_vid[] = {
-	&dev_attr_cpu0_vid.attr,
-	&dev_attr_vrm.attr,
-	NULL
+    &dev_attr_cpu0_vid.attr,
+    &dev_attr_vrm.attr,
+    NULL
 };
 
 static const struct attribute_group lm87_group_vid = {
-	.attrs = lm87_attributes_vid,
+    .attrs = lm87_attributes_vid,
 };
 
 /* Return 0 if detection is successful, -ENODEV otherwise */
-static int lm87_detect(struct i2c_client *client, struct i2c_board_info *info)
-{
-	struct i2c_adapter *adapter = client->adapter;
-	const char *name;
-	u8 cid, rev;
+static int lm87_detect(struct i2c_client *client, struct i2c_board_info *info) {
+    struct i2c_adapter *adapter = client->adapter;
+    const char *name;
+    u8 cid, rev;
 
-	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
-		return -ENODEV;
+    if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+        return -ENODEV;
 
-	if (lm87_read_value(client, LM87_REG_CONFIG) & 0x80)
-		return -ENODEV;
+    if (lm87_read_value(client, LM87_REG_CONFIG) & 0x80)
+        return -ENODEV;
 
-	/* Now, we do the remaining detection. */
-	cid = lm87_read_value(client, LM87_REG_COMPANY_ID);
-	rev = lm87_read_value(client, LM87_REG_REVISION);
+    /* Now, we do the remaining detection. */
+    cid = lm87_read_value(client, LM87_REG_COMPANY_ID);
+    rev = lm87_read_value(client, LM87_REG_REVISION);
 
-	if (cid == 0x02			/* National Semiconductor */
-	 && (rev >= 0x01 && rev <= 0x08))
-		name = "lm87";
-	else if (cid == 0x41		/* Analog Devices */
-	      && (rev & 0xf0) == 0x10)
-		name = "adm1024";
-	else {
-		dev_dbg(&adapter->dev, "LM87 detection failed at 0x%02x\n",
-			client->addr);
-		return -ENODEV;
-	}
+    if (cid == 0x02			/* National Semiconductor */
+            && (rev >= 0x01 && rev <= 0x08))
+        name = "lm87";
+    else if (cid == 0x41		/* Analog Devices */
+             && (rev & 0xf0) == 0x10)
+        name = "adm1024";
+    else {
+        dev_dbg(&adapter->dev, "LM87 detection failed at 0x%02x\n",
+                client->addr);
+        return -ENODEV;
+    }
 
-	strlcpy(info->type, name, I2C_NAME_SIZE);
+    strlcpy(info->type, name, I2C_NAME_SIZE);
 
-	return 0;
+    return 0;
 }
 
-static void lm87_remove_files(struct i2c_client *client)
-{
-	struct device *dev = &client->dev;
+static void lm87_remove_files(struct i2c_client *client) {
+    struct device *dev = &client->dev;
 
-	sysfs_remove_group(&dev->kobj, &lm87_group);
-	sysfs_remove_group(&dev->kobj, &lm87_group_in6);
-	sysfs_remove_group(&dev->kobj, &lm87_group_fan1);
-	sysfs_remove_group(&dev->kobj, &lm87_group_in7);
-	sysfs_remove_group(&dev->kobj, &lm87_group_fan2);
-	sysfs_remove_group(&dev->kobj, &lm87_group_temp3);
-	sysfs_remove_group(&dev->kobj, &lm87_group_in0_5);
-	sysfs_remove_group(&dev->kobj, &lm87_group_vid);
+    sysfs_remove_group(&dev->kobj, &lm87_group);
+    sysfs_remove_group(&dev->kobj, &lm87_group_in6);
+    sysfs_remove_group(&dev->kobj, &lm87_group_fan1);
+    sysfs_remove_group(&dev->kobj, &lm87_group_in7);
+    sysfs_remove_group(&dev->kobj, &lm87_group_fan2);
+    sysfs_remove_group(&dev->kobj, &lm87_group_temp3);
+    sysfs_remove_group(&dev->kobj, &lm87_group_in0_5);
+    sysfs_remove_group(&dev->kobj, &lm87_group_vid);
 }
 
-static void lm87_init_client(struct i2c_client *client)
-{
-	struct lm87_data *data = i2c_get_clientdata(client);
+static void lm87_init_client(struct i2c_client *client) {
+    struct lm87_data *data = i2c_get_clientdata(client);
 
-	if (client->dev.platform_data) {
-		data->channel = *(u8 *)client->dev.platform_data;
-		lm87_write_value(client,
-				 LM87_REG_CHANNEL_MODE, data->channel);
-	} else {
-		data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
-	}
-	data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
+    if (client->dev.platform_data) {
+        data->channel = *(u8 *)client->dev.platform_data;
+        lm87_write_value(client,
+                         LM87_REG_CHANNEL_MODE, data->channel);
+    } else {
+        data->channel = lm87_read_value(client, LM87_REG_CHANNEL_MODE);
+    }
+    data->config = lm87_read_value(client, LM87_REG_CONFIG) & 0x6F;
 
-	if (!(data->config & 0x01)) {
-		int i;
+    if (!(data->config & 0x01)) {
+        int i;
 
-		/* Limits are left uninitialized after power-up */
-		for (i = 1; i < 6; i++) {
-			lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
-			lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
-		}
-		for (i = 0; i < 2; i++) {
-			lm87_write_value(client, LM87_REG_TEMP_HIGH[i], 0x7F);
-			lm87_write_value(client, LM87_REG_TEMP_LOW[i], 0x00);
-			lm87_write_value(client, LM87_REG_AIN_MIN(i), 0x00);
-			lm87_write_value(client, LM87_REG_AIN_MAX(i), 0xFF);
-		}
-		if (data->channel & CHAN_TEMP3) {
-			lm87_write_value(client, LM87_REG_TEMP_HIGH[2], 0x7F);
-			lm87_write_value(client, LM87_REG_TEMP_LOW[2], 0x00);
-		} else {
-			lm87_write_value(client, LM87_REG_IN_MIN(0), 0x00);
-			lm87_write_value(client, LM87_REG_IN_MAX(0), 0xFF);
-		}
-	}
+        /* Limits are left uninitialized after power-up */
+        for (i = 1; i < 6; i++) {
+            lm87_write_value(client, LM87_REG_IN_MIN(i), 0x00);
+            lm87_write_value(client, LM87_REG_IN_MAX(i), 0xFF);
+        }
+        for (i = 0; i < 2; i++) {
+            lm87_write_value(client, LM87_REG_TEMP_HIGH[i], 0x7F);
+            lm87_write_value(client, LM87_REG_TEMP_LOW[i], 0x00);
+            lm87_write_value(client, LM87_REG_AIN_MIN(i), 0x00);
+            lm87_write_value(client, LM87_REG_AIN_MAX(i), 0xFF);
+        }
+        if (data->channel & CHAN_TEMP3) {
+            lm87_write_value(client, LM87_REG_TEMP_HIGH[2], 0x7F);
+            lm87_write_value(client, LM87_REG_TEMP_LOW[2], 0x00);
+        } else {
+            lm87_write_value(client, LM87_REG_IN_MIN(0), 0x00);
+            lm87_write_value(client, LM87_REG_IN_MAX(0), 0xFF);
+        }
+    }
 
-	/* Make sure Start is set and INT#_Clear is clear */
-	if ((data->config & 0x09) != 0x01)
-		lm87_write_value(client, LM87_REG_CONFIG,
-				 (data->config & 0x77) | 0x01);
+    /* Make sure Start is set and INT#_Clear is clear */
+    if ((data->config & 0x09) != 0x01)
+        lm87_write_value(client, LM87_REG_CONFIG,
+                         (data->config & 0x77) | 0x01);
 }
 
-static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
-{
-	struct lm87_data *data;
-	int err;
+static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id) {
+    struct lm87_data *data;
+    int err;
 
-	data = kzalloc(sizeof(struct lm87_data), GFP_KERNEL);
-	if (!data) {
-		err = -ENOMEM;
-		goto exit;
-	}
+    data = kzalloc(sizeof(struct lm87_data), GFP_KERNEL);
+    if (!data) {
+        err = -ENOMEM;
+        goto exit;
+    }
 
-	i2c_set_clientdata(client, data);
-	data->valid = 0;
-	mutex_init(&data->update_lock);
+    i2c_set_clientdata(client, data);
+    data->valid = 0;
+    mutex_init(&data->update_lock);
 
-	/* Initialize the LM87 chip */
-	lm87_init_client(client);
+    /* Initialize the LM87 chip */
+    lm87_init_client(client);
 
-	data->in_scale[0] = 2500;
-	data->in_scale[1] = 2700;
-	data->in_scale[2] = (data->channel & CHAN_VCC_5V) ? 5000 : 3300;
-	data->in_scale[3] = 5000;
-	data->in_scale[4] = 12000;
-	data->in_scale[5] = 2700;
-	data->in_scale[6] = 1875;
-	data->in_scale[7] = 1875;
+    data->in_scale[0] = 2500;
+    data->in_scale[1] = 2700;
+    data->in_scale[2] = (data->channel & CHAN_VCC_5V) ? 5000 : 3300;
+    data->in_scale[3] = 5000;
+    data->in_scale[4] = 12000;
+    data->in_scale[5] = 2700;
+    data->in_scale[6] = 1875;
+    data->in_scale[7] = 1875;
 
-	/* Register sysfs hooks */
-	err = sysfs_create_group(&client->dev.kobj, &lm87_group);
-	if (err)
-		goto exit_free;
+    /* Register sysfs hooks */
+    err = sysfs_create_group(&client->dev.kobj, &lm87_group);
+    if (err)
+        goto exit_free;
 
-	if (data->channel & CHAN_NO_FAN(0)) {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in6);
-		if (err)
-			goto exit_remove;
-	} else {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan1);
-		if (err)
-			goto exit_remove;
-	}
+    if (data->channel & CHAN_NO_FAN(0)) {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_in6);
+        if (err)
+            goto exit_remove;
+    } else {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan1);
+        if (err)
+            goto exit_remove;
+    }
 
-	if (data->channel & CHAN_NO_FAN(1)) {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in7);
-		if (err)
-			goto exit_remove;
-	} else {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan2);
-		if (err)
-			goto exit_remove;
-	}
+    if (data->channel & CHAN_NO_FAN(1)) {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_in7);
+        if (err)
+            goto exit_remove;
+    } else {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_fan2);
+        if (err)
+            goto exit_remove;
+    }
 
-	if (data->channel & CHAN_TEMP3) {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_temp3);
-		if (err)
-			goto exit_remove;
-	} else {
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_in0_5);
-		if (err)
-			goto exit_remove;
-	}
+    if (data->channel & CHAN_TEMP3) {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_temp3);
+        if (err)
+            goto exit_remove;
+    } else {
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_in0_5);
+        if (err)
+            goto exit_remove;
+    }
 
-	if (!(data->channel & CHAN_NO_VID)) {
-		data->vrm = vid_which_vrm();
-		err = sysfs_create_group(&client->dev.kobj, &lm87_group_vid);
-		if (err)
-			goto exit_remove;
-	}
+    if (!(data->channel & CHAN_NO_VID)) {
+        data->vrm = vid_which_vrm();
+        err = sysfs_create_group(&client->dev.kobj, &lm87_group_vid);
+        if (err)
+            goto exit_remove;
+    }
 
-	data->hwmon_dev = hwmon_device_register(&client->dev);
-	if (IS_ERR(data->hwmon_dev)) {
-		err = PTR_ERR(data->hwmon_dev);
-		goto exit_remove;
-	}
+    data->hwmon_dev = hwmon_device_register(&client->dev);
+    if (IS_ERR(data->hwmon_dev)) {
+        err = PTR_ERR(data->hwmon_dev);
+        goto exit_remove;
+    }
 
-	return 0;
+    return 0;
 
 exit_remove:
-	lm87_remove_files(client);
+    lm87_remove_files(client);
 exit_free:
-	lm87_write_value(client, LM87_REG_CONFIG, data->config);
-	kfree(data);
+    lm87_write_value(client, LM87_REG_CONFIG, data->config);
+    kfree(data);
 exit:
-	return err;
+    return err;
 }
 
-static int lm87_remove(struct i2c_client *client)
-{
-	struct lm87_data *data = i2c_get_clientdata(client);
+static int lm87_remove(struct i2c_client *client) {
+    struct lm87_data *data = i2c_get_clientdata(client);
 
-	hwmon_device_unregister(data->hwmon_dev);
-	lm87_remove_files(client);
+    hwmon_device_unregister(data->hwmon_dev);
+    lm87_remove_files(client);
 
-	lm87_write_value(client, LM87_REG_CONFIG, data->config);
-	kfree(data);
-	return 0;
+    lm87_write_value(client, LM87_REG_CONFIG, data->config);
+    kfree(data);
+    return 0;
 }
 
 /*
@@ -996,22 +964,22 @@ static int lm87_remove(struct i2c_client *client)
  */
 
 static const struct i2c_device_id lm87_id[] = {
-	{ "lm87", lm87 },
-	{ "adm1024", adm1024 },
-	{ }
+    { "lm87", lm87 },
+    { "adm1024", adm1024 },
+    { }
 };
 MODULE_DEVICE_TABLE(i2c, lm87_id);
 
 static struct i2c_driver lm87_driver = {
-	.class		= I2C_CLASS_HWMON,
-	.driver = {
-		.name	= "lm87",
-	},
-	.probe		= lm87_probe,
-	.remove		= lm87_remove,
-	.id_table	= lm87_id,
-	.detect		= lm87_detect,
-	.address_list	= normal_i2c,
+    .class		= I2C_CLASS_HWMON,
+    .driver = {
+        .name	= "lm87",
+    },
+    .probe		= lm87_probe,
+    .remove		= lm87_remove,
+    .id_table	= lm87_id,
+    .detect		= lm87_detect,
+    .address_list	= normal_i2c,
 };
 
 module_i2c_driver(lm87_driver);

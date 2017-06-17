@@ -35,37 +35,29 @@ extern resource_size_t isa_mem_base;
 
 #define IO_SPACE_LIMIT (0xFFFFFFFF)
 
-static inline unsigned char __raw_readb(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned char __force *)addr;
+static inline unsigned char __raw_readb(const volatile void __iomem *addr) {
+    return *(volatile unsigned char __force *)addr;
 }
-static inline unsigned short __raw_readw(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned short __force *)addr;
+static inline unsigned short __raw_readw(const volatile void __iomem *addr) {
+    return *(volatile unsigned short __force *)addr;
 }
-static inline unsigned int __raw_readl(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned int __force *)addr;
+static inline unsigned int __raw_readl(const volatile void __iomem *addr) {
+    return *(volatile unsigned int __force *)addr;
 }
-static inline unsigned long __raw_readq(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned long __force *)addr;
+static inline unsigned long __raw_readq(const volatile void __iomem *addr) {
+    return *(volatile unsigned long __force *)addr;
 }
-static inline void __raw_writeb(unsigned char v, volatile void __iomem *addr)
-{
-	*(volatile unsigned char __force *)addr = v;
+static inline void __raw_writeb(unsigned char v, volatile void __iomem *addr) {
+    *(volatile unsigned char __force *)addr = v;
 }
-static inline void __raw_writew(unsigned short v, volatile void __iomem *addr)
-{
-	*(volatile unsigned short __force *)addr = v;
+static inline void __raw_writew(unsigned short v, volatile void __iomem *addr) {
+    *(volatile unsigned short __force *)addr = v;
 }
-static inline void __raw_writel(unsigned int v, volatile void __iomem *addr)
-{
-	*(volatile unsigned int __force *)addr = v;
+static inline void __raw_writel(unsigned int v, volatile void __iomem *addr) {
+    *(volatile unsigned int __force *)addr = v;
 }
-static inline void __raw_writeq(unsigned long v, volatile void __iomem *addr)
-{
-	*(volatile unsigned long __force *)addr = v;
+static inline void __raw_writeq(unsigned long v, volatile void __iomem *addr) {
+    *(volatile unsigned long __force *)addr = v;
 }
 
 /*
@@ -73,29 +65,23 @@ static inline void __raw_writeq(unsigned long v, volatile void __iomem *addr)
  * writel, writeq) accessors are for PCI and thus little endian.
  * Linux 2.4 for Microblaze had this wrong.
  */
-static inline unsigned char readb(const volatile void __iomem *addr)
-{
-	return *(volatile unsigned char __force *)addr;
+static inline unsigned char readb(const volatile void __iomem *addr) {
+    return *(volatile unsigned char __force *)addr;
 }
-static inline unsigned short readw(const volatile void __iomem *addr)
-{
-	return le16_to_cpu(*(volatile unsigned short __force *)addr);
+static inline unsigned short readw(const volatile void __iomem *addr) {
+    return le16_to_cpu(*(volatile unsigned short __force *)addr);
 }
-static inline unsigned int readl(const volatile void __iomem *addr)
-{
-	return le32_to_cpu(*(volatile unsigned int __force *)addr);
+static inline unsigned int readl(const volatile void __iomem *addr) {
+    return le32_to_cpu(*(volatile unsigned int __force *)addr);
 }
-static inline void writeb(unsigned char v, volatile void __iomem *addr)
-{
-	*(volatile unsigned char __force *)addr = v;
+static inline void writeb(unsigned char v, volatile void __iomem *addr) {
+    *(volatile unsigned char __force *)addr = v;
 }
-static inline void writew(unsigned short v, volatile void __iomem *addr)
-{
-	*(volatile unsigned short __force *)addr = cpu_to_le16(v);
+static inline void writew(unsigned short v, volatile void __iomem *addr) {
+    *(volatile unsigned short __force *)addr = cpu_to_le16(v);
 }
-static inline void writel(unsigned int v, volatile void __iomem *addr)
-{
-	*(volatile unsigned int __force *)addr = cpu_to_le32(v);
+static inline void writel(unsigned int v, volatile void __iomem *addr) {
+    *(volatile unsigned int __force *)addr = cpu_to_le32(v);
 }
 
 /* ioread and iowrite variants. thease are for now same as __raw_
@@ -168,9 +154,8 @@ extern void __iomem *ioremap(phys_addr_t address, unsigned long size);
  *	almost all conceivable cases a device driver should not be using
  *	this function
  */
-static inline unsigned long __iomem virt_to_phys(volatile void *address)
-{
-	return __pa((unsigned long)address);
+static inline unsigned long __iomem virt_to_phys(volatile void *address) {
+    return __pa((unsigned long)address);
 }
 
 #define virt_to_bus virt_to_phys
@@ -187,17 +172,15 @@ static inline unsigned long __iomem virt_to_phys(volatile void *address)
  *	almost all conceivable cases a device driver should not be using
  *	this function
  */
-static inline void *phys_to_virt(unsigned long address)
-{
-	return (void *)__va(address);
+static inline void *phys_to_virt(unsigned long address) {
+    return (void *)__va(address);
 }
 
 #define bus_to_virt(a) phys_to_virt(a)
 
 static inline void __iomem *__ioremap(phys_addr_t address, unsigned long size,
-			unsigned long flags)
-{
-	return (void *)address;
+                                      unsigned long flags) {
+    return (void *)address;
 }
 
 #define ioremap(physaddr, size)	((void __iomem *)(unsigned long)(physaddr))

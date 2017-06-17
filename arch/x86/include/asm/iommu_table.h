@@ -31,13 +31,13 @@
  */
 
 struct iommu_table_entry {
-	initcall_t	detect;
-	initcall_t	depend;
-	void		(*early_init)(void); /* No memory allocate available. */
-	void		(*late_init)(void); /* Yes, can allocate memory. */
+    initcall_t	detect;
+    initcall_t	depend;
+    void		(*early_init)(void); /* No memory allocate available. */
+    void		(*late_init)(void); /* Yes, can allocate memory. */
 #define IOMMU_FINISH_IF_DETECTED (1<<0)
 #define IOMMU_DETECTED		 (1<<1)
-	int		flags;
+    int		flags;
 };
 /*
  * Macro fills out an entry in the .iommu_table that is equivalent
@@ -92,9 +92,9 @@ struct iommu_table_entry {
 	__IOMMU_INIT(_detect, _depend, _init, _late_init, 0)
 
 void sort_iommu_table(struct iommu_table_entry *start,
-		      struct iommu_table_entry *finish);
+                      struct iommu_table_entry *finish);
 
 void check_iommu_entries(struct iommu_table_entry *start,
-			 struct iommu_table_entry *finish);
+                         struct iommu_table_entry *finish);
 
 #endif /* _ASM_X86_IOMMU_TABLE_H */

@@ -51,16 +51,15 @@
 	REG_WRITE(reg, FLD_MOD(REG_READ(reg), val, start, end))
 
 static inline int REGISTER_FLD_WAIT(struct drm_device *dev, u32 reg,
-		u32 val, int start, int end)
-{
-	int t = 100000;
+                                    u32 val, int start, int end) {
+    int t = 100000;
 
-	while (FLD_GET(REG_READ(reg), start, end) != val) {
-		if (--t == 0)
-			return 1;
-	}
+    while (FLD_GET(REG_READ(reg), start, end) != val) {
+        if (--t == 0)
+            return 1;
+    }
 
-	return 0;
+    return 0;
 }
 
 #define REG_FLD_WAIT(reg, val, start, end) \
@@ -218,28 +217,28 @@ static inline int REGISTER_FLD_WAIT(struct drm_device *dev, u32 reg,
 #define DSI_POWER_MODE_IDLE_ON		BIT(6)
 
 enum {
-	MDFLD_DSI_VIDEO_NON_BURST_MODE_SYNC_PULSE = 1,
-	MDFLD_DSI_VIDEO_NON_BURST_MODE_SYNC_EVENTS = 2,
-	MDFLD_DSI_VIDEO_BURST_MODE = 3,
+    MDFLD_DSI_VIDEO_NON_BURST_MODE_SYNC_PULSE = 1,
+    MDFLD_DSI_VIDEO_NON_BURST_MODE_SYNC_EVENTS = 2,
+    MDFLD_DSI_VIDEO_BURST_MODE = 3,
 };
 
 #define DSI_DPI_COMPLETE_LAST_LINE			BIT(2)
 #define DSI_DPI_DISABLE_BTA					BIT(3)
 
 struct mdfld_dsi_connector {
-	struct psb_intel_connector base;
+    struct psb_intel_connector base;
 
-	int pipe;
-	void *private;
-	void *pkg_sender;
+    int pipe;
+    void *private;
+    void *pkg_sender;
 
-	/* Connection status */
-	enum drm_connector_status status;
+    /* Connection status */
+    enum drm_connector_status status;
 };
 
 struct mdfld_dsi_encoder {
-	struct psb_intel_encoder base;
-	void *private;
+    struct psb_intel_encoder base;
+    void *private;
 };
 
 /*
@@ -247,131 +246,123 @@ struct mdfld_dsi_encoder {
  * DRM will pick up on DSI encoder basing on differents configs.
  */
 struct mdfld_dsi_config {
-	struct drm_device *dev;
-	struct drm_display_mode *fixed_mode;
-	struct drm_display_mode *mode;
+    struct drm_device *dev;
+    struct drm_display_mode *fixed_mode;
+    struct drm_display_mode *mode;
 
-	struct mdfld_dsi_connector *connector;
-	struct mdfld_dsi_encoder *encoder;
+    struct mdfld_dsi_connector *connector;
+    struct mdfld_dsi_encoder *encoder;
 
-	int changed;
+    int changed;
 
-	int bpp;
-	int lane_count;
-	/*Virtual channel number for this encoder*/
-	int channel_num;
-	/*video mode configure*/
-	int video_mode;
+    int bpp;
+    int lane_count;
+    /*Virtual channel number for this encoder*/
+    int channel_num;
+    /*video mode configure*/
+    int video_mode;
 
-	int dvr_ic_inited;
+    int dvr_ic_inited;
 };
 
 static inline struct mdfld_dsi_connector *mdfld_dsi_connector(
-		struct drm_connector *connector)
-{
-	struct psb_intel_connector *psb_connector;
+    struct drm_connector *connector) {
+    struct psb_intel_connector *psb_connector;
 
-	psb_connector = to_psb_intel_connector(connector);
+    psb_connector = to_psb_intel_connector(connector);
 
-	return container_of(psb_connector, struct mdfld_dsi_connector, base);
+    return container_of(psb_connector, struct mdfld_dsi_connector, base);
 }
 
 static inline struct mdfld_dsi_encoder *mdfld_dsi_encoder(
-		struct drm_encoder *encoder)
-{
-	struct psb_intel_encoder *psb_encoder;
+    struct drm_encoder *encoder) {
+    struct psb_intel_encoder *psb_encoder;
 
-	psb_encoder = to_psb_intel_encoder(encoder);
+    psb_encoder = to_psb_intel_encoder(encoder);
 
-	return container_of(psb_encoder, struct mdfld_dsi_encoder, base);
+    return container_of(psb_encoder, struct mdfld_dsi_encoder, base);
 }
 
 static inline struct mdfld_dsi_config *
-	mdfld_dsi_get_config(struct mdfld_dsi_connector *connector)
-{
-	if (!connector)
-		return NULL;
-	return (struct mdfld_dsi_config *)connector->private;
+mdfld_dsi_get_config(struct mdfld_dsi_connector *connector) {
+    if (!connector)
+        return NULL;
+    return (struct mdfld_dsi_config *)connector->private;
 }
 
-static inline void *mdfld_dsi_get_pkg_sender(struct mdfld_dsi_config *config)
-{
-	struct mdfld_dsi_connector *dsi_connector;
+static inline void *mdfld_dsi_get_pkg_sender(struct mdfld_dsi_config *config) {
+    struct mdfld_dsi_connector *dsi_connector;
 
-	if (!config)
-		return NULL;
+    if (!config)
+        return NULL;
 
-	dsi_connector = config->connector;
+    dsi_connector = config->connector;
 
-	if (!dsi_connector)
-		return NULL;
+    if (!dsi_connector)
+        return NULL;
 
-	return dsi_connector->pkg_sender;
+    return dsi_connector->pkg_sender;
 }
 
 static inline struct mdfld_dsi_config *
-	mdfld_dsi_encoder_get_config(struct mdfld_dsi_encoder *encoder)
-{
-	if (!encoder)
-		return NULL;
-	return (struct mdfld_dsi_config *)encoder->private;
+mdfld_dsi_encoder_get_config(struct mdfld_dsi_encoder *encoder) {
+    if (!encoder)
+        return NULL;
+    return (struct mdfld_dsi_config *)encoder->private;
 }
 
 static inline struct mdfld_dsi_connector *
-	mdfld_dsi_encoder_get_connector(struct mdfld_dsi_encoder *encoder)
-{
-	struct mdfld_dsi_config *config;
+mdfld_dsi_encoder_get_connector(struct mdfld_dsi_encoder *encoder) {
+    struct mdfld_dsi_config *config;
 
-	if (!encoder)
-		return NULL;
+    if (!encoder)
+        return NULL;
 
-	config = mdfld_dsi_encoder_get_config(encoder);
-	if (!config)
-		return NULL;
+    config = mdfld_dsi_encoder_get_config(encoder);
+    if (!config)
+        return NULL;
 
-	return config->connector;
+    return config->connector;
 }
 
 static inline void *mdfld_dsi_encoder_get_pkg_sender(
-				struct mdfld_dsi_encoder *encoder)
-{
-	struct mdfld_dsi_config *dsi_config;
+    struct mdfld_dsi_encoder *encoder) {
+    struct mdfld_dsi_config *dsi_config;
 
-	dsi_config = mdfld_dsi_encoder_get_config(encoder);
-	if (!dsi_config)
-		return NULL;
+    dsi_config = mdfld_dsi_encoder_get_config(encoder);
+    if (!dsi_config)
+        return NULL;
 
-	return mdfld_dsi_get_pkg_sender(dsi_config);
+    return mdfld_dsi_get_pkg_sender(dsi_config);
 }
 
-static inline int mdfld_dsi_encoder_get_pipe(struct mdfld_dsi_encoder *encoder)
-{
-	struct mdfld_dsi_connector *connector;
+static inline int mdfld_dsi_encoder_get_pipe(struct mdfld_dsi_encoder *encoder) {
+    struct mdfld_dsi_connector *connector;
 
-	if (!encoder)
-		return -1;
+    if (!encoder)
+        return -1;
 
-	connector = mdfld_dsi_encoder_get_connector(encoder);
-	if (!connector)
-		return -1;
-	return connector->pipe;
+    connector = mdfld_dsi_encoder_get_connector(encoder);
+    if (!connector)
+        return -1;
+    return connector->pipe;
 }
 
 /* Export functions */
 extern void mdfld_dsi_gen_fifo_ready(struct drm_device *dev,
-					u32 gen_fifo_stat_reg, u32 fifo_stat);
+                                     u32 gen_fifo_stat_reg, u32 fifo_stat);
 extern void mdfld_dsi_brightness_init(struct mdfld_dsi_config *dsi_config,
-					int pipe);
+                                      int pipe);
 extern void mdfld_dsi_brightness_control(struct drm_device *dev, int pipe,
-					int level);
+        int level);
 extern void mdfld_dsi_output_init(struct drm_device *dev,
-					int pipe,
-					const struct panel_funcs *p_vid_funcs);
+                                  int pipe,
+                                  const struct panel_funcs *p_vid_funcs);
 extern void mdfld_dsi_controller_init(struct mdfld_dsi_config *dsi_config,
-					int pipe);
+                                      int pipe);
 
 extern int mdfld_dsi_get_power_mode(struct mdfld_dsi_config *dsi_config,
-					u32 *mode, bool hs);
+                                    u32 *mode, bool hs);
 extern int mdfld_dsi_panel_reset(int pipe);
 
 #endif /*__MDFLD_DSI_OUTPUT_H__*/

@@ -89,10 +89,10 @@ All 16-bit fields are sent in little-endian (Intel) format.
 //
 
 struct int_status_pkt {
-	__u16 RxBytesAvail;			// Additional bytes available to
-						// be read from Bulk IN pipe
-	__u16 TxCredits[MAX_RS232_PORTS];	// Additional space available in
-						// given port's TxBuffer
+    __u16 RxBytesAvail;			// Additional bytes available to
+    // be read from Bulk IN pipe
+    __u16 TxCredits[MAX_RS232_PORTS];	// Additional space available in
+    // given port's TxBuffer
 };
 
 

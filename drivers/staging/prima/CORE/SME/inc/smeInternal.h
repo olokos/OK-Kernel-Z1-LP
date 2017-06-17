@@ -61,8 +61,7 @@
   ------------------------------------------------------------------------*/
 
 // Mask can be only have one bit set
-typedef enum eSmeCommandType
-{
+typedef enum eSmeCommandType {
     eSmeNoCommand = 0,
     eSmeDropCommand,
     //CSR
@@ -114,8 +113,7 @@ typedef enum eSmeCommandType
 } eSmeCommandType;
 
 
-typedef enum eSmeState
-{
+typedef enum eSmeState {
     SME_STATE_STOP,
     SME_STATE_START,
     SME_STATE_READY,
@@ -127,14 +125,12 @@ typedef enum eSmeState
 /* HDD Callback function */
 typedef void(*pEncryptMsgRSPCb)(void *pUserData, void *infoParam);
 
-typedef struct tagSmeEncMsgHddCbkInfo
-{
+typedef struct tagSmeEncMsgHddCbkInfo {
     void *pUserData;
     pEncryptMsgRSPCb pEncMsgCbk;
 } tSmeEncMsgHddCbkInfo;
 
-typedef struct tagSmeStruct
-{
+typedef struct tagSmeStruct {
     eSmeState state;
     vos_lock_t lkSmeGlobalLock;
     tANI_U32 totalSmeCmd;

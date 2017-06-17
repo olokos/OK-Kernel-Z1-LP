@@ -7,9 +7,8 @@
 
 /* type used in struct mm to couple an MMU context to an active mm */
 
-typedef struct
-{
-  unsigned int page_id;
+typedef struct {
+    unsigned int page_id;
 } mm_context_t;
 
 /* kernel memory segments */

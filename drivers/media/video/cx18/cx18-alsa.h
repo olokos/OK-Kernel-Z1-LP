@@ -22,12 +22,12 @@
 struct snd_card;
 
 struct snd_cx18_card {
-	struct v4l2_device *v4l2_dev;
-	struct snd_card *sc;
-	unsigned int capture_transfer_done;
-	unsigned int hwptr_done_capture;
-	struct snd_pcm_substream *capture_pcm_substream;
-	spinlock_t slock;
+    struct v4l2_device *v4l2_dev;
+    struct snd_card *sc;
+    unsigned int capture_transfer_done;
+    unsigned int hwptr_done_capture;
+    struct snd_pcm_substream *capture_pcm_substream;
+    spinlock_t slock;
 };
 
 extern int cx18_alsa_debug;
@@ -36,16 +36,14 @@ extern int cx18_alsa_debug;
  * File operations that manipulate the encoder or video or audio subdevices
  * need to be serialized.  Use the same lock we use for v4l2 file ops.
  */
-static inline void snd_cx18_lock(struct snd_cx18_card *cxsc)
-{
-	struct cx18 *cx = to_cx18(cxsc->v4l2_dev);
-	mutex_lock(&cx->serialize_lock);
+static inline void snd_cx18_lock(struct snd_cx18_card *cxsc) {
+    struct cx18 *cx = to_cx18(cxsc->v4l2_dev);
+    mutex_lock(&cx->serialize_lock);
 }
 
-static inline void snd_cx18_unlock(struct snd_cx18_card *cxsc)
-{
-	struct cx18 *cx = to_cx18(cxsc->v4l2_dev);
-	mutex_unlock(&cx->serialize_lock);
+static inline void snd_cx18_unlock(struct snd_cx18_card *cxsc) {
+    struct cx18 *cx = to_cx18(cxsc->v4l2_dev);
+    mutex_unlock(&cx->serialize_lock);
 }
 
 #define CX18_ALSA_DBGFLG_WARN  (1 << 0)

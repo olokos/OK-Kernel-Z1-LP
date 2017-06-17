@@ -55,8 +55,7 @@
 /* RAID Action Request                                                      */
 /****************************************************************************/
 
-typedef struct _MSG_RAID_ACTION
-{
+typedef struct _MSG_RAID_ACTION {
     U8                      Action;             /* 00h */
     U8                      Reserved1;          /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -70,7 +69,7 @@ typedef struct _MSG_RAID_ACTION
     U32                     ActionDataWord;     /* 10h */
     SGE_SIMPLE_UNION        ActionDataSGE;      /* 14h */
 } MSG_RAID_ACTION_REQUEST, MPI_POINTER PTR_MSG_RAID_ACTION_REQUEST,
-  MpiRaidActionRequest_t , MPI_POINTER pMpiRaidActionRequest_t;
+MpiRaidActionRequest_t , MPI_POINTER pMpiRaidActionRequest_t;
 
 
 /* RAID Action request Action values */
@@ -129,8 +128,7 @@ typedef struct _MSG_RAID_ACTION
 
 /* RAID Action reply message */
 
-typedef struct _MSG_RAID_ACTION_REPLY
-{
+typedef struct _MSG_RAID_ACTION_REPLY {
     U8                      Action;             /* 00h */
     U8                      Reserved;           /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -146,7 +144,7 @@ typedef struct _MSG_RAID_ACTION_REPLY
     U32                     VolumeStatus;       /* 14h */
     U32                     ActionData;         /* 18h */
 } MSG_RAID_ACTION_REPLY, MPI_POINTER PTR_MSG_RAID_ACTION_REPLY,
-  MpiRaidActionReply_t, MPI_POINTER pMpiRaidActionReply_t;
+MpiRaidActionReply_t, MPI_POINTER pMpiRaidActionReply_t;
 
 
 /* RAID Volume reply ActionStatus values */
@@ -159,20 +157,18 @@ typedef struct _MSG_RAID_ACTION_REPLY
 
 /* RAID Volume reply RAID Volume Indicator structure */
 
-typedef struct _MPI_RAID_VOL_INDICATOR
-{
+typedef struct _MPI_RAID_VOL_INDICATOR {
     U64                     TotalBlocks;        /* 00h */
     U64                     BlocksRemaining;    /* 08h */
 } MPI_RAID_VOL_INDICATOR, MPI_POINTER PTR_MPI_RAID_VOL_INDICATOR,
-  MpiRaidVolIndicator_t, MPI_POINTER pMpiRaidVolIndicator_t;
+MpiRaidVolIndicator_t, MPI_POINTER pMpiRaidVolIndicator_t;
 
 
 /****************************************************************************/
 /* SCSI IO RAID Passthrough Request                                         */
 /****************************************************************************/
 
-typedef struct _MSG_SCSI_IO_RAID_PT_REQUEST
-{
+typedef struct _MSG_SCSI_IO_RAID_PT_REQUEST {
     U8                      PhysDiskNum;        /* 00h */
     U8                      Reserved1;          /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -189,13 +185,12 @@ typedef struct _MSG_SCSI_IO_RAID_PT_REQUEST
     U32                     SenseBufferLowAddr; /* 2Ch */
     SGE_IO_UNION            SGL;                /* 30h */
 } MSG_SCSI_IO_RAID_PT_REQUEST, MPI_POINTER PTR_MSG_SCSI_IO_RAID_PT_REQUEST,
-  SCSIIORaidPassthroughRequest_t, MPI_POINTER pSCSIIORaidPassthroughRequest_t;
+SCSIIORaidPassthroughRequest_t, MPI_POINTER pSCSIIORaidPassthroughRequest_t;
 
 
 /* SCSI IO RAID Passthrough reply structure */
 
-typedef struct _MSG_SCSI_IO_RAID_PT_REPLY
-{
+typedef struct _MSG_SCSI_IO_RAID_PT_REPLY {
     U8                      PhysDiskNum;        /* 00h */
     U8                      Reserved1;          /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -213,15 +208,14 @@ typedef struct _MSG_SCSI_IO_RAID_PT_REPLY
     U32                     SenseCount;         /* 18h */
     U32                     ResponseInfo;       /* 1Ch */
 } MSG_SCSI_IO_RAID_PT_REPLY, MPI_POINTER PTR_MSG_SCSI_IO_RAID_PT_REPLY,
-  SCSIIORaidPassthroughReply_t, MPI_POINTER pSCSIIORaidPassthroughReply_t;
+SCSIIORaidPassthroughReply_t, MPI_POINTER pSCSIIORaidPassthroughReply_t;
 
 
 /****************************************************************************/
 /* Mailbox reqeust structure */
 /****************************************************************************/
 
-typedef struct _MSG_MAILBOX_REQUEST
-{
+typedef struct _MSG_MAILBOX_REQUEST {
     U16                     Reserved1;
     U8                      ChainOffset;
     U8                      Function;
@@ -233,12 +227,11 @@ typedef struct _MSG_MAILBOX_REQUEST
     U16                     Reserved4;
     SGE_IO_UNION            SGL;
 } MSG_MAILBOX_REQUEST, MPI_POINTER PTR_MSG_MAILBOX_REQUEST,
-  MailboxRequest_t, MPI_POINTER pMailboxRequest_t;
+MailboxRequest_t, MPI_POINTER pMailboxRequest_t;
 
 
 /* Mailbox reply structure */
-typedef struct _MSG_MAILBOX_REPLY
-{
+typedef struct _MSG_MAILBOX_REPLY {
     U16                     Reserved1;          /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -251,7 +244,7 @@ typedef struct _MSG_MAILBOX_REPLY
     U32                     IOCLogInfo;         /* 10h */
     U32                     Reserved4;          /* 14h */
 } MSG_MAILBOX_REPLY, MPI_POINTER PTR_MSG_MAILBOX_REPLY,
-  MailboxReply_t, MPI_POINTER pMailboxReply_t;
+MailboxReply_t, MPI_POINTER pMailboxReply_t;
 
 #endif
 

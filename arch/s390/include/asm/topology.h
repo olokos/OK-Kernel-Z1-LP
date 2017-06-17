@@ -11,9 +11,8 @@ struct cpu;
 extern unsigned char cpu_core_id[NR_CPUS];
 extern cpumask_t cpu_core_map[NR_CPUS];
 
-static inline const struct cpumask *cpu_coregroup_mask(int cpu)
-{
-	return &cpu_core_map[cpu];
+static inline const struct cpumask *cpu_coregroup_mask(int cpu) {
+    return &cpu_core_map[cpu];
 }
 
 #define topology_core_id(cpu)		(cpu_core_id[cpu])
@@ -23,9 +22,8 @@ static inline const struct cpumask *cpu_coregroup_mask(int cpu)
 extern unsigned char cpu_book_id[NR_CPUS];
 extern cpumask_t cpu_book_map[NR_CPUS];
 
-static inline const struct cpumask *cpu_book_mask(int cpu)
-{
-	return &cpu_book_map[cpu];
+static inline const struct cpumask *cpu_book_mask(int cpu) {
+    return &cpu_book_map[cpu];
 }
 
 #define topology_book_id(cpu)		(cpu_book_id[cpu])
@@ -40,7 +38,9 @@ void topology_expect_change(void);
 #else /* CONFIG_SCHED_BOOK */
 
 static inline void topology_schedule_update(void) { }
-static inline int topology_cpu_init(struct cpu *cpu) { return 0; }
+static inline int topology_cpu_init(struct cpu *cpu) {
+    return 0;
+}
 static inline void topology_expect_change(void) { }
 
 #endif /* CONFIG_SCHED_BOOK */
@@ -53,27 +53,24 @@ static inline void topology_expect_change(void) { }
 
 extern int cpu_polarization[];
 
-static inline void cpu_set_polarization(int cpu, int val)
-{
+static inline void cpu_set_polarization(int cpu, int val) {
 #ifdef CONFIG_SCHED_BOOK
-	cpu_polarization[cpu] = val;
+    cpu_polarization[cpu] = val;
 #endif
 }
 
-static inline int cpu_read_polarization(int cpu)
-{
+static inline int cpu_read_polarization(int cpu) {
 #ifdef CONFIG_SCHED_BOOK
-	return cpu_polarization[cpu];
+    return cpu_polarization[cpu];
 #else
-	return POLARIZATION_HRZ;
+    return POLARIZATION_HRZ;
 #endif
 }
 
 #ifdef CONFIG_SCHED_BOOK
 void s390_init_cpu_topology(void);
 #else
-static inline void s390_init_cpu_topology(void)
-{
+static inline void s390_init_cpu_topology(void) {
 };
 #endif
 

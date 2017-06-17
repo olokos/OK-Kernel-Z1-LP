@@ -47,8 +47,7 @@
 #define LOG_LAST_MODULE_ID     SIR_LAST_MODULE_ID
 #define LOG_ENTRY_NUM          (LOG_LAST_MODULE_ID - LOG_FIRST_MODULE_ID + 1)
 
-typedef struct sAniSirUtils
-{
+typedef struct sAniSirUtils {
     tANI_U32  gLogEvtLevel[LOG_ENTRY_NUM];
     tANI_U32  gLogDbgLevel[LOG_ENTRY_NUM];
 

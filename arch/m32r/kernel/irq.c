@@ -26,18 +26,17 @@
  * SMP cross-CPU interrupts have their own specific
  * handlers).
  */
-asmlinkage unsigned int do_IRQ(int irq, struct pt_regs *regs)
-{
-	struct pt_regs *old_regs;
-	old_regs = set_irq_regs(regs);
-	irq_enter();
+asmlinkage unsigned int do_IRQ(int irq, struct pt_regs *regs) {
+    struct pt_regs *old_regs;
+    old_regs = set_irq_regs(regs);
+    irq_enter();
 
 #ifdef CONFIG_DEBUG_STACKOVERFLOW
-	/* FIXME M32R */
+    /* FIXME M32R */
 #endif
-	generic_handle_irq(irq);
-	irq_exit();
-	set_irq_regs(old_regs);
+    generic_handle_irq(irq);
+    irq_exit();
+    set_irq_regs(old_regs);
 
-	return 1;
+    return 1;
 }

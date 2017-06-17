@@ -57,8 +57,7 @@
   ------------------------------------------------------------------------*/
 //FIXME To be removed when DIAG support is added. This definiton should be
 //picked from log.h file above.
-typedef struct
-{
+typedef struct {
     /* Specifies the length, in bytes of the entry, including this header. */
     v_U16_t len;
 

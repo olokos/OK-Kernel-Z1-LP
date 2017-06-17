@@ -71,39 +71,39 @@
 
 void
 RATEvParseMaxRate(
-     void *pDeviceHandler,
-     PWLAN_IE_SUPP_RATES pItemRates,
-     PWLAN_IE_SUPP_RATES pItemExtRates,
-     BOOL bUpdateBasicRate,
-     PWORD pwMaxBasicRate,
-     PWORD pwMaxSuppRate,
-     PWORD pwSuppRate,
-     PBYTE pbyTopCCKRate,
-     PBYTE pbyTopOFDMRate
-    );
+    void *pDeviceHandler,
+    PWLAN_IE_SUPP_RATES pItemRates,
+    PWLAN_IE_SUPP_RATES pItemExtRates,
+    BOOL bUpdateBasicRate,
+    PWORD pwMaxBasicRate,
+    PWORD pwMaxSuppRate,
+    PWORD pwSuppRate,
+    PBYTE pbyTopCCKRate,
+    PBYTE pbyTopOFDMRate
+);
 
 void
 RATEvTxRateFallBack(
-     void *pDeviceHandler,
-     PKnownNodeDB psNodeDBTable
-    );
+    void *pDeviceHandler,
+    PKnownNodeDB psNodeDBTable
+);
 
 BYTE
 RATEuSetIE(
-     PWLAN_IE_SUPP_RATES pSrcRates,
-     PWLAN_IE_SUPP_RATES pDstRates,
-     unsigned int                uRateLen
-    );
+    PWLAN_IE_SUPP_RATES pSrcRates,
+    PWLAN_IE_SUPP_RATES pDstRates,
+    unsigned int                uRateLen
+);
 
 WORD
 RATEwGetRateIdx(
-     BYTE byRate
-    );
+    BYTE byRate
+);
 
 
 BYTE
 DATARATEbyGetRateIdx(
-     BYTE byRate
-    );
+    BYTE byRate
+);
 
 #endif /* __DATARATE_H__ */

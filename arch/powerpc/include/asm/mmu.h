@@ -120,14 +120,12 @@
 DECLARE_PER_CPU(int, next_tlbcam_idx);
 #endif
 
-static inline int mmu_has_feature(unsigned long feature)
-{
-	return (cur_cpu_spec->mmu_features & feature);
+static inline int mmu_has_feature(unsigned long feature) {
+    return (cur_cpu_spec->mmu_features & feature);
 }
 
-static inline void mmu_clear_feature(unsigned long feature)
-{
-	cur_cpu_spec->mmu_features &= ~feature;
+static inline void mmu_clear_feature(unsigned long feature) {
+    cur_cpu_spec->mmu_features &= ~feature;
 }
 
 extern unsigned int __start___mmu_ftr_fixup, __stop___mmu_ftr_fixup;
@@ -137,7 +135,7 @@ extern void early_init_mmu(void);
 extern void early_init_mmu_secondary(void);
 
 extern void setup_initial_memory_limit(phys_addr_t first_memblock_base,
-				       phys_addr_t first_memblock_size);
+                                       phys_addr_t first_memblock_size);
 
 #ifdef CONFIG_PPC64
 /* This is our real memory area size on ppc64 server, on embedded, we

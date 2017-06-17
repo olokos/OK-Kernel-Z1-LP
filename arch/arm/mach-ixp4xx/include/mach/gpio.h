@@ -30,43 +30,37 @@
 
 #define __ARM_GPIOLIB_COMPLEX
 
-static inline int gpio_request(unsigned gpio, const char *label)
-{
-	return 0;
+static inline int gpio_request(unsigned gpio, const char *label) {
+    return 0;
 }
 
-static inline void gpio_free(unsigned gpio)
-{
-	might_sleep();
+static inline void gpio_free(unsigned gpio) {
+    might_sleep();
 
-	return;
+    return;
 }
 
-static inline int gpio_direction_input(unsigned gpio)
-{
-	gpio_line_config(gpio, IXP4XX_GPIO_IN);
-	return 0;
+static inline int gpio_direction_input(unsigned gpio) {
+    gpio_line_config(gpio, IXP4XX_GPIO_IN);
+    return 0;
 }
 
-static inline int gpio_direction_output(unsigned gpio, int level)
-{
-	gpio_line_set(gpio, level);
-	gpio_line_config(gpio, IXP4XX_GPIO_OUT);
-	return 0;
+static inline int gpio_direction_output(unsigned gpio, int level) {
+    gpio_line_set(gpio, level);
+    gpio_line_config(gpio, IXP4XX_GPIO_OUT);
+    return 0;
 }
 
-static inline int gpio_get_value(unsigned gpio)
-{
-	int value;
+static inline int gpio_get_value(unsigned gpio) {
+    int value;
 
-	gpio_line_get(gpio, &value);
+    gpio_line_get(gpio, &value);
 
-	return value;
+    return value;
 }
 
-static inline void gpio_set_value(unsigned gpio, int value)
-{
-	gpio_line_set(gpio, value);
+static inline void gpio_set_value(unsigned gpio, int value) {
+    gpio_line_set(gpio, value);
 }
 
 #include <asm-generic/gpio.h>			/* cansleep wrappers */

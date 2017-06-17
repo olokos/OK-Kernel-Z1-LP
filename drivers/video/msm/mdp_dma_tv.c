@@ -36,105 +36,102 @@
 extern spinlock_t mdp_spin_lock;
 extern uint32 mdp_intr_mask;
 
-int mdp_dma3_on(struct platform_device *pdev)
-{
-	struct msm_fb_data_type *mfd;
-	struct fb_info *fbi;
-	uint8 *buf;
-	int bpp;
-	int ret = 0;
+int mdp_dma3_on(struct platform_device *pdev) {
+    struct msm_fb_data_type *mfd;
+    struct fb_info *fbi;
+    uint8 *buf;
+    int bpp;
+    int ret = 0;
 
-	mfd = (struct msm_fb_data_type *)platform_get_drvdata(pdev);
+    mfd = (struct msm_fb_data_type *)platform_get_drvdata(pdev);
 
-	if (!mfd)
-		return -ENODEV;
+    if (!mfd)
+        return -ENODEV;
 
-	if (mfd->key != MFD_KEY)
-		return -EINVAL;
+    if (mfd->key != MFD_KEY)
+        return -EINVAL;
 
-	fbi = mfd->fbi;
+    fbi = mfd->fbi;
 
-	/* MDP cmd block enable */
-	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
+    /* MDP cmd block enable */
+    mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 
-	bpp = fbi->var.bits_per_pixel / 8;
-	buf = (uint8 *) fbi->fix.smem_start;
+    bpp = fbi->var.bits_per_pixel / 8;
+    buf = (uint8 *) fbi->fix.smem_start;
 
-	buf += calc_fb_offset(mfd, fbi, bpp);
+    buf += calc_fb_offset(mfd, fbi, bpp);
 
-	/* starting address[31..8] of Video frame buffer is CS0 */
-	MDP_OUTP(MDP_BASE + 0xC0008, (uint32) buf >> 3);
+    /* starting address[31..8] of Video frame buffer is CS0 */
+    MDP_OUTP(MDP_BASE + 0xC0008, (uint32) buf >> 3);
 
-	mdp_pipe_ctrl(MDP_DMA3_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
+    mdp_pipe_ctrl(MDP_DMA3_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 
-	MDP_OUTP(MDP_BASE + 0xC0004, 0x4c60674); /* flicker filter enabled */
-	MDP_OUTP(MDP_BASE + 0xC0010, 0x20);	/* sobel treshold */
+    MDP_OUTP(MDP_BASE + 0xC0004, 0x4c60674); /* flicker filter enabled */
+    MDP_OUTP(MDP_BASE + 0xC0010, 0x20);	/* sobel treshold */
 
-	MDP_OUTP(MDP_BASE + 0xC0018, 0xeb0010);	/* Y  Max, Y  min */
-	MDP_OUTP(MDP_BASE + 0xC001C, 0xf00010);	/* Cb Max, Cb min */
-	MDP_OUTP(MDP_BASE + 0xC0020, 0xf00010);	/* Cb Max, Cb min */
+    MDP_OUTP(MDP_BASE + 0xC0018, 0xeb0010);	/* Y  Max, Y  min */
+    MDP_OUTP(MDP_BASE + 0xC001C, 0xf00010);	/* Cb Max, Cb min */
+    MDP_OUTP(MDP_BASE + 0xC0020, 0xf00010);	/* Cb Max, Cb min */
 
-	MDP_OUTP(MDP_BASE + 0xC000C, 0x67686970); /* add a few chars for CC */
-	MDP_OUTP(MDP_BASE + 0xC0000, 0x1);	/* MDP tv out enable */
+    MDP_OUTP(MDP_BASE + 0xC000C, 0x67686970); /* add a few chars for CC */
+    MDP_OUTP(MDP_BASE + 0xC0000, 0x1);	/* MDP tv out enable */
 
-	/* MDP cmd block disable */
-	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+    /* MDP cmd block disable */
+    mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
-	ret = panel_next_on(pdev);
+    ret = panel_next_on(pdev);
 
-	return ret;
+    return ret;
 }
 
-int mdp_dma3_off(struct platform_device *pdev)
-{
-	int ret = 0;
+int mdp_dma3_off(struct platform_device *pdev) {
+    int ret = 0;
 
-	ret = panel_next_off(pdev);
-	if (ret)
-		return ret;
+    ret = panel_next_off(pdev);
+    if (ret)
+        return ret;
 
-	/* MDP cmd block enable */
-	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
-	MDP_OUTP(MDP_BASE + 0xC0000, 0x0);
-	/* MDP cmd block disable */
-	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+    /* MDP cmd block enable */
+    mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
+    MDP_OUTP(MDP_BASE + 0xC0000, 0x0);
+    /* MDP cmd block disable */
+    mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
-	mdp_pipe_ctrl(MDP_DMA3_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+    mdp_pipe_ctrl(MDP_DMA3_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
-	/* delay to make sure the last frame finishes */
-	msleep(16);
+    /* delay to make sure the last frame finishes */
+    msleep(16);
 
-	return ret;
+    return ret;
 }
 
-void mdp_dma3_update(struct msm_fb_data_type *mfd)
-{
-	struct fb_info *fbi = mfd->fbi;
-	uint8 *buf;
-	int bpp;
-	unsigned long flag;
+void mdp_dma3_update(struct msm_fb_data_type *mfd) {
+    struct fb_info *fbi = mfd->fbi;
+    uint8 *buf;
+    int bpp;
+    unsigned long flag;
 
-	if (!mfd->panel_power_on)
-		return;
+    if (!mfd->panel_power_on)
+        return;
 
-	/* no need to power on cmd block since dma3 is running */
-	bpp = fbi->var.bits_per_pixel / 8;
-	buf = (uint8 *) fbi->fix.smem_start;
+    /* no need to power on cmd block since dma3 is running */
+    bpp = fbi->var.bits_per_pixel / 8;
+    buf = (uint8 *) fbi->fix.smem_start;
 
-	buf += calc_fb_offset(mfd, fbi, bpp);
+    buf += calc_fb_offset(mfd, fbi, bpp);
 
-	MDP_OUTP(MDP_BASE + 0xC0008, (uint32) buf >> 3);
+    MDP_OUTP(MDP_BASE + 0xC0008, (uint32) buf >> 3);
 
-	spin_lock_irqsave(&mdp_spin_lock, flag);
-	mdp_enable_irq(MDP_DMA3_TERM);
-	INIT_COMPLETION(mfd->dma->comp);
-	mfd->dma->waiting = TRUE;
+    spin_lock_irqsave(&mdp_spin_lock, flag);
+    mdp_enable_irq(MDP_DMA3_TERM);
+    INIT_COMPLETION(mfd->dma->comp);
+    mfd->dma->waiting = TRUE;
 
-	outp32(MDP_INTR_CLEAR, TV_OUT_DMA3_START);
-	mdp_intr_mask |= TV_OUT_DMA3_START;
-	outp32(MDP_INTR_ENABLE, mdp_intr_mask);
-	spin_unlock_irqrestore(&mdp_spin_lock, flag);
+    outp32(MDP_INTR_CLEAR, TV_OUT_DMA3_START);
+    mdp_intr_mask |= TV_OUT_DMA3_START;
+    outp32(MDP_INTR_ENABLE, mdp_intr_mask);
+    spin_unlock_irqrestore(&mdp_spin_lock, flag);
 
-	wait_for_completion_killable(&mfd->dma->comp);
-	mdp_disable_irq(MDP_DMA3_TERM);
+    wait_for_completion_killable(&mfd->dma->comp);
+    mdp_disable_irq(MDP_DMA3_TERM);
 }

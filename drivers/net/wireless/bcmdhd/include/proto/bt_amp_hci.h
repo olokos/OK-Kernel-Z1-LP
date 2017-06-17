@@ -2,13 +2,13 @@
  * BT-AMP (BlueTooth Alternate Mac and Phy) HCI (Host/Controller Interface)
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -33,9 +33,9 @@
 
 /* AMP HCI CMD packet format */
 typedef BWL_PRE_PACKED_STRUCT struct amp_hci_cmd {
-	uint16 opcode;
-	uint8 plen;
-	uint8 parms[1];
+    uint16 opcode;
+    uint8 plen;
+    uint8 parms[1];
 } BWL_POST_PACKED_STRUCT amp_hci_cmd_t;
 
 #define HCI_CMD_PREAMBLE_SIZE		OFFSETOF(amp_hci_cmd_t, parms)
@@ -83,91 +83,91 @@ typedef BWL_PRE_PACKED_STRUCT struct amp_hci_cmd {
 
 /* AMP HCI command parameters */
 typedef BWL_PRE_PACKED_STRUCT struct read_local_cmd_parms {
-	uint8 plh;
-	uint8 offset[2];			/* length so far */
-	uint8 max_remote[2];
+    uint8 plh;
+    uint8 offset[2];			/* length so far */
+    uint8 max_remote[2];
 } BWL_POST_PACKED_STRUCT read_local_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct write_remote_cmd_parms {
-	uint8 plh;
-	uint8 offset[2];
-	uint8 len[2];
-	uint8 frag[1];
+    uint8 plh;
+    uint8 offset[2];
+    uint8 len[2];
+    uint8 frag[1];
 } BWL_POST_PACKED_STRUCT write_remote_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct phy_link_cmd_parms {
-	uint8 plh;
-	uint8 key_length;
-	uint8 key_type;
-	uint8 key[1];
+    uint8 plh;
+    uint8 key_length;
+    uint8 key_type;
+    uint8 key[1];
 } BWL_POST_PACKED_STRUCT phy_link_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct dis_phy_link_cmd_parms {
-	uint8 plh;
-	uint8 reason;
+    uint8 plh;
+    uint8 reason;
 } BWL_POST_PACKED_STRUCT dis_phy_link_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct log_link_cmd_parms {
-	uint8 plh;
-	uint8 txflow[16];
-	uint8 rxflow[16];
+    uint8 plh;
+    uint8 txflow[16];
+    uint8 rxflow[16];
 } BWL_POST_PACKED_STRUCT log_link_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct ext_flow_spec {
-	uint8 id;
-	uint8 service_type;
-	uint8 max_sdu[2];
-	uint8 sdu_ia_time[4];
-	uint8 access_latency[4];
-	uint8 flush_timeout[4];
+    uint8 id;
+    uint8 service_type;
+    uint8 max_sdu[2];
+    uint8 sdu_ia_time[4];
+    uint8 access_latency[4];
+    uint8 flush_timeout[4];
 } BWL_POST_PACKED_STRUCT ext_flow_spec_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct log_link_cancel_cmd_parms {
-	uint8 plh;
-	uint8 tx_fs_ID;
+    uint8 plh;
+    uint8 tx_fs_ID;
 } BWL_POST_PACKED_STRUCT log_link_cancel_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct flow_spec_mod_cmd_parms {
-	uint8 llh[2];
-	uint8 txflow[16];
-	uint8 rxflow[16];
+    uint8 llh[2];
+    uint8 txflow[16];
+    uint8 rxflow[16];
 } BWL_POST_PACKED_STRUCT flow_spec_mod_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct plh_pad {
-	uint8 plh;
-	uint8 pad;
+    uint8 plh;
+    uint8 pad;
 } BWL_POST_PACKED_STRUCT plh_pad_t;
 
 typedef BWL_PRE_PACKED_STRUCT union hci_handle {
-	uint16 bredr;
-	plh_pad_t amp;
+    uint16 bredr;
+    plh_pad_t amp;
 } BWL_POST_PACKED_STRUCT hci_handle_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct ls_to_cmd_parms {
-	hci_handle_t handle;
-	uint8 timeout[2];
+    hci_handle_t handle;
+    uint8 timeout[2];
 } BWL_POST_PACKED_STRUCT ls_to_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct befto_cmd_parms {
-	uint8 llh[2];
-	uint8 befto[4];
+    uint8 llh[2];
+    uint8 befto[4];
 } BWL_POST_PACKED_STRUCT befto_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct srm_cmd_parms {
-	uint8 plh;
-	uint8 srm;
+    uint8 plh;
+    uint8 srm;
 } BWL_POST_PACKED_STRUCT srm_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct ld_cmd_parms {
-	uint8 ld_aware;
-	uint8 ld[2];
-	uint8 ld_opts;
-	uint8 l_opts;
+    uint8 ld_aware;
+    uint8 ld[2];
+    uint8 ld_opts;
+    uint8 l_opts;
 } BWL_POST_PACKED_STRUCT ld_cmd_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct eflush_cmd_parms {
-	uint8 llh[2];
-	uint8 packet_type;
+    uint8 llh[2];
+    uint8 packet_type;
 } BWL_POST_PACKED_STRUCT eflush_cmd_parms_t;
 
 /* Generic AMP extended flow spec service types */
@@ -177,9 +177,9 @@ typedef BWL_PRE_PACKED_STRUCT struct eflush_cmd_parms {
 
 /* AMP HCI event packet format */
 typedef BWL_PRE_PACKED_STRUCT struct amp_hci_event {
-	uint8 ecode;
-	uint8 plen;
-	uint8 parms[1];
+    uint8 ecode;
+    uint8 plen;
+    uint8 parms[1];
 } BWL_POST_PACKED_STRUCT amp_hci_event_t;
 
 #define HCI_EVT_PREAMBLE_SIZE			OFFSETOF(amp_hci_event_t, parms)
@@ -213,175 +213,175 @@ typedef BWL_PRE_PACKED_STRUCT struct amp_hci_event {
 #define HCI_All_Event_Mask					0x31e7
 /* AMP HCI event parameters */
 typedef BWL_PRE_PACKED_STRUCT struct cmd_status_parms {
-	uint8 status;
-	uint8 cmdpkts;
-	uint16 opcode;
+    uint8 status;
+    uint8 cmdpkts;
+    uint16 opcode;
 } BWL_POST_PACKED_STRUCT cmd_status_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct cmd_complete_parms {
-	uint8 cmdpkts;
-	uint16 opcode;
-	uint8 parms[1];
+    uint8 cmdpkts;
+    uint16 opcode;
+    uint8 parms[1];
 } BWL_POST_PACKED_STRUCT cmd_complete_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct flush_occurred_evt_parms {
-	uint16 handle;
+    uint16 handle;
 } BWL_POST_PACKED_STRUCT flush_occurred_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct write_remote_evt_parms {
-	uint8 status;
-	uint8 plh;
+    uint8 status;
+    uint8 plh;
 } BWL_POST_PACKED_STRUCT write_remote_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_local_evt_parms {
-	uint8 status;
-	uint8 plh;
-	uint16 len;
-	uint8 frag[1];
+    uint8 status;
+    uint8 plh;
+    uint16 len;
+    uint8 frag[1];
 } BWL_POST_PACKED_STRUCT read_local_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_local_info_evt_parms {
-	uint8 status;
-	uint8 AMP_status;
-	uint32 bandwidth;
-	uint32 gbandwidth;
-	uint32 latency;
-	uint32 PDU_size;
-	uint8 ctrl_type;
-	uint16 PAL_cap;
-	uint16 AMP_ASSOC_len;
-	uint32 max_flush_timeout;
-	uint32 be_flush_timeout;
+    uint8 status;
+    uint8 AMP_status;
+    uint32 bandwidth;
+    uint32 gbandwidth;
+    uint32 latency;
+    uint32 PDU_size;
+    uint8 ctrl_type;
+    uint16 PAL_cap;
+    uint16 AMP_ASSOC_len;
+    uint32 max_flush_timeout;
+    uint32 be_flush_timeout;
 } BWL_POST_PACKED_STRUCT read_local_info_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct log_link_evt_parms {
-	uint8 status;
-	uint16 llh;
-	uint8 plh;
-	uint8 tx_fs_ID;
+    uint8 status;
+    uint16 llh;
+    uint8 plh;
+    uint8 tx_fs_ID;
 } BWL_POST_PACKED_STRUCT log_link_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct disc_log_link_evt_parms {
-	uint8 status;
-	uint16 llh;
-	uint8 reason;
+    uint8 status;
+    uint16 llh;
+    uint8 reason;
 } BWL_POST_PACKED_STRUCT disc_log_link_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct log_link_cancel_evt_parms {
-	uint8 status;
-	uint8 plh;
-	uint8 tx_fs_ID;
+    uint8 status;
+    uint8 plh;
+    uint8 tx_fs_ID;
 } BWL_POST_PACKED_STRUCT log_link_cancel_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct flow_spec_mod_evt_parms {
-	uint8 status;
-	uint16 llh;
+    uint8 status;
+    uint16 llh;
 } BWL_POST_PACKED_STRUCT flow_spec_mod_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct phy_link_evt_parms {
-	uint8 status;
-	uint8 plh;
+    uint8 status;
+    uint8 plh;
 } BWL_POST_PACKED_STRUCT phy_link_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct dis_phy_link_evt_parms {
-	uint8 status;
-	uint8 plh;
-	uint8 reason;
+    uint8 status;
+    uint8 plh;
+    uint8 reason;
 } BWL_POST_PACKED_STRUCT dis_phy_link_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_ls_to_evt_parms {
-	uint8 status;
-	hci_handle_t handle;
-	uint16 timeout;
+    uint8 status;
+    hci_handle_t handle;
+    uint16 timeout;
 } BWL_POST_PACKED_STRUCT read_ls_to_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_lla_ca_to_evt_parms {
-	uint8 status;
-	uint16 timeout;
+    uint8 status;
+    uint16 timeout;
 } BWL_POST_PACKED_STRUCT read_lla_ca_to_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_data_block_size_evt_parms {
-	uint8 status;
-	uint16 ACL_pkt_len;
-	uint16 data_block_len;
-	uint16 data_block_num;
+    uint8 status;
+    uint16 ACL_pkt_len;
+    uint16 data_block_len;
+    uint16 data_block_num;
 } BWL_POST_PACKED_STRUCT read_data_block_size_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct data_blocks {
-	uint16 handle;
-	uint16 pkts;
-	uint16 blocks;
+    uint16 handle;
+    uint16 pkts;
+    uint16 blocks;
 } BWL_POST_PACKED_STRUCT data_blocks_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct num_completed_data_blocks_evt_parms {
-	uint16 num_blocks;
-	uint8 num_handles;
-	data_blocks_t completed[1];
+    uint16 num_blocks;
+    uint8 num_handles;
+    data_blocks_t completed[1];
 } BWL_POST_PACKED_STRUCT num_completed_data_blocks_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct befto_evt_parms {
-	uint8 status;
-	uint32 befto;
+    uint8 status;
+    uint32 befto;
 } BWL_POST_PACKED_STRUCT befto_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct srm_evt_parms {
-	uint8 status;
-	uint8 plh;
-	uint8 srm;
+    uint8 status;
+    uint8 plh;
+    uint8 srm;
 } BWL_POST_PACKED_STRUCT srm_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct contact_counter_evt_parms {
-	uint8 status;
-	uint8 llh[2];
-	uint16 counter;
+    uint8 status;
+    uint8 llh[2];
+    uint16 counter;
 } BWL_POST_PACKED_STRUCT contact_counter_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct contact_counter_reset_evt_parms {
-	uint8 status;
-	uint8 llh[2];
+    uint8 status;
+    uint8 llh[2];
 } BWL_POST_PACKED_STRUCT contact_counter_reset_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct read_linkq_evt_parms {
-	uint8 status;
-	hci_handle_t handle;
-	uint8 link_quality;
+    uint8 status;
+    hci_handle_t handle;
+    uint8 link_quality;
 } BWL_POST_PACKED_STRUCT read_linkq_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct ld_evt_parms {
-	uint8 status;
-	uint8 ld_aware;
-	uint8 ld[2];
-	uint8 ld_opts;
-	uint8 l_opts;
+    uint8 status;
+    uint8 ld_aware;
+    uint8 ld[2];
+    uint8 ld_opts;
+    uint8 l_opts;
 } BWL_POST_PACKED_STRUCT ld_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct eflush_complete_evt_parms {
-	uint16 handle;
+    uint16 handle;
 } BWL_POST_PACKED_STRUCT eflush_complete_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct vendor_specific_evt_parms {
-	uint8 len;
-	uint8 parms[1];
+    uint8 len;
+    uint8 parms[1];
 } BWL_POST_PACKED_STRUCT vendor_specific_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct local_version_info_evt_parms {
-	uint8 status;
-	uint8 hci_version;
-	uint16 hci_revision;
-	uint8 pal_version;
-	uint16 mfg_name;
-	uint16 pal_subversion;
+    uint8 status;
+    uint8 hci_version;
+    uint16 hci_revision;
+    uint8 pal_version;
+    uint16 mfg_name;
+    uint16 pal_subversion;
 } BWL_POST_PACKED_STRUCT local_version_info_evt_parms_t;
 
 #define MAX_SUPPORTED_CMD_BYTE	64
 typedef BWL_PRE_PACKED_STRUCT struct local_supported_cmd_evt_parms {
-	uint8 status;
-	uint8 cmd[MAX_SUPPORTED_CMD_BYTE];
+    uint8 status;
+    uint8 cmd[MAX_SUPPORTED_CMD_BYTE];
 } BWL_POST_PACKED_STRUCT local_supported_cmd_evt_parms_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct status_change_evt_parms {
-	uint8 status;
-	uint8 amp_status;
+    uint8 status;
+    uint8 amp_status;
 } BWL_POST_PACKED_STRUCT status_change_evt_parms_t;
 
 /* AMP HCI error codes */
@@ -406,9 +406,9 @@ typedef BWL_PRE_PACKED_STRUCT struct status_change_evt_parms {
 
 /* AMP HCI ACL Data packet format */
 typedef BWL_PRE_PACKED_STRUCT struct amp_hci_ACL_data {
-	uint16	handle;			/* 12-bit connection handle + 2-bit PB and 2-bit BC flags */
-	uint16	dlen;			/* data total length */
-	uint8 data[1];
+    uint16	handle;			/* 12-bit connection handle + 2-bit PB and 2-bit BC flags */
+    uint16	dlen;			/* data total length */
+    uint8 data[1];
 } BWL_POST_PACKED_STRUCT amp_hci_ACL_data_t;
 
 #define HCI_ACL_DATA_PREAMBLE_SIZE	OFFSETOF(amp_hci_ACL_data_t, data)
@@ -421,15 +421,15 @@ typedef BWL_PRE_PACKED_STRUCT struct amp_hci_ACL_data {
 
 /* AMP Activity Report packet formats */
 typedef BWL_PRE_PACKED_STRUCT struct amp_hci_activity_report {
-	uint8	ScheduleKnown;
-	uint8	NumReports;
-	uint8	data[1];
+    uint8	ScheduleKnown;
+    uint8	NumReports;
+    uint8	data[1];
 } BWL_POST_PACKED_STRUCT amp_hci_activity_report_t;
 
 typedef BWL_PRE_PACKED_STRUCT struct amp_hci_activity_report_triple {
-	uint32	StartTime;
-	uint32	Duration;
-	uint32	Periodicity;
+    uint32	StartTime;
+    uint32	Duration;
+    uint32	Periodicity;
 } BWL_POST_PACKED_STRUCT amp_hci_activity_report_triple_t;
 
 #define HCI_AR_SCHEDULE_KNOWN		0x01

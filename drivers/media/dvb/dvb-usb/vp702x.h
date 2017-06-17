@@ -99,9 +99,9 @@ extern int dvb_usb_vp702x_debug;
 /* IN  i: 0, v: 0, no extra buffer */
 
 struct vp702x_device_state {
-	struct mutex buf_mutex;
-	int buf_len;
-	u8 *buf;
+    struct mutex buf_mutex;
+    int buf_len;
+    u8 *buf;
 };
 
 

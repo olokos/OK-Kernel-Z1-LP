@@ -40,50 +40,48 @@ unsigned int free_mem_end_ptr;
 #define arch_decomp_puts(p)
 #endif
 
-void *memcpy(void *dest, const void *src, size_t n)
-{
-	int i = 0;
-	unsigned char *d = (unsigned char *)dest, *s = (unsigned char *)src;
+void *memcpy(void *dest, const void *src, size_t n) {
+    int i = 0;
+    unsigned char *d = (unsigned char *)dest, *s = (unsigned char *)src;
 
-	for (i = n >> 3; i > 0; i--) {
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-	}
+    for (i = n >> 3; i > 0; i--) {
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+    }
 
-	if (n & 1 << 2) {
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-		*d++ = *s++;
-	}
+    if (n & 1 << 2) {
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+        *d++ = *s++;
+    }
 
-	if (n & 1 << 1) {
-		*d++ = *s++;
-		*d++ = *s++;
-	}
+    if (n & 1 << 1) {
+        *d++ = *s++;
+        *d++ = *s++;
+    }
 
-	if (n & 1)
-		*d++ = *s++;
+    if (n & 1)
+        *d++ = *s++;
 
-	return dest;
+    return dest;
 }
 
-void error(char *x)
-{
-	arch_decomp_puts("\n\n");
-	arch_decomp_puts(x);
-	arch_decomp_puts("\n\n -- System halted");
+void error(char *x) {
+    arch_decomp_puts("\n\n");
+    arch_decomp_puts(x);
+    arch_decomp_puts("\n\n -- System halted");
 
-	arch_decomp_error(x);
+    arch_decomp_error(x);
 
-	for (;;)
-		; /* Halt */
+    for (;;)
+        ; /* Halt */
 }
 
 /* Heap size should be adjusted for different decompress method */
@@ -104,23 +102,22 @@ void error(char *x)
 #endif
 
 unsigned long decompress_kernel(unsigned long output_start,
-		unsigned long free_mem_ptr_p,
-		unsigned long free_mem_ptr_end_p)
-{
-	unsigned char *tmp;
+                                unsigned long free_mem_ptr_p,
+                                unsigned long free_mem_ptr_end_p) {
+    unsigned char *tmp;
 
-	output_data		= (unsigned char *)output_start;
-	free_mem_ptr		= free_mem_ptr_p;
-	free_mem_end_ptr	= free_mem_ptr_end_p;
+    output_data		= (unsigned char *)output_start;
+    free_mem_ptr		= free_mem_ptr_p;
+    free_mem_end_ptr	= free_mem_ptr_end_p;
 
-	arch_decomp_setup();
+    arch_decomp_setup();
 
-	tmp = (unsigned char *) (((unsigned long)input_data_end) - 4);
-	output_ptr = get_unaligned_le32(tmp);
+    tmp = (unsigned char *) (((unsigned long)input_data_end) - 4);
+    output_ptr = get_unaligned_le32(tmp);
 
-	arch_decomp_puts("Uncompressing Linux...");
-	decompress(input_data, input_data_end - input_data, NULL, NULL,
-			output_data, NULL, error);
-	arch_decomp_puts(" done, booting the kernel.\n");
-	return output_ptr;
+    arch_decomp_puts("Uncompressing Linux...");
+    decompress(input_data, input_data_end - input_data, NULL, NULL,
+               output_data, NULL, error);
+    arch_decomp_puts(" done, booting the kernel.\n");
+    return output_ptr;
 }

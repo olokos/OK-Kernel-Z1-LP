@@ -99,13 +99,13 @@
 /* discipline functions */
 struct tape_request *tape_std_read_block(struct tape_device *, size_t);
 void tape_std_read_backward(struct tape_device *device,
-			    struct tape_request *request);
+                            struct tape_request *request);
 struct tape_request *tape_std_write_block(struct tape_device *, size_t);
 struct tape_request *tape_std_bread(struct tape_device *, struct request *);
 void tape_std_free_bread(struct tape_request *);
 void tape_std_check_locate(struct tape_device *, struct tape_request *);
 struct tape_request *tape_std_bwrite(struct request *,
-				     struct tape_device *, int);
+                                     struct tape_device *, int);
 
 /* Some non-mtop commands. */
 int tape_std_assign(struct tape_device *);
@@ -150,10 +150,10 @@ void tape_std_error_recovery_HWBUG(struct tape_device *, int condno);
 
 /* S390 tape types */
 enum s390_tape_type {
-        tape_3480,
-        tape_3490,
-        tape_3590,
-        tape_3592,
+    tape_3480,
+    tape_3490,
+    tape_3590,
+    tape_3592,
 };
 
 #endif // _TAPE_STD_H

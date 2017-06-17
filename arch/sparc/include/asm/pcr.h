@@ -2,8 +2,8 @@
 #define __PCR_H
 
 struct pcr_ops {
-	u64 (*read)(void);
-	void (*write)(u64);
+    u64 (*read)(void);
+    void (*write)(u64);
 };
 extern const struct pcr_ops *pcr_ops;
 
@@ -34,11 +34,10 @@ extern unsigned int picl_shift;
  * to accommodate Niagara-1 which can only count insn cycles
  * in PICH.
  */
-static inline u64 picl_value(unsigned int nmi_hz)
-{
-	u32 delta = local_cpu_data().clock_tick / (nmi_hz << picl_shift);
+static inline u64 picl_value(unsigned int nmi_hz) {
+    u32 delta = local_cpu_data().clock_tick / (nmi_hz << picl_shift);
 
-	return ((u64)((0 - delta) & 0xffffffff)) << 32;
+    return ((u64)((0 - delta) & 0xffffffff)) << 32;
 }
 
 extern u64 pcr_enable;

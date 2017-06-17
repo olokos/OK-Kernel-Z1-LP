@@ -33,11 +33,11 @@
 #define _RMI_FUNCTION_05_H
 
 void FN_05_inthandler(struct rmi_function_info *rmifninfo,
-	unsigned int assertedIRQs);
+                      unsigned int assertedIRQs);
 int FN_05_config(struct rmi_function_info *rmifninfo);
 int FN_05_init(struct rmi_function_device *function_device);
 int FN_05_detect(struct rmi_function_info *rmifninfo,
-		struct rmi_function_descriptor *fndescr,
-		unsigned int interruptCount);
+                 struct rmi_function_descriptor *fndescr,
+                 unsigned int interruptCount);
 /* No attention function for F05 */
 #endif

@@ -57,15 +57,15 @@
 #endif
 
 typedef struct path_entry {
-	char	*directory;
-	int	quoted_includes_only;
-	SLIST_ENTRY(path_entry) links;
+    char	*directory;
+    int	quoted_includes_only;
+    SLIST_ENTRY(path_entry) links;
 } *path_entry_t;
 
-typedef enum {  
-	QUOTED_INCLUDE,
-	BRACKETED_INCLUDE,
-	SOURCE_FILE
+typedef enum {
+    QUOTED_INCLUDE,
+    BRACKETED_INCLUDE,
+    SOURCE_FILE
 } include_type;
 
 SLIST_HEAD(path_list, path_entry);

@@ -10,8 +10,8 @@
 #define __MACH_MXS_MMC_H__
 
 struct mxs_mmc_platform_data {
-	int wp_gpio;	/* write protect pin */
-	unsigned int flags;
+    int wp_gpio;	/* write protect pin */
+    unsigned int flags;
 #define SLOTF_4_BIT_CAPABLE	(1 << 0)
 #define SLOTF_8_BIT_CAPABLE	(1 << 1)
 };

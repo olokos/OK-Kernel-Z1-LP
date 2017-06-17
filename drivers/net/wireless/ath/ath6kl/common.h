@@ -35,9 +35,9 @@ extern int ath6kl_printk(const char *level, const char *fmt, ...);
 #define SIGNAL_QUALITY_METRICS_NUM_MAX    2
 
 enum {
-	SIGNAL_QUALITY_METRICS_SNR = 0,
-	SIGNAL_QUALITY_METRICS_RSSI,
-	SIGNAL_QUALITY_METRICS_ALL,
+    SIGNAL_QUALITY_METRICS_SNR = 0,
+    SIGNAL_QUALITY_METRICS_RSSI,
+    SIGNAL_QUALITY_METRICS_ALL,
 };
 
 /*
@@ -60,19 +60,19 @@ enum {
 	 - sizeof(struct htc_frame_hdr))
 
 struct ath6kl_llc_snap_hdr {
-	u8 dsap;
-	u8 ssap;
-	u8 cntl;
-	u8 org_code[3];
-	__be16 eth_type;
+    u8 dsap;
+    u8 ssap;
+    u8 cntl;
+    u8 org_code[3];
+    __be16 eth_type;
 } __packed;
 
 enum crypto_type {
-	NONE_CRYPT          = 0x01,
-	WEP_CRYPT           = 0x02,
-	TKIP_CRYPT          = 0x04,
-	AES_CRYPT           = 0x08,
-	WAPI_CRYPT          = 0x10,
+    NONE_CRYPT          = 0x01,
+    WEP_CRYPT           = 0x02,
+    TKIP_CRYPT          = 0x04,
+    AES_CRYPT           = 0x08,
+    WAPI_CRYPT          = 0x10,
 };
 
 struct htc_endpoint_credit_dist;

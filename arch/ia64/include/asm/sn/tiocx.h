@@ -12,31 +12,31 @@
 #ifdef __KERNEL__
 
 struct cx_id_s {
-	unsigned int part_num;
-	unsigned int mfg_num;
-	int nasid;
+    unsigned int part_num;
+    unsigned int mfg_num;
+    int nasid;
 };
 
 struct cx_dev {
-	struct cx_id_s cx_id;
-	int bt;				/* board/blade type */
-	void *soft;			/* driver specific */
-	struct hubdev_info *hubdev;
-	struct device dev;
-	struct cx_drv *driver;
+    struct cx_id_s cx_id;
+    int bt;				/* board/blade type */
+    void *soft;			/* driver specific */
+    struct hubdev_info *hubdev;
+    struct device dev;
+    struct cx_drv *driver;
 };
 
 struct cx_device_id {
-	unsigned int part_num;
-	unsigned int mfg_num;
+    unsigned int part_num;
+    unsigned int mfg_num;
 };
 
 struct cx_drv {
-	char *name;
-	const struct cx_device_id *id_table;
-	struct device_driver driver;
-	int (*probe) (struct cx_dev * dev, const struct cx_device_id * id);
-	int (*remove) (struct cx_dev * dev);
+    char *name;
+    const struct cx_device_id *id_table;
+    struct device_driver driver;
+    int (*probe) (struct cx_dev * dev, const struct cx_device_id * id);
+    int (*remove) (struct cx_dev * dev);
 };
 
 /* create DMA address by stripping AS bits */

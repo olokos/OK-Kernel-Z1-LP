@@ -46,14 +46,13 @@
 extern void _mcount(void);
 
 #ifdef CONFIG_DYNAMIC_FTRACE
-static inline unsigned long ftrace_call_adjust(unsigned long addr)
-{
-       /* reloction of mcount call site is the same as the address */
-       return addr;
+static inline unsigned long ftrace_call_adjust(unsigned long addr) {
+    /* reloction of mcount call site is the same as the address */
+    return addr;
 }
 
 struct dyn_arch_ftrace {
-	struct module *mod;
+    struct module *mod;
 };
 #endif /*  CONFIG_DYNAMIC_FTRACE */
 #endif /* __ASSEMBLY__ */
@@ -62,15 +61,14 @@ struct dyn_arch_ftrace {
 
 #if defined(CONFIG_FTRACE_SYSCALLS) && defined(CONFIG_PPC64) && !defined(__ASSEMBLY__)
 #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
-static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
-{
-	/*
-	 * Compare the symbol name with the system call name. Skip the .sys or .SyS
-	 * prefix from the symbol name and the sys prefix from the system call name and
-	 * just match the rest. This is only needed on ppc64 since symbol names on
-	 * 32bit do not start with a period so the generic function will work.
-	 */
-	return !strcmp(sym + 4, name + 3);
+static inline bool arch_syscall_match_sym_name(const char *sym, const char *name) {
+    /*
+     * Compare the symbol name with the system call name. Skip the .sys or .SyS
+     * prefix from the symbol name and the sys prefix from the system call name and
+     * just match the rest. This is only needed on ppc64 since symbol names on
+     * 32bit do not start with a period so the generic function will work.
+     */
+    return !strcmp(sym + 4, name + 3);
 }
 #endif /* CONFIG_FTRACE_SYSCALLS && CONFIG_PPC64 && !__ASSEMBLY__ */
 

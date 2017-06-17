@@ -42,159 +42,153 @@
 #define DAP_DEVICEEN_DISABLE	BIT(8)
 
 struct fuse_drvdata {
-	void __iomem		*base;
-	struct device		*dev;
-	struct coresight_device	*csdev;
+    void __iomem		*base;
+    struct device		*dev;
+    struct coresight_device	*csdev;
 };
 
 static struct fuse_drvdata *fusedrvdata;
 
-bool coresight_fuse_access_disabled(void)
-{
-	struct fuse_drvdata *drvdata = fusedrvdata;
-	uint32_t config0, config1;
-	bool ret;
+bool coresight_fuse_access_disabled(void) {
+    struct fuse_drvdata *drvdata = fusedrvdata;
+    uint32_t config0, config1;
+    bool ret;
 
-	config0 = fuse_readl(drvdata, OEM_CONFIG0);
-	config1 = fuse_readl(drvdata, OEM_CONFIG1);
+    config0 = fuse_readl(drvdata, OEM_CONFIG0);
+    config1 = fuse_readl(drvdata, OEM_CONFIG1);
 
-	dev_dbg(drvdata->dev, "config0: %lx\n", (unsigned long)config0);
-	dev_dbg(drvdata->dev, "config1: %lx\n", (unsigned long)config1);
+    dev_dbg(drvdata->dev, "config0: %lx\n", (unsigned long)config0);
+    dev_dbg(drvdata->dev, "config1: %lx\n", (unsigned long)config1);
 
-	if (config0 & ALL_DEBUG_DISABLE)
-		ret = true;
-	else if (config1 & DAP_DBGEN_DISABLE)
-		ret = true;
-	else if (config1 & DAP_NIDEN_DISABLE)
-		ret = true;
-	else if (config1 & DAP_SPIDEN_DISABLE)
-		ret = true;
-	else if (config1 & DAP_SPNIDEN_DISABLE)
-		ret = true;
-	else if (config1 & DAP_DEVICEEN_DISABLE)
-		ret = true;
-	else
-		ret = false;
+    if (config0 & ALL_DEBUG_DISABLE)
+        ret = true;
+    else if (config1 & DAP_DBGEN_DISABLE)
+        ret = true;
+    else if (config1 & DAP_NIDEN_DISABLE)
+        ret = true;
+    else if (config1 & DAP_SPIDEN_DISABLE)
+        ret = true;
+    else if (config1 & DAP_SPNIDEN_DISABLE)
+        ret = true;
+    else if (config1 & DAP_DEVICEEN_DISABLE)
+        ret = true;
+    else
+        ret = false;
 
-	if (ret)
-		dev_dbg(drvdata->dev, "coresight fuse disabled\n");
+    if (ret)
+        dev_dbg(drvdata->dev, "coresight fuse disabled\n");
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(coresight_fuse_access_disabled);
 
-bool coresight_fuse_apps_access_disabled(void)
-{
-	struct fuse_drvdata *drvdata = fusedrvdata;
-	uint32_t config0, config1;
-	bool ret;
+bool coresight_fuse_apps_access_disabled(void) {
+    struct fuse_drvdata *drvdata = fusedrvdata;
+    uint32_t config0, config1;
+    bool ret;
 
-	config0 = fuse_readl(drvdata, OEM_CONFIG0);
-	config1 = fuse_readl(drvdata, OEM_CONFIG1);
+    config0 = fuse_readl(drvdata, OEM_CONFIG0);
+    config1 = fuse_readl(drvdata, OEM_CONFIG1);
 
-	dev_dbg(drvdata->dev, "apps config0: %lx\n", (unsigned long)config0);
-	dev_dbg(drvdata->dev, "apps config1: %lx\n", (unsigned long)config1);
+    dev_dbg(drvdata->dev, "apps config0: %lx\n", (unsigned long)config0);
+    dev_dbg(drvdata->dev, "apps config1: %lx\n", (unsigned long)config1);
 
-	if (config0 & ALL_DEBUG_DISABLE)
-		ret = true;
-	else if (config1 & APPS_DBGEN_DISABLE)
-		ret = true;
-	else if (config1 & APPS_NIDEN_DISABLE)
-		ret = true;
-	else if (config1 & APPS_SPIDEN_DISABLE)
-		ret = true;
-	else if (config1 & APPS_SPNIDEN_DISABLE)
-		ret = true;
-	else if (config1 & DAP_DEVICEEN_DISABLE)
-		ret = true;
-	else
-		ret = false;
+    if (config0 & ALL_DEBUG_DISABLE)
+        ret = true;
+    else if (config1 & APPS_DBGEN_DISABLE)
+        ret = true;
+    else if (config1 & APPS_NIDEN_DISABLE)
+        ret = true;
+    else if (config1 & APPS_SPIDEN_DISABLE)
+        ret = true;
+    else if (config1 & APPS_SPNIDEN_DISABLE)
+        ret = true;
+    else if (config1 & DAP_DEVICEEN_DISABLE)
+        ret = true;
+    else
+        ret = false;
 
-	if (ret)
-		dev_dbg(drvdata->dev, "apps fuse disabled\n");
+    if (ret)
+        dev_dbg(drvdata->dev, "apps fuse disabled\n");
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(coresight_fuse_apps_access_disabled);
 
-static int __devinit fuse_probe(struct platform_device *pdev)
-{
-	struct device *dev = &pdev->dev;
-	struct coresight_platform_data *pdata;
-	struct fuse_drvdata *drvdata;
-	struct resource *res;
-	struct coresight_desc *desc;
+static int __devinit fuse_probe(struct platform_device *pdev) {
+    struct device *dev = &pdev->dev;
+    struct coresight_platform_data *pdata;
+    struct fuse_drvdata *drvdata;
+    struct resource *res;
+    struct coresight_desc *desc;
 
-	if (pdev->dev.of_node) {
-		pdata = of_get_coresight_platform_data(dev, pdev->dev.of_node);
-		if (IS_ERR(pdata))
-			return PTR_ERR(pdata);
-		pdev->dev.platform_data = pdata;
-	}
+    if (pdev->dev.of_node) {
+        pdata = of_get_coresight_platform_data(dev, pdev->dev.of_node);
+        if (IS_ERR(pdata))
+            return PTR_ERR(pdata);
+        pdev->dev.platform_data = pdata;
+    }
 
-	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-	if (!drvdata)
-		return -ENOMEM;
-	/* Store the driver data pointer for use in exported functions */
-	fusedrvdata = drvdata;
-	drvdata->dev = &pdev->dev;
-	platform_set_drvdata(pdev, drvdata);
+    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+    if (!drvdata)
+        return -ENOMEM;
+    /* Store the driver data pointer for use in exported functions */
+    fusedrvdata = drvdata;
+    drvdata->dev = &pdev->dev;
+    platform_set_drvdata(pdev, drvdata);
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "fuse-base");
-	if (!res)
-		return -ENODEV;
+    res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "fuse-base");
+    if (!res)
+        return -ENODEV;
 
-	drvdata->base = devm_ioremap(dev, res->start, resource_size(res));
-	if (!drvdata->base)
-		return -ENOMEM;
+    drvdata->base = devm_ioremap(dev, res->start, resource_size(res));
+    if (!drvdata->base)
+        return -ENOMEM;
 
-	desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
-	if (!desc)
-		return -ENOMEM;
-	desc->type = CORESIGHT_DEV_TYPE_NONE;
-	desc->pdata = pdev->dev.platform_data;
-	desc->dev = &pdev->dev;
-	desc->owner = THIS_MODULE;
-	drvdata->csdev = coresight_register(desc);
-	if (IS_ERR(drvdata->csdev))
-		return PTR_ERR(drvdata->csdev);
+    desc = devm_kzalloc(dev, sizeof(*desc), GFP_KERNEL);
+    if (!desc)
+        return -ENOMEM;
+    desc->type = CORESIGHT_DEV_TYPE_NONE;
+    desc->pdata = pdev->dev.platform_data;
+    desc->dev = &pdev->dev;
+    desc->owner = THIS_MODULE;
+    drvdata->csdev = coresight_register(desc);
+    if (IS_ERR(drvdata->csdev))
+        return PTR_ERR(drvdata->csdev);
 
-	dev_info(dev, "Fuse initialized\n");
-	return 0;
+    dev_info(dev, "Fuse initialized\n");
+    return 0;
 }
 
-static int __devexit fuse_remove(struct platform_device *pdev)
-{
-	struct fuse_drvdata *drvdata = platform_get_drvdata(pdev);
+static int __devexit fuse_remove(struct platform_device *pdev) {
+    struct fuse_drvdata *drvdata = platform_get_drvdata(pdev);
 
-	coresight_unregister(drvdata->csdev);
-	return 0;
+    coresight_unregister(drvdata->csdev);
+    return 0;
 }
 
 static struct of_device_id fuse_match[] = {
-	{.compatible = "arm,coresight-fuse"},
-	{}
+    {.compatible = "arm,coresight-fuse"},
+    {}
 };
 
 static struct platform_driver fuse_driver = {
-	.probe          = fuse_probe,
-	.remove         = __devexit_p(fuse_remove),
-	.driver         = {
-		.name   = "coresight-fuse",
-		.owner	= THIS_MODULE,
-		.of_match_table = fuse_match,
-	},
+    .probe          = fuse_probe,
+    .remove         = __devexit_p(fuse_remove),
+    .driver         = {
+        .name   = "coresight-fuse",
+        .owner	= THIS_MODULE,
+        .of_match_table = fuse_match,
+    },
 };
 
-static int __init fuse_init(void)
-{
-	return platform_driver_register(&fuse_driver);
+static int __init fuse_init(void) {
+    return platform_driver_register(&fuse_driver);
 }
 module_init(fuse_init);
 
-static void __exit fuse_exit(void)
-{
-	platform_driver_unregister(&fuse_driver);
+static void __exit fuse_exit(void) {
+    platform_driver_unregister(&fuse_driver);
 }
 module_exit(fuse_exit);
 

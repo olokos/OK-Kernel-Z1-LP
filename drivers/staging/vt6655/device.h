@@ -178,16 +178,14 @@
 #define PRINT_K(p, args...) {if (PRIVATE_Message) printk( p ,##args);}
 
 //0:11A 1:11B 2:11G
-typedef enum _VIA_BB_TYPE
-{
+typedef enum _VIA_BB_TYPE {
     BB_TYPE_11A=0,
     BB_TYPE_11B,
     BB_TYPE_11G
 } VIA_BB_TYPE, *PVIA_BB_TYPE;
 
 //0:11a,1:11b,2:11gb(only CCK in BasicRate),3:11ga(OFDM in Basic Rate)
-typedef enum _VIA_PKT_TYPE
-{
+typedef enum _VIA_PKT_TYPE {
     PK_TYPE_11A=0,
     PK_TYPE_11B,
     PK_TYPE_11GB,
@@ -221,8 +219,7 @@ typedef enum __device_init_type {
 typedef unsigned char NDIS_802_11_PMKID_VALUE[16];
 
 
-typedef enum _NDIS_802_11_WEP_STATUS
-{
+typedef enum _NDIS_802_11_WEP_STATUS {
     Ndis802_11WEPEnabled,
     Ndis802_11Encryption1Enabled = Ndis802_11WEPEnabled,
     Ndis802_11WEPDisabled,
@@ -236,11 +233,10 @@ typedef enum _NDIS_802_11_WEP_STATUS
     Ndis802_11Encryption3Enabled,
     Ndis802_11Encryption3KeyAbsent
 } NDIS_802_11_WEP_STATUS, *PNDIS_802_11_WEP_STATUS,
-  NDIS_802_11_ENCRYPTION_STATUS, *PNDIS_802_11_ENCRYPTION_STATUS;
+NDIS_802_11_ENCRYPTION_STATUS, *PNDIS_802_11_ENCRYPTION_STATUS;
 
 
-typedef enum _NDIS_802_11_STATUS_TYPE
-{
+typedef enum _NDIS_802_11_STATUS_TYPE {
     Ndis802_11StatusType_Authentication,
     Ndis802_11StatusType_MediaStreamMode,
     Ndis802_11StatusType_PMKID_CandidateList,
@@ -254,8 +250,7 @@ typedef struct _PMKID_CANDIDATE {
 } PMKID_CANDIDATE, *PPMKID_CANDIDATE;
 
 
-typedef struct _BSSID_INFO
-{
+typedef struct _BSSID_INFO {
     NDIS_802_11_MAC_ADDRESS BSSID;
     NDIS_802_11_PMKID_VALUE PMKID;
 } BSSID_INFO, *PBSSID_INFO;
@@ -286,7 +281,7 @@ typedef struct tagSQuietControl {
 } SQuietControl, *PSQuietControl;
 
 //--
-typedef struct __chip_info_tbl{
+typedef struct __chip_info_tbl {
     CHIP_TYPE   chip_id;
     char*       name;
     int         io_size;
@@ -302,23 +297,22 @@ typedef enum {
 
 
 // The receive duplicate detection cache entry
-typedef struct tagSCacheEntry{
+typedef struct tagSCacheEntry {
     unsigned short wFmSequence;
     unsigned char abyAddr2[ETH_ALEN];
 } SCacheEntry, *PSCacheEntry;
 
-typedef struct tagSCache{
-/* The receive cache is updated circularly.  The next entry to be written is
- * indexed by the "InPtr".
-*/
+typedef struct tagSCache {
+    /* The receive cache is updated circularly.  The next entry to be written is
+     * indexed by the "InPtr".
+    */
     unsigned int uInPtr;         // Place to use next
     SCacheEntry     asCacheEntry[DUPLICATE_RX_CACHE_LENGTH];
 } SCache, *PSCache;
 
 #define CB_MAX_RX_FRAG                 64
 // DeFragment Control Block, used for collecting fragments prior to reassembly
-typedef struct tagSDeFragControlBlock
-{
+typedef struct tagSDeFragControlBlock {
     unsigned short wSequence;
     unsigned short wFragNum;
     unsigned char abyAddr2[ETH_ALEN];
@@ -362,11 +356,10 @@ typedef struct tagSDeFragControlBlock
 //PLICE_DEBUG->
 
 
-typedef	struct _RxManagementQueue
-{
-	int	packet_num;
-	int	head,tail;
-	PSRxMgmtPacket	Q[NUM];
+typedef	struct _RxManagementQueue {
+    int	packet_num;
+    int	head,tail;
+    PSRxMgmtPacket	Q[NUM];
 } RxManagementQueue,*PSRxManagementQueue;
 
 
@@ -462,13 +455,13 @@ typedef struct __device_info {
 
     spinlock_t                  lock;
 //PLICE_DEBUG->
-	struct	tasklet_struct 		RxMngWorkItem;
-	RxManagementQueue	rxManeQueue;
+    struct	tasklet_struct 		RxMngWorkItem;
+    RxManagementQueue	rxManeQueue;
 //PLICE_DEBUG<-
 //PLICE_DEBUG ->
-	pid_t				MLMEThr_pid;
-	struct 	completion	notify;
-	struct 	semaphore	mlme_semaphore;
+    pid_t				MLMEThr_pid;
+    struct 	completion	notify;
+    struct 	semaphore	mlme_semaphore;
 //PLICE_DEBUG <-
 
 
@@ -481,7 +474,7 @@ typedef struct __device_info {
     unsigned char byMaxPwrLevel;
     unsigned char byZoneType;
     bool bZoneRegExist;
-   unsigned char byOriginalZonetype;
+    unsigned char byOriginalZonetype;
     unsigned char abyMacContext[MAC_MAX_CONTEXT_REG];
     bool bLinkPass;          // link status: OK or fail
     unsigned char abyCurrentNetAddr[ETH_ALEN];
@@ -711,10 +704,10 @@ typedef struct __device_info {
     // command timer
     struct timer_list       sTimerCommand;
 #ifdef TxInSleep
-     struct timer_list       sTimerTxData;
-     unsigned long nTxDataTimeCout;
-     bool fTxDataInSleep;
-     bool IsTxDataTrigger;
+    struct timer_list       sTimerTxData;
+    unsigned long nTxDataTimeCout;
+    bool fTxDataInSleep;
+    bool IsTxDataTrigger;
 #endif
 
 #ifdef WPA_SM_Transtatus
@@ -756,7 +749,7 @@ typedef struct __device_info {
     unsigned char abyBroadcastAddr[ETH_ALEN];
     unsigned char abySNAP_RFC1042[ETH_ALEN];
     unsigned char abySNAP_Bridgetunnel[ETH_ALEN];
-     unsigned char abyEEPROM[EEP_MAX_CONTEXT_SIZE];  //unsigned long alignment
+    unsigned char abyEEPROM[EEP_MAX_CONTEXT_SIZE];  //unsigned long alignment
     // Pre-Authentication & PMK cache
     SPMKID                  gsPMKID;
     SPMKIDCandidateEvent    gsPMKIDCandidate;
@@ -793,33 +786,33 @@ typedef struct __device_info {
     unsigned short wBeaconInterval;
 
     //WPA supplicant deamon
-	struct net_device       *wpadev;
-	bool bWPADEVUp;
+    struct net_device       *wpadev;
+    bool bWPADEVUp;
     struct sk_buff          *skb;
 #ifdef WPA_SUPPLICANT_DRIVER_WEXT_SUPPORT
-/*
-        bool bwextstep0;
-        bool bwextstep1;
-        bool bwextstep2;
-        bool bwextstep3;
-        */
-        unsigned int	bwextcount;
-        bool bWPASuppWextEnabled;
+    /*
+            bool bwextstep0;
+            bool bwextstep1;
+            bool bwextstep2;
+            bool bwextstep3;
+            */
+    unsigned int	bwextcount;
+    bool bWPASuppWextEnabled;
 #endif
 
     //--
 #ifdef HOSTAP
     // user space daemon: hostapd, is used for HOSTAP
-	bool bEnableHostapd;
-	bool bEnable8021x;
-	bool bEnableHostWEP;
-	struct net_device       *apdev;
-	int (*tx_80211)(struct sk_buff *skb, struct net_device *dev);
+    bool bEnableHostapd;
+    bool bEnable8021x;
+    bool bEnableHostWEP;
+    struct net_device       *apdev;
+    int (*tx_80211)(struct sk_buff *skb, struct net_device *dev);
 #endif
     unsigned int	uChannel;
     bool bMACSuspend;
 
-	struct iw_statistics	wstats;		// wireless stats
+    struct iw_statistics	wstats;		// wireless stats
     bool bCommit;
 
 } DEVICE_INFO, *PSDevice;
@@ -828,45 +821,37 @@ typedef struct __device_info {
 //PLICE_DEBUG->
 
 
- inline  static	void   EnQueue (PSDevice pDevice,PSRxMgmtPacket  pRxMgmtPacket)
-{
-	//printk("Enter EnQueue:tail is %d\n",pDevice->rxManeQueue.tail);
-	if ((pDevice->rxManeQueue.tail+1) % NUM == pDevice->rxManeQueue.head)
-	{
-		//printk("Queue is Full,tail is %d\n",pDevice->rxManeQueue.tail);
-		return ;
-	}
-	else
-	{
-		pDevice->rxManeQueue.tail = (pDevice->rxManeQueue.tail+1)% NUM;
-		pDevice->rxManeQueue.Q[pDevice->rxManeQueue.tail] = pRxMgmtPacket;
-		pDevice->rxManeQueue.packet_num++;
-		//printk("packet num is %d\n",pDevice->rxManeQueue.packet_num);
-	}
+inline  static	void   EnQueue (PSDevice pDevice,PSRxMgmtPacket  pRxMgmtPacket) {
+    //printk("Enter EnQueue:tail is %d\n",pDevice->rxManeQueue.tail);
+    if ((pDevice->rxManeQueue.tail+1) % NUM == pDevice->rxManeQueue.head) {
+        //printk("Queue is Full,tail is %d\n",pDevice->rxManeQueue.tail);
+        return ;
+    } else {
+        pDevice->rxManeQueue.tail = (pDevice->rxManeQueue.tail+1)% NUM;
+        pDevice->rxManeQueue.Q[pDevice->rxManeQueue.tail] = pRxMgmtPacket;
+        pDevice->rxManeQueue.packet_num++;
+        //printk("packet num is %d\n",pDevice->rxManeQueue.packet_num);
+    }
 }
 
 
 
 
-	inline  static  PSRxMgmtPacket DeQueue (PSDevice pDevice)
-{
-	PSRxMgmtPacket  pRxMgmtPacket;
-	if (pDevice->rxManeQueue.tail == pDevice->rxManeQueue.head)
-	{
-		printk("Queue is Empty\n");
-		return NULL;
-	}
-	else
-	{
-		int	x;
-		//x=pDevice->rxManeQueue.head = (pDevice->rxManeQueue.head+1)%NUM;
-		pDevice->rxManeQueue.head = (pDevice->rxManeQueue.head+1)%NUM;
-		x = pDevice->rxManeQueue.head;
-		//printk("Enter DeQueue:head is %d\n",x);
-		pRxMgmtPacket = pDevice->rxManeQueue.Q[x];
-		pDevice->rxManeQueue.packet_num--;
-		return pRxMgmtPacket;
-	}
+inline  static  PSRxMgmtPacket DeQueue (PSDevice pDevice) {
+    PSRxMgmtPacket  pRxMgmtPacket;
+    if (pDevice->rxManeQueue.tail == pDevice->rxManeQueue.head) {
+        printk("Queue is Empty\n");
+        return NULL;
+    } else {
+        int	x;
+        //x=pDevice->rxManeQueue.head = (pDevice->rxManeQueue.head+1)%NUM;
+        pDevice->rxManeQueue.head = (pDevice->rxManeQueue.head+1)%NUM;
+        x = pDevice->rxManeQueue.head;
+        //printk("Enter DeQueue:head is %d\n",x);
+        pRxMgmtPacket = pDevice->rxManeQueue.Q[x];
+        pDevice->rxManeQueue.packet_num--;
+        return pRxMgmtPacket;
+    }
 }
 
 void	InitRxManagementQueue(PSDevice   pDevice);

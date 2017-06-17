@@ -64,9 +64,8 @@
  *
  * va to pa translation
  */
-static inline phys_addr_t omap_iommu_translate(u32 d, u32 va, u32 mask)
-{
-	return (d & mask) | (va & (~mask));
+static inline phys_addr_t omap_iommu_translate(u32 d, u32 va, u32 mask) {
+    return (d & mask) | (va & (~mask));
 }
 
 /*
@@ -98,20 +97,19 @@ static inline phys_addr_t omap_iommu_translate(u32 d, u32 va, u32 mask)
 #define iopte_offset(iopgd, da)	(iopgd_page_vaddr(iopgd) + iopte_index(da))
 
 static inline u32 iotlb_init_entry(struct iotlb_entry *e, u32 da, u32 pa,
-				   u32 flags)
-{
-	memset(e, 0, sizeof(*e));
+                                   u32 flags) {
+    memset(e, 0, sizeof(*e));
 
-	e->da		= da;
-	e->pa		= pa;
-	e->valid	= 1;
-	/* FIXME: add OMAP1 support */
-	e->pgsz		= flags & MMU_CAM_PGSZ_MASK;
-	e->endian	= flags & MMU_RAM_ENDIAN_MASK;
-	e->elsz		= flags & MMU_RAM_ELSZ_MASK;
-	e->mixed	= flags & MMU_RAM_MIXED_MASK;
+    e->da		= da;
+    e->pa		= pa;
+    e->valid	= 1;
+    /* FIXME: add OMAP1 support */
+    e->pgsz		= flags & MMU_CAM_PGSZ_MASK;
+    e->endian	= flags & MMU_RAM_ENDIAN_MASK;
+    e->elsz		= flags & MMU_RAM_ELSZ_MASK;
+    e->mixed	= flags & MMU_RAM_MIXED_MASK;
 
-	return iopgsz_to_bytes(e->pgsz);
+    return iopgsz_to_bytes(e->pgsz);
 }
 
 #define to_iommu(dev)							\

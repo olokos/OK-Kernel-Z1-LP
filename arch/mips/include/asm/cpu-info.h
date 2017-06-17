@@ -20,12 +20,12 @@
  * Descriptor for a cache
  */
 struct cache_desc {
-	unsigned int waysize;	/* Bytes per way */
-	unsigned short sets;	/* Number of lines per set */
-	unsigned char ways;	/* Number of ways */
-	unsigned char linesz;	/* Size of line in bytes */
-	unsigned char waybit;	/* Bits to select in a cache set */
-	unsigned char flags;	/* Flags describing cache properties */
+    unsigned int waysize;	/* Bytes per way */
+    unsigned short sets;	/* Number of lines per set */
+    unsigned char ways;	/* Number of ways */
+    unsigned char linesz;	/* Size of line in bytes */
+    unsigned char waybit;	/* Bits to select in a cache set */
+    unsigned char flags;	/* Flags describing cache properties */
 };
 
 /*
@@ -39,46 +39,46 @@ struct cache_desc {
 #define MIPS_CACHE_PINDEX	0x00000020	/* Physically indexed cache */
 
 struct cpuinfo_mips {
-	unsigned int		udelay_val;
-	unsigned int		asid_cache;
+    unsigned int		udelay_val;
+    unsigned int		asid_cache;
 
-	/*
-	 * Capability and feature descriptor structure for MIPS CPU
-	 */
-	unsigned long		options;
-	unsigned long		ases;
-	unsigned int		processor_id;
-	unsigned int		fpu_id;
-	unsigned int		cputype;
-	int			isa_level;
-	int			tlbsize;
-	struct cache_desc	icache;	/* Primary I-cache */
-	struct cache_desc	dcache;	/* Primary D or combined I/D cache */
-	struct cache_desc	scache;	/* Secondary cache */
-	struct cache_desc	tcache;	/* Tertiary/split secondary cache */
-	int			srsets;	/* Shadow register sets */
-	int			core;	/* physical core number */
+    /*
+     * Capability and feature descriptor structure for MIPS CPU
+     */
+    unsigned long		options;
+    unsigned long		ases;
+    unsigned int		processor_id;
+    unsigned int		fpu_id;
+    unsigned int		cputype;
+    int			isa_level;
+    int			tlbsize;
+    struct cache_desc	icache;	/* Primary I-cache */
+    struct cache_desc	dcache;	/* Primary D or combined I/D cache */
+    struct cache_desc	scache;	/* Secondary cache */
+    struct cache_desc	tcache;	/* Tertiary/split secondary cache */
+    int			srsets;	/* Shadow register sets */
+    int			core;	/* physical core number */
 #ifdef CONFIG_64BIT
-	int			vmbits;	/* Virtual memory size in bits */
+    int			vmbits;	/* Virtual memory size in bits */
 #endif
 #if defined(CONFIG_MIPS_MT_SMP) || defined(CONFIG_MIPS_MT_SMTC)
-	/*
-	 * In the MIPS MT "SMTC" model, each TC is considered
-	 * to be a "CPU" for the purposes of scheduling, but
-	 * exception resources, ASID spaces, etc, are common
-	 * to all TCs within the same VPE.
-	 */
-	int			vpe_id;  /* Virtual Processor number */
+    /*
+     * In the MIPS MT "SMTC" model, each TC is considered
+     * to be a "CPU" for the purposes of scheduling, but
+     * exception resources, ASID spaces, etc, are common
+     * to all TCs within the same VPE.
+     */
+    int			vpe_id;  /* Virtual Processor number */
 #endif
 #ifdef CONFIG_MIPS_MT_SMTC
-	int			tc_id;   /* Thread Context number */
+    int			tc_id;   /* Thread Context number */
 #endif
-	void 			*data;	/* Additional data */
-	unsigned int		watch_reg_count;   /* Number that exist */
-	unsigned int		watch_reg_use_cnt; /* Usable by ptrace */
+    void 			*data;	/* Additional data */
+    unsigned int		watch_reg_count;   /* Number that exist */
+    unsigned int		watch_reg_use_cnt; /* Usable by ptrace */
 #define NUM_WATCH_REGS 4
-	u16			watch_reg_masks[NUM_WATCH_REGS];
-	unsigned int		kscratch_mask; /* Usable KScratch mask. */
+    u16			watch_reg_masks[NUM_WATCH_REGS];
+    unsigned int		kscratch_mask; /* Usable KScratch mask. */
 } __attribute__((aligned(SMP_CACHE_BYTES)));
 
 extern struct cpuinfo_mips cpu_data[];

@@ -12,8 +12,8 @@
 struct dm_dev;
 
 struct dm_path {
-	struct dm_dev *dev;	/* Read-only */
-	void *pscontext;	/* For path-selector use */
+    struct dm_dev *dev;	/* Read-only */
+    void *pscontext;	/* For path-selector use */
 };
 
 /* Callback for hwh_pg_init_fn to use when complete */

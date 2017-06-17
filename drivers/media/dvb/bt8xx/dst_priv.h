@@ -5,24 +5,24 @@
  */
 
 struct dst_gpio_enable {
-	u32	mask;
-	u32	enable;
+    u32	mask;
+    u32	enable;
 };
 
 struct dst_gpio_output {
-	u32	mask;
-	u32	highvals;
+    u32	mask;
+    u32	highvals;
 };
 
 struct dst_gpio_read {
-	unsigned long value;
+    unsigned long value;
 };
 
 union dst_gpio_packet {
-	struct dst_gpio_enable enb;
-	struct dst_gpio_output outp;
-	struct dst_gpio_read rd;
-	int    psize;
+    struct dst_gpio_enable enb;
+    struct dst_gpio_output outp;
+    struct dst_gpio_read rd;
+    int    psize;
 };
 
 #define DST_IG_ENABLE	0

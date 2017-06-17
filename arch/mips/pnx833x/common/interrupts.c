@@ -32,8 +32,7 @@
 
 static int mips_cpu_timer_irq;
 
-static const unsigned int irq_prio[PNX833X_PIC_NUM_IRQ] =
-{
+static const unsigned int irq_prio[PNX833X_PIC_NUM_IRQ] = {
     0, /* unused */
     4, /* PNX833X_PIC_I2C0_INT                 1 */
     4, /* PNX833X_PIC_I2C1_INT                 2 */
@@ -87,7 +86,7 @@ static const unsigned int irq_prio[PNX833X_PIC_NUM_IRQ] =
     4, /* PNX8335_PIC_MMI_SIF1_INT            49 */
     4, /* PNX8335_PIC_MMI_CDMMU_INT           50 */
     4, /* PNX8335_PIC_PIBCS_INT               51 */
-   12, /* PNX8335_PIC_ETHERNET_INT            52 */
+    12, /* PNX8335_PIC_ETHERNET_INT            52 */
     3, /* PNX8335_PIC_VMSP1_0_INT             53 */
     3, /* PNX8335_PIC_VMSP1_1_INT             54 */
     4, /* PNX8335_PIC_VMSP1_DMA_INT           55 */
@@ -96,221 +95,207 @@ static const unsigned int irq_prio[PNX833X_PIC_NUM_IRQ] =
 #endif
 };
 
-static void pnx833x_timer_dispatch(void)
-{
-	do_IRQ(mips_cpu_timer_irq);
+static void pnx833x_timer_dispatch(void) {
+    do_IRQ(mips_cpu_timer_irq);
 }
 
-static void pic_dispatch(void)
-{
-	unsigned int irq = PNX833X_REGFIELD(PIC_INT_SRC, INT_SRC);
+static void pic_dispatch(void) {
+    unsigned int irq = PNX833X_REGFIELD(PIC_INT_SRC, INT_SRC);
 
-	if ((irq >= 1) && (irq < (PNX833X_PIC_NUM_IRQ))) {
-		unsigned long priority = PNX833X_PIC_INT_PRIORITY;
-		PNX833X_PIC_INT_PRIORITY = irq_prio[irq];
+    if ((irq >= 1) && (irq < (PNX833X_PIC_NUM_IRQ))) {
+        unsigned long priority = PNX833X_PIC_INT_PRIORITY;
+        PNX833X_PIC_INT_PRIORITY = irq_prio[irq];
 
-		if (irq == PNX833X_PIC_GPIO_INT) {
-			unsigned long mask = PNX833X_PIO_INT_STATUS & PNX833X_PIO_INT_ENABLE;
-			int pin;
-			while ((pin = ffs(mask & 0xffff))) {
-				pin -= 1;
-				do_IRQ(PNX833X_GPIO_IRQ_BASE + pin);
-				mask &= ~(1 << pin);
-			}
-		} else {
-			do_IRQ(irq + PNX833X_PIC_IRQ_BASE);
-		}
+        if (irq == PNX833X_PIC_GPIO_INT) {
+            unsigned long mask = PNX833X_PIO_INT_STATUS & PNX833X_PIO_INT_ENABLE;
+            int pin;
+            while ((pin = ffs(mask & 0xffff))) {
+                pin -= 1;
+                do_IRQ(PNX833X_GPIO_IRQ_BASE + pin);
+                mask &= ~(1 << pin);
+            }
+        } else {
+            do_IRQ(irq + PNX833X_PIC_IRQ_BASE);
+        }
 
-		PNX833X_PIC_INT_PRIORITY = priority;
-	} else {
-		printk(KERN_ERR "plat_irq_dispatch: unexpected irq %u\n", irq);
-	}
+        PNX833X_PIC_INT_PRIORITY = priority;
+    } else {
+        printk(KERN_ERR "plat_irq_dispatch: unexpected irq %u\n", irq);
+    }
 }
 
-asmlinkage void plat_irq_dispatch(void)
-{
-	unsigned int pending = read_c0_status() & read_c0_cause();
+asmlinkage void plat_irq_dispatch(void) {
+    unsigned int pending = read_c0_status() & read_c0_cause();
 
-	if (pending & STATUSF_IP4)
-		pic_dispatch();
-	else if (pending & STATUSF_IP7)
-		do_IRQ(PNX833X_TIMER_IRQ);
-	else
-		spurious_interrupt();
+    if (pending & STATUSF_IP4)
+        pic_dispatch();
+    else if (pending & STATUSF_IP7)
+        do_IRQ(PNX833X_TIMER_IRQ);
+    else
+        spurious_interrupt();
 }
 
-static inline void pnx833x_hard_enable_pic_irq(unsigned int irq)
-{
-	/* Currently we do this by setting IRQ priority to 1.
-	   If priority support is being implemented, 1 should be repalced
-		by a better value. */
-	PNX833X_PIC_INT_REG(irq) = irq_prio[irq];
+static inline void pnx833x_hard_enable_pic_irq(unsigned int irq) {
+    /* Currently we do this by setting IRQ priority to 1.
+       If priority support is being implemented, 1 should be repalced
+    	by a better value. */
+    PNX833X_PIC_INT_REG(irq) = irq_prio[irq];
 }
 
-static inline void pnx833x_hard_disable_pic_irq(unsigned int irq)
-{
-	/* Disable IRQ by writing setting it's priority to 0 */
-	PNX833X_PIC_INT_REG(irq) = 0;
+static inline void pnx833x_hard_disable_pic_irq(unsigned int irq) {
+    /* Disable IRQ by writing setting it's priority to 0 */
+    PNX833X_PIC_INT_REG(irq) = 0;
 }
 
 static DEFINE_RAW_SPINLOCK(pnx833x_irq_lock);
 
-static unsigned int pnx833x_startup_pic_irq(unsigned int irq)
-{
-	unsigned long flags;
-	unsigned int pic_irq = irq - PNX833X_PIC_IRQ_BASE;
+static unsigned int pnx833x_startup_pic_irq(unsigned int irq) {
+    unsigned long flags;
+    unsigned int pic_irq = irq - PNX833X_PIC_IRQ_BASE;
 
-	raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
-	pnx833x_hard_enable_pic_irq(pic_irq);
-	raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
-	return 0;
+    raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
+    pnx833x_hard_enable_pic_irq(pic_irq);
+    raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
+    return 0;
 }
 
-static void pnx833x_enable_pic_irq(struct irq_data *d)
-{
-	unsigned long flags;
-	unsigned int pic_irq = d->irq - PNX833X_PIC_IRQ_BASE;
+static void pnx833x_enable_pic_irq(struct irq_data *d) {
+    unsigned long flags;
+    unsigned int pic_irq = d->irq - PNX833X_PIC_IRQ_BASE;
 
-	raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
-	pnx833x_hard_enable_pic_irq(pic_irq);
-	raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
+    raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
+    pnx833x_hard_enable_pic_irq(pic_irq);
+    raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
 }
 
-static void pnx833x_disable_pic_irq(struct irq_data *d)
-{
-	unsigned long flags;
-	unsigned int pic_irq = d->irq - PNX833X_PIC_IRQ_BASE;
+static void pnx833x_disable_pic_irq(struct irq_data *d) {
+    unsigned long flags;
+    unsigned int pic_irq = d->irq - PNX833X_PIC_IRQ_BASE;
 
-	raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
-	pnx833x_hard_disable_pic_irq(pic_irq);
-	raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
+    raw_spin_lock_irqsave(&pnx833x_irq_lock, flags);
+    pnx833x_hard_disable_pic_irq(pic_irq);
+    raw_spin_unlock_irqrestore(&pnx833x_irq_lock, flags);
 }
 
 static DEFINE_RAW_SPINLOCK(pnx833x_gpio_pnx833x_irq_lock);
 
-static void pnx833x_enable_gpio_irq(struct irq_data *d)
-{
-	int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
-	unsigned long flags;
-	raw_spin_lock_irqsave(&pnx833x_gpio_pnx833x_irq_lock, flags);
-	pnx833x_gpio_enable_irq(pin);
-	raw_spin_unlock_irqrestore(&pnx833x_gpio_pnx833x_irq_lock, flags);
+static void pnx833x_enable_gpio_irq(struct irq_data *d) {
+    int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
+    unsigned long flags;
+    raw_spin_lock_irqsave(&pnx833x_gpio_pnx833x_irq_lock, flags);
+    pnx833x_gpio_enable_irq(pin);
+    raw_spin_unlock_irqrestore(&pnx833x_gpio_pnx833x_irq_lock, flags);
 }
 
-static void pnx833x_disable_gpio_irq(struct irq_data *d)
-{
-	int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
-	unsigned long flags;
-	raw_spin_lock_irqsave(&pnx833x_gpio_pnx833x_irq_lock, flags);
-	pnx833x_gpio_disable_irq(pin);
-	raw_spin_unlock_irqrestore(&pnx833x_gpio_pnx833x_irq_lock, flags);
+static void pnx833x_disable_gpio_irq(struct irq_data *d) {
+    int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
+    unsigned long flags;
+    raw_spin_lock_irqsave(&pnx833x_gpio_pnx833x_irq_lock, flags);
+    pnx833x_gpio_disable_irq(pin);
+    raw_spin_unlock_irqrestore(&pnx833x_gpio_pnx833x_irq_lock, flags);
 }
 
-static int pnx833x_set_type_gpio_irq(struct irq_data *d, unsigned int flow_type)
-{
-	int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
-	int gpio_mode;
+static int pnx833x_set_type_gpio_irq(struct irq_data *d, unsigned int flow_type) {
+    int pin = d->irq - PNX833X_GPIO_IRQ_BASE;
+    int gpio_mode;
 
-	switch (flow_type) {
-	case IRQ_TYPE_EDGE_RISING:
-		gpio_mode = GPIO_INT_EDGE_RISING;
-		break;
-	case IRQ_TYPE_EDGE_FALLING:
-		gpio_mode = GPIO_INT_EDGE_FALLING;
-		break;
-	case IRQ_TYPE_EDGE_BOTH:
-		gpio_mode = GPIO_INT_EDGE_BOTH;
-		break;
-	case IRQ_TYPE_LEVEL_HIGH:
-		gpio_mode = GPIO_INT_LEVEL_HIGH;
-		break;
-	case IRQ_TYPE_LEVEL_LOW:
-		gpio_mode = GPIO_INT_LEVEL_LOW;
-		break;
-	default:
-		gpio_mode = GPIO_INT_NONE;
-		break;
-	}
+    switch (flow_type) {
+    case IRQ_TYPE_EDGE_RISING:
+        gpio_mode = GPIO_INT_EDGE_RISING;
+        break;
+    case IRQ_TYPE_EDGE_FALLING:
+        gpio_mode = GPIO_INT_EDGE_FALLING;
+        break;
+    case IRQ_TYPE_EDGE_BOTH:
+        gpio_mode = GPIO_INT_EDGE_BOTH;
+        break;
+    case IRQ_TYPE_LEVEL_HIGH:
+        gpio_mode = GPIO_INT_LEVEL_HIGH;
+        break;
+    case IRQ_TYPE_LEVEL_LOW:
+        gpio_mode = GPIO_INT_LEVEL_LOW;
+        break;
+    default:
+        gpio_mode = GPIO_INT_NONE;
+        break;
+    }
 
-	pnx833x_gpio_setup_irq(gpio_mode, pin);
+    pnx833x_gpio_setup_irq(gpio_mode, pin);
 
-	return 0;
+    return 0;
 }
 
 static struct irq_chip pnx833x_pic_irq_type = {
-	.name = "PNX-PIC",
-	.irq_enable = pnx833x_enable_pic_irq,
-	.irq_disable = pnx833x_disable_pic_irq,
+    .name = "PNX-PIC",
+    .irq_enable = pnx833x_enable_pic_irq,
+    .irq_disable = pnx833x_disable_pic_irq,
 };
 
 static struct irq_chip pnx833x_gpio_irq_type = {
-	.name = "PNX-GPIO",
-	.irq_enable = pnx833x_enable_gpio_irq,
-	.irq_disable = pnx833x_disable_gpio_irq,
-	.irq_set_type = pnx833x_set_type_gpio_irq,
+    .name = "PNX-GPIO",
+    .irq_enable = pnx833x_enable_gpio_irq,
+    .irq_disable = pnx833x_disable_gpio_irq,
+    .irq_set_type = pnx833x_set_type_gpio_irq,
 };
 
-void __init arch_init_irq(void)
-{
-	unsigned int irq;
+void __init arch_init_irq(void) {
+    unsigned int irq;
 
-	/* setup standard internal cpu irqs */
-	mips_cpu_irq_init();
+    /* setup standard internal cpu irqs */
+    mips_cpu_irq_init();
 
-	/* Set IRQ information in irq_desc */
-	for (irq = PNX833X_PIC_IRQ_BASE; irq < (PNX833X_PIC_IRQ_BASE + PNX833X_PIC_NUM_IRQ); irq++) {
-		pnx833x_hard_disable_pic_irq(irq);
-		irq_set_chip_and_handler(irq, &pnx833x_pic_irq_type,
-					 handle_simple_irq);
-	}
+    /* Set IRQ information in irq_desc */
+    for (irq = PNX833X_PIC_IRQ_BASE; irq < (PNX833X_PIC_IRQ_BASE + PNX833X_PIC_NUM_IRQ); irq++) {
+        pnx833x_hard_disable_pic_irq(irq);
+        irq_set_chip_and_handler(irq, &pnx833x_pic_irq_type,
+                                 handle_simple_irq);
+    }
 
-	for (irq = PNX833X_GPIO_IRQ_BASE; irq < (PNX833X_GPIO_IRQ_BASE + PNX833X_GPIO_NUM_IRQ); irq++)
-		irq_set_chip_and_handler(irq, &pnx833x_gpio_irq_type,
-					 handle_simple_irq);
+    for (irq = PNX833X_GPIO_IRQ_BASE; irq < (PNX833X_GPIO_IRQ_BASE + PNX833X_GPIO_NUM_IRQ); irq++)
+        irq_set_chip_and_handler(irq, &pnx833x_gpio_irq_type,
+                                 handle_simple_irq);
 
-	/* Set PIC priority limiter register to 0 */
-	PNX833X_PIC_INT_PRIORITY = 0;
+    /* Set PIC priority limiter register to 0 */
+    PNX833X_PIC_INT_PRIORITY = 0;
 
-	/* Setup GPIO IRQ dispatching */
-	pnx833x_startup_pic_irq(PNX833X_PIC_GPIO_INT);
+    /* Setup GPIO IRQ dispatching */
+    pnx833x_startup_pic_irq(PNX833X_PIC_GPIO_INT);
 
-	/* Enable PIC IRQs (HWIRQ2) */
-	if (cpu_has_vint)
-		set_vi_handler(4, pic_dispatch);
+    /* Enable PIC IRQs (HWIRQ2) */
+    if (cpu_has_vint)
+        set_vi_handler(4, pic_dispatch);
 
-	write_c0_status(read_c0_status() | IE_IRQ2);
+    write_c0_status(read_c0_status() | IE_IRQ2);
 }
 
-unsigned int __cpuinit get_c0_compare_int(void)
-{
-	if (cpu_has_vint)
-		set_vi_handler(cp0_compare_irq, pnx833x_timer_dispatch);
+unsigned int __cpuinit get_c0_compare_int(void) {
+    if (cpu_has_vint)
+        set_vi_handler(cp0_compare_irq, pnx833x_timer_dispatch);
 
-	mips_cpu_timer_irq = MIPS_CPU_IRQ_BASE + cp0_compare_irq;
-	return mips_cpu_timer_irq;
+    mips_cpu_timer_irq = MIPS_CPU_IRQ_BASE + cp0_compare_irq;
+    return mips_cpu_timer_irq;
 }
 
-void __init plat_time_init(void)
-{
-	/* calculate mips_hpt_frequency based on PNX833X_CLOCK_CPUCP_CTL reg */
+void __init plat_time_init(void) {
+    /* calculate mips_hpt_frequency based on PNX833X_CLOCK_CPUCP_CTL reg */
 
-	extern unsigned long mips_hpt_frequency;
-	unsigned long reg = PNX833X_CLOCK_CPUCP_CTL;
+    extern unsigned long mips_hpt_frequency;
+    unsigned long reg = PNX833X_CLOCK_CPUCP_CTL;
 
-	if (!(PNX833X_BIT(reg, CLOCK_CPUCP_CTL, EXIT_RESET))) {
-		/* Functional clock is disabled so use crystal frequency */
-		mips_hpt_frequency = 25;
-	} else {
+    if (!(PNX833X_BIT(reg, CLOCK_CPUCP_CTL, EXIT_RESET))) {
+        /* Functional clock is disabled so use crystal frequency */
+        mips_hpt_frequency = 25;
+    } else {
 #if defined(CONFIG_SOC_PNX8335)
-		/* Functional clock is enabled, so get clock multiplier */
-		mips_hpt_frequency = 90 + (10 * PNX8335_REGFIELD(CLOCK_PLL_CPU_CTL, FREQ));
+        /* Functional clock is enabled, so get clock multiplier */
+        mips_hpt_frequency = 90 + (10 * PNX8335_REGFIELD(CLOCK_PLL_CPU_CTL, FREQ));
 #else
-		static const unsigned long int freq[4] = {240, 160, 120, 80};
-		mips_hpt_frequency = freq[PNX833X_FIELD(reg, CLOCK_CPUCP_CTL, DIV_CLOCK)];
+        static const unsigned long int freq[4] = {240, 160, 120, 80};
+        mips_hpt_frequency = freq[PNX833X_FIELD(reg, CLOCK_CPUCP_CTL, DIV_CLOCK)];
 #endif
-	}
+    }
 
-	printk(KERN_INFO "CPU clock is %ld MHz\n", mips_hpt_frequency);
+    printk(KERN_INFO "CPU clock is %ld MHz\n", mips_hpt_frequency);
 
-	mips_hpt_frequency *= 500000;
+    mips_hpt_frequency *= 500000;
 }

@@ -134,10 +134,10 @@ register struct frv_frame0 *__debug_frame0 asm("gr31");
 #define __debug_reg(X)		((unsigned long *) ((unsigned long) &__debug_frame0 + (X)))
 
 struct frv_debug_status {
-	unsigned long		bpsr;
-	unsigned long		dcr;
-	unsigned long		brr;
-	unsigned long		nmar;
+    unsigned long		bpsr;
+    unsigned long		dcr;
+    unsigned long		brr;
+    unsigned long		nmar;
 };
 
 extern struct frv_debug_status __debug_status;

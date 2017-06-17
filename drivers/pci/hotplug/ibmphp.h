@@ -35,9 +35,9 @@
 extern int ibmphp_debug;
 
 #if !defined(MODULE)
-	#define MY_NAME "ibmphpd"
+#define MY_NAME "ibmphpd"
 #else
-	#define MY_NAME THIS_MODULE->name
+#define MY_NAME THIS_MODULE->name
 #endif
 #define debug(fmt, arg...) do { if (ibmphp_debug == 1) printk(KERN_DEBUG "%s: " fmt , MY_NAME , ## arg); } while (0)
 #define debug_pci(fmt, arg...) do { if (ibmphp_debug) printk(KERN_DEBUG "%s: " fmt , MY_NAME , ## arg); } while (0)
@@ -103,10 +103,10 @@ extern int ibmphp_debug;
 //--------------------------------------------------------------
 
 struct rio_table_hdr {
-	u8 ver_num; 
-	u8 scal_count;
-	u8 riodev_count;
-	u16 offset;
+    u8 ver_num;
+    u8 scal_count;
+    u8 riodev_count;
+    u16 offset;
 };
 
 //-------------------------------------------------------------
@@ -114,63 +114,63 @@ struct rio_table_hdr {
 //-------------------------------------------------------------
 
 struct scal_detail {
-	u8 node_id;
-	u32 cbar;
-	u8 port0_node_connect;
-	u8 port0_port_connect;
-	u8 port1_node_connect;
-	u8 port1_port_connect;
-	u8 port2_node_connect;
-	u8 port2_port_connect;
-	u8 chassis_num;
+    u8 node_id;
+    u32 cbar;
+    u8 port0_node_connect;
+    u8 port0_port_connect;
+    u8 port1_node_connect;
+    u8 port1_port_connect;
+    u8 port2_node_connect;
+    u8 port2_port_connect;
+    u8 chassis_num;
 //	struct list_head scal_detail_list;
 };
 
 //--------------------------------------------------------------
-// RIO DETAIL 
+// RIO DETAIL
 //--------------------------------------------------------------
 
 struct rio_detail {
-	u8 rio_node_id;
-	u32 bbar;
-	u8 rio_type;
-	u8 owner_id;
-	u8 port0_node_connect;
-	u8 port0_port_connect;
-	u8 port1_node_connect;
-	u8 port1_port_connect;
-	u8 first_slot_num;
-	u8 status;
-	u8 wpindex;
-	u8 chassis_num;
-	struct list_head rio_detail_list;
+    u8 rio_node_id;
+    u32 bbar;
+    u8 rio_type;
+    u8 owner_id;
+    u8 port0_node_connect;
+    u8 port0_port_connect;
+    u8 port1_node_connect;
+    u8 port1_port_connect;
+    u8 first_slot_num;
+    u8 status;
+    u8 wpindex;
+    u8 chassis_num;
+    struct list_head rio_detail_list;
 };
 
 struct opt_rio {
-	u8 rio_type;
-	u8 chassis_num;
-	u8 first_slot_num;
-	u8 middle_num;
-	struct list_head opt_rio_list;
-};	
+    u8 rio_type;
+    u8 chassis_num;
+    u8 first_slot_num;
+    u8 middle_num;
+    struct list_head opt_rio_list;
+};
 
 struct opt_rio_lo {
-	u8 rio_type;
-	u8 chassis_num;
-	u8 first_slot_num;
-	u8 middle_num;
-	u8 pack_count;
-	struct list_head opt_rio_lo_list;
-};	
+    u8 rio_type;
+    u8 chassis_num;
+    u8 first_slot_num;
+    u8 middle_num;
+    u8 pack_count;
+    struct list_head opt_rio_lo_list;
+};
 
 /****************************************************************
 *  HPC DESCRIPTOR NODE                                          *
 ****************************************************************/
 
 struct ebda_hpc_list {
-	u8 format;
-	u16 num_ctlrs;
-	short phys_addr;
+    u8 format;
+    u16 num_ctlrs;
+    short phys_addr;
 //      struct list_head ebda_hpc_list;
 };
 /*****************************************************************
@@ -179,19 +179,19 @@ struct ebda_hpc_list {
 *****************************************************************/
 
 struct ebda_hpc_slot {
-	u8 slot_num;
-	u32 slot_bus_num;
-	u8 ctl_index;
-	u8 slot_cap;
+    u8 slot_num;
+    u32 slot_bus_num;
+    u8 ctl_index;
+    u8 slot_cap;
 };
 
 struct ebda_hpc_bus {
-	u32 bus_num;
-	u8 slots_at_33_conv;
-	u8 slots_at_66_conv;
-	u8 slots_at_66_pcix;
-	u8 slots_at_100_pcix;
-	u8 slots_at_133_pcix;
+    u32 bus_num;
+    u8 slots_at_33_conv;
+    u8 slots_at_66_conv;
+    u8 slots_at_66_pcix;
+    u8 slots_at_100_pcix;
+    u8 slots_at_133_pcix;
 };
 
 
@@ -200,18 +200,18 @@ struct ebda_hpc_bus {
 ********************************************************************/
 
 struct isa_ctlr_access {
-	u16 io_start;
-	u16 io_end;
+    u16 io_start;
+    u16 io_end;
 };
 
 struct pci_ctlr_access {
-	u8 bus;
-	u8 dev_fun;
+    u8 bus;
+    u8 dev_fun;
 };
 
 struct wpeg_i2c_ctlr_access {
-	ulong wpegbbar;
-	u8 i2c_addr;
+    ulong wpegbbar;
+    u8 i2c_addr;
 };
 
 #define HPC_DEVICE_ID		0x0246
@@ -222,10 +222,10 @@ struct wpeg_i2c_ctlr_access {
 *************************************************************************/
 
 struct ebda_rsrc_list {
-	u8 format;
-	u16 num_entries;
-	u16 phys_addr;
-	struct ebda_rsrc_list *next;
+    u8 format;
+    u16 num_entries;
+    u16 phys_addr;
+    struct ebda_rsrc_list *next;
 };
 
 
@@ -234,13 +234,13 @@ struct ebda_rsrc_list {
 ***************************************************************************/
 
 struct ebda_pci_rsrc {
-	u8 rsrc_type;
-	u8 bus_num;
-	u8 dev_fun;
-	u32 start_addr;
-	u32 end_addr;
-	u8 marked;	/* for NVRAM */
-	struct list_head ebda_pci_rsrc_list;
+    u8 rsrc_type;
+    u8 bus_num;
+    u8 dev_fun;
+    u32 start_addr;
+    u32 end_addr;
+    u8 marked;	/* for NVRAM */
+    struct list_head ebda_pci_rsrc_list;
 };
 
 
@@ -249,20 +249,20 @@ struct ebda_pci_rsrc {
 ***********************************************************/
 
 struct bus_info {
-	u8 slot_min;
-	u8 slot_max;
-	u8 slot_count;
-	u8 busno;
-	u8 controller_id;
-	u8 current_speed;
-	u8 current_bus_mode;
-	u8 index;
-	u8 slots_at_33_conv;
-	u8 slots_at_66_conv;
-	u8 slots_at_66_pcix;
-	u8 slots_at_100_pcix;
-	u8 slots_at_133_pcix;
-	struct list_head bus_info_list;
+    u8 slot_min;
+    u8 slot_max;
+    u8 slot_count;
+    u8 busno;
+    u8 controller_id;
+    u8 current_speed;
+    u8 current_bus_mode;
+    u8 index;
+    u8 slots_at_33_conv;
+    u8 slots_at_66_conv;
+    u8 slots_at_66_pcix;
+    u8 slots_at_100_pcix;
+    u8 slots_at_133_pcix;
+    struct list_head bus_info_list;
 };
 
 
@@ -333,50 +333,50 @@ extern int ibmphp_register_pci (void);
  * allocated per primary bus in the EBDA
  */
 struct range_node {
-	int rangeno;
-	u32 start;
-	u32 end;
-	struct range_node *next;
+    int rangeno;
+    u32 start;
+    u32 end;
+    struct range_node *next;
 };
 
 struct bus_node {
-	u8 busno;
-	int noIORanges;
-	struct range_node *rangeIO;
-	int noMemRanges;
-	struct range_node *rangeMem;
-	int noPFMemRanges;
-	struct range_node *rangePFMem;
-	int needIOUpdate;
-	int needMemUpdate;
-	int needPFMemUpdate;
-	struct resource_node *firstIO;	/* first IO resource on the Bus */
-	struct resource_node *firstMem;	/* first memory resource on the Bus */
-	struct resource_node *firstPFMem;	/* first prefetchable memory resource on the Bus */
-	struct resource_node *firstPFMemFromMem;	/* when run out of pfmem available, taking from Mem */
-	struct list_head bus_list;
+    u8 busno;
+    int noIORanges;
+    struct range_node *rangeIO;
+    int noMemRanges;
+    struct range_node *rangeMem;
+    int noPFMemRanges;
+    struct range_node *rangePFMem;
+    int needIOUpdate;
+    int needMemUpdate;
+    int needPFMemUpdate;
+    struct resource_node *firstIO;	/* first IO resource on the Bus */
+    struct resource_node *firstMem;	/* first memory resource on the Bus */
+    struct resource_node *firstPFMem;	/* first prefetchable memory resource on the Bus */
+    struct resource_node *firstPFMemFromMem;	/* when run out of pfmem available, taking from Mem */
+    struct list_head bus_list;
 };
 
 struct resource_node {
-	int rangeno;
-	u8 busno;
-	u8 devfunc;
-	u32 start;
-	u32 end;
-	u32 len;
-	int type;		/* MEM, IO, PFMEM */
-	u8 fromMem;		/* this is to indicate that the range is from
+    int rangeno;
+    u8 busno;
+    u8 devfunc;
+    u32 start;
+    u32 end;
+    u32 len;
+    int type;		/* MEM, IO, PFMEM */
+    u8 fromMem;		/* this is to indicate that the range is from
 				 * from the Memory bucket rather than from PFMem */
-	struct resource_node *next;
-	struct resource_node *nextRange;	/* for the other mem range on bus */
+    struct resource_node *next;
+    struct resource_node *nextRange;	/* for the other mem range on bus */
 };
 
 struct res_needed {
-	u32 mem;
-	u32 pfmem;
-	u32 io;
-	u8 not_correct;		/* needed for return */
-	int devices[32];	/* for device numbers behind this bridge */
+    u32 mem;
+    u32 pfmem;
+    u32 io;
+    u8 not_correct;		/* needed for return */
+    int devices[32];	/* for device numbers behind this bridge */
 };
 
 /* functions */
@@ -689,62 +689,62 @@ extern struct pci_bus *ibmphp_pci_bus;
 /* Variables */
 
 struct pci_func {
-	struct pci_dev *dev;	/* from the OS */
-	u8 busno;
-	u8 device;
-	u8 function;
-	struct resource_node *io[6];
-	struct resource_node *mem[6];
-	struct resource_node *pfmem[6];
-	struct pci_func *next;
-	int devices[32];	/* for bridge config */
-	u8 irq[4];		/* for interrupt config */
-	u8 bus;			/* flag for unconfiguring, to say if PPB */
+    struct pci_dev *dev;	/* from the OS */
+    u8 busno;
+    u8 device;
+    u8 function;
+    struct resource_node *io[6];
+    struct resource_node *mem[6];
+    struct resource_node *pfmem[6];
+    struct pci_func *next;
+    int devices[32];	/* for bridge config */
+    u8 irq[4];		/* for interrupt config */
+    u8 bus;			/* flag for unconfiguring, to say if PPB */
 };
 
 struct slot {
-	u8 bus;
-	u8 device;
-	u8 number;
-	u8 real_physical_slot_num;
-	u32 capabilities;
-	u8 supported_speed;
-	u8 supported_bus_mode;
-	u8 flag;		/* this is for disable slot and polling */
-	u8 ctlr_index;
-	struct hotplug_slot *hotplug_slot;
-	struct controller *ctrl;
-	struct pci_func *func;
-	u8 irq[4];
-	int bit_mode;		/* 0 = 32, 1 = 64 */
-	struct bus_info *bus_on;
-	struct list_head ibm_slot_list;
-	u8 status;
-	u8 ext_status;
-	u8 busstatus;
+    u8 bus;
+    u8 device;
+    u8 number;
+    u8 real_physical_slot_num;
+    u32 capabilities;
+    u8 supported_speed;
+    u8 supported_bus_mode;
+    u8 flag;		/* this is for disable slot and polling */
+    u8 ctlr_index;
+    struct hotplug_slot *hotplug_slot;
+    struct controller *ctrl;
+    struct pci_func *func;
+    u8 irq[4];
+    int bit_mode;		/* 0 = 32, 1 = 64 */
+    struct bus_info *bus_on;
+    struct list_head ibm_slot_list;
+    u8 status;
+    u8 ext_status;
+    u8 busstatus;
 };
 
 struct controller {
-	struct ebda_hpc_slot *slots;
-	struct ebda_hpc_bus *buses;
-	struct pci_dev *ctrl_dev; /* in case where controller is PCI */
-	u8 starting_slot_num;	/* starting and ending slot #'s this ctrl controls*/
-	u8 ending_slot_num;
-	u8 revision;
-	u8 options;		/* which options HPC supports */
-	u8 status;
-	u8 ctlr_id;
-	u8 slot_count;
-	u8 bus_count;
-	u8 ctlr_relative_id;
-	u32 irq;
-	union {
-		struct isa_ctlr_access isa_ctlr;
-		struct pci_ctlr_access pci_ctlr;
-		struct wpeg_i2c_ctlr_access wpeg_ctlr;
-	} u;
-	u8 ctlr_type;
-	struct list_head ebda_hpc_list;
+    struct ebda_hpc_slot *slots;
+    struct ebda_hpc_bus *buses;
+    struct pci_dev *ctrl_dev; /* in case where controller is PCI */
+    u8 starting_slot_num;	/* starting and ending slot #'s this ctrl controls*/
+    u8 ending_slot_num;
+    u8 revision;
+    u8 options;		/* which options HPC supports */
+    u8 status;
+    u8 ctlr_id;
+    u8 slot_count;
+    u8 bus_count;
+    u8 ctlr_relative_id;
+    u32 irq;
+    union {
+        struct isa_ctlr_access isa_ctlr;
+        struct pci_ctlr_access pci_ctlr;
+        struct wpeg_i2c_ctlr_access wpeg_ctlr;
+    } u;
+    u8 ctlr_type;
+    struct list_head ebda_hpc_list;
 };
 
 /* Functions */

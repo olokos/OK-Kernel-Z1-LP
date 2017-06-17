@@ -54,61 +54,58 @@ MODULE_PARM_DESC(debug, "Debug trace mask");
 static struct pvr2_sysfs_class *class_ptr = NULL;
 #endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
 
-static void pvr_setup_attach(struct pvr2_context *pvr)
-{
-	/* Create association with v4l layer */
-	pvr2_v4l2_create(pvr);
+static void pvr_setup_attach(struct pvr2_context *pvr) {
+    /* Create association with v4l layer */
+    pvr2_v4l2_create(pvr);
 #ifdef CONFIG_VIDEO_PVRUSB2_DVB
-	/* Create association with dvb layer */
-	pvr2_dvb_create(pvr);
+    /* Create association with dvb layer */
+    pvr2_dvb_create(pvr);
 #endif
 #ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
-	pvr2_sysfs_create(pvr,class_ptr);
+    pvr2_sysfs_create(pvr,class_ptr);
 #endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
 }
 
 static int pvr_probe(struct usb_interface *intf,
-		     const struct usb_device_id *devid)
-{
-	struct pvr2_context *pvr;
+                     const struct usb_device_id *devid) {
+    struct pvr2_context *pvr;
 
-	/* Create underlying hardware interface */
-	pvr = pvr2_context_create(intf,devid,pvr_setup_attach);
-	if (!pvr) {
-		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
-			   "Failed to create hdw handler");
-		return -ENOMEM;
-	}
+    /* Create underlying hardware interface */
+    pvr = pvr2_context_create(intf,devid,pvr_setup_attach);
+    if (!pvr) {
+        pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+                   "Failed to create hdw handler");
+        return -ENOMEM;
+    }
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_probe(pvr=%p)",pvr);
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_probe(pvr=%p)",pvr);
 
-	usb_set_intfdata(intf, pvr);
+    usb_set_intfdata(intf, pvr);
 
-	return 0;
+    return 0;
 }
 
 /*
  * pvr_disconnect()
  *
  */
-static void pvr_disconnect(struct usb_interface *intf)
-{
-	struct pvr2_context *pvr = usb_get_intfdata(intf);
+static void pvr_disconnect(struct usb_interface *intf) {
+    struct pvr2_context *pvr = usb_get_intfdata(intf);
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_disconnect(pvr=%p) BEGIN",pvr);
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_disconnect(pvr=%p) BEGIN",pvr);
 
-	usb_set_intfdata (intf, NULL);
-	pvr2_context_disconnect(pvr);
+    usb_set_intfdata (intf, NULL);
+    pvr2_context_disconnect(pvr);
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_disconnect(pvr=%p) DONE",pvr);
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_disconnect(pvr=%p) DONE",pvr);
 
 }
 
 static struct usb_driver pvr_driver = {
-	.name =         "pvrusb2",
-	.id_table =     pvr2_device_table,
-	.probe =        pvr_probe,
-	.disconnect =   pvr_disconnect
+    .name =         "pvrusb2",
+    .id_table =     pvr2_device_table,
+    .probe =        pvr_probe,
+    .disconnect =   pvr_disconnect
 };
 
 /*
@@ -117,49 +114,47 @@ static struct usb_driver pvr_driver = {
  * This code is run to initialize/exit the driver.
  *
  */
-static int __init pvr_init(void)
-{
-	int ret;
+static int __init pvr_init(void) {
+    int ret;
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_init");
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_init");
 
-	ret = pvr2_context_global_init();
-	if (ret != 0) {
-		pvr2_trace(PVR2_TRACE_INIT,"pvr_init failure code=%d",ret);
-		return ret;
-	}
+    ret = pvr2_context_global_init();
+    if (ret != 0) {
+        pvr2_trace(PVR2_TRACE_INIT,"pvr_init failure code=%d",ret);
+        return ret;
+    }
 
 #ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
-	class_ptr = pvr2_sysfs_class_create();
+    class_ptr = pvr2_sysfs_class_create();
 #endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
 
-	ret = usb_register(&pvr_driver);
+    ret = usb_register(&pvr_driver);
 
-	if (ret == 0)
-		printk(KERN_INFO "pvrusb2: " DRIVER_VERSION ":"
-		       DRIVER_DESC "\n");
-	if (pvrusb2_debug)
-		printk(KERN_INFO "pvrusb2: Debug mask is %d (0x%x)\n",
-		       pvrusb2_debug,pvrusb2_debug);
+    if (ret == 0)
+        printk(KERN_INFO "pvrusb2: " DRIVER_VERSION ":"
+               DRIVER_DESC "\n");
+    if (pvrusb2_debug)
+        printk(KERN_INFO "pvrusb2: Debug mask is %d (0x%x)\n",
+               pvrusb2_debug,pvrusb2_debug);
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_init complete");
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_init complete");
 
-	return ret;
+    return ret;
 }
 
-static void __exit pvr_exit(void)
-{
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_exit");
+static void __exit pvr_exit(void) {
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_exit");
 
-	usb_deregister(&pvr_driver);
+    usb_deregister(&pvr_driver);
 
-	pvr2_context_global_done();
+    pvr2_context_global_done();
 
 #ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
-	pvr2_sysfs_class_destroy(class_ptr);
+    pvr2_sysfs_class_destroy(class_ptr);
 #endif /* CONFIG_VIDEO_PVRUSB2_SYSFS */
 
-	pvr2_trace(PVR2_TRACE_INIT,"pvr_exit complete");
+    pvr2_trace(PVR2_TRACE_INIT,"pvr_exit complete");
 }
 
 module_init(pvr_init);

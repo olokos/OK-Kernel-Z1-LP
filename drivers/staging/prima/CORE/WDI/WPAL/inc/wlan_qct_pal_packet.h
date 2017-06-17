@@ -80,8 +80,7 @@
 /* Transport channel name string size */
 #define WPT_TRPT_CHANNEL_NAME     4
 
-typedef enum
-{
+typedef enum {
     ///Packet is used to transmit 802.11 Management frames.
     eWLAN_PAL_PKT_TYPE_TX_802_11_MGMT,
     ///Packet is used to transmit 802.11 Data frames.
@@ -93,8 +92,7 @@ typedef enum
 } wpt_packet_type;
 
 
-typedef struct swpt_packet
-{
+typedef struct swpt_packet {
     /*
     Pointer to a buffer for BD for TX packets
     For RX packets. The pBD MUST set to NULL.
@@ -115,16 +113,14 @@ typedef struct swpt_packet
     void *pInternalData;
 } wpt_packet;
 
-typedef struct swpt_iterator
-{
+typedef struct swpt_iterator {
     void *pNext;
     void *pCur;
     void *pContext;
 } wpt_iterator;
 
 /* Each specific channel dedicated information should be logged */
-typedef struct
-{
+typedef struct {
     char         channelName[WPT_TRPT_CHANNEL_NAME];
     v_U32_t      numDesc;
     v_U32_t      numFreeDesc;
@@ -138,8 +134,7 @@ typedef struct
 } wpt_log_data_stall_channel_type;
 
 /* Transport log context */
-typedef struct
-{
+typedef struct {
     v_U32_t                          PowerState;
     v_U32_t                          numFreeBd;
     wpt_log_data_stall_channel_type  dxeChannelInfo[WPT_NUM_TRPT_CHANNEL];

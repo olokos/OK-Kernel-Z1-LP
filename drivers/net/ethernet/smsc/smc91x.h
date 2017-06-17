@@ -72,15 +72,14 @@
 #define SMC_IRQ_FLAGS		(-1)	/* from resource */
 
 /* We actually can't write halfwords properly if not word aligned */
-static inline void SMC_outw(u16 val, void __iomem *ioaddr, int reg)
-{
-	if ((machine_is_mainstone() || machine_is_stargate2()) && reg & 2) {
-		unsigned int v = val << 16;
-		v |= readl(ioaddr + (reg & ~2)) & 0xffff;
-		writel(v, ioaddr + (reg & ~2));
-	} else {
-		writew(val, ioaddr + reg);
-	}
+static inline void SMC_outw(u16 val, void __iomem *ioaddr, int reg) {
+    if ((machine_is_mainstone() || machine_is_stargate2()) && reg & 2) {
+        unsigned int v = val << 16;
+        v |= readl(ioaddr + (reg & ~2)) & 0xffff;
+        writel(v, ioaddr + (reg & ~2));
+    } else {
+        writew(val, ioaddr + reg);
+    }
 }
 
 #elif defined(CONFIG_SA1100_PLEB)
@@ -158,15 +157,14 @@ static inline void SMC_outw(u16 val, void __iomem *ioaddr, int reg)
 
 /* We actually can't write halfwords properly if not word aligned */
 static inline void
-SMC_outw(u16 val, void __iomem *ioaddr, int reg)
-{
-	if (reg & 2) {
-		unsigned int v = val << 16;
-		v |= readl(ioaddr + (reg & ~2)) & 0xffff;
-		writel(v, ioaddr + (reg & ~2));
-	} else {
-		writew(val, ioaddr + reg);
-	}
+SMC_outw(u16 val, void __iomem *ioaddr, int reg) {
+    if (reg & 2) {
+        unsigned int v = val << 16;
+        v |= readl(ioaddr + (reg & ~2)) & 0xffff;
+        writel(v, ioaddr + (reg & ~2));
+    } else {
+        writew(val, ioaddr + reg);
+    }
 }
 
 #elif	defined(CONFIG_SH_SH4202_MICRODEV)
@@ -266,18 +264,16 @@ SMC_outw(u16 val, void __iomem *ioaddr, int reg)
 #define SMC_CAN_USE_32BIT	0
 #define SMC_NOWAIT		1
 
-static inline void mcf_insw(void *a, unsigned char *p, int l)
-{
-	u16 *wp = (u16 *) p;
-	while (l-- > 0)
-		*wp++ = readw(a);
+static inline void mcf_insw(void *a, unsigned char *p, int l) {
+    u16 *wp = (u16 *) p;
+    while (l-- > 0)
+        *wp++ = readw(a);
 }
 
-static inline void mcf_outsw(void *a, unsigned char *p, int l)
-{
-	u16 *wp = (u16 *) p;
-	while (l-- > 0)
-		writew(*wp++, a);
+static inline void mcf_outsw(void *a, unsigned char *p, int l) {
+    u16 *wp = (u16 *) p;
+    while (l-- > 0)
+        writew(*wp++, a);
 }
 
 #define SMC_inw(a, r)		_swapw(readw((a) + (r)))
@@ -319,51 +315,51 @@ static inline void mcf_outsw(void *a, unsigned char *p, int l)
 
 /* store this information for the driver.. */
 struct smc_local {
-	/*
-	 * If I have to wait until memory is available to send a
-	 * packet, I will store the skbuff here, until I get the
-	 * desired memory.  Then, I'll send it out and free it.
-	 */
-	struct sk_buff *pending_tx_skb;
-	struct tasklet_struct tx_task;
+    /*
+     * If I have to wait until memory is available to send a
+     * packet, I will store the skbuff here, until I get the
+     * desired memory.  Then, I'll send it out and free it.
+     */
+    struct sk_buff *pending_tx_skb;
+    struct tasklet_struct tx_task;
 
-	/* version/revision of the SMC91x chip */
-	int	version;
+    /* version/revision of the SMC91x chip */
+    int	version;
 
-	/* Contains the current active transmission mode */
-	int	tcr_cur_mode;
+    /* Contains the current active transmission mode */
+    int	tcr_cur_mode;
 
-	/* Contains the current active receive mode */
-	int	rcr_cur_mode;
+    /* Contains the current active receive mode */
+    int	rcr_cur_mode;
 
-	/* Contains the current active receive/phy mode */
-	int	rpc_cur_mode;
-	int	ctl_rfduplx;
-	int	ctl_rspeed;
+    /* Contains the current active receive/phy mode */
+    int	rpc_cur_mode;
+    int	ctl_rfduplx;
+    int	ctl_rspeed;
 
-	u32	msg_enable;
-	u32	phy_type;
-	struct mii_if_info mii;
+    u32	msg_enable;
+    u32	phy_type;
+    struct mii_if_info mii;
 
-	/* work queue */
-	struct work_struct phy_configure;
-	struct net_device *dev;
-	int	work_pending;
+    /* work queue */
+    struct work_struct phy_configure;
+    struct net_device *dev;
+    int	work_pending;
 
-	spinlock_t lock;
+    spinlock_t lock;
 
 #ifdef CONFIG_ARCH_PXA
-	/* DMA needs the physical address of the chip */
-	u_long physaddr;
-	struct device *device;
+    /* DMA needs the physical address of the chip */
+    u_long physaddr;
+    struct device *device;
 #endif
-	void __iomem *base;
-	void __iomem *datacs;
+    void __iomem *base;
+    void __iomem *datacs;
 
-	/* the low address lines on some platforms aren't connected... */
-	int	io_shift;
+    /* the low address lines on some platforms aren't connected... */
+    int	io_shift;
 
-	struct smc91x_platdata cfg;
+    struct smc91x_platdata cfg;
 };
 
 #define SMC_8BIT(p)	((p)->cfg.flags & SMC91X_USE_8BIT)
@@ -386,36 +382,35 @@ struct smc_local {
 	smc_pxa_dma_insl(a, lp, r, dev->dma, p, l)
 static inline void
 smc_pxa_dma_insl(void __iomem *ioaddr, struct smc_local *lp, int reg, int dma,
-		 u_char *buf, int len)
-{
-	u_long physaddr = lp->physaddr;
-	dma_addr_t dmabuf;
+                 u_char *buf, int len) {
+    u_long physaddr = lp->physaddr;
+    dma_addr_t dmabuf;
 
-	/* fallback if no DMA available */
-	if (dma == (unsigned char)-1) {
-		readsl(ioaddr + reg, buf, len);
-		return;
-	}
+    /* fallback if no DMA available */
+    if (dma == (unsigned char)-1) {
+        readsl(ioaddr + reg, buf, len);
+        return;
+    }
 
-	/* 64 bit alignment is required for memory to memory DMA */
-	if ((long)buf & 4) {
-		*((u32 *)buf) = SMC_inl(ioaddr, reg);
-		buf += 4;
-		len--;
-	}
+    /* 64 bit alignment is required for memory to memory DMA */
+    if ((long)buf & 4) {
+        *((u32 *)buf) = SMC_inl(ioaddr, reg);
+        buf += 4;
+        len--;
+    }
 
-	len *= 4;
-	dmabuf = dma_map_single(lp->device, buf, len, DMA_FROM_DEVICE);
-	DCSR(dma) = DCSR_NODESC;
-	DTADR(dma) = dmabuf;
-	DSADR(dma) = physaddr + reg;
-	DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
-		     DCMD_WIDTH4 | (DCMD_LENGTH & len));
-	DCSR(dma) = DCSR_NODESC | DCSR_RUN;
-	while (!(DCSR(dma) & DCSR_STOPSTATE))
-		cpu_relax();
-	DCSR(dma) = 0;
-	dma_unmap_single(lp->device, dmabuf, len, DMA_FROM_DEVICE);
+    len *= 4;
+    dmabuf = dma_map_single(lp->device, buf, len, DMA_FROM_DEVICE);
+    DCSR(dma) = DCSR_NODESC;
+    DTADR(dma) = dmabuf;
+    DSADR(dma) = physaddr + reg;
+    DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
+                 DCMD_WIDTH4 | (DCMD_LENGTH & len));
+    DCSR(dma) = DCSR_NODESC | DCSR_RUN;
+    while (!(DCSR(dma) & DCSR_STOPSTATE))
+        cpu_relax();
+    DCSR(dma) = 0;
+    dma_unmap_single(lp->device, dmabuf, len, DMA_FROM_DEVICE);
 }
 #endif
 
@@ -425,43 +420,41 @@ smc_pxa_dma_insl(void __iomem *ioaddr, struct smc_local *lp, int reg, int dma,
 	smc_pxa_dma_insw(a, lp, r, dev->dma, p, l)
 static inline void
 smc_pxa_dma_insw(void __iomem *ioaddr, struct smc_local *lp, int reg, int dma,
-		 u_char *buf, int len)
-{
-	u_long physaddr = lp->physaddr;
-	dma_addr_t dmabuf;
+                 u_char *buf, int len) {
+    u_long physaddr = lp->physaddr;
+    dma_addr_t dmabuf;
 
-	/* fallback if no DMA available */
-	if (dma == (unsigned char)-1) {
-		readsw(ioaddr + reg, buf, len);
-		return;
-	}
+    /* fallback if no DMA available */
+    if (dma == (unsigned char)-1) {
+        readsw(ioaddr + reg, buf, len);
+        return;
+    }
 
-	/* 64 bit alignment is required for memory to memory DMA */
-	while ((long)buf & 6) {
-		*((u16 *)buf) = SMC_inw(ioaddr, reg);
-		buf += 2;
-		len--;
-	}
+    /* 64 bit alignment is required for memory to memory DMA */
+    while ((long)buf & 6) {
+        *((u16 *)buf) = SMC_inw(ioaddr, reg);
+        buf += 2;
+        len--;
+    }
 
-	len *= 2;
-	dmabuf = dma_map_single(lp->device, buf, len, DMA_FROM_DEVICE);
-	DCSR(dma) = DCSR_NODESC;
-	DTADR(dma) = dmabuf;
-	DSADR(dma) = physaddr + reg;
-	DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
-		     DCMD_WIDTH2 | (DCMD_LENGTH & len));
-	DCSR(dma) = DCSR_NODESC | DCSR_RUN;
-	while (!(DCSR(dma) & DCSR_STOPSTATE))
-		cpu_relax();
-	DCSR(dma) = 0;
-	dma_unmap_single(lp->device, dmabuf, len, DMA_FROM_DEVICE);
+    len *= 2;
+    dmabuf = dma_map_single(lp->device, buf, len, DMA_FROM_DEVICE);
+    DCSR(dma) = DCSR_NODESC;
+    DTADR(dma) = dmabuf;
+    DSADR(dma) = physaddr + reg;
+    DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
+                 DCMD_WIDTH2 | (DCMD_LENGTH & len));
+    DCSR(dma) = DCSR_NODESC | DCSR_RUN;
+    while (!(DCSR(dma) & DCSR_STOPSTATE))
+        cpu_relax();
+    DCSR(dma) = 0;
+    dma_unmap_single(lp->device, dmabuf, len, DMA_FROM_DEVICE);
 }
 #endif
 
 static void
-smc_pxa_dma_irq(int dma, void *dummy)
-{
-	DCSR(dma) = 0;
+smc_pxa_dma_irq(int dma, void *dummy) {
+    DCSR(dma) = 0;
 }
 #endif  /* CONFIG_ARCH_PXA */
 
@@ -805,16 +798,17 @@ smc_pxa_dma_irq(int dma, void *dummy)
 #define CHIP_91111FD	9
 
 static const char * chip_ids[ 16 ] =  {
-	NULL, NULL, NULL,
-	/* 3 */ "SMC91C90/91C92",
-	/* 4 */ "SMC91C94",
-	/* 5 */ "SMC91C95",
-	/* 6 */ "SMC91C96",
-	/* 7 */ "SMC91C100",
-	/* 8 */ "SMC91C100FD",
-	/* 9 */ "SMC91C11xFD",
-	NULL, NULL, NULL,
-	NULL, NULL, NULL};
+    NULL, NULL, NULL,
+    /* 3 */ "SMC91C90/91C92",
+    /* 4 */ "SMC91C94",
+    /* 5 */ "SMC91C95",
+    /* 6 */ "SMC91C96",
+    /* 7 */ "SMC91C100",
+    /* 8 */ "SMC91C100FD",
+    /* 9 */ "SMC91C11xFD",
+    NULL, NULL, NULL,
+    NULL, NULL, NULL
+};
 
 
 /*

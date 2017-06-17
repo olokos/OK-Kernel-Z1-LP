@@ -110,121 +110,121 @@
 #define RTL_DEFAULT_HARDWARE_TYPE	HARDWARE_TYPE_RTL8192CE
 
 enum pci_bridge_vendor {
-	PCI_BRIDGE_VENDOR_INTEL = 0x0,	/*0b'0000,0001 */
-	PCI_BRIDGE_VENDOR_ATI,		/*0b'0000,0010*/
-	PCI_BRIDGE_VENDOR_AMD,		/*0b'0000,0100*/
-	PCI_BRIDGE_VENDOR_SIS,		/*0b'0000,1000*/
-	PCI_BRIDGE_VENDOR_UNKNOWN,	/*0b'0100,0000*/
-	PCI_BRIDGE_VENDOR_MAX,
+    PCI_BRIDGE_VENDOR_INTEL = 0x0,	/*0b'0000,0001 */
+    PCI_BRIDGE_VENDOR_ATI,		/*0b'0000,0010*/
+    PCI_BRIDGE_VENDOR_AMD,		/*0b'0000,0100*/
+    PCI_BRIDGE_VENDOR_SIS,		/*0b'0000,1000*/
+    PCI_BRIDGE_VENDOR_UNKNOWN,	/*0b'0100,0000*/
+    PCI_BRIDGE_VENDOR_MAX,
 };
 
 struct rtl_pci_capabilities_header {
-	u8 capability_id;
-	u8 next;
+    u8 capability_id;
+    u8 next;
 };
 
 struct rtl_rx_desc {
-	u32 dword[8];
+    u32 dword[8];
 } __packed;
 
 struct rtl_tx_desc {
-	u32 dword[16];
+    u32 dword[16];
 } __packed;
 
 struct rtl_tx_cmd_desc {
-	u32 dword[16];
+    u32 dword[16];
 } __packed;
 
 struct rtl8192_tx_ring {
-	struct rtl_tx_desc *desc;
-	dma_addr_t dma;
-	unsigned int idx;
-	unsigned int entries;
-	struct sk_buff_head queue;
+    struct rtl_tx_desc *desc;
+    dma_addr_t dma;
+    unsigned int idx;
+    unsigned int entries;
+    struct sk_buff_head queue;
 };
 
 struct rtl8192_rx_ring {
-	struct rtl_rx_desc *desc;
-	dma_addr_t dma;
-	unsigned int idx;
-	struct sk_buff *rx_buf[RTL_PCI_MAX_RX_COUNT];
+    struct rtl_rx_desc *desc;
+    dma_addr_t dma;
+    unsigned int idx;
+    struct sk_buff *rx_buf[RTL_PCI_MAX_RX_COUNT];
 };
 
 struct rtl_pci {
-	struct pci_dev *pdev;
+    struct pci_dev *pdev;
 
-	bool driver_is_goingto_unload;
-	bool up_first_time;
-	bool first_init;
-	bool being_init_adapter;
-	bool init_ready;
+    bool driver_is_goingto_unload;
+    bool up_first_time;
+    bool first_init;
+    bool being_init_adapter;
+    bool init_ready;
 
-	/*Tx */
-	struct rtl8192_tx_ring tx_ring[RTL_PCI_MAX_TX_QUEUE_COUNT];
-	int txringcount[RTL_PCI_MAX_TX_QUEUE_COUNT];
-	u32 transmit_config;
+    /*Tx */
+    struct rtl8192_tx_ring tx_ring[RTL_PCI_MAX_TX_QUEUE_COUNT];
+    int txringcount[RTL_PCI_MAX_TX_QUEUE_COUNT];
+    u32 transmit_config;
 
-	/*Rx */
-	struct rtl8192_rx_ring rx_ring[RTL_PCI_MAX_RX_QUEUE];
-	int rxringcount;
-	u16 rxbuffersize;
-	u32 receive_config;
+    /*Rx */
+    struct rtl8192_rx_ring rx_ring[RTL_PCI_MAX_RX_QUEUE];
+    int rxringcount;
+    u16 rxbuffersize;
+    u32 receive_config;
 
-	/*irq */
-	u8 irq_alloc;
-	u32 irq_mask[2];
+    /*irq */
+    u8 irq_alloc;
+    u32 irq_mask[2];
 
-	/*Bcn control register setting */
-	u32 reg_bcn_ctrl_val;
+    /*Bcn control register setting */
+    u32 reg_bcn_ctrl_val;
 
-	 /*ASPM*/ u8 const_pci_aspm;
-	u8 const_amdpci_aspm;
-	u8 const_hwsw_rfoff_d3;
-	u8 const_support_pciaspm;
-	/*pci-e bridge */
-	u8 const_hostpci_aspm_setting;
-	/*pci-e device */
-	u8 const_devicepci_aspm_setting;
-	/*If it supports ASPM, Offset[560h] = 0x40,
-	   otherwise Offset[560h] = 0x00. */
-	bool support_aspm;
-	bool support_backdoor;
+    /*ASPM*/ u8 const_pci_aspm;
+    u8 const_amdpci_aspm;
+    u8 const_hwsw_rfoff_d3;
+    u8 const_support_pciaspm;
+    /*pci-e bridge */
+    u8 const_hostpci_aspm_setting;
+    /*pci-e device */
+    u8 const_devicepci_aspm_setting;
+    /*If it supports ASPM, Offset[560h] = 0x40,
+       otherwise Offset[560h] = 0x00. */
+    bool support_aspm;
+    bool support_backdoor;
 
-	/*QOS & EDCA */
-	enum acm_method acm_method;
+    /*QOS & EDCA */
+    enum acm_method acm_method;
 
-	u16 shortretry_limit;
-	u16 longretry_limit;
+    u16 shortretry_limit;
+    u16 longretry_limit;
 };
 
 struct mp_adapter {
-	u8 linkctrl_reg;
+    u8 linkctrl_reg;
 
-	u8 busnumber;
-	u8 devnumber;
-	u8 funcnumber;
+    u8 busnumber;
+    u8 devnumber;
+    u8 funcnumber;
 
-	u8 pcibridge_busnum;
-	u8 pcibridge_devnum;
-	u8 pcibridge_funcnum;
+    u8 pcibridge_busnum;
+    u8 pcibridge_devnum;
+    u8 pcibridge_funcnum;
 
-	u8 pcibridge_vendor;
-	u16 pcibridge_vendorid;
-	u16 pcibridge_deviceid;
+    u8 pcibridge_vendor;
+    u16 pcibridge_vendorid;
+    u16 pcibridge_deviceid;
 
-	u8 num4bytes;
+    u8 num4bytes;
 
-	u8 pcibridge_pciehdr_offset;
-	u8 pcibridge_linkctrlreg;
+    u8 pcibridge_pciehdr_offset;
+    u8 pcibridge_linkctrlreg;
 
-	bool amd_l1_patch;
+    bool amd_l1_patch;
 };
 
 struct rtl_pci_priv {
-	struct rtl_pci dev;
-	struct mp_adapter ndis_adapter;
-	struct rtl_led_ctl ledctl;
-	struct bt_coexist_info bt_coexist;
+    struct rtl_pci dev;
+    struct mp_adapter ndis_adapter;
+    struct rtl_led_ctl ledctl;
+    struct bt_coexist_info bt_coexist;
 };
 
 #define rtl_pcipriv(hw)		(((struct rtl_pci_priv *)(rtl_priv(hw))->priv))
@@ -235,40 +235,34 @@ int rtl_pci_reset_trx_ring(struct ieee80211_hw *hw);
 extern struct rtl_intf_ops rtl_pci_ops;
 
 int __devinit rtl_pci_probe(struct pci_dev *pdev,
-			    const struct pci_device_id *id);
+                            const struct pci_device_id *id);
 void rtl_pci_disconnect(struct pci_dev *pdev);
 int rtl_pci_suspend(struct device *dev);
 int rtl_pci_resume(struct device *dev);
-static inline u8 pci_read8_sync(struct rtl_priv *rtlpriv, u32 addr)
-{
-	return readb((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+static inline u8 pci_read8_sync(struct rtl_priv *rtlpriv, u32 addr) {
+    return readb((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
-static inline u16 pci_read16_sync(struct rtl_priv *rtlpriv, u32 addr)
-{
-	return readw((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+static inline u16 pci_read16_sync(struct rtl_priv *rtlpriv, u32 addr) {
+    return readw((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
-static inline u32 pci_read32_sync(struct rtl_priv *rtlpriv, u32 addr)
-{
-	return readl((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+static inline u32 pci_read32_sync(struct rtl_priv *rtlpriv, u32 addr) {
+    return readl((u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
-static inline void pci_write8_async(struct rtl_priv *rtlpriv, u32 addr, u8 val)
-{
-	writeb(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+static inline void pci_write8_async(struct rtl_priv *rtlpriv, u32 addr, u8 val) {
+    writeb(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
 static inline void pci_write16_async(struct rtl_priv *rtlpriv,
-				     u32 addr, u16 val)
-{
-	writew(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+                                     u32 addr, u16 val) {
+    writew(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
 static inline void pci_write32_async(struct rtl_priv *rtlpriv,
-				     u32 addr, u32 val)
-{
-	writel(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
+                                     u32 addr, u32 val) {
+    writel(val, (u8 __iomem *) rtlpriv->io.pci_mem_start + addr);
 }
 
 #endif

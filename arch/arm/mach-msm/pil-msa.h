@@ -18,9 +18,9 @@
 #define VDD_MSS_UV	1050000
 
 struct mba_data {
-	void __iomem *rmb_base;
-	struct clk *xo;
-	struct pil_desc desc;
+    void __iomem *rmb_base;
+    struct clk *xo;
+    struct pil_desc desc;
 };
 
 extern struct pil_reset_ops pil_msa_pbl_ops;

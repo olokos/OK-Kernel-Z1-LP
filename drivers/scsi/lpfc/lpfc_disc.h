@@ -30,23 +30,23 @@
 
 /* worker thread events */
 enum lpfc_work_type {
-	LPFC_EVT_ONLINE,
-	LPFC_EVT_OFFLINE_PREP,
-	LPFC_EVT_OFFLINE,
-	LPFC_EVT_WARM_START,
-	LPFC_EVT_KILL,
-	LPFC_EVT_ELS_RETRY,
-	LPFC_EVT_DEV_LOSS,
-	LPFC_EVT_FASTPATH_MGMT_EVT,
-	LPFC_EVT_RESET_HBA,
+    LPFC_EVT_ONLINE,
+    LPFC_EVT_OFFLINE_PREP,
+    LPFC_EVT_OFFLINE,
+    LPFC_EVT_WARM_START,
+    LPFC_EVT_KILL,
+    LPFC_EVT_ELS_RETRY,
+    LPFC_EVT_DEV_LOSS,
+    LPFC_EVT_FASTPATH_MGMT_EVT,
+    LPFC_EVT_RESET_HBA,
 };
 
 /* structure used to queue event to the discovery tasklet */
 struct lpfc_work_evt {
-	struct list_head      evt_listp;
-	void                 *evt_arg1;
-	void                 *evt_arg2;
-	enum lpfc_work_type   evt;
+    struct list_head      evt_listp;
+    void                 *evt_arg1;
+    void                 *evt_arg2;
+    enum lpfc_work_type   evt;
 };
 
 struct lpfc_scsi_check_condition_event;
@@ -57,77 +57,77 @@ struct lpfc_fcprdchkerr_event;
 
 /* structure used for sending events from fast path */
 struct lpfc_fast_path_event {
-	struct lpfc_work_evt work_evt;
-	struct lpfc_vport     *vport;
-	union {
-		struct lpfc_scsi_check_condition_event check_cond_evt;
-		struct lpfc_scsi_varqueuedepth_event queue_depth_evt;
-		struct lpfc_scsi_event_header scsi_evt;
-		struct lpfc_fabric_event_header fabric_evt;
-		struct lpfc_fcprdchkerr_event read_check_error;
-	} un;
+    struct lpfc_work_evt work_evt;
+    struct lpfc_vport     *vport;
+    union {
+        struct lpfc_scsi_check_condition_event check_cond_evt;
+        struct lpfc_scsi_varqueuedepth_event queue_depth_evt;
+        struct lpfc_scsi_event_header scsi_evt;
+        struct lpfc_fabric_event_header fabric_evt;
+        struct lpfc_fcprdchkerr_event read_check_error;
+    } un;
 };
 
 #define LPFC_SLI4_MAX_XRI	1024	/* Used to make the ndlp's xri_bitmap */
 #define XRI_BITMAP_ULONGS (LPFC_SLI4_MAX_XRI / BITS_PER_LONG)
 struct lpfc_node_rrqs {
-	unsigned long xri_bitmap[XRI_BITMAP_ULONGS];
+    unsigned long xri_bitmap[XRI_BITMAP_ULONGS];
 };
 
 struct lpfc_nodelist {
-	struct list_head nlp_listp;
-	struct lpfc_name nlp_portname;
-	struct lpfc_name nlp_nodename;
-	uint32_t         nlp_flag;		/* entry  flags */
-	uint32_t         nlp_DID;		/* FC D_ID of entry */
-	uint32_t         nlp_last_elscmd;	/* Last ELS cmd sent */
-	uint16_t         nlp_type;
+    struct list_head nlp_listp;
+    struct lpfc_name nlp_portname;
+    struct lpfc_name nlp_nodename;
+    uint32_t         nlp_flag;		/* entry  flags */
+    uint32_t         nlp_DID;		/* FC D_ID of entry */
+    uint32_t         nlp_last_elscmd;	/* Last ELS cmd sent */
+    uint16_t         nlp_type;
 #define NLP_FC_NODE        0x1			/* entry is an FC node */
 #define NLP_FABRIC         0x4			/* entry rep a Fabric entity */
 #define NLP_FCP_TARGET     0x8			/* entry is an FCP target */
 #define NLP_FCP_INITIATOR  0x10			/* entry is an FCP Initiator */
 
-	uint16_t        nlp_rpi;
-	uint16_t        nlp_state;		/* state transition indicator */
-	uint16_t        nlp_prev_state;		/* state transition indicator */
-	uint16_t        nlp_xri;		/* output exchange id for RPI */
-	uint16_t        nlp_sid;		/* scsi id */
+    uint16_t        nlp_rpi;
+    uint16_t        nlp_state;		/* state transition indicator */
+    uint16_t        nlp_prev_state;		/* state transition indicator */
+    uint16_t        nlp_xri;		/* output exchange id for RPI */
+    uint16_t        nlp_sid;		/* scsi id */
 #define NLP_NO_SID		0xffff
-	uint16_t	nlp_maxframe;		/* Max RCV frame size */
-	uint8_t		nlp_class_sup;		/* Supported Classes */
-	uint8_t         nlp_retry;		/* used for ELS retries */
-	uint8_t         nlp_fcp_info;	        /* class info, bits 0-3 */
+    uint16_t	nlp_maxframe;		/* Max RCV frame size */
+    uint8_t		nlp_class_sup;		/* Supported Classes */
+    uint8_t         nlp_retry;		/* used for ELS retries */
+    uint8_t         nlp_fcp_info;	        /* class info, bits 0-3 */
 #define NLP_FCP_2_DEVICE   0x10			/* FCP-2 device */
 
-	uint16_t        nlp_usg_map;	/* ndlp management usage bitmap */
+    uint16_t        nlp_usg_map;	/* ndlp management usage bitmap */
 #define NLP_USG_NODE_ACT_BIT	0x1	/* Indicate ndlp is actively used */
 #define NLP_USG_IACT_REQ_BIT	0x2	/* Request to inactivate ndlp */
 #define NLP_USG_FREE_REQ_BIT	0x4	/* Request to invoke ndlp memory free */
 #define NLP_USG_FREE_ACK_BIT	0x8	/* Indicate ndlp memory free invoked */
 
-	struct timer_list   nlp_delayfunc;	/* Used for delayed ELS cmds */
-	struct lpfc_hba *phba;
-	struct fc_rport *rport;			/* Corresponding FC transport
+    struct timer_list   nlp_delayfunc;	/* Used for delayed ELS cmds */
+    struct lpfc_hba *phba;
+    struct fc_rport *rport;			/* Corresponding FC transport
 						   port structure */
-	struct lpfc_vport *vport;
-	struct lpfc_work_evt els_retry_evt;
-	struct lpfc_work_evt dev_loss_evt;
-	struct kref     kref;
-	atomic_t cmd_pending;
-	uint32_t cmd_qdepth;
-	unsigned long last_change_time;
-	struct lpfc_node_rrqs active_rrqs;
-	struct lpfc_scsicmd_bkt *lat_data;	/* Latency data */
+    struct lpfc_vport *vport;
+    struct lpfc_work_evt els_retry_evt;
+    struct lpfc_work_evt dev_loss_evt;
+    struct kref     kref;
+    atomic_t cmd_pending;
+    uint32_t cmd_qdepth;
+    unsigned long last_change_time;
+    struct lpfc_node_rrqs active_rrqs;
+    struct lpfc_scsicmd_bkt *lat_data;	/* Latency data */
 };
 struct lpfc_node_rrq {
-	struct list_head list;
-	uint16_t xritag;
-	uint16_t send_rrq;
-	uint16_t rxid;
-	uint32_t         nlp_DID;		/* FC D_ID of entry */
-	struct lpfc_vport *vport;
-	struct lpfc_nodelist *ndlp;
-	unsigned long rrq_stop_time;
+    struct list_head list;
+    uint16_t xritag;
+    uint16_t send_rrq;
+    uint16_t rxid;
+    uint32_t         nlp_DID;		/* FC D_ID of entry */
+    struct lpfc_vport *vport;
+    struct lpfc_nodelist *ndlp;
+    unsigned long rrq_stop_time;
 };
 
 /* Defines for nlp_flag (uint32) */

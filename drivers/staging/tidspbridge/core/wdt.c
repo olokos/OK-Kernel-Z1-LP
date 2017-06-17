@@ -29,106 +29,100 @@
 
 static struct dsp_wdt_setting dsp_wdt;
 
-void dsp_wdt_dpc(unsigned long data)
-{
-	struct deh_mgr *deh_mgr;
-	dev_get_deh_mgr(dev_get_first(), &deh_mgr);
-	if (deh_mgr)
-		bridge_deh_notify(deh_mgr, DSP_WDTOVERFLOW, 0);
+void dsp_wdt_dpc(unsigned long data) {
+    struct deh_mgr *deh_mgr;
+    dev_get_deh_mgr(dev_get_first(), &deh_mgr);
+    if (deh_mgr)
+        bridge_deh_notify(deh_mgr, DSP_WDTOVERFLOW, 0);
 }
 
-irqreturn_t dsp_wdt_isr(int irq, void *data)
-{
-	u32 value;
-	/* ack wdt3 interrupt */
-	value = __raw_readl(dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
-	__raw_writel(value, dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
+irqreturn_t dsp_wdt_isr(int irq, void *data) {
+    u32 value;
+    /* ack wdt3 interrupt */
+    value = __raw_readl(dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
+    __raw_writel(value, dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
 
-	tasklet_schedule(&dsp_wdt.wdt3_tasklet);
-	return IRQ_HANDLED;
+    tasklet_schedule(&dsp_wdt.wdt3_tasklet);
+    return IRQ_HANDLED;
 }
 
-int dsp_wdt_init(void)
-{
-	int ret = 0;
+int dsp_wdt_init(void) {
+    int ret = 0;
 
-	dsp_wdt.sm_wdt = NULL;
-	dsp_wdt.reg_base = ioremap(OMAP34XX_WDT3_BASE, SZ_4K);
-	if (!dsp_wdt.reg_base)
-		return -ENOMEM;
+    dsp_wdt.sm_wdt = NULL;
+    dsp_wdt.reg_base = ioremap(OMAP34XX_WDT3_BASE, SZ_4K);
+    if (!dsp_wdt.reg_base)
+        return -ENOMEM;
 
-	tasklet_init(&dsp_wdt.wdt3_tasklet, dsp_wdt_dpc, 0);
+    tasklet_init(&dsp_wdt.wdt3_tasklet, dsp_wdt_dpc, 0);
 
-	dsp_wdt.fclk = clk_get(NULL, "wdt3_fck");
+    dsp_wdt.fclk = clk_get(NULL, "wdt3_fck");
 
-	if (dsp_wdt.fclk) {
-		dsp_wdt.iclk = clk_get(NULL, "wdt3_ick");
-		if (!dsp_wdt.iclk) {
-			clk_put(dsp_wdt.fclk);
-			dsp_wdt.fclk = NULL;
-			ret = -EFAULT;
-		}
-	} else
-		ret = -EFAULT;
+    if (dsp_wdt.fclk) {
+        dsp_wdt.iclk = clk_get(NULL, "wdt3_ick");
+        if (!dsp_wdt.iclk) {
+            clk_put(dsp_wdt.fclk);
+            dsp_wdt.fclk = NULL;
+            ret = -EFAULT;
+        }
+    } else
+        ret = -EFAULT;
 
-	if (!ret)
-		ret = request_irq(INT_34XX_WDT3_IRQ, dsp_wdt_isr, 0,
-							"dsp_wdt", &dsp_wdt);
+    if (!ret)
+        ret = request_irq(INT_34XX_WDT3_IRQ, dsp_wdt_isr, 0,
+                          "dsp_wdt", &dsp_wdt);
 
-	/* Disable at this moment, it will be enabled when DSP starts */
-	if (!ret)
-		disable_irq(INT_34XX_WDT3_IRQ);
+    /* Disable at this moment, it will be enabled when DSP starts */
+    if (!ret)
+        disable_irq(INT_34XX_WDT3_IRQ);
 
-	return ret;
+    return ret;
 }
 
-void dsp_wdt_sm_set(void *data)
-{
-	dsp_wdt.sm_wdt = data;
-	dsp_wdt.sm_wdt->wdt_overflow = 5;	/* in seconds */
+void dsp_wdt_sm_set(void *data) {
+    dsp_wdt.sm_wdt = data;
+    dsp_wdt.sm_wdt->wdt_overflow = 5;	/* in seconds */
 }
 
 
-void dsp_wdt_exit(void)
-{
-	free_irq(INT_34XX_WDT3_IRQ, &dsp_wdt);
-	tasklet_kill(&dsp_wdt.wdt3_tasklet);
+void dsp_wdt_exit(void) {
+    free_irq(INT_34XX_WDT3_IRQ, &dsp_wdt);
+    tasklet_kill(&dsp_wdt.wdt3_tasklet);
 
-	if (dsp_wdt.fclk)
-		clk_put(dsp_wdt.fclk);
-	if (dsp_wdt.iclk)
-		clk_put(dsp_wdt.iclk);
+    if (dsp_wdt.fclk)
+        clk_put(dsp_wdt.fclk);
+    if (dsp_wdt.iclk)
+        clk_put(dsp_wdt.iclk);
 
-	dsp_wdt.fclk = NULL;
-	dsp_wdt.iclk = NULL;
-	dsp_wdt.sm_wdt = NULL;
+    dsp_wdt.fclk = NULL;
+    dsp_wdt.iclk = NULL;
+    dsp_wdt.sm_wdt = NULL;
 
-	if (dsp_wdt.reg_base)
-		iounmap(dsp_wdt.reg_base);
-	dsp_wdt.reg_base = NULL;
+    if (dsp_wdt.reg_base)
+        iounmap(dsp_wdt.reg_base);
+    dsp_wdt.reg_base = NULL;
 }
 
-void dsp_wdt_enable(bool enable)
-{
-	u32 tmp;
-	static bool wdt_enable;
+void dsp_wdt_enable(bool enable) {
+    u32 tmp;
+    static bool wdt_enable;
 
-	if (wdt_enable == enable || !dsp_wdt.fclk || !dsp_wdt.iclk)
-		return;
+    if (wdt_enable == enable || !dsp_wdt.fclk || !dsp_wdt.iclk)
+        return;
 
-	wdt_enable = enable;
+    wdt_enable = enable;
 
-	if (enable) {
-		clk_enable(dsp_wdt.fclk);
-		clk_enable(dsp_wdt.iclk);
-		dsp_wdt.sm_wdt->wdt_setclocks = 1;
-		tmp = __raw_readl(dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
-		__raw_writel(tmp, dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
-		enable_irq(INT_34XX_WDT3_IRQ);
-	} else {
-		disable_irq(INT_34XX_WDT3_IRQ);
-		dsp_wdt.sm_wdt->wdt_setclocks = 0;
-		clk_disable(dsp_wdt.iclk);
-		clk_disable(dsp_wdt.fclk);
-	}
+    if (enable) {
+        clk_enable(dsp_wdt.fclk);
+        clk_enable(dsp_wdt.iclk);
+        dsp_wdt.sm_wdt->wdt_setclocks = 1;
+        tmp = __raw_readl(dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
+        __raw_writel(tmp, dsp_wdt.reg_base + OMAP3_WDT3_ISR_OFFSET);
+        enable_irq(INT_34XX_WDT3_IRQ);
+    } else {
+        disable_irq(INT_34XX_WDT3_IRQ);
+        dsp_wdt.sm_wdt->wdt_setclocks = 0;
+        clk_disable(dsp_wdt.iclk);
+        clk_disable(dsp_wdt.fclk);
+    }
 }

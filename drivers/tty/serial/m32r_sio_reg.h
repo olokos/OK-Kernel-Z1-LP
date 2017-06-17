@@ -29,9 +29,9 @@
 #define SIORXB		0x00e
 
 #define UART_RX		((unsigned long) PLD_ESIO0RXB)
-				/* In:  Receive buffer (DLAB=0) */
+/* In:  Receive buffer (DLAB=0) */
 #define UART_TX		((unsigned long) PLD_ESIO0TXB)
-				/* Out: Transmit buffer (DLAB=0) */
+/* Out: Transmit buffer (DLAB=0) */
 #define UART_DLL	0	/* Out: Divisor Latch Low (DLAB=1) */
 #define UART_TRG	0	/* (LCR=BF) FCTR bit 7 selects Rx or Tx
 				 * In: Fifo count
@@ -40,19 +40,19 @@
 
 #define UART_DLM	0	/* Out: Divisor Latch High (DLAB=1) */
 #define UART_IER	((unsigned long) PLD_ESIO0INTCR)
-				/* Out: Interrupt Enable Register */
+/* Out: Interrupt Enable Register */
 #define UART_FCTR	0	/* (LCR=BF) Feature Control Register
 				 * XR16C85x only */
 
 #define UART_IIR	0	/* In:  Interrupt ID Register */
 #define UART_FCR	0	/* Out: FIFO Control Register */
 #define UART_EFR	0	/* I/O: Extended Features Register */
-				/* (DLAB=1, 16C660 only) */
+/* (DLAB=1, 16C660 only) */
 
 #define UART_LCR	0	/* Out: Line Control Register */
 #define UART_MCR	0	/* Out: Modem Control Register */
 #define UART_LSR	((unsigned long) PLD_ESIO0STS)
-				/* In:  Line Status Register */
+/* In:  Line Status Register */
 #define UART_MSR	0	/* In:  Modem Status Register */
 #define UART_SCR	0	/* I/O: Scratch Register */
 #define UART_EMSR	0	/* (LCR=BF) Extended Mode Select Register
@@ -87,7 +87,7 @@
 #define UART_IIR	0	/* In:  Interrupt ID Register */
 #define UART_FCR	0	/* Out: FIFO Control Register */
 #define UART_EFR	0	/* I/O: Extended Features Register */
-				/* (DLAB=1, 16C660 only) */
+/* (DLAB=1, 16C660 only) */
 
 #define UART_LCR	0	/* Out: Line Control Register */
 #define UART_MCR	0	/* Out: Modem Control Register */

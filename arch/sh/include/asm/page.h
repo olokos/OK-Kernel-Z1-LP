@@ -52,9 +52,8 @@ extern unsigned long max_low_pfn, min_low_pfn;
 extern unsigned long memory_start, memory_end, memory_limit;
 
 static inline unsigned long
-pages_do_alias(unsigned long addr1, unsigned long addr2)
-{
-	return (addr1 ^ addr2) & shm_align_mask;
+pages_do_alias(unsigned long addr1, unsigned long addr2) {
+    return (addr1 ^ addr2) & shm_align_mask;
 }
 
 #define clear_page(page)	memset((void *)(page), 0, PAGE_SIZE)
@@ -64,7 +63,7 @@ struct page;
 struct vm_area_struct;
 
 extern void copy_user_highpage(struct page *to, struct page *from,
-			       unsigned long vaddr, struct vm_area_struct *vma);
+                               unsigned long vaddr, struct vm_area_struct *vma);
 #define __HAVE_ARCH_COPY_USER_HIGHPAGE
 extern void clear_user_highpage(struct page *page, unsigned long vaddr);
 #define clear_user_highpage	clear_user_highpage
@@ -73,23 +72,41 @@ extern void clear_user_highpage(struct page *page, unsigned long vaddr);
  * These are used to make use of C type-checking..
  */
 #ifdef CONFIG_X2TLB
-typedef struct { unsigned long pte_low, pte_high; } pte_t;
-typedef struct { unsigned long long pgprot; } pgprot_t;
-typedef struct { unsigned long long pgd; } pgd_t;
+typedef struct {
+    unsigned long pte_low, pte_high;
+} pte_t;
+typedef struct {
+    unsigned long long pgprot;
+} pgprot_t;
+typedef struct {
+    unsigned long long pgd;
+} pgd_t;
 #define pte_val(x) \
 	((x).pte_low | ((unsigned long long)(x).pte_high << 32))
 #define __pte(x) \
 	({ pte_t __pte = {(x), ((unsigned long long)(x)) >> 32}; __pte; })
 #elif defined(CONFIG_SUPERH32)
-typedef struct { unsigned long pte_low; } pte_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pte_low;
+} pte_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #define pte_val(x)	((x).pte_low)
 #define __pte(x)	((pte_t) { (x) } )
 #else
-typedef struct { unsigned long long pte_low; } pte_t;
-typedef struct { unsigned long long pgprot; } pgprot_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long long pte_low;
+} pte_t;
+typedef struct {
+    unsigned long long pgprot;
+} pgprot_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #define pte_val(x)	((x).pte_low)
 #define __pte(x)	((pte_t) { (x) } )
 #endif

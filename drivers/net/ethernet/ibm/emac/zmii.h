@@ -26,29 +26,29 @@
 
 /* ZMII bridge registers */
 struct zmii_regs {
-	u32 fer;		/* Function enable reg */
-	u32 ssr;		/* Speed select reg */
-	u32 smiirs;		/* SMII status reg */
+    u32 fer;		/* Function enable reg */
+    u32 ssr;		/* Speed select reg */
+    u32 smiirs;		/* SMII status reg */
 };
 
 /* ZMII device */
 struct zmii_instance {
-	struct zmii_regs __iomem	*base;
+    struct zmii_regs __iomem	*base;
 
-	/* Only one EMAC whacks us at a time */
-	struct mutex			lock;
+    /* Only one EMAC whacks us at a time */
+    struct mutex			lock;
 
-	/* subset of PHY_MODE_XXXX */
-	int				mode;
+    /* subset of PHY_MODE_XXXX */
+    int				mode;
 
-	/* number of EMACs using this ZMII bridge */
-	int				users;
+    /* number of EMACs using this ZMII bridge */
+    int				users;
 
-	/* FER value left by firmware */
-	u32				fer_save;
+    /* FER value left by firmware */
+    u32				fer_save;
 
-	/* OF device instance */
-	struct platform_device		*ofdev;
+    /* OF device instance */
+    struct platform_device		*ofdev;
 };
 
 #ifdef CONFIG_IBM_EMAC_ZMII

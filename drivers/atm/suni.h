@@ -1,7 +1,7 @@
 /*
  * drivers/atm/suni.h - S/UNI PHY driver
  */
- 
+
 /* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
 
 #ifndef DRIVER_ATM_SUNI_H
@@ -17,19 +17,19 @@
 					   Meter */
 #define SUNI_MC			0x01	/* Master Configuration */
 #define SUNI_MIS		0x02	/* Master Interrupt Status */
-			  /* no 0x03 */
+/* no 0x03 */
 #define SUNI_MCM		0x04	/* Master Clock Monitor */
 #define SUNI_MCT		0x05	/* Master Control */
 #define SUNI_CSCS		0x06	/* Clock Synthesis Control and Status */
 #define SUNI_CRCS		0x07	/* Clock Recovery Control and Status */
-			     /* 0x08-0x0F reserved */
+/* 0x08-0x0F reserved */
 #define SUNI_RSOP_CIE		0x10	/* RSOP Control/Interrupt Enable */
 #define SUNI_RSOP_SIS		0x11	/* RSOP Status/Interrupt Status */
 #define SUNI_RSOP_SBL		0x12	/* RSOP Section BIP-8 LSB */
 #define SUNI_RSOP_SBM		0x13	/* RSOP Section BIP-8 MSB */
 #define SUNI_TSOP_CTRL		0x14	/* TSOP Control */
 #define SUNI_TSOP_DIAG		0x15	/* TSOP Diagnostic */
-			     /* 0x16-0x17 reserved */
+/* 0x16-0x17 reserved */
 #define SUNI_RLOP_CS		0x18	/* RLOP Control/Status */
 #define SUNI_RLOP_IES		0x19	/* RLOP Interrupt Enable/Status */
 #define SUNI_RLOP_LBL		0x1A	/* RLOP Line BIP-8/24 LSB */
@@ -40,31 +40,31 @@
 #define SUNI_RLOP_LFM		0x1F	/* RLOP Line FEBE MSB */
 #define SUNI_TLOP_CTRL		0x20	/* TLOP Control */
 #define SUNI_TLOP_DIAG		0x21	/* TLOP Diagnostic */
-			     /* 0x22-0x27 reserved */
+/* 0x22-0x27 reserved */
 #define SUNI_SSTB_CTRL		0x28
 #define SUNI_RPOP_SC		0x30	/* RPOP Status/Control */
 #define SUNI_RPOP_IS		0x31	/* RPOP Interrupt Status */
-			     /* 0x32 reserved */
+/* 0x32 reserved */
 #define SUNI_RPOP_IE		0x33	/* RPOP Interrupt Enable */
-			     /* 0x34-0x36 reserved */
+/* 0x34-0x36 reserved */
 #define SUNI_RPOP_PSL		0x37	/* RPOP Path Signal Label */
 #define SUNI_RPOP_PBL		0x38	/* RPOP Path BIP-8 LSB */
 #define SUNI_RPOP_PBM		0x39	/* RPOP Path BIP-8 MSB */
 #define SUNI_RPOP_PFL		0x3A	/* RPOP Path FEBE LSB */
 #define SUNI_RPOP_PFM		0x3B	/* RPOP Path FEBE MSB */
-			     /* 0x3C reserved */
+/* 0x3C reserved */
 #define SUNI_RPOP_PBC		0x3D	/* RPOP Path BIP-8 Configuration */
 #define SUNI_RPOP_RC		0x3D	/* RPOP Ring Control (PM5355) */
-			     /* 0x3E-0x3F reserved */
+/* 0x3E-0x3F reserved */
 #define SUNI_TPOP_CD		0x40	/* TPOP Control/Diagnostic */
 #define SUNI_TPOP_PC		0x41	/* TPOP Pointer Control */
-			     /* 0x42-0x44 reserved */
+/* 0x42-0x44 reserved */
 #define SUNI_TPOP_APL		0x45	/* TPOP Arbitrary Pointer LSB */
 #define SUNI_TPOP_APM		0x46	/* TPOP Arbitrary Pointer MSB */
-			     /* 0x47 reserved */
+/* 0x47 reserved */
 #define SUNI_TPOP_PSL		0x48	/* TPOP Path Signal Label */
 #define SUNI_TPOP_PS		0x49	/* TPOP Path Status */
-			     /* 0x4A-0x4F reserved */
+/* 0x4A-0x4F reserved */
 #define SUNI_RACP_CS		0x50	/* RACP Control/Status */
 #define SUNI_RACP_IES		0x51	/* RACP Interrupt Enable/Status */
 #define SUNI_RACP_MHP		0x52	/* RACP Match Header Pattern */
@@ -75,7 +75,7 @@
 #define SUNI_RACP_RCC		0x57	/* RACP Receive Cell Counter */
 #define SUNI_RACP_RCCM		0x58	/* RACP Receive Cell Counter MSB */
 #define SUNI_RACP_CFG		0x59	/* RACP Configuration */
-			     /* 0x5A-0x5F reserved */
+/* 0x5A-0x5F reserved */
 #define SUNI_TACP_CS		0x60	/* TACP Control/Status */
 #define SUNI_TACP_IUCHP		0x61	/* TACP Idle/Unassigned Cell Hdr Pat */
 #define SUNI_TACP_IUCPOP	0x62	/* TACP Idle/Unassigned Cell Payload
@@ -86,9 +86,9 @@
 #define SUNI_TACP_TCCM		0x66	/* TACP Transmit Cell Counter MSB */
 #define SUNI_TACP_CFG		0x67	/* TACP Configuration */
 #define SUNI_SPTB_CTRL		0x68	/* SPTB Control */
-			     /* 0x69-0x7F reserved */
+/* 0x69-0x7F reserved */
 #define	SUNI_MT			0x80	/* Master Test */
-			     /* 0x81-0xFF reserved */
+/* 0x81-0xFF reserved */
 
 /* SUNI register values */
 
@@ -228,11 +228,11 @@
 
 #ifdef __KERNEL__
 struct suni_priv {
-	struct k_sonet_stats sonet_stats;	/* link diagnostics */
-	int loop_mode;				/* loopback mode */
-	int type;				/* phy type */
-	struct atm_dev *dev;			/* device back-pointer */
-	struct suni_priv *next;			/* next SUNI */
+    struct k_sonet_stats sonet_stats;	/* link diagnostics */
+    int loop_mode;				/* loopback mode */
+    int type;				/* phy type */
+    struct atm_dev *dev;			/* device back-pointer */
+    struct suni_priv *next;			/* next SUNI */
 };
 
 int suni_init(struct atm_dev *dev);

@@ -248,150 +248,147 @@
  */
 
 struct z8530_channel;
- 
-struct z8530_irqhandler
-{
-	void (*rx)(struct z8530_channel *);
-	void (*tx)(struct z8530_channel *);
-	void (*status)(struct z8530_channel *);
+
+struct z8530_irqhandler {
+    void (*rx)(struct z8530_channel *);
+    void (*tx)(struct z8530_channel *);
+    void (*status)(struct z8530_channel *);
 };
 
 /*
  *	A channel of the Z8530
  */
 
-struct z8530_channel
-{
-	struct		z8530_irqhandler *irqs;		/* IRQ handlers */
-	/*
-	 *	Synchronous
-	 */
-	u16		count;		/* Buyes received */
-	u16		max;		/* Most we can receive this frame */
-	u16		mtu;		/* MTU of the device */
-	u8		*dptr;		/* Pointer into rx buffer */
-	struct sk_buff	*skb;		/* Buffer dptr points into */
-	struct sk_buff	*skb2;		/* Pending buffer */
-	u8		status;		/* Current DCD */
-	u8		dcdcheck;	/* which bit to check for line */
-	u8		sync;		/* Set if in sync mode */
+struct z8530_channel {
+    struct		z8530_irqhandler *irqs;		/* IRQ handlers */
+    /*
+     *	Synchronous
+     */
+    u16		count;		/* Buyes received */
+    u16		max;		/* Most we can receive this frame */
+    u16		mtu;		/* MTU of the device */
+    u8		*dptr;		/* Pointer into rx buffer */
+    struct sk_buff	*skb;		/* Buffer dptr points into */
+    struct sk_buff	*skb2;		/* Pending buffer */
+    u8		status;		/* Current DCD */
+    u8		dcdcheck;	/* which bit to check for line */
+    u8		sync;		/* Set if in sync mode */
 
-	u8		regs[32];	/* Register map for the chip */
-	u8		pendregs[32];	/* Pending register values */
-	
-	struct sk_buff 	*tx_skb;	/* Buffer being transmitted */
-	struct sk_buff  *tx_next_skb;	/* Next transmit buffer */
-	u8		*tx_ptr;	/* Byte pointer into the buffer */
-	u8		*tx_next_ptr;	/* Next pointer to use */
-	u8		*tx_dma_buf[2];	/* TX flip buffers for DMA */
-	u8		tx_dma_used;	/* Flip buffer usage toggler */
-	u16		txcount;	/* Count of bytes to transmit */
-	
-	void		(*rx_function)(struct z8530_channel *, struct sk_buff *);
-	
-	/*
-	 *	Sync DMA
-	 */
-	
-	u8		rxdma;		/* DMA channels */
-	u8		txdma;		
-	u8		rxdma_on;	/* DMA active if flag set */
-	u8		txdma_on;
-	u8		dma_num;	/* Buffer we are DMAing into */
-	u8		dma_ready;	/* Is the other buffer free */
-	u8		dma_tx;		/* TX is to use DMA */
-	u8		*rx_buf[2];	/* The flip buffers */
-	
-	/*
-	 *	System
-	 */
-	 
-	struct z8530_dev *dev;		/* Z85230 chip instance we are from */
-	unsigned long	ctrlio;		/* I/O ports */
-	unsigned long	dataio;
+    u8		regs[32];	/* Register map for the chip */
+    u8		pendregs[32];	/* Pending register values */
 
-	/*
-	 *	For PC we encode this way.
-	 */	
+    struct sk_buff 	*tx_skb;	/* Buffer being transmitted */
+    struct sk_buff  *tx_next_skb;	/* Next transmit buffer */
+    u8		*tx_ptr;	/* Byte pointer into the buffer */
+    u8		*tx_next_ptr;	/* Next pointer to use */
+    u8		*tx_dma_buf[2];	/* TX flip buffers for DMA */
+    u8		tx_dma_used;	/* Flip buffer usage toggler */
+    u16		txcount;	/* Count of bytes to transmit */
+
+    void		(*rx_function)(struct z8530_channel *, struct sk_buff *);
+
+    /*
+     *	Sync DMA
+     */
+
+    u8		rxdma;		/* DMA channels */
+    u8		txdma;
+    u8		rxdma_on;	/* DMA active if flag set */
+    u8		txdma_on;
+    u8		dma_num;	/* Buffer we are DMAing into */
+    u8		dma_ready;	/* Is the other buffer free */
+    u8		dma_tx;		/* TX is to use DMA */
+    u8		*rx_buf[2];	/* The flip buffers */
+
+    /*
+     *	System
+     */
+
+    struct z8530_dev *dev;		/* Z85230 chip instance we are from */
+    unsigned long	ctrlio;		/* I/O ports */
+    unsigned long	dataio;
+
+    /*
+     *	For PC we encode this way.
+     */
 #define Z8530_PORT_SLEEP	0x80000000
 #define Z8530_PORT_OF(x)	((x)&0xFFFF)
 
-	u32		rx_overrun;		/* Overruns - not done yet */
-	u32		rx_crc_err;
+    u32		rx_overrun;		/* Overruns - not done yet */
+    u32		rx_crc_err;
 
-	/*
-	 *	Bound device pointers
-	 */
+    /*
+     *	Bound device pointers
+     */
 
-	void		*private;	/* For our owner */
-	struct net_device	*netdevice;	/* Network layer device */
+    void		*private;	/* For our owner */
+    struct net_device	*netdevice;	/* Network layer device */
 
-	/*
-	 *	Async features
-	 */
+    /*
+     *	Async features
+     */
 
-	struct tty_struct 	*tty;		/* Attached terminal */
-	int			line;		/* Minor number */
-	wait_queue_head_t	open_wait;	/* Tasks waiting to open */
-	wait_queue_head_t	close_wait;	/* and for close to end */
-	unsigned long		event;		/* Pending events */
-	int			fdcount;    	/* # of fd on device */
-	int			blocked_open;	/* # of blocked opens */
-	int			x_char;		/* XON/XOF char */
-	unsigned char 		*xmit_buf;	/* Transmit pointer */
-	int			xmit_head;	/* Transmit ring */
-	int			xmit_tail;
-	int			xmit_cnt;
-	int			flags;	
-	int			timeout;
-	int			xmit_fifo_size;	/* Transmit FIFO info */
+    struct tty_struct 	*tty;		/* Attached terminal */
+    int			line;		/* Minor number */
+    wait_queue_head_t	open_wait;	/* Tasks waiting to open */
+    wait_queue_head_t	close_wait;	/* and for close to end */
+    unsigned long		event;		/* Pending events */
+    int			fdcount;    	/* # of fd on device */
+    int			blocked_open;	/* # of blocked opens */
+    int			x_char;		/* XON/XOF char */
+    unsigned char 		*xmit_buf;	/* Transmit pointer */
+    int			xmit_head;	/* Transmit ring */
+    int			xmit_tail;
+    int			xmit_cnt;
+    int			flags;
+    int			timeout;
+    int			xmit_fifo_size;	/* Transmit FIFO info */
 
-	int			close_delay;	/* Do we wait for drain on close ? */
-	unsigned short		closing_wait;
+    int			close_delay;	/* Do we wait for drain on close ? */
+    unsigned short		closing_wait;
 
-	/* We need to know the current clock divisor
-	 * to read the bps rate the chip has currently
-	 * loaded.
-	 */
+    /* We need to know the current clock divisor
+     * to read the bps rate the chip has currently
+     * loaded.
+     */
 
-	unsigned char		clk_divisor;  /* May be 1, 16, 32, or 64 */
-	int			zs_baud;
+    unsigned char		clk_divisor;  /* May be 1, 16, 32, or 64 */
+    int			zs_baud;
 
-	int			magic;
-	int			baud_base;		/* Baud parameters */
-	int			custom_divisor;
+    int			magic;
+    int			baud_base;		/* Baud parameters */
+    int			custom_divisor;
 
 
-	unsigned char		tx_active; /* character is being xmitted */
-	unsigned char		tx_stopped; /* output is suspended */
+    unsigned char		tx_active; /* character is being xmitted */
+    unsigned char		tx_stopped; /* output is suspended */
 
-	spinlock_t		*lock;	  /* Device lock */
+    spinlock_t		*lock;	  /* Device lock */
 };
 
 /*
  *	Each Z853x0 device.
  */
 
-struct z8530_dev
-{
-	char *name;	/* Device instance name */
-	struct z8530_channel chanA;	/* SCC channel A */
-	struct z8530_channel chanB;	/* SCC channel B */
-	int type;
-#define Z8530	0	/* NMOS dinosaur */	
+struct z8530_dev {
+    char *name;	/* Device instance name */
+    struct z8530_channel chanA;	/* SCC channel A */
+    struct z8530_channel chanB;	/* SCC channel B */
+    int type;
+#define Z8530	0	/* NMOS dinosaur */
 #define Z85C30	1	/* CMOS - better */
 #define Z85230	2	/* CMOS with real FIFO */
-	int irq;	/* Interrupt for the device */
-	int active;	/* Soft interrupt enable - the Mac doesn't 
+    int irq;	/* Interrupt for the device */
+    int active;	/* Soft interrupt enable - the Mac doesn't
 			   always have a hard disable on its 8530s... */
-	spinlock_t lock;
+    spinlock_t lock;
 };
 
 
 /*
  *	Functions
  */
- 
+
 extern u8 z8530_dead_port[];
 extern u8 z8530_hdlc_kilostream_85230[];
 extern u8 z8530_hdlc_kilostream[];
@@ -407,14 +404,14 @@ extern int z8530_sync_txdma_open(struct net_device *, struct z8530_channel *);
 extern int z8530_sync_txdma_close(struct net_device *, struct z8530_channel *);
 extern int z8530_channel_load(struct z8530_channel *, u8 *);
 extern netdev_tx_t z8530_queue_xmit(struct z8530_channel *c,
-					  struct sk_buff *skb);
+                                    struct sk_buff *skb);
 extern void z8530_null_rx(struct z8530_channel *c, struct sk_buff *skb);
 
 
 /*
  *	Standard interrupt vector sets
  */
- 
+
 extern struct z8530_irqhandler z8530_sync, z8530_async, z8530_nop;
 
 /*

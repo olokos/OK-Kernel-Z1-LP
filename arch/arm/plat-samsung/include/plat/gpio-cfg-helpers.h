@@ -25,27 +25,23 @@
 */
 
 static inline int samsung_gpio_do_setcfg(struct samsung_gpio_chip *chip,
-					 unsigned int off, unsigned int config)
-{
-	return (chip->config->set_config)(chip, off, config);
+        unsigned int off, unsigned int config) {
+    return (chip->config->set_config)(chip, off, config);
 }
 
 static inline unsigned samsung_gpio_do_getcfg(struct samsung_gpio_chip *chip,
-					      unsigned int off)
-{
-	return (chip->config->get_config)(chip, off);
+        unsigned int off) {
+    return (chip->config->get_config)(chip, off);
 }
 
 static inline int samsung_gpio_do_setpull(struct samsung_gpio_chip *chip,
-					  unsigned int off, samsung_gpio_pull_t pull)
-{
-	return (chip->config->set_pull)(chip, off, pull);
+        unsigned int off, samsung_gpio_pull_t pull) {
+    return (chip->config->set_pull)(chip, off, pull);
 }
 
 static inline samsung_gpio_pull_t samsung_gpio_do_getpull(struct samsung_gpio_chip *chip,
-							  unsigned int off)
-{
-	return chip->config->get_pull(chip, off);
+        unsigned int off) {
+    return chip->config->get_pull(chip, off);
 }
 
 /* Pull-{up,down} resistor controls.
@@ -66,7 +62,7 @@ static inline samsung_gpio_pull_t samsung_gpio_do_getpull(struct samsung_gpio_ch
  * bit configuring the presence of a pull-up resistor.
  */
 extern int s3c24xx_gpio_setpull_1up(struct samsung_gpio_chip *chip,
-				    unsigned int off, samsung_gpio_pull_t pull);
+                                    unsigned int off, samsung_gpio_pull_t pull);
 
 /**
  * s3c24xx_gpio_setpull_1down() - Pull configuration for choice of down or none
@@ -78,7 +74,7 @@ extern int s3c24xx_gpio_setpull_1up(struct samsung_gpio_chip *chip,
  * bit configuring the presence of a pull-down resistor.
  */
 extern int s3c24xx_gpio_setpull_1down(struct samsung_gpio_chip *chip,
-				      unsigned int off, samsung_gpio_pull_t pull);
+                                      unsigned int off, samsung_gpio_pull_t pull);
 
 /**
  * samsung_gpio_setpull_upown() - Pull configuration for choice of up,
@@ -96,7 +92,7 @@ extern int s3c24xx_gpio_setpull_1down(struct samsung_gpio_chip *chip,
  *	10 = Pull-down resistor connected
  */
 extern int samsung_gpio_setpull_updown(struct samsung_gpio_chip *chip,
-				       unsigned int off, samsung_gpio_pull_t pull);
+                                       unsigned int off, samsung_gpio_pull_t pull);
 
 /**
  * samsung_gpio_getpull_updown() - Get configuration for choice of up,
@@ -109,7 +105,7 @@ extern int samsung_gpio_setpull_updown(struct samsung_gpio_chip *chip,
  * for the given GPIO in the same case as samsung_gpio_setpull_upown.
 */
 extern samsung_gpio_pull_t samsung_gpio_getpull_updown(struct samsung_gpio_chip *chip,
-						       unsigned int off);
+        unsigned int off);
 
 /**
  * s3c24xx_gpio_getpull_1up() - Get configuration for choice of up or none
@@ -120,7 +116,7 @@ extern samsung_gpio_pull_t samsung_gpio_getpull_updown(struct samsung_gpio_chip 
  * given GPIO in the same case as s3c24xx_gpio_setpull_1up.
 */
 extern samsung_gpio_pull_t s3c24xx_gpio_getpull_1up(struct samsung_gpio_chip *chip,
-						    unsigned int off);
+        unsigned int off);
 
 /**
  * s3c24xx_gpio_getpull_1down() - Get configuration for choice of down or none
@@ -131,7 +127,7 @@ extern samsung_gpio_pull_t s3c24xx_gpio_getpull_1up(struct samsung_gpio_chip *ch
  * given GPIO in the same case as s3c24xx_gpio_setpull_1down.
 */
 extern samsung_gpio_pull_t s3c24xx_gpio_getpull_1down(struct samsung_gpio_chip *chip,
-						      unsigned int off);
+        unsigned int off);
 
 /**
  * s3c2443_gpio_setpull() - Pull configuration for s3c2443.
@@ -147,7 +143,7 @@ extern samsung_gpio_pull_t s3c24xx_gpio_getpull_1down(struct samsung_gpio_chip *
  *	x1 = No pull up resistor
  */
 extern int s3c2443_gpio_setpull(struct samsung_gpio_chip *chip,
-				unsigned int off, samsung_gpio_pull_t pull);
+                                unsigned int off, samsung_gpio_pull_t pull);
 
 /**
  * s3c2443_gpio_getpull() - Get configuration for s3c2443 pull resistors
@@ -158,6 +154,6 @@ extern int s3c2443_gpio_setpull(struct samsung_gpio_chip *chip,
  * given GPIO in the same case as samsung_gpio_setpull_upown.
 */
 extern samsung_gpio_pull_t s3c2443_gpio_getpull(struct samsung_gpio_chip *chip,
-						unsigned int off);
+        unsigned int off);
 
 #endif /* __PLAT_GPIO_CFG_HELPERS_H */

@@ -47,22 +47,22 @@
 
 /*--------------------------------------POF file record structs------------*/
 typedef struct PofFileHdr_tag {	/* Pof file header */
-	/*00 */ unsigned long Magic __attribute__((packed));
-	/*04 */ unsigned long N_PofRecs __attribute__((packed));
-/*08 */
+    /*00 */ unsigned long Magic __attribute__((packed));
+    /*04 */ unsigned long N_PofRecs __attribute__((packed));
+    /*08 */
 } tPofFileHdr;
 
 typedef struct PofRecHdr_tag {	/* Pof record header */
-	/*00 */ unsigned short PofRecId __attribute__((packed));
-	/*02 */ unsigned long PofRecDataLen __attribute__((packed));
-/*06 */
+    /*00 */ unsigned short PofRecId __attribute__((packed));
+    /*02 */ unsigned long PofRecDataLen __attribute__((packed));
+    /*06 */
 } tPofRecHdr;
 
 typedef struct PofTimeStamp_tag {
-	/*00 */ unsigned long UnixTime __attribute__((packed));
-	/*04 */ unsigned char DateTimeText[0x28];
-	/* =40 */
-/*2C */
+    /*00 */ unsigned long UnixTime __attribute__((packed));
+    /*04 */ unsigned char DateTimeText[0x28];
+    /* =40 */
+    /*2C */
 } tPofTimeStamp;
 
 /* tPofFileHdr.Magic value: */

@@ -9,7 +9,7 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and
- * limitations under the License. 
+ * limitations under the License.
  *
  * The initial developer of the original code is David A. Hinds
  * <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
@@ -104,49 +104,46 @@
 #define TOPIC_EXCA_IF_CONTROL		0x3e	/* 8 bit */
 #define TOPIC_EXCA_IFC_33V_ENA		0x01
 
-static void topic97_zoom_video(struct pcmcia_socket *sock, int onoff)
-{
-	struct yenta_socket *socket = container_of(sock, struct yenta_socket, socket);
-	u8 reg_zv, reg;
+static void topic97_zoom_video(struct pcmcia_socket *sock, int onoff) {
+    struct yenta_socket *socket = container_of(sock, struct yenta_socket, socket);
+    u8 reg_zv, reg;
 
-	reg_zv = config_readb(socket, TOPIC97_ZOOM_VIDEO_CONTROL);
-	if (onoff) {
-		reg_zv |= TOPIC97_ZV_CONTROL_ENABLE;
-		config_writeb(socket, TOPIC97_ZOOM_VIDEO_CONTROL, reg_zv);
+    reg_zv = config_readb(socket, TOPIC97_ZOOM_VIDEO_CONTROL);
+    if (onoff) {
+        reg_zv |= TOPIC97_ZV_CONTROL_ENABLE;
+        config_writeb(socket, TOPIC97_ZOOM_VIDEO_CONTROL, reg_zv);
 
-		reg = config_readb(socket, TOPIC97_AUDIO_VIDEO_SWITCH);
-		reg |= TOPIC97_AVS_AUDIO_CONTROL | TOPIC97_AVS_VIDEO_CONTROL;
-		config_writeb(socket, TOPIC97_AUDIO_VIDEO_SWITCH, reg);
-	} else {
-		reg_zv &= ~TOPIC97_ZV_CONTROL_ENABLE;
-		config_writeb(socket, TOPIC97_ZOOM_VIDEO_CONTROL, reg_zv);
+        reg = config_readb(socket, TOPIC97_AUDIO_VIDEO_SWITCH);
+        reg |= TOPIC97_AVS_AUDIO_CONTROL | TOPIC97_AVS_VIDEO_CONTROL;
+        config_writeb(socket, TOPIC97_AUDIO_VIDEO_SWITCH, reg);
+    } else {
+        reg_zv &= ~TOPIC97_ZV_CONTROL_ENABLE;
+        config_writeb(socket, TOPIC97_ZOOM_VIDEO_CONTROL, reg_zv);
 
-		reg = config_readb(socket, TOPIC97_AUDIO_VIDEO_SWITCH);
-		reg &= ~(TOPIC97_AVS_AUDIO_CONTROL | TOPIC97_AVS_VIDEO_CONTROL);
-		config_writeb(socket, TOPIC97_AUDIO_VIDEO_SWITCH, reg);
-	}
+        reg = config_readb(socket, TOPIC97_AUDIO_VIDEO_SWITCH);
+        reg &= ~(TOPIC97_AVS_AUDIO_CONTROL | TOPIC97_AVS_VIDEO_CONTROL);
+        config_writeb(socket, TOPIC97_AUDIO_VIDEO_SWITCH, reg);
+    }
 }
 
-static int topic97_override(struct yenta_socket *socket)
-{
-	/* ToPIC97/100 support ZV */
-	socket->socket.zoom_video = topic97_zoom_video;
-	return 0;
+static int topic97_override(struct yenta_socket *socket) {
+    /* ToPIC97/100 support ZV */
+    socket->socket.zoom_video = topic97_zoom_video;
+    return 0;
 }
 
 
-static int topic95_override(struct yenta_socket *socket)
-{
-	u8 fctrl;
+static int topic95_override(struct yenta_socket *socket) {
+    u8 fctrl;
 
-	/* enable 3.3V support for 16bit cards */
-	fctrl = exca_readb(socket, TOPIC_EXCA_IF_CONTROL);
-	exca_writeb(socket, TOPIC_EXCA_IF_CONTROL, fctrl | TOPIC_EXCA_IFC_33V_ENA);
+    /* enable 3.3V support for 16bit cards */
+    fctrl = exca_readb(socket, TOPIC_EXCA_IF_CONTROL);
+    exca_writeb(socket, TOPIC_EXCA_IF_CONTROL, fctrl | TOPIC_EXCA_IFC_33V_ENA);
 
-	/* tell yenta to use exca registers to power 16bit cards */
-	socket->flags |= YENTA_16BIT_POWER_EXCA | YENTA_16BIT_POWER_DF;
+    /* tell yenta to use exca registers to power 16bit cards */
+    socket->flags |= YENTA_16BIT_POWER_EXCA | YENTA_16BIT_POWER_DF;
 
-	return 0;
+    return 0;
 }
 
 #endif /* _LINUX_TOPIC_H */

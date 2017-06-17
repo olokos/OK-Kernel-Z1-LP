@@ -39,15 +39,15 @@
 
 /* Structure used to hold driver specific information */
 struct ca91cx42_driver {
-	void __iomem *base;	/* Base Address of device registers */
-	wait_queue_head_t dma_queue;
-	wait_queue_head_t iack_queue;
-	wait_queue_head_t mbox_queue;
-	void (*lm_callback[4])(int);	/* Called in interrupt handler */
-	void *crcsr_kernel;
-	dma_addr_t crcsr_bus;
-	struct mutex vme_rmw;		/* Only one RMW cycle at a time */
-	struct mutex vme_int;		/*
+    void __iomem *base;	/* Base Address of device registers */
+    wait_queue_head_t dma_queue;
+    wait_queue_head_t iack_queue;
+    wait_queue_head_t mbox_queue;
+    void (*lm_callback[4])(int);	/* Called in interrupt handler */
+    void *crcsr_kernel;
+    dma_addr_t crcsr_bus;
+    struct mutex vme_rmw;		/* Only one RMW cycle at a time */
+    struct mutex vme_int;		/*
 					 * Only one VME interrupt can be
 					 * generated at a time, provide locking
 					 */
@@ -55,19 +55,19 @@ struct ca91cx42_driver {
 
 /* See Page 2-77 in the Universe User Manual */
 struct ca91cx42_dma_descriptor {
-	unsigned int dctl;      /* DMA Control */
-	unsigned int dtbc;      /* Transfer Byte Count */
-	unsigned int dla;       /* PCI Address */
-	unsigned int res1;      /* Reserved */
-	unsigned int dva;       /* Vme Address */
-	unsigned int res2;      /* Reserved */
-	unsigned int dcpp;      /* Pointer to Numed Cmd Packet with rPN */
-	unsigned int res3;      /* Reserved */
+    unsigned int dctl;      /* DMA Control */
+    unsigned int dtbc;      /* Transfer Byte Count */
+    unsigned int dla;       /* PCI Address */
+    unsigned int res1;      /* Reserved */
+    unsigned int dva;       /* Vme Address */
+    unsigned int res2;      /* Reserved */
+    unsigned int dcpp;      /* Pointer to Numed Cmd Packet with rPN */
+    unsigned int res3;      /* Reserved */
 };
 
 struct ca91cx42_dma_entry {
-	struct ca91cx42_dma_descriptor descriptor;
-	struct list_head list;
+    struct ca91cx42_dma_descriptor descriptor;
+    struct list_head list;
 };
 
 /* Universe Register Offsets */
@@ -120,16 +120,20 @@ struct ca91cx42_dma_entry {
 #define LSI7_TO			0x01E8
 
 static const int CA91CX42_LSI_CTL[] = { LSI0_CTL, LSI1_CTL, LSI2_CTL, LSI3_CTL,
-				LSI4_CTL, LSI5_CTL, LSI6_CTL, LSI7_CTL };
+                                        LSI4_CTL, LSI5_CTL, LSI6_CTL, LSI7_CTL
+                                      };
 
 static const int CA91CX42_LSI_BS[] = { LSI0_BS, LSI1_BS, LSI2_BS, LSI3_BS,
-				LSI4_BS, LSI5_BS, LSI6_BS, LSI7_BS };
+                                       LSI4_BS, LSI5_BS, LSI6_BS, LSI7_BS
+                                     };
 
 static const int CA91CX42_LSI_BD[] = { LSI0_BD, LSI1_BD, LSI2_BD, LSI3_BD,
-				LSI4_BD, LSI5_BD, LSI6_BD, LSI7_BD };
+                                       LSI4_BD, LSI5_BD, LSI6_BD, LSI7_BD
+                                     };
 
 static const int CA91CX42_LSI_TO[] = { LSI0_TO, LSI1_TO, LSI2_TO, LSI3_TO,
-				LSI4_TO, LSI5_TO, LSI6_TO, LSI7_TO };
+                                       LSI4_TO, LSI5_TO, LSI6_TO, LSI7_TO
+                                     };
 
 #define SCYC_CTL		0x0170
 #define SCYC_ADDR		0x0174
@@ -168,8 +172,9 @@ static const int CA91CX42_LSI_TO[] = { LSI0_TO, LSI1_TO, LSI2_TO, LSI3_TO,
 #define V7_STATID		0x033C
 
 static const int CA91CX42_V_STATID[8] = { 0, V1_STATID, V2_STATID, V3_STATID,
-					V4_STATID, V5_STATID, V6_STATID,
-					V7_STATID };
+                                          V4_STATID, V5_STATID, V6_STATID,
+                                          V7_STATID
+                                        };
 
 #define LINT_MAP2		0x0340
 #define VINT_MAP2		0x0344
@@ -238,16 +243,20 @@ static const int CA91CX42_V_STATID[8] = { 0, V1_STATID, V2_STATID, V3_STATID,
 #define VSI7_TO			0x0FD8
 
 static const int CA91CX42_VSI_CTL[] = { VSI0_CTL, VSI1_CTL, VSI2_CTL, VSI3_CTL,
-				VSI4_CTL, VSI5_CTL, VSI6_CTL, VSI7_CTL };
+                                        VSI4_CTL, VSI5_CTL, VSI6_CTL, VSI7_CTL
+                                      };
 
 static const int CA91CX42_VSI_BS[] = { VSI0_BS, VSI1_BS, VSI2_BS, VSI3_BS,
-				VSI4_BS, VSI5_BS, VSI6_BS, VSI7_BS };
+                                       VSI4_BS, VSI5_BS, VSI6_BS, VSI7_BS
+                                     };
 
 static const int CA91CX42_VSI_BD[] = { VSI0_BD, VSI1_BD, VSI2_BD, VSI3_BD,
-				VSI4_BD, VSI5_BD, VSI6_BD, VSI7_BD };
+                                       VSI4_BD, VSI5_BD, VSI6_BD, VSI7_BD
+                                     };
 
 static const int CA91CX42_VSI_TO[] = { VSI0_TO, VSI1_TO, VSI2_TO, VSI3_TO,
-				VSI4_TO, VSI5_TO, VSI6_TO, VSI7_TO };
+                                       VSI4_TO, VSI5_TO, VSI6_TO, VSI7_TO
+                                     };
 
 #define VCSR_CLR		0x0FF4
 #define VCSR_SET		0x0FF8
@@ -449,14 +458,16 @@ static const int CA91CX42_VSI_TO[] = { VSI0_TO, VSI1_TO, VSI2_TO, VSI3_TO,
 #define CA91CX42_LINT_VOWN		0x00000001
 
 static const int CA91CX42_LINT_VIRQ[] = { 0, CA91CX42_LINT_VIRQ1,
-				CA91CX42_LINT_VIRQ2, CA91CX42_LINT_VIRQ3,
-				CA91CX42_LINT_VIRQ4, CA91CX42_LINT_VIRQ5,
-				CA91CX42_LINT_VIRQ6, CA91CX42_LINT_VIRQ7 };
+                                          CA91CX42_LINT_VIRQ2, CA91CX42_LINT_VIRQ3,
+                                          CA91CX42_LINT_VIRQ4, CA91CX42_LINT_VIRQ5,
+                                          CA91CX42_LINT_VIRQ6, CA91CX42_LINT_VIRQ7
+                                        };
 
 #define CA91CX42_LINT_MBOX		0x000F0000
 
 static const int CA91CX42_LINT_LM[] = { CA91CX42_LINT_LM0, CA91CX42_LINT_LM1,
-					CA91CX42_LINT_LM2, CA91CX42_LINT_LM3 };
+                                        CA91CX42_LINT_LM2, CA91CX42_LINT_LM3
+                                      };
 
 /*
  * MAST_CTL Register

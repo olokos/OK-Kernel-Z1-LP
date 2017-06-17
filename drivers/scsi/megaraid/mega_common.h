@@ -66,17 +66,17 @@
  * target on the controller.
  */
 typedef struct {
-	caddr_t			ccb;
-	struct list_head	list;
-	unsigned long		gp;
-	unsigned int		sno;
-	struct scsi_cmnd	*scp;
-	uint32_t		state;
-	uint32_t		dma_direction;
-	uint32_t		dma_type;
-	uint16_t		dev_channel;
-	uint16_t		dev_target;
-	uint32_t		status;
+    caddr_t			ccb;
+    struct list_head	list;
+    unsigned long		gp;
+    unsigned int		sno;
+    struct scsi_cmnd	*scp;
+    uint32_t		state;
+    uint32_t		dma_direction;
+    uint32_t		dma_type;
+    uint16_t		dev_channel;
+    uint16_t		dev_target;
+    uint32_t		status;
 } scb_t;
 
 /*
@@ -153,44 +153,44 @@ typedef struct {
 #define VERSION_SIZE	16
 
 typedef struct {
-	struct tasklet_struct	dpc_h;
-	struct pci_dev		*pdev;
-	struct Scsi_Host	*host;
-	spinlock_t		lock;
-	uint8_t			quiescent;
-	int			outstanding_cmds;
-	scb_t			*kscb_list;
-	struct list_head	kscb_pool;
-	spinlock_t		kscb_pool_lock;
-	struct list_head	pend_list;
-	spinlock_t		pend_list_lock;
-	struct list_head	completed_list;
-	spinlock_t		completed_list_lock;
-	uint16_t		sglen;
-	int			device_ids[LSI_MAX_CHANNELS]
-					[LSI_MAX_LOGICAL_DRIVES_64LD];
-	caddr_t			raid_device;
-	uint8_t			max_channel;
-	uint16_t		max_target;
-	uint8_t			max_lun;
+    struct tasklet_struct	dpc_h;
+    struct pci_dev		*pdev;
+    struct Scsi_Host	*host;
+    spinlock_t		lock;
+    uint8_t			quiescent;
+    int			outstanding_cmds;
+    scb_t			*kscb_list;
+    struct list_head	kscb_pool;
+    spinlock_t		kscb_pool_lock;
+    struct list_head	pend_list;
+    spinlock_t		pend_list_lock;
+    struct list_head	completed_list;
+    spinlock_t		completed_list_lock;
+    uint16_t		sglen;
+    int			device_ids[LSI_MAX_CHANNELS]
+    [LSI_MAX_LOGICAL_DRIVES_64LD];
+    caddr_t			raid_device;
+    uint8_t			max_channel;
+    uint16_t		max_target;
+    uint8_t			max_lun;
 
-	uint32_t		unique_id;
-	int			irq;
-	uint8_t			ito;
-	caddr_t			ibuf;
-	dma_addr_t		ibuf_dma_h;
-	scb_t			*uscb_list;
-	struct list_head	uscb_pool;
-	spinlock_t		uscb_pool_lock;
-	int			max_cmds;
-	uint8_t			fw_version[VERSION_SIZE];
-	uint8_t			bios_version[VERSION_SIZE];
-	uint8_t			max_cdb_sz;
-	uint8_t			ha;
-	uint16_t		init_id;
-	uint16_t		max_sectors;
-	uint16_t		cmd_per_lun;
-	atomic_t		being_detached;
+    uint32_t		unique_id;
+    int			irq;
+    uint8_t			ito;
+    caddr_t			ibuf;
+    dma_addr_t		ibuf_dma_h;
+    scb_t			*uscb_list;
+    struct list_head	uscb_pool;
+    spinlock_t		uscb_pool_lock;
+    int			max_cmds;
+    uint8_t			fw_version[VERSION_SIZE];
+    uint8_t			bios_version[VERSION_SIZE];
+    uint8_t			max_cdb_sz;
+    uint8_t			ha;
+    uint16_t		init_id;
+    uint16_t		max_sectors;
+    uint16_t		cmd_per_lun;
+    atomic_t		being_detached;
 } adapter_t;
 
 #define SCSI_FREE_LIST_LOCK(adapter)	(&adapter->kscb_pool_lock)
@@ -253,7 +253,7 @@ typedef struct {
  * ### Helper routines ###
  */
 #define LSI_DBGLVL mraid_debug_level	// each LLD must define a global
- 					// mraid_debug_level
+// mraid_debug_level
 
 #ifdef DEBUG
 #if defined (_ASSERT_PANIC)
@@ -281,8 +281,8 @@ typedef struct {
  * requested elements
  */
 struct mraid_pci_blk {
-	caddr_t		vaddr;
-	dma_addr_t	dma_addr;
+    caddr_t		vaddr;
+    dma_addr_t	dma_addr;
 };
 
 #endif // _MEGA_COMMON_H_

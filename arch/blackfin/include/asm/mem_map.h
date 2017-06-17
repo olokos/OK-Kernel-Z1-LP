@@ -45,37 +45,29 @@
 
 # ifndef __ASSEMBLY__
 
-static inline unsigned long get_l1_scratch_start_cpu(int cpu)
-{
-	return L1_SCRATCH_START;
+static inline unsigned long get_l1_scratch_start_cpu(int cpu) {
+    return L1_SCRATCH_START;
 }
-static inline unsigned long get_l1_code_start_cpu(int cpu)
-{
-	return L1_CODE_START;
+static inline unsigned long get_l1_code_start_cpu(int cpu) {
+    return L1_CODE_START;
 }
-static inline unsigned long get_l1_data_a_start_cpu(int cpu)
-{
-	return L1_DATA_A_START;
+static inline unsigned long get_l1_data_a_start_cpu(int cpu) {
+    return L1_DATA_A_START;
 }
-static inline unsigned long get_l1_data_b_start_cpu(int cpu)
-{
-	return L1_DATA_B_START;
+static inline unsigned long get_l1_data_b_start_cpu(int cpu) {
+    return L1_DATA_B_START;
 }
-static inline unsigned long get_l1_scratch_start(void)
-{
-	return get_l1_scratch_start_cpu(0);
+static inline unsigned long get_l1_scratch_start(void) {
+    return get_l1_scratch_start_cpu(0);
 }
-static inline unsigned long get_l1_code_start(void)
-{
-	return  get_l1_code_start_cpu(0);
+static inline unsigned long get_l1_code_start(void) {
+    return  get_l1_code_start_cpu(0);
 }
-static inline unsigned long get_l1_data_a_start(void)
-{
-	return get_l1_data_a_start_cpu(0);
+static inline unsigned long get_l1_data_a_start(void) {
+    return get_l1_data_a_start_cpu(0);
 }
-static inline unsigned long get_l1_data_b_start(void)
-{
-	return get_l1_data_b_start_cpu(0);
+static inline unsigned long get_l1_data_b_start(void) {
+    return get_l1_data_b_start_cpu(0);
 }
 
 # endif /* __ASSEMBLY__ */

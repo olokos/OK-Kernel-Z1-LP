@@ -177,8 +177,7 @@ VOS_STATUS
 WLANBAP_Open
 (
     v_PVOID_t  pvosGCtx
-)
-{
+) {
     ptBtampContext  pBtampCtx = NULL;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -188,8 +187,7 @@ WLANBAP_Open
     vos_alloc_context(pvosGCtx, VOS_MODULE_ID_BAP, (v_VOID_t**)&pBtampCtx, sizeof(tBtampContext));
 
     pBtampCtx = VOS_GET_BAP_CB(pvosGCtx);
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer from pvosGCtx on WLANBAP_Open");
         //"Failed to allocate BAP pointer from pvosGCtx on WLANBAP_Open");
@@ -250,8 +248,7 @@ VOS_STATUS
 WLANBAP_Start
 (
     v_PVOID_t  pvosGCtx
-)
-{
+) {
     ptBtampContext  pBtampCtx = NULL;
     VOS_STATUS      vosStatus;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -261,8 +258,7 @@ WLANBAP_Start
       Extract BAP control block
      ------------------------------------------------------------------------*/
     pBtampCtx = VOS_GET_BAP_CB(pvosGCtx);
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer from pvosGCtx on WLANBAP_Start");
         return VOS_STATUS_E_FAULT;
@@ -290,8 +286,7 @@ WLANBAP_Start
                     pBtampCtx);
 
     vosStatus = vos_lock_init(&pBtampCtx->bapLock);
-    if(!VOS_IS_STATUS_SUCCESS(vosStatus))
-    {
+    if(!VOS_IS_STATUS_SUCCESS(vosStatus)) {
         VOS_TRACE(VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,"Lock Init Fail");
     }
 
@@ -329,8 +324,7 @@ VOS_STATUS
 WLANBAP_Stop
 (
     v_PVOID_t  pvosGCtx
-)
-{
+) {
     ptBtampContext  pBtampCtx = NULL;
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -340,8 +334,7 @@ WLANBAP_Stop
       Extract BAP control block
      ------------------------------------------------------------------------*/
     pBtampCtx = VOS_GET_BAP_CB(pvosGCtx);
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer from pvosGCtx on WLANBAP_Stop");
         return VOS_STATUS_E_FAULT;
@@ -351,23 +344,20 @@ WLANBAP_Stop
       Stop BAP (de-register RSN handler!?)
      ------------------------------------------------------------------------*/
     vosStatus = WLANBAP_DeinitConnectionAcceptTimer(pBtampCtx);
-    if ( VOS_STATUS_SUCCESS != vosStatus)
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Couldn't destroy  bapConnectionAcceptTimer");
     }
 
     vosStatus = WLANBAP_DeinitLinkSupervisionTimer(pBtampCtx);
-    if ( VOS_STATUS_SUCCESS != vosStatus)
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Couldn't destroy  bapLinkSupervisionTimer");
     }
 
     vosStatus = vos_timer_destroy (
                     &pBtampCtx->bapTxPktMonitorTimer );
-    if ( VOS_STATUS_SUCCESS != vosStatus)
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Couldn't destroy  bapTxPktMonitorTimer");
     }
@@ -405,8 +395,7 @@ VOS_STATUS
 WLANBAP_Close
 (
     v_PVOID_t  pvosGCtx
-)
-{
+) {
     ptBtampContext  pBtampCtx = NULL;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -415,8 +404,7 @@ WLANBAP_Close
       Extract BAP control block
      ------------------------------------------------------------------------*/
     pBtampCtx = VOS_GET_BAP_CB(pvosGCtx);
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer from pvosGCtx on WLANBAP_Close");
         return VOS_STATUS_E_FAULT;
@@ -476,14 +464,12 @@ VOS_STATUS
 WLANBAP_GetNewHndl
 (
     ptBtampHandle *hBtampHandle  /* Handle to return btampHandle value in  */
-)
-{
+) {
     ptBtampContext  btampContext = NULL;
     /*------------------------------------------------------------------------
       Sanity check params
      ------------------------------------------------------------------------*/
-    if ( NULL == hBtampHandle)
-    {
+    if ( NULL == hBtampHandle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle pointer in WLANBAP_GetNewHndl");
         return VOS_STATUS_E_FAULT;
@@ -493,8 +479,7 @@ WLANBAP_GetNewHndl
     /*------------------------------------------------------------------------
       Sanity check the BAP control block pointer
      ------------------------------------------------------------------------*/
-    if ( NULL == gpBtampCtx )
-    {
+    if ( NULL == gpBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in WLANBAP_GetNewHndl");
         return VOS_STATUS_E_FAULT;
@@ -545,8 +530,7 @@ VOS_STATUS
 WLANBAP_ReleaseHndl
 (
     ptBtampHandle btampHandle  /* btamp handle value to release  */
-)
-{
+) {
     /* obtain btamp Context  */
     ptBtampContext  btampContext = (ptBtampContext) btampHandle;
     tHalHandle halHandle;
@@ -554,8 +538,7 @@ WLANBAP_ReleaseHndl
     /*------------------------------------------------------------------------
       Sanity check params
      ------------------------------------------------------------------------*/
-    if ( NULL == btampHandle)
-    {
+    if ( NULL == btampHandle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in WLANBAP_ReleaseHndl");
         return VOS_STATUS_E_FAULT;
@@ -570,19 +553,16 @@ WLANBAP_ReleaseHndl
      * on all of them  */
 
     halHandle = VOS_GET_HAL_CB(btampContext->pvosGCtx);
-    if(NULL == halHandle)
-    {
+    if(NULL == halHandle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "halHandle is NULL in %s", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if( btampContext->isBapSessionOpen == TRUE )
-    {
+    if( btampContext->isBapSessionOpen == TRUE ) {
         halStatus = sme_CloseSession(halHandle,
                                      btampContext->sessionId, NULL, NULL);
-        if(eHAL_STATUS_SUCCESS == halStatus)
-        {
+        if(eHAL_STATUS_SUCCESS == halStatus) {
             btampContext->isBapSessionOpen = FALSE;
         }
     }
@@ -626,8 +606,7 @@ WLANBAP_CleanCB
 (
     ptBtampContext  pBtampCtx,
     v_U32_t freeFlag // 0 /*do not empty*/);
-)
-{
+) {
     v_U16_t         i; /* Logical Link index */
     tpBtampLogLinkCtx  pLogLinkContext = NULL;
 
@@ -635,8 +614,7 @@ WLANBAP_CleanCB
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in WLANBAP_CleanCB");
         return VOS_STATUS_E_FAULT;
@@ -715,8 +693,7 @@ WLANBAP_CleanCB
     pBtampCtx->total_log_link_index = 0;  /* should never be >16 */
 
     // Clear up the array of logical links
-    for (i = 0; i < WLANBAP_MAX_LOG_LINKS ; i++)
-    {
+    for (i = 0; i < WLANBAP_MAX_LOG_LINKS ; i++) {
         pLogLinkContext = &pBtampCtx->btampLogLinkCtx[i];
         pLogLinkContext->present = 0;
         pLogLinkContext->uTxPktCompleted = 0;
@@ -782,8 +759,7 @@ WLANBAP_GetCtxFromStaId
     ptBtampHandle *hBtampHandle,  /* Handle to return per app btampHandle value in  */
     ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */
     v_PVOID_t     *hHddHdl /* Handle to return BSL context in */
-)
-{
+) {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
 
     /* For now, we know there is only one application context */
@@ -843,16 +819,14 @@ WLANBAP_GetStaIdFromLinkCtx
     v_U8_t         phy_link_handle,  /* phy_link_handle value in */
     v_U8_t        *pucSTAId,  /* The StaId (used by TL, PE, and HAL) */
     v_PVOID_t     *hHddHdl /* Handle to return BSL context */
-)
-{
+) {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
     ptBtampContext           pBtampCtx = (ptBtampContext) btampHandle;
 
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -911,8 +885,7 @@ WLANBAP_CreateNewPhyLinkCtx
     v_PVOID_t      pHddHdl,   /* BSL passes in its specific context */
     ptBtampContext *hBtampContext, /* Handle to return per assoc btampContext value in  */
     tWLAN_BAPRole  BAPDeviceRole
-)
-{
+) {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
     ptBtampContext  pBtampCtx = gpBtampCtx;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -1002,15 +975,13 @@ WLANBAP_UpdatePhyLinkCtxStaId
 (
     ptBtampContext pBtampContext, /* btampContext value in  */
     v_U8_t         ucSTAId
-)
-{
+) {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
 
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if ( NULL == pBtampContext)
-    {
+    if ( NULL == pBtampContext) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1030,8 +1001,7 @@ bapAllocNextLogLinkIndex
 (
     ptBtampContext pBtampContext, /* Pointer to the per assoc btampContext value */
     v_U8_t         phy_link_handle /*  I get phy_link_handle from the Command */
-)
-{
+) {
     return ++(pBtampContext->current_log_link_index) % WLANBAP_MAX_LOG_LINKS;
 }/* bapAllocNextLogLinkIndex */
 
@@ -1071,8 +1041,7 @@ WLANBAP_CreateNewLogLinkCtx
     v_U8_t         tx_flow_spec[18],
     v_U8_t         rx_flow_spec[18],
     v_U16_t         *pLog_link_handle /*  Return the logical link index here */
-)
-{
+) {
 #ifndef BTAMP_MULTIPLE_PHY_LINKS
     v_U16_t         i; /* Logical Link index */
     tpBtampLogLinkCtx        pLogLinkContext;
@@ -1110,8 +1079,7 @@ WLANBAP_CreateNewLogLinkCtx
     retval = btampUnpackTlvFlow_Spec((void *)pBtampContext, tx_flow_spec,
                                      WLAN_BAP_PAL_FLOW_SPEC_TLV_LEN,
                                      &pLogLinkContext->btampFlowSpec);
-    if (retval != BTAMP_PARSE_SUCCESS)
-    {
+    if (retval != BTAMP_PARSE_SUCCESS) {
         /* Flow spec parsing failed, return failure */
         return VOS_STATUS_E_BADMSG;
     }
@@ -1167,8 +1135,7 @@ WLANBAP_pmcFullPwrReqCB
 (
     void *callbackContext,
     eHalStatus status
-)
-{
+) {
 
 }/* WLANBAP_pmcFullPwrReqCB */
 
@@ -1197,16 +1164,14 @@ void
 WLANBAP_ReadMacConfig
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     tANI_U32        len = WNI_CFG_BSSID_LEN;
     tHalHandle      pMac = NULL;
 
     /*------------------------------------------------------------------------
       Temporary method to get the self MAC address
     ------------------------------------------------------------------------*/
-    if (NULL == pBtampCtx)
-    {
+    if (NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "pBtampCtx is NULL in %s", __func__);
 
@@ -1214,8 +1179,7 @@ WLANBAP_ReadMacConfig
     }
 
     pMac = (tHalHandle)vos_get_context( VOS_MODULE_ID_SME, pBtampCtx->pvosGCtx);
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "pMac is NULL in %s", __func__);
 
@@ -1279,8 +1243,7 @@ WLANBAP_NeedBTCoexPriority
 (
     ptBtampContext  pBtampCtx,
     v_U32_t         needCoexPriority
-)
-{
+) {
     tHalHandle      pMac = NULL;
     tSmeBtAmpEvent  btAmpEvent;
 
@@ -1291,14 +1254,12 @@ WLANBAP_NeedBTCoexPriority
     pMac = (tHalHandle)vos_get_context( VOS_MODULE_ID_SME, pBtampCtx->pvosGCtx);
 
     // Is re-entrancy protection needed for this?
-    if (needCoexPriority != gBapCoexPriority)
-    {
+    if (needCoexPriority != gBapCoexPriority) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Calling %s with needCoexPriority=%d.", __func__, needCoexPriority);
 
         gBapCoexPriority = needCoexPriority;
-        switch ( needCoexPriority)
-        {
+        switch ( needCoexPriority) {
         case 0:  /* Idle */
             btAmpEvent.btAmpEventType = BTAMP_EVENT_CONNECTION_TERMINATED;
             pBtampCtx->btamp_session_on = FALSE;
@@ -1356,23 +1317,19 @@ VOS_STATUS WLANBAP_RxCallback
     v_PVOID_t               pvosGCtx,
     vos_pkt_t              *pPacket,
     WLANTL_BAPFrameEnumType frameType
-)
-{
+) {
     ptBtampContext  pBtampCtx = NULL;
 
     pBtampCtx = VOS_GET_BAP_CB(pvosGCtx);
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer from pvosGCtx on WLANBAP_Start");
         return VOS_STATUS_E_FAULT;
     }
 
-    switch (frameType)
-    {
+    switch (frameType) {
     case WLANTL_BT_AMP_TYPE_LS_REQ:  /* Fall through */
-    case WLANTL_BT_AMP_TYPE_LS_REP:
-    {
+    case WLANTL_BT_AMP_TYPE_LS_REP: {
         /* Link supervision frame, process this frame */
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "%s: link Supervision packet received over TL: %d, => BAP",
@@ -1385,8 +1342,7 @@ VOS_STATUS WLANBAP_RxCallback
     }
 
     case WLANTL_BT_AMP_TYPE_AR: /* Fall through */
-    case WLANTL_BT_AMP_TYPE_SEC:
-    {
+    case WLANTL_BT_AMP_TYPE_SEC: {
         /* Call the RSN callback handler */
         bapRsnRxCallback (pvosGCtx, pPacket);
         break;

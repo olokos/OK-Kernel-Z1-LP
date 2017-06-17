@@ -25,31 +25,31 @@
 /* Bits of interest in the GPIO_IN_OUT register.
  */
 enum {
-	GPIO_IN_BIT  = 0,
-	GPIO_OUT_BIT = 1
+    GPIO_IN_BIT  = 0,
+    GPIO_OUT_BIT = 1
 };
 
 /* Bits of interest in the GPIO_INTR_STATUS register.
  */
 enum {
-	INTR_STATUS_BIT = 0,
+    INTR_STATUS_BIT = 0,
 };
 
 /* Bits of interest in the GPIO_CFG register.
  */
 enum {
-	GPIO_OE_BIT = 9,
+    GPIO_OE_BIT = 9,
 };
 
 /* Bits of interest in the GPIO_INTR_CFG register.
  */
 enum {
-	INTR_ENABLE_BIT        = 0,
-	INTR_POL_CTL_BIT       = 1,
-	INTR_DECT_CTL_BIT      = 2,
-	INTR_RAW_STATUS_EN_BIT = 4,
-	INTR_TARGET_PROC_BIT   = 5,
-	INTR_DIR_CONN_EN_BIT   = 8,
+    INTR_ENABLE_BIT        = 0,
+    INTR_POL_CTL_BIT       = 1,
+    INTR_DECT_CTL_BIT      = 2,
+    INTR_RAW_STATUS_EN_BIT = 4,
+    INTR_TARGET_PROC_BIT   = 5,
+    INTR_DIR_CONN_EN_BIT   = 8,
 };
 
 /*
@@ -58,8 +58,8 @@ enum {
  * the registers allow for low-polarity inputs, the case can never arise.
  */
 enum {
-	DC_GPIO_SEL_BIT = 0,
-	DC_POLARITY_BIT	= 8,
+    DC_GPIO_SEL_BIT = 0,
+    DC_POLARITY_BIT	= 8,
 };
 
 /*
@@ -95,138 +95,124 @@ enum {
 #define GPIO_INTR_STATUS(gpio)   (MSM_TLMM_BASE + 0x100c + (0x10 * (gpio)))
 #define GPIO_DIR_CONN_INTR(intr) (MSM_TLMM_BASE + 0x2800 + (0x04 * (intr)))
 
-static inline void set_gpio_bits(unsigned n, void __iomem *reg)
-{
-	__raw_writel(__raw_readl(reg) | n, reg);
+static inline void set_gpio_bits(unsigned n, void __iomem *reg) {
+    __raw_writel(__raw_readl(reg) | n, reg);
 }
 
-static inline void clr_gpio_bits(unsigned n, void __iomem *reg)
-{
-	__raw_writel(__raw_readl(reg) & ~n, reg);
+static inline void clr_gpio_bits(unsigned n, void __iomem *reg) {
+    __raw_writel(__raw_readl(reg) & ~n, reg);
 }
 
-unsigned __msm_gpio_get_inout(unsigned gpio)
-{
-	return __raw_readl(GPIO_IN_OUT(gpio)) & BIT(GPIO_IN_BIT);
+unsigned __msm_gpio_get_inout(unsigned gpio) {
+    return __raw_readl(GPIO_IN_OUT(gpio)) & BIT(GPIO_IN_BIT);
 }
 
-void __msm_gpio_set_inout(unsigned gpio, unsigned val)
-{
-	__raw_writel(val ? BIT(GPIO_OUT_BIT) : 0, GPIO_IN_OUT(gpio));
+void __msm_gpio_set_inout(unsigned gpio, unsigned val) {
+    __raw_writel(val ? BIT(GPIO_OUT_BIT) : 0, GPIO_IN_OUT(gpio));
 }
 
-void __msm_gpio_set_config_direction(unsigned gpio, int input, int val)
-{
-	if (input) {
-		clr_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
-	} else {
-		__msm_gpio_set_inout(gpio, val);
-		set_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
-	}
+void __msm_gpio_set_config_direction(unsigned gpio, int input, int val) {
+    if (input) {
+        clr_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
+    } else {
+        __msm_gpio_set_inout(gpio, val);
+        set_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
+    }
 }
 
-void __msm_gpio_set_polarity(unsigned gpio, unsigned val)
-{
-	if (val)
-		clr_gpio_bits(INTR_POL_CTL_HI, GPIO_INTR_CFG(gpio));
-	else
-		set_gpio_bits(INTR_POL_CTL_HI, GPIO_INTR_CFG(gpio));
+void __msm_gpio_set_polarity(unsigned gpio, unsigned val) {
+    if (val)
+        clr_gpio_bits(INTR_POL_CTL_HI, GPIO_INTR_CFG(gpio));
+    else
+        set_gpio_bits(INTR_POL_CTL_HI, GPIO_INTR_CFG(gpio));
 }
 
-unsigned __msm_gpio_get_intr_status(unsigned gpio)
-{
-	return __raw_readl(GPIO_INTR_STATUS(gpio)) &
-					BIT(INTR_STATUS_BIT);
+unsigned __msm_gpio_get_intr_status(unsigned gpio) {
+    return __raw_readl(GPIO_INTR_STATUS(gpio)) &
+           BIT(INTR_STATUS_BIT);
 }
 
-void __msm_gpio_set_intr_status(unsigned gpio)
-{
-	__raw_writel(0, GPIO_INTR_STATUS(gpio));
+void __msm_gpio_set_intr_status(unsigned gpio) {
+    __raw_writel(0, GPIO_INTR_STATUS(gpio));
 }
 
-unsigned __msm_gpio_get_intr_config(unsigned gpio)
-{
-	return __raw_readl(GPIO_INTR_CFG(gpio));
+unsigned __msm_gpio_get_intr_config(unsigned gpio) {
+    return __raw_readl(GPIO_INTR_CFG(gpio));
 }
 
-void __msm_gpio_set_intr_cfg_enable(unsigned gpio, unsigned val)
-{
-	unsigned cfg;
+void __msm_gpio_set_intr_cfg_enable(unsigned gpio, unsigned val) {
+    unsigned cfg;
 
-	cfg = __raw_readl(GPIO_INTR_CFG(gpio));
-	if (val) {
-		cfg &= ~INTR_DIR_CONN_EN;
-		cfg |= INTR_ENABLE;
-	} else {
-		cfg &= ~INTR_ENABLE;
-	}
-	__raw_writel(cfg, GPIO_INTR_CFG(gpio));
+    cfg = __raw_readl(GPIO_INTR_CFG(gpio));
+    if (val) {
+        cfg &= ~INTR_DIR_CONN_EN;
+        cfg |= INTR_ENABLE;
+    } else {
+        cfg &= ~INTR_ENABLE;
+    }
+    __raw_writel(cfg, GPIO_INTR_CFG(gpio));
 }
 
-unsigned  __msm_gpio_get_intr_cfg_enable(unsigned gpio)
-{
-	return __msm_gpio_get_intr_config(gpio) & INTR_ENABLE;
+unsigned  __msm_gpio_get_intr_cfg_enable(unsigned gpio) {
+    return __msm_gpio_get_intr_config(gpio) & INTR_ENABLE;
 }
 
-void __msm_gpio_set_intr_cfg_type(unsigned gpio, unsigned type)
-{
-	unsigned cfg;
+void __msm_gpio_set_intr_cfg_type(unsigned gpio, unsigned type) {
+    unsigned cfg;
 
-	/* RAW_STATUS_EN is left on for all gpio irqs. Due to the
-	 * internal circuitry of TLMM, toggling the RAW_STATUS
-	 * could cause the INTR_STATUS to be set for EDGE interrupts.
-	 */
-	cfg = INTR_RAW_STATUS_EN | INTR_TARGET_PROC_APPS;
-	__raw_writel(cfg, GPIO_INTR_CFG(gpio));
-	cfg &= ~INTR_DECT_CTL_MASK;
-	if (type == IRQ_TYPE_EDGE_RISING)
-		cfg |= INTR_DECT_CTL_POS_EDGE;
-	else if (type == IRQ_TYPE_EDGE_FALLING)
-		cfg |= INTR_DECT_CTL_NEG_EDGE;
-	else if (type == IRQ_TYPE_EDGE_BOTH)
-		cfg |= INTR_DECT_CTL_DUAL_EDGE;
-	else
-		cfg |= INTR_DECT_CTL_LEVEL;
+    /* RAW_STATUS_EN is left on for all gpio irqs. Due to the
+     * internal circuitry of TLMM, toggling the RAW_STATUS
+     * could cause the INTR_STATUS to be set for EDGE interrupts.
+     */
+    cfg = INTR_RAW_STATUS_EN | INTR_TARGET_PROC_APPS;
+    __raw_writel(cfg, GPIO_INTR_CFG(gpio));
+    cfg &= ~INTR_DECT_CTL_MASK;
+    if (type == IRQ_TYPE_EDGE_RISING)
+        cfg |= INTR_DECT_CTL_POS_EDGE;
+    else if (type == IRQ_TYPE_EDGE_FALLING)
+        cfg |= INTR_DECT_CTL_NEG_EDGE;
+    else if (type == IRQ_TYPE_EDGE_BOTH)
+        cfg |= INTR_DECT_CTL_DUAL_EDGE;
+    else
+        cfg |= INTR_DECT_CTL_LEVEL;
 
-	if (type & IRQ_TYPE_LEVEL_LOW)
-		cfg &= ~INTR_POL_CTL_HI;
-	else
-		cfg |= INTR_POL_CTL_HI;
+    if (type & IRQ_TYPE_LEVEL_LOW)
+        cfg &= ~INTR_POL_CTL_HI;
+    else
+        cfg |= INTR_POL_CTL_HI;
 
-	__raw_writel(cfg, GPIO_INTR_CFG(gpio));
-	/* Sometimes it might take a little while to update
-	 * the interrupt status after the RAW_STATUS is enabled
-	 * We clear the interrupt status before enabling the
-	 * interrupt in the unmask call-back.
-	 */
-	udelay(5);
+    __raw_writel(cfg, GPIO_INTR_CFG(gpio));
+    /* Sometimes it might take a little while to update
+     * the interrupt status after the RAW_STATUS is enabled
+     * We clear the interrupt status before enabling the
+     * interrupt in the unmask call-back.
+     */
+    udelay(5);
 }
 
-void __gpio_tlmm_config(unsigned config)
-{
-	unsigned flags;
-	unsigned gpio = GPIO_PIN(config);
+void __gpio_tlmm_config(unsigned config) {
+    unsigned flags;
+    unsigned gpio = GPIO_PIN(config);
 
-	flags = ((GPIO_DIR(config) << 9) & (0x1 << 9)) |
-		((GPIO_DRVSTR(config) << 6) & (0x7 << 6)) |
-		((GPIO_FUNC(config) << 2) & (0xf << 2)) |
-		((GPIO_PULL(config) & 0x3));
-	__raw_writel(flags, GPIO_CONFIG(gpio));
+    flags = ((GPIO_DIR(config) << 9) & (0x1 << 9)) |
+            ((GPIO_DRVSTR(config) << 6) & (0x7 << 6)) |
+            ((GPIO_FUNC(config) << 2) & (0xf << 2)) |
+            ((GPIO_PULL(config) & 0x3));
+    __raw_writel(flags, GPIO_CONFIG(gpio));
 }
 
 void __msm_gpio_install_direct_irq(unsigned gpio, unsigned irq,
-					unsigned int input_polarity)
-{
-	unsigned cfg;
+                                   unsigned int input_polarity) {
+    unsigned cfg;
 
-	set_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
-	cfg = __raw_readl(GPIO_INTR_CFG(gpio));
-	cfg &= ~(INTR_TARGET_PROC_NONE | INTR_RAW_STATUS_EN | INTR_ENABLE);
-	cfg |= INTR_TARGET_PROC_APPS | INTR_DIR_CONN_EN;
-	__raw_writel(cfg, GPIO_INTR_CFG(gpio));
+    set_gpio_bits(BIT(GPIO_OE_BIT), GPIO_CONFIG(gpio));
+    cfg = __raw_readl(GPIO_INTR_CFG(gpio));
+    cfg &= ~(INTR_TARGET_PROC_NONE | INTR_RAW_STATUS_EN | INTR_ENABLE);
+    cfg |= INTR_TARGET_PROC_APPS | INTR_DIR_CONN_EN;
+    __raw_writel(cfg, GPIO_INTR_CFG(gpio));
 
-	cfg = gpio;
-	if (input_polarity)
-		cfg |= DC_POLARITY_HI;
-	__raw_writel(cfg, GPIO_DIR_CONN_INTR(irq));
+    cfg = gpio;
+    if (input_polarity)
+        cfg |= DC_POLARITY_HI;
+    __raw_writel(cfg, GPIO_DIR_CONN_INTR(irq));
 }

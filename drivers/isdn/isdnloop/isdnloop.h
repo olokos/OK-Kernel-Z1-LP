@@ -19,13 +19,13 @@
 
 /* Struct for adding new cards */
 typedef struct isdnloop_cdef {
-	char id1[10];
+    char id1[10];
 } isdnloop_cdef;
 
 /* Struct for configuring cards */
 typedef struct isdnloop_sdef {
-	int ptype;
-	char num[3][20];
+    int ptype;
+    char num[3][20];
 } isdnloop_sdef;
 
 #if defined(__KERNEL__) || defined(__DEBUGVAR__)
@@ -63,38 +63,38 @@ typedef struct isdnloop_sdef {
  * Per card driver data
  */
 typedef struct isdnloop_card {
-	struct isdnloop_card *next;	/* Pointer to next device struct    */
-	struct isdnloop_card
-	*rcard[ISDNLOOP_BCH];   /* Pointer to 'remote' card         */
-	int rch[ISDNLOOP_BCH];  /* 'remote' channel                 */
-	int myid;               /* Driver-Nr. assigned by linklevel */
-	int leased;             /* Flag: This Adapter is connected  */
-	/*       to a leased line           */
-	int sil[ISDNLOOP_BCH];  /* SI's to listen for               */
-	char eazlist[ISDNLOOP_BCH][11];
-	/* EAZ's to listen for              */
-	char s0num[3][20];      /* 1TR6 base-number or MSN's        */
-	unsigned short flags;   /* Statusflags                      */
-	int ptype;              /* Protocol type (1TR6 or Euro)     */
-	struct timer_list st_timer;	/* Timer for Status-Polls           */
-	struct timer_list rb_timer;	/* Timer for B-Channel-Polls        */
-	struct timer_list
-	c_timer[ISDNLOOP_BCH]; /* Timer for Alerting               */
-	int l2_proto[ISDNLOOP_BCH];	/* Current layer-2-protocol         */
-	isdn_if interface;      /* Interface to upper layer         */
-	int iptr;               /* Index to imsg-buffer             */
-	char imsg[60];          /* Internal buf for status-parsing  */
-	int optr;               /* Index to omsg-buffer             */
-	char omsg[60];          /* Internal buf for cmd-parsing     */
-	char msg_buf[2048];     /* Buffer for status-messages       */
-	char *msg_buf_write;    /* Writepointer for statusbuffer    */
-	char *msg_buf_read;     /* Readpointer for statusbuffer     */
-	char *msg_buf_end;      /* Pointer to end of statusbuffer   */
-	int sndcount[ISDNLOOP_BCH];	/* Byte-counters for B-Ch.-send     */
-	struct sk_buff_head
-	bqueue[ISDNLOOP_BCH];  /* B-Channel queues                 */
-	struct sk_buff_head dqueue;	/* D-Channel queue                  */
-	spinlock_t isdnloop_lock;
+    struct isdnloop_card *next;	/* Pointer to next device struct    */
+    struct isdnloop_card
+        *rcard[ISDNLOOP_BCH];   /* Pointer to 'remote' card         */
+    int rch[ISDNLOOP_BCH];  /* 'remote' channel                 */
+    int myid;               /* Driver-Nr. assigned by linklevel */
+    int leased;             /* Flag: This Adapter is connected  */
+    /*       to a leased line           */
+    int sil[ISDNLOOP_BCH];  /* SI's to listen for               */
+    char eazlist[ISDNLOOP_BCH][11];
+    /* EAZ's to listen for              */
+    char s0num[3][20];      /* 1TR6 base-number or MSN's        */
+    unsigned short flags;   /* Statusflags                      */
+    int ptype;              /* Protocol type (1TR6 or Euro)     */
+    struct timer_list st_timer;	/* Timer for Status-Polls           */
+    struct timer_list rb_timer;	/* Timer for B-Channel-Polls        */
+    struct timer_list
+        c_timer[ISDNLOOP_BCH]; /* Timer for Alerting               */
+    int l2_proto[ISDNLOOP_BCH];	/* Current layer-2-protocol         */
+    isdn_if interface;      /* Interface to upper layer         */
+    int iptr;               /* Index to imsg-buffer             */
+    char imsg[60];          /* Internal buf for status-parsing  */
+    int optr;               /* Index to omsg-buffer             */
+    char omsg[60];          /* Internal buf for cmd-parsing     */
+    char msg_buf[2048];     /* Buffer for status-messages       */
+    char *msg_buf_write;    /* Writepointer for statusbuffer    */
+    char *msg_buf_read;     /* Readpointer for statusbuffer     */
+    char *msg_buf_end;      /* Pointer to end of statusbuffer   */
+    int sndcount[ISDNLOOP_BCH];	/* Byte-counters for B-Ch.-send     */
+    struct sk_buff_head
+        bqueue[ISDNLOOP_BCH];  /* B-Channel queues                 */
+    struct sk_buff_head dqueue;	/* D-Channel queue                  */
+    spinlock_t isdnloop_lock;
 } isdnloop_card;
 
 /*

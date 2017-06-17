@@ -51,17 +51,17 @@
 				 *  for rdl) */
 
 struct rdl_state_le {
-	__le32 state;
-	__le32 bytes;
+    __le32 state;
+    __le32 bytes;
 };
 
 struct bootrom_id_le {
-	__le32 chip;	/* Chip id */
-	__le32 chiprev;	/* Chip rev */
-	__le32 ramsize;	/* Size of  RAM */
-	__le32 remapbase;	/* Current remap base address */
-	__le32 boardtype;	/* Type of board */
-	__le32 boardrev;	/* Board revision */
+    __le32 chip;	/* Chip id */
+    __le32 chiprev;	/* Chip rev */
+    __le32 ramsize;	/* Size of  RAM */
+    __le32 remapbase;	/* Current remap base address */
+    __le32 boardtype;	/* Type of board */
+    __le32 boardrev;	/* Board revision */
 };
 
 #define RDL_CHUNK	1500  /* size of each dl transfer */

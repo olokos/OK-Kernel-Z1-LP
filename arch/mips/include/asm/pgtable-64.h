@@ -156,7 +156,9 @@ extern pte_t empty_bad_page_table[PTRS_PER_PTE];
  * For 3-level pagetables we defines these ourselves, for 2-level the
  * definitions are supplied by <asm-generic/pgtable-nopmd.h>.
  */
-typedef struct { unsigned long pmd; } pmd_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
 #define pmd_val(x)	((x).pmd)
 #define __pmd(x)	((pmd_t) { (x) } )
 
@@ -168,45 +170,38 @@ extern pmd_t empty_bad_pmd_table[PTRS_PER_PMD];
 /*
  * Empty pgd/pmd entries point to the invalid_pte_table.
  */
-static inline int pmd_none(pmd_t pmd)
-{
-	return pmd_val(pmd) == (unsigned long) invalid_pte_table;
+static inline int pmd_none(pmd_t pmd) {
+    return pmd_val(pmd) == (unsigned long) invalid_pte_table;
 }
 
 #define pmd_bad(pmd)		(pmd_val(pmd) & ~PAGE_MASK)
 
-static inline int pmd_present(pmd_t pmd)
-{
-	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
+static inline int pmd_present(pmd_t pmd) {
+    return pmd_val(pmd) != (unsigned long) invalid_pte_table;
 }
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
+static inline void pmd_clear(pmd_t *pmdp) {
+    pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
 }
 #ifndef __PAGETABLE_PMD_FOLDED
 
 /*
  * Empty pud entries point to the invalid_pmd_table.
  */
-static inline int pud_none(pud_t pud)
-{
-	return pud_val(pud) == (unsigned long) invalid_pmd_table;
+static inline int pud_none(pud_t pud) {
+    return pud_val(pud) == (unsigned long) invalid_pmd_table;
 }
 
-static inline int pud_bad(pud_t pud)
-{
-	return pud_val(pud) & ~PAGE_MASK;
+static inline int pud_bad(pud_t pud) {
+    return pud_val(pud) & ~PAGE_MASK;
 }
 
-static inline int pud_present(pud_t pud)
-{
-	return pud_val(pud) != (unsigned long) invalid_pmd_table;
+static inline int pud_present(pud_t pud) {
+    return pud_val(pud) != (unsigned long) invalid_pmd_table;
 }
 
-static inline void pud_clear(pud_t *pudp)
-{
-	pud_val(*pudp) = ((unsigned long) invalid_pmd_table);
+static inline void pud_clear(pud_t *pudp) {
+    pud_val(*pudp) = ((unsigned long) invalid_pmd_table);
 }
 #endif
 
@@ -234,17 +229,15 @@ static inline void pud_clear(pud_t *pudp)
 #define pgd_offset(mm, addr)	((mm)->pgd + pgd_index(addr))
 
 #ifndef __PAGETABLE_PMD_FOLDED
-static inline unsigned long pud_page_vaddr(pud_t pud)
-{
-	return pud_val(pud);
+static inline unsigned long pud_page_vaddr(pud_t pud) {
+    return pud_val(pud);
 }
 #define pud_phys(pud)		virt_to_phys((void *)pud_val(pud))
 #define pud_page(pud)		(pfn_to_page(pud_phys(pud) >> PAGE_SHIFT))
 
 /* Find an entry in the second-level page table.. */
-static inline pmd_t *pmd_offset(pud_t * pud, unsigned long address)
-{
-	return (pmd_t *) pud_page_vaddr(*pud) + pmd_index(address);
+static inline pmd_t *pmd_offset(pud_t * pud, unsigned long address) {
+    return (pmd_t *) pud_page_vaddr(*pud) + pmd_index(address);
 }
 #endif
 
@@ -269,8 +262,11 @@ extern void pmd_init(unsigned long page, unsigned long pagetable);
  * Non-present pages:  high 24 bits are offset, next 8 bits type,
  * low 32 bits zero.
  */
-static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset)
-{ pte_t pte; pte_val(pte) = (type << 32) | (offset << 40); return pte; }
+static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset) {
+    pte_t pte;
+    pte_val(pte) = (type << 32) | (offset << 40);
+    return pte;
+}
 
 #define __swp_type(x)		(((x).val >> 32) & 0xff)
 #define __swp_offset(x)		((x).val >> 40)

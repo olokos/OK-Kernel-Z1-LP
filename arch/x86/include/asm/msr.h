@@ -18,33 +18,32 @@
 #include <asm/cpumask.h>
 
 struct msr {
-	union {
-		struct {
-			u32 l;
-			u32 h;
-		};
-		u64 q;
-	};
+    union {
+        struct {
+            u32 l;
+            u32 h;
+        };
+        u64 q;
+    };
 };
 
 struct msr_info {
-	u32 msr_no;
-	struct msr reg;
-	struct msr *msrs;
-	int err;
+    u32 msr_no;
+    struct msr reg;
+    struct msr *msrs;
+    int err;
 };
 
 struct msr_regs_info {
-	u32 *regs;
-	int err;
+    u32 *regs;
+    int err;
 };
 
-static inline unsigned long long native_read_tscp(unsigned int *aux)
-{
-	unsigned long low, high;
-	asm volatile(".byte 0x0f,0x01,0xf9"
-		     : "=a" (low), "=d" (high), "=c" (*aux));
-	return low | ((u64)high << 32);
+static inline unsigned long long native_read_tscp(unsigned int *aux) {
+    unsigned long low, high;
+    asm volatile(".byte 0x0f,0x01,0xf9"
+                 : "=a" (low), "=d" (high), "=c" (*aux));
+    return low | ((u64)high << 32);
 }
 
 /*
@@ -65,52 +64,48 @@ static inline unsigned long long native_read_tscp(unsigned int *aux)
 #define EAX_EDX_RET(val, low, high)	"=A" (val)
 #endif
 
-static inline unsigned long long native_read_msr(unsigned int msr)
-{
-	DECLARE_ARGS(val, low, high);
+static inline unsigned long long native_read_msr(unsigned int msr) {
+    DECLARE_ARGS(val, low, high);
 
-	asm volatile("rdmsr" : EAX_EDX_RET(val, low, high) : "c" (msr));
-	return EAX_EDX_VAL(val, low, high);
+    asm volatile("rdmsr" : EAX_EDX_RET(val, low, high) : "c" (msr));
+    return EAX_EDX_VAL(val, low, high);
 }
 
 static inline unsigned long long native_read_msr_safe(unsigned int msr,
-						      int *err)
-{
-	DECLARE_ARGS(val, low, high);
+        int *err) {
+    DECLARE_ARGS(val, low, high);
 
-	asm volatile("2: rdmsr ; xor %[err],%[err]\n"
-		     "1:\n\t"
-		     ".section .fixup,\"ax\"\n\t"
-		     "3:  mov %[fault],%[err] ; jmp 1b\n\t"
-		     ".previous\n\t"
-		     _ASM_EXTABLE(2b, 3b)
-		     : [err] "=r" (*err), EAX_EDX_RET(val, low, high)
-		     : "c" (msr), [fault] "i" (-EIO));
-	return EAX_EDX_VAL(val, low, high);
+    asm volatile("2: rdmsr ; xor %[err],%[err]\n"
+                 "1:\n\t"
+                 ".section .fixup,\"ax\"\n\t"
+                 "3:  mov %[fault],%[err] ; jmp 1b\n\t"
+                 ".previous\n\t"
+                 _ASM_EXTABLE(2b, 3b)
+                 : [err] "=r" (*err), EAX_EDX_RET(val, low, high)
+                 : "c" (msr), [fault] "i" (-EIO));
+    return EAX_EDX_VAL(val, low, high);
 }
 
 static inline void native_write_msr(unsigned int msr,
-				    unsigned low, unsigned high)
-{
-	asm volatile("wrmsr" : : "c" (msr), "a"(low), "d" (high) : "memory");
+                                    unsigned low, unsigned high) {
+    asm volatile("wrmsr" : : "c" (msr), "a"(low), "d" (high) : "memory");
 }
 
 /* Can be uninlined because referenced by paravirt */
 notrace static inline int native_write_msr_safe(unsigned int msr,
-					unsigned low, unsigned high)
-{
-	int err;
-	asm volatile("2: wrmsr ; xor %[err],%[err]\n"
-		     "1:\n\t"
-		     ".section .fixup,\"ax\"\n\t"
-		     "3:  mov %[fault],%[err] ; jmp 1b\n\t"
-		     ".previous\n\t"
-		     _ASM_EXTABLE(2b, 3b)
-		     : [err] "=a" (err)
-		     : "c" (msr), "0" (low), "d" (high),
-		       [fault] "i" (-EIO)
-		     : "memory");
-	return err;
+        unsigned low, unsigned high) {
+    int err;
+    asm volatile("2: wrmsr ; xor %[err],%[err]\n"
+                 "1:\n\t"
+                 ".section .fixup,\"ax\"\n\t"
+                 "3:  mov %[fault],%[err] ; jmp 1b\n\t"
+                 ".previous\n\t"
+                 _ASM_EXTABLE(2b, 3b)
+                 : [err] "=a" (err)
+                 : "c" (msr), "0" (low), "d" (high),
+                 [fault] "i" (-EIO)
+                 : "memory");
+    return err;
 }
 
 extern unsigned long long native_read_tsc(void);
@@ -118,21 +113,19 @@ extern unsigned long long native_read_tsc(void);
 extern int native_rdmsr_safe_regs(u32 regs[8]);
 extern int native_wrmsr_safe_regs(u32 regs[8]);
 
-static __always_inline unsigned long long __native_read_tsc(void)
-{
-	DECLARE_ARGS(val, low, high);
+static __always_inline unsigned long long __native_read_tsc(void) {
+    DECLARE_ARGS(val, low, high);
 
-	asm volatile("rdtsc" : EAX_EDX_RET(val, low, high));
+    asm volatile("rdtsc" : EAX_EDX_RET(val, low, high));
 
-	return EAX_EDX_VAL(val, low, high);
+    return EAX_EDX_VAL(val, low, high);
 }
 
-static inline unsigned long long native_read_pmc(int counter)
-{
-	DECLARE_ARGS(val, low, high);
+static inline unsigned long long native_read_pmc(int counter) {
+    DECLARE_ARGS(val, low, high);
 
-	asm volatile("rdpmc" : EAX_EDX_RET(val, low, high) : "c" (counter));
-	return EAX_EDX_VAL(val, low, high);
+    asm volatile("rdpmc" : EAX_EDX_RET(val, low, high) : "c" (counter));
+    return EAX_EDX_VAL(val, low, high);
 }
 
 #ifdef CONFIG_PARAVIRT
@@ -152,9 +145,8 @@ do {								\
 	(void)((val2) = (u32)(__val >> 32));			\
 } while (0)
 
-static inline void wrmsr(unsigned msr, unsigned low, unsigned high)
-{
-	native_write_msr(msr, low, high);
+static inline void wrmsr(unsigned msr, unsigned low, unsigned high) {
+    native_write_msr(msr, low, high);
 }
 
 #define rdmsrl(msr, val)			\
@@ -164,9 +156,8 @@ static inline void wrmsr(unsigned msr, unsigned low, unsigned high)
 	native_write_msr((msr), (u32)((u64)(val)), (u32)((u64)(val) >> 32))
 
 /* wrmsr with exception handling */
-static inline int wrmsr_safe(unsigned msr, unsigned low, unsigned high)
-{
-	return native_write_msr_safe(msr, low, high);
+static inline int wrmsr_safe(unsigned msr, unsigned low, unsigned high) {
+    return native_write_msr_safe(msr, low, high);
 }
 
 /*
@@ -186,49 +177,44 @@ static inline int wrmsr_safe(unsigned msr, unsigned low, unsigned high)
 	__err;							\
 })
 
-static inline int rdmsrl_safe(unsigned msr, unsigned long long *p)
-{
-	int err;
+static inline int rdmsrl_safe(unsigned msr, unsigned long long *p) {
+    int err;
 
-	*p = native_read_msr_safe(msr, &err);
-	return err;
+    *p = native_read_msr_safe(msr, &err);
+    return err;
 }
 
-static inline int rdmsrl_amd_safe(unsigned msr, unsigned long long *p)
-{
-	u32 gprs[8] = { 0 };
-	int err;
+static inline int rdmsrl_amd_safe(unsigned msr, unsigned long long *p) {
+    u32 gprs[8] = { 0 };
+    int err;
 
-	gprs[1] = msr;
-	gprs[7] = 0x9c5a203a;
+    gprs[1] = msr;
+    gprs[7] = 0x9c5a203a;
 
-	err = native_rdmsr_safe_regs(gprs);
+    err = native_rdmsr_safe_regs(gprs);
 
-	*p = gprs[0] | ((u64)gprs[2] << 32);
+    *p = gprs[0] | ((u64)gprs[2] << 32);
 
-	return err;
+    return err;
 }
 
-static inline int wrmsrl_amd_safe(unsigned msr, unsigned long long val)
-{
-	u32 gprs[8] = { 0 };
+static inline int wrmsrl_amd_safe(unsigned msr, unsigned long long val) {
+    u32 gprs[8] = { 0 };
 
-	gprs[0] = (u32)val;
-	gprs[1] = msr;
-	gprs[2] = val >> 32;
-	gprs[7] = 0x9c5a203a;
+    gprs[0] = (u32)val;
+    gprs[1] = msr;
+    gprs[2] = val >> 32;
+    gprs[7] = 0x9c5a203a;
 
-	return native_wrmsr_safe_regs(gprs);
+    return native_wrmsr_safe_regs(gprs);
 }
 
-static inline int rdmsr_safe_regs(u32 regs[8])
-{
-	return native_rdmsr_safe_regs(regs);
+static inline int rdmsr_safe_regs(u32 regs[8]) {
+    return native_rdmsr_safe_regs(regs);
 }
 
-static inline int wrmsr_safe_regs(u32 regs[8])
-{
-	return native_wrmsr_safe_regs(regs);
+static inline int wrmsr_safe_regs(u32 regs[8]) {
+    return native_wrmsr_safe_regs(regs);
 }
 
 #define rdtscl(low)						\
@@ -276,42 +262,34 @@ int wrmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h);
 int rdmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]);
 int wrmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]);
 #else  /*  CONFIG_SMP  */
-static inline int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h)
-{
-	rdmsr(msr_no, *l, *h);
-	return 0;
+static inline int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h) {
+    rdmsr(msr_no, *l, *h);
+    return 0;
 }
-static inline int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h)
-{
-	wrmsr(msr_no, l, h);
-	return 0;
+static inline int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h) {
+    wrmsr(msr_no, l, h);
+    return 0;
 }
 static inline void rdmsr_on_cpus(const struct cpumask *m, u32 msr_no,
-				struct msr *msrs)
-{
-       rdmsr_on_cpu(0, msr_no, &(msrs[0].l), &(msrs[0].h));
+                                 struct msr *msrs) {
+    rdmsr_on_cpu(0, msr_no, &(msrs[0].l), &(msrs[0].h));
 }
 static inline void wrmsr_on_cpus(const struct cpumask *m, u32 msr_no,
-				struct msr *msrs)
-{
-       wrmsr_on_cpu(0, msr_no, msrs[0].l, msrs[0].h);
+                                 struct msr *msrs) {
+    wrmsr_on_cpu(0, msr_no, msrs[0].l, msrs[0].h);
 }
 static inline int rdmsr_safe_on_cpu(unsigned int cpu, u32 msr_no,
-				    u32 *l, u32 *h)
-{
-	return rdmsr_safe(msr_no, l, h);
+                                    u32 *l, u32 *h) {
+    return rdmsr_safe(msr_no, l, h);
 }
-static inline int wrmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h)
-{
-	return wrmsr_safe(msr_no, l, h);
+static inline int wrmsr_safe_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h) {
+    return wrmsr_safe(msr_no, l, h);
 }
-static inline int rdmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8])
-{
-	return rdmsr_safe_regs(regs);
+static inline int rdmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]) {
+    return rdmsr_safe_regs(regs);
 }
-static inline int wrmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8])
-{
-	return wrmsr_safe_regs(regs);
+static inline int wrmsr_safe_regs_on_cpu(unsigned int cpu, u32 regs[8]) {
+    return wrmsr_safe_regs(regs);
 }
 #endif  /* CONFIG_SMP */
 #endif /* __KERNEL__ */

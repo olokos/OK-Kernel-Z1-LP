@@ -77,8 +77,8 @@
 #define TSB_ENTRY_ALIGNMENT	16
 
 struct tsb {
-	unsigned long tag;
-	unsigned long pte;
+    unsigned long tag;
+    unsigned long pte;
 } __attribute__((aligned(TSB_ENTRY_ALIGNMENT)));
 
 extern void __tsb_insert(unsigned long ent, unsigned long tag, unsigned long pte);
@@ -86,12 +86,12 @@ extern void tsb_flush(unsigned long ent, unsigned long tag);
 extern void tsb_init(struct tsb *tsb, unsigned long size);
 
 struct tsb_config {
-	struct tsb		*tsb;
-	unsigned long		tsb_rss_limit;
-	unsigned long		tsb_nentries;
-	unsigned long		tsb_reg_val;
-	unsigned long		tsb_map_vaddr;
-	unsigned long		tsb_map_pte;
+    struct tsb		*tsb;
+    unsigned long		tsb_rss_limit;
+    unsigned long		tsb_nentries;
+    unsigned long		tsb_reg_val;
+    unsigned long		tsb_map_vaddr;
+    unsigned long		tsb_map_pte;
 };
 
 #define MM_TSB_BASE	0
@@ -104,11 +104,11 @@ struct tsb_config {
 #endif
 
 typedef struct {
-	spinlock_t		lock;
-	unsigned long		sparc64_ctx_val;
-	unsigned long		huge_pte_count;
-	struct tsb_config	tsb_block[MM_NUM_TSBS];
-	struct hv_tsb_descr	tsb_descr[MM_NUM_TSBS];
+    spinlock_t		lock;
+    unsigned long		sparc64_ctx_val;
+    unsigned long		huge_pte_count;
+    struct tsb_config	tsb_block[MM_NUM_TSBS];
+    struct hv_tsb_descr	tsb_descr[MM_NUM_TSBS];
 } mm_context_t;
 
 #endif /* !__ASSEMBLY__ */

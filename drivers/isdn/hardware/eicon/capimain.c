@@ -28,7 +28,7 @@
 
 static char *main_revision = "$Revision: 1.24 $";
 static char *DRIVERNAME =
-	"Eicon DIVA - CAPI Interface driver (http://www.melware.net)";
+    "Eicon DIVA - CAPI Interface driver (http://www.melware.net)";
 static char *DRIVERLNAME = "divacapi";
 
 MODULE_DESCRIPTION("CAPI driver for Eicon DIVA cards");
@@ -39,17 +39,16 @@ MODULE_LICENSE("GPL");
 /*
  * get revision number from revision string
  */
-static char *getrev(const char *revision)
-{
-	char *rev;
-	char *p;
-	if ((p = strchr(revision, ':'))) {
-		rev = p + 2;
-		p = strchr(rev, '$');
-		*--p = 0;
-	} else
-		rev = "1.0";
-	return rev;
+static char *getrev(const char *revision) {
+    char *rev;
+    char *p;
+    if ((p = strchr(revision, ':'))) {
+        rev = p + 2;
+        p = strchr(rev, '$');
+        *--p = 0;
+    } else
+        rev = "1.0";
+    return rev;
 
 }
 
@@ -57,97 +56,90 @@ static char *getrev(const char *revision)
  * alloc a message buffer
  */
 diva_os_message_buffer_s *diva_os_alloc_message_buffer(unsigned long size,
-						       void **data_buf)
-{
-	diva_os_message_buffer_s *dmb = alloc_skb(size, GFP_ATOMIC);
-	if (dmb) {
-		*data_buf = skb_put(dmb, size);
-	}
-	return (dmb);
+        void **data_buf) {
+    diva_os_message_buffer_s *dmb = alloc_skb(size, GFP_ATOMIC);
+    if (dmb) {
+        *data_buf = skb_put(dmb, size);
+    }
+    return (dmb);
 }
 
 /*
  * free a message buffer
  */
-void diva_os_free_message_buffer(diva_os_message_buffer_s *dmb)
-{
-	kfree_skb(dmb);
+void diva_os_free_message_buffer(diva_os_message_buffer_s *dmb) {
+    kfree_skb(dmb);
 }
 
 /*
  * proc function for controller info
  */
-static int diva_ctl_proc_show(struct seq_file *m, void *v)
-{
-	struct capi_ctr *ctrl = m->private;
-	diva_card *card = (diva_card *) ctrl->driverdata;
+static int diva_ctl_proc_show(struct seq_file *m, void *v) {
+    struct capi_ctr *ctrl = m->private;
+    diva_card *card = (diva_card *) ctrl->driverdata;
 
-	seq_printf(m, "%s\n", ctrl->name);
-	seq_printf(m, "Serial No. : %s\n", ctrl->serial);
-	seq_printf(m, "Id         : %d\n", card->Id);
-	seq_printf(m, "Channels   : %d\n", card->d.channels);
+    seq_printf(m, "%s\n", ctrl->name);
+    seq_printf(m, "Serial No. : %s\n", ctrl->serial);
+    seq_printf(m, "Id         : %d\n", card->Id);
+    seq_printf(m, "Channels   : %d\n", card->d.channels);
 
-	return 0;
+    return 0;
 }
 
-static int diva_ctl_proc_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, diva_ctl_proc_show, NULL);
+static int diva_ctl_proc_open(struct inode *inode, struct file *file) {
+    return single_open(file, diva_ctl_proc_show, NULL);
 }
 
 static const struct file_operations diva_ctl_proc_fops = {
-	.owner		= THIS_MODULE,
-	.open		= diva_ctl_proc_open,
-	.read		= seq_read,
-	.llseek		= seq_lseek,
-	.release	= single_release,
+    .owner		= THIS_MODULE,
+    .open		= diva_ctl_proc_open,
+    .read		= seq_read,
+    .llseek		= seq_lseek,
+    .release	= single_release,
 };
 
 /*
  * set additional os settings in capi_ctr struct
  */
-void diva_os_set_controller_struct(struct capi_ctr *ctrl)
-{
-	ctrl->driver_name = DRIVERLNAME;
-	ctrl->load_firmware = NULL;
-	ctrl->reset_ctr = NULL;
-	ctrl->proc_fops = &diva_ctl_proc_fops;
-	ctrl->owner = THIS_MODULE;
+void diva_os_set_controller_struct(struct capi_ctr *ctrl) {
+    ctrl->driver_name = DRIVERLNAME;
+    ctrl->load_firmware = NULL;
+    ctrl->reset_ctr = NULL;
+    ctrl->proc_fops = &diva_ctl_proc_fops;
+    ctrl->owner = THIS_MODULE;
 }
 
 /*
  * module init
  */
-static int DIVA_INIT_FUNCTION divacapi_init(void)
-{
-	char tmprev[32];
-	int ret = 0;
+static int DIVA_INIT_FUNCTION divacapi_init(void) {
+    char tmprev[32];
+    int ret = 0;
 
-	sprintf(DRIVERRELEASE_CAPI, "%d.%d%s", DRRELMAJOR, DRRELMINOR,
-		DRRELEXTRA);
+    sprintf(DRIVERRELEASE_CAPI, "%d.%d%s", DRRELMAJOR, DRRELMINOR,
+            DRRELEXTRA);
 
-	printk(KERN_INFO "%s\n", DRIVERNAME);
-	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_CAPI);
-	strcpy(tmprev, main_revision);
-	printk("%s  Build: %s(%s)\n", getrev(tmprev),
-	       diva_capi_common_code_build, DIVA_BUILD);
+    printk(KERN_INFO "%s\n", DRIVERNAME);
+    printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_CAPI);
+    strcpy(tmprev, main_revision);
+    printk("%s  Build: %s(%s)\n", getrev(tmprev),
+           diva_capi_common_code_build, DIVA_BUILD);
 
-	if (!(init_capifunc())) {
-		printk(KERN_ERR "%s: failed init capi_driver.\n",
-		       DRIVERLNAME);
-		ret = -EIO;
-	}
+    if (!(init_capifunc())) {
+        printk(KERN_ERR "%s: failed init capi_driver.\n",
+               DRIVERLNAME);
+        ret = -EIO;
+    }
 
-	return ret;
+    return ret;
 }
 
 /*
  * module exit
  */
-static void DIVA_EXIT_FUNCTION divacapi_exit(void)
-{
-	finit_capifunc();
-	printk(KERN_INFO "%s: module unloaded.\n", DRIVERLNAME);
+static void DIVA_EXIT_FUNCTION divacapi_exit(void) {
+    finit_capifunc();
+    printk(KERN_INFO "%s: module unloaded.\n", DRIVERLNAME);
 }
 
 module_init(divacapi_init);

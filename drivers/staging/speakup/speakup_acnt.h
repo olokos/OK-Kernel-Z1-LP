@@ -4,7 +4,7 @@
 
 #define SYNTH_CLEAR	0x18		/* stops speech */
 
-	/* Port Status Flags */
+/* Port Status Flags */
 #define SYNTH_READABLE	0x01	/* mask for bit which is nonzero if a
 				   byte can be read from the data port */
 #define SYNTH_WRITABLE	0x02	/* mask for RDY bit, which when set to

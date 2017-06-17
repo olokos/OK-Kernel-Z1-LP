@@ -14,11 +14,11 @@
 #define __ARCH_ARM_MACH_MSM_RPM_NOTIF_H
 
 struct msm_rpm_notifier_data {
-	uint32_t rsc_type;
-	uint32_t rsc_id;
-	uint32_t key;
-	uint32_t size;
-	uint8_t *value;
+    uint32_t rsc_type;
+    uint32_t rsc_id;
+    uint32_t key;
+    uint32_t size;
+    uint8_t *value;
 };
 /**
  * msm_rpm_register_notifier - Register for sleep set notifications

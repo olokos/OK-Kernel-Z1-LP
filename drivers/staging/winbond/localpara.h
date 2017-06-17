@@ -114,154 +114,154 @@
 #define MAX_IE_APPEND_SIZE			(256 + 4)
 
 struct chan_info {
-	u8	band;
-	u8	ChanNo;
+    u8	band;
+    u8	ChanNo;
 };
 
 struct radio_off {
-	u8	boHwRadioOff;
-	u8	boSwRadioOff;
+    u8	boHwRadioOff;
+    u8	boSwRadioOff;
 };
 
 struct wb_local_para {
-	/* read from EPROM, manufacture set for each NetCard */
-	u8	PermanentAddress[MAC_ADDR_LENGTH + 2];
-	/* the driver will use this one actually. */
-	u8	ThisMacAddress[MAC_ADDR_LENGTH + 2];
-	u32	MTUsize;	/* Ind to Uplayer, Max transmission unit size */
-	u8	region_INF;	/* region setting from INF */
-	u8	region;		/* real region setting of the device */
-	u8	Reserved_1[2];
+    /* read from EPROM, manufacture set for each NetCard */
+    u8	PermanentAddress[MAC_ADDR_LENGTH + 2];
+    /* the driver will use this one actually. */
+    u8	ThisMacAddress[MAC_ADDR_LENGTH + 2];
+    u32	MTUsize;	/* Ind to Uplayer, Max transmission unit size */
+    u8	region_INF;	/* region setting from INF */
+    u8	region;		/* real region setting of the device */
+    u8	Reserved_1[2];
 
-	/* power-save variables */
-	u8	iPowerSaveMode; /* 0 indicates on, 1 indicates off */
-	u8	ATIMmode;
-	u8	ExcludeUnencrypted;
-	/* Unit ime count for the decision to enter PS mode */
-	u16	CheckCountForPS;
-	u8	boHasTxActivity;/* tx activity has occurred */
-	u8	boMacPsValid;	/* Power save mode obtained from H/W is valid or not */
+    /* power-save variables */
+    u8	iPowerSaveMode; /* 0 indicates on, 1 indicates off */
+    u8	ATIMmode;
+    u8	ExcludeUnencrypted;
+    /* Unit ime count for the decision to enter PS mode */
+    u16	CheckCountForPS;
+    u8	boHasTxActivity;/* tx activity has occurred */
+    u8	boMacPsValid;	/* Power save mode obtained from H/W is valid or not */
 
-	/* Rate */
-	u8	TxRateMode; /*
+    /* Rate */
+    u8	TxRateMode; /*
 			     * Initial, input from Registry,
 			     * may be updated by GUI
 			     * Tx Rate Mode: auto(DTO on), max, 1M, 2M, ..
 			     */
-	u8	CurrentTxRate;		/* The current Tx rate */
-	u8	CurrentTxRateForMng;	/*
+    u8	CurrentTxRate;		/* The current Tx rate */
+    u8	CurrentTxRateForMng;	/*
 					 * The current Tx rate for management
 					 * frames. It will be decided before
 					 * connection succeeds.
 					 */
-	u8	CurrentTxFallbackRate;
+    u8	CurrentTxFallbackRate;
 
-	/* for Rate handler */
-	u8	BRateSet[32];		/* basic rate set */
-	u8	SRateSet[32];		/* support rate set */
+    /* for Rate handler */
+    u8	BRateSet[32];		/* basic rate set */
+    u8	SRateSet[32];		/* support rate set */
 
-	u8	NumOfBRate;
-	u8	NumOfSRate;
-	u8	NumOfDsssRateInSRate;	/* number of DSSS rates in supported rate set */
-	u8	reserved1;
+    u8	NumOfBRate;
+    u8	NumOfSRate;
+    u8	NumOfDsssRateInSRate;	/* number of DSSS rates in supported rate set */
+    u8	reserved1;
 
-	u32	dwBasicRateBitmap;	/* bit map of basic rates */
+    u32	dwBasicRateBitmap;	/* bit map of basic rates */
 
-	u32	dwSupportRateBitmap;	/* bit map of all support rates including basic and operational rates */
+    u32	dwSupportRateBitmap;	/* bit map of all support rates including basic and operational rates */
 
 
-	/* For SME/MLME handler */
+    /* For SME/MLME handler */
 
-	u16	wOldSTAindex;		/* valid when boHandover=TRUE, store old connected STA index */
-	u16	wConnectedSTAindex;	/* Index of peerly connected AP or IBSS in the descriptionset. */
-	u16	Association_ID;		/* The Association ID in the (Re)Association Response frame. */
-	u16	ListenInterval;		/* The listen interval when SME invoking MLME_ (Re)Associate_Request(). */
+    u16	wOldSTAindex;		/* valid when boHandover=TRUE, store old connected STA index */
+    u16	wConnectedSTAindex;	/* Index of peerly connected AP or IBSS in the descriptionset. */
+    u16	Association_ID;		/* The Association ID in the (Re)Association Response frame. */
+    u16	ListenInterval;		/* The listen interval when SME invoking MLME_ (Re)Associate_Request(). */
 
-	struct	radio_off RadioOffStatus;
-	u8	Reserved0[2];
-	u8	boMsRadioOff;		/* Ndis demands to be true when set Disassoc. OID and be false when set SSID OID. */
-	u8	bAntennaNo;		/* which antenna */
-	u8	bConnectFlag;		/* the connect status flag for roaming task */
+    struct	radio_off RadioOffStatus;
+    u8	Reserved0[2];
+    u8	boMsRadioOff;		/* Ndis demands to be true when set Disassoc. OID and be false when set SSID OID. */
+    u8	bAntennaNo;		/* which antenna */
+    u8	bConnectFlag;		/* the connect status flag for roaming task */
 
-	u8	RoamStatus;
-	u8	reserved7[3];
+    u8	RoamStatus;
+    u8	reserved7[3];
 
-	struct	chan_info CurrentChan;	/* Current channel no. and channel band. It may be changed by scanning. */
-	u8	boHandover;		/* Roaming, Hnadover to other AP. */
-	u8	boCCAbusy;
+    struct	chan_info CurrentChan;	/* Current channel no. and channel band. It may be changed by scanning. */
+    u8	boHandover;		/* Roaming, Hnadover to other AP. */
+    u8	boCCAbusy;
 
-	u16	CWMax;			/* It may not be the real value that H/W used */
-	u8	CWMin;			/* 255: set according to 802.11 spec. */
-	u8	reserved2;
+    u16	CWMax;			/* It may not be the real value that H/W used */
+    u8	CWMin;			/* 255: set according to 802.11 spec. */
+    u8	reserved2;
 
-	/* 11G: */
-	u8	bMacOperationMode;	/* operation in 802.11b or 802.11g */
-	u8	bSlotTimeMode;		/* AUTO, s32 */
-	u8	bPreambleMode;		/* AUTO, s32 */
-	u8	boNonERPpresent;
+    /* 11G: */
+    u8	bMacOperationMode;	/* operation in 802.11b or 802.11g */
+    u8	bSlotTimeMode;		/* AUTO, s32 */
+    u8	bPreambleMode;		/* AUTO, s32 */
+    u8	boNonERPpresent;
 
-	u8	boProtectMechanism;	/* H/W will take the necessary action based on this variable */
-	u8	boShortPreamble;	/* Same here */
-	u8	boShortSlotTime;	/* Same here */
-	u8	reserved_3;
+    u8	boProtectMechanism;	/* H/W will take the necessary action based on this variable */
+    u8	boShortPreamble;	/* Same here */
+    u8	boShortSlotTime;	/* Same here */
+    u8	reserved_3;
 
-	u32	RSN_IE_Bitmap;
-	u32	RSN_OUI_Type;
+    u32	RSN_IE_Bitmap;
+    u32	RSN_OUI_Type;
 
-	/* For the BSSID */
-	u8	HwBssid[MAC_ADDR_LENGTH + 2];
-	u32	HwBssidValid;
+    /* For the BSSID */
+    u8	HwBssid[MAC_ADDR_LENGTH + 2];
+    u32	HwBssidValid;
 
-	/* For scan list */
-	u8	BssListCount;		/* Total count of valid descriptor indexes */
-	u8	boReceiveUncorrectInfo;	/* important settings in beacon/probe resp. have been changed */
-	u8	NoOfJoinerInIbss;
-	u8	reserved_4;
+    /* For scan list */
+    u8	BssListCount;		/* Total count of valid descriptor indexes */
+    u8	boReceiveUncorrectInfo;	/* important settings in beacon/probe resp. have been changed */
+    u8	NoOfJoinerInIbss;
+    u8	reserved_4;
 
-	/* Store the valid descriptor indexes obtained from scannings */
-	u8	BssListIndex[(MAX_BSS_DESCRIPT_ELEMENT + 3) & ~0x03];
-	/*
-	 * Save the BssDescriptor index in this IBSS.
-	 * The index 0 is local descriptor (psLOCAL->wConnectedSTAindex).
-	 * If CONNECTED : NoOfJoinerInIbss >= 2
-	 * else		: NoOfJoinerInIbss <= 1
-	 */
-	u8	JoinerInIbss[(MAX_BSS_DESCRIPT_ELEMENT + 3) & ~0x03];
+    /* Store the valid descriptor indexes obtained from scannings */
+    u8	BssListIndex[(MAX_BSS_DESCRIPT_ELEMENT + 3) & ~0x03];
+    /*
+     * Save the BssDescriptor index in this IBSS.
+     * The index 0 is local descriptor (psLOCAL->wConnectedSTAindex).
+     * If CONNECTED : NoOfJoinerInIbss >= 2
+     * else		: NoOfJoinerInIbss <= 1
+     */
+    u8	JoinerInIbss[(MAX_BSS_DESCRIPT_ELEMENT + 3) & ~0x03];
 
-	/* General Statistics, count at Rx_handler or Tx_callback interrupt handler */
-	u64	GS_XMIT_OK;		/* Good Frames Transmitted */
-	u64	GS_RCV_OK;		/* Good Frames Received */
-	u32	GS_RCV_ERROR;		/* Frames received with crc error */
-	u32	GS_XMIT_ERROR;		/* Bad Frames Transmitted */
-	u32	GS_RCV_NO_BUFFER;	/* Receive Buffer underrun */
-	u32	GS_XMIT_ONE_COLLISION;	/* one collision */
-	u32	GS_XMIT_MORE_COLLISIONS;/* more collisions */
+    /* General Statistics, count at Rx_handler or Tx_callback interrupt handler */
+    u64	GS_XMIT_OK;		/* Good Frames Transmitted */
+    u64	GS_RCV_OK;		/* Good Frames Received */
+    u32	GS_RCV_ERROR;		/* Frames received with crc error */
+    u32	GS_XMIT_ERROR;		/* Bad Frames Transmitted */
+    u32	GS_RCV_NO_BUFFER;	/* Receive Buffer underrun */
+    u32	GS_XMIT_ONE_COLLISION;	/* one collision */
+    u32	GS_XMIT_MORE_COLLISIONS;/* more collisions */
 
-	/*
-	 * ================================================================
-	 * Statistics (no matter whether it had done successfully) -wkchen
-	 * ================================================================
-	 */
-	u32	_NumRxMSDU;
-	u32	_NumTxMSDU;
-	u32	_dot11WEPExcludedCount;
-	u32	_dot11WEPUndecryptableCount;
-	u32	_dot11FrameDuplicateCount;
+    /*
+     * ================================================================
+     * Statistics (no matter whether it had done successfully) -wkchen
+     * ================================================================
+     */
+    u32	_NumRxMSDU;
+    u32	_NumTxMSDU;
+    u32	_dot11WEPExcludedCount;
+    u32	_dot11WEPUndecryptableCount;
+    u32	_dot11FrameDuplicateCount;
 
-	struct	chan_info IbssChanSetting;	/* 2B. Start IBSS Channel setting by registry or WWU. */
-	u8	reserved_5[2];		/* It may not be used after considering RF type, region and modulation type. */
+    struct	chan_info IbssChanSetting;	/* 2B. Start IBSS Channel setting by registry or WWU. */
+    u8	reserved_5[2];		/* It may not be used after considering RF type, region and modulation type. */
 
-	u8	reserved_6[2];		/* two variables are for wep key error detection */
-	u32	bWepKeyError;
-	u32	bToSelfPacketReceived;
-	u32	WepKeyDetectTimerCount;
+    u8	reserved_6[2];		/* two variables are for wep key error detection */
+    u32	bWepKeyError;
+    u32	bToSelfPacketReceived;
+    u32	WepKeyDetectTimerCount;
 
-	u16	SignalLostTh;
-	u16	SignalRoamTh;
+    u16	SignalLostTh;
+    u16	SignalRoamTh;
 
-	u8		IE_Append_data[MAX_IE_APPEND_SIZE];
-	u16		IE_Append_size;
-	u16		reserved_7;
+    u8		IE_Append_data[MAX_IE_APPEND_SIZE];
+    u16		IE_Append_size;
+    u16		reserved_7;
 };
 
 #endif

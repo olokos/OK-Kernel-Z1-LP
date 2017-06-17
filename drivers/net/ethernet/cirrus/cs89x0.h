@@ -16,8 +16,8 @@
 
 
 #define PP_ChipID 0x0000	/* offset   0h -> Corp -ID              */
-				/* offset   2h -> Model/Product Number  */
-				/* offset   3h -> Chip Revision Number  */
+/* offset   2h -> Model/Product Number  */
+/* offset   3h -> Chip Revision Number  */
 
 #define PP_ISAIOB 0x0020	/*  IO base address */
 #define PP_CS8900_ISAINT 0x0022	/*  ISA interrupt select */
@@ -369,10 +369,10 @@
 #define TX_CTL_OFFSET (ISA_CNF_OFFSET + 8)			/*  8900 eeprom */
 #define AUTO_NEG_CNF_OFFSET (ISA_CNF_OFFSET + 8)		/*  8920 eeprom */
 
-  /*  the assumption here is that the bits in the eeprom are generally  */
-  /*  in the same position as those in the autonegctl register. */
-  /*  Of course the IMM bit is not in that register so it must be  */
-  /*  masked out */
+/*  the assumption here is that the bits in the eeprom are generally  */
+/*  in the same position as those in the autonegctl register. */
+/*  Of course the IMM bit is not in that register so it must be  */
+/*  masked out */
 #define EE_FORCE_FDX  0x8000
 #define EE_NLP_ENABLE 0x0200
 #define EE_AUTO_NEG_ENABLE 0x0100

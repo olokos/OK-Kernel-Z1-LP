@@ -79,13 +79,13 @@
  * @done: UIC command completion
  */
 struct uic_command {
-	u32 command;
-	u32 argument1;
-	u32 argument2;
-	u32 argument3;
-	int cmd_active;
-	int result;
-	struct completion done;
+    u32 command;
+    u32 argument1;
+    u32 argument2;
+    u32 argument3;
+    int cmd_active;
+    int result;
+    struct completion done;
 };
 
 /**
@@ -103,19 +103,19 @@ struct uic_command {
  * @lun: LUN of the command
  */
 struct ufshcd_lrb {
-	struct utp_transfer_req_desc *utr_descriptor_ptr;
-	struct utp_upiu_cmd *ucd_cmd_ptr;
-	struct utp_upiu_rsp *ucd_rsp_ptr;
-	struct ufshcd_sg_entry *ucd_prdt_ptr;
+    struct utp_transfer_req_desc *utr_descriptor_ptr;
+    struct utp_upiu_cmd *ucd_cmd_ptr;
+    struct utp_upiu_rsp *ucd_rsp_ptr;
+    struct ufshcd_sg_entry *ucd_prdt_ptr;
 
-	struct scsi_cmnd *cmd;
-	u8 *sense_buffer;
-	unsigned int sense_bufflen;
-	int scsi_status;
+    struct scsi_cmnd *cmd;
+    u8 *sense_buffer;
+    unsigned int sense_bufflen;
+    int scsi_status;
 
-	int command_type;
-	int task_tag;
-	unsigned int lun;
+    int command_type;
+    int task_tag;
+    unsigned int lun;
 };
 
 
@@ -148,46 +148,46 @@ struct ufshcd_lrb {
  * @errors: HBA errors
  */
 struct ufs_hba {
-	void __iomem *mmio_base;
+    void __iomem *mmio_base;
 
-	/* Virtual memory reference */
-	struct utp_transfer_cmd_desc *ucdl_base_addr;
-	struct utp_transfer_req_desc *utrdl_base_addr;
-	struct utp_task_req_desc *utmrdl_base_addr;
+    /* Virtual memory reference */
+    struct utp_transfer_cmd_desc *ucdl_base_addr;
+    struct utp_transfer_req_desc *utrdl_base_addr;
+    struct utp_task_req_desc *utmrdl_base_addr;
 
-	/* DMA memory reference */
-	dma_addr_t ucdl_dma_addr;
-	dma_addr_t utrdl_dma_addr;
-	dma_addr_t utmrdl_dma_addr;
+    /* DMA memory reference */
+    dma_addr_t ucdl_dma_addr;
+    dma_addr_t utrdl_dma_addr;
+    dma_addr_t utmrdl_dma_addr;
 
-	struct Scsi_Host *host;
-	struct device *dev;
+    struct Scsi_Host *host;
+    struct device *dev;
 
-	struct ufshcd_lrb *lrb;
+    struct ufshcd_lrb *lrb;
 
-	unsigned long outstanding_tasks;
-	unsigned long outstanding_reqs;
+    unsigned long outstanding_tasks;
+    unsigned long outstanding_reqs;
 
-	u32 capabilities;
-	int nutrs;
-	int nutmrs;
-	u32 ufs_version;
-	unsigned int irq;
+    u32 capabilities;
+    int nutrs;
+    int nutmrs;
+    u32 ufs_version;
+    unsigned int irq;
 
-	struct uic_command *active_uic_cmd;
-	struct mutex uic_cmd_mutex;
+    struct uic_command *active_uic_cmd;
+    struct mutex uic_cmd_mutex;
 
-	wait_queue_head_t ufshcd_tm_wait_queue;
-	unsigned long tm_condition;
+    wait_queue_head_t ufshcd_tm_wait_queue;
+    unsigned long tm_condition;
 
-	u32 ufshcd_state;
-	u32 intr_mask;
+    u32 ufshcd_state;
+    u32 intr_mask;
 
-	/* Work Queues */
-	struct work_struct feh_workq;
+    /* Work Queues */
+    struct work_struct feh_workq;
 
-	/* HBA Errors */
-	u32 errors;
+    /* HBA Errors */
+    u32 errors;
 };
 
 #define ufshcd_writel(hba, val, reg)	\
@@ -196,16 +196,15 @@ struct ufs_hba {
 	readl((hba)->mmio_base + (reg))
 
 int ufshcd_init(struct device *, struct ufs_hba ** , void __iomem * ,
-			unsigned int);
+                unsigned int);
 void ufshcd_remove(struct ufs_hba *);
 
 /**
  * ufshcd_hba_stop - Send controller to reset state
  * @hba: per adapter instance
  */
-static inline void ufshcd_hba_stop(struct ufs_hba *hba)
-{
-	ufshcd_writel(hba, CONTROLLER_DISABLE,  REG_CONTROLLER_ENABLE);
+static inline void ufshcd_hba_stop(struct ufs_hba *hba) {
+    ufshcd_writel(hba, CONTROLLER_DISABLE,  REG_CONTROLLER_ENABLE);
 }
 
 #endif /* End of Header */

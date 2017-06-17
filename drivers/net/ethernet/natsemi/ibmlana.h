@@ -18,26 +18,26 @@
    POS registers... */
 
 typedef enum {
-	Media_10BaseT, Media_10Base5,
-	Media_Unknown, Media_10Base2, Media_Count
+    Media_10BaseT, Media_10Base5,
+    Media_Unknown, Media_10Base2, Media_Count
 } ibmlana_medium;
 
 /* private structure */
 
 typedef struct {
-	unsigned int slot;		/* MCA-Slot-#                       */
-	int realirq;			/* memorizes actual IRQ, even when
+    unsigned int slot;		/* MCA-Slot-#                       */
+    int realirq;			/* memorizes actual IRQ, even when
 					   currently not allocated          */
-	ibmlana_medium medium;		/* physical cannector               */
-	u32 	tdastart, txbufstart,	/* addresses                        */
-		rrastart, rxbufstart, rdastart, rxbufcnt, txusedcnt;
-	int 	nextrxdescr,		/* next rx descriptor to be used    */
-		lastrxdescr,		/* last free rx descriptor          */
-		nexttxdescr,		/* last tx descriptor to be used    */
-		currtxdescr,		/* tx descriptor currently tx'ed    */
-		txused[TXBUFCNT];	/* busy flags                       */
-	void __iomem *base;
-	spinlock_t lock;
+    ibmlana_medium medium;		/* physical cannector               */
+    u32 	tdastart, txbufstart,	/* addresses                        */
+            rrastart, rxbufstart, rdastart, rxbufcnt, txusedcnt;
+    int 	nextrxdescr,		/* next rx descriptor to be used    */
+            lastrxdescr,		/* last free rx descriptor          */
+            nexttxdescr,		/* last tx descriptor to be used    */
+            currtxdescr,		/* tx descriptor currently tx'ed    */
+            txused[TXBUFCNT];	/* busy flags                       */
+    void __iomem *base;
+    spinlock_t lock;
 } ibmlana_priv;
 
 /* this card uses quite a lot of I/O ports...luckily the MCA bus decodes
@@ -229,48 +229,48 @@ typedef struct {
 /* structure of a CAM entry */
 
 typedef struct {
-	u32 index;		/* pointer into CAM area            */
-	u32 addr0;		/* address part (bits 0..15 used)   */
-	u32 addr1;
-	u32 addr2;
+    u32 index;		/* pointer into CAM area            */
+    u32 addr0;		/* address part (bits 0..15 used)   */
+    u32 addr1;
+    u32 addr2;
 } camentry_t;
 
 /* structure of a receive resource */
 
 typedef struct {
-	u32 startlo;		/* start address (bits 0..15 used)  */
-	u32 starthi;
-	u32 cntlo;		/* size in 16-bit quantities        */
-	u32 cnthi;
+    u32 startlo;		/* start address (bits 0..15 used)  */
+    u32 starthi;
+    u32 cntlo;		/* size in 16-bit quantities        */
+    u32 cnthi;
 } rra_t;
 
 /* structure of a receive descriptor */
 
 typedef struct {
-	u32 status;		/* packet status                    */
-	u32 length;		/* length in bytes                  */
-	u32 startlo;		/* start address                    */
-	u32 starthi;
-	u32 seqno;		/* frame sequence                   */
-	u32 link;		/* pointer to next descriptor       */
-	/* bit 0 = EOL                      */
-	u32 inuse;		/* !=0 --> free for SONIC to write  */
+    u32 status;		/* packet status                    */
+    u32 length;		/* length in bytes                  */
+    u32 startlo;		/* start address                    */
+    u32 starthi;
+    u32 seqno;		/* frame sequence                   */
+    u32 link;		/* pointer to next descriptor       */
+    /* bit 0 = EOL                      */
+    u32 inuse;		/* !=0 --> free for SONIC to write  */
 } rda_t;
 
 /* structure of a transmit descriptor */
 
 typedef struct {
-	u32 status;		/* transmit status                  */
-	u32 config;		/* value for TCR                    */
-	u32 length;		/* total length                     */
-	u32 fragcount;		/* number of fragments              */
-	u32 startlo;		/* start address of fragment        */
-	u32 starthi;
-	u32 fraglength;		/* length of this fragment          */
-	/* more address/length triplets may */
-	/* follow here                      */
-	u32 link;		/* pointer to next descriptor       */
-	/* bit 0 = EOL                      */
+    u32 status;		/* transmit status                  */
+    u32 config;		/* value for TCR                    */
+    u32 length;		/* total length                     */
+    u32 fragcount;		/* number of fragments              */
+    u32 startlo;		/* start address of fragment        */
+    u32 starthi;
+    u32 fraglength;		/* length of this fragment          */
+    /* more address/length triplets may */
+    /* follow here                      */
+    u32 link;		/* pointer to next descriptor       */
+    /* bit 0 = EOL                      */
 } tda_t;
 
 #endif				/* _IBM_LANA_DRIVER_ */

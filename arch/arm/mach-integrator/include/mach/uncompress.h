@@ -28,18 +28,16 @@
 /*
  * This does not append a newline
  */
-static void putc(int c)
-{
-	while (AMBA_UART_FR & (1 << 5))
-		barrier();
+static void putc(int c) {
+    while (AMBA_UART_FR & (1 << 5))
+        barrier();
 
-	AMBA_UART_DR = c;
+    AMBA_UART_DR = c;
 }
 
-static inline void flush(void)
-{
-	while (AMBA_UART_FR & (1 << 3))
-		barrier();
+static inline void flush(void) {
+    while (AMBA_UART_FR & (1 << 3))
+        barrier();
 }
 
 /*

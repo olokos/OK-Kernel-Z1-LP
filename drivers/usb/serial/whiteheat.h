@@ -57,7 +57,7 @@
  * WHITEHEAT_REPORT_TX_DONE
 */
 struct whiteheat_simple {
-	__u8	port;	/* port number (1 to N) */
+    __u8	port;	/* port number (1 to N) */
 };
 
 
@@ -90,17 +90,17 @@ struct whiteheat_simple {
 						   fills/empties */
 
 struct whiteheat_port_settings {
-	__u8	port;		/* port number (1 to N) */
-	__u32	baud;		/* any value 7 - 460800, firmware calculates
+    __u8	port;		/* port number (1 to N) */
+    __u32	baud;		/* any value 7 - 460800, firmware calculates
 				   best fit; arrives little endian */
-	__u8	bits;		/* 5, 6, 7, or 8 */
-	__u8	stop;		/* 1 or 2, default 1 (2 = 1.5 if bits = 5) */
-	__u8	parity;		/* see WHITEHEAT_PAR_* above */
-	__u8	sflow;		/* see WHITEHEAT_SFLOW_* above */
-	__u8	xoff;		/* XOFF byte value */
-	__u8	xon;		/* XON byte value */
-	__u8	hflow;		/* see WHITEHEAT_HFLOW_* above */
-	__u8	lloop;		/* 0/1 turns local loopback mode off/on */
+    __u8	bits;		/* 5, 6, 7, or 8 */
+    __u8	stop;		/* 1 or 2, default 1 (2 = 1.5 if bits = 5) */
+    __u8	parity;		/* see WHITEHEAT_PAR_* above */
+    __u8	sflow;		/* see WHITEHEAT_SFLOW_* above */
+    __u8	xoff;		/* XOFF byte value */
+    __u8	xon;		/* XON byte value */
+    __u8	hflow;		/* see WHITEHEAT_HFLOW_* above */
+    __u8	lloop;		/* 0/1 turns local loopback mode off/on */
 } __attribute__ ((packed));
 
 
@@ -117,8 +117,8 @@ struct whiteheat_port_settings {
 #define WHITEHEAT_BREAK_ON	0x01
 
 struct whiteheat_set_rdb {
-	__u8	port;		/* port number (1 to N) */
-	__u8	state;		/* 0/1 turns signal off/on */
+    __u8	port;		/* port number (1 to N) */
+    __u8	state;		/* 0/1 turns signal off/on */
 };
 
 
@@ -146,9 +146,9 @@ struct whiteheat_set_rdb {
  */
 
 struct whiteheat_dump {
-	__u8	mem_type;	/* see WHITEHEAT_DUMP_* above */
-	__u16	addr;		/* address, see restrictions above */
-	__u16	length;		/* number of bytes to dump, max 63 bytes */
+    __u8	mem_type;	/* see WHITEHEAT_DUMP_* above */
+    __u16	addr;		/* address, see restrictions above */
+    __u16	length;		/* number of bytes to dump, max 63 bytes */
 };
 
 
@@ -159,8 +159,8 @@ struct whiteheat_dump {
 #define WHITEHEAT_PURGE_TX	0x02	/* purge tx fifos */
 
 struct whiteheat_purge {
-	__u8	port;		/* port number (1 to N) */
-	__u8	what;		/* bit pattern of what to purge */
+    __u8	port;		/* port number (1 to N) */
+    __u8	what;		/* bit pattern of what to purge */
 };
 
 
@@ -168,9 +168,9 @@ struct whiteheat_purge {
  * WHITEHEAT_ECHO
  */
 struct whiteheat_echo {
-	__u8	port;		/* port number (1 to N) */
-	__u8	length;		/* length of message to echo, max 61 bytes */
-	__u8	echo_data[61];	/* data to echo */
+    __u8	port;		/* port number (1 to N) */
+    __u8	length;		/* length of message to echo, max 61 bytes */
+    __u8	echo_data[61];	/* data to echo */
 };
 
 
@@ -192,9 +192,9 @@ struct whiteheat_echo {
 #define WHITEHEAT_TEST_PROGRAM_EEPROM	0x0b  /* program eeprom */
 
 struct whiteheat_test {
-	__u8	port;		/* port number (1 to n) */
-	__u8	test;		/* see WHITEHEAT_TEST_* above*/
-	__u8	info[32];	/* additional info */
+    __u8	port;		/* port number (1 to n) */
+    __u8	test;		/* see WHITEHEAT_TEST_* above*/
+    __u8	info[32];	/* additional info */
 };
 
 
@@ -223,15 +223,15 @@ struct whiteheat_test {
 #define WHITEHEAT_FLOW_TX_DONE		0x80	/* TX has completed */
 
 struct whiteheat_status_info {
-	__u8	port;		/* port number (1 to N) */
-	__u8	event;		/* indicates what the current event is,
+    __u8	port;		/* port number (1 to N) */
+    __u8	event;		/* indicates what the current event is,
 					see WHITEHEAT_EVENT_* above */
-	__u8	modem;		/* modem signal status (copy of uart's
+    __u8	modem;		/* modem signal status (copy of uart's
 					MSR register) */
-	__u8	error;		/* line status (copy of uart's LSR register) */
-	__u8	flow;		/* flow control state, see WHITEHEAT_FLOW_*
+    __u8	error;		/* line status (copy of uart's LSR register) */
+    __u8	flow;		/* flow control state, see WHITEHEAT_FLOW_*
 					above */
-	__u8	connect;	/* 0 means not connected, non-zero means
+    __u8	connect;	/* 0 means not connected, non-zero means
 					connected */
 };
 
@@ -240,7 +240,7 @@ struct whiteheat_status_info {
  * WHITEHEAT_GET_DTR_RTS
  */
 struct whiteheat_dr_info {
-	__u8	mcr;		/* copy of uart's MCR register */
+    __u8	mcr;		/* copy of uart's MCR register */
 };
 
 
@@ -248,27 +248,27 @@ struct whiteheat_dr_info {
  * WHITEHEAT_GET_HW_INFO
  */
 struct whiteheat_hw_info {
-	__u8	hw_id;		/* hardware id number, WhiteHEAT = 0 */
-	__u8	sw_major_rev;	/* major version number */
-	__u8	sw_minor_rev;	/* minor version number */
-	struct whiteheat_hw_eeprom_info {
-		__u8	b0;			/* B0 */
-		__u8	vendor_id_low;		/* vendor id (low byte) */
-		__u8	vendor_id_high;		/* vendor id (high byte) */
-		__u8	product_id_low;		/* product id (low byte) */
-		__u8	product_id_high;	/* product id (high byte) */
-		__u8	device_id_low;		/* device id (low byte) */
-		__u8	device_id_high;		/* device id (high byte) */
-		__u8	not_used_1;
-		__u8	serial_number_0;	/* serial number (low byte) */
-		__u8	serial_number_1;	/* serial number */
-		__u8	serial_number_2;	/* serial number */
-		__u8	serial_number_3;	/* serial number (high byte) */
-		__u8	not_used_2;
-		__u8	not_used_3;
-		__u8	checksum_low;		/* checksum (low byte) */
-		__u8	checksum_high;		/* checksum (high byte */
-	} hw_eeprom_info;	/* EEPROM contents */
+    __u8	hw_id;		/* hardware id number, WhiteHEAT = 0 */
+    __u8	sw_major_rev;	/* major version number */
+    __u8	sw_minor_rev;	/* minor version number */
+    struct whiteheat_hw_eeprom_info {
+        __u8	b0;			/* B0 */
+        __u8	vendor_id_low;		/* vendor id (low byte) */
+        __u8	vendor_id_high;		/* vendor id (high byte) */
+        __u8	product_id_low;		/* product id (low byte) */
+        __u8	product_id_high;	/* product id (high byte) */
+        __u8	device_id_low;		/* device id (low byte) */
+        __u8	device_id_high;		/* device id (high byte) */
+        __u8	not_used_1;
+        __u8	serial_number_0;	/* serial number (low byte) */
+        __u8	serial_number_1;	/* serial number */
+        __u8	serial_number_2;	/* serial number */
+        __u8	serial_number_3;	/* serial number (high byte) */
+        __u8	not_used_2;
+        __u8	not_used_3;
+        __u8	checksum_low;		/* checksum (low byte) */
+        __u8	checksum_high;		/* checksum (high byte */
+    } hw_eeprom_info;	/* EEPROM contents */
 };
 
 
@@ -276,9 +276,9 @@ struct whiteheat_hw_info {
  * WHITEHEAT_EVENT
  */
 struct whiteheat_event_info {
-	__u8	port;		/* port number (1 to N) */
-	__u8	event;		/* see whiteheat_status_info.event */
-	__u8	info;		/* see whiteheat_status_info.modem, .error,
+    __u8	port;		/* port number (1 to N) */
+    __u8	event;		/* see whiteheat_status_info.event */
+    __u8	info;		/* see whiteheat_status_info.modem, .error,
 					.flow, .connect */
 };
 
@@ -291,11 +291,11 @@ struct whiteheat_event_info {
 #define WHITEHEAT_TEST_PASS	0xff  /* test passed */
 
 struct whiteheat_test_info {
-	__u8	port;		/* port number (1 to N) */
-	__u8	test;		/* indicates which test this is a response for,
+    __u8	port;		/* port number (1 to N) */
+    __u8	test;		/* indicates which test this is a response for,
 				   see WHITEHEAT_DO_TEST above */
-	__u8	status;		/* see WHITEHEAT_TEST_* above */
-	__u8	results[32];	/* test-dependent results */
+    __u8	status;		/* see WHITEHEAT_TEST_* above */
+    __u8	results[32];	/* test-dependent results */
 };
 
 

@@ -19,8 +19,8 @@
 #include <linux/list.h>
 
 struct jz4740_clock_board_data {
-	unsigned long ext_rate;
-	unsigned long rtc_rate;
+    unsigned long ext_rate;
+    unsigned long rtc_rate;
 };
 
 extern struct jz4740_clock_board_data jz4740_clock_bdata;
@@ -31,30 +31,30 @@ void jz4740_clock_resume(void);
 struct clk;
 
 struct clk_ops {
-	unsigned long (*get_rate)(struct clk *clk);
-	unsigned long (*round_rate)(struct clk *clk, unsigned long rate);
-	int (*set_rate)(struct clk *clk, unsigned long rate);
-	int (*enable)(struct clk *clk);
-	int (*disable)(struct clk *clk);
-	int (*is_enabled)(struct clk *clk);
+    unsigned long (*get_rate)(struct clk *clk);
+    unsigned long (*round_rate)(struct clk *clk, unsigned long rate);
+    int (*set_rate)(struct clk *clk, unsigned long rate);
+    int (*enable)(struct clk *clk);
+    int (*disable)(struct clk *clk);
+    int (*is_enabled)(struct clk *clk);
 
-	int (*set_parent)(struct clk *clk, struct clk *parent);
+    int (*set_parent)(struct clk *clk, struct clk *parent);
 
 };
 
 struct clk {
-	const char *name;
-	struct clk *parent;
+    const char *name;
+    struct clk *parent;
 
-	uint32_t gate_bit;
+    uint32_t gate_bit;
 
-	const struct clk_ops *ops;
+    const struct clk_ops *ops;
 
-	struct list_head list;
+    struct list_head list;
 
 #ifdef CONFIG_DEBUG_FS
-	struct dentry *debugfs_entry;
-	struct dentry *debugfs_parent_entry;
+    struct dentry *debugfs_entry;
+    struct dentry *debugfs_parent_entry;
 #endif
 
 };

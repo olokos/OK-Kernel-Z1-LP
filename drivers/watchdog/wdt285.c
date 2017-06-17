@@ -50,59 +50,56 @@ static unsigned long timer_alive;
 /*
  *	If the timer expires..
  */
-static void watchdog_fire(int irq, void *dev_id)
-{
-	pr_crit("Would Reboot\n");
-	*CSR_TIMER4_CNTL = 0;
-	*CSR_TIMER4_CLR = 0;
+static void watchdog_fire(int irq, void *dev_id) {
+    pr_crit("Would Reboot\n");
+    *CSR_TIMER4_CNTL = 0;
+    *CSR_TIMER4_CLR = 0;
 }
 #endif
 
 /*
  *	Refresh the timer.
  */
-static void watchdog_ping(void)
-{
-	*CSR_TIMER4_LOAD = reload;
+static void watchdog_ping(void) {
+    *CSR_TIMER4_LOAD = reload;
 }
 
 /*
  *	Allow only one person to hold it open
  */
-static int watchdog_open(struct inode *inode, struct file *file)
-{
-	int ret;
+static int watchdog_open(struct inode *inode, struct file *file) {
+    int ret;
 
-	if (*CSR_SA110_CNTL & (1 << 13))
-		return -EBUSY;
+    if (*CSR_SA110_CNTL & (1 << 13))
+        return -EBUSY;
 
-	if (test_and_set_bit(1, &timer_alive))
-		return -EBUSY;
+    if (test_and_set_bit(1, &timer_alive))
+        return -EBUSY;
 
-	reload = soft_margin * (mem_fclk_21285 / 256);
+    reload = soft_margin * (mem_fclk_21285 / 256);
 
-	*CSR_TIMER4_CLR = 0;
-	watchdog_ping();
-	*CSR_TIMER4_CNTL = TIMER_CNTL_ENABLE | TIMER_CNTL_AUTORELOAD
-		| TIMER_CNTL_DIV256;
+    *CSR_TIMER4_CLR = 0;
+    watchdog_ping();
+    *CSR_TIMER4_CNTL = TIMER_CNTL_ENABLE | TIMER_CNTL_AUTORELOAD
+                       | TIMER_CNTL_DIV256;
 
 #ifdef ONLY_TESTING
-	ret = request_irq(IRQ_TIMER4, watchdog_fire, 0, "watchdog", NULL);
-	if (ret) {
-		*CSR_TIMER4_CNTL = 0;
-		clear_bit(1, &timer_alive);
-	}
+    ret = request_irq(IRQ_TIMER4, watchdog_fire, 0, "watchdog", NULL);
+    if (ret) {
+        *CSR_TIMER4_CNTL = 0;
+        clear_bit(1, &timer_alive);
+    }
 #else
-	/*
-	 * Setting this bit is irreversible; once enabled, there is
-	 * no way to disable the watchdog.
-	 */
-	*CSR_SA110_CNTL |= 1 << 13;
+    /*
+     * Setting this bit is irreversible; once enabled, there is
+     * no way to disable the watchdog.
+     */
+    *CSR_SA110_CNTL |= 1 << 13;
 
-	ret = 0;
+    ret = 0;
 #endif
-	nonseekable_open(inode, file);
-	return ret;
+    nonseekable_open(inode, file);
+    return ret;
 }
 
 /*
@@ -110,115 +107,110 @@ static int watchdog_open(struct inode *inode, struct file *file)
  *	Note: if we really have enabled the watchdog, there
  *	is no way to turn off.
  */
-static int watchdog_release(struct inode *inode, struct file *file)
-{
+static int watchdog_release(struct inode *inode, struct file *file) {
 #ifdef ONLY_TESTING
-	free_irq(IRQ_TIMER4, NULL);
-	clear_bit(1, &timer_alive);
+    free_irq(IRQ_TIMER4, NULL);
+    clear_bit(1, &timer_alive);
 #endif
-	return 0;
+    return 0;
 }
 
 static ssize_t watchdog_write(struct file *file, const char __user *data,
-			      size_t len, loff_t *ppos)
-{
-	/*
-	 *	Refresh the timer.
-	 */
-	if (len)
-		watchdog_ping();
+                              size_t len, loff_t *ppos) {
+    /*
+     *	Refresh the timer.
+     */
+    if (len)
+        watchdog_ping();
 
-	return len;
+    return len;
 }
 
 static const struct watchdog_info ident = {
-	.options	= WDIOF_SETTIMEOUT,
-	.identity	= "Footbridge Watchdog",
+    .options	= WDIOF_SETTIMEOUT,
+    .identity	= "Footbridge Watchdog",
 };
 
 static long watchdog_ioctl(struct file *file, unsigned int cmd,
-			   unsigned long arg)
-{
-	unsigned int new_margin;
-	int __user *int_arg = (int __user *)arg;
-	int ret = -ENOTTY;
+                           unsigned long arg) {
+    unsigned int new_margin;
+    int __user *int_arg = (int __user *)arg;
+    int ret = -ENOTTY;
 
-	switch (cmd) {
-	case WDIOC_GETSUPPORT:
-		ret = 0;
-		if (copy_to_user((void __user *)arg, &ident, sizeof(ident)))
-			ret = -EFAULT;
-		break;
+    switch (cmd) {
+    case WDIOC_GETSUPPORT:
+        ret = 0;
+        if (copy_to_user((void __user *)arg, &ident, sizeof(ident)))
+            ret = -EFAULT;
+        break;
 
-	case WDIOC_GETSTATUS:
-	case WDIOC_GETBOOTSTATUS:
-		ret = put_user(0, int_arg);
-		break;
+    case WDIOC_GETSTATUS:
+    case WDIOC_GETBOOTSTATUS:
+        ret = put_user(0, int_arg);
+        break;
 
-	case WDIOC_KEEPALIVE:
-		watchdog_ping();
-		ret = 0;
-		break;
+    case WDIOC_KEEPALIVE:
+        watchdog_ping();
+        ret = 0;
+        break;
 
-	case WDIOC_SETTIMEOUT:
-		ret = get_user(new_margin, int_arg);
-		if (ret)
-			break;
+    case WDIOC_SETTIMEOUT:
+        ret = get_user(new_margin, int_arg);
+        if (ret)
+            break;
 
-		/* Arbitrary, can't find the card's limits */
-		if (new_margin < 0 || new_margin > 60) {
-			ret = -EINVAL;
-			break;
-		}
+        /* Arbitrary, can't find the card's limits */
+        if (new_margin < 0 || new_margin > 60) {
+            ret = -EINVAL;
+            break;
+        }
 
-		soft_margin = new_margin;
-		reload = soft_margin * (mem_fclk_21285 / 256);
-		watchdog_ping();
-		/* Fall */
-	case WDIOC_GETTIMEOUT:
-		ret = put_user(soft_margin, int_arg);
-		break;
-	}
-	return ret;
+        soft_margin = new_margin;
+        reload = soft_margin * (mem_fclk_21285 / 256);
+        watchdog_ping();
+    /* Fall */
+    case WDIOC_GETTIMEOUT:
+        ret = put_user(soft_margin, int_arg);
+        break;
+    }
+    return ret;
 }
 
 static const struct file_operations watchdog_fops = {
-	.owner		= THIS_MODULE,
-	.llseek		= no_llseek,
-	.write		= watchdog_write,
-	.unlocked_ioctl	= watchdog_ioctl,
-	.open		= watchdog_open,
-	.release	= watchdog_release,
+    .owner		= THIS_MODULE,
+    .llseek		= no_llseek,
+    .write		= watchdog_write,
+    .unlocked_ioctl	= watchdog_ioctl,
+    .open		= watchdog_open,
+    .release	= watchdog_release,
 };
 
 static struct miscdevice watchdog_miscdev = {
-	.minor		= WATCHDOG_MINOR,
-	.name		= "watchdog",
-	.fops		= &watchdog_fops,
+    .minor		= WATCHDOG_MINOR,
+    .name		= "watchdog",
+    .fops		= &watchdog_fops,
 };
 
-static int __init footbridge_watchdog_init(void)
-{
-	int retval;
+static int __init footbridge_watchdog_init(void) {
+    int retval;
 
-	if (machine_is_netwinder())
-		return -ENODEV;
+    if (machine_is_netwinder())
+        return -ENODEV;
 
-	retval = misc_register(&watchdog_miscdev);
-	if (retval < 0)
-		return retval;
+    retval = misc_register(&watchdog_miscdev);
+    if (retval < 0)
+        return retval;
 
-	pr_info("Footbridge Watchdog Timer: 0.01, timer margin: %d sec\n",
-		soft_margin);
+    pr_info("Footbridge Watchdog Timer: 0.01, timer margin: %d sec\n",
+            soft_margin);
 
-	if (machine_is_cats())
-		pr_warn("Warning: Watchdog reset may not work on this machine\n");
-	return 0;
+    if (machine_is_cats())
+        pr_warn("Warning: Watchdog reset may not work on this machine\n");
+    return 0;
 }
 
-static void __exit footbridge_watchdog_exit(void)
-{
-	misc_deregister(&watchdog_miscdev);
+static void __exit footbridge_watchdog_exit(void) {
+    misc_deregister(&watchdog_miscdev);
 }
 
 MODULE_AUTHOR("Phil Blundell <pb@nexus.co.uk>");

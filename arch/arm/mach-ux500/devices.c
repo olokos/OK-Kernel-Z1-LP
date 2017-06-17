@@ -14,12 +14,11 @@
 #include <mach/hardware.h>
 #include <mach/setup.h>
 
-void __init amba_add_devices(struct amba_device *devs[], int num)
-{
-	int i;
+void __init amba_add_devices(struct amba_device *devs[], int num) {
+    int i;
 
-	for (i = 0; i < num; i++) {
-		struct amba_device *d = devs[i];
-		amba_device_register(d, &iomem_resource);
-	}
+    for (i = 0; i < num; i++) {
+        struct amba_device *d = devs[i];
+        amba_device_register(d, &iomem_resource);
+    }
 }

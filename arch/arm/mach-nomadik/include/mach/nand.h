@@ -2,11 +2,11 @@
 #define __ASM_ARCH_NAND_H
 
 struct nomadik_nand_platform_data {
-	struct mtd_partition *parts;
-	int nparts;
-	int options;
-	int (*init) (void);
-	int (*exit) (void);
+    struct mtd_partition *parts;
+    int nparts;
+    int options;
+    int (*init) (void);
+    int (*exit) (void);
 };
 
 #define NAND_IO_DATA	0x40000000

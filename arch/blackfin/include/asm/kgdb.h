@@ -24,83 +24,82 @@
  * Linux's register image is defined by struct pt_regs in ptrace.h.
  */
 enum regnames {
-  /* Core Registers */
-  BFIN_R0 = 0,
-  BFIN_R1,
-  BFIN_R2,
-  BFIN_R3,
-  BFIN_R4,
-  BFIN_R5,
-  BFIN_R6,
-  BFIN_R7,
-  BFIN_P0,
-  BFIN_P1,
-  BFIN_P2,
-  BFIN_P3,
-  BFIN_P4,
-  BFIN_P5,
-  BFIN_SP,
-  BFIN_FP,
-  BFIN_I0,
-  BFIN_I1,
-  BFIN_I2,
-  BFIN_I3,
-  BFIN_M0,
-  BFIN_M1,
-  BFIN_M2,
-  BFIN_M3,
-  BFIN_B0,
-  BFIN_B1,
-  BFIN_B2,
-  BFIN_B3,
-  BFIN_L0,
-  BFIN_L1,
-  BFIN_L2,
-  BFIN_L3,
-  BFIN_A0_DOT_X,
-  BFIN_A0_DOT_W,
-  BFIN_A1_DOT_X,
-  BFIN_A1_DOT_W,
-  BFIN_ASTAT,
-  BFIN_RETS,
-  BFIN_LC0,
-  BFIN_LT0,
-  BFIN_LB0,
-  BFIN_LC1,
-  BFIN_LT1,
-  BFIN_LB1,
-  BFIN_CYCLES,
-  BFIN_CYCLES2,
-  BFIN_USP,
-  BFIN_SEQSTAT,
-  BFIN_SYSCFG,
-  BFIN_RETI,
-  BFIN_RETX,
-  BFIN_RETN,
-  BFIN_RETE,
+    /* Core Registers */
+    BFIN_R0 = 0,
+    BFIN_R1,
+    BFIN_R2,
+    BFIN_R3,
+    BFIN_R4,
+    BFIN_R5,
+    BFIN_R6,
+    BFIN_R7,
+    BFIN_P0,
+    BFIN_P1,
+    BFIN_P2,
+    BFIN_P3,
+    BFIN_P4,
+    BFIN_P5,
+    BFIN_SP,
+    BFIN_FP,
+    BFIN_I0,
+    BFIN_I1,
+    BFIN_I2,
+    BFIN_I3,
+    BFIN_M0,
+    BFIN_M1,
+    BFIN_M2,
+    BFIN_M3,
+    BFIN_B0,
+    BFIN_B1,
+    BFIN_B2,
+    BFIN_B3,
+    BFIN_L0,
+    BFIN_L1,
+    BFIN_L2,
+    BFIN_L3,
+    BFIN_A0_DOT_X,
+    BFIN_A0_DOT_W,
+    BFIN_A1_DOT_X,
+    BFIN_A1_DOT_W,
+    BFIN_ASTAT,
+    BFIN_RETS,
+    BFIN_LC0,
+    BFIN_LT0,
+    BFIN_LB0,
+    BFIN_LC1,
+    BFIN_LT1,
+    BFIN_LB1,
+    BFIN_CYCLES,
+    BFIN_CYCLES2,
+    BFIN_USP,
+    BFIN_SEQSTAT,
+    BFIN_SYSCFG,
+    BFIN_RETI,
+    BFIN_RETX,
+    BFIN_RETN,
+    BFIN_RETE,
 
-  /* Pseudo Registers */
-  BFIN_PC,
-  BFIN_CC,
-  BFIN_EXTRA1,		/* Address of .text section.  */
-  BFIN_EXTRA2,		/* Address of .data section.  */
-  BFIN_EXTRA3,		/* Address of .bss section.  */
-  BFIN_FDPIC_EXEC,
-  BFIN_FDPIC_INTERP,
+    /* Pseudo Registers */
+    BFIN_PC,
+    BFIN_CC,
+    BFIN_EXTRA1,		/* Address of .text section.  */
+    BFIN_EXTRA2,		/* Address of .data section.  */
+    BFIN_EXTRA3,		/* Address of .bss section.  */
+    BFIN_FDPIC_EXEC,
+    BFIN_FDPIC_INTERP,
 
-  /* MMRs */
-  BFIN_IPEND,
+    /* MMRs */
+    BFIN_IPEND,
 
-  /* LAST ENTRY SHOULD NOT BE CHANGED.  */
-  BFIN_NUM_REGS		/* The number of all registers.  */
+    /* LAST ENTRY SHOULD NOT BE CHANGED.  */
+    BFIN_NUM_REGS		/* The number of all registers.  */
 };
 
 /* Number of bytes of registers.  */
 #define NUMREGBYTES BFIN_NUM_REGS*4
 
-static inline void arch_kgdb_breakpoint(void)
-{
-	asm("EXCPT 2;");
+static inline void arch_kgdb_breakpoint(void) {
+    asm("EXCPT 2;");
 }
 #define BREAK_INSTR_SIZE	2
 #ifdef CONFIG_SMP

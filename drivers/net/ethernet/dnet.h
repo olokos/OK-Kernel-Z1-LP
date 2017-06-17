@@ -179,47 +179,47 @@
  * Hardware-collected statistics.
  */
 struct dnet_stats {
-	u32 rx_pkt_ignr;
-	u32 rx_len_chk_err;
-	u32 rx_lng_frm;
-	u32 rx_shrt_frm;
-	u32 rx_ipg_viol;
-	u32 rx_crc_err;
-	u32 rx_ok_pkt;
-	u32 rx_ctl_frm;
-	u32 rx_pause_frm;
-	u32 rx_multicast;
-	u32 rx_broadcast;
-	u32 rx_vlan_tag;
-	u32 rx_pre_shrink;
-	u32 rx_drib_nib;
-	u32 rx_unsup_opcd;
-	u32 rx_byte;
-	u32 tx_unicast;
-	u32 tx_pause_frm;
-	u32 tx_multicast;
-	u32 tx_brdcast;
-	u32 tx_vlan_tag;
-	u32 tx_bad_fcs;
-	u32 tx_jumbo;
-	u32 tx_byte;
+    u32 rx_pkt_ignr;
+    u32 rx_len_chk_err;
+    u32 rx_lng_frm;
+    u32 rx_shrt_frm;
+    u32 rx_ipg_viol;
+    u32 rx_crc_err;
+    u32 rx_ok_pkt;
+    u32 rx_ctl_frm;
+    u32 rx_pause_frm;
+    u32 rx_multicast;
+    u32 rx_broadcast;
+    u32 rx_vlan_tag;
+    u32 rx_pre_shrink;
+    u32 rx_drib_nib;
+    u32 rx_unsup_opcd;
+    u32 rx_byte;
+    u32 tx_unicast;
+    u32 tx_pause_frm;
+    u32 tx_multicast;
+    u32 tx_brdcast;
+    u32 tx_vlan_tag;
+    u32 tx_bad_fcs;
+    u32 tx_jumbo;
+    u32 tx_byte;
 };
 
 struct dnet {
-	void __iomem			*regs;
-	spinlock_t			lock;
-	struct platform_device		*pdev;
-	struct net_device		*dev;
-	struct dnet_stats		hw_stats;
-	unsigned int			capabilities; /* read from FPGA */
-	struct napi_struct		napi;
+    void __iomem			*regs;
+    spinlock_t			lock;
+    struct platform_device		*pdev;
+    struct net_device		*dev;
+    struct dnet_stats		hw_stats;
+    unsigned int			capabilities; /* read from FPGA */
+    struct napi_struct		napi;
 
-	/* PHY stuff */
-	struct mii_bus			*mii_bus;
-	struct phy_device		*phy_dev;
-	unsigned int			link;
-	unsigned int			speed;
-	unsigned int			duplex;
+    /* PHY stuff */
+    struct mii_bus			*mii_bus;
+    struct phy_device		*phy_dev;
+    unsigned int			link;
+    unsigned int			speed;
+    unsigned int			duplex;
 };
 
 #endif /* _DNET_H */

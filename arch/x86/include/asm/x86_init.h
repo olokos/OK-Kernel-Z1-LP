@@ -21,14 +21,14 @@ struct cpuinfo_x86;
  * @get_smp_config:		get the smp configuration
  */
 struct x86_init_mpparse {
-	void (*mpc_record)(unsigned int mode);
-	void (*setup_ioapic_ids)(void);
-	int (*mpc_apic_id)(struct mpc_cpu *m);
-	void (*smp_read_mpc_oem)(struct mpc_table *mpc);
-	void (*mpc_oem_pci_bus)(struct mpc_bus *m);
-	void (*mpc_oem_bus_info)(struct mpc_bus *m, char *name);
-	void (*find_smp_config)(void);
-	void (*get_smp_config)(unsigned int early);
+    void (*mpc_record)(unsigned int mode);
+    void (*setup_ioapic_ids)(void);
+    int (*mpc_apic_id)(struct mpc_cpu *m);
+    void (*smp_read_mpc_oem)(struct mpc_table *mpc);
+    void (*mpc_oem_pci_bus)(struct mpc_bus *m);
+    void (*mpc_oem_bus_info)(struct mpc_bus *m, char *name);
+    void (*find_smp_config)(void);
+    void (*get_smp_config)(unsigned int early);
 };
 
 /**
@@ -40,9 +40,9 @@ struct x86_init_mpparse {
  *
  */
 struct x86_init_resources {
-	void (*probe_roms)(void);
-	void (*reserve_resources)(void);
-	char *(*memory_setup)(void);
+    void (*probe_roms)(void);
+    void (*reserve_resources)(void);
+    char *(*memory_setup)(void);
 };
 
 /**
@@ -53,9 +53,9 @@ struct x86_init_resources {
  * @trap_init:			platform specific trap setup
  */
 struct x86_init_irqs {
-	void (*pre_vector_init)(void);
-	void (*intr_init)(void);
-	void (*trap_init)(void);
+    void (*pre_vector_init)(void);
+    void (*intr_init)(void);
+    void (*trap_init)(void);
 };
 
 /**
@@ -64,8 +64,8 @@ struct x86_init_irqs {
  * @banner:			print a platform specific banner
  */
 struct x86_init_oem {
-	void (*arch_setup)(void);
-	void (*banner)(void);
+    void (*arch_setup)(void);
+    void (*banner)(void);
 };
 
 /**
@@ -76,7 +76,7 @@ struct x86_init_oem {
  * init_memory_mapping and the commit that added it.
  */
 struct x86_init_mapping {
-	void (*pagetable_reserve)(u64 start, u64 end);
+    void (*pagetable_reserve)(u64 start, u64 end);
 };
 
 /**
@@ -85,8 +85,8 @@ struct x86_init_mapping {
  * @pagetable_setup_done:	platform specific post paging_init() call
  */
 struct x86_init_paging {
-	void (*pagetable_setup_start)(pgd_t *base);
-	void (*pagetable_setup_done)(pgd_t *base);
+    void (*pagetable_setup_start)(pgd_t *base);
+    void (*pagetable_setup_done)(pgd_t *base);
 };
 
 /**
@@ -98,10 +98,10 @@ struct x86_init_paging {
  * @wallclock_init:		init the wallclock device
  */
 struct x86_init_timers {
-	void (*setup_percpu_clockev)(void);
-	void (*tsc_pre_init)(void);
-	void (*timer_init)(void);
-	void (*wallclock_init)(void);
+    void (*setup_percpu_clockev)(void);
+    void (*tsc_pre_init)(void);
+    void (*timer_init)(void);
+    void (*wallclock_init)(void);
 };
 
 /**
@@ -109,7 +109,7 @@ struct x86_init_timers {
  * @iommu_init:			platform specific iommu setup
  */
 struct x86_init_iommu {
-	int (*iommu_init)(void);
+    int (*iommu_init)(void);
 };
 
 /**
@@ -120,10 +120,10 @@ struct x86_init_iommu {
  * @fixup_irqs:			platform specific pci irq fixup
  */
 struct x86_init_pci {
-	int (*arch_init)(void);
-	int (*init)(void);
-	void (*init_irq)(void);
-	void (*fixup_irqs)(void);
+    int (*arch_init)(void);
+    int (*init)(void);
+    void (*init_irq)(void);
+    void (*fixup_irqs)(void);
 };
 
 /**
@@ -131,15 +131,15 @@ struct x86_init_pci {
  *
  */
 struct x86_init_ops {
-	struct x86_init_resources	resources;
-	struct x86_init_mpparse		mpparse;
-	struct x86_init_irqs		irqs;
-	struct x86_init_oem		oem;
-	struct x86_init_mapping		mapping;
-	struct x86_init_paging		paging;
-	struct x86_init_timers		timers;
-	struct x86_init_iommu		iommu;
-	struct x86_init_pci		pci;
+    struct x86_init_resources	resources;
+    struct x86_init_mpparse		mpparse;
+    struct x86_init_irqs		irqs;
+    struct x86_init_oem		oem;
+    struct x86_init_mapping		mapping;
+    struct x86_init_paging		paging;
+    struct x86_init_timers		timers;
+    struct x86_init_iommu		iommu;
+    struct x86_init_pci		pci;
 };
 
 /**
@@ -148,9 +148,9 @@ struct x86_init_ops {
  * @early_percpu_clock_init:	early init of the per cpu clock event device
  */
 struct x86_cpuinit_ops {
-	void (*setup_percpu_clockev)(void);
-	void (*early_percpu_clock_init)(void);
-	void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
+    void (*setup_percpu_clockev)(void);
+    void (*early_percpu_clock_init)(void);
+    void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
 };
 
 /**
@@ -166,26 +166,26 @@ struct x86_cpuinit_ops {
  * @restore_sched_clock_state:	restore state for sched_clock() on resume
  */
 struct x86_platform_ops {
-	unsigned long (*calibrate_tsc)(void);
-	void (*wallclock_init)(void);
-	unsigned long (*get_wallclock)(void);
-	int (*set_wallclock)(unsigned long nowtime);
-	void (*iommu_shutdown)(void);
-	bool (*is_untracked_pat_range)(u64 start, u64 end);
-	void (*nmi_init)(void);
-	unsigned char (*get_nmi_reason)(void);
-	int (*i8042_detect)(void);
-	void (*save_sched_clock_state)(void);
-	void (*restore_sched_clock_state)(void);
+    unsigned long (*calibrate_tsc)(void);
+    void (*wallclock_init)(void);
+    unsigned long (*get_wallclock)(void);
+    int (*set_wallclock)(unsigned long nowtime);
+    void (*iommu_shutdown)(void);
+    bool (*is_untracked_pat_range)(u64 start, u64 end);
+    void (*nmi_init)(void);
+    unsigned char (*get_nmi_reason)(void);
+    int (*i8042_detect)(void);
+    void (*save_sched_clock_state)(void);
+    void (*restore_sched_clock_state)(void);
 };
 
 struct pci_dev;
 
 struct x86_msi_ops {
-	int (*setup_msi_irqs)(struct pci_dev *dev, int nvec, int type);
-	void (*teardown_msi_irq)(unsigned int irq);
-	void (*teardown_msi_irqs)(struct pci_dev *dev);
-	void (*restore_msi_irqs)(struct pci_dev *dev, int irq);
+    int (*setup_msi_irqs)(struct pci_dev *dev, int nvec, int type);
+    void (*teardown_msi_irq)(unsigned int irq);
+    void (*teardown_msi_irqs)(struct pci_dev *dev);
+    void (*restore_msi_irqs)(struct pci_dev *dev, int irq);
 };
 
 extern struct x86_init_ops x86_init;

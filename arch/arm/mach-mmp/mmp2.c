@@ -35,90 +35,86 @@
 
 static struct mfp_addr_map mmp2_addr_map[] __initdata = {
 
-	MFP_ADDR_X(GPIO0, GPIO58, 0x54),
-	MFP_ADDR_X(GPIO59, GPIO73, 0x280),
-	MFP_ADDR_X(GPIO74, GPIO101, 0x170),
+    MFP_ADDR_X(GPIO0, GPIO58, 0x54),
+    MFP_ADDR_X(GPIO59, GPIO73, 0x280),
+    MFP_ADDR_X(GPIO74, GPIO101, 0x170),
 
-	MFP_ADDR(GPIO102, 0x0),
-	MFP_ADDR(GPIO103, 0x4),
-	MFP_ADDR(GPIO104, 0x1fc),
-	MFP_ADDR(GPIO105, 0x1f8),
-	MFP_ADDR(GPIO106, 0x1f4),
-	MFP_ADDR(GPIO107, 0x1f0),
-	MFP_ADDR(GPIO108, 0x21c),
-	MFP_ADDR(GPIO109, 0x218),
-	MFP_ADDR(GPIO110, 0x214),
-	MFP_ADDR(GPIO111, 0x200),
-	MFP_ADDR(GPIO112, 0x244),
-	MFP_ADDR(GPIO113, 0x25c),
-	MFP_ADDR(GPIO114, 0x164),
-	MFP_ADDR_X(GPIO115, GPIO122, 0x260),
+    MFP_ADDR(GPIO102, 0x0),
+    MFP_ADDR(GPIO103, 0x4),
+    MFP_ADDR(GPIO104, 0x1fc),
+    MFP_ADDR(GPIO105, 0x1f8),
+    MFP_ADDR(GPIO106, 0x1f4),
+    MFP_ADDR(GPIO107, 0x1f0),
+    MFP_ADDR(GPIO108, 0x21c),
+    MFP_ADDR(GPIO109, 0x218),
+    MFP_ADDR(GPIO110, 0x214),
+    MFP_ADDR(GPIO111, 0x200),
+    MFP_ADDR(GPIO112, 0x244),
+    MFP_ADDR(GPIO113, 0x25c),
+    MFP_ADDR(GPIO114, 0x164),
+    MFP_ADDR_X(GPIO115, GPIO122, 0x260),
 
-	MFP_ADDR(GPIO123, 0x148),
-	MFP_ADDR_X(GPIO124, GPIO141, 0xc),
+    MFP_ADDR(GPIO123, 0x148),
+    MFP_ADDR_X(GPIO124, GPIO141, 0xc),
 
-	MFP_ADDR(GPIO142, 0x8),
-	MFP_ADDR_X(GPIO143, GPIO151, 0x220),
-	MFP_ADDR_X(GPIO152, GPIO153, 0x248),
-	MFP_ADDR_X(GPIO154, GPIO155, 0x254),
-	MFP_ADDR_X(GPIO156, GPIO159, 0x14c),
+    MFP_ADDR(GPIO142, 0x8),
+    MFP_ADDR_X(GPIO143, GPIO151, 0x220),
+    MFP_ADDR_X(GPIO152, GPIO153, 0x248),
+    MFP_ADDR_X(GPIO154, GPIO155, 0x254),
+    MFP_ADDR_X(GPIO156, GPIO159, 0x14c),
 
-	MFP_ADDR(GPIO160, 0x250),
-	MFP_ADDR(GPIO161, 0x210),
-	MFP_ADDR(GPIO162, 0x20c),
-	MFP_ADDR(GPIO163, 0x208),
-	MFP_ADDR(GPIO164, 0x204),
-	MFP_ADDR(GPIO165, 0x1ec),
-	MFP_ADDR(GPIO166, 0x1e8),
-	MFP_ADDR(GPIO167, 0x1e4),
-	MFP_ADDR(GPIO168, 0x1e0),
+    MFP_ADDR(GPIO160, 0x250),
+    MFP_ADDR(GPIO161, 0x210),
+    MFP_ADDR(GPIO162, 0x20c),
+    MFP_ADDR(GPIO163, 0x208),
+    MFP_ADDR(GPIO164, 0x204),
+    MFP_ADDR(GPIO165, 0x1ec),
+    MFP_ADDR(GPIO166, 0x1e8),
+    MFP_ADDR(GPIO167, 0x1e4),
+    MFP_ADDR(GPIO168, 0x1e0),
 
-	MFP_ADDR_X(TWSI1_SCL, TWSI1_SDA, 0x140),
-	MFP_ADDR_X(TWSI4_SCL, TWSI4_SDA, 0x2bc),
+    MFP_ADDR_X(TWSI1_SCL, TWSI1_SDA, 0x140),
+    MFP_ADDR_X(TWSI4_SCL, TWSI4_SDA, 0x2bc),
 
-	MFP_ADDR(PMIC_INT, 0x2c4),
-	MFP_ADDR(CLK_REQ, 0x160),
+    MFP_ADDR(PMIC_INT, 0x2c4),
+    MFP_ADDR(CLK_REQ, 0x160),
 
-	MFP_ADDR_END,
+    MFP_ADDR_END,
 };
 
-void mmp2_clear_pmic_int(void)
-{
-	void __iomem *mfpr_pmic;
-	unsigned long data;
+void mmp2_clear_pmic_int(void) {
+    void __iomem *mfpr_pmic;
+    unsigned long data;
 
-	mfpr_pmic = APB_VIRT_BASE + 0x1e000 + 0x2c4;
-	data = __raw_readl(mfpr_pmic);
-	__raw_writel(data | (1 << 6), mfpr_pmic);
-	__raw_writel(data, mfpr_pmic);
+    mfpr_pmic = APB_VIRT_BASE + 0x1e000 + 0x2c4;
+    data = __raw_readl(mfpr_pmic);
+    __raw_writel(data | (1 << 6), mfpr_pmic);
+    __raw_writel(data, mfpr_pmic);
 }
 
-void __init mmp2_init_irq(void)
-{
-	mmp2_init_icu();
+void __init mmp2_init_irq(void) {
+    mmp2_init_icu();
 }
 
-static void sdhc_clk_enable(struct clk *clk)
-{
-	uint32_t clk_rst;
+static void sdhc_clk_enable(struct clk *clk) {
+    uint32_t clk_rst;
 
-	clk_rst  =  __raw_readl(clk->clk_rst);
-	clk_rst |= clk->enable_val;
-	__raw_writel(clk_rst, clk->clk_rst);
+    clk_rst  =  __raw_readl(clk->clk_rst);
+    clk_rst |= clk->enable_val;
+    __raw_writel(clk_rst, clk->clk_rst);
 }
 
-static void sdhc_clk_disable(struct clk *clk)
-{
-	uint32_t clk_rst;
+static void sdhc_clk_disable(struct clk *clk) {
+    uint32_t clk_rst;
 
-	clk_rst  =  __raw_readl(clk->clk_rst);
-	clk_rst &= ~clk->enable_val;
-	__raw_writel(clk_rst, clk->clk_rst);
+    clk_rst  =  __raw_readl(clk->clk_rst);
+    clk_rst &= ~clk->enable_val;
+    __raw_writel(clk_rst, clk->clk_rst);
 }
 
 struct clkops sdhc_clk_ops = {
-	.enable		= sdhc_clk_enable,
-	.disable	= sdhc_clk_disable,
+    .enable		= sdhc_clk_enable,
+    .disable	= sdhc_clk_disable,
 };
 
 /* APB peripheral clocks */
@@ -141,58 +137,56 @@ static APMU_CLK_OPS(sdh2, SDH2, 0x1b, 200000000, &sdhc_clk_ops);
 static APMU_CLK_OPS(sdh3, SDH3, 0x1b, 200000000, &sdhc_clk_ops);
 
 static struct clk_lookup mmp2_clkregs[] = {
-	INIT_CLKREG(&clk_uart1, "pxa2xx-uart.0", NULL),
-	INIT_CLKREG(&clk_uart2, "pxa2xx-uart.1", NULL),
-	INIT_CLKREG(&clk_uart3, "pxa2xx-uart.2", NULL),
-	INIT_CLKREG(&clk_uart4, "pxa2xx-uart.3", NULL),
-	INIT_CLKREG(&clk_twsi1, "pxa2xx-i2c.0", NULL),
-	INIT_CLKREG(&clk_twsi2, "pxa2xx-i2c.1", NULL),
-	INIT_CLKREG(&clk_twsi3, "pxa2xx-i2c.2", NULL),
-	INIT_CLKREG(&clk_twsi4, "pxa2xx-i2c.3", NULL),
-	INIT_CLKREG(&clk_twsi5, "pxa2xx-i2c.4", NULL),
-	INIT_CLKREG(&clk_twsi6, "pxa2xx-i2c.5", NULL),
-	INIT_CLKREG(&clk_nand, "pxa3xx-nand", NULL),
-	INIT_CLKREG(&clk_gpio, "pxa-gpio", NULL),
-	INIT_CLKREG(&clk_sdh0, "sdhci-pxav3.0", "PXA-SDHCLK"),
-	INIT_CLKREG(&clk_sdh1, "sdhci-pxav3.1", "PXA-SDHCLK"),
-	INIT_CLKREG(&clk_sdh2, "sdhci-pxav3.2", "PXA-SDHCLK"),
-	INIT_CLKREG(&clk_sdh3, "sdhci-pxav3.3", "PXA-SDHCLK"),
+    INIT_CLKREG(&clk_uart1, "pxa2xx-uart.0", NULL),
+    INIT_CLKREG(&clk_uart2, "pxa2xx-uart.1", NULL),
+    INIT_CLKREG(&clk_uart3, "pxa2xx-uart.2", NULL),
+    INIT_CLKREG(&clk_uart4, "pxa2xx-uart.3", NULL),
+    INIT_CLKREG(&clk_twsi1, "pxa2xx-i2c.0", NULL),
+    INIT_CLKREG(&clk_twsi2, "pxa2xx-i2c.1", NULL),
+    INIT_CLKREG(&clk_twsi3, "pxa2xx-i2c.2", NULL),
+    INIT_CLKREG(&clk_twsi4, "pxa2xx-i2c.3", NULL),
+    INIT_CLKREG(&clk_twsi5, "pxa2xx-i2c.4", NULL),
+    INIT_CLKREG(&clk_twsi6, "pxa2xx-i2c.5", NULL),
+    INIT_CLKREG(&clk_nand, "pxa3xx-nand", NULL),
+    INIT_CLKREG(&clk_gpio, "pxa-gpio", NULL),
+    INIT_CLKREG(&clk_sdh0, "sdhci-pxav3.0", "PXA-SDHCLK"),
+    INIT_CLKREG(&clk_sdh1, "sdhci-pxav3.1", "PXA-SDHCLK"),
+    INIT_CLKREG(&clk_sdh2, "sdhci-pxav3.2", "PXA-SDHCLK"),
+    INIT_CLKREG(&clk_sdh3, "sdhci-pxav3.3", "PXA-SDHCLK"),
 };
 
-static int __init mmp2_init(void)
-{
-	if (cpu_is_mmp2()) {
+static int __init mmp2_init(void) {
+    if (cpu_is_mmp2()) {
 #ifdef CONFIG_CACHE_TAUROS2
-		tauros2_init();
+        tauros2_init();
 #endif
-		mfp_init_base(MFPR_VIRT_BASE);
-		mfp_init_addr(mmp2_addr_map);
-		pxa_init_dma(IRQ_MMP2_DMA_RIQ, 16);
-		clkdev_add_table(ARRAY_AND_SIZE(mmp2_clkregs));
-	}
+        mfp_init_base(MFPR_VIRT_BASE);
+        mfp_init_addr(mmp2_addr_map);
+        pxa_init_dma(IRQ_MMP2_DMA_RIQ, 16);
+        clkdev_add_table(ARRAY_AND_SIZE(mmp2_clkregs));
+    }
 
-	return 0;
+    return 0;
 }
 postcore_initcall(mmp2_init);
 
-static void __init mmp2_timer_init(void)
-{
-	unsigned long clk_rst;
+static void __init mmp2_timer_init(void) {
+    unsigned long clk_rst;
 
-	__raw_writel(APBC_APBCLK | APBC_RST, APBC_MMP2_TIMERS);
+    __raw_writel(APBC_APBCLK | APBC_RST, APBC_MMP2_TIMERS);
 
-	/*
-	 * enable bus/functional clock, enable 6.5MHz (divider 4),
-	 * release reset
-	 */
-	clk_rst = APBC_APBCLK | APBC_FNCLK | APBC_FNCLKSEL(1);
-	__raw_writel(clk_rst, APBC_MMP2_TIMERS);
+    /*
+     * enable bus/functional clock, enable 6.5MHz (divider 4),
+     * release reset
+     */
+    clk_rst = APBC_APBCLK | APBC_FNCLK | APBC_FNCLKSEL(1);
+    __raw_writel(clk_rst, APBC_MMP2_TIMERS);
 
-	timer_init(IRQ_MMP2_TIMER1);
+    timer_init(IRQ_MMP2_TIMER1);
 }
 
 struct sys_timer mmp2_timer = {
-	.init	= mmp2_timer_init,
+    .init	= mmp2_timer_init,
 };
 
 /* on-chip devices */
@@ -216,21 +210,21 @@ MMP2_DEVICE(asram, "asram", -1, NONE, 0xe0000000, 0x4000);
 MMP2_DEVICE(isram, "isram", -1, NONE, 0xd1020000, 0x18000);
 
 struct resource mmp2_resource_gpio[] = {
-	{
-		.start	= 0xd4019000,
-		.end	= 0xd4019fff,
-		.flags	= IORESOURCE_MEM,
-	}, {
-		.start	= IRQ_MMP2_GPIO,
-		.end	= IRQ_MMP2_GPIO,
-		.name	= "gpio_mux",
-		.flags	= IORESOURCE_IRQ,
-	},
+    {
+        .start	= 0xd4019000,
+        .end	= 0xd4019fff,
+        .flags	= IORESOURCE_MEM,
+    }, {
+        .start	= IRQ_MMP2_GPIO,
+        .end	= IRQ_MMP2_GPIO,
+        .name	= "gpio_mux",
+        .flags	= IORESOURCE_IRQ,
+    },
 };
 
 struct platform_device mmp2_device_gpio = {
-	.name		= "pxa-gpio",
-	.id		= -1,
-	.num_resources	= ARRAY_SIZE(mmp2_resource_gpio),
-	.resource	= mmp2_resource_gpio,
+    .name		= "pxa-gpio",
+    .id		= -1,
+    .num_resources	= ARRAY_SIZE(mmp2_resource_gpio),
+    .resource	= mmp2_resource_gpio,
 };

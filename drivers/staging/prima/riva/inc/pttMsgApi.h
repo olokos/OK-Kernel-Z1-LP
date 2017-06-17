@@ -66,8 +66,7 @@ typedef tANI_U8 tQWPTT_BOOLEAN;
 #define PTT_MEM_ACCESS_MAX_SIZE 256
 
 //Messages to/from socket or pttApi.c
-typedef enum
-{
+typedef enum {
     PTT_MSG_TYPES_BEGIN = 0x3000,
 
     // Init
@@ -255,8 +254,7 @@ typedef enum
     PTT_MAX_MSG_ID = PTT_MSG_EXIT
 } ePttMsgId;
 
-enum
-{
+enum {
     PTT_MSG_PRIMA_GENERIC_CMD_FAST_SET_CHANNEL = 0x0,
 };
 
@@ -265,8 +263,7 @@ enum
 #define PTT_MSG_TYPES_BEGIN_32          PTT_MSG_TYPES_BEGIN + 0x200
 
 // for FTM PER feature
-enum
-{
+enum {
     Legacy_FTM = 0,
     FTM_PER_TX = 1,
     FTM_PER_RX = 2,
@@ -282,67 +279,56 @@ enum
     PTT MESSAGES
 ******************************************************************************************************************/
 //Init
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tPttModuleVariables ptt;
 } tMsgPttMsgInit;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 tableSize;
     tANI_U32 chunkSize;
     eNvTable nvTable;
 } tMsgPttGetNvTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 tableSize;
     tANI_U32 chunkSize;
     eNvTable nvTable;
 } tMsgPttSetNvTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eNvTable nvTable;
 } tMsgPttDelNvTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttBlankNv;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eNvField nvField;
     uNvFields fieldData;
 } tMsgPttGetNvField;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eNvField nvField;
     uNvFields fieldData;
 } tMsgPttSetNvField;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eNvTable nvTable;
 } tMsgPttStoreNvTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eRegDomainId regDomainId;
 } tMsgPttSetRegDomain;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 tableSize;
     tANI_U32 chunkSize;
     eNvTable nvTable;
     tANI_U8 nvData[MAX_NV_BIN_SIZE];
 } tMsgPttGetNvBin;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 tableSize;
     tANI_U32 chunkSize;
     eNvTable nvTable;
@@ -350,91 +336,77 @@ typedef PACKED_PRE struct PACKED_POST
 } tMsgPttSetNvBin;
 
 //Device Register Access
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 regAddr;
     tANI_U32 regValue;
 } tMsgPttDbgReadRegister;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 regAddr;
     tANI_U32 regValue;
 } tMsgPttDbgWriteRegister;
 
 #define PTT_READ_MEM_MAX 512
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 memAddr;
     tANI_U32 nBytes;
     tANI_U32 pMemBuf[PTT_READ_MEM_MAX]; //caller should allocate space
 } tMsgPttDbgReadMemory;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 memAddr;
     tANI_U32 nBytes;
     tANI_U32 pMemBuf[PTT_READ_MEM_MAX];
 } tMsgPttDbgWriteMemory;
 
 //Device MAC Test Setup
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 chId;
     ePhyChanBondState cbState;
 } tMsgPttSetChannel;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyChainSelect chainSelect;
 } tMsgPttEnableChains;
 
 typedef tIQSamples tWaveformSample;
 
 //Tx Waveform Gen Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tWaveformSample waveform[MAX_TEST_WAVEFORM_SAMPLES];
     tANI_U16 numSamples;
     tANI_BOOLEAN clk80;
     tANI_U8 reserved[1];
 } tMsgPttSetWaveform;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
     tANI_U8 gain;
 } tMsgPttSetTxWaveformGain;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
     tANI_U32 gain;
 } tMsgPttSetTxWaveformGain_PRIMA_V1;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyRxChains rxChain;
     tANI_U8 gain;
 } tMsgPttSetRxWaveformGain;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsPowerAdcReadings txPowerAdc;
 } tMsgPttGetWaveformPowerAdc;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttStopWaveform;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttClpcCalSetup_PRIMA_V1;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 setup_measure;
     tANI_U16 setup_txDmdPwrOffset;
     tANI_U16 measure_totalExtraPt;
@@ -442,78 +414,66 @@ typedef PACKED_PRE struct PACKED_POST
     tANI_U8 plut[256];
 } tMsgPttClpcCalExtraMeasurement_PRIMA_V1;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttClpcCalRestore_PRIMA_V1;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 startIndex;
     tANI_U32 numSamples;
 } tMsgPttStartWaveform;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 startIndex;
     tANI_U32 numSamples;
 } tMsgPttStartWaveform_PRIMA_V1;
 
 // Added for PRIMA
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tWaveformSample waveform[MAX_TEST_WAVEFORM_SAMPLES];
     tANI_U16 numSamples;
     tANI_BOOLEAN clk80;
     tANI_U8 reserved[1];
 } tMsgPttSetWaveformRF;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 startIndex;
     tANI_U32 numSamples;
 } tMsgPttStartWaveformRF;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttStopWaveformRF;
 
 //Tx Frame Gen Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sPttFrameGenParams frameParams;
 } tMsgPttConfigTxPacketGen;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_BOOLEAN startStop;
     tANI_U8 reserved[3];
 } tMsgPttStartStopTxPacketGen;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxFrameCounters numFrames;
     tANI_BOOLEAN status;
     tANI_U8 reserved[3];
 } tMsgPttQueryTxStatus;
 
 //Tx Frame Power Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_BOOLEAN tpcClose;
     tANI_U8 reserved[3];
 } tMsgPttCloseTpcLoop;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 tpcClose;
 } tMsgPttCloseTpcLoop_PRIMA_V1;
 
 
 //open loop service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
 
     ePhyTxChains txChain;
     tANI_U8 minIndex;
@@ -522,47 +482,40 @@ typedef PACKED_PRE struct PACKED_POST
     tANI_U8 gainTable[TPC_MEM_GAIN_LUT_DEPTH];
 } tMsgPttSetPacketTxGainTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
     tANI_U8 gainTable[TPC_MEM_GAIN_LUT_DEPTH];
 } tMsgPttGetPacketTxGainTable;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U8 index;
     tANI_U8 reserved[3];
 } tMsgPttSetPacketTxGainIndex;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
     tANI_U8 gain;
     tANI_U8 reserved[3];
 } tMsgPttForcePacketTxGain;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
     tANI_U32 gain;
 } tMsgPttForcePacketTxGain_PRIMA_V1;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePowerTempIndexSource indexSource;
 } tMsgPttSetPwrIndexSource;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     t2Decimal dbmPwr;
     tANI_U8 reserved[2];
 } tMsgPttSetTxPower;
 
 typedef tTxPowerReport tMsgPttGetTxPowerReport;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
 
     tANI_U8 minIndex;
@@ -572,8 +525,7 @@ typedef PACKED_PRE struct PACKED_POST
     tANI_U8 powerLut[TPC_MEM_POWER_LUT_DEPTH];
 } tMsgPttSetPowerLut;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     ePhyTxChains txChain;
 
     tANI_U8 powerLut[TPC_MEM_POWER_LUT_DEPTH];
@@ -581,46 +533,38 @@ typedef PACKED_PRE struct PACKED_POST
 
 
 //Rx Gain Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsAgcDisable gains;
 } tMsgPttDisableAgcTables;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsAgcEnable enables;
 } tMsgPttEnableAgcTables;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsRssi rssi;
 } tMsgPttGetRxRssi;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsRssi rssi;
 } tMsgPttGetUnicastMacPktRxRssi;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 conf;
 } tMsgPttGetUnicastMacPktRxRssiConf_PRIMA_V1;
 
 //Rx Frame Catcher Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxTypesDisabled disabled;
 } tMsgPttSetRxDisableMode;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxFrameCounters counters;
 } tMsgPttGetRxPktCounts;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttResetRxPacketStatistics;
 
@@ -629,8 +573,7 @@ typedef PACKED_PRE struct PACKED_POST
 
 
 //ADC Sample Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 startSample;        //index of first requested sample, 0 causes new capture
     tANI_U32 numSamples;         //number of samples to transfer to host
     eGrabRamSampleType sampleType;
@@ -639,57 +582,48 @@ typedef PACKED_PRE struct PACKED_POST
 
 
 //Phy Calibration Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttRxIqCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsDcoCorrections calValues;
     tANI_U8 gain;
 } tMsgPttRxDcoCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsIm2Corrections calValues;
     eGainSteps gain;
     tANI_U8 im2CalOnly;
 } tMsgPttRxIm2Cal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLoCorrections calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttTxCarrierSuppressCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsIQCalValues calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttTxIqCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsHKIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttHKdacTxIqCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 unused;
 } tMsgPttExecuteInitialCals;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRfHdetCalValues hdetCalValues;
 } tMsgPttHdetCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 clpcMode;
     tANI_U16 txCmdPwr;
     tANI_U16 pwrMax_pwrMin;
@@ -699,99 +633,84 @@ typedef PACKED_PRE struct PACKED_POST
 
 
 //Phy Calibration Override Service
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLoCorrections calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttSetTxCarrierSuppressCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLoCorrections calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttGetTxCarrierSuppressCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsIQCalValues calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttSetTxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsIQCalValues calValues;
     tANI_U8 reserve[2];
     eGainSteps gain;
 } tMsgPttGetTxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsHKIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttHKdacSetTxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsHKIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttHKdacGetTxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttSetRxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sRxChainsIQCalValues calValues;
     eGainSteps gain;
 } tMsgPttGetRxIqCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsDcoCorrections calValues;
     tANI_U8 gain;
 } tMsgPttSetRxDcoCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsDcoCorrections calValues;
     tANI_U8 gain;
 } tMsgPttGetRxDcoCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsIm2Corrections calValues;
     tANI_U8 dummy;
 } tMsgPttSetRxIm2Correct;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tRxChainsIm2Corrections calValues;
     tANI_U8 dummy;
 } tMsgPttGetRxIm2Correct;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     eRfTempSensor tempSensor;
     tTempADCVal tempAdc;
     tANI_U8 reserved[4 - sizeof(tTempADCVal)];
 } tMsgPttGetTempAdc;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 addr;
     tANI_U32 mask;
     tANI_U32 shift;
     tANI_U32 value;
 } tMsgPttReadRfField;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 addr;
     tANI_U32 mask;
     tANI_U32 shift;
@@ -799,36 +718,30 @@ typedef PACKED_PRE struct PACKED_POST
 } tMsgPttWriteRfField;
 
 //SIF bar4 Register Access
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 sifRegAddr;
     tANI_U32 sifRegValue;
 } tMsgPttReadSifBar4Register;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 sifRegAddr;
     tANI_U32 sifRegValue;
 } tMsgPttWriteSifBar4Register;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttDeepSleep;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttEnterFullPower;
 
 //Misc.
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 notUsed;
 } tMsgPttSystemReset;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 cmd;
     tANI_U32 arg1;
     tANI_U32 arg2;
@@ -836,83 +749,69 @@ typedef PACKED_PRE struct PACKED_POST
     tANI_U32 arg4;
 } tMsgPttLogDump;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sBuildReleaseParams relParams;
 } tMsgPttGetBuildReleaseNumber;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 revId;
 } tMsgPttGetRFVersion;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 option;             //dummy variable
 } tMsgPttCalControlBitmap;
 
 //#ifdef VERIFY_HALPHY_SIMV_MODEL
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 option;             //dummy variable
 } tMsgPttHalPhyInit;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 option;             //dummy variable
 } tMsgPttRxIQTest;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsDPDCalValues calValues;
     eGainSteps gain;
 } tMsgPttDpdCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U8 lutIdx;
     tANI_U8 band;
 } tMsgPttStartToneGen;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 option;             //dummy variable
 } tMsgPttStopToneGen;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLnaBandCalValues calValues;
     eGainSteps gain;
 } tMsgPttLnaBandCal;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLnaBandCalValues calValues;
     eGainSteps gain;
 } tMsgPttGetLnaBandCalCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsLnaBandCalValues calValues;
     eGainSteps gain;
 } tMsgPttSetLnaBandCalCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsDPDCalValues calValues;
     eGainSteps gain;
 } tMsgPttSetDPDCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     sTxChainsDPDCalValues calValues;
     eGainSteps gain;
 } tMsgPttGetDPDCorrect;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tQWPTT_U32 cmdIdx;
     tQWPTT_U32 param1;
     tQWPTT_U32 param2;
@@ -920,8 +819,7 @@ typedef PACKED_PRE struct PACKED_POST
     tQWPTT_U32 param4;
 } tMsgPttPrimaGenericCmd;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 testID;
     tANI_U16 result;
 } tMsgPttPinConnTestRes;
@@ -931,8 +829,7 @@ typedef PACKED_PRE struct PACKED_POST
     END OF PTT MESSAGES
 ******************************************************************************************************************/
 
-typedef PACKED_PRE union PACKED_POST pttMsgUnion
-{
+typedef PACKED_PRE union PACKED_POST pttMsgUnion {
 //typedef union pttMsgUnion {
     tMsgPttMsgInit MsgInit;
     tMsgPttGetNvTable GetNvTable;
@@ -1045,8 +942,7 @@ typedef PACKED_PRE union PACKED_POST pttMsgUnion
     tMsgPttPinConnTestRes PinConnTestRes;
 } uPttMsgs;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 msgId;
     tANI_U16 msgBodyLength;      //actually, the length of all the fields in this structure
     eQWPttStatus msgResponse;
@@ -1054,8 +950,7 @@ typedef PACKED_PRE struct PACKED_POST
 } tPttMsgbuffer, *tpPttMsgbuffer;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     /*
      * success or failure
      */

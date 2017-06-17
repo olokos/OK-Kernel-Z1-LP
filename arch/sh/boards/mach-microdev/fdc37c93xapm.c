@@ -61,100 +61,99 @@
 #define	MSB(x)		( (x) >> 8 )
 #define	LSB(x)		( (x) & 0xff )
 
-	/* General-Purpose base address on CPU-board FPGA */
+/* General-Purpose base address on CPU-board FPGA */
 #define	MICRODEV_FPGA_GP_BASE		0xa6100000ul
 
-static int __init smsc_superio_setup(void)
-{
+static int __init smsc_superio_setup(void) {
 
-	unsigned char devid, devrev;
+    unsigned char devid, devrev;
 
-		/* Initially the chip is in run state */
-		/* Put it into configuration state */
-	outb(SMSC_ENTER_CONFIG_KEY, SMSC_CONFIG_PORT_ADDR);
+    /* Initially the chip is in run state */
+    /* Put it into configuration state */
+    outb(SMSC_ENTER_CONFIG_KEY, SMSC_CONFIG_PORT_ADDR);
 
-		/* Read device ID info */
-	devid  = SMSC_READ_INDEXED(SMSC_DEVICE_ID_INDEX);
-	devrev = SMSC_READ_INDEXED(SMSC_DEVICE_REV_INDEX);
+    /* Read device ID info */
+    devid  = SMSC_READ_INDEXED(SMSC_DEVICE_ID_INDEX);
+    devrev = SMSC_READ_INDEXED(SMSC_DEVICE_REV_INDEX);
 
-	if ((devid == 0x30) && (devrev == 0x01))
-		printk("SMSC FDC37C93xAPM SuperIO device detected\n");
-	else
-		return -ENODEV;
+    if ((devid == 0x30) && (devrev == 0x01))
+        printk("SMSC FDC37C93xAPM SuperIO device detected\n");
+    else
+        return -ENODEV;
 
-		/* Select the keyboard device */
-	SMSC_WRITE_INDEXED(SMSC_KEYBOARD_DEVICE, SMCS_LOGICAL_DEV_INDEX);
-		/* enable it */
-	SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
-		/* enable the interrupts */
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_KEYBOARD, SMSC_PRIMARY_INT_INDEX);
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_MOUSE, SMSC_SECONDARY_INT_INDEX);
+    /* Select the keyboard device */
+    SMSC_WRITE_INDEXED(SMSC_KEYBOARD_DEVICE, SMCS_LOGICAL_DEV_INDEX);
+    /* enable it */
+    SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
+    /* enable the interrupts */
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_KEYBOARD, SMSC_PRIMARY_INT_INDEX);
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_MOUSE, SMSC_SECONDARY_INT_INDEX);
 
-		/* Select the Serial #1 device */
-	SMSC_WRITE_INDEXED(SMSC_SERIAL1_DEVICE, SMCS_LOGICAL_DEV_INDEX);
-		/* enable it */
-	SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
-		/* program with port addresses */
-	SMSC_WRITE_INDEXED(MSB(SERIAL1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(SERIAL1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
-	SMSC_WRITE_INDEXED(0x00, SMSC_HDCS0_INDEX);
-		/* enable the interrupts */
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_SERIAL1, SMSC_PRIMARY_INT_INDEX);
+    /* Select the Serial #1 device */
+    SMSC_WRITE_INDEXED(SMSC_SERIAL1_DEVICE, SMCS_LOGICAL_DEV_INDEX);
+    /* enable it */
+    SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
+    /* program with port addresses */
+    SMSC_WRITE_INDEXED(MSB(SERIAL1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(SERIAL1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
+    SMSC_WRITE_INDEXED(0x00, SMSC_HDCS0_INDEX);
+    /* enable the interrupts */
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_SERIAL1, SMSC_PRIMARY_INT_INDEX);
 
-		/* Select the Serial #2 device */
-	SMSC_WRITE_INDEXED(SMSC_SERIAL2_DEVICE, SMCS_LOGICAL_DEV_INDEX);
-		/* enable it */
-	SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
-		/* program with port addresses */
-	SMSC_WRITE_INDEXED(MSB(SERIAL2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(SERIAL2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
-	SMSC_WRITE_INDEXED(0x00, SMSC_HDCS0_INDEX);
-		/* enable the interrupts */
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_SERIAL2, SMSC_PRIMARY_INT_INDEX);
+    /* Select the Serial #2 device */
+    SMSC_WRITE_INDEXED(SMSC_SERIAL2_DEVICE, SMCS_LOGICAL_DEV_INDEX);
+    /* enable it */
+    SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
+    /* program with port addresses */
+    SMSC_WRITE_INDEXED(MSB(SERIAL2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(SERIAL2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
+    SMSC_WRITE_INDEXED(0x00, SMSC_HDCS0_INDEX);
+    /* enable the interrupts */
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_SERIAL2, SMSC_PRIMARY_INT_INDEX);
 
-		/* Select the IDE#1 device */
-	SMSC_WRITE_INDEXED(SMSC_IDE1_DEVICE, SMCS_LOGICAL_DEV_INDEX);
-		/* enable it */
-	SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
-		/* program with port addresses */
-	SMSC_WRITE_INDEXED(MSB(IDE1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(IDE1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
-	SMSC_WRITE_INDEXED(MSB(IDE1_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(IDE1_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+1);
-	SMSC_WRITE_INDEXED(0x0c, SMSC_HDCS0_INDEX);
-	SMSC_WRITE_INDEXED(0x00, SMSC_HDCS1_INDEX);
-		/* select the interrupt */
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_IDE1, SMSC_PRIMARY_INT_INDEX);
+    /* Select the IDE#1 device */
+    SMSC_WRITE_INDEXED(SMSC_IDE1_DEVICE, SMCS_LOGICAL_DEV_INDEX);
+    /* enable it */
+    SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
+    /* program with port addresses */
+    SMSC_WRITE_INDEXED(MSB(IDE1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(IDE1_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
+    SMSC_WRITE_INDEXED(MSB(IDE1_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(IDE1_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+1);
+    SMSC_WRITE_INDEXED(0x0c, SMSC_HDCS0_INDEX);
+    SMSC_WRITE_INDEXED(0x00, SMSC_HDCS1_INDEX);
+    /* select the interrupt */
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_IDE1, SMSC_PRIMARY_INT_INDEX);
 
-		/* Select the IDE#2 device */
-	SMSC_WRITE_INDEXED(SMSC_IDE2_DEVICE, SMCS_LOGICAL_DEV_INDEX);
-		/* enable it */
-	SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
-		/* program with port addresses */
-	SMSC_WRITE_INDEXED(MSB(IDE2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(IDE2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
-	SMSC_WRITE_INDEXED(MSB(IDE2_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+0);
-	SMSC_WRITE_INDEXED(LSB(IDE2_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+1);
-		/* select the interrupt */
-	SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_IDE2, SMSC_PRIMARY_INT_INDEX);
+    /* Select the IDE#2 device */
+    SMSC_WRITE_INDEXED(SMSC_IDE2_DEVICE, SMCS_LOGICAL_DEV_INDEX);
+    /* enable it */
+    SMSC_WRITE_INDEXED(1, SMSC_ACTIVATE_INDEX);
+    /* program with port addresses */
+    SMSC_WRITE_INDEXED(MSB(IDE2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(IDE2_PRIMARY_BASE), SMSC_PRIMARY_BASE_INDEX+1);
+    SMSC_WRITE_INDEXED(MSB(IDE2_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+0);
+    SMSC_WRITE_INDEXED(LSB(IDE2_SECONDARY_BASE), SMSC_SECONDARY_BASE_INDEX+1);
+    /* select the interrupt */
+    SMSC_WRITE_INDEXED(MICRODEV_FPGA_IRQ_IDE2, SMSC_PRIMARY_INT_INDEX);
 
-		/* Select the configuration registers */
-	SMSC_WRITE_INDEXED(SMSC_CONFIG_REGISTERS, SMCS_LOGICAL_DEV_INDEX);
-		/* enable the appropriate GPIO pins for IDE functionality:
-		 * bit[0]   In/Out		1==input;  0==output
-		 * bit[1]   Polarity		1==invert; 0==no invert
-		 * bit[2]   Int Enb #1		1==Enable Combined IRQ #1; 0==disable
-		 * bit[3:4] Function Select	00==original; 01==Alternate Function #1
-		 */
-	SMSC_WRITE_INDEXED(0x00, 0xc2);	/* GP42 = nIDE1_OE */
-	SMSC_WRITE_INDEXED(0x01, 0xc5);	/* GP45 = IDE1_IRQ */
-	SMSC_WRITE_INDEXED(0x00, 0xc6);	/* GP46 = nIOROP */
-	SMSC_WRITE_INDEXED(0x00, 0xc7);	/* GP47 = nIOWOP */
-	SMSC_WRITE_INDEXED(0x08, 0xe8);	/* GP20 = nIDE2_OE */
+    /* Select the configuration registers */
+    SMSC_WRITE_INDEXED(SMSC_CONFIG_REGISTERS, SMCS_LOGICAL_DEV_INDEX);
+    /* enable the appropriate GPIO pins for IDE functionality:
+     * bit[0]   In/Out		1==input;  0==output
+     * bit[1]   Polarity		1==invert; 0==no invert
+     * bit[2]   Int Enb #1		1==Enable Combined IRQ #1; 0==disable
+     * bit[3:4] Function Select	00==original; 01==Alternate Function #1
+     */
+    SMSC_WRITE_INDEXED(0x00, 0xc2);	/* GP42 = nIDE1_OE */
+    SMSC_WRITE_INDEXED(0x01, 0xc5);	/* GP45 = IDE1_IRQ */
+    SMSC_WRITE_INDEXED(0x00, 0xc6);	/* GP46 = nIOROP */
+    SMSC_WRITE_INDEXED(0x00, 0xc7);	/* GP47 = nIOWOP */
+    SMSC_WRITE_INDEXED(0x08, 0xe8);	/* GP20 = nIDE2_OE */
 
-		/* Exit the configuration state */
-	outb(SMSC_EXIT_CONFIG_KEY, SMSC_CONFIG_PORT_ADDR);
+    /* Exit the configuration state */
+    outb(SMSC_EXIT_CONFIG_KEY, SMSC_CONFIG_PORT_ADDR);
 
-	return 0;
+    return 0;
 }
 device_initcall(smsc_superio_setup);

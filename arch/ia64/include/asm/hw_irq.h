@@ -90,22 +90,22 @@ extern int ia64_last_device_vector;
 
 /* Delivery modes for inter-cpu interrupts */
 enum {
-        IA64_IPI_DM_INT =       0x0,    /* pend an external interrupt */
-        IA64_IPI_DM_PMI =       0x2,    /* pend a PMI */
-        IA64_IPI_DM_NMI =       0x4,    /* pend an NMI (vector 2) */
-        IA64_IPI_DM_INIT =      0x5,    /* pend an INIT interrupt */
-        IA64_IPI_DM_EXTINT =    0x7,    /* pend an 8259-compatible interrupt. */
+    IA64_IPI_DM_INT =       0x0,    /* pend an external interrupt */
+    IA64_IPI_DM_PMI =       0x2,    /* pend a PMI */
+    IA64_IPI_DM_NMI =       0x4,    /* pend an NMI (vector 2) */
+    IA64_IPI_DM_INIT =      0x5,    /* pend an INIT interrupt */
+    IA64_IPI_DM_EXTINT =    0x7,    /* pend an 8259-compatible interrupt. */
 };
 
 extern __u8 isa_irq_to_vector_map[16];
 #define isa_irq_to_vector(x)	isa_irq_to_vector_map[(x)]
 
 struct irq_cfg {
-	ia64_vector vector;
-	cpumask_t domain;
-	cpumask_t old_domain;
-	unsigned move_cleanup_count;
-	u8 move_in_progress : 1;
+    ia64_vector vector;
+    cpumask_t domain;
+    cpumask_t old_domain;
+    unsigned move_cleanup_count;
+    u8 move_in_progress : 1;
 };
 extern spinlock_t vector_lock;
 extern struct irq_cfg irq_cfg[NR_IRQS];
@@ -139,28 +139,27 @@ extern void destroy_and_reserve_irq (unsigned int irq);
 extern int irq_prepare_move(int irq, int cpu);
 extern void irq_complete_move(unsigned int irq);
 #else
-static inline int irq_prepare_move(int irq, int cpu) { return 0; }
+static inline int irq_prepare_move(int irq, int cpu) {
+    return 0;
+}
 static inline void irq_complete_move(unsigned int irq) {}
 #endif
 
-static inline void ia64_native_resend_irq(unsigned int vector)
-{
-	platform_send_ipi(smp_processor_id(), vector, IA64_IPI_DM_INT, 0);
+static inline void ia64_native_resend_irq(unsigned int vector) {
+    platform_send_ipi(smp_processor_id(), vector, IA64_IPI_DM_INT, 0);
 }
 
 /*
  * Default implementations for the irq-descriptor API:
  */
 #ifndef CONFIG_IA64_GENERIC
-static inline ia64_vector __ia64_irq_to_vector(int irq)
-{
-	return irq_cfg[irq].vector;
+static inline ia64_vector __ia64_irq_to_vector(int irq) {
+    return irq_cfg[irq].vector;
 }
 
 static inline unsigned int
-__ia64_local_vector_to_irq (ia64_vector vec)
-{
-	return __get_cpu_var(vector_irq)[vec];
+__ia64_local_vector_to_irq (ia64_vector vec) {
+    return __get_cpu_var(vector_irq)[vec];
 }
 #endif
 
@@ -176,9 +175,8 @@ __ia64_local_vector_to_irq (ia64_vector vec)
 
 /* Extract the IA-64 vector that corresponds to IRQ.  */
 static inline ia64_vector
-irq_to_vector (int irq)
-{
-	return platform_irq_to_vector(irq);
+irq_to_vector (int irq) {
+    return platform_irq_to_vector(irq);
 }
 
 /*
@@ -187,9 +185,8 @@ irq_to_vector (int irq)
  * to.
  */
 static inline unsigned int
-local_vector_to_irq (ia64_vector vec)
-{
-	return platform_local_vector_to_irq(vec);
+local_vector_to_irq (ia64_vector vec) {
+    return platform_local_vector_to_irq(vec);
 }
 
 #endif /* _ASM_IA64_HW_IRQ_H */

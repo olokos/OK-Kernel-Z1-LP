@@ -13,20 +13,20 @@
 #define __MACH_MSM_XO_H
 
 enum msm_xo_ids {
-	MSM_XO_TCXO_D0,
-	MSM_XO_TCXO_D1,
-	MSM_XO_TCXO_A0,
-	MSM_XO_TCXO_A1,
-	MSM_XO_TCXO_A2,
-	MSM_XO_CORE,
-	NUM_MSM_XO_IDS
+    MSM_XO_TCXO_D0,
+    MSM_XO_TCXO_D1,
+    MSM_XO_TCXO_A0,
+    MSM_XO_TCXO_A1,
+    MSM_XO_TCXO_A2,
+    MSM_XO_CORE,
+    NUM_MSM_XO_IDS
 };
 
 enum msm_xo_modes {
-	MSM_XO_MODE_OFF,
-	MSM_XO_MODE_PIN_CTRL,
-	MSM_XO_MODE_ON,
-	NUM_MSM_XO_MODES
+    MSM_XO_MODE_OFF,
+    MSM_XO_MODE_PIN_CTRL,
+    MSM_XO_MODE_ON,
+    NUM_MSM_XO_MODES
 };
 
 struct msm_xo_voter;
@@ -38,19 +38,19 @@ int msm_xo_mode_vote(struct msm_xo_voter *xo_voter, enum msm_xo_modes xo_mode);
 int __init msm_xo_init(void);
 #else
 static inline struct msm_xo_voter *msm_xo_get(enum msm_xo_ids xo_id,
-		const char *voter)
-{
-	return NULL;
+        const char *voter) {
+    return NULL;
 }
 
 static inline void msm_xo_put(struct msm_xo_voter *xo_voter) { }
 
 static inline int msm_xo_mode_vote(struct msm_xo_voter *xo_voter,
-		enum msm_xo_modes xo_mode)
-{
-	return 0;
+                                   enum msm_xo_modes xo_mode) {
+    return 0;
 }
-static inline int msm_xo_init(void) { return 0; }
+static inline int msm_xo_init(void) {
+    return 0;
+}
 #endif /* CONFIG_MSM_XO */
 
 #endif

@@ -56,53 +56,53 @@
 #define EFUSE_ERROE_HANDLE		1
 
 struct efuse_map {
-	u8 offset;
-	u8 word_start;
-	u8 byte_start;
-	u8 byte_cnts;
+    u8 offset;
+    u8 word_start;
+    u8 byte_start;
+    u8 byte_cnts;
 };
 
 struct pgpkt_struct {
-	u8 offset;
-	u8 word_en;
-	u8 data[8];
+    u8 offset;
+    u8 word_en;
+    u8 data[8];
 };
 
 enum efuse_data_item {
-	EFUSE_CHIP_ID = 0,
-	EFUSE_LDO_SETTING,
-	EFUSE_CLK_SETTING,
-	EFUSE_SDIO_SETTING,
-	EFUSE_CCCR,
-	EFUSE_SDIO_MODE,
-	EFUSE_OCR,
-	EFUSE_F0CIS,
-	EFUSE_F1CIS,
-	EFUSE_MAC_ADDR,
-	EFUSE_EEPROM_VER,
-	EFUSE_CHAN_PLAN,
-	EFUSE_TXPW_TAB
+    EFUSE_CHIP_ID = 0,
+    EFUSE_LDO_SETTING,
+    EFUSE_CLK_SETTING,
+    EFUSE_SDIO_SETTING,
+    EFUSE_CCCR,
+    EFUSE_SDIO_MODE,
+    EFUSE_OCR,
+    EFUSE_F0CIS,
+    EFUSE_F1CIS,
+    EFUSE_MAC_ADDR,
+    EFUSE_EEPROM_VER,
+    EFUSE_CHAN_PLAN,
+    EFUSE_TXPW_TAB
 };
 
 enum {
-	VOLTAGE_V25 = 0x03,
-	LDOE25_SHIFT = 28,
+    VOLTAGE_V25 = 0x03,
+    LDOE25_SHIFT = 28,
 };
 
 struct efuse_priv {
-	u8 id[2];
-	u8 ldo_setting[2];
-	u8 clk_setting[2];
-	u8 cccr;
-	u8 sdio_mode;
-	u8 ocr[3];
-	u8 cis0[17];
-	u8 cis1[48];
-	u8 mac_addr[6];
-	u8 eeprom_verno;
-	u8 channel_plan;
-	u8 tx_power_b[14];
-	u8 tx_power_g[14];
+    u8 id[2];
+    u8 ldo_setting[2];
+    u8 clk_setting[2];
+    u8 cccr;
+    u8 sdio_mode;
+    u8 ocr[3];
+    u8 cis0[17];
+    u8 cis1[48];
+    u8 mac_addr[6];
+    u8 eeprom_verno;
+    u8 channel_plan;
+    u8 tx_power_b[14];
+    u8 tx_power_g[14];
 };
 
 extern void read_efuse_byte(struct ieee80211_hw *hw, u16 _offset, u8 *pbuf);
@@ -110,11 +110,11 @@ extern void efuse_initialize(struct ieee80211_hw *hw);
 extern u8 efuse_read_1byte(struct ieee80211_hw *hw, u16 address);
 extern void efuse_write_1byte(struct ieee80211_hw *hw, u16 address, u8 value);
 extern void read_efuse(struct ieee80211_hw *hw, u16 _offset,
-		       u16 _size_byte, u8 *pbuf);
+                       u16 _size_byte, u8 *pbuf);
 extern void efuse_shadow_read(struct ieee80211_hw *hw, u8 type,
-			      u16 offset, u32 *value);
+                              u16 offset, u32 *value);
 extern void efuse_shadow_write(struct ieee80211_hw *hw, u8 type,
-			       u16 offset, u32 value);
+                               u16 offset, u32 value);
 extern bool efuse_shadow_update(struct ieee80211_hw *hw);
 extern bool efuse_shadow_update_chk(struct ieee80211_hw *hw);
 extern void rtl_efuse_shadow_map_update(struct ieee80211_hw *hw);

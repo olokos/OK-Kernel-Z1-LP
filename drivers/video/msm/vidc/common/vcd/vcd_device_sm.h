@@ -22,53 +22,53 @@ struct vcd_dev_state_ctxt;
 struct vcd_drv_ctxt;
 
 enum vcd_dev_state_enum {
-	VCD_DEVICE_STATE_NULL = 0,
-	VCD_DEVICE_STATE_NOT_INIT,
-	VCD_DEVICE_STATE_INITING,
-	VCD_DEVICE_STATE_READY,
-	VCD_DEVICE_STATE_INVALID,
-	VCD_DEVICE_STATE_MAX,
-	VCD_DEVICE_STATE_32BIT = 0x7FFFFFFF
+    VCD_DEVICE_STATE_NULL = 0,
+    VCD_DEVICE_STATE_NOT_INIT,
+    VCD_DEVICE_STATE_INITING,
+    VCD_DEVICE_STATE_READY,
+    VCD_DEVICE_STATE_INVALID,
+    VCD_DEVICE_STATE_MAX,
+    VCD_DEVICE_STATE_32BIT = 0x7FFFFFFF
 };
 
 struct vcd_dev_state_table {
-	struct {
-		u32(*init) (struct vcd_drv_ctxt *drv_ctxt,
-				struct vcd_init_config *config,
-				s32 *driver_handle);
+    struct {
+        u32(*init) (struct vcd_drv_ctxt *drv_ctxt,
+                    struct vcd_init_config *config,
+                    s32 *driver_handle);
 
-		u32(*term) (struct vcd_drv_ctxt *drv_ctxt,
-				s32 driver_handle);
+        u32(*term) (struct vcd_drv_ctxt *drv_ctxt,
+                    s32 driver_handle);
 
-		u32(*open) (struct vcd_drv_ctxt *drv_ctxt,
-				s32 driver_handle, u32 decoding,
-				void (*callback) (u32 event, u32 status,
-					void *info, size_t sz, void *handle,
-					void *const client_data),
-				void *client_data);
+        u32(*open) (struct vcd_drv_ctxt *drv_ctxt,
+                    s32 driver_handle, u32 decoding,
+                    void (*callback) (u32 event, u32 status,
+                                      void *info, size_t sz, void *handle,
+                                      void *const client_data),
+                    void *client_data);
 
-		u32(*close) (struct vcd_drv_ctxt *drv_ctxt,
-				struct vcd_clnt_ctxt *cctxt);
+        u32(*close) (struct vcd_drv_ctxt *drv_ctxt,
+                     struct vcd_clnt_ctxt *cctxt);
 
-		u32(*resume) (struct vcd_drv_ctxt *drv_ctxt,
-				struct vcd_clnt_ctxt *cctxt);
+        u32(*resume) (struct vcd_drv_ctxt *drv_ctxt,
+                      struct vcd_clnt_ctxt *cctxt);
 
-		u32(*set_dev_pwr) (struct vcd_drv_ctxt *drv_ctxt,
-				enum vcd_power_state pwr_state);
+        u32(*set_dev_pwr) (struct vcd_drv_ctxt *drv_ctxt,
+                           enum vcd_power_state pwr_state);
 
-		void (*dev_cb) (struct vcd_drv_ctxt *drv_ctxt,
-				u32 event, u32 status, void *payload,
-				size_t sz, u32 *ddl_handle,
-				void *const client_data);
+        void (*dev_cb) (struct vcd_drv_ctxt *drv_ctxt,
+                        u32 event, u32 status, void *payload,
+                        size_t sz, u32 *ddl_handle,
+                        void *const client_data);
 
-		void (*timeout) (struct vcd_drv_ctxt *drv_ctxt,
-							void *user_data);
-	} ev_hdlr;
+        void (*timeout) (struct vcd_drv_ctxt *drv_ctxt,
+                         void *user_data);
+    } ev_hdlr;
 
-	void (*entry) (struct vcd_drv_ctxt *drv_ctxt,
-			s32 state_event);
-	void (*exit) (struct vcd_drv_ctxt *drv_ctxt,
-			s32 state_event);
+    void (*entry) (struct vcd_drv_ctxt *drv_ctxt,
+                   s32 state_event);
+    void (*exit) (struct vcd_drv_ctxt *drv_ctxt,
+                  s32 state_event);
 };
 
 #define   DEVICE_STATE_EVENT_NUMBER(ppf) \
@@ -77,15 +77,15 @@ struct vcd_dev_state_table {
 	+ 1)
 
 struct vcd_dev_state_ctxt {
-	const struct vcd_dev_state_table *state_table;
+    const struct vcd_dev_state_table *state_table;
 
-	enum vcd_dev_state_enum state;
+    enum vcd_dev_state_enum state;
 };
 
 struct vcd_drv_ctxt {
-	struct vcd_dev_state_ctxt dev_state;
-	struct vcd_dev_ctxt dev_ctxt;
-	struct mutex dev_mutex;
+    struct vcd_dev_state_ctxt dev_state;
+    struct vcd_dev_ctxt dev_ctxt;
+    struct mutex dev_mutex;
 };
 
 

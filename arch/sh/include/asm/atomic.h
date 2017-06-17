@@ -46,20 +46,19 @@
  * Atomically adds @a to @v, so long as it was not @u.
  * Returns the old value of @v.
  */
-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	int c, old;
-	c = atomic_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
+static inline int __atomic_add_unless(atomic_t *v, int a, int u) {
+    int c, old;
+    c = atomic_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
 
-	return c;
+    return c;
 }
 
 #define smp_mb__before_atomic_dec()	smp_mb()

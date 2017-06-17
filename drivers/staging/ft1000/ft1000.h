@@ -138,9 +138,9 @@
 
 /* Bit field definition for Host Control Register */
 #define DSP_RESET_BIT		0x0001	/* Bit field to control dsp reset state */
-					/* (0 = out of reset 1 = reset) */
+/* (0 = out of reset 1 = reset) */
 #define ASIC_RESET_BIT		0x0002	/* Bit field to control ASIC reset state */
-					/* (0 = out of reset 1 = reset) */
+/* (0 = out of reset 1 = reset) */
 #define DSP_UNENCRYPTED		0x0004
 #define DSP_ENCRYPTED		0x0008
 #define EFUSE_MEM_DISABLE	0x0040
@@ -191,62 +191,62 @@
 
 /* Pseudo Header structure */
 struct pseudo_hdr {
-	unsigned short	length;		/* length of msg body */
-	unsigned char	source;		/* hardware source id */
-					/*    Host = 0x10 */
-					/*    Dsp  = 0x20 */
-	unsigned char	destination;	/* hardware destination id (refer to source) */
-	unsigned char	portdest;	/* software destination port id */
-					/*    Host = 0x00 */
-					/*    Applicaton Broadcast = 0x10 */
-					/*    Network Stack = 0x20 */
-					/*    Dsp OAM = 0x80 */
-					/*    Dsp Airlink = 0x90 */
-					/*    Dsp Loader = 0xa0 */
-					/*    Dsp MIP = 0xb0 */
-	unsigned char	portsrc;	/* software source port id (refer to portdest) */
-	unsigned short	sh_str_id;	/* not used */
-	unsigned char	control;	/* not used */
-	unsigned char	rsvd1;
-	unsigned char	seq_num;	/* message sequence number */
-	unsigned char	rsvd2;
-	unsigned short	qos_class;	/* not used */
-	unsigned short	checksum;	/* pseudo header checksum */
+    unsigned short	length;		/* length of msg body */
+    unsigned char	source;		/* hardware source id */
+    /*    Host = 0x10 */
+    /*    Dsp  = 0x20 */
+    unsigned char	destination;	/* hardware destination id (refer to source) */
+    unsigned char	portdest;	/* software destination port id */
+    /*    Host = 0x00 */
+    /*    Applicaton Broadcast = 0x10 */
+    /*    Network Stack = 0x20 */
+    /*    Dsp OAM = 0x80 */
+    /*    Dsp Airlink = 0x90 */
+    /*    Dsp Loader = 0xa0 */
+    /*    Dsp MIP = 0xb0 */
+    unsigned char	portsrc;	/* software source port id (refer to portdest) */
+    unsigned short	sh_str_id;	/* not used */
+    unsigned char	control;	/* not used */
+    unsigned char	rsvd1;
+    unsigned char	seq_num;	/* message sequence number */
+    unsigned char	rsvd2;
+    unsigned short	qos_class;	/* not used */
+    unsigned short	checksum;	/* pseudo header checksum */
 } __packed;
 
 struct drv_msg {
-	struct pseudo_hdr pseudo;
-	u16 type;
-	u16 length;
-	u8  data[0];
+    struct pseudo_hdr pseudo;
+    u16 type;
+    u16 length;
+    u8  data[0];
 } __packed;
 
 struct media_msg {
-	struct pseudo_hdr pseudo;
-	u16 type;
-	u16 length;
-	u16 state;
-	u32 ip_addr;
-	u32 net_mask;
-	u32 gateway;
-	u32 dns_1;
-	u32 dns_2;
+    struct pseudo_hdr pseudo;
+    u16 type;
+    u16 length;
+    u16 state;
+    u32 ip_addr;
+    u32 net_mask;
+    u32 gateway;
+    u32 dns_1;
+    u32 dns_2;
 } __packed;
 
 struct dsp_init_msg {
-	struct pseudo_hdr pseudo;
-	u16 type;
-	u16 length;
-	u8 DspVer[DSPVERSZ];		/* DSP version number */
-	u8 HwSerNum[HWSERNUMSZ];	/* Hardware Serial Number */
-	u8 Sku[SKUSZ];			/* SKU */
-	u8 eui64[EUISZ];		/* EUI64 */
-	u8 ProductMode[MODESZ];		/* Product Mode (Market/Production) */
-	u8 RfCalVer[CALVERSZ];		/* Rf Calibration version */
-	u8 RfCalDate[CALDATESZ];	/* Rf Calibration date */
+    struct pseudo_hdr pseudo;
+    u16 type;
+    u16 length;
+    u8 DspVer[DSPVERSZ];		/* DSP version number */
+    u8 HwSerNum[HWSERNUMSZ];	/* Hardware Serial Number */
+    u8 Sku[SKUSZ];			/* SKU */
+    u8 eui64[EUISZ];		/* EUI64 */
+    u8 ProductMode[MODESZ];		/* Product Mode (Market/Production) */
+    u8 RfCalVer[CALVERSZ];		/* Rf Calibration version */
+    u8 RfCalDate[CALDATESZ];	/* Rf Calibration date */
 } __packed;
 
 struct prov_record {
-	struct list_head list;
-	u8 *pprov_data;
+    struct list_head list;
+    u8 *pprov_data;
 };

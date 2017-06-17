@@ -22,11 +22,13 @@ void avs_set_avsdscr(u32 avsdscr);
 void avs_disable(int cpu);
 void avs_enable(int cpu, u32 avsdscr);
 #else
-static inline u32 avs_get_avscsr(void)
-{ return 0; }
+static inline u32 avs_get_avscsr(void) {
+    return 0;
+}
 static inline void avs_set_avscsr(u32 avscsr) {}
-static inline u32 avs_get_avsdscr(void)
-{ return 0; }
+static inline u32 avs_get_avsdscr(void) {
+    return 0;
+}
 static inline void avs_set_avsdscr(u32 avsdscr) {}
 static inline void avs_disable(int cpu) {}
 static inline void avs_enable(int cpu, u32 avsdscr) {}

@@ -139,8 +139,8 @@ extern int edac_debug_level;
  */
 
 struct edac_device_counter {
-	u32 ue_count;
-	u32 ce_count;
+    u32 ue_count;
+    u32 ce_count;
 };
 
 /* forward reference */
@@ -153,9 +153,9 @@ struct edac_device_block;
  *		like high level error Injection controls
  */
 struct edac_dev_sysfs_attribute {
-	struct attribute attr;
-	ssize_t (*show)(struct edac_device_ctl_info *, char *);
-	ssize_t (*store)(struct edac_device_ctl_info *, const char *, size_t);
+    struct attribute attr;
+    ssize_t (*show)(struct edac_device_ctl_info *, char *);
+    ssize_t (*store)(struct edac_device_ctl_info *, const char *, size_t);
 };
 
 /* edac_dev_sysfs_block_attribute structure
@@ -171,43 +171,43 @@ struct edac_dev_sysfs_attribute {
  *	counting
  */
 struct edac_dev_sysfs_block_attribute {
-	struct attribute attr;
-	ssize_t (*show)(struct kobject *, struct attribute *, char *);
-	ssize_t (*store)(struct kobject *, struct attribute *,
-			const char *, size_t);
-	struct edac_device_block *block;
+    struct attribute attr;
+    ssize_t (*show)(struct kobject *, struct attribute *, char *);
+    ssize_t (*store)(struct kobject *, struct attribute *,
+                     const char *, size_t);
+    struct edac_device_block *block;
 
-	unsigned int value;
+    unsigned int value;
 };
 
 /* device block control structure */
 struct edac_device_block {
-	struct edac_device_instance *instance;	/* Up Pointer */
-	char name[EDAC_DEVICE_NAME_LEN + 1];
+    struct edac_device_instance *instance;	/* Up Pointer */
+    char name[EDAC_DEVICE_NAME_LEN + 1];
 
-	struct edac_device_counter counters;	/* basic UE and CE counters */
+    struct edac_device_counter counters;	/* basic UE and CE counters */
 
-	int nr_attribs;		/* how many attributes */
+    int nr_attribs;		/* how many attributes */
 
-	/* this block's attributes, could be NULL */
-	struct edac_dev_sysfs_block_attribute *block_attributes;
+    /* this block's attributes, could be NULL */
+    struct edac_dev_sysfs_block_attribute *block_attributes;
 
-	/* edac sysfs device control */
-	struct kobject kobj;
+    /* edac sysfs device control */
+    struct kobject kobj;
 };
 
 /* device instance control structure */
 struct edac_device_instance {
-	struct edac_device_ctl_info *ctl;	/* Up pointer */
-	char name[EDAC_DEVICE_NAME_LEN + 4];
+    struct edac_device_ctl_info *ctl;	/* Up pointer */
+    char name[EDAC_DEVICE_NAME_LEN + 4];
 
-	struct edac_device_counter counters;	/* instance counters */
+    struct edac_device_counter counters;	/* instance counters */
 
-	u32 nr_blocks;		/* how many blocks */
-	struct edac_device_block *blocks;	/* block array */
+    u32 nr_blocks;		/* how many blocks */
+    struct edac_device_block *blocks;	/* block array */
 
-	/* edac sysfs device control */
-	struct kobject kobj;
+    /* edac sysfs device control */
+    struct kobject kobj;
 };
 
 
@@ -216,81 +216,81 @@ struct edac_device_instance {
  *
  */
 struct edac_device_ctl_info {
-	/* for global list of edac_device_ctl_info structs */
-	struct list_head link;
+    /* for global list of edac_device_ctl_info structs */
+    struct list_head link;
 
-	struct module *owner;	/* Module owner of this control struct */
+    struct module *owner;	/* Module owner of this control struct */
 
-	int dev_idx;
+    int dev_idx;
 
-	/* Per instance controls for this edac_device */
-	int log_ue;		/* boolean for logging UEs */
-	int log_ce;		/* boolean for logging CEs */
-	int panic_on_ue;	/* boolean for panic'ing on an UE */
-	unsigned poll_msec;	/* number of milliseconds to poll interval */
-	unsigned long delay;	/* number of jiffies for poll_msec */
+    /* Per instance controls for this edac_device */
+    int log_ue;		/* boolean for logging UEs */
+    int log_ce;		/* boolean for logging CEs */
+    int panic_on_ue;	/* boolean for panic'ing on an UE */
+    unsigned poll_msec;	/* number of milliseconds to poll interval */
+    unsigned long delay;	/* number of jiffies for poll_msec */
 
-	/* Additional top controller level attributes, but specified
-	 * by the low level driver.
-	 *
-	 * Set by the low level driver to provide attributes at the
-	 * controller level, same level as 'ue_count' and 'ce_count' above.
-	 * An array of structures, NULL terminated
-	 *
-	 * If attributes are desired, then set to array of attributes
-	 * If no attributes are desired, leave NULL
-	 */
-	struct edac_dev_sysfs_attribute *sysfs_attributes;
+    /* Additional top controller level attributes, but specified
+     * by the low level driver.
+     *
+     * Set by the low level driver to provide attributes at the
+     * controller level, same level as 'ue_count' and 'ce_count' above.
+     * An array of structures, NULL terminated
+     *
+     * If attributes are desired, then set to array of attributes
+     * If no attributes are desired, leave NULL
+     */
+    struct edac_dev_sysfs_attribute *sysfs_attributes;
 
-	/* pointer to main 'edac' subsys in sysfs */
-	struct bus_type *edac_subsys;
+    /* pointer to main 'edac' subsys in sysfs */
+    struct bus_type *edac_subsys;
 
-	/* the internal state of this controller instance */
-	int op_state;
-	/* work struct for this instance */
-	struct delayed_work work;
+    /* the internal state of this controller instance */
+    int op_state;
+    /* work struct for this instance */
+    struct delayed_work work;
 
-	/* pointer to edac polling checking routine:
-	 *      If NOT NULL: points to polling check routine
-	 *      If NULL: Then assumes INTERRUPT operation, where
-	 *              MC driver will receive events
-	 */
-	void (*edac_check) (struct edac_device_ctl_info * edac_dev);
+    /* pointer to edac polling checking routine:
+     *      If NOT NULL: points to polling check routine
+     *      If NULL: Then assumes INTERRUPT operation, where
+     *              MC driver will receive events
+     */
+    void (*edac_check) (struct edac_device_ctl_info * edac_dev);
 
-	struct device *dev;	/* pointer to device structure */
+    struct device *dev;	/* pointer to device structure */
 
-	const char *mod_name;	/* module name */
-	const char *ctl_name;	/* edac controller  name */
-	const char *dev_name;	/* pci/platform/etc... name */
+    const char *mod_name;	/* module name */
+    const char *ctl_name;	/* edac controller  name */
+    const char *dev_name;	/* pci/platform/etc... name */
 
-	void *pvt_info;		/* pointer to 'private driver' info */
+    void *pvt_info;		/* pointer to 'private driver' info */
 
-	unsigned long start_time;	/* edac_device load start time (jiffies) */
+    unsigned long start_time;	/* edac_device load start time (jiffies) */
 
-	struct completion removal_complete;
+    struct completion removal_complete;
 
-	/* sysfs top name under 'edac' directory
-	 * and instance name:
-	 *      cpu/cpu0/...
-	 *      cpu/cpu1/...
-	 *      cpu/cpu2/...
-	 *      ...
-	 */
-	char name[EDAC_DEVICE_NAME_LEN + 1];
+    /* sysfs top name under 'edac' directory
+     * and instance name:
+     *      cpu/cpu0/...
+     *      cpu/cpu1/...
+     *      cpu/cpu2/...
+     *      ...
+     */
+    char name[EDAC_DEVICE_NAME_LEN + 1];
 
-	/* Number of instances supported on this control structure
-	 * and the array of those instances
-	 */
-	u32 nr_instances;
-	struct edac_device_instance *instances;
+    /* Number of instances supported on this control structure
+     * and the array of those instances
+     */
+    u32 nr_instances;
+    struct edac_device_instance *instances;
 
-	/* Event counters for the this whole EDAC Device */
-	struct edac_device_counter counters;
+    /* Event counters for the this whole EDAC Device */
+    struct edac_device_counter counters;
 
-	/* edac sysfs device control for the 'name'
-	 * device this structure controls
-	 */
-	struct kobject kobj;
+    /* edac sysfs device control for the 'name'
+     * device this structure controls
+     */
+    struct kobject kobj;
 };
 
 /* To get from the instance's wq to the beginning of the ctl structure */
@@ -306,13 +306,13 @@ struct edac_device_ctl_info {
  * it is going to control/register with the EDAC CORE.
  */
 extern struct edac_device_ctl_info *edac_device_alloc_ctl_info(
-		unsigned sizeof_private,
-		char *edac_device_name, unsigned nr_instances,
-		char *edac_block_name, unsigned nr_blocks,
-		unsigned offset_value,
-		struct edac_dev_sysfs_block_attribute *block_attributes,
-		unsigned nr_attribs,
-		int device_index);
+    unsigned sizeof_private,
+    char *edac_device_name, unsigned nr_instances,
+    char *edac_block_name, unsigned nr_blocks,
+    unsigned offset_value,
+    struct edac_dev_sysfs_block_attribute *block_attributes,
+    unsigned nr_attribs,
+    int device_index);
 
 /* The offset value can be:
  *	-1 indicating no offset value
@@ -327,8 +327,8 @@ extern void edac_device_free_ctl_info(struct edac_device_ctl_info *ctl_info);
 #ifdef CONFIG_PCI
 
 struct edac_pci_counter {
-	atomic_t pe_count;
-	atomic_t npe_count;
+    atomic_t pe_count;
+    atomic_t npe_count;
 };
 
 /*
@@ -336,54 +336,54 @@ struct edac_pci_counter {
  *
  */
 struct edac_pci_ctl_info {
-	/* for global list of edac_pci_ctl_info structs */
-	struct list_head link;
+    /* for global list of edac_pci_ctl_info structs */
+    struct list_head link;
 
-	int pci_idx;
+    int pci_idx;
 
-	struct bus_type *edac_subsys;	/* pointer to subsystem */
+    struct bus_type *edac_subsys;	/* pointer to subsystem */
 
-	/* the internal state of this controller instance */
-	int op_state;
-	/* work struct for this instance */
-	struct delayed_work work;
+    /* the internal state of this controller instance */
+    int op_state;
+    /* work struct for this instance */
+    struct delayed_work work;
 
-	/* pointer to edac polling checking routine:
-	 *      If NOT NULL: points to polling check routine
-	 *      If NULL: Then assumes INTERRUPT operation, where
-	 *              MC driver will receive events
-	 */
-	void (*edac_check) (struct edac_pci_ctl_info * edac_dev);
+    /* pointer to edac polling checking routine:
+     *      If NOT NULL: points to polling check routine
+     *      If NULL: Then assumes INTERRUPT operation, where
+     *              MC driver will receive events
+     */
+    void (*edac_check) (struct edac_pci_ctl_info * edac_dev);
 
-	struct device *dev;	/* pointer to device structure */
+    struct device *dev;	/* pointer to device structure */
 
-	const char *mod_name;	/* module name */
-	const char *ctl_name;	/* edac controller  name */
-	const char *dev_name;	/* pci/platform/etc... name */
+    const char *mod_name;	/* module name */
+    const char *ctl_name;	/* edac controller  name */
+    const char *dev_name;	/* pci/platform/etc... name */
 
-	void *pvt_info;		/* pointer to 'private driver' info */
+    void *pvt_info;		/* pointer to 'private driver' info */
 
-	unsigned long start_time;	/* edac_pci load start time (jiffies) */
+    unsigned long start_time;	/* edac_pci load start time (jiffies) */
 
-	struct completion complete;
+    struct completion complete;
 
-	/* sysfs top name under 'edac' directory
-	 * and instance name:
-	 *      cpu/cpu0/...
-	 *      cpu/cpu1/...
-	 *      cpu/cpu2/...
-	 *      ...
-	 */
-	char name[EDAC_DEVICE_NAME_LEN + 1];
+    /* sysfs top name under 'edac' directory
+     * and instance name:
+     *      cpu/cpu0/...
+     *      cpu/cpu1/...
+     *      cpu/cpu2/...
+     *      ...
+     */
+    char name[EDAC_DEVICE_NAME_LEN + 1];
 
-	/* Event counters for the this whole EDAC Device */
-	struct edac_pci_counter counters;
+    /* Event counters for the this whole EDAC Device */
+    struct edac_pci_counter counters;
 
-	/* edac sysfs device control for the 'name'
-	 * device this structure controls
-	 */
-	struct kobject kobj;
-	struct completion kobj_complete;
+    /* edac sysfs device control for the 'name'
+     * device this structure controls
+     */
+    struct kobject kobj;
+    struct completion kobj_complete;
 };
 
 #define to_edac_pci_ctl_work(w) \
@@ -391,34 +391,32 @@ struct edac_pci_ctl_info {
 
 /* write all or some bits in a byte-register*/
 static inline void pci_write_bits8(struct pci_dev *pdev, int offset, u8 value,
-				   u8 mask)
-{
-	if (mask != 0xff) {
-		u8 buf;
+                                   u8 mask) {
+    if (mask != 0xff) {
+        u8 buf;
 
-		pci_read_config_byte(pdev, offset, &buf);
-		value &= mask;
-		buf &= ~mask;
-		value |= buf;
-	}
+        pci_read_config_byte(pdev, offset, &buf);
+        value &= mask;
+        buf &= ~mask;
+        value |= buf;
+    }
 
-	pci_write_config_byte(pdev, offset, value);
+    pci_write_config_byte(pdev, offset, value);
 }
 
 /* write all or some bits in a word-register*/
 static inline void pci_write_bits16(struct pci_dev *pdev, int offset,
-				    u16 value, u16 mask)
-{
-	if (mask != 0xffff) {
-		u16 buf;
+                                    u16 value, u16 mask) {
+    if (mask != 0xffff) {
+        u16 buf;
 
-		pci_read_config_word(pdev, offset, &buf);
-		value &= mask;
-		buf &= ~mask;
-		value |= buf;
-	}
+        pci_read_config_word(pdev, offset, &buf);
+        value &= mask;
+        buf &= ~mask;
+        value |= buf;
+    }
 
-	pci_write_config_word(pdev, offset, value);
+    pci_write_config_word(pdev, offset, value);
 }
 
 /*
@@ -431,31 +429,30 @@ static inline void pci_write_bits16(struct pci_dev *pdev, int offset,
  * write all or some bits in a dword-register
  */
 static inline void pci_write_bits32(struct pci_dev *pdev, int offset,
-				    u32 value, u32 mask)
-{
-	if (mask != 0xffffffff) {
-		u32 buf;
+                                    u32 value, u32 mask) {
+    if (mask != 0xffffffff) {
+        u32 buf;
 
-		pci_read_config_dword(pdev, offset, &buf);
-		value &= mask;
-		buf &= ~mask;
-		value |= buf;
-	}
+        pci_read_config_dword(pdev, offset, &buf);
+        value &= mask;
+        buf &= ~mask;
+        value |= buf;
+    }
 
-	pci_write_config_dword(pdev, offset, value);
+    pci_write_config_dword(pdev, offset, value);
 }
 
 #endif				/* CONFIG_PCI */
 
 extern struct mem_ctl_info *edac_mc_alloc(unsigned sz_pvt, unsigned nr_csrows,
-					  unsigned nr_chans, int edac_index);
+        unsigned nr_chans, int edac_index);
 extern int edac_mc_add_mc(struct mem_ctl_info *mci);
 extern void edac_mc_free(struct mem_ctl_info *mci);
 extern struct mem_ctl_info *edac_mc_find(int idx);
 extern struct mem_ctl_info *find_mci_by_dev(struct device *dev);
 extern struct mem_ctl_info *edac_mc_del_mc(struct device *dev);
 extern int edac_mc_find_csrow_by_page(struct mem_ctl_info *mci,
-				      unsigned long page);
+                                      unsigned long page);
 
 /*
  * The no info errors are used when error overflows are reported.
@@ -468,23 +465,23 @@ extern int edac_mc_find_csrow_by_page(struct mem_ctl_info *mci,
  * statement clutter and extra function arguments.
  */
 extern void edac_mc_handle_ce(struct mem_ctl_info *mci,
-			      unsigned long page_frame_number,
-			      unsigned long offset_in_page,
-			      unsigned long syndrome, int row, int channel,
-			      const char *msg);
+                              unsigned long page_frame_number,
+                              unsigned long offset_in_page,
+                              unsigned long syndrome, int row, int channel,
+                              const char *msg);
 extern void edac_mc_handle_ce_no_info(struct mem_ctl_info *mci,
-				      const char *msg);
+                                      const char *msg);
 extern void edac_mc_handle_ue(struct mem_ctl_info *mci,
-			      unsigned long page_frame_number,
-			      unsigned long offset_in_page, int row,
-			      const char *msg);
+                              unsigned long page_frame_number,
+                              unsigned long offset_in_page, int row,
+                              const char *msg);
 extern void edac_mc_handle_ue_no_info(struct mem_ctl_info *mci,
-				      const char *msg);
+                                      const char *msg);
 extern void edac_mc_handle_fbd_ue(struct mem_ctl_info *mci, unsigned int csrow,
-				  unsigned int channel0, unsigned int channel1,
-				  char *msg);
+                                  unsigned int channel0, unsigned int channel1,
+                                  char *msg);
 extern void edac_mc_handle_fbd_ce(struct mem_ctl_info *mci, unsigned int csrow,
-				  unsigned int channel, char *msg);
+                                  unsigned int channel, char *msg);
 
 /*
  * edac_device APIs
@@ -492,29 +489,29 @@ extern void edac_mc_handle_fbd_ce(struct mem_ctl_info *mci, unsigned int csrow,
 extern int edac_device_add_device(struct edac_device_ctl_info *edac_dev);
 extern struct edac_device_ctl_info *edac_device_del_device(struct device *dev);
 extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
-				int inst_nr, int block_nr, const char *msg);
+                                  int inst_nr, int block_nr, const char *msg);
 extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
-				int inst_nr, int block_nr, const char *msg);
+                                  int inst_nr, int block_nr, const char *msg);
 extern int edac_device_alloc_index(void);
 
 /*
  * edac_pci APIs
  */
 extern struct edac_pci_ctl_info *edac_pci_alloc_ctl_info(unsigned int sz_pvt,
-				const char *edac_pci_name);
+        const char *edac_pci_name);
 
 extern void edac_pci_free_ctl_info(struct edac_pci_ctl_info *pci);
 
 extern void edac_pci_reset_delay_period(struct edac_pci_ctl_info *pci,
-				unsigned long value);
+                                        unsigned long value);
 
 extern int edac_pci_alloc_index(void);
 extern int edac_pci_add_device(struct edac_pci_ctl_info *pci, int edac_idx);
 extern struct edac_pci_ctl_info *edac_pci_del_device(struct device *dev);
 
 extern struct edac_pci_ctl_info *edac_pci_create_generic_ctl(
-				struct device *dev,
-				const char *mod_name);
+    struct device *dev,
+    const char *mod_name);
 
 extern void edac_pci_release_generic_ctl(struct edac_pci_ctl_info *pci);
 extern int edac_pci_create_sysfs(struct edac_pci_ctl_info *pci);

@@ -77,7 +77,7 @@
 #define MCHIP_MM_INTA_PCI_ERR_MASK	0x00004000
 
 #define MCHIP_MM_PT_ADDR		0x08		/* page table address*/
-							/* n*4kB */
+/* n*4kB */
 #define MCHIP_NB_PAGES			1024		/* pages for display */
 #define MCHIP_NB_PAGES_MJPEG		256		/* pages for mjpeg */
 
@@ -86,7 +86,7 @@
 #define MCHIP_MM_FIR_FAILFR_MASK	0xf8000000	/* # of failed frames */
 #define MCHIP_MM_FIR_FAILFR_SHIFT	27
 
-	/* continuous comp/decomp mode */
+/* continuous comp/decomp mode */
 #define MCHIP_MM_FIR_C_ENDL_MASK	0x000007fe	/* end DW [10] */
 #define MCHIP_MM_FIR_C_ENDL_SHIFT	1
 #define MCHIP_MM_FIR_C_ENDP_MASK	0x0007f800	/* end page [8] */
@@ -94,7 +94,7 @@
 #define MCHIP_MM_FIR_C_STARTP_MASK	0x07f80000	/* start page [8] */
 #define MCHIP_MM_FIR_C_STARTP_SHIFT	19
 
-	/* continuous picture output mode */
+/* continuous picture output mode */
 #define MCHIP_MM_FIR_O_STARTP_MASK	0x7ffe0000	/* start page [10] */
 #define MCHIP_MM_FIR_O_STARTP_SHIFT	17
 
@@ -148,7 +148,7 @@
 
 #define MCHIP_HIC_PCI_VFMT		0x64		/* video format */
 #define MCHIP_HIC_PCI_VFMT_YVYU		0x00000001	/* 0: V Y' U Y */
-							/* 1: Y' V Y U */
+/* 1: Y' V Y U */
 
 #define MCHIP_MCC_CMD			0x80		/* MCC commands */
 #define MCHIP_MCC_CMD_INITIAL		0x0		/* idle ? */
@@ -278,10 +278,10 @@
 
 /* grab buffer */
 struct meye_grab_buffer {
-	int state;			/* state of buffer */
-	unsigned long size;		/* size of jpg frame */
-	struct timeval timestamp;	/* timestamp */
-	unsigned long sequence;		/* sequence number */
+    int state;			/* state of buffer */
+    unsigned long size;		/* size of jpg frame */
+    struct timeval timestamp;	/* timestamp */
+    unsigned long sequence;		/* sequence number */
 };
 
 /* size of kfifos containings buffer indices */
@@ -289,35 +289,35 @@ struct meye_grab_buffer {
 
 /* Motion Eye device structure */
 struct meye {
-	struct v4l2_device v4l2_dev;	/* Main v4l2_device struct */
-	struct pci_dev *mchip_dev;	/* pci device */
-	u8 mchip_irq;			/* irq */
-	u8 mchip_mode;			/* actual mchip mode: HIC_MODE... */
-	u8 mchip_fnum;			/* current mchip frame number */
-	unsigned char __iomem *mchip_mmregs;/* mchip: memory mapped registers */
-	u8 *mchip_ptable[MCHIP_NB_PAGES];/* mchip: ptable */
-	void *mchip_ptable_toc;		/* mchip: ptable toc */
-	dma_addr_t mchip_dmahandle;	/* mchip: dma handle to ptable toc */
-	unsigned char *grab_fbuffer;	/* capture framebuffer */
-	unsigned char *grab_temp;	/* temporary buffer */
-					/* list of buffers */
-	struct meye_grab_buffer grab_buffer[MEYE_MAX_BUFNBRS];
-	int vma_use_count[MEYE_MAX_BUFNBRS]; /* mmap count */
-	struct mutex lock;		/* mutex for open/mmap... */
-	struct kfifo grabq;		/* queue for buffers to be grabbed */
-	spinlock_t grabq_lock;		/* lock protecting the queue */
-	struct kfifo doneq;		/* queue for grabbed buffers */
-	spinlock_t doneq_lock;		/* lock protecting the queue */
-	wait_queue_head_t proc_list;	/* wait queue */
-	struct video_device *vdev;	/* video device parameters */
-	u16 brightness;
-	u16 hue;
-	u16 contrast;
-	u16 colour;
-	struct meye_params params;	/* additional parameters */
-	unsigned long in_use;		/* set to 1 if the device is in use */
+    struct v4l2_device v4l2_dev;	/* Main v4l2_device struct */
+    struct pci_dev *mchip_dev;	/* pci device */
+    u8 mchip_irq;			/* irq */
+    u8 mchip_mode;			/* actual mchip mode: HIC_MODE... */
+    u8 mchip_fnum;			/* current mchip frame number */
+    unsigned char __iomem *mchip_mmregs;/* mchip: memory mapped registers */
+    u8 *mchip_ptable[MCHIP_NB_PAGES];/* mchip: ptable */
+    void *mchip_ptable_toc;		/* mchip: ptable toc */
+    dma_addr_t mchip_dmahandle;	/* mchip: dma handle to ptable toc */
+    unsigned char *grab_fbuffer;	/* capture framebuffer */
+    unsigned char *grab_temp;	/* temporary buffer */
+    /* list of buffers */
+    struct meye_grab_buffer grab_buffer[MEYE_MAX_BUFNBRS];
+    int vma_use_count[MEYE_MAX_BUFNBRS]; /* mmap count */
+    struct mutex lock;		/* mutex for open/mmap... */
+    struct kfifo grabq;		/* queue for buffers to be grabbed */
+    spinlock_t grabq_lock;		/* lock protecting the queue */
+    struct kfifo doneq;		/* queue for grabbed buffers */
+    spinlock_t doneq_lock;		/* lock protecting the queue */
+    wait_queue_head_t proc_list;	/* wait queue */
+    struct video_device *vdev;	/* video device parameters */
+    u16 brightness;
+    u16 hue;
+    u16 contrast;
+    u16 colour;
+    struct meye_params params;	/* additional parameters */
+    unsigned long in_use;		/* set to 1 if the device is in use */
 #ifdef CONFIG_PM
-	u8 pm_mchip_mode;		/* old mchip mode */
+    u8 pm_mchip_mode;		/* old mchip mode */
 #endif
 };
 

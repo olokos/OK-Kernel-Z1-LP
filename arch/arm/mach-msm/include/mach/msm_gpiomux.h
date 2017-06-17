@@ -23,14 +23,12 @@ int msm_gpiomux_put(unsigned gpio);
 
 #else
 
-static inline int __must_check msm_gpiomux_get(unsigned gpio)
-{
-	return -ENOSYS;
+static inline int __must_check msm_gpiomux_get(unsigned gpio) {
+    return -ENOSYS;
 }
 
-static inline int msm_gpiomux_put(unsigned gpio)
-{
-	return -ENOSYS;
+static inline int msm_gpiomux_put(unsigned gpio) {
+    return -ENOSYS;
 }
 
 #endif

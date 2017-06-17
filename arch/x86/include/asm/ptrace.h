@@ -19,45 +19,45 @@
 #ifndef __KERNEL__
 
 struct pt_regs {
-	long ebx;
-	long ecx;
-	long edx;
-	long esi;
-	long edi;
-	long ebp;
-	long eax;
-	int  xds;
-	int  xes;
-	int  xfs;
-	int  xgs;
-	long orig_eax;
-	long eip;
-	int  xcs;
-	long eflags;
-	long esp;
-	int  xss;
+    long ebx;
+    long ecx;
+    long edx;
+    long esi;
+    long edi;
+    long ebp;
+    long eax;
+    int  xds;
+    int  xes;
+    int  xfs;
+    int  xgs;
+    long orig_eax;
+    long eip;
+    int  xcs;
+    long eflags;
+    long esp;
+    int  xss;
 };
 
 #else /* __KERNEL__ */
 
 struct pt_regs {
-	unsigned long bx;
-	unsigned long cx;
-	unsigned long dx;
-	unsigned long si;
-	unsigned long di;
-	unsigned long bp;
-	unsigned long ax;
-	unsigned long ds;
-	unsigned long es;
-	unsigned long fs;
-	unsigned long gs;
-	unsigned long orig_ax;
-	unsigned long ip;
-	unsigned long cs;
-	unsigned long flags;
-	unsigned long sp;
-	unsigned long ss;
+    unsigned long bx;
+    unsigned long cx;
+    unsigned long dx;
+    unsigned long si;
+    unsigned long di;
+    unsigned long bp;
+    unsigned long ax;
+    unsigned long ds;
+    unsigned long es;
+    unsigned long fs;
+    unsigned long gs;
+    unsigned long orig_ax;
+    unsigned long ip;
+    unsigned long cs;
+    unsigned long flags;
+    unsigned long sp;
+    unsigned long ss;
 };
 
 #endif /* __KERNEL__ */
@@ -67,61 +67,61 @@ struct pt_regs {
 #ifndef __KERNEL__
 
 struct pt_regs {
-	unsigned long r15;
-	unsigned long r14;
-	unsigned long r13;
-	unsigned long r12;
-	unsigned long rbp;
-	unsigned long rbx;
-/* arguments: non interrupts/non tracing syscalls only save up to here*/
-	unsigned long r11;
-	unsigned long r10;
-	unsigned long r9;
-	unsigned long r8;
-	unsigned long rax;
-	unsigned long rcx;
-	unsigned long rdx;
-	unsigned long rsi;
-	unsigned long rdi;
-	unsigned long orig_rax;
-/* end of arguments */
-/* cpu exception frame or undefined */
-	unsigned long rip;
-	unsigned long cs;
-	unsigned long eflags;
-	unsigned long rsp;
-	unsigned long ss;
-/* top of stack page */
+    unsigned long r15;
+    unsigned long r14;
+    unsigned long r13;
+    unsigned long r12;
+    unsigned long rbp;
+    unsigned long rbx;
+    /* arguments: non interrupts/non tracing syscalls only save up to here*/
+    unsigned long r11;
+    unsigned long r10;
+    unsigned long r9;
+    unsigned long r8;
+    unsigned long rax;
+    unsigned long rcx;
+    unsigned long rdx;
+    unsigned long rsi;
+    unsigned long rdi;
+    unsigned long orig_rax;
+    /* end of arguments */
+    /* cpu exception frame or undefined */
+    unsigned long rip;
+    unsigned long cs;
+    unsigned long eflags;
+    unsigned long rsp;
+    unsigned long ss;
+    /* top of stack page */
 };
 
 #else /* __KERNEL__ */
 
 struct pt_regs {
-	unsigned long r15;
-	unsigned long r14;
-	unsigned long r13;
-	unsigned long r12;
-	unsigned long bp;
-	unsigned long bx;
-/* arguments: non interrupts/non tracing syscalls only save up to here*/
-	unsigned long r11;
-	unsigned long r10;
-	unsigned long r9;
-	unsigned long r8;
-	unsigned long ax;
-	unsigned long cx;
-	unsigned long dx;
-	unsigned long si;
-	unsigned long di;
-	unsigned long orig_ax;
-/* end of arguments */
-/* cpu exception frame or undefined */
-	unsigned long ip;
-	unsigned long cs;
-	unsigned long flags;
-	unsigned long sp;
-	unsigned long ss;
-/* top of stack page */
+    unsigned long r15;
+    unsigned long r14;
+    unsigned long r13;
+    unsigned long r12;
+    unsigned long bp;
+    unsigned long bx;
+    /* arguments: non interrupts/non tracing syscalls only save up to here*/
+    unsigned long r11;
+    unsigned long r10;
+    unsigned long r9;
+    unsigned long r8;
+    unsigned long ax;
+    unsigned long cx;
+    unsigned long dx;
+    unsigned long si;
+    unsigned long di;
+    unsigned long orig_ax;
+    /* end of arguments */
+    /* cpu exception frame or undefined */
+    unsigned long ip;
+    unsigned long cs;
+    unsigned long flags;
+    unsigned long sp;
+    unsigned long ss;
+    /* top of stack page */
 };
 
 #endif /* __KERNEL__ */
@@ -144,14 +144,13 @@ extern unsigned long profile_pc(struct pt_regs *regs);
 extern unsigned long
 convert_ip_to_linear(struct task_struct *child, struct pt_regs *regs);
 extern void send_sigtrap(struct task_struct *tsk, struct pt_regs *regs,
-			 int error_code, int si_code);
+                         int error_code, int si_code);
 
 extern long syscall_trace_enter(struct pt_regs *);
 extern void syscall_trace_leave(struct pt_regs *);
 
-static inline unsigned long regs_return_value(struct pt_regs *regs)
-{
-	return regs->ax;
+static inline unsigned long regs_return_value(struct pt_regs *regs) {
+    return regs->ax;
 }
 
 /*
@@ -161,46 +160,42 @@ static inline unsigned long regs_return_value(struct pt_regs *regs)
  * one comparison.  Many places in the kernel can bypass this full check
  * if they have already ruled out V8086 mode, so user_mode(regs) can be used.
  */
-static inline int user_mode(struct pt_regs *regs)
-{
+static inline int user_mode(struct pt_regs *regs) {
 #ifdef CONFIG_X86_32
-	return (regs->cs & SEGMENT_RPL_MASK) == USER_RPL;
+    return (regs->cs & SEGMENT_RPL_MASK) == USER_RPL;
 #else
-	return !!(regs->cs & 3);
+    return !!(regs->cs & 3);
 #endif
 }
 
-static inline int user_mode_vm(struct pt_regs *regs)
-{
+static inline int user_mode_vm(struct pt_regs *regs) {
 #ifdef CONFIG_X86_32
-	return ((regs->cs & SEGMENT_RPL_MASK) | (regs->flags & X86_VM_MASK)) >=
-		USER_RPL;
+    return ((regs->cs & SEGMENT_RPL_MASK) | (regs->flags & X86_VM_MASK)) >=
+           USER_RPL;
 #else
-	return user_mode(regs);
+    return user_mode(regs);
 #endif
 }
 
-static inline int v8086_mode(struct pt_regs *regs)
-{
+static inline int v8086_mode(struct pt_regs *regs) {
 #ifdef CONFIG_X86_32
-	return (regs->flags & X86_VM_MASK);
+    return (regs->flags & X86_VM_MASK);
 #else
-	return 0;	/* No V86 mode support in long mode */
+    return 0;	/* No V86 mode support in long mode */
 #endif
 }
 
 #ifdef CONFIG_X86_64
-static inline bool user_64bit_mode(struct pt_regs *regs)
-{
+static inline bool user_64bit_mode(struct pt_regs *regs) {
 #ifndef CONFIG_PARAVIRT
-	/*
-	 * On non-paravirt systems, this is the only long mode CPL 3
-	 * selector.  We do not allow long mode selectors in the LDT.
-	 */
-	return regs->cs == __USER_CS;
+    /*
+     * On non-paravirt systems, this is the only long mode CPL 3
+     * selector.  We do not allow long mode selectors in the LDT.
+     */
+    return regs->cs == __USER_CS;
 #else
-	/* Headers are too twisted for this to go in paravirt.h. */
-	return regs->cs == __USER_CS || regs->cs == pv_info.extra_user_64bit_cs;
+    /* Headers are too twisted for this to go in paravirt.h. */
+    return regs->cs == __USER_CS || regs->cs == pv_info.extra_user_64bit_cs;
 #endif
 }
 #endif
@@ -212,12 +207,11 @@ static inline bool user_64bit_mode(struct pt_regs *regs)
  *
  * This is valid only for kernel mode traps.
  */
-static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-{
+static inline unsigned long kernel_stack_pointer(struct pt_regs *regs) {
 #ifdef CONFIG_X86_32
-	return (unsigned long)(&regs->sp);
+    return (unsigned long)(&regs->sp);
 #else
-	return regs->sp;
+    return regs->sp;
 #endif
 }
 
@@ -242,11 +236,10 @@ extern const char *regs_query_register_name(unsigned int offset);
  * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
  */
 static inline unsigned long regs_get_register(struct pt_regs *regs,
-					      unsigned int offset)
-{
-	if (unlikely(offset > MAX_REG_OFFSET))
-		return 0;
-	return *(unsigned long *)((unsigned long)regs + offset);
+        unsigned int offset) {
+    if (unlikely(offset > MAX_REG_OFFSET))
+        return 0;
+    return *(unsigned long *)((unsigned long)regs + offset);
 }
 
 /**
@@ -258,10 +251,9 @@ static inline unsigned long regs_get_register(struct pt_regs *regs,
  * If @addr is within the kernel stack, it returns true. If not, returns false.
  */
 static inline int regs_within_kernel_stack(struct pt_regs *regs,
-					   unsigned long addr)
-{
-	return ((addr & ~(THREAD_SIZE - 1))  ==
-		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
+        unsigned long addr) {
+    return ((addr & ~(THREAD_SIZE - 1))  ==
+            (kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
 }
 
 /**
@@ -274,14 +266,13 @@ static inline int regs_within_kernel_stack(struct pt_regs *regs,
  * this returns 0.
  */
 static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
-						      unsigned int n)
-{
-	unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
-	addr += n;
-	if (regs_within_kernel_stack(regs, (unsigned long)addr))
-		return *addr;
-	else
-		return 0;
+        unsigned int n) {
+    unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
+    addr += n;
+    if (regs_within_kernel_stack(regs, (unsigned long)addr))
+        return *addr;
+    else
+        return 0;
 }
 
 #define arch_has_single_step()	(1)
@@ -295,9 +286,9 @@ static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
 
 struct user_desc;
 extern int do_get_thread_area(struct task_struct *p, int idx,
-			      struct user_desc __user *info);
+                              struct user_desc __user *info);
 extern int do_set_thread_area(struct task_struct *p, int idx,
-			      struct user_desc __user *info, int can_allocate);
+                              struct user_desc __user *info, int can_allocate);
 
 #endif /* __KERNEL__ */
 

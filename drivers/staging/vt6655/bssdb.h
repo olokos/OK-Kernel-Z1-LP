@@ -79,8 +79,7 @@
 // IEEE 802.11 Structures and definitions
 //
 
-typedef enum _NDIS_802_11_NETWORK_TYPE
-{
+typedef enum _NDIS_802_11_NETWORK_TYPE {
     Ndis802_11FH,
     Ndis802_11DS,
     Ndis802_11OFDM5,
@@ -92,13 +91,13 @@ typedef enum _NDIS_802_11_NETWORK_TYPE
 typedef struct tagSERPObject {
     bool bERPExist;
     unsigned char byERP;
-}ERPObject, *PERPObject;
+} ERPObject, *PERPObject;
 
 
 typedef struct tagSRSNCapObject {
     bool bRSNCapExist;
     unsigned short wRSNCap;
-}SRSNCapObject, *PSRSNCapObject;
+} SRSNCapObject, *PSRSNCapObject;
 
 // BSS info(AP)
 #pragma pack(1)
@@ -163,7 +162,7 @@ typedef struct tagKnownBSS {
     SRSNCapObject   sRSNCapObj;
     unsigned char abyIEs[1024];   // don't move this field !!
 
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 KnownBSS , *PKnownBSS;
 
 //2006-1116-01,<Add> by NomadZhao
@@ -248,20 +247,20 @@ BSSpSearchBSSList(
     unsigned char *pbyDesireBSSID,
     unsigned char *pbyDesireSSID,
     CARD_PHY_TYPE ePhyType
-    );
+);
 
 PKnownBSS
 BSSpAddrIsInBSSList(
     void *hDeviceContext,
     unsigned char *abyBSSID,
     PWLAN_IE_SSID pSSID
-    );
+);
 
 void
 BSSvClearBSSList(
     void *hDeviceContext,
     bool bKeepCurrBSSID
-    );
+);
 
 bool
 BSSbInsertToBSSList(
@@ -282,7 +281,7 @@ BSSbInsertToBSSList(
     unsigned int uIELength,
     unsigned char *pbyIEs,
     void *pRxPacketContext
-    );
+);
 
 
 bool
@@ -305,12 +304,12 @@ BSSbUpdateToBSSList(
     unsigned int uIELength,
     unsigned char *pbyIEs,
     void *pRxPacketContext
-    );
+);
 
 
 bool
 BSSDBbIsSTAInNodeDB(void *hDeviceContext, unsigned char *abyDstAddr,
-		unsigned int *puNodeIndex);
+                    unsigned int *puNodeIndex);
 
 void
 BSSvCreateOneNode(void *hDeviceContext, unsigned int *puNodeIndex);
@@ -321,13 +320,13 @@ BSSvUpdateAPNode(
     unsigned short *pwCapInfo,
     PWLAN_IE_SUPP_RATES pItemRates,
     PWLAN_IE_SUPP_RATES pExtSuppRates
-    );
+);
 
 
 void
 BSSvSecondCallBack(
     void *hDeviceContext
-    );
+);
 
 
 void
@@ -337,29 +336,29 @@ BSSvUpdateNodeTxCounter(
     unsigned char byTsr1,
     unsigned char *pbyBuffer,
     unsigned int uFIFOHeaderSize
-    );
+);
 
 void
 BSSvRemoveOneNode(
     void *hDeviceContext,
     unsigned int uNodeIndex
-    );
+);
 
 void
 BSSvAddMulticastNode(
     void *hDeviceContext
-    );
+);
 
 
 void
 BSSvClearNodeDBTable(
     void *hDeviceContext,
     unsigned int uStartIndex
-    );
+);
 
 void
 BSSvClearAnyBSSJoinRecord(
     void *hDeviceContext
-    );
+);
 
 #endif //__BSSDB_H__

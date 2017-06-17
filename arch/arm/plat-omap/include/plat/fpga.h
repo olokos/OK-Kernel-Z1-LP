@@ -45,22 +45,22 @@ extern void omap1510_fpga_init_irq(void);
 
 /* NOTE:  most boards don't have a static mapping for the FPGA ... */
 struct h2p2_dbg_fpga {
-	/* offset 0x00 */
-	u16		smc91x[8];
-	/* offset 0x10 */
-	u16		fpga_rev;
-	u16		board_rev;
-	u16		gpio_outputs;
-	u16		leds;
-	/* offset 0x18 */
-	u16		misc_inputs;
-	u16		lan_status;
-	u16		lan_reset;
-	u16		reserved0;
-	/* offset 0x20 */
-	u16		ps2_data;
-	u16		ps2_ctrl;
-	/* plus also 4 rs232 ports ... */
+    /* offset 0x00 */
+    u16		smc91x[8];
+    /* offset 0x10 */
+    u16		fpga_rev;
+    u16		board_rev;
+    u16		gpio_outputs;
+    u16		leds;
+    /* offset 0x18 */
+    u16		misc_inputs;
+    u16		lan_status;
+    u16		lan_reset;
+    u16		reserved0;
+    /* offset 0x20 */
+    u16		ps2_data;
+    u16		ps2_ctrl;
+    /* plus also 4 rs232 ports ... */
 };
 
 /* LEDs definition on debug board (16 LEDs, all physically green) */

@@ -122,7 +122,7 @@ extern char *prom_getenv(char *name);
 extern void prom_init_cmdline(void);
 extern void prom_meminit(void);
 extern void prom_fixup_mem_map(unsigned long start_mem,
-			       unsigned long end_mem);
+                               unsigned long end_mem);
 
 extern int get_ethernet_addr(char *ethaddr_name, char *ethernet_addr);
 extern unsigned long get_deviceid(void);
@@ -151,15 +151,15 @@ extern unsigned long identify_revision(void);
 #define PROM_MAX_PMEMBLOCKS    7	/* 6 used */
 
 enum yamon_memtypes {
-	yamon_dontuse,
-	yamon_prom,
-	yamon_free,
+    yamon_dontuse,
+    yamon_prom,
+    yamon_free,
 };
 
 struct prom_pmemblock {
-	unsigned long base; /* Within KSEG0. */
-	unsigned int size;  /* In bytes. */
-	unsigned int type;  /* free or prom memory */
+    unsigned long base; /* Within KSEG0. */
+    unsigned int size;  /* In bytes. */
+    unsigned int type;  /* free or prom memory */
 };
 
 extern int prom_argc;

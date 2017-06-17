@@ -34,7 +34,7 @@ int qcrypto_ahash_set_flag(struct ahash_request *req, unsigned int flags);
 int qcrypto_aead_set_flag(struct aead_request *req, unsigned int flags);
 
 int qcrypto_cipher_clear_flag(struct ablkcipher_request *req,
-							unsigned int flags);
+                              unsigned int flags);
 int qcrypto_ahash_clear_flag(struct ahash_request *req, unsigned int flags);
 int qcrypto_aead_clear_flag(struct aead_request *req, unsigned int flags);
 

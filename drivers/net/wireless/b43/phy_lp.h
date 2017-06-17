@@ -815,95 +815,95 @@
 
 
 enum b43_lpphy_txpctl_mode {
-	B43_LPPHY_TXPCTL_UNKNOWN = 0,
-	B43_LPPHY_TXPCTL_OFF,	/* TX power control is OFF */
-	B43_LPPHY_TXPCTL_SW,	/* TX power control is set to Software */
-	B43_LPPHY_TXPCTL_HW,	/* TX power control is set to Hardware */
+    B43_LPPHY_TXPCTL_UNKNOWN = 0,
+    B43_LPPHY_TXPCTL_OFF,	/* TX power control is OFF */
+    B43_LPPHY_TXPCTL_SW,	/* TX power control is set to Software */
+    B43_LPPHY_TXPCTL_HW,	/* TX power control is set to Hardware */
 };
 
 struct b43_phy_lp {
-	/* Current TX power control mode. */
-	enum b43_lpphy_txpctl_mode txpctl_mode;
+    /* Current TX power control mode. */
+    enum b43_lpphy_txpctl_mode txpctl_mode;
 
-	/* Transmit isolation medium band */
-	u8 tx_isolation_med_band;
-	/* Transmit isolation low band */
-	u8 tx_isolation_low_band;
-	/* Transmit isolation high band */
-	u8 tx_isolation_hi_band;
+    /* Transmit isolation medium band */
+    u8 tx_isolation_med_band;
+    /* Transmit isolation low band */
+    u8 tx_isolation_low_band;
+    /* Transmit isolation high band */
+    u8 tx_isolation_hi_band;
 
-	/* Max transmit power medium band */
-	u16 max_tx_pwr_med_band;
-	/* Max transmit power low band */
-	u16 max_tx_pwr_low_band;
-	/* Max transmit power high band */
-	u16 max_tx_pwr_hi_band;
+    /* Max transmit power medium band */
+    u16 max_tx_pwr_med_band;
+    /* Max transmit power low band */
+    u16 max_tx_pwr_low_band;
+    /* Max transmit power high band */
+    u16 max_tx_pwr_hi_band;
 
-	/* FIXME What are these used for? */
-	/* FIXME Is 15 the correct array size? */
-	u16 tx_max_rate[15];
-	u16 tx_max_ratel[15];
-	u16 tx_max_rateh[15];
+    /* FIXME What are these used for? */
+    /* FIXME Is 15 the correct array size? */
+    u16 tx_max_rate[15];
+    u16 tx_max_ratel[15];
+    u16 tx_max_rateh[15];
 
-	/* Transmit power arrays */
-	s16 txpa[3], txpal[3], txpah[3];
+    /* Transmit power arrays */
+    s16 txpa[3], txpal[3], txpah[3];
 
-	/* Receive power offset */
-	u8 rx_pwr_offset;
+    /* Receive power offset */
+    u8 rx_pwr_offset;
 
-	/* TSSI transmit count */
-	u16 tssi_tx_count;
-	/* TSSI index */
-	u16 tssi_idx; /* FIXME initial value? */
-	/* TSSI npt */
-	u16 tssi_npt; /* FIXME initial value? */
+    /* TSSI transmit count */
+    u16 tssi_tx_count;
+    /* TSSI index */
+    u16 tssi_idx; /* FIXME initial value? */
+    /* TSSI npt */
+    u16 tssi_npt; /* FIXME initial value? */
 
-	/* Target TX frequency */
-	u16 tgt_tx_freq; /* FIXME initial value? */
+    /* Target TX frequency */
+    u16 tgt_tx_freq; /* FIXME initial value? */
 
-	/* Transmit power index override */
-	s8 tx_pwr_idx_over; /* FIXME initial value? */
+    /* Transmit power index override */
+    s8 tx_pwr_idx_over; /* FIXME initial value? */
 
-	/* RSSI vf */
-	u8 rssi_vf;
-	/* RSSI vc */
-	u8 rssi_vc;
-	/* RSSI gs */
-	u8 rssi_gs;
+    /* RSSI vf */
+    u8 rssi_vf;
+    /* RSSI vc */
+    u8 rssi_vc;
+    /* RSSI gs */
+    u8 rssi_gs;
 
-	/* RC cap */
-	u8 rc_cap;
-	/* BX arch */
-	u8 bx_arch;
+    /* RC cap */
+    u8 rc_cap;
+    /* BX arch */
+    u8 bx_arch;
 
-	/* Full calibration channel */
-	u8 full_calib_chan;
+    /* Full calibration channel */
+    u8 full_calib_chan;
 
-	/* Transmit iqlocal best coeffs */
-	bool tx_iqloc_best_coeffs_valid;
-	u8 tx_iqloc_best_coeffs[11];
+    /* Transmit iqlocal best coeffs */
+    bool tx_iqloc_best_coeffs_valid;
+    u8 tx_iqloc_best_coeffs[11];
 
-	/* Used for "Save/Restore Dig Filt State" */
-	u16 dig_flt_state[9];
+    /* Used for "Save/Restore Dig Filt State" */
+    u16 dig_flt_state[9];
 
-	bool crs_usr_disable, crs_sys_disable;
+    bool crs_usr_disable, crs_sys_disable;
 
-	unsigned int pdiv;
+    unsigned int pdiv;
 
-	/* The channel we are tuned to */
-	u8 channel;
+    /* The channel we are tuned to */
+    u8 channel;
 
-	/* The active antenna diversity mode */
-	int antenna;
+    /* The active antenna diversity mode */
+    int antenna;
 
-	/* Frequency of the active TX tone */
-	int tx_tone_freq;
+    /* Frequency of the active TX tone */
+    int tx_tone_freq;
 };
 
 enum tssi_mux_mode {
-	TSSI_MUX_PREPA,
-	TSSI_MUX_POSTPA,
-	TSSI_MUX_EXT,
+    TSSI_MUX_PREPA,
+    TSSI_MUX_POSTPA,
+    TSSI_MUX_EXT,
 };
 
 struct b43_phy_operations;

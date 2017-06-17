@@ -45,8 +45,7 @@
  * three u_int32 must not be reordered.
  */
 
-struct mdesc
-{
+struct mdesc {
     volatile u_int32_t status;  /* Buffer Descriptor */
     u_int32_t   data;           /* Data Pointer */
     u_int32_t   next;           /* MUSYCC view of Next Pointer */
@@ -59,8 +58,7 @@ struct mdesc
  * Private driver data structures, internal use only.
  */
 
-struct c4_chan_info
-{
+struct c4_chan_info {
     int         gchan;          /* channel number within group/port 0-31 */
     int         channum;        /* absolute channel number 0-128 */
     u_int8_t    status;
@@ -87,8 +85,7 @@ struct c4_chan_info
     unsigned short txd_num;     /* must support range up to 1000 */
     int         rxix_irq_srv;
 
-    enum
-    {
+    enum {
         UNASSIGNED,             /* AVAILABLE, NOTINUSE */
         DOWN,                   /* ASSIGNED, NOTINUSE */
         UP                      /* ASSIGNED and INUSE */
@@ -125,8 +122,7 @@ struct c4_chan_info
 };
 typedef struct c4_chan_info mch_t;
 
-struct c4_port_info
-{
+struct c4_port_info {
 
     struct musycc_globalr *reg;
     struct musycc_groupr *regram;
@@ -176,8 +172,7 @@ typedef struct c4_port_info mpi_t;
 #define ISPLD_INTR  0x3
 #define ISPLD_MAX   0x3
 
-struct sbe_card_info
-{
+struct sbe_card_info {
     struct musycc_globalr *reg;
     struct musycc_groupr *regram;
     u_int32_t  *iqd_p;          /* pointer to dword aligned interrupt queue
@@ -224,8 +219,7 @@ struct sbe_card_info
     hdlc_device *last_if;
     short       first_channum, last_channum;
 
-    struct intlog
-    {
+    struct intlog {
         u_int32_t   this_status_new;
         u_int32_t   last_status_new;
         u_int32_t   drvr_intr_thcount;
@@ -246,8 +240,7 @@ struct sbe_card_info
 };
 typedef struct sbe_card_info ci_t;
 
-struct s_hdw_info
-{
+struct s_hdw_info {
     u_int8_t    pci_busno;
     u_int8_t    pci_slot;
     u_int8_t    pci_pin[2];
@@ -266,8 +259,7 @@ struct s_hdw_info
     unsigned long addr_mapped[2];
     unsigned long len[2];
 
-    union
-    {
+    union {
         char        data[128];
         FLD_TYPE1   pft1;       /* prom field, type #1 */
         FLD_TYPE2   pft2;       /* prom field, type #2 */
@@ -277,8 +269,7 @@ typedef struct s_hdw_info hdw_info_t;
 
 /*****************************************************************/
 
-struct c4_priv
-{
+struct c4_priv {
     int         channum;
     struct sbe_card_info *ci;
 };

@@ -17,7 +17,7 @@ struct siginfo;
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #else
@@ -107,33 +107,33 @@ typedef unsigned long sigset_t;
 
 #ifdef __KERNEL__
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
 };
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 #else
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-	union {
-	  __sighandler_t _sa_handler;
-	  void (*_sa_sigaction)(int, struct siginfo *, void *);
-	} _u;
-	sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    union {
+        __sighandler_t _sa_handler;
+        void (*_sa_sigaction)(int, struct siginfo *, void *);
+    } _u;
+    sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 #define sa_handler	_u._sa_handler
@@ -142,9 +142,9 @@ struct sigaction {
 #endif /* __KERNEL__ */
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
@@ -153,36 +153,32 @@ typedef struct sigaltstack {
 #ifndef CONFIG_CPU_HAS_NO_BITFIELDS
 #define __HAVE_ARCH_SIG_BITOPS
 
-static inline void sigaddset(sigset_t *set, int _sig)
-{
-	asm ("bfset %0{%1,#1}"
-		: "+od" (*set)
-		: "id" ((_sig - 1) ^ 31)
-		: "cc");
+static inline void sigaddset(sigset_t *set, int _sig) {
+    asm ("bfset %0{%1,#1}"
+         : "+od" (*set)
+         : "id" ((_sig - 1) ^ 31)
+         : "cc");
 }
 
-static inline void sigdelset(sigset_t *set, int _sig)
-{
-	asm ("bfclr %0{%1,#1}"
-		: "+od" (*set)
-		: "id" ((_sig - 1) ^ 31)
-		: "cc");
+static inline void sigdelset(sigset_t *set, int _sig) {
+    asm ("bfclr %0{%1,#1}"
+         : "+od" (*set)
+         : "id" ((_sig - 1) ^ 31)
+         : "cc");
 }
 
-static inline int __const_sigismember(sigset_t *set, int _sig)
-{
-	unsigned long sig = _sig - 1;
-	return 1 & (set->sig[sig / _NSIG_BPW] >> (sig % _NSIG_BPW));
+static inline int __const_sigismember(sigset_t *set, int _sig) {
+    unsigned long sig = _sig - 1;
+    return 1 & (set->sig[sig / _NSIG_BPW] >> (sig % _NSIG_BPW));
 }
 
-static inline int __gen_sigismember(sigset_t *set, int _sig)
-{
-	int ret;
-	asm ("bfextu %1{%2,#1},%0"
-		: "=d" (ret)
-		: "od" (*set), "id" ((_sig-1) ^ 31)
-		: "cc");
-	return ret;
+static inline int __gen_sigismember(sigset_t *set, int _sig) {
+    int ret;
+    asm ("bfextu %1{%2,#1},%0"
+         : "=d" (ret)
+         : "od" (*set), "id" ((_sig-1) ^ 31)
+         : "cc");
+    return ret;
 }
 
 #define sigismember(set,sig)			\
@@ -190,13 +186,12 @@ static inline int __gen_sigismember(sigset_t *set, int _sig)
 	 __const_sigismember(set,sig) :		\
 	 __gen_sigismember(set,sig))
 
-static inline int sigfindinword(unsigned long word)
-{
-	asm ("bfffo %1{#0,#0},%0"
-		: "=d" (word)
-		: "d" (word & -word)
-		: "cc");
-	return word ^ 31;
+static inline int sigfindinword(unsigned long word) {
+    asm ("bfffo %1{#0,#0},%0"
+         : "=d" (word)
+         : "d" (word & -word)
+         : "cc");
+    return word ^ 31;
 }
 
 #endif /* !CONFIG_CPU_HAS_NO_BITFIELDS */

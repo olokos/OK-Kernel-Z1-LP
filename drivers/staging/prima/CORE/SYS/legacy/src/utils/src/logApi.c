@@ -71,14 +71,12 @@
  * @return None
  */
 tSirRetStatus
-logInit(tpAniSirGlobal pMac)
-{
+logInit(tpAniSirGlobal pMac) {
     tANI_U32    i;
 
     // Add code to initialize debug level from CFG module
     // For now, enable all logging
-    for (i = 0; i < LOG_ENTRY_NUM; i++)
-    {
+    for (i = 0; i < LOG_ENTRY_NUM; i++) {
 #ifdef SIR_DEBUG
         pMac->utils.gLogEvtLevel[i] = pMac->utils.gLogDbgLevel[i] = LOG1;
 #else
@@ -90,8 +88,7 @@ logInit(tpAniSirGlobal pMac)
 } /*** logInit() ***/
 
 void
-logDeinit(tpAniSirGlobal pMac)
-{
+logDeinit(tpAniSirGlobal pMac) {
     return;
 }
 
@@ -118,13 +115,11 @@ logDeinit(tpAniSirGlobal pMac)
  */
 
 
-void logDbg(tpAniSirGlobal pMac, tANI_U8 modId, tANI_U32 debugLevel, const char *pStr,...)
-{
+void logDbg(tpAniSirGlobal pMac, tANI_U8 modId, tANI_U32 debugLevel, const char *pStr,...) {
 #ifdef WLAN_DEBUG
     if ( debugLevel > pMac->utils.gLogDbgLevel[LOG_INDEX_FOR_MODULE( modId )] )
         return;
-    else
-    {
+    else {
         va_list marker;
 
         va_start( marker, pStr );     /* Initialize variable arguments. */
@@ -136,10 +131,8 @@ void logDbg(tpAniSirGlobal pMac, tANI_U8 modId, tANI_U32 debugLevel, const char 
 #endif
 }
 
-VOS_TRACE_LEVEL getVosDebugLevel(tANI_U32 debugLevel)
-{
-    switch(debugLevel)
-    {
+VOS_TRACE_LEVEL getVosDebugLevel(tANI_U32 debugLevel) {
+    switch(debugLevel) {
     case LOGP:
         return VOS_TRACE_LEVEL_FATAL;
     case LOGE:
@@ -159,10 +152,8 @@ VOS_TRACE_LEVEL getVosDebugLevel(tANI_U32 debugLevel)
     }
 }
 
-static inline VOS_MODULE_ID getVosModuleId(tANI_U8 modId)
-{
-    switch(modId)
-    {
+static inline VOS_MODULE_ID getVosModuleId(tANI_U8 modId) {
+    switch(modId) {
     case SIR_HAL_MODULE_ID:
     case SIR_PHY_MODULE_ID:
         return VOS_MODULE_ID_WDA;
@@ -189,8 +180,7 @@ static inline VOS_MODULE_ID getVosModuleId(tANI_U8 modId)
 }
 
 #define LOG_SIZE 256
-void logDebug(tpAniSirGlobal pMac, tANI_U8 modId, tANI_U32 debugLevel, const char *pStr, va_list marker)
-{
+void logDebug(tpAniSirGlobal pMac, tANI_U8 modId, tANI_U32 debugLevel, const char *pStr, va_list marker) {
     VOS_TRACE_LEVEL  vosDebugLevel;
     VOS_MODULE_ID    vosModuleId;
     char             logBuffer[LOG_SIZE];

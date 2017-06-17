@@ -90,22 +90,19 @@ typedef void (*TimerFunction)(unsigned long);
 //+++ NDIS related
 
 typedef unsigned char NDIS_802_11_MAC_ADDRESS[ETH_ALEN];
-typedef struct _NDIS_802_11_AI_REQFI
-{
+typedef struct _NDIS_802_11_AI_REQFI {
     unsigned short Capabilities;
     unsigned short ListenInterval;
     NDIS_802_11_MAC_ADDRESS  CurrentAPAddress;
 } NDIS_802_11_AI_REQFI, *PNDIS_802_11_AI_REQFI;
 
-typedef struct _NDIS_802_11_AI_RESFI
-{
+typedef struct _NDIS_802_11_AI_RESFI {
     unsigned short Capabilities;
     unsigned short StatusCode;
     unsigned short AssociationId;
 } NDIS_802_11_AI_RESFI, *PNDIS_802_11_AI_RESFI;
 
-typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION
-{
+typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION {
     unsigned long                   Length;
     unsigned short                  AvailableRequestFixedIEs;
     NDIS_802_11_AI_REQFI    RequestFixedIEs;
@@ -244,9 +241,8 @@ typedef struct tagSRxMgmtPacket {
 
 
 
-typedef struct tagSMgmtObject
-{
-	void *pAdapter;
+typedef struct tagSMgmtObject {
+    void *pAdapter;
     // MAC address
     BYTE                    abyMACAddr[WLAN_ADDR_LEN];
 
@@ -291,7 +287,7 @@ typedef struct tagSMgmtObject
     BYTE                    abyDesireBSSID[WLAN_BSSID_LEN];
 
 //restore BSS info for Ad-Hoc mode
-     BYTE                    abyAdHocSSID[WLAN_IEHDR_LEN + WLAN_SSID_MAXLEN + 1];
+    BYTE                    abyAdHocSSID[WLAN_IEHDR_LEN + WLAN_SSID_MAXLEN + 1];
 
     // Adhoc or AP configuration vars
     WORD                    wIBSSBeaconPeriod;
@@ -348,14 +344,14 @@ typedef struct tagSMgmtObject
 
 
     // One second callback timer
-	struct timer_list	    sTimerSecondCallback;
+    struct timer_list	    sTimerSecondCallback;
 
     // Temporarily Rx Mgmt Packet Descriptor
     SRxMgmtPacket           sRxPacket;
 
     // link list of known bss's (scan results)
     KnownBSS                sBSSList[MAX_BSS_NUM];
-	/* link list of same bss's */
+    /* link list of same bss's */
     KnownBSS				pSameBSS[6] ;
     BOOL          Cisco_cckm ;
     BYTE          Roam_dbm;
@@ -402,32 +398,32 @@ typedef struct tagSMgmtObject
 void vMgrObjectInit(void *hDeviceContext);
 
 void vMgrAssocBeginSta(void *hDeviceContext,
-		       PSMgmtObject pMgmt,
-		       PCMD_STATUS pStatus);
+                       PSMgmtObject pMgmt,
+                       PCMD_STATUS pStatus);
 
 void vMgrReAssocBeginSta(void *hDeviceContext,
-			 PSMgmtObject pMgmt,
-			 PCMD_STATUS pStatus);
+                         PSMgmtObject pMgmt,
+                         PCMD_STATUS pStatus);
 
 void vMgrDisassocBeginSta(void *hDeviceContext,
-			  PSMgmtObject pMgmt,
-			  PBYTE abyDestAddress,
-			  WORD wReason,
-			  PCMD_STATUS pStatus);
+                          PSMgmtObject pMgmt,
+                          PBYTE abyDestAddress,
+                          WORD wReason,
+                          PCMD_STATUS pStatus);
 
 void vMgrAuthenBeginSta(void *hDeviceContext,
-			PSMgmtObject pMgmt,
-			PCMD_STATUS pStatus);
+                        PSMgmtObject pMgmt,
+                        PCMD_STATUS pStatus);
 
 void vMgrCreateOwnIBSS(void *hDeviceContext,
-		       PCMD_STATUS pStatus);
+                       PCMD_STATUS pStatus);
 
 void vMgrJoinBSSBegin(void *hDeviceContext,
-		      PCMD_STATUS pStatus);
+                      PCMD_STATUS pStatus);
 
 void vMgrRxManagePacket(void *hDeviceContext,
-			PSMgmtObject pMgmt,
-			PSRxMgmtPacket pRxPacket);
+                        PSMgmtObject pMgmt,
+                        PSRxMgmtPacket pRxPacket);
 
 /*
 void
@@ -438,17 +434,17 @@ vMgrScanBegin(
 */
 
 void vMgrDeAuthenBeginSta(void *hDeviceContext,
-			  PSMgmtObject pMgmt,
-			  PBYTE abyDestAddress,
-			  WORD wReason,
-			  PCMD_STATUS pStatus);
+                          PSMgmtObject pMgmt,
+                          PBYTE abyDestAddress,
+                          WORD wReason,
+                          PCMD_STATUS pStatus);
 
 BOOL bMgrPrepareBeaconToSend(void *hDeviceContext,
-			     PSMgmtObject pMgmt);
+                             PSMgmtObject pMgmt);
 
 BOOL bAdd_PMKID_Candidate(void *hDeviceContext,
-			  PBYTE pbyBSSID,
-			  PSRSNCapObject psRSNCapObj);
+                          PBYTE pbyBSSID,
+                          PSRSNCapObject psRSNCapObj);
 
 void vFlush_PMKID_Candidate(void *hDeviceContext);
 

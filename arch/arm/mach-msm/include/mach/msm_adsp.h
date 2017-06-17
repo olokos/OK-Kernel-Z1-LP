@@ -20,13 +20,13 @@
 struct msm_adsp_module;
 
 struct msm_adsp_ops {
-	/* event is called from interrupt context when a message
-	 * arrives from the DSP.  Use the provided function pointer
-	 * to copy the message into a local buffer.  Do NOT call
-	 * it multiple times.
-	 */
-	void (*event)(void *driver_data, unsigned id, size_t len,
-		      void (*getevent)(void *ptr, size_t len));
+    /* event is called from interrupt context when a message
+     * arrives from the DSP.  Use the provided function pointer
+     * to copy the message into a local buffer.  Do NOT call
+     * it multiple times.
+     */
+    void (*event)(void *driver_data, unsigned id, size_t len,
+                  void (*getevent)(void *ptr, size_t len));
 };
 
 /* Get, Put, Enable, and Disable are synchronous and must only
@@ -35,7 +35,7 @@ struct msm_adsp_ops {
  * much faster otherwise.
  */
 int msm_adsp_get(const char *name, struct msm_adsp_module **module,
-		 struct msm_adsp_ops *ops, void *driver_data);
+                 struct msm_adsp_ops *ops, void *driver_data);
 void msm_adsp_put(struct msm_adsp_module *module);
 int msm_adsp_enable(struct msm_adsp_module *module);
 int msm_adsp_disable(struct msm_adsp_module *module);
@@ -43,23 +43,23 @@ int msm_adsp_dump(struct msm_adsp_module *module);
 int adsp_set_clkrate(struct msm_adsp_module *module, unsigned long clk_rate);
 int msm_adsp_disable_event_rsp(struct msm_adsp_module *module);
 int32_t get_adsp_resource(unsigned short client_idx,
-				void *cmd_buf, size_t cmd_size);
+                          void *cmd_buf, size_t cmd_size);
 int32_t put_adsp_resource(unsigned short client_idx,
-				void *cmd_buf, size_t cmd_size);
+                          void *cmd_buf, size_t cmd_size);
 
 /* Write is safe to call from interrupt context.
  */
 int msm_adsp_write(struct msm_adsp_module *module,
-		   unsigned queue_id,
-		   void *data, size_t len);
+                   unsigned queue_id,
+                   void *data, size_t len);
 
 /*Explicitly gererate adsp event */
 int msm_adsp_generate_event(void *data,
-			struct msm_adsp_module *mod,
-			unsigned event_id,
-			unsigned event_length,
-			unsigned event_size,
-			void *msg);
+                            struct msm_adsp_module *mod,
+                            unsigned event_id,
+                            unsigned event_length,
+                            unsigned event_size,
+                            void *msg);
 
 #define ADSP_MESSAGE_ID 0xFFFF
 

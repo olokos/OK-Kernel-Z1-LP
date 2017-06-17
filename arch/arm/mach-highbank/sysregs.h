@@ -29,24 +29,20 @@ extern void __iomem *sregs_base;
 #define HB_PWR_HARD_RESET		2
 #define HB_PWR_SHUTDOWN			3
 
-static inline void hignbank_set_pwr_suspend(void)
-{
-	writel(HB_PWR_SUSPEND, sregs_base + HB_SREG_A9_PWR_REQ);
+static inline void hignbank_set_pwr_suspend(void) {
+    writel(HB_PWR_SUSPEND, sregs_base + HB_SREG_A9_PWR_REQ);
 }
 
-static inline void hignbank_set_pwr_shutdown(void)
-{
-	writel(HB_PWR_SHUTDOWN, sregs_base + HB_SREG_A9_PWR_REQ);
+static inline void hignbank_set_pwr_shutdown(void) {
+    writel(HB_PWR_SHUTDOWN, sregs_base + HB_SREG_A9_PWR_REQ);
 }
 
-static inline void hignbank_set_pwr_soft_reset(void)
-{
-	writel(HB_PWR_SOFT_RESET, sregs_base + HB_SREG_A9_PWR_REQ);
+static inline void hignbank_set_pwr_soft_reset(void) {
+    writel(HB_PWR_SOFT_RESET, sregs_base + HB_SREG_A9_PWR_REQ);
 }
 
-static inline void hignbank_set_pwr_hard_reset(void)
-{
-	writel(HB_PWR_HARD_RESET, sregs_base + HB_SREG_A9_PWR_REQ);
+static inline void hignbank_set_pwr_hard_reset(void) {
+    writel(HB_PWR_HARD_RESET, sregs_base + HB_SREG_A9_PWR_REQ);
 }
 
 #endif

@@ -258,8 +258,7 @@ typedef struct sDphQueueAttr
 
 
 
-typedef struct sCfgTrafficClass
-{
+typedef struct sCfgTrafficClass {
 
     //Use Block ACK on this STA/TID
 

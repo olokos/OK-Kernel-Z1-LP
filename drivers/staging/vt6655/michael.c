@@ -52,7 +52,7 @@ static unsigned long s_dwGetUINT32(unsigned char *p);         // Get unsigned lo
 static void s_vPutUINT32(unsigned char *p, unsigned long val); // Put unsigned long into 4 bytes LSByte first
 */
 static void s_vClear(void);                       // Clear the internal message,
-                                              // resets the object to the state just after construction.
+// resets the object to the state just after construction.
 static void s_vSetKey(unsigned long dwK0, unsigned long dwK1);
 static void s_vAppendByte(unsigned char b);            // Add a single byte to the internal message
 
@@ -90,8 +90,7 @@ static void s_vPutUINT32 (unsigned char *p, unsigned long val)
 }
 */
 
-static void s_vClear (void)
-{
+static void s_vClear (void) {
     // Reset the state to the empty message.
     L = K0;
     R = K1;
@@ -99,8 +98,7 @@ static void s_vClear (void)
     M = 0;
 }
 
-static void s_vSetKey (unsigned long dwK0, unsigned long dwK1)
-{
+static void s_vSetKey (unsigned long dwK0, unsigned long dwK1) {
     // Set the key
     K0 = dwK0;
     K1 = dwK1;
@@ -108,14 +106,12 @@ static void s_vSetKey (unsigned long dwK0, unsigned long dwK1)
     s_vClear();
 }
 
-static void s_vAppendByte (unsigned char b)
-{
+static void s_vAppendByte (unsigned char b) {
     // Append the byte to our word-sized buffer
     M |= b << (8*nBytesInM);
     nBytesInM++;
     // Process the word if it is full.
-    if( nBytesInM >= 4 )
-    {
+    if( nBytesInM >= 4 ) {
         L ^= M;
         R ^= ROL32( L, 17 );
         L += R;
@@ -131,15 +127,13 @@ static void s_vAppendByte (unsigned char b)
     }
 }
 
-void MIC_vInit (unsigned long dwK0, unsigned long dwK1)
-{
+void MIC_vInit (unsigned long dwK0, unsigned long dwK1) {
     // Set the key
     s_vSetKey(dwK0, dwK1);
 }
 
 
-void MIC_vUnInit (void)
-{
+void MIC_vUnInit (void) {
     // Wipe the key material
     K0 = 0;
     K1 = 0;
@@ -149,18 +143,15 @@ void MIC_vUnInit (void)
     s_vClear();
 }
 
-void MIC_vAppend (unsigned char *src, unsigned int nBytes)
-{
+void MIC_vAppend (unsigned char *src, unsigned int nBytes) {
     // This is simple
-    while (nBytes > 0)
-    {
+    while (nBytes > 0) {
         s_vAppendByte(*src++);
         nBytes--;
     }
 }
 
-void MIC_vGetMIC (unsigned long *pdwL, unsigned long *pdwR)
-{
+void MIC_vGetMIC (unsigned long *pdwL, unsigned long *pdwR) {
     // Append the minimum padding
     s_vAppendByte(0x5a);
     s_vAppendByte(0);
@@ -168,8 +159,7 @@ void MIC_vGetMIC (unsigned long *pdwL, unsigned long *pdwR)
     s_vAppendByte(0);
     s_vAppendByte(0);
     // and then zeroes until the length is a multiple of 4
-    while( nBytesInM != 0 )
-    {
+    while( nBytesInM != 0 ) {
         s_vAppendByte(0);
     }
     // The s_vAppendByte function has already computed the result.

@@ -11,9 +11,8 @@
 
 #define PHYSID_ARRAY_SIZE       1
 
-struct physid_mask
-{
-	unsigned long mask[PHYSID_ARRAY_SIZE];
+struct physid_mask {
+    unsigned long mask[PHYSID_ARRAY_SIZE];
 };
 
 typedef struct physid_mask physid_mask_t;
@@ -64,24 +63,20 @@ extern volatile int cpu_2_physid[NR_CPUS];
 
 extern cpumask_t cpu_callout_map;
 
-static __inline__ int hard_smp_processor_id(void)
-{
-	return (int)*(volatile long *)M32R_CPUID_PORTL;
+static __inline__ int hard_smp_processor_id(void) {
+    return (int)*(volatile long *)M32R_CPUID_PORTL;
 }
 
-static __inline__ int cpu_logical_map(int cpu)
-{
-	return cpu;
+static __inline__ int cpu_logical_map(int cpu) {
+    return cpu;
 }
 
-static __inline__ int cpu_number_map(int cpu)
-{
-	return cpu;
+static __inline__ int cpu_number_map(int cpu) {
+    return cpu;
 }
 
-static __inline__ unsigned int num_booting_cpus(void)
-{
-	return cpumask_weight(&cpu_callout_map);
+static __inline__ unsigned int num_booting_cpus(void) {
+    return cpumask_weight(&cpu_callout_map);
 }
 
 extern void smp_send_timer(void);

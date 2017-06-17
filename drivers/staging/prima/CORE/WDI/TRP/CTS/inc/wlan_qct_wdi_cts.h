@@ -92,8 +92,7 @@ typedef void*  WCTS_HandleType;
 /*---------------------------------------------------------------------------
    WCTS_NotifyEventType
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WCTS_EVENT_OPEN,
     WCTS_EVENT_CLOSE,
     WCTS_EVENT_MAX
@@ -157,8 +156,7 @@ typedef void (*WCTS_RxMsgCBType) (WCTS_HandleType       wctsHandle,
 /*---------------------------------------------------------------------------
    WCTS Transport Callbacks holder type
  ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WCTS_NotifyCBType      wctsNotifyCB;
     void*                  wctsNotifyCBData;
     WCTS_RxMsgCBType       wctsRxMsgCB;

@@ -32,72 +32,68 @@ module_param(mpu_start, ulong, 0644);
 module_param(mpu_size, ulong, 0644);
 
 static void mem_prot_region(u64 start, u64 size, bool lock);
-static int set_enabled(const char *val, const struct kernel_param *kp)
-{
-	int ret = 0;
-	ret = param_set_int(val, kp);
+static int set_enabled(const char *val, const struct kernel_param *kp) {
+    int ret = 0;
+    ret = param_set_int(val, kp);
 
-	if (mpu_enable == MPU_MAGIC_LOCK)
-		mem_prot_region(mpu_start, mpu_size, true);
-	else if (mpu_enable == MPU_MAGIC_UNLOCK)
-		mem_prot_region(mpu_start, mpu_size, false);
-	return ret;
+    if (mpu_enable == MPU_MAGIC_LOCK)
+        mem_prot_region(mpu_start, mpu_size, true);
+    else if (mpu_enable == MPU_MAGIC_UNLOCK)
+        mem_prot_region(mpu_start, mpu_size, false);
+    return ret;
 }
 
 static struct kernel_param_ops mpu_ops = {
-	.set = set_enabled,
-	.get = param_get_int,
+    .set = set_enabled,
+    .get = param_get_int,
 };
 module_param_cb(mpu_enable, &mpu_ops, &mpu_enable, 0644);
 
-static void mem_prot_region(u64 start, u64 size, bool lock)
-{
-	int ret;
-	struct req_cmd {
-		u32 address;
-		u32 size;
-		u32 permission;
-		u32 lock;
-		u32 arg;
-	} request;
+static void mem_prot_region(u64 start, u64 size, bool lock) {
+    int ret;
+    struct req_cmd {
+        u32 address;
+        u32 size;
+        u32 permission;
+        u32 lock;
+        u32 arg;
+    } request;
 
-	request.address = PAGE_ALIGN(start);
-	request.size =  PAGE_ALIGN(size);
-	/*
-	 * Permissions:  Write:         Read
-	 * 0x1           TZ             Anyone
-	 * 0x2           TZ             Tz, APPS
-	 * 0x3           TZ             Tz
-	 */
-	request.permission  = 0x1;
-	request.lock = lock;
-	request.arg = 0;
+    request.address = PAGE_ALIGN(start);
+    request.size =  PAGE_ALIGN(size);
+    /*
+     * Permissions:  Write:         Read
+     * 0x1           TZ             Anyone
+     * 0x2           TZ             Tz, APPS
+     * 0x3           TZ             Tz
+     */
+    request.permission  = 0x1;
+    request.lock = lock;
+    request.arg = 0;
 
-	ret = scm_call(SCM_SVC_MP, TZ_PROTECT_MEMORY,
-			&request, sizeof(request), &ret, sizeof(ret));
+    ret = scm_call(SCM_SVC_MP, TZ_PROTECT_MEMORY,
+                   &request, sizeof(request), &ret, sizeof(ret));
 
-	if (ret != 0)
-		pr_err("Failed to %s region %llx - %llx\n",
-			lock ? "protect" : "unlock", start, start + size);
-	else
-		pr_debug("SUCCESS to %s region %llx - %llx\n",
-			lock ? "protect" : "unlock", start, start + size);
+    if (ret != 0)
+        pr_err("Failed to %s region %llx - %llx\n",
+               lock ? "protect" : "unlock", start, start + size);
+    else
+        pr_debug("SUCCESS to %s region %llx - %llx\n",
+                 lock ? "protect" : "unlock", start, start + size);
 }
 
 #ifdef CONFIG_KERNEL_TEXT_MPU_PROT
-static int __init mem_prot_init(void)
-{
-	phys_addr_t phys = virt_to_phys(_stext);
-	mem_prot_region((u64)phys, (u64)(_etext - _stext), true);
-	return 0;
+static int __init mem_prot_init(void) {
+    phys_addr_t phys = virt_to_phys(_stext);
+    mem_prot_region((u64)phys, (u64)(_etext - _stext), true);
+    return 0;
 }
 late_initcall(mem_prot_init);
 #else
-static int __init mem_prot_init(void)
-{
-	if (mpu_start && mpu_size)
-		mem_prot_region(mpu_start, mpu_size, true);
-	return 0;
+static int __init mem_prot_init(void) {
+    if (mpu_start && mpu_size)
+        mem_prot_region(mpu_start, mpu_size, true);
+    return 0;
 }
 late_initcall(mem_prot_init);
 #endif

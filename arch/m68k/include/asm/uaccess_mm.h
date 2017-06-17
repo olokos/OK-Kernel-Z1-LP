@@ -15,9 +15,8 @@
 
 /* We let the MMU do all checking */
 static inline int access_ok(int type, const void __user *addr,
-			    unsigned long size)
-{
-	return 1;
+                            unsigned long size) {
+    return 1;
 }
 
 /*
@@ -49,9 +48,8 @@ static inline int access_ok(int type, const void __user *addr,
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 extern int __put_user_bad(void);
@@ -236,50 +234,49 @@ unsigned long __generic_copy_to_user(void __user *to, const void *from, unsigned
 		: : "memory")
 
 static __always_inline unsigned long
-__constant_copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	unsigned long res = 0, tmp;
+__constant_copy_from_user(void *to, const void __user *from, unsigned long n) {
+    unsigned long res = 0, tmp;
 
-	switch (n) {
-	case 1:
-		__get_user_asm(res, *(u8 *)to, (u8 __user *)from, u8, b, d, 1);
-		break;
-	case 2:
-		__get_user_asm(res, *(u16 *)to, (u16 __user *)from, u16, w, d, 2);
-		break;
-	case 3:
-		__constant_copy_from_user_asm(res, to, from, tmp, 3, w, b,);
-		break;
-	case 4:
-		__get_user_asm(res, *(u32 *)to, (u32 __user *)from, u32, l, r, 4);
-		break;
-	case 5:
-		__constant_copy_from_user_asm(res, to, from, tmp, 5, l, b,);
-		break;
-	case 6:
-		__constant_copy_from_user_asm(res, to, from, tmp, 6, l, w,);
-		break;
-	case 7:
-		__constant_copy_from_user_asm(res, to, from, tmp, 7, l, w, b);
-		break;
-	case 8:
-		__constant_copy_from_user_asm(res, to, from, tmp, 8, l, l,);
-		break;
-	case 9:
-		__constant_copy_from_user_asm(res, to, from, tmp, 9, l, l, b);
-		break;
-	case 10:
-		__constant_copy_from_user_asm(res, to, from, tmp, 10, l, l, w);
-		break;
-	case 12:
-		__constant_copy_from_user_asm(res, to, from, tmp, 12, l, l, l);
-		break;
-	default:
-		/* we limit the inlined version to 3 moves */
-		return __generic_copy_from_user(to, from, n);
-	}
+    switch (n) {
+    case 1:
+        __get_user_asm(res, *(u8 *)to, (u8 __user *)from, u8, b, d, 1);
+        break;
+    case 2:
+        __get_user_asm(res, *(u16 *)to, (u16 __user *)from, u16, w, d, 2);
+        break;
+    case 3:
+        __constant_copy_from_user_asm(res, to, from, tmp, 3, w, b,);
+        break;
+    case 4:
+        __get_user_asm(res, *(u32 *)to, (u32 __user *)from, u32, l, r, 4);
+        break;
+    case 5:
+        __constant_copy_from_user_asm(res, to, from, tmp, 5, l, b,);
+        break;
+    case 6:
+        __constant_copy_from_user_asm(res, to, from, tmp, 6, l, w,);
+        break;
+    case 7:
+        __constant_copy_from_user_asm(res, to, from, tmp, 7, l, w, b);
+        break;
+    case 8:
+        __constant_copy_from_user_asm(res, to, from, tmp, 8, l, l,);
+        break;
+    case 9:
+        __constant_copy_from_user_asm(res, to, from, tmp, 9, l, l, b);
+        break;
+    case 10:
+        __constant_copy_from_user_asm(res, to, from, tmp, 10, l, l, w);
+        break;
+    case 12:
+        __constant_copy_from_user_asm(res, to, from, tmp, 12, l, l, l);
+        break;
+    default:
+        /* we limit the inlined version to 3 moves */
+        return __generic_copy_from_user(to, from, n);
+    }
 
-	return res;
+    return res;
 }
 
 #define __constant_copy_to_user_asm(res, to, from, tmp, n, s1, s2, s3)	\
@@ -317,50 +314,49 @@ __constant_copy_from_user(void *to, const void __user *from, unsigned long n)
 		: : "memory")
 
 static __always_inline unsigned long
-__constant_copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	unsigned long res = 0, tmp;
+__constant_copy_to_user(void __user *to, const void *from, unsigned long n) {
+    unsigned long res = 0, tmp;
 
-	switch (n) {
-	case 1:
-		__put_user_asm(res, *(u8 *)from, (u8 __user *)to, b, d, 1);
-		break;
-	case 2:
-		__put_user_asm(res, *(u16 *)from, (u16 __user *)to, w, d, 2);
-		break;
-	case 3:
-		__constant_copy_to_user_asm(res, to, from, tmp, 3, w, b,);
-		break;
-	case 4:
-		__put_user_asm(res, *(u32 *)from, (u32 __user *)to, l, r, 4);
-		break;
-	case 5:
-		__constant_copy_to_user_asm(res, to, from, tmp, 5, l, b,);
-		break;
-	case 6:
-		__constant_copy_to_user_asm(res, to, from, tmp, 6, l, w,);
-		break;
-	case 7:
-		__constant_copy_to_user_asm(res, to, from, tmp, 7, l, w, b);
-		break;
-	case 8:
-		__constant_copy_to_user_asm(res, to, from, tmp, 8, l, l,);
-		break;
-	case 9:
-		__constant_copy_to_user_asm(res, to, from, tmp, 9, l, l, b);
-		break;
-	case 10:
-		__constant_copy_to_user_asm(res, to, from, tmp, 10, l, l, w);
-		break;
-	case 12:
-		__constant_copy_to_user_asm(res, to, from, tmp, 12, l, l, l);
-		break;
-	default:
-		/* limit the inlined version to 3 moves */
-		return __generic_copy_to_user(to, from, n);
-	}
+    switch (n) {
+    case 1:
+        __put_user_asm(res, *(u8 *)from, (u8 __user *)to, b, d, 1);
+        break;
+    case 2:
+        __put_user_asm(res, *(u16 *)from, (u16 __user *)to, w, d, 2);
+        break;
+    case 3:
+        __constant_copy_to_user_asm(res, to, from, tmp, 3, w, b,);
+        break;
+    case 4:
+        __put_user_asm(res, *(u32 *)from, (u32 __user *)to, l, r, 4);
+        break;
+    case 5:
+        __constant_copy_to_user_asm(res, to, from, tmp, 5, l, b,);
+        break;
+    case 6:
+        __constant_copy_to_user_asm(res, to, from, tmp, 6, l, w,);
+        break;
+    case 7:
+        __constant_copy_to_user_asm(res, to, from, tmp, 7, l, w, b);
+        break;
+    case 8:
+        __constant_copy_to_user_asm(res, to, from, tmp, 8, l, l,);
+        break;
+    case 9:
+        __constant_copy_to_user_asm(res, to, from, tmp, 9, l, l, b);
+        break;
+    case 10:
+        __constant_copy_to_user_asm(res, to, from, tmp, 10, l, l, w);
+        break;
+    case 12:
+        __constant_copy_to_user_asm(res, to, from, tmp, 12, l, l, l);
+        break;
+    default:
+        /* limit the inlined version to 3 moves */
+        return __generic_copy_to_user(to, from, n);
+    }
 
-	return res;
+    return res;
 }
 
 #define __copy_from_user(to, from, n)		\

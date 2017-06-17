@@ -74,7 +74,7 @@
   __put_user_nocheck((__typeof__(*(ptr)))(x),(ptr),sizeof(*(ptr)))
 #define __get_user(x,ptr) \
   __get_user_nocheck((x),(ptr),sizeof(*(ptr)))
-  
+
 /*
  * The "lda %1, 2b-1b(%0)" bits are magic to get the assembler to
  * encode the bits we need for resolving the exception.  See the
@@ -119,7 +119,9 @@ extern void __get_user_unknown(void);
 	__gu_err;							\
 })
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct __user *)(x))
 
 #define __get_user_64(addr)				\
@@ -355,28 +357,26 @@ __asm__ __volatile__("1: stb %r2,%1\n"				\
 extern void __copy_user(void);
 
 extern inline long
-__copy_tofrom_user_nocheck(void *to, const void *from, long len)
-{
-	register void * __cu_to __asm__("$6") = to;
-	register const void * __cu_from __asm__("$7") = from;
-	register long __cu_len __asm__("$0") = len;
+__copy_tofrom_user_nocheck(void *to, const void *from, long len) {
+    register void * __cu_to __asm__("$6") = to;
+    register const void * __cu_from __asm__("$7") = from;
+    register long __cu_len __asm__("$0") = len;
 
-	__asm__ __volatile__(
-		__module_call(28, 3, __copy_user)
-		: "=r" (__cu_len), "=r" (__cu_from), "=r" (__cu_to)
-		: __module_address(__copy_user)
-		  "0" (__cu_len), "1" (__cu_from), "2" (__cu_to)
-		: "$1","$2","$3","$4","$5","$28","memory");
+    __asm__ __volatile__(
+        __module_call(28, 3, __copy_user)
+        : "=r" (__cu_len), "=r" (__cu_from), "=r" (__cu_to)
+        : __module_address(__copy_user)
+        "0" (__cu_len), "1" (__cu_from), "2" (__cu_to)
+        : "$1","$2","$3","$4","$5","$28","memory");
 
-	return __cu_len;
+    return __cu_len;
 }
 
 extern inline long
-__copy_tofrom_user(void *to, const void *from, long len, const void __user *validate)
-{
-	if (__access_ok((unsigned long)validate, len, get_fs()))
-		len = __copy_tofrom_user_nocheck(to, from, len);
-	return len;
+__copy_tofrom_user(void *to, const void *from, long len, const void __user *validate) {
+    if (__access_ok((unsigned long)validate, len, get_fs()))
+        len = __copy_tofrom_user_nocheck(to, from, len);
+    return len;
 }
 
 #define __copy_to_user(to,from,n)					\
@@ -395,39 +395,35 @@ __copy_tofrom_user(void *to, const void *from, long len, const void __user *vali
 
 
 extern inline long
-copy_to_user(void __user *to, const void *from, long n)
-{
-	return __copy_tofrom_user((__force void *)to, from, n, to);
+copy_to_user(void __user *to, const void *from, long n) {
+    return __copy_tofrom_user((__force void *)to, from, n, to);
 }
 
 extern inline long
-copy_from_user(void *to, const void __user *from, long n)
-{
-	return __copy_tofrom_user(to, (__force void *)from, n, from);
+copy_from_user(void *to, const void __user *from, long n) {
+    return __copy_tofrom_user(to, (__force void *)from, n, from);
 }
 
 extern void __do_clear_user(void);
 
 extern inline long
-__clear_user(void __user *to, long len)
-{
-	register void __user * __cl_to __asm__("$6") = to;
-	register long __cl_len __asm__("$0") = len;
-	__asm__ __volatile__(
-		__module_call(28, 2, __do_clear_user)
-		: "=r"(__cl_len), "=r"(__cl_to)
-		: __module_address(__do_clear_user)
-		  "0"(__cl_len), "1"(__cl_to)
-		: "$1","$2","$3","$4","$5","$28","memory");
-	return __cl_len;
+__clear_user(void __user *to, long len) {
+    register void __user * __cl_to __asm__("$6") = to;
+    register long __cl_len __asm__("$0") = len;
+    __asm__ __volatile__(
+        __module_call(28, 2, __do_clear_user)
+        : "=r"(__cl_len), "=r"(__cl_to)
+        : __module_address(__do_clear_user)
+        "0"(__cl_len), "1"(__cl_to)
+        : "$1","$2","$3","$4","$5","$28","memory");
+    return __cl_len;
 }
 
 extern inline long
-clear_user(void __user *to, long len)
-{
-	if (__access_ok((unsigned long)to, len, get_fs()))
-		len = __clear_user(to, len);
-	return len;
+clear_user(void __user *to, long len) {
+    if (__access_ok((unsigned long)to, len, get_fs()))
+        len = __clear_user(to, len);
+    return len;
 }
 
 #undef __module_address
@@ -439,29 +435,26 @@ clear_user(void __user *to, long len)
 extern long __strncpy_from_user(char *__to, const char __user *__from, long __to_len);
 
 extern inline long
-strncpy_from_user(char *to, const char __user *from, long n)
-{
-	long ret = -EFAULT;
-	if (__access_ok((unsigned long)from, 0, get_fs()))
-		ret = __strncpy_from_user(to, from, n);
-	return ret;
+strncpy_from_user(char *to, const char __user *from, long n) {
+    long ret = -EFAULT;
+    if (__access_ok((unsigned long)from, 0, get_fs()))
+        ret = __strncpy_from_user(to, from, n);
+    return ret;
 }
 
 /* Returns: 0 if bad, string length+1 (memory size) of string if ok */
 extern long __strlen_user(const char __user *);
 
-extern inline long strlen_user(const char __user *str)
-{
-	return access_ok(VERIFY_READ,str,0) ? __strlen_user(str) : 0;
+extern inline long strlen_user(const char __user *str) {
+    return access_ok(VERIFY_READ,str,0) ? __strlen_user(str) : 0;
 }
 
 /* Returns: 0 if exception before NUL or reaching the supplied limit (N),
  * a value greater than N if the limit would be exceeded, else strlen.  */
 extern long __strnlen_user(const char __user *, long);
 
-extern inline long strnlen_user(const char __user *str, long n)
-{
-	return access_ok(VERIFY_READ,str,0) ? __strnlen_user(str, n) : 0;
+extern inline long strnlen_user(const char __user *str, long n) {
+    return access_ok(VERIFY_READ,str,0) ? __strnlen_user(str, n) : 0;
 }
 
 /*
@@ -484,17 +477,16 @@ extern inline long strnlen_user(const char __user *str, long n)
  *
  */
 
-struct exception_table_entry
-{
-	signed int insn;
-	union exception_fixup {
-		unsigned unit;
-		struct {
-			signed int nextinsn : 16;
-			unsigned int errreg : 5;
-			unsigned int valreg : 5;
-		} bits;
-	} fixup;
+struct exception_table_entry {
+    signed int insn;
+    union exception_fixup {
+        unsigned unit;
+        struct {
+            signed int nextinsn : 16;
+            unsigned int errreg : 5;
+            unsigned int valreg : 5;
+        } bits;
+    } fixup;
 };
 
 /* Returns the new pc */

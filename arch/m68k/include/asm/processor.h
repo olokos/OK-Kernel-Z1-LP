@@ -18,28 +18,26 @@
 #include <asm/fpu.h>
 #include <asm/ptrace.h>
 
-static inline unsigned long rdusp(void)
-{
+static inline unsigned long rdusp(void) {
 #ifdef CONFIG_COLDFIRE_SW_A7
-	extern unsigned int sw_usp;
-	return sw_usp;
+    extern unsigned int sw_usp;
+    return sw_usp;
 #else
-	register unsigned long usp __asm__("a0");
-	/* move %usp,%a0 */
-	__asm__ __volatile__(".word 0x4e68" : "=a" (usp));
-	return usp;
+    register unsigned long usp __asm__("a0");
+    /* move %usp,%a0 */
+    __asm__ __volatile__(".word 0x4e68" : "=a" (usp));
+    return usp;
 #endif
 }
 
-static inline void wrusp(unsigned long usp)
-{
+static inline void wrusp(unsigned long usp) {
 #ifdef CONFIG_COLDFIRE_SW_A7
-	extern unsigned int sw_usp;
-	sw_usp = usp;
+    extern unsigned int sw_usp;
+    sw_usp = usp;
 #else
-	register unsigned long a0 __asm__("a0") = usp;
-	/* move %a0,%usp */
-	__asm__ __volatile__(".word 0x4e60" : : "a" (a0) );
+    register unsigned long a0 __asm__("a0") = usp;
+    /* move %a0,%usp */
+    __asm__ __volatile__(".word 0x4e60" : : "a" (a0) );
 #endif
 }
 
@@ -81,17 +79,17 @@ static inline void wrusp(unsigned long usp)
 #endif
 
 struct thread_struct {
-	unsigned long  ksp;		/* kernel stack pointer */
-	unsigned long  usp;		/* user stack pointer */
-	unsigned short sr;		/* saved status register */
-	unsigned short fs;		/* saved fs (sfc, dfc) */
-	unsigned long  crp[2];		/* cpu root pointer */
-	unsigned long  esp0;		/* points to SR of stack frame */
-	unsigned long  faddr;		/* info about last fault */
-	int            signo, code;
-	unsigned long  fp[8*3];
-	unsigned long  fpcntl[3];	/* fp control regs */
-	unsigned char  fpstate[FPSTATESIZE];  /* floating point state */
+    unsigned long  ksp;		/* kernel stack pointer */
+    unsigned long  usp;		/* user stack pointer */
+    unsigned short sr;		/* saved status register */
+    unsigned short fs;		/* saved fs (sfc, dfc) */
+    unsigned long  crp[2];		/* cpu root pointer */
+    unsigned long  esp0;		/* points to SR of stack frame */
+    unsigned long  faddr;		/* info about last fault */
+    int            signo, code;
+    unsigned long  fp[8*3];
+    unsigned long  fpcntl[3];	/* fp control regs */
+    unsigned char  fpstate[FPSTATESIZE];  /* floating point state */
 };
 
 #define INIT_THREAD  {							\
@@ -105,11 +103,10 @@ struct thread_struct {
  * Do necessary setup to start up a newly executed thread.
  */
 static inline void start_thread(struct pt_regs * regs, unsigned long pc,
-				unsigned long usp)
-{
-	regs->pc = pc;
-	regs->sr &= ~0x2000;
-	wrusp(usp);
+                                unsigned long usp) {
+    regs->pc = pc;
+    regs->sr &= ~0x2000;
+    wrusp(usp);
 }
 
 extern int handle_kernel_fault(struct pt_regs *regs);
@@ -137,10 +134,9 @@ do {                                                    \
 	wrusp(_usp);                                    \
 } while(0)
 
-static inline  int handle_kernel_fault(struct pt_regs *regs)
-{
-	/* Any fault in kernel is fatal on non-mmu */
-	return 0;
+static inline  int handle_kernel_fault(struct pt_regs *regs) {
+    /* Any fault in kernel is fatal on non-mmu */
+    return 0;
 }
 
 #endif
@@ -149,8 +145,7 @@ static inline  int handle_kernel_fault(struct pt_regs *regs)
 struct task_struct;
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
+static inline void release_thread(struct task_struct *dead_task) {
 }
 
 /* Prepare to copy thread state - unlazy all lazy status */
@@ -161,8 +156,7 @@ extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
 /*
  * Free current thread data structures etc..
  */
-static inline void exit_thread(void)
-{
+static inline void exit_thread(void) {
 }
 
 extern unsigned long thread_saved_pc(struct task_struct *tsk);

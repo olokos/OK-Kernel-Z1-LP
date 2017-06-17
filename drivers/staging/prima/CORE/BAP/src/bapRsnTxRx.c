@@ -54,10 +54,8 @@ static pnfRxFrameHandler bapRsnFsmRxFrameHandler;
 extern int gReadToSetKey;
 
 
-VOS_STATUS bapRsnRegisterTxRxCallbacks( pnfTxCompleteHandler pfnTxCom, pnfRxFrameHandler pnfRxFrame )
-{
-    if( bapRsnFsmTxCmpHandler || bapRsnFsmRxFrameHandler )
-    {
+VOS_STATUS bapRsnRegisterTxRxCallbacks( pnfTxCompleteHandler pfnTxCom, pnfRxFrameHandler pnfRxFrame ) {
+    if( bapRsnFsmTxCmpHandler || bapRsnFsmRxFrameHandler ) {
         return VOS_STATUS_E_ALREADY;
     }
 
@@ -67,8 +65,7 @@ VOS_STATUS bapRsnRegisterTxRxCallbacks( pnfTxCompleteHandler pfnTxCom, pnfRxFram
     return ( VOS_STATUS_SUCCESS );
 }
 
-void bapRsnClearTxRxCallbacks(void)
-{
+void bapRsnClearTxRxCallbacks(void) {
     bapRsnFsmTxCmpHandler = NULL;
     bapRsnFsmRxFrameHandler = NULL;
 }
@@ -76,29 +73,22 @@ void bapRsnClearTxRxCallbacks(void)
 
 //To reserve a vos_packet for Tx eapol frame
 //If success, pPacket is the packet and pData points to the head.
-static VOS_STATUS bapRsnAcquirePacket( vos_pkt_t **ppPacket, v_U8_t **ppData, v_U16_t size )
-{
+static VOS_STATUS bapRsnAcquirePacket( vos_pkt_t **ppPacket, v_U8_t **ppData, v_U16_t size ) {
     VOS_STATUS status;
     vos_pkt_t *pPacket;
 
     status = vos_pkt_get_packet( &pPacket, VOS_PKT_TYPE_TX_802_11_MGMT, size, 1,
                                  VOS_TRUE, NULL, NULL );
-    if( VOS_IS_STATUS_SUCCESS( status ) )
-    {
+    if( VOS_IS_STATUS_SUCCESS( status ) ) {
         status = vos_pkt_reserve_head( pPacket, (v_VOID_t **)ppData, size );
-        if( !VOS_IS_STATUS_SUCCESS( status ) )
-        {
+        if( !VOS_IS_STATUS_SUCCESS( status ) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "bapRsnAcquirePacket failed to reserve size = %d\n", size );
             vos_pkt_return_packet( pPacket );
-        }
-        else
-        {
+        } else {
             *ppPacket = pPacket;
         }
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "bapRsnAcquirePacket failed to get vos_pkt\n" );
     }
@@ -107,15 +97,13 @@ static VOS_STATUS bapRsnAcquirePacket( vos_pkt_t **ppPacket, v_U8_t **ppData, v_
 }
 
 
-static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPacket, VOS_STATUS retStatus )
-{
+static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPacket, VOS_STATUS retStatus ) {
     int retVal;
     ptBtampContext btampContext; // use btampContext value
     tCsrRoamSetKey setKeyInfo;
     tSuppRsnFsm *fsm;
 
-    if (NULL == pvosGCtx)
-    {
+    if (NULL == pvosGCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "pvosGCtx is NULL in %s", __func__);
 
@@ -123,8 +111,7 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
     }
 
     btampContext = VOS_GET_BAP_CB(pvosGCtx);
-    if (NULL == btampContext)
-    {
+    if (NULL == btampContext) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "btampContext is NULL in %s", __func__);
 
@@ -132,8 +119,7 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
     }
 
     fsm = &btampContext->uFsm.suppFsm;
-    if (NULL == fsm)
-    {
+    if (NULL == fsm) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "fsm is NULL in %s", __func__);
 
@@ -144,14 +130,11 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
     //bapRsnFsmTxCmpHandler could be NULL
     //VOS_ASSERT( bapRsnFsmTxCmpHandler );
 
-    if( bapRsnFsmTxCmpHandler )
-    {
+    if( bapRsnFsmTxCmpHandler ) {
         //Change the state
         //Call auth or supp FSM's handler
         bapRsnFsmTxCmpHandler( pvosGCtx, pPacket, retStatus );
-    }
-    else
-    {
+    } else {
         vos_pkt_return_packet( pPacket );
         return (VOS_STATUS_SUCCESS );
     }
@@ -160,8 +143,7 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
     /*
     We will move the Set key to EAPOL Completion handler. We found a race condition betweem
     sending EAPOL frame and setting Key */
-    if (BAP_SET_RSN_KEY == gReadToSetKey)
-    {
+    if (BAP_SET_RSN_KEY == gReadToSetKey) {
         vos_mem_zero( &setKeyInfo, sizeof( tCsrRoamSetKey ) );
         setKeyInfo.encType = eCSR_ENCRYPT_TYPE_AES;
         setKeyInfo.keyDirection = eSIR_TX_RX;
@@ -171,8 +153,7 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
         setKeyInfo.keyLength = CSR_AES_KEY_LEN;
         vos_mem_copy( setKeyInfo.Key, (v_U8_t *)fsm->suppCtx->ptk + (2 * CSR_AES_KEY_LEN ), CSR_AES_KEY_LEN );
 
-        if( !VOS_IS_STATUS_SUCCESS( bapSetKey( fsm->ctx->pvosGCtx, &setKeyInfo ) ) )
-        {
+        if( !VOS_IS_STATUS_SUCCESS( bapSetKey( fsm->ctx->pvosGCtx, &setKeyInfo ) ) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR, " Supp: gotoStateStaKeySet fail to set key\n" );
             retVal = ANI_ERROR;
         }
@@ -183,16 +164,14 @@ static VOS_STATUS bapRsnTxCompleteCallback( v_PVOID_t pvosGCtx, vos_pkt_t *pPack
 }
 
 
-static VOS_STATUS bapRsnTxFrame( v_PVOID_t pvosGCtx, vos_pkt_t *pPacket )
-{
+static VOS_STATUS bapRsnTxFrame( v_PVOID_t pvosGCtx, vos_pkt_t *pPacket ) {
     VOS_STATUS status;
     WLANTL_MetaInfoType metaInfo;
 
     vos_mem_zero( &metaInfo, sizeof( WLANTL_MetaInfoType ) );
     metaInfo.ucIsEapol = 1; //only send eapol frame
     status = WLANTL_TxBAPFrm( pvosGCtx, pPacket, &metaInfo, bapRsnTxCompleteCallback );
-    if( !VOS_IS_STATUS_SUCCESS( status ) )
-    {
+    if( !VOS_IS_STATUS_SUCCESS( status ) ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "bapRsnTxFrame failed to send vos_pkt status = %d\n", status );
     }
@@ -207,25 +186,21 @@ static VOS_STATUS bapRsnTxFrame( v_PVOID_t pvosGCtx, vos_pkt_t *pPacket )
 
     \param pAniPkt - a ready eapol frame that is prepared in tAniPacket format
 */
-VOS_STATUS bapRsnSendEapolFrame( v_PVOID_t pvosGCtx, tAniPacket *pAniPkt )
-{
+VOS_STATUS bapRsnSendEapolFrame( v_PVOID_t pvosGCtx, tAniPacket *pAniPkt ) {
     VOS_STATUS status;
     vos_pkt_t *pPacket = NULL;
     v_U8_t *pData, *pSrc;
     int pktLen = aniAsfPacketGetBytes( pAniPkt, &pSrc );
 
-    if( pktLen <= 0 )
-    {
+    if( pktLen <= 0 ) {
         return VOS_STATUS_E_EMPTY;
     }
     status = bapRsnAcquirePacket( &pPacket, &pData, pktLen );
-    if( VOS_IS_STATUS_SUCCESS( status ) && ( NULL != pPacket ))
-    {
+    if( VOS_IS_STATUS_SUCCESS( status ) && ( NULL != pPacket )) {
         vos_mem_copy( pData, pSrc, pktLen );
         //Send the packet, need to check whether we have an outstanding packet first.
         status = bapRsnTxFrame( pvosGCtx, pPacket );
-        if( !VOS_IS_STATUS_SUCCESS( status ) )
-        {
+        if( !VOS_IS_STATUS_SUCCESS( status ) ) {
             vos_pkt_return_packet( pPacket );
         }
     }
@@ -235,16 +210,12 @@ VOS_STATUS bapRsnSendEapolFrame( v_PVOID_t pvosGCtx, tAniPacket *pAniPkt )
 
 
 //TL call this function on Rx frames, should only be EAPOL frames
-VOS_STATUS bapRsnRxCallback( v_PVOID_t pv, vos_pkt_t *pPacket )
-{
+VOS_STATUS bapRsnRxCallback( v_PVOID_t pv, vos_pkt_t *pPacket ) {
     //Callback to auth or supp FSM's handler
     VOS_ASSERT( bapRsnFsmRxFrameHandler );
-    if( bapRsnFsmRxFrameHandler )
-    {
+    if( bapRsnFsmRxFrameHandler ) {
         bapRsnFsmRxFrameHandler( pv, pPacket );
-    }
-    else
-    {
+    } else {
         //done
         vos_pkt_return_packet( pPacket );
     }
@@ -254,20 +225,15 @@ VOS_STATUS bapRsnRxCallback( v_PVOID_t pv, vos_pkt_t *pPacket )
 
 
 
-VOS_STATUS bapRsnRegisterRxCallback( v_PVOID_t pvosGCtx )
-{
+VOS_STATUS bapRsnRegisterRxCallback( v_PVOID_t pvosGCtx ) {
     VOS_STATUS status;
 
     status = WLANTL_RegisterBAPClient( pvosGCtx, WLANBAP_RxCallback, WLANBAP_TLFlushCompCallback );
-    if( !VOS_IS_STATUS_SUCCESS( status ) )
-    {
-        if( VOS_STATUS_E_EXISTS != status )
-        {
+    if( !VOS_IS_STATUS_SUCCESS( status ) ) {
+        if( VOS_STATUS_E_EXISTS != status ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "bapRsnRegisterRxCallback failed with status = %d\n", status );
-        }
-        else
-        {
+        } else {
             //We consider it ok to register it multiple times because only BAP's RSN should call this
             status = VOS_STATUS_SUCCESS;
         }

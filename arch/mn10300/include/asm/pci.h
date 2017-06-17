@@ -70,15 +70,14 @@ struct pci_dev;
 #define PCI_DMA_BUS_IS_PHYS	(1)
 
 /* Return the index of the PCI controller for device. */
-static inline int pci_controller_num(struct pci_dev *dev)
-{
-	return 0;
+static inline int pci_controller_num(struct pci_dev *dev) {
+    return 0;
 }
 
 #define HAVE_PCI_MMAP
 extern int pci_mmap_page_range(struct pci_dev *dev, struct vm_area_struct *vma,
-			       enum pci_mmap_state mmap_state,
-			       int write_combine);
+                               enum pci_mmap_state mmap_state,
+                               int write_combine);
 
 #endif /* __KERNEL__ */
 
@@ -86,21 +85,19 @@ extern int pci_mmap_page_range(struct pci_dev *dev, struct vm_area_struct *vma,
 #include <asm-generic/pci-dma-compat.h>
 
 static inline struct resource *
-pcibios_select_root(struct pci_dev *pdev, struct resource *res)
-{
-	struct resource *root = NULL;
+pcibios_select_root(struct pci_dev *pdev, struct resource *res) {
+    struct resource *root = NULL;
 
-	if (res->flags & IORESOURCE_IO)
-		root = &ioport_resource;
-	if (res->flags & IORESOURCE_MEM)
-		root = &iomem_resource;
+    if (res->flags & IORESOURCE_IO)
+        root = &ioport_resource;
+    if (res->flags & IORESOURCE_MEM)
+        root = &iomem_resource;
 
-	return root;
+    return root;
 }
 
-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-{
-	return channel ? 15 : 14;
+static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel) {
+    return channel ? 15 : 14;
 }
 
 #endif /* _ASM_PCI_H */

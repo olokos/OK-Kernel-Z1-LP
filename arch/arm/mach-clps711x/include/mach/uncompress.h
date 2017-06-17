@@ -37,17 +37,15 @@
 /*
  * This does not append a newline
  */
-static inline void putc(int c)
-{
-	while (clps_readl(SYSFLGx) & SYSFLG_UTXFF)
-		barrier();
-	clps_writel(c, UARTDRx);
+static inline void putc(int c) {
+    while (clps_readl(SYSFLGx) & SYSFLG_UTXFF)
+        barrier();
+    clps_writel(c, UARTDRx);
 }
 
-static inline void flush(void)
-{
-	while (clps_readl(SYSFLGx) & SYSFLG_UBUSY)
-		barrier();
+static inline void flush(void) {
+    while (clps_readl(SYSFLGx) & SYSFLG_UBUSY)
+        barrier();
 }
 
 /*

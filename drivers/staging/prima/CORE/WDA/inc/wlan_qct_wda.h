@@ -78,8 +78,7 @@ when        who          what, where, why
 
 /* Add Include */
 
-typedef enum
-{
+typedef enum {
     WDA_INIT_STATE,
     WDA_START_STATE,
     WDA_READY_STATE,
@@ -90,25 +89,21 @@ typedef enum
     WDA_CLOSE_STATE
 } WDA_state;
 
-typedef enum
-{
+typedef enum {
     WDA_PROCESS_SET_LINK_STATE,
     WDA_IGNORE_SET_LINK_STATE
 } WDA_processSetLinkStateStatus;
 
-typedef enum
-{
+typedef enum {
     WDA_DISABLE_BA,
     WDA_ENABLE_BA
 } WDA_BaEnableFlags;
 
-typedef enum
-{
+typedef enum {
     WDA_INVALID_STA_INDEX,
     WDA_VALID_STA_INDEX
 } WDA_ValidStaIndex;
-typedef enum
-{
+typedef enum {
     eWDA_AUTH_TYPE_NONE,    //never used
     // MAC layer authentication types
     eWDA_AUTH_TYPE_OPEN_SYSTEM,
@@ -172,8 +167,7 @@ typedef enum
 #endif
 #define IS_HT40_OBSS_SCAN_FEATURE_ENABLE ((WDA_getFwWlanFeatCaps(HT40_OBSS_SCAN)) & (WDI_getHostWlanFeatCaps(HT40_OBSS_SCAN)))
 
-typedef enum
-{
+typedef enum {
     MODE_11A        = 0,   /* 11a Mode */
     MODE_11G        = 1,   /* 11b/g Mode */
     MODE_11B        = 2,   /* 11b Mode */
@@ -260,8 +254,7 @@ typedef enum
    Define five TX channels for UMAC here. WDA can map these logical
    channels to physical DXE channels if needed.
 */
-typedef enum
-{
+typedef enum {
     WDA_TXFLOW_AC_BK = 0,
     WDA_TXFLOW_AC_BE = 1,
     WDA_TXFLOW_AC_VI = 2,
@@ -380,8 +373,7 @@ typedef void (*pWDATxRxCompFunc)( v_PVOID_t pContext, void *pData );
 //parameter 2 - txComplete status : 1- success, 0 - failure.
 typedef eHalStatus (*pWDAAckFnTxComp)(tpAniSirGlobal, tANI_U32);
 
-typedef struct
-{
+typedef struct {
     tANI_U16 ucValidStaIndex ;
     /*
      * each bit in ucUseBaBitmap represent BA is enabled or not for this tid
@@ -394,8 +386,7 @@ typedef struct
 } tWdaStaInfo, *tpWdaStaInfo ;
 
 /* group all the WDA timers into this structure */
-typedef struct
-{
+typedef struct {
     /* BA activity check timer */
     TX_TIMER baActivityChkTmr ;
 
@@ -411,8 +402,7 @@ typedef struct
 #else
 #define WDA_MAX_STA    (16)
 #endif
-typedef enum
-{
+typedef enum {
     WDA_ADDSTA_REQ_NO_MEM = 0,
     WDA_ADDSTA_REQ_WDI_FAIL = 1,
     WDA_ADDSTA_RSP_NO_MEM = 2,
@@ -421,8 +411,7 @@ typedef enum
 } WDA_AddSelfStaFailReasonDebug;
 
 /*AddSelfSta Request and Response Debug*/
-typedef struct
-{
+typedef struct {
     wpt_uint8            wdiAddStaSelfStaReqCounter;
     wpt_uint8            wdiAddStaSelfStaRspCounter;
     wpt_uint8            wdiAddStaSelfStaFailCounter;
@@ -430,8 +419,7 @@ typedef struct
     wpt_uint8            wdaAddSelfStaFailReason;
 } tWDA_AddSelfStaDebugParams;
 
-typedef struct
-{
+typedef struct {
     v_PVOID_t            pVosContext;             /* global VOSS context*/
     v_PVOID_t            pWdiContext;             /* WDI context */
     WDA_state            wdaState ;               /* WDA state tracking */
@@ -501,8 +489,7 @@ typedef struct
 
 } tWDA_CbContext ;
 
-typedef struct
-{
+typedef struct {
     v_PVOID_t            pWdaContext;             /* pointer to WDA context*/
     v_PVOID_t            wdaMsgParam;            /* PE parameter tracking */
     v_PVOID_t            wdaWdiApiMsgParam;      /* WDI API paramter tracking */

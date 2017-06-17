@@ -54,9 +54,9 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned int	id;
-	unsigned int	active;
-	unsigned long	vdso_base;
+    unsigned int	id;
+    unsigned int	active;
+    unsigned long	vdso_base;
 } mm_context_t;
 
 #endif /* !__ASSEMBLY__ */

@@ -40,49 +40,49 @@
 #include <asm/io.h>
 
 struct hwicap_drvdata {
-	u32 write_buffer_in_use;  /* Always in [0,3] */
-	u8 write_buffer[4];
-	u32 read_buffer_in_use;	  /* Always in [0,3] */
-	u8 read_buffer[4];
-	resource_size_t mem_start;/* phys. address of the control registers */
-	resource_size_t mem_end;  /* phys. address of the control registers */
-	resource_size_t mem_size;
-	void __iomem *base_address;/* virt. address of the control registers */
+    u32 write_buffer_in_use;  /* Always in [0,3] */
+    u8 write_buffer[4];
+    u32 read_buffer_in_use;	  /* Always in [0,3] */
+    u8 read_buffer[4];
+    resource_size_t mem_start;/* phys. address of the control registers */
+    resource_size_t mem_end;  /* phys. address of the control registers */
+    resource_size_t mem_size;
+    void __iomem *base_address;/* virt. address of the control registers */
 
-	struct device *dev;
-	struct cdev cdev;	/* Char device structure */
-	dev_t devt;
+    struct device *dev;
+    struct cdev cdev;	/* Char device structure */
+    dev_t devt;
 
-	const struct hwicap_driver_config *config;
-	const struct config_registers *config_regs;
-	void *private_data;
-	bool is_open;
-	struct mutex sem;
+    const struct hwicap_driver_config *config;
+    const struct config_registers *config_regs;
+    void *private_data;
+    bool is_open;
+    struct mutex sem;
 };
 
 struct hwicap_driver_config {
-	/* Read configuration data given by size into the data buffer.
-	   Return 0 if successful. */
-	int (*get_configuration)(struct hwicap_drvdata *drvdata, u32 *data,
-			u32 size);
-	/* Write configuration data given by size from the data buffer.
-	   Return 0 if successful. */
-	int (*set_configuration)(struct hwicap_drvdata *drvdata, u32 *data,
-			u32 size);
-	/* Get the status register, bit pattern given by:
-	 * D8 - 0 = configuration error
-	 * D7 - 1 = alignment found
-	 * D6 - 1 = readback in progress
-	 * D5 - 0 = abort in progress
-	 * D4 - Always 1
-	 * D3 - Always 1
-	 * D2 - Always 1
-	 * D1 - Always 1
-	 * D0 - 1 = operation completed
-	 */
-	u32 (*get_status)(struct hwicap_drvdata *drvdata);
-	/* Reset the hw */
-	void (*reset)(struct hwicap_drvdata *drvdata);
+    /* Read configuration data given by size into the data buffer.
+       Return 0 if successful. */
+    int (*get_configuration)(struct hwicap_drvdata *drvdata, u32 *data,
+                             u32 size);
+    /* Write configuration data given by size from the data buffer.
+       Return 0 if successful. */
+    int (*set_configuration)(struct hwicap_drvdata *drvdata, u32 *data,
+                             u32 size);
+    /* Get the status register, bit pattern given by:
+     * D8 - 0 = configuration error
+     * D7 - 1 = alignment found
+     * D6 - 1 = readback in progress
+     * D5 - 0 = abort in progress
+     * D4 - Always 1
+     * D3 - Always 1
+     * D2 - Always 1
+     * D1 - Always 1
+     * D0 - 1 = operation completed
+     */
+    u32 (*get_status)(struct hwicap_drvdata *drvdata);
+    /* Reset the hw */
+    void (*reset)(struct hwicap_drvdata *drvdata);
 };
 
 /* Number of times to poll the done regsiter */
@@ -114,28 +114,28 @@ struct hwicap_driver_config {
 #define XHI_FAR_BRAM_INT_BLOCK      2
 
 struct config_registers {
-	u32 CRC;
-	u32 FAR;
-	u32 FDRI;
-	u32 FDRO;
-	u32 CMD;
-	u32 CTL;
-	u32 MASK;
-	u32 STAT;
-	u32 LOUT;
-	u32 COR;
-	u32 MFWR;
-	u32 FLR;
-	u32 KEY;
-	u32 CBC;
-	u32 IDCODE;
-	u32 AXSS;
-	u32 C0R_1;
-	u32 CSOB;
-	u32 WBSTAR;
-	u32 TIMER;
-	u32 BOOTSTS;
-	u32 CTL_1;
+    u32 CRC;
+    u32 FAR;
+    u32 FDRI;
+    u32 FDRO;
+    u32 CMD;
+    u32 CTL;
+    u32 MASK;
+    u32 STAT;
+    u32 LOUT;
+    u32 COR;
+    u32 MFWR;
+    u32 FLR;
+    u32 KEY;
+    u32 CBC;
+    u32 IDCODE;
+    u32 AXSS;
+    u32 C0R_1;
+    u32 CSOB;
+    u32 WBSTAR;
+    u32 TIMER;
+    u32 BOOTSTS;
+    u32 CTL_1;
 };
 
 /* Configuration Commands */
@@ -192,22 +192,20 @@ struct config_registers {
  * be sent through the icap device, and a return packet received with
  * the information.
  **/
-static inline u32 hwicap_type_1_read(u32 reg)
-{
-	return (XHI_TYPE_1 << XHI_TYPE_SHIFT) |
-		(reg << XHI_REGISTER_SHIFT) |
-		(XHI_OP_READ << XHI_OP_SHIFT);
+static inline u32 hwicap_type_1_read(u32 reg) {
+    return (XHI_TYPE_1 << XHI_TYPE_SHIFT) |
+           (reg << XHI_REGISTER_SHIFT) |
+           (XHI_OP_READ << XHI_OP_SHIFT);
 }
 
 /**
  * hwicap_type_1_write - Generates a Type 1 write packet header
  * @reg: is the address of the register to be read back.
  **/
-static inline u32 hwicap_type_1_write(u32 reg)
-{
-	return (XHI_TYPE_1 << XHI_TYPE_SHIFT) |
-		(reg << XHI_REGISTER_SHIFT) |
-		(XHI_OP_WRITE << XHI_OP_SHIFT);
+static inline u32 hwicap_type_1_write(u32 reg) {
+    return (XHI_TYPE_1 << XHI_TYPE_SHIFT) |
+           (reg << XHI_REGISTER_SHIFT) |
+           (XHI_OP_WRITE << XHI_OP_SHIFT);
 }
 
 #endif

@@ -204,97 +204,96 @@
  * Read either the frame pointer (r14) or the stack pointer (r15).
  * NOTE: this MUST be inlined.
  */
-static __always_inline unsigned long dwarf_read_arch_reg(unsigned int reg)
-{
-	unsigned long value = 0;
+static __always_inline unsigned long dwarf_read_arch_reg(unsigned int reg) {
+    unsigned long value = 0;
 
-	switch (reg) {
-	case 14:
-		__asm__ __volatile__("mov r14, %0\n" : "=r" (value));
-		break;
-	case 15:
-		__asm__ __volatile__("mov r15, %0\n" : "=r" (value));
-		break;
-	default:
-		BUG();
-	}
+    switch (reg) {
+    case 14:
+        __asm__ __volatile__("mov r14, %0\n" : "=r" (value));
+        break;
+    case 15:
+        __asm__ __volatile__("mov r15, %0\n" : "=r" (value));
+        break;
+    default:
+        BUG();
+    }
 
-	return value;
+    return value;
 }
 
 /**
  *	dwarf_cie - Common Information Entry
  */
 struct dwarf_cie {
-	unsigned long length;
-	unsigned long cie_id;
-	unsigned char version;
-	const char *augmentation;
-	unsigned int code_alignment_factor;
-	int data_alignment_factor;
+    unsigned long length;
+    unsigned long cie_id;
+    unsigned char version;
+    const char *augmentation;
+    unsigned int code_alignment_factor;
+    int data_alignment_factor;
 
-	/* Which column in the rule table represents return addr of func. */
-	unsigned int return_address_reg;
+    /* Which column in the rule table represents return addr of func. */
+    unsigned int return_address_reg;
 
-	unsigned char *initial_instructions;
-	unsigned char *instructions_end;
+    unsigned char *initial_instructions;
+    unsigned char *instructions_end;
 
-	unsigned char encoding;
+    unsigned char encoding;
 
-	unsigned long cie_pointer;
+    unsigned long cie_pointer;
 
-	unsigned long flags;
+    unsigned long flags;
 #define DWARF_CIE_Z_AUGMENTATION	(1 << 0)
 
-	/* linked-list entry if this CIE is from a module */
-	struct list_head link;
+    /* linked-list entry if this CIE is from a module */
+    struct list_head link;
 
-	struct rb_node node;
+    struct rb_node node;
 };
 
 /**
  *	dwarf_fde - Frame Description Entry
  */
 struct dwarf_fde {
-	unsigned long length;
-	unsigned long cie_pointer;
-	struct dwarf_cie *cie;
-	unsigned long initial_location;
-	unsigned long address_range;
-	unsigned char *instructions;
-	unsigned char *end;
+    unsigned long length;
+    unsigned long cie_pointer;
+    struct dwarf_cie *cie;
+    unsigned long initial_location;
+    unsigned long address_range;
+    unsigned char *instructions;
+    unsigned char *end;
 
-	/* linked-list entry if this FDE is from a module */
-	struct list_head link;
+    /* linked-list entry if this FDE is from a module */
+    struct list_head link;
 
-	struct rb_node node;
+    struct rb_node node;
 };
 
 /**
  *	dwarf_frame - DWARF information for a frame in the call stack
  */
 struct dwarf_frame {
-	struct dwarf_frame *prev, *next;
+    struct dwarf_frame *prev, *next;
 
-	unsigned long pc;
+    unsigned long pc;
 
-	struct list_head reg_list;
+    struct list_head reg_list;
 
-	unsigned long cfa;
+    unsigned long cfa;
 
-	/* Valid when DW_FRAME_CFA_REG_OFFSET is set in flags */
-	unsigned int cfa_register;
-	unsigned int cfa_offset;
+    /* Valid when DW_FRAME_CFA_REG_OFFSET is set in flags */
+    unsigned int cfa_register;
+    unsigned int cfa_offset;
 
-	/* Valid when DW_FRAME_CFA_REG_EXP is set in flags */
-	unsigned char *cfa_expr;
-	unsigned int cfa_expr_len;
+    /* Valid when DW_FRAME_CFA_REG_EXP is set in flags */
+    unsigned char *cfa_expr;
+    unsigned int cfa_expr_len;
 
-	unsigned long flags;
+    unsigned long flags;
 #define DWARF_FRAME_CFA_REG_OFFSET	(1 << 0)
 #define DWARF_FRAME_CFA_REG_EXP		(1 << 1)
 
-	unsigned long return_addr;
+    unsigned long return_addr;
 };
 
 /**
@@ -302,12 +301,12 @@ struct dwarf_frame {
  *	@flags: Describes how to calculate the value of this register
  */
 struct dwarf_reg {
-	struct list_head link;
+    struct list_head link;
 
-	unsigned int number;
+    unsigned int number;
 
-	unsigned long addr;
-	unsigned long flags;
+    unsigned long addr;
+    unsigned long flags;
 #define DWARF_REG_OFFSET	(1 << 0)
 #define DWARF_VAL_OFFSET	(1 << 1)
 #define DWARF_UNDEFINED		(1 << 2)
@@ -354,14 +353,12 @@ struct dwarf_reg {
  * need some helper functions to extract both the opcode and operands
  * from an instruction.
  */
-static inline unsigned int DW_CFA_opcode(unsigned long insn)
-{
-	return (insn & 0xc0);
+static inline unsigned int DW_CFA_opcode(unsigned long insn) {
+    return (insn & 0xc0);
 }
 
-static inline unsigned int DW_CFA_operand(unsigned long insn)
-{
-	return (insn & 0x3f);
+static inline unsigned int DW_CFA_operand(unsigned long insn) {
+    return (insn & 0x3f);
 }
 
 #define DW_EH_FRAME_CIE	0		/* .eh_frame CIE IDs are 0 */
@@ -376,11 +373,11 @@ static inline unsigned int DW_CFA_operand(unsigned long insn)
 #define DW_EXT_DWARF64	DW_EXT_HI
 
 extern struct dwarf_frame *dwarf_unwind_stack(unsigned long,
-					      struct dwarf_frame *);
+        struct dwarf_frame *);
 extern void dwarf_free_frame(struct dwarf_frame *);
 
 extern int module_dwarf_finalize(const Elf_Ehdr *, const Elf_Shdr *,
-				 struct module *);
+                                 struct module *);
 extern void module_dwarf_cleanup(struct module *);
 
 #endif /* !__ASSEMBLY__ */
@@ -407,8 +404,7 @@ extern void module_dwarf_cleanup(struct module *);
 #define CFI_UNDEFINED	CFI_IGNORE
 
 #ifndef __ASSEMBLY__
-static inline void dwarf_unwinder_init(void)
-{
+static inline void dwarf_unwinder_init(void) {
 }
 
 #define module_dwarf_finalize(hdr, sechdrs, me)	(0)

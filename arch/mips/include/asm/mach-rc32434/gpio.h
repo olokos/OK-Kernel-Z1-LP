@@ -26,25 +26,25 @@
 #define irq_to_gpio(irq)	(irq - (8 + 4 * 32))
 
 struct rb532_gpio_reg {
-	u32   gpiofunc;   /* GPIO Function Register
+    u32   gpiofunc;   /* GPIO Function Register
 			   * gpiofunc[x]==0 bit = gpio
 			   * func[x]==1  bit = altfunc
 			   */
-	u32   gpiocfg;	  /* GPIO Configuration Register
+    u32   gpiocfg;	  /* GPIO Configuration Register
 			   * gpiocfg[x]==0 bit = input
 			   * gpiocfg[x]==1 bit = output
 			   */
-	u32   gpiod;	  /* GPIO Data Register
+    u32   gpiod;	  /* GPIO Data Register
 			   * gpiod[x] read/write gpio pinX status
 			   */
-	u32   gpioilevel; /* GPIO Interrupt Status Register
+    u32   gpioilevel; /* GPIO Interrupt Status Register
 			   * interrupt level (see gpioistat)
 			   */
-	u32   gpioistat;  /* Gpio Interrupt Status Register
+    u32   gpioistat;  /* Gpio Interrupt Status Register
 			   * istat[x] = (gpiod[x] == level[x])
 			   * cleared in ISR (STICKY bits)
 			   */
-	u32   gpionmien;  /* GPIO Non-maskable Interrupt Enable Register */
+    u32   gpionmien;  /* GPIO Non-maskable Interrupt Enable Register */
 };
 
 /* UART GPIO signals */

@@ -19,39 +19,35 @@
 
 #include "common.h"
 
-static inline int is_valid_ram_addr(void *addr)
-{
-	if (((u32) addr > KSEG0) &&
-	    ((u32) addr < (KSEG0 + ATH79_MEM_SIZE_MAX)))
-		return 1;
+static inline int is_valid_ram_addr(void *addr) {
+    if (((u32) addr > KSEG0) &&
+            ((u32) addr < (KSEG0 + ATH79_MEM_SIZE_MAX)))
+        return 1;
 
-	if (((u32) addr > KSEG1) &&
-	    ((u32) addr < (KSEG1 + ATH79_MEM_SIZE_MAX)))
-		return 1;
+    if (((u32) addr > KSEG1) &&
+            ((u32) addr < (KSEG1 + ATH79_MEM_SIZE_MAX)))
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static __init void ath79_prom_init_cmdline(int argc, char **argv)
-{
-	int i;
+static __init void ath79_prom_init_cmdline(int argc, char **argv) {
+    int i;
 
-	if (!is_valid_ram_addr(argv))
-		return;
+    if (!is_valid_ram_addr(argv))
+        return;
 
-	for (i = 0; i < argc; i++)
-		if (is_valid_ram_addr(argv[i])) {
-			strlcat(arcs_cmdline, " ", sizeof(arcs_cmdline));
-			strlcat(arcs_cmdline, argv[i], sizeof(arcs_cmdline));
-		}
+    for (i = 0; i < argc; i++)
+        if (is_valid_ram_addr(argv[i])) {
+            strlcat(arcs_cmdline, " ", sizeof(arcs_cmdline));
+            strlcat(arcs_cmdline, argv[i], sizeof(arcs_cmdline));
+        }
 }
 
-void __init prom_init(void)
-{
-	ath79_prom_init_cmdline(fw_arg0, (char **)fw_arg1);
+void __init prom_init(void) {
+    ath79_prom_init_cmdline(fw_arg0, (char **)fw_arg1);
 }
 
-void __init prom_free_prom_memory(void)
-{
-	/* We do not have to prom memory to free */
+void __init prom_free_prom_memory(void) {
+    /* We do not have to prom memory to free */
 }

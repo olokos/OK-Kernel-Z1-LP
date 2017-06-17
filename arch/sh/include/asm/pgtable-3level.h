@@ -27,19 +27,19 @@
 #define pmd_ERROR(e) \
 	printk("%s:%d: bad pmd %016llx.\n", __FILE__, __LINE__, pmd_val(e))
 
-typedef struct { unsigned long long pmd; } pmd_t;
+typedef struct {
+    unsigned long long pmd;
+} pmd_t;
 #define pmd_val(x)	((x).pmd)
 #define __pmd(x)	((pmd_t) { (x) } )
 
-static inline unsigned long pud_page_vaddr(pud_t pud)
-{
-	return pud_val(pud);
+static inline unsigned long pud_page_vaddr(pud_t pud) {
+    return pud_val(pud);
 }
 
 #define pmd_index(address)	(((address) >> PMD_SHIFT) & (PTRS_PER_PMD-1))
-static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
-{
-	return (pmd_t *)pud_page_vaddr(*pud) + pmd_index(address);
+static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address) {
+    return (pmd_t *)pud_page_vaddr(*pud) + pmd_index(address);
 }
 
 #define pud_none(x)	(!pud_val(x))

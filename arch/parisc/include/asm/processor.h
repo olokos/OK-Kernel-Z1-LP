@@ -67,46 +67,46 @@
  * FIXME: some CPU rev info may be processor specific...
  */
 struct system_cpuinfo_parisc {
-	unsigned int	cpu_count;
-	unsigned int	cpu_hz;
-	unsigned int	hversion;
-	unsigned int	sversion;
-	enum cpu_type	cpu_type;
+    unsigned int	cpu_count;
+    unsigned int	cpu_hz;
+    unsigned int	hversion;
+    unsigned int	sversion;
+    enum cpu_type	cpu_type;
 
-	struct {
-		struct pdc_model model;
-		unsigned long versions;
-		unsigned long cpuid;
-		unsigned long capabilities;
-		char   sys_model_name[81]; /* PDC-ROM returnes this model name */
-	} pdc;
+    struct {
+        struct pdc_model model;
+        unsigned long versions;
+        unsigned long cpuid;
+        unsigned long capabilities;
+        char   sys_model_name[81]; /* PDC-ROM returnes this model name */
+    } pdc;
 
-	const char	*cpu_name;	/* e.g. "PA7300LC (PCX-L2)" */
-	const char	*family_name;	/* e.g. "1.1e" */
+    const char	*cpu_name;	/* e.g. "PA7300LC (PCX-L2)" */
+    const char	*family_name;	/* e.g. "1.1e" */
 };
 
 
 /* Per CPU data structure - ie varies per CPU.  */
 struct cpuinfo_parisc {
-	unsigned long it_value;     /* Interval Timer at last timer Intr */
-	unsigned long it_delta;     /* Interval delta (tic_10ms / HZ * 100) */
-	unsigned long irq_count;    /* number of IRQ's since boot */
-	unsigned long irq_max_cr16; /* longest time to handle a single IRQ */
-	unsigned long cpuid;        /* aka slot_number or set to NO_PROC_ID */
-	unsigned long hpa;          /* Host Physical address */
-	unsigned long txn_addr;     /* MMIO addr of EIR or id_eid */
+    unsigned long it_value;     /* Interval Timer at last timer Intr */
+    unsigned long it_delta;     /* Interval delta (tic_10ms / HZ * 100) */
+    unsigned long irq_count;    /* number of IRQ's since boot */
+    unsigned long irq_max_cr16; /* longest time to handle a single IRQ */
+    unsigned long cpuid;        /* aka slot_number or set to NO_PROC_ID */
+    unsigned long hpa;          /* Host Physical address */
+    unsigned long txn_addr;     /* MMIO addr of EIR or id_eid */
 #ifdef CONFIG_SMP
-	unsigned long pending_ipi;  /* bitmap of type ipi_message_type */
-	unsigned long ipi_count;    /* number ipi Interrupts */
+    unsigned long pending_ipi;  /* bitmap of type ipi_message_type */
+    unsigned long ipi_count;    /* number ipi Interrupts */
 #endif
-	unsigned long bh_count;     /* number of times bh was invoked */
-	unsigned long prof_counter; /* per CPU profiling support */
-	unsigned long prof_multiplier;	/* per CPU profiling support */
-	unsigned long fp_rev;
-	unsigned long fp_model;
-	unsigned int state;
-	struct parisc_device *dev;
-	unsigned long loops_per_jiffy;
+    unsigned long bh_count;     /* number of times bh was invoked */
+    unsigned long prof_counter; /* per CPU profiling support */
+    unsigned long prof_multiplier;	/* per CPU profiling support */
+    unsigned long fp_rev;
+    unsigned long fp_model;
+    unsigned int state;
+    struct parisc_device *dev;
+    unsigned long loops_per_jiffy;
 };
 
 extern struct system_cpuinfo_parisc boot_cpu_data;
@@ -115,17 +115,17 @@ DECLARE_PER_CPU(struct cpuinfo_parisc, cpu_data);
 #define CPU_HVERSION ((boot_cpu_data.hversion >> 4) & 0x0FFF)
 
 typedef struct {
-	int seg;  
+    int seg;
 } mm_segment_t;
 
 #define ARCH_MIN_TASKALIGN	8
 
 struct thread_struct {
-	struct pt_regs regs;
-	unsigned long  task_size;
-	unsigned long  map_base;
-	unsigned long  flags;
-}; 
+    struct pt_regs regs;
+    unsigned long  task_size;
+    unsigned long  map_base;
+    unsigned long  flags;
+};
 
 #define task_pt_regs(tsk) ((struct pt_regs *)&((tsk)->thread.regs))
 
@@ -343,13 +343,12 @@ extern unsigned long get_wchan(struct task_struct *p);
 /* Used as a macro to identify the combined VIPT/PIPT cached
  * CPUs which require a guarantee of coherency (no inequivalent
  * aliases with different data, whether clean or not) to operate */
-static inline int parisc_requires_coherency(void)
-{
+static inline int parisc_requires_coherency(void) {
 #ifdef CONFIG_PA8X00
-	return (boot_cpu_data.cpu_type == mako) ||
-		(boot_cpu_data.cpu_type == mako2);
+    return (boot_cpu_data.cpu_type == mako) ||
+           (boot_cpu_data.cpu_type == mako2);
 #else
-	return 0;
+    return 0;
 #endif
 }
 

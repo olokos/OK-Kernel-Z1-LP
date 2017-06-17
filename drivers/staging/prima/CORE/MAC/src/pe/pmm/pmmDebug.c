@@ -43,8 +43,7 @@
 #include "pmmDebug.h"
 #define LOG_SIZE 256
 
-void pmmLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...)
-{
+void pmmLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...) {
     VOS_TRACE_LEVEL  vosDebugLevel;
     char    logBuffer[LOG_SIZE];
     va_list marker;

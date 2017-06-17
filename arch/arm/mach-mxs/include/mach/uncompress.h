@@ -34,41 +34,38 @@ unsigned long mxs_duart_base;
  * simply discarded.
  */
 
-static void putc(int ch)
-{
-	if (!mxs_duart_base)
-		return;
-	if (!(MXS_DUART(MXS_DUART_CR) & MXS_DUART_CR_UARTEN))
-		return;
+static void putc(int ch) {
+    if (!mxs_duart_base)
+        return;
+    if (!(MXS_DUART(MXS_DUART_CR) & MXS_DUART_CR_UARTEN))
+        return;
 
-	while (!(MXS_DUART(MXS_DUART_FR) & MXS_DUART_FR_TXFE))
-		barrier();
+    while (!(MXS_DUART(MXS_DUART_FR) & MXS_DUART_FR_TXFE))
+        barrier();
 
-	MXS_DUART(MXS_DUART_DR) = ch;
+    MXS_DUART(MXS_DUART_DR) = ch;
 }
 
-static inline void flush(void)
-{
+static inline void flush(void) {
 }
 
 #define MX23_DUART_BASE_ADDR	0x80070000
 #define MX28_DUART_BASE_ADDR	0x80074000
 #define MXS_DIGCTL_CHIPID	0x8001c310
 
-static inline void __arch_decomp_setup(unsigned long arch_id)
-{
-	u16 chipid = (*(volatile unsigned long *) MXS_DIGCTL_CHIPID) >> 16;
+static inline void __arch_decomp_setup(unsigned long arch_id) {
+    u16 chipid = (*(volatile unsigned long *) MXS_DIGCTL_CHIPID) >> 16;
 
-	switch (chipid) {
-	case 0x3780:
-		mxs_duart_base = MX23_DUART_BASE_ADDR;
-		break;
-	case 0x2800:
-		mxs_duart_base = MX28_DUART_BASE_ADDR;
-		break;
-	default:
-		break;
-	}
+    switch (chipid) {
+    case 0x3780:
+        mxs_duart_base = MX23_DUART_BASE_ADDR;
+        break;
+    case 0x2800:
+        mxs_duart_base = MX28_DUART_BASE_ADDR;
+        break;
+    default:
+        break;
+    }
 }
 
 #define arch_decomp_setup()	__arch_decomp_setup(arch_id)

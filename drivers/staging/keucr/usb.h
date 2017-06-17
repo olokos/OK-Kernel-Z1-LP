@@ -19,11 +19,11 @@ struct scsi_cmnd;
  */
 
 struct us_unusual_dev {
-	const char* vendorName;
-	const char* productName;
-	__u8  useProtocol;
-	__u8  useTransport;
-	int (*initFunction)(struct us_data *);
+    const char* vendorName;
+    const char* productName;
+    __u8  useProtocol;
+    __u8  useTransport;
+    int (*initFunction)(struct us_data *);
 };
 
 //EnE HW Register
@@ -118,116 +118,116 @@ typedef void (*pm_hook)(struct us_data *, int);	/* power management hook */
 
 /* we allocate one of these for every device that we remember */
 struct us_data {
-	/* The device we're working with
-	 * It's important to note:
-	 *    (o) you must hold dev_mutex to change pusb_dev
-	 */
-	struct mutex		dev_mutex;	 /* protect pusb_dev */
-	struct usb_device	*pusb_dev;	 /* this usb_device */
-	struct usb_interface	*pusb_intf;	 /* this interface */
-	struct us_unusual_dev   *unusual_dev;	 /* device-filter entry     */
-	unsigned long		fflags;		 /* fixed flags from filter */
-	unsigned long		dflags;		 /* dynamic atomic bitflags */
-	unsigned int		send_bulk_pipe;	 /* cached pipe values */
-	unsigned int		recv_bulk_pipe;
-	unsigned int		send_ctrl_pipe;
-	unsigned int		recv_ctrl_pipe;
-	unsigned int		recv_intr_pipe;
+    /* The device we're working with
+     * It's important to note:
+     *    (o) you must hold dev_mutex to change pusb_dev
+     */
+    struct mutex		dev_mutex;	 /* protect pusb_dev */
+    struct usb_device	*pusb_dev;	 /* this usb_device */
+    struct usb_interface	*pusb_intf;	 /* this interface */
+    struct us_unusual_dev   *unusual_dev;	 /* device-filter entry     */
+    unsigned long		fflags;		 /* fixed flags from filter */
+    unsigned long		dflags;		 /* dynamic atomic bitflags */
+    unsigned int		send_bulk_pipe;	 /* cached pipe values */
+    unsigned int		recv_bulk_pipe;
+    unsigned int		send_ctrl_pipe;
+    unsigned int		recv_ctrl_pipe;
+    unsigned int		recv_intr_pipe;
 
-	/* information about the device */
-	char			*transport_name;
-	char			*protocol_name;
-	__le32			bcs_signature;
-	u8			subclass;
-	u8			protocol;
-	u8			max_lun;
+    /* information about the device */
+    char			*transport_name;
+    char			*protocol_name;
+    __le32			bcs_signature;
+    u8			subclass;
+    u8			protocol;
+    u8			max_lun;
 
-	u8			ifnum;		 /* interface number   */
-	u8			ep_bInterval;	 /* interrupt interval */
+    u8			ifnum;		 /* interface number   */
+    u8			ep_bInterval;	 /* interrupt interval */
 
-	/* function pointers for this device */
-	trans_cmnd		transport;	 /* transport function	   */
-	trans_reset		transport_reset; /* transport device reset */
-	proto_cmnd		proto_handler;	 /* protocol handler	   */
+    /* function pointers for this device */
+    trans_cmnd		transport;	 /* transport function	   */
+    trans_reset		transport_reset; /* transport device reset */
+    proto_cmnd		proto_handler;	 /* protocol handler	   */
 
-	/* SCSI interfaces */
-	struct scsi_cmnd	*srb;		 /* current srb		*/
-	unsigned int		tag;		 /* current dCBWTag	*/
+    /* SCSI interfaces */
+    struct scsi_cmnd	*srb;		 /* current srb		*/
+    unsigned int		tag;		 /* current dCBWTag	*/
 
-	/* control and bulk communications data */
-	struct urb		*current_urb;	 /* USB requests	 */
-	struct usb_ctrlrequest	*cr;		 /* control requests	 */
-	struct usb_sg_request	current_sg;	 /* scatter-gather req.  */
-	unsigned char		*iobuf;		 /* I/O buffer		 */
-	unsigned char		*sensebuf;	 /* sense data buffer	 */
-	dma_addr_t		cr_dma;		 /* buffer DMA addresses */
-	dma_addr_t		iobuf_dma;
-	struct task_struct	*ctl_thread;	 /* the control thread   */
+    /* control and bulk communications data */
+    struct urb		*current_urb;	 /* USB requests	 */
+    struct usb_ctrlrequest	*cr;		 /* control requests	 */
+    struct usb_sg_request	current_sg;	 /* scatter-gather req.  */
+    unsigned char		*iobuf;		 /* I/O buffer		 */
+    unsigned char		*sensebuf;	 /* sense data buffer	 */
+    dma_addr_t		cr_dma;		 /* buffer DMA addresses */
+    dma_addr_t		iobuf_dma;
+    struct task_struct	*ctl_thread;	 /* the control thread   */
 
-	/* mutual exclusion and synchronization structures */
-	struct completion	cmnd_ready;	 /* to sleep thread on	    */
-	struct completion	notify;		 /* thread begin/end	    */
-	wait_queue_head_t	delay_wait;	 /* wait during scan, reset */
-	struct completion	scanning_done;	 /* wait for scan thread    */
+    /* mutual exclusion and synchronization structures */
+    struct completion	cmnd_ready;	 /* to sleep thread on	    */
+    struct completion	notify;		 /* thread begin/end	    */
+    wait_queue_head_t	delay_wait;	 /* wait during scan, reset */
+    struct completion	scanning_done;	 /* wait for scan thread    */
 
-	/* subdriver information */
-	void			*extra;		 /* Any extra data          */
-	extra_data_destructor	extra_destructor;/* extra data destructor   */
+    /* subdriver information */
+    void			*extra;		 /* Any extra data          */
+    extra_data_destructor	extra_destructor;/* extra data destructor   */
 #ifdef CONFIG_PM
-	pm_hook			suspend_resume_hook;
+    pm_hook			suspend_resume_hook;
 #endif
-	// for 6250 code
-	SD_STATUS   SD_Status;
-	MS_STATUS   MS_Status;
-	SM_STATUS   SM_Status;
+    // for 6250 code
+    SD_STATUS   SD_Status;
+    MS_STATUS   MS_Status;
+    SM_STATUS   SM_Status;
 
-	//----- SD Control Data ----------------
-	//SD_REGISTER SD_Regs;
-	WORD        SD_Block_Mult;
-	BYTE        SD_READ_BL_LEN;
-	WORD        SD_C_SIZE;
-	BYTE        SD_C_SIZE_MULT;
+    //----- SD Control Data ----------------
+    //SD_REGISTER SD_Regs;
+    WORD        SD_Block_Mult;
+    BYTE        SD_READ_BL_LEN;
+    WORD        SD_C_SIZE;
+    BYTE        SD_C_SIZE_MULT;
 
-	// SD/MMC New spec.
-	BYTE        SD_SPEC_VER;
-	BYTE        SD_CSD_VER;
-	BYTE        SD20_HIGH_CAPACITY;
-	DWORD       HC_C_SIZE;
-	BYTE        MMC_SPEC_VER;
-	BYTE        MMC_BusWidth;
-	BYTE        MMC_HIGH_CAPACITY;
-	
-	//----- MS Control Data ----------------
-	BOOLEAN             MS_SWWP;
-	DWORD               MSP_TotalBlock;
-	/* MS_LibControl       MS_Lib; */
-	BOOLEAN             MS_IsRWPage;
-	WORD                MS_Model;
+    // SD/MMC New spec.
+    BYTE        SD_SPEC_VER;
+    BYTE        SD_CSD_VER;
+    BYTE        SD20_HIGH_CAPACITY;
+    DWORD       HC_C_SIZE;
+    BYTE        MMC_SPEC_VER;
+    BYTE        MMC_BusWidth;
+    BYTE        MMC_HIGH_CAPACITY;
 
-	//----- SM Control Data ----------------
-	BYTE		SM_DeviceID;
-	BYTE		SM_CardID;
+    //----- MS Control Data ----------------
+    BOOLEAN             MS_SWWP;
+    DWORD               MSP_TotalBlock;
+    /* MS_LibControl       MS_Lib; */
+    BOOLEAN             MS_IsRWPage;
+    WORD                MS_Model;
 
-	PBYTE		testbuf;
-	BYTE		BIN_FLAG;
-	DWORD		bl_num;
-	int		SrbStatus;
-	
-	//------Power Managerment ---------------
-	BOOLEAN         Power_IsResum;	
+    //----- SM Control Data ----------------
+    BYTE		SM_DeviceID;
+    BYTE		SM_CardID;
+
+    PBYTE		testbuf;
+    BYTE		BIN_FLAG;
+    DWORD		bl_num;
+    int		SrbStatus;
+
+    //------Power Managerment ---------------
+    BOOLEAN         Power_IsResum;
 };
 
 /* Convert between us_data and the corresponding Scsi_Host */
 static inline struct Scsi_Host *us_to_host(struct us_data *us) {
-	return container_of((void *) us, struct Scsi_Host, hostdata);
+    return container_of((void *) us, struct Scsi_Host, hostdata);
 }
 static inline struct us_data *host_to_us(struct Scsi_Host *host) {
-	return (struct us_data *) host->hostdata;
+    return (struct us_data *) host->hostdata;
 }
 
 /* Function to fill an inquiry response. See usb.c for details */
 extern void fill_inquiry_response(struct us_data *us,
-	unsigned char *data, unsigned int data_len);
+                                  unsigned char *data, unsigned int data_len);
 
 /* The scsi_lock() and scsi_unlock() macros protect the sm_state and the
  * single queue element srb for write access */

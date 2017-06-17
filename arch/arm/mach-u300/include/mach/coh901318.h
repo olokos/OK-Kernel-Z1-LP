@@ -28,13 +28,13 @@
  * @phy_this: physical address of current lli (only used by pool_free)
  */
 struct coh901318_lli {
-	u32 control;
-	dma_addr_t src_addr;
-	dma_addr_t dst_addr;
-	dma_addr_t link_addr;
+    u32 control;
+    dma_addr_t src_addr;
+    dma_addr_t dst_addr;
+    dma_addr_t link_addr;
 
-	void *virt_link_addr;
-	dma_addr_t phy_this;
+    void *virt_link_addr;
+    dma_addr_t phy_this;
 };
 /**
  * struct coh901318_params - parameters for DMAC configuration
@@ -44,10 +44,10 @@ struct coh901318_lli {
  * @ctrl_lli_chained: DMA control register for a chained lli
  */
 struct coh901318_params {
-	u32 config;
-	u32 ctrl_lli_last;
-	u32 ctrl_lli;
-	u32 ctrl_lli_chained;
+    u32 config;
+    u32 ctrl_lli_last;
+    u32 ctrl_lli;
+    u32 ctrl_lli_chained;
 };
 /**
  * struct coh_dma_channel - dma channel base
@@ -59,12 +59,12 @@ struct coh901318_params {
  * @dev_addr: physical address of periphal connected to channel
  */
 struct coh_dma_channel {
-	const char name[32];
-	const int number;
-	const int desc_nbr_max;
-	const int priority_high;
-	const struct coh901318_params param;
-	const dma_addr_t dev_addr;
+    const char name[32];
+    const int number;
+    const int desc_nbr_max;
+    const int priority_high;
+    const struct coh901318_params param;
+    const dma_addr_t dev_addr;
 };
 
 /**
@@ -75,7 +75,7 @@ struct coh_dma_channel {
  *           0 means dma wont access memory
  */
 typedef void (*dma_access_memory_state_t)(struct device *dev,
-					  bool active);
+        bool active);
 
 /**
  * struct powersave - DMA power save structure
@@ -83,8 +83,8 @@ typedef void (*dma_access_memory_state_t)(struct device *dev,
  * @started_channels: bit mask indicating active dma channels
  */
 struct powersave {
-	spinlock_t lock;
-	u64 started_channels;
+    spinlock_t lock;
+    u64 started_channels;
 };
 /**
  * struct coh901318_platform - platform arch structure
@@ -95,11 +95,11 @@ struct powersave {
  * @max_channels: max number of dma chanenls
  */
 struct coh901318_platform {
-	const int *chans_slave;
-	const int *chans_memcpy;
-	const dma_access_memory_state_t access_memory_state;
-	const struct coh_dma_channel *chan_conf;
-	const int max_channels;
+    const int *chans_slave;
+    const int *chans_memcpy;
+    const dma_access_memory_state_t access_memory_state;
+    const struct coh_dma_channel *chan_conf;
+    const int max_channels;
 };
 
 #ifdef CONFIG_COH901318
@@ -112,9 +112,8 @@ struct coh901318_platform {
  */
 bool coh901318_filter_id(struct dma_chan *chan, void *chan_id);
 #else
-static inline bool coh901318_filter_id(struct dma_chan *chan, void *chan_id)
-{
-	return false;
+static inline bool coh901318_filter_id(struct dma_chan *chan, void *chan_id) {
+    return false;
 }
 #endif
 

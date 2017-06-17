@@ -22,6 +22,6 @@
  * coherent memory.
  */
 void __init s5p_mfc_reserve_mem(phys_addr_t rbase, unsigned int rsize,
-				phys_addr_t lbase, unsigned int lsize);
+                                phys_addr_t lbase, unsigned int lsize);
 
 #endif /* __PLAT_SAMSUNG_MFC_H */

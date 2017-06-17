@@ -71,7 +71,7 @@
 #define IRQ_PB11MP_GPIO0	(IRQ_PB11MP_GIC_START + 6)	/* GPIO 0 */
 #define IRQ_PB11MP_GPIO1	(IRQ_PB11MP_GIC_START + 7)	/* GPIO 1 */
 #define IRQ_PB11MP_GPIO2	(IRQ_PB11MP_GIC_START + 8)	/* GPIO 2 */
-								/* 9 reserved */
+/* 9 reserved */
 #define IRQ_PB11MP_RTC_GIC1	(IRQ_PB11MP_GIC_START + 10)	/* Real Time Clock */
 #define IRQ_PB11MP_SSP		(IRQ_PB11MP_GIC_START + 11)	/* Synchronous Serial Port */
 #define IRQ_PB11MP_UART0_GIC1	(IRQ_PB11MP_GIC_START + 12)	/* UART 0 on development chip */

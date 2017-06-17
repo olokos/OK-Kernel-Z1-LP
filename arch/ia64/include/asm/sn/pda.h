@@ -17,31 +17,31 @@
  *
  * One of these structures is allocated for each cpu of a NUMA system.
  *
- * This structure provides a convenient way of keeping together 
- * all SN per-cpu data structures. 
+ * This structure provides a convenient way of keeping together
+ * all SN per-cpu data structures.
  */
 
 typedef struct pda_s {
 
-	/*
-	 * Support for SN LEDs
-	 */
-	volatile short	*led_address;
-	u8		led_state;
-	u8		hb_state;	/* supports blinking heartbeat leds */
-	unsigned int	hb_count;
+    /*
+     * Support for SN LEDs
+     */
+    volatile short	*led_address;
+    u8		led_state;
+    u8		hb_state;	/* supports blinking heartbeat leds */
+    unsigned int	hb_count;
 
-	unsigned int	idle_flag;
-	
-	volatile unsigned long *bedrock_rev_id;
-	volatile unsigned long *pio_write_status_addr;
-	unsigned long pio_write_status_val;
-	volatile unsigned long *pio_shub_war_cam_addr;
+    unsigned int	idle_flag;
 
-	unsigned long	sn_in_service_ivecs[4];
-	int		sn_lb_int_war_ticks;
-	int		sn_last_irq;
-	int		sn_first_irq;
+    volatile unsigned long *bedrock_rev_id;
+    volatile unsigned long *pio_write_status_addr;
+    unsigned long pio_write_status_val;
+    volatile unsigned long *pio_shub_war_cam_addr;
+
+    unsigned long	sn_in_service_ivecs[4];
+    int		sn_lb_int_war_ticks;
+    int		sn_last_irq;
+    int		sn_first_irq;
 } pda_t;
 
 

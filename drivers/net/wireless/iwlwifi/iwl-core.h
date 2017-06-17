@@ -75,18 +75,18 @@ struct iwl_cmd;
 #define TIME_UNIT		1024
 
 struct iwl_lib_ops {
-	/* set hw dependent parameters */
-	void (*set_hw_params)(struct iwl_priv *priv);
-	int (*set_channel_switch)(struct iwl_priv *priv,
-				  struct ieee80211_channel_switch *ch_switch);
-	/* device specific configuration */
-	void (*nic_config)(struct iwl_priv *priv);
+    /* set hw dependent parameters */
+    void (*set_hw_params)(struct iwl_priv *priv);
+    int (*set_channel_switch)(struct iwl_priv *priv,
+                              struct ieee80211_channel_switch *ch_switch);
+    /* device specific configuration */
+    void (*nic_config)(struct iwl_priv *priv);
 
-	/* eeprom operations (as defined in iwl-eeprom.h) */
-	struct iwl_eeprom_ops eeprom_ops;
+    /* eeprom operations (as defined in iwl-eeprom.h) */
+    struct iwl_eeprom_ops eeprom_ops;
 
-	/* temperature */
-	void (*temperature)(struct iwl_priv *priv);
+    /* temperature */
+    void (*temperature)(struct iwl_priv *priv);
 };
 
 /***************************
@@ -94,61 +94,55 @@ struct iwl_lib_ops {
  ***************************/
 
 void iwl_set_rxon_hwcrypto(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
-			   int hw_decrypt);
+                           int hw_decrypt);
 int iwl_check_rxon_cmd(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 int iwl_full_rxon_required(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 void iwl_set_rxon_channel(struct iwl_priv *priv, struct ieee80211_channel *ch,
-			 struct iwl_rxon_context *ctx);
+                          struct iwl_rxon_context *ctx);
 void iwl_set_flags_for_band(struct iwl_priv *priv,
-			    struct iwl_rxon_context *ctx,
-			    enum ieee80211_band band,
-			    struct ieee80211_vif *vif);
+                            struct iwl_rxon_context *ctx,
+                            enum ieee80211_band band,
+                            struct ieee80211_vif *vif);
 u8 iwl_get_single_channel_number(struct iwl_priv *priv,
-				  enum ieee80211_band band);
+                                 enum ieee80211_band band);
 void iwl_set_rxon_ht(struct iwl_priv *priv, struct iwl_ht_config *ht_conf);
 bool iwl_is_ht40_tx_allowed(struct iwl_priv *priv,
-			    struct iwl_rxon_context *ctx,
-			    struct ieee80211_sta_ht_cap *ht_cap);
+                            struct iwl_rxon_context *ctx,
+                            struct ieee80211_sta_ht_cap *ht_cap);
 void iwl_connection_init_rx_config(struct iwl_priv *priv,
-				   struct iwl_rxon_context *ctx);
+                                   struct iwl_rxon_context *ctx);
 void iwl_set_rate(struct iwl_priv *priv);
 int iwl_cmd_echo_test(struct iwl_priv *priv);
 #ifdef CONFIG_IWLWIFI_DEBUGFS
 int iwl_alloc_traffic_mem(struct iwl_priv *priv);
 void iwl_free_traffic_mem(struct iwl_priv *priv);
 void iwl_dbg_log_tx_data_frame(struct iwl_priv *priv,
-				u16 length, struct ieee80211_hdr *header);
+                               u16 length, struct ieee80211_hdr *header);
 void iwl_dbg_log_rx_data_frame(struct iwl_priv *priv,
-				u16 length, struct ieee80211_hdr *header);
+                               u16 length, struct ieee80211_hdr *header);
 const char *get_mgmt_string(int cmd);
 const char *get_ctrl_string(int cmd);
 void iwl_clear_traffic_stats(struct iwl_priv *priv);
 void iwl_update_stats(struct iwl_priv *priv, bool is_tx, __le16 fc,
-		      u16 len);
+                      u16 len);
 void iwl_reset_traffic_log(struct iwl_priv *priv);
 
 #else
-static inline int iwl_alloc_traffic_mem(struct iwl_priv *priv)
-{
-	return 0;
+static inline int iwl_alloc_traffic_mem(struct iwl_priv *priv) {
+    return 0;
 }
-static inline void iwl_free_traffic_mem(struct iwl_priv *priv)
-{
+static inline void iwl_free_traffic_mem(struct iwl_priv *priv) {
 }
-static inline void iwl_reset_traffic_log(struct iwl_priv *priv)
-{
+static inline void iwl_reset_traffic_log(struct iwl_priv *priv) {
 }
 static inline void iwl_dbg_log_tx_data_frame(struct iwl_priv *priv,
-		      u16 length, struct ieee80211_hdr *header)
-{
+        u16 length, struct ieee80211_hdr *header) {
 }
 static inline void iwl_dbg_log_rx_data_frame(struct iwl_priv *priv,
-		      u16 length, struct ieee80211_hdr *header)
-{
+        u16 length, struct ieee80211_hdr *header) {
 }
 static inline void iwl_update_stats(struct iwl_priv *priv, bool is_tx,
-				    __le16 fc, u16 len)
-{
+                                    __le16 fc, u16 len) {
 }
 #endif
 
@@ -176,9 +170,9 @@ void iwl_setup_rx_scan_handlers(struct iwl_priv *priv);
 void iwl_setup_scan_deferred_work(struct iwl_priv *priv);
 void iwl_cancel_scan_deferred_work(struct iwl_priv *priv);
 int __must_check iwl_scan_initiate(struct iwl_priv *priv,
-				   struct ieee80211_vif *vif,
-				   enum iwl_scan_type scan_type,
-				   enum ieee80211_band band);
+                                   struct ieee80211_vif *vif,
+                                   enum iwl_scan_type scan_type,
+                                   enum ieee80211_band band);
 
 /* For faster active scanning, scan will move to the next channel if fewer than
  * PLCP_QUIET_THRESH packets are heard on this channel within
@@ -202,7 +196,7 @@ int __must_check iwl_scan_initiate(struct iwl_priv *priv,
 void iwl_bg_watchdog(unsigned long data);
 u32 iwl_usecs_to_beacons(struct iwl_priv *priv, u32 usec, u32 beacon_interval);
 __le32 iwl_add_beacon_time(struct iwl_priv *priv, u32 base,
-			   u32 addon, u32 beacon_interval);
+                           u32 addon, u32 beacon_interval);
 
 
 /*****************************************************
@@ -213,20 +207,18 @@ void iwl_free_geos(struct iwl_priv *priv);
 
 extern void iwl_send_bt_config(struct iwl_priv *priv);
 extern int iwl_send_statistics_request(struct iwl_priv *priv,
-				       u8 flags, bool clear);
+                                       u8 flags, bool clear);
 
 int iwl_send_rxon_timing(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 
 static inline const struct ieee80211_supported_band *iwl_get_hw_mode(
-			struct iwl_priv *priv, enum ieee80211_band band)
-{
-	return priv->hw->wiphy->bands[band];
+    struct iwl_priv *priv, enum ieee80211_band band) {
+    return priv->hw->wiphy->bands[band];
 }
 
-static inline bool iwl_advanced_bt_coexist(struct iwl_priv *priv)
-{
-	return cfg(priv)->bt_params &&
-	       cfg(priv)->bt_params->advanced_bt_coexist;
+static inline bool iwl_advanced_bt_coexist(struct iwl_priv *priv) {
+    return cfg(priv)->bt_params &&
+           cfg(priv)->bt_params->advanced_bt_coexist;
 }
 
 extern bool bt_siso_mode;

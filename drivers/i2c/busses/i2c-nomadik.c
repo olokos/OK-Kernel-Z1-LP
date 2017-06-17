@@ -105,17 +105,17 @@
 #define MAX_I2C_FIFO_THRESHOLD	15
 
 enum i2c_status {
-	I2C_NOP,
-	I2C_ON_GOING,
-	I2C_OK,
-	I2C_ABORT
+    I2C_NOP,
+    I2C_ON_GOING,
+    I2C_OK,
+    I2C_ABORT
 };
 
 /* operation */
 enum i2c_operation {
-	I2C_NO_OPERATION = 0xff,
-	I2C_WRITE = 0x00,
-	I2C_READ = 0x01
+    I2C_NO_OPERATION = 0xff,
+    I2C_WRITE = 0x00,
+    I2C_READ = 0x01
 };
 
 /**
@@ -127,11 +127,11 @@ enum i2c_operation {
  * @operation: current I2C operation
  */
 struct i2c_nmk_client {
-	unsigned short		slave_adr;
-	unsigned long		count;
-	unsigned char		*buffer;
-	unsigned long		xfer_bytes;
-	enum i2c_operation	operation;
+    unsigned short		slave_adr;
+    unsigned long		count;
+    unsigned char		*buffer;
+    unsigned long		xfer_bytes;
+    enum i2c_operation	operation;
 };
 
 /**
@@ -150,39 +150,37 @@ struct i2c_nmk_client {
  * @busy: Busy doing transfer.
  */
 struct nmk_i2c_dev {
-	struct platform_device		*pdev;
-	struct i2c_adapter		adap;
-	int				irq;
-	void __iomem			*virtbase;
-	struct clk			*clk;
-	struct nmk_i2c_controller	cfg;
-	struct i2c_nmk_client		cli;
-	int				stop;
-	struct completion		xfer_complete;
-	int				result;
-	struct regulator		*regulator;
-	bool				busy;
+    struct platform_device		*pdev;
+    struct i2c_adapter		adap;
+    int				irq;
+    void __iomem			*virtbase;
+    struct clk			*clk;
+    struct nmk_i2c_controller	cfg;
+    struct i2c_nmk_client		cli;
+    int				stop;
+    struct completion		xfer_complete;
+    int				result;
+    struct regulator		*regulator;
+    bool				busy;
 };
 
 /* controller's abort causes */
 static const char *abort_causes[] = {
-	"no ack received after address transmission",
-	"no ack received during data phase",
-	"ack received after xmission of master code",
-	"master lost arbitration",
-	"slave restarts",
-	"slave reset",
-	"overflow, maxsize is 2047 bytes",
+    "no ack received after address transmission",
+    "no ack received during data phase",
+    "ack received after xmission of master code",
+    "master lost arbitration",
+    "slave restarts",
+    "slave reset",
+    "overflow, maxsize is 2047 bytes",
 };
 
-static inline void i2c_set_bit(void __iomem *reg, u32 mask)
-{
-	writel(readl(reg) | mask, reg);
+static inline void i2c_set_bit(void __iomem *reg, u32 mask) {
+    writel(readl(reg) | mask, reg);
 }
 
-static inline void i2c_clr_bit(void __iomem *reg, u32 mask)
-{
-	writel(readl(reg) & ~mask, reg);
+static inline void i2c_clr_bit(void __iomem *reg, u32 mask) {
+    writel(readl(reg) & ~mask, reg);
 }
 
 /**
@@ -192,82 +190,78 @@ static inline void i2c_clr_bit(void __iomem *reg, u32 mask)
  * This function flushes the I2C Tx and Rx FIFOs. It returns
  * 0 on successful flushing of FIFO
  */
-static int flush_i2c_fifo(struct nmk_i2c_dev *dev)
-{
+static int flush_i2c_fifo(struct nmk_i2c_dev *dev) {
 #define LOOP_ATTEMPTS 10
-	int i;
-	unsigned long timeout;
+    int i;
+    unsigned long timeout;
 
-	/*
-	 * flush the transmit and receive FIFO. The flushing
-	 * operation takes several cycles before to be completed.
-	 * On the completion, the I2C internal logic clears these
-	 * bits, until then no one must access Tx, Rx FIFO and
-	 * should poll on these bits waiting for the completion.
-	 */
-	writel((I2C_CR_FTX | I2C_CR_FRX), dev->virtbase + I2C_CR);
+    /*
+     * flush the transmit and receive FIFO. The flushing
+     * operation takes several cycles before to be completed.
+     * On the completion, the I2C internal logic clears these
+     * bits, until then no one must access Tx, Rx FIFO and
+     * should poll on these bits waiting for the completion.
+     */
+    writel((I2C_CR_FTX | I2C_CR_FRX), dev->virtbase + I2C_CR);
 
-	for (i = 0; i < LOOP_ATTEMPTS; i++) {
-		timeout = jiffies + dev->adap.timeout;
+    for (i = 0; i < LOOP_ATTEMPTS; i++) {
+        timeout = jiffies + dev->adap.timeout;
 
-		while (!time_after(jiffies, timeout)) {
-			if ((readl(dev->virtbase + I2C_CR) &
-				(I2C_CR_FTX | I2C_CR_FRX)) == 0)
-					return 0;
-		}
-	}
+        while (!time_after(jiffies, timeout)) {
+            if ((readl(dev->virtbase + I2C_CR) &
+                    (I2C_CR_FTX | I2C_CR_FRX)) == 0)
+                return 0;
+        }
+    }
 
-	dev_err(&dev->pdev->dev,
-		"flushing operation timed out giving up after %d attempts",
-		LOOP_ATTEMPTS);
+    dev_err(&dev->pdev->dev,
+            "flushing operation timed out giving up after %d attempts",
+            LOOP_ATTEMPTS);
 
-	return -ETIMEDOUT;
+    return -ETIMEDOUT;
 }
 
 /**
  * disable_all_interrupts() - Disable all interrupts of this I2c Bus
  * @dev: private data of I2C Driver
  */
-static void disable_all_interrupts(struct nmk_i2c_dev *dev)
-{
-	u32 mask = IRQ_MASK(0);
-	writel(mask, dev->virtbase + I2C_IMSCR);
+static void disable_all_interrupts(struct nmk_i2c_dev *dev) {
+    u32 mask = IRQ_MASK(0);
+    writel(mask, dev->virtbase + I2C_IMSCR);
 }
 
 /**
  * clear_all_interrupts() - Clear all interrupts of I2C Controller
  * @dev: private data of I2C Driver
  */
-static void clear_all_interrupts(struct nmk_i2c_dev *dev)
-{
-	u32 mask;
-	mask = IRQ_MASK(I2C_CLEAR_ALL_INTS);
-	writel(mask, dev->virtbase + I2C_ICR);
+static void clear_all_interrupts(struct nmk_i2c_dev *dev) {
+    u32 mask;
+    mask = IRQ_MASK(I2C_CLEAR_ALL_INTS);
+    writel(mask, dev->virtbase + I2C_ICR);
 }
 
 /**
  * init_hw() - initialize the I2C hardware
  * @dev: private data of I2C Driver
  */
-static int init_hw(struct nmk_i2c_dev *dev)
-{
-	int stat;
+static int init_hw(struct nmk_i2c_dev *dev) {
+    int stat;
 
-	stat = flush_i2c_fifo(dev);
-	if (stat)
-		goto exit;
+    stat = flush_i2c_fifo(dev);
+    if (stat)
+        goto exit;
 
-	/* disable the controller */
-	i2c_clr_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
+    /* disable the controller */
+    i2c_clr_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
 
-	disable_all_interrupts(dev);
+    disable_all_interrupts(dev);
 
-	clear_all_interrupts(dev);
+    clear_all_interrupts(dev);
 
-	dev->cli.operation = I2C_NO_OPERATION;
+    dev->cli.operation = I2C_NO_OPERATION;
 
 exit:
-	return stat;
+    return stat;
 }
 
 /* enable peripheral, master mode operation */
@@ -277,105 +271,103 @@ exit:
  * load_i2c_mcr_reg() - load the MCR register
  * @dev: private data of controller
  */
-static u32 load_i2c_mcr_reg(struct nmk_i2c_dev *dev)
-{
-	u32 mcr = 0;
+static u32 load_i2c_mcr_reg(struct nmk_i2c_dev *dev) {
+    u32 mcr = 0;
 
-	/* 7-bit address transaction */
-	mcr |= GEN_MASK(1, I2C_MCR_AM, 12);
-	mcr |= GEN_MASK(dev->cli.slave_adr, I2C_MCR_A7, 1);
+    /* 7-bit address transaction */
+    mcr |= GEN_MASK(1, I2C_MCR_AM, 12);
+    mcr |= GEN_MASK(dev->cli.slave_adr, I2C_MCR_A7, 1);
 
-	/* start byte procedure not applied */
-	mcr |= GEN_MASK(0, I2C_MCR_SB, 11);
+    /* start byte procedure not applied */
+    mcr |= GEN_MASK(0, I2C_MCR_SB, 11);
 
-	/* check the operation, master read/write? */
-	if (dev->cli.operation == I2C_WRITE)
-		mcr |= GEN_MASK(I2C_WRITE, I2C_MCR_OP, 0);
-	else
-		mcr |= GEN_MASK(I2C_READ, I2C_MCR_OP, 0);
+    /* check the operation, master read/write? */
+    if (dev->cli.operation == I2C_WRITE)
+        mcr |= GEN_MASK(I2C_WRITE, I2C_MCR_OP, 0);
+    else
+        mcr |= GEN_MASK(I2C_READ, I2C_MCR_OP, 0);
 
-	/* stop or repeated start? */
-	if (dev->stop)
-		mcr |= GEN_MASK(1, I2C_MCR_STOP, 14);
-	else
-		mcr &= ~(GEN_MASK(1, I2C_MCR_STOP, 14));
+    /* stop or repeated start? */
+    if (dev->stop)
+        mcr |= GEN_MASK(1, I2C_MCR_STOP, 14);
+    else
+        mcr &= ~(GEN_MASK(1, I2C_MCR_STOP, 14));
 
-	mcr |= GEN_MASK(dev->cli.count, I2C_MCR_LENGTH, 15);
+    mcr |= GEN_MASK(dev->cli.count, I2C_MCR_LENGTH, 15);
 
-	return mcr;
+    return mcr;
 }
 
 /**
  * setup_i2c_controller() - setup the controller
  * @dev: private data of controller
  */
-static void setup_i2c_controller(struct nmk_i2c_dev *dev)
-{
-	u32 brcr1, brcr2;
-	u32 i2c_clk, div;
+static void setup_i2c_controller(struct nmk_i2c_dev *dev) {
+    u32 brcr1, brcr2;
+    u32 i2c_clk, div;
 
-	writel(0x0, dev->virtbase + I2C_CR);
-	writel(0x0, dev->virtbase + I2C_HSMCR);
-	writel(0x0, dev->virtbase + I2C_TFTR);
-	writel(0x0, dev->virtbase + I2C_RFTR);
-	writel(0x0, dev->virtbase + I2C_DMAR);
+    writel(0x0, dev->virtbase + I2C_CR);
+    writel(0x0, dev->virtbase + I2C_HSMCR);
+    writel(0x0, dev->virtbase + I2C_TFTR);
+    writel(0x0, dev->virtbase + I2C_RFTR);
+    writel(0x0, dev->virtbase + I2C_DMAR);
 
-	/*
-	 * set the slsu:
-	 *
-	 * slsu defines the data setup time after SCL clock
-	 * stretching in terms of i2c clk cycles. The
-	 * needed setup time for the three modes are 250ns,
-	 * 100ns, 10ns respectively thus leading to the values
-	 * of 14, 6, 2 for a 48 MHz i2c clk.
-	 */
-	writel(dev->cfg.slsu << 16, dev->virtbase + I2C_SCR);
+    /*
+     * set the slsu:
+     *
+     * slsu defines the data setup time after SCL clock
+     * stretching in terms of i2c clk cycles. The
+     * needed setup time for the three modes are 250ns,
+     * 100ns, 10ns respectively thus leading to the values
+     * of 14, 6, 2 for a 48 MHz i2c clk.
+     */
+    writel(dev->cfg.slsu << 16, dev->virtbase + I2C_SCR);
 
-	i2c_clk = clk_get_rate(dev->clk);
+    i2c_clk = clk_get_rate(dev->clk);
 
-	/* fallback to std. mode if machine has not provided it */
-	if (dev->cfg.clk_freq == 0)
-		dev->cfg.clk_freq = 100000;
+    /* fallback to std. mode if machine has not provided it */
+    if (dev->cfg.clk_freq == 0)
+        dev->cfg.clk_freq = 100000;
 
-	/*
-	 * The spec says, in case of std. mode the divider is
-	 * 2 whereas it is 3 for fast and fastplus mode of
-	 * operation. TODO - high speed support.
-	 */
-	div = (dev->cfg.clk_freq > 100000) ? 3 : 2;
+    /*
+     * The spec says, in case of std. mode the divider is
+     * 2 whereas it is 3 for fast and fastplus mode of
+     * operation. TODO - high speed support.
+     */
+    div = (dev->cfg.clk_freq > 100000) ? 3 : 2;
 
-	/*
-	 * generate the mask for baud rate counters. The controller
-	 * has two baud rate counters. One is used for High speed
-	 * operation, and the other is for std, fast mode, fast mode
-	 * plus operation. Currently we do not supprt high speed mode
-	 * so set brcr1 to 0.
-	 */
-	brcr1 = 0 << 16;
-	brcr2 = (i2c_clk/(dev->cfg.clk_freq * div)) & 0xffff;
+    /*
+     * generate the mask for baud rate counters. The controller
+     * has two baud rate counters. One is used for High speed
+     * operation, and the other is for std, fast mode, fast mode
+     * plus operation. Currently we do not supprt high speed mode
+     * so set brcr1 to 0.
+     */
+    brcr1 = 0 << 16;
+    brcr2 = (i2c_clk/(dev->cfg.clk_freq * div)) & 0xffff;
 
-	/* set the baud rate counter register */
-	writel((brcr1 | brcr2), dev->virtbase + I2C_BRCR);
+    /* set the baud rate counter register */
+    writel((brcr1 | brcr2), dev->virtbase + I2C_BRCR);
 
-	/*
-	 * set the speed mode. Currently we support
-	 * only standard and fast mode of operation
-	 * TODO - support for fast mode plus (up to 1Mb/s)
-	 * and high speed (up to 3.4 Mb/s)
-	 */
-	if (dev->cfg.sm > I2C_FREQ_MODE_FAST) {
-		dev_err(&dev->pdev->dev,
-			"do not support this mode defaulting to std. mode\n");
-		brcr2 = i2c_clk/(100000 * 2) & 0xffff;
-		writel((brcr1 | brcr2), dev->virtbase + I2C_BRCR);
-		writel(I2C_FREQ_MODE_STANDARD << 4,
-				dev->virtbase + I2C_CR);
-	}
-	writel(dev->cfg.sm << 4, dev->virtbase + I2C_CR);
+    /*
+     * set the speed mode. Currently we support
+     * only standard and fast mode of operation
+     * TODO - support for fast mode plus (up to 1Mb/s)
+     * and high speed (up to 3.4 Mb/s)
+     */
+    if (dev->cfg.sm > I2C_FREQ_MODE_FAST) {
+        dev_err(&dev->pdev->dev,
+                "do not support this mode defaulting to std. mode\n");
+        brcr2 = i2c_clk/(100000 * 2) & 0xffff;
+        writel((brcr1 | brcr2), dev->virtbase + I2C_BRCR);
+        writel(I2C_FREQ_MODE_STANDARD << 4,
+               dev->virtbase + I2C_CR);
+    }
+    writel(dev->cfg.sm << 4, dev->virtbase + I2C_CR);
 
-	/* set the Tx and Rx FIFO threshold */
-	writel(dev->cfg.tft, dev->virtbase + I2C_TFTR);
-	writel(dev->cfg.rft, dev->virtbase + I2C_RFTR);
+    /* set the Tx and Rx FIFO threshold */
+    writel(dev->cfg.tft, dev->virtbase + I2C_TFTR);
+    writel(dev->cfg.rft, dev->virtbase + I2C_RFTR);
 }
 
 /**
@@ -386,73 +378,71 @@ static void setup_i2c_controller(struct nmk_i2c_dev *dev)
  * master mode. There is a completion timeout. If there is no transfer
  * before timeout error is returned.
  */
-static int read_i2c(struct nmk_i2c_dev *dev)
-{
-	u32 status = 0;
-	u32 mcr;
-	u32 irq_mask = 0;
-	int timeout;
+static int read_i2c(struct nmk_i2c_dev *dev) {
+    u32 status = 0;
+    u32 mcr;
+    u32 irq_mask = 0;
+    int timeout;
 
-	mcr = load_i2c_mcr_reg(dev);
-	writel(mcr, dev->virtbase + I2C_MCR);
+    mcr = load_i2c_mcr_reg(dev);
+    writel(mcr, dev->virtbase + I2C_MCR);
 
-	/* load the current CR value */
-	writel(readl(dev->virtbase + I2C_CR) | DEFAULT_I2C_REG_CR,
-			dev->virtbase + I2C_CR);
+    /* load the current CR value */
+    writel(readl(dev->virtbase + I2C_CR) | DEFAULT_I2C_REG_CR,
+           dev->virtbase + I2C_CR);
 
-	/* enable the controller */
-	i2c_set_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
+    /* enable the controller */
+    i2c_set_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
 
-	init_completion(&dev->xfer_complete);
+    init_completion(&dev->xfer_complete);
 
-	/* enable interrupts by setting the mask */
-	irq_mask = (I2C_IT_RXFNF | I2C_IT_RXFF |
-			I2C_IT_MAL | I2C_IT_BERR);
+    /* enable interrupts by setting the mask */
+    irq_mask = (I2C_IT_RXFNF | I2C_IT_RXFF |
+                I2C_IT_MAL | I2C_IT_BERR);
 
-	if (dev->stop)
-		irq_mask |= I2C_IT_MTD;
-	else
-		irq_mask |= I2C_IT_MTDWS;
+    if (dev->stop)
+        irq_mask |= I2C_IT_MTD;
+    else
+        irq_mask |= I2C_IT_MTDWS;
 
-	irq_mask = I2C_CLEAR_ALL_INTS & IRQ_MASK(irq_mask);
+    irq_mask = I2C_CLEAR_ALL_INTS & IRQ_MASK(irq_mask);
 
-	writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
-			dev->virtbase + I2C_IMSCR);
+    writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
+           dev->virtbase + I2C_IMSCR);
 
-	timeout = wait_for_completion_timeout(
-		&dev->xfer_complete, dev->adap.timeout);
+    timeout = wait_for_completion_timeout(
+                  &dev->xfer_complete, dev->adap.timeout);
 
-	if (timeout < 0) {
-		dev_err(&dev->pdev->dev,
-			"wait_for_completion_timeout "
-			"returned %d waiting for event\n", timeout);
-		status = timeout;
-	}
+    if (timeout < 0) {
+        dev_err(&dev->pdev->dev,
+                "wait_for_completion_timeout "
+                "returned %d waiting for event\n", timeout);
+        status = timeout;
+    }
 
-	if (timeout == 0) {
-		/* Controller timed out */
-		dev_err(&dev->pdev->dev, "read from slave 0x%x timed out\n",
-				dev->cli.slave_adr);
-		status = -ETIMEDOUT;
-	}
-	return status;
+    if (timeout == 0) {
+        /* Controller timed out */
+        dev_err(&dev->pdev->dev, "read from slave 0x%x timed out\n",
+                dev->cli.slave_adr);
+        status = -ETIMEDOUT;
+    }
+    return status;
 }
 
-static void fill_tx_fifo(struct nmk_i2c_dev *dev, int no_bytes)
-{
-	int count;
+static void fill_tx_fifo(struct nmk_i2c_dev *dev, int no_bytes) {
+    int count;
 
-	for (count = (no_bytes - 2);
-			(count > 0) &&
-			(dev->cli.count != 0);
-			count--) {
-		/* write to the Tx FIFO */
-		writeb(*dev->cli.buffer,
-			dev->virtbase + I2C_TFR);
-		dev->cli.buffer++;
-		dev->cli.count--;
-		dev->cli.xfer_bytes++;
-	}
+    for (count = (no_bytes - 2);
+            (count > 0) &&
+            (dev->cli.count != 0);
+            count--) {
+        /* write to the Tx FIFO */
+        writeb(*dev->cli.buffer,
+               dev->virtbase + I2C_TFR);
+        dev->cli.buffer++;
+        dev->cli.count--;
+        dev->cli.xfer_bytes++;
+    }
 
 }
 
@@ -462,68 +452,67 @@ static void fill_tx_fifo(struct nmk_i2c_dev *dev, int no_bytes)
  *
  * This function writes data to I2C client
  */
-static int write_i2c(struct nmk_i2c_dev *dev)
-{
-	u32 status = 0;
-	u32 mcr;
-	u32 irq_mask = 0;
-	int timeout;
+static int write_i2c(struct nmk_i2c_dev *dev) {
+    u32 status = 0;
+    u32 mcr;
+    u32 irq_mask = 0;
+    int timeout;
 
-	mcr = load_i2c_mcr_reg(dev);
+    mcr = load_i2c_mcr_reg(dev);
 
-	writel(mcr, dev->virtbase + I2C_MCR);
+    writel(mcr, dev->virtbase + I2C_MCR);
 
-	/* load the current CR value */
-	writel(readl(dev->virtbase + I2C_CR) | DEFAULT_I2C_REG_CR,
-			dev->virtbase + I2C_CR);
+    /* load the current CR value */
+    writel(readl(dev->virtbase + I2C_CR) | DEFAULT_I2C_REG_CR,
+           dev->virtbase + I2C_CR);
 
-	/* enable the controller */
-	i2c_set_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
+    /* enable the controller */
+    i2c_set_bit(dev->virtbase + I2C_CR , I2C_CR_PE);
 
-	init_completion(&dev->xfer_complete);
+    init_completion(&dev->xfer_complete);
 
-	/* enable interrupts by settings the masks */
-	irq_mask = (I2C_IT_TXFOVR | I2C_IT_MAL | I2C_IT_BERR);
+    /* enable interrupts by settings the masks */
+    irq_mask = (I2C_IT_TXFOVR | I2C_IT_MAL | I2C_IT_BERR);
 
-	/* Fill the TX FIFO with transmit data */
-	fill_tx_fifo(dev, MAX_I2C_FIFO_THRESHOLD);
+    /* Fill the TX FIFO with transmit data */
+    fill_tx_fifo(dev, MAX_I2C_FIFO_THRESHOLD);
 
-	if (dev->cli.count != 0)
-		irq_mask |= I2C_IT_TXFNE;
+    if (dev->cli.count != 0)
+        irq_mask |= I2C_IT_TXFNE;
 
-	/*
-	 * check if we want to transfer a single or multiple bytes, if so
-	 * set the MTDWS bit (Master Transaction Done Without Stop)
-	 * to start repeated start operation
-	 */
-	if (dev->stop)
-		irq_mask |= I2C_IT_MTD;
-	else
-		irq_mask |= I2C_IT_MTDWS;
+    /*
+     * check if we want to transfer a single or multiple bytes, if so
+     * set the MTDWS bit (Master Transaction Done Without Stop)
+     * to start repeated start operation
+     */
+    if (dev->stop)
+        irq_mask |= I2C_IT_MTD;
+    else
+        irq_mask |= I2C_IT_MTDWS;
 
-	irq_mask = I2C_CLEAR_ALL_INTS & IRQ_MASK(irq_mask);
+    irq_mask = I2C_CLEAR_ALL_INTS & IRQ_MASK(irq_mask);
 
-	writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
-			dev->virtbase + I2C_IMSCR);
+    writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
+           dev->virtbase + I2C_IMSCR);
 
-	timeout = wait_for_completion_timeout(
-		&dev->xfer_complete, dev->adap.timeout);
+    timeout = wait_for_completion_timeout(
+                  &dev->xfer_complete, dev->adap.timeout);
 
-	if (timeout < 0) {
-		dev_err(&dev->pdev->dev,
-			"wait_for_completion_timeout "
-			"returned %d waiting for event\n", timeout);
-		status = timeout;
-	}
+    if (timeout < 0) {
+        dev_err(&dev->pdev->dev,
+                "wait_for_completion_timeout "
+                "returned %d waiting for event\n", timeout);
+        status = timeout;
+    }
 
-	if (timeout == 0) {
-		/* Controller timed out */
-		dev_err(&dev->pdev->dev, "write to slave 0x%x timed out\n",
-				dev->cli.slave_adr);
-		status = -ETIMEDOUT;
-	}
+    if (timeout == 0) {
+        /* Controller timed out */
+        dev_err(&dev->pdev->dev, "write to slave 0x%x timed out\n",
+                dev->cli.slave_adr);
+        status = -ETIMEDOUT;
+    }
 
-	return status;
+    return status;
 }
 
 /**
@@ -531,44 +520,43 @@ static int write_i2c(struct nmk_i2c_dev *dev)
  * @dev: device with a message encoded into it
  * @flags: message flags
  */
-static int nmk_i2c_xfer_one(struct nmk_i2c_dev *dev, u16 flags)
-{
-	int status;
+static int nmk_i2c_xfer_one(struct nmk_i2c_dev *dev, u16 flags) {
+    int status;
 
-	if (flags & I2C_M_RD) {
-		/* read operation */
-		dev->cli.operation = I2C_READ;
-		status = read_i2c(dev);
-	} else {
-		/* write operation */
-		dev->cli.operation = I2C_WRITE;
-		status = write_i2c(dev);
-	}
+    if (flags & I2C_M_RD) {
+        /* read operation */
+        dev->cli.operation = I2C_READ;
+        status = read_i2c(dev);
+    } else {
+        /* write operation */
+        dev->cli.operation = I2C_WRITE;
+        status = write_i2c(dev);
+    }
 
-	if (status || (dev->result)) {
-		u32 i2c_sr;
-		u32 cause;
+    if (status || (dev->result)) {
+        u32 i2c_sr;
+        u32 cause;
 
-		i2c_sr = readl(dev->virtbase + I2C_SR);
-		/*
-		 * Check if the controller I2C operation status
-		 * is set to ABORT(11b).
-		 */
-		if (((i2c_sr >> 2) & 0x3) == 0x3) {
-			/* get the abort cause */
-			cause =	(i2c_sr >> 4) & 0x7;
-			dev_err(&dev->pdev->dev, "%s\n",
-				cause >= ARRAY_SIZE(abort_causes) ?
-				"unknown reason" :
-				abort_causes[cause]);
-		}
+        i2c_sr = readl(dev->virtbase + I2C_SR);
+        /*
+         * Check if the controller I2C operation status
+         * is set to ABORT(11b).
+         */
+        if (((i2c_sr >> 2) & 0x3) == 0x3) {
+            /* get the abort cause */
+            cause =	(i2c_sr >> 4) & 0x7;
+            dev_err(&dev->pdev->dev, "%s\n",
+                    cause >= ARRAY_SIZE(abort_causes) ?
+                    "unknown reason" :
+                    abort_causes[cause]);
+        }
 
-		(void) init_hw(dev);
+        (void) init_hw(dev);
 
-		status = status ? status : dev->result;
-	}
+        status = status ? status : dev->result;
+    }
 
-	return status;
+    return status;
 }
 
 /**
@@ -619,65 +607,64 @@ static int nmk_i2c_xfer_one(struct nmk_i2c_dev *dev, u16 flags)
  * or i2c_smbus_write_i2c_block_data() API
  */
 static int nmk_i2c_xfer(struct i2c_adapter *i2c_adap,
-		struct i2c_msg msgs[], int num_msgs)
-{
-	int status;
-	int i;
-	struct nmk_i2c_dev *dev = i2c_get_adapdata(i2c_adap);
-	int j;
+                        struct i2c_msg msgs[], int num_msgs) {
+    int status;
+    int i;
+    struct nmk_i2c_dev *dev = i2c_get_adapdata(i2c_adap);
+    int j;
 
-	dev->busy = true;
+    dev->busy = true;
 
-	if (dev->regulator)
-		regulator_enable(dev->regulator);
-	pm_runtime_get_sync(&dev->pdev->dev);
+    if (dev->regulator)
+        regulator_enable(dev->regulator);
+    pm_runtime_get_sync(&dev->pdev->dev);
 
-	clk_enable(dev->clk);
+    clk_enable(dev->clk);
 
-	status = init_hw(dev);
-	if (status)
-		goto out;
+    status = init_hw(dev);
+    if (status)
+        goto out;
 
-	/* Attempt three times to send the message queue */
-	for (j = 0; j < 3; j++) {
-		/* setup the i2c controller */
-		setup_i2c_controller(dev);
+    /* Attempt three times to send the message queue */
+    for (j = 0; j < 3; j++) {
+        /* setup the i2c controller */
+        setup_i2c_controller(dev);
 
-		for (i = 0; i < num_msgs; i++) {
-			if (unlikely(msgs[i].flags & I2C_M_TEN)) {
-				dev_err(&dev->pdev->dev,
-					"10 bit addressing not supported\n");
+        for (i = 0; i < num_msgs; i++) {
+            if (unlikely(msgs[i].flags & I2C_M_TEN)) {
+                dev_err(&dev->pdev->dev,
+                        "10 bit addressing not supported\n");
 
-				status = -EINVAL;
-				goto out;
-			}
-			dev->cli.slave_adr	= msgs[i].addr;
-			dev->cli.buffer		= msgs[i].buf;
-			dev->cli.count		= msgs[i].len;
-			dev->stop = (i < (num_msgs - 1)) ? 0 : 1;
-			dev->result = 0;
+                status = -EINVAL;
+                goto out;
+            }
+            dev->cli.slave_adr	= msgs[i].addr;
+            dev->cli.buffer		= msgs[i].buf;
+            dev->cli.count		= msgs[i].len;
+            dev->stop = (i < (num_msgs - 1)) ? 0 : 1;
+            dev->result = 0;
 
-			status = nmk_i2c_xfer_one(dev, msgs[i].flags);
-			if (status != 0)
-				break;
-		}
-		if (status == 0)
-			break;
-	}
+            status = nmk_i2c_xfer_one(dev, msgs[i].flags);
+            if (status != 0)
+                break;
+        }
+        if (status == 0)
+            break;
+    }
 
 out:
-	clk_disable(dev->clk);
-	pm_runtime_put_sync(&dev->pdev->dev);
-	if (dev->regulator)
-		regulator_disable(dev->regulator);
+    clk_disable(dev->clk);
+    pm_runtime_put_sync(&dev->pdev->dev);
+    if (dev->regulator)
+        regulator_disable(dev->regulator);
 
-	dev->busy = false;
+    dev->busy = false;
 
-	/* return the no. messages processed */
-	if (status)
-		return status;
-	else
-		return num_msgs;
+    /* return the no. messages processed */
+    if (status)
+        return status;
+    else
+        return num_msgs;
 }
 
 /**
@@ -685,12 +672,11 @@ out:
  * @dev: private data of controller
  * @irq: interrupt number
  */
-static int disable_interrupts(struct nmk_i2c_dev *dev, u32 irq)
-{
-	irq = IRQ_MASK(irq);
-	writel(readl(dev->virtbase + I2C_IMSCR) & ~(I2C_CLEAR_ALL_INTS & irq),
-			dev->virtbase + I2C_IMSCR);
-	return 0;
+static int disable_interrupts(struct nmk_i2c_dev *dev, u32 irq) {
+    irq = IRQ_MASK(irq);
+    writel(readl(dev->virtbase + I2C_IMSCR) & ~(I2C_CLEAR_ALL_INTS & irq),
+           dev->virtbase + I2C_IMSCR);
+    return 0;
 }
 
 /**
@@ -704,175 +690,171 @@ static int disable_interrupts(struct nmk_i2c_dev *dev, u32 irq)
  * bus error interrupts. The rest of the interrupts are treated as
  * unhandled.
  */
-static irqreturn_t i2c_irq_handler(int irq, void *arg)
-{
-	struct nmk_i2c_dev *dev = arg;
-	u32 tft, rft;
-	u32 count;
-	u32 misr;
-	u32 src = 0;
+static irqreturn_t i2c_irq_handler(int irq, void *arg) {
+    struct nmk_i2c_dev *dev = arg;
+    u32 tft, rft;
+    u32 count;
+    u32 misr;
+    u32 src = 0;
 
-	/* load Tx FIFO and Rx FIFO threshold values */
-	tft = readl(dev->virtbase + I2C_TFTR);
-	rft = readl(dev->virtbase + I2C_RFTR);
+    /* load Tx FIFO and Rx FIFO threshold values */
+    tft = readl(dev->virtbase + I2C_TFTR);
+    rft = readl(dev->virtbase + I2C_RFTR);
 
-	/* read interrupt status register */
-	misr = readl(dev->virtbase + I2C_MISR);
+    /* read interrupt status register */
+    misr = readl(dev->virtbase + I2C_MISR);
 
-	src = __ffs(misr);
-	switch ((1 << src)) {
+    src = __ffs(misr);
+    switch ((1 << src)) {
 
-	/* Transmit FIFO nearly empty interrupt */
-	case I2C_IT_TXFNE:
-	{
-		if (dev->cli.operation == I2C_READ) {
-			/*
-			 * in read operation why do we care for writing?
-			 * so disable the Transmit FIFO interrupt
-			 */
-			disable_interrupts(dev, I2C_IT_TXFNE);
-		} else {
-			fill_tx_fifo(dev, (MAX_I2C_FIFO_THRESHOLD - tft));
-			/*
-			 * if done, close the transfer by disabling the
-			 * corresponding TXFNE interrupt
-			 */
-			if (dev->cli.count == 0)
-				disable_interrupts(dev,	I2C_IT_TXFNE);
-		}
-	}
-	break;
+    /* Transmit FIFO nearly empty interrupt */
+    case I2C_IT_TXFNE: {
+        if (dev->cli.operation == I2C_READ) {
+            /*
+             * in read operation why do we care for writing?
+             * so disable the Transmit FIFO interrupt
+             */
+            disable_interrupts(dev, I2C_IT_TXFNE);
+        } else {
+            fill_tx_fifo(dev, (MAX_I2C_FIFO_THRESHOLD - tft));
+            /*
+             * if done, close the transfer by disabling the
+             * corresponding TXFNE interrupt
+             */
+            if (dev->cli.count == 0)
+                disable_interrupts(dev,	I2C_IT_TXFNE);
+        }
+    }
+    break;
 
-	/*
-	 * Rx FIFO nearly full interrupt.
-	 * This is set when the numer of entries in Rx FIFO is
-	 * greater or equal than the threshold value programmed
-	 * in RFT
-	 */
-	case I2C_IT_RXFNF:
-		for (count = rft; count > 0; count--) {
-			/* Read the Rx FIFO */
-			*dev->cli.buffer = readb(dev->virtbase + I2C_RFR);
-			dev->cli.buffer++;
-		}
-		dev->cli.count -= rft;
-		dev->cli.xfer_bytes += rft;
-		break;
+    /*
+     * Rx FIFO nearly full interrupt.
+     * This is set when the numer of entries in Rx FIFO is
+     * greater or equal than the threshold value programmed
+     * in RFT
+     */
+    case I2C_IT_RXFNF:
+        for (count = rft; count > 0; count--) {
+            /* Read the Rx FIFO */
+            *dev->cli.buffer = readb(dev->virtbase + I2C_RFR);
+            dev->cli.buffer++;
+        }
+        dev->cli.count -= rft;
+        dev->cli.xfer_bytes += rft;
+        break;
 
-	/* Rx FIFO full */
-	case I2C_IT_RXFF:
-		for (count = MAX_I2C_FIFO_THRESHOLD; count > 0; count--) {
-			*dev->cli.buffer = readb(dev->virtbase + I2C_RFR);
-			dev->cli.buffer++;
-		}
-		dev->cli.count -= MAX_I2C_FIFO_THRESHOLD;
-		dev->cli.xfer_bytes += MAX_I2C_FIFO_THRESHOLD;
-		break;
+    /* Rx FIFO full */
+    case I2C_IT_RXFF:
+        for (count = MAX_I2C_FIFO_THRESHOLD; count > 0; count--) {
+            *dev->cli.buffer = readb(dev->virtbase + I2C_RFR);
+            dev->cli.buffer++;
+        }
+        dev->cli.count -= MAX_I2C_FIFO_THRESHOLD;
+        dev->cli.xfer_bytes += MAX_I2C_FIFO_THRESHOLD;
+        break;
 
-	/* Master Transaction Done with/without stop */
-	case I2C_IT_MTD:
-	case I2C_IT_MTDWS:
-		if (dev->cli.operation == I2C_READ) {
-			while (!(readl(dev->virtbase + I2C_RISR)
-				 & I2C_IT_RXFE)) {
-				if (dev->cli.count == 0)
-					break;
-				*dev->cli.buffer =
-					readb(dev->virtbase + I2C_RFR);
-				dev->cli.buffer++;
-				dev->cli.count--;
-				dev->cli.xfer_bytes++;
-			}
-		}
+    /* Master Transaction Done with/without stop */
+    case I2C_IT_MTD:
+    case I2C_IT_MTDWS:
+        if (dev->cli.operation == I2C_READ) {
+            while (!(readl(dev->virtbase + I2C_RISR)
+                     & I2C_IT_RXFE)) {
+                if (dev->cli.count == 0)
+                    break;
+                *dev->cli.buffer =
+                    readb(dev->virtbase + I2C_RFR);
+                dev->cli.buffer++;
+                dev->cli.count--;
+                dev->cli.xfer_bytes++;
+            }
+        }
 
-		disable_all_interrupts(dev);
-		clear_all_interrupts(dev);
+        disable_all_interrupts(dev);
+        clear_all_interrupts(dev);
 
-		if (dev->cli.count) {
-			dev->result = -EIO;
-			dev_err(&dev->pdev->dev,
-				"%lu bytes still remain to be xfered\n",
-				dev->cli.count);
-			(void) init_hw(dev);
-		}
-		complete(&dev->xfer_complete);
+        if (dev->cli.count) {
+            dev->result = -EIO;
+            dev_err(&dev->pdev->dev,
+                    "%lu bytes still remain to be xfered\n",
+                    dev->cli.count);
+            (void) init_hw(dev);
+        }
+        complete(&dev->xfer_complete);
 
-		break;
+        break;
 
-	/* Master Arbitration lost interrupt */
-	case I2C_IT_MAL:
-		dev->result = -EIO;
-		(void) init_hw(dev);
+    /* Master Arbitration lost interrupt */
+    case I2C_IT_MAL:
+        dev->result = -EIO;
+        (void) init_hw(dev);
 
-		i2c_set_bit(dev->virtbase + I2C_ICR, I2C_IT_MAL);
-		complete(&dev->xfer_complete);
+        i2c_set_bit(dev->virtbase + I2C_ICR, I2C_IT_MAL);
+        complete(&dev->xfer_complete);
 
-		break;
+        break;
 
-	/*
-	 * Bus Error interrupt.
-	 * This happens when an unexpected start/stop condition occurs
-	 * during the transaction.
-	 */
-	case I2C_IT_BERR:
-		dev->result = -EIO;
-		/* get the status */
-		if (((readl(dev->virtbase + I2C_SR) >> 2) & 0x3) == I2C_ABORT)
-			(void) init_hw(dev);
+    /*
+     * Bus Error interrupt.
+     * This happens when an unexpected start/stop condition occurs
+     * during the transaction.
+     */
+    case I2C_IT_BERR:
+        dev->result = -EIO;
+        /* get the status */
+        if (((readl(dev->virtbase + I2C_SR) >> 2) & 0x3) == I2C_ABORT)
+            (void) init_hw(dev);
 
-		i2c_set_bit(dev->virtbase + I2C_ICR, I2C_IT_BERR);
-		complete(&dev->xfer_complete);
+        i2c_set_bit(dev->virtbase + I2C_ICR, I2C_IT_BERR);
+        complete(&dev->xfer_complete);
 
-		break;
+        break;
 
-	/*
-	 * Tx FIFO overrun interrupt.
-	 * This is set when a write operation in Tx FIFO is performed and
-	 * the Tx FIFO is full.
-	 */
-	case I2C_IT_TXFOVR:
-		dev->result = -EIO;
-		(void) init_hw(dev);
+    /*
+     * Tx FIFO overrun interrupt.
+     * This is set when a write operation in Tx FIFO is performed and
+     * the Tx FIFO is full.
+     */
+    case I2C_IT_TXFOVR:
+        dev->result = -EIO;
+        (void) init_hw(dev);
 
-		dev_err(&dev->pdev->dev, "Tx Fifo Over run\n");
-		complete(&dev->xfer_complete);
+        dev_err(&dev->pdev->dev, "Tx Fifo Over run\n");
+        complete(&dev->xfer_complete);
 
-		break;
+        break;
 
-	/* unhandled interrupts by this driver - TODO*/
-	case I2C_IT_TXFE:
-	case I2C_IT_TXFF:
-	case I2C_IT_RXFE:
-	case I2C_IT_RFSR:
-	case I2C_IT_RFSE:
-	case I2C_IT_WTSR:
-	case I2C_IT_STD:
-		dev_err(&dev->pdev->dev, "unhandled Interrupt\n");
-		break;
-	default:
-		dev_err(&dev->pdev->dev, "spurious Interrupt..\n");
-		break;
-	}
+    /* unhandled interrupts by this driver - TODO*/
+    case I2C_IT_TXFE:
+    case I2C_IT_TXFF:
+    case I2C_IT_RXFE:
+    case I2C_IT_RFSR:
+    case I2C_IT_RFSE:
+    case I2C_IT_WTSR:
+    case I2C_IT_STD:
+        dev_err(&dev->pdev->dev, "unhandled Interrupt\n");
+        break;
+    default:
+        dev_err(&dev->pdev->dev, "spurious Interrupt..\n");
+        break;
+    }
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 
 #ifdef CONFIG_PM
-static int nmk_i2c_suspend(struct device *dev)
-{
-	struct platform_device *pdev = to_platform_device(dev);
-	struct nmk_i2c_dev *nmk_i2c = platform_get_drvdata(pdev);
+static int nmk_i2c_suspend(struct device *dev) {
+    struct platform_device *pdev = to_platform_device(dev);
+    struct nmk_i2c_dev *nmk_i2c = platform_get_drvdata(pdev);
 
-	if (nmk_i2c->busy)
-		return -EBUSY;
+    if (nmk_i2c->busy)
+        return -EBUSY;
 
-	return 0;
+    return 0;
 }
 
-static int nmk_i2c_resume(struct device *dev)
-{
-	return 0;
+static int nmk_i2c_resume(struct device *dev) {
+    return 0;
 }
 #else
 #define nmk_i2c_suspend	NULL
@@ -885,178 +867,173 @@ static int nmk_i2c_resume(struct device *dev)
  * there has been a regular pm runtime resume (via pm_runtime_get_sync()).
  */
 static const struct dev_pm_ops nmk_i2c_pm = {
-	.suspend_noirq	= nmk_i2c_suspend,
-	.resume_noirq	= nmk_i2c_resume,
+    .suspend_noirq	= nmk_i2c_suspend,
+    .resume_noirq	= nmk_i2c_resume,
 };
 
-static unsigned int nmk_i2c_functionality(struct i2c_adapter *adap)
-{
-	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+static unsigned int nmk_i2c_functionality(struct i2c_adapter *adap) {
+    return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
 }
 
 static const struct i2c_algorithm nmk_i2c_algo = {
-	.master_xfer	= nmk_i2c_xfer,
-	.functionality	= nmk_i2c_functionality
+    .master_xfer	= nmk_i2c_xfer,
+    .functionality	= nmk_i2c_functionality
 };
 
-static int __devinit nmk_i2c_probe(struct platform_device *pdev)
-{
-	int ret = 0;
-	struct resource *res;
-	struct nmk_i2c_controller *pdata =
-			pdev->dev.platform_data;
-	struct nmk_i2c_dev	*dev;
-	struct i2c_adapter *adap;
+static int __devinit nmk_i2c_probe(struct platform_device *pdev) {
+    int ret = 0;
+    struct resource *res;
+    struct nmk_i2c_controller *pdata =
+            pdev->dev.platform_data;
+    struct nmk_i2c_dev	*dev;
+    struct i2c_adapter *adap;
 
-	dev = kzalloc(sizeof(struct nmk_i2c_dev), GFP_KERNEL);
-	if (!dev) {
-		dev_err(&pdev->dev, "cannot allocate memory\n");
-		ret = -ENOMEM;
-		goto err_no_mem;
-	}
-	dev->busy = false;
-	dev->pdev = pdev;
-	platform_set_drvdata(pdev, dev);
+    dev = kzalloc(sizeof(struct nmk_i2c_dev), GFP_KERNEL);
+    if (!dev) {
+        dev_err(&pdev->dev, "cannot allocate memory\n");
+        ret = -ENOMEM;
+        goto err_no_mem;
+    }
+    dev->busy = false;
+    dev->pdev = pdev;
+    platform_set_drvdata(pdev, dev);
 
-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	if (!res) {
-		ret = -ENOENT;
-		goto err_no_resource;
-	}
+    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    if (!res) {
+        ret = -ENOENT;
+        goto err_no_resource;
+    }
 
-	if (request_mem_region(res->start, resource_size(res),
-		DRIVER_NAME "I/O region") == NULL) {
-		ret = -EBUSY;
-		goto err_no_region;
-	}
+    if (request_mem_region(res->start, resource_size(res),
+                           DRIVER_NAME "I/O region") == NULL) {
+        ret = -EBUSY;
+        goto err_no_region;
+    }
 
-	dev->virtbase = ioremap(res->start, resource_size(res));
-	if (!dev->virtbase) {
-		ret = -ENOMEM;
-		goto err_no_ioremap;
-	}
+    dev->virtbase = ioremap(res->start, resource_size(res));
+    if (!dev->virtbase) {
+        ret = -ENOMEM;
+        goto err_no_ioremap;
+    }
 
-	dev->irq = platform_get_irq(pdev, 0);
-	ret = request_irq(dev->irq, i2c_irq_handler, 0,
-				DRIVER_NAME, dev);
-	if (ret) {
-		dev_err(&pdev->dev, "cannot claim the irq %d\n", dev->irq);
-		goto err_irq;
-	}
+    dev->irq = platform_get_irq(pdev, 0);
+    ret = request_irq(dev->irq, i2c_irq_handler, 0,
+                      DRIVER_NAME, dev);
+    if (ret) {
+        dev_err(&pdev->dev, "cannot claim the irq %d\n", dev->irq);
+        goto err_irq;
+    }
 
-	dev->regulator = regulator_get(&pdev->dev, "v-i2c");
-	if (IS_ERR(dev->regulator)) {
-		dev_warn(&pdev->dev, "could not get i2c regulator\n");
-		dev->regulator = NULL;
-	}
+    dev->regulator = regulator_get(&pdev->dev, "v-i2c");
+    if (IS_ERR(dev->regulator)) {
+        dev_warn(&pdev->dev, "could not get i2c regulator\n");
+        dev->regulator = NULL;
+    }
 
-	pm_suspend_ignore_children(&pdev->dev, true);
-	pm_runtime_enable(&pdev->dev);
+    pm_suspend_ignore_children(&pdev->dev, true);
+    pm_runtime_enable(&pdev->dev);
 
-	dev->clk = clk_get(&pdev->dev, NULL);
-	if (IS_ERR(dev->clk)) {
-		dev_err(&pdev->dev, "could not get i2c clock\n");
-		ret = PTR_ERR(dev->clk);
-		goto err_no_clk;
-	}
+    dev->clk = clk_get(&pdev->dev, NULL);
+    if (IS_ERR(dev->clk)) {
+        dev_err(&pdev->dev, "could not get i2c clock\n");
+        ret = PTR_ERR(dev->clk);
+        goto err_no_clk;
+    }
 
-	adap = &dev->adap;
-	adap->dev.parent = &pdev->dev;
-	adap->owner	= THIS_MODULE;
-	adap->class	= I2C_CLASS_HWMON | I2C_CLASS_SPD;
-	adap->algo	= &nmk_i2c_algo;
-	adap->timeout	= pdata->timeout ? msecs_to_jiffies(pdata->timeout) :
-		msecs_to_jiffies(20000);
-	snprintf(adap->name, sizeof(adap->name),
-		 "Nomadik I2C%d at %lx", pdev->id, (unsigned long)res->start);
+    adap = &dev->adap;
+    adap->dev.parent = &pdev->dev;
+    adap->owner	= THIS_MODULE;
+    adap->class	= I2C_CLASS_HWMON | I2C_CLASS_SPD;
+    adap->algo	= &nmk_i2c_algo;
+    adap->timeout	= pdata->timeout ? msecs_to_jiffies(pdata->timeout) :
+                      msecs_to_jiffies(20000);
+    snprintf(adap->name, sizeof(adap->name),
+             "Nomadik I2C%d at %lx", pdev->id, (unsigned long)res->start);
 
-	/* fetch the controller id */
-	adap->nr	= pdev->id;
+    /* fetch the controller id */
+    adap->nr	= pdev->id;
 
-	/* fetch the controller configuration from machine */
-	dev->cfg.clk_freq = pdata->clk_freq;
-	dev->cfg.slsu	= pdata->slsu;
-	dev->cfg.tft	= pdata->tft;
-	dev->cfg.rft	= pdata->rft;
-	dev->cfg.sm	= pdata->sm;
+    /* fetch the controller configuration from machine */
+    dev->cfg.clk_freq = pdata->clk_freq;
+    dev->cfg.slsu	= pdata->slsu;
+    dev->cfg.tft	= pdata->tft;
+    dev->cfg.rft	= pdata->rft;
+    dev->cfg.sm	= pdata->sm;
 
-	i2c_set_adapdata(adap, dev);
+    i2c_set_adapdata(adap, dev);
 
-	dev_info(&pdev->dev,
-		 "initialize %s on virtual base %p\n",
-		 adap->name, dev->virtbase);
+    dev_info(&pdev->dev,
+             "initialize %s on virtual base %p\n",
+             adap->name, dev->virtbase);
 
-	ret = i2c_add_numbered_adapter(adap);
-	if (ret) {
-		dev_err(&pdev->dev, "failed to add adapter\n");
-		goto err_add_adap;
-	}
+    ret = i2c_add_numbered_adapter(adap);
+    if (ret) {
+        dev_err(&pdev->dev, "failed to add adapter\n");
+        goto err_add_adap;
+    }
 
-	return 0;
+    return 0;
 
- err_add_adap:
-	clk_put(dev->clk);
- err_no_clk:
-	if (dev->regulator)
-		regulator_put(dev->regulator);
-	pm_runtime_disable(&pdev->dev);
-	free_irq(dev->irq, dev);
- err_irq:
-	iounmap(dev->virtbase);
- err_no_ioremap:
-	release_mem_region(res->start, resource_size(res));
- err_no_region:
-	platform_set_drvdata(pdev, NULL);
- err_no_resource:
-	kfree(dev);
- err_no_mem:
+err_add_adap:
+    clk_put(dev->clk);
+err_no_clk:
+    if (dev->regulator)
+        regulator_put(dev->regulator);
+    pm_runtime_disable(&pdev->dev);
+    free_irq(dev->irq, dev);
+err_irq:
+    iounmap(dev->virtbase);
+err_no_ioremap:
+    release_mem_region(res->start, resource_size(res));
+err_no_region:
+    platform_set_drvdata(pdev, NULL);
+err_no_resource:
+    kfree(dev);
+err_no_mem:
 
-	return ret;
+    return ret;
 }
 
-static int __devexit nmk_i2c_remove(struct platform_device *pdev)
-{
-	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	struct nmk_i2c_dev *dev = platform_get_drvdata(pdev);
+static int __devexit nmk_i2c_remove(struct platform_device *pdev) {
+    struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    struct nmk_i2c_dev *dev = platform_get_drvdata(pdev);
 
-	i2c_del_adapter(&dev->adap);
-	flush_i2c_fifo(dev);
-	disable_all_interrupts(dev);
-	clear_all_interrupts(dev);
-	/* disable the controller */
-	i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
-	free_irq(dev->irq, dev);
-	iounmap(dev->virtbase);
-	if (res)
-		release_mem_region(res->start, resource_size(res));
-	clk_put(dev->clk);
-	if (dev->regulator)
-		regulator_put(dev->regulator);
-	pm_runtime_disable(&pdev->dev);
-	platform_set_drvdata(pdev, NULL);
-	kfree(dev);
+    i2c_del_adapter(&dev->adap);
+    flush_i2c_fifo(dev);
+    disable_all_interrupts(dev);
+    clear_all_interrupts(dev);
+    /* disable the controller */
+    i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
+    free_irq(dev->irq, dev);
+    iounmap(dev->virtbase);
+    if (res)
+        release_mem_region(res->start, resource_size(res));
+    clk_put(dev->clk);
+    if (dev->regulator)
+        regulator_put(dev->regulator);
+    pm_runtime_disable(&pdev->dev);
+    platform_set_drvdata(pdev, NULL);
+    kfree(dev);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver nmk_i2c_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = DRIVER_NAME,
-		.pm = &nmk_i2c_pm,
-	},
-	.probe = nmk_i2c_probe,
-	.remove = __devexit_p(nmk_i2c_remove),
+    .driver = {
+        .owner = THIS_MODULE,
+        .name = DRIVER_NAME,
+        .pm = &nmk_i2c_pm,
+    },
+    .probe = nmk_i2c_probe,
+    .remove = __devexit_p(nmk_i2c_remove),
 };
 
-static int __init nmk_i2c_init(void)
-{
-	return platform_driver_register(&nmk_i2c_driver);
+static int __init nmk_i2c_init(void) {
+    return platform_driver_register(&nmk_i2c_driver);
 }
 
-static void __exit nmk_i2c_exit(void)
-{
-	platform_driver_unregister(&nmk_i2c_driver);
+static void __exit nmk_i2c_exit(void) {
+    platform_driver_unregister(&nmk_i2c_driver);
 }
 
 subsys_initcall(nmk_i2c_init);

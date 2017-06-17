@@ -14,9 +14,9 @@
  * changed as well.
  */
 struct thread_struct {
-	unsigned long ksp;	/* Kernel stack pointer. */
-	unsigned long usp;	/* User stack pointer. */
-	unsigned long ccs;	/* Saved flags register. */
+    unsigned long ksp;	/* Kernel stack pointer. */
+    unsigned long usp;	/* User stack pointer. */
+    unsigned long ccs;	/* Saved flags register. */
 };
 
 /*

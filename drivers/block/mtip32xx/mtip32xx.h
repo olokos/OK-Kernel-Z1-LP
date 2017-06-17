@@ -105,10 +105,10 @@
 #define MTIP_ABAR		5
 
 #ifdef DEBUG
- #define dbg_printk(format, arg...)	\
+#define dbg_printk(format, arg...)	\
 	printk(pr_fmt(format), ##arg);
 #else
- #define dbg_printk(format, arg...)
+#define dbg_printk(format, arg...)
 #endif
 
 #define __force_bit2int (unsigned int __force)
@@ -141,276 +141,276 @@
 #define MTIP_DDF_INIT_DONE_BIT		7
 #define MTIP_DDF_REBUILD_FAILED_BIT	8
 
-__packed struct smart_attr{
-	u8 attr_id;
-	u16 flags;
-	u8 cur;
-	u8 worst;
-	u32 data;
-	u8 res[3];
+__packed struct smart_attr {
+    u8 attr_id;
+    u16 flags;
+    u8 cur;
+    u8 worst;
+    u32 data;
+    u8 res[3];
 };
 
 /* Register Frame Information Structure (FIS), host to device. */
 struct host_to_dev_fis {
-	/*
-	 * FIS type.
-	 * - 27h Register FIS, host to device.
-	 * - 34h Register FIS, device to host.
-	 * - 39h DMA Activate FIS, device to host.
-	 * - 41h DMA Setup FIS, bi-directional.
-	 * - 46h Data FIS, bi-directional.
-	 * - 58h BIST Activate FIS, bi-directional.
-	 * - 5Fh PIO Setup FIS, device to host.
-	 * - A1h Set Device Bits FIS, device to host.
-	 */
-	unsigned char type;
-	unsigned char opts;
-	unsigned char command;
-	unsigned char features;
+    /*
+     * FIS type.
+     * - 27h Register FIS, host to device.
+     * - 34h Register FIS, device to host.
+     * - 39h DMA Activate FIS, device to host.
+     * - 41h DMA Setup FIS, bi-directional.
+     * - 46h Data FIS, bi-directional.
+     * - 58h BIST Activate FIS, bi-directional.
+     * - 5Fh PIO Setup FIS, device to host.
+     * - A1h Set Device Bits FIS, device to host.
+     */
+    unsigned char type;
+    unsigned char opts;
+    unsigned char command;
+    unsigned char features;
 
-	union {
-		unsigned char lba_low;
-		unsigned char sector;
-	};
-	union {
-		unsigned char lba_mid;
-		unsigned char cyl_low;
-	};
-	union {
-		unsigned char lba_hi;
-		unsigned char cyl_hi;
-	};
-	union {
-		unsigned char device;
-		unsigned char head;
-	};
+    union {
+        unsigned char lba_low;
+        unsigned char sector;
+    };
+    union {
+        unsigned char lba_mid;
+        unsigned char cyl_low;
+    };
+    union {
+        unsigned char lba_hi;
+        unsigned char cyl_hi;
+    };
+    union {
+        unsigned char device;
+        unsigned char head;
+    };
 
-	union {
-		unsigned char lba_low_ex;
-		unsigned char sector_ex;
-	};
-	union {
-		unsigned char lba_mid_ex;
-		unsigned char cyl_low_ex;
-	};
-	union {
-		unsigned char lba_hi_ex;
-		unsigned char cyl_hi_ex;
-	};
-	unsigned char features_ex;
+    union {
+        unsigned char lba_low_ex;
+        unsigned char sector_ex;
+    };
+    union {
+        unsigned char lba_mid_ex;
+        unsigned char cyl_low_ex;
+    };
+    union {
+        unsigned char lba_hi_ex;
+        unsigned char cyl_hi_ex;
+    };
+    unsigned char features_ex;
 
-	unsigned char sect_count;
-	unsigned char sect_cnt_ex;
-	unsigned char res2;
-	unsigned char control;
+    unsigned char sect_count;
+    unsigned char sect_cnt_ex;
+    unsigned char res2;
+    unsigned char control;
 
-	unsigned int res3;
+    unsigned int res3;
 };
 
 /* Command header structure. */
 struct mtip_cmd_hdr {
-	/*
-	 * Command options.
-	 * - Bits 31:16 Number of PRD entries.
-	 * - Bits 15:8 Unused in this implementation.
-	 * - Bit 7 Prefetch bit, informs the drive to prefetch PRD entries.
-	 * - Bit 6 Write bit, should be set when writing data to the device.
-	 * - Bit 5 Unused in this implementation.
-	 * - Bits 4:0 Length of the command FIS in DWords (DWord = 4 bytes).
-	 */
-	unsigned int opts;
-	/* This field is unsed when using NCQ. */
-	union {
-		unsigned int byte_count;
-		unsigned int status;
-	};
-	/*
-	 * Lower 32 bits of the command table address associated with this
-	 * header. The command table addresses must be 128 byte aligned.
-	 */
-	unsigned int ctba;
-	/*
-	 * If 64 bit addressing is used this field is the upper 32 bits
-	 * of the command table address associated with this command.
-	 */
-	unsigned int ctbau;
-	/* Reserved and unused. */
-	unsigned int res[4];
+    /*
+     * Command options.
+     * - Bits 31:16 Number of PRD entries.
+     * - Bits 15:8 Unused in this implementation.
+     * - Bit 7 Prefetch bit, informs the drive to prefetch PRD entries.
+     * - Bit 6 Write bit, should be set when writing data to the device.
+     * - Bit 5 Unused in this implementation.
+     * - Bits 4:0 Length of the command FIS in DWords (DWord = 4 bytes).
+     */
+    unsigned int opts;
+    /* This field is unsed when using NCQ. */
+    union {
+        unsigned int byte_count;
+        unsigned int status;
+    };
+    /*
+     * Lower 32 bits of the command table address associated with this
+     * header. The command table addresses must be 128 byte aligned.
+     */
+    unsigned int ctba;
+    /*
+     * If 64 bit addressing is used this field is the upper 32 bits
+     * of the command table address associated with this command.
+     */
+    unsigned int ctbau;
+    /* Reserved and unused. */
+    unsigned int res[4];
 };
 
 /* Command scatter gather structure (PRD). */
 struct mtip_cmd_sg {
-	/*
-	 * Low 32 bits of the data buffer address. For P320 this
-	 * address must be 8 byte aligned signified by bits 2:0 being
-	 * set to 0.
-	 */
-	unsigned int dba;
-	/*
-	 * When 64 bit addressing is used this field is the upper
-	 * 32 bits of the data buffer address.
-	 */
-	unsigned int dba_upper;
-	/* Unused. */
-	unsigned int reserved;
-	/*
-	 * Bit 31: interrupt when this data block has been transferred.
-	 * Bits 30..22: reserved
-	 * Bits 21..0: byte count (minus 1).  For P320 the byte count must be
-	 * 8 byte aligned signified by bits 2:0 being set to 1.
-	 */
-	unsigned int info;
+    /*
+     * Low 32 bits of the data buffer address. For P320 this
+     * address must be 8 byte aligned signified by bits 2:0 being
+     * set to 0.
+     */
+    unsigned int dba;
+    /*
+     * When 64 bit addressing is used this field is the upper
+     * 32 bits of the data buffer address.
+     */
+    unsigned int dba_upper;
+    /* Unused. */
+    unsigned int reserved;
+    /*
+     * Bit 31: interrupt when this data block has been transferred.
+     * Bits 30..22: reserved
+     * Bits 21..0: byte count (minus 1).  For P320 the byte count must be
+     * 8 byte aligned signified by bits 2:0 being set to 1.
+     */
+    unsigned int info;
 };
 struct mtip_port;
 
 /* Structure used to describe a command. */
 struct mtip_cmd {
 
-	struct mtip_cmd_hdr *command_header; /* ptr to command header entry */
+    struct mtip_cmd_hdr *command_header; /* ptr to command header entry */
 
-	dma_addr_t command_header_dma; /* corresponding physical address */
+    dma_addr_t command_header_dma; /* corresponding physical address */
 
-	void *command; /* ptr to command table entry */
+    void *command; /* ptr to command table entry */
 
-	dma_addr_t command_dma; /* corresponding physical address */
+    dma_addr_t command_dma; /* corresponding physical address */
 
-	void *comp_data; /* data passed to completion function comp_func() */
-	/*
-	 * Completion function called by the ISR upon completion of
-	 * a command.
-	 */
-	void (*comp_func)(struct mtip_port *port,
-				int tag,
-				void *data,
-				int status);
-	/* Additional callback function that may be called by comp_func() */
-	void (*async_callback)(void *data, int status);
+    void *comp_data; /* data passed to completion function comp_func() */
+    /*
+     * Completion function called by the ISR upon completion of
+     * a command.
+     */
+    void (*comp_func)(struct mtip_port *port,
+                      int tag,
+                      void *data,
+                      int status);
+    /* Additional callback function that may be called by comp_func() */
+    void (*async_callback)(void *data, int status);
 
-	void *async_data; /* Addl. data passed to async_callback() */
+    void *async_data; /* Addl. data passed to async_callback() */
 
-	int scatter_ents; /* Number of scatter list entries used */
+    int scatter_ents; /* Number of scatter list entries used */
 
-	struct scatterlist sg[MTIP_MAX_SG]; /* Scatter list entries */
+    struct scatterlist sg[MTIP_MAX_SG]; /* Scatter list entries */
 
-	int retries; /* The number of retries left for this command. */
+    int retries; /* The number of retries left for this command. */
 
-	int direction; /* Data transfer direction */
+    int direction; /* Data transfer direction */
 
-	unsigned long comp_time; /* command completion time, in jiffies */
+    unsigned long comp_time; /* command completion time, in jiffies */
 
-	atomic_t active; /* declares if this command sent to the drive. */
+    atomic_t active; /* declares if this command sent to the drive. */
 };
 
 /* Structure used to describe a port. */
 struct mtip_port {
-	/* Pointer back to the driver data for this port. */
-	struct driver_data *dd;
-	/*
-	 * Used to determine if the data pointed to by the
-	 * identify field is valid.
-	 */
-	unsigned long identify_valid;
-	/* Base address of the memory mapped IO for the port. */
-	void __iomem *mmio;
-	/* Array of pointers to the memory mapped s_active registers. */
-	void __iomem *s_active[MTIP_MAX_SLOT_GROUPS];
-	/* Array of pointers to the memory mapped completed registers. */
-	void __iomem *completed[MTIP_MAX_SLOT_GROUPS];
-	/* Array of pointers to the memory mapped Command Issue registers. */
-	void __iomem *cmd_issue[MTIP_MAX_SLOT_GROUPS];
-	/*
-	 * Pointer to the beginning of the command header memory as used
-	 * by the driver.
-	 */
-	void *command_list;
-	/*
-	 * Pointer to the beginning of the command header memory as used
-	 * by the DMA.
-	 */
-	dma_addr_t command_list_dma;
-	/*
-	 * Pointer to the beginning of the RX FIS memory as used
-	 * by the driver.
-	 */
-	void *rxfis;
-	/*
-	 * Pointer to the beginning of the RX FIS memory as used
-	 * by the DMA.
-	 */
-	dma_addr_t rxfis_dma;
-	/*
-	 * Pointer to the beginning of the command table memory as used
-	 * by the driver.
-	 */
-	void *command_table;
-	/*
-	 * Pointer to the beginning of the command table memory as used
-	 * by the DMA.
-	 */
-	dma_addr_t command_tbl_dma;
-	/*
-	 * Pointer to the beginning of the identify data memory as used
-	 * by the driver.
-	 */
-	u16 *identify;
-	/*
-	 * Pointer to the beginning of the identify data memory as used
-	 * by the DMA.
-	 */
-	dma_addr_t identify_dma;
-	/*
-	 * Pointer to the beginning of a sector buffer that is used
-	 * by the driver when issuing internal commands.
-	 */
-	u16 *sector_buffer;
-	/*
-	 * Pointer to the beginning of a sector buffer that is used
-	 * by the DMA when the driver issues internal commands.
-	 */
-	dma_addr_t sector_buffer_dma;
-	/*
-	 * Bit significant, used to determine if a command slot has
-	 * been allocated. i.e. the slot is in use.  Bits are cleared
-	 * when the command slot and all associated data structures
-	 * are no longer needed.
-	 */
-	u16 *log_buf;
-	dma_addr_t log_buf_dma;
+    /* Pointer back to the driver data for this port. */
+    struct driver_data *dd;
+    /*
+     * Used to determine if the data pointed to by the
+     * identify field is valid.
+     */
+    unsigned long identify_valid;
+    /* Base address of the memory mapped IO for the port. */
+    void __iomem *mmio;
+    /* Array of pointers to the memory mapped s_active registers. */
+    void __iomem *s_active[MTIP_MAX_SLOT_GROUPS];
+    /* Array of pointers to the memory mapped completed registers. */
+    void __iomem *completed[MTIP_MAX_SLOT_GROUPS];
+    /* Array of pointers to the memory mapped Command Issue registers. */
+    void __iomem *cmd_issue[MTIP_MAX_SLOT_GROUPS];
+    /*
+     * Pointer to the beginning of the command header memory as used
+     * by the driver.
+     */
+    void *command_list;
+    /*
+     * Pointer to the beginning of the command header memory as used
+     * by the DMA.
+     */
+    dma_addr_t command_list_dma;
+    /*
+     * Pointer to the beginning of the RX FIS memory as used
+     * by the driver.
+     */
+    void *rxfis;
+    /*
+     * Pointer to the beginning of the RX FIS memory as used
+     * by the DMA.
+     */
+    dma_addr_t rxfis_dma;
+    /*
+     * Pointer to the beginning of the command table memory as used
+     * by the driver.
+     */
+    void *command_table;
+    /*
+     * Pointer to the beginning of the command table memory as used
+     * by the DMA.
+     */
+    dma_addr_t command_tbl_dma;
+    /*
+     * Pointer to the beginning of the identify data memory as used
+     * by the driver.
+     */
+    u16 *identify;
+    /*
+     * Pointer to the beginning of the identify data memory as used
+     * by the DMA.
+     */
+    dma_addr_t identify_dma;
+    /*
+     * Pointer to the beginning of a sector buffer that is used
+     * by the driver when issuing internal commands.
+     */
+    u16 *sector_buffer;
+    /*
+     * Pointer to the beginning of a sector buffer that is used
+     * by the DMA when the driver issues internal commands.
+     */
+    dma_addr_t sector_buffer_dma;
+    /*
+     * Bit significant, used to determine if a command slot has
+     * been allocated. i.e. the slot is in use.  Bits are cleared
+     * when the command slot and all associated data structures
+     * are no longer needed.
+     */
+    u16 *log_buf;
+    dma_addr_t log_buf_dma;
 
-	u8 *smart_buf;
-	dma_addr_t smart_buf_dma;
+    u8 *smart_buf;
+    dma_addr_t smart_buf_dma;
 
-	unsigned long allocated[SLOTBITS_IN_LONGS];
-	/*
-	 * used to queue commands when an internal command is in progress
-	 * or error handling is active
-	 */
-	unsigned long cmds_to_issue[SLOTBITS_IN_LONGS];
-	/*
-	 * Array of command slots. Structure includes pointers to the
-	 * command header and command table, and completion function and data
-	 * pointers.
-	 */
-	struct mtip_cmd commands[MTIP_MAX_COMMAND_SLOTS];
-	/* Used by mtip_service_thread to wait for an event */
-	wait_queue_head_t svc_wait;
-	/*
-	 * indicates the state of the port. Also, helps the service thread
-	 * to determine its action on wake up.
-	 */
-	unsigned long flags;
-	/*
-	 * Timer used to complete commands that have been active for too long.
-	 */
-	struct timer_list cmd_timer;
-	unsigned long ic_pause_timer;
-	/*
-	 * Semaphore used to block threads if there are no
-	 * command slots available.
-	 */
-	struct semaphore cmd_slot;
-	/* Spinlock for working around command-issue bug. */
-	spinlock_t cmd_issue_lock;
+    unsigned long allocated[SLOTBITS_IN_LONGS];
+    /*
+     * used to queue commands when an internal command is in progress
+     * or error handling is active
+     */
+    unsigned long cmds_to_issue[SLOTBITS_IN_LONGS];
+    /*
+     * Array of command slots. Structure includes pointers to the
+     * command header and command table, and completion function and data
+     * pointers.
+     */
+    struct mtip_cmd commands[MTIP_MAX_COMMAND_SLOTS];
+    /* Used by mtip_service_thread to wait for an event */
+    wait_queue_head_t svc_wait;
+    /*
+     * indicates the state of the port. Also, helps the service thread
+     * to determine its action on wake up.
+     */
+    unsigned long flags;
+    /*
+     * Timer used to complete commands that have been active for too long.
+     */
+    struct timer_list cmd_timer;
+    unsigned long ic_pause_timer;
+    /*
+     * Semaphore used to block threads if there are no
+     * command slots available.
+     */
+    struct semaphore cmd_slot;
+    /* Spinlock for working around command-issue bug. */
+    spinlock_t cmd_issue_lock;
 };
 
 /*
@@ -419,32 +419,32 @@ struct mtip_port {
  * One structure is allocated per probed device.
  */
 struct driver_data {
-	void __iomem *mmio; /* Base address of the HBA registers. */
+    void __iomem *mmio; /* Base address of the HBA registers. */
 
-	int major; /* Major device number. */
+    int major; /* Major device number. */
 
-	int instance; /* Instance number. First device probed is 0, ... */
+    int instance; /* Instance number. First device probed is 0, ... */
 
-	struct gendisk *disk; /* Pointer to our gendisk structure. */
+    struct gendisk *disk; /* Pointer to our gendisk structure. */
 
-	struct pci_dev *pdev; /* Pointer to the PCI device structure. */
+    struct pci_dev *pdev; /* Pointer to the PCI device structure. */
 
-	struct request_queue *queue; /* Our request queue. */
+    struct request_queue *queue; /* Our request queue. */
 
-	struct mtip_port *port; /* Pointer to the port data structure. */
+    struct mtip_port *port; /* Pointer to the port data structure. */
 
-	/* Tasklet used to process the bottom half of the ISR. */
-	struct tasklet_struct tasklet;
+    /* Tasklet used to process the bottom half of the ISR. */
+    struct tasklet_struct tasklet;
 
-	unsigned product_type; /* magic value declaring the product type */
+    unsigned product_type; /* magic value declaring the product type */
 
-	unsigned slot_groups; /* number of slot groups the product supports */
+    unsigned slot_groups; /* number of slot groups the product supports */
 
-	unsigned long index; /* Index to determine the disk name */
+    unsigned long index; /* Index to determine the disk name */
 
-	unsigned long dd_flag; /* NOTE: use atomic bit operations on this */
+    unsigned long dd_flag; /* NOTE: use atomic bit operations on this */
 
-	struct task_struct *mtip_svc_handler; /* task_struct of svc thd */
+    struct task_struct *mtip_svc_handler; /* task_struct of svc thd */
 };
 
 #endif

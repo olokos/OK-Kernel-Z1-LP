@@ -39,7 +39,7 @@
 #define N_MODE_MCS15_RIX 15
 
 struct rtl_rate_priv {
-	u8 ht_cap;
+    u8 ht_cap;
 };
 
 int rtl_rate_control_register(void);

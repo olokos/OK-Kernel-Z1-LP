@@ -49,8 +49,7 @@
 #include "vos_memory.h"
 #endif /* MEMORY_DEBUG */
 
-typedef struct sPalStruct
-{
+typedef struct sPalStruct {
     /*?must check the data type*/
     void* devHandle;
 } tPalContext;

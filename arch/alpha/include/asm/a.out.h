@@ -7,54 +7,50 @@
  * OSF/1 ECOFF header structs.  ECOFF files consist of:
  * 	- a file header (struct filehdr),
  *	- an a.out header (struct aouthdr),
- *	- one or more section headers (struct scnhdr). 
+ *	- one or more section headers (struct scnhdr).
  *	  The filhdr's "f_nscns" field contains the
  *	  number of section headers.
  */
 
-struct filehdr
-{
-	/* OSF/1 "file" header */
-	__u16 f_magic, f_nscns;
-	__u32 f_timdat;
-	__u64 f_symptr;
-	__u32 f_nsyms;
-	__u16 f_opthdr, f_flags;
+struct filehdr {
+    /* OSF/1 "file" header */
+    __u16 f_magic, f_nscns;
+    __u32 f_timdat;
+    __u64 f_symptr;
+    __u32 f_nsyms;
+    __u16 f_opthdr, f_flags;
 };
 
-struct aouthdr
-{
-	__u64 info;		/* after that it looks quite normal.. */
-	__u64 tsize;
-	__u64 dsize;
-	__u64 bsize;
-	__u64 entry;
-	__u64 text_start;	/* with a few additions that actually make sense */
-	__u64 data_start;
-	__u64 bss_start;
-	__u32 gprmask, fprmask;	/* bitmask of general & floating point regs used in binary */
-	__u64 gpvalue;
+struct aouthdr {
+    __u64 info;		/* after that it looks quite normal.. */
+    __u64 tsize;
+    __u64 dsize;
+    __u64 bsize;
+    __u64 entry;
+    __u64 text_start;	/* with a few additions that actually make sense */
+    __u64 data_start;
+    __u64 bss_start;
+    __u32 gprmask, fprmask;	/* bitmask of general & floating point regs used in binary */
+    __u64 gpvalue;
 };
 
-struct scnhdr
-{
-	char	s_name[8];
-	__u64	s_paddr;
-	__u64	s_vaddr;
-	__u64	s_size;
-	__u64	s_scnptr;
-	__u64	s_relptr;
-	__u64	s_lnnoptr;
-	__u16	s_nreloc;
-	__u16	s_nlnno;
-	__u32	s_flags;
+struct scnhdr {
+    char	s_name[8];
+    __u64	s_paddr;
+    __u64	s_vaddr;
+    __u64	s_size;
+    __u64	s_scnptr;
+    __u64	s_relptr;
+    __u64	s_lnnoptr;
+    __u16	s_nreloc;
+    __u16	s_nlnno;
+    __u32	s_flags;
 };
 
-struct exec
-{
-	/* OSF/1 "file" header */
-	struct filehdr		fh;
-	struct aouthdr		ah;
+struct exec {
+    /* OSF/1 "file" header */
+    struct filehdr		fh;
+    struct aouthdr		ah;
 };
 
 /*

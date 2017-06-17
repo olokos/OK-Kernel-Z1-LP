@@ -31,7 +31,7 @@
 /*
  * IXDP2400 CPLD registers
  */
-#define IXDP2400_CPLD_SYSLED		IXDP2X00_CPLD_REG(0x0)  
+#define IXDP2400_CPLD_SYSLED		IXDP2X00_CPLD_REG(0x0)
 #define IXDP2400_CPLD_DISP_DATA		IXDP2X00_CPLD_REG(0x4)
 #define IXDP2400_CPLD_CLOCK_SPEED	IXDP2X00_CPLD_REG(0x8)
 #define IXDP2400_CPLD_INT_STAT		IXDP2X00_CPLD_REG(0xc)
@@ -74,9 +74,8 @@
 /*
  * The master NPU is always PCI master.
  */
-static inline unsigned int ixdp2x00_master_npu(void)
-{
-	return !!ixp2000_is_pcimaster();
+static inline unsigned int ixdp2x00_master_npu(void) {
+    return !!ixp2000_is_pcimaster();
 }
 
 /*

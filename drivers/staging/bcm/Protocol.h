@@ -18,71 +18,62 @@ struct ArpHeader {
 }/*__attribute__((packed))*/;
 
 
-struct TransportHeaderT
-{
-	union
-	{
-		struct udphdr uhdr;
-		struct tcphdr thdr;
-	};
+struct TransportHeaderT {
+    union {
+        struct udphdr uhdr;
+        struct tcphdr thdr;
+    };
 } __attribute__((packed));
 typedef struct TransportHeaderT xporthdr;
 
 
-typedef enum _E_NWPKT_IPFRAME_TYPE
-{
-	eNonIPPacket,
-	eIPv4Packet,
-	eIPv6Packet
-}E_NWPKT_IPFRAME_TYPE;
+typedef enum _E_NWPKT_IPFRAME_TYPE {
+    eNonIPPacket,
+    eIPv4Packet,
+    eIPv6Packet
+} E_NWPKT_IPFRAME_TYPE;
 
-typedef enum _E_NWPKT_ETHFRAME_TYPE
-{
-	eEthUnsupportedFrame,
-	eEth802LLCFrame,
-	eEth802LLCSNAPFrame,
-	eEth802QVLANFrame,
-	eEthOtherFrame
+typedef enum _E_NWPKT_ETHFRAME_TYPE {
+    eEthUnsupportedFrame,
+    eEth802LLCFrame,
+    eEth802LLCSNAPFrame,
+    eEth802QVLANFrame,
+    eEthOtherFrame
 } E_NWPKT_ETHFRAME_TYPE;
 
-typedef struct _S_ETHCS_PKT_INFO
-{
-	E_NWPKT_IPFRAME_TYPE eNwpktIPFrameType;
-	E_NWPKT_ETHFRAME_TYPE eNwpktEthFrameType;
-	USHORT	usEtherType;
-	UCHAR	ucDSAP;
-}S_ETHCS_PKT_INFO,*PS_ETHCS_PKT_INFO;
+typedef struct _S_ETHCS_PKT_INFO {
+    E_NWPKT_IPFRAME_TYPE eNwpktIPFrameType;
+    E_NWPKT_ETHFRAME_TYPE eNwpktEthFrameType;
+    USHORT	usEtherType;
+    UCHAR	ucDSAP;
+} S_ETHCS_PKT_INFO,*PS_ETHCS_PKT_INFO;
 
-typedef struct _ETH_CS_802_Q_FRAME
-{
-	ETH_HEADER_STRUC EThHdr;
-	USHORT UserPriority:3;
-	USHORT CFI:1;
-	USHORT VLANID:12;
-	USHORT EthType;
+typedef struct _ETH_CS_802_Q_FRAME {
+    ETH_HEADER_STRUC EThHdr;
+    USHORT UserPriority:3;
+    USHORT CFI:1;
+    USHORT VLANID:12;
+    USHORT EthType;
 } __attribute__((packed)) ETH_CS_802_Q_FRAME;
 
-typedef struct _ETH_CS_802_LLC_FRAME
-{
-	ETH_HEADER_STRUC EThHdr;
-	unsigned char DSAP;
-	unsigned char SSAP;
-	unsigned char Control;
-}__attribute__((packed)) ETH_CS_802_LLC_FRAME;
+typedef struct _ETH_CS_802_LLC_FRAME {
+    ETH_HEADER_STRUC EThHdr;
+    unsigned char DSAP;
+    unsigned char SSAP;
+    unsigned char Control;
+} __attribute__((packed)) ETH_CS_802_LLC_FRAME;
 
-typedef struct _ETH_CS_802_LLC_SNAP_FRAME
-{
-	ETH_HEADER_STRUC EThHdr;
-	unsigned char DSAP;
-	unsigned char SSAP;
-	unsigned char Control;
-	unsigned char OUI[3];
-	unsigned short usEtherType;
+typedef struct _ETH_CS_802_LLC_SNAP_FRAME {
+    ETH_HEADER_STRUC EThHdr;
+    unsigned char DSAP;
+    unsigned char SSAP;
+    unsigned char Control;
+    unsigned char OUI[3];
+    unsigned short usEtherType;
 } __attribute__((packed)) ETH_CS_802_LLC_SNAP_FRAME;
 
-typedef struct _ETH_CS_ETH2_FRAME
-{
-	ETH_HEADER_STRUC EThHdr;
+typedef struct _ETH_CS_ETH2_FRAME {
+    ETH_HEADER_STRUC EThHdr;
 } __attribute__((packed)) ETH_CS_ETH2_FRAME;
 
 #define ETHERNET_FRAMETYPE_IPV4		ntohs(0x0800)
@@ -90,19 +81,18 @@ typedef struct _ETH_CS_ETH2_FRAME
 #define ETHERNET_FRAMETYPE_802QVLAN 	ntohs(0x8100)
 
 //Per SF CS Specification Encodings
-typedef enum _E_SERVICEFLOW_CS_SPEC_
-{
-	eCSSpecUnspecified =0,
-	eCSPacketIPV4,
-	eCSPacketIPV6,
-	eCS802_3PacketEthernet,
-	eCS802_1QPacketVLAN,
-	eCSPacketIPV4Over802_3Ethernet,
-	eCSPacketIPV6Over802_3Ethernet,
-	eCSPacketIPV4Over802_1QVLAN,
-	eCSPacketIPV6Over802_1QVLAN,
-	eCSPacketUnsupported
-}E_SERVICEFLOW_CS_SPEC;
+typedef enum _E_SERVICEFLOW_CS_SPEC_ {
+    eCSSpecUnspecified =0,
+    eCSPacketIPV4,
+    eCSPacketIPV6,
+    eCS802_3PacketEthernet,
+    eCS802_1QPacketVLAN,
+    eCSPacketIPV4Over802_3Ethernet,
+    eCSPacketIPV6Over802_3Ethernet,
+    eCSPacketIPV4Over802_1QVLAN,
+    eCSPacketIPV6Over802_1QVLAN,
+    eCSPacketUnsupported
+} E_SERVICEFLOW_CS_SPEC;
 
 
 #define	IP6_HEADER_LEN	40
@@ -131,17 +121,16 @@ typedef enum _E_SERVICEFLOW_CS_SPEC_
 #define	ARP_PKT_SIZE			60
 
 // This is the format for the TCP packet header
-typedef struct _TCP_HEADER
-{
-	USHORT usSrcPort;
-	USHORT usDestPort;
-	ULONG  ulSeqNumber;
-	ULONG  ulAckNumber;
-	UCHAR  HeaderLength;
+typedef struct _TCP_HEADER {
+    USHORT usSrcPort;
+    USHORT usDestPort;
+    ULONG  ulSeqNumber;
+    ULONG  ulAckNumber;
+    UCHAR  HeaderLength;
     UCHAR  ucFlags;
-	USHORT usWindowsSize;
-	USHORT usChkSum;
-	USHORT usUrgetPtr;
+    USHORT usWindowsSize;
+    USHORT usChkSum;
+    USHORT usUrgetPtr;
 } TCP_HEADER,*PTCP_HEADER;
 #define TCP_HEADER_LEN  	sizeof(TCP_HEADER)
 #define TCP_ACK             0x10  //Bit 4 in tcpflags field.

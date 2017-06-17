@@ -26,9 +26,9 @@ extern void setup_ptcg_sem(int max_purges, int from_palo);
 extern void local_flush_tlb_all (void);
 
 #ifdef CONFIG_SMP
-  extern void smp_flush_tlb_all (void);
-  extern void smp_flush_tlb_mm (struct mm_struct *mm);
-  extern void smp_flush_tlb_cpumask (cpumask_t xcpumask);
+extern void smp_flush_tlb_all (void);
+extern void smp_flush_tlb_mm (struct mm_struct *mm);
+extern void smp_flush_tlb_cpumask (cpumask_t xcpumask);
 # define flush_tlb_all()	smp_flush_tlb_all()
 #else
 # define flush_tlb_all()	local_flush_tlb_all()
@@ -36,10 +36,9 @@ extern void local_flush_tlb_all (void);
 #endif
 
 static inline void
-local_finish_flush_tlb_mm (struct mm_struct *mm)
-{
-	if (mm == current->active_mm)
-		activate_context(mm);
+local_finish_flush_tlb_mm (struct mm_struct *mm) {
+    if (mm == current->active_mm)
+        activate_context(mm);
 }
 
 /*
@@ -48,21 +47,20 @@ local_finish_flush_tlb_mm (struct mm_struct *mm)
  * the PTEs of the parent task.
  */
 static inline void
-flush_tlb_mm (struct mm_struct *mm)
-{
-	if (!mm)
-		return;
+flush_tlb_mm (struct mm_struct *mm) {
+    if (!mm)
+        return;
 
-	set_bit(mm->context, ia64_ctx.flushmap);
-	mm->context = 0;
+    set_bit(mm->context, ia64_ctx.flushmap);
+    mm->context = 0;
 
-	if (atomic_read(&mm->mm_users) == 0)
-		return;		/* happens as a result of exit_mmap() */
+    if (atomic_read(&mm->mm_users) == 0)
+        return;		/* happens as a result of exit_mmap() */
 
 #ifdef CONFIG_SMP
-	smp_flush_tlb_mm(mm);
+    smp_flush_tlb_mm(mm);
 #else
-	local_finish_flush_tlb_mm(mm);
+    local_finish_flush_tlb_mm(mm);
 #endif
 }
 
@@ -72,15 +70,14 @@ extern void flush_tlb_range (struct vm_area_struct *vma, unsigned long start, un
  * Page-granular tlb flush.
  */
 static inline void
-flush_tlb_page (struct vm_area_struct *vma, unsigned long addr)
-{
+flush_tlb_page (struct vm_area_struct *vma, unsigned long addr) {
 #ifdef CONFIG_SMP
-	flush_tlb_range(vma, (addr & PAGE_MASK), (addr & PAGE_MASK) + PAGE_SIZE);
+    flush_tlb_range(vma, (addr & PAGE_MASK), (addr & PAGE_MASK) + PAGE_SIZE);
 #else
-	if (vma->vm_mm == current->active_mm)
-		ia64_ptcl(addr, (PAGE_SHIFT << 2));
-	else
-		vma->vm_mm->context = 0;
+    if (vma->vm_mm == current->active_mm)
+        ia64_ptcl(addr, (PAGE_SHIFT << 2));
+    else
+        vma->vm_mm->context = 0;
 #endif
 }
 
@@ -94,9 +91,8 @@ void smp_local_flush_tlb(void);
 #endif
 
 static inline void flush_tlb_kernel_range(unsigned long start,
-					  unsigned long end)
-{
-	flush_tlb_all();	/* XXX fix me */
+        unsigned long end) {
+    flush_tlb_all();	/* XXX fix me */
 }
 
 #endif /* _ASM_IA64_TLBFLUSH_H */

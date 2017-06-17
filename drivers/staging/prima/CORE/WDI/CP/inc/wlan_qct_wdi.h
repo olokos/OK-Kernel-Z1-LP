@@ -164,8 +164,7 @@ of NV fragment is nt possbile.The next multiple of 1Kb is 3K */
 /*---------------------------------------------------------------------------
  WDI Version Information
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8                  revision;
     wpt_uint8                  version;
     wpt_uint8                  minor;
@@ -175,8 +174,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI Device Capability
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*If this flag is true it means that the device can support 802.3/ETH2 to
       802.11 translation*/
     wpt_boolean   bFrameXtlSupported;
@@ -191,8 +189,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI Channel Offset
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_SECONDARY_CHANNEL_OFFSET_NONE   = 0,
     WDI_SECONDARY_CHANNEL_OFFSET_UP     = 1,
     WDI_SECONDARY_CHANNEL_OFFSET_DOWN   = 3,
@@ -212,8 +209,7 @@ typedef enum
   WDI_MacFrameCtl
    Frame control field format (2 bytes)
 ---------------------------------------------------------------------------*/
-typedef  struct
-{
+typedef  struct {
     wpt_uint8 protVer :2;
     wpt_uint8 type :2;
     wpt_uint8 subType :4;
@@ -232,8 +228,7 @@ typedef  struct
 /*---------------------------------------------------------------------------
   WDI Sequence control field
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8 fragNum  : 4;
     wpt_uint8 seqNumLo : 4;
     wpt_uint8 seqNumHi : 8;
@@ -242,8 +237,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   Management header format
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_MacFrameCtl     fc;
     wpt_uint8           durationLo;
     wpt_uint8           durationHi;
@@ -257,8 +251,7 @@ typedef struct
   NV Blob management sturcture
   ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /* NV image  fragments count */
     wpt_uint16 usTotalFragment;
 
@@ -275,8 +268,7 @@ typedef struct
   Data path enums memory pool resource
   ---------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     /* managment resource pool ID */
     WDI_MGMT_POOL_ID = 0,
     /* Data resource pool ID */
@@ -293,8 +285,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI Status
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_STATUS_SUCCESS,       /* Operation has completed successfully*/
     WDI_STATUS_SUCCESS_SYNC,  /* Operation has completed successfully in a
                                 synchronous way - no rsp will be generated*/
@@ -341,8 +332,7 @@ typedef void (*WDI_ReqStatusCb)(WDI_Status   wdiStatus,
   WDI_LowLevelIndEnumType
     Types of indication that can be posted to UMAC by DAL
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*When RSSI monitoring is enabled of the Lower MAC and a threshold has been
       passed. */
     WDI_RSSI_NOTIFICATION_IND,
@@ -425,8 +415,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_LowRSSIThIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Positive crossing of Rssi Thresh1*/
     wpt_uint32             bRssiThres1PosCross : 1;
     /*Negative crossing of Rssi Thresh1*/
@@ -449,8 +438,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UnkAddr2FrmRxIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Rx Bd data of the unknown received addr2 frame.*/
     void*  bufRxBd;
 
@@ -461,8 +449,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DeleteSTAIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*ASSOC ID, as assigned by UMAC*/
     wpt_uint16    usAssocId;
 
@@ -483,8 +470,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_MicFailureIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*current BSSID*/
     wpt_macAddr bssId;
 
@@ -516,8 +502,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_CoexIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32  coexIndType;
     wpt_uint32  coexIndData[WDI_COEX_IND_DATA_SIZE];
 } WDI_CoexIndType;
@@ -526,8 +511,7 @@ typedef struct
   WDI_DHCPInd
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     wpt_uint8       device_mode;
     wpt_uint8       macAddr[WDI_MAC_ADDR_LEN];
 } WDI_DHCPInd;
@@ -536,8 +520,7 @@ typedef struct
 
   WDI_MacSSid
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8        ucLength;
     wpt_uint8        sSSID[WDI_MAX_SSID_SIZE];
 } WDI_MacSSid;
@@ -546,8 +529,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_PrefNetworkFoundInd
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Network that was found with the highest RSSI*/
     WDI_MacSSid   ssId;
     /* Indicates the RSSI */
@@ -560,8 +542,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  *WDI_P2pNoaAttrIndType
  *-------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8       ucIndex ;
     wpt_uint8       ucOppPsFlag ;
     wpt_uint16      usCtWin  ;
@@ -584,8 +565,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  *WDI_P2pNoaStartIndType
  *-------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32      status;
     wpt_uint32      bssIdx;
 } WDI_P2pNoaStartIndType;
@@ -593,8 +573,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  *WDI_TdlsIndType
  *-------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint16      status;
     wpt_uint16      assocId;
     wpt_uint16      staIdx;
@@ -605,8 +584,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_WakeReasonIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32      ulReason;        /* see tWakeReasonType */
     wpt_uint32      ulReasonArg;     /* argument specific to the reason type */
     wpt_uint32      ulStoredDataLen; /* length of optional data stored in this message, in case
@@ -621,8 +599,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_MissedBeaconIndType
 -----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8       bssIdx;  /*bssidx on which beacon is missed*/
 } WDI_MissedBeaconIndType;
 
@@ -630,8 +607,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_LPHBTimeoutIndData
 -----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8 bssIdx;
     wpt_uint8 sessionIdx;
     wpt_uint8 protocolType; /*TCP or UDP*/
@@ -642,8 +618,7 @@ typedef struct
 /*-----------------------------------------------------------------------------
 WDI_PeriodicTxPtrnFwIndType
 -----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  bssIdx;
     wpt_uint32 selfStaIdx;
     wpt_uint32 status;
@@ -654,8 +629,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetBatchScanReqType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32 scanFrequency;        /* how frequent to do scan default 30Sec*/
     wpt_uint32 numberOfScansToBatch; /* number of scans to batch */
     wpt_uint32 bestNetwork;          /* best networks in terms of rssi */
@@ -669,8 +643,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetBatchScanRspType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*max number of scans which FW can cache*/
     wpt_uint32 nScansToBatch;
 } WDI_SetBatchScanRspType;
@@ -678,16 +651,14 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TriggerBatchScanResultIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32 param;
 } WDI_TriggerBatchScanResultIndType;
 
 /*---------------------------------------------------------------------------
   WDI_StopBatchScanIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*max number of scans which FW can cache*/
     wpt_uint32 param;
 } WDI_StopBatchScanIndType;
@@ -696,8 +667,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  * WDI_BatchScanResultIndType
  *--------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32   bssid[6];     /* BSSID */
     wpt_uint32   ssid[32];     /* SSID */
     wpt_uint32   ch;           /* Channel */
@@ -707,8 +677,7 @@ typedef struct
     wpt_uint32  timestamp;
 } tWDIBatchScanNetworkInfo, *tpWDIBatchScanNetworkInfo;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32   scanId; /*Scan List ID*/
     /*No of AP in a Scan Result. Should be same as bestNetwork in SET_REQ msg*/
     wpt_uint32   numNetworksInScanList;
@@ -716,8 +685,7 @@ typedef struct
     wpt_uint32    scanList[1];
 } tWDIBatchScanList, *tpWDIBatchScanList;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32      timestamp;
     wpt_uint32      numScanLists;
     wpt_boolean     isLastResult;
@@ -731,8 +699,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_IbssPeerInactivityIndType
 -----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8   bssIdx;
     wpt_uint8   staIdx;
     wpt_macAddr staMacAddr;
@@ -741,8 +708,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_TxRateFlags
 -----------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_TX_RATE_LEGACY = 0x1,    /* Legacy rates */
     WDI_TX_RATE_HT20   = 0x2,    /* HT20 rates */
     WDI_TX_RATE_HT40   = 0x4,    /* HT40 rates */
@@ -757,8 +723,7 @@ typedef enum
 /*---------------------------------------------------------------------------
  WDI_RateUpdateIndParams
 -----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* 0 implies RA, positive value implies fixed rate, -1 implies ignore this
      * param ucastDataRate can be used to control RA behavior of unicast data to
      */
@@ -815,30 +780,26 @@ typedef struct
 #ifdef FEATURE_WLAN_CH_AVOID
 #define WDI_CH_AVOID_MAX_RANGE   4
 
-typedef struct
-{
+typedef struct {
     wpt_uint32 startFreq;
     wpt_uint32 endFreq;
 } WDI_ChAvoidFreqType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32          avoidRangeCount;
     WDI_ChAvoidFreqType avoidFreqRange[WDI_CH_AVOID_MAX_RANGE];
 } WDI_ChAvoidIndType;
 #endif /* FEATURE_WLAN_CH_AVOID */
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
-typedef struct
-{
+typedef struct {
     void *pLinkLayerStatsResults;
     wpt_macAddr  macAddr;
 }  WDI_LinkLayerStatsResults;
 
 #endif
 
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint16    staIdx;
 
@@ -861,14 +822,12 @@ typedef struct
     Inidcation type and information about the indication being carried
     over
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Inidcation type*/
     WDI_LowLevelIndEnumType  wdiIndicationType;
 
     /*Indication data*/
-    union
-    {
+    union {
         /*RSSI Threshold Info for WDI_LOW_RSSI_IND*/
         WDI_LowRSSIThIndType        wdiLowRSSIInfo;
 
@@ -962,8 +921,7 @@ typedef void (*WDI_LowLevelIndCBType)(WDI_LowLevelIndType* pwdiInd,
 /*---------------------------------------------------------------------------
   WDI_DriverType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_DRIVER_TYPE_PRODUCTION  = 0,
     WDI_DRIVER_TYPE_MFG         = 1,
     WDI_DRIVER_TYPE_DVT         = 2
@@ -972,8 +930,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_StartReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*This is a TLV formatted buffer containing all config values that can
      be set through the DAL Interface
 
@@ -1047,8 +1004,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_StartRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -1075,8 +1031,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_StopType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*Device is being stopped due to a reset*/
     WDI_STOP_TYPE_SYS_RESET,
 
@@ -1091,8 +1046,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_StopReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
 
     /*The reason for which the device is being stopped*/
     WDI_StopType   wdiStopReason;
@@ -1111,8 +1065,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ScanMode
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_SCAN_MODE_NORMAL = 0,
     WDI_SCAN_MODE_LEARN,
     WDI_SCAN_MODE_SCAN,
@@ -1126,8 +1079,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_ScanEntry
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8 bssIdx[WDI_NUM_BSSID];
     wpt_uint8 activeBSScnt;
 } WDI_ScanEntry;
@@ -1135,8 +1087,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_InitScanReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*LEARN - AP Role
      SCAN - STA Role*/
     WDI_ScanMode     wdiScanMode;
@@ -1175,8 +1126,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_InitScanReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*The info associated with the request that needs to be sent over to the
       device*/
     WDI_InitScanReqInfoType  wdiReqInfo;
@@ -1194,8 +1144,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_StartScanReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the channel to scan*/
     wpt_uint8         ucChannel;
 
@@ -1212,8 +1161,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_StartScanRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the status of the operation */
     WDI_Status        wdiStatus;
 
@@ -1226,8 +1174,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_EndScanReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the channel to stop scanning.  Not used really. But retained
       for symmetry with "start Scan" message. It can also help in error
       check if needed.*/
@@ -1246,8 +1193,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_PhyChanBondState
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_PHY_SINGLE_CHANNEL_CENTERED = 0,
     WDI_PHY_DOUBLE_CHANNEL_LOW_PRIMARY = 1,
     WDI_PHY_DOUBLE_CHANNEL_CENTERED = 2,
@@ -1267,8 +1213,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_FinishScanReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*LEARN - AP Role
      SCAN - STA Role*/
     WDI_ScanMode          wdiScanMode;
@@ -1307,8 +1252,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SwitchChReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the channel to switch to.*/
     wpt_uint8         ucChannel;
 
@@ -1336,8 +1280,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SwitchChReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Channel Info*/
     WDI_SwitchChReqInfoType  wdiChInfo;
 
@@ -1354,8 +1297,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_FinishScanReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Info for the Finish Scan request that will be sent down to the device*/
     WDI_FinishScanReqInfoType  wdiReqInfo;
 
@@ -1372,8 +1314,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_JoinReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the BSSID to which STA is going to associate*/
     wpt_macAddr   macBSSID;
 
@@ -1388,8 +1329,7 @@ typedef struct
 
 } WDI_JoinReqInfoType;
 
-typedef enum
-{
+typedef enum {
     eWDI_CHANNEL_SWITCH_SOURCE_SCAN,
     eWDI_CHANNEL_SWITCH_SOURCE_LISTEN,
     eWDI_CHANNEL_SWITCH_SOURCE_MCC,
@@ -1400,8 +1340,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_SwitchChReqInfoType_V1
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the channel to switch to.*/
     wpt_uint8         ucChannel;
 
@@ -1432,8 +1371,7 @@ typedef struct
 /*--------------------------------------------------------------------
   WDI_SwitchChReqParamsType_V1
 ----------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Channel Info*/
     WDI_SwitchChReqInfoType_V1  wdiChInfo;
 
@@ -1450,8 +1388,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_JoinReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Info for the Join request that will be sent down to the device*/
     WDI_JoinReqInfoType   wdiReqInfo;
 
@@ -1468,8 +1405,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_BssType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_INFRASTRUCTURE_MODE,
     WDI_INFRA_AP_MODE,                    //Added for softAP support
     WDI_IBSS_MODE,
@@ -1481,8 +1417,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_NwType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_11A_NW_TYPE,
     WDI_11B_NW_TYPE,
     WDI_11G_NW_TYPE,
@@ -1492,8 +1427,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_ConfigAction
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_ADD_BSS,
     WDI_UPDATE_BSS
 } WDI_ConfigAction;
@@ -1501,8 +1435,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_HTOperatingMode
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_HT_OP_MODE_PURE,
     WDI_HT_OP_MODE_OVERLAP_LEGACY,
     WDI_HT_OP_MODE_NO_LEGACY_20MHZ_HT,
@@ -1514,8 +1447,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_STAEntryType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_STA_ENTRY_SELF,
     WDI_STA_ENTRY_PEER,
     WDI_STA_ENTRY_BSSID,
@@ -1528,8 +1460,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_ConfigActionType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_ADD_STA,
     WDI_UPDATE_STA
 } WDI_ConfigActionType;
@@ -1537,8 +1468,7 @@ typedef enum
 /*----------------------------------------------------------------------------
   Each station added has a rate mode which specifies the sta attributes
   ----------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_RESERVED_1 = 0,
     WDI_RESERVED_2,
     WDI_RESERVED_3,
@@ -1551,8 +1481,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_SupportedRatesType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*
     * For Self STA Entry: this represents Self Mode.
     * For Peer Stations, this represents the mode of the peer.
@@ -1611,8 +1540,7 @@ typedef struct
   WDI_HTMIMOPowerSaveState
     Spatial Multiplexing(SM) Power Save mode
  --------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_HT_MIMO_PS_STATIC   = 0,    // Static SM Power Save mode
     WDI_HT_MIMO_PS_DYNAMIC  = 1,   // Dynamic SM Power Save mode
     WDI_HT_MIMO_PS_NA       = 2,        // reserved
@@ -1622,8 +1550,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_ConfigStaReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSSID of STA*/
     wpt_macAddr               macBSSID;
 
@@ -1741,8 +1668,7 @@ typedef struct
 ---------------------------------------------------------------------------*/
 #define WDI_RATESET_EID_MAX            12
 
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucNumRates;
     wpt_uint8  aRates[WDI_RATESET_EID_MAX];
 } WDI_RateSet;
@@ -1751,8 +1677,7 @@ typedef struct
   WDI_AciAifsnType
    access category record
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  rsvd  : 1;
     wpt_uint8  aci   : 2;
     wpt_uint8  acm   : 1;
@@ -1763,8 +1688,7 @@ typedef struct
   WDI_CWType
    contention window size
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  max : 4;
     wpt_uint8  min : 4;
 } WDI_CWType;
@@ -1772,8 +1696,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_EdcaParamRecord
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Access Category Record*/
     WDI_AciAifsnType  wdiACI;
 
@@ -1787,8 +1710,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_EDCAParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSS Index*/
     wpt_uint8      ucBSSIdx;
 
@@ -1815,8 +1737,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigBSSRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -1848,8 +1769,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelBSSReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSS Index of the BSS*/
     wpt_uint8      ucBssIdx;
 
@@ -1866,8 +1786,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelBSSRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -1881,8 +1800,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigSTARspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status      wdiStatus;
 
@@ -1918,8 +1836,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_PostAssocRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -1934,8 +1851,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelSTAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index returned during DAL_PostAssocReq or DAL_ConfigStaReq*/
     wpt_uint8         ucSTAIdx;
 
@@ -1952,8 +1868,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelSTARspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -1964,8 +1879,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_EncryptType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_ENCR_NONE,
     WDI_ENCR_WEP40,
     WDI_ENCR_WEP104,
@@ -1980,8 +1894,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_KeyDirectionType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_TX_ONLY,
     WDI_RX_ONLY,
     WDI_TX_RX,
@@ -1998,8 +1911,7 @@ typedef enum
 #define WDI_MAX_KEY_RSC_LEN         8
 #endif
 
-typedef struct
-{
+typedef struct {
     /* Key ID */
     wpt_uint8                  keyId;
     /* 0 for multicast */
@@ -2018,8 +1930,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetBSSKeyReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSS Index of the BSS*/
     wpt_uint8      ucBssIdx;
 
@@ -2040,8 +1951,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetBSSKeyReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Key Info */
     WDI_SetBSSKeyReqInfoType  wdiBSSKeyInfo;
 
@@ -2058,8 +1968,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_WepType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_WEP_STATIC,
     WDI_WEP_DYNAMIC
 
@@ -2068,8 +1977,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_RemoveBSSKeyReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSS Index of the BSS*/
     wpt_uint8      ucBssIdx;
 
@@ -2087,8 +1995,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_RemoveBSSKeyReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Key Info */
     WDI_RemoveBSSKeyReqInfoType  wdiKeyInfo;
 
@@ -2105,8 +2012,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetSTAKeyReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8        ucSTAIdx;
 
@@ -2133,8 +2039,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigBSSReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Peer BSSID*/
     wpt_macAddr              macBSSID;
 
@@ -2270,8 +2175,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_PostAssocReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Config STA arguments.*/
     WDI_ConfigStaReqInfoType  wdiSTAParams;
 
@@ -2291,8 +2195,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigBSSReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Info for the Join request that will be sent down to the device*/
     WDI_ConfigBSSReqInfoType   wdiReqInfo;
 
@@ -2309,8 +2212,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetSTAKeyReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Key Info*/
     WDI_SetSTAKeyReqInfoType  wdiKeyInfo;
 
@@ -2327,8 +2229,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_RemoveSTAKeyReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8        ucSTAIdx;
 
@@ -2346,8 +2247,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_RemoveSTAKeyReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Key Info */
     WDI_RemoveSTAKeyReqInfoType  wdiKeyInfo;
 
@@ -2368,8 +2268,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSInfoTfc
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint16       ackPolicy:2;
     wpt_uint16       userPrio:3;
     wpt_uint16       psb:1;
@@ -2383,8 +2282,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSInfoSch
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8        rsvd : 7;
     wpt_uint8        schedule : 1;
 } WDI_TSInfoSch;
@@ -2392,8 +2290,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_TSInfoTfc  wdiTraffic;
     WDI_TSInfoSch  wdiSchedule;
 } WDI_TSInfoType;
@@ -2401,8 +2298,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TspecIEType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8             ucType;
     wpt_uint8             ucLength;
     WDI_TSInfoType        wdiTSinfo;
@@ -2426,8 +2322,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddTSReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8         ucSTAIdx;
 
@@ -2455,8 +2350,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddTSReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*TSpec Info */
     WDI_AddTSReqInfoType  wdiTsInfo;
 
@@ -2473,8 +2367,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelTSReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8         ucSTAIdx;
 
@@ -2488,8 +2381,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelTSReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Del TSpec Info*/
     WDI_DelTSReqInfoType  wdiDelTSInfo;
 
@@ -2506,8 +2398,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateEDCAInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSS Index of the BSS*/
     wpt_uint16      ucBssIdx;
 
@@ -2528,8 +2419,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateEDCAParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*EDCA Info */
     WDI_UpdateEDCAInfoType  wdiEDCAInfo;
 
@@ -2546,8 +2436,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBASessionReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which BA is added..*/
     wpt_uint8        ucSTAIdx;
 
@@ -2579,8 +2468,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBASessionReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BA Session Info Type*/
     WDI_AddBASessionReqinfoType  wdiBASessionInfoType;
 
@@ -2597,8 +2485,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBASessionRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -2628,8 +2515,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SpoofMacAddrRspParamType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* wdi status */
     wpt_uint32   wdiStatus;
 
@@ -2640,8 +2526,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBAReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which BA is added..*/
     wpt_uint8        ucSTAIdx;
 
@@ -2661,8 +2546,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BA Info Type*/
     WDI_AddBAReqinfoType  wdiBAInfoType;
 
@@ -2680,8 +2564,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBARspinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -2693,8 +2576,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TriggerBAReqCandidateType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* STA index */
     wpt_uint8   ucSTAIdx;
 
@@ -2707,8 +2589,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TriggerBAReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which BA is added..*/
     wpt_uint8        ucSTAIdx;
 
@@ -2726,8 +2607,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TriggerBAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BA Trigger Info Type*/
     WDI_TriggerBAReqinfoType  wdiTriggerBAInfoType;
 
@@ -2744,8 +2624,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddBAInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint16 fBaEnable : 1;
     wpt_uint16 startingSeqNum: 12;
     wpt_uint16 reserved : 3;
@@ -2756,8 +2635,7 @@ typedef struct
 ---------------------------------------------------------------------------*/
 #define STA_MAX_TC 8
 
-typedef struct
-{
+typedef struct {
     /* STA index */
     wpt_macAddr       macSTA;
 
@@ -2768,8 +2646,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TriggerBARspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -2786,8 +2663,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelBAReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which BA is added..*/
     wpt_uint8        ucSTAIdx;
 
@@ -2802,8 +2678,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelBAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BA Info */
     WDI_DelBAReqinfoType  wdiBAInfo;
 
@@ -2820,8 +2695,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateChannelReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /** primary 20 MHz channel frequency in mhz */
     wpt_uint32 mhz;
     /** Center frequency 1 in MHz*/
@@ -2838,16 +2712,14 @@ typedef struct
     wpt_uint32 reg_info_2;
 } WDI_UpdateChannelReqinfoType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8 numchan;
     WDI_UpdateChannelReqinfoType *pchanParam;
 } WDI_UpdateChannelReqType;
 /*---------------------------------------------------------------------------
   WDI_UpdateChReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BA Info */
     WDI_UpdateChannelReqType  wdiUpdateChanParams;
 
@@ -2864,8 +2736,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SwitchCHRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -2882,8 +2753,7 @@ typedef struct
 /*--------------------------------------------------------------------
   WDI_SwitchChRspParamsType_V1
 --------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -2902,8 +2772,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigSTAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Info for the Join request that will be sent down to the device*/
     WDI_ConfigStaReqInfoType   wdiReqInfo;
 
@@ -2922,8 +2791,7 @@ typedef struct
   WDI_UpdateBeaconParamsInfoType
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /*BSS Index of the BSS*/
     wpt_uint8      ucBssIdx;
 
@@ -2947,8 +2815,7 @@ typedef struct
 } WDI_UpdateBeaconParamsInfoType;
 
 #ifdef WLAN_FEATURE_11AC
-typedef struct
-{
+typedef struct {
     wpt_uint16  opMode;
     wpt_uint16  staId;
 } WDI_UpdateVHTOpMode;
@@ -2957,8 +2824,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateBeaconParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Update Beacon Params  Info*/
     WDI_UpdateBeaconParamsInfoType  wdiUpdateBeaconParamsInfo;
 
@@ -2976,8 +2842,7 @@ typedef struct
   WDI_SendBeaconParamsInfoType
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
 
     /*BSSID of the BSS*/
     wpt_macAddr  macBSSID;
@@ -2998,8 +2863,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SendBeaconParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Send Beacon Params  Info*/
     WDI_SendBeaconParamsInfoType  wdiSendBeaconParamsInfo;
 
@@ -3016,8 +2880,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_LinkStateType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_LINK_IDLE_STATE              = 0,
     WDI_LINK_PREASSOC_STATE          = 1,
     WDI_LINK_POSTASSOC_STATE         = 2,
@@ -3044,8 +2907,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_SetLinkReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BSSID of the BSS*/
     wpt_macAddr           macBSSID;
 
@@ -3059,8 +2921,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetLinkReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Link Info*/
     WDI_SetLinkReqInfoType  wdiLinkInfo;
 
@@ -3077,8 +2938,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetStatsParamsInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which Get Stats are requested..*/
     wpt_uint8        ucSTAIdx;
 
@@ -3089,8 +2949,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetStatsReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Get Stats Params  Info*/
     WDI_GetStatsParamsInfoType  wdiGetStatsParamsInfo;
 
@@ -3107,8 +2966,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetStatsRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*message type is same as the request type*/
     wpt_uint16       usMsgType;
 
@@ -3132,8 +2990,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetRoamRssiParamsInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which Get Stats are requested..*/
     wpt_uint8        ucSTAIdx;
 
@@ -3144,8 +3001,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetRoamRssiReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Get Roam Rssi Params  Info*/
     WDI_GetRoamRssiParamsInfoType  wdiGetRoamRssiParamsInfo;
 
@@ -3162,8 +3018,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_GetRoamRssiRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
 
@@ -3182,8 +3037,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSMStatsParamsInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the station for which Get Stats are requested..*/
     wpt_uint8        ucTid;
 
@@ -3193,8 +3047,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSMStatsReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Get TSM Stats Params  Info*/
     WDI_TSMStatsParamsInfoType  wdiTsmStatsParamsInfo;
 
@@ -3210,8 +3063,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TSMStatsRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Indicates the status of the operation */
     WDI_Status      wdiStatus;
 
@@ -3229,8 +3081,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateCfgReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*This is a TLV formatted buffer containing all config values that can
      be set through the DAL Interface
 
@@ -3293,8 +3144,7 @@ typedef struct
 
 #define WDI_PROBE_REQ_BITMAP_IE_LEN 8
 
-typedef struct
-{
+typedef struct {
     /*BSSID for which the Probe Template is to be used*/
     wpt_macAddr     macBSSID;
 
@@ -3312,8 +3162,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateProbeRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Link Info*/
     WDI_UpdateProbeRspTemplateInfoType  wdiProbeRspTemplateInfo;
 
@@ -3331,8 +3180,7 @@ typedef struct
   WDI_NvDownloadReqBlobInfo
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /* Blob starting address*/
     void *pBlobAddress;
 
@@ -3344,8 +3192,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_NvDownloadReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*NV Blob Info*/
     WDI_NvDownloadReqBlobInfo  wdiBlobInfo;
 
@@ -3363,8 +3210,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_NvDownloadRspInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -3374,8 +3220,7 @@ typedef struct
   WDI_SetMaxTxPowerInfoType
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /*BSSID is needed to identify which session issued this request. As the request has
       power constraints, this should be applied only to that session*/
     wpt_macAddr macBSSId;
@@ -3392,8 +3237,7 @@ typedef struct
   WDI_SetTxPowerInfoType
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     wpt_uint8  bssIdx;
     /* In request  power == MaxTxpower to be used.*/
     wpt_uint8  ucPower;
@@ -3403,8 +3247,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetMaxTxPowerParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Link Info*/
     WDI_SetMaxTxPowerInfoType  wdiMaxTxPowerInfo;
 
@@ -3421,8 +3264,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_Band
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_BAND_ALL,
     WDI_BAND_24,
     WDI_BAND_5G,
@@ -3432,8 +3274,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_MaxTxPowerPerBandInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     eWDIBand   bandInfo;
     /* In request  power == MaxTxpower to be used.*/
     wpt_uint8  ucPower;
@@ -3442,8 +3283,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetMaxTxPowerPerBandParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Link Info*/
     WDI_MaxTxPowerPerBandInfoType  wdiMaxTxPowerPerBandInfo;
 
@@ -3460,8 +3300,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetTxPowerParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Link Info*/
     WDI_SetTxPowerInfoType  wdiTxPowerInfo;
 
@@ -3479,8 +3318,7 @@ typedef struct
   WDI_SetMaxTxPowerRspMsg
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /* In response, power==tx power used for management frames*/
     wpt_int8  ucPower;
 
@@ -3492,8 +3330,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetMaxTxPowerPerBandRspMsg
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* In response, power==tx power used for management frames*/
     wpt_int8  ucPower;
 
@@ -3506,8 +3343,7 @@ typedef struct
   WDI_SetTxPowerRspMsg
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /* In response, power==tx power used for management frames*/
     wpt_int8  ucPower;
 
@@ -3516,8 +3352,7 @@ typedef struct
 
 } WDI_SetTxPowerRspMsg;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8   ucOpp_ps;
     wpt_uint32  uCtWindow;
     wpt_uint8   ucCount;
@@ -3530,8 +3365,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetP2PGONOAReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*P2P GO NOA Req*/
     WDI_SetP2PGONOAReqInfoType  wdiP2PGONOAInfo;
 
@@ -3548,8 +3382,7 @@ typedef struct
 #define WDI_MAX_SUPP_CHANNELS 128
 #define WDI_MAX_SUPP_OPER_CLASSES 32
 
-typedef struct
-{
+typedef struct {
     wpt_uint16 uStaIdx;
     wpt_uint8  uIsResponder;
     wpt_uint8  uUapsdQueues;
@@ -3566,8 +3399,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetTDLSLinkEstablishReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*TDLS Link Establish Req*/
     WDI_SetTDLSLinkEstablishReqInfoType  wdiTDLSLinkEstablishInfo;
 
@@ -3581,8 +3413,7 @@ typedef struct
     void*             pUserData;
 } WDI_SetTDLSLinkEstablishReqParamsType;
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status wdiStatus;
 
@@ -3592,8 +3423,7 @@ typedef struct
 
 
 
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8  staIdx;
     /* if this is 1, self is initiator otherwise responder only*/
@@ -3605,16 +3435,14 @@ typedef struct
     wpt_uint8  reserved[64];
 } WDI_SetTDLSChanSwitchReqInfoType;
 
-typedef struct
-{
+typedef struct {
     WDI_SetTDLSChanSwitchReqInfoType  wdiTDLSChanSwitchReqInfo;
     WDI_ReqStatusCb   wdiReqStatusCB;
     void*  pUserData;
 } WDI_SetTDLSChanSwitchReqParamsType;
 
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status wdiStatus;
 
@@ -3624,8 +3452,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetAddSTASelfParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Self Station MAC address*/
     wpt_macAddr selfMacAddr;
 
@@ -3639,8 +3466,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetAddSTASelfParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Add Sta Self Req */
     WDI_AddSTASelfInfoType  wdiAddSTASelfInfo;
 
@@ -3658,8 +3484,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddSTASelfRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -3681,8 +3506,7 @@ typedef struct
   WDI_DelSTASelfReqParamsType
   Del Sta Self info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_macAddr       selfMacAddr;
 
 } WDI_DelSTASelfInfoType;
@@ -3691,8 +3515,7 @@ typedef struct
   WDI_DelSTASelfReqParamsType
   Del Sta Self info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Del Sta Self Info Type */
     WDI_DelSTASelfInfoType     wdiDelStaSelfInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3707,8 +3530,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelSTASelfRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 
@@ -3720,8 +3542,7 @@ typedef struct
   WDI_UapsdInfoType
   UAPSD parameters passed per AC to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucSTAIdx;        // STA index
     wpt_uint8  ucAc;            // Access Category
     wpt_uint8  ucUp;            // User Priority
@@ -3734,8 +3555,7 @@ typedef struct
   WDI_SetUapsdAcParamsReqParamsType
   UAPSD parameters passed per AC to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Enter BMPS Info Type, same as tEnterBmpsParams */
     WDI_UapsdInfoType wdiUapsdInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3751,8 +3571,7 @@ typedef struct
   WDI_EnterBmpsReqinfoType
   Enter BMPS parameters passed to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     //TBTT value derived from the last beacon
     wpt_uint8         ucBssIdx;
     wpt_uint64        uTbtt;
@@ -3774,8 +3593,7 @@ typedef struct
   WDI_EnterBmpsReqParamsType
   Enter BMPS parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Enter BMPS Info Type, same as tEnterBmpsParams */
     WDI_EnterBmpsReqinfoType wdiEnterBmpsInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3791,8 +3609,7 @@ typedef struct
   WDI_EnterImpsReqParamsType
   Enter IMPS parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Request status callback offered by UMAC - it is called if the current req
     has returned PENDING as status; it delivers the status of sending the message
     over the BUS */
@@ -3806,8 +3623,7 @@ typedef struct
   WDI_ExitImpsReqParamsType
   Exit IMPS parameters passed to WDI from WDA
 ----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Request status callback offered by UMAC */
     WDI_ReqStatusCb         wdiReqStatusCB;
     /*The user data passed in by UMAC, it will be sent back when the above
@@ -3820,8 +3636,7 @@ typedef struct
   WDI_EnterBmpsReqParamsType
   Enter BMPS parameters passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -3833,8 +3648,7 @@ typedef struct
   WDI_ExitBmpsReqinfoType
   Exit BMPS parameters passed to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8     ucSendDataNull;
     wpt_uint8     bssIdx;
 } WDI_ExitBmpsReqinfoType;
@@ -3843,8 +3657,7 @@ typedef struct
   WDI_ExitBmpsReqParamsType
   Exit BMPS parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Exit BMPS Info Type, same as tExitBmpsParams */
     WDI_ExitBmpsReqinfoType wdiExitBmpsInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3860,8 +3673,7 @@ typedef struct
   WDI_ExitBmpsReqParamsType
   Exit BMPS parameters passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -3873,8 +3685,7 @@ typedef struct
   WDI_EnterUapsdReqinfoType
   Enter UAPSD parameters passed to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8     ucBkDeliveryEnabled:1;
     wpt_uint8     ucBeDeliveryEnabled:1;
     wpt_uint8     ucViDeliveryEnabled:1;
@@ -3890,8 +3701,7 @@ typedef struct
   WDI_EnterUapsdRspParamsType
   Enter UAPSD parameters passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -3903,8 +3713,7 @@ typedef struct
   WDI_EnterUapsdReqinfoType
   Enter UAPSD parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Enter UAPSD Info Type, same as tUapsdParams */
     WDI_EnterUapsdReqinfoType wdiEnterUapsdInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3920,8 +3729,7 @@ typedef struct
   WDI_UpdateUapsdReqinfoType
   Update UAPSD parameters passed to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucSTAIdx;
     wpt_uint8  ucUapsdACMask;
     wpt_uint32 uMaxSpLen;
@@ -3931,8 +3739,7 @@ typedef struct
   WDI_ExitUapsdReqinfoType
   Exit UAPSD parameters passed to WDA from UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8     bssIdx;
 } WDI_ExitUapsdReqinfoType;
 
@@ -3940,8 +3747,7 @@ typedef struct
   WDI_ExitUapsdReqParamsType
   Exit UAPSD parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Exit UAPSD Info Type, same as tUapsdParams */
     WDI_ExitUapsdReqinfoType wdiExitUapsdInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3957,8 +3763,7 @@ typedef struct
   WDI_ExitUapsdRspParamsType
   Exit UAPSD parameters passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
 
@@ -3970,8 +3775,7 @@ typedef struct
   WDI_UpdateUapsdReqParamsType
   Update UAPSD parameters passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Update UAPSD Info Type, same as tUpdateUapsdParams */
     WDI_UpdateUapsdReqinfoType wdiUpdateUapsdInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -3987,8 +3791,7 @@ typedef struct
   WDI_ConfigureRxpFilterReqParamsType
   RXP filter parameters passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Mode of Mcast and Bcast filters configured */
     wpt_uint8 ucSetMcstBcstFilterSetting;
 
@@ -3996,8 +3799,7 @@ typedef struct
     wpt_uint8 ucSetMcstBcstFilter;
 } WDI_RxpFilterReqParamsType;
 
-typedef struct
-{
+typedef struct {
     /* Rxp Filter */
     WDI_RxpFilterReqParamsType wdiRxpFilterParam;
 
@@ -4014,8 +3816,7 @@ typedef struct
   WDI_BeaconFilterInfoType
   Beacon Filtering data structures passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint16    usCapabilityInfo;
     wpt_uint16    usCapabilityMask;
     wpt_uint16    usBeaconInterval;
@@ -4028,8 +3829,7 @@ typedef struct
   WDI_BeaconFilterReqParamsType
   Beacon Filtering parameters passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Beacon Filtering Info Type, same as tBeaconFilterMsg */
     WDI_BeaconFilterInfoType wdiBeaconFilterInfo;
     /*Beacon Filter(s) follow the "usIeNum" field, hence the array to ease the
@@ -4048,8 +3848,7 @@ typedef struct
   WDI_RemBeaconFilterInfoType
   Beacon Filtering data structures (to be reomoved) passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucIeCount;
     wpt_uint8  ucRemIeId[1];
 } WDI_RemBeaconFilterInfoType;
@@ -4058,8 +3857,7 @@ typedef struct
   WDI_RemBeaconFilterReqParamsType
   Beacon Filtering parameters (to be reomoved)passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Beacon Filtering Info Type, same as tBeaconFilterMsg */
     WDI_RemBeaconFilterInfoType wdiBeaconFilterInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4075,8 +3873,7 @@ typedef struct
   WDI_RSSIThresholdsType
   RSSI thresholds data structures (to be reomoved) passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_int8    ucRssiThreshold1     : 8;
     wpt_int8    ucRssiThreshold2     : 8;
     wpt_int8    ucRssiThreshold3     : 8;
@@ -4093,8 +3890,7 @@ typedef struct
   WDI_SetRSSIThresholdsReqParamsType
   RSSI thresholds parameters (to be reomoved)passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*RSSI thresholds Info Type, same as WDI_RSSIThresholds */
     WDI_RSSIThresholdsType     wdiRSSIThresholdsInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4111,8 +3907,7 @@ typedef struct
   host offload info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
 #ifdef WLAN_NS_OFFLOAD
-typedef struct
-{
+typedef struct {
     wpt_uint8 srcIPv6Addr[16];
     wpt_uint8 selfIPv6Addr[16];
     //Only support 2 possible Network Advertisement IPv6 address
@@ -4126,13 +3921,11 @@ typedef struct
 } WDI_NSOffloadParams;
 #endif //WLAN_NS_OFFLOAD
 
-typedef struct
-{
+typedef struct {
     wpt_uint8 ucOffloadType;
     wpt_uint8 ucEnableOrDisable;
     wpt_macAddr bssId;
-    union
-    {
+    union {
         wpt_uint8 aHostIpv4Addr [4];
         wpt_uint8 aHostIpv6Addr [16];
     } params;
@@ -4142,8 +3935,7 @@ typedef struct
   WDI_HostOffloadReqParamsType
   host offload info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Host offload Info Type, same as tHalHostOffloadReq */
     WDI_HostOffloadReqType     wdiHostOffloadInfo;
 #ifdef WLAN_NS_OFFLOAD
@@ -4162,8 +3954,7 @@ typedef struct
   WDI_KeepAliveReqType
   Keep Alive info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucPacketType;
     wpt_uint32 ucTimePeriod;
     wpt_uint8  aHostIpv4Addr[4];
@@ -4176,8 +3967,7 @@ typedef struct
   WDI_KeepAliveReqParamsType
   Keep Alive passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Keep Alive Info Type, same as tHalKeepAliveReq */
     WDI_KeepAliveReqType     wdiKeepAliveInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4193,8 +3983,7 @@ typedef struct
   WDI_WowlAddBcPtrnInfoType
   Wowl add ptrn info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucPatternId;           // Pattern ID
     // Pattern byte offset from beginning of the 802.11 packet to start of the
     // wake-up pattern
@@ -4212,8 +4001,7 @@ typedef struct
   WDI_WowlAddBcPtrnReqParamsType
   Wowl add ptrn info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Wowl add ptrn Info Type, same as tpSirWowlAddBcastPtrn */
     WDI_WowlAddBcPtrnInfoType     wdiWowlAddBcPtrnInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4229,8 +4017,7 @@ typedef struct
   WDI_WowlAddBcPtrnRspParamsType
   Wowl add ptrn info passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
     /*BssIDX of the session*/
@@ -4241,8 +4028,7 @@ typedef struct
   WDI_WowlDelBcPtrnInfoType
   Wowl add ptrn info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Pattern ID of the wakeup pattern to be deleted */
     wpt_uint8   ucPatternId;
     wpt_macAddr bssId;
@@ -4252,8 +4038,7 @@ typedef struct
   WDI_WowlDelBcPtrnReqParamsType
   Wowl add ptrn info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Wowl delete ptrn Info Type, same as WDI_WowlDelBcastPtrn */
     WDI_WowlDelBcPtrnInfoType     wdiWowlDelBcPtrnInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4269,8 +4054,7 @@ typedef struct
   WDI_WowlDelBcPtrnRspParamsType
   Wowl Del ptrn info passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status    wdiStatus;
     /*BssIDX of the session*/
@@ -4281,8 +4065,7 @@ typedef struct
   WDI_WowlEnterInfoType
   Wowl enter info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Enables/disables magic packet filtering */
     wpt_uint8   ucMagicPktEnable;
 
@@ -4370,8 +4153,7 @@ typedef struct
   WDI_WowlEnterReqParamsType
   Wowl enter info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Wowl delete ptrn Info Type, same as WDI_SmeWowlEnterParams */
     WDI_WowlEnterInfoType     wdiWowlEnterInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4387,8 +4169,7 @@ typedef struct
   WDI_WowlEnterRsqParamsType
   Wowl enter info passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response message*/
     WDI_Status  status;
 
@@ -4401,8 +4182,7 @@ typedef struct
       WDI_WowlExitInfoType
       Wowl exit info passed to WDA form UMAC
     ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* BSSIDX used to find the current session
        */
     wpt_uint8  bssIdx;
@@ -4412,8 +4192,7 @@ typedef struct
   WDI_WowlExitReqParamsType
   Wowl exit info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Wowl delete ptrn Info Type, same as WDI_SmeWowlEnterParams */
     WDI_WowlExitInfoType     wdiWowlExitInfo;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4429,8 +4208,7 @@ typedef struct
   WDI_WowlExitRspParamsType
   Wowl exit info passed from WDI to WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response message*/
     WDI_Status  status;
 
@@ -4443,8 +4221,7 @@ typedef struct
   WDI_ConfigureAppsCpuWakeupStateReqParamsType
   Apps Cpu Wakeup State parameters passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Depicts the state of the Apps CPU */
     wpt_boolean                bIsAppsAwake;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -4458,8 +4235,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_FlushAcReqinfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     // Message Type
     wpt_uint16 usMesgType;
 
@@ -4477,8 +4253,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_FlushAcReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*AC Info */
     WDI_FlushAcReqinfoType  wdiFlushAcInfo;
 
@@ -4496,8 +4271,7 @@ typedef struct
   WDI_BtAmpEventinfoType
       BT-AMP Event Structure
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8 ucBtAmpEventType;
 
 } WDI_BtAmpEventinfoType;
@@ -4505,8 +4279,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_BtAmpEventParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BT AMP event Info */
     WDI_BtAmpEventinfoType  wdiBtAmpEventInfo;
 
@@ -4532,8 +4305,7 @@ typedef struct
 /*----------------------------------------------------------------------------
   WDI_oemDataReqInfoType
 ----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_macAddr                  selfMacAddr;
     wpt_uint8                    oemDataReq[OEM_DATA_REQ_SIZE];
 } WDI_oemDataReqInfoType;
@@ -4541,8 +4313,7 @@ typedef struct
 /*----------------------------------------------------------------------------
   WDI_oemDataReqParamsType
 ----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Request status callback offered by UMAC - it is called if the current
       req has returned PENDING as status; it delivers the status of sending
       the message over the BUS */
@@ -4560,8 +4331,7 @@ typedef struct
 /*----------------------------------------------------------------------------
   WDI_oemDataRspParamsType
 ----------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8           oemDataRsp[OEM_DATA_RSP_SIZE];
 } WDI_oemDataRspParamsType;
 
@@ -4571,8 +4341,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AggrAddTSReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*STA Index*/
     wpt_uint8         ucSTAIdx;
 
@@ -4600,8 +4369,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AggrAddTSReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*TSpec Info */
     WDI_AggrAddTSReqInfoType  wdiAggrTsInfo;
 
@@ -4620,8 +4388,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_FTMCommandReqType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* FTM Command Body length */
     wpt_uint32   bodyLength;
     /* Actual FTM Command body */
@@ -4631,8 +4398,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_WlanSuspendInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Mode of Mcast and Bcast filters configured */
     wpt_uint8 ucConfiguredMcstBcstFilterSetting;
 } WDI_WlanSuspendInfoType;
@@ -4640,8 +4406,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SuspendParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_WlanSuspendInfoType wdiSuspendParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -4659,8 +4424,7 @@ typedef struct
   WDI_TrafficStatsType - This is collected for each STA
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     /* TX stats */
     wpt_uint32 txBytesPushed;
     wpt_uint32 txPacketsPushed;
@@ -4671,8 +4435,7 @@ typedef struct
     wpt_uint32 rxTimeTotal;
 } WDI_TrafficStatsType;
 
-typedef struct
-{
+typedef struct {
     WDI_TrafficStatsType *pTrafficStats;
     wpt_uint32 length;
     wpt_uint32 duration;
@@ -4688,8 +4451,7 @@ typedef struct
 } WDI_TrafficStatsIndType;
 
 #ifdef WLAN_FEATURE_11W
-typedef struct
-{
+typedef struct {
 
     wpt_boolean   bExcludeUnencrypt;
     wpt_macAddr   bssid;
@@ -4707,8 +4469,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_WlanResumeInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Mode of Mcast and Bcast filters configured */
     wpt_uint8 ucConfiguredMcstBcstFilterSetting;
 } WDI_WlanResumeInfoType;
@@ -4716,8 +4477,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ResumeParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_WlanResumeInfoType wdiResumeParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -4736,8 +4496,7 @@ typedef struct
  * WDI_GTK_OFFLOAD_REQ
  *--------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     wpt_uint32     ulFlags;             /* optional flags */
     wpt_uint8      aKCK[16];            /* Key confirmation key */
     wpt_uint8      aKEK[16];            /* key encryption key */
@@ -4745,8 +4504,7 @@ typedef struct
     wpt_macAddr    bssId;
 } WDI_GtkOffloadReqParams;
 
-typedef struct
-{
+typedef struct {
     WDI_GtkOffloadReqParams gtkOffloadReqParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -4762,16 +4520,14 @@ typedef struct
 /*---------------------------------------------------------------------------
  * WDI_GTK_OFFLOAD_RSP
  *--------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* success or failure */
     wpt_uint32   ulStatus;
     /*BssIdx of the response */
     wpt_uint8   bssIdx;
 } WDI_GtkOffloadRspParams;
 
-typedef struct
-{
+typedef struct {
     WDI_GtkOffloadRspParams gtkOffloadRspParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -4788,14 +4544,12 @@ typedef struct
 /*---------------------------------------------------------------------------
 * WDI_GTK_OFFLOAD_GETINFO_REQ
 *--------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*BssIdx of the response */
     wpt_macAddr bssId;
 } WDI_GtkOffloadGetInfoReqParams;
 
-typedef struct
-{
+typedef struct {
 
     WDI_GtkOffloadGetInfoReqParams WDI_GtkOffloadGetInfoReqParams;
     /*Request status callback offered by UMAC - it is called if the current
@@ -4811,8 +4565,7 @@ typedef struct
 /*---------------------------------------------------------------------------
 * WDI_GTK_OFFLOAD_GETINFO_RSP
 *--------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint32   ulStatus;             /* success or failure */
     wpt_uint64   ullKeyReplayCounter;  /* current replay counter value */
     wpt_uint32   ulTotalRekeyCount;    /* total rekey attempts */
@@ -4821,8 +4574,7 @@ typedef struct
     wpt_macAddr    bssId;
 } WDI_GtkOffloadGetInfoRspParams;
 
-typedef struct
-{
+typedef struct {
     WDI_GtkOffloadGetInfoRspParams gtkOffloadGetInfoRspParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -4839,8 +4591,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SuspendResumeRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Status of the response*/
     WDI_Status   wdiStatus;
 } WDI_SuspendResumeRspParamsType;
@@ -4852,8 +4603,7 @@ typedef struct
 ---------------------------------------------------------------------------*/
 #define WDI_LPHB_FILTER_LEN   64
 
-typedef enum
-{
+typedef enum {
     WDI_LPHB_SET_EN_PARAMS_INDID = 0x0001,
     WDI_LPHB_SET_TCP_PARAMS_INDID,
     WDI_LPHB_SET_TCP_PKT_FILTER_INDID,
@@ -4862,15 +4612,13 @@ typedef enum
     WDI_LPHB_SET_NETWORK_INFO_INDID,
 } WDI_LPHBIndType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8 enable;
     wpt_uint8 item;
     wpt_uint8 session;
 } WDI_LPHBEnableStruct;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32 srv_ip;
     wpt_uint32 dev_ip;
     wpt_uint16 src_port;
@@ -4882,16 +4630,14 @@ typedef struct
     wpt_uint32 tcpSn;
 } WDI_LPHBTcpParamStruct;
 
-typedef struct
-{
+typedef struct {
     wpt_uint16 length;
     wpt_uint8  offset;
     wpt_uint8  session;
     wpt_uint8  filter[WDI_LPHB_FILTER_LEN];
 } WDI_LPHBTcpFilterStruct;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32 srv_ip;
     wpt_uint32 dev_ip;
     wpt_uint16 src_port;
@@ -4902,20 +4648,17 @@ typedef struct
     wpt_uint8  gateway_mac[WDI_MAC_ADDR_LEN];
 } WDI_LPHBUdpParamStruct;
 
-typedef struct
-{
+typedef struct {
     wpt_uint16 length;
     wpt_uint8  offset;
     wpt_uint8  session;
     wpt_uint8  filter[WDI_LPHB_FILTER_LEN];
 } WDI_LPHBUdpFilterStruct;
 
-typedef struct
-{
+typedef struct {
     wpt_uint16 cmd;
     wpt_uint16 dummy;
-    union
-    {
+    union {
         WDI_LPHBEnableStruct     lphbEnableReq;
         WDI_LPHBTcpParamStruct   lphbTcpParamReq;
         WDI_LPHBTcpFilterStruct  lphbTcpFilterReq;
@@ -4928,8 +4671,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AuthType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_AUTH_TYPE_ANY     = 0,
 
     WDI_AUTH_TYPE_NONE,
@@ -4953,8 +4695,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_EdType
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     WDI_ED_ANY        = 0,
     WDI_ED_NONE,
     WDI_ED_WEP40,
@@ -4985,8 +4726,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_PNOMode
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*Network offload is to start immediately*/
     WDI_PNO_MODE_IMMEDIATE,
 
@@ -4999,8 +4739,7 @@ typedef enum
 } WDI_PNOMode;
 
 /* SSID broadcast  type */
-typedef enum
-{
+typedef enum {
     WDI_BCAST_UNKNOWN      = 0,
     WDI_BCAST_NORMAL       = 1,
     WDI_BCAST_HIDDEN       = 2,
@@ -5011,8 +4750,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   WDI_NetworkType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*The SSID of the preferred network*/
     WDI_MacSSid  ssId;
 
@@ -5039,8 +4777,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ScanTimer
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*The timer value*/
     wpt_uint32    uTimerValue;
 
@@ -5051,8 +4788,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ScanTimersType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*The number of value pair intervals present in the array*/
     wpt_uint8      ucScanTimersCount;
 
@@ -5063,8 +4799,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_PNOScanReqType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Enable or disable PNO feature*/
     wpt_uint8           bEnable;
 
@@ -5093,8 +4828,7 @@ typedef struct
   WDI_PNOScanReqParamsType
   PNO info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* PNO Info Type, same as tPrefNetwListParams */
     WDI_PNOScanReqType        wdiPNOScanInfo;
     /* Request status callback offered by UMAC - it is called if the current req
@@ -5110,8 +4844,7 @@ typedef struct
   WDI_SetRssiFilterReqParamsType
   PNO info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* RSSI Threshold */
     wpt_uint8                  rssiThreshold;
     /* Request status callback offered by UMAC - it is called if the current req
@@ -5126,8 +4859,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateScanParamsInfo
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Is 11d enabled*/
     wpt_uint8    b11dEnabled;
 
@@ -5160,8 +4892,7 @@ typedef struct
   WDI_UpdateScanParamsInfoType
   UpdateScanParams info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* PNO Info Type, same as tUpdateScanParams */
     WDI_UpdateScanParamsInfo   wdiUpdateScanParamsInfo;
     /* Request status callback offered by UMAC - it is called if the current req
@@ -5179,8 +4910,7 @@ typedef struct
 #define WDI_ROAM_SCAN_MAX_CHANNELS       80
 #define WDI_ROAM_SCAN_MAX_PROBE_SIZE     450
 
-typedef struct
-{
+typedef struct {
     /*The SSID of the preferred network*/
     WDI_MacSSid  ssId;
     wpt_uint8    currAPbssid[WDI_MAC_ADDR_LEN];
@@ -5203,8 +4933,7 @@ typedef struct
 
 } WDI_RoamNetworkType;
 
-typedef struct WDIMobilityDomainInfo
-{
+typedef struct WDIMobilityDomainInfo {
     wpt_uint8 mdiePresent;
     wpt_uint16 mobilityDomain;
 } WDI_MobilityDomainInfo;
@@ -5212,8 +4941,7 @@ typedef struct WDIMobilityDomainInfo
 /*---------------------------------------------------------------------------
   WDI_RoamOffloadScanInfo
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_boolean RoamScanOffloadEnabled;
     wpt_boolean MAWCEnabled;
     wpt_uint8   LookupThreshold;
@@ -5245,8 +4973,7 @@ typedef struct
     wpt_uint16              HomeAwayTime;
 } WDI_RoamOffloadScanInfo;
 
-typedef struct
-{
+typedef struct {
     /* Start Roam Candidate Lookup Offload Back Ground Info Type */
     WDI_RoamOffloadScanInfo        wdiRoamOffloadScanInfo;
     /* Request status callback offered by UMAC - it is called if the current req
@@ -5262,8 +4989,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_HT40ObssScanIndType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8     cmdType;
     wpt_uint8     scanType;
     wpt_uint16    OBSSScanPassiveDwellTime; // In TUs
@@ -5287,8 +5013,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_OBSSScanIndParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_HT40ObssScanIndType wdiHT40ObssScanParam;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -5305,8 +5030,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_UpdateScanParamsInfo
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*  Ignore DTIM */
     wpt_uint32 uIgnoreDTIM;
 
@@ -5334,8 +5058,7 @@ typedef struct
   WDI_UpdateScanParamsInfoType
   UpdateScanParams info passed to WDI form WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Power params Info Type, same as tSetPowerParamsReq */
     WDI_SetPowerParamsInfo     wdiSetPowerParamsInfo;
     /* Request status callback offered by UMAC - it is called if the current req
@@ -5351,8 +5074,7 @@ typedef struct
   WDI_SetTxPerTrackingConfType
   Wowl add ptrn info passed to WDA form UMAC
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint8  ucTxPerTrackingEnable;     /* 0: disable, 1:enable */
     wpt_uint8  ucTxPerTrackingPeriod;        /* Check period, unit is sec. */
     wpt_uint8  ucTxPerTrackingRatio;      /* (Fail TX packet)/(Total TX packet) ratio, the unit is 10%. */
@@ -5363,8 +5085,7 @@ typedef struct
   WDI_SetTxPerTrackingReqParamsType
   Tx PER Tracking parameters passed to WDI from WDA
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Configurations for Tx PER Tracking */
     WDI_TxPerTrackingParamType     wdiTxPerTrackingParam;
     /*Request status callback offered by UMAC - it is called if the current req
@@ -5391,16 +5112,14 @@ typedef struct
 //
 // Receive Filter Parameters
 //
-typedef enum
-{
+typedef enum {
     WDI_RCV_FILTER_TYPE_INVALID,
     WDI_RCV_FILTER_TYPE_FILTER_PKT,
     WDI_RCV_FILTER_TYPE_BUFFER_PKT,
     WDI_RCV_FILTER_TYPE_MAX_ENUM_SIZE
 } WDI_ReceivePacketFilterType;
 
-typedef enum
-{
+typedef enum {
     WDI_FILTER_HDR_TYPE_INVALID,
     WDI_FILTER_HDR_TYPE_MAC,
     WDI_FILTER_HDR_TYPE_ARP,
@@ -5410,8 +5129,7 @@ typedef enum
     WDI_FILTER_HDR_TYPE_MAX
 } WDI_RcvPktFltProtocolType;
 
-typedef enum
-{
+typedef enum {
     WDI_FILTER_CMP_TYPE_INVALID,
     WDI_FILTER_CMP_TYPE_EQUAL,
     WDI_FILTER_CMP_TYPE_MASK_EQUAL,
@@ -5420,8 +5138,7 @@ typedef enum
     WDI_FILTER_CMP_TYPE_MAX
 } WDI_RcvPktFltCmpFlagType;
 
-typedef struct
-{
+typedef struct {
     WDI_RcvPktFltProtocolType          protocolLayer;
     WDI_RcvPktFltCmpFlagType           cmpFlag;
     /* Length of the data to compare */
@@ -5435,8 +5152,7 @@ typedef struct
     wpt_uint8                          dataMask[WDI_MAX_FILTER_TEST_DATA_LEN];
 } WDI_RcvPktFilterFieldParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8                       filterId;
     wpt_uint8                       filterType;
     wpt_uint32                      numFieldParams;
@@ -5447,8 +5163,7 @@ typedef struct
 
 } WDI_RcvPktFilterCfgType;
 
-typedef struct
-{
+typedef struct {
     /*Request status callback offered by UMAC - it is called if the current
       req has returned PENDING as status; it delivers the status of sending
       the message over the BUS */
@@ -5462,8 +5177,7 @@ typedef struct
     WDI_RcvPktFilterCfgType wdiPktFilterCfg;
 } WDI_SetRcvPktFilterReqParamsType;
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
     /* BSSIDX of the Set Receive Filter
@@ -5474,8 +5188,7 @@ typedef struct
 //
 // Filter Packet Match Count Parameters
 //
-typedef struct
-{
+typedef struct {
     /*Request status callback offered by UMAC - it is called if the current
       req has returned PENDING as status; it delivers the status of sending
       the message over the BUS */
@@ -5490,14 +5203,12 @@ typedef struct
     wpt_macAddr      bssId;
 } WDI_RcvFltPktMatchCntReqParamsType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8    filterId;
     wpt_uint32   matchCnt;
 } WDI_RcvFltPktMatchCnt;
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
 
@@ -5510,16 +5221,14 @@ typedef struct
 //
 // Receive Filter Clear Parameters
 //
-typedef struct
-{
+typedef struct {
     wpt_uint32   status;  /* only valid for response message */
     wpt_uint8    filterId;
     wpt_macAddr  selfMacAddr;
     wpt_macAddr  bssId;
 } WDI_RcvFltPktClearParam;
 
-typedef struct
-{
+typedef struct {
     WDI_RcvFltPktClearParam     filterClearParam;
     /*Request status callback offered by UMAC - it is called if the current
       req has returned PENDING as status; it delivers the status of sending
@@ -5531,8 +5240,7 @@ typedef struct
     void*             pUserData;
 } WDI_RcvFltPktClearReqParamsType;
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
     /* BSSIDX of the Match count response
@@ -5544,16 +5252,14 @@ typedef struct
 //
 // Multicast Address List Parameters
 //
-typedef struct
-{
+typedef struct {
     wpt_uint32     ulMulticastAddrCnt;
     wpt_macAddr    multicastAddr[WDI_MAX_NUM_MULTICAST_ADDRESS];
     wpt_macAddr    selfMacAddr;
     wpt_macAddr    bssId;
 } WDI_RcvFltMcAddrListType;
 
-typedef struct
-{
+typedef struct {
     WDI_RcvFltMcAddrListType         mcAddrList;
     /*Request status callback offered by UMAC - it is called if the current
       req has returned PENDING as status; it delivers the status of sending
@@ -5565,8 +5271,7 @@ typedef struct
     void*             pUserData;
 } WDI_RcvFltPktSetMcListReqParamsType;
 
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
     /* BSSIDX of the Match count response
@@ -5579,8 +5284,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_HALDumpCmdReqInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*command*/
     wpt_uint32 command;
 
@@ -5595,8 +5299,7 @@ typedef struct
 /*---------------------------------------------------------------------------
  WDI_HALDumpCmdReqParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*NV Blob Info*/
     WDI_HALDumpCmdReqInfoType  wdiHALDumpCmdInfoType;
 
@@ -5615,8 +5318,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_HALDumpCmdRspParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Result of the operation*/
     WDI_Status       wdiStatus;
 
@@ -5631,8 +5333,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetTmLevelReqType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     wpt_uint16       tmMode;
     wpt_uint16       tmLevel;
     void*            pUserData;
@@ -5641,8 +5342,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SetTmLevelRspType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_Status       wdiStatus;
     void*            pUserData;
 } WDI_SetTmLevelRspType;
@@ -5651,8 +5351,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_LPHBConfigParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     void*             pLphsConfIndData;
 } WDI_LPHBConfigParamsType;
 #endif /* FEATURE_WLAN_LPHB */
@@ -5660,8 +5359,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddPeriodicTxPtrnInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* MAC Address for the adapter  */
     wpt_macAddr macAddr;
 
@@ -5674,8 +5372,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelPeriodicTxPtrnInfoType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* MAC Address for the adapter  */
     wpt_macAddr macAddr;
 
@@ -5686,8 +5383,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_AddPeriodicTxPtrnParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_AddPeriodicTxPtrnInfoType wdiAddPeriodicTxPtrnParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -5703,8 +5399,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_DelPeriodicTxPtrnParamsType
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_DelPeriodicTxPtrnInfoType wdiDelPeriodicTxPtrnParams;
 
     /*Request status callback offered by UMAC - it is called if the current
@@ -5724,8 +5419,7 @@ typedef struct
 #define WDI_WLAN_EXTSCAN_MAX_HOTLIST_APS              128
 #define WDI_WLAN_EXTSCAN_MAX_SIGNIFICANT_CHANGE_APS   64
 
-typedef enum
-{
+typedef enum {
     WDI_WIFI_BAND_UNSPECIFIED,
     WDI_WIFI_BAND_BG             = 1,    // 2.4 GHz
     WDI_WIFI_BAND_A              = 2,    // 5 GHz without DFS
@@ -5738,8 +5432,7 @@ typedef enum
     WDI_WIFI_BAND_MAX
 } WDI_WifiBand;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32      channel;        // frequency
     wpt_uint32      dwellTimeMs;    // dwell time hint
     wpt_uint8       passive;        // 0 => active,
@@ -5747,8 +5440,7 @@ typedef struct
     wpt_uint8       chnlClass;
 } WDI_WifiScanChannelSpec;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8       bucket;  // bucket index, 0 based
     WDI_WifiBand     band;    // when UNSPECIFIED, use channel list
 
@@ -5777,8 +5469,7 @@ typedef struct
     WDI_WifiScanChannelSpec channels[WDI_WLAN_EXTSCAN_MAX_CHANNELS];
 } WDI_WifiScanBucketSpec;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32                requestId;
     wpt_uint8                 sessionId;
     wpt_uint32                basePeriod;   // base timer period
@@ -5791,14 +5482,12 @@ typedef struct
     WDI_WifiScanBucketSpec  buckets[WDI_WLAN_EXTSCAN_MAX_BUCKETS];
 } WDI_EXTScanStartReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32      requestId;
     wpt_uint8       sessionId;
 } WDI_EXTScanStopReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32      requestId;
     wpt_uint8       sessionId;
 
@@ -5809,22 +5498,19 @@ typedef struct
     wpt_boolean  flush;
 } WDI_EXTScanGetCachedResultsReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32    requestId;
     wpt_uint8     sessionId;
 } WDI_EXTScanGetCapabilitiesReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8   bssid[6];     /* BSSID */
     wpt_int32    low;     // low threshold
     wpt_int32    high;    // high threshold
     wpt_uint32   channel; // channel hint
 } WDI_APThresholdParam;
 
-typedef struct
-{
+typedef struct {
     wpt_int32   requestId;
     wpt_int8    sessionId;    // session Id mapped to vdev_id
 
@@ -5832,15 +5518,13 @@ typedef struct
     WDI_APThresholdParam   ap[WDI_WLAN_EXTSCAN_MAX_HOTLIST_APS];    // hotlist APs
 } WDI_EXTScanSetBSSIDHotlistReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32    requestId;
     wpt_uint8     sessionId;
 } WDI_EXTScanResetBSSIDHotlistReqParams;
 
 
-typedef struct
-{
+typedef struct {
     wpt_int32   requestId;
     wpt_int8    sessionId;    // session Id mapped to vdev_id
 
@@ -5859,31 +5543,27 @@ typedef struct
     WDI_APThresholdParam   ap[WDI_WLAN_EXTSCAN_MAX_HOTLIST_APS];    // hotlist APs
 } WDI_EXTScanSetSignfRSSIChangeReqParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32    requestId;
     wpt_uint8     sessionId;
 } WDI_EXTScanResetSignfRSSIChangeReqParams;
 #endif /* WLAN_FEATURE_EXTSCAN */
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
-typedef struct
-{
+typedef struct {
     wpt_uint32  reqId;
     wpt_macAddr macAddr;
     wpt_uint32  mpduSizeThreshold;
     wpt_uint32  aggressiveStatisticsGathering;
 } WDI_LLStatsSetReqType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32  reqId;
     wpt_macAddr macAddr;
     wpt_uint32  paramIdMask;
 } WDI_LLStatsGetReqType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32  reqId;
     wpt_macAddr macAddr;
     wpt_uint32  statsClearReqMask;
@@ -5895,8 +5575,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_SPOOF_MAC_ADDR_REQ
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Spoof MAC Address for FW  */
     wpt_macAddr macAddr;
 
@@ -5909,8 +5588,7 @@ typedef struct
 #define SIR_MAX_ENUM_SIZE    0x7FFFFFFF
 // Enum to specify whether key is used
 // for TX only, RX only or both
-typedef enum
-{
+typedef enum {
     eWDI_TX_ONLY,
     eWDI_RX_ONLY,
     eWDI_TX_RX,
@@ -5923,8 +5601,7 @@ typedef enum
 /* Max key size  including the WAPI and TKIP */
 #define WLAN_MAX_KEY_RSC_LEN         16
 // Definition for Encryption Keys
-typedef struct
-{
+typedef struct {
     wpt_uint8                  keyId;
     wpt_uint8                  unicast;     // 0 for multicast
     tWDIKeyDirection    keyDirection;
@@ -5935,15 +5612,13 @@ typedef struct
     wpt_uint8                  key[SIR_MAC_MAX_KEY_LENGTH];
 } tWDIKeys, *tpWDIKeys;
 
-typedef enum
-{
+typedef enum {
     eWDI_WEP_STATIC,
     eWDI_WEP_DYNAMIC,
 } tWDIWepType;
 
 // Encryption type enum used with peer
-typedef enum
-{
+typedef enum {
     eWDI_ED_NONE,
     eWDI_ED_WEP40,
     eWDI_ED_WEP104,
@@ -5966,8 +5641,7 @@ typedef enum
  * a preconfigured key from a BSS the station assoicated with; otherwise
  * a new key descriptor is created based on the key field.
  */
-typedef struct
-{
+typedef struct {
     wpt_uint16          staIdx;
     tWDIEdType          encType;        // Encryption/Decryption type
     tWDIWepType         wepType;        // valid only for WEP
@@ -5977,20 +5651,17 @@ typedef struct
     wpt_uint8           sessionId; // PE session id for PE<->HAL interface
 } tWDISetStaKeyParams, *tpWDISetStaKeyParams;
 
-typedef struct
-{
+typedef struct {
     tWDISetStaKeyParams     keyParams;
     wpt_uint8 pn[6];
 } wpt_encConfigParams;
 
-typedef struct
-{
+typedef struct {
     wpt_uint16  length;
     wpt_uint8 data[WDI_DISA_MAX_PAYLOAD_SIZE];
 } wpt_payload;
 
-typedef struct
-{
+typedef struct {
     wpt_80211Header macHeader;
     wpt_encConfigParams encParams;
     wpt_payload data;

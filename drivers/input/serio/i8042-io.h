@@ -46,49 +46,43 @@ extern int of_i8042_aux_irq;
 #define I8042_STATUS_REG	0x64
 #define I8042_DATA_REG		0x60
 
-static inline int i8042_read_data(void)
-{
-	return inb(I8042_DATA_REG);
+static inline int i8042_read_data(void) {
+    return inb(I8042_DATA_REG);
 }
 
-static inline int i8042_read_status(void)
-{
-	return inb(I8042_STATUS_REG);
+static inline int i8042_read_status(void) {
+    return inb(I8042_STATUS_REG);
 }
 
-static inline void i8042_write_data(int val)
-{
-	outb(val, I8042_DATA_REG);
+static inline void i8042_write_data(int val) {
+    outb(val, I8042_DATA_REG);
 }
 
-static inline void i8042_write_command(int val)
-{
-	outb(val, I8042_COMMAND_REG);
+static inline void i8042_write_command(int val) {
+    outb(val, I8042_COMMAND_REG);
 }
 
-static inline int i8042_platform_init(void)
-{
-/*
- * On some platforms touching the i8042 data register region can do really
- * bad things. Because of this the region is always reserved on such boxes.
- */
+static inline int i8042_platform_init(void) {
+    /*
+     * On some platforms touching the i8042 data register region can do really
+     * bad things. Because of this the region is always reserved on such boxes.
+     */
 #if defined(CONFIG_PPC)
-	if (check_legacy_ioport(I8042_DATA_REG))
-		return -ENODEV;
+    if (check_legacy_ioport(I8042_DATA_REG))
+        return -ENODEV;
 #endif
 #if !defined(__sh__) && !defined(__alpha__) && !defined(__mips__)
-	if (!request_region(I8042_DATA_REG, 16, "i8042"))
-		return -EBUSY;
+    if (!request_region(I8042_DATA_REG, 16, "i8042"))
+        return -EBUSY;
 #endif
 
-	i8042_reset = 1;
-	return 0;
+    i8042_reset = 1;
+    return 0;
 }
 
-static inline void i8042_platform_exit(void)
-{
+static inline void i8042_platform_exit(void) {
 #if !defined(__sh__) && !defined(__alpha__)
-	release_region(I8042_DATA_REG, 16);
+    release_region(I8042_DATA_REG, 16);
 #endif
 }
 

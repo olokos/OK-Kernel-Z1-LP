@@ -17,27 +17,26 @@
 
 static const phys_addr_t primary_cpu_pwrctl_phys = 0x2088004;
 
-static int __init msm_cpu_pwrctl_init(void)
-{
-	void *pwrctl_ptr;
-	unsigned int value;
-	int rc = 0;
+static int __init msm_cpu_pwrctl_init(void) {
+    void *pwrctl_ptr;
+    unsigned int value;
+    int rc = 0;
 
-	pwrctl_ptr = ioremap_nocache(primary_cpu_pwrctl_phys, SZ_4K);
-	if (unlikely(!pwrctl_ptr)) {
-		pr_err("Failed to remap APCS_CPU_PWR_CTL register for CPU0\n");
-		rc = -EINVAL;
-		goto done;
-	}
+    pwrctl_ptr = ioremap_nocache(primary_cpu_pwrctl_phys, SZ_4K);
+    if (unlikely(!pwrctl_ptr)) {
+        pr_err("Failed to remap APCS_CPU_PWR_CTL register for CPU0\n");
+        rc = -EINVAL;
+        goto done;
+    }
 
-	value = readl_relaxed(pwrctl_ptr);
-	value |= 0x100;
-	writel_relaxed(value, pwrctl_ptr);
-	mb();
-	iounmap(pwrctl_ptr);
+    value = readl_relaxed(pwrctl_ptr);
+    value |= 0x100;
+    writel_relaxed(value, pwrctl_ptr);
+    mb();
+    iounmap(pwrctl_ptr);
 
 done:
-	return rc;
+    return rc;
 }
 
 early_initcall(msm_cpu_pwrctl_init);

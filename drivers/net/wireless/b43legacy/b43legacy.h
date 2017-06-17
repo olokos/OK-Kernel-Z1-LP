@@ -292,12 +292,12 @@
 #define B43legacy_SEC_KEYSIZE		16
 /* Security algorithms. */
 enum {
-	B43legacy_SEC_ALGO_NONE = 0, /* unencrypted, as of TX header. */
-	B43legacy_SEC_ALGO_WEP40,
-	B43legacy_SEC_ALGO_TKIP,
-	B43legacy_SEC_ALGO_AES,
-	B43legacy_SEC_ALGO_WEP104,
-	B43legacy_SEC_ALGO_AES_LEGACY,
+    B43legacy_SEC_ALGO_NONE = 0, /* unencrypted, as of TX header. */
+    B43legacy_SEC_ALGO_WEP40,
+    B43legacy_SEC_ALGO_TKIP,
+    B43legacy_SEC_ALGO_AES,
+    B43legacy_SEC_ALGO_WEP104,
+    B43legacy_SEC_ALGO_AES_LEGACY,
 };
 
 /* Core Information Registers */
@@ -342,7 +342,9 @@ enum {
 # define B43legacy_DEBUG	1
 #else
 /* This will evaluate the argument even if debugging is disabled. */
-static inline bool __b43legacy_warn_on_dummy(bool x) { return x; }
+static inline bool __b43legacy_warn_on_dummy(bool x) {
+    return x;
+}
 # define B43legacy_WARN_ON(x)	__b43legacy_warn_on_dummy(unlikely(!!(x)))
 # define B43legacy_BUG_ON(x)	do { /* nothing */ } while (0)
 # define B43legacy_DEBUG	0
@@ -359,25 +361,25 @@ struct b43legacy_pioqueue;
 #define B43legacy_FW_TYPE_PCM	'p'
 #define B43legacy_FW_TYPE_IV	'i'
 struct b43legacy_fw_header {
-	/* File type */
-	u8 type;
-	/* File format version */
-	u8 ver;
-	u8 __padding[2];
-	/* Size of the data. For ucode and PCM this is in bytes.
-	 * For IV this is number-of-ivs. */
-	__be32 size;
+    /* File type */
+    u8 type;
+    /* File format version */
+    u8 ver;
+    u8 __padding[2];
+    /* Size of the data. For ucode and PCM this is in bytes.
+     * For IV this is number-of-ivs. */
+    __be32 size;
 } __packed;
 
 /* Initial Value file format */
 #define B43legacy_IV_OFFSET_MASK	0x7FFF
 #define B43legacy_IV_32BIT		0x8000
 struct b43legacy_iv {
-	__be16 offset_size;
-	union {
-		__be16 d16;
-		__be32 d32;
-	} data __packed;
+    __be16 offset_size;
+    union {
+        __be16 d16;
+        __be32 d32;
+    } data __packed;
 } __packed;
 
 #define B43legacy_PHYMODE(phytype)	(1 << (phytype))
@@ -388,176 +390,176 @@ struct b43legacy_iv {
 
 /* Value pair to measure the LocalOscillator. */
 struct b43legacy_lopair {
-	s8 low;
-	s8 high;
-	u8 used:1;
+    s8 low;
+    s8 high;
+    u8 used:1;
 };
 #define B43legacy_LO_COUNT	(14*4)
 
 struct b43legacy_phy {
-	/* Possible PHYMODEs on this PHY */
-	u8 possible_phymodes;
-	/* GMODE bit enabled in MACCTL? */
-	bool gmode;
+    /* Possible PHYMODEs on this PHY */
+    u8 possible_phymodes;
+    /* GMODE bit enabled in MACCTL? */
+    bool gmode;
 
-	/* Analog Type */
-	u8 analog;
-	/* B43legacy_PHYTYPE_ */
-	u8 type;
-	/* PHY revision number. */
-	u8 rev;
+    /* Analog Type */
+    u8 analog;
+    /* B43legacy_PHYTYPE_ */
+    u8 type;
+    /* PHY revision number. */
+    u8 rev;
 
-	u16 antenna_diversity;
-	u16 savedpctlreg;
-	/* Radio versioning */
-	u16 radio_manuf;	/* Radio manufacturer */
-	u16 radio_ver;		/* Radio version */
-	u8 calibrated:1;
-	u8 radio_rev;		/* Radio revision */
+    u16 antenna_diversity;
+    u16 savedpctlreg;
+    /* Radio versioning */
+    u16 radio_manuf;	/* Radio manufacturer */
+    u16 radio_ver;		/* Radio version */
+    u8 calibrated:1;
+    u8 radio_rev;		/* Radio revision */
 
-	bool dyn_tssi_tbl;	/* tssi2dbm is kmalloc()ed. */
+    bool dyn_tssi_tbl;	/* tssi2dbm is kmalloc()ed. */
 
-	/* ACI (adjacent channel interference) flags. */
-	bool aci_enable;
-	bool aci_wlan_automatic;
-	bool aci_hw_rssi;
+    /* ACI (adjacent channel interference) flags. */
+    bool aci_enable;
+    bool aci_wlan_automatic;
+    bool aci_hw_rssi;
 
-	/* Radio switched on/off */
-	bool radio_on;
-	struct {
-		/* Values saved when turning the radio off.
-		 * They are needed when turning it on again. */
-		bool valid;
-		u16 rfover;
-		u16 rfoverval;
-	} radio_off_context;
+    /* Radio switched on/off */
+    bool radio_on;
+    struct {
+        /* Values saved when turning the radio off.
+         * They are needed when turning it on again. */
+        bool valid;
+        u16 rfover;
+        u16 rfoverval;
+    } radio_off_context;
 
-	u16 minlowsig[2];
-	u16 minlowsigpos[2];
+    u16 minlowsig[2];
+    u16 minlowsigpos[2];
 
-	/* LO Measurement Data.
-	 * Use b43legacy_get_lopair() to get a value.
-	 */
-	struct b43legacy_lopair *_lo_pairs;
-	/* TSSI to dBm table in use */
-	const s8 *tssi2dbm;
-	/* idle TSSI value */
-	s8 idle_tssi;
-	/* Target idle TSSI */
-	int tgt_idle_tssi;
-	/* Current idle TSSI */
-	int cur_idle_tssi;
+    /* LO Measurement Data.
+     * Use b43legacy_get_lopair() to get a value.
+     */
+    struct b43legacy_lopair *_lo_pairs;
+    /* TSSI to dBm table in use */
+    const s8 *tssi2dbm;
+    /* idle TSSI value */
+    s8 idle_tssi;
+    /* Target idle TSSI */
+    int tgt_idle_tssi;
+    /* Current idle TSSI */
+    int cur_idle_tssi;
 
-	/* LocalOscillator control values. */
-	struct b43legacy_txpower_lo_control *lo_control;
-	/* Values from b43legacy_calc_loopback_gain() */
-	s16 max_lb_gain;	/* Maximum Loopback gain in hdB */
-	s16 trsw_rx_gain;	/* TRSW RX gain in hdB */
-	s16 lna_lod_gain;	/* LNA lod */
-	s16 lna_gain;		/* LNA */
-	s16 pga_gain;		/* PGA */
+    /* LocalOscillator control values. */
+    struct b43legacy_txpower_lo_control *lo_control;
+    /* Values from b43legacy_calc_loopback_gain() */
+    s16 max_lb_gain;	/* Maximum Loopback gain in hdB */
+    s16 trsw_rx_gain;	/* TRSW RX gain in hdB */
+    s16 lna_lod_gain;	/* LNA lod */
+    s16 lna_gain;		/* LNA */
+    s16 pga_gain;		/* PGA */
 
-	/* Desired TX power level (in dBm). This is set by the user and
-	 * adjusted in b43legacy_phy_xmitpower(). */
-	u8 power_level;
+    /* Desired TX power level (in dBm). This is set by the user and
+     * adjusted in b43legacy_phy_xmitpower(). */
+    u8 power_level;
 
-	/* Values from b43legacy_calc_loopback_gain() */
-	u16 loopback_gain[2];
+    /* Values from b43legacy_calc_loopback_gain() */
+    u16 loopback_gain[2];
 
-	/* TX Power control values. */
-	/* B/G PHY */
-	struct {
-		/* Current Radio Attenuation for TXpower recalculation. */
-		u16 rfatt;
-		/* Current Baseband Attenuation for TXpower recalculation. */
-		u16 bbatt;
-		/* Current TXpower control value for TXpower recalculation. */
-		u16 txctl1;
-		u16 txctl2;
-	};
-	/* A PHY */
-	struct {
-		u16 txpwr_offset;
-	};
+    /* TX Power control values. */
+    /* B/G PHY */
+    struct {
+        /* Current Radio Attenuation for TXpower recalculation. */
+        u16 rfatt;
+        /* Current Baseband Attenuation for TXpower recalculation. */
+        u16 bbatt;
+        /* Current TXpower control value for TXpower recalculation. */
+        u16 txctl1;
+        u16 txctl2;
+    };
+    /* A PHY */
+    struct {
+        u16 txpwr_offset;
+    };
 
-	/* Current Interference Mitigation mode */
-	int interfmode;
-	/* Stack of saved values from the Interference Mitigation code.
-	 * Each value in the stack is laid out as follows:
-	 * bit 0-11:  offset
-	 * bit 12-15: register ID
-	 * bit 16-32: value
-	 * register ID is: 0x1 PHY, 0x2 Radio, 0x3 ILT
-	 */
+    /* Current Interference Mitigation mode */
+    int interfmode;
+    /* Stack of saved values from the Interference Mitigation code.
+     * Each value in the stack is laid out as follows:
+     * bit 0-11:  offset
+     * bit 12-15: register ID
+     * bit 16-32: value
+     * register ID is: 0x1 PHY, 0x2 Radio, 0x3 ILT
+     */
 #define B43legacy_INTERFSTACK_SIZE	26
-	u32 interfstack[B43legacy_INTERFSTACK_SIZE];
+    u32 interfstack[B43legacy_INTERFSTACK_SIZE];
 
-	/* Saved values from the NRSSI Slope calculation */
-	s16 nrssi[2];
-	s32 nrssislope;
-	/* In memory nrssi lookup table. */
-	s8 nrssi_lt[64];
+    /* Saved values from the NRSSI Slope calculation */
+    s16 nrssi[2];
+    s32 nrssislope;
+    /* In memory nrssi lookup table. */
+    s8 nrssi_lt[64];
 
-	/* current channel */
-	u8 channel;
+    /* current channel */
+    u8 channel;
 
-	u16 lofcal;
+    u16 lofcal;
 
-	u16 initval;
+    u16 initval;
 
-	/* PHY TX errors counter. */
-	atomic_t txerr_cnt;
+    /* PHY TX errors counter. */
+    atomic_t txerr_cnt;
 
 #if B43legacy_DEBUG
-	/* Manual TX-power control enabled? */
-	bool manual_txpower_control;
-	/* PHY registers locked by b43legacy_phy_lock()? */
-	bool phy_locked;
+    /* Manual TX-power control enabled? */
+    bool manual_txpower_control;
+    /* PHY registers locked by b43legacy_phy_lock()? */
+    bool phy_locked;
 #endif /* B43legacy_DEBUG */
 };
 
 /* Data structures for DMA transmission, per 80211 core. */
 struct b43legacy_dma {
-	struct b43legacy_dmaring *tx_ring0;
-	struct b43legacy_dmaring *tx_ring1;
-	struct b43legacy_dmaring *tx_ring2;
-	struct b43legacy_dmaring *tx_ring3;
-	struct b43legacy_dmaring *tx_ring4;
-	struct b43legacy_dmaring *tx_ring5;
+    struct b43legacy_dmaring *tx_ring0;
+    struct b43legacy_dmaring *tx_ring1;
+    struct b43legacy_dmaring *tx_ring2;
+    struct b43legacy_dmaring *tx_ring3;
+    struct b43legacy_dmaring *tx_ring4;
+    struct b43legacy_dmaring *tx_ring5;
 
-	struct b43legacy_dmaring *rx_ring0;
-	struct b43legacy_dmaring *rx_ring3; /* only on core.rev < 5 */
+    struct b43legacy_dmaring *rx_ring0;
+    struct b43legacy_dmaring *rx_ring3; /* only on core.rev < 5 */
 
-	u32 translation; /* Routing bits */
+    u32 translation; /* Routing bits */
 };
 
 /* Data structures for PIO transmission, per 80211 core. */
 struct b43legacy_pio {
-	struct b43legacy_pioqueue *queue0;
-	struct b43legacy_pioqueue *queue1;
-	struct b43legacy_pioqueue *queue2;
-	struct b43legacy_pioqueue *queue3;
+    struct b43legacy_pioqueue *queue0;
+    struct b43legacy_pioqueue *queue1;
+    struct b43legacy_pioqueue *queue2;
+    struct b43legacy_pioqueue *queue3;
 };
 
 /* Context information for a noise calculation (Link Quality). */
 struct b43legacy_noise_calculation {
-	u8 channel_at_start;
-	bool calculation_running;
-	u8 nr_samples;
-	s8 samples[8][4];
+    u8 channel_at_start;
+    bool calculation_running;
+    u8 nr_samples;
+    s8 samples[8][4];
 };
 
 struct b43legacy_stats {
-	u8 link_noise;
-	/* Store the last TX/RX times here for updating the leds. */
-	unsigned long last_tx;
-	unsigned long last_rx;
+    u8 link_noise;
+    /* Store the last TX/RX times here for updating the leds. */
+    unsigned long last_tx;
+    unsigned long last_rx;
 };
 
 struct b43legacy_key {
-	void *keyconf;
-	bool enabled;
-	u8 algorithm;
+    void *keyconf;
+    bool enabled;
+    u8 algorithm;
 };
 
 #define B43legacy_QOS_QUEUE_NUM	4
@@ -566,97 +568,97 @@ struct b43legacy_wldev;
 
 /* QOS parameters for a queue. */
 struct b43legacy_qos_params {
-	/* The QOS parameters */
-	struct ieee80211_tx_queue_params p;
+    /* The QOS parameters */
+    struct ieee80211_tx_queue_params p;
 };
 
 /* Data structure for the WLAN parts (802.11 cores) of the b43legacy chip. */
 struct b43legacy_wl {
-	/* Pointer to the active wireless device on this chip */
-	struct b43legacy_wldev *current_dev;
-	/* Pointer to the ieee80211 hardware data structure */
-	struct ieee80211_hw *hw;
+    /* Pointer to the active wireless device on this chip */
+    struct b43legacy_wldev *current_dev;
+    /* Pointer to the ieee80211 hardware data structure */
+    struct ieee80211_hw *hw;
 
-	spinlock_t irq_lock;		/* locks IRQ */
-	struct mutex mutex;		/* locks wireless core state */
-	spinlock_t leds_lock;		/* lock for leds */
+    spinlock_t irq_lock;		/* locks IRQ */
+    struct mutex mutex;		/* locks wireless core state */
+    spinlock_t leds_lock;		/* lock for leds */
 
-	/* firmware loading work */
-	struct work_struct firmware_load;
+    /* firmware loading work */
+    struct work_struct firmware_load;
 
-	/* We can only have one operating interface (802.11 core)
-	 * at a time. General information about this interface follows.
-	 */
+    /* We can only have one operating interface (802.11 core)
+     * at a time. General information about this interface follows.
+     */
 
-	struct ieee80211_vif *vif;
-	/* MAC address (can be NULL). */
-	u8 mac_addr[ETH_ALEN];
-	/* Current BSSID (can be NULL). */
-	u8 bssid[ETH_ALEN];
-	/* Interface type. (IEEE80211_IF_TYPE_XXX) */
-	int if_type;
-	/* Is the card operating in AP, STA or IBSS mode? */
-	bool operating;
-	/* filter flags */
-	unsigned int filter_flags;
-	/* Stats about the wireless interface */
-	struct ieee80211_low_level_stats ieee_stats;
+    struct ieee80211_vif *vif;
+    /* MAC address (can be NULL). */
+    u8 mac_addr[ETH_ALEN];
+    /* Current BSSID (can be NULL). */
+    u8 bssid[ETH_ALEN];
+    /* Interface type. (IEEE80211_IF_TYPE_XXX) */
+    int if_type;
+    /* Is the card operating in AP, STA or IBSS mode? */
+    bool operating;
+    /* filter flags */
+    unsigned int filter_flags;
+    /* Stats about the wireless interface */
+    struct ieee80211_low_level_stats ieee_stats;
 
 #ifdef CONFIG_B43LEGACY_HWRNG
-	struct hwrng rng;
-	u8 rng_initialized;
-	char rng_name[30 + 1];
+    struct hwrng rng;
+    u8 rng_initialized;
+    char rng_name[30 + 1];
 #endif
 
-	/* List of all wireless devices on this chip */
-	struct list_head devlist;
-	u8 nr_devs;
+    /* List of all wireless devices on this chip */
+    struct list_head devlist;
+    u8 nr_devs;
 
-	bool radiotap_enabled;
-	bool radio_enabled;
+    bool radiotap_enabled;
+    bool radio_enabled;
 
-	/* The beacon we are currently using (AP or IBSS mode).
-	 * This beacon stuff is protected by the irq_lock. */
-	struct sk_buff *current_beacon;
-	bool beacon0_uploaded;
-	bool beacon1_uploaded;
-	bool beacon_templates_virgin; /* Never wrote the templates? */
-	struct work_struct beacon_update_trigger;
-	/* The current QOS parameters for the 4 queues. */
-	struct b43legacy_qos_params qos_params[B43legacy_QOS_QUEUE_NUM];
+    /* The beacon we are currently using (AP or IBSS mode).
+     * This beacon stuff is protected by the irq_lock. */
+    struct sk_buff *current_beacon;
+    bool beacon0_uploaded;
+    bool beacon1_uploaded;
+    bool beacon_templates_virgin; /* Never wrote the templates? */
+    struct work_struct beacon_update_trigger;
+    /* The current QOS parameters for the 4 queues. */
+    struct b43legacy_qos_params qos_params[B43legacy_QOS_QUEUE_NUM];
 
-	/* Packet transmit work */
-	struct work_struct tx_work;
+    /* Packet transmit work */
+    struct work_struct tx_work;
 
-	/* Queue of packets to be transmitted. */
-	struct sk_buff_head tx_queue[B43legacy_QOS_QUEUE_NUM];
+    /* Queue of packets to be transmitted. */
+    struct sk_buff_head tx_queue[B43legacy_QOS_QUEUE_NUM];
 
-	/* Flag that implement the queues stopping. */
-	bool tx_queue_stopped[B43legacy_QOS_QUEUE_NUM];
+    /* Flag that implement the queues stopping. */
+    bool tx_queue_stopped[B43legacy_QOS_QUEUE_NUM];
 
 };
 
 /* Pointers to the firmware data and meta information about it. */
 struct b43legacy_firmware {
-	/* Microcode */
-	const struct firmware *ucode;
-	/* PCM code */
-	const struct firmware *pcm;
-	/* Initial MMIO values for the firmware */
-	const struct firmware *initvals;
-	/* Initial MMIO values for the firmware, band-specific */
-	const struct firmware *initvals_band;
-	/* Firmware revision */
-	u16 rev;
-	/* Firmware patchlevel */
-	u16 patch;
+    /* Microcode */
+    const struct firmware *ucode;
+    /* PCM code */
+    const struct firmware *pcm;
+    /* Initial MMIO values for the firmware */
+    const struct firmware *initvals;
+    /* Initial MMIO values for the firmware, band-specific */
+    const struct firmware *initvals_band;
+    /* Firmware revision */
+    u16 rev;
+    /* Firmware patchlevel */
+    u16 patch;
 };
 
 /* Device (802.11 core) initialization status. */
 enum {
-	B43legacy_STAT_UNINIT		= 0, /* Uninitialized. */
-	B43legacy_STAT_INITIALIZED	= 1, /* Initialized, not yet started. */
-	B43legacy_STAT_STARTED	= 2, /* Up and running. */
+    B43legacy_STAT_UNINIT		= 0, /* Uninitialized. */
+    B43legacy_STAT_INITIALIZED	= 1, /* Initialized, not yet started. */
+    B43legacy_STAT_STARTED	= 2, /* Up and running. */
 };
 #define b43legacy_status(wldev)	atomic_read(&(wldev)->__init_status)
 #define b43legacy_set_status(wldev, stat)	do {		\
@@ -674,80 +676,79 @@ enum {
 
 /* Data structure for one wireless device (802.11 core) */
 struct b43legacy_wldev {
-	struct ssb_device *dev;
-	struct b43legacy_wl *wl;
+    struct ssb_device *dev;
+    struct b43legacy_wl *wl;
 
-	/* The device initialization status.
-	 * Use b43legacy_status() to query. */
-	atomic_t __init_status;
-	/* Saved init status for handling suspend. */
-	int suspend_init_status;
+    /* The device initialization status.
+     * Use b43legacy_status() to query. */
+    atomic_t __init_status;
+    /* Saved init status for handling suspend. */
+    int suspend_init_status;
 
-	bool __using_pio;	/* Using pio rather than dma. */
-	bool bad_frames_preempt;/* Use "Bad Frames Preemption". */
-	bool dfq_valid;		/* Directed frame queue valid (IBSS PS mode, ATIM). */
-	bool short_preamble;	/* TRUE if using short preamble. */
-	bool radio_hw_enable;	/* State of radio hardware enable bit. */
+    bool __using_pio;	/* Using pio rather than dma. */
+    bool bad_frames_preempt;/* Use "Bad Frames Preemption". */
+    bool dfq_valid;		/* Directed frame queue valid (IBSS PS mode, ATIM). */
+    bool short_preamble;	/* TRUE if using short preamble. */
+    bool radio_hw_enable;	/* State of radio hardware enable bit. */
 
-	/* PHY/Radio device. */
-	struct b43legacy_phy phy;
-	union {
-		/* DMA engines. */
-		struct b43legacy_dma dma;
-		/* PIO engines. */
-		struct b43legacy_pio pio;
-	};
+    /* PHY/Radio device. */
+    struct b43legacy_phy phy;
+    union {
+        /* DMA engines. */
+        struct b43legacy_dma dma;
+        /* PIO engines. */
+        struct b43legacy_pio pio;
+    };
 
-	/* Various statistics about the physical device. */
-	struct b43legacy_stats stats;
+    /* Various statistics about the physical device. */
+    struct b43legacy_stats stats;
 
-	/* The device LEDs. */
-	struct b43legacy_led led_tx;
-	struct b43legacy_led led_rx;
-	struct b43legacy_led led_assoc;
-	struct b43legacy_led led_radio;
+    /* The device LEDs. */
+    struct b43legacy_led led_tx;
+    struct b43legacy_led led_rx;
+    struct b43legacy_led led_assoc;
+    struct b43legacy_led led_radio;
 
-	/* Reason code of the last interrupt. */
-	u32 irq_reason;
-	u32 dma_reason[6];
-	/* The currently active generic-interrupt mask. */
-	u32 irq_mask;
-	/* Link Quality calculation context. */
-	struct b43legacy_noise_calculation noisecalc;
-	/* if > 0 MAC is suspended. if == 0 MAC is enabled. */
-	int mac_suspended;
+    /* Reason code of the last interrupt. */
+    u32 irq_reason;
+    u32 dma_reason[6];
+    /* The currently active generic-interrupt mask. */
+    u32 irq_mask;
+    /* Link Quality calculation context. */
+    struct b43legacy_noise_calculation noisecalc;
+    /* if > 0 MAC is suspended. if == 0 MAC is enabled. */
+    int mac_suspended;
 
-	/* Interrupt Service Routine tasklet (bottom-half) */
-	struct tasklet_struct isr_tasklet;
+    /* Interrupt Service Routine tasklet (bottom-half) */
+    struct tasklet_struct isr_tasklet;
 
-	/* Periodic tasks */
-	struct delayed_work periodic_work;
-	unsigned int periodic_state;
+    /* Periodic tasks */
+    struct delayed_work periodic_work;
+    unsigned int periodic_state;
 
-	struct work_struct restart_work;
+    struct work_struct restart_work;
 
-	/* encryption/decryption */
-	u16 ktp; /* Key table pointer */
-	u8 max_nr_keys;
-	struct b43legacy_key key[58];
+    /* encryption/decryption */
+    u16 ktp; /* Key table pointer */
+    u8 max_nr_keys;
+    struct b43legacy_key key[58];
 
-	/* Firmware data */
-	struct b43legacy_firmware fw;
+    /* Firmware data */
+    struct b43legacy_firmware fw;
 
-	/* Devicelist in struct b43legacy_wl (all 802.11 cores) */
-	struct list_head list;
+    /* Devicelist in struct b43legacy_wl (all 802.11 cores) */
+    struct list_head list;
 
-	/* Debugging stuff follows. */
+    /* Debugging stuff follows. */
 #ifdef CONFIG_B43LEGACY_DEBUG
-	struct b43legacy_dfsentry *dfsentry;
+    struct b43legacy_dfsentry *dfsentry;
 #endif
 };
 
 
 static inline
-struct b43legacy_wl *hw_to_b43legacy_wl(struct ieee80211_hw *hw)
-{
-	return hw->priv;
+struct b43legacy_wl *hw_to_b43legacy_wl(struct ieee80211_hw *hw) {
+    return hw->priv;
 }
 
 /* Helper function, which returns a boolean.
@@ -755,21 +756,18 @@ struct b43legacy_wl *hw_to_b43legacy_wl(struct ieee80211_hw *hw)
  */
 #if defined(CONFIG_B43LEGACY_DMA) && defined(CONFIG_B43LEGACY_PIO)
 static inline
-int b43legacy_using_pio(struct b43legacy_wldev *dev)
-{
-	return dev->__using_pio;
+int b43legacy_using_pio(struct b43legacy_wldev *dev) {
+    return dev->__using_pio;
 }
 #elif defined(CONFIG_B43LEGACY_DMA)
 static inline
-int b43legacy_using_pio(struct b43legacy_wldev *dev)
-{
-	return 0;
+int b43legacy_using_pio(struct b43legacy_wldev *dev) {
+    return 0;
 }
 #elif defined(CONFIG_B43LEGACY_PIO)
 static inline
-int b43legacy_using_pio(struct b43legacy_wldev *dev)
-{
-	return 1;
+int b43legacy_using_pio(struct b43legacy_wldev *dev) {
+    return 1;
 }
 #else
 # error "Using neither DMA nor PIO? Confused..."
@@ -777,57 +775,49 @@ int b43legacy_using_pio(struct b43legacy_wldev *dev)
 
 
 static inline
-struct b43legacy_wldev *dev_to_b43legacy_wldev(struct device *dev)
-{
-	struct ssb_device *ssb_dev = dev_to_ssb_dev(dev);
-	return ssb_get_drvdata(ssb_dev);
+struct b43legacy_wldev *dev_to_b43legacy_wldev(struct device *dev) {
+    struct ssb_device *ssb_dev = dev_to_ssb_dev(dev);
+    return ssb_get_drvdata(ssb_dev);
 }
 
 /* Is the device operating in a specified mode (IEEE80211_IF_TYPE_XXX). */
 static inline
-int b43legacy_is_mode(struct b43legacy_wl *wl, int type)
-{
-	return (wl->operating &&
-		wl->if_type == type);
+int b43legacy_is_mode(struct b43legacy_wl *wl, int type) {
+    return (wl->operating &&
+            wl->if_type == type);
 }
 
 static inline
-bool is_bcm_board_vendor(struct b43legacy_wldev *dev)
-{
-	return  (dev->dev->bus->boardinfo.vendor == PCI_VENDOR_ID_BROADCOM);
+bool is_bcm_board_vendor(struct b43legacy_wldev *dev) {
+    return  (dev->dev->bus->boardinfo.vendor == PCI_VENDOR_ID_BROADCOM);
 }
 
 static inline
-u16 b43legacy_read16(struct b43legacy_wldev *dev, u16 offset)
-{
-	return ssb_read16(dev->dev, offset);
+u16 b43legacy_read16(struct b43legacy_wldev *dev, u16 offset) {
+    return ssb_read16(dev->dev, offset);
 }
 
 static inline
-void b43legacy_write16(struct b43legacy_wldev *dev, u16 offset, u16 value)
-{
-	ssb_write16(dev->dev, offset, value);
+void b43legacy_write16(struct b43legacy_wldev *dev, u16 offset, u16 value) {
+    ssb_write16(dev->dev, offset, value);
 }
 
 static inline
-u32 b43legacy_read32(struct b43legacy_wldev *dev, u16 offset)
-{
-	return ssb_read32(dev->dev, offset);
+u32 b43legacy_read32(struct b43legacy_wldev *dev, u16 offset) {
+    return ssb_read32(dev->dev, offset);
 }
 
 static inline
-void b43legacy_write32(struct b43legacy_wldev *dev, u16 offset, u32 value)
-{
-	ssb_write32(dev->dev, offset, value);
+void b43legacy_write32(struct b43legacy_wldev *dev, u16 offset, u32 value) {
+    ssb_write32(dev->dev, offset, value);
 }
 
 static inline
 struct b43legacy_lopair *b43legacy_get_lopair(struct b43legacy_phy *phy,
-					      u16 radio_attenuation,
-					      u16 baseband_attenuation)
-{
-	return phy->_lo_pairs + (radio_attenuation
-			+ 14 * (baseband_attenuation / 2));
+        u16 radio_attenuation,
+        u16 baseband_attenuation) {
+    return phy->_lo_pairs + (radio_attenuation
+                             + 14 * (baseband_attenuation / 2));
 }
 
 

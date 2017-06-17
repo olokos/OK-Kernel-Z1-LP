@@ -29,31 +29,30 @@
 })
 #endif
 
-static inline void trigger_address_error(void)
-{
-	__asm__ __volatile__ (
-		"ldc %0, sr\n\t"
-		"mov.l @%1, %0"
-		:
-		: "r" (0x10000000), "r" (0x80000001)
-	);
+static inline void trigger_address_error(void) {
+    __asm__ __volatile__ (
+        "ldc %0, sr\n\t"
+        "mov.l @%1, %0"
+        :
+        : "r" (0x10000000), "r" (0x80000001)
+    );
 }
 
 asmlinkage void do_address_error(struct pt_regs *regs,
-				 unsigned long writeaccess,
-				 unsigned long address);
+                                 unsigned long writeaccess,
+                                 unsigned long address);
 asmlinkage void do_divide_error(unsigned long r4, unsigned long r5,
-				unsigned long r6, unsigned long r7,
-				struct pt_regs __regs);
+                                unsigned long r6, unsigned long r7,
+                                struct pt_regs __regs);
 asmlinkage void do_reserved_inst(unsigned long r4, unsigned long r5,
-				unsigned long r6, unsigned long r7,
-				struct pt_regs __regs);
+                                 unsigned long r6, unsigned long r7,
+                                 struct pt_regs __regs);
 asmlinkage void do_illegal_slot_inst(unsigned long r4, unsigned long r5,
-				unsigned long r6, unsigned long r7,
-				struct pt_regs __regs);
+                                     unsigned long r6, unsigned long r7,
+                                     struct pt_regs __regs);
 asmlinkage void do_exception_error(unsigned long r4, unsigned long r5,
-				   unsigned long r6, unsigned long r7,
-				   struct pt_regs __regs);
+                                   unsigned long r6, unsigned long r7,
+                                   struct pt_regs __regs);
 
 #define BUILD_TRAP_HANDLER(name)					\
 asmlinkage void name##_trap_handler(unsigned long r4, unsigned long r5,	\

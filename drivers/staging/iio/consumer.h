@@ -20,8 +20,8 @@ struct iio_chan_spec;
  * @channel:		Full description of the channel.
  */
 struct iio_channel {
-	struct iio_dev *indio_dev;
-	const struct iio_chan_spec *channel;
+    struct iio_dev *indio_dev;
+    const struct iio_chan_spec *channel;
 };
 
 /**
@@ -34,7 +34,7 @@ struct iio_channel {
  *			the consumer. E.g. 'battery_voltage'
  */
 struct iio_channel *iio_st_channel_get(const char *name,
-				       const char *consumer_channel);
+                                       const char *consumer_channel);
 
 /**
  * iio_st_channel_release() - release channels obtained via iio_st_channel_get
@@ -68,7 +68,7 @@ void iio_st_channel_release_all(struct iio_channel *chan);
  * scale will need to be applied if standard units required.
  */
 int iio_st_read_channel_raw(struct iio_channel *chan,
-			    int *val);
+                            int *val);
 
 /**
  * iio_st_get_channel_type() - get the type of a channel
@@ -78,7 +78,7 @@ int iio_st_read_channel_raw(struct iio_channel *chan,
  * returns the enum iio_chan_type of the channel
  */
 int iio_st_get_channel_type(struct iio_channel *channel,
-			    enum iio_chan_type *type);
+                            enum iio_chan_type *type);
 
 /**
  * iio_st_read_channel_scale() - read the scale value for a channel
@@ -91,6 +91,6 @@ int iio_st_get_channel_type(struct iio_channel *channel,
  * + val2/1e6
  */
 int iio_st_read_channel_scale(struct iio_channel *chan, int *val,
-			      int *val2);
+                              int *val2);
 
 #endif

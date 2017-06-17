@@ -56,7 +56,7 @@ MODULE_PARM_DESC(force_id, "Override the detected device ID");
 static bool probe_all_addr;
 module_param(probe_all_addr, bool, 0);
 MODULE_PARM_DESC(probe_all_addr, "Include probing of non-standard LPC "
-		 "addresses");
+                 "addresses");
 
 /* Addresses to scan */
 static const unsigned short normal_i2c[] = {0x2c, 0x2d, 0x2e, I2C_CLIENT_END};
@@ -208,58 +208,62 @@ static const u8 DME1737_BIT_ALARM_FAN[] = {10, 11, 12, 13, 22, 23};
  * --------------------------------------------------------------------- */
 
 struct dme1737_data {
-	struct i2c_client *client;	/* for I2C devices only */
-	struct device *hwmon_dev;
-	const char *name;
-	unsigned int addr;		/* for ISA devices only */
+    struct i2c_client *client;	/* for I2C devices only */
+    struct device *hwmon_dev;
+    const char *name;
+    unsigned int addr;		/* for ISA devices only */
 
-	struct mutex update_lock;
-	int valid;			/* !=0 if following fields are valid */
-	unsigned long last_update;	/* in jiffies */
-	unsigned long last_vbat;	/* in jiffies */
-	enum chips type;
-	const int *in_nominal;		/* pointer to IN_NOMINAL array */
+    struct mutex update_lock;
+    int valid;			/* !=0 if following fields are valid */
+    unsigned long last_update;	/* in jiffies */
+    unsigned long last_vbat;	/* in jiffies */
+    enum chips type;
+    const int *in_nominal;		/* pointer to IN_NOMINAL array */
 
-	u8 vid;
-	u8 pwm_rr_en;
-	u32 has_features;
+    u8 vid;
+    u8 pwm_rr_en;
+    u32 has_features;
 
-	/* Register values */
-	u16 in[8];
-	u8  in_min[8];
-	u8  in_max[8];
-	s16 temp[3];
-	s8  temp_min[3];
-	s8  temp_max[3];
-	s8  temp_offset[3];
-	u8  config;
-	u8  config2;
-	u8  vrm;
-	u16 fan[6];
-	u16 fan_min[6];
-	u8  fan_max[2];
-	u8  fan_opt[6];
-	u8  pwm[6];
-	u8  pwm_min[3];
-	u8  pwm_config[3];
-	u8  pwm_acz[3];
-	u8  pwm_freq[6];
-	u8  pwm_rr[2];
-	u8  zone_low[3];
-	u8  zone_abs[3];
-	u8  zone_hyst[2];
-	u32 alarms;
+    /* Register values */
+    u16 in[8];
+    u8  in_min[8];
+    u8  in_max[8];
+    s16 temp[3];
+    s8  temp_min[3];
+    s8  temp_max[3];
+    s8  temp_offset[3];
+    u8  config;
+    u8  config2;
+    u8  vrm;
+    u16 fan[6];
+    u16 fan_min[6];
+    u8  fan_max[2];
+    u8  fan_opt[6];
+    u8  pwm[6];
+    u8  pwm_min[3];
+    u8  pwm_config[3];
+    u8  pwm_acz[3];
+    u8  pwm_freq[6];
+    u8  pwm_rr[2];
+    u8  zone_low[3];
+    u8  zone_abs[3];
+    u8  zone_hyst[2];
+    u32 alarms;
 };
 
 /* Nominal voltage values */
 static const int IN_NOMINAL_DME1737[] = {5000, 2250, 3300, 5000, 12000, 3300,
-					 3300};
+                                         3300
+                                        };
 static const int IN_NOMINAL_SCH311x[] = {2500, 1500, 3300, 5000, 12000, 3300,
-					 3300};
+                                         3300
+                                        };
 static const int IN_NOMINAL_SCH5027[] = {5000, 2250, 3300, 1125, 1125, 3300,
-					 3300};
+                                         3300
+                                        };
 static const int IN_NOMINAL_SCH5127[] = {2500, 2250, 3300, 1125, 1125, 3300,
-					 3300, 1500};
+                                         3300, 1500
+                                        };
 #define IN_NOMINAL(type)	((type) == sch311x ? IN_NOMINAL_SCH311x : \
 				 (type) == sch5027 ? IN_NOMINAL_SCH5027 : \
 				 (type) == sch5127 ? IN_NOMINAL_SCH5127 : \
@@ -270,14 +274,12 @@ static const int IN_NOMINAL_SCH5127[] = {2500, 2250, 3300, 1125, 1125, 3300,
  * Voltage inputs have 16 bits resolution, limit values have 8 bits
  * resolution.
  */
-static inline int IN_FROM_REG(int reg, int nominal, int res)
-{
-	return (reg * nominal + (3 << (res - 3))) / (3 << (res - 2));
+static inline int IN_FROM_REG(int reg, int nominal, int res) {
+    return (reg * nominal + (3 << (res - 3))) / (3 << (res - 2));
 }
 
-static inline int IN_TO_REG(int val, int nominal)
-{
-	return SENSORS_LIMIT((val * 192 + nominal / 2) / nominal, 0, 255);
+static inline int IN_TO_REG(int val, int nominal) {
+    return SENSORS_LIMIT((val * 192 + nominal / 2) / nominal, 0, 255);
 }
 
 /*
@@ -286,37 +288,34 @@ static inline int IN_TO_REG(int val, int nominal)
  * -127 degrees C to +127 degrees C. Temp inputs have 16 bits resolution, limit
  * values have 8 bits resolution.
  */
-static inline int TEMP_FROM_REG(int reg, int res)
-{
-	return (reg * 1000) >> (res - 8);
+static inline int TEMP_FROM_REG(int reg, int res) {
+    return (reg * 1000) >> (res - 8);
 }
 
-static inline int TEMP_TO_REG(int val)
-{
-	return SENSORS_LIMIT((val < 0 ? val - 500 : val + 500) / 1000,
-			     -128, 127);
+static inline int TEMP_TO_REG(int val) {
+    return SENSORS_LIMIT((val < 0 ? val - 500 : val + 500) / 1000,
+                         -128, 127);
 }
 
 /* Temperature range */
 static const int TEMP_RANGE[] = {2000, 2500, 3333, 4000, 5000, 6666, 8000,
-				 10000, 13333, 16000, 20000, 26666, 32000,
-				 40000, 53333, 80000};
+                                 10000, 13333, 16000, 20000, 26666, 32000,
+                                 40000, 53333, 80000
+                                };
 
-static inline int TEMP_RANGE_FROM_REG(int reg)
-{
-	return TEMP_RANGE[(reg >> 4) & 0x0f];
+static inline int TEMP_RANGE_FROM_REG(int reg) {
+    return TEMP_RANGE[(reg >> 4) & 0x0f];
 }
 
-static int TEMP_RANGE_TO_REG(int val, int reg)
-{
-	int i;
+static int TEMP_RANGE_TO_REG(int val, int reg) {
+    int i;
 
-	for (i = 15; i > 0; i--) {
-		if (val > (TEMP_RANGE[i] + TEMP_RANGE[i - 1] + 1) / 2)
-			break;
-	}
+    for (i = 15; i > 0; i--) {
+        if (val > (TEMP_RANGE[i] + TEMP_RANGE[i - 1] + 1) / 2)
+            break;
+    }
 
-	return (reg & 0x0f) | (i << 4);
+    return (reg & 0x0f) | (i << 4);
 }
 
 /*
@@ -325,35 +324,31 @@ static int TEMP_RANGE_TO_REG(int val, int reg)
  *    reg[0] = [H1-3, H1-2, H1-1, H1-0, H2-3, H2-2, H2-1, H2-0]
  *    reg[1] = [H3-3, H3-2, H3-1, H3-0, xxxx, xxxx, xxxx, xxxx]
  */
-static inline int TEMP_HYST_FROM_REG(int reg, int ix)
-{
-	return (((ix == 1) ? reg : reg >> 4) & 0x0f) * 1000;
+static inline int TEMP_HYST_FROM_REG(int reg, int ix) {
+    return (((ix == 1) ? reg : reg >> 4) & 0x0f) * 1000;
 }
 
-static inline int TEMP_HYST_TO_REG(int val, int ix, int reg)
-{
-	int hyst = SENSORS_LIMIT((val + 500) / 1000, 0, 15);
+static inline int TEMP_HYST_TO_REG(int val, int ix, int reg) {
+    int hyst = SENSORS_LIMIT((val + 500) / 1000, 0, 15);
 
-	return (ix == 1) ? (reg & 0xf0) | hyst : (reg & 0x0f) | (hyst << 4);
+    return (ix == 1) ? (reg & 0xf0) | hyst : (reg & 0x0f) | (hyst << 4);
 }
 
 /* Fan input RPM */
-static inline int FAN_FROM_REG(int reg, int tpc)
-{
-	if (tpc)
-		return tpc * reg;
-	else
-		return (reg == 0 || reg == 0xffff) ? 0 : 90000 * 60 / reg;
+static inline int FAN_FROM_REG(int reg, int tpc) {
+    if (tpc)
+        return tpc * reg;
+    else
+        return (reg == 0 || reg == 0xffff) ? 0 : 90000 * 60 / reg;
 }
 
-static inline int FAN_TO_REG(int val, int tpc)
-{
-	if (tpc) {
-		return SENSORS_LIMIT(val / tpc, 0, 0xffff);
-	} else {
-		return (val <= 0) ? 0xffff :
-			SENSORS_LIMIT(90000 * 60 / val, 0, 0xfffe);
-	}
+static inline int FAN_TO_REG(int val, int tpc) {
+    if (tpc) {
+        return SENSORS_LIMIT(val / tpc, 0, 0xffff);
+    } else {
+        return (val <= 0) ? 0xffff :
+               SENSORS_LIMIT(90000 * 60 / val, 0, 0xfffe);
+    }
 }
 
 /*
@@ -361,9 +356,8 @@ static inline int FAN_TO_REG(int val, int tpc)
  * Converts a register value to a TPC multiplier or returns 0 if the tachometer
  * is configured in legacy (non-tpc) mode
  */
-static inline int FAN_TPC_FROM_REG(int reg)
-{
-	return (reg & 0x20) ? 0 : 60 >> (reg & 0x03);
+static inline int FAN_TPC_FROM_REG(int reg) {
+    return (reg & 0x20) ? 0 : 60 >> (reg & 0x03);
 }
 
 /*
@@ -371,46 +365,43 @@ static inline int FAN_TPC_FROM_REG(int reg)
  * The type of a fan is expressed in number of pulses-per-revolution that it
  * emits
  */
-static inline int FAN_TYPE_FROM_REG(int reg)
-{
-	int edge = (reg >> 1) & 0x03;
+static inline int FAN_TYPE_FROM_REG(int reg) {
+    int edge = (reg >> 1) & 0x03;
 
-	return (edge > 0) ? 1 << (edge - 1) : 0;
+    return (edge > 0) ? 1 << (edge - 1) : 0;
 }
 
-static inline int FAN_TYPE_TO_REG(int val, int reg)
-{
-	int edge = (val == 4) ? 3 : val;
+static inline int FAN_TYPE_TO_REG(int val, int reg) {
+    int edge = (val == 4) ? 3 : val;
 
-	return (reg & 0xf9) | (edge << 1);
+    return (reg & 0xf9) | (edge << 1);
 }
 
 /* Fan max RPM */
 static const int FAN_MAX[] = {0x54, 0x38, 0x2a, 0x21, 0x1c, 0x18, 0x15, 0x12,
-			      0x11, 0x0f, 0x0e};
+                              0x11, 0x0f, 0x0e
+                             };
 
-static int FAN_MAX_FROM_REG(int reg)
-{
-	int i;
+static int FAN_MAX_FROM_REG(int reg) {
+    int i;
 
-	for (i = 10; i > 0; i--) {
-		if (reg == FAN_MAX[i])
-			break;
-	}
+    for (i = 10; i > 0; i--) {
+        if (reg == FAN_MAX[i])
+            break;
+    }
 
-	return 1000 + i * 500;
+    return 1000 + i * 500;
 }
 
-static int FAN_MAX_TO_REG(int val)
-{
-	int i;
+static int FAN_MAX_TO_REG(int val) {
+    int i;
 
-	for (i = 10; i > 0; i--) {
-		if (val > (1000 + (i - 1) * 500))
-			break;
-	}
+    for (i = 10; i > 0; i--) {
+        if (val > (1000 + (i - 1) * 500))
+            break;
+    }
 
-	return FAN_MAX[i];
+    return FAN_MAX[i];
 }
 
 /*
@@ -425,18 +416,16 @@ static int FAN_MAX_TO_REG(int val)
  * 110:  2  fan on hottest of zones 1,2,3 auto
  * 111:  1  fan in manual mode
  */
-static inline int PWM_EN_FROM_REG(int reg)
-{
-	static const int en[] = {2, 2, 2, 0, -1, 2, 2, 1};
+static inline int PWM_EN_FROM_REG(int reg) {
+    static const int en[] = {2, 2, 2, 0, -1, 2, 2, 1};
 
-	return en[(reg >> 5) & 0x07];
+    return en[(reg >> 5) & 0x07];
 }
 
-static inline int PWM_EN_TO_REG(int val, int reg)
-{
-	int en = (val == 1) ? 7 : 3;
+static inline int PWM_EN_TO_REG(int val, int reg) {
+    int en = (val == 1) ? 7 : 3;
 
-	return (reg & 0x1f) | ((en & 0x07) << 5);
+    return (reg & 0x1f) | ((en & 0x07) << 5);
 }
 
 /*
@@ -452,46 +441,43 @@ static inline int PWM_EN_TO_REG(int val, int reg)
  * 110: 111  fan on hottest of zones 1,2,3 auto
  * 111: 000  fan in manual mode
  */
-static inline int PWM_ACZ_FROM_REG(int reg)
-{
-	static const int acz[] = {1, 2, 4, 0, 0, 6, 7, 0};
+static inline int PWM_ACZ_FROM_REG(int reg) {
+    static const int acz[] = {1, 2, 4, 0, 0, 6, 7, 0};
 
-	return acz[(reg >> 5) & 0x07];
+    return acz[(reg >> 5) & 0x07];
 }
 
-static inline int PWM_ACZ_TO_REG(int val, int reg)
-{
-	int acz = (val == 4) ? 2 : val - 1;
+static inline int PWM_ACZ_TO_REG(int val, int reg) {
+    int acz = (val == 4) ? 2 : val - 1;
 
-	return (reg & 0x1f) | ((acz & 0x07) << 5);
+    return (reg & 0x1f) | ((acz & 0x07) << 5);
 }
 
 /* PWM frequency */
 static const int PWM_FREQ[] = {11, 15, 22, 29, 35, 44, 59, 88,
-			       15000, 20000, 30000, 25000, 0, 0, 0, 0};
+                               15000, 20000, 30000, 25000, 0, 0, 0, 0
+                              };
 
-static inline int PWM_FREQ_FROM_REG(int reg)
-{
-	return PWM_FREQ[reg & 0x0f];
+static inline int PWM_FREQ_FROM_REG(int reg) {
+    return PWM_FREQ[reg & 0x0f];
 }
 
-static int PWM_FREQ_TO_REG(int val, int reg)
-{
-	int i;
+static int PWM_FREQ_TO_REG(int val, int reg) {
+    int i;
 
-	/* the first two cases are special - stupid chip design! */
-	if (val > 27500) {
-		i = 10;
-	} else if (val > 22500) {
-		i = 11;
-	} else {
-		for (i = 9; i > 0; i--) {
-			if (val > (PWM_FREQ[i] + PWM_FREQ[i - 1] + 1) / 2)
-				break;
-		}
-	}
+    /* the first two cases are special - stupid chip design! */
+    if (val > 27500) {
+        i = 10;
+    } else if (val > 22500) {
+        i = 11;
+    } else {
+        for (i = 9; i > 0; i--) {
+            if (val > (PWM_FREQ[i] + PWM_FREQ[i - 1] + 1) / 2)
+                break;
+        }
+    }
 
-	return (reg & 0xf0) | i;
+    return (reg & 0xf0) | i;
 }
 
 /*
@@ -502,36 +488,32 @@ static int PWM_FREQ_TO_REG(int val, int reg)
  */
 static const u8 PWM_RR[] = {206, 104, 69, 41, 26, 18, 10, 5};
 
-static inline int PWM_RR_FROM_REG(int reg, int ix)
-{
-	int rr = (ix == 1) ? reg >> 4 : reg;
+static inline int PWM_RR_FROM_REG(int reg, int ix) {
+    int rr = (ix == 1) ? reg >> 4 : reg;
 
-	return (rr & 0x08) ? PWM_RR[rr & 0x07] : 0;
+    return (rr & 0x08) ? PWM_RR[rr & 0x07] : 0;
 }
 
-static int PWM_RR_TO_REG(int val, int ix, int reg)
-{
-	int i;
+static int PWM_RR_TO_REG(int val, int ix, int reg) {
+    int i;
 
-	for (i = 0; i < 7; i++) {
-		if (val > (PWM_RR[i] + PWM_RR[i + 1] + 1) / 2)
-			break;
-	}
+    for (i = 0; i < 7; i++) {
+        if (val > (PWM_RR[i] + PWM_RR[i + 1] + 1) / 2)
+            break;
+    }
 
-	return (ix == 1) ? (reg & 0x8f) | (i << 4) : (reg & 0xf8) | i;
+    return (ix == 1) ? (reg & 0x8f) | (i << 4) : (reg & 0xf8) | i;
 }
 
 /* PWM ramp rate enable */
-static inline int PWM_RR_EN_FROM_REG(int reg, int ix)
-{
-	return PWM_RR_FROM_REG(reg, ix) ? 1 : 0;
+static inline int PWM_RR_EN_FROM_REG(int reg, int ix) {
+    return PWM_RR_FROM_REG(reg, ix) ? 1 : 0;
 }
 
-static inline int PWM_RR_EN_TO_REG(int val, int ix, int reg)
-{
-	int en = (ix == 1) ? 0x80 : 0x08;
+static inline int PWM_RR_EN_TO_REG(int val, int ix, int reg) {
+    int en = (ix == 1) ? 0x80 : 0x08;
 
-	return val ? reg | en : reg & ~en;
+    return val ? reg | en : reg & ~en;
 }
 
 /*
@@ -539,14 +521,12 @@ static inline int PWM_RR_EN_TO_REG(int val, int ix, int reg)
  * The PWM min/off bits are part of the PMW ramp rate register 0 (see above for
  * the register layout).
  */
-static inline int PWM_OFF_FROM_REG(int reg, int ix)
-{
-	return (reg >> (ix + 5)) & 0x01;
+static inline int PWM_OFF_FROM_REG(int reg, int ix) {
+    return (reg >> (ix + 5)) & 0x01;
 }
 
-static inline int PWM_OFF_TO_REG(int val, int ix, int reg)
-{
-	return (reg & ~(1 << (ix + 5))) | ((val & 0x01) << (ix + 5));
+static inline int PWM_OFF_TO_REG(int val, int ix, int reg) {
+    return (reg & ~(1 << (ix + 5))) | ((val & 0x01) << (ix + 5));
 }
 
 /* ---------------------------------------------------------------------
@@ -558,241 +538,238 @@ static inline int PWM_OFF_TO_REG(int val, int ix, int reg)
  * before calling dme1737_read or dme1737_write.
  * --------------------------------------------------------------------- */
 
-static u8 dme1737_read(const struct dme1737_data *data, u8 reg)
-{
-	struct i2c_client *client = data->client;
-	s32 val;
+static u8 dme1737_read(const struct dme1737_data *data, u8 reg) {
+    struct i2c_client *client = data->client;
+    s32 val;
 
-	if (client) { /* I2C device */
-		val = i2c_smbus_read_byte_data(client, reg);
+    if (client) { /* I2C device */
+        val = i2c_smbus_read_byte_data(client, reg);
 
-		if (val < 0) {
-			dev_warn(&client->dev, "Read from register "
-				 "0x%02x failed! Please report to the driver "
-				 "maintainer.\n", reg);
-		}
-	} else { /* ISA device */
-		outb(reg, data->addr);
-		val = inb(data->addr + 1);
-	}
+        if (val < 0) {
+            dev_warn(&client->dev, "Read from register "
+                     "0x%02x failed! Please report to the driver "
+                     "maintainer.\n", reg);
+        }
+    } else { /* ISA device */
+        outb(reg, data->addr);
+        val = inb(data->addr + 1);
+    }
 
-	return val;
+    return val;
 }
 
-static s32 dme1737_write(const struct dme1737_data *data, u8 reg, u8 val)
-{
-	struct i2c_client *client = data->client;
-	s32 res = 0;
+static s32 dme1737_write(const struct dme1737_data *data, u8 reg, u8 val) {
+    struct i2c_client *client = data->client;
+    s32 res = 0;
 
-	if (client) { /* I2C device */
-		res = i2c_smbus_write_byte_data(client, reg, val);
+    if (client) { /* I2C device */
+        res = i2c_smbus_write_byte_data(client, reg, val);
 
-		if (res < 0) {
-			dev_warn(&client->dev, "Write to register "
-				 "0x%02x failed! Please report to the driver "
-				 "maintainer.\n", reg);
-		}
-	} else { /* ISA device */
-		outb(reg, data->addr);
-		outb(val, data->addr + 1);
-	}
+        if (res < 0) {
+            dev_warn(&client->dev, "Write to register "
+                     "0x%02x failed! Please report to the driver "
+                     "maintainer.\n", reg);
+        }
+    } else { /* ISA device */
+        outb(reg, data->addr);
+        outb(val, data->addr + 1);
+    }
 
-	return res;
+    return res;
 }
 
-static struct dme1737_data *dme1737_update_device(struct device *dev)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	int ix;
-	u8 lsb[6];
+static struct dme1737_data *dme1737_update_device(struct device *dev) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    int ix;
+    u8 lsb[6];
 
-	mutex_lock(&data->update_lock);
+    mutex_lock(&data->update_lock);
 
-	/* Enable a Vbat monitoring cycle every 10 mins */
-	if (time_after(jiffies, data->last_vbat + 600 * HZ) || !data->valid) {
-		dme1737_write(data, DME1737_REG_CONFIG, dme1737_read(data,
-						DME1737_REG_CONFIG) | 0x10);
-		data->last_vbat = jiffies;
-	}
+    /* Enable a Vbat monitoring cycle every 10 mins */
+    if (time_after(jiffies, data->last_vbat + 600 * HZ) || !data->valid) {
+        dme1737_write(data, DME1737_REG_CONFIG, dme1737_read(data,
+                      DME1737_REG_CONFIG) | 0x10);
+        data->last_vbat = jiffies;
+    }
 
-	/* Sample register contents every 1 sec */
-	if (time_after(jiffies, data->last_update + HZ) || !data->valid) {
-		if (data->has_features & HAS_VID) {
-			data->vid = dme1737_read(data, DME1737_REG_VID) &
-				0x3f;
-		}
+    /* Sample register contents every 1 sec */
+    if (time_after(jiffies, data->last_update + HZ) || !data->valid) {
+        if (data->has_features & HAS_VID) {
+            data->vid = dme1737_read(data, DME1737_REG_VID) &
+                        0x3f;
+        }
 
-		/* In (voltage) registers */
-		for (ix = 0; ix < ARRAY_SIZE(data->in); ix++) {
-			/*
-			 * Voltage inputs are stored as 16 bit values even
-			 * though they have only 12 bits resolution. This is
-			 * to make it consistent with the temp inputs.
-			 */
-			if (ix == 7 && !(data->has_features & HAS_IN7))
-				continue;
-			data->in[ix] = dme1737_read(data,
-					DME1737_REG_IN(ix)) << 8;
-			data->in_min[ix] = dme1737_read(data,
-					DME1737_REG_IN_MIN(ix));
-			data->in_max[ix] = dme1737_read(data,
-					DME1737_REG_IN_MAX(ix));
-		}
+        /* In (voltage) registers */
+        for (ix = 0; ix < ARRAY_SIZE(data->in); ix++) {
+            /*
+             * Voltage inputs are stored as 16 bit values even
+             * though they have only 12 bits resolution. This is
+             * to make it consistent with the temp inputs.
+             */
+            if (ix == 7 && !(data->has_features & HAS_IN7))
+                continue;
+            data->in[ix] = dme1737_read(data,
+                                        DME1737_REG_IN(ix)) << 8;
+            data->in_min[ix] = dme1737_read(data,
+                                            DME1737_REG_IN_MIN(ix));
+            data->in_max[ix] = dme1737_read(data,
+                                            DME1737_REG_IN_MAX(ix));
+        }
 
-		/* Temp registers */
-		for (ix = 0; ix < ARRAY_SIZE(data->temp); ix++) {
-			/*
-			 * Temp inputs are stored as 16 bit values even
-			 * though they have only 12 bits resolution. This is
-			 * to take advantage of implicit conversions between
-			 * register values (2's complement) and temp values
-			 * (signed decimal).
-			 */
-			data->temp[ix] = dme1737_read(data,
-					DME1737_REG_TEMP(ix)) << 8;
-			data->temp_min[ix] = dme1737_read(data,
-					DME1737_REG_TEMP_MIN(ix));
-			data->temp_max[ix] = dme1737_read(data,
-					DME1737_REG_TEMP_MAX(ix));
-			if (data->has_features & HAS_TEMP_OFFSET) {
-				data->temp_offset[ix] = dme1737_read(data,
-						DME1737_REG_TEMP_OFFSET(ix));
-			}
-		}
+        /* Temp registers */
+        for (ix = 0; ix < ARRAY_SIZE(data->temp); ix++) {
+            /*
+             * Temp inputs are stored as 16 bit values even
+             * though they have only 12 bits resolution. This is
+             * to take advantage of implicit conversions between
+             * register values (2's complement) and temp values
+             * (signed decimal).
+             */
+            data->temp[ix] = dme1737_read(data,
+                                          DME1737_REG_TEMP(ix)) << 8;
+            data->temp_min[ix] = dme1737_read(data,
+                                              DME1737_REG_TEMP_MIN(ix));
+            data->temp_max[ix] = dme1737_read(data,
+                                              DME1737_REG_TEMP_MAX(ix));
+            if (data->has_features & HAS_TEMP_OFFSET) {
+                data->temp_offset[ix] = dme1737_read(data,
+                                                     DME1737_REG_TEMP_OFFSET(ix));
+            }
+        }
 
-		/*
-		 * In and temp LSB registers
-		 * The LSBs are latched when the MSBs are read, so the order in
-		 * which the registers are read (MSB first, then LSB) is
-		 * important!
-		 */
-		for (ix = 0; ix < ARRAY_SIZE(lsb); ix++) {
-			if (ix == 5 && !(data->has_features & HAS_IN7))
-				continue;
-			lsb[ix] = dme1737_read(data,
-					DME1737_REG_IN_TEMP_LSB(ix));
-		}
-		for (ix = 0; ix < ARRAY_SIZE(data->in); ix++) {
-			if (ix == 7 && !(data->has_features & HAS_IN7))
-				continue;
-			data->in[ix] |= (lsb[DME1737_REG_IN_LSB[ix]] <<
-					DME1737_REG_IN_LSB_SHL[ix]) & 0xf0;
-		}
-		for (ix = 0; ix < ARRAY_SIZE(data->temp); ix++) {
-			data->temp[ix] |= (lsb[DME1737_REG_TEMP_LSB[ix]] <<
-					DME1737_REG_TEMP_LSB_SHL[ix]) & 0xf0;
-		}
+        /*
+         * In and temp LSB registers
+         * The LSBs are latched when the MSBs are read, so the order in
+         * which the registers are read (MSB first, then LSB) is
+         * important!
+         */
+        for (ix = 0; ix < ARRAY_SIZE(lsb); ix++) {
+            if (ix == 5 && !(data->has_features & HAS_IN7))
+                continue;
+            lsb[ix] = dme1737_read(data,
+                                   DME1737_REG_IN_TEMP_LSB(ix));
+        }
+        for (ix = 0; ix < ARRAY_SIZE(data->in); ix++) {
+            if (ix == 7 && !(data->has_features & HAS_IN7))
+                continue;
+            data->in[ix] |= (lsb[DME1737_REG_IN_LSB[ix]] <<
+                             DME1737_REG_IN_LSB_SHL[ix]) & 0xf0;
+        }
+        for (ix = 0; ix < ARRAY_SIZE(data->temp); ix++) {
+            data->temp[ix] |= (lsb[DME1737_REG_TEMP_LSB[ix]] <<
+                               DME1737_REG_TEMP_LSB_SHL[ix]) & 0xf0;
+        }
 
-		/* Fan registers */
-		for (ix = 0; ix < ARRAY_SIZE(data->fan); ix++) {
-			/*
-			 * Skip reading registers if optional fans are not
-			 * present
-			 */
-			if (!(data->has_features & HAS_FAN(ix)))
-				continue;
-			data->fan[ix] = dme1737_read(data,
-					DME1737_REG_FAN(ix));
-			data->fan[ix] |= dme1737_read(data,
-					DME1737_REG_FAN(ix) + 1) << 8;
-			data->fan_min[ix] = dme1737_read(data,
-					DME1737_REG_FAN_MIN(ix));
-			data->fan_min[ix] |= dme1737_read(data,
-					DME1737_REG_FAN_MIN(ix) + 1) << 8;
-			data->fan_opt[ix] = dme1737_read(data,
-					DME1737_REG_FAN_OPT(ix));
-			/* fan_max exists only for fan[5-6] */
-			if (ix > 3) {
-				data->fan_max[ix - 4] = dme1737_read(data,
-					DME1737_REG_FAN_MAX(ix));
-			}
-		}
+        /* Fan registers */
+        for (ix = 0; ix < ARRAY_SIZE(data->fan); ix++) {
+            /*
+             * Skip reading registers if optional fans are not
+             * present
+             */
+            if (!(data->has_features & HAS_FAN(ix)))
+                continue;
+            data->fan[ix] = dme1737_read(data,
+                                         DME1737_REG_FAN(ix));
+            data->fan[ix] |= dme1737_read(data,
+                                          DME1737_REG_FAN(ix) + 1) << 8;
+            data->fan_min[ix] = dme1737_read(data,
+                                             DME1737_REG_FAN_MIN(ix));
+            data->fan_min[ix] |= dme1737_read(data,
+                                              DME1737_REG_FAN_MIN(ix) + 1) << 8;
+            data->fan_opt[ix] = dme1737_read(data,
+                                             DME1737_REG_FAN_OPT(ix));
+            /* fan_max exists only for fan[5-6] */
+            if (ix > 3) {
+                data->fan_max[ix - 4] = dme1737_read(data,
+                                                     DME1737_REG_FAN_MAX(ix));
+            }
+        }
 
-		/* PWM registers */
-		for (ix = 0; ix < ARRAY_SIZE(data->pwm); ix++) {
-			/*
-			 * Skip reading registers if optional PWMs are not
-			 * present
-			 */
-			if (!(data->has_features & HAS_PWM(ix)))
-				continue;
-			data->pwm[ix] = dme1737_read(data,
-					DME1737_REG_PWM(ix));
-			data->pwm_freq[ix] = dme1737_read(data,
-					DME1737_REG_PWM_FREQ(ix));
-			/* pwm_config and pwm_min exist only for pwm[1-3] */
-			if (ix < 3) {
-				data->pwm_config[ix] = dme1737_read(data,
-						DME1737_REG_PWM_CONFIG(ix));
-				data->pwm_min[ix] = dme1737_read(data,
-						DME1737_REG_PWM_MIN(ix));
-			}
-		}
-		for (ix = 0; ix < ARRAY_SIZE(data->pwm_rr); ix++) {
-			data->pwm_rr[ix] = dme1737_read(data,
-						DME1737_REG_PWM_RR(ix));
-		}
+        /* PWM registers */
+        for (ix = 0; ix < ARRAY_SIZE(data->pwm); ix++) {
+            /*
+             * Skip reading registers if optional PWMs are not
+             * present
+             */
+            if (!(data->has_features & HAS_PWM(ix)))
+                continue;
+            data->pwm[ix] = dme1737_read(data,
+                                         DME1737_REG_PWM(ix));
+            data->pwm_freq[ix] = dme1737_read(data,
+                                              DME1737_REG_PWM_FREQ(ix));
+            /* pwm_config and pwm_min exist only for pwm[1-3] */
+            if (ix < 3) {
+                data->pwm_config[ix] = dme1737_read(data,
+                                                    DME1737_REG_PWM_CONFIG(ix));
+                data->pwm_min[ix] = dme1737_read(data,
+                                                 DME1737_REG_PWM_MIN(ix));
+            }
+        }
+        for (ix = 0; ix < ARRAY_SIZE(data->pwm_rr); ix++) {
+            data->pwm_rr[ix] = dme1737_read(data,
+                                            DME1737_REG_PWM_RR(ix));
+        }
 
-		/* Thermal zone registers */
-		for (ix = 0; ix < ARRAY_SIZE(data->zone_low); ix++) {
-			/* Skip reading registers if zone3 is not present */
-			if ((ix == 2) && !(data->has_features & HAS_ZONE3))
-				continue;
-			/* sch5127 zone2 registers are special */
-			if ((ix == 1) && (data->type == sch5127)) {
-				data->zone_low[1] = dme1737_read(data,
-						DME1737_REG_ZONE_LOW(2));
-				data->zone_abs[1] = dme1737_read(data,
-						DME1737_REG_ZONE_ABS(2));
-			} else {
-				data->zone_low[ix] = dme1737_read(data,
-						DME1737_REG_ZONE_LOW(ix));
-				data->zone_abs[ix] = dme1737_read(data,
-						DME1737_REG_ZONE_ABS(ix));
-			}
-		}
-		if (data->has_features & HAS_ZONE_HYST) {
-			for (ix = 0; ix < ARRAY_SIZE(data->zone_hyst); ix++) {
-				data->zone_hyst[ix] = dme1737_read(data,
-						DME1737_REG_ZONE_HYST(ix));
-			}
-		}
+        /* Thermal zone registers */
+        for (ix = 0; ix < ARRAY_SIZE(data->zone_low); ix++) {
+            /* Skip reading registers if zone3 is not present */
+            if ((ix == 2) && !(data->has_features & HAS_ZONE3))
+                continue;
+            /* sch5127 zone2 registers are special */
+            if ((ix == 1) && (data->type == sch5127)) {
+                data->zone_low[1] = dme1737_read(data,
+                                                 DME1737_REG_ZONE_LOW(2));
+                data->zone_abs[1] = dme1737_read(data,
+                                                 DME1737_REG_ZONE_ABS(2));
+            } else {
+                data->zone_low[ix] = dme1737_read(data,
+                                                  DME1737_REG_ZONE_LOW(ix));
+                data->zone_abs[ix] = dme1737_read(data,
+                                                  DME1737_REG_ZONE_ABS(ix));
+            }
+        }
+        if (data->has_features & HAS_ZONE_HYST) {
+            for (ix = 0; ix < ARRAY_SIZE(data->zone_hyst); ix++) {
+                data->zone_hyst[ix] = dme1737_read(data,
+                                                   DME1737_REG_ZONE_HYST(ix));
+            }
+        }
 
-		/* Alarm registers */
-		data->alarms = dme1737_read(data,
-						DME1737_REG_ALARM1);
-		/*
-		 * Bit 7 tells us if the other alarm registers are non-zero and
-		 * therefore also need to be read
-		 */
-		if (data->alarms & 0x80) {
-			data->alarms |= dme1737_read(data,
-						DME1737_REG_ALARM2) << 8;
-			data->alarms |= dme1737_read(data,
-						DME1737_REG_ALARM3) << 16;
-		}
+        /* Alarm registers */
+        data->alarms = dme1737_read(data,
+                                    DME1737_REG_ALARM1);
+        /*
+         * Bit 7 tells us if the other alarm registers are non-zero and
+         * therefore also need to be read
+         */
+        if (data->alarms & 0x80) {
+            data->alarms |= dme1737_read(data,
+                                         DME1737_REG_ALARM2) << 8;
+            data->alarms |= dme1737_read(data,
+                                         DME1737_REG_ALARM3) << 16;
+        }
 
-		/*
-		 * The ISA chips require explicit clearing of alarm bits.
-		 * Don't worry, an alarm will come back if the condition
-		 * that causes it still exists
-		 */
-		if (!data->client) {
-			if (data->alarms & 0xff0000)
-				dme1737_write(data, DME1737_REG_ALARM3, 0xff);
-			if (data->alarms & 0xff00)
-				dme1737_write(data, DME1737_REG_ALARM2, 0xff);
-			if (data->alarms & 0xff)
-				dme1737_write(data, DME1737_REG_ALARM1, 0xff);
-		}
+        /*
+         * The ISA chips require explicit clearing of alarm bits.
+         * Don't worry, an alarm will come back if the condition
+         * that causes it still exists
+         */
+        if (!data->client) {
+            if (data->alarms & 0xff0000)
+                dme1737_write(data, DME1737_REG_ALARM3, 0xff);
+            if (data->alarms & 0xff00)
+                dme1737_write(data, DME1737_REG_ALARM2, 0xff);
+            if (data->alarms & 0xff)
+                dme1737_write(data, DME1737_REG_ALARM1, 0xff);
+        }
 
-		data->last_update = jiffies;
-		data->valid = 1;
-	}
+        data->last_update = jiffies;
+        data->valid = 1;
+    }
 
-	mutex_unlock(&data->update_lock);
+    mutex_unlock(&data->update_lock);
 
-	return data;
+    return data;
 }
 
 /* ---------------------------------------------------------------------
@@ -806,69 +783,67 @@ static struct dme1737_data *dme1737_update_device(struct device *dev)
 #define SYS_IN_ALARM	3
 
 static ssize_t show_in(struct device *dev, struct device_attribute *attr,
-		       char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	int res;
+                       char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    int res;
 
-	switch (fn) {
-	case SYS_IN_INPUT:
-		res = IN_FROM_REG(data->in[ix], data->in_nominal[ix], 16);
-		break;
-	case SYS_IN_MIN:
-		res = IN_FROM_REG(data->in_min[ix], data->in_nominal[ix], 8);
-		break;
-	case SYS_IN_MAX:
-		res = IN_FROM_REG(data->in_max[ix], data->in_nominal[ix], 8);
-		break;
-	case SYS_IN_ALARM:
-		res = (data->alarms >> DME1737_BIT_ALARM_IN[ix]) & 0x01;
-		break;
-	default:
-		res = 0;
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    switch (fn) {
+    case SYS_IN_INPUT:
+        res = IN_FROM_REG(data->in[ix], data->in_nominal[ix], 16);
+        break;
+    case SYS_IN_MIN:
+        res = IN_FROM_REG(data->in_min[ix], data->in_nominal[ix], 8);
+        break;
+    case SYS_IN_MAX:
+        res = IN_FROM_REG(data->in_max[ix], data->in_nominal[ix], 8);
+        break;
+    case SYS_IN_ALARM:
+        res = (data->alarms >> DME1737_BIT_ALARM_IN[ix]) & 0x01;
+        break;
+    default:
+        res = 0;
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 
-	return sprintf(buf, "%d\n", res);
+    return sprintf(buf, "%d\n", res);
 }
 
 static ssize_t set_in(struct device *dev, struct device_attribute *attr,
-		      const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	long val;
-	int err;
+                      const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	switch (fn) {
-	case SYS_IN_MIN:
-		data->in_min[ix] = IN_TO_REG(val, data->in_nominal[ix]);
-		dme1737_write(data, DME1737_REG_IN_MIN(ix),
-			      data->in_min[ix]);
-		break;
-	case SYS_IN_MAX:
-		data->in_max[ix] = IN_TO_REG(val, data->in_nominal[ix]);
-		dme1737_write(data, DME1737_REG_IN_MAX(ix),
-			      data->in_max[ix]);
-		break;
-	default:
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
-	mutex_unlock(&data->update_lock);
+    mutex_lock(&data->update_lock);
+    switch (fn) {
+    case SYS_IN_MIN:
+        data->in_min[ix] = IN_TO_REG(val, data->in_nominal[ix]);
+        dme1737_write(data, DME1737_REG_IN_MIN(ix),
+                      data->in_min[ix]);
+        break;
+    case SYS_IN_MAX:
+        data->in_max[ix] = IN_TO_REG(val, data->in_nominal[ix]);
+        dme1737_write(data, DME1737_REG_IN_MAX(ix),
+                      data->in_max[ix]);
+        break;
+    default:
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 /* ---------------------------------------------------------------------
@@ -884,80 +859,78 @@ static ssize_t set_in(struct device *dev, struct device_attribute *attr,
 #define SYS_TEMP_FAULT			5
 
 static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
-			 char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	int res;
+                         char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    int res;
 
-	switch (fn) {
-	case SYS_TEMP_INPUT:
-		res = TEMP_FROM_REG(data->temp[ix], 16);
-		break;
-	case SYS_TEMP_MIN:
-		res = TEMP_FROM_REG(data->temp_min[ix], 8);
-		break;
-	case SYS_TEMP_MAX:
-		res = TEMP_FROM_REG(data->temp_max[ix], 8);
-		break;
-	case SYS_TEMP_OFFSET:
-		res = TEMP_FROM_REG(data->temp_offset[ix], 8);
-		break;
-	case SYS_TEMP_ALARM:
-		res = (data->alarms >> DME1737_BIT_ALARM_TEMP[ix]) & 0x01;
-		break;
-	case SYS_TEMP_FAULT:
-		res = (((u16)data->temp[ix] & 0xff00) == 0x8000);
-		break;
-	default:
-		res = 0;
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    switch (fn) {
+    case SYS_TEMP_INPUT:
+        res = TEMP_FROM_REG(data->temp[ix], 16);
+        break;
+    case SYS_TEMP_MIN:
+        res = TEMP_FROM_REG(data->temp_min[ix], 8);
+        break;
+    case SYS_TEMP_MAX:
+        res = TEMP_FROM_REG(data->temp_max[ix], 8);
+        break;
+    case SYS_TEMP_OFFSET:
+        res = TEMP_FROM_REG(data->temp_offset[ix], 8);
+        break;
+    case SYS_TEMP_ALARM:
+        res = (data->alarms >> DME1737_BIT_ALARM_TEMP[ix]) & 0x01;
+        break;
+    case SYS_TEMP_FAULT:
+        res = (((u16)data->temp[ix] & 0xff00) == 0x8000);
+        break;
+    default:
+        res = 0;
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 
-	return sprintf(buf, "%d\n", res);
+    return sprintf(buf, "%d\n", res);
 }
 
 static ssize_t set_temp(struct device *dev, struct device_attribute *attr,
-			const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	long val;
-	int err;
+                        const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	switch (fn) {
-	case SYS_TEMP_MIN:
-		data->temp_min[ix] = TEMP_TO_REG(val);
-		dme1737_write(data, DME1737_REG_TEMP_MIN(ix),
-			      data->temp_min[ix]);
-		break;
-	case SYS_TEMP_MAX:
-		data->temp_max[ix] = TEMP_TO_REG(val);
-		dme1737_write(data, DME1737_REG_TEMP_MAX(ix),
-			      data->temp_max[ix]);
-		break;
-	case SYS_TEMP_OFFSET:
-		data->temp_offset[ix] = TEMP_TO_REG(val);
-		dme1737_write(data, DME1737_REG_TEMP_OFFSET(ix),
-			      data->temp_offset[ix]);
-		break;
-	default:
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
-	mutex_unlock(&data->update_lock);
+    mutex_lock(&data->update_lock);
+    switch (fn) {
+    case SYS_TEMP_MIN:
+        data->temp_min[ix] = TEMP_TO_REG(val);
+        dme1737_write(data, DME1737_REG_TEMP_MIN(ix),
+                      data->temp_min[ix]);
+        break;
+    case SYS_TEMP_MAX:
+        data->temp_max[ix] = TEMP_TO_REG(val);
+        dme1737_write(data, DME1737_REG_TEMP_MAX(ix),
+                      data->temp_max[ix]);
+        break;
+    case SYS_TEMP_OFFSET:
+        data->temp_offset[ix] = TEMP_TO_REG(val);
+        dme1737_write(data, DME1737_REG_TEMP_OFFSET(ix),
+                      data->temp_offset[ix]);
+        break;
+    default:
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 /* ---------------------------------------------------------------------
@@ -972,106 +945,104 @@ static ssize_t set_temp(struct device *dev, struct device_attribute *attr,
 #define SYS_ZONE_AUTO_POINT3_TEMP	4
 
 static ssize_t show_zone(struct device *dev, struct device_attribute *attr,
-			 char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	int res;
+                         char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    int res;
 
-	switch (fn) {
-	case SYS_ZONE_AUTO_CHANNELS_TEMP:
-		/* check config2 for non-standard temp-to-zone mapping */
-		if ((ix == 1) && (data->config2 & 0x02))
-			res = 4;
-		else
-			res = 1 << ix;
-		break;
-	case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
-		res = TEMP_FROM_REG(data->zone_low[ix], 8) -
-		      TEMP_HYST_FROM_REG(data->zone_hyst[ix == 2], ix);
-		break;
-	case SYS_ZONE_AUTO_POINT1_TEMP:
-		res = TEMP_FROM_REG(data->zone_low[ix], 8);
-		break;
-	case SYS_ZONE_AUTO_POINT2_TEMP:
-		/* pwm_freq holds the temp range bits in the upper nibble */
-		res = TEMP_FROM_REG(data->zone_low[ix], 8) +
-		      TEMP_RANGE_FROM_REG(data->pwm_freq[ix]);
-		break;
-	case SYS_ZONE_AUTO_POINT3_TEMP:
-		res = TEMP_FROM_REG(data->zone_abs[ix], 8);
-		break;
-	default:
-		res = 0;
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    switch (fn) {
+    case SYS_ZONE_AUTO_CHANNELS_TEMP:
+        /* check config2 for non-standard temp-to-zone mapping */
+        if ((ix == 1) && (data->config2 & 0x02))
+            res = 4;
+        else
+            res = 1 << ix;
+        break;
+    case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
+        res = TEMP_FROM_REG(data->zone_low[ix], 8) -
+              TEMP_HYST_FROM_REG(data->zone_hyst[ix == 2], ix);
+        break;
+    case SYS_ZONE_AUTO_POINT1_TEMP:
+        res = TEMP_FROM_REG(data->zone_low[ix], 8);
+        break;
+    case SYS_ZONE_AUTO_POINT2_TEMP:
+        /* pwm_freq holds the temp range bits in the upper nibble */
+        res = TEMP_FROM_REG(data->zone_low[ix], 8) +
+              TEMP_RANGE_FROM_REG(data->pwm_freq[ix]);
+        break;
+    case SYS_ZONE_AUTO_POINT3_TEMP:
+        res = TEMP_FROM_REG(data->zone_abs[ix], 8);
+        break;
+    default:
+        res = 0;
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 
-	return sprintf(buf, "%d\n", res);
+    return sprintf(buf, "%d\n", res);
 }
 
 static ssize_t set_zone(struct device *dev, struct device_attribute *attr,
-			const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	long val;
-	int err;
+                        const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	switch (fn) {
-	case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
-		/* Refresh the cache */
-		data->zone_low[ix] = dme1737_read(data,
-						  DME1737_REG_ZONE_LOW(ix));
-		/* Modify the temp hyst value */
-		data->zone_hyst[ix == 2] = TEMP_HYST_TO_REG(
-					TEMP_FROM_REG(data->zone_low[ix], 8) -
-					val, ix, dme1737_read(data,
-					DME1737_REG_ZONE_HYST(ix == 2)));
-		dme1737_write(data, DME1737_REG_ZONE_HYST(ix == 2),
-			      data->zone_hyst[ix == 2]);
-		break;
-	case SYS_ZONE_AUTO_POINT1_TEMP:
-		data->zone_low[ix] = TEMP_TO_REG(val);
-		dme1737_write(data, DME1737_REG_ZONE_LOW(ix),
-			      data->zone_low[ix]);
-		break;
-	case SYS_ZONE_AUTO_POINT2_TEMP:
-		/* Refresh the cache */
-		data->zone_low[ix] = dme1737_read(data,
-						  DME1737_REG_ZONE_LOW(ix));
-		/*
-		 * Modify the temp range value (which is stored in the upper
-		 * nibble of the pwm_freq register)
-		 */
-		data->pwm_freq[ix] = TEMP_RANGE_TO_REG(val -
-					TEMP_FROM_REG(data->zone_low[ix], 8),
-					dme1737_read(data,
-					DME1737_REG_PWM_FREQ(ix)));
-		dme1737_write(data, DME1737_REG_PWM_FREQ(ix),
-			      data->pwm_freq[ix]);
-		break;
-	case SYS_ZONE_AUTO_POINT3_TEMP:
-		data->zone_abs[ix] = TEMP_TO_REG(val);
-		dme1737_write(data, DME1737_REG_ZONE_ABS(ix),
-			      data->zone_abs[ix]);
-		break;
-	default:
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
-	mutex_unlock(&data->update_lock);
+    mutex_lock(&data->update_lock);
+    switch (fn) {
+    case SYS_ZONE_AUTO_POINT1_TEMP_HYST:
+        /* Refresh the cache */
+        data->zone_low[ix] = dme1737_read(data,
+                                          DME1737_REG_ZONE_LOW(ix));
+        /* Modify the temp hyst value */
+        data->zone_hyst[ix == 2] = TEMP_HYST_TO_REG(
+                                       TEMP_FROM_REG(data->zone_low[ix], 8) -
+                                       val, ix, dme1737_read(data,
+                                               DME1737_REG_ZONE_HYST(ix == 2)));
+        dme1737_write(data, DME1737_REG_ZONE_HYST(ix == 2),
+                      data->zone_hyst[ix == 2]);
+        break;
+    case SYS_ZONE_AUTO_POINT1_TEMP:
+        data->zone_low[ix] = TEMP_TO_REG(val);
+        dme1737_write(data, DME1737_REG_ZONE_LOW(ix),
+                      data->zone_low[ix]);
+        break;
+    case SYS_ZONE_AUTO_POINT2_TEMP:
+        /* Refresh the cache */
+        data->zone_low[ix] = dme1737_read(data,
+                                          DME1737_REG_ZONE_LOW(ix));
+        /*
+         * Modify the temp range value (which is stored in the upper
+         * nibble of the pwm_freq register)
+         */
+        data->pwm_freq[ix] = TEMP_RANGE_TO_REG(val -
+                                               TEMP_FROM_REG(data->zone_low[ix], 8),
+                                               dme1737_read(data,
+                                                       DME1737_REG_PWM_FREQ(ix)));
+        dme1737_write(data, DME1737_REG_PWM_FREQ(ix),
+                      data->pwm_freq[ix]);
+        break;
+    case SYS_ZONE_AUTO_POINT3_TEMP:
+        data->zone_abs[ix] = TEMP_TO_REG(val);
+        dme1737_write(data, DME1737_REG_ZONE_ABS(ix),
+                      data->zone_abs[ix]);
+        break;
+    default:
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 /* ---------------------------------------------------------------------
@@ -1086,105 +1057,103 @@ static ssize_t set_zone(struct device *dev, struct device_attribute *attr,
 #define SYS_FAN_TYPE	4
 
 static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	int res;
+                        char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    int res;
 
-	switch (fn) {
-	case SYS_FAN_INPUT:
-		res = FAN_FROM_REG(data->fan[ix],
-				   ix < 4 ? 0 :
-				   FAN_TPC_FROM_REG(data->fan_opt[ix]));
-		break;
-	case SYS_FAN_MIN:
-		res = FAN_FROM_REG(data->fan_min[ix],
-				   ix < 4 ? 0 :
-				   FAN_TPC_FROM_REG(data->fan_opt[ix]));
-		break;
-	case SYS_FAN_MAX:
-		/* only valid for fan[5-6] */
-		res = FAN_MAX_FROM_REG(data->fan_max[ix - 4]);
-		break;
-	case SYS_FAN_ALARM:
-		res = (data->alarms >> DME1737_BIT_ALARM_FAN[ix]) & 0x01;
-		break;
-	case SYS_FAN_TYPE:
-		/* only valid for fan[1-4] */
-		res = FAN_TYPE_FROM_REG(data->fan_opt[ix]);
-		break;
-	default:
-		res = 0;
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    switch (fn) {
+    case SYS_FAN_INPUT:
+        res = FAN_FROM_REG(data->fan[ix],
+                           ix < 4 ? 0 :
+                           FAN_TPC_FROM_REG(data->fan_opt[ix]));
+        break;
+    case SYS_FAN_MIN:
+        res = FAN_FROM_REG(data->fan_min[ix],
+                           ix < 4 ? 0 :
+                           FAN_TPC_FROM_REG(data->fan_opt[ix]));
+        break;
+    case SYS_FAN_MAX:
+        /* only valid for fan[5-6] */
+        res = FAN_MAX_FROM_REG(data->fan_max[ix - 4]);
+        break;
+    case SYS_FAN_ALARM:
+        res = (data->alarms >> DME1737_BIT_ALARM_FAN[ix]) & 0x01;
+        break;
+    case SYS_FAN_TYPE:
+        /* only valid for fan[1-4] */
+        res = FAN_TYPE_FROM_REG(data->fan_opt[ix]);
+        break;
+    default:
+        res = 0;
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 
-	return sprintf(buf, "%d\n", res);
+    return sprintf(buf, "%d\n", res);
 }
 
 static ssize_t set_fan(struct device *dev, struct device_attribute *attr,
-		       const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	long val;
-	int err;
+                       const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	switch (fn) {
-	case SYS_FAN_MIN:
-		if (ix < 4) {
-			data->fan_min[ix] = FAN_TO_REG(val, 0);
-		} else {
-			/* Refresh the cache */
-			data->fan_opt[ix] = dme1737_read(data,
-						DME1737_REG_FAN_OPT(ix));
-			/* Modify the fan min value */
-			data->fan_min[ix] = FAN_TO_REG(val,
-					FAN_TPC_FROM_REG(data->fan_opt[ix]));
-		}
-		dme1737_write(data, DME1737_REG_FAN_MIN(ix),
-			      data->fan_min[ix] & 0xff);
-		dme1737_write(data, DME1737_REG_FAN_MIN(ix) + 1,
-			      data->fan_min[ix] >> 8);
-		break;
-	case SYS_FAN_MAX:
-		/* Only valid for fan[5-6] */
-		data->fan_max[ix - 4] = FAN_MAX_TO_REG(val);
-		dme1737_write(data, DME1737_REG_FAN_MAX(ix),
-			      data->fan_max[ix - 4]);
-		break;
-	case SYS_FAN_TYPE:
-		/* Only valid for fan[1-4] */
-		if (!(val == 1 || val == 2 || val == 4)) {
-			count = -EINVAL;
-			dev_warn(dev, "Fan type value %ld not "
-				 "supported. Choose one of 1, 2, or 4.\n",
-				 val);
-			goto exit;
-		}
-		data->fan_opt[ix] = FAN_TYPE_TO_REG(val, dme1737_read(data,
-					DME1737_REG_FAN_OPT(ix)));
-		dme1737_write(data, DME1737_REG_FAN_OPT(ix),
-			      data->fan_opt[ix]);
-		break;
-	default:
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    mutex_lock(&data->update_lock);
+    switch (fn) {
+    case SYS_FAN_MIN:
+        if (ix < 4) {
+            data->fan_min[ix] = FAN_TO_REG(val, 0);
+        } else {
+            /* Refresh the cache */
+            data->fan_opt[ix] = dme1737_read(data,
+                                             DME1737_REG_FAN_OPT(ix));
+            /* Modify the fan min value */
+            data->fan_min[ix] = FAN_TO_REG(val,
+                                           FAN_TPC_FROM_REG(data->fan_opt[ix]));
+        }
+        dme1737_write(data, DME1737_REG_FAN_MIN(ix),
+                      data->fan_min[ix] & 0xff);
+        dme1737_write(data, DME1737_REG_FAN_MIN(ix) + 1,
+                      data->fan_min[ix] >> 8);
+        break;
+    case SYS_FAN_MAX:
+        /* Only valid for fan[5-6] */
+        data->fan_max[ix - 4] = FAN_MAX_TO_REG(val);
+        dme1737_write(data, DME1737_REG_FAN_MAX(ix),
+                      data->fan_max[ix - 4]);
+        break;
+    case SYS_FAN_TYPE:
+        /* Only valid for fan[1-4] */
+        if (!(val == 1 || val == 2 || val == 4)) {
+            count = -EINVAL;
+            dev_warn(dev, "Fan type value %ld not "
+                     "supported. Choose one of 1, 2, or 4.\n",
+                     val);
+            goto exit;
+        }
+        data->fan_opt[ix] = FAN_TYPE_TO_REG(val, dme1737_read(data,
+                                            DME1737_REG_FAN_OPT(ix)));
+        dme1737_write(data, DME1737_REG_FAN_OPT(ix),
+                      data->fan_opt[ix]);
+        break;
+    default:
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 exit:
-	mutex_unlock(&data->update_lock);
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 /* ---------------------------------------------------------------------
@@ -1202,265 +1171,263 @@ exit:
 #define SYS_PWM_AUTO_POINT2_PWM		7
 
 static ssize_t show_pwm(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	int res;
+                        char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    int res;
 
-	switch (fn) {
-	case SYS_PWM:
-		if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 0)
-			res = 255;
-		else
-			res = data->pwm[ix];
-		break;
-	case SYS_PWM_FREQ:
-		res = PWM_FREQ_FROM_REG(data->pwm_freq[ix]);
-		break;
-	case SYS_PWM_ENABLE:
-		if (ix >= 3)
-			res = 1; /* pwm[5-6] hard-wired to manual mode */
-		else
-			res = PWM_EN_FROM_REG(data->pwm_config[ix]);
-		break;
-	case SYS_PWM_RAMP_RATE:
-		/* Only valid for pwm[1-3] */
-		res = PWM_RR_FROM_REG(data->pwm_rr[ix > 0], ix);
-		break;
-	case SYS_PWM_AUTO_CHANNELS_ZONE:
-		/* Only valid for pwm[1-3] */
-		if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2)
-			res = PWM_ACZ_FROM_REG(data->pwm_config[ix]);
-		else
-			res = data->pwm_acz[ix];
-		break;
-	case SYS_PWM_AUTO_PWM_MIN:
-		/* Only valid for pwm[1-3] */
-		if (PWM_OFF_FROM_REG(data->pwm_rr[0], ix))
-			res = data->pwm_min[ix];
-		else
-			res = 0;
-		break;
-	case SYS_PWM_AUTO_POINT1_PWM:
-		/* Only valid for pwm[1-3] */
-		res = data->pwm_min[ix];
-		break;
-	case SYS_PWM_AUTO_POINT2_PWM:
-		/* Only valid for pwm[1-3] */
-		res = 255; /* hard-wired */
-		break;
-	default:
-		res = 0;
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    switch (fn) {
+    case SYS_PWM:
+        if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 0)
+            res = 255;
+        else
+            res = data->pwm[ix];
+        break;
+    case SYS_PWM_FREQ:
+        res = PWM_FREQ_FROM_REG(data->pwm_freq[ix]);
+        break;
+    case SYS_PWM_ENABLE:
+        if (ix >= 3)
+            res = 1; /* pwm[5-6] hard-wired to manual mode */
+        else
+            res = PWM_EN_FROM_REG(data->pwm_config[ix]);
+        break;
+    case SYS_PWM_RAMP_RATE:
+        /* Only valid for pwm[1-3] */
+        res = PWM_RR_FROM_REG(data->pwm_rr[ix > 0], ix);
+        break;
+    case SYS_PWM_AUTO_CHANNELS_ZONE:
+        /* Only valid for pwm[1-3] */
+        if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2)
+            res = PWM_ACZ_FROM_REG(data->pwm_config[ix]);
+        else
+            res = data->pwm_acz[ix];
+        break;
+    case SYS_PWM_AUTO_PWM_MIN:
+        /* Only valid for pwm[1-3] */
+        if (PWM_OFF_FROM_REG(data->pwm_rr[0], ix))
+            res = data->pwm_min[ix];
+        else
+            res = 0;
+        break;
+    case SYS_PWM_AUTO_POINT1_PWM:
+        /* Only valid for pwm[1-3] */
+        res = data->pwm_min[ix];
+        break;
+    case SYS_PWM_AUTO_POINT2_PWM:
+        /* Only valid for pwm[1-3] */
+        res = 255; /* hard-wired */
+        break;
+    default:
+        res = 0;
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 
-	return sprintf(buf, "%d\n", res);
+    return sprintf(buf, "%d\n", res);
 }
 
 static struct attribute *dme1737_pwm_chmod_attr[];
 static void dme1737_chmod_file(struct device*, struct attribute*, umode_t);
 
 static ssize_t set_pwm(struct device *dev, struct device_attribute *attr,
-		       const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct sensor_device_attribute_2
-		*sensor_attr_2 = to_sensor_dev_attr_2(attr);
-	int ix = sensor_attr_2->index;
-	int fn = sensor_attr_2->nr;
-	long val;
-	int err;
+                       const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct sensor_device_attribute_2
+    *sensor_attr_2 = to_sensor_dev_attr_2(attr);
+    int ix = sensor_attr_2->index;
+    int fn = sensor_attr_2->nr;
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	mutex_lock(&data->update_lock);
-	switch (fn) {
-	case SYS_PWM:
-		data->pwm[ix] = SENSORS_LIMIT(val, 0, 255);
-		dme1737_write(data, DME1737_REG_PWM(ix), data->pwm[ix]);
-		break;
-	case SYS_PWM_FREQ:
-		data->pwm_freq[ix] = PWM_FREQ_TO_REG(val, dme1737_read(data,
-						DME1737_REG_PWM_FREQ(ix)));
-		dme1737_write(data, DME1737_REG_PWM_FREQ(ix),
-			      data->pwm_freq[ix]);
-		break;
-	case SYS_PWM_ENABLE:
-		/* Only valid for pwm[1-3] */
-		if (val < 0 || val > 2) {
-			count = -EINVAL;
-			dev_warn(dev, "PWM enable %ld not "
-				 "supported. Choose one of 0, 1, or 2.\n",
-				 val);
-			goto exit;
-		}
-		/* Refresh the cache */
-		data->pwm_config[ix] = dme1737_read(data,
-						DME1737_REG_PWM_CONFIG(ix));
-		if (val == PWM_EN_FROM_REG(data->pwm_config[ix])) {
-			/* Bail out if no change */
-			goto exit;
-		}
-		/* Do some housekeeping if we are currently in auto mode */
-		if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
-			/* Save the current zone channel assignment */
-			data->pwm_acz[ix] = PWM_ACZ_FROM_REG(
-							data->pwm_config[ix]);
-			/* Save the current ramp rate state and disable it */
-			data->pwm_rr[ix > 0] = dme1737_read(data,
-						DME1737_REG_PWM_RR(ix > 0));
-			data->pwm_rr_en &= ~(1 << ix);
-			if (PWM_RR_EN_FROM_REG(data->pwm_rr[ix > 0], ix)) {
-				data->pwm_rr_en |= (1 << ix);
-				data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(0, ix,
-							data->pwm_rr[ix > 0]);
-				dme1737_write(data,
-					      DME1737_REG_PWM_RR(ix > 0),
-					      data->pwm_rr[ix > 0]);
-			}
-		}
-		/* Set the new PWM mode */
-		switch (val) {
-		case 0:
-			/* Change permissions of pwm[ix] to read-only */
-			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
-					   S_IRUGO);
-			/* Turn fan fully on */
-			data->pwm_config[ix] = PWM_EN_TO_REG(0,
-							data->pwm_config[ix]);
-			dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
-				      data->pwm_config[ix]);
-			break;
-		case 1:
-			/* Turn on manual mode */
-			data->pwm_config[ix] = PWM_EN_TO_REG(1,
-							data->pwm_config[ix]);
-			dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
-				      data->pwm_config[ix]);
-			/* Change permissions of pwm[ix] to read-writeable */
-			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
-					   S_IRUGO | S_IWUSR);
-			break;
-		case 2:
-			/* Change permissions of pwm[ix] to read-only */
-			dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
-					   S_IRUGO);
-			/*
-			 * Turn on auto mode using the saved zone channel
-			 * assignment
-			 */
-			data->pwm_config[ix] = PWM_ACZ_TO_REG(
-							data->pwm_acz[ix],
-							data->pwm_config[ix]);
-			dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
-				      data->pwm_config[ix]);
-			/* Enable PWM ramp rate if previously enabled */
-			if (data->pwm_rr_en & (1 << ix)) {
-				data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(1, ix,
-						dme1737_read(data,
-						DME1737_REG_PWM_RR(ix > 0)));
-				dme1737_write(data,
-					      DME1737_REG_PWM_RR(ix > 0),
-					      data->pwm_rr[ix > 0]);
-			}
-			break;
-		}
-		break;
-	case SYS_PWM_RAMP_RATE:
-		/* Only valid for pwm[1-3] */
-		/* Refresh the cache */
-		data->pwm_config[ix] = dme1737_read(data,
-						DME1737_REG_PWM_CONFIG(ix));
-		data->pwm_rr[ix > 0] = dme1737_read(data,
-						DME1737_REG_PWM_RR(ix > 0));
-		/* Set the ramp rate value */
-		if (val > 0) {
-			data->pwm_rr[ix > 0] = PWM_RR_TO_REG(val, ix,
-							data->pwm_rr[ix > 0]);
-		}
-		/*
-		 * Enable/disable the feature only if the associated PWM
-		 * output is in automatic mode.
-		 */
-		if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
-			data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(val > 0, ix,
-							data->pwm_rr[ix > 0]);
-		}
-		dme1737_write(data, DME1737_REG_PWM_RR(ix > 0),
-			      data->pwm_rr[ix > 0]);
-		break;
-	case SYS_PWM_AUTO_CHANNELS_ZONE:
-		/* Only valid for pwm[1-3] */
-		if (!(val == 1 || val == 2 || val == 4 ||
-		      val == 6 || val == 7)) {
-			count = -EINVAL;
-			dev_warn(dev, "PWM auto channels zone %ld "
-				 "not supported. Choose one of 1, 2, 4, 6, "
-				 "or 7.\n", val);
-			goto exit;
-		}
-		/* Refresh the cache */
-		data->pwm_config[ix] = dme1737_read(data,
-						DME1737_REG_PWM_CONFIG(ix));
-		if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
-			/*
-			 * PWM is already in auto mode so update the temp
-			 * channel assignment
-			 */
-			data->pwm_config[ix] = PWM_ACZ_TO_REG(val,
-						data->pwm_config[ix]);
-			dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
-				      data->pwm_config[ix]);
-		} else {
-			/*
-			 * PWM is not in auto mode so we save the temp
-			 * channel assignment for later use
-			 */
-			data->pwm_acz[ix] = val;
-		}
-		break;
-	case SYS_PWM_AUTO_PWM_MIN:
-		/* Only valid for pwm[1-3] */
-		/* Refresh the cache */
-		data->pwm_min[ix] = dme1737_read(data,
-						DME1737_REG_PWM_MIN(ix));
-		/*
-		 * There are only 2 values supported for the auto_pwm_min
-		 * value: 0 or auto_point1_pwm. So if the temperature drops
-		 * below the auto_point1_temp_hyst value, the fan either turns
-		 * off or runs at auto_point1_pwm duty-cycle.
-		 */
-		if (val > ((data->pwm_min[ix] + 1) / 2)) {
-			data->pwm_rr[0] = PWM_OFF_TO_REG(1, ix,
-						dme1737_read(data,
-						DME1737_REG_PWM_RR(0)));
-		} else {
-			data->pwm_rr[0] = PWM_OFF_TO_REG(0, ix,
-						dme1737_read(data,
-						DME1737_REG_PWM_RR(0)));
-		}
-		dme1737_write(data, DME1737_REG_PWM_RR(0),
-			      data->pwm_rr[0]);
-		break;
-	case SYS_PWM_AUTO_POINT1_PWM:
-		/* Only valid for pwm[1-3] */
-		data->pwm_min[ix] = SENSORS_LIMIT(val, 0, 255);
-		dme1737_write(data, DME1737_REG_PWM_MIN(ix),
-			      data->pwm_min[ix]);
-		break;
-	default:
-		dev_dbg(dev, "Unknown function %d.\n", fn);
-	}
+    mutex_lock(&data->update_lock);
+    switch (fn) {
+    case SYS_PWM:
+        data->pwm[ix] = SENSORS_LIMIT(val, 0, 255);
+        dme1737_write(data, DME1737_REG_PWM(ix), data->pwm[ix]);
+        break;
+    case SYS_PWM_FREQ:
+        data->pwm_freq[ix] = PWM_FREQ_TO_REG(val, dme1737_read(data,
+                                             DME1737_REG_PWM_FREQ(ix)));
+        dme1737_write(data, DME1737_REG_PWM_FREQ(ix),
+                      data->pwm_freq[ix]);
+        break;
+    case SYS_PWM_ENABLE:
+        /* Only valid for pwm[1-3] */
+        if (val < 0 || val > 2) {
+            count = -EINVAL;
+            dev_warn(dev, "PWM enable %ld not "
+                     "supported. Choose one of 0, 1, or 2.\n",
+                     val);
+            goto exit;
+        }
+        /* Refresh the cache */
+        data->pwm_config[ix] = dme1737_read(data,
+                                            DME1737_REG_PWM_CONFIG(ix));
+        if (val == PWM_EN_FROM_REG(data->pwm_config[ix])) {
+            /* Bail out if no change */
+            goto exit;
+        }
+        /* Do some housekeeping if we are currently in auto mode */
+        if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
+            /* Save the current zone channel assignment */
+            data->pwm_acz[ix] = PWM_ACZ_FROM_REG(
+                                    data->pwm_config[ix]);
+            /* Save the current ramp rate state and disable it */
+            data->pwm_rr[ix > 0] = dme1737_read(data,
+                                                DME1737_REG_PWM_RR(ix > 0));
+            data->pwm_rr_en &= ~(1 << ix);
+            if (PWM_RR_EN_FROM_REG(data->pwm_rr[ix > 0], ix)) {
+                data->pwm_rr_en |= (1 << ix);
+                data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(0, ix,
+                                                        data->pwm_rr[ix > 0]);
+                dme1737_write(data,
+                              DME1737_REG_PWM_RR(ix > 0),
+                              data->pwm_rr[ix > 0]);
+            }
+        }
+        /* Set the new PWM mode */
+        switch (val) {
+        case 0:
+            /* Change permissions of pwm[ix] to read-only */
+            dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
+                               S_IRUGO);
+            /* Turn fan fully on */
+            data->pwm_config[ix] = PWM_EN_TO_REG(0,
+                                                 data->pwm_config[ix]);
+            dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
+                          data->pwm_config[ix]);
+            break;
+        case 1:
+            /* Turn on manual mode */
+            data->pwm_config[ix] = PWM_EN_TO_REG(1,
+                                                 data->pwm_config[ix]);
+            dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
+                          data->pwm_config[ix]);
+            /* Change permissions of pwm[ix] to read-writeable */
+            dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
+                               S_IRUGO | S_IWUSR);
+            break;
+        case 2:
+            /* Change permissions of pwm[ix] to read-only */
+            dme1737_chmod_file(dev, dme1737_pwm_chmod_attr[ix],
+                               S_IRUGO);
+            /*
+             * Turn on auto mode using the saved zone channel
+             * assignment
+             */
+            data->pwm_config[ix] = PWM_ACZ_TO_REG(
+                                       data->pwm_acz[ix],
+                                       data->pwm_config[ix]);
+            dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
+                          data->pwm_config[ix]);
+            /* Enable PWM ramp rate if previously enabled */
+            if (data->pwm_rr_en & (1 << ix)) {
+                data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(1, ix,
+                                                        dme1737_read(data,
+                                                                DME1737_REG_PWM_RR(ix > 0)));
+                dme1737_write(data,
+                              DME1737_REG_PWM_RR(ix > 0),
+                              data->pwm_rr[ix > 0]);
+            }
+            break;
+        }
+        break;
+    case SYS_PWM_RAMP_RATE:
+        /* Only valid for pwm[1-3] */
+        /* Refresh the cache */
+        data->pwm_config[ix] = dme1737_read(data,
+                                            DME1737_REG_PWM_CONFIG(ix));
+        data->pwm_rr[ix > 0] = dme1737_read(data,
+                                            DME1737_REG_PWM_RR(ix > 0));
+        /* Set the ramp rate value */
+        if (val > 0) {
+            data->pwm_rr[ix > 0] = PWM_RR_TO_REG(val, ix,
+                                                 data->pwm_rr[ix > 0]);
+        }
+        /*
+         * Enable/disable the feature only if the associated PWM
+         * output is in automatic mode.
+         */
+        if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
+            data->pwm_rr[ix > 0] = PWM_RR_EN_TO_REG(val > 0, ix,
+                                                    data->pwm_rr[ix > 0]);
+        }
+        dme1737_write(data, DME1737_REG_PWM_RR(ix > 0),
+                      data->pwm_rr[ix > 0]);
+        break;
+    case SYS_PWM_AUTO_CHANNELS_ZONE:
+        /* Only valid for pwm[1-3] */
+        if (!(val == 1 || val == 2 || val == 4 ||
+                val == 6 || val == 7)) {
+            count = -EINVAL;
+            dev_warn(dev, "PWM auto channels zone %ld "
+                     "not supported. Choose one of 1, 2, 4, 6, "
+                     "or 7.\n", val);
+            goto exit;
+        }
+        /* Refresh the cache */
+        data->pwm_config[ix] = dme1737_read(data,
+                                            DME1737_REG_PWM_CONFIG(ix));
+        if (PWM_EN_FROM_REG(data->pwm_config[ix]) == 2) {
+            /*
+             * PWM is already in auto mode so update the temp
+             * channel assignment
+             */
+            data->pwm_config[ix] = PWM_ACZ_TO_REG(val,
+                                                  data->pwm_config[ix]);
+            dme1737_write(data, DME1737_REG_PWM_CONFIG(ix),
+                          data->pwm_config[ix]);
+        } else {
+            /*
+             * PWM is not in auto mode so we save the temp
+             * channel assignment for later use
+             */
+            data->pwm_acz[ix] = val;
+        }
+        break;
+    case SYS_PWM_AUTO_PWM_MIN:
+        /* Only valid for pwm[1-3] */
+        /* Refresh the cache */
+        data->pwm_min[ix] = dme1737_read(data,
+                                         DME1737_REG_PWM_MIN(ix));
+        /*
+         * There are only 2 values supported for the auto_pwm_min
+         * value: 0 or auto_point1_pwm. So if the temperature drops
+         * below the auto_point1_temp_hyst value, the fan either turns
+         * off or runs at auto_point1_pwm duty-cycle.
+         */
+        if (val > ((data->pwm_min[ix] + 1) / 2)) {
+            data->pwm_rr[0] = PWM_OFF_TO_REG(1, ix,
+                                             dme1737_read(data,
+                                                     DME1737_REG_PWM_RR(0)));
+        } else {
+            data->pwm_rr[0] = PWM_OFF_TO_REG(0, ix,
+                                             dme1737_read(data,
+                                                     DME1737_REG_PWM_RR(0)));
+        }
+        dme1737_write(data, DME1737_REG_PWM_RR(0),
+                      data->pwm_rr[0]);
+        break;
+    case SYS_PWM_AUTO_POINT1_PWM:
+        /* Only valid for pwm[1-3] */
+        data->pwm_min[ix] = SENSORS_LIMIT(val, 0, 255);
+        dme1737_write(data, DME1737_REG_PWM_MIN(ix),
+                      data->pwm_min[ix]);
+        break;
+    default:
+        dev_dbg(dev, "Unknown function %d.\n", fn);
+    }
 exit:
-	mutex_unlock(&data->update_lock);
+    mutex_unlock(&data->update_lock);
 
-	return count;
+    return count;
 }
 
 /* ---------------------------------------------------------------------
@@ -1468,43 +1435,39 @@ exit:
  * --------------------------------------------------------------------- */
 
 static ssize_t show_vrm(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct i2c_client *client = to_i2c_client(dev);
-	struct dme1737_data *data = i2c_get_clientdata(client);
+                        char *buf) {
+    struct i2c_client *client = to_i2c_client(dev);
+    struct dme1737_data *data = i2c_get_clientdata(client);
 
-	return sprintf(buf, "%d\n", data->vrm);
+    return sprintf(buf, "%d\n", data->vrm);
 }
 
 static ssize_t set_vrm(struct device *dev, struct device_attribute *attr,
-		       const char *buf, size_t count)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	long val;
-	int err;
+                       const char *buf, size_t count) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    long val;
+    int err;
 
-	err = kstrtol(buf, 10, &val);
-	if (err)
-		return err;
+    err = kstrtol(buf, 10, &val);
+    if (err)
+        return err;
 
-	data->vrm = val;
-	return count;
+    data->vrm = val;
+    return count;
 }
 
 static ssize_t show_vid(struct device *dev, struct device_attribute *attr,
-			char *buf)
-{
-	struct dme1737_data *data = dme1737_update_device(dev);
+                        char *buf) {
+    struct dme1737_data *data = dme1737_update_device(dev);
 
-	return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
+    return sprintf(buf, "%d\n", vid_from_reg(data->vid, data->vrm));
 }
 
 static ssize_t show_name(struct device *dev, struct device_attribute *attr,
-			 char *buf)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
+                         char *buf) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
 
-	return sprintf(buf, "%s\n", data->name);
+    return sprintf(buf, "%s\n", data->name);
 }
 
 /* ---------------------------------------------------------------------
@@ -1652,65 +1615,65 @@ static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);   /* for ISA devices */
  * on the fly when required
  */
 static struct attribute *dme1737_attr[] = {
-	/* Voltages */
-	&sensor_dev_attr_in0_input.dev_attr.attr,
-	&sensor_dev_attr_in0_min.dev_attr.attr,
-	&sensor_dev_attr_in0_max.dev_attr.attr,
-	&sensor_dev_attr_in0_alarm.dev_attr.attr,
-	&sensor_dev_attr_in1_input.dev_attr.attr,
-	&sensor_dev_attr_in1_min.dev_attr.attr,
-	&sensor_dev_attr_in1_max.dev_attr.attr,
-	&sensor_dev_attr_in1_alarm.dev_attr.attr,
-	&sensor_dev_attr_in2_input.dev_attr.attr,
-	&sensor_dev_attr_in2_min.dev_attr.attr,
-	&sensor_dev_attr_in2_max.dev_attr.attr,
-	&sensor_dev_attr_in2_alarm.dev_attr.attr,
-	&sensor_dev_attr_in3_input.dev_attr.attr,
-	&sensor_dev_attr_in3_min.dev_attr.attr,
-	&sensor_dev_attr_in3_max.dev_attr.attr,
-	&sensor_dev_attr_in3_alarm.dev_attr.attr,
-	&sensor_dev_attr_in4_input.dev_attr.attr,
-	&sensor_dev_attr_in4_min.dev_attr.attr,
-	&sensor_dev_attr_in4_max.dev_attr.attr,
-	&sensor_dev_attr_in4_alarm.dev_attr.attr,
-	&sensor_dev_attr_in5_input.dev_attr.attr,
-	&sensor_dev_attr_in5_min.dev_attr.attr,
-	&sensor_dev_attr_in5_max.dev_attr.attr,
-	&sensor_dev_attr_in5_alarm.dev_attr.attr,
-	&sensor_dev_attr_in6_input.dev_attr.attr,
-	&sensor_dev_attr_in6_min.dev_attr.attr,
-	&sensor_dev_attr_in6_max.dev_attr.attr,
-	&sensor_dev_attr_in6_alarm.dev_attr.attr,
-	/* Temperatures */
-	&sensor_dev_attr_temp1_input.dev_attr.attr,
-	&sensor_dev_attr_temp1_min.dev_attr.attr,
-	&sensor_dev_attr_temp1_max.dev_attr.attr,
-	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp1_fault.dev_attr.attr,
-	&sensor_dev_attr_temp2_input.dev_attr.attr,
-	&sensor_dev_attr_temp2_min.dev_attr.attr,
-	&sensor_dev_attr_temp2_max.dev_attr.attr,
-	&sensor_dev_attr_temp2_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp2_fault.dev_attr.attr,
-	&sensor_dev_attr_temp3_input.dev_attr.attr,
-	&sensor_dev_attr_temp3_min.dev_attr.attr,
-	&sensor_dev_attr_temp3_max.dev_attr.attr,
-	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
-	&sensor_dev_attr_temp3_fault.dev_attr.attr,
-	/* Zones */
-	&sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
-	&sensor_dev_attr_zone1_auto_channels_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_channels_temp.dev_attr.attr,
-	NULL
+    /* Voltages */
+    &sensor_dev_attr_in0_input.dev_attr.attr,
+    &sensor_dev_attr_in0_min.dev_attr.attr,
+    &sensor_dev_attr_in0_max.dev_attr.attr,
+    &sensor_dev_attr_in0_alarm.dev_attr.attr,
+    &sensor_dev_attr_in1_input.dev_attr.attr,
+    &sensor_dev_attr_in1_min.dev_attr.attr,
+    &sensor_dev_attr_in1_max.dev_attr.attr,
+    &sensor_dev_attr_in1_alarm.dev_attr.attr,
+    &sensor_dev_attr_in2_input.dev_attr.attr,
+    &sensor_dev_attr_in2_min.dev_attr.attr,
+    &sensor_dev_attr_in2_max.dev_attr.attr,
+    &sensor_dev_attr_in2_alarm.dev_attr.attr,
+    &sensor_dev_attr_in3_input.dev_attr.attr,
+    &sensor_dev_attr_in3_min.dev_attr.attr,
+    &sensor_dev_attr_in3_max.dev_attr.attr,
+    &sensor_dev_attr_in3_alarm.dev_attr.attr,
+    &sensor_dev_attr_in4_input.dev_attr.attr,
+    &sensor_dev_attr_in4_min.dev_attr.attr,
+    &sensor_dev_attr_in4_max.dev_attr.attr,
+    &sensor_dev_attr_in4_alarm.dev_attr.attr,
+    &sensor_dev_attr_in5_input.dev_attr.attr,
+    &sensor_dev_attr_in5_min.dev_attr.attr,
+    &sensor_dev_attr_in5_max.dev_attr.attr,
+    &sensor_dev_attr_in5_alarm.dev_attr.attr,
+    &sensor_dev_attr_in6_input.dev_attr.attr,
+    &sensor_dev_attr_in6_min.dev_attr.attr,
+    &sensor_dev_attr_in6_max.dev_attr.attr,
+    &sensor_dev_attr_in6_alarm.dev_attr.attr,
+    /* Temperatures */
+    &sensor_dev_attr_temp1_input.dev_attr.attr,
+    &sensor_dev_attr_temp1_min.dev_attr.attr,
+    &sensor_dev_attr_temp1_max.dev_attr.attr,
+    &sensor_dev_attr_temp1_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp1_fault.dev_attr.attr,
+    &sensor_dev_attr_temp2_input.dev_attr.attr,
+    &sensor_dev_attr_temp2_min.dev_attr.attr,
+    &sensor_dev_attr_temp2_max.dev_attr.attr,
+    &sensor_dev_attr_temp2_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp2_fault.dev_attr.attr,
+    &sensor_dev_attr_temp3_input.dev_attr.attr,
+    &sensor_dev_attr_temp3_min.dev_attr.attr,
+    &sensor_dev_attr_temp3_max.dev_attr.attr,
+    &sensor_dev_attr_temp3_alarm.dev_attr.attr,
+    &sensor_dev_attr_temp3_fault.dev_attr.attr,
+    /* Zones */
+    &sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
+    &sensor_dev_attr_zone1_auto_channels_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_channels_temp.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_group = {
-	.attrs = dme1737_attr,
+    .attrs = dme1737_attr,
 };
 
 /*
@@ -1719,14 +1682,14 @@ static const struct attribute_group dme1737_group = {
  * DME1737, SCH311x
  */
 static struct attribute *dme1737_temp_offset_attr[] = {
-	&sensor_dev_attr_temp1_offset.dev_attr.attr,
-	&sensor_dev_attr_temp2_offset.dev_attr.attr,
-	&sensor_dev_attr_temp3_offset.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_temp1_offset.dev_attr.attr,
+    &sensor_dev_attr_temp2_offset.dev_attr.attr,
+    &sensor_dev_attr_temp3_offset.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_temp_offset_group = {
-	.attrs = dme1737_temp_offset_attr,
+    .attrs = dme1737_temp_offset_attr,
 };
 
 /*
@@ -1735,13 +1698,13 @@ static const struct attribute_group dme1737_temp_offset_group = {
  * DME1737
  */
 static struct attribute *dme1737_vid_attr[] = {
-	&dev_attr_vrm.attr,
-	&dev_attr_cpu0_vid.attr,
-	NULL
+    &dev_attr_vrm.attr,
+    &dev_attr_cpu0_vid.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_vid_group = {
-	.attrs = dme1737_vid_attr,
+    .attrs = dme1737_vid_attr,
 };
 
 /*
@@ -1750,15 +1713,15 @@ static const struct attribute_group dme1737_vid_group = {
  * DME1737, SCH311x, SCH5027
  */
 static struct attribute *dme1737_zone3_attr[] = {
-	&sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_channels_temp.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_channels_temp.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_zone3_group = {
-	.attrs = dme1737_zone3_attr,
+    .attrs = dme1737_zone3_attr,
 };
 
 
@@ -1768,14 +1731,14 @@ static const struct attribute_group dme1737_zone3_group = {
  * DME1737, SCH311x
  */
 static struct attribute *dme1737_zone_hyst_attr[] = {
-	&sensor_dev_attr_zone1_auto_point1_temp_hyst.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point1_temp_hyst.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_point1_temp_hyst.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_zone1_auto_point1_temp_hyst.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point1_temp_hyst.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_point1_temp_hyst.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_zone_hyst_group = {
-	.attrs = dme1737_zone_hyst_attr,
+    .attrs = dme1737_zone_hyst_attr,
 };
 
 /*
@@ -1784,15 +1747,15 @@ static const struct attribute_group dme1737_zone_hyst_group = {
  * SCH5127
  */
 static struct attribute *dme1737_in7_attr[] = {
-	&sensor_dev_attr_in7_input.dev_attr.attr,
-	&sensor_dev_attr_in7_min.dev_attr.attr,
-	&sensor_dev_attr_in7_max.dev_attr.attr,
-	&sensor_dev_attr_in7_alarm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_in7_input.dev_attr.attr,
+    &sensor_dev_attr_in7_min.dev_attr.attr,
+    &sensor_dev_attr_in7_max.dev_attr.attr,
+    &sensor_dev_attr_in7_alarm.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_in7_group = {
-	.attrs = dme1737_in7_attr,
+    .attrs = dme1737_in7_attr,
 };
 
 /*
@@ -1801,55 +1764,55 @@ static const struct attribute_group dme1737_in7_group = {
  * module load.
  */
 static struct attribute *dme1737_pwm1_attr[] = {
-	&sensor_dev_attr_pwm1.dev_attr.attr,
-	&sensor_dev_attr_pwm1_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm1_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
-	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm1.dev_attr.attr,
+    &sensor_dev_attr_pwm1_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm1_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm1_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm2_attr[] = {
-	&sensor_dev_attr_pwm2.dev_attr.attr,
-	&sensor_dev_attr_pwm2_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm2_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm2_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_point2_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm2.dev_attr.attr,
+    &sensor_dev_attr_pwm2_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm2_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm2_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_point2_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm3_attr[] = {
-	&sensor_dev_attr_pwm3.dev_attr.attr,
-	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm3_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm3.dev_attr.attr,
+    &sensor_dev_attr_pwm3_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm3_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm3_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm5_attr[] = {
-	&sensor_dev_attr_pwm5.dev_attr.attr,
-	&sensor_dev_attr_pwm5_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm5_enable.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm5.dev_attr.attr,
+    &sensor_dev_attr_pwm5_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm5_enable.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm6_attr[] = {
-	&sensor_dev_attr_pwm6.dev_attr.attr,
-	&sensor_dev_attr_pwm6_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm6_enable.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm6.dev_attr.attr,
+    &sensor_dev_attr_pwm6_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm6_enable.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_pwm_group[] = {
-	{ .attrs = dme1737_pwm1_attr },
-	{ .attrs = dme1737_pwm2_attr },
-	{ .attrs = dme1737_pwm3_attr },
-	{ .attrs = NULL },
-	{ .attrs = dme1737_pwm5_attr },
-	{ .attrs = dme1737_pwm6_attr },
+    { .attrs = dme1737_pwm1_attr },
+    { .attrs = dme1737_pwm2_attr },
+    { .attrs = dme1737_pwm3_attr },
+    { .attrs = NULL },
+    { .attrs = dme1737_pwm5_attr },
+    { .attrs = dme1737_pwm6_attr },
 };
 
 /*
@@ -1858,9 +1821,9 @@ static const struct attribute_group dme1737_pwm_group[] = {
  * during module load.
  */
 static struct attribute *dme1737_auto_pwm_min_attr[] = {
-	&sensor_dev_attr_pwm1_auto_pwm_min.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_pwm_min.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_pwm_min.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_pwm_min.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_pwm_min.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_pwm_min.dev_attr.attr,
 };
 
 /*
@@ -1869,55 +1832,55 @@ static struct attribute *dme1737_auto_pwm_min_attr[] = {
  * module load.
  */
 static struct attribute *dme1737_fan1_attr[] = {
-	&sensor_dev_attr_fan1_input.dev_attr.attr,
-	&sensor_dev_attr_fan1_min.dev_attr.attr,
-	&sensor_dev_attr_fan1_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan1_type.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan1_input.dev_attr.attr,
+    &sensor_dev_attr_fan1_min.dev_attr.attr,
+    &sensor_dev_attr_fan1_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan1_type.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_fan2_attr[] = {
-	&sensor_dev_attr_fan2_input.dev_attr.attr,
-	&sensor_dev_attr_fan2_min.dev_attr.attr,
-	&sensor_dev_attr_fan2_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan2_type.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan2_input.dev_attr.attr,
+    &sensor_dev_attr_fan2_min.dev_attr.attr,
+    &sensor_dev_attr_fan2_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan2_type.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_fan3_attr[] = {
-	&sensor_dev_attr_fan3_input.dev_attr.attr,
-	&sensor_dev_attr_fan3_min.dev_attr.attr,
-	&sensor_dev_attr_fan3_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan3_type.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan3_input.dev_attr.attr,
+    &sensor_dev_attr_fan3_min.dev_attr.attr,
+    &sensor_dev_attr_fan3_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan3_type.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_fan4_attr[] = {
-	&sensor_dev_attr_fan4_input.dev_attr.attr,
-	&sensor_dev_attr_fan4_min.dev_attr.attr,
-	&sensor_dev_attr_fan4_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan4_type.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan4_input.dev_attr.attr,
+    &sensor_dev_attr_fan4_min.dev_attr.attr,
+    &sensor_dev_attr_fan4_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan4_type.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_fan5_attr[] = {
-	&sensor_dev_attr_fan5_input.dev_attr.attr,
-	&sensor_dev_attr_fan5_min.dev_attr.attr,
-	&sensor_dev_attr_fan5_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan5_max.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan5_input.dev_attr.attr,
+    &sensor_dev_attr_fan5_min.dev_attr.attr,
+    &sensor_dev_attr_fan5_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan5_max.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_fan6_attr[] = {
-	&sensor_dev_attr_fan6_input.dev_attr.attr,
-	&sensor_dev_attr_fan6_min.dev_attr.attr,
-	&sensor_dev_attr_fan6_alarm.dev_attr.attr,
-	&sensor_dev_attr_fan6_max.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_fan6_input.dev_attr.attr,
+    &sensor_dev_attr_fan6_min.dev_attr.attr,
+    &sensor_dev_attr_fan6_alarm.dev_attr.attr,
+    &sensor_dev_attr_fan6_max.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_fan_group[] = {
-	{ .attrs = dme1737_fan1_attr },
-	{ .attrs = dme1737_fan2_attr },
-	{ .attrs = dme1737_fan3_attr },
-	{ .attrs = dme1737_fan4_attr },
-	{ .attrs = dme1737_fan5_attr },
-	{ .attrs = dme1737_fan6_attr },
+    { .attrs = dme1737_fan1_attr },
+    { .attrs = dme1737_fan2_attr },
+    { .attrs = dme1737_fan3_attr },
+    { .attrs = dme1737_fan4_attr },
+    { .attrs = dme1737_fan5_attr },
+    { .attrs = dme1737_fan6_attr },
 };
 
 /*
@@ -1925,17 +1888,17 @@ static const struct attribute_group dme1737_fan_group[] = {
  * writeable if the chip is *not* locked. Otherwise they stay read-only.
  */
 static struct attribute *dme1737_zone_chmod_attr[] = {
-	&sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_zone1_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone1_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone1_auto_point3_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone2_auto_point3_temp.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_zone_chmod_group = {
-	.attrs = dme1737_zone_chmod_attr,
+    .attrs = dme1737_zone_chmod_attr,
 };
 
 
@@ -1944,14 +1907,14 @@ static const struct attribute_group dme1737_zone_chmod_group = {
  * writeable if the chip is *not* locked. Otherwise they stay read-only.
  */
 static struct attribute *dme1737_zone3_chmod_attr[] = {
-	&sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
-	&sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_zone3_auto_point1_temp.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_point2_temp.dev_attr.attr,
+    &sensor_dev_attr_zone3_auto_point3_temp.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_zone3_chmod_group = {
-	.attrs = dme1737_zone3_chmod_attr,
+    .attrs = dme1737_zone3_chmod_attr,
 };
 
 /*
@@ -1960,47 +1923,47 @@ static const struct attribute_group dme1737_zone3_chmod_group = {
  * Otherwise they stay read-only.
  */
 static struct attribute *dme1737_pwm1_chmod_attr[] = {
-	&sensor_dev_attr_pwm1_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm1_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm1_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm1_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm1_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm2_chmod_attr[] = {
-	&sensor_dev_attr_pwm2_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm2_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm2_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm2_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm2_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm2_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm3_chmod_attr[] = {
-	&sensor_dev_attr_pwm3_freq.dev_attr.attr,
-	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
-	&sensor_dev_attr_pwm3_ramp_rate.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
-	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm3_freq.dev_attr.attr,
+    &sensor_dev_attr_pwm3_enable.dev_attr.attr,
+    &sensor_dev_attr_pwm3_ramp_rate.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_channels_zone.dev_attr.attr,
+    &sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm5_chmod_attr[] = {
-	&sensor_dev_attr_pwm5.dev_attr.attr,
-	&sensor_dev_attr_pwm5_freq.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm5.dev_attr.attr,
+    &sensor_dev_attr_pwm5_freq.dev_attr.attr,
+    NULL
 };
 static struct attribute *dme1737_pwm6_chmod_attr[] = {
-	&sensor_dev_attr_pwm6.dev_attr.attr,
-	&sensor_dev_attr_pwm6_freq.dev_attr.attr,
-	NULL
+    &sensor_dev_attr_pwm6.dev_attr.attr,
+    &sensor_dev_attr_pwm6_freq.dev_attr.attr,
+    NULL
 };
 
 static const struct attribute_group dme1737_pwm_chmod_group[] = {
-	{ .attrs = dme1737_pwm1_chmod_attr },
-	{ .attrs = dme1737_pwm2_chmod_attr },
-	{ .attrs = dme1737_pwm3_chmod_attr },
-	{ .attrs = NULL },
-	{ .attrs = dme1737_pwm5_chmod_attr },
-	{ .attrs = dme1737_pwm6_chmod_attr },
+    { .attrs = dme1737_pwm1_chmod_attr },
+    { .attrs = dme1737_pwm2_chmod_attr },
+    { .attrs = dme1737_pwm3_chmod_attr },
+    { .attrs = NULL },
+    { .attrs = dme1737_pwm5_chmod_attr },
+    { .attrs = dme1737_pwm6_chmod_attr },
 };
 
 /*
@@ -2008,35 +1971,31 @@ static const struct attribute_group dme1737_pwm_chmod_group[] = {
  * chip is not locked. Otherwise they are read-only.
  */
 static struct attribute *dme1737_pwm_chmod_attr[] = {
-	&sensor_dev_attr_pwm1.dev_attr.attr,
-	&sensor_dev_attr_pwm2.dev_attr.attr,
-	&sensor_dev_attr_pwm3.dev_attr.attr,
+    &sensor_dev_attr_pwm1.dev_attr.attr,
+    &sensor_dev_attr_pwm2.dev_attr.attr,
+    &sensor_dev_attr_pwm3.dev_attr.attr,
 };
 
 /* ---------------------------------------------------------------------
  * Super-IO functions
  * --------------------------------------------------------------------- */
 
-static inline void dme1737_sio_enter(int sio_cip)
-{
-	outb(0x55, sio_cip);
+static inline void dme1737_sio_enter(int sio_cip) {
+    outb(0x55, sio_cip);
 }
 
-static inline void dme1737_sio_exit(int sio_cip)
-{
-	outb(0xaa, sio_cip);
+static inline void dme1737_sio_exit(int sio_cip) {
+    outb(0xaa, sio_cip);
 }
 
-static inline int dme1737_sio_inb(int sio_cip, int reg)
-{
-	outb(reg, sio_cip);
-	return inb(sio_cip + 1);
+static inline int dme1737_sio_inb(int sio_cip, int reg) {
+    outb(reg, sio_cip);
+    return inb(sio_cip + 1);
 }
 
-static inline void dme1737_sio_outb(int sio_cip, int reg, int val)
-{
-	outb(reg, sio_cip);
-	outb(val, sio_cip + 1);
+static inline void dme1737_sio_outb(int sio_cip, int reg, int val) {
+    outb(reg, sio_cip);
+    outb(val, sio_cip + 1);
 }
 
 /* ---------------------------------------------------------------------
@@ -2046,338 +2005,333 @@ static inline void dme1737_sio_outb(int sio_cip, int reg, int val)
 static int dme1737_i2c_get_features(int, struct dme1737_data*);
 
 static void dme1737_chmod_file(struct device *dev,
-			       struct attribute *attr, umode_t mode)
-{
-	if (sysfs_chmod_file(&dev->kobj, attr, mode)) {
-		dev_warn(dev, "Failed to change permissions of %s.\n",
-			 attr->name);
-	}
+                               struct attribute *attr, umode_t mode) {
+    if (sysfs_chmod_file(&dev->kobj, attr, mode)) {
+        dev_warn(dev, "Failed to change permissions of %s.\n",
+                 attr->name);
+    }
 }
 
 static void dme1737_chmod_group(struct device *dev,
-				const struct attribute_group *group,
-				umode_t mode)
-{
-	struct attribute **attr;
+                                const struct attribute_group *group,
+                                umode_t mode) {
+    struct attribute **attr;
 
-	for (attr = group->attrs; *attr; attr++)
-		dme1737_chmod_file(dev, *attr, mode);
+    for (attr = group->attrs; *attr; attr++)
+        dme1737_chmod_file(dev, *attr, mode);
 }
 
-static void dme1737_remove_files(struct device *dev)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	int ix;
+static void dme1737_remove_files(struct device *dev) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    int ix;
 
-	for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
-		if (data->has_features & HAS_FAN(ix)) {
-			sysfs_remove_group(&dev->kobj,
-					   &dme1737_fan_group[ix]);
-		}
-	}
+    for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
+        if (data->has_features & HAS_FAN(ix)) {
+            sysfs_remove_group(&dev->kobj,
+                               &dme1737_fan_group[ix]);
+        }
+    }
 
-	for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
-		if (data->has_features & HAS_PWM(ix)) {
-			sysfs_remove_group(&dev->kobj,
-					   &dme1737_pwm_group[ix]);
-			if ((data->has_features & HAS_PWM_MIN) && ix < 3) {
-				sysfs_remove_file(&dev->kobj,
-						dme1737_auto_pwm_min_attr[ix]);
-			}
-		}
-	}
+    for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
+        if (data->has_features & HAS_PWM(ix)) {
+            sysfs_remove_group(&dev->kobj,
+                               &dme1737_pwm_group[ix]);
+            if ((data->has_features & HAS_PWM_MIN) && ix < 3) {
+                sysfs_remove_file(&dev->kobj,
+                                  dme1737_auto_pwm_min_attr[ix]);
+            }
+        }
+    }
 
-	if (data->has_features & HAS_TEMP_OFFSET)
-		sysfs_remove_group(&dev->kobj, &dme1737_temp_offset_group);
-	if (data->has_features & HAS_VID)
-		sysfs_remove_group(&dev->kobj, &dme1737_vid_group);
-	if (data->has_features & HAS_ZONE3)
-		sysfs_remove_group(&dev->kobj, &dme1737_zone3_group);
-	if (data->has_features & HAS_ZONE_HYST)
-		sysfs_remove_group(&dev->kobj, &dme1737_zone_hyst_group);
-	if (data->has_features & HAS_IN7)
-		sysfs_remove_group(&dev->kobj, &dme1737_in7_group);
-	sysfs_remove_group(&dev->kobj, &dme1737_group);
+    if (data->has_features & HAS_TEMP_OFFSET)
+        sysfs_remove_group(&dev->kobj, &dme1737_temp_offset_group);
+    if (data->has_features & HAS_VID)
+        sysfs_remove_group(&dev->kobj, &dme1737_vid_group);
+    if (data->has_features & HAS_ZONE3)
+        sysfs_remove_group(&dev->kobj, &dme1737_zone3_group);
+    if (data->has_features & HAS_ZONE_HYST)
+        sysfs_remove_group(&dev->kobj, &dme1737_zone_hyst_group);
+    if (data->has_features & HAS_IN7)
+        sysfs_remove_group(&dev->kobj, &dme1737_in7_group);
+    sysfs_remove_group(&dev->kobj, &dme1737_group);
 
-	if (!data->client)
-		sysfs_remove_file(&dev->kobj, &dev_attr_name.attr);
+    if (!data->client)
+        sysfs_remove_file(&dev->kobj, &dev_attr_name.attr);
 }
 
-static int dme1737_create_files(struct device *dev)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	int err, ix;
+static int dme1737_create_files(struct device *dev) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    int err, ix;
 
-	/* Create a name attribute for ISA devices */
-	if (!data->client) {
-		err = sysfs_create_file(&dev->kobj, &dev_attr_name.attr);
-		if (err)
-			goto exit;
-	}
+    /* Create a name attribute for ISA devices */
+    if (!data->client) {
+        err = sysfs_create_file(&dev->kobj, &dev_attr_name.attr);
+        if (err)
+            goto exit;
+    }
 
-	/* Create standard sysfs attributes */
-	err = sysfs_create_group(&dev->kobj, &dme1737_group);
-	if (err)
-		goto exit_remove;
+    /* Create standard sysfs attributes */
+    err = sysfs_create_group(&dev->kobj, &dme1737_group);
+    if (err)
+        goto exit_remove;
 
-	/* Create chip-dependent sysfs attributes */
-	if (data->has_features & HAS_TEMP_OFFSET) {
-		err = sysfs_create_group(&dev->kobj,
-					 &dme1737_temp_offset_group);
-		if (err)
-			goto exit_remove;
-	}
-	if (data->has_features & HAS_VID) {
-		err = sysfs_create_group(&dev->kobj, &dme1737_vid_group);
-		if (err)
-			goto exit_remove;
-	}
-	if (data->has_features & HAS_ZONE3) {
-		err = sysfs_create_group(&dev->kobj, &dme1737_zone3_group);
-		if (err)
-			goto exit_remove;
-	}
-	if (data->has_features & HAS_ZONE_HYST) {
-		err = sysfs_create_group(&dev->kobj, &dme1737_zone_hyst_group);
-		if (err)
-			goto exit_remove;
-	}
-	if (data->has_features & HAS_IN7) {
-		err = sysfs_create_group(&dev->kobj, &dme1737_in7_group);
-		if (err)
-			goto exit_remove;
-	}
+    /* Create chip-dependent sysfs attributes */
+    if (data->has_features & HAS_TEMP_OFFSET) {
+        err = sysfs_create_group(&dev->kobj,
+                                 &dme1737_temp_offset_group);
+        if (err)
+            goto exit_remove;
+    }
+    if (data->has_features & HAS_VID) {
+        err = sysfs_create_group(&dev->kobj, &dme1737_vid_group);
+        if (err)
+            goto exit_remove;
+    }
+    if (data->has_features & HAS_ZONE3) {
+        err = sysfs_create_group(&dev->kobj, &dme1737_zone3_group);
+        if (err)
+            goto exit_remove;
+    }
+    if (data->has_features & HAS_ZONE_HYST) {
+        err = sysfs_create_group(&dev->kobj, &dme1737_zone_hyst_group);
+        if (err)
+            goto exit_remove;
+    }
+    if (data->has_features & HAS_IN7) {
+        err = sysfs_create_group(&dev->kobj, &dme1737_in7_group);
+        if (err)
+            goto exit_remove;
+    }
 
-	/* Create fan sysfs attributes */
-	for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
-		if (data->has_features & HAS_FAN(ix)) {
-			err = sysfs_create_group(&dev->kobj,
-						 &dme1737_fan_group[ix]);
-			if (err)
-				goto exit_remove;
-		}
-	}
+    /* Create fan sysfs attributes */
+    for (ix = 0; ix < ARRAY_SIZE(dme1737_fan_group); ix++) {
+        if (data->has_features & HAS_FAN(ix)) {
+            err = sysfs_create_group(&dev->kobj,
+                                     &dme1737_fan_group[ix]);
+            if (err)
+                goto exit_remove;
+        }
+    }
 
-	/* Create PWM sysfs attributes */
-	for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
-		if (data->has_features & HAS_PWM(ix)) {
-			err = sysfs_create_group(&dev->kobj,
-						 &dme1737_pwm_group[ix]);
-			if (err)
-				goto exit_remove;
-			if ((data->has_features & HAS_PWM_MIN) && (ix < 3)) {
-				err = sysfs_create_file(&dev->kobj,
-						dme1737_auto_pwm_min_attr[ix]);
-				if (err)
-					goto exit_remove;
-			}
-		}
-	}
+    /* Create PWM sysfs attributes */
+    for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_group); ix++) {
+        if (data->has_features & HAS_PWM(ix)) {
+            err = sysfs_create_group(&dev->kobj,
+                                     &dme1737_pwm_group[ix]);
+            if (err)
+                goto exit_remove;
+            if ((data->has_features & HAS_PWM_MIN) && (ix < 3)) {
+                err = sysfs_create_file(&dev->kobj,
+                                        dme1737_auto_pwm_min_attr[ix]);
+                if (err)
+                    goto exit_remove;
+            }
+        }
+    }
 
-	/*
-	 * Inform if the device is locked. Otherwise change the permissions of
-	 * selected attributes from read-only to read-writeable.
-	 */
-	if (data->config & 0x02) {
-		dev_info(dev, "Device is locked. Some attributes "
-			 "will be read-only.\n");
-	} else {
-		/* Change permissions of zone sysfs attributes */
-		dme1737_chmod_group(dev, &dme1737_zone_chmod_group,
-				    S_IRUGO | S_IWUSR);
+    /*
+     * Inform if the device is locked. Otherwise change the permissions of
+     * selected attributes from read-only to read-writeable.
+     */
+    if (data->config & 0x02) {
+        dev_info(dev, "Device is locked. Some attributes "
+                 "will be read-only.\n");
+    } else {
+        /* Change permissions of zone sysfs attributes */
+        dme1737_chmod_group(dev, &dme1737_zone_chmod_group,
+                            S_IRUGO | S_IWUSR);
 
-		/* Change permissions of chip-dependent sysfs attributes */
-		if (data->has_features & HAS_TEMP_OFFSET) {
-			dme1737_chmod_group(dev, &dme1737_temp_offset_group,
-					    S_IRUGO | S_IWUSR);
-		}
-		if (data->has_features & HAS_ZONE3) {
-			dme1737_chmod_group(dev, &dme1737_zone3_chmod_group,
-					    S_IRUGO | S_IWUSR);
-		}
-		if (data->has_features & HAS_ZONE_HYST) {
-			dme1737_chmod_group(dev, &dme1737_zone_hyst_group,
-					    S_IRUGO | S_IWUSR);
-		}
+        /* Change permissions of chip-dependent sysfs attributes */
+        if (data->has_features & HAS_TEMP_OFFSET) {
+            dme1737_chmod_group(dev, &dme1737_temp_offset_group,
+                                S_IRUGO | S_IWUSR);
+        }
+        if (data->has_features & HAS_ZONE3) {
+            dme1737_chmod_group(dev, &dme1737_zone3_chmod_group,
+                                S_IRUGO | S_IWUSR);
+        }
+        if (data->has_features & HAS_ZONE_HYST) {
+            dme1737_chmod_group(dev, &dme1737_zone_hyst_group,
+                                S_IRUGO | S_IWUSR);
+        }
 
-		/* Change permissions of PWM sysfs attributes */
-		for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_chmod_group); ix++) {
-			if (data->has_features & HAS_PWM(ix)) {
-				dme1737_chmod_group(dev,
-						&dme1737_pwm_chmod_group[ix],
-						S_IRUGO | S_IWUSR);
-				if ((data->has_features & HAS_PWM_MIN) &&
-				    ix < 3) {
-					dme1737_chmod_file(dev,
-						dme1737_auto_pwm_min_attr[ix],
-						S_IRUGO | S_IWUSR);
-				}
-			}
-		}
+        /* Change permissions of PWM sysfs attributes */
+        for (ix = 0; ix < ARRAY_SIZE(dme1737_pwm_chmod_group); ix++) {
+            if (data->has_features & HAS_PWM(ix)) {
+                dme1737_chmod_group(dev,
+                                    &dme1737_pwm_chmod_group[ix],
+                                    S_IRUGO | S_IWUSR);
+                if ((data->has_features & HAS_PWM_MIN) &&
+                        ix < 3) {
+                    dme1737_chmod_file(dev,
+                                       dme1737_auto_pwm_min_attr[ix],
+                                       S_IRUGO | S_IWUSR);
+                }
+            }
+        }
 
-		/* Change permissions of pwm[1-3] if in manual mode */
-		for (ix = 0; ix < 3; ix++) {
-			if ((data->has_features & HAS_PWM(ix)) &&
-			    (PWM_EN_FROM_REG(data->pwm_config[ix]) == 1)) {
-				dme1737_chmod_file(dev,
-						dme1737_pwm_chmod_attr[ix],
-						S_IRUGO | S_IWUSR);
-			}
-		}
-	}
+        /* Change permissions of pwm[1-3] if in manual mode */
+        for (ix = 0; ix < 3; ix++) {
+            if ((data->has_features & HAS_PWM(ix)) &&
+                    (PWM_EN_FROM_REG(data->pwm_config[ix]) == 1)) {
+                dme1737_chmod_file(dev,
+                                   dme1737_pwm_chmod_attr[ix],
+                                   S_IRUGO | S_IWUSR);
+            }
+        }
+    }
 
-	return 0;
+    return 0;
 
 exit_remove:
-	dme1737_remove_files(dev);
+    dme1737_remove_files(dev);
 exit:
-	return err;
+    return err;
 }
 
-static int dme1737_init_device(struct device *dev)
-{
-	struct dme1737_data *data = dev_get_drvdata(dev);
-	struct i2c_client *client = data->client;
-	int ix;
-	u8 reg;
+static int dme1737_init_device(struct device *dev) {
+    struct dme1737_data *data = dev_get_drvdata(dev);
+    struct i2c_client *client = data->client;
+    int ix;
+    u8 reg;
 
-	/* Point to the right nominal voltages array */
-	data->in_nominal = IN_NOMINAL(data->type);
+    /* Point to the right nominal voltages array */
+    data->in_nominal = IN_NOMINAL(data->type);
 
-	data->config = dme1737_read(data, DME1737_REG_CONFIG);
-	/* Inform if part is not monitoring/started */
-	if (!(data->config & 0x01)) {
-		if (!force_start) {
-			dev_err(dev, "Device is not monitoring. "
-				"Use the force_start load parameter to "
-				"override.\n");
-			return -EFAULT;
-		}
+    data->config = dme1737_read(data, DME1737_REG_CONFIG);
+    /* Inform if part is not monitoring/started */
+    if (!(data->config & 0x01)) {
+        if (!force_start) {
+            dev_err(dev, "Device is not monitoring. "
+                    "Use the force_start load parameter to "
+                    "override.\n");
+            return -EFAULT;
+        }
 
-		/* Force monitoring */
-		data->config |= 0x01;
-		dme1737_write(data, DME1737_REG_CONFIG, data->config);
-	}
-	/* Inform if part is not ready */
-	if (!(data->config & 0x04)) {
-		dev_err(dev, "Device is not ready.\n");
-		return -EFAULT;
-	}
+        /* Force monitoring */
+        data->config |= 0x01;
+        dme1737_write(data, DME1737_REG_CONFIG, data->config);
+    }
+    /* Inform if part is not ready */
+    if (!(data->config & 0x04)) {
+        dev_err(dev, "Device is not ready.\n");
+        return -EFAULT;
+    }
 
-	/*
-	 * Determine which optional fan and pwm features are enabled (only
-	 * valid for I2C devices)
-	 */
-	if (client) {   /* I2C chip */
-		data->config2 = dme1737_read(data, DME1737_REG_CONFIG2);
-		/* Check if optional fan3 input is enabled */
-		if (data->config2 & 0x04)
-			data->has_features |= HAS_FAN(2);
+    /*
+     * Determine which optional fan and pwm features are enabled (only
+     * valid for I2C devices)
+     */
+    if (client) {   /* I2C chip */
+        data->config2 = dme1737_read(data, DME1737_REG_CONFIG2);
+        /* Check if optional fan3 input is enabled */
+        if (data->config2 & 0x04)
+            data->has_features |= HAS_FAN(2);
 
-		/*
-		 * Fan4 and pwm3 are only available if the client's I2C address
-		 * is the default 0x2e. Otherwise the I/Os associated with
-		 * these functions are used for addr enable/select.
-		 */
-		if (client->addr == 0x2e)
-			data->has_features |= HAS_FAN(3) | HAS_PWM(2);
+        /*
+         * Fan4 and pwm3 are only available if the client's I2C address
+         * is the default 0x2e. Otherwise the I/Os associated with
+         * these functions are used for addr enable/select.
+         */
+        if (client->addr == 0x2e)
+            data->has_features |= HAS_FAN(3) | HAS_PWM(2);
 
-		/*
-		 * Determine which of the optional fan[5-6] and pwm[5-6]
-		 * features are enabled. For this, we need to query the runtime
-		 * registers through the Super-IO LPC interface. Try both
-		 * config ports 0x2e and 0x4e.
-		 */
-		if (dme1737_i2c_get_features(0x2e, data) &&
-		    dme1737_i2c_get_features(0x4e, data)) {
-			dev_warn(dev, "Failed to query Super-IO for optional "
-				 "features.\n");
-		}
-	}
+        /*
+         * Determine which of the optional fan[5-6] and pwm[5-6]
+         * features are enabled. For this, we need to query the runtime
+         * registers through the Super-IO LPC interface. Try both
+         * config ports 0x2e and 0x4e.
+         */
+        if (dme1737_i2c_get_features(0x2e, data) &&
+                dme1737_i2c_get_features(0x4e, data)) {
+            dev_warn(dev, "Failed to query Super-IO for optional "
+                     "features.\n");
+        }
+    }
 
-	/* Fan[1-2] and pwm[1-2] are present in all chips */
-	data->has_features |= HAS_FAN(0) | HAS_FAN(1) | HAS_PWM(0) | HAS_PWM(1);
+    /* Fan[1-2] and pwm[1-2] are present in all chips */
+    data->has_features |= HAS_FAN(0) | HAS_FAN(1) | HAS_PWM(0) | HAS_PWM(1);
 
-	/* Chip-dependent features */
-	switch (data->type) {
-	case dme1737:
-		data->has_features |= HAS_TEMP_OFFSET | HAS_VID | HAS_ZONE3 |
-			HAS_ZONE_HYST | HAS_PWM_MIN;
-		break;
-	case sch311x:
-		data->has_features |= HAS_TEMP_OFFSET | HAS_ZONE3 |
-			HAS_ZONE_HYST | HAS_PWM_MIN | HAS_FAN(2) | HAS_PWM(2);
-		break;
-	case sch5027:
-		data->has_features |= HAS_ZONE3;
-		break;
-	case sch5127:
-		data->has_features |= HAS_FAN(2) | HAS_PWM(2) | HAS_IN7;
-		break;
-	default:
-		break;
-	}
+    /* Chip-dependent features */
+    switch (data->type) {
+    case dme1737:
+        data->has_features |= HAS_TEMP_OFFSET | HAS_VID | HAS_ZONE3 |
+                              HAS_ZONE_HYST | HAS_PWM_MIN;
+        break;
+    case sch311x:
+        data->has_features |= HAS_TEMP_OFFSET | HAS_ZONE3 |
+                              HAS_ZONE_HYST | HAS_PWM_MIN | HAS_FAN(2) | HAS_PWM(2);
+        break;
+    case sch5027:
+        data->has_features |= HAS_ZONE3;
+        break;
+    case sch5127:
+        data->has_features |= HAS_FAN(2) | HAS_PWM(2) | HAS_IN7;
+        break;
+    default:
+        break;
+    }
 
-	dev_info(dev, "Optional features: pwm3=%s, pwm5=%s, pwm6=%s, "
-		 "fan3=%s, fan4=%s, fan5=%s, fan6=%s.\n",
-		 (data->has_features & HAS_PWM(2)) ? "yes" : "no",
-		 (data->has_features & HAS_PWM(4)) ? "yes" : "no",
-		 (data->has_features & HAS_PWM(5)) ? "yes" : "no",
-		 (data->has_features & HAS_FAN(2)) ? "yes" : "no",
-		 (data->has_features & HAS_FAN(3)) ? "yes" : "no",
-		 (data->has_features & HAS_FAN(4)) ? "yes" : "no",
-		 (data->has_features & HAS_FAN(5)) ? "yes" : "no");
+    dev_info(dev, "Optional features: pwm3=%s, pwm5=%s, pwm6=%s, "
+             "fan3=%s, fan4=%s, fan5=%s, fan6=%s.\n",
+             (data->has_features & HAS_PWM(2)) ? "yes" : "no",
+             (data->has_features & HAS_PWM(4)) ? "yes" : "no",
+             (data->has_features & HAS_PWM(5)) ? "yes" : "no",
+             (data->has_features & HAS_FAN(2)) ? "yes" : "no",
+             (data->has_features & HAS_FAN(3)) ? "yes" : "no",
+             (data->has_features & HAS_FAN(4)) ? "yes" : "no",
+             (data->has_features & HAS_FAN(5)) ? "yes" : "no");
 
-	reg = dme1737_read(data, DME1737_REG_TACH_PWM);
-	/* Inform if fan-to-pwm mapping differs from the default */
-	if (client && reg != 0xa4) {   /* I2C chip */
-		dev_warn(dev, "Non-standard fan to pwm mapping: "
-			 "fan1->pwm%d, fan2->pwm%d, fan3->pwm%d, "
-			 "fan4->pwm%d. Please report to the driver "
-			 "maintainer.\n",
-			 (reg & 0x03) + 1, ((reg >> 2) & 0x03) + 1,
-			 ((reg >> 4) & 0x03) + 1, ((reg >> 6) & 0x03) + 1);
-	} else if (!client && reg != 0x24) {   /* ISA chip */
-		dev_warn(dev, "Non-standard fan to pwm mapping: "
-			 "fan1->pwm%d, fan2->pwm%d, fan3->pwm%d. "
-			 "Please report to the driver maintainer.\n",
-			 (reg & 0x03) + 1, ((reg >> 2) & 0x03) + 1,
-			 ((reg >> 4) & 0x03) + 1);
-	}
+    reg = dme1737_read(data, DME1737_REG_TACH_PWM);
+    /* Inform if fan-to-pwm mapping differs from the default */
+    if (client && reg != 0xa4) {   /* I2C chip */
+        dev_warn(dev, "Non-standard fan to pwm mapping: "
+                 "fan1->pwm%d, fan2->pwm%d, fan3->pwm%d, "
+                 "fan4->pwm%d. Please report to the driver "
+                 "maintainer.\n",
+                 (reg & 0x03) + 1, ((reg >> 2) & 0x03) + 1,
+                 ((reg >> 4) & 0x03) + 1, ((reg >> 6) & 0x03) + 1);
+    } else if (!client && reg != 0x24) {   /* ISA chip */
+        dev_warn(dev, "Non-standard fan to pwm mapping: "
+                 "fan1->pwm%d, fan2->pwm%d, fan3->pwm%d. "
+                 "Please report to the driver maintainer.\n",
+                 (reg & 0x03) + 1, ((reg >> 2) & 0x03) + 1,
+                 ((reg >> 4) & 0x03) + 1);
+    }
 
-	/*
-	 * Switch pwm[1-3] to manual mode if they are currently disabled and
-	 * set the duty-cycles to 0% (which is identical to the PWMs being
-	 * disabled).
-	 */
-	if (!(data->config & 0x02)) {
-		for (ix = 0; ix < 3; ix++) {
-			data->pwm_config[ix] = dme1737_read(data,
-						DME1737_REG_PWM_CONFIG(ix));
-			if ((data->has_features & HAS_PWM(ix)) &&
-			    (PWM_EN_FROM_REG(data->pwm_config[ix]) == -1)) {
-				dev_info(dev, "Switching pwm%d to "
-					 "manual mode.\n", ix + 1);
-				data->pwm_config[ix] = PWM_EN_TO_REG(1,
-							data->pwm_config[ix]);
-				dme1737_write(data, DME1737_REG_PWM(ix), 0);
-				dme1737_write(data,
-					      DME1737_REG_PWM_CONFIG(ix),
-					      data->pwm_config[ix]);
-			}
-		}
-	}
+    /*
+     * Switch pwm[1-3] to manual mode if they are currently disabled and
+     * set the duty-cycles to 0% (which is identical to the PWMs being
+     * disabled).
+     */
+    if (!(data->config & 0x02)) {
+        for (ix = 0; ix < 3; ix++) {
+            data->pwm_config[ix] = dme1737_read(data,
+                                                DME1737_REG_PWM_CONFIG(ix));
+            if ((data->has_features & HAS_PWM(ix)) &&
+                    (PWM_EN_FROM_REG(data->pwm_config[ix]) == -1)) {
+                dev_info(dev, "Switching pwm%d to "
+                         "manual mode.\n", ix + 1);
+                data->pwm_config[ix] = PWM_EN_TO_REG(1,
+                                                     data->pwm_config[ix]);
+                dme1737_write(data, DME1737_REG_PWM(ix), 0);
+                dme1737_write(data,
+                              DME1737_REG_PWM_CONFIG(ix),
+                              data->pwm_config[ix]);
+            }
+        }
+    }
 
-	/* Initialize the default PWM auto channels zone (acz) assignments */
-	data->pwm_acz[0] = 1;	/* pwm1 -> zone1 */
-	data->pwm_acz[1] = 2;	/* pwm2 -> zone2 */
-	data->pwm_acz[2] = 4;	/* pwm3 -> zone3 */
+    /* Initialize the default PWM auto channels zone (acz) assignments */
+    data->pwm_acz[0] = 1;	/* pwm1 -> zone1 */
+    data->pwm_acz[1] = 2;	/* pwm2 -> zone2 */
+    data->pwm_acz[2] = 4;	/* pwm3 -> zone3 */
 
-	/* Set VRM */
-	if (data->has_features & HAS_VID)
-		data->vrm = vid_which_vrm();
+    /* Set VRM */
+    if (data->has_features & HAS_VID)
+        data->vrm = vid_which_vrm();
 
-	return 0;
+    return 0;
 }
 
 /* ---------------------------------------------------------------------
@@ -2386,425 +2340,415 @@ static int dme1737_init_device(struct device *dev)
 
 static struct i2c_driver dme1737_i2c_driver;
 
-static int dme1737_i2c_get_features(int sio_cip, struct dme1737_data *data)
-{
-	int err = 0, reg;
-	u16 addr;
+static int dme1737_i2c_get_features(int sio_cip, struct dme1737_data *data) {
+    int err = 0, reg;
+    u16 addr;
 
-	dme1737_sio_enter(sio_cip);
+    dme1737_sio_enter(sio_cip);
 
-	/*
-	 * Check device ID
-	 * We currently know about two kinds of DME1737 and SCH5027.
-	 */
-	reg = force_id ? force_id : dme1737_sio_inb(sio_cip, 0x20);
-	if (!(reg == DME1737_ID_1 || reg == DME1737_ID_2 ||
-	      reg == SCH5027_ID)) {
-		err = -ENODEV;
-		goto exit;
-	}
+    /*
+     * Check device ID
+     * We currently know about two kinds of DME1737 and SCH5027.
+     */
+    reg = force_id ? force_id : dme1737_sio_inb(sio_cip, 0x20);
+    if (!(reg == DME1737_ID_1 || reg == DME1737_ID_2 ||
+            reg == SCH5027_ID)) {
+        err = -ENODEV;
+        goto exit;
+    }
 
-	/* Select logical device A (runtime registers) */
-	dme1737_sio_outb(sio_cip, 0x07, 0x0a);
+    /* Select logical device A (runtime registers) */
+    dme1737_sio_outb(sio_cip, 0x07, 0x0a);
 
-	/* Get the base address of the runtime registers */
-	addr = (dme1737_sio_inb(sio_cip, 0x60) << 8) |
-		dme1737_sio_inb(sio_cip, 0x61);
-	if (!addr) {
-		err = -ENODEV;
-		goto exit;
-	}
+    /* Get the base address of the runtime registers */
+    addr = (dme1737_sio_inb(sio_cip, 0x60) << 8) |
+           dme1737_sio_inb(sio_cip, 0x61);
+    if (!addr) {
+        err = -ENODEV;
+        goto exit;
+    }
 
-	/*
-	 * Read the runtime registers to determine which optional features
-	 * are enabled and available. Bits [3:2] of registers 0x43-0x46 are set
-	 * to '10' if the respective feature is enabled.
-	 */
-	if ((inb(addr + 0x43) & 0x0c) == 0x08) /* fan6 */
-		data->has_features |= HAS_FAN(5);
-	if ((inb(addr + 0x44) & 0x0c) == 0x08) /* pwm6 */
-		data->has_features |= HAS_PWM(5);
-	if ((inb(addr + 0x45) & 0x0c) == 0x08) /* fan5 */
-		data->has_features |= HAS_FAN(4);
-	if ((inb(addr + 0x46) & 0x0c) == 0x08) /* pwm5 */
-		data->has_features |= HAS_PWM(4);
+    /*
+     * Read the runtime registers to determine which optional features
+     * are enabled and available. Bits [3:2] of registers 0x43-0x46 are set
+     * to '10' if the respective feature is enabled.
+     */
+    if ((inb(addr + 0x43) & 0x0c) == 0x08) /* fan6 */
+        data->has_features |= HAS_FAN(5);
+    if ((inb(addr + 0x44) & 0x0c) == 0x08) /* pwm6 */
+        data->has_features |= HAS_PWM(5);
+    if ((inb(addr + 0x45) & 0x0c) == 0x08) /* fan5 */
+        data->has_features |= HAS_FAN(4);
+    if ((inb(addr + 0x46) & 0x0c) == 0x08) /* pwm5 */
+        data->has_features |= HAS_PWM(4);
 
 exit:
-	dme1737_sio_exit(sio_cip);
+    dme1737_sio_exit(sio_cip);
 
-	return err;
+    return err;
 }
 
 /* Return 0 if detection is successful, -ENODEV otherwise */
 static int dme1737_i2c_detect(struct i2c_client *client,
-			      struct i2c_board_info *info)
-{
-	struct i2c_adapter *adapter = client->adapter;
-	struct device *dev = &adapter->dev;
-	u8 company, verstep = 0;
-	const char *name;
+                              struct i2c_board_info *info) {
+    struct i2c_adapter *adapter = client->adapter;
+    struct device *dev = &adapter->dev;
+    u8 company, verstep = 0;
+    const char *name;
 
-	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
-		return -ENODEV;
+    if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+        return -ENODEV;
 
-	company = i2c_smbus_read_byte_data(client, DME1737_REG_COMPANY);
-	verstep = i2c_smbus_read_byte_data(client, DME1737_REG_VERSTEP);
+    company = i2c_smbus_read_byte_data(client, DME1737_REG_COMPANY);
+    verstep = i2c_smbus_read_byte_data(client, DME1737_REG_VERSTEP);
 
-	if (company == DME1737_COMPANY_SMSC &&
-	    verstep == SCH5027_VERSTEP) {
-		name = "sch5027";
-	} else if (company == DME1737_COMPANY_SMSC &&
-		   (verstep & DME1737_VERSTEP_MASK) == DME1737_VERSTEP) {
-		name = "dme1737";
-	} else {
-		return -ENODEV;
-	}
+    if (company == DME1737_COMPANY_SMSC &&
+            verstep == SCH5027_VERSTEP) {
+        name = "sch5027";
+    } else if (company == DME1737_COMPANY_SMSC &&
+               (verstep & DME1737_VERSTEP_MASK) == DME1737_VERSTEP) {
+        name = "dme1737";
+    } else {
+        return -ENODEV;
+    }
 
-	dev_info(dev, "Found a %s chip at 0x%02x (rev 0x%02x).\n",
-		 verstep == SCH5027_VERSTEP ? "SCH5027" : "DME1737",
-		 client->addr, verstep);
-	strlcpy(info->type, name, I2C_NAME_SIZE);
+    dev_info(dev, "Found a %s chip at 0x%02x (rev 0x%02x).\n",
+             verstep == SCH5027_VERSTEP ? "SCH5027" : "DME1737",
+             client->addr, verstep);
+    strlcpy(info->type, name, I2C_NAME_SIZE);
 
-	return 0;
+    return 0;
 }
 
 static int dme1737_i2c_probe(struct i2c_client *client,
-			     const struct i2c_device_id *id)
-{
-	struct dme1737_data *data;
-	struct device *dev = &client->dev;
-	int err;
+                             const struct i2c_device_id *id) {
+    struct dme1737_data *data;
+    struct device *dev = &client->dev;
+    int err;
 
-	data = kzalloc(sizeof(struct dme1737_data), GFP_KERNEL);
-	if (!data) {
-		err = -ENOMEM;
-		goto exit;
-	}
+    data = kzalloc(sizeof(struct dme1737_data), GFP_KERNEL);
+    if (!data) {
+        err = -ENOMEM;
+        goto exit;
+    }
 
-	i2c_set_clientdata(client, data);
-	data->type = id->driver_data;
-	data->client = client;
-	data->name = client->name;
-	mutex_init(&data->update_lock);
+    i2c_set_clientdata(client, data);
+    data->type = id->driver_data;
+    data->client = client;
+    data->name = client->name;
+    mutex_init(&data->update_lock);
 
-	/* Initialize the DME1737 chip */
-	err = dme1737_init_device(dev);
-	if (err) {
-		dev_err(dev, "Failed to initialize device.\n");
-		goto exit_kfree;
-	}
+    /* Initialize the DME1737 chip */
+    err = dme1737_init_device(dev);
+    if (err) {
+        dev_err(dev, "Failed to initialize device.\n");
+        goto exit_kfree;
+    }
 
-	/* Create sysfs files */
-	err = dme1737_create_files(dev);
-	if (err) {
-		dev_err(dev, "Failed to create sysfs files.\n");
-		goto exit_kfree;
-	}
+    /* Create sysfs files */
+    err = dme1737_create_files(dev);
+    if (err) {
+        dev_err(dev, "Failed to create sysfs files.\n");
+        goto exit_kfree;
+    }
 
-	/* Register device */
-	data->hwmon_dev = hwmon_device_register(dev);
-	if (IS_ERR(data->hwmon_dev)) {
-		dev_err(dev, "Failed to register device.\n");
-		err = PTR_ERR(data->hwmon_dev);
-		goto exit_remove;
-	}
+    /* Register device */
+    data->hwmon_dev = hwmon_device_register(dev);
+    if (IS_ERR(data->hwmon_dev)) {
+        dev_err(dev, "Failed to register device.\n");
+        err = PTR_ERR(data->hwmon_dev);
+        goto exit_remove;
+    }
 
-	return 0;
+    return 0;
 
 exit_remove:
-	dme1737_remove_files(dev);
+    dme1737_remove_files(dev);
 exit_kfree:
-	kfree(data);
+    kfree(data);
 exit:
-	return err;
+    return err;
 }
 
-static int dme1737_i2c_remove(struct i2c_client *client)
-{
-	struct dme1737_data *data = i2c_get_clientdata(client);
+static int dme1737_i2c_remove(struct i2c_client *client) {
+    struct dme1737_data *data = i2c_get_clientdata(client);
 
-	hwmon_device_unregister(data->hwmon_dev);
-	dme1737_remove_files(&client->dev);
+    hwmon_device_unregister(data->hwmon_dev);
+    dme1737_remove_files(&client->dev);
 
-	kfree(data);
-	return 0;
+    kfree(data);
+    return 0;
 }
 
 static const struct i2c_device_id dme1737_id[] = {
-	{ "dme1737", dme1737 },
-	{ "sch5027", sch5027 },
-	{ }
+    { "dme1737", dme1737 },
+    { "sch5027", sch5027 },
+    { }
 };
 MODULE_DEVICE_TABLE(i2c, dme1737_id);
 
 static struct i2c_driver dme1737_i2c_driver = {
-	.class = I2C_CLASS_HWMON,
-	.driver = {
-		.name = "dme1737",
-	},
-	.probe = dme1737_i2c_probe,
-	.remove = dme1737_i2c_remove,
-	.id_table = dme1737_id,
-	.detect = dme1737_i2c_detect,
-	.address_list = normal_i2c,
+    .class = I2C_CLASS_HWMON,
+    .driver = {
+        .name = "dme1737",
+    },
+    .probe = dme1737_i2c_probe,
+    .remove = dme1737_i2c_remove,
+    .id_table = dme1737_id,
+    .detect = dme1737_i2c_detect,
+    .address_list = normal_i2c,
 };
 
 /* ---------------------------------------------------------------------
  * ISA device detection and registration
  * --------------------------------------------------------------------- */
 
-static int __init dme1737_isa_detect(int sio_cip, unsigned short *addr)
-{
-	int err = 0, reg;
-	unsigned short base_addr;
+static int __init dme1737_isa_detect(int sio_cip, unsigned short *addr) {
+    int err = 0, reg;
+    unsigned short base_addr;
 
-	dme1737_sio_enter(sio_cip);
+    dme1737_sio_enter(sio_cip);
 
-	/*
-	 * Check device ID
-	 * We currently know about SCH3112, SCH3114, SCH3116, and SCH5127
-	 */
-	reg = force_id ? force_id : dme1737_sio_inb(sio_cip, 0x20);
-	if (!(reg == SCH3112_ID || reg == SCH3114_ID || reg == SCH3116_ID ||
-	      reg == SCH5127_ID)) {
-		err = -ENODEV;
-		goto exit;
-	}
+    /*
+     * Check device ID
+     * We currently know about SCH3112, SCH3114, SCH3116, and SCH5127
+     */
+    reg = force_id ? force_id : dme1737_sio_inb(sio_cip, 0x20);
+    if (!(reg == SCH3112_ID || reg == SCH3114_ID || reg == SCH3116_ID ||
+            reg == SCH5127_ID)) {
+        err = -ENODEV;
+        goto exit;
+    }
 
-	/* Select logical device A (runtime registers) */
-	dme1737_sio_outb(sio_cip, 0x07, 0x0a);
+    /* Select logical device A (runtime registers) */
+    dme1737_sio_outb(sio_cip, 0x07, 0x0a);
 
-	/* Get the base address of the runtime registers */
-	base_addr = (dme1737_sio_inb(sio_cip, 0x60) << 8) |
-		     dme1737_sio_inb(sio_cip, 0x61);
-	if (!base_addr) {
-		pr_err("Base address not set\n");
-		err = -ENODEV;
-		goto exit;
-	}
+    /* Get the base address of the runtime registers */
+    base_addr = (dme1737_sio_inb(sio_cip, 0x60) << 8) |
+                dme1737_sio_inb(sio_cip, 0x61);
+    if (!base_addr) {
+        pr_err("Base address not set\n");
+        err = -ENODEV;
+        goto exit;
+    }
 
-	/*
-	 * Access to the hwmon registers is through an index/data register
-	 * pair located at offset 0x70/0x71.
-	 */
-	*addr = base_addr + 0x70;
+    /*
+     * Access to the hwmon registers is through an index/data register
+     * pair located at offset 0x70/0x71.
+     */
+    *addr = base_addr + 0x70;
 
 exit:
-	dme1737_sio_exit(sio_cip);
-	return err;
+    dme1737_sio_exit(sio_cip);
+    return err;
 }
 
-static int __init dme1737_isa_device_add(unsigned short addr)
-{
-	struct resource res = {
-		.start	= addr,
-		.end	= addr + DME1737_EXTENT - 1,
-		.name	= "dme1737",
-		.flags	= IORESOURCE_IO,
-	};
-	int err;
+static int __init dme1737_isa_device_add(unsigned short addr) {
+    struct resource res = {
+        .start	= addr,
+        .end	= addr + DME1737_EXTENT - 1,
+        .name	= "dme1737",
+        .flags	= IORESOURCE_IO,
+    };
+    int err;
 
-	err = acpi_check_resource_conflict(&res);
-	if (err)
-		goto exit;
+    err = acpi_check_resource_conflict(&res);
+    if (err)
+        goto exit;
 
-	pdev = platform_device_alloc("dme1737", addr);
-	if (!pdev) {
-		pr_err("Failed to allocate device\n");
-		err = -ENOMEM;
-		goto exit;
-	}
+    pdev = platform_device_alloc("dme1737", addr);
+    if (!pdev) {
+        pr_err("Failed to allocate device\n");
+        err = -ENOMEM;
+        goto exit;
+    }
 
-	err = platform_device_add_resources(pdev, &res, 1);
-	if (err) {
-		pr_err("Failed to add device resource (err = %d)\n", err);
-		goto exit_device_put;
-	}
+    err = platform_device_add_resources(pdev, &res, 1);
+    if (err) {
+        pr_err("Failed to add device resource (err = %d)\n", err);
+        goto exit_device_put;
+    }
 
-	err = platform_device_add(pdev);
-	if (err) {
-		pr_err("Failed to add device (err = %d)\n", err);
-		goto exit_device_put;
-	}
+    err = platform_device_add(pdev);
+    if (err) {
+        pr_err("Failed to add device (err = %d)\n", err);
+        goto exit_device_put;
+    }
 
-	return 0;
+    return 0;
 
 exit_device_put:
-	platform_device_put(pdev);
-	pdev = NULL;
+    platform_device_put(pdev);
+    pdev = NULL;
 exit:
-	return err;
+    return err;
 }
 
-static int __devinit dme1737_isa_probe(struct platform_device *pdev)
-{
-	u8 company, device;
-	struct resource *res;
-	struct dme1737_data *data;
-	struct device *dev = &pdev->dev;
-	int err;
+static int __devinit dme1737_isa_probe(struct platform_device *pdev) {
+    u8 company, device;
+    struct resource *res;
+    struct dme1737_data *data;
+    struct device *dev = &pdev->dev;
+    int err;
 
-	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-	if (!request_region(res->start, DME1737_EXTENT, "dme1737")) {
-		dev_err(dev, "Failed to request region 0x%04x-0x%04x.\n",
-			(unsigned short)res->start,
-			(unsigned short)res->start + DME1737_EXTENT - 1);
-		err = -EBUSY;
-		goto exit;
-	}
+    res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+    if (!request_region(res->start, DME1737_EXTENT, "dme1737")) {
+        dev_err(dev, "Failed to request region 0x%04x-0x%04x.\n",
+                (unsigned short)res->start,
+                (unsigned short)res->start + DME1737_EXTENT - 1);
+        err = -EBUSY;
+        goto exit;
+    }
 
-	data = kzalloc(sizeof(struct dme1737_data), GFP_KERNEL);
-	if (!data) {
-		err = -ENOMEM;
-		goto exit_release_region;
-	}
+    data = kzalloc(sizeof(struct dme1737_data), GFP_KERNEL);
+    if (!data) {
+        err = -ENOMEM;
+        goto exit_release_region;
+    }
 
-	data->addr = res->start;
-	platform_set_drvdata(pdev, data);
+    data->addr = res->start;
+    platform_set_drvdata(pdev, data);
 
-	/* Skip chip detection if module is loaded with force_id parameter */
-	switch (force_id) {
-	case SCH3112_ID:
-	case SCH3114_ID:
-	case SCH3116_ID:
-		data->type = sch311x;
-		break;
-	case SCH5127_ID:
-		data->type = sch5127;
-		break;
-	default:
-		company = dme1737_read(data, DME1737_REG_COMPANY);
-		device = dme1737_read(data, DME1737_REG_DEVICE);
+    /* Skip chip detection if module is loaded with force_id parameter */
+    switch (force_id) {
+    case SCH3112_ID:
+    case SCH3114_ID:
+    case SCH3116_ID:
+        data->type = sch311x;
+        break;
+    case SCH5127_ID:
+        data->type = sch5127;
+        break;
+    default:
+        company = dme1737_read(data, DME1737_REG_COMPANY);
+        device = dme1737_read(data, DME1737_REG_DEVICE);
 
-		if ((company == DME1737_COMPANY_SMSC) &&
-		    (device == SCH311X_DEVICE)) {
-			data->type = sch311x;
-		} else if ((company == DME1737_COMPANY_SMSC) &&
-			   (device == SCH5127_DEVICE)) {
-			data->type = sch5127;
-		} else {
-			err = -ENODEV;
-			goto exit_kfree;
-		}
-	}
+        if ((company == DME1737_COMPANY_SMSC) &&
+                (device == SCH311X_DEVICE)) {
+            data->type = sch311x;
+        } else if ((company == DME1737_COMPANY_SMSC) &&
+                   (device == SCH5127_DEVICE)) {
+            data->type = sch5127;
+        } else {
+            err = -ENODEV;
+            goto exit_kfree;
+        }
+    }
 
-	if (data->type == sch5127)
-		data->name = "sch5127";
-	else
-		data->name = "sch311x";
+    if (data->type == sch5127)
+        data->name = "sch5127";
+    else
+        data->name = "sch311x";
 
-	/* Initialize the mutex */
-	mutex_init(&data->update_lock);
+    /* Initialize the mutex */
+    mutex_init(&data->update_lock);
 
-	dev_info(dev, "Found a %s chip at 0x%04x\n",
-		 data->type == sch5127 ? "SCH5127" : "SCH311x", data->addr);
+    dev_info(dev, "Found a %s chip at 0x%04x\n",
+             data->type == sch5127 ? "SCH5127" : "SCH311x", data->addr);
 
-	/* Initialize the chip */
-	err = dme1737_init_device(dev);
-	if (err) {
-		dev_err(dev, "Failed to initialize device.\n");
-		goto exit_kfree;
-	}
+    /* Initialize the chip */
+    err = dme1737_init_device(dev);
+    if (err) {
+        dev_err(dev, "Failed to initialize device.\n");
+        goto exit_kfree;
+    }
 
-	/* Create sysfs files */
-	err = dme1737_create_files(dev);
-	if (err) {
-		dev_err(dev, "Failed to create sysfs files.\n");
-		goto exit_kfree;
-	}
+    /* Create sysfs files */
+    err = dme1737_create_files(dev);
+    if (err) {
+        dev_err(dev, "Failed to create sysfs files.\n");
+        goto exit_kfree;
+    }
 
-	/* Register device */
-	data->hwmon_dev = hwmon_device_register(dev);
-	if (IS_ERR(data->hwmon_dev)) {
-		dev_err(dev, "Failed to register device.\n");
-		err = PTR_ERR(data->hwmon_dev);
-		goto exit_remove_files;
-	}
+    /* Register device */
+    data->hwmon_dev = hwmon_device_register(dev);
+    if (IS_ERR(data->hwmon_dev)) {
+        dev_err(dev, "Failed to register device.\n");
+        err = PTR_ERR(data->hwmon_dev);
+        goto exit_remove_files;
+    }
 
-	return 0;
+    return 0;
 
 exit_remove_files:
-	dme1737_remove_files(dev);
+    dme1737_remove_files(dev);
 exit_kfree:
-	platform_set_drvdata(pdev, NULL);
-	kfree(data);
+    platform_set_drvdata(pdev, NULL);
+    kfree(data);
 exit_release_region:
-	release_region(res->start, DME1737_EXTENT);
+    release_region(res->start, DME1737_EXTENT);
 exit:
-	return err;
+    return err;
 }
 
-static int __devexit dme1737_isa_remove(struct platform_device *pdev)
-{
-	struct dme1737_data *data = platform_get_drvdata(pdev);
+static int __devexit dme1737_isa_remove(struct platform_device *pdev) {
+    struct dme1737_data *data = platform_get_drvdata(pdev);
 
-	hwmon_device_unregister(data->hwmon_dev);
-	dme1737_remove_files(&pdev->dev);
-	release_region(data->addr, DME1737_EXTENT);
-	platform_set_drvdata(pdev, NULL);
-	kfree(data);
+    hwmon_device_unregister(data->hwmon_dev);
+    dme1737_remove_files(&pdev->dev);
+    release_region(data->addr, DME1737_EXTENT);
+    platform_set_drvdata(pdev, NULL);
+    kfree(data);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver dme1737_isa_driver = {
-	.driver = {
-		.owner = THIS_MODULE,
-		.name = "dme1737",
-	},
-	.probe = dme1737_isa_probe,
-	.remove = __devexit_p(dme1737_isa_remove),
+    .driver = {
+        .owner = THIS_MODULE,
+        .name = "dme1737",
+    },
+    .probe = dme1737_isa_probe,
+    .remove = __devexit_p(dme1737_isa_remove),
 };
 
 /* ---------------------------------------------------------------------
  * Module initialization and cleanup
  * --------------------------------------------------------------------- */
 
-static int __init dme1737_init(void)
-{
-	int err;
-	unsigned short addr;
+static int __init dme1737_init(void) {
+    int err;
+    unsigned short addr;
 
-	err = i2c_add_driver(&dme1737_i2c_driver);
-	if (err)
-		goto exit;
+    err = i2c_add_driver(&dme1737_i2c_driver);
+    if (err)
+        goto exit;
 
-	if (dme1737_isa_detect(0x2e, &addr) &&
-	    dme1737_isa_detect(0x4e, &addr) &&
-	    (!probe_all_addr ||
-	     (dme1737_isa_detect(0x162e, &addr) &&
-	      dme1737_isa_detect(0x164e, &addr)))) {
-		/* Return 0 if we didn't find an ISA device */
-		return 0;
-	}
+    if (dme1737_isa_detect(0x2e, &addr) &&
+            dme1737_isa_detect(0x4e, &addr) &&
+            (!probe_all_addr ||
+             (dme1737_isa_detect(0x162e, &addr) &&
+              dme1737_isa_detect(0x164e, &addr)))) {
+        /* Return 0 if we didn't find an ISA device */
+        return 0;
+    }
 
-	err = platform_driver_register(&dme1737_isa_driver);
-	if (err)
-		goto exit_del_i2c_driver;
+    err = platform_driver_register(&dme1737_isa_driver);
+    if (err)
+        goto exit_del_i2c_driver;
 
-	/* Sets global pdev as a side effect */
-	err = dme1737_isa_device_add(addr);
-	if (err)
-		goto exit_del_isa_driver;
+    /* Sets global pdev as a side effect */
+    err = dme1737_isa_device_add(addr);
+    if (err)
+        goto exit_del_isa_driver;
 
-	return 0;
+    return 0;
 
 exit_del_isa_driver:
-	platform_driver_unregister(&dme1737_isa_driver);
+    platform_driver_unregister(&dme1737_isa_driver);
 exit_del_i2c_driver:
-	i2c_del_driver(&dme1737_i2c_driver);
+    i2c_del_driver(&dme1737_i2c_driver);
 exit:
-	return err;
+    return err;
 }
 
-static void __exit dme1737_exit(void)
-{
-	if (pdev) {
-		platform_device_unregister(pdev);
-		platform_driver_unregister(&dme1737_isa_driver);
-	}
+static void __exit dme1737_exit(void) {
+    if (pdev) {
+        platform_device_unregister(pdev);
+        platform_driver_unregister(&dme1737_isa_driver);
+    }
 
-	i2c_del_driver(&dme1737_i2c_driver);
+    i2c_del_driver(&dme1737_i2c_driver);
 }
 
 MODULE_AUTHOR("Juerg Haefliger <juergh@gmail.com>");

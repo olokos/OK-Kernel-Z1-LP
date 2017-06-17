@@ -44,23 +44,23 @@
 #ifndef __ASSEMBLY__
 
 typedef struct gda {
-	u32	g_magic;	/* GDA magic number */
-	u16	g_version;	/* Version of this structure */
-	u16	g_masterid;	/* The NASID:CPUNUM of the master cpu */
-	u32	g_promop;	/* Passes requests from the kernel to prom */
-	u32	g_vds;		/* Store the virtual dipswitches here */
-	void	**g_hooked_norm;/* ptr to pda loc for norm hndlr */
-	void	**g_hooked_utlb;/* ptr to pda loc for utlb hndlr */
-	void	**g_hooked_xtlb;/* ptr to pda loc for xtlb hndlr */
-	int	g_partid;	/* partition id */
-	int	g_symmax;	/* Max symbols in name table. */
-	void	*g_dbstab;	/* Address of idbg symbol table */
-	char	*g_nametab;	/* Address of idbg name table */
-	void	*g_ktext_repmask;
-				/* Pointer to a mask of nodes with copies
-				 * of the kernel. */
-	char	g_padding[56];	/* pad out to 128 bytes */
-	nasid_t	g_nasidtable[MAX_COMPACT_NODES]; /* NASID of each node,
+    u32	g_magic;	/* GDA magic number */
+    u16	g_version;	/* Version of this structure */
+    u16	g_masterid;	/* The NASID:CPUNUM of the master cpu */
+    u32	g_promop;	/* Passes requests from the kernel to prom */
+    u32	g_vds;		/* Store the virtual dipswitches here */
+    void	**g_hooked_norm;/* ptr to pda loc for norm hndlr */
+    void	**g_hooked_utlb;/* ptr to pda loc for utlb hndlr */
+    void	**g_hooked_xtlb;/* ptr to pda loc for xtlb hndlr */
+    int	g_partid;	/* partition id */
+    int	g_symmax;	/* Max symbols in name table. */
+    void	*g_dbstab;	/* Address of idbg symbol table */
+    char	*g_nametab;	/* Address of idbg name table */
+    void	*g_ktext_repmask;
+    /* Pointer to a mask of nodes with copies
+     * of the kernel. */
+    char	g_padding[56];	/* pad out to 128 bytes */
+    nasid_t	g_nasidtable[MAX_COMPACT_NODES]; /* NASID of each node,
 						  * indexed by cnodeid.
 						  */
 } gda_t;

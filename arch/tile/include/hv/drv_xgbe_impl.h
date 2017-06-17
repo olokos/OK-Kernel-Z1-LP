@@ -109,14 +109,14 @@
  * slots are invalid (do not contain a packet).
  */
 typedef struct {
-  /** Byte offset of the next notify packet to be written: zero for the first
-   *  packet on the queue, sizeof (netio_pkt_t) for the second packet on the
-   *  queue, etc. */
-  volatile uint32_t __packet_write;
+    /** Byte offset of the next notify packet to be written: zero for the first
+     *  packet on the queue, sizeof (netio_pkt_t) for the second packet on the
+     *  queue, etc. */
+    volatile uint32_t __packet_write;
 
-  /** Offset of the packet after the last valid packet (i.e., when any
-   *  pointer is incremented to this value, it wraps back to zero). */
-  uint32_t __last_packet_plus_one;
+    /** Offset of the packet after the last valid packet (i.e., when any
+     *  pointer is incremented to this value, it wraps back to zero). */
+    uint32_t __last_packet_plus_one;
 }
 __netio_packet_queue_t;
 
@@ -175,15 +175,14 @@ __netio_packet_queue_t;
  * will be placed in slots 6 and 5 when they arrive.  Finally, the remaining
  * slots are invalid (do not contain a buffer).
  */
-typedef struct
-{
-  /** Ordinal number of the next buffer to be written: 0 for the first slot in
-   *  the queue, 1 for the second slot in the queue, etc. */
-  volatile uint32_t __buffer_write;
+typedef struct {
+    /** Ordinal number of the next buffer to be written: 0 for the first slot in
+     *  the queue, 1 for the second slot in the queue, etc. */
+    volatile uint32_t __buffer_write;
 
-  /** Ordinal number of the last buffer (i.e., when any pointer is decremented
-   *  below zero, it is reloaded with this value). */
-  uint32_t __last_buffer;
+    /** Ordinal number of the last buffer (i.e., when any pointer is decremented
+     *  below zero, it is reloaded with this value). */
+    uint32_t __last_buffer;
 }
 __netio_buffer_queue_t;
 
@@ -191,33 +190,32 @@ __netio_buffer_queue_t;
 /**
  * An object for providing Ethernet packets to a process.
  */
-typedef struct __netio_queue_impl_t
-{
-  /** The queue of packets waiting to be received. */
-  __netio_packet_queue_t __packet_receive_queue;
-  /** The intr bit mask that IDs this device. */
-  unsigned int __intr_id;
-  /** Offset to queues of empty buffers, one per size. */
-  uint32_t __buffer_queue[NETIO_NUM_SIZES];
-  /** The address of the first EPP tile, or -1 if no EPP. */
-  /* ISSUE: Actually this is always "0" or "~0". */
-  uint32_t __epp_location;
-  /** The queue ID that this queue represents. */
-  unsigned int __queue_id;
-  /** Number of acknowledgements received. */
-  volatile uint32_t __acks_received;
-  /** Last completion number received for packet_sendv. */
-  volatile uint32_t __last_completion_rcv;
-  /** Number of packets allowed to be outstanding. */
-  uint32_t __max_outstanding;
-  /** First VA available for packets. */
-  void* __va_0;
-  /** First VA in second range available for packets. */
-  void* __va_1;
-  /** Padding to align the "__packets" field to the size of a netio_pkt_t. */
-  uint32_t __padding[3];
-  /** The packets themselves. */
-  netio_pkt_t __packets[0];
+typedef struct __netio_queue_impl_t {
+    /** The queue of packets waiting to be received. */
+    __netio_packet_queue_t __packet_receive_queue;
+    /** The intr bit mask that IDs this device. */
+    unsigned int __intr_id;
+    /** Offset to queues of empty buffers, one per size. */
+    uint32_t __buffer_queue[NETIO_NUM_SIZES];
+    /** The address of the first EPP tile, or -1 if no EPP. */
+    /* ISSUE: Actually this is always "0" or "~0". */
+    uint32_t __epp_location;
+    /** The queue ID that this queue represents. */
+    unsigned int __queue_id;
+    /** Number of acknowledgements received. */
+    volatile uint32_t __acks_received;
+    /** Last completion number received for packet_sendv. */
+    volatile uint32_t __last_completion_rcv;
+    /** Number of packets allowed to be outstanding. */
+    uint32_t __max_outstanding;
+    /** First VA available for packets. */
+    void* __va_0;
+    /** First VA in second range available for packets. */
+    void* __va_1;
+    /** Padding to align the "__packets" field to the size of a netio_pkt_t. */
+    uint32_t __padding[3];
+    /** The packets themselves. */
+    netio_pkt_t __packets[0];
 }
 netio_queue_impl_t;
 
@@ -225,29 +223,28 @@ netio_queue_impl_t;
 /**
  * An object for managing the user end of a NetIO queue.
  */
-typedef struct __netio_queue_user_impl_t
-{
-  /** The next incoming packet to be read. */
-  uint32_t __packet_receive_read;
-  /** The next empty buffers to be read, one index per size. */
-  uint8_t __buffer_read[NETIO_NUM_SIZES];
-  /** Where the empty buffer we next request from the IPP will go, one index
-   * per size. */
-  uint8_t __buffer_requested_write[NETIO_NUM_SIZES];
-  /** PCIe interface flag. */
-  uint8_t __pcie;
-  /** Number of packets left to be received before we send a credit update. */
-  uint32_t __receive_credit_remaining;
-  /** Value placed in __receive_credit_remaining when it reaches zero. */
-  uint32_t __receive_credit_interval;
-  /** First fast I/O routine index. */
-  uint32_t __fastio_index;
-  /** Number of acknowledgements expected. */
-  uint32_t __acks_outstanding;
-  /** Last completion number requested. */
-  uint32_t __last_completion_req;
-  /** File descriptor for driver. */
-  int __fd;
+typedef struct __netio_queue_user_impl_t {
+    /** The next incoming packet to be read. */
+    uint32_t __packet_receive_read;
+    /** The next empty buffers to be read, one index per size. */
+    uint8_t __buffer_read[NETIO_NUM_SIZES];
+    /** Where the empty buffer we next request from the IPP will go, one index
+     * per size. */
+    uint8_t __buffer_requested_write[NETIO_NUM_SIZES];
+    /** PCIe interface flag. */
+    uint8_t __pcie;
+    /** Number of packets left to be received before we send a credit update. */
+    uint32_t __receive_credit_remaining;
+    /** Value placed in __receive_credit_remaining when it reaches zero. */
+    uint32_t __receive_credit_interval;
+    /** First fast I/O routine index. */
+    uint32_t __fastio_index;
+    /** Number of acknowledgements expected. */
+    uint32_t __acks_outstanding;
+    /** Last completion number requested. */
+    uint32_t __last_completion_req;
+    /** File descriptor for driver. */
+    int __fd;
 }
 netio_queue_user_impl_t;
 
@@ -260,14 +257,13 @@ netio_queue_user_impl_t;
  * hypervisor.  FIXME: Actually, it's not used for that anymore, but
  * netio_packet_send() still uses it internally.
  */
-typedef struct
-{
-  uint16_t flags;              /**< Packet flags (__NETIO_SEND_FLG_xxx) */
-  uint16_t transfer_size;      /**< Size of packet */
-  uint32_t va;                 /**< VA of start of packet */
-  __netio_pkt_handle_t handle; /**< Packet handle */
-  uint32_t csum0;              /**< First checksum word */
-  uint32_t csum1;              /**< Second checksum word */
+typedef struct {
+    uint16_t flags;              /**< Packet flags (__NETIO_SEND_FLG_xxx) */
+    uint16_t transfer_size;      /**< Size of packet */
+    uint32_t va;                 /**< VA of start of packet */
+    __netio_pkt_handle_t handle; /**< Packet handle */
+    uint32_t csum0;              /**< First checksum word */
+    uint32_t csum1;              /**< Second checksum word */
 }
 __netio_send_cmd_t;
 

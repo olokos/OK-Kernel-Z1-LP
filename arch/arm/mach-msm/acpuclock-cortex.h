@@ -20,60 +20,60 @@
 #define NUM_SPEED_BIN	8
 
 enum clk_src {
-	CXO,
-	PLL0,
-	ACPUPLL,
-	NUM_SRC,
+    CXO,
+    PLL0,
+    ACPUPLL,
+    NUM_SRC,
 };
 
 struct src_clock {
-	struct clk *clk;
-	const char *name;
+    struct clk *clk;
+    const char *name;
 };
 
 struct clkctl_acpu_speed {
-	bool use_for_scaling;
-	unsigned int khz;
-	int src;
-	unsigned int src_sel;
-	unsigned int src_div;
-	unsigned int vdd_cpu;
-	unsigned int vdd_mem;
-	unsigned int bw_level;
+    bool use_for_scaling;
+    unsigned int khz;
+    int src;
+    unsigned int src_sel;
+    unsigned int src_div;
+    unsigned int vdd_cpu;
+    unsigned int vdd_mem;
+    unsigned int bw_level;
 };
 
 struct acpuclk_reg_data {
-	u32 cfg_src_mask;
-	u32 cfg_src_shift;
-	u32 cfg_div_mask;
-	u32 cfg_div_shift;
-	u32 update_mask;
-	u32 poll_mask;
+    u32 cfg_src_mask;
+    u32 cfg_src_shift;
+    u32 cfg_div_mask;
+    u32 cfg_div_shift;
+    u32 update_mask;
+    u32 poll_mask;
 };
 
 struct acpuclk_drv_data {
-	struct mutex			lock;
-	struct clkctl_acpu_speed	*freq_tbl;
-	struct clkctl_acpu_speed	**pvs_tables;
-	void __iomem			*pte_efuse_base;
-	struct clkctl_acpu_speed	*current_speed;
-	struct msm_bus_scale_pdata	*bus_scale;
-	void __iomem			*apcs_rcg_config;
-	void __iomem			*apcs_rcg_cmd;
-	void __iomem			*apcs_cpu_pwr_ctl;
-	struct regulator		*vdd_cpu;
-	unsigned long			vdd_max_cpu;
-	struct regulator		*vdd_mem;
-	unsigned long			vdd_max_mem;
-	struct src_clock		src_clocks[NUM_SRC];
-	struct acpuclk_reg_data		reg_data;
-	unsigned long                   power_collapse_khz;
-	unsigned long                   wait_for_irq_khz;
+    struct mutex			lock;
+    struct clkctl_acpu_speed	*freq_tbl;
+    struct clkctl_acpu_speed	**pvs_tables;
+    void __iomem			*pte_efuse_base;
+    struct clkctl_acpu_speed	*current_speed;
+    struct msm_bus_scale_pdata	*bus_scale;
+    void __iomem			*apcs_rcg_config;
+    void __iomem			*apcs_rcg_cmd;
+    void __iomem			*apcs_cpu_pwr_ctl;
+    struct regulator		*vdd_cpu;
+    unsigned long			vdd_max_cpu;
+    struct regulator		*vdd_mem;
+    unsigned long			vdd_max_mem;
+    struct src_clock		src_clocks[NUM_SRC];
+    struct acpuclk_reg_data		reg_data;
+    unsigned long                   power_collapse_khz;
+    unsigned long                   wait_for_irq_khz;
 };
 
 struct bin_info {
-	bool speed_valid;
-	int speed;
+    bool speed_valid;
+    int speed;
 };
 
 /* Instantaneous bandwidth requests in MB/s. */
@@ -89,5 +89,5 @@ struct bin_info {
 	}
 
 int __init acpuclk_cortex_init(struct platform_device *pdev,
-	struct acpuclk_drv_data *data);
+                               struct acpuclk_drv_data *data);
 

@@ -42,26 +42,26 @@
  * Structure for obtaining GRU resource information
  */
 struct gru_chiplet_info {
-	int	node;
-	int	chiplet;
-	int	blade;
-	int	total_dsr_bytes;
-	int	total_cbr;
-	int	total_user_dsr_bytes;
-	int	total_user_cbr;
-	int	free_user_dsr_bytes;
-	int	free_user_cbr;
+    int	node;
+    int	chiplet;
+    int	blade;
+    int	total_dsr_bytes;
+    int	total_cbr;
+    int	total_user_dsr_bytes;
+    int	total_user_cbr;
+    int	free_user_dsr_bytes;
+    int	free_user_cbr;
 };
 
 /*
  * Statictics kept for each context.
  */
 struct gru_gseg_statistics {
-	unsigned long	fmm_tlbmiss;
-	unsigned long	upm_tlbmiss;
-	unsigned long	tlbdropin;
-	unsigned long	context_stolen;
-	unsigned long	reserved[10];
+    unsigned long	fmm_tlbmiss;
+    unsigned long	upm_tlbmiss;
+    unsigned long	tlbdropin;
+    unsigned long	context_stolen;
+    unsigned long	reserved[10];
 };
 
 /* Flags for GRU options on the gru_create_context() call */

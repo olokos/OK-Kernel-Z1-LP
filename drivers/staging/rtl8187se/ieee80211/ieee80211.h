@@ -92,34 +92,34 @@
 
 //by amy for ps
 typedef struct ieee_param {
-	u32 cmd;
-	u8 sta_addr[ETH_ALEN];
-        union {
-		struct {
-			u8 name;
-			u32 value;
-		} wpa_param;
-		struct {
-			u32 len;
-			u8 reserved[32];
-			u8 data[0];
-		} wpa_ie;
-	        struct{
-			int command;
-    			int reason_code;
-		} mlme;
-		struct {
-			u8 alg[IEEE_CRYPT_ALG_NAME_LEN];
-			u8 set_tx;
-			u32 err;
-			u8 idx;
-			u8 seq[8]; /* sequence counter (set: RX, get: TX) */
-			u16 key_len;
-			u8 key[0];
-		} crypt;
+    u32 cmd;
+    u8 sta_addr[ETH_ALEN];
+    union {
+        struct {
+            u8 name;
+            u32 value;
+        } wpa_param;
+        struct {
+            u32 len;
+            u8 reserved[32];
+            u8 data[0];
+        } wpa_ie;
+        struct {
+            int command;
+            int reason_code;
+        } mlme;
+        struct {
+            u8 alg[IEEE_CRYPT_ALG_NAME_LEN];
+            u8 set_tx;
+            u32 err;
+            u8 idx;
+            u8 seq[8]; /* sequence counter (set: RX, get: TX) */
+            u16 key_len;
+            u8 key[0];
+        } crypt;
 
-	} u;
-}ieee_param;
+    } u;
+} ieee_param;
 
 
 #define MSECS(t) msecs_to_jiffies(t)
@@ -238,10 +238,10 @@ do { if (ieee80211_debug_level & (level)) \
 
 struct ieee80211_snap_hdr {
 
-        u8    dsap;   /* always 0xAA */
-        u8    ssap;   /* always 0xAA */
-        u8    ctrl;   /* always 0x03 */
-        u8    oui[P80211_OUI_LEN];    /* organizational universal id */
+    u8    dsap;   /* always 0xAA */
+    u8    ssap;   /* always 0xAA */
+    u8    ctrl;   /* always 0x03 */
+    u8    oui[P80211_OUI_LEN];    /* organizational universal id */
 
 } __attribute__ ((packed));
 
@@ -335,29 +335,29 @@ struct ieee80211_snap_hdr {
 /* this is stolen from ipw2200 driver */
 #define IEEE_IBSS_MAC_HASH_SIZE 31
 struct ieee_ibss_seq {
-	u8 mac[ETH_ALEN];
-	u16 seq_num[17];
-	u16 frag_num[17];
-	unsigned long packet_time[17];
-	struct list_head list;
+    u8 mac[ETH_ALEN];
+    u16 seq_num[17];
+    u16 frag_num[17];
+    unsigned long packet_time[17];
+    struct list_head list;
 };
 
 /* NOTE: This data is for statistical purposes; not all hardware provides this
  *       information for frames received.  Not setting these will not cause
  *       any adverse affects. */
 struct ieee80211_rx_stats {
-	u32 mac_time[2];
-	u8 signalstrength;
-	s8 rssi;
-	u8 signal;
-	u8 noise;
-	u16 rate; /* in 100 kbps */
-	u8 received_channel;
-	u8 control;
-	u8 mask;
-	u8 freq;
-	u16 len;
-	u8 nic_type;
+    u32 mac_time[2];
+    u8 signalstrength;
+    s8 rssi;
+    u8 signal;
+    u8 noise;
+    u16 rate; /* in 100 kbps */
+    u8 received_channel;
+    u8 control;
+    u8 mask;
+    u8 freq;
+    u16 len;
+    u8 nic_type;
 };
 
 /* IEEE 802.11 requires that STA supports concurrent reception of at least
@@ -367,36 +367,36 @@ struct ieee80211_rx_stats {
 #define IEEE80211_FRAG_CACHE_LEN 4
 
 struct ieee80211_frag_entry {
-	unsigned long first_frag_time;
-	unsigned int seq;
-	unsigned int last_frag;
-	struct sk_buff *skb;
-	u8 src_addr[ETH_ALEN];
-	u8 dst_addr[ETH_ALEN];
+    unsigned long first_frag_time;
+    unsigned int seq;
+    unsigned int last_frag;
+    struct sk_buff *skb;
+    u8 src_addr[ETH_ALEN];
+    u8 dst_addr[ETH_ALEN];
 };
 
 struct ieee80211_stats {
-	unsigned int tx_unicast_frames;
-	unsigned int tx_multicast_frames;
-	unsigned int tx_fragments;
-	unsigned int tx_unicast_octets;
-	unsigned int tx_multicast_octets;
-	unsigned int tx_deferred_transmissions;
-	unsigned int tx_single_retry_frames;
-	unsigned int tx_multiple_retry_frames;
-	unsigned int tx_retry_limit_exceeded;
-	unsigned int tx_discards;
-	unsigned int rx_unicast_frames;
-	unsigned int rx_multicast_frames;
-	unsigned int rx_fragments;
-	unsigned int rx_unicast_octets;
-	unsigned int rx_multicast_octets;
-	unsigned int rx_fcs_errors;
-	unsigned int rx_discards_no_buffer;
-	unsigned int tx_discards_wrong_sa;
-	unsigned int rx_discards_undecryptable;
-	unsigned int rx_message_in_msg_fragments;
-	unsigned int rx_message_in_bad_msg_fragments;
+    unsigned int tx_unicast_frames;
+    unsigned int tx_multicast_frames;
+    unsigned int tx_fragments;
+    unsigned int tx_unicast_octets;
+    unsigned int tx_multicast_octets;
+    unsigned int tx_deferred_transmissions;
+    unsigned int tx_single_retry_frames;
+    unsigned int tx_multiple_retry_frames;
+    unsigned int tx_retry_limit_exceeded;
+    unsigned int tx_discards;
+    unsigned int rx_unicast_frames;
+    unsigned int rx_multicast_frames;
+    unsigned int rx_fragments;
+    unsigned int rx_unicast_octets;
+    unsigned int rx_multicast_octets;
+    unsigned int rx_fcs_errors;
+    unsigned int rx_discards_no_buffer;
+    unsigned int tx_discards_wrong_sa;
+    unsigned int rx_discards_undecryptable;
+    unsigned int rx_message_in_msg_fragments;
+    unsigned int rx_message_in_bad_msg_fragments;
 };
 
 struct ieee80211_device;
@@ -425,15 +425,15 @@ struct ieee80211_device;
 #define WEP_KEY_LEN_MODIF 32
 
 struct ieee80211_security {
-	u16 active_key:2,
-            enabled:1,
-	    auth_mode:2,
-            auth_algo:4,
-            unicast_uses_group:1;
-	u8 key_sizes[WEP_KEYS];
-	u8 keys[WEP_KEYS][WEP_KEY_LEN_MODIF];
-	u8 level;
-	u16 flags;
+    u16 active_key:2,
+        enabled:1,
+        auth_mode:2,
+        auth_algo:4,
+        unicast_uses_group:1;
+    u8 key_sizes[WEP_KEYS];
+    u8 keys[WEP_KEYS][WEP_KEY_LEN_MODIF];
+    u8 level;
+    u16 flags;
 } __attribute__ ((packed));
 
 
@@ -454,121 +454,121 @@ Total: 28-2340 bytes
 
 /* Management Frame Information Element Types */
 enum {
-	MFIE_TYPE_SSID = 0,
-	MFIE_TYPE_RATES = 1,
-	MFIE_TYPE_FH_SET = 2,
-	MFIE_TYPE_DS_SET = 3,
-	MFIE_TYPE_CF_SET = 4,
-	MFIE_TYPE_TIM = 5,
-	MFIE_TYPE_IBSS_SET = 6,
-	MFIE_TYPE_COUNTRY = 7,
-	MFIE_TYPE_CHALLENGE = 16,
-	MFIE_TYPE_ERP = 42,
-	MFIE_TYPE_RSN = 48,
-	MFIE_TYPE_RATES_EX = 50,
-	MFIE_TYPE_GENERIC = 221,
+    MFIE_TYPE_SSID = 0,
+    MFIE_TYPE_RATES = 1,
+    MFIE_TYPE_FH_SET = 2,
+    MFIE_TYPE_DS_SET = 3,
+    MFIE_TYPE_CF_SET = 4,
+    MFIE_TYPE_TIM = 5,
+    MFIE_TYPE_IBSS_SET = 6,
+    MFIE_TYPE_COUNTRY = 7,
+    MFIE_TYPE_CHALLENGE = 16,
+    MFIE_TYPE_ERP = 42,
+    MFIE_TYPE_RSN = 48,
+    MFIE_TYPE_RATES_EX = 50,
+    MFIE_TYPE_GENERIC = 221,
 };
 
 struct ieee80211_header_data {
-	u16 frame_ctl;
-	u16 duration_id;
-	u8 addr1[6];
-	u8 addr2[6];
-	u8 addr3[6];
-	u16 seq_ctrl;
+    u16 frame_ctl;
+    u16 duration_id;
+    u8 addr1[6];
+    u8 addr2[6];
+    u8 addr3[6];
+    u16 seq_ctrl;
 };
 
 struct ieee80211_hdr_4addr {
-	u16 frame_ctl;
-	u16 duration_id;
-	u8 addr1[ETH_ALEN];
-	u8 addr2[ETH_ALEN];
-	u8 addr3[ETH_ALEN];
-	u16 seq_ctl;
-	u8 addr4[ETH_ALEN];
+    u16 frame_ctl;
+    u16 duration_id;
+    u8 addr1[ETH_ALEN];
+    u8 addr2[ETH_ALEN];
+    u8 addr3[ETH_ALEN];
+    u16 seq_ctl;
+    u8 addr4[ETH_ALEN];
 } __attribute__ ((packed));
 
 struct ieee80211_hdr_3addrqos {
-	u16 frame_ctl;
-	u16 duration_id;
-	u8 addr1[ETH_ALEN];
-	u8 addr2[ETH_ALEN];
-	u8 addr3[ETH_ALEN];
-	u16 seq_ctl;
-	u16 qos_ctl;
+    u16 frame_ctl;
+    u16 duration_id;
+    u8 addr1[ETH_ALEN];
+    u8 addr2[ETH_ALEN];
+    u8 addr3[ETH_ALEN];
+    u16 seq_ctl;
+    u16 qos_ctl;
 } __attribute__ ((packed));
 
 struct ieee80211_hdr_4addrqos {
-	u16 frame_ctl;
-	u16 duration_id;
-	u8 addr1[ETH_ALEN];
-	u8 addr2[ETH_ALEN];
-	u8 addr3[ETH_ALEN];
-	u16 seq_ctl;
-	u8 addr4[ETH_ALEN];
-	u16 qos_ctl;
+    u16 frame_ctl;
+    u16 duration_id;
+    u8 addr1[ETH_ALEN];
+    u8 addr2[ETH_ALEN];
+    u8 addr3[ETH_ALEN];
+    u16 seq_ctl;
+    u8 addr4[ETH_ALEN];
+    u16 qos_ctl;
 } __attribute__ ((packed));
 
 struct ieee80211_info_element_hdr {
-	u8 id;
-	u8 len;
+    u8 id;
+    u8 len;
 } __attribute__ ((packed));
 
 struct ieee80211_info_element {
-	u8 id;
-	u8 len;
-	u8 data[0];
+    u8 id;
+    u8 len;
+    u8 data[0];
 } __attribute__ ((packed));
 
 struct ieee80211_authentication {
-	struct ieee80211_header_data header;
-	u16 algorithm;
-	u16 transaction;
-	u16 status;
-	//struct ieee80211_info_element_hdr info_element;
+    struct ieee80211_header_data header;
+    u16 algorithm;
+    u16 transaction;
+    u16 status;
+    //struct ieee80211_info_element_hdr info_element;
 } __attribute__ ((packed));
 
 struct ieee80211_disassoc_frame {
-	struct ieee80211_hdr_3addr header;
-	u16    reasoncode;
+    struct ieee80211_hdr_3addr header;
+    u16    reasoncode;
 } __attribute__ ((packed));
 
 struct ieee80211_probe_request {
-	struct ieee80211_header_data header;
-	/* struct ieee80211_info_element info_element; */
+    struct ieee80211_header_data header;
+    /* struct ieee80211_info_element info_element; */
 } __attribute__ ((packed));
 
 struct ieee80211_probe_response {
-	struct ieee80211_header_data header;
-	u32 time_stamp[2];
-	u16 beacon_interval;
-	u16 capability;
-	struct ieee80211_info_element info_element;
+    struct ieee80211_header_data header;
+    u32 time_stamp[2];
+    u16 beacon_interval;
+    u16 capability;
+    struct ieee80211_info_element info_element;
 } __attribute__ ((packed));
 
 struct ieee80211_assoc_request_frame {
-	struct ieee80211_hdr_3addr header;
-	u16 capability;
-	u16 listen_interval;
-	//u8 current_ap[ETH_ALEN];
-	struct ieee80211_info_element_hdr info_element;
+    struct ieee80211_hdr_3addr header;
+    u16 capability;
+    u16 listen_interval;
+    //u8 current_ap[ETH_ALEN];
+    struct ieee80211_info_element_hdr info_element;
 } __attribute__ ((packed));
 
 struct ieee80211_assoc_response_frame {
-	struct ieee80211_hdr_3addr header;
-	u16 capability;
-	u16 status;
-	u16 aid;
-	struct ieee80211_info_element info_element; /* supported rates */
+    struct ieee80211_hdr_3addr header;
+    u16 capability;
+    u16 status;
+    u16 aid;
+    struct ieee80211_info_element info_element; /* supported rates */
 } __attribute__ ((packed));
 
 struct ieee80211_txb {
-	u8 nr_frags;
-	u8 encrypted;
-	u16 reserved;
-	u16 frag_size;
-	u16 payload_size;
-	struct sk_buff *fragments[0];
+    u8 nr_frags;
+    u8 encrypted;
+    u16 reserved;
+    u16 frag_size;
+    u16 payload_size;
+    struct sk_buff *fragments[0];
 };
 
 /* SWEEP TABLE ENTRIES NUMBER */
@@ -598,83 +598,82 @@ struct ieee80211_txb {
 #define NETWORK_HAS_CCK		(1 << 2)
 
 struct ieee80211_wmm_ac_param {
-	u8 ac_aci_acm_aifsn;
-	u8 ac_ecwmin_ecwmax;
-	u16 ac_txop_limit;
+    u8 ac_aci_acm_aifsn;
+    u8 ac_ecwmin_ecwmax;
+    u16 ac_txop_limit;
 };
 
 struct ieee80211_wmm_ts_info {
-	u8 ac_dir_tid;
-	u8 ac_up_psb;
-	u8 reserved;
+    u8 ac_dir_tid;
+    u8 ac_up_psb;
+    u8 reserved;
 } __attribute__ ((packed));
 
 struct ieee80211_wmm_tspec_elem {
-	struct ieee80211_wmm_ts_info ts_info;
-	u16 norm_msdu_size;
-	u16 max_msdu_size;
-	u32 min_serv_inter;
-	u32 max_serv_inter;
-	u32 inact_inter;
-	u32 suspen_inter;
-	u32 serv_start_time;
-	u32 min_data_rate;
-	u32 mean_data_rate;
-	u32 peak_data_rate;
-	u32 max_burst_size;
-	u32 delay_bound;
-	u32 min_phy_rate;
-	u16 surp_band_allow;
-	u16 medium_time;
-}__attribute__((packed));
+    struct ieee80211_wmm_ts_info ts_info;
+    u16 norm_msdu_size;
+    u16 max_msdu_size;
+    u32 min_serv_inter;
+    u32 max_serv_inter;
+    u32 inact_inter;
+    u32 suspen_inter;
+    u32 serv_start_time;
+    u32 min_data_rate;
+    u32 mean_data_rate;
+    u32 peak_data_rate;
+    u32 max_burst_size;
+    u32 delay_bound;
+    u32 min_phy_rate;
+    u16 surp_band_allow;
+    u16 medium_time;
+} __attribute__((packed));
 
 enum eap_type {
-	EAP_PACKET = 0,
-	EAPOL_START,
-	EAPOL_LOGOFF,
-	EAPOL_KEY,
-	EAPOL_ENCAP_ASF_ALERT
+    EAP_PACKET = 0,
+    EAPOL_START,
+    EAPOL_LOGOFF,
+    EAPOL_KEY,
+    EAPOL_ENCAP_ASF_ALERT
 };
 
 static const char *eap_types[] = {
-	[EAP_PACKET]		= "EAP-Packet",
-	[EAPOL_START]		= "EAPOL-Start",
-	[EAPOL_LOGOFF]		= "EAPOL-Logoff",
-	[EAPOL_KEY]		= "EAPOL-Key",
-	[EAPOL_ENCAP_ASF_ALERT]	= "EAPOL-Encap-ASF-Alert"
+    [EAP_PACKET]		= "EAP-Packet",
+    [EAPOL_START]		= "EAPOL-Start",
+    [EAPOL_LOGOFF]		= "EAPOL-Logoff",
+    [EAPOL_KEY]		= "EAPOL-Key",
+    [EAPOL_ENCAP_ASF_ALERT]	= "EAPOL-Encap-ASF-Alert"
 };
 
-static inline const char *eap_get_type(int type)
-{
-	return (type >= ARRAY_SIZE(eap_types)) ? "Unknown" : eap_types[type];
+static inline const char *eap_get_type(int type) {
+    return (type >= ARRAY_SIZE(eap_types)) ? "Unknown" : eap_types[type];
 }
 
 struct eapol {
-	u8 snap[6];
-	u16 ethertype;
-	u8 version;
-	u8 type;
-	u16 length;
+    u8 snap[6];
+    u16 ethertype;
+    u8 version;
+    u8 type;
+    u16 length;
 } __attribute__ ((packed));
 
 struct ieee80211_softmac_stats {
-	unsigned int rx_ass_ok;
-	unsigned int rx_ass_err;
-	unsigned int rx_probe_rq;
-	unsigned int tx_probe_rs;
-	unsigned int tx_beacons;
-	unsigned int rx_auth_rq;
-	unsigned int rx_auth_rs_ok;
-	unsigned int rx_auth_rs_err;
-	unsigned int tx_auth_rq;
-	unsigned int no_auth_rs;
-	unsigned int no_ass_rs;
-	unsigned int tx_ass_rq;
-	unsigned int rx_ass_rq;
-	unsigned int tx_probe_rq;
-	unsigned int reassoc;
-	unsigned int swtxstop;
-	unsigned int swtxawake;
+    unsigned int rx_ass_ok;
+    unsigned int rx_ass_err;
+    unsigned int rx_probe_rq;
+    unsigned int tx_probe_rs;
+    unsigned int tx_beacons;
+    unsigned int rx_auth_rq;
+    unsigned int rx_auth_rs_ok;
+    unsigned int rx_auth_rs_err;
+    unsigned int tx_auth_rq;
+    unsigned int no_auth_rs;
+    unsigned int no_ass_rs;
+    unsigned int tx_ass_rq;
+    unsigned int rx_ass_rq;
+    unsigned int tx_probe_rq;
+    unsigned int reassoc;
+    unsigned int swtxstop;
+    unsigned int swtxawake;
 };
 
 #define BEACON_PROBE_SSID_ID_POSITION 12
@@ -706,10 +705,10 @@ enum {WMM_all_frame, WMM_two_frame, WMM_four_frame, WMM_six_frame};
 
 #define MAX_IE_LEN						0xFF //+YJ,080625
 
-typedef struct _CHANNEL_LIST{
-	u8	Channel[MAX_CHANNEL_NUMBER + 1];
-	u8	Len;
-}CHANNEL_LIST, *PCHANNEL_LIST;
+typedef struct _CHANNEL_LIST {
+    u8	Channel[MAX_CHANNEL_NUMBER + 1];
+    u8	Len;
+} CHANNEL_LIST, *PCHANNEL_LIST;
 
 //by amy for ps
 #define IEEE80211_WATCH_DOG_TIME    2000
@@ -758,9 +757,9 @@ typedef struct _CHANNEL_LIST{
 
 #define	ETHER_ADDR_LEN		6	/* length of an Ethernet address */
 struct	ether_header {
-	u8 ether_dhost[ETHER_ADDR_LEN];
-	u8 ether_shost[ETHER_ADDR_LEN];
-	u16 ether_type;
+    u8 ether_dhost[ETHER_ADDR_LEN];
+    u8 ether_shost[ETHER_ADDR_LEN];
+    u16 ether_type;
 } __attribute__((packed));
 
 #ifndef ETHERTYPE_PAE
@@ -771,85 +770,85 @@ struct	ether_header {
 #endif
 
 struct ieee80211_network {
-	/* These entries are used to identify a unique network */
-	u8 bssid[ETH_ALEN];
-	u8 channel;
-	/* Ensure null-terminated for any debug msgs */
-	u8 ssid[IW_ESSID_MAX_SIZE + 1];
-	u8 ssid_len;
+    /* These entries are used to identify a unique network */
+    u8 bssid[ETH_ALEN];
+    u8 channel;
+    /* Ensure null-terminated for any debug msgs */
+    u8 ssid[IW_ESSID_MAX_SIZE + 1];
+    u8 ssid_len;
 
-	/* These are network statistics */
-	struct ieee80211_rx_stats stats;
-	u16 capability;
-	u8 rates[MAX_RATES_LENGTH];
-	u8 rates_len;
-	u8 rates_ex[MAX_RATES_EX_LENGTH];
-	u8 rates_ex_len;
-	unsigned long last_scanned;
-	u8 mode;
-	u8 flags;
-	u32 last_associate;
-	u32 time_stamp[2];
-	u16 beacon_interval;
-	u16 listen_interval;
-	u16 atim_window;
-	u8 wpa_ie[MAX_WPA_IE_LEN];
-	size_t wpa_ie_len;
-	u8 rsn_ie[MAX_WPA_IE_LEN];
-	size_t rsn_ie_len;
-	u8 dtim_period;
-	u8 dtim_data;
-	u32 last_dtim_sta_time[2];
-	struct list_head list;
-	//appeded for QoS
-	u8 wmm_info;
-	struct ieee80211_wmm_ac_param wmm_param[4];
-	u8 QoS_Enable;
-	u8 SignalStrength;
+    /* These are network statistics */
+    struct ieee80211_rx_stats stats;
+    u16 capability;
+    u8 rates[MAX_RATES_LENGTH];
+    u8 rates_len;
+    u8 rates_ex[MAX_RATES_EX_LENGTH];
+    u8 rates_ex_len;
+    unsigned long last_scanned;
+    u8 mode;
+    u8 flags;
+    u32 last_associate;
+    u32 time_stamp[2];
+    u16 beacon_interval;
+    u16 listen_interval;
+    u16 atim_window;
+    u8 wpa_ie[MAX_WPA_IE_LEN];
+    size_t wpa_ie_len;
+    u8 rsn_ie[MAX_WPA_IE_LEN];
+    size_t rsn_ie_len;
+    u8 dtim_period;
+    u8 dtim_data;
+    u32 last_dtim_sta_time[2];
+    struct list_head list;
+    //appeded for QoS
+    u8 wmm_info;
+    struct ieee80211_wmm_ac_param wmm_param[4];
+    u8 QoS_Enable;
+    u8 SignalStrength;
 //by amy 080312
-	u8 HighestOperaRate;
+    u8 HighestOperaRate;
 //by amy 080312
-	u8 Turbo_Enable;//enable turbo mode, added by thomas
-	u16 CountryIeLen;
-	u8 CountryIeBuf[MAX_IE_LEN];
+    u8 Turbo_Enable;//enable turbo mode, added by thomas
+    u16 CountryIeLen;
+    u8 CountryIeBuf[MAX_IE_LEN];
 };
 
 enum ieee80211_state {
 
-	/* the card is not linked at all */
-	IEEE80211_NOLINK = 0,
+    /* the card is not linked at all */
+    IEEE80211_NOLINK = 0,
 
-	/* IEEE80211_ASSOCIATING* are for BSS client mode
-	 * the driver shall not perform RX filtering unless
-	 * the state is LINKED.
-	 * The driver shall just check for the state LINKED and
-	 * defaults to NOLINK for ALL the other states (including
-	 * LINKED_SCANNING)
-	 */
+    /* IEEE80211_ASSOCIATING* are for BSS client mode
+     * the driver shall not perform RX filtering unless
+     * the state is LINKED.
+     * The driver shall just check for the state LINKED and
+     * defaults to NOLINK for ALL the other states (including
+     * LINKED_SCANNING)
+     */
 
-	/* the association procedure will start (wq scheduling)*/
-	IEEE80211_ASSOCIATING,
-	IEEE80211_ASSOCIATING_RETRY,
+    /* the association procedure will start (wq scheduling)*/
+    IEEE80211_ASSOCIATING,
+    IEEE80211_ASSOCIATING_RETRY,
 
-	/* the association procedure is sending AUTH request*/
-	IEEE80211_ASSOCIATING_AUTHENTICATING,
+    /* the association procedure is sending AUTH request*/
+    IEEE80211_ASSOCIATING_AUTHENTICATING,
 
-	/* the association procedure has successfully authentcated
-	 * and is sending association request
-	 */
-	IEEE80211_ASSOCIATING_AUTHENTICATED,
+    /* the association procedure has successfully authentcated
+     * and is sending association request
+     */
+    IEEE80211_ASSOCIATING_AUTHENTICATED,
 
-	/* the link is ok. the card associated to a BSS or linked
-	 * to a ibss cell or acting as an AP and creating the bss
-	 */
-	IEEE80211_LINKED,
+    /* the link is ok. the card associated to a BSS or linked
+     * to a ibss cell or acting as an AP and creating the bss
+     */
+    IEEE80211_LINKED,
 
-	/* same as LINKED, but the driver shall apply RX filter
-	 * rules as we are in NO_LINK mode. As the card is still
-	 * logically linked, but it is doing a syncro site survey
-	 * then it will be back to LINKED state.
-	 */
-	IEEE80211_LINKED_SCANNING,
+    /* same as LINKED, but the driver shall apply RX filter
+     * rules as we are in NO_LINK mode. As the card is still
+     * logically linked, but it is doing a syncro site survey
+     * then it will be back to LINKED state.
+     */
+    IEEE80211_LINKED_SCANNING,
 
 };
 
@@ -859,323 +858,323 @@ enum ieee80211_state {
 #define CFG_IEEE80211_RESERVE_FCS (1<<0)
 #define CFG_IEEE80211_COMPUTE_FCS (1<<1)
 
-typedef struct tx_pending_t{
-	int frag;
-	struct ieee80211_txb *txb;
-}tx_pending_t;
+typedef struct tx_pending_t {
+    int frag;
+    struct ieee80211_txb *txb;
+} tx_pending_t;
 
 enum {
-	COUNTRY_CODE_FCC = 0,
-	COUNTRY_CODE_IC = 1,
-	COUNTRY_CODE_ETSI = 2,
-	COUNTRY_CODE_SPAIN = 3,
-	COUNTRY_CODE_FRANCE = 4,
-	COUNTRY_CODE_MKK = 5,
-	COUNTRY_CODE_MKK1 = 6,
-	COUNTRY_CODE_ISRAEL = 7,
-	COUNTRY_CODE_TELEC = 8,
-	COUNTRY_CODE_GLOBAL_DOMAIN = 9,
-	COUNTRY_CODE_WORLD_WIDE_13_INDEX = 10
+    COUNTRY_CODE_FCC = 0,
+    COUNTRY_CODE_IC = 1,
+    COUNTRY_CODE_ETSI = 2,
+    COUNTRY_CODE_SPAIN = 3,
+    COUNTRY_CODE_FRANCE = 4,
+    COUNTRY_CODE_MKK = 5,
+    COUNTRY_CODE_MKK1 = 6,
+    COUNTRY_CODE_ISRAEL = 7,
+    COUNTRY_CODE_TELEC = 8,
+    COUNTRY_CODE_GLOBAL_DOMAIN = 9,
+    COUNTRY_CODE_WORLD_WIDE_13_INDEX = 10
 };
 
 struct ieee80211_device {
-	struct net_device *dev;
+    struct net_device *dev;
 
-	/* Bookkeeping structures */
-	struct net_device_stats stats;
-	struct ieee80211_stats ieee_stats;
-	struct ieee80211_softmac_stats softmac_stats;
+    /* Bookkeeping structures */
+    struct net_device_stats stats;
+    struct ieee80211_stats ieee_stats;
+    struct ieee80211_softmac_stats softmac_stats;
 
-	/* Probe / Beacon management */
-	struct list_head network_free_list;
-	struct list_head network_list;
-	struct ieee80211_network *networks;
-	int scans;
-	int scan_age;
+    /* Probe / Beacon management */
+    struct list_head network_free_list;
+    struct list_head network_list;
+    struct ieee80211_network *networks;
+    int scans;
+    int scan_age;
 
-	int iw_mode; /* operating mode (IW_MODE_*) */
+    int iw_mode; /* operating mode (IW_MODE_*) */
 
-	spinlock_t lock;
-	spinlock_t wpax_suitlist_lock;
+    spinlock_t lock;
+    spinlock_t wpax_suitlist_lock;
 
-	int tx_headroom; /* Set to size of any additional room needed at front
+    int tx_headroom; /* Set to size of any additional room needed at front
 			  * of allocated Tx SKBs */
-	u32 config;
+    u32 config;
 
-	/* WEP and other encryption related settings at the device level */
-	int open_wep; /* Set to 1 to allow unencrypted frames */
+    /* WEP and other encryption related settings at the device level */
+    int open_wep; /* Set to 1 to allow unencrypted frames */
 
-	int reset_on_keychange; /* Set to 1 if the HW needs to be reset on
+    int reset_on_keychange; /* Set to 1 if the HW needs to be reset on
 				 * WEP key changes */
 
-	/* If the host performs {en,de}cryption, then set to 1 */
-	int host_encrypt;
-	int host_decrypt;
-	int ieee802_1x; /* is IEEE 802.1X used */
+    /* If the host performs {en,de}cryption, then set to 1 */
+    int host_encrypt;
+    int host_decrypt;
+    int ieee802_1x; /* is IEEE 802.1X used */
 
-	/* WPA data */
-	int wpa_enabled;
-	int drop_unencrypted;
-	int tkip_countermeasures;
-	int privacy_invoked;
-	size_t wpa_ie_len;
-	u8 *wpa_ie;
+    /* WPA data */
+    int wpa_enabled;
+    int drop_unencrypted;
+    int tkip_countermeasures;
+    int privacy_invoked;
+    size_t wpa_ie_len;
+    u8 *wpa_ie;
 
-	u8 ap_mac_addr[6];
-	u16 pairwise_key_type;
-	u16 broadcast_key_type;
+    u8 ap_mac_addr[6];
+    u16 pairwise_key_type;
+    u16 broadcast_key_type;
 
-	struct list_head crypt_deinit_list;
-	struct ieee80211_crypt_data *crypt[WEP_KEYS];
-	int tx_keyidx; /* default TX key index (crypt[tx_keyidx]) */
-	struct timer_list crypt_deinit_timer;
+    struct list_head crypt_deinit_list;
+    struct ieee80211_crypt_data *crypt[WEP_KEYS];
+    int tx_keyidx; /* default TX key index (crypt[tx_keyidx]) */
+    struct timer_list crypt_deinit_timer;
 
-	int bcrx_sta_key; /* use individual keys to override default keys even
+    int bcrx_sta_key; /* use individual keys to override default keys even
 			   * with RX of broad/multicast frames */
 
-	/* Fragmentation structures */
-	// each streaming contain a entry
-	struct ieee80211_frag_entry frag_cache[17][IEEE80211_FRAG_CACHE_LEN];
-	unsigned int frag_next_idx[17];
-	u16 fts; /* Fragmentation Threshold */
+    /* Fragmentation structures */
+    // each streaming contain a entry
+    struct ieee80211_frag_entry frag_cache[17][IEEE80211_FRAG_CACHE_LEN];
+    unsigned int frag_next_idx[17];
+    u16 fts; /* Fragmentation Threshold */
 
-	/* This stores infos for the current network.
-	 * Either the network we are associated in INFRASTRUCTURE
-	 * or the network that we are creating in MASTER mode.
-	 * ad-hoc is a mixture ;-).
-	 * Note that in infrastructure mode, even when not associated,
-	 * fields bssid and essid may be valid (if wpa_set and essid_set
-	 * are true) as thy carry the value set by the user via iwconfig
-	 */
-	struct ieee80211_network current_network;
-
-
-	enum ieee80211_state state;
-
-	int short_slot;
-	int mode;       /* A, B, G */
-	int modulation; /* CCK, OFDM */
-	int freq_band;  /* 2.4Ghz, 5.2Ghz, Mixed */
-	int abg_true;   /* ABG flag              */
-
-	/* used for forcing the ibss workqueue to terminate
-	 * without wait for the syncro scan to terminate
-	 */
-	short sync_scan_hurryup;
-
-	void * pDot11dInfo;
-	bool bGlobalDomain;
-
-	// For Liteon Ch12~13 passive scan
-	u8	MinPassiveChnlNum;
-	u8	IbssStartChnl;
-
-	int rate;       /* current rate */
-	int basic_rate;
-	//FIXME: pleace callback, see if redundant with softmac_features
-	short active_scan;
-
-	/* this contains flags for selectively enable softmac support */
-	u16 softmac_features;
-
-	/* if the sequence control field is not filled by HW */
-	u16 seq_ctrl[5];
-
-	/* association procedure transaction sequence number */
-	u16 associate_seq;
-
-	/* AID for RTXed association responses */
-	u16 assoc_id;
-
-	/* power save mode related*/
-	short ps;
-	short sta_sleep;
-	int ps_timeout;
-	struct tasklet_struct ps_task;
-	u32 ps_th;
-	u32 ps_tl;
-
-	short raw_tx;
-	/* used if IEEE_SOFTMAC_TX_QUEUE is set */
-	short queue_stop;
-	short scanning;
-	short proto_started;
-
-	struct semaphore wx_sem;
-	struct semaphore scan_sem;
-
-	spinlock_t mgmt_tx_lock;
-	spinlock_t beacon_lock;
-
-	short beacon_txing;
-
-	short wap_set;
-	short ssid_set;
-
-	u8  wpax_type_set;    //{added by David, 2006.9.28}
-	u32 wpax_type_notify; //{added by David, 2006.9.26}
-
-	/* QoS related flag */
-	char init_wmmparam_flag;
-
-	/* for discarding duplicated packets in IBSS */
-	struct list_head ibss_mac_hash[IEEE_IBSS_MAC_HASH_SIZE];
-
-	/* for discarding duplicated packets in BSS */
-	u16 last_rxseq_num[17]; /* rx seq previous per-tid */
-	u16 last_rxfrag_num[17];/* tx frag previous per-tid */
-	unsigned long last_packet_time[17];
-
-	/* for PS mode */
-	unsigned long last_rx_ps_time;
-
-	/* used if IEEE_SOFTMAC_SINGLE_QUEUE is set */
-	struct sk_buff *mgmt_queue_ring[MGMT_QUEUE_NUM];
-	int mgmt_queue_head;
-	int mgmt_queue_tail;
+    /* This stores infos for the current network.
+     * Either the network we are associated in INFRASTRUCTURE
+     * or the network that we are creating in MASTER mode.
+     * ad-hoc is a mixture ;-).
+     * Note that in infrastructure mode, even when not associated,
+     * fields bssid and essid may be valid (if wpa_set and essid_set
+     * are true) as thy carry the value set by the user via iwconfig
+     */
+    struct ieee80211_network current_network;
 
 
-	/* used if IEEE_SOFTMAC_TX_QUEUE is set */
-	struct  tx_pending_t tx_pending;
+    enum ieee80211_state state;
 
-	/* used if IEEE_SOFTMAC_ASSOCIATE is set */
-	struct timer_list associate_timer;
+    int short_slot;
+    int mode;       /* A, B, G */
+    int modulation; /* CCK, OFDM */
+    int freq_band;  /* 2.4Ghz, 5.2Ghz, Mixed */
+    int abg_true;   /* ABG flag              */
 
-	/* used if IEEE_SOFTMAC_BEACONS is set */
-	struct timer_list beacon_timer;
+    /* used for forcing the ibss workqueue to terminate
+     * without wait for the syncro scan to terminate
+     */
+    short sync_scan_hurryup;
 
-	struct work_struct associate_complete_wq;
+    void * pDot11dInfo;
+    bool bGlobalDomain;
+
+    // For Liteon Ch12~13 passive scan
+    u8	MinPassiveChnlNum;
+    u8	IbssStartChnl;
+
+    int rate;       /* current rate */
+    int basic_rate;
+    //FIXME: pleace callback, see if redundant with softmac_features
+    short active_scan;
+
+    /* this contains flags for selectively enable softmac support */
+    u16 softmac_features;
+
+    /* if the sequence control field is not filled by HW */
+    u16 seq_ctrl[5];
+
+    /* association procedure transaction sequence number */
+    u16 associate_seq;
+
+    /* AID for RTXed association responses */
+    u16 assoc_id;
+
+    /* power save mode related*/
+    short ps;
+    short sta_sleep;
+    int ps_timeout;
+    struct tasklet_struct ps_task;
+    u32 ps_th;
+    u32 ps_tl;
+
+    short raw_tx;
+    /* used if IEEE_SOFTMAC_TX_QUEUE is set */
+    short queue_stop;
+    short scanning;
+    short proto_started;
+
+    struct semaphore wx_sem;
+    struct semaphore scan_sem;
+
+    spinlock_t mgmt_tx_lock;
+    spinlock_t beacon_lock;
+
+    short beacon_txing;
+
+    short wap_set;
+    short ssid_set;
+
+    u8  wpax_type_set;    //{added by David, 2006.9.28}
+    u32 wpax_type_notify; //{added by David, 2006.9.26}
+
+    /* QoS related flag */
+    char init_wmmparam_flag;
+
+    /* for discarding duplicated packets in IBSS */
+    struct list_head ibss_mac_hash[IEEE_IBSS_MAC_HASH_SIZE];
+
+    /* for discarding duplicated packets in BSS */
+    u16 last_rxseq_num[17]; /* rx seq previous per-tid */
+    u16 last_rxfrag_num[17];/* tx frag previous per-tid */
+    unsigned long last_packet_time[17];
+
+    /* for PS mode */
+    unsigned long last_rx_ps_time;
+
+    /* used if IEEE_SOFTMAC_SINGLE_QUEUE is set */
+    struct sk_buff *mgmt_queue_ring[MGMT_QUEUE_NUM];
+    int mgmt_queue_head;
+    int mgmt_queue_tail;
+
+
+    /* used if IEEE_SOFTMAC_TX_QUEUE is set */
+    struct  tx_pending_t tx_pending;
+
+    /* used if IEEE_SOFTMAC_ASSOCIATE is set */
+    struct timer_list associate_timer;
+
+    /* used if IEEE_SOFTMAC_BEACONS is set */
+    struct timer_list beacon_timer;
+
+    struct work_struct associate_complete_wq;
 //	struct work_struct associate_retry_wq;
-	struct work_struct associate_procedure_wq;
+    struct work_struct associate_procedure_wq;
 //	struct work_struct softmac_scan_wq;
-	struct work_struct wx_sync_scan_wq;
-	struct work_struct wmm_param_update_wq;
-	struct work_struct ps_request_tx_ack_wq;//for ps
+    struct work_struct wx_sync_scan_wq;
+    struct work_struct wmm_param_update_wq;
+    struct work_struct ps_request_tx_ack_wq;//for ps
 //	struct work_struct hw_wakeup_wq;
 //	struct work_struct hw_sleep_wq;
 //	struct work_struct watch_dog_wq;
-	bool bInactivePs;
-	bool actscanning;
-	bool beinretry;
-	u16 ListenInterval;
-	unsigned long NumRxDataInPeriod; //YJ,add,080828
-	unsigned long NumRxBcnInPeriod;  //YJ,add,080828
-	unsigned long NumRxOkTotal;
-	unsigned long NumRxUnicast;//YJ,add,080828,for keep alive
-	bool bHwRadioOff;
-        struct delayed_work softmac_scan_wq;
-        struct delayed_work associate_retry_wq;
-	struct delayed_work hw_wakeup_wq;
-	struct delayed_work hw_sleep_wq;//+by amy 080324
-	struct delayed_work watch_dog_wq;
-	struct delayed_work sw_antenna_wq;
-	struct delayed_work  start_ibss_wq;
+    bool bInactivePs;
+    bool actscanning;
+    bool beinretry;
+    u16 ListenInterval;
+    unsigned long NumRxDataInPeriod; //YJ,add,080828
+    unsigned long NumRxBcnInPeriod;  //YJ,add,080828
+    unsigned long NumRxOkTotal;
+    unsigned long NumRxUnicast;//YJ,add,080828,for keep alive
+    bool bHwRadioOff;
+    struct delayed_work softmac_scan_wq;
+    struct delayed_work associate_retry_wq;
+    struct delayed_work hw_wakeup_wq;
+    struct delayed_work hw_sleep_wq;//+by amy 080324
+    struct delayed_work watch_dog_wq;
+    struct delayed_work sw_antenna_wq;
+    struct delayed_work  start_ibss_wq;
 //by amy for rate adaptive 080312
     struct delayed_work rate_adapter_wq;
 //by amy for rate adaptive
-	struct delayed_work hw_dig_wq;
-	struct delayed_work tx_pw_wq;
+    struct delayed_work hw_dig_wq;
+    struct delayed_work tx_pw_wq;
 
 //Added for RF power on power off by lizhaoming 080512
-	struct delayed_work GPIOChangeRFWorkItem;
+    struct delayed_work GPIOChangeRFWorkItem;
 
-	struct workqueue_struct *wq;
+    struct workqueue_struct *wq;
 
-	/* Callback functions */
-	void (*set_security)(struct net_device *dev,
-			     struct ieee80211_security *sec);
+    /* Callback functions */
+    void (*set_security)(struct net_device *dev,
+                         struct ieee80211_security *sec);
 
-	/* Used to TX data frame by using txb structs.
-	 * this is not used if in the softmac_features
-	 * is set the flag IEEE_SOFTMAC_TX_QUEUE
-	 */
-	int (*hard_start_xmit)(struct ieee80211_txb *txb,
-			       struct net_device *dev);
+    /* Used to TX data frame by using txb structs.
+     * this is not used if in the softmac_features
+     * is set the flag IEEE_SOFTMAC_TX_QUEUE
+     */
+    int (*hard_start_xmit)(struct ieee80211_txb *txb,
+                           struct net_device *dev);
 
-	int (*reset_port)(struct net_device *dev);
+    int (*reset_port)(struct net_device *dev);
 
-	/* Softmac-generated frames (mamagement) are TXed via this
-	 * callback if the flag IEEE_SOFTMAC_SINGLE_QUEUE is
-	 * not set. As some cards may have different HW queues that
-	 * one might want to use for data and management frames
-	 * the option to have two callbacks might be useful.
-	 * This function can't sleep.
-	 */
-	int (*softmac_hard_start_xmit)(struct sk_buff *skb,
-			       struct net_device *dev);
+    /* Softmac-generated frames (mamagement) are TXed via this
+     * callback if the flag IEEE_SOFTMAC_SINGLE_QUEUE is
+     * not set. As some cards may have different HW queues that
+     * one might want to use for data and management frames
+     * the option to have two callbacks might be useful.
+     * This function can't sleep.
+     */
+    int (*softmac_hard_start_xmit)(struct sk_buff *skb,
+                                   struct net_device *dev);
 
-	/* used instead of hard_start_xmit (not softmac_hard_start_xmit)
-	 * if the IEEE_SOFTMAC_TX_QUEUE feature is used to TX data
-	 * frames. I the option IEEE_SOFTMAC_SINGLE_QUEUE is also set
-	 * then also management frames are sent via this callback.
-	 * This function can't sleep.
-	 */
-	void (*softmac_data_hard_start_xmit)(struct sk_buff *skb,
-			       struct net_device *dev,int rate);
+    /* used instead of hard_start_xmit (not softmac_hard_start_xmit)
+     * if the IEEE_SOFTMAC_TX_QUEUE feature is used to TX data
+     * frames. I the option IEEE_SOFTMAC_SINGLE_QUEUE is also set
+     * then also management frames are sent via this callback.
+     * This function can't sleep.
+     */
+    void (*softmac_data_hard_start_xmit)(struct sk_buff *skb,
+                                         struct net_device *dev,int rate);
 
-	/* stops the HW queue for DATA frames. Useful to avoid
-	 * waste time to TX data frame when we are reassociating
-	 * This function can sleep.
-	 */
-	void (*data_hard_stop)(struct net_device *dev);
+    /* stops the HW queue for DATA frames. Useful to avoid
+     * waste time to TX data frame when we are reassociating
+     * This function can sleep.
+     */
+    void (*data_hard_stop)(struct net_device *dev);
 
-	/* OK this is complementar to data_poll_hard_stop */
-	void (*data_hard_resume)(struct net_device *dev);
+    /* OK this is complementar to data_poll_hard_stop */
+    void (*data_hard_resume)(struct net_device *dev);
 
-	/* ask to the driver to retune the radio .
-	 * This function can sleep. the driver should ensure
-	 * the radio has been swithced before return.
-	 */
-	void (*set_chan)(struct net_device *dev,short ch);
+    /* ask to the driver to retune the radio .
+     * This function can sleep. the driver should ensure
+     * the radio has been swithced before return.
+     */
+    void (*set_chan)(struct net_device *dev,short ch);
 
-	/* These are not used if the ieee stack takes care of
-	 * scanning (IEEE_SOFTMAC_SCAN feature set).
-	 * In this case only the set_chan is used.
-	 *
-	 * The syncro version is similar to the start_scan but
-	 * does not return until all channels has been scanned.
-	 * this is called in user context and should sleep,
-	 * it is called in a work_queue when swithcing to ad-hoc mode
-	 * or in behalf of iwlist scan when the card is associated
-	 * and root user ask for a scan.
-	 * the function stop_scan should stop both the syncro and
-	 * background scanning and can sleep.
-	 * The function start_scan should initiate the background
-	 * scanning and can't sleep.
-	 */
-	void (*scan_syncro)(struct net_device *dev);
-	void (*start_scan)(struct net_device *dev);
-	void (*stop_scan)(struct net_device *dev);
+    /* These are not used if the ieee stack takes care of
+     * scanning (IEEE_SOFTMAC_SCAN feature set).
+     * In this case only the set_chan is used.
+     *
+     * The syncro version is similar to the start_scan but
+     * does not return until all channels has been scanned.
+     * this is called in user context and should sleep,
+     * it is called in a work_queue when swithcing to ad-hoc mode
+     * or in behalf of iwlist scan when the card is associated
+     * and root user ask for a scan.
+     * the function stop_scan should stop both the syncro and
+     * background scanning and can sleep.
+     * The function start_scan should initiate the background
+     * scanning and can't sleep.
+     */
+    void (*scan_syncro)(struct net_device *dev);
+    void (*start_scan)(struct net_device *dev);
+    void (*stop_scan)(struct net_device *dev);
 
-	/* indicate the driver that the link state is changed
-	 * for example it may indicate the card is associated now.
-	 * Driver might be interested in this to apply RX filter
-	 * rules or simply light the LINK led
-	 */
-	void (*link_change)(struct net_device *dev);
+    /* indicate the driver that the link state is changed
+     * for example it may indicate the card is associated now.
+     * Driver might be interested in this to apply RX filter
+     * rules or simply light the LINK led
+     */
+    void (*link_change)(struct net_device *dev);
 
-	/* these two function indicates to the HW when to start
-	 * and stop to send beacons. This is used when the
-	 * IEEE_SOFTMAC_BEACONS is not set. For now the
-	 * stop_send_bacons is NOT guaranteed to be called only
-	 * after start_send_beacons.
-	 */
-	void (*start_send_beacons) (struct net_device *dev);
-	void (*stop_send_beacons) (struct net_device *dev);
+    /* these two function indicates to the HW when to start
+     * and stop to send beacons. This is used when the
+     * IEEE_SOFTMAC_BEACONS is not set. For now the
+     * stop_send_bacons is NOT guaranteed to be called only
+     * after start_send_beacons.
+     */
+    void (*start_send_beacons) (struct net_device *dev);
+    void (*stop_send_beacons) (struct net_device *dev);
 
-	/* power save mode related */
-	void (*sta_wake_up) (struct net_device *dev);
-	void (*ps_request_tx_ack) (struct net_device *dev);
-	void (*enter_sleep_state) (struct net_device *dev, u32 th, u32 tl);
-	short (*ps_is_queue_empty) (struct net_device *dev);
+    /* power save mode related */
+    void (*sta_wake_up) (struct net_device *dev);
+    void (*ps_request_tx_ack) (struct net_device *dev);
+    void (*enter_sleep_state) (struct net_device *dev, u32 th, u32 tl);
+    short (*ps_is_queue_empty) (struct net_device *dev);
 
-	/* QoS related */
-	//void (*wmm_param_update) (struct net_device *dev, u8 *ac_param);
-	//void (*wmm_param_update) (struct ieee80211_device *ieee);
+    /* QoS related */
+    //void (*wmm_param_update) (struct net_device *dev, u8 *ac_param);
+    //void (*wmm_param_update) (struct ieee80211_device *ieee);
 
-	/* This must be the last item so that it points to the data
-	 * allocated beyond this structure by alloc_ieee80211 */
-	u8 priv[0];
+    /* This must be the last item so that it points to the data
+     * allocated beyond this structure by alloc_ieee80211 */
+    u8 priv[0];
 };
 
 #define IEEE_A            (1<<0)
@@ -1216,78 +1215,74 @@ struct ieee80211_device {
 
 
 
-static inline void *ieee80211_priv(struct net_device *dev)
-{
-	return ((struct ieee80211_device *)netdev_priv(dev))->priv;
+static inline void *ieee80211_priv(struct net_device *dev) {
+    return ((struct ieee80211_device *)netdev_priv(dev))->priv;
 }
 
-extern inline int ieee80211_is_empty_essid(const char *essid, int essid_len)
-{
-	/* Single white space is for Linksys APs */
-	if (essid_len == 1 && essid[0] == ' ')
-		return 1;
+extern inline int ieee80211_is_empty_essid(const char *essid, int essid_len) {
+    /* Single white space is for Linksys APs */
+    if (essid_len == 1 && essid[0] == ' ')
+        return 1;
 
-	/* Otherwise, if the entire essid is 0, we assume it is hidden */
-	while (essid_len) {
-		essid_len--;
-		if (essid[essid_len] != '\0')
-			return 0;
-	}
+    /* Otherwise, if the entire essid is 0, we assume it is hidden */
+    while (essid_len) {
+        essid_len--;
+        if (essid[essid_len] != '\0')
+            return 0;
+    }
 
-	return 1;
+    return 1;
 }
 
-extern inline int ieee80211_is_valid_mode(struct ieee80211_device *ieee, int mode)
-{
-	/*
-	 * It is possible for both access points and our device to support
-	 * combinations of modes, so as long as there is one valid combination
-	 * of ap/device supported modes, then return success
-	 *
-	 */
-	if ((mode & IEEE_A) &&
-	    (ieee->modulation & IEEE80211_OFDM_MODULATION) &&
-	    (ieee->freq_band & IEEE80211_52GHZ_BAND))
-		return 1;
+extern inline int ieee80211_is_valid_mode(struct ieee80211_device *ieee, int mode) {
+    /*
+     * It is possible for both access points and our device to support
+     * combinations of modes, so as long as there is one valid combination
+     * of ap/device supported modes, then return success
+     *
+     */
+    if ((mode & IEEE_A) &&
+            (ieee->modulation & IEEE80211_OFDM_MODULATION) &&
+            (ieee->freq_band & IEEE80211_52GHZ_BAND))
+        return 1;
 
-	if ((mode & IEEE_G) &&
-	    (ieee->modulation & IEEE80211_OFDM_MODULATION) &&
-	    (ieee->freq_band & IEEE80211_24GHZ_BAND))
-		return 1;
+    if ((mode & IEEE_G) &&
+            (ieee->modulation & IEEE80211_OFDM_MODULATION) &&
+            (ieee->freq_band & IEEE80211_24GHZ_BAND))
+        return 1;
 
-	if ((mode & IEEE_B) &&
-	    (ieee->modulation & IEEE80211_CCK_MODULATION) &&
-	    (ieee->freq_band & IEEE80211_24GHZ_BAND))
-		return 1;
+    if ((mode & IEEE_B) &&
+            (ieee->modulation & IEEE80211_CCK_MODULATION) &&
+            (ieee->freq_band & IEEE80211_24GHZ_BAND))
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-extern inline int ieee80211_get_hdrlen(u16 fc)
-{
-	int hdrlen = 24;
+extern inline int ieee80211_get_hdrlen(u16 fc) {
+    int hdrlen = 24;
 
-	switch (WLAN_FC_GET_TYPE(fc)) {
-	case IEEE80211_FTYPE_DATA:
-		if ((fc & IEEE80211_FCTL_FROMDS) && (fc & IEEE80211_FCTL_TODS))
-			hdrlen = 30; /* Addr4 */
-		if(IEEE80211_QOS_HAS_SEQ(fc))
-			hdrlen += 2; /* QOS ctrl*/
-		break;
-	case IEEE80211_FTYPE_CTL:
-		switch (WLAN_FC_GET_STYPE(fc)) {
-		case IEEE80211_STYPE_CTS:
-		case IEEE80211_STYPE_ACK:
-			hdrlen = 10;
-			break;
-		default:
-			hdrlen = 16;
-			break;
-		}
-		break;
-	}
+    switch (WLAN_FC_GET_TYPE(fc)) {
+    case IEEE80211_FTYPE_DATA:
+        if ((fc & IEEE80211_FCTL_FROMDS) && (fc & IEEE80211_FCTL_TODS))
+            hdrlen = 30; /* Addr4 */
+        if(IEEE80211_QOS_HAS_SEQ(fc))
+            hdrlen += 2; /* QOS ctrl*/
+        break;
+    case IEEE80211_FTYPE_CTL:
+        switch (WLAN_FC_GET_STYPE(fc)) {
+        case IEEE80211_STYPE_CTS:
+        case IEEE80211_STYPE_ACK:
+            hdrlen = 10;
+            break;
+        default:
+            hdrlen = 16;
+            break;
+        }
+        break;
+    }
 
-	return hdrlen;
+    return hdrlen;
 }
 
 
@@ -1301,49 +1296,49 @@ extern int ieee80211_set_encryption(struct ieee80211_device *ieee);
 /* ieee80211_tx.c */
 
 extern int ieee80211_encrypt_fragment(
-	struct ieee80211_device *ieee,
-	struct sk_buff *frag,
-	int hdr_len);
+    struct ieee80211_device *ieee,
+    struct sk_buff *frag,
+    int hdr_len);
 
 extern int ieee80211_rtl_xmit(struct sk_buff *skb,
-			  struct net_device *dev);
+                              struct net_device *dev);
 extern void ieee80211_txb_free(struct ieee80211_txb *);
 
 
 /* ieee80211_rx.c */
 extern int ieee80211_rtl_rx(struct ieee80211_device *ieee, struct sk_buff *skb,
-			struct ieee80211_rx_stats *rx_stats);
+                            struct ieee80211_rx_stats *rx_stats);
 extern void ieee80211_rx_mgt(struct ieee80211_device *ieee,
-			     struct ieee80211_hdr_4addr *header,
-			     struct ieee80211_rx_stats *stats);
+                             struct ieee80211_hdr_4addr *header,
+                             struct ieee80211_rx_stats *stats);
 
 /* ieee80211_wx.c */
 extern int ieee80211_wx_get_scan(struct ieee80211_device *ieee,
-				 struct iw_request_info *info,
-				 union iwreq_data *wrqu, char *key);
+                                 struct iw_request_info *info,
+                                 union iwreq_data *wrqu, char *key);
 extern int ieee80211_wx_set_encode(struct ieee80211_device *ieee,
-				   struct iw_request_info *info,
-				   union iwreq_data *wrqu, char *key);
+                                   struct iw_request_info *info,
+                                   union iwreq_data *wrqu, char *key);
 extern int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
-				   struct iw_request_info *info,
-				   union iwreq_data *wrqu, char *key);
+                                   struct iw_request_info *info,
+                                   union iwreq_data *wrqu, char *key);
 extern int ieee80211_wx_set_encode_ext(struct ieee80211_device *ieee,
-                            struct iw_request_info *info,
-                            union iwreq_data* wrqu, char *extra);
+                                       struct iw_request_info *info,
+                                       union iwreq_data* wrqu, char *extra);
 int ieee80211_wx_set_auth(struct ieee80211_device *ieee,
-                               struct iw_request_info *info,
-                               struct iw_param *data, char *extra);
+                          struct iw_request_info *info,
+                          struct iw_param *data, char *extra);
 int ieee80211_wx_set_mlme(struct ieee80211_device *ieee,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra);
+                          struct iw_request_info *info,
+                          union iwreq_data *wrqu, char *extra);
 
 int ieee80211_wx_set_gen_ie(struct ieee80211_device *ieee, u8 *ie, size_t len);
 /* ieee80211_softmac.c */
 extern short ieee80211_is_54g(const struct ieee80211_network *net);
 extern short ieee80211_is_shortslot(const struct ieee80211_network *net);
 extern int ieee80211_rx_frame_softmac(struct ieee80211_device *ieee, struct sk_buff *skb,
-			struct ieee80211_rx_stats *rx_stats, u16 type,
-			u16 stype);
+                                      struct ieee80211_rx_stats *rx_stats, u16 type,
+                                      u16 stype);
 extern void ieee80211_softmac_new_net(struct ieee80211_device *ieee, struct ieee80211_network *net);
 
 extern void ieee80211_softmac_xmit(struct ieee80211_txb *txb, struct ieee80211_device *ieee);
@@ -1376,8 +1371,8 @@ extern void ieee80211_rtl_start_scan(struct ieee80211_device *ieee);
 
 //Add for RF power on power off by lizhaoming 080512
 extern void SendDisassociation(struct ieee80211_device *ieee,
-       			 u8*                     asSta,
-        		 u8                      asRsn);
+                               u8*                     asSta,
+                               u8                      asRsn);
 
 /* ieee80211_crypt_ccmp&tkip&wep.c */
 extern void ieee80211_tkip_null(void);
@@ -1386,60 +1381,60 @@ extern void ieee80211_ccmp_null(void);
 /* ieee80211_softmac_wx.c */
 
 extern int ieee80211_wx_get_wap(struct ieee80211_device *ieee,
-			    struct iw_request_info *info,
-			    union iwreq_data *wrqu, char *ext);
+                                struct iw_request_info *info,
+                                union iwreq_data *wrqu, char *ext);
 
 extern int ieee80211_wx_set_wap(struct ieee80211_device *ieee,
-			 struct iw_request_info *info,
-			 union iwreq_data *awrq,
-			 char *extra);
+                                struct iw_request_info *info,
+                                union iwreq_data *awrq,
+                                char *extra);
 
 extern int ieee80211_wx_get_essid(struct ieee80211_device *ieee, struct iw_request_info *a,union iwreq_data *wrqu,char *b);
 
 extern int ieee80211_wx_set_rate(struct ieee80211_device *ieee,
-			     struct iw_request_info *info,
-			     union iwreq_data *wrqu, char *extra);
+                                 struct iw_request_info *info,
+                                 union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_get_rate(struct ieee80211_device *ieee,
-			     struct iw_request_info *info,
-			     union iwreq_data *wrqu, char *extra);
+                                 struct iw_request_info *info,
+                                 union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_set_mode(struct ieee80211_device *ieee, struct iw_request_info *a,
-			     union iwreq_data *wrqu, char *b);
+                                 union iwreq_data *wrqu, char *b);
 
 extern int ieee80211_wx_set_scan(struct ieee80211_device *ieee, struct iw_request_info *a,
-			     union iwreq_data *wrqu, char *b);
+                                 union iwreq_data *wrqu, char *b);
 
 extern int ieee80211_wx_set_essid(struct ieee80211_device *ieee,
-			      struct iw_request_info *a,
-			      union iwreq_data *wrqu, char *extra);
+                                  struct iw_request_info *a,
+                                  union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_get_mode(struct ieee80211_device *ieee, struct iw_request_info *a,
-			     union iwreq_data *wrqu, char *b);
+                                 union iwreq_data *wrqu, char *b);
 
 extern int ieee80211_wx_set_freq(struct ieee80211_device *ieee, struct iw_request_info *a,
-			     union iwreq_data *wrqu, char *b);
+                                 union iwreq_data *wrqu, char *b);
 
 extern int ieee80211_wx_get_freq(struct ieee80211_device *ieee, struct iw_request_info *a,
-			     union iwreq_data *wrqu, char *b);
+                                 union iwreq_data *wrqu, char *b);
 
 extern void ieee80211_wx_sync_scan_wq(struct work_struct *work);
 
 extern int ieee80211_wx_set_rawtx(struct ieee80211_device *ieee,
-			       struct iw_request_info *info,
-			       union iwreq_data *wrqu, char *extra);
+                                  struct iw_request_info *info,
+                                  union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_get_name(struct ieee80211_device *ieee,
-			     struct iw_request_info *info,
-			     union iwreq_data *wrqu, char *extra);
+                                 struct iw_request_info *info,
+                                 union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_set_power(struct ieee80211_device *ieee,
-				 struct iw_request_info *info,
-				 union iwreq_data *wrqu, char *extra);
+                                  struct iw_request_info *info,
+                                  union iwreq_data *wrqu, char *extra);
 
 extern int ieee80211_wx_get_power(struct ieee80211_device *ieee,
-				 struct iw_request_info *info,
-				 union iwreq_data *wrqu, char *extra);
+                                  struct iw_request_info *info,
+                                  union iwreq_data *wrqu, char *extra);
 
 extern void ieee80211_softmac_ips_scan_syncro(struct ieee80211_device *ieee);
 
@@ -1447,37 +1442,35 @@ extern void ieee80211_sta_ps_send_null_frame(struct ieee80211_device *ieee, shor
 
 extern const long ieee80211_wlan_frequencies[];
 
-extern inline void ieee80211_increment_scans(struct ieee80211_device *ieee)
-{
-	ieee->scans++;
+extern inline void ieee80211_increment_scans(struct ieee80211_device *ieee) {
+    ieee->scans++;
 }
 
-extern inline int ieee80211_get_scans(struct ieee80211_device *ieee)
-{
-	return ieee->scans;
+extern inline int ieee80211_get_scans(struct ieee80211_device *ieee) {
+    return ieee->scans;
 }
 
 static inline const char *escape_essid(const char *essid, u8 essid_len) {
-	static char escaped[IW_ESSID_MAX_SIZE * 2 + 1];
-	const char *s = essid;
-	char *d = escaped;
+    static char escaped[IW_ESSID_MAX_SIZE * 2 + 1];
+    const char *s = essid;
+    char *d = escaped;
 
-	if (ieee80211_is_empty_essid(essid, essid_len)) {
-		memcpy(escaped, "<hidden>", sizeof("<hidden>"));
-		return escaped;
-	}
+    if (ieee80211_is_empty_essid(essid, essid_len)) {
+        memcpy(escaped, "<hidden>", sizeof("<hidden>"));
+        return escaped;
+    }
 
-	essid_len = min(essid_len, (u8)IW_ESSID_MAX_SIZE);
-	while (essid_len--) {
-		if (*s == '\0') {
-			*d++ = '\\';
-			*d++ = '0';
-			s++;
-		} else {
-			*d++ = *s++;
-		}
-	}
-	*d = '\0';
-	return escaped;
+    essid_len = min(essid_len, (u8)IW_ESSID_MAX_SIZE);
+    while (essid_len--) {
+        if (*s == '\0') {
+            *d++ = '\\';
+            *d++ = '0';
+            s++;
+        } else {
+            *d++ = *s++;
+        }
+    }
+    *d = '\0';
+    return escaped;
 }
 #endif /* IEEE80211_H */

@@ -8,22 +8,22 @@
 #include "xyarray.h"
 #include "cgroup.h"
 #include "hist.h"
- 
+
 struct perf_counts_values {
-	union {
-		struct {
-			u64 val;
-			u64 ena;
-			u64 run;
-		};
-		u64 values[3];
-	};
+    union {
+        struct {
+            u64 val;
+            u64 ena;
+            u64 run;
+        };
+        u64 values[3];
+    };
 };
 
 struct perf_counts {
-	s8		   	  scaled;
-	struct perf_counts_values aggr;
-	struct perf_counts_values cpu[];
+    s8		   	  scaled;
+    struct perf_counts_values aggr;
+    struct perf_counts_values cpu[];
 };
 
 struct perf_evsel;
@@ -33,9 +33,9 @@ struct perf_evsel;
  * more than one entry in the evlist.
  */
 struct perf_sample_id {
-	struct hlist_node 	node;
-	u64		 	id;
-	struct perf_evsel	*evsel;
+    struct hlist_node 	node;
+    u64		 	id;
+    struct perf_evsel	*evsel;
 };
 
 /** struct perf_evsel - event selector
@@ -45,27 +45,27 @@ struct perf_sample_id {
  *         show the name used, not some alias.
  */
 struct perf_evsel {
-	struct list_head	node;
-	struct perf_event_attr	attr;
-	char			*filter;
-	struct xyarray		*fd;
-	struct xyarray		*sample_id;
-	u64			*id;
-	struct perf_counts	*counts;
-	int			idx;
-	int			ids;
-	struct hists		hists;
-	char			*name;
-	union {
-		void		*priv;
-		off_t		id_offset;
-	};
-	struct cgroup_sel	*cgrp;
-	struct {
-		void		*func;
-		void		*data;
-	} handler;
-	bool 			supported;
+    struct list_head	node;
+    struct perf_event_attr	attr;
+    char			*filter;
+    struct xyarray		*fd;
+    struct xyarray		*sample_id;
+    u64			*id;
+    struct perf_counts	*counts;
+    int			idx;
+    int			ids;
+    struct hists		hists;
+    char			*name;
+    union {
+        void		*priv;
+        off_t		id_offset;
+    };
+    struct cgroup_sel	*cgrp;
+    struct {
+        void		*func;
+        void		*data;
+    } handler;
+    bool 			supported;
 };
 
 struct cpu_map;
@@ -75,13 +75,13 @@ struct perf_record_opts;
 
 struct perf_evsel *perf_evsel__new(struct perf_event_attr *attr, int idx);
 void perf_evsel__init(struct perf_evsel *evsel,
-		      struct perf_event_attr *attr, int idx);
+                      struct perf_event_attr *attr, int idx);
 void perf_evsel__exit(struct perf_evsel *evsel);
 void perf_evsel__delete(struct perf_evsel *evsel);
 
 void perf_evsel__config(struct perf_evsel *evsel,
-			struct perf_record_opts *opts,
-			struct perf_evsel *first);
+                        struct perf_record_opts *opts,
+                        struct perf_evsel *first);
 
 int perf_evsel__alloc_fd(struct perf_evsel *evsel, int ncpus, int nthreads);
 int perf_evsel__alloc_id(struct perf_evsel *evsel, int ncpus, int nthreads);
@@ -91,14 +91,14 @@ void perf_evsel__free_id(struct perf_evsel *evsel);
 void perf_evsel__close_fd(struct perf_evsel *evsel, int ncpus, int nthreads);
 
 int perf_evsel__open_per_cpu(struct perf_evsel *evsel,
-			     struct cpu_map *cpus, bool group,
-			     struct xyarray *group_fds);
+                             struct cpu_map *cpus, bool group,
+                             struct xyarray *group_fds);
 int perf_evsel__open_per_thread(struct perf_evsel *evsel,
-				struct thread_map *threads, bool group,
-				struct xyarray *group_fds);
+                                struct thread_map *threads, bool group,
+                                struct xyarray *group_fds);
 int perf_evsel__open(struct perf_evsel *evsel, struct cpu_map *cpus,
-		     struct thread_map *threads, bool group,
-		     struct xyarray *group_fds);
+                     struct thread_map *threads, bool group,
+                     struct xyarray *group_fds);
 void perf_evsel__close(struct perf_evsel *evsel, int ncpus, int nthreads);
 
 #define perf_evsel__match(evsel, t, c)		\
@@ -106,7 +106,7 @@ void perf_evsel__close(struct perf_evsel *evsel, int ncpus, int nthreads);
 	 evsel->attr.config == PERF_COUNT_##c)
 
 int __perf_evsel__read_on_cpu(struct perf_evsel *evsel,
-			      int cpu, int thread, bool scale);
+                              int cpu, int thread, bool scale);
 
 /**
  * perf_evsel__read_on_cpu - Read out the results on a CPU and thread
@@ -116,9 +116,8 @@ int __perf_evsel__read_on_cpu(struct perf_evsel *evsel,
  * @thread - thread of interest
  */
 static inline int perf_evsel__read_on_cpu(struct perf_evsel *evsel,
-					  int cpu, int thread)
-{
-	return __perf_evsel__read_on_cpu(evsel, cpu, thread, false);
+        int cpu, int thread) {
+    return __perf_evsel__read_on_cpu(evsel, cpu, thread, false);
 }
 
 /**
@@ -129,13 +128,12 @@ static inline int perf_evsel__read_on_cpu(struct perf_evsel *evsel,
  * @thread - thread of interest
  */
 static inline int perf_evsel__read_on_cpu_scaled(struct perf_evsel *evsel,
-						 int cpu, int thread)
-{
-	return __perf_evsel__read_on_cpu(evsel, cpu, thread, true);
+        int cpu, int thread) {
+    return __perf_evsel__read_on_cpu(evsel, cpu, thread, true);
 }
 
 int __perf_evsel__read(struct perf_evsel *evsel, int ncpus, int nthreads,
-		       bool scale);
+                       bool scale);
 
 /**
  * perf_evsel__read - Read the aggregate results on all CPUs
@@ -145,9 +143,8 @@ int __perf_evsel__read(struct perf_evsel *evsel, int ncpus, int nthreads,
  * @nthreads - Number of threads affected, from zero
  */
 static inline int perf_evsel__read(struct perf_evsel *evsel,
-				    int ncpus, int nthreads)
-{
-	return __perf_evsel__read(evsel, ncpus, nthreads, false);
+                                   int ncpus, int nthreads) {
+    return __perf_evsel__read(evsel, ncpus, nthreads, false);
 }
 
 /**
@@ -158,16 +155,14 @@ static inline int perf_evsel__read(struct perf_evsel *evsel,
  * @nthreads - Number of threads affected, from zero
  */
 static inline int perf_evsel__read_scaled(struct perf_evsel *evsel,
-					  int ncpus, int nthreads)
-{
-	return __perf_evsel__read(evsel, ncpus, nthreads, true);
+        int ncpus, int nthreads) {
+    return __perf_evsel__read(evsel, ncpus, nthreads, true);
 }
 
 int __perf_evsel__sample_size(u64 sample_type);
 
-static inline int perf_evsel__sample_size(struct perf_evsel *evsel)
-{
-	return __perf_evsel__sample_size(evsel->attr.sample_type);
+static inline int perf_evsel__sample_size(struct perf_evsel *evsel) {
+    return __perf_evsel__sample_size(evsel->attr.sample_type);
 }
 
 void hists__init(struct hists *hists);

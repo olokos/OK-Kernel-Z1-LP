@@ -17,14 +17,14 @@
 
 extern void dvma_init(void);
 extern int dvma_map_iommu(unsigned long kaddr, unsigned long baddr,
-			  int len);
+                          int len);
 
 #define dvma_malloc(x) dvma_malloc_align(x, 0)
 #define dvma_map(x, y) dvma_map_align(x, y, 0)
 #define dvma_map_vme(x, y) (dvma_map(x, y) & 0xfffff)
 #define dvma_map_align_vme(x, y, z) (dvma_map_align (x, y, z) & 0xfffff)
 extern unsigned long dvma_map_align(unsigned long kaddr, int len,
-			    int align);
+                                    int align);
 extern void *dvma_malloc_align(unsigned long len, unsigned long align);
 
 extern void dvma_unmap(void *baddr);
@@ -58,9 +58,8 @@ extern void dvma_free(void *vaddr);
 #define dvma_btov(x) dvma_ptov(x)
 
 static inline int dvma_map_cpu(unsigned long kaddr, unsigned long vaddr,
-			       int len)
-{
-	return 0;
+                               int len) {
+    return 0;
 }
 
 #else /* Sun3x */
@@ -86,43 +85,43 @@ extern int dvma_map_cpu(unsigned long kaddr, unsigned long vaddr, int len);
 
 /* Structure to describe the current status of DMA registers on the Sparc */
 struct sparc_dma_registers {
-  __volatile__ unsigned long cond_reg;	/* DMA condition register */
-  __volatile__ unsigned long st_addr;	/* Start address of this transfer */
-  __volatile__ unsigned long  cnt;	/* How many bytes to transfer */
-  __volatile__ unsigned long dma_test;	/* DMA test register */
+    __volatile__ unsigned long cond_reg;	/* DMA condition register */
+    __volatile__ unsigned long st_addr;	/* Start address of this transfer */
+    __volatile__ unsigned long  cnt;	/* How many bytes to transfer */
+    __volatile__ unsigned long dma_test;	/* DMA test register */
 };
 
 /* DVMA chip revisions */
 enum dvma_rev {
-	dvmarev0,
-	dvmaesc1,
-	dvmarev1,
-	dvmarev2,
-	dvmarev3,
-	dvmarevplus,
-	dvmahme
+    dvmarev0,
+    dvmaesc1,
+    dvmarev1,
+    dvmarev2,
+    dvmarev3,
+    dvmarevplus,
+    dvmahme
 };
 
 #define DMA_HASCOUNT(rev)  ((rev)==dvmaesc1)
 
 /* Linux DMA information structure, filled during probe. */
 struct Linux_SBus_DMA {
-	struct Linux_SBus_DMA *next;
-	struct linux_sbus_device *SBus_dev;
-	struct sparc_dma_registers *regs;
+    struct Linux_SBus_DMA *next;
+    struct linux_sbus_device *SBus_dev;
+    struct sparc_dma_registers *regs;
 
-	/* Status, misc info */
-	int node;                /* Prom node for this DMA device */
-	int running;             /* Are we doing DMA now? */
-	int allocated;           /* Are we "owned" by anyone yet? */
+    /* Status, misc info */
+    int node;                /* Prom node for this DMA device */
+    int running;             /* Are we doing DMA now? */
+    int allocated;           /* Are we "owned" by anyone yet? */
 
-	/* Transfer information. */
-	unsigned long addr;      /* Start address of current transfer */
-	int nbytes;              /* Size of current transfer */
-	int realbytes;           /* For splitting up large transfers, etc. */
+    /* Transfer information. */
+    unsigned long addr;      /* Start address of current transfer */
+    int nbytes;              /* Size of current transfer */
+    int realbytes;           /* For splitting up large transfers, etc. */
 
-	/* DMA revision */
-	enum dvma_rev revision;
+    /* DMA revision */
+    enum dvma_rev revision;
 };
 
 extern struct Linux_SBus_DMA *dma_chain;

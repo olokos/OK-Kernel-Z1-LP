@@ -58,20 +58,20 @@
 
 /* Authentication  and Association States */
 enum connection_manager_assoc_states {
-	CMAS_INIT = 0,
-	CMAS_TX_AUTH_SEQ_1,
-	CMAS_RX_AUTH_SEQ_2,
-	CMAS_AUTH_SEQ_1_PASS,
-	CMAS_AUTH_SEQ_1_FAIL,
-	CMAS_TX_AUTH_SEQ_3,
-	CMAS_RX_AUTH_SEQ_4,
-	CMAS_AUTH_SEQ_2_PASS,
-	CMAS_AUTH_SEQ_2_FAIL,
-	CMAS_AUTHENTICATED,
-	CMAS_TX_ASSOC,
-	CMAS_RX_ASSOC_RESP,
-	CMAS_ASSOCIATED,
-	CMAS_LAST
+    CMAS_INIT = 0,
+    CMAS_TX_AUTH_SEQ_1,
+    CMAS_RX_AUTH_SEQ_2,
+    CMAS_AUTH_SEQ_1_PASS,
+    CMAS_AUTH_SEQ_1_FAIL,
+    CMAS_TX_AUTH_SEQ_3,
+    CMAS_RX_AUTH_SEQ_4,
+    CMAS_AUTH_SEQ_2_PASS,
+    CMAS_AUTH_SEQ_2_FAIL,
+    CMAS_AUTHENTICATED,
+    CMAS_TX_ASSOC,
+    CMAS_RX_ASSOC_RESP,
+    CMAS_ASSOCIATED,
+    CMAS_LAST
 };
 
 #define IPW_WAIT                     (1<<0)
@@ -363,13 +363,13 @@ enum connection_manager_assoc_states {
 
 /* QoS sturctures */
 struct ipw_qos_info {
-	int qos_enable;
-	struct libipw_qos_parameters *def_qos_parm_OFDM;
-	struct libipw_qos_parameters *def_qos_parm_CCK;
-	u32 burst_duration_CCK;
-	u32 burst_duration_OFDM;
-	u16 qos_no_ack_mask;
-	int burst_enable;
+    int qos_enable;
+    struct libipw_qos_parameters *def_qos_parm_OFDM;
+    struct libipw_qos_parameters *def_qos_parm_CCK;
+    u32 burst_duration_CCK;
+    u32 burst_duration_OFDM;
+    u16 qos_no_ack_mask;
+    int burst_enable;
 };
 
 /**************************************************************/
@@ -379,149 +379,149 @@ struct ipw_qos_info {
  * Contains common data for Rx and Tx queues
  */
 struct clx2_queue {
-	int n_bd;		       /**< number of BDs in this queue */
-	int first_empty;	       /**< 1-st empty entry (index) */
-	int last_used;		       /**< last used entry (index) */
-	u32 reg_w;		     /**< 'write' reg (queue head), addr in domain 1 */
-	u32 reg_r;		     /**< 'read' reg (queue tail), addr in domain 1 */
-	dma_addr_t dma_addr;		/**< physical addr for BD's */
-	int low_mark;		       /**< low watermark, resume queue if free space more than this */
-	int high_mark;		       /**< high watermark, stop queue if free space less than this */
+    int n_bd;		       /**< number of BDs in this queue */
+    int first_empty;	       /**< 1-st empty entry (index) */
+    int last_used;		       /**< last used entry (index) */
+    u32 reg_w;		     /**< 'write' reg (queue head), addr in domain 1 */
+    u32 reg_r;		     /**< 'read' reg (queue tail), addr in domain 1 */
+    dma_addr_t dma_addr;		/**< physical addr for BD's */
+    int low_mark;		       /**< low watermark, resume queue if free space more than this */
+    int high_mark;		       /**< high watermark, stop queue if free space less than this */
 } __packed; /* XXX */
 
 struct machdr32 {
-	__le16 frame_ctl;
-	__le16 duration;		// watch out for endians!
-	u8 addr1[MACADRR_BYTE_LEN];
-	u8 addr2[MACADRR_BYTE_LEN];
-	u8 addr3[MACADRR_BYTE_LEN];
-	__le16 seq_ctrl;		// more endians!
-	u8 addr4[MACADRR_BYTE_LEN];
-	__le16 qos_ctrl;
+    __le16 frame_ctl;
+    __le16 duration;		// watch out for endians!
+    u8 addr1[MACADRR_BYTE_LEN];
+    u8 addr2[MACADRR_BYTE_LEN];
+    u8 addr3[MACADRR_BYTE_LEN];
+    __le16 seq_ctrl;		// more endians!
+    u8 addr4[MACADRR_BYTE_LEN];
+    __le16 qos_ctrl;
 } __packed;
 
 struct machdr30 {
-	__le16 frame_ctl;
-	__le16 duration;		// watch out for endians!
-	u8 addr1[MACADRR_BYTE_LEN];
-	u8 addr2[MACADRR_BYTE_LEN];
-	u8 addr3[MACADRR_BYTE_LEN];
-	__le16 seq_ctrl;		// more endians!
-	u8 addr4[MACADRR_BYTE_LEN];
+    __le16 frame_ctl;
+    __le16 duration;		// watch out for endians!
+    u8 addr1[MACADRR_BYTE_LEN];
+    u8 addr2[MACADRR_BYTE_LEN];
+    u8 addr3[MACADRR_BYTE_LEN];
+    __le16 seq_ctrl;		// more endians!
+    u8 addr4[MACADRR_BYTE_LEN];
 } __packed;
 
 struct machdr26 {
-	__le16 frame_ctl;
-	__le16 duration;		// watch out for endians!
-	u8 addr1[MACADRR_BYTE_LEN];
-	u8 addr2[MACADRR_BYTE_LEN];
-	u8 addr3[MACADRR_BYTE_LEN];
-	__le16 seq_ctrl;		// more endians!
-	__le16 qos_ctrl;
+    __le16 frame_ctl;
+    __le16 duration;		// watch out for endians!
+    u8 addr1[MACADRR_BYTE_LEN];
+    u8 addr2[MACADRR_BYTE_LEN];
+    u8 addr3[MACADRR_BYTE_LEN];
+    __le16 seq_ctrl;		// more endians!
+    __le16 qos_ctrl;
 } __packed;
 
 struct machdr24 {
-	__le16 frame_ctl;
-	__le16 duration;		// watch out for endians!
-	u8 addr1[MACADRR_BYTE_LEN];
-	u8 addr2[MACADRR_BYTE_LEN];
-	u8 addr3[MACADRR_BYTE_LEN];
-	__le16 seq_ctrl;		// more endians!
+    __le16 frame_ctl;
+    __le16 duration;		// watch out for endians!
+    u8 addr1[MACADRR_BYTE_LEN];
+    u8 addr2[MACADRR_BYTE_LEN];
+    u8 addr3[MACADRR_BYTE_LEN];
+    __le16 seq_ctrl;		// more endians!
 } __packed;
 
 // TX TFD with 32 byte MAC Header
 struct tx_tfd_32 {
-	struct machdr32 mchdr;	// 32
-	__le32 uivplaceholder[2];	// 8
+    struct machdr32 mchdr;	// 32
+    __le32 uivplaceholder[2];	// 8
 } __packed;
 
 // TX TFD with 30 byte MAC Header
 struct tx_tfd_30 {
-	struct machdr30 mchdr;	// 30
-	u8 reserved[2];		// 2
-	__le32 uivplaceholder[2];	// 8
+    struct machdr30 mchdr;	// 30
+    u8 reserved[2];		// 2
+    __le32 uivplaceholder[2];	// 8
 } __packed;
 
 // tx tfd with 26 byte mac header
 struct tx_tfd_26 {
-	struct machdr26 mchdr;	// 26
-	u8 reserved1[2];	// 2
-	__le32 uivplaceholder[2];	// 8
-	u8 reserved2[4];	// 4
+    struct machdr26 mchdr;	// 26
+    u8 reserved1[2];	// 2
+    __le32 uivplaceholder[2];	// 8
+    u8 reserved2[4];	// 4
 } __packed;
 
 // tx tfd with 24 byte mac header
 struct tx_tfd_24 {
-	struct machdr24 mchdr;	// 24
-	__le32 uivplaceholder[2];	// 8
-	u8 reserved[8];		// 8
+    struct machdr24 mchdr;	// 24
+    __le32 uivplaceholder[2];	// 8
+    u8 reserved[8];		// 8
 } __packed;
 
 #define DCT_WEP_KEY_FIELD_LENGTH 16
 
 struct tfd_command {
-	u8 index;
-	u8 length;
-	__le16 reserved;
-	u8 payload[0];
+    u8 index;
+    u8 length;
+    __le16 reserved;
+    u8 payload[0];
 } __packed;
 
 struct tfd_data {
-	/* Header */
-	__le32 work_area_ptr;
-	u8 station_number;	/* 0 for BSS */
-	u8 reserved1;
-	__le16 reserved2;
+    /* Header */
+    __le32 work_area_ptr;
+    u8 station_number;	/* 0 for BSS */
+    u8 reserved1;
+    __le16 reserved2;
 
-	/* Tx Parameters */
-	u8 cmd_id;
-	u8 seq_num;
-	__le16 len;
-	u8 priority;
-	u8 tx_flags;
-	u8 tx_flags_ext;
-	u8 key_index;
-	u8 wepkey[DCT_WEP_KEY_FIELD_LENGTH];
-	u8 rate;
-	u8 antenna;
-	__le16 next_packet_duration;
-	__le16 next_frag_len;
-	__le16 back_off_counter;	//////txop;
-	u8 retrylimit;
-	__le16 cwcurrent;
-	u8 reserved3;
+    /* Tx Parameters */
+    u8 cmd_id;
+    u8 seq_num;
+    __le16 len;
+    u8 priority;
+    u8 tx_flags;
+    u8 tx_flags_ext;
+    u8 key_index;
+    u8 wepkey[DCT_WEP_KEY_FIELD_LENGTH];
+    u8 rate;
+    u8 antenna;
+    __le16 next_packet_duration;
+    __le16 next_frag_len;
+    __le16 back_off_counter;	//////txop;
+    u8 retrylimit;
+    __le16 cwcurrent;
+    u8 reserved3;
 
-	/* 802.11 MAC Header */
-	union {
-		struct tx_tfd_24 tfd_24;
-		struct tx_tfd_26 tfd_26;
-		struct tx_tfd_30 tfd_30;
-		struct tx_tfd_32 tfd_32;
-	} tfd;
+    /* 802.11 MAC Header */
+    union {
+        struct tx_tfd_24 tfd_24;
+        struct tx_tfd_26 tfd_26;
+        struct tx_tfd_30 tfd_30;
+        struct tx_tfd_32 tfd_32;
+    } tfd;
 
-	/* Payload DMA info */
-	__le32 num_chunks;
-	__le32 chunk_ptr[NUM_TFD_CHUNKS];
-	__le16 chunk_len[NUM_TFD_CHUNKS];
+    /* Payload DMA info */
+    __le32 num_chunks;
+    __le32 chunk_ptr[NUM_TFD_CHUNKS];
+    __le16 chunk_len[NUM_TFD_CHUNKS];
 } __packed;
 
 struct txrx_control_flags {
-	u8 message_type;
-	u8 rx_seq_num;
-	u8 control_bits;
-	u8 reserved;
+    u8 message_type;
+    u8 rx_seq_num;
+    u8 control_bits;
+    u8 reserved;
 } __packed;
 
 #define  TFD_SIZE                           128
 #define  TFD_CMD_IMMEDIATE_PAYLOAD_LENGTH   (TFD_SIZE - sizeof(struct txrx_control_flags))
 
 struct tfd_frame {
-	struct txrx_control_flags control_flags;
-	union {
-		struct tfd_data data;
-		struct tfd_command cmd;
-		u8 raw[TFD_CMD_IMMEDIATE_PAYLOAD_LENGTH];
-	} u;
+    struct txrx_control_flags control_flags;
+    union {
+        struct tfd_data data;
+        struct tfd_command cmd;
+        u8 raw[TFD_CMD_IMMEDIATE_PAYLOAD_LENGTH];
+    } u;
 } __packed;
 
 typedef void destructor_func(const void *);
@@ -531,9 +531,9 @@ typedef void destructor_func(const void *);
  * BD's and required locking structures.
  */
 struct clx2_tx_queue {
-	struct clx2_queue q;
-	struct tfd_frame *bd;
-	struct libipw_txb **txb;
+    struct clx2_queue q;
+    struct tfd_frame *bd;
+    struct libipw_txb **txb;
 };
 
 /*
@@ -548,164 +548,164 @@ struct clx2_tx_queue {
 
 // Used for passing to driver number of successes and failures per rate
 struct rate_histogram {
-	union {
-		__le32 a[SUP_RATE_11A_MAX_NUM_CHANNELS];
-		__le32 b[SUP_RATE_11B_MAX_NUM_CHANNELS];
-		__le32 g[SUP_RATE_11G_MAX_NUM_CHANNELS];
-	} success;
-	union {
-		__le32 a[SUP_RATE_11A_MAX_NUM_CHANNELS];
-		__le32 b[SUP_RATE_11B_MAX_NUM_CHANNELS];
-		__le32 g[SUP_RATE_11G_MAX_NUM_CHANNELS];
-	} failed;
+    union {
+        __le32 a[SUP_RATE_11A_MAX_NUM_CHANNELS];
+        __le32 b[SUP_RATE_11B_MAX_NUM_CHANNELS];
+        __le32 g[SUP_RATE_11G_MAX_NUM_CHANNELS];
+    } success;
+    union {
+        __le32 a[SUP_RATE_11A_MAX_NUM_CHANNELS];
+        __le32 b[SUP_RATE_11B_MAX_NUM_CHANNELS];
+        __le32 g[SUP_RATE_11G_MAX_NUM_CHANNELS];
+    } failed;
 } __packed;
 
 /* statistics command response */
 struct ipw_cmd_stats {
-	u8 cmd_id;
-	u8 seq_num;
-	__le16 good_sfd;
-	__le16 bad_plcp;
-	__le16 wrong_bssid;
-	__le16 valid_mpdu;
-	__le16 bad_mac_header;
-	__le16 reserved_frame_types;
-	__le16 rx_ina;
-	__le16 bad_crc32;
-	__le16 invalid_cts;
-	__le16 invalid_acks;
-	__le16 long_distance_ina_fina;
-	__le16 dsp_silence_unreachable;
-	__le16 accumulated_rssi;
-	__le16 rx_ovfl_frame_tossed;
-	__le16 rssi_silence_threshold;
-	__le16 rx_ovfl_frame_supplied;
-	__le16 last_rx_frame_signal;
-	__le16 last_rx_frame_noise;
-	__le16 rx_autodetec_no_ofdm;
-	__le16 rx_autodetec_no_barker;
-	__le16 reserved;
+    u8 cmd_id;
+    u8 seq_num;
+    __le16 good_sfd;
+    __le16 bad_plcp;
+    __le16 wrong_bssid;
+    __le16 valid_mpdu;
+    __le16 bad_mac_header;
+    __le16 reserved_frame_types;
+    __le16 rx_ina;
+    __le16 bad_crc32;
+    __le16 invalid_cts;
+    __le16 invalid_acks;
+    __le16 long_distance_ina_fina;
+    __le16 dsp_silence_unreachable;
+    __le16 accumulated_rssi;
+    __le16 rx_ovfl_frame_tossed;
+    __le16 rssi_silence_threshold;
+    __le16 rx_ovfl_frame_supplied;
+    __le16 last_rx_frame_signal;
+    __le16 last_rx_frame_noise;
+    __le16 rx_autodetec_no_ofdm;
+    __le16 rx_autodetec_no_barker;
+    __le16 reserved;
 } __packed;
 
 struct notif_channel_result {
-	u8 channel_num;
-	struct ipw_cmd_stats stats;
-	u8 uReserved;
+    u8 channel_num;
+    struct ipw_cmd_stats stats;
+    u8 uReserved;
 } __packed;
 
 #define SCAN_COMPLETED_STATUS_COMPLETE  1
 #define SCAN_COMPLETED_STATUS_ABORTED   2
 
 struct notif_scan_complete {
-	u8 scan_type;
-	u8 num_channels;
-	u8 status;
-	u8 reserved;
+    u8 scan_type;
+    u8 num_channels;
+    u8 status;
+    u8 reserved;
 } __packed;
 
 struct notif_frag_length {
-	__le16 frag_length;
-	__le16 reserved;
+    __le16 frag_length;
+    __le16 reserved;
 } __packed;
 
 struct notif_beacon_state {
-	__le32 state;
-	__le32 number;
+    __le32 state;
+    __le32 number;
 } __packed;
 
 struct notif_tgi_tx_key {
-	u8 key_state;
-	u8 security_type;
-	u8 station_index;
-	u8 reserved;
+    u8 key_state;
+    u8 security_type;
+    u8 station_index;
+    u8 reserved;
 } __packed;
 
 #define SILENCE_OVER_THRESH (1)
 #define SILENCE_UNDER_THRESH (2)
 
 struct notif_link_deterioration {
-	struct ipw_cmd_stats stats;
-	u8 rate;
-	u8 modulation;
-	struct rate_histogram histogram;
-	u8 silence_notification_type;	/* SILENCE_OVER/UNDER_THRESH */
-	__le16 silence_count;
+    struct ipw_cmd_stats stats;
+    u8 rate;
+    u8 modulation;
+    struct rate_histogram histogram;
+    u8 silence_notification_type;	/* SILENCE_OVER/UNDER_THRESH */
+    __le16 silence_count;
 } __packed;
 
 struct notif_association {
-	u8 state;
+    u8 state;
 } __packed;
 
 struct notif_authenticate {
-	u8 state;
-	struct machdr24 addr;
-	__le16 status;
+    u8 state;
+    struct machdr24 addr;
+    __le16 status;
 } __packed;
 
 struct notif_calibration {
-	u8 data[104];
+    u8 data[104];
 } __packed;
 
 struct notif_noise {
-	__le32 value;
+    __le32 value;
 } __packed;
 
 struct ipw_rx_notification {
-	u8 reserved[8];
-	u8 subtype;
-	u8 flags;
-	__le16 size;
-	union {
-		struct notif_association assoc;
-		struct notif_authenticate auth;
-		struct notif_channel_result channel_result;
-		struct notif_scan_complete scan_complete;
-		struct notif_frag_length frag_len;
-		struct notif_beacon_state beacon_state;
-		struct notif_tgi_tx_key tgi_tx_key;
-		struct notif_link_deterioration link_deterioration;
-		struct notif_calibration calibration;
-		struct notif_noise noise;
-		u8 raw[0];
-	} u;
+    u8 reserved[8];
+    u8 subtype;
+    u8 flags;
+    __le16 size;
+    union {
+        struct notif_association assoc;
+        struct notif_authenticate auth;
+        struct notif_channel_result channel_result;
+        struct notif_scan_complete scan_complete;
+        struct notif_frag_length frag_len;
+        struct notif_beacon_state beacon_state;
+        struct notif_tgi_tx_key tgi_tx_key;
+        struct notif_link_deterioration link_deterioration;
+        struct notif_calibration calibration;
+        struct notif_noise noise;
+        u8 raw[0];
+    } u;
 } __packed;
 
 struct ipw_rx_frame {
-	__le32 reserved1;
-	u8 parent_tsf[4];	// fw_use[0] is boolean for OUR_TSF_IS_GREATER
-	u8 received_channel;	// The channel that this frame was received on.
-	// Note that for .11b this does not have to be
-	// the same as the channel that it was sent.
-	// Filled by LMAC
-	u8 frameStatus;
-	u8 rate;
-	u8 rssi;
-	u8 agc;
-	u8 rssi_dbm;
-	__le16 signal;
-	__le16 noise;
-	u8 antennaAndPhy;
-	u8 control;		// control bit should be on in bg
-	u8 rtscts_rate;		// rate of rts or cts (in rts cts sequence rate
-	// is identical)
-	u8 rtscts_seen;		// 0x1 RTS seen ; 0x2 CTS seen
-	__le16 length;
-	u8 data[0];
+    __le32 reserved1;
+    u8 parent_tsf[4];	// fw_use[0] is boolean for OUR_TSF_IS_GREATER
+    u8 received_channel;	// The channel that this frame was received on.
+    // Note that for .11b this does not have to be
+    // the same as the channel that it was sent.
+    // Filled by LMAC
+    u8 frameStatus;
+    u8 rate;
+    u8 rssi;
+    u8 agc;
+    u8 rssi_dbm;
+    __le16 signal;
+    __le16 noise;
+    u8 antennaAndPhy;
+    u8 control;		// control bit should be on in bg
+    u8 rtscts_rate;		// rate of rts or cts (in rts cts sequence rate
+    // is identical)
+    u8 rtscts_seen;		// 0x1 RTS seen ; 0x2 CTS seen
+    __le16 length;
+    u8 data[0];
 } __packed;
 
 struct ipw_rx_header {
-	u8 message_type;
-	u8 rx_seq_num;
-	u8 control_bits;
-	u8 reserved;
+    u8 message_type;
+    u8 rx_seq_num;
+    u8 control_bits;
+    u8 reserved;
 } __packed;
 
 struct ipw_rx_packet {
-	struct ipw_rx_header header;
-	union {
-		struct ipw_rx_frame frame;
-		struct ipw_rx_notification notification;
-	} u;
+    struct ipw_rx_header header;
+    union {
+        struct ipw_rx_frame frame;
+        struct ipw_rx_notification notification;
+    } u;
 } __packed;
 
 #define IPW_RX_NOTIFICATION_SIZE sizeof(struct ipw_rx_header) + 12
@@ -713,93 +713,93 @@ struct ipw_rx_packet {
                                  sizeof(struct ipw_rx_frame))
 
 struct ipw_rx_mem_buffer {
-	dma_addr_t dma_addr;
-	struct sk_buff *skb;
-	struct list_head list;
+    dma_addr_t dma_addr;
+    struct sk_buff *skb;
+    struct list_head list;
 };				/* Not transferred over network, so not  __packed */
 
 struct ipw_rx_queue {
-	struct ipw_rx_mem_buffer pool[RX_QUEUE_SIZE + RX_FREE_BUFFERS];
-	struct ipw_rx_mem_buffer *queue[RX_QUEUE_SIZE];
-	u32 processed;		/* Internal index to last handled Rx packet */
-	u32 read;		/* Shared index to newest available Rx buffer */
-	u32 write;		/* Shared index to oldest written Rx packet */
-	u32 free_count;		/* Number of pre-allocated buffers in rx_free */
-	/* Each of these lists is used as a FIFO for ipw_rx_mem_buffers */
-	struct list_head rx_free;	/* Own an SKBs */
-	struct list_head rx_used;	/* No SKB allocated */
-	spinlock_t lock;
+    struct ipw_rx_mem_buffer pool[RX_QUEUE_SIZE + RX_FREE_BUFFERS];
+    struct ipw_rx_mem_buffer *queue[RX_QUEUE_SIZE];
+    u32 processed;		/* Internal index to last handled Rx packet */
+    u32 read;		/* Shared index to newest available Rx buffer */
+    u32 write;		/* Shared index to oldest written Rx packet */
+    u32 free_count;		/* Number of pre-allocated buffers in rx_free */
+    /* Each of these lists is used as a FIFO for ipw_rx_mem_buffers */
+    struct list_head rx_free;	/* Own an SKBs */
+    struct list_head rx_used;	/* No SKB allocated */
+    spinlock_t lock;
 };				/* Not transferred over network, so not  __packed */
 
 struct alive_command_responce {
-	u8 alive_command;
-	u8 sequence_number;
-	__le16 software_revision;
-	u8 device_identifier;
-	u8 reserved1[5];
-	__le16 reserved2;
-	__le16 reserved3;
-	__le16 clock_settle_time;
-	__le16 powerup_settle_time;
-	__le16 reserved4;
-	u8 time_stamp[5];	/* month, day, year, hours, minutes */
-	u8 ucode_valid;
+    u8 alive_command;
+    u8 sequence_number;
+    __le16 software_revision;
+    u8 device_identifier;
+    u8 reserved1[5];
+    __le16 reserved2;
+    __le16 reserved3;
+    __le16 clock_settle_time;
+    __le16 powerup_settle_time;
+    __le16 reserved4;
+    u8 time_stamp[5];	/* month, day, year, hours, minutes */
+    u8 ucode_valid;
 } __packed;
 
 #define IPW_MAX_RATES 12
 
 struct ipw_rates {
-	u8 num_rates;
-	u8 rates[IPW_MAX_RATES];
+    u8 num_rates;
+    u8 rates[IPW_MAX_RATES];
 } __packed;
 
 struct command_block {
-	unsigned int control;
-	u32 source_addr;
-	u32 dest_addr;
-	unsigned int status;
+    unsigned int control;
+    u32 source_addr;
+    u32 dest_addr;
+    unsigned int status;
 } __packed;
 
 #define CB_NUMBER_OF_ELEMENTS_SMALL 64
 struct fw_image_desc {
-	unsigned long last_cb_index;
-	unsigned long current_cb_index;
-	struct command_block cb_list[CB_NUMBER_OF_ELEMENTS_SMALL];
-	void *v_addr;
-	unsigned long p_addr;
-	unsigned long len;
+    unsigned long last_cb_index;
+    unsigned long current_cb_index;
+    struct command_block cb_list[CB_NUMBER_OF_ELEMENTS_SMALL];
+    void *v_addr;
+    unsigned long p_addr;
+    unsigned long len;
 };
 
 struct ipw_sys_config {
-	u8 bt_coexistence;
-	u8 reserved1;
-	u8 answer_broadcast_ssid_probe;
-	u8 accept_all_data_frames;
-	u8 accept_non_directed_frames;
-	u8 exclude_unicast_unencrypted;
-	u8 disable_unicast_decryption;
-	u8 exclude_multicast_unencrypted;
-	u8 disable_multicast_decryption;
-	u8 antenna_diversity;
-	u8 pass_crc_to_host;
-	u8 dot11g_auto_detection;
-	u8 enable_cts_to_self;
-	u8 enable_multicast_filtering;
-	u8 bt_coexist_collision_thr;
-	u8 silence_threshold;
-	u8 accept_all_mgmt_bcpr;
-	u8 accept_all_mgmt_frames;
-	u8 pass_noise_stats_to_host;
-	u8 reserved3;
+    u8 bt_coexistence;
+    u8 reserved1;
+    u8 answer_broadcast_ssid_probe;
+    u8 accept_all_data_frames;
+    u8 accept_non_directed_frames;
+    u8 exclude_unicast_unencrypted;
+    u8 disable_unicast_decryption;
+    u8 exclude_multicast_unencrypted;
+    u8 disable_multicast_decryption;
+    u8 antenna_diversity;
+    u8 pass_crc_to_host;
+    u8 dot11g_auto_detection;
+    u8 enable_cts_to_self;
+    u8 enable_multicast_filtering;
+    u8 bt_coexist_collision_thr;
+    u8 silence_threshold;
+    u8 accept_all_mgmt_bcpr;
+    u8 accept_all_mgmt_frames;
+    u8 pass_noise_stats_to_host;
+    u8 reserved3;
 } __packed;
 
 struct ipw_multicast_addr {
-	u8 num_of_multicast_addresses;
-	u8 reserved[3];
-	u8 mac1[6];
-	u8 mac2[6];
-	u8 mac3[6];
-	u8 mac4[6];
+    u8 num_of_multicast_addresses;
+    u8 reserved[3];
+    u8 mac1[6];
+    u8 mac2[6];
+    u8 mac3[6];
+    u8 mac4[6];
 } __packed;
 
 #define DCW_WEP_KEY_INDEX_MASK		0x03	/* bits [0:1] */
@@ -816,157 +816,155 @@ struct ipw_multicast_addr {
 //#define DCW_WEP_KEY128BitIV_SIZE      0x10    /* 128-bit key and 128-bit IV */
 
 struct ipw_wep_key {
-	u8 cmd_id;
-	u8 seq_num;
-	u8 key_index;
-	u8 key_size;
-	u8 key[16];
+    u8 cmd_id;
+    u8 seq_num;
+    u8 key_index;
+    u8 key_size;
+    u8 key[16];
 } __packed;
 
 struct ipw_tgi_tx_key {
-	u8 key_id;
-	u8 security_type;
-	u8 station_index;
-	u8 flags;
-	u8 key[16];
-	__le32 tx_counter[2];
+    u8 key_id;
+    u8 security_type;
+    u8 station_index;
+    u8 flags;
+    u8 key[16];
+    __le32 tx_counter[2];
 } __packed;
 
 #define IPW_SCAN_CHANNELS 54
 
 struct ipw_scan_request {
-	u8 scan_type;
-	__le16 dwell_time;
-	u8 channels_list[IPW_SCAN_CHANNELS];
-	u8 channels_reserved[3];
+    u8 scan_type;
+    __le16 dwell_time;
+    u8 channels_list[IPW_SCAN_CHANNELS];
+    u8 channels_reserved[3];
 } __packed;
 
 enum {
-	IPW_SCAN_PASSIVE_TILL_FIRST_BEACON_SCAN = 0,
-	IPW_SCAN_PASSIVE_FULL_DWELL_SCAN,
-	IPW_SCAN_ACTIVE_DIRECT_SCAN,
-	IPW_SCAN_ACTIVE_BROADCAST_SCAN,
-	IPW_SCAN_ACTIVE_BROADCAST_AND_DIRECT_SCAN,
-	IPW_SCAN_TYPES
+    IPW_SCAN_PASSIVE_TILL_FIRST_BEACON_SCAN = 0,
+    IPW_SCAN_PASSIVE_FULL_DWELL_SCAN,
+    IPW_SCAN_ACTIVE_DIRECT_SCAN,
+    IPW_SCAN_ACTIVE_BROADCAST_SCAN,
+    IPW_SCAN_ACTIVE_BROADCAST_AND_DIRECT_SCAN,
+    IPW_SCAN_TYPES
 };
 
 struct ipw_scan_request_ext {
-	__le32 full_scan_index;
-	u8 channels_list[IPW_SCAN_CHANNELS];
-	u8 scan_type[IPW_SCAN_CHANNELS / 2];
-	u8 reserved;
-	__le16 dwell_time[IPW_SCAN_TYPES];
+    __le32 full_scan_index;
+    u8 channels_list[IPW_SCAN_CHANNELS];
+    u8 scan_type[IPW_SCAN_CHANNELS / 2];
+    u8 reserved;
+    __le16 dwell_time[IPW_SCAN_TYPES];
 } __packed;
 
-static inline u8 ipw_get_scan_type(struct ipw_scan_request_ext *scan, u8 index)
-{
-	if (index % 2)
-		return scan->scan_type[index / 2] & 0x0F;
-	else
-		return (scan->scan_type[index / 2] & 0xF0) >> 4;
+static inline u8 ipw_get_scan_type(struct ipw_scan_request_ext *scan, u8 index) {
+    if (index % 2)
+        return scan->scan_type[index / 2] & 0x0F;
+    else
+        return (scan->scan_type[index / 2] & 0xF0) >> 4;
 }
 
 static inline void ipw_set_scan_type(struct ipw_scan_request_ext *scan,
-				     u8 index, u8 scan_type)
-{
-	if (index % 2)
-		scan->scan_type[index / 2] =
-		    (scan->scan_type[index / 2] & 0xF0) | (scan_type & 0x0F);
-	else
-		scan->scan_type[index / 2] =
-		    (scan->scan_type[index / 2] & 0x0F) |
-		    ((scan_type & 0x0F) << 4);
+                                     u8 index, u8 scan_type) {
+    if (index % 2)
+        scan->scan_type[index / 2] =
+            (scan->scan_type[index / 2] & 0xF0) | (scan_type & 0x0F);
+    else
+        scan->scan_type[index / 2] =
+            (scan->scan_type[index / 2] & 0x0F) |
+            ((scan_type & 0x0F) << 4);
 }
 
 struct ipw_associate {
-	u8 channel;
+    u8 channel;
 #ifdef __LITTLE_ENDIAN_BITFIELD
-	u8 auth_type:4, auth_key:4;
+    u8 auth_type:4, auth_key:4;
 #else
-	u8 auth_key:4, auth_type:4;
+    u8 auth_key:4, auth_type:4;
 #endif
-	u8 assoc_type;
-	u8 reserved;
-	__le16 policy_support;
-	u8 preamble_length;
-	u8 ieee_mode;
-	u8 bssid[ETH_ALEN];
-	__le32 assoc_tsf_msw;
-	__le32 assoc_tsf_lsw;
-	__le16 capability;
-	__le16 listen_interval;
-	__le16 beacon_interval;
-	u8 dest[ETH_ALEN];
-	__le16 atim_window;
-	u8 smr;
-	u8 reserved1;
-	__le16 reserved2;
+    u8 assoc_type;
+    u8 reserved;
+    __le16 policy_support;
+    u8 preamble_length;
+    u8 ieee_mode;
+    u8 bssid[ETH_ALEN];
+    __le32 assoc_tsf_msw;
+    __le32 assoc_tsf_lsw;
+    __le16 capability;
+    __le16 listen_interval;
+    __le16 beacon_interval;
+    u8 dest[ETH_ALEN];
+    __le16 atim_window;
+    u8 smr;
+    u8 reserved1;
+    __le16 reserved2;
 } __packed;
 
 struct ipw_supported_rates {
-	u8 ieee_mode;
-	u8 num_rates;
-	u8 purpose;
-	u8 reserved;
-	u8 supported_rates[IPW_MAX_RATES];
+    u8 ieee_mode;
+    u8 num_rates;
+    u8 purpose;
+    u8 reserved;
+    u8 supported_rates[IPW_MAX_RATES];
 } __packed;
 
 struct ipw_rts_threshold {
-	__le16 rts_threshold;
-	__le16 reserved;
+    __le16 rts_threshold;
+    __le16 reserved;
 } __packed;
 
 struct ipw_frag_threshold {
-	__le16 frag_threshold;
-	__le16 reserved;
+    __le16 frag_threshold;
+    __le16 reserved;
 } __packed;
 
 struct ipw_retry_limit {
-	u8 short_retry_limit;
-	u8 long_retry_limit;
-	__le16 reserved;
+    u8 short_retry_limit;
+    u8 long_retry_limit;
+    __le16 reserved;
 } __packed;
 
 struct ipw_dino_config {
-	__le32 dino_config_addr;
-	__le16 dino_config_size;
-	u8 dino_response;
-	u8 reserved;
+    __le32 dino_config_addr;
+    __le16 dino_config_size;
+    u8 dino_response;
+    u8 reserved;
 } __packed;
 
 struct ipw_aironet_info {
-	u8 id;
-	u8 length;
-	__le16 reserved;
+    u8 id;
+    u8 length;
+    __le16 reserved;
 } __packed;
 
 struct ipw_rx_key {
-	u8 station_index;
-	u8 key_type;
-	u8 key_id;
-	u8 key_flag;
-	u8 key[16];
-	u8 station_address[6];
-	u8 key_index;
-	u8 reserved;
+    u8 station_index;
+    u8 key_type;
+    u8 key_id;
+    u8 key_flag;
+    u8 key[16];
+    u8 station_address[6];
+    u8 key_index;
+    u8 reserved;
 } __packed;
 
 struct ipw_country_channel_info {
-	u8 first_channel;
-	u8 no_channels;
-	s8 max_tx_power;
+    u8 first_channel;
+    u8 no_channels;
+    s8 max_tx_power;
 } __packed;
 
 struct ipw_country_info {
-	u8 id;
-	u8 length;
-	u8 country_str[IEEE80211_COUNTRY_STRING_LEN];
-	struct ipw_country_channel_info groups[7];
+    u8 id;
+    u8 length;
+    u8 country_str[IEEE80211_COUNTRY_STRING_LEN];
+    struct ipw_country_channel_info groups[7];
 } __packed;
 
 struct ipw_channel_tx_power {
-	u8 channel_number;
-	s8 tx_power;
+    u8 channel_number;
+    s8 tx_power;
 } __packed;
 
 #define SCAN_ASSOCIATED_INTERVAL (HZ)
@@ -975,20 +973,20 @@ struct ipw_channel_tx_power {
 #define MAX_B_CHANNELS  14
 
 struct ipw_tx_power {
-	u8 num_channels;
-	u8 ieee_mode;
-	struct ipw_channel_tx_power channels_tx_power[MAX_A_CHANNELS];
+    u8 num_channels;
+    u8 ieee_mode;
+    struct ipw_channel_tx_power channels_tx_power[MAX_A_CHANNELS];
 } __packed;
 
 struct ipw_rsn_capabilities {
-	u8 id;
-	u8 length;
-	__le16 version;
+    u8 id;
+    u8 length;
+    __le16 version;
 } __packed;
 
 struct ipw_sensitivity_calib {
-	__le16 beacon_rssi_raw;
-	__le16 reserved;
+    __le16 beacon_rssi_raw;
+    __le16 reserved;
 } __packed;
 
 /**
@@ -1005,19 +1003,19 @@ struct ipw_sensitivity_calib {
  * - \a param filled with status parameters.
  */
 struct ipw_cmd {	 /* XXX */
-	u32 cmd;   /**< Host command */
-	u32 status;/**< Status */
-	u32 status_len;
-		   /**< How many 32 bit parameters in the status */
-	u32 len;   /**< incoming parameters length, bytes */
-  /**
-   * command parameters.
-   * There should be enough space for incoming and
-   * outcoming parameters.
-   * Incoming parameters listed 1-st, followed by outcoming params.
-   * nParams=(len+3)/4+status_len
-   */
-	u32 param[0];
+    u32 cmd;   /**< Host command */
+    u32 status;/**< Status */
+    u32 status_len;
+    /**< How many 32 bit parameters in the status */
+    u32 len;   /**< incoming parameters length, bytes */
+    /**
+     * command parameters.
+     * There should be enough space for incoming and
+     * outcoming parameters.
+     * Incoming parameters listed 1-st, followed by outcoming params.
+     * nParams=(len+3)/4+status_len
+     */
+    u32 param[0];
 } __packed;
 
 #define STATUS_HCMD_ACTIVE      (1<<0)	/**< host command in progress */
@@ -1075,78 +1073,78 @@ struct ipw_cmd {	 /* XXX */
 #define IPW_INVALID_STATION     (0xff)
 
 struct ipw_station_entry {
-	u8 mac_addr[ETH_ALEN];
-	u8 reserved;
-	u8 support_mode;
+    u8 mac_addr[ETH_ALEN];
+    u8 reserved;
+    u8 support_mode;
 };
 
 #define AVG_ENTRIES 8
 struct average {
-	s16 entries[AVG_ENTRIES];
-	u8 pos;
-	u8 init;
-	s32 sum;
+    s16 entries[AVG_ENTRIES];
+    u8 pos;
+    u8 init;
+    s32 sum;
 };
 
 #define MAX_SPEED_SCAN 100
 #define IPW_IBSS_MAC_HASH_SIZE 31
 
 struct ipw_ibss_seq {
-	u8 mac[ETH_ALEN];
-	u16 seq_num;
-	u16 frag_num;
-	unsigned long packet_time;
-	struct list_head list;
+    u8 mac[ETH_ALEN];
+    u16 seq_num;
+    u16 frag_num;
+    unsigned long packet_time;
+    struct list_head list;
 };
 
 struct ipw_error_elem {	 /* XXX */
-	u32 desc;
-	u32 time;
-	u32 blink1;
-	u32 blink2;
-	u32 link1;
-	u32 link2;
-	u32 data;
+    u32 desc;
+    u32 time;
+    u32 blink1;
+    u32 blink2;
+    u32 link1;
+    u32 link2;
+    u32 data;
 };
 
 struct ipw_event {	 /* XXX */
-	u32 event;
-	u32 time;
-	u32 data;
+    u32 event;
+    u32 time;
+    u32 data;
 } __packed;
 
 struct ipw_fw_error {	 /* XXX */
-	unsigned long jiffies;
-	u32 status;
-	u32 config;
-	u32 elem_len;
-	u32 log_len;
-	struct ipw_error_elem *elem;
-	struct ipw_event *log;
-	u8 payload[0];
+    unsigned long jiffies;
+    u32 status;
+    u32 config;
+    u32 elem_len;
+    u32 log_len;
+    struct ipw_error_elem *elem;
+    struct ipw_event *log;
+    u8 payload[0];
 } __packed;
 
 #ifdef CONFIG_IPW2200_PROMISCUOUS
 
 enum ipw_prom_filter {
-	IPW_PROM_CTL_HEADER_ONLY = (1 << 0),
-	IPW_PROM_MGMT_HEADER_ONLY = (1 << 1),
-	IPW_PROM_DATA_HEADER_ONLY = (1 << 2),
-	IPW_PROM_ALL_HEADER_ONLY = 0xf, /* bits 0..3 */
-	IPW_PROM_NO_TX = (1 << 4),
-	IPW_PROM_NO_RX = (1 << 5),
-	IPW_PROM_NO_CTL = (1 << 6),
-	IPW_PROM_NO_MGMT = (1 << 7),
-	IPW_PROM_NO_DATA = (1 << 8),
+    IPW_PROM_CTL_HEADER_ONLY = (1 << 0),
+    IPW_PROM_MGMT_HEADER_ONLY = (1 << 1),
+    IPW_PROM_DATA_HEADER_ONLY = (1 << 2),
+    IPW_PROM_ALL_HEADER_ONLY = 0xf, /* bits 0..3 */
+    IPW_PROM_NO_TX = (1 << 4),
+    IPW_PROM_NO_RX = (1 << 5),
+    IPW_PROM_NO_CTL = (1 << 6),
+    IPW_PROM_NO_MGMT = (1 << 7),
+    IPW_PROM_NO_DATA = (1 << 8),
 };
 
 struct ipw_priv;
 struct ipw_prom_priv {
-	struct ipw_priv *priv;
-	struct libipw_device *ieee;
-	enum ipw_prom_filter filter;
-	int tx_packets;
-	int rx_packets;
+    struct ipw_priv *priv;
+    struct libipw_device *ieee;
+    enum ipw_prom_filter filter;
+    int tx_packets;
+    int rx_packets;
 };
 #endif
 
@@ -1159,215 +1157,215 @@ struct ipw_prom_priv {
  * structure is provided regardless of any bits unset.
  */
 struct ipw_rt_hdr {
-	struct ieee80211_radiotap_header rt_hdr;
-	u64 rt_tsf;      /* TSF */	/* XXX */
-	u8 rt_flags;	/* radiotap packet flags */
-	u8 rt_rate;	/* rate in 500kb/s */
-	__le16 rt_channel;	/* channel in mhz */
-	__le16 rt_chbitmask;	/* channel bitfield */
-	s8 rt_dbmsignal;	/* signal in dbM, kluged to signed */
-	s8 rt_dbmnoise;
-	u8 rt_antenna;	/* antenna number */
-	u8 payload[0];  /* payload... */
+    struct ieee80211_radiotap_header rt_hdr;
+    u64 rt_tsf;      /* TSF */	/* XXX */
+    u8 rt_flags;	/* radiotap packet flags */
+    u8 rt_rate;	/* rate in 500kb/s */
+    __le16 rt_channel;	/* channel in mhz */
+    __le16 rt_chbitmask;	/* channel bitfield */
+    s8 rt_dbmsignal;	/* signal in dbM, kluged to signed */
+    s8 rt_dbmnoise;
+    u8 rt_antenna;	/* antenna number */
+    u8 payload[0];  /* payload... */
 } __packed;
 #endif
 
 struct ipw_priv {
-	/* ieee device used by generic ieee processing code */
-	struct libipw_device *ieee;
+    /* ieee device used by generic ieee processing code */
+    struct libipw_device *ieee;
 
-	spinlock_t lock;
-	spinlock_t irq_lock;
-	struct mutex mutex;
+    spinlock_t lock;
+    spinlock_t irq_lock;
+    struct mutex mutex;
 
-	/* basic pci-network driver stuff */
-	struct pci_dev *pci_dev;
-	struct net_device *net_dev;
+    /* basic pci-network driver stuff */
+    struct pci_dev *pci_dev;
+    struct net_device *net_dev;
 
 #ifdef CONFIG_IPW2200_PROMISCUOUS
-	/* Promiscuous mode */
-	struct ipw_prom_priv *prom_priv;
-	struct net_device *prom_net_dev;
+    /* Promiscuous mode */
+    struct ipw_prom_priv *prom_priv;
+    struct net_device *prom_net_dev;
 #endif
 
-	/* pci hardware address support */
-	void __iomem *hw_base;
-	unsigned long hw_len;
+    /* pci hardware address support */
+    void __iomem *hw_base;
+    unsigned long hw_len;
 
-	struct fw_image_desc sram_desc;
+    struct fw_image_desc sram_desc;
 
-	/* result of ucode download */
-	struct alive_command_responce dino_alive;
+    /* result of ucode download */
+    struct alive_command_responce dino_alive;
 
-	wait_queue_head_t wait_command_queue;
-	wait_queue_head_t wait_state;
+    wait_queue_head_t wait_command_queue;
+    wait_queue_head_t wait_state;
 
-	/* Rx and Tx DMA processing queues */
-	struct ipw_rx_queue *rxq;
-	struct clx2_tx_queue txq_cmd;
-	struct clx2_tx_queue txq[4];
-	u32 status;
-	u32 config;
-	u32 capability;
+    /* Rx and Tx DMA processing queues */
+    struct ipw_rx_queue *rxq;
+    struct clx2_tx_queue txq_cmd;
+    struct clx2_tx_queue txq[4];
+    u32 status;
+    u32 config;
+    u32 capability;
 
-	struct average average_missed_beacons;
-	s16 exp_avg_rssi;
-	s16 exp_avg_noise;
-	u32 port_type;
-	int rx_bufs_min;	  /**< minimum number of bufs in Rx queue */
-	int rx_pend_max;	  /**< maximum pending buffers for one IRQ */
-	u32 hcmd_seq;		  /**< sequence number for hcmd */
-	u32 disassociate_threshold;
-	u32 roaming_threshold;
+    struct average average_missed_beacons;
+    s16 exp_avg_rssi;
+    s16 exp_avg_noise;
+    u32 port_type;
+    int rx_bufs_min;	  /**< minimum number of bufs in Rx queue */
+    int rx_pend_max;	  /**< maximum pending buffers for one IRQ */
+    u32 hcmd_seq;		  /**< sequence number for hcmd */
+    u32 disassociate_threshold;
+    u32 roaming_threshold;
 
-	struct ipw_associate assoc_request;
-	struct libipw_network *assoc_network;
+    struct ipw_associate assoc_request;
+    struct libipw_network *assoc_network;
 
-	unsigned long ts_scan_abort;
-	struct ipw_supported_rates rates;
-	struct ipw_rates phy[3];	   /**< PHY restrictions, per band */
-	struct ipw_rates supp;		   /**< software defined */
-	struct ipw_rates extended;	   /**< use for corresp. IE, AP only */
+    unsigned long ts_scan_abort;
+    struct ipw_supported_rates rates;
+    struct ipw_rates phy[3];	   /**< PHY restrictions, per band */
+    struct ipw_rates supp;		   /**< software defined */
+    struct ipw_rates extended;	   /**< use for corresp. IE, AP only */
 
-	struct notif_link_deterioration last_link_deterioration; /** for statistics */
-	struct ipw_cmd *hcmd; /**< host command currently executed */
+    struct notif_link_deterioration last_link_deterioration; /** for statistics */
+    struct ipw_cmd *hcmd; /**< host command currently executed */
 
-	wait_queue_head_t hcmd_wq;     /**< host command waits for execution */
-	u32 tsf_bcn[2];		     /**< TSF from latest beacon */
+    wait_queue_head_t hcmd_wq;     /**< host command waits for execution */
+    u32 tsf_bcn[2];		     /**< TSF from latest beacon */
 
-	struct notif_calibration calib;	/**< last calibration */
+    struct notif_calibration calib;	/**< last calibration */
 
-	/* ordinal interface with firmware */
-	u32 table0_addr;
-	u32 table0_len;
-	u32 table1_addr;
-	u32 table1_len;
-	u32 table2_addr;
-	u32 table2_len;
+    /* ordinal interface with firmware */
+    u32 table0_addr;
+    u32 table0_len;
+    u32 table1_addr;
+    u32 table1_len;
+    u32 table2_addr;
+    u32 table2_len;
 
-	/* context information */
-	u8 essid[IW_ESSID_MAX_SIZE];
-	u8 essid_len;
-	u8 nick[IW_ESSID_MAX_SIZE];
-	u16 rates_mask;
-	u8 channel;
-	struct ipw_sys_config sys_config;
-	u32 power_mode;
-	u8 bssid[ETH_ALEN];
-	u16 rts_threshold;
-	u8 mac_addr[ETH_ALEN];
-	u8 num_stations;
-	u8 stations[MAX_STATIONS][ETH_ALEN];
-	u8 short_retry_limit;
-	u8 long_retry_limit;
+    /* context information */
+    u8 essid[IW_ESSID_MAX_SIZE];
+    u8 essid_len;
+    u8 nick[IW_ESSID_MAX_SIZE];
+    u16 rates_mask;
+    u8 channel;
+    struct ipw_sys_config sys_config;
+    u32 power_mode;
+    u8 bssid[ETH_ALEN];
+    u16 rts_threshold;
+    u8 mac_addr[ETH_ALEN];
+    u8 num_stations;
+    u8 stations[MAX_STATIONS][ETH_ALEN];
+    u8 short_retry_limit;
+    u8 long_retry_limit;
 
-	u32 notif_missed_beacons;
+    u32 notif_missed_beacons;
 
-	/* Statistics and counters normalized with each association */
-	u32 last_missed_beacons;
-	u32 last_tx_packets;
-	u32 last_rx_packets;
-	u32 last_tx_failures;
-	u32 last_rx_err;
-	u32 last_rate;
+    /* Statistics and counters normalized with each association */
+    u32 last_missed_beacons;
+    u32 last_tx_packets;
+    u32 last_rx_packets;
+    u32 last_tx_failures;
+    u32 last_rx_err;
+    u32 last_rate;
 
-	u32 missed_adhoc_beacons;
-	u32 missed_beacons;
-	u32 rx_packets;
-	u32 tx_packets;
-	u32 quality;
+    u32 missed_adhoc_beacons;
+    u32 missed_beacons;
+    u32 rx_packets;
+    u32 tx_packets;
+    u32 quality;
 
-	u8 speed_scan[MAX_SPEED_SCAN];
-	u8 speed_scan_pos;
+    u8 speed_scan[MAX_SPEED_SCAN];
+    u8 speed_scan_pos;
 
-	u16 last_seq_num;
-	u16 last_frag_num;
-	unsigned long last_packet_time;
-	struct list_head ibss_mac_hash[IPW_IBSS_MAC_HASH_SIZE];
+    u16 last_seq_num;
+    u16 last_frag_num;
+    unsigned long last_packet_time;
+    struct list_head ibss_mac_hash[IPW_IBSS_MAC_HASH_SIZE];
 
-	/* eeprom */
-	u8 eeprom[0x100];	/* 256 bytes of eeprom */
-	u8 country[4];
-	int eeprom_delay;
+    /* eeprom */
+    u8 eeprom[0x100];	/* 256 bytes of eeprom */
+    u8 country[4];
+    int eeprom_delay;
 
-	struct iw_statistics wstats;
+    struct iw_statistics wstats;
 
-	struct iw_public_data wireless_data;
+    struct iw_public_data wireless_data;
 
-	int user_requested_scan;
-	u8 direct_scan_ssid[IW_ESSID_MAX_SIZE];
-	u8 direct_scan_ssid_len;
+    int user_requested_scan;
+    u8 direct_scan_ssid[IW_ESSID_MAX_SIZE];
+    u8 direct_scan_ssid_len;
 
-	struct delayed_work adhoc_check;
-	struct work_struct associate;
-	struct work_struct disassociate;
-	struct work_struct system_config;
-	struct work_struct rx_replenish;
-	struct delayed_work request_scan;
-	struct delayed_work request_direct_scan;
-	struct delayed_work request_passive_scan;
-	struct delayed_work scan_event;
-	struct work_struct adapter_restart;
-	struct delayed_work rf_kill;
-	struct work_struct up;
-	struct work_struct down;
-	struct delayed_work gather_stats;
-	struct work_struct abort_scan;
-	struct work_struct roam;
-	struct delayed_work scan_check;
-	struct work_struct link_up;
-	struct work_struct link_down;
+    struct delayed_work adhoc_check;
+    struct work_struct associate;
+    struct work_struct disassociate;
+    struct work_struct system_config;
+    struct work_struct rx_replenish;
+    struct delayed_work request_scan;
+    struct delayed_work request_direct_scan;
+    struct delayed_work request_passive_scan;
+    struct delayed_work scan_event;
+    struct work_struct adapter_restart;
+    struct delayed_work rf_kill;
+    struct work_struct up;
+    struct work_struct down;
+    struct delayed_work gather_stats;
+    struct work_struct abort_scan;
+    struct work_struct roam;
+    struct delayed_work scan_check;
+    struct work_struct link_up;
+    struct work_struct link_down;
 
-	struct tasklet_struct irq_tasklet;
+    struct tasklet_struct irq_tasklet;
 
-	/* LED related variables and work_struct */
-	u8 nic_type;
-	u32 led_activity_on;
-	u32 led_activity_off;
-	u32 led_association_on;
-	u32 led_association_off;
-	u32 led_ofdm_on;
-	u32 led_ofdm_off;
+    /* LED related variables and work_struct */
+    u8 nic_type;
+    u32 led_activity_on;
+    u32 led_activity_off;
+    u32 led_association_on;
+    u32 led_association_off;
+    u32 led_ofdm_on;
+    u32 led_ofdm_off;
 
-	struct delayed_work led_link_on;
-	struct delayed_work led_link_off;
-	struct delayed_work led_act_off;
-	struct work_struct merge_networks;
+    struct delayed_work led_link_on;
+    struct delayed_work led_link_off;
+    struct delayed_work led_act_off;
+    struct work_struct merge_networks;
 
-	struct ipw_cmd_log *cmdlog;
-	int cmdlog_len;
-	int cmdlog_pos;
+    struct ipw_cmd_log *cmdlog;
+    int cmdlog_len;
+    int cmdlog_pos;
 
 #define IPW_2200BG  1
 #define IPW_2915ABG 2
-	u8 adapter;
+    u8 adapter;
 
-	s8 tx_power;
+    s8 tx_power;
 
-	/* Track time in suspend */
-	unsigned long suspend_at;
-	unsigned long suspend_time;
+    /* Track time in suspend */
+    unsigned long suspend_at;
+    unsigned long suspend_time;
 
 #ifdef CONFIG_PM
-	u32 pm_state[16];
+    u32 pm_state[16];
 #endif
 
-	struct ipw_fw_error *error;
+    struct ipw_fw_error *error;
 
-	/* network state */
+    /* network state */
 
-	/* Used to pass the current INTA value from ISR to Tasklet */
-	u32 isr_inta;
+    /* Used to pass the current INTA value from ISR to Tasklet */
+    u32 isr_inta;
 
-	/* QoS */
-	struct ipw_qos_info qos_data;
-	struct work_struct qos_activate;
-	/*********************************/
+    /* QoS */
+    struct ipw_qos_info qos_data;
+    struct work_struct qos_activate;
+    /*********************************/
 
-	/* debugging info */
-	u32 indirect_dword;
-	u32 direct_dword;
-	u32 indirect_byte;
+    /* debugging info */
+    u32 indirect_dword;
+    u32 direct_dword;
+    u32 indirect_byte;
 };				/*ipw_priv */
 
 /* debug macros */
@@ -1742,21 +1740,21 @@ do { if (ipw_debug_level & (level)) \
 #define IPW_TX_POWER_DEFAULT	IPW_TX_POWER_MAX
 
 enum {
-	IPW_FW_ERROR_OK = 0,
-	IPW_FW_ERROR_FAIL,
-	IPW_FW_ERROR_MEMORY_UNDERFLOW,
-	IPW_FW_ERROR_MEMORY_OVERFLOW,
-	IPW_FW_ERROR_BAD_PARAM,
-	IPW_FW_ERROR_BAD_CHECKSUM,
-	IPW_FW_ERROR_NMI_INTERRUPT,
-	IPW_FW_ERROR_BAD_DATABASE,
-	IPW_FW_ERROR_ALLOC_FAIL,
-	IPW_FW_ERROR_DMA_UNDERRUN,
-	IPW_FW_ERROR_DMA_STATUS,
-	IPW_FW_ERROR_DINO_ERROR,
-	IPW_FW_ERROR_EEPROM_ERROR,
-	IPW_FW_ERROR_SYSASSERT,
-	IPW_FW_ERROR_FATAL_ERROR
+    IPW_FW_ERROR_OK = 0,
+    IPW_FW_ERROR_FAIL,
+    IPW_FW_ERROR_MEMORY_UNDERFLOW,
+    IPW_FW_ERROR_MEMORY_OVERFLOW,
+    IPW_FW_ERROR_BAD_PARAM,
+    IPW_FW_ERROR_BAD_CHECKSUM,
+    IPW_FW_ERROR_NMI_INTERRUPT,
+    IPW_FW_ERROR_BAD_DATABASE,
+    IPW_FW_ERROR_ALLOC_FAIL,
+    IPW_FW_ERROR_DMA_UNDERRUN,
+    IPW_FW_ERROR_DMA_STATUS,
+    IPW_FW_ERROR_DINO_ERROR,
+    IPW_FW_ERROR_EEPROM_ERROR,
+    IPW_FW_ERROR_SYSASSERT,
+    IPW_FW_ERROR_FATAL_ERROR
 };
 
 #define AUTH_OPEN	0
@@ -1808,62 +1806,62 @@ enum {
  * Table 0 Entries (all entries are 32 bits)
  */
 enum {
-	IPW_ORD_STAT_TX_CURR_RATE = IPW_ORD_TABLE_0_MASK + 1,
-	IPW_ORD_STAT_FRAG_TRESHOLD,
-	IPW_ORD_STAT_RTS_THRESHOLD,
-	IPW_ORD_STAT_TX_HOST_REQUESTS,
-	IPW_ORD_STAT_TX_HOST_COMPLETE,
-	IPW_ORD_STAT_TX_DIR_DATA,
-	IPW_ORD_STAT_TX_DIR_DATA_B_1,
-	IPW_ORD_STAT_TX_DIR_DATA_B_2,
-	IPW_ORD_STAT_TX_DIR_DATA_B_5_5,
-	IPW_ORD_STAT_TX_DIR_DATA_B_11,
-	/* Hole */
+    IPW_ORD_STAT_TX_CURR_RATE = IPW_ORD_TABLE_0_MASK + 1,
+    IPW_ORD_STAT_FRAG_TRESHOLD,
+    IPW_ORD_STAT_RTS_THRESHOLD,
+    IPW_ORD_STAT_TX_HOST_REQUESTS,
+    IPW_ORD_STAT_TX_HOST_COMPLETE,
+    IPW_ORD_STAT_TX_DIR_DATA,
+    IPW_ORD_STAT_TX_DIR_DATA_B_1,
+    IPW_ORD_STAT_TX_DIR_DATA_B_2,
+    IPW_ORD_STAT_TX_DIR_DATA_B_5_5,
+    IPW_ORD_STAT_TX_DIR_DATA_B_11,
+    /* Hole */
 
-	IPW_ORD_STAT_TX_DIR_DATA_G_1 = IPW_ORD_TABLE_0_MASK + 19,
-	IPW_ORD_STAT_TX_DIR_DATA_G_2,
-	IPW_ORD_STAT_TX_DIR_DATA_G_5_5,
-	IPW_ORD_STAT_TX_DIR_DATA_G_6,
-	IPW_ORD_STAT_TX_DIR_DATA_G_9,
-	IPW_ORD_STAT_TX_DIR_DATA_G_11,
-	IPW_ORD_STAT_TX_DIR_DATA_G_12,
-	IPW_ORD_STAT_TX_DIR_DATA_G_18,
-	IPW_ORD_STAT_TX_DIR_DATA_G_24,
-	IPW_ORD_STAT_TX_DIR_DATA_G_36,
-	IPW_ORD_STAT_TX_DIR_DATA_G_48,
-	IPW_ORD_STAT_TX_DIR_DATA_G_54,
-	IPW_ORD_STAT_TX_NON_DIR_DATA,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_B_1,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_B_2,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_B_5_5,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_B_11,
-	/* Hole */
+    IPW_ORD_STAT_TX_DIR_DATA_G_1 = IPW_ORD_TABLE_0_MASK + 19,
+    IPW_ORD_STAT_TX_DIR_DATA_G_2,
+    IPW_ORD_STAT_TX_DIR_DATA_G_5_5,
+    IPW_ORD_STAT_TX_DIR_DATA_G_6,
+    IPW_ORD_STAT_TX_DIR_DATA_G_9,
+    IPW_ORD_STAT_TX_DIR_DATA_G_11,
+    IPW_ORD_STAT_TX_DIR_DATA_G_12,
+    IPW_ORD_STAT_TX_DIR_DATA_G_18,
+    IPW_ORD_STAT_TX_DIR_DATA_G_24,
+    IPW_ORD_STAT_TX_DIR_DATA_G_36,
+    IPW_ORD_STAT_TX_DIR_DATA_G_48,
+    IPW_ORD_STAT_TX_DIR_DATA_G_54,
+    IPW_ORD_STAT_TX_NON_DIR_DATA,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_B_1,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_B_2,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_B_5_5,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_B_11,
+    /* Hole */
 
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_1 = IPW_ORD_TABLE_0_MASK + 44,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_2,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_5_5,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_6,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_9,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_11,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_12,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_18,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_24,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_36,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_48,
-	IPW_ORD_STAT_TX_NON_DIR_DATA_G_54,
-	IPW_ORD_STAT_TX_RETRY,
-	IPW_ORD_STAT_TX_FAILURE,
-	IPW_ORD_STAT_RX_ERR_CRC,
-	IPW_ORD_STAT_RX_ERR_ICV,
-	IPW_ORD_STAT_RX_NO_BUFFER,
-	IPW_ORD_STAT_FULL_SCANS,
-	IPW_ORD_STAT_PARTIAL_SCANS,
-	IPW_ORD_STAT_TGH_ABORTED_SCANS,
-	IPW_ORD_STAT_TX_TOTAL_BYTES,
-	IPW_ORD_STAT_CURR_RSSI_RAW,
-	IPW_ORD_STAT_RX_BEACON,
-	IPW_ORD_STAT_MISSED_BEACONS,
-	IPW_ORD_TABLE_0_LAST
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_1 = IPW_ORD_TABLE_0_MASK + 44,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_2,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_5_5,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_6,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_9,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_11,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_12,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_18,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_24,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_36,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_48,
+    IPW_ORD_STAT_TX_NON_DIR_DATA_G_54,
+    IPW_ORD_STAT_TX_RETRY,
+    IPW_ORD_STAT_TX_FAILURE,
+    IPW_ORD_STAT_RX_ERR_CRC,
+    IPW_ORD_STAT_RX_ERR_ICV,
+    IPW_ORD_STAT_RX_NO_BUFFER,
+    IPW_ORD_STAT_FULL_SCANS,
+    IPW_ORD_STAT_PARTIAL_SCANS,
+    IPW_ORD_STAT_TGH_ABORTED_SCANS,
+    IPW_ORD_STAT_TX_TOTAL_BYTES,
+    IPW_ORD_STAT_CURR_RSSI_RAW,
+    IPW_ORD_STAT_RX_BEACON,
+    IPW_ORD_STAT_MISSED_BEACONS,
+    IPW_ORD_TABLE_0_LAST
 };
 
 #define IPW_RSSI_TO_DBM 112
@@ -1871,7 +1869,7 @@ enum {
 /* Table 1 Entries
  */
 enum {
-	IPW_ORD_TABLE_1_LAST = IPW_ORD_TABLE_1_MASK | 1,
+    IPW_ORD_TABLE_1_LAST = IPW_ORD_TABLE_1_MASK | 1,
 };
 
 /*
@@ -1885,62 +1883,62 @@ enum {
  * RTC:           4 byte clock
  */
 enum {
-	IPW_ORD_STAT_FW_VERSION = IPW_ORD_TABLE_2_MASK | 1,
-	IPW_ORD_STAT_FW_DATE,
-	IPW_ORD_STAT_UCODE_VERSION,
-	IPW_ORD_STAT_UCODE_DATE,
-	IPW_ORD_STAT_ADAPTER_MAC,
-	IPW_ORD_STAT_RTC,
-	IPW_ORD_TABLE_2_LAST
+    IPW_ORD_STAT_FW_VERSION = IPW_ORD_TABLE_2_MASK | 1,
+    IPW_ORD_STAT_FW_DATE,
+    IPW_ORD_STAT_UCODE_VERSION,
+    IPW_ORD_STAT_UCODE_DATE,
+    IPW_ORD_STAT_ADAPTER_MAC,
+    IPW_ORD_STAT_RTC,
+    IPW_ORD_TABLE_2_LAST
 };
 
 /* Table 3 */
 enum {
-	IPW_ORD_STAT_TX_PACKET = IPW_ORD_TABLE_3_MASK | 0,
-	IPW_ORD_STAT_TX_PACKET_FAILURE,
-	IPW_ORD_STAT_TX_PACKET_SUCCESS,
-	IPW_ORD_STAT_TX_PACKET_ABORTED,
-	IPW_ORD_TABLE_3_LAST
+    IPW_ORD_STAT_TX_PACKET = IPW_ORD_TABLE_3_MASK | 0,
+    IPW_ORD_STAT_TX_PACKET_FAILURE,
+    IPW_ORD_STAT_TX_PACKET_SUCCESS,
+    IPW_ORD_STAT_TX_PACKET_ABORTED,
+    IPW_ORD_TABLE_3_LAST
 };
 
 /* Table 4 */
 enum {
-	IPW_ORD_TABLE_4_LAST = IPW_ORD_TABLE_4_MASK
+    IPW_ORD_TABLE_4_LAST = IPW_ORD_TABLE_4_MASK
 };
 
 /* Table 5 */
 enum {
-	IPW_ORD_STAT_AVAILABLE_AP_COUNT = IPW_ORD_TABLE_5_MASK,
-	IPW_ORD_STAT_AP_ASSNS,
-	IPW_ORD_STAT_ROAM,
-	IPW_ORD_STAT_ROAM_CAUSE_MISSED_BEACONS,
-	IPW_ORD_STAT_ROAM_CAUSE_UNASSOC,
-	IPW_ORD_STAT_ROAM_CAUSE_RSSI,
-	IPW_ORD_STAT_ROAM_CAUSE_LINK_QUALITY,
-	IPW_ORD_STAT_ROAM_CAUSE_AP_LOAD_BALANCE,
-	IPW_ORD_STAT_ROAM_CAUSE_AP_NO_TX,
-	IPW_ORD_STAT_LINK_UP,
-	IPW_ORD_STAT_LINK_DOWN,
-	IPW_ORD_ANTENNA_DIVERSITY,
-	IPW_ORD_CURR_FREQ,
-	IPW_ORD_TABLE_5_LAST
+    IPW_ORD_STAT_AVAILABLE_AP_COUNT = IPW_ORD_TABLE_5_MASK,
+    IPW_ORD_STAT_AP_ASSNS,
+    IPW_ORD_STAT_ROAM,
+    IPW_ORD_STAT_ROAM_CAUSE_MISSED_BEACONS,
+    IPW_ORD_STAT_ROAM_CAUSE_UNASSOC,
+    IPW_ORD_STAT_ROAM_CAUSE_RSSI,
+    IPW_ORD_STAT_ROAM_CAUSE_LINK_QUALITY,
+    IPW_ORD_STAT_ROAM_CAUSE_AP_LOAD_BALANCE,
+    IPW_ORD_STAT_ROAM_CAUSE_AP_NO_TX,
+    IPW_ORD_STAT_LINK_UP,
+    IPW_ORD_STAT_LINK_DOWN,
+    IPW_ORD_ANTENNA_DIVERSITY,
+    IPW_ORD_CURR_FREQ,
+    IPW_ORD_TABLE_5_LAST
 };
 
 /* Table 6 */
 enum {
-	IPW_ORD_COUNTRY_CODE = IPW_ORD_TABLE_6_MASK,
-	IPW_ORD_CURR_BSSID,
-	IPW_ORD_CURR_SSID,
-	IPW_ORD_TABLE_6_LAST
+    IPW_ORD_COUNTRY_CODE = IPW_ORD_TABLE_6_MASK,
+    IPW_ORD_CURR_BSSID,
+    IPW_ORD_CURR_SSID,
+    IPW_ORD_TABLE_6_LAST
 };
 
 /* Table 7 */
 enum {
-	IPW_ORD_STAT_PERCENT_MISSED_BEACONS = IPW_ORD_TABLE_7_MASK,
-	IPW_ORD_STAT_PERCENT_TX_RETRIES,
-	IPW_ORD_STAT_PERCENT_LINK_QUALITY,
-	IPW_ORD_STAT_CURR_RSSI_DBM,
-	IPW_ORD_TABLE_7_LAST
+    IPW_ORD_STAT_PERCENT_MISSED_BEACONS = IPW_ORD_TABLE_7_MASK,
+    IPW_ORD_STAT_PERCENT_TX_RETRIES,
+    IPW_ORD_STAT_PERCENT_LINK_QUALITY,
+    IPW_ORD_STAT_CURR_RSSI_DBM,
+    IPW_ORD_TABLE_7_LAST
 };
 
 #define IPW_ERROR_LOG     (IPW_SHARED_LOWER_BOUND + 0x410)
@@ -1952,30 +1950,30 @@ enum {
 #define IPW_MEM_FIXED_OVERRIDE          (IPW_SHARED_LOWER_BOUND + 0x41C)
 
 struct ipw_fixed_rate {
-	__le16 tx_rates;
-	__le16 reserved;
+    __le16 tx_rates;
+    __le16 reserved;
 } __packed;
 
 #define IPW_INDIRECT_ADDR_MASK (~0x3ul)
 
 struct host_cmd {
-	u8 cmd;
-	u8 len;
-	u16 reserved;
-	u32 *param;
+    u8 cmd;
+    u8 len;
+    u16 reserved;
+    u32 *param;
 } __packed;	/* XXX */
 
 struct cmdlog_host_cmd {
-	u8 cmd;
-	u8 len;
-	__le16 reserved;
-	char param[124];
+    u8 cmd;
+    u8 len;
+    __le16 reserved;
+    char param[124];
 } __packed;
 
 struct ipw_cmd_log {
-	unsigned long jiffies;
-	int retcode;
-	struct cmdlog_host_cmd cmd;
+    unsigned long jiffies;
+    int retcode;
+    struct cmdlog_host_cmd cmd;
 };
 
 /* SysConfig command parameters ... */

@@ -100,7 +100,10 @@
 /*
  * Interrupt table structures to hide differences between systems.
  */
-typedef union { int i; void *p; } int_ptr;
+typedef union {
+    int i;
+    void *p;
+} int_ptr;
 extern int dec_interrupt[DEC_NR_INTS];
 extern int_ptr cpu_mask_nr_tbl[DEC_MAX_CPU_INTS][2];
 extern int_ptr asic_mask_nr_tbl[DEC_MAX_ASIC_INTS][2];

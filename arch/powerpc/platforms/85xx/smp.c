@@ -43,111 +43,107 @@ extern void __early_start(void);
 #define SIZE_BOOT_ENTRY		(NUM_BOOT_ENTRY * sizeof(u32))
 
 static int __init
-smp_85xx_kick_cpu(int nr)
-{
-	unsigned long flags;
-	const u64 *cpu_rel_addr;
-	__iomem u32 *bptr_vaddr;
-	struct device_node *np;
-	int n = 0, hw_cpu = get_hard_smp_processor_id(nr);
-	int ioremappable;
+smp_85xx_kick_cpu(int nr) {
+    unsigned long flags;
+    const u64 *cpu_rel_addr;
+    __iomem u32 *bptr_vaddr;
+    struct device_node *np;
+    int n = 0, hw_cpu = get_hard_smp_processor_id(nr);
+    int ioremappable;
 
-	WARN_ON(nr < 0 || nr >= NR_CPUS);
-	WARN_ON(hw_cpu < 0 || hw_cpu >= NR_CPUS);
+    WARN_ON(nr < 0 || nr >= NR_CPUS);
+    WARN_ON(hw_cpu < 0 || hw_cpu >= NR_CPUS);
 
-	pr_debug("smp_85xx_kick_cpu: kick CPU #%d\n", nr);
+    pr_debug("smp_85xx_kick_cpu: kick CPU #%d\n", nr);
 
-	np = of_get_cpu_node(nr, NULL);
-	cpu_rel_addr = of_get_property(np, "cpu-release-addr", NULL);
+    np = of_get_cpu_node(nr, NULL);
+    cpu_rel_addr = of_get_property(np, "cpu-release-addr", NULL);
 
-	if (cpu_rel_addr == NULL) {
-		printk(KERN_ERR "No cpu-release-addr for cpu %d\n", nr);
-		return -ENOENT;
-	}
+    if (cpu_rel_addr == NULL) {
+        printk(KERN_ERR "No cpu-release-addr for cpu %d\n", nr);
+        return -ENOENT;
+    }
 
-	/*
-	 * A secondary core could be in a spinloop in the bootpage
-	 * (0xfffff000), somewhere in highmem, or somewhere in lowmem.
-	 * The bootpage and highmem can be accessed via ioremap(), but
-	 * we need to directly access the spinloop if its in lowmem.
-	 */
-	ioremappable = *cpu_rel_addr > virt_to_phys(high_memory);
+    /*
+     * A secondary core could be in a spinloop in the bootpage
+     * (0xfffff000), somewhere in highmem, or somewhere in lowmem.
+     * The bootpage and highmem can be accessed via ioremap(), but
+     * we need to directly access the spinloop if its in lowmem.
+     */
+    ioremappable = *cpu_rel_addr > virt_to_phys(high_memory);
 
-	/* Map the spin table */
-	if (ioremappable)
-		bptr_vaddr = ioremap(*cpu_rel_addr, SIZE_BOOT_ENTRY);
-	else
-		bptr_vaddr = phys_to_virt(*cpu_rel_addr);
+    /* Map the spin table */
+    if (ioremappable)
+        bptr_vaddr = ioremap(*cpu_rel_addr, SIZE_BOOT_ENTRY);
+    else
+        bptr_vaddr = phys_to_virt(*cpu_rel_addr);
 
-	local_irq_save(flags);
+    local_irq_save(flags);
 
-	out_be32(bptr_vaddr + BOOT_ENTRY_PIR, hw_cpu);
+    out_be32(bptr_vaddr + BOOT_ENTRY_PIR, hw_cpu);
 #ifdef CONFIG_PPC32
-	out_be32(bptr_vaddr + BOOT_ENTRY_ADDR_LOWER, __pa(__early_start));
+    out_be32(bptr_vaddr + BOOT_ENTRY_ADDR_LOWER, __pa(__early_start));
 
-	if (!ioremappable)
-		flush_dcache_range((ulong)bptr_vaddr,
-				(ulong)(bptr_vaddr + SIZE_BOOT_ENTRY));
+    if (!ioremappable)
+        flush_dcache_range((ulong)bptr_vaddr,
+                           (ulong)(bptr_vaddr + SIZE_BOOT_ENTRY));
 
-	/* Wait a bit for the CPU to ack. */
-	while ((__secondary_hold_acknowledge != hw_cpu) && (++n < 1000))
-		mdelay(1);
+    /* Wait a bit for the CPU to ack. */
+    while ((__secondary_hold_acknowledge != hw_cpu) && (++n < 1000))
+        mdelay(1);
 #else
-	smp_generic_kick_cpu(nr);
+    smp_generic_kick_cpu(nr);
 
-	out_be64((u64 *)(bptr_vaddr + BOOT_ENTRY_ADDR_UPPER),
-		__pa((u64)*((unsigned long long *) generic_secondary_smp_init)));
+    out_be64((u64 *)(bptr_vaddr + BOOT_ENTRY_ADDR_UPPER),
+             __pa((u64)*((unsigned long long *) generic_secondary_smp_init)));
 
-	if (!ioremappable)
-		flush_dcache_range((ulong)bptr_vaddr,
-				(ulong)(bptr_vaddr + SIZE_BOOT_ENTRY));
+    if (!ioremappable)
+        flush_dcache_range((ulong)bptr_vaddr,
+                           (ulong)(bptr_vaddr + SIZE_BOOT_ENTRY));
 #endif
 
-	local_irq_restore(flags);
+    local_irq_restore(flags);
 
-	if (ioremappable)
-		iounmap(bptr_vaddr);
+    if (ioremappable)
+        iounmap(bptr_vaddr);
 
-	pr_debug("waited %d msecs for CPU #%d.\n", n, nr);
+    pr_debug("waited %d msecs for CPU #%d.\n", n, nr);
 
-	return 0;
+    return 0;
 }
 
 struct smp_ops_t smp_85xx_ops = {
-	.kick_cpu = smp_85xx_kick_cpu,
+    .kick_cpu = smp_85xx_kick_cpu,
 #ifdef CONFIG_KEXEC
-	.give_timebase	= smp_generic_give_timebase,
-	.take_timebase	= smp_generic_take_timebase,
+    .give_timebase	= smp_generic_give_timebase,
+    .take_timebase	= smp_generic_take_timebase,
 #endif
 };
 
 #ifdef CONFIG_KEXEC
 atomic_t kexec_down_cpus = ATOMIC_INIT(0);
 
-void mpc85xx_smp_kexec_cpu_down(int crash_shutdown, int secondary)
-{
-	local_irq_disable();
+void mpc85xx_smp_kexec_cpu_down(int crash_shutdown, int secondary) {
+    local_irq_disable();
 
-	if (secondary) {
-		atomic_inc(&kexec_down_cpus);
-		/* loop forever */
-		while (1);
-	}
+    if (secondary) {
+        atomic_inc(&kexec_down_cpus);
+        /* loop forever */
+        while (1);
+    }
 }
 
-static void mpc85xx_smp_kexec_down(void *arg)
-{
-	if (ppc_md.kexec_cpu_down)
-		ppc_md.kexec_cpu_down(0,1);
+static void mpc85xx_smp_kexec_down(void *arg) {
+    if (ppc_md.kexec_cpu_down)
+        ppc_md.kexec_cpu_down(0,1);
 }
 
-static void map_and_flush(unsigned long paddr)
-{
-	struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-	unsigned long kaddr  = (unsigned long)kmap(page);
+static void map_and_flush(unsigned long paddr) {
+    struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+    unsigned long kaddr  = (unsigned long)kmap(page);
 
-	flush_dcache_range(kaddr, kaddr + PAGE_SIZE);
-	kunmap(page);
+    flush_dcache_range(kaddr, kaddr + PAGE_SIZE);
+    kunmap(page);
 }
 
 /**
@@ -156,103 +152,97 @@ static void map_and_flush(unsigned long paddr)
  * are performed out of an overabundance of caution as interrupts are not
  * disabled yet and we can switch cores
  */
-static void mpc85xx_smp_flush_dcache_kexec(struct kimage *image)
-{
-	kimage_entry_t *ptr, entry;
-	unsigned long paddr;
-	int i;
+static void mpc85xx_smp_flush_dcache_kexec(struct kimage *image) {
+    kimage_entry_t *ptr, entry;
+    unsigned long paddr;
+    int i;
 
-	if (image->type == KEXEC_TYPE_DEFAULT) {
-		/* normal kexec images are stored in temporary pages */
-		for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE);
-		     ptr = (entry & IND_INDIRECTION) ?
-				phys_to_virt(entry & PAGE_MASK) : ptr + 1) {
-			if (!(entry & IND_DESTINATION)) {
-				map_and_flush(entry);
-			}
-		}
-		/* flush out last IND_DONE page */
-		map_and_flush(entry);
-	} else {
-		/* crash type kexec images are copied to the crash region */
-		for (i = 0; i < image->nr_segments; i++) {
-			struct kexec_segment *seg = &image->segment[i];
-			for (paddr = seg->mem; paddr < seg->mem + seg->memsz;
-			     paddr += PAGE_SIZE) {
-				map_and_flush(paddr);
-			}
-		}
-	}
+    if (image->type == KEXEC_TYPE_DEFAULT) {
+        /* normal kexec images are stored in temporary pages */
+        for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE);
+                ptr = (entry & IND_INDIRECTION) ?
+                      phys_to_virt(entry & PAGE_MASK) : ptr + 1) {
+            if (!(entry & IND_DESTINATION)) {
+                map_and_flush(entry);
+            }
+        }
+        /* flush out last IND_DONE page */
+        map_and_flush(entry);
+    } else {
+        /* crash type kexec images are copied to the crash region */
+        for (i = 0; i < image->nr_segments; i++) {
+            struct kexec_segment *seg = &image->segment[i];
+            for (paddr = seg->mem; paddr < seg->mem + seg->memsz;
+                    paddr += PAGE_SIZE) {
+                map_and_flush(paddr);
+            }
+        }
+    }
 
-	/* also flush the kimage struct to be passed in as well */
-	flush_dcache_range((unsigned long)image,
-			   (unsigned long)image + sizeof(*image));
+    /* also flush the kimage struct to be passed in as well */
+    flush_dcache_range((unsigned long)image,
+                       (unsigned long)image + sizeof(*image));
 }
 
-static void mpc85xx_smp_machine_kexec(struct kimage *image)
-{
-	int timeout = INT_MAX;
-	int i, num_cpus = num_present_cpus();
+static void mpc85xx_smp_machine_kexec(struct kimage *image) {
+    int timeout = INT_MAX;
+    int i, num_cpus = num_present_cpus();
 
-	mpc85xx_smp_flush_dcache_kexec(image);
+    mpc85xx_smp_flush_dcache_kexec(image);
 
-	if (image->type == KEXEC_TYPE_DEFAULT)
-		smp_call_function(mpc85xx_smp_kexec_down, NULL, 0);
+    if (image->type == KEXEC_TYPE_DEFAULT)
+        smp_call_function(mpc85xx_smp_kexec_down, NULL, 0);
 
-	while ( (atomic_read(&kexec_down_cpus) != (num_cpus - 1)) &&
-		( timeout > 0 ) )
-	{
-		timeout--;
-	}
+    while ( (atomic_read(&kexec_down_cpus) != (num_cpus - 1)) &&
+            ( timeout > 0 ) ) {
+        timeout--;
+    }
 
-	if ( !timeout )
-		printk(KERN_ERR "Unable to bring down secondary cpu(s)");
+    if ( !timeout )
+        printk(KERN_ERR "Unable to bring down secondary cpu(s)");
 
-	for_each_online_cpu(i)
-	{
-		if ( i == smp_processor_id() ) continue;
-		mpic_reset_core(i);
-	}
+    for_each_online_cpu(i) {
+        if ( i == smp_processor_id() ) continue;
+        mpic_reset_core(i);
+    }
 
-	default_machine_kexec(image);
+    default_machine_kexec(image);
 }
 #endif /* CONFIG_KEXEC */
 
 static void __init
-smp_85xx_setup_cpu(int cpu_nr)
-{
-	if (smp_85xx_ops.probe == smp_mpic_probe)
-		mpic_setup_this_cpu();
+smp_85xx_setup_cpu(int cpu_nr) {
+    if (smp_85xx_ops.probe == smp_mpic_probe)
+        mpic_setup_this_cpu();
 
-	if (cpu_has_feature(CPU_FTR_DBELL))
-		doorbell_setup_this_cpu();
+    if (cpu_has_feature(CPU_FTR_DBELL))
+        doorbell_setup_this_cpu();
 }
 
-void __init mpc85xx_smp_init(void)
-{
-	struct device_node *np;
+void __init mpc85xx_smp_init(void) {
+    struct device_node *np;
 
-	smp_85xx_ops.setup_cpu = smp_85xx_setup_cpu;
+    smp_85xx_ops.setup_cpu = smp_85xx_setup_cpu;
 
-	np = of_find_node_by_type(NULL, "open-pic");
-	if (np) {
-		smp_85xx_ops.probe = smp_mpic_probe;
-		smp_85xx_ops.message_pass = smp_mpic_message_pass;
-	}
+    np = of_find_node_by_type(NULL, "open-pic");
+    if (np) {
+        smp_85xx_ops.probe = smp_mpic_probe;
+        smp_85xx_ops.message_pass = smp_mpic_message_pass;
+    }
 
-	if (cpu_has_feature(CPU_FTR_DBELL)) {
-		/*
-		 * If left NULL, .message_pass defaults to
-		 * smp_muxed_ipi_message_pass
-		 */
-		smp_85xx_ops.message_pass = NULL;
-		smp_85xx_ops.cause_ipi = doorbell_cause_ipi;
-	}
+    if (cpu_has_feature(CPU_FTR_DBELL)) {
+        /*
+         * If left NULL, .message_pass defaults to
+         * smp_muxed_ipi_message_pass
+         */
+        smp_85xx_ops.message_pass = NULL;
+        smp_85xx_ops.cause_ipi = doorbell_cause_ipi;
+    }
 
-	smp_ops = &smp_85xx_ops;
+    smp_ops = &smp_85xx_ops;
 
 #ifdef CONFIG_KEXEC
-	ppc_md.kexec_cpu_down = mpc85xx_smp_kexec_cpu_down;
-	ppc_md.machine_kexec = mpc85xx_smp_machine_kexec;
+    ppc_md.kexec_cpu_down = mpc85xx_smp_kexec_cpu_down;
+    ppc_md.machine_kexec = mpc85xx_smp_machine_kexec;
 #endif
 }

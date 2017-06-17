@@ -56,14 +56,14 @@
 #ifndef __ASSEMBLY__
 #include <linux/types.h>
 struct e820entry {
-	__u64 addr;	/* start of memory segment */
-	__u64 size;	/* size of memory segment */
-	__u32 type;	/* type of memory segment */
+    __u64 addr;	/* start of memory segment */
+    __u64 size;	/* size of memory segment */
+    __u32 type;	/* type of memory segment */
 } __attribute__((packed));
 
 struct e820map {
-	__u32 nr_map;
-	struct e820entry map[E820_X_MAX];
+    __u32 nr_map;
+    struct e820entry map[E820_X_MAX];
 };
 
 #define ISA_START_ADDRESS	0xa0000
@@ -88,13 +88,13 @@ extern void e820_print_map(char *who);
 extern int
 sanitize_e820_map(struct e820entry *biosmap, int max_nr_map, u32 *pnr_map);
 extern u64 e820_update_range(u64 start, u64 size, unsigned old_type,
-			       unsigned new_type);
+                             unsigned new_type);
 extern u64 e820_remove_range(u64 start, u64 size, unsigned old_type,
-			     int checktype);
+                             int checktype);
 extern void update_e820(void);
 extern void e820_setup_gap(void);
 extern int e820_search_gap(unsigned long *gapstart, unsigned long *gapsize,
-			unsigned long start_addr, unsigned long long end_addr);
+                           unsigned long start_addr, unsigned long long end_addr);
 struct setup_data;
 extern void parse_e820_ext(struct setup_data *data);
 
@@ -102,16 +102,14 @@ extern void parse_e820_ext(struct setup_data *data);
 	(defined(CONFIG_X86_32) && defined(CONFIG_HIBERNATION))
 extern void e820_mark_nosave_regions(unsigned long limit_pfn);
 #else
-static inline void e820_mark_nosave_regions(unsigned long limit_pfn)
-{
+static inline void e820_mark_nosave_regions(unsigned long limit_pfn) {
 }
 #endif
 
 #ifdef CONFIG_MEMTEST
 extern void early_memtest(unsigned long start, unsigned long end);
 #else
-static inline void early_memtest(unsigned long start, unsigned long end)
-{
+static inline void early_memtest(unsigned long start, unsigned long end) {
 }
 #endif
 
@@ -132,9 +130,8 @@ extern char *default_machine_specific_memory_setup(void);
  * Returns true iff the specified range [s,e) is completely contained inside
  * the ISA region.
  */
-static inline bool is_ISA_range(u64 s, u64 e)
-{
-	return s >= ISA_START_ADDRESS && e <= ISA_END_ADDRESS;
+static inline bool is_ISA_range(u64 s, u64 e) {
+    return s >= ISA_START_ADDRESS && e <= ISA_END_ADDRESS;
 }
 
 #endif /* __KERNEL__ */

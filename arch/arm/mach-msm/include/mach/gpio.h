@@ -36,13 +36,13 @@ extern struct irq_chip msm_gpio_irq_extn;
  * and facilitete group operations provided by msm_gpios_xxx()
  */
 struct msm_gpio {
-	u32 gpio_cfg;
-	const char *label;
+    u32 gpio_cfg;
+    const char *label;
 };
 
 struct msm_gpio_pdata {
-	int ngpio;
-	int direct_connect_irqs;
+    int ngpio;
+    int direct_connect_irqs;
 };
 
 /**
@@ -113,33 +113,33 @@ void msm_gpio_show_resume_irq(void);
 
 /* GPIO TLMM: Direction */
 enum {
-	GPIO_CFG_INPUT,
-	GPIO_CFG_OUTPUT,
+    GPIO_CFG_INPUT,
+    GPIO_CFG_OUTPUT,
 };
 
 /* GPIO TLMM: Pullup/Pulldown */
 enum {
-	GPIO_CFG_NO_PULL,
-	GPIO_CFG_PULL_DOWN,
-	GPIO_CFG_KEEPER,
-	GPIO_CFG_PULL_UP,
+    GPIO_CFG_NO_PULL,
+    GPIO_CFG_PULL_DOWN,
+    GPIO_CFG_KEEPER,
+    GPIO_CFG_PULL_UP,
 };
 
 /* GPIO TLMM: Drive Strength */
 enum {
-	GPIO_CFG_2MA,
-	GPIO_CFG_4MA,
-	GPIO_CFG_6MA,
-	GPIO_CFG_8MA,
-	GPIO_CFG_10MA,
-	GPIO_CFG_12MA,
-	GPIO_CFG_14MA,
-	GPIO_CFG_16MA,
+    GPIO_CFG_2MA,
+    GPIO_CFG_4MA,
+    GPIO_CFG_6MA,
+    GPIO_CFG_8MA,
+    GPIO_CFG_10MA,
+    GPIO_CFG_12MA,
+    GPIO_CFG_14MA,
+    GPIO_CFG_16MA,
 };
 
 enum {
-	GPIO_CFG_ENABLE,
-	GPIO_CFG_DISABLE,
+    GPIO_CFG_ENABLE,
+    GPIO_CFG_DISABLE,
 };
 
 #define GPIO_CFG(gpio, func, dir, pull, drvstr) \
@@ -161,34 +161,34 @@ enum {
 int gpio_tlmm_config(unsigned config, unsigned disable);
 
 enum msm_tlmm_hdrive_tgt {
-	TLMM_HDRV_SDC4_CLK = 0,
-	TLMM_HDRV_SDC4_CMD,
-	TLMM_HDRV_SDC4_DATA,
-	TLMM_HDRV_SDC3_CLK,
-	TLMM_HDRV_SDC3_CMD,
-	TLMM_HDRV_SDC3_DATA,
-	TLMM_HDRV_SDC2_CLK,
-	TLMM_HDRV_SDC2_CMD,
-	TLMM_HDRV_SDC2_DATA,
-	TLMM_HDRV_SDC1_CLK,
-	TLMM_HDRV_SDC1_CMD,
-	TLMM_HDRV_SDC1_DATA,
+    TLMM_HDRV_SDC4_CLK = 0,
+    TLMM_HDRV_SDC4_CMD,
+    TLMM_HDRV_SDC4_DATA,
+    TLMM_HDRV_SDC3_CLK,
+    TLMM_HDRV_SDC3_CMD,
+    TLMM_HDRV_SDC3_DATA,
+    TLMM_HDRV_SDC2_CLK,
+    TLMM_HDRV_SDC2_CMD,
+    TLMM_HDRV_SDC2_DATA,
+    TLMM_HDRV_SDC1_CLK,
+    TLMM_HDRV_SDC1_CMD,
+    TLMM_HDRV_SDC1_DATA,
 };
 
 enum msm_tlmm_pull_tgt {
-	TLMM_PULL_SDC4_CLK = 0,
-	TLMM_PULL_SDC4_CMD,
-	TLMM_PULL_SDC4_DATA,
-	TLMM_PULL_SDC3_CLK,
-	TLMM_PULL_SDC3_CMD,
-	TLMM_PULL_SDC3_DATA,
-	TLMM_PULL_SDC2_CLK,
-	TLMM_PULL_SDC2_CMD,
-	TLMM_PULL_SDC2_DATA,
-	TLMM_PULL_SDC1_CLK,
-	TLMM_PULL_SDC1_CMD,
-	TLMM_PULL_SDC1_DATA,
-	TLMM_PULL_SDC1_RCLK,
+    TLMM_PULL_SDC4_CLK = 0,
+    TLMM_PULL_SDC4_CMD,
+    TLMM_PULL_SDC4_DATA,
+    TLMM_PULL_SDC3_CLK,
+    TLMM_PULL_SDC3_CMD,
+    TLMM_PULL_SDC3_DATA,
+    TLMM_PULL_SDC2_CLK,
+    TLMM_PULL_SDC2_CMD,
+    TLMM_PULL_SDC2_DATA,
+    TLMM_PULL_SDC1_CLK,
+    TLMM_PULL_SDC1_CMD,
+    TLMM_PULL_SDC1_DATA,
+    TLMM_PULL_SDC1_RCLK,
 };
 
 #if defined(CONFIG_GPIO_MSM_V2) || defined(CONFIG_GPIO_MSM_V3)
@@ -217,21 +217,20 @@ void msm_tlmm_set_pull(enum msm_tlmm_pull_tgt tgt, int pull);
  *
  */
 int msm_gpio_install_direct_irq(unsigned gpio, unsigned irq,
-						unsigned int input_polarity);
+                                unsigned int input_polarity);
 #else
 static inline void msm_tlmm_set_hdrive(enum msm_tlmm_hdrive_tgt tgt,
-				       int drv_str) {}
+                                       int drv_str) {}
 static inline void msm_tlmm_set_pull(enum msm_tlmm_pull_tgt tgt, int pull) {}
 static inline int msm_gpio_install_direct_irq(unsigned gpio, unsigned irq,
-						unsigned int input_polarity)
-{
-	return -ENOSYS;
+        unsigned int input_polarity) {
+    return -ENOSYS;
 }
 #endif
 
 #ifdef CONFIG_OF
 int __init msm_gpio_of_init(struct device_node *node,
-			    struct device_node *parent);
+                            struct device_node *parent);
 #endif
 
 #endif /* __ASM_ARCH_MSM_GPIO_H */

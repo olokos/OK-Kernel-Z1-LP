@@ -43,81 +43,76 @@ unsigned long __delay_loops_MHz;
 static irqreturn_t timer_interrupt(int irq, void *dummy);
 
 static struct irqaction timer_irq  = {
-	.handler = timer_interrupt,
-	.flags = IRQF_DISABLED,
-	.name = "timer",
+    .handler = timer_interrupt,
+    .flags = IRQF_DISABLED,
+    .name = "timer",
 };
 
 /*
  * timer_interrupt() needs to keep up the real-time clock,
  * as well as call the "xtime_update()" routine every clocktick
  */
-static irqreturn_t timer_interrupt(int irq, void *dummy)
-{
-	profile_tick(CPU_PROFILING);
+static irqreturn_t timer_interrupt(int irq, void *dummy) {
+    profile_tick(CPU_PROFILING);
 
-	xtime_update(1);
+    xtime_update(1);
 
 #ifdef CONFIG_HEARTBEAT
-	static unsigned short n;
-	n++;
-	__set_LEDS(n);
+    static unsigned short n;
+    n++;
+    __set_LEDS(n);
 #endif /* CONFIG_HEARTBEAT */
 
-	update_process_times(user_mode(get_irq_regs()));
+    update_process_times(user_mode(get_irq_regs()));
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
-void time_divisor_init(void)
-{
-	unsigned short base, pre, prediv;
+void time_divisor_init(void) {
+    unsigned short base, pre, prediv;
 
-	/* set the scheduling timer going */
-	pre = 1;
-	prediv = 4;
-	base = __res_bus_clock_speed_HZ / pre / HZ / (1 << prediv);
+    /* set the scheduling timer going */
+    pre = 1;
+    prediv = 4;
+    base = __res_bus_clock_speed_HZ / pre / HZ / (1 << prediv);
 
-	__set_TPRV(pre);
-	__set_TxCKSL_DATA(0, prediv);
-	__set_TCTR(TCTR_SC_CTR0 | TCTR_RL_RW_LH8 | TCTR_MODE_2);
-	__set_TCSR_DATA(0, base & 0xff);
-	__set_TCSR_DATA(0, base >> 8);
+    __set_TPRV(pre);
+    __set_TxCKSL_DATA(0, prediv);
+    __set_TCTR(TCTR_SC_CTR0 | TCTR_RL_RW_LH8 | TCTR_MODE_2);
+    __set_TCSR_DATA(0, base & 0xff);
+    __set_TCSR_DATA(0, base >> 8);
 }
 
 
-void read_persistent_clock(struct timespec *ts)
-{
-	unsigned int year, mon, day, hour, min, sec;
+void read_persistent_clock(struct timespec *ts) {
+    unsigned int year, mon, day, hour, min, sec;
 
-	extern void arch_gettod(int *year, int *mon, int *day, int *hour, int *min, int *sec);
+    extern void arch_gettod(int *year, int *mon, int *day, int *hour, int *min, int *sec);
 
-	/* FIX by dqg : Set to zero for platforms that don't have tod */
-	/* without this time is undefined and can overflow time_t, causing  */
-	/* very strange errors */
-	year = 1980;
-	mon = day = 1;
-	hour = min = sec = 0;
-	arch_gettod (&year, &mon, &day, &hour, &min, &sec);
+    /* FIX by dqg : Set to zero for platforms that don't have tod */
+    /* without this time is undefined and can overflow time_t, causing  */
+    /* very strange errors */
+    year = 1980;
+    mon = day = 1;
+    hour = min = sec = 0;
+    arch_gettod (&year, &mon, &day, &hour, &min, &sec);
 
-	if ((year += 1900) < 1970)
-		year += 100;
-	ts->tv_sec = mktime(year, mon, day, hour, min, sec);
-	ts->tv_nsec = 0;
+    if ((year += 1900) < 1970)
+        year += 100;
+    ts->tv_sec = mktime(year, mon, day, hour, min, sec);
+    ts->tv_nsec = 0;
 }
 
-void time_init(void)
-{
-	/* install scheduling interrupt handler */
-	setup_irq(IRQ_CPU_TIMER0, &timer_irq);
+void time_init(void) {
+    /* install scheduling interrupt handler */
+    setup_irq(IRQ_CPU_TIMER0, &timer_irq);
 
-	time_divisor_init();
+    time_divisor_init();
 }
 
 /*
  * Scheduler clock - returns current time in nanosec units.
  */
-unsigned long long sched_clock(void)
-{
-	return jiffies_64 * (1000000000 / HZ);
+unsigned long long sched_clock(void) {
+    return jiffies_64 * (1000000000 / HZ);
 }

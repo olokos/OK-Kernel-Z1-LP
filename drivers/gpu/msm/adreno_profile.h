@@ -23,35 +23,35 @@
  * @offset: perfcounter register address offset
  */
 struct adreno_profile_assigns_list {
-	struct list_head list;
-	char name[25];
-	unsigned int groupid;
-	unsigned int countable;
-	unsigned int offset;    /* LO offset */
-	unsigned int offset_hi; /* HI offset */
+    struct list_head list;
+    char name[25];
+    unsigned int groupid;
+    unsigned int countable;
+    unsigned int offset;    /* LO offset */
+    unsigned int offset_hi; /* HI offset */
 };
 
 struct adreno_profile {
-	struct list_head assignments_list; /* list of all assignments */
-	unsigned int assignment_count;  /* Number of assigned counters */
-	unsigned int *log_buffer;
-	unsigned int *log_head;
-	unsigned int *log_tail;
-	bool enabled;
-	/* counter, pre_ib, and post_ib held in one large circular buffer
-	 * shared between kgsl and GPU
-	 * counter entry 0
-	 * pre_ib entry 0
-	 * post_ib entry 0
-	 * ...
-	 * counter entry N
-	 * pre_ib entry N
-	 * post_ib entry N
-	 */
-	struct kgsl_memdesc shared_buffer;
-	unsigned int shared_head;
-	unsigned int shared_tail;
-	unsigned int shared_size;
+    struct list_head assignments_list; /* list of all assignments */
+    unsigned int assignment_count;  /* Number of assigned counters */
+    unsigned int *log_buffer;
+    unsigned int *log_head;
+    unsigned int *log_tail;
+    bool enabled;
+    /* counter, pre_ib, and post_ib held in one large circular buffer
+     * shared between kgsl and GPU
+     * counter entry 0
+     * pre_ib entry 0
+     * post_ib entry 0
+     * ...
+     * counter entry N
+     * pre_ib entry N
+     * post_ib entry N
+     */
+    struct kgsl_memdesc shared_buffer;
+    unsigned int shared_head;
+    unsigned int shared_tail;
+    unsigned int shared_size;
 };
 
 #define ADRENO_PROFILE_SHARED_BUF_SIZE_DWORDS (48 * 4096 / sizeof(uint))
@@ -67,44 +67,40 @@ void adreno_profile_init(struct kgsl_device *device);
 void adreno_profile_close(struct kgsl_device *device);
 int adreno_profile_process_results(struct kgsl_device *device);
 void adreno_profile_preib_processing(struct kgsl_device *device,
-		unsigned int context_id, unsigned int *cmd_flags,
-		unsigned int **rbptr, unsigned int *cmds_gpu);
+                                     unsigned int context_id, unsigned int *cmd_flags,
+                                     unsigned int **rbptr, unsigned int *cmds_gpu);
 void adreno_profile_postib_processing(struct kgsl_device *device,
-		unsigned int *cmd_flags, unsigned int **rbptr,
-		unsigned int *cmds_gpu);
+                                      unsigned int *cmd_flags, unsigned int **rbptr,
+                                      unsigned int *cmds_gpu);
 #else
 static inline void adreno_profile_init(struct kgsl_device *device) { }
 static inline void adreno_profile_close(struct kgsl_device *device) { }
-static inline int adreno_profile_process_results(struct kgsl_device *device)
-{
-	return 0;
+static inline int adreno_profile_process_results(struct kgsl_device *device) {
+    return 0;
 }
 
 static inline void adreno_profile_preib_processing(struct kgsl_device *device,
-		unsigned int context_id, unsigned int *cmd_flags,
-		unsigned int **rbptr, unsigned int *cmds_gpu) { }
+        unsigned int context_id, unsigned int *cmd_flags,
+        unsigned int **rbptr, unsigned int *cmds_gpu) { }
 
 static inline void adreno_profile_postib_processing(struct kgsl_device *device,
-		unsigned int *cmd_flags, unsigned int **rbptr,
-		unsigned int *cmds_gpu) { }
+        unsigned int *cmd_flags, unsigned int **rbptr,
+        unsigned int *cmds_gpu) { }
 #endif
 
-static inline bool adreno_profile_enabled(struct adreno_profile *profile)
-{
-	return profile->enabled;
+static inline bool adreno_profile_enabled(struct adreno_profile *profile) {
+    return profile->enabled;
 }
 
 static inline bool adreno_profile_has_assignments(
-	struct adreno_profile *profile)
-{
-	return list_empty(&profile->assignments_list) ? false : true;
+    struct adreno_profile *profile) {
+    return list_empty(&profile->assignments_list) ? false : true;
 }
 
 static inline bool adreno_profile_assignments_ready(
-	struct adreno_profile *profile)
-{
-	return adreno_profile_enabled(profile) &&
-		adreno_profile_has_assignments(profile);
+    struct adreno_profile *profile) {
+    return adreno_profile_enabled(profile) &&
+           adreno_profile_has_assignments(profile);
 }
 
 #endif

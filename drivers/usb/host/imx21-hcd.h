@@ -280,10 +280,10 @@
 #define IMX_FMT_INT    0x3
 
 static char fmt_urb_to_etd[4] = {
-/*PIPE_ISOCHRONOUS*/ IMX_FMT_ISO,
-/*PIPE_INTERRUPT*/ IMX_FMT_INT,
-/*PIPE_CONTROL*/ IMX_FMT_CTRL,
-/*PIPE_BULK*/ IMX_FMT_BULK
+    /*PIPE_ISOCHRONOUS*/ IMX_FMT_ISO,
+    /*PIPE_INTERRUPT*/ IMX_FMT_INT,
+    /*PIPE_CONTROL*/ IMX_FMT_CTRL,
+    /*PIPE_BULK*/ IMX_FMT_BULK
 };
 
 /* condition (error) CC codes and mapping (OHCI like) */
@@ -304,136 +304,136 @@ static char fmt_urb_to_etd[4] = {
 #define TD_NOTACCESSED		0x0F
 
 static const int cc_to_error[16] = {
-	/* No  Error  */ 0,
-	/* CRC Error  */ -EILSEQ,
-	/* Bit Stuff  */ -EPROTO,
-	/* Data Togg  */ -EILSEQ,
-	/* Stall      */ -EPIPE,
-	/* DevNotResp */ -ETIMEDOUT,
-	/* PIDCheck   */ -EPROTO,
-	/* UnExpPID   */ -EPROTO,
-	/* DataOver   */ -EOVERFLOW,
-	/* DataUnder  */ -EREMOTEIO,
-	/* (for hw)   */ -EIO,
-	/* (for hw)   */ -EIO,
-	/* BufferOver */ -ECOMM,
-	/* BuffUnder  */ -ENOSR,
-	/* (for HCD)  */ -ENOSPC,
-	/* (for HCD)  */ -EALREADY
+    /* No  Error  */ 0,
+    /* CRC Error  */ -EILSEQ,
+    /* Bit Stuff  */ -EPROTO,
+    /* Data Togg  */ -EILSEQ,
+    /* Stall      */ -EPIPE,
+    /* DevNotResp */ -ETIMEDOUT,
+    /* PIDCheck   */ -EPROTO,
+    /* UnExpPID   */ -EPROTO,
+    /* DataOver   */ -EOVERFLOW,
+    /* DataUnder  */ -EREMOTEIO,
+    /* (for hw)   */ -EIO,
+    /* (for hw)   */ -EIO,
+    /* BufferOver */ -ECOMM,
+    /* BuffUnder  */ -ENOSR,
+    /* (for HCD)  */ -ENOSPC,
+    /* (for HCD)  */ -EALREADY
 };
 
 /* HCD data associated with a usb core URB */
 struct urb_priv {
-	struct urb *urb;
-	struct usb_host_endpoint *ep;
-	int active;
-	int state;
-	struct td *isoc_td;
-	int isoc_remaining;
-	int isoc_status;
+    struct urb *urb;
+    struct usb_host_endpoint *ep;
+    int active;
+    int state;
+    struct td *isoc_td;
+    int isoc_remaining;
+    int isoc_status;
 };
 
 /* HCD data associated with a usb core endpoint */
 struct ep_priv {
-	struct usb_host_endpoint *ep;
-	struct list_head td_list;
-	struct list_head queue;
-	int etd[NUM_ISO_ETDS];
-	int waiting_etd;
+    struct usb_host_endpoint *ep;
+    struct list_head td_list;
+    struct list_head queue;
+    int etd[NUM_ISO_ETDS];
+    int waiting_etd;
 };
 
 /* isoc packet */
 struct td {
-	struct list_head list;
-	struct urb *urb;
-	struct usb_host_endpoint *ep;
-	dma_addr_t dma_handle;
-	void *cpu_buffer;
-	int len;
-	int frame;
-	int isoc_index;
+    struct list_head list;
+    struct urb *urb;
+    struct usb_host_endpoint *ep;
+    dma_addr_t dma_handle;
+    void *cpu_buffer;
+    int len;
+    int frame;
+    int isoc_index;
 };
 
 /* HCD data associated with a hardware ETD */
 struct etd_priv {
-	struct usb_host_endpoint *ep;
-	struct urb *urb;
-	struct td *td;
-	struct list_head queue;
-	dma_addr_t dma_handle;
-	void *cpu_buffer;
-	void *bounce_buffer;
-	int alloc;
-	int len;
-	int dmem_size;
-	int dmem_offset;
-	int active_count;
+    struct usb_host_endpoint *ep;
+    struct urb *urb;
+    struct td *td;
+    struct list_head queue;
+    dma_addr_t dma_handle;
+    void *cpu_buffer;
+    void *bounce_buffer;
+    int alloc;
+    int len;
+    int dmem_size;
+    int dmem_offset;
+    int active_count;
 #ifdef DEBUG
-	int activated_frame;
-	int disactivated_frame;
-	int last_int_frame;
-	int last_req_frame;
-	u32 submitted_dwords[4];
+    int activated_frame;
+    int disactivated_frame;
+    int last_int_frame;
+    int last_req_frame;
+    u32 submitted_dwords[4];
 #endif
 };
 
 /* Hardware data memory info */
 struct imx21_dmem_area {
-	struct usb_host_endpoint *ep;
-	unsigned int offset;
-	unsigned int size;
-	struct list_head list;
+    struct usb_host_endpoint *ep;
+    unsigned int offset;
+    unsigned int size;
+    struct list_head list;
 };
 
 #ifdef DEBUG
 struct debug_usage_stats {
-	unsigned int value;
-	unsigned int maximum;
+    unsigned int value;
+    unsigned int maximum;
 };
 
 struct debug_stats {
-	unsigned long submitted;
-	unsigned long completed_ok;
-	unsigned long completed_failed;
-	unsigned long unlinked;
-	unsigned long queue_etd;
-	unsigned long queue_dmem;
+    unsigned long submitted;
+    unsigned long completed_ok;
+    unsigned long completed_failed;
+    unsigned long unlinked;
+    unsigned long queue_etd;
+    unsigned long queue_dmem;
 };
 
 struct debug_isoc_trace {
-	int schedule_frame;
-	int submit_frame;
-	int request_len;
-	int done_frame;
-	int done_len;
-	int cc;
-	struct td *td;
+    int schedule_frame;
+    int submit_frame;
+    int request_len;
+    int done_frame;
+    int done_len;
+    int cc;
+    struct td *td;
 };
 #endif
 
 /* HCD data structure */
 struct imx21 {
-	spinlock_t lock;
-	struct device *dev;
-	struct usb_hcd *hcd;
-	struct mx21_usbh_platform_data *pdata;
-	struct list_head dmem_list;
-	struct list_head queue_for_etd; /* eps queued due to etd shortage */
-	struct list_head queue_for_dmem; /* etds queued due to dmem shortage */
-	struct etd_priv etd[USB_NUM_ETD];
-	struct clk *clk;
-	void __iomem *regs;
+    spinlock_t lock;
+    struct device *dev;
+    struct usb_hcd *hcd;
+    struct mx21_usbh_platform_data *pdata;
+    struct list_head dmem_list;
+    struct list_head queue_for_etd; /* eps queued due to etd shortage */
+    struct list_head queue_for_dmem; /* etds queued due to dmem shortage */
+    struct etd_priv etd[USB_NUM_ETD];
+    struct clk *clk;
+    void __iomem *regs;
 #ifdef DEBUG
-	struct dentry *debug_root;
-	struct debug_stats nonisoc_stats;
-	struct debug_stats isoc_stats;
-	struct debug_usage_stats etd_usage;
-	struct debug_usage_stats dmem_usage;
-	struct debug_isoc_trace isoc_trace[20];
-	struct debug_isoc_trace isoc_trace_failed[20];
-	unsigned long debug_unblocks;
-	int isoc_trace_index;
-	int isoc_trace_index_failed;
+    struct dentry *debug_root;
+    struct debug_stats nonisoc_stats;
+    struct debug_stats isoc_stats;
+    struct debug_usage_stats etd_usage;
+    struct debug_usage_stats dmem_usage;
+    struct debug_isoc_trace isoc_trace[20];
+    struct debug_isoc_trace isoc_trace_failed[20];
+    unsigned long debug_unblocks;
+    int isoc_trace_index;
+    int isoc_trace_index_failed;
 #endif
 };
 

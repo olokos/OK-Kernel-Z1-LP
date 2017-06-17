@@ -149,7 +149,7 @@
  * @sr_pmic_init:	API to initialize smartreflex on the PMIC side.
  */
 struct omap_sr_pmic_data {
-	void (*sr_pmic_init) (void);
+    void (*sr_pmic_init) (void);
 };
 
 /**
@@ -158,7 +158,7 @@ struct omap_sr_pmic_data {
  * @sensor_voltdm_name:       Name of voltdomain of SR instance
  */
 struct omap_smartreflex_dev_attr {
-	const char      *sensor_voltdm_name;
+    const char      *sensor_voltdm_name;
 };
 
 #ifdef CONFIG_OMAP_SMARTREFLEX
@@ -186,12 +186,12 @@ struct omap_smartreflex_dev_attr {
  *			based decisions.
  */
 struct omap_sr_class_data {
-	int (*enable)(struct voltagedomain *voltdm);
-	int (*disable)(struct voltagedomain *voltdm, int is_volt_reset);
-	int (*configure)(struct voltagedomain *voltdm);
-	int (*notify)(struct voltagedomain *voltdm, u32 status);
-	u8 notify_flags;
-	u8 class_type;
+    int (*enable)(struct voltagedomain *voltdm);
+    int (*disable)(struct voltagedomain *voltdm, int is_volt_reset);
+    int (*configure)(struct voltagedomain *voltdm);
+    int (*notify)(struct voltagedomain *voltdm, u32 status);
+    u8 notify_flags;
+    u8 class_type;
 };
 
 /**
@@ -201,8 +201,8 @@ struct omap_sr_class_data {
  * @nvalue:	The n-target value.
  */
 struct omap_sr_nvalue_table {
-	u32 efuse_offs;
-	u32 nvalue;
+    u32 efuse_offs;
+    u32 nvalue;
 };
 
 /**
@@ -219,13 +219,13 @@ struct omap_sr_nvalue_table {
  * @voltdm:		Pointer to the voltage domain associated with the SR
  */
 struct omap_sr_data {
-	int				ip_type;
-	u32				senp_mod;
-	u32				senn_mod;
-	int				nvalue_count;
-	bool				enable_on_init;
-	struct omap_sr_nvalue_table	*nvalue_table;
-	struct voltagedomain		*voltdm;
+    int				ip_type;
+    u32				senp_mod;
+    u32				senn_mod;
+    int				nvalue_count;
+    bool				enable_on_init;
+    struct omap_sr_nvalue_table	*nvalue_table;
+    struct voltagedomain		*voltdm;
 };
 
 /* Smartreflex module enable/disable interface */
@@ -249,8 +249,8 @@ int sr_register_class(struct omap_sr_class_data *class_data);
 static inline void omap_sr_enable(struct voltagedomain *voltdm) {}
 static inline void omap_sr_disable(struct voltagedomain *voltdm) {}
 static inline void omap_sr_disable_reset_volt(
-		struct voltagedomain *voltdm) {}
+    struct voltagedomain *voltdm) {}
 static inline void omap_sr_register_pmic(
-		struct omap_sr_pmic_data *pmic_data) {}
+    struct omap_sr_pmic_data *pmic_data) {}
 #endif
 #endif

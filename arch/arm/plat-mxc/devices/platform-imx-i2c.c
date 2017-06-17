@@ -22,21 +22,21 @@
 
 #ifdef CONFIG_SOC_IMX1
 const struct imx_imx_i2c_data imx1_imx_i2c_data __initconst =
-	imx_imx_i2c_data_entry_single(MX1, 0, , SZ_4K);
+    imx_imx_i2c_data_entry_single(MX1, 0, , SZ_4K);
 #endif /* ifdef CONFIG_SOC_IMX1 */
 
 #ifdef CONFIG_SOC_IMX21
 const struct imx_imx_i2c_data imx21_imx_i2c_data __initconst =
-	imx_imx_i2c_data_entry_single(MX21, 0, , SZ_4K);
+    imx_imx_i2c_data_entry_single(MX21, 0, , SZ_4K);
 #endif /* ifdef CONFIG_SOC_IMX21 */
 
 #ifdef CONFIG_SOC_IMX25
 const struct imx_imx_i2c_data imx25_imx_i2c_data[] __initconst = {
 #define imx25_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX25, _id, _hwid, SZ_16K)
-	imx25_imx_i2c_data_entry(0, 1),
-	imx25_imx_i2c_data_entry(1, 2),
-	imx25_imx_i2c_data_entry(2, 3),
+    imx25_imx_i2c_data_entry(0, 1),
+    imx25_imx_i2c_data_entry(1, 2),
+    imx25_imx_i2c_data_entry(2, 3),
 };
 #endif /* ifdef CONFIG_SOC_IMX25 */
 
@@ -44,8 +44,8 @@ const struct imx_imx_i2c_data imx25_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx27_imx_i2c_data[] __initconst = {
 #define imx27_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX27, _id, _hwid, SZ_4K)
-	imx27_imx_i2c_data_entry(0, 1),
-	imx27_imx_i2c_data_entry(1, 2),
+    imx27_imx_i2c_data_entry(0, 1),
+    imx27_imx_i2c_data_entry(1, 2),
 };
 #endif /* ifdef CONFIG_SOC_IMX27 */
 
@@ -53,9 +53,9 @@ const struct imx_imx_i2c_data imx27_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx31_imx_i2c_data[] __initconst = {
 #define imx31_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX31, _id, _hwid, SZ_4K)
-	imx31_imx_i2c_data_entry(0, 1),
-	imx31_imx_i2c_data_entry(1, 2),
-	imx31_imx_i2c_data_entry(2, 3),
+    imx31_imx_i2c_data_entry(0, 1),
+    imx31_imx_i2c_data_entry(1, 2),
+    imx31_imx_i2c_data_entry(2, 3),
 };
 #endif /* ifdef CONFIG_SOC_IMX31 */
 
@@ -63,9 +63,9 @@ const struct imx_imx_i2c_data imx31_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx35_imx_i2c_data[] __initconst = {
 #define imx35_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX35, _id, _hwid, SZ_4K)
-	imx35_imx_i2c_data_entry(0, 1),
-	imx35_imx_i2c_data_entry(1, 2),
-	imx35_imx_i2c_data_entry(2, 3),
+    imx35_imx_i2c_data_entry(0, 1),
+    imx35_imx_i2c_data_entry(1, 2),
+    imx35_imx_i2c_data_entry(2, 3),
 };
 #endif /* ifdef CONFIG_SOC_IMX35 */
 
@@ -73,9 +73,9 @@ const struct imx_imx_i2c_data imx35_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx50_imx_i2c_data[] __initconst = {
 #define imx50_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX50, _id, _hwid, SZ_4K)
-	imx50_imx_i2c_data_entry(0, 1),
-	imx50_imx_i2c_data_entry(1, 2),
-	imx50_imx_i2c_data_entry(2, 3),
+    imx50_imx_i2c_data_entry(0, 1),
+    imx50_imx_i2c_data_entry(1, 2),
+    imx50_imx_i2c_data_entry(2, 3),
 };
 #endif /* ifdef CONFIG_SOC_IMX51 */
 
@@ -83,14 +83,14 @@ const struct imx_imx_i2c_data imx50_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx51_imx_i2c_data[] __initconst = {
 #define imx51_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX51, _id, _hwid, SZ_4K)
-	imx51_imx_i2c_data_entry(0, 1),
-	imx51_imx_i2c_data_entry(1, 2),
-	{
-		.id = 2,
-		.iobase = MX51_HSI2C_DMA_BASE_ADDR,
-		.iosize = SZ_16K,
-		.irq = MX51_INT_HS_I2C,
-	},
+    imx51_imx_i2c_data_entry(0, 1),
+    imx51_imx_i2c_data_entry(1, 2),
+    {
+        .id = 2,
+        .iobase = MX51_HSI2C_DMA_BASE_ADDR,
+        .iosize = SZ_16K,
+        .irq = MX51_INT_HS_I2C,
+    },
 };
 #endif /* ifdef CONFIG_SOC_IMX51 */
 
@@ -98,29 +98,28 @@ const struct imx_imx_i2c_data imx51_imx_i2c_data[] __initconst = {
 const struct imx_imx_i2c_data imx53_imx_i2c_data[] __initconst = {
 #define imx53_imx_i2c_data_entry(_id, _hwid)				\
 	imx_imx_i2c_data_entry(MX53, _id, _hwid, SZ_4K)
-	imx53_imx_i2c_data_entry(0, 1),
-	imx53_imx_i2c_data_entry(1, 2),
-	imx53_imx_i2c_data_entry(2, 3),
+    imx53_imx_i2c_data_entry(0, 1),
+    imx53_imx_i2c_data_entry(1, 2),
+    imx53_imx_i2c_data_entry(2, 3),
 };
 #endif /* ifdef CONFIG_SOC_IMX53 */
 
 struct platform_device *__init imx_add_imx_i2c(
-		const struct imx_imx_i2c_data *data,
-		const struct imxi2c_platform_data *pdata)
-{
-	struct resource res[] = {
-		{
-			.start = data->iobase,
-			.end = data->iobase + data->iosize - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irq,
-			.end = data->irq,
-			.flags = IORESOURCE_IRQ,
-		},
-	};
+    const struct imx_imx_i2c_data *data,
+    const struct imxi2c_platform_data *pdata) {
+    struct resource res[] = {
+        {
+            .start = data->iobase,
+            .end = data->iobase + data->iosize - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irq,
+            .end = data->irq,
+            .flags = IORESOURCE_IRQ,
+        },
+    };
 
-	return imx_add_platform_device("imx-i2c", data->id,
-			res, ARRAY_SIZE(res),
-			pdata, sizeof(*pdata));
+    return imx_add_platform_device("imx-i2c", data->id,
+                                   res, ARRAY_SIZE(res),
+                                   pdata, sizeof(*pdata));
 }

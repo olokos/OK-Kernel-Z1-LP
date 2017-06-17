@@ -27,14 +27,13 @@ extern char __start_unwind[], __end_unwind[];
 extern char __start_ivt_text[], __end_ivt_text[];
 
 #undef dereference_function_descriptor
-static inline void *dereference_function_descriptor(void *ptr)
-{
-	struct fdesc *desc = ptr;
-	void *p;
+static inline void *dereference_function_descriptor(void *ptr) {
+    struct fdesc *desc = ptr;
+    void *p;
 
-	if (!probe_kernel_address(&desc->ip, p))
-		ptr = p;
-	return ptr;
+    if (!probe_kernel_address(&desc->ip, p))
+        ptr = p;
+    return ptr;
 }
 
 

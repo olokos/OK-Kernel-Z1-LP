@@ -17,28 +17,27 @@
 extern void __xchg_bad_pointer(void);
 
 static inline unsigned long __xchg(unsigned long x, volatile void *ptr,
-		int size)
-{
-	unsigned long ret;
+                                   int size) {
+    unsigned long ret;
 
-	switch (size) {
-	case 1:
-		asm volatile("swapb	%0, %1, [%2]"
-			: "=&r" (ret)
-			: "r" (x), "r" (ptr)
-			: "memory", "cc");
-		break;
-	case 4:
-		asm volatile("swapw	%0, %1, [%2]"
-			: "=&r" (ret)
-			: "r" (x), "r" (ptr)
-			: "memory", "cc");
-		break;
-	default:
-		ret = __xchg_bad_pointer();
-	}
+    switch (size) {
+    case 1:
+        asm volatile("swapb	%0, %1, [%2]"
+                     : "=&r" (ret)
+                     : "r" (x), "r" (ptr)
+                     : "memory", "cc");
+        break;
+    case 4:
+        asm volatile("swapw	%0, %1, [%2]"
+                     : "=&r" (ret)
+                     : "r" (x), "r" (ptr)
+                     : "memory", "cc");
+        break;
+    default:
+        ret = __xchg_bad_pointer();
+    }
 
-	return ret;
+    return ret;
 }
 
 #define xchg(ptr, x) \

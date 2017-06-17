@@ -103,8 +103,7 @@ static int          msglevel                =MSG_LEVEL_INFO;
  * Return Value: none
  *
  */
-void MACvReadAllRegs (unsigned long dwIoBase, unsigned char *pbyMacRegs)
-{
+void MACvReadAllRegs (unsigned long dwIoBase, unsigned char *pbyMacRegs) {
     int ii;
 
     // read page0 register
@@ -140,8 +139,7 @@ void MACvReadAllRegs (unsigned long dwIoBase, unsigned char *pbyMacRegs)
  * Return Value: true if all test bits On; otherwise false
  *
  */
-bool MACbIsRegBitsOn (unsigned long dwIoBase, unsigned char byRegOfs, unsigned char byTestBits)
-{
+bool MACbIsRegBitsOn (unsigned long dwIoBase, unsigned char byRegOfs, unsigned char byTestBits) {
     unsigned char byData;
 
     VNSvInPortB(dwIoBase + byRegOfs, &byData);
@@ -163,8 +161,7 @@ bool MACbIsRegBitsOn (unsigned long dwIoBase, unsigned char byRegOfs, unsigned c
  * Return Value: true if all test bits Off; otherwise false
  *
  */
-bool MACbIsRegBitsOff (unsigned long dwIoBase, unsigned char byRegOfs, unsigned char byTestBits)
-{
+bool MACbIsRegBitsOff (unsigned long dwIoBase, unsigned char byRegOfs, unsigned char byTestBits) {
     unsigned char byData;
 
     VNSvInPortB(dwIoBase + byRegOfs, &byData);
@@ -184,8 +181,7 @@ bool MACbIsRegBitsOff (unsigned long dwIoBase, unsigned char byRegOfs, unsigned 
  * Return Value: true if interrupt is disable; otherwise false
  *
  */
-bool MACbIsIntDisable (unsigned long dwIoBase)
-{
+bool MACbIsIntDisable (unsigned long dwIoBase) {
     unsigned long dwData;
 
     VNSvInPortD(dwIoBase + MAC_REG_IMR, &dwData);
@@ -209,8 +205,7 @@ bool MACbIsIntDisable (unsigned long dwIoBase)
  * Return Value: Mask Value read
  *
  */
-unsigned char MACbyReadMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx)
-{
+unsigned char MACbyReadMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx) {
     unsigned char byData;
 
     MACvSelectPage1(dwIoBase);
@@ -234,8 +229,7 @@ unsigned char MACbyReadMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx)
  * Return Value: none
  *
  */
-void MACvWriteMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx, unsigned char byData)
-{
+void MACvWriteMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx, unsigned char byData) {
     MACvSelectPage1(dwIoBase);
     VNSvOutPortB(dwIoBase + MAC_REG_MAR0 + uByteIdx, byData);
     MACvSelectPage0(dwIoBase);
@@ -255,8 +249,7 @@ void MACvWriteMultiAddr (unsigned long dwIoBase, unsigned int uByteIdx, unsigned
  * Return Value: none
  *
  */
-void MACvSetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx)
-{
+void MACvSetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx) {
     unsigned int uByteIdx;
     unsigned char byBitMask;
     unsigned char byOrgValue;
@@ -286,8 +279,7 @@ void MACvSetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx)
  * Return Value: none
  *
  */
-void MACvResetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx)
-{
+void MACvResetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx) {
     unsigned int uByteIdx;
     unsigned char byBitMask;
     unsigned char byOrgValue;
@@ -317,8 +309,7 @@ void MACvResetMultiAddrByHash (unsigned long dwIoBase, unsigned char byHashIdx)
  * Return Value: none
  *
  */
-void MACvSetRxThreshold (unsigned long dwIoBase, unsigned char byThreshold)
-{
+void MACvSetRxThreshold (unsigned long dwIoBase, unsigned char byThreshold) {
     unsigned char byOrgValue;
 
     ASSERT(byThreshold < 4);
@@ -342,8 +333,7 @@ void MACvSetRxThreshold (unsigned long dwIoBase, unsigned char byThreshold)
  * Return Value: none
  *
  */
-void MACvGetRxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold)
-{
+void MACvGetRxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold) {
     // get FCR0
     VNSvInPortB(dwIoBase + MAC_REG_FCR0, pbyThreshold);
     *pbyThreshold = (*pbyThreshold >> 4) & 0x03;
@@ -363,8 +353,7 @@ void MACvGetRxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold)
  * Return Value: none
  *
  */
-void MACvSetTxThreshold (unsigned long dwIoBase, unsigned char byThreshold)
-{
+void MACvSetTxThreshold (unsigned long dwIoBase, unsigned char byThreshold) {
     unsigned char byOrgValue;
 
     ASSERT(byThreshold < 4);
@@ -388,8 +377,7 @@ void MACvSetTxThreshold (unsigned long dwIoBase, unsigned char byThreshold)
  * Return Value: none
  *
  */
-void MACvGetTxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold)
-{
+void MACvGetTxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold) {
     // get FCR0
     VNSvInPortB(dwIoBase + MAC_REG_FCR0, pbyThreshold);
     *pbyThreshold = (*pbyThreshold >> 2) & 0x03;
@@ -409,8 +397,7 @@ void MACvGetTxThreshold (unsigned long dwIoBase, unsigned char *pbyThreshold)
  * Return Value: none
  *
  */
-void MACvSetDmaLength (unsigned long dwIoBase, unsigned char byDmaLength)
-{
+void MACvSetDmaLength (unsigned long dwIoBase, unsigned char byDmaLength) {
     unsigned char byOrgValue;
 
     ASSERT(byDmaLength < 4);
@@ -434,8 +421,7 @@ void MACvSetDmaLength (unsigned long dwIoBase, unsigned char byDmaLength)
  * Return Value: none
  *
  */
-void MACvGetDmaLength (unsigned long dwIoBase, unsigned char *pbyDmaLength)
-{
+void MACvGetDmaLength (unsigned long dwIoBase, unsigned char *pbyDmaLength) {
     // get FCR0
     VNSvInPortB(dwIoBase + MAC_REG_FCR0, pbyDmaLength);
     *pbyDmaLength &= 0x03;
@@ -455,8 +441,7 @@ void MACvGetDmaLength (unsigned long dwIoBase, unsigned char *pbyDmaLength)
  * Return Value: none
  *
  */
-void MACvSetShortRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit)
-{
+void MACvSetShortRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit) {
     // set SRT
     VNSvOutPortB(dwIoBase + MAC_REG_SRT, byRetryLimit);
 }
@@ -474,8 +459,7 @@ void MACvSetShortRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit)
  * Return Value: none
  *
  */
-void MACvGetShortRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimit)
-{
+void MACvGetShortRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimit) {
     // get SRT
     VNSvInPortB(dwIoBase + MAC_REG_SRT, pbyRetryLimit);
 }
@@ -494,8 +478,7 @@ void MACvGetShortRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimi
  * Return Value: none
  *
  */
-void MACvSetLongRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit)
-{
+void MACvSetLongRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit) {
     // set LRT
     VNSvOutPortB(dwIoBase + MAC_REG_LRT, byRetryLimit);
 }
@@ -513,8 +496,7 @@ void MACvSetLongRetryLimit (unsigned long dwIoBase, unsigned char byRetryLimit)
  * Return Value: none
  *
  */
-void MACvGetLongRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimit)
-{
+void MACvGetLongRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimit) {
     // get LRT
     VNSvInPortB(dwIoBase + MAC_REG_LRT, pbyRetryLimit);
 }
@@ -533,8 +515,7 @@ void MACvGetLongRetryLimit (unsigned long dwIoBase, unsigned char *pbyRetryLimit
  * Return Value: none
  *
  */
-void MACvSetLoopbackMode (unsigned long dwIoBase, unsigned char byLoopbackMode)
-{
+void MACvSetLoopbackMode (unsigned long dwIoBase, unsigned char byLoopbackMode) {
     unsigned char byOrgValue;
 
     ASSERT(byLoopbackMode < 3);
@@ -559,8 +540,7 @@ void MACvSetLoopbackMode (unsigned long dwIoBase, unsigned char byLoopbackMode)
  * Return Value: true if in Loopback mode; otherwise false
  *
  */
-bool MACbIsInLoopbackMode (unsigned long dwIoBase)
-{
+bool MACbIsInLoopbackMode (unsigned long dwIoBase) {
     unsigned char byOrgValue;
 
     VNSvInPortB(dwIoBase + MAC_REG_TEST, &byOrgValue);
@@ -583,8 +563,7 @@ bool MACbIsInLoopbackMode (unsigned long dwIoBase)
  * Return Value: none
  *
  */
-void MACvSetPacketFilter (unsigned long dwIoBase, unsigned short wFilterType)
-{
+void MACvSetPacketFilter (unsigned long dwIoBase, unsigned short wFilterType) {
     unsigned char byOldRCR;
     unsigned char byNewRCR = 0;
 
@@ -643,8 +622,7 @@ void MACvSetPacketFilter (unsigned long dwIoBase, unsigned short wFilterType)
  * Return Value: none
  *
  */
-void MACvSaveContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
-{
+void MACvSaveContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf) {
     int         ii;
 
     // read page0 register
@@ -676,8 +654,7 @@ void MACvSaveContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
  * Return Value: none
  *
  */
-void MACvRestoreContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
-{
+void MACvRestoreContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf) {
     int         ii;
 
     MACvSelectPage1(dwIoBase);
@@ -728,8 +705,7 @@ void MACvRestoreContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
  * Return Value: true if all values are the same; otherwise false
  *
  */
-bool MACbCompareContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
-{
+bool MACbCompareContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf) {
     unsigned long dwData;
 
     // compare MAC context to determine if this is a power lost init,
@@ -773,8 +749,7 @@ bool MACbCompareContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
  * Return Value: true if Reset Success; otherwise false
  *
  */
-bool MACbSoftwareReset (unsigned long dwIoBase)
-{
+bool MACbSoftwareReset (unsigned long dwIoBase) {
     unsigned char byData;
     unsigned short ww;
 
@@ -806,8 +781,7 @@ bool MACbSoftwareReset (unsigned long dwIoBase)
  * Return Value: true if success; otherwise false
  *
  */
-bool MACbSafeSoftwareReset (unsigned long dwIoBase)
-{
+bool MACbSafeSoftwareReset (unsigned long dwIoBase) {
     unsigned char abyTmpRegData[MAC_MAX_CONTEXT_SIZE_PAGE0+MAC_MAX_CONTEXT_SIZE_PAGE1];
     bool bRetVal;
 
@@ -839,8 +813,7 @@ bool MACbSafeSoftwareReset (unsigned long dwIoBase)
  * Return Value: true if success; otherwise false
  *
  */
-bool MACbSafeRxOff (unsigned long dwIoBase)
-{
+bool MACbSafeRxOff (unsigned long dwIoBase) {
     unsigned short ww;
     unsigned long dwData;
     unsigned char byData;
@@ -900,8 +873,7 @@ bool MACbSafeRxOff (unsigned long dwIoBase)
  * Return Value: true if success; otherwise false
  *
  */
-bool MACbSafeTxOff (unsigned long dwIoBase)
-{
+bool MACbSafeTxOff (unsigned long dwIoBase) {
     unsigned short ww;
     unsigned long dwData;
     unsigned char byData;
@@ -964,8 +936,7 @@ bool MACbSafeTxOff (unsigned long dwIoBase)
  * Return Value: true if success; otherwise false
  *
  */
-bool MACbSafeStop (unsigned long dwIoBase)
-{
+bool MACbSafeStop (unsigned long dwIoBase) {
     MACvRegBitsOff(dwIoBase, MAC_REG_TCR, TCR_AUTOBCNTX);
 
     if (MACbSafeRxOff(dwIoBase) == false) {
@@ -999,8 +970,7 @@ bool MACbSafeStop (unsigned long dwIoBase)
  * Return Value: true if success; otherwise false
  *
  */
-bool MACbShutdown (unsigned long dwIoBase)
-{
+bool MACbShutdown (unsigned long dwIoBase) {
     // disable MAC IMR
     MACvIntDisable(dwIoBase);
     MACvSetLoopbackMode(dwIoBase, MAC_LB_INTERNAL);
@@ -1026,8 +996,7 @@ bool MACbShutdown (unsigned long dwIoBase)
  * Return Value: none
  *
  */
-void MACvInitialize (unsigned long dwIoBase)
-{
+void MACvInitialize (unsigned long dwIoBase) {
     // clear sticky bits
     MACvClearStckDS(dwIoBase);
     // disable force PME-enable
@@ -1079,11 +1048,10 @@ void MACvInitialize (unsigned long dwIoBase)
  * Return Value: none
  *
  */
-void MACvSetCurrRx0DescAddr (unsigned long dwIoBase, unsigned long dwCurrDescAddr)
-{
-unsigned short ww;
-unsigned char byData;
-unsigned char byOrgDMACtl;
+void MACvSetCurrRx0DescAddr (unsigned long dwIoBase, unsigned long dwCurrDescAddr) {
+    unsigned short ww;
+    unsigned char byData;
+    unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL0, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
@@ -1117,11 +1085,10 @@ unsigned char byOrgDMACtl;
  * Return Value: none
  *
  */
-void MACvSetCurrRx1DescAddr (unsigned long dwIoBase, unsigned long dwCurrDescAddr)
-{
-unsigned short ww;
-unsigned char byData;
-unsigned char byOrgDMACtl;
+void MACvSetCurrRx1DescAddr (unsigned long dwIoBase, unsigned long dwCurrDescAddr) {
+    unsigned short ww;
+    unsigned char byData;
+    unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL1, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
@@ -1155,11 +1122,10 @@ unsigned char byOrgDMACtl;
  * Return Value: none
  *
  */
-void MACvSetCurrTx0DescAddrEx (unsigned long dwIoBase, unsigned long dwCurrDescAddr)
-{
-unsigned short ww;
-unsigned char byData;
-unsigned char byOrgDMACtl;
+void MACvSetCurrTx0DescAddrEx (unsigned long dwIoBase, unsigned long dwCurrDescAddr) {
+    unsigned short ww;
+    unsigned char byData;
+    unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
@@ -1193,12 +1159,11 @@ unsigned char byOrgDMACtl;
  * Return Value: none
  *
  */
- //TxDMA1 = AC0DMA
-void MACvSetCurrAC0DescAddrEx (unsigned long dwIoBase, unsigned long dwCurrDescAddr)
-{
-unsigned short ww;
-unsigned char byData;
-unsigned char byOrgDMACtl;
+//TxDMA1 = AC0DMA
+void MACvSetCurrAC0DescAddrEx (unsigned long dwIoBase, unsigned long dwCurrDescAddr) {
+    unsigned short ww;
+    unsigned char byData;
+    unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
@@ -1221,11 +1186,10 @@ unsigned char byOrgDMACtl;
 
 
 
-void MACvSetCurrTXDescAddr (int iTxType, unsigned long dwIoBase, unsigned long dwCurrDescAddr)
-{
-    if(iTxType == TYPE_AC0DMA){
+void MACvSetCurrTXDescAddr (int iTxType, unsigned long dwIoBase, unsigned long dwCurrDescAddr) {
+    if(iTxType == TYPE_AC0DMA) {
         MACvSetCurrAC0DescAddrEx(dwIoBase, dwCurrDescAddr);
-    }else if(iTxType == TYPE_TXDMA0){
+    } else if(iTxType == TYPE_TXDMA0) {
         MACvSetCurrTx0DescAddrEx(dwIoBase, dwCurrDescAddr);
     }
 }
@@ -1244,19 +1208,18 @@ void MACvSetCurrTXDescAddr (int iTxType, unsigned long dwIoBase, unsigned long d
  * Return Value: none
  *
  */
-void MACvTimer0MicroSDelay (unsigned long dwIoBase, unsigned int uDelay)
-{
-unsigned char byValue;
-unsigned int uu,ii;
+void MACvTimer0MicroSDelay (unsigned long dwIoBase, unsigned int uDelay) {
+    unsigned char byValue;
+    unsigned int uu,ii;
 
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
     VNSvOutPortD(dwIoBase + MAC_REG_TMDATA0, uDelay);
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, (TMCTL_TMD | TMCTL_TE));
-    for(ii=0;ii<66;ii++) {  // assume max PCI clock is 66Mhz
+    for(ii=0; ii<66; ii++) { // assume max PCI clock is 66Mhz
         for (uu = 0; uu < uDelay; uu++) {
             VNSvInPortB(dwIoBase + MAC_REG_TMCTL0, &byValue);
             if ((byValue == 0) ||
-                (byValue & TMCTL_TSUSP)) {
+                    (byValue & TMCTL_TSUSP)) {
                 VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
                 return;
             }
@@ -1280,8 +1243,7 @@ unsigned int uu,ii;
  * Return Value: none
  *
  */
-void MACvOneShotTimer0MicroSec (unsigned long dwIoBase, unsigned int uDelayTime)
-{
+void MACvOneShotTimer0MicroSec (unsigned long dwIoBase, unsigned int uDelayTime) {
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
     VNSvOutPortD(dwIoBase + MAC_REG_TMDATA0, uDelayTime);
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, (TMCTL_TMD | TMCTL_TE));
@@ -1301,16 +1263,14 @@ void MACvOneShotTimer0MicroSec (unsigned long dwIoBase, unsigned int uDelayTime)
  * Return Value: none
  *
  */
-void MACvOneShotTimer1MicroSec (unsigned long dwIoBase, unsigned int uDelayTime)
-{
+void MACvOneShotTimer1MicroSec (unsigned long dwIoBase, unsigned int uDelayTime) {
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL1, 0);
     VNSvOutPortD(dwIoBase + MAC_REG_TMDATA1, uDelayTime);
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL1, (TMCTL_TMD | TMCTL_TE));
 }
 
 
-void MACvSetMISCFifo (unsigned long dwIoBase, unsigned short wOffset, unsigned long dwData)
-{
+void MACvSetMISCFifo (unsigned long dwIoBase, unsigned short wOffset, unsigned long dwData) {
     if (wOffset > 273)
         return;
     VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset);
@@ -1319,10 +1279,9 @@ void MACvSetMISCFifo (unsigned long dwIoBase, unsigned short wOffset, unsigned l
 }
 
 
-bool MACbTxDMAOff (unsigned long dwIoBase, unsigned int idx)
-{
-unsigned char byData;
-unsigned int ww = 0;
+bool MACbTxDMAOff (unsigned long dwIoBase, unsigned int idx) {
+    unsigned char byData;
+    unsigned int ww = 0;
 
     if (idx == TYPE_TXDMA0) {
         VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0+2, DMACTL_RUN);
@@ -1347,8 +1306,7 @@ unsigned int ww = 0;
     return true;
 }
 
-void MACvClearBusSusInd (unsigned long dwIoBase)
-{
+void MACvClearBusSusInd (unsigned long dwIoBase) {
     unsigned long dwOrgValue;
     unsigned int ww;
     // check if BcnSusInd enabled
@@ -1369,8 +1327,7 @@ void MACvClearBusSusInd (unsigned long dwIoBase)
     }
 }
 
-void MACvEnableBusSusEn (unsigned long dwIoBase)
-{
+void MACvEnableBusSusEn (unsigned long dwIoBase) {
     unsigned char byOrgValue;
     unsigned long dwOrgValue;
     unsigned int ww;
@@ -1391,8 +1348,7 @@ void MACvEnableBusSusEn (unsigned long dwIoBase)
     }
 }
 
-bool MACbFlushSYNCFifo (unsigned long dwIoBase)
-{
+bool MACbFlushSYNCFifo (unsigned long dwIoBase) {
     unsigned char byOrgValue;
     unsigned int ww;
     // Read MACCR
@@ -1415,8 +1371,7 @@ bool MACbFlushSYNCFifo (unsigned long dwIoBase)
     return true;
 }
 
-bool MACbPSWakeup (unsigned long dwIoBase)
-{
+bool MACbPSWakeup (unsigned long dwIoBase) {
     unsigned char byOrgValue;
     unsigned int ww;
     // Read PSCTL
@@ -1456,11 +1411,10 @@ bool MACbPSWakeup (unsigned long dwIoBase)
  */
 
 void MACvSetKeyEntry (unsigned long dwIoBase, unsigned short wKeyCtl, unsigned int uEntryIdx,
-		unsigned int uKeyIdx, unsigned char *pbyAddr, unsigned long *pdwKey, unsigned char byLocalID)
-{
-unsigned short wOffset;
-unsigned long dwData;
-int     ii;
+                      unsigned int uKeyIdx, unsigned char *pbyAddr, unsigned long *pdwKey, unsigned char byLocalID) {
+    unsigned short wOffset;
+    unsigned long dwData;
+    int     ii;
 
     if (byLocalID <= 1)
         return;
@@ -1497,7 +1451,7 @@ int     ii;
     wOffset++;
 
     wOffset += (uKeyIdx * 4);
-    for (ii=0;ii<4;ii++) {
+    for (ii=0; ii<4; ii++) {
         // alway push 128 bits
         DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"3.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
         VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
@@ -1522,9 +1476,8 @@ int     ii;
  * Return Value: none
  *
  */
-void MACvDisableKeyEntry (unsigned long dwIoBase, unsigned int uEntryIdx)
-{
-unsigned short wOffset;
+void MACvDisableKeyEntry (unsigned long dwIoBase, unsigned int uEntryIdx) {
+    unsigned short wOffset;
 
     wOffset = MISCFIFO_KEYETRY0;
     wOffset += (uEntryIdx * MISCFIFO_KEYENTRYSIZE);
@@ -1551,11 +1504,10 @@ unsigned short wOffset;
  */
 
 void MACvSetDefaultKeyEntry (unsigned long dwIoBase, unsigned int uKeyLen,
-		unsigned int uKeyIdx, unsigned long *pdwKey, unsigned char byLocalID)
-{
-unsigned short wOffset;
-unsigned long dwData;
-int     ii;
+                             unsigned int uKeyIdx, unsigned long *pdwKey, unsigned char byLocalID) {
+    unsigned short wOffset;
+    unsigned long dwData;
+    int     ii;
 
     if (byLocalID <= 1)
         return;
@@ -1636,10 +1588,9 @@ unsigned long dwData;
  * Return Value: none
  *
  */
-void MACvDisableDefaultKey (unsigned long dwIoBase)
-{
-unsigned short wOffset;
-unsigned long dwData;
+void MACvDisableDefaultKey (unsigned long dwIoBase) {
+    unsigned short wOffset;
+    unsigned long dwData;
 
 
     wOffset = MISCFIFO_KEYETRY0;
@@ -1667,11 +1618,10 @@ unsigned long dwData;
  *
  */
 void MACvSetDefaultTKIPKeyEntry (unsigned long dwIoBase, unsigned int uKeyLen,
-		unsigned int uKeyIdx, unsigned long *pdwKey, unsigned char byLocalID)
-{
-unsigned short wOffset;
-unsigned long dwData;
-int     ii;
+                                 unsigned int uKeyIdx, unsigned long *pdwKey, unsigned char byLocalID) {
+    unsigned short wOffset;
+    unsigned long dwData;
+    int     ii;
 
     if (byLocalID <= 1)
         return;
@@ -1723,10 +1673,9 @@ int     ii;
  *
  */
 
-void MACvSetDefaultKeyCtl (unsigned long dwIoBase, unsigned short wKeyCtl, unsigned int uEntryIdx, unsigned char byLocalID)
-{
-unsigned short wOffset;
-unsigned long dwData;
+void MACvSetDefaultKeyCtl (unsigned long dwIoBase, unsigned short wKeyCtl, unsigned int uEntryIdx, unsigned char byLocalID) {
+    unsigned short wOffset;
+    unsigned long dwData;
 
     if (byLocalID <= 1)
         return;

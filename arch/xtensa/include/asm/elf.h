@@ -76,16 +76,16 @@
 typedef unsigned long elf_greg_t;
 
 typedef struct {
-	elf_greg_t pc;
-	elf_greg_t ps;
-	elf_greg_t lbeg;
-	elf_greg_t lend;
-	elf_greg_t lcount;
-	elf_greg_t sar;
-	elf_greg_t windowstart;
-	elf_greg_t windowbase;
-	elf_greg_t reserved[8+48];
-	elf_greg_t a[64];
+    elf_greg_t pc;
+    elf_greg_t ps;
+    elf_greg_t lbeg;
+    elf_greg_t lend;
+    elf_greg_t lcount;
+    elf_greg_t sar;
+    elf_greg_t windowstart;
+    elf_greg_t windowbase;
+    elf_greg_t reserved[8+48];
+    elf_greg_t a[64];
 } xtensa_gregset_t;
 
 #define ELF_NGREG	(sizeof(xtensa_gregset_t) / sizeof(elf_greg_t))
@@ -175,17 +175,17 @@ extern void xtensa_elf_core_copy_regs (xtensa_gregset_t *, struct pt_regs *);
   } while (0)
 
 typedef struct {
-	xtregs_opt_t	opt;
-	xtregs_user_t	user;
+    xtregs_opt_t	opt;
+    xtregs_user_t	user;
 #if XTENSA_HAVE_COPROCESSORS
-	xtregs_cp0_t	cp0;
-	xtregs_cp1_t	cp1;
-	xtregs_cp2_t	cp2;
-	xtregs_cp3_t	cp3;
-	xtregs_cp4_t	cp4;
-	xtregs_cp5_t	cp5;
-	xtregs_cp6_t	cp6;
-	xtregs_cp7_t	cp7;
+    xtregs_cp0_t	cp0;
+    xtregs_cp1_t	cp1;
+    xtregs_cp2_t	cp2;
+    xtregs_cp3_t	cp3;
+    xtregs_cp4_t	cp4;
+    xtregs_cp5_t	cp5;
+    xtregs_cp6_t	cp6;
+    xtregs_cp7_t	cp7;
 #endif
 } elf_xtregs_t;
 
@@ -194,12 +194,12 @@ typedef struct {
 struct task_struct;
 
 extern void do_copy_regs (xtensa_gregset_t*, struct pt_regs*,
-			  struct task_struct*);
+                          struct task_struct*);
 extern void do_restore_regs (xtensa_gregset_t*, struct pt_regs*,
-			     struct task_struct*);
+                             struct task_struct*);
 extern void do_save_fpregs (elf_fpregset_t*, struct pt_regs*,
-			    struct task_struct*);
+                            struct task_struct*);
 extern int do_restore_fpregs (elf_fpregset_t*, struct pt_regs*,
-			      struct task_struct*);
+                              struct task_struct*);
 
 #endif	/* _XTENSA_ELF_H */

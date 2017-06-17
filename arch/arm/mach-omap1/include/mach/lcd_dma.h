@@ -51,15 +51,15 @@
 
 /* LCD DMA block numbers */
 enum {
-	OMAP_LCD_DMA_B1_TOP,
-	OMAP_LCD_DMA_B1_BOTTOM,
-	OMAP_LCD_DMA_B2_TOP,
-	OMAP_LCD_DMA_B2_BOTTOM
+    OMAP_LCD_DMA_B1_TOP,
+    OMAP_LCD_DMA_B1_BOTTOM,
+    OMAP_LCD_DMA_B2_TOP,
+    OMAP_LCD_DMA_B2_BOTTOM
 };
 
 /* LCD DMA functions */
 extern int omap_request_lcd_dma(void (*callback)(u16 status, void *data),
-				void *data);
+                                void *data);
 extern void omap_free_lcd_dma(void);
 extern void omap_setup_lcd_dma(void);
 extern void omap_enable_lcd_dma(void);
@@ -67,7 +67,7 @@ extern void omap_stop_lcd_dma(void);
 extern void omap_set_lcd_dma_ext_controller(int external);
 extern void omap_set_lcd_dma_single_transfer(int single);
 extern void omap_set_lcd_dma_b1(unsigned long addr, u16 fb_xres, u16 fb_yres,
-				int data_type);
+                                int data_type);
 extern void omap_set_lcd_dma_b1_rotation(int rotate);
 extern void omap_set_lcd_dma_b1_vxres(unsigned long vxres);
 extern void omap_set_lcd_dma_b1_mirror(int mirror);

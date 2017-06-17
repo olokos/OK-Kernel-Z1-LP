@@ -63,159 +63,145 @@
 
 #ifdef EFX_USE_QWORD_IO
 static inline void _efx_writeq(struct efx_nic *efx, __le64 value,
-				  unsigned int reg)
-{
-	__raw_writeq((__force u64)value, efx->membase + reg);
+                               unsigned int reg) {
+    __raw_writeq((__force u64)value, efx->membase + reg);
 }
-static inline __le64 _efx_readq(struct efx_nic *efx, unsigned int reg)
-{
-	return (__force __le64)__raw_readq(efx->membase + reg);
+static inline __le64 _efx_readq(struct efx_nic *efx, unsigned int reg) {
+    return (__force __le64)__raw_readq(efx->membase + reg);
 }
 #endif
 
 static inline void _efx_writed(struct efx_nic *efx, __le32 value,
-				  unsigned int reg)
-{
-	__raw_writel((__force u32)value, efx->membase + reg);
+                               unsigned int reg) {
+    __raw_writel((__force u32)value, efx->membase + reg);
 }
-static inline __le32 _efx_readd(struct efx_nic *efx, unsigned int reg)
-{
-	return (__force __le32)__raw_readl(efx->membase + reg);
+static inline __le32 _efx_readd(struct efx_nic *efx, unsigned int reg) {
+    return (__force __le32)__raw_readl(efx->membase + reg);
 }
 
 /* Write a normal 128-bit CSR, locking as appropriate. */
 static inline void efx_writeo(struct efx_nic *efx, efx_oword_t *value,
-			      unsigned int reg)
-{
-	unsigned long flags __attribute__ ((unused));
+                              unsigned int reg) {
+    unsigned long flags __attribute__ ((unused));
 
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "writing register %x with " EFX_OWORD_FMT "\n", reg,
-		   EFX_OWORD_VAL(*value));
+    netif_vdbg(efx, hw, efx->net_dev,
+               "writing register %x with " EFX_OWORD_FMT "\n", reg,
+               EFX_OWORD_VAL(*value));
 
-	spin_lock_irqsave(&efx->biu_lock, flags);
+    spin_lock_irqsave(&efx->biu_lock, flags);
 #ifdef EFX_USE_QWORD_IO
-	_efx_writeq(efx, value->u64[0], reg + 0);
-	_efx_writeq(efx, value->u64[1], reg + 8);
+    _efx_writeq(efx, value->u64[0], reg + 0);
+    _efx_writeq(efx, value->u64[1], reg + 8);
 #else
-	_efx_writed(efx, value->u32[0], reg + 0);
-	_efx_writed(efx, value->u32[1], reg + 4);
-	_efx_writed(efx, value->u32[2], reg + 8);
-	_efx_writed(efx, value->u32[3], reg + 12);
+    _efx_writed(efx, value->u32[0], reg + 0);
+    _efx_writed(efx, value->u32[1], reg + 4);
+    _efx_writed(efx, value->u32[2], reg + 8);
+    _efx_writed(efx, value->u32[3], reg + 12);
 #endif
-	mmiowb();
-	spin_unlock_irqrestore(&efx->biu_lock, flags);
+    mmiowb();
+    spin_unlock_irqrestore(&efx->biu_lock, flags);
 }
 
 /* Write 64-bit SRAM through the supplied mapping, locking as appropriate. */
 static inline void efx_sram_writeq(struct efx_nic *efx, void __iomem *membase,
-				   efx_qword_t *value, unsigned int index)
-{
-	unsigned int addr = index * sizeof(*value);
-	unsigned long flags __attribute__ ((unused));
+                                   efx_qword_t *value, unsigned int index) {
+    unsigned int addr = index * sizeof(*value);
+    unsigned long flags __attribute__ ((unused));
 
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "writing SRAM address %x with " EFX_QWORD_FMT "\n",
-		   addr, EFX_QWORD_VAL(*value));
+    netif_vdbg(efx, hw, efx->net_dev,
+               "writing SRAM address %x with " EFX_QWORD_FMT "\n",
+               addr, EFX_QWORD_VAL(*value));
 
-	spin_lock_irqsave(&efx->biu_lock, flags);
+    spin_lock_irqsave(&efx->biu_lock, flags);
 #ifdef EFX_USE_QWORD_IO
-	__raw_writeq((__force u64)value->u64[0], membase + addr);
+    __raw_writeq((__force u64)value->u64[0], membase + addr);
 #else
-	__raw_writel((__force u32)value->u32[0], membase + addr);
-	__raw_writel((__force u32)value->u32[1], membase + addr + 4);
+    __raw_writel((__force u32)value->u32[0], membase + addr);
+    __raw_writel((__force u32)value->u32[1], membase + addr + 4);
 #endif
-	mmiowb();
-	spin_unlock_irqrestore(&efx->biu_lock, flags);
+    mmiowb();
+    spin_unlock_irqrestore(&efx->biu_lock, flags);
 }
 
 /* Write a 32-bit CSR or the last dword of a special 128-bit CSR */
 static inline void efx_writed(struct efx_nic *efx, efx_dword_t *value,
-			      unsigned int reg)
-{
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "writing register %x with "EFX_DWORD_FMT"\n",
-		   reg, EFX_DWORD_VAL(*value));
+                              unsigned int reg) {
+    netif_vdbg(efx, hw, efx->net_dev,
+               "writing register %x with "EFX_DWORD_FMT"\n",
+               reg, EFX_DWORD_VAL(*value));
 
-	/* No lock required */
-	_efx_writed(efx, value->u32[0], reg);
+    /* No lock required */
+    _efx_writed(efx, value->u32[0], reg);
 }
 
 /* Read a 128-bit CSR, locking as appropriate. */
 static inline void efx_reado(struct efx_nic *efx, efx_oword_t *value,
-			     unsigned int reg)
-{
-	unsigned long flags __attribute__ ((unused));
+                             unsigned int reg) {
+    unsigned long flags __attribute__ ((unused));
 
-	spin_lock_irqsave(&efx->biu_lock, flags);
-	value->u32[0] = _efx_readd(efx, reg + 0);
-	value->u32[1] = _efx_readd(efx, reg + 4);
-	value->u32[2] = _efx_readd(efx, reg + 8);
-	value->u32[3] = _efx_readd(efx, reg + 12);
-	spin_unlock_irqrestore(&efx->biu_lock, flags);
+    spin_lock_irqsave(&efx->biu_lock, flags);
+    value->u32[0] = _efx_readd(efx, reg + 0);
+    value->u32[1] = _efx_readd(efx, reg + 4);
+    value->u32[2] = _efx_readd(efx, reg + 8);
+    value->u32[3] = _efx_readd(efx, reg + 12);
+    spin_unlock_irqrestore(&efx->biu_lock, flags);
 
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "read from register %x, got " EFX_OWORD_FMT "\n", reg,
-		   EFX_OWORD_VAL(*value));
+    netif_vdbg(efx, hw, efx->net_dev,
+               "read from register %x, got " EFX_OWORD_FMT "\n", reg,
+               EFX_OWORD_VAL(*value));
 }
 
 /* Read 64-bit SRAM through the supplied mapping, locking as appropriate. */
 static inline void efx_sram_readq(struct efx_nic *efx, void __iomem *membase,
-				  efx_qword_t *value, unsigned int index)
-{
-	unsigned int addr = index * sizeof(*value);
-	unsigned long flags __attribute__ ((unused));
+                                  efx_qword_t *value, unsigned int index) {
+    unsigned int addr = index * sizeof(*value);
+    unsigned long flags __attribute__ ((unused));
 
-	spin_lock_irqsave(&efx->biu_lock, flags);
+    spin_lock_irqsave(&efx->biu_lock, flags);
 #ifdef EFX_USE_QWORD_IO
-	value->u64[0] = (__force __le64)__raw_readq(membase + addr);
+    value->u64[0] = (__force __le64)__raw_readq(membase + addr);
 #else
-	value->u32[0] = (__force __le32)__raw_readl(membase + addr);
-	value->u32[1] = (__force __le32)__raw_readl(membase + addr + 4);
+    value->u32[0] = (__force __le32)__raw_readl(membase + addr);
+    value->u32[1] = (__force __le32)__raw_readl(membase + addr + 4);
 #endif
-	spin_unlock_irqrestore(&efx->biu_lock, flags);
+    spin_unlock_irqrestore(&efx->biu_lock, flags);
 
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "read from SRAM address %x, got "EFX_QWORD_FMT"\n",
-		   addr, EFX_QWORD_VAL(*value));
+    netif_vdbg(efx, hw, efx->net_dev,
+               "read from SRAM address %x, got "EFX_QWORD_FMT"\n",
+               addr, EFX_QWORD_VAL(*value));
 }
 
 /* Read a 32-bit CSR or SRAM */
 static inline void efx_readd(struct efx_nic *efx, efx_dword_t *value,
-				unsigned int reg)
-{
-	value->u32[0] = _efx_readd(efx, reg);
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "read from register %x, got "EFX_DWORD_FMT"\n",
-		   reg, EFX_DWORD_VAL(*value));
+                             unsigned int reg) {
+    value->u32[0] = _efx_readd(efx, reg);
+    netif_vdbg(efx, hw, efx->net_dev,
+               "read from register %x, got "EFX_DWORD_FMT"\n",
+               reg, EFX_DWORD_VAL(*value));
 }
 
 /* Write a 128-bit CSR forming part of a table */
 static inline void efx_writeo_table(struct efx_nic *efx, efx_oword_t *value,
-				      unsigned int reg, unsigned int index)
-{
-	efx_writeo(efx, value, reg + index * sizeof(efx_oword_t));
+                                    unsigned int reg, unsigned int index) {
+    efx_writeo(efx, value, reg + index * sizeof(efx_oword_t));
 }
 
 /* Read a 128-bit CSR forming part of a table */
 static inline void efx_reado_table(struct efx_nic *efx, efx_oword_t *value,
-				     unsigned int reg, unsigned int index)
-{
-	efx_reado(efx, value, reg + index * sizeof(efx_oword_t));
+                                   unsigned int reg, unsigned int index) {
+    efx_reado(efx, value, reg + index * sizeof(efx_oword_t));
 }
 
 /* Write a 32-bit CSR forming part of a table, or 32-bit SRAM */
 static inline void efx_writed_table(struct efx_nic *efx, efx_dword_t *value,
-				       unsigned int reg, unsigned int index)
-{
-	efx_writed(efx, value, reg + index * sizeof(efx_oword_t));
+                                    unsigned int reg, unsigned int index) {
+    efx_writed(efx, value, reg + index * sizeof(efx_oword_t));
 }
 
 /* Read a 32-bit CSR forming part of a table, or 32-bit SRAM */
 static inline void efx_readd_table(struct efx_nic *efx, efx_dword_t *value,
-				   unsigned int reg, unsigned int index)
-{
-	efx_readd(efx, value, reg + index * sizeof(efx_dword_t));
+                                   unsigned int reg, unsigned int index) {
+    efx_readd(efx, value, reg + index * sizeof(efx_dword_t));
 }
 
 /* Page-mapped register block size */
@@ -227,22 +213,21 @@ static inline void efx_readd_table(struct efx_nic *efx, efx_dword_t *value,
 
 /* Write the whole of RX_DESC_UPD or TX_DESC_UPD */
 static inline void _efx_writeo_page(struct efx_nic *efx, efx_oword_t *value,
-				    unsigned int reg, unsigned int page)
-{
-	reg = EFX_PAGED_REG(page, reg);
+                                    unsigned int reg, unsigned int page) {
+    reg = EFX_PAGED_REG(page, reg);
 
-	netif_vdbg(efx, hw, efx->net_dev,
-		   "writing register %x with " EFX_OWORD_FMT "\n", reg,
-		   EFX_OWORD_VAL(*value));
+    netif_vdbg(efx, hw, efx->net_dev,
+               "writing register %x with " EFX_OWORD_FMT "\n", reg,
+               EFX_OWORD_VAL(*value));
 
 #ifdef EFX_USE_QWORD_IO
-	_efx_writeq(efx, value->u64[0], reg + 0);
-	_efx_writeq(efx, value->u64[1], reg + 8);
+    _efx_writeq(efx, value->u64[0], reg + 0);
+    _efx_writeq(efx, value->u64[1], reg + 8);
 #else
-	_efx_writed(efx, value->u32[0], reg + 0);
-	_efx_writed(efx, value->u32[1], reg + 4);
-	_efx_writed(efx, value->u32[2], reg + 8);
-	_efx_writed(efx, value->u32[3], reg + 12);
+    _efx_writed(efx, value->u32[0], reg + 0);
+    _efx_writed(efx, value->u32[1], reg + 4);
+    _efx_writed(efx, value->u32[2], reg + 8);
+    _efx_writed(efx, value->u32[3], reg + 12);
 #endif
 }
 #define efx_writeo_page(efx, value, reg, page)				\
@@ -255,9 +240,8 @@ static inline void _efx_writeo_page(struct efx_nic *efx, efx_oword_t *value,
  * RX_DESC_UPD or TX_DESC_UPD)
  */
 static inline void _efx_writed_page(struct efx_nic *efx, efx_dword_t *value,
-				    unsigned int reg, unsigned int page)
-{
-	efx_writed(efx, value, EFX_PAGED_REG(page, reg));
+                                    unsigned int reg, unsigned int page) {
+    efx_writed(efx, value, EFX_PAGED_REG(page, reg));
 }
 #define efx_writed_page(efx, value, reg, page)				\
 	_efx_writed_page(efx, value,					\
@@ -271,19 +255,18 @@ static inline void _efx_writed_page(struct efx_nic *efx, efx_dword_t *value,
  * collector register.
  */
 static inline void _efx_writed_page_locked(struct efx_nic *efx,
-					   efx_dword_t *value,
-					   unsigned int reg,
-					   unsigned int page)
-{
-	unsigned long flags __attribute__ ((unused));
+        efx_dword_t *value,
+        unsigned int reg,
+        unsigned int page) {
+    unsigned long flags __attribute__ ((unused));
 
-	if (page == 0) {
-		spin_lock_irqsave(&efx->biu_lock, flags);
-		efx_writed(efx, value, EFX_PAGED_REG(page, reg));
-		spin_unlock_irqrestore(&efx->biu_lock, flags);
-	} else {
-		efx_writed(efx, value, EFX_PAGED_REG(page, reg));
-	}
+    if (page == 0) {
+        spin_lock_irqsave(&efx->biu_lock, flags);
+        efx_writed(efx, value, EFX_PAGED_REG(page, reg));
+        spin_unlock_irqrestore(&efx->biu_lock, flags);
+    } else {
+        efx_writed(efx, value, EFX_PAGED_REG(page, reg));
+    }
 }
 #define efx_writed_page_locked(efx, value, reg, page)			\
 	_efx_writed_page_locked(efx, value,				\

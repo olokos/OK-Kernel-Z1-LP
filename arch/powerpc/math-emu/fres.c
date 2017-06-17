@@ -3,10 +3,9 @@
 #include <asm/uaccess.h>
 
 int
-fres(void *frD, void *frB)
-{
+fres(void *frD, void *frB) {
 #ifdef DEBUG
-	printk("%s: %p %p\n", __func__, frD, frB);
+    printk("%s: %p %p\n", __func__, frD, frB);
 #endif
-	return -ENOSYS;
+    return -ENOSYS;
 }

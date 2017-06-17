@@ -19,29 +19,29 @@
 #include "msm_gemini_hw_reg.h"
 
 struct msm_gemini_hw_buf {
-	struct msm_gemini_buf vbuf;
-	struct file  *file;
-	uint32_t framedone_len;
-	uint32_t y_buffer_addr;
-	uint32_t y_len;
-	uint32_t cbcr_buffer_addr;
-	uint32_t cbcr_len;
-	uint32_t num_of_mcu_rows;
-	struct ion_handle *handle;
+    struct msm_gemini_buf vbuf;
+    struct file  *file;
+    uint32_t framedone_len;
+    uint32_t y_buffer_addr;
+    uint32_t y_len;
+    uint32_t cbcr_buffer_addr;
+    uint32_t cbcr_len;
+    uint32_t num_of_mcu_rows;
+    struct ion_handle *handle;
 };
 
 struct msm_gemini_hw_pingpong {
-	uint8_t is_fe; /* 1: fe; 0: we */
-	struct  msm_gemini_hw_buf buf[2];
-	int     buf_status[2];
-	int     buf_active_index;
+    uint8_t is_fe; /* 1: fe; 0: we */
+    struct  msm_gemini_hw_buf buf[2];
+    int     buf_status[2];
+    int     buf_active_index;
 };
 
 int msm_gemini_hw_pingpong_update(struct msm_gemini_hw_pingpong *pingpong_hw,
-	struct msm_gemini_hw_buf *buf);
+                                  struct msm_gemini_hw_buf *buf);
 void *msm_gemini_hw_pingpong_irq(struct msm_gemini_hw_pingpong *pingpong_hw);
 void *msm_gemini_hw_pingpong_active_buffer(struct msm_gemini_hw_pingpong
-	*pingpong_hw);
+        *pingpong_hw);
 
 void msm_gemini_hw_irq_clear(uint32_t, uint32_t);
 int msm_gemini_hw_irq_get_status(void);
@@ -77,9 +77,9 @@ long msm_gemini_hw_encode_output_size(void);
 	(gemini_irq_status & MSM_GEMINI_HW_MASK_COMP_ERR)
 
 void msm_gemini_hw_fe_buffer_update(struct msm_gemini_hw_buf *p_input,
-	uint8_t pingpong_index);
+                                    uint8_t pingpong_index);
 void msm_gemini_hw_we_buffer_update(struct msm_gemini_hw_buf *p_input,
-	uint8_t pingpong_index);
+                                    uint8_t pingpong_index);
 
 void msm_gemini_hw_we_buffer_cfg(uint8_t is_realtime);
 
@@ -95,7 +95,7 @@ void msm_gemini_hw_write(struct msm_gemini_hw_cmd *hw_cmd_p);
 int msm_gemini_hw_wait(struct msm_gemini_hw_cmd *hw_cmd_p, int m_us);
 void msm_gemini_hw_delay(struct msm_gemini_hw_cmd *hw_cmd_p, int m_us);
 int msm_gemini_hw_exec_cmds(struct msm_gemini_hw_cmd *hw_cmd_p,
-	uint32_t m_cmds);
+                            uint32_t m_cmds);
 void msm_gemini_io_dump(int size);
 
 #define MSM_GEMINI_PIPELINE_CLK_128MHZ 128 /* 8MP  128MHz */

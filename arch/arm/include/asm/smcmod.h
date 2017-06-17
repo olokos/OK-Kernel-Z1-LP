@@ -20,11 +20,11 @@
  * @return_val - return value from secure world operation.
  */
 struct smcmod_reg_req {
-	uint32_t service_id; /* in */
-	uint32_t command_id; /* in */
-	uint8_t  num_args; /* in */
-	uint32_t args[SMCMOD_REG_REQ_MAX_ARGS]; /* in */
-	uint32_t return_val; /* out */
+    uint32_t service_id; /* in */
+    uint32_t command_id; /* in */
+    uint8_t  num_args; /* in */
+    uint32_t args[SMCMOD_REG_REQ_MAX_ARGS]; /* in */
+    uint32_t return_val; /* out */
 };
 
 /**
@@ -39,13 +39,13 @@ struct smcmod_reg_req {
  * @return_val - return value from secure world operation.
  */
 struct smcmod_buf_req {
-	uint32_t service_id;/* in */
-	uint32_t command_id; /* in */
-	int32_t ion_cmd_fd; /* in */
-	uint32_t cmd_len; /* in */
-	int32_t ion_resp_fd; /* in */
-	uint32_t resp_len; /* in */
-	uint32_t return_val; /* out */
+    uint32_t service_id;/* in */
+    uint32_t command_id; /* in */
+    int32_t ion_cmd_fd; /* in */
+    uint32_t cmd_len; /* in */
+    int32_t ion_resp_fd; /* in */
+    uint32_t resp_len; /* in */
+    uint32_t return_val; /* out */
 };
 
 /**
@@ -66,19 +66,19 @@ struct smcmod_buf_req {
  * @return_val - return value from secure world opreation.
  */
 struct smcmod_cipher_req {
-	uint32_t algorithm; /* in */
-	uint32_t operation; /* in */
-	uint32_t mode; /* in */
-	int32_t ion_key_fd; /* in */
-	uint32_t key_size; /* in */
-	int32_t ion_plain_text_fd; /* in (encrypt)/out (decrypt) */
-	uint32_t plain_text_size; /* in */
-	int32_t ion_cipher_text_fd; /* out (encrypt)/in (decrypt) */
-	uint32_t cipher_text_size; /* in */
-	int32_t ion_init_vector_fd; /* in */
-	uint32_t init_vector_size; /* in */
-	uint32_t key_is_null; /* in */
-	uint32_t return_val; /* out */
+    uint32_t algorithm; /* in */
+    uint32_t operation; /* in */
+    uint32_t mode; /* in */
+    int32_t ion_key_fd; /* in */
+    uint32_t key_size; /* in */
+    int32_t ion_plain_text_fd; /* in (encrypt)/out (decrypt) */
+    uint32_t plain_text_size; /* in */
+    int32_t ion_cipher_text_fd; /* out (encrypt)/in (decrypt) */
+    uint32_t cipher_text_size; /* in */
+    int32_t ion_init_vector_fd; /* in */
+    uint32_t init_vector_size; /* in */
+    uint32_t key_is_null; /* in */
+    uint32_t return_val; /* out */
 };
 
 /**
@@ -96,16 +96,16 @@ struct smcmod_cipher_req {
  * @return_val - return value from secure world opreation.
  */
 struct smcmod_msg_digest_req {
-	uint32_t algorithm; /* in */
-	int32_t ion_key_fd; /* in */
-	uint32_t key_size; /* in */
-	int32_t ion_input_fd; /* in */
-	uint32_t input_size; /* in */
-	int32_t ion_output_fd; /* in/out */
-	uint32_t output_size; /* in */
-	uint32_t fixed_block; /* in */
-	uint32_t key_is_null; /* in */
-	uint32_t return_val; /* out */
+    uint32_t algorithm; /* in */
+    int32_t ion_key_fd; /* in */
+    uint32_t key_size; /* in */
+    int32_t ion_input_fd; /* in */
+    uint32_t input_size; /* in */
+    int32_t ion_output_fd; /* in/out */
+    uint32_t output_size; /* in */
+    uint32_t fixed_block; /* in */
+    uint32_t key_is_null; /* in */
+    uint32_t return_val; /* out */
 } __packed;
 
 /**
@@ -117,34 +117,34 @@ struct smcmod_msg_digest_req {
  * @response - this is the response of the request.
  */
 struct smcmod_decrypt_req {
-	uint32_t service_id;
-	uint32_t command_id;
+    uint32_t service_id;
+    uint32_t command_id;
 #define SMCMOD_DECRYPT_REQ_OP_METADATA	1
 #define SMCMOD_DECRYPT_REQ_OP_IMG_FRAG	2
-	uint32_t operation;
-	union {
-		struct {
-			uint32_t len;
-			uint32_t ion_fd;
-		} metadata;
-		struct {
-			uint32_t ctx_id;
-			uint32_t last_frag;
-			uint32_t frag_len;
-			uint32_t ion_fd;
-			uint32_t offset;
-		} img_frag;
-	} request;
-	union {
-		struct {
-			uint32_t status;
-			uint32_t ctx_id;
-			uint32_t end_offset;
-		} metadata;
-		struct {
-			uint32_t status;
-		} img_frag;
-	} response;
+    uint32_t operation;
+    union {
+        struct {
+            uint32_t len;
+            uint32_t ion_fd;
+        } metadata;
+        struct {
+            uint32_t ctx_id;
+            uint32_t last_frag;
+            uint32_t frag_len;
+            uint32_t ion_fd;
+            uint32_t offset;
+        } img_frag;
+    } request;
+    union {
+        struct {
+            uint32_t status;
+            uint32_t ctx_id;
+            uint32_t end_offset;
+        } metadata;
+        struct {
+            uint32_t status;
+        } img_frag;
+    } response;
 };
 
 #define SMCMOD_IOC_MAGIC	0x97

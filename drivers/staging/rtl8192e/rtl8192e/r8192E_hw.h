@@ -22,8 +22,8 @@
 #define R8180_HW
 
 enum baseband_config {
-	BaseBand_Config_PHY_REG = 0,
-	BaseBand_Config_AGC_TAB = 1,
+    BaseBand_Config_PHY_REG = 0,
+    BaseBand_Config_AGC_TAB = 1,
 };
 
 #define	RTL8187_REQT_READ	0xc0
@@ -90,13 +90,13 @@ enum baseband_config {
 #define EEPROM_CID_DLINK				0x8
 #define EEPROM_CID_WHQL					0xFE
 enum _RTL8192Pci_HW {
-	MAC0			= 0x000,
-	MAC1			= 0x001,
-	MAC2			= 0x002,
-	MAC3			= 0x003,
-	MAC4			= 0x004,
-	MAC5			= 0x005,
-	PCIF			= 0x009,
+    MAC0			= 0x000,
+    MAC1			= 0x001,
+    MAC2			= 0x002,
+    MAC3			= 0x003,
+    MAC4			= 0x004,
+    MAC5			= 0x005,
+    PCIF			= 0x009,
 #define MXDMA2_16bytes		0x000
 #define MXDMA2_32bytes		0x001
 #define MXDMA2_64bytes		0x010
@@ -109,8 +109,8 @@ enum _RTL8192Pci_HW {
 #define	MULRW_SHIFT		3
 #define	MXDMA2_RX_SHIFT		4
 #define	MXDMA2_TX_SHIFT		0
-	PMR			= 0x00c,
-	EPROM_CMD		= 0x00e,
+    PMR			= 0x00c,
+    EPROM_CMD		= 0x00e,
 #define EPROM_CMD_RESERVED_MASK BIT5
 #define EPROM_CMD_9356SEL	BIT4
 #define EPROM_CMD_OPERATING_MODE_SHIFT 6
@@ -124,23 +124,23 @@ enum _RTL8192Pci_HW {
 #define EPROM_W_SHIFT 1
 #define EPROM_R_SHIFT 0
 
-	AFR			 = 0x010,
+    AFR			 = 0x010,
 #define AFR_CardBEn		(1<<0)
 #define AFR_CLKRUN_SEL		(1<<1)
 #define AFR_FuncRegEn		(1<<2)
 
-	ANAPAR			= 0x17,
+    ANAPAR			= 0x17,
 #define	BB_GLOBAL_RESET_BIT	0x1
-	BB_GLOBAL_RESET		= 0x020,
-	BSSIDR			= 0x02E,
-	CMDR			= 0x037,
+    BB_GLOBAL_RESET		= 0x020,
+    BSSIDR			= 0x02E,
+    CMDR			= 0x037,
 #define		CR_RST					0x10
 #define		CR_RE					0x08
 #define		CR_TE					0x04
 #define		CR_MulRW				0x01
-	SIFS		= 0x03E,
-	TCR			= 0x040,
-	RCR			= 0x044,
+    SIFS		= 0x03E,
+    TCR			= 0x040,
+    RCR			= 0x044,
 #define RCR_FILTER_MASK (BIT0 | BIT1 | BIT2 | BIT3 | BIT5 | BIT12 |	\
 			BIT18 | BIT19 | BIT20 | BIT21 | BIT22 | BIT23)
 #define RCR_ONLYERLPKT		BIT31
@@ -163,31 +163,31 @@ enum _RTL8192Pci_HW {
 #define	RCR_AAP			BIT0
 #define RCR_MXDMA_OFFSET	8
 #define RCR_FIFO_OFFSET		13
-	SLOT_TIME		= 0x049,
-	ACK_TIMEOUT		= 0x04c,
-	PIFS_TIME		= 0x04d,
-	USTIME			= 0x04e,
-	EDCAPARA_BE		= 0x050,
-	EDCAPARA_BK		= 0x054,
-	EDCAPARA_VO		= 0x058,
-	EDCAPARA_VI		= 0x05C,
+    SLOT_TIME		= 0x049,
+    ACK_TIMEOUT		= 0x04c,
+    PIFS_TIME		= 0x04d,
+    USTIME			= 0x04e,
+    EDCAPARA_BE		= 0x050,
+    EDCAPARA_BK		= 0x054,
+    EDCAPARA_VO		= 0x058,
+    EDCAPARA_VI		= 0x05C,
 #define	AC_PARAM_TXOP_LIMIT_OFFSET		16
 #define	AC_PARAM_ECW_MAX_OFFSET		12
 #define	AC_PARAM_ECW_MIN_OFFSET			8
 #define	AC_PARAM_AIFS_OFFSET				0
-	RFPC			= 0x05F,
-	CWRR			= 0x060,
-	BCN_TCFG		= 0x062,
+    RFPC			= 0x05F,
+    CWRR			= 0x060,
+    BCN_TCFG		= 0x062,
 #define BCN_TCFG_CW_SHIFT		8
 #define BCN_TCFG_IFS			0
-	BCN_INTERVAL		= 0x070,
-	ATIMWND			= 0x072,
-	BCN_DRV_EARLY_INT	= 0x074,
+    BCN_INTERVAL		= 0x070,
+    ATIMWND			= 0x072,
+    BCN_DRV_EARLY_INT	= 0x074,
 #define	BCN_DRV_EARLY_INT_SWBCN_SHIFT	8
 #define	BCN_DRV_EARLY_INT_TIME_SHIFT	0
-	BCN_DMATIME		= 0x076,
-	BCN_ERR_THRESH		= 0x078,
-	RWCAM			= 0x0A0,
+    BCN_DMATIME		= 0x076,
+    BCN_ERR_THRESH		= 0x078,
+    RWCAM			= 0x0A0,
 #define   CAM_CM_SecCAMPolling		BIT31
 #define   CAM_CM_SecCAMClr			BIT30
 #define   CAM_CM_SecCAMWE			BIT16
@@ -209,17 +209,17 @@ enum _RTL8192Pci_HW {
 #define   CAM_READ		0x00000000
 #define   CAM_POLLINIG		BIT31
 #define   SCR_UseDK		0x01
-	WCAMI			= 0x0A4,
-	RCAMO			= 0x0A8,
-	SECR			= 0x0B0,
+    WCAMI			= 0x0A4,
+    RCAMO			= 0x0A8,
+    SECR			= 0x0B0,
 #define	SCR_TxUseDK			BIT0
 #define   SCR_RxUseDK			BIT1
 #define   SCR_TxEncEnable		BIT2
 #define   SCR_RxDecEnable		BIT3
 #define   SCR_SKByA2				BIT4
 #define   SCR_NoSKMC				BIT5
-	SWREGULATOR	= 0x0BD,
-	INTA_MASK		= 0x0f4,
+    SWREGULATOR	= 0x0BD,
+    INTA_MASK		= 0x0f4,
 #define IMR8190_DISABLED		0x0
 #define IMR_ATIMEND			BIT28
 #define IMR_TBDOK			BIT27
@@ -240,8 +240,8 @@ enum _RTL8192Pci_HW {
 #define	IMR_VIDOK			BIT2
 #define	IMR_VODOK			BIT1
 #define	IMR_ROK				BIT0
-	ISR			= 0x0f8,
-	TPPoll			= 0x0fd,
+    ISR			= 0x0f8,
+    TPPoll			= 0x0fd,
 #define TPPoll_BKQ		BIT0
 #define TPPoll_BEQ		BIT1
 #define TPPoll_VIQ		BIT2
@@ -260,11 +260,11 @@ enum _RTL8192Pci_HW {
 #define TPPoll_StopHCCA	BIT15
 #define TPPoll_SHIFT		8
 
-	PSR			= 0x0ff,
+    PSR			= 0x0ff,
 #define PSR_GEN			0x0
 #define PSR_CPU			0x1
-	CPU_GEN			= 0x100,
-	BB_RESET			= 0x101,
+    CPU_GEN			= 0x100,
+    BB_RESET			= 0x101,
 #define	CPU_CCK_LOOPBACK	0x00030000
 #define	CPU_GEN_SYSTEM_RESET	0x00000001
 #define	CPU_GEN_FIRMWARE_RESET	0x00000008
@@ -277,11 +277,11 @@ enum _RTL8192Pci_HW {
 #define CPU_GEN_NO_LOOPBACK_SET	0x00080000
 #define	CPU_GEN_GPIO_UART		0x00007000
 
-	LED1Cfg			= 0x154,
-	LED0Cfg			= 0x155,
+    LED1Cfg			= 0x154,
+    LED0Cfg			= 0x155,
 
-	AcmAvg			= 0x170,
-	AcmHwCtrl		= 0x171,
+    AcmAvg			= 0x170,
+    AcmHwCtrl		= 0x171,
 #define	AcmHw_HwEn		BIT0
 #define	AcmHw_BeqEn		BIT1
 #define	AcmHw_ViqEn		BIT2
@@ -289,65 +289,65 @@ enum _RTL8192Pci_HW {
 #define	AcmHw_BeqStatus		BIT4
 #define	AcmHw_ViqStatus		BIT5
 #define	AcmHw_VoqStatus		BIT6
-	AcmFwCtrl		= 0x172,
+    AcmFwCtrl		= 0x172,
 #define	AcmFw_BeqStatus		BIT0
 #define	AcmFw_ViqStatus		BIT1
 #define	AcmFw_VoqStatus		BIT2
-	VOAdmTime		= 0x174,
-	VIAdmTime		= 0x178,
-	BEAdmTime		= 0x17C,
-	RQPN1			= 0x180,
-	RQPN2			= 0x184,
-	RQPN3			= 0x188,
-	QPRR			= 0x1E0,
-	QPNR			= 0x1F0,
-	BQDA			= 0x200,
-	HQDA			= 0x204,
-	CQDA			= 0x208,
-	MQDA			= 0x20C,
-	HCCAQDA			= 0x210,
-	VOQDA			= 0x214,
-	VIQDA			= 0x218,
-	BEQDA			= 0x21C,
-	BKQDA			= 0x220,
-	RCQDA			= 0x224,
-	RDQDA			= 0x228,
+    VOAdmTime		= 0x174,
+    VIAdmTime		= 0x178,
+    BEAdmTime		= 0x17C,
+    RQPN1			= 0x180,
+    RQPN2			= 0x184,
+    RQPN3			= 0x188,
+    QPRR			= 0x1E0,
+    QPNR			= 0x1F0,
+    BQDA			= 0x200,
+    HQDA			= 0x204,
+    CQDA			= 0x208,
+    MQDA			= 0x20C,
+    HCCAQDA			= 0x210,
+    VOQDA			= 0x214,
+    VIQDA			= 0x218,
+    BEQDA			= 0x21C,
+    BKQDA			= 0x220,
+    RCQDA			= 0x224,
+    RDQDA			= 0x228,
 
-	MAR0			= 0x240,
-	MAR4			= 0x244,
+    MAR0			= 0x240,
+    MAR4			= 0x244,
 
-	CCX_PERIOD		= 0x250,
-	CLM_RESULT		= 0x251,
-	NHM_PERIOD		= 0x252,
+    CCX_PERIOD		= 0x250,
+    CLM_RESULT		= 0x251,
+    NHM_PERIOD		= 0x252,
 
-	NHM_THRESHOLD0		= 0x253,
-	NHM_THRESHOLD1		= 0x254,
-	NHM_THRESHOLD2		= 0x255,
-	NHM_THRESHOLD3		= 0x256,
-	NHM_THRESHOLD4		= 0x257,
-	NHM_THRESHOLD5		= 0x258,
-	NHM_THRESHOLD6		= 0x259,
+    NHM_THRESHOLD0		= 0x253,
+    NHM_THRESHOLD1		= 0x254,
+    NHM_THRESHOLD2		= 0x255,
+    NHM_THRESHOLD3		= 0x256,
+    NHM_THRESHOLD4		= 0x257,
+    NHM_THRESHOLD5		= 0x258,
+    NHM_THRESHOLD6		= 0x259,
 
-	MCTRL			= 0x25A,
+    MCTRL			= 0x25A,
 
-	NHM_RPI_COUNTER0	= 0x264,
-	NHM_RPI_COUNTER1	= 0x265,
-	NHM_RPI_COUNTER2	= 0x266,
-	NHM_RPI_COUNTER3	= 0x267,
-	NHM_RPI_COUNTER4	= 0x268,
-	NHM_RPI_COUNTER5	= 0x269,
-	NHM_RPI_COUNTER6	= 0x26A,
-	NHM_RPI_COUNTER7	= 0x26B,
-	WFCRC0		  = 0x2f0,
-	WFCRC1		  = 0x2f4,
-	WFCRC2		  = 0x2f8,
+    NHM_RPI_COUNTER0	= 0x264,
+    NHM_RPI_COUNTER1	= 0x265,
+    NHM_RPI_COUNTER2	= 0x266,
+    NHM_RPI_COUNTER3	= 0x267,
+    NHM_RPI_COUNTER4	= 0x268,
+    NHM_RPI_COUNTER5	= 0x269,
+    NHM_RPI_COUNTER6	= 0x26A,
+    NHM_RPI_COUNTER7	= 0x26B,
+    WFCRC0		  = 0x2f0,
+    WFCRC1		  = 0x2f4,
+    WFCRC2		  = 0x2f8,
 
-	BW_OPMODE		= 0x300,
+    BW_OPMODE		= 0x300,
 #define	BW_OPMODE_11J			BIT0
 #define	BW_OPMODE_5G			BIT1
 #define	BW_OPMODE_20MHZ			BIT2
-	IC_VERRSION		= 0x301,
-	MSR			= 0x303,
+    IC_VERRSION		= 0x301,
+    MSR			= 0x303,
 #define MSR_LINK_MASK      ((1<<0)|(1<<1))
 #define MSR_LINK_MANAGED   2
 #define MSR_LINK_NONE      0
@@ -361,11 +361,11 @@ enum _RTL8192Pci_HW {
 #define	MSR_INFRA					0x02
 #define	MSR_AP						0x03
 
-	RETRY_LIMIT		= 0x304,
+    RETRY_LIMIT		= 0x304,
 #define RETRY_LIMIT_SHORT_SHIFT 8
 #define RETRY_LIMIT_LONG_SHIFT 0
-	TSFR			= 0x308,
-	RRSR			= 0x310,
+    TSFR			= 0x308,
+    RRSR			= 0x310,
 #define RRSR_RSC_OFFSET				21
 #define RRSR_SHORT_OFFSET			23
 #define RRSR_RSC_DUPLICATE			0x600000
@@ -393,8 +393,8 @@ enum _RTL8192Pci_HW {
 #define RRSR_MCS6				BIT18
 #define RRSR_MCS7				BIT19
 #define BRSR_AckShortPmb			BIT23
-	UFWP			= 0x318,
-	RATR0			= 0x320,
+    UFWP			= 0x318,
+    RATR0			= 0x320,
 #define	RATR_1M			0x00000001
 #define	RATR_2M			0x00000002
 #define	RATR_55M		0x00000004
@@ -434,10 +434,10 @@ enum _RTL8192Pci_HW {
 				RATR_MCS14|RATR_MCS15)
 
 
-	DRIVER_RSSI		= 0x32c,
-	MCS_TXAGC		= 0x340,
-	CCK_TXAGC		= 0x348,
-	MacBlkCtrl		= 0x403,
+    DRIVER_RSSI		= 0x32c,
+    MCS_TXAGC		= 0x340,
+    CCK_TXAGC		= 0x348,
+    MacBlkCtrl		= 0x403,
 
 }
 ;

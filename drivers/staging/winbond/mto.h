@@ -17,61 +17,61 @@ struct wbsoft_priv;
 
 /* Defines the parameters used in the MAC Throughput Optimization algorithm */
 struct wb35_mto_params {
-	u32	TxFlowCount; /* to judge what kind the tx flow(sparse or busy) is */
+    u32	TxFlowCount; /* to judge what kind the tx flow(sparse or busy) is */
 
-	/* --------- DTO threshold parameters ------------- */
-	u16	DTO_PeriodicCheckCycle;
-	u16	DTO_RssiThForAntDiv;
+    /* --------- DTO threshold parameters ------------- */
+    u16	DTO_PeriodicCheckCycle;
+    u16	DTO_RssiThForAntDiv;
 
-	u16	DTO_TxCountThForCalcNewRate;
-	u16	DTO_TxRateIncTh;
+    u16	DTO_TxCountThForCalcNewRate;
+    u16	DTO_TxRateIncTh;
 
-	u16	DTO_TxRateDecTh;
-	u16	DTO_TxRateEqTh;
+    u16	DTO_TxRateDecTh;
+    u16	DTO_TxRateEqTh;
 
-	u16	DTO_TxRateBackOff;
-	u16	DTO_TxRetryRateReduce;
+    u16	DTO_TxRateBackOff;
+    u16	DTO_TxRetryRateReduce;
 
-	u16	DTO_TxPowerIndex;		/* 0 ~ 31 */
-	u16	reserved_1;
-	/* ------------------------------------------------ */
+    u16	DTO_TxPowerIndex;		/* 0 ~ 31 */
+    u16	reserved_1;
+    /* ------------------------------------------------ */
 
-	u8	PowerChangeEnable;
-	u8	AntDiversityEnable;
-	u8	CCA_Mode;
-	u8	CCA_Mode_Setup;
-	u8	Preamble_Type;
-	u8	PreambleChangeEnable;
+    u8	PowerChangeEnable;
+    u8	AntDiversityEnable;
+    u8	CCA_Mode;
+    u8	CCA_Mode_Setup;
+    u8	Preamble_Type;
+    u8	PreambleChangeEnable;
 
-	u8	DataRateLevel;
-	u8	DataRateChangeEnable;
-	u8	FragThresholdLevel;
-	u8	FragThresholdChangeEnable;
+    u8	DataRateLevel;
+    u8	DataRateChangeEnable;
+    u8	FragThresholdLevel;
+    u8	FragThresholdChangeEnable;
 
-	u16	RTSThreshold;
-	u16	RTSThreshold_Setup;
+    u16	RTSThreshold;
+    u16	RTSThreshold_Setup;
 
-	u32	AvgIdleSlot;
-	u32	Pr_Interf;
-	u32	AvgGapBtwnInterf;
+    u32	AvgIdleSlot;
+    u32	Pr_Interf;
+    u32	AvgGapBtwnInterf;
 
-	u8	RTSChangeEnable;
-	u8	Ant_sel;
-	u8	aging_timeout;
-	u8	reserved_2;
+    u8	RTSChangeEnable;
+    u8	Ant_sel;
+    u8	aging_timeout;
+    u8	reserved_2;
 
-	u32	Cnt_Ant[2];
-	u32	SQ_Ant[2];
+    u32	Cnt_Ant[2];
+    u32	SQ_Ant[2];
 
-	u8	FallbackRateLevel;
-	u8	OfdmRateLevel;
+    u8	FallbackRateLevel;
+    u8	OfdmRateLevel;
 
-	u8	RatePolicy;
-	u8	reserved_3[3];
+    u8	RatePolicy;
+    u8	reserved_3[3];
 
-	/* For RSSI turning */
-	s32	RSSI_high;
-	s32	RSSI_low;
+    /* For RSSI turning */
+    s32	RSSI_high;
+    s32	RSSI_low;
 };
 
 

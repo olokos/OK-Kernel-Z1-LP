@@ -43,18 +43,17 @@ extern unsigned long __start_gate_section[];
 		(unsigned long)__ia64_native_end_gate_##name##_patchlist
 
 struct pv_patchdata pv_patchdata __initdata = {
-	ASSIGN(fsyscall),
-	ASSIGN(brl_fsys_bubble_down),
-	ASSIGN(vtop),
-	ASSIGN(mckinley_e9),
+    ASSIGN(fsyscall),
+    ASSIGN(brl_fsys_bubble_down),
+    ASSIGN(vtop),
+    ASSIGN(mckinley_e9),
 
-	.gate_section = (void*)__start_gate_section,
+    .gate_section = (void*)__start_gate_section,
 };
 
 
 unsigned long __init
-paravirt_get_gate_patchlist(enum pv_gate_patchlist type)
-{
+paravirt_get_gate_patchlist(enum pv_gate_patchlist type) {
 
 #define CASE(NAME, name)					\
 	case PV_GATE_START_##NAME:				\
@@ -62,20 +61,19 @@ paravirt_get_gate_patchlist(enum pv_gate_patchlist type)
 	case PV_GATE_END_##NAME:				\
 		return pv_patchdata.end_##name##_patchlist;	\
 
-	switch (type) {
-		CASE(FSYSCALL, fsyscall);
-		CASE(BRL_FSYS_BUBBLE_DOWN, brl_fsys_bubble_down);
-		CASE(VTOP, vtop);
-		CASE(MCKINLEY_E9, mckinley_e9);
-	default:
-		BUG();
-		break;
-	}
-	return 0;
+    switch (type) {
+        CASE(FSYSCALL, fsyscall);
+        CASE(BRL_FSYS_BUBBLE_DOWN, brl_fsys_bubble_down);
+        CASE(VTOP, vtop);
+        CASE(MCKINLEY_E9, mckinley_e9);
+    default:
+        BUG();
+        break;
+    }
+    return 0;
 }
 
 void * __init
-paravirt_get_gate_section(void)
-{
-	return pv_patchdata.gate_section;
+paravirt_get_gate_section(void) {
+    return pv_patchdata.gate_section;
 }

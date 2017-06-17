@@ -11,13 +11,12 @@
 #define SIOCDELIPDDPRT   (SIOCDEVPRIVATE+1)
 #define SIOCFINDIPDDPRT  (SIOCDEVPRIVATE+2)
 
-struct ipddp_route
-{
-        struct net_device *dev;             /* Carrier device */
-        __be32 ip;                       /* IP address */
-        struct atalk_addr at;              /* Gateway appletalk address */
-        int flags;
-        struct ipddp_route *next;
+struct ipddp_route {
+    struct net_device *dev;             /* Carrier device */
+    __be32 ip;                       /* IP address */
+    struct atalk_addr at;              /* Gateway appletalk address */
+    int flags;
+    struct ipddp_route *next;
 };
 
 #define IPDDP_ENCAP	1

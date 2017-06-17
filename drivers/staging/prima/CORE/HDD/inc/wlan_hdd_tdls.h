@@ -63,8 +63,7 @@ should not be more than 2000 */
 #define TDLS_IS_CONNECTED(peer)  \
         ((eTDLS_LINK_CONNECTED == (peer)->link_status) || \
          (eTDLS_LINK_TEARING == (peer)->link_status))
-typedef struct
-{
+typedef struct {
     tANI_U32    tdls;
     tANI_U32    tx_period_t;
     tANI_U32    tx_packet_n;
@@ -77,8 +76,7 @@ typedef struct
     tANI_S32    rssi_teardown_threshold;
 } tdls_config_params_t;
 
-typedef struct
-{
+typedef struct {
     struct wiphy *wiphy;
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
     struct net_device *dev;
@@ -90,23 +88,20 @@ typedef struct
     struct delayed_work tdls_scan_work;
 } tdls_scan_context_t;
 
-typedef enum
-{
+typedef enum {
     eTDLS_SUPPORT_NOT_ENABLED = 0,
     eTDLS_SUPPORT_DISABLED, /* suppress implicit trigger and not respond to the peer */
     eTDLS_SUPPORT_EXPLICIT_TRIGGER_ONLY, /* suppress implicit trigger, but respond to the peer */
     eTDLS_SUPPORT_ENABLED, /* implicit trigger */
 } eTDLSSupportMode;
 
-typedef enum eTDLSCapType
-{
+typedef enum eTDLSCapType {
     eTDLS_CAP_NOT_SUPPORTED = -1,
     eTDLS_CAP_UNKNOWN = 0,
     eTDLS_CAP_SUPPORTED = 1,
 } tTDLSCapType;
 
-typedef enum eTDLSLinkStatus
-{
+typedef enum eTDLSLinkStatus {
     eTDLS_LINK_IDLE = 0,
     eTDLS_LINK_DISCOVERING,
     eTDLS_LINK_DISCOVERED,
@@ -116,8 +111,7 @@ typedef enum eTDLSLinkStatus
 } tTDLSLinkStatus;
 
 
-typedef enum
-{
+typedef enum {
     eTDLS_LINK_SUCCESS,                              /* Success */
     eTDLS_LINK_UNSPECIFIED           = -1,           /* Unspecified reason */
     eTDLS_LINK_NOT_SUPPORTED         = -2,           /* Remote side doesn't support TDLS */
@@ -126,16 +120,14 @@ typedef enum
     eTDLS_LINK_DROPPED_BY_REMOTE     = -5            /* Remote side doesn't want it anymore */
 } tTDLSLinkReason;
 
-typedef struct
-{
+typedef struct {
     int channel;                        /* channel hint, in channel number (NOT frequency ) */
     int global_operating_class;         /* operating class to use */
     int max_latency_ms;                 /* max latency that can be tolerated by apps */
     int min_bandwidth_kbps;             /* bandwidth required by apps, in kilo bits per second */
 } tdls_req_params_t;
 
-typedef enum
-{
+typedef enum {
     WIFI_TDLS_DISABLED,                 /* TDLS is not enabled, or is disabled now */
     WIFI_TDLS_ENABLED,                  /* TDLS is enabled, but not yet tried */
     WIFI_TDLS_TRYING,                   /* Direct link is being attempted (optional) */
@@ -149,32 +141,27 @@ typedef int (*cfg80211_exttdls_callback)(tANI_U8* mac,
         tANI_S32 state,
         tANI_S32 reason,
         void *ctx);
-typedef struct
-{
+typedef struct {
     tANI_U16    period;
     tANI_U16    bytes;
 } tdls_tx_tput_config_t;
 
-typedef struct
-{
+typedef struct {
     tANI_U16    period;
     tANI_U16    tries;
 } tdls_discovery_config_t;
 
-typedef struct
-{
+typedef struct {
     tANI_U16    timeout;
 } tdls_rx_idle_config_t;
 
-typedef struct
-{
+typedef struct {
     tANI_U16    rssi_thres;
 } tdls_rssi_config_t;
 
 struct _hddTdlsPeer_t;
 
-typedef struct
-{
+typedef struct {
     struct list_head peer_list[256];
     hdd_adapter_t   *pAdapter;
 #ifdef TDLS_USE_SEPARATE_DISCOVERY_TIMER
@@ -191,8 +178,7 @@ typedef struct
     v_U32_t            magic;
 } tdlsCtx_t;
 
-typedef struct _hddTdlsPeer_t
-{
+typedef struct _hddTdlsPeer_t {
     struct list_head node;
     tdlsCtx_t   *pHddTdlsCtx;
     tSirMacAddr peerMac;
@@ -223,8 +209,7 @@ typedef struct _hddTdlsPeer_t
     cfg80211_exttdls_callback state_change_notification;
 } hddTdlsPeer_t;
 
-typedef struct
-{
+typedef struct {
     /* Session ID */
     tANI_U8 sessionId;
     /*TDLS peer station id */

@@ -17,7 +17,8 @@
 #define PIO2_REGS_DATA3			0x3
 
 static const int PIO2_REGS_DATA[4] = { PIO2_REGS_DATA0, PIO2_REGS_DATA1,
-					PIO2_REGS_DATA2, PIO2_REGS_DATA3 };
+                                       PIO2_REGS_DATA2, PIO2_REGS_DATA3
+                                     };
 
 #define PIO2_REGS_INT_STAT0		0x8
 #define PIO2_REGS_INT_STAT1		0x9
@@ -25,9 +26,10 @@ static const int PIO2_REGS_DATA[4] = { PIO2_REGS_DATA0, PIO2_REGS_DATA1,
 #define PIO2_REGS_INT_STAT3		0xb
 
 static const int PIO2_REGS_INT_STAT[4] = { PIO2_REGS_INT_STAT0,
-					PIO2_REGS_INT_STAT1,
-					PIO2_REGS_INT_STAT2,
-					PIO2_REGS_INT_STAT3 };
+                                           PIO2_REGS_INT_STAT1,
+                                           PIO2_REGS_INT_STAT2,
+                                           PIO2_REGS_INT_STAT3
+                                         };
 
 #define PIO2_REGS_INT_STAT_CNTR		0xc
 #define PIO2_REGS_INT_MASK0		0x10
@@ -40,13 +42,14 @@ static const int PIO2_REGS_INT_STAT[4] = { PIO2_REGS_INT_STAT0,
 #define PIO2_REGS_INT_MASK7		0x17
 
 static const int PIO2_REGS_INT_MASK[8] = { PIO2_REGS_INT_MASK0,
-					PIO2_REGS_INT_MASK1,
-					PIO2_REGS_INT_MASK2,
-					PIO2_REGS_INT_MASK3,
-					PIO2_REGS_INT_MASK4,
-					PIO2_REGS_INT_MASK5,
-					PIO2_REGS_INT_MASK6,
-					PIO2_REGS_INT_MASK7 };
+                                           PIO2_REGS_INT_MASK1,
+                                           PIO2_REGS_INT_MASK2,
+                                           PIO2_REGS_INT_MASK3,
+                                           PIO2_REGS_INT_MASK4,
+                                           PIO2_REGS_INT_MASK5,
+                                           PIO2_REGS_INT_MASK6,
+                                           PIO2_REGS_INT_MASK7
+                                         };
 
 
 
@@ -67,9 +70,10 @@ static const int PIO2_REGS_INT_MASK[8] = { PIO2_REGS_INT_MASK0,
 /* PIO2_REGS_DATAx (0x0 - 0x3) */
 
 static const int PIO2_CHANNEL_BANK[32] = { 0, 0, 0, 0, 0, 0, 0, 0,
-					1, 1, 1, 1, 1, 1, 1, 1,
-					2, 2, 2, 2, 2, 2, 2, 2,
-					3, 3, 3, 3, 3, 3, 3, 3 };
+                                           1, 1, 1, 1, 1, 1, 1, 1,
+                                           2, 2, 2, 2, 2, 2, 2, 2,
+                                           3, 3, 3, 3, 3, 3, 3, 3
+                                         };
 
 #define PIO2_CHANNEL0_BIT		(1 << 0)
 #define PIO2_CHANNEL1_BIT		(1 << 1)
@@ -105,22 +109,22 @@ static const int PIO2_CHANNEL_BANK[32] = { 0, 0, 0, 0, 0, 0, 0, 0,
 #define PIO2_CHANNEL31_BIT		(1 << 7)
 
 static const int PIO2_CHANNEL_BIT[32] = { PIO2_CHANNEL0_BIT, PIO2_CHANNEL1_BIT,
-					PIO2_CHANNEL2_BIT, PIO2_CHANNEL3_BIT,
-					PIO2_CHANNEL4_BIT, PIO2_CHANNEL5_BIT,
-					PIO2_CHANNEL6_BIT, PIO2_CHANNEL7_BIT,
-					PIO2_CHANNEL8_BIT, PIO2_CHANNEL9_BIT,
-					PIO2_CHANNEL10_BIT, PIO2_CHANNEL11_BIT,
-					PIO2_CHANNEL12_BIT, PIO2_CHANNEL13_BIT,
-					PIO2_CHANNEL14_BIT, PIO2_CHANNEL15_BIT,
-					PIO2_CHANNEL16_BIT, PIO2_CHANNEL17_BIT,
-					PIO2_CHANNEL18_BIT, PIO2_CHANNEL19_BIT,
-					PIO2_CHANNEL20_BIT, PIO2_CHANNEL21_BIT,
-					PIO2_CHANNEL22_BIT, PIO2_CHANNEL23_BIT,
-					PIO2_CHANNEL24_BIT, PIO2_CHANNEL25_BIT,
-					PIO2_CHANNEL26_BIT, PIO2_CHANNEL27_BIT,
-					PIO2_CHANNEL28_BIT, PIO2_CHANNEL29_BIT,
-					PIO2_CHANNEL30_BIT, PIO2_CHANNEL31_BIT
-					};
+                                          PIO2_CHANNEL2_BIT, PIO2_CHANNEL3_BIT,
+                                          PIO2_CHANNEL4_BIT, PIO2_CHANNEL5_BIT,
+                                          PIO2_CHANNEL6_BIT, PIO2_CHANNEL7_BIT,
+                                          PIO2_CHANNEL8_BIT, PIO2_CHANNEL9_BIT,
+                                          PIO2_CHANNEL10_BIT, PIO2_CHANNEL11_BIT,
+                                          PIO2_CHANNEL12_BIT, PIO2_CHANNEL13_BIT,
+                                          PIO2_CHANNEL14_BIT, PIO2_CHANNEL15_BIT,
+                                          PIO2_CHANNEL16_BIT, PIO2_CHANNEL17_BIT,
+                                          PIO2_CHANNEL18_BIT, PIO2_CHANNEL19_BIT,
+                                          PIO2_CHANNEL20_BIT, PIO2_CHANNEL21_BIT,
+                                          PIO2_CHANNEL22_BIT, PIO2_CHANNEL23_BIT,
+                                          PIO2_CHANNEL24_BIT, PIO2_CHANNEL25_BIT,
+                                          PIO2_CHANNEL26_BIT, PIO2_CHANNEL27_BIT,
+                                          PIO2_CHANNEL28_BIT, PIO2_CHANNEL29_BIT,
+                                          PIO2_CHANNEL30_BIT, PIO2_CHANNEL31_BIT
+                                        };
 
 /* PIO2_REGS_INT_STAT_CNTR (0xc) */
 #define PIO2_COUNTER0			(1 << 0)
@@ -131,8 +135,9 @@ static const int PIO2_CHANNEL_BIT[32] = { PIO2_CHANNEL0_BIT, PIO2_CHANNEL1_BIT,
 #define PIO2_COUNTER5			(1 << 5)
 
 static const int PIO2_COUNTER[6] = { PIO2_COUNTER0, PIO2_COUNTER1,
-					PIO2_COUNTER2, PIO2_COUNTER3,
-					PIO2_COUNTER4, PIO2_COUNTER5 };
+                                     PIO2_COUNTER2, PIO2_COUNTER3,
+                                     PIO2_COUNTER4, PIO2_COUNTER5
+                                   };
 
 /* PIO2_REGS_CTRL (0x18) */
 #define PIO2_VME_INT_MASK		0x7
@@ -155,31 +160,35 @@ static const int PIO2_COUNTER[6] = { PIO2_COUNTER0, PIO2_COUNTER1,
 #define PIO2_VME_VECTOR_MASK		0xf0
 
 static const int PIO2_VECTOR_BANK[4] = { PIO2_VME_VECTOR_BANK0,
-					PIO2_VME_VECTOR_BANK1,
-					PIO2_VME_VECTOR_BANK2,
-					PIO2_VME_VECTOR_BANK3 };
+                                         PIO2_VME_VECTOR_BANK1,
+                                         PIO2_VME_VECTOR_BANK2,
+                                         PIO2_VME_VECTOR_BANK3
+                                       };
 
 static const int PIO2_VECTOR_CNTR[6] = { PIO2_VME_VECTOR_CNTR0,
-					PIO2_VME_VECTOR_CNTR1,
-					PIO2_VME_VECTOR_CNTR2,
-					PIO2_VME_VECTOR_CNTR3,
-					PIO2_VME_VECTOR_CNTR4,
-					PIO2_VME_VECTOR_CNTR5 };
+                                         PIO2_VME_VECTOR_CNTR1,
+                                         PIO2_VME_VECTOR_CNTR2,
+                                         PIO2_VME_VECTOR_CNTR3,
+                                         PIO2_VME_VECTOR_CNTR4,
+                                         PIO2_VME_VECTOR_CNTR5
+                                       };
 
 /* PIO2_REGS_CNTRx (0x20 - 0x24 & 0x28 - 0x2c) */
 
 static const int PIO2_CNTR_DATA[6] = { PIO2_REGS_CNTR0, PIO2_REGS_CNTR1,
-					PIO2_REGS_CNTR2, PIO2_REGS_CNTR3,
-					PIO2_REGS_CNTR4, PIO2_REGS_CNTR5 };
+                                       PIO2_REGS_CNTR2, PIO2_REGS_CNTR3,
+                                       PIO2_REGS_CNTR4, PIO2_REGS_CNTR5
+                                     };
 
 /* PIO2_REGS_CTRL_WRDx (0x26 & 0x2e) */
 
 static const int PIO2_CNTR_CTRL[6] = { PIO2_REGS_CTRL_WRD0,
-					PIO2_REGS_CTRL_WRD0,
-					PIO2_REGS_CTRL_WRD0,
-					PIO2_REGS_CTRL_WRD1,
-					PIO2_REGS_CTRL_WRD1,
-					PIO2_REGS_CTRL_WRD1 };
+                                       PIO2_REGS_CTRL_WRD0,
+                                       PIO2_REGS_CTRL_WRD0,
+                                       PIO2_REGS_CTRL_WRD1,
+                                       PIO2_REGS_CTRL_WRD1,
+                                       PIO2_REGS_CTRL_WRD1
+                                     };
 
 #define PIO2_CNTR_SC_DEV0		0
 #define PIO2_CNTR_SC_DEV1		(1 << 6)
@@ -187,8 +196,9 @@ static const int PIO2_CNTR_CTRL[6] = { PIO2_REGS_CTRL_WRD0,
 #define PIO2_CNTR_SC_RDBACK		(3 << 6)
 
 static const int PIO2_CNTR_SC_DEV[6] = { PIO2_CNTR_SC_DEV0, PIO2_CNTR_SC_DEV1,
-					PIO2_CNTR_SC_DEV2, PIO2_CNTR_SC_DEV0,
-					PIO2_CNTR_SC_DEV1, PIO2_CNTR_SC_DEV2 };
+                                         PIO2_CNTR_SC_DEV2, PIO2_CNTR_SC_DEV0,
+                                         PIO2_CNTR_SC_DEV1, PIO2_CNTR_SC_DEV2
+                                       };
 
 #define PIO2_CNTR_RW_LATCH		0
 #define PIO2_CNTR_RW_LSB		(1 << 4)
@@ -211,33 +221,33 @@ enum pio2_int_config { NONE = 0, LOW2HIGH = 1, HIGH2LOW = 2, EITHER = 4 };
 
 /* Bank configuration structure */
 struct pio2_io_bank {
-	enum pio2_bank_config config;
-	u8 value;
-	enum pio2_int_config irq[8];
+    enum pio2_bank_config config;
+    u8 value;
+    enum pio2_int_config irq[8];
 };
 
 /* Counter configuration structure */
 struct pio2_cntr {
-	int mode;
-	int count;
+    int mode;
+    int count;
 };
 
 struct pio2_card {
-	int id;
-	int bus;
-	long base;
-	int irq_vector;
-	int irq_level;
-	char variant[6];
-	int led;
+    int id;
+    int bus;
+    long base;
+    int irq_vector;
+    int irq_level;
+    char variant[6];
+    int led;
 
-	struct vme_dev *vdev;
-	struct vme_resource *window;
+    struct vme_dev *vdev;
+    struct vme_resource *window;
 
-	struct gpio_chip gc;
-	struct pio2_io_bank bank[4];
+    struct gpio_chip gc;
+    struct pio2_io_bank bank[4];
 
-	struct pio2_cntr cntr[6];
+    struct pio2_cntr cntr[6];
 };
 
 int pio2_cntr_reset(struct pio2_card *);

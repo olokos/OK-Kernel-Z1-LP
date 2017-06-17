@@ -40,18 +40,18 @@
  * move all this stuff to it.
  */
 struct prcm_config {
-	unsigned long xtal_speed;	/* crystal rate */
-	unsigned long dpll_speed;	/* dpll: out*xtal*M/(N-1)table_recalc */
-	unsigned long mpu_speed;	/* speed of MPU */
-	unsigned long cm_clksel_mpu;	/* mpu divider */
-	unsigned long cm_clksel_dsp;	/* dsp+iva1 div(2420), iva2.1(2430) */
-	unsigned long cm_clksel_gfx;	/* gfx dividers */
-	unsigned long cm_clksel1_core;	/* major subsystem dividers */
-	unsigned long cm_clksel1_pll;	/* m,n */
-	unsigned long cm_clksel2_pll;	/* dpllx1 or x2 out */
-	unsigned long cm_clksel_mdm;	/* modem dividers 2430 only */
-	unsigned long base_sdrc_rfr;	/* base refresh timing for a set */
-	unsigned short flags;
+    unsigned long xtal_speed;	/* crystal rate */
+    unsigned long dpll_speed;	/* dpll: out*xtal*M/(N-1)table_recalc */
+    unsigned long mpu_speed;	/* speed of MPU */
+    unsigned long cm_clksel_mpu;	/* mpu divider */
+    unsigned long cm_clksel_dsp;	/* dsp+iva1 div(2420), iva2.1(2430) */
+    unsigned long cm_clksel_gfx;	/* gfx dividers */
+    unsigned long cm_clksel1_core;	/* major subsystem dividers */
+    unsigned long cm_clksel1_pll;	/* m,n */
+    unsigned long cm_clksel2_pll;	/* dpllx1 or x2 out */
+    unsigned long cm_clksel_mdm;	/* modem dividers 2430 only */
+    unsigned long base_sdrc_rfr;	/* base refresh timing for a set */
+    unsigned short flags;
 };
 
 

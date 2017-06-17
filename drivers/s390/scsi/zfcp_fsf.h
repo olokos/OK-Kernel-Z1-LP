@@ -191,134 +191,134 @@
 #define ZFCP_CFDC_PAGES 		PFN_UP(ZFCP_CFDC_MAX_SIZE)
 
 struct zfcp_fsf_cfdc {
-	struct scatterlist sg[ZFCP_CFDC_PAGES];
-	u32 command;
-	u32 option;
+    struct scatterlist sg[ZFCP_CFDC_PAGES];
+    u32 command;
+    u32 option;
 };
 
 struct fsf_queue_designator {
-	u8  cssid;
-	u8  chpid;
-	u8  hla;
-	u8  ua;
-	u32 res1;
+    u8  cssid;
+    u8  chpid;
+    u8  hla;
+    u8  ua;
+    u32 res1;
 } __attribute__ ((packed));
 
 struct fsf_bit_error_payload {
-	u32 res1;
-	u32 link_failure_error_count;
-	u32 loss_of_sync_error_count;
-	u32 loss_of_signal_error_count;
-	u32 primitive_sequence_error_count;
-	u32 invalid_transmission_word_error_count;
-	u32 crc_error_count;
-	u32 primitive_sequence_event_timeout_count;
-	u32 elastic_buffer_overrun_error_count;
-	u32 fcal_arbitration_timeout_count;
-	u32 advertised_receive_b2b_credit;
-	u32 current_receive_b2b_credit;
-	u32 advertised_transmit_b2b_credit;
-	u32 current_transmit_b2b_credit;
+    u32 res1;
+    u32 link_failure_error_count;
+    u32 loss_of_sync_error_count;
+    u32 loss_of_signal_error_count;
+    u32 primitive_sequence_error_count;
+    u32 invalid_transmission_word_error_count;
+    u32 crc_error_count;
+    u32 primitive_sequence_event_timeout_count;
+    u32 elastic_buffer_overrun_error_count;
+    u32 fcal_arbitration_timeout_count;
+    u32 advertised_receive_b2b_credit;
+    u32 current_receive_b2b_credit;
+    u32 advertised_transmit_b2b_credit;
+    u32 current_transmit_b2b_credit;
 } __attribute__ ((packed));
 
 struct fsf_link_down_info {
-	u32 error_code;
-	u32 res1;
-	u8 res2[2];
-	u8 primary_status;
-	u8 ioerr_code;
-	u8 action_code;
-	u8 reason_code;
-	u8 explanation_code;
-	u8 vendor_specific_code;
+    u32 error_code;
+    u32 res1;
+    u8 res2[2];
+    u8 primary_status;
+    u8 ioerr_code;
+    u8 action_code;
+    u8 reason_code;
+    u8 explanation_code;
+    u8 vendor_specific_code;
 } __attribute__ ((packed));
 
 struct fsf_status_read_buffer {
-	u32 status_type;
-	u32 status_subtype;
-	u32 length;
-	u32 res1;
-	struct fsf_queue_designator queue_designator;
-	u8 res2;
-	u8 d_id[3];
-	u32 class;
-	u64 fcp_lun;
-	u8  res3[24];
-	union {
-		u8  data[FSF_STATUS_READ_PAYLOAD_SIZE];
-		u32 word[FSF_STATUS_READ_PAYLOAD_SIZE/sizeof(u32)];
-		struct fsf_link_down_info link_down_info;
-		struct fsf_bit_error_payload bit_error;
-	} payload;
+    u32 status_type;
+    u32 status_subtype;
+    u32 length;
+    u32 res1;
+    struct fsf_queue_designator queue_designator;
+    u8 res2;
+    u8 d_id[3];
+    u32 class;
+    u64 fcp_lun;
+    u8  res3[24];
+    union {
+        u8  data[FSF_STATUS_READ_PAYLOAD_SIZE];
+        u32 word[FSF_STATUS_READ_PAYLOAD_SIZE/sizeof(u32)];
+        struct fsf_link_down_info link_down_info;
+        struct fsf_bit_error_payload bit_error;
+    } payload;
 } __attribute__ ((packed));
 
 struct fsf_qual_version_error {
-	u32 fsf_version;
-	u32 res1[3];
+    u32 fsf_version;
+    u32 res1[3];
 } __attribute__ ((packed));
 
 struct fsf_qual_sequence_error {
-	u32 exp_req_seq_no;
-	u32 res1[3];
+    u32 exp_req_seq_no;
+    u32 res1[3];
 } __attribute__ ((packed));
 
 struct fsf_qual_latency_info {
-	u32 channel_lat;
-	u32 fabric_lat;
-	u8 res1[8];
+    u32 channel_lat;
+    u32 fabric_lat;
+    u8 res1[8];
 } __attribute__ ((packed));
 
 union fsf_prot_status_qual {
-	u32 word[FSF_PROT_STATUS_QUAL_SIZE / sizeof(u32)];
-	u64 doubleword[FSF_PROT_STATUS_QUAL_SIZE / sizeof(u64)];
-	struct fsf_qual_version_error   version_error;
-	struct fsf_qual_sequence_error  sequence_error;
-	struct fsf_link_down_info link_down_info;
-	struct fsf_qual_latency_info latency_info;
+    u32 word[FSF_PROT_STATUS_QUAL_SIZE / sizeof(u32)];
+    u64 doubleword[FSF_PROT_STATUS_QUAL_SIZE / sizeof(u64)];
+    struct fsf_qual_version_error   version_error;
+    struct fsf_qual_sequence_error  sequence_error;
+    struct fsf_link_down_info link_down_info;
+    struct fsf_qual_latency_info latency_info;
 } __attribute__ ((packed));
 
 struct fsf_qtcb_prefix {
-	u64 req_id;
-	u32 qtcb_version;
-	u32 ulp_info;
-	u32 qtcb_type;
-	u32 req_seq_no;
-	u32 prot_status;
-	union fsf_prot_status_qual prot_status_qual;
-	u8  res1[20];
+    u64 req_id;
+    u32 qtcb_version;
+    u32 ulp_info;
+    u32 qtcb_type;
+    u32 req_seq_no;
+    u32 prot_status;
+    union fsf_prot_status_qual prot_status_qual;
+    u8  res1[20];
 } __attribute__ ((packed));
 
 struct fsf_statistics_info {
-	u64 input_req;
-	u64 output_req;
-	u64 control_req;
-	u64 input_mb;
-	u64 output_mb;
-	u64 seconds_act;
+    u64 input_req;
+    u64 output_req;
+    u64 control_req;
+    u64 input_mb;
+    u64 output_mb;
+    u64 seconds_act;
 } __attribute__ ((packed));
 
 union fsf_status_qual {
-	u8  byte[FSF_STATUS_QUALIFIER_SIZE];
-	u16 halfword[FSF_STATUS_QUALIFIER_SIZE / sizeof (u16)];
-	u32 word[FSF_STATUS_QUALIFIER_SIZE / sizeof (u32)];
-	u64 doubleword[FSF_STATUS_QUALIFIER_SIZE / sizeof(u64)];
-	struct fsf_queue_designator fsf_queue_designator;
-	struct fsf_link_down_info link_down_info;
+    u8  byte[FSF_STATUS_QUALIFIER_SIZE];
+    u16 halfword[FSF_STATUS_QUALIFIER_SIZE / sizeof (u16)];
+    u32 word[FSF_STATUS_QUALIFIER_SIZE / sizeof (u32)];
+    u64 doubleword[FSF_STATUS_QUALIFIER_SIZE / sizeof(u64)];
+    struct fsf_queue_designator fsf_queue_designator;
+    struct fsf_link_down_info link_down_info;
 } __attribute__ ((packed));
 
 struct fsf_qtcb_header {
-	u64 req_handle;
-	u32 fsf_command;
-	u32 res1;
-	u32 port_handle;
-	u32 lun_handle;
-	u32 res2;
-	u32 fsf_status;
-	union fsf_status_qual fsf_status_qual;
-	u8  res3[28];
-	u16 log_start;
-	u16 log_length;
-	u8  res4[16];
+    u64 req_handle;
+    u32 fsf_command;
+    u32 res1;
+    u32 port_handle;
+    u32 lun_handle;
+    u32 res2;
+    u32 fsf_status;
+    union fsf_status_qual fsf_status_qual;
+    u8  res3[28];
+    u16 log_start;
+    u16 log_length;
+    u8  res4[16];
 } __attribute__ ((packed));
 
 #define FSF_PLOGI_MIN_LEN	112
@@ -327,131 +327,131 @@ struct fsf_qtcb_header {
 #define FSF_FCP_RSP_SIZE	128
 
 struct fsf_qtcb_bottom_io {
-	u32 data_direction;
-	u32 service_class;
-	u8  res1;
-	u8  data_prot_flags;
-	u16 app_tag_value;
-	u32 ref_tag_value;
-	u32 fcp_cmnd_length;
-	u32 data_block_length;
-	u32 prot_data_length;
-	u8  res2[4];
-	u8  fcp_cmnd[FSF_FCP_CMND_SIZE];
-	u8  fcp_rsp[FSF_FCP_RSP_SIZE];
-	u8  res3[64];
+    u32 data_direction;
+    u32 service_class;
+    u8  res1;
+    u8  data_prot_flags;
+    u16 app_tag_value;
+    u32 ref_tag_value;
+    u32 fcp_cmnd_length;
+    u32 data_block_length;
+    u32 prot_data_length;
+    u8  res2[4];
+    u8  fcp_cmnd[FSF_FCP_CMND_SIZE];
+    u8  fcp_rsp[FSF_FCP_RSP_SIZE];
+    u8  res3[64];
 } __attribute__ ((packed));
 
 struct fsf_qtcb_bottom_support {
-	u32 operation_subtype;
-	u8  res1[13];
-	u8 d_id[3];
-	u32 option;
-	u64 fcp_lun;
-	u64 res2;
-	u64 req_handle;
-	u32 service_class;
-	u8  res3[3];
-	u8  timeout;
-        u32 lun_access_info;
-        u8  res4[180];
-	u32 els1_length;
-	u32 els2_length;
-	u32 req_buf_length;
-	u32 resp_buf_length;
-	u8  els[256];
+    u32 operation_subtype;
+    u8  res1[13];
+    u8 d_id[3];
+    u32 option;
+    u64 fcp_lun;
+    u64 res2;
+    u64 req_handle;
+    u32 service_class;
+    u8  res3[3];
+    u8  timeout;
+    u32 lun_access_info;
+    u8  res4[180];
+    u32 els1_length;
+    u32 els2_length;
+    u32 req_buf_length;
+    u32 resp_buf_length;
+    u8  els[256];
 } __attribute__ ((packed));
 
 #define ZFCP_FSF_TIMER_INT_MASK	0x3FFF
 
 struct fsf_qtcb_bottom_config {
-	u32 lic_version;
-	u32 feature_selection;
-	u32 high_qtcb_version;
-	u32 low_qtcb_version;
-	u32 max_qtcb_size;
-	u32 max_data_transfer_size;
-	u32 adapter_features;
-	u32 connection_features;
-	u32 fc_topology;
-	u32 fc_link_speed;
-	u32 adapter_type;
-	u8 res0;
-	u8 peer_d_id[3];
-	u16 status_read_buf_num;
-	u16 timer_interval;
-	u8 res2[9];
-	u8 s_id[3];
-	u8 nport_serv_param[128];
-	u8 res3[8];
-	u32 adapter_ports;
-	u32 hardware_version;
-	u8 serial_number[32];
-	u8 plogi_payload[112];
-	struct fsf_statistics_info stat_info;
-	u8 res4[112];
+    u32 lic_version;
+    u32 feature_selection;
+    u32 high_qtcb_version;
+    u32 low_qtcb_version;
+    u32 max_qtcb_size;
+    u32 max_data_transfer_size;
+    u32 adapter_features;
+    u32 connection_features;
+    u32 fc_topology;
+    u32 fc_link_speed;
+    u32 adapter_type;
+    u8 res0;
+    u8 peer_d_id[3];
+    u16 status_read_buf_num;
+    u16 timer_interval;
+    u8 res2[9];
+    u8 s_id[3];
+    u8 nport_serv_param[128];
+    u8 res3[8];
+    u32 adapter_ports;
+    u32 hardware_version;
+    u8 serial_number[32];
+    u8 plogi_payload[112];
+    struct fsf_statistics_info stat_info;
+    u8 res4[112];
 } __attribute__ ((packed));
 
 struct fsf_qtcb_bottom_port {
-	u64 wwpn;
-	u32 fc_port_id;
-	u32 port_type;
-	u32 port_state;
-	u32 class_of_service;	/* should be 0x00000006 for class 2 and 3 */
-	u8 supported_fc4_types[32]; /* should be 0x00000100 for scsi fcp */
-	u8 active_fc4_types[32];
-	u32 supported_speed;	/* 0x0001 for 1 GBit/s or 0x0002 for 2 GBit/s */
-	u32 maximum_frame_size;	/* fixed value of 2112 */
-	u64 seconds_since_last_reset;
-	u64 tx_frames;
-	u64 tx_words;
-	u64 rx_frames;
-	u64 rx_words;
-	u64 lip;		/* 0 */
-	u64 nos;		/* currently 0 */
-	u64 error_frames;	/* currently 0 */
-	u64 dumped_frames;	/* currently 0 */
-	u64 link_failure;
-	u64 loss_of_sync;
-	u64 loss_of_signal;
-	u64 psp_error_counts;
-	u64 invalid_tx_words;
-	u64 invalid_crcs;
-	u64 input_requests;
-	u64 output_requests;
-	u64 control_requests;
-	u64 input_mb;		/* where 1 MByte == 1.000.000 Bytes */
-	u64 output_mb;		/* where 1 MByte == 1.000.000 Bytes */
-	u8 cp_util;
-	u8 cb_util;
-	u8 a_util;
-	u8 res2[253];
+    u64 wwpn;
+    u32 fc_port_id;
+    u32 port_type;
+    u32 port_state;
+    u32 class_of_service;	/* should be 0x00000006 for class 2 and 3 */
+    u8 supported_fc4_types[32]; /* should be 0x00000100 for scsi fcp */
+    u8 active_fc4_types[32];
+    u32 supported_speed;	/* 0x0001 for 1 GBit/s or 0x0002 for 2 GBit/s */
+    u32 maximum_frame_size;	/* fixed value of 2112 */
+    u64 seconds_since_last_reset;
+    u64 tx_frames;
+    u64 tx_words;
+    u64 rx_frames;
+    u64 rx_words;
+    u64 lip;		/* 0 */
+    u64 nos;		/* currently 0 */
+    u64 error_frames;	/* currently 0 */
+    u64 dumped_frames;	/* currently 0 */
+    u64 link_failure;
+    u64 loss_of_sync;
+    u64 loss_of_signal;
+    u64 psp_error_counts;
+    u64 invalid_tx_words;
+    u64 invalid_crcs;
+    u64 input_requests;
+    u64 output_requests;
+    u64 control_requests;
+    u64 input_mb;		/* where 1 MByte == 1.000.000 Bytes */
+    u64 output_mb;		/* where 1 MByte == 1.000.000 Bytes */
+    u8 cp_util;
+    u8 cb_util;
+    u8 a_util;
+    u8 res2[253];
 } __attribute__ ((packed));
 
 union fsf_qtcb_bottom {
-	struct fsf_qtcb_bottom_io      io;
-	struct fsf_qtcb_bottom_support support;
-	struct fsf_qtcb_bottom_config  config;
-	struct fsf_qtcb_bottom_port port;
+    struct fsf_qtcb_bottom_io      io;
+    struct fsf_qtcb_bottom_support support;
+    struct fsf_qtcb_bottom_config  config;
+    struct fsf_qtcb_bottom_port port;
 };
 
 struct fsf_qtcb {
-	struct fsf_qtcb_prefix prefix;
-	struct fsf_qtcb_header header;
-	union  fsf_qtcb_bottom bottom;
-	u8 log[FSF_QTCB_LOG_SIZE];
+    struct fsf_qtcb_prefix prefix;
+    struct fsf_qtcb_header header;
+    union  fsf_qtcb_bottom bottom;
+    u8 log[FSF_QTCB_LOG_SIZE];
 } __attribute__ ((packed));
 
 struct zfcp_blk_drv_data {
 #define ZFCP_BLK_DRV_DATA_MAGIC			0x1
-	u32 magic;
+    u32 magic;
 #define ZFCP_BLK_LAT_VALID			0x1
 #define ZFCP_BLK_REQ_ERROR			0x2
-	u16 flags;
-	u8 inb_usage;
-	u8 outb_usage;
-	u64 channel_lat;
-	u64 fabric_lat;
+    u16 flags;
+    u8 inb_usage;
+    u8 outb_usage;
+    u64 channel_lat;
+    u64 fabric_lat;
 } __attribute__ ((packed));
 
 /**
@@ -464,12 +464,12 @@ struct zfcp_blk_drv_data {
  * @status: used to pass error status to calling function
  */
 struct zfcp_fsf_ct_els {
-	struct scatterlist *req;
-	struct scatterlist *resp;
-	void (*handler)(void *);
-	void *handler_data;
-	struct zfcp_port *port;
-	int status;
+    struct scatterlist *req;
+    struct scatterlist *resp;
+    void (*handler)(void *);
+    void *handler_data;
+    struct zfcp_port *port;
+    int status;
 };
 
 #endif				/* FSF_H */

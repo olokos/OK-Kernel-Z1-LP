@@ -20,17 +20,17 @@
 
 /* All timings in nanoseconds */
 struct davinci_aemif_timing {
-	u8	wsetup;
-	u8	wstrobe;
-	u8	whold;
+    u8	wsetup;
+    u8	wstrobe;
+    u8	whold;
 
-	u8	rsetup;
-	u8	rstrobe;
-	u8	rhold;
+    u8	rsetup;
+    u8	rstrobe;
+    u8	rhold;
 
-	u8	ta;
+    u8	ta;
 };
 
 int davinci_aemif_setup_timing(struct davinci_aemif_timing *t,
-					void __iomem *base, unsigned cs);
+                               void __iomem *base, unsigned cs);
 #endif

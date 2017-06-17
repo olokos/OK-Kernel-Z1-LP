@@ -122,7 +122,7 @@ extern pgprot_t		pgprot_kernel;
 #define COHERENT_IS_NORMAL 1
 struct file;
 extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-				     unsigned long size, pgprot_t vma_prot);
+                                     unsigned long size, pgprot_t vma_prot);
 #else
 #define pgprot_dmacoherent(prot) \
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_UNCACHED | L_PTE_XN)
@@ -179,9 +179,8 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 #define pmd_none(pmd)		(!pmd_val(pmd))
 #define pmd_present(pmd)	(pmd_val(pmd))
 
-static inline pte_t *pmd_page_vaddr(pmd_t pmd)
-{
-	return __va(pmd_val(pmd) & PHYS_MASK & (s32)PAGE_MASK);
+static inline pte_t *pmd_page_vaddr(pmd_t pmd) {
+    return __va(pmd_val(pmd) & PHYS_MASK & (s32)PAGE_MASK);
 }
 
 #define pmd_page(pmd)		pfn_to_page(__phys_to_pfn(pmd_val(pmd) & PHYS_MASK))
@@ -210,22 +209,20 @@ static inline pte_t *pmd_page_vaddr(pmd_t pmd)
 #define pte_clear(mm,addr,ptep)	set_pte_ext(ptep, __pte(0), 0)
 
 #if __LINUX_ARM_ARCH__ < 6
-static inline void __sync_icache_dcache(pte_t pteval)
-{
+static inline void __sync_icache_dcache(pte_t pteval) {
 }
 #else
 extern void __sync_icache_dcache(pte_t pteval);
 #endif
 
 static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-			      pte_t *ptep, pte_t pteval)
-{
-	if (addr >= TASK_SIZE)
-		set_pte_ext(ptep, pteval, 0);
-	else {
-		__sync_icache_dcache(pteval);
-		set_pte_ext(ptep, pteval, PTE_EXT_NG);
-	}
+                              pte_t *ptep, pte_t pteval) {
+    if (addr >= TASK_SIZE)
+        set_pte_ext(ptep, pteval, 0);
+    else {
+        __sync_icache_dcache(pteval);
+        set_pte_ext(ptep, pteval, PTE_EXT_NG);
+    }
 }
 
 #define pte_none(pte)		(!pte_val(pte))
@@ -252,13 +249,14 @@ PTE_BIT_FUNC(mkyoung,   |= L_PTE_YOUNG);
 PTE_BIT_FUNC(mkexec,   &= ~L_PTE_XN);
 PTE_BIT_FUNC(mknexec,   |= L_PTE_XN);
 
-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
+}
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	const pteval_t mask = L_PTE_XN | L_PTE_RDONLY | L_PTE_USER;
-	pte_val(pte) = (pte_val(pte) & ~mask) | (pgprot_val(newprot) & mask);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    const pteval_t mask = L_PTE_XN | L_PTE_RDONLY | L_PTE_USER;
+    pte_val(pte) = (pte_val(pte) & ~mask) | (pgprot_val(newprot) & mask);
+    return pte;
 }
 
 /*

@@ -11,9 +11,8 @@
 typedef unsigned long cycles_t;
 extern short h8300_timer_count;
 
-static inline cycles_t get_cycles(void)
-{
-	return 0;
+static inline cycles_t get_cycles(void) {
+    return 0;
 }
 
 #endif

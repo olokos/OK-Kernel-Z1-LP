@@ -34,53 +34,52 @@
 
 /* Clocks and BRGs */
 enum qe_clock {
-	QE_CLK_NONE = 0,
-	QE_BRG1,		/* Baud Rate Generator 1 */
-	QE_BRG2,		/* Baud Rate Generator 2 */
-	QE_BRG3,		/* Baud Rate Generator 3 */
-	QE_BRG4,		/* Baud Rate Generator 4 */
-	QE_BRG5,		/* Baud Rate Generator 5 */
-	QE_BRG6,		/* Baud Rate Generator 6 */
-	QE_BRG7,		/* Baud Rate Generator 7 */
-	QE_BRG8,		/* Baud Rate Generator 8 */
-	QE_BRG9,		/* Baud Rate Generator 9 */
-	QE_BRG10,		/* Baud Rate Generator 10 */
-	QE_BRG11,		/* Baud Rate Generator 11 */
-	QE_BRG12,		/* Baud Rate Generator 12 */
-	QE_BRG13,		/* Baud Rate Generator 13 */
-	QE_BRG14,		/* Baud Rate Generator 14 */
-	QE_BRG15,		/* Baud Rate Generator 15 */
-	QE_BRG16,		/* Baud Rate Generator 16 */
-	QE_CLK1,		/* Clock 1 */
-	QE_CLK2,		/* Clock 2 */
-	QE_CLK3,		/* Clock 3 */
-	QE_CLK4,		/* Clock 4 */
-	QE_CLK5,		/* Clock 5 */
-	QE_CLK6,		/* Clock 6 */
-	QE_CLK7,		/* Clock 7 */
-	QE_CLK8,		/* Clock 8 */
-	QE_CLK9,		/* Clock 9 */
-	QE_CLK10,		/* Clock 10 */
-	QE_CLK11,		/* Clock 11 */
-	QE_CLK12,		/* Clock 12 */
-	QE_CLK13,		/* Clock 13 */
-	QE_CLK14,		/* Clock 14 */
-	QE_CLK15,		/* Clock 15 */
-	QE_CLK16,		/* Clock 16 */
-	QE_CLK17,		/* Clock 17 */
-	QE_CLK18,		/* Clock 18 */
-	QE_CLK19,		/* Clock 19 */
-	QE_CLK20,		/* Clock 20 */
-	QE_CLK21,		/* Clock 21 */
-	QE_CLK22,		/* Clock 22 */
-	QE_CLK23,		/* Clock 23 */
-	QE_CLK24,		/* Clock 24 */
-	QE_CLK_DUMMY
+    QE_CLK_NONE = 0,
+    QE_BRG1,		/* Baud Rate Generator 1 */
+    QE_BRG2,		/* Baud Rate Generator 2 */
+    QE_BRG3,		/* Baud Rate Generator 3 */
+    QE_BRG4,		/* Baud Rate Generator 4 */
+    QE_BRG5,		/* Baud Rate Generator 5 */
+    QE_BRG6,		/* Baud Rate Generator 6 */
+    QE_BRG7,		/* Baud Rate Generator 7 */
+    QE_BRG8,		/* Baud Rate Generator 8 */
+    QE_BRG9,		/* Baud Rate Generator 9 */
+    QE_BRG10,		/* Baud Rate Generator 10 */
+    QE_BRG11,		/* Baud Rate Generator 11 */
+    QE_BRG12,		/* Baud Rate Generator 12 */
+    QE_BRG13,		/* Baud Rate Generator 13 */
+    QE_BRG14,		/* Baud Rate Generator 14 */
+    QE_BRG15,		/* Baud Rate Generator 15 */
+    QE_BRG16,		/* Baud Rate Generator 16 */
+    QE_CLK1,		/* Clock 1 */
+    QE_CLK2,		/* Clock 2 */
+    QE_CLK3,		/* Clock 3 */
+    QE_CLK4,		/* Clock 4 */
+    QE_CLK5,		/* Clock 5 */
+    QE_CLK6,		/* Clock 6 */
+    QE_CLK7,		/* Clock 7 */
+    QE_CLK8,		/* Clock 8 */
+    QE_CLK9,		/* Clock 9 */
+    QE_CLK10,		/* Clock 10 */
+    QE_CLK11,		/* Clock 11 */
+    QE_CLK12,		/* Clock 12 */
+    QE_CLK13,		/* Clock 13 */
+    QE_CLK14,		/* Clock 14 */
+    QE_CLK15,		/* Clock 15 */
+    QE_CLK16,		/* Clock 16 */
+    QE_CLK17,		/* Clock 17 */
+    QE_CLK18,		/* Clock 18 */
+    QE_CLK19,		/* Clock 19 */
+    QE_CLK20,		/* Clock 20 */
+    QE_CLK21,		/* Clock 21 */
+    QE_CLK22,		/* Clock 22 */
+    QE_CLK23,		/* Clock 23 */
+    QE_CLK24,		/* Clock 24 */
+    QE_CLK_DUMMY
 };
 
-static inline bool qe_clock_is_brg(enum qe_clock clk)
-{
-	return clk >= QE_BRG1 && clk <= QE_BRG16;
+static inline bool qe_clock_is_brg(enum qe_clock clk) {
+    return clk >= QE_BRG1 && clk <= QE_BRG16;
 }
 
 extern spinlock_t cmxgcr_lock;
@@ -96,34 +95,42 @@ static inline void qe_reset(void) {}
 #define QE_PIO_PINS 32
 
 struct qe_pio_regs {
-	__be32	cpodr;		/* Open drain register */
-	__be32	cpdata;		/* Data register */
-	__be32	cpdir1;		/* Direction register */
-	__be32	cpdir2;		/* Direction register */
-	__be32	cppar1;		/* Pin assignment register */
-	__be32	cppar2;		/* Pin assignment register */
+    __be32	cpodr;		/* Open drain register */
+    __be32	cpdata;		/* Data register */
+    __be32	cpdir1;		/* Direction register */
+    __be32	cpdir2;		/* Direction register */
+    __be32	cppar1;		/* Pin assignment register */
+    __be32	cppar2;		/* Pin assignment register */
 #ifdef CONFIG_PPC_85xx
-	u8	pad[8];
+    u8	pad[8];
 #endif
 };
 
 #define QE_PIO_DIR_IN	2
 #define QE_PIO_DIR_OUT	1
 extern void __par_io_config_pin(struct qe_pio_regs __iomem *par_io, u8 pin,
-				int dir, int open_drain, int assignment,
-				int has_irq);
+                                int dir, int open_drain, int assignment,
+                                int has_irq);
 #ifdef CONFIG_QUICC_ENGINE
 extern int par_io_init(struct device_node *np);
 extern int par_io_of_config(struct device_node *np);
 extern int par_io_config_pin(u8 port, u8 pin, int dir, int open_drain,
-			     int assignment, int has_irq);
+                             int assignment, int has_irq);
 extern int par_io_data_set(u8 port, u8 pin, u8 val);
 #else
-static inline int par_io_init(struct device_node *np) { return -ENOSYS; }
-static inline int par_io_of_config(struct device_node *np) { return -ENOSYS; }
+static inline int par_io_init(struct device_node *np) {
+    return -ENOSYS;
+}
+static inline int par_io_of_config(struct device_node *np) {
+    return -ENOSYS;
+}
 static inline int par_io_config_pin(u8 port, u8 pin, int dir, int open_drain,
-		int assignment, int has_irq) { return -ENOSYS; }
-static inline int par_io_data_set(u8 port, u8 pin, u8 val) { return -ENOSYS; }
+                                    int assignment, int has_irq) {
+    return -ENOSYS;
+}
+static inline int par_io_data_set(u8 port, u8 pin, u8 val) {
+    return -ENOSYS;
+}
 #endif /* CONFIG_QUICC_ENGINE */
 
 /*
@@ -136,9 +143,8 @@ extern void qe_pin_free(struct qe_pin *qe_pin);
 extern void qe_pin_set_gpio(struct qe_pin *qe_pin);
 extern void qe_pin_set_dedicated(struct qe_pin *pin);
 #else
-static inline struct qe_pin *qe_pin_request(struct device_node *np, int index)
-{
-	return ERR_PTR(-ENOSYS);
+static inline struct qe_pin *qe_pin_request(struct device_node *np, int index) {
+    return ERR_PTR(-ENOSYS);
 }
 static inline void qe_pin_free(struct qe_pin *qe_pin) {}
 static inline void qe_pin_set_gpio(struct qe_pin *qe_pin) {}
@@ -149,9 +155,8 @@ static inline void qe_pin_set_dedicated(struct qe_pin *pin) {}
 int qe_issue_cmd(u32 cmd, u32 device, u8 mcn_protocol, u32 cmd_input);
 #else
 static inline int qe_issue_cmd(u32 cmd, u32 device, u8 mcn_protocol,
-			       u32 cmd_input)
-{
-	return -ENOSYS;
+                               u32 cmd_input) {
+    return -ENOSYS;
 }
 #endif /* CONFIG_QUICC_ENGINE */
 
@@ -164,25 +169,24 @@ void qe_put_snum(u8 snum);
 unsigned int qe_get_num_of_risc(void);
 unsigned int qe_get_num_of_snums(void);
 
-static inline int qe_alive_during_sleep(void)
-{
-	/*
-	 * MPC8568E reference manual says:
-	 *
-	 * "...power down sequence waits for all I/O interfaces to become idle.
-	 *  In some applications this may happen eventually without actively
-	 *  shutting down interfaces, but most likely, software will have to
-	 *  take steps to shut down the eTSEC, QUICC Engine Block, and PCI
-	 *  interfaces before issuing the command (either the write to the core
-	 *  MSR[WE] as described above or writing to POWMGTCSR) to put the
-	 *  device into sleep state."
-	 *
-	 * MPC8569E reference manual has a similar paragraph.
-	 */
+static inline int qe_alive_during_sleep(void) {
+    /*
+     * MPC8568E reference manual says:
+     *
+     * "...power down sequence waits for all I/O interfaces to become idle.
+     *  In some applications this may happen eventually without actively
+     *  shutting down interfaces, but most likely, software will have to
+     *  take steps to shut down the eTSEC, QUICC Engine Block, and PCI
+     *  interfaces before issuing the command (either the write to the core
+     *  MSR[WE] as described above or writing to POWMGTCSR) to put the
+     *  device into sleep state."
+     *
+     * MPC8569E reference manual has a similar paragraph.
+     */
 #ifdef CONFIG_PPC_85xx
-	return 0;
+    return 0;
 #else
-	return 1;
+    return 1;
 #endif
 }
 
@@ -200,53 +204,52 @@ static inline int qe_alive_during_sleep(void)
  * fields.
  */
 struct qe_firmware {
-	struct qe_header {
-		__be32 length;  /* Length of the entire structure, in bytes */
-		u8 magic[3];    /* Set to { 'Q', 'E', 'F' } */
-		u8 version;     /* Version of this layout. First ver is '1' */
-	} header;
-	u8 id[62];      /* Null-terminated identifier string */
-	u8 split;	/* 0 = shared I-RAM, 1 = split I-RAM */
-	u8 count;       /* Number of microcode[] structures */
-	struct {
-		__be16 model;   	/* The SOC model  */
-		u8 major;       	/* The SOC revision major */
-		u8 minor;       	/* The SOC revision minor */
-	} __attribute__ ((packed)) soc;
-	u8 padding[4];			/* Reserved, for alignment */
-	__be64 extended_modes;		/* Extended modes */
-	__be32 vtraps[8];		/* Virtual trap addresses */
-	u8 reserved[4];			/* Reserved, for future expansion */
-	struct qe_microcode {
-		u8 id[32];      	/* Null-terminated identifier */
-		__be32 traps[16];       /* Trap addresses, 0 == ignore */
-		__be32 eccr;    	/* The value for the ECCR register */
-		__be32 iram_offset;     /* Offset into I-RAM for the code */
-		__be32 count;   	/* Number of 32-bit words of the code */
-		__be32 code_offset;     /* Offset of the actual microcode */
-		u8 major;       	/* The microcode version major */
-		u8 minor;       	/* The microcode version minor */
-		u8 revision;		/* The microcode version revision */
-		u8 padding;		/* Reserved, for alignment */
-		u8 reserved[4];		/* Reserved, for future expansion */
-	} __attribute__ ((packed)) microcode[1];
-	/* All microcode binaries should be located here */
-	/* CRC32 should be located here, after the microcode binaries */
+    struct qe_header {
+        __be32 length;  /* Length of the entire structure, in bytes */
+        u8 magic[3];    /* Set to { 'Q', 'E', 'F' } */
+        u8 version;     /* Version of this layout. First ver is '1' */
+    } header;
+    u8 id[62];      /* Null-terminated identifier string */
+    u8 split;	/* 0 = shared I-RAM, 1 = split I-RAM */
+    u8 count;       /* Number of microcode[] structures */
+    struct {
+        __be16 model;   	/* The SOC model  */
+        u8 major;       	/* The SOC revision major */
+        u8 minor;       	/* The SOC revision minor */
+    } __attribute__ ((packed)) soc;
+    u8 padding[4];			/* Reserved, for alignment */
+    __be64 extended_modes;		/* Extended modes */
+    __be32 vtraps[8];		/* Virtual trap addresses */
+    u8 reserved[4];			/* Reserved, for future expansion */
+    struct qe_microcode {
+        u8 id[32];      	/* Null-terminated identifier */
+        __be32 traps[16];       /* Trap addresses, 0 == ignore */
+        __be32 eccr;    	/* The value for the ECCR register */
+        __be32 iram_offset;     /* Offset into I-RAM for the code */
+        __be32 count;   	/* Number of 32-bit words of the code */
+        __be32 code_offset;     /* Offset of the actual microcode */
+        u8 major;       	/* The microcode version major */
+        u8 minor;       	/* The microcode version minor */
+        u8 revision;		/* The microcode version revision */
+        u8 padding;		/* Reserved, for alignment */
+        u8 reserved[4];		/* Reserved, for future expansion */
+    } __attribute__ ((packed)) microcode[1];
+    /* All microcode binaries should be located here */
+    /* CRC32 should be located here, after the microcode binaries */
 } __attribute__ ((packed));
 
 struct qe_firmware_info {
-	char id[64];		/* Firmware name */
-	u32 vtraps[8];		/* Virtual trap addresses */
-	u64 extended_modes;	/* Extended modes */
+    char id[64];		/* Firmware name */
+    u32 vtraps[8];		/* Virtual trap addresses */
+    u64 extended_modes;	/* Extended modes */
 };
 
 #ifdef CONFIG_QUICC_ENGINE
 /* Upload a firmware to the QE */
 int qe_upload_firmware(const struct qe_firmware *firmware);
 #else
-static inline int qe_upload_firmware(const struct qe_firmware *firmware)
-{
-	return -ENOSYS;
+static inline int qe_upload_firmware(const struct qe_firmware *firmware) {
+    return -ENOSYS;
 }
 #endif /* CONFIG_QUICC_ENGINE */
 
@@ -258,9 +261,9 @@ int qe_usb_clock_set(enum qe_clock clk, int rate);
 
 /* Buffer descriptors */
 struct qe_bd {
-	__be16 status;
-	__be16 length;
-	__be32 buf;
+    __be16 status;
+    __be16 length;
+    __be32 buf;
 } __attribute__ ((packed));
 
 #define BD_STATUS_MASK	0xffff0000
@@ -285,47 +288,47 @@ struct qe_bd {
 
 /* QE extended filtering Table Lookup Key Size */
 enum qe_fltr_tbl_lookup_key_size {
-	QE_FLTR_TABLE_LOOKUP_KEY_SIZE_8_BYTES
-		= 0x3f,		/* LookupKey parsed by the Generate LookupKey
+    QE_FLTR_TABLE_LOOKUP_KEY_SIZE_8_BYTES
+        = 0x3f,		/* LookupKey parsed by the Generate LookupKey
 				   CMD is truncated to 8 bytes */
-	QE_FLTR_TABLE_LOOKUP_KEY_SIZE_16_BYTES
-		= 0x5f,		/* LookupKey parsed by the Generate LookupKey
+    QE_FLTR_TABLE_LOOKUP_KEY_SIZE_16_BYTES
+        = 0x5f,		/* LookupKey parsed by the Generate LookupKey
 				   CMD is truncated to 16 bytes */
 };
 
 /* QE FLTR extended filtering Largest External Table Lookup Key Size */
 enum qe_fltr_largest_external_tbl_lookup_key_size {
-	QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_NONE
-		= 0x0,/* not used */
-	QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_8_BYTES
-		= QE_FLTR_TABLE_LOOKUP_KEY_SIZE_8_BYTES,	/* 8 bytes */
-	QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_16_BYTES
-		= QE_FLTR_TABLE_LOOKUP_KEY_SIZE_16_BYTES,	/* 16 bytes */
+    QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_NONE
+    = 0x0,/* not used */
+    QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_8_BYTES
+    = QE_FLTR_TABLE_LOOKUP_KEY_SIZE_8_BYTES,	/* 8 bytes */
+    QE_FLTR_LARGEST_EXTERNAL_TABLE_LOOKUP_KEY_SIZE_16_BYTES
+    = QE_FLTR_TABLE_LOOKUP_KEY_SIZE_16_BYTES,	/* 16 bytes */
 };
 
 /* structure representing QE parameter RAM */
 struct qe_timer_tables {
-	u16 tm_base;		/* QE timer table base adr */
-	u16 tm_ptr;		/* QE timer table pointer */
-	u16 r_tmr;		/* QE timer mode register */
-	u16 r_tmv;		/* QE timer valid register */
-	u32 tm_cmd;		/* QE timer cmd register */
-	u32 tm_cnt;		/* QE timer internal cnt */
+    u16 tm_base;		/* QE timer table base adr */
+    u16 tm_ptr;		/* QE timer table pointer */
+    u16 r_tmr;		/* QE timer mode register */
+    u16 r_tmv;		/* QE timer valid register */
+    u32 tm_cmd;		/* QE timer cmd register */
+    u32 tm_cnt;		/* QE timer internal cnt */
 } __attribute__ ((packed));
 
 #define QE_FLTR_TAD_SIZE	8
 
 /* QE extended filtering Termination Action Descriptor (TAD) */
 struct qe_fltr_tad {
-	u8 serialized[QE_FLTR_TAD_SIZE];
+    u8 serialized[QE_FLTR_TAD_SIZE];
 } __attribute__ ((packed));
 
 /* Communication Direction */
 enum comm_dir {
-	COMM_DIR_NONE = 0,
-	COMM_DIR_RX = 1,
-	COMM_DIR_TX = 2,
-	COMM_DIR_RX_AND_TX = 3
+    COMM_DIR_NONE = 0,
+    COMM_DIR_RX = 1,
+    COMM_DIR_TX = 2,
+    COMM_DIR_RX_AND_TX = 3
 };
 
 /* QE CMXUCR Registers.
@@ -520,23 +523,23 @@ enum comm_dir {
 
 /* structure representing UCC SLOW parameter RAM */
 struct ucc_slow_pram {
-	__be16 rbase;		/* RX BD base address */
-	__be16 tbase;		/* TX BD base address */
-	u8 rbmr;		/* RX bus mode register (same as CPM's RFCR) */
-	u8 tbmr;		/* TX bus mode register (same as CPM's TFCR) */
-	__be16 mrblr;		/* Rx buffer length */
-	__be32 rstate;		/* Rx internal state */
-	__be32 rptr;		/* Rx internal data pointer */
-	__be16 rbptr;		/* rb BD Pointer */
-	__be16 rcount;		/* Rx internal byte count */
-	__be32 rtemp;		/* Rx temp */
-	__be32 tstate;		/* Tx internal state */
-	__be32 tptr;		/* Tx internal data pointer */
-	__be16 tbptr;		/* Tx BD pointer */
-	__be16 tcount;		/* Tx byte count */
-	__be32 ttemp;		/* Tx temp */
-	__be32 rcrc;		/* temp receive CRC */
-	__be32 tcrc;		/* temp transmit CRC */
+    __be16 rbase;		/* RX BD base address */
+    __be16 tbase;		/* TX BD base address */
+    u8 rbmr;		/* RX bus mode register (same as CPM's RFCR) */
+    u8 tbmr;		/* TX bus mode register (same as CPM's TFCR) */
+    __be16 mrblr;		/* Rx buffer length */
+    __be32 rstate;		/* Rx internal state */
+    __be32 rptr;		/* Rx internal data pointer */
+    __be16 rbptr;		/* rb BD Pointer */
+    __be16 rcount;		/* Rx internal byte count */
+    __be32 rtemp;		/* Rx temp */
+    __be32 tstate;		/* Tx internal state */
+    __be32 tptr;		/* Tx internal data pointer */
+    __be16 tbptr;		/* Tx BD pointer */
+    __be16 tcount;		/* Tx byte count */
+    __be32 ttemp;		/* Tx temp */
+    __be32 rcrc;		/* temp receive CRC */
+    __be32 tcrc;		/* temp transmit CRC */
 } __attribute__ ((packed));
 
 /* General UCC SLOW Mode Register (GUMRH & GUMRL) */

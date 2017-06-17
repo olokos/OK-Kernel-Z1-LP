@@ -29,25 +29,24 @@ static DEFINE_MUTEX(msm_bus_config_lock);
  * msm_bus_axi_porthalt() - Halt the given axi master port
  * @master_port: AXI Master port to be halted
  */
-int msm_bus_axi_porthalt(int master_port)
-{
-	int ret = 0;
-	int priv_id;
-	struct msm_bus_fabric_device *fabdev;
+int msm_bus_axi_porthalt(int master_port) {
+    int ret = 0;
+    int priv_id;
+    struct msm_bus_fabric_device *fabdev;
 
-	priv_id = msm_bus_board_get_iid(master_port);
-	MSM_BUS_DBG("master_port: %d iid: %d fabid%d\n",
-		master_port, priv_id, GET_FABID(priv_id));
-	fabdev = msm_bus_get_fabric_device(GET_FABID(priv_id));
-	if (IS_ERR_OR_NULL(fabdev)) {
-		MSM_BUS_ERR("Fabric device not found for mport: %d\n",
-			master_port);
-		return -ENODEV;
-	}
-	mutex_lock(&msm_bus_config_lock);
-	ret = fabdev->algo->port_halt(fabdev, priv_id);
-	mutex_unlock(&msm_bus_config_lock);
-	return ret;
+    priv_id = msm_bus_board_get_iid(master_port);
+    MSM_BUS_DBG("master_port: %d iid: %d fabid%d\n",
+                master_port, priv_id, GET_FABID(priv_id));
+    fabdev = msm_bus_get_fabric_device(GET_FABID(priv_id));
+    if (IS_ERR_OR_NULL(fabdev)) {
+        MSM_BUS_ERR("Fabric device not found for mport: %d\n",
+                    master_port);
+        return -ENODEV;
+    }
+    mutex_lock(&msm_bus_config_lock);
+    ret = fabdev->algo->port_halt(fabdev, priv_id);
+    mutex_unlock(&msm_bus_config_lock);
+    return ret;
 }
 EXPORT_SYMBOL(msm_bus_axi_porthalt);
 
@@ -55,24 +54,23 @@ EXPORT_SYMBOL(msm_bus_axi_porthalt);
  * msm_bus_axi_portunhalt() - Unhalt the given axi master port
  * @master_port: AXI Master port to be unhalted
  */
-int msm_bus_axi_portunhalt(int master_port)
-{
-	int ret = 0;
-	int priv_id;
-	struct msm_bus_fabric_device *fabdev;
+int msm_bus_axi_portunhalt(int master_port) {
+    int ret = 0;
+    int priv_id;
+    struct msm_bus_fabric_device *fabdev;
 
-	priv_id = msm_bus_board_get_iid(master_port);
-	MSM_BUS_DBG("master_port: %d iid: %d fabid: %d\n",
-		master_port, priv_id, GET_FABID(priv_id));
-	fabdev = msm_bus_get_fabric_device(GET_FABID(priv_id));
-	if (IS_ERR_OR_NULL(fabdev)) {
-		MSM_BUS_ERR("Fabric device not found for mport: %d\n",
-			master_port);
-		return -ENODEV;
-	}
-	mutex_lock(&msm_bus_config_lock);
-	ret = fabdev->algo->port_unhalt(fabdev, priv_id);
-	mutex_unlock(&msm_bus_config_lock);
-	return ret;
+    priv_id = msm_bus_board_get_iid(master_port);
+    MSM_BUS_DBG("master_port: %d iid: %d fabid: %d\n",
+                master_port, priv_id, GET_FABID(priv_id));
+    fabdev = msm_bus_get_fabric_device(GET_FABID(priv_id));
+    if (IS_ERR_OR_NULL(fabdev)) {
+        MSM_BUS_ERR("Fabric device not found for mport: %d\n",
+                    master_port);
+        return -ENODEV;
+    }
+    mutex_lock(&msm_bus_config_lock);
+    ret = fabdev->algo->port_unhalt(fabdev, priv_id);
+    mutex_unlock(&msm_bus_config_lock);
+    return ret;
 }
 EXPORT_SYMBOL(msm_bus_axi_portunhalt);

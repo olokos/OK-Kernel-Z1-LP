@@ -52,11 +52,11 @@ struct scatterlist;
  *	For capture devices the buffer contains valid data.
  */
 enum isp_video_buffer_state {
-	ISP_BUF_STATE_IDLE,
-	ISP_BUF_STATE_QUEUED,
-	ISP_BUF_STATE_ACTIVE,
-	ISP_BUF_STATE_ERROR,
-	ISP_BUF_STATE_DONE,
+    ISP_BUF_STATE_IDLE,
+    ISP_BUF_STATE_QUEUED,
+    ISP_BUF_STATE_ACTIVE,
+    ISP_BUF_STATE_ERROR,
+    ISP_BUF_STATE_DONE,
 };
 
 /**
@@ -80,31 +80,31 @@ enum isp_video_buffer_state {
  * @wait: Wait queue to signal buffer completion
  */
 struct isp_video_buffer {
-	unsigned long vma_use_count;
-	struct list_head stream;
-	struct isp_video_queue *queue;
-	unsigned int prepared:1;
-	bool skip_cache;
+    unsigned long vma_use_count;
+    struct list_head stream;
+    struct isp_video_queue *queue;
+    unsigned int prepared:1;
+    bool skip_cache;
 
-	/* For kernel buffers. */
-	void *vaddr;
+    /* For kernel buffers. */
+    void *vaddr;
 
-	/* For userspace buffers. */
-	unsigned long vm_flags;
-	unsigned long offset;
-	unsigned int npages;
-	struct page **pages;
-	dma_addr_t paddr;
+    /* For userspace buffers. */
+    unsigned long vm_flags;
+    unsigned long offset;
+    unsigned int npages;
+    struct page **pages;
+    dma_addr_t paddr;
 
-	/* For all buffers except VM_PFNMAP. */
-	unsigned int sglen;
-	struct scatterlist *sglist;
+    /* For all buffers except VM_PFNMAP. */
+    unsigned int sglen;
+    struct scatterlist *sglist;
 
-	/* Touched by the interrupt handler. */
-	struct v4l2_buffer vbuf;
-	struct list_head irqlist;
-	enum isp_video_buffer_state state;
-	wait_queue_head_t wait;
+    /* Touched by the interrupt handler. */
+    struct v4l2_buffer vbuf;
+    struct list_head irqlist;
+    enum isp_video_buffer_state state;
+    wait_queue_head_t wait;
 };
 
 #define to_isp_video_buffer(vb)	container_of(vb, struct isp_video_buffer, vb)
@@ -126,11 +126,11 @@ struct isp_video_buffer {
  *	buffer_prepare call. This operation is optional.
  */
 struct isp_video_queue_operations {
-	void (*queue_prepare)(struct isp_video_queue *queue,
-			      unsigned int *nbuffers, unsigned int *size);
-	int  (*buffer_prepare)(struct isp_video_buffer *buf);
-	void (*buffer_queue)(struct isp_video_buffer *buf);
-	void (*buffer_cleanup)(struct isp_video_buffer *buf);
+    void (*queue_prepare)(struct isp_video_queue *queue,
+                          unsigned int *nbuffers, unsigned int *size);
+    int  (*buffer_prepare)(struct isp_video_buffer *buf);
+    void (*buffer_queue)(struct isp_video_buffer *buf);
+    void (*buffer_cleanup)(struct isp_video_buffer *buf);
 };
 
 /**
@@ -147,41 +147,41 @@ struct isp_video_queue_operations {
  * @queue: List of all queued buffers
  */
 struct isp_video_queue {
-	enum v4l2_buf_type type;
-	const struct isp_video_queue_operations *ops;
-	struct device *dev;
-	unsigned int bufsize;
+    enum v4l2_buf_type type;
+    const struct isp_video_queue_operations *ops;
+    struct device *dev;
+    unsigned int bufsize;
 
-	unsigned int count;
-	struct isp_video_buffer *buffers[ISP_VIDEO_MAX_BUFFERS];
-	struct mutex lock;
-	spinlock_t irqlock;
+    unsigned int count;
+    struct isp_video_buffer *buffers[ISP_VIDEO_MAX_BUFFERS];
+    struct mutex lock;
+    spinlock_t irqlock;
 
-	unsigned int streaming:1;
+    unsigned int streaming:1;
 
-	struct list_head queue;
+    struct list_head queue;
 };
 
 int omap3isp_video_queue_cleanup(struct isp_video_queue *queue);
 int omap3isp_video_queue_init(struct isp_video_queue *queue,
-			      enum v4l2_buf_type type,
-			      const struct isp_video_queue_operations *ops,
-			      struct device *dev, unsigned int bufsize);
+                              enum v4l2_buf_type type,
+                              const struct isp_video_queue_operations *ops,
+                              struct device *dev, unsigned int bufsize);
 
 int omap3isp_video_queue_reqbufs(struct isp_video_queue *queue,
-				 struct v4l2_requestbuffers *rb);
+                                 struct v4l2_requestbuffers *rb);
 int omap3isp_video_queue_querybuf(struct isp_video_queue *queue,
-				  struct v4l2_buffer *vbuf);
+                                  struct v4l2_buffer *vbuf);
 int omap3isp_video_queue_qbuf(struct isp_video_queue *queue,
-			      struct v4l2_buffer *vbuf);
+                              struct v4l2_buffer *vbuf);
 int omap3isp_video_queue_dqbuf(struct isp_video_queue *queue,
-			       struct v4l2_buffer *vbuf, int nonblocking);
+                               struct v4l2_buffer *vbuf, int nonblocking);
 int omap3isp_video_queue_streamon(struct isp_video_queue *queue);
 void omap3isp_video_queue_streamoff(struct isp_video_queue *queue);
 void omap3isp_video_queue_discard_done(struct isp_video_queue *queue);
 int omap3isp_video_queue_mmap(struct isp_video_queue *queue,
-			      struct vm_area_struct *vma);
+                              struct vm_area_struct *vma);
 unsigned int omap3isp_video_queue_poll(struct isp_video_queue *queue,
-				       struct file *file, poll_table *wait);
+                                       struct file *file, poll_table *wait);
 
 #endif /* OMAP3_ISP_QUEUE_H */

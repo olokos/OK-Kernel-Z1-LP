@@ -155,7 +155,7 @@
 
 /* I'd like a Big Mac, small fries, small coke, and SparcLinux please. */
 #define BMAC_XIFCFG	0x0000UL	/* XIF config register                */
-	/* 0x4-->0x204, reserved */
+/* 0x4-->0x204, reserved */
 #define BMAC_TXSWRESET	0x208UL	/* Transmitter software reset         */
 #define BMAC_TXCFG	0x20cUL	/* Transmitter config register        */
 #define BMAC_IGAP1	0x210UL	/* Inter-packet gap 1                 */
@@ -176,7 +176,7 @@
 #define BMAC_LTCTR	0x24cUL	/* Transmit late-collision counter    */
 #define BMAC_RSEED	0x250UL	/* Transmit random number seed        */
 #define BMAC_TXSMACHINE	0x254UL	/* Transmit state machine             */
-	/* 0x258-->0x304, reserved */
+/* 0x258-->0x304, reserved */
 #define BMAC_RXSWRESET	0x308UL	/* Receiver software reset            */
 #define BMAC_RXCFG	0x30cUL	/* Receiver config register           */
 #define BMAC_RXMAX	0x310UL	/* Receive max pkt size               */
@@ -190,7 +190,7 @@
 #define BMAC_RCRCECTR	0x330UL	/* Receive CRC error counter          */
 #define BMAC_RXSMACHINE	0x334UL	/* Receiver state machine             */
 #define BMAC_RXCVALID	0x338UL	/* Receiver code violation            */
-	/* 0x33c, reserved */
+/* 0x33c, reserved */
 #define BMAC_HTABLE3	0x340UL	/* Hash table 3                       */
 #define BMAC_HTABLE2	0x344UL	/* Hash table 2                       */
 #define BMAC_HTABLE1	0x348UL	/* Hash table 1                       */
@@ -305,8 +305,8 @@
 typedef u32 __bitwise__ hme32;
 
 struct happy_meal_rxd {
-	hme32 rx_flags;
-	hme32 rx_addr;
+    hme32 rx_flags;
+    hme32 rx_addr;
 };
 
 #define RXFLAG_OWN         0x80000000 /* 1 = hardware, 0 = software */
@@ -315,8 +315,8 @@ struct happy_meal_rxd {
 #define RXFLAG_CSUM        0x0000ffff /* HW computed checksum       */
 
 struct happy_meal_txd {
-	hme32 tx_flags;
-	hme32 tx_addr;
+    hme32 tx_flags;
+    hme32 tx_addr;
 };
 
 #define TXFLAG_OWN         0x80000000 /* 1 = hardware, 0 = software */
@@ -372,8 +372,8 @@ struct happy_meal_txd {
 #define RX_COPY_THRESHOLD  256
 
 struct hmeal_init_block {
-	struct happy_meal_rxd happy_meal_rxd[RX_RING_MAXSIZE];
-	struct happy_meal_txd happy_meal_txd[TX_RING_MAXSIZE];
+    struct happy_meal_rxd happy_meal_rxd[RX_RING_MAXSIZE];
+    struct happy_meal_txd happy_meal_txd[TX_RING_MAXSIZE];
 };
 
 #define hblock_offset(mem, elem) \
@@ -381,84 +381,84 @@ struct hmeal_init_block {
 
 /* Now software state stuff. */
 enum happy_transceiver {
-	external = 0,
-	internal = 1,
-	none     = 2,
+    external = 0,
+    internal = 1,
+    none     = 2,
 };
 
 /* Timer state engine. */
 enum happy_timer_state {
-	arbwait  = 0,  /* Waiting for auto negotiation to complete.          */
-	lupwait  = 1,  /* Auto-neg complete, awaiting link-up status.        */
-	ltrywait = 2,  /* Forcing try of all modes, from fastest to slowest. */
-	asleep   = 3,  /* Time inactive.                                     */
+    arbwait  = 0,  /* Waiting for auto negotiation to complete.          */
+    lupwait  = 1,  /* Auto-neg complete, awaiting link-up status.        */
+    ltrywait = 2,  /* Forcing try of all modes, from fastest to slowest. */
+    asleep   = 3,  /* Time inactive.                                     */
 };
 
 struct quattro;
 
 /* Happy happy, joy joy! */
 struct happy_meal {
-	void __iomem	*gregs;			/* Happy meal global registers       */
-	struct hmeal_init_block  *happy_block;	/* RX and TX descriptors (CPU addr)  */
+    void __iomem	*gregs;			/* Happy meal global registers       */
+    struct hmeal_init_block  *happy_block;	/* RX and TX descriptors (CPU addr)  */
 
 #if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
-	u32 (*read_desc32)(hme32 *);
-	void (*write_txd)(struct happy_meal_txd *, u32, u32);
-	void (*write_rxd)(struct happy_meal_rxd *, u32, u32);
+    u32 (*read_desc32)(hme32 *);
+    void (*write_txd)(struct happy_meal_txd *, u32, u32);
+    void (*write_rxd)(struct happy_meal_rxd *, u32, u32);
 #endif
 
-	/* This is either an platform_device or a pci_dev. */
-	void			  *happy_dev;
-	struct device		  *dma_dev;
+    /* This is either an platform_device or a pci_dev. */
+    void			  *happy_dev;
+    struct device		  *dma_dev;
 
-	spinlock_t		  happy_lock;
+    spinlock_t		  happy_lock;
 
-	struct sk_buff           *rx_skbs[RX_RING_SIZE];
-	struct sk_buff           *tx_skbs[TX_RING_SIZE];
+    struct sk_buff           *rx_skbs[RX_RING_SIZE];
+    struct sk_buff           *tx_skbs[TX_RING_SIZE];
 
-	int rx_new, tx_new, rx_old, tx_old;
+    int rx_new, tx_new, rx_old, tx_old;
 
-	struct net_device_stats	  net_stats;      /* Statistical counters              */
+    struct net_device_stats	  net_stats;      /* Statistical counters              */
 
 #if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
-	u32 (*read32)(void __iomem *);
-	void (*write32)(void __iomem *, u32);
+    u32 (*read32)(void __iomem *);
+    void (*write32)(void __iomem *, u32);
 #endif
 
-	void __iomem	*etxregs;        /* External transmitter regs        */
-	void __iomem	*erxregs;        /* External receiver regs           */
-	void __iomem	*bigmacregs;     /* BIGMAC core regs		     */
-	void __iomem	*tcvregs;        /* MIF transceiver regs             */
+    void __iomem	*etxregs;        /* External transmitter regs        */
+    void __iomem	*erxregs;        /* External receiver regs           */
+    void __iomem	*bigmacregs;     /* BIGMAC core regs		     */
+    void __iomem	*tcvregs;        /* MIF transceiver regs             */
 
-	dma_addr_t                hblock_dvma;    /* DVMA visible address happy block  */
-	unsigned int              happy_flags;    /* Driver state flags                */
-	enum happy_transceiver    tcvr_type;      /* Kind of transceiver in use        */
-	unsigned int              happy_bursts;   /* Get your mind out of the gutter   */
-	unsigned int              paddr;          /* PHY address for transceiver       */
-	unsigned short            hm_revision;    /* Happy meal revision               */
-	unsigned short            sw_bmcr;        /* SW copy of BMCR                   */
-	unsigned short            sw_bmsr;        /* SW copy of BMSR                   */
-	unsigned short            sw_physid1;     /* SW copy of PHYSID1                */
-	unsigned short            sw_physid2;     /* SW copy of PHYSID2                */
-	unsigned short            sw_advertise;   /* SW copy of ADVERTISE              */
-	unsigned short            sw_lpa;         /* SW copy of LPA                    */
-	unsigned short            sw_expansion;   /* SW copy of EXPANSION              */
-	unsigned short            sw_csconfig;    /* SW copy of CSCONFIG               */
-	unsigned int              auto_speed;     /* Auto-nego link speed              */
-        unsigned int              forced_speed;   /* Force mode link speed             */
-	unsigned int              poll_data;      /* MIF poll data                     */
-	unsigned int              poll_flag;      /* MIF poll flag                     */
-	unsigned int              linkcheck;      /* Have we checked the link yet?     */
-	unsigned int              lnkup;          /* Is the link up as far as we know? */
-	unsigned int              lnkdown;        /* Trying to force the link down?    */
-	unsigned int              lnkcnt;         /* Counter for link-up attempts.     */
-	struct timer_list         happy_timer;    /* To watch the link when coming up. */
-	enum happy_timer_state    timer_state;    /* State of the auto-neg timer.      */
-	unsigned int              timer_ticks;    /* Number of clicks at each state.   */
+    dma_addr_t                hblock_dvma;    /* DVMA visible address happy block  */
+    unsigned int              happy_flags;    /* Driver state flags                */
+    enum happy_transceiver    tcvr_type;      /* Kind of transceiver in use        */
+    unsigned int              happy_bursts;   /* Get your mind out of the gutter   */
+    unsigned int              paddr;          /* PHY address for transceiver       */
+    unsigned short            hm_revision;    /* Happy meal revision               */
+    unsigned short            sw_bmcr;        /* SW copy of BMCR                   */
+    unsigned short            sw_bmsr;        /* SW copy of BMSR                   */
+    unsigned short            sw_physid1;     /* SW copy of PHYSID1                */
+    unsigned short            sw_physid2;     /* SW copy of PHYSID2                */
+    unsigned short            sw_advertise;   /* SW copy of ADVERTISE              */
+    unsigned short            sw_lpa;         /* SW copy of LPA                    */
+    unsigned short            sw_expansion;   /* SW copy of EXPANSION              */
+    unsigned short            sw_csconfig;    /* SW copy of CSCONFIG               */
+    unsigned int              auto_speed;     /* Auto-nego link speed              */
+    unsigned int              forced_speed;   /* Force mode link speed             */
+    unsigned int              poll_data;      /* MIF poll data                     */
+    unsigned int              poll_flag;      /* MIF poll flag                     */
+    unsigned int              linkcheck;      /* Have we checked the link yet?     */
+    unsigned int              lnkup;          /* Is the link up as far as we know? */
+    unsigned int              lnkdown;        /* Trying to force the link down?    */
+    unsigned int              lnkcnt;         /* Counter for link-up attempts.     */
+    struct timer_list         happy_timer;    /* To watch the link when coming up. */
+    enum happy_timer_state    timer_state;    /* State of the auto-neg timer.      */
+    unsigned int              timer_ticks;    /* Number of clicks at each state.   */
 
-	struct net_device	 *dev;		/* Backpointer                       */
-	struct quattro		 *qfe_parent;	/* For Quattro cards                 */
-	int			  qfe_ent;	/* Which instance on quattro         */
+    struct net_device	 *dev;		/* Backpointer                       */
+    struct quattro		 *qfe_parent;	/* For Quattro cards                 */
+    int			  qfe_ent;	/* Which instance on quattro         */
 };
 
 /* Here are the happy flags. */
@@ -481,18 +481,18 @@ struct happy_meal {
 
 /* Support for QFE/Quattro cards. */
 struct quattro {
-	struct net_device	*happy_meals[4];
+    struct net_device	*happy_meals[4];
 
-	/* This is either a sbus_dev or a pci_dev. */
-	void			*quattro_dev;
+    /* This is either a sbus_dev or a pci_dev. */
+    void			*quattro_dev;
 
-	struct quattro		*next;
+    struct quattro		*next;
 
-	/* PROM ranges, if any. */
+    /* PROM ranges, if any. */
 #ifdef CONFIG_SBUS
-	struct linux_prom_ranges  ranges[8];
+    struct linux_prom_ranges  ranges[8];
 #endif
-	int			  nranges;
+    int			  nranges;
 };
 
 /* We use this to acquire receive skb's that we can DMA directly into. */

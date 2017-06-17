@@ -23,49 +23,49 @@ typedef __u16 __bitwise __hc16;
  * both EHCI and UHCI call similar structures a "QH".
  */
 struct ed {
-	/* first fields are hardware-specified */
-	__hc32			hwINFO;      /* endpoint config bitmap */
-	/* info bits defined by hcd */
+    /* first fields are hardware-specified */
+    __hc32			hwINFO;      /* endpoint config bitmap */
+    /* info bits defined by hcd */
 #define ED_DEQUEUE	(1 << 27)
-	/* info bits defined by the hardware */
+    /* info bits defined by the hardware */
 #define ED_ISO		(1 << 15)
 #define ED_SKIP		(1 << 14)
 #define ED_LOWSPEED	(1 << 13)
 #define ED_OUT		(0x01 << 11)
 #define ED_IN		(0x02 << 11)
-	__hc32			hwTailP;	/* tail of TD list */
-	__hc32			hwHeadP;	/* head of TD list (hc r/w) */
+    __hc32			hwTailP;	/* tail of TD list */
+    __hc32			hwHeadP;	/* head of TD list (hc r/w) */
 #define ED_C		(0x02)			/* toggle carry */
 #define ED_H		(0x01)			/* halted */
-	__hc32			hwNextED;	/* next ED in list */
+    __hc32			hwNextED;	/* next ED in list */
 
-	/* rest are purely for the driver's use */
-	dma_addr_t		dma;		/* addr of ED */
-	struct td		*dummy;		/* next TD to activate */
+    /* rest are purely for the driver's use */
+    dma_addr_t		dma;		/* addr of ED */
+    struct td		*dummy;		/* next TD to activate */
 
-	/* host's view of schedule */
-	struct ed		*ed_next;	/* on schedule or rm_list */
-	struct ed		*ed_prev;	/* for non-interrupt EDs */
-	struct list_head	td_list;	/* "shadow list" of our TDs */
+    /* host's view of schedule */
+    struct ed		*ed_next;	/* on schedule or rm_list */
+    struct ed		*ed_prev;	/* for non-interrupt EDs */
+    struct list_head	td_list;	/* "shadow list" of our TDs */
 
-	/* create --> IDLE --> OPER --> ... --> IDLE --> destroy
-	 * usually:  OPER --> UNLINK --> (IDLE | OPER) --> ...
-	 */
-	u8			state;		/* ED_{IDLE,UNLINK,OPER} */
+    /* create --> IDLE --> OPER --> ... --> IDLE --> destroy
+     * usually:  OPER --> UNLINK --> (IDLE | OPER) --> ...
+     */
+    u8			state;		/* ED_{IDLE,UNLINK,OPER} */
 #define ED_IDLE		0x00		/* NOT linked to HC */
 #define ED_UNLINK	0x01		/* being unlinked from hc */
 #define ED_OPER		0x02		/* IS linked to hc */
 
-	u8			type;		/* PIPE_{BULK,...} */
+    u8			type;		/* PIPE_{BULK,...} */
 
-	/* periodic scheduling params (for intr and iso) */
-	u8			branch;
-	u16			interval;
-	u16			load;
-	u16			last_iso;	/* iso only */
+    /* periodic scheduling params (for intr and iso) */
+    u8			branch;
+    u16			interval;
+    u16			load;
+    u16			last_iso;	/* iso only */
 
-	/* HC may see EDs on rm_list until next frame (frame_no == tick) */
-	u16			tick;
+    /* HC may see EDs on rm_list until next frame (frame_no == tick) */
+    u16			tick;
 } __attribute__ ((aligned(16)));
 
 #define ED_MASK	((u32)~0x0f)		/* strip hw status in low addr bits */
@@ -77,22 +77,22 @@ struct ed {
  * and 4.3.2 (iso)
  */
 struct td {
-	/* first fields are hardware-specified */
-	__hc32		hwINFO;		/* transfer info bitmask */
+    /* first fields are hardware-specified */
+    __hc32		hwINFO;		/* transfer info bitmask */
 
-	/* hwINFO bits for both general and iso tds: */
+    /* hwINFO bits for both general and iso tds: */
 #define TD_CC       0xf0000000			/* condition code */
 #define TD_CC_GET(td_p) ((td_p >>28) & 0x0f)
 //#define TD_CC_SET(td_p, cc) (td_p) = ((td_p) & 0x0fffffff) | (((cc) & 0x0f) << 28)
 #define TD_DI       0x00E00000			/* frames before interrupt */
 #define TD_DI_SET(X) (((X) & 0x07)<< 21)
-	/* these two bits are available for definition/use by HCDs in both
-	 * general and iso tds ... others are available for only one type
-	 */
+    /* these two bits are available for definition/use by HCDs in both
+     * general and iso tds ... others are available for only one type
+     */
 #define TD_DONE     0x00020000			/* retired to donelist */
 #define TD_ISO      0x00010000			/* copy of ED_ISO */
 
-	/* hwINFO bits for general tds: */
+    /* hwINFO bits for general tds: */
 #define TD_EC       0x0C000000			/* error count */
 #define TD_T        0x03000000			/* data toggle state */
 #define TD_T_DATA0  0x02000000				/* DATA0 */
@@ -102,32 +102,32 @@ struct td {
 #define TD_DP_SETUP 0x00000000			/* SETUP pid */
 #define TD_DP_IN    0x00100000				/* IN pid */
 #define TD_DP_OUT   0x00080000				/* OUT pid */
-							/* 0x00180000 rsvd */
+    /* 0x00180000 rsvd */
 #define TD_R        0x00040000			/* round: short packets OK? */
 
-	/* (no hwINFO #defines yet for iso tds) */
+    /* (no hwINFO #defines yet for iso tds) */
 
-	__hc32		hwCBP;		/* Current Buffer Pointer (or 0) */
-	__hc32		hwNextTD;	/* Next TD Pointer */
-	__hc32		hwBE;		/* Memory Buffer End Pointer */
+    __hc32		hwCBP;		/* Current Buffer Pointer (or 0) */
+    __hc32		hwNextTD;	/* Next TD Pointer */
+    __hc32		hwBE;		/* Memory Buffer End Pointer */
 
-	/* PSW is only for ISO.  Only 1 PSW entry is used, but on
-	 * big-endian PPC hardware that's the second entry.
-	 */
+    /* PSW is only for ISO.  Only 1 PSW entry is used, but on
+     * big-endian PPC hardware that's the second entry.
+     */
 #define MAXPSW	2
-	__hc16		hwPSW [MAXPSW];
+    __hc16		hwPSW [MAXPSW];
 
-	/* rest are purely for the driver's use */
-	__u8		index;
-	struct ed	*ed;
-	struct td	*td_hash;	/* dma-->td hashtable */
-	struct td	*next_dl_td;
-	struct urb	*urb;
+    /* rest are purely for the driver's use */
+    __u8		index;
+    struct ed	*ed;
+    struct td	*td_hash;	/* dma-->td hashtable */
+    struct td	*next_dl_td;
+    struct urb	*urb;
 
-	dma_addr_t	td_dma;		/* addr of this TD */
-	dma_addr_t	data_dma;	/* addr of data it points to */
+    dma_addr_t	td_dma;		/* addr of this TD */
+    dma_addr_t	data_dma;	/* addr of data it points to */
 
-	struct list_head td_list;	/* "shadow list", TDs on same ED */
+    struct list_head td_list;	/* "shadow list", TDs on same ED */
 } __attribute__ ((aligned(32)));	/* c/b/i need 16; only iso needs 32 */
 
 #define TD_MASK	((u32)~0x1f)		/* strip hw status in low addr bits */
@@ -145,31 +145,31 @@ struct td {
 #define TD_UNEXPECTEDPID   0x07
 #define TD_DATAOVERRUN     0x08
 #define TD_DATAUNDERRUN    0x09
-    /* 0x0A, 0x0B reserved for hardware */
+/* 0x0A, 0x0B reserved for hardware */
 #define TD_BUFFEROVERRUN   0x0C
 #define TD_BUFFERUNDERRUN  0x0D
-    /* 0x0E, 0x0F reserved for HCD */
+/* 0x0E, 0x0F reserved for HCD */
 #define TD_NOTACCESSED     0x0F
 
 
 /* map OHCI TD status codes (CC) to errno values */
 static const int cc_to_error [16] = {
-	/* No  Error  */               0,
-	/* CRC Error  */               -EILSEQ,
-	/* Bit Stuff  */               -EPROTO,
-	/* Data Togg  */               -EILSEQ,
-	/* Stall      */               -EPIPE,
-	/* DevNotResp */               -ETIME,
-	/* PIDCheck   */               -EPROTO,
-	/* UnExpPID   */               -EPROTO,
-	/* DataOver   */               -EOVERFLOW,
-	/* DataUnder  */               -EREMOTEIO,
-	/* (for hw)   */               -EIO,
-	/* (for hw)   */               -EIO,
-	/* BufferOver */               -ECOMM,
-	/* BuffUnder  */               -ENOSR,
-	/* (for HCD)  */               -EALREADY,
-	/* (for HCD)  */               -EALREADY
+    /* No  Error  */               0,
+    /* CRC Error  */               -EILSEQ,
+    /* Bit Stuff  */               -EPROTO,
+    /* Data Togg  */               -EILSEQ,
+    /* Stall      */               -EPIPE,
+    /* DevNotResp */               -ETIME,
+    /* PIDCheck   */               -EPROTO,
+    /* UnExpPID   */               -EPROTO,
+    /* DataOver   */               -EOVERFLOW,
+    /* DataUnder  */               -EREMOTEIO,
+    /* (for hw)   */               -EIO,
+    /* (for hw)   */               -EIO,
+    /* BufferOver */               -ECOMM,
+    /* BuffUnder  */               -ENOSR,
+    /* (for HCD)  */               -EALREADY,
+    /* (for HCD)  */               -EALREADY
 };
 
 
@@ -180,17 +180,17 @@ static const int cc_to_error [16] = {
  */
 struct ohci_hcca {
 #define NUM_INTS 32
-	__hc32	int_table [NUM_INTS];	/* periodic schedule */
+    __hc32	int_table [NUM_INTS];	/* periodic schedule */
 
-	/*
-	 * OHCI defines u16 frame_no, followed by u16 zero pad.
-	 * Since some processors can't do 16 bit bus accesses,
-	 * portable access must be a 32 bits wide.
-	 */
-	__hc32	frame_no;		/* current frame number */
-	__hc32	done_head;		/* info returned for an interrupt */
-	u8	reserved_for_hc [116];
-	u8	what [4];		/* spec only identifies 252 bytes :) */
+    /*
+     * OHCI defines u16 frame_no, followed by u16 zero pad.
+     * Since some processors can't do 16 bit bus accesses,
+     * portable access must be a 32 bits wide.
+     */
+    __hc32	frame_no;		/* current frame number */
+    __hc32	done_head;		/* info returned for an interrupt */
+    u8	reserved_for_hc [116];
+    u8	what [4];		/* spec only identifies 252 bytes :) */
 } __attribute__ ((aligned(256)));
 
 /*
@@ -199,40 +199,40 @@ struct ohci_hcca {
  * Layout is in section 7 (and appendix B) of the spec.
  */
 struct ohci_regs {
-	/* control and status registers (section 7.1) */
-	__hc32	revision;
-	__hc32	control;
-	__hc32	cmdstatus;
-	__hc32	intrstatus;
-	__hc32	intrenable;
-	__hc32	intrdisable;
+    /* control and status registers (section 7.1) */
+    __hc32	revision;
+    __hc32	control;
+    __hc32	cmdstatus;
+    __hc32	intrstatus;
+    __hc32	intrenable;
+    __hc32	intrdisable;
 
-	/* memory pointers (section 7.2) */
-	__hc32	hcca;
-	__hc32	ed_periodcurrent;
-	__hc32	ed_controlhead;
-	__hc32	ed_controlcurrent;
-	__hc32	ed_bulkhead;
-	__hc32	ed_bulkcurrent;
-	__hc32	donehead;
+    /* memory pointers (section 7.2) */
+    __hc32	hcca;
+    __hc32	ed_periodcurrent;
+    __hc32	ed_controlhead;
+    __hc32	ed_controlcurrent;
+    __hc32	ed_bulkhead;
+    __hc32	ed_bulkcurrent;
+    __hc32	donehead;
 
-	/* frame counters (section 7.3) */
-	__hc32	fminterval;
-	__hc32	fmremaining;
-	__hc32	fmnumber;
-	__hc32	periodicstart;
-	__hc32	lsthresh;
+    /* frame counters (section 7.3) */
+    __hc32	fminterval;
+    __hc32	fmremaining;
+    __hc32	fmnumber;
+    __hc32	periodicstart;
+    __hc32	lsthresh;
 
-	/* Root hub ports (section 7.4) */
-	struct	ohci_roothub_regs {
-		__hc32	a;
-		__hc32	b;
-		__hc32	status;
+    /* Root hub ports (section 7.4) */
+    struct	ohci_roothub_regs {
+        __hc32	a;
+        __hc32	b;
+        __hc32	status;
 #define MAX_ROOT_PORTS	15	/* maximum OHCI root hub ports (RH_A_NDP) */
-		__hc32	portstatus [MAX_ROOT_PORTS];
-	} roothub;
+        __hc32	portstatus [MAX_ROOT_PORTS];
+    } roothub;
 
-	/* and optional "legacy support" registers (appendix B) at 0x0100 */
+    /* and optional "legacy support" registers (appendix B) at 0x0100 */
 
 } __attribute__ ((aligned(32)));
 
@@ -324,11 +324,11 @@ struct ohci_regs {
 
 /* hcd-private per-urb state */
 typedef struct urb_priv {
-	struct ed		*ed;
-	u16			length;		// # tds in this request
-	u16			td_cnt;		// tds already serviced
-	struct list_head	pending;
-	struct td		*td [0];	// all TDs in this request
+    struct ed		*ed;
+    u16			length;		// # tds in this request
+    u16			td_cnt;		// tds already serviced
+    struct list_head	pending;
+    struct td		*td [0];	// all TDs in this request
 
 } urb_priv_t;
 
@@ -345,60 +345,60 @@ typedef struct urb_priv {
  */
 
 enum ohci_rh_state {
-	OHCI_RH_HALTED,
-	OHCI_RH_SUSPENDED,
-	OHCI_RH_RUNNING
+    OHCI_RH_HALTED,
+    OHCI_RH_SUSPENDED,
+    OHCI_RH_RUNNING
 };
 
 struct ohci_hcd {
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	/*
-	 * I/O memory used to communicate with the HC (dma-consistent)
-	 */
-	struct ohci_regs __iomem *regs;
+    /*
+     * I/O memory used to communicate with the HC (dma-consistent)
+     */
+    struct ohci_regs __iomem *regs;
 
-	/*
-	 * main memory used to communicate with the HC (dma-consistent).
-	 * hcd adds to schedule for a live hc any time, but removals finish
-	 * only at the start of the next frame.
-	 */
-	struct ohci_hcca	*hcca;
-	dma_addr_t		hcca_dma;
+    /*
+     * main memory used to communicate with the HC (dma-consistent).
+     * hcd adds to schedule for a live hc any time, but removals finish
+     * only at the start of the next frame.
+     */
+    struct ohci_hcca	*hcca;
+    dma_addr_t		hcca_dma;
 
-	struct ed		*ed_rm_list;		/* to be removed */
+    struct ed		*ed_rm_list;		/* to be removed */
 
-	struct ed		*ed_bulktail;		/* last in bulk list */
-	struct ed		*ed_controltail;	/* last in ctrl list */
-	struct ed		*periodic [NUM_INTS];	/* shadow int_table */
+    struct ed		*ed_bulktail;		/* last in bulk list */
+    struct ed		*ed_controltail;	/* last in ctrl list */
+    struct ed		*periodic [NUM_INTS];	/* shadow int_table */
 
-	/*
-	 * OTG controllers and transceivers need software interaction;
-	 * other external transceivers should be software-transparent
-	 */
-	struct usb_phy	*transceiver;
-	void (*start_hnp)(struct ohci_hcd *ohci);
+    /*
+     * OTG controllers and transceivers need software interaction;
+     * other external transceivers should be software-transparent
+     */
+    struct usb_phy	*transceiver;
+    void (*start_hnp)(struct ohci_hcd *ohci);
 
-	/*
-	 * memory management for queue data structures
-	 */
-	struct dma_pool		*td_cache;
-	struct dma_pool		*ed_cache;
-	struct td		*td_hash [TD_HASH_SIZE];
-	struct list_head	pending;
+    /*
+     * memory management for queue data structures
+     */
+    struct dma_pool		*td_cache;
+    struct dma_pool		*ed_cache;
+    struct td		*td_hash [TD_HASH_SIZE];
+    struct list_head	pending;
 
-	/*
-	 * driver state
-	 */
-	enum ohci_rh_state	rh_state;
-	int			num_ports;
-	int			load [NUM_INTS];
-	u32			hc_control;	/* copy of hc control reg */
-	unsigned long		next_statechange;	/* suspend/resume */
-	u32			fminterval;		/* saved register */
-	unsigned		autostop:1;	/* rh auto stopping/stopped */
+    /*
+     * driver state
+     */
+    enum ohci_rh_state	rh_state;
+    int			num_ports;
+    int			load [NUM_INTS];
+    u32			hc_control;	/* copy of hc control reg */
+    unsigned long		next_statechange;	/* suspend/resume */
+    u32			fminterval;		/* saved register */
+    unsigned		autostop:1;	/* rh auto stopping/stopped */
 
-	unsigned long		flags;		/* for HC bugs */
+    unsigned long		flags;		/* for HC bugs */
 #define	OHCI_QUIRK_AMD756	0x01			/* erratum #4 */
 #define	OHCI_QUIRK_SUPERIO	0x02			/* natsemi */
 #define	OHCI_QUIRK_INITRESET	0x04			/* SiS, OPTi, ... */
@@ -410,68 +410,58 @@ struct ohci_hcd {
 #define	OHCI_QUIRK_HUB_POWER	0x100			/* distrust firmware power/oc setup */
 #define	OHCI_QUIRK_AMD_PLL	0x200			/* AMD PLL quirk*/
 #define	OHCI_QUIRK_AMD_PREFETCH	0x400			/* pre-fetch for ISO transfer */
-	// there are also chip quirks/bugs in init logic
+    // there are also chip quirks/bugs in init logic
 
-	struct work_struct	nec_work;	/* Worker for NEC quirk */
+    struct work_struct	nec_work;	/* Worker for NEC quirk */
 
-	/* Needed for ZF Micro quirk */
-	struct timer_list	unlink_watchdog;
-	unsigned		eds_scheduled;
-	struct ed		*ed_to_check;
-	unsigned		zf_delay;
+    /* Needed for ZF Micro quirk */
+    struct timer_list	unlink_watchdog;
+    unsigned		eds_scheduled;
+    struct ed		*ed_to_check;
+    unsigned		zf_delay;
 
 #ifdef DEBUG
-	struct dentry		*debug_dir;
-	struct dentry		*debug_async;
-	struct dentry		*debug_periodic;
-	struct dentry		*debug_registers;
+    struct dentry		*debug_dir;
+    struct dentry		*debug_async;
+    struct dentry		*debug_periodic;
+    struct dentry		*debug_registers;
 #endif
 };
 
 #ifdef CONFIG_PCI
-static inline int quirk_nec(struct ohci_hcd *ohci)
-{
-	return ohci->flags & OHCI_QUIRK_NEC;
+static inline int quirk_nec(struct ohci_hcd *ohci) {
+    return ohci->flags & OHCI_QUIRK_NEC;
 }
-static inline int quirk_zfmicro(struct ohci_hcd *ohci)
-{
-	return ohci->flags & OHCI_QUIRK_ZFMICRO;
+static inline int quirk_zfmicro(struct ohci_hcd *ohci) {
+    return ohci->flags & OHCI_QUIRK_ZFMICRO;
 }
-static inline int quirk_amdiso(struct ohci_hcd *ohci)
-{
-	return ohci->flags & OHCI_QUIRK_AMD_PLL;
+static inline int quirk_amdiso(struct ohci_hcd *ohci) {
+    return ohci->flags & OHCI_QUIRK_AMD_PLL;
 }
-static inline int quirk_amdprefetch(struct ohci_hcd *ohci)
-{
-	return ohci->flags & OHCI_QUIRK_AMD_PREFETCH;
+static inline int quirk_amdprefetch(struct ohci_hcd *ohci) {
+    return ohci->flags & OHCI_QUIRK_AMD_PREFETCH;
 }
 #else
-static inline int quirk_nec(struct ohci_hcd *ohci)
-{
-	return 0;
+static inline int quirk_nec(struct ohci_hcd *ohci) {
+    return 0;
 }
-static inline int quirk_zfmicro(struct ohci_hcd *ohci)
-{
-	return 0;
+static inline int quirk_zfmicro(struct ohci_hcd *ohci) {
+    return 0;
 }
-static inline int quirk_amdiso(struct ohci_hcd *ohci)
-{
-	return 0;
+static inline int quirk_amdiso(struct ohci_hcd *ohci) {
+    return 0;
 }
-static inline int quirk_amdprefetch(struct ohci_hcd *ohci)
-{
-	return 0;
+static inline int quirk_amdprefetch(struct ohci_hcd *ohci) {
+    return 0;
 }
 #endif
 
 /* convert between an hcd pointer and the corresponding ohci_hcd */
-static inline struct ohci_hcd *hcd_to_ohci (struct usb_hcd *hcd)
-{
-	return (struct ohci_hcd *) (hcd->hcd_priv);
+static inline struct ohci_hcd *hcd_to_ohci (struct usb_hcd *hcd) {
+    return (struct ohci_hcd *) (hcd->hcd_priv);
 }
-static inline struct usb_hcd *ohci_to_hcd (const struct ohci_hcd *ohci)
-{
-	return container_of ((void *) ohci, struct usb_hcd, hcd_priv);
+static inline struct usb_hcd *ohci_to_hcd (const struct ohci_hcd *ohci) {
+    return container_of ((void *) ohci, struct usb_hcd, hcd_priv);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -558,26 +548,24 @@ static inline struct usb_hcd *ohci_to_hcd (const struct ohci_hcd *ohci)
  *
  */
 static inline unsigned int _ohci_readl (const struct ohci_hcd *ohci,
-					__hc32 __iomem * regs)
-{
+                                        __hc32 __iomem * regs) {
 #ifdef CONFIG_USB_OHCI_BIG_ENDIAN_MMIO
-	return big_endian_mmio(ohci) ?
-		readl_be (regs) :
-		readl (regs);
+    return big_endian_mmio(ohci) ?
+           readl_be (regs) :
+           readl (regs);
 #else
-	return readl (regs);
+    return readl (regs);
 #endif
 }
 
 static inline void _ohci_writel (const struct ohci_hcd *ohci,
-				 const unsigned int val, __hc32 __iomem *regs)
-{
+                                 const unsigned int val, __hc32 __iomem *regs) {
 #ifdef CONFIG_USB_OHCI_BIG_ENDIAN_MMIO
-	big_endian_mmio(ohci) ?
-		writel_be (val, regs) :
-		writel (val, regs);
+    big_endian_mmio(ohci) ?
+    writel_be (val, regs) :
+    writel (val, regs);
 #else
-		writel (val, regs);
+    writel (val, regs);
 #endif
 }
 
@@ -588,61 +576,53 @@ static inline void _ohci_writel (const struct ohci_hcd *ohci,
 /*-------------------------------------------------------------------------*/
 
 /* cpu to ohci */
-static inline __hc16 cpu_to_hc16 (const struct ohci_hcd *ohci, const u16 x)
-{
-	return big_endian_desc(ohci) ?
-		(__force __hc16)cpu_to_be16(x) :
-		(__force __hc16)cpu_to_le16(x);
+static inline __hc16 cpu_to_hc16 (const struct ohci_hcd *ohci, const u16 x) {
+    return big_endian_desc(ohci) ?
+           (__force __hc16)cpu_to_be16(x) :
+           (__force __hc16)cpu_to_le16(x);
 }
 
-static inline __hc16 cpu_to_hc16p (const struct ohci_hcd *ohci, const u16 *x)
-{
-	return big_endian_desc(ohci) ?
-		cpu_to_be16p(x) :
-		cpu_to_le16p(x);
+static inline __hc16 cpu_to_hc16p (const struct ohci_hcd *ohci, const u16 *x) {
+    return big_endian_desc(ohci) ?
+           cpu_to_be16p(x) :
+           cpu_to_le16p(x);
 }
 
-static inline __hc32 cpu_to_hc32 (const struct ohci_hcd *ohci, const u32 x)
-{
-	return big_endian_desc(ohci) ?
-		(__force __hc32)cpu_to_be32(x) :
-		(__force __hc32)cpu_to_le32(x);
+static inline __hc32 cpu_to_hc32 (const struct ohci_hcd *ohci, const u32 x) {
+    return big_endian_desc(ohci) ?
+           (__force __hc32)cpu_to_be32(x) :
+           (__force __hc32)cpu_to_le32(x);
 }
 
-static inline __hc32 cpu_to_hc32p (const struct ohci_hcd *ohci, const u32 *x)
-{
-	return big_endian_desc(ohci) ?
-		cpu_to_be32p(x) :
-		cpu_to_le32p(x);
+static inline __hc32 cpu_to_hc32p (const struct ohci_hcd *ohci, const u32 *x) {
+    return big_endian_desc(ohci) ?
+           cpu_to_be32p(x) :
+           cpu_to_le32p(x);
 }
 
 /* ohci to cpu */
-static inline u16 hc16_to_cpu (const struct ohci_hcd *ohci, const __hc16 x)
-{
-	return big_endian_desc(ohci) ?
-		be16_to_cpu((__force __be16)x) :
-		le16_to_cpu((__force __le16)x);
+static inline u16 hc16_to_cpu (const struct ohci_hcd *ohci, const __hc16 x) {
+    return big_endian_desc(ohci) ?
+           be16_to_cpu((__force __be16)x) :
+           le16_to_cpu((__force __le16)x);
 }
 
-static inline u16 hc16_to_cpup (const struct ohci_hcd *ohci, const __hc16 *x)
-{
-	return big_endian_desc(ohci) ?
-		be16_to_cpup((__force __be16 *)x) :
-		le16_to_cpup((__force __le16 *)x);
+static inline u16 hc16_to_cpup (const struct ohci_hcd *ohci, const __hc16 *x) {
+    return big_endian_desc(ohci) ?
+           be16_to_cpup((__force __be16 *)x) :
+           le16_to_cpup((__force __le16 *)x);
 }
 
-static inline u32 hc32_to_cpu (const struct ohci_hcd *ohci, const __hc32 x)
-{
-	return big_endian_desc(ohci) ?
-		be32_to_cpu((__force __be32)x) :
-		le32_to_cpu((__force __le32)x);
+static inline u32 hc32_to_cpu (const struct ohci_hcd *ohci, const __hc32 x) {
+    return big_endian_desc(ohci) ?
+           be32_to_cpu((__force __be32)x) :
+           le32_to_cpu((__force __le32)x);
 }
 
-static inline u32 hc32_to_cpup (const struct ohci_hcd *ohci, const __hc32 *x)
-{
-	return big_endian_desc(ohci) ?
-		be32_to_cpup((__force __be32 *)x) :
-		le32_to_cpup((__force __le32 *)x);
+static inline u32 hc32_to_cpup (const struct ohci_hcd *ohci, const __hc32 *x) {
+    return big_endian_desc(ohci) ?
+           be32_to_cpup((__force __be32 *)x) :
+           le32_to_cpup((__force __le32 *)x);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -658,30 +638,27 @@ static inline u32 hc32_to_cpup (const struct ohci_hcd *ohci, const __hc32 *x)
 #define big_endian_frame_no_quirk(ohci)	0
 #endif
 
-static inline u16 ohci_frame_no(const struct ohci_hcd *ohci)
-{
-	u32 tmp;
-	if (big_endian_desc(ohci)) {
-		tmp = be32_to_cpup((__force __be32 *)&ohci->hcca->frame_no);
-		if (!big_endian_frame_no_quirk(ohci))
-			tmp >>= 16;
-	} else
-		tmp = le32_to_cpup((__force __le32 *)&ohci->hcca->frame_no);
+static inline u16 ohci_frame_no(const struct ohci_hcd *ohci) {
+    u32 tmp;
+    if (big_endian_desc(ohci)) {
+        tmp = be32_to_cpup((__force __be32 *)&ohci->hcca->frame_no);
+        if (!big_endian_frame_no_quirk(ohci))
+            tmp >>= 16;
+    } else
+        tmp = le32_to_cpup((__force __le32 *)&ohci->hcca->frame_no);
 
-	return (u16)tmp;
+    return (u16)tmp;
 }
 
 static inline __hc16 *ohci_hwPSWp(const struct ohci_hcd *ohci,
-                                 const struct td *td, int index)
-{
-	return (__hc16 *)(big_endian_desc(ohci) ?
-			&td->hwPSW[index ^ 1] : &td->hwPSW[index]);
+                                  const struct td *td, int index) {
+    return (__hc16 *)(big_endian_desc(ohci) ?
+                      &td->hwPSW[index ^ 1] : &td->hwPSW[index]);
 }
 
 static inline u16 ohci_hwPSW(const struct ohci_hcd *ohci,
-                               const struct td *td, int index)
-{
-	return hc16_to_cpup(ohci, ohci_hwPSWp(ohci, td, index));
+                             const struct td *td, int index) {
+    return hc16_to_cpup(ohci, ohci_hwPSWp(ohci, td, index));
 }
 
 /*-------------------------------------------------------------------------*/
@@ -691,15 +668,14 @@ static inline u16 ohci_hwPSW(const struct ohci_hcd *ohci,
 #define	FIT			(1 << 31)
 #define LSTHRESH		0x628		/* lowspeed bit threshold */
 
-static inline void periodic_reinit (struct ohci_hcd *ohci)
-{
-	u32	fi = ohci->fminterval & 0x03fff;
-	u32	fit = ohci_readl(ohci, &ohci->regs->fminterval) & FIT;
+static inline void periodic_reinit (struct ohci_hcd *ohci) {
+    u32	fi = ohci->fminterval & 0x03fff;
+    u32	fit = ohci_readl(ohci, &ohci->regs->fminterval) & FIT;
 
-	ohci_writel (ohci, (fit ^ FIT) | ohci->fminterval,
-						&ohci->regs->fminterval);
-	ohci_writel (ohci, ((9 * fi) / 10) & 0x3fff,
-						&ohci->regs->periodicstart);
+    ohci_writel (ohci, (fit ^ FIT) | ohci->fminterval,
+                 &ohci->regs->fminterval);
+    ohci_writel (ohci, ((9 * fi) / 10) & 0x3fff,
+                 &ohci->regs->periodicstart);
 }
 
 /* AMD-756 (D2 rev) reports corrupt register contents in some cases.
@@ -715,11 +691,15 @@ static inline void periodic_reinit (struct ohci_hcd *ohci)
 			temp = ohci_readl (hc, &hc->regs->roothub.register); \
 	temp; })
 
-static inline u32 roothub_a (struct ohci_hcd *hc)
-	{ return read_roothub (hc, a, 0xfc0fe000); }
-static inline u32 roothub_b (struct ohci_hcd *hc)
-	{ return ohci_readl (hc, &hc->regs->roothub.b); }
-static inline u32 roothub_status (struct ohci_hcd *hc)
-	{ return ohci_readl (hc, &hc->regs->roothub.status); }
-static inline u32 roothub_portstatus (struct ohci_hcd *hc, int i)
-	{ return read_roothub (hc, portstatus [i], 0xffe0fce0); }
+static inline u32 roothub_a (struct ohci_hcd *hc) {
+    return read_roothub (hc, a, 0xfc0fe000);
+}
+static inline u32 roothub_b (struct ohci_hcd *hc) {
+    return ohci_readl (hc, &hc->regs->roothub.b);
+}
+static inline u32 roothub_status (struct ohci_hcd *hc) {
+    return ohci_readl (hc, &hc->regs->roothub.status);
+}
+static inline u32 roothub_portstatus (struct ohci_hcd *hc, int i) {
+    return read_roothub (hc, portstatus [i], 0xffe0fce0);
+}

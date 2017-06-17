@@ -240,34 +240,34 @@ struct usbhs_priv;
  */
 struct usbhs_priv {
 
-	void __iomem *base;
-	unsigned int irq;
-	unsigned long irqflags;
+    void __iomem *base;
+    unsigned int irq;
+    unsigned long irqflags;
 
-	struct renesas_usbhs_platform_callback	pfunc;
-	struct renesas_usbhs_driver_param	dparam;
+    struct renesas_usbhs_platform_callback	pfunc;
+    struct renesas_usbhs_driver_param	dparam;
 
-	struct delayed_work notify_hotplug_work;
-	struct platform_device *pdev;
+    struct delayed_work notify_hotplug_work;
+    struct platform_device *pdev;
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	u32 flags;
+    u32 flags;
 
-	/*
-	 * module control
-	 */
-	struct usbhs_mod_info mod_info;
+    /*
+     * module control
+     */
+    struct usbhs_mod_info mod_info;
 
-	/*
-	 * pipe control
-	 */
-	struct usbhs_pipe_info pipe_info;
+    /*
+     * pipe control
+     */
+    struct usbhs_pipe_info pipe_info;
 
-	/*
-	 * fifo control
-	 */
-	struct usbhs_fifo_info fifo_info;
+    /*
+     * fifo control
+     */
+    struct usbhs_fifo_info fifo_info;
 };
 
 /*
@@ -310,7 +310,7 @@ int usbhs_frame_get_num(struct usbhs_priv *priv);
  * device config
  */
 int usbhs_set_device_config(struct usbhs_priv *priv, int devnum, u16 upphub,
-			   u16 hubport, u16 speed);
+                            u16 hubport, u16 speed);
 
 /*
  * data

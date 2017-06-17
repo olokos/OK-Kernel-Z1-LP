@@ -26,8 +26,8 @@ struct mod_arch_specific {
 };
 
 struct loaded_sections {
-	unsigned int new_vaddr;
-	unsigned int loaded;
+    unsigned int new_vaddr;
+    unsigned int loaded;
 };
 
 #endif /* _ASM_C6X_MODULE_H */

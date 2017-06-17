@@ -95,8 +95,7 @@ extern uint8 WDA_IsWcnssWlanReportedVersionGreaterThanOrEqual(uint8 major, uint8
 /*--------------------------------------------------------------------------
    TID->QueueID mapping
  --------------------------------------------------------------------------*/
-static wpt_uint8 btqmQosTid2QidMapping[] =
-{
+static wpt_uint8 btqmQosTid2QidMapping[] = {
     BTQM_QID0,
     BTQM_QID1,
     BTQM_QID2,
@@ -122,8 +121,7 @@ WDI_Status
 WDI_DP_UtilsInit
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     WDI_RxBdType*  pAmsduRxBdFixMask;
 
     // WQ to be used for filling the TxBD
@@ -169,8 +167,7 @@ WDI_Status
 WDI_DP_UtilsExit
 (
     WDI_ControlBlockType*  pWDICtx
-)
-{
+) {
     return WDI_STATUS_SUCCESS;
 }/*WDI_DP_UtilsExit*/
 
@@ -187,8 +184,7 @@ WDI_SwapBytes
 (
     wpt_uint8 *pBd,
     wpt_uint32 nbSwap
-)
-{
+) {
     wpt_uint32 *pU32;
     wpt_uint32 nU32;
     wpt_uint32 wc;
@@ -196,8 +192,7 @@ WDI_SwapBytes
     nU32 = (((nbSwap) + 3)>>2);
 
     pU32 = (wpt_uint32 *)pBd;
-    for ( wc = 0; wc < nU32; wc++ )
-    {
+    for ( wc = 0; wc < nU32; wc++ ) {
         pU32[ wc ] = WPAL_BE32_TO_CPU( pU32[ wc ] );
     }
 }/*WDI_SwapBytes*/
@@ -217,8 +212,7 @@ WDI_BmuGetQidForQOSTid
 (
     wpt_uint8   ucTid,
     wpt_uint8*  pQid
-)
-{
+) {
     if (ucTid > BTQM_QUEUE_TX_TID_7 )
         return WDI_STATUS_E_FAILURE;
 
@@ -248,8 +242,7 @@ WDI_ComputeTxBdSignature
     wpt_uint8*             pDestMac,
     wpt_uint8              ucTid,
     wpt_uint8              ucUnicastDst
-)
-{
+) {
     wpt_uint16 *pMacU16 = (wpt_uint16 *) pDestMac;
 
     return ((pMacU16[0] ^ pMacU16[1] ^ pMacU16[2])<< WDI_TXBD_SIG_MACADDR_HASH_OFFSET |
@@ -281,8 +274,7 @@ WDI_TxBdFastFwd
     wpt_uint8              ucUnicastDst,
     void*                  pTxBd,
     wpt_uint16             usMpduLength
-)
-{
+) {
     WDI_TxBdType*     pBd      = (WDI_TxBdType*) pTxBd;
     wpt_uint32        uRetval  = 0;
 #ifdef WPT_LITTLE_BYTE_ENDIAN
@@ -293,8 +285,7 @@ WDI_TxBdFastFwd
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     if( pBd->txBdSignature ==
-            WDI_ComputeTxBdSignature(pWDICtx, pDestMac, ucTid, ucUnicastDst))
-    {
+            WDI_ComputeTxBdSignature(pWDICtx, pDestMac, ucTid, ucUnicastDst)) {
 
 #ifdef WPT_LITTLE_BYTE_ENDIAN
         /* When swap to BE format, mpduLength field is at 8th WORD location(16th byte) */
@@ -390,8 +381,7 @@ WDI_FillTxBd
     wpt_uint32             uTimeStamp,
     wpt_uint8              isEapol,
     wpt_uint8*             staIndex
-)
-{
+) {
     wpt_uint8              ucTid        = *pTid;
     WDI_TxBdType*          pBd          = (WDI_TxBdType*) pTxBd;
     WDI_Status             wdiStatus    = WDI_STATUS_SUCCESS;
@@ -452,17 +442,13 @@ WDI_FillTxBd
 
     // Route all trigger enabled frames to FW WQ, for FW to suspend trigger frame generation
     // when no traffic is exists on trigger enabled ACs
-    if(ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK)
-    {
+    if(ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK) {
         pBd->dpuRF = pWDICtx->ucDpuRF;
-    }
-    else
-    {
+    } else {
         pBd->dpuRF = BMUWQ_BTQM_TX_MGMT;
     }
 
-    if (ucTxFlag & WDI_USE_FW_IN_TX_PATH)
-    {
+    if (ucTxFlag & WDI_USE_FW_IN_TX_PATH) {
         WPAL_TRACE( eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_INFO,
                     "iType: %d SubType %d, MAC S: %08x. MAC D: %08x., Tid=%d",
                     ucType, ucSubType,
@@ -488,13 +474,11 @@ WDI_FillTxBd
     ucUnicastDst = !(((wpt_uint8 *)pDestMacAddr)[0] & 0x01);
     *((wpt_uint32 *)pBd + WDI_DPU_FEEDBACK_OFFSET) = 0;
 
-    if(!ucUnicastDst)
-    {
+    if(!ucUnicastDst) {
         pBd->ap    = WDI_ACKPOLICY_ACK_NOTREQUIRED;
     }
 
-    if (ucType == WDI_MAC_DATA_FRAME)
-    {
+    if (ucType == WDI_MAC_DATA_FRAME) {
 
         /* Set common fields for data frames (regardless FT enable/disable)
          *     bd_ssn: Let DPU auto generate seq # if QosData frame. All other
@@ -511,12 +495,9 @@ WDI_FillTxBd
          */
 
         if ((ucSubType & WDI_MAC_DATA_QOS_DATA)&&
-                (ucSubType != WDI_MAC_DATA_QOS_NULL))
-        {
+                (ucSubType != WDI_MAC_DATA_QOS_NULL)) {
             pBd->bd_ssn = WDI_TXBD_BD_SSN_FILL_DPU_QOS;
-        }
-        else
-        {
+        } else {
             pBd->bd_ssn = WDI_TXBD_BD_SSN_FILL_DPU_NON_QOS;
         }
 
@@ -540,42 +521,32 @@ WDI_FillTxBd
         //never use BD rate for BC/MC frames in AP mode.
 
 
-        if (useStaRateForBcastFrames)
-        {
+        if (useStaRateForBcastFrames) {
             pBd->bdRate = WDI_TXBD_BDRATE_DEFAULT;
-        }
-        else
-        {
+        } else {
             pBd->bdRate = (ucUnicastDst)? WDI_TXBD_BDRATE_DEFAULT : WDI_BDRATE_BCDATA_FRAME;
         }
 #ifdef FEATURE_WLAN_TDLS
-        if ( ucTxFlag & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME)
-        {
+        if ( ucTxFlag & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME) {
             pBd->bdRate = WDI_BDRATE_CTRL_FRAME;
         }
 #endif
 
-        if(ucTxFlag & WDI_USE_BD_RATE_MASK)
-        {
+        if(ucTxFlag & WDI_USE_BD_RATE_MASK) {
             pBd->bdRate = WDI_BDRATE_BCDATA_FRAME;
         }
 
         pBd->rmf    = WDI_RMF_DISABLED;
 
         /* sanity: Might already be set by caller, but enforce it here again */
-        if( WDI_MAC_DATA_NULL == (ucSubType & ~WDI_MAC_DATA_QOS_DATA))
-        {
+        if( WDI_MAC_DATA_NULL == (ucSubType & ~WDI_MAC_DATA_QOS_DATA)) {
             ucDisableFrmXtl = 1;
-            if (ucTxFlag & WDI_TXCOMP_REQUESTED_MASK)
-            {
+            if (ucTxFlag & WDI_TXCOMP_REQUESTED_MASK) {
                 /*Send to FW to transmit NULL frames.*/
                 pBd->dpuRF = BMUWQ_FW_TRANSMIT;
-            }
-            else
-            {
+            } else {
 #ifdef LIBRA_WAPI_SUPPORT
-                if (ucTxFlag & WDI_WAPI_STA_MASK)
-                {
+                if (ucTxFlag & WDI_WAPI_STA_MASK) {
                     pBd->dpuRF = BMUWQ_WAPI_DPU_TX;
                     /*set NE bit to 1 for the null/qos null frames*/
                     pBd->dpuNE = WDI_NO_ENCRYPTION_ENABLED;
@@ -585,18 +556,15 @@ WDI_FillTxBd
         }
 #if defined(WLAN_PERF) || defined(FEATURE_WLAN_WAPI) || defined(LIBRA_WAPI_SUPPORT)
         //For not-NULL data frames
-        else
-        {
+        else {
 #if defined(FEATURE_WLAN_WAPI)
             //If caller doesn't want this frame to be encrypted, for example, WAI packets
-            if( (ucTxFlag & WDI_TX_NO_ENCRYPTION_MASK) )
-            {
+            if( (ucTxFlag & WDI_TX_NO_ENCRYPTION_MASK) ) {
                 pBd->dpuNE = WDI_NO_ENCRYPTION_ENABLED;
             }
 #endif //defined(FEATURE_WLAN_WAPI)
 #ifdef LIBRA_WAPI_SUPPORT
-            if (ucTxFlag & WDI_WAPI_STA_MASK)
-            {
+            if (ucTxFlag & WDI_WAPI_STA_MASK) {
                 pBd->dpuRF = BMUWQ_WAPI_DPU_TX;
             }
 #endif //LIBRA_WAPI_SUPPORT
@@ -605,9 +573,7 @@ WDI_FillTxBd
 #endif //defined(WLAN_PERF)
         }
 #endif
-    }
-    else if (ucType == WDI_MAC_MGMT_FRAME)
-    {
+    } else if (ucType == WDI_MAC_MGMT_FRAME) {
 
         /*--------------------------------------------------------------------
          *  Set common fields for mgmt frames
@@ -621,23 +587,16 @@ WDI_FillTxBd
          --------------------------------------------------------------------*/
         /* apply to both ucast/mcast mgmt frames */
         /* Probe requests are sent using BD rate */
-        if( ucSubType ==  WDI_MAC_MGMT_PROBE_REQ )
-        {
+        if( ucSubType ==  WDI_MAC_MGMT_PROBE_REQ ) {
             pBd->bdRate = WDI_BDRATE_BCMGMT_FRAME;
-        }
-        else
-        {
-            if (useStaRateForBcastFrames)
-            {
+        } else {
+            if (useStaRateForBcastFrames) {
                 pBd->bdRate = (ucUnicastDst)? WDI_BDRATE_BCMGMT_FRAME : WDI_TXBD_BDRATE_DEFAULT;
-            }
-            else
-            {
+            } else {
                 pBd->bdRate = WDI_BDRATE_BCMGMT_FRAME;
             }
         }
-        if ( ucTxFlag & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME)
-        {
+        if ( ucTxFlag & WDI_USE_BD_RATE2_FOR_MANAGEMENT_FRAME) {
             pBd->bdRate = WDI_BDRATE_CTRL_FRAME;
         }
 
@@ -646,9 +605,7 @@ WDI_FillTxBd
                 (ucSubType == WDI_MAC_MGMT_DISASSOC))
             ucIsRMF = 1;
         ucDisableFrmXtl = 1;
-    }
-    else
-    {
+    } else {
         // Control Packet
         /* We should never get a control packet, asserting here since something
         is wrong */
@@ -669,8 +626,7 @@ WDI_FillTxBd
 
     pBd->ft = pWDICtx->bFrameTransEnabled & !ucDisableFrmXtl;
 
-    if( !pBd->ft)
-    {
+    if( !pBd->ft) {
         /* - Slow path: Frame translation is disabled. Need to set the
         following fields:
          *    STA id
@@ -690,14 +646,12 @@ WDI_FillTxBd
         uTxBdSignature = WDI_TXBD_SIG_MGMT_MAGIC;
 #endif
         if((ucTxFlag & WDI_USE_SELF_STA_REQUESTED_MASK) &&
-                !(ucIsRMF && ucProtMgmtFrame))
-        {
+                !(ucIsRMF && ucProtMgmtFrame)) {
 #ifdef HAL_SELF_STA_PER_BSS
             // Get the (self) station index from ADDR2, which should be the self MAC addr
             wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                         *(wpt_macAddr*)pAddr2, &ucStaId );
-            if (WDI_STATUS_SUCCESS != wdiStatus)
-            {
+            if (WDI_STATUS_SUCCESS != wdiStatus) {
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR, "WDI_STATableFindStaidByAddr failed");
                 WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR, "STA ID = %d " MAC_ADDRESS_STR,
                            ucStaId, MAC_ADDR_ARRAY(*(wpt_macAddr*)pAddr2));
@@ -706,9 +660,7 @@ WDI_FillTxBd
 #else
             ucStaId = pWDICtx->ucSelfStaId;
 #endif
-        }
-        else
-        {
+        } else {
             /*
                _____________________________________________________________________________________________
                |    |       |                 Data                  ||                Mgmt                   |
@@ -736,8 +688,7 @@ WDI_FillTxBd
                |    |       |                   |                   ||                   | bssIdx->bcasStaIdx|
                |____|_______|___________________|___________________||___________________|___________________|*/
             // Get the station index based on the above table
-            if( ucUnicastDst )
-            {
+            if( ucUnicastDst ) {
                 wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                             *(wpt_macAddr*)pDestMacAddr, &ucStaId );
                 // In STA mode the unicast data frame could be
@@ -750,26 +701,20 @@ WDI_FillTxBd
                 // go out using selfStaIdx.
 
 
-                if (WDI_STATUS_SUCCESS != wdiStatus)
-                {
-                    if(ucType == WDI_MAC_MGMT_FRAME)
-                    {
+                if (WDI_STATUS_SUCCESS != wdiStatus) {
+                    if(ucType == WDI_MAC_MGMT_FRAME) {
                         //For management frames, use self staIdx if peer sta
                         //entry is not found.
                         wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                                     *(wpt_macAddr*)pAddr2, &ucStaId );
-                    }
-                    else
-                    {
-                        if( !ucDisableFrmXtl )
-                        {
+                    } else {
+                        if( !ucDisableFrmXtl ) {
                             // FrameTranslation in HW is enanled. This means,
                             // pDestMacaddress may be unknown. Get the station index
                             // for ADDR2, which should be the self MAC addr
                             wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                                         *(wpt_macAddr*)pAddr2, &ucStaId );
-                            if (WDI_STATUS_SUCCESS == wdiStatus)
-                            {
+                            if (WDI_STATUS_SUCCESS == wdiStatus) {
                                 //Found self Sta index.
                                 WDI_StaStruct* pSTATable = (WDI_StaStruct*) pWDICtx->staTable;
                                 wpt_uint8                 bssIdx  = 0;
@@ -779,16 +724,14 @@ WDI_FillTxBd
                                 wdiStatus = WDI_STATUS_E_NOT_ALLOWED;
 
                                 //Check if its BSSIdx is valid.
-                                if (pSTATable[ucStaId].bssIdx != WDI_BSS_INVALID_IDX)
-                                {
+                                if (pSTATable[ucStaId].bssIdx != WDI_BSS_INVALID_IDX) {
                                     //Use BSSIdx to get the association sequence and use
                                     //macBssId to get the peerMac Address(MacBSSID).
                                     bssIdx = WDI_FindAssocSessionByBSSIdx( pWDICtx,
                                                                            pSTATable[ucStaId].bssIdx,
                                                                            &pBSSSes);
 
-                                    if ( NULL != pBSSSes )
-                                    {
+                                    if ( NULL != pBSSSes ) {
                                         //Get staId from the peerMac.
                                         wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                                                     pBSSSes->macBSSID, &ucStaId );
@@ -799,22 +742,18 @@ WDI_FillTxBd
                     }
                     //wdiStatus will be success if it found valid peerStaIdx
                     //Otherwise return failure.
-                    if(WDI_STATUS_SUCCESS != wdiStatus )
-                    {
+                    if(WDI_STATUS_SUCCESS != wdiStatus ) {
                         return WDI_STATUS_E_NOT_ALLOWED;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 // For bcast frames use the bcast station index
                 wpt_uint8 bssSessIdx;
 
                 // Get the station index for ADDR2, which should be the self MAC addr
                 wdiStatus = WDI_STATableFindStaidByAddr( pWDICtx,
                             *(wpt_macAddr*)pAddr2, &ucStaId );
-                if (WDI_STATUS_SUCCESS != wdiStatus)
-                {
+                if (WDI_STATUS_SUCCESS != wdiStatus) {
                     return WDI_STATUS_E_NOT_ALLOWED;
                 }
 
@@ -824,8 +763,7 @@ WDI_FillTxBd
                 // Get the broadcast station index for this bss
                 (void) WDI_FindAssocSessionByBSSIdx( pWDICtx, bssSessIdx,
                                                      &pBSSSes );
-                if (NULL == pBSSSes)
-                {
+                if (NULL == pBSSSes) {
                     // session not found ?!?
                     return WDI_STATUS_E_FAILURE;
                 }
@@ -841,45 +779,33 @@ WDI_FillTxBd
 
         pSta += ucStaId;  // Go to the curresponding station's station table
 
-        if(ucType == WDI_MAC_MGMT_FRAME)
-        {
-            if (ucUnicastDst)
-            {
+        if(ucType == WDI_MAC_MGMT_FRAME) {
+            if (ucUnicastDst) {
                 /* If no ack is requested use the bcast queue */
-                if (ucTxFlag & WDI_USE_NO_ACK_REQUESTED_MASK)
-                {
+                if (ucTxFlag & WDI_USE_NO_ACK_REQUESTED_MASK) {
                     pBd->queueId = BTQM_QUEUE_SELF_STA_BCAST_MGMT;
-                }
-                else
-                {
+                } else {
                     /* Assigning Queue Id configured to Ack */
                     pBd->queueId = BTQM_QUEUE_SELF_STA_UCAST_MGMT;
                 }
-            }
-            else
-            {
+            } else {
                 /* Assigning to Queue Id configured to No Ack */
                 pBd->queueId = BTQM_QUEUE_SELF_STA_BCAST_MGMT;
             }
 
-            if(ucIsRMF && pSta->rmfEnabled)
-            {
+            if(ucIsRMF && pSta->rmfEnabled) {
                 pBd->dpuNE = !ucProtMgmtFrame;
                 pBd->rmf = 1;
                 if(!ucUnicastDst)
                     pBd->dpuDescIdx = pSta->bcastMgmtDpuIndex; /* IGTK */
                 else
                     pBd->dpuDescIdx = pSta->dpuIndex; /* PTK */
-            }
-            else
-            {
+            } else {
                 pBd->dpuNE = WDI_NO_ENCRYPTION_ENABLED;
                 pBd->rmf = 0;
                 pBd->dpuDescIdx = pSta->dpuIndex; /* PTK for both u/mcast mgmt frames */
             }
-        }
-        else
-        {
+        } else {
             /* data frames */
             /* TID->QID is one-to-one mapping, the same way as followed in H/W */
             wpt_uint8 queueId = 0;
@@ -895,20 +821,15 @@ WDI_FillTxBd
             else if( ucUnicastDst && (ucSTAType == WDI_STA_ENTRY_SELF))
                 pBd->queueId = BTQM_QUEUE_SELF_STA_UCAST_DATA;
 #endif
-            else if (pSta->qosEnabled)
-            {
+            else if (pSta->qosEnabled) {
                 WDI_BmuGetQidForQOSTid( ucTid, &queueId);
                 pBd->queueId = (wpt_uint32) queueId;
-            }
-            else
+            } else
                 pBd->queueId = BTQM_QUEUE_TX_nQOS;
 
-            if(ucUnicastDst)
-            {
+            if(ucUnicastDst) {
                 pBd->dpuDescIdx = pSta->dpuIndex; /*unicast data frames: PTK*/
-            }
-            else
-            {
+            } else {
                 pBd->dpuDescIdx = pSta->bcastDpuIndex; /* mcast data frames: GTK*/
             }
         }
@@ -934,8 +855,7 @@ WDI_FillTxBd
 #ifdef FEATURE_WLAN_TDLS
                     (ucSTAType == WDI_STA_ENTRY_TDLS_PEER ) &&
 #endif
-                    (ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK)) || isEapol)
-        {
+                    (ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK)) || isEapol) {
             WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_INFO,
                        "Sending EAPOL pakcet over WQ5 MAC S: %08x. MAC D: %08x.",
                        *((wpt_uint32 *) pAddr2),
@@ -980,28 +900,21 @@ WDI_RxBD_GetFrameTypeSubType
 (
     void* _pvBDHeader,
     wpt_uint16 usFrmCtrl
-)
-{
+) {
     WDI_RxBdType*    pRxBd = (WDI_RxBdType*) _pvBDHeader;
     wpt_uint8        typeSubType;
     WDI_MacFrameCtl  wdiFrmCtl;
 
-    if (pRxBd->ft != WDI_RX_BD_FT_DONE)
-    {
-        if (pRxBd->asf)
-        {
+    if (pRxBd->ft != WDI_RX_BD_FT_DONE) {
+        if (pRxBd->asf) {
             typeSubType = (WDI_MAC_DATA_FRAME << WDI_FRAME_TYPE_OFFSET) |
                           WDI_MAC_DATA_QOS_DATA;
-        }
-        else
-        {
+        } else {
             wpalMemoryCopy(&wdiFrmCtl, &usFrmCtrl, sizeof(wdiFrmCtl));
             typeSubType = (wdiFrmCtl.type << WDI_FRAME_TYPE_OFFSET) |
                           wdiFrmCtl.subType;
         }
-    }
-    else
-    {
+    } else {
         wpalMemoryCopy(&wdiFrmCtl, &usFrmCtrl, sizeof(wdiFrmCtl));
         typeSubType = (wdiFrmCtl.type << WDI_FRAME_TYPE_OFFSET) |
                       wdiFrmCtl.subType;
@@ -1019,8 +932,7 @@ WDI_RxBD_GetFrameTypeSubType
  @return None
 */
 void
-WDI_SwapRxBd(wpt_uint8 *pBd)
-{
+WDI_SwapRxBd(wpt_uint8 *pBd) {
 #ifndef WDI_BIG_BYTE_ENDIAN
     WDI_SwapBytes(pBd , WDI_RX_BD_HEADER_SIZE);
 #endif
@@ -1035,8 +947,7 @@ WDI_SwapRxBd(wpt_uint8 *pBd)
  @return   none
 */
 void
-WDI_SwapTxBd(wpt_uint8 *pBd)
-{
+WDI_SwapTxBd(wpt_uint8 *pBd) {
 #ifndef WDI_BIG_BYTE_ENDIAN
     WDI_SwapBytes(pBd , WDI_TX_BD_HEADER_SIZE);
 #endif
@@ -1057,27 +968,21 @@ WDI_RxAmsduBdFix
 (
     WDI_ControlBlockType*  pWDICtx,
     void*                 _pvBDHeader
-)
-{
+) {
     WDI_RxBdType*          pRxBd   = (WDI_RxBdType*) _pvBDHeader;
     wpt_uint32 *pModBd, *pMaskBd, *pFirstBd, i;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
-    if (pRxBd->asf)
-    {
-        if (pRxBd->sybFrameIdx == 0)
-        {
+    if (pRxBd->asf) {
+        if (pRxBd->sybFrameIdx == 0) {
             //copy the BD of first AMSDU
             pWDICtx->wdiRxAmsduFirstBdCache = *pRxBd;
-        }
-        else
-        {
+        } else {
             pModBd   = (wpt_uint32*)pRxBd;
             pMaskBd  = (wpt_uint32*)&pWDICtx->wdiRxAmsduBdFixMask;
             pFirstBd = (wpt_uint32*)&pWDICtx->wdiRxAmsduFirstBdCache;
 
-            for (i = 0; i < sizeof(WDI_RxBdType)/sizeof(wpt_uint32 *); i++)
-            {
+            for (i = 0; i < sizeof(WDI_RxBdType)/sizeof(wpt_uint32 *); i++) {
                 //modified BD = zero out non AMSDU related fields in this BD |
                 //              non AMSDU related fields from the first BD.
                 pModBd[i] = (pModBd[i] & ~pMaskBd[i]) |

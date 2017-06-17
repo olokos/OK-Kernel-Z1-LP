@@ -14,108 +14,108 @@
 #define __A200_REG_H
 
 enum VGT_EVENT_TYPE {
-	VS_DEALLOC = 0,
-	PS_DEALLOC = 1,
-	VS_DONE_TS = 2,
-	PS_DONE_TS = 3,
-	CACHE_FLUSH_TS = 4,
-	CONTEXT_DONE = 5,
-	CACHE_FLUSH = 6,
-	VIZQUERY_START = 7,
-	VIZQUERY_END = 8,
-	SC_WAIT_WC = 9,
-	RST_PIX_CNT = 13,
-	RST_VTX_CNT = 14,
-	TILE_FLUSH = 15,
-	CACHE_FLUSH_AND_INV_TS_EVENT = 20,
-	ZPASS_DONE = 21,
-	CACHE_FLUSH_AND_INV_EVENT = 22,
-	PERFCOUNTER_START = 23,
-	PERFCOUNTER_STOP = 24,
-	VS_FETCH_DONE = 27,
-	FACENESS_FLUSH = 28,
+    VS_DEALLOC = 0,
+    PS_DEALLOC = 1,
+    VS_DONE_TS = 2,
+    PS_DONE_TS = 3,
+    CACHE_FLUSH_TS = 4,
+    CONTEXT_DONE = 5,
+    CACHE_FLUSH = 6,
+    VIZQUERY_START = 7,
+    VIZQUERY_END = 8,
+    SC_WAIT_WC = 9,
+    RST_PIX_CNT = 13,
+    RST_VTX_CNT = 14,
+    TILE_FLUSH = 15,
+    CACHE_FLUSH_AND_INV_TS_EVENT = 20,
+    ZPASS_DONE = 21,
+    CACHE_FLUSH_AND_INV_EVENT = 22,
+    PERFCOUNTER_START = 23,
+    PERFCOUNTER_STOP = 24,
+    VS_FETCH_DONE = 27,
+    FACENESS_FLUSH = 28,
 };
 
 enum COLORFORMATX {
-	COLORX_4_4_4_4 = 0,
-	COLORX_1_5_5_5 = 1,
-	COLORX_5_6_5 = 2,
-	COLORX_8 = 3,
-	COLORX_8_8 = 4,
-	COLORX_8_8_8_8 = 5,
-	COLORX_S8_8_8_8 = 6,
-	COLORX_16_FLOAT = 7,
-	COLORX_16_16_FLOAT = 8,
-	COLORX_16_16_16_16_FLOAT = 9,
-	COLORX_32_FLOAT = 10,
-	COLORX_32_32_FLOAT = 11,
-	COLORX_32_32_32_32_FLOAT = 12,
-	COLORX_2_3_3 = 13,
-	COLORX_8_8_8 = 14,
+    COLORX_4_4_4_4 = 0,
+    COLORX_1_5_5_5 = 1,
+    COLORX_5_6_5 = 2,
+    COLORX_8 = 3,
+    COLORX_8_8 = 4,
+    COLORX_8_8_8_8 = 5,
+    COLORX_S8_8_8_8 = 6,
+    COLORX_16_FLOAT = 7,
+    COLORX_16_16_FLOAT = 8,
+    COLORX_16_16_16_16_FLOAT = 9,
+    COLORX_32_FLOAT = 10,
+    COLORX_32_32_FLOAT = 11,
+    COLORX_32_32_32_32_FLOAT = 12,
+    COLORX_2_3_3 = 13,
+    COLORX_8_8_8 = 14,
 };
 
 enum SURFACEFORMAT {
-	FMT_1_REVERSE                  = 0,
-	FMT_1                          = 1,
-	FMT_8                          = 2,
-	FMT_1_5_5_5                    = 3,
-	FMT_5_6_5                      = 4,
-	FMT_6_5_5                      = 5,
-	FMT_8_8_8_8                    = 6,
-	FMT_2_10_10_10                 = 7,
-	FMT_8_A                        = 8,
-	FMT_8_B                        = 9,
-	FMT_8_8                        = 10,
-	FMT_Cr_Y1_Cb_Y0                = 11,
-	FMT_Y1_Cr_Y0_Cb                = 12,
-	FMT_5_5_5_1                    = 13,
-	FMT_8_8_8_8_A                  = 14,
-	FMT_4_4_4_4                    = 15,
-	FMT_10_11_11                   = 16,
-	FMT_11_11_10                   = 17,
-	FMT_DXT1                       = 18,
-	FMT_DXT2_3                     = 19,
-	FMT_DXT4_5                     = 20,
-	FMT_24_8                       = 22,
-	FMT_24_8_FLOAT                 = 23,
-	FMT_16                         = 24,
-	FMT_16_16                      = 25,
-	FMT_16_16_16_16                = 26,
-	FMT_16_EXPAND                  = 27,
-	FMT_16_16_EXPAND               = 28,
-	FMT_16_16_16_16_EXPAND         = 29,
-	FMT_16_FLOAT                   = 30,
-	FMT_16_16_FLOAT                = 31,
-	FMT_16_16_16_16_FLOAT          = 32,
-	FMT_32                         = 33,
-	FMT_32_32                      = 34,
-	FMT_32_32_32_32                = 35,
-	FMT_32_FLOAT                   = 36,
-	FMT_32_32_FLOAT                = 37,
-	FMT_32_32_32_32_FLOAT          = 38,
-	FMT_32_AS_8                    = 39,
-	FMT_32_AS_8_8                  = 40,
-	FMT_16_MPEG                    = 41,
-	FMT_16_16_MPEG                 = 42,
-	FMT_8_INTERLACED               = 43,
-	FMT_32_AS_8_INTERLACED         = 44,
-	FMT_32_AS_8_8_INTERLACED       = 45,
-	FMT_16_INTERLACED              = 46,
-	FMT_16_MPEG_INTERLACED         = 47,
-	FMT_16_16_MPEG_INTERLACED      = 48,
-	FMT_DXN                        = 49,
-	FMT_8_8_8_8_AS_16_16_16_16     = 50,
-	FMT_DXT1_AS_16_16_16_16        = 51,
-	FMT_DXT2_3_AS_16_16_16_16      = 52,
-	FMT_DXT4_5_AS_16_16_16_16      = 53,
-	FMT_2_10_10_10_AS_16_16_16_16  = 54,
-	FMT_10_11_11_AS_16_16_16_16    = 55,
-	FMT_11_11_10_AS_16_16_16_16    = 56,
-	FMT_32_32_32_FLOAT             = 57,
-	FMT_DXT3A                      = 58,
-	FMT_DXT5A                      = 59,
-	FMT_CTX1                       = 60,
-	FMT_DXT3A_AS_1_1_1_1           = 61
+    FMT_1_REVERSE                  = 0,
+    FMT_1                          = 1,
+    FMT_8                          = 2,
+    FMT_1_5_5_5                    = 3,
+    FMT_5_6_5                      = 4,
+    FMT_6_5_5                      = 5,
+    FMT_8_8_8_8                    = 6,
+    FMT_2_10_10_10                 = 7,
+    FMT_8_A                        = 8,
+    FMT_8_B                        = 9,
+    FMT_8_8                        = 10,
+    FMT_Cr_Y1_Cb_Y0                = 11,
+    FMT_Y1_Cr_Y0_Cb                = 12,
+    FMT_5_5_5_1                    = 13,
+    FMT_8_8_8_8_A                  = 14,
+    FMT_4_4_4_4                    = 15,
+    FMT_10_11_11                   = 16,
+    FMT_11_11_10                   = 17,
+    FMT_DXT1                       = 18,
+    FMT_DXT2_3                     = 19,
+    FMT_DXT4_5                     = 20,
+    FMT_24_8                       = 22,
+    FMT_24_8_FLOAT                 = 23,
+    FMT_16                         = 24,
+    FMT_16_16                      = 25,
+    FMT_16_16_16_16                = 26,
+    FMT_16_EXPAND                  = 27,
+    FMT_16_16_EXPAND               = 28,
+    FMT_16_16_16_16_EXPAND         = 29,
+    FMT_16_FLOAT                   = 30,
+    FMT_16_16_FLOAT                = 31,
+    FMT_16_16_16_16_FLOAT          = 32,
+    FMT_32                         = 33,
+    FMT_32_32                      = 34,
+    FMT_32_32_32_32                = 35,
+    FMT_32_FLOAT                   = 36,
+    FMT_32_32_FLOAT                = 37,
+    FMT_32_32_32_32_FLOAT          = 38,
+    FMT_32_AS_8                    = 39,
+    FMT_32_AS_8_8                  = 40,
+    FMT_16_MPEG                    = 41,
+    FMT_16_16_MPEG                 = 42,
+    FMT_8_INTERLACED               = 43,
+    FMT_32_AS_8_INTERLACED         = 44,
+    FMT_32_AS_8_8_INTERLACED       = 45,
+    FMT_16_INTERLACED              = 46,
+    FMT_16_MPEG_INTERLACED         = 47,
+    FMT_16_16_MPEG_INTERLACED      = 48,
+    FMT_DXN                        = 49,
+    FMT_8_8_8_8_AS_16_16_16_16     = 50,
+    FMT_DXT1_AS_16_16_16_16        = 51,
+    FMT_DXT2_3_AS_16_16_16_16      = 52,
+    FMT_DXT4_5_AS_16_16_16_16      = 53,
+    FMT_2_10_10_10_AS_16_16_16_16  = 54,
+    FMT_10_11_11_AS_16_16_16_16    = 55,
+    FMT_11_11_10_AS_16_16_16_16    = 56,
+    FMT_32_32_32_FLOAT             = 57,
+    FMT_DXT3A                      = 58,
+    FMT_DXT5A                      = 59,
+    FMT_CTX1                       = 60,
+    FMT_DXT3A_AS_1_1_1_1           = 61
 };
 
 #define REG_PERF_MODE_CNT	0x0
@@ -129,15 +129,19 @@ enum SURFACEFORMAT {
 #define RB_EDRAM_INFO_EDRAM_RANGE_SIZE                     18
 
 struct rb_edram_info_t {
-	unsigned int edram_size:RB_EDRAM_INFO_EDRAM_SIZE_SIZE;
-	unsigned int edram_mapping_mode:RB_EDRAM_INFO_EDRAM_MAPPING_MODE_SIZE;
-	unsigned int unused0:RB_EDRAM_INFO_UNUSED0_SIZE;
-	unsigned int edram_range:RB_EDRAM_INFO_EDRAM_RANGE_SIZE;
+unsigned int edram_size:
+    RB_EDRAM_INFO_EDRAM_SIZE_SIZE;
+unsigned int edram_mapping_mode:
+    RB_EDRAM_INFO_EDRAM_MAPPING_MODE_SIZE;
+unsigned int unused0:
+    RB_EDRAM_INFO_UNUSED0_SIZE;
+unsigned int edram_range:
+    RB_EDRAM_INFO_EDRAM_RANGE_SIZE;
 };
 
 union reg_rb_edram_info {
-	unsigned int val;
-	struct rb_edram_info_t f;
+    unsigned int val;
+    struct rb_edram_info_t f;
 };
 
 #define RBBM_READ_ERROR_ADDRESS_MASK	0x0001fffc
@@ -157,22 +161,33 @@ union reg_rb_edram_info {
 #define CP_RB_CNTL_RB_RPTR_WR_ENA_SIZE                     1
 
 struct cp_rb_cntl_t {
-	unsigned int rb_bufsz:CP_RB_CNTL_RB_BUFSZ_SIZE;
-	unsigned int unused0:CP_RB_CNTL_UNUSED0_SIZE;
-	unsigned int rb_blksz:CP_RB_CNTL_RB_BLKSZ_SIZE;
-	unsigned int unused1:CP_RB_CNTL_UNUSED1_SIZE;
-	unsigned int buf_swap:CP_RB_CNTL_BUF_SWAP_SIZE;
-	unsigned int unused2:CP_RB_CNTL_UNUSED2_SIZE;
-	unsigned int rb_poll_en:CP_RB_CNTL_RB_POLL_EN_SIZE;
-	unsigned int unused3:CP_RB_CNTL_UNUSED3_SIZE;
-	unsigned int rb_no_update:CP_RB_CNTL_RB_NO_UPDATE_SIZE;
-	unsigned int unused4:CP_RB_CNTL_UNUSED4_SIZE;
-	unsigned int rb_rptr_wr_ena:CP_RB_CNTL_RB_RPTR_WR_ENA_SIZE;
+unsigned int rb_bufsz:
+    CP_RB_CNTL_RB_BUFSZ_SIZE;
+unsigned int unused0:
+    CP_RB_CNTL_UNUSED0_SIZE;
+unsigned int rb_blksz:
+    CP_RB_CNTL_RB_BLKSZ_SIZE;
+unsigned int unused1:
+    CP_RB_CNTL_UNUSED1_SIZE;
+unsigned int buf_swap:
+    CP_RB_CNTL_BUF_SWAP_SIZE;
+unsigned int unused2:
+    CP_RB_CNTL_UNUSED2_SIZE;
+unsigned int rb_poll_en:
+    CP_RB_CNTL_RB_POLL_EN_SIZE;
+unsigned int unused3:
+    CP_RB_CNTL_UNUSED3_SIZE;
+unsigned int rb_no_update:
+    CP_RB_CNTL_RB_NO_UPDATE_SIZE;
+unsigned int unused4:
+    CP_RB_CNTL_UNUSED4_SIZE;
+unsigned int rb_rptr_wr_ena:
+    CP_RB_CNTL_RB_RPTR_WR_ENA_SIZE;
 };
 
 union reg_cp_rb_cntl {
-	unsigned int val:32;
-	struct cp_rb_cntl_t f;
+    unsigned int val:32;
+    struct cp_rb_cntl_t f;
 };
 
 #define RB_COLOR_INFO__COLOR_FORMAT_MASK                   0x0000000fL

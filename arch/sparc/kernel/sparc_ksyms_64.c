@@ -18,9 +18,9 @@
 #include <asm/cacheflush.h>
 
 struct poll {
-	int fd;
-	short events;
-	short revents;
+    int fd;
+    short events;
+    short revents;
 };
 
 /* from helpers.S */

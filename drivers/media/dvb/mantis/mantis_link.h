@@ -26,42 +26,42 @@
 #include "dvb_ca_en50221.h"
 
 enum mantis_sbuf_status {
-	MANTIS_SBUF_DATA_AVAIL		= 1,
-	MANTIS_SBUF_DATA_EMPTY		= 2,
-	MANTIS_SBUF_DATA_OVFLW		= 3
+    MANTIS_SBUF_DATA_AVAIL		= 1,
+    MANTIS_SBUF_DATA_EMPTY		= 2,
+    MANTIS_SBUF_DATA_OVFLW		= 3
 };
 
 struct mantis_slot {
-	u32				timeout;
-	u32				slave_cfg;
-	u32				bar;
+    u32				timeout;
+    u32				slave_cfg;
+    u32				bar;
 };
 
 /* Physical layer */
 enum mantis_slot_state {
-	MODULE_INSERTED			= 3,
-	MODULE_XTRACTED			= 4
+    MODULE_INSERTED			= 3,
+    MODULE_XTRACTED			= 4
 };
 
 struct mantis_ca {
-	struct mantis_slot		slot[4];
+    struct mantis_slot		slot[4];
 
-	struct work_struct		hif_evm_work;
+    struct work_struct		hif_evm_work;
 
-	u32				hif_event;
-	wait_queue_head_t		hif_opdone_wq;
-	wait_queue_head_t		hif_brrdyw_wq;
-	wait_queue_head_t		hif_data_wq;
-	wait_queue_head_t		hif_write_wq; /* HIF Write op */
+    u32				hif_event;
+    wait_queue_head_t		hif_opdone_wq;
+    wait_queue_head_t		hif_brrdyw_wq;
+    wait_queue_head_t		hif_data_wq;
+    wait_queue_head_t		hif_write_wq; /* HIF Write op */
 
-	enum mantis_sbuf_status		sbuf_status;
+    enum mantis_sbuf_status		sbuf_status;
 
-	enum mantis_slot_state		slot_state;
+    enum mantis_slot_state		slot_state;
 
-	void				*ca_priv;
+    void				*ca_priv;
 
-	struct dvb_ca_en50221		en50221;
-	struct mutex			ca_lock;
+    struct dvb_ca_en50221		en50221;
+    struct mutex			ca_lock;
 };
 
 /* CA */

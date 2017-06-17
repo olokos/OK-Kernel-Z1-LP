@@ -29,51 +29,51 @@
  */
 
 struct cpu_context {
-	__u32	r1; /* stack pointer */
-	__u32	r2;
-	/* dedicated registers */
-	__u32	r13;
-	__u32	r14;
-	__u32	r15;
-	__u32	r16;
-	__u32	r17;
-	__u32	r18;
-	/* non-volatile registers */
-	__u32	r19;
-	__u32	r20;
-	__u32	r21;
-	__u32	r22;
-	__u32	r23;
-	__u32	r24;
-	__u32	r25;
-	__u32	r26;
-	__u32	r27;
-	__u32	r28;
-	__u32	r29;
-	__u32	r30;
-	/* r31 is used as current task pointer */
-	/* special purpose registers */
-	__u32	msr;
-	__u32	ear;
-	__u32	esr;
-	__u32	fsr;
+    __u32	r1; /* stack pointer */
+    __u32	r2;
+    /* dedicated registers */
+    __u32	r13;
+    __u32	r14;
+    __u32	r15;
+    __u32	r16;
+    __u32	r17;
+    __u32	r18;
+    /* non-volatile registers */
+    __u32	r19;
+    __u32	r20;
+    __u32	r21;
+    __u32	r22;
+    __u32	r23;
+    __u32	r24;
+    __u32	r25;
+    __u32	r26;
+    __u32	r27;
+    __u32	r28;
+    __u32	r29;
+    __u32	r30;
+    /* r31 is used as current task pointer */
+    /* special purpose registers */
+    __u32	msr;
+    __u32	ear;
+    __u32	esr;
+    __u32	fsr;
 };
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 struct thread_info {
-	struct task_struct	*task; /* main task structure */
-	struct exec_domain	*exec_domain; /* execution domain */
-	unsigned long		flags; /* low level flags */
-	unsigned long		status; /* thread-synchronous flags */
-	__u32			cpu; /* current CPU */
-	__s32			preempt_count; /* 0 => preemptable,< 0 => BUG*/
-	mm_segment_t		addr_limit; /* thread address space */
-	struct restart_block	restart_block;
+    struct task_struct	*task; /* main task structure */
+    struct exec_domain	*exec_domain; /* execution domain */
+    unsigned long		flags; /* low level flags */
+    unsigned long		status; /* thread-synchronous flags */
+    __u32			cpu; /* current CPU */
+    __s32			preempt_count; /* 0 => preemptable,< 0 => BUG*/
+    mm_segment_t		addr_limit; /* thread address space */
+    struct restart_block	restart_block;
 
-	struct cpu_context	cpu_context;
+    struct cpu_context	cpu_context;
 };
 
 /*
@@ -96,11 +96,10 @@ struct thread_info {
 #define init_stack		(init_thread_union.stack)
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	register unsigned long sp asm("r1");
+static inline struct thread_info *current_thread_info(void) {
+    register unsigned long sp asm("r1");
 
-	return (struct thread_info *)(sp & ~(THREAD_SIZE-1));
+    return (struct thread_info *)(sp & ~(THREAD_SIZE-1));
 }
 
 /* thread information allocation */
@@ -162,11 +161,10 @@ static inline struct thread_info *current_thread_info(void)
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK 1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->status |= TS_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->status |= TS_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
 }
 #endif
 

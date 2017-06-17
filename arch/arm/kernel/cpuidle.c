@@ -13,9 +13,8 @@
 #include <asm/proc-fns.h>
 
 int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
-		struct cpuidle_driver *drv, int index)
-{
-	cpu_do_idle();
+                             struct cpuidle_driver *drv, int index) {
+    cpu_do_idle();
 
-	return index;
+    return index;
 }

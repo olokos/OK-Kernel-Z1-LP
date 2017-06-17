@@ -98,177 +98,172 @@ struct completion dm_clear_event;
 struct completion dm_transfer_event;
 /* Shadow tables for debug purposes */
 struct ocmem_br_table {
-	unsigned int offset;
-	unsigned int size;
-	unsigned int ddr_low;
-	unsigned int ddr_high;
-	unsigned int ctrl;
+    unsigned int offset;
+    unsigned int size;
+    unsigned int ddr_low;
+    unsigned int ddr_high;
+    unsigned int ctrl;
 } br_table[RDM_MAX_ENTRIES];
 
 /* DM Table replicates an entire BR table */
 /* Note: There are more than 1 BRs in the system */
 struct ocmem_dm_table {
-	unsigned int offset;
-	unsigned int size;
-	unsigned int ddr_low;
-	unsigned int ddr_high;
-	unsigned int ctrl;
+    unsigned int offset;
+    unsigned int size;
+    unsigned int ddr_low;
+    unsigned int ddr_high;
+    unsigned int ctrl;
 } dm_table[RDM_MAX_ENTRIES];
 
-static inline int client_ctrl_id(int id)
-{
-	return (id == OCMEM_SENSORS) ? 1 : 0;
+static inline int client_ctrl_id(int id) {
+    return (id == OCMEM_SENSORS) ? 1 : 0;
 }
 
-static inline int client_slot_start(int id)
-{
+static inline int client_slot_start(int id) {
 
-	return client_ctrl_id(id) * 16;
+    return client_ctrl_id(id) * 16;
 }
 
-static irqreturn_t ocmem_dm_irq_handler(int irq, void *dev_id)
-{
-	unsigned status;
-	unsigned irq_status;
-	status = ocmem_read(dm_base + DM_GEN_STATUS);
-	irq_status = ocmem_read(dm_base + DM_INT_STATUS);
-	pr_debug("irq:dm_status %x irq_status %x\n", status, irq_status);
-	if (irq_status & BIT(0)) {
-		pr_debug("Data mover completed\n");
-		ocmem_write(BIT(0), dm_base + DM_INTR_CLR);
-		pr_debug("Last re-mapped address block %x\n",
-				ocmem_read(br_base + BR_LAST_ADDR));
-		complete(&dm_transfer_event);
-	} else if (irq_status & BIT(1)) {
-		pr_debug("Data clear engine completed\n");
-		ocmem_write(BIT(1), dm_base + DM_INTR_CLR);
-		complete(&dm_clear_event);
-	} else {
-		BUG_ON(1);
-	}
-	return IRQ_HANDLED;
+static irqreturn_t ocmem_dm_irq_handler(int irq, void *dev_id) {
+    unsigned status;
+    unsigned irq_status;
+    status = ocmem_read(dm_base + DM_GEN_STATUS);
+    irq_status = ocmem_read(dm_base + DM_INT_STATUS);
+    pr_debug("irq:dm_status %x irq_status %x\n", status, irq_status);
+    if (irq_status & BIT(0)) {
+        pr_debug("Data mover completed\n");
+        ocmem_write(BIT(0), dm_base + DM_INTR_CLR);
+        pr_debug("Last re-mapped address block %x\n",
+                 ocmem_read(br_base + BR_LAST_ADDR));
+        complete(&dm_transfer_event);
+    } else if (irq_status & BIT(1)) {
+        pr_debug("Data clear engine completed\n");
+        ocmem_write(BIT(1), dm_base + DM_INTR_CLR);
+        complete(&dm_clear_event);
+    } else {
+        BUG_ON(1);
+    }
+    return IRQ_HANDLED;
 }
 
 /* Lock during transfers */
 int ocmem_rdm_transfer(int id, struct ocmem_map_list *clist,
-			unsigned long start, int direction)
-{
-	int num_chunks = clist->num_chunks;
-	int slot = client_slot_start(id);
-	int table_start = 0;
-	int table_end = 0;
-	int br_ctrl = 0;
-	int br_id = 0;
-	int client_id = 0;
-	int dm_ctrl = 0;
-	int i = 0;
-	int j = 0;
-	int status = 0;
-	int rc = 0;
+                       unsigned long start, int direction) {
+    int num_chunks = clist->num_chunks;
+    int slot = client_slot_start(id);
+    int table_start = 0;
+    int table_end = 0;
+    int br_ctrl = 0;
+    int br_id = 0;
+    int client_id = 0;
+    int dm_ctrl = 0;
+    int i = 0;
+    int j = 0;
+    int status = 0;
+    int rc = 0;
 
-	rc = ocmem_enable_core_clock();
+    rc = ocmem_enable_core_clock();
 
-	if (rc < 0) {
-		pr_err("RDM transfer failed for client %s (id: %d)\n",
-				get_name(id), id);
-		return rc;
-	}
+    if (rc < 0) {
+        pr_err("RDM transfer failed for client %s (id: %d)\n",
+               get_name(id), id);
+        return rc;
+    }
 
-	/* Clear DM Mask */
-	ocmem_write(DM_MASK_RESET, dm_base + DM_INTR_MASK);
-	/* Clear DM Interrupts */
-	ocmem_write(DM_INTR_RESET, dm_base + DM_INTR_CLR);
+    /* Clear DM Mask */
+    ocmem_write(DM_MASK_RESET, dm_base + DM_INTR_MASK);
+    /* Clear DM Interrupts */
+    ocmem_write(DM_INTR_RESET, dm_base + DM_INTR_CLR);
 
-	for (i = 0, j = slot; i < num_chunks; i++, j++) {
+    for (i = 0, j = slot; i < num_chunks; i++, j++) {
 
-		struct ocmem_chunk *chunk = &clist->chunks[i];
-		int sz = chunk->size;
-		int paddr = chunk->ddr_paddr;
-		int tbl_n_ctrl = 0;
+        struct ocmem_chunk *chunk = &clist->chunks[i];
+        int sz = chunk->size;
+        int paddr = chunk->ddr_paddr;
+        int tbl_n_ctrl = 0;
 
-		tbl_n_ctrl |= BR_TBL_ENTRY_ENABLE;
-		if (chunk->ro)
-			tbl_n_ctrl |= (1 << BR_RW_SHIFT);
+        tbl_n_ctrl |= BR_TBL_ENTRY_ENABLE;
+        if (chunk->ro)
+            tbl_n_ctrl |= (1 << BR_RW_SHIFT);
 
-		/* Table Entry n of BR and DM */
-		ocmem_write(start, br_base + BR_TBL_n_offset(j));
-		ocmem_write(sz, br_base + BR_TBL_n_size(j));
-		ocmem_write(paddr, br_base + BR_TBL_n_paddr(j));
-		ocmem_write(tbl_n_ctrl, br_base + BR_TBL_n_ctrl(j));
+        /* Table Entry n of BR and DM */
+        ocmem_write(start, br_base + BR_TBL_n_offset(j));
+        ocmem_write(sz, br_base + BR_TBL_n_size(j));
+        ocmem_write(paddr, br_base + BR_TBL_n_paddr(j));
+        ocmem_write(tbl_n_ctrl, br_base + BR_TBL_n_ctrl(j));
 
-		ocmem_write(start, dm_base + DM_TBL_n_offset(j));
-		ocmem_write(sz, dm_base + DM_TBL_n_size(j));
-		ocmem_write(paddr, dm_base + DM_TBL_n_paddr(j));
-		ocmem_write(tbl_n_ctrl, dm_base + DM_TBL_n_ctrl(j));
+        ocmem_write(start, dm_base + DM_TBL_n_offset(j));
+        ocmem_write(sz, dm_base + DM_TBL_n_size(j));
+        ocmem_write(paddr, dm_base + DM_TBL_n_paddr(j));
+        ocmem_write(tbl_n_ctrl, dm_base + DM_TBL_n_ctrl(j));
 
-		start += sz;
-	}
+        start += sz;
+    }
 
-	br_id = client_ctrl_id(id);
-	table_start = slot;
-	table_end = slot + num_chunks - 1;
-	br_ctrl |= (table_start << BR_TBL_START);
-	br_ctrl |= (table_end << BR_TBL_END);
+    br_id = client_ctrl_id(id);
+    table_start = slot;
+    table_end = slot + num_chunks - 1;
+    br_ctrl |= (table_start << BR_TBL_START);
+    br_ctrl |= (table_end << BR_TBL_END);
 
-	ocmem_write(br_ctrl, (br_base + BR_CLIENT_n_ctrl(br_id)));
-	/* Enable BR */
-	ocmem_write(0x1, br_base + BR_CTRL);
+    ocmem_write(br_ctrl, (br_base + BR_CLIENT_n_ctrl(br_id)));
+    /* Enable BR */
+    ocmem_write(0x1, br_base + BR_CTRL);
 
-	/* Compute DM Control Value */
-	dm_ctrl |= (table_start << DM_TBL_START);
-	dm_ctrl |= (table_end << DM_TBL_END);
+    /* Compute DM Control Value */
+    dm_ctrl |= (table_start << DM_TBL_START);
+    dm_ctrl |= (table_end << DM_TBL_END);
 
-	client_id = client_ctrl_id(id);
-	dm_ctrl |= (client_id << DM_CLIENT_SHIFT);
-	dm_ctrl |= (DM_BR_ID_LPASS << DM_BR_ID_SHIFT);
-	dm_ctrl |= (DM_BLOCK_256 << DM_BR_BLK_SHIFT);
-	dm_ctrl |= (direction << DM_DIR_SHIFT);
+    client_id = client_ctrl_id(id);
+    dm_ctrl |= (client_id << DM_CLIENT_SHIFT);
+    dm_ctrl |= (DM_BR_ID_LPASS << DM_BR_ID_SHIFT);
+    dm_ctrl |= (DM_BLOCK_256 << DM_BR_BLK_SHIFT);
+    dm_ctrl |= (direction << DM_DIR_SHIFT);
 
-	status = ocmem_read(dm_base + DM_GEN_STATUS);
-	pr_debug("Transfer status before %x\n", status);
-	INIT_COMPLETION(dm_transfer_event);
-	/* The DM and BR tables must be programmed before triggering the
-	 * Data Mover else the coherent transfer would be corrupted
-	 */
-	mb();
-	/* Trigger DM */
-	ocmem_write(dm_ctrl, dm_base + DM_CTRL);
-	pr_debug("ocmem: rdm: dm_ctrl %x br_ctrl %x\n", dm_ctrl, br_ctrl);
+    status = ocmem_read(dm_base + DM_GEN_STATUS);
+    pr_debug("Transfer status before %x\n", status);
+    INIT_COMPLETION(dm_transfer_event);
+    /* The DM and BR tables must be programmed before triggering the
+     * Data Mover else the coherent transfer would be corrupted
+     */
+    mb();
+    /* Trigger DM */
+    ocmem_write(dm_ctrl, dm_base + DM_CTRL);
+    pr_debug("ocmem: rdm: dm_ctrl %x br_ctrl %x\n", dm_ctrl, br_ctrl);
 
-	wait_for_completion(&dm_transfer_event);
-	pr_debug("Completed transferring %d segments\n", num_chunks);
-	ocmem_disable_core_clock();
-	return 0;
+    wait_for_completion(&dm_transfer_event);
+    pr_debug("Completed transferring %d segments\n", num_chunks);
+    ocmem_disable_core_clock();
+    return 0;
 }
 
-int ocmem_rdm_init(struct platform_device *pdev)
-{
+int ocmem_rdm_init(struct platform_device *pdev) {
 
-	struct ocmem_plat_data *pdata = NULL;
-	int rc = 0;
+    struct ocmem_plat_data *pdata = NULL;
+    int rc = 0;
 
-	pdata = platform_get_drvdata(pdev);
+    pdata = platform_get_drvdata(pdev);
 
-	br_base = pdata->br_base;
-	dm_base = pdata->dm_base;
+    br_base = pdata->br_base;
+    dm_base = pdata->dm_base;
 
-	rc = devm_request_irq(&pdev->dev, pdata->dm_irq, ocmem_dm_irq_handler,
-				IRQF_TRIGGER_RISING, "ocmem_dm_irq", pdata);
+    rc = devm_request_irq(&pdev->dev, pdata->dm_irq, ocmem_dm_irq_handler,
+                          IRQF_TRIGGER_RISING, "ocmem_dm_irq", pdata);
 
-	if (rc) {
-		dev_err(&pdev->dev, "Failed to request dm irq");
-		return -EINVAL;
-	}
+    if (rc) {
+        dev_err(&pdev->dev, "Failed to request dm irq");
+        return -EINVAL;
+    }
 
-	rc = ocmem_enable_core_clock();
+    rc = ocmem_enable_core_clock();
 
-	if (rc < 0) {
-		pr_err("RDM initialization failed\n");
-		return rc;
-	}
+    if (rc < 0) {
+        pr_err("RDM initialization failed\n");
+        return rc;
+    }
 
-	init_completion(&dm_clear_event);
-	init_completion(&dm_transfer_event);
-	ocmem_disable_core_clock();
-	return 0;
+    init_completion(&dm_clear_event);
+    init_completion(&dm_transfer_event);
+    ocmem_disable_core_clock();
+    return 0;
 }

@@ -25,43 +25,47 @@
 #include <linux/slab.h>
 
 struct tuner_i2c_props {
-	u8 addr;
-	struct i2c_adapter *adap;
+    u8 addr;
+    struct i2c_adapter *adap;
 
-	/* used for tuner instance management */
-	int count;
-	char *name;
+    /* used for tuner instance management */
+    int count;
+    char *name;
 };
 
-static inline int tuner_i2c_xfer_send(struct tuner_i2c_props *props, char *buf, int len)
-{
-	struct i2c_msg msg = { .addr = props->addr, .flags = 0,
-			       .buf = buf, .len = len };
-	int ret = i2c_transfer(props->adap, &msg, 1);
+static inline int tuner_i2c_xfer_send(struct tuner_i2c_props *props, char *buf, int len) {
+    struct i2c_msg msg = { .addr = props->addr, .flags = 0,
+               .buf = buf, .len = len
+    };
+    int ret = i2c_transfer(props->adap, &msg, 1);
 
-	return (ret == 1) ? len : ret;
+    return (ret == 1) ? len : ret;
 }
 
-static inline int tuner_i2c_xfer_recv(struct tuner_i2c_props *props, char *buf, int len)
-{
-	struct i2c_msg msg = { .addr = props->addr, .flags = I2C_M_RD,
-			       .buf = buf, .len = len };
-	int ret = i2c_transfer(props->adap, &msg, 1);
+static inline int tuner_i2c_xfer_recv(struct tuner_i2c_props *props, char *buf, int len) {
+    struct i2c_msg msg = { .addr = props->addr, .flags = I2C_M_RD,
+               .buf = buf, .len = len
+    };
+    int ret = i2c_transfer(props->adap, &msg, 1);
 
-	return (ret == 1) ? len : ret;
+    return (ret == 1) ? len : ret;
 }
 
 static inline int tuner_i2c_xfer_send_recv(struct tuner_i2c_props *props,
-					   char *obuf, int olen,
-					   char *ibuf, int ilen)
-{
-	struct i2c_msg msg[2] = { { .addr = props->addr, .flags = 0,
-				    .buf = obuf, .len = olen },
-				  { .addr = props->addr, .flags = I2C_M_RD,
-				    .buf = ibuf, .len = ilen } };
-	int ret = i2c_transfer(props->adap, msg, 2);
+        char *obuf, int olen,
+        char *ibuf, int ilen) {
+    struct i2c_msg msg[2] = { {
+            .addr = props->addr, .flags = 0,
+            .buf = obuf, .len = olen
+        },
+        {
+            .addr = props->addr, .flags = I2C_M_RD,
+            .buf = ibuf, .len = ilen
+        }
+    };
+    int ret = i2c_transfer(props->adap, msg, 2);
 
-	return (ret == 2) ? ilen : ret;
+    return (ret == 2) ? ilen : ret;
 }
 
 /* Callers must declare as a global for the module:

@@ -132,13 +132,13 @@
 #define ADIS16400_HAS_PROD_ID 1
 #define ADIS16400_NO_BURST 2
 struct adis16400_chip_info {
-	const struct iio_chan_spec *channels;
-	const int num_channels;
-	const int product_id;
-	const long flags;
-	unsigned int gyro_scale_micro;
-	unsigned int accel_scale_micro;
-	unsigned long default_scan_mask;
+    const struct iio_chan_spec *channels;
+    const int num_channels;
+    const int product_id;
+    const long flags;
+    unsigned int gyro_scale_micro;
+    unsigned int accel_scale_micro;
+    unsigned long default_scan_mask;
 };
 
 /**
@@ -151,14 +151,14 @@ struct adis16400_chip_info {
  * @filt_int:		integer part of requested filter frequency
  **/
 struct adis16400_state {
-	struct spi_device		*us;
-	struct iio_trigger		*trig;
-	struct mutex			buf_lock;
-	struct adis16400_chip_info	*variant;
-	int				filt_int;
+    struct spi_device		*us;
+    struct iio_trigger		*trig;
+    struct mutex			buf_lock;
+    struct adis16400_chip_info	*variant;
+    int				filt_int;
 
-	u8	tx[ADIS16400_MAX_TX] ____cacheline_aligned;
-	u8	rx[ADIS16400_MAX_RX] ____cacheline_aligned;
+    u8	tx[ADIS16400_MAX_TX] ____cacheline_aligned;
+    u8	rx[ADIS16400_MAX_RX] ____cacheline_aligned;
 };
 
 int adis16400_set_irq(struct iio_dev *indio_dev, bool enable);
@@ -191,8 +191,8 @@ void adis16400_remove_trigger(struct iio_dev *indio_dev);
 int adis16400_probe_trigger(struct iio_dev *indio_dev);
 
 ssize_t adis16400_read_data_from_ring(struct device *dev,
-				      struct device_attribute *attr,
-				      char *buf);
+                                      struct device_attribute *attr,
+                                      char *buf);
 
 
 int adis16400_configure_ring(struct iio_dev *indio_dev);
@@ -200,30 +200,25 @@ void adis16400_unconfigure_ring(struct iio_dev *indio_dev);
 
 #else /* CONFIG_IIO_BUFFER */
 
-static inline void adis16400_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void adis16400_remove_trigger(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16400_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int adis16400_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
 static inline ssize_t
 adis16400_read_data_from_ring(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	return 0;
+                              struct device_attribute *attr,
+                              char *buf) {
+    return 0;
 }
 
-static int adis16400_configure_ring(struct iio_dev *indio_dev)
-{
-	return 0;
+static int adis16400_configure_ring(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void adis16400_unconfigure_ring(struct iio_dev *indio_dev)
-{
+static inline void adis16400_unconfigure_ring(struct iio_dev *indio_dev) {
 }
 
 #endif /* CONFIG_IIO_BUFFER */

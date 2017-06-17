@@ -35,21 +35,21 @@
 #define VERSATILE_FLASH_BASE           0x34000000
 #define VERSATILE_FLASH_SIZE           SZ_64M
 
-/* 
+/*
  *  SDRAM
  */
 #define VERSATILE_SDRAM_BASE           0x00000000
 
-/* 
+/*
  *  Logic expansion modules
- * 
+ *
  */
 
 
 /* ------------------------------------------------------------------------
  *  Versatile Registers
  * ------------------------------------------------------------------------
- * 
+ *
  */
 #define VERSATILE_SYS_ID_OFFSET               0x00
 #define VERSATILE_SYS_SW_OFFSET               0x04
@@ -130,7 +130,7 @@
 #define VERSATILE_SYS_TEST_OSC3               (VERSATILE_SYS_BASE + VERSATILE_SYS_TEST_OSC3_OFFSET)
 #define VERSATILE_SYS_TEST_OSC4               (VERSATILE_SYS_BASE + VERSATILE_SYS_TEST_OSC4_OFFSET)
 
-/* 
+/*
  * Values for VERSATILE_SYS_RESET_CTRL
  */
 #define VERSATILE_SYS_CTRL_RESET_CONFIGCLR    0x01
@@ -148,7 +148,7 @@
  * ------------------------------------------------------------------------
  */
 
-/* 
+/*
  * VERSATILE_IDFIELD
  *
  * 31:24 = manufacturer (0x41 = ARM)
@@ -160,7 +160,7 @@
 
 /*
  * VERSATILE_SYS_LOCK
- *     control access to SYS_OSCx, SYS_CFGDATAx, SYS_RESETCTL, 
+ *     control access to SYS_OSCx, SYS_CFGDATAx, SYS_RESETCTL,
  *     SYS_CLD, SYS_BOOTCS
  */
 #define VERSATILE_SYS_LOCK_LOCKED    (1 << 16)
@@ -173,12 +173,12 @@
 
 /*
  * VERSATILE_INTREG
- *     - used to acknowledge and control MMCI and UART interrupts 
+ *     - used to acknowledge and control MMCI and UART interrupts
  */
 #define VERSATILE_INTREG_WPROT        0x00    /* MMC protection status (no interrupt generated) */
 #define VERSATILE_INTREG_RI0          0x01    /* Ring indicator UART0 is asserted,              */
 #define VERSATILE_INTREG_CARDIN       0x08    /* MMCI card in detect                            */
-                                                /* write 1 to acknowledge and clear               */
+/* write 1 to acknowledge and clear               */
 #define VERSATILE_INTREG_RI1          0x02    /* Ring indicator UART1 is asserted,              */
 #define VERSATILE_INTREG_CARDINSERT   0x03    /* Signal insertion of MMC card                   */
 
@@ -196,17 +196,17 @@
 #define VERSATILE_UART3_BASE           0x10009000	/* UART 3 */
 #define VERSATILE_SCI1_BASE            0x1000A000
 #define VERSATILE_MMCI1_BASE           0x1000B000    /* MMC Interface */
-	/* 0x1000C000 - 0x1000CFFF = reserved */
+/* 0x1000C000 - 0x1000CFFF = reserved */
 #define VERSATILE_ETH_BASE             0x10010000	/* Ethernet */
 #define VERSATILE_USB_BASE             0x10020000	/* USB */
-	/* 0x10030000 - 0x100FFFFF = reserved */
+/* 0x10030000 - 0x100FFFFF = reserved */
 #define VERSATILE_SMC_BASE             0x10100000	/* SMC */
 #define VERSATILE_MPMC_BASE            0x10110000	/* MPMC */
 #define VERSATILE_CLCD_BASE            0x10120000	/* CLCD */
 #define VERSATILE_DMAC_BASE            0x10130000	/* DMA controller */
 #define VERSATILE_VIC_BASE             0x10140000	/* Vectored interrupt controller */
 #define VERSATILE_PERIPH_BASE          0x10150000	/* off-chip peripherals alias from */
-                                                /* 0x10000000 - 0x100FFFFF */
+/* 0x10000000 - 0x100FFFFF */
 #define VERSATILE_AHBM_BASE            0x101D0000	/* AHB monitor */
 #define VERSATILE_SCTL_BASE            0x101E0000	/* System controller */
 #define VERSATILE_WATCHDOG_BASE        0x101E1000	/* Watchdog */
@@ -217,7 +217,7 @@
 #define VERSATILE_GPIO2_BASE           0x101E6000	/* GPIO port 2 */
 #define VERSATILE_GPIO3_BASE           0x101E7000	/* GPIO port 3 */
 #define VERSATILE_RTC_BASE             0x101E8000	/* Real Time Clock */
-	/* 0x101E9000 - reserved */
+/* 0x101E9000 - reserved */
 #define VERSATILE_SCI_BASE             0x101F0000	/* Smart card controller */
 #define VERSATILE_UART0_BASE           0x101F1000	/* Uart 0 */
 #define VERSATILE_UART1_BASE           0x101F2000	/* Uart 1 */
@@ -255,7 +255,7 @@
 #define ERASE_UNIT_PAGES    32
 #define START_PAGE          0x80
 
-/* 
+/*
  *  LED settings, bits [7:0]
  */
 #define VERSATILE_SYS_LED0             (1 << 0)
@@ -271,7 +271,7 @@
 
 #define LED_BANK                  VERSATILE_SYS_LED
 
-/* 
+/*
  * Control registers
  */
 #define VERSATILE_IDFIELD_OFFSET	0x0	/* Versatile build information */
@@ -283,17 +283,17 @@
 /* ------------------------------------------------------------------------
  *  Versatile Interrupt Controller - control registers
  * ------------------------------------------------------------------------
- * 
- *  Offsets from interrupt controller base 
- * 
+ *
+ *  Offsets from interrupt controller base
+ *
  *  System Controller interrupt controller base is
- * 
+ *
  * 	VERSATILE_IC_BASE
- * 
+ *
  *  Core Module interrupt controller base is
- * 
- * 	VERSATILE_SYS_IC 
- * 
+ *
+ * 	VERSATILE_SYS_IC
+ *
  */
 /* VIC definitions in include/asm-arm/hardware/vic.h */
 
@@ -334,7 +334,7 @@
 #define INT_PWRFAILINT                  18	/* Power failure */
 #define INT_MBXINT                      19	/* Graphics processor */
 #define INT_GNDINT                      20	/* Reserved */
-	/* External interrupt signals from logic tiles or secondary controller */
+/* External interrupt signals from logic tiles or secondary controller */
 #define INT_VICSOURCE21                 21	/* Disk on Chip */
 #define INT_VICSOURCE22                 22	/* MCI0A */
 #define INT_VICSOURCE23                 23	/* MCI1A */
@@ -366,7 +366,7 @@
 #define SIC_INT_CLCD                    7	/* Character LCD */
 #define SIC_INT_TOUCH                   8	/* Touchscreen */
 #define SIC_INT_KEYPAD                  9	/* Key pressed on display keypad */
-	/* 10:20 - reserved */
+/* 10:20 - reserved */
 #define SIC_INT_DoC                     21	/* Disk on Chip memory controller */
 #define SIC_INT_MMCI0A                  22	/* MMC 0A */
 #define SIC_INT_MMCI1A                  23	/* MMC 1A */

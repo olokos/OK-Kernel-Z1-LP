@@ -231,9 +231,8 @@ extern void sni_cpu_time_init(void);
 #ifdef CONFIG_EISA
 extern int sni_eisa_root_init(void);
 #else
-static inline int sni_eisa_root_init(void)
-{
-	return 0;
+static inline int sni_eisa_root_init(void) {
+    return 0;
 }
 #endif
 

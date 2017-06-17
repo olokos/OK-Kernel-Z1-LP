@@ -49,7 +49,7 @@
 #ifdef CONFIG_64BIT
 #  define USER_PSW_HI_MASK	PSW_HI_CB
 #  define WIDE_PSW		PSW_W
-#else 
+#else
 #  define WIDE_PSW		0
 #endif
 
@@ -63,33 +63,33 @@
 
 /* The program status word as bitfields.  */
 struct pa_psw {
-	unsigned int y:1;
-	unsigned int z:1;
-	unsigned int rv:2;
-	unsigned int w:1;
-	unsigned int e:1;
-	unsigned int s:1;
-	unsigned int t:1;
+    unsigned int y:1;
+    unsigned int z:1;
+    unsigned int rv:2;
+    unsigned int w:1;
+    unsigned int e:1;
+    unsigned int s:1;
+    unsigned int t:1;
 
-	unsigned int h:1;
-	unsigned int l:1;
-	unsigned int n:1;
-	unsigned int x:1;
-	unsigned int b:1;
-	unsigned int c:1;
-	unsigned int v:1;
-	unsigned int m:1;
+    unsigned int h:1;
+    unsigned int l:1;
+    unsigned int n:1;
+    unsigned int x:1;
+    unsigned int b:1;
+    unsigned int c:1;
+    unsigned int v:1;
+    unsigned int m:1;
 
-	unsigned int cb:8;
+    unsigned int cb:8;
 
-	unsigned int o:1;
-	unsigned int g:1;
-	unsigned int f:1;
-	unsigned int r:1;
-	unsigned int q:1;
-	unsigned int p:1;
-	unsigned int d:1;
-	unsigned int i:1;
+    unsigned int o:1;
+    unsigned int g:1;
+    unsigned int f:1;
+    unsigned int r:1;
+    unsigned int q:1;
+    unsigned int p:1;
+    unsigned int d:1;
+    unsigned int i:1;
 };
 
 #ifdef CONFIG_64BIT

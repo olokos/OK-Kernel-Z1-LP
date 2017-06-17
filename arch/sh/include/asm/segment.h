@@ -4,7 +4,7 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })

@@ -29,12 +29,12 @@
 static struct backlight_device *apple_backlight_device;
 
 struct hw_data {
-	/* I/O resource to allocate. */
-	unsigned long iostart;
-	unsigned long iolen;
-	/* Backlight operations structure. */
-	const struct backlight_ops backlight_ops;
-	void (*set_brightness)(int);
+    /* I/O resource to allocate. */
+    unsigned long iostart;
+    unsigned long iolen;
+    /* Backlight operations structure. */
+    const struct backlight_ops backlight_ops;
+    void (*set_brightness)(int);
 };
 
 static const struct hw_data *hw_data;
@@ -49,205 +49,193 @@ MODULE_PARM_DESC(debug, "Set to one to enable debugging messages.");
 /*
  * Implementation for machines with Intel chipset.
  */
-static void intel_chipset_set_brightness(int intensity)
-{
-	outb(0x04 | (intensity << 4), 0xb3);
-	outb(0xbf, 0xb2);
+static void intel_chipset_set_brightness(int intensity) {
+    outb(0x04 | (intensity << 4), 0xb3);
+    outb(0xbf, 0xb2);
 }
 
-static int intel_chipset_send_intensity(struct backlight_device *bd)
-{
-	int intensity = bd->props.brightness;
+static int intel_chipset_send_intensity(struct backlight_device *bd) {
+    int intensity = bd->props.brightness;
 
-	if (debug)
-		printk(KERN_DEBUG DRIVER "setting brightness to %d\n",
-		       intensity);
+    if (debug)
+        printk(KERN_DEBUG DRIVER "setting brightness to %d\n",
+               intensity);
 
-	intel_chipset_set_brightness(intensity);
-	return 0;
+    intel_chipset_set_brightness(intensity);
+    return 0;
 }
 
-static int intel_chipset_get_intensity(struct backlight_device *bd)
-{
-	int intensity;
+static int intel_chipset_get_intensity(struct backlight_device *bd) {
+    int intensity;
 
-	outb(0x03, 0xb3);
-	outb(0xbf, 0xb2);
-	intensity = inb(0xb3) >> 4;
+    outb(0x03, 0xb3);
+    outb(0xbf, 0xb2);
+    intensity = inb(0xb3) >> 4;
 
-	if (debug)
-		printk(KERN_DEBUG DRIVER "read brightness of %d\n",
-		       intensity);
+    if (debug)
+        printk(KERN_DEBUG DRIVER "read brightness of %d\n",
+               intensity);
 
-	return intensity;
+    return intensity;
 }
 
 static const struct hw_data intel_chipset_data = {
-	.iostart = 0xb2,
-	.iolen = 2,
-	.backlight_ops	= {
-		.options	= BL_CORE_SUSPENDRESUME,
-		.get_brightness	= intel_chipset_get_intensity,
-		.update_status	= intel_chipset_send_intensity,
-	},
-	.set_brightness = intel_chipset_set_brightness,
+    .iostart = 0xb2,
+    .iolen = 2,
+    .backlight_ops	= {
+        .options	= BL_CORE_SUSPENDRESUME,
+        .get_brightness	= intel_chipset_get_intensity,
+        .update_status	= intel_chipset_send_intensity,
+    },
+    .set_brightness = intel_chipset_set_brightness,
 };
 
 /*
  * Implementation for machines with Nvidia chipset.
  */
-static void nvidia_chipset_set_brightness(int intensity)
-{
-	outb(0x04 | (intensity << 4), 0x52f);
-	outb(0xbf, 0x52e);
+static void nvidia_chipset_set_brightness(int intensity) {
+    outb(0x04 | (intensity << 4), 0x52f);
+    outb(0xbf, 0x52e);
 }
 
-static int nvidia_chipset_send_intensity(struct backlight_device *bd)
-{
-	int intensity = bd->props.brightness;
+static int nvidia_chipset_send_intensity(struct backlight_device *bd) {
+    int intensity = bd->props.brightness;
 
-	if (debug)
-		printk(KERN_DEBUG DRIVER "setting brightness to %d\n",
-		       intensity);
+    if (debug)
+        printk(KERN_DEBUG DRIVER "setting brightness to %d\n",
+               intensity);
 
-	nvidia_chipset_set_brightness(intensity);
-	return 0;
+    nvidia_chipset_set_brightness(intensity);
+    return 0;
 }
 
-static int nvidia_chipset_get_intensity(struct backlight_device *bd)
-{
-	int intensity;
+static int nvidia_chipset_get_intensity(struct backlight_device *bd) {
+    int intensity;
 
-	outb(0x03, 0x52f);
-	outb(0xbf, 0x52e);
-	intensity = inb(0x52f) >> 4;
+    outb(0x03, 0x52f);
+    outb(0xbf, 0x52e);
+    intensity = inb(0x52f) >> 4;
 
-	if (debug)
-		printk(KERN_DEBUG DRIVER "read brightness of %d\n",
-		       intensity);
+    if (debug)
+        printk(KERN_DEBUG DRIVER "read brightness of %d\n",
+               intensity);
 
-	return intensity;
+    return intensity;
 }
 
 static const struct hw_data nvidia_chipset_data = {
-	.iostart = 0x52e,
-	.iolen = 2,
-	.backlight_ops		= {
-		.options	= BL_CORE_SUSPENDRESUME,
-		.get_brightness	= nvidia_chipset_get_intensity,
-		.update_status	= nvidia_chipset_send_intensity
-	},
-	.set_brightness = nvidia_chipset_set_brightness,
+    .iostart = 0x52e,
+    .iolen = 2,
+    .backlight_ops		= {
+        .options	= BL_CORE_SUSPENDRESUME,
+        .get_brightness	= nvidia_chipset_get_intensity,
+        .update_status	= nvidia_chipset_send_intensity
+    },
+    .set_brightness = nvidia_chipset_set_brightness,
 };
 
-static int __devinit apple_bl_add(struct acpi_device *dev)
-{
-	struct backlight_properties props;
-	struct pci_dev *host;
-	int intensity;
+static int __devinit apple_bl_add(struct acpi_device *dev) {
+    struct backlight_properties props;
+    struct pci_dev *host;
+    int intensity;
 
-	host = pci_get_bus_and_slot(0, 0);
+    host = pci_get_bus_and_slot(0, 0);
 
-	if (!host) {
-		printk(KERN_ERR DRIVER "unable to find PCI host\n");
-		return -ENODEV;
-	}
+    if (!host) {
+        printk(KERN_ERR DRIVER "unable to find PCI host\n");
+        return -ENODEV;
+    }
 
-	if (host->vendor == PCI_VENDOR_ID_INTEL)
-		hw_data = &intel_chipset_data;
-	else if (host->vendor == PCI_VENDOR_ID_NVIDIA)
-		hw_data = &nvidia_chipset_data;
+    if (host->vendor == PCI_VENDOR_ID_INTEL)
+        hw_data = &intel_chipset_data;
+    else if (host->vendor == PCI_VENDOR_ID_NVIDIA)
+        hw_data = &nvidia_chipset_data;
 
-	pci_dev_put(host);
+    pci_dev_put(host);
 
-	if (!hw_data) {
-		printk(KERN_ERR DRIVER "unknown hardware\n");
-		return -ENODEV;
-	}
+    if (!hw_data) {
+        printk(KERN_ERR DRIVER "unknown hardware\n");
+        return -ENODEV;
+    }
 
-	/* Check that the hardware responds - this may not work under EFI */
+    /* Check that the hardware responds - this may not work under EFI */
 
-	intensity = hw_data->backlight_ops.get_brightness(NULL);
+    intensity = hw_data->backlight_ops.get_brightness(NULL);
 
-	if (!intensity) {
-		hw_data->set_brightness(1);
-		if (!hw_data->backlight_ops.get_brightness(NULL))
-			return -ENODEV;
+    if (!intensity) {
+        hw_data->set_brightness(1);
+        if (!hw_data->backlight_ops.get_brightness(NULL))
+            return -ENODEV;
 
-		hw_data->set_brightness(0);
-	}
+        hw_data->set_brightness(0);
+    }
 
-	if (!request_region(hw_data->iostart, hw_data->iolen,
-			    "Apple backlight"))
-		return -ENXIO;
+    if (!request_region(hw_data->iostart, hw_data->iolen,
+                        "Apple backlight"))
+        return -ENXIO;
 
-	memset(&props, 0, sizeof(struct backlight_properties));
-	props.type = BACKLIGHT_PLATFORM;
-	props.max_brightness = 15;
-	apple_backlight_device = backlight_device_register("apple_backlight",
-				  NULL, NULL, &hw_data->backlight_ops, &props);
+    memset(&props, 0, sizeof(struct backlight_properties));
+    props.type = BACKLIGHT_PLATFORM;
+    props.max_brightness = 15;
+    apple_backlight_device = backlight_device_register("apple_backlight",
+                             NULL, NULL, &hw_data->backlight_ops, &props);
 
-	if (IS_ERR(apple_backlight_device)) {
-		release_region(hw_data->iostart, hw_data->iolen);
-		return PTR_ERR(apple_backlight_device);
-	}
+    if (IS_ERR(apple_backlight_device)) {
+        release_region(hw_data->iostart, hw_data->iolen);
+        return PTR_ERR(apple_backlight_device);
+    }
 
-	apple_backlight_device->props.brightness =
-		hw_data->backlight_ops.get_brightness(apple_backlight_device);
-	backlight_update_status(apple_backlight_device);
+    apple_backlight_device->props.brightness =
+        hw_data->backlight_ops.get_brightness(apple_backlight_device);
+    backlight_update_status(apple_backlight_device);
 
-	return 0;
+    return 0;
 }
 
-static int __devexit apple_bl_remove(struct acpi_device *dev, int type)
-{
-	backlight_device_unregister(apple_backlight_device);
+static int __devexit apple_bl_remove(struct acpi_device *dev, int type) {
+    backlight_device_unregister(apple_backlight_device);
 
-	release_region(hw_data->iostart, hw_data->iolen);
-	hw_data = NULL;
-	return 0;
+    release_region(hw_data->iostart, hw_data->iolen);
+    hw_data = NULL;
+    return 0;
 }
 
 static const struct acpi_device_id apple_bl_ids[] = {
-	{"APP0002", 0},
-	{"", 0},
+    {"APP0002", 0},
+    {"", 0},
 };
 
 static struct acpi_driver apple_bl_driver = {
-	.name = "Apple backlight",
-	.ids = apple_bl_ids,
-	.ops = {
-		.add = apple_bl_add,
-		.remove = apple_bl_remove,
-	},
+    .name = "Apple backlight",
+    .ids = apple_bl_ids,
+    .ops = {
+        .add = apple_bl_add,
+        .remove = apple_bl_remove,
+    },
 };
 
 static atomic_t apple_bl_registered = ATOMIC_INIT(0);
 
-int apple_bl_register(void)
-{
-	if (atomic_xchg(&apple_bl_registered, 1) == 0)
-		return acpi_bus_register_driver(&apple_bl_driver);
+int apple_bl_register(void) {
+    if (atomic_xchg(&apple_bl_registered, 1) == 0)
+        return acpi_bus_register_driver(&apple_bl_driver);
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL_GPL(apple_bl_register);
 
-void apple_bl_unregister(void)
-{
-	if (atomic_xchg(&apple_bl_registered, 0) == 1)
-		acpi_bus_unregister_driver(&apple_bl_driver);
+void apple_bl_unregister(void) {
+    if (atomic_xchg(&apple_bl_registered, 0) == 1)
+        acpi_bus_unregister_driver(&apple_bl_driver);
 }
 EXPORT_SYMBOL_GPL(apple_bl_unregister);
 
-static int __init apple_bl_init(void)
-{
-	return apple_bl_register();
+static int __init apple_bl_init(void) {
+    return apple_bl_register();
 }
 
-static void __exit apple_bl_exit(void)
-{
-	apple_bl_unregister();
+static void __exit apple_bl_exit(void) {
+    apple_bl_unregister();
 }
 
 module_init(apple_bl_init);

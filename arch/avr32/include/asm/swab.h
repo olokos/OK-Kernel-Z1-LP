@@ -19,15 +19,13 @@ extern unsigned short __builtin_bswap_16(unsigned short x);
  * the result.
  */
 #if !(__GNUC__ == 4 && __GNUC_MINOR__ < 2)
-static inline __attribute_const__ __u16 __arch_swab16(__u16 val)
-{
-	return __builtin_bswap_16(val);
+static inline __attribute_const__ __u16 __arch_swab16(__u16 val) {
+    return __builtin_bswap_16(val);
 }
 #define __arch_swab16 __arch_swab16
 
-static inline __attribute_const__ __u32 __arch_swab32(__u32 val)
-{
-	return __builtin_bswap_32(val);
+static inline __attribute_const__ __u32 __arch_swab32(__u32 val) {
+    return __builtin_bswap_32(val);
 }
 #define __arch_swab32 __arch_swab32
 #endif

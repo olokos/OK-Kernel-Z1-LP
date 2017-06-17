@@ -33,13 +33,13 @@ superhyway_ro_attr(top_mb, "0x%02x\n", vcr.top_mb);
 superhyway_ro_attr(resource, "0x%08lx\n", resource[0].start);
 
 struct device_attribute superhyway_dev_attrs[] = {
-	__ATTR_RO(perr_flags),
-	__ATTR_RO(merr_flags),
-	__ATTR_RO(mod_vers),
-	__ATTR_RO(mod_id),
-	__ATTR_RO(bot_mb),
-	__ATTR_RO(top_mb),
-	__ATTR_RO(resource),
-	__ATTR_NULL,
+    __ATTR_RO(perr_flags),
+    __ATTR_RO(merr_flags),
+    __ATTR_RO(mod_vers),
+    __ATTR_RO(mod_id),
+    __ATTR_RO(bot_mb),
+    __ATTR_RO(top_mb),
+    __ATTR_RO(resource),
+    __ATTR_NULL,
 };
 

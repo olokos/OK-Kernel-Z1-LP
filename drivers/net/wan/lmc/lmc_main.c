@@ -1,41 +1,41 @@
- /*
-  * Copyright (c) 1997-2000 LAN Media Corporation (LMC)
-  * All rights reserved.  www.lanmedia.com
-  * Generic HDLC port Copyright (C) 2008 Krzysztof Halasa <khc@pm.waw.pl>
-  *
-  * This code is written by:
-  * Andrew Stanley-Jones (asj@cban.com)
-  * Rob Braun (bbraun@vix.com),
-  * Michael Graff (explorer@vix.com) and
-  * Matt Thomas (matt@3am-software.com).
-  *
-  * With Help By:
-  * David Boggs
-  * Ron Crane
-  * Alan Cox
-  *
-  * This software may be used and distributed according to the terms
-  * of the GNU General Public License version 2, incorporated herein by reference.
-  *
-  * Driver for the LanMedia LMC5200, LMC5245, LMC1000, LMC1200 cards.
-  *
-  * To control link specific options lmcctl is required.
-  * It can be obtained from ftp.lanmedia.com.
-  *
-  * Linux driver notes:
-  * Linux uses the device struct lmc_private to pass private information
-  * around.
-  *
-  * The initialization portion of this driver (the lmc_reset() and the
-  * lmc_dec_reset() functions, as well as the led controls and the
-  * lmc_initcsrs() functions.
-  *
-  * The watchdog function runs every second and checks to see if
-  * we still have link, and that the timing source is what we expected
-  * it to be.  If link is lost, the interface is marked down, and
-  * we no longer can transmit.
-  *
-  */
+/*
+ * Copyright (c) 1997-2000 LAN Media Corporation (LMC)
+ * All rights reserved.  www.lanmedia.com
+ * Generic HDLC port Copyright (C) 2008 Krzysztof Halasa <khc@pm.waw.pl>
+ *
+ * This code is written by:
+ * Andrew Stanley-Jones (asj@cban.com)
+ * Rob Braun (bbraun@vix.com),
+ * Michael Graff (explorer@vix.com) and
+ * Matt Thomas (matt@3am-software.com).
+ *
+ * With Help By:
+ * David Boggs
+ * Ron Crane
+ * Alan Cox
+ *
+ * This software may be used and distributed according to the terms
+ * of the GNU General Public License version 2, incorporated herein by reference.
+ *
+ * Driver for the LanMedia LMC5200, LMC5245, LMC1000, LMC1200 cards.
+ *
+ * To control link specific options lmcctl is required.
+ * It can be obtained from ftp.lanmedia.com.
+ *
+ * Linux driver notes:
+ * Linux uses the device struct lmc_private to pass private information
+ * around.
+ *
+ * The initialization portion of this driver (the lmc_reset() and the
+ * lmc_dec_reset() functions, as well as the led controls and the
+ * lmc_initcsrs() functions.
+ *
+ * The watchdog function runs every second and checks to see if
+ * we still have link, and that the timing source is what we expected
+ * it to be.  If link is lost, the interface is marked down, and
+ * we no longer can transmit.
+ *
+ */
 
 #include <linux/kernel.h>
 #include <linux/module.h>
@@ -78,11 +78,15 @@
 static int LMC_PKT_BUF_SZ = 1542;
 
 static DEFINE_PCI_DEVICE_TABLE(lmc_pci_tbl) = {
-	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
-	  PCI_VENDOR_ID_LMC, PCI_ANY_ID },
-	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
-	  PCI_ANY_ID, PCI_VENDOR_ID_LMC },
-	{ 0 }
+    {
+        PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
+        PCI_VENDOR_ID_LMC, PCI_ANY_ID
+    },
+    {
+        PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
+        PCI_ANY_ID, PCI_VENDOR_ID_LMC
+    },
+    { 0 }
 };
 
 MODULE_DEVICE_TABLE(pci, lmc_pci_tbl);
@@ -90,7 +94,7 @@ MODULE_LICENSE("GPL v2");
 
 
 static netdev_tx_t lmc_start_xmit(struct sk_buff *skb,
-					struct net_device *dev);
+                                  struct net_device *dev);
 static int lmc_rx (struct net_device *dev);
 static int lmc_open(struct net_device *dev);
 static int lmc_close(struct net_device *dev);
@@ -109,8 +113,7 @@ static void lmc_driver_timeout(struct net_device *dev);
  * linux reserves 16 device specific IOCTLs.  We call them
  * LMCIOC* to control various bits of our world.
  */
-int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
-{
+int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) { /*fold00*/
     lmc_softc_t *sc = dev_to_sc(dev);
     lmc_ctl_t ctl;
     int ret = -EOPNOTSUPP;
@@ -125,15 +128,15 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
      */
 
     switch (cmd) {
-        /*
-         * Return current driver state.  Since we keep this up
-         * To date internally, just copy this out to the user.
-         */
+    /*
+     * Return current driver state.  Since we keep this up
+     * To date internally, just copy this out to the user.
+     */
     case LMCIOCGINFO: /*fold01*/
-	if (copy_to_user(ifr->ifr_data, &sc->ictl, sizeof(lmc_ctl_t)))
-		ret = -EFAULT;
-	else
-		ret = 0;
+        if (copy_to_user(ifr->ifr_data, &sc->ictl, sizeof(lmc_ctl_t)))
+            ret = -EFAULT;
+        else
+            ret = 0;
         break;
 
     case LMCIOCSINFO: /*fold01*/
@@ -142,65 +145,63 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
             break;
         }
 
-        if(dev->flags & IFF_UP){
+        if(dev->flags & IFF_UP) {
             ret = -EBUSY;
             break;
         }
 
-	if (copy_from_user(&ctl, ifr->ifr_data, sizeof(lmc_ctl_t))) {
-		ret = -EFAULT;
-		break;
-	}
+        if (copy_from_user(&ctl, ifr->ifr_data, sizeof(lmc_ctl_t))) {
+            ret = -EFAULT;
+            break;
+        }
 
-	spin_lock_irqsave(&sc->lmc_lock, flags);
+        spin_lock_irqsave(&sc->lmc_lock, flags);
         sc->lmc_media->set_status (sc, &ctl);
 
         if(ctl.crc_length != sc->ictl.crc_length) {
             sc->lmc_media->set_crc_length(sc, ctl.crc_length);
-	    if (sc->ictl.crc_length == LMC_CTL_CRC_LENGTH_16)
-		sc->TxDescriptControlInit |=  LMC_TDES_ADD_CRC_DISABLE;
-	    else
-		sc->TxDescriptControlInit &= ~LMC_TDES_ADD_CRC_DISABLE;
+            if (sc->ictl.crc_length == LMC_CTL_CRC_LENGTH_16)
+                sc->TxDescriptControlInit |=  LMC_TDES_ADD_CRC_DISABLE;
+            else
+                sc->TxDescriptControlInit &= ~LMC_TDES_ADD_CRC_DISABLE;
         }
-	spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
         ret = 0;
         break;
 
-    case LMCIOCIFTYPE: /*fold01*/
-        {
-	    u16 old_type = sc->if_type;
-	    u16	new_type;
+    case LMCIOCIFTYPE: { /*fold01*/
+        u16 old_type = sc->if_type;
+        u16	new_type;
 
-	    if (!capable(CAP_NET_ADMIN)) {
-		ret = -EPERM;
-		break;
-	    }
+        if (!capable(CAP_NET_ADMIN)) {
+            ret = -EPERM;
+            break;
+        }
 
-	    if (copy_from_user(&new_type, ifr->ifr_data, sizeof(u16))) {
-		ret = -EFAULT;
-		break;
-	    }
+        if (copy_from_user(&new_type, ifr->ifr_data, sizeof(u16))) {
+            ret = -EFAULT;
+            break;
+        }
 
-            
-	    if (new_type == old_type)
-	    {
-		ret = 0 ;
-		break;				/* no change */
-            }
-            
-	    spin_lock_irqsave(&sc->lmc_lock, flags);
-            lmc_proto_close(sc);
 
-            sc->if_type = new_type;
-            lmc_proto_attach(sc);
-	    ret = lmc_proto_open(sc);
-	    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-	    break;
-	}
+        if (new_type == old_type) {
+            ret = 0 ;
+            break;				/* no change */
+        }
+
+        spin_lock_irqsave(&sc->lmc_lock, flags);
+        lmc_proto_close(sc);
+
+        sc->if_type = new_type;
+        lmc_proto_attach(sc);
+        ret = lmc_proto_open(sc);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        break;
+    }
 
     case LMCIOCGETXINFO: /*fold01*/
-	spin_lock_irqsave(&sc->lmc_lock, flags);
+        spin_lock_irqsave(&sc->lmc_lock, flags);
         sc->lmc_xinfo.Magic0 = 0xBEEFCAFE;
 
         sc->lmc_xinfo.PciCardType = sc->lmc_cardtype;
@@ -213,417 +214,410 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
         sc->lmc_xinfo.MaxFrameSize = LMC_PKT_BUF_SZ;
         sc->lmc_xinfo.link_status = sc->lmc_media->get_link_status (sc);
         sc->lmc_xinfo.mii_reg16 = lmc_mii_readreg (sc, 0, 16);
-	spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
         sc->lmc_xinfo.Magic1 = 0xDEADBEEF;
 
         if (copy_to_user(ifr->ifr_data, &sc->lmc_xinfo,
-			 sizeof(struct lmc_xinfo)))
-		ret = -EFAULT;
-	else
-		ret = 0;
+                         sizeof(struct lmc_xinfo)))
+            ret = -EFAULT;
+        else
+            ret = 0;
 
         break;
 
     case LMCIOCGETLMCSTATS:
-	    spin_lock_irqsave(&sc->lmc_lock, flags);
-	    if (sc->lmc_cardtype == LMC_CARDTYPE_T1) {
-		    lmc_mii_writereg(sc, 0, 17, T1FRAMER_FERR_LSB);
-		    sc->extra_stats.framingBitErrorCount +=
-			    lmc_mii_readreg(sc, 0, 18) & 0xff;
-		    lmc_mii_writereg(sc, 0, 17, T1FRAMER_FERR_MSB);
-		    sc->extra_stats.framingBitErrorCount +=
-			    (lmc_mii_readreg(sc, 0, 18) & 0xff) << 8;
-		    lmc_mii_writereg(sc, 0, 17, T1FRAMER_LCV_LSB);
-		    sc->extra_stats.lineCodeViolationCount +=
-			    lmc_mii_readreg(sc, 0, 18) & 0xff;
-		    lmc_mii_writereg(sc, 0, 17, T1FRAMER_LCV_MSB);
-		    sc->extra_stats.lineCodeViolationCount +=
-			    (lmc_mii_readreg(sc, 0, 18) & 0xff) << 8;
-		    lmc_mii_writereg(sc, 0, 17, T1FRAMER_AERR);
-		    regVal = lmc_mii_readreg(sc, 0, 18) & 0xff;
+        spin_lock_irqsave(&sc->lmc_lock, flags);
+        if (sc->lmc_cardtype == LMC_CARDTYPE_T1) {
+            lmc_mii_writereg(sc, 0, 17, T1FRAMER_FERR_LSB);
+            sc->extra_stats.framingBitErrorCount +=
+                lmc_mii_readreg(sc, 0, 18) & 0xff;
+            lmc_mii_writereg(sc, 0, 17, T1FRAMER_FERR_MSB);
+            sc->extra_stats.framingBitErrorCount +=
+                (lmc_mii_readreg(sc, 0, 18) & 0xff) << 8;
+            lmc_mii_writereg(sc, 0, 17, T1FRAMER_LCV_LSB);
+            sc->extra_stats.lineCodeViolationCount +=
+                lmc_mii_readreg(sc, 0, 18) & 0xff;
+            lmc_mii_writereg(sc, 0, 17, T1FRAMER_LCV_MSB);
+            sc->extra_stats.lineCodeViolationCount +=
+                (lmc_mii_readreg(sc, 0, 18) & 0xff) << 8;
+            lmc_mii_writereg(sc, 0, 17, T1FRAMER_AERR);
+            regVal = lmc_mii_readreg(sc, 0, 18) & 0xff;
 
-		    sc->extra_stats.lossOfFrameCount +=
-			    (regVal & T1FRAMER_LOF_MASK) >> 4;
-		    sc->extra_stats.changeOfFrameAlignmentCount +=
-			    (regVal & T1FRAMER_COFA_MASK) >> 2;
-		    sc->extra_stats.severelyErroredFrameCount +=
-			    regVal & T1FRAMER_SEF_MASK;
-	    }
-	    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-	    if (copy_to_user(ifr->ifr_data, &sc->lmc_device->stats,
-			     sizeof(sc->lmc_device->stats)) ||
-		copy_to_user(ifr->ifr_data + sizeof(sc->lmc_device->stats),
-			     &sc->extra_stats, sizeof(sc->extra_stats)))
-		    ret = -EFAULT;
-	    else
-		    ret = 0;
-	    break;
+            sc->extra_stats.lossOfFrameCount +=
+                (regVal & T1FRAMER_LOF_MASK) >> 4;
+            sc->extra_stats.changeOfFrameAlignmentCount +=
+                (regVal & T1FRAMER_COFA_MASK) >> 2;
+            sc->extra_stats.severelyErroredFrameCount +=
+                regVal & T1FRAMER_SEF_MASK;
+        }
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        if (copy_to_user(ifr->ifr_data, &sc->lmc_device->stats,
+                         sizeof(sc->lmc_device->stats)) ||
+                copy_to_user(ifr->ifr_data + sizeof(sc->lmc_device->stats),
+                             &sc->extra_stats, sizeof(sc->extra_stats)))
+            ret = -EFAULT;
+        else
+            ret = 0;
+        break;
 
     case LMCIOCCLEARLMCSTATS:
-	    if (!capable(CAP_NET_ADMIN)) {
-		    ret = -EPERM;
-		    break;
-	    }
-
-	    spin_lock_irqsave(&sc->lmc_lock, flags);
-	    memset(&sc->lmc_device->stats, 0, sizeof(sc->lmc_device->stats));
-	    memset(&sc->extra_stats, 0, sizeof(sc->extra_stats));
-	    sc->extra_stats.check = STATCHECK;
-	    sc->extra_stats.version_size = (DRIVER_VERSION << 16) +
-		    sizeof(sc->lmc_device->stats) + sizeof(sc->extra_stats);
-	    sc->extra_stats.lmc_cardtype = sc->lmc_cardtype;
-	    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-	    ret = 0;
-	    break;
-
-    case LMCIOCSETCIRCUIT: /*fold01*/
-        if (!capable(CAP_NET_ADMIN)){
+        if (!capable(CAP_NET_ADMIN)) {
             ret = -EPERM;
             break;
         }
 
-        if(dev->flags & IFF_UP){
+        spin_lock_irqsave(&sc->lmc_lock, flags);
+        memset(&sc->lmc_device->stats, 0, sizeof(sc->lmc_device->stats));
+        memset(&sc->extra_stats, 0, sizeof(sc->extra_stats));
+        sc->extra_stats.check = STATCHECK;
+        sc->extra_stats.version_size = (DRIVER_VERSION << 16) +
+                                       sizeof(sc->lmc_device->stats) + sizeof(sc->extra_stats);
+        sc->extra_stats.lmc_cardtype = sc->lmc_cardtype;
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        ret = 0;
+        break;
+
+    case LMCIOCSETCIRCUIT: /*fold01*/
+        if (!capable(CAP_NET_ADMIN)) {
+            ret = -EPERM;
+            break;
+        }
+
+        if(dev->flags & IFF_UP) {
             ret = -EBUSY;
             break;
         }
 
-	if (copy_from_user(&ctl, ifr->ifr_data, sizeof(lmc_ctl_t))) {
-		ret = -EFAULT;
-		break;
-	}
-	spin_lock_irqsave(&sc->lmc_lock, flags);
+        if (copy_from_user(&ctl, ifr->ifr_data, sizeof(lmc_ctl_t))) {
+            ret = -EFAULT;
+            break;
+        }
+        spin_lock_irqsave(&sc->lmc_lock, flags);
         sc->lmc_media->set_circuit_type(sc, ctl.circuit_type);
         sc->ictl.circuit_type = ctl.circuit_type;
-	spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
         ret = 0;
 
         break;
 
     case LMCIOCRESET: /*fold01*/
-        if (!capable(CAP_NET_ADMIN)){
+        if (!capable(CAP_NET_ADMIN)) {
             ret = -EPERM;
             break;
         }
 
-	spin_lock_irqsave(&sc->lmc_lock, flags);
+        spin_lock_irqsave(&sc->lmc_lock, flags);
         /* Reset driver and bring back to current state */
         printk (" REG16 before reset +%04x\n", lmc_mii_readreg (sc, 0, 16));
         lmc_running_reset (dev);
         printk (" REG16 after reset +%04x\n", lmc_mii_readreg (sc, 0, 16));
 
         LMC_EVENT_LOG(LMC_EVENT_FORCEDRESET, LMC_CSR_READ (sc, csr_status), lmc_mii_readreg (sc, 0, 16));
-	spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
         ret = 0;
         break;
 
 #ifdef DEBUG
     case LMCIOCDUMPEVENTLOG:
-	if (copy_to_user(ifr->ifr_data, &lmcEventLogIndex, sizeof(u32))) {
-		ret = -EFAULT;
-		break;
-	}
-	if (copy_to_user(ifr->ifr_data + sizeof(u32), lmcEventLogBuf,
-			 sizeof(lmcEventLogBuf)))
-		ret = -EFAULT;
-	else
-		ret = 0;
+        if (copy_to_user(ifr->ifr_data, &lmcEventLogIndex, sizeof(u32))) {
+            ret = -EFAULT;
+            break;
+        }
+        if (copy_to_user(ifr->ifr_data + sizeof(u32), lmcEventLogBuf,
+                         sizeof(lmcEventLogBuf)))
+            ret = -EFAULT;
+        else
+            ret = 0;
 
         break;
 #endif /* end ifdef _DBG_EVENTLOG */
     case LMCIOCT1CONTROL: /*fold01*/
-        if (sc->lmc_cardtype != LMC_CARDTYPE_T1){
+        if (sc->lmc_cardtype != LMC_CARDTYPE_T1) {
             ret = -EOPNOTSUPP;
             break;
         }
         break;
-    case LMCIOCXILINX: /*fold01*/
-        {
-            struct lmc_xilinx_control xc; /*fold02*/
+    case LMCIOCXILINX: { /*fold01*/
+        struct lmc_xilinx_control xc; /*fold02*/
 
-            if (!capable(CAP_NET_ADMIN)){
-                ret = -EPERM;
-                break;
-            }
+        if (!capable(CAP_NET_ADMIN)) {
+            ret = -EPERM;
+            break;
+        }
+
+        /*
+         * Stop the xwitter whlie we restart the hardware
+         */
+        netif_stop_queue(dev);
+
+        if (copy_from_user(&xc, ifr->ifr_data, sizeof(struct lmc_xilinx_control))) {
+            ret = -EFAULT;
+            break;
+        }
+        switch(xc.command) {
+        case lmc_xilinx_reset: { /*fold02*/
+            u16 mii;
+            spin_lock_irqsave(&sc->lmc_lock, flags);
+            mii = lmc_mii_readreg (sc, 0, 16);
 
             /*
-             * Stop the xwitter whlie we restart the hardware
+             * Make all of them 0 and make input
              */
-            netif_stop_queue(dev);
+            lmc_gpio_mkinput(sc, 0xff);
 
-	    if (copy_from_user(&xc, ifr->ifr_data, sizeof(struct lmc_xilinx_control))) {
-		ret = -EFAULT;
-		break;
-	    }
-            switch(xc.command){
-            case lmc_xilinx_reset: /*fold02*/
-                {
-                    u16 mii;
-		    spin_lock_irqsave(&sc->lmc_lock, flags);
-                    mii = lmc_mii_readreg (sc, 0, 16);
+            /*
+             * make the reset output
+             */
+            lmc_gpio_mkoutput(sc, LMC_GEP_RESET);
 
-                    /*
-                     * Make all of them 0 and make input
-                     */
-                    lmc_gpio_mkinput(sc, 0xff);
+            /*
+             * RESET low to force configuration.  This also forces
+             * the transmitter clock to be internal, but we expect to reset
+             * that later anyway.
+             */
 
-                    /*
-                     * make the reset output
-                     */
-                    lmc_gpio_mkoutput(sc, LMC_GEP_RESET);
-
-                    /*
-                     * RESET low to force configuration.  This also forces
-                     * the transmitter clock to be internal, but we expect to reset
-                     * that later anyway.
-                     */
-
-                    sc->lmc_gpio &= ~LMC_GEP_RESET;
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+            sc->lmc_gpio &= ~LMC_GEP_RESET;
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
 
 
-                    /*
-                     * hold for more than 10 microseconds
-                     */
-                    udelay(50);
+            /*
+             * hold for more than 10 microseconds
+             */
+            udelay(50);
 
-                    sc->lmc_gpio |= LMC_GEP_RESET;
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+            sc->lmc_gpio |= LMC_GEP_RESET;
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
 
 
-                    /*
-                     * stop driving Xilinx-related signals
-                     */
-                    lmc_gpio_mkinput(sc, 0xff);
+            /*
+             * stop driving Xilinx-related signals
+             */
+            lmc_gpio_mkinput(sc, 0xff);
 
-                    /* Reset the frammer hardware */
-                    sc->lmc_media->set_link_status (sc, 1);
-                    sc->lmc_media->set_status (sc, NULL);
+            /* Reset the frammer hardware */
+            sc->lmc_media->set_link_status (sc, 1);
+            sc->lmc_media->set_status (sc, NULL);
 //                    lmc_softreset(sc);
 
-                    {
-                        int i;
-                        for(i = 0; i < 5; i++){
-                            lmc_led_on(sc, LMC_DS3_LED0);
-                            mdelay(100);
-                            lmc_led_off(sc, LMC_DS3_LED0);
-                            lmc_led_on(sc, LMC_DS3_LED1);
-                            mdelay(100);
-                            lmc_led_off(sc, LMC_DS3_LED1);
-                            lmc_led_on(sc, LMC_DS3_LED3);
-                            mdelay(100);
-                            lmc_led_off(sc, LMC_DS3_LED3);
-                            lmc_led_on(sc, LMC_DS3_LED2);
-                            mdelay(100);
-                            lmc_led_off(sc, LMC_DS3_LED2);
-                        }
-                    }
-		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-                    
-                    
-
-                    ret = 0x0;
-
+            {
+                int i;
+                for(i = 0; i < 5; i++) {
+                    lmc_led_on(sc, LMC_DS3_LED0);
+                    mdelay(100);
+                    lmc_led_off(sc, LMC_DS3_LED0);
+                    lmc_led_on(sc, LMC_DS3_LED1);
+                    mdelay(100);
+                    lmc_led_off(sc, LMC_DS3_LED1);
+                    lmc_led_on(sc, LMC_DS3_LED3);
+                    mdelay(100);
+                    lmc_led_off(sc, LMC_DS3_LED3);
+                    lmc_led_on(sc, LMC_DS3_LED2);
+                    mdelay(100);
+                    lmc_led_off(sc, LMC_DS3_LED2);
                 }
-
-                break;
-            case lmc_xilinx_load_prom: /*fold02*/
-                {
-                    u16 mii;
-                    int timeout = 500000;
-		    spin_lock_irqsave(&sc->lmc_lock, flags);
-                    mii = lmc_mii_readreg (sc, 0, 16);
-
-                    /*
-                     * Make all of them 0 and make input
-                     */
-                    lmc_gpio_mkinput(sc, 0xff);
-
-                    /*
-                     * make the reset output
-                     */
-                    lmc_gpio_mkoutput(sc,  LMC_GEP_DP | LMC_GEP_RESET);
-
-                    /*
-                     * RESET low to force configuration.  This also forces
-                     * the transmitter clock to be internal, but we expect to reset
-                     * that later anyway.
-                     */
-
-                    sc->lmc_gpio &= ~(LMC_GEP_RESET | LMC_GEP_DP);
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+            }
+            spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
 
-                    /*
-                     * hold for more than 10 microseconds
-                     */
-                    udelay(50);
 
-                    sc->lmc_gpio |= LMC_GEP_DP | LMC_GEP_RESET;
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+            ret = 0x0;
 
-                    /*
-                     * busy wait for the chip to reset
-                     */
-                    while( (LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0 &&
-                           (timeout-- > 0))
-                        cpu_relax();
+        }
+
+        break;
+        case lmc_xilinx_load_prom: { /*fold02*/
+            u16 mii;
+            int timeout = 500000;
+            spin_lock_irqsave(&sc->lmc_lock, flags);
+            mii = lmc_mii_readreg (sc, 0, 16);
+
+            /*
+             * Make all of them 0 and make input
+             */
+            lmc_gpio_mkinput(sc, 0xff);
+
+            /*
+             * make the reset output
+             */
+            lmc_gpio_mkoutput(sc,  LMC_GEP_DP | LMC_GEP_RESET);
+
+            /*
+             * RESET low to force configuration.  This also forces
+             * the transmitter clock to be internal, but we expect to reset
+             * that later anyway.
+             */
+
+            sc->lmc_gpio &= ~(LMC_GEP_RESET | LMC_GEP_DP);
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
 
 
-                    /*
-                     * stop driving Xilinx-related signals
-                     */
-                    lmc_gpio_mkinput(sc, 0xff);
-		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
+            /*
+             * hold for more than 10 microseconds
+             */
+            udelay(50);
 
-                    ret = 0x0;
-                    
+            sc->lmc_gpio |= LMC_GEP_DP | LMC_GEP_RESET;
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
 
-                    break;
+            /*
+             * busy wait for the chip to reset
+             */
+            while( (LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0 &&
+                    (timeout-- > 0))
+                cpu_relax();
 
-                }
 
-            case lmc_xilinx_load: /*fold02*/
-                {
-                    char *data;
-                    int pos;
-                    int timeout = 500000;
+            /*
+             * stop driving Xilinx-related signals
+             */
+            lmc_gpio_mkinput(sc, 0xff);
+            spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
-                    if (!xc.data) {
-                            ret = -EINVAL;
-                            break;
-                    }
+            ret = 0x0;
 
-                    data = kmalloc(xc.len, GFP_KERNEL);
-                    if (!data) {
-                            ret = -ENOMEM;
-                            break;
-                    }
-                    
-                    if(copy_from_user(data, xc.data, xc.len))
-                    {
-                    	kfree(data);
-                    	ret = -ENOMEM;
-                    	break;
-                    }
 
-                    printk("%s: Starting load of data Len: %d at 0x%p == 0x%p\n", dev->name, xc.len, xc.data, data);
+            break;
 
-		    spin_lock_irqsave(&sc->lmc_lock, flags);
-                    lmc_gpio_mkinput(sc, 0xff);
+        }
 
-                    /*
-                     * Clear the Xilinx and start prgramming from the DEC
-                     */
+        case lmc_xilinx_load: { /*fold02*/
+            char *data;
+            int pos;
+            int timeout = 500000;
 
-                    /*
-                     * Set ouput as:
-                     * Reset: 0 (active)
-                     * DP:    0 (active)
-                     * Mode:  1
-                     *
-                     */
-                    sc->lmc_gpio = 0x00;
-                    sc->lmc_gpio &= ~LMC_GEP_DP;
-                    sc->lmc_gpio &= ~LMC_GEP_RESET;
-                    sc->lmc_gpio |=  LMC_GEP_MODE;
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
-
-                    lmc_gpio_mkoutput(sc, LMC_GEP_MODE | LMC_GEP_DP | LMC_GEP_RESET);
-
-                    /*
-                     * Wait at least 10 us 20 to be safe
-                     */
-                    udelay(50);
-
-                    /*
-                     * Clear reset and activate programming lines
-                     * Reset: Input
-                     * DP:    Input
-                     * Clock: Output
-                     * Data:  Output
-                     * Mode:  Output
-                     */
-                    lmc_gpio_mkinput(sc, LMC_GEP_DP | LMC_GEP_RESET);
-
-                    /*
-                     * Set LOAD, DATA, Clock to 1
-                     */
-                    sc->lmc_gpio = 0x00;
-                    sc->lmc_gpio |= LMC_GEP_MODE;
-                    sc->lmc_gpio |= LMC_GEP_DATA;
-                    sc->lmc_gpio |= LMC_GEP_CLK;
-                    LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
-                    
-                    lmc_gpio_mkoutput(sc, LMC_GEP_DATA | LMC_GEP_CLK | LMC_GEP_MODE );
-
-                    /*
-                     * busy wait for the chip to reset
-                     */
-                    while( (LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0 &&
-                           (timeout-- > 0))
-                        cpu_relax();
-
-                    printk(KERN_DEBUG "%s: Waited %d for the Xilinx to clear it's memory\n", dev->name, 500000-timeout);
-
-                    for(pos = 0; pos < xc.len; pos++){
-                        switch(data[pos]){
-                        case 0:
-                            sc->lmc_gpio &= ~LMC_GEP_DATA; /* Data is 0 */
-                            break;
-                        case 1:
-                            sc->lmc_gpio |= LMC_GEP_DATA; /* Data is 1 */
-                            break;
-                        default:
-                            printk(KERN_WARNING "%s Bad data in xilinx programming data at %d, got %d wanted 0 or 1\n", dev->name, pos, data[pos]);
-                            sc->lmc_gpio |= LMC_GEP_DATA; /* Assume it's 1 */
-                        }
-                        sc->lmc_gpio &= ~LMC_GEP_CLK; /* Clock to zero */
-                        sc->lmc_gpio |= LMC_GEP_MODE;
-                        LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
-                        udelay(1);
-                        
-                        sc->lmc_gpio |= LMC_GEP_CLK; /* Put the clack back to one */
-                        sc->lmc_gpio |= LMC_GEP_MODE;
-                        LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
-                        udelay(1);
-                    }
-                    if((LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0){
-                        printk(KERN_WARNING "%s: Reprogramming FAILED. Needs to be reprogrammed. (corrupted data)\n", dev->name);
-                    }
-                    else if((LMC_CSR_READ(sc, csr_gp) & LMC_GEP_DP) == 0){
-                        printk(KERN_WARNING "%s: Reprogramming FAILED. Needs to be reprogrammed. (done)\n", dev->name);
-                    }
-                    else {
-                        printk(KERN_DEBUG "%s: Done reprogramming Xilinx, %d bits, good luck!\n", dev->name, pos);
-                    }
-
-                    lmc_gpio_mkinput(sc, 0xff);
-                    
-                    sc->lmc_miireg16 |= LMC_MII16_FIFO_RESET;
-                    lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
-
-                    sc->lmc_miireg16 &= ~LMC_MII16_FIFO_RESET;
-                    lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
-		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-
-                    kfree(data);
-                    
-                    ret = 0;
-                    
-                    break;
-                }
-            default: /*fold02*/
-                ret = -EBADE;
+            if (!xc.data) {
+                ret = -EINVAL;
                 break;
             }
 
-            netif_wake_queue(dev);
-            sc->lmc_txfull = 0;
+            data = kmalloc(xc.len, GFP_KERNEL);
+            if (!data) {
+                ret = -ENOMEM;
+                break;
+            }
 
+            if(copy_from_user(data, xc.data, xc.len)) {
+                kfree(data);
+                ret = -ENOMEM;
+                break;
+            }
+
+            printk("%s: Starting load of data Len: %d at 0x%p == 0x%p\n", dev->name, xc.len, xc.data, data);
+
+            spin_lock_irqsave(&sc->lmc_lock, flags);
+            lmc_gpio_mkinput(sc, 0xff);
+
+            /*
+             * Clear the Xilinx and start prgramming from the DEC
+             */
+
+            /*
+             * Set ouput as:
+             * Reset: 0 (active)
+             * DP:    0 (active)
+             * Mode:  1
+             *
+             */
+            sc->lmc_gpio = 0x00;
+            sc->lmc_gpio &= ~LMC_GEP_DP;
+            sc->lmc_gpio &= ~LMC_GEP_RESET;
+            sc->lmc_gpio |=  LMC_GEP_MODE;
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+
+            lmc_gpio_mkoutput(sc, LMC_GEP_MODE | LMC_GEP_DP | LMC_GEP_RESET);
+
+            /*
+             * Wait at least 10 us 20 to be safe
+             */
+            udelay(50);
+
+            /*
+             * Clear reset and activate programming lines
+             * Reset: Input
+             * DP:    Input
+             * Clock: Output
+             * Data:  Output
+             * Mode:  Output
+             */
+            lmc_gpio_mkinput(sc, LMC_GEP_DP | LMC_GEP_RESET);
+
+            /*
+             * Set LOAD, DATA, Clock to 1
+             */
+            sc->lmc_gpio = 0x00;
+            sc->lmc_gpio |= LMC_GEP_MODE;
+            sc->lmc_gpio |= LMC_GEP_DATA;
+            sc->lmc_gpio |= LMC_GEP_CLK;
+            LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+
+            lmc_gpio_mkoutput(sc, LMC_GEP_DATA | LMC_GEP_CLK | LMC_GEP_MODE );
+
+            /*
+             * busy wait for the chip to reset
+             */
+            while( (LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0 &&
+                    (timeout-- > 0))
+                cpu_relax();
+
+            printk(KERN_DEBUG "%s: Waited %d for the Xilinx to clear it's memory\n", dev->name, 500000-timeout);
+
+            for(pos = 0; pos < xc.len; pos++) {
+                switch(data[pos]) {
+                case 0:
+                    sc->lmc_gpio &= ~LMC_GEP_DATA; /* Data is 0 */
+                    break;
+                case 1:
+                    sc->lmc_gpio |= LMC_GEP_DATA; /* Data is 1 */
+                    break;
+                default:
+                    printk(KERN_WARNING "%s Bad data in xilinx programming data at %d, got %d wanted 0 or 1\n", dev->name, pos, data[pos]);
+                    sc->lmc_gpio |= LMC_GEP_DATA; /* Assume it's 1 */
+                }
+                sc->lmc_gpio &= ~LMC_GEP_CLK; /* Clock to zero */
+                sc->lmc_gpio |= LMC_GEP_MODE;
+                LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+                udelay(1);
+
+                sc->lmc_gpio |= LMC_GEP_CLK; /* Put the clack back to one */
+                sc->lmc_gpio |= LMC_GEP_MODE;
+                LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
+                udelay(1);
+            }
+            if((LMC_CSR_READ(sc, csr_gp) & LMC_GEP_INIT) == 0) {
+                printk(KERN_WARNING "%s: Reprogramming FAILED. Needs to be reprogrammed. (corrupted data)\n", dev->name);
+            } else if((LMC_CSR_READ(sc, csr_gp) & LMC_GEP_DP) == 0) {
+                printk(KERN_WARNING "%s: Reprogramming FAILED. Needs to be reprogrammed. (done)\n", dev->name);
+            } else {
+                printk(KERN_DEBUG "%s: Done reprogramming Xilinx, %d bits, good luck!\n", dev->name, pos);
+            }
+
+            lmc_gpio_mkinput(sc, 0xff);
+
+            sc->lmc_miireg16 |= LMC_MII16_FIFO_RESET;
+            lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
+
+            sc->lmc_miireg16 &= ~LMC_MII16_FIFO_RESET;
+            lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
+            spin_unlock_irqrestore(&sc->lmc_lock, flags);
+
+            kfree(data);
+
+            ret = 0;
+
+            break;
         }
-        break;
+        default: /*fold02*/
+            ret = -EBADE;
+            break;
+        }
+
+        netif_wake_queue(dev);
+        sc->lmc_txfull = 0;
+
+    }
+    break;
     default: /*fold01*/
         /* If we don't know what to do, give the protocol a shot. */
         ret = lmc_proto_ioctl (sc, ifr, cmd);
@@ -637,8 +631,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
 
 
 /* the watchdog process that cruises around */
-static void lmc_watchdog (unsigned long data) /*fold00*/
-{
+static void lmc_watchdog (unsigned long data) { /*fold00*/
     struct net_device *dev = (struct net_device *)data;
     lmc_softc_t *sc = dev_to_sc(dev);
     int link_status;
@@ -649,9 +642,9 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
 
     spin_lock_irqsave(&sc->lmc_lock, flags);
 
-    if(sc->check != 0xBEAFCAFE){
+    if(sc->check != 0xBEAFCAFE) {
         printk("LMC: Corrupt net_device struct, breaking out\n");
-	spin_unlock_irqrestore(&sc->lmc_lock, flags);
+        spin_unlock_irqrestore(&sc->lmc_lock, flags);
         return;
     }
 
@@ -673,22 +666,19 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
      * check for a transmit interrupt timeout
      * Has the packet xmt vs xmt serviced threshold been exceeded */
     if (sc->lmc_taint_tx == sc->lastlmc_taint_tx &&
-	sc->lmc_device->stats.tx_packets > sc->lasttx_packets &&
-	sc->tx_TimeoutInd == 0)
-    {
+            sc->lmc_device->stats.tx_packets > sc->lasttx_packets &&
+            sc->tx_TimeoutInd == 0) {
 
         /* wait for the watchdog to come around again */
         sc->tx_TimeoutInd = 1;
-    }
-    else if (sc->lmc_taint_tx == sc->lastlmc_taint_tx &&
-	     sc->lmc_device->stats.tx_packets > sc->lasttx_packets &&
-	     sc->tx_TimeoutInd)
-    {
+    } else if (sc->lmc_taint_tx == sc->lastlmc_taint_tx &&
+               sc->lmc_device->stats.tx_packets > sc->lasttx_packets &&
+               sc->tx_TimeoutInd) {
 
         LMC_EVENT_LOG(LMC_EVENT_XMTINTTMO, LMC_CSR_READ (sc, csr_status), 0);
 
         sc->tx_TimeoutDisplay = 1;
-	sc->extra_stats.tx_TimeoutCnt++;
+        sc->extra_stats.tx_TimeoutCnt++;
 
         /* DEC chip is stuck, hit it with a RESET!!!! */
         lmc_running_reset (dev);
@@ -708,11 +698,11 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
         /* reset the transmit timeout detection flag */
         sc->tx_TimeoutInd = 0;
         sc->lastlmc_taint_tx = sc->lmc_taint_tx;
-	sc->lasttx_packets = sc->lmc_device->stats.tx_packets;
+        sc->lasttx_packets = sc->lmc_device->stats.tx_packets;
     } else {
         sc->tx_TimeoutInd = 0;
         sc->lastlmc_taint_tx = sc->lmc_taint_tx;
-	sc->lasttx_packets = sc->lmc_device->stats.tx_packets;
+        sc->lasttx_packets = sc->lmc_device->stats.tx_packets;
     }
 
     /* --- end time out check ----------------------------------- */
@@ -730,20 +720,20 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
         /* lmc_reset (sc); Why reset??? The link can go down ok */
 
         /* Inform the world that link has been lost */
-	netif_carrier_off(dev);
+        netif_carrier_off(dev);
     }
 
     /*
      * hardware link is up, but the interface is marked as down.
      * Bring it back up again.
      */
-     if (link_status != 0 && sc->last_link_status == 0) {
-         printk(KERN_WARNING "%s: hardware/physical link up\n", dev->name);
-         sc->last_link_status = 1;
-         /* lmc_reset (sc); Again why reset??? */
+    if (link_status != 0 && sc->last_link_status == 0) {
+        printk(KERN_WARNING "%s: hardware/physical link up\n", dev->name);
+        sc->last_link_status = 1;
+        /* lmc_reset (sc); Again why reset??? */
 
-	 netif_carrier_on(dev);
-     }
+        netif_carrier_on(dev);
+    }
 
     /* Call media specific watchdog functions */
     sc->lmc_media->watchdog(sc);
@@ -758,7 +748,7 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
      * Check for code that failed
      * and try and fix it as appropriate
      */
-    if(sc->failed_ring == 1){
+    if(sc->failed_ring == 1) {
         /*
          * Failed to setup the recv/xmit rin
          * Try again
@@ -766,7 +756,7 @@ static void lmc_watchdog (unsigned long data) /*fold00*/
         sc->failed_ring = 0;
         lmc_softreset(sc);
     }
-    if(sc->failed_recv_alloc == 1){
+    if(sc->failed_recv_alloc == 1) {
         /*
          * We failed to alloc mem in the
          * interrupt handler, go through the rings
@@ -799,98 +789,96 @@ kick_timer:
 }
 
 static int lmc_attach(struct net_device *dev, unsigned short encoding,
-		      unsigned short parity)
-{
-	if (encoding == ENCODING_NRZ && parity == PARITY_CRC16_PR1_CCITT)
-		return 0;
-	return -EINVAL;
+                      unsigned short parity) {
+    if (encoding == ENCODING_NRZ && parity == PARITY_CRC16_PR1_CCITT)
+        return 0;
+    return -EINVAL;
 }
 
 static const struct net_device_ops lmc_ops = {
-	.ndo_open       = lmc_open,
-	.ndo_stop       = lmc_close,
-	.ndo_change_mtu = hdlc_change_mtu,
-	.ndo_start_xmit = hdlc_start_xmit,
-	.ndo_do_ioctl   = lmc_ioctl,
-	.ndo_tx_timeout = lmc_driver_timeout,
-	.ndo_get_stats  = lmc_get_stats,
+    .ndo_open       = lmc_open,
+    .ndo_stop       = lmc_close,
+    .ndo_change_mtu = hdlc_change_mtu,
+    .ndo_start_xmit = hdlc_start_xmit,
+    .ndo_do_ioctl   = lmc_ioctl,
+    .ndo_tx_timeout = lmc_driver_timeout,
+    .ndo_get_stats  = lmc_get_stats,
 };
 
 static int __devinit lmc_init_one(struct pci_dev *pdev,
-				  const struct pci_device_id *ent)
-{
-	lmc_softc_t *sc;
-	struct net_device *dev;
-	u16 subdevice;
-	u16 AdapModelNum;
-	int err;
-	static int cards_found;
+                                  const struct pci_device_id *ent) {
+    lmc_softc_t *sc;
+    struct net_device *dev;
+    u16 subdevice;
+    u16 AdapModelNum;
+    int err;
+    static int cards_found;
 
-	/* lmc_trace(dev, "lmc_init_one in"); */
+    /* lmc_trace(dev, "lmc_init_one in"); */
 
-	err = pci_enable_device(pdev);
-	if (err) {
-		printk(KERN_ERR "lmc: pci enable failed: %d\n", err);
-		return err;
-	}
+    err = pci_enable_device(pdev);
+    if (err) {
+        printk(KERN_ERR "lmc: pci enable failed: %d\n", err);
+        return err;
+    }
 
-	err = pci_request_regions(pdev, "lmc");
-	if (err) {
-		printk(KERN_ERR "lmc: pci_request_region failed\n");
-		goto err_req_io;
-	}
+    err = pci_request_regions(pdev, "lmc");
+    if (err) {
+        printk(KERN_ERR "lmc: pci_request_region failed\n");
+        goto err_req_io;
+    }
 
-	/*
-	 * Allocate our own device structure
-	 */
-	sc = kzalloc(sizeof(lmc_softc_t), GFP_KERNEL);
-	if (!sc) {
-		err = -ENOMEM;
-		goto err_kzalloc;
-	}
+    /*
+     * Allocate our own device structure
+     */
+    sc = kzalloc(sizeof(lmc_softc_t), GFP_KERNEL);
+    if (!sc) {
+        err = -ENOMEM;
+        goto err_kzalloc;
+    }
 
-	dev = alloc_hdlcdev(sc);
-	if (!dev) {
-		printk(KERN_ERR "lmc:alloc_netdev for device failed\n");
-		goto err_hdlcdev;
-	}
+    dev = alloc_hdlcdev(sc);
+    if (!dev) {
+        printk(KERN_ERR "lmc:alloc_netdev for device failed\n");
+        goto err_hdlcdev;
+    }
 
 
-	dev->type = ARPHRD_HDLC;
-	dev_to_hdlc(dev)->xmit = lmc_start_xmit;
-	dev_to_hdlc(dev)->attach = lmc_attach;
-	dev->netdev_ops = &lmc_ops;
-	dev->watchdog_timeo = HZ; /* 1 second */
-	dev->tx_queue_len = 100;
-	sc->lmc_device = dev;
-	sc->name = dev->name;
-	sc->if_type = LMC_PPP;
-	sc->check = 0xBEAFCAFE;
-	dev->base_addr = pci_resource_start(pdev, 0);
-	dev->irq = pdev->irq;
-	pci_set_drvdata(pdev, dev);
-	SET_NETDEV_DEV(dev, &pdev->dev);
+    dev->type = ARPHRD_HDLC;
+    dev_to_hdlc(dev)->xmit = lmc_start_xmit;
+    dev_to_hdlc(dev)->attach = lmc_attach;
+    dev->netdev_ops = &lmc_ops;
+    dev->watchdog_timeo = HZ; /* 1 second */
+    dev->tx_queue_len = 100;
+    sc->lmc_device = dev;
+    sc->name = dev->name;
+    sc->if_type = LMC_PPP;
+    sc->check = 0xBEAFCAFE;
+    dev->base_addr = pci_resource_start(pdev, 0);
+    dev->irq = pdev->irq;
+    pci_set_drvdata(pdev, dev);
+    SET_NETDEV_DEV(dev, &pdev->dev);
 
-	/*
-	 * This will get the protocol layer ready and do any 1 time init's
-	 * Must have a valid sc and dev structure
-	 */
-	lmc_proto_attach(sc);
+    /*
+     * This will get the protocol layer ready and do any 1 time init's
+     * Must have a valid sc and dev structure
+     */
+    lmc_proto_attach(sc);
 
-	/* Init the spin lock so can call it latter */
+    /* Init the spin lock so can call it latter */
 
-	spin_lock_init(&sc->lmc_lock);
-	pci_set_master(pdev);
+    spin_lock_init(&sc->lmc_lock);
+    pci_set_master(pdev);
 
-	printk(KERN_INFO "%s: detected at %lx, irq %d\n", dev->name,
-	       dev->base_addr, dev->irq);
+    printk(KERN_INFO "%s: detected at %lx, irq %d\n", dev->name,
+           dev->base_addr, dev->irq);
 
-	err = register_hdlc_device(dev);
-	if (err) {
-		printk(KERN_ERR "%s: register_netdev failed.\n", dev->name);
-		free_netdev(dev);
-		goto err_hdlcdev;
-	}
+    err = register_hdlc_device(dev);
+    if (err) {
+        printk(KERN_ERR "%s: register_netdev failed.\n", dev->name);
+        free_netdev(dev);
+        goto err_hdlcdev;
+    }
 
     sc->lmc_cardtype = LMC_CARDTYPE_UNKNOWN;
     sc->lmc_timing = LMC_CTL_CLOCK_SOURCE_EXT;
@@ -899,34 +887,34 @@ static int __devinit lmc_init_one(struct pci_dev *pdev,
      *
      * Check either the subvendor or the subdevice, some systems reverse
      * the setting in the bois, seems to be version and arch dependent?
-     * Fix the error, exchange the two values 
+     * Fix the error, exchange the two values
      */
     if ((subdevice = pdev->subsystem_device) == PCI_VENDOR_ID_LMC)
-	    subdevice = pdev->subsystem_vendor;
+        subdevice = pdev->subsystem_vendor;
 
     switch (subdevice) {
     case PCI_DEVICE_ID_LMC_HSSI:
-	printk(KERN_INFO "%s: LMC HSSI\n", dev->name);
+        printk(KERN_INFO "%s: LMC HSSI\n", dev->name);
         sc->lmc_cardtype = LMC_CARDTYPE_HSSI;
         sc->lmc_media = &lmc_hssi_media;
         break;
     case PCI_DEVICE_ID_LMC_DS3:
-	printk(KERN_INFO "%s: LMC DS3\n", dev->name);
+        printk(KERN_INFO "%s: LMC DS3\n", dev->name);
         sc->lmc_cardtype = LMC_CARDTYPE_DS3;
         sc->lmc_media = &lmc_ds3_media;
         break;
     case PCI_DEVICE_ID_LMC_SSI:
-	printk(KERN_INFO "%s: LMC SSI\n", dev->name);
+        printk(KERN_INFO "%s: LMC SSI\n", dev->name);
         sc->lmc_cardtype = LMC_CARDTYPE_SSI;
         sc->lmc_media = &lmc_ssi_media;
         break;
     case PCI_DEVICE_ID_LMC_T1:
-	printk(KERN_INFO "%s: LMC T1\n", dev->name);
+        printk(KERN_INFO "%s: LMC T1\n", dev->name);
         sc->lmc_cardtype = LMC_CARDTYPE_T1;
         sc->lmc_media = &lmc_t1_media;
         break;
     default:
-	printk(KERN_WARNING "%s: LMC UNKNOWN CARD!\n", dev->name);
+        printk(KERN_WARNING "%s: LMC UNKNOWN CARD!\n", dev->name);
         break;
     }
 
@@ -945,16 +933,16 @@ static int __devinit lmc_init_one(struct pci_dev *pdev,
     AdapModelNum = (lmc_mii_readreg (sc, 0, 3) & 0x3f0) >> 4;
 
     if ((AdapModelNum != LMC_ADAP_T1 || /* detect LMC1200 */
-	 subdevice != PCI_DEVICE_ID_LMC_T1) &&
-	(AdapModelNum != LMC_ADAP_SSI || /* detect LMC1000 */
-	 subdevice != PCI_DEVICE_ID_LMC_SSI) &&
-	(AdapModelNum != LMC_ADAP_DS3 || /* detect LMC5245 */
-	 subdevice != PCI_DEVICE_ID_LMC_DS3) &&
-	(AdapModelNum != LMC_ADAP_HSSI || /* detect LMC5200 */
-	 subdevice != PCI_DEVICE_ID_LMC_HSSI))
-	    printk(KERN_WARNING "%s: Model number (%d) miscompare for PCI"
-		   " Subsystem ID = 0x%04x\n",
-		   dev->name, AdapModelNum, subdevice);
+            subdevice != PCI_DEVICE_ID_LMC_T1) &&
+            (AdapModelNum != LMC_ADAP_SSI || /* detect LMC1000 */
+             subdevice != PCI_DEVICE_ID_LMC_SSI) &&
+            (AdapModelNum != LMC_ADAP_DS3 || /* detect LMC5245 */
+             subdevice != PCI_DEVICE_ID_LMC_DS3) &&
+            (AdapModelNum != LMC_ADAP_HSSI || /* detect LMC5200 */
+             subdevice != PCI_DEVICE_ID_LMC_HSSI))
+        printk(KERN_WARNING "%s: Model number (%d) miscompare for PCI"
+               " Subsystem ID = 0x%04x\n",
+               dev->name, AdapModelNum, subdevice);
 
     /*
      * reset clock
@@ -964,7 +952,7 @@ static int __devinit lmc_init_one(struct pci_dev *pdev,
     sc->board_idx = cards_found++;
     sc->extra_stats.check = STATCHECK;
     sc->extra_stats.version_size = (DRIVER_VERSION << 16) +
-	    sizeof(sc->lmc_device->stats) + sizeof(sc->extra_stats);
+                                   sizeof(sc->lmc_device->stats) + sizeof(sc->extra_stats);
     sc->extra_stats.lmc_cardtype = sc->lmc_cardtype;
 
     sc->lmc_ok = 0;
@@ -974,37 +962,35 @@ static int __devinit lmc_init_one(struct pci_dev *pdev,
     return 0;
 
 err_hdlcdev:
-	pci_set_drvdata(pdev, NULL);
-	kfree(sc);
+    pci_set_drvdata(pdev, NULL);
+    kfree(sc);
 err_kzalloc:
-	pci_release_regions(pdev);
+    pci_release_regions(pdev);
 err_req_io:
-	pci_disable_device(pdev);
-	return err;
+    pci_disable_device(pdev);
+    return err;
 }
 
 /*
  * Called from pci when removing module.
  */
-static void __devexit lmc_remove_one(struct pci_dev *pdev)
-{
-	struct net_device *dev = pci_get_drvdata(pdev);
+static void __devexit lmc_remove_one(struct pci_dev *pdev) {
+    struct net_device *dev = pci_get_drvdata(pdev);
 
-	if (dev) {
-		printk(KERN_DEBUG "%s: removing...\n", dev->name);
-		unregister_hdlc_device(dev);
-		free_netdev(dev);
-		pci_release_regions(pdev);
-		pci_disable_device(pdev);
-		pci_set_drvdata(pdev, NULL);
-	}
+    if (dev) {
+        printk(KERN_DEBUG "%s: removing...\n", dev->name);
+        unregister_hdlc_device(dev);
+        free_netdev(dev);
+        pci_release_regions(pdev);
+        pci_disable_device(pdev);
+        pci_set_drvdata(pdev, NULL);
+    }
 }
 
 /* After this is called, packets can be sent.
  * Does not initialize the addresses
  */
-static int lmc_open(struct net_device *dev)
-{
+static int lmc_open(struct net_device *dev) {
     lmc_softc_t *sc = dev_to_sc(dev);
     int err;
 
@@ -1017,9 +1003,9 @@ static int lmc_open(struct net_device *dev)
 
     LMC_EVENT_LOG(LMC_EVENT_RESET1, LMC_CSR_READ(sc, csr_status), 0);
     LMC_EVENT_LOG(LMC_EVENT_RESET2, lmc_mii_readreg(sc, 0, 16),
-		  lmc_mii_readreg(sc, 0, 17));
+                  lmc_mii_readreg(sc, 0, 17));
 
-    if (sc->lmc_ok){
+    if (sc->lmc_ok) {
         lmc_trace(dev, "lmc_open lmc_ok out");
         return 0;
     }
@@ -1027,7 +1013,7 @@ static int lmc_open(struct net_device *dev)
     lmc_softreset (sc);
 
     /* Since we have to use PCI bus, this should work on x86,alpha,ppc */
-    if (request_irq (dev->irq, lmc_interrupt, IRQF_SHARED, dev->name, dev)){
+    if (request_irq (dev->irq, lmc_interrupt, IRQF_SHARED, dev->name, dev)) {
         printk(KERN_WARNING "%s: could not get irq: %d\n", dev->name, dev->irq);
         lmc_trace(dev, "lmc_open irq failed out");
         return -EAGAIN;
@@ -1046,11 +1032,11 @@ static int lmc_open(struct net_device *dev)
     /* setup default bits to be used in tulip_desc_t transmit descriptor
      * -baz */
     sc->TxDescriptControlInit = (
-                                 LMC_TDES_INTERRUPT_ON_COMPLETION
-                                 | LMC_TDES_FIRST_SEGMENT
-                                 | LMC_TDES_LAST_SEGMENT
-                                 | LMC_TDES_SECOND_ADDR_CHAINED
-                                 | LMC_TDES_DISABLE_PADDING
+                                    LMC_TDES_INTERRUPT_ON_COMPLETION
+                                    | LMC_TDES_FIRST_SEGMENT
+                                    | LMC_TDES_LAST_SEGMENT
+                                    | LMC_TDES_SECOND_ADDR_CHAINED
+                                    | LMC_TDES_DISABLE_PADDING
                                 );
 
     if (sc->ictl.crc_length == LMC_CTL_CRC_LENGTH_16) {
@@ -1063,7 +1049,7 @@ static int lmc_open(struct net_device *dev)
     /* dev->flags |= IFF_UP; */
 
     if ((err = lmc_proto_open(sc)) != 0)
-	    return err;
+        return err;
 
     netif_start_queue(dev);
     sc->extra_stats.tx_tbusy0++;
@@ -1081,7 +1067,7 @@ static int lmc_open(struct net_device *dev)
                          | TULIP_STS_TXSTOPPED
                          | TULIP_STS_TXUNDERFLOW
                          | TULIP_STS_RXSTOPPED
-		         | TULIP_STS_RXNOBUF
+                         | TULIP_STS_RXNOBUF
                         );
     LMC_CSR_WRITE (sc, csr_intr, sc->lmc_intrmask);
 
@@ -1116,8 +1102,7 @@ static int lmc_open(struct net_device *dev)
  *  under heavy load
  */
 
-static void lmc_running_reset (struct net_device *dev) /*fold00*/
-{
+static void lmc_running_reset (struct net_device *dev) { /*fold00*/
     lmc_softc_t *sc = dev_to_sc(dev);
 
     lmc_trace(dev, "lmc_runnig_reset in");
@@ -1152,8 +1137,7 @@ static void lmc_running_reset (struct net_device *dev) /*fold00*/
  * This disables the timer for the watchdog and keepalives,
  * and disables the irq for dev.
  */
-static int lmc_close(struct net_device *dev)
-{
+static int lmc_close(struct net_device *dev) {
     /* not calling release_region() as we should */
     lmc_softc_t *sc = dev_to_sc(dev);
 
@@ -1172,8 +1156,7 @@ static int lmc_close(struct net_device *dev)
 
 /* Ends the transfer of packets */
 /* When the interface goes down, this is called */
-static int lmc_ifdown (struct net_device *dev) /*fold00*/
-{
+static int lmc_ifdown (struct net_device *dev) { /*fold00*/
     lmc_softc_t *sc = dev_to_sc(dev);
     u32 csr6;
     int i;
@@ -1196,17 +1179,16 @@ static int lmc_ifdown (struct net_device *dev) /*fold00*/
     LMC_CSR_WRITE (sc, csr_command, csr6);
 
     sc->lmc_device->stats.rx_missed_errors +=
-	    LMC_CSR_READ(sc, csr_missed_frames) & 0xffff;
+        LMC_CSR_READ(sc, csr_missed_frames) & 0xffff;
 
     /* release the interrupt */
-    if(sc->got_irq == 1){
+    if(sc->got_irq == 1) {
         free_irq (dev->irq, dev);
         sc->got_irq = 0;
     }
 
     /* free skbuffs in the Rx queue */
-    for (i = 0; i < LMC_RXDESCS; i++)
-    {
+    for (i = 0; i < LMC_RXDESCS; i++) {
         struct sk_buff *skb = sc->lmc_rxq[i];
         sc->lmc_rxq[i] = NULL;
         sc->lmc_rxring[i].status = 0;
@@ -1217,8 +1199,7 @@ static int lmc_ifdown (struct net_device *dev) /*fold00*/
         sc->lmc_rxq[i] = NULL;
     }
 
-    for (i = 0; i < LMC_TXDESCS; i++)
-    {
+    for (i = 0; i < LMC_TXDESCS; i++) {
         if (sc->lmc_txq[i] != NULL)
             dev_kfree_skb(sc->lmc_txq[i]);
         sc->lmc_txq[i] = NULL;
@@ -1237,8 +1218,7 @@ static int lmc_ifdown (struct net_device *dev) /*fold00*/
 /* Interrupt handling routine.  This will take an incoming packet, or clean
  * up after a trasmit.
  */
-static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
-{
+static irqreturn_t lmc_interrupt (int irq, void *dev_instance) { /*fold00*/
     struct net_device *dev = (struct net_device *) dev_instance;
     lmc_softc_t *sc = dev_to_sc(dev);
     u32 csr;
@@ -1269,7 +1249,7 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
 
     /* always go through this loop at least once */
     while (csr & sc->lmc_intrmask) {
-	handled = 1;
+        handled = 1;
 
         /*
          * Clear interrupt bits, we handle all case below
@@ -1289,21 +1269,21 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
          * Is this really right? Should we do a running reset for jabber?
          * (being a WAN card and all)
          */
-        if (csr & TULIP_STS_ABNRMLINTR){
+        if (csr & TULIP_STS_ABNRMLINTR) {
             lmc_running_reset (dev);
             break;
         }
-        
-        if (csr & TULIP_STS_RXINTR){
+
+        if (csr & TULIP_STS_RXINTR) {
             lmc_trace(dev, "rx interrupt");
             lmc_rx (dev);
-            
+
         }
         if (csr & (TULIP_STS_TXINTR | TULIP_STS_TXNOBUF | TULIP_STS_TXSTOPPED)) {
 
-	    int		n_compl = 0 ;
+            int		n_compl = 0 ;
             /* reset the transmit timeout detection flag -baz */
-	    sc->extra_stats.tx_NoCompleteCnt = 0;
+            sc->extra_stats.tx_NoCompleteCnt = 0;
 
             badtx = sc->lmc_taint_tx;
             i = badtx % LMC_TXDESCS;
@@ -1312,14 +1292,14 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
                 stat = sc->lmc_txring[i].status;
 
                 LMC_EVENT_LOG (LMC_EVENT_XMTINT, stat,
-						 sc->lmc_txring[i].length);
+                               sc->lmc_txring[i].length);
                 /*
                  * If bit 31 is 1 the tulip owns it break out of the loop
                  */
                 if (stat & 0x80000000)
                     break;
 
-		n_compl++ ;		/* i.e., have an empty slot in ring */
+                n_compl++ ;		/* i.e., have an empty slot in ring */
                 /*
                  * If we have no skbuff or have cleared it
                  * Already continue to the next buffer
@@ -1327,23 +1307,23 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
                 if (sc->lmc_txq[i] == NULL)
                     continue;
 
-		/*
-		 * Check the total error summary to look for any errors
-		 */
-		if (stat & 0x8000) {
-			sc->lmc_device->stats.tx_errors++;
-			if (stat & 0x4104)
-				sc->lmc_device->stats.tx_aborted_errors++;
-			if (stat & 0x0C00)
-				sc->lmc_device->stats.tx_carrier_errors++;
-			if (stat & 0x0200)
-				sc->lmc_device->stats.tx_window_errors++;
-			if (stat & 0x0002)
-				sc->lmc_device->stats.tx_fifo_errors++;
-		} else {
-			sc->lmc_device->stats.tx_bytes += sc->lmc_txring[i].length & 0x7ff;
+                /*
+                 * Check the total error summary to look for any errors
+                 */
+                if (stat & 0x8000) {
+                    sc->lmc_device->stats.tx_errors++;
+                    if (stat & 0x4104)
+                        sc->lmc_device->stats.tx_aborted_errors++;
+                    if (stat & 0x0C00)
+                        sc->lmc_device->stats.tx_carrier_errors++;
+                    if (stat & 0x0200)
+                        sc->lmc_device->stats.tx_window_errors++;
+                    if (stat & 0x0002)
+                        sc->lmc_device->stats.tx_fifo_errors++;
+                } else {
+                    sc->lmc_device->stats.tx_bytes += sc->lmc_txring[i].length & 0x7ff;
 
-			sc->lmc_device->stats.tx_packets++;
+                    sc->lmc_device->stats.tx_packets++;
                 }
 
                 //                dev_kfree_skb(sc->lmc_txq[i]);
@@ -1354,21 +1334,20 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
                 i = badtx % LMC_TXDESCS;
             }
 
-            if (sc->lmc_next_tx - badtx > LMC_TXDESCS)
-            {
+            if (sc->lmc_next_tx - badtx > LMC_TXDESCS) {
                 printk ("%s: out of sync pointer\n", dev->name);
                 badtx += LMC_TXDESCS;
             }
             LMC_EVENT_LOG(LMC_EVENT_TBUSY0, n_compl, 0);
             sc->lmc_txfull = 0;
             netif_wake_queue(dev);
-	    sc->extra_stats.tx_tbusy0++;
+            sc->extra_stats.tx_tbusy0++;
 
 
 #ifdef DEBUG
-	    sc->extra_stats.dirtyTx = badtx;
-	    sc->extra_stats.lmc_next_tx = sc->lmc_next_tx;
-	    sc->extra_stats.lmc_txfull = sc->lmc_txfull;
+            sc->extra_stats.dirtyTx = badtx;
+            sc->extra_stats.lmc_next_tx = sc->lmc_next_tx;
+            sc->extra_stats.lmc_txfull = sc->lmc_txfull;
 #endif
             sc->lmc_taint_tx = badtx;
 
@@ -1381,7 +1360,7 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
             u32 error;
             printk (KERN_WARNING "%s: system bus error csr: %#8.8x\n", dev->name, csr);
             error = csr>>23 & 0x7;
-            switch(error){
+            switch(error) {
             case 0x000:
                 printk(KERN_WARNING "%s: Parity Fault (bad)\n", dev->name);
                 break;
@@ -1403,10 +1382,10 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
 
         }
 
-        
+
         if(max_work-- <= 0)
             break;
-        
+
         /*
          * Get current csr status to make sure
          * we've cleared all interrupts
@@ -1424,8 +1403,7 @@ lmc_int_fail_out:
 }
 
 static netdev_tx_t lmc_start_xmit(struct sk_buff *skb,
-					struct net_device *dev)
-{
+                                  struct net_device *dev) {
     lmc_softc_t *sc = dev_to_sc(dev);
     u32 flag;
     int entry;
@@ -1446,26 +1424,19 @@ static netdev_tx_t lmc_start_xmit(struct sk_buff *skb,
 
 #ifndef GCOM
     /* If the queue is less than half full, don't interrupt */
-    if (sc->lmc_next_tx - sc->lmc_taint_tx < LMC_TXDESCS / 2)
-    {
+    if (sc->lmc_next_tx - sc->lmc_taint_tx < LMC_TXDESCS / 2) {
         /* Do not interrupt on completion of this packet */
         flag = 0x60000000;
         netif_wake_queue(dev);
-    }
-    else if (sc->lmc_next_tx - sc->lmc_taint_tx == LMC_TXDESCS / 2)
-    {
+    } else if (sc->lmc_next_tx - sc->lmc_taint_tx == LMC_TXDESCS / 2) {
         /* This generates an interrupt on completion of this packet */
         flag = 0xe0000000;
         netif_wake_queue(dev);
-    }
-    else if (sc->lmc_next_tx - sc->lmc_taint_tx < LMC_TXDESCS - 1)
-    {
+    } else if (sc->lmc_next_tx - sc->lmc_taint_tx < LMC_TXDESCS - 1) {
         /* Do not interrupt on completion of this packet */
         flag = 0x60000000;
         netif_wake_queue(dev);
-    }
-    else
-    {
+    } else {
         /* This generates an interrupt on completion of this packet */
         flag = 0xe0000000;
         sc->lmc_txfull = 1;
@@ -1474,22 +1445,22 @@ static netdev_tx_t lmc_start_xmit(struct sk_buff *skb,
 #else
     flag = LMC_TDES_INTERRUPT_ON_COMPLETION;
 
-    if (sc->lmc_next_tx - sc->lmc_taint_tx >= LMC_TXDESCS - 1)
-    {				/* ring full, go busy */
+    if (sc->lmc_next_tx - sc->lmc_taint_tx >= LMC_TXDESCS - 1) {
+        /* ring full, go busy */
         sc->lmc_txfull = 1;
-	netif_stop_queue(dev);
-	sc->extra_stats.tx_tbusy1++;
+        netif_stop_queue(dev);
+        sc->extra_stats.tx_tbusy1++;
         LMC_EVENT_LOG(LMC_EVENT_TBUSY1, entry, 0);
     }
 #endif
 
 
     if (entry == LMC_TXDESCS - 1)	/* last descriptor in ring */
-	flag |= LMC_TDES_END_OF_RING;	/* flag as such for Tulip */
+        flag |= LMC_TDES_END_OF_RING;	/* flag as such for Tulip */
 
     /* don't pad small packets either */
     flag = sc->lmc_txring[entry].length = (skb->len) | flag |
-						sc->TxDescriptControlInit;
+                                          sc->TxDescriptControlInit;
 
     /* set the transmit timeout flag to be checked in
      * the watchdog timer handler. -baz
@@ -1512,8 +1483,7 @@ static netdev_tx_t lmc_start_xmit(struct sk_buff *skb,
 }
 
 
-static int lmc_rx(struct net_device *dev)
-{
+static int lmc_rx(struct net_device *dev) {
     lmc_softc_t *sc = dev_to_sc(dev);
     int i;
     int rx_work_limit = LMC_RXDESCS;
@@ -1533,45 +1503,44 @@ static int lmc_rx(struct net_device *dev)
     i = sc->lmc_next_rx % LMC_RXDESCS;
     next_rx = sc->lmc_next_rx;
 
-    while (((stat = sc->lmc_rxring[i].status) & LMC_RDES_OWN_BIT) != DESC_OWNED_BY_DC21X4)
-    {
+    while (((stat = sc->lmc_rxring[i].status) & LMC_RDES_OWN_BIT) != DESC_OWNED_BY_DC21X4) {
         rxIntLoopCnt++;		/* debug -baz */
         len = ((stat & LMC_RDES_FRAME_LENGTH) >> RDES_FRAME_LENGTH_BIT_NUMBER);
         if ((stat & 0x0300) != 0x0300) {  /* Check first segment and last segment */
-		if ((stat & 0x0000ffff) != 0x7fff) {
-			/* Oversized frame */
-			sc->lmc_device->stats.rx_length_errors++;
-			goto skip_packet;
-		}
-	}
+            if ((stat & 0x0000ffff) != 0x7fff) {
+                /* Oversized frame */
+                sc->lmc_device->stats.rx_length_errors++;
+                goto skip_packet;
+            }
+        }
 
-	if (stat & 0x00000008) { /* Catch a dribbling bit error */
-		sc->lmc_device->stats.rx_errors++;
-		sc->lmc_device->stats.rx_frame_errors++;
-		goto skip_packet;
-	}
+        if (stat & 0x00000008) { /* Catch a dribbling bit error */
+            sc->lmc_device->stats.rx_errors++;
+            sc->lmc_device->stats.rx_frame_errors++;
+            goto skip_packet;
+        }
 
 
-	if (stat & 0x00000004) { /* Catch a CRC error by the Xilinx */
-		sc->lmc_device->stats.rx_errors++;
-		sc->lmc_device->stats.rx_crc_errors++;
-		goto skip_packet;
-	}
+        if (stat & 0x00000004) { /* Catch a CRC error by the Xilinx */
+            sc->lmc_device->stats.rx_errors++;
+            sc->lmc_device->stats.rx_crc_errors++;
+            goto skip_packet;
+        }
 
-	if (len > LMC_PKT_BUF_SZ) {
-		sc->lmc_device->stats.rx_length_errors++;
-		localLengthErrCnt++;
-		goto skip_packet;
-	}
+        if (len > LMC_PKT_BUF_SZ) {
+            sc->lmc_device->stats.rx_length_errors++;
+            localLengthErrCnt++;
+            goto skip_packet;
+        }
 
-	if (len < sc->lmc_crcSize + 2) {
-		sc->lmc_device->stats.rx_length_errors++;
-		sc->extra_stats.rx_SmallPktCnt++;
-		localLengthErrCnt++;
-		goto skip_packet;
-	}
+        if (len < sc->lmc_crcSize + 2) {
+            sc->lmc_device->stats.rx_length_errors++;
+            sc->extra_stats.rx_SmallPktCnt++;
+            localLengthErrCnt++;
+            goto skip_packet;
+        }
 
-        if(stat & 0x00004000){
+        if(stat & 0x00004000) {
             printk(KERN_WARNING "%s: Receiver descriptor error, receiver out of sync?\n", dev->name);
         }
 
@@ -1583,7 +1552,7 @@ static int lmc_rx(struct net_device *dev)
          * We ran out of memory at some point
          * just allocate an skb buff and continue.
          */
-        
+
         if (!skb) {
             nsb = dev_alloc_skb (LMC_PKT_BUF_SZ + 2);
             if (nsb) {
@@ -1594,9 +1563,9 @@ static int lmc_rx(struct net_device *dev)
             sc->failed_recv_alloc = 1;
             goto skip_packet;
         }
-        
-	sc->lmc_device->stats.rx_packets++;
-	sc->lmc_device->stats.rx_bytes += len;
+
+        sc->lmc_device->stats.rx_packets++;
+        sc->lmc_device->stats.rx_bytes += len;
 
         LMC_CONSOLE_LOG("recv", skb->data, len);
 
@@ -1606,12 +1575,12 @@ static int lmc_rx(struct net_device *dev)
          * 44.210mbits/sec and we're going to copy
          * them into a new buffer??
          */
-        
-        if(len > (LMC_MTU - (LMC_MTU>>2))){ /* len > LMC_MTU * 0.75 */
+
+        if(len > (LMC_MTU - (LMC_MTU>>2))) { /* len > LMC_MTU * 0.75 */
             /*
              * If it's a large packet don't copy it just hand it up
              */
-        give_it_anyways:
+give_it_anyways:
 
             sc->lmc_rxq[i] = NULL;
             sc->lmc_rxring[i].buffer1 = 0x0;
@@ -1632,8 +1601,7 @@ static int lmc_rx(struct net_device *dev)
                 nsb->dev = dev;
                 sc->lmc_rxring[i].buffer1 = virt_to_bus(skb_tail_pointer(nsb));
                 /* Transferred to 21140 below */
-            }
-            else {
+            } else {
                 /*
                  * We've run out of memory, stop trying to allocate
                  * memory and exit the interrupt handler
@@ -1642,19 +1610,18 @@ static int lmc_rx(struct net_device *dev)
                  * in which care we'll try to allocate the buffer
                  * again.  (once a second)
                  */
-		sc->extra_stats.rx_BuffAllocErr++;
+                sc->extra_stats.rx_BuffAllocErr++;
                 LMC_EVENT_LOG(LMC_EVENT_RCVINT, stat, len);
                 sc->failed_recv_alloc = 1;
                 goto skip_out_of_mem;
             }
-        }
-        else {
+        } else {
             nsb = dev_alloc_skb(len);
             if(!nsb) {
                 goto give_it_anyways;
             }
             skb_copy_from_linear_data(skb, skb_put(nsb, len), len);
-            
+
             nsb->protocol = lmc_proto_type(sc, nsb);
             skb_reset_mac_header(nsb);
             /* skb_reset_network_header(nsb); */
@@ -1662,7 +1629,7 @@ static int lmc_rx(struct net_device *dev)
             lmc_proto_netif(sc, nsb);
         }
 
-    skip_packet:
+skip_packet:
         LMC_EVENT_LOG(LMC_EVENT_RCVINT, stat, len);
         sc->lmc_rxring[i].status = DESC_OWNED_BY_DC21X4;
 
@@ -1677,23 +1644,20 @@ static int lmc_rx(struct net_device *dev)
      * descriptors with bogus packets
      *
     if (localLengthErrCnt > LMC_RXDESCS - 3) {
-	sc->extra_stats.rx_BadPktSurgeCnt++;
-	LMC_EVENT_LOG(LMC_EVENT_BADPKTSURGE, localLengthErrCnt,
-		      sc->extra_stats.rx_BadPktSurgeCnt);
+    sc->extra_stats.rx_BadPktSurgeCnt++;
+    LMC_EVENT_LOG(LMC_EVENT_BADPKTSURGE, localLengthErrCnt,
+    	      sc->extra_stats.rx_BadPktSurgeCnt);
     } */
 
     /* save max count of receive descriptors serviced */
     if (rxIntLoopCnt > sc->extra_stats.rxIntLoopCnt)
-	    sc->extra_stats.rxIntLoopCnt = rxIntLoopCnt; /* debug -baz */
+        sc->extra_stats.rxIntLoopCnt = rxIntLoopCnt; /* debug -baz */
 
 #ifdef DEBUG
-    if (rxIntLoopCnt == 0)
-    {
-        for (i = 0; i < LMC_RXDESCS; i++)
-        {
+    if (rxIntLoopCnt == 0) {
+        for (i = 0; i < LMC_RXDESCS; i++) {
             if ((sc->lmc_rxring[i].status & LMC_RDES_OWN_BIT)
-                != DESC_OWNED_BY_DC21X4)
-            {
+                    != DESC_OWNED_BY_DC21X4) {
                 rxIntLoopCnt++;
             }
         }
@@ -1711,8 +1675,7 @@ skip_out_of_mem:
     return 0;
 }
 
-static struct net_device_stats *lmc_get_stats(struct net_device *dev)
-{
+static struct net_device_stats *lmc_get_stats(struct net_device *dev) {
     lmc_softc_t *sc = dev_to_sc(dev);
     unsigned long flags;
 
@@ -1730,27 +1693,24 @@ static struct net_device_stats *lmc_get_stats(struct net_device *dev)
 }
 
 static struct pci_driver lmc_driver = {
-	.name		= "lmc",
-	.id_table	= lmc_pci_tbl,
-	.probe		= lmc_init_one,
-	.remove		= __devexit_p(lmc_remove_one),
+    .name		= "lmc",
+    .id_table	= lmc_pci_tbl,
+    .probe		= lmc_init_one,
+    .remove		= __devexit_p(lmc_remove_one),
 };
 
-static int __init init_lmc(void)
-{
+static int __init init_lmc(void) {
     return pci_register_driver(&lmc_driver);
 }
 
-static void __exit exit_lmc(void)
-{
+static void __exit exit_lmc(void) {
     pci_unregister_driver(&lmc_driver);
 }
 
 module_init(init_lmc);
 module_exit(exit_lmc);
 
-unsigned lmc_mii_readreg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno) /*fold00*/
-{
+unsigned lmc_mii_readreg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno) { /*fold00*/
     int i;
     int command = (0xf6 << 10) | (devaddr << 5) | regno;
     int retval = 0;
@@ -1761,8 +1721,7 @@ unsigned lmc_mii_readreg (lmc_softc_t * const sc, unsigned devaddr, unsigned reg
 
     lmc_trace(sc->lmc_device, "lmc_mii_readreg: done sync");
 
-    for (i = 15; i >= 0; i--)
-    {
+    for (i = 15; i >= 0; i--) {
         int dataval = (command & (1 << i)) ? 0x20000 : 0;
 
         LMC_CSR_WRITE (sc, csr_9, dataval);
@@ -1775,8 +1734,7 @@ unsigned lmc_mii_readreg (lmc_softc_t * const sc, unsigned devaddr, unsigned reg
 
     lmc_trace(sc->lmc_device, "lmc_mii_readreg: done1");
 
-    for (i = 19; i > 0; i--)
-    {
+    for (i = 19; i > 0; i--) {
         LMC_CSR_WRITE (sc, csr_9, 0x40000);
         lmc_delay ();
         /* __SLOW_DOWN_IO; */
@@ -1791,8 +1749,7 @@ unsigned lmc_mii_readreg (lmc_softc_t * const sc, unsigned devaddr, unsigned reg
     return (retval >> 1) & 0xffff;
 }
 
-void lmc_mii_writereg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno, unsigned data) /*fold00*/
-{
+void lmc_mii_writereg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno, unsigned data) { /*fold00*/
     int i = 32;
     int command = (0x5002 << 16) | (devaddr << 23) | (regno << 18) | data;
 
@@ -1801,8 +1758,7 @@ void lmc_mii_writereg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno,
     LMC_MII_SYNC (sc);
 
     i = 31;
-    while (i >= 0)
-    {
+    while (i >= 0) {
         int datav;
 
         if (command & (1 << i))
@@ -1820,8 +1776,7 @@ void lmc_mii_writereg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno,
     }
 
     i = 2;
-    while (i > 0)
-    {
+    while (i > 0) {
         LMC_CSR_WRITE (sc, csr_9, 0x40000);
         lmc_delay ();
         /* __SLOW_DOWN_IO; */
@@ -1834,8 +1789,7 @@ void lmc_mii_writereg (lmc_softc_t * const sc, unsigned devaddr, unsigned regno,
     lmc_trace(sc->lmc_device, "lmc_mii_writereg out");
 }
 
-static void lmc_softreset (lmc_softc_t * const sc) /*fold00*/
-{
+static void lmc_softreset (lmc_softc_t * const sc) { /*fold00*/
     int i;
 
     lmc_trace(sc->lmc_device, "lmc_softreset in");
@@ -1853,24 +1807,19 @@ static void lmc_softreset (lmc_softc_t * const sc) /*fold00*/
      * and point each buffer at the next one
      */
 
-    for (i = 0; i < LMC_RXDESCS; i++)
-    {
+    for (i = 0; i < LMC_RXDESCS; i++) {
         struct sk_buff *skb;
 
-        if (sc->lmc_rxq[i] == NULL)
-        {
+        if (sc->lmc_rxq[i] == NULL) {
             skb = dev_alloc_skb (LMC_PKT_BUF_SZ + 2);
-            if(skb == NULL){
+            if(skb == NULL) {
                 printk(KERN_WARNING "%s: Failed to allocate receiver ring, will try again\n", sc->name);
                 sc->failed_ring = 1;
                 break;
-            }
-            else{
+            } else {
                 sc->lmc_rxq[i] = skb;
             }
-        }
-        else
-        {
+        } else {
             skb = sc->lmc_rxq[i];
         }
 
@@ -1902,11 +1851,10 @@ static void lmc_softreset (lmc_softc_t * const sc) /*fold00*/
     LMC_CSR_WRITE (sc, csr_rxlist, virt_to_bus (sc->lmc_rxring)); /* write base address */
 
     /* Initialize the transmit rings and buffers */
-    for (i = 0; i < LMC_TXDESCS; i++)
-    {
-        if (sc->lmc_txq[i] != NULL){		/* have buffer */
+    for (i = 0; i < LMC_TXDESCS; i++) {
+        if (sc->lmc_txq[i] != NULL) {		/* have buffer */
             dev_kfree_skb(sc->lmc_txq[i]);	/* free it */
-	    sc->lmc_device->stats.tx_dropped++;	/* We just dropped a packet */
+            sc->lmc_device->stats.tx_dropped++;	/* We just dropped a packet */
         }
         sc->lmc_txq[i] = NULL;
         sc->lmc_txring[i].status = 0x00000000;
@@ -1918,50 +1866,45 @@ static void lmc_softreset (lmc_softc_t * const sc) /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_softreset out");
 }
 
-void lmc_gpio_mkinput(lmc_softc_t * const sc, u32 bits) /*fold00*/
-{
+void lmc_gpio_mkinput(lmc_softc_t * const sc, u32 bits) { /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_gpio_mkinput in");
     sc->lmc_gpio_io &= ~bits;
     LMC_CSR_WRITE(sc, csr_gp, TULIP_GP_PINSET | (sc->lmc_gpio_io));
     lmc_trace(sc->lmc_device, "lmc_gpio_mkinput out");
 }
 
-void lmc_gpio_mkoutput(lmc_softc_t * const sc, u32 bits) /*fold00*/
-{
+void lmc_gpio_mkoutput(lmc_softc_t * const sc, u32 bits) { /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_gpio_mkoutput in");
     sc->lmc_gpio_io |= bits;
     LMC_CSR_WRITE(sc, csr_gp, TULIP_GP_PINSET | (sc->lmc_gpio_io));
     lmc_trace(sc->lmc_device, "lmc_gpio_mkoutput out");
 }
 
-void lmc_led_on(lmc_softc_t * const sc, u32 led) /*fold00*/
-{
+void lmc_led_on(lmc_softc_t * const sc, u32 led) { /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_led_on in");
-    if((~sc->lmc_miireg16) & led){ /* Already on! */
+    if((~sc->lmc_miireg16) & led) { /* Already on! */
         lmc_trace(sc->lmc_device, "lmc_led_on aon out");
         return;
     }
-    
+
     sc->lmc_miireg16 &= ~led;
     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
     lmc_trace(sc->lmc_device, "lmc_led_on out");
 }
 
-void lmc_led_off(lmc_softc_t * const sc, u32 led) /*fold00*/
-{
+void lmc_led_off(lmc_softc_t * const sc, u32 led) { /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_led_off in");
-    if(sc->lmc_miireg16 & led){ /* Already set don't do anything */
+    if(sc->lmc_miireg16 & led) { /* Already set don't do anything */
         lmc_trace(sc->lmc_device, "lmc_led_off aoff out");
         return;
     }
-    
+
     sc->lmc_miireg16 |= led;
     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
     lmc_trace(sc->lmc_device, "lmc_led_off out");
 }
 
-static void lmc_reset(lmc_softc_t * const sc) /*fold00*/
-{
+static void lmc_reset(lmc_softc_t * const sc) { /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_reset in");
     sc->lmc_miireg16 |= LMC_MII16_FIFO_RESET;
     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
@@ -2001,8 +1944,7 @@ static void lmc_reset(lmc_softc_t * const sc) /*fold00*/
     lmc_trace(sc->lmc_device, "lmc_reset out");
 }
 
-static void lmc_dec_reset(lmc_softc_t * const sc) /*fold00*/
-{
+static void lmc_dec_reset(lmc_softc_t * const sc) { /*fold00*/
     u32 val;
     lmc_trace(sc->lmc_device, "lmc_dec_reset in");
 
@@ -2065,8 +2007,7 @@ static void lmc_dec_reset(lmc_softc_t * const sc) /*fold00*/
 }
 
 static void lmc_initcsrs(lmc_softc_t * const sc, lmc_csrptr_t csr_base, /*fold00*/
-                         size_t csr_size)
-{
+                         size_t csr_size) {
     lmc_trace(sc->lmc_device, "lmc_initcsrs in");
     sc->lmc_csrs.csr_busmode	        = csr_base +  0 * csr_size;
     sc->lmc_csrs.csr_txpoll		= csr_base +  1 * csr_size;
@@ -2087,8 +2028,7 @@ static void lmc_initcsrs(lmc_softc_t * const sc, lmc_csrptr_t csr_base, /*fold00
     lmc_trace(sc->lmc_device, "lmc_initcsrs out");
 }
 
-static void lmc_driver_timeout(struct net_device *dev)
-{
+static void lmc_driver_timeout(struct net_device *dev) {
     lmc_softc_t *sc = dev_to_sc(dev);
     u32 csr6;
     unsigned long flags;
@@ -2101,7 +2041,7 @@ static void lmc_driver_timeout(struct net_device *dev)
 
     sc->extra_stats.tx_tbusy_calls++;
     if (jiffies - dev_trans_start(dev) < TX_TIMEOUT)
-	    goto bug_out;
+        goto bug_out;
 
     /*
      * Chip seems to have locked up
@@ -2112,7 +2052,7 @@ static void lmc_driver_timeout(struct net_device *dev)
 
     LMC_EVENT_LOG(LMC_EVENT_XMTPRCTMO,
                   LMC_CSR_READ (sc, csr_status),
-		  sc->extra_stats.tx_ProcTimeout);
+                  sc->extra_stats.tx_ProcTimeout);
 
     lmc_running_reset (dev);
 

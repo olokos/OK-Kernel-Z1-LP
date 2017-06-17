@@ -89,11 +89,11 @@
 #ifndef __ASSEMBLY__
 
 struct mn10300_dmactl_regs {
-	u32		ctr;
-	const void	*src;
-	void		*dst;
-	u32		siz;
-	u32		cyc;
+    u32		ctr;
+    const void	*src;
+    void		*dst;
+    u32		siz;
+    u32		cyc;
 } __attribute__((aligned(0x100)));
 
 #endif /* __ASSEMBLY__ */

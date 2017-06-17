@@ -35,20 +35,18 @@
 #define PMU_INTERRUPT_CAUSE	(DOVE_PMU_VIRT_BASE + 0x50)
 #define PMU_INTERRUPT_MASK	(DOVE_PMU_VIRT_BASE + 0x54)
 
-static inline int pmu_to_irq(int pin)
-{
-	if (pin < NR_PMU_IRQS)
-		return pin + IRQ_DOVE_PMU_START;
+static inline int pmu_to_irq(int pin) {
+    if (pin < NR_PMU_IRQS)
+        return pin + IRQ_DOVE_PMU_START;
 
-	return -EINVAL;
+    return -EINVAL;
 }
 
-static inline int irq_to_pmu(int irq)
-{
-	if (IRQ_DOVE_PMU_START < irq && irq < NR_IRQS)
-		return irq - IRQ_DOVE_PMU_START;
+static inline int irq_to_pmu(int irq) {
+    if (IRQ_DOVE_PMU_START < irq && irq < NR_IRQS)
+        return irq - IRQ_DOVE_PMU_START;
 
-	return -EINVAL;
+    return -EINVAL;
 }
 
 #endif

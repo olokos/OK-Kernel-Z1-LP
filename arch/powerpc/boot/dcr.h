@@ -33,7 +33,8 @@
 #define 	SDRAM0_B3CR				0x4c
 
 static const unsigned long sdram_bxcr[] = { SDRAM0_B0CR, SDRAM0_B1CR,
-					    SDRAM0_B2CR, SDRAM0_B3CR };
+                                            SDRAM0_B2CR, SDRAM0_B3CR
+                                          };
 
 #define			SDRAM_CONFIG_BANK_ENABLE        0x00000001
 #define			SDRAM_CONFIG_SIZE_MASK          0x000e0000

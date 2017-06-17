@@ -2,19 +2,19 @@
 #define _LMC_IOCTL_H_
 /*	$Id: lmc_ioctl.h,v 1.15 2000/04/06 12:16:43 asj Exp $	*/
 
- /*
-  * Copyright (c) 1997-2000 LAN Media Corporation (LMC)
-  * All rights reserved.  www.lanmedia.com
-  *
-  * This code is written by:
-  * Andrew Stanley-Jones (asj@cban.com)
-  * Rob Braun (bbraun@vix.com),
-  * Michael Graff (explorer@vix.com) and
-  * Matt Thomas (matt@3am-software.com).
-  *
-  * This software may be used and distributed according to the terms
-  * of the GNU General Public License version 2, incorporated herein by reference.
-  */
+/*
+ * Copyright (c) 1997-2000 LAN Media Corporation (LMC)
+ * All rights reserved.  www.lanmedia.com
+ *
+ * This code is written by:
+ * Andrew Stanley-Jones (asj@cban.com)
+ * Rob Braun (bbraun@vix.com),
+ * Michael Graff (explorer@vix.com) and
+ * Matt Thomas (matt@3am-software.com).
+ *
+ * This software may be used and distributed according to the terms
+ * of the GNU General Public License version 2, incorporated herein by reference.
+ */
 
 #define LMCIOCGINFO             SIOCDEVPRIVATE+3 /* get current state */
 #define LMCIOCSINFO             SIOCDEVPRIVATE+4 /* set state to user values */
@@ -231,10 +231,10 @@
 #define LMC_T1F_READ        1
 
 typedef struct lmc_st1f_control {
-  int command;
-  int address;
-  int value;
-  char __user *data;
+    int command;
+    int address;
+    int value;
+    char __user *data;
 } lmc_t1f_control;
 
 enum lmc_xilinx_c {

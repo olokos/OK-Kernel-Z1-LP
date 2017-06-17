@@ -23,48 +23,44 @@
  * Note that this function may corrupt unrelated data structures when
  * applied on buffers that are not cacheline aligned in both ends.
  */
-static inline void invalidate_dcache_line(void *vaddr)
-{
-	asm volatile("cache %0[0], %1"
-		     :
-		     : "r"(vaddr), "n"(CACHE_OP_DCACHE_INVALIDATE)
-		     : "memory");
+static inline void invalidate_dcache_line(void *vaddr) {
+    asm volatile("cache %0[0], %1"
+                 :
+                 : "r"(vaddr), "n"(CACHE_OP_DCACHE_INVALIDATE)
+                 : "memory");
 }
 
 /*
  * Make sure any cacheline containing virtual address vaddr is written
  * to memory.
  */
-static inline void clean_dcache_line(void *vaddr)
-{
-	asm volatile("cache %0[0], %1"
-		     :
-		     : "r"(vaddr), "n"(CACHE_OP_DCACHE_CLEAN)
-		     : "memory");
+static inline void clean_dcache_line(void *vaddr) {
+    asm volatile("cache %0[0], %1"
+                 :
+                 : "r"(vaddr), "n"(CACHE_OP_DCACHE_CLEAN)
+                 : "memory");
 }
 
 /*
  * Make sure any cacheline containing virtual address vaddr is written
  * to memory and then invalidate it.
  */
-static inline void flush_dcache_line(void *vaddr)
-{
-	asm volatile("cache %0[0], %1"
-		     :
-		     : "r"(vaddr), "n"(CACHE_OP_DCACHE_CLEAN_INVAL)
-		     : "memory");
+static inline void flush_dcache_line(void *vaddr) {
+    asm volatile("cache %0[0], %1"
+                 :
+                 : "r"(vaddr), "n"(CACHE_OP_DCACHE_CLEAN_INVAL)
+                 : "memory");
 }
 
 /*
  * Invalidate any instruction cacheline containing virtual address
  * vaddr.
  */
-static inline void invalidate_icache_line(void *vaddr)
-{
-	asm volatile("cache %0[0], %1"
-		     :
-		     : "r"(vaddr), "n"(CACHE_OP_ICACHE_INVALIDATE)
-		     : "memory");
+static inline void invalidate_icache_line(void *vaddr) {
+    asm volatile("cache %0[0], %1"
+                 :
+                 : "r"(vaddr), "n"(CACHE_OP_ICACHE_INVALIDATE)
+                 : "memory");
 }
 
 /*
@@ -119,14 +115,13 @@ extern void flush_icache_page(struct vm_area_struct *vma, struct page *page);
 extern void flush_icache_range(unsigned long start, unsigned long end);
 
 extern void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
-		unsigned long vaddr, void *dst, const void *src,
-		unsigned long len);
+                              unsigned long vaddr, void *dst, const void *src,
+                              unsigned long len);
 
 static inline void copy_from_user_page(struct vm_area_struct *vma,
-		struct page *page, unsigned long vaddr, void *dst,
-		const void *src, unsigned long len)
-{
-	memcpy(dst, src, len);
+                                       struct page *page, unsigned long vaddr, void *dst,
+                                       const void *src, unsigned long len) {
+    memcpy(dst, src, len);
 }
 
 #endif /* __ASM_AVR32_CACHEFLUSH_H */

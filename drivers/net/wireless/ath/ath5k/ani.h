@@ -49,10 +49,10 @@ enum ath5k_phy_error_code;
  *			amount of OFDM and CCK frame errors (default).
  */
 enum ath5k_ani_mode {
-	ATH5K_ANI_MODE_OFF		= 0,
-	ATH5K_ANI_MODE_MANUAL_LOW	= 1,
-	ATH5K_ANI_MODE_MANUAL_HIGH	= 2,
-	ATH5K_ANI_MODE_AUTO		= 3
+    ATH5K_ANI_MODE_OFF		= 0,
+    ATH5K_ANI_MODE_MANUAL_LOW	= 1,
+    ATH5K_ANI_MODE_MANUAL_HIGH	= 2,
+    ATH5K_ANI_MODE_AUTO		= 3
 };
 
 
@@ -76,36 +76,36 @@ enum ath5k_ani_mode {
  * @sum_cck_errors: Sum of all CCK timing errors (for stats)
  */
 struct ath5k_ani_state {
-	enum ath5k_ani_mode	ani_mode;
+    enum ath5k_ani_mode	ani_mode;
 
-	/* state */
-	int			noise_imm_level;
-	int			spur_level;
-	int			firstep_level;
-	bool			ofdm_weak_sig;
-	bool			cck_weak_sig;
+    /* state */
+    int			noise_imm_level;
+    int			spur_level;
+    int			firstep_level;
+    bool			ofdm_weak_sig;
+    bool			cck_weak_sig;
 
-	int			max_spur_level;
+    int			max_spur_level;
 
-	/* used by the algorithm */
-	unsigned int		listen_time;
-	unsigned int		ofdm_errors;
-	unsigned int		cck_errors;
+    /* used by the algorithm */
+    unsigned int		listen_time;
+    unsigned int		ofdm_errors;
+    unsigned int		cck_errors;
 
-	/* debug/statistics only: numbers from last ANI calibration */
-	struct ath_cycle_counters last_cc;
-	unsigned int		last_listen;
-	unsigned int		last_ofdm_errors;
-	unsigned int		last_cck_errors;
-	unsigned int		sum_ofdm_errors;
-	unsigned int		sum_cck_errors;
+    /* debug/statistics only: numbers from last ANI calibration */
+    struct ath_cycle_counters last_cc;
+    unsigned int		last_listen;
+    unsigned int		last_ofdm_errors;
+    unsigned int		last_cck_errors;
+    unsigned int		sum_ofdm_errors;
+    unsigned int		sum_cck_errors;
 };
 
 void ath5k_ani_init(struct ath5k_hw *ah, enum ath5k_ani_mode mode);
 void ath5k_ani_mib_intr(struct ath5k_hw *ah);
 void ath5k_ani_calibration(struct ath5k_hw *ah);
 void ath5k_ani_phy_error_report(struct ath5k_hw *ah,
-				enum ath5k_phy_error_code phyerr);
+                                enum ath5k_phy_error_code phyerr);
 
 /* for manual control */
 void ath5k_ani_set_noise_immunity_level(struct ath5k_hw *ah, int level);

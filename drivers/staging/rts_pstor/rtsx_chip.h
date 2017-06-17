@@ -40,12 +40,12 @@
 /* #define DISABLE_CARD_INT */
 
 #ifdef SUPPORT_MAGIC_GATE
-	/* Using NORMAL_WRITE instead of AUTO_WRITE to set ICV */
-	#define MG_SET_ICV_SLOW
-	/* HW may miss ERR/CMDNK signal when sampling INT status. */
-	#define MS_SAMPLE_INT_ERR
-	/* HW DO NOT support Wait_INT function during READ_BYTES transfer mode */
-	#define READ_BYTES_WAIT_INT
+/* Using NORMAL_WRITE instead of AUTO_WRITE to set ICV */
+#define MG_SET_ICV_SLOW
+/* HW may miss ERR/CMDNK signal when sampling INT status. */
+#define MS_SAMPLE_INT_ERR
+/* HW DO NOT support Wait_INT function during READ_BYTES transfer mode */
+#define READ_BYTES_WAIT_INT
 #endif
 
 #ifdef SUPPORT_MSXC
@@ -156,7 +156,7 @@
 #define UNIT_ATTENTION          0x06    /* unit attention condition occur   */
 #define DAT_PRTCT               0x07    /* read/write is desable            */
 #define BLNC_CHK                0x08    /* find blank/DOF in read           */
-					/* write to unblank area            */
+/* write to unblank area            */
 #define CPY_ABRT                0x0a    /* Copy/Compare/Copy&Verify illgal  */
 #define ABRT_CMD                0x0b    /* Target make the command in error */
 #define EQUAL                   0x0c    /* Search Data end with Equal       */
@@ -226,15 +226,15 @@
 
 struct sense_data_t {
     unsigned char   err_code;		/* error code */
-						/* bit7 : valid                    */
-						/*   (1 : SCSI2)                    */
-						/*   (0 : Vendor specific)          */
-						/* bit6-0 : error code             */
-						/*  (0x70 : current error)          */
-						/*  (0x71 : specific command error) */
+    /* bit7 : valid                    */
+    /*   (1 : SCSI2)                    */
+    /*   (0 : Vendor specific)          */
+    /* bit6-0 : error code             */
+    /*  (0x70 : current error)          */
+    /*  (0x71 : specific command error) */
     unsigned char   seg_no;		/* segment No.                      */
     unsigned char   sense_key;		/* byte5 : ILI                      */
-						/* bit3-0 : sense key              */
+    /* bit3-0 : sense key              */
     unsigned char   info[4];		/* information                       */
     unsigned char   ad_sense_len;	/* additional sense data length     */
     unsigned char   cmd_info[4];	/* command specific information      */
@@ -350,7 +350,8 @@ typedef int (*card_rw_func)(struct scsi_cmnd *srb, struct rtsx_chip *chip, u32 s
 enum card_clock	{CLK_20 = 1, CLK_30, CLK_40, CLK_50, CLK_60, CLK_80, CLK_100, CLK_120, CLK_150, CLK_200};
 
 enum RTSX_STAT	{RTSX_STAT_INIT, RTSX_STAT_IDLE, RTSX_STAT_RUN, RTSX_STAT_SS,
-		RTSX_STAT_DELINK, RTSX_STAT_SUSPEND, RTSX_STAT_ABORT, RTSX_STAT_DISCONNECT};
+                 RTSX_STAT_DELINK, RTSX_STAT_SUSPEND, RTSX_STAT_ABORT, RTSX_STAT_DISCONNECT
+               };
 enum IC_VER	{IC_VER_AB, IC_VER_C = 2, IC_VER_D = 3};
 
 #define MAX_RESET_CNT		3
@@ -359,15 +360,15 @@ enum IC_VER	{IC_VER_AB, IC_VER_C = 2, IC_VER_D = 3};
 #define MAX_DEFECTIVE_BLOCK     10
 
 struct zone_entry {
-	u16 *l2p_table;
-	u16 *free_table;
-	u16 defect_list[MAX_DEFECTIVE_BLOCK];  /* For MS card only */
-	int set_index;
-	int get_index;
-	int unused_blk_cnt;
-	int disable_count;
-	/* To indicate whether the L2P table of this zone has been built. */
-	int build_flag;
+    u16 *l2p_table;
+    u16 *free_table;
+    u16 defect_list[MAX_DEFECTIVE_BLOCK];  /* For MS card only */
+    int set_index;
+    int get_index;
+    int unused_blk_cnt;
+    int disable_count;
+    /* To indicate whether the L2P table of this zone has been built. */
+    int build_flag;
 };
 
 #define TYPE_SD			0x0000
@@ -455,76 +456,76 @@ do {						\
 #define SD_CLR_1V8(sd_card)		((sd_card)->sd_setting &= ~SD_SUPPORT_1V8)
 
 struct sd_info {
-	u16 sd_type;
-	u8 err_code;
-	u8 sd_data_buf_ready;
-	u32 sd_addr;
-	u32 capacity;
+    u16 sd_type;
+    u8 err_code;
+    u8 sd_data_buf_ready;
+    u32 sd_addr;
+    u32 capacity;
 
-	u8 raw_csd[16];
-	u8 raw_scr[8];
+    u8 raw_csd[16];
+    u8 raw_scr[8];
 
-	/* Sequential RW */
-	int seq_mode;
-	enum dma_data_direction pre_dir;
-	u32 pre_sec_addr;
-	u16 pre_sec_cnt;
+    /* Sequential RW */
+    int seq_mode;
+    enum dma_data_direction pre_dir;
+    u32 pre_sec_addr;
+    u16 pre_sec_cnt;
 
-	int cleanup_counter;
+    int cleanup_counter;
 
-	int sd_clock;
+    int sd_clock;
 
-	int mmc_dont_switch_bus;
+    int mmc_dont_switch_bus;
 
 #ifdef SUPPORT_CPRM
-	int sd_pass_thru_en;
-	int pre_cmd_err;
-	u8 last_rsp_type;
-	u8 rsp[17];
+    int sd_pass_thru_en;
+    int pre_cmd_err;
+    u8 last_rsp_type;
+    u8 rsp[17];
 #endif
 
-	u8 func_group1_mask;
-	u8 func_group2_mask;
-	u8 func_group3_mask;
-	u8 func_group4_mask;
+    u8 func_group1_mask;
+    u8 func_group2_mask;
+    u8 func_group3_mask;
+    u8 func_group4_mask;
 
-	u8 sd_switch_fail;
-	u8 sd_read_phase;
+    u8 sd_switch_fail;
+    u8 sd_read_phase;
 
 #ifdef SUPPORT_SD_LOCK
-	u8 sd_lock_status;
-	u8 sd_erase_status;
-	u8 sd_lock_notify;
+    u8 sd_lock_status;
+    u8 sd_erase_status;
+    u8 sd_lock_notify;
 #endif
-	int need_retune;
+    int need_retune;
 };
 
 struct xd_delay_write_tag {
-	u32 old_phyblock;
-	u32 new_phyblock;
-	u32 logblock;
-	u8 pageoff;
-	u8 delay_write_flag;
+    u32 old_phyblock;
+    u32 new_phyblock;
+    u32 logblock;
+    u8 pageoff;
+    u8 delay_write_flag;
 };
 
 struct xd_info {
-	u8 maker_code;
-	u8 device_code;
-	u8 block_shift;
-	u8 page_off;
-	u8 addr_cycle;
-	u16 cis_block;
-	u8 multi_flag;
-	u8 err_code;
-	u32 capacity;
+    u8 maker_code;
+    u8 device_code;
+    u8 block_shift;
+    u8 page_off;
+    u8 addr_cycle;
+    u16 cis_block;
+    u8 multi_flag;
+    u8 err_code;
+    u32 capacity;
 
-	struct zone_entry *zone;
-	int zone_cnt;
+    struct zone_entry *zone;
+    int zone_cnt;
 
-	struct xd_delay_write_tag delay_write;
-	int cleanup_counter;
+    struct xd_delay_write_tag delay_write;
+    int cleanup_counter;
 
-	int xd_clock;
+    int xd_clock;
 };
 
 #define MODE_512_SEQ		0x01
@@ -549,78 +550,78 @@ struct xd_info {
 #define CHK_MS4BIT(ms_card)	(((ms_card)->ms_type & MS_4BIT))
 
 struct ms_delay_write_tag {
-	u16 old_phyblock;
-	u16 new_phyblock;
-	u16 logblock;
-	u8 pageoff;
-	u8 delay_write_flag;
+    u16 old_phyblock;
+    u16 new_phyblock;
+    u16 logblock;
+    u8 pageoff;
+    u8 delay_write_flag;
 };
 
 struct ms_info {
-	u16 ms_type;
-	u8 block_shift;
-	u8 page_off;
-	u16 total_block;
-	u16 boot_block;
-	u32 capacity;
+    u16 ms_type;
+    u8 block_shift;
+    u8 page_off;
+    u16 total_block;
+    u16 boot_block;
+    u32 capacity;
 
-	u8 check_ms_flow;
-	u8 switch_8bit_fail;
-	u8 err_code;
+    u8 check_ms_flow;
+    u8 switch_8bit_fail;
+    u8 err_code;
 
-	struct zone_entry *segment;
-	int segment_cnt;
+    struct zone_entry *segment;
+    int segment_cnt;
 
-	int pro_under_formatting;
-	int format_status;
-	u16 progress;
-	u8 raw_sys_info[96];
+    int pro_under_formatting;
+    int format_status;
+    u16 progress;
+    u8 raw_sys_info[96];
 #ifdef SUPPORT_PCGL_1P18
-	u8 raw_model_name[48];
+    u8 raw_model_name[48];
 #endif
 
-	u8 multi_flag;
+    u8 multi_flag;
 
-	/* Sequential RW */
-	u8 seq_mode;
-	enum dma_data_direction pre_dir;
-	u32 pre_sec_addr;
-	u16 pre_sec_cnt;
-	u32 total_sec_cnt;
+    /* Sequential RW */
+    u8 seq_mode;
+    enum dma_data_direction pre_dir;
+    u32 pre_sec_addr;
+    u16 pre_sec_cnt;
+    u32 total_sec_cnt;
 
-	struct ms_delay_write_tag delay_write;
+    struct ms_delay_write_tag delay_write;
 
-	int cleanup_counter;
+    int cleanup_counter;
 
-	int ms_clock;
+    int ms_clock;
 
 #ifdef SUPPORT_MAGIC_GATE
-	u8 magic_gate_id[16];
-	u8 mg_entry_num;
-	int mg_auth;    /* flag to indicate authentication process */
+    u8 magic_gate_id[16];
+    u8 mg_entry_num;
+    int mg_auth;    /* flag to indicate authentication process */
 #endif
 };
 
 struct spi_info {
-	u8 use_clk;
-	u8 write_en;
-	u16 clk_div;
-	u8 err_code;
+    u8 use_clk;
+    u8 write_en;
+    u16 clk_div;
+    u8 err_code;
 
-	int spi_clock;
+    int spi_clock;
 };
 
 
 #ifdef _MSG_TRACE
 struct trace_msg_t {
-	u16 line;
+    u16 line;
 #define MSG_FUNC_LEN 64
-	char func[MSG_FUNC_LEN];
+    char func[MSG_FUNC_LEN];
 #define MSG_FILE_LEN 32
-	char file[MSG_FILE_LEN];
+    char file[MSG_FILE_LEN];
 #define TIME_VAL_LEN 16
-	u8 timeval_buf[TIME_VAL_LEN];
-	u8 valid;
+    u8 timeval_buf[TIME_VAL_LEN];
+    u8 valid;
 };
 #endif
 
@@ -681,233 +682,233 @@ struct trace_msg_t {
 #define CLR_SDIO_IGNORED(chip)		((chip)->sdio_func_exist &= ~SDIO_IGNORED)
 
 struct rtsx_chip {
-	rtsx_dev_t 		*rtsx;
+    rtsx_dev_t 		*rtsx;
 
-	u32 			int_reg;		/* Bus interrupt pending register */
-	char 			max_lun;
-	void 			*context;
+    u32 			int_reg;		/* Bus interrupt pending register */
+    char 			max_lun;
+    void 			*context;
 
-	void 			*host_cmds_ptr;		/* host commands buffer pointer */
-	dma_addr_t		host_cmds_addr;
-	int 			ci;			/* Command Index */
+    void 			*host_cmds_ptr;		/* host commands buffer pointer */
+    dma_addr_t		host_cmds_addr;
+    int 			ci;			/* Command Index */
 
-	void			*host_sg_tbl_ptr;	/* SG descriptor table */
-	dma_addr_t		host_sg_tbl_addr;
-	int			sgi;			/* SG entry index */
+    void			*host_sg_tbl_ptr;	/* SG descriptor table */
+    dma_addr_t		host_sg_tbl_addr;
+    int			sgi;			/* SG entry index */
 
-	struct scsi_cmnd	*srb;		 	/* current srb */
-	struct sense_data_t 	sense_buffer[MAX_ALLOWED_LUN_CNT];
+    struct scsi_cmnd	*srb;		 	/* current srb */
+    struct sense_data_t 	sense_buffer[MAX_ALLOWED_LUN_CNT];
 
-	int			cur_clk;		/* current card clock */
+    int			cur_clk;		/* current card clock */
 
-	/* Current accessed card */
-	int 			cur_card;
+    /* Current accessed card */
+    int 			cur_card;
 
-	unsigned long 		need_release;		/* need release bit map */
-	unsigned long 		need_reset;		/* need reset bit map */
-	/* Flag to indicate that this card is just resumed from SS state,
-	 * and need released before being resetted
-	 */
-	unsigned long 		need_reinit;
+    unsigned long 		need_release;		/* need release bit map */
+    unsigned long 		need_reset;		/* need reset bit map */
+    /* Flag to indicate that this card is just resumed from SS state,
+     * and need released before being resetted
+     */
+    unsigned long 		need_reinit;
 
-	int 			rw_need_retry;
+    int 			rw_need_retry;
 
 #ifdef SUPPORT_OCP
-	u32 			ocp_int;
-	u8 			ocp_stat;
+    u32 			ocp_int;
+    u8 			ocp_stat;
 #endif
 
-	u8 			card_exist;		/* card exist bit map (physical exist) */
-	u8 			card_ready;		/* card ready bit map (reset successfully) */
-	u8 			card_fail;		/* card reset fail bit map */
-	u8 			card_ejected;		/* card ejected bit map */
-	u8 			card_wp;		/* card write protected bit map */
+    u8 			card_exist;		/* card exist bit map (physical exist) */
+    u8 			card_ready;		/* card ready bit map (reset successfully) */
+    u8 			card_fail;		/* card reset fail bit map */
+    u8 			card_ejected;		/* card ejected bit map */
+    u8 			card_wp;		/* card write protected bit map */
 
-	u8 			lun_mc;			/* flag to indicate whether to answer MediaChange */
+    u8 			lun_mc;			/* flag to indicate whether to answer MediaChange */
 
 #ifndef LED_AUTO_BLINK
-	int 			led_toggle_counter;
+    int 			led_toggle_counter;
 #endif
 
-	int 			sd_reset_counter;
-	int 			xd_reset_counter;
-	int 			ms_reset_counter;
+    int 			sd_reset_counter;
+    int 			xd_reset_counter;
+    int 			ms_reset_counter;
 
-	/* card bus width */
-	u8			card_bus_width[MAX_ALLOWED_LUN_CNT];
-	/* card capacity */
-	u32 			capacity[MAX_ALLOWED_LUN_CNT];
-	/* read/write card function pointer */
-	card_rw_func 		rw_card[MAX_ALLOWED_LUN_CNT];
-	/* read/write capacity, used for GPIO Toggle */
-	u32			rw_cap[MAX_ALLOWED_LUN_CNT];
-	/* card to lun mapping table */
-	u8			card2lun[32];
-	/* lun to card mapping table */
-	u8			lun2card[MAX_ALLOWED_LUN_CNT];
+    /* card bus width */
+    u8			card_bus_width[MAX_ALLOWED_LUN_CNT];
+    /* card capacity */
+    u32 			capacity[MAX_ALLOWED_LUN_CNT];
+    /* read/write card function pointer */
+    card_rw_func 		rw_card[MAX_ALLOWED_LUN_CNT];
+    /* read/write capacity, used for GPIO Toggle */
+    u32			rw_cap[MAX_ALLOWED_LUN_CNT];
+    /* card to lun mapping table */
+    u8			card2lun[32];
+    /* lun to card mapping table */
+    u8			lun2card[MAX_ALLOWED_LUN_CNT];
 
-	int 			rw_fail_cnt[MAX_ALLOWED_LUN_CNT];
+    int 			rw_fail_cnt[MAX_ALLOWED_LUN_CNT];
 
-	int 			sd_show_cnt;
-	int 			xd_show_cnt;
-	int 			ms_show_cnt;
+    int 			sd_show_cnt;
+    int 			xd_show_cnt;
+    int 			ms_show_cnt;
 
-	/* card information */
-	struct sd_info		sd_card;
-	struct xd_info		xd_card;
-	struct ms_info		ms_card;
+    /* card information */
+    struct sd_info		sd_card;
+    struct xd_info		xd_card;
+    struct ms_info		ms_card;
 
-	struct spi_info		spi;
+    struct spi_info		spi;
 
 #ifdef _MSG_TRACE
-	struct trace_msg_t	trace_msg[TRACE_ITEM_CNT];
-	int 			msg_idx;
+    struct trace_msg_t	trace_msg[TRACE_ITEM_CNT];
+    int 			msg_idx;
 #endif
 
-	int 			auto_delink_cnt;
-	int 			auto_delink_allowed;
+    int 			auto_delink_cnt;
+    int 			auto_delink_allowed;
 
-	int 			aspm_enabled;
+    int 			aspm_enabled;
 
-	int 			sdio_aspm;
-	int 			sdio_idle;
-	int 			sdio_counter;
-	u8 			sdio_raw_data[12];
+    int 			sdio_aspm;
+    int 			sdio_idle;
+    int 			sdio_counter;
+    u8 			sdio_raw_data[12];
 
-	u8 			sd_io;
-	u8 			sd_int;
+    u8 			sd_io;
+    u8 			sd_int;
 
-	u8 			rtsx_flag;
+    u8 			rtsx_flag;
 
-	int 			ss_counter;
-	int 			idle_counter;
-	enum RTSX_STAT 		rtsx_stat;
+    int 			ss_counter;
+    int 			idle_counter;
+    enum RTSX_STAT 		rtsx_stat;
 
-	u16 			vendor_id;
-	u16			product_id;
-	u8 			ic_version;
+    u16 			vendor_id;
+    u16			product_id;
+    u8 			ic_version;
 
-	int			driver_first_load;
+    int			driver_first_load;
 
 #ifdef HW_AUTO_SWITCH_SD_BUS
-	int 			sdio_in_charge;
+    int 			sdio_in_charge;
 #endif
 
-	u8 			aspm_level[2];
+    u8 			aspm_level[2];
 
-	int 			chip_insert_with_sdio;
+    int 			chip_insert_with_sdio;
 
-	/* Options */
+    /* Options */
 
-	int adma_mode;
+    int adma_mode;
 
-	int auto_delink_en;
-	int ss_en;
-	u8 lun_mode;
-	u8 aspm_l0s_l1_en;
+    int auto_delink_en;
+    int ss_en;
+    u8 lun_mode;
+    u8 aspm_l0s_l1_en;
 
-	int power_down_in_ss;
+    int power_down_in_ss;
 
-	int sdr104_en;
-	int ddr50_en;
-	int sdr50_en;
+    int sdr104_en;
+    int ddr50_en;
+    int sdr50_en;
 
-	int baro_pkg;
+    int baro_pkg;
 
-	int asic_code;
-	int phy_debug_mode;
-	int hw_bypass_sd;
-	int sdio_func_exist;
-	int aux_pwr_exist;
-	u8 ms_power_class_en;
+    int asic_code;
+    int phy_debug_mode;
+    int hw_bypass_sd;
+    int sdio_func_exist;
+    int aux_pwr_exist;
+    u8 ms_power_class_en;
 
-	int mspro_formatter_enable;
+    int mspro_formatter_enable;
 
-	int remote_wakeup_en;
+    int remote_wakeup_en;
 
-	int ignore_sd;
-	int use_hw_setting;
+    int ignore_sd;
+    int use_hw_setting;
 
-	int ss_idle_period;
+    int ss_idle_period;
 
-	int dynamic_aspm;
+    int dynamic_aspm;
 
-	int fpga_sd_sdr104_clk;
-	int fpga_sd_ddr50_clk;
-	int fpga_sd_sdr50_clk;
-	int fpga_sd_hs_clk;
-	int fpga_mmc_52m_clk;
-	int fpga_ms_hg_clk;
-	int fpga_ms_4bit_clk;
-	int fpga_ms_1bit_clk;
+    int fpga_sd_sdr104_clk;
+    int fpga_sd_ddr50_clk;
+    int fpga_sd_sdr50_clk;
+    int fpga_sd_hs_clk;
+    int fpga_mmc_52m_clk;
+    int fpga_ms_hg_clk;
+    int fpga_ms_4bit_clk;
+    int fpga_ms_1bit_clk;
 
-	int asic_sd_sdr104_clk;
-	int asic_sd_ddr50_clk;
-	int asic_sd_sdr50_clk;
-	int asic_sd_hs_clk;
-	int asic_mmc_52m_clk;
-	int asic_ms_hg_clk;
-	int asic_ms_4bit_clk;
-	int asic_ms_1bit_clk;
+    int asic_sd_sdr104_clk;
+    int asic_sd_ddr50_clk;
+    int asic_sd_sdr50_clk;
+    int asic_sd_hs_clk;
+    int asic_mmc_52m_clk;
+    int asic_ms_hg_clk;
+    int asic_ms_4bit_clk;
+    int asic_ms_1bit_clk;
 
-	u8 ssc_depth_sd_sdr104;
-	u8 ssc_depth_sd_ddr50;
-	u8 ssc_depth_sd_sdr50;
-	u8 ssc_depth_sd_hs;
-	u8 ssc_depth_mmc_52m;
-	u8 ssc_depth_ms_hg;
-	u8 ssc_depth_ms_4bit;
-	u8 ssc_depth_low_speed;
+    u8 ssc_depth_sd_sdr104;
+    u8 ssc_depth_sd_ddr50;
+    u8 ssc_depth_sd_sdr50;
+    u8 ssc_depth_sd_hs;
+    u8 ssc_depth_mmc_52m;
+    u8 ssc_depth_ms_hg;
+    u8 ssc_depth_ms_4bit;
+    u8 ssc_depth_low_speed;
 
-	u8 card_drive_sel;
-	u8 sd30_drive_sel_1v8;
-	u8 sd30_drive_sel_3v3;
+    u8 card_drive_sel;
+    u8 sd30_drive_sel_1v8;
+    u8 sd30_drive_sel_3v3;
 
-	u8 sd_400mA_ocp_thd;
-	u8 sd_800mA_ocp_thd;
-	u8 ms_ocp_thd;
+    u8 sd_400mA_ocp_thd;
+    u8 sd_800mA_ocp_thd;
+    u8 ms_ocp_thd;
 
-	int ssc_en;
-	int msi_en;
+    int ssc_en;
+    int msi_en;
 
-	int xd_timeout;
-	int sd_timeout;
-	int ms_timeout;
-	int mspro_timeout;
+    int xd_timeout;
+    int sd_timeout;
+    int ms_timeout;
+    int mspro_timeout;
 
-	int auto_power_down;
+    int auto_power_down;
 
-	int sd_ddr_tx_phase;
-	int mmc_ddr_tx_phase;
-	int sd_default_tx_phase;
-	int sd_default_rx_phase;
+    int sd_ddr_tx_phase;
+    int mmc_ddr_tx_phase;
+    int sd_default_tx_phase;
+    int sd_default_rx_phase;
 
-	int pmos_pwr_on_interval;
-	int sd_voltage_switch_delay;
-	int s3_pwr_off_delay;
+    int pmos_pwr_on_interval;
+    int sd_voltage_switch_delay;
+    int s3_pwr_off_delay;
 
-	int force_clkreq_0;
-	int ft2_fast_mode;
+    int force_clkreq_0;
+    int ft2_fast_mode;
 
-	int do_delink_before_power_down;
-	int polling_config;
-	int sdio_retry_cnt;
+    int do_delink_before_power_down;
+    int polling_config;
+    int sdio_retry_cnt;
 
-	int delink_stage1_step;
-	int delink_stage2_step;
-	int delink_stage3_step;
+    int delink_stage1_step;
+    int delink_stage2_step;
+    int delink_stage3_step;
 
-	int auto_delink_in_L1;
-	int hp_watch_bios_hotplug;
-	int support_ms_8bit;
+    int auto_delink_in_L1;
+    int hp_watch_bios_hotplug;
+    int support_ms_8bit;
 
-	u8 blink_led;
-	u8 phy_voltage;
-	u8 max_payload;
+    u8 blink_led;
+    u8 phy_voltage;
+    u8 max_payload;
 
-	u32 sd_speed_prior;
-	u32 sd_current_prior;
-	u32 sd_ctl;
+    u32 sd_speed_prior;
+    u32 sd_current_prior;
+    u32 sd_ctl;
 };
 
 #define rtsx_set_stat(chip, stat)				\

@@ -6,38 +6,34 @@
 
 /* INTPND0 CP6 R0 Page 3
  */
-static inline u32 read_intpnd_0(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c0, c3, 0":"=r" (val));
-	return val;
+static inline u32 read_intpnd_0(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c0, c3, 0":"=r" (val));
+    return val;
 }
 
 /* INTPND1 CP6 R1 Page 3
  */
-static inline u32 read_intpnd_1(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c1, c3, 0":"=r" (val));
-	return val;
+static inline u32 read_intpnd_1(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c1, c3, 0":"=r" (val));
+    return val;
 }
 
 /* INTPND2 CP6 R2 Page 3
  */
-static inline u32 read_intpnd_2(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c2, c3, 0":"=r" (val));
-	return val;
+static inline u32 read_intpnd_2(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c2, c3, 0":"=r" (val));
+    return val;
 }
 
 /* INTPND3 CP6 R3 Page 3
  */
-static inline u32 read_intpnd_3(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c3, c3, 0":"=r" (val));
-	return val;
+static inline u32 read_intpnd_3(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c3, c3, 0":"=r" (val));
+    return val;
 }
 #endif
 
@@ -84,7 +80,7 @@ static inline u32 read_intpnd_3(void)
 #define IRQ_IOP13XX_XINT5	(29)
 #define IRQ_IOP13XX_XINT6	(30)
 #define IRQ_IOP13XX_XINT7	(31)
-				      /* IINTSRC1 bit */
+/* IINTSRC1 bit */
 #define IRQ_IOP13XX_XINT8	(32)  /* 0  */
 #define IRQ_IOP13XX_XINT9	(33)  /* 1  */
 #define IRQ_IOP13XX_XINT10	(34)  /* 2  */
@@ -117,7 +113,7 @@ static inline u32 read_intpnd_3(void)
 #define IRQ_IOP13XX_RSVD_61	(61)  /* 29 */
 #define IRQ_IOP13XX_MSG_ERR	(62)  /* 30 */
 #define IRQ_IOP13XX_RSVD_63	(63)  /* 31 */
-				      /* IINTSRC2 bit */
+/* IINTSRC2 bit */
 #define IRQ_IOP13XX_INTERPROC	(64)  /* 0  */
 #define IRQ_IOP13XX_RSVD_65	(65)  /* 1  */
 #define IRQ_IOP13XX_RSVD_66	(66)  /* 2  */
@@ -150,7 +146,7 @@ static inline u32 read_intpnd_3(void)
 #define IRQ_IOP13XX_RSVD_93	(93)  /* 29 */
 #define IRQ_IOP13XX_SIB_ERR	(94)  /* 30 */
 #define IRQ_IOP13XX_SRAM_ERR	(95)  /* 31 */
-				      /* IINTSRC3 bit */
+/* IINTSRC3 bit */
 #define IRQ_IOP13XX_I2C_2	(96)  /* 0  */
 #define IRQ_IOP13XX_ATUE_BIST	(97)  /* 1  */
 #define IRQ_IOP13XX_ATUE_CRW	(98)  /* 2  */

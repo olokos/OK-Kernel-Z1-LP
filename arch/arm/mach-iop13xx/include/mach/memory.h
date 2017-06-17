@@ -16,14 +16,12 @@
 #define IOP13XX_PMMR_P_START (IOP13XX_PMMR_PHYS_MEM_BASE)
 #define IOP13XX_PMMR_P_END   (IOP13XX_PMMR_PHYS_MEM_BASE + IOP13XX_PMMR_SIZE)
 
-static inline dma_addr_t __virt_to_lbus(unsigned long x)
-{
-	return x + IOP13XX_PMMR_PHYS_MEM_BASE - IOP13XX_PMMR_VIRT_MEM_BASE;
+static inline dma_addr_t __virt_to_lbus(unsigned long x) {
+    return x + IOP13XX_PMMR_PHYS_MEM_BASE - IOP13XX_PMMR_VIRT_MEM_BASE;
 }
 
-static inline unsigned long __lbus_to_virt(dma_addr_t x)
-{
-	return x + IOP13XX_PMMR_VIRT_MEM_BASE - IOP13XX_PMMR_PHYS_MEM_BASE;
+static inline unsigned long __lbus_to_virt(dma_addr_t x) {
+    return x + IOP13XX_PMMR_VIRT_MEM_BASE - IOP13XX_PMMR_PHYS_MEM_BASE;
 }
 
 #define __is_lbus_dma(a)				\

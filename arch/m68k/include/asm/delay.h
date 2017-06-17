@@ -30,14 +30,13 @@
 #define	DELAY_ALIGN
 #endif
 
-static inline void __delay(unsigned long loops)
-{
-	__asm__ __volatile__ (
-		DELAY_ALIGN
-		"1: subql #1,%0\n\t"
-		"jcc 1b"
-		: "=d" (loops)
-		: "0" (loops));
+static inline void __delay(unsigned long loops) {
+    __asm__ __volatile__ (
+        DELAY_ALIGN
+        "1: subql #1,%0\n\t"
+        "jcc 1b"
+        : "=d" (loops)
+        : "0" (loops));
 }
 
 extern void __bad_udelay(void);
@@ -58,14 +57,13 @@ extern void __bad_udelay(void);
 
 #else
 
-static inline void __xdelay(unsigned long xloops)
-{
-	unsigned long tmp;
+static inline void __xdelay(unsigned long xloops) {
+    unsigned long tmp;
 
-	__asm__ ("mulul %2,%0:%1"
-		: "=d" (xloops), "=d" (tmp)
-		: "d" (xloops), "1" (loops_per_jiffy));
-	__delay(xloops * HZ);
+    __asm__ ("mulul %2,%0:%1"
+             : "=d" (xloops), "=d" (tmp)
+             : "d" (xloops), "1" (loops_per_jiffy));
+    __delay(xloops * HZ);
 }
 
 /*
@@ -77,9 +75,8 @@ static inline void __xdelay(unsigned long xloops)
 
 #endif
 
-static inline void __udelay(unsigned long usecs)
-{
-	__const_udelay(usecs);
+static inline void __udelay(unsigned long usecs) {
+    __const_udelay(usecs);
 }
 
 /*

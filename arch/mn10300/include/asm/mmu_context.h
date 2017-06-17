@@ -36,19 +36,17 @@
 
 #define enter_lazy_tlb(mm, tsk)	do {} while (0)
 
-static inline void cpu_ran_vm(int cpu, struct mm_struct *mm)
-{
+static inline void cpu_ran_vm(int cpu, struct mm_struct *mm) {
 #ifdef CONFIG_SMP
-	cpumask_set_cpu(cpu, mm_cpumask(mm));
+    cpumask_set_cpu(cpu, mm_cpumask(mm));
 #endif
 }
 
-static inline bool cpu_maybe_ran_vm(int cpu, struct mm_struct *mm)
-{
+static inline bool cpu_maybe_ran_vm(int cpu, struct mm_struct *mm) {
 #ifdef CONFIG_SMP
-	return cpumask_test_and_set_cpu(cpu, mm_cpumask(mm));
+    return cpumask_test_and_set_cpu(cpu, mm_cpumask(mm));
 #else
-	return true;
+    return true;
 #endif
 }
 
@@ -60,63 +58,59 @@ extern unsigned long mmu_context_cache[NR_CPUS];
  * allocate_mmu_context - Allocate storage for the arch-specific MMU data
  * @mm: The userspace VM context being set up
  */
-static inline unsigned long allocate_mmu_context(struct mm_struct *mm)
-{
-	unsigned long *pmc = &mmu_context_cache[smp_processor_id()];
-	unsigned long mc = ++(*pmc);
+static inline unsigned long allocate_mmu_context(struct mm_struct *mm) {
+    unsigned long *pmc = &mmu_context_cache[smp_processor_id()];
+    unsigned long mc = ++(*pmc);
 
-	if (!(mc & MMU_CONTEXT_TLBPID_MASK)) {
-		/* we exhausted the TLB PIDs of this version on this CPU, so we
-		 * flush this CPU's TLB in its entirety and start new cycle */
-		local_flush_tlb_all();
+    if (!(mc & MMU_CONTEXT_TLBPID_MASK)) {
+        /* we exhausted the TLB PIDs of this version on this CPU, so we
+         * flush this CPU's TLB in its entirety and start new cycle */
+        local_flush_tlb_all();
 
-		/* fix the TLB version if needed (we avoid version #0 so as to
-		 * distingush MMU_NO_CONTEXT) */
-		if (!mc)
-			*pmc = mc = MMU_CONTEXT_FIRST_VERSION;
-	}
-	mm_context(mm) = mc;
-	return mc;
+        /* fix the TLB version if needed (we avoid version #0 so as to
+         * distingush MMU_NO_CONTEXT) */
+        if (!mc)
+            *pmc = mc = MMU_CONTEXT_FIRST_VERSION;
+    }
+    mm_context(mm) = mc;
+    return mc;
 }
 
 /*
  * get an MMU context if one is needed
  */
-static inline unsigned long get_mmu_context(struct mm_struct *mm)
-{
-	unsigned long mc = MMU_NO_CONTEXT, cache;
+static inline unsigned long get_mmu_context(struct mm_struct *mm) {
+    unsigned long mc = MMU_NO_CONTEXT, cache;
 
-	if (mm) {
-		cache = mmu_context_cache[smp_processor_id()];
-		mc = mm_context(mm);
+    if (mm) {
+        cache = mmu_context_cache[smp_processor_id()];
+        mc = mm_context(mm);
 
-		/* if we have an old version of the context, replace it */
-		if ((mc ^ cache) & MMU_CONTEXT_VERSION_MASK)
-			mc = allocate_mmu_context(mm);
-	}
-	return mc;
+        /* if we have an old version of the context, replace it */
+        if ((mc ^ cache) & MMU_CONTEXT_VERSION_MASK)
+            mc = allocate_mmu_context(mm);
+    }
+    return mc;
 }
 
 /*
  * initialise the context related info for a new mm_struct instance
  */
 static inline int init_new_context(struct task_struct *tsk,
-				   struct mm_struct *mm)
-{
-	int num_cpus = NR_CPUS, i;
+                                   struct mm_struct *mm) {
+    int num_cpus = NR_CPUS, i;
 
-	for (i = 0; i < num_cpus; i++)
-		mm->context.tlbpid[i] = MMU_NO_CONTEXT;
-	return 0;
+    for (i = 0; i < num_cpus; i++)
+        mm->context.tlbpid[i] = MMU_NO_CONTEXT;
+    return 0;
 }
 
 /*
  * after we have set current->mm to a new value, this activates the context for
  * the new mm so we see the new mappings.
  */
-static inline void activate_context(struct mm_struct *mm)
-{
-	PIDR = get_mmu_context(mm) & MMU_CONTEXT_TLBPID_MASK;
+static inline void activate_context(struct mm_struct *mm) {
+    PIDR = get_mmu_context(mm) & MMU_CONTEXT_TLBPID_MASK;
 }
 #else  /* CONFIG_MN10300_TLB_USE_PIDR */
 
@@ -141,18 +135,17 @@ static inline void activate_context(struct mm_struct *mm)
  * @tsk: The incoming task.
  */
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-			     struct task_struct *tsk)
-{
-	int cpu = smp_processor_id();
+                             struct task_struct *tsk) {
+    int cpu = smp_processor_id();
 
-	if (prev != next) {
+    if (prev != next) {
 #ifdef CONFIG_SMP
-		per_cpu(cpu_tlbstate, cpu).active_mm = next;
+        per_cpu(cpu_tlbstate, cpu).active_mm = next;
 #endif
-		cpu_ran_vm(cpu, next);
-		PTBR = (unsigned long) next->pgd;
-		activate_context(next);
-	}
+        cpu_ran_vm(cpu, next);
+        PTBR = (unsigned long) next->pgd;
+        activate_context(next);
+    }
 }
 
 #define deactivate_mm(tsk, mm)	do {} while (0)

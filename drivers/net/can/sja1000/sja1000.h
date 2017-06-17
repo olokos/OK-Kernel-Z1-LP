@@ -151,26 +151,26 @@
  * SJA1000 private data structure
  */
 struct sja1000_priv {
-	struct can_priv can;	/* must be the first member */
-	int open_time;
-	struct sk_buff *echo_skb;
+    struct can_priv can;	/* must be the first member */
+    int open_time;
+    struct sk_buff *echo_skb;
 
-	/* the lower-layer is responsible for appropriate locking */
-	u8 (*read_reg) (const struct sja1000_priv *priv, int reg);
-	void (*write_reg) (const struct sja1000_priv *priv, int reg, u8 val);
-	void (*pre_irq) (const struct sja1000_priv *priv);
-	void (*post_irq) (const struct sja1000_priv *priv);
+    /* the lower-layer is responsible for appropriate locking */
+    u8 (*read_reg) (const struct sja1000_priv *priv, int reg);
+    void (*write_reg) (const struct sja1000_priv *priv, int reg, u8 val);
+    void (*pre_irq) (const struct sja1000_priv *priv);
+    void (*post_irq) (const struct sja1000_priv *priv);
 
-	void *priv;		/* for board-specific data */
-	struct net_device *dev;
+    void *priv;		/* for board-specific data */
+    struct net_device *dev;
 
-	void __iomem *reg_base;	 /* ioremap'ed address to registers */
-	unsigned long irq_flags; /* for request_irq() */
-	spinlock_t cmdreg_lock;  /* lock for concurrent cmd register writes */
+    void __iomem *reg_base;	 /* ioremap'ed address to registers */
+    unsigned long irq_flags; /* for request_irq() */
+    spinlock_t cmdreg_lock;  /* lock for concurrent cmd register writes */
 
-	u16 flags;		/* custom mode flags */
-	u8 ocr;			/* output control register */
-	u8 cdr;			/* clock divider register */
+    u16 flags;		/* custom mode flags */
+    u8 ocr;			/* output control register */
+    u8 cdr;			/* clock divider register */
 };
 
 struct net_device *alloc_sja1000dev(int sizeof_priv);

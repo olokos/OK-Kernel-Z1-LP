@@ -29,22 +29,20 @@
 #define insw  delayed_insw
 #define outsw  delayed_outsw
 
-static inline void delayed_outsw(unsigned int addr, void *buf, int len)
-{
-	unsigned short *bp = (unsigned short *)buf;
-	while (len--) {
-		DUMMY_DELAY_ACCESS;
-		outw(*bp++, addr);
-	}
+static inline void delayed_outsw(unsigned int addr, void *buf, int len) {
+    unsigned short *bp = (unsigned short *)buf;
+    while (len--) {
+        DUMMY_DELAY_ACCESS;
+        outw(*bp++, addr);
+    }
 }
 
-static inline void delayed_insw(unsigned int addr, void *buf, int len)
-{
-	unsigned short *bp = (unsigned short *)buf;
-	while (len--) {
-		DUMMY_DELAY_ACCESS;
-		*bp++ = inw(addr);
-	}
+static inline void delayed_insw(unsigned int addr, void *buf, int len) {
+    unsigned short *bp = (unsigned short *)buf;
+    while (len--) {
+        DUMMY_DELAY_ACCESS;
+        *bp++ = inw(addr);
+    }
 }
 
 #else
@@ -250,25 +248,25 @@ ISP1362_REG(OTGALTTMR,	0x6C,	REG_WIDTH_16,	REG_ACCESS_RW);
 
 /* Philips transfer descriptor, cpu-endian */
 struct ptd {
-	u16 count;
+    u16 count;
 #define	PTD_COUNT_MSK	(0x3ff << 0)
 #define	PTD_TOGGLE_MSK	(1 << 10)
 #define	PTD_ACTIVE_MSK	(1 << 11)
 #define	PTD_CC_MSK	(0xf << 12)
-	u16 mps;
+    u16 mps;
 #define	PTD_MPS_MSK	(0x3ff << 0)
 #define	PTD_SPD_MSK	(1 << 10)
 #define	PTD_LAST_MSK	(1 << 11)
 #define	PTD_EP_MSK	(0xf << 12)
-	u16 len;
+    u16 len;
 #define	PTD_LEN_MSK	(0x3ff << 0)
 #define	PTD_DIR_MSK	(3 << 10)
 #define	PTD_DIR_SETUP	(0)
 #define	PTD_DIR_OUT	(1)
 #define	PTD_DIR_IN	(2)
-	u16 faddr;
+    u16 faddr;
 #define	PTD_FA_MSK	(0x7f << 0)
-/* PTD Byte 7: [StartingFrame (if ISO PTD) | StartingFrame[0..4], PollingRate[0..2] (if INT PTD)] */
+    /* PTD Byte 7: [StartingFrame (if ISO PTD) | StartingFrame[0..4], PollingRate[0..2] (if INT PTD)] */
 #define PTD_SF_ISO_MSK	(0xff << 8)
 #define PTD_SF_INT_MSK	(0x1f << 8)
 #define PTD_PR_MSK	(0x07 << 13)
@@ -290,31 +288,31 @@ struct ptd {
 #define PTD_UNEXPECTEDPID   0x07
 #define PTD_DATAOVERRUN     0x08
 #define PTD_DATAUNDERRUN    0x09
-    /* 0x0A, 0x0B reserved for hardware */
+/* 0x0A, 0x0B reserved for hardware */
 #define PTD_BUFFEROVERRUN   0x0C
 #define PTD_BUFFERUNDERRUN  0x0D
-    /* 0x0E, 0x0F reserved for HCD */
+/* 0x0E, 0x0F reserved for HCD */
 #define PTD_NOTACCESSED     0x0F
 
 
 /* map OHCI TD status codes (CC) to errno values */
 static const int cc_to_error[16] = {
-	/* No  Error  */               0,
-	/* CRC Error  */               -EILSEQ,
-	/* Bit Stuff  */               -EPROTO,
-	/* Data Togg  */               -EILSEQ,
-	/* Stall      */               -EPIPE,
-	/* DevNotResp */               -ETIMEDOUT,
-	/* PIDCheck   */               -EPROTO,
-	/* UnExpPID   */               -EPROTO,
-	/* DataOver   */               -EOVERFLOW,
-	/* DataUnder  */               -EREMOTEIO,
-	/* (for hw)   */               -EIO,
-	/* (for hw)   */               -EIO,
-	/* BufferOver */               -ECOMM,
-	/* BuffUnder  */               -ENOSR,
-	/* (for HCD)  */               -EALREADY,
-	/* (for HCD)  */               -EALREADY
+    /* No  Error  */               0,
+    /* CRC Error  */               -EILSEQ,
+    /* Bit Stuff  */               -EPROTO,
+    /* Data Togg  */               -EILSEQ,
+    /* Stall      */               -EPIPE,
+    /* DevNotResp */               -ETIMEDOUT,
+    /* PIDCheck   */               -EPROTO,
+    /* UnExpPID   */               -EPROTO,
+    /* DataOver   */               -EOVERFLOW,
+    /* DataUnder  */               -EREMOTEIO,
+    /* (for hw)   */               -EIO,
+    /* (for hw)   */               -EIO,
+    /* BufferOver */               -ECOMM,
+    /* BuffUnder  */               -ENOSR,
+    /* (for HCD)  */               -EALREADY,
+    /* (for HCD)  */               -EALREADY
 };
 
 
@@ -428,157 +426,164 @@ static const int cc_to_error[16] = {
 #define	PERIODIC_SIZE		(1 << LOG2_PERIODIC_SIZE)
 
 struct isp1362_ep {
-	struct usb_host_endpoint *hep;
-	struct usb_device	*udev;
+    struct usb_host_endpoint *hep;
+    struct usb_device	*udev;
 
-	/* philips transfer descriptor */
-	struct ptd		ptd;
+    /* philips transfer descriptor */
+    struct ptd		ptd;
 
-	u8			maxpacket;
-	u8			epnum;
-	u8			nextpid;
-	u16			error_count;
-	u16			length;		/* of current packet */
-	s16			ptd_offset;	/* buffer offset in ISP1362 where
+    u8			maxpacket;
+    u8			epnum;
+    u8			nextpid;
+    u16			error_count;
+    u16			length;		/* of current packet */
+    s16			ptd_offset;	/* buffer offset in ISP1362 where
 						   PTD has been stored
 						   (for access thru HCDIRDATA) */
-	int			ptd_index;
-	int num_ptds;
-	void 			*data;		/* to databuf */
-	/* queue of active EPs (the ones transmitted to the chip) */
-	struct list_head	active;
+    int			ptd_index;
+    int num_ptds;
+    void 			*data;		/* to databuf */
+    /* queue of active EPs (the ones transmitted to the chip) */
+    struct list_head	active;
 
-	/* periodic schedule */
-	u8			branch;
-	u16			interval;
-	u16			load;
-	u16			last_iso;
+    /* periodic schedule */
+    u8			branch;
+    u16			interval;
+    u16			load;
+    u16			last_iso;
 
-	/* async schedule */
-	struct list_head	schedule;	/* list of all EPs that need processing */
-	struct list_head	remove_list;
-	int			num_req;
+    /* async schedule */
+    struct list_head	schedule;	/* list of all EPs that need processing */
+    struct list_head	remove_list;
+    int			num_req;
 };
 
 struct isp1362_ep_queue {
-	struct list_head	active;		/* list of PTDs currently processed by HC */
-	atomic_t		finishing;
-	unsigned long		buf_map;
-	unsigned long		skip_map;
-	int			free_ptd;
-	u16			buf_start;
-	u16			buf_size;
-	u16			blk_size;	/* PTD buffer block size for ATL and INTL */
-	u8			buf_count;
-	u8			buf_avail;
-	char			name[16];
+    struct list_head	active;		/* list of PTDs currently processed by HC */
+    atomic_t		finishing;
+    unsigned long		buf_map;
+    unsigned long		skip_map;
+    int			free_ptd;
+    u16			buf_start;
+    u16			buf_size;
+    u16			blk_size;	/* PTD buffer block size for ATL and INTL */
+    u8			buf_count;
+    u8			buf_avail;
+    char			name[16];
 
-	/* for statistical tracking */
-	u8			stat_maxptds;	/* Max # of ptds seen simultaneously in fifo */
-	u8			ptd_count;	/* number of ptds submitted to this queue */
+    /* for statistical tracking */
+    u8			stat_maxptds;	/* Max # of ptds seen simultaneously in fifo */
+    u8			ptd_count;	/* number of ptds submitted to this queue */
 };
 
 struct isp1362_hcd {
-	spinlock_t		lock;
-	void __iomem		*addr_reg;
-	void __iomem		*data_reg;
+    spinlock_t		lock;
+    void __iomem		*addr_reg;
+    void __iomem		*data_reg;
 
-	struct isp1362_platform_data *board;
+    struct isp1362_platform_data *board;
 
-	struct proc_dir_entry	*pde;
-	unsigned long		stat1, stat2, stat4, stat8, stat16;
+    struct proc_dir_entry	*pde;
+    unsigned long		stat1, stat2, stat4, stat8, stat16;
 
-	/* HC registers */
-	u32			intenb;		/* "OHCI" interrupts */
-	u16			irqenb;		/* uP interrupts */
+    /* HC registers */
+    u32			intenb;		/* "OHCI" interrupts */
+    u16			irqenb;		/* uP interrupts */
 
-	/* Root hub registers */
-	u32			rhdesca;
-	u32			rhdescb;
-	u32			rhstatus;
-	u32			rhport[MAX_ROOT_PORTS];
-	unsigned long		next_statechange;
+    /* Root hub registers */
+    u32			rhdesca;
+    u32			rhdescb;
+    u32			rhstatus;
+    u32			rhport[MAX_ROOT_PORTS];
+    unsigned long		next_statechange;
 
-	/* HC control reg shadow copy */
-	u32			hc_control;
+    /* HC control reg shadow copy */
+    u32			hc_control;
 
-	/* async schedule: control, bulk */
-	struct list_head	async;
+    /* async schedule: control, bulk */
+    struct list_head	async;
 
-	/* periodic schedule: int */
-	u16			load[PERIODIC_SIZE];
-	struct list_head	periodic;
-	u16			fmindex;
+    /* periodic schedule: int */
+    u16			load[PERIODIC_SIZE];
+    struct list_head	periodic;
+    u16			fmindex;
 
-	/* periodic schedule: isochronous */
-	struct list_head	isoc;
-	unsigned int		istl_flip:1;
-	unsigned int		irq_active:1;
+    /* periodic schedule: isochronous */
+    struct list_head	isoc;
+    unsigned int		istl_flip:1;
+    unsigned int		irq_active:1;
 
-	/* Schedules for the current frame */
-	struct isp1362_ep_queue atl_queue;
-	struct isp1362_ep_queue intl_queue;
-	struct isp1362_ep_queue istl_queue[2];
+    /* Schedules for the current frame */
+    struct isp1362_ep_queue atl_queue;
+    struct isp1362_ep_queue intl_queue;
+    struct isp1362_ep_queue istl_queue[2];
 
-	/* list of PTDs retrieved from HC */
-	struct list_head	remove_list;
-	enum {
-		ISP1362_INT_SOF,
-		ISP1362_INT_ISTL0,
-		ISP1362_INT_ISTL1,
-		ISP1362_INT_EOT,
-		ISP1362_INT_OPR,
-		ISP1362_INT_SUSP,
-		ISP1362_INT_CLKRDY,
-		ISP1362_INT_INTL,
-		ISP1362_INT_ATL,
-		ISP1362_INT_OTG,
-		NUM_ISP1362_IRQS
-	} IRQ_NAMES;
-	unsigned int		irq_stat[NUM_ISP1362_IRQS];
-	int			req_serial;
+    /* list of PTDs retrieved from HC */
+    struct list_head	remove_list;
+    enum {
+        ISP1362_INT_SOF,
+        ISP1362_INT_ISTL0,
+        ISP1362_INT_ISTL1,
+        ISP1362_INT_EOT,
+        ISP1362_INT_OPR,
+        ISP1362_INT_SUSP,
+        ISP1362_INT_CLKRDY,
+        ISP1362_INT_INTL,
+        ISP1362_INT_ATL,
+        ISP1362_INT_OTG,
+        NUM_ISP1362_IRQS
+    } IRQ_NAMES;
+    unsigned int		irq_stat[NUM_ISP1362_IRQS];
+    int			req_serial;
 };
 
-static inline const char *ISP1362_INT_NAME(int n)
-{
-	switch (n) {
-	case ISP1362_INT_SOF:    return "SOF";
-	case ISP1362_INT_ISTL0:  return "ISTL0";
-	case ISP1362_INT_ISTL1:  return "ISTL1";
-	case ISP1362_INT_EOT:    return "EOT";
-	case ISP1362_INT_OPR:    return "OPR";
-	case ISP1362_INT_SUSP:   return "SUSP";
-	case ISP1362_INT_CLKRDY: return "CLKRDY";
-	case ISP1362_INT_INTL:   return "INTL";
-	case ISP1362_INT_ATL:    return "ATL";
-	case ISP1362_INT_OTG:    return "OTG";
-	default:                 return "unknown";
-	}
+static inline const char *ISP1362_INT_NAME(int n) {
+    switch (n) {
+    case ISP1362_INT_SOF:
+        return "SOF";
+    case ISP1362_INT_ISTL0:
+        return "ISTL0";
+    case ISP1362_INT_ISTL1:
+        return "ISTL1";
+    case ISP1362_INT_EOT:
+        return "EOT";
+    case ISP1362_INT_OPR:
+        return "OPR";
+    case ISP1362_INT_SUSP:
+        return "SUSP";
+    case ISP1362_INT_CLKRDY:
+        return "CLKRDY";
+    case ISP1362_INT_INTL:
+        return "INTL";
+    case ISP1362_INT_ATL:
+        return "ATL";
+    case ISP1362_INT_OTG:
+        return "OTG";
+    default:
+        return "unknown";
+    }
 }
 
-static inline void ALIGNSTAT(struct isp1362_hcd *isp1362_hcd, void *ptr)
-{
-	unsigned long p = (unsigned long)ptr;
-	if (!(p & 0xf))
-		isp1362_hcd->stat16++;
-	else if (!(p & 0x7))
-		isp1362_hcd->stat8++;
-	else if (!(p & 0x3))
-		isp1362_hcd->stat4++;
-	else if (!(p & 0x1))
-		isp1362_hcd->stat2++;
-	else
-		isp1362_hcd->stat1++;
+static inline void ALIGNSTAT(struct isp1362_hcd *isp1362_hcd, void *ptr) {
+    unsigned long p = (unsigned long)ptr;
+    if (!(p & 0xf))
+        isp1362_hcd->stat16++;
+    else if (!(p & 0x7))
+        isp1362_hcd->stat8++;
+    else if (!(p & 0x3))
+        isp1362_hcd->stat4++;
+    else if (!(p & 0x1))
+        isp1362_hcd->stat2++;
+    else
+        isp1362_hcd->stat1++;
 }
 
-static inline struct isp1362_hcd *hcd_to_isp1362_hcd(struct usb_hcd *hcd)
-{
-	return (struct isp1362_hcd *) (hcd->hcd_priv);
+static inline struct isp1362_hcd *hcd_to_isp1362_hcd(struct usb_hcd *hcd) {
+    return (struct isp1362_hcd *) (hcd->hcd_priv);
 }
 
-static inline struct usb_hcd *isp1362_hcd_to_hcd(struct isp1362_hcd *isp1362_hcd)
-{
-	return container_of((void *)isp1362_hcd, struct usb_hcd, hcd_priv);
+static inline struct usb_hcd *isp1362_hcd_to_hcd(struct isp1362_hcd *isp1362_hcd) {
+    return container_of((void *)isp1362_hcd, struct usb_hcd, hcd_priv);
 }
 
 #define frame_before(f1, f2)	((s16)((u16)f1 - (u16)f2) < 0)
@@ -643,151 +648,144 @@ static inline struct usb_hcd *isp1362_hcd_to_hcd(struct isp1362_hcd *isp1362_hcd
  * that all register accesses are performed with interrupts disabled, since the interrupt
  * handler has no way of restoring the previous state.
  */
-static void isp1362_write_addr(struct isp1362_hcd *isp1362_hcd, isp1362_reg_t reg)
-{
-	/*_BUG_ON((reg & ISP1362_REG_WRITE_OFFSET) && !(reg & REG_ACCESS_W));*/
-	REG_ACCESS_TEST(reg);
-	_BUG_ON(!irqs_disabled());
-	DUMMY_DELAY_ACCESS;
-	writew(ISP1362_REG_NO(reg), isp1362_hcd->addr_reg);
-	DUMMY_DELAY_ACCESS;
-	isp1362_delay(isp1362_hcd, 1);
+static void isp1362_write_addr(struct isp1362_hcd *isp1362_hcd, isp1362_reg_t reg) {
+    /*_BUG_ON((reg & ISP1362_REG_WRITE_OFFSET) && !(reg & REG_ACCESS_W));*/
+    REG_ACCESS_TEST(reg);
+    _BUG_ON(!irqs_disabled());
+    DUMMY_DELAY_ACCESS;
+    writew(ISP1362_REG_NO(reg), isp1362_hcd->addr_reg);
+    DUMMY_DELAY_ACCESS;
+    isp1362_delay(isp1362_hcd, 1);
 }
 
-static void isp1362_write_data16(struct isp1362_hcd *isp1362_hcd, u16 val)
-{
-	_BUG_ON(!irqs_disabled());
-	DUMMY_DELAY_ACCESS;
-	writew(val, isp1362_hcd->data_reg);
+static void isp1362_write_data16(struct isp1362_hcd *isp1362_hcd, u16 val) {
+    _BUG_ON(!irqs_disabled());
+    DUMMY_DELAY_ACCESS;
+    writew(val, isp1362_hcd->data_reg);
 }
 
-static u16 isp1362_read_data16(struct isp1362_hcd *isp1362_hcd)
-{
-	u16 val;
+static u16 isp1362_read_data16(struct isp1362_hcd *isp1362_hcd) {
+    u16 val;
 
-	_BUG_ON(!irqs_disabled());
-	DUMMY_DELAY_ACCESS;
-	val = readw(isp1362_hcd->data_reg);
+    _BUG_ON(!irqs_disabled());
+    DUMMY_DELAY_ACCESS;
+    val = readw(isp1362_hcd->data_reg);
 
-	return val;
+    return val;
 }
 
-static void isp1362_write_data32(struct isp1362_hcd *isp1362_hcd, u32 val)
-{
-	_BUG_ON(!irqs_disabled());
+static void isp1362_write_data32(struct isp1362_hcd *isp1362_hcd, u32 val) {
+    _BUG_ON(!irqs_disabled());
 #if USE_32BIT
-	DUMMY_DELAY_ACCESS;
-	writel(val, isp1362_hcd->data_reg);
+    DUMMY_DELAY_ACCESS;
+    writel(val, isp1362_hcd->data_reg);
 #else
-	DUMMY_DELAY_ACCESS;
-	writew((u16)val, isp1362_hcd->data_reg);
-	DUMMY_DELAY_ACCESS;
-	writew(val >> 16, isp1362_hcd->data_reg);
+    DUMMY_DELAY_ACCESS;
+    writew((u16)val, isp1362_hcd->data_reg);
+    DUMMY_DELAY_ACCESS;
+    writew(val >> 16, isp1362_hcd->data_reg);
 #endif
 }
 
-static u32 isp1362_read_data32(struct isp1362_hcd *isp1362_hcd)
-{
-	u32 val;
+static u32 isp1362_read_data32(struct isp1362_hcd *isp1362_hcd) {
+    u32 val;
 
-	_BUG_ON(!irqs_disabled());
+    _BUG_ON(!irqs_disabled());
 #if USE_32BIT
-	DUMMY_DELAY_ACCESS;
-	val = readl(isp1362_hcd->data_reg);
+    DUMMY_DELAY_ACCESS;
+    val = readl(isp1362_hcd->data_reg);
 #else
-	DUMMY_DELAY_ACCESS;
-	val = (u32)readw(isp1362_hcd->data_reg);
-	DUMMY_DELAY_ACCESS;
-	val |= (u32)readw(isp1362_hcd->data_reg) << 16;
+    DUMMY_DELAY_ACCESS;
+    val = (u32)readw(isp1362_hcd->data_reg);
+    DUMMY_DELAY_ACCESS;
+    val |= (u32)readw(isp1362_hcd->data_reg) << 16;
 #endif
-	return val;
+    return val;
 }
 
 /* use readsw/writesw to access the fifo whenever possible */
 /* assume HCDIRDATA or XFERCTR & addr_reg have been set up */
-static void isp1362_read_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 len)
-{
-	u8 *dp = buf;
-	u16 data;
+static void isp1362_read_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 len) {
+    u8 *dp = buf;
+    u16 data;
 
-	if (!len)
-		return;
+    if (!len)
+        return;
 
-	_BUG_ON(!irqs_disabled());
+    _BUG_ON(!irqs_disabled());
 
-	RDBG("%s: Reading %d byte from fifo to mem @ %p\n", __func__, len, buf);
+    RDBG("%s: Reading %d byte from fifo to mem @ %p\n", __func__, len, buf);
 #if USE_32BIT
-	if (len >= 4) {
-		RDBG("%s: Using readsl for %d dwords\n", __func__, len >> 2);
-		readsl(isp1362_hcd->data_reg, dp, len >> 2);
-		dp += len & ~3;
-		len &= 3;
-	}
+    if (len >= 4) {
+        RDBG("%s: Using readsl for %d dwords\n", __func__, len >> 2);
+        readsl(isp1362_hcd->data_reg, dp, len >> 2);
+        dp += len & ~3;
+        len &= 3;
+    }
 #endif
-	if (len >= 2) {
-		RDBG("%s: Using readsw for %d words\n", __func__, len >> 1);
-		insw((unsigned long)isp1362_hcd->data_reg, dp, len >> 1);
-		dp += len & ~1;
-		len &= 1;
-	}
+    if (len >= 2) {
+        RDBG("%s: Using readsw for %d words\n", __func__, len >> 1);
+        insw((unsigned long)isp1362_hcd->data_reg, dp, len >> 1);
+        dp += len & ~1;
+        len &= 1;
+    }
 
-	BUG_ON(len & ~1);
-	if (len > 0) {
-		data = isp1362_read_data16(isp1362_hcd);
-		RDBG("%s: Reading trailing byte %02x to mem @ %08x\n", __func__,
-		     (u8)data, (u32)dp);
-		*dp = (u8)data;
-	}
+    BUG_ON(len & ~1);
+    if (len > 0) {
+        data = isp1362_read_data16(isp1362_hcd);
+        RDBG("%s: Reading trailing byte %02x to mem @ %08x\n", __func__,
+             (u8)data, (u32)dp);
+        *dp = (u8)data;
+    }
 }
 
-static void isp1362_write_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 len)
-{
-	u8 *dp = buf;
-	u16 data;
+static void isp1362_write_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 len) {
+    u8 *dp = buf;
+    u16 data;
 
-	if (!len)
-		return;
+    if (!len)
+        return;
 
-	if ((unsigned long)dp & 0x1) {
-		/* not aligned */
-		for (; len > 1; len -= 2) {
-			data = *dp++;
-			data |= *dp++ << 8;
-			isp1362_write_data16(isp1362_hcd, data);
-		}
-		if (len)
-			isp1362_write_data16(isp1362_hcd, *dp);
-		return;
-	}
+    if ((unsigned long)dp & 0x1) {
+        /* not aligned */
+        for (; len > 1; len -= 2) {
+            data = *dp++;
+            data |= *dp++ << 8;
+            isp1362_write_data16(isp1362_hcd, data);
+        }
+        if (len)
+            isp1362_write_data16(isp1362_hcd, *dp);
+        return;
+    }
 
-	_BUG_ON(!irqs_disabled());
+    _BUG_ON(!irqs_disabled());
 
-	RDBG("%s: Writing %d byte to fifo from memory @%p\n", __func__, len, buf);
+    RDBG("%s: Writing %d byte to fifo from memory @%p\n", __func__, len, buf);
 #if USE_32BIT
-	if (len >= 4) {
-		RDBG("%s: Using writesl for %d dwords\n", __func__, len >> 2);
-		writesl(isp1362_hcd->data_reg, dp, len >> 2);
-		dp += len & ~3;
-		len &= 3;
-	}
+    if (len >= 4) {
+        RDBG("%s: Using writesl for %d dwords\n", __func__, len >> 2);
+        writesl(isp1362_hcd->data_reg, dp, len >> 2);
+        dp += len & ~3;
+        len &= 3;
+    }
 #endif
-	if (len >= 2) {
-		RDBG("%s: Using writesw for %d words\n", __func__, len >> 1);
-		outsw((unsigned long)isp1362_hcd->data_reg, dp, len >> 1);
-		dp += len & ~1;
-		len &= 1;
-	}
+    if (len >= 2) {
+        RDBG("%s: Using writesw for %d words\n", __func__, len >> 1);
+        outsw((unsigned long)isp1362_hcd->data_reg, dp, len >> 1);
+        dp += len & ~1;
+        len &= 1;
+    }
 
-	BUG_ON(len & ~1);
-	if (len > 0) {
-		/* finally write any trailing byte; we don't need to care
-		 * about the high byte of the last word written
-		 */
-		data = (u16)*dp;
-		RDBG("%s: Sending trailing byte %02x from mem @ %08x\n", __func__,
-			data, (u32)dp);
-		isp1362_write_data16(isp1362_hcd, data);
-	}
+    BUG_ON(len & ~1);
+    if (len > 0) {
+        /* finally write any trailing byte; we don't need to care
+         * about the high byte of the last word written
+         */
+        data = (u16)*dp;
+        RDBG("%s: Sending trailing byte %02x from mem @ %08x\n", __func__,
+             data, (u32)dp);
+        isp1362_write_data16(isp1362_hcd, data);
+    }
 }
 
 #define isp1362_read_reg16(d, r)		({			\
@@ -867,186 +865,177 @@ static void isp1362_write_fifo(struct isp1362_hcd *isp1362_hcd, void *buf, u16 l
 #define isp1362_show_reg(d, r)	do {} while (0)
 #endif
 
-static void __attribute__((__unused__)) isp1362_show_regs(struct isp1362_hcd *isp1362_hcd)
-{
-	isp1362_show_reg(isp1362_hcd, HCREVISION);
-	isp1362_show_reg(isp1362_hcd, HCCONTROL);
-	isp1362_show_reg(isp1362_hcd, HCCMDSTAT);
-	isp1362_show_reg(isp1362_hcd, HCINTSTAT);
-	isp1362_show_reg(isp1362_hcd, HCINTENB);
-	isp1362_show_reg(isp1362_hcd, HCFMINTVL);
-	isp1362_show_reg(isp1362_hcd, HCFMREM);
-	isp1362_show_reg(isp1362_hcd, HCFMNUM);
-	isp1362_show_reg(isp1362_hcd, HCLSTHRESH);
-	isp1362_show_reg(isp1362_hcd, HCRHDESCA);
-	isp1362_show_reg(isp1362_hcd, HCRHDESCB);
-	isp1362_show_reg(isp1362_hcd, HCRHSTATUS);
-	isp1362_show_reg(isp1362_hcd, HCRHPORT1);
-	isp1362_show_reg(isp1362_hcd, HCRHPORT2);
+static void __attribute__((__unused__)) isp1362_show_regs(struct isp1362_hcd *isp1362_hcd) {
+    isp1362_show_reg(isp1362_hcd, HCREVISION);
+    isp1362_show_reg(isp1362_hcd, HCCONTROL);
+    isp1362_show_reg(isp1362_hcd, HCCMDSTAT);
+    isp1362_show_reg(isp1362_hcd, HCINTSTAT);
+    isp1362_show_reg(isp1362_hcd, HCINTENB);
+    isp1362_show_reg(isp1362_hcd, HCFMINTVL);
+    isp1362_show_reg(isp1362_hcd, HCFMREM);
+    isp1362_show_reg(isp1362_hcd, HCFMNUM);
+    isp1362_show_reg(isp1362_hcd, HCLSTHRESH);
+    isp1362_show_reg(isp1362_hcd, HCRHDESCA);
+    isp1362_show_reg(isp1362_hcd, HCRHDESCB);
+    isp1362_show_reg(isp1362_hcd, HCRHSTATUS);
+    isp1362_show_reg(isp1362_hcd, HCRHPORT1);
+    isp1362_show_reg(isp1362_hcd, HCRHPORT2);
 
-	isp1362_show_reg(isp1362_hcd, HCHWCFG);
-	isp1362_show_reg(isp1362_hcd, HCDMACFG);
-	isp1362_show_reg(isp1362_hcd, HCXFERCTR);
-	isp1362_show_reg(isp1362_hcd, HCuPINT);
+    isp1362_show_reg(isp1362_hcd, HCHWCFG);
+    isp1362_show_reg(isp1362_hcd, HCDMACFG);
+    isp1362_show_reg(isp1362_hcd, HCXFERCTR);
+    isp1362_show_reg(isp1362_hcd, HCuPINT);
 
-	if (in_interrupt())
-		DBG(0, "%-12s[%02x]:     %04x\n", "HCuPINTENB",
-			 ISP1362_REG_NO(ISP1362_REG_HCuPINTENB), isp1362_hcd->irqenb);
-	else
-		isp1362_show_reg(isp1362_hcd, HCuPINTENB);
-	isp1362_show_reg(isp1362_hcd, HCCHIPID);
-	isp1362_show_reg(isp1362_hcd, HCSCRATCH);
-	isp1362_show_reg(isp1362_hcd, HCBUFSTAT);
-	isp1362_show_reg(isp1362_hcd, HCDIRADDR);
-	/* Access would advance fifo
-	 * isp1362_show_reg(isp1362_hcd, HCDIRDATA);
-	 */
-	isp1362_show_reg(isp1362_hcd, HCISTLBUFSZ);
-	isp1362_show_reg(isp1362_hcd, HCISTLRATE);
-	isp1362_show_reg(isp1362_hcd, HCINTLBUFSZ);
-	isp1362_show_reg(isp1362_hcd, HCINTLBLKSZ);
-	isp1362_show_reg(isp1362_hcd, HCINTLDONE);
-	isp1362_show_reg(isp1362_hcd, HCINTLSKIP);
-	isp1362_show_reg(isp1362_hcd, HCINTLLAST);
-	isp1362_show_reg(isp1362_hcd, HCINTLCURR);
-	isp1362_show_reg(isp1362_hcd, HCATLBUFSZ);
-	isp1362_show_reg(isp1362_hcd, HCATLBLKSZ);
-	/* only valid after ATL_DONE interrupt
-	 * isp1362_show_reg(isp1362_hcd, HCATLDONE);
-	 */
-	isp1362_show_reg(isp1362_hcd, HCATLSKIP);
-	isp1362_show_reg(isp1362_hcd, HCATLLAST);
-	isp1362_show_reg(isp1362_hcd, HCATLCURR);
-	isp1362_show_reg(isp1362_hcd, HCATLDTC);
-	isp1362_show_reg(isp1362_hcd, HCATLDTCTO);
+    if (in_interrupt())
+        DBG(0, "%-12s[%02x]:     %04x\n", "HCuPINTENB",
+            ISP1362_REG_NO(ISP1362_REG_HCuPINTENB), isp1362_hcd->irqenb);
+    else
+        isp1362_show_reg(isp1362_hcd, HCuPINTENB);
+    isp1362_show_reg(isp1362_hcd, HCCHIPID);
+    isp1362_show_reg(isp1362_hcd, HCSCRATCH);
+    isp1362_show_reg(isp1362_hcd, HCBUFSTAT);
+    isp1362_show_reg(isp1362_hcd, HCDIRADDR);
+    /* Access would advance fifo
+     * isp1362_show_reg(isp1362_hcd, HCDIRDATA);
+     */
+    isp1362_show_reg(isp1362_hcd, HCISTLBUFSZ);
+    isp1362_show_reg(isp1362_hcd, HCISTLRATE);
+    isp1362_show_reg(isp1362_hcd, HCINTLBUFSZ);
+    isp1362_show_reg(isp1362_hcd, HCINTLBLKSZ);
+    isp1362_show_reg(isp1362_hcd, HCINTLDONE);
+    isp1362_show_reg(isp1362_hcd, HCINTLSKIP);
+    isp1362_show_reg(isp1362_hcd, HCINTLLAST);
+    isp1362_show_reg(isp1362_hcd, HCINTLCURR);
+    isp1362_show_reg(isp1362_hcd, HCATLBUFSZ);
+    isp1362_show_reg(isp1362_hcd, HCATLBLKSZ);
+    /* only valid after ATL_DONE interrupt
+     * isp1362_show_reg(isp1362_hcd, HCATLDONE);
+     */
+    isp1362_show_reg(isp1362_hcd, HCATLSKIP);
+    isp1362_show_reg(isp1362_hcd, HCATLLAST);
+    isp1362_show_reg(isp1362_hcd, HCATLCURR);
+    isp1362_show_reg(isp1362_hcd, HCATLDTC);
+    isp1362_show_reg(isp1362_hcd, HCATLDTCTO);
 }
 
-static void isp1362_write_diraddr(struct isp1362_hcd *isp1362_hcd, u16 offset, u16 len)
-{
-	_BUG_ON(offset & 1);
-	_BUG_ON(offset >= ISP1362_BUF_SIZE);
-	_BUG_ON(len > ISP1362_BUF_SIZE);
-	_BUG_ON(offset + len > ISP1362_BUF_SIZE);
-	len = (len + 1) & ~1;
+static void isp1362_write_diraddr(struct isp1362_hcd *isp1362_hcd, u16 offset, u16 len) {
+    _BUG_ON(offset & 1);
+    _BUG_ON(offset >= ISP1362_BUF_SIZE);
+    _BUG_ON(len > ISP1362_BUF_SIZE);
+    _BUG_ON(offset + len > ISP1362_BUF_SIZE);
+    len = (len + 1) & ~1;
 
-	isp1362_clr_mask16(isp1362_hcd, HCDMACFG, HCDMACFG_CTR_ENABLE);
-	isp1362_write_reg32(isp1362_hcd, HCDIRADDR,
-			    HCDIRADDR_ADDR(offset) | HCDIRADDR_COUNT(len));
+    isp1362_clr_mask16(isp1362_hcd, HCDMACFG, HCDMACFG_CTR_ENABLE);
+    isp1362_write_reg32(isp1362_hcd, HCDIRADDR,
+                        HCDIRADDR_ADDR(offset) | HCDIRADDR_COUNT(len));
 }
 
-static void isp1362_read_buffer(struct isp1362_hcd *isp1362_hcd, void *buf, u16 offset, int len)
-{
-	_BUG_ON(offset & 1);
+static void isp1362_read_buffer(struct isp1362_hcd *isp1362_hcd, void *buf, u16 offset, int len) {
+    _BUG_ON(offset & 1);
 
-	isp1362_write_diraddr(isp1362_hcd, offset, len);
+    isp1362_write_diraddr(isp1362_hcd, offset, len);
 
-	DBG(3, "%s: Reading %d byte from buffer @%04x to memory @ %p\n",
-	    __func__, len, offset, buf);
+    DBG(3, "%s: Reading %d byte from buffer @%04x to memory @ %p\n",
+        __func__, len, offset, buf);
 
-	isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
-	_WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
+    _WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
 
-	isp1362_write_addr(isp1362_hcd, ISP1362_REG_HCDIRDATA);
+    isp1362_write_addr(isp1362_hcd, ISP1362_REG_HCDIRDATA);
 
-	isp1362_read_fifo(isp1362_hcd, buf, len);
-	_WARN_ON(!(isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
-	isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
-	_WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    isp1362_read_fifo(isp1362_hcd, buf, len);
+    _WARN_ON(!(isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
+    _WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
 }
 
-static void isp1362_write_buffer(struct isp1362_hcd *isp1362_hcd, void *buf, u16 offset, int len)
-{
-	_BUG_ON(offset & 1);
+static void isp1362_write_buffer(struct isp1362_hcd *isp1362_hcd, void *buf, u16 offset, int len) {
+    _BUG_ON(offset & 1);
 
-	isp1362_write_diraddr(isp1362_hcd, offset, len);
+    isp1362_write_diraddr(isp1362_hcd, offset, len);
 
-	DBG(3, "%s: Writing %d byte to buffer @%04x from memory @ %p\n",
-	    __func__, len, offset, buf);
+    DBG(3, "%s: Writing %d byte to buffer @%04x from memory @ %p\n",
+        __func__, len, offset, buf);
 
-	isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
-	_WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
+    _WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
 
-	isp1362_write_addr(isp1362_hcd, ISP1362_REG_HCDIRDATA | ISP1362_REG_WRITE_OFFSET);
-	isp1362_write_fifo(isp1362_hcd, buf, len);
+    isp1362_write_addr(isp1362_hcd, ISP1362_REG_HCDIRDATA | ISP1362_REG_WRITE_OFFSET);
+    isp1362_write_fifo(isp1362_hcd, buf, len);
 
-	_WARN_ON(!(isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
-	isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
-	_WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    _WARN_ON(!(isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
+    isp1362_write_reg16(isp1362_hcd, HCuPINT, HCuPINT_EOT);
+    _WARN_ON((isp1362_read_reg16(isp1362_hcd, HCuPINT) & HCuPINT_EOT));
 }
 
-static void __attribute__((unused)) dump_data(char *buf, int len)
-{
-	if (dbg_level > 0) {
-		int k;
-		int lf = 0;
+static void __attribute__((unused)) dump_data(char *buf, int len) {
+    if (dbg_level > 0) {
+        int k;
+        int lf = 0;
 
-		for (k = 0; k < len; ++k) {
-			if (!lf)
-				DBG(0, "%04x:", k);
-			printk(" %02x", ((u8 *) buf)[k]);
-			lf = 1;
-			if (!k)
-				continue;
-			if (k % 16 == 15) {
-				printk("\n");
-				lf = 0;
-				continue;
-			}
-			if (k % 8 == 7)
-				printk(" ");
-			if (k % 4 == 3)
-				printk(" ");
-		}
-		if (lf)
-			printk("\n");
-	}
+        for (k = 0; k < len; ++k) {
+            if (!lf)
+                DBG(0, "%04x:", k);
+            printk(" %02x", ((u8 *) buf)[k]);
+            lf = 1;
+            if (!k)
+                continue;
+            if (k % 16 == 15) {
+                printk("\n");
+                lf = 0;
+                continue;
+            }
+            if (k % 8 == 7)
+                printk(" ");
+            if (k % 4 == 3)
+                printk(" ");
+        }
+        if (lf)
+            printk("\n");
+    }
 }
 
 #if defined(ISP1362_DEBUG) && defined(PTD_TRACE)
 
-static void dump_ptd(struct ptd *ptd)
-{
-	DBG(0, "EP %p: CC=%x EP=%d DIR=%x CNT=%d LEN=%d MPS=%d TGL=%x ACT=%x FA=%d SPD=%x SF=%x PR=%x LST=%x\n",
-	    container_of(ptd, struct isp1362_ep, ptd),
-	    PTD_GET_CC(ptd), PTD_GET_EP(ptd), PTD_GET_DIR(ptd),
-	    PTD_GET_COUNT(ptd), PTD_GET_LEN(ptd), PTD_GET_MPS(ptd),
-	    PTD_GET_TOGGLE(ptd), PTD_GET_ACTIVE(ptd), PTD_GET_FA(ptd),
-	    PTD_GET_SPD(ptd), PTD_GET_SF_INT(ptd), PTD_GET_PR(ptd), PTD_GET_LAST(ptd));
-	DBG(0, "  %04x %04x %04x %04x\n", ptd->count, ptd->mps, ptd->len, ptd->faddr);
+static void dump_ptd(struct ptd *ptd) {
+    DBG(0, "EP %p: CC=%x EP=%d DIR=%x CNT=%d LEN=%d MPS=%d TGL=%x ACT=%x FA=%d SPD=%x SF=%x PR=%x LST=%x\n",
+        container_of(ptd, struct isp1362_ep, ptd),
+        PTD_GET_CC(ptd), PTD_GET_EP(ptd), PTD_GET_DIR(ptd),
+        PTD_GET_COUNT(ptd), PTD_GET_LEN(ptd), PTD_GET_MPS(ptd),
+        PTD_GET_TOGGLE(ptd), PTD_GET_ACTIVE(ptd), PTD_GET_FA(ptd),
+        PTD_GET_SPD(ptd), PTD_GET_SF_INT(ptd), PTD_GET_PR(ptd), PTD_GET_LAST(ptd));
+    DBG(0, "  %04x %04x %04x %04x\n", ptd->count, ptd->mps, ptd->len, ptd->faddr);
 }
 
-static void dump_ptd_out_data(struct ptd *ptd, u8 *buf)
-{
-	if (dbg_level > 0) {
-		if (PTD_GET_DIR(ptd) != PTD_DIR_IN && PTD_GET_LEN(ptd)) {
-			DBG(0, "--out->\n");
-			dump_data(buf, PTD_GET_LEN(ptd));
-		}
-	}
+static void dump_ptd_out_data(struct ptd *ptd, u8 *buf) {
+    if (dbg_level > 0) {
+        if (PTD_GET_DIR(ptd) != PTD_DIR_IN && PTD_GET_LEN(ptd)) {
+            DBG(0, "--out->\n");
+            dump_data(buf, PTD_GET_LEN(ptd));
+        }
+    }
 }
 
-static void dump_ptd_in_data(struct ptd *ptd, u8 *buf)
-{
-	if (dbg_level > 0) {
-		if (PTD_GET_DIR(ptd) == PTD_DIR_IN && PTD_GET_COUNT(ptd)) {
-			DBG(0, "<--in--\n");
-			dump_data(buf, PTD_GET_COUNT(ptd));
-		}
-		DBG(0, "-----\n");
-	}
+static void dump_ptd_in_data(struct ptd *ptd, u8 *buf) {
+    if (dbg_level > 0) {
+        if (PTD_GET_DIR(ptd) == PTD_DIR_IN && PTD_GET_COUNT(ptd)) {
+            DBG(0, "<--in--\n");
+            dump_data(buf, PTD_GET_COUNT(ptd));
+        }
+        DBG(0, "-----\n");
+    }
 }
 
-static void dump_ptd_queue(struct isp1362_ep_queue *epq)
-{
-	struct isp1362_ep *ep;
-	int dbg = dbg_level;
+static void dump_ptd_queue(struct isp1362_ep_queue *epq) {
+    struct isp1362_ep *ep;
+    int dbg = dbg_level;
 
-	dbg_level = 1;
-	list_for_each_entry(ep, &epq->active, active) {
-		dump_ptd(&ep->ptd);
-		dump_data(ep->data, ep->length);
-	}
-	dbg_level = dbg;
+    dbg_level = 1;
+    list_for_each_entry(ep, &epq->active, active) {
+        dump_ptd(&ep->ptd);
+        dump_data(ep->data, ep->length);
+    }
+    dbg_level = dbg;
 }
 #else
 #define dump_ptd(ptd)			do {} while (0)

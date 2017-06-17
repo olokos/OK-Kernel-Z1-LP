@@ -32,10 +32,10 @@
 #include <linux/string.h>
 
 enum cvmx_mips_space {
-	CVMX_MIPS_SPACE_XKSEG = 3LL,
-	CVMX_MIPS_SPACE_XKPHYS = 2LL,
-	CVMX_MIPS_SPACE_XSSEG = 1LL,
-	CVMX_MIPS_SPACE_XUSEG = 0LL
+    CVMX_MIPS_SPACE_XKSEG = 3LL,
+    CVMX_MIPS_SPACE_XKPHYS = 2LL,
+    CVMX_MIPS_SPACE_XSSEG = 1LL,
+    CVMX_MIPS_SPACE_XUSEG = 0LL
 };
 
 /* These macros for use when using 32 bit pointers. */
@@ -93,11 +93,10 @@ enum cvmx_mips_space {
  * provided in the cvmx-app-init*.c files.
  */
 static inline uint32_t cvmx_get_proc_id(void) __attribute__ ((pure));
-static inline uint32_t cvmx_get_proc_id(void)
-{
-	uint32_t id;
-	asm("mfc0 %0, $15,0" : "=r"(id));
-	return id;
+static inline uint32_t cvmx_get_proc_id(void) {
+    uint32_t id;
+    asm("mfc0 %0, $15,0" : "=r"(id));
+    return id;
 }
 
 /* turn the variable name into a string */
@@ -109,9 +108,8 @@ static inline uint32_t cvmx_get_proc_id(void)
  *
  * @bits:   Number of bits in the mask
  * Returns The mask
- */ static inline uint64_t cvmx_build_mask(uint64_t bits)
-{
-	return ~((~0x0ull) << bits);
+ */ static inline uint64_t cvmx_build_mask(uint64_t bits) {
+    return ~((~0x0ull) << bits);
 }
 
 /**
@@ -122,9 +120,8 @@ static inline uint32_t cvmx_get_proc_id(void)
  * Returns I/O base address
  */
 static inline uint64_t cvmx_build_io_address(uint64_t major_did,
-					     uint64_t sub_did)
-{
-	return (0x1ull << 48) | (major_did << 43) | (sub_did << 40);
+        uint64_t sub_did) {
+    return (0x1ull << 48) | (major_did << 43) | (sub_did << 40);
 }
 
 /**
@@ -145,9 +142,8 @@ static inline uint64_t cvmx_build_io_address(uint64_t major_did,
  * Returns Value masked and shifted
  */
 static inline uint64_t cvmx_build_bits(uint64_t high_bit,
-				       uint64_t low_bit, uint64_t value)
-{
-	return (value & cvmx_build_mask(high_bit - low_bit + 1)) << low_bit;
+                                       uint64_t low_bit, uint64_t value) {
+    return (value & cvmx_build_mask(high_bit - low_bit + 1)) << low_bit;
 }
 
 /**
@@ -158,24 +154,23 @@ static inline uint64_t cvmx_build_bits(uint64_t high_bit,
  * @ptr:    C style memory pointer
  * Returns Hardware physical address
  */
-static inline uint64_t cvmx_ptr_to_phys(void *ptr)
-{
-	if (sizeof(void *) == 8) {
-		/*
-		 * We're running in 64 bit mode. Normally this means
-		 * that we can use 40 bits of address space (the
-		 * hardware limit). Unfortunately there is one case
-		 * were we need to limit this to 30 bits, sign
-		 * extended 32 bit. Although these are 64 bits wide,
-		 * only 30 bits can be used.
-		 */
-		if ((CAST64(ptr) >> 62) == 3)
-			return CAST64(ptr) & cvmx_build_mask(30);
-		else
-			return CAST64(ptr) & cvmx_build_mask(40);
-	} else {
-		return (long)(ptr) & 0x1fffffff;
-	}
+static inline uint64_t cvmx_ptr_to_phys(void *ptr) {
+    if (sizeof(void *) == 8) {
+        /*
+         * We're running in 64 bit mode. Normally this means
+         * that we can use 40 bits of address space (the
+         * hardware limit). Unfortunately there is one case
+         * were we need to limit this to 30 bits, sign
+         * extended 32 bit. Although these are 64 bits wide,
+         * only 30 bits can be used.
+         */
+        if ((CAST64(ptr) >> 62) == 3)
+            return CAST64(ptr) & cvmx_build_mask(30);
+        else
+            return CAST64(ptr) & cvmx_build_mask(40);
+    } else {
+        return (long)(ptr) & 0x1fffffff;
+    }
 }
 
 /**
@@ -186,18 +181,17 @@ static inline uint64_t cvmx_ptr_to_phys(void *ptr)
  *               Hardware physical address to memory
  * Returns Pointer to memory
  */
-static inline void *cvmx_phys_to_ptr(uint64_t physical_address)
-{
-	if (sizeof(void *) == 8) {
-		/* Just set the top bit, avoiding any TLB uglyness */
-		return CASTPTR(void,
-			       CVMX_ADD_SEG(CVMX_MIPS_SPACE_XKPHYS,
-					    physical_address));
-	} else {
-		return CASTPTR(void,
-			       CVMX_ADD_SEG32(CVMX_MIPS32_SPACE_KSEG0,
-					      physical_address));
-	}
+static inline void *cvmx_phys_to_ptr(uint64_t physical_address) {
+    if (sizeof(void *) == 8) {
+        /* Just set the top bit, avoiding any TLB uglyness */
+        return CASTPTR(void,
+                       CVMX_ADD_SEG(CVMX_MIPS_SPACE_XKPHYS,
+                                    physical_address));
+    } else {
+        return CASTPTR(void,
+                       CVMX_ADD_SEG32(CVMX_MIPS32_SPACE_KSEG0,
+                                      physical_address));
+    }
 }
 
 /* The following #if controls the definition of the macro
@@ -261,75 +255,68 @@ CVMX_BUILD_READ64(uint8, "lbu");
 #define cvmx_read64 cvmx_read64_uint64
 
 
-static inline void cvmx_write_csr(uint64_t csr_addr, uint64_t val)
-{
-	cvmx_write64(csr_addr, val);
+static inline void cvmx_write_csr(uint64_t csr_addr, uint64_t val) {
+    cvmx_write64(csr_addr, val);
 
-	/*
-	 * Perform an immediate read after every write to an RSL
-	 * register to force the write to complete. It doesn't matter
-	 * what RSL read we do, so we choose CVMX_MIO_BOOT_BIST_STAT
-	 * because it is fast and harmless.
-	 */
-	if (((csr_addr >> 40) & 0x7ffff) == (0x118))
-		cvmx_read64(CVMX_MIO_BOOT_BIST_STAT);
+    /*
+     * Perform an immediate read after every write to an RSL
+     * register to force the write to complete. It doesn't matter
+     * what RSL read we do, so we choose CVMX_MIO_BOOT_BIST_STAT
+     * because it is fast and harmless.
+     */
+    if (((csr_addr >> 40) & 0x7ffff) == (0x118))
+        cvmx_read64(CVMX_MIO_BOOT_BIST_STAT);
 }
 
-static inline void cvmx_write_io(uint64_t io_addr, uint64_t val)
-{
-	cvmx_write64(io_addr, val);
+static inline void cvmx_write_io(uint64_t io_addr, uint64_t val) {
+    cvmx_write64(io_addr, val);
 
 }
 
-static inline uint64_t cvmx_read_csr(uint64_t csr_addr)
-{
-	uint64_t val = cvmx_read64(csr_addr);
-	return val;
+static inline uint64_t cvmx_read_csr(uint64_t csr_addr) {
+    uint64_t val = cvmx_read64(csr_addr);
+    return val;
 }
 
 
-static inline void cvmx_send_single(uint64_t data)
-{
-	const uint64_t CVMX_IOBDMA_SENDSINGLE = 0xffffffffffffa200ull;
-	cvmx_write64(CVMX_IOBDMA_SENDSINGLE, data);
+static inline void cvmx_send_single(uint64_t data) {
+    const uint64_t CVMX_IOBDMA_SENDSINGLE = 0xffffffffffffa200ull;
+    cvmx_write64(CVMX_IOBDMA_SENDSINGLE, data);
 }
 
-static inline void cvmx_read_csr_async(uint64_t scraddr, uint64_t csr_addr)
-{
-	union {
-		uint64_t u64;
-		struct {
-			uint64_t scraddr:8;
-			uint64_t len:8;
-			uint64_t addr:48;
-		} s;
-	} addr;
-	addr.u64 = csr_addr;
-	addr.s.scraddr = scraddr >> 3;
-	addr.s.len = 1;
-	cvmx_send_single(addr.u64);
+static inline void cvmx_read_csr_async(uint64_t scraddr, uint64_t csr_addr) {
+    union {
+        uint64_t u64;
+        struct {
+            uint64_t scraddr:8;
+            uint64_t len:8;
+            uint64_t addr:48;
+        } s;
+    } addr;
+    addr.u64 = csr_addr;
+    addr.s.scraddr = scraddr >> 3;
+    addr.s.len = 1;
+    cvmx_send_single(addr.u64);
 }
 
 /* Return true if Octeon is CN38XX pass 1 */
-static inline int cvmx_octeon_is_pass1(void)
-{
+static inline int cvmx_octeon_is_pass1(void) {
 #if OCTEON_IS_COMMON_BINARY()
-	return 0;	/* Pass 1 isn't supported for common binaries */
+    return 0;	/* Pass 1 isn't supported for common binaries */
 #else
-/* Now that we know we're built for a specific model, only check CN38XX */
+    /* Now that we know we're built for a specific model, only check CN38XX */
 #if OCTEON_IS_MODEL(OCTEON_CN38XX)
-	return cvmx_get_proc_id() == OCTEON_CN38XX_PASS1;
+    return cvmx_get_proc_id() == OCTEON_CN38XX_PASS1;
 #else
-	return 0;	/* Built for non CN38XX chip, we're not CN38XX pass1 */
+    return 0;	/* Built for non CN38XX chip, we're not CN38XX pass1 */
 #endif
 #endif
 }
 
-static inline unsigned int cvmx_get_core_num(void)
-{
-	unsigned int core_num;
-	CVMX_RDHWRNV(core_num, 0);
-	return core_num;
+static inline unsigned int cvmx_get_core_num(void) {
+    unsigned int core_num;
+    CVMX_RDHWRNV(core_num, 0);
+    return core_num;
 }
 
 /**
@@ -340,11 +327,10 @@ static inline unsigned int cvmx_get_core_num(void)
  *
  * Returns Number of bits set
  */
-static inline uint32_t cvmx_pop(uint32_t val)
-{
-	uint32_t pop;
-	CVMX_POP(pop, val);
-	return pop;
+static inline uint32_t cvmx_pop(uint32_t val) {
+    uint32_t pop;
+    CVMX_POP(pop, val);
+    return pop;
 }
 
 /**
@@ -355,11 +341,10 @@ static inline uint32_t cvmx_pop(uint32_t val)
  *
  * Returns Number of bits set
  */
-static inline int cvmx_dpop(uint64_t val)
-{
-	int pop;
-	CVMX_DPOP(pop, val);
-	return pop;
+static inline int cvmx_dpop(uint64_t val) {
+    int pop;
+    CVMX_DPOP(pop, val);
+    return pop;
 }
 
 /**
@@ -368,23 +353,21 @@ static inline int cvmx_dpop(uint64_t val)
  * Returns current cycle counter
  */
 
-static inline uint64_t cvmx_get_cycle(void)
-{
-	uint64_t cycle;
-	CVMX_RDHWR(cycle, 31);
-	return cycle;
+static inline uint64_t cvmx_get_cycle(void) {
+    uint64_t cycle;
+    CVMX_RDHWR(cycle, 31);
+    return cycle;
 }
 
 /**
  * Wait for the specified number of cycle
  *
  */
-static inline void cvmx_wait(uint64_t cycles)
-{
-	uint64_t done = cvmx_get_cycle() + cycles;
+static inline void cvmx_wait(uint64_t cycles) {
+    uint64_t done = cvmx_get_cycle() + cycles;
 
-	while (cvmx_get_cycle() < done)
-		; /* Spin */
+    while (cvmx_get_cycle() < done)
+        ; /* Spin */
 }
 
 /**
@@ -394,12 +377,11 @@ static inline void cvmx_wait(uint64_t cycles)
  *
  * Returns Global chip cycle count since chip reset.
  */
-static inline uint64_t cvmx_get_cycle_global(void)
-{
-	if (cvmx_octeon_is_pass1())
-		return 0;
-	else
-		return cvmx_read64(CVMX_IPD_CLK_COUNT);
+static inline uint64_t cvmx_get_cycle_global(void) {
+    if (cvmx_octeon_is_pass1())
+        return 0;
+    else
+        return cvmx_read64(CVMX_IPD_CLK_COUNT);
 }
 
 /**
@@ -436,19 +418,17 @@ static inline uint64_t cvmx_get_cycle_global(void)
 
 /***************************************************************************/
 
-static inline void cvmx_reset_octeon(void)
-{
-	union cvmx_ciu_soft_rst ciu_soft_rst;
-	ciu_soft_rst.u64 = 0;
-	ciu_soft_rst.s.soft_rst = 1;
-	cvmx_write_csr(CVMX_CIU_SOFT_RST, ciu_soft_rst.u64);
+static inline void cvmx_reset_octeon(void) {
+    union cvmx_ciu_soft_rst ciu_soft_rst;
+    ciu_soft_rst.u64 = 0;
+    ciu_soft_rst.s.soft_rst = 1;
+    cvmx_write_csr(CVMX_CIU_SOFT_RST, ciu_soft_rst.u64);
 }
 
 /* Return the number of cores available in the chip */
-static inline uint32_t cvmx_octeon_num_cores(void)
-{
-	uint32_t ciu_fuse = (uint32_t) cvmx_read_csr(CVMX_CIU_FUSE) & 0xffff;
-	return cvmx_pop(ciu_fuse);
+static inline uint32_t cvmx_octeon_num_cores(void) {
+    uint32_t ciu_fuse = (uint32_t) cvmx_read_csr(CVMX_CIU_FUSE) & 0xffff;
+    return cvmx_pop(ciu_fuse);
 }
 
 /**
@@ -457,18 +437,17 @@ static inline uint32_t cvmx_octeon_num_cores(void)
  *
  * Returns fuse value: 0 or 1
  */
-static uint8_t cvmx_fuse_read_byte(int byte_addr)
-{
-	union cvmx_mio_fus_rcmd read_cmd;
+static uint8_t cvmx_fuse_read_byte(int byte_addr) {
+    union cvmx_mio_fus_rcmd read_cmd;
 
-	read_cmd.u64 = 0;
-	read_cmd.s.addr = byte_addr;
-	read_cmd.s.pend = 1;
-	cvmx_write_csr(CVMX_MIO_FUS_RCMD, read_cmd.u64);
-	while ((read_cmd.u64 = cvmx_read_csr(CVMX_MIO_FUS_RCMD))
-	       && read_cmd.s.pend)
-		;
-	return read_cmd.s.dat;
+    read_cmd.u64 = 0;
+    read_cmd.s.addr = byte_addr;
+    read_cmd.s.pend = 1;
+    cvmx_write_csr(CVMX_MIO_FUS_RCMD, read_cmd.u64);
+    while ((read_cmd.u64 = cvmx_read_csr(CVMX_MIO_FUS_RCMD))
+            && read_cmd.s.pend)
+        ;
+    return read_cmd.s.dat;
 }
 
 /**
@@ -478,40 +457,35 @@ static uint8_t cvmx_fuse_read_byte(int byte_addr)
  *
  * Returns fuse value: 0 or 1
  */
-static inline int cvmx_fuse_read(int fuse)
-{
-	return (cvmx_fuse_read_byte(fuse >> 3) >> (fuse & 0x7)) & 1;
+static inline int cvmx_fuse_read(int fuse) {
+    return (cvmx_fuse_read_byte(fuse >> 3) >> (fuse & 0x7)) & 1;
 }
 
-static inline int cvmx_octeon_model_CN36XX(void)
-{
-	return OCTEON_IS_MODEL(OCTEON_CN38XX)
-		&& !cvmx_octeon_is_pass1()
-		&& cvmx_fuse_read(264);
+static inline int cvmx_octeon_model_CN36XX(void) {
+    return OCTEON_IS_MODEL(OCTEON_CN38XX)
+           && !cvmx_octeon_is_pass1()
+           && cvmx_fuse_read(264);
 }
 
-static inline int cvmx_octeon_zip_present(void)
-{
-	return octeon_has_feature(OCTEON_FEATURE_ZIP);
+static inline int cvmx_octeon_zip_present(void) {
+    return octeon_has_feature(OCTEON_FEATURE_ZIP);
 }
 
-static inline int cvmx_octeon_dfa_present(void)
-{
-	if (!OCTEON_IS_MODEL(OCTEON_CN38XX)
-	    && !OCTEON_IS_MODEL(OCTEON_CN31XX)
-	    && !OCTEON_IS_MODEL(OCTEON_CN58XX))
-		return 0;
-	else if (OCTEON_IS_MODEL(OCTEON_CN3020))
-		return 0;
-	else if (cvmx_octeon_is_pass1())
-		return 1;
-	else
-		return !cvmx_fuse_read(120);
+static inline int cvmx_octeon_dfa_present(void) {
+    if (!OCTEON_IS_MODEL(OCTEON_CN38XX)
+            && !OCTEON_IS_MODEL(OCTEON_CN31XX)
+            && !OCTEON_IS_MODEL(OCTEON_CN58XX))
+        return 0;
+    else if (OCTEON_IS_MODEL(OCTEON_CN3020))
+        return 0;
+    else if (cvmx_octeon_is_pass1())
+        return 1;
+    else
+        return !cvmx_fuse_read(120);
 }
 
-static inline int cvmx_octeon_crypto_present(void)
-{
-	return octeon_has_feature(OCTEON_FEATURE_CRYPTO);
+static inline int cvmx_octeon_crypto_present(void) {
+    return octeon_has_feature(OCTEON_FEATURE_CRYPTO);
 }
 
 #endif /*  __CVMX_H__  */

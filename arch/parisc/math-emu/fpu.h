@@ -20,19 +20,19 @@
  */
 /*
  * BEGIN_DESC
- * 
- *  File: 
+ *
+ *  File:
  *      @(#)	pa/fp/fpu.h		$Revision: 1.1 $
- * 
+ *
  *  Purpose:
  *      <<please update with a synopis of the functionality provided by this file>>
- * 
- * 
- * END_DESC  
+ *
+ *
+ * END_DESC
 */
 
 #ifdef __NO_PA_HDRS
-    PA header file -- do not include this header file for non-PA builds.
+PA header file -- do not include this header file for non-PA builds.
 #endif
 
 
@@ -59,14 +59,14 @@
 
 #define EM_FPU_TYPE_OFFSET 272
 
-/* version of EMULATION software for COPR,0,0 instruction */
+    /* version of EMULATION software for COPR,0,0 instruction */
 #define EMULATION_VERSION 4
 
-/*
- * The only was to differeniate between TIMEX and ROLEX (or PCX-S and PCX-T)
- * is thorough the potential type field from the PDC_MODEL call.  The 
- * following flags are used at assist this differeniation.
- */
+    /*
+     * The only was to differeniate between TIMEX and ROLEX (or PCX-S and PCX-T)
+     * is thorough the potential type field from the PDC_MODEL call.  The
+     * following flags are used at assist this differeniation.
+     */
 
 #define ROLEX_POTENTIAL_KEY_FLAGS	PDC_MODEL_CPU_KEY_WORD_TO_IO
 #define TIMEX_POTENTIAL_KEY_FLAGS	(PDC_MODEL_CPU_KEY_QUAD_STORE | \

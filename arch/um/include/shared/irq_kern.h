@@ -10,9 +10,9 @@
 #include "asm/ptrace.h"
 
 extern int um_request_irq(unsigned int irq, int fd, int type,
-			  irq_handler_t handler,
-			  unsigned long irqflags,  const char * devname,
-			  void *dev_id);
+                          irq_handler_t handler,
+                          unsigned long irqflags,  const char * devname,
+                          void *dev_id);
 
 #endif
 

@@ -18,8 +18,8 @@
 /* Structure definitions: */
 
 struct button_callback {
-	void (*callback) (void);
-	int count;
+    void (*callback) (void);
+    int count;
 };
 
 /* Function prototypes: */

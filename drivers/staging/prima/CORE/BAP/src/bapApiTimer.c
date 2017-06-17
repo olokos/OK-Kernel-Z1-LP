@@ -143,8 +143,7 @@ VOS_STATUS
 WLANBAP_InitConnectionAcceptTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
 
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -154,8 +153,7 @@ WLANBAP_InitConnectionAcceptTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -198,8 +196,7 @@ VOS_STATUS
 WLANBAP_DeinitConnectionAcceptTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
 
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -209,8 +206,7 @@ WLANBAP_DeinitConnectionAcceptTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -252,14 +248,12 @@ WLANBAP_StartConnectionAcceptTimer
 (
     ptBtampContext  pBtampCtx,
     v_U32_t interval
-)
-{
+) {
     /*------------------------------------------------------------------------
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -301,8 +295,7 @@ VOS_STATUS
 WLANBAP_StopConnectionAcceptTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -311,8 +304,7 @@ WLANBAP_StopConnectionAcceptTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -353,8 +345,7 @@ v_VOID_t
 WLANBAP_ConnectionAcceptTimerHandler
 (
     v_PVOID_t userData
-)
-{
+) {
     ptBtampContext  pBtampCtx = (ptBtampContext)userData;
     tWLAN_BAPEvent bapEvent; /* State machine event */
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
@@ -364,8 +355,7 @@ WLANBAP_ConnectionAcceptTimerHandler
     /*-----------------------------------------------------------------------
       Sanity check
      -----------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Fatal error in %s", __func__ );
         VOS_ASSERT(0);
@@ -419,8 +409,7 @@ VOS_STATUS
 WLANBAP_InitLinkSupervisionTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
 
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -430,8 +419,7 @@ WLANBAP_InitLinkSupervisionTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -474,8 +462,7 @@ VOS_STATUS
 WLANBAP_DeinitLinkSupervisionTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
 
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -485,8 +472,7 @@ WLANBAP_DeinitLinkSupervisionTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -528,14 +514,12 @@ WLANBAP_StartLinkSupervisionTimer
 (
     ptBtampContext  pBtampCtx,
     v_U32_t interval
-)
-{
+) {
     /*------------------------------------------------------------------------
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -575,8 +559,7 @@ VOS_STATUS
 WLANBAP_StopLinkSupervisionTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -585,8 +568,7 @@ WLANBAP_StopLinkSupervisionTimer
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
 
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -625,8 +607,7 @@ v_VOID_t
 WLANBAP_LinkSupervisionTimerHandler
 (
     v_PVOID_t userData
-)
-{
+) {
     ptBtampContext           pBtampCtx =      (ptBtampContext)userData;
     VOS_STATUS               vosStatus =      VOS_STATUS_SUCCESS;
     ptBtampHandle            btampHandle =    (ptBtampHandle)userData;
@@ -638,8 +619,7 @@ WLANBAP_LinkSupervisionTimerHandler
     /*-----------------------------------------------------------------------
       Sanity check
      -----------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Fatal error in %s", __func__ );
         VOS_ASSERT(0);
@@ -650,8 +630,7 @@ WLANBAP_LinkSupervisionTimerHandler
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                "WLAN BAP:In LinkSupervision Timer handler %s", __func__ );
 
-    if(pBtampCtx->dataPktPending == VOS_TRUE)
-    {
+    if(pBtampCtx->dataPktPending == VOS_TRUE) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "%s: Data seen. Do nothing", __func__ );
 
@@ -664,10 +643,8 @@ WLANBAP_LinkSupervisionTimerHandler
 
         //Data is seen. or our previous packet is not yet fetched by TL.Don't do any thing.Just return;
         return;
-    }
-    else if((pBtampCtx->lsReqPktPending == VOS_TRUE )
-            && (pBtampCtx->retries == WLANBAP_LINK_SUPERVISION_RETRIES))
-    {
+    } else if((pBtampCtx->lsReqPktPending == VOS_TRUE )
+              && (pBtampCtx->retries == WLANBAP_LINK_SUPERVISION_RETRIES)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "#########WLAN BAP: LinkSupervision Timed OUT######## %s", __func__ );
 
@@ -682,9 +659,7 @@ WLANBAP_LinkSupervisionTimerHandler
 
         /* Handle event */
         vosStatus = btampFsm(pBtampCtx, &bapEvent, (v_U8_t *)&vosStatus);
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "%s: Resend the LS packet", __func__ );
 
@@ -727,8 +702,7 @@ VOS_STATUS
 WLANBAP_StartTxPacketMonitorTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     v_U32_t     uInterval = WLAN_BAP_TX_PKT_MONITOR_TIME;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -737,8 +711,7 @@ WLANBAP_StartTxPacketMonitorTimer
     /*------------------------------------------------------------------------
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -779,8 +752,7 @@ VOS_STATUS
 WLANBAP_StopTxPacketMonitorTimer
 (
     ptBtampContext  pBtampCtx
-)
-{
+) {
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -788,8 +760,7 @@ WLANBAP_StopTxPacketMonitorTimer
     /*------------------------------------------------------------------------
       Sanity check BAP control block
      ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP pointer in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -827,8 +798,7 @@ v_VOID_t
 WLANBAP_SendCompletedPktsEvent
 (
     ptBtampContext     pBtampCtx
-)
-{
+) {
     v_U8_t             i, j;
     tBtampHCI_Event    bapHCIEvent; /* This now encodes ALL event types */
     v_U32_t            uTxCompleted    = 0;
@@ -842,11 +812,9 @@ WLANBAP_SendCompletedPktsEvent
        Check if LL still exists, if TRUE generate num_pkt_event and
        restart the timer
       ---------------------------------------------------------------------*/
-    for (i = 0, j = 0; i < WLANBAP_MAX_LOG_LINKS ; i++)
-    {
+    for (i = 0, j = 0; i < WLANBAP_MAX_LOG_LINKS ; i++) {
         pLogLinkContext = &pBtampCtx->btampLogLinkCtx[i];
-        if ( pLogLinkContext->present )
-        {
+        if ( pLogLinkContext->present ) {
             uTxCompleted = pLogLinkContext->uTxPktCompleted;
             bapHCIEvent.u.btampNumOfCompletedPktsEvent.conn_handles[j] =
                 pLogLinkContext->log_link_handle;
@@ -858,8 +826,7 @@ WLANBAP_SendCompletedPktsEvent
             vos_atomic_decrement_U32_by_value((v_U32_t *) &pLogLinkContext->uTxPktCompleted,
                                               (v_U32_t) uTxCompleted);
 
-            if (uTxCompleted)
-            {
+            if (uTxCompleted) {
                 VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                            "wlan bap: %s Log Link handle - %d No Of Pkts - %d", __func__,
                            pLogLinkContext->log_link_handle, uTxCompleted);
@@ -869,8 +836,7 @@ WLANBAP_SendCompletedPktsEvent
 
     /* Indicate only if at least one logical link is present and number of
        completed packets is non zero */
-    if (j && uTxCompleted)
-    {
+    if (j && uTxCompleted) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Indicating Num Completed packets Event");
 
@@ -910,8 +876,7 @@ v_VOID_t
 WLANBAP_SendCompletedDataBlksEvent
 (
     ptBtampContext     pBtampCtx
-)
-{
+) {
     v_U8_t             i, j;
     tBtampHCI_Event    bapHCIEvent; /* This now encodes ALL event types */
     v_U32_t            uTxCompleted    = 0;
@@ -925,11 +890,9 @@ WLANBAP_SendCompletedDataBlksEvent
        Check if LL still exists, if TRUE generate num_data_blocks_event and
        restart the timer
       ---------------------------------------------------------------------*/
-    for (i = 0, j = 0; i < WLANBAP_MAX_LOG_LINKS ; i++)
-    {
+    for (i = 0, j = 0; i < WLANBAP_MAX_LOG_LINKS ; i++) {
         pLogLinkContext = &pBtampCtx->btampLogLinkCtx[i];
-        if ( pLogLinkContext->present )
-        {
+        if ( pLogLinkContext->present ) {
             uTxCompleted = pLogLinkContext->uTxPktCompleted;
             bapHCIEvent.u.btampNumOfCompletedDataBlocksEvent.conn_handles[j] =
                 pLogLinkContext->log_link_handle;
@@ -944,8 +907,7 @@ WLANBAP_SendCompletedDataBlksEvent
             vos_atomic_decrement_U32_by_value((v_U32_t *) &pLogLinkContext->uTxPktCompleted,
                                               (v_U32_t) uTxCompleted);
 
-            if (uTxCompleted)
-            {
+            if (uTxCompleted) {
                 VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                            "wlan bap: %s Log Link handle - %d No Of Pkts - %d", __func__,
                            pLogLinkContext->log_link_handle, uTxCompleted);
@@ -955,8 +917,7 @@ WLANBAP_SendCompletedDataBlksEvent
 
     /* Indicate only if at least one logical link is present and number of
        completed data blocks is non zero */
-    if (j && uTxCompleted)
-    {
+    if (j && uTxCompleted) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Indicating Num Completed Data Blocks Event");
 
@@ -997,8 +958,7 @@ v_VOID_t
 WLANBAP_TxPacketMonitorHandler
 (
     v_PVOID_t userData
-)
-{
+) {
     ptBtampContext     pBtampCtx       = (ptBtampContext)userData;
     BTAMPFSM_INSTANCEDATA_T *instanceVar = &pBtampCtx->bapPhysLinkMachine;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -1006,8 +966,7 @@ WLANBAP_TxPacketMonitorHandler
     /*-----------------------------------------------------------------------
       Sanity check
      -----------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx )
-    {
+    if ( NULL == pBtampCtx ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLAN BAP: Fatal error in %s", __func__ );
         VOS_ASSERT(0);
@@ -1020,12 +979,9 @@ WLANBAP_TxPacketMonitorHandler
                "WLAN BAP Context Monitor: pBtampCtx value = %x in %s:%d", pBtampCtx, __func__, __LINE__ );
 #endif //BAP_DEBUG
 
-    if(WLANBAP_FLOW_CONTROL_MODE_BLOCK_BASED == pBtampCtx->ucDataTrafficMode)
-    {
+    if(WLANBAP_FLOW_CONTROL_MODE_BLOCK_BASED == pBtampCtx->ucDataTrafficMode) {
         WLANBAP_SendCompletedDataBlksEvent(pBtampCtx);
-    }
-    else
-    {
+    } else {
         WLANBAP_SendCompletedPktsEvent(pBtampCtx);
     }
 
@@ -1034,8 +990,7 @@ WLANBAP_TxPacketMonitorHandler
      * It is possible that when the physical link is tear down,
      * timer start request is in Q and could start again.
      */
-    if (CONNECTED == instanceVar->stateVar)
-    {
+    if (CONNECTED == instanceVar->stateVar) {
         WLANBAP_StartTxPacketMonitorTimer(pBtampCtx);
     }
 }/*WLANBAP_TxPacketMonitorHandler*/

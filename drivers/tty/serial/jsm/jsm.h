@@ -38,23 +38,23 @@
  * They can also be compiled out completely.
  */
 enum {
-	DBG_INIT	= 0x01,
-	DBG_BASIC	= 0x02,
-	DBG_CORE	= 0x04,
-	DBG_OPEN	= 0x08,
-	DBG_CLOSE	= 0x10,
-	DBG_READ	= 0x20,
-	DBG_WRITE	= 0x40,
-	DBG_IOCTL	= 0x80,
-	DBG_PROC	= 0x100,
-	DBG_PARAM	= 0x200,
-	DBG_PSCAN	= 0x400,
-	DBG_EVENT	= 0x800,
-	DBG_DRAIN	= 0x1000,
-	DBG_MSIGS	= 0x2000,
-	DBG_MGMT	= 0x4000,
-	DBG_INTR	= 0x8000,
-	DBG_CARR	= 0x10000,
+    DBG_INIT	= 0x01,
+    DBG_BASIC	= 0x02,
+    DBG_CORE	= 0x04,
+    DBG_OPEN	= 0x08,
+    DBG_CLOSE	= 0x10,
+    DBG_READ	= 0x20,
+    DBG_WRITE	= 0x40,
+    DBG_IOCTL	= 0x80,
+    DBG_PROC	= 0x100,
+    DBG_PARAM	= 0x200,
+    DBG_PSCAN	= 0x400,
+    DBG_EVENT	= 0x800,
+    DBG_DRAIN	= 0x1000,
+    DBG_MSIGS	= 0x2000,
+    DBG_MGMT	= 0x4000,
+    DBG_INTR	= 0x8000,
+    DBG_CARR	= 0x10000,
 };
 
 #define jsm_printk(nlevel, klevel, pdev, fmt, args...)	\
@@ -99,62 +99,61 @@ struct jsm_channel;
  * Per board operations structure					*
  ************************************************************************/
 struct board_ops {
-	irq_handler_t intr;
-	void (*uart_init) (struct jsm_channel *ch);
-	void (*uart_off) (struct jsm_channel *ch);
-	void (*param) (struct jsm_channel *ch);
-	void (*assert_modem_signals) (struct jsm_channel *ch);
-	void (*flush_uart_write) (struct jsm_channel *ch);
-	void (*flush_uart_read) (struct jsm_channel *ch);
-	void (*disable_receiver) (struct jsm_channel *ch);
-	void (*enable_receiver) (struct jsm_channel *ch);
-	void (*send_break) (struct jsm_channel *ch);
-	void (*clear_break) (struct jsm_channel *ch, int);
-	void (*send_start_character) (struct jsm_channel *ch);
-	void (*send_stop_character) (struct jsm_channel *ch);
-	void (*copy_data_from_queue_to_uart) (struct jsm_channel *ch);
-	u32 (*get_uart_bytes_left) (struct jsm_channel *ch);
-	void (*send_immediate_char) (struct jsm_channel *ch, unsigned char);
+    irq_handler_t intr;
+    void (*uart_init) (struct jsm_channel *ch);
+    void (*uart_off) (struct jsm_channel *ch);
+    void (*param) (struct jsm_channel *ch);
+    void (*assert_modem_signals) (struct jsm_channel *ch);
+    void (*flush_uart_write) (struct jsm_channel *ch);
+    void (*flush_uart_read) (struct jsm_channel *ch);
+    void (*disable_receiver) (struct jsm_channel *ch);
+    void (*enable_receiver) (struct jsm_channel *ch);
+    void (*send_break) (struct jsm_channel *ch);
+    void (*clear_break) (struct jsm_channel *ch, int);
+    void (*send_start_character) (struct jsm_channel *ch);
+    void (*send_stop_character) (struct jsm_channel *ch);
+    void (*copy_data_from_queue_to_uart) (struct jsm_channel *ch);
+    u32 (*get_uart_bytes_left) (struct jsm_channel *ch);
+    void (*send_immediate_char) (struct jsm_channel *ch, unsigned char);
 };
 
 
 /*
  *	Per-board information
  */
-struct jsm_board
-{
-	int		boardnum;	/* Board number: 0-32 */
+struct jsm_board {
+    int		boardnum;	/* Board number: 0-32 */
 
-	int		type;		/* Type of board */
-	u8		rev;		/* PCI revision ID */
-	struct pci_dev	*pci_dev;
-	u32		maxports;	/* MAX ports this board can handle */
+    int		type;		/* Type of board */
+    u8		rev;		/* PCI revision ID */
+    struct pci_dev	*pci_dev;
+    u32		maxports;	/* MAX ports this board can handle */
 
-	spinlock_t	bd_intr_lock;	/* Used to protect the poller tasklet and
+    spinlock_t	bd_intr_lock;	/* Used to protect the poller tasklet and
 					 * the interrupt routine from each other.
 					 */
 
-	u32		nasync;		/* Number of ports on card */
+    u32		nasync;		/* Number of ports on card */
 
-	u32		irq;		/* Interrupt request number */
+    u32		irq;		/* Interrupt request number */
 
-	u64		membase;	/* Start of base memory of the card */
-	u64		membase_end;	/* End of base memory of the card */
+    u64		membase;	/* Start of base memory of the card */
+    u64		membase_end;	/* End of base memory of the card */
 
-	u8	__iomem *re_map_membase;/* Remapped memory of the card */
+    u8	__iomem *re_map_membase;/* Remapped memory of the card */
 
-	u64		iobase;		/* Start of io base of the card */
-	u64		iobase_end;	/* End of io base of the card */
+    u64		iobase;		/* Start of io base of the card */
+    u64		iobase_end;	/* End of io base of the card */
 
-	u32		bd_uart_offset;	/* Space between each UART */
+    u32		bd_uart_offset;	/* Space between each UART */
 
-	struct jsm_channel *channels[MAXPORTS]; /* array of pointers to our channels. */
+    struct jsm_channel *channels[MAXPORTS]; /* array of pointers to our channels. */
 
-	u32		bd_dividend;	/* Board/UARTs specific dividend */
+    u32		bd_dividend;	/* Board/UARTs specific dividend */
 
-	struct board_ops *bd_ops;
+    struct board_ops *bd_ops;
 
-	struct list_head jsm_board_entry;
+    struct list_head jsm_board_entry;
 };
 
 /************************************************************************
@@ -188,58 +187,58 @@ struct jsm_board
  * Channel information structure.
  ************************************************************************/
 struct jsm_channel {
-	struct uart_port uart_port;
-	struct jsm_board	*ch_bd;		/* Board structure pointer	*/
+    struct uart_port uart_port;
+    struct jsm_board	*ch_bd;		/* Board structure pointer	*/
 
-	spinlock_t	ch_lock;	/* provide for serialization */
-	wait_queue_head_t ch_flags_wait;
+    spinlock_t	ch_lock;	/* provide for serialization */
+    wait_queue_head_t ch_flags_wait;
 
-	u32		ch_portnum;	/* Port number, 0 offset.	*/
-	u32		ch_open_count;	/* open count			*/
-	u32		ch_flags;	/* Channel flags		*/
+    u32		ch_portnum;	/* Port number, 0 offset.	*/
+    u32		ch_open_count;	/* open count			*/
+    u32		ch_flags;	/* Channel flags		*/
 
-	u64		ch_close_delay;	/* How long we should drop RTS/DTR for */
+    u64		ch_close_delay;	/* How long we should drop RTS/DTR for */
 
-	tcflag_t	ch_c_iflag;	/* channel iflags		*/
-	tcflag_t	ch_c_cflag;	/* channel cflags		*/
-	tcflag_t	ch_c_oflag;	/* channel oflags		*/
-	tcflag_t	ch_c_lflag;	/* channel lflags		*/
-	u8		ch_stopc;	/* Stop character		*/
-	u8		ch_startc;	/* Start character		*/
+    tcflag_t	ch_c_iflag;	/* channel iflags		*/
+    tcflag_t	ch_c_cflag;	/* channel cflags		*/
+    tcflag_t	ch_c_oflag;	/* channel oflags		*/
+    tcflag_t	ch_c_lflag;	/* channel lflags		*/
+    u8		ch_stopc;	/* Stop character		*/
+    u8		ch_startc;	/* Start character		*/
 
-	u8		ch_mostat;	/* FEP output modem status	*/
-	u8		ch_mistat;	/* FEP input modem status	*/
+    u8		ch_mostat;	/* FEP output modem status	*/
+    u8		ch_mistat;	/* FEP input modem status	*/
 
-	struct neo_uart_struct __iomem *ch_neo_uart;	/* Pointer to the "mapped" UART struct */
-	u8		ch_cached_lsr;	/* Cached value of the LSR register */
+    struct neo_uart_struct __iomem *ch_neo_uart;	/* Pointer to the "mapped" UART struct */
+    u8		ch_cached_lsr;	/* Cached value of the LSR register */
 
-	u8		*ch_rqueue;	/* Our read queue buffer - malloc'ed */
-	u16		ch_r_head;	/* Head location of the read queue */
-	u16		ch_r_tail;	/* Tail location of the read queue */
+    u8		*ch_rqueue;	/* Our read queue buffer - malloc'ed */
+    u16		ch_r_head;	/* Head location of the read queue */
+    u16		ch_r_tail;	/* Tail location of the read queue */
 
-	u8		*ch_equeue;	/* Our error queue buffer - malloc'ed */
-	u16		ch_e_head;	/* Head location of the error queue */
-	u16		ch_e_tail;	/* Tail location of the error queue */
+    u8		*ch_equeue;	/* Our error queue buffer - malloc'ed */
+    u16		ch_e_head;	/* Head location of the error queue */
+    u16		ch_e_tail;	/* Tail location of the error queue */
 
-	u64		ch_rxcount;	/* total of data received so far */
-	u64		ch_txcount;	/* total of data transmitted so far */
+    u64		ch_rxcount;	/* total of data received so far */
+    u64		ch_txcount;	/* total of data transmitted so far */
 
-	u8		ch_r_tlevel;	/* Receive Trigger level */
-	u8		ch_t_tlevel;	/* Transmit Trigger level */
+    u8		ch_r_tlevel;	/* Receive Trigger level */
+    u8		ch_t_tlevel;	/* Transmit Trigger level */
 
-	u8		ch_r_watermark;	/* Receive Watermark */
+    u8		ch_r_watermark;	/* Receive Watermark */
 
 
-	u32		ch_stops_sent;	/* How many times I have sent a stop character
+    u32		ch_stops_sent;	/* How many times I have sent a stop character
 					 * to try to stop the other guy sending.
 					 */
-	u64		ch_err_parity;	/* Count of parity errors on channel */
-	u64		ch_err_frame;	/* Count of framing errors on channel */
-	u64		ch_err_break;	/* Count of breaks on channel */
-	u64		ch_err_overrun; /* Count of overruns on channel */
+    u64		ch_err_parity;	/* Count of parity errors on channel */
+    u64		ch_err_frame;	/* Count of framing errors on channel */
+    u64		ch_err_break;	/* Count of breaks on channel */
+    u64		ch_err_overrun; /* Count of overruns on channel */
 
-	u64		ch_xon_sends;	/* Count of xons transmitted */
-	u64		ch_xoff_sends;	/* Count of xoffs transmitted */
+    u64		ch_xon_sends;	/* Count of xons transmitted */
+    u64		ch_xoff_sends;	/* Count of xoffs transmitted */
 };
 
 
@@ -253,27 +252,27 @@ struct jsm_channel {
  ************************************************************************/
 
 struct neo_uart_struct {
-	 u8 txrx;		/* WR	RHR/THR - Holding Reg */
-	 u8 ier;		/* WR	IER - Interrupt Enable Reg */
-	 u8 isr_fcr;		/* WR	ISR/FCR - Interrupt Status Reg/Fifo Control Reg */
-	 u8 lcr;		/* WR	LCR - Line Control Reg */
-	 u8 mcr;		/* WR	MCR - Modem Control Reg */
-	 u8 lsr;		/* WR	LSR - Line Status Reg */
-	 u8 msr;		/* WR	MSR - Modem Status Reg */
-	 u8 spr;		/* WR	SPR - Scratch Pad Reg */
-	 u8 fctr;		/* WR	FCTR - Feature Control Reg */
-	 u8 efr;		/* WR	EFR - Enhanced Function Reg */
-	 u8 tfifo;		/* WR	TXCNT/TXTRG - Transmit FIFO Reg */
-	 u8 rfifo;		/* WR	RXCNT/RXTRG - Receive FIFO Reg */
-	 u8 xoffchar1;	/* WR	XOFF 1 - XOff Character 1 Reg */
-	 u8 xoffchar2;	/* WR	XOFF 2 - XOff Character 2 Reg */
-	 u8 xonchar1;	/* WR	XON 1 - Xon Character 1 Reg */
-	 u8 xonchar2;	/* WR	XON 2 - XOn Character 2 Reg */
+    u8 txrx;		/* WR	RHR/THR - Holding Reg */
+    u8 ier;		/* WR	IER - Interrupt Enable Reg */
+    u8 isr_fcr;		/* WR	ISR/FCR - Interrupt Status Reg/Fifo Control Reg */
+    u8 lcr;		/* WR	LCR - Line Control Reg */
+    u8 mcr;		/* WR	MCR - Modem Control Reg */
+    u8 lsr;		/* WR	LSR - Line Status Reg */
+    u8 msr;		/* WR	MSR - Modem Status Reg */
+    u8 spr;		/* WR	SPR - Scratch Pad Reg */
+    u8 fctr;		/* WR	FCTR - Feature Control Reg */
+    u8 efr;		/* WR	EFR - Enhanced Function Reg */
+    u8 tfifo;		/* WR	TXCNT/TXTRG - Transmit FIFO Reg */
+    u8 rfifo;		/* WR	RXCNT/RXTRG - Receive FIFO Reg */
+    u8 xoffchar1;	/* WR	XOFF 1 - XOff Character 1 Reg */
+    u8 xoffchar2;	/* WR	XOFF 2 - XOff Character 2 Reg */
+    u8 xonchar1;	/* WR	XON 1 - Xon Character 1 Reg */
+    u8 xonchar2;	/* WR	XON 2 - XOn Character 2 Reg */
 
-	 u8 reserved1[0x2ff - 0x200]; /* U	Reserved by Exar */
-	 u8 txrxburst[64];	/* RW	64 bytes of RX/TX FIFO Data */
-	 u8 reserved2[0x37f - 0x340]; /* U	Reserved by Exar */
-	 u8 rxburst_with_errors[64];	/* R	64 bytes of RX FIFO Data + LSR */
+    u8 reserved1[0x2ff - 0x200]; /* U	Reserved by Exar */
+    u8 txrxburst[64];	/* RW	64 bytes of RX/TX FIFO Data */
+    u8 reserved2[0x37f - 0x340]; /* U	Reserved by Exar */
+    u8 rxburst_with_errors[64];	/* R	64 bytes of RX FIFO Data + LSR */
 };
 
 /* Where to read the extended interrupt register (32bits instead of 8bits) */

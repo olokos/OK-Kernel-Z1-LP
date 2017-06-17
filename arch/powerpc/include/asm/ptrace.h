@@ -29,26 +29,26 @@
 #ifndef __ASSEMBLY__
 
 struct pt_regs {
-	unsigned long gpr[32];
-	unsigned long nip;
-	unsigned long msr;
-	unsigned long orig_gpr3;	/* Used for restarting system calls */
-	unsigned long ctr;
-	unsigned long link;
-	unsigned long xer;
-	unsigned long ccr;
+    unsigned long gpr[32];
+    unsigned long nip;
+    unsigned long msr;
+    unsigned long orig_gpr3;	/* Used for restarting system calls */
+    unsigned long ctr;
+    unsigned long link;
+    unsigned long xer;
+    unsigned long ccr;
 #ifdef __powerpc64__
-	unsigned long softe;		/* Soft enabled/disabled */
+    unsigned long softe;		/* Soft enabled/disabled */
 #else
-	unsigned long mq;		/* 601 only (not used at present) */
-					/* Used on APUS to hold IPL value. */
+    unsigned long mq;		/* 601 only (not used at present) */
+    /* Used on APUS to hold IPL value. */
 #endif
-	unsigned long trap;		/* Reason for being here */
-	/* N.B. for critical exceptions on 4xx, the dar and dsisr
-	   fields are overloaded to hold srr0 and srr1. */
-	unsigned long dar;		/* Fault registers */
-	unsigned long dsisr;		/* on 4xx/Book-E used for ESR */
-	unsigned long result;		/* Result of a system call */
+    unsigned long trap;		/* Reason for being here */
+    /* N.B. for critical exceptions on 4xx, the dar and dsisr
+       fields are overloaded to hold srr0 and srr1. */
+    unsigned long dar;		/* Fault registers */
+    unsigned long dsisr;		/* on 4xx/Book-E used for ESR */
+    unsigned long result;		/* Result of a system call */
 };
 
 #endif /* __ASSEMBLY__ */
@@ -96,17 +96,15 @@ extern unsigned long profile_pc(struct pt_regs *regs);
 #include <asm-generic/ptrace.h>
 
 #define kernel_stack_pointer(regs) ((regs)->gpr[1])
-static inline int is_syscall_success(struct pt_regs *regs)
-{
-	return !(regs->ccr & 0x10000000);
+static inline int is_syscall_success(struct pt_regs *regs) {
+    return !(regs->ccr & 0x10000000);
 }
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	if (is_syscall_success(regs))
-		return regs->gpr[3];
-	else
-		return -regs->gpr[3];
+static inline long regs_return_value(struct pt_regs *regs) {
+    if (is_syscall_success(regs))
+        return regs->gpr[3];
+    else
+        return -regs->gpr[3];
 }
 
 #ifdef __powerpc64__
@@ -123,7 +121,7 @@ static inline long regs_return_value(struct pt_regs *regs)
 struct task_struct;
 extern unsigned long ptrace_get_reg(struct task_struct *task, int regno);
 extern int ptrace_put_reg(struct task_struct *task, int regno,
-			  unsigned long data);
+                          unsigned long data);
 
 /*
  * We use the least-significant bit of the trap field to indicate
@@ -175,11 +173,10 @@ extern const char *regs_query_register_name(unsigned int offset);
  * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
  */
 static inline unsigned long regs_get_register(struct pt_regs *regs,
-						unsigned int offset)
-{
-	if (unlikely(offset > MAX_REG_OFFSET))
-		return 0;
-	return *(unsigned long *)((unsigned long)regs + offset);
+        unsigned int offset) {
+    if (unlikely(offset > MAX_REG_OFFSET))
+        return 0;
+    return *(unsigned long *)((unsigned long)regs + offset);
 }
 
 /**
@@ -192,10 +189,9 @@ static inline unsigned long regs_get_register(struct pt_regs *regs,
  */
 
 static inline bool regs_within_kernel_stack(struct pt_regs *regs,
-						unsigned long addr)
-{
-	return ((addr & ~(THREAD_SIZE - 1))  ==
-		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
+        unsigned long addr) {
+    return ((addr & ~(THREAD_SIZE - 1))  ==
+            (kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
 }
 
 /**
@@ -208,14 +204,13 @@ static inline bool regs_within_kernel_stack(struct pt_regs *regs,
  * this returns 0.
  */
 static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
-						      unsigned int n)
-{
-	unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
-	addr += n;
-	if (regs_within_kernel_stack(regs, (unsigned long)addr))
-		return *addr;
-	else
-		return 0;
+        unsigned int n) {
+    unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
+    addr += n;
+    if (regs_within_kernel_stack(regs, (unsigned long)addr))
+        return *addr;
+    else
+        return 0;
 }
 
 #endif /* __ASSEMBLY__ */
@@ -377,13 +372,13 @@ static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
 #ifndef __ASSEMBLY__
 
 struct ppc_debug_info {
-	__u32 version;			/* Only version 1 exists to date */
-	__u32 num_instruction_bps;
-	__u32 num_data_bps;
-	__u32 num_condition_regs;
-	__u32 data_bp_alignment;
-	__u32 sizeof_condition;		/* size of the DVC register */
-	__u64 features;
+    __u32 version;			/* Only version 1 exists to date */
+    __u32 num_instruction_bps;
+    __u32 num_data_bps;
+    __u32 num_condition_regs;
+    __u32 data_bp_alignment;
+    __u32 sizeof_condition;		/* size of the DVC register */
+    __u64 features;
 };
 
 #endif /* __ASSEMBLY__ */
@@ -399,13 +394,13 @@ struct ppc_debug_info {
 #ifndef __ASSEMBLY__
 
 struct ppc_hw_breakpoint {
-	__u32 version;		/* currently, version must be 1 */
-	__u32 trigger_type;	/* only some combinations allowed */
-	__u32 addr_mode;	/* address match mode */
-	__u32 condition_mode;	/* break/watchpoint condition flags */
-	__u64 addr;		/* break/watchpoint address */
-	__u64 addr2;		/* range end or mask */
-	__u64 condition_value;	/* contents of the DVC register */
+    __u32 version;		/* currently, version must be 1 */
+    __u32 trigger_type;	/* only some combinations allowed */
+    __u32 addr_mode;	/* address match mode */
+    __u32 condition_mode;	/* break/watchpoint condition flags */
+    __u64 addr;		/* break/watchpoint address */
+    __u64 addr2;		/* range end or mask */
+    __u64 condition_value;	/* contents of the DVC register */
 };
 
 #endif /* __ASSEMBLY__ */

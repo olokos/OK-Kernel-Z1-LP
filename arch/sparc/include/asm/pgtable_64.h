@@ -228,126 +228,121 @@ extern struct page *mem_map_zero;
  * the first physical page in the machine is at some huge physical address,
  * such as 4GB.   This is common on a partitioned E10000, for example.
  */
-static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
-{
-	unsigned long paddr = pfn << PAGE_SHIFT;
-	unsigned long sz_bits;
+static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot) {
+    unsigned long paddr = pfn << PAGE_SHIFT;
+    unsigned long sz_bits;
 
-	sz_bits = 0UL;
-	if (_PAGE_SZBITS_4U != 0UL || _PAGE_SZBITS_4V != 0UL) {
-		__asm__ __volatile__(
-		"\n661:	sethi		%%uhi(%1), %0\n"
-		"	sllx		%0, 32, %0\n"
-		"	.section	.sun4v_2insn_patch, \"ax\"\n"
-		"	.word		661b\n"
-		"	mov		%2, %0\n"
-		"	nop\n"
-		"	.previous\n"
-		: "=r" (sz_bits)
-		: "i" (_PAGE_SZBITS_4U), "i" (_PAGE_SZBITS_4V));
-	}
-	return __pte(paddr | sz_bits | pgprot_val(prot));
+    sz_bits = 0UL;
+    if (_PAGE_SZBITS_4U != 0UL || _PAGE_SZBITS_4V != 0UL) {
+        __asm__ __volatile__(
+            "\n661:	sethi		%%uhi(%1), %0\n"
+            "	sllx		%0, 32, %0\n"
+            "	.section	.sun4v_2insn_patch, \"ax\"\n"
+            "	.word		661b\n"
+            "	mov		%2, %0\n"
+            "	nop\n"
+            "	.previous\n"
+            : "=r" (sz_bits)
+            : "i" (_PAGE_SZBITS_4U), "i" (_PAGE_SZBITS_4V));
+    }
+    return __pte(paddr | sz_bits | pgprot_val(prot));
 }
 #define mk_pte(page, pgprot)	pfn_pte(page_to_pfn(page), (pgprot))
 
 /* This one can be done with two shifts.  */
-static inline unsigned long pte_pfn(pte_t pte)
-{
-	unsigned long ret;
+static inline unsigned long pte_pfn(pte_t pte) {
+    unsigned long ret;
 
-	__asm__ __volatile__(
-	"\n661:	sllx		%1, %2, %0\n"
-	"	srlx		%0, %3, %0\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sllx		%1, %4, %0\n"
-	"	srlx		%0, %5, %0\n"
-	"	.previous\n"
-	: "=r" (ret)
-	: "r" (pte_val(pte)),
-	  "i" (21), "i" (21 + PAGE_SHIFT),
-	  "i" (8), "i" (8 + PAGE_SHIFT));
+    __asm__ __volatile__(
+        "\n661:	sllx		%1, %2, %0\n"
+        "	srlx		%0, %3, %0\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sllx		%1, %4, %0\n"
+        "	srlx		%0, %5, %0\n"
+        "	.previous\n"
+        : "=r" (ret)
+        : "r" (pte_val(pte)),
+        "i" (21), "i" (21 + PAGE_SHIFT),
+        "i" (8), "i" (8 + PAGE_SHIFT));
 
-	return ret;
+    return ret;
 }
 #define pte_page(x) pfn_to_page(pte_pfn(x))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t prot)
-{
-	unsigned long mask, tmp;
+static inline pte_t pte_modify(pte_t pte, pgprot_t prot) {
+    unsigned long mask, tmp;
 
-	/* SUN4U: 0x600307ffffffecb8 (negated == 0x9ffcf80000001347)
-	 * SUN4V: 0x30ffffffffffee17 (negated == 0xcf000000000011e8)
-	 *
-	 * Even if we use negation tricks the result is still a 6
-	 * instruction sequence, so don't try to play fancy and just
-	 * do the most straightforward implementation.
-	 *
-	 * Note: We encode this into 3 sun4v 2-insn patch sequences.
-	 */
+    /* SUN4U: 0x600307ffffffecb8 (negated == 0x9ffcf80000001347)
+     * SUN4V: 0x30ffffffffffee17 (negated == 0xcf000000000011e8)
+     *
+     * Even if we use negation tricks the result is still a 6
+     * instruction sequence, so don't try to play fancy and just
+     * do the most straightforward implementation.
+     *
+     * Note: We encode this into 3 sun4v 2-insn patch sequences.
+     */
 
-	__asm__ __volatile__(
-	"\n661:	sethi		%%uhi(%2), %1\n"
-	"	sethi		%%hi(%2), %0\n"
-	"\n662:	or		%1, %%ulo(%2), %1\n"
-	"	or		%0, %%lo(%2), %0\n"
-	"\n663:	sllx		%1, 32, %1\n"
-	"	or		%0, %1, %0\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%3), %1\n"
-	"	sethi		%%hi(%3), %0\n"
-	"	.word		662b\n"
-	"	or		%1, %%ulo(%3), %1\n"
-	"	or		%0, %%lo(%3), %0\n"
-	"	.word		663b\n"
-	"	sllx		%1, 32, %1\n"
-	"	or		%0, %1, %0\n"
-	"	.previous\n"
-	: "=r" (mask), "=r" (tmp)
-	: "i" (_PAGE_PADDR_4U | _PAGE_MODIFIED_4U | _PAGE_ACCESSED_4U |
-	       _PAGE_CP_4U | _PAGE_CV_4U | _PAGE_E_4U | _PAGE_PRESENT_4U |
-	       _PAGE_SZBITS_4U | _PAGE_SPECIAL),
-	  "i" (_PAGE_PADDR_4V | _PAGE_MODIFIED_4V | _PAGE_ACCESSED_4V |
-	       _PAGE_CP_4V | _PAGE_CV_4V | _PAGE_E_4V | _PAGE_PRESENT_4V |
-	       _PAGE_SZBITS_4V | _PAGE_SPECIAL));
+    __asm__ __volatile__(
+        "\n661:	sethi		%%uhi(%2), %1\n"
+        "	sethi		%%hi(%2), %0\n"
+        "\n662:	or		%1, %%ulo(%2), %1\n"
+        "	or		%0, %%lo(%2), %0\n"
+        "\n663:	sllx		%1, 32, %1\n"
+        "	or		%0, %1, %0\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%3), %1\n"
+        "	sethi		%%hi(%3), %0\n"
+        "	.word		662b\n"
+        "	or		%1, %%ulo(%3), %1\n"
+        "	or		%0, %%lo(%3), %0\n"
+        "	.word		663b\n"
+        "	sllx		%1, 32, %1\n"
+        "	or		%0, %1, %0\n"
+        "	.previous\n"
+        : "=r" (mask), "=r" (tmp)
+        : "i" (_PAGE_PADDR_4U | _PAGE_MODIFIED_4U | _PAGE_ACCESSED_4U |
+               _PAGE_CP_4U | _PAGE_CV_4U | _PAGE_E_4U | _PAGE_PRESENT_4U |
+               _PAGE_SZBITS_4U | _PAGE_SPECIAL),
+        "i" (_PAGE_PADDR_4V | _PAGE_MODIFIED_4V | _PAGE_ACCESSED_4V |
+             _PAGE_CP_4V | _PAGE_CV_4V | _PAGE_E_4V | _PAGE_PRESENT_4V |
+             _PAGE_SZBITS_4V | _PAGE_SPECIAL));
 
-	return __pte((pte_val(pte) & mask) | (pgprot_val(prot) & ~mask));
+    return __pte((pte_val(pte) & mask) | (pgprot_val(prot) & ~mask));
 }
 
-static inline pte_t pgoff_to_pte(unsigned long off)
-{
-	off <<= PAGE_SHIFT;
+static inline pte_t pgoff_to_pte(unsigned long off) {
+    off <<= PAGE_SHIFT;
 
-	__asm__ __volatile__(
-	"\n661:	or		%0, %2, %0\n"
-	"	.section	.sun4v_1insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	or		%0, %3, %0\n"
-	"	.previous\n"
-	: "=r" (off)
-	: "0" (off), "i" (_PAGE_FILE_4U), "i" (_PAGE_FILE_4V));
+    __asm__ __volatile__(
+        "\n661:	or		%0, %2, %0\n"
+        "	.section	.sun4v_1insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	or		%0, %3, %0\n"
+        "	.previous\n"
+        : "=r" (off)
+        : "0" (off), "i" (_PAGE_FILE_4U), "i" (_PAGE_FILE_4V));
 
-	return __pte(off);
+    return __pte(off);
 }
 
-static inline pgprot_t pgprot_noncached(pgprot_t prot)
-{
-	unsigned long val = pgprot_val(prot);
+static inline pgprot_t pgprot_noncached(pgprot_t prot) {
+    unsigned long val = pgprot_val(prot);
 
-	__asm__ __volatile__(
-	"\n661:	andn		%0, %2, %0\n"
-	"	or		%0, %3, %0\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	andn		%0, %4, %0\n"
-	"	or		%0, %5, %0\n"
-	"	.previous\n"
-	: "=r" (val)
-	: "0" (val), "i" (_PAGE_CP_4U | _PAGE_CV_4U), "i" (_PAGE_E_4U),
-	             "i" (_PAGE_CP_4V | _PAGE_CV_4V), "i" (_PAGE_E_4V));
+    __asm__ __volatile__(
+        "\n661:	andn		%0, %2, %0\n"
+        "	or		%0, %3, %0\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	andn		%0, %4, %0\n"
+        "	or		%0, %5, %0\n"
+        "	.previous\n"
+        : "=r" (val)
+        : "0" (val), "i" (_PAGE_CP_4U | _PAGE_CV_4U), "i" (_PAGE_E_4U),
+        "i" (_PAGE_CP_4V | _PAGE_CV_4V), "i" (_PAGE_E_4V));
 
-	return __pgprot(val);
+    return __pgprot(val);
 }
 /* Various pieces of code check for platform support by ifdef testing
  * on "pgprot_noncached".  That's broken and should be fixed, but for
@@ -356,266 +351,251 @@ static inline pgprot_t pgprot_noncached(pgprot_t prot)
 #define pgprot_noncached pgprot_noncached
 
 #ifdef CONFIG_HUGETLB_PAGE
-static inline pte_t pte_mkhuge(pte_t pte)
-{
-	unsigned long mask;
+static inline pte_t pte_mkhuge(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	sethi		%%uhi(%1), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	mov		%2, %0\n"
-	"	nop\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_SZHUGE_4U), "i" (_PAGE_SZHUGE_4V));
+    __asm__ __volatile__(
+        "\n661:	sethi		%%uhi(%1), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	mov		%2, %0\n"
+        "	nop\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_SZHUGE_4U), "i" (_PAGE_SZHUGE_4V));
 
-	return __pte(pte_val(pte) | mask);
+    return __pte(pte_val(pte) | mask);
 }
 #endif
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	unsigned long val = pte_val(pte), tmp;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    unsigned long val = pte_val(pte), tmp;
 
-	__asm__ __volatile__(
-	"\n661:	or		%0, %3, %0\n"
-	"	nop\n"
-	"\n662:	nop\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%4), %1\n"
-	"	sllx		%1, 32, %1\n"
-	"	.word		662b\n"
-	"	or		%1, %%lo(%4), %1\n"
-	"	or		%0, %1, %0\n"
-	"	.previous\n"
-	: "=r" (val), "=r" (tmp)
-	: "0" (val), "i" (_PAGE_MODIFIED_4U | _PAGE_W_4U),
-	  "i" (_PAGE_MODIFIED_4V | _PAGE_W_4V));
+    __asm__ __volatile__(
+        "\n661:	or		%0, %3, %0\n"
+        "	nop\n"
+        "\n662:	nop\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%4), %1\n"
+        "	sllx		%1, 32, %1\n"
+        "	.word		662b\n"
+        "	or		%1, %%lo(%4), %1\n"
+        "	or		%0, %1, %0\n"
+        "	.previous\n"
+        : "=r" (val), "=r" (tmp)
+        : "0" (val), "i" (_PAGE_MODIFIED_4U | _PAGE_W_4U),
+        "i" (_PAGE_MODIFIED_4V | _PAGE_W_4V));
 
-	return __pte(val);
+    return __pte(val);
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	unsigned long val = pte_val(pte), tmp;
+static inline pte_t pte_mkclean(pte_t pte) {
+    unsigned long val = pte_val(pte), tmp;
 
-	__asm__ __volatile__(
-	"\n661:	andn		%0, %3, %0\n"
-	"	nop\n"
-	"\n662:	nop\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%4), %1\n"
-	"	sllx		%1, 32, %1\n"
-	"	.word		662b\n"
-	"	or		%1, %%lo(%4), %1\n"
-	"	andn		%0, %1, %0\n"
-	"	.previous\n"
-	: "=r" (val), "=r" (tmp)
-	: "0" (val), "i" (_PAGE_MODIFIED_4U | _PAGE_W_4U),
-	  "i" (_PAGE_MODIFIED_4V | _PAGE_W_4V));
+    __asm__ __volatile__(
+        "\n661:	andn		%0, %3, %0\n"
+        "	nop\n"
+        "\n662:	nop\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%4), %1\n"
+        "	sllx		%1, 32, %1\n"
+        "	.word		662b\n"
+        "	or		%1, %%lo(%4), %1\n"
+        "	andn		%0, %1, %0\n"
+        "	.previous\n"
+        : "=r" (val), "=r" (tmp)
+        : "0" (val), "i" (_PAGE_MODIFIED_4U | _PAGE_W_4U),
+        "i" (_PAGE_MODIFIED_4V | _PAGE_W_4V));
 
-	return __pte(val);
+    return __pte(val);
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	unsigned long val = pte_val(pte), mask;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    unsigned long val = pte_val(pte), mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
 
-	return __pte(val | mask);
+    return __pte(val | mask);
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	unsigned long val = pte_val(pte), tmp;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    unsigned long val = pte_val(pte), tmp;
 
-	__asm__ __volatile__(
-	"\n661:	andn		%0, %3, %0\n"
-	"	nop\n"
-	"\n662:	nop\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%4), %1\n"
-	"	sllx		%1, 32, %1\n"
-	"	.word		662b\n"
-	"	or		%1, %%lo(%4), %1\n"
-	"	andn		%0, %1, %0\n"
-	"	.previous\n"
-	: "=r" (val), "=r" (tmp)
-	: "0" (val), "i" (_PAGE_WRITE_4U | _PAGE_W_4U),
-	  "i" (_PAGE_WRITE_4V | _PAGE_W_4V));
+    __asm__ __volatile__(
+        "\n661:	andn		%0, %3, %0\n"
+        "	nop\n"
+        "\n662:	nop\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%4), %1\n"
+        "	sllx		%1, 32, %1\n"
+        "	.word		662b\n"
+        "	or		%1, %%lo(%4), %1\n"
+        "	andn		%0, %1, %0\n"
+        "	.previous\n"
+        : "=r" (val), "=r" (tmp)
+        : "0" (val), "i" (_PAGE_WRITE_4U | _PAGE_W_4U),
+        "i" (_PAGE_WRITE_4V | _PAGE_W_4V));
 
-	return __pte(val);
+    return __pte(val);
 }
 
-static inline pte_t pte_mkold(pte_t pte)
-{
-	unsigned long mask;
+static inline pte_t pte_mkold(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
 
-	mask |= _PAGE_R;
+    mask |= _PAGE_R;
 
-	return __pte(pte_val(pte) & ~mask);
+    return __pte(pte_val(pte) & ~mask);
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	unsigned long mask;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
 
-	mask |= _PAGE_R;
+    mask |= _PAGE_R;
 
-	return __pte(pte_val(pte) | mask);
+    return __pte(pte_val(pte) | mask);
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_SPECIAL;
-	return pte;
+static inline pte_t pte_mkspecial(pte_t pte) {
+    pte_val(pte) |= _PAGE_SPECIAL;
+    return pte;
 }
 
-static inline unsigned long pte_young(pte_t pte)
-{
-	unsigned long mask;
+static inline unsigned long pte_young(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_ACCESSED_4U), "i" (_PAGE_ACCESSED_4V));
 
-	return (pte_val(pte) & mask);
+    return (pte_val(pte) & mask);
 }
 
-static inline unsigned long pte_dirty(pte_t pte)
-{
-	unsigned long mask;
+static inline unsigned long pte_dirty(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_MODIFIED_4U), "i" (_PAGE_MODIFIED_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_MODIFIED_4U), "i" (_PAGE_MODIFIED_4V));
 
-	return (pte_val(pte) & mask);
+    return (pte_val(pte) & mask);
 }
 
-static inline unsigned long pte_write(pte_t pte)
-{
-	unsigned long mask;
+static inline unsigned long pte_write(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	mov		%1, %0\n"
-	"	nop\n"
-	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	sethi		%%uhi(%2), %0\n"
-	"	sllx		%0, 32, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
+    __asm__ __volatile__(
+        "\n661:	mov		%1, %0\n"
+        "	nop\n"
+        "	.section	.sun4v_2insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	sethi		%%uhi(%2), %0\n"
+        "	sllx		%0, 32, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
 
-	return (pte_val(pte) & mask);
+    return (pte_val(pte) & mask);
 }
 
-static inline unsigned long pte_exec(pte_t pte)
-{
-	unsigned long mask;
+static inline unsigned long pte_exec(pte_t pte) {
+    unsigned long mask;
 
-	__asm__ __volatile__(
-	"\n661:	sethi		%%hi(%1), %0\n"
-	"	.section	.sun4v_1insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	mov		%2, %0\n"
-	"	.previous\n"
-	: "=r" (mask)
-	: "i" (_PAGE_EXEC_4U), "i" (_PAGE_EXEC_4V));
+    __asm__ __volatile__(
+        "\n661:	sethi		%%hi(%1), %0\n"
+        "	.section	.sun4v_1insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	mov		%2, %0\n"
+        "	.previous\n"
+        : "=r" (mask)
+        : "i" (_PAGE_EXEC_4U), "i" (_PAGE_EXEC_4V));
 
-	return (pte_val(pte) & mask);
+    return (pte_val(pte) & mask);
 }
 
-static inline unsigned long pte_file(pte_t pte)
-{
-	unsigned long val = pte_val(pte);
+static inline unsigned long pte_file(pte_t pte) {
+    unsigned long val = pte_val(pte);
 
-	__asm__ __volatile__(
-	"\n661:	and		%0, %2, %0\n"
-	"	.section	.sun4v_1insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	and		%0, %3, %0\n"
-	"	.previous\n"
-	: "=r" (val)
-	: "0" (val), "i" (_PAGE_FILE_4U), "i" (_PAGE_FILE_4V));
+    __asm__ __volatile__(
+        "\n661:	and		%0, %2, %0\n"
+        "	.section	.sun4v_1insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	and		%0, %3, %0\n"
+        "	.previous\n"
+        : "=r" (val)
+        : "0" (val), "i" (_PAGE_FILE_4U), "i" (_PAGE_FILE_4V));
 
-	return val;
+    return val;
 }
 
-static inline unsigned long pte_present(pte_t pte)
-{
-	unsigned long val = pte_val(pte);
+static inline unsigned long pte_present(pte_t pte) {
+    unsigned long val = pte_val(pte);
 
-	__asm__ __volatile__(
-	"\n661:	and		%0, %2, %0\n"
-	"	.section	.sun4v_1insn_patch, \"ax\"\n"
-	"	.word		661b\n"
-	"	and		%0, %3, %0\n"
-	"	.previous\n"
-	: "=r" (val)
-	: "0" (val), "i" (_PAGE_PRESENT_4U), "i" (_PAGE_PRESENT_4V));
+    __asm__ __volatile__(
+        "\n661:	and		%0, %2, %0\n"
+        "	.section	.sun4v_1insn_patch, \"ax\"\n"
+        "	.word		661b\n"
+        "	and		%0, %3, %0\n"
+        "	.previous\n"
+        : "=r" (val)
+        : "0" (val), "i" (_PAGE_PRESENT_4U), "i" (_PAGE_PRESENT_4V));
 
-	return val;
+    return val;
 }
 
-static inline unsigned long pte_special(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_SPECIAL;
+static inline unsigned long pte_special(pte_t pte) {
+    return pte_val(pte) & _PAGE_SPECIAL;
 }
 
 #define pmd_set(pmdp, ptep)	\
@@ -662,23 +642,22 @@ static inline unsigned long pte_special(pte_t pte)
 
 /* Actual page table PTE updates.  */
 extern void tlb_batch_add(struct mm_struct *mm, unsigned long vaddr,
-			  pte_t *ptep, pte_t orig, int fullmm);
+                          pte_t *ptep, pte_t orig, int fullmm);
 
 static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-			     pte_t *ptep, pte_t pte, int fullmm)
-{
-	pte_t orig = *ptep;
+                                pte_t *ptep, pte_t pte, int fullmm) {
+    pte_t orig = *ptep;
 
-	*ptep = pte;
+    *ptep = pte;
 
-	/* It is more efficient to let flush_tlb_kernel_range()
-	 * handle init_mm tlb flushes.
-	 *
-	 * SUN4V NOTE: _PAGE_VALID is the same value in both the SUN4U
-	 *             and SUN4V pte layout, so this inline test is fine.
-	 */
-	if (likely(mm != &init_mm) && (pte_val(orig) & _PAGE_VALID))
-		tlb_batch_add(mm, addr, ptep, orig, fullmm);
+    /* It is more efficient to let flush_tlb_kernel_range()
+     * handle init_mm tlb flushes.
+     *
+     * SUN4V NOTE: _PAGE_VALID is the same value in both the SUN4U
+     *             and SUN4V pte layout, so this inline test is fine.
+     */
+    if (likely(mm != &init_mm) && (pte_val(orig) & _PAGE_VALID))
+        tlb_batch_add(mm, addr, ptep, orig, fullmm);
 }
 
 #define set_pte_at(mm,addr,ptep,pte)	\
@@ -745,13 +724,12 @@ extern pte_t pgoff_to_pte(unsigned long);
 extern unsigned long sparc64_valid_addr_bitmap[];
 
 /* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
-static inline bool kern_addr_valid(unsigned long addr)
-{
-	unsigned long paddr = __pa(addr);
+static inline bool kern_addr_valid(unsigned long addr) {
+    unsigned long paddr = __pa(addr);
 
-	if ((paddr >> 41UL) != 0UL)
-		return false;
-	return test_bit(paddr >> 22, sparc64_valid_addr_bitmap);
+    if ((paddr >> 41UL) != 0UL)
+        return false;
+    return test_bit(paddr >> 22, sparc64_valid_addr_bitmap);
 }
 
 extern int page_in_phys_avail(unsigned long paddr);
@@ -765,19 +743,18 @@ extern int page_in_phys_avail(unsigned long paddr);
 #define GET_PFN(pfn)			(pfn & 0x0fffffffffffffffUL)
 
 extern int remap_pfn_range(struct vm_area_struct *, unsigned long, unsigned long,
-			   unsigned long, pgprot_t);
+                           unsigned long, pgprot_t);
 
 static inline int io_remap_pfn_range(struct vm_area_struct *vma,
-				     unsigned long from, unsigned long pfn,
-				     unsigned long size, pgprot_t prot)
-{
-	unsigned long offset = GET_PFN(pfn) << PAGE_SHIFT;
-	int space = GET_IOSPACE(pfn);
-	unsigned long phys_base;
+                                     unsigned long from, unsigned long pfn,
+                                     unsigned long size, pgprot_t prot) {
+    unsigned long offset = GET_PFN(pfn) << PAGE_SHIFT;
+    int space = GET_IOSPACE(pfn);
+    unsigned long phys_base;
 
-	phys_base = offset | (((unsigned long) space) << 32UL);
+    phys_base = offset | (((unsigned long) space) << 32UL);
 
-	return remap_pfn_range(vma, from, phys_base >> PAGE_SHIFT, size, prot);
+    return remap_pfn_range(vma, from, phys_base >> PAGE_SHIFT, size, prot);
 }
 
 #include <asm-generic/pgtable.h>
@@ -792,8 +769,8 @@ static inline int io_remap_pfn_range(struct vm_area_struct *vma,
  * the largest alignment possible such that larget PTEs can be used.
  */
 extern unsigned long get_fb_unmapped_area(struct file *filp, unsigned long,
-					  unsigned long, unsigned long,
-					  unsigned long);
+        unsigned long, unsigned long,
+        unsigned long);
 #define HAVE_ARCH_FB_UNMAPPED_AREA
 
 extern void pgtable_cache_init(void);

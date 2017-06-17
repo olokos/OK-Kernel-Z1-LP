@@ -20,24 +20,24 @@
 #define HAL_BUFFER_MAX 0xb
 
 enum smem_type {
-	SMEM_ION,
+    SMEM_ION,
 };
 
 enum smem_prop {
-	SMEM_CACHED = ION_FLAG_CACHED,
-	SMEM_SECURE = ION_FLAG_SECURE,
+    SMEM_CACHED = ION_FLAG_CACHED,
+    SMEM_SECURE = ION_FLAG_SECURE,
 };
 
 void *msm_smem_new_client(enum smem_type mtype,
-				struct msm_vidc_platform_resources *res);
+                          struct msm_vidc_platform_resources *res);
 struct msm_smem *msm_smem_alloc(void *clt, size_t size, u32 align, u32 flags,
-		enum hal_buffer buffer_type, int map_kernel);
+                                enum hal_buffer buffer_type, int map_kernel);
 void msm_smem_free(void *clt, struct msm_smem *mem);
 void msm_smem_delete_client(void *clt);
 int msm_smem_cache_operations(void *clt, struct msm_smem *mem,
-		enum smem_cache_ops);
+                              enum smem_cache_ops);
 struct msm_smem *msm_smem_user_to_kernel(void *clt, int fd, u32 offset,
-				enum hal_buffer buffer_type);
+        enum hal_buffer buffer_type);
 int msm_smem_get_domain_partition(void *clt, u32 flags, enum hal_buffer
-		buffer_type, int *domain_num, int *partition_num);
+                                  buffer_type, int *domain_num, int *partition_num);
 #endif

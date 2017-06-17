@@ -132,9 +132,9 @@
 #define S6_DMAC_INDEX(dmac)	(((unsigned)(dmac) >> 18) % S6_DMAC_NB)
 
 struct s6dmac_ctrl {
-	u32 dmac;
-	spinlock_t lock;
-	u8 chan_nb;
+    u32 dmac;
+    spinlock_t lock;
+    u8 chan_nb;
 };
 
 extern struct s6dmac_ctrl s6dmac_ctrl[S6_DMAC_NB];
@@ -142,149 +142,134 @@ extern struct s6dmac_ctrl s6dmac_ctrl[S6_DMAC_NB];
 
 /* DMA control, per channel */
 
-static inline int s6dmac_fifo_full(u32 dmac, int chan)
-{
-	return (readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
-		& (1 << S6_DMA_CHNCTRL_DESCFIFOFULL)) && 1;
+static inline int s6dmac_fifo_full(u32 dmac, int chan) {
+    return (readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
+            & (1 << S6_DMA_CHNCTRL_DESCFIFOFULL)) && 1;
 }
 
-static inline int s6dmac_termcnt_irq(u32 dmac, int chan)
-{
-	u32 m = 1 << chan;
-	int r = (readl(dmac + S6_DMA_TERMCNTIRQSTAT) & m) && 1;
-	if (r)
-		writel(m, dmac + S6_DMA_TERMCNTIRQCLR);
-	return r;
+static inline int s6dmac_termcnt_irq(u32 dmac, int chan) {
+    u32 m = 1 << chan;
+    int r = (readl(dmac + S6_DMA_TERMCNTIRQSTAT) & m) && 1;
+    if (r)
+        writel(m, dmac + S6_DMA_TERMCNTIRQCLR);
+    return r;
 }
 
-static inline int s6dmac_pendcnt_irq(u32 dmac, int chan)
-{
-	u32 m = 1 << chan;
-	int r = (readl(dmac + S6_DMA_PENDCNTIRQSTAT) & m) && 1;
-	if (r)
-		writel(m, dmac + S6_DMA_PENDCNTIRQCLR);
-	return r;
+static inline int s6dmac_pendcnt_irq(u32 dmac, int chan) {
+    u32 m = 1 << chan;
+    int r = (readl(dmac + S6_DMA_PENDCNTIRQSTAT) & m) && 1;
+    if (r)
+        writel(m, dmac + S6_DMA_PENDCNTIRQCLR);
+    return r;
 }
 
-static inline int s6dmac_lowwmark_irq(u32 dmac, int chan)
-{
-	int r = (readl(dmac + S6_DMA_LOWWMRKIRQSTAT) & (1 << chan)) ? 1 : 0;
-	if (r)
-		writel(1 << chan, dmac + S6_DMA_LOWWMRKIRQCLR);
-	return r;
+static inline int s6dmac_lowwmark_irq(u32 dmac, int chan) {
+    int r = (readl(dmac + S6_DMA_LOWWMRKIRQSTAT) & (1 << chan)) ? 1 : 0;
+    if (r)
+        writel(1 << chan, dmac + S6_DMA_LOWWMRKIRQCLR);
+    return r;
 }
 
-static inline u32 s6dmac_pending_count(u32 dmac, int chan)
-{
-	return (readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
-			>> S6_DMA_CHNCTRL_PENDGCNTSTAT)
-		& S6_DMA_CHNCTRL_PENDGCNTSTAT_MASK;
+static inline u32 s6dmac_pending_count(u32 dmac, int chan) {
+    return (readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
+            >> S6_DMA_CHNCTRL_PENDGCNTSTAT)
+           & S6_DMA_CHNCTRL_PENDGCNTSTAT_MASK;
 }
 
-static inline void s6dmac_set_terminal_count(u32 dmac, int chan, u32 n)
-{
-	n &= S6_DMA_TERMCNTNB_MASK;
-	n |= readl(DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB)
-	      & ~S6_DMA_TERMCNTNB_MASK;
-	writel(n, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB);
+static inline void s6dmac_set_terminal_count(u32 dmac, int chan, u32 n) {
+    n &= S6_DMA_TERMCNTNB_MASK;
+    n |= readl(DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB)
+         & ~S6_DMA_TERMCNTNB_MASK;
+    writel(n, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB);
 }
 
-static inline u32 s6dmac_get_terminal_count(u32 dmac, int chan)
-{
-	return (readl(DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB))
-		& S6_DMA_TERMCNTNB_MASK;
+static inline u32 s6dmac_get_terminal_count(u32 dmac, int chan) {
+    return (readl(DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB))
+           & S6_DMA_TERMCNTNB_MASK;
 }
 
-static inline u32 s6dmac_timestamp(u32 dmac, int chan)
-{
-	return readl(DMA_CHNL(dmac, chan) + S6_DMA_TIMESTAMP);
+static inline u32 s6dmac_timestamp(u32 dmac, int chan) {
+    return readl(DMA_CHNL(dmac, chan) + S6_DMA_TIMESTAMP);
 }
 
-static inline u32 s6dmac_cur_src(u32 dmac, int chan)
-{
-	return readl(DMA_CHNL(dmac, chan) + S6_DMA_CUR_SRC);
+static inline u32 s6dmac_cur_src(u32 dmac, int chan) {
+    return readl(DMA_CHNL(dmac, chan) + S6_DMA_CUR_SRC);
 }
 
-static inline u32 s6dmac_cur_dst(u32 dmac, int chan)
-{
-	return readl(DMA_CHNL(dmac, chan) + S6_DMA_CUR_DST);
+static inline u32 s6dmac_cur_dst(u32 dmac, int chan) {
+    return readl(DMA_CHNL(dmac, chan) + S6_DMA_CUR_DST);
 }
 
-static inline void s6dmac_disable_chan(u32 dmac, int chan)
-{
-	u32 ctrl;
-	writel(readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
-		& ~(1 << S6_DMA_CHNCTRL_ENABLE),
-		DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
-	do
-		ctrl = readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
-	while (ctrl & (1 << S6_DMA_CHNCTRL_ENABLE));
+static inline void s6dmac_disable_chan(u32 dmac, int chan) {
+    u32 ctrl;
+    writel(readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL)
+           & ~(1 << S6_DMA_CHNCTRL_ENABLE),
+           DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
+    do
+        ctrl = readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
+    while (ctrl & (1 << S6_DMA_CHNCTRL_ENABLE));
 }
 
 static inline void s6dmac_set_stride_skip(u32 dmac, int chan,
-	int comchunk,		/* 0: disable scatter/gather */
-	int srcskip, int dstskip)
-{
-	writel(comchunk, DMA_CHNL(dmac, chan) + S6_DMA_CMONCHUNK);
-	writel(srcskip, DMA_CHNL(dmac, chan) + S6_DMA_SRCSKIP);
-	writel(dstskip, DMA_CHNL(dmac, chan) + S6_DMA_DSTSKIP);
+        int comchunk,		/* 0: disable scatter/gather */
+        int srcskip, int dstskip) {
+    writel(comchunk, DMA_CHNL(dmac, chan) + S6_DMA_CMONCHUNK);
+    writel(srcskip, DMA_CHNL(dmac, chan) + S6_DMA_SRCSKIP);
+    writel(dstskip, DMA_CHNL(dmac, chan) + S6_DMA_DSTSKIP);
 }
 
 static inline void s6dmac_enable_chan(u32 dmac, int chan,
-	int prio,               /* 0 (highest) .. 3 (lowest) */
-	int periphxfer,         /* <0: disable p.req.line, 0..1: mode */
-	int srcinc, int dstinc, /* 0: dont increment src/dst address */
-	int comchunk,		/* 0: disable scatter/gather */
-	int srcskip, int dstskip,
-	int burstsize,		/* 4 for I2S, 7 for everything else */
-	int bandwidthconserve,  /* <0: disable, 0..1: select */
-	int lowwmark,           /* 0..15 */
-	int timestamp,		/* 0: disable timestamp */
-	int enable)		/* 0: disable for now */
-{
-	writel(1, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB);
-	writel(0, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTTMO);
-	writel(lowwmark << S6_DMA_CHNCTRL_LOWWMARK,
-		DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
-	s6dmac_set_stride_skip(dmac, chan, comchunk, srcskip, dstskip);
-	writel(((enable ? 1 : 0) << S6_DMA_CHNCTRL_ENABLE) |
-		(prio << S6_DMA_CHNCTRL_PRIO) |
-		(((periphxfer > 0) ? 1 : 0) << S6_DMA_CHNCTRL_PERIPHXFER) |
-		(((periphxfer < 0) ? 0 : 1) << S6_DMA_CHNCTRL_PERIPHENA) |
-		((srcinc ? 1 : 0) << S6_DMA_CHNCTRL_SRCINC) |
-		((dstinc ? 1 : 0) << S6_DMA_CHNCTRL_DSTINC) |
-		(burstsize << S6_DMA_CHNCTRL_BURSTLOG) |
-		(((bandwidthconserve > 0) ? 1 : 0) << S6_DMA_CHNCTRL_BWCONSEL) |
-		(((bandwidthconserve < 0) ? 0 : 1) << S6_DMA_CHNCTRL_BWCONENA) |
-		(lowwmark << S6_DMA_CHNCTRL_LOWWMARK) |
-		((timestamp ? 1 : 0) << S6_DMA_CHNCTRL_TSTAMP),
-		DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
+                                      int prio,               /* 0 (highest) .. 3 (lowest) */
+                                      int periphxfer,         /* <0: disable p.req.line, 0..1: mode */
+                                      int srcinc, int dstinc, /* 0: dont increment src/dst address */
+                                      int comchunk,		/* 0: disable scatter/gather */
+                                      int srcskip, int dstskip,
+                                      int burstsize,		/* 4 for I2S, 7 for everything else */
+                                      int bandwidthconserve,  /* <0: disable, 0..1: select */
+                                      int lowwmark,           /* 0..15 */
+                                      int timestamp,		/* 0: disable timestamp */
+                                      int enable) {	/* 0: disable for now */
+    writel(1, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTNB);
+    writel(0, DMA_CHNL(dmac, chan) + S6_DMA_TERMCNTTMO);
+    writel(lowwmark << S6_DMA_CHNCTRL_LOWWMARK,
+           DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
+    s6dmac_set_stride_skip(dmac, chan, comchunk, srcskip, dstskip);
+    writel(((enable ? 1 : 0) << S6_DMA_CHNCTRL_ENABLE) |
+           (prio << S6_DMA_CHNCTRL_PRIO) |
+           (((periphxfer > 0) ? 1 : 0) << S6_DMA_CHNCTRL_PERIPHXFER) |
+           (((periphxfer < 0) ? 0 : 1) << S6_DMA_CHNCTRL_PERIPHENA) |
+           ((srcinc ? 1 : 0) << S6_DMA_CHNCTRL_SRCINC) |
+           ((dstinc ? 1 : 0) << S6_DMA_CHNCTRL_DSTINC) |
+           (burstsize << S6_DMA_CHNCTRL_BURSTLOG) |
+           (((bandwidthconserve > 0) ? 1 : 0) << S6_DMA_CHNCTRL_BWCONSEL) |
+           (((bandwidthconserve < 0) ? 0 : 1) << S6_DMA_CHNCTRL_BWCONENA) |
+           (lowwmark << S6_DMA_CHNCTRL_LOWWMARK) |
+           ((timestamp ? 1 : 0) << S6_DMA_CHNCTRL_TSTAMP),
+           DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL);
 }
 
 
 /* DMA control, per engine */
 
-static inline unsigned _dmac_addr_index(u32 dmac)
-{
-	unsigned i = S6_DMAC_INDEX(dmac);
-	if (s6dmac_ctrl[i].dmac != dmac)
-		BUG();
-	return i;
+static inline unsigned _dmac_addr_index(u32 dmac) {
+    unsigned i = S6_DMAC_INDEX(dmac);
+    if (s6dmac_ctrl[i].dmac != dmac)
+        BUG();
+    return i;
 }
 
-static inline void _s6dmac_disable_error_irqs(u32 dmac, u32 mask)
-{
-	writel(mask, dmac + S6_DMA_TERMCNTIRQCLR);
-	writel(mask, dmac + S6_DMA_PENDCNTIRQCLR);
-	writel(mask, dmac + S6_DMA_LOWWMRKIRQCLR);
-	writel(readl(dmac + S6_DMA_INTENABLE0)
-		& ~((mask << S6_DMA_INT0_UNDER) | (mask << S6_DMA_INT0_OVER)),
-		dmac + S6_DMA_INTENABLE0);
-	writel(readl(dmac + S6_DMA_INTENABLE1) & ~(mask << S6_DMA_INT1_CHANNEL),
-		dmac + S6_DMA_INTENABLE1);
-	writel((mask << S6_DMA_INT0_UNDER) | (mask << S6_DMA_INT0_OVER),
-		dmac + S6_DMA_INTCLEAR0);
-	writel(mask << S6_DMA_INT1_CHANNEL, dmac + S6_DMA_INTCLEAR1);
+static inline void _s6dmac_disable_error_irqs(u32 dmac, u32 mask) {
+    writel(mask, dmac + S6_DMA_TERMCNTIRQCLR);
+    writel(mask, dmac + S6_DMA_PENDCNTIRQCLR);
+    writel(mask, dmac + S6_DMA_LOWWMRKIRQCLR);
+    writel(readl(dmac + S6_DMA_INTENABLE0)
+           & ~((mask << S6_DMA_INT0_UNDER) | (mask << S6_DMA_INT0_OVER)),
+           dmac + S6_DMA_INTENABLE0);
+    writel(readl(dmac + S6_DMA_INTENABLE1) & ~(mask << S6_DMA_INT1_CHANNEL),
+           dmac + S6_DMA_INTENABLE1);
+    writel((mask << S6_DMA_INT0_UNDER) | (mask << S6_DMA_INT0_OVER),
+           dmac + S6_DMA_INTCLEAR0);
+    writel(mask << S6_DMA_INT1_CHANNEL, dmac + S6_DMA_INTCLEAR1);
 }
 
 /*
@@ -294,59 +279,56 @@ static inline void _s6dmac_disable_error_irqs(u32 dmac, u32 mask)
  * returns < 0 upon error, channel nb otherwise
  */
 static inline int s6dmac_request_chan(u32 dmac, int chan,
-	int prio,
-	int periphxfer,
-	int srcinc, int dstinc,
-	int comchunk,
-	int srcskip, int dstskip,
-	int burstsize,
-	int bandwidthconserve,
-	int lowwmark,
-	int timestamp,
-	int enable)
-{
-	int r = chan;
-	unsigned long flags;
-	spinlock_t *spinl = &s6dmac_ctrl[_dmac_addr_index(dmac)].lock;
-	spin_lock_irqsave(spinl, flags);
-	if (r < 0) {
-		r = (readl(dmac + S6_DMA_NEXTFREE) >> S6_DMA_NEXTFREE_CHAN)
-			& S6_DMA_NEXTFREE_CHAN_MASK;
-	}
-	if (r >= s6dmac_ctrl[_dmac_addr_index(dmac)].chan_nb) {
-		if (chan < 0)
-			r = -EBUSY;
-		else
-			r = -ENXIO;
-	} else if (((readl(dmac + S6_DMA_NEXTFREE) >> S6_DMA_NEXTFREE_ENA)
-			>> r) & 1) {
-		r = -EBUSY;
-	} else {
-		s6dmac_enable_chan(dmac, r, prio, periphxfer,
-			srcinc, dstinc, comchunk, srcskip, dstskip, burstsize,
-			bandwidthconserve, lowwmark, timestamp, enable);
-	}
-	spin_unlock_irqrestore(spinl, flags);
-	return r;
+                                      int prio,
+                                      int periphxfer,
+                                      int srcinc, int dstinc,
+                                      int comchunk,
+                                      int srcskip, int dstskip,
+                                      int burstsize,
+                                      int bandwidthconserve,
+                                      int lowwmark,
+                                      int timestamp,
+                                      int enable) {
+    int r = chan;
+    unsigned long flags;
+    spinlock_t *spinl = &s6dmac_ctrl[_dmac_addr_index(dmac)].lock;
+    spin_lock_irqsave(spinl, flags);
+    if (r < 0) {
+        r = (readl(dmac + S6_DMA_NEXTFREE) >> S6_DMA_NEXTFREE_CHAN)
+            & S6_DMA_NEXTFREE_CHAN_MASK;
+    }
+    if (r >= s6dmac_ctrl[_dmac_addr_index(dmac)].chan_nb) {
+        if (chan < 0)
+            r = -EBUSY;
+        else
+            r = -ENXIO;
+    } else if (((readl(dmac + S6_DMA_NEXTFREE) >> S6_DMA_NEXTFREE_ENA)
+                >> r) & 1) {
+        r = -EBUSY;
+    } else {
+        s6dmac_enable_chan(dmac, r, prio, periphxfer,
+                           srcinc, dstinc, comchunk, srcskip, dstskip, burstsize,
+                           bandwidthconserve, lowwmark, timestamp, enable);
+    }
+    spin_unlock_irqrestore(spinl, flags);
+    return r;
 }
 
 static inline void s6dmac_put_fifo(u32 dmac, int chan,
-	u32 src, u32 dst, u32 size)
-{
-	unsigned long flags;
-	spinlock_t *spinl = &s6dmac_ctrl[_dmac_addr_index(dmac)].lock;
-	spin_lock_irqsave(spinl, flags);
-	writel(src, dmac + S6_DMA_DESCRFIFO0);
-	writel(dst, dmac + S6_DMA_DESCRFIFO1);
-	writel(size, dmac + S6_DMA_DESCRFIFO2);
-	writel(chan, dmac + S6_DMA_DESCRFIFO3);
-	spin_unlock_irqrestore(spinl, flags);
+                                   u32 src, u32 dst, u32 size) {
+    unsigned long flags;
+    spinlock_t *spinl = &s6dmac_ctrl[_dmac_addr_index(dmac)].lock;
+    spin_lock_irqsave(spinl, flags);
+    writel(src, dmac + S6_DMA_DESCRFIFO0);
+    writel(dst, dmac + S6_DMA_DESCRFIFO1);
+    writel(size, dmac + S6_DMA_DESCRFIFO2);
+    writel(chan, dmac + S6_DMA_DESCRFIFO3);
+    spin_unlock_irqrestore(spinl, flags);
 }
 
-static inline u32 s6dmac_channel_enabled(u32 dmac, int chan)
-{
-	return readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL) &
-			(1 << S6_DMA_CHNCTRL_ENABLE);
+static inline u32 s6dmac_channel_enabled(u32 dmac, int chan) {
+    return readl(DMA_CHNL(dmac, chan) + S6_DMA_CHNCTRL) &
+           (1 << S6_DMA_CHNCTRL_ENABLE);
 }
 
 /*
@@ -355,31 +337,29 @@ static inline u32 s6dmac_channel_enabled(u32 dmac, int chan)
  * frrep=0/1 (dis- or enable frame repeat)
  */
 static inline void s6dmac_dp_setup_group(u32 dmac, int port,
-			int nrch, int frrep)
-{
-	static const u8 mask[4] = {0, 3, 1, 2};
-	BUG_ON(dmac != S6_REG_DPDMA);
-	if ((port < 0) || (port > 3) || (nrch < 1) || (nrch > 4))
-		return;
-	writel((mask[nrch - 1] << S6_DMA_DPORTCTRLGRP_NRCHANS)
-		| ((frrep ? 1 : 0) << S6_DMA_DPORTCTRLGRP_FRAMEREP),
-		dmac + S6_DMA_DPORTCTRLGRP(port));
+        int nrch, int frrep) {
+    static const u8 mask[4] = {0, 3, 1, 2};
+    BUG_ON(dmac != S6_REG_DPDMA);
+    if ((port < 0) || (port > 3) || (nrch < 1) || (nrch > 4))
+        return;
+    writel((mask[nrch - 1] << S6_DMA_DPORTCTRLGRP_NRCHANS)
+           | ((frrep ? 1 : 0) << S6_DMA_DPORTCTRLGRP_FRAMEREP),
+           dmac + S6_DMA_DPORTCTRLGRP(port));
 }
 
-static inline void s6dmac_dp_switch_group(u32 dmac, int port, int enable)
-{
-	u32 tmp;
-	BUG_ON(dmac != S6_REG_DPDMA);
-	tmp = readl(dmac + S6_DMA_DPORTCTRLGRP(port));
-	if (enable)
-		tmp |= (1 << S6_DMA_DPORTCTRLGRP_ENA);
-	else
-		tmp &= ~(1 << S6_DMA_DPORTCTRLGRP_ENA);
-	writel(tmp, dmac + S6_DMA_DPORTCTRLGRP(port));
+static inline void s6dmac_dp_switch_group(u32 dmac, int port, int enable) {
+    u32 tmp;
+    BUG_ON(dmac != S6_REG_DPDMA);
+    tmp = readl(dmac + S6_DMA_DPORTCTRLGRP(port));
+    if (enable)
+        tmp |= (1 << S6_DMA_DPORTCTRLGRP_ENA);
+    else
+        tmp &= ~(1 << S6_DMA_DPORTCTRLGRP_ENA);
+    writel(tmp, dmac + S6_DMA_DPORTCTRLGRP(port));
 }
 
 extern void s6dmac_put_fifo_cache(u32 dmac, int chan,
-	u32 src, u32 dst, u32 size);
+                                  u32 src, u32 dst, u32 size);
 extern void s6dmac_disable_error_irqs(u32 dmac, u32 mask);
 extern u32 s6dmac_int_sources(u32 dmac, u32 channel);
 extern void s6dmac_release_chan(u32 dmac, int chan);

@@ -6,11 +6,11 @@
 #include <linux/cpumask.h>
 
 struct cputopo_arm {
-	int thread_id;
-	int core_id;
-	int socket_id;
-	cpumask_t thread_sibling;
-	cpumask_t core_sibling;
+    int thread_id;
+    int core_id;
+    int socket_id;
+    cpumask_t thread_sibling;
+    cpumask_t core_sibling;
 };
 
 extern struct cputopo_arm cpu_topology[NR_CPUS];

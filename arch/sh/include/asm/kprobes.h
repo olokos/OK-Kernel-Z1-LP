@@ -27,27 +27,27 @@ void jprobe_return_end(void);
 
 /* Architecture specific copy of original instruction*/
 struct arch_specific_insn {
-	/* copy of the original instruction */
-	kprobe_opcode_t insn[MAX_INSN_SIZE];
+    /* copy of the original instruction */
+    kprobe_opcode_t insn[MAX_INSN_SIZE];
 };
 
 struct prev_kprobe {
-	struct kprobe *kp;
-	unsigned long status;
+    struct kprobe *kp;
+    unsigned long status;
 };
 
 /* per-cpu kprobe control block */
 struct kprobe_ctlblk {
-	unsigned long kprobe_status;
-	unsigned long jprobe_saved_r15;
-	struct pt_regs jprobe_saved_regs;
-	kprobe_opcode_t jprobes_stack[MAX_STACK_SIZE];
-	struct prev_kprobe prev_kprobe;
+    unsigned long kprobe_status;
+    unsigned long jprobe_saved_r15;
+    struct pt_regs jprobe_saved_regs;
+    kprobe_opcode_t jprobes_stack[MAX_STACK_SIZE];
+    struct prev_kprobe prev_kprobe;
 };
 
 extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
 extern int kprobe_exceptions_notify(struct notifier_block *self,
-				    unsigned long val, void *data);
+                                    unsigned long val, void *data);
 extern int kprobe_handle_illslot(unsigned long pc);
 #else
 

@@ -353,8 +353,8 @@
 	})
 
 struct dma_desc {
-	u32	addr;
-	u32	ctrl;
+    u32	addr;
+    u32	ctrl;
 };
 
 /* DMA descriptor bitfields */
@@ -418,8 +418,8 @@ struct dma_desc {
 #define MACB_TX_USED_SIZE			1
 
 struct ring_info {
-	struct sk_buff		*skb;
-	dma_addr_t		mapping;
+    struct sk_buff		*skb;
+    dma_addr_t		mapping;
 };
 
 /*
@@ -427,118 +427,117 @@ struct ring_info {
  * device stats by a periodic timer.
  */
 struct macb_stats {
-	u32	rx_pause_frames;
-	u32	tx_ok;
-	u32	tx_single_cols;
-	u32	tx_multiple_cols;
-	u32	rx_ok;
-	u32	rx_fcs_errors;
-	u32	rx_align_errors;
-	u32	tx_deferred;
-	u32	tx_late_cols;
-	u32	tx_excessive_cols;
-	u32	tx_underruns;
-	u32	tx_carrier_errors;
-	u32	rx_resource_errors;
-	u32	rx_overruns;
-	u32	rx_symbol_errors;
-	u32	rx_oversize_pkts;
-	u32	rx_jabbers;
-	u32	rx_undersize_pkts;
-	u32	sqe_test_errors;
-	u32	rx_length_mismatch;
-	u32	tx_pause_frames;
+    u32	rx_pause_frames;
+    u32	tx_ok;
+    u32	tx_single_cols;
+    u32	tx_multiple_cols;
+    u32	rx_ok;
+    u32	rx_fcs_errors;
+    u32	rx_align_errors;
+    u32	tx_deferred;
+    u32	tx_late_cols;
+    u32	tx_excessive_cols;
+    u32	tx_underruns;
+    u32	tx_carrier_errors;
+    u32	rx_resource_errors;
+    u32	rx_overruns;
+    u32	rx_symbol_errors;
+    u32	rx_oversize_pkts;
+    u32	rx_jabbers;
+    u32	rx_undersize_pkts;
+    u32	sqe_test_errors;
+    u32	rx_length_mismatch;
+    u32	tx_pause_frames;
 };
 
 struct gem_stats {
-	u32	tx_octets_31_0;
-	u32	tx_octets_47_32;
-	u32	tx_frames;
-	u32	tx_broadcast_frames;
-	u32	tx_multicast_frames;
-	u32	tx_pause_frames;
-	u32	tx_64_byte_frames;
-	u32	tx_65_127_byte_frames;
-	u32	tx_128_255_byte_frames;
-	u32	tx_256_511_byte_frames;
-	u32	tx_512_1023_byte_frames;
-	u32	tx_1024_1518_byte_frames;
-	u32	tx_greater_than_1518_byte_frames;
-	u32	tx_underrun;
-	u32	tx_single_collision_frames;
-	u32	tx_multiple_collision_frames;
-	u32	tx_excessive_collisions;
-	u32	tx_late_collisions;
-	u32	tx_deferred_frames;
-	u32	tx_carrier_sense_errors;
-	u32	rx_octets_31_0;
-	u32	rx_octets_47_32;
-	u32	rx_frames;
-	u32	rx_broadcast_frames;
-	u32	rx_multicast_frames;
-	u32	rx_pause_frames;
-	u32	rx_64_byte_frames;
-	u32	rx_65_127_byte_frames;
-	u32	rx_128_255_byte_frames;
-	u32	rx_256_511_byte_frames;
-	u32	rx_512_1023_byte_frames;
-	u32	rx_1024_1518_byte_frames;
-	u32	rx_greater_than_1518_byte_frames;
-	u32	rx_undersized_frames;
-	u32	rx_oversize_frames;
-	u32	rx_jabbers;
-	u32	rx_frame_check_sequence_errors;
-	u32	rx_length_field_frame_errors;
-	u32	rx_symbol_errors;
-	u32	rx_alignment_errors;
-	u32	rx_resource_errors;
-	u32	rx_overruns;
-	u32	rx_ip_header_checksum_errors;
-	u32	rx_tcp_checksum_errors;
-	u32	rx_udp_checksum_errors;
+    u32	tx_octets_31_0;
+    u32	tx_octets_47_32;
+    u32	tx_frames;
+    u32	tx_broadcast_frames;
+    u32	tx_multicast_frames;
+    u32	tx_pause_frames;
+    u32	tx_64_byte_frames;
+    u32	tx_65_127_byte_frames;
+    u32	tx_128_255_byte_frames;
+    u32	tx_256_511_byte_frames;
+    u32	tx_512_1023_byte_frames;
+    u32	tx_1024_1518_byte_frames;
+    u32	tx_greater_than_1518_byte_frames;
+    u32	tx_underrun;
+    u32	tx_single_collision_frames;
+    u32	tx_multiple_collision_frames;
+    u32	tx_excessive_collisions;
+    u32	tx_late_collisions;
+    u32	tx_deferred_frames;
+    u32	tx_carrier_sense_errors;
+    u32	rx_octets_31_0;
+    u32	rx_octets_47_32;
+    u32	rx_frames;
+    u32	rx_broadcast_frames;
+    u32	rx_multicast_frames;
+    u32	rx_pause_frames;
+    u32	rx_64_byte_frames;
+    u32	rx_65_127_byte_frames;
+    u32	rx_128_255_byte_frames;
+    u32	rx_256_511_byte_frames;
+    u32	rx_512_1023_byte_frames;
+    u32	rx_1024_1518_byte_frames;
+    u32	rx_greater_than_1518_byte_frames;
+    u32	rx_undersized_frames;
+    u32	rx_oversize_frames;
+    u32	rx_jabbers;
+    u32	rx_frame_check_sequence_errors;
+    u32	rx_length_field_frame_errors;
+    u32	rx_symbol_errors;
+    u32	rx_alignment_errors;
+    u32	rx_resource_errors;
+    u32	rx_overruns;
+    u32	rx_ip_header_checksum_errors;
+    u32	rx_tcp_checksum_errors;
+    u32	rx_udp_checksum_errors;
 };
 
 struct macb {
-	void __iomem		*regs;
+    void __iomem		*regs;
 
-	unsigned int		rx_tail;
-	struct dma_desc		*rx_ring;
-	void			*rx_buffers;
+    unsigned int		rx_tail;
+    struct dma_desc		*rx_ring;
+    void			*rx_buffers;
 
-	unsigned int		tx_head, tx_tail;
-	struct dma_desc		*tx_ring;
-	struct ring_info	*tx_skb;
+    unsigned int		tx_head, tx_tail;
+    struct dma_desc		*tx_ring;
+    struct ring_info	*tx_skb;
 
-	spinlock_t		lock;
-	struct platform_device	*pdev;
-	struct clk		*pclk;
-	struct clk		*hclk;
-	struct net_device	*dev;
-	struct napi_struct	napi;
-	struct net_device_stats	stats;
-	union {
-		struct macb_stats	macb;
-		struct gem_stats	gem;
-	}			hw_stats;
+    spinlock_t		lock;
+    struct platform_device	*pdev;
+    struct clk		*pclk;
+    struct clk		*hclk;
+    struct net_device	*dev;
+    struct napi_struct	napi;
+    struct net_device_stats	stats;
+    union {
+        struct macb_stats	macb;
+        struct gem_stats	gem;
+    }			hw_stats;
 
-	dma_addr_t		rx_ring_dma;
-	dma_addr_t		tx_ring_dma;
-	dma_addr_t		rx_buffers_dma;
+    dma_addr_t		rx_ring_dma;
+    dma_addr_t		tx_ring_dma;
+    dma_addr_t		rx_buffers_dma;
 
-	unsigned int		rx_pending, tx_pending;
+    unsigned int		rx_pending, tx_pending;
 
-	struct mii_bus		*mii_bus;
-	struct phy_device	*phy_dev;
-	unsigned int 		link;
-	unsigned int 		speed;
-	unsigned int 		duplex;
+    struct mii_bus		*mii_bus;
+    struct phy_device	*phy_dev;
+    unsigned int 		link;
+    unsigned int 		speed;
+    unsigned int 		duplex;
 
-	phy_interface_t		phy_interface;
+    phy_interface_t		phy_interface;
 };
 
-static inline bool macb_is_gem(struct macb *bp)
-{
-	return MACB_BFEXT(IDNUM, macb_readl(bp, MID)) == 0x2;
+static inline bool macb_is_gem(struct macb *bp) {
+    return MACB_BFEXT(IDNUM, macb_readl(bp, MID)) == 0x2;
 }
 
 #endif /* _MACB_H */

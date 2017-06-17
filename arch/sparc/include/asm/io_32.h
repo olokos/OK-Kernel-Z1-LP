@@ -10,14 +10,12 @@
 
 #define page_to_phys(page)	(page_to_pfn(page) << PAGE_SHIFT)
 
-static inline u32 flip_dword (u32 l)
-{
-	return ((l&0xff)<<24) | (((l>>8)&0xff)<<16) | (((l>>16)&0xff)<<8)| ((l>>24)&0xff);
+static inline u32 flip_dword (u32 l) {
+    return ((l&0xff)<<24) | (((l>>8)&0xff)<<16) | (((l>>16)&0xff)<<8)| ((l>>24)&0xff);
 }
 
-static inline u16 flip_word (u16 w)
-{
-	return ((w&0xff) << 8) | ((w>>8)&0xff);
+static inline u16 flip_word (u16 w) {
+    return ((w&0xff) << 8) | ((w>>8)&0xff);
 }
 
 #define mmiowb()
@@ -26,64 +24,52 @@ static inline u16 flip_word (u16 w)
  * Memory mapped I/O to PCI
  */
 
-static inline u8 __raw_readb(const volatile void __iomem *addr)
-{
-	return *(__force volatile u8 *)addr;
+static inline u8 __raw_readb(const volatile void __iomem *addr) {
+    return *(__force volatile u8 *)addr;
 }
 
-static inline u16 __raw_readw(const volatile void __iomem *addr)
-{
-	return *(__force volatile u16 *)addr;
+static inline u16 __raw_readw(const volatile void __iomem *addr) {
+    return *(__force volatile u16 *)addr;
 }
 
-static inline u32 __raw_readl(const volatile void __iomem *addr)
-{
-	return *(__force volatile u32 *)addr;
+static inline u32 __raw_readl(const volatile void __iomem *addr) {
+    return *(__force volatile u32 *)addr;
 }
 
-static inline void __raw_writeb(u8 b, volatile void __iomem *addr)
-{
-	*(__force volatile u8 *)addr = b;
+static inline void __raw_writeb(u8 b, volatile void __iomem *addr) {
+    *(__force volatile u8 *)addr = b;
 }
 
-static inline void __raw_writew(u16 w, volatile void __iomem *addr)
-{
-	*(__force volatile u16 *)addr = w;
+static inline void __raw_writew(u16 w, volatile void __iomem *addr) {
+    *(__force volatile u16 *)addr = w;
 }
 
-static inline void __raw_writel(u32 l, volatile void __iomem *addr)
-{
-	*(__force volatile u32 *)addr = l;
+static inline void __raw_writel(u32 l, volatile void __iomem *addr) {
+    *(__force volatile u32 *)addr = l;
 }
 
-static inline u8 __readb(const volatile void __iomem *addr)
-{
-	return *(__force volatile u8 *)addr;
+static inline u8 __readb(const volatile void __iomem *addr) {
+    return *(__force volatile u8 *)addr;
 }
 
-static inline u16 __readw(const volatile void __iomem *addr)
-{
-	return flip_word(*(__force volatile u16 *)addr);
+static inline u16 __readw(const volatile void __iomem *addr) {
+    return flip_word(*(__force volatile u16 *)addr);
 }
 
-static inline u32 __readl(const volatile void __iomem *addr)
-{
-	return flip_dword(*(__force volatile u32 *)addr);
+static inline u32 __readl(const volatile void __iomem *addr) {
+    return flip_dword(*(__force volatile u32 *)addr);
 }
 
-static inline void __writeb(u8 b, volatile void __iomem *addr)
-{
-	*(__force volatile u8 *)addr = b;
+static inline void __writeb(u8 b, volatile void __iomem *addr) {
+    *(__force volatile u8 *)addr = b;
 }
 
-static inline void __writew(u16 w, volatile void __iomem *addr)
-{
-	*(__force volatile u16 *)addr = flip_word(w);
+static inline void __writew(u16 w, volatile void __iomem *addr) {
+    *(__force volatile u16 *)addr = flip_word(w);
 }
 
-static inline void __writel(u32 l, volatile void __iomem *addr)
-{
-	*(__force volatile u32 *)addr = flip_dword(l);
+static inline void __writel(u32 l, volatile void __iomem *addr) {
+    *(__force volatile u32 *)addr = flip_dword(l);
 }
 
 #define readb(__addr)		__readb(__addr)
@@ -146,34 +132,28 @@ void insl(unsigned long addr, void *dst, unsigned long count);
  * SBus has only one, memory mapped, I/O space.
  * We do not need to flip bytes for SBus of course.
  */
-static inline u8 _sbus_readb(const volatile void __iomem *addr)
-{
-	return *(__force volatile u8 *)addr;
+static inline u8 _sbus_readb(const volatile void __iomem *addr) {
+    return *(__force volatile u8 *)addr;
 }
 
-static inline u16 _sbus_readw(const volatile void __iomem *addr)
-{
-	return *(__force volatile u16 *)addr;
+static inline u16 _sbus_readw(const volatile void __iomem *addr) {
+    return *(__force volatile u16 *)addr;
 }
 
-static inline u32 _sbus_readl(const volatile void __iomem *addr)
-{
-	return *(__force volatile u32 *)addr;
+static inline u32 _sbus_readl(const volatile void __iomem *addr) {
+    return *(__force volatile u32 *)addr;
 }
 
-static inline void _sbus_writeb(u8 b, volatile void __iomem *addr)
-{
-	*(__force volatile u8 *)addr = b;
+static inline void _sbus_writeb(u8 b, volatile void __iomem *addr) {
+    *(__force volatile u8 *)addr = b;
 }
 
-static inline void _sbus_writew(u16 w, volatile void __iomem *addr)
-{
-	*(__force volatile u16 *)addr = w;
+static inline void _sbus_writew(u16 w, volatile void __iomem *addr) {
+    *(__force volatile u16 *)addr = w;
 }
 
-static inline void _sbus_writel(u32 l, volatile void __iomem *addr)
-{
-	*(__force volatile u32 *)addr = l;
+static inline void _sbus_writel(u32 l, volatile void __iomem *addr) {
+    *(__force volatile u32 *)addr = l;
 }
 
 /*
@@ -186,83 +166,77 @@ static inline void _sbus_writel(u32 l, volatile void __iomem *addr)
 #define sbus_writew(__w, __addr)	_sbus_writew(__w, __addr)
 #define sbus_writel(__l, __addr)	_sbus_writel(__l, __addr)
 
-static inline void sbus_memset_io(volatile void __iomem *__dst, int c, __kernel_size_t n)
-{
-	while(n--) {
-		sbus_writeb(c, __dst);
-		__dst++;
-	}
+static inline void sbus_memset_io(volatile void __iomem *__dst, int c, __kernel_size_t n) {
+    while(n--) {
+        sbus_writeb(c, __dst);
+        __dst++;
+    }
 }
 
 static inline void
-_memset_io(volatile void __iomem *dst, int c, __kernel_size_t n)
-{
-	volatile void __iomem *d = dst;
+_memset_io(volatile void __iomem *dst, int c, __kernel_size_t n) {
+    volatile void __iomem *d = dst;
 
-	while (n--) {
-		writeb(c, d);
-		d++;
-	}
+    while (n--) {
+        writeb(c, d);
+        d++;
+    }
 }
 
 #define memset_io(d,c,sz)	_memset_io(d,c,sz)
 
 static inline void
 _sbus_memcpy_fromio(void *dst, const volatile void __iomem *src,
-		    __kernel_size_t n)
-{
-	char *d = dst;
+                    __kernel_size_t n) {
+    char *d = dst;
 
-	while (n--) {
-		char tmp = sbus_readb(src);
-		*d++ = tmp;
-		src++;
-	}
+    while (n--) {
+        char tmp = sbus_readb(src);
+        *d++ = tmp;
+        src++;
+    }
 }
 
 #define sbus_memcpy_fromio(d, s, sz)	_sbus_memcpy_fromio(d, s, sz)
 
 static inline void
-_memcpy_fromio(void *dst, const volatile void __iomem *src, __kernel_size_t n)
-{
-	char *d = dst;
+_memcpy_fromio(void *dst, const volatile void __iomem *src, __kernel_size_t n) {
+    char *d = dst;
 
-	while (n--) {
-		char tmp = readb(src);
-		*d++ = tmp;
-		src++;
-	}
+    while (n--) {
+        char tmp = readb(src);
+        *d++ = tmp;
+        src++;
+    }
 }
 
 #define memcpy_fromio(d,s,sz)	_memcpy_fromio(d,s,sz)
 
 static inline void
 _sbus_memcpy_toio(volatile void __iomem *dst, const void *src,
-		  __kernel_size_t n)
-{
-	const char *s = src;
-	volatile void __iomem *d = dst;
+                  __kernel_size_t n) {
+    const char *s = src;
+    volatile void __iomem *d = dst;
 
-	while (n--) {
-		char tmp = *s++;
-		sbus_writeb(tmp, d);
-		d++;
-	}
+    while (n--) {
+        char tmp = *s++;
+        sbus_writeb(tmp, d);
+        d++;
+    }
 }
 
 #define sbus_memcpy_toio(d, s, sz)	_sbus_memcpy_toio(d, s, sz)
 
 static inline void
-_memcpy_toio(volatile void __iomem *dst, const void *src, __kernel_size_t n)
-{
-	const char *s = src;
-	volatile void __iomem *d = dst;
+_memcpy_toio(volatile void __iomem *dst, const void *src, __kernel_size_t n) {
+    const char *s = src;
+    volatile void __iomem *d = dst;
 
-	while (n--) {
-		char tmp = *s++;
-		writeb(tmp, d);
-		d++;
-	}
+    while (n--) {
+        char tmp = *s++;
+        writeb(tmp, d);
+        d++;
+    }
 }
 
 #define memcpy_toio(d,s,sz)	_memcpy_toio(d,s,sz)
@@ -289,33 +263,27 @@ extern void iounmap(volatile void __iomem *addr);
 #define iowrite32(val,X)		writel(val,X)
 #define iowrite32be(val,X)		__raw_writel(val,X)
 
-static inline void ioread8_rep(void __iomem *port, void *buf, unsigned long count)
-{
-	insb((unsigned long __force)port, buf, count);
+static inline void ioread8_rep(void __iomem *port, void *buf, unsigned long count) {
+    insb((unsigned long __force)port, buf, count);
 }
-static inline void ioread16_rep(void __iomem *port, void *buf, unsigned long count)
-{
-	insw((unsigned long __force)port, buf, count);
+static inline void ioread16_rep(void __iomem *port, void *buf, unsigned long count) {
+    insw((unsigned long __force)port, buf, count);
 }
 
-static inline void ioread32_rep(void __iomem *port, void *buf, unsigned long count)
-{
-	insl((unsigned long __force)port, buf, count);
+static inline void ioread32_rep(void __iomem *port, void *buf, unsigned long count) {
+    insl((unsigned long __force)port, buf, count);
 }
 
-static inline void iowrite8_rep(void __iomem *port, const void *buf, unsigned long count)
-{
-	outsb((unsigned long __force)port, buf, count);
+static inline void iowrite8_rep(void __iomem *port, const void *buf, unsigned long count) {
+    outsb((unsigned long __force)port, buf, count);
 }
 
-static inline void iowrite16_rep(void __iomem *port, const void *buf, unsigned long count)
-{
-	outsw((unsigned long __force)port, buf, count);
+static inline void iowrite16_rep(void __iomem *port, const void *buf, unsigned long count) {
+    outsw((unsigned long __force)port, buf, count);
 }
 
-static inline void iowrite32_rep(void __iomem *port, const void *buf, unsigned long count)
-{
-	outsl((unsigned long __force)port, buf, count);
+static inline void iowrite32_rep(void __iomem *port, const void *buf, unsigned long count) {
+    outsl((unsigned long __force)port, buf, count);
 }
 
 /* Create a virtual mapping cookie for an IO port range */
@@ -334,13 +302,11 @@ extern void pci_iounmap(struct pci_dev *dev, void __iomem *);
 #define RTC_PORT(x)   (rtc_port + (x))
 #define RTC_ALWAYS_BCD  0
 
-static inline int sbus_can_dma_64bit(void)
-{
-	return 0; /* actually, sparc_cpu_model==sun4d */
+static inline int sbus_can_dma_64bit(void) {
+    return 0; /* actually, sparc_cpu_model==sun4d */
 }
-static inline int sbus_can_burst64(void)
-{
-	return 0; /* actually, sparc_cpu_model==sun4d */
+static inline int sbus_can_burst64(void) {
+    return 0; /* actually, sparc_cpu_model==sun4d */
 }
 struct device;
 extern void sbus_set_sbus64(struct device *, int);

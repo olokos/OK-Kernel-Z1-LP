@@ -21,7 +21,7 @@
 #define __ASM_UNIFIED_H
 
 #if defined(__ASSEMBLY__) && defined(CONFIG_ARM_ASM_UNIFIED)
-	.syntax unified
+.syntax unified
 #endif
 
 #ifdef CONFIG_THUMB2_KERNEL
@@ -61,68 +61,68 @@
  * macros expand to an empty string
  */
 #ifdef __ASSEMBLY__
-	.macro	it, cond
-	.endm
-	.macro	itt, cond
-	.endm
-	.macro	ite, cond
-	.endm
-	.macro	ittt, cond
-	.endm
-	.macro	itte, cond
-	.endm
-	.macro	itet, cond
-	.endm
-	.macro	itee, cond
-	.endm
-	.macro	itttt, cond
-	.endm
-	.macro	ittte, cond
-	.endm
-	.macro	ittet, cond
-	.endm
-	.macro	ittee, cond
-	.endm
-	.macro	itett, cond
-	.endm
-	.macro	itete, cond
-	.endm
-	.macro	iteet, cond
-	.endm
-	.macro	iteee, cond
-	.endm
+.macro	it, cond
+.endm
+.macro	itt, cond
+.endm
+.macro	ite, cond
+.endm
+.macro	ittt, cond
+.endm
+.macro	itte, cond
+.endm
+.macro	itet, cond
+.endm
+.macro	itee, cond
+.endm
+.macro	itttt, cond
+.endm
+.macro	ittte, cond
+.endm
+.macro	ittet, cond
+.endm
+.macro	ittee, cond
+.endm
+.macro	itett, cond
+.endm
+.macro	itete, cond
+.endm
+.macro	iteet, cond
+.endm
+.macro	iteee, cond
+.endm
 #else	/* !__ASSEMBLY__ */
 __asm__(
-"	.macro	it, cond\n"
-"	.endm\n"
-"	.macro	itt, cond\n"
-"	.endm\n"
-"	.macro	ite, cond\n"
-"	.endm\n"
-"	.macro	ittt, cond\n"
-"	.endm\n"
-"	.macro	itte, cond\n"
-"	.endm\n"
-"	.macro	itet, cond\n"
-"	.endm\n"
-"	.macro	itee, cond\n"
-"	.endm\n"
-"	.macro	itttt, cond\n"
-"	.endm\n"
-"	.macro	ittte, cond\n"
-"	.endm\n"
-"	.macro	ittet, cond\n"
-"	.endm\n"
-"	.macro	ittee, cond\n"
-"	.endm\n"
-"	.macro	itett, cond\n"
-"	.endm\n"
-"	.macro	itete, cond\n"
-"	.endm\n"
-"	.macro	iteet, cond\n"
-"	.endm\n"
-"	.macro	iteee, cond\n"
-"	.endm\n");
+    "	.macro	it, cond\n"
+    "	.endm\n"
+    "	.macro	itt, cond\n"
+    "	.endm\n"
+    "	.macro	ite, cond\n"
+    "	.endm\n"
+    "	.macro	ittt, cond\n"
+    "	.endm\n"
+    "	.macro	itte, cond\n"
+    "	.endm\n"
+    "	.macro	itet, cond\n"
+    "	.endm\n"
+    "	.macro	itee, cond\n"
+    "	.endm\n"
+    "	.macro	itttt, cond\n"
+    "	.endm\n"
+    "	.macro	ittte, cond\n"
+    "	.endm\n"
+    "	.macro	ittet, cond\n"
+    "	.endm\n"
+    "	.macro	ittee, cond\n"
+    "	.endm\n"
+    "	.macro	itett, cond\n"
+    "	.endm\n"
+    "	.macro	itete, cond\n"
+    "	.endm\n"
+    "	.macro	iteet, cond\n"
+    "	.endm\n"
+    "	.macro	iteee, cond\n"
+    "	.endm\n");
 #endif	/* __ASSEMBLY__ */
 
 #endif	/* CONFIG_ARM_ASM_UNIFIED */

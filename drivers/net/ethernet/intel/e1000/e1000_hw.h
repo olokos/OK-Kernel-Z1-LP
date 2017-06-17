@@ -43,232 +43,232 @@ struct e1000_hw_stats;
 /* Enumerated types specific to the e1000 hardware */
 /* Media Access Controllers */
 typedef enum {
-	e1000_undefined = 0,
-	e1000_82542_rev2_0,
-	e1000_82542_rev2_1,
-	e1000_82543,
-	e1000_82544,
-	e1000_82540,
-	e1000_82545,
-	e1000_82545_rev_3,
-	e1000_82546,
-	e1000_ce4100,
-	e1000_82546_rev_3,
-	e1000_82541,
-	e1000_82541_rev_2,
-	e1000_82547,
-	e1000_82547_rev_2,
-	e1000_num_macs
+    e1000_undefined = 0,
+    e1000_82542_rev2_0,
+    e1000_82542_rev2_1,
+    e1000_82543,
+    e1000_82544,
+    e1000_82540,
+    e1000_82545,
+    e1000_82545_rev_3,
+    e1000_82546,
+    e1000_ce4100,
+    e1000_82546_rev_3,
+    e1000_82541,
+    e1000_82541_rev_2,
+    e1000_82547,
+    e1000_82547_rev_2,
+    e1000_num_macs
 } e1000_mac_type;
 
 typedef enum {
-	e1000_eeprom_uninitialized = 0,
-	e1000_eeprom_spi,
-	e1000_eeprom_microwire,
-	e1000_eeprom_flash,
-	e1000_eeprom_none,	/* No NVM support */
-	e1000_num_eeprom_types
+    e1000_eeprom_uninitialized = 0,
+    e1000_eeprom_spi,
+    e1000_eeprom_microwire,
+    e1000_eeprom_flash,
+    e1000_eeprom_none,	/* No NVM support */
+    e1000_num_eeprom_types
 } e1000_eeprom_type;
 
 /* Media Types */
 typedef enum {
-	e1000_media_type_copper = 0,
-	e1000_media_type_fiber = 1,
-	e1000_media_type_internal_serdes = 2,
-	e1000_num_media_types
+    e1000_media_type_copper = 0,
+    e1000_media_type_fiber = 1,
+    e1000_media_type_internal_serdes = 2,
+    e1000_num_media_types
 } e1000_media_type;
 
 typedef enum {
-	e1000_10_half = 0,
-	e1000_10_full = 1,
-	e1000_100_half = 2,
-	e1000_100_full = 3
+    e1000_10_half = 0,
+    e1000_10_full = 1,
+    e1000_100_half = 2,
+    e1000_100_full = 3
 } e1000_speed_duplex_type;
 
 /* Flow Control Settings */
 typedef enum {
-	E1000_FC_NONE = 0,
-	E1000_FC_RX_PAUSE = 1,
-	E1000_FC_TX_PAUSE = 2,
-	E1000_FC_FULL = 3,
-	E1000_FC_DEFAULT = 0xFF
+    E1000_FC_NONE = 0,
+    E1000_FC_RX_PAUSE = 1,
+    E1000_FC_TX_PAUSE = 2,
+    E1000_FC_FULL = 3,
+    E1000_FC_DEFAULT = 0xFF
 } e1000_fc_type;
 
 struct e1000_shadow_ram {
-	u16 eeprom_word;
-	bool modified;
+    u16 eeprom_word;
+    bool modified;
 };
 
 /* PCI bus types */
 typedef enum {
-	e1000_bus_type_unknown = 0,
-	e1000_bus_type_pci,
-	e1000_bus_type_pcix,
-	e1000_bus_type_reserved
+    e1000_bus_type_unknown = 0,
+    e1000_bus_type_pci,
+    e1000_bus_type_pcix,
+    e1000_bus_type_reserved
 } e1000_bus_type;
 
 /* PCI bus speeds */
 typedef enum {
-	e1000_bus_speed_unknown = 0,
-	e1000_bus_speed_33,
-	e1000_bus_speed_66,
-	e1000_bus_speed_100,
-	e1000_bus_speed_120,
-	e1000_bus_speed_133,
-	e1000_bus_speed_reserved
+    e1000_bus_speed_unknown = 0,
+    e1000_bus_speed_33,
+    e1000_bus_speed_66,
+    e1000_bus_speed_100,
+    e1000_bus_speed_120,
+    e1000_bus_speed_133,
+    e1000_bus_speed_reserved
 } e1000_bus_speed;
 
 /* PCI bus widths */
 typedef enum {
-	e1000_bus_width_unknown = 0,
-	e1000_bus_width_32,
-	e1000_bus_width_64,
-	e1000_bus_width_reserved
+    e1000_bus_width_unknown = 0,
+    e1000_bus_width_32,
+    e1000_bus_width_64,
+    e1000_bus_width_reserved
 } e1000_bus_width;
 
 /* PHY status info structure and supporting enums */
 typedef enum {
-	e1000_cable_length_50 = 0,
-	e1000_cable_length_50_80,
-	e1000_cable_length_80_110,
-	e1000_cable_length_110_140,
-	e1000_cable_length_140,
-	e1000_cable_length_undefined = 0xFF
+    e1000_cable_length_50 = 0,
+    e1000_cable_length_50_80,
+    e1000_cable_length_80_110,
+    e1000_cable_length_110_140,
+    e1000_cable_length_140,
+    e1000_cable_length_undefined = 0xFF
 } e1000_cable_length;
 
 typedef enum {
-	e1000_gg_cable_length_60 = 0,
-	e1000_gg_cable_length_60_115 = 1,
-	e1000_gg_cable_length_115_150 = 2,
-	e1000_gg_cable_length_150 = 4
+    e1000_gg_cable_length_60 = 0,
+    e1000_gg_cable_length_60_115 = 1,
+    e1000_gg_cable_length_115_150 = 2,
+    e1000_gg_cable_length_150 = 4
 } e1000_gg_cable_length;
 
 typedef enum {
-	e1000_igp_cable_length_10 = 10,
-	e1000_igp_cable_length_20 = 20,
-	e1000_igp_cable_length_30 = 30,
-	e1000_igp_cable_length_40 = 40,
-	e1000_igp_cable_length_50 = 50,
-	e1000_igp_cable_length_60 = 60,
-	e1000_igp_cable_length_70 = 70,
-	e1000_igp_cable_length_80 = 80,
-	e1000_igp_cable_length_90 = 90,
-	e1000_igp_cable_length_100 = 100,
-	e1000_igp_cable_length_110 = 110,
-	e1000_igp_cable_length_115 = 115,
-	e1000_igp_cable_length_120 = 120,
-	e1000_igp_cable_length_130 = 130,
-	e1000_igp_cable_length_140 = 140,
-	e1000_igp_cable_length_150 = 150,
-	e1000_igp_cable_length_160 = 160,
-	e1000_igp_cable_length_170 = 170,
-	e1000_igp_cable_length_180 = 180
+    e1000_igp_cable_length_10 = 10,
+    e1000_igp_cable_length_20 = 20,
+    e1000_igp_cable_length_30 = 30,
+    e1000_igp_cable_length_40 = 40,
+    e1000_igp_cable_length_50 = 50,
+    e1000_igp_cable_length_60 = 60,
+    e1000_igp_cable_length_70 = 70,
+    e1000_igp_cable_length_80 = 80,
+    e1000_igp_cable_length_90 = 90,
+    e1000_igp_cable_length_100 = 100,
+    e1000_igp_cable_length_110 = 110,
+    e1000_igp_cable_length_115 = 115,
+    e1000_igp_cable_length_120 = 120,
+    e1000_igp_cable_length_130 = 130,
+    e1000_igp_cable_length_140 = 140,
+    e1000_igp_cable_length_150 = 150,
+    e1000_igp_cable_length_160 = 160,
+    e1000_igp_cable_length_170 = 170,
+    e1000_igp_cable_length_180 = 180
 } e1000_igp_cable_length;
 
 typedef enum {
-	e1000_10bt_ext_dist_enable_normal = 0,
-	e1000_10bt_ext_dist_enable_lower,
-	e1000_10bt_ext_dist_enable_undefined = 0xFF
+    e1000_10bt_ext_dist_enable_normal = 0,
+    e1000_10bt_ext_dist_enable_lower,
+    e1000_10bt_ext_dist_enable_undefined = 0xFF
 } e1000_10bt_ext_dist_enable;
 
 typedef enum {
-	e1000_rev_polarity_normal = 0,
-	e1000_rev_polarity_reversed,
-	e1000_rev_polarity_undefined = 0xFF
+    e1000_rev_polarity_normal = 0,
+    e1000_rev_polarity_reversed,
+    e1000_rev_polarity_undefined = 0xFF
 } e1000_rev_polarity;
 
 typedef enum {
-	e1000_downshift_normal = 0,
-	e1000_downshift_activated,
-	e1000_downshift_undefined = 0xFF
+    e1000_downshift_normal = 0,
+    e1000_downshift_activated,
+    e1000_downshift_undefined = 0xFF
 } e1000_downshift;
 
 typedef enum {
-	e1000_smart_speed_default = 0,
-	e1000_smart_speed_on,
-	e1000_smart_speed_off
+    e1000_smart_speed_default = 0,
+    e1000_smart_speed_on,
+    e1000_smart_speed_off
 } e1000_smart_speed;
 
 typedef enum {
-	e1000_polarity_reversal_enabled = 0,
-	e1000_polarity_reversal_disabled,
-	e1000_polarity_reversal_undefined = 0xFF
+    e1000_polarity_reversal_enabled = 0,
+    e1000_polarity_reversal_disabled,
+    e1000_polarity_reversal_undefined = 0xFF
 } e1000_polarity_reversal;
 
 typedef enum {
-	e1000_auto_x_mode_manual_mdi = 0,
-	e1000_auto_x_mode_manual_mdix,
-	e1000_auto_x_mode_auto1,
-	e1000_auto_x_mode_auto2,
-	e1000_auto_x_mode_undefined = 0xFF
+    e1000_auto_x_mode_manual_mdi = 0,
+    e1000_auto_x_mode_manual_mdix,
+    e1000_auto_x_mode_auto1,
+    e1000_auto_x_mode_auto2,
+    e1000_auto_x_mode_undefined = 0xFF
 } e1000_auto_x_mode;
 
 typedef enum {
-	e1000_1000t_rx_status_not_ok = 0,
-	e1000_1000t_rx_status_ok,
-	e1000_1000t_rx_status_undefined = 0xFF
+    e1000_1000t_rx_status_not_ok = 0,
+    e1000_1000t_rx_status_ok,
+    e1000_1000t_rx_status_undefined = 0xFF
 } e1000_1000t_rx_status;
 
 typedef enum {
-	e1000_phy_m88 = 0,
-	e1000_phy_igp,
-	e1000_phy_8211,
-	e1000_phy_8201,
-	e1000_phy_undefined = 0xFF
+    e1000_phy_m88 = 0,
+    e1000_phy_igp,
+    e1000_phy_8211,
+    e1000_phy_8201,
+    e1000_phy_undefined = 0xFF
 } e1000_phy_type;
 
 typedef enum {
-	e1000_ms_hw_default = 0,
-	e1000_ms_force_master,
-	e1000_ms_force_slave,
-	e1000_ms_auto
+    e1000_ms_hw_default = 0,
+    e1000_ms_force_master,
+    e1000_ms_force_slave,
+    e1000_ms_auto
 } e1000_ms_type;
 
 typedef enum {
-	e1000_ffe_config_enabled = 0,
-	e1000_ffe_config_active,
-	e1000_ffe_config_blocked
+    e1000_ffe_config_enabled = 0,
+    e1000_ffe_config_active,
+    e1000_ffe_config_blocked
 } e1000_ffe_config;
 
 typedef enum {
-	e1000_dsp_config_disabled = 0,
-	e1000_dsp_config_enabled,
-	e1000_dsp_config_activated,
-	e1000_dsp_config_undefined = 0xFF
+    e1000_dsp_config_disabled = 0,
+    e1000_dsp_config_enabled,
+    e1000_dsp_config_activated,
+    e1000_dsp_config_undefined = 0xFF
 } e1000_dsp_config;
 
 struct e1000_phy_info {
-	e1000_cable_length cable_length;
-	e1000_10bt_ext_dist_enable extended_10bt_distance;
-	e1000_rev_polarity cable_polarity;
-	e1000_downshift downshift;
-	e1000_polarity_reversal polarity_correction;
-	e1000_auto_x_mode mdix_mode;
-	e1000_1000t_rx_status local_rx;
-	e1000_1000t_rx_status remote_rx;
+    e1000_cable_length cable_length;
+    e1000_10bt_ext_dist_enable extended_10bt_distance;
+    e1000_rev_polarity cable_polarity;
+    e1000_downshift downshift;
+    e1000_polarity_reversal polarity_correction;
+    e1000_auto_x_mode mdix_mode;
+    e1000_1000t_rx_status local_rx;
+    e1000_1000t_rx_status remote_rx;
 };
 
 struct e1000_phy_stats {
-	u32 idle_errors;
-	u32 receive_errors;
+    u32 idle_errors;
+    u32 receive_errors;
 };
 
 struct e1000_eeprom_info {
-	e1000_eeprom_type type;
-	u16 word_size;
-	u16 opcode_bits;
-	u16 address_bits;
-	u16 delay_usec;
-	u16 page_size;
+    e1000_eeprom_type type;
+    u16 word_size;
+    u16 opcode_bits;
+    u16 address_bits;
+    u16 delay_usec;
+    u16 page_size;
 };
 
 /* Flex ASF Information */
 #define E1000_HOST_IF_MAX_SIZE  2048
 
 typedef enum {
-	e1000_byte_align = 0,
-	e1000_word_align = 1,
-	e1000_dword_align = 2
+    e1000_byte_align = 0,
+    e1000_word_align = 1,
+    e1000_dword_align = 2
 } e1000_align_type;
 
 /* Error Codes */
@@ -333,38 +333,38 @@ u32 e1000_enable_mng_pass_thru(struct e1000_hw *hw);
 #define E1000_VFTA_ENTRY_BIT_SHIFT_MASK              0x1F
 
 struct e1000_host_mng_command_header {
-	u8 command_id;
-	u8 checksum;
-	u16 reserved1;
-	u16 reserved2;
-	u16 command_length;
+    u8 command_id;
+    u8 checksum;
+    u16 reserved1;
+    u16 reserved2;
+    u16 command_length;
 };
 
 struct e1000_host_mng_command_info {
-	struct e1000_host_mng_command_header command_header;	/* Command Head/Command Result Head has 4 bytes */
-	u8 command_data[E1000_HI_MAX_MNG_DATA_LENGTH];	/* Command data can length 0..0x658 */
+    struct e1000_host_mng_command_header command_header;	/* Command Head/Command Result Head has 4 bytes */
+    u8 command_data[E1000_HI_MAX_MNG_DATA_LENGTH];	/* Command data can length 0..0x658 */
 };
 #ifdef __BIG_ENDIAN
 struct e1000_host_mng_dhcp_cookie {
-	u32 signature;
-	u16 vlan_id;
-	u8 reserved0;
-	u8 status;
-	u32 reserved1;
-	u8 checksum;
-	u8 reserved3;
-	u16 reserved2;
+    u32 signature;
+    u16 vlan_id;
+    u8 reserved0;
+    u8 status;
+    u32 reserved1;
+    u8 checksum;
+    u8 reserved3;
+    u16 reserved2;
 };
 #else
 struct e1000_host_mng_dhcp_cookie {
-	u32 signature;
-	u8 status;
-	u8 reserved0;
-	u16 vlan_id;
-	u32 reserved1;
-	u16 reserved2;
-	u8 reserved3;
-	u8 checksum;
+    u32 signature;
+    u8 status;
+    u8 reserved0;
+    u16 vlan_id;
+    u32 reserved1;
+    u16 reserved2;
+    u8 reserved3;
+    u8 checksum;
 };
 #endif
 
@@ -394,7 +394,7 @@ s32 e1000_blink_led_start(struct e1000_hw *hw);
 void e1000_reset_adaptive(struct e1000_hw *hw);
 void e1000_update_adaptive(struct e1000_hw *hw);
 void e1000_tbi_adjust_stats(struct e1000_hw *hw, struct e1000_hw_stats *stats,
-			    u32 frame_len, u8 * mac_addr);
+                            u32 frame_len, u8 * mac_addr);
 void e1000_get_bus_info(struct e1000_hw *hw);
 void e1000_pci_set_mwi(struct e1000_hw *hw);
 void e1000_pci_clear_mwi(struct e1000_hw *hw);
@@ -522,68 +522,68 @@ void e1000_io_write(struct e1000_hw *hw, unsigned long port, u32 value);
 
 /* Receive Descriptor */
 struct e1000_rx_desc {
-	__le64 buffer_addr;	/* Address of the descriptor's data buffer */
-	__le16 length;		/* Length of data DMAed into data buffer */
-	__le16 csum;		/* Packet checksum */
-	u8 status;		/* Descriptor status */
-	u8 errors;		/* Descriptor Errors */
-	__le16 special;
+    __le64 buffer_addr;	/* Address of the descriptor's data buffer */
+    __le16 length;		/* Length of data DMAed into data buffer */
+    __le16 csum;		/* Packet checksum */
+    u8 status;		/* Descriptor status */
+    u8 errors;		/* Descriptor Errors */
+    __le16 special;
 };
 
 /* Receive Descriptor - Extended */
 union e1000_rx_desc_extended {
-	struct {
-		__le64 buffer_addr;
-		__le64 reserved;
-	} read;
-	struct {
-		struct {
-			__le32 mrq;	/* Multiple Rx Queues */
-			union {
-				__le32 rss;	/* RSS Hash */
-				struct {
-					__le16 ip_id;	/* IP id */
-					__le16 csum;	/* Packet Checksum */
-				} csum_ip;
-			} hi_dword;
-		} lower;
-		struct {
-			__le32 status_error;	/* ext status/error */
-			__le16 length;
-			__le16 vlan;	/* VLAN tag */
-		} upper;
-	} wb;			/* writeback */
+    struct {
+        __le64 buffer_addr;
+        __le64 reserved;
+    } read;
+    struct {
+        struct {
+            __le32 mrq;	/* Multiple Rx Queues */
+            union {
+                __le32 rss;	/* RSS Hash */
+                struct {
+                    __le16 ip_id;	/* IP id */
+                    __le16 csum;	/* Packet Checksum */
+                } csum_ip;
+            } hi_dword;
+        } lower;
+        struct {
+            __le32 status_error;	/* ext status/error */
+            __le16 length;
+            __le16 vlan;	/* VLAN tag */
+        } upper;
+    } wb;			/* writeback */
 };
 
 #define MAX_PS_BUFFERS 4
 /* Receive Descriptor - Packet Split */
 union e1000_rx_desc_packet_split {
-	struct {
-		/* one buffer for protocol header(s), three data buffers */
-		__le64 buffer_addr[MAX_PS_BUFFERS];
-	} read;
-	struct {
-		struct {
-			__le32 mrq;	/* Multiple Rx Queues */
-			union {
-				__le32 rss;	/* RSS Hash */
-				struct {
-					__le16 ip_id;	/* IP id */
-					__le16 csum;	/* Packet Checksum */
-				} csum_ip;
-			} hi_dword;
-		} lower;
-		struct {
-			__le32 status_error;	/* ext status/error */
-			__le16 length0;	/* length of buffer 0 */
-			__le16 vlan;	/* VLAN tag */
-		} middle;
-		struct {
-			__le16 header_status;
-			__le16 length[3];	/* length of buffers 1-3 */
-		} upper;
-		__le64 reserved;
-	} wb;			/* writeback */
+    struct {
+        /* one buffer for protocol header(s), three data buffers */
+        __le64 buffer_addr[MAX_PS_BUFFERS];
+    } read;
+    struct {
+        struct {
+            __le32 mrq;	/* Multiple Rx Queues */
+            union {
+                __le32 rss;	/* RSS Hash */
+                struct {
+                    __le16 ip_id;	/* IP id */
+                    __le16 csum;	/* Packet Checksum */
+                } csum_ip;
+            } hi_dword;
+        } lower;
+        struct {
+            __le32 status_error;	/* ext status/error */
+            __le16 length0;	/* length of buffer 0 */
+            __le16 vlan;	/* VLAN tag */
+        } middle;
+        struct {
+            __le16 header_status;
+            __le16 length[3];	/* length of buffers 1-3 */
+        } upper;
+        __le64 reserved;
+    } wb;			/* writeback */
 };
 
 /* Receive Descriptor bit definitions */
@@ -640,23 +640,23 @@ union e1000_rx_desc_packet_split {
 
 /* Transmit Descriptor */
 struct e1000_tx_desc {
-	__le64 buffer_addr;	/* Address of the descriptor's data buffer */
-	union {
-		__le32 data;
-		struct {
-			__le16 length;	/* Data buffer length */
-			u8 cso;	/* Checksum offset */
-			u8 cmd;	/* Descriptor control */
-		} flags;
-	} lower;
-	union {
-		__le32 data;
-		struct {
-			u8 status;	/* Descriptor status */
-			u8 css;	/* Checksum start */
-			__le16 special;
-		} fields;
-	} upper;
+    __le64 buffer_addr;	/* Address of the descriptor's data buffer */
+    union {
+        __le32 data;
+        struct {
+            __le16 length;	/* Data buffer length */
+            u8 cso;	/* Checksum offset */
+            u8 cmd;	/* Descriptor control */
+        } flags;
+    } lower;
+    union {
+        __le32 data;
+        struct {
+            u8 status;	/* Descriptor status */
+            u8 css;	/* Checksum start */
+            __le16 special;
+        } fields;
+    } upper;
 };
 
 /* Transmit Descriptor bit definitions */
@@ -683,52 +683,52 @@ struct e1000_tx_desc {
 
 /* Offload Context Descriptor */
 struct e1000_context_desc {
-	union {
-		__le32 ip_config;
-		struct {
-			u8 ipcss;	/* IP checksum start */
-			u8 ipcso;	/* IP checksum offset */
-			__le16 ipcse;	/* IP checksum end */
-		} ip_fields;
-	} lower_setup;
-	union {
-		__le32 tcp_config;
-		struct {
-			u8 tucss;	/* TCP checksum start */
-			u8 tucso;	/* TCP checksum offset */
-			__le16 tucse;	/* TCP checksum end */
-		} tcp_fields;
-	} upper_setup;
-	__le32 cmd_and_length;	/* */
-	union {
-		__le32 data;
-		struct {
-			u8 status;	/* Descriptor status */
-			u8 hdr_len;	/* Header length */
-			__le16 mss;	/* Maximum segment size */
-		} fields;
-	} tcp_seg_setup;
+    union {
+        __le32 ip_config;
+        struct {
+            u8 ipcss;	/* IP checksum start */
+            u8 ipcso;	/* IP checksum offset */
+            __le16 ipcse;	/* IP checksum end */
+        } ip_fields;
+    } lower_setup;
+    union {
+        __le32 tcp_config;
+        struct {
+            u8 tucss;	/* TCP checksum start */
+            u8 tucso;	/* TCP checksum offset */
+            __le16 tucse;	/* TCP checksum end */
+        } tcp_fields;
+    } upper_setup;
+    __le32 cmd_and_length;	/* */
+    union {
+        __le32 data;
+        struct {
+            u8 status;	/* Descriptor status */
+            u8 hdr_len;	/* Header length */
+            __le16 mss;	/* Maximum segment size */
+        } fields;
+    } tcp_seg_setup;
 };
 
 /* Offload data descriptor */
 struct e1000_data_desc {
-	__le64 buffer_addr;	/* Address of the descriptor's buffer address */
-	union {
-		__le32 data;
-		struct {
-			__le16 length;	/* Data buffer length */
-			u8 typ_len_ext;	/* */
-			u8 cmd;	/* */
-		} flags;
-	} lower;
-	union {
-		__le32 data;
-		struct {
-			u8 status;	/* Descriptor status */
-			u8 popts;	/* Packet Options */
-			__le16 special;	/* */
-		} fields;
-	} upper;
+    __le64 buffer_addr;	/* Address of the descriptor's buffer address */
+    union {
+        __le32 data;
+        struct {
+            __le16 length;	/* Data buffer length */
+            u8 typ_len_ext;	/* */
+            u8 cmd;	/* */
+        } flags;
+    } lower;
+    union {
+        __le32 data;
+        struct {
+            u8 status;	/* Descriptor status */
+            u8 popts;	/* Packet Options */
+            __le16 special;	/* */
+        } fields;
+    } upper;
 };
 
 /* Filters */
@@ -738,8 +738,8 @@ struct e1000_data_desc {
 
 /* Receive Address Register */
 struct e1000_rar {
-	volatile __le32 low;	/* receive address low */
-	volatile __le32 high;	/* receive address high */
+    volatile __le32 low;	/* receive address low */
+    volatile __le32 high;	/* receive address high */
 };
 
 /* Number of entries in the Multicast Table Array (MTA). */
@@ -747,8 +747,8 @@ struct e1000_rar {
 
 /* IPv4 Address Table Entry */
 struct e1000_ipv4_at_entry {
-	volatile u32 ipv4_addr;	/* IP Address (RW) */
-	volatile u32 reserved;
+    volatile u32 ipv4_addr;	/* IP Address (RW) */
+    volatile u32 reserved;
 };
 
 /* Four wakeup IP addresses are supported */
@@ -758,25 +758,25 @@ struct e1000_ipv4_at_entry {
 
 /* IPv6 Address Table Entry */
 struct e1000_ipv6_at_entry {
-	volatile u8 ipv6_addr[16];
+    volatile u8 ipv6_addr[16];
 };
 
 /* Flexible Filter Length Table Entry */
 struct e1000_fflt_entry {
-	volatile u32 length;	/* Flexible Filter Length (RW) */
-	volatile u32 reserved;
+    volatile u32 length;	/* Flexible Filter Length (RW) */
+    volatile u32 reserved;
 };
 
 /* Flexible Filter Mask Table Entry */
 struct e1000_ffmt_entry {
-	volatile u32 mask;	/* Flexible Filter Mask (RW) */
-	volatile u32 reserved;
+    volatile u32 mask;	/* Flexible Filter Mask (RW) */
+    volatile u32 reserved;
 };
 
 /* Flexible Filter Value Table Entry */
 struct e1000_ffvt_entry {
-	volatile u32 value;	/* Flexible Filter Value (RW) */
-	volatile u32 reserved;
+    volatile u32 value;	/* Flexible Filter Value (RW) */
+    volatile u32 reserved;
 };
 
 /* Four Flexible Filters are supported */
@@ -1277,162 +1277,162 @@ struct e1000_ffvt_entry {
 
 /* Statistics counters collected by the MAC */
 struct e1000_hw_stats {
-	u64 crcerrs;
-	u64 algnerrc;
-	u64 symerrs;
-	u64 rxerrc;
-	u64 txerrc;
-	u64 mpc;
-	u64 scc;
-	u64 ecol;
-	u64 mcc;
-	u64 latecol;
-	u64 colc;
-	u64 dc;
-	u64 tncrs;
-	u64 sec;
-	u64 cexterr;
-	u64 rlec;
-	u64 xonrxc;
-	u64 xontxc;
-	u64 xoffrxc;
-	u64 xofftxc;
-	u64 fcruc;
-	u64 prc64;
-	u64 prc127;
-	u64 prc255;
-	u64 prc511;
-	u64 prc1023;
-	u64 prc1522;
-	u64 gprc;
-	u64 bprc;
-	u64 mprc;
-	u64 gptc;
-	u64 gorcl;
-	u64 gorch;
-	u64 gotcl;
-	u64 gotch;
-	u64 rnbc;
-	u64 ruc;
-	u64 rfc;
-	u64 roc;
-	u64 rlerrc;
-	u64 rjc;
-	u64 mgprc;
-	u64 mgpdc;
-	u64 mgptc;
-	u64 torl;
-	u64 torh;
-	u64 totl;
-	u64 toth;
-	u64 tpr;
-	u64 tpt;
-	u64 ptc64;
-	u64 ptc127;
-	u64 ptc255;
-	u64 ptc511;
-	u64 ptc1023;
-	u64 ptc1522;
-	u64 mptc;
-	u64 bptc;
-	u64 tsctc;
-	u64 tsctfc;
-	u64 iac;
-	u64 icrxptc;
-	u64 icrxatc;
-	u64 ictxptc;
-	u64 ictxatc;
-	u64 ictxqec;
-	u64 ictxqmtc;
-	u64 icrxdmtc;
-	u64 icrxoc;
+    u64 crcerrs;
+    u64 algnerrc;
+    u64 symerrs;
+    u64 rxerrc;
+    u64 txerrc;
+    u64 mpc;
+    u64 scc;
+    u64 ecol;
+    u64 mcc;
+    u64 latecol;
+    u64 colc;
+    u64 dc;
+    u64 tncrs;
+    u64 sec;
+    u64 cexterr;
+    u64 rlec;
+    u64 xonrxc;
+    u64 xontxc;
+    u64 xoffrxc;
+    u64 xofftxc;
+    u64 fcruc;
+    u64 prc64;
+    u64 prc127;
+    u64 prc255;
+    u64 prc511;
+    u64 prc1023;
+    u64 prc1522;
+    u64 gprc;
+    u64 bprc;
+    u64 mprc;
+    u64 gptc;
+    u64 gorcl;
+    u64 gorch;
+    u64 gotcl;
+    u64 gotch;
+    u64 rnbc;
+    u64 ruc;
+    u64 rfc;
+    u64 roc;
+    u64 rlerrc;
+    u64 rjc;
+    u64 mgprc;
+    u64 mgpdc;
+    u64 mgptc;
+    u64 torl;
+    u64 torh;
+    u64 totl;
+    u64 toth;
+    u64 tpr;
+    u64 tpt;
+    u64 ptc64;
+    u64 ptc127;
+    u64 ptc255;
+    u64 ptc511;
+    u64 ptc1023;
+    u64 ptc1522;
+    u64 mptc;
+    u64 bptc;
+    u64 tsctc;
+    u64 tsctfc;
+    u64 iac;
+    u64 icrxptc;
+    u64 icrxatc;
+    u64 ictxptc;
+    u64 ictxatc;
+    u64 ictxqec;
+    u64 ictxqmtc;
+    u64 icrxdmtc;
+    u64 icrxoc;
 };
 
 /* Structure containing variables used by the shared code (e1000_hw.c) */
 struct e1000_hw {
-	u8 __iomem *hw_addr;
-	u8 __iomem *flash_address;
-	void __iomem *ce4100_gbe_mdio_base_virt;
-	e1000_mac_type mac_type;
-	e1000_phy_type phy_type;
-	u32 phy_init_script;
-	e1000_media_type media_type;
-	void *back;
-	struct e1000_shadow_ram *eeprom_shadow_ram;
-	u32 flash_bank_size;
-	u32 flash_base_addr;
-	e1000_fc_type fc;
-	e1000_bus_speed bus_speed;
-	e1000_bus_width bus_width;
-	e1000_bus_type bus_type;
-	struct e1000_eeprom_info eeprom;
-	e1000_ms_type master_slave;
-	e1000_ms_type original_master_slave;
-	e1000_ffe_config ffe_config_state;
-	u32 asf_firmware_present;
-	u32 eeprom_semaphore_present;
-	unsigned long io_base;
-	u32 phy_id;
-	u32 phy_revision;
-	u32 phy_addr;
-	u32 original_fc;
-	u32 txcw;
-	u32 autoneg_failed;
-	u32 max_frame_size;
-	u32 min_frame_size;
-	u32 mc_filter_type;
-	u32 num_mc_addrs;
-	u32 collision_delta;
-	u32 tx_packet_delta;
-	u32 ledctl_default;
-	u32 ledctl_mode1;
-	u32 ledctl_mode2;
-	bool tx_pkt_filtering;
-	struct e1000_host_mng_dhcp_cookie mng_cookie;
-	u16 phy_spd_default;
-	u16 autoneg_advertised;
-	u16 pci_cmd_word;
-	u16 fc_high_water;
-	u16 fc_low_water;
-	u16 fc_pause_time;
-	u16 current_ifs_val;
-	u16 ifs_min_val;
-	u16 ifs_max_val;
-	u16 ifs_step_size;
-	u16 ifs_ratio;
-	u16 device_id;
-	u16 vendor_id;
-	u16 subsystem_id;
-	u16 subsystem_vendor_id;
-	u8 revision_id;
-	u8 autoneg;
-	u8 mdix;
-	u8 forced_speed_duplex;
-	u8 wait_autoneg_complete;
-	u8 dma_fairness;
-	u8 mac_addr[NODE_ADDRESS_SIZE];
-	u8 perm_mac_addr[NODE_ADDRESS_SIZE];
-	bool disable_polarity_correction;
-	bool speed_downgraded;
-	e1000_smart_speed smart_speed;
-	e1000_dsp_config dsp_config_state;
-	bool get_link_status;
-	bool serdes_has_link;
-	bool tbi_compatibility_en;
-	bool tbi_compatibility_on;
-	bool laa_is_present;
-	bool phy_reset_disable;
-	bool initialize_hw_bits_disable;
-	bool fc_send_xon;
-	bool fc_strict_ieee;
-	bool report_tx_early;
-	bool adaptive_ifs;
-	bool ifs_params_forced;
-	bool in_ifs_mode;
-	bool mng_reg_access_disabled;
-	bool leave_av_bit_off;
-	bool bad_tx_carr_stats_fd;
-	bool has_smbus;
+    u8 __iomem *hw_addr;
+    u8 __iomem *flash_address;
+    void __iomem *ce4100_gbe_mdio_base_virt;
+    e1000_mac_type mac_type;
+    e1000_phy_type phy_type;
+    u32 phy_init_script;
+    e1000_media_type media_type;
+    void *back;
+    struct e1000_shadow_ram *eeprom_shadow_ram;
+    u32 flash_bank_size;
+    u32 flash_base_addr;
+    e1000_fc_type fc;
+    e1000_bus_speed bus_speed;
+    e1000_bus_width bus_width;
+    e1000_bus_type bus_type;
+    struct e1000_eeprom_info eeprom;
+    e1000_ms_type master_slave;
+    e1000_ms_type original_master_slave;
+    e1000_ffe_config ffe_config_state;
+    u32 asf_firmware_present;
+    u32 eeprom_semaphore_present;
+    unsigned long io_base;
+    u32 phy_id;
+    u32 phy_revision;
+    u32 phy_addr;
+    u32 original_fc;
+    u32 txcw;
+    u32 autoneg_failed;
+    u32 max_frame_size;
+    u32 min_frame_size;
+    u32 mc_filter_type;
+    u32 num_mc_addrs;
+    u32 collision_delta;
+    u32 tx_packet_delta;
+    u32 ledctl_default;
+    u32 ledctl_mode1;
+    u32 ledctl_mode2;
+    bool tx_pkt_filtering;
+    struct e1000_host_mng_dhcp_cookie mng_cookie;
+    u16 phy_spd_default;
+    u16 autoneg_advertised;
+    u16 pci_cmd_word;
+    u16 fc_high_water;
+    u16 fc_low_water;
+    u16 fc_pause_time;
+    u16 current_ifs_val;
+    u16 ifs_min_val;
+    u16 ifs_max_val;
+    u16 ifs_step_size;
+    u16 ifs_ratio;
+    u16 device_id;
+    u16 vendor_id;
+    u16 subsystem_id;
+    u16 subsystem_vendor_id;
+    u8 revision_id;
+    u8 autoneg;
+    u8 mdix;
+    u8 forced_speed_duplex;
+    u8 wait_autoneg_complete;
+    u8 dma_fairness;
+    u8 mac_addr[NODE_ADDRESS_SIZE];
+    u8 perm_mac_addr[NODE_ADDRESS_SIZE];
+    bool disable_polarity_correction;
+    bool speed_downgraded;
+    e1000_smart_speed smart_speed;
+    e1000_dsp_config dsp_config_state;
+    bool get_link_status;
+    bool serdes_has_link;
+    bool tbi_compatibility_en;
+    bool tbi_compatibility_on;
+    bool laa_is_present;
+    bool phy_reset_disable;
+    bool initialize_hw_bits_disable;
+    bool fc_send_xon;
+    bool fc_strict_ieee;
+    bool report_tx_early;
+    bool adaptive_ifs;
+    bool ifs_params_forced;
+    bool in_ifs_mode;
+    bool mng_reg_access_disabled;
+    bool leave_av_bit_off;
+    bool bad_tx_carr_stats_fd;
+    bool has_smbus;
 };
 
 #define E1000_EEPROM_SWDPIN0   0x0001	/* SWDPIN 0 EEPROM Value */
@@ -2110,11 +2110,11 @@ struct e1000_hw {
 #define E1000_FFLT_DBG_INVC     0x00100000	/* Invalid /C/ code handling */
 
 typedef enum {
-	e1000_mng_mode_none = 0,
-	e1000_mng_mode_asf,
-	e1000_mng_mode_pt,
-	e1000_mng_mode_ipmi,
-	e1000_mng_mode_host_interface_only
+    e1000_mng_mode_none = 0,
+    e1000_mng_mode_asf,
+    e1000_mng_mode_pt,
+    e1000_mng_mode_ipmi,
+    e1000_mng_mode_host_interface_only
 } e1000_mng_mode;
 
 /* Host Interface Control Register */
@@ -2131,14 +2131,14 @@ typedef enum {
 #define E1000_HI_COMMAND_TIMEOUT         500	/* Time in ms to process HI command */
 
 struct e1000_host_command_header {
-	u8 command_id;
-	u8 command_length;
-	u8 command_options;	/* I/F bits for command, status for return */
-	u8 checksum;
+    u8 command_id;
+    u8 command_length;
+    u8 command_options;	/* I/F bits for command, status for return */
+    u8 checksum;
 };
 struct e1000_host_command_info {
-	struct e1000_host_command_header command_header;	/* Command Head/Command Result Head has 4 bytes */
-	u8 command_data[E1000_HI_MAX_DATA_LENGTH];	/* Command data can length 0..252 */
+    struct e1000_host_command_header command_header;	/* Command Head/Command Result Head has 4 bytes */
+    u8 command_data[E1000_HI_MAX_DATA_LENGTH];	/* Command data can length 0..252 */
 };
 
 /* Host SMB register #0 */
@@ -2683,11 +2683,11 @@ struct e1000_host_command_info {
 #define CR_1000T_HD_CAPS         0x0100	/* Advertise 1000T HD capability */
 #define CR_1000T_FD_CAPS         0x0200	/* Advertise 1000T FD capability  */
 #define CR_1000T_REPEATER_DTE    0x0400	/* 1=Repeater/switch device port */
-					/* 0=DTE device */
+/* 0=DTE device */
 #define CR_1000T_MS_VALUE        0x0800	/* 1=Configure PHY as Master */
-					/* 0=Configure PHY as Slave */
+/* 0=Configure PHY as Slave */
 #define CR_1000T_MS_ENABLE       0x1000	/* 1=Master/Slave manual config value */
-					/* 0=Automatic Master/Slave config */
+/* 0=Automatic Master/Slave config */
 #define CR_1000T_TEST_MODE_NORMAL 0x0000	/* Normal Operation */
 #define CR_1000T_TEST_MODE_1     0x2000	/* Transmit Waveform test */
 #define CR_1000T_TEST_MODE_2     0x4000	/* Master Transmit Jitter test */
@@ -2719,7 +2719,7 @@ struct e1000_host_command_info {
 #define PHY_TX_NORMAL_POLARITY 0	/* register 10h bit 8 (normal polarity) */
 
 #define AUTO_POLARITY_DISABLE  0x0010	/* register 11h bit 4 */
-				      /* (0=enable, 1=disable) */
+/* (0=enable, 1=disable) */
 
 /* M88E1000 PHY Specific Control Register */
 #define M88E1000_PSCR_JABBER_DISABLE    0x0001	/* 1=Jabber Function disabled */
@@ -2729,7 +2729,7 @@ struct e1000_host_command_info {
 						 * 0=CLK125 toggling
 						 */
 #define M88E1000_PSCR_MDI_MANUAL_MODE  0x0000	/* MDI Crossover Mode bits 6:5 */
-					       /* Manual MDI configuration */
+/* Manual MDI configuration */
 #define M88E1000_PSCR_MDIX_MANUAL_MODE 0x0020	/* Manual MDIX configuration */
 #define M88E1000_PSCR_AUTO_X_1000T     0x0040	/* 1000BASE-T: Auto crossover,
 						 *  100BASE-TX/10BASE-T:
@@ -2739,12 +2739,12 @@ struct e1000_host_command_info {
 						 * all speeds.
 						 */
 #define M88E1000_PSCR_10BT_EXT_DIST_ENABLE 0x0080
-					/* 1=Enable Extended 10BASE-T distance
-					 * (Lower 10BASE-T RX Threshold)
-					 * 0=Normal 10BASE-T RX Threshold */
+/* 1=Enable Extended 10BASE-T distance
+ * (Lower 10BASE-T RX Threshold)
+ * 0=Normal 10BASE-T RX Threshold */
 #define M88E1000_PSCR_MII_5BIT_ENABLE      0x0100
-					/* 1=5-Bit interface in 100BASE-TX
-					 * 0=MII interface in 100BASE-TX */
+/* 1=5-Bit interface in 100BASE-TX
+ * 0=MII interface in 100BASE-TX */
 #define M88E1000_PSCR_SCRAMBLER_DISABLE    0x0200	/* 1=Scrambler disable */
 #define M88E1000_PSCR_FORCE_LINK_GOOD      0x0400	/* 1=Force link good */
 #define M88E1000_PSCR_ASSERT_CRS_ON_TX     0x0800	/* 1=Assert CRS on Transmit */

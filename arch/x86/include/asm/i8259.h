@@ -27,41 +27,39 @@ extern unsigned int cached_irq_mask;
 extern raw_spinlock_t i8259A_lock;
 
 /* the PIC may need a careful delay on some platforms, hence specific calls */
-static inline unsigned char inb_pic(unsigned int port)
-{
-	unsigned char value = inb(port);
+static inline unsigned char inb_pic(unsigned int port) {
+    unsigned char value = inb(port);
 
-	/*
-	 * delay for some accesses to PIC on motherboard or in chipset
-	 * must be at least one microsecond, so be safe here:
-	 */
-	udelay(2);
+    /*
+     * delay for some accesses to PIC on motherboard or in chipset
+     * must be at least one microsecond, so be safe here:
+     */
+    udelay(2);
 
-	return value;
+    return value;
 }
 
-static inline void outb_pic(unsigned char value, unsigned int port)
-{
-	outb(value, port);
-	/*
-	 * delay for some accesses to PIC on motherboard or in chipset
-	 * must be at least one microsecond, so be safe here:
-	 */
-	udelay(2);
+static inline void outb_pic(unsigned char value, unsigned int port) {
+    outb(value, port);
+    /*
+     * delay for some accesses to PIC on motherboard or in chipset
+     * must be at least one microsecond, so be safe here:
+     */
+    udelay(2);
 }
 
 extern struct irq_chip i8259A_chip;
 
 struct legacy_pic {
-	int nr_legacy_irqs;
-	struct irq_chip *chip;
-	void (*mask)(unsigned int irq);
-	void (*unmask)(unsigned int irq);
-	void (*mask_all)(void);
-	void (*restore_mask)(void);
-	void (*init)(int auto_eoi);
-	int (*irq_pending)(unsigned int irq);
-	void (*make_irq)(unsigned int irq);
+    int nr_legacy_irqs;
+    struct irq_chip *chip;
+    void (*mask)(unsigned int irq);
+    void (*unmask)(unsigned int irq);
+    void (*mask_all)(void);
+    void (*restore_mask)(void);
+    void (*init)(int auto_eoi);
+    int (*irq_pending)(unsigned int irq);
+    void (*make_irq)(unsigned int irq);
 };
 
 extern struct legacy_pic *legacy_pic;

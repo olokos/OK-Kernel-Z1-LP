@@ -53,8 +53,8 @@
 #define WINDOW_BAR_ENABLE(chan)	(0x240 + ((chan) << 2))
 
 struct mv_xor_shared_private {
-	void __iomem	*xor_base;
-	void __iomem	*xor_high_base;
+    void __iomem	*xor_base;
+    void __iomem	*xor_high_base;
 };
 
 
@@ -67,12 +67,12 @@ struct mv_xor_shared_private {
  * @common: embedded struct dma_device
  */
 struct mv_xor_device {
-	struct platform_device		*pdev;
-	int				id;
-	dma_addr_t			dma_desc_pool;
-	void				*dma_desc_pool_virt;
-	struct dma_device		common;
-	struct mv_xor_shared_private	*shared;
+    struct platform_device		*pdev;
+    int				id;
+    dma_addr_t			dma_desc_pool;
+    void				*dma_desc_pool_virt;
+    struct dma_device		common;
+    struct mv_xor_shared_private	*shared;
 };
 
 /**
@@ -91,22 +91,22 @@ struct mv_xor_device {
  * @irq_tasklet: bottom half where mv_xor_slot_cleanup runs
  */
 struct mv_xor_chan {
-	int			pending;
-	spinlock_t		lock; /* protects the descriptor slot pool */
-	void __iomem		*mmr_base;
-	unsigned int		idx;
-	enum dma_transaction_type	current_type;
-	struct list_head	chain;
-	struct list_head	completed_slots;
-	struct mv_xor_device	*device;
-	struct dma_chan		common;
-	struct mv_xor_desc_slot	*last_used;
-	struct list_head	all_slots;
-	int			slots_allocated;
-	struct tasklet_struct	irq_tasklet;
+    int			pending;
+    spinlock_t		lock; /* protects the descriptor slot pool */
+    void __iomem		*mmr_base;
+    unsigned int		idx;
+    enum dma_transaction_type	current_type;
+    struct list_head	chain;
+    struct list_head	completed_slots;
+    struct mv_xor_device	*device;
+    struct dma_chan		common;
+    struct mv_xor_desc_slot	*last_used;
+    struct list_head	all_slots;
+    int			slots_allocated;
+    struct tasklet_struct	irq_tasklet;
 #ifdef USE_TIMER
-	unsigned long		cleanup_time;
-	u32			current_on_last_cleanup;
+    unsigned long		cleanup_time;
+    u32			current_on_last_cleanup;
 #endif
 };
 
@@ -129,41 +129,41 @@ struct mv_xor_chan {
  * @crc32_result: result crc calculation
  */
 struct mv_xor_desc_slot {
-	struct list_head	slot_node;
-	struct list_head	chain_node;
-	struct list_head	completed_node;
-	enum dma_transaction_type	type;
-	void			*hw_desc;
-	struct mv_xor_desc_slot	*group_head;
-	u16			slot_cnt;
-	u16			slots_per_op;
-	u16			idx;
-	u16			unmap_src_cnt;
-	u32			value;
-	size_t			unmap_len;
-	struct list_head	tx_list;
-	struct dma_async_tx_descriptor	async_tx;
-	union {
-		u32		*xor_check_result;
-		u32		*crc32_result;
-	};
+    struct list_head	slot_node;
+    struct list_head	chain_node;
+    struct list_head	completed_node;
+    enum dma_transaction_type	type;
+    void			*hw_desc;
+    struct mv_xor_desc_slot	*group_head;
+    u16			slot_cnt;
+    u16			slots_per_op;
+    u16			idx;
+    u16			unmap_src_cnt;
+    u32			value;
+    size_t			unmap_len;
+    struct list_head	tx_list;
+    struct dma_async_tx_descriptor	async_tx;
+    union {
+        u32		*xor_check_result;
+        u32		*crc32_result;
+    };
 #ifdef USE_TIMER
-	unsigned long		arrival_time;
-	struct timer_list	timeout;
+    unsigned long		arrival_time;
+    struct timer_list	timeout;
 #endif
 };
 
 /* This structure describes XOR descriptor size 64bytes	*/
 struct mv_xor_desc {
-	u32 status;		/* descriptor execution status */
-	u32 crc32_result;	/* result of CRC-32 calculation */
-	u32 desc_command;	/* type of operation to be carried out */
-	u32 phy_next_desc;	/* next descriptor address pointer */
-	u32 byte_count;		/* size of src/dst blocks in bytes */
-	u32 phy_dest_addr;	/* destination block address */
-	u32 phy_src_addr[8];	/* source block addresses */
-	u32 reserved0;
-	u32 reserved1;
+    u32 status;		/* descriptor execution status */
+    u32 crc32_result;	/* result of CRC-32 calculation */
+    u32 desc_command;	/* type of operation to be carried out */
+    u32 phy_next_desc;	/* next descriptor address pointer */
+    u32 byte_count;		/* size of src/dst blocks in bytes */
+    u32 phy_dest_addr;	/* destination block address */
+    u32 phy_src_addr[8];	/* source block addresses */
+    u32 reserved0;
+    u32 reserved1;
 };
 
 #define to_mv_sw_desc(addr_hw_desc)		\

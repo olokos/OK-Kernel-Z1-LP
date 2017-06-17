@@ -77,8 +77,8 @@ struct arch_vcpu_info {
 };
 
 struct xen_callback {
-	unsigned long cs;
-	unsigned long eip;
+    unsigned long cs;
+    unsigned long eip;
 };
 typedef struct xen_callback xen_callback_t;
 

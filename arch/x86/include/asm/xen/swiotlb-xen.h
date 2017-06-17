@@ -7,7 +7,9 @@ extern int __init pci_xen_swiotlb_detect(void);
 extern void __init pci_xen_swiotlb_init(void);
 #else
 #define xen_swiotlb (0)
-static inline int __init pci_xen_swiotlb_detect(void) { return 0; }
+static inline int __init pci_xen_swiotlb_detect(void) {
+    return 0;
+}
 static inline void __init pci_xen_swiotlb_init(void) { }
 #endif
 

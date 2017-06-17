@@ -84,300 +84,290 @@ static struct clk *clk;
 /*
  * Enabling and disabling functions.
  */
-static void coh901327_enable(u16 timeout)
-{
-	u16 val;
-	unsigned long freq;
-	unsigned long delay_ns;
+static void coh901327_enable(u16 timeout) {
+    u16 val;
+    unsigned long freq;
+    unsigned long delay_ns;
 
-	clk_enable(clk);
-	/* Restart timer if it is disabled */
-	val = readw(virtbase + U300_WDOG_D2R);
-	if (val == U300_WDOG_D2R_DISABLE_STATUS_DISABLED)
-		writew(U300_WDOG_RR_RESTART_VALUE_RESUME,
-		       virtbase + U300_WDOG_RR);
-	/* Acknowledge any pending interrupt so it doesn't just fire off */
-	writew(U300_WDOG_IER_WILL_BARK_IRQ_ACK_ENABLE,
-	       virtbase + U300_WDOG_IER);
-	/*
-	 * The interrupt is cleared in the 32 kHz clock domain.
-	 * Wait 3 32 kHz cycles for it to take effect
-	 */
-	freq = clk_get_rate(clk);
-	delay_ns = DIV_ROUND_UP(1000000000, freq); /* Freq to ns and round up */
-	delay_ns = 3 * delay_ns; /* Wait 3 cycles */
-	ndelay(delay_ns);
-	/* Enable the watchdog interrupt */
-	writew(U300_WDOG_IMR_WILL_BARK_IRQ_ENABLE, virtbase + U300_WDOG_IMR);
-	/* Activate the watchdog timer */
-	writew(timeout, virtbase + U300_WDOG_TR);
-	/* Start the watchdog timer */
-	writew(U300_WDOG_FR_FEED_RESTART_TIMER, virtbase + U300_WDOG_FR);
-	/*
-	 * Extra read so that this change propagate in the watchdog.
-	 */
-	(void) readw(virtbase + U300_WDOG_CR);
-	val = readw(virtbase + U300_WDOG_D2R);
-	clk_disable(clk);
-	if (val != U300_WDOG_D2R_DISABLE_STATUS_ENABLED)
-		dev_err(parent,
-			"%s(): watchdog not enabled! D2R value %04x\n",
-			__func__, val);
+    clk_enable(clk);
+    /* Restart timer if it is disabled */
+    val = readw(virtbase + U300_WDOG_D2R);
+    if (val == U300_WDOG_D2R_DISABLE_STATUS_DISABLED)
+        writew(U300_WDOG_RR_RESTART_VALUE_RESUME,
+               virtbase + U300_WDOG_RR);
+    /* Acknowledge any pending interrupt so it doesn't just fire off */
+    writew(U300_WDOG_IER_WILL_BARK_IRQ_ACK_ENABLE,
+           virtbase + U300_WDOG_IER);
+    /*
+     * The interrupt is cleared in the 32 kHz clock domain.
+     * Wait 3 32 kHz cycles for it to take effect
+     */
+    freq = clk_get_rate(clk);
+    delay_ns = DIV_ROUND_UP(1000000000, freq); /* Freq to ns and round up */
+    delay_ns = 3 * delay_ns; /* Wait 3 cycles */
+    ndelay(delay_ns);
+    /* Enable the watchdog interrupt */
+    writew(U300_WDOG_IMR_WILL_BARK_IRQ_ENABLE, virtbase + U300_WDOG_IMR);
+    /* Activate the watchdog timer */
+    writew(timeout, virtbase + U300_WDOG_TR);
+    /* Start the watchdog timer */
+    writew(U300_WDOG_FR_FEED_RESTART_TIMER, virtbase + U300_WDOG_FR);
+    /*
+     * Extra read so that this change propagate in the watchdog.
+     */
+    (void) readw(virtbase + U300_WDOG_CR);
+    val = readw(virtbase + U300_WDOG_D2R);
+    clk_disable(clk);
+    if (val != U300_WDOG_D2R_DISABLE_STATUS_ENABLED)
+        dev_err(parent,
+                "%s(): watchdog not enabled! D2R value %04x\n",
+                __func__, val);
 }
 
-static void coh901327_disable(void)
-{
-	u16 val;
+static void coh901327_disable(void) {
+    u16 val;
 
-	clk_enable(clk);
-	/* Disable the watchdog interrupt if it is active */
-	writew(0x0000U, virtbase + U300_WDOG_IMR);
-	/* If the watchdog is currently enabled, attempt to disable it */
-	val = readw(virtbase + U300_WDOG_D2R);
-	if (val != U300_WDOG_D2R_DISABLE_STATUS_DISABLED) {
-		writew(U300_WDOG_D1R_DISABLE1_DISABLE_TIMER,
-		       virtbase + U300_WDOG_D1R);
-		writew(U300_WDOG_D2R_DISABLE2_DISABLE_TIMER,
-		       virtbase + U300_WDOG_D2R);
-		/* Write this twice (else problems occur) */
-		writew(U300_WDOG_D2R_DISABLE2_DISABLE_TIMER,
-		       virtbase + U300_WDOG_D2R);
-	}
-	val = readw(virtbase + U300_WDOG_D2R);
-	clk_disable(clk);
-	if (val != U300_WDOG_D2R_DISABLE_STATUS_DISABLED)
-		dev_err(parent,
-			"%s(): watchdog not disabled! D2R value %04x\n",
-			__func__, val);
+    clk_enable(clk);
+    /* Disable the watchdog interrupt if it is active */
+    writew(0x0000U, virtbase + U300_WDOG_IMR);
+    /* If the watchdog is currently enabled, attempt to disable it */
+    val = readw(virtbase + U300_WDOG_D2R);
+    if (val != U300_WDOG_D2R_DISABLE_STATUS_DISABLED) {
+        writew(U300_WDOG_D1R_DISABLE1_DISABLE_TIMER,
+               virtbase + U300_WDOG_D1R);
+        writew(U300_WDOG_D2R_DISABLE2_DISABLE_TIMER,
+               virtbase + U300_WDOG_D2R);
+        /* Write this twice (else problems occur) */
+        writew(U300_WDOG_D2R_DISABLE2_DISABLE_TIMER,
+               virtbase + U300_WDOG_D2R);
+    }
+    val = readw(virtbase + U300_WDOG_D2R);
+    clk_disable(clk);
+    if (val != U300_WDOG_D2R_DISABLE_STATUS_DISABLED)
+        dev_err(parent,
+                "%s(): watchdog not disabled! D2R value %04x\n",
+                __func__, val);
 }
 
-static int coh901327_start(struct watchdog_device *wdt_dev)
-{
-	coh901327_enable(wdt_dev->timeout * 100);
-	return 0;
+static int coh901327_start(struct watchdog_device *wdt_dev) {
+    coh901327_enable(wdt_dev->timeout * 100);
+    return 0;
 }
 
-static int coh901327_stop(struct watchdog_device *wdt_dev)
-{
-	coh901327_disable();
-	return 0;
+static int coh901327_stop(struct watchdog_device *wdt_dev) {
+    coh901327_disable();
+    return 0;
 }
 
-static int coh901327_ping(struct watchdog_device *wdd)
-{
-	clk_enable(clk);
-	/* Feed the watchdog */
-	writew(U300_WDOG_FR_FEED_RESTART_TIMER,
-	       virtbase + U300_WDOG_FR);
-	clk_disable(clk);
-	return 0;
+static int coh901327_ping(struct watchdog_device *wdd) {
+    clk_enable(clk);
+    /* Feed the watchdog */
+    writew(U300_WDOG_FR_FEED_RESTART_TIMER,
+           virtbase + U300_WDOG_FR);
+    clk_disable(clk);
+    return 0;
 }
 
 static int coh901327_settimeout(struct watchdog_device *wdt_dev,
-				unsigned int time)
-{
-	wdt_dev->timeout = time;
-	clk_enable(clk);
-	/* Set new timeout value */
-	writew(time * 100, virtbase + U300_WDOG_TR);
-	/* Feed the dog */
-	writew(U300_WDOG_FR_FEED_RESTART_TIMER,
-	       virtbase + U300_WDOG_FR);
-	clk_disable(clk);
-	return 0;
+                                unsigned int time) {
+    wdt_dev->timeout = time;
+    clk_enable(clk);
+    /* Set new timeout value */
+    writew(time * 100, virtbase + U300_WDOG_TR);
+    /* Feed the dog */
+    writew(U300_WDOG_FR_FEED_RESTART_TIMER,
+           virtbase + U300_WDOG_FR);
+    clk_disable(clk);
+    return 0;
 }
 
-static unsigned int coh901327_gettimeleft(struct watchdog_device *wdt_dev)
-{
-	u16 val;
+static unsigned int coh901327_gettimeleft(struct watchdog_device *wdt_dev) {
+    u16 val;
 
-	clk_enable(clk);
-	/* Read repeatedly until the value is stable! */
-	val = readw(virtbase + U300_WDOG_CR);
-	while (val & U300_WDOG_CR_VALID_IND)
-		val = readw(virtbase + U300_WDOG_CR);
-	val &= U300_WDOG_CR_COUNT_VALUE_MASK;
-	clk_disable(clk);
-	if (val != 0)
-		val /= 100;
+    clk_enable(clk);
+    /* Read repeatedly until the value is stable! */
+    val = readw(virtbase + U300_WDOG_CR);
+    while (val & U300_WDOG_CR_VALID_IND)
+        val = readw(virtbase + U300_WDOG_CR);
+    val &= U300_WDOG_CR_COUNT_VALUE_MASK;
+    clk_disable(clk);
+    if (val != 0)
+        val /= 100;
 
-	return val;
+    return val;
 }
 
 /*
  * This interrupt occurs 10 ms before the watchdog WILL bark.
  */
-static irqreturn_t coh901327_interrupt(int irq, void *data)
-{
-	u16 val;
+static irqreturn_t coh901327_interrupt(int irq, void *data) {
+    u16 val;
 
-	/*
-	 * Ack IRQ? If this occurs we're FUBAR anyway, so
-	 * just acknowledge, disable the interrupt and await the imminent end.
-	 * If you at some point need a host of callbacks to be called
-	 * when the system is about to watchdog-reset, add them here!
-	 *
-	 * NOTE: on future versions of this IP-block, it will be possible
-	 * to prevent a watchdog reset by feeding the watchdog at this
-	 * point.
-	 */
-	clk_enable(clk);
-	val = readw(virtbase + U300_WDOG_IER);
-	if (val == U300_WDOG_IER_WILL_BARK_IRQ_EVENT_IND)
-		writew(U300_WDOG_IER_WILL_BARK_IRQ_ACK_ENABLE,
-		       virtbase + U300_WDOG_IER);
-	writew(0x0000U, virtbase + U300_WDOG_IMR);
-	clk_disable(clk);
-	dev_crit(parent, "watchdog is barking!\n");
-	return IRQ_HANDLED;
+    /*
+     * Ack IRQ? If this occurs we're FUBAR anyway, so
+     * just acknowledge, disable the interrupt and await the imminent end.
+     * If you at some point need a host of callbacks to be called
+     * when the system is about to watchdog-reset, add them here!
+     *
+     * NOTE: on future versions of this IP-block, it will be possible
+     * to prevent a watchdog reset by feeding the watchdog at this
+     * point.
+     */
+    clk_enable(clk);
+    val = readw(virtbase + U300_WDOG_IER);
+    if (val == U300_WDOG_IER_WILL_BARK_IRQ_EVENT_IND)
+        writew(U300_WDOG_IER_WILL_BARK_IRQ_ACK_ENABLE,
+               virtbase + U300_WDOG_IER);
+    writew(0x0000U, virtbase + U300_WDOG_IMR);
+    clk_disable(clk);
+    dev_crit(parent, "watchdog is barking!\n");
+    return IRQ_HANDLED;
 }
 
 static const struct watchdog_info coh901327_ident = {
-	.options = WDIOF_CARDRESET | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-	.identity = DRV_NAME,
+    .options = WDIOF_CARDRESET | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
+    .identity = DRV_NAME,
 };
 
 static struct watchdog_ops coh901327_ops = {
-	.owner = THIS_MODULE,
-	.start = coh901327_start,
-	.stop = coh901327_stop,
-	.ping = coh901327_ping,
-	.set_timeout = coh901327_settimeout,
-	.get_timeleft = coh901327_gettimeleft,
+    .owner = THIS_MODULE,
+    .start = coh901327_start,
+    .stop = coh901327_stop,
+    .ping = coh901327_ping,
+    .set_timeout = coh901327_settimeout,
+    .get_timeleft = coh901327_gettimeleft,
 };
 
 static struct watchdog_device coh901327_wdt = {
-	.info = &coh901327_ident,
-	.ops = &coh901327_ops,
-	/*
-	 * Max timeout is 327 since the 10ms
-	 * timeout register is max
-	 * 0x7FFF = 327670ms ~= 327s.
-	 */
-	.min_timeout = 0,
-	.max_timeout = 327,
+    .info = &coh901327_ident,
+    .ops = &coh901327_ops,
+    /*
+     * Max timeout is 327 since the 10ms
+     * timeout register is max
+     * 0x7FFF = 327670ms ~= 327s.
+     */
+    .min_timeout = 0,
+    .max_timeout = 327,
 };
 
-static int __exit coh901327_remove(struct platform_device *pdev)
-{
-	watchdog_unregister_device(&coh901327_wdt);
-	coh901327_disable();
-	free_irq(irq, pdev);
-	clk_put(clk);
-	iounmap(virtbase);
-	release_mem_region(phybase, physize);
-	return 0;
+static int __exit coh901327_remove(struct platform_device *pdev) {
+    watchdog_unregister_device(&coh901327_wdt);
+    coh901327_disable();
+    free_irq(irq, pdev);
+    clk_put(clk);
+    iounmap(virtbase);
+    release_mem_region(phybase, physize);
+    return 0;
 }
 
-static int __init coh901327_probe(struct platform_device *pdev)
-{
-	int ret;
-	u16 val;
-	struct resource *res;
+static int __init coh901327_probe(struct platform_device *pdev) {
+    int ret;
+    u16 val;
+    struct resource *res;
 
-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	if (!res)
-		return -ENOENT;
+    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    if (!res)
+        return -ENOENT;
 
-	parent = &pdev->dev;
-	physize = resource_size(res);
-	phybase = res->start;
+    parent = &pdev->dev;
+    physize = resource_size(res);
+    phybase = res->start;
 
-	if (request_mem_region(phybase, physize, DRV_NAME) == NULL) {
-		ret = -EBUSY;
-		goto out;
-	}
+    if (request_mem_region(phybase, physize, DRV_NAME) == NULL) {
+        ret = -EBUSY;
+        goto out;
+    }
 
-	virtbase = ioremap(phybase, physize);
-	if (!virtbase) {
-		ret = -ENOMEM;
-		goto out_no_remap;
-	}
+    virtbase = ioremap(phybase, physize);
+    if (!virtbase) {
+        ret = -ENOMEM;
+        goto out_no_remap;
+    }
 
-	clk = clk_get(&pdev->dev, NULL);
-	if (IS_ERR(clk)) {
-		ret = PTR_ERR(clk);
-		dev_err(&pdev->dev, "could not get clock\n");
-		goto out_no_clk;
-	}
-	ret = clk_enable(clk);
-	if (ret) {
-		dev_err(&pdev->dev, "could not enable clock\n");
-		goto out_no_clk_enable;
-	}
+    clk = clk_get(&pdev->dev, NULL);
+    if (IS_ERR(clk)) {
+        ret = PTR_ERR(clk);
+        dev_err(&pdev->dev, "could not get clock\n");
+        goto out_no_clk;
+    }
+    ret = clk_enable(clk);
+    if (ret) {
+        dev_err(&pdev->dev, "could not enable clock\n");
+        goto out_no_clk_enable;
+    }
 
-	val = readw(virtbase + U300_WDOG_SR);
-	switch (val) {
-	case U300_WDOG_SR_STATUS_TIMED_OUT:
-		dev_info(&pdev->dev,
-			"watchdog timed out since last chip reset!\n");
-		coh901327_wdt.bootstatus |= WDIOF_CARDRESET;
-		/* Status will be cleared below */
-		break;
-	case U300_WDOG_SR_STATUS_NORMAL:
-		dev_info(&pdev->dev,
-			"in normal status, no timeouts have occurred.\n");
-		break;
-	default:
-		dev_info(&pdev->dev,
-			"contains an illegal status code (%08x)\n", val);
-		break;
-	}
+    val = readw(virtbase + U300_WDOG_SR);
+    switch (val) {
+    case U300_WDOG_SR_STATUS_TIMED_OUT:
+        dev_info(&pdev->dev,
+                 "watchdog timed out since last chip reset!\n");
+        coh901327_wdt.bootstatus |= WDIOF_CARDRESET;
+        /* Status will be cleared below */
+        break;
+    case U300_WDOG_SR_STATUS_NORMAL:
+        dev_info(&pdev->dev,
+                 "in normal status, no timeouts have occurred.\n");
+        break;
+    default:
+        dev_info(&pdev->dev,
+                 "contains an illegal status code (%08x)\n", val);
+        break;
+    }
 
-	val = readw(virtbase + U300_WDOG_D2R);
-	switch (val) {
-	case U300_WDOG_D2R_DISABLE_STATUS_DISABLED:
-		dev_info(&pdev->dev, "currently disabled.\n");
-		break;
-	case U300_WDOG_D2R_DISABLE_STATUS_ENABLED:
-		dev_info(&pdev->dev,
-			 "currently enabled! (disabling it now)\n");
-		coh901327_disable();
-		break;
-	default:
-		dev_err(&pdev->dev,
-			"contains an illegal enable/disable code (%08x)\n",
-			val);
-		break;
-	}
+    val = readw(virtbase + U300_WDOG_D2R);
+    switch (val) {
+    case U300_WDOG_D2R_DISABLE_STATUS_DISABLED:
+        dev_info(&pdev->dev, "currently disabled.\n");
+        break;
+    case U300_WDOG_D2R_DISABLE_STATUS_ENABLED:
+        dev_info(&pdev->dev,
+                 "currently enabled! (disabling it now)\n");
+        coh901327_disable();
+        break;
+    default:
+        dev_err(&pdev->dev,
+                "contains an illegal enable/disable code (%08x)\n",
+                val);
+        break;
+    }
 
-	/* Reset the watchdog */
-	writew(U300_WDOG_SR_RESET_STATUS_RESET, virtbase + U300_WDOG_SR);
+    /* Reset the watchdog */
+    writew(U300_WDOG_SR_RESET_STATUS_RESET, virtbase + U300_WDOG_SR);
 
-	irq = platform_get_irq(pdev, 0);
-	if (request_irq(irq, coh901327_interrupt, 0,
-			DRV_NAME " Bark", pdev)) {
-		ret = -EIO;
-		goto out_no_irq;
-	}
+    irq = platform_get_irq(pdev, 0);
+    if (request_irq(irq, coh901327_interrupt, 0,
+                    DRV_NAME " Bark", pdev)) {
+        ret = -EIO;
+        goto out_no_irq;
+    }
 
-	clk_disable(clk);
+    clk_disable(clk);
 
-	if (margin < 1 || margin > 327)
-		margin = 60;
-	coh901327_wdt.timeout = margin;
+    if (margin < 1 || margin > 327)
+        margin = 60;
+    coh901327_wdt.timeout = margin;
 
-	ret = watchdog_register_device(&coh901327_wdt);
-	if (ret == 0)
-		dev_info(&pdev->dev,
-			 "initialized. timer margin=%d sec\n", margin);
-	else
-		goto out_no_wdog;
+    ret = watchdog_register_device(&coh901327_wdt);
+    if (ret == 0)
+        dev_info(&pdev->dev,
+                 "initialized. timer margin=%d sec\n", margin);
+    else
+        goto out_no_wdog;
 
-	return 0;
+    return 0;
 
 out_no_wdog:
-	free_irq(irq, pdev);
+    free_irq(irq, pdev);
 out_no_irq:
-	clk_disable(clk);
+    clk_disable(clk);
 out_no_clk_enable:
-	clk_put(clk);
+    clk_put(clk);
 out_no_clk:
-	iounmap(virtbase);
+    iounmap(virtbase);
 out_no_remap:
-	release_mem_region(phybase, SZ_4K);
+    release_mem_region(phybase, SZ_4K);
 out:
-	return ret;
+    return ret;
 }
 
 #ifdef CONFIG_PM
@@ -385,28 +375,26 @@ out:
 static u16 wdogenablestore;
 static u16 irqmaskstore;
 
-static int coh901327_suspend(struct platform_device *pdev, pm_message_t state)
-{
-	irqmaskstore = readw(virtbase + U300_WDOG_IMR) & 0x0001U;
-	wdogenablestore = readw(virtbase + U300_WDOG_D2R);
-	/* If watchdog is on, disable it here and now */
-	if (wdogenablestore == U300_WDOG_D2R_DISABLE_STATUS_ENABLED)
-		coh901327_disable();
-	return 0;
+static int coh901327_suspend(struct platform_device *pdev, pm_message_t state) {
+    irqmaskstore = readw(virtbase + U300_WDOG_IMR) & 0x0001U;
+    wdogenablestore = readw(virtbase + U300_WDOG_D2R);
+    /* If watchdog is on, disable it here and now */
+    if (wdogenablestore == U300_WDOG_D2R_DISABLE_STATUS_ENABLED)
+        coh901327_disable();
+    return 0;
 }
 
-static int coh901327_resume(struct platform_device *pdev)
-{
-	/* Restore the watchdog interrupt */
-	writew(irqmaskstore, virtbase + U300_WDOG_IMR);
-	if (wdogenablestore == U300_WDOG_D2R_DISABLE_STATUS_ENABLED) {
-		/* Restart the watchdog timer */
-		writew(U300_WDOG_RR_RESTART_VALUE_RESUME,
-		       virtbase + U300_WDOG_RR);
-		writew(U300_WDOG_FR_FEED_RESTART_TIMER,
-		       virtbase + U300_WDOG_FR);
-	}
-	return 0;
+static int coh901327_resume(struct platform_device *pdev) {
+    /* Restore the watchdog interrupt */
+    writew(irqmaskstore, virtbase + U300_WDOG_IMR);
+    if (wdogenablestore == U300_WDOG_D2R_DISABLE_STATUS_ENABLED) {
+        /* Restart the watchdog timer */
+        writew(U300_WDOG_RR_RESTART_VALUE_RESUME,
+               virtbase + U300_WDOG_RR);
+        writew(U300_WDOG_FR_FEED_RESTART_TIMER,
+               virtbase + U300_WDOG_FR);
+    }
+    return 0;
 }
 #else
 #define coh901327_suspend NULL
@@ -417,48 +405,45 @@ static int coh901327_resume(struct platform_device *pdev)
  * Mistreating the watchdog is the only way to perform a software reset of the
  * system on EMP platforms. So we implement this and export a symbol for it.
  */
-void coh901327_watchdog_reset(void)
-{
-	/* Enable even if on JTAG too */
-	writew(U300_WDOG_JOR_JTAG_WATCHDOG_ENABLE,
-	       virtbase + U300_WDOG_JOR);
-	/*
-	 * Timeout = 5s, we have to wait for the watchdog reset to
-	 * actually take place: the watchdog will be reloaded with the
-	 * default value immediately, so we HAVE to reboot and get back
-	 * into the kernel in 30s, or the device will reboot again!
-	 * The boot loader will typically deactivate the watchdog, so we
-	 * need time enough for the boot loader to get to the point of
-	 * deactivating the watchdog before it is shut down by it.
-	 *
-	 * NOTE: on future versions of the watchdog, this restriction is
-	 * gone: the watchdog will be reloaded with a default value (1 min)
-	 * instead of last value, and you can conveniently set the watchdog
-	 * timeout to 10ms (value = 1) without any problems.
-	 */
-	coh901327_enable(500);
-	/* Return and await doom */
+void coh901327_watchdog_reset(void) {
+    /* Enable even if on JTAG too */
+    writew(U300_WDOG_JOR_JTAG_WATCHDOG_ENABLE,
+           virtbase + U300_WDOG_JOR);
+    /*
+     * Timeout = 5s, we have to wait for the watchdog reset to
+     * actually take place: the watchdog will be reloaded with the
+     * default value immediately, so we HAVE to reboot and get back
+     * into the kernel in 30s, or the device will reboot again!
+     * The boot loader will typically deactivate the watchdog, so we
+     * need time enough for the boot loader to get to the point of
+     * deactivating the watchdog before it is shut down by it.
+     *
+     * NOTE: on future versions of the watchdog, this restriction is
+     * gone: the watchdog will be reloaded with a default value (1 min)
+     * instead of last value, and you can conveniently set the watchdog
+     * timeout to 10ms (value = 1) without any problems.
+     */
+    coh901327_enable(500);
+    /* Return and await doom */
 }
 
 static struct platform_driver coh901327_driver = {
-	.driver = {
-		.owner	= THIS_MODULE,
-		.name	= "coh901327_wdog",
-	},
-	.remove		= __exit_p(coh901327_remove),
-	.suspend	= coh901327_suspend,
-	.resume		= coh901327_resume,
+    .driver = {
+        .owner	= THIS_MODULE,
+        .name	= "coh901327_wdog",
+    },
+    .remove		= __exit_p(coh901327_remove),
+    .suspend	= coh901327_suspend,
+    .resume		= coh901327_resume,
 };
 
-static int __init coh901327_init(void)
-{
-	return platform_driver_probe(&coh901327_driver, coh901327_probe);
+static int __init coh901327_init(void) {
+    return platform_driver_probe(&coh901327_driver, coh901327_probe);
 }
 module_init(coh901327_init);
 
-static void __exit coh901327_exit(void)
-{
-	platform_driver_unregister(&coh901327_driver);
+static void __exit coh901327_exit(void) {
+    platform_driver_unregister(&coh901327_driver);
 }
 module_exit(coh901327_exit);
 

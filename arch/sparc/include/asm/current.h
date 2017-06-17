@@ -24,9 +24,8 @@ register struct task_struct *current asm("g4");
  * We also obfuscate get_current() to check if anyone used that by mistake.
  */
 struct task_struct;
-static inline struct task_struct *__get_current(void)
-{
-	return current_thread_info()->task;
+static inline struct task_struct *__get_current(void) {
+    return current_thread_info()->task;
 }
 #define current __get_current()
 #endif

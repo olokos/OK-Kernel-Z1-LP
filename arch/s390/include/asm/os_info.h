@@ -16,20 +16,20 @@
 #define OS_INFO_INIT_FN		2
 
 struct os_info_entry {
-	u64	addr;
-	u64	size;
-	u32	csum;
+    u64	addr;
+    u64	size;
+    u32	csum;
 } __packed;
 
 struct os_info {
-	u64	magic;
-	u32	csum;
-	u16	version_major;
-	u16	version_minor;
-	u64	crashkernel_addr;
-	u64	crashkernel_size;
-	struct os_info_entry entry[3];
-	u8	reserved[4004];
+    u64	magic;
+    u32	csum;
+    u16	version_major;
+    u16	version_minor;
+    u64	crashkernel_addr;
+    u64	crashkernel_size;
+    struct os_info_entry entry[3];
+    u8	reserved[4004];
 } __packed;
 
 void os_info_init(void);
@@ -41,9 +41,8 @@ u32 os_info_csum(struct os_info *os_info);
 void *os_info_old_entry(int nr, unsigned long *size);
 int copy_from_oldmem(void *dest, void *src, size_t count);
 #else
-static inline void *os_info_old_entry(int nr, unsigned long *size)
-{
-	return NULL;
+static inline void *os_info_old_entry(int nr, unsigned long *size) {
+    return NULL;
 }
 #endif
 

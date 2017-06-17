@@ -34,43 +34,40 @@
  * System Configuration Pointer Struct
  */
 
-struct scp_struct
-{
-	u16 zero_dum0;	/* has to be zero */
-	u8 sysbus;	/* 0=16Bit,1=8Bit */
-	u8 zero_dum1;	/* has to be zero for 586 */
-	u16 zero_dum2;
-	u16 zero_dum3;
-	u32 iscp;		/* pointer to the iscp-block */
+struct scp_struct {
+    u16 zero_dum0;	/* has to be zero */
+    u8 sysbus;	/* 0=16Bit,1=8Bit */
+    u8 zero_dum1;	/* has to be zero for 586 */
+    u16 zero_dum2;
+    u16 zero_dum3;
+    u32 iscp;		/* pointer to the iscp-block */
 };
 
 
 /*
  * Intermediate System Configuration Pointer (ISCP)
  */
-struct iscp_struct
-{
-	u8 busy;          /* 586 clears after successful init */
-	u8 zero_dummy;    /* has to be zero */
-	u16 scb_offset;    /* pointeroffset to the scb_base */
-	u32 scb_base;      /* base-address of all 16-bit offsets */
+struct iscp_struct {
+    u8 busy;          /* 586 clears after successful init */
+    u8 zero_dummy;    /* has to be zero */
+    u16 scb_offset;    /* pointeroffset to the scb_base */
+    u32 scb_base;      /* base-address of all 16-bit offsets */
 };
 
 /*
  * System Control Block (SCB)
  */
-struct scb_struct
-{
-	u8 rus;
-	u8 cus;
-	u8 cmd_ruc;        /* command word: RU part */
-	u8 cmd_cuc;        /* command word: CU part & ACK */
-	u16 cbl_offset;    /* pointeroffset, command block list */
-	u16 rfa_offset;    /* pointeroffset, receive frame area */
-	u16 crc_errs;      /* CRC-Error counter */
-	u16 aln_errs;      /* alignmenterror counter */
-	u16 rsc_errs;      /* Resourceerror counter */
-	u16 ovrn_errs;     /* OVerrunerror counter */
+struct scb_struct {
+    u8 rus;
+    u8 cus;
+    u8 cmd_ruc;        /* command word: RU part */
+    u8 cmd_cuc;        /* command word: CU part & ACK */
+    u16 cbl_offset;    /* pointeroffset, command block list */
+    u16 rfa_offset;    /* pointeroffset, receive frame area */
+    u16 crc_errs;      /* CRC-Error counter */
+    u16 aln_errs;      /* alignmenterror counter */
+    u16 rsc_errs;      /* Resourceerror counter */
+    u16 ovrn_errs;     /* OVerrunerror counter */
 };
 
 /*
@@ -117,18 +114,17 @@ struct scb_struct
 /*
  * Receive Frame Descriptor (RFD)
  */
-struct rfd_struct
-{
-	u8  stat_low;	/* status word */
-	u8  stat_high;	/* status word */
-	u8  rfd_sf;	/* 82596 mode only */
-	u8  last;		/* Bit15,Last Frame on List / Bit14,suspend */
-	u16 next;		/* linkoffset to next RFD */
-	u16 rbd_offset;	/* pointeroffset to RBD-buffer */
-	u8  dest[6];	/* ethernet-address, destination */
-	u8  source[6];	/* ethernet-address, source */
-	u16 length;	/* 802.3 frame-length */
-	u16 zero_dummy;	/* dummy */
+struct rfd_struct {
+    u8  stat_low;	/* status word */
+    u8  stat_high;	/* status word */
+    u8  rfd_sf;	/* 82596 mode only */
+    u8  last;		/* Bit15,Last Frame on List / Bit14,suspend */
+    u16 next;		/* linkoffset to next RFD */
+    u16 rbd_offset;	/* pointeroffset to RBD-buffer */
+    u8  dest[6];	/* ethernet-address, destination */
+    u8  source[6];	/* ethernet-address, source */
+    u16 length;	/* 802.3 frame-length */
+    u16 zero_dummy;	/* dummy */
 };
 
 #define RFD_LAST     0x80	/* last: last rfd in the list */
@@ -151,13 +147,12 @@ struct rfd_struct
 /*
  * Receive Buffer Descriptor (RBD)
  */
-struct rbd_struct
-{
-	u16 status;	/* status word,number of used bytes in buff */
-	u16 next;		/* pointeroffset to next RBD */
-	u32 buffer;	/* receive buffer address pointer */
-	u16 size;		/* size of this buffer */
-	u16 zero_dummy;    /* dummy */
+struct rbd_struct {
+    u16 status;	/* status word,number of used bytes in buff */
+    u16 next;		/* pointeroffset to next RBD */
+    u32 buffer;	/* receive buffer address pointer */
+    u16 size;		/* size of this buffer */
+    u16 zero_dummy;    /* dummy */
 };
 
 #define RBD_LAST	0x8000	/* last buffer */
@@ -193,80 +188,74 @@ struct rbd_struct
 /*
  * NOP - command
  */
-struct nop_cmd_struct
-{
-	u16 cmd_status;	/* status of this command */
-	u16 cmd_cmd;       /* the command itself (+bits) */
-	u16 cmd_link;      /* offsetpointer to next command */
+struct nop_cmd_struct {
+    u16 cmd_status;	/* status of this command */
+    u16 cmd_cmd;       /* the command itself (+bits) */
+    u16 cmd_link;      /* offsetpointer to next command */
 };
 
 /*
  * IA Setup command
  */
-struct iasetup_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u8  iaddr[6];
+struct iasetup_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u8  iaddr[6];
 };
 
 /*
  * Configure command
  */
-struct configure_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u8  byte_cnt;   /* size of the config-cmd */
-	u8  fifo;       /* fifo/recv monitor */
-	u8  sav_bf;     /* save bad frames (bit7=1)*/
-	u8  adr_len;    /* adr_len(0-2),al_loc(3),pream(4-5),loopbak(6-7)*/
-	u8  priority;   /* lin_prio(0-2),exp_prio(4-6),bof_metd(7) */
-	u8  ifs;        /* inter frame spacing */
-	u8  time_low;   /* slot time low */
-	u8  time_high;  /* slot time high(0-2) and max. retries(4-7) */
-	u8  promisc;    /* promisc-mode(0) , et al (1-7) */
-	u8  carr_coll;  /* carrier(0-3)/collision(4-7) stuff */
-	u8  fram_len;   /* minimal frame len */
-	u8  dummy;	     /* dummy */
+struct configure_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u8  byte_cnt;   /* size of the config-cmd */
+    u8  fifo;       /* fifo/recv monitor */
+    u8  sav_bf;     /* save bad frames (bit7=1)*/
+    u8  adr_len;    /* adr_len(0-2),al_loc(3),pream(4-5),loopbak(6-7)*/
+    u8  priority;   /* lin_prio(0-2),exp_prio(4-6),bof_metd(7) */
+    u8  ifs;        /* inter frame spacing */
+    u8  time_low;   /* slot time low */
+    u8  time_high;  /* slot time high(0-2) and max. retries(4-7) */
+    u8  promisc;    /* promisc-mode(0) , et al (1-7) */
+    u8  carr_coll;  /* carrier(0-3)/collision(4-7) stuff */
+    u8  fram_len;   /* minimal frame len */
+    u8  dummy;	     /* dummy */
 };
 
 /*
  * Multicast Setup command
  */
-struct mcsetup_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u16 mc_cnt;		/* number of bytes in the MC-List */
-	u8  mc_list[0][6];  	/* pointer to 6 bytes entries */
+struct mcsetup_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u16 mc_cnt;		/* number of bytes in the MC-List */
+    u8  mc_list[0][6];  	/* pointer to 6 bytes entries */
 };
 
 /*
  * DUMP command
  */
-struct dump_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u16 dump_offset;    /* pointeroffset to DUMP space */
+struct dump_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u16 dump_offset;    /* pointeroffset to DUMP space */
 };
 
 /*
  * transmit command
  */
-struct transmit_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u16 tbd_offset;	/* pointeroffset to TBD */
-	u8  dest[6];       /* destination address of the frame */
-	u16 length;	/* user defined: 802.3 length / Ether type */
+struct transmit_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u16 tbd_offset;	/* pointeroffset to TBD */
+    u8  dest[6];       /* destination address of the frame */
+    u16 length;	/* user defined: 802.3 length / Ether type */
 };
 
 #define TCMD_ERRMASK     0x0fa0
@@ -279,12 +268,11 @@ struct transmit_cmd_struct
 #define TCMD_NOCARRIER   0x0400
 #define TCMD_LATECOLL    0x0800
 
-struct tdr_cmd_struct
-{
-	u16 cmd_status;
-	u16 cmd_cmd;
-	u16 cmd_link;
-	u16 status;
+struct tdr_cmd_struct {
+    u16 cmd_status;
+    u16 cmd_cmd;
+    u16 cmd_link;
+    u16 status;
 };
 
 #define TDR_LNK_OK	0x8000	/* No link problem identified */
@@ -296,11 +284,10 @@ struct tdr_cmd_struct
 /*
  * Transmit Buffer Descriptor (TBD)
  */
-struct tbd_struct
-{
-	u16 size;		/* size + EOF-Flag(15) */
-	u16 next;          /* pointeroffset to next TBD */
-	u32 buffer;        /* pointer to buffer */
+struct tbd_struct {
+    u16 size;		/* size + EOF-Flag(15) */
+    u16 next;          /* pointeroffset to next TBD */
+    u32 buffer;        /* pointer to buffer */
 };
 
 #define TBD_LAST 0x8000         /* EOF-Flag, indicates last buffer in list */

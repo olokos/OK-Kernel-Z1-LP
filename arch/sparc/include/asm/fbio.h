@@ -10,19 +10,19 @@
 /* Frame buffer types */
 #define FBTYPE_NOTYPE           -1
 #define FBTYPE_SUN1BW           0   /* mono */
-#define FBTYPE_SUN1COLOR        1 
-#define FBTYPE_SUN2BW           2 
-#define FBTYPE_SUN2COLOR        3 
-#define FBTYPE_SUN2GP           4 
-#define FBTYPE_SUN5COLOR        5 
-#define FBTYPE_SUN3COLOR        6 
-#define FBTYPE_MEMCOLOR         7 
-#define FBTYPE_SUN4COLOR        8 
- 
-#define FBTYPE_NOTSUN1          9 
+#define FBTYPE_SUN1COLOR        1
+#define FBTYPE_SUN2BW           2
+#define FBTYPE_SUN2COLOR        3
+#define FBTYPE_SUN2GP           4
+#define FBTYPE_SUN5COLOR        5
+#define FBTYPE_SUN3COLOR        6
+#define FBTYPE_MEMCOLOR         7
+#define FBTYPE_SUN4COLOR        8
+
+#define FBTYPE_NOTSUN1          9
 #define FBTYPE_NOTSUN2          10
 #define FBTYPE_NOTSUN3          11
- 
+
 #define FBTYPE_SUNFAST_COLOR    12  /* cg6 */
 #define FBTYPE_SUNROP_COLOR     13
 #define FBTYPE_SUNFB_VIDEO      14
@@ -47,21 +47,21 @@
 /* fbio ioctls */
 /* Returned by FBIOGTYPE */
 struct  fbtype {
-        int     fb_type;        /* fb type, see above */
-        int     fb_height;      /* pixels */
-        int     fb_width;       /* pixels */
-        int     fb_depth;
-        int     fb_cmsize;      /* color map entries */
-        int     fb_size;        /* fb size in bytes */
+    int     fb_type;        /* fb type, see above */
+    int     fb_height;      /* pixels */
+    int     fb_width;       /* pixels */
+    int     fb_depth;
+    int     fb_cmsize;      /* color map entries */
+    int     fb_size;        /* fb size in bytes */
 };
 #define FBIOGTYPE _IOR('F', 0, struct fbtype)
 
 struct  fbcmap {
-        int             index;          /* first element (0 origin) */
-        int             count;
-        unsigned char   __user *red;
-        unsigned char   __user *green;
-        unsigned char   __user *blue;
+    int             index;          /* first element (0 origin) */
+    int             count;
+    unsigned char   __user *red;
+    unsigned char   __user *green;
+    unsigned char   __user *blue;
 };
 
 #ifdef __KERNEL__
@@ -76,19 +76,19 @@ struct  fbcmap {
 #define FB_ATTR_NDEVSPECIFIC    8
 /* # of possible emulations */
 #define FB_ATTR_NEMUTYPES       4
- 
+
 struct fbsattr {
-        int     flags;
-        int     emu_type;	/* -1 if none */
-        int     dev_specific[FB_ATTR_NDEVSPECIFIC];
+    int     flags;
+    int     emu_type;	/* -1 if none */
+    int     dev_specific[FB_ATTR_NDEVSPECIFIC];
 };
- 
+
 struct fbgattr {
-        int     real_type;	/* real frame buffer type */
-        int     owner;		/* unknown */
-        struct fbtype fbtype;	/* real frame buffer fbtype */
-        struct fbsattr sattr;   
-        int     emu_types[FB_ATTR_NEMUTYPES]; /* supported emulations */
+    int     real_type;	/* real frame buffer type */
+    int     owner;		/* unknown */
+    struct fbtype fbtype;	/* real frame buffer fbtype */
+    struct fbsattr sattr;
+    int     emu_types[FB_ATTR_NEMUTYPES]; /* supported emulations */
 };
 #define FBIOSATTR  _IOW('F', 5, struct fbgattr) /* Unsupported: */
 #define FBIOGATTR  _IOR('F', 6, struct fbgattr)	/* supported */
@@ -97,24 +97,24 @@ struct fbgattr {
 #define FBIOGVIDEO _IOR('F', 8, int)
 
 struct fbcursor {
-        short set;              /* what to set, choose from the list above */
-        short enable;           /* cursor on/off */
-        struct fbcurpos pos;    /* cursor position */
-        struct fbcurpos hot;    /* cursor hot spot */
-        struct fbcmap cmap;     /* color map info */
-        struct fbcurpos size;   /* cursor bit map size */
-        char __user *image;     /* cursor image bits */
-        char __user *mask;      /* cursor mask bits */
+    short set;              /* what to set, choose from the list above */
+    short enable;           /* cursor on/off */
+    struct fbcurpos pos;    /* cursor position */
+    struct fbcurpos hot;    /* cursor hot spot */
+    struct fbcmap cmap;     /* color map info */
+    struct fbcurpos size;   /* cursor bit map size */
+    char __user *image;     /* cursor image bits */
+    char __user *mask;      /* cursor mask bits */
 };
 
 /* set/get cursor attributes/shape */
 #define FBIOSCURSOR     _IOW('F', 24, struct fbcursor)
 #define FBIOGCURSOR     _IOWR('F', 25, struct fbcursor)
- 
+
 /* set/get cursor position */
 #define FBIOSCURPOS     _IOW('F', 26, struct fbcurpos)
 #define FBIOGCURPOS     _IOW('F', 27, struct fbcurpos)
- 
+
 /* get max cursor size */
 #define FBIOGCURMAX     _IOR('F', 28, struct fbcurpos)
 
@@ -124,20 +124,20 @@ struct fb_wid_alloc {
 #define FB_WID_SHARED_24	1
 #define FB_WID_DBL_8		2
 #define FB_WID_DBL_24		3
-	__u32	wa_type;
-	__s32	wa_index;	/* Set on return */
-	__u32	wa_count;	
+    __u32	wa_type;
+    __s32	wa_index;	/* Set on return */
+    __u32	wa_count;
 };
 struct fb_wid_item {
-	__u32	wi_type;
-	__s32	wi_index;
-	__u32	wi_attrs;
-	__u32	wi_values[32];
+    __u32	wi_type;
+    __s32	wi_index;
+    __u32	wi_attrs;
+    __u32	wi_values[32];
 };
 struct fb_wid_list {
-	__u32	wl_flags;
-	__u32	wl_count;
-	struct fb_wid_item	*wl_list;
+    __u32	wl_flags;
+    __u32	wl_count;
+    struct fb_wid_item	*wl_list;
 };
 
 #define FBIO_WID_ALLOC	_IOWR('F', 30, struct fb_wid_alloc)
@@ -170,13 +170,13 @@ struct fb_wid_list {
 #    define MDI_8_PIX      8
 
 struct mdi_cfginfo {
-	int     mdi_ncluts;     /* Number of implemented CLUTs in this MDI */
-        int     mdi_type;       /* FBTYPE name */
-        int     mdi_height;     /* height */
-        int     mdi_width;      /* width */
-        int     mdi_size;       /* available ram */
-        int     mdi_mode;       /* 8bpp, 16bpp or 32bpp */
-        int     mdi_pixfreq;    /* pixel clock (from PROM) */
+    int     mdi_ncluts;     /* Number of implemented CLUTs in this MDI */
+    int     mdi_type;       /* FBTYPE name */
+    int     mdi_height;     /* height */
+    int     mdi_width;      /* width */
+    int     mdi_size;       /* available ram */
+    int     mdi_mode;       /* 8bpp, 16bpp or 32bpp */
+    int     mdi_pixfreq;    /* pixel clock (from PROM) */
 };
 
 /* SparcLinux specific ioctl for the MDI, should be replaced for
@@ -186,30 +186,30 @@ struct mdi_cfginfo {
 
 /* leo & ffb ioctls */
 struct fb_clut_alloc {
-	__u32	clutid;	/* Set on return */
- 	__u32	flag;
- 	__u32	index;
+    __u32	clutid;	/* Set on return */
+    __u32	flag;
+    __u32	index;
 };
 
 struct fb_clut {
 #define FB_CLUT_WAIT	0x00000001	/* Not yet implemented */
- 	__u32	flag;
- 	__u32	clutid;
- 	__u32	offset;
- 	__u32	count;
- 	char *	red;
- 	char *	green;
- 	char *	blue;
+    __u32	flag;
+    __u32	clutid;
+    __u32	offset;
+    __u32	count;
+    char *	red;
+    char *	green;
+    char *	blue;
 };
 
 struct fb_clut32 {
- 	__u32	flag;
- 	__u32	clutid;
- 	__u32	offset;
- 	__u32	count;
- 	__u32	red;
- 	__u32	green;
- 	__u32	blue;
+    __u32	flag;
+    __u32	clutid;
+    __u32	offset;
+    __u32	count;
+    __u32	red;
+    __u32	green;
+    __u32	blue;
 };
 
 #define LEO_CLUTALLOC	_IOWR('L', 53, struct fb_clut_alloc)
@@ -302,25 +302,25 @@ struct fb_clut32 {
 
 #ifdef __KERNEL__
 struct  fbcmap32 {
-	int             index;          /* first element (0 origin) */
-	int             count;
-	u32		red;
-	u32		green;
-	u32		blue;
+    int             index;          /* first element (0 origin) */
+    int             count;
+    u32		red;
+    u32		green;
+    u32		blue;
 };
 
 #define FBIOPUTCMAP32	_IOW('F', 3, struct fbcmap32)
 #define FBIOGETCMAP32	_IOW('F', 4, struct fbcmap32)
 
 struct fbcursor32 {
-	short set;		/* what to set, choose from the list above */
-	short enable;		/* cursor on/off */
-	struct fbcurpos pos;	/* cursor position */
-	struct fbcurpos hot;	/* cursor hot spot */
-	struct fbcmap32 cmap;	/* color map info */
-	struct fbcurpos size;	/* cursor bit map size */
-	u32	image;		/* cursor image bits */
-	u32	mask;		/* cursor mask bits */
+    short set;		/* what to set, choose from the list above */
+    short enable;		/* cursor on/off */
+    struct fbcurpos pos;	/* cursor position */
+    struct fbcurpos hot;	/* cursor hot spot */
+    struct fbcmap32 cmap;	/* color map info */
+    struct fbcurpos size;	/* cursor bit map size */
+    u32	image;		/* cursor image bits */
+    u32	mask;		/* cursor mask bits */
 };
 
 #define FBIOSCURSOR32	_IOW('F', 24, struct fbcursor32)

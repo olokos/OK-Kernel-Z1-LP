@@ -21,9 +21,8 @@
 #define MIN_PROBE_IRQ			(NR_IRQS - 32)
 
 #ifndef __ASSEMBLY__
-static inline int irq_canonicalize(int irq)
-{
-	return irq;
+static inline int irq_canonicalize(int irq) {
+    return irq;
 }
 #endif
 

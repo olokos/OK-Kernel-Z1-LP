@@ -50,15 +50,13 @@ static int btc_msg_callback (struct sk_buff * skb);
  * Send a netlink message to the user space.
  * Destination pid as zero implies broadcast
  */
-void send_btc_nlink_msg (int type, int dest_pid)
-{
+void send_btc_nlink_msg (int type, int dest_pid) {
     struct sk_buff *skb;
     struct nlmsghdr *nlh;
     tAniMsgHdr *aniHdr;
     tWlanAssocData *assocData;
     skb = alloc_skb(NLMSG_SPACE(WLAN_NL_MAX_PAYLOAD), GFP_KERNEL);
-    if(skb == NULL)
-    {
+    if(skb == NULL) {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "BTC: alloc_skb failed\n");
         return;
@@ -72,19 +70,16 @@ void send_btc_nlink_msg (int type, int dest_pid)
     aniHdr->type = type;
 
     /* Set BTC driver mode correctly based on received events type */
-    if(type == WLAN_BTC_SOFTAP_BSS_START)
-    {
+    if(type == WLAN_BTC_SOFTAP_BSS_START) {
         /* Event is SoftAP BSS Start set BTC driver mode to SoftAP */
         gBtcDriverMode = WLAN_HDD_SOFTAP;
     }
-    if(type == WLAN_STA_ASSOC_DONE_IND)
-    {
+    if(type == WLAN_STA_ASSOC_DONE_IND) {
         /* Event is STA Assoc done set BTC driver mode to INFRA STA*/
         gBtcDriverMode = WLAN_HDD_INFRA_STATION;
     }
 
-    switch( type )
-    {
+    switch( type ) {
     case WLAN_STA_DISASSOC_DONE_IND:
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_LOW,
                    "WiFi unassociated; gAmpChannel %d gWiFiChannel %d", gAmpChannel, gWiFiChannel);
@@ -93,8 +88,7 @@ void send_btc_nlink_msg (int type, int dest_pid)
            Or, if WiFi wasn't using a channel before, no message sent.
            Logic presumes same channel has to be used for WiFi and AMP if both are active.
            In any case, track the WiFi channel in use (none) */
-        if((gAmpChannel != 0) || (gWiFiChannel == 0))
-        {
+        if((gAmpChannel != 0) || (gWiFiChannel == 0)) {
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_LOW,
                        "No msg for AFH will be sent");
             gWiFiChannel = 0;
@@ -125,14 +119,12 @@ void send_btc_nlink_msg (int type, int dest_pid)
                    assocData->channel, gAmpChannel, gWiFiChannel);
 
         /* If WiFi has finished associating */
-        if(type == WLAN_STA_ASSOC_DONE_IND)
-        {
+        if(type == WLAN_STA_ASSOC_DONE_IND) {
             /* If AMP is using a channel (non-zero), no message sent.
                Or, if the WiFi channel did not change, no message sent.
                Logic presumes same channel has to be used for WiFi and AMP if both are active.
                In any case, track the WiFi channel in use (1-13 or none, in assocData->channel) */
-            if((gAmpChannel != 0) || (assocData->channel == gWiFiChannel))
-            {
+            if((gAmpChannel != 0) || (assocData->channel == gWiFiChannel)) {
                 VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_LOW,
                            "No msg for AFH will be sent");
                 gWiFiChannel = assocData->channel;
@@ -140,8 +132,7 @@ void send_btc_nlink_msg (int type, int dest_pid)
                 return;
             }
         }
-        if(type == WLAN_BTC_SOFTAP_BSS_START)
-        {
+        if(type == WLAN_BTC_SOFTAP_BSS_START) {
             /*Replace WLAN_BTC_SOFTAP_BSS_START by WLAN_STA_ASSOC_DONE_IND*/
             aniHdr->type = WLAN_STA_ASSOC_DONE_IND;
         }
@@ -160,8 +151,7 @@ void send_btc_nlink_msg (int type, int dest_pid)
            Or, if the AMP channel did not change, no message sent.
            Logic presumes same channel has to be used for WiFi and AMP if both are active.
            In any case, track the AMP channel in use (1-13 or none, in dest_pid) */
-        if((gWiFiChannel != 0) || (dest_pid == gAmpChannel))
-        {
+        if((gWiFiChannel != 0) || (dest_pid == gAmpChannel)) {
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_LOW,
                        "No msg for AFH will be sent");
             gAmpChannel = dest_pid;
@@ -172,17 +162,14 @@ void send_btc_nlink_msg (int type, int dest_pid)
         gAmpChannel = dest_pid;
 
         /* Fix overloaded parameters and finish message formatting */
-        if(dest_pid != 0)
-        {
+        if(dest_pid != 0) {
             aniHdr->type = WLAN_STA_ASSOC_DONE_IND;
             aniHdr->length = sizeof(tWlanAssocData);
             nlh->nlmsg_len = NLMSG_LENGTH((sizeof(tAniMsgHdr) + sizeof(tWlanAssocData)));
             assocData = ( tWlanAssocData *)((char*)aniHdr + sizeof(tAniMsgHdr));
             assocData->channel = dest_pid;
             skb_put(skb, NLMSG_SPACE((sizeof(tAniMsgHdr)+ sizeof(tWlanAssocData))));
-        }
-        else
-        {
+        } else {
             aniHdr->type = WLAN_STA_DISASSOC_DONE_IND;
             aniHdr->length = 0;
             nlh->nlmsg_len = NLMSG_LENGTH((sizeof(tAniMsgHdr)));
@@ -206,8 +193,7 @@ void send_btc_nlink_msg (int type, int dest_pid)
  * Activate BTC handler. This will register a handler to receive
  * netlink messages addressed to WLAN_NL_MSG_BTC from user space
  */
-int btc_activate_service(void *pAdapter)
-{
+int btc_activate_service(void *pAdapter) {
     pHddCtx = (struct hdd_context_s*)pAdapter;
 
     //Register the msg handler for msgs addressed to ANI_NL_MSG_BTC
@@ -218,8 +204,7 @@ int btc_activate_service(void *pAdapter)
  * Callback function invoked by Netlink service for all netlink
  * messages (from user space) addressed to WLAN_NL_MSG_BTC
  */
-int btc_msg_callback (struct sk_buff * skb)
-{
+int btc_msg_callback (struct sk_buff * skb) {
     struct nlmsghdr *nlh;
     tAniMsgHdr *msg_hdr;
     tSmeBtEvent *btEvent = NULL;
@@ -227,8 +212,7 @@ int btc_msg_callback (struct sk_buff * skb)
     msg_hdr = NLMSG_DATA(nlh);
 
     /* Continue with parsing payload. */
-    switch(msg_hdr->type)
-    {
+    switch(msg_hdr->type) {
     case WLAN_BTC_QUERY_STATE_REQ:
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
                    "BTC: Received probe from BTC Service\n");
@@ -237,8 +221,7 @@ int btc_msg_callback (struct sk_buff * skb)
     case WLAN_BTC_BT_EVENT_IND:
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
                    "BTC: Received Bluetooth event indication\n");
-        if(msg_hdr->length != sizeof(tSmeBtEvent))
-        {
+        if(msg_hdr->length != sizeof(tSmeBtEvent)) {
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                        "BTC: Size mismatch in BT event data\n");
             break;

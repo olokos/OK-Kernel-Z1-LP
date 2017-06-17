@@ -30,36 +30,36 @@
  * Per device, used to track global memory allocations.
  */
 struct ilo_hwinfo {
-	/* mmio registers on device */
-	char __iomem *mmio_vaddr;
+    /* mmio registers on device */
+    char __iomem *mmio_vaddr;
 
-	/* doorbell registers on device */
-	char __iomem *db_vaddr;
+    /* doorbell registers on device */
+    char __iomem *db_vaddr;
 
-	/* shared memory on device used for channel control blocks */
-	char __iomem *ram_vaddr;
+    /* shared memory on device used for channel control blocks */
+    char __iomem *ram_vaddr;
 
-	/* files corresponding to this device */
-	struct ccb_data *ccb_alloc[MAX_CCB];
+    /* files corresponding to this device */
+    struct ccb_data *ccb_alloc[MAX_CCB];
 
-	struct pci_dev *ilo_dev;
+    struct pci_dev *ilo_dev;
 
-	/*
-	 * open_lock      serializes ccb_cnt during open and close
-	 * [ irq disabled ]
-	 * -> alloc_lock  used when adding/removing/searching ccb_alloc,
-	 *                which represents all ccbs open on the device
-	 * --> fifo_lock  controls access to fifo queues shared with hw
-	 *
-	 * Locks must be taken in this order, but open_lock and alloc_lock
-	 * are optional, they do not need to be held in order to take a
-	 * lower level lock.
-	 */
-	spinlock_t open_lock;
-	spinlock_t alloc_lock;
-	spinlock_t fifo_lock;
+    /*
+     * open_lock      serializes ccb_cnt during open and close
+     * [ irq disabled ]
+     * -> alloc_lock  used when adding/removing/searching ccb_alloc,
+     *                which represents all ccbs open on the device
+     * --> fifo_lock  controls access to fifo queues shared with hw
+     *
+     * Locks must be taken in this order, but open_lock and alloc_lock
+     * are optional, they do not need to be held in order to take a
+     * lower level lock.
+     */
+    spinlock_t open_lock;
+    spinlock_t alloc_lock;
+    spinlock_t fifo_lock;
 
-	struct cdev cdev;
+    struct cdev cdev;
 };
 
 /* offset from mmio_vaddr for enabling doorbell interrupts */
@@ -77,34 +77,34 @@ struct ilo_hwinfo {
 #define ILOSW_CCB_SZ	64
 #define ILOHW_CCB_SZ 	128
 struct ccb {
-	union {
-		char *send_fifobar;
-		u64 send_fifobar_pa;
-	} ccb_u1;
-	union {
-		char *send_desc;
-		u64 send_desc_pa;
-	} ccb_u2;
-	u64 send_ctrl;
+    union {
+        char *send_fifobar;
+        u64 send_fifobar_pa;
+    } ccb_u1;
+    union {
+        char *send_desc;
+        u64 send_desc_pa;
+    } ccb_u2;
+    u64 send_ctrl;
 
-	union {
-		char *recv_fifobar;
-		u64 recv_fifobar_pa;
-	} ccb_u3;
-	union {
-		char *recv_desc;
-		u64 recv_desc_pa;
-	} ccb_u4;
-	u64 recv_ctrl;
+    union {
+        char *recv_fifobar;
+        u64 recv_fifobar_pa;
+    } ccb_u3;
+    union {
+        char *recv_desc;
+        u64 recv_desc_pa;
+    } ccb_u4;
+    u64 recv_ctrl;
 
-	union {
-		char __iomem *db_base;
-		u64 padding5;
-	} ccb_u5;
+    union {
+        char __iomem *db_base;
+        u64 padding5;
+    } ccb_u5;
 
-	u64 channel;
+    u64 channel;
 
-	/* unused context area (64 bytes) */
+    /* unused context area (64 bytes) */
 };
 
 /* ccb queue parameters */
@@ -128,31 +128,31 @@ struct ccb {
  * Per fd structure used to track the ccb allocated to that dev file.
  */
 struct ccb_data {
-	/* software version of ccb, using virtual addrs */
-	struct ccb  driver_ccb;
+    /* software version of ccb, using virtual addrs */
+    struct ccb  driver_ccb;
 
-	/* hardware version of ccb, using physical addrs */
-	struct ccb  ilo_ccb;
+    /* hardware version of ccb, using physical addrs */
+    struct ccb  ilo_ccb;
 
-	/* hardware ccb is written to this shared mapped device memory */
-	struct ccb __iomem *mapped_ccb;
+    /* hardware ccb is written to this shared mapped device memory */
+    struct ccb __iomem *mapped_ccb;
 
-	/* dma'able memory used for send/recv queues */
-	void       *dma_va;
-	dma_addr_t  dma_pa;
-	size_t      dma_size;
+    /* dma'able memory used for send/recv queues */
+    void       *dma_va;
+    dma_addr_t  dma_pa;
+    size_t      dma_size;
 
-	/* pointer to hardware device info */
-	struct ilo_hwinfo *ilo_hw;
+    /* pointer to hardware device info */
+    struct ilo_hwinfo *ilo_hw;
 
-	/* queue for this ccb to wait for recv data */
-	wait_queue_head_t ccb_waitq;
+    /* queue for this ccb to wait for recv data */
+    wait_queue_head_t ccb_waitq;
 
-	/* usage count, to allow for shared ccb's */
-	int	    ccb_cnt;
+    /* usage count, to allow for shared ccb's */
+    int	    ccb_cnt;
 
-	/* open wanted exclusive access to this ccb */
-	int	    ccb_excl;
+    /* open wanted exclusive access to this ccb */
+    int	    ccb_excl;
 };
 
 /*

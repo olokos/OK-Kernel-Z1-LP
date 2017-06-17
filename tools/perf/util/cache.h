@@ -34,10 +34,9 @@ extern int pager_use_color;
 extern int use_browser;
 
 #ifdef NO_NEWT_SUPPORT
-static inline void setup_browser(bool fallback_to_pager)
-{
-	if (fallback_to_pager)
-		setup_pager();
+static inline void setup_browser(bool fallback_to_pager) {
+    if (fallback_to_pager)
+        setup_pager();
 }
 static inline void exit_browser(bool wait_for_ok __used) {}
 #else
@@ -46,10 +45,9 @@ void exit_browser(bool wait_for_ok);
 #endif
 
 #ifdef NO_GTK2_SUPPORT
-static inline void perf_gtk_setup_browser(int argc __used, const char *argv[] __used, bool fallback_to_pager)
-{
-	if (fallback_to_pager)
-		setup_pager();
+static inline void perf_gtk_setup_browser(int argc __used, const char *argv[] __used, bool fallback_to_pager) {
+    if (fallback_to_pager)
+        setup_pager();
 }
 static inline void perf_gtk_exit_browser(bool wait_for_ok __used) {}
 #else
@@ -81,9 +79,8 @@ int split_cmdline(char *cmdline, const char ***argv);
 	} while(0)
 
 
-static inline int is_absolute_path(const char *path)
-{
-	return path[0] == '/';
+static inline int is_absolute_path(const char *path) {
+    return path[0] == '/';
 }
 
 const char *make_nonrelative_path(const char *path);
@@ -93,7 +90,7 @@ extern char *mkpath(const char *fmt, ...) __attribute__((format (printf, 1, 2)))
 extern char *perf_path(const char *fmt, ...) __attribute__((format (printf, 1, 2)));
 
 extern char *perf_pathdup(const char *fmt, ...)
-	__attribute__((format (printf, 1, 2)));
+__attribute__((format (printf, 1, 2)));
 
 #ifdef NO_STRLCPY
 extern size_t strlcpy(char *dest, const char *src, size_t size);

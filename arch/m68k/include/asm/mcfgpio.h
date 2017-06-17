@@ -20,13 +20,13 @@
 #include <asm-generic/gpio.h>
 
 struct mcf_gpio_chip {
-	struct gpio_chip gpio_chip;
-	void __iomem *pddr;
-	void __iomem *podr;
-	void __iomem *ppdr;
-	void __iomem *setr;
-	void __iomem *clrr;
-	const u8 *gpio_to_pinmux;
+    struct gpio_chip gpio_chip;
+    void __iomem *pddr;
+    void __iomem *podr;
+    void __iomem *ppdr;
+    void __iomem *setr;
+    void __iomem *clrr;
+    const u8 *gpio_to_pinmux;
 };
 
 int mcf_gpio_direction_input(struct gpio_chip *, unsigned);

@@ -103,8 +103,8 @@ int io_mbox_msg(struct notifier_block *self, unsigned long len, void *msg);
  *  Ensures:
  */
 extern void io_request_chnl(struct io_mgr *io_manager,
-			    struct chnl_object *pchnl,
-			    u8 io_mode, u16 *mbx_val);
+                            struct chnl_object *pchnl,
+                            u8 io_mode, u16 *mbx_val);
 
 /*
  *  ======== iosm_schedule ========
@@ -148,7 +148,7 @@ extern u32 io_buf_size(struct io_mgr *hio_mgr);
  *      Print DSP tracebuffer.
  */
 extern int print_dsp_trace_buffer(struct bridge_dev_context
-					 *hbridge_context);
+                                  *hbridge_context);
 
 int dump_dsp_stack(struct bridge_dev_context *bridge_context);
 

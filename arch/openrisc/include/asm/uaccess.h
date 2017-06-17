@@ -79,7 +79,7 @@
  */
 
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -145,7 +145,7 @@ do {									\
 } while (0)
 
 struct __large_struct {
-	unsigned long buf[100];
+    unsigned long buf[100];
 };
 #define __m(x) (*(struct __large_struct *)(x))
 
@@ -271,55 +271,51 @@ __copy_tofrom_user(void *to, const void *from, unsigned long size);
 #define __copy_from_user_inatomic __copy_from_user
 
 static inline unsigned long
-copy_from_user(void *to, const void *from, unsigned long n)
-{
-	unsigned long over;
+copy_from_user(void *to, const void *from, unsigned long n) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_READ, from, n))
-		return __copy_tofrom_user(to, from, n);
-	if ((unsigned long)from < TASK_SIZE) {
-		over = (unsigned long)from + n - TASK_SIZE;
-		return __copy_tofrom_user(to, from, n - over) + over;
-	}
-	return n;
+    if (access_ok(VERIFY_READ, from, n))
+        return __copy_tofrom_user(to, from, n);
+    if ((unsigned long)from < TASK_SIZE) {
+        over = (unsigned long)from + n - TASK_SIZE;
+        return __copy_tofrom_user(to, from, n - over) + over;
+    }
+    return n;
 }
 
 static inline unsigned long
-copy_to_user(void *to, const void *from, unsigned long n)
-{
-	unsigned long over;
+copy_to_user(void *to, const void *from, unsigned long n) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __copy_tofrom_user(to, from, n);
-	if ((unsigned long)to < TASK_SIZE) {
-		over = (unsigned long)to + n - TASK_SIZE;
-		return __copy_tofrom_user(to, from, n - over) + over;
-	}
-	return n;
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __copy_tofrom_user(to, from, n);
+    if ((unsigned long)to < TASK_SIZE) {
+        over = (unsigned long)to + n - TASK_SIZE;
+        return __copy_tofrom_user(to, from, n - over) + over;
+    }
+    return n;
 }
 
 extern unsigned long __clear_user(void *addr, unsigned long size);
 
 static inline __must_check unsigned long
-clear_user(void *addr, unsigned long size)
-{
+clear_user(void *addr, unsigned long size) {
 
-	if (access_ok(VERIFY_WRITE, addr, size))
-		return __clear_user(addr, size);
-	if ((unsigned long)addr < TASK_SIZE) {
-		unsigned long over = (unsigned long)addr + size - TASK_SIZE;
-		return __clear_user(addr, size - over) + over;
-	}
-	return size;
+    if (access_ok(VERIFY_WRITE, addr, size))
+        return __clear_user(addr, size);
+    if ((unsigned long)addr < TASK_SIZE) {
+        unsigned long over = (unsigned long)addr + size - TASK_SIZE;
+        return __clear_user(addr, size - over) + over;
+    }
+    return size;
 }
 
 extern int __strncpy_from_user(char *dst, const char *src, long count);
 
-static inline long strncpy_from_user(char *dst, const char *src, long count)
-{
-	if (access_ok(VERIFY_READ, src, 1))
-		return __strncpy_from_user(dst, src, count);
-	return -EFAULT;
+static inline long strncpy_from_user(char *dst, const char *src, long count) {
+    if (access_ok(VERIFY_READ, src, 1))
+        return __strncpy_from_user(dst, src, count);
+    return -EFAULT;
 }
 
 /*
@@ -338,15 +334,14 @@ extern int __strnlen_user(const char *str, long len, unsigned long top);
  * The `top' parameter to __strnlen_user is to make sure that
  * we can never overflow from the user area into kernel space.
  */
-static inline long strnlen_user(const char __user *str, long len)
-{
-	unsigned long top = (unsigned long)get_fs();
-	unsigned long res = 0;
+static inline long strnlen_user(const char __user *str, long len) {
+    unsigned long top = (unsigned long)get_fs();
+    unsigned long res = 0;
 
-	if (__addr_ok(str))
-		res = __strnlen_user(str, len, top);
+    if (__addr_ok(str))
+        res = __strnlen_user(str, len, top);
 
-	return res;
+    return res;
 }
 
 #define strlen_user(str) strnlen_user(str, TASK_SIZE-1)

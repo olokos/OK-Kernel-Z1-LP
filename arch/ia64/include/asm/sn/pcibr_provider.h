@@ -91,30 +91,30 @@
 /*
  * PMU resources.
  */
-struct ate_resource{
-	u64 *ate;
-	u64 num_ate;
-	u64 lowest_free_index;
+struct ate_resource {
+    u64 *ate;
+    u64 num_ate;
+    u64 lowest_free_index;
 };
 
 struct pcibus_info {
-	struct pcibus_bussoft	pbi_buscommon;   /* common header */
-	u32                pbi_moduleid;
-	short                   pbi_bridge_type;
-	short                   pbi_bridge_mode;
+    struct pcibus_bussoft	pbi_buscommon;   /* common header */
+    u32                pbi_moduleid;
+    short                   pbi_bridge_type;
+    short                   pbi_bridge_mode;
 
-	struct ate_resource     pbi_int_ate_resource;
-	u64                pbi_int_ate_size;
+    struct ate_resource     pbi_int_ate_resource;
+    u64                pbi_int_ate_size;
 
-	u64                pbi_dir_xbase;
-	char                    pbi_hub_xid;
+    u64                pbi_dir_xbase;
+    char                    pbi_hub_xid;
 
-	u64                pbi_devreg[8];
+    u64                pbi_devreg[8];
 
-	u32		pbi_valid_devices;
-	u32		pbi_enabled_devices;
+    u32		pbi_valid_devices;
+    u32		pbi_enabled_devices;
 
-	spinlock_t              pbi_lock;
+    spinlock_t              pbi_lock;
 };
 
 extern int  pcibr_init_provider(void);
@@ -143,8 +143,8 @@ extern int 		pcibr_ate_alloc(struct pcibus_info *, int);
 extern void 		pcibr_ate_free(struct pcibus_info *, int);
 extern void 		ate_write(struct pcibus_info *, int, int, u64);
 extern int sal_pcibr_slot_enable(struct pcibus_info *soft, int device,
-				 void *resp, char **ssdt);
+                                 void *resp, char **ssdt);
 extern int sal_pcibr_slot_disable(struct pcibus_info *soft, int device,
-				  int action, void *resp);
+                                  int action, void *resp);
 extern u16 sn_ioboard_to_pci_bus(struct pci_bus *pci_bus);
 #endif

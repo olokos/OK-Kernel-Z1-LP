@@ -13,16 +13,16 @@
 extern int host_has_cmov;
 
 struct uml_tls_struct {
-	struct user_desc tls;
-	unsigned flushed:1;
-	unsigned present:1;
+    struct user_desc tls;
+    unsigned flushed:1;
+    unsigned present:1;
 };
 
 struct arch_thread {
-	struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-	unsigned long debugregs[8];
-	int debugregs_seq;
-	struct faultinfo faultinfo;
+    struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
+    unsigned long debugregs[8];
+    int debugregs_seq;
+    struct faultinfo faultinfo;
 };
 
 #define INIT_ARCH_THREAD { \
@@ -33,16 +33,14 @@ struct arch_thread {
 	.faultinfo		= { 0, 0, 0 } \
 }
 
-static inline void arch_flush_thread(struct arch_thread *thread)
-{
-	/* Clear any TLS still hanging */
-	memset(&thread->tls_array, 0, sizeof(thread->tls_array));
+static inline void arch_flush_thread(struct arch_thread *thread) {
+    /* Clear any TLS still hanging */
+    memset(&thread->tls_array, 0, sizeof(thread->tls_array));
 }
 
 static inline void arch_copy_thread(struct arch_thread *from,
-                                    struct arch_thread *to)
-{
-        memcpy(&to->tls_array, &from->tls_array, sizeof(from->tls_array));
+                                    struct arch_thread *to) {
+    memcpy(&to->tls_array, &from->tls_array, sizeof(from->tls_array));
 }
 
 /*

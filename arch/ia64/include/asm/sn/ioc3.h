@@ -6,35 +6,35 @@
 
 /* serial port register map */
 struct ioc3_serialregs {
-	uint32_t sscr;
-	uint32_t stpir;
-	uint32_t stcir;
-	uint32_t srpir;
-	uint32_t srcir;
-	uint32_t srtr;
-	uint32_t shadow;
+    uint32_t sscr;
+    uint32_t stpir;
+    uint32_t stcir;
+    uint32_t srpir;
+    uint32_t srcir;
+    uint32_t srtr;
+    uint32_t shadow;
 };
 
 /* SUPERIO uart register map */
 struct ioc3_uartregs {
-	char iu_lcr;
-	union {
-		char iir;	/* read only */
-		char fcr;	/* write only */
-	} u3;
-	union {
-		char ier;	/* DLAB == 0 */
-		char dlm;	/* DLAB == 1 */
-	} u2;
-	union {
-		char rbr;	/* read only, DLAB == 0 */
-		char thr;	/* write only, DLAB == 0 */
-		char dll;	/* DLAB == 1 */
-	} u1;
-	char iu_scr;
-	char iu_msr;
-	char iu_lsr;
-	char iu_mcr;
+    char iu_lcr;
+    union {
+        char iir;	/* read only */
+        char fcr;	/* write only */
+    } u3;
+    union {
+        char ier;	/* DLAB == 0 */
+        char dlm;	/* DLAB == 1 */
+    } u2;
+    union {
+        char rbr;	/* read only, DLAB == 0 */
+        char thr;	/* write only, DLAB == 0 */
+        char dll;	/* DLAB == 1 */
+    } u1;
+    char iu_scr;
+    char iu_msr;
+    char iu_lsr;
+    char iu_mcr;
 };
 
 #define iu_rbr u1.rbr
@@ -46,45 +46,45 @@ struct ioc3_uartregs {
 #define iu_fcr u3.fcr
 
 struct ioc3_sioregs {
-	char fill[0x170];
-	struct ioc3_uartregs uartb;
-	struct ioc3_uartregs uarta;
+    char fill[0x170];
+    struct ioc3_uartregs uartb;
+    struct ioc3_uartregs uarta;
 };
 
 /* PCI IO/mem space register map */
 struct ioc3 {
-	uint32_t pci_id;
-	uint32_t pci_scr;
-	uint32_t pci_rev;
-	uint32_t pci_lat;
-	uint32_t pci_addr;
-	uint32_t pci_err_addr_l;
-	uint32_t pci_err_addr_h;
+    uint32_t pci_id;
+    uint32_t pci_scr;
+    uint32_t pci_rev;
+    uint32_t pci_lat;
+    uint32_t pci_addr;
+    uint32_t pci_err_addr_l;
+    uint32_t pci_err_addr_h;
 
-	uint32_t sio_ir;
-	/* these registers are read-only for general kernel code. To
-	 * modify them use the functions in ioc3.c
-	 */
-	uint32_t sio_ies;
-	uint32_t sio_iec;
-	uint32_t sio_cr;
-	uint32_t int_out;
-	uint32_t mcr;
-	uint32_t gpcr_s;
-	uint32_t gpcr_c;
-	uint32_t gpdr;
-	uint32_t gppr[9];
-	char fill[0x4c];
+    uint32_t sio_ir;
+    /* these registers are read-only for general kernel code. To
+     * modify them use the functions in ioc3.c
+     */
+    uint32_t sio_ies;
+    uint32_t sio_iec;
+    uint32_t sio_cr;
+    uint32_t int_out;
+    uint32_t mcr;
+    uint32_t gpcr_s;
+    uint32_t gpcr_c;
+    uint32_t gpdr;
+    uint32_t gppr[9];
+    char fill[0x4c];
 
-	/* serial port registers */
-	uint32_t sbbr_h;
-	uint32_t sbbr_l;
+    /* serial port registers */
+    uint32_t sbbr_h;
+    uint32_t sbbr_l;
 
-	struct ioc3_serialregs port_a;
-	struct ioc3_serialregs port_b;
-	char fill1[0x1ff10];
-	/* superio registers */
-	struct ioc3_sioregs sregs;
+    struct ioc3_serialregs port_a;
+    struct ioc3_serialregs port_b;
+    char fill1[0x1ff10];
+    /* superio registers */
+    struct ioc3_sioregs sregs;
 };
 
 /* These don't exist on the ioc3 serial card... */

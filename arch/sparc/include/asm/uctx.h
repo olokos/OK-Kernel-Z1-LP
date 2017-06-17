@@ -33,38 +33,38 @@ typedef mc_greg_t mc_gregset_t[MC_NGREG];
 
 #define MC_MAXFPQ	16
 struct mc_fq {
-	unsigned long	*mcfq_addr;
-	unsigned int	mcfq_insn;
+    unsigned long	*mcfq_addr;
+    unsigned int	mcfq_insn;
 };
 
 struct mc_fpu {
-	union {
-		unsigned int	sregs[32];
-		unsigned long	dregs[32];
-		long double	qregs[16];
-	} mcfpu_fregs;
-	unsigned long	mcfpu_fsr;
-	unsigned long	mcfpu_fprs;
-	unsigned long	mcfpu_gsr;
-	struct mc_fq	*mcfpu_fq;
-	unsigned char	mcfpu_qcnt;
-	unsigned char	mcfpu_qentsz;
-	unsigned char	mcfpu_enab;
+    union {
+        unsigned int	sregs[32];
+        unsigned long	dregs[32];
+        long double	qregs[16];
+    } mcfpu_fregs;
+    unsigned long	mcfpu_fsr;
+    unsigned long	mcfpu_fprs;
+    unsigned long	mcfpu_gsr;
+    struct mc_fq	*mcfpu_fq;
+    unsigned char	mcfpu_qcnt;
+    unsigned char	mcfpu_qentsz;
+    unsigned char	mcfpu_enab;
 };
 typedef struct mc_fpu mc_fpu_t;
 
 typedef struct {
-	mc_gregset_t	mc_gregs;
-	mc_greg_t	mc_fp;
-	mc_greg_t	mc_i7;
-	mc_fpu_t	mc_fpregs;
+    mc_gregset_t	mc_gregs;
+    mc_greg_t	mc_fp;
+    mc_greg_t	mc_i7;
+    mc_fpu_t	mc_fpregs;
 } mcontext_t;
 
 struct ucontext {
-	struct ucontext		*uc_link;
-	unsigned long		uc_flags;
-	sigset_t		uc_sigmask;
-	mcontext_t		uc_mcontext;
+    struct ucontext		*uc_link;
+    unsigned long		uc_flags;
+    sigset_t		uc_sigmask;
+    mcontext_t		uc_mcontext;
 };
 typedef struct ucontext ucontext_t;
 

@@ -95,12 +95,12 @@ void display_buffer(char *, int);
  *  frame handling
  */
 typedef struct {
-	u8 version;
-	u8 operation;
-	u32 oid;
-	u8 device_id;
-	u8 flags;
-	u32 length;
+    u8 version;
+    u8 operation;
+    u32 oid;
+    u8 device_id;
+    u8 flags;
+    u32 length;
 } __packed
 pimfor_header_t;
 
@@ -108,11 +108,11 @@ pimfor_header_t;
  * schedule_work(prism54_process_trap) or for priv->mgmt_received,
  * processed by islpci_mgt_transaction(). */
 struct islpci_mgmtframe {
-	struct net_device *ndev;      /* pointer to network device */
-	pimfor_header_t *header;      /* payload header, points into buf */
-	void *data;		      /* payload ex header, points into buf */
-        struct work_struct ws;	      /* argument for schedule_work() */
-	char buf[0];		      /* fragment buffer */
+    struct net_device *ndev;      /* pointer to network device */
+    pimfor_header_t *header;      /* payload header, points into buf */
+    void *data;		      /* payload ex header, points into buf */
+    struct work_struct ws;	      /* argument for schedule_work() */
+    char buf[0];		      /* fragment buffer */
 };
 
 int
@@ -127,13 +127,12 @@ islpci_mgt_cleanup_transmit(struct net_device *ndev);
 int
 islpci_mgt_transaction(struct net_device *ndev,
                        int operation, unsigned long oid,
-		       void *senddata, int sendlen,
-		       struct islpci_mgmtframe **recvframe);
+                       void *senddata, int sendlen,
+                       struct islpci_mgmtframe **recvframe);
 
 static inline void
-islpci_mgt_release(struct islpci_mgmtframe *frame)
-{
-        kfree(frame);
+islpci_mgt_release(struct islpci_mgmtframe *frame) {
+    kfree(frame);
 }
 
 #endif				/* _ISLPCI_MGT_H */

@@ -29,16 +29,14 @@
 #define RTC_PORT(x)	(0x70 + (x))
 #define RTC_IRQ		8
 
-static inline unsigned char CMOS_READ(unsigned long addr)
-{
-	outb(addr, MALTA_RTC_ADR_REG);
-	return inb(MALTA_RTC_DAT_REG);
+static inline unsigned char CMOS_READ(unsigned long addr) {
+    outb(addr, MALTA_RTC_ADR_REG);
+    return inb(MALTA_RTC_DAT_REG);
 }
 
-static inline void CMOS_WRITE(unsigned char data, unsigned long addr)
-{
-	outb(addr, MALTA_RTC_ADR_REG);
-	outb(data, MALTA_RTC_DAT_REG);
+static inline void CMOS_WRITE(unsigned char data, unsigned long addr) {
+    outb(addr, MALTA_RTC_ADR_REG);
+    outb(data, MALTA_RTC_DAT_REG);
 }
 
 #define RTC_ALWAYS_BCD	0

@@ -9,15 +9,14 @@
 /* HACK: Cabrio WHAMI return value is bogus if more than 8 bits used.. :-( */
 
 static __inline__ unsigned char
-__hard_smp_processor_id(void)
-{
-	register unsigned char __r0 __asm__("$0");
-	__asm__ __volatile__(
-		"call_pal %1 #whami"
-		: "=r"(__r0)
-		:"i" (PAL_whami)
-		: "$1", "$22", "$23", "$24", "$25");
-	return __r0;
+__hard_smp_processor_id(void) {
+    register unsigned char __r0 __asm__("$0");
+    __asm__ __volatile__(
+        "call_pal %1 #whami"
+        : "=r"(__r0)
+        :"i" (PAL_whami)
+        : "$1", "$22", "$23", "$24", "$25");
+    return __r0;
 }
 
 #ifdef CONFIG_SMP
@@ -25,16 +24,16 @@ __hard_smp_processor_id(void)
 #include <asm/irq.h>
 
 struct cpuinfo_alpha {
-	unsigned long loops_per_jiffy;
-	unsigned long last_asn;
-	int need_new_asn;
-	int asn_lock;
-	unsigned long ipi_count;
-	unsigned long prof_multiplier;
-	unsigned long prof_counter;
-	unsigned char mcheck_expected;
-	unsigned char mcheck_taken;
-	unsigned char mcheck_extra;
+    unsigned long loops_per_jiffy;
+    unsigned long last_asn;
+    int need_new_asn;
+    int asn_lock;
+    unsigned long ipi_count;
+    unsigned long prof_multiplier;
+    unsigned long prof_counter;
+    unsigned char mcheck_expected;
+    unsigned char mcheck_taken;
+    unsigned char mcheck_extra;
 } __attribute__((aligned(64)));
 
 extern struct cpuinfo_alpha cpu_data[NR_CPUS];

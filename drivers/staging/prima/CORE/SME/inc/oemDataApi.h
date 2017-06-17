@@ -59,8 +59,7 @@
 *************************************************************************************************************/
 
 /* Structure for defining req sent to the PE */
-typedef struct tagOemDataReq
-{
+typedef struct tagOemDataReq {
     tANI_U8   sessionId;
     tANI_U8   oemDataReq[OEM_DATA_REQ_SIZE];
 } tOemDataReq, tOemDataReqConfig;
@@ -68,15 +67,13 @@ typedef struct tagOemDataReq
 /*************************************************************************************************************
   OEM DATA RESPONSE - DATA STRUCTURES
 *************************************************************************************************************/
-typedef struct tagOemDataRsp
-{
+typedef struct tagOemDataRsp {
     tANI_U8   oemDataRsp[OEM_DATA_RSP_SIZE];
 } tOemDataRsp;
 
 /*************************************************************************************************************/
 
-typedef enum
-{
+typedef enum {
     eOEM_DATA_REQ_SUCCESS=1,
     eOEM_DATA_REQ_FAILURE,
     eOEM_DATA_REQ_INVALID_MODE,

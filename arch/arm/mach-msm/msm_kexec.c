@@ -19,12 +19,11 @@
 #define WDT0_EN        (MSM_TMR_BASE + 0x40)
 #endif
 
-void arch_kexec(void)
-{
+void arch_kexec(void) {
 #ifdef CONFIG_MSM_WATCHDOG
-	/* Prevent watchdog from resetting SoC */
-	writel(0, WDT0_EN);
-	pr_crit("KEXEC: MSM Watchdog Exit - Deactivated\n");
+    /* Prevent watchdog from resetting SoC */
+    writel(0, WDT0_EN);
+    pr_crit("KEXEC: MSM Watchdog Exit - Deactivated\n");
 #endif
-	return;
+    return;
 }

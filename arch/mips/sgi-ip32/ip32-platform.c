@@ -27,81 +27,76 @@
 }
 
 static struct plat_serial8250_port uart8250_data[] = {
-	MACE_PORT(MACEISA_SERIAL1_OFFS, MACEISA_SERIAL1_IRQ),
-	MACE_PORT(MACEISA_SERIAL2_OFFS, MACEISA_SERIAL2_IRQ),
-	{ },
+    MACE_PORT(MACEISA_SERIAL1_OFFS, MACEISA_SERIAL1_IRQ),
+    MACE_PORT(MACEISA_SERIAL2_OFFS, MACEISA_SERIAL2_IRQ),
+    { },
 };
 
 static struct platform_device uart8250_device = {
-	.name			= "serial8250",
-	.id			= PLAT8250_DEV_PLATFORM,
-	.dev			= {
-		.platform_data	= uart8250_data,
-	},
+    .name			= "serial8250",
+    .id			= PLAT8250_DEV_PLATFORM,
+    .dev			= {
+        .platform_data	= uart8250_data,
+    },
 };
 
-static int __init uart8250_init(void)
-{
-	return platform_device_register(&uart8250_device);
+static int __init uart8250_init(void) {
+    return platform_device_register(&uart8250_device);
 }
 
 device_initcall(uart8250_init);
 
-static __init int meth_devinit(void)
-{
-	struct platform_device *pd;
-	int ret;
+static __init int meth_devinit(void) {
+    struct platform_device *pd;
+    int ret;
 
-	pd = platform_device_alloc("meth", -1);
-	if (!pd)
-		return -ENOMEM;
+    pd = platform_device_alloc("meth", -1);
+    if (!pd)
+        return -ENOMEM;
 
-	ret = platform_device_add(pd);
-	if (ret)
-		platform_device_put(pd);
+    ret = platform_device_add(pd);
+    if (ret)
+        platform_device_put(pd);
 
-	return ret;
+    return ret;
 }
 
 device_initcall(meth_devinit);
 
-static __init int sgio2audio_devinit(void)
-{
-	struct platform_device *pd;
-	int ret;
+static __init int sgio2audio_devinit(void) {
+    struct platform_device *pd;
+    int ret;
 
-	pd = platform_device_alloc("sgio2audio", -1);
-	if (!pd)
-		return -ENOMEM;
+    pd = platform_device_alloc("sgio2audio", -1);
+    if (!pd)
+        return -ENOMEM;
 
-	ret = platform_device_add(pd);
-	if (ret)
-		platform_device_put(pd);
+    ret = platform_device_add(pd);
+    if (ret)
+        platform_device_put(pd);
 
-	return ret;
+    return ret;
 }
 
 device_initcall(sgio2audio_devinit);
 
-static __init int sgio2btns_devinit(void)
-{
-	return IS_ERR(platform_device_register_simple("sgibtns", -1, NULL, 0));
+static __init int sgio2btns_devinit(void) {
+    return IS_ERR(platform_device_register_simple("sgibtns", -1, NULL, 0));
 }
 
 device_initcall(sgio2btns_devinit);
 
 static struct resource sgio2_cmos_rsrc[] = {
-	{
-		.start = 0x70,
-		.end   = 0x71,
-		.flags = IORESOURCE_IO
-	}
+    {
+        .start = 0x70,
+        .end   = 0x71,
+        .flags = IORESOURCE_IO
+    }
 };
 
-static __init int sgio2_cmos_devinit(void)
-{
-	return IS_ERR(platform_device_register_simple("rtc_cmos", -1,
-						      sgio2_cmos_rsrc, 1));
+static __init int sgio2_cmos_devinit(void) {
+    return IS_ERR(platform_device_register_simple("rtc_cmos", -1,
+                  sgio2_cmos_rsrc, 1));
 }
 
 device_initcall(sgio2_cmos_devinit);

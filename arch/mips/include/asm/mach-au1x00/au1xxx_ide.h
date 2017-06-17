@@ -47,18 +47,18 @@
 #endif
 
 typedef struct {
-	u32			tx_dev_id, rx_dev_id, target_dev_id;
-	u32			tx_chan, rx_chan;
-	void			*tx_desc_head, *rx_desc_head;
-	ide_hwif_t		*hwif;
+    u32			tx_dev_id, rx_dev_id, target_dev_id;
+    u32			tx_chan, rx_chan;
+    void			*tx_desc_head, *rx_desc_head;
+    ide_hwif_t		*hwif;
 #ifdef CONFIG_BLK_DEV_IDE_AU1XXX_MDMA2_DBDMA
-	ide_drive_t		*drive;
-	struct dbdma_cmd	*dma_table_cpu;
-	dma_addr_t		dma_table_dma;
+    ide_drive_t		*drive;
+    struct dbdma_cmd	*dma_table_cpu;
+    dma_addr_t		dma_table_dma;
 #endif
-	int			irq;
-	u32			regbase;
-	int			ddma_id;
+    int			irq;
+    u32			regbase;
+    int			ddma_id;
 } _auide_hwif;
 
 /******************************************************************************/

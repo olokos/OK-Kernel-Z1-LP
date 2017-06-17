@@ -18,7 +18,7 @@
  *
  */
 struct msm_sps_platform_data {
-	u32 bamdma_restricted_pipes;
+    u32 bamdma_restricted_pipes;
 };
 
 #endif /* _MSM_SPS_H_ */

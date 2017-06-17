@@ -54,7 +54,7 @@
 // Product IDs - assigned to match middle digit of serial number (No longer true)
 
 #define ION_DEVICE_ID_80251_NETCHIP	0x020	// This bit is set in the PID if this edgeport hardware$
-						// is based on the 80251+Netchip.
+// is based on the 80251+Netchip.
 
 #define ION_DEVICE_ID_GENERATION_1	0x00	// Value for 930 based edgeports
 #define ION_DEVICE_ID_GENERATION_2	0x01	// Value for 80251+Netchip.
@@ -63,8 +63,8 @@
 #define ION_GENERATION_MASK		0x03
 
 #define ION_DEVICE_ID_HUB_MASK		0x0080	// This bit in the PID designates a HUB device
-						// for example 8C would be a 421 4 port hub
-						// and 8D would be a 2 port embedded hub
+// for example 8C would be a 421 4 port hub
+// and 8D would be a 2 port embedded hub
 
 #define EDGEPORT_DEVICE_ID_MASK			0x0ff	// Not including OEM or GENERATION fields
 
@@ -99,11 +99,11 @@
 // Compact Form factor TI based devices  2c, 21c, 22c, 221c
 #define ION_DEVICE_ID_EDGEPORT_2C		0x01B	// Edgeport/2c is a TI based Edgeport/2 - Small I2c
 #define ION_DEVICE_ID_EDGEPORT_221C		0x01C	// Edgeport/221c is a TI based Edgeport/2 with lucent chip and
-							// 2 external hub ports - Large I2C
+// 2 external hub ports - Large I2C
 #define ION_DEVICE_ID_EDGEPORT_22C		0x01D	// Edgeport/22c is a TI based Edgeport/2 with
-							// 2 external hub ports - Large I2C
+// 2 external hub ports - Large I2C
 #define ION_DEVICE_ID_EDGEPORT_21C		0x01E	// Edgeport/21c is a TI based Edgeport/2 with lucent chip
-							// Small I2C
+// Small I2C
 
 
 /*
@@ -137,9 +137,9 @@
 #define ION_DEVICE_ID_TI_EDGEPORT_22I		0x021A	// Edgeport/22I is an Edgeport/4 with ports 1&2 RS422 and ports 3&4 RS232
 #define ION_DEVICE_ID_TI_EDGEPORT_2C		0x021B	// Edgeport/2c RS232
 #define ION_DEVICE_ID_TI_EDGEPORT_221C		0x021C	// Edgeport/221c is a TI based Edgeport/2 with lucent chip and
-							// 2 external hub ports - Large I2C
+// 2 external hub ports - Large I2C
 #define ION_DEVICE_ID_TI_EDGEPORT_22C		0x021D	// Edgeport/22c is a TI based Edgeport/2 with
-							// 2 external hub ports - Large I2C
+// 2 external hub ports - Large I2C
 #define ION_DEVICE_ID_TI_EDGEPORT_21C		0x021E	// Edgeport/21c is a TI based Edgeport/2 with lucent chip
 
 // Generation 3 devices -- 3410 based edgport/1 (256 byte I2C)
@@ -173,7 +173,7 @@
 #define ION_DEVICE_ID_WP_ACCELERATION		0x309	// Watchport/A
 #define ION_DEVICE_ID_WP_DISTANCE		0x30A	// Watchport/D Discontinued
 #define ION_DEVICE_ID_WP_PROX_DIST		0x30B	// Watchport/D uses distance sensor
-							// Default to /P function
+// Default to /P function
 
 #define ION_DEVICE_ID_PLUS_PWR_HP4CD		0x30C	// 5052 Plus Power HubPort/4CD+ (for Dell)
 #define ION_DEVICE_ID_PLUS_PWR_HP4C		0x30D	// 5052 Plus Power HubPort/4C+
@@ -243,8 +243,8 @@
 #define EDGE_FW_BULK_READ_BUFFER_SIZE		1024	// Size to use for Bulk reads
 
 #define	EDGE_FW_INT_MAX_PACKET_SIZE		32	// Max Packet Size for Interrupt In Endpoint
-							// Note that many units were shipped with MPS=16, we
-							// force an upgrade to this value).
+// Note that many units were shipped with MPS=16, we
+// force an upgrade to this value).
 #define EDGE_FW_INT_INTERVAL			2	// 2ms polling on IntPipe
 
 
@@ -273,19 +273,19 @@
 #define USB_REQUEST_ION_READ_ROM	5	// Read  EdgePort ROM at specified addr
 #define USB_REQUEST_ION_WRITE_ROM	6	// Write EdgePort ROM at specified addr
 #define USB_REQUEST_ION_EXEC_DL_CODE	7	// Begin execution of RAM-based download
-						// code by jumping to address in wIndex:wValue
+// code by jumping to address in wIndex:wValue
 //					8	// Unused, available
 #define USB_REQUEST_ION_ENABLE_SUSPEND	9	// Enable/Disable suspend feature
-						// (wValue != 0: Enable; wValue = 0: Disable)
+// (wValue != 0: Enable; wValue = 0: Disable)
 
 #define USB_REQUEST_ION_SEND_IOSP	10	// Send an IOSP command to the edgeport over the control pipe
 #define USB_REQUEST_ION_RECV_IOSP	11	// Receive an IOSP command from the edgeport over the control pipe
 
 
 #define USB_REQUEST_ION_DIS_INT_TIMER	0x80	// Sent to Axiohm to enable/ disable
-						// interrupt token timer
-						// wValue = 1, enable (default)
-						// wValue = 0, disable
+// interrupt token timer
+// wValue = 1, enable (default)
+// wValue = 0, disable
 
 //
 // Define parameter values for our vendor-specific commands
@@ -302,37 +302,37 @@
 //
 
 struct edge_compatibility_bits {
-	// This __u32 defines which Vendor-specific commands/functionality
-	// the device supports on the default EP0 pipe.
+    // This __u32 defines which Vendor-specific commands/functionality
+    // the device supports on the default EP0 pipe.
 
-	__u32	VendEnableSuspend	:  1;	// 0001 Set if device supports ION_ENABLE_SUSPEND
-	__u32	VendUnused		: 31;	// Available for future expansion, must be 0
+    __u32	VendEnableSuspend	:  1;	// 0001 Set if device supports ION_ENABLE_SUSPEND
+    __u32	VendUnused		: 31;	// Available for future expansion, must be 0
 
-	// This __u32 defines which IOSP commands are supported over the
-	// bulk pipe EP1.
+    // This __u32 defines which IOSP commands are supported over the
+    // bulk pipe EP1.
 
-											// xxxx Set if device supports:
-	__u32	IOSPOpen		:  1;	// 0001	OPEN / OPEN_RSP (Currently must be 1)
-	__u32	IOSPClose		:  1;	// 0002	CLOSE
-	__u32	IOSPChase		:  1;	// 0004	CHASE / CHASE_RSP
-	__u32	IOSPSetRxFlow		:  1;	// 0008	SET_RX_FLOW
-	__u32	IOSPSetTxFlow		:  1;	// 0010	SET_TX_FLOW
-	__u32	IOSPSetXChar		:  1;	// 0020	SET_XON_CHAR/SET_XOFF_CHAR
-	__u32	IOSPRxCheck		:  1;	// 0040	RX_CHECK_REQ/RX_CHECK_RSP
-	__u32	IOSPSetClrBreak		:  1;	// 0080	SET_BREAK/CLEAR_BREAK
-	__u32	IOSPWriteMCR		:  1;	// 0100	MCR register writes (set/clr DTR/RTS)
-	__u32	IOSPWriteLCR		:  1;	// 0200	LCR register writes (wordlen/stop/parity)
-	__u32	IOSPSetBaudRate		:  1;	// 0400	setting Baud rate (writes to LCR.80h and DLL/DLM register)
-	__u32	IOSPDisableIntPipe	:  1;	// 0800 Do not use the interrupt pipe for TxCredits or RxButesAvailable
-	__u32	IOSPRxDataAvail		:  1;   // 1000 Return status of RX Fifo (Data available in Fifo)
-	__u32	IOSPTxPurge		:  1;	// 2000 Purge TXBuffer and/or Fifo in Edgeport hardware
-	__u32	IOSPUnused		: 18;	// Available for future expansion, must be 0
+    // xxxx Set if device supports:
+    __u32	IOSPOpen		:  1;	// 0001	OPEN / OPEN_RSP (Currently must be 1)
+    __u32	IOSPClose		:  1;	// 0002	CLOSE
+    __u32	IOSPChase		:  1;	// 0004	CHASE / CHASE_RSP
+    __u32	IOSPSetRxFlow		:  1;	// 0008	SET_RX_FLOW
+    __u32	IOSPSetTxFlow		:  1;	// 0010	SET_TX_FLOW
+    __u32	IOSPSetXChar		:  1;	// 0020	SET_XON_CHAR/SET_XOFF_CHAR
+    __u32	IOSPRxCheck		:  1;	// 0040	RX_CHECK_REQ/RX_CHECK_RSP
+    __u32	IOSPSetClrBreak		:  1;	// 0080	SET_BREAK/CLEAR_BREAK
+    __u32	IOSPWriteMCR		:  1;	// 0100	MCR register writes (set/clr DTR/RTS)
+    __u32	IOSPWriteLCR		:  1;	// 0200	LCR register writes (wordlen/stop/parity)
+    __u32	IOSPSetBaudRate		:  1;	// 0400	setting Baud rate (writes to LCR.80h and DLL/DLM register)
+    __u32	IOSPDisableIntPipe	:  1;	// 0800 Do not use the interrupt pipe for TxCredits or RxButesAvailable
+    __u32	IOSPRxDataAvail		:  1;   // 1000 Return status of RX Fifo (Data available in Fifo)
+    __u32	IOSPTxPurge		:  1;	// 2000 Purge TXBuffer and/or Fifo in Edgeport hardware
+    __u32	IOSPUnused		: 18;	// Available for future expansion, must be 0
 
-	// This __u32 defines which 'general' features are supported
+    // This __u32 defines which 'general' features are supported
 
-	__u32	TrueEdgeport		:  1;	// 0001	Set if device is a 'real' Edgeport
-											// (Used only by driver, NEVER set by an EPiC device)
-	__u32	GenUnused		: 31;	// Available for future expansion, must be 0
+    __u32	TrueEdgeport		:  1;	// 0001	Set if device is a 'real' Edgeport
+    // (Used only by driver, NEVER set by an EPiC device)
+    __u32	GenUnused		: 31;	// Available for future expansion, must be 0
 };
 
 #define EDGE_COMPATIBILITY_MASK0	0x0001
@@ -340,23 +340,23 @@ struct edge_compatibility_bits {
 #define EDGE_COMPATIBILITY_MASK2	0x0001
 
 struct edge_compatibility_descriptor {
-	__u8	Length;				// Descriptor Length (per USB spec)
-	__u8	DescType;			// Descriptor Type (per USB spec, =DEVICE type)
-	__u8	EpicVer;			// Version of EPiC spec supported
-						// (Currently must be 1)
-	__u8	NumPorts;			// Number of serial ports supported
-	__u8	iDownloadFile;			// Index of string containing download code filename
-						// 0=no download, FF=download compiled into driver.
-	__u8	Unused[3];			// Available for future expansion, must be 0
-						// (Currently must be 0).
-	__u8	MajorVersion;			// Firmware version: xx.
-	__u8	MinorVersion;			//  yy.
-	__le16	BuildNumber;			//  zzzz (LE format)
+    __u8	Length;				// Descriptor Length (per USB spec)
+    __u8	DescType;			// Descriptor Type (per USB spec, =DEVICE type)
+    __u8	EpicVer;			// Version of EPiC spec supported
+    // (Currently must be 1)
+    __u8	NumPorts;			// Number of serial ports supported
+    __u8	iDownloadFile;			// Index of string containing download code filename
+    // 0=no download, FF=download compiled into driver.
+    __u8	Unused[3];			// Available for future expansion, must be 0
+    // (Currently must be 0).
+    __u8	MajorVersion;			// Firmware version: xx.
+    __u8	MinorVersion;			//  yy.
+    __le16	BuildNumber;			//  zzzz (LE format)
 
-	// The following structure contains __u32s, with each bit
-	// specifying whether the EPiC device supports the given
-	// command or functionality.
-	struct edge_compatibility_bits	Supports;
+    // The following structure contains __u32s, with each bit
+    // specifying whether the EPiC device supports the given
+    // command or functionality.
+    struct edge_compatibility_bits	Supports;
 };
 
 // Values for iDownloadFile
@@ -425,48 +425,48 @@ struct edge_compatibility_descriptor {
 
 struct edge_manuf_descriptor {
 
-	__u16	RootDescTable[0x10];			// C00 Root of descriptor tables (just a placeholder)
-	__u8	DescriptorArea[0x2E0];			// C20 Descriptors go here, up to 2E0h (just a placeholder)
+    __u16	RootDescTable[0x10];			// C00 Root of descriptor tables (just a placeholder)
+    __u8	DescriptorArea[0x2E0];			// C20 Descriptors go here, up to 2E0h (just a placeholder)
 
-							//     Start of v1-compatible section
-	__u8	Length;					// F00 Desc length for what follows, per USB (= C0h )
-	__u8	DescType;				// F01 Desc type, per USB (=DEVICE type)
-	__u8	DescVer;				// F02 Desc version/format (currently 2)
-	__u8	NumRootDescEntries;			// F03 # entries in RootDescTable
+    //     Start of v1-compatible section
+    __u8	Length;					// F00 Desc length for what follows, per USB (= C0h )
+    __u8	DescType;				// F01 Desc type, per USB (=DEVICE type)
+    __u8	DescVer;				// F02 Desc version/format (currently 2)
+    __u8	NumRootDescEntries;			// F03 # entries in RootDescTable
 
-	__u8	RomSize;				// F04 Size of ROM/E2PROM in K
-	__u8	RamSize;				// F05 Size of external RAM in K
-	__u8	CpuRev;					// F06 CPU revision level (chg only if s/w visible)
-	__u8	BoardRev;				// F07 PCB revision level (chg only if s/w visible)
+    __u8	RomSize;				// F04 Size of ROM/E2PROM in K
+    __u8	RamSize;				// F05 Size of external RAM in K
+    __u8	CpuRev;					// F06 CPU revision level (chg only if s/w visible)
+    __u8	BoardRev;				// F07 PCB revision level (chg only if s/w visible)
 
-	__u8	NumPorts;				// F08 Number of ports
-	__u8	DescDate[3];				// F09 MM/DD/YY when descriptor template was compiler,
-							//     so host can track changes to USB-only descriptors.
+    __u8	NumPorts;				// F08 Number of ports
+    __u8	DescDate[3];				// F09 MM/DD/YY when descriptor template was compiler,
+    //     so host can track changes to USB-only descriptors.
 
-	__u8	SerNumLength;				// F0C USB string descriptor len
-	__u8	SerNumDescType;				// F0D USB descriptor type (=STRING type)
-	__le16	SerialNumber[MAX_SERIALNUMBER_LEN];	// F0E "01-01-000100" Unicode Serial Number
+    __u8	SerNumLength;				// F0C USB string descriptor len
+    __u8	SerNumDescType;				// F0D USB descriptor type (=STRING type)
+    __le16	SerialNumber[MAX_SERIALNUMBER_LEN];	// F0E "01-01-000100" Unicode Serial Number
 
-	__u8	AssemblyNumLength;			// F26 USB string descriptor len
-	__u8	AssemblyNumDescType;			// F27 USB descriptor type (=STRING type)
-	__le16	AssemblyNumber[MAX_ASSEMBLYNUMBER_LEN];	// F28 "350-1000-01-A " assembly number
+    __u8	AssemblyNumLength;			// F26 USB string descriptor len
+    __u8	AssemblyNumDescType;			// F27 USB descriptor type (=STRING type)
+    __le16	AssemblyNumber[MAX_ASSEMBLYNUMBER_LEN];	// F28 "350-1000-01-A " assembly number
 
-	__u8	OemAssyNumLength;			// F44 USB string descriptor len
-	__u8	OemAssyNumDescType;			// F45 USB descriptor type (=STRING type)
-	__le16	OemAssyNumber[MAX_ASSEMBLYNUMBER_LEN];	// F46 "xxxxxxxxxxxxxx" OEM assembly number
+    __u8	OemAssyNumLength;			// F44 USB string descriptor len
+    __u8	OemAssyNumDescType;			// F45 USB descriptor type (=STRING type)
+    __le16	OemAssyNumber[MAX_ASSEMBLYNUMBER_LEN];	// F46 "xxxxxxxxxxxxxx" OEM assembly number
 
-	__u8	ManufDateLength;			// F62 USB string descriptor len
-	__u8	ManufDateDescType;			// F63 USB descriptor type (=STRING type)
-	__le16	ManufDate[6];				// F64 "MMDDYY" manufacturing date
+    __u8	ManufDateLength;			// F62 USB string descriptor len
+    __u8	ManufDateDescType;			// F63 USB descriptor type (=STRING type)
+    __le16	ManufDate[6];				// F64 "MMDDYY" manufacturing date
 
-	__u8	Reserved3[0x4D];			// F70 -- unused, set to 0 --
+    __u8	Reserved3[0x4D];			// F70 -- unused, set to 0 --
 
-	__u8	UartType;				// FBD Uart Type
-	__u8	IonPid;					// FBE Product ID, == LSB of USB DevDesc.PID
-							//      (Note: Edgeport/4s before 11/98 will have
-							//       00 here instead of 01)
-	__u8	IonConfig;				// FBF Config byte for ION manufacturing use
-							// FBF end of structure, total len = 3C0h
+    __u8	UartType;				// FBD Uart Type
+    __u8	IonPid;					// FBE Product ID, == LSB of USB DevDesc.PID
+    //      (Note: Edgeport/4s before 11/98 will have
+    //       00 here instead of 01)
+    __u8	IonConfig;				// FBF Config byte for ION manufacturing use
+    // FBF end of structure, total len = 3C0h
 
 };
 
@@ -516,9 +516,9 @@ struct edge_manuf_descriptor {
 
 #define	MANUF_ION_CONFIG_DIAG_NO_LOOP	0x20	// As below but no ext loopback test
 #define	MANUF_ION_CONFIG_DIAG		0x40	// 930 based device: 1=Run h/w diags, 0=norm
-						// TIUMP Device    : 1=IONSERIAL needs to run Final Test
+// TIUMP Device    : 1=IONSERIAL needs to run Final Test
 #define	MANUF_ION_CONFIG_MASTER		0x80	// 930 based device:  1=Master mode, 0=Normal
-						// TIUMP Device    :  1=First device on a multi TIUMP Device
+// TIUMP Device    :  1=First device on a multi TIUMP Device
 
 //
 // This structure describes parameters for the boot code, and
@@ -529,29 +529,29 @@ struct edge_manuf_descriptor {
 // included in this structure.
 //
 struct edge_boot_descriptor {
-	__u8		Length;			// C0 Desc length, per USB (= 40h)
-	__u8		DescType;		// C1 Desc type, per USB (= DEVICE type)
-	__u8		DescVer;		// C2 Desc version/format
-	__u8		Reserved1;		// C3 -- unused, set to 0 --
+    __u8		Length;			// C0 Desc length, per USB (= 40h)
+    __u8		DescType;		// C1 Desc type, per USB (= DEVICE type)
+    __u8		DescVer;		// C2 Desc version/format
+    __u8		Reserved1;		// C3 -- unused, set to 0 --
 
-	__le16		BootCodeLength;		// C4 Boot code goes from FF:0000 to FF:(len-1)
-						//	  (LE format)
+    __le16		BootCodeLength;		// C4 Boot code goes from FF:0000 to FF:(len-1)
+    //	  (LE format)
 
-	__u8		MajorVersion;		// C6 Firmware version: xx.
-	__u8		MinorVersion;		// C7			yy.
-	__le16		BuildNumber;		// C8			zzzz (LE format)
+    __u8		MajorVersion;		// C6 Firmware version: xx.
+    __u8		MinorVersion;		// C7			yy.
+    __le16		BuildNumber;		// C8			zzzz (LE format)
 
-	__u16		EnumRootDescTable;	// CA Root of ROM-based descriptor table
-	__u8		NumDescTypes;		// CC Number of supported descriptor types
+    __u16		EnumRootDescTable;	// CA Root of ROM-based descriptor table
+    __u8		NumDescTypes;		// CC Number of supported descriptor types
 
-	__u8		Reserved4;		// CD Fix Compiler Packing
+    __u8		Reserved4;		// CD Fix Compiler Packing
 
-	__le16		Capabilities;		// CE-CF Capabilities flags (LE format)
-	__u8		Reserved2[0x28];	// D0 -- unused, set to 0 --
-	__u8		UConfig0;		// F8 930-defined CPU configuration byte 0
-	__u8		UConfig1;		// F9 930-defined CPU configuration byte 1
-	__u8		Reserved3[6];		// FA -- unused, set to 0 --
-						// FF end of structure, total len = 80
+    __le16		Capabilities;		// CE-CF Capabilities flags (LE format)
+    __u8		Reserved2[0x28];	// D0 -- unused, set to 0 --
+    __u8		UConfig0;		// F8 930-defined CPU configuration byte 0
+    __u8		UConfig1;		// F9 930-defined CPU configuration byte 1
+    __u8		Reserved3[6];		// FA -- unused, set to 0 --
+    // FF end of structure, total len = 80
 };
 
 
@@ -559,7 +559,7 @@ struct edge_boot_descriptor {
 #define BOOT_DESC_VER_2		2	// 2nd definition, descriptors not included in boot
 
 
-	// Capabilities flags
+// Capabilities flags
 
 #define	BOOT_CAP_RESET_CMD	0x0001	// If set, boot correctly supports ION_RESET_DEVICE
 
@@ -593,48 +593,48 @@ struct edge_boot_descriptor {
 
 
 struct ti_i2c_desc {
-	__u8	Type;			// Type of descriptor
-	__u16	Size;			// Size of data only not including header
-	__u8	CheckSum;		// Checksum (8 bit sum of data only)
-	__u8	Data[0];		// Data starts here
+    __u8	Type;			// Type of descriptor
+    __u16	Size;			// Size of data only not including header
+    __u8	CheckSum;		// Checksum (8 bit sum of data only)
+    __u8	Data[0];		// Data starts here
 } __attribute__((packed));
 
 // for 5152 devices only (type 2 record)
 // for 3410 the version is stored in the WATCHPORT_FIRMWARE_VERSION descriptor
 struct ti_i2c_firmware_rec {
-	__u8	Ver_Major;		// Firmware Major version number
-	__u8	Ver_Minor;		// Firmware Minor version number
-	__u8	Data[0];		// Download starts here
+    __u8	Ver_Major;		// Firmware Major version number
+    __u8	Ver_Minor;		// Firmware Minor version number
+    __u8	Data[0];		// Download starts here
 } __attribute__((packed));
 
 
 struct watchport_firmware_version {
 // Added 2 bytes for version number
-	__u8	Version_Major;		//  Download Version (for Watchport)
-	__u8	Version_Minor;
+    __u8	Version_Major;		//  Download Version (for Watchport)
+    __u8	Version_Minor;
 } __attribute__((packed));
 
 
 // Structure of header of download image in fw_down.h
 struct ti_i2c_image_header {
-	__le16	Length;
-	__u8	CheckSum;
+    __le16	Length;
+    __u8	CheckSum;
 } __attribute__((packed));
 
 struct ti_basic_descriptor {
-	__u8	Power;		// Self powered
-				// bit 7: 1 - power switching supported
-				//        0 - power switching not supported
-				//
-				// bit 0: 1 - self powered
-				//        0 - bus powered
-				//
-				//
-	__u16	HubVid;		// VID HUB
-	__u16	HubPid;		// PID HUB
-	__u16	DevPid;		// PID Edgeport
-	__u8	HubTime;	// Time for power on to power good
-	__u8	HubCurrent;	// HUB Current = 100ma
+    __u8	Power;		// Self powered
+    // bit 7: 1 - power switching supported
+    //        0 - power switching not supported
+    //
+    // bit 0: 1 - self powered
+    //        0 - bus powered
+    //
+    //
+    __u16	HubVid;		// VID HUB
+    __u16	HubPid;		// PID HUB
+    __u16	DevPid;		// PID Edgeport
+    __u8	HubTime;	// Time for power on to power good
+    __u8	HubCurrent;	// HUB Current = 100ma
 } __attribute__((packed));
 
 
@@ -667,16 +667,16 @@ struct ti_basic_descriptor {
 
 
 struct edge_ti_manuf_descriptor {
-	__u8 IonConfig;		//  Config byte for ION manufacturing use
-	__u8 IonConfig2;	//  Expansion
-	__u8 Version;		//  Version
-	__u8 CpuRev_BoardRev;	//  CPU revision level (0xF0) and Board Rev Level (0x0F)
-	__u8 NumPorts;		//  Number of ports	for this UMP
-	__u8 NumVirtualPorts;	//  Number of Virtual ports
-	__u8 HubConfig1;	//  Used to configure the Hub
-	__u8 HubConfig2;	//  Used to configure the Hub
-	__u8 TotalPorts;	//  Total Number of Com Ports for the entire device (All UMPs)
-	__u8 Reserved;		//  Reserved
+    __u8 IonConfig;		//  Config byte for ION manufacturing use
+    __u8 IonConfig2;	//  Expansion
+    __u8 Version;		//  Version
+    __u8 CpuRev_BoardRev;	//  CPU revision level (0xF0) and Board Rev Level (0x0F)
+    __u8 NumPorts;		//  Number of ports	for this UMP
+    __u8 NumVirtualPorts;	//  Number of Virtual ports
+    __u8 HubConfig1;	//  Used to configure the Hub
+    __u8 HubConfig2;	//  Used to configure the Hub
+    __u8 TotalPorts;	//  Total Number of Com Ports for the entire device (All UMPs)
+    __u8 Reserved;		//  Reserved
 } __attribute__((packed));
 
 

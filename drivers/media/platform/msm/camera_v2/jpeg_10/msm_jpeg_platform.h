@@ -23,23 +23,23 @@
 #define JPEG_MAX_CLK_RATE 320000000
 
 int msm_jpeg_platform_set_clk_rate(struct msm_jpeg_device *pgmn_dev,
-		long clk_rate);
+                                   long clk_rate);
 void msm_jpeg_platform_p2v(struct msm_jpeg_device *pgmn_dev, struct file *file,
-	struct ion_handle **ionhandle, int domain_num);
+                           struct ion_handle **ionhandle, int domain_num);
 uint32_t msm_jpeg_platform_v2p(struct msm_jpeg_device *pgmn_dev, int fd,
-	uint32_t len, struct file **file, struct ion_handle **ionhandle,
-	int domain_num);
+                               uint32_t len, struct file **file, struct ion_handle **ionhandle,
+                               int domain_num);
 
 int msm_jpeg_platform_clk_enable(void);
 int msm_jpeg_platform_clk_disable(void);
 
 int msm_jpeg_platform_init(struct platform_device *pdev,
-	struct resource **mem,
-	void **base,
-	int *irq,
-	irqreturn_t (*handler) (int, void *),
-	void *context);
+                           struct resource **mem,
+                           void **base,
+                           int *irq,
+                           irqreturn_t (*handler) (int, void *),
+                           void *context);
 int msm_jpeg_platform_release(struct resource *mem, void *base, int irq,
-	void *context);
+                              void *context);
 
 #endif /* MSM_JPEG_PLATFORM_H */

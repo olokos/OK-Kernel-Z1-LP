@@ -56,8 +56,8 @@
  *                              chnl_destroy() will fail.
  */
 extern int chnl_create(struct chnl_mgr **channel_mgr,
-			      struct dev_object *hdev_obj,
-			      const struct chnl_mgrattrs *mgr_attrts);
+                       struct dev_object *hdev_obj,
+                       const struct chnl_mgrattrs *mgr_attrts);
 
 /*
  *  ======== chnl_destroy ========

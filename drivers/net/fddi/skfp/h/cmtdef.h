@@ -384,38 +384,38 @@
  * SMT timer
  */
 struct smt_timer {
-	struct smt_timer	*tm_next ;	/* linked list */
-	struct s_smc		*tm_smc ;	/* pointer to context */
-	u_long			tm_delta ;	/* delta time */
-	u_long			tm_token ;	/* token value */
-	u_short			tm_active ;	/* flag : active/inactive */
-	u_short			tm_pad ;	/* pad field */
+    struct smt_timer	*tm_next ;	/* linked list */
+    struct s_smc		*tm_smc ;	/* pointer to context */
+    u_long			tm_delta ;	/* delta time */
+    u_long			tm_token ;	/* token value */
+    u_short			tm_active ;	/* flag : active/inactive */
+    u_short			tm_pad ;	/* pad field */
 } ;
 
 /*
  * communication structures
  */
 struct mac_parameter {
-	u_long	t_neg ;		/* T_Neg parameter */
-	u_long	t_pri ;		/* T_Pri register in MAC */
+    u_long	t_neg ;		/* T_Neg parameter */
+    u_long	t_pri ;		/* T_Pri register in MAC */
 } ;
 
 /*
  * MAC counters
  */
 struct mac_counter {
-	u_long	mac_nobuf_counter ;	/* MAC SW counter: no buffer */
-	u_long	mac_r_restart_counter ;	/* MAC SW counter: rx restarted */
+    u_long	mac_nobuf_counter ;	/* MAC SW counter: no buffer */
+    u_long	mac_r_restart_counter ;	/* MAC SW counter: rx restarted */
 } ;
 
 /*
  * para struct context for SMT parameters
  */
 struct s_pcon {
-	int	pc_len ;
-	int	pc_err ;
-	int	pc_badset ;
-	void	*pc_p ;
+    int	pc_len ;
+    int	pc_err ;
+    int	pc_badset ;
+    void	*pc_p ;
 } ;
 
 /*
@@ -424,20 +424,20 @@ struct s_pcon {
 #define LEM_AVG	5
 struct lem_counter {
 #ifdef	AM29K
-	int	lem_on	;
-	u_long	lem_errors ;
-	u_long	lem_symbols ;
-	u_long	lem_tsymbols ;
-	int	lem_s_count ;
-	int	lem_n_s ;
-	int	lem_values ;
-	int	lem_index ;
-	int	lem_avg_ber[LEM_AVG] ;
-	int	lem_sum ;
+    int	lem_on	;
+    u_long	lem_errors ;
+    u_long	lem_symbols ;
+    u_long	lem_tsymbols ;
+    int	lem_s_count ;
+    int	lem_n_s ;
+    int	lem_values ;
+    int	lem_index ;
+    int	lem_avg_ber[LEM_AVG] ;
+    int	lem_sum ;
 #else
-	u_short	lem_float_ber ;		/* 10E-nn bit error rate */
-	u_long	lem_errors ;		/* accumulated error count */
-	u_short	lem_on	;
+    u_short	lem_float_ber ;		/* 10E-nn bit error rate */
+    u_long	lem_errors ;		/* accumulated error count */
+    u_short	lem_on	;
 #endif
 } ;
 
@@ -449,25 +449,25 @@ struct lem_counter {
  * PLC state table
  */
 struct s_plc {
-	u_short	p_state ;		/* current state */
-	u_short	p_bits ;		/* number of bits to send */
-	u_short	p_start ;		/* first bit pos */
-	u_short	p_pad ;			/* padding for alignment */
-	u_long soft_err ;		/* error counter */
-	u_long parity_err ;		/* error counter */
-	u_long ebuf_err ;		/* error counter */
-	u_long ebuf_cont ;		/* continuous error counter */
-	u_long phyinv ;			/* error counter */
-	u_long vsym_ctr ;		/* error counter */
-	u_long mini_ctr ;		/* error counter */
-	u_long tpc_exp ;		/* error counter */
-	u_long np_err ;			/* error counter */
-	u_long b_pcs ;			/* error counter */
-	u_long b_tpc ;			/* error counter */
-	u_long b_tne ;			/* error counter */
-	u_long b_qls ;			/* error counter */
-	u_long b_ils ;			/* error counter */
-	u_long b_hls ;			/* error counter */
+    u_short	p_state ;		/* current state */
+    u_short	p_bits ;		/* number of bits to send */
+    u_short	p_start ;		/* first bit pos */
+    u_short	p_pad ;			/* padding for alignment */
+    u_long soft_err ;		/* error counter */
+    u_long parity_err ;		/* error counter */
+    u_long ebuf_err ;		/* error counter */
+    u_long ebuf_cont ;		/* continuous error counter */
+    u_long phyinv ;			/* error counter */
+    u_long vsym_ctr ;		/* error counter */
+    u_long mini_ctr ;		/* error counter */
+    u_long tpc_exp ;		/* error counter */
+    u_long np_err ;			/* error counter */
+    u_long b_pcs ;			/* error counter */
+    u_long b_tpc ;			/* error counter */
+    u_long b_tne ;			/* error counter */
+    u_long b_qls ;			/* error counter */
+    u_long b_ils ;			/* error counter */
+    u_long b_hls ;			/* error counter */
 } ;
 #endif
 
@@ -482,10 +482,10 @@ struct s_plc {
 
 void hwt_restart(struct s_smc *smc);	/* hwt.c */
 SMbuf *smt_build_frame(struct s_smc *smc, int class, int type,
-		       int length);	/* smt.c */
+                       int length);	/* smt.c */
 SMbuf *smt_get_mbuf(struct s_smc *smc);	/* drvsr.c */
 void *sm_to_para(struct s_smc *smc, struct smt_header *sm,
-		 int para);		/* smt.c */
+                 int para);		/* smt.c */
 
 #ifndef SK_UNUSED
 #define SK_UNUSED(var)		(void)(var)
@@ -501,10 +501,10 @@ void pcm_init(struct s_smc *smc);
 void cfm(struct s_smc *smc, int event);
 void cfm_init(struct s_smc *smc);
 void smt_timer_start(struct s_smc *smc, struct smt_timer *timer, u_long time,
-		     u_long token);
+                     u_long token);
 void smt_timer_stop(struct s_smc *smc, struct smt_timer *timer);
 void pcm_status_state(struct s_smc *smc, int np, int *type, int *state,
-		      int *remote, int *mac);
+                      int *remote, int *mac);
 void plc_config_mux(struct s_smc *smc, int mux);
 void sm_lem_evaluate(struct s_smc *smc);
 void mac_update_counter(struct s_smc *smc);
@@ -516,7 +516,7 @@ void smt_agent_init(struct s_smc *smc);
 void smt_timer_init(struct s_smc *smc);
 void smt_received_pack(struct s_smc *smc, SMbuf *mb, int fs);
 void smt_add_para(struct s_smc *smc, struct s_pcon *pcon, u_short para,
-		  int index, int local);
+                  int index, int local);
 void smt_swap_para(struct smt_header *sm, int len, int direction);
 void ev_init(struct s_smc *smc);
 void hwt_init(struct s_smc *smc);
@@ -544,7 +544,7 @@ void smt_fixup_mib(struct s_smc *smc);
 void smt_reset_defaults(struct s_smc *smc, int level);
 void smt_agent_task(struct s_smc *smc);
 int smt_check_para(struct s_smc *smc, struct smt_header *sm,
-		   const u_short list[]);
+                   const u_short list[]);
 void driver_get_bia(struct s_smc *smc, struct fddi_addr *bia_addr);
 
 #ifdef SUPERNET_3
@@ -603,7 +603,7 @@ void hwt_wait_time(struct s_smc *smc, u_long start, long duration);
 #ifdef SMT_PNMI
 int pnmi_init(struct s_smc* smc);
 int pnmi_process_ndis_id(struct s_smc *smc, u_long ndis_oid, void *buf, int len,
-			 int *BytesAccessed, int *BytesNeeded, u_char action);
+                         int *BytesAccessed, int *BytesNeeded, u_char action);
 #endif
 
 #ifdef	SBA
@@ -617,7 +617,7 @@ void smt_init_sba();
 
 #ifdef	ESS
 int ess_raf_received_pack(struct s_smc *smc, SMbuf *mb, struct smt_header *sm,
-			  int fs);
+                          int fs);
 void ess_timer_poll(struct s_smc *smc);
 void ess_para_change(struct s_smc *smc);
 #endif

@@ -79,8 +79,7 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
                        tANI_U8 *qosCap, tANI_U16 *propCap, tANI_U8 *uapsd,
                        tPowerdBm *localConstraint,
                        tpPESession psessionEntry
-                      )
-{
+                      ) {
     tSirProbeRespBeacon *pBeaconStruct;
 #if !defined WLAN_FEATURE_VOWIFI
     tANI_U32            localPowerConstraints = 0;
@@ -88,8 +87,7 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
 
     pBeaconStruct = vos_mem_malloc(sizeof(tSirProbeRespBeacon));
 
-    if ( NULL == pBeaconStruct )
-    {
+    if ( NULL == pBeaconStruct ) {
         limLog(pMac, LOGE, FL("Unable to allocate memory in limExtractApCapability") );
         return;
     }
@@ -101,8 +99,7 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
     PELOG3(limLog( pMac, LOG3,
                    FL("In limExtractApCapability: The IE's being received are:"));
            sirDumpBuf( pMac, SIR_LIM_MODULE_ID, LOG3, pIE, ieLen );)
-    if (sirParseBeaconIE(pMac, pBeaconStruct, pIE, (tANI_U32)ieLen) == eSIR_SUCCESS)
-    {
+    if (sirParseBeaconIE(pMac, pBeaconStruct, pIE, (tANI_U32)ieLen) == eSIR_SUCCESS) {
         if (pBeaconStruct->wmeInfoPresent || pBeaconStruct->wmeEdcaPresent)
             LIM_BSS_CAPS_SET(WME, *qosCap);
         if (LIM_BSS_CAPS_GET(WME, *qosCap) && pBeaconStruct->wsmCapablePresent)
@@ -121,14 +118,11 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
         VOS_TRACE(VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO_MED,
                   "***beacon.SU Beamformer Capable*****=%d",pBeaconStruct->VHTCaps.suBeamFormerCap);
 
-        if ( pBeaconStruct->VHTCaps.present && pBeaconStruct->VHTOperation.present)
-        {
+        if ( pBeaconStruct->VHTCaps.present && pBeaconStruct->VHTOperation.present) {
             psessionEntry->vhtCapabilityPresentInBeacon = 1;
             psessionEntry->apCenterChan = pBeaconStruct->VHTOperation.chanCenterFreqSeg1;
             psessionEntry->apChanWidth = pBeaconStruct->VHTOperation.chanWidth;
-        }
-        else
-        {
+        } else {
             psessionEntry->vhtCapabilityPresentInBeacon = 0;
         }
 #endif
@@ -142,14 +136,12 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
            the lowest channel number in the subband */
 
         if (pBeaconStruct->countryInfoPresent &&
-                pBeaconStruct->countryInfoParam.channelTransmitPower[0].channelNumber < LIM_OPERATING_EXT_IDENTIFIER )
-        {
+                pBeaconStruct->countryInfoParam.channelTransmitPower[0].channelNumber < LIM_OPERATING_EXT_IDENTIFIER ) {
             int i;
             tANI_U8 firstChannel =0, numChannels =0;
             tANI_U8 channel = psessionEntry->currentOperChannel;
 
-            for (i=0; i < pBeaconStruct->countryInfoParam.numIntervals; ++i)
-            {
+            for (i=0; i < pBeaconStruct->countryInfoParam.numIntervals; ++i) {
                 if (i >= COUNTRY_INFO_MAX_CHANNEL)
                     break;
 
@@ -161,8 +153,7 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
                     break;
             }
 
-            if (i < pBeaconStruct->countryInfoParam.numIntervals && i < COUNTRY_INFO_MAX_CHANNEL)
-            {
+            if (i < pBeaconStruct->countryInfoParam.numIntervals && i < COUNTRY_INFO_MAX_CHANNEL) {
                 *localConstraint = pBeaconStruct->countryInfoParam.channelTransmitPower[i].maxTransmitPower;
             }
         }
@@ -171,25 +162,21 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
          * adapt to it. Hence there is else condition check
          * for this if statement.
          */
-        if ( pBeaconStruct->eseTxPwr.present)
-        {
+        if ( pBeaconStruct->eseTxPwr.present) {
             *localConstraint = pBeaconStruct->eseTxPwr.power_limit;
         }
 #endif
-        if (pBeaconStruct->powerConstraintPresent)
-        {
+        if (pBeaconStruct->powerConstraintPresent) {
             *localConstraint -= pBeaconStruct->localPowerConstraint.localPowerConstraints;
         }
 #if !defined WLAN_FEATURE_VOWIFI
         localPowerConstraints = (tANI_U32)pBeaconStruct->localPowerConstraint.localPowerConstraints;
-        if (cfgSetInt(pMac, WNI_CFG_LOCAL_POWER_CONSTRAINT, localPowerConstraints) != eSIR_SUCCESS)
-        {
+        if (cfgSetInt(pMac, WNI_CFG_LOCAL_POWER_CONSTRAINT, localPowerConstraints) != eSIR_SUCCESS) {
             limLog(pMac, LOGP, FL("Could not update local power constraint to cfg."));
         }
 #endif
         psessionEntry->countryInfoPresent = FALSE; /* Initializing before first use */
-        if (pBeaconStruct->countryInfoPresent)
-        {
+        if (pBeaconStruct->countryInfoPresent) {
             psessionEntry->countryInfoPresent = TRUE;
         }
     }
@@ -211,10 +198,8 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
  * @param  pMac - Pointer to Global MAC structure
  * @return The corresponding HT enumeration
  */
-ePhyChanBondState  limGetHTCBState(ePhyChanBondState aniCBMode)
-{
-    switch ( aniCBMode )
-    {
+ePhyChanBondState  limGetHTCBState(ePhyChanBondState aniCBMode) {
+    switch ( aniCBMode ) {
 #ifdef WLAN_FEATURE_11AC
     case PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_LOW:
     case PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_CENTERED:
@@ -260,12 +245,10 @@ ePhyChanBondState  limGetHTCBState(ePhyChanBondState aniCBMode)
 */
 tStaRateMode limGetStaPeerType( tpAniSirGlobal pMac,
                                 tpDphHashNode pStaDs,
-                                tpPESession   psessionEntry)
-{
+                                tpPESession   psessionEntry) {
     tStaRateMode staPeerType = eSTA_11b;
     // Determine the peer-STA type
-    if( pStaDs->aniPeer )
-    {
+    if( pStaDs->aniPeer ) {
         if(PROP_CAPABILITY_GET( TAURUS, pStaDs->propCapability ))
             staPeerType = eSTA_TAURUS;
         else if( PROP_CAPABILITY_GET( TITAN, pStaDs->propCapability ))

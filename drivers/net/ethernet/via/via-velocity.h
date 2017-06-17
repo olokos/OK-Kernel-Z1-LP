@@ -144,7 +144,7 @@
 
 // max transmit or receive buffer size
 #define CB_RX_BUF_SIZE     2048UL	// max buffer size
-					// NOTE: must be multiple of 4
+// NOTE: must be multiple of 4
 
 #define CB_MAX_RD_NUM       512	// MAX # of RD
 #define CB_MAX_TD_NUM       256	// MAX # of TD
@@ -173,26 +173,26 @@
  */
 
 struct rdesc0 {
-	__le16 RSR;		/* Receive status */
-	__le16 len;		/* bits 0--13; bit 15 - owner */
+    __le16 RSR;		/* Receive status */
+    __le16 len;		/* bits 0--13; bit 15 - owner */
 };
 
 struct rdesc1 {
-	__le16 PQTAG;
-	u8 CSM;
-	u8 IPKT;
+    __le16 PQTAG;
+    u8 CSM;
+    u8 IPKT;
 };
 
 enum {
-	RX_INTEN = cpu_to_le16(0x8000)
+    RX_INTEN = cpu_to_le16(0x8000)
 };
 
 struct rx_desc {
-	struct rdesc0 rdesc0;
-	struct rdesc1 rdesc1;
-	__le32 pa_low;		/* Low 32 bit PCI address */
-	__le16 pa_high;		/* Next 16 bit PCI address (48 total) */
-	__le16 size;		/* bits 0--14 - frame size, bit 15 - enable int. */
+    struct rdesc0 rdesc0;
+    struct rdesc1 rdesc1;
+    __le32 pa_low;		/* Low 32 bit PCI address */
+    __le16 pa_high;		/* Next 16 bit PCI address (48 total) */
+    __le16 size;		/* bits 0--14 - frame size, bit 15 - enable int. */
 } __packed;
 
 /*
@@ -200,35 +200,35 @@ struct rx_desc {
  */
 
 struct tdesc0 {
-	__le16 TSR;		/* Transmit status register */
-	__le16 len;		/* bits 0--13 - size of frame, bit 15 - owner */
+    __le16 TSR;		/* Transmit status register */
+    __le16 len;		/* bits 0--13 - size of frame, bit 15 - owner */
 };
 
 struct tdesc1 {
-	__le16 vlan;
-	u8 TCR;
-	u8 cmd;			/* bits 0--1 - TCPLS, bits 4--7 - CMDZ */
+    __le16 vlan;
+    u8 TCR;
+    u8 cmd;			/* bits 0--1 - TCPLS, bits 4--7 - CMDZ */
 } __packed;
 
 enum {
-	TD_QUEUE = cpu_to_le16(0x8000)
+    TD_QUEUE = cpu_to_le16(0x8000)
 };
 
 struct td_buf {
-	__le32 pa_low;
-	__le16 pa_high;
-	__le16 size;		/* bits 0--13 - size, bit 15 - queue */
+    __le32 pa_low;
+    __le16 pa_high;
+    __le16 size;		/* bits 0--13 - size, bit 15 - queue */
 } __packed;
 
 struct tx_desc {
-	struct tdesc0 tdesc0;
-	struct tdesc1 tdesc1;
-	struct td_buf td_buf[7];
+    struct tdesc0 tdesc0;
+    struct tdesc1 tdesc1;
+    struct td_buf td_buf[7];
 };
 
 struct velocity_rd_info {
-	struct sk_buff *skb;
-	dma_addr_t skb_dma;
+    struct sk_buff *skb;
+    dma_addr_t skb_dma;
 };
 
 /*
@@ -236,14 +236,14 @@ struct velocity_rd_info {
  */
 
 struct velocity_td_info {
-	struct sk_buff *skb;
-	int nskb_dma;
-	dma_addr_t skb_dma[7];
+    struct sk_buff *skb;
+    int nskb_dma;
+    dma_addr_t skb_dma[7];
 };
 
 enum  velocity_owner {
-	OWNED_BY_HOST = 0,
-	OWNED_BY_NIC = cpu_to_le16(0x8000)
+    OWNED_BY_HOST = 0,
+    OWNED_BY_NIC = cpu_to_le16(0x8000)
 };
 
 
@@ -975,175 +975,175 @@ enum  velocity_owner {
  */
 
 struct mac_regs {
-	volatile u8 PAR[6];		/* 0x00 */
-	volatile u8 RCR;
-	volatile u8 TCR;
+    volatile u8 PAR[6];		/* 0x00 */
+    volatile u8 RCR;
+    volatile u8 TCR;
 
-	volatile __le32 CR0Set;		/* 0x08 */
-	volatile __le32 CR0Clr;		/* 0x0C */
+    volatile __le32 CR0Set;		/* 0x08 */
+    volatile __le32 CR0Clr;		/* 0x0C */
 
-	volatile u8 MARCAM[8];		/* 0x10 */
+    volatile u8 MARCAM[8];		/* 0x10 */
 
-	volatile __le32 DecBaseHi;	/* 0x18 */
-	volatile __le16 DbfBaseHi;	/* 0x1C */
-	volatile __le16 reserved_1E;
+    volatile __le32 DecBaseHi;	/* 0x18 */
+    volatile __le16 DbfBaseHi;	/* 0x1C */
+    volatile __le16 reserved_1E;
 
-	volatile __le16 ISRCTL;		/* 0x20 */
-	volatile u8 TXESR;
-	volatile u8 RXESR;
+    volatile __le16 ISRCTL;		/* 0x20 */
+    volatile u8 TXESR;
+    volatile u8 RXESR;
 
-	volatile __le32 ISR;		/* 0x24 */
-	volatile __le32 IMR;
+    volatile __le32 ISR;		/* 0x24 */
+    volatile __le32 IMR;
 
-	volatile __le32 TDStatusPort;	/* 0x2C */
+    volatile __le32 TDStatusPort;	/* 0x2C */
 
-	volatile __le16 TDCSRSet;	/* 0x30 */
-	volatile u8 RDCSRSet;
-	volatile u8 reserved_33;
-	volatile __le16 TDCSRClr;
-	volatile u8 RDCSRClr;
-	volatile u8 reserved_37;
+    volatile __le16 TDCSRSet;	/* 0x30 */
+    volatile u8 RDCSRSet;
+    volatile u8 reserved_33;
+    volatile __le16 TDCSRClr;
+    volatile u8 RDCSRClr;
+    volatile u8 reserved_37;
 
-	volatile __le32 RDBaseLo;	/* 0x38 */
-	volatile __le16 RDIdx;		/* 0x3C */
-	volatile u8 TQETMR;		/* 0x3E, VT3216 and above only */
-	volatile u8 RQETMR;		/* 0x3F, VT3216 and above only */
+    volatile __le32 RDBaseLo;	/* 0x38 */
+    volatile __le16 RDIdx;		/* 0x3C */
+    volatile u8 TQETMR;		/* 0x3E, VT3216 and above only */
+    volatile u8 RQETMR;		/* 0x3F, VT3216 and above only */
 
-	volatile __le32 TDBaseLo[4];	/* 0x40 */
+    volatile __le32 TDBaseLo[4];	/* 0x40 */
 
-	volatile __le16 RDCSize;	/* 0x50 */
-	volatile __le16 TDCSize;	/* 0x52 */
-	volatile __le16 TDIdx[4];	/* 0x54 */
-	volatile __le16 tx_pause_timer;	/* 0x5C */
-	volatile __le16 RBRDU;		/* 0x5E */
+    volatile __le16 RDCSize;	/* 0x50 */
+    volatile __le16 TDCSize;	/* 0x52 */
+    volatile __le16 TDIdx[4];	/* 0x54 */
+    volatile __le16 tx_pause_timer;	/* 0x5C */
+    volatile __le16 RBRDU;		/* 0x5E */
 
-	volatile __le32 FIFOTest0;	/* 0x60 */
-	volatile __le32 FIFOTest1;	/* 0x64 */
+    volatile __le32 FIFOTest0;	/* 0x60 */
+    volatile __le32 FIFOTest1;	/* 0x64 */
 
-	volatile u8 CAMADDR;		/* 0x68 */
-	volatile u8 CAMCR;		/* 0x69 */
-	volatile u8 GFTEST;		/* 0x6A */
-	volatile u8 FTSTCMD;		/* 0x6B */
+    volatile u8 CAMADDR;		/* 0x68 */
+    volatile u8 CAMCR;		/* 0x69 */
+    volatile u8 GFTEST;		/* 0x6A */
+    volatile u8 FTSTCMD;		/* 0x6B */
 
-	volatile u8 MIICFG;		/* 0x6C */
-	volatile u8 MIISR;
-	volatile u8 PHYSR0;
-	volatile u8 PHYSR1;
-	volatile u8 MIICR;
-	volatile u8 MIIADR;
-	volatile __le16 MIIDATA;
+    volatile u8 MIICFG;		/* 0x6C */
+    volatile u8 MIISR;
+    volatile u8 PHYSR0;
+    volatile u8 PHYSR1;
+    volatile u8 MIICR;
+    volatile u8 MIIADR;
+    volatile __le16 MIIDATA;
 
-	volatile __le16 SoftTimer0;	/* 0x74 */
-	volatile __le16 SoftTimer1;
+    volatile __le16 SoftTimer0;	/* 0x74 */
+    volatile __le16 SoftTimer1;
 
-	volatile u8 CFGA;		/* 0x78 */
-	volatile u8 CFGB;
-	volatile u8 CFGC;
-	volatile u8 CFGD;
+    volatile u8 CFGA;		/* 0x78 */
+    volatile u8 CFGB;
+    volatile u8 CFGC;
+    volatile u8 CFGD;
 
-	volatile __le16 DCFG;		/* 0x7C */
-	volatile __le16 MCFG;
+    volatile __le16 DCFG;		/* 0x7C */
+    volatile __le16 MCFG;
 
-	volatile u8 TBIST;		/* 0x80 */
-	volatile u8 RBIST;
-	volatile u8 PMCPORT;
-	volatile u8 STICKHW;
+    volatile u8 TBIST;		/* 0x80 */
+    volatile u8 RBIST;
+    volatile u8 PMCPORT;
+    volatile u8 STICKHW;
 
-	volatile u8 MIBCR;		/* 0x84 */
-	volatile u8 reserved_85;
-	volatile u8 rev_id;
-	volatile u8 PORSTS;
+    volatile u8 MIBCR;		/* 0x84 */
+    volatile u8 reserved_85;
+    volatile u8 rev_id;
+    volatile u8 PORSTS;
 
-	volatile __le32 MIBData;	/* 0x88 */
+    volatile __le32 MIBData;	/* 0x88 */
 
-	volatile __le16 EEWrData;
+    volatile __le16 EEWrData;
 
-	volatile u8 reserved_8E;
-	volatile u8 BPMDWr;
-	volatile u8 BPCMD;
-	volatile u8 BPMDRd;
+    volatile u8 reserved_8E;
+    volatile u8 BPMDWr;
+    volatile u8 BPCMD;
+    volatile u8 BPMDRd;
 
-	volatile u8 EECHKSUM;		/* 0x92 */
-	volatile u8 EECSR;
+    volatile u8 EECHKSUM;		/* 0x92 */
+    volatile u8 EECSR;
 
-	volatile __le16 EERdData;	/* 0x94 */
-	volatile u8 EADDR;
-	volatile u8 EMBCMD;
+    volatile __le16 EERdData;	/* 0x94 */
+    volatile u8 EADDR;
+    volatile u8 EMBCMD;
 
 
-	volatile u8 JMPSR0;		/* 0x98 */
-	volatile u8 JMPSR1;
-	volatile u8 JMPSR2;
-	volatile u8 JMPSR3;
-	volatile u8 CHIPGSR;		/* 0x9C */
-	volatile u8 TESTCFG;
-	volatile u8 DEBUG;
-	volatile u8 CHIPGCR;
+    volatile u8 JMPSR0;		/* 0x98 */
+    volatile u8 JMPSR1;
+    volatile u8 JMPSR2;
+    volatile u8 JMPSR3;
+    volatile u8 CHIPGSR;		/* 0x9C */
+    volatile u8 TESTCFG;
+    volatile u8 DEBUG;
+    volatile u8 CHIPGCR;
 
-	volatile __le16 WOLCRSet;	/* 0xA0 */
-	volatile u8 PWCFGSet;
-	volatile u8 WOLCFGSet;
+    volatile __le16 WOLCRSet;	/* 0xA0 */
+    volatile u8 PWCFGSet;
+    volatile u8 WOLCFGSet;
 
-	volatile __le16 WOLCRClr;	/* 0xA4 */
-	volatile u8 PWCFGCLR;
-	volatile u8 WOLCFGClr;
+    volatile __le16 WOLCRClr;	/* 0xA4 */
+    volatile u8 PWCFGCLR;
+    volatile u8 WOLCFGClr;
 
-	volatile __le16 WOLSRSet;	/* 0xA8 */
-	volatile __le16 reserved_AA;
+    volatile __le16 WOLSRSet;	/* 0xA8 */
+    volatile __le16 reserved_AA;
 
-	volatile __le16 WOLSRClr;	/* 0xAC */
-	volatile __le16 reserved_AE;
+    volatile __le16 WOLSRClr;	/* 0xAC */
+    volatile __le16 reserved_AE;
 
-	volatile __le16 PatternCRC[8];	/* 0xB0 */
-	volatile __le32 ByteMask[4][4];	/* 0xC0 */
+    volatile __le16 PatternCRC[8];	/* 0xB0 */
+    volatile __le32 ByteMask[4][4];	/* 0xC0 */
 };
 
 
 enum hw_mib {
-	HW_MIB_ifRxAllPkts = 0,
-	HW_MIB_ifRxOkPkts,
-	HW_MIB_ifTxOkPkts,
-	HW_MIB_ifRxErrorPkts,
-	HW_MIB_ifRxRuntOkPkt,
-	HW_MIB_ifRxRuntErrPkt,
-	HW_MIB_ifRx64Pkts,
-	HW_MIB_ifTx64Pkts,
-	HW_MIB_ifRx65To127Pkts,
-	HW_MIB_ifTx65To127Pkts,
-	HW_MIB_ifRx128To255Pkts,
-	HW_MIB_ifTx128To255Pkts,
-	HW_MIB_ifRx256To511Pkts,
-	HW_MIB_ifTx256To511Pkts,
-	HW_MIB_ifRx512To1023Pkts,
-	HW_MIB_ifTx512To1023Pkts,
-	HW_MIB_ifRx1024To1518Pkts,
-	HW_MIB_ifTx1024To1518Pkts,
-	HW_MIB_ifTxEtherCollisions,
-	HW_MIB_ifRxPktCRCE,
-	HW_MIB_ifRxJumboPkts,
-	HW_MIB_ifTxJumboPkts,
-	HW_MIB_ifRxMacControlFrames,
-	HW_MIB_ifTxMacControlFrames,
-	HW_MIB_ifRxPktFAE,
-	HW_MIB_ifRxLongOkPkt,
-	HW_MIB_ifRxLongPktErrPkt,
-	HW_MIB_ifTXSQEErrors,
-	HW_MIB_ifRxNobuf,
-	HW_MIB_ifRxSymbolErrors,
-	HW_MIB_ifInRangeLengthErrors,
-	HW_MIB_ifLateCollisions,
-	HW_MIB_SIZE
+    HW_MIB_ifRxAllPkts = 0,
+    HW_MIB_ifRxOkPkts,
+    HW_MIB_ifTxOkPkts,
+    HW_MIB_ifRxErrorPkts,
+    HW_MIB_ifRxRuntOkPkt,
+    HW_MIB_ifRxRuntErrPkt,
+    HW_MIB_ifRx64Pkts,
+    HW_MIB_ifTx64Pkts,
+    HW_MIB_ifRx65To127Pkts,
+    HW_MIB_ifTx65To127Pkts,
+    HW_MIB_ifRx128To255Pkts,
+    HW_MIB_ifTx128To255Pkts,
+    HW_MIB_ifRx256To511Pkts,
+    HW_MIB_ifTx256To511Pkts,
+    HW_MIB_ifRx512To1023Pkts,
+    HW_MIB_ifTx512To1023Pkts,
+    HW_MIB_ifRx1024To1518Pkts,
+    HW_MIB_ifTx1024To1518Pkts,
+    HW_MIB_ifTxEtherCollisions,
+    HW_MIB_ifRxPktCRCE,
+    HW_MIB_ifRxJumboPkts,
+    HW_MIB_ifTxJumboPkts,
+    HW_MIB_ifRxMacControlFrames,
+    HW_MIB_ifTxMacControlFrames,
+    HW_MIB_ifRxPktFAE,
+    HW_MIB_ifRxLongOkPkt,
+    HW_MIB_ifRxLongPktErrPkt,
+    HW_MIB_ifTXSQEErrors,
+    HW_MIB_ifRxNobuf,
+    HW_MIB_ifRxSymbolErrors,
+    HW_MIB_ifInRangeLengthErrors,
+    HW_MIB_ifLateCollisions,
+    HW_MIB_SIZE
 };
 
 enum chip_type {
-	CHIP_TYPE_VT6110 = 1,
+    CHIP_TYPE_VT6110 = 1,
 };
 
 struct velocity_info_tbl {
-	enum chip_type chip_id;
-	const char *name;
-	int txqueue;
-	u32 flags;
+    enum chip_type chip_id;
+    const char *name;
+    int txqueue;
+    u32 flags;
 };
 
 #define mac_hw_mibs_init(regs) {\
@@ -1187,14 +1187,14 @@ struct velocity_info_tbl {
 }
 
 static inline void mac_eeprom_reload(struct mac_regs __iomem * regs) {
-	int i=0;
+    int i=0;
 
-	BYTE_REG_BITS_ON(EECSR_RELOAD,&(regs->EECSR));
-	do {
-		udelay(10);
-		if (i++>0x1000)
-			break;
-	} while (BYTE_REG_BITS_IS_ON(EECSR_RELOAD,&(regs->EECSR)));
+    BYTE_REG_BITS_ON(EECSR_RELOAD,&(regs->EECSR));
+    do {
+        udelay(10);
+        if (i++>0x1000)
+            break;
+    } while (BYTE_REG_BITS_IS_ON(EECSR_RELOAD,&(regs->EECSR)));
 }
 
 /*
@@ -1204,26 +1204,26 @@ static inline void mac_eeprom_reload(struct mac_regs __iomem * regs) {
 typedef u8 MCAM_ADDR[ETH_ALEN];
 
 struct arp_packet {
-	u8 dest_mac[ETH_ALEN];
-	u8 src_mac[ETH_ALEN];
-	__be16 type;
-	__be16 ar_hrd;
-	__be16 ar_pro;
-	u8 ar_hln;
-	u8 ar_pln;
-	__be16 ar_op;
-	u8 ar_sha[ETH_ALEN];
-	u8 ar_sip[4];
-	u8 ar_tha[ETH_ALEN];
-	u8 ar_tip[4];
+    u8 dest_mac[ETH_ALEN];
+    u8 src_mac[ETH_ALEN];
+    __be16 type;
+    __be16 ar_hrd;
+    __be16 ar_pro;
+    u8 ar_hln;
+    u8 ar_pln;
+    __be16 ar_op;
+    u8 ar_sha[ETH_ALEN];
+    u8 ar_sip[4];
+    u8 ar_tha[ETH_ALEN];
+    u8 ar_tip[4];
 } __packed;
 
 struct _magic_packet {
-	u8 dest_mac[6];
-	u8 src_mac[6];
-	__be16 type;
-	u8 MAC[16][6];
-	u8 password[6];
+    u8 dest_mac[6];
+    u8 src_mac[6];
+    __be16 type;
+    u8 MAC[16][6];
+    u8 password[6];
 } __packed;
 
 /*
@@ -1232,12 +1232,12 @@ struct _magic_packet {
  */
 
 struct velocity_context {
-	u8 mac_reg[256];
-	MCAM_ADDR cam_addr[MCAM_SIZE];
-	u16 vcam[VCAM_SIZE];
-	u32 cammask[2];
-	u32 patcrc[2];
-	u32 pattern[8];
+    u8 mac_reg[256];
+    MCAM_ADDR cam_addr[MCAM_SIZE];
+    u16 vcam[VCAM_SIZE];
+    u32 cammask[2];
+    u32 patcrc[2];
+    u32 pattern[8];
 };
 
 /*
@@ -1301,11 +1301,11 @@ struct velocity_context {
 
 
 enum velocity_msg_level {
-	MSG_LEVEL_ERR = 0,	//Errors that will cause abnormal operation.
-	MSG_LEVEL_NOTICE = 1,	//Some errors need users to be notified.
-	MSG_LEVEL_INFO = 2,	//Normal message.
-	MSG_LEVEL_VERBOSE = 3,	//Will report all trival errors.
-	MSG_LEVEL_DEBUG = 4	//Only for debug purpose.
+    MSG_LEVEL_ERR = 0,	//Errors that will cause abnormal operation.
+    MSG_LEVEL_NOTICE = 1,	//Some errors need users to be notified.
+    MSG_LEVEL_INFO = 2,	//Normal message.
+    MSG_LEVEL_VERBOSE = 3,	//Will report all trival errors.
+    MSG_LEVEL_DEBUG = 4	//Only for debug purpose.
 };
 
 #ifdef VELOCITY_DEBUG
@@ -1386,47 +1386,47 @@ enum velocity_msg_level {
 #define     VELOCITY_LINK_CHANGE           0x00000001UL
 
 enum speed_opt {
-	SPD_DPX_AUTO = 0,
-	SPD_DPX_100_HALF = 1,
-	SPD_DPX_100_FULL = 2,
-	SPD_DPX_10_HALF = 3,
-	SPD_DPX_10_FULL = 4,
-	SPD_DPX_1000_FULL = 5
+    SPD_DPX_AUTO = 0,
+    SPD_DPX_100_HALF = 1,
+    SPD_DPX_100_FULL = 2,
+    SPD_DPX_10_HALF = 3,
+    SPD_DPX_10_FULL = 4,
+    SPD_DPX_1000_FULL = 5
 };
 
 enum velocity_init_type {
-	VELOCITY_INIT_COLD = 0,
-	VELOCITY_INIT_RESET,
-	VELOCITY_INIT_WOL
+    VELOCITY_INIT_COLD = 0,
+    VELOCITY_INIT_RESET,
+    VELOCITY_INIT_WOL
 };
 
 enum velocity_flow_cntl_type {
-	FLOW_CNTL_DEFAULT = 1,
-	FLOW_CNTL_TX,
-	FLOW_CNTL_RX,
-	FLOW_CNTL_TX_RX,
-	FLOW_CNTL_DISABLE,
+    FLOW_CNTL_DEFAULT = 1,
+    FLOW_CNTL_TX,
+    FLOW_CNTL_RX,
+    FLOW_CNTL_TX_RX,
+    FLOW_CNTL_DISABLE,
 };
 
 struct velocity_opt {
-	int numrx;			/* Number of RX descriptors */
-	int numtx;			/* Number of TX descriptors */
-	enum speed_opt spd_dpx;		/* Media link mode */
+    int numrx;			/* Number of RX descriptors */
+    int numtx;			/* Number of TX descriptors */
+    enum speed_opt spd_dpx;		/* Media link mode */
 
-	int DMA_length;			/* DMA length */
-	int rx_thresh;			/* RX_THRESH */
-	int flow_cntl;
-	int wol_opts;			/* Wake on lan options */
-	int td_int_count;
-	int int_works;
-	int rx_bandwidth_hi;
-	int rx_bandwidth_lo;
-	int rx_bandwidth_en;
-	int rxqueue_timer;
-	int txqueue_timer;
-	int tx_intsup;
-	int rx_intsup;
-	u32 flags;
+    int DMA_length;			/* DMA length */
+    int rx_thresh;			/* RX_THRESH */
+    int flow_cntl;
+    int wol_opts;			/* Wake on lan options */
+    int td_int_count;
+    int int_works;
+    int rx_bandwidth_hi;
+    int rx_bandwidth_lo;
+    int rx_bandwidth_en;
+    int rxqueue_timer;
+    int txqueue_timer;
+    int tx_intsup;
+    int rx_intsup;
+    u32 flags;
 };
 
 #define AVAIL_TD(p,q)   ((p)->options.numtx-((p)->tx.used[(q)]))
@@ -1434,66 +1434,66 @@ struct velocity_opt {
 #define GET_RD_BY_IDX(vptr, idx)   (vptr->rd_ring[idx])
 
 struct velocity_info {
-	struct pci_dev *pdev;
-	struct net_device *dev;
+    struct pci_dev *pdev;
+    struct net_device *dev;
 
-	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
-	u8 ip_addr[4];
-	enum chip_type chip_id;
+    unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+    u8 ip_addr[4];
+    enum chip_type chip_id;
 
-	struct mac_regs __iomem * mac_regs;
-	unsigned long memaddr;
-	unsigned long ioaddr;
+    struct mac_regs __iomem * mac_regs;
+    unsigned long memaddr;
+    unsigned long ioaddr;
 
-	struct tx_info {
-		int numq;
+    struct tx_info {
+        int numq;
 
-		/* FIXME: the locality of the data seems rather poor. */
-		int used[TX_QUEUE_NO];
-		int curr[TX_QUEUE_NO];
-		int tail[TX_QUEUE_NO];
-		struct tx_desc *rings[TX_QUEUE_NO];
-		struct velocity_td_info *infos[TX_QUEUE_NO];
-		dma_addr_t pool_dma[TX_QUEUE_NO];
-	} tx;
+        /* FIXME: the locality of the data seems rather poor. */
+        int used[TX_QUEUE_NO];
+        int curr[TX_QUEUE_NO];
+        int tail[TX_QUEUE_NO];
+        struct tx_desc *rings[TX_QUEUE_NO];
+        struct velocity_td_info *infos[TX_QUEUE_NO];
+        dma_addr_t pool_dma[TX_QUEUE_NO];
+    } tx;
 
-	struct rx_info {
-		int buf_sz;
+    struct rx_info {
+        int buf_sz;
 
-		int dirty;
-		int curr;
-		u32 filled;
-		struct rx_desc *ring;
-		struct velocity_rd_info *info;	/* It's an array */
-		dma_addr_t pool_dma;
-	} rx;
+        int dirty;
+        int curr;
+        u32 filled;
+        struct rx_desc *ring;
+        struct velocity_rd_info *info;	/* It's an array */
+        dma_addr_t pool_dma;
+    } rx;
 
-	u32 mib_counter[MAX_HW_MIB_COUNTER];
-	struct velocity_opt options;
+    u32 mib_counter[MAX_HW_MIB_COUNTER];
+    struct velocity_opt options;
 
-	u32 int_mask;
+    u32 int_mask;
 
-	u32 flags;
+    u32 flags;
 
-	u32 mii_status;
-	u32 phy_id;
-	int multicast_limit;
+    u32 mii_status;
+    u32 phy_id;
+    int multicast_limit;
 
-	u8 vCAMmask[(VCAM_SIZE / 8)];
-	u8 mCAMmask[(MCAM_SIZE / 8)];
+    u8 vCAMmask[(VCAM_SIZE / 8)];
+    u8 mCAMmask[(MCAM_SIZE / 8)];
 
-	spinlock_t lock;
+    spinlock_t lock;
 
-	int wol_opts;
-	u8 wol_passwd[6];
+    int wol_opts;
+    u8 wol_passwd[6];
 
-	struct velocity_context context;
+    struct velocity_context context;
 
-	u32 ticks;
+    u32 ticks;
 
-	u8 rev_id;
+    u8 rev_id;
 
-	struct napi_struct napi;
+    struct napi_struct napi;
 };
 
 /**
@@ -1507,23 +1507,22 @@ struct velocity_info {
  *
  */
 
-static inline int velocity_get_ip(struct velocity_info *vptr)
-{
-	struct in_device *in_dev;
-	struct in_ifaddr *ifa;
-	int res = -ENOENT;
+static inline int velocity_get_ip(struct velocity_info *vptr) {
+    struct in_device *in_dev;
+    struct in_ifaddr *ifa;
+    int res = -ENOENT;
 
-	rcu_read_lock();
-	in_dev = __in_dev_get_rcu(vptr->dev);
-	if (in_dev != NULL) {
-		ifa = (struct in_ifaddr *) in_dev->ifa_list;
-		if (ifa != NULL) {
-			memcpy(vptr->ip_addr, &ifa->ifa_address, 4);
-			res = 0;
-		}
-	}
-	rcu_read_unlock();
-	return res;
+    rcu_read_lock();
+    in_dev = __in_dev_get_rcu(vptr->dev);
+    if (in_dev != NULL) {
+        ifa = (struct in_ifaddr *) in_dev->ifa_list;
+        if (ifa != NULL) {
+            memcpy(vptr->ip_addr, &ifa->ifa_address, 4);
+            res = 0;
+        }
+    }
+    rcu_read_unlock();
+    return res;
 }
 
 /**
@@ -1537,19 +1536,18 @@ static inline int velocity_get_ip(struct velocity_info *vptr)
  *	space.
  */
 
-static inline void velocity_update_hw_mibs(struct velocity_info *vptr)
-{
-	u32 tmp;
-	int i;
-	BYTE_REG_BITS_ON(MIBCR_MIBFLSH, &(vptr->mac_regs->MIBCR));
+static inline void velocity_update_hw_mibs(struct velocity_info *vptr) {
+    u32 tmp;
+    int i;
+    BYTE_REG_BITS_ON(MIBCR_MIBFLSH, &(vptr->mac_regs->MIBCR));
 
-	while (BYTE_REG_BITS_IS_ON(MIBCR_MIBFLSH, &(vptr->mac_regs->MIBCR)));
+    while (BYTE_REG_BITS_IS_ON(MIBCR_MIBFLSH, &(vptr->mac_regs->MIBCR)));
 
-	BYTE_REG_BITS_ON(MIBCR_MPTRINI, &(vptr->mac_regs->MIBCR));
-	for (i = 0; i < HW_MIB_SIZE; i++) {
-		tmp = readl(&(vptr->mac_regs->MIBData)) & 0x00FFFFFFUL;
-		vptr->mib_counter[i] += tmp;
-	}
+    BYTE_REG_BITS_ON(MIBCR_MPTRINI, &(vptr->mac_regs->MIBCR));
+    for (i = 0; i < HW_MIB_SIZE; i++) {
+        tmp = readl(&(vptr->mac_regs->MIBData)) & 0x00FFFFFFUL;
+        vptr->mib_counter[i] += tmp;
+    }
 }
 
 /**
@@ -1559,20 +1557,19 @@ static inline void velocity_update_hw_mibs(struct velocity_info *vptr)
  *	Configure the flow control registers for this velocity device.
  */
 
-static inline void init_flow_control_register(struct velocity_info *vptr)
-{
-	struct mac_regs __iomem * regs = vptr->mac_regs;
+static inline void init_flow_control_register(struct velocity_info *vptr) {
+    struct mac_regs __iomem * regs = vptr->mac_regs;
 
-	/* Set {XHITH1, XHITH0, XLTH1, XLTH0} in FlowCR1 to {1, 0, 1, 1}
-	   depend on RD=64, and Turn on XNOEN in FlowCR1 */
-	writel((CR0_XONEN | CR0_XHITH1 | CR0_XLTH1 | CR0_XLTH0), &regs->CR0Set);
-	writel((CR0_FDXTFCEN | CR0_FDXRFCEN | CR0_HDXFCEN | CR0_XHITH0), &regs->CR0Clr);
+    /* Set {XHITH1, XHITH0, XLTH1, XLTH0} in FlowCR1 to {1, 0, 1, 1}
+       depend on RD=64, and Turn on XNOEN in FlowCR1 */
+    writel((CR0_XONEN | CR0_XHITH1 | CR0_XLTH1 | CR0_XLTH0), &regs->CR0Set);
+    writel((CR0_FDXTFCEN | CR0_FDXRFCEN | CR0_HDXFCEN | CR0_XHITH0), &regs->CR0Clr);
 
-	/* Set TxPauseTimer to 0xFFFF */
-	writew(0xFFFF, &regs->tx_pause_timer);
+    /* Set TxPauseTimer to 0xFFFF */
+    writew(0xFFFF, &regs->tx_pause_timer);
 
-	/* Initialize RBRDU to Rx buffer count. */
-	writew(vptr->options.numrx, &regs->RBRDU);
+    /* Initialize RBRDU to Rx buffer count. */
+    writew(vptr->options.numrx, &regs->RBRDU);
 }
 
 

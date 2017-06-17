@@ -280,7 +280,7 @@
 #define ERR_STS_WAR_REGISTER	IIO_IIBUSERR
 #define ERR_STS_WAR_ADDR	LOCAL_HUB_ADDR(IIO_IIBUSERR)
 #define ERR_STS_WAR_PHYSADDR	TO_PHYS((__psunsigned_t)ERR_STS_WAR_ADDR)
-				/* Used to match addr in error reg. */
+/* Used to match addr in error reg. */
 #define OLD_ERR_STS_WAR_OFFSET	((MD_MEM_BANKS * MD_BANK_SIZE) - 0x100)
 
 #endif /* HUB_ERR_STS_WAR */

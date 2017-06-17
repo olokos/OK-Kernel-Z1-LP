@@ -18,12 +18,11 @@
 /* also used to denote that PIDs are not used */
 #define COP_PID_NONE 0
 
-static inline void sync_cop(void *arg)
-{
-	struct mm_struct *mm = arg;
+static inline void sync_cop(void *arg) {
+    struct mm_struct *mm = arg;
 
-	if (mm == current->active_mm)
-		switch_cop(current->active_mm);
+    if (mm == current->active_mm)
+        switch_cop(current->active_mm);
 }
 
 #ifdef CONFIG_PPC_ICSWX_PID
@@ -58,11 +57,10 @@ extern void free_cop_pid(int free_pid);
 #define ICSWX_RC_UNDEFINED	0x1	/* Reserved */
 
 extern int acop_handle_fault(struct pt_regs *regs, unsigned long address,
-			     unsigned long error_code);
+                             unsigned long error_code);
 
-static inline u64 acop_copro_type_bit(unsigned int type)
-{
-	return 1ULL << (63 - type);
+static inline u64 acop_copro_type_bit(unsigned int type) {
+    return 1ULL << (63 - type);
 }
 
 #endif /* !_ARCH_POWERPC_MM_ICSWX_H_ */

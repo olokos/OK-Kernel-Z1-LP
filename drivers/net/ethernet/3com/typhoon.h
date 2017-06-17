@@ -29,8 +29,8 @@
  * lastWrite: the next entry we'll use
  */
 struct basic_ring {
-	u8 *ringBase;
-	u32 lastWrite;
+    u8 *ringBase;
+    u32 lastWrite;
 };
 
 /* The Typoon transmit ring -- same as a basic ring, plus:
@@ -38,10 +38,10 @@ struct basic_ring {
  * writeRegister: register to use for writing (different for Hi & Lo rings)
  */
 struct transmit_ring {
-	u8 *ringBase;
-	u32 lastWrite;
-	u32 lastRead;
-	int writeRegister;
+    u8 *ringBase;
+    u32 lastWrite;
+    u32 lastRead;
+    int writeRegister;
 };
 
 /* The host<->Typhoon ring index structure
@@ -63,20 +63,20 @@ struct transmit_ring {
  * rxHiReady:     entry the NIC has filled to in the Hi receive ring
  */
 struct typhoon_indexes {
-	/* The first four are written by the host, and read by the NIC */
-	volatile __le32 rxHiCleared;
-	volatile __le32 rxLoCleared;
-	volatile __le32 rxBuffReady;
-	volatile __le32 respCleared;
+    /* The first four are written by the host, and read by the NIC */
+    volatile __le32 rxHiCleared;
+    volatile __le32 rxLoCleared;
+    volatile __le32 rxBuffReady;
+    volatile __le32 respCleared;
 
-	/* The remaining are written by the NIC, and read by the host */
-	volatile __le32 txLoCleared;
-	volatile __le32 txHiCleared;
-	volatile __le32 rxLoReady;
-	volatile __le32 rxBuffCleared;
-	volatile __le32 cmdCleared;
-	volatile __le32 respReady;
-	volatile __le32 rxHiReady;
+    /* The remaining are written by the NIC, and read by the host */
+    volatile __le32 txLoCleared;
+    volatile __le32 txHiCleared;
+    volatile __le32 rxLoReady;
+    volatile __le32 rxBuffCleared;
+    volatile __le32 cmdCleared;
+    volatile __le32 respReady;
+    volatile __le32 rxHiReady;
 } __packed;
 
 /* The host<->Typhoon interface
@@ -100,31 +100,31 @@ struct typhoon_indexes {
  * be zero.
  */
 struct typhoon_interface {
-	__le32 ringIndex;
-	__le32 ringIndexHi;
-	__le32 txLoAddr;
-	__le32 txLoAddrHi;
-	__le32 txLoSize;
-	__le32 txHiAddr;
-	__le32 txHiAddrHi;
-	__le32 txHiSize;
-	__le32 rxLoAddr;
-	__le32 rxLoAddrHi;
-	__le32 rxLoSize;
-	__le32 rxBuffAddr;
-	__le32 rxBuffAddrHi;
-	__le32 rxBuffSize;
-	__le32 cmdAddr;
-	__le32 cmdAddrHi;
-	__le32 cmdSize;
-	__le32 respAddr;
-	__le32 respAddrHi;
-	__le32 respSize;
-	__le32 zeroAddr;
-	__le32 zeroAddrHi;
-	__le32 rxHiAddr;
-	__le32 rxHiAddrHi;
-	__le32 rxHiSize;
+    __le32 ringIndex;
+    __le32 ringIndexHi;
+    __le32 txLoAddr;
+    __le32 txLoAddrHi;
+    __le32 txLoSize;
+    __le32 txHiAddr;
+    __le32 txHiAddrHi;
+    __le32 txHiSize;
+    __le32 rxLoAddr;
+    __le32 rxLoAddrHi;
+    __le32 rxLoSize;
+    __le32 rxBuffAddr;
+    __le32 rxBuffAddrHi;
+    __le32 rxBuffSize;
+    __le32 cmdAddr;
+    __le32 cmdAddrHi;
+    __le32 cmdSize;
+    __le32 respAddr;
+    __le32 respAddrHi;
+    __le32 respSize;
+    __le32 zeroAddr;
+    __le32 zeroAddrHi;
+    __le32 rxHiAddr;
+    __le32 rxHiAddrHi;
+    __le32 rxHiSize;
 } __packed;
 
 /* The Typhoon transmit/fragment descriptor
@@ -149,7 +149,7 @@ struct typhoon_interface {
  * driver uses it.
  */
 struct tx_desc {
-	u8  flags;
+    u8  flags;
 #define TYPHOON_TYPE_MASK	0x07
 #define 	TYPHOON_FRAG_DESC	0x00
 #define 	TYPHOON_TX_DESC		0x01
@@ -164,16 +164,16 @@ struct tx_desc {
 #define TYPHOON_RESP_ERROR	0x40
 #define TYPHOON_RX_ERROR	0x40
 #define TYPHOON_DESC_VALID	0x80
-	u8  numDesc;
-	__le16 len;
-	union {
-		struct {
-			__le32 addr;
-			__le32 addrHi;
-		} frag;
-		u64 tx_addr;	/* opaque for hardware, for TX_DESC */
-	};
-	__le32 processFlags;
+    u8  numDesc;
+    __le16 len;
+    union {
+        struct {
+            __le32 addr;
+            __le32 addrHi;
+        } frag;
+        u64 tx_addr;	/* opaque for hardware, for TX_DESC */
+    };
+    __le32 processFlags;
 #define TYPHOON_TX_PF_NO_CRC		cpu_to_le32(0x00000001)
 #define TYPHOON_TX_PF_IP_CHKSUM		cpu_to_le32(0x00000002)
 #define TYPHOON_TX_PF_TCP_CHKSUM	cpu_to_le32(0x00000004)
@@ -200,14 +200,14 @@ struct tx_desc {
  * status:	0 on completion
  */
 struct tcpopt_desc {
-	u8  flags;
-	u8  numDesc;
-	__le16 mss_flags;
+    u8  flags;
+    u8  numDesc;
+    __le16 mss_flags;
 #define TYPHOON_TSO_FIRST		cpu_to_le16(0x1000)
 #define TYPHOON_TSO_LAST		cpu_to_le16(0x2000)
-	__le32 respAddrLo;
-	__le32 bytesTx;
-	__le32 status;
+    __le32 respAddrLo;
+    __le32 bytesTx;
+    __le32 status;
 } __packed;
 
 /* The IPSEC Offload descriptor
@@ -219,14 +219,14 @@ struct tcpopt_desc {
  * reserved:	set to 0
  */
 struct ipsec_desc {
-	u8  flags;
-	u8  numDesc;
-	__le16 ipsecFlags;
+    u8  flags;
+    u8  numDesc;
+    __le16 ipsecFlags;
 #define TYPHOON_IPSEC_GEN_IV	cpu_to_le16(0x0000)
 #define TYPHOON_IPSEC_USE_IV	cpu_to_le16(0x0001)
-	__le32 sa1;
-	__le32 sa2;
-	__le32 reserved;
+    __le32 sa1;
+    __le32 sa2;
+    __le32 reserved;
 } __packed;
 
 /* The Typhoon receive descriptor (Updated by NIC)
@@ -242,12 +242,12 @@ struct ipsec_desc {
  * vlanTag:       the 801.2q TCI from the packet
  */
 struct rx_desc {
-	u8  flags;
-	u8  numDesc;
-	__le16 frameLen;
-	u32 addr;	/* opaque, comes from virtAddr */
-	u32 addrHi;	/* opaque, comes from virtAddrHi */
-	__le32 rxStatus;
+    u8  flags;
+    u8  numDesc;
+    __le16 frameLen;
+    u32 addr;	/* opaque, comes from virtAddr */
+    u32 addrHi;	/* opaque, comes from virtAddrHi */
+    __le32 rxStatus;
 #define TYPHOON_RX_ERR_INTERNAL		cpu_to_le32(0x00000000)
 #define TYPHOON_RX_ERR_FIFO_UNDERRUN	cpu_to_le32(0x00000001)
 #define TYPHOON_RX_ERR_BAD_SSD		cpu_to_le32(0x00000002)
@@ -269,10 +269,10 @@ struct rx_desc {
 #define TYPHOON_RX_IP_CHK_GOOD		cpu_to_le32(0x00000100)
 #define TYPHOON_RX_TCP_CHK_GOOD		cpu_to_le32(0x00000200)
 #define TYPHOON_RX_UDP_CHK_GOOD		cpu_to_le32(0x00000400)
-	__le16 filterResults;
+    __le16 filterResults;
 #define TYPHOON_RX_FILTER_MASK		cpu_to_le16(0x7fff)
 #define TYPHOON_RX_FILTERED		cpu_to_le16(0x8000)
-	__le16 ipsecResults;
+    __le16 ipsecResults;
 #define TYPHOON_RX_OUTER_AH_GOOD	cpu_to_le16(0x0001)
 #define TYPHOON_RX_OUTER_ESP_GOOD	cpu_to_le16(0x0002)
 #define TYPHOON_RX_INNER_AH_GOOD	cpu_to_le16(0x0004)
@@ -283,7 +283,7 @@ struct rx_desc {
 #define TYPHOON_RX_INNER_ESP_FAIL	cpu_to_le16(0x0080)
 #define TYPHOON_RX_UNKNOWN_SA		cpu_to_le16(0x0100)
 #define TYPHOON_RX_ESP_FORMAT_ERR	cpu_to_le16(0x0200)
-	__be32 vlanTag;
+    __be32 vlanTag;
 } __packed;
 
 /* The Typhoon free buffer descriptor, used to give a buffer to the NIC
@@ -297,10 +297,10 @@ struct rx_desc {
  * from the NIC
  */
 struct rx_free {
-	__le32 physAddr;
-	__le32 physAddrHi;
-	u32 virtAddr;
-	u32 virtAddrHi;
+    __le32 physAddr;
+    __le32 physAddrHi;
+    u32 virtAddr;
+    u32 virtAddrHi;
 } __packed;
 
 /* The Typhoon command descriptor, used for commands and responses
@@ -315,9 +315,9 @@ struct rx_free {
  * parm3:   use varies by command
  */
 struct cmd_desc {
-	u8  flags;
-	u8  numDesc;
-	__le16 cmd;
+    u8  flags;
+    u8  numDesc;
+    __le16 cmd;
 #define TYPHOON_CMD_TX_ENABLE		cpu_to_le16(0x0001)
 #define TYPHOON_CMD_TX_DISABLE		cpu_to_le16(0x0002)
 #define TYPHOON_CMD_RX_ENABLE		cpu_to_le16(0x0003)
@@ -343,22 +343,22 @@ struct cmd_desc {
 #define TYPHOON_CMD_READ_IPSEC_INFO	cpu_to_le16(0x005e)
 #define TYPHOON_CMD_GET_IPSEC_ENABLE	cpu_to_le16(0x0067)
 #define TYPHOON_CMD_GET_CMD_LVL		cpu_to_le16(0x0069)
-	u16 seqNo;
-	__le16 parm1;
-	__le32 parm2;
-	__le32 parm3;
+    u16 seqNo;
+    __le16 parm1;
+    __le32 parm2;
+    __le32 parm3;
 } __packed;
 
 /* The Typhoon response descriptor, see command descriptor for details
  */
 struct resp_desc {
-	u8  flags;
-	u8  numDesc;
-	__le16 cmd;
-	__le16 seqNo;
-	__le16 parm1;
-	__le32 parm2;
-	__le32 parm3;
+    u8  flags;
+    u8  numDesc;
+    __le16 cmd;
+    __le16 seqNo;
+    __le16 parm1;
+    __le32 parm2;
+    __le32 parm3;
 } __packed;
 
 #define INIT_COMMAND_NO_RESPONSE(x, command)				\
@@ -389,33 +389,33 @@ struct resp_desc {
 /* TYPHOON_CMD_READ_STATS response format
  */
 struct stats_resp {
-	u8  flags;
-	u8  numDesc;
-	__le16 cmd;
-	__le16 seqNo;
-	__le16 unused;
-	__le32 txPackets;
-	__le64 txBytes;
-	__le32 txDeferred;
-	__le32 txLateCollisions;
-	__le32 txCollisions;
-	__le32 txCarrierLost;
-	__le32 txMultipleCollisions;
-	__le32 txExcessiveCollisions;
-	__le32 txFifoUnderruns;
-	__le32 txMulticastTxOverflows;
-	__le32 txFiltered;
-	__le32 rxPacketsGood;
-	__le64 rxBytesGood;
-	__le32 rxFifoOverruns;
-	__le32 BadSSD;
-	__le32 rxCrcErrors;
-	__le32 rxOversized;
-	__le32 rxBroadcast;
-	__le32 rxMulticast;
-	__le32 rxOverflow;
-	__le32 rxFiltered;
-	__le32 linkStatus;
+    u8  flags;
+    u8  numDesc;
+    __le16 cmd;
+    __le16 seqNo;
+    __le16 unused;
+    __le32 txPackets;
+    __le64 txBytes;
+    __le32 txDeferred;
+    __le32 txLateCollisions;
+    __le32 txCollisions;
+    __le32 txCarrierLost;
+    __le32 txMultipleCollisions;
+    __le32 txExcessiveCollisions;
+    __le32 txFifoUnderruns;
+    __le32 txMulticastTxOverflows;
+    __le32 txFiltered;
+    __le32 rxPacketsGood;
+    __le64 rxBytesGood;
+    __le32 rxFifoOverruns;
+    __le32 BadSSD;
+    __le32 rxCrcErrors;
+    __le32 rxOversized;
+    __le32 rxBroadcast;
+    __le32 rxMulticast;
+    __le32 rxOverflow;
+    __le32 rxFiltered;
+    __le32 linkStatus;
 #define TYPHOON_LINK_STAT_MASK		cpu_to_le32(0x00000001)
 #define TYPHOON_LINK_GOOD		cpu_to_le32(0x00000001)
 #define TYPHOON_LINK_BAD		cpu_to_le32(0x00000000)
@@ -425,8 +425,8 @@ struct stats_resp {
 #define TYPHOON_LINK_DUPLEX_MASK	cpu_to_le32(0x00000004)
 #define TYPHOON_LINK_FULL_DUPLEX	cpu_to_le32(0x00000004)
 #define TYPHOON_LINK_HALF_DUPLEX	cpu_to_le32(0x00000000)
-	__le32 unused2;
-	__le32 unused3;
+    __le32 unused2;
+    __le32 unused3;
 } __packed;
 
 /* TYPHOON_CMD_XCVR_SELECT xcvr values (resp.parm1)
@@ -454,22 +454,22 @@ struct stats_resp {
 /* TYPHOON_CMD_CREATE_SA descriptor and settings
  */
 struct sa_descriptor {
-	u8  flags;
-	u8  numDesc;
-	u16 cmd;
-	u16 seqNo;
-	u16 mode;
+    u8  flags;
+    u8  numDesc;
+    u16 cmd;
+    u16 seqNo;
+    u16 mode;
 #define TYPHOON_SA_MODE_NULL		cpu_to_le16(0x0000)
 #define TYPHOON_SA_MODE_AH		cpu_to_le16(0x0001)
 #define TYPHOON_SA_MODE_ESP		cpu_to_le16(0x0002)
-	u8  hashFlags;
+    u8  hashFlags;
 #define TYPHOON_SA_HASH_ENABLE		0x01
 #define TYPHOON_SA_HASH_SHA1		0x02
 #define TYPHOON_SA_HASH_MD5		0x04
-	u8  direction;
+    u8  direction;
 #define TYPHOON_SA_DIR_RX		0x00
 #define TYPHOON_SA_DIR_TX		0x01
-	u8  encryptionFlags;
+    u8  encryptionFlags;
 #define TYPHOON_SA_ENCRYPT_ENABLE	0x01
 #define TYPHOON_SA_ENCRYPT_DES		0x02
 #define TYPHOON_SA_ENCRYPT_3DES		0x00
@@ -477,17 +477,17 @@ struct sa_descriptor {
 #define TYPHOON_SA_ENCRYPT_3DES_3KEY	0x04
 #define TYPHOON_SA_ENCRYPT_CBC		0x08
 #define TYPHOON_SA_ENCRYPT_ECB		0x00
-	u8  specifyIndex;
+    u8  specifyIndex;
 #define TYPHOON_SA_SPECIFY_INDEX	0x01
 #define TYPHOON_SA_GENERATE_INDEX	0x00
-	u32 SPI;
-	u32 destAddr;
-	u32 destMask;
-	u8  integKey[20];
-	u8  confKey[24];
-	u32 index;
-	u32 unused;
-	u32 unused2;
+    u32 SPI;
+    u32 destAddr;
+    u32 destMask;
+    u8  integKey[20];
+    u8  confKey[24];
+    u32 index;
+    u32 unused;
+    u32 unused2;
 } __packed;
 
 /* TYPHOON_CMD_SET_OFFLOAD_TASKS bits (cmd.parm2 (Tx) & cmd.parm3 (Rx))
@@ -513,18 +513,18 @@ struct sa_descriptor {
 /* These are used to load the firmware image on the NIC
  */
 struct typhoon_file_header {
-	u8  tag[8];
-	__le32 version;
-	__le32 numSections;
-	__le32 startAddr;
-	__le32 hmacDigest[5];
+    u8  tag[8];
+    __le32 version;
+    __le32 numSections;
+    __le32 startAddr;
+    __le32 hmacDigest[5];
 } __packed;
 
 struct typhoon_section_header {
-	__le32 len;
-	u16 checksum;
-	u16 reserved;
-	__le32 startAddr;
+    __le32 len;
+    u16 checksum;
+    u16 reserved;
+    __le32 startAddr;
 } __packed;
 
 /* The Typhoon Register offsets

@@ -43,12 +43,12 @@
  *		-1 to indicate no preference.
  */
 struct proccomm_regulator_info {
-	struct regulator_init_data	init_data;
-	int				id;
-	int				rise_time;
-	int				pulldown;
-	int				negative;
-	int				n_voltages;
+    struct regulator_init_data	init_data;
+    int				id;
+    int				rise_time;
+    int				pulldown;
+    int				negative;
+    int				n_voltages;
 };
 
 /**
@@ -62,8 +62,8 @@ struct proccomm_regulator_info {
  * @nregs:	The number of regulators to register.
  */
 struct proccomm_regulator_platform_data {
-	struct proccomm_regulator_info	*regs;
-	size_t				nregs;
+    struct proccomm_regulator_info	*regs;
+    size_t				nregs;
 };
 
 #if defined(CONFIG_MSM_VREG_SWITCH_INVERTED)

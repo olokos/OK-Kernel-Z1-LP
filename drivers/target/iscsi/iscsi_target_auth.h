@@ -18,14 +18,14 @@
 #define CHAP_STAGE_SERVER_NR	5
 
 extern u32 chap_main_loop(struct iscsi_conn *, struct iscsi_node_auth *, char *, char *,
-				int *, int *);
+                          int *, int *);
 
 struct iscsi_chap {
-	unsigned char	digest_type;
-	unsigned char	id;
-	unsigned char	challenge[CHAP_CHALLENGE_LENGTH];
-	unsigned int	authenticate_target;
-	unsigned int	chap_state;
+    unsigned char	digest_type;
+    unsigned char	id;
+    unsigned char	challenge[CHAP_CHALLENGE_LENGTH];
+    unsigned int	authenticate_target;
+    unsigned int	chap_state;
 } ____cacheline_aligned;
 
 #endif   /*** _ISCSI_CHAP_H_ ***/

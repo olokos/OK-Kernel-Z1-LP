@@ -99,8 +99,7 @@
 
 /* A matrix which maps channels to frequencies */
 #define MAX_CHAN_FREQ_MAP_ENTRIES   50
-static const long chan_freq_list[][MAX_CHAN_FREQ_MAP_ENTRIES] =
-{
+static const long chan_freq_list[][MAX_CHAN_FREQ_MAP_ENTRIES] = {
     {1,2412},
     {2,2417},
     {3,2422},
@@ -153,8 +152,7 @@ extern dbg_info_t *DbgInfo;
  *      the value in dBm
  *
  ******************************************************************************/
-int dbm( int value )
-{
+int dbm( int value ) {
     /* Truncate the value to be between min and max. */
     if( value < HCF_MIN_SIGNAL_LEVEL )
         value = HCF_MIN_SIGNAL_LEVEL;
@@ -189,8 +187,7 @@ int dbm( int value )
  *      the percentage value
  *
  ******************************************************************************/
-int percent( int value, int min, int max )
-{
+int percent( int value, int min, int max ) {
     /* Truncate the value to be between min and max. */
     if( value < min )
         value = min;
@@ -223,8 +220,7 @@ int percent( int value, int min, int max )
  *      non-zero if the string contains a valid key
  *
  ******************************************************************************/
-int is_valid_key_string( char *s )
-{
+int is_valid_key_string( char *s ) {
     int l;
     int i;
     /*------------------------------------------------------------------------*/
@@ -247,8 +243,7 @@ int is_valid_key_string( char *s )
     }
 
     /* string with 0, 5, or 13 characters is valid */
-    else
-    {
+    else {
         return( l == 0 || l == 5 || l == 13 );
     }
 } // is_valid_key_string
@@ -277,8 +272,7 @@ int is_valid_key_string( char *s )
  *      N/A
  *
  ******************************************************************************/
-void key_string2key( char *ks, KEY_STRCT *key )
-{
+void key_string2key( char *ks, KEY_STRCT *key ) {
     int l,i,n;
     char *p;
     /*------------------------------------------------------------------------*/
@@ -292,8 +286,8 @@ void key_string2key( char *ks, KEY_STRCT *key )
         p = (char *)key->key;
 
         for( i = 2; i < l; i+=2 ) {
-			*p++ = (hex_to_bin(ks[i]) << 4) + hex_to_bin(ks[i+1]);
-           n++;
+            *p++ = (hex_to_bin(ks[i]) << 4) + hex_to_bin(ks[i+1]);
+            n++;
         }
 
         /* Note that endian translation of the length field is not needed here
@@ -301,8 +295,7 @@ void key_string2key( char *ks, KEY_STRCT *key )
         key->len = n;
     }
     /* character string */
-    else
-    {
+    else {
         strcpy( (char *)key->key, ks );
         key->len = l;
     }
@@ -331,24 +324,23 @@ void key_string2key( char *ks, KEY_STRCT *key )
  *      1 if WEP is known enabled, else 0
  *
  ******************************************************************************/
-int wl_has_wep (IFBP ifbp)
-{
+int wl_has_wep (IFBP ifbp) {
     CFG_PRIVACY_OPT_IMPLEMENTED_STRCT ltv;
-	int rc, privacy;
+    int rc, privacy;
     /*------------------------------------------------------------------------*/
 
 
-	/* This function allows us to distiguish bronze cards from other types, to
+    /* This function allows us to distiguish bronze cards from other types, to
        know if WEP exists. Does not distinguish (because there's no way to)
        between silver and gold cards. */
     ltv.len = 2;
     ltv.typ = CFG_PRIVACY_OPT_IMPLEMENTED;
 
-	rc = hcf_get_info( ifbp, (LTVP) &ltv );
+    rc = hcf_get_info( ifbp, (LTVP) &ltv );
 
-	privacy = CNV_LITTLE_TO_INT( ltv.privacy_opt_implemented );
+    privacy = CNV_LITTLE_TO_INT( ltv.privacy_opt_implemented );
 
-	//return rc ? 0 : privacy;
+    //return rc ? 0 : privacy;
     return 1;
 } // wl_has_wep
 /*============================================================================*/
@@ -373,8 +365,7 @@ int wl_has_wep (IFBP ifbp)
  *      A descriptive string indicating the error, quiet otherwise.
  *
  ******************************************************************************/
-void wl_hcf_error( struct net_device *dev, int hcfStatus )
-{
+void wl_hcf_error( struct net_device *dev, int hcfStatus ) {
     char     buffer[64], *pMsg;
     /*------------------------------------------------------------------------*/
 
@@ -409,7 +400,7 @@ void wl_hcf_error( struct net_device *dev, int hcfStatus )
         case HCF_ERR_INCOMP_FW:
 
             pMsg = "Primary functions are compatible, "
-                "station/ap functions are not";
+                   "station/ap functions are not";
             break;
 
 
@@ -480,8 +471,7 @@ void wl_hcf_error( struct net_device *dev, int hcfStatus )
  *      N/A
  *
  ******************************************************************************/
-void wl_endian_translate_event( ltv_t *pLtv )
-{
+void wl_endian_translate_event( ltv_t *pLtv ) {
     DBG_FUNC( "wl_endian_translate_event" );
     DBG_ENTER( DbgInfo );
 
@@ -491,85 +481,81 @@ void wl_endian_translate_event( ltv_t *pLtv )
         break;
 
 
-    case CFG_SCAN:
-        {
-            int numAPs;
-            SCAN_RS_STRCT *pAps = (SCAN_RS_STRCT*)&pLtv->u.u8[0];
+    case CFG_SCAN: {
+        int numAPs;
+        SCAN_RS_STRCT *pAps = (SCAN_RS_STRCT*)&pLtv->u.u8[0];
 
-            numAPs = (hcf_16)(( (size_t)( pLtv->len - 1 ) * 2 ) /
-                                (sizeof( SCAN_RS_STRCT )));
+        numAPs = (hcf_16)(( (size_t)( pLtv->len - 1 ) * 2 ) /
+                          (sizeof( SCAN_RS_STRCT )));
 
-            while( numAPs >= 1 ) {
-                numAPs--;
+        while( numAPs >= 1 ) {
+            numAPs--;
 
-                pAps[numAPs].channel_id           =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].channel_id );
+            pAps[numAPs].channel_id           =
+                CNV_LITTLE_TO_INT( pAps[numAPs].channel_id );
 
-                pAps[numAPs].noise_level          =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].noise_level );
+            pAps[numAPs].noise_level          =
+                CNV_LITTLE_TO_INT( pAps[numAPs].noise_level );
 
-                pAps[numAPs].signal_level         =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].signal_level );
+            pAps[numAPs].signal_level         =
+                CNV_LITTLE_TO_INT( pAps[numAPs].signal_level );
 
-                pAps[numAPs].beacon_interval_time =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].beacon_interval_time );
+            pAps[numAPs].beacon_interval_time =
+                CNV_LITTLE_TO_INT( pAps[numAPs].beacon_interval_time );
 
-                pAps[numAPs].capability           =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].capability );
+            pAps[numAPs].capability           =
+                CNV_LITTLE_TO_INT( pAps[numAPs].capability );
 
-                pAps[numAPs].ssid_len             =
-                    CNV_LITTLE_TO_INT( pAps[numAPs].ssid_len );
+            pAps[numAPs].ssid_len             =
+                CNV_LITTLE_TO_INT( pAps[numAPs].ssid_len );
 
-                pAps[numAPs].ssid_val[pAps[numAPs].ssid_len] = 0;
+            pAps[numAPs].ssid_val[pAps[numAPs].ssid_len] = 0;
 
-            }
         }
-        break;
+    }
+    break;
 
 
-    case CFG_ACS_SCAN:
-        {
-            PROBE_RESP *probe_resp = (PROBE_RESP *)pLtv;
+    case CFG_ACS_SCAN: {
+        PROBE_RESP *probe_resp = (PROBE_RESP *)pLtv;
 
-            probe_resp->frameControl   = CNV_LITTLE_TO_INT( probe_resp->frameControl );
-            probe_resp->durID          = CNV_LITTLE_TO_INT( probe_resp->durID );
-            probe_resp->sequence       = CNV_LITTLE_TO_INT( probe_resp->sequence );
-            probe_resp->dataLength     = CNV_LITTLE_TO_INT( probe_resp->dataLength );
+        probe_resp->frameControl   = CNV_LITTLE_TO_INT( probe_resp->frameControl );
+        probe_resp->durID          = CNV_LITTLE_TO_INT( probe_resp->durID );
+        probe_resp->sequence       = CNV_LITTLE_TO_INT( probe_resp->sequence );
+        probe_resp->dataLength     = CNV_LITTLE_TO_INT( probe_resp->dataLength );
 
 #ifndef WARP
-            probe_resp->lenType        = CNV_LITTLE_TO_INT( probe_resp->lenType );
+        probe_resp->lenType        = CNV_LITTLE_TO_INT( probe_resp->lenType );
 #endif // WARP
 
-            probe_resp->beaconInterval = CNV_LITTLE_TO_INT( probe_resp->beaconInterval );
-            probe_resp->capability     = CNV_LITTLE_TO_INT( probe_resp->capability );
-            probe_resp->flags          = CNV_LITTLE_TO_INT( probe_resp->flags );
-        }
-        break;
+        probe_resp->beaconInterval = CNV_LITTLE_TO_INT( probe_resp->beaconInterval );
+        probe_resp->capability     = CNV_LITTLE_TO_INT( probe_resp->capability );
+        probe_resp->flags          = CNV_LITTLE_TO_INT( probe_resp->flags );
+    }
+    break;
 
 
     case CFG_LINK_STAT:
 #define ls ((LINK_STATUS_STRCT *)pLtv)
-            ls->linkStatus = CNV_LITTLE_TO_INT( ls->linkStatus );
+        ls->linkStatus = CNV_LITTLE_TO_INT( ls->linkStatus );
         break;
 #undef ls
 
-    case CFG_ASSOC_STAT:
-        {
-            ASSOC_STATUS_STRCT *pAs = (ASSOC_STATUS_STRCT *)pLtv;
+    case CFG_ASSOC_STAT: {
+        ASSOC_STATUS_STRCT *pAs = (ASSOC_STATUS_STRCT *)pLtv;
 
-            pAs->assocStatus = CNV_LITTLE_TO_INT( pAs->assocStatus );
-        }
-        break;
+        pAs->assocStatus = CNV_LITTLE_TO_INT( pAs->assocStatus );
+    }
+    break;
 
 
-    case CFG_SECURITY_STAT:
-        {
-            SECURITY_STATUS_STRCT *pSs = (SECURITY_STATUS_STRCT *)pLtv;
+    case CFG_SECURITY_STAT: {
+        SECURITY_STATUS_STRCT *pSs = (SECURITY_STATUS_STRCT *)pLtv;
 
-            pSs->securityStatus = CNV_LITTLE_TO_INT( pSs->securityStatus );
-            pSs->reason         = CNV_LITTLE_TO_INT( pSs->reason );
-        }
-        break;
+        pSs->securityStatus = CNV_LITTLE_TO_INT( pSs->securityStatus );
+        pSs->reason         = CNV_LITTLE_TO_INT( pSs->reason );
+    }
+    break;
 
 
     case CFG_WMP:
@@ -611,8 +597,7 @@ void wl_endian_translate_event( ltv_t *pLtv )
  *      N/A
  *
  ******************************************************************************/
-void msf_assert( unsigned int line_number, hcf_16 trace, hcf_32 qual )
-{
+void msf_assert( unsigned int line_number, hcf_16 trace, hcf_32 qual ) {
     DBG_PRINT( "HCF ASSERT: Line %d, VAL: 0x%.8x\n", line_number, /*;?*/(u32)qual );
 } // msf_assert
 /*============================================================================*/
@@ -640,8 +625,7 @@ void msf_assert( unsigned int line_number, hcf_16 trace, hcf_32 qual )
  *      transmitting.
  *
  ******************************************************************************/
-hcf_8 wl_parse_ds_ie( PROBE_RESP *probe_rsp )
-{
+hcf_8 wl_parse_ds_ie( PROBE_RESP *probe_rsp ) {
     int     i;
     int     ie_length = 0;
     hcf_8   *buf;
@@ -699,8 +683,7 @@ hcf_8 wl_parse_ds_ie( PROBE_RESP *probe_rsp )
  *      argument passed to the function.
  *
  ******************************************************************************/
-hcf_8 * wl_parse_wpa_ie( PROBE_RESP *probe_rsp, hcf_16 *length )
-{
+hcf_8 * wl_parse_wpa_ie( PROBE_RESP *probe_rsp, hcf_16 *length ) {
     int     i;
     int     ie_length = 0;
     hcf_8   *buf;
@@ -772,8 +755,7 @@ hcf_8 * wl_parse_wpa_ie( PROBE_RESP *probe_rsp, hcf_16 *length )
  *      required for proper operation with some WPA supplicants.
  *
  ******************************************************************************/
-hcf_8 * wl_print_wpa_ie( hcf_8 *buffer, int length )
-{
+hcf_8 * wl_print_wpa_ie( hcf_8 *buffer, int length ) {
     int count;
     int rows;
     int remainder;
@@ -834,8 +816,7 @@ hcf_8 * wl_print_wpa_ie( hcf_8 *buffer, int length )
  *      0 if FALSE
  *
  ******************************************************************************/
-int wl_is_a_valid_chan( int channel )
-{
+int wl_is_a_valid_chan( int channel ) {
     int i;
     /*------------------------------------------------------------------------*/
 
@@ -877,8 +858,7 @@ int wl_is_a_valid_chan( int channel )
  *      0 if FALSE
  *
  ******************************************************************************/
-int wl_is_a_valid_freq( long frequency )
-{
+int wl_is_a_valid_freq( long frequency ) {
     int i;
     /*------------------------------------------------------------------------*/
 
@@ -915,8 +895,7 @@ int wl_is_a_valid_freq( long frequency )
  *      The corresponding frequency
  *
  ******************************************************************************/
-long wl_get_freq_from_chan( int channel )
-{
+long wl_get_freq_from_chan( int channel ) {
     int i;
     /*------------------------------------------------------------------------*/
 
@@ -958,8 +937,7 @@ long wl_get_freq_from_chan( int channel )
  *      The corresponding channel
  *
  ******************************************************************************/
-int wl_get_chan_from_freq( long frequency )
-{
+int wl_get_chan_from_freq( long frequency ) {
     int i;
     /*------------------------------------------------------------------------*/
 
@@ -995,8 +973,7 @@ int wl_get_chan_from_freq( long frequency )
  *      N/A
  *
  ******************************************************************************/
-void wl_process_link_status( struct wl_private *lp )
-{
+void wl_process_link_status( struct wl_private *lp ) {
     hcf_16 link_stat;
     /*------------------------------------------------------------------------*/
 
@@ -1054,8 +1031,7 @@ void wl_process_link_status( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_process_probe_response( struct wl_private *lp )
-{
+void wl_process_probe_response( struct wl_private *lp ) {
     PROBE_RESP  *probe_rsp;
     hcf_8       *wpa_ie = NULL;
     hcf_16      wpa_ie_len = 0;
@@ -1073,85 +1049,85 @@ void wl_process_probe_response( struct wl_private *lp )
 
         DBG_TRACE( DbgInfo, "(%s) =========================\n", lp->dev->name );
         DBG_TRACE( DbgInfo, "(%s) length      : 0x%04x.\n",  lp->dev->name,
-                probe_rsp->length );
+                   probe_rsp->length );
 
         if( probe_rsp->length > 1 ) {
             DBG_TRACE( DbgInfo, "(%s) infoType    : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->infoType );
+                       probe_rsp->infoType );
 
             DBG_TRACE( DbgInfo, "(%s) signal      : 0x%02x.\n", lp->dev->name,
-                    probe_rsp->signal );
+                       probe_rsp->signal );
 
             DBG_TRACE( DbgInfo, "(%s) silence     : 0x%02x.\n", lp->dev->name,
-                    probe_rsp->silence );
+                       probe_rsp->silence );
 
             DBG_TRACE( DbgInfo, "(%s) rxFlow      : 0x%02x.\n", lp->dev->name,
-                    probe_rsp->rxFlow );
+                       probe_rsp->rxFlow );
 
             DBG_TRACE( DbgInfo, "(%s) rate        : 0x%02x.\n", lp->dev->name,
-                    probe_rsp->rate );
+                       probe_rsp->rate );
 
             DBG_TRACE( DbgInfo, "(%s) frame cntl  : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->frameControl );
+                       probe_rsp->frameControl );
 
             DBG_TRACE( DbgInfo, "(%s) durID       : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->durID );
+                       probe_rsp->durID );
 
-		DBG_TRACE(DbgInfo, "(%s) address1    : %pM\n", lp->dev->name,
-			probe_rsp->address1);
+            DBG_TRACE(DbgInfo, "(%s) address1    : %pM\n", lp->dev->name,
+                      probe_rsp->address1);
 
-		DBG_TRACE(DbgInfo, "(%s) address2    : %pM\n", lp->dev->name,
-			probe_rsp->address2);
+            DBG_TRACE(DbgInfo, "(%s) address2    : %pM\n", lp->dev->name,
+                      probe_rsp->address2);
 
-		DBG_TRACE(DbgInfo, "(%s) BSSID       : %pM\n", lp->dev->name,
-			probe_rsp->BSSID);
+            DBG_TRACE(DbgInfo, "(%s) BSSID       : %pM\n", lp->dev->name,
+                      probe_rsp->BSSID);
 
             DBG_TRACE( DbgInfo, "(%s) sequence    : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->sequence );
+                       probe_rsp->sequence );
 
-		DBG_TRACE(DbgInfo, "(%s) address4    : %pM\n", lp->dev->name,
-			probe_rsp->address4);
+            DBG_TRACE(DbgInfo, "(%s) address4    : %pM\n", lp->dev->name,
+                      probe_rsp->address4);
 
             DBG_TRACE( DbgInfo, "(%s) datalength  : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->dataLength );
+                       probe_rsp->dataLength );
 
-		DBG_TRACE(DbgInfo, "(%s) DA          : %pM\n", lp->dev->name,
-			probe_rsp->DA);
+            DBG_TRACE(DbgInfo, "(%s) DA          : %pM\n", lp->dev->name,
+                      probe_rsp->DA);
 
-		DBG_TRACE(DbgInfo, "(%s) SA          : %pM\n", lp->dev->name,
-			probe_rsp->SA);
+            DBG_TRACE(DbgInfo, "(%s) SA          : %pM\n", lp->dev->name,
+                      probe_rsp->SA);
 
 #ifdef WARP
 
             DBG_TRACE( DbgInfo, "(%s) channel     : %d\n", lp->dev->name,
-                    probe_rsp->channel );
+                       probe_rsp->channel );
 
             DBG_TRACE( DbgInfo, "(%s) band        : %d\n", lp->dev->name,
-                    probe_rsp->band );
+                       probe_rsp->band );
 #else
             DBG_TRACE( DbgInfo, "(%s) lenType     : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->lenType );
+                       probe_rsp->lenType );
 #endif  // WARP
 
             DBG_TRACE( DbgInfo, "(%s) timeStamp   : %d.%d.%d.%d.%d.%d.%d.%d\n",
-                    lp->dev->name,
-                    probe_rsp->timeStamp[0],
-                    probe_rsp->timeStamp[1],
-                    probe_rsp->timeStamp[2],
-                    probe_rsp->timeStamp[3],
-                    probe_rsp->timeStamp[4],
-                    probe_rsp->timeStamp[5],
-                    probe_rsp->timeStamp[6],
-                    probe_rsp->timeStamp[7]);
+                       lp->dev->name,
+                       probe_rsp->timeStamp[0],
+                       probe_rsp->timeStamp[1],
+                       probe_rsp->timeStamp[2],
+                       probe_rsp->timeStamp[3],
+                       probe_rsp->timeStamp[4],
+                       probe_rsp->timeStamp[5],
+                       probe_rsp->timeStamp[6],
+                       probe_rsp->timeStamp[7]);
 
             DBG_TRACE( DbgInfo, "(%s) beaconInt   : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->beaconInterval );
+                       probe_rsp->beaconInterval );
 
             DBG_TRACE( DbgInfo, "(%s) capability  : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->capability );
+                       probe_rsp->capability );
 
             DBG_TRACE( DbgInfo, "(%s) SSID len    : 0x%04x.\n", lp->dev->name,
-                    probe_rsp->rawData[1] );
+                       probe_rsp->rawData[1] );
 
 
             if( probe_rsp->rawData[1] > 0 ) {
@@ -1159,10 +1135,10 @@ void wl_process_probe_response( struct wl_private *lp )
 
                 memset( ssid, 0, sizeof( ssid ));
                 strncpy( ssid, &probe_rsp->rawData[2],
-                            probe_rsp->rawData[1] );
+                         probe_rsp->rawData[1] );
 
                 DBG_TRACE( DbgInfo, "(%s) SSID        : %s\n",
-                            lp->dev->name, ssid );
+                           lp->dev->name, ssid );
             }
 
 
@@ -1170,11 +1146,11 @@ void wl_process_probe_response( struct wl_private *lp )
             wpa_ie = wl_parse_wpa_ie( probe_rsp, &wpa_ie_len );
             if( wpa_ie != NULL ) {
                 DBG_TRACE( DbgInfo, "(%s) WPA-IE      : %s\n",
-                lp->dev->name, wl_print_wpa_ie( wpa_ie, wpa_ie_len ));
+                           lp->dev->name, wl_print_wpa_ie( wpa_ie, wpa_ie_len ));
             }
 
             DBG_TRACE( DbgInfo, "(%s) flags       : 0x%04x.\n",
-                        lp->dev->name, probe_rsp->flags );
+                       lp->dev->name, probe_rsp->flags );
         }
 
         DBG_TRACE( DbgInfo, "\n" );
@@ -1208,8 +1184,8 @@ void wl_process_probe_response( struct wl_private *lp )
 
                 for( count = 0; count < lp->probe_num_aps; count++ ) {
                     if( memcmp( &( probe_rsp->BSSID ),
-                        lp->probe_results.ProbeTable[count].BSSID,
-                        ETH_ALEN ) == 0 ) {
+                                lp->probe_results.ProbeTable[count].BSSID,
+                                ETH_ALEN ) == 0 ) {
                         unique = 0;
                     }
                 }
@@ -1218,13 +1194,10 @@ void wl_process_probe_response( struct wl_private *lp )
                     /* Copy the info to the ScanResult structure in the
                     private adapter struct. Only copy if there's room in the
                     table */
-                    if( lp->probe_num_aps < MAX_NAPS )
-                    {
+                    if( lp->probe_num_aps < MAX_NAPS ) {
                         memcpy( &( lp->probe_results.ProbeTable[lp->probe_num_aps] ),
                                 probe_rsp, sizeof( PROBE_RESP ));
-                    }
-                    else
-                    {
+                    } else {
                         DBG_WARNING( DbgInfo, "Num of scan results exceeds storage, truncating\n" );
                     }
 
@@ -1262,8 +1235,7 @@ void wl_process_probe_response( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_process_updated_record( struct wl_private *lp )
-{
+void wl_process_updated_record( struct wl_private *lp ) {
     DBG_FUNC( "wl_process_updated_record" );
     DBG_ENTER( DbgInfo );
 
@@ -1313,8 +1285,7 @@ void wl_process_updated_record( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_process_assoc_status( struct wl_private *lp )
-{
+void wl_process_assoc_status( struct wl_private *lp ) {
     ASSOC_STATUS_STRCT *assoc_stat;
     /*------------------------------------------------------------------------*/
 
@@ -1343,15 +1314,15 @@ void wl_process_assoc_status( struct wl_private *lp )
 
         default:
             DBG_TRACE( DbgInfo, "Association Status : UNKNOWN (0x%04x)\n",
-                        assoc_stat->assocStatus );
+                       assoc_stat->assocStatus );
             break;
         }
 
-	DBG_TRACE(DbgInfo, "STA Address        : %pM\n", assoc_stat->staAddr);
+        DBG_TRACE(DbgInfo, "STA Address        : %pM\n", assoc_stat->staAddr);
 
         if(( assoc_stat->assocStatus == 2 )  && ( assoc_stat->len == 8 )) {
-		DBG_TRACE(DbgInfo, "Old AP Address     : %pM\n",
-			assoc_stat->oldApAddr);
+            DBG_TRACE(DbgInfo, "Old AP Address     : %pM\n",
+                      assoc_stat->oldApAddr);
         }
     }
 
@@ -1380,8 +1351,7 @@ void wl_process_assoc_status( struct wl_private *lp )
  *      N/A
  *
  ******************************************************************************/
-void wl_process_security_status( struct wl_private *lp )
-{
+void wl_process_security_status( struct wl_private *lp ) {
     SECURITY_STATUS_STRCT *sec_stat;
     /*------------------------------------------------------------------------*/
 
@@ -1418,12 +1388,12 @@ void wl_process_security_status( struct wl_private *lp )
 
         default:
             DBG_TRACE( DbgInfo, "Security Status : UNKNOWN (0x%04x)\n",
-                        sec_stat->securityStatus );
+                       sec_stat->securityStatus );
             break;
         }
 
-	DBG_TRACE(DbgInfo, "STA Address     : %pM\n", sec_stat->staAddr);
-	DBG_TRACE(DbgInfo, "Reason          : 0x%04x\n", sec_stat->reason);
+        DBG_TRACE(DbgInfo, "STA Address     : %pM\n", sec_stat->staAddr);
+        DBG_TRACE(DbgInfo, "Reason          : 0x%04x\n", sec_stat->reason);
 
     }
 
@@ -1433,8 +1403,7 @@ void wl_process_security_status( struct wl_private *lp )
 /*============================================================================*/
 
 int wl_get_tallies(struct wl_private *lp,
-		   CFG_HERMES_TALLIES_STRCT *tallies)
-{
+                   CFG_HERMES_TALLIES_STRCT *tallies) {
     int ret = 0;
     int status;
     CFG_HERMES_TALLIES_STRCT *pTallies;
@@ -1449,12 +1418,12 @@ int wl_get_tallies(struct wl_private *lp,
     status = hcf_get_info(&(lp->hcfCtx), (LTVP)&(lp->ltvRecord));
 
     if( status == HCF_SUCCESS ) {
-	pTallies = (CFG_HERMES_TALLIES_STRCT *)&(lp->ltvRecord.u.u32);
-	memcpy(tallies, pTallies, sizeof(*tallies));
-    	DBG_TRACE( DbgInfo, "Get tallies okay, dixe: %d\n", sizeof(*tallies) );
+        pTallies = (CFG_HERMES_TALLIES_STRCT *)&(lp->ltvRecord.u.u32);
+        memcpy(tallies, pTallies, sizeof(*tallies));
+        DBG_TRACE( DbgInfo, "Get tallies okay, dixe: %d\n", sizeof(*tallies) );
     } else {
-    	DBG_TRACE( DbgInfo, "Get tallies failed\n" );
-	ret = -EFAULT;
+        DBG_TRACE( DbgInfo, "Get tallies failed\n" );
+        ret = -EFAULT;
     }
 
     DBG_LEAVE( DbgInfo );

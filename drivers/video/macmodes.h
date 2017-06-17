@@ -11,11 +11,11 @@
 #ifndef _VIDEO_MACMODES_H
 #define _VIDEO_MACMODES_H
 
-    /*
-     *  Video mode values.
-     *  These are supposed to be the same as the values that Apple uses in
-     *  MacOS.
-     */
+/*
+ *  Video mode values.
+ *  These are supposed to be the same as the values that Apple uses in
+ *  MacOS.
+ */
 
 #define VMODE_NVRAM		0
 #define VMODE_512_384_60I	1	/* 512x384, 60Hz interlaced (NTSC) */
@@ -51,19 +51,19 @@
 
 
 extern int mac_vmode_to_var(int vmode, int cmode,
-			    struct fb_var_screeninfo *var);
+                            struct fb_var_screeninfo *var);
 extern int mac_var_to_vmode(const struct fb_var_screeninfo *var, int *vmode,
-			    int *cmode);
+                            int *cmode);
 extern int mac_map_monitor_sense(int sense);
 extern int mac_find_mode(struct fb_var_screeninfo *var,
-			 struct fb_info *info,
-			 const char *mode_option,
-			 unsigned int default_bpp);
+                         struct fb_info *info,
+                         const char *mode_option,
+                         unsigned int default_bpp);
 
 
-    /*
-     *  Addresses in NVRAM where video mode and pixel size are stored.
-     */
+/*
+ *  Addresses in NVRAM where video mode and pixel size are stored.
+ */
 
 #define NV_VMODE		0x140f
 #define NV_CMODE		0x1410

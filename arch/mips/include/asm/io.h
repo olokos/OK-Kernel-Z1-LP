@@ -69,10 +69,9 @@ extern const unsigned long mips_io_port_base;
  * will need the barrier() to fight side effects of the aliasing chat.
  * This trickery will eventually collapse under gcc's optimizer.  Oh well.
  */
-static inline void set_io_port_base(unsigned long base)
-{
-	* (unsigned long *) &mips_io_port_base = base;
-	barrier();
+static inline void set_io_port_base(unsigned long base) {
+    * (unsigned long *) &mips_io_port_base = base;
+    barrier();
 }
 
 /*
@@ -114,9 +113,8 @@ static inline void set_io_port_base(unsigned long base)
  *     almost all conceivable cases a device driver should not be using
  *     this function
  */
-static inline unsigned long virt_to_phys(volatile const void *address)
-{
-	return (unsigned long)address - PAGE_OFFSET + PHYS_OFFSET;
+static inline unsigned long virt_to_phys(volatile const void *address) {
+    return (unsigned long)address - PAGE_OFFSET + PHYS_OFFSET;
 }
 
 /*
@@ -131,22 +129,19 @@ static inline unsigned long virt_to_phys(volatile const void *address)
  *     almost all conceivable cases a device driver should not be using
  *     this function
  */
-static inline void * phys_to_virt(unsigned long address)
-{
-	return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
+static inline void * phys_to_virt(unsigned long address) {
+    return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
 }
 
 /*
  * ISA I/O bus memory addresses are 1:1 with the physical address.
  */
-static inline unsigned long isa_virt_to_bus(volatile void * address)
-{
-	return (unsigned long)address - PAGE_OFFSET;
+static inline unsigned long isa_virt_to_bus(volatile void * address) {
+    return (unsigned long)address - PAGE_OFFSET;
 }
 
-static inline void * isa_bus_to_virt(unsigned long address)
-{
-	return (void *)(address + PAGE_OFFSET);
+static inline void * isa_bus_to_virt(unsigned long address) {
+    return (void *)(address + PAGE_OFFSET);
 }
 
 #define isa_page_to_bus page_to_phys
@@ -169,47 +164,46 @@ extern void __iomem * __ioremap(phys_t offset, phys_t size, unsigned long flags)
 extern void __iounmap(const volatile void __iomem *addr);
 
 static inline void __iomem * __ioremap_mode(phys_t offset, unsigned long size,
-	unsigned long flags)
-{
-	void __iomem *addr = plat_ioremap(offset, size, flags);
+        unsigned long flags) {
+    void __iomem *addr = plat_ioremap(offset, size, flags);
 
-	if (addr)
-		return addr;
+    if (addr)
+        return addr;
 
 #define __IS_LOW512(addr) (!((phys_t)(addr) & (phys_t) ~0x1fffffffULL))
 
-	if (cpu_has_64bit_addresses) {
-		u64 base = UNCAC_BASE;
+    if (cpu_has_64bit_addresses) {
+        u64 base = UNCAC_BASE;
 
-		/*
-		 * R10000 supports a 2 bit uncached attribute therefore
-		 * UNCAC_BASE may not equal IO_BASE.
-		 */
-		if (flags == _CACHE_UNCACHED)
-			base = (u64) IO_BASE;
-		return (void __iomem *) (unsigned long) (base + offset);
-	} else if (__builtin_constant_p(offset) &&
-		   __builtin_constant_p(size) && __builtin_constant_p(flags)) {
-		phys_t phys_addr, last_addr;
+        /*
+         * R10000 supports a 2 bit uncached attribute therefore
+         * UNCAC_BASE may not equal IO_BASE.
+         */
+        if (flags == _CACHE_UNCACHED)
+            base = (u64) IO_BASE;
+        return (void __iomem *) (unsigned long) (base + offset);
+    } else if (__builtin_constant_p(offset) &&
+               __builtin_constant_p(size) && __builtin_constant_p(flags)) {
+        phys_t phys_addr, last_addr;
 
-		phys_addr = fixup_bigphys_addr(offset, size);
+        phys_addr = fixup_bigphys_addr(offset, size);
 
-		/* Don't allow wraparound or zero size. */
-		last_addr = phys_addr + size - 1;
-		if (!size || last_addr < phys_addr)
-			return NULL;
+        /* Don't allow wraparound or zero size. */
+        last_addr = phys_addr + size - 1;
+        if (!size || last_addr < phys_addr)
+            return NULL;
 
-		/*
-		 * Map uncached objects in the low 512MB of address
-		 * space using KSEG1.
-		 */
-		if (__IS_LOW512(phys_addr) && __IS_LOW512(last_addr) &&
-		    flags == _CACHE_UNCACHED)
-			return (void __iomem *)
-				(unsigned long)CKSEG1ADDR(phys_addr);
-	}
+        /*
+         * Map uncached objects in the low 512MB of address
+         * space using KSEG1.
+         */
+        if (__IS_LOW512(phys_addr) && __IS_LOW512(last_addr) &&
+                flags == _CACHE_UNCACHED)
+            return (void __iomem *)
+                   (unsigned long)CKSEG1ADDR(phys_addr);
+    }
 
-	return __ioremap(offset, size, flags);
+    return __ioremap(offset, size, flags);
 
 #undef __IS_LOW512
 }
@@ -279,18 +273,17 @@ static inline void __iomem * __ioremap_mode(phys_t offset, unsigned long size,
 #define ioremap_uncached_accelerated(offset, size)			\
 	__ioremap_mode((offset), (size), _CACHE_UNCACHED_ACCELERATED)
 
-static inline void iounmap(const volatile void __iomem *addr)
-{
-	if (plat_iounmap(addr))
-		return;
+static inline void iounmap(const volatile void __iomem *addr) {
+    if (plat_iounmap(addr))
+        return;
 
 #define __IS_KSEG1(addr) (((unsigned long)(addr) & ~0x1fffffffUL) == CKSEG1)
 
-	if (cpu_has_64bit_addresses ||
-	    (__builtin_constant_p(addr) && __IS_KSEG1(addr)))
-		return;
+    if (cpu_has_64bit_addresses ||
+            (__builtin_constant_p(addr) && __IS_KSEG1(addr)))
+        return;
 
-	__iounmap(addr);
+    __iounmap(addr);
 
 #undef __IS_KSEG1
 }
@@ -539,17 +532,14 @@ BUILDSTRING(q, u64)
 #define mmiowb() asm volatile ("sync" ::: "memory")
 #endif
 
-static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
-{
-	memset((void __force *) addr, val, count);
+static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count) {
+    memset((void __force *) addr, val, count);
 }
-static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
-{
-	memcpy(dst, (void __force *) src, count);
+static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count) {
+    memcpy(dst, (void __force *) src, count);
 }
-static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
-{
-	memcpy((void __force *) dst, src, count);
+static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count) {
+    memcpy((void __force *) dst, src, count);
 }
 
 /*

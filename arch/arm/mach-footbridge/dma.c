@@ -21,37 +21,33 @@
 #include <asm/hardware/dec21285.h>
 
 #if 0
-static int fb_dma_request(unsigned int chan, dma_t *dma)
-{
-	return -EINVAL;
+static int fb_dma_request(unsigned int chan, dma_t *dma) {
+    return -EINVAL;
 }
 
-static void fb_dma_enable(unsigned int chan, dma_t *dma)
-{
+static void fb_dma_enable(unsigned int chan, dma_t *dma) {
 }
 
-static void fb_dma_disable(unsigned int chan, dma_t *dma)
-{
+static void fb_dma_disable(unsigned int chan, dma_t *dma) {
 }
 
 static struct dma_ops fb_dma_ops = {
-	.type		= "fb",
-	.request	= fb_dma_request,
-	.enable		= fb_dma_enable,
-	.disable	= fb_dma_disable,
+    .type		= "fb",
+    .request	= fb_dma_request,
+    .enable		= fb_dma_enable,
+    .disable	= fb_dma_disable,
 };
 #endif
 
-static int __init fb_dma_init(void)
-{
+static int __init fb_dma_init(void) {
 #if 0
-	dma[_DC21285_DMA(0)].d_ops = &fb_dma_ops;
-	dma[_DC21285_DMA(1)].d_ops = &fb_dma_ops;
+    dma[_DC21285_DMA(0)].d_ops = &fb_dma_ops;
+    dma[_DC21285_DMA(1)].d_ops = &fb_dma_ops;
 #endif
 #ifdef CONFIG_ISA_DMA
-	if (footbridge_cfn_mode())
-		isa_init_dma();
+    if (footbridge_cfn_mode())
+        isa_init_dma();
 #endif
-	return 0;
+    return 0;
 }
 core_initcall(fb_dma_init);

@@ -62,50 +62,49 @@ ACPI_MODULE_NAME("evxfevnt")
  *
  ******************************************************************************/
 
-acpi_status acpi_enable(void)
-{
-	acpi_status status;
-	int retry;
+acpi_status acpi_enable(void) {
+    acpi_status status;
+    int retry;
 
-	ACPI_FUNCTION_TRACE(acpi_enable);
+    ACPI_FUNCTION_TRACE(acpi_enable);
 
-	/* ACPI tables must be present */
+    /* ACPI tables must be present */
 
-	if (!acpi_tb_tables_loaded()) {
-		return_ACPI_STATUS(AE_NO_ACPI_TABLES);
-	}
+    if (!acpi_tb_tables_loaded()) {
+        return_ACPI_STATUS(AE_NO_ACPI_TABLES);
+    }
 
-	/* Check current mode */
+    /* Check current mode */
 
-	if (acpi_hw_get_mode() == ACPI_SYS_MODE_ACPI) {
-		ACPI_DEBUG_PRINT((ACPI_DB_INIT,
-				  "System is already in ACPI mode\n"));
-		return_ACPI_STATUS(AE_OK);
-	}
+    if (acpi_hw_get_mode() == ACPI_SYS_MODE_ACPI) {
+        ACPI_DEBUG_PRINT((ACPI_DB_INIT,
+                          "System is already in ACPI mode\n"));
+        return_ACPI_STATUS(AE_OK);
+    }
 
-	/* Transition to ACPI mode */
+    /* Transition to ACPI mode */
 
-	status = acpi_hw_set_mode(ACPI_SYS_MODE_ACPI);
-	if (ACPI_FAILURE(status)) {
-		ACPI_ERROR((AE_INFO,
-			    "Could not transition to ACPI mode"));
-		return_ACPI_STATUS(status);
-	}
+    status = acpi_hw_set_mode(ACPI_SYS_MODE_ACPI);
+    if (ACPI_FAILURE(status)) {
+        ACPI_ERROR((AE_INFO,
+                    "Could not transition to ACPI mode"));
+        return_ACPI_STATUS(status);
+    }
 
-	/* Sanity check that transition succeeded */
+    /* Sanity check that transition succeeded */
 
-	for (retry = 0; retry < 30000; ++retry) {
-		if (acpi_hw_get_mode() == ACPI_SYS_MODE_ACPI) {
-			if (retry != 0)
-				ACPI_WARNING((AE_INFO,
-				"Platform took > %d00 usec to enter ACPI mode", retry));
-			return_ACPI_STATUS(AE_OK);
-		}
-		acpi_os_stall(100);	/* 100 usec */
-	}
+    for (retry = 0; retry < 30000; ++retry) {
+        if (acpi_hw_get_mode() == ACPI_SYS_MODE_ACPI) {
+            if (retry != 0)
+                ACPI_WARNING((AE_INFO,
+                              "Platform took > %d00 usec to enter ACPI mode", retry));
+            return_ACPI_STATUS(AE_OK);
+        }
+        acpi_os_stall(100);	/* 100 usec */
+    }
 
-	ACPI_ERROR((AE_INFO, "Hardware did not enter ACPI mode"));
-	return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
+    ACPI_ERROR((AE_INFO, "Hardware did not enter ACPI mode"));
+    return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_enable)
@@ -121,30 +120,29 @@ ACPI_EXPORT_SYMBOL(acpi_enable)
  * DESCRIPTION: Transfers the system into LEGACY (non-ACPI) mode.
  *
  ******************************************************************************/
-acpi_status acpi_disable(void)
-{
-	acpi_status status = AE_OK;
+acpi_status acpi_disable(void) {
+    acpi_status status = AE_OK;
 
-	ACPI_FUNCTION_TRACE(acpi_disable);
+    ACPI_FUNCTION_TRACE(acpi_disable);
 
-	if (acpi_hw_get_mode() == ACPI_SYS_MODE_LEGACY) {
-		ACPI_DEBUG_PRINT((ACPI_DB_INIT,
-				  "System is already in legacy (non-ACPI) mode\n"));
-	} else {
-		/* Transition to LEGACY mode */
+    if (acpi_hw_get_mode() == ACPI_SYS_MODE_LEGACY) {
+        ACPI_DEBUG_PRINT((ACPI_DB_INIT,
+                          "System is already in legacy (non-ACPI) mode\n"));
+    } else {
+        /* Transition to LEGACY mode */
 
-		status = acpi_hw_set_mode(ACPI_SYS_MODE_LEGACY);
+        status = acpi_hw_set_mode(ACPI_SYS_MODE_LEGACY);
 
-		if (ACPI_FAILURE(status)) {
-			ACPI_ERROR((AE_INFO,
-				    "Could not exit ACPI mode to legacy mode"));
-			return_ACPI_STATUS(status);
-		}
+        if (ACPI_FAILURE(status)) {
+            ACPI_ERROR((AE_INFO,
+                        "Could not exit ACPI mode to legacy mode"));
+            return_ACPI_STATUS(status);
+        }
 
-		ACPI_DEBUG_PRINT((ACPI_DB_INIT, "ACPI mode disabled\n"));
-	}
+        ACPI_DEBUG_PRINT((ACPI_DB_INIT, "ACPI mode disabled\n"));
+    }
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS(status);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_disable)
@@ -161,47 +159,46 @@ ACPI_EXPORT_SYMBOL(acpi_disable)
  * DESCRIPTION: Enable an ACPI event (fixed)
  *
  ******************************************************************************/
-acpi_status acpi_enable_event(u32 event, u32 flags)
-{
-	acpi_status status = AE_OK;
-	u32 value;
+acpi_status acpi_enable_event(u32 event, u32 flags) {
+    acpi_status status = AE_OK;
+    u32 value;
 
-	ACPI_FUNCTION_TRACE(acpi_enable_event);
+    ACPI_FUNCTION_TRACE(acpi_enable_event);
 
-	/* Decode the Fixed Event */
+    /* Decode the Fixed Event */
 
-	if (event > ACPI_EVENT_MAX) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    if (event > ACPI_EVENT_MAX) {
+        return_ACPI_STATUS(AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Enable the requested fixed event (by writing a one to the enable
-	 * register bit)
-	 */
-	status =
-	    acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
-				    enable_register_id, ACPI_ENABLE_EVENT);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /*
+     * Enable the requested fixed event (by writing a one to the enable
+     * register bit)
+     */
+    status =
+        acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
+                                enable_register_id, ACPI_ENABLE_EVENT);
+    if (ACPI_FAILURE(status)) {
+        return_ACPI_STATUS(status);
+    }
 
-	/* Make sure that the hardware responded */
+    /* Make sure that the hardware responded */
 
-	status =
-	    acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
-				   enable_register_id, &value);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    status =
+        acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
+                               enable_register_id, &value);
+    if (ACPI_FAILURE(status)) {
+        return_ACPI_STATUS(status);
+    }
 
-	if (value != 1) {
-		ACPI_ERROR((AE_INFO,
-			    "Could not enable %s event",
-			    acpi_ut_get_event_name(event)));
-		return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
-	}
+    if (value != 1) {
+        ACPI_ERROR((AE_INFO,
+                    "Could not enable %s event",
+                    acpi_ut_get_event_name(event)));
+        return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
+    }
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS(status);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_enable_event)
@@ -218,45 +215,44 @@ ACPI_EXPORT_SYMBOL(acpi_enable_event)
  * DESCRIPTION: Disable an ACPI event (fixed)
  *
  ******************************************************************************/
-acpi_status acpi_disable_event(u32 event, u32 flags)
-{
-	acpi_status status = AE_OK;
-	u32 value;
+acpi_status acpi_disable_event(u32 event, u32 flags) {
+    acpi_status status = AE_OK;
+    u32 value;
 
-	ACPI_FUNCTION_TRACE(acpi_disable_event);
+    ACPI_FUNCTION_TRACE(acpi_disable_event);
 
-	/* Decode the Fixed Event */
+    /* Decode the Fixed Event */
 
-	if (event > ACPI_EVENT_MAX) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    if (event > ACPI_EVENT_MAX) {
+        return_ACPI_STATUS(AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Disable the requested fixed event (by writing a zero to the enable
-	 * register bit)
-	 */
-	status =
-	    acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
-				    enable_register_id, ACPI_DISABLE_EVENT);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /*
+     * Disable the requested fixed event (by writing a zero to the enable
+     * register bit)
+     */
+    status =
+        acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
+                                enable_register_id, ACPI_DISABLE_EVENT);
+    if (ACPI_FAILURE(status)) {
+        return_ACPI_STATUS(status);
+    }
 
-	status =
-	    acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
-				   enable_register_id, &value);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    status =
+        acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
+                               enable_register_id, &value);
+    if (ACPI_FAILURE(status)) {
+        return_ACPI_STATUS(status);
+    }
 
-	if (value != 0) {
-		ACPI_ERROR((AE_INFO,
-			    "Could not disable %s events",
-			    acpi_ut_get_event_name(event)));
-		return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
-	}
+    if (value != 0) {
+        ACPI_ERROR((AE_INFO,
+                    "Could not disable %s events",
+                    acpi_ut_get_event_name(event)));
+        return_ACPI_STATUS(AE_NO_HARDWARE_RESPONSE);
+    }
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS(status);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_disable_event)
@@ -272,27 +268,26 @@ ACPI_EXPORT_SYMBOL(acpi_disable_event)
  * DESCRIPTION: Clear an ACPI event (fixed)
  *
  ******************************************************************************/
-acpi_status acpi_clear_event(u32 event)
-{
-	acpi_status status = AE_OK;
+acpi_status acpi_clear_event(u32 event) {
+    acpi_status status = AE_OK;
 
-	ACPI_FUNCTION_TRACE(acpi_clear_event);
+    ACPI_FUNCTION_TRACE(acpi_clear_event);
 
-	/* Decode the Fixed Event */
+    /* Decode the Fixed Event */
 
-	if (event > ACPI_EVENT_MAX) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    if (event > ACPI_EVENT_MAX) {
+        return_ACPI_STATUS(AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Clear the requested fixed event (By writing a one to the status
-	 * register bit)
-	 */
-	status =
-	    acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
-				    status_register_id, ACPI_CLEAR_STATUS);
+    /*
+     * Clear the requested fixed event (By writing a one to the status
+     * register bit)
+     */
+    status =
+        acpi_write_bit_register(acpi_gbl_fixed_event_info[event].
+                                status_register_id, ACPI_CLEAR_STATUS);
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS(status);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_clear_event)
@@ -310,46 +305,45 @@ ACPI_EXPORT_SYMBOL(acpi_clear_event)
  * DESCRIPTION: Obtains and returns the current status of the event
  *
  ******************************************************************************/
-acpi_status acpi_get_event_status(u32 event, acpi_event_status * event_status)
-{
-	acpi_status status = AE_OK;
-	u32 value;
+acpi_status acpi_get_event_status(u32 event, acpi_event_status * event_status) {
+    acpi_status status = AE_OK;
+    u32 value;
 
-	ACPI_FUNCTION_TRACE(acpi_get_event_status);
+    ACPI_FUNCTION_TRACE(acpi_get_event_status);
 
-	if (!event_status) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    if (!event_status) {
+        return_ACPI_STATUS(AE_BAD_PARAMETER);
+    }
 
-	/* Decode the Fixed Event */
+    /* Decode the Fixed Event */
 
-	if (event > ACPI_EVENT_MAX) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    if (event > ACPI_EVENT_MAX) {
+        return_ACPI_STATUS(AE_BAD_PARAMETER);
+    }
 
-	/* Get the status of the requested fixed event */
+    /* Get the status of the requested fixed event */
 
-	status =
-	    acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
-			      enable_register_id, &value);
-	if (ACPI_FAILURE(status))
-		return_ACPI_STATUS(status);
+    status =
+        acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
+                               enable_register_id, &value);
+    if (ACPI_FAILURE(status))
+        return_ACPI_STATUS(status);
 
-	*event_status = value;
+    *event_status = value;
 
-	status =
-	    acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
-			      status_register_id, &value);
-	if (ACPI_FAILURE(status))
-		return_ACPI_STATUS(status);
+    status =
+        acpi_read_bit_register(acpi_gbl_fixed_event_info[event].
+                               status_register_id, &value);
+    if (ACPI_FAILURE(status))
+        return_ACPI_STATUS(status);
 
-	if (value)
-		*event_status |= ACPI_EVENT_FLAG_SET;
+    if (value)
+        *event_status |= ACPI_EVENT_FLAG_SET;
 
-	if (acpi_gbl_fixed_event_handlers[event].handler)
-		*event_status |= ACPI_EVENT_FLAG_HANDLE;
+    if (acpi_gbl_fixed_event_handlers[event].handler)
+        *event_status |= ACPI_EVENT_FLAG_HANDLE;
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS(status);
 }
 
 ACPI_EXPORT_SYMBOL(acpi_get_event_status)

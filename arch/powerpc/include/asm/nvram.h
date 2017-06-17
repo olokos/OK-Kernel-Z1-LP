@@ -32,9 +32,9 @@
 
 #ifdef CONFIG_PPC_PSERIES
 extern int nvram_write_error_log(char * buff, int length,
-					 unsigned int err_type, unsigned int err_seq);
+                                 unsigned int err_type, unsigned int err_seq);
 extern int nvram_read_error_log(char * buff, int length,
-					 unsigned int * err_type, unsigned int *err_seq);
+                                unsigned int * err_type, unsigned int *err_seq);
 extern int nvram_clear_error_log(void);
 extern int pSeries_nvram_init(void);
 #endif /* CONFIG_PPC_PSERIES */
@@ -42,17 +42,16 @@ extern int pSeries_nvram_init(void);
 #ifdef CONFIG_MMIO_NVRAM
 extern int mmio_nvram_init(void);
 #else
-static inline int mmio_nvram_init(void)
-{
-	return -ENODEV;
+static inline int mmio_nvram_init(void) {
+    return -ENODEV;
 }
 #endif
 
 extern int __init nvram_scan_partitions(void);
 extern loff_t nvram_create_partition(const char *name, int sig,
-				     int req_size, int min_size);
+                                     int req_size, int min_size);
 extern int nvram_remove_partition(const char *name, int sig,
-					const char *exceptions[]);
+                                  const char *exceptions[]);
 extern int nvram_get_partition_size(loff_t data_index);
 extern loff_t nvram_find_partition(const char *name, int sig, int *out_size);
 
@@ -61,9 +60,9 @@ extern loff_t nvram_find_partition(const char *name, int sig, int *out_size);
 /* PowerMac specific nvram stuffs */
 
 enum {
-	pmac_nvram_OF,		/* Open Firmware partition */
-	pmac_nvram_XPRAM,	/* MacOS XPRAM partition */
-	pmac_nvram_NR		/* MacOS Name Registry partition */
+    pmac_nvram_OF,		/* Open Firmware partition */
+    pmac_nvram_XPRAM,	/* MacOS XPRAM partition */
+    pmac_nvram_NR		/* MacOS Name Registry partition */
 };
 
 #ifdef __KERNEL__
@@ -91,9 +90,9 @@ extern void nvram_write_byte(unsigned char c, int i);
 
 /* Machine location structure in PowerMac XPRAM */
 struct pmac_machine_location {
-	unsigned int	latitude;	/* 2+30 bit Fractional number */
-	unsigned int	longitude;	/* 2+30 bit Fractional number */
-	unsigned int	delta;		/* mix of GMT delta and DLS */
+    unsigned int	latitude;	/* 2+30 bit Fractional number */
+    unsigned int	longitude;	/* 2+30 bit Fractional number */
+    unsigned int	delta;		/* mix of GMT delta and DLS */
 };
 
 /*

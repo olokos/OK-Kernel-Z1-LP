@@ -13,41 +13,39 @@
  * We don't need to check for alignment etc.
  */
 #ifdef CPU_M68040_OR_M68060_ONLY
-static inline void copy_page(void *to, void *from)
-{
-  unsigned long tmp;
+static inline void copy_page(void *to, void *from) {
+    unsigned long tmp;
 
-  __asm__ __volatile__("1:\t"
-		       ".chip 68040\n\t"
-		       "move16 %1@+,%0@+\n\t"
-		       "move16 %1@+,%0@+\n\t"
-		       ".chip 68k\n\t"
-		       "dbra  %2,1b\n\t"
-		       : "=a" (to), "=a" (from), "=d" (tmp)
-		       : "0" (to), "1" (from) , "2" (PAGE_SIZE / 32 - 1)
-		       );
+    __asm__ __volatile__("1:\t"
+                         ".chip 68040\n\t"
+                         "move16 %1@+,%0@+\n\t"
+                         "move16 %1@+,%0@+\n\t"
+                         ".chip 68k\n\t"
+                         "dbra  %2,1b\n\t"
+                         : "=a" (to), "=a" (from), "=d" (tmp)
+                         : "0" (to), "1" (from) , "2" (PAGE_SIZE / 32 - 1)
+                        );
 }
 
-static inline void clear_page(void *page)
-{
-	unsigned long tmp;
-	unsigned long *sp = page;
+static inline void clear_page(void *page) {
+    unsigned long tmp;
+    unsigned long *sp = page;
 
-	*sp++ = 0;
-	*sp++ = 0;
-	*sp++ = 0;
-	*sp++ = 0;
+    *sp++ = 0;
+    *sp++ = 0;
+    *sp++ = 0;
+    *sp++ = 0;
 
-	__asm__ __volatile__("1:\t"
-			     ".chip 68040\n\t"
-			     "move16 %2@+,%0@+\n\t"
-			     ".chip 68k\n\t"
-			     "subqw  #8,%2\n\t"
-			     "subqw  #8,%2\n\t"
-			     "dbra   %1,1b\n\t"
-			     : "=a" (sp), "=d" (tmp)
-			     : "a" (page), "0" (sp),
-			       "1" ((PAGE_SIZE - 16) / 16 - 1));
+    __asm__ __volatile__("1:\t"
+                         ".chip 68040\n\t"
+                         "move16 %2@+,%0@+\n\t"
+                         ".chip 68k\n\t"
+                         "subqw  #8,%2\n\t"
+                         "subqw  #8,%2\n\t"
+                         "dbra   %1,1b\n\t"
+                         : "=a" (sp), "=d" (tmp)
+                         : "a" (page), "0" (sp),
+                         "1" ((PAGE_SIZE - 16) / 16 - 1));
 }
 
 #else
@@ -70,49 +68,45 @@ extern unsigned long m68k_memoffset;
 
 #define WANT_PAGE_VIRTUAL
 
-static inline unsigned long ___pa(void *vaddr)
-{
-	unsigned long paddr;
-	asm (
-		"1:	addl #0,%0\n"
-		m68k_fixup(%c2, 1b+2)
-		: "=r" (paddr)
-		: "0" (vaddr), "i" (m68k_fixup_memoffset));
-	return paddr;
+static inline unsigned long ___pa(void *vaddr) {
+    unsigned long paddr;
+    asm (
+        "1:	addl #0,%0\n"
+        m68k_fixup(%c2, 1b+2)
+        : "=r" (paddr)
+        : "0" (vaddr), "i" (m68k_fixup_memoffset));
+    return paddr;
 }
 #define __pa(vaddr)	___pa((void *)(long)(vaddr))
-static inline void *__va(unsigned long paddr)
-{
-	void *vaddr;
-	asm (
-		"1:	subl #0,%0\n"
-		m68k_fixup(%c2, 1b+2)
-		: "=r" (vaddr)
-		: "0" (paddr), "i" (m68k_fixup_memoffset));
-	return vaddr;
+static inline void *__va(unsigned long paddr) {
+    void *vaddr;
+    asm (
+        "1:	subl #0,%0\n"
+        m68k_fixup(%c2, 1b+2)
+        : "=r" (vaddr)
+        : "0" (paddr), "i" (m68k_fixup_memoffset));
+    return vaddr;
 }
 
 #else	/* !CONFIG_SUN3 */
 /* This #define is a horrible hack to suppress lots of warnings. --m */
 #define __pa(x) ___pa((unsigned long)(x))
-static inline unsigned long ___pa(unsigned long x)
-{
-     if(x == 0)
-	  return 0;
-     if(x >= PAGE_OFFSET)
+static inline unsigned long ___pa(unsigned long x) {
+    if(x == 0)
+        return 0;
+    if(x >= PAGE_OFFSET)
         return (x-PAGE_OFFSET);
-     else
+    else
         return (x+0x2000000);
 }
 
-static inline void *__va(unsigned long x)
-{
-     if(x == 0)
-	  return (void *)0;
+static inline void *__va(unsigned long x) {
+    if(x == 0)
+        return (void *)0;
 
-     if(x < 0x2000000)
+    if(x < 0x2000000)
         return (void *)(x+PAGE_OFFSET);
-     else
+    else
         return (void *)(x-0x2000000);
 }
 #endif	/* CONFIG_SUN3 */
@@ -133,16 +127,15 @@ extern int m68k_virt_to_node_shift;
 #else
 extern struct pglist_data *pg_data_table[];
 
-static inline __attribute_const__ int __virt_to_node_shift(void)
-{
-	int shift;
+static inline __attribute_const__ int __virt_to_node_shift(void) {
+    int shift;
 
-	asm (
-		"1:	moveq	#0,%0\n"
-		m68k_fixup(%c1, 1b)
-		: "=d" (shift)
-		: "i" (m68k_fixup_vnode_shift));
-	return shift;
+    asm (
+        "1:	moveq	#0,%0\n"
+        m68k_fixup(%c1, 1b)
+        : "=d" (shift)
+        : "i" (m68k_fixup_vnode_shift));
+    return shift;
 }
 
 #define __virt_to_node(addr)	(pg_data_table[(unsigned long)(addr) >> __virt_to_node_shift()])

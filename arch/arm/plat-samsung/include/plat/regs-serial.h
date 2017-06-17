@@ -254,17 +254,17 @@
 */
 
 struct s3c2410_uartcfg {
-	unsigned char	   hwport;	 /* hardware port number */
-	unsigned char	   unused;
-	unsigned short	   flags;
-	upf_t		   uart_flags;	 /* default uart flags */
-	unsigned int	   clk_sel;
+    unsigned char	   hwport;	 /* hardware port number */
+    unsigned char	   unused;
+    unsigned short	   flags;
+    upf_t		   uart_flags;	 /* default uart flags */
+    unsigned int	   clk_sel;
 
-	unsigned int	   has_fracval;
+    unsigned int	   has_fracval;
 
-	unsigned long	   ucon;	 /* value of ucon for port */
-	unsigned long	   ulcon;	 /* value of ulcon for port */
-	unsigned long	   ufcon;	 /* value of ufcon for port */
+    unsigned long	   ucon;	 /* value of ucon for port */
+    unsigned long	   ulcon;	 /* value of ulcon for port */
+    unsigned long	   ufcon;	 /* value of ufcon for port */
 };
 
 /* s3c24xx_uart_devs

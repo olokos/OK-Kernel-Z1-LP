@@ -7,8 +7,8 @@
 
 #ifndef __ASSEMBLY__
 typedef union {
-	s32 lock;
-	s32 write;
+    s32 lock;
+    s32 write;
 } arch_rwlock_t;
 #endif
 
@@ -25,11 +25,11 @@ typedef union {
 
 #ifndef __ASSEMBLY__
 typedef union {
-	s64 lock;
-	struct {
-		u32 read;
-		s32 write;
-	};
+    s64 lock;
+    struct {
+        u32 read;
+        s32 write;
+    };
 } arch_rwlock_t;
 #endif
 

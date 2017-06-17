@@ -36,9 +36,9 @@
 #define DDI_DMA_SYNC_FORDEV
 #endif
 
-	/*
-	 * hardware modul dependent receive modes
-	 */
+/*
+ * hardware modul dependent receive modes
+ */
 #define	RX_ENABLE_PASS_SMT	21
 #define	RX_DISABLE_PASS_SMT	22
 #define	RX_ENABLE_PASS_NSA	23
@@ -58,9 +58,9 @@
 #endif
 #define SMT_BUF		0x80
 
-	/*
-	 * bits of the frame status byte
-	 */
+/*
+ * bits of the frame status byte
+ */
 #define EN_IRQ_EOF	0x02	/* get IRQ after end of frame transmission */
 #define	LOC_TX		0x04	/* send frame to the local SMT */
 #define LAST_FRAG	0x08	/* last TxD of the frame */
@@ -87,9 +87,9 @@
 #define A_INDIC		(1L<<26)
 #define	RD_FS_LOCAL	0x80
 
-	/*
-	 * DEBUG FLAGS
-	 */
+/*
+ * DEBUG FLAGS
+ */
 #define	DEBUG_SMTF	1
 #define	DEBUG_SMT	2
 #define	DEBUG_ECM	3
@@ -105,56 +105,56 @@
 
 struct s_mbuf_pool {
 #ifndef	MB_OUTSIDE_SMC
-	SMbuf		mb[MAX_MBUF] ;		/* mbuf pool */
+    SMbuf		mb[MAX_MBUF] ;		/* mbuf pool */
 #endif
-	SMbuf		*mb_start ;		/* points to the first mb */
-	SMbuf		*mb_free ;		/* free queue */
+    SMbuf		*mb_start ;		/* points to the first mb */
+    SMbuf		*mb_free ;		/* free queue */
 } ;
 
 struct hwm_r {
-	/*
-	 * hardware modul specific receive variables
-	 */
-	u_int			len ;		/* length of the whole frame */
-	char			*mb_pos ;	/* SMbuf receive position */
+    /*
+     * hardware modul specific receive variables
+     */
+    u_int			len ;		/* length of the whole frame */
+    char			*mb_pos ;	/* SMbuf receive position */
 } ;
 
 struct hw_modul {
-	/*
-	 * All hardware modul specific variables
-	 */
-	struct	s_mbuf_pool	mbuf_pool ;
-	struct	hwm_r	r ;
+    /*
+     * All hardware modul specific variables
+     */
+    struct	s_mbuf_pool	mbuf_pool ;
+    struct	hwm_r	r ;
 
-	union s_fp_descr volatile *descr_p ; /* points to the desriptor area */
+    union s_fp_descr volatile *descr_p ; /* points to the desriptor area */
 
-	u_short pass_SMT ;		/* pass SMT frames */
-	u_short pass_NSA ;		/* pass all NSA frames */
-	u_short pass_DB ;		/* pass Direct Beacon Frames */
-	u_short pass_llc_promisc ;	/* pass all llc frames (default ON) */
+    u_short pass_SMT ;		/* pass SMT frames */
+    u_short pass_NSA ;		/* pass all NSA frames */
+    u_short pass_DB ;		/* pass Direct Beacon Frames */
+    u_short pass_llc_promisc ;	/* pass all llc frames (default ON) */
 
-	SMbuf	*llc_rx_pipe ;		/* points to the first queued llc fr */
-	SMbuf	*llc_rx_tail ;		/* points to the last queued llc fr */
-	int	queued_rx_frames ;	/* number of queued frames */
+    SMbuf	*llc_rx_pipe ;		/* points to the first queued llc fr */
+    SMbuf	*llc_rx_tail ;		/* points to the last queued llc fr */
+    int	queued_rx_frames ;	/* number of queued frames */
 
-	SMbuf	*txd_tx_pipe ;		/* points to first mb in the txd ring */
-	SMbuf	*txd_tx_tail ;		/* points to last mb in the txd ring */
-	int	queued_txd_mb ;		/* number of SMT MBufs in txd ring */
+    SMbuf	*txd_tx_pipe ;		/* points to first mb in the txd ring */
+    SMbuf	*txd_tx_tail ;		/* points to last mb in the txd ring */
+    int	queued_txd_mb ;		/* number of SMT MBufs in txd ring */
 
-	int	rx_break ;		/* rev. was breaked because ind. off */
-	int	leave_isr ;		/* leave fddi_isr immedeately if set */
-	int	isr_flag ;		/* set, when HWM is entered from isr */
-	/*
-	 * variables for the current transmit frame
-	 */
-	struct s_smt_tx_queue *tx_p ;	/* pointer to the transmit queue */
-	u_long	tx_descr ;		/* tx descriptor for FORMAC+ */
-	int	tx_len ;		/* tx frame length */
-	SMbuf	*tx_mb ;		/* SMT tx MBuf pointer */
-	char	*tx_data ;		/* data pointer to the SMT tx Mbuf */
+    int	rx_break ;		/* rev. was breaked because ind. off */
+    int	leave_isr ;		/* leave fddi_isr immedeately if set */
+    int	isr_flag ;		/* set, when HWM is entered from isr */
+    /*
+     * variables for the current transmit frame
+     */
+    struct s_smt_tx_queue *tx_p ;	/* pointer to the transmit queue */
+    u_long	tx_descr ;		/* tx descriptor for FORMAC+ */
+    int	tx_len ;		/* tx frame length */
+    SMbuf	*tx_mb ;		/* SMT tx MBuf pointer */
+    char	*tx_data ;		/* data pointer to the SMT tx Mbuf */
 
-	int	detec_count ;		/* counter for out of RxD condition */
-	u_long	rx_len_error ;		/* rx len FORMAC != sum of fragments */
+    int	detec_count ;		/* counter for out of RxD condition */
+    u_long	rx_len_error ;		/* rx len FORMAC != sum of fragments */
 } ;
 
 
@@ -164,9 +164,9 @@ struct hw_modul {
 
 #ifdef	DEBUG
 struct os_debug {
-	int	hwm_rx ;
-	int	hwm_tx ;
-	int	hwm_gen ;
+    int	hwm_rx ;
+    int	hwm_tx ;
+    int	hwm_gen ;
 } ;
 #endif
 

@@ -129,24 +129,24 @@
 #ifndef __ASSEMBLER__
 
 typedef struct {
-	volatile u32 stat;
-	u32 address;		/* PCI address */
-	volatile u32 length;
-}desc_t;
+    volatile u32 stat;
+    u32 address;		/* PCI address */
+    volatile u32 length;
+} desc_t;
 
 
 typedef struct {
 // Card to host
-	volatile u32 open;
-	volatile u32 cable;
-	volatile u32 rx_overruns;
-	volatile u32 rx_frame_errors;
+    volatile u32 open;
+    volatile u32 cable;
+    volatile u32 rx_overruns;
+    volatile u32 rx_frame_errors;
 
 // Host to card
-	u32 parity;
-	u32 encoding;
-	u32 clocking;
-	desc_t tx_descs[TX_BUFFERS];
-}port_status_t;
+    u32 parity;
+    u32 encoding;
+    u32 clocking;
+    desc_t tx_descs[TX_BUFFERS];
+} port_status_t;
 
 #endif /* __ASSEMBLER__ */

@@ -42,9 +42,9 @@
  */
 enum fixed_addresses {
 #define FIX_N_COLOURS 8
-	FIX_CMAP_BEGIN,
-	FIX_CMAP_END = FIX_CMAP_BEGIN + FIX_N_COLOURS,
-	__end_of_fixed_addresses
+    FIX_CMAP_BEGIN,
+    FIX_CMAP_END = FIX_CMAP_BEGIN + FIX_N_COLOURS,
+    __end_of_fixed_addresses
 };
 
 /*
@@ -69,14 +69,12 @@ extern void __this_fixmap_does_not_exist(void);
  * directly without tranlation, we catch the bug with a NULL-deference
  * kernel oops. Illegal ranges of incoming indices are caught too.
  */
-static inline unsigned long fix_to_virt(const unsigned int idx)
-{
-	return __fix_to_virt(idx);
+static inline unsigned long fix_to_virt(const unsigned int idx) {
+    return __fix_to_virt(idx);
 }
 
-static inline unsigned long virt_to_fix(const unsigned long vaddr)
-{
-	return __virt_to_fix(vaddr);
+static inline unsigned long virt_to_fix(const unsigned long vaddr) {
+    return __virt_to_fix(vaddr);
 }
 
 #endif /* _ASM_SCORE_FIXMAP_H */

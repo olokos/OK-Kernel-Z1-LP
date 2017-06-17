@@ -23,8 +23,8 @@
    Every element starts with this.
  */
 struct oz_elt {
-	u8 type;
-	u8 length;
+    u8 type;
+    u8 length;
 } PACKED;
 
 #define oz_next_elt(__elt)	\
@@ -43,9 +43,9 @@ struct oz_elt {
  * of a frame and comes after the MAC header.
  */
 struct oz_hdr {
-	u8	control;
-	u8	last_pkt_num;
-	u32	pkt_num;
+    u8	control;
+    u8	last_pkt_num;
+    u32	pkt_num;
 } PACKED;
 
 #define OZ_PROTOCOL_VERSION	0x1
@@ -68,18 +68,18 @@ struct oz_hdr {
 /* Connect request data structure.
  */
 struct oz_elt_connect_req {
-	u8	mode;
-	u8	resv1[16];
-	u8	pd_info;
-	u8	session_id;
-	u8	presleep;
-	u8	resv2;
-	u8	host_vendor;
-	u8	keep_alive;
-	u16	apps;
-	u8	max_len_div16;
-	u8	ms_per_isoc;
-	u8	resv3[2];
+    u8	mode;
+    u8	resv1[16];
+    u8	pd_info;
+    u8	session_id;
+    u8	presleep;
+    u8	resv2;
+    u8	host_vendor;
+    u8	keep_alive;
+    u16	apps;
+    u8	max_len_div16;
+    u8	ms_per_isoc;
+    u8	resv3[2];
 } PACKED;
 
 /* mode field bits.
@@ -102,33 +102,33 @@ struct oz_elt_connect_req {
 /* Connect response data structure.
  */
 struct oz_elt_connect_rsp {
-	u8	mode;
-	u8	status;
-	u8	resv1[3];
-	u8	session_id;
-	u16	apps;
-	u32	resv2;
+    u8	mode;
+    u8	status;
+    u8	resv1[3];
+    u8	session_id;
+    u16	apps;
+    u32	resv2;
 } PACKED;
 
 struct oz_elt_farewell {
-	u8	ep_num;
-	u8	index;
-	u8	report[1];
+    u8	ep_num;
+    u8	index;
+    u8	report[1];
 } PACKED;
 
 struct oz_elt_update_param {
-	u8	resv1[16];
-	u8	presleep;
-	u8	resv2;
-	u8	host_vendor;
-	u8	keepalive;
+    u8	resv1[16];
+    u8	presleep;
+    u8	resv2;
+    u8	host_vendor;
+    u8	keepalive;
 } PACKED;
 
 /* Header common to all application elements.
  */
 struct oz_app_hdr {
-	u8	app_id;
-	u8	elt_seq_num;
+    u8	app_id;
+    u8	elt_seq_num;
 } PACKED;
 
 /* Values for app_id.
@@ -145,9 +145,9 @@ struct oz_app_hdr {
  * the element header in a USB application.
  */
 struct oz_usb_hdr {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
 } PACKED;
 
 
@@ -179,16 +179,16 @@ struct oz_usb_hdr {
 #define OZ_REQD_D2H			0x80
 
 struct oz_get_desc_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u16	offset;
-	u16	size;
-	u8	req_type;
-	u8	desc_type;
-	u16	w_index;
-	u8	index;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u16	offset;
+    u16	size;
+    u8	req_type;
+    u8	desc_type;
+    u16	w_index;
+    u8	index;
 } PACKED;
 
 /* Values for desc_type field.
@@ -210,143 +210,143 @@ struct oz_get_desc_req {
 #define OZ_REQT_VENDOR			0x40
 
 struct oz_get_desc_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u16	offset;
-	u16	total_size;
-	u8	rcode;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u16	offset;
+    u16	total_size;
+    u8	rcode;
+    u8	data[1];
 } PACKED;
 
 struct oz_feature_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	recipient;
-	u8	index;
-	u16	feature;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	recipient;
+    u8	index;
+    u16	feature;
 } PACKED;
 
 struct oz_feature_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	rcode;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	rcode;
 } PACKED;
 
 struct oz_set_config_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	index;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	index;
 } PACKED;
 
 struct oz_set_config_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	rcode;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	rcode;
 } PACKED;
 
 struct oz_set_interface_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	index;
-	u8	alternative;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	index;
+    u8	alternative;
 } PACKED;
 
 struct oz_set_interface_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	rcode;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	rcode;
 } PACKED;
 
 struct oz_get_interface_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	index;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	index;
 } PACKED;
 
 struct oz_get_interface_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	rcode;
-	u8	alternative;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	rcode;
+    u8	alternative;
 } PACKED;
 
 struct oz_vendor_class_req {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	req_type;
-	u8	request;
-	u16	value;
-	u16	index;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	req_type;
+    u8	request;
+    u16	value;
+    u16	index;
+    u8	data[1];
 } PACKED;
 
 struct oz_vendor_class_rsp {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	req_id;
-	u8	rcode;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	req_id;
+    u8	rcode;
+    u8	data[1];
 } PACKED;
 
 struct oz_data {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	endpoint;
-	u8	format;
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	endpoint;
+    u8	format;
 } PACKED;
 
 struct oz_isoc_fixed {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	endpoint;
-	u8	format;
-	u8	unit_size;
-	u8	frame_number;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	endpoint;
+    u8	format;
+    u8	unit_size;
+    u8	frame_number;
+    u8	data[1];
 } PACKED;
 
 struct oz_multiple_fixed {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	endpoint;
-	u8	format;
-	u8	unit_size;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	endpoint;
+    u8	format;
+    u8	unit_size;
+    u8	data[1];
 } PACKED;
 
 struct oz_fragmented {
-	u8	app_id;
-	u8	elt_seq_num;
-	u8	type;
-	u8	endpoint;
-	u8	format;
-	u16	total_size;
-	u16	offset;
-	u8	data[1];
+    u8	app_id;
+    u8	elt_seq_num;
+    u8	type;
+    u8	endpoint;
+    u8	format;
+    u16	total_size;
+    u16	offset;
+    u8	data[1];
 } PACKED;
 
 /* Note: the following does not get packaged in an element in the same way
@@ -355,10 +355,10 @@ struct oz_fragmented {
  * frame. The length of the data is directly determined from the frame size.
  */
 struct oz_isoc_large {
-	u8	endpoint;
-	u8	format;
-	u8	ms_data;
-	u8	frame_number;
+    u8	endpoint;
+    u8	format;
+    u8	ms_data;
+    u8	frame_number;
 } PACKED;
 
 #define OZ_DATA_F_TYPE_MASK		0xF

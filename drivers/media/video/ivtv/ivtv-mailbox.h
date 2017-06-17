@@ -25,7 +25,7 @@
 #define IVTV_MBOX_DMA             9
 
 void ivtv_api_get_data(struct ivtv_mailbox_data *mbdata, int mb,
-		       int argc, u32 data[]);
+                       int argc, u32 data[]);
 int ivtv_api(struct ivtv *itv, int cmd, int args, u32 data[]);
 int ivtv_vapi_result(struct ivtv *itv, u32 data[CX2341X_MBOX_MAX_DATA], int cmd, int args, ...);
 int ivtv_vapi(struct ivtv *itv, int cmd, int args, ...);

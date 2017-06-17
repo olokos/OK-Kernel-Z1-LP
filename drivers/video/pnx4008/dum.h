@@ -146,66 +146,66 @@
 #define V_LCD_DISPLAY_ON	((BIT(25)) | (64 << 16) | DISP_0_REG)
 
 enum {
-	PAD_NONE,
-	PAD_512,
-	PAD_1024
+    PAD_NONE,
+    PAD_512,
+    PAD_1024
 };
 
 enum {
-	RGB888,
-	RGB666,
-	RGB565,
-	BGR565,
-	ARGB1555,
-	ABGR1555,
-	ARGB4444,
-	ABGR4444
+    RGB888,
+    RGB666,
+    RGB565,
+    BGR565,
+    ARGB1555,
+    ABGR1555,
+    ARGB4444,
+    ABGR4444
 };
 
 struct dum_setup {
-	int sync_neg_edge;
-	int round_robin;
-	int mux_int;
-	int synced_dirty_flag_int;
-	int dirty_flag_int;
-	int error_int;
-	int pf_empty_int;
-	int sf_empty_int;
-	int bac_dis_int;
-	u32 dirty_base_adr;
-	u32 command_base_adr;
-	u32 sync_clk_div;
-	int sync_output;
-	u32 sync_restart_val;
-	u32 set_sync_high;
-	u32 set_sync_low;
+    int sync_neg_edge;
+    int round_robin;
+    int mux_int;
+    int synced_dirty_flag_int;
+    int dirty_flag_int;
+    int error_int;
+    int pf_empty_int;
+    int sf_empty_int;
+    int bac_dis_int;
+    u32 dirty_base_adr;
+    u32 command_base_adr;
+    u32 sync_clk_div;
+    int sync_output;
+    u32 sync_restart_val;
+    u32 set_sync_high;
+    u32 set_sync_low;
 };
 
 struct dum_ch_setup {
-	int disp_no;
-	u32 xmin;
-	u32 ymin;
-	u32 xmax;
-	u32 ymax;
-	int xmirror;
-	int ymirror;
-	int rotate;
-	u32 minadr;
-	u32 maxadr;
-	u32 dirtybuffer;
-	int pad;
-	int format;
-	int hwdirty;
-	int slave_trans;
+    int disp_no;
+    u32 xmin;
+    u32 ymin;
+    u32 xmax;
+    u32 ymax;
+    int xmirror;
+    int ymirror;
+    int rotate;
+    u32 minadr;
+    u32 maxadr;
+    u32 dirtybuffer;
+    int pad;
+    int format;
+    int hwdirty;
+    int slave_trans;
 };
 
 struct disp_window {
-	u32 xmin_l;
-	u32 xmin_h;
-	u32 ymin;
-	u32 xmax_l;
-	u32 xmax_h;
-	u32 ymax;
+    u32 xmin_l;
+    u32 xmin_h;
+    u32 ymin;
+    u32 xmax_l;
+    u32 xmax_h;
+    u32 ymax;
 };
 
 #endif				/* #ifndef __PNX008_DUM_H__ */

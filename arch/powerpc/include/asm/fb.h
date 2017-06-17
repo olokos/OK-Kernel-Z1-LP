@@ -6,16 +6,14 @@
 #include <asm/page.h>
 
 static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
-				unsigned long off)
-{
-	vma->vm_page_prot = phys_mem_access_prot(file, off >> PAGE_SHIFT,
-						 vma->vm_end - vma->vm_start,
-						 vma->vm_page_prot);
+                                unsigned long off) {
+    vma->vm_page_prot = phys_mem_access_prot(file, off >> PAGE_SHIFT,
+                        vma->vm_end - vma->vm_start,
+                        vma->vm_page_prot);
 }
 
-static inline int fb_is_primary_device(struct fb_info *info)
-{
-	return 0;
+static inline int fb_is_primary_device(struct fb_info *info) {
+    return 0;
 }
 
 #endif /* _ASM_FB_H_ */

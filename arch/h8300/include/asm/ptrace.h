@@ -20,21 +20,21 @@
    stack during a system call. */
 
 struct pt_regs {
-	long     retpc;
-	long     er4;
-	long     er5;
-	long     er6;
-	long     er3;
-	long     er2;
-	long     er1;
-	long     orig_er0;
-	unsigned short ccr;
-	long     er0;
-	long     vector;
+    long     retpc;
+    long     er4;
+    long     er5;
+    long     er6;
+    long     er3;
+    long     er2;
+    long     er1;
+    long     orig_er0;
+    unsigned short ccr;
+    long     er0;
+    long     vector;
 #if defined(CONFIG_CPU_H8S)
-	unsigned short exr;
+    unsigned short exr;
 #endif
-	unsigned long  pc;
+    unsigned long  pc;
 } __attribute__((aligned(2),packed));
 
 #define PTRACE_GETREGS            12

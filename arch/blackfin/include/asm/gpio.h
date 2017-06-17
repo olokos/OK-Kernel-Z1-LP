@@ -80,39 +80,39 @@ unsigned short get_gpiop_maskb(unsigned);
 unsigned short get_gpiop_data(unsigned);
 
 struct gpio_port_t {
-	unsigned short data;
-	unsigned short dummy1;
-	unsigned short data_clear;
-	unsigned short dummy2;
-	unsigned short data_set;
-	unsigned short dummy3;
-	unsigned short toggle;
-	unsigned short dummy4;
-	unsigned short maska;
-	unsigned short dummy5;
-	unsigned short maska_clear;
-	unsigned short dummy6;
-	unsigned short maska_set;
-	unsigned short dummy7;
-	unsigned short maska_toggle;
-	unsigned short dummy8;
-	unsigned short maskb;
-	unsigned short dummy9;
-	unsigned short maskb_clear;
-	unsigned short dummy10;
-	unsigned short maskb_set;
-	unsigned short dummy11;
-	unsigned short maskb_toggle;
-	unsigned short dummy12;
-	unsigned short dir;
-	unsigned short dummy13;
-	unsigned short polar;
-	unsigned short dummy14;
-	unsigned short edge;
-	unsigned short dummy15;
-	unsigned short both;
-	unsigned short dummy16;
-	unsigned short inen;
+    unsigned short data;
+    unsigned short dummy1;
+    unsigned short data_clear;
+    unsigned short dummy2;
+    unsigned short data_set;
+    unsigned short dummy3;
+    unsigned short toggle;
+    unsigned short dummy4;
+    unsigned short maska;
+    unsigned short dummy5;
+    unsigned short maska_clear;
+    unsigned short dummy6;
+    unsigned short maska_set;
+    unsigned short dummy7;
+    unsigned short maska_toggle;
+    unsigned short dummy8;
+    unsigned short maskb;
+    unsigned short dummy9;
+    unsigned short maskb_clear;
+    unsigned short dummy10;
+    unsigned short maskb_set;
+    unsigned short dummy11;
+    unsigned short maskb_toggle;
+    unsigned short dummy12;
+    unsigned short dir;
+    unsigned short dummy13;
+    unsigned short polar;
+    unsigned short dummy14;
+    unsigned short edge;
+    unsigned short dummy15;
+    unsigned short both;
+    unsigned short dummy16;
+    unsigned short inen;
 };
 #endif
 
@@ -128,14 +128,12 @@ void bfin_special_gpio_pm_hibernate_suspend(void);
 #ifdef CONFIG_PM
 int bfin_pm_standby_ctrl(unsigned ctrl);
 
-static inline int bfin_pm_standby_setup(void)
-{
-	return bfin_pm_standby_ctrl(1);
+static inline int bfin_pm_standby_setup(void) {
+    return bfin_pm_standby_ctrl(1);
 }
 
-static inline void bfin_pm_standby_restore(void)
-{
-	bfin_pm_standby_ctrl(0);
+static inline void bfin_pm_standby_restore(void) {
+    bfin_pm_standby_ctrl(0);
 }
 
 void bfin_gpio_pm_hibernate_restore(void);
@@ -145,18 +143,18 @@ void bfin_gpio_pm_hibernate_suspend(void);
 int gpio_pm_wakeup_ctrl(unsigned gpio, unsigned ctrl);
 
 struct gpio_port_s {
-	unsigned short data;
-	unsigned short maska;
-	unsigned short maskb;
-	unsigned short dir;
-	unsigned short polar;
-	unsigned short edge;
-	unsigned short both;
-	unsigned short inen;
+    unsigned short data;
+    unsigned short maska;
+    unsigned short maskb;
+    unsigned short dir;
+    unsigned short polar;
+    unsigned short edge;
+    unsigned short both;
+    unsigned short inen;
 
-	unsigned short fer;
-	unsigned short reserved;
-	unsigned short mux;
+    unsigned short fer;
+    unsigned short reserved;
+    unsigned short mux;
 };
 # endif
 #endif /*CONFIG_PM*/
@@ -191,93 +189,78 @@ void bfin_gpio_set_value(unsigned gpio, int value);
 #ifdef CONFIG_GPIOLIB
 #include <asm-generic/gpio.h>		/* cansleep wrappers */
 
-static inline int gpio_get_value(unsigned int gpio)
-{
-	if (gpio < MAX_BLACKFIN_GPIOS)
-		return bfin_gpio_get_value(gpio);
-	else
-		return __gpio_get_value(gpio);
+static inline int gpio_get_value(unsigned int gpio) {
+    if (gpio < MAX_BLACKFIN_GPIOS)
+        return bfin_gpio_get_value(gpio);
+    else
+        return __gpio_get_value(gpio);
 }
 
-static inline void gpio_set_value(unsigned int gpio, int value)
-{
-	if (gpio < MAX_BLACKFIN_GPIOS)
-		bfin_gpio_set_value(gpio, value);
-	else
-		__gpio_set_value(gpio, value);
+static inline void gpio_set_value(unsigned int gpio, int value) {
+    if (gpio < MAX_BLACKFIN_GPIOS)
+        bfin_gpio_set_value(gpio, value);
+    else
+        __gpio_set_value(gpio, value);
 }
 
-static inline int gpio_cansleep(unsigned int gpio)
-{
-	return __gpio_cansleep(gpio);
+static inline int gpio_cansleep(unsigned int gpio) {
+    return __gpio_cansleep(gpio);
 }
 
-static inline int gpio_to_irq(unsigned gpio)
-{
-	return __gpio_to_irq(gpio);
+static inline int gpio_to_irq(unsigned gpio) {
+    return __gpio_to_irq(gpio);
 }
 
 #else /* !CONFIG_GPIOLIB */
 
-static inline int gpio_request(unsigned gpio, const char *label)
-{
-	return bfin_gpio_request(gpio, label);
+static inline int gpio_request(unsigned gpio, const char *label) {
+    return bfin_gpio_request(gpio, label);
 }
 
-static inline void gpio_free(unsigned gpio)
-{
-	return bfin_gpio_free(gpio);
+static inline void gpio_free(unsigned gpio) {
+    return bfin_gpio_free(gpio);
 }
 
-static inline int gpio_direction_input(unsigned gpio)
-{
-	return bfin_gpio_direction_input(gpio);
+static inline int gpio_direction_input(unsigned gpio) {
+    return bfin_gpio_direction_input(gpio);
 }
 
-static inline int gpio_direction_output(unsigned gpio, int value)
-{
-	return bfin_gpio_direction_output(gpio, value);
+static inline int gpio_direction_output(unsigned gpio, int value) {
+    return bfin_gpio_direction_output(gpio, value);
 }
 
-static inline int gpio_set_debounce(unsigned gpio, unsigned debounce)
-{
-	return -EINVAL;
+static inline int gpio_set_debounce(unsigned gpio, unsigned debounce) {
+    return -EINVAL;
 }
 
-static inline int __gpio_get_value(unsigned gpio)
-{
-	return bfin_gpio_get_value(gpio);
+static inline int __gpio_get_value(unsigned gpio) {
+    return bfin_gpio_get_value(gpio);
 }
 
-static inline void __gpio_set_value(unsigned gpio, int value)
-{
-	return bfin_gpio_set_value(gpio, value);
+static inline void __gpio_set_value(unsigned gpio, int value) {
+    return bfin_gpio_set_value(gpio, value);
 }
 
-static inline int gpio_get_value(unsigned gpio)
-{
-	return __gpio_get_value(gpio);
+static inline int gpio_get_value(unsigned gpio) {
+    return __gpio_get_value(gpio);
 }
 
-static inline void gpio_set_value(unsigned gpio, int value)
-{
-	return __gpio_set_value(gpio, value);
+static inline void gpio_set_value(unsigned gpio, int value) {
+    return __gpio_set_value(gpio, value);
 }
 
-static inline int gpio_to_irq(unsigned gpio)
-{
-	if (likely(gpio < MAX_BLACKFIN_GPIOS))
-		return gpio + GPIO_IRQ_BASE;
+static inline int gpio_to_irq(unsigned gpio) {
+    if (likely(gpio < MAX_BLACKFIN_GPIOS))
+        return gpio + GPIO_IRQ_BASE;
 
-	return -EINVAL;
+    return -EINVAL;
 }
 
 #include <asm-generic/gpio.h>		/* cansleep wrappers */
 #endif	/* !CONFIG_GPIOLIB */
 
-static inline int irq_to_gpio(unsigned irq)
-{
-	return (irq - GPIO_IRQ_BASE);
+static inline int irq_to_gpio(unsigned irq) {
+    return (irq - GPIO_IRQ_BASE);
 }
 
 #endif /* __ASSEMBLY__ */

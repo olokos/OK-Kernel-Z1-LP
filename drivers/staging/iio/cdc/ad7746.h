@@ -19,11 +19,11 @@
 #define AD7466_EXCLVL_3		3 /* +-VDD/2 */
 
 struct ad7746_platform_data {
-	unsigned char exclvl;	/*Excitation Voltage Level */
-	bool exca_en;		/* enables EXCA pin as the excitation output */
-	bool exca_inv_en;	/* enables /EXCA pin as the excitation output */
-	bool excb_en;		/* enables EXCB pin as the excitation output */
-	bool excb_inv_en;	/* enables /EXCB pin as the excitation output */
+    unsigned char exclvl;	/*Excitation Voltage Level */
+    bool exca_en;		/* enables EXCA pin as the excitation output */
+    bool exca_inv_en;	/* enables /EXCA pin as the excitation output */
+    bool excb_en;		/* enables EXCB pin as the excitation output */
+    bool excb_inv_en;	/* enables /EXCB pin as the excitation output */
 };
 
 #endif /* IIO_CDC_AD7746_H_ */

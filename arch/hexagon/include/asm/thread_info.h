@@ -44,7 +44,7 @@ extern void free_thread_info(struct thread_info *ti);
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 /*
@@ -54,25 +54,25 @@ typedef struct {
  */
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain      *exec_domain;   /* execution domain */
-	unsigned long		flags;          /* low level flags */
-	__u32                   cpu;            /* current cpu */
-	int                     preempt_count;  /* 0=>preemptible,<0=>BUG */
-	mm_segment_t            addr_limit;     /* segmentation sux */
-	/*
-	 * used for syscalls somehow;
-	 * seems to have a function pointer and four arguments
-	 */
-	struct restart_block    restart_block;
-	/* Points to the current pt_regs frame  */
-	struct pt_regs		*regs;
-	/*
-	 * saved kernel sp at switch_to time;
-	 * not sure if this is used (it's not in the VM model it seems;
-	 * see thread_struct)
-	 */
-	unsigned long		sp;
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain      *exec_domain;   /* execution domain */
+    unsigned long		flags;          /* low level flags */
+    __u32                   cpu;            /* current cpu */
+    int                     preempt_count;  /* 0=>preemptible,<0=>BUG */
+    mm_segment_t            addr_limit;     /* segmentation sux */
+    /*
+     * used for syscalls somehow;
+     * seems to have a function pointer and four arguments
+     */
+    struct restart_block    restart_block;
+    /* Points to the current pt_regs frame  */
+    struct pt_regs		*regs;
+    /*
+     * saved kernel sp at switch_to time;
+     * not sure if this is used (it's not in the VM model it seems;
+     * see thread_struct)
+     */
+    unsigned long		sp;
 };
 
 #else /* !__ASSEMBLY__ */

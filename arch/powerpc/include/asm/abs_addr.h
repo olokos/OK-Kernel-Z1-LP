@@ -19,11 +19,11 @@
 #include <asm/prom.h>
 
 struct mschunks_map {
-        unsigned long num_chunks;
-        unsigned long chunk_size;
-        unsigned long chunk_shift;
-        unsigned long chunk_mask;
-        u32 *mapping;
+    unsigned long num_chunks;
+    unsigned long chunk_size;
+    unsigned long chunk_shift;
+    unsigned long chunk_mask;
+    u32 *mapping;
 };
 
 extern struct mschunks_map mschunks_map;
@@ -33,19 +33,16 @@ extern struct mschunks_map mschunks_map;
 #define MSCHUNKS_CHUNK_SIZE	(1UL << MSCHUNKS_CHUNK_SHIFT)
 #define MSCHUNKS_OFFSET_MASK	(MSCHUNKS_CHUNK_SIZE - 1)
 
-static inline unsigned long chunk_to_addr(unsigned long chunk)
-{
-	return chunk << MSCHUNKS_CHUNK_SHIFT;
+static inline unsigned long chunk_to_addr(unsigned long chunk) {
+    return chunk << MSCHUNKS_CHUNK_SHIFT;
 }
 
-static inline unsigned long addr_to_chunk(unsigned long addr)
-{
-	return addr >> MSCHUNKS_CHUNK_SHIFT;
+static inline unsigned long addr_to_chunk(unsigned long addr) {
+    return addr >> MSCHUNKS_CHUNK_SHIFT;
 }
 
-static inline unsigned long phys_to_abs(unsigned long pa)
-{
-	return pa;
+static inline unsigned long phys_to_abs(unsigned long pa) {
+    return pa;
 }
 
 /* Convenience macros */

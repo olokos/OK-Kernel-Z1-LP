@@ -32,17 +32,17 @@
 #define MAX_FS		12
 
 struct fs_clk_data {
-	const char *name;
-	struct clk *clk;
-	unsigned long rate;
-	unsigned long reset_rate;
-	bool enabled;
+    const char *name;
+    struct clk *clk;
+    unsigned long rate;
+    unsigned long reset_rate;
+    bool enabled;
 };
 
 struct fs_driver_data {
-	int bus_port0, bus_port1;
-	struct fs_clk_data *clks;
-	unsigned long reset_delay_us;
+    int bus_port0, bus_port1;
+    struct fs_clk_data *clks;
+    unsigned long reset_delay_us;
 };
 
 #define FS_GENERIC(_drv_name, _id, _name, _dev_id, _data) \

@@ -147,9 +147,8 @@ BTFIXUPDEF_CALL_CONST(unsigned long, pgd_page_vaddr, pgd_t)
 BTFIXUPDEF_CALL_CONST(int, pte_present, pte_t)
 BTFIXUPDEF_CALL(void, pte_clear, pte_t *)
 
-static inline int pte_none(pte_t pte)
-{
-	return !pte_val(pte);
+static inline int pte_none(pte_t pte) {
+    return !pte_val(pte);
 }
 
 #define pte_present(pte) BTFIXUP_CALL(pte_present)(pte)
@@ -159,9 +158,8 @@ BTFIXUPDEF_CALL_CONST(int, pmd_bad, pmd_t)
 BTFIXUPDEF_CALL_CONST(int, pmd_present, pmd_t)
 BTFIXUPDEF_CALL(void, pmd_clear, pmd_t *)
 
-static inline int pmd_none(pmd_t pmd)
-{
-	return !pmd_val(pmd);
+static inline int pmd_none(pmd_t pmd) {
+    return !pmd_val(pmd);
 }
 
 #define pmd_bad(pmd) BTFIXUP_CALL(pmd_bad)(pmd)
@@ -187,21 +185,18 @@ BTFIXUPDEF_HALF(pte_dirtyi)
 BTFIXUPDEF_HALF(pte_youngi)
 
 static int pte_write(pte_t pte) __attribute_const__;
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & BTFIXUP_HALF(pte_writei);
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & BTFIXUP_HALF(pte_writei);
 }
 
 static int pte_dirty(pte_t pte) __attribute_const__;
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & BTFIXUP_HALF(pte_dirtyi);
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & BTFIXUP_HALF(pte_dirtyi);
 }
 
 static int pte_young(pte_t pte) __attribute_const__;
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & BTFIXUP_HALF(pte_youngi);
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & BTFIXUP_HALF(pte_youngi);
 }
 
 /*
@@ -210,14 +205,12 @@ static inline int pte_young(pte_t pte)
 BTFIXUPDEF_HALF(pte_filei)
 
 static int pte_file(pte_t pte) __attribute_const__;
-static inline int pte_file(pte_t pte)
-{
-	return pte_val(pte) & BTFIXUP_HALF(pte_filei);
+static inline int pte_file(pte_t pte) {
+    return pte_val(pte) & BTFIXUP_HALF(pte_filei);
 }
 
-static inline int pte_special(pte_t pte)
-{
-	return 0;
+static inline int pte_special(pte_t pte) {
+    return 0;
 }
 
 /*
@@ -227,21 +220,18 @@ BTFIXUPDEF_HALF(pte_mkcleani)
 BTFIXUPDEF_HALF(pte_mkoldi)
 
 static pte_t pte_wrprotect(pte_t pte) __attribute_const__;
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_wrprotecti));
+static inline pte_t pte_wrprotect(pte_t pte) {
+    return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_wrprotecti));
 }
 
 static pte_t pte_mkclean(pte_t pte) __attribute_const__;
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_mkcleani));
+static inline pte_t pte_mkclean(pte_t pte) {
+    return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_mkcleani));
 }
 
 static pte_t pte_mkold(pte_t pte) __attribute_const__;
-static inline pte_t pte_mkold(pte_t pte)
-{
-	return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_mkoldi));
+static inline pte_t pte_mkold(pte_t pte) {
+    return __pte(pte_val(pte) & ~BTFIXUP_HALF(pte_mkoldi));
 }
 
 BTFIXUPDEF_CALL_CONST(pte_t, pte_mkwrite, pte_t)
@@ -279,10 +269,9 @@ BTFIXUPDEF_CALL_CONST(pgprot_t, pgprot_noncached, pgprot_t)
 BTFIXUPDEF_INT(pte_modify_mask)
 
 static pte_t pte_modify(pte_t pte, pgprot_t newprot) __attribute_const__;
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	return __pte((pte_val(pte) & BTFIXUP_INT(pte_modify_mask)) |
-		pgprot_val(newprot));
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    return __pte((pte_val(pte) & BTFIXUP_INT(pte_modify_mask)) |
+                 pgprot_val(newprot));
 }
 
 #define pgd_index(address) ((address) >> PGDIR_SHIFT)
@@ -333,7 +322,7 @@ BTFIXUPDEF_CALL(void, update_mmu_cache, struct vm_area_struct *, unsigned long, 
 #define update_mmu_cache(vma,addr,ptep) BTFIXUP_CALL(update_mmu_cache)(vma,addr,ptep)
 
 BTFIXUPDEF_CALL(void, sparc_mapiorange, unsigned int, unsigned long,
-    unsigned long, unsigned int)
+                unsigned long, unsigned int)
 BTFIXUPDEF_CALL(void, sparc_unmapiorange, unsigned long, unsigned int)
 #define sparc_mapiorange(bus,pa,va,len) BTFIXUP_CALL(sparc_mapiorange)(bus,pa,va,len)
 #define sparc_unmapiorange(va,len) BTFIXUP_CALL(sparc_unmapiorange)(va,len)
@@ -368,10 +357,10 @@ BTFIXUPDEF_CALL(pte_t, pgoff_to_pte, unsigned long pgoff);
 /*
  */
 struct ctx_list {
-	struct ctx_list *next;
-	struct ctx_list *prev;
-	unsigned int ctx_number;
-	struct mm_struct *ctx_mm;
+    struct ctx_list *next;
+    struct ctx_list *prev;
+    unsigned int ctx_number;
+    struct mm_struct *ctx_mm;
 };
 
 extern struct ctx_list *ctx_list_pool;  /* Dynamically allocated */
@@ -380,49 +369,45 @@ extern struct ctx_list ctx_used;        /* Head of used contexts list */
 
 #define NO_CONTEXT     -1
 
-static inline void remove_from_ctx_list(struct ctx_list *entry)
-{
-	entry->next->prev = entry->prev;
-	entry->prev->next = entry->next;
+static inline void remove_from_ctx_list(struct ctx_list *entry) {
+    entry->next->prev = entry->prev;
+    entry->prev->next = entry->next;
 }
 
-static inline void add_to_ctx_list(struct ctx_list *head, struct ctx_list *entry)
-{
-	entry->next = head;
-	(entry->prev = head->prev)->next = entry;
-	head->prev = entry;
+static inline void add_to_ctx_list(struct ctx_list *head, struct ctx_list *entry) {
+    entry->next = head;
+    (entry->prev = head->prev)->next = entry;
+    head->prev = entry;
 }
 #define add_to_free_ctxlist(entry) add_to_ctx_list(&ctx_free, entry)
 #define add_to_used_ctxlist(entry) add_to_ctx_list(&ctx_used, entry)
 
 static inline unsigned long
-__get_phys (unsigned long addr)
-{
-	switch (sparc_cpu_model){
-	case sun4:
-	case sun4c:
-		return sun4c_get_pte (addr) << PAGE_SHIFT;
-	case sun4m:
-	case sun4d:
-		return ((srmmu_get_pte (addr) & 0xffffff00) << 4);
-	default:
-		return 0;
-	}
+__get_phys (unsigned long addr) {
+    switch (sparc_cpu_model) {
+    case sun4:
+    case sun4c:
+        return sun4c_get_pte (addr) << PAGE_SHIFT;
+    case sun4m:
+    case sun4d:
+        return ((srmmu_get_pte (addr) & 0xffffff00) << 4);
+    default:
+        return 0;
+    }
 }
 
 static inline int
-__get_iospace (unsigned long addr)
-{
-	switch (sparc_cpu_model){
-	case sun4:
-	case sun4c:
-		return -1; /* Don't check iospace on sun4c */
-	case sun4m:
-	case sun4d:
-		return (srmmu_get_pte (addr) >> 28);
-	default:
-		return -1;
-	}
+__get_iospace (unsigned long addr) {
+    switch (sparc_cpu_model) {
+    case sun4:
+    case sun4c:
+        return -1; /* Don't check iospace on sun4c */
+    case sun4m:
+    case sun4d:
+        return (srmmu_get_pte (addr) >> 28);
+    default:
+        return -1;
+    }
 }
 
 extern unsigned long *sparc_valid_addr_bitmap;
@@ -440,19 +425,18 @@ extern unsigned long *sparc_valid_addr_bitmap;
 #define GET_PFN(pfn)			(pfn & 0x0fffffffUL)
 
 extern int remap_pfn_range(struct vm_area_struct *, unsigned long, unsigned long,
-			   unsigned long, pgprot_t);
+                           unsigned long, pgprot_t);
 
 static inline int io_remap_pfn_range(struct vm_area_struct *vma,
-				     unsigned long from, unsigned long pfn,
-				     unsigned long size, pgprot_t prot)
-{
-	unsigned long long offset, space, phys_base;
+                                     unsigned long from, unsigned long pfn,
+                                     unsigned long size, pgprot_t prot) {
+    unsigned long long offset, space, phys_base;
 
-	offset = ((unsigned long long) GET_PFN(pfn)) << PAGE_SHIFT;
-	space = GET_IOSPACE(pfn);
-	phys_base = offset | (space << 32ULL);
+    offset = ((unsigned long long) GET_PFN(pfn)) << PAGE_SHIFT;
+    space = GET_IOSPACE(pfn);
+    phys_base = offset | (space << 32ULL);
 
-	return remap_pfn_range(vma, from, phys_base >> PAGE_SHIFT, size, prot);
+    return remap_pfn_range(vma, from, phys_base >> PAGE_SHIFT, size, prot);
 }
 
 #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS

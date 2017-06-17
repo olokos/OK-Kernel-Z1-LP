@@ -6,12 +6,12 @@
  */
 
 extern struct at93c_defs {
-	volatile u32 *reg;
-	volatile u32 *rdata_reg;
-	int rdata_shift;
-	int wdata_shift;
-	u32 cs;
-	u32 clk;
+    volatile u32 *reg;
+    volatile u32 *rdata_reg;
+    int rdata_shift;
+    int wdata_shift;
+    u32 cs;
+    u32 clk;
 } *at93c;
 
 u8 at93c_read(u8 addr);

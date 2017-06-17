@@ -52,18 +52,18 @@
 
 
 enum Power_Mgnt {
-	PS_MODE_ACTIVE	= 0	,
-	PS_MODE_MIN			,
-	PS_MODE_MAX			,
-	PS_MODE_DTIM			,
-	PS_MODE_VOIP			,
-	PS_MODE_UAPSD_WMM	,
-	PS_MODE_UAPSD			,
-	PS_MODE_IBSS			,
-	PS_MODE_WWLAN		,
-	PM_Radio_Off			,
-	PM_Card_Disable		,
-	PS_MODE_NUM
+    PS_MODE_ACTIVE	= 0	,
+    PS_MODE_MIN			,
+    PS_MODE_MAX			,
+    PS_MODE_DTIM			,
+    PS_MODE_VOIP			,
+    PS_MODE_UAPSD_WMM	,
+    PS_MODE_UAPSD			,
+    PS_MODE_IBSS			,
+    PS_MODE_WWLAN		,
+    PM_Radio_Off			,
+    PM_Card_Disable		,
+    PS_MODE_NUM
 };
 
 
@@ -102,50 +102,49 @@ enum Power_Mgnt {
 
 
 struct reportpwrstate_parm {
-	unsigned char mode;
-	unsigned char state; /* the CPWM value */
-	unsigned short rsvd;
+    unsigned char mode;
+    unsigned char state; /* the CPWM value */
+    unsigned short rsvd;
 };
 
-static inline void _enter_pwrlock(struct semaphore *plock)
-{
-	_down_sema(plock);
+static inline void _enter_pwrlock(struct semaphore *plock) {
+    _down_sema(plock);
 }
 
 struct	pwrctrl_priv {
-	struct semaphore lock;
-	/*volatile*/ u8 rpwm; /* requested power state for fw */
-	/* fw current power state. updated when 1. read from HCPWM or
-	 * 2. driver lowers power level */
-	/*volatile*/ u8 cpwm;
-	/*volatile*/ u8 tog; /* toggling */
-	/*volatile*/ u8 cpwm_tog; /* toggling */
-	/*volatile*/ u8 tgt_rpwm; /* wanted power state */
-	uint pwr_mode;
-	uint smart_ps;
-	uint alives;
-	uint ImrContent;	/* used to store original imr. */
-	uint bSleep; /* sleep -> active is different from active -> sleep. */
+    struct semaphore lock;
+    /*volatile*/ u8 rpwm; /* requested power state for fw */
+    /* fw current power state. updated when 1. read from HCPWM or
+     * 2. driver lowers power level */
+    /*volatile*/ u8 cpwm;
+    /*volatile*/ u8 tog; /* toggling */
+    /*volatile*/ u8 cpwm_tog; /* toggling */
+    /*volatile*/ u8 tgt_rpwm; /* wanted power state */
+    uint pwr_mode;
+    uint smart_ps;
+    uint alives;
+    uint ImrContent;	/* used to store original imr. */
+    uint bSleep; /* sleep -> active is different from active -> sleep. */
 
-	_workitem SetPSModeWorkItem;
-	_workitem rpwm_workitem;
-	struct timer_list rpwm_check_timer;
-	u8	rpwm_retry;
-	uint	bSetPSModeWorkItemInProgress;
+    _workitem SetPSModeWorkItem;
+    _workitem rpwm_workitem;
+    struct timer_list rpwm_check_timer;
+    u8	rpwm_retry;
+    uint	bSetPSModeWorkItemInProgress;
 
-	spinlock_t pnp_pwr_mgnt_lock;
-	s32	pnp_current_pwr_state;
-	u8	pnp_bstop_trx;
-	u8	pnp_wwirp_pending;
+    spinlock_t pnp_pwr_mgnt_lock;
+    s32	pnp_current_pwr_state;
+    u8	pnp_bstop_trx;
+    u8	pnp_wwirp_pending;
 };
 
 void r8712_init_pwrctrl_priv(struct _adapter *adapter);
 sint r8712_register_cmd_alive(struct _adapter *padapter);
 void r8712_unregister_cmd_alive(struct _adapter *padapter);
 void r8712_cpwm_int_hdl(struct _adapter *padapter,
-			struct reportpwrstate_parm *preportpwrstate);
+                        struct reportpwrstate_parm *preportpwrstate);
 void r8712_set_ps_mode(struct _adapter *padapter, uint ps_mode,
-			uint smart_ps);
+                       uint smart_ps);
 void r8712_set_rpwm(struct _adapter *padapter, u8 val8);
 
 #endif  /* __RTL871X_PWRCTRL_H_ */

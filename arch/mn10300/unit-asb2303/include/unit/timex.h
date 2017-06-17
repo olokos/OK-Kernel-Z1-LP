@@ -57,32 +57,30 @@
 #define MN10300_JC_PER_HZ	((MN10300_JCCLK + HZ / 2) / HZ)
 #define MN10300_TSC_PER_HZ	((MN10300_TSCCLK + HZ / 2) / HZ)
 
-static inline void stop_jiffies_counter(void)
-{
-	u16 tmp;
-	TM01MD = JC_TIMER_CLKSRC | TM1MD_SRC_TM0CASCADE << 8;
-	tmp = TM01MD;
+static inline void stop_jiffies_counter(void) {
+    u16 tmp;
+    TM01MD = JC_TIMER_CLKSRC | TM1MD_SRC_TM0CASCADE << 8;
+    tmp = TM01MD;
 }
 
-static inline void reload_jiffies_counter(u32 cnt)
-{
-	u32 tmp;
+static inline void reload_jiffies_counter(u32 cnt) {
+    u32 tmp;
 
-	TM01BR = cnt;
-	tmp = TM01BR;
+    TM01BR = cnt;
+    tmp = TM01BR;
 
-	TM01MD = JC_TIMER_CLKSRC |		\
-		 TM1MD_SRC_TM0CASCADE << 8 |	\
-		 TM0MD_INIT_COUNTER |		\
-		 TM1MD_INIT_COUNTER << 8;
+    TM01MD = JC_TIMER_CLKSRC |		\
+             TM1MD_SRC_TM0CASCADE << 8 |	\
+             TM0MD_INIT_COUNTER |		\
+             TM1MD_INIT_COUNTER << 8;
 
 
-	TM01MD = JC_TIMER_CLKSRC |		\
-		 TM1MD_SRC_TM0CASCADE << 8 |	\
-		 TM0MD_COUNT_ENABLE |		\
-		 TM1MD_COUNT_ENABLE << 8;
+    TM01MD = JC_TIMER_CLKSRC |		\
+             TM1MD_SRC_TM0CASCADE << 8 |	\
+             TM0MD_COUNT_ENABLE |		\
+             TM1MD_COUNT_ENABLE << 8;
 
-	tmp = TM01MD;
+    tmp = TM01MD;
 }
 
 #endif /* !__ASSEMBLY__ */
@@ -97,41 +95,39 @@ static inline void reload_jiffies_counter(u32 cnt)
 
 #ifndef __ASSEMBLY__
 
-static inline void startup_timestamp_counter(void)
-{
-	u32 t32;
+static inline void startup_timestamp_counter(void) {
+    u32 t32;
 
-	/* set up timer 4 & 5 cascaded as a 32-bit counter to count real time
-	 * - count down from 4Gig-1 to 0 and wrap at IOCLK rate
-	 */
-	TM45BR = TMTSCBR_MAX;
-	t32 = TM45BR;
+    /* set up timer 4 & 5 cascaded as a 32-bit counter to count real time
+     * - count down from 4Gig-1 to 0 and wrap at IOCLK rate
+     */
+    TM45BR = TMTSCBR_MAX;
+    t32 = TM45BR;
 
-	TM4MD = TSC_TIMER_CLKSRC;
-	TM4MD |= TM4MD_INIT_COUNTER;
-	TM4MD &= ~TM4MD_INIT_COUNTER;
-	TM4ICR = 0;
-	t32 = TM4ICR;
+    TM4MD = TSC_TIMER_CLKSRC;
+    TM4MD |= TM4MD_INIT_COUNTER;
+    TM4MD &= ~TM4MD_INIT_COUNTER;
+    TM4ICR = 0;
+    t32 = TM4ICR;
 
-	TM5MD = TM5MD_SRC_TM4CASCADE;
-	TM5MD |= TM5MD_INIT_COUNTER;
-	TM5MD &= ~TM5MD_INIT_COUNTER;
-	TM5ICR = 0;
-	t32 = TM5ICR;
+    TM5MD = TM5MD_SRC_TM4CASCADE;
+    TM5MD |= TM5MD_INIT_COUNTER;
+    TM5MD &= ~TM5MD_INIT_COUNTER;
+    TM5ICR = 0;
+    t32 = TM5ICR;
 
-	TM5MD |= TM5MD_COUNT_ENABLE;
-	TM4MD |= TM4MD_COUNT_ENABLE;
-	t32 = TM5MD;
-	t32 = TM4MD;
+    TM5MD |= TM5MD_COUNT_ENABLE;
+    TM4MD |= TM4MD_COUNT_ENABLE;
+    t32 = TM5MD;
+    t32 = TM4MD;
 }
 
-static inline void shutdown_timestamp_counter(void)
-{
-	u8 t8;
-	TM4MD = 0;
-	TM5MD = 0;
-	t8 = TM4MD;
-	t8 = TM5MD;
+static inline void shutdown_timestamp_counter(void) {
+    u8 t8;
+    TM4MD = 0;
+    TM5MD = 0;
+    t8 = TM4MD;
+    t8 = TM5MD;
 }
 
 /*
@@ -140,9 +136,8 @@ static inline void shutdown_timestamp_counter(void)
  */
 typedef unsigned long cycles_t;
 
-static inline cycles_t read_timestamp_counter(void)
-{
-	return (cycles_t)~TMTSCBC;
+static inline cycles_t read_timestamp_counter(void) {
+    return (cycles_t)~TMTSCBC;
 }
 
 #endif /* !__ASSEMBLY__ */

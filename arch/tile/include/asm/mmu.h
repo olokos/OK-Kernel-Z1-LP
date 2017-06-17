@@ -17,11 +17,11 @@
 
 /* Capture any arch- and mm-specific information. */
 struct mm_context {
-	/*
-	 * Written under the mmap_sem semaphore; read without the
-	 * semaphore but atomically, but it is conservatively set.
-	 */
-	unsigned int priority_cached;
+    /*
+     * Written under the mmap_sem semaphore; read without the
+     * semaphore but atomically, but it is conservatively set.
+     */
+    unsigned int priority_cached;
 };
 
 typedef struct mm_context mm_context_t;

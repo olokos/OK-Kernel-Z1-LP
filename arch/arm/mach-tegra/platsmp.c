@@ -50,139 +50,133 @@ static void __iomem *scu_base = IO_ADDRESS(TEGRA_ARM_PERIF_BASE);
 #define CPU_CLOCK(cpu)	(0x1<<(8+cpu))
 #define CPU_RESET(cpu)	(0x1111ul<<(cpu))
 
-void __cpuinit platform_secondary_init(unsigned int cpu)
-{
-	/*
-	 * if any interrupts are already enabled for the primary
-	 * core (e.g. timer irq), then they will not have been enabled
-	 * for us: do so
-	 */
-	gic_secondary_init(0);
+void __cpuinit platform_secondary_init(unsigned int cpu) {
+    /*
+     * if any interrupts are already enabled for the primary
+     * core (e.g. timer irq), then they will not have been enabled
+     * for us: do so
+     */
+    gic_secondary_init(0);
 
 }
 
-static int tegra20_power_up_cpu(unsigned int cpu)
-{
-	u32 reg;
+static int tegra20_power_up_cpu(unsigned int cpu) {
+    u32 reg;
 
-	/* Enable the CPU clock. */
-	reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
-	writel(reg & ~CPU_CLOCK(cpu), CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
-	barrier();
-	reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
+    /* Enable the CPU clock. */
+    reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
+    writel(reg & ~CPU_CLOCK(cpu), CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
+    barrier();
+    reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX);
 
-	/* Clear flow controller CSR. */
-	flowctrl_write_cpu_csr(cpu, 0);
+    /* Clear flow controller CSR. */
+    flowctrl_write_cpu_csr(cpu, 0);
 
-	return 0;
+    return 0;
 }
 
-static int tegra30_power_up_cpu(unsigned int cpu)
-{
-	u32 reg;
-	int ret, pwrgateid;
-	unsigned long timeout;
+static int tegra30_power_up_cpu(unsigned int cpu) {
+    u32 reg;
+    int ret, pwrgateid;
+    unsigned long timeout;
 
-	pwrgateid = tegra_cpu_powergate_id(cpu);
-	if (pwrgateid < 0)
-		return pwrgateid;
+    pwrgateid = tegra_cpu_powergate_id(cpu);
+    if (pwrgateid < 0)
+        return pwrgateid;
 
-	/* If this is the first boot, toggle powergates directly. */
-	if (!tegra_powergate_is_powered(pwrgateid)) {
-		ret = tegra_powergate_power_on(pwrgateid);
-		if (ret)
-			return ret;
+    /* If this is the first boot, toggle powergates directly. */
+    if (!tegra_powergate_is_powered(pwrgateid)) {
+        ret = tegra_powergate_power_on(pwrgateid);
+        if (ret)
+            return ret;
 
-		/* Wait for the power to come up. */
-		timeout = jiffies + 10*HZ;
-		while (tegra_powergate_is_powered(pwrgateid)) {
-			if (time_after(jiffies, timeout))
-				return -ETIMEDOUT;
-			udelay(10);
-		}
-	}
+        /* Wait for the power to come up. */
+        timeout = jiffies + 10*HZ;
+        while (tegra_powergate_is_powered(pwrgateid)) {
+            if (time_after(jiffies, timeout))
+                return -ETIMEDOUT;
+            udelay(10);
+        }
+    }
 
-	/* CPU partition is powered. Enable the CPU clock. */
-	writel(CPU_CLOCK(cpu), CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
-	reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
-	udelay(10);
+    /* CPU partition is powered. Enable the CPU clock. */
+    writel(CPU_CLOCK(cpu), CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
+    reg = readl(CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
+    udelay(10);
 
-	/* Remove I/O clamps. */
-	ret = tegra_powergate_remove_clamping(pwrgateid);
-	udelay(10);
+    /* Remove I/O clamps. */
+    ret = tegra_powergate_remove_clamping(pwrgateid);
+    udelay(10);
 
-	/* Clear flow controller CSR. */
-	flowctrl_write_cpu_csr(cpu, 0);
+    /* Clear flow controller CSR. */
+    flowctrl_write_cpu_csr(cpu, 0);
 
-	return 0;
+    return 0;
 }
 
-int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle)
-{
-	int status;
+int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle) {
+    int status;
 
-	/*
-	 * Force the CPU into reset. The CPU must remain in reset when the
-	 * flow controller state is cleared (which will cause the flow
-	 * controller to stop driving reset if the CPU has been power-gated
-	 * via the flow controller). This will have no effect on first boot
-	 * of the CPU since it should already be in reset.
-	 */
-	writel(CPU_RESET(cpu), CLK_RST_CONTROLLER_RST_CPU_CMPLX_SET);
-	dmb();
+    /*
+     * Force the CPU into reset. The CPU must remain in reset when the
+     * flow controller state is cleared (which will cause the flow
+     * controller to stop driving reset if the CPU has been power-gated
+     * via the flow controller). This will have no effect on first boot
+     * of the CPU since it should already be in reset.
+     */
+    writel(CPU_RESET(cpu), CLK_RST_CONTROLLER_RST_CPU_CMPLX_SET);
+    dmb();
 
-	/*
-	 * Unhalt the CPU. If the flow controller was used to power-gate the
-	 * CPU this will cause the flow controller to stop driving reset.
-	 * The CPU will remain in reset because the clock and reset block
-	 * is now driving reset.
-	 */
-	flowctrl_write_cpu_halt(cpu, 0);
+    /*
+     * Unhalt the CPU. If the flow controller was used to power-gate the
+     * CPU this will cause the flow controller to stop driving reset.
+     * The CPU will remain in reset because the clock and reset block
+     * is now driving reset.
+     */
+    flowctrl_write_cpu_halt(cpu, 0);
 
-	switch (tegra_chip_id) {
-	case TEGRA20:
-		status = tegra20_power_up_cpu(cpu);
-		break;
-	case TEGRA30:
-		status = tegra30_power_up_cpu(cpu);
-		break;
-	default:
-		status = -EINVAL;
-		break;
-	}
+    switch (tegra_chip_id) {
+    case TEGRA20:
+        status = tegra20_power_up_cpu(cpu);
+        break;
+    case TEGRA30:
+        status = tegra30_power_up_cpu(cpu);
+        break;
+    default:
+        status = -EINVAL;
+        break;
+    }
 
-	if (status)
-		goto done;
+    if (status)
+        goto done;
 
-	/* Take the CPU out of reset. */
-	writel(CPU_RESET(cpu), CLK_RST_CONTROLLER_RST_CPU_CMPLX_CLR);
-	wmb();
+    /* Take the CPU out of reset. */
+    writel(CPU_RESET(cpu), CLK_RST_CONTROLLER_RST_CPU_CMPLX_CLR);
+    wmb();
 done:
-	return status;
+    return status;
 }
 
 /*
  * Initialise the CPU possible map early - this describes the CPUs
  * which may be present or become present in the system.
  */
-void __init smp_init_cpus(void)
-{
-	unsigned int i, ncores = scu_get_core_count(scu_base);
+void __init smp_init_cpus(void) {
+    unsigned int i, ncores = scu_get_core_count(scu_base);
 
-	if (ncores > nr_cpu_ids) {
-		pr_warn("SMP: %u cores greater than maximum (%u), clipping\n",
-			ncores, nr_cpu_ids);
-		ncores = nr_cpu_ids;
-	}
+    if (ncores > nr_cpu_ids) {
+        pr_warn("SMP: %u cores greater than maximum (%u), clipping\n",
+                ncores, nr_cpu_ids);
+        ncores = nr_cpu_ids;
+    }
 
-	for (i = 0; i < ncores; i++)
-		set_cpu_possible(i, true);
+    for (i = 0; i < ncores; i++)
+        set_cpu_possible(i, true);
 
-	set_smp_cross_call(gic_raise_softirq);
+    set_smp_cross_call(gic_raise_softirq);
 }
 
-void __init platform_smp_prepare_cpus(unsigned int max_cpus)
-{
-	tegra_cpu_reset_handler_init();
-	scu_enable(scu_base);
+void __init platform_smp_prepare_cpus(unsigned int max_cpus) {
+    tegra_cpu_reset_handler_init();
+    scu_enable(scu_base);
 }

@@ -29,25 +29,25 @@
  */
 
 struct gaudio_snd_dev {
-	struct gaudio			*card;
-	struct file			*filp;
-	struct snd_pcm_substream	*substream;
-	int				access;
-	int				format;
-	int				channels;
-	int				rate;
+    struct gaudio			*card;
+    struct file			*filp;
+    struct snd_pcm_substream	*substream;
+    int				access;
+    int				format;
+    int				channels;
+    int				rate;
 };
 
 struct gaudio {
-	struct usb_function		func;
-	struct usb_gadget		*gadget;
+    struct usb_function		func;
+    struct usb_gadget		*gadget;
 
-	/* ALSA sound device interfaces */
-	struct gaudio_snd_dev		control;
-	struct gaudio_snd_dev		playback;
-	struct gaudio_snd_dev		capture;
+    /* ALSA sound device interfaces */
+    struct gaudio_snd_dev		control;
+    struct gaudio_snd_dev		playback;
+    struct gaudio_snd_dev		capture;
 
-	/* TODO */
+    /* TODO */
 };
 
 int gaudio_setup(struct gaudio *card);

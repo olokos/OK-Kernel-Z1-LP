@@ -34,9 +34,8 @@ extern void unlock_media_bay(struct macio_dev *bay);
 
 #else
 
-static inline int check_media_bay(struct macio_dev *bay)
-{
-	return MB_NO;
+static inline int check_media_bay(struct macio_dev *bay) {
+    return MB_NO;
 }
 
 static inline void lock_media_bay(struct macio_dev *bay) { }

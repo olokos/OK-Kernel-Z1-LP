@@ -26,13 +26,13 @@
 #define E33G_STOPPG	(EL2H+1)	/* Stop page, must match EN0_STOPPG */
 #define E33G_DRQCNT	(EL2H+2)	/* DMA burst count */
 #define E33G_IOBASE	(EL2H+3)	/* Read of I/O base jumpers. */
-	/* (non-useful, but it also appears at the end of EPROM space) */
+/* (non-useful, but it also appears at the end of EPROM space) */
 #define E33G_ROMBASE	(EL2H+4)	/* Read of memory base jumpers. */
 #define E33G_GACFR	(EL2H+5)	/* Config/setup bits for the ASIC GA */
 #define E33G_CNTRL	(EL2H+6)	/* Board's main control register */
 #define E33G_STATUS	(EL2H+7)	/* Status on completions. */
 #define E33G_IDCFR	(EL2H+8)	/* Interrupt/DMA config register */
-				/* (Which IRQ to assert, DMA chan to use) */
+/* (Which IRQ to assert, DMA chan to use) */
 #define E33G_DMAAH	(EL2H+9)	/* High byte of DMA address reg */
 #define E33G_DMAAL	(EL2H+10)	/* Low byte of DMA address reg */
 /* "Vector pointer" - if this address matches a read, the EPROM (rather than

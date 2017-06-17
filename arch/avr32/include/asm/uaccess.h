@@ -15,7 +15,7 @@
 #define VERIFY_WRITE	1
 
 typedef struct {
-	unsigned int is_user_space;
+    unsigned int is_user_space;
 } mm_segment_t;
 
 /*
@@ -35,17 +35,15 @@ typedef struct {
 
 #define get_ds()	(KERNEL_DS)
 
-static inline mm_segment_t get_fs(void)
-{
-	return MAKE_MM_SEG(test_thread_flag(TIF_USERSPACE));
+static inline mm_segment_t get_fs(void) {
+    return MAKE_MM_SEG(test_thread_flag(TIF_USERSPACE));
 }
 
-static inline void set_fs(mm_segment_t s)
-{
-	if (s.is_user_space)
-		set_thread_flag(TIF_USERSPACE);
-	else
-		clear_thread_flag(TIF_USERSPACE);
+static inline void set_fs(mm_segment_t s) {
+    if (s.is_user_space)
+        set_thread_flag(TIF_USERSPACE);
+    else
+        clear_thread_flag(TIF_USERSPACE);
 }
 
 /*
@@ -70,23 +68,21 @@ static inline void set_fs(mm_segment_t s)
 
 /* Generic arbitrary sized copy. Return the number of bytes NOT copied */
 extern __kernel_size_t __copy_user(void *to, const void *from,
-				   __kernel_size_t n);
+                                   __kernel_size_t n);
 
 extern __kernel_size_t copy_to_user(void __user *to, const void *from,
-				    __kernel_size_t n);
+                                    __kernel_size_t n);
 extern __kernel_size_t copy_from_user(void *to, const void __user *from,
-				      __kernel_size_t n);
+                                      __kernel_size_t n);
 
 static inline __kernel_size_t __copy_to_user(void __user *to, const void *from,
-					     __kernel_size_t n)
-{
-	return __copy_user((void __force *)to, from, n);
+        __kernel_size_t n) {
+    return __copy_user((void __force *)to, from, n);
 }
 static inline __kernel_size_t __copy_from_user(void *to,
-					       const void __user *from,
-					       __kernel_size_t n)
-{
-	return __copy_user(to, (const void __force *)from, n);
+        const void __user *from,
+        __kernel_size_t n) {
+    return __copy_user(to, (const void __force *)from, n);
 }
 
 #define __copy_to_user_inatomic __copy_to_user
@@ -316,9 +312,8 @@ extern long __strnlen_user(const char __user *__s, long __n);
 
 #define strlen_user(s) strnlen_user(s, ~0UL >> 1)
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 #endif /* __ASM_AVR32_UACCESS_H */

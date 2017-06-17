@@ -508,24 +508,22 @@ do {									\
 })
 
 static __always_inline int x86_this_cpu_constant_test_bit(unsigned int nr,
-                        const unsigned long __percpu *addr)
-{
-	unsigned long __percpu *a = (unsigned long *)addr + nr / BITS_PER_LONG;
+        const unsigned long __percpu *addr) {
+    unsigned long __percpu *a = (unsigned long *)addr + nr / BITS_PER_LONG;
 
-	return ((1UL << (nr % BITS_PER_LONG)) & percpu_read(*a)) != 0;
+    return ((1UL << (nr % BITS_PER_LONG)) & percpu_read(*a)) != 0;
 }
 
 static inline int x86_this_cpu_variable_test_bit(int nr,
-                        const unsigned long __percpu *addr)
-{
-	int oldbit;
+        const unsigned long __percpu *addr) {
+    int oldbit;
 
-	asm volatile("bt "__percpu_arg(2)",%1\n\t"
-			"sbb %0,%0"
-			: "=r" (oldbit)
-			: "m" (*(unsigned long *)addr), "Ir" (nr));
+    asm volatile("bt "__percpu_arg(2)",%1\n\t"
+                 "sbb %0,%0"
+                 : "=r" (oldbit)
+                 : "m" (*(unsigned long *)addr), "Ir" (nr));
 
-	return oldbit;
+    return oldbit;
 }
 
 #define x86_this_cpu_test_bit(nr, addr)			\

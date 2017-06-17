@@ -3,13 +3,13 @@
  * Protocol and standard (common) device definitions
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -17,7 +17,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -31,31 +31,31 @@
 
 /* CCCR structure for function 0 */
 typedef volatile struct {
-	uint8	cccr_sdio_rev;		/* RO, cccr and sdio revision */
-	uint8	sd_rev;			/* RO, sd spec revision */
-	uint8	io_en;			/* I/O enable */
-	uint8	io_rdy;			/* I/O ready reg */
-	uint8	intr_ctl;		/* Master and per function interrupt enable control */
-	uint8	intr_status;		/* RO, interrupt pending status */
-	uint8	io_abort;		/* read/write abort or reset all functions */
-	uint8	bus_inter;		/* bus interface control */
-	uint8	capability;		/* RO, card capability */
+    uint8	cccr_sdio_rev;		/* RO, cccr and sdio revision */
+    uint8	sd_rev;			/* RO, sd spec revision */
+    uint8	io_en;			/* I/O enable */
+    uint8	io_rdy;			/* I/O ready reg */
+    uint8	intr_ctl;		/* Master and per function interrupt enable control */
+    uint8	intr_status;		/* RO, interrupt pending status */
+    uint8	io_abort;		/* read/write abort or reset all functions */
+    uint8	bus_inter;		/* bus interface control */
+    uint8	capability;		/* RO, card capability */
 
-	uint8	cis_base_low;		/* 0x9 RO, common CIS base address, LSB */
-	uint8	cis_base_mid;
-	uint8	cis_base_high;		/* 0xB RO, common CIS base address, MSB */
+    uint8	cis_base_low;		/* 0x9 RO, common CIS base address, LSB */
+    uint8	cis_base_mid;
+    uint8	cis_base_high;		/* 0xB RO, common CIS base address, MSB */
 
-	/* suspend/resume registers */
-	uint8	bus_suspend;		/* 0xC */
-	uint8	func_select;		/* 0xD */
-	uint8	exec_flag;		/* 0xE */
-	uint8	ready_flag;		/* 0xF */
+    /* suspend/resume registers */
+    uint8	bus_suspend;		/* 0xC */
+    uint8	func_select;		/* 0xD */
+    uint8	exec_flag;		/* 0xE */
+    uint8	ready_flag;		/* 0xF */
 
-	uint8	fn0_blk_size[2];	/* 0x10(LSB), 0x11(MSB) */
+    uint8	fn0_blk_size[2];	/* 0x10(LSB), 0x11(MSB) */
 
-	uint8	power_control;		/* 0x12 (SDIO version 1.10) */
+    uint8	power_control;		/* 0x12 (SDIO version 1.10) */
 
-	uint8	speed_control;		/* 0x13 */
+    uint8	speed_control;		/* 0x13 */
 } sdio_regs_t;
 
 /* SDIO Device CCCR offsets */
@@ -176,20 +176,20 @@ typedef volatile struct {
 
 /* FBR structure for function 1-7, FBR addresses and register offsets */
 typedef volatile struct {
-	uint8	devctr;			/* device interface, CSA control */
-	uint8	ext_dev;		/* extended standard I/O device type code */
-	uint8	pwr_sel;		/* power selection support */
-	uint8	PAD[6];			/* reserved */
+    uint8	devctr;			/* device interface, CSA control */
+    uint8	ext_dev;		/* extended standard I/O device type code */
+    uint8	pwr_sel;		/* power selection support */
+    uint8	PAD[6];			/* reserved */
 
-	uint8	cis_low;		/* CIS LSB */
-	uint8	cis_mid;
-	uint8	cis_high;		/* CIS MSB */
-	uint8	csa_low;		/* code storage area, LSB */
-	uint8	csa_mid;
-	uint8	csa_high;		/* code storage area, MSB */
-	uint8	csa_dat_win;		/* data access window to function */
+    uint8	cis_low;		/* CIS LSB */
+    uint8	cis_mid;
+    uint8	cis_high;		/* CIS MSB */
+    uint8	csa_low;		/* code storage area, LSB */
+    uint8	csa_mid;
+    uint8	csa_high;		/* code storage area, MSB */
+    uint8	csa_dat_win;		/* data access window to function */
 
-	uint8	fnx_blk_size[2];	/* block size, little endian */
+    uint8	fnx_blk_size[2];	/* block size, little endian */
 } sdio_fbr_t;
 
 /* Maximum number of I/O funcs */
@@ -340,12 +340,12 @@ typedef volatile struct {
 #define SD_RSP_NO_5			5
 #define SD_RSP_NO_6			6
 
-	/* Modified R6 response (to CMD3) */
+/* Modified R6 response (to CMD3) */
 #define SD_RSP_MR6_COM_CRC_ERROR	0x8000
 #define SD_RSP_MR6_ILLEGAL_COMMAND	0x4000
 #define SD_RSP_MR6_ERROR		0x2000
 
-	/* Modified R1 in R4 Response (to CMD5) */
+/* Modified R1 in R4 Response (to CMD5) */
 #define SD_RSP_MR1_SBIT			0x80
 #define SD_RSP_MR1_PARAMETER_ERROR	0x40
 #define SD_RSP_MR1_RFU5			0x20
@@ -355,7 +355,7 @@ typedef volatile struct {
 #define SD_RSP_MR1_RFU1			0x02
 #define SD_RSP_MR1_IDLE_STATE		0x01
 
-	/* R5 response (to CMD52 and CMD53) */
+/* R5 response (to CMD52 and CMD53) */
 #define SD_RSP_R5_COM_CRC_ERROR		0x80
 #define SD_RSP_R5_ILLEGAL_COMMAND	0x40
 #define SD_RSP_R5_IO_CURRENTSTATE1	0x20

@@ -20,10 +20,10 @@
 #define FBCON_FLAGS_INIT         1
 #define FBCON_FLAGS_CURSOR_TIMER 2
 
-   /*
-    *    This is the interface between the low-level console driver and the
-    *    low-level frame buffer device
-    */
+/*
+ *    This is the interface between the low-level console driver and the
+ *    low-level frame buffer device
+ */
 
 struct display {
     /* Filled in by the low-level console driver */
@@ -52,42 +52,42 @@ struct display {
 };
 
 struct fbcon_ops {
-	void (*bmove)(struct vc_data *vc, struct fb_info *info, int sy,
-		      int sx, int dy, int dx, int height, int width);
-	void (*clear)(struct vc_data *vc, struct fb_info *info, int sy,
-		      int sx, int height, int width);
-	void (*putcs)(struct vc_data *vc, struct fb_info *info,
-		      const unsigned short *s, int count, int yy, int xx,
-		      int fg, int bg);
-	void (*clear_margins)(struct vc_data *vc, struct fb_info *info,
-			      int bottom_only);
-	void (*cursor)(struct vc_data *vc, struct fb_info *info, int mode,
-		       int softback_lines, int fg, int bg);
-	int  (*update_start)(struct fb_info *info);
-	int  (*rotate_font)(struct fb_info *info, struct vc_data *vc);
-	struct fb_var_screeninfo var;  /* copy of the current fb_var_screeninfo */
-	struct timer_list cursor_timer; /* Cursor timer */
-	struct fb_cursor cursor_state;
-	struct display *p;
-        int    currcon;	                /* Current VC. */
-	int    cursor_flash;
-	int    cursor_reset;
-	int    blank_state;
-	int    graphics;
-	int    save_graphics; /* for debug enter/leave */
-	int    flags;
-	int    rotate;
-	int    cur_rotate;
-	char  *cursor_data;
-	u8    *fontbuffer;
-	u8    *fontdata;
-	u8    *cursor_src;
-	u32    cursor_size;
-	u32    fd_size;
+    void (*bmove)(struct vc_data *vc, struct fb_info *info, int sy,
+                  int sx, int dy, int dx, int height, int width);
+    void (*clear)(struct vc_data *vc, struct fb_info *info, int sy,
+                  int sx, int height, int width);
+    void (*putcs)(struct vc_data *vc, struct fb_info *info,
+                  const unsigned short *s, int count, int yy, int xx,
+                  int fg, int bg);
+    void (*clear_margins)(struct vc_data *vc, struct fb_info *info,
+                          int bottom_only);
+    void (*cursor)(struct vc_data *vc, struct fb_info *info, int mode,
+                   int softback_lines, int fg, int bg);
+    int  (*update_start)(struct fb_info *info);
+    int  (*rotate_font)(struct fb_info *info, struct vc_data *vc);
+    struct fb_var_screeninfo var;  /* copy of the current fb_var_screeninfo */
+    struct timer_list cursor_timer; /* Cursor timer */
+    struct fb_cursor cursor_state;
+    struct display *p;
+    int    currcon;	                /* Current VC. */
+    int    cursor_flash;
+    int    cursor_reset;
+    int    blank_state;
+    int    graphics;
+    int    save_graphics; /* for debug enter/leave */
+    int    flags;
+    int    rotate;
+    int    cur_rotate;
+    char  *cursor_data;
+    u8    *fontbuffer;
+    u8    *fontdata;
+    u8    *cursor_src;
+    u32    cursor_size;
+    u32    fd_size;
 };
-    /*
-     *  Attribute Decoding
-     */
+/*
+ *  Attribute Decoding
+ */
 
 /* Color */
 #define attr_fgcol(fgshift,s)    \
@@ -104,47 +104,44 @@ struct fbcon_ops {
 	((s) & 0x400)
 #define attr_blink(s) \
 	((s) & 0x8000)
-	
 
-static inline int mono_col(const struct fb_info *info)
-{
-	__u32 max_len;
-	max_len = max(info->var.green.length, info->var.red.length);
-	max_len = max(info->var.blue.length, max_len);
-	return (~(0xfff << max_len)) & 0xff;
+
+static inline int mono_col(const struct fb_info *info) {
+    __u32 max_len;
+    max_len = max(info->var.green.length, info->var.red.length);
+    max_len = max(info->var.blue.length, max_len);
+    return (~(0xfff << max_len)) & 0xff;
 }
 
 static inline int attr_col_ec(int shift, struct vc_data *vc,
-			      struct fb_info *info, int is_fg)
-{
-	int is_mono01;
-	int col;
-	int fg;
-	int bg;
+                              struct fb_info *info, int is_fg) {
+    int is_mono01;
+    int col;
+    int fg;
+    int bg;
 
-	if (!vc)
-		return 0;
+    if (!vc)
+        return 0;
 
-	if (vc->vc_can_do_color)
-		return is_fg ? attr_fgcol(shift,vc->vc_video_erase_char)
-			: attr_bgcol(shift,vc->vc_video_erase_char);
+    if (vc->vc_can_do_color)
+        return is_fg ? attr_fgcol(shift,vc->vc_video_erase_char)
+               : attr_bgcol(shift,vc->vc_video_erase_char);
 
-	if (!info)
-		return 0;
+    if (!info)
+        return 0;
 
-	col = mono_col(info);
-	is_mono01 = info->fix.visual == FB_VISUAL_MONO01;
+    col = mono_col(info);
+    is_mono01 = info->fix.visual == FB_VISUAL_MONO01;
 
-	if (attr_reverse(vc->vc_video_erase_char)) {
-		fg = is_mono01 ? col : 0;
-		bg = is_mono01 ? 0 : col;
-	}
-	else {
-		fg = is_mono01 ? 0 : col;
-		bg = is_mono01 ? col : 0;
-	}
+    if (attr_reverse(vc->vc_video_erase_char)) {
+        fg = is_mono01 ? col : 0;
+        bg = is_mono01 ? 0 : col;
+    } else {
+        fg = is_mono01 ? 0 : col;
+        bg = is_mono01 ? col : 0;
+    }
 
-	return is_fg ? fg : bg;
+    return is_fg ? fg : bg;
 }
 
 #define attr_bgcol_ec(bgshift, vc, info) attr_col_ec(bgshift, vc, info, 0)
@@ -157,10 +154,10 @@ static inline int attr_col_ec(int shift, struct vc_data *vc,
 #define FNTSUM(fd)	(((int *)(fd))[-4])
 #define FONT_EXTRA_WORDS 4
 
-    /*
-     *  Scroll Method
-     */
-     
+/*
+ *  Scroll Method
+ */
+
 /* There are several methods fbcon can use to move text around the screen:
  *
  *                     Operation   Pan    Wrap
@@ -223,29 +220,27 @@ extern int  soft_cursor(struct fb_info *info, struct fb_cursor *cursor);
 #define FBCON_ATTRIBUTE_REVERSE   2
 #define FBCON_ATTRIBUTE_BOLD      4
 
-static inline int real_y(struct display *p, int ypos)
-{
-	int rows = p->vrows;
+static inline int real_y(struct display *p, int ypos) {
+    int rows = p->vrows;
 
-	ypos += p->yscroll;
-	return ypos < rows ? ypos : ypos - rows;
+    ypos += p->yscroll;
+    return ypos < rows ? ypos : ypos - rows;
 }
 
 
-static inline int get_attribute(struct fb_info *info, u16 c)
-{
-	int attribute = 0;
+static inline int get_attribute(struct fb_info *info, u16 c) {
+    int attribute = 0;
 
-	if (fb_get_color_depth(&info->var, &info->fix) == 1) {
-		if (attr_underline(c))
-			attribute |= FBCON_ATTRIBUTE_UNDERLINE;
-		if (attr_reverse(c))
-			attribute |= FBCON_ATTRIBUTE_REVERSE;
-		if (attr_bold(c))
-			attribute |= FBCON_ATTRIBUTE_BOLD;
-	}
+    if (fb_get_color_depth(&info->var, &info->fix) == 1) {
+        if (attr_underline(c))
+            attribute |= FBCON_ATTRIBUTE_UNDERLINE;
+        if (attr_reverse(c))
+            attribute |= FBCON_ATTRIBUTE_REVERSE;
+        if (attr_bold(c))
+            attribute |= FBCON_ATTRIBUTE_BOLD;
+    }
 
-	return attribute;
+    return attribute;
 }
 
 #define FBCON_SWAP(i,r,v) ({ \

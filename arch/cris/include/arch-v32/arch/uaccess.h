@@ -94,63 +94,62 @@
  * (without the null byte)
  */
 static inline long
-__do_strncpy_from_user(char *dst, const char *src, long count)
-{
-	long res;
+__do_strncpy_from_user(char *dst, const char *src, long count) {
+    long res;
 
-	if (count == 0)
-		return 0;
+    if (count == 0)
+        return 0;
 
-	/*
-	 * Currently, in 2.4.0-test9, most ports use a simple byte-copy loop.
-	 *  So do we.
-	 *
-	 *  This code is deduced from:
-	 *
-	 *	char tmp2;
-	 *	long tmp1, tmp3;
-	 *	tmp1 = count;
-	 *	while ((*dst++ = (tmp2 = *src++)) != 0
-	 *	       && --tmp1)
-	 *	  ;
-	 *
-	 *	res = count - tmp1;
-	 *
-	 *  with tweaks.
-	 */
+    /*
+     * Currently, in 2.4.0-test9, most ports use a simple byte-copy loop.
+     *  So do we.
+     *
+     *  This code is deduced from:
+     *
+     *	char tmp2;
+     *	long tmp1, tmp3;
+     *	tmp1 = count;
+     *	while ((*dst++ = (tmp2 = *src++)) != 0
+     *	       && --tmp1)
+     *	  ;
+     *
+     *	res = count - tmp1;
+     *
+     *  with tweaks.
+     */
 
-	__asm__ __volatile__ (
-		"	move.d %3,%0\n"
-		"5:	move.b [%2+],$acr\n"
-		"1:	beq 6f\n"
-		"	move.b $acr,[%1+]\n"
+    __asm__ __volatile__ (
+        "	move.d %3,%0\n"
+        "5:	move.b [%2+],$acr\n"
+        "1:	beq 6f\n"
+        "	move.b $acr,[%1+]\n"
 
-		"	subq 1,%0\n"
-		"2:	bne 1b\n"
-		"	move.b [%2+],$acr\n"
+        "	subq 1,%0\n"
+        "2:	bne 1b\n"
+        "	move.b [%2+],$acr\n"
 
-		"6:	sub.d %3,%0\n"
-		"	neg.d %0,%0\n"
-		"3:\n"
-		"	.section .fixup,\"ax\"\n"
-		"4:	move.d %7,%0\n"
-		"	jump 3b\n"
-		"	nop\n"
+        "6:	sub.d %3,%0\n"
+        "	neg.d %0,%0\n"
+        "3:\n"
+        "	.section .fixup,\"ax\"\n"
+        "4:	move.d %7,%0\n"
+        "	jump 3b\n"
+        "	nop\n"
 
-		/* The address for a fault at the first move is trivial.
-		   The address for a fault at the second move is that of
-		   the preceding branch insn, since the move insn is in
-		   its delay-slot.  Just so you don't get confused...  */
-		"	.previous\n"
-		"	.section __ex_table,\"a\"\n"
-		"	.dword 5b,4b\n"
-		"	.dword 2b,4b\n"
-		"	.previous"
-		: "=r" (res), "=b" (dst), "=b" (src), "=r" (count)
-		: "3" (count), "1" (dst), "2" (src), "g" (-EFAULT)
-		: "acr");
+        /* The address for a fault at the first move is trivial.
+           The address for a fault at the second move is that of
+           the preceding branch insn, since the move insn is in
+           its delay-slot.  Just so you don't get confused...  */
+        "	.previous\n"
+        "	.section __ex_table,\"a\"\n"
+        "	.dword 5b,4b\n"
+        "	.dword 2b,4b\n"
+        "	.previous"
+        : "=r" (res), "=b" (dst), "=b" (src), "=r" (count)
+        : "3" (count), "1" (dst), "2" (src), "g" (-EFAULT)
+        : "acr");
 
-	return res;
+    return res;
 }
 
 /* A few copy asms to build up the more complex ones from.
@@ -695,53 +694,52 @@ __do_strncpy_from_user(char *dst, const char *src, long count)
  */
 
 static inline long
-strnlen_user(const char *s, long n)
-{
-	long res, tmp1;
+strnlen_user(const char *s, long n) {
+    long res, tmp1;
 
-	if (!access_ok(VERIFY_READ, s, 0))
-		return 0;
+    if (!access_ok(VERIFY_READ, s, 0))
+        return 0;
 
-	/*
-	 * This code is deduced from:
-	 *
-	 *	tmp1 = n;
-	 *	while (tmp1-- > 0 && *s++)
-	 *	  ;
-	 *
-	 *	res = n - tmp1;
-	 *
-	 *  (with tweaks).
-	 */
+    /*
+     * This code is deduced from:
+     *
+     *	tmp1 = n;
+     *	while (tmp1-- > 0 && *s++)
+     *	  ;
+     *
+     *	res = n - tmp1;
+     *
+     *  (with tweaks).
+     */
 
-	__asm__ __volatile__ (
-		"	move.d %1,$acr\n"
-		"	cmpq 0,$acr\n"
-		"0:\n"
-		"	ble 1f\n"
-		"	subq 1,$acr\n"
+    __asm__ __volatile__ (
+        "	move.d %1,$acr\n"
+        "	cmpq 0,$acr\n"
+        "0:\n"
+        "	ble 1f\n"
+        "	subq 1,$acr\n"
 
-		"4:	test.b [%0+]\n"
-		"	bne 0b\n"
-		"	cmpq 0,$acr\n"
-		"1:\n"
-		"	move.d %1,%0\n"
-		"	sub.d $acr,%0\n"
-		"2:\n"
-		"	.section .fixup,\"ax\"\n"
+        "4:	test.b [%0+]\n"
+        "	bne 0b\n"
+        "	cmpq 0,$acr\n"
+        "1:\n"
+        "	move.d %1,%0\n"
+        "	sub.d $acr,%0\n"
+        "2:\n"
+        "	.section .fixup,\"ax\"\n"
 
-		"3:	jump 2b\n"
-		"	clear.d %0\n"
+        "3:	jump 2b\n"
+        "	clear.d %0\n"
 
-		"	.previous\n"
-		"	.section __ex_table,\"a\"\n"
-		"	.dword 4b,3b\n"
-		"	.previous\n"
-		: "=r" (res), "=r" (tmp1)
-		: "0" (s), "1" (n)
-		: "acr");
+        "	.previous\n"
+        "	.section __ex_table,\"a\"\n"
+        "	.dword 4b,3b\n"
+        "	.previous\n"
+        : "=r" (res), "=r" (tmp1)
+        : "0" (s), "1" (n)
+        : "acr");
 
-	return res;
+    return res;
 }
 
 #endif

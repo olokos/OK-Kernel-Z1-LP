@@ -156,7 +156,7 @@ extern unsigned long empty_zero_page[1024];
 #define PAGE_KERNEL_NOCACHE	__pgprot(0)
 #endif /* CONFIG_MMU */
 
-	/* xwr */
+/* xwr */
 #define __P000	PAGE_NONE
 #define __P001	PAGE_READONLY
 #define __P010	PAGE_COPY
@@ -191,94 +191,79 @@ extern unsigned long empty_zero_page[1024];
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_DIRTY;
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_DIRTY;
 }
 
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_ACCESSED;
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
 }
 
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_WRITE;
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_WRITE;
 }
 
 /*
  * The following only works if pte_present() is not true.
  */
-static inline int pte_file(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_FILE;
+static inline int pte_file(pte_t pte) {
+    return pte_val(pte) & _PAGE_FILE;
 }
 
-static inline int pte_special(pte_t pte)
-{
-	return 0;
+static inline int pte_special(pte_t pte) {
+    return 0;
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_DIRTY;
+    return pte;
 }
 
-static inline pte_t pte_mkold(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_ACCESSED;
+    return pte;
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_WRITE;
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_WRITE;
+    return pte;
 }
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_val(pte) |= _PAGE_DIRTY;
+    return pte;
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_val(pte) |= _PAGE_ACCESSED;
+    return pte;
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_WRITE;
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= _PAGE_WRITE;
+    return pte;
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	return pte;
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
 }
 
-static inline  int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-{
-	return test_and_clear_bit(_PAGE_BIT_ACCESSED, ptep);
+static inline  int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep) {
+    return test_and_clear_bit(_PAGE_BIT_ACCESSED, ptep);
 }
 
-static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	clear_bit(_PAGE_BIT_WRITE, ptep);
+static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    clear_bit(_PAGE_BIT_WRITE, ptep);
 }
 
 /*
  * Macro and implementation to make a page protection as uncachable.
  */
-static inline pgprot_t pgprot_noncached(pgprot_t _prot)
-{
-	unsigned long prot = pgprot_val(_prot);
+static inline pgprot_t pgprot_noncached(pgprot_t _prot) {
+    unsigned long prot = pgprot_val(_prot);
 
-	prot |= _PAGE_NONCACHABLE;
-	return __pgprot(prot);
+    prot |= _PAGE_NONCACHABLE;
+    return __pgprot(prot);
 }
 
 #define pgprot_writecombine(prot) pgprot_noncached(prot)
@@ -289,12 +274,11 @@ static inline pgprot_t pgprot_noncached(pgprot_t _prot)
  */
 #define mk_pte(page, pgprot)	pfn_pte(page_to_pfn(page), pgprot)
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK) \
-		| pgprot_val(newprot)));
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    set_pte(&pte, __pte((pte_val(pte) & _PAGE_CHG_MASK) \
+                        | pgprot_val(newprot)));
 
-	return pte;
+    return pte;
 }
 
 /*
@@ -302,9 +286,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
  * and a page entry and page directory to the page they refer to.
  */
 
-static inline void pmd_set(pmd_t * pmdp, pte_t * ptep)
-{
-	pmd_val(*pmdp) = (((unsigned long) ptep) & PAGE_MASK);
+static inline void pmd_set(pmd_t * pmdp, pte_t * ptep) {
+    pmd_val(*pmdp) = (((unsigned long) ptep) & PAGE_MASK);
 }
 
 #define pmd_page_vaddr(pmd)	\

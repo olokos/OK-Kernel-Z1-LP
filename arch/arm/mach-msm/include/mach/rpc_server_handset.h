@@ -15,9 +15,9 @@
 #define __ASM_ARCH_MSM_RPC_SERVER_HANDSET_H
 
 struct msm_handset_platform_data {
-	const char *hs_name;
-	uint32_t pwr_key_delay_ms; /* default 500ms */
-	bool ignore_end_key;
+    const char *hs_name;
+    uint32_t pwr_key_delay_ms; /* default 500ms */
+    bool ignore_end_key;
 };
 
 void report_headset_status(bool connected);

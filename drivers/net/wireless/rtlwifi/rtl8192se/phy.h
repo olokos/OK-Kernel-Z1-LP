@@ -41,33 +41,33 @@
 #define RF90_PATH_MAX			4
 
 enum version_8192s {
-	VERSION_8192S_ACUT,
-	VERSION_8192S_BCUT,
-	VERSION_8192S_CCUT
+    VERSION_8192S_ACUT,
+    VERSION_8192S_BCUT,
+    VERSION_8192S_CCUT
 };
 
 enum swchnlcmd_id {
-	CMDID_END,
-	CMDID_SET_TXPOWEROWER_LEVEL,
-	CMDID_BBREGWRITE10,
-	CMDID_WRITEPORT_ULONG,
-	CMDID_WRITEPORT_USHORT,
-	CMDID_WRITEPORT_UCHAR,
-	CMDID_RF_WRITEREG,
+    CMDID_END,
+    CMDID_SET_TXPOWEROWER_LEVEL,
+    CMDID_BBREGWRITE10,
+    CMDID_WRITEPORT_ULONG,
+    CMDID_WRITEPORT_USHORT,
+    CMDID_WRITEPORT_UCHAR,
+    CMDID_RF_WRITEREG,
 };
 
 struct swchnlcmd {
-	enum swchnlcmd_id cmdid;
-	u32 para1;
-	u32 para2;
-	u32 msdelay;
+    enum swchnlcmd_id cmdid;
+    u32 para1;
+    u32 para2;
+    u32 msdelay;
 };
 
 enum baseband_config_type {
-	/* Radio Path A */
-	BASEBAND_CONFIG_PHY_REG = 0,
-	/* Radio Path B */
-	BASEBAND_CONFIG_AGC_TAB = 1,
+    /* Radio Path A */
+    BASEBAND_CONFIG_PHY_REG = 0,
+    /* Radio Path B */
+    BASEBAND_CONFIG_AGC_TAB = 1,
 };
 
 #define hal_get_firmwareversion(rtlpriv) \
@@ -75,17 +75,17 @@ enum baseband_config_type {
 
 u32 rtl92s_phy_query_bb_reg(struct ieee80211_hw *hw, u32 regaddr, u32 bitmask);
 void rtl92s_phy_set_bb_reg(struct ieee80211_hw *hw, u32 regaddr, u32 bitmask,
-			   u32 data);
+                           u32 data);
 void rtl92s_phy_scan_operation_backup(struct ieee80211_hw *hw, u8 operation);
 u32 rtl92s_phy_query_rf_reg(struct ieee80211_hw *hw, enum radio_path rfpath,
-			    u32 regaddr, u32 bitmask);
+                            u32 regaddr, u32 bitmask);
 void rtl92s_phy_set_rf_reg(struct ieee80211_hw *hw,	enum radio_path rfpath,
-			   u32 regaddr, u32 bitmask, u32 data);
+                           u32 regaddr, u32 bitmask, u32 data);
 void rtl92s_phy_set_bw_mode(struct ieee80211_hw *hw,
-			    enum nl80211_channel_type ch_type);
+                            enum nl80211_channel_type ch_type);
 u8 rtl92s_phy_sw_chnl(struct ieee80211_hw *hw);
 bool rtl92s_phy_set_rf_power_state(struct ieee80211_hw *hw,
-				   enum rf_pwrstate rfpower_state);
+                                   enum rf_pwrstate rfpower_state);
 bool rtl92s_phy_mac_config(struct ieee80211_hw *hw);
 void rtl92s_phy_switch_ephy_parameter(struct ieee80211_hw *hw);
 bool rtl92s_phy_bb_config(struct ieee80211_hw *hw);

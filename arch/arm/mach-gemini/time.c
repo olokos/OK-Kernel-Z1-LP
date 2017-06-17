@@ -36,54 +36,52 @@
 /*
  * IRQ handler for the timer
  */
-static irqreturn_t gemini_timer_interrupt(int irq, void *dev_id)
-{
-	timer_tick();
+static irqreturn_t gemini_timer_interrupt(int irq, void *dev_id) {
+    timer_tick();
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 static struct irqaction gemini_timer_irq = {
-	.name		= "Gemini Timer Tick",
-	.flags		= IRQF_DISABLED | IRQF_TIMER,
-	.handler	= gemini_timer_interrupt,
+    .name		= "Gemini Timer Tick",
+    .flags		= IRQF_DISABLED | IRQF_TIMER,
+    .handler	= gemini_timer_interrupt,
 };
 
 /*
  * Set up timer interrupt, and return the current time in seconds.
  */
-void __init gemini_timer_init(void)
-{
-	unsigned int tick_rate, reg_v;
+void __init gemini_timer_init(void) {
+    unsigned int tick_rate, reg_v;
 
-	reg_v = __raw_readl(IO_ADDRESS(GEMINI_GLOBAL_BASE + GLOBAL_STATUS));
-	tick_rate = REG_TO_AHB_SPEED(reg_v) * 1000000;
+    reg_v = __raw_readl(IO_ADDRESS(GEMINI_GLOBAL_BASE + GLOBAL_STATUS));
+    tick_rate = REG_TO_AHB_SPEED(reg_v) * 1000000;
 
-	printk(KERN_INFO "Bus: %dMHz", tick_rate / 1000000);
+    printk(KERN_INFO "Bus: %dMHz", tick_rate / 1000000);
 
-	tick_rate /= 6;		/* APB bus run AHB*(1/6) */
+    tick_rate /= 6;		/* APB bus run AHB*(1/6) */
 
-	switch(reg_v & CPU_AHB_RATIO_MASK) {
-	case CPU_AHB_1_1:
-		printk(KERN_CONT "(1/1)\n");
-		break;
-	case CPU_AHB_3_2:
-		printk(KERN_CONT "(3/2)\n");
-		break;
-	case CPU_AHB_24_13:
-		printk(KERN_CONT "(24/13)\n");
-		break;
-	case CPU_AHB_2_1:
-		printk(KERN_CONT "(2/1)\n");
-		break;
-	}
+    switch(reg_v & CPU_AHB_RATIO_MASK) {
+    case CPU_AHB_1_1:
+        printk(KERN_CONT "(1/1)\n");
+        break;
+    case CPU_AHB_3_2:
+        printk(KERN_CONT "(3/2)\n");
+        break;
+    case CPU_AHB_24_13:
+        printk(KERN_CONT "(24/13)\n");
+        break;
+    case CPU_AHB_2_1:
+        printk(KERN_CONT "(2/1)\n");
+        break;
+    }
 
-	/*
-	 * Make irqs happen for the system timer
-	 */
-	setup_irq(IRQ_TIMER2, &gemini_timer_irq);
-	/* Start the timer */
-	__raw_writel(tick_rate / HZ, TIMER_COUNT(IO_ADDRESS(GEMINI_TIMER2_BASE)));
-	__raw_writel(tick_rate / HZ, TIMER_LOAD(IO_ADDRESS(GEMINI_TIMER2_BASE)));
-	__raw_writel(TIMER_2_CR_ENABLE | TIMER_2_CR_INT, TIMER_CR(IO_ADDRESS(GEMINI_TIMER_BASE)));
+    /*
+     * Make irqs happen for the system timer
+     */
+    setup_irq(IRQ_TIMER2, &gemini_timer_irq);
+    /* Start the timer */
+    __raw_writel(tick_rate / HZ, TIMER_COUNT(IO_ADDRESS(GEMINI_TIMER2_BASE)));
+    __raw_writel(tick_rate / HZ, TIMER_LOAD(IO_ADDRESS(GEMINI_TIMER2_BASE)));
+    __raw_writel(TIMER_2_CR_ENABLE | TIMER_2_CR_INT, TIMER_CR(IO_ADDRESS(GEMINI_TIMER_BASE)));
 }

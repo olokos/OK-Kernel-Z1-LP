@@ -32,63 +32,61 @@
 #define __ide_mm_outsw	__ide_outsw
 #define __ide_mm_outsl	__ide_outsl
 
-static inline void __ide_insw(void __iomem *port, void *dst, u32 count)
-{
+static inline void __ide_insw(void __iomem *port, void *dst, u32 count) {
 #if defined(CONFIG_SPARC64) && defined(DCACHE_ALIASING_POSSIBLE)
-	unsigned long end = (unsigned long)dst + (count << 1);
+    unsigned long end = (unsigned long)dst + (count << 1);
 #endif
-	u16 *ps = dst;
-	u32 *pi;
+    u16 *ps = dst;
+    u32 *pi;
 
-	if(((unsigned long)ps) & 0x2) {
-		*ps++ = __raw_readw(port);
-		count--;
-	}
-	pi = (u32 *)ps;
-	while(count >= 2) {
-		u32 w;
+    if(((unsigned long)ps) & 0x2) {
+        *ps++ = __raw_readw(port);
+        count--;
+    }
+    pi = (u32 *)ps;
+    while(count >= 2) {
+        u32 w;
 
-		w  = __raw_readw(port) << 16;
-		w |= __raw_readw(port);
-		*pi++ = w;
-		count -= 2;
-	}
-	ps = (u16 *)pi;
-	if(count)
-		*ps++ = __raw_readw(port);
+        w  = __raw_readw(port) << 16;
+        w |= __raw_readw(port);
+        *pi++ = w;
+        count -= 2;
+    }
+    ps = (u16 *)pi;
+    if(count)
+        *ps++ = __raw_readw(port);
 
 #if defined(CONFIG_SPARC64) && defined(DCACHE_ALIASING_POSSIBLE)
-	__flush_dcache_range((unsigned long)dst, end);
+    __flush_dcache_range((unsigned long)dst, end);
 #endif
 }
 
-static inline void __ide_outsw(void __iomem *port, const void *src, u32 count)
-{
+static inline void __ide_outsw(void __iomem *port, const void *src, u32 count) {
 #if defined(CONFIG_SPARC64) && defined(DCACHE_ALIASING_POSSIBLE)
-	unsigned long end = (unsigned long)src + (count << 1);
+    unsigned long end = (unsigned long)src + (count << 1);
 #endif
-	const u16 *ps = src;
-	const u32 *pi;
+    const u16 *ps = src;
+    const u32 *pi;
 
-	if(((unsigned long)src) & 0x2) {
-		__raw_writew(*ps++, port);
-		count--;
-	}
-	pi = (const u32 *)ps;
-	while(count >= 2) {
-		u32 w;
+    if(((unsigned long)src) & 0x2) {
+        __raw_writew(*ps++, port);
+        count--;
+    }
+    pi = (const u32 *)ps;
+    while(count >= 2) {
+        u32 w;
 
-		w = *pi++;
-		__raw_writew((w >> 16), port);
-		__raw_writew(w, port);
-		count -= 2;
-	}
-	ps = (const u16 *)pi;
-	if(count)
-		__raw_writew(*ps, port);
+        w = *pi++;
+        __raw_writew((w >> 16), port);
+        __raw_writew(w, port);
+        count -= 2;
+    }
+    ps = (const u16 *)pi;
+    if(count)
+        __raw_writew(*ps, port);
 
 #if defined(CONFIG_SPARC64) && defined(DCACHE_ALIASING_POSSIBLE)
-	__flush_dcache_range((unsigned long)src, end);
+    __flush_dcache_range((unsigned long)src, end);
 #endif
 }
 

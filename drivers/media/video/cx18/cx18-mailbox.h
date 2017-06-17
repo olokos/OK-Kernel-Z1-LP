@@ -83,10 +83,10 @@ struct cx18_stream;
 
 int cx18_api(struct cx18 *cx, u32 cmd, int args, u32 data[]);
 int cx18_vapi_result(struct cx18 *cx, u32 data[MAX_MB_ARGUMENTS], u32 cmd,
-		int args, ...);
+                     int args, ...);
 int cx18_vapi(struct cx18 *cx, u32 cmd, int args, ...);
 int cx18_api_func(void *priv, u32 cmd, int in, int out,
-		u32 data[CX2341X_MBOX_MAX_DATA]);
+                  u32 data[CX2341X_MBOX_MAX_DATA]);
 
 void cx18_api_epu_cmd_irq(struct cx18 *cx, int rpu);
 

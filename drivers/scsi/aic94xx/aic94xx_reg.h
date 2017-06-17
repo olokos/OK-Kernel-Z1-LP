@@ -70,9 +70,9 @@ void asd_write_reg_word(struct asd_ha_struct *asd_ha, u32 reg, u16 val);
 void asd_write_reg_dword(struct asd_ha_struct *asd_ha, u32 reg, u32 val);
 
 void asd_read_reg_string(struct asd_ha_struct *asd_ha, void *dst,
-			 u32 offs, int count);
+                         u32 offs, int count);
 void asd_write_reg_string(struct asd_ha_struct *asd_ha, void *src,
-			  u32 offs, int count);
+                          u32 offs, int count);
 
 #define ASD_READ_OCM(type, ord, S)                                    \
 static inline type asd_read_ocm_##ord (struct asd_ha_struct *asd_ha,  \
@@ -115,15 +115,14 @@ ASD_DDBSITE_READ(u32, dword);
 ASD_DDBSITE_READ(u16, word);
 
 static inline u8 asd_ddbsite_read_byte(struct asd_ha_struct *asd_ha,
-				       u16 ddb_site_no,
-				       u16 offs)
-{
-	if (offs & 1)
-		return asd_ddbsite_read_word(asd_ha, ddb_site_no,
-					     offs & ~1) >> 8;
-	else
-		return asd_ddbsite_read_word(asd_ha, ddb_site_no,
-					     offs) & 0xFF;
+                                       u16 ddb_site_no,
+                                       u16 offs) {
+    if (offs & 1)
+        return asd_ddbsite_read_word(asd_ha, ddb_site_no,
+                                     offs & ~1) >> 8;
+    else
+        return asd_ddbsite_read_word(asd_ha, ddb_site_no,
+                                     offs) & 0xFF;
 }
 
 
@@ -141,16 +140,15 @@ ASD_DDBSITE_WRITE(u32, dword);
 ASD_DDBSITE_WRITE(u16, word);
 
 static inline void asd_ddbsite_write_byte(struct asd_ha_struct *asd_ha,
-					  u16 ddb_site_no,
-					  u16 offs, u8 val)
-{
-	u16 base = offs & ~1;
-	u16 rval = asd_ddbsite_read_word(asd_ha, ddb_site_no, base);
-	if (offs & 1)
-		rval = (val << 8) | (rval & 0xFF);
-	else
-		rval = (rval & 0xFF00) | val;
-	asd_ddbsite_write_word(asd_ha, ddb_site_no, base, rval);
+        u16 ddb_site_no,
+        u16 offs, u8 val) {
+    u16 base = offs & ~1;
+    u16 rval = asd_ddbsite_read_word(asd_ha, ddb_site_no, base);
+    if (offs & 1)
+        rval = (val << 8) | (rval & 0xFF);
+    else
+        rval = (rval & 0xFF00) | val;
+    asd_ddbsite_write_word(asd_ha, ddb_site_no, base, rval);
 }
 
 
@@ -168,15 +166,14 @@ ASD_SCBSITE_READ(u32, dword);
 ASD_SCBSITE_READ(u16, word);
 
 static inline u8 asd_scbsite_read_byte(struct asd_ha_struct *asd_ha,
-				       u16 scb_site_no,
-				       u16 offs)
-{
-	if (offs & 1)
-		return asd_scbsite_read_word(asd_ha, scb_site_no,
-					     offs & ~1) >> 8;
-	else
-		return asd_scbsite_read_word(asd_ha, scb_site_no,
-					     offs) & 0xFF;
+                                       u16 scb_site_no,
+                                       u16 offs) {
+    if (offs & 1)
+        return asd_scbsite_read_word(asd_ha, scb_site_no,
+                                     offs & ~1) >> 8;
+    else
+        return asd_scbsite_read_word(asd_ha, scb_site_no,
+                                     offs) & 0xFF;
 }
 
 
@@ -194,16 +191,15 @@ ASD_SCBSITE_WRITE(u32, dword);
 ASD_SCBSITE_WRITE(u16, word);
 
 static inline void asd_scbsite_write_byte(struct asd_ha_struct *asd_ha,
-					  u16 scb_site_no,
-					  u16 offs, u8 val)
-{
-	u16 base = offs & ~1;
-	u16 rval = asd_scbsite_read_word(asd_ha, scb_site_no, base);
-	if (offs & 1)
-		rval = (val << 8) | (rval & 0xFF);
-	else
-		rval = (rval & 0xFF00) | val;
-	asd_scbsite_write_word(asd_ha, scb_site_no, base, rval);
+        u16 scb_site_no,
+        u16 offs, u8 val) {
+    u16 base = offs & ~1;
+    u16 rval = asd_scbsite_read_word(asd_ha, scb_site_no, base);
+    if (offs & 1)
+        rval = (val << 8) | (rval & 0xFF);
+    else
+        rval = (rval & 0xFF00) | val;
+    asd_scbsite_write_word(asd_ha, scb_site_no, base, rval);
 }
 
 /**
@@ -222,81 +218,74 @@ static inline void asd_scbsite_write_byte(struct asd_ha_struct *asd_ha,
  * is different than the current value at that offset.
  */
 static inline int asd_ddbsite_update_word(struct asd_ha_struct *asd_ha,
-					  u16 ddb_site_no, u16 offs,
-					  u16 oldval, u16 newval)
-{
-	u8  done;
-	u16 oval = asd_ddbsite_read_word(asd_ha, ddb_site_no, offs);
-	if (oval != oldval)
-		return -EAGAIN;
-	asd_write_reg_word(asd_ha, AOLDDATA, oldval);
-	asd_write_reg_word(asd_ha, ANEWDATA, newval);
-	do {
-		done = asd_read_reg_byte(asd_ha, ATOMICSTATCTL);
-	} while (!(done & ATOMICDONE));
-	if (done & ATOMICERR)
-		return -EFAULT;	  /* parity error */
-	else if (done & ATOMICWIN)
-		return 0;	  /* success */
-	else
-		return -EAGAIN;	  /* oldval different than current value */
+        u16 ddb_site_no, u16 offs,
+        u16 oldval, u16 newval) {
+    u8  done;
+    u16 oval = asd_ddbsite_read_word(asd_ha, ddb_site_no, offs);
+    if (oval != oldval)
+        return -EAGAIN;
+    asd_write_reg_word(asd_ha, AOLDDATA, oldval);
+    asd_write_reg_word(asd_ha, ANEWDATA, newval);
+    do {
+        done = asd_read_reg_byte(asd_ha, ATOMICSTATCTL);
+    } while (!(done & ATOMICDONE));
+    if (done & ATOMICERR)
+        return -EFAULT;	  /* parity error */
+    else if (done & ATOMICWIN)
+        return 0;	  /* success */
+    else
+        return -EAGAIN;	  /* oldval different than current value */
 }
 
 static inline int asd_ddbsite_update_byte(struct asd_ha_struct *asd_ha,
-					  u16 ddb_site_no, u16 offs,
-					  u8 _oldval, u8 _newval)
-{
-	u16 base = offs & ~1;
-	u16 oval;
-	u16 nval = asd_ddbsite_read_word(asd_ha, ddb_site_no, base);
-	if (offs & 1) {
-		if ((nval >> 8) != _oldval)
-			return -EAGAIN;
-		nval = (_newval << 8) | (nval & 0xFF);
-		oval = (_oldval << 8) | (nval & 0xFF);
-	} else {
-		if ((nval & 0xFF) != _oldval)
-			return -EAGAIN;
-		nval = (nval & 0xFF00) | _newval;
-		oval = (nval & 0xFF00) | _oldval;
-	}
-	return asd_ddbsite_update_word(asd_ha, ddb_site_no, base, oval, nval);
+        u16 ddb_site_no, u16 offs,
+        u8 _oldval, u8 _newval) {
+    u16 base = offs & ~1;
+    u16 oval;
+    u16 nval = asd_ddbsite_read_word(asd_ha, ddb_site_no, base);
+    if (offs & 1) {
+        if ((nval >> 8) != _oldval)
+            return -EAGAIN;
+        nval = (_newval << 8) | (nval & 0xFF);
+        oval = (_oldval << 8) | (nval & 0xFF);
+    } else {
+        if ((nval & 0xFF) != _oldval)
+            return -EAGAIN;
+        nval = (nval & 0xFF00) | _newval;
+        oval = (nval & 0xFF00) | _oldval;
+    }
+    return asd_ddbsite_update_word(asd_ha, ddb_site_no, base, oval, nval);
 }
 
 static inline void asd_write_reg_addr(struct asd_ha_struct *asd_ha, u32 reg,
-				      dma_addr_t dma_handle)
-{
-	asd_write_reg_dword(asd_ha, reg,   ASD_BUSADDR_LO(dma_handle));
-	asd_write_reg_dword(asd_ha, reg+4, ASD_BUSADDR_HI(dma_handle));
+                                      dma_addr_t dma_handle) {
+    asd_write_reg_dword(asd_ha, reg,   ASD_BUSADDR_LO(dma_handle));
+    asd_write_reg_dword(asd_ha, reg+4, ASD_BUSADDR_HI(dma_handle));
 }
 
-static inline u32 asd_get_cmdctx_size(struct asd_ha_struct *asd_ha)
-{
-	/* DCHREVISION returns 0, possibly broken */
-	u32 ctxmemsize = asd_read_reg_dword(asd_ha, LmMnINT(0,0)) & CTXMEMSIZE;
-	return ctxmemsize ? 65536 : 32768;
+static inline u32 asd_get_cmdctx_size(struct asd_ha_struct *asd_ha) {
+    /* DCHREVISION returns 0, possibly broken */
+    u32 ctxmemsize = asd_read_reg_dword(asd_ha, LmMnINT(0,0)) & CTXMEMSIZE;
+    return ctxmemsize ? 65536 : 32768;
 }
 
-static inline u32 asd_get_devctx_size(struct asd_ha_struct *asd_ha)
-{
-	u32 ctxmemsize = asd_read_reg_dword(asd_ha, LmMnINT(0,0)) & CTXMEMSIZE;
-	return ctxmemsize ? 8192 : 4096;
+static inline u32 asd_get_devctx_size(struct asd_ha_struct *asd_ha) {
+    u32 ctxmemsize = asd_read_reg_dword(asd_ha, LmMnINT(0,0)) & CTXMEMSIZE;
+    return ctxmemsize ? 8192 : 4096;
 }
 
-static inline void asd_disable_ints(struct asd_ha_struct *asd_ha)
-{
-	asd_write_reg_dword(asd_ha, CHIMINTEN, RST_CHIMINTEN);
+static inline void asd_disable_ints(struct asd_ha_struct *asd_ha) {
+    asd_write_reg_dword(asd_ha, CHIMINTEN, RST_CHIMINTEN);
 }
 
-static inline void asd_enable_ints(struct asd_ha_struct *asd_ha)
-{
-	/* Enable COM SAS interrupt on errors, COMSTAT */
-	asd_write_reg_dword(asd_ha, COMSTATEN,
-			    EN_CSBUFPERR | EN_CSERR | EN_OVLYERR);
-	/* Enable DCH SAS CFIFTOERR */
-	asd_write_reg_dword(asd_ha, DCHSTATUS, EN_CFIFTOERR);
-	/* Enable Host Device interrupts */
-	asd_write_reg_dword(asd_ha, CHIMINTEN, SET_CHIMINTEN);
+static inline void asd_enable_ints(struct asd_ha_struct *asd_ha) {
+    /* Enable COM SAS interrupt on errors, COMSTAT */
+    asd_write_reg_dword(asd_ha, COMSTATEN,
+                        EN_CSBUFPERR | EN_CSERR | EN_OVLYERR);
+    /* Enable DCH SAS CFIFTOERR */
+    asd_write_reg_dword(asd_ha, DCHSTATUS, EN_CFIFTOERR);
+    /* Enable Host Device interrupts */
+    asd_write_reg_dword(asd_ha, CHIMINTEN, SET_CHIMINTEN);
 }
 
 #endif

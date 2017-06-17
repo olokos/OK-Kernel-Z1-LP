@@ -50,8 +50,7 @@
 #include "wlan_qct_wdi.h"
 
 
-typedef struct
-{
+typedef struct {
     wpt_uint32 txFlags;
     wpt_uint8 ac;
     wpt_uint8 isEapol:1; //0 - not eapol 1 - eapol
@@ -73,8 +72,7 @@ typedef struct
 } WDI_DS_TxMetaInfoType;
 
 
-typedef enum
-{
+typedef enum {
     WDI_DS_OPCODE_INVALID         = 0,
     WDI_DS_OPCODE_QCUR_FWDBUF     = 1,
     WDI_DS_OPCODE_FWDBUF_FWDCUR   = 2,
@@ -88,8 +86,7 @@ typedef enum
     WDI_DS_OPCODE_MAX
 } WDI_DS_BAOpCodeEnumType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint8 staId;
     wpt_uint8 addr3Idx;
     wpt_uint8 rxChannel;
@@ -161,25 +158,21 @@ typedef struct
 #endif
 } WDI_DS_RxMetaInfoType;
 
-typedef struct sPktMetaInfo
-{
-    union
-    {
+typedef struct sPktMetaInfo {
+    union {
         WDI_DS_TxMetaInfoType txMetaInfo;
         WDI_DS_RxMetaInfoType rxMetaInfo;
     } u;
 } WDI_DS_MetaInfoType;
 
-WPT_STATIC WPT_INLINE WDI_DS_RxMetaInfoType* WDI_DS_ExtractRxMetaData (wpt_packet *pFrame)
-{
+WPT_STATIC WPT_INLINE WDI_DS_RxMetaInfoType* WDI_DS_ExtractRxMetaData (wpt_packet *pFrame) {
     WDI_DS_RxMetaInfoType * pRxMetadata =
         &((WDI_DS_MetaInfoType *)WPAL_PACKET_GET_METAINFO_POINTER(pFrame))->u.rxMetaInfo;
     return pRxMetadata;
 }
 
 
-WPT_STATIC WPT_INLINE WDI_DS_TxMetaInfoType* WDI_DS_ExtractTxMetaData (wpt_packet *pFrame)
-{
+WPT_STATIC WPT_INLINE WDI_DS_TxMetaInfoType* WDI_DS_ExtractTxMetaData (wpt_packet *pFrame) {
     WDI_DS_TxMetaInfoType * pTxMetadata =
         &((WDI_DS_MetaInfoType *)WPAL_PACKET_GET_METAINFO_POINTER(pFrame))->u.txMetaInfo;
     return pTxMetadata;

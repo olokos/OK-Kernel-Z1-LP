@@ -29,22 +29,21 @@
  *
  * Atomically subtracts @i from @v. Returns the resulting value.
  */
-static inline int atomic_sub_return(int i, atomic_t *v)
-{
-	int result;
+static inline int atomic_sub_return(int i, atomic_t *v) {
+    int result;
 
-	asm volatile(
-		"/* atomic_sub_return */\n"
-		"1:	ssrf	5\n"
-		"	ld.w	%0, %2\n"
-		"	sub	%0, %3\n"
-		"	stcond	%1, %0\n"
-		"	brne	1b"
-		: "=&r"(result), "=o"(v->counter)
-		: "m"(v->counter), "rKs21"(i)
-		: "cc");
+    asm volatile(
+        "/* atomic_sub_return */\n"
+        "1:	ssrf	5\n"
+        "	ld.w	%0, %2\n"
+        "	sub	%0, %3\n"
+        "	stcond	%1, %0\n"
+        "	brne	1b"
+        : "=&r"(result), "=o"(v->counter)
+        : "m"(v->counter), "rKs21"(i)
+        : "cc");
 
-	return result;
+    return result;
 }
 
 /*
@@ -54,25 +53,24 @@ static inline int atomic_sub_return(int i, atomic_t *v)
  *
  * Atomically adds @i to @v. Returns the resulting value.
  */
-static inline int atomic_add_return(int i, atomic_t *v)
-{
-	int result;
+static inline int atomic_add_return(int i, atomic_t *v) {
+    int result;
 
-	if (__builtin_constant_p(i) && (i >= -1048575) && (i <= 1048576))
-		result = atomic_sub_return(-i, v);
-	else
-		asm volatile(
-			"/* atomic_add_return */\n"
-			"1:	ssrf	5\n"
-			"	ld.w	%0, %1\n"
-			"	add	%0, %3\n"
-			"	stcond	%2, %0\n"
-			"	brne	1b"
-			: "=&r"(result), "=o"(v->counter)
-			: "m"(v->counter), "r"(i)
-			: "cc", "memory");
+    if (__builtin_constant_p(i) && (i >= -1048575) && (i <= 1048576))
+        result = atomic_sub_return(-i, v);
+    else
+        asm volatile(
+            "/* atomic_add_return */\n"
+            "1:	ssrf	5\n"
+            "	ld.w	%0, %1\n"
+            "	add	%0, %3\n"
+            "	stcond	%2, %0\n"
+            "	brne	1b"
+            : "=&r"(result), "=o"(v->counter)
+            : "m"(v->counter), "r"(i)
+            : "cc", "memory");
 
-	return result;
+    return result;
 }
 
 /*
@@ -84,23 +82,22 @@ static inline int atomic_add_return(int i, atomic_t *v)
  * Atomically subtract @a from @v, so long as it was not @u.
  * Returns the old value of @v.
 */
-static inline void atomic_sub_unless(atomic_t *v, int a, int u)
-{
-	int tmp;
+static inline void atomic_sub_unless(atomic_t *v, int a, int u) {
+    int tmp;
 
-	asm volatile(
-		"/* atomic_sub_unless */\n"
-		"1:	ssrf	5\n"
-		"	ld.w	%0, %2\n"
-		"	cp.w	%0, %4\n"
-		"	breq	1f\n"
-		"	sub	%0, %3\n"
-		"	stcond	%1, %0\n"
-		"	brne	1b\n"
-		"1:"
-		: "=&r"(tmp), "=o"(v->counter)
-		: "m"(v->counter), "rKs21"(a), "rKs21"(u)
-		: "cc", "memory");
+    asm volatile(
+        "/* atomic_sub_unless */\n"
+        "1:	ssrf	5\n"
+        "	ld.w	%0, %2\n"
+        "	cp.w	%0, %4\n"
+        "	breq	1f\n"
+        "	sub	%0, %3\n"
+        "	stcond	%1, %0\n"
+        "	brne	1b\n"
+        "1:"
+        : "=&r"(tmp), "=o"(v->counter)
+        : "m"(v->counter), "rKs21"(a), "rKs21"(u)
+        : "cc", "memory");
 }
 
 /*
@@ -112,29 +109,28 @@ static inline void atomic_sub_unless(atomic_t *v, int a, int u)
  * Atomically adds @a to @v, so long as it was not @u.
  * Returns the old value of @v.
 */
-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	int tmp, old = atomic_read(v);
+static inline int __atomic_add_unless(atomic_t *v, int a, int u) {
+    int tmp, old = atomic_read(v);
 
-	if (__builtin_constant_p(a) && (a >= -1048575) && (a <= 1048576))
-		atomic_sub_unless(v, -a, u);
-	else {
-		asm volatile(
-			"/* __atomic_add_unless */\n"
-			"1:	ssrf	5\n"
-			"	ld.w	%0, %2\n"
-			"	cp.w	%0, %4\n"
-			"	breq	1f\n"
-			"	add	%0, %3\n"
-			"	stcond	%1, %0\n"
-			"	brne	1b\n"
-			"1:"
-			: "=&r"(tmp), "=o"(v->counter)
-			: "m"(v->counter), "r"(a), "ir"(u)
-			: "cc", "memory");
-	}
+    if (__builtin_constant_p(a) && (a >= -1048575) && (a <= 1048576))
+        atomic_sub_unless(v, -a, u);
+    else {
+        asm volatile(
+            "/* __atomic_add_unless */\n"
+            "1:	ssrf	5\n"
+            "	ld.w	%0, %2\n"
+            "	cp.w	%0, %4\n"
+            "	breq	1f\n"
+            "	add	%0, %3\n"
+            "	stcond	%1, %0\n"
+            "	brne	1b\n"
+            "1:"
+            : "=&r"(tmp), "=o"(v->counter)
+            : "m"(v->counter), "r"(a), "ir"(u)
+            : "cc", "memory");
+    }
 
-	return old;
+    return old;
 }
 
 /*
@@ -145,24 +141,23 @@ static inline int __atomic_add_unless(atomic_t *v, int a, int u)
  * Atomically test @v and subtract @i if @v is greater or equal than @i.
  * The function returns the old value of @v minus @i.
  */
-static inline int atomic_sub_if_positive(int i, atomic_t *v)
-{
-	int result;
+static inline int atomic_sub_if_positive(int i, atomic_t *v) {
+    int result;
 
-	asm volatile(
-		"/* atomic_sub_if_positive */\n"
-		"1:	ssrf	5\n"
-		"	ld.w	%0, %2\n"
-		"	sub	%0, %3\n"
-		"	brlt	1f\n"
-		"	stcond	%1, %0\n"
-		"	brne	1b\n"
-		"1:"
-		: "=&r"(result), "=o"(v->counter)
-		: "m"(v->counter), "ir"(i)
-		: "cc", "memory");
+    asm volatile(
+        "/* atomic_sub_if_positive */\n"
+        "1:	ssrf	5\n"
+        "	ld.w	%0, %2\n"
+        "	sub	%0, %3\n"
+        "	brlt	1f\n"
+        "	stcond	%1, %0\n"
+        "	brne	1b\n"
+        "1:"
+        : "=&r"(result), "=o"(v->counter)
+        : "m"(v->counter), "ir"(i)
+        : "cc", "memory");
 
-	return result;
+    return result;
 }
 
 #define atomic_xchg(v, new)	(xchg(&((v)->counter), new))

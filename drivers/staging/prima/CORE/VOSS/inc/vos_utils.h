@@ -168,8 +168,7 @@ v_U8_t vos_chan_to_band(v_U32_t chan);
 #ifdef DEBUG_ROAM_DELAY
 #define ROAM_DELAY_TABLE_SIZE   30
 
-enum e_roaming_event
-{
+enum e_roaming_event {
     e_HDD_DISABLE_TX_QUEUE = 0,
     e_SME_PREAUTH_REASSOC_START,
     e_SME_PREAUTH_CALLBACK_HIT,
@@ -200,8 +199,7 @@ enum e_roaming_event
     e_ROAM_EVENT_MAX
 };
 
-typedef enum
-{
+typedef enum {
     eVOS_AUTH_TYPE_NONE,    //never used
     // MAC layer authentication types
     eVOS_AUTH_TYPE_OPEN_SYSTEM,
@@ -237,8 +235,7 @@ typedef enum
 } eVosAuthType;
 
 
-typedef struct sRoamDelayMetaInfo
-{
+typedef struct sRoamDelayMetaInfo {
     v_BOOL_t           log_tl;
     v_U8_t             hdd_monitor_tx;//monitor the tx @ hdd basically (Eapol , First Tx Data Frame )
     v_U8_t             hdd_monitor_rx;//monitor the rx @ hdd basically (Eapol )

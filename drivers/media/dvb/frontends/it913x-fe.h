@@ -25,30 +25,29 @@
 #include "dvb_frontend.h"
 
 struct ite_config {
-	u8 chip_ver;
-	u16 chip_type;
-	u32 firmware;
-	u8 firmware_ver;
-	u8 adc_x2;
-	u8 tuner_id_0;
-	u8 tuner_id_1;
-	u8 dual_mode;
-	u8 adf;
-	/* option to read SIGNAL_LEVEL */
-	u8 read_slevel;
+    u8 chip_ver;
+    u16 chip_type;
+    u32 firmware;
+    u8 firmware_ver;
+    u8 adc_x2;
+    u8 tuner_id_0;
+    u8 tuner_id_1;
+    u8 dual_mode;
+    u8 adf;
+    /* option to read SIGNAL_LEVEL */
+    u8 read_slevel;
 };
 
 #if defined(CONFIG_DVB_IT913X_FE) || (defined(CONFIG_DVB_IT913X_FE_MODULE) && \
 defined(MODULE))
 extern struct dvb_frontend *it913x_fe_attach(struct i2c_adapter *i2c_adap,
-			u8 i2c_addr, struct ite_config *config);
+        u8 i2c_addr, struct ite_config *config);
 #else
 static inline struct dvb_frontend *it913x_fe_attach(
-		struct i2c_adapter *i2c_adap,
-			u8 i2c_addr, struct ite_config *config)
-{
-	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
-	return NULL;
+    struct i2c_adapter *i2c_adap,
+    u8 i2c_addr, struct ite_config *config) {
+    printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
+    return NULL;
 }
 #endif /* CONFIG_IT913X_FE */
 #define I2C_BASE_ADDR		0x10
@@ -182,56 +181,56 @@ static inline struct dvb_frontend *it913x_fe_attach(
 #define IT9135_62 0x62
 
 enum {
-	CMD_DEMOD_READ = 0,
-	CMD_DEMOD_WRITE,
-	CMD_TUNER_READ,
-	CMD_TUNER_WRITE,
-	CMD_REG_EEPROM_READ,
-	CMD_REG_EEPROM_WRITE,
-	CMD_DATA_READ,
-	CMD_VAR_READ = 8,
-	CMD_VAR_WRITE,
-	CMD_PLATFORM_GET,
-	CMD_PLATFORM_SET,
-	CMD_IP_CACHE,
-	CMD_IP_ADD,
-	CMD_IP_REMOVE,
-	CMD_PID_ADD,
-	CMD_PID_REMOVE,
-	CMD_SIPSI_GET,
-	CMD_SIPSI_MPE_RESET,
-	CMD_H_PID_ADD = 0x15,
-	CMD_H_PID_REMOVE,
-	CMD_ABORT,
-	CMD_IR_GET,
-	CMD_IR_SET,
-	CMD_FW_DOWNLOAD = 0x21,
-	CMD_QUERYINFO,
-	CMD_BOOT,
-	CMD_FW_DOWNLOAD_BEGIN,
-	CMD_FW_DOWNLOAD_END,
-	CMD_RUN_CODE,
-	CMD_SCATTER_READ = 0x28,
-	CMD_SCATTER_WRITE,
-	CMD_GENERIC_READ,
-	CMD_GENERIC_WRITE
+    CMD_DEMOD_READ = 0,
+    CMD_DEMOD_WRITE,
+    CMD_TUNER_READ,
+    CMD_TUNER_WRITE,
+    CMD_REG_EEPROM_READ,
+    CMD_REG_EEPROM_WRITE,
+    CMD_DATA_READ,
+    CMD_VAR_READ = 8,
+    CMD_VAR_WRITE,
+    CMD_PLATFORM_GET,
+    CMD_PLATFORM_SET,
+    CMD_IP_CACHE,
+    CMD_IP_ADD,
+    CMD_IP_REMOVE,
+    CMD_PID_ADD,
+    CMD_PID_REMOVE,
+    CMD_SIPSI_GET,
+    CMD_SIPSI_MPE_RESET,
+    CMD_H_PID_ADD = 0x15,
+    CMD_H_PID_REMOVE,
+    CMD_ABORT,
+    CMD_IR_GET,
+    CMD_IR_SET,
+    CMD_FW_DOWNLOAD = 0x21,
+    CMD_QUERYINFO,
+    CMD_BOOT,
+    CMD_FW_DOWNLOAD_BEGIN,
+    CMD_FW_DOWNLOAD_END,
+    CMD_RUN_CODE,
+    CMD_SCATTER_READ = 0x28,
+    CMD_SCATTER_WRITE,
+    CMD_GENERIC_READ,
+    CMD_GENERIC_WRITE
 };
 
 enum {
-	READ_LONG,
-	WRITE_LONG,
-	READ_SHORT,
-	WRITE_SHORT,
-	READ_DATA,
-	WRITE_DATA,
-	WRITE_CMD,
+    READ_LONG,
+    WRITE_LONG,
+    READ_SHORT,
+    WRITE_SHORT,
+    READ_DATA,
+    WRITE_DATA,
+    WRITE_CMD,
 };
 
 enum {
-	IT9135_AUTO = 0,
-	IT9137_FW,
-	IT9135_V1_FW,
-	IT9135_V2_FW,
+    IT9135_AUTO = 0,
+    IT9137_FW,
+    IT9135_V1_FW,
+    IT9135_V2_FW,
 };
 
 #endif /* IT913X_FE_H */

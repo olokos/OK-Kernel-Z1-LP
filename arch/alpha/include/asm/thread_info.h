@@ -11,22 +11,22 @@
 
 #ifndef __ASSEMBLY__
 struct thread_info {
-	struct pcb_struct	pcb;		/* palcode state */
+    struct pcb_struct	pcb;		/* palcode state */
 
-	struct task_struct	*task;		/* main task structure */
-	unsigned int		flags;		/* low level flags */
-	unsigned int		ieee_state;	/* see fpu.h */
+    struct task_struct	*task;		/* main task structure */
+    unsigned int		flags;		/* low level flags */
+    unsigned int		ieee_state;	/* see fpu.h */
 
-	struct exec_domain	*exec_domain;	/* execution domain */
-	mm_segment_t		addr_limit;	/* thread address space */
-	unsigned		cpu;		/* current CPU */
-	int			preempt_count; /* 0 => preemptable, <0 => BUG */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    mm_segment_t		addr_limit;	/* thread address space */
+    unsigned		cpu;		/* current CPU */
+    int			preempt_count; /* 0 => preemptable, <0 => BUG */
 
-	int bpt_nsaved;
-	unsigned long bpt_addr[2];		/* breakpoint handling  */
-	unsigned int bpt_insn[2];
+    int bpt_nsaved;
+    unsigned long bpt_addr[2];		/* breakpoint handling  */
+    unsigned int bpt_insn[2];
 
-	struct restart_block	restart_block;
+    struct restart_block	restart_block;
 };
 
 /*

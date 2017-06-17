@@ -14,10 +14,10 @@
 
 /* MobiCore internal trace buffer structure. */
 struct mc_trace_buf {
-	uint32_t version; /* version of trace buffer */
-	uint32_t length; /* length of allocated buffer(includes header) */
-	uint32_t write_pos; /* last write position */
-	char  buff[1]; /* start of the log buffer */
+    uint32_t version; /* version of trace buffer */
+    uint32_t length; /* length of allocated buffer(includes header) */
+    uint32_t write_pos; /* last write position */
+    char  buff[1]; /* start of the log buffer */
 };
 
 /* MobiCore internal trace log setup. */

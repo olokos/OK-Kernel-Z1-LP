@@ -186,7 +186,7 @@
 #define NV_PRMCIO_INP0			0x006013c2
 #define NV_PRMCIO_CRX__COLOR		0x006013d4
 #define NV_PRMCIO_CR__COLOR		0x006013d5
-	/* Standard VGA CRTC registers */
+/* Standard VGA CRTC registers */
 #	define NV_CIO_CR_HDT_INDEX		0x00	/* horizontal display total */
 #	define NV_CIO_CR_HDE_INDEX		0x01	/* horizontal display end */
 #	define NV_CIO_CR_HBS_INDEX		0x02	/* horizontal blanking start */
@@ -225,7 +225,7 @@
 #	define NV_CIO_CR_VBE_INDEX		0x16	/* vertical blank end */
 #	define NV_CIO_CR_MODE_INDEX		0x17	/* crtc mode control */
 #	define NV_CIO_CR_LCOMP_INDEX		0x18	/* line compare */
-	/* Extended VGA CRTC registers */
+/* Extended VGA CRTC registers */
 #	define NV_CIO_CRE_RPC0_INDEX		0x19	/* repaint control 0 */
 #		define NV_CIO_CRE_RPC0_OFFSET_10_8	7:5
 #	define NV_CIO_CRE_RPC1_INDEX		0x1a	/* repaint control 1 */

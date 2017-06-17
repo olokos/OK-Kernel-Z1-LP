@@ -10,9 +10,8 @@
 #define RESET_STATUS_ALL	(0xf)
 
 extern unsigned int reset_status;
-static inline void clear_reset_status(unsigned int mask)
-{
-	RCSR = mask;
+static inline void clear_reset_status(unsigned int mask) {
+    RCSR = mask;
 }
 
 #endif /* __ASM_ARCH_RESET_H */

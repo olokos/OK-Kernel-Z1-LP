@@ -247,22 +247,22 @@
 
 /* Definition for PCIe errors */
 struct wsp_pcie_err_log_data {
-	__u64	phb_err;
-	__u64	phb_err1;
-	__u64	phb_log0;
-	__u64	phb_log1;
-	__u64	mmio_err;
-	__u64	mmio_err1;
-	__u64	mmio_log0;
-	__u64	mmio_log1;
-	__u64	dma_err;
-	__u64	dma_err1;
-	__u64	dma_log0;
-	__u64	dma_log1;
-	__u64	utl_sys_err;
-	__u64	utl_port_err;
-	__u64	utl_rc_err;
-	__u64	unused;
+    __u64	phb_err;
+    __u64	phb_err1;
+    __u64	phb_log0;
+    __u64	phb_log1;
+    __u64	mmio_err;
+    __u64	mmio_err1;
+    __u64	mmio_log0;
+    __u64	mmio_log1;
+    __u64	dma_err;
+    __u64	dma_err1;
+    __u64	dma_log0;
+    __u64	dma_log1;
+    __u64	utl_sys_err;
+    __u64	utl_port_err;
+    __u64	utl_rc_err;
+    __u64	unused;
 };
 
 #endif /* __WSP_PCI_H */

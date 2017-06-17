@@ -101,48 +101,43 @@
 #ifndef __ASSEMBLY__
 
 /* do a virtual address read without cache */
-static inline unsigned long leon_readnobuffer_reg(unsigned long paddr)
-{
-	unsigned long retval;
-	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
-			     "=r"(retval) : "r"(paddr), "i"(ASI_LEON_NOCACHE));
-	return retval;
+static inline unsigned long leon_readnobuffer_reg(unsigned long paddr) {
+    unsigned long retval;
+    __asm__ __volatile__("lda [%1] %2, %0\n\t" :
+                         "=r"(retval) : "r"(paddr), "i"(ASI_LEON_NOCACHE));
+    return retval;
 }
 
 /* do a physical address bypass write, i.e. for 0x80000000 */
-static inline void leon_store_reg(unsigned long paddr, unsigned long value)
-{
-	__asm__ __volatile__("sta %0, [%1] %2\n\t" : : "r"(value), "r"(paddr),
-			     "i"(ASI_LEON_BYPASS) : "memory");
+static inline void leon_store_reg(unsigned long paddr, unsigned long value) {
+    __asm__ __volatile__("sta %0, [%1] %2\n\t" : : "r"(value), "r"(paddr),
+                         "i"(ASI_LEON_BYPASS) : "memory");
 }
 
 /* do a physical address bypass load, i.e. for 0x80000000 */
-static inline unsigned long leon_load_reg(unsigned long paddr)
-{
-	unsigned long retval;
-	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
-			     "=r"(retval) : "r"(paddr), "i"(ASI_LEON_BYPASS));
-	return retval;
+static inline unsigned long leon_load_reg(unsigned long paddr) {
+    unsigned long retval;
+    __asm__ __volatile__("lda [%1] %2, %0\n\t" :
+                         "=r"(retval) : "r"(paddr), "i"(ASI_LEON_BYPASS));
+    return retval;
 }
 
-static inline void leon_srmmu_disabletlb(void)
-{
-	unsigned int retval;
-	__asm__ __volatile__("lda [%%g0] %2, %0\n\t" : "=r"(retval) : "r"(0),
-			     "i"(ASI_LEON_MMUREGS));
-	retval |= LEON_CNR_CTRL_TLBDIS;
-	__asm__ __volatile__("sta %0, [%%g0] %2\n\t" : : "r"(retval), "r"(0),
-			     "i"(ASI_LEON_MMUREGS) : "memory");
+static inline void leon_srmmu_disabletlb(void) {
+    unsigned int retval;
+    __asm__ __volatile__("lda [%%g0] %2, %0\n\t" : "=r"(retval) : "r"(0),
+                         "i"(ASI_LEON_MMUREGS));
+    retval |= LEON_CNR_CTRL_TLBDIS;
+    __asm__ __volatile__("sta %0, [%%g0] %2\n\t" : : "r"(retval), "r"(0),
+                         "i"(ASI_LEON_MMUREGS) : "memory");
 }
 
-static inline void leon_srmmu_enabletlb(void)
-{
-	unsigned int retval;
-	__asm__ __volatile__("lda [%%g0] %2, %0\n\t" : "=r"(retval) : "r"(0),
-			     "i"(ASI_LEON_MMUREGS));
-	retval = retval & ~LEON_CNR_CTRL_TLBDIS;
-	__asm__ __volatile__("sta %0, [%%g0] %2\n\t" : : "r"(retval), "r"(0),
-			     "i"(ASI_LEON_MMUREGS) : "memory");
+static inline void leon_srmmu_enabletlb(void) {
+    unsigned int retval;
+    __asm__ __volatile__("lda [%%g0] %2, %0\n\t" : "=r"(retval) : "r"(0),
+                         "i"(ASI_LEON_MMUREGS));
+    retval = retval & ~LEON_CNR_CTRL_TLBDIS;
+    __asm__ __volatile__("sta %0, [%%g0] %2\n\t" : : "r"(retval), "r"(0),
+                         "i"(ASI_LEON_MMUREGS) : "memory");
 }
 
 /* macro access for leon_load_reg() and leon_store_reg() */
@@ -166,50 +161,44 @@ extern void leon_init_IRQ(void);
 
 extern unsigned long last_valid_pfn;
 
-static inline unsigned long sparc_leon3_get_dcachecfg(void)
-{
-	unsigned int retval;
-	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
-			     "=r"(retval) :
-			     "r"(ASI_LEON3_SYSCTRL_DCFG),
-			     "i"(ASI_LEON3_SYSCTRL));
-	return retval;
+static inline unsigned long sparc_leon3_get_dcachecfg(void) {
+    unsigned int retval;
+    __asm__ __volatile__("lda [%1] %2, %0\n\t" :
+                         "=r"(retval) :
+                         "r"(ASI_LEON3_SYSCTRL_DCFG),
+                         "i"(ASI_LEON3_SYSCTRL));
+    return retval;
 }
 
 /* enable snooping */
-static inline void sparc_leon3_enable_snooping(void)
-{
-	__asm__ __volatile__ ("lda [%%g0] 2, %%l1\n\t"
-			  "set 0x800000, %%l2\n\t"
-			  "or  %%l2, %%l1, %%l2\n\t"
-			  "sta %%l2, [%%g0] 2\n\t" : : : "l1", "l2");
+static inline void sparc_leon3_enable_snooping(void) {
+    __asm__ __volatile__ ("lda [%%g0] 2, %%l1\n\t"
+                          "set 0x800000, %%l2\n\t"
+                          "or  %%l2, %%l1, %%l2\n\t"
+                          "sta %%l2, [%%g0] 2\n\t" : : : "l1", "l2");
 };
 
-static inline int sparc_leon3_snooping_enabled(void)
-{
-	u32 cctrl;
-	__asm__ __volatile__("lda [%%g0] 2, %0\n\t" : "=r"(cctrl));
-        return (cctrl >> 23) & 1;
+static inline int sparc_leon3_snooping_enabled(void) {
+    u32 cctrl;
+    __asm__ __volatile__("lda [%%g0] 2, %0\n\t" : "=r"(cctrl));
+    return (cctrl >> 23) & 1;
 };
 
-static inline void sparc_leon3_disable_cache(void)
-{
-	__asm__ __volatile__ ("lda [%%g0] 2, %%l1\n\t"
-			  "set 0x00000f, %%l2\n\t"
-			  "andn  %%l2, %%l1, %%l2\n\t"
-			  "sta %%l2, [%%g0] 2\n\t" : : : "l1", "l2");
+static inline void sparc_leon3_disable_cache(void) {
+    __asm__ __volatile__ ("lda [%%g0] 2, %%l1\n\t"
+                          "set 0x00000f, %%l2\n\t"
+                          "andn  %%l2, %%l1, %%l2\n\t"
+                          "sta %%l2, [%%g0] 2\n\t" : : : "l1", "l2");
 };
 
-static inline unsigned long sparc_leon3_asr17(void)
-{
-	u32 asr17;
-	__asm__ __volatile__ ("rd %%asr17, %0\n\t" : "=r"(asr17));
-	return asr17;
+static inline unsigned long sparc_leon3_asr17(void) {
+    u32 asr17;
+    __asm__ __volatile__ ("rd %%asr17, %0\n\t" : "=r"(asr17));
+    return asr17;
 };
 
-static inline int sparc_leon3_cpuid(void)
-{
-	return sparc_leon3_asr17() >> 28;
+static inline int sparc_leon3_cpuid(void) {
+    return sparc_leon3_asr17() >> 28;
 }
 
 #endif /*!__ASSEMBLY__*/
@@ -298,16 +287,16 @@ extern void leon_flush_pcache_all(struct vm_area_struct *vma, unsigned long page
 
 /* struct that hold LEON3 cache configuration registers */
 struct leon3_cacheregs {
-	unsigned long ccr;	/* 0x00 - Cache Control Register  */
-	unsigned long iccr;     /* 0x08 - Instruction Cache Configuration Register */
-	unsigned long dccr;	/* 0x0c - Data Cache Configuration Register */
+    unsigned long ccr;	/* 0x00 - Cache Control Register  */
+    unsigned long iccr;     /* 0x08 - Instruction Cache Configuration Register */
+    unsigned long dccr;	/* 0x0c - Data Cache Configuration Register */
 };
 
 /* struct that hold LEON2 cache configuration register
  * & configuration register
  */
 struct leon2_cacheregs {
-	unsigned long ccr, cfg;
+    unsigned long ccr, cfg;
 };
 
 #ifdef __KERNEL__
@@ -316,11 +305,11 @@ struct leon2_cacheregs {
 
 struct device_node;
 extern unsigned int leon_build_device_irq(unsigned int real_irq,
-					   irq_flow_handler_t flow_handler,
-					   const char *name, int do_ack);
+        irq_flow_handler_t flow_handler,
+        const char *name, int do_ack);
 extern void leon_update_virq_handling(unsigned int virq,
-			      irq_flow_handler_t flow_handler,
-			      const char *name, int do_ack);
+                                      irq_flow_handler_t flow_handler,
+                                      const char *name, int do_ack);
 extern void leon_clear_clock_irq(void);
 extern void leon_load_profile_irq(int cpu, unsigned int limit);
 extern void leon_init_timers(irq_handler_t counter_fn);

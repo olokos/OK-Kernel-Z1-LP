@@ -11,9 +11,8 @@
 //		STATUS_SUCCESS/STATUS_FAILURE
 //
 //-----------------------------------------------------------------------------
-INT vendorextnGetSectionInfo(PVOID  pContext,PFLASH2X_VENDORSPECIFIC_INFO pVendorInfo)
-{
-	return STATUS_FAILURE;
+INT vendorextnGetSectionInfo(PVOID  pContext,PFLASH2X_VENDORSPECIFIC_INFO pVendorInfo) {
+    return STATUS_FAILURE;
 }
 
 //-----------------------------------------------------------------------------
@@ -28,9 +27,8 @@ INT vendorextnGetSectionInfo(PVOID  pContext,PFLASH2X_VENDORSPECIFIC_INFO pVendo
 //              STATUS_SUCCESS/STATUS_FAILURE
 //
 //-----------------------------------------------------------------------------
-INT vendorextnInit(PMINI_ADAPTER Adapter)
-{
-	return STATUS_SUCCESS;
+INT vendorextnInit(PMINI_ADAPTER Adapter) {
+    return STATUS_SUCCESS;
 }
 
 //-----------------------------------------------------------------------------
@@ -45,9 +43,8 @@ INT vendorextnInit(PMINI_ADAPTER Adapter)
 //              STATUS_SUCCESS/STATUS_FAILURE
 //
 //-----------------------------------------------------------------------------
-INT vendorextnExit(PMINI_ADAPTER Adapter)
-{
-	return STATUS_SUCCESS;
+INT vendorextnExit(PMINI_ADAPTER Adapter) {
+    return STATUS_SUCCESS;
 }
 
 //------------------------------------------------------------------------
@@ -65,9 +62,8 @@ INT vendorextnExit(PMINI_ADAPTER Adapter)
 //		STATUS_SUCCESS/STATUS_FAILURE as per the IOCTL return value
 //
 //--------------------------------------------------------------------------
-INT vendorextnIoctl(PMINI_ADAPTER Adapter, UINT cmd, ULONG arg)
-{
-	return CONTINUE_COMMON_PATH;
+INT vendorextnIoctl(PMINI_ADAPTER Adapter, UINT cmd, ULONG arg) {
+    return CONTINUE_COMMON_PATH;
 }
 
 
@@ -90,9 +86,8 @@ INT vendorextnIoctl(PMINI_ADAPTER Adapter, UINT cmd, ULONG arg)
 //------------------------------------------------------------------
 
 INT vendorextnReadSection(PVOID  pContext, PUCHAR pBuffer, FLASH2X_SECTION_VAL SectionVal,
-			UINT offset, UINT numOfBytes)
-{
-	return STATUS_FAILURE;
+                          UINT offset, UINT numOfBytes) {
+    return STATUS_FAILURE;
 }
 
 
@@ -115,9 +110,8 @@ INT vendorextnReadSection(PVOID  pContext, PUCHAR pBuffer, FLASH2X_SECTION_VAL S
 //
 //------------------------------------------------------------------
 INT vendorextnWriteSection(PVOID  pContext, PUCHAR pBuffer, FLASH2X_SECTION_VAL SectionVal,
-			UINT offset, UINT numOfBytes, BOOLEAN bVerify)
-{
-	return STATUS_FAILURE;
+                           UINT offset, UINT numOfBytes, BOOLEAN bVerify) {
+    return STATUS_FAILURE;
 }
 
 
@@ -139,8 +133,7 @@ INT vendorextnWriteSection(PVOID  pContext, PUCHAR pBuffer, FLASH2X_SECTION_VAL 
 //
 //------------------------------------------------------------------
 INT vendorextnWriteSectionWithoutErase(PVOID  pContext, PUCHAR pBuffer, FLASH2X_SECTION_VAL SectionVal,
-			UINT offset, UINT numOfBytes)
-{
-	return STATUS_FAILURE;
+                                       UINT offset, UINT numOfBytes) {
+    return STATUS_FAILURE;
 }
 

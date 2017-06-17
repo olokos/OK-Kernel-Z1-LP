@@ -35,7 +35,7 @@
  */
 
 typedef struct {
-	unsigned long a, b;
+    unsigned long a, b;
 } __attribute__((aligned(16))) xmm_store_t;
 
 /* Doesn't use gcc to save the XMM registers, because there is no easy way to
@@ -88,15 +88,14 @@ do {						\
 
 
 static void
-xor_sse_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
-{
-	unsigned int lines = bytes >> 8;
-	unsigned long cr0;
-	xmm_store_t xmm_save[4];
+xor_sse_2(unsigned long bytes, unsigned long *p1, unsigned long *p2) {
+    unsigned int lines = bytes >> 8;
+    unsigned long cr0;
+    xmm_store_t xmm_save[4];
 
-	XMMS_SAVE;
+    XMMS_SAVE;
 
-	asm volatile(
+    asm volatile(
 #undef BLOCK
 #define BLOCK(i) \
 		LD(i, 0)				\
@@ -117,38 +116,37 @@ xor_sse_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
 					ST(i + 3, 3)	\
 
 
-		PF0(0)
-				PF0(2)
+        PF0(0)
+        PF0(2)
 
-	" .align 32			;\n"
-	" 1:                            ;\n"
+        " .align 32			;\n"
+        " 1:                            ;\n"
 
-		BLOCK(0)
-		BLOCK(4)
-		BLOCK(8)
-		BLOCK(12)
+        BLOCK(0)
+        BLOCK(4)
+        BLOCK(8)
+        BLOCK(12)
 
-	"       addq %[inc], %[p1]           ;\n"
-	"       addq %[inc], %[p2]           ;\n"
-		"		decl %[cnt] ; jnz 1b"
-	: [p1] "+r" (p1), [p2] "+r" (p2), [cnt] "+r" (lines)
-	: [inc] "r" (256UL)
-	: "memory");
+        "       addq %[inc], %[p1]           ;\n"
+        "       addq %[inc], %[p2]           ;\n"
+        "		decl %[cnt] ; jnz 1b"
+        : [p1] "+r" (p1), [p2] "+r" (p2), [cnt] "+r" (lines)
+        : [inc] "r" (256UL)
+        : "memory");
 
-	XMMS_RESTORE;
+    XMMS_RESTORE;
 }
 
 static void
 xor_sse_3(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-	  unsigned long *p3)
-{
-	unsigned int lines = bytes >> 8;
-	xmm_store_t xmm_save[4];
-	unsigned long cr0;
+          unsigned long *p3) {
+    unsigned int lines = bytes >> 8;
+    xmm_store_t xmm_save[4];
+    unsigned long cr0;
 
-	XMMS_SAVE;
+    XMMS_SAVE;
 
-	asm volatile(
+    asm volatile(
 #undef BLOCK
 #define BLOCK(i) \
 		PF1(i)					\
@@ -175,39 +173,38 @@ xor_sse_3(unsigned long bytes, unsigned long *p1, unsigned long *p2,
 					ST(i + 3, 3)	\
 
 
-		PF0(0)
-				PF0(2)
+        PF0(0)
+        PF0(2)
 
-	" .align 32			;\n"
-	" 1:                            ;\n"
+        " .align 32			;\n"
+        " 1:                            ;\n"
 
-		BLOCK(0)
-		BLOCK(4)
-		BLOCK(8)
-		BLOCK(12)
+        BLOCK(0)
+        BLOCK(4)
+        BLOCK(8)
+        BLOCK(12)
 
-	"       addq %[inc], %[p1]           ;\n"
-	"       addq %[inc], %[p2]          ;\n"
-	"       addq %[inc], %[p3]           ;\n"
-		"		decl %[cnt] ; jnz 1b"
-	: [cnt] "+r" (lines),
-	  [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3)
-	: [inc] "r" (256UL)
-	: "memory");
-	XMMS_RESTORE;
+        "       addq %[inc], %[p1]           ;\n"
+        "       addq %[inc], %[p2]          ;\n"
+        "       addq %[inc], %[p3]           ;\n"
+        "		decl %[cnt] ; jnz 1b"
+        : [cnt] "+r" (lines),
+        [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3)
+        : [inc] "r" (256UL)
+        : "memory");
+    XMMS_RESTORE;
 }
 
 static void
 xor_sse_4(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-	  unsigned long *p3, unsigned long *p4)
-{
-	unsigned int lines = bytes >> 8;
-	xmm_store_t xmm_save[4];
-	unsigned long cr0;
+          unsigned long *p3, unsigned long *p4) {
+    unsigned int lines = bytes >> 8;
+    xmm_store_t xmm_save[4];
+    unsigned long cr0;
 
-	XMMS_SAVE;
+    XMMS_SAVE;
 
-	asm volatile(
+    asm volatile(
 #undef BLOCK
 #define BLOCK(i) \
 		PF1(i)					\
@@ -240,41 +237,40 @@ xor_sse_4(unsigned long bytes, unsigned long *p1, unsigned long *p2,
 					ST(i + 3, 3)	\
 
 
-		PF0(0)
-				PF0(2)
+        PF0(0)
+        PF0(2)
 
-	" .align 32			;\n"
-	" 1:                            ;\n"
+        " .align 32			;\n"
+        " 1:                            ;\n"
 
-		BLOCK(0)
-		BLOCK(4)
-		BLOCK(8)
-		BLOCK(12)
+        BLOCK(0)
+        BLOCK(4)
+        BLOCK(8)
+        BLOCK(12)
 
-	"       addq %[inc], %[p1]           ;\n"
-	"       addq %[inc], %[p2]           ;\n"
-	"       addq %[inc], %[p3]           ;\n"
-	"       addq %[inc], %[p4]           ;\n"
-	"	decl %[cnt] ; jnz 1b"
-	: [cnt] "+c" (lines),
-	  [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3), [p4] "+r" (p4)
-	: [inc] "r" (256UL)
-	: "memory" );
+        "       addq %[inc], %[p1]           ;\n"
+        "       addq %[inc], %[p2]           ;\n"
+        "       addq %[inc], %[p3]           ;\n"
+        "       addq %[inc], %[p4]           ;\n"
+        "	decl %[cnt] ; jnz 1b"
+        : [cnt] "+c" (lines),
+        [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3), [p4] "+r" (p4)
+        : [inc] "r" (256UL)
+        : "memory" );
 
-	XMMS_RESTORE;
+    XMMS_RESTORE;
 }
 
 static void
 xor_sse_5(unsigned long bytes, unsigned long *p1, unsigned long *p2,
-	  unsigned long *p3, unsigned long *p4, unsigned long *p5)
-{
-	unsigned int lines = bytes >> 8;
-	xmm_store_t xmm_save[4];
-	unsigned long cr0;
+          unsigned long *p3, unsigned long *p4, unsigned long *p5) {
+    unsigned int lines = bytes >> 8;
+    xmm_store_t xmm_save[4];
+    unsigned long cr0;
 
-	XMMS_SAVE;
+    XMMS_SAVE;
 
-	asm volatile(
+    asm volatile(
 #undef BLOCK
 #define BLOCK(i) \
 		PF1(i)					\
@@ -313,38 +309,38 @@ xor_sse_5(unsigned long bytes, unsigned long *p1, unsigned long *p2,
 					ST(i + 3, 3)	\
 
 
-		PF0(0)
-				PF0(2)
+        PF0(0)
+        PF0(2)
 
-	" .align 32			;\n"
-	" 1:                            ;\n"
+        " .align 32			;\n"
+        " 1:                            ;\n"
 
-		BLOCK(0)
-		BLOCK(4)
-		BLOCK(8)
-		BLOCK(12)
+        BLOCK(0)
+        BLOCK(4)
+        BLOCK(8)
+        BLOCK(12)
 
-	"       addq %[inc], %[p1]           ;\n"
-	"       addq %[inc], %[p2]           ;\n"
-	"       addq %[inc], %[p3]           ;\n"
-	"       addq %[inc], %[p4]           ;\n"
-	"       addq %[inc], %[p5]           ;\n"
-	"	decl %[cnt] ; jnz 1b"
-	: [cnt] "+c" (lines),
-	  [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3), [p4] "+r" (p4),
-	  [p5] "+r" (p5)
-	: [inc] "r" (256UL)
-	: "memory");
+        "       addq %[inc], %[p1]           ;\n"
+        "       addq %[inc], %[p2]           ;\n"
+        "       addq %[inc], %[p3]           ;\n"
+        "       addq %[inc], %[p4]           ;\n"
+        "       addq %[inc], %[p5]           ;\n"
+        "	decl %[cnt] ; jnz 1b"
+        : [cnt] "+c" (lines),
+        [p1] "+r" (p1), [p2] "+r" (p2), [p3] "+r" (p3), [p4] "+r" (p4),
+        [p5] "+r" (p5)
+        : [inc] "r" (256UL)
+        : "memory");
 
-	XMMS_RESTORE;
+    XMMS_RESTORE;
 }
 
 static struct xor_block_template xor_block_sse = {
-	.name = "generic_sse",
-	.do_2 = xor_sse_2,
-	.do_3 = xor_sse_3,
-	.do_4 = xor_sse_4,
-	.do_5 = xor_sse_5,
+    .name = "generic_sse",
+    .do_2 = xor_sse_2,
+    .do_3 = xor_sse_3,
+    .do_4 = xor_sse_4,
+    .do_5 = xor_sse_5,
 };
 
 #undef XOR_TRY_TEMPLATES

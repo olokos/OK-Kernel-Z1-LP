@@ -54,19 +54,19 @@
 #define IPIC_SMVCR	0x64	/* System Management Interrupt Vector Register */
 
 enum ipic_prio_grp {
-	IPIC_INT_GRP_A = IPIC_SIPRR_A,
-	IPIC_INT_GRP_D = IPIC_SIPRR_D,
-	IPIC_MIX_GRP_A = IPIC_SMPRR_A,
-	IPIC_MIX_GRP_B = IPIC_SMPRR_B,
+    IPIC_INT_GRP_A = IPIC_SIPRR_A,
+    IPIC_INT_GRP_D = IPIC_SIPRR_D,
+    IPIC_MIX_GRP_A = IPIC_SMPRR_A,
+    IPIC_MIX_GRP_B = IPIC_SMPRR_B,
 };
 
 enum ipic_mcp_irq {
-	IPIC_MCP_IRQ0 = 0,
-	IPIC_MCP_WDT  = 1,
-	IPIC_MCP_SBA  = 2,
-	IPIC_MCP_PCI1 = 5,
-	IPIC_MCP_PCI2 = 6,
-	IPIC_MCP_MU   = 7,
+    IPIC_MCP_IRQ0 = 0,
+    IPIC_MCP_WDT  = 1,
+    IPIC_MCP_SBA  = 2,
+    IPIC_MCP_PCI1 = 5,
+    IPIC_MCP_PCI2 = 6,
+    IPIC_MCP_MU   = 7,
 };
 
 extern int ipic_set_priority(unsigned int irq, unsigned int priority);

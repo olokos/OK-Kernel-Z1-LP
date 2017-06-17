@@ -21,31 +21,31 @@
 #define BRIDGE_NAME_MAX_LEN 20
 
 struct bridge_ops {
-	int (*send_pkt)(void *, void *, size_t actual);
-	void (*send_cbits)(void *, unsigned int);
+    int (*send_pkt)(void *, void *, size_t actual);
+    void (*send_cbits)(void *, unsigned int);
 
-	/* flow control */
-	void (*unthrottle_tx)(void *);
+    /* flow control */
+    void (*unthrottle_tx)(void *);
 };
 
 #define TX_THROTTLED BIT(0)
 #define RX_THROTTLED BIT(1)
 
 struct bridge {
-	/* context of the gadget port using bridge driver */
-	void *ctx;
+    /* context of the gadget port using bridge driver */
+    void *ctx;
 
-	/*to maps bridge driver instance*/
-	unsigned int ch_id;
+    /*to maps bridge driver instance*/
+    unsigned int ch_id;
 
-	/*to match against bridge xport name to get bridge driver instance*/
-	char *name;
+    /*to match against bridge xport name to get bridge driver instance*/
+    char *name;
 
-	/* flow control bits */
-	unsigned long flags;
+    /* flow control bits */
+    unsigned long flags;
 
-	/* data/ctrl bridge callbacks */
-	struct bridge_ops ops;
+    /* data/ctrl bridge callbacks */
+    struct bridge_ops ops;
 };
 
 /**
@@ -63,13 +63,13 @@ struct bridge {
  * holds.
  */
 struct timestamp_info {
-	struct data_bridge	*dev;
+    struct data_bridge	*dev;
 
-	unsigned int		created;
-	unsigned int		rx_queued;
-	unsigned int		rx_done;
-	unsigned int		rx_done_sent;
-	unsigned int		tx_queued;
+    unsigned int		created;
+    unsigned int		rx_queued;
+    unsigned int		rx_done;
+    unsigned int		rx_done_sent;
+    unsigned int		tx_queued;
 };
 
 /* Maximum timestamp message length */
@@ -80,9 +80,9 @@ struct timestamp_info {
 
 /* timestamp buffer descriptor */
 struct timestamp_buf {
-	char		(buf[DBG_DATA_MAX])[DBG_DATA_MSG];   /* buffer */
-	unsigned	idx;   /* index */
-	rwlock_t	lck;   /* lock */
+    char		(buf[DBG_DATA_MAX])[DBG_DATA_MSG];   /* buffer */
+    unsigned	idx;   /* index */
+    rwlock_t	lck;   /* lock */
 };
 
 #if defined(CONFIG_USB_QCOM_MDM_BRIDGE) ||	\
@@ -103,54 +103,47 @@ int data_bridge_unthrottle_rx(unsigned int);
 int ctrl_bridge_init(void);
 void ctrl_bridge_exit(void);
 int ctrl_bridge_probe(struct usb_interface *, struct usb_host_endpoint *,
-		char *, int);
+                      char *, int);
 void ctrl_bridge_disconnect(unsigned int);
 int ctrl_bridge_resume(unsigned int);
 int ctrl_bridge_suspend(unsigned int);
 
 #else
 
-static inline int __maybe_unused ctrl_bridge_open(struct bridge *brdg)
-{
-	return -ENODEV;
+static inline int __maybe_unused ctrl_bridge_open(struct bridge *brdg) {
+    return -ENODEV;
 }
 
 static inline void __maybe_unused ctrl_bridge_close(unsigned int id) { }
 
 static inline int __maybe_unused ctrl_bridge_write(unsigned int id,
-						char *data, size_t size)
-{
-	return -ENODEV;
+        char *data, size_t size) {
+    return -ENODEV;
 }
 
 static inline int __maybe_unused ctrl_bridge_set_cbits(unsigned int id,
-					unsigned int cbits)
-{
-	return -ENODEV;
+        unsigned int cbits) {
+    return -ENODEV;
 }
 
 static inline unsigned int __maybe_unused
-ctrl_bridge_get_cbits_tohost(unsigned int id)
-{
-	return -ENODEV;
+ctrl_bridge_get_cbits_tohost(unsigned int id) {
+    return -ENODEV;
 }
 
-static inline int __maybe_unused data_bridge_open(struct bridge *brdg)
-{
-	return -ENODEV;
+static inline int __maybe_unused data_bridge_open(struct bridge *brdg) {
+    return -ENODEV;
 }
 
 static inline void __maybe_unused data_bridge_close(unsigned int id) { }
 
 static inline int __maybe_unused data_bridge_write(unsigned int id,
-					    struct sk_buff *skb)
-{
-	return -ENODEV;
+        struct sk_buff *skb) {
+    return -ENODEV;
 }
 
-static inline int __maybe_unused data_bridge_unthrottle_rx(unsigned int id)
-{
-	return -ENODEV;
+static inline int __maybe_unused data_bridge_unthrottle_rx(unsigned int id) {
+    return -ENODEV;
 }
 
 #endif

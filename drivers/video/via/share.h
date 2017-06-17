@@ -316,17 +316,17 @@
 #define     LCD_SPWG                  0x01
 
 struct crt_mode_table {
-	int refresh_rate;
-	int h_sync_polarity;
-	int v_sync_polarity;
-	struct display_timing crtc;
+    int refresh_rate;
+    int h_sync_polarity;
+    int v_sync_polarity;
+    struct display_timing crtc;
 };
 
 struct io_reg {
-	int port;
-	u8 index;
-	u8 mask;
-	u8 value;
+    int port;
+    u8 index;
+    u8 mask;
+    u8 value;
 };
 
 #endif /* __SHARE_H__ */

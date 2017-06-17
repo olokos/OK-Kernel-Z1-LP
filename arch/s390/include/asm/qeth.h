@@ -23,69 +23,69 @@
 #define SIOC_QETH_QUERY_OAT		(SIOCDEVPRIVATE + 7)
 
 struct qeth_arp_cache_entry {
-	__u8  macaddr[6];
-	__u8  reserved1[2];
-	__u8  ipaddr[16]; /* for both  IPv4 and IPv6 */
-	__u8  reserved2[32];
+    __u8  macaddr[6];
+    __u8  reserved1[2];
+    __u8  ipaddr[16]; /* for both  IPv4 and IPv6 */
+    __u8  reserved2[32];
 } __attribute__ ((packed));
 
 enum qeth_arp_ipaddrtype {
-	QETHARP_IP_ADDR_V4 = 1,
-	QETHARP_IP_ADDR_V6 = 2,
+    QETHARP_IP_ADDR_V4 = 1,
+    QETHARP_IP_ADDR_V6 = 2,
 };
 struct qeth_arp_entrytype {
-	__u8 mac;
-	__u8 ip;
+    __u8 mac;
+    __u8 ip;
 } __attribute__((packed));
 
 #define QETH_QARP_MEDIASPECIFIC_BYTES 32
 #define QETH_QARP_MACADDRTYPE_BYTES 1
 struct qeth_arp_qi_entry7 {
-	__u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
-	struct qeth_arp_entrytype type;
-	__u8 macaddr[6];
-	__u8 ipaddr[4];
+    __u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
+    struct qeth_arp_entrytype type;
+    __u8 macaddr[6];
+    __u8 ipaddr[4];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry7_ipv6 {
-	__u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
-	struct qeth_arp_entrytype type;
-	__u8 macaddr[6];
-	__u8 ipaddr[16];
+    __u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
+    struct qeth_arp_entrytype type;
+    __u8 macaddr[6];
+    __u8 ipaddr[16];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry7_short {
-	struct qeth_arp_entrytype type;
-	__u8 macaddr[6];
-	__u8 ipaddr[4];
+    struct qeth_arp_entrytype type;
+    __u8 macaddr[6];
+    __u8 ipaddr[4];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry7_short_ipv6 {
-	struct qeth_arp_entrytype type;
-	__u8 macaddr[6];
-	__u8 ipaddr[16];
+    struct qeth_arp_entrytype type;
+    __u8 macaddr[6];
+    __u8 ipaddr[16];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry5 {
-	__u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
-	struct qeth_arp_entrytype type;
-	__u8 ipaddr[4];
+    __u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
+    struct qeth_arp_entrytype type;
+    __u8 ipaddr[4];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry5_ipv6 {
-	__u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
-	struct qeth_arp_entrytype type;
-	__u8 ipaddr[16];
+    __u8 media_specific[QETH_QARP_MEDIASPECIFIC_BYTES];
+    struct qeth_arp_entrytype type;
+    __u8 ipaddr[16];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry5_short {
-	struct qeth_arp_entrytype type;
-	__u8 ipaddr[4];
+    struct qeth_arp_entrytype type;
+    __u8 ipaddr[4];
 } __attribute__((packed));
 
 struct qeth_arp_qi_entry5_short_ipv6 {
-	struct qeth_arp_entrytype type;
-	__u8 ipaddr[16];
+    struct qeth_arp_entrytype type;
+    __u8 ipaddr[16];
 } __attribute__((packed));
 /*
  * can be set by user if no "media specific information" is wanted
@@ -100,18 +100,18 @@ struct qeth_arp_qi_entry5_short_ipv6 {
 #define QETH_QARP_MASK_OFFSET    4
 #define QETH_QARP_ENTRIES_OFFSET 6
 struct qeth_arp_query_user_data {
-	union {
-		__u32 data_len;		/* set by user space program */
-		__u32 no_entries;	/* set by kernel */
-	} u;
-	__u16 mask_bits;
-	char *entries;
+    union {
+        __u32 data_len;		/* set by user space program */
+        __u32 no_entries;	/* set by kernel */
+    } u;
+    __u16 mask_bits;
+    char *entries;
 } __attribute__((packed));
 
 struct qeth_query_oat_data {
-	__u32 command;
-	__u32 buffer_len;
-	__u32 response_len;
-	__u64 ptr;
+    __u32 command;
+    __u32 buffer_len;
+    __u32 response_len;
+    __u64 ptr;
 };
 #endif /* __ASM_S390_QETH_IOCTL_H__ */

@@ -57,14 +57,12 @@
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct sRrmConfigParam
-{
+typedef struct sRrmConfigParam {
     tANI_U8 rrmEnabled;
     tANI_U8 maxRandnInterval;
 } tRrmConfigParam, *tpRrmConfigParam;
 
-typedef struct sRrmNeighborReportDesc
-{
+typedef struct sRrmNeighborReportDesc {
     tListElem    List;
     tSirNeighborBssDescription   *pNeighborBssDescription;
     tANI_U32                     roamScore;
@@ -73,22 +71,19 @@ typedef struct sRrmNeighborReportDesc
 
 typedef void (*NeighborReportRspCallback) (void *context, VOS_STATUS vosStatus);
 
-typedef struct sRrmNeighborRspCallbackInfo
-{
+typedef struct sRrmNeighborRspCallbackInfo {
     tANI_U32                  timeout;  //in ms.. min value is 10 (10ms)
     NeighborReportRspCallback neighborRspCallback;
     void                      *neighborRspCallbackContext;
 } tRrmNeighborRspCallbackInfo, *tpRrmNeighborRspCallbackInfo;
 
-typedef struct sRrmNeighborRequestControlInfo
-{
+typedef struct sRrmNeighborRequestControlInfo {
     tANI_BOOLEAN    isNeighborRspPending;   //To check whether a neighbor req is already sent and response pending
     vos_timer_t     neighborRspWaitTimer;
     tRrmNeighborRspCallbackInfo neighborRspCallbackInfo;
 } tRrmNeighborRequestControlInfo, *tpRrmNeighborRequestControlInfo;
 
-typedef struct sRrmSMEContext
-{
+typedef struct sRrmSMEContext {
     tANI_U16 token;
     tCsrBssid sessionBssId;
     tANI_U8 regClass;
@@ -110,8 +105,7 @@ typedef struct sRrmSMEContext
     tRrmMsgReqSource msgSource;
 } tRrmSMEContext, *tpRrmSMEContext;
 
-typedef struct sRrmNeighborReq
-{
+typedef struct sRrmNeighborReq {
     tANI_U8 no_ssid;
     tSirMacSSid ssid;
 } tRrmNeighborReq, *tpRrmNeighborReq;

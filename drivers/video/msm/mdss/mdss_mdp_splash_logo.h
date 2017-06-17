@@ -19,25 +19,25 @@
 #include <linux/completion.h>
 
 struct msm_fb_splash_info {
-	struct task_struct	*splash_thread;
-	bool			splash_logo_enabled;
-	bool			iommu_dynamic_attached;
-	struct notifier_block	notifier;
-	uint32_t		frame_done_count;
-	struct completion	frame_done;
+    struct task_struct	*splash_thread;
+    bool			splash_logo_enabled;
+    bool			iommu_dynamic_attached;
+    struct notifier_block	notifier;
+    uint32_t		frame_done_count;
+    struct completion	frame_done;
 
-	struct ion_handle	*ion_handle;
-	dma_addr_t		iova;
-	void			*splash_buffer;
-	int			pipe_ndx[2];
-	bool			splash_pipe_allocated;
+    struct ion_handle	*ion_handle;
+    dma_addr_t		iova;
+    void			*splash_buffer;
+    int			pipe_ndx[2];
+    bool			splash_pipe_allocated;
 };
 
 struct msm_fb_data_type;
 
 void mdss_mdp_release_splash_pipe(struct msm_fb_data_type *mfd);
 int mdss_mdp_splash_cleanup(struct msm_fb_data_type *mfd,
-				 bool use_borderfill);
+                            bool use_borderfill);
 int mdss_mdp_splash_init(struct msm_fb_data_type *mfd);
 
 #endif

@@ -174,7 +174,7 @@ extern volatile unsigned long *port_csp4_addr;
 /* Console I/O for simulated etrax100.  Use #ifdef so erroneous
    use will be evident. */
 #ifdef CONFIG_SVINTO_SIM
-  /* Let's use the ucsim interface since it lets us do write(2, ...) */
+/* Let's use the ucsim interface since it lets us do write(2, ...) */
 #define SIMCOUT(s,len)							\
   asm ("moveq 4,$r9	\n\t"						\
        "moveq 2,$r10	\n\t"						\

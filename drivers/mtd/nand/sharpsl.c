@@ -29,10 +29,10 @@
 #include <asm/mach-types.h>
 
 struct sharpsl_nand {
-	struct mtd_info		mtd;
-	struct nand_chip	chip;
+    struct mtd_info		mtd;
+    struct nand_chip	chip;
 
-	void __iomem		*io;
+    void __iomem		*io;
 };
 
 #define mtd_to_sharpsl(_mtd)	container_of(_mtd, struct sharpsl_nand, mtd)
@@ -63,172 +63,166 @@ struct sharpsl_nand {
  *
  */
 static void sharpsl_nand_hwcontrol(struct mtd_info *mtd, int cmd,
-				   unsigned int ctrl)
-{
-	struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
-	struct nand_chip *chip = mtd->priv;
+                                   unsigned int ctrl) {
+    struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
+    struct nand_chip *chip = mtd->priv;
 
-	if (ctrl & NAND_CTRL_CHANGE) {
-		unsigned char bits = ctrl & 0x07;
+    if (ctrl & NAND_CTRL_CHANGE) {
+        unsigned char bits = ctrl & 0x07;
 
-		bits |= (ctrl & 0x01) << 4;
+        bits |= (ctrl & 0x01) << 4;
 
-		bits ^= 0x11;
+        bits ^= 0x11;
 
-		writeb((readb(sharpsl->io + FLASHCTL) & ~0x17) | bits, sharpsl->io + FLASHCTL);
-	}
+        writeb((readb(sharpsl->io + FLASHCTL) & ~0x17) | bits, sharpsl->io + FLASHCTL);
+    }
 
-	if (cmd != NAND_CMD_NONE)
-		writeb(cmd, chip->IO_ADDR_W);
+    if (cmd != NAND_CMD_NONE)
+        writeb(cmd, chip->IO_ADDR_W);
 }
 
-static int sharpsl_nand_dev_ready(struct mtd_info *mtd)
-{
-	struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
-	return !((readb(sharpsl->io + FLASHCTL) & FLRYBY) == 0);
+static int sharpsl_nand_dev_ready(struct mtd_info *mtd) {
+    struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
+    return !((readb(sharpsl->io + FLASHCTL) & FLRYBY) == 0);
 }
 
-static void sharpsl_nand_enable_hwecc(struct mtd_info *mtd, int mode)
-{
-	struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
-	writeb(0, sharpsl->io + ECCCLRR);
+static void sharpsl_nand_enable_hwecc(struct mtd_info *mtd, int mode) {
+    struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
+    writeb(0, sharpsl->io + ECCCLRR);
 }
 
-static int sharpsl_nand_calculate_ecc(struct mtd_info *mtd, const u_char * dat, u_char * ecc_code)
-{
-	struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
-	ecc_code[0] = ~readb(sharpsl->io + ECCLPUB);
-	ecc_code[1] = ~readb(sharpsl->io + ECCLPLB);
-	ecc_code[2] = (~readb(sharpsl->io + ECCCP) << 2) | 0x03;
-	return readb(sharpsl->io + ECCCNTR) != 0;
+static int sharpsl_nand_calculate_ecc(struct mtd_info *mtd, const u_char * dat, u_char * ecc_code) {
+    struct sharpsl_nand *sharpsl = mtd_to_sharpsl(mtd);
+    ecc_code[0] = ~readb(sharpsl->io + ECCLPUB);
+    ecc_code[1] = ~readb(sharpsl->io + ECCLPLB);
+    ecc_code[2] = (~readb(sharpsl->io + ECCCP) << 2) | 0x03;
+    return readb(sharpsl->io + ECCCNTR) != 0;
 }
 
 /*
  * Main initialization routine
  */
-static int __devinit sharpsl_nand_probe(struct platform_device *pdev)
-{
-	struct nand_chip *this;
-	struct resource *r;
-	int err = 0;
-	struct sharpsl_nand *sharpsl;
-	struct sharpsl_nand_platform_data *data = pdev->dev.platform_data;
+static int __devinit sharpsl_nand_probe(struct platform_device *pdev) {
+    struct nand_chip *this;
+    struct resource *r;
+    int err = 0;
+    struct sharpsl_nand *sharpsl;
+    struct sharpsl_nand_platform_data *data = pdev->dev.platform_data;
 
-	if (!data) {
-		dev_err(&pdev->dev, "no platform data!\n");
-		return -EINVAL;
-	}
+    if (!data) {
+        dev_err(&pdev->dev, "no platform data!\n");
+        return -EINVAL;
+    }
 
-	/* Allocate memory for MTD device structure and private data */
-	sharpsl = kzalloc(sizeof(struct sharpsl_nand), GFP_KERNEL);
-	if (!sharpsl) {
-		printk("Unable to allocate SharpSL NAND MTD device structure.\n");
-		return -ENOMEM;
-	}
+    /* Allocate memory for MTD device structure and private data */
+    sharpsl = kzalloc(sizeof(struct sharpsl_nand), GFP_KERNEL);
+    if (!sharpsl) {
+        printk("Unable to allocate SharpSL NAND MTD device structure.\n");
+        return -ENOMEM;
+    }
 
-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	if (!r) {
-		dev_err(&pdev->dev, "no io memory resource defined!\n");
-		err = -ENODEV;
-		goto err_get_res;
-	}
+    r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    if (!r) {
+        dev_err(&pdev->dev, "no io memory resource defined!\n");
+        err = -ENODEV;
+        goto err_get_res;
+    }
 
-	/* map physical address */
-	sharpsl->io = ioremap(r->start, resource_size(r));
-	if (!sharpsl->io) {
-		printk("ioremap to access Sharp SL NAND chip failed\n");
-		err = -EIO;
-		goto err_ioremap;
-	}
+    /* map physical address */
+    sharpsl->io = ioremap(r->start, resource_size(r));
+    if (!sharpsl->io) {
+        printk("ioremap to access Sharp SL NAND chip failed\n");
+        err = -EIO;
+        goto err_ioremap;
+    }
 
-	/* Get pointer to private data */
-	this = (struct nand_chip *)(&sharpsl->chip);
+    /* Get pointer to private data */
+    this = (struct nand_chip *)(&sharpsl->chip);
 
-	/* Link the private data with the MTD structure */
-	sharpsl->mtd.priv = this;
-	sharpsl->mtd.owner = THIS_MODULE;
+    /* Link the private data with the MTD structure */
+    sharpsl->mtd.priv = this;
+    sharpsl->mtd.owner = THIS_MODULE;
 
-	platform_set_drvdata(pdev, sharpsl);
+    platform_set_drvdata(pdev, sharpsl);
 
-	/*
-	 * PXA initialize
-	 */
-	writeb(readb(sharpsl->io + FLASHCTL) | FLWP, sharpsl->io + FLASHCTL);
+    /*
+     * PXA initialize
+     */
+    writeb(readb(sharpsl->io + FLASHCTL) | FLWP, sharpsl->io + FLASHCTL);
 
-	/* Set address of NAND IO lines */
-	this->IO_ADDR_R = sharpsl->io + FLASHIO;
-	this->IO_ADDR_W = sharpsl->io + FLASHIO;
-	/* Set address of hardware control function */
-	this->cmd_ctrl = sharpsl_nand_hwcontrol;
-	this->dev_ready = sharpsl_nand_dev_ready;
-	/* 15 us command delay time */
-	this->chip_delay = 15;
-	/* set eccmode using hardware ECC */
-	this->ecc.mode = NAND_ECC_HW;
-	this->ecc.size = 256;
-	this->ecc.bytes = 3;
-	this->ecc.strength = 1;
-	this->badblock_pattern = data->badblock_pattern;
-	this->ecc.layout = data->ecc_layout;
-	this->ecc.hwctl = sharpsl_nand_enable_hwecc;
-	this->ecc.calculate = sharpsl_nand_calculate_ecc;
-	this->ecc.correct = nand_correct_data;
+    /* Set address of NAND IO lines */
+    this->IO_ADDR_R = sharpsl->io + FLASHIO;
+    this->IO_ADDR_W = sharpsl->io + FLASHIO;
+    /* Set address of hardware control function */
+    this->cmd_ctrl = sharpsl_nand_hwcontrol;
+    this->dev_ready = sharpsl_nand_dev_ready;
+    /* 15 us command delay time */
+    this->chip_delay = 15;
+    /* set eccmode using hardware ECC */
+    this->ecc.mode = NAND_ECC_HW;
+    this->ecc.size = 256;
+    this->ecc.bytes = 3;
+    this->ecc.strength = 1;
+    this->badblock_pattern = data->badblock_pattern;
+    this->ecc.layout = data->ecc_layout;
+    this->ecc.hwctl = sharpsl_nand_enable_hwecc;
+    this->ecc.calculate = sharpsl_nand_calculate_ecc;
+    this->ecc.correct = nand_correct_data;
 
-	/* Scan to find existence of the device */
-	err = nand_scan(&sharpsl->mtd, 1);
-	if (err)
-		goto err_scan;
+    /* Scan to find existence of the device */
+    err = nand_scan(&sharpsl->mtd, 1);
+    if (err)
+        goto err_scan;
 
-	/* Register the partitions */
-	sharpsl->mtd.name = "sharpsl-nand";
+    /* Register the partitions */
+    sharpsl->mtd.name = "sharpsl-nand";
 
-	err = mtd_device_parse_register(&sharpsl->mtd, NULL, NULL,
-					data->partitions, data->nr_partitions);
-	if (err)
-		goto err_add;
+    err = mtd_device_parse_register(&sharpsl->mtd, NULL, NULL,
+                                    data->partitions, data->nr_partitions);
+    if (err)
+        goto err_add;
 
-	/* Return happy */
-	return 0;
+    /* Return happy */
+    return 0;
 
 err_add:
-	nand_release(&sharpsl->mtd);
+    nand_release(&sharpsl->mtd);
 
 err_scan:
-	platform_set_drvdata(pdev, NULL);
-	iounmap(sharpsl->io);
+    platform_set_drvdata(pdev, NULL);
+    iounmap(sharpsl->io);
 err_ioremap:
 err_get_res:
-	kfree(sharpsl);
-	return err;
+    kfree(sharpsl);
+    return err;
 }
 
 /*
  * Clean up routine
  */
-static int __devexit sharpsl_nand_remove(struct platform_device *pdev)
-{
-	struct sharpsl_nand *sharpsl = platform_get_drvdata(pdev);
+static int __devexit sharpsl_nand_remove(struct platform_device *pdev) {
+    struct sharpsl_nand *sharpsl = platform_get_drvdata(pdev);
 
-	/* Release resources, unregister device */
-	nand_release(&sharpsl->mtd);
+    /* Release resources, unregister device */
+    nand_release(&sharpsl->mtd);
 
-	platform_set_drvdata(pdev, NULL);
+    platform_set_drvdata(pdev, NULL);
 
-	iounmap(sharpsl->io);
+    iounmap(sharpsl->io);
 
-	/* Free the MTD device structure */
-	kfree(sharpsl);
+    /* Free the MTD device structure */
+    kfree(sharpsl);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver sharpsl_nand_driver = {
-	.driver = {
-		.name	= "sharpsl-nand",
-		.owner	= THIS_MODULE,
-	},
-	.probe		= sharpsl_nand_probe,
-	.remove		= __devexit_p(sharpsl_nand_remove),
+    .driver = {
+        .name	= "sharpsl-nand",
+        .owner	= THIS_MODULE,
+    },
+    .probe		= sharpsl_nand_probe,
+    .remove		= __devexit_p(sharpsl_nand_remove),
 };
 
 module_platform_driver(sharpsl_nand_driver);

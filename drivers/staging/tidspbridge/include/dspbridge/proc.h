@@ -52,9 +52,9 @@ extern char *iva_img;
  *      When attr_in is NULL, the default timeout value is 10 seconds.
  */
 extern int proc_attach(u32 processor_id,
-			      const struct dsp_processorattrin
-			      *attr_in, void **ph_processor,
-			      struct process_context *pr_ctxt);
+                       const struct dsp_processorattrin
+                       *attr_in, void **ph_processor,
+                       struct process_context *pr_ctxt);
 
 /*
  *  ======== proc_auto_start =========
@@ -74,7 +74,7 @@ extern int proc_attach(u32 processor_id,
  *  Ensures:
  */
 extern int proc_auto_start(struct cfg_devnode *dev_node_obj,
-				  struct dev_object *hdev_obj);
+                           struct dev_object *hdev_obj);
 
 /*
  *  ======== proc_ctrl ========
@@ -99,7 +99,7 @@ extern int proc_auto_start(struct cfg_devnode *dev_node_obj,
  *      This function Calls bridge_dev_ctrl.
  */
 extern int proc_ctrl(void *hprocessor,
-			    u32 dw_cmd, struct dsp_cbdata *arg);
+                     u32 dw_cmd, struct dsp_cbdata *arg);
 
 /*
  *  ======== proc_detach ========
@@ -151,10 +151,10 @@ extern int proc_detach(struct process_context *pr_ctxt);
  *  Details:
  */
 extern int proc_enum_nodes(void *hprocessor,
-				  void **node_tab,
-				  u32 node_tab_size,
-				  u32 *pu_num_nodes,
-				  u32 *pu_allocated);
+                           void **node_tab,
+                           u32 node_tab_size,
+                           u32 *pu_num_nodes,
+                           u32 *pu_allocated);
 
 /*
  *  ======== proc_get_resource_info ========
@@ -183,10 +183,10 @@ extern int proc_enum_nodes(void *hprocessor,
  *      -ENOSYS, and does not write any data to the resource_info struct.
  */
 extern int proc_get_resource_info(void *hprocessor,
-					 u32 resource_type,
-					 struct dsp_resourceinfo
-					 *resource_info,
-					 u32 resource_info_size);
+                                  u32 resource_type,
+                                  struct dsp_resourceinfo
+                                  *resource_info,
+                                  u32 resource_info_size);
 
 /*
  * ======== proc_get_dev_object =========
@@ -206,7 +206,7 @@ extern int proc_get_resource_info(void *hprocessor,
  *      -EPERM   :   *device_obj is NULL.
  */
 extern int proc_get_dev_object(void *hprocessor,
-				      struct dev_object **device_obj);
+                               struct dev_object **device_obj);
 
 /*
  *  ======== proc_get_state ========
@@ -229,7 +229,7 @@ extern int proc_get_dev_object(void *hprocessor,
  *  Details:
  */
 extern int proc_get_state(void *hprocessor, struct dsp_processorstate
-				 *proc_state_obj, u32 state_info_size);
+                          *proc_state_obj, u32 state_info_size);
 
 /*
  *  ======== PROC_GetProcessorID ========
@@ -301,8 +301,8 @@ extern int proc_get_trace(void *hprocessor, u8 * pbuf, u32 max_size);
  *      can load the processor.
  */
 extern int proc_load(void *hprocessor,
-			    const s32 argc_index, const char **user_args,
-			    const char **user_envp);
+                     const s32 argc_index, const char **user_args,
+                     const char **user_envp);
 
 /*
  *  ======== proc_register_notify ========
@@ -327,9 +327,9 @@ extern int proc_load(void *hprocessor,
  *  Details:
  */
 extern int proc_register_notify(void *hprocessor,
-				       u32 event_mask, u32 notify_type,
-				       struct dsp_notification
-				       *hnotification);
+                                u32 event_mask, u32 notify_type,
+                                struct dsp_notification
+                                *hnotification);
 
 /*
  *  ======== proc_notify_clients ========
@@ -429,7 +429,7 @@ extern int proc_stop(void *hprocessor);
  *      Memory was previously mapped.
  */
 extern int proc_end_dma(void *hprocessor, void *pmpu_addr, u32 ul_size,
-						enum dma_data_direction dir);
+                        enum dma_data_direction dir);
 /*
  *  ======== proc_begin_dma ========
  *  Purpose:
@@ -443,7 +443,7 @@ extern int proc_end_dma(void *hprocessor, void *pmpu_addr, u32 ul_size,
  *      Memory was previously mapped.
  */
 extern int proc_begin_dma(void *hprocessor, void *pmpu_addr, u32 ul_size,
-						enum dma_data_direction dir);
+                          enum dma_data_direction dir);
 
 /*
  *  ======== proc_flush_memory ========
@@ -465,7 +465,7 @@ extern int proc_begin_dma(void *hprocessor, void *pmpu_addr, u32 ul_size,
  *      All the arguments are currently ignored.
  */
 extern int proc_flush_memory(void *hprocessor,
-				    void *pmpu_addr, u32 ul_size, u32 ul_flags);
+                             void *pmpu_addr, u32 ul_size, u32 ul_flags);
 
 /*
  *  ======== proc_invalidate_memory ========
@@ -486,7 +486,7 @@ extern int proc_flush_memory(void *hprocessor,
  *      All the arguments are currently ignored.
  */
 extern int proc_invalidate_memory(void *hprocessor,
-					 void *pmpu_addr, u32 ul_size);
+                                  void *pmpu_addr, u32 ul_size);
 
 /*
  *  ======== proc_map ========
@@ -516,11 +516,11 @@ extern int proc_invalidate_memory(void *hprocessor,
  *  Details:
  */
 extern int proc_map(void *hprocessor,
-			   void *pmpu_addr,
-			   u32 ul_size,
-			   void *req_addr,
-			   void **pp_map_addr, u32 ul_map_attr,
-			   struct process_context *pr_ctxt);
+                    void *pmpu_addr,
+                    u32 ul_size,
+                    void *req_addr,
+                    void **pp_map_addr, u32 ul_map_attr,
+                    struct process_context *pr_ctxt);
 
 /*
  *  ======== proc_reserve_memory ========
@@ -542,8 +542,8 @@ extern int proc_map(void *hprocessor,
  *  Details:
  */
 extern int proc_reserve_memory(void *hprocessor,
-				      u32 ul_size, void **pp_rsv_addr,
-				      struct process_context *pr_ctxt);
+                               u32 ul_size, void **pp_rsv_addr,
+                               struct process_context *pr_ctxt);
 
 /*
  *  ======== proc_un_map ========
@@ -565,7 +565,7 @@ extern int proc_reserve_memory(void *hprocessor,
  *  Details:
  */
 extern int proc_un_map(void *hprocessor, void *map_addr,
-			      struct process_context *pr_ctxt);
+                       struct process_context *pr_ctxt);
 
 /*
  *  ======== proc_un_reserve_memory ========
@@ -587,7 +587,7 @@ extern int proc_un_map(void *hprocessor, void *map_addr,
  *  Details:
  */
 extern int proc_un_reserve_memory(void *hprocessor,
-					 void *prsv_addr,
-					 struct process_context *pr_ctxt);
+                                  void *prsv_addr,
+                                  struct process_context *pr_ctxt);
 
 #endif /* PROC_ */

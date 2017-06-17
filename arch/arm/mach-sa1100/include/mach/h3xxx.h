@@ -78,9 +78,9 @@
 #define H3600_EGPIO_LVDD_ON		(H3XXX_EGPIO_BASE + 15) /* enable 9V and -6.5V to LCD. */
 
 struct gpio_default_state {
-	int gpio;
-	int mode;
-	const char *name;
+    int gpio;
+    int mode;
+    const char *name;
 };
 
 #define GPIO_MODE_IN	-1

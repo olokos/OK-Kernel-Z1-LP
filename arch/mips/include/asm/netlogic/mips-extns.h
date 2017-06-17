@@ -68,9 +68,8 @@ do {									\
 		__write_64bit_c0_register($9, 7, (val));		\
 } while (0)
 
-static inline int hard_smp_processor_id(void)
-{
-	return __read_32bit_c0_register($15, 1) & 0x3ff;
+static inline int hard_smp_processor_id(void) {
+    return __read_32bit_c0_register($15, 1) & 0x3ff;
 }
 
 #endif /*_ASM_NLM_MIPS_EXTS_H */

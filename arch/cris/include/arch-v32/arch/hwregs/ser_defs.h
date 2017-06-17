@@ -86,223 +86,223 @@
 
 /* Register rw_tr_ctrl, scope ser, type rw */
 typedef struct {
-  unsigned int base_freq : 3;
-  unsigned int en        : 1;
-  unsigned int par       : 2;
-  unsigned int par_en    : 1;
-  unsigned int data_bits : 1;
-  unsigned int stop_bits : 1;
-  unsigned int stop      : 1;
-  unsigned int rts_delay : 3;
-  unsigned int rts_setup : 1;
-  unsigned int auto_rts  : 1;
-  unsigned int txd       : 1;
-  unsigned int auto_cts  : 1;
-  unsigned int dummy1    : 15;
+    unsigned int base_freq : 3;
+    unsigned int en        : 1;
+    unsigned int par       : 2;
+    unsigned int par_en    : 1;
+    unsigned int data_bits : 1;
+    unsigned int stop_bits : 1;
+    unsigned int stop      : 1;
+    unsigned int rts_delay : 3;
+    unsigned int rts_setup : 1;
+    unsigned int auto_rts  : 1;
+    unsigned int txd       : 1;
+    unsigned int auto_cts  : 1;
+    unsigned int dummy1    : 15;
 } reg_ser_rw_tr_ctrl;
 #define REG_RD_ADDR_ser_rw_tr_ctrl 0
 #define REG_WR_ADDR_ser_rw_tr_ctrl 0
 
 /* Register rw_tr_dma_en, scope ser, type rw */
 typedef struct {
-  unsigned int en : 1;
-  unsigned int dummy1 : 31;
+    unsigned int en : 1;
+    unsigned int dummy1 : 31;
 } reg_ser_rw_tr_dma_en;
 #define REG_RD_ADDR_ser_rw_tr_dma_en 4
 #define REG_WR_ADDR_ser_rw_tr_dma_en 4
 
 /* Register rw_rec_ctrl, scope ser, type rw */
 typedef struct {
-  unsigned int base_freq   : 3;
-  unsigned int en          : 1;
-  unsigned int par         : 2;
-  unsigned int par_en      : 1;
-  unsigned int data_bits   : 1;
-  unsigned int dma_mode    : 1;
-  unsigned int dma_err     : 1;
-  unsigned int sampling    : 1;
-  unsigned int timeout     : 3;
-  unsigned int auto_eop    : 1;
-  unsigned int half_duplex : 1;
-  unsigned int rts_n       : 1;
-  unsigned int loopback    : 1;
-  unsigned int dummy1      : 14;
+    unsigned int base_freq   : 3;
+    unsigned int en          : 1;
+    unsigned int par         : 2;
+    unsigned int par_en      : 1;
+    unsigned int data_bits   : 1;
+    unsigned int dma_mode    : 1;
+    unsigned int dma_err     : 1;
+    unsigned int sampling    : 1;
+    unsigned int timeout     : 3;
+    unsigned int auto_eop    : 1;
+    unsigned int half_duplex : 1;
+    unsigned int rts_n       : 1;
+    unsigned int loopback    : 1;
+    unsigned int dummy1      : 14;
 } reg_ser_rw_rec_ctrl;
 #define REG_RD_ADDR_ser_rw_rec_ctrl 8
 #define REG_WR_ADDR_ser_rw_rec_ctrl 8
 
 /* Register rw_tr_baud_div, scope ser, type rw */
 typedef struct {
-  unsigned int div : 16;
-  unsigned int dummy1 : 16;
+    unsigned int div : 16;
+    unsigned int dummy1 : 16;
 } reg_ser_rw_tr_baud_div;
 #define REG_RD_ADDR_ser_rw_tr_baud_div 12
 #define REG_WR_ADDR_ser_rw_tr_baud_div 12
 
 /* Register rw_rec_baud_div, scope ser, type rw */
 typedef struct {
-  unsigned int div : 16;
-  unsigned int dummy1 : 16;
+    unsigned int div : 16;
+    unsigned int dummy1 : 16;
 } reg_ser_rw_rec_baud_div;
 #define REG_RD_ADDR_ser_rw_rec_baud_div 16
 #define REG_WR_ADDR_ser_rw_rec_baud_div 16
 
 /* Register rw_xoff, scope ser, type rw */
 typedef struct {
-  unsigned int chr       : 8;
-  unsigned int automatic : 1;
-  unsigned int dummy1    : 23;
+    unsigned int chr       : 8;
+    unsigned int automatic : 1;
+    unsigned int dummy1    : 23;
 } reg_ser_rw_xoff;
 #define REG_RD_ADDR_ser_rw_xoff 20
 #define REG_WR_ADDR_ser_rw_xoff 20
 
 /* Register rw_xoff_clr, scope ser, type rw */
 typedef struct {
-  unsigned int clr : 1;
-  unsigned int dummy1 : 31;
+    unsigned int clr : 1;
+    unsigned int dummy1 : 31;
 } reg_ser_rw_xoff_clr;
 #define REG_RD_ADDR_ser_rw_xoff_clr 24
 #define REG_WR_ADDR_ser_rw_xoff_clr 24
 
 /* Register rw_dout, scope ser, type rw */
 typedef struct {
-  unsigned int data : 8;
-  unsigned int dummy1 : 24;
+    unsigned int data : 8;
+    unsigned int dummy1 : 24;
 } reg_ser_rw_dout;
 #define REG_RD_ADDR_ser_rw_dout 28
 #define REG_WR_ADDR_ser_rw_dout 28
 
 /* Register rs_stat_din, scope ser, type rs */
 typedef struct {
-  unsigned int data        : 8;
-  unsigned int dummy1      : 8;
-  unsigned int dav         : 1;
-  unsigned int framing_err : 1;
-  unsigned int par_err     : 1;
-  unsigned int orun        : 1;
-  unsigned int rec_err     : 1;
-  unsigned int rxd         : 1;
-  unsigned int tr_idle     : 1;
-  unsigned int tr_empty    : 1;
-  unsigned int tr_rdy      : 1;
-  unsigned int cts_n       : 1;
-  unsigned int xoff_detect : 1;
-  unsigned int rts_n       : 1;
-  unsigned int txd         : 1;
-  unsigned int dummy2      : 3;
+    unsigned int data        : 8;
+    unsigned int dummy1      : 8;
+    unsigned int dav         : 1;
+    unsigned int framing_err : 1;
+    unsigned int par_err     : 1;
+    unsigned int orun        : 1;
+    unsigned int rec_err     : 1;
+    unsigned int rxd         : 1;
+    unsigned int tr_idle     : 1;
+    unsigned int tr_empty    : 1;
+    unsigned int tr_rdy      : 1;
+    unsigned int cts_n       : 1;
+    unsigned int xoff_detect : 1;
+    unsigned int rts_n       : 1;
+    unsigned int txd         : 1;
+    unsigned int dummy2      : 3;
 } reg_ser_rs_stat_din;
 #define REG_RD_ADDR_ser_rs_stat_din 32
 
 /* Register r_stat_din, scope ser, type r */
 typedef struct {
-  unsigned int data        : 8;
-  unsigned int dummy1      : 8;
-  unsigned int dav         : 1;
-  unsigned int framing_err : 1;
-  unsigned int par_err     : 1;
-  unsigned int orun        : 1;
-  unsigned int rec_err     : 1;
-  unsigned int rxd         : 1;
-  unsigned int tr_idle     : 1;
-  unsigned int tr_empty    : 1;
-  unsigned int tr_rdy      : 1;
-  unsigned int cts_n       : 1;
-  unsigned int xoff_detect : 1;
-  unsigned int rts_n       : 1;
-  unsigned int txd         : 1;
-  unsigned int dummy2      : 3;
+    unsigned int data        : 8;
+    unsigned int dummy1      : 8;
+    unsigned int dav         : 1;
+    unsigned int framing_err : 1;
+    unsigned int par_err     : 1;
+    unsigned int orun        : 1;
+    unsigned int rec_err     : 1;
+    unsigned int rxd         : 1;
+    unsigned int tr_idle     : 1;
+    unsigned int tr_empty    : 1;
+    unsigned int tr_rdy      : 1;
+    unsigned int cts_n       : 1;
+    unsigned int xoff_detect : 1;
+    unsigned int rts_n       : 1;
+    unsigned int txd         : 1;
+    unsigned int dummy2      : 3;
 } reg_ser_r_stat_din;
 #define REG_RD_ADDR_ser_r_stat_din 36
 
 /* Register rw_rec_eop, scope ser, type rw */
 typedef struct {
-  unsigned int set : 1;
-  unsigned int dummy1 : 31;
+    unsigned int set : 1;
+    unsigned int dummy1 : 31;
 } reg_ser_rw_rec_eop;
 #define REG_RD_ADDR_ser_rw_rec_eop 40
 #define REG_WR_ADDR_ser_rw_rec_eop 40
 
 /* Register rw_intr_mask, scope ser, type rw */
 typedef struct {
-  unsigned int tr_rdy   : 1;
-  unsigned int tr_empty : 1;
-  unsigned int tr_idle  : 1;
-  unsigned int dav      : 1;
-  unsigned int dummy1   : 28;
+    unsigned int tr_rdy   : 1;
+    unsigned int tr_empty : 1;
+    unsigned int tr_idle  : 1;
+    unsigned int dav      : 1;
+    unsigned int dummy1   : 28;
 } reg_ser_rw_intr_mask;
 #define REG_RD_ADDR_ser_rw_intr_mask 44
 #define REG_WR_ADDR_ser_rw_intr_mask 44
 
 /* Register rw_ack_intr, scope ser, type rw */
 typedef struct {
-  unsigned int tr_rdy   : 1;
-  unsigned int tr_empty : 1;
-  unsigned int tr_idle  : 1;
-  unsigned int dav      : 1;
-  unsigned int dummy1   : 28;
+    unsigned int tr_rdy   : 1;
+    unsigned int tr_empty : 1;
+    unsigned int tr_idle  : 1;
+    unsigned int dav      : 1;
+    unsigned int dummy1   : 28;
 } reg_ser_rw_ack_intr;
 #define REG_RD_ADDR_ser_rw_ack_intr 48
 #define REG_WR_ADDR_ser_rw_ack_intr 48
 
 /* Register r_intr, scope ser, type r */
 typedef struct {
-  unsigned int tr_rdy   : 1;
-  unsigned int tr_empty : 1;
-  unsigned int tr_idle  : 1;
-  unsigned int dav      : 1;
-  unsigned int dummy1   : 28;
+    unsigned int tr_rdy   : 1;
+    unsigned int tr_empty : 1;
+    unsigned int tr_idle  : 1;
+    unsigned int dav      : 1;
+    unsigned int dummy1   : 28;
 } reg_ser_r_intr;
 #define REG_RD_ADDR_ser_r_intr 52
 
 /* Register r_masked_intr, scope ser, type r */
 typedef struct {
-  unsigned int tr_rdy   : 1;
-  unsigned int tr_empty : 1;
-  unsigned int tr_idle  : 1;
-  unsigned int dav      : 1;
-  unsigned int dummy1   : 28;
+    unsigned int tr_rdy   : 1;
+    unsigned int tr_empty : 1;
+    unsigned int tr_idle  : 1;
+    unsigned int dav      : 1;
+    unsigned int dummy1   : 28;
 } reg_ser_r_masked_intr;
 #define REG_RD_ADDR_ser_r_masked_intr 56
 
 
 /* Constants */
 enum {
-  regk_ser_active                          = 0x00000000,
-  regk_ser_bits1                           = 0x00000000,
-  regk_ser_bits2                           = 0x00000001,
-  regk_ser_bits7                           = 0x00000001,
-  regk_ser_bits8                           = 0x00000000,
-  regk_ser_del0_5                          = 0x00000000,
-  regk_ser_del1                            = 0x00000001,
-  regk_ser_del1_5                          = 0x00000002,
-  regk_ser_del2                            = 0x00000003,
-  regk_ser_del2_5                          = 0x00000004,
-  regk_ser_del3                            = 0x00000005,
-  regk_ser_del3_5                          = 0x00000006,
-  regk_ser_del4                            = 0x00000007,
-  regk_ser_even                            = 0x00000000,
-  regk_ser_ext                             = 0x00000001,
-  regk_ser_f100                            = 0x00000007,
-  regk_ser_f29_493                         = 0x00000004,
-  regk_ser_f32                             = 0x00000005,
-  regk_ser_f32_768                         = 0x00000006,
-  regk_ser_ignore                          = 0x00000001,
-  regk_ser_inactive                        = 0x00000001,
-  regk_ser_majority                        = 0x00000001,
-  regk_ser_mark                            = 0x00000002,
-  regk_ser_middle                          = 0x00000000,
-  regk_ser_no                              = 0x00000000,
-  regk_ser_odd                             = 0x00000001,
-  regk_ser_off                             = 0x00000000,
-  regk_ser_rw_intr_mask_default            = 0x00000000,
-  regk_ser_rw_rec_baud_div_default         = 0x00000000,
-  regk_ser_rw_rec_ctrl_default             = 0x00010000,
-  regk_ser_rw_tr_baud_div_default          = 0x00000000,
-  regk_ser_rw_tr_ctrl_default              = 0x00008000,
-  regk_ser_rw_tr_dma_en_default            = 0x00000000,
-  regk_ser_rw_xoff_default                 = 0x00000000,
-  regk_ser_space                           = 0x00000003,
-  regk_ser_stop                            = 0x00000000,
-  regk_ser_yes                             = 0x00000001
+    regk_ser_active                          = 0x00000000,
+    regk_ser_bits1                           = 0x00000000,
+    regk_ser_bits2                           = 0x00000001,
+    regk_ser_bits7                           = 0x00000001,
+    regk_ser_bits8                           = 0x00000000,
+    regk_ser_del0_5                          = 0x00000000,
+    regk_ser_del1                            = 0x00000001,
+    regk_ser_del1_5                          = 0x00000002,
+    regk_ser_del2                            = 0x00000003,
+    regk_ser_del2_5                          = 0x00000004,
+    regk_ser_del3                            = 0x00000005,
+    regk_ser_del3_5                          = 0x00000006,
+    regk_ser_del4                            = 0x00000007,
+    regk_ser_even                            = 0x00000000,
+    regk_ser_ext                             = 0x00000001,
+    regk_ser_f100                            = 0x00000007,
+    regk_ser_f29_493                         = 0x00000004,
+    regk_ser_f32                             = 0x00000005,
+    regk_ser_f32_768                         = 0x00000006,
+    regk_ser_ignore                          = 0x00000001,
+    regk_ser_inactive                        = 0x00000001,
+    regk_ser_majority                        = 0x00000001,
+    regk_ser_mark                            = 0x00000002,
+    regk_ser_middle                          = 0x00000000,
+    regk_ser_no                              = 0x00000000,
+    regk_ser_odd                             = 0x00000001,
+    regk_ser_off                             = 0x00000000,
+    regk_ser_rw_intr_mask_default            = 0x00000000,
+    regk_ser_rw_rec_baud_div_default         = 0x00000000,
+    regk_ser_rw_rec_ctrl_default             = 0x00010000,
+    regk_ser_rw_tr_baud_div_default          = 0x00000000,
+    regk_ser_rw_tr_ctrl_default              = 0x00008000,
+    regk_ser_rw_tr_dma_en_default            = 0x00000000,
+    regk_ser_rw_xoff_default                 = 0x00000000,
+    regk_ser_space                           = 0x00000003,
+    regk_ser_stop                            = 0x00000000,
+    regk_ser_yes                             = 0x00000001
 };
 #endif /* __ser_defs_h */

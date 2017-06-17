@@ -54,8 +54,8 @@ extern void flush_dcache_page(struct page *page);
 #define flush_icache_user_range(vma,pg,adr,len)	do { } while (0)
 
 extern void flush_ptrace_access(struct vm_area_struct *, struct page *,
-				unsigned long uaddr, void *kaddr,
-				unsigned long len, int write);
+                                unsigned long uaddr, void *kaddr,
+                                unsigned long len, int write);
 
 #define copy_to_user_page(vma, page, vaddr, dst, src, len)		\
 	do {								\

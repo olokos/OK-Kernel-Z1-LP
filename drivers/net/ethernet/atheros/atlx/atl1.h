@@ -60,7 +60,7 @@ static u32 atl1_hash_mc_addr(struct atl1_hw *hw, u8 *mc_addr);
 static void atl1_hash_set(struct atl1_hw *hw, u32 hash_value);
 static void atl1_set_mac_addr(struct atl1_hw *hw);
 static int atl1_mii_ioctl(struct net_device *netdev, struct ifreq *ifr,
-	int cmd);
+                          int cmd);
 static u32 atl1_check_link(struct atl1_adapter *adapter);
 
 /* hardware definitions specific to L1 */
@@ -316,61 +316,61 @@ static u32 atl1_check_link(struct atl1_adapter *adapter);
 
 /* Statistics counters collected by the MAC */
 struct stats_msg_block {
-	/* rx */
-	u32 rx_ok;		/* good RX packets */
-	u32 rx_bcast;		/* good RX broadcast packets */
-	u32 rx_mcast;		/* good RX multicast packets */
-	u32 rx_pause;		/* RX pause frames */
-	u32 rx_ctrl;		/* RX control packets other than pause frames */
-	u32 rx_fcs_err;		/* RX packets with bad FCS */
-	u32 rx_len_err;		/* RX packets with length != actual size */
-	u32 rx_byte_cnt;	/* good bytes received. FCS is NOT included */
-	u32 rx_runt;		/* RX packets < 64 bytes with good FCS */
-	u32 rx_frag;		/* RX packets < 64 bytes with bad FCS */
-	u32 rx_sz_64;		/* 64 byte RX packets */
-	u32 rx_sz_65_127;
-	u32 rx_sz_128_255;
-	u32 rx_sz_256_511;
-	u32 rx_sz_512_1023;
-	u32 rx_sz_1024_1518;
-	u32 rx_sz_1519_max;	/* 1519 byte to MTU RX packets */
-	u32 rx_sz_ov;		/* truncated RX packets > MTU */
-	u32 rx_rxf_ov;		/* frames dropped due to RX FIFO overflow */
-	u32 rx_rrd_ov;		/* frames dropped due to RRD overflow */
-	u32 rx_align_err;	/* alignment errors */
-	u32 rx_bcast_byte_cnt;	/* RX broadcast bytes, excluding FCS */
-	u32 rx_mcast_byte_cnt;	/* RX multicast bytes, excluding FCS */
-	u32 rx_err_addr;	/* packets dropped due to address filtering */
+    /* rx */
+    u32 rx_ok;		/* good RX packets */
+    u32 rx_bcast;		/* good RX broadcast packets */
+    u32 rx_mcast;		/* good RX multicast packets */
+    u32 rx_pause;		/* RX pause frames */
+    u32 rx_ctrl;		/* RX control packets other than pause frames */
+    u32 rx_fcs_err;		/* RX packets with bad FCS */
+    u32 rx_len_err;		/* RX packets with length != actual size */
+    u32 rx_byte_cnt;	/* good bytes received. FCS is NOT included */
+    u32 rx_runt;		/* RX packets < 64 bytes with good FCS */
+    u32 rx_frag;		/* RX packets < 64 bytes with bad FCS */
+    u32 rx_sz_64;		/* 64 byte RX packets */
+    u32 rx_sz_65_127;
+    u32 rx_sz_128_255;
+    u32 rx_sz_256_511;
+    u32 rx_sz_512_1023;
+    u32 rx_sz_1024_1518;
+    u32 rx_sz_1519_max;	/* 1519 byte to MTU RX packets */
+    u32 rx_sz_ov;		/* truncated RX packets > MTU */
+    u32 rx_rxf_ov;		/* frames dropped due to RX FIFO overflow */
+    u32 rx_rrd_ov;		/* frames dropped due to RRD overflow */
+    u32 rx_align_err;	/* alignment errors */
+    u32 rx_bcast_byte_cnt;	/* RX broadcast bytes, excluding FCS */
+    u32 rx_mcast_byte_cnt;	/* RX multicast bytes, excluding FCS */
+    u32 rx_err_addr;	/* packets dropped due to address filtering */
 
-	/* tx */
-	u32 tx_ok;		/* good TX packets */
-	u32 tx_bcast;		/* good TX broadcast packets */
-	u32 tx_mcast;		/* good TX multicast packets */
-	u32 tx_pause;		/* TX pause frames */
-	u32 tx_exc_defer;	/* TX packets deferred excessively */
-	u32 tx_ctrl;		/* TX control frames, excluding pause frames */
-	u32 tx_defer;		/* TX packets deferred */
-	u32 tx_byte_cnt;	/* bytes transmitted, FCS is NOT included */
-	u32 tx_sz_64;		/* 64 byte TX packets */
-	u32 tx_sz_65_127;
-	u32 tx_sz_128_255;
-	u32 tx_sz_256_511;
-	u32 tx_sz_512_1023;
-	u32 tx_sz_1024_1518;
-	u32 tx_sz_1519_max;	/* 1519 byte to MTU TX packets */
-	u32 tx_1_col;		/* packets TX after a single collision */
-	u32 tx_2_col;		/* packets TX after multiple collisions */
-	u32 tx_late_col;	/* TX packets with late collisions */
-	u32 tx_abort_col;	/* TX packets aborted w/excessive collisions */
-	u32 tx_underrun;	/* TX packets aborted due to TX FIFO underrun
+    /* tx */
+    u32 tx_ok;		/* good TX packets */
+    u32 tx_bcast;		/* good TX broadcast packets */
+    u32 tx_mcast;		/* good TX multicast packets */
+    u32 tx_pause;		/* TX pause frames */
+    u32 tx_exc_defer;	/* TX packets deferred excessively */
+    u32 tx_ctrl;		/* TX control frames, excluding pause frames */
+    u32 tx_defer;		/* TX packets deferred */
+    u32 tx_byte_cnt;	/* bytes transmitted, FCS is NOT included */
+    u32 tx_sz_64;		/* 64 byte TX packets */
+    u32 tx_sz_65_127;
+    u32 tx_sz_128_255;
+    u32 tx_sz_256_511;
+    u32 tx_sz_512_1023;
+    u32 tx_sz_1024_1518;
+    u32 tx_sz_1519_max;	/* 1519 byte to MTU TX packets */
+    u32 tx_1_col;		/* packets TX after a single collision */
+    u32 tx_2_col;		/* packets TX after multiple collisions */
+    u32 tx_late_col;	/* TX packets with late collisions */
+    u32 tx_abort_col;	/* TX packets aborted w/excessive collisions */
+    u32 tx_underrun;	/* TX packets aborted due to TX FIFO underrun
 				 * or TRD FIFO underrun */
-	u32 tx_rd_eop;		/* reads beyond the EOP into the next frame
+    u32 tx_rd_eop;		/* reads beyond the EOP into the next frame
 				 * when TRD was not written timely */
-	u32 tx_len_err;		/* TX packets where length != actual size */
-	u32 tx_trunc;		/* TX packets truncated due to size > MTU */
-	u32 tx_bcast_byte;	/* broadcast bytes transmitted, excluding FCS */
-	u32 tx_mcast_byte;	/* multicast bytes transmitted, excluding FCS */
-	u32 smb_updated;	/* 1: SMB Updated. This is used by software to
+    u32 tx_len_err;		/* TX packets where length != actual size */
+    u32 tx_trunc;		/* TX packets truncated due to size > MTU */
+    u32 tx_bcast_byte;	/* broadcast bytes transmitted, excluding FCS */
+    u32 tx_mcast_byte;	/* multicast bytes transmitted, excluding FCS */
+    u32 smb_updated;	/* 1: SMB Updated. This is used by software to
 				 * indicate the statistics update. Software
 				 * should clear this bit after retrieving the
 				 * statistics information. */
@@ -378,32 +378,32 @@ struct stats_msg_block {
 
 /* Coalescing Message Block */
 struct coals_msg_block {
-	u32 int_stats;		/* interrupt status */
-	u16 rrd_prod_idx;	/* TRD Producer Index. */
-	u16 rfd_cons_idx;	/* RFD Consumer Index. */
-	u16 update;		/* Selene sets this bit every time it DMAs the
+    u32 int_stats;		/* interrupt status */
+    u16 rrd_prod_idx;	/* TRD Producer Index. */
+    u16 rfd_cons_idx;	/* RFD Consumer Index. */
+    u16 update;		/* Selene sets this bit every time it DMAs the
 				 * CMB to host memory. Software should clear
 				 * this bit when CMB info is processed. */
-	u16 tpd_cons_idx;	/* TPD Consumer Index. */
+    u16 tpd_cons_idx;	/* TPD Consumer Index. */
 };
 
 /* RRD descriptor */
 struct rx_return_desc {
-	u8 num_buf;	/* Number of RFD buffers used by the received packet */
-	u8 resved;
-	u16 buf_indx;	/* RFD Index of the first buffer */
-	union {
-		u32 valid;
-		struct {
-			u16 rx_chksum;
-			u16 pkt_size;
-		} xsum_sz;
-	} xsz;
+    u8 num_buf;	/* Number of RFD buffers used by the received packet */
+    u8 resved;
+    u16 buf_indx;	/* RFD Index of the first buffer */
+    union {
+        u32 valid;
+        struct {
+            u16 rx_chksum;
+            u16 pkt_size;
+        } xsum_sz;
+    } xsz;
 
-	u16 pkt_flg;	/* Packet flags */
-	u16 err_flg;	/* Error flags */
-	u16 resved2;
-	u16 vlan_tag;	/* VLAN TAG */
+    u16 pkt_flg;	/* Packet flags */
+    u16 err_flg;	/* Error flags */
+    u16 resved2;
+    u16 vlan_tag;	/* VLAN TAG */
 };
 
 #define PACKET_FLAG_ETH_TYPE	0x0080
@@ -429,11 +429,11 @@ struct rx_return_desc {
 
 /* RFD descriptor */
 struct rx_free_desc {
-	__le64 buffer_addr;	/* Address of the descriptor's data buffer */
-	__le16 buf_len;		/* Size of the receive buffer in host memory */
-	u16 coalese;		/* Update consumer index to host after the
+    __le64 buffer_addr;	/* Address of the descriptor's data buffer */
+    __le16 buf_len;		/* Size of the receive buffer in host memory */
+    u16 coalese;		/* Update consumer index to host after the
 				 * reception of this frame */
-	/* __packed is required */
+    /* __packed is required */
 } __packed;
 
 /*
@@ -542,30 +542,30 @@ struct rx_free_desc {
 #define TPD_CCSUMOFFSET_SHIFT	24
 
 struct tx_packet_desc {
-	__le64 buffer_addr;
-	__le32 word2;
-	__le32 word3;
+    __le64 buffer_addr;
+    __le32 word2;
+    __le32 word3;
 };
 
 /* DMA Order Settings */
 enum atl1_dma_order {
-	atl1_dma_ord_in = 1,
-	atl1_dma_ord_enh = 2,
-	atl1_dma_ord_out = 4
+    atl1_dma_ord_in = 1,
+    atl1_dma_ord_enh = 2,
+    atl1_dma_ord_out = 4
 };
 
 enum atl1_dma_rcb {
-	atl1_rcb_64 = 0,
-	atl1_rcb_128 = 1
+    atl1_rcb_64 = 0,
+    atl1_rcb_128 = 1
 };
 
 enum atl1_dma_req_block {
-	atl1_dma_req_128 = 0,
-	atl1_dma_req_256 = 1,
-	atl1_dma_req_512 = 2,
-	atl1_dma_req_1024 = 3,
-	atl1_dma_req_2048 = 4,
-	atl1_dma_req_4096 = 5
+    atl1_dma_req_128 = 0,
+    atl1_dma_req_256 = 1,
+    atl1_dma_req_512 = 2,
+    atl1_dma_req_1024 = 3,
+    atl1_dma_req_2048 = 4,
+    atl1_dma_req_4096 = 5
 };
 
 #define ATL1_MAX_INTR		3
@@ -590,9 +590,9 @@ enum atl1_dma_req_block {
  * message blocks (cmb, smb) described below
  */
 struct atl1_ring_header {
-	void *desc;		/* virtual address */
-	dma_addr_t dma;		/* physical address*/
-	unsigned int size;	/* length in bytes */
+    void *desc;		/* virtual address */
+    dma_addr_t dma;		/* physical address*/
+    unsigned int size;	/* length in bytes */
 };
 
 /*
@@ -600,192 +600,192 @@ struct atl1_ring_header {
  * so a DMA handle can be stored along with the skb
  */
 struct atl1_buffer {
-	struct sk_buff *skb;	/* socket buffer */
-	u16 length;		/* rx buffer length */
-	u16 alloced;		/* 1 if skb allocated */
-	dma_addr_t dma;
+    struct sk_buff *skb;	/* socket buffer */
+    u16 length;		/* rx buffer length */
+    u16 alloced;		/* 1 if skb allocated */
+    dma_addr_t dma;
 };
 
 /* transmit packet descriptor (tpd) ring */
 struct atl1_tpd_ring {
-	void *desc;		/* descriptor ring virtual address */
-	dma_addr_t dma;		/* descriptor ring physical address */
-	u16 size;		/* descriptor ring length in bytes */
-	u16 count;		/* number of descriptors in the ring */
-	u16 hw_idx;		/* hardware index */
-	atomic_t next_to_clean;
-	atomic_t next_to_use;
-	struct atl1_buffer *buffer_info;
+    void *desc;		/* descriptor ring virtual address */
+    dma_addr_t dma;		/* descriptor ring physical address */
+    u16 size;		/* descriptor ring length in bytes */
+    u16 count;		/* number of descriptors in the ring */
+    u16 hw_idx;		/* hardware index */
+    atomic_t next_to_clean;
+    atomic_t next_to_use;
+    struct atl1_buffer *buffer_info;
 };
 
 /* receive free descriptor (rfd) ring */
 struct atl1_rfd_ring {
-	void *desc;		/* descriptor ring virtual address */
-	dma_addr_t dma;		/* descriptor ring physical address */
-	u16 size;		/* descriptor ring length in bytes */
-	u16 count;		/* number of descriptors in the ring */
-	atomic_t next_to_use;
-	u16 next_to_clean;
-	struct atl1_buffer *buffer_info;
+    void *desc;		/* descriptor ring virtual address */
+    dma_addr_t dma;		/* descriptor ring physical address */
+    u16 size;		/* descriptor ring length in bytes */
+    u16 count;		/* number of descriptors in the ring */
+    atomic_t next_to_use;
+    u16 next_to_clean;
+    struct atl1_buffer *buffer_info;
 };
 
 /* receive return descriptor (rrd) ring */
 struct atl1_rrd_ring {
-	void *desc;		/* descriptor ring virtual address */
-	dma_addr_t dma;		/* descriptor ring physical address */
-	unsigned int size;	/* descriptor ring length in bytes */
-	u16 count;		/* number of descriptors in the ring */
-	u16 next_to_use;
-	atomic_t next_to_clean;
+    void *desc;		/* descriptor ring virtual address */
+    dma_addr_t dma;		/* descriptor ring physical address */
+    unsigned int size;	/* descriptor ring length in bytes */
+    u16 count;		/* number of descriptors in the ring */
+    u16 next_to_use;
+    atomic_t next_to_clean;
 };
 
 /* coalescing message block (cmb) */
 struct atl1_cmb {
-	struct coals_msg_block *cmb;
-	dma_addr_t dma;
+    struct coals_msg_block *cmb;
+    dma_addr_t dma;
 };
 
 /* statistics message block (smb) */
 struct atl1_smb {
-	struct stats_msg_block *smb;
-	dma_addr_t dma;
+    struct stats_msg_block *smb;
+    dma_addr_t dma;
 };
 
 /* Statistics counters */
 struct atl1_sft_stats {
-	u64 rx_packets;
-	u64 tx_packets;
-	u64 rx_bytes;
-	u64 tx_bytes;
-	u64 multicast;
-	u64 collisions;
-	u64 rx_errors;
-	u64 rx_length_errors;
-	u64 rx_crc_errors;
-	u64 rx_frame_errors;
-	u64 rx_fifo_errors;
-	u64 rx_missed_errors;
-	u64 tx_errors;
-	u64 tx_fifo_errors;
-	u64 tx_aborted_errors;
-	u64 tx_window_errors;
-	u64 tx_carrier_errors;
-	u64 tx_pause;		/* TX pause frames */
-	u64 excecol;		/* TX packets w/ excessive collisions */
-	u64 deffer;		/* TX packets deferred */
-	u64 scc;		/* packets TX after a single collision */
-	u64 mcc;		/* packets TX after multiple collisions */
-	u64 latecol;		/* TX packets w/ late collisions */
-	u64 tx_underun;		/* TX packets aborted due to TX FIFO underrun
+    u64 rx_packets;
+    u64 tx_packets;
+    u64 rx_bytes;
+    u64 tx_bytes;
+    u64 multicast;
+    u64 collisions;
+    u64 rx_errors;
+    u64 rx_length_errors;
+    u64 rx_crc_errors;
+    u64 rx_frame_errors;
+    u64 rx_fifo_errors;
+    u64 rx_missed_errors;
+    u64 tx_errors;
+    u64 tx_fifo_errors;
+    u64 tx_aborted_errors;
+    u64 tx_window_errors;
+    u64 tx_carrier_errors;
+    u64 tx_pause;		/* TX pause frames */
+    u64 excecol;		/* TX packets w/ excessive collisions */
+    u64 deffer;		/* TX packets deferred */
+    u64 scc;		/* packets TX after a single collision */
+    u64 mcc;		/* packets TX after multiple collisions */
+    u64 latecol;		/* TX packets w/ late collisions */
+    u64 tx_underun;		/* TX packets aborted due to TX FIFO underrun
 				 * or TRD FIFO underrun */
-	u64 tx_trunc;		/* TX packets truncated due to size > MTU */
-	u64 rx_pause;		/* num Pause packets received. */
-	u64 rx_rrd_ov;
-	u64 rx_trunc;
+    u64 tx_trunc;		/* TX packets truncated due to size > MTU */
+    u64 rx_pause;		/* num Pause packets received. */
+    u64 rx_rrd_ov;
+    u64 rx_trunc;
 };
 
 /* hardware structure */
 struct atl1_hw {
-	u8 __iomem *hw_addr;
-	struct atl1_adapter *back;
-	enum atl1_dma_order dma_ord;
-	enum atl1_dma_rcb rcb_value;
-	enum atl1_dma_req_block dmar_block;
-	enum atl1_dma_req_block dmaw_block;
-	u8 preamble_len;
-	u8 max_retry;
-	u8 jam_ipg;		/* IPG to start JAM for collision based flow
+    u8 __iomem *hw_addr;
+    struct atl1_adapter *back;
+    enum atl1_dma_order dma_ord;
+    enum atl1_dma_rcb rcb_value;
+    enum atl1_dma_req_block dmar_block;
+    enum atl1_dma_req_block dmaw_block;
+    u8 preamble_len;
+    u8 max_retry;
+    u8 jam_ipg;		/* IPG to start JAM for collision based flow
 				 * control in half-duplex mode. In units of
 				 * 8-bit time */
-	u8 ipgt;		/* Desired back to back inter-packet gap.
+    u8 ipgt;		/* Desired back to back inter-packet gap.
 				 * The default is 96-bit time */
-	u8 min_ifg;		/* Minimum number of IFG to enforce in between
+    u8 min_ifg;		/* Minimum number of IFG to enforce in between
 				 * receive frames. Frame gap below such IFP
 				 * is dropped */
-	u8 ipgr1;		/* 64bit Carrier-Sense window */
-	u8 ipgr2;		/* 96-bit IPG window */
-	u8 tpd_burst;		/* Number of TPD to prefetch in cache-aligned
+    u8 ipgr1;		/* 64bit Carrier-Sense window */
+    u8 ipgr2;		/* 96-bit IPG window */
+    u8 tpd_burst;		/* Number of TPD to prefetch in cache-aligned
 				 * burst. Each TPD is 16 bytes long */
-	u8 rfd_burst;		/* Number of RFD to prefetch in cache-aligned
+    u8 rfd_burst;		/* Number of RFD to prefetch in cache-aligned
 				 * burst. Each RFD is 12 bytes long */
-	u8 rfd_fetch_gap;
-	u8 rrd_burst;		/* Threshold number of RRDs that can be retired
+    u8 rfd_fetch_gap;
+    u8 rrd_burst;		/* Threshold number of RRDs that can be retired
 				 * in a burst. Each RRD is 16 bytes long */
-	u8 tpd_fetch_th;
-	u8 tpd_fetch_gap;
-	u16 tx_jumbo_task_th;
-	u16 txf_burst;		/* Number of data bytes to read in a cache-
+    u8 tpd_fetch_th;
+    u8 tpd_fetch_gap;
+    u16 tx_jumbo_task_th;
+    u16 txf_burst;		/* Number of data bytes to read in a cache-
 				 * aligned burst. Each SRAM entry is 8 bytes */
-	u16 rx_jumbo_th;	/* Jumbo packet size for non-VLAN packet. VLAN
+    u16 rx_jumbo_th;	/* Jumbo packet size for non-VLAN packet. VLAN
 				 * packets should add 4 bytes */
-	u16 rx_jumbo_lkah;
-	u16 rrd_ret_timer;	/* RRD retirement timer. Decrement by 1 after
+    u16 rx_jumbo_lkah;
+    u16 rrd_ret_timer;	/* RRD retirement timer. Decrement by 1 after
 				 * every 512ns passes. */
-	u16 lcol;		/* Collision Window */
+    u16 lcol;		/* Collision Window */
 
-	u16 cmb_tpd;
-	u16 cmb_rrd;
-	u16 cmb_rx_timer;
-	u16 cmb_tx_timer;
-	u32 smb_timer;
-	u16 media_type;
-	u16 autoneg_advertised;
+    u16 cmb_tpd;
+    u16 cmb_rrd;
+    u16 cmb_rx_timer;
+    u16 cmb_tx_timer;
+    u32 smb_timer;
+    u16 media_type;
+    u16 autoneg_advertised;
 
-	u16 mii_autoneg_adv_reg;
-	u16 mii_1000t_ctrl_reg;
+    u16 mii_autoneg_adv_reg;
+    u16 mii_1000t_ctrl_reg;
 
-	u32 max_frame_size;
-	u32 min_frame_size;
+    u32 max_frame_size;
+    u32 min_frame_size;
 
-	u16 dev_rev;
+    u16 dev_rev;
 
-	/* spi flash */
-	u8 flash_vendor;
+    /* spi flash */
+    u8 flash_vendor;
 
-	u8 mac_addr[ETH_ALEN];
-	u8 perm_mac_addr[ETH_ALEN];
+    u8 mac_addr[ETH_ALEN];
+    u8 perm_mac_addr[ETH_ALEN];
 
-	bool phy_configured;
+    bool phy_configured;
 };
 
 struct atl1_adapter {
-	struct net_device *netdev;
-	struct pci_dev *pdev;
+    struct net_device *netdev;
+    struct pci_dev *pdev;
 
-	struct atl1_sft_stats soft_stats;
-	u32 rx_buffer_len;
-	u32 wol;
-	u16 link_speed;
-	u16 link_duplex;
-	spinlock_t lock;
-	struct work_struct reset_dev_task;
-	struct work_struct link_chg_task;
+    struct atl1_sft_stats soft_stats;
+    u32 rx_buffer_len;
+    u32 wol;
+    u16 link_speed;
+    u16 link_duplex;
+    spinlock_t lock;
+    struct work_struct reset_dev_task;
+    struct work_struct link_chg_task;
 
-	struct timer_list phy_config_timer;
-	bool phy_timer_pending;
+    struct timer_list phy_config_timer;
+    bool phy_timer_pending;
 
-	/* all descriptor rings' memory */
-	struct atl1_ring_header ring_header;
+    /* all descriptor rings' memory */
+    struct atl1_ring_header ring_header;
 
-	/* TX */
-	struct atl1_tpd_ring tpd_ring;
-	spinlock_t mb_lock;
+    /* TX */
+    struct atl1_tpd_ring tpd_ring;
+    spinlock_t mb_lock;
 
-	/* RX */
-	struct atl1_rfd_ring rfd_ring;
-	struct atl1_rrd_ring rrd_ring;
-	u64 hw_csum_err;
-	u64 hw_csum_good;
-	u32 msg_enable;
-	u16 imt;		/* interrupt moderator timer (2us resolution) */
-	u16 ict;		/* interrupt clear timer (2us resolution */
-	struct mii_if_info mii;	/* MII interface info */
+    /* RX */
+    struct atl1_rfd_ring rfd_ring;
+    struct atl1_rrd_ring rrd_ring;
+    u64 hw_csum_err;
+    u64 hw_csum_good;
+    u32 msg_enable;
+    u16 imt;		/* interrupt moderator timer (2us resolution) */
+    u16 ict;		/* interrupt clear timer (2us resolution */
+    struct mii_if_info mii;	/* MII interface info */
 
-	u32 bd_number;		/* board number */
-	bool pci_using_64;
-	struct atl1_hw hw;
-	struct atl1_smb smb;
-	struct atl1_cmb cmb;
+    u32 bd_number;		/* board number */
+    bool pci_using_64;
+    struct atl1_hw hw;
+    struct atl1_smb smb;
+    struct atl1_cmb cmb;
 };
 
 #endif /* ATL1_H */

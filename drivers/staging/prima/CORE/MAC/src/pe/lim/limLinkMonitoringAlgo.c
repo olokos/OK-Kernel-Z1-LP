@@ -75,8 +75,7 @@
  */
 
 void
-limSendKeepAliveToPeer(tpAniSirGlobal pMac)
-{
+limSendKeepAliveToPeer(tpAniSirGlobal pMac) {
 
 } /*** limSendKeepAliveToPeer() ***/
 
@@ -92,40 +91,34 @@ limSendKeepAliveToPeer(tpAniSirGlobal pMac)
 \return  none
   -----------------------------------------------------------*/
 void
-limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
-{
+limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg) {
     tpDeleteStaContext  pMsg = (tpDeleteStaContext)limMsg->bodyptr;
     tpDphHashNode       pStaDs;
     tpPESession psessionEntry ;
     tANI_U8     sessionId;
 
-    if(NULL == pMsg)
-    {
+    if(NULL == pMsg) {
         PELOGE(limLog(pMac, LOGE,FL("Invalid body pointer in message"));)
         return;
     }
-    if((psessionEntry = peFindSessionByBssid(pMac,pMsg->bssId,&sessionId))== NULL)
-    {
+    if((psessionEntry = peFindSessionByBssid(pMac,pMsg->bssId,&sessionId))== NULL) {
         PELOGE(limLog(pMac, LOGE,FL("session does not exist for given BSSId"));)
         vos_mem_free(pMsg);
         return;
     }
 
-    switch(pMsg->reasonCode)
-    {
+    switch(pMsg->reasonCode) {
     case HAL_DEL_STA_REASON_CODE_KEEP_ALIVE:
     case HAL_DEL_STA_REASON_CODE_TIM_BASED:
         PELOGE(limLog(pMac, LOGE, FL(" Deleting station: staId = %d, reasonCode = %d"), pMsg->staId, pMsg->reasonCode);)
-        if (eLIM_STA_IN_IBSS_ROLE == psessionEntry->limSystemRole)
-        {
+        if (eLIM_STA_IN_IBSS_ROLE == psessionEntry->limSystemRole) {
             vos_mem_free(pMsg);
             return;
         }
 
         pStaDs = dphLookupAssocId(pMac, pMsg->staId, &pMsg->assocId, &psessionEntry->dph.dphHashTable);
 
-        if (!pStaDs)
-        {
+        if (!pStaDs) {
             PELOGE(limLog(pMac, LOGE, FL("Skip STA deletion (invalid STA) limSystemRole=%d"),psessionEntry->limSystemRole);)
             vos_mem_free(pMsg);
             return;
@@ -134,16 +127,14 @@ limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
         /* check and see if same staId. This is to avoid the scenario
          * where we're trying to delete a staId we just added.
          */
-        if (pStaDs->staIndex != pMsg->staId)
-        {
+        if (pStaDs->staIndex != pMsg->staId) {
             PELOGE(limLog(pMac, LOGE, FL("staid mismatch: %d vs %d "), pStaDs->staIndex, pMsg->staId);)
             vos_mem_free(pMsg);
             return;
         }
 
         if((eLIM_BT_AMP_AP_ROLE == psessionEntry->limSystemRole) ||
-                (eLIM_AP_ROLE == psessionEntry->limSystemRole))
-        {
+                (eLIM_AP_ROLE == psessionEntry->limSystemRole)) {
             PELOG1(limLog(pMac, LOG1, FL("SAP:lim Delete Station Context (staId: %d, assocId: %d) "),
                           pMsg->staId, pMsg->assocId);)
             /*
@@ -158,30 +149,23 @@ limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
                      (pStaDs->mlmStaContext.mlmState !=
                       eLIM_MLM_WT_ASSOC_CNF_STATE) &&
                      (pStaDs->mlmStaContext.mlmState !=
-                      eLIM_MLM_ASSOCIATED_STATE))))
-            {
+                      eLIM_MLM_ASSOCIATED_STATE)))) {
                 PELOGE(limLog(pMac, LOGE, FL("SAP:received Del STA context in some transit state(staId: %d, assocId: %d)"),
                               pMsg->staId, pMsg->assocId);)
                 vos_mem_free(pMsg);
                 return;
-            }
-            else
+            } else
                 limTriggerSTAdeletion(pMac, pStaDs, psessionEntry);
-        }
-        else
-        {
+        } else {
 #ifdef FEATURE_WLAN_TDLS
             if(eLIM_STA_ROLE == psessionEntry->limSystemRole &&
-                    STA_ENTRY_TDLS_PEER == pStaDs->staType)
-            {
+                    STA_ENTRY_TDLS_PEER == pStaDs->staType) {
                 //TeardownLink with PEER
                 //Reason code HAL_DEL_STA_REASON_CODE_KEEP_ALIVE means
                 //eSIR_MAC_TDLS_TEARDOWN_PEER_UNREACHABLE
                 limSendSmeTDLSDelStaInd(pMac, pStaDs, psessionEntry,
                                         /*pMsg->reasonCode*/ eSIR_MAC_TDLS_TEARDOWN_PEER_UNREACHABLE);
-            }
-            else
-            {
+            } else {
 #endif
                 //TearDownLink with AP
                 tLimMlmDeauthInd  mlmDeauthInd;
@@ -193,8 +177,7 @@ limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
                          (pStaDs->mlmStaContext.mlmState !=
                           eLIM_MLM_WT_ASSOC_CNF_STATE) &&
                          (pStaDs->mlmStaContext.mlmState !=
-                          eLIM_MLM_ASSOCIATED_STATE))))
-                {
+                          eLIM_MLM_ASSOCIATED_STATE)))) {
                     /**
                      * Received WDA_DELETE_STA_CONTEXT_IND for STA that does not
                      * have context or in some transit state.
@@ -207,8 +190,7 @@ limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
                     return;
                 }
 
-                if( pMac->roam.configParam.sendDeauthBeforeCon )
-                {
+                if( pMac->roam.configParam.sendDeauthBeforeCon ) {
                     tANI_U8 apCount = pMac->lim.gLimHeartBeatApMacIndex;
 
                     if(pMac->lim.gLimHeartBeatApMacIndex)
@@ -288,15 +270,13 @@ limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
  * @return None
  */
 void
-limTriggerSTAdeletion(tpAniSirGlobal pMac, tpDphHashNode pStaDs, tpPESession psessionEntry)
-{
+limTriggerSTAdeletion(tpAniSirGlobal pMac, tpDphHashNode pStaDs, tpPESession psessionEntry) {
     tSirSmeDeauthReq    *pSmeDeauthReq;
     tANI_U8             *pBuf;
     tANI_U8             *pLen;
     tANI_U16            msgLength = 0;
 
-    if (! pStaDs)
-    {
+    if (! pStaDs) {
         PELOGW(limLog(pMac, LOGW, FL("Skip STA deletion (invalid STA)"));)
         return;
     }
@@ -307,8 +287,7 @@ limTriggerSTAdeletion(tpAniSirGlobal pMac, tpDphHashNode pStaDs, tpPESession pse
      */
 
     pSmeDeauthReq = vos_mem_malloc(sizeof(tSirSmeDeauthReq));
-    if (NULL == pSmeDeauthReq)
-    {
+    if (NULL == pSmeDeauthReq) {
         limLog(pMac, LOGP, FL("AllocateMemory failed for eWNI_SME_DEAUTH_REQ "));
         return;
     }
@@ -387,15 +366,13 @@ limTriggerSTAdeletion(tpAniSirGlobal pMac, tpDphHashNode pStaDs, tpPESession pse
  */
 
 void
-limTearDownLinkWithAp(tpAniSirGlobal pMac, tANI_U8 sessionId, tSirMacReasonCodes reasonCode)
-{
+limTearDownLinkWithAp(tpAniSirGlobal pMac, tANI_U8 sessionId, tSirMacReasonCodes reasonCode) {
     tpDphHashNode pStaDs = NULL;
 
     //tear down the following sessionEntry
     tpPESession psessionEntry;
 
-    if((psessionEntry = peFindSessionBySessionId(pMac, sessionId))== NULL)
-    {
+    if((psessionEntry = peFindSessionBySessionId(pMac, sessionId))== NULL) {
         limLog(pMac, LOGP,FL("Session Does not exist for given sessionID"));
         return;
     }
@@ -418,8 +395,7 @@ limTearDownLinkWithAp(tpAniSirGlobal pMac, tANI_U8 sessionId, tSirMacReasonCodes
     pStaDs = dphGetHashEntry(pMac, DPH_STA_HASH_INDEX_PEER, &psessionEntry->dph.dphHashTable);
 
 
-    if (pStaDs != NULL)
-    {
+    if (pStaDs != NULL) {
         tLimMlmDeauthInd  mlmDeauthInd;
 
 #ifdef FEATURE_WLAN_TDLS
@@ -440,8 +416,7 @@ limTearDownLinkWithAp(tpAniSirGlobal pMac, tANI_U8 sessionId, tSirMacReasonCodes
          * after HB failure.
          */
         if(pMac->roam.configParam.sendDeauthBeforeCon &&
-                eSIR_BEACON_MISSED == reasonCode)
-        {
+                eSIR_BEACON_MISSED == reasonCode) {
             int apCount = pMac->lim.gLimHeartBeatApMacIndex;
 
             if(pMac->lim.gLimHeartBeatApMacIndex)
@@ -484,8 +459,7 @@ limTearDownLinkWithAp(tpAniSirGlobal pMac, tANI_U8 sessionId, tSirMacReasonCodes
  * @return None
  */
 
-void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry)
-{
+void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry) {
 
 #ifdef FEATURE_WLAN_DIAG_SUPPORT_LIM //FEATURE_WLAN_DIAG_SUPPORT
     vos_log_beacon_update_pkt_type *log_ptr = NULL;
@@ -514,8 +488,7 @@ void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry)
             (psessionEntry->limSystemRole == eLIM_BT_AMP_STA_ROLE))&&
             (psessionEntry->limMlmState == eLIM_MLM_LINK_ESTABLISHED_STATE)&&
             (psessionEntry->limSmeState != eLIM_SME_WT_DISASSOC_STATE) &&
-            (psessionEntry->limSmeState != eLIM_SME_WT_DEAUTH_STATE))
-    {
+            (psessionEntry->limSmeState != eLIM_SME_WT_DEAUTH_STATE)) {
         if (!pMac->sys.gSysEnableLinkMonitorMode)
             return;
 
@@ -529,8 +502,7 @@ void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry)
          * Check if connected on the DFS channel, if not connected on
          * DFS channel then only send the probe request otherwise tear down the link
          */
-        if(!limIsconnectedOnDFSChannel(psessionEntry->currentOperChannel))
-        {
+        if(!limIsconnectedOnDFSChannel(psessionEntry->currentOperChannel)) {
             /*** Detected continuous Beacon Misses ***/
             psessionEntry->LimHBFailureStatus= eANI_BOOLEAN_TRUE;
             /*Reset the HB packet count before sending probe*/
@@ -545,13 +517,10 @@ void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry)
             limSendProbeReqMgmtFrame(pMac, &psessionEntry->ssId, psessionEntry->bssId,
                                      psessionEntry->currentOperChannel,psessionEntry->selfMacAddr,
                                      psessionEntry->dot11mode, 0, NULL);
-        }
-        else
-        {
+        } else {
             PELOGW(limLog(pMac, LOGW,
                           FL("Heart Beat missed from AP on DFS chanel moving to passive"));)
-            if (psessionEntry->currentOperChannel < SIR_MAX_24G_5G_CHANNEL_RANGE)
-            {
+            if (psessionEntry->currentOperChannel < SIR_MAX_24G_5G_CHANNEL_RANGE) {
                 limCovertChannelScanType(pMac, psessionEntry->currentOperChannel, false);
                 pMac->lim.dfschannelList.timeStamp[psessionEntry->currentOperChannel] = 0;
             }
@@ -559,9 +528,7 @@ void limHandleHeartBeatFailure(tpAniSirGlobal pMac,tpPESession psessionEntry)
             * tear down the link directly */
             limTearDownLinkWithAp(pMac, psessionEntry->peSessionId, eSIR_BEACON_MISSED);
         }
-    }
-    else
-    {
+    } else {
         /**
              * Heartbeat timer may have timed out
             * while we're doing background scanning/learning

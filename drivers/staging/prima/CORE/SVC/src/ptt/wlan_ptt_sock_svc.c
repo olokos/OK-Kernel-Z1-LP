@@ -50,16 +50,14 @@
 // Global variables
 static struct hdd_context_s *pAdapterHandle;
 //Utility function to perform endianess swap
-static void ptt_sock_swap_32(void *pBuffer, unsigned int len)
-{
+static void ptt_sock_swap_32(void *pBuffer, unsigned int len) {
     v_U32_t *pBuf32, data;
     v_U8_t *pBuf8;
     unsigned int i;
     len &= ~(sizeof(v_U32_t)-1);
     pBuf32 = (v_U32_t *) pBuffer;
     pBuf8 = (v_U8_t *) pBuffer;
-    for (i = 0; i < len; i += 4, ++pBuf32, pBuf8 += 4)
-    {
+    for (i = 0; i < len; i += 4, ++pBuf32, pBuf8 += 4) {
         data = *pBuf32;
         pBuf8[0] = (v_U8_t) ((data >> 24) & 0xff);
         pBuf8[1] = (v_U8_t) ((data >> 16) & 0xff);
@@ -69,11 +67,9 @@ static void ptt_sock_swap_32(void *pBuffer, unsigned int len)
 }
 #ifdef PTT_SOCK_DEBUG_VERBOSE
 //Utility function to perform a hex dump
-static void ptt_sock_dump_buf(const unsigned char * pbuf, int cnt)
-{
+static void ptt_sock_dump_buf(const unsigned char * pbuf, int cnt) {
     int i;
-    for (i = 0; i < cnt ; i++)
-    {
+    for (i = 0; i < cnt ; i++) {
         if ((i%16)==0)
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,"\n%p:", pbuf);
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO," %02X", *pbuf);
@@ -83,8 +79,7 @@ static void ptt_sock_dump_buf(const unsigned char * pbuf, int cnt)
 }
 #endif
 //Utility function to send a netlink message to an application in user space
-int ptt_sock_send_msg_to_app(tAniHdr *wmsg, int radio, int src_mod, int pid, int flag)
-{
+int ptt_sock_send_msg_to_app(tAniHdr *wmsg, int radio, int src_mod, int pid, int flag) {
     int err = -1;
     int payload_len;
     int tot_msg_len;
@@ -93,23 +88,20 @@ int ptt_sock_send_msg_to_app(tAniHdr *wmsg, int radio, int src_mod, int pid, int
     struct nlmsghdr *nlh;
     int wmsg_length = be16_to_cpu(wmsg->length);
     static int nlmsg_seq;
-    if (radio < 0 || radio > ANI_MAX_RADIOS)
-    {
+    if (radio < 0 || radio > ANI_MAX_RADIOS) {
         PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: invalid radio id [%d]\n",
                   __func__, radio);
         return -EINVAL;
     }
     payload_len = wmsg_length + 4;  // 4 extra bytes for the radio idx
     tot_msg_len = NLMSG_SPACE(payload_len);
-    if ((skb = dev_alloc_skb(tot_msg_len)) == NULL)
-    {
+    if ((skb = dev_alloc_skb(tot_msg_len)) == NULL) {
         PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: dev_alloc_skb() failed for msg size[%d]\n",
                   __func__, tot_msg_len);
         return -ENOMEM;
     }
     nlh = nlmsg_put(skb, pid, nlmsg_seq++, src_mod, payload_len, NLM_F_REQUEST);
-    if (NULL == nlh)
-    {
+    if (NULL == nlh) {
         PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: nlmsg_put() failed for msg size[%d]\n",
                   __func__, tot_msg_len);
         kfree_skb(skb);
@@ -130,8 +122,7 @@ int ptt_sock_send_msg_to_app(tAniHdr *wmsg, int radio, int src_mod, int pid, int
  * Process tregisteration request and send registration response messages
  * to the PTT Socket App in user space
  */
-static void ptt_sock_proc_reg_req(tAniHdr *wmsg, int radio)
-{
+static void ptt_sock_proc_reg_req(tAniHdr *wmsg, int radio) {
     tAniNlAppRegReq *reg_req;
     tAniNlAppRegRsp rspmsg;
     reg_req = (tAniNlAppRegReq *)(wmsg + 1);
@@ -150,8 +141,7 @@ static void ptt_sock_proc_reg_req(tAniHdr *wmsg, int radio)
     rspmsg.wniHdr.type = cpu_to_be16(ANI_MSG_APP_REG_RSP);
     rspmsg.wniHdr.length = cpu_to_be16(sizeof(rspmsg));
     if (ptt_sock_send_msg_to_app((tAniHdr *)&rspmsg.wniHdr, radio,
-                                 ANI_NL_MSG_PUMAC, reg_req->pid, MSG_DONTWAIT) < 0)
-    {
+                                 ANI_NL_MSG_PUMAC, reg_req->pid, MSG_DONTWAIT) < 0) {
         PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: Error sending ANI_MSG_APP_REG_RSP to pid[%d]\n",
                   __func__, reg_req->pid);
     }
@@ -159,11 +149,9 @@ static void ptt_sock_proc_reg_req(tAniHdr *wmsg, int radio)
 /*
  * Process all the messages from the PTT Socket App in user space
  */
-static void ptt_proc_pumac_msg(struct sk_buff * skb, tAniHdr *wmsg, int radio)
-{
+static void ptt_proc_pumac_msg(struct sk_buff * skb, tAniHdr *wmsg, int radio) {
     u16 ani_msg_type = be16_to_cpu(wmsg->type);
-    switch(ani_msg_type)
-    {
+    switch(ani_msg_type) {
     case ANI_MSG_APP_REG_REQ:
         PTT_TRACE(VOS_TRACE_LEVEL_INFO, "%s: Received ANI_MSG_APP_REG_REQ [0x%X]\n",
                   __func__, ani_msg_type);
@@ -178,8 +166,7 @@ static void ptt_proc_pumac_msg(struct sk_buff * skb, tAniHdr *wmsg, int radio)
 /*
  * Process all the messages from the Quarky Client
  */
-static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
-{
+static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio) {
     u16 ani_msg_type = be16_to_cpu(wmsg->type);
     v_U32_t reg_addr;
     v_U32_t reg_val;
@@ -187,20 +174,15 @@ static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
     v_U8_t* buf;
     unsigned int arg1, arg2, arg3, arg4, cmd;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
-    if (radio < 0 || radio > ANI_MAX_RADIOS)
-    {
+    if (radio < 0 || radio > ANI_MAX_RADIOS) {
         PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: ANI Msg [0x%X] invalid radio id [%d]\n",
                   __func__, ani_msg_type, radio);
         return;
     }
-    if(ani_msg_type == ANI_MSG_APP_REG_REQ)
-    {
+    if(ani_msg_type == ANI_MSG_APP_REG_REQ) {
         ptt_sock_proc_reg_req(wmsg, radio);
-    }
-    else
-    {
-        switch (ani_msg_type)
-        {
+    } else {
+        switch (ani_msg_type) {
         case PTT_MSG_READ_REGISTER:
             reg_addr = *(v_U32_t*) ((char*)wmsg + 8);
             PTT_TRACE(VOS_TRACE_LEVEL_INFO, "%s: PTT_MSG_READ_REGISTER [0x%08X]\n",
@@ -218,8 +200,7 @@ static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
             PTT_TRACE(VOS_TRACE_LEVEL_INFO, "%s: PTT_MSG_WRITE_REGISTER Addr [0x%08X] value [0x%08X]\n",
                       __func__, reg_addr, reg_val);
             vosStatus = sme_DbgWriteRegister(pAdapterHandle->hHal, reg_addr, reg_val);
-            if(vosStatus != VOS_STATUS_SUCCESS)
-            {
+            if(vosStatus != VOS_STATUS_SUCCESS) {
                 PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: Write Register [0x%08X] value [0x%08X] failed!!\n",
                           __func__, reg_addr, reg_val);
             }
@@ -233,8 +214,7 @@ static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
                       __func__, reg_addr, len_payload);
             buf = (v_U8_t*)wmsg + 16;
             vosStatus = sme_DbgReadMemory(pAdapterHandle->hHal, reg_addr, buf, len_payload);
-            if(vosStatus != VOS_STATUS_SUCCESS)
-            {
+            if(vosStatus != VOS_STATUS_SUCCESS) {
                 PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: Memory read failed for [0x%08X]!!\n",
                           __func__, reg_addr);
             }
@@ -250,8 +230,7 @@ static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
             buf = (v_U8_t*)wmsg + 16;
             ptt_sock_swap_32(buf, len_payload);
             vosStatus = sme_DbgWriteMemory(pAdapterHandle->hHal, reg_addr, buf, len_payload);
-            if(vosStatus != VOS_STATUS_SUCCESS)
-            {
+            if(vosStatus != VOS_STATUS_SUCCESS) {
                 PTT_TRACE(VOS_TRACE_LEVEL_ERROR, "%s: Memory write failed for addr [0x%08X]!!\n",
                           __func__, reg_addr);
             }
@@ -282,16 +261,14 @@ static void ptt_proc_quarky_msg(tAniNlHdr *wnl, tAniHdr *wmsg, int radio)
 /*
  * Process all the Netlink messages from PTT Socket app in user space
  */
-static int ptt_sock_rx_nlink_msg (struct sk_buff * skb)
-{
+static int ptt_sock_rx_nlink_msg (struct sk_buff * skb) {
     tAniNlHdr *wnl;
     int radio;
     int type;
     wnl = (tAniNlHdr *) skb->data;
     radio = wnl->radio;
     type = wnl->nlh.nlmsg_type;
-    switch (type)
-    {
+    switch (type) {
     case ANI_NL_MSG_PUMAC:  //Message from the PTT socket APP
         PTT_TRACE(VOS_TRACE_LEVEL_INFO, "%s: Received ANI_NL_MSG_PUMAC Msg [0x%X]\n",
                   __func__, type);
@@ -308,8 +285,7 @@ static int ptt_sock_rx_nlink_msg (struct sk_buff * skb)
     }
     return 0;
 }
-int ptt_sock_activate_svc(void *pAdapter)
-{
+int ptt_sock_activate_svc(void *pAdapter) {
     pAdapterHandle = (struct hdd_context_s*)pAdapter;
     nl_srv_register(ANI_NL_MSG_PUMAC, ptt_sock_rx_nlink_msg);
     nl_srv_register(ANI_NL_MSG_PTT, ptt_sock_rx_nlink_msg);

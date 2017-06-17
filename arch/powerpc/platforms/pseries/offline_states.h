@@ -3,10 +3,10 @@
 
 /* Cpu offline states go here */
 enum cpu_state_vals {
-	CPU_STATE_OFFLINE,
-	CPU_STATE_INACTIVE,
-	CPU_STATE_ONLINE,
-	CPU_MAX_OFFLINE_STATES
+    CPU_STATE_OFFLINE,
+    CPU_STATE_INACTIVE,
+    CPU_STATE_ONLINE,
+    CPU_MAX_OFFLINE_STATES
 };
 
 #ifdef CONFIG_HOTPLUG_CPU
@@ -15,21 +15,17 @@ extern void set_cpu_current_state(int cpu, enum cpu_state_vals state);
 extern void set_preferred_offline_state(int cpu, enum cpu_state_vals state);
 extern void set_default_offline_state(int cpu);
 #else
-static inline enum cpu_state_vals get_cpu_current_state(int cpu)
-{
-	return CPU_STATE_ONLINE;
+static inline enum cpu_state_vals get_cpu_current_state(int cpu) {
+    return CPU_STATE_ONLINE;
 }
 
-static inline void set_cpu_current_state(int cpu, enum cpu_state_vals state)
-{
+static inline void set_cpu_current_state(int cpu, enum cpu_state_vals state) {
 }
 
-static inline void set_preferred_offline_state(int cpu, enum cpu_state_vals state)
-{
+static inline void set_preferred_offline_state(int cpu, enum cpu_state_vals state) {
 }
 
-static inline void set_default_offline_state(int cpu)
-{
+static inline void set_default_offline_state(int cpu) {
 }
 #endif
 

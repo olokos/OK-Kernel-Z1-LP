@@ -23,17 +23,17 @@
 #include "usbip_common.h"
 
 struct usbip_host_driver {
-	int ndevs;
-	struct sysfs_driver *sysfs_driver;
-	/* list of exported device */
-	struct dlist *edev_list;
+    int ndevs;
+    struct sysfs_driver *sysfs_driver;
+    /* list of exported device */
+    struct dlist *edev_list;
 };
 
 struct usbip_exported_device {
-	struct sysfs_device *sudev;
-	int32_t status;
-	struct usbip_usb_device udev;
-	struct usbip_usb_interface uinf[];
+    struct sysfs_device *sudev;
+    int32_t status;
+    struct usbip_usb_device udev;
+    struct usbip_usb_interface uinf[];
 };
 
 extern struct usbip_host_driver *host_driver;

@@ -33,9 +33,8 @@
 
 typedef unsigned int cycles_t;
 
-static inline cycles_t get_cycles(void)
-{
-	return 0;
+static inline cycles_t get_cycles(void) {
+    return 0;
 }
 
 #endif /* __KERNEL__ */

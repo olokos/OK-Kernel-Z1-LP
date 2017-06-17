@@ -16,11 +16,11 @@
 #include <asm/sn/types.h>
 
 typedef struct kern_vars_s {
-	int		kv_magic;
-	nasid_t		kv_ro_nasid;
-	nasid_t		kv_rw_nasid;
-	unsigned long	kv_ro_baseaddr;
-	unsigned long	kv_rw_baseaddr;
+    int		kv_magic;
+    nasid_t		kv_ro_nasid;
+    nasid_t		kv_rw_nasid;
+    unsigned long	kv_ro_baseaddr;
+    unsigned long	kv_rw_baseaddr;
 } kern_vars_t;
 
 #endif /* !__ASSEMBLY__ */

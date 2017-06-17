@@ -55,93 +55,87 @@ extern char *strstr(const char *, const char *);
 
 #if !defined(IN_ARCH_STRING_C)
 
-static inline void *memchr(const void * s, int c, size_t n)
-{
-	register int r0 asm("0") = (char) c;
-	const void *ret = s + n;
+static inline void *memchr(const void * s, int c, size_t n) {
+    register int r0 asm("0") = (char) c;
+    const void *ret = s + n;
 
-	asm volatile(
-		"0:	srst	%0,%1\n"
-		"	jo	0b\n"
-		"	jl	1f\n"
-		"	la	%0,0\n"
-		"1:"
-		: "+a" (ret), "+&a" (s) : "d" (r0) : "cc");
-	return (void *) ret;
+    asm volatile(
+        "0:	srst	%0,%1\n"
+        "	jo	0b\n"
+        "	jl	1f\n"
+        "	la	%0,0\n"
+        "1:"
+        : "+a" (ret), "+&a" (s) : "d" (r0) : "cc");
+    return (void *) ret;
 }
 
-static inline void *memscan(void *s, int c, size_t n)
-{
-	register int r0 asm("0") = (char) c;
-	const void *ret = s + n;
+static inline void *memscan(void *s, int c, size_t n) {
+    register int r0 asm("0") = (char) c;
+    const void *ret = s + n;
 
-	asm volatile(
-		"0:	srst	%0,%1\n"
-		"	jo	0b\n"
-		: "+a" (ret), "+&a" (s) : "d" (r0) : "cc");
-	return (void *) ret;
+    asm volatile(
+        "0:	srst	%0,%1\n"
+        "	jo	0b\n"
+        : "+a" (ret), "+&a" (s) : "d" (r0) : "cc");
+    return (void *) ret;
 }
 
-static inline char *strcat(char *dst, const char *src)
-{
-	register int r0 asm("0") = 0;
-	unsigned long dummy;
-	char *ret = dst;
+static inline char *strcat(char *dst, const char *src) {
+    register int r0 asm("0") = 0;
+    unsigned long dummy;
+    char *ret = dst;
 
-	asm volatile(
-		"0:	srst	%0,%1\n"
-		"	jo	0b\n"
-		"1:	mvst	%0,%2\n"
-		"	jo	1b"
-		: "=&a" (dummy), "+a" (dst), "+a" (src)
-		: "d" (r0), "0" (0) : "cc", "memory" );
-	return ret;
+    asm volatile(
+        "0:	srst	%0,%1\n"
+        "	jo	0b\n"
+        "1:	mvst	%0,%2\n"
+        "	jo	1b"
+        : "=&a" (dummy), "+a" (dst), "+a" (src)
+        : "d" (r0), "0" (0) : "cc", "memory" );
+    return ret;
 }
 
-static inline char *strcpy(char *dst, const char *src)
-{
+static inline char *strcpy(char *dst, const char *src) {
 #if __GNUC__ < 4
-	register int r0 asm("0") = 0;
-	char *ret = dst;
+    register int r0 asm("0") = 0;
+    char *ret = dst;
 
-	asm volatile(
-		"0:	mvst	%0,%1\n"
-		"	jo	0b"
-		: "+&a" (dst), "+&a" (src) : "d" (r0)
-		: "cc", "memory");
-	return ret;
+    asm volatile(
+        "0:	mvst	%0,%1\n"
+        "	jo	0b"
+        : "+&a" (dst), "+&a" (src) : "d" (r0)
+        : "cc", "memory");
+    return ret;
 #else
-	return __builtin_strcpy(dst, src);
+    return __builtin_strcpy(dst, src);
 #endif
 }
 
-static inline size_t strlen(const char *s)
-{
+static inline size_t strlen(const char *s) {
 #if __GNUC__ < 4
-	register unsigned long r0 asm("0") = 0;
-	const char *tmp = s;
+    register unsigned long r0 asm("0") = 0;
+    const char *tmp = s;
 
-	asm volatile(
-		"0:	srst	%0,%1\n"
-		"	jo	0b"
-		: "+d" (r0), "+a" (tmp) :  : "cc");
-	return r0 - (unsigned long) s;
+    asm volatile(
+        "0:	srst	%0,%1\n"
+        "	jo	0b"
+        : "+d" (r0), "+a" (tmp) :  : "cc");
+    return r0 - (unsigned long) s;
 #else
-	return __builtin_strlen(s);
+    return __builtin_strlen(s);
 #endif
 }
 
-static inline size_t strnlen(const char * s, size_t n)
-{
-	register int r0 asm("0") = 0;
-	const char *tmp = s;
-	const char *end = s + n;
+static inline size_t strnlen(const char * s, size_t n) {
+    register int r0 asm("0") = 0;
+    const char *tmp = s;
+    const char *end = s + n;
 
-	asm volatile(
-		"0:	srst	%0,%1\n"
-		"	jo	0b"
-		: "+a" (end), "+a" (tmp) : "d" (r0)  : "cc");
-	return end - s;
+    asm volatile(
+        "0:	srst	%0,%1\n"
+        "	jo	0b"
+        : "+a" (end), "+a" (tmp) : "d" (r0)  : "cc");
+    return end - s;
 }
 #else /* IN_ARCH_STRING_C */
 void *memchr(const void * s, int c, size_t n);

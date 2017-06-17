@@ -486,17 +486,17 @@
 #define EEPROM_SUM			0xBABA
 
 struct atlx_spi_flash_dev {
-	const char *manu_name;	/* manufacturer id */
-	/* op-code */
-	u8 cmd_wrsr;
-	u8 cmd_read;
-	u8 cmd_program;
-	u8 cmd_wren;
-	u8 cmd_wrdi;
-	u8 cmd_rdsr;
-	u8 cmd_rdid;
-	u8 cmd_sector_erase;
-	u8 cmd_chip_erase;
+    const char *manu_name;	/* manufacturer id */
+    /* op-code */
+    u8 cmd_wrsr;
+    u8 cmd_read;
+    u8 cmd_program;
+    u8 cmd_wren;
+    u8 cmd_wrdi;
+    u8 cmd_rdsr;
+    u8 cmd_rdid;
+    u8 cmd_sector_erase;
+    u8 cmd_chip_erase;
 };
 
 #endif /* ATLX_H */

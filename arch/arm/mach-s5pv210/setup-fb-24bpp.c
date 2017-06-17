@@ -20,30 +20,28 @@
 #include <mach/regs-clock.h>
 #include <plat/gpio-cfg.h>
 
-static void s5pv210_fb_cfg_gpios(unsigned int base, unsigned int nr)
-{
-	s3c_gpio_cfgrange_nopull(base, nr, S3C_GPIO_SFN(2));
+static void s5pv210_fb_cfg_gpios(unsigned int base, unsigned int nr) {
+    s3c_gpio_cfgrange_nopull(base, nr, S3C_GPIO_SFN(2));
 
-	for (; nr > 0; nr--, base++)
-		s5p_gpio_set_drvstr(base, S5P_GPIO_DRVSTR_LV4);
+    for (; nr > 0; nr--, base++)
+        s5p_gpio_set_drvstr(base, S5P_GPIO_DRVSTR_LV4);
 }
 
 
-void s5pv210_fb_gpio_setup_24bpp(void)
-{
-	s5pv210_fb_cfg_gpios(S5PV210_GPF0(0), 8);
-	s5pv210_fb_cfg_gpios(S5PV210_GPF1(0), 8);
-	s5pv210_fb_cfg_gpios(S5PV210_GPF2(0), 8);
-	s5pv210_fb_cfg_gpios(S5PV210_GPF3(0), 4);
+void s5pv210_fb_gpio_setup_24bpp(void) {
+    s5pv210_fb_cfg_gpios(S5PV210_GPF0(0), 8);
+    s5pv210_fb_cfg_gpios(S5PV210_GPF1(0), 8);
+    s5pv210_fb_cfg_gpios(S5PV210_GPF2(0), 8);
+    s5pv210_fb_cfg_gpios(S5PV210_GPF3(0), 4);
 
-	/* Set DISPLAY_CONTROL register for Display path selection.
-	 *
-	 * ouput   |   RGB   |   I80   |   ITU
-	 * -----------------------------------
-	 *  00     |   MIE   |  FIMD   |  FIMD
-	 *  01     | MDNIE   | MDNIE   |  FIMD
-	 *  10     |  FIMD   |  FIMD   |  FIMD
-	 *  11     |  FIMD   |  FIMD   |  FIMD
-	 */
-	writel(0x2, S5P_MDNIE_SEL);
+    /* Set DISPLAY_CONTROL register for Display path selection.
+     *
+     * ouput   |   RGB   |   I80   |   ITU
+     * -----------------------------------
+     *  00     |   MIE   |  FIMD   |  FIMD
+     *  01     | MDNIE   | MDNIE   |  FIMD
+     *  10     |  FIMD   |  FIMD   |  FIMD
+     *  11     |  FIMD   |  FIMD   |  FIMD
+     */
+    writel(0x2, S5P_MDNIE_SEL);
 }

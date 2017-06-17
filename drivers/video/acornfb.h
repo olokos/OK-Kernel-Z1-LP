@@ -23,82 +23,82 @@
 #define EXTEND4(x) ((x)|(x)<<4|(x)<<8|(x)<<12)
 
 struct vidc20_palette {
-	u_int red:8;
-	u_int green:8;
-	u_int blue:8;
-	u_int ext:4;
-	u_int unused:4;
+    u_int red:8;
+    u_int green:8;
+    u_int blue:8;
+    u_int ext:4;
+    u_int unused:4;
 };
 
 struct vidc_palette {
-	u_int red:4;
-	u_int green:4;
-	u_int blue:4;
-	u_int trans:1;
-	u_int sbz1:13;
-	u_int reg:4;
-	u_int sbz2:2;
+    u_int red:4;
+    u_int green:4;
+    u_int blue:4;
+    u_int trans:1;
+    u_int sbz1:13;
+    u_int reg:4;
+    u_int sbz2:2;
 };
 
 union palette {
-	struct vidc20_palette	vidc20;
-	struct vidc_palette	vidc;
-	u_int	p;
+    struct vidc20_palette	vidc20;
+    struct vidc_palette	vidc;
+    u_int	p;
 };
 
 struct acornfb_par {
-	struct device	*dev;
-	unsigned long	screen_end;
-	unsigned int	dram_size;
-	unsigned int	vram_half_sam;
-	unsigned int	palette_size;
-	  signed int	montype;
-	unsigned int	using_vram	: 1;
-	unsigned int	dpms		: 1;
+    struct device	*dev;
+    unsigned long	screen_end;
+    unsigned int	dram_size;
+    unsigned int	vram_half_sam;
+    unsigned int	palette_size;
+    signed int	montype;
+    unsigned int	using_vram	: 1;
+    unsigned int	dpms		: 1;
 
-	union palette palette[VIDC_PALETTE_SIZE];
+    union palette palette[VIDC_PALETTE_SIZE];
 
-	u32		pseudo_palette[16];
+    u32		pseudo_palette[16];
 };
 
 struct vidc_timing {
-	u_int	h_cycle;
-	u_int	h_sync_width;
-	u_int	h_border_start;
-	u_int	h_display_start;
-	u_int	h_display_end;
-	u_int	h_border_end;
-	u_int	h_interlace;
+    u_int	h_cycle;
+    u_int	h_sync_width;
+    u_int	h_border_start;
+    u_int	h_display_start;
+    u_int	h_display_end;
+    u_int	h_border_end;
+    u_int	h_interlace;
 
-	u_int	v_cycle;
-	u_int	v_sync_width;
-	u_int	v_border_start;
-	u_int	v_display_start;
-	u_int	v_display_end;
-	u_int	v_border_end;
+    u_int	v_cycle;
+    u_int	v_sync_width;
+    u_int	v_border_start;
+    u_int	v_display_start;
+    u_int	v_display_end;
+    u_int	v_border_end;
 
-	u_int	control;
+    u_int	control;
 
-	/* VIDC20 only */
-	u_int	pll_ctl;
+    /* VIDC20 only */
+    u_int	pll_ctl;
 };
 
 struct modey_params {
-	u_int	y_res;
-	u_int	u_margin;
-	u_int	b_margin;
-	u_int	vsync_len;
-	u_int	vf;
+    u_int	y_res;
+    u_int	u_margin;
+    u_int	b_margin;
+    u_int	vsync_len;
+    u_int	vf;
 };
 
 struct modex_params {
-	u_int	x_res;
-	u_int	l_margin;
-	u_int	r_margin;
-	u_int	hsync_len;
-	u_int	clock;
-	u_int	hf;
-	const struct modey_params *modey;
+    u_int	x_res;
+    u_int	l_margin;
+    u_int	r_margin;
+    u_int	hsync_len;
+    u_int	clock;
+    u_int	hf;
+    const struct modey_params *modey;
 };
 
 #ifdef HAS_VIDC

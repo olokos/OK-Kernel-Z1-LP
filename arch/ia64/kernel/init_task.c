@@ -28,15 +28,16 @@ static struct sighand_struct init_sighand = INIT_SIGHAND(init_sighand);
 #define init_thread_info	init_task_mem.s.thread_info
 
 union {
-	struct {
-		struct task_struct task;
-		struct thread_info thread_info;
-	} s;
-	unsigned long stack[KERNEL_STACK_SIZE/sizeof (unsigned long)];
-} init_task_mem asm ("init_task") __init_task_data =
-	{{
-	.task =		INIT_TASK(init_task_mem.s.task),
-	.thread_info =	INIT_THREAD_INFO(init_task_mem.s.task)
-}};
+    struct {
+        struct task_struct task;
+        struct thread_info thread_info;
+    } s;
+    unsigned long stack[KERNEL_STACK_SIZE/sizeof (unsigned long)];
+} init_task_mem asm ("init_task") __init_task_data = {
+    {
+        .task =		INIT_TASK(init_task_mem.s.task),
+        .thread_info =	INIT_THREAD_INFO(init_task_mem.s.task)
+    }
+};
 
 EXPORT_SYMBOL(init_task);

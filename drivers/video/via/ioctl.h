@@ -81,117 +81,117 @@
 #define MAX_ACTIVE_DEV_NUM  2
 
 struct device_t {
-	unsigned short crt:1;
-	unsigned short dvi:1;
-	unsigned short lcd:1;
-	unsigned short samm:1;
-	unsigned short lcd_dsp_cent:1;
-	unsigned char lcd_mode:1;
-	unsigned short epia_dvi:1;
-	unsigned short lcd_dual_edge:1;
-	unsigned short lcd2:1;
+    unsigned short crt:1;
+    unsigned short dvi:1;
+    unsigned short lcd:1;
+    unsigned short samm:1;
+    unsigned short lcd_dsp_cent:1;
+    unsigned char lcd_mode:1;
+    unsigned short epia_dvi:1;
+    unsigned short lcd_dual_edge:1;
+    unsigned short lcd2:1;
 
-	unsigned short primary_dev;
-	unsigned char lcd_panel_id;
-	unsigned short xres, yres;
-	unsigned short xres1, yres1;
-	unsigned short refresh;
-	unsigned short bpp;
-	unsigned short refresh1;
-	unsigned short bpp1;
-	unsigned short sequence;
-	unsigned short bus_width;
+    unsigned short primary_dev;
+    unsigned char lcd_panel_id;
+    unsigned short xres, yres;
+    unsigned short xres1, yres1;
+    unsigned short refresh;
+    unsigned short bpp;
+    unsigned short refresh1;
+    unsigned short bpp1;
+    unsigned short sequence;
+    unsigned short bus_width;
 };
 
 struct viafb_ioctl_info {
-	u32 viafb_id;		/* for identifying viafb */
+    u32 viafb_id;		/* for identifying viafb */
 #define VIAID       0x56494146	/* Identify myself with 'VIAF' */
-	u16 vendor_id;
-	u16 device_id;
-	u8 version;
-	u8 revision;
-	u8 reserved[246];	/* for future use */
+    u16 vendor_id;
+    u16 device_id;
+    u8 version;
+    u8 revision;
+    u8 reserved[246];	/* for future use */
 };
 
 struct viafb_ioctl_mode {
-	u32 xres;
-	u32 yres;
-	u32 refresh;
-	u32 bpp;
-	u32 xres_sec;
-	u32 yres_sec;
-	u32 virtual_xres_sec;
-	u32 virtual_yres_sec;
-	u32 refresh_sec;
-	u32 bpp_sec;
+    u32 xres;
+    u32 yres;
+    u32 refresh;
+    u32 bpp;
+    u32 xres_sec;
+    u32 yres_sec;
+    u32 virtual_xres_sec;
+    u32 virtual_yres_sec;
+    u32 refresh_sec;
+    u32 bpp_sec;
 };
 struct viafb_ioctl_samm {
-	u32 samm_status;
-	u32 size_prim;
-	u32 size_sec;
-	u32 mem_base;
-	u32 offset_sec;
+    u32 samm_status;
+    u32 size_prim;
+    u32 size_sec;
+    u32 mem_base;
+    u32 offset_sec;
 };
 
 struct viafb_driver_version {
-	int iMajorNum;
-	int iKernelNum;
-	int iOSNum;
-	int iMinorNum;
+    int iMajorNum;
+    int iKernelNum;
+    int iOSNum;
+    int iMinorNum;
 };
 
 struct viafb_ioctl_lcd_attribute {
-	unsigned int panel_id;
-	unsigned int display_center;
-	unsigned int lcd_mode;
+    unsigned int panel_id;
+    unsigned int display_center;
+    unsigned int lcd_mode;
 };
 
 struct viafb_ioctl_setting {
-	/* Enable or disable active devices */
-	unsigned short device_flag;
-	/* Indicate which device should be turn on or turn off. */
-	unsigned short device_status;
-	unsigned int reserved;
-	/* Indicate which LCD's attribute can be changed. */
-	unsigned short lcd_operation_flag;
-	/* 1: SAMM ON  0: SAMM OFF */
-	unsigned short samm_status;
-	/* horizontal resolution of first device */
-	unsigned short first_dev_hor_res;
-	/* vertical resolution of first device */
-	unsigned short first_dev_ver_res;
-	/* horizontal resolution of second device */
-	unsigned short second_dev_hor_res;
-	/* vertical resolution of second device */
-	unsigned short second_dev_ver_res;
-	/* refresh rate of first device */
-	unsigned short first_dev_refresh;
-	/* bpp of first device */
-	unsigned short first_dev_bpp;
-	/* refresh rate of second device */
-	unsigned short second_dev_refresh;
-	/* bpp of second device */
-	unsigned short second_dev_bpp;
-	/* Indicate which device are primary display device. */
-	unsigned int primary_device;
-	unsigned int struct_reserved[35];
-	struct viafb_ioctl_lcd_attribute lcd_attributes;
+    /* Enable or disable active devices */
+    unsigned short device_flag;
+    /* Indicate which device should be turn on or turn off. */
+    unsigned short device_status;
+    unsigned int reserved;
+    /* Indicate which LCD's attribute can be changed. */
+    unsigned short lcd_operation_flag;
+    /* 1: SAMM ON  0: SAMM OFF */
+    unsigned short samm_status;
+    /* horizontal resolution of first device */
+    unsigned short first_dev_hor_res;
+    /* vertical resolution of first device */
+    unsigned short first_dev_ver_res;
+    /* horizontal resolution of second device */
+    unsigned short second_dev_hor_res;
+    /* vertical resolution of second device */
+    unsigned short second_dev_ver_res;
+    /* refresh rate of first device */
+    unsigned short first_dev_refresh;
+    /* bpp of first device */
+    unsigned short first_dev_bpp;
+    /* refresh rate of second device */
+    unsigned short second_dev_refresh;
+    /* bpp of second device */
+    unsigned short second_dev_bpp;
+    /* Indicate which device are primary display device. */
+    unsigned int primary_device;
+    unsigned int struct_reserved[35];
+    struct viafb_ioctl_lcd_attribute lcd_attributes;
 };
 
 struct _UTFunctionCaps {
-	unsigned int dw3DScalingState;
-	unsigned int reserved[31];
+    unsigned int dw3DScalingState;
+    unsigned int reserved[31];
 };
 
 struct _POSITIONVALUE {
-	unsigned int dwX;
-	unsigned int dwY;
+    unsigned int dwX;
+    unsigned int dwY;
 };
 
 struct _panel_size_pos_info {
-	unsigned int device_type;
-	int x;
-	int y;
+    unsigned int device_type;
+    int x;
+    int y;
 };
 
 extern int viafb_LCD_ON;

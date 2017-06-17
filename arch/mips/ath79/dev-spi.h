@@ -16,7 +16,7 @@
 #include <asm/mach-ath79/ath79_spi_platform.h>
 
 void ath79_register_spi(struct ath79_spi_platform_data *pdata,
-			 struct spi_board_info const *info,
-			 unsigned n);
+                        struct spi_board_info const *info,
+                        unsigned n);
 
 #endif /* _ATH79_DEV_SPI_H */

@@ -146,8 +146,7 @@
 
 /** Enumeration of all the different kinds of BT events
 */
-typedef enum eSmeBtEventType
-{
+typedef enum eSmeBtEventType {
     BT_EVENT_DEVICE_SWITCHED_ON,
     BT_EVENT_DEVICE_SWITCHED_OFF,
     BT_EVENT_INQUIRY_STARTED,
@@ -172,8 +171,7 @@ typedef enum eSmeBtEventType
 
 /** BT-AMP events type
 */
-typedef enum eSmeBtAmpEventType
-{
+typedef enum eSmeBtAmpEventType {
     BTAMP_EVENT_CONNECTION_START,
     BTAMP_EVENT_CONNECTION_STOP,
     BTAMP_EVENT_CONNECTION_TERMINATED,
@@ -184,8 +182,7 @@ typedef enum eSmeBtAmpEventType
 /**Data structure that specifies the needed event parameters for
     BT_EVENT_CREATE_ACL_CONNECTION and BT_EVENT_ACL_CONNECTION_COMPLETE
 */
-typedef struct sSmeBtAclConnectionParam
-{
+typedef struct sSmeBtAclConnectionParam {
     v_U8_t       bdAddr[6];
     v_U16_t      connectionHandle;
     v_U8_t       status;
@@ -195,8 +192,7 @@ typedef struct sSmeBtAclConnectionParam
     BT_EVENT_CREATE_SYNC_CONNECTION, BT_EVENT_SYNC_CONNECTION_COMPLETE
     and BT_EVENT_SYNC_CONNECTION_UPDATED
 */
-typedef struct sSmeBtSyncConnectionParam
-{
+typedef struct sSmeBtSyncConnectionParam {
     v_U8_t       bdAddr[6];
     v_U16_t      connectionHandle;
     v_U8_t       status;
@@ -206,8 +202,7 @@ typedef struct sSmeBtSyncConnectionParam
     v_U8_t       retransmisisonWindow; //units in number of 625us slots
 } tSmeBtSyncConnectionParam, *tpSmeBtSyncConnectionParam;
 
-typedef struct sSmeBtSyncUpdateHist
-{
+typedef struct sSmeBtSyncUpdateHist {
     tSmeBtSyncConnectionParam btSyncConnection;
     v_BOOL_t fValid;
 } tSmeBtSyncUpdateHist, *tpSmeBtSyncUpdateHist;
@@ -215,8 +210,7 @@ typedef struct sSmeBtSyncUpdateHist
 /**Data structure that specifies the needed event parameters for
     BT_EVENT_MODE_CHANGED
 */
-typedef struct sSmeBtAclModeChangeParam
-{
+typedef struct sSmeBtAclModeChangeParam {
     v_U16_t     connectionHandle;
     v_U8_t      mode;
 } tSmeBtAclModeChangeParam, *tpSmeBtAclModeChangeParam;
@@ -224,8 +218,7 @@ typedef struct sSmeBtAclModeChangeParam
 /*Data structure that specifies the needed event parameters for
     BT_EVENT_DISCONNECTION_COMPLETE
 */
-typedef struct sSmeBtDisconnectParam
-{
+typedef struct sSmeBtDisconnectParam {
     v_U16_t connectionHandle;
 } tSmeBtDisconnectParam, *tpSmeBtDisconnectParam;
 
@@ -233,19 +226,16 @@ typedef struct sSmeBtDisconnectParam
     BT_EVENT_A2DP_STREAM_START
     BT_EVENT_A2DP_STREAM_STOP
 */
-typedef struct sSmeBtA2DPParam
-{
+typedef struct sSmeBtA2DPParam {
     v_U8_t       bdAddr[6];
 } tSmeBtA2DPParam, *tpSmeBtA2DPParam;
 
 
 /** Generic Bluetooth Event structure for BTC
 */
-typedef struct sSmeBtcBtEvent
-{
+typedef struct sSmeBtcBtEvent {
     tSmeBtEventType btEventType;
-    union
-    {
+    union {
         v_U8_t                    bdAddr[6];    /**< For events with only a BT Addr in event_data */
         tSmeBtAclConnectionParam  btAclConnection;
         tSmeBtSyncConnectionParam btSyncConnection;
@@ -258,8 +248,7 @@ typedef struct sSmeBtcBtEvent
 /**
     BT-AMP Event Structure
 */
-typedef struct sSmeBtAmpEvent
-{
+typedef struct sSmeBtAmpEvent {
     tSmeBtAmpEventType btAmpEventType;
 
 } tSmeBtAmpEvent, *tpSmeBtAmpEvent;
@@ -267,8 +256,7 @@ typedef struct sSmeBtAmpEvent
 
 /** Data structure that specifies the BTC Configuration parameters
 */
-typedef struct sSmeBtcConfig
-{
+typedef struct sSmeBtcConfig {
     v_U8_t       btcExecutionMode;
     v_U8_t       btcConsBtSlotsToBlockDuringDhcp;
     v_U8_t       btcA2DPBtSubIntervalsDuringDhcp;
@@ -300,14 +288,12 @@ typedef struct sSmeBtcConfig
 } tSmeBtcConfig, *tpSmeBtcConfig;
 
 
-typedef struct sSmeBtAclModeChangeEventHist
-{
+typedef struct sSmeBtAclModeChangeEventHist {
     tSmeBtAclModeChangeParam  btAclModeChange;
     v_BOOL_t fValid;
 } tSmeBtAclModeChangeEventHist, *tpSmeBtAclModeChangeEventHist;
 
-typedef struct sSmeBtAclEventHist
-{
+typedef struct sSmeBtAclEventHist {
     //At most, cached events are COMPLETION, DISCONNECT, CREATION, COMPLETION
     tSmeBtEventType btEventType[BT_MAX_NUM_EVENT_ACL_DEFERRED];
     tSmeBtAclConnectionParam  btAclConnection[BT_MAX_NUM_EVENT_ACL_DEFERRED];
@@ -315,8 +301,7 @@ typedef struct sSmeBtAclEventHist
     tANI_U8 bNextEventIdx;
 } tSmeBtAclEventHist, *tpSmeBtAclEventHist;
 
-typedef struct sSmeBtSyncEventHist
-{
+typedef struct sSmeBtSyncEventHist {
     //At most, cached events are COMPLETION, DISCONNECT, CREATION, COMPLETION
     tSmeBtEventType btEventType[BT_MAX_NUM_EVENT_SCO_DEFERRED];
     tSmeBtSyncConnectionParam  btSyncConnection[BT_MAX_NUM_EVENT_SCO_DEFERRED];
@@ -324,8 +309,7 @@ typedef struct sSmeBtSyncEventHist
     tANI_U8 bNextEventIdx;
 } tSmeBtSyncEventHist, *tpSmeBtSyncEventHist;
 
-typedef struct sSmeBtDisconnectEventHist
-{
+typedef struct sSmeBtDisconnectEventHist {
     tSmeBtDisconnectParam btDisconnect;
     v_BOOL_t fValid;
 } tSmeBtDisconnectEventHist, *tpSmeBtDisconnectEventHist;
@@ -334,8 +318,7 @@ typedef struct sSmeBtDisconnectEventHist
 /*
   Data structure for the history of BT events
 */
-typedef struct sSmeBtcEventHist
-{
+typedef struct sSmeBtcEventHist {
     tSmeBtSyncEventHist btSyncConnectionEvent[BT_MAX_SCO_SUPPORT];
     tSmeBtAclEventHist btAclConnectionEvent[BT_MAX_ACL_SUPPORT];
     tSmeBtAclModeChangeEventHist btAclModeChangeEvent[BT_MAX_ACL_SUPPORT];
@@ -351,8 +334,7 @@ typedef struct sSmeBtcEventHist
     v_BOOL_t fA2DPStopped;
 } tSmeBtcEventHist, *tpSmeBtcEventHist;
 
-typedef struct sSmeBtcEventReplay
-{
+typedef struct sSmeBtcEventReplay {
     tSmeBtcEventHist btcEventHist;
     v_BOOL_t fBTSwitchOn;
     v_BOOL_t fBTSwitchOff;
@@ -360,8 +342,7 @@ typedef struct sSmeBtcEventReplay
     v_BOOL_t fRestoreHBMonitor;
 } tSmeBtcEventReplay, *tpSmeBtcEventReplay;
 
-typedef struct sSmeBtcInfo
-{
+typedef struct sSmeBtcInfo {
     tSmeBtcConfig btcConfig;
     v_BOOL_t      btcReady;
     v_U8_t        btcEventState;

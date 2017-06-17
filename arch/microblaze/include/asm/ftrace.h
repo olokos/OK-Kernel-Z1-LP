@@ -13,9 +13,8 @@ extern void ftrace_call_graph(void);
 
 #ifdef CONFIG_DYNAMIC_FTRACE
 /* reloction of mcount call site is the same as the address */
-static inline unsigned long ftrace_call_adjust(unsigned long addr)
-{
-	return addr;
+static inline unsigned long ftrace_call_adjust(unsigned long addr) {
+    return addr;
 }
 
 struct dyn_arch_ftrace {

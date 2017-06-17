@@ -52,44 +52,43 @@ void ahc_unpause(struct ahc_softc *ahc);
 
 /************************** Memory mapping routines ***************************/
 void	ahc_sync_sglist(struct ahc_softc *ahc,
-			struct scb *scb, int op);
+                        struct scb *scb, int op);
 
 /******************************** Debugging ***********************************/
 static inline char *ahc_name(struct ahc_softc *ahc);
 
-static inline char *ahc_name(struct ahc_softc *ahc)
-{
-	return (ahc->name);
+static inline char *ahc_name(struct ahc_softc *ahc) {
+    return (ahc->name);
 }
 
 /*********************** Miscellaneous Support Functions ***********************/
 
 struct ahc_initiator_tinfo *
-	ahc_fetch_transinfo(struct ahc_softc *ahc,
-			    char channel, u_int our_id,
-			    u_int remote_id,
-			    struct ahc_tmode_tstate **tstate);
+ahc_fetch_transinfo(struct ahc_softc *ahc,
+                    char channel, u_int our_id,
+                    u_int remote_id,
+                    struct ahc_tmode_tstate **tstate);
 uint16_t
-	ahc_inw(struct ahc_softc *ahc, u_int port);
+ahc_inw(struct ahc_softc *ahc, u_int port);
 void	ahc_outw(struct ahc_softc *ahc, u_int port,
-		 u_int value);
+                 u_int value);
 uint32_t
-	ahc_inl(struct ahc_softc *ahc, u_int port);
+ahc_inl(struct ahc_softc *ahc, u_int port);
 void	ahc_outl(struct ahc_softc *ahc, u_int port,
-		 uint32_t value);
+                 uint32_t value);
 uint64_t
-	ahc_inq(struct ahc_softc *ahc, u_int port);
+ahc_inq(struct ahc_softc *ahc, u_int port);
 void	ahc_outq(struct ahc_softc *ahc, u_int port,
-		 uint64_t value);
+                 uint64_t value);
 struct scb*
-	ahc_get_scb(struct ahc_softc *ahc);
+ahc_get_scb(struct ahc_softc *ahc);
 void	ahc_free_scb(struct ahc_softc *ahc, struct scb *scb);
 struct scb *
-	ahc_lookup_scb(struct ahc_softc *ahc, u_int tag);
+ahc_lookup_scb(struct ahc_softc *ahc, u_int tag);
 void	ahc_queue_scb(struct ahc_softc *ahc, struct scb *scb);
 struct scsi_sense_data *
-	ahc_get_sense_buf(struct ahc_softc *ahc,
-			  struct scb *scb);
+ahc_get_sense_buf(struct ahc_softc *ahc,
+                  struct scb *scb);
 
 /************************** Interrupt Processing ******************************/
 int	ahc_intr(struct ahc_softc *ahc);

@@ -71,8 +71,7 @@ const unsigned char abyOUI05[4] = { 0x00, 0x50, 0xf2, 0x05 };
 void
 WPA_ClearRSN (
     PKnownBSS        pBSSList
-    )
-{
+) {
     int ii;
     pBSSList->byGKType = WPA_TKIP;
     for (ii=0; ii < 4; ii ++)
@@ -108,8 +107,7 @@ void
 WPA_ParseRSN (
     PKnownBSS        pBSSList,
     PWLAN_IE_RSN_EXT pRSN
-    )
-{
+) {
     PWLAN_IE_RSN_AUTH  pIE_RSN_Auth = NULL;
     int                i, j, m, n = 0;
     unsigned char *pbyCaps;
@@ -120,13 +118,12 @@ WPA_ParseRSN (
 
     // information element header makes sense
     if ((pRSN->len >= 6) // oui1(4)+ver(2)
-         && (pRSN->byElementID == WLAN_EID_RSN_WPA) &&  !memcmp(pRSN->abyOUI, abyOUI01, 4)
-         && (pRSN->wVersion == 1)) {
+            && (pRSN->byElementID == WLAN_EID_RSN_WPA) &&  !memcmp(pRSN->abyOUI, abyOUI01, 4)
+            && (pRSN->wVersion == 1)) {
 
         DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Legal RSN\n");
         // update each variable if pRSN is long enough to contain the variable
-        if (pRSN->len >= 10) //oui1(4)+ver(2)+GKSuite(4)
-        {
+        if (pRSN->len >= 10) { //oui1(4)+ver(2)+GKSuite(4)
             if ( !memcmp(pRSN->abyMulticast, abyOUI01, 4))
                 pBSSList->byGKType = WPA_WEP40;
             else if ( !memcmp(pRSN->abyMulticast, abyOUI02, 4))
@@ -144,8 +141,7 @@ WPA_ParseRSN (
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"byGKType: %x\n", pBSSList->byGKType);
         }
 
-        if (pRSN->len >= 12) //oui1(4)+ver(2)+GKS(4)+PKSCnt(2)
-        {
+        if (pRSN->len >= 12) { //oui1(4)+ver(2)+GKS(4)+PKSCnt(2)
             j = 0;
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"wPKCount: %d, sizeof(pBSSList->abyPKType): %zu\n", pRSN->wPKCount, sizeof(pBSSList->abyPKType));
             for(i = 0; (i < pRSN->wPKCount) && (j < sizeof(pBSSList->abyPKType)/sizeof(unsigned char)); i++) {
@@ -161,8 +157,7 @@ WPA_ParseRSN (
                     else
                         // any vendor checks here
                         ;
-                }
-                else
+                } else
                     break;
                 //DBG_PRN_GRP14(("abyPKType[%d]: %X\n", j-1, pBSSList->abyPKType[j-1]));
             } //for
@@ -179,7 +174,7 @@ WPA_ParseRSN (
             pIE_RSN_Auth = (PWLAN_IE_RSN_AUTH) pRSN->PKSList[m].abyOUI;
             j = 0;
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"wAuthCount: %d, sizeof(pBSSList->abyAuthType): %zu\n",
-                          pIE_RSN_Auth->wAuthCount, sizeof(pBSSList->abyAuthType));
+                    pIE_RSN_Auth->wAuthCount, sizeof(pBSSList->abyAuthType));
             for(i = 0; (i < pIE_RSN_Auth->wAuthCount) && (j < sizeof(pBSSList->abyAuthType)/sizeof(unsigned char)); i++) {
                 if(pRSN->len >= 14+4+(m+i)*4) { //oui1(4)+ver(2)+GKS(4)+PKSCnt(2)+PKS(4*m)+AKC(2)+AKS(4*i)
                     if ( !memcmp(pIE_RSN_Auth->AuthKSList[i].abyOUI, abyOUI01, 4))
@@ -187,10 +182,9 @@ WPA_ParseRSN (
                     else if ( !memcmp(pIE_RSN_Auth->AuthKSList[i].abyOUI, abyOUI02, 4))
                         pBSSList->abyAuthType[j++] = WPA_AUTH_PSK;
                     else
-                    // any vendor checks here
-                    ;
-                }
-                else
+                        // any vendor checks here
+                        ;
+                } else
                     break;
                 //DBG_PRN_GRP14(("abyAuthType[%d]: %X\n", j-1, pBSSList->abyAuthType[j-1]));
             }
@@ -242,8 +236,7 @@ WPA_SearchRSN (
     unsigned char byCmd,
     unsigned char byEncrypt,
     PKnownBSS        pBSSList
-    )
-{
+) {
     int ii;
     unsigned char byPKType = WPA_NONE;
 
@@ -261,11 +254,11 @@ WPA_SearchRSN (
                 if (pBSSList->abyPKType[ii] == WPA_AESCCMP)
                     byPKType = WPA_AESCCMP;
                 else if ((pBSSList->abyPKType[ii] == WPA_TKIP) && (byPKType != WPA_AESCCMP))
-                     byPKType = WPA_TKIP;
+                    byPKType = WPA_TKIP;
                 else if ((pBSSList->abyPKType[ii] == WPA_WEP40) && (byPKType != WPA_AESCCMP) && (byPKType != WPA_TKIP))
-                     byPKType = WPA_WEP40;
+                    byPKType = WPA_WEP40;
                 else if ((pBSSList->abyPKType[ii] == WPA_WEP104) && (byPKType != WPA_AESCCMP) && (byPKType != WPA_TKIP))
-                     byPKType = WPA_WEP104;
+                    byPKType = WPA_WEP104;
             }
             if (byEncrypt != byPKType)
                 return false;
@@ -300,17 +293,15 @@ WPA_SearchRSN (
 bool
 WPAb_Is_RSN (
     PWLAN_IE_RSN_EXT pRSN
-    )
-{
+) {
     if (pRSN == NULL)
         return false;
 
     if ((pRSN->len >= 6) && // oui1(4)+ver(2)
-        (pRSN->byElementID == WLAN_EID_RSN_WPA) &&  !memcmp(pRSN->abyOUI, abyOUI01, 4) &&
-        (pRSN->wVersion == 1)) {
+            (pRSN->byElementID == WLAN_EID_RSN_WPA) &&  !memcmp(pRSN->abyOUI, abyOUI01, 4) &&
+            (pRSN->wVersion == 1)) {
         return true;
-    }
-    else
+    } else
         return false;
 }
 

@@ -35,24 +35,24 @@
  */
 #ifndef __ASSEMBLY__
 typedef struct {
-	unsigned long	seg;
+    unsigned long	seg;
 } mm_segment_t;
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	struct pt_regs		*frame;		/* current exception frame */
-	unsigned long		flags;		/* low level flags */
-	__u32			cpu;		/* current CPU */
-	__s32			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    struct pt_regs		*frame;		/* current exception frame */
+    unsigned long		flags;		/* low level flags */
+    __u32			cpu;		/* current CPU */
+    __s32			preempt_count;	/* 0 => preemptable, <0 => BUG */
 
-	mm_segment_t		addr_limit;	/* thread address space:
+    mm_segment_t		addr_limit;	/* thread address space:
 						   0-0xBFFFFFFF for user-thead
 						   0-0xFFFFFFFF for kernel-thread
 						*/
-	struct restart_block    restart_block;
+    struct restart_block    restart_block;
 
-	__u8			supervisor_stack[0];
+    __u8			supervisor_stack[0];
 };
 
 #define thread_info_to_uregs(ti)					\
@@ -95,29 +95,26 @@ extern struct thread_info *__current_ti;
 
 /* how to get the thread information struct from C */
 static inline __attribute__((const))
-struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	asm("mov sp,%0\n"
-	    "and %1,%0\n"
-	    : "=d" (ti)
-	    : "i" (~(THREAD_SIZE - 1))
-	    : "cc");
-	return ti;
+struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    asm("mov sp,%0\n"
+        "and %1,%0\n"
+        : "=d" (ti)
+        : "i" (~(THREAD_SIZE - 1))
+        : "cc");
+    return ti;
 }
 
 static inline __attribute__((const))
-struct pt_regs *current_frame(void)
-{
-	return current_thread_info()->frame;
+struct pt_regs *current_frame(void) {
+    return current_thread_info()->frame;
 }
 
 /* how to get the current stack pointer from C */
-static inline unsigned long current_stack_pointer(void)
-{
-	unsigned long sp;
-	asm("mov sp,%0; ":"=r" (sp));
-	return sp;
+static inline unsigned long current_stack_pointer(void) {
+    unsigned long sp;
+    asm("mov sp,%0; ":"=r" (sp));
+    return sp;
 }
 
 #define __HAVE_ARCH_THREAD_INFO_ALLOCATOR
@@ -144,8 +141,8 @@ extern void free_thread_info(struct thread_info *);
 #ifndef __VMLINUX_LDS__
 /* how to get the thread information struct from ASM */
 .macro GET_THREAD_INFO reg
-	mov	sp,\reg
-	and	-THREAD_SIZE,\reg
+mov	sp,\reg
+and	-THREAD_SIZE,\reg
 .endm
 #endif
 #endif

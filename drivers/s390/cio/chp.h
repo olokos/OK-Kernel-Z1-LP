@@ -26,36 +26,34 @@
 #define CHP_VARY_OFF 3
 
 struct chp_link {
-	struct chp_id chpid;
-	u32 fla_mask;
-	u16 fla;
+    struct chp_id chpid;
+    u32 fla_mask;
+    u16 fla;
 };
 
-static inline int chp_test_bit(u8 *bitmap, int num)
-{
-	int byte = num >> 3;
-	int mask = 128 >> (num & 7);
+static inline int chp_test_bit(u8 *bitmap, int num) {
+    int byte = num >> 3;
+    int mask = 128 >> (num & 7);
 
-	return (bitmap[byte] & mask) ? 1 : 0;
+    return (bitmap[byte] & mask) ? 1 : 0;
 }
 
 
 struct channel_path {
-	struct device dev;
-	struct chp_id chpid;
-	struct mutex lock; /* Serialize access to below members. */
-	int state;
-	struct channel_path_desc desc;
-	/* Channel-measurement related stuff: */
-	int cmg;
-	int shared;
-	void *cmg_chars;
+    struct device dev;
+    struct chp_id chpid;
+    struct mutex lock; /* Serialize access to below members. */
+    int state;
+    struct channel_path_desc desc;
+    /* Channel-measurement related stuff: */
+    int cmg;
+    int shared;
+    void *cmg_chars;
 };
 
 /* Return channel_path struct for given chpid. */
-static inline struct channel_path *chpid_to_chp(struct chp_id chpid)
-{
-	return channel_subsystems[chpid.cssid]->chps[chpid.id];
+static inline struct channel_path *chpid_to_chp(struct chp_id chpid) {
+    return channel_subsystems[chpid.cssid]->chps[chpid.id];
 }
 
 int chp_get_status(struct chp_id chpid);

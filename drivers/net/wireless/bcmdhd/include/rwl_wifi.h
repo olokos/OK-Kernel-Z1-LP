@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2012, Broadcom Corporation
  * All Rights Reserved.
- * 
+ *
  * This is UNPUBLISHED PROPRIETARY SOURCE CODE of Broadcom Corporation;
  * the contents of this file may not be disclosed to third parties, copied
  * or duplicated in any form, in whole or in part, without the prior
@@ -73,13 +73,13 @@
 #endif
 
 typedef struct rem_packet {
-	rem_ioctl_t rem_cdc;
-	uchar message [RWL_ACTION_FRAME_DATA_SIZE];
+    rem_ioctl_t rem_cdc;
+    uchar message [RWL_ACTION_FRAME_DATA_SIZE];
 } rem_packet_t;
 
 struct send_packet {
-	char command [RWL_WIFI_ACTION_CMD_LEN];
-	dot11_action_wifi_vendor_specific_t response;
+    char command [RWL_WIFI_ACTION_CMD_LEN];
+    dot11_action_wifi_vendor_specific_t response;
 } PACKED;
 typedef struct send_packet send_packet_t;
 
@@ -87,8 +87,8 @@ typedef struct send_packet send_packet_t;
 #endif /* WIFI_REFLECTOR */
 
 typedef struct rwl_request {
-	struct rwl_request* next_request;
-	struct dot11_action_wifi_vendor_specific action_frame;
+    struct rwl_request* next_request;
+    struct dot11_action_wifi_vendor_specific action_frame;
 } rwl_request_t;
 
 

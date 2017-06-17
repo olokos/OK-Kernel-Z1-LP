@@ -30,151 +30,151 @@
 #define KOFF_TIMEOUT msecs_to_jiffies(84)
 
 enum  {
-	MDP3_CLK_AHB,
-	MDP3_CLK_CORE,
-	MDP3_CLK_VSYNC,
-	MDP3_CLK_LCDC,
-	MDP3_CLK_DSI,
-	MDP3_MAX_CLK
+    MDP3_CLK_AHB,
+    MDP3_CLK_CORE,
+    MDP3_CLK_VSYNC,
+    MDP3_CLK_LCDC,
+    MDP3_CLK_DSI,
+    MDP3_MAX_CLK
 };
 
 enum {
-	MDP3_BUS_HANDLE_DMA,
-	MDP3_BUS_HANDLE_PPP,
-	MDP3_BUS_HANDLE_MAX,
+    MDP3_BUS_HANDLE_DMA,
+    MDP3_BUS_HANDLE_PPP,
+    MDP3_BUS_HANDLE_MAX,
 };
 
 enum {
-	MDP3_DMA_IOMMU_DOMAIN,
-	MDP3_PPP_IOMMU_DOMAIN,
-	MDP3_IOMMU_DOMAIN_MAX,
+    MDP3_DMA_IOMMU_DOMAIN,
+    MDP3_PPP_IOMMU_DOMAIN,
+    MDP3_IOMMU_DOMAIN_MAX,
 };
 
 enum {
-	MDP3_IOMMU_CTX_PPP_0,
-	MDP3_IOMMU_CTX_PPP_1,
-	MDP3_IOMMU_CTX_DMA_0,
-	MDP3_IOMMU_CTX_DMA_1,
-	MDP3_IOMMU_CTX_MAX
+    MDP3_IOMMU_CTX_PPP_0,
+    MDP3_IOMMU_CTX_PPP_1,
+    MDP3_IOMMU_CTX_DMA_0,
+    MDP3_IOMMU_CTX_DMA_1,
+    MDP3_IOMMU_CTX_MAX
 };
 
 enum {
-	MDP3_CLIENT_DMA_P,
-	MDP3_CLIENT_PPP,
+    MDP3_CLIENT_DMA_P,
+    MDP3_CLIENT_PPP,
 };
 
 enum {
-	DI_PARTITION_NUM = 0,
-	DI_DOMAIN_NUM = 1,
-	DI_MAX,
+    DI_PARTITION_NUM = 0,
+    DI_DOMAIN_NUM = 1,
+    DI_MAX,
 };
 
 struct mdp3_bus_handle_map {
-	struct msm_bus_vectors *bus_vector;
-	struct msm_bus_paths *usecases;
-	struct msm_bus_scale_pdata *scale_pdata;
-	int current_bus_idx;
-	int ref_cnt;
-	u64 restore_ab;
-	u64 restore_ib;
-	u32 handle;
+    struct msm_bus_vectors *bus_vector;
+    struct msm_bus_paths *usecases;
+    struct msm_bus_scale_pdata *scale_pdata;
+    int current_bus_idx;
+    int ref_cnt;
+    u64 restore_ab;
+    u64 restore_ib;
+    u32 handle;
 };
 
 struct mdp3_iommu_domain_map {
-	u32 domain_type;
-	char *client_name;
-	struct msm_iova_partition partitions[1];
-	int npartitions;
-	int domain_idx;
-	struct iommu_domain *domain;
+    u32 domain_type;
+    char *client_name;
+    struct msm_iova_partition partitions[1];
+    int npartitions;
+    int domain_idx;
+    struct iommu_domain *domain;
 };
 
 struct mdp3_iommu_ctx_map {
-	u32 ctx_type;
-	struct mdp3_iommu_domain_map *domain;
-	char *ctx_name;
-	struct device *ctx;
-	int attached;
+    u32 ctx_type;
+    struct mdp3_iommu_domain_map *domain;
+    char *ctx_name;
+    struct device *ctx;
+    int attached;
 };
 
 struct mdp3_iommu_meta {
-	struct rb_node node;
-	struct ion_handle *handle;
-	struct rb_root iommu_maps;
-	struct kref ref;
-	struct sg_table *table;
-	struct dma_buf *dbuf;
-	int mapped_size;
-	unsigned long size;
-	unsigned long iova_addr;
-	unsigned long flags;
+    struct rb_node node;
+    struct ion_handle *handle;
+    struct rb_root iommu_maps;
+    struct kref ref;
+    struct sg_table *table;
+    struct dma_buf *dbuf;
+    int mapped_size;
+    unsigned long size;
+    unsigned long iova_addr;
+    unsigned long flags;
 };
 
 #define MDP3_MAX_INTR 28
 
 struct mdp3_intr_cb {
-	void (*cb)(int type, void *);
-	void *data;
+    void (*cb)(int type, void *);
+    void *data;
 };
 
 struct mdp3_hw_resource {
-	struct platform_device *pdev;
-	u32 mdp_rev;
+    struct platform_device *pdev;
+    u32 mdp_rev;
 
-	struct mutex res_mutex;
+    struct mutex res_mutex;
 
-	struct clk *clocks[MDP3_MAX_CLK];
-	int clock_ref_count[MDP3_MAX_CLK];
-	unsigned long dma_core_clk_request;
-	unsigned long ppp_core_clk_request;
+    struct clk *clocks[MDP3_MAX_CLK];
+    int clock_ref_count[MDP3_MAX_CLK];
+    unsigned long dma_core_clk_request;
+    unsigned long ppp_core_clk_request;
 
-	char __iomem *mdp_base;
-	size_t mdp_reg_size;
+    char __iomem *mdp_base;
+    size_t mdp_reg_size;
 
-	u32 irq;
-	struct mdp3_bus_handle_map *bus_handle;
+    u32 irq;
+    struct mdp3_bus_handle_map *bus_handle;
 
-	struct ion_client *ion_client;
-	struct mdp3_iommu_domain_map *domains;
-	struct mdp3_iommu_ctx_map *iommu_contexts;
-	bool allow_iommu_update;
-	struct ion_handle *ion_handle;
-	struct mutex iommu_lock;
-	struct rb_root iommu_root;
+    struct ion_client *ion_client;
+    struct mdp3_iommu_domain_map *domains;
+    struct mdp3_iommu_ctx_map *iommu_contexts;
+    bool allow_iommu_update;
+    struct ion_handle *ion_handle;
+    struct mutex iommu_lock;
+    struct rb_root iommu_root;
 
-	struct mdp3_dma dma[MDP3_DMA_MAX];
-	struct mdp3_intf intf[MDP3_DMA_OUTPUT_SEL_MAX];
+    struct mdp3_dma dma[MDP3_DMA_MAX];
+    struct mdp3_intf intf[MDP3_DMA_OUTPUT_SEL_MAX];
 
-	spinlock_t irq_lock;
-	u32 irq_ref_count[MDP3_MAX_INTR];
-	u32 irq_mask;
-	int irq_ref_cnt;
-	struct mdp3_intr_cb callbacks[MDP3_MAX_INTR];
-	u32 underrun_cnt;
+    spinlock_t irq_lock;
+    u32 irq_ref_count[MDP3_MAX_INTR];
+    u32 irq_mask;
+    int irq_ref_cnt;
+    struct mdp3_intr_cb callbacks[MDP3_MAX_INTR];
+    u32 underrun_cnt;
 
-	int irq_registered;
+    int irq_registered;
 
-	struct early_suspend suspend_handler;
-	struct mdss_panel_cfg pan_cfg;
-	unsigned long splash_mem_addr;
-	u32 splash_mem_size;
+    struct early_suspend suspend_handler;
+    struct mdss_panel_cfg pan_cfg;
+    unsigned long splash_mem_addr;
+    u32 splash_mem_size;
 
-	int clk_prepare_count;
-	int cont_splash_en;
+    int clk_prepare_count;
+    int cont_splash_en;
 
-	bool batfet_required;
-	struct regulator *batfet;
-	struct regulator *vdd_cx;
+    bool batfet_required;
+    struct regulator *batfet;
+    struct regulator *vdd_cx;
 };
 
 struct mdp3_img_data {
-	u32 addr;
-	u32 len;
-	u32 padding;
-	u32 flags;
-	int p_need;
-	struct file *srcp_file;
-	struct ion_handle *srcp_ihdl;
+    u32 addr;
+    u32 len;
+    u32 padding;
+    u32 flags;
+    int p_need;
+    struct file *srcp_file;
+    struct ion_handle *srcp_ihdl;
 };
 
 extern struct mdp3_hw_resource *mdp3_res;
@@ -193,7 +193,7 @@ int mdp3_res_update(int enable, int dsi_clk, int client);
 int mdp3_bus_scale_set_quota(int client, u64 ab_quota, u64 ib_quota);
 int mdp3_put_img(struct mdp3_img_data *data, int client);
 int mdp3_get_img(struct msmfb_data *img, struct mdp3_img_data *data,
-		int client);
+                 int client);
 int mdp3_iommu_enable(int client);
 int mdp3_iommu_disable(int client);
 int mdp3_iommu_is_attached(int client);
@@ -210,7 +210,7 @@ int mdp3_misr_set(struct mdp_misr *misr_req);
 int mdp3_misr_get(struct mdp_misr *misr_resp);
 void mdp3_enable_regulator(int enable);
 void mdp3_check_dsi_ctrl_status(struct work_struct *work,
-				uint32_t interval);
+                                uint32_t interval);
 
 #define MDP3_REG_WRITE(addr, val) writel_relaxed(val, mdp3_res->mdp_base + addr)
 #define MDP3_REG_READ(addr) readl_relaxed(mdp3_res->mdp_base + addr)

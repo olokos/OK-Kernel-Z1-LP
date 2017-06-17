@@ -40,82 +40,82 @@
 #define IB_SMP_INVALID_FIELD    cpu_to_be16(0x001C)
 
 struct ib_node_info {
-	u8 base_version;
-	u8 class_version;
-	u8 node_type;
-	u8 num_ports;
-	__be64 sys_guid;
-	__be64 node_guid;
-	__be64 port_guid;
-	__be16 partition_cap;
-	__be16 device_id;
-	__be32 revision;
-	u8 local_port_num;
-	u8 vendor_id[3];
+    u8 base_version;
+    u8 class_version;
+    u8 node_type;
+    u8 num_ports;
+    __be64 sys_guid;
+    __be64 node_guid;
+    __be64 port_guid;
+    __be16 partition_cap;
+    __be16 device_id;
+    __be32 revision;
+    u8 local_port_num;
+    u8 vendor_id[3];
 } __attribute__ ((packed));
 
 struct ib_mad_notice_attr {
-	u8 generic_type;
-	u8 prod_type_msb;
-	__be16 prod_type_lsb;
-	__be16 trap_num;
-	__be16 issuer_lid;
-	__be16 toggle_count;
+    u8 generic_type;
+    u8 prod_type_msb;
+    __be16 prod_type_lsb;
+    __be16 trap_num;
+    __be16 issuer_lid;
+    __be16 toggle_count;
 
-	union {
-		struct {
-			u8	details[54];
-		} raw_data;
+    union {
+        struct {
+            u8	details[54];
+        } raw_data;
 
-		struct {
-			__be16	reserved;
-			__be16	lid;		/* where violation happened */
-			u8	port_num;	/* where violation happened */
-		} __attribute__ ((packed)) ntc_129_131;
+        struct {
+            __be16	reserved;
+            __be16	lid;		/* where violation happened */
+            u8	port_num;	/* where violation happened */
+        } __attribute__ ((packed)) ntc_129_131;
 
-		struct {
-			__be16	reserved;
-			__be16	lid;		/* LID where change occurred */
-			u8	reserved2;
-			u8	local_changes;	/* low bit - local changes */
-			__be32	new_cap_mask;	/* new capability mask */
-			u8	reserved3;
-			u8	change_flags;	/* low 3 bits only */
-		} __attribute__ ((packed)) ntc_144;
+        struct {
+            __be16	reserved;
+            __be16	lid;		/* LID where change occurred */
+            u8	reserved2;
+            u8	local_changes;	/* low bit - local changes */
+            __be32	new_cap_mask;	/* new capability mask */
+            u8	reserved3;
+            u8	change_flags;	/* low 3 bits only */
+        } __attribute__ ((packed)) ntc_144;
 
-		struct {
-			__be16	reserved;
-			__be16	lid;		/* lid where sys guid changed */
-			__be16	reserved2;
-			__be64	new_sys_guid;
-		} __attribute__ ((packed)) ntc_145;
+        struct {
+            __be16	reserved;
+            __be16	lid;		/* lid where sys guid changed */
+            __be16	reserved2;
+            __be64	new_sys_guid;
+        } __attribute__ ((packed)) ntc_145;
 
-		struct {
-			__be16	reserved;
-			__be16	lid;
-			__be16	dr_slid;
-			u8	method;
-			u8	reserved2;
-			__be16	attr_id;
-			__be32	attr_mod;
-			__be64	mkey;
-			u8	reserved3;
-			u8	dr_trunc_hop;
-			u8	dr_rtn_path[30];
-		} __attribute__ ((packed)) ntc_256;
+        struct {
+            __be16	reserved;
+            __be16	lid;
+            __be16	dr_slid;
+            u8	method;
+            u8	reserved2;
+            __be16	attr_id;
+            __be32	attr_mod;
+            __be64	mkey;
+            u8	reserved3;
+            u8	dr_trunc_hop;
+            u8	dr_rtn_path[30];
+        } __attribute__ ((packed)) ntc_256;
 
-		struct {
-			__be16		reserved;
-			__be16		lid1;
-			__be16		lid2;
-			__be32		key;
-			__be32		sl_qp1;	/* SL: high 4 bits */
-			__be32		qp2;	/* high 8 bits reserved */
-			union ib_gid	gid1;
-			union ib_gid	gid2;
-		} __attribute__ ((packed)) ntc_257_258;
+        struct {
+            __be16		reserved;
+            __be16		lid1;
+            __be16		lid2;
+            __be32		key;
+            __be32		sl_qp1;	/* SL: high 4 bits */
+            __be32		qp2;	/* high 8 bits reserved */
+            union ib_gid	gid1;
+            union ib_gid	gid2;
+        } __attribute__ ((packed)) ntc_257_258;
 
-	} details;
+    } details;
 };
 
 /*
@@ -173,8 +173,8 @@ struct ib_mad_notice_attr {
 #define IB_NOTICE_TRAP_DR_TRUNC		0x40
 
 struct ib_vl_weight_elem {
-	u8      vl;     /* Only low 4 bits, upper 4 bits reserved */
-	u8      weight;
+    u8      vl;     /* Only low 4 bits, upper 4 bits reserved */
+    u8      weight;
 };
 
 #define IB_VLARB_LOWPRI_0_31    1
@@ -185,28 +185,28 @@ struct ib_vl_weight_elem {
 #define IB_PMA_PORT_COUNTERS_CONG       cpu_to_be16(0xFF00)
 
 struct ib_pma_portcounters_cong {
-	u8 reserved;
-	u8 reserved1;
-	__be16 port_check_rate;
-	__be16 symbol_error_counter;
-	u8 link_error_recovery_counter;
-	u8 link_downed_counter;
-	__be16 port_rcv_errors;
-	__be16 port_rcv_remphys_errors;
-	__be16 port_rcv_switch_relay_errors;
-	__be16 port_xmit_discards;
-	u8 port_xmit_constraint_errors;
-	u8 port_rcv_constraint_errors;
-	u8 reserved2;
-	u8 link_overrun_errors; /* LocalLink: 7:4, BufferOverrun: 3:0 */
-	__be16 reserved3;
-	__be16 vl15_dropped;
-	__be64 port_xmit_data;
-	__be64 port_rcv_data;
-	__be64 port_xmit_packets;
-	__be64 port_rcv_packets;
-	__be64 port_xmit_wait;
-	__be64 port_adr_events;
+    u8 reserved;
+    u8 reserved1;
+    __be16 port_check_rate;
+    __be16 symbol_error_counter;
+    u8 link_error_recovery_counter;
+    u8 link_downed_counter;
+    __be16 port_rcv_errors;
+    __be16 port_rcv_remphys_errors;
+    __be16 port_rcv_switch_relay_errors;
+    __be16 port_xmit_discards;
+    u8 port_xmit_constraint_errors;
+    u8 port_rcv_constraint_errors;
+    u8 reserved2;
+    u8 link_overrun_errors; /* LocalLink: 7:4, BufferOverrun: 3:0 */
+    __be16 reserved3;
+    __be16 vl15_dropped;
+    __be64 port_xmit_data;
+    __be64 port_rcv_data;
+    __be64 port_xmit_packets;
+    __be64 port_rcv_packets;
+    __be64 port_xmit_wait;
+    __be64 port_adr_events;
 } __attribute__ ((packed));
 
 #define IB_PMA_CONG_HW_CONTROL_TIMER            0x00

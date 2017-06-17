@@ -26,8 +26,8 @@
 const struct mxs_auart_data mx23_auart_data[] __initconst = {
 #define mx23_auart_data_entry(_id, hwid)				\
 	mxs_auart_data_entry(MX23, _id, hwid)
-	mx23_auart_data_entry(0, 1),
-	mx23_auart_data_entry(1, 2),
+    mx23_auart_data_entry(0, 1),
+    mx23_auart_data_entry(1, 2),
 };
 #endif
 
@@ -35,31 +35,30 @@ const struct mxs_auart_data mx23_auart_data[] __initconst = {
 const struct mxs_auart_data mx28_auart_data[] __initconst = {
 #define mx28_auart_data_entry(_id)					\
 	mxs_auart_data_entry(MX28, _id, _id)
-	mx28_auart_data_entry(0),
-	mx28_auart_data_entry(1),
-	mx28_auart_data_entry(2),
-	mx28_auart_data_entry(3),
-	mx28_auart_data_entry(4),
+    mx28_auart_data_entry(0),
+    mx28_auart_data_entry(1),
+    mx28_auart_data_entry(2),
+    mx28_auart_data_entry(3),
+    mx28_auart_data_entry(4),
 };
 #endif
 
 struct platform_device *__init mxs_add_auart(
-		const struct mxs_auart_data *data)
-{
-	struct resource res[] = {
-		{
-			.start = data->iobase,
-			.end = data->iobase + SZ_8K - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irq,
-			.end = data->irq,
-			.flags = IORESOURCE_IRQ,
-		},
-	};
+    const struct mxs_auart_data *data) {
+    struct resource res[] = {
+        {
+            .start = data->iobase,
+            .end = data->iobase + SZ_8K - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irq,
+            .end = data->irq,
+            .flags = IORESOURCE_IRQ,
+        },
+    };
 
-	return mxs_add_platform_device_dmamask("mxs-auart", data->id,
-					res, ARRAY_SIZE(res), NULL, 0,
-					DMA_BIT_MASK(32));
+    return mxs_add_platform_device_dmamask("mxs-auart", data->id,
+                                           res, ARRAY_SIZE(res), NULL, 0,
+                                           DMA_BIT_MASK(32));
 }
 

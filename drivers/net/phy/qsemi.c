@@ -60,87 +60,82 @@ MODULE_AUTHOR("Andy Fleming");
 MODULE_LICENSE("GPL");
 
 /* Returns 0, unless there's a write error */
-static int qs6612_config_init(struct phy_device *phydev)
-{
-	/* The PHY powers up isolated on the RPX,
-	 * so send a command to allow operation.
-	 * XXX - My docs indicate this should be 0x0940
-	 * ...or something.  The current value sets three
-	 * reserved bits, bit 11, which specifies it should be
-	 * set to one, bit 10, which specifies it should be set
-	 * to 0, and bit 7, which doesn't specify.  However, my
-	 * docs are preliminary, and I will leave it like this
-	 * until someone more knowledgable corrects me or it.
-	 * -- Andy Fleming
-	 */
-	return phy_write(phydev, MII_QS6612_PCR, 0x0dc0);
+static int qs6612_config_init(struct phy_device *phydev) {
+    /* The PHY powers up isolated on the RPX,
+     * so send a command to allow operation.
+     * XXX - My docs indicate this should be 0x0940
+     * ...or something.  The current value sets three
+     * reserved bits, bit 11, which specifies it should be
+     * set to one, bit 10, which specifies it should be set
+     * to 0, and bit 7, which doesn't specify.  However, my
+     * docs are preliminary, and I will leave it like this
+     * until someone more knowledgable corrects me or it.
+     * -- Andy Fleming
+     */
+    return phy_write(phydev, MII_QS6612_PCR, 0x0dc0);
 }
 
-static int qs6612_ack_interrupt(struct phy_device *phydev)
-{
-	int err;
+static int qs6612_ack_interrupt(struct phy_device *phydev) {
+    int err;
 
-	err = phy_read(phydev, MII_QS6612_ISR);
+    err = phy_read(phydev, MII_QS6612_ISR);
 
-	if (err < 0)
-		return err;
+    if (err < 0)
+        return err;
 
-	err = phy_read(phydev, MII_BMSR);
+    err = phy_read(phydev, MII_BMSR);
 
-	if (err < 0)
-		return err;
+    if (err < 0)
+        return err;
 
-	err = phy_read(phydev, MII_EXPANSION);
+    err = phy_read(phydev, MII_EXPANSION);
 
-	if (err < 0)
-		return err;
+    if (err < 0)
+        return err;
 
-	return 0;
+    return 0;
 }
 
-static int qs6612_config_intr(struct phy_device *phydev)
-{
-	int err;
-	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-		err = phy_write(phydev, MII_QS6612_IMR,
-				MII_QS6612_IMR_INIT);
-	else
-		err = phy_write(phydev, MII_QS6612_IMR, 0);
+static int qs6612_config_intr(struct phy_device *phydev) {
+    int err;
+    if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+        err = phy_write(phydev, MII_QS6612_IMR,
+                        MII_QS6612_IMR_INIT);
+    else
+        err = phy_write(phydev, MII_QS6612_IMR, 0);
 
-	return err;
+    return err;
 
 }
 
 static struct phy_driver qs6612_driver = {
-	.phy_id		= 0x00181440,
-	.name		= "QS6612",
-	.phy_id_mask	= 0xfffffff0,
-	.features	= PHY_BASIC_FEATURES,
-	.flags		= PHY_HAS_INTERRUPT,
-	.config_init	= qs6612_config_init,
-	.config_aneg	= genphy_config_aneg,
-	.read_status	= genphy_read_status,
-	.ack_interrupt	= qs6612_ack_interrupt,
-	.config_intr	= qs6612_config_intr,
-	.driver 	= { .owner = THIS_MODULE,},
+    .phy_id		= 0x00181440,
+    .name		= "QS6612",
+    .phy_id_mask	= 0xfffffff0,
+    .features	= PHY_BASIC_FEATURES,
+    .flags		= PHY_HAS_INTERRUPT,
+    .config_init	= qs6612_config_init,
+    .config_aneg	= genphy_config_aneg,
+    .read_status	= genphy_read_status,
+    .ack_interrupt	= qs6612_ack_interrupt,
+    .config_intr	= qs6612_config_intr,
+    .driver 	= { .owner = THIS_MODULE,},
 };
 
-static int __init qs6612_init(void)
-{
-	return phy_driver_register(&qs6612_driver);
+static int __init qs6612_init(void) {
+    return phy_driver_register(&qs6612_driver);
 }
 
-static void __exit qs6612_exit(void)
-{
-	phy_driver_unregister(&qs6612_driver);
+static void __exit qs6612_exit(void) {
+    phy_driver_unregister(&qs6612_driver);
 }
 
 module_init(qs6612_init);
 module_exit(qs6612_exit);
 
 static struct mdio_device_id __maybe_unused qs6612_tbl[] = {
-	{ 0x00181440, 0xfffffff0 },
-	{ }
+    { 0x00181440, 0xfffffff0 },
+    { }
 };
 
 MODULE_DEVICE_TABLE(mdio, qs6612_tbl);

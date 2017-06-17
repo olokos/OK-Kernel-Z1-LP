@@ -20,12 +20,12 @@
 #endif
 
 struct cplb_entry {
-	unsigned long data, addr;
+    unsigned long data, addr;
 };
 
 struct cplb_boundary {
-	unsigned long eaddr; /* End of this region.  */
-	unsigned long data; /* CPLB data value.  */
+    unsigned long eaddr; /* End of this region.  */
+    unsigned long data; /* CPLB data value.  */
 };
 
 extern struct cplb_boundary dcplb_bounds[];

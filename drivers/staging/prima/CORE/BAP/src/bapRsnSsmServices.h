@@ -82,8 +82,7 @@
 
 
 // Upper level authentication types used by AA
-typedef enum eAniSsmAuthType
-{
+typedef enum eAniSsmAuthType {
     eANI_SSM_AT_UNDERFLOW = -1,
 
     // The numbers are fixed so that they can be re-used in the XCLI
@@ -98,8 +97,7 @@ typedef enum eAniSsmAuthType
 } tAniSsmAuthType;
 
 // Upper level encryption types used by AA
-typedef enum eAniSsmCipherType
-{
+typedef enum eAniSsmCipherType {
     eANI_SSM_CT_UNDERFLOW = -1,
 
     // The numbers are fixed so that they can be re-used in the XCLI
@@ -117,8 +115,7 @@ typedef enum eAniSsmCipherType
 
 
 // WPA modes
-typedef enum eAniSsmWpaModes
-{
+typedef enum eAniSsmWpaModes {
     eANI_SSM_WPA_UNDERFLOW = -1,
 
     eANI_SSM_WPA_DISABLE = 0,
@@ -128,14 +125,12 @@ typedef enum eAniSsmWpaModes
     eANI_SSM_WPA_OVERFLOW = ((eANI_SSM_WPA_2 | eANI_SSM_WPA_1)  + 1)
 } tAniSsmWpaModes;
 
-typedef struct sAniSsmGroup
-{
+typedef struct sAniSsmGroup {
     v_U16_t len; // Valid range: 0..ANI_SSM_MAX_GROUP_SIZE
     v_U8_t  group[1];
 } tAniSsmGroup;
 
-typedef struct sAniSsmUserId
-{
+typedef struct sAniSsmUserId {
     v_U16_t len; // Valid range: 0..ANI_SSM_MAX_USERID_SIZE
     v_U8_t  userId[1];
 } tAniSsmUserId;

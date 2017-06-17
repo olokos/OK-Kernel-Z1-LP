@@ -25,11 +25,11 @@ static struct s1d13xxxfb_regval s1d13xxxfb_initregs[] = {
     {0x0014,0x00},   // LCD Pixel Clock Configuration Register
     {0x0018,0x00},   // CRT/TV Pixel Clock Configuration Register
     {0x001C,0x00},   // MediaPlug Clock Configuration Register
-/*
- * .. 10MHz: 0x00
- * .. 30MHz: 0x01
- * 30MHz ..: 0x02
- */
+    /*
+     * .. 10MHz: 0x00
+     * .. 30MHz: 0x01
+     * 30MHz ..: 0x02
+     */
     {0x001E,0x02},   // CPU To Memory Wait State Select Register
     {0x0021,0x02},   // DRAM Refresh Rate Register
     {0x002A,0x11},   // DRAM Timings Control Register 0

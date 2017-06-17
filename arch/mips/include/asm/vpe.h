@@ -20,10 +20,10 @@
 #define _ASM_VPE_H
 
 struct vpe_notifications {
-	void (*start)(int vpe);
-	void (*stop)(int vpe);
+    void (*start)(int vpe);
+    void (*stop)(int vpe);
 
-	struct list_head list;
+    struct list_head list;
 };
 
 

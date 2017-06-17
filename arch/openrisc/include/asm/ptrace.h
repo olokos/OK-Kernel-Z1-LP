@@ -26,12 +26,12 @@
  * This is the layout of the regset returned by the GETREGSET ptrace call
  */
 struct user_regs_struct {
-	/* GPR R0-R31... */
-	unsigned long gpr[32];
-	unsigned long pc;
-	unsigned long sr;
-	unsigned long pad1;
-	unsigned long pad2;
+    /* GPR R0-R31... */
+    unsigned long gpr[32];
+    unsigned long pc;
+    unsigned long sr;
+    unsigned long pad1;
+    unsigned long pad2;
 };
 #endif
 
@@ -56,30 +56,30 @@ struct user_regs_struct {
  */
 
 struct pt_regs {
-	union {
-		struct {
-			/* Named registers */
-			long  sr;	/* Stored in place of r0 */
-			long  sp;	/* r1 */
-		};
-		struct {
-			/* Old style */
-			long offset[2];
-			long gprs[30];
-		};
-		struct {
-			/* New style */
-			long gpr[32];
-		};
-	};
-	long  pc;
-	/* For restarting system calls:
-	 * Set to syscall number for syscall exceptions,
-	 * -1 for all other exceptions.
-	 */
-	long  orig_gpr11;	/* For restarting system calls */
-	long dummy;		/* Cheap alignment fix */
-	long dummy2;		/* Cheap alignment fix */
+    union {
+        struct {
+            /* Named registers */
+            long  sr;	/* Stored in place of r0 */
+            long  sp;	/* r1 */
+        };
+        struct {
+            /* Old style */
+            long offset[2];
+            long gprs[30];
+        };
+        struct {
+            /* New style */
+            long gpr[32];
+        };
+    };
+    long  pc;
+    /* For restarting system calls:
+     * Set to syscall number for syscall exceptions,
+     * -1 for all other exceptions.
+     */
+    long  orig_gpr11;	/* For restarting system calls */
+    long dummy;		/* Cheap alignment fix */
+    long dummy2;		/* Cheap alignment fix */
 };
 
 /* TODO: Rename this to REDZONE because that's what it is */
@@ -90,9 +90,8 @@ struct pt_regs {
 #define user_stack_pointer(regs)	((unsigned long)(regs)->sp)
 #define profile_pc(regs)		instruction_pointer(regs)
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	return regs->gpr[11];
+static inline long regs_return_value(struct pt_regs *regs) {
+    return regs->gpr[11];
 }
 
 #endif /* __ASSEMBLY__ */

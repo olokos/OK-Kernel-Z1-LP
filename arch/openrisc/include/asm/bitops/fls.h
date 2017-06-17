@@ -15,15 +15,14 @@
 
 #ifdef CONFIG_OPENRISC_HAVE_INST_FL1
 
-static inline int fls(int x)
-{
-	int ret;
+static inline int fls(int x) {
+    int ret;
 
-	__asm__ ("l.fl1 %0,%1"
-		 : "=r" (ret)
-		 : "r" (x));
+    __asm__ ("l.fl1 %0,%1"
+             : "=r" (ret)
+             : "r" (x));
 
-	return ret;
+    return ret;
 }
 
 #else

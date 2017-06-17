@@ -9,39 +9,35 @@
  */
 #ifdef DEBUG
 #ifdef LMC_PACKET_LOG
-void lmcConsoleLog(char *type, unsigned char *ucData, int iLen)
-{
-  int iNewLine = 1;
-  char str[80], *pstr;
-  
-  sprintf(str, KERN_DEBUG "lmc: %s: ", type);
-  pstr = str+strlen(str);
-  
-  if(iLen > 240){
-      printk(KERN_DEBUG "lmc: Printing 240 chars... out of: %d\n", iLen);
-    iLen = 240;
-  }
-  else{
-      printk(KERN_DEBUG "lmc: Printing %d chars\n", iLen);
-  }
+void lmcConsoleLog(char *type, unsigned char *ucData, int iLen) {
+    int iNewLine = 1;
+    char str[80], *pstr;
 
-  while(iLen > 0) 
-    {
-      sprintf(pstr, "%02x ", *ucData);
-      pstr+=3;
-      ucData++;
-      if( !(iNewLine % 20))
-	{
-	  sprintf(pstr, "\n");
-	  printk(str);
-	  sprintf(str, KERN_DEBUG "lmc: %s: ", type);
-	  pstr=str+strlen(str);
-	}
-      iNewLine++;
-      iLen--;
+    sprintf(str, KERN_DEBUG "lmc: %s: ", type);
+    pstr = str+strlen(str);
+
+    if(iLen > 240) {
+        printk(KERN_DEBUG "lmc: Printing 240 chars... out of: %d\n", iLen);
+        iLen = 240;
+    } else {
+        printk(KERN_DEBUG "lmc: Printing %d chars\n", iLen);
     }
-  sprintf(pstr, "\n");
-  printk(str);
+
+    while(iLen > 0) {
+        sprintf(pstr, "%02x ", *ucData);
+        pstr+=3;
+        ucData++;
+        if( !(iNewLine % 20)) {
+            sprintf(pstr, "\n");
+            printk(str);
+            sprintf(str, KERN_DEBUG "lmc: %s: ", type);
+            pstr=str+strlen(str);
+        }
+        iNewLine++;
+        iLen--;
+    }
+    sprintf(pstr, "\n");
+    printk(str);
 }
 #endif
 #endif
@@ -50,27 +46,25 @@ void lmcConsoleLog(char *type, unsigned char *ucData, int iLen)
 u32 lmcEventLogIndex;
 u32 lmcEventLogBuf[LMC_EVENTLOGSIZE * LMC_EVENTLOGARGS];
 
-void lmcEventLog(u32 EventNum, u32 arg2, u32 arg3)
-{
-  lmcEventLogBuf[lmcEventLogIndex++] = EventNum;
-  lmcEventLogBuf[lmcEventLogIndex++] = arg2;
-  lmcEventLogBuf[lmcEventLogIndex++] = arg3;
-  lmcEventLogBuf[lmcEventLogIndex++] = jiffies;
+void lmcEventLog(u32 EventNum, u32 arg2, u32 arg3) {
+    lmcEventLogBuf[lmcEventLogIndex++] = EventNum;
+    lmcEventLogBuf[lmcEventLogIndex++] = arg2;
+    lmcEventLogBuf[lmcEventLogIndex++] = arg3;
+    lmcEventLogBuf[lmcEventLogIndex++] = jiffies;
 
-  lmcEventLogIndex &= (LMC_EVENTLOGSIZE * LMC_EVENTLOGARGS) - 1;
+    lmcEventLogIndex &= (LMC_EVENTLOGSIZE * LMC_EVENTLOGARGS) - 1;
 }
 #endif  /*  DEBUG  */
 
-void lmc_trace(struct net_device *dev, char *msg){
+void lmc_trace(struct net_device *dev, char *msg) {
 #ifdef LMC_TRACE
     unsigned long j = jiffies + 3; /* Wait for 50 ms */
 
-    if(in_interrupt()){
+    if(in_interrupt()) {
         printk("%s: * %s\n", dev->name, msg);
 //        while(time_before(jiffies, j+10))
 //            ;
-    }
-    else {
+    } else {
         printk("%s: %s\n", dev->name, msg);
         while(time_before(jiffies, j))
             schedule();

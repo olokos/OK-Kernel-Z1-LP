@@ -31,8 +31,7 @@
 
 #include <vos_types.h>
 
-typedef enum
-{
+typedef enum {
     eMib_dot11DesiredBssType_infrastructure = 1,
     eMib_dot11DesiredBssType_independent = 2,
     eMib_dot11DesiredBssType_infra_ap =3,
@@ -46,8 +45,7 @@ typedef enum
       this maximum BSSID list count.  */
 #define MIB_DOT11_DESIRED_BSSID_LIST_MAX_COUNT ( 1 )
 
-typedef struct
-{
+typedef struct {
     v_U32_t cEntries;
 
     v_MACADDR_t BSSIDs[ MIB_DOT11_DESIRED_BSSID_LIST_MAX_COUNT ];
@@ -64,15 +62,13 @@ typedef struct
 
 #define MIB_DOT11_SSID_MAX_LENGTH ( 32 )
 
-typedef struct
-{
+typedef struct {
     v_U32_t ssidLength;
     v_U8_t  ssid[ MIB_DOT11_SSID_MAX_LENGTH ];
 
 } sDot11Ssid;
 
-typedef struct
-{
+typedef struct {
     v_U32_t cEntries;
 
     sDot11Ssid SSIDs[ MIB_DOT11_DESIRED_SSID_LIST_MAX_COUNT ];
@@ -81,8 +77,7 @@ typedef struct
 
 
 
-typedef enum
-{
+typedef enum {
     // these are bitmasks....
     eMib_dot11AutoConfigEnabled_None = 0U,
     eMib_dot11AutoConfigEnabled_Phy  = 0x00000001U,
@@ -94,23 +89,20 @@ typedef enum
 
 #define MIB_DOT11_SUPPORTED_PHY_TYPES_MAX_COUNT ( 3 )
 
-typedef enum tagMib_dot11PhyType
-{
+typedef enum tagMib_dot11PhyType {
     eMib_dot11PhyType_11b,
     eMib_dot11PhyType_11a,
     eMib_dot11PhyType_11g,
     eMib_dot11PhyType_all
 } eMib_dot11PhyType;
 
-typedef struct tagMib_dot11SupportedPhyTypes
-{
+typedef struct tagMib_dot11SupportedPhyTypes {
     v_U32_t cEntries;
     eMib_dot11PhyType phyTypes[ MIB_DOT11_SUPPORTED_PHY_TYPES_MAX_COUNT ];
 }  sMib_dot11SupportedPhyTypes;
 
 
-typedef enum
-{
+typedef enum {
     eMib_DevicePowerState_D0,
     eMib_DevicePowerState_D1,
     eMib_DevicePowerState_D2,
@@ -119,24 +111,21 @@ typedef enum
 } eMib_DevicePowerState;
 
 
-typedef enum
-{
+typedef enum {
     eMib_dot11NICPowerState_OFF = VOS_FALSE,
     eMib_dot11NICPowerState_ON  = VOS_TRUE
 
 } eMib_dot11NICPowerState;
 
 
-typedef enum
-{
+typedef enum {
     eMib_dot11HardwarePHYState_OFF = VOS_FALSE,
     eMib_dot11HardwarePHYState_ON  = VOS_TRUE
 
 } eMib_dot11HardwarePHYState;
 
 
-typedef enum
-{
+typedef enum {
     eMib_dot11PowerSavingLevel_None,
     eMib_dot11PowerSavingLevel_MaxPS,
     eMib_dot11PowerSavingLevel_FastPS,
@@ -146,8 +135,7 @@ typedef enum
 
 
 #define MIB_DOT11_MAC_EXCLUSION_LIST_MAX_COUNT 4
-typedef struct
-{
+typedef struct {
     v_U32_t cEntries;
 
     v_MACADDR_t macAddrs[ MIB_DOT11_MAC_EXCLUSION_LIST_MAX_COUNT ];
@@ -156,39 +144,34 @@ typedef struct
 
 #define MIB_DOT11_PRIVACY_EXEMPT_LIST_MAX_COUNT 32
 
-typedef enum
-{
+typedef enum {
     eMib_dot11ExemptionAction_Always,
     eMib_dot11ExemptionAction_OnKeyMapUnavailable
 
 } eMib_dot11ExemptAction;
 
-typedef enum
-{
+typedef enum {
     eMib_dot11ExemptPacket_Unicast,
     eMib_dot11ExemptPacket_Multicast,
     eMib_dot11ExemptPacket_Both
 
 } eMib_dot11ExemptPacket;
 
-typedef struct
-{
+typedef struct {
     v_U16_t uEtherType;
     eMib_dot11ExemptAction exemptAction;
     eMib_dot11ExemptPacket exemptPacket;
 
 } sMib_dot11PrivacyExemption;
 
-typedef struct
-{
+typedef struct {
     v_U32_t cEntries;
 
     sMib_dot11PrivacyExemption privacyExemptList[ MIB_DOT11_PRIVACY_EXEMPT_LIST_MAX_COUNT ];
 
 } sMib_dot11PrivacyExemptionList;
 
-typedef struct sHddMib_s
-{
+typedef struct sHddMib_s {
     eMib_dot11DesiredBssType    mibDot11DesiredBssType;
 
     sMib_dot11DesiredBssidList  mibDot11DesiredBssidList;

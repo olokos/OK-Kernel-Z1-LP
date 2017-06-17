@@ -69,100 +69,93 @@
 #ifndef __ASSEMBLY__
 
 /* Read bus error status register (implicitly clearing it). */
-static inline unsigned char sun3_get_buserr(void)
-{
-	unsigned char sfc, c;
+static inline unsigned char sun3_get_buserr(void) {
+    unsigned char sfc, c;
 
-	GET_SFC (sfc);
-	SET_SFC (FC_CONTROL);
-	GET_CONTROL_BYTE (AC_BUS_ERROR, c);
-	SET_SFC (sfc);
+    GET_SFC (sfc);
+    SET_SFC (FC_CONTROL);
+    GET_CONTROL_BYTE (AC_BUS_ERROR, c);
+    SET_SFC (sfc);
 
-	return c;
+    return c;
 }
 
 /* Read segmap from hardware MMU. */
-static inline unsigned long sun3_get_segmap(unsigned long addr)
-{
-        register unsigned long entry;
-        unsigned char c, sfc;
+static inline unsigned long sun3_get_segmap(unsigned long addr) {
+    register unsigned long entry;
+    unsigned char c, sfc;
 
-        GET_SFC (sfc);
-        SET_SFC (FC_CONTROL);
-        GET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), c);
-        SET_SFC (sfc);
-        entry = c;
+    GET_SFC (sfc);
+    SET_SFC (FC_CONTROL);
+    GET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), c);
+    SET_SFC (sfc);
+    entry = c;
 
-        return entry;
+    return entry;
 }
 
 /* Write segmap to hardware MMU. */
-static inline void sun3_put_segmap(unsigned long addr, unsigned long entry)
-{
-        unsigned char sfc;
+static inline void sun3_put_segmap(unsigned long addr, unsigned long entry) {
+    unsigned char sfc;
 
-        GET_DFC (sfc);
-        SET_DFC (FC_CONTROL);
-        SET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), entry);
-	SET_DFC (sfc);
+    GET_DFC (sfc);
+    SET_DFC (FC_CONTROL);
+    SET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), entry);
+    SET_DFC (sfc);
 
-        return;
+    return;
 }
 
 /* Read PTE from hardware MMU. */
-static inline unsigned long sun3_get_pte(unsigned long addr)
-{
-        register unsigned long entry;
-        unsigned char sfc;
+static inline unsigned long sun3_get_pte(unsigned long addr) {
+    register unsigned long entry;
+    unsigned char sfc;
 
-        GET_SFC (sfc);
-        SET_SFC (FC_CONTROL);
-        GET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
-        SET_SFC (sfc);
+    GET_SFC (sfc);
+    SET_SFC (FC_CONTROL);
+    GET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
+    SET_SFC (sfc);
 
-        return entry;
+    return entry;
 }
 
 /* Write PTE to hardware MMU. */
-static inline void sun3_put_pte(unsigned long addr, unsigned long entry)
-{
-        unsigned char sfc;
+static inline void sun3_put_pte(unsigned long addr, unsigned long entry) {
+    unsigned char sfc;
 
-        GET_DFC (sfc);
-        SET_DFC (FC_CONTROL);
-        SET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
-	SET_DFC (sfc);
+    GET_DFC (sfc);
+    SET_DFC (FC_CONTROL);
+    SET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
+    SET_DFC (sfc);
 
-        return;
+    return;
 }
 
 /* get current context */
-static inline unsigned char sun3_get_context(void)
-{
-	unsigned char sfc, c;
+static inline unsigned char sun3_get_context(void) {
+    unsigned char sfc, c;
 
-	GET_SFC(sfc);
-	SET_SFC(FC_CONTROL);
-	GET_CONTROL_BYTE(AC_CONTEXT, c);
-	SET_SFC(sfc);
+    GET_SFC(sfc);
+    SET_SFC(FC_CONTROL);
+    GET_CONTROL_BYTE(AC_CONTEXT, c);
+    SET_SFC(sfc);
 
-	return c;
+    return c;
 }
 
 /* set alternate context */
-static inline void sun3_put_context(unsigned char c)
-{
-	unsigned char dfc;
-	GET_DFC(dfc);
-	SET_DFC(FC_CONTROL);
-	SET_CONTROL_BYTE(AC_CONTEXT, c);
-	SET_DFC(dfc);
+static inline void sun3_put_context(unsigned char c) {
+    unsigned char dfc;
+    GET_DFC(dfc);
+    SET_DFC(FC_CONTROL);
+    SET_CONTROL_BYTE(AC_CONTEXT, c);
+    SET_DFC(dfc);
 
-	return;
+    return;
 }
 
 extern void __iomem *sun3_ioremap(unsigned long phys, unsigned long size,
-			  unsigned long type);
+                                  unsigned long type);
 
 extern int sun3_map_test(unsigned long addr, char *val);
 

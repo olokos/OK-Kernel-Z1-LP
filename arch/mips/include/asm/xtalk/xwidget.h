@@ -96,47 +96,47 @@ typedef u32 widgetreg_t;
 
 /* widget configuration registers */
 typedef volatile struct widget_cfg {
-	widgetreg_t		w_pad_0;		/* 0x00 */
-	widgetreg_t		w_id;			/* 0x04 */
-	widgetreg_t		w_pad_1;		/* 0x08 */
-	widgetreg_t		w_status;		/* 0x0c */
-	widgetreg_t		w_pad_2;		/* 0x10 */
-	widgetreg_t		w_err_upper_addr;	/* 0x14 */
-	widgetreg_t		w_pad_3;		/* 0x18 */
-	widgetreg_t		w_err_lower_addr;	/* 0x1c */
-	widgetreg_t		w_pad_4;		/* 0x20 */
-	widgetreg_t		w_control;		/* 0x24 */
-	widgetreg_t		w_pad_5;		/* 0x28 */
-	widgetreg_t		w_req_timeout;		/* 0x2c */
-	widgetreg_t		w_pad_6;		/* 0x30 */
-	widgetreg_t		w_intdest_upper_addr;	/* 0x34 */
-	widgetreg_t		w_pad_7;		/* 0x38 */
-	widgetreg_t		w_intdest_lower_addr;	/* 0x3c */
-	widgetreg_t		w_pad_8;		/* 0x40 */
-	widgetreg_t		w_err_cmd_word;		/* 0x44 */
-	widgetreg_t		w_pad_9;		/* 0x48 */
-	widgetreg_t		w_llp_cfg;		/* 0x4c */
-	widgetreg_t		w_pad_10;		/* 0x50 */
-	widgetreg_t		w_tflush;		/* 0x54 */
+    widgetreg_t		w_pad_0;		/* 0x00 */
+    widgetreg_t		w_id;			/* 0x04 */
+    widgetreg_t		w_pad_1;		/* 0x08 */
+    widgetreg_t		w_status;		/* 0x0c */
+    widgetreg_t		w_pad_2;		/* 0x10 */
+    widgetreg_t		w_err_upper_addr;	/* 0x14 */
+    widgetreg_t		w_pad_3;		/* 0x18 */
+    widgetreg_t		w_err_lower_addr;	/* 0x1c */
+    widgetreg_t		w_pad_4;		/* 0x20 */
+    widgetreg_t		w_control;		/* 0x24 */
+    widgetreg_t		w_pad_5;		/* 0x28 */
+    widgetreg_t		w_req_timeout;		/* 0x2c */
+    widgetreg_t		w_pad_6;		/* 0x30 */
+    widgetreg_t		w_intdest_upper_addr;	/* 0x34 */
+    widgetreg_t		w_pad_7;		/* 0x38 */
+    widgetreg_t		w_intdest_lower_addr;	/* 0x3c */
+    widgetreg_t		w_pad_8;		/* 0x40 */
+    widgetreg_t		w_err_cmd_word;		/* 0x44 */
+    widgetreg_t		w_pad_9;		/* 0x48 */
+    widgetreg_t		w_llp_cfg;		/* 0x4c */
+    widgetreg_t		w_pad_10;		/* 0x50 */
+    widgetreg_t		w_tflush;		/* 0x54 */
 } widget_cfg_t;
 
 typedef struct {
-	unsigned	didn:4;
-	unsigned	sidn:4;
-	unsigned	pactyp:4;
-	unsigned	tnum:5;
-	unsigned	ct:1;
-	unsigned	ds:2;
-	unsigned	gbr:1;
-	unsigned	vbpm:1;
-	unsigned	error:1;
-	unsigned	bo:1;
-	unsigned	other:8;
+    unsigned	didn:4;
+    unsigned	sidn:4;
+    unsigned	pactyp:4;
+    unsigned	tnum:5;
+    unsigned	ct:1;
+    unsigned	ds:2;
+    unsigned	gbr:1;
+    unsigned	vbpm:1;
+    unsigned	error:1;
+    unsigned	bo:1;
+    unsigned	other:8;
 } w_err_cmd_word_f;
 
 typedef union {
-	widgetreg_t		r;
-	w_err_cmd_word_f	f;
+    widgetreg_t		r;
+    w_err_cmd_word_f	f;
 } w_err_cmd_word_u;
 
 typedef struct xwidget_info_s *xwidget_info_t;
@@ -145,9 +145,9 @@ typedef struct xwidget_info_s *xwidget_info_t;
  * Crosstalk Widget Hardware Identification, as defined in the Crosstalk spec.
  */
 typedef struct xwidget_hwid_s {
-	xwidget_part_num_t	part_num;
-	xwidget_rev_num_t	rev_num;
-	xwidget_mfg_num_t	mfg_num;
+    xwidget_part_num_t	part_num;
+    xwidget_rev_num_t	rev_num;
+    xwidget_mfg_num_t	mfg_num;
 } *xwidget_hwid_t;
 
 

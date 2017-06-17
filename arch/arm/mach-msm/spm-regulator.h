@@ -19,7 +19,9 @@
 #ifdef CONFIG_MSM_SPM_REGULATOR
 int __init spm_regulator_init(void);
 #else
-static inline int __init spm_regulator_init(void) { return -ENODEV; }
+static inline int __init spm_regulator_init(void) {
+    return -ENODEV;
+}
 #endif
 
 #endif

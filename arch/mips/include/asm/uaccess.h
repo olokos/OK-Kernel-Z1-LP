@@ -206,7 +206,9 @@ extern u64 __ua_limit;
 #define __get_user(x,ptr) \
 	__get_user_nocheck((x), (ptr), sizeof(*(ptr)))
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct __user *)(x))
 
 /*
@@ -935,22 +937,21 @@ extern size_t __copy_user_inatomic(void *__to, const void *__from, size_t __n);
  * On success, this will be zero.
  */
 static inline __kernel_size_t
-__clear_user(void __user *addr, __kernel_size_t size)
-{
-	__kernel_size_t res;
+__clear_user(void __user *addr, __kernel_size_t size) {
+    __kernel_size_t res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		"move\t$5, $0\n\t"
-		"move\t$6, %2\n\t"
-		__MODULE_JAL(__bzero)
-		"move\t%0, $6"
-		: "=r" (res)
-		: "r" (addr), "r" (size)
-		: "$4", "$5", "$6", __UA_t0, __UA_t1, "$31");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        "move\t$5, $0\n\t"
+        "move\t$6, %2\n\t"
+        __MODULE_JAL(__bzero)
+        "move\t%0, $6"
+        : "=r" (res)
+        : "r" (addr), "r" (size)
+        : "$4", "$5", "$6", __UA_t0, __UA_t1, "$31");
 
-	return res;
+    return res;
 }
 
 #define clear_user(addr,n)						\
@@ -984,22 +985,21 @@ __clear_user(void __user *addr, __kernel_size_t size)
  * and returns @count.
  */
 static inline long
-__strncpy_from_user(char *__to, const char __user *__from, long __len)
-{
-	long res;
+__strncpy_from_user(char *__to, const char __user *__from, long __len) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		"move\t$5, %2\n\t"
-		"move\t$6, %3\n\t"
-		__MODULE_JAL(__strncpy_from_user_nocheck_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (__to), "r" (__from), "r" (__len)
-		: "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        "move\t$5, %2\n\t"
+        "move\t$6, %3\n\t"
+        __MODULE_JAL(__strncpy_from_user_nocheck_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (__to), "r" (__from), "r" (__len)
+        : "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
 
-	return res;
+    return res;
 }
 
 /*
@@ -1021,39 +1021,37 @@ __strncpy_from_user(char *__to, const char __user *__from, long __len)
  * and returns @count.
  */
 static inline long
-strncpy_from_user(char *__to, const char __user *__from, long __len)
-{
-	long res;
+strncpy_from_user(char *__to, const char __user *__from, long __len) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		"move\t$5, %2\n\t"
-		"move\t$6, %3\n\t"
-		__MODULE_JAL(__strncpy_from_user_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (__to), "r" (__from), "r" (__len)
-		: "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        "move\t$5, %2\n\t"
+        "move\t$6, %3\n\t"
+        __MODULE_JAL(__strncpy_from_user_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (__to), "r" (__from), "r" (__len)
+        : "$2", "$3", "$4", "$5", "$6", __UA_t0, "$31", "memory");
 
-	return res;
+    return res;
 }
 
 /* Returns: 0 if bad, string length+1 (memory size) of string if ok */
-static inline long __strlen_user(const char __user *s)
-{
-	long res;
+static inline long __strlen_user(const char __user *s) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		__MODULE_JAL(__strlen_user_nocheck_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (s)
-		: "$2", "$4", __UA_t0, "$31");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        __MODULE_JAL(__strlen_user_nocheck_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (s)
+        : "$2", "$4", __UA_t0, "$31");
 
-	return res;
+    return res;
 }
 
 /*
@@ -1070,38 +1068,36 @@ static inline long __strlen_user(const char __user *s)
  * If there is a limit on the length of a valid string, you may wish to
  * consider using strnlen_user() instead.
  */
-static inline long strlen_user(const char __user *s)
-{
-	long res;
+static inline long strlen_user(const char __user *s) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		__MODULE_JAL(__strlen_user_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (s)
-		: "$2", "$4", __UA_t0, "$31");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        __MODULE_JAL(__strlen_user_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (s)
+        : "$2", "$4", __UA_t0, "$31");
 
-	return res;
+    return res;
 }
 
 /* Returns: 0 if bad, string length+1 (memory size) of string if ok */
-static inline long __strnlen_user(const char __user *s, long n)
-{
-	long res;
+static inline long __strnlen_user(const char __user *s, long n) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		"move\t$5, %2\n\t"
-		__MODULE_JAL(__strnlen_user_nocheck_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (s), "r" (n)
-		: "$2", "$4", "$5", __UA_t0, "$31");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        "move\t$5, %2\n\t"
+        __MODULE_JAL(__strnlen_user_nocheck_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (s), "r" (n)
+        : "$2", "$4", "$5", __UA_t0, "$31");
 
-	return res;
+    return res;
 }
 
 /*
@@ -1118,27 +1114,25 @@ static inline long __strnlen_user(const char __user *s, long n)
  * If there is a limit on the length of a valid string, you may wish to
  * consider using strnlen_user() instead.
  */
-static inline long strnlen_user(const char __user *s, long n)
-{
-	long res;
+static inline long strnlen_user(const char __user *s, long n) {
+    long res;
 
-	might_fault();
-	__asm__ __volatile__(
-		"move\t$4, %1\n\t"
-		"move\t$5, %2\n\t"
-		__MODULE_JAL(__strnlen_user_asm)
-		"move\t%0, $2"
-		: "=r" (res)
-		: "r" (s), "r" (n)
-		: "$2", "$4", "$5", __UA_t0, "$31");
+    might_fault();
+    __asm__ __volatile__(
+        "move\t$4, %1\n\t"
+        "move\t$5, %2\n\t"
+        __MODULE_JAL(__strnlen_user_asm)
+        "move\t%0, $2"
+        : "=r" (res)
+        : "r" (s), "r" (n)
+        : "$2", "$4", "$5", __UA_t0, "$31");
 
-	return res;
+    return res;
 }
 
-struct exception_table_entry
-{
-	unsigned long insn;
-	unsigned long nextinsn;
+struct exception_table_entry {
+    unsigned long insn;
+    unsigned long nextinsn;
 };
 
 extern int fixup_exception(struct pt_regs *regs);

@@ -12,10 +12,10 @@
 #ifdef __KERNEL__
 
 struct pci_sysdata {
-	int		domain;		/* PCI domain */
-	int		node;		/* NUMA node */
+    int		domain;		/* PCI domain */
+    int		node;		/* NUMA node */
 #ifdef CONFIG_X86_64
-	void		*iommu;		/* IOMMU private data */
+    void		*iommu;		/* IOMMU private data */
 #endif
 };
 
@@ -25,21 +25,19 @@ extern int noioapicreroute;
 
 /* scan a bus after allocating a pci_sysdata for it */
 extern struct pci_bus *pci_scan_bus_on_node(int busno, struct pci_ops *ops,
-					    int node);
+        int node);
 extern struct pci_bus *pci_scan_bus_with_sysdata(int busno);
 
 #ifdef CONFIG_PCI
 
 #ifdef CONFIG_PCI_DOMAINS
-static inline int pci_domain_nr(struct pci_bus *bus)
-{
-	struct pci_sysdata *sd = bus->sysdata;
-	return sd->domain;
+static inline int pci_domain_nr(struct pci_bus *bus) {
+    struct pci_sysdata *sd = bus->sysdata;
+    return sd->domain;
 }
 
-static inline int pci_proc_domain(struct pci_bus *bus)
-{
-	return pci_domain_nr(bus);
+static inline int pci_proc_domain(struct pci_bus *bus) {
+    return pci_domain_nr(bus);
 }
 #endif
 
@@ -77,18 +75,17 @@ int pcibios_set_irq_routing(struct pci_dev *dev, int pin, int irq);
 
 #define HAVE_PCI_MMAP
 extern int pci_mmap_page_range(struct pci_dev *dev, struct vm_area_struct *vma,
-			       enum pci_mmap_state mmap_state,
-			       int write_combine);
+                               enum pci_mmap_state mmap_state,
+                               int write_combine);
 
 
 #ifdef CONFIG_PCI
 extern void early_quirks(void);
 static inline void pci_dma_burst_advice(struct pci_dev *pdev,
-					enum pci_dma_burst_strategy *strat,
-					unsigned long *strategy_parameter)
-{
-	*strat = PCI_DMA_BURST_INFINITY;
-	*strategy_parameter = ~0UL;
+                                        enum pci_dma_burst_strategy *strat,
+                                        unsigned long *strategy_parameter) {
+    *strat = PCI_DMA_BURST_INFINITY;
+    *strategy_parameter = ~0UL;
 }
 #else
 static inline void early_quirks(void) { }
@@ -98,23 +95,19 @@ extern void pci_iommu_alloc(void);
 
 #ifdef CONFIG_PCI_MSI
 /* MSI arch specific hooks */
-static inline int x86_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-{
-	return x86_msi.setup_msi_irqs(dev, nvec, type);
+static inline int x86_setup_msi_irqs(struct pci_dev *dev, int nvec, int type) {
+    return x86_msi.setup_msi_irqs(dev, nvec, type);
 }
 
-static inline void x86_teardown_msi_irqs(struct pci_dev *dev)
-{
-	x86_msi.teardown_msi_irqs(dev);
+static inline void x86_teardown_msi_irqs(struct pci_dev *dev) {
+    x86_msi.teardown_msi_irqs(dev);
 }
 
-static inline void x86_teardown_msi_irq(unsigned int irq)
-{
-	x86_msi.teardown_msi_irq(irq);
+static inline void x86_teardown_msi_irq(unsigned int irq) {
+    x86_msi.teardown_msi_irq(irq);
 }
-static inline void x86_restore_msi_irqs(struct pci_dev *dev, int irq)
-{
-	x86_msi.restore_msi_irqs(dev, irq);
+static inline void x86_restore_msi_irqs(struct pci_dev *dev, int irq) {
+    x86_msi.restore_msi_irqs(dev, irq);
 }
 #define arch_setup_msi_irqs x86_setup_msi_irqs
 #define arch_teardown_msi_irqs x86_teardown_msi_irqs
@@ -153,21 +146,19 @@ void default_restore_msi_irqs(struct pci_dev *dev, int irq);
 
 #ifdef CONFIG_NUMA
 /* Returns the node based on pci bus */
-static inline int __pcibus_to_node(const struct pci_bus *bus)
-{
-	const struct pci_sysdata *sd = bus->sysdata;
+static inline int __pcibus_to_node(const struct pci_bus *bus) {
+    const struct pci_sysdata *sd = bus->sysdata;
 
-	return sd->node;
+    return sd->node;
 }
 
 static inline const struct cpumask *
-cpumask_of_pcibus(const struct pci_bus *bus)
-{
-	int node;
+cpumask_of_pcibus(const struct pci_bus *bus) {
+    int node;
 
-	node = __pcibus_to_node(bus);
-	return (node == -1) ? cpu_online_mask :
-			      cpumask_of_node(node);
+    node = __pcibus_to_node(bus);
+    return (node == -1) ? cpu_online_mask :
+           cpumask_of_node(node);
 }
 #endif
 

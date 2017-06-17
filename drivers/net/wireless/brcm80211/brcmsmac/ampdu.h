@@ -20,10 +20,10 @@
 extern struct ampdu_info *brcms_c_ampdu_attach(struct brcms_c_info *wlc);
 extern void brcms_c_ampdu_detach(struct ampdu_info *ampdu);
 extern int brcms_c_sendampdu(struct ampdu_info *ampdu,
-			     struct brcms_txq_info *qi,
-			     struct sk_buff **aggp, int prec);
+                             struct brcms_txq_info *qi,
+                             struct sk_buff **aggp, int prec);
 extern void brcms_c_ampdu_dotxstatus(struct ampdu_info *ampdu, struct scb *scb,
-				 struct sk_buff *p, struct tx_status *txs);
+                                     struct sk_buff *p, struct tx_status *txs);
 extern void brcms_c_ampdu_macaddr_upd(struct brcms_c_info *wlc);
 extern void brcms_c_ampdu_shm_upd(struct ampdu_info *ampdu);
 

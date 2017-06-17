@@ -59,52 +59,51 @@ ACPI_MODULE_NAME("pswalk")
  * DESCRIPTION: Delete a portion of or an entire parse tree.
  *
  ******************************************************************************/
-void acpi_ps_delete_parse_tree(union acpi_parse_object *subtree_root)
-{
-	union acpi_parse_object *op = subtree_root;
-	union acpi_parse_object *next = NULL;
-	union acpi_parse_object *parent = NULL;
+void acpi_ps_delete_parse_tree(union acpi_parse_object *subtree_root) {
+    union acpi_parse_object *op = subtree_root;
+    union acpi_parse_object *next = NULL;
+    union acpi_parse_object *parent = NULL;
 
-	ACPI_FUNCTION_TRACE_PTR(ps_delete_parse_tree, subtree_root);
+    ACPI_FUNCTION_TRACE_PTR(ps_delete_parse_tree, subtree_root);
 
-	/* Visit all nodes in the subtree */
+    /* Visit all nodes in the subtree */
 
-	while (op) {
+    while (op) {
 
-		/* Check if we are not ascending */
+        /* Check if we are not ascending */
 
-		if (op != parent) {
+        if (op != parent) {
 
-			/* Look for an argument or child of the current op */
+            /* Look for an argument or child of the current op */
 
-			next = acpi_ps_get_arg(op, 0);
-			if (next) {
+            next = acpi_ps_get_arg(op, 0);
+            if (next) {
 
-				/* Still going downward in tree (Op is not completed yet) */
+                /* Still going downward in tree (Op is not completed yet) */
 
-				op = next;
-				continue;
-			}
-		}
+                op = next;
+                continue;
+            }
+        }
 
-		/* No more children, this Op is complete. */
+        /* No more children, this Op is complete. */
 
-		next = op->common.next;
-		parent = op->common.parent;
+        next = op->common.next;
+        parent = op->common.parent;
 
-		acpi_ps_free_op(op);
+        acpi_ps_free_op(op);
 
-		/* If we are back to the starting point, the walk is complete. */
+        /* If we are back to the starting point, the walk is complete. */
 
-		if (op == subtree_root) {
-			return_VOID;
-		}
-		if (next) {
-			op = next;
-		} else {
-			op = parent;
-		}
-	}
+        if (op == subtree_root) {
+            return_VOID;
+        }
+        if (next) {
+            op = next;
+        } else {
+            op = parent;
+        }
+    }
 
-	return_VOID;
+    return_VOID;
 }

@@ -6,31 +6,30 @@
 void __bad_xchg(volatile void *ptr, int size);
 
 static inline unsigned long __xchg(unsigned long x, volatile void *ptr,
-								int size)
-{
-	unsigned long ret;
-	unsigned long flags;
+                                   int size) {
+    unsigned long ret;
+    unsigned long flags;
 
-	switch (size) {
-	case 1:
-		local_irq_save(flags);
-		ret = *(volatile unsigned char *)ptr;
-		*(volatile unsigned char *)ptr = x;
-		local_irq_restore(flags);
-		break;
+    switch (size) {
+    case 1:
+        local_irq_save(flags);
+        ret = *(volatile unsigned char *)ptr;
+        *(volatile unsigned char *)ptr = x;
+        local_irq_restore(flags);
+        break;
 
-	case 4:
-		local_irq_save(flags);
-		ret = *(volatile unsigned long *)ptr;
-		*(volatile unsigned long *)ptr = x;
-		local_irq_restore(flags);
-		break;
-	default:
-		__bad_xchg(ptr, size), ret = 0;
-		break;
-	}
+    case 4:
+        local_irq_save(flags);
+        ret = *(volatile unsigned long *)ptr;
+        *(volatile unsigned long *)ptr = x;
+        local_irq_restore(flags);
+        break;
+    default:
+        __bad_xchg(ptr, size), ret = 0;
+        break;
+    }
 
-	return ret;
+    return ret;
 }
 
 #define xchg(ptr, x) \

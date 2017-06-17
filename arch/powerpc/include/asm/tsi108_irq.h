@@ -118,7 +118,7 @@
 
 /* Interrupt delivery modes */
 typedef enum {
-	TSI108_IRQ_DIRECTED,
-	TSI108_IRQ_DISTRIBUTED,
+    TSI108_IRQ_DIRECTED,
+    TSI108_IRQ_DISTRIBUTED,
 } TSI108_IRQ_MODE;
 #endif				/*  _ASM_POWERPC_TSI108_IRQ_H */

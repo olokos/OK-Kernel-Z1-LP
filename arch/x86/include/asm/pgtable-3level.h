@@ -24,26 +24,22 @@
  * not possible, use pte_get_and_clear to obtain the old pte
  * value and then use set_pte to update it.  -ben
  */
-static inline void native_set_pte(pte_t *ptep, pte_t pte)
-{
-	ptep->pte_high = pte.pte_high;
-	smp_wmb();
-	ptep->pte_low = pte.pte_low;
+static inline void native_set_pte(pte_t *ptep, pte_t pte) {
+    ptep->pte_high = pte.pte_high;
+    smp_wmb();
+    ptep->pte_low = pte.pte_low;
 }
 
-static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte)
-{
-	set_64bit((unsigned long long *)(ptep), native_pte_val(pte));
+static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte) {
+    set_64bit((unsigned long long *)(ptep), native_pte_val(pte));
 }
 
-static inline void native_set_pmd(pmd_t *pmdp, pmd_t pmd)
-{
-	set_64bit((unsigned long long *)(pmdp), native_pmd_val(pmd));
+static inline void native_set_pmd(pmd_t *pmdp, pmd_t pmd) {
+    set_64bit((unsigned long long *)(pmdp), native_pmd_val(pmd));
 }
 
-static inline void native_set_pud(pud_t *pudp, pud_t pud)
-{
-	set_64bit((unsigned long long *)(pudp), native_pud_val(pud));
+static inline void native_set_pud(pud_t *pudp, pud_t pud) {
+    set_64bit((unsigned long long *)(pudp), native_pud_val(pud));
 }
 
 /*
@@ -52,48 +48,44 @@ static inline void native_set_pud(pud_t *pudp, pud_t pud)
  * barrier.
  */
 static inline void native_pte_clear(struct mm_struct *mm, unsigned long addr,
-				    pte_t *ptep)
-{
-	ptep->pte_low = 0;
-	smp_wmb();
-	ptep->pte_high = 0;
+                                    pte_t *ptep) {
+    ptep->pte_low = 0;
+    smp_wmb();
+    ptep->pte_high = 0;
 }
 
-static inline void native_pmd_clear(pmd_t *pmd)
-{
-	u32 *tmp = (u32 *)pmd;
-	*tmp = 0;
-	smp_wmb();
-	*(tmp + 1) = 0;
+static inline void native_pmd_clear(pmd_t *pmd) {
+    u32 *tmp = (u32 *)pmd;
+    *tmp = 0;
+    smp_wmb();
+    *(tmp + 1) = 0;
 }
 
-static inline void pud_clear(pud_t *pudp)
-{
-	set_pud(pudp, __pud(0));
+static inline void pud_clear(pud_t *pudp) {
+    set_pud(pudp, __pud(0));
 
-	/*
-	 * According to Intel App note "TLBs, Paging-Structure Caches,
-	 * and Their Invalidation", April 2007, document 317080-001,
-	 * section 8.1: in PAE mode we explicitly have to flush the
-	 * TLB via cr3 if the top-level pgd is changed...
-	 *
-	 * Currently all places where pud_clear() is called either have
-	 * flush_tlb_mm() followed or don't need TLB flush (x86_64 code or
-	 * pud_clear_bad()), so we don't need TLB flush here.
-	 */
+    /*
+     * According to Intel App note "TLBs, Paging-Structure Caches,
+     * and Their Invalidation", April 2007, document 317080-001,
+     * section 8.1: in PAE mode we explicitly have to flush the
+     * TLB via cr3 if the top-level pgd is changed...
+     *
+     * Currently all places where pud_clear() is called either have
+     * flush_tlb_mm() followed or don't need TLB flush (x86_64 code or
+     * pud_clear_bad()), so we don't need TLB flush here.
+     */
 }
 
 #ifdef CONFIG_SMP
-static inline pte_t native_ptep_get_and_clear(pte_t *ptep)
-{
-	pte_t res;
+static inline pte_t native_ptep_get_and_clear(pte_t *ptep) {
+    pte_t res;
 
-	/* xchg acts as a barrier before the setting of the high bits */
-	res.pte_low = xchg(&ptep->pte_low, 0);
-	res.pte_high = ptep->pte_high;
-	ptep->pte_high = 0;
+    /* xchg acts as a barrier before the setting of the high bits */
+    res.pte_low = xchg(&ptep->pte_low, 0);
+    res.pte_high = ptep->pte_high;
+    ptep->pte_high = 0;
 
-	return res;
+    return res;
 }
 #else
 #define native_ptep_get_and_clear(xp) native_local_ptep_get_and_clear(xp)
@@ -101,22 +93,21 @@ static inline pte_t native_ptep_get_and_clear(pte_t *ptep)
 
 #ifdef CONFIG_SMP
 union split_pmd {
-	struct {
-		u32 pmd_low;
-		u32 pmd_high;
-	};
-	pmd_t pmd;
+    struct {
+        u32 pmd_low;
+        u32 pmd_high;
+    };
+    pmd_t pmd;
 };
-static inline pmd_t native_pmdp_get_and_clear(pmd_t *pmdp)
-{
-	union split_pmd res, *orig = (union split_pmd *)pmdp;
+static inline pmd_t native_pmdp_get_and_clear(pmd_t *pmdp) {
+    union split_pmd res, *orig = (union split_pmd *)pmdp;
 
-	/* xchg acts as a barrier before setting of the high bits */
-	res.pmd_low = xchg(&orig->pmd_low, 0);
-	res.pmd_high = orig->pmd_high;
-	orig->pmd_high = 0;
+    /* xchg acts as a barrier before setting of the high bits */
+    res.pmd_low = xchg(&orig->pmd_low, 0);
+    res.pmd_high = orig->pmd_high;
+    orig->pmd_high = 0;
 
-	return res.pmd;
+    return res.pmd;
 }
 #else
 #define native_pmdp_get_and_clear(xp) native_local_pmdp_get_and_clear(xp)

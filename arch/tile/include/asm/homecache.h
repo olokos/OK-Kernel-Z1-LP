@@ -57,11 +57,11 @@ struct zone;
 
 /* Support wrapper to use instead of explicit hv_flush_remote(). */
 extern void flush_remote(unsigned long cache_pfn, unsigned long cache_length,
-			 const struct cpumask *cache_cpumask,
-			 HV_VirtAddr tlb_va, unsigned long tlb_length,
-			 unsigned long tlb_pgsize,
-			 const struct cpumask *tlb_cpumask,
-			 HV_Remote_ASID *asids, int asidcount);
+                         const struct cpumask *cache_cpumask,
+                         HV_VirtAddr tlb_va, unsigned long tlb_length,
+                         unsigned long tlb_pgsize,
+                         const struct cpumask *tlb_cpumask,
+                         HV_Remote_ASID *asids, int asidcount);
 
 /* Set homing-related bits in a PTE (can also pass a pgprot_t). */
 extern pte_t pte_set_home(pte_t pte, int home);
@@ -92,9 +92,9 @@ extern void homecache_flush_cache(struct page *, int order);
  * If !CONFIG_HOMECACHE, uses homecache_change_page_home().
  */
 extern struct page *homecache_alloc_pages(gfp_t gfp_mask,
-					  unsigned int order, int home);
+        unsigned int order, int home);
 extern struct page *homecache_alloc_pages_node(int nid, gfp_t gfp_mask,
-					       unsigned int order, int home);
+        unsigned int order, int home);
 #define homecache_alloc_page(gfp_mask, home) \
   homecache_alloc_pages(gfp_mask, 0, home)
 

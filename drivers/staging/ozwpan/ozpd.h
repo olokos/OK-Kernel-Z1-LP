@@ -26,72 +26,72 @@
  * if a re-transmission is required.
  */
 struct oz_tx_frame {
-	struct list_head link;
-	struct list_head elt_list;
-	struct oz_hdr hdr;
-	int total_size;
+    struct list_head link;
+    struct list_head elt_list;
+    struct oz_hdr hdr;
+    int total_size;
 };
 
 struct oz_isoc_stream {
-	struct list_head link;
-	u8 ep_num;
-	u8 frame_num;
-	u8 nb_units;
-	int size;
-	struct sk_buff *skb;
-	struct oz_hdr *oz_hdr;
+    struct list_head link;
+    u8 ep_num;
+    u8 frame_num;
+    u8 nb_units;
+    int size;
+    struct sk_buff *skb;
+    struct oz_hdr *oz_hdr;
 };
 
 struct oz_farewell {
-	struct list_head link;
-	u8 ep_num;
-	u8 index;
-	u8 report[1];
-	u8 len;
+    struct list_head link;
+    u8 ep_num;
+    u8 index;
+    u8 report[1];
+    u8 len;
 };
 
 /* Data structure that holds information on a specific peripheral device (PD).
  */
 struct oz_pd {
-	struct list_head link;
-	atomic_t	ref_count;
-	u8		mac_addr[ETH_ALEN];
-	unsigned	state;
-	unsigned	state_flags;
-	unsigned	send_flags;
-	u16		total_apps;
-	u16		paused_apps;
-	u8		session_id;
-	u8		param_rsp_status;
-	u8		pd_info;
-	u8		isoc_sent;
-	u32		last_rx_pkt_num;
-	u32		last_tx_pkt_num;
-	u32		trigger_pkt_num;
-	unsigned long	pulse_time_j;
-	unsigned long	timeout_time_j;
-	unsigned long	pulse_period_j;
-	unsigned long	presleep_j;
-	unsigned long	keep_alive_j;
-	unsigned long	last_rx_time_j;
-	struct oz_elt_buf elt_buff;
-	void		*app_ctx[OZ_APPID_MAX];
-	spinlock_t	app_lock[OZ_APPID_MAX];
-	int		max_tx_size;
-	u8		heartbeat_requested;
-	u8		mode;
-	u8		ms_per_isoc;
-	unsigned	max_stream_buffering;
-	int		nb_queued_frames;
-	struct list_head *tx_pool;
-	int		tx_pool_count;
-	spinlock_t	tx_frame_lock;
-	struct list_head *last_sent_frame;
-	struct list_head tx_queue;
-	struct list_head farewell_list;
-	spinlock_t	stream_lock;
-	struct list_head stream_list;
-	struct net_device *net_dev;
+    struct list_head link;
+    atomic_t	ref_count;
+    u8		mac_addr[ETH_ALEN];
+    unsigned	state;
+    unsigned	state_flags;
+    unsigned	send_flags;
+    u16		total_apps;
+    u16		paused_apps;
+    u8		session_id;
+    u8		param_rsp_status;
+    u8		pd_info;
+    u8		isoc_sent;
+    u32		last_rx_pkt_num;
+    u32		last_tx_pkt_num;
+    u32		trigger_pkt_num;
+    unsigned long	pulse_time_j;
+    unsigned long	timeout_time_j;
+    unsigned long	pulse_period_j;
+    unsigned long	presleep_j;
+    unsigned long	keep_alive_j;
+    unsigned long	last_rx_time_j;
+    struct oz_elt_buf elt_buff;
+    void		*app_ctx[OZ_APPID_MAX];
+    spinlock_t	app_lock[OZ_APPID_MAX];
+    int		max_tx_size;
+    u8		heartbeat_requested;
+    u8		mode;
+    u8		ms_per_isoc;
+    unsigned	max_stream_buffering;
+    int		nb_queued_frames;
+    struct list_head *tx_pool;
+    int		tx_pool_count;
+    spinlock_t	tx_frame_lock;
+    struct list_head *last_sent_frame;
+    struct list_head tx_queue;
+    struct list_head farewell_list;
+    spinlock_t	stream_lock;
+    struct list_head stream_list;
+    struct net_device *net_dev;
 };
 
 #define OZ_MAX_QUEUED_FRAMES	4

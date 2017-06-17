@@ -32,20 +32,20 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 /*
  * low level task data.
  */
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	int			cpu;		/* cpu we're on */
-	int			preempt_count;	/* 0 = preemptable, <0 = BUG */
-	mm_segment_t		addr_limit;	/* thread address space */
-	struct restart_block	restart_block;
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    int			cpu;		/* cpu we're on */
+    int			preempt_count;	/* 0 = preemptable, <0 = BUG */
+    mm_segment_t		addr_limit;	/* thread address space */
+    struct restart_block	restart_block;
 };
 
 /*
@@ -71,13 +71,12 @@ struct thread_info {
 
 /* get the thread information struct of current task */
 static inline __attribute__((const))
-struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	asm volatile (" clr   .s2 B15,0,%1,%0\n"
-		      : "=b" (ti)
-		      : "Iu5" (THREAD_SHIFT - 1));
-	return ti;
+struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    asm volatile (" clr   .s2 B15,0,%1,%0\n"
+                  : "=b" (ti)
+                  : "Iu5" (THREAD_SHIFT - 1));
+    return ti;
 }
 
 #define __HAVE_ARCH_THREAD_INFO_ALLOCATOR

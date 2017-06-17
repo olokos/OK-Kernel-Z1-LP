@@ -9,13 +9,13 @@
 #include "sysdep/ptrace.h"
 
 struct irq_fd {
-	struct irq_fd *next;
-	void *id;
-	int fd;
-	int type;
-	int irq;
-	int events;
-	int current_events;
+    struct irq_fd *next;
+    void *id;
+    int fd;
+    int type;
+    int irq;
+    int events;
+    int current_events;
 };
 
 enum { IRQ_READ, IRQ_WRITE };

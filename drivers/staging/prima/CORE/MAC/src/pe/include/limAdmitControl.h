@@ -74,8 +74,7 @@ static inline tSirRetStatus
 limAdmitControlAddSta(
     tpAniSirGlobal  pMac,
     tANI_U8             *staAddr,
-    tANI_U8            alloc)
-{
+    tANI_U8            alloc) {
     return eSIR_SUCCESS;
 }
 

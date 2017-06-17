@@ -623,55 +623,55 @@
 #define HS_ISO_MAX_PACKET_SIZE		0x400
 
 struct fusb300_ep_info {
-	u8	epnum;
-	u8	type;
-	u8	interval;
-	u8	dir_in;
-	u16	maxpacket;
-	u16	addrofs;
-	u16	bw_num;
+    u8	epnum;
+    u8	type;
+    u8	interval;
+    u8	dir_in;
+    u16	maxpacket;
+    u16	addrofs;
+    u16	bw_num;
 };
 
 struct fusb300_request {
 
-	struct usb_request	req;
-	struct list_head	queue;
+    struct usb_request	req;
+    struct list_head	queue;
 };
 
 
 struct fusb300_ep {
-	struct usb_ep		ep;
-	struct fusb300		*fusb300;
+    struct usb_ep		ep;
+    struct fusb300		*fusb300;
 
-	struct list_head	queue;
-	unsigned		stall:1;
-	unsigned		wedged:1;
-	unsigned		use_dma:1;
+    struct list_head	queue;
+    unsigned		stall:1;
+    unsigned		wedged:1;
+    unsigned		use_dma:1;
 
-	unsigned char		epnum;
-	unsigned char		type;
-	const struct usb_endpoint_descriptor	*desc;
+    unsigned char		epnum;
+    unsigned char		type;
+    const struct usb_endpoint_descriptor	*desc;
 };
 
 struct fusb300 {
-	spinlock_t		lock;
-	void __iomem		*reg;
+    spinlock_t		lock;
+    void __iomem		*reg;
 
-	unsigned long		irq_trigger;
+    unsigned long		irq_trigger;
 
-	struct usb_gadget		gadget;
-	struct usb_gadget_driver	*driver;
+    struct usb_gadget		gadget;
+    struct usb_gadget_driver	*driver;
 
-	struct fusb300_ep	*ep[FUSB300_MAX_NUM_EP];
+    struct fusb300_ep	*ep[FUSB300_MAX_NUM_EP];
 
-	struct usb_request	*ep0_req;	/* for internal request */
-	__le16			ep0_data;
-	u32			ep0_length;	/* for internal request */
-	u8			ep0_dir;	/* 0/0x80  out/in */
+    struct usb_request	*ep0_req;	/* for internal request */
+    __le16			ep0_data;
+    u32			ep0_length;	/* for internal request */
+    u8			ep0_dir;	/* 0/0x80  out/in */
 
-	u8			fifo_entry_num;	/* next start fifo entry */
-	u32			addrofs;	/* next fifo address offset */
-	u8			reenum;		/* if re-enumeration */
+    u8			fifo_entry_num;	/* next start fifo entry */
+    u32			addrofs;	/* next fifo address offset */
+    u8			reenum;		/* if re-enumeration */
 };
 
 #endif

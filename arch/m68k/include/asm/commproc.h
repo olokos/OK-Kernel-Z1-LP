@@ -80,9 +80,9 @@ void	      m360_cpm_setbrg(uint brg, uint rate);
 #if 0 /* use QUICC_BD declared in include/asm/m68360_quicc.h  */
 /* Buffer descriptors used by many of the CPM protocols. */
 typedef struct cpm_buf_desc {
-	ushort	cbd_sc;		/* Status and Control */
-	ushort	cbd_datlen;	/* Data length in buffer */
-	uint	cbd_bufaddr;	/* Buffer address in host memory */
+    ushort	cbd_sc;		/* Status and Control */
+    ushort	cbd_datlen;	/* Data length in buffer */
+    uint	cbd_bufaddr;	/* Buffer address in host memory */
 } cbd_t;
 #endif
 
@@ -128,7 +128,7 @@ typedef struct cpm_buf_desc {
 
 
 /* In 2.4 ppc, the PROFF_S?C? are used as byte offsets into DPRAM.
- * In 2.0, we use a more structured C struct map of DPRAM, and so 
+ * In 2.0, we use a more structured C struct map of DPRAM, and so
  * instead, we need only a parameter ram `slot'  */
 
 #define PRSLOT_SCC1	0
@@ -151,27 +151,27 @@ typedef struct cpm_buf_desc {
  * The MBX uses SMC1 as the host serial port.
  */
 typedef struct smc_uart {
-	ushort	smc_rbase;	/* Rx Buffer descriptor base address */
-	ushort	smc_tbase;	/* Tx Buffer descriptor base address */
-	u_char	smc_rfcr;	/* Rx function code */
-	u_char	smc_tfcr;	/* Tx function code */
-	ushort	smc_mrblr;	/* Max receive buffer length */
-	uint	smc_rstate;	/* Internal */
-	uint	smc_idp;	/* Internal */
-	ushort	smc_rbptr;	/* Internal */
-	ushort	smc_ibc;	/* Internal */
-	uint	smc_rxtmp;	/* Internal */
-	uint	smc_tstate;	/* Internal */
-	uint	smc_tdp;	/* Internal */
-	ushort	smc_tbptr;	/* Internal */
-	ushort	smc_tbc;	/* Internal */
-	uint	smc_txtmp;	/* Internal */
-	ushort	smc_maxidl;	/* Maximum idle characters */
-	ushort	smc_tmpidl;	/* Temporary idle counter */
-	ushort	smc_brklen;	/* Last received break length */
-	ushort	smc_brkec;	/* rcv'd break condition counter */
-	ushort	smc_brkcr;	/* xmt break count register */
-	ushort	smc_rmask;	/* Temporary bit mask */
+    ushort	smc_rbase;	/* Rx Buffer descriptor base address */
+    ushort	smc_tbase;	/* Tx Buffer descriptor base address */
+    u_char	smc_rfcr;	/* Rx function code */
+    u_char	smc_tfcr;	/* Tx function code */
+    ushort	smc_mrblr;	/* Max receive buffer length */
+    uint	smc_rstate;	/* Internal */
+    uint	smc_idp;	/* Internal */
+    ushort	smc_rbptr;	/* Internal */
+    ushort	smc_ibc;	/* Internal */
+    uint	smc_rxtmp;	/* Internal */
+    uint	smc_tstate;	/* Internal */
+    uint	smc_tdp;	/* Internal */
+    ushort	smc_tbptr;	/* Internal */
+    ushort	smc_tbc;	/* Internal */
+    uint	smc_txtmp;	/* Internal */
+    ushort	smc_maxidl;	/* Maximum idle characters */
+    ushort	smc_tmpidl;	/* Temporary idle counter */
+    ushort	smc_brklen;	/* Last received break length */
+    ushort	smc_brkec;	/* rcv'd break condition counter */
+    ushort	smc_brkcr;	/* xmt break count register */
+    ushort	smc_rmask;	/* Temporary bit mask */
 } smc_uart_t;
 
 /* Function code bits.
@@ -201,33 +201,33 @@ typedef struct smc_uart {
  * include them in one structure.
  */
 typedef struct smc_centronics {
-	ushort	scent_rbase;
-	ushort	scent_tbase;
-	u_char	scent_cfcr;
-	u_char	scent_smask;
-	ushort	scent_mrblr;
-	uint	scent_rstate;
-	uint	scent_r_ptr;
-	ushort	scent_rbptr;
-	ushort	scent_r_cnt;
-	uint	scent_rtemp;
-	uint	scent_tstate;
-	uint	scent_t_ptr;
-	ushort	scent_tbptr;
-	ushort	scent_t_cnt;
-	uint	scent_ttemp;
-	ushort	scent_max_sl;
-	ushort	scent_sl_cnt;
-	ushort	scent_character1;
-	ushort	scent_character2;
-	ushort	scent_character3;
-	ushort	scent_character4;
-	ushort	scent_character5;
-	ushort	scent_character6;
-	ushort	scent_character7;
-	ushort	scent_character8;
-	ushort	scent_rccm;
-	ushort	scent_rccr;
+    ushort	scent_rbase;
+    ushort	scent_tbase;
+    u_char	scent_cfcr;
+    u_char	scent_smask;
+    ushort	scent_mrblr;
+    uint	scent_rstate;
+    uint	scent_r_ptr;
+    ushort	scent_rbptr;
+    ushort	scent_r_cnt;
+    uint	scent_rtemp;
+    uint	scent_tstate;
+    uint	scent_t_ptr;
+    ushort	scent_tbptr;
+    ushort	scent_t_cnt;
+    uint	scent_ttemp;
+    ushort	scent_max_sl;
+    ushort	scent_sl_cnt;
+    ushort	scent_character1;
+    ushort	scent_character2;
+    ushort	scent_character3;
+    ushort	scent_character4;
+    ushort	scent_character5;
+    ushort	scent_character6;
+    ushort	scent_character7;
+    ushort	scent_character8;
+    ushort	scent_rccm;
+    ushort	scent_rccr;
 } smc_cent_t;
 
 /* Centronics Status Mask Register.
@@ -348,23 +348,23 @@ typedef struct smc_centronics {
 #define	SCCM_RX		((unsigned char)0x01)
 
 typedef struct scc_param {
-	ushort	scc_rbase;	/* Rx Buffer descriptor base address */
-	ushort	scc_tbase;	/* Tx Buffer descriptor base address */
-	u_char	scc_rfcr;	/* Rx function code */
-	u_char	scc_tfcr;	/* Tx function code */
-	ushort	scc_mrblr;	/* Max receive buffer length */
-	uint	scc_rstate;	/* Internal */
-	uint	scc_idp;	/* Internal */
-	ushort	scc_rbptr;	/* Internal */
-	ushort	scc_ibc;	/* Internal */
-	uint	scc_rxtmp;	/* Internal */
-	uint	scc_tstate;	/* Internal */
-	uint	scc_tdp;	/* Internal */
-	ushort	scc_tbptr;	/* Internal */
-	ushort	scc_tbc;	/* Internal */
-	uint	scc_txtmp;	/* Internal */
-	uint	scc_rcrc;	/* Internal */
-	uint	scc_tcrc;	/* Internal */
+    ushort	scc_rbase;	/* Rx Buffer descriptor base address */
+    ushort	scc_tbase;	/* Tx Buffer descriptor base address */
+    u_char	scc_rfcr;	/* Rx function code */
+    u_char	scc_tfcr;	/* Tx function code */
+    ushort	scc_mrblr;	/* Max receive buffer length */
+    uint	scc_rstate;	/* Internal */
+    uint	scc_idp;	/* Internal */
+    ushort	scc_rbptr;	/* Internal */
+    ushort	scc_ibc;	/* Internal */
+    uint	scc_rxtmp;	/* Internal */
+    uint	scc_tstate;	/* Internal */
+    uint	scc_tdp;	/* Internal */
+    ushort	scc_tbptr;	/* Internal */
+    ushort	scc_tbc;	/* Internal */
+    uint	scc_txtmp;	/* Internal */
+    uint	scc_rcrc;	/* Internal */
+    uint	scc_tcrc;	/* Internal */
 } sccp_t;
 
 
@@ -376,56 +376,56 @@ typedef struct scc_param {
 /* CPM Ethernet through SCC1.
  */
 typedef struct scc_enet {
-	sccp_t	sen_genscc;
-	uint	sen_cpres;	/* Preset CRC */
-	uint	sen_cmask;	/* Constant mask for CRC */
-	uint	sen_crcec;	/* CRC Error counter */
-	uint	sen_alec;	/* alignment error counter */
-	uint	sen_disfc;	/* discard frame counter */
-	ushort	sen_pads;	/* Tx short frame pad character */
-	ushort	sen_retlim;	/* Retry limit threshold */
-	ushort	sen_retcnt;	/* Retry limit counter */
-	ushort	sen_maxflr;	/* maximum frame length register */
-	ushort	sen_minflr;	/* minimum frame length register */
-	ushort	sen_maxd1;	/* maximum DMA1 length */
-	ushort	sen_maxd2;	/* maximum DMA2 length */
-	ushort	sen_maxd;	/* Rx max DMA */
-	ushort	sen_dmacnt;	/* Rx DMA counter */
-	ushort	sen_maxb;	/* Max BD byte count */
-	ushort	sen_gaddr1;	/* Group address filter */
-	ushort	sen_gaddr2;
-	ushort	sen_gaddr3;
-	ushort	sen_gaddr4;
-	uint	sen_tbuf0data0;	/* Save area 0 - current frame */
-	uint	sen_tbuf0data1;	/* Save area 1 - current frame */
-	uint	sen_tbuf0rba;	/* Internal */
-	uint	sen_tbuf0crc;	/* Internal */
-	ushort	sen_tbuf0bcnt;	/* Internal */
-	ushort	sen_paddrh;	/* physical address (MSB) */
-	ushort	sen_paddrm;
-	ushort	sen_paddrl;	/* physical address (LSB) */
-	ushort	sen_pper;	/* persistence */
-	ushort	sen_rfbdptr;	/* Rx first BD pointer */
-	ushort	sen_tfbdptr;	/* Tx first BD pointer */
-	ushort	sen_tlbdptr;	/* Tx last BD pointer */
-	uint	sen_tbuf1data0;	/* Save area 0 - current frame */
-	uint	sen_tbuf1data1;	/* Save area 1 - current frame */
-	uint	sen_tbuf1rba;	/* Internal */
-	uint	sen_tbuf1crc;	/* Internal */
-	ushort	sen_tbuf1bcnt;	/* Internal */
-	ushort	sen_txlen;	/* Tx Frame length counter */
-	ushort	sen_iaddr1;	/* Individual address filter */
-	ushort	sen_iaddr2;
-	ushort	sen_iaddr3;
-	ushort	sen_iaddr4;
-	ushort	sen_boffcnt;	/* Backoff counter */
+    sccp_t	sen_genscc;
+    uint	sen_cpres;	/* Preset CRC */
+    uint	sen_cmask;	/* Constant mask for CRC */
+    uint	sen_crcec;	/* CRC Error counter */
+    uint	sen_alec;	/* alignment error counter */
+    uint	sen_disfc;	/* discard frame counter */
+    ushort	sen_pads;	/* Tx short frame pad character */
+    ushort	sen_retlim;	/* Retry limit threshold */
+    ushort	sen_retcnt;	/* Retry limit counter */
+    ushort	sen_maxflr;	/* maximum frame length register */
+    ushort	sen_minflr;	/* minimum frame length register */
+    ushort	sen_maxd1;	/* maximum DMA1 length */
+    ushort	sen_maxd2;	/* maximum DMA2 length */
+    ushort	sen_maxd;	/* Rx max DMA */
+    ushort	sen_dmacnt;	/* Rx DMA counter */
+    ushort	sen_maxb;	/* Max BD byte count */
+    ushort	sen_gaddr1;	/* Group address filter */
+    ushort	sen_gaddr2;
+    ushort	sen_gaddr3;
+    ushort	sen_gaddr4;
+    uint	sen_tbuf0data0;	/* Save area 0 - current frame */
+    uint	sen_tbuf0data1;	/* Save area 1 - current frame */
+    uint	sen_tbuf0rba;	/* Internal */
+    uint	sen_tbuf0crc;	/* Internal */
+    ushort	sen_tbuf0bcnt;	/* Internal */
+    ushort	sen_paddrh;	/* physical address (MSB) */
+    ushort	sen_paddrm;
+    ushort	sen_paddrl;	/* physical address (LSB) */
+    ushort	sen_pper;	/* persistence */
+    ushort	sen_rfbdptr;	/* Rx first BD pointer */
+    ushort	sen_tfbdptr;	/* Tx first BD pointer */
+    ushort	sen_tlbdptr;	/* Tx last BD pointer */
+    uint	sen_tbuf1data0;	/* Save area 0 - current frame */
+    uint	sen_tbuf1data1;	/* Save area 1 - current frame */
+    uint	sen_tbuf1rba;	/* Internal */
+    uint	sen_tbuf1crc;	/* Internal */
+    ushort	sen_tbuf1bcnt;	/* Internal */
+    ushort	sen_txlen;	/* Tx Frame length counter */
+    ushort	sen_iaddr1;	/* Individual address filter */
+    ushort	sen_iaddr2;
+    ushort	sen_iaddr3;
+    ushort	sen_iaddr4;
+    ushort	sen_boffcnt;	/* Backoff counter */
 
-	/* NOTE: Some versions of the manual have the following items
-	 * incorrectly documented.  Below is the proper order.
-	 */
-	ushort	sen_taddrh;	/* temp address (MSB) */
-	ushort	sen_taddrm;
-	ushort	sen_taddrl;	/* temp address (LSB) */
+    /* NOTE: Some versions of the manual have the following items
+     * incorrectly documented.  Below is the proper order.
+     */
+    ushort	sen_taddrh;	/* temp address (MSB) */
+    ushort	sen_taddrm;
+    ushort	sen_taddrl;	/* temp address (LSB) */
 } scc_enet_t;
 
 
@@ -580,32 +580,32 @@ typedef struct scc_enet {
 /* SCC as UART
 */
 typedef struct scc_uart {
-	sccp_t	scc_genscc;
-	uint	scc_res1;	/* Reserved */
-	uint	scc_res2;	/* Reserved */
-	ushort	scc_maxidl;	/* Maximum idle chars */
-	ushort	scc_idlc;	/* temp idle counter */
-	ushort	scc_brkcr;	/* Break count register */
-	ushort	scc_parec;	/* receive parity error counter */
-	ushort	scc_frmec;	/* receive framing error counter */
-	ushort	scc_nosec;	/* receive noise counter */
-	ushort	scc_brkec;	/* receive break condition counter */
-	ushort	scc_brkln;	/* last received break length */
-	ushort	scc_uaddr1;	/* UART address character 1 */
-	ushort	scc_uaddr2;	/* UART address character 2 */
-	ushort	scc_rtemp;	/* Temp storage */
-	ushort	scc_toseq;	/* Transmit out of sequence char */
-	ushort	scc_char1;	/* control character 1 */
-	ushort	scc_char2;	/* control character 2 */
-	ushort	scc_char3;	/* control character 3 */
-	ushort	scc_char4;	/* control character 4 */
-	ushort	scc_char5;	/* control character 5 */
-	ushort	scc_char6;	/* control character 6 */
-	ushort	scc_char7;	/* control character 7 */
-	ushort	scc_char8;	/* control character 8 */
-	ushort	scc_rccm;	/* receive control character mask */
-	ushort	scc_rccr;	/* receive control character register */
-	ushort	scc_rlbc;	/* receive last break character */
+    sccp_t	scc_genscc;
+    uint	scc_res1;	/* Reserved */
+    uint	scc_res2;	/* Reserved */
+    ushort	scc_maxidl;	/* Maximum idle chars */
+    ushort	scc_idlc;	/* temp idle counter */
+    ushort	scc_brkcr;	/* Break count register */
+    ushort	scc_parec;	/* receive parity error counter */
+    ushort	scc_frmec;	/* receive framing error counter */
+    ushort	scc_nosec;	/* receive noise counter */
+    ushort	scc_brkec;	/* receive break condition counter */
+    ushort	scc_brkln;	/* last received break length */
+    ushort	scc_uaddr1;	/* UART address character 1 */
+    ushort	scc_uaddr2;	/* UART address character 2 */
+    ushort	scc_rtemp;	/* Temp storage */
+    ushort	scc_toseq;	/* Transmit out of sequence char */
+    ushort	scc_char1;	/* control character 1 */
+    ushort	scc_char2;	/* control character 2 */
+    ushort	scc_char3;	/* control character 3 */
+    ushort	scc_char4;	/* control character 4 */
+    ushort	scc_char5;	/* control character 5 */
+    ushort	scc_char6;	/* control character 6 */
+    ushort	scc_char7;	/* control character 7 */
+    ushort	scc_char8;	/* control character 8 */
+    ushort	scc_rccm;	/* receive control character mask */
+    ushort	scc_rccr;	/* receive control character register */
+    ushort	scc_rlbc;	/* receive last break character */
 } scc_uart_t;
 
 /* SCC Event and Mask registers when it is used as a UART.
@@ -641,9 +641,9 @@ typedef struct scc_uart {
 /* CPM Transparent mode SCC.
  */
 typedef struct scc_trans {
-	sccp_t	st_genscc;
-	uint	st_cpres;	/* Preset CRC */
-	uint	st_cmask;	/* Constant mask for CRC */
+    sccp_t	st_genscc;
+    uint	st_cpres;	/* Preset CRC */
+    uint	st_cmask;	/* Constant mask for CRC */
 } scc_trans_t;
 
 #define BD_SCC_TX_LAST		((ushort)0x0800)

@@ -38,10 +38,10 @@
 
 #define SLOT_NAME_SIZE	10
 struct slot {
-	u8 number;
-	struct hotplug_slot *hotplug_slot;
-	struct list_head slot_list;
-	char name[SLOT_NAME_SIZE];
+    u8 number;
+    struct hotplug_slot *hotplug_slot;
+    struct list_head slot_list;
+    char name[SLOT_NAME_SIZE];
 };
 
 static LIST_HEAD(slot_list);
@@ -82,277 +82,263 @@ static int get_latch_status	(struct hotplug_slot *slot, u8 *value);
 static int get_adapter_status	(struct hotplug_slot *slot, u8 *value);
 
 static struct hotplug_slot_ops skel_hotplug_slot_ops = {
-	.enable_slot =		enable_slot,
-	.disable_slot =		disable_slot,
-	.set_attention_status =	set_attention_status,
-	.hardware_test =	hardware_test,
-	.get_power_status =	get_power_status,
-	.get_attention_status =	get_attention_status,
-	.get_latch_status =	get_latch_status,
-	.get_adapter_status =	get_adapter_status,
+    .enable_slot =		enable_slot,
+    .disable_slot =		disable_slot,
+    .set_attention_status =	set_attention_status,
+    .hardware_test =	hardware_test,
+    .get_power_status =	get_power_status,
+    .get_attention_status =	get_attention_status,
+    .get_latch_status =	get_latch_status,
+    .get_adapter_status =	get_adapter_status,
 };
 
-static int enable_slot(struct hotplug_slot *hotplug_slot)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int enable_slot(struct hotplug_slot *hotplug_slot) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in code here to enable the specified slot
-	 */
+    /*
+     * Fill in code here to enable the specified slot
+     */
 
-	return retval;
+    return retval;
 }
 
-static int disable_slot(struct hotplug_slot *hotplug_slot)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int disable_slot(struct hotplug_slot *hotplug_slot) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in code here to disable the specified slot
-	 */
+    /*
+     * Fill in code here to disable the specified slot
+     */
 
-	return retval;
+    return retval;
 }
 
-static int set_attention_status(struct hotplug_slot *hotplug_slot, u8 status)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int set_attention_status(struct hotplug_slot *hotplug_slot, u8 status) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	switch (status) {
-		case 0:
-			/*
-			 * Fill in code here to turn light off
-			 */
-			break;
+    switch (status) {
+    case 0:
+        /*
+         * Fill in code here to turn light off
+         */
+        break;
 
-		case 1:
-		default:
-			/*
-			 * Fill in code here to turn light on
-			 */
-			break;
-	}
+    case 1:
+    default:
+        /*
+         * Fill in code here to turn light on
+         */
+        break;
+    }
 
-	return retval;
+    return retval;
 }
 
-static int hardware_test(struct hotplug_slot *hotplug_slot, u32 value)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int hardware_test(struct hotplug_slot *hotplug_slot, u32 value) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	switch (value) {
-		case 0:
-			/* Specify a test here */
-			break;
-		case 1:
-			/* Specify another test here */
-			break;
-	}
+    switch (value) {
+    case 0:
+        /* Specify a test here */
+        break;
+    case 1:
+        /* Specify another test here */
+        break;
+    }
 
-	return retval;
+    return retval;
 }
 
-static int get_power_status(struct hotplug_slot *hotplug_slot, u8 *value)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int get_power_status(struct hotplug_slot *hotplug_slot, u8 *value) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in logic to get the current power status of the specific
-	 * slot and store it in the *value location.
-	 */
+    /*
+     * Fill in logic to get the current power status of the specific
+     * slot and store it in the *value location.
+     */
 
-	return retval;
+    return retval;
 }
 
-static int get_attention_status(struct hotplug_slot *hotplug_slot, u8 *value)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int get_attention_status(struct hotplug_slot *hotplug_slot, u8 *value) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in logic to get the current attention status of the specific
-	 * slot and store it in the *value location.
-	 */
+    /*
+     * Fill in logic to get the current attention status of the specific
+     * slot and store it in the *value location.
+     */
 
-	return retval;
+    return retval;
 }
 
-static int get_latch_status(struct hotplug_slot *hotplug_slot, u8 *value)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int get_latch_status(struct hotplug_slot *hotplug_slot, u8 *value) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in logic to get the current latch status of the specific
-	 * slot and store it in the *value location.
-	 */
+    /*
+     * Fill in logic to get the current latch status of the specific
+     * slot and store it in the *value location.
+     */
 
-	return retval;
+    return retval;
 }
 
-static int get_adapter_status(struct hotplug_slot *hotplug_slot, u8 *value)
-{
-	struct slot *slot = hotplug_slot->private;
-	int retval = 0;
+static int get_adapter_status(struct hotplug_slot *hotplug_slot, u8 *value) {
+    struct slot *slot = hotplug_slot->private;
+    int retval = 0;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
 
-	/*
-	 * Fill in logic to get the current adapter status of the specific
-	 * slot and store it in the *value location.
-	 */
+    /*
+     * Fill in logic to get the current adapter status of the specific
+     * slot and store it in the *value location.
+     */
 
-	return retval;
+    return retval;
 }
 
-static void release_slot(struct hotplug_slot *hotplug_slot)
-{
-	struct slot *slot = hotplug_slot->private;
+static void release_slot(struct hotplug_slot *hotplug_slot) {
+    struct slot *slot = hotplug_slot->private;
 
-	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
-	kfree(slot->hotplug_slot->info);
-	kfree(slot->hotplug_slot);
-	kfree(slot);
+    dbg("%s - physical_slot = %s\n", __func__, hotplug_slot->name);
+    kfree(slot->hotplug_slot->info);
+    kfree(slot->hotplug_slot);
+    kfree(slot);
 }
 
-static void make_slot_name(struct slot *slot)
-{
-	/*
-	 * Stupid way to make a filename out of the slot name.
-	 * replace this if your hardware provides a better way to name slots.
-	 */
-	snprintf(slot->hotplug_slot->name, SLOT_NAME_SIZE, "%d", slot->number);
+static void make_slot_name(struct slot *slot) {
+    /*
+     * Stupid way to make a filename out of the slot name.
+     * replace this if your hardware provides a better way to name slots.
+     */
+    snprintf(slot->hotplug_slot->name, SLOT_NAME_SIZE, "%d", slot->number);
 }
 
 /**
  * init_slots - initialize 'struct slot' structures for each slot
  *
  */
-static int __init init_slots(void)
-{
-	struct slot *slot;
-	struct hotplug_slot *hotplug_slot;
-	struct hotplug_slot_info *info;
-	int retval = -ENOMEM;
-	int i;
+static int __init init_slots(void) {
+    struct slot *slot;
+    struct hotplug_slot *hotplug_slot;
+    struct hotplug_slot_info *info;
+    int retval = -ENOMEM;
+    int i;
 
-	/*
-	 * Create a structure for each slot, and register that slot
-	 * with the pci_hotplug subsystem.
-	 */
-	for (i = 0; i < num_slots; ++i) {
-		slot = kzalloc(sizeof(*slot), GFP_KERNEL);
-		if (!slot)
-			goto error;
+    /*
+     * Create a structure for each slot, and register that slot
+     * with the pci_hotplug subsystem.
+     */
+    for (i = 0; i < num_slots; ++i) {
+        slot = kzalloc(sizeof(*slot), GFP_KERNEL);
+        if (!slot)
+            goto error;
 
-		hotplug_slot = kzalloc(sizeof(*hotplug_slot), GFP_KERNEL);
-		if (!hotplug_slot)
-			goto error_slot;
-		slot->hotplug_slot = hotplug_slot;
+        hotplug_slot = kzalloc(sizeof(*hotplug_slot), GFP_KERNEL);
+        if (!hotplug_slot)
+            goto error_slot;
+        slot->hotplug_slot = hotplug_slot;
 
-		info = kzalloc(sizeof(*info), GFP_KERNEL);
-		if (!info)
-			goto error_hpslot;
-		hotplug_slot->info = info;
+        info = kzalloc(sizeof(*info), GFP_KERNEL);
+        if (!info)
+            goto error_hpslot;
+        hotplug_slot->info = info;
 
-		slot->number = i;
+        slot->number = i;
 
-		hotplug_slot->name = slot->name;
-		hotplug_slot->private = slot;
-		hotplug_slot->release = &release_slot;
-		make_slot_name(slot);
-		hotplug_slot->ops = &skel_hotplug_slot_ops;
-		
-		/*
-		 * Initialize the slot info structure with some known
-		 * good values.
-		 */
-		get_power_status(hotplug_slot, &info->power_status);
-		get_attention_status(hotplug_slot, &info->attention_status);
-		get_latch_status(hotplug_slot, &info->latch_status);
-		get_adapter_status(hotplug_slot, &info->adapter_status);
-		
-		dbg("registering slot %d\n", i);
-		retval = pci_hp_register(slot->hotplug_slot);
-		if (retval) {
-			err("pci_hp_register failed with error %d\n", retval);
-			goto error_info;
-		}
+        hotplug_slot->name = slot->name;
+        hotplug_slot->private = slot;
+        hotplug_slot->release = &release_slot;
+        make_slot_name(slot);
+        hotplug_slot->ops = &skel_hotplug_slot_ops;
 
-		/* add slot to our internal list */
-		list_add(&slot->slot_list, &slot_list);
-	}
+        /*
+         * Initialize the slot info structure with some known
+         * good values.
+         */
+        get_power_status(hotplug_slot, &info->power_status);
+        get_attention_status(hotplug_slot, &info->attention_status);
+        get_latch_status(hotplug_slot, &info->latch_status);
+        get_adapter_status(hotplug_slot, &info->adapter_status);
 
-	return 0;
+        dbg("registering slot %d\n", i);
+        retval = pci_hp_register(slot->hotplug_slot);
+        if (retval) {
+            err("pci_hp_register failed with error %d\n", retval);
+            goto error_info;
+        }
+
+        /* add slot to our internal list */
+        list_add(&slot->slot_list, &slot_list);
+    }
+
+    return 0;
 error_info:
-	kfree(info);
+    kfree(info);
 error_hpslot:
-	kfree(hotplug_slot);
+    kfree(hotplug_slot);
 error_slot:
-	kfree(slot);
+    kfree(slot);
 error:
-	return retval;
+    return retval;
 }
 
-static void __exit cleanup_slots(void)
-{
-	struct list_head *tmp;
-	struct list_head *next;
-	struct slot *slot;
+static void __exit cleanup_slots(void) {
+    struct list_head *tmp;
+    struct list_head *next;
+    struct slot *slot;
 
-	/*
-	 * Unregister all of our slots with the pci_hotplug subsystem.
-	 * Memory will be freed in release_slot() callback after slot's
-	 * lifespan is finished.
-	 */
-	list_for_each_safe(tmp, next, &slot_list) {
-		slot = list_entry(tmp, struct slot, slot_list);
-		list_del(&slot->slot_list);
-		pci_hp_deregister(slot->hotplug_slot);
-	}
-}
-		
-static int __init pcihp_skel_init(void)
-{
-	int retval;
-
-	info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
-	/*
-	 * Do specific initialization stuff for your driver here
-	 * like initializing your controller hardware (if any) and
-	 * determining the number of slots you have in the system
-	 * right now.
-	 */
-	num_slots = 5;
-
-	return init_slots();
+    /*
+     * Unregister all of our slots with the pci_hotplug subsystem.
+     * Memory will be freed in release_slot() callback after slot's
+     * lifespan is finished.
+     */
+    list_for_each_safe(tmp, next, &slot_list) {
+        slot = list_entry(tmp, struct slot, slot_list);
+        list_del(&slot->slot_list);
+        pci_hp_deregister(slot->hotplug_slot);
+    }
 }
 
-static void __exit pcihp_skel_exit(void)
-{
-	/*
-	 * Clean everything up.
-	 */
-	cleanup_slots();
+static int __init pcihp_skel_init(void) {
+    int retval;
+
+    info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+    /*
+     * Do specific initialization stuff for your driver here
+     * like initializing your controller hardware (if any) and
+     * determining the number of slots you have in the system
+     * right now.
+     */
+    num_slots = 5;
+
+    return init_slots();
+}
+
+static void __exit pcihp_skel_exit(void) {
+    /*
+     * Clean everything up.
+     */
+    cleanup_slots();
 }
 
 module_init(pcihp_skel_init);

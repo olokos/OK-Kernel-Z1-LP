@@ -30,9 +30,9 @@
  * -- Cort
  */
 extern struct pgtable_cache_struct {
-	unsigned long *pgd_cache;
-	unsigned long *pte_cache;
-	unsigned long pgtable_cache_sz;
+    unsigned long *pgd_cache;
+    unsigned long *pte_cache;
+    unsigned long pgtable_cache_sz;
 } quicklists;
 
 #define pgd_quicklist		(quicklists.pgd_cache)
@@ -60,40 +60,36 @@ extern unsigned long get_zero_page_fast(void);
 
 extern void __bad_pte(pmd_t *pmd);
 
-extern inline pgd_t *get_pgd_slow(void)
-{
-	pgd_t *ret;
+extern inline pgd_t *get_pgd_slow(void) {
+    pgd_t *ret;
 
-	ret = (pgd_t *)__get_free_pages(GFP_KERNEL, PGDIR_ORDER);
-	if (ret != NULL)
-		clear_page(ret);
-	return ret;
+    ret = (pgd_t *)__get_free_pages(GFP_KERNEL, PGDIR_ORDER);
+    if (ret != NULL)
+        clear_page(ret);
+    return ret;
 }
 
-extern inline pgd_t *get_pgd_fast(void)
-{
-	unsigned long *ret;
+extern inline pgd_t *get_pgd_fast(void) {
+    unsigned long *ret;
 
-	ret = pgd_quicklist;
-	if (ret != NULL) {
-		pgd_quicklist = (unsigned long *)(*ret);
-		ret[0] = 0;
-		pgtable_cache_size--;
-	} else
-		ret = (unsigned long *)get_pgd_slow();
-	return (pgd_t *)ret;
+    ret = pgd_quicklist;
+    if (ret != NULL) {
+        pgd_quicklist = (unsigned long *)(*ret);
+        ret[0] = 0;
+        pgtable_cache_size--;
+    } else
+        ret = (unsigned long *)get_pgd_slow();
+    return (pgd_t *)ret;
 }
 
-extern inline void free_pgd_fast(pgd_t *pgd)
-{
-	*(unsigned long **)pgd = pgd_quicklist;
-	pgd_quicklist = (unsigned long *) pgd;
-	pgtable_cache_size++;
+extern inline void free_pgd_fast(pgd_t *pgd) {
+    *(unsigned long **)pgd = pgd_quicklist;
+    pgd_quicklist = (unsigned long *) pgd;
+    pgtable_cache_size++;
 }
 
-extern inline void free_pgd_slow(pgd_t *pgd)
-{
-	free_page((unsigned long)pgd);
+extern inline void free_pgd_slow(pgd_t *pgd) {
+    free_page((unsigned long)pgd);
 }
 
 #define pgd_free(mm, pgd)        free_pgd_fast(pgd)
@@ -111,56 +107,50 @@ extern inline void free_pgd_slow(pgd_t *pgd)
 extern pte_t *pte_alloc_one_kernel(struct mm_struct *mm, unsigned long addr);
 
 static inline struct page *pte_alloc_one(struct mm_struct *mm,
-		unsigned long address)
-{
-	struct page *ptepage;
+        unsigned long address) {
+    struct page *ptepage;
 
 #ifdef CONFIG_HIGHPTE
-	int flags = GFP_KERNEL | __GFP_HIGHMEM | __GFP_REPEAT;
+    int flags = GFP_KERNEL | __GFP_HIGHMEM | __GFP_REPEAT;
 #else
-	int flags = GFP_KERNEL | __GFP_REPEAT;
+    int flags = GFP_KERNEL | __GFP_REPEAT;
 #endif
 
-	ptepage = alloc_pages(flags, 0);
-	if (ptepage)
-		clear_highpage(ptepage);
-	return ptepage;
+    ptepage = alloc_pages(flags, 0);
+    if (ptepage)
+        clear_highpage(ptepage);
+    return ptepage;
 }
 
 static inline pte_t *pte_alloc_one_fast(struct mm_struct *mm,
-		unsigned long address)
-{
-	unsigned long *ret;
+                                        unsigned long address) {
+    unsigned long *ret;
 
-	ret = pte_quicklist;
-	if (ret != NULL) {
-		pte_quicklist = (unsigned long *)(*ret);
-		ret[0] = 0;
-		pgtable_cache_size--;
-	}
-	return (pte_t *)ret;
+    ret = pte_quicklist;
+    if (ret != NULL) {
+        pte_quicklist = (unsigned long *)(*ret);
+        ret[0] = 0;
+        pgtable_cache_size--;
+    }
+    return (pte_t *)ret;
 }
 
-extern inline void pte_free_fast(pte_t *pte)
-{
-	*(unsigned long **)pte = pte_quicklist;
-	pte_quicklist = (unsigned long *) pte;
-	pgtable_cache_size++;
+extern inline void pte_free_fast(pte_t *pte) {
+    *(unsigned long **)pte = pte_quicklist;
+    pte_quicklist = (unsigned long *) pte;
+    pgtable_cache_size++;
 }
 
-extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	free_page((unsigned long)pte);
+extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    free_page((unsigned long)pte);
 }
 
-extern inline void pte_free_slow(struct page *ptepage)
-{
-	__free_page(ptepage);
+extern inline void pte_free_slow(struct page *ptepage) {
+    __free_page(ptepage);
 }
 
-extern inline void pte_free(struct mm_struct *mm, struct page *ptepage)
-{
-	__free_page(ptepage);
+extern inline void pte_free(struct mm_struct *mm, struct page *ptepage) {
+    __free_page(ptepage);
 }
 
 #define __pte_free_tlb(tlb, pte, addr)	pte_free((tlb)->mm, (pte))

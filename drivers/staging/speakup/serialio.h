@@ -13,11 +13,11 @@
  * and this whole broken driver.
  */
 struct old_serial_port {
-	unsigned int uart; /* unused */
-	unsigned int baud_base;
-	unsigned int port;
-	unsigned int irq;
-	unsigned int flags; /* unused */
+    unsigned int uart; /* unused */
+    unsigned int baud_base;
+    unsigned int port;
+    unsigned int irq;
+    unsigned int flags; /* unused */
 };
 
 /* countdown values for serial timeouts in us */

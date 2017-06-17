@@ -108,8 +108,7 @@ static v_U8_t WLANBAP_LLC_HEADER[] =  {0xAA, 0xAA, 0x03, 0x00, 0x00, 0x00 };
  * Function Declarations and Documentation
  * -------------------------------------------------------------------------*/
 VOS_STATUS
-WLANBAP_AcquireLSPacket( ptBtampContext pBtampCtx, vos_pkt_t **ppPacket, v_U16_t size, tANI_BOOLEAN isLsReq )
-{
+WLANBAP_AcquireLSPacket( ptBtampContext pBtampCtx, vos_pkt_t **ppPacket, v_U16_t size, tANI_BOOLEAN isLsReq ) {
     VOS_STATUS vosStatus;
     vos_pkt_t *pPacket;
     WLANBAP_8023HeaderType   w8023Header;
@@ -119,31 +118,25 @@ WLANBAP_AcquireLSPacket( ptBtampContext pBtampCtx, vos_pkt_t **ppPacket, v_U16_t
     v_U8_t                   *pData = NULL;
 
 
-    if(isLsReq)
-    {
+    if(isLsReq) {
         protoType = WLANTL_BT_AMP_TYPE_LS_REQ;
-    }
-    else
-    {
+    } else {
         protoType = WLANTL_BT_AMP_TYPE_LS_REP;
     }
 
     //If success, vosTxLsPacket is the packet and pData points to the head.
     vosStatus = vos_pkt_get_packet( &pPacket, VOS_PKT_TYPE_TX_802_11_MGMT,size, 1,
                                     VOS_TRUE, NULL, NULL );
-    if( VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         vosStatus = vos_pkt_reserve_head( pPacket, (v_VOID_t *)&pData, size );
-        if( !VOS_IS_STATUS_SUCCESS( vosStatus ) )
-        {
+        if( !VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "%s: failed to reserve size = %d\n",__func__, size );
             vos_pkt_return_packet( pPacket );
         }
     }
 
-    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLANBAP_LinkSupervisionTimerHandler failed to get vos_pkt\n" );
         return vosStatus;
@@ -212,16 +205,14 @@ VOS_STATUS
 WLANBAP_InitLinkSupervision
 (
     ptBtampHandle     btampHandle
-)
-{
+) {
     VOS_STATUS               vosStatus = VOS_STATUS_SUCCESS;
     ptBtampContext           pBtampCtx = (ptBtampContext) btampHandle;
     vos_pkt_t                *pLSReqPacket;
     vos_pkt_t                *pLSRepPacket;
     v_U16_t                   lsPktln;
 
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -242,12 +233,9 @@ WLANBAP_InitLinkSupervision
     pBtampCtx->retries = 0;
 
     vosStatus = WLANBAP_AcquireLSPacket( pBtampCtx, &pLSReqPacket,32, TRUE );
-    if( VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         pBtampCtx->lsReqPacket = pLSReqPacket;
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "%s:AcquireLSPacket failed\n",__func__);
         pBtampCtx->lsReqPacket = NULL;
@@ -255,12 +243,9 @@ WLANBAP_InitLinkSupervision
     }
 
     vosStatus = WLANBAP_AcquireLSPacket( pBtampCtx, &pLSRepPacket,32,FALSE );
-    if( VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         pBtampCtx->lsRepPacket = pLSRepPacket;
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "%s:AcquireLSPacket failed\n",__func__);
         pBtampCtx->lsRepPacket = NULL;
@@ -269,8 +254,7 @@ WLANBAP_InitLinkSupervision
 
     vosStatus = vos_pkt_get_packet_length(pBtampCtx->lsRepPacket,&lsPktln);
 
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "%s:vos_pkt_get_length error",__func__);
         return VOS_STATUS_E_FAULT;
@@ -278,13 +262,10 @@ WLANBAP_InitLinkSupervision
     pBtampCtx->lsPktln = lsPktln;
 
     /* Start Link Supervision Timer if not configured for infinite */
-    if (pBtampCtx->bapLinkSupervisionTimerInterval)
-    {
+    if (pBtampCtx->bapLinkSupervisionTimerInterval) {
         vosStatus = WLANBAP_StartLinkSupervisionTimer (pBtampCtx,
                     pBtampCtx->bapLinkSupervisionTimerInterval * WLANBAP_BREDR_BASEBAND_SLOT_TIME);
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                    "%s:No LS configured for infinite",__func__);
     }
@@ -319,13 +300,11 @@ VOS_STATUS
 WLANBAP_DeInitLinkSupervision
 (
     ptBtampHandle     btampHandle
-)
-{
+) {
     VOS_STATUS               vosStatus = VOS_STATUS_SUCCESS;
     ptBtampContext           pBtampCtx = (ptBtampContext) btampHandle;
 
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -337,14 +316,12 @@ WLANBAP_DeInitLinkSupervision
 
 
     /*Free the vos packet*/
-    if ( pBtampCtx->lsRepPacket )
-    {
+    if ( pBtampCtx->lsRepPacket ) {
         vosStatus = vos_pkt_return_packet(pBtampCtx->lsRepPacket);
         pBtampCtx->lsRepPacket = NULL;
     }
 
-    if ( pBtampCtx->lsReqPacket )
-    {
+    if ( pBtampCtx->lsReqPacket ) {
         vosStatus = vos_pkt_return_packet(pBtampCtx->lsReqPacket);
         pBtampCtx->lsReqPacket = NULL;
     }
@@ -386,8 +363,7 @@ WLANBAP_RxProcLsPkt
     v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
     v_U16_t            RxProtoType,     /* Protocol Type from the frame received */
     vos_pkt_t         *vosRxLsBuff
-)
-{
+) {
     VOS_STATUS               vosStatus;
     ptBtampContext           pBtampCtx = (ptBtampContext) btampHandle;
     WLANBAP_8023HeaderType   w8023Header;
@@ -397,8 +373,7 @@ WLANBAP_RxProcLsPkt
     /*------------------------------------------------------------------------
         Sanity check params
       ------------------------------------------------------------------------*/
-    if ( NULL == pBtampCtx)
-    {
+    if ( NULL == pBtampCtx) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Invalid BAP handle value in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -409,8 +384,7 @@ WLANBAP_RxProcLsPkt
 
     vos_pkt_extract_data(vosRxLsBuff,0,(v_VOID_t*)&w8023Header,&HeaderLen);
     if ( !(vos_mem_compare( w8023Header.vDA, pBtampCtx->self_mac_addr, VOS_MAC_ADDR_SIZE)
-            && vos_mem_compare( w8023Header.vSA, pBtampCtx->peer_mac_addr, VOS_MAC_ADDR_SIZE)))
-    {
+            && vos_mem_compare( w8023Header.vSA, pBtampCtx->peer_mac_addr, VOS_MAC_ADDR_SIZE))) {
 
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "MAC address mismatch in %s", __func__);
@@ -419,8 +393,7 @@ WLANBAP_RxProcLsPkt
 
     /*Free the vos packet*/
     vosStatus = vos_pkt_return_packet( vosRxLsBuff );
-    if ( VOS_STATUS_SUCCESS != vosStatus)
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Failed to free VOS packet in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -428,22 +401,17 @@ WLANBAP_RxProcLsPkt
 
 
     /* Reset Link Supervision timer */
-    if (RxProtoType ==  WLANTL_BT_AMP_TYPE_LS_REP)
-    {
+    if (RxProtoType ==  WLANTL_BT_AMP_TYPE_LS_REP) {
         pBtampCtx->lsReqPktPending = FALSE;
         pBtampCtx->retries = 0;
-        if (pBtampCtx->bapLinkSupervisionTimerInterval)
-        {
+        if (pBtampCtx->bapLinkSupervisionTimerInterval) {
             /* Restart the LS timer */
             WLANBAP_StopLinkSupervisionTimer(pBtampCtx);
             vosStatus = WLANBAP_StartLinkSupervisionTimer (pBtampCtx,
                         pBtampCtx->bapLinkSupervisionTimerInterval * WLANBAP_BREDR_BASEBAND_SLOT_TIME);
         }
-    }
-    else if(RxProtoType == WLANTL_BT_AMP_TYPE_LS_REQ)
-    {
-        if (pBtampCtx->bapLinkSupervisionTimerInterval)
-        {
+    } else if(RxProtoType == WLANTL_BT_AMP_TYPE_LS_REQ) {
+        if (pBtampCtx->bapLinkSupervisionTimerInterval) {
             /* Restart the LS timer */
             WLANBAP_StopLinkSupervisionTimer(pBtampCtx);
             vosStatus = WLANBAP_StartLinkSupervisionTimer (pBtampCtx,
@@ -464,8 +432,7 @@ static VOS_STATUS WLANBAP_TxLinkSupervisionCB
     v_PVOID_t   pvosGCtx,
     vos_pkt_t   *pPacket,
     VOS_STATUS  retStatus
-)
-{
+) {
     VOS_STATUS     vosStatus;
     ptBtampContext bapContext; /* Holds the btampContext value returned */
     vos_pkt_t                *pLSPacket;
@@ -476,14 +443,12 @@ static VOS_STATUS WLANBAP_TxLinkSupervisionCB
     /* Get the BT AMP context from the global */
     bapContext = gpBtampCtx;
 
-    if (!VOS_IS_STATUS_SUCCESS (retStatus))
-    {
+    if (!VOS_IS_STATUS_SUCCESS (retStatus)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "TxCompCB:Transmit status Failure");
     }
 
-    if ( pPacket == NULL )
-    {
+    if ( pPacket == NULL ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLANBAP_TxCompCB bad input\n" );
         return VOS_STATUS_E_FAILURE;
@@ -492,30 +457,21 @@ static VOS_STATUS WLANBAP_TxLinkSupervisionCB
 
     /* Return the packet & reallocate */
 
-    if( pPacket == bapContext->lsReqPacket )
-    {
+    if( pPacket == bapContext->lsReqPacket ) {
         vosStatus = WLANBAP_AcquireLSPacket( bapContext, &pLSPacket,32, TRUE );
-        if( VOS_IS_STATUS_SUCCESS( vosStatus ) )
-        {
+        if( VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
             bapContext->lsReqPacket = pLSPacket;
-        }
-        else
-        {
+        } else {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                        "%s:AcquireLSPacket failed\n",__func__);
             bapContext->lsReqPacket = NULL;
             return vosStatus;
         }
-    }
-    else
-    {
+    } else {
         vosStatus = WLANBAP_AcquireLSPacket( bapContext, &pLSPacket,32, FALSE );
-        if( VOS_IS_STATUS_SUCCESS( vosStatus ) )
-        {
+        if( VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
             bapContext->lsRepPacket = pLSPacket;
-        }
-        else
-        {
+        } else {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO,
                        "%s:AcquireLSPacket failed\n",__func__);
             bapContext->lsRepPacket = NULL;
@@ -563,8 +519,7 @@ WLANBAP_TxLinkSupervision
     v_U8_t            phy_link_handle,  /* Used by BAP to indentify the WLAN assoc. (StaId) */
     vos_pkt_t         *pPacket,
     v_U16_t           protoType
-)
-{
+) {
     ptBtampContext             pBtampCtx = (ptBtampContext)btampHandle;
     VOS_STATUS                 vosStatus = VOS_STATUS_E_FAILURE;
     v_PVOID_t                  pvosGCtx;
@@ -587,8 +542,7 @@ WLANBAP_TxLinkSupervision
                     &ucSTAId,  /* The StaId (used by TL, PE, and HAL) */
                     &pHddHdl); /* Handle to return BSL context */
 
-    if ( VOS_STATUS_SUCCESS != vosStatus )
-    {
+    if ( VOS_STATUS_SUCCESS != vosStatus ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Unable to retrieve STA Id from BAP context and phy_link_handle in WLANBAP_TxLinKSupervisionReq");
         return VOS_STATUS_E_FAULT;
@@ -604,29 +558,25 @@ WLANBAP_TxLinkSupervision
     pBtampCtx->metaInfo = metaInfo;
 
     vosStatus = WLANTL_TxBAPFrm( pvosGCtx, pPacket, &metaInfo, WLANBAP_TxLinkSupervisionCB );
-    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Tx: Packet rejected by TL in WLANBAP_TxLinkSupervisionReq");
         return vosStatus;
     }
 
-    if(protoType ==  WLANTL_BT_AMP_TYPE_LS_REQ)
-    {
+    if(protoType ==  WLANTL_BT_AMP_TYPE_LS_REQ) {
         pBtampCtx->lsReqPktPending = TRUE;
         pBtampCtx->retries++;
     }
 
-    if (pBtampCtx->bapLinkSupervisionTimerInterval)
-    {
+    if (pBtampCtx->bapLinkSupervisionTimerInterval) {
         /* Restart the LS timer */
         WLANBAP_StopLinkSupervisionTimer(pBtampCtx);
         vosStatus = WLANBAP_StartLinkSupervisionTimer (pBtampCtx,
                     pBtampCtx->bapLinkSupervisionTimerInterval * WLANBAP_BREDR_BASEBAND_SLOT_TIME);
     }
 
-    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) )
-    {
+    if( !VOS_IS_STATUS_SUCCESS( vosStatus ) ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "WLANBAP_TxLinkSupervisionReq failed to Start LinkSupervision Timer\n" );
         return vosStatus;

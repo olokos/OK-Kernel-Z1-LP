@@ -390,197 +390,197 @@ enum _SIS_CMDTYPE {
 };
 
 struct SIS_OH {
-	struct SIS_OH *poh_next;
-	struct SIS_OH *poh_prev;
-	u32            offset;
-	u32            size;
+    struct SIS_OH *poh_next;
+    struct SIS_OH *poh_prev;
+    u32            offset;
+    u32            size;
 };
 
 struct SIS_OHALLOC {
-	struct SIS_OHALLOC *poha_next;
-	struct SIS_OH aoh[1];
+    struct SIS_OHALLOC *poha_next;
+    struct SIS_OH aoh[1];
 };
 
 struct SIS_HEAP {
-	struct SIS_OH	oh_free;
-	struct SIS_OH	oh_used;
-	struct SIS_OH	*poh_freelist;
-	struct SIS_OHALLOC *poha_chain;
-	u32		max_freesize;
-	struct sis_video_info *vinfo;
+    struct SIS_OH	oh_free;
+    struct SIS_OH	oh_used;
+    struct SIS_OH	*poh_freelist;
+    struct SIS_OHALLOC *poha_chain;
+    u32		max_freesize;
+    struct sis_video_info *vinfo;
 };
 
 /* Our "par" */
 struct sis_video_info {
-	int		cardnumber;
-	struct fb_info  *memyselfandi;
+    int		cardnumber;
+    struct fb_info  *memyselfandi;
 
-	struct SiS_Private SiS_Pr;
+    struct SiS_Private SiS_Pr;
 
-	struct sisfb_info sisfbinfo;	/* For ioctl SISFB_GET_INFO */
+    struct sisfb_info sisfbinfo;	/* For ioctl SISFB_GET_INFO */
 
-	struct fb_var_screeninfo default_var;
+    struct fb_var_screeninfo default_var;
 
-	struct fb_fix_screeninfo sisfb_fix;
-	u32		pseudo_palette[16];
+    struct fb_fix_screeninfo sisfb_fix;
+    u32		pseudo_palette[16];
 
-	struct sisfb_monitor {
-		u16 hmin;
-		u16 hmax;
-		u16 vmin;
-		u16 vmax;
-		u32 dclockmax;
-		u8  feature;
-		bool datavalid;
-	}		sisfb_thismonitor;
+    struct sisfb_monitor {
+        u16 hmin;
+        u16 hmax;
+        u16 vmin;
+        u16 vmax;
+        u32 dclockmax;
+        u8  feature;
+        bool datavalid;
+    }		sisfb_thismonitor;
 
-	unsigned short	chip_id;	/* PCI ID of chip */
-	unsigned short	chip_vendor;	/* PCI ID of vendor */
-	char		myid[40];
+    unsigned short	chip_id;	/* PCI ID of chip */
+    unsigned short	chip_vendor;	/* PCI ID of vendor */
+    char		myid[40];
 
-	struct pci_dev  *nbridge;
-	struct pci_dev  *lpcdev;
+    struct pci_dev  *nbridge;
+    struct pci_dev  *lpcdev;
 
-	int		mni;	/* Mode number index */
+    int		mni;	/* Mode number index */
 
-	unsigned long	video_size;
-	unsigned long	video_base;
-	unsigned long	mmio_size;
-	unsigned long	mmio_base;
-	unsigned long	vga_base;
+    unsigned long	video_size;
+    unsigned long	video_base;
+    unsigned long	mmio_size;
+    unsigned long	mmio_base;
+    unsigned long	vga_base;
 
-	unsigned long	video_offset;
+    unsigned long	video_offset;
 
-	unsigned long	UMAsize, LFBsize;
+    unsigned long	UMAsize, LFBsize;
 
-	void __iomem	*video_vbase;
-	void __iomem	*mmio_vbase;
+    void __iomem	*video_vbase;
+    void __iomem	*mmio_vbase;
 
-	unsigned char	*bios_abase;
+    unsigned char	*bios_abase;
 
-	int		mtrr;
+    int		mtrr;
 
-	u32		sisfb_mem;
+    u32		sisfb_mem;
 
-	u32		sisfb_parm_mem;
-	int		sisfb_accel;
-	int		sisfb_ypan;
-	int		sisfb_max;
-	int		sisfb_userom;
-	int		sisfb_useoem;
-	int		sisfb_mode_idx;
-	int		sisfb_parm_rate;
-	int		sisfb_crt1off;
-	int		sisfb_forcecrt1;
-	int		sisfb_crt2type;
-	int		sisfb_crt2flags;
-	int		sisfb_dstn;
-	int		sisfb_fstn;
-	int		sisfb_tvplug;
-	int		sisfb_tvstd;
-	int		sisfb_nocrt2rate;
+    u32		sisfb_parm_mem;
+    int		sisfb_accel;
+    int		sisfb_ypan;
+    int		sisfb_max;
+    int		sisfb_userom;
+    int		sisfb_useoem;
+    int		sisfb_mode_idx;
+    int		sisfb_parm_rate;
+    int		sisfb_crt1off;
+    int		sisfb_forcecrt1;
+    int		sisfb_crt2type;
+    int		sisfb_crt2flags;
+    int		sisfb_dstn;
+    int		sisfb_fstn;
+    int		sisfb_tvplug;
+    int		sisfb_tvstd;
+    int		sisfb_nocrt2rate;
 
-	u32		heapstart;		/* offset  */
-	void __iomem	*sisfb_heap_start;	/* address */
-	void __iomem	*sisfb_heap_end;	/* address */
-	u32		sisfb_heap_size;
-	int		havenoheap;
+    u32		heapstart;		/* offset  */
+    void __iomem	*sisfb_heap_start;	/* address */
+    void __iomem	*sisfb_heap_end;	/* address */
+    u32		sisfb_heap_size;
+    int		havenoheap;
 
-	struct SIS_HEAP	sisfb_heap;		/* This card's vram heap */
+    struct SIS_HEAP	sisfb_heap;		/* This card's vram heap */
 
-	int		video_bpp;
-	int		video_cmap_len;
-	int		video_width;
-	int		video_height;
-	unsigned int	refresh_rate;
+    int		video_bpp;
+    int		video_cmap_len;
+    int		video_width;
+    int		video_height;
+    unsigned int	refresh_rate;
 
-	unsigned int	chip;
-	unsigned int	chip_real_id;
-	u8		revision_id;
-	int		sisvga_enabled;		/* PCI device was enabled */
+    unsigned int	chip;
+    unsigned int	chip_real_id;
+    u8		revision_id;
+    int		sisvga_enabled;		/* PCI device was enabled */
 
-	int		video_linelength;	/* real pitch */
-	int		scrnpitchCRT1;		/* pitch regarding interlace */
+    int		video_linelength;	/* real pitch */
+    int		scrnpitchCRT1;		/* pitch regarding interlace */
 
-	u16		DstColor;		/* For 2d acceleration */
-	u32		SiS310_AccelDepth;
-	u32		CommandReg;
-	int		cmdqueuelength;		/* Current (for accel) */
-	u32		cmdQueueSize;		/* Total size in KB */
+    u16		DstColor;		/* For 2d acceleration */
+    u32		SiS310_AccelDepth;
+    u32		CommandReg;
+    int		cmdqueuelength;		/* Current (for accel) */
+    u32		cmdQueueSize;		/* Total size in KB */
 
-	spinlock_t	lockaccel;		/* Do not use outside of kernel! */
+    spinlock_t	lockaccel;		/* Do not use outside of kernel! */
 
-	unsigned int	pcibus;
-	unsigned int	pcislot;
-	unsigned int	pcifunc;
+    unsigned int	pcibus;
+    unsigned int	pcislot;
+    unsigned int	pcifunc;
 
-	int		accel;
-	int		engineok;
+    int		accel;
+    int		engineok;
 
-	u16		subsysvendor;
-	u16		subsysdevice;
+    u16		subsysvendor;
+    u16		subsysdevice;
 
-	u32		vbflags;		/* Replacing deprecated stuff from above */
-	u32		currentvbflags;
-	u32		vbflags2;
+    u32		vbflags;		/* Replacing deprecated stuff from above */
+    u32		currentvbflags;
+    u32		vbflags2;
 
-	int		lcdxres, lcdyres;
-	int		lcddefmodeidx, tvdefmodeidx, defmodeidx;
-	u32		CRT2LCDType;		/* defined in "SIS_LCD_TYPE" */
-	u32		curFSTN, curDSTN;
+    int		lcdxres, lcdyres;
+    int		lcddefmodeidx, tvdefmodeidx, defmodeidx;
+    u32		CRT2LCDType;		/* defined in "SIS_LCD_TYPE" */
+    u32		curFSTN, curDSTN;
 
-	int		current_bpp;
-	int		current_width;
-	int		current_height;
-	int		current_htotal;
-	int		current_vtotal;
-	int		current_linelength;
-	__u32		current_pixclock;
-	int		current_refresh_rate;
+    int		current_bpp;
+    int		current_width;
+    int		current_height;
+    int		current_htotal;
+    int		current_vtotal;
+    int		current_linelength;
+    __u32		current_pixclock;
+    int		current_refresh_rate;
 
-	unsigned int	current_base;
+    unsigned int	current_base;
 
-	u8		mode_no;
-	u8		rate_idx;
-	int		modechanged;
-	unsigned char	modeprechange;
+    u8		mode_no;
+    u8		rate_idx;
+    int		modechanged;
+    unsigned char	modeprechange;
 
-	u8		sisfb_lastrates[128];
+    u8		sisfb_lastrates[128];
 
-	int		newrom;
-	int		haveXGIROM;
-	int		registered;
-	int		warncount;
+    int		newrom;
+    int		haveXGIROM;
+    int		registered;
+    int		warncount;
 
-	int		sisvga_engine;
-	int		hwcursor_size;
-	int		CRT2_write_enable;
-	u8		caps;
+    int		sisvga_engine;
+    int		hwcursor_size;
+    int		CRT2_write_enable;
+    u8		caps;
 
-	u8		detectedpdc;
-	u8		detectedpdca;
-	u8		detectedlcda;
+    u8		detectedpdc;
+    u8		detectedpdca;
+    u8		detectedlcda;
 
-	void __iomem	*hwcursor_vbase;
+    void __iomem	*hwcursor_vbase;
 
-	int		chronteltype;
-	int		tvxpos, tvypos;
-	u8		p2_1f,p2_20,p2_2b,p2_42,p2_43,p2_01,p2_02;
-	int		tvx, tvy;
+    int		chronteltype;
+    int		tvxpos, tvypos;
+    u8		p2_1f,p2_20,p2_2b,p2_42,p2_43,p2_01,p2_02;
+    int		tvx, tvy;
 
-	u8		sisfblocked;
+    u8		sisfblocked;
 
-	struct sisfb_info sisfb_infoblock;
+    struct sisfb_info sisfb_infoblock;
 
-	struct sisfb_cmd sisfb_command;
+    struct sisfb_cmd sisfb_command;
 
-	u32		sisfb_id;
+    u32		sisfb_id;
 
-	u8		sisfb_can_post;
-	u8		sisfb_card_posted;
-	u8		sisfb_was_boot_device;
+    u8		sisfb_can_post;
+    u8		sisfb_card_posted;
+    u8		sisfb_was_boot_device;
 
-	struct sis_video_info *next;
+    struct sis_video_info *next;
 };
 
 #endif

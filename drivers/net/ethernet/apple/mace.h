@@ -13,38 +13,38 @@
 #define REG(x)	volatile unsigned char x; char x ## _pad[15]
 
 struct mace {
-	REG(rcvfifo);		/* receive FIFO */
-	REG(xmtfifo);		/* transmit FIFO */
-	REG(xmtfc);		/* transmit frame control */
-	REG(xmtfs);		/* transmit frame status */
-	REG(xmtrc);		/* transmit retry count */
-	REG(rcvfc);		/* receive frame control */
-	REG(rcvfs);		/* receive frame status (4 bytes) */
-	REG(fifofc);		/* FIFO frame count */
-	REG(ir);		/* interrupt register */
-	REG(imr);		/* interrupt mask register */
-	REG(pr);		/* poll register */
-	REG(biucc);		/* bus interface unit config control */
-	REG(fifocc);		/* FIFO configuration control */
-	REG(maccc);		/* medium access control config control */
-	REG(plscc);		/* phys layer signalling config control */
-	REG(phycc);		/* physical configuration control */
-	REG(chipid_lo);		/* chip ID, lsb */
-	REG(chipid_hi);		/* chip ID, msb */
-	REG(iac);		/* internal address config */
-	REG(reg19);
-	REG(ladrf);		/* logical address filter (8 bytes) */
-	REG(padr);		/* physical address (6 bytes) */
-	REG(reg22);
-	REG(reg23);
-	REG(mpc);		/* missed packet count (clears when read) */
-	REG(reg25);
-	REG(rntpc);		/* runt packet count (clears when read) */
-	REG(rcvcc);		/* recv collision count (clears when read) */
-	REG(reg28);
-	REG(utr);		/* user test reg */
-	REG(reg30);
-	REG(reg31);
+    REG(rcvfifo);		/* receive FIFO */
+    REG(xmtfifo);		/* transmit FIFO */
+    REG(xmtfc);		/* transmit frame control */
+    REG(xmtfs);		/* transmit frame status */
+    REG(xmtrc);		/* transmit retry count */
+    REG(rcvfc);		/* receive frame control */
+    REG(rcvfs);		/* receive frame status (4 bytes) */
+    REG(fifofc);		/* FIFO frame count */
+    REG(ir);		/* interrupt register */
+    REG(imr);		/* interrupt mask register */
+    REG(pr);		/* poll register */
+    REG(biucc);		/* bus interface unit config control */
+    REG(fifocc);		/* FIFO configuration control */
+    REG(maccc);		/* medium access control config control */
+    REG(plscc);		/* phys layer signalling config control */
+    REG(phycc);		/* physical configuration control */
+    REG(chipid_lo);		/* chip ID, lsb */
+    REG(chipid_hi);		/* chip ID, msb */
+    REG(iac);		/* internal address config */
+    REG(reg19);
+    REG(ladrf);		/* logical address filter (8 bytes) */
+    REG(padr);		/* physical address (6 bytes) */
+    REG(reg22);
+    REG(reg23);
+    REG(mpc);		/* missed packet count (clears when read) */
+    REG(reg25);
+    REG(rntpc);		/* runt packet count (clears when read) */
+    REG(rcvcc);		/* recv collision count (clears when read) */
+    REG(reg28);
+    REG(utr);		/* user test reg */
+    REG(reg30);
+    REG(reg31);
 };
 
 /* Bits in XMTFC */

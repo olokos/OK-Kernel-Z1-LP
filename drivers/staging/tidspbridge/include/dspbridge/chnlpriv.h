@@ -53,33 +53,33 @@
 
 /* Channel info. */
 struct chnl_info {
-	struct chnl_mgr *chnl_mgr;	/* Owning channel manager. */
-	u32 cnhl_id;		/* Channel ID. */
-	void *event_obj;	/* Channel I/O completion event. */
-	/*Abstraction of I/O completion event. */
-	struct sync_object *sync_event;
-	s8 mode;		/* Channel mode. */
-	u8 state;		/* Current channel state. */
-	u32 bytes_tx;		/* Total bytes transferred. */
-	u32 cio_cs;		/* Number of IOCs in queue. */
-	u32 cio_reqs;		/* Number of IO Requests in queue. */
-	u32 process;		/* Process owning this channel. */
+    struct chnl_mgr *chnl_mgr;	/* Owning channel manager. */
+    u32 cnhl_id;		/* Channel ID. */
+    void *event_obj;	/* Channel I/O completion event. */
+    /*Abstraction of I/O completion event. */
+    struct sync_object *sync_event;
+    s8 mode;		/* Channel mode. */
+    u8 state;		/* Current channel state. */
+    u32 bytes_tx;		/* Total bytes transferred. */
+    u32 cio_cs;		/* Number of IOCs in queue. */
+    u32 cio_reqs;		/* Number of IO Requests in queue. */
+    u32 process;		/* Process owning this channel. */
 };
 
 /* Channel manager info: */
 struct chnl_mgrinfo {
-	u8 type;		/* Type of channel class library. */
-	/* Channel handle, given the channel id. */
-	struct chnl_object *chnl_obj;
-	u8 open_channels;	/* Number of open channels. */
-	u8 max_channels;	/* total # of chnls supported */
+    u8 type;		/* Type of channel class library. */
+    /* Channel handle, given the channel id. */
+    struct chnl_object *chnl_obj;
+    u8 open_channels;	/* Number of open channels. */
+    u8 max_channels;	/* total # of chnls supported */
 };
 
 /* Channel Manager Attrs: */
 struct chnl_mgrattrs {
-	/* Max number of channels this manager can use. */
-	u8 max_channels;
-	u32 word_size;		/* DSP Word size. */
+    /* Max number of channels this manager can use. */
+    u8 max_channels;
+    u32 word_size;		/* DSP Word size. */
 };
 
 #endif /* CHNLPRIV_ */

@@ -25,13 +25,13 @@ extern int udbg_read(char *buf, int buflen);
 
 extern void register_early_udbg_console(void);
 extern void udbg_printf(const char *fmt, ...)
-	__attribute__ ((format (printf, 1, 2)));
+__attribute__ ((format (printf, 1, 2)));
 extern void udbg_progress(char *s, unsigned short hex);
 
 extern void udbg_init_uart(void __iomem *comport, unsigned int speed,
-			   unsigned int clock);
+                           unsigned int clock);
 extern unsigned int udbg_probe_uart_speed(void __iomem *comport,
-					  unsigned int clock);
+        unsigned int clock);
 
 struct device_node;
 extern void udbg_scc_init(int force_scc);

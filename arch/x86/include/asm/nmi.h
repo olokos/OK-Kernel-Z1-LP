@@ -15,7 +15,7 @@ extern void release_evntsel_nmi(unsigned int);
 
 struct ctl_table;
 extern int proc_nmi_enabled(struct ctl_table *, int ,
-			void __user *, size_t *, loff_t *);
+                            void __user *, size_t *, loff_t *);
 extern int unknown_nmi_panic;
 
 void arch_trigger_all_cpu_backtrace(void);
@@ -25,9 +25,9 @@ void arch_trigger_all_cpu_backtrace(void);
 #define NMI_FLAG_FIRST	1
 
 enum {
-	NMI_LOCAL=0,
-	NMI_UNKNOWN,
-	NMI_MAX
+    NMI_LOCAL=0,
+    NMI_UNKNOWN,
+    NMI_MAX
 };
 
 #define NMI_DONE	0
@@ -36,7 +36,7 @@ enum {
 typedef int (*nmi_handler_t)(unsigned int, struct pt_regs *);
 
 int register_nmi_handler(unsigned int, nmi_handler_t, unsigned long,
-			 const char *);
+                         const char *);
 
 void unregister_nmi_handler(unsigned int, const char *);
 

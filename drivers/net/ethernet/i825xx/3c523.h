@@ -28,41 +28,38 @@
  * System Configuration Pointer Struct
  */
 
-struct scp_struct
-{
-  unsigned short zero_dum0;	/* has to be zero */
-  unsigned char  sysbus;	/* 0=16Bit,1=8Bit */
-  unsigned char  zero_dum1;	/* has to be zero for 586 */
-  unsigned short zero_dum2;
-  unsigned short zero_dum3;
-  char          *iscp;		/* pointer to the iscp-block */
+struct scp_struct {
+    unsigned short zero_dum0;	/* has to be zero */
+    unsigned char  sysbus;	/* 0=16Bit,1=8Bit */
+    unsigned char  zero_dum1;	/* has to be zero for 586 */
+    unsigned short zero_dum2;
+    unsigned short zero_dum3;
+    char          *iscp;		/* pointer to the iscp-block */
 };
 
 
 /*
  * Intermediate System Configuration Pointer (ISCP)
  */
-struct iscp_struct
-{
-  unsigned char  busy;          /* 586 clears after successful init */
-  unsigned char  zero_dummy;    /* hast to be zero */
-  unsigned short scb_offset;    /* pointeroffset to the scb_base */
-  char          *scb_base;      /* base-address of all 16-bit offsets */
+struct iscp_struct {
+    unsigned char  busy;          /* 586 clears after successful init */
+    unsigned char  zero_dummy;    /* hast to be zero */
+    unsigned short scb_offset;    /* pointeroffset to the scb_base */
+    char          *scb_base;      /* base-address of all 16-bit offsets */
 };
 
 /*
  * System Control Block (SCB)
  */
-struct scb_struct
-{
-  unsigned short status;        /* status word */
-  unsigned short cmd;           /* command word */
-  unsigned short cbl_offset;    /* pointeroffset, command block list */
-  unsigned short rfa_offset;    /* pointeroffset, receive frame area */
-  unsigned short crc_errs;      /* CRC-Error counter */
-  unsigned short aln_errs;      /* alignmenterror counter */
-  unsigned short rsc_errs;      /* Resourceerror counter */
-  unsigned short ovrn_errs;     /* OVerrunerror counter */
+struct scb_struct {
+    unsigned short status;        /* status word */
+    unsigned short cmd;           /* command word */
+    unsigned short cbl_offset;    /* pointeroffset, command block list */
+    unsigned short rfa_offset;    /* pointeroffset, receive frame area */
+    unsigned short crc_errs;      /* CRC-Error counter */
+    unsigned short aln_errs;      /* alignmenterror counter */
+    unsigned short rsc_errs;      /* Resourceerror counter */
+    unsigned short ovrn_errs;     /* OVerrunerror counter */
 };
 
 /*
@@ -109,16 +106,15 @@ struct scb_struct
 /*
  * Receive Frame Descriptor (RFD)
  */
-struct rfd_struct
-{
-  unsigned short status;	/* status word */
-  unsigned short last;		/* Bit15,Last Frame on List / Bit14,suspend */
-  unsigned short next;		/* linkoffset to next RFD */
-  unsigned short rbd_offset;	/* pointeroffset to RBD-buffer */
-  unsigned char  dest[6];	/* ethernet-address, destination */
-  unsigned char  source[6];	/* ethernet-address, source */
-  unsigned short length;	/* 802.3 frame-length */
-  unsigned short zero_dummy;	/* dummy */
+struct rfd_struct {
+    unsigned short status;	/* status word */
+    unsigned short last;		/* Bit15,Last Frame on List / Bit14,suspend */
+    unsigned short next;		/* linkoffset to next RFD */
+    unsigned short rbd_offset;	/* pointeroffset to RBD-buffer */
+    unsigned char  dest[6];	/* ethernet-address, destination */
+    unsigned char  source[6];	/* ethernet-address, source */
+    unsigned short length;	/* 802.3 frame-length */
+    unsigned short zero_dummy;	/* dummy */
 };
 
 #define RFD_LAST     0x8000	/* last: last rfd in the list */
@@ -130,13 +126,12 @@ struct rfd_struct
 /*
  * Receive Buffer Descriptor (RBD)
  */
-struct rbd_struct
-{
-  unsigned short status;	/* status word,number of used bytes in buff */
-  unsigned short next;		/* pointeroffset to next RBD */
-  char          *buffer;	/* receive buffer address pointer */
-  unsigned short size;		/* size of this buffer */
-  unsigned short zero_dummy;    /* dummy */
+struct rbd_struct {
+    unsigned short status;	/* status word,number of used bytes in buff */
+    unsigned short next;		/* pointeroffset to next RBD */
+    char          *buffer;	/* receive buffer address pointer */
+    unsigned short size;		/* size of this buffer */
+    unsigned short zero_dummy;    /* dummy */
 };
 
 #define RBD_LAST	0x8000	/* last buffer */
@@ -172,69 +167,64 @@ struct rbd_struct
 /*
  * NOP - command
  */
-struct nop_cmd_struct
-{
-  unsigned short cmd_status;	/* status of this command */
-  unsigned short cmd_cmd;       /* the command itself (+bits) */
-  unsigned short cmd_link;      /* offsetpointer to next command */
+struct nop_cmd_struct {
+    unsigned short cmd_status;	/* status of this command */
+    unsigned short cmd_cmd;       /* the command itself (+bits) */
+    unsigned short cmd_link;      /* offsetpointer to next command */
 };
 
 /*
  * IA Setup command
  */
-struct iasetup_cmd_struct
-{
-  unsigned short cmd_status;
-  unsigned short cmd_cmd;
-  unsigned short cmd_link;
-  unsigned char  iaddr[6];
+struct iasetup_cmd_struct {
+    unsigned short cmd_status;
+    unsigned short cmd_cmd;
+    unsigned short cmd_link;
+    unsigned char  iaddr[6];
 };
 
 /*
  * Configure command
  */
-struct configure_cmd_struct
-{
-  unsigned short cmd_status;
-  unsigned short cmd_cmd;
-  unsigned short cmd_link;
-  unsigned char  byte_cnt;   /* size of the config-cmd */
-  unsigned char  fifo;       /* fifo/recv monitor */
-  unsigned char  sav_bf;     /* save bad frames (bit7=1)*/
-  unsigned char  adr_len;    /* adr_len(0-2),al_loc(3),pream(4-5),loopbak(6-7)*/
-  unsigned char  priority;   /* lin_prio(0-2),exp_prio(4-6),bof_metd(7) */
-  unsigned char  ifs;        /* inter frame spacing */
-  unsigned char  time_low;   /* slot time low */
-  unsigned char  time_high;  /* slot time high(0-2) and max. retries(4-7) */
-  unsigned char  promisc;    /* promisc-mode(0) , et al (1-7) */
-  unsigned char  carr_coll;  /* carrier(0-3)/collision(4-7) stuff */
-  unsigned char  fram_len;   /* minimal frame len */
-  unsigned char  dummy;	     /* dummy */
+struct configure_cmd_struct {
+    unsigned short cmd_status;
+    unsigned short cmd_cmd;
+    unsigned short cmd_link;
+    unsigned char  byte_cnt;   /* size of the config-cmd */
+    unsigned char  fifo;       /* fifo/recv monitor */
+    unsigned char  sav_bf;     /* save bad frames (bit7=1)*/
+    unsigned char  adr_len;    /* adr_len(0-2),al_loc(3),pream(4-5),loopbak(6-7)*/
+    unsigned char  priority;   /* lin_prio(0-2),exp_prio(4-6),bof_metd(7) */
+    unsigned char  ifs;        /* inter frame spacing */
+    unsigned char  time_low;   /* slot time low */
+    unsigned char  time_high;  /* slot time high(0-2) and max. retries(4-7) */
+    unsigned char  promisc;    /* promisc-mode(0) , et al (1-7) */
+    unsigned char  carr_coll;  /* carrier(0-3)/collision(4-7) stuff */
+    unsigned char  fram_len;   /* minimal frame len */
+    unsigned char  dummy;	     /* dummy */
 };
 
 /*
  * Multicast Setup command
  */
-struct mcsetup_cmd_struct
-{
-  unsigned short cmd_status;
-  unsigned short cmd_cmd;
-  unsigned short cmd_link;
-  unsigned short mc_cnt;		/* number of bytes in the MC-List */
-  unsigned char  mc_list[0][6];  	/* pointer to 6 bytes entries */
+struct mcsetup_cmd_struct {
+    unsigned short cmd_status;
+    unsigned short cmd_cmd;
+    unsigned short cmd_link;
+    unsigned short mc_cnt;		/* number of bytes in the MC-List */
+    unsigned char  mc_list[0][6];  	/* pointer to 6 bytes entries */
 };
 
 /*
  * transmit command
  */
-struct transmit_cmd_struct
-{
-  unsigned short cmd_status;
-  unsigned short cmd_cmd;
-  unsigned short cmd_link;
-  unsigned short tbd_offset;	/* pointeroffset to TBD */
-  unsigned char  dest[6];       /* destination address of the frame */
-  unsigned short length;	/* user defined: 802.3 length / Ether type */
+struct transmit_cmd_struct {
+    unsigned short cmd_status;
+    unsigned short cmd_cmd;
+    unsigned short cmd_link;
+    unsigned short tbd_offset;	/* pointeroffset to TBD */
+    unsigned char  dest[6];       /* destination address of the frame */
+    unsigned short length;	/* user defined: 802.3 length / Ether type */
 };
 
 #define TCMD_ERRMASK     0x0fa0
@@ -247,12 +237,11 @@ struct transmit_cmd_struct
 #define TCMD_NOCARRIER   0x0400
 #define TCMD_LATECOLL    0x0800
 
-struct tdr_cmd_struct
-{
-  unsigned short cmd_status;
-  unsigned short cmd_cmd;
-  unsigned short cmd_link;
-  unsigned short status;
+struct tdr_cmd_struct {
+    unsigned short cmd_status;
+    unsigned short cmd_cmd;
+    unsigned short cmd_link;
+    unsigned short status;
 };
 
 #define TDR_LNK_OK	0x8000	/* No link problem identified */
@@ -264,11 +253,10 @@ struct tdr_cmd_struct
 /*
  * Transmit Buffer Descriptor (TBD)
  */
-struct tbd_struct
-{
-  unsigned short size;		/* size + EOF-Flag(15) */
-  unsigned short next;          /* pointeroffset to next TBD */
-  char          *buffer;        /* pointer to buffer */
+struct tbd_struct {
+    unsigned short size;		/* size + EOF-Flag(15) */
+    unsigned short next;          /* pointeroffset to next TBD */
+    char          *buffer;        /* pointer to buffer */
 };
 
 #define TBD_LAST 0x8000         /* EOF-Flag, indicates last buffer in list */

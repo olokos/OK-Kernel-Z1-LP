@@ -3135,18 +3135,18 @@
 
 /* Board configuration v2 (v1 is obsolete; later versions are compatible) */
 struct falcon_nvconfig_board_v2 {
-	__le16 nports;
-	u8 port0_phy_addr;
-	u8 port0_phy_type;
-	u8 port1_phy_addr;
-	u8 port1_phy_type;
-	__le16 asic_sub_revision;
-	__le16 board_revision;
+    __le16 nports;
+    u8 port0_phy_addr;
+    u8 port0_phy_type;
+    u8 port1_phy_addr;
+    u8 port1_phy_type;
+    __le16 asic_sub_revision;
+    __le16 board_revision;
 } __packed;
 
 /* Board configuration v3 extra information */
 struct falcon_nvconfig_board_v3 {
-	__le32 spi_device_type[2];
+    __le32 spi_device_type[2];
 } __packed;
 
 /* Bit numbers for spi_device_type */
@@ -3167,22 +3167,22 @@ struct falcon_nvconfig_board_v3 {
 
 #define FALCON_NVCONFIG_BOARD_MAGIC_NUM 0xFA1C
 struct falcon_nvconfig {
-	efx_oword_t ee_vpd_cfg_reg;			/* 0x300 */
-	u8 mac_address[2][8];			/* 0x310 */
-	efx_oword_t pcie_sd_ctl0123_reg;		/* 0x320 */
-	efx_oword_t pcie_sd_ctl45_reg;			/* 0x330 */
-	efx_oword_t pcie_pcs_ctl_stat_reg;		/* 0x340 */
-	efx_oword_t hw_init_reg;			/* 0x350 */
-	efx_oword_t nic_stat_reg;			/* 0x360 */
-	efx_oword_t glb_ctl_reg;			/* 0x370 */
-	efx_oword_t srm_cfg_reg;			/* 0x380 */
-	efx_oword_t spare_reg;				/* 0x390 */
-	__le16 board_magic_num;			/* 0x3A0 */
-	__le16 board_struct_ver;
-	__le16 board_checksum;
-	struct falcon_nvconfig_board_v2 board_v2;
-	efx_oword_t ee_base_page_reg;			/* 0x3B0 */
-	struct falcon_nvconfig_board_v3 board_v3;	/* 0x3C0 */
+    efx_oword_t ee_vpd_cfg_reg;			/* 0x300 */
+    u8 mac_address[2][8];			/* 0x310 */
+    efx_oword_t pcie_sd_ctl0123_reg;		/* 0x320 */
+    efx_oword_t pcie_sd_ctl45_reg;			/* 0x330 */
+    efx_oword_t pcie_pcs_ctl_stat_reg;		/* 0x340 */
+    efx_oword_t hw_init_reg;			/* 0x350 */
+    efx_oword_t nic_stat_reg;			/* 0x360 */
+    efx_oword_t glb_ctl_reg;			/* 0x370 */
+    efx_oword_t srm_cfg_reg;			/* 0x380 */
+    efx_oword_t spare_reg;				/* 0x390 */
+    __le16 board_magic_num;			/* 0x3A0 */
+    __le16 board_struct_ver;
+    __le16 board_checksum;
+    struct falcon_nvconfig_board_v2 board_v2;
+    efx_oword_t ee_base_page_reg;			/* 0x3B0 */
+    struct falcon_nvconfig_board_v3 board_v3;	/* 0x3C0 */
 } __packed;
 
 #endif /* EFX_REGS_H */

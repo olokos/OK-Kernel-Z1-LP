@@ -51,134 +51,115 @@
 #define CCM_LTR2	0x48
 #define CCM_LTR3	0x4c
 
-static unsigned long get_rate_mpll(void)
-{
-	ulong mpctl = __raw_readl(CRM_BASE + CCM_MPCTL);
+static unsigned long get_rate_mpll(void) {
+    ulong mpctl = __raw_readl(CRM_BASE + CCM_MPCTL);
 
-	return mxc_decode_pll(mpctl, 24000000);
+    return mxc_decode_pll(mpctl, 24000000);
 }
 
-static unsigned long get_rate_upll(void)
-{
-	ulong mpctl = __raw_readl(CRM_BASE + CCM_UPCTL);
+static unsigned long get_rate_upll(void) {
+    ulong mpctl = __raw_readl(CRM_BASE + CCM_UPCTL);
 
-	return mxc_decode_pll(mpctl, 24000000);
+    return mxc_decode_pll(mpctl, 24000000);
 }
 
-unsigned long get_rate_arm(struct clk *clk)
-{
-	unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
-	unsigned long rate = get_rate_mpll();
+unsigned long get_rate_arm(struct clk *clk) {
+    unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
+    unsigned long rate = get_rate_mpll();
 
-	if (cctl & (1 << 14))
-		rate = (rate * 3) >> 2;
+    if (cctl & (1 << 14))
+        rate = (rate * 3) >> 2;
 
-	return rate / ((cctl >> 30) + 1);
+    return rate / ((cctl >> 30) + 1);
 }
 
-static unsigned long get_rate_ahb(struct clk *clk)
-{
-	unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
+static unsigned long get_rate_ahb(struct clk *clk) {
+    unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
 
-	return get_rate_arm(NULL) / (((cctl >> 28) & 0x3) + 1);
+    return get_rate_arm(NULL) / (((cctl >> 28) & 0x3) + 1);
 }
 
-static unsigned long get_rate_ipg(struct clk *clk)
-{
-	return get_rate_ahb(NULL) >> 1;
+static unsigned long get_rate_ipg(struct clk *clk) {
+    return get_rate_ahb(NULL) >> 1;
 }
 
-static unsigned long get_rate_per(int per)
-{
-	unsigned long ofs = (per & 0x3) * 8;
-	unsigned long reg = per & ~0x3;
-	unsigned long val = (readl(CRM_BASE + CCM_PCDR0 + reg) >> ofs) & 0x3f;
-	unsigned long fref;
+static unsigned long get_rate_per(int per) {
+    unsigned long ofs = (per & 0x3) * 8;
+    unsigned long reg = per & ~0x3;
+    unsigned long val = (readl(CRM_BASE + CCM_PCDR0 + reg) >> ofs) & 0x3f;
+    unsigned long fref;
 
-	if (readl(CRM_BASE + 0x64) & (1 << per))
-		fref = get_rate_upll();
-	else
-		fref = get_rate_ahb(NULL);
+    if (readl(CRM_BASE + 0x64) & (1 << per))
+        fref = get_rate_upll();
+    else
+        fref = get_rate_ahb(NULL);
 
-	return fref / (val + 1);
+    return fref / (val + 1);
 }
 
-static unsigned long get_rate_uart(struct clk *clk)
-{
-	return get_rate_per(15);
+static unsigned long get_rate_uart(struct clk *clk) {
+    return get_rate_per(15);
 }
 
-static unsigned long get_rate_ssi2(struct clk *clk)
-{
-	return get_rate_per(14);
+static unsigned long get_rate_ssi2(struct clk *clk) {
+    return get_rate_per(14);
 }
 
-static unsigned long get_rate_ssi1(struct clk *clk)
-{
-	return get_rate_per(13);
+static unsigned long get_rate_ssi1(struct clk *clk) {
+    return get_rate_per(13);
 }
 
-static unsigned long get_rate_i2c(struct clk *clk)
-{
-	return get_rate_per(6);
+static unsigned long get_rate_i2c(struct clk *clk) {
+    return get_rate_per(6);
 }
 
-static unsigned long get_rate_nfc(struct clk *clk)
-{
-	return get_rate_per(8);
+static unsigned long get_rate_nfc(struct clk *clk) {
+    return get_rate_per(8);
 }
 
-static unsigned long get_rate_gpt(struct clk *clk)
-{
-	return get_rate_per(5);
+static unsigned long get_rate_gpt(struct clk *clk) {
+    return get_rate_per(5);
 }
 
-static unsigned long get_rate_lcdc(struct clk *clk)
-{
-	return get_rate_per(7);
+static unsigned long get_rate_lcdc(struct clk *clk) {
+    return get_rate_per(7);
 }
 
-static unsigned long get_rate_esdhc1(struct clk *clk)
-{
-	return get_rate_per(3);
+static unsigned long get_rate_esdhc1(struct clk *clk) {
+    return get_rate_per(3);
 }
 
-static unsigned long get_rate_esdhc2(struct clk *clk)
-{
-	return get_rate_per(4);
+static unsigned long get_rate_esdhc2(struct clk *clk) {
+    return get_rate_per(4);
 }
 
-static unsigned long get_rate_csi(struct clk *clk)
-{
-	return get_rate_per(0);
+static unsigned long get_rate_csi(struct clk *clk) {
+    return get_rate_per(0);
 }
 
-static unsigned long get_rate_otg(struct clk *clk)
-{
-	unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
-	unsigned long rate = get_rate_upll();
+static unsigned long get_rate_otg(struct clk *clk) {
+    unsigned long cctl = readl(CRM_BASE + CCM_CCTL);
+    unsigned long rate = get_rate_upll();
 
-	return (cctl & (1 << 23)) ? 0 : rate / ((0x3F & (cctl >> 16)) + 1);
+    return (cctl & (1 << 23)) ? 0 : rate / ((0x3F & (cctl >> 16)) + 1);
 }
 
-static int clk_cgcr_enable(struct clk *clk)
-{
-	u32 reg;
+static int clk_cgcr_enable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(clk->enable_reg);
-	reg |= 1 << clk->enable_shift;
-	__raw_writel(reg, clk->enable_reg);
+    reg = __raw_readl(clk->enable_reg);
+    reg |= 1 << clk->enable_shift;
+    __raw_writel(reg, clk->enable_reg);
 
-	return 0;
+    return 0;
 }
 
-static void clk_cgcr_disable(struct clk *clk)
-{
-	u32 reg;
+static void clk_cgcr_disable(struct clk *clk) {
+    u32 reg;
 
-	reg = __raw_readl(clk->enable_reg);
-	reg &= ~(1 << clk->enable_shift);
-	__raw_writel(reg, clk->enable_reg);
+    reg = __raw_readl(clk->enable_reg);
+    reg &= ~(1 << clk->enable_shift);
+    __raw_writel(reg, clk->enable_reg);
 }
 
 #define DEFINE_CLOCK(name, i, er, es, gr, sr, s)	\
@@ -224,10 +205,10 @@ DEFINE_CLOCK(cspi2_clk,  0, CCM_CGCR1,  6, get_rate_ipg, NULL, NULL);
 DEFINE_CLOCK(cspi3_clk,  0, CCM_CGCR1,  7, get_rate_ipg, NULL, NULL);
 DEFINE_CLOCK(esdhc1_ahb_clk, 0, CCM_CGCR0, 21, get_rate_esdhc1,	 NULL, NULL);
 DEFINE_CLOCK(esdhc1_per_clk, 0, CCM_CGCR0,  3, get_rate_esdhc1,	 NULL,
-		&esdhc1_ahb_clk);
+             &esdhc1_ahb_clk);
 DEFINE_CLOCK(esdhc2_ahb_clk, 0, CCM_CGCR0, 22, get_rate_esdhc2,	 NULL, NULL);
 DEFINE_CLOCK(esdhc2_per_clk, 0, CCM_CGCR0,  4, get_rate_esdhc2,	 NULL,
-		&esdhc2_ahb_clk);
+             &esdhc2_ahb_clk);
 DEFINE_CLOCK(sdma_ahb_clk, 0, CCM_CGCR0, 26, NULL,	 NULL, NULL);
 DEFINE_CLOCK(fec_ahb_clk, 0, CCM_CGCR0, 23, NULL,	 NULL, NULL);
 DEFINE_CLOCK(lcdc_ahb_clk, 0, CCM_CGCR0, 24, NULL,	 NULL, NULL);
@@ -256,9 +237,9 @@ DEFINE_CLOCK(ssi1_clk,  0, CCM_CGCR2, 11, get_rate_ssi1, NULL, &ssi1_per_clk);
 DEFINE_CLOCK(ssi2_clk,  1, CCM_CGCR2, 12, get_rate_ssi2, NULL, &ssi2_per_clk);
 DEFINE_CLOCK(sdma_clk, 0, CCM_CGCR2,  6, get_rate_ipg, NULL, &sdma_ahb_clk);
 DEFINE_CLOCK(esdhc1_clk,  0, CCM_CGCR1, 13, get_rate_esdhc1, NULL,
-		&esdhc1_per_clk);
+             &esdhc1_per_clk);
 DEFINE_CLOCK(esdhc2_clk,  1, CCM_CGCR1, 14, get_rate_esdhc2, NULL,
-		&esdhc2_per_clk);
+             &esdhc2_per_clk);
 DEFINE_CLOCK(audmux_clk, 0, CCM_CGCR1, 0, NULL, NULL, NULL);
 DEFINE_CLOCK(csi_clk,    0, CCM_CGCR1,  4, get_rate_csi, NULL,  &csi_per_clk);
 DEFINE_CLOCK(can1_clk,	 0, CCM_CGCR1,  2, get_rate_ipg, NULL, NULL);
@@ -273,74 +254,73 @@ DEFINE_CLOCK(iim_clk,    0, CCM_CGCR1, 26, NULL, NULL, NULL);
 	},
 
 static struct clk_lookup lookups[] = {
-	/* i.mx25 has the i.mx21 type uart */
-	_REGISTER_CLOCK("imx21-uart.0", NULL, uart1_clk)
-	_REGISTER_CLOCK("imx21-uart.1", NULL, uart2_clk)
-	_REGISTER_CLOCK("imx21-uart.2", NULL, uart3_clk)
-	_REGISTER_CLOCK("imx21-uart.3", NULL, uart4_clk)
-	_REGISTER_CLOCK("imx21-uart.4", NULL, uart5_clk)
-	_REGISTER_CLOCK("mxc-ehci.0", "usb", usbotg_clk)
-	_REGISTER_CLOCK("mxc-ehci.1", "usb", usbotg_clk)
-	_REGISTER_CLOCK("mxc-ehci.2", "usb", usbotg_clk)
-	_REGISTER_CLOCK("fsl-usb2-udc", "usb", usbotg_clk)
-	_REGISTER_CLOCK("mxc_nand.0", NULL, nfc_clk)
-	/* i.mx25 has the i.mx35 type cspi */
-	_REGISTER_CLOCK("imx35-cspi.0", NULL, cspi1_clk)
-	_REGISTER_CLOCK("imx35-cspi.1", NULL, cspi2_clk)
-	_REGISTER_CLOCK("imx35-cspi.2", NULL, cspi3_clk)
-	_REGISTER_CLOCK("mxc_pwm.0", NULL, pwm1_clk)
-	_REGISTER_CLOCK("mxc_pwm.1", NULL, pwm2_clk)
-	_REGISTER_CLOCK("mxc_pwm.2", NULL, pwm3_clk)
-	_REGISTER_CLOCK("mxc_pwm.3", NULL, pwm4_clk)
-	_REGISTER_CLOCK("imx-keypad", NULL, kpp_clk)
-	_REGISTER_CLOCK("mx25-adc", NULL, tsc_clk)
-	_REGISTER_CLOCK("imx-i2c.0", NULL, i2c_clk)
-	_REGISTER_CLOCK("imx-i2c.1", NULL, i2c_clk)
-	_REGISTER_CLOCK("imx-i2c.2", NULL, i2c_clk)
-	_REGISTER_CLOCK("imx25-fec.0", NULL, fec_clk)
-	_REGISTER_CLOCK("imxdi_rtc.0", NULL, dryice_clk)
-	_REGISTER_CLOCK("imx-fb.0", NULL, lcdc_clk)
-	_REGISTER_CLOCK("imx2-wdt.0", NULL, wdt_clk)
-	_REGISTER_CLOCK("imx-ssi.0", NULL, ssi1_clk)
-	_REGISTER_CLOCK("imx-ssi.1", NULL, ssi2_clk)
-	_REGISTER_CLOCK("sdhci-esdhc-imx25.0", NULL, esdhc1_clk)
-	_REGISTER_CLOCK("sdhci-esdhc-imx25.1", NULL, esdhc2_clk)
-	_REGISTER_CLOCK("mx2-camera.0", NULL, csi_clk)
-	_REGISTER_CLOCK(NULL, "audmux", audmux_clk)
-	_REGISTER_CLOCK("flexcan.0", NULL, can1_clk)
-	_REGISTER_CLOCK("flexcan.1", NULL, can2_clk)
-	/* i.mx25 has the i.mx35 type sdma */
-	_REGISTER_CLOCK("imx35-sdma", NULL, sdma_clk)
-	_REGISTER_CLOCK(NULL, "iim", iim_clk)
+    /* i.mx25 has the i.mx21 type uart */
+    _REGISTER_CLOCK("imx21-uart.0", NULL, uart1_clk)
+    _REGISTER_CLOCK("imx21-uart.1", NULL, uart2_clk)
+    _REGISTER_CLOCK("imx21-uart.2", NULL, uart3_clk)
+    _REGISTER_CLOCK("imx21-uart.3", NULL, uart4_clk)
+    _REGISTER_CLOCK("imx21-uart.4", NULL, uart5_clk)
+    _REGISTER_CLOCK("mxc-ehci.0", "usb", usbotg_clk)
+    _REGISTER_CLOCK("mxc-ehci.1", "usb", usbotg_clk)
+    _REGISTER_CLOCK("mxc-ehci.2", "usb", usbotg_clk)
+    _REGISTER_CLOCK("fsl-usb2-udc", "usb", usbotg_clk)
+    _REGISTER_CLOCK("mxc_nand.0", NULL, nfc_clk)
+    /* i.mx25 has the i.mx35 type cspi */
+    _REGISTER_CLOCK("imx35-cspi.0", NULL, cspi1_clk)
+    _REGISTER_CLOCK("imx35-cspi.1", NULL, cspi2_clk)
+    _REGISTER_CLOCK("imx35-cspi.2", NULL, cspi3_clk)
+    _REGISTER_CLOCK("mxc_pwm.0", NULL, pwm1_clk)
+    _REGISTER_CLOCK("mxc_pwm.1", NULL, pwm2_clk)
+    _REGISTER_CLOCK("mxc_pwm.2", NULL, pwm3_clk)
+    _REGISTER_CLOCK("mxc_pwm.3", NULL, pwm4_clk)
+    _REGISTER_CLOCK("imx-keypad", NULL, kpp_clk)
+    _REGISTER_CLOCK("mx25-adc", NULL, tsc_clk)
+    _REGISTER_CLOCK("imx-i2c.0", NULL, i2c_clk)
+    _REGISTER_CLOCK("imx-i2c.1", NULL, i2c_clk)
+    _REGISTER_CLOCK("imx-i2c.2", NULL, i2c_clk)
+    _REGISTER_CLOCK("imx25-fec.0", NULL, fec_clk)
+    _REGISTER_CLOCK("imxdi_rtc.0", NULL, dryice_clk)
+    _REGISTER_CLOCK("imx-fb.0", NULL, lcdc_clk)
+    _REGISTER_CLOCK("imx2-wdt.0", NULL, wdt_clk)
+    _REGISTER_CLOCK("imx-ssi.0", NULL, ssi1_clk)
+    _REGISTER_CLOCK("imx-ssi.1", NULL, ssi2_clk)
+    _REGISTER_CLOCK("sdhci-esdhc-imx25.0", NULL, esdhc1_clk)
+    _REGISTER_CLOCK("sdhci-esdhc-imx25.1", NULL, esdhc2_clk)
+    _REGISTER_CLOCK("mx2-camera.0", NULL, csi_clk)
+    _REGISTER_CLOCK(NULL, "audmux", audmux_clk)
+    _REGISTER_CLOCK("flexcan.0", NULL, can1_clk)
+    _REGISTER_CLOCK("flexcan.1", NULL, can2_clk)
+    /* i.mx25 has the i.mx35 type sdma */
+    _REGISTER_CLOCK("imx35-sdma", NULL, sdma_clk)
+    _REGISTER_CLOCK(NULL, "iim", iim_clk)
 };
 
-int __init mx25_clocks_init(void)
-{
-	clkdev_add_table(lookups, ARRAY_SIZE(lookups));
+int __init mx25_clocks_init(void) {
+    clkdev_add_table(lookups, ARRAY_SIZE(lookups));
 
-	/* Turn off all clocks except the ones we need to survive, namely:
-	 * EMI, GPIO1-3 (CCM_CGCR1[18:16]), GPT1, IOMUXC (CCM_CGCR1[27]), IIM,
-	 * SCC
-	 */
-	__raw_writel((1 << 19), CRM_BASE + CCM_CGCR0);
-	__raw_writel((0xf << 16) | (3 << 26), CRM_BASE + CCM_CGCR1);
-	__raw_writel((1 << 5), CRM_BASE + CCM_CGCR2);
+    /* Turn off all clocks except the ones we need to survive, namely:
+     * EMI, GPIO1-3 (CCM_CGCR1[18:16]), GPT1, IOMUXC (CCM_CGCR1[27]), IIM,
+     * SCC
+     */
+    __raw_writel((1 << 19), CRM_BASE + CCM_CGCR0);
+    __raw_writel((0xf << 16) | (3 << 26), CRM_BASE + CCM_CGCR1);
+    __raw_writel((1 << 5), CRM_BASE + CCM_CGCR2);
 #if defined(CONFIG_DEBUG_LL) && !defined(CONFIG_DEBUG_ICEDCC)
-	clk_enable(&uart1_clk);
+    clk_enable(&uart1_clk);
 #endif
 
-	/* Clock source for lcdc and csi is upll */
-	__raw_writel(__raw_readl(CRM_BASE+0x64) | (1 << 7) | (1 << 0),
-			CRM_BASE + 0x64);
+    /* Clock source for lcdc and csi is upll */
+    __raw_writel(__raw_readl(CRM_BASE+0x64) | (1 << 7) | (1 << 0),
+                 CRM_BASE + 0x64);
 
-	/* Clock source for gpt is ahb_div */
-	__raw_writel(__raw_readl(CRM_BASE+0x64) & ~(1 << 5), CRM_BASE + 0x64);
+    /* Clock source for gpt is ahb_div */
+    __raw_writel(__raw_readl(CRM_BASE+0x64) & ~(1 << 5), CRM_BASE + 0x64);
 
-	clk_enable(&iim_clk);
-	imx_print_silicon_rev("i.MX25", mx25_revision());
-	clk_disable(&iim_clk);
+    clk_enable(&iim_clk);
+    imx_print_silicon_rev("i.MX25", mx25_revision());
+    clk_disable(&iim_clk);
 
-	mxc_timer_init(&gpt_clk, MX25_IO_ADDRESS(MX25_GPT1_BASE_ADDR), 54);
+    mxc_timer_init(&gpt_clk, MX25_IO_ADDRESS(MX25_GPT1_BASE_ADDR), 54);
 
-	return 0;
+    return 0;
 }

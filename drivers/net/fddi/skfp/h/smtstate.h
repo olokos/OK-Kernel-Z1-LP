@@ -86,20 +86,20 @@
 #endif
 
 struct pcm_state {
-	unsigned char	pcm_type ;		/* TA TB TS TM */
-	unsigned char	pcm_state ;		/* state PC[0-9]_* */
-	unsigned char	pcm_mode ;		/* PM_{NONE,PEER,TREE} */
-	unsigned char	pcm_neighbor ;		/* TA TB TS TM */
-	unsigned char	pcm_bsf ;		/* flag bs : TRUE/FALSE */
-	unsigned char	pcm_lsf ;		/* flag ls : TRUE/FALSE */
-	unsigned char	pcm_lct_fail ;		/* counter lct_fail */
-	unsigned char	pcm_ls_rx ;		/* rx line state */
-	short		pcm_r_val ;		/* signaling bits */
-	short		pcm_t_val ;		/* signaling bits */
+    unsigned char	pcm_type ;		/* TA TB TS TM */
+    unsigned char	pcm_state ;		/* state PC[0-9]_* */
+    unsigned char	pcm_mode ;		/* PM_{NONE,PEER,TREE} */
+    unsigned char	pcm_neighbor ;		/* TA TB TS TM */
+    unsigned char	pcm_bsf ;		/* flag bs : TRUE/FALSE */
+    unsigned char	pcm_lsf ;		/* flag ls : TRUE/FALSE */
+    unsigned char	pcm_lct_fail ;		/* counter lct_fail */
+    unsigned char	pcm_ls_rx ;		/* rx line state */
+    short		pcm_r_val ;		/* signaling bits */
+    short		pcm_t_val ;		/* signaling bits */
 } ;
 
 struct smt_state {
-	struct pcm_state pcm_state[NUMPHYS] ;	/* port A & port B */
+    struct pcm_state pcm_state[NUMPHYS] ;	/* port A & port B */
 } ;
 
 #endif

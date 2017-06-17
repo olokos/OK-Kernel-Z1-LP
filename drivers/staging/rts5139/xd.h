@@ -184,7 +184,7 @@
 int reset_xd_card(struct rts51x_chip *chip);
 int xd_delay_write(struct rts51x_chip *chip);
 int xd_rw(struct scsi_cmnd *srb, struct rts51x_chip *chip, u32 start_sector,
-	  u16 sector_cnt);
+          u16 sector_cnt);
 void xd_free_l2p_tbl(struct rts51x_chip *chip);
 void xd_cleanup_work(struct rts51x_chip *chip);
 int xd_power_off_card3v3(struct rts51x_chip *chip);

@@ -14,8 +14,8 @@
 #ifndef __MSM_ROTATOR_IMEM_H__
 
 enum {
-	ROTATOR_REQUEST,
-	JPEG_REQUEST
+    ROTATOR_REQUEST,
+    JPEG_REQUEST
 };
 
 /* Allocates imem for the requested owner.

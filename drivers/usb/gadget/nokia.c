@@ -67,32 +67,32 @@ static const char product_nokia[] = NOKIA_LONG_NAME;
 static const char description_nokia[] = "PC-Suite Configuration";
 
 static struct usb_string strings_dev[] = {
-	[STRING_MANUFACTURER_IDX].s = manufacturer_nokia,
-	[STRING_PRODUCT_IDX].s = NOKIA_LONG_NAME,
-	[STRING_DESCRIPTION_IDX].s = description_nokia,
-	{  } /* end of list */
+    [STRING_MANUFACTURER_IDX].s = manufacturer_nokia,
+    [STRING_PRODUCT_IDX].s = NOKIA_LONG_NAME,
+    [STRING_DESCRIPTION_IDX].s = description_nokia,
+    {  } /* end of list */
 };
 
 static struct usb_gadget_strings stringtab_dev = {
-	.language	= 0x0409,	/* en-us */
-	.strings	= strings_dev,
+    .language	= 0x0409,	/* en-us */
+    .strings	= strings_dev,
 };
 
 static struct usb_gadget_strings *dev_strings[] = {
-	&stringtab_dev,
-	NULL,
+    &stringtab_dev,
+    NULL,
 };
 
 static struct usb_device_descriptor device_desc = {
-	.bLength		= USB_DT_DEVICE_SIZE,
-	.bDescriptorType	= USB_DT_DEVICE,
-	.bcdUSB			= __constant_cpu_to_le16(0x0200),
-	.bDeviceClass		= USB_CLASS_COMM,
-	.idVendor		= __constant_cpu_to_le16(NOKIA_VENDOR_ID),
-	.idProduct		= __constant_cpu_to_le16(NOKIA_PRODUCT_ID),
-	/* .iManufacturer = DYNAMIC */
-	/* .iProduct = DYNAMIC */
-	.bNumConfigurations =	1,
+    .bLength		= USB_DT_DEVICE_SIZE,
+    .bDescriptorType	= USB_DT_DEVICE,
+    .bcdUSB			= __constant_cpu_to_le16(0x0200),
+    .bDeviceClass		= USB_CLASS_COMM,
+    .idVendor		= __constant_cpu_to_le16(NOKIA_VENDOR_ID),
+    .idProduct		= __constant_cpu_to_le16(NOKIA_PRODUCT_ID),
+    /* .iManufacturer = DYNAMIC */
+    /* .iProduct = DYNAMIC */
+    .bNumConfigurations =	1,
 };
 
 /*-------------------------------------------------------------------------*/
@@ -106,154 +106,149 @@ MODULE_LICENSE("GPL");
 
 static u8 hostaddr[ETH_ALEN];
 
-static int __init nokia_bind_config(struct usb_configuration *c)
-{
-	int status = 0;
+static int __init nokia_bind_config(struct usb_configuration *c) {
+    int status = 0;
 
-	status = phonet_bind_config(c);
-	if (status)
-		printk(KERN_DEBUG "could not bind phonet config\n");
+    status = phonet_bind_config(c);
+    if (status)
+        printk(KERN_DEBUG "could not bind phonet config\n");
 
-	status = obex_bind_config(c, 0);
-	if (status)
-		printk(KERN_DEBUG "could not bind obex config %d\n", 0);
+    status = obex_bind_config(c, 0);
+    if (status)
+        printk(KERN_DEBUG "could not bind obex config %d\n", 0);
 
-	status = obex_bind_config(c, 1);
-	if (status)
-		printk(KERN_DEBUG "could not bind obex config %d\n", 0);
+    status = obex_bind_config(c, 1);
+    if (status)
+        printk(KERN_DEBUG "could not bind obex config %d\n", 0);
 
-	status = acm_bind_config(c, 2);
-	if (status)
-		printk(KERN_DEBUG "could not bind acm config\n");
+    status = acm_bind_config(c, 2);
+    if (status)
+        printk(KERN_DEBUG "could not bind acm config\n");
 
-	status = ecm_bind_config(c, hostaddr);
-	if (status)
-		printk(KERN_DEBUG "could not bind ecm config\n");
+    status = ecm_bind_config(c, hostaddr);
+    if (status)
+        printk(KERN_DEBUG "could not bind ecm config\n");
 
-	return status;
+    return status;
 }
 
 static struct usb_configuration nokia_config_500ma_driver = {
-	.label		= "Bus Powered",
-	.bConfigurationValue = 1,
-	/* .iConfiguration = DYNAMIC */
-	.bmAttributes	= USB_CONFIG_ATT_ONE,
-	.bMaxPower	= 250, /* 500mA */
+    .label		= "Bus Powered",
+    .bConfigurationValue = 1,
+    /* .iConfiguration = DYNAMIC */
+    .bmAttributes	= USB_CONFIG_ATT_ONE,
+    .bMaxPower	= 250, /* 500mA */
 };
 
 static struct usb_configuration nokia_config_100ma_driver = {
-	.label		= "Self Powered",
-	.bConfigurationValue = 2,
-	/* .iConfiguration = DYNAMIC */
-	.bmAttributes	= USB_CONFIG_ATT_ONE | USB_CONFIG_ATT_SELFPOWER,
-	.bMaxPower	= 50, /* 100 mA */
+    .label		= "Self Powered",
+    .bConfigurationValue = 2,
+    /* .iConfiguration = DYNAMIC */
+    .bmAttributes	= USB_CONFIG_ATT_ONE | USB_CONFIG_ATT_SELFPOWER,
+    .bMaxPower	= 50, /* 100 mA */
 };
 
-static int __init nokia_bind(struct usb_composite_dev *cdev)
-{
-	int			gcnum;
-	struct usb_gadget	*gadget = cdev->gadget;
-	int			status;
+static int __init nokia_bind(struct usb_composite_dev *cdev) {
+    int			gcnum;
+    struct usb_gadget	*gadget = cdev->gadget;
+    int			status;
 
-	status = gphonet_setup(cdev->gadget);
-	if (status < 0)
-		goto err_phonet;
+    status = gphonet_setup(cdev->gadget);
+    if (status < 0)
+        goto err_phonet;
 
-	status = gserial_setup(cdev->gadget, 3);
-	if (status < 0)
-		goto err_serial;
+    status = gserial_setup(cdev->gadget, 3);
+    if (status < 0)
+        goto err_serial;
 
-	status = gether_setup(cdev->gadget, hostaddr);
-	if (status < 0)
-		goto err_ether;
+    status = gether_setup(cdev->gadget, hostaddr);
+    if (status < 0)
+        goto err_ether;
 
-	status = usb_string_id(cdev);
-	if (status < 0)
-		goto err_usb;
-	strings_dev[STRING_MANUFACTURER_IDX].id = status;
+    status = usb_string_id(cdev);
+    if (status < 0)
+        goto err_usb;
+    strings_dev[STRING_MANUFACTURER_IDX].id = status;
 
-	device_desc.iManufacturer = status;
+    device_desc.iManufacturer = status;
 
-	status = usb_string_id(cdev);
-	if (status < 0)
-		goto err_usb;
-	strings_dev[STRING_PRODUCT_IDX].id = status;
+    status = usb_string_id(cdev);
+    if (status < 0)
+        goto err_usb;
+    strings_dev[STRING_PRODUCT_IDX].id = status;
 
-	device_desc.iProduct = status;
+    device_desc.iProduct = status;
 
-	/* config description */
-	status = usb_string_id(cdev);
-	if (status < 0)
-		goto err_usb;
-	strings_dev[STRING_DESCRIPTION_IDX].id = status;
+    /* config description */
+    status = usb_string_id(cdev);
+    if (status < 0)
+        goto err_usb;
+    strings_dev[STRING_DESCRIPTION_IDX].id = status;
 
-	nokia_config_500ma_driver.iConfiguration = status;
-	nokia_config_100ma_driver.iConfiguration = status;
+    nokia_config_500ma_driver.iConfiguration = status;
+    nokia_config_100ma_driver.iConfiguration = status;
 
-	/* set up other descriptors */
-	gcnum = usb_gadget_controller_number(gadget);
-	if (gcnum >= 0)
-		device_desc.bcdDevice = cpu_to_le16(NOKIA_VERSION_NUM);
-	else {
-		/* this should only work with hw that supports altsettings
-		 * and several endpoints, anything else, panic.
-		 */
-		pr_err("nokia_bind: controller '%s' not recognized\n",
-			gadget->name);
-		goto err_usb;
-	}
+    /* set up other descriptors */
+    gcnum = usb_gadget_controller_number(gadget);
+    if (gcnum >= 0)
+        device_desc.bcdDevice = cpu_to_le16(NOKIA_VERSION_NUM);
+    else {
+        /* this should only work with hw that supports altsettings
+         * and several endpoints, anything else, panic.
+         */
+        pr_err("nokia_bind: controller '%s' not recognized\n",
+               gadget->name);
+        goto err_usb;
+    }
 
-	/* finally register the configuration */
-	status = usb_add_config(cdev, &nokia_config_500ma_driver,
-			nokia_bind_config);
-	if (status < 0)
-		goto err_usb;
+    /* finally register the configuration */
+    status = usb_add_config(cdev, &nokia_config_500ma_driver,
+                            nokia_bind_config);
+    if (status < 0)
+        goto err_usb;
 
-	status = usb_add_config(cdev, &nokia_config_100ma_driver,
-			nokia_bind_config);
-	if (status < 0)
-		goto err_usb;
+    status = usb_add_config(cdev, &nokia_config_100ma_driver,
+                            nokia_bind_config);
+    if (status < 0)
+        goto err_usb;
 
-	dev_info(&gadget->dev, "%s\n", NOKIA_LONG_NAME);
+    dev_info(&gadget->dev, "%s\n", NOKIA_LONG_NAME);
 
-	return 0;
+    return 0;
 
 err_usb:
-	gether_cleanup();
+    gether_cleanup();
 err_ether:
-	gserial_cleanup();
+    gserial_cleanup();
 err_serial:
-	gphonet_cleanup();
+    gphonet_cleanup();
 err_phonet:
-	return status;
+    return status;
 }
 
-static int __exit nokia_unbind(struct usb_composite_dev *cdev)
-{
-	gphonet_cleanup();
-	gserial_cleanup();
-	gether_cleanup();
+static int __exit nokia_unbind(struct usb_composite_dev *cdev) {
+    gphonet_cleanup();
+    gserial_cleanup();
+    gether_cleanup();
 
-	return 0;
+    return 0;
 }
 
 static struct usb_composite_driver nokia_driver = {
-	.name		= "g_nokia",
-	.dev		= &device_desc,
-	.strings	= dev_strings,
-	.max_speed	= USB_SPEED_HIGH,
-	.unbind		= __exit_p(nokia_unbind),
+    .name		= "g_nokia",
+    .dev		= &device_desc,
+    .strings	= dev_strings,
+    .max_speed	= USB_SPEED_HIGH,
+    .unbind		= __exit_p(nokia_unbind),
 };
 
-static int __init nokia_init(void)
-{
-	return usb_composite_probe(&nokia_driver, nokia_bind);
+static int __init nokia_init(void) {
+    return usb_composite_probe(&nokia_driver, nokia_bind);
 }
 module_init(nokia_init);
 
-static void __exit nokia_cleanup(void)
-{
-	usb_composite_unregister(&nokia_driver);
+static void __exit nokia_cleanup(void) {
+    usb_composite_unregister(&nokia_driver);
 }
 module_exit(nokia_cleanup);
 

@@ -101,25 +101,25 @@ acpi_ns_load_table(u32 table_index, struct acpi_namespace_node *node);
  */
 acpi_status
 acpi_ns_walk_namespace(acpi_object_type type,
-		       acpi_handle start_object,
-		       u32 max_depth,
-		       u32 flags,
-		       acpi_walk_callback pre_order_visit,
-		       acpi_walk_callback post_order_visit,
-		       void *context, void **return_value);
+                       acpi_handle start_object,
+                       u32 max_depth,
+                       u32 flags,
+                       acpi_walk_callback pre_order_visit,
+                       acpi_walk_callback post_order_visit,
+                       void *context, void **return_value);
 
 struct acpi_namespace_node *acpi_ns_get_next_node(struct acpi_namespace_node
-						  *parent,
-						  struct acpi_namespace_node
-						  *child);
+        *parent,
+        struct acpi_namespace_node
+        *child);
 
 struct acpi_namespace_node *acpi_ns_get_next_node_typed(acpi_object_type type,
-							struct
-							acpi_namespace_node
-							*parent,
-							struct
-							acpi_namespace_node
-							*child);
+        struct
+        acpi_namespace_node
+        *parent,
+        struct
+        acpi_namespace_node
+        *child);
 
 /*
  * nsparse - table parsing
@@ -129,8 +129,8 @@ acpi_ns_parse_table(u32 table_index, struct acpi_namespace_node *start_node);
 
 acpi_status
 acpi_ns_one_complete_parse(u32 pass_number,
-			   u32 table_index,
-			   struct acpi_namespace_node *start_node);
+                           u32 table_index,
+                           struct acpi_namespace_node *start_node);
 
 /*
  * nsaccess - Top-level namespace access
@@ -139,12 +139,12 @@ acpi_status acpi_ns_root_initialize(void);
 
 acpi_status
 acpi_ns_lookup(union acpi_generic_state *scope_info,
-	       char *name,
-	       acpi_object_type type,
-	       acpi_interpreter_mode interpreter_mode,
-	       u32 flags,
-	       struct acpi_walk_state *walk_state,
-	       struct acpi_namespace_node **ret_node);
+               char *name,
+               acpi_object_type type,
+               acpi_interpreter_mode interpreter_mode,
+               u32 flags,
+               struct acpi_walk_state *walk_state,
+               struct acpi_namespace_node **ret_node);
 
 /*
  * nsalloc - Named object allocation/deallocation
@@ -182,14 +182,14 @@ void acpi_ns_print_pathname(u32 num_segments, char *pathname);
 
 acpi_status
 acpi_ns_dump_one_object(acpi_handle obj_handle,
-			u32 level, void *context, void **return_value);
+                        u32 level, void *context, void **return_value);
 
 #ifdef	ACPI_FUTURE_USAGE
 void
 acpi_ns_dump_objects(acpi_object_type type,
-		     u8 display_type,
-		     u32 max_depth,
-		     acpi_owner_id owner_id, acpi_handle start_handle);
+                     u8 display_type,
+                     u32 max_depth,
+                     acpi_owner_id owner_id, acpi_handle start_handle);
 #endif				/* ACPI_FUTURE_USAGE */
 
 /*
@@ -204,19 +204,19 @@ void acpi_ns_exec_module_code_list(void);
  */
 acpi_status
 acpi_ns_check_predefined_names(struct acpi_namespace_node *node,
-			       u32 user_param_count,
-			       acpi_status return_status,
-			       union acpi_operand_object **return_object);
+                               u32 user_param_count,
+                               acpi_status return_status,
+                               union acpi_operand_object **return_object);
 
 const union acpi_predefined_info *acpi_ns_check_for_predefined_name(struct
-								    acpi_namespace_node
-								    *node);
+            acpi_namespace_node
+            *node);
 
 void
 acpi_ns_check_parameter_count(char *pathname,
-			      struct acpi_namespace_node *node,
-			      u32 user_param_count,
-			      const union acpi_predefined_info *info);
+                              struct acpi_namespace_node *node,
+                              u32 user_param_count,
+                              const union acpi_predefined_info *info);
 
 /*
  * nsnames - Name and Scope manipulation
@@ -225,7 +225,7 @@ u32 acpi_ns_opens_scope(acpi_object_type type);
 
 acpi_status
 acpi_ns_build_external_path(struct acpi_namespace_node *node,
-			    acpi_size size, char *name_buffer);
+                            acpi_size size, char *name_buffer);
 
 char *acpi_ns_get_external_pathname(struct acpi_namespace_node *node);
 
@@ -233,15 +233,15 @@ char *acpi_ns_name_of_current_scope(struct acpi_walk_state *walk_state);
 
 acpi_status
 acpi_ns_handle_to_pathname(acpi_handle target_handle,
-			   struct acpi_buffer *buffer);
+                           struct acpi_buffer *buffer);
 
 u8
 acpi_ns_pattern_match(struct acpi_namespace_node *obj_node, char *search_for);
 
 acpi_status
 acpi_ns_get_node(struct acpi_namespace_node *prefix_node,
-		 const char *external_pathname,
-		 u32 flags, struct acpi_namespace_node **out_node);
+                 const char *external_pathname,
+                 u32 flags, struct acpi_namespace_node **out_node);
 
 acpi_size acpi_ns_get_pathname_length(struct acpi_namespace_node *node);
 
@@ -250,27 +250,27 @@ acpi_size acpi_ns_get_pathname_length(struct acpi_namespace_node *node);
  */
 acpi_status
 acpi_ns_attach_object(struct acpi_namespace_node *node,
-		      union acpi_operand_object *object, acpi_object_type type);
+                      union acpi_operand_object *object, acpi_object_type type);
 
 union acpi_operand_object *acpi_ns_get_attached_object(struct
-						       acpi_namespace_node
-						       *node);
+            acpi_namespace_node
+            *node);
 
 union acpi_operand_object *acpi_ns_get_secondary_object(union
-							acpi_operand_object
-							*obj_desc);
+            acpi_operand_object
+            *obj_desc);
 
 acpi_status
 acpi_ns_attach_data(struct acpi_namespace_node *node,
-		    acpi_object_handler handler, void *data);
+                    acpi_object_handler handler, void *data);
 
 acpi_status
 acpi_ns_detach_data(struct acpi_namespace_node *node,
-		    acpi_object_handler handler);
+                    acpi_object_handler handler);
 
 acpi_status
 acpi_ns_get_attached_data(struct acpi_namespace_node *node,
-			  acpi_object_handler handler, void **data);
+                          acpi_object_handler handler, void **data);
 
 /*
  * nsrepair - General return object repair for all
@@ -278,25 +278,25 @@ acpi_ns_get_attached_data(struct acpi_namespace_node *node,
  */
 acpi_status
 acpi_ns_repair_object(struct acpi_predefined_data *data,
-		      u32 expected_btypes,
-		      u32 package_index,
-		      union acpi_operand_object **return_object_ptr);
+                      u32 expected_btypes,
+                      u32 package_index,
+                      union acpi_operand_object **return_object_ptr);
 
 acpi_status
 acpi_ns_wrap_with_package(struct acpi_predefined_data *data,
-			  union acpi_operand_object *original_object,
-			  union acpi_operand_object **obj_desc_ptr);
+                          union acpi_operand_object *original_object,
+                          union acpi_operand_object **obj_desc_ptr);
 
 acpi_status
 acpi_ns_repair_null_element(struct acpi_predefined_data *data,
-			    u32 expected_btypes,
-			    u32 package_index,
-			    union acpi_operand_object **return_object_ptr);
+                            u32 expected_btypes,
+                            u32 package_index,
+                            union acpi_operand_object **return_object_ptr);
 
 void
 acpi_ns_remove_null_elements(struct acpi_predefined_data *data,
-			     u8 package_type,
-			     union acpi_operand_object *obj_desc);
+                             u8 package_type,
+                             union acpi_operand_object *obj_desc);
 
 /*
  * nsrepair2 - Return object repair for specific
@@ -304,31 +304,31 @@ acpi_ns_remove_null_elements(struct acpi_predefined_data *data,
  */
 acpi_status
 acpi_ns_complex_repairs(struct acpi_predefined_data *data,
-			struct acpi_namespace_node *node,
-			acpi_status validate_status,
-			union acpi_operand_object **return_object_ptr);
+                        struct acpi_namespace_node *node,
+                        acpi_status validate_status,
+                        union acpi_operand_object **return_object_ptr);
 
 /*
  * nssearch - Namespace searching and entry
  */
 acpi_status
 acpi_ns_search_and_enter(u32 entry_name,
-			 struct acpi_walk_state *walk_state,
-			 struct acpi_namespace_node *node,
-			 acpi_interpreter_mode interpreter_mode,
-			 acpi_object_type type,
-			 u32 flags, struct acpi_namespace_node **ret_node);
+                         struct acpi_walk_state *walk_state,
+                         struct acpi_namespace_node *node,
+                         acpi_interpreter_mode interpreter_mode,
+                         acpi_object_type type,
+                         u32 flags, struct acpi_namespace_node **ret_node);
 
 acpi_status
 acpi_ns_search_one_scope(u32 entry_name,
-			 struct acpi_namespace_node *node,
-			 acpi_object_type type,
-			 struct acpi_namespace_node **ret_node);
+                         struct acpi_namespace_node *node,
+                         acpi_object_type type,
+                         struct acpi_namespace_node **ret_node);
 
 void
 acpi_ns_install_node(struct acpi_walk_state *walk_state,
-		     struct acpi_namespace_node *parent_node,
-		     struct acpi_namespace_node *node, acpi_object_type type);
+                     struct acpi_namespace_node *parent_node,
+                     struct acpi_namespace_node *node, acpi_object_type type);
 
 /*
  * nsutils - Utility functions
@@ -351,8 +351,8 @@ acpi_ns_internalize_name(const char *dotted_name, char **converted_name);
 
 acpi_status
 acpi_ns_externalize_name(u32 internal_name_length,
-			 const char *internal_name,
-			 u32 * converted_name_length, char **converted_name);
+                         const char *internal_name,
+                         u32 * converted_name_length, char **converted_name);
 
 struct acpi_namespace_node *acpi_ns_validate_handle(acpi_handle handle);
 

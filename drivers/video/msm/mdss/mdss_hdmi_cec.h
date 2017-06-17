@@ -16,9 +16,9 @@
 #include "mdss_hdmi_util.h"
 
 struct hdmi_cec_init_data {
-	struct workqueue_struct *workq;
-	struct kobject *sysfs_kobj;
-	struct dss_io_data *io;
+    struct workqueue_struct *workq;
+    struct kobject *sysfs_kobj;
+    struct dss_io_data *io;
 };
 
 int hdmi_cec_deconfig(void *cec_ctrl);

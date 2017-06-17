@@ -4,9 +4,8 @@
 #ifdef CONFIG_USB_ULPI
 struct usb_phy *imx_otg_ulpi_create(unsigned int flags);
 #else
-static inline struct usb_phy *imx_otg_ulpi_create(unsigned int flags)
-{
-	return NULL;
+static inline struct usb_phy *imx_otg_ulpi_create(unsigned int flags) {
+    return NULL;
 }
 #endif
 

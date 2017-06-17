@@ -35,24 +35,24 @@ typedef long hw_status;
 /* hw_endianism_t:  Enumerated Type used to specify the endianism
  *		Do NOT change these values. They are used as bit fields. */
 enum hw_endianism_t {
-	HW_LITTLE_ENDIAN,
-	HW_BIG_ENDIAN
+    HW_LITTLE_ENDIAN,
+    HW_BIG_ENDIAN
 };
 
 /* hw_element_size_t:  Enumerated Type used to specify the element size
  *		Do NOT change these values. They are used as bit fields. */
 enum hw_element_size_t {
-	HW_ELEM_SIZE8BIT,
-	HW_ELEM_SIZE16BIT,
-	HW_ELEM_SIZE32BIT,
-	HW_ELEM_SIZE64BIT
+    HW_ELEM_SIZE8BIT,
+    HW_ELEM_SIZE16BIT,
+    HW_ELEM_SIZE32BIT,
+    HW_ELEM_SIZE64BIT
 };
 
 /* hw_idle_mode_t:  Enumerated Type used to specify Idle modes */
 enum hw_idle_mode_t {
-	HW_FORCE_IDLE,
-	HW_NO_IDLE,
-	HW_SMART_IDLE
+    HW_FORCE_IDLE,
+    HW_NO_IDLE,
+    HW_SMART_IDLE
 };
 
 #endif /* _HW_DEFS_H */

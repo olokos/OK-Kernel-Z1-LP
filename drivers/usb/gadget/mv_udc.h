@@ -133,123 +133,123 @@
 #define USB_DEVICE_ADDRESS_BIT_SHIFT		(25)
 
 struct mv_cap_regs {
-	u32	caplength_hciversion;
-	u32	hcsparams;	/* HC structural parameters */
-	u32	hccparams;	/* HC Capability Parameters*/
-	u32	reserved[5];
-	u32	dciversion;	/* DC version number and reserved 16 bits */
-	u32	dccparams;	/* DC Capability Parameters */
+    u32	caplength_hciversion;
+    u32	hcsparams;	/* HC structural parameters */
+    u32	hccparams;	/* HC Capability Parameters*/
+    u32	reserved[5];
+    u32	dciversion;	/* DC version number and reserved 16 bits */
+    u32	dccparams;	/* DC Capability Parameters */
 };
 
 struct mv_op_regs {
-	u32	usbcmd;		/* Command register */
-	u32	usbsts;		/* Status register */
-	u32	usbintr;	/* Interrupt enable */
-	u32	frindex;	/* Frame index */
-	u32	reserved1[1];
-	u32	deviceaddr;	/* Device Address */
-	u32	eplistaddr;	/* Endpoint List Address */
-	u32	ttctrl;		/* HOST TT status and control */
-	u32	burstsize;	/* Programmable Burst Size */
-	u32	txfilltuning;	/* Host Transmit Pre-Buffer Packet Tuning */
-	u32	reserved[4];
-	u32	epnak;		/* Endpoint NAK */
-	u32	epnaken;	/* Endpoint NAK Enable */
-	u32	configflag;	/* Configured Flag register */
-	u32	portsc[VUSBHS_MAX_PORTS]; /* Port Status/Control x, x = 1..8 */
-	u32	otgsc;
-	u32	usbmode;	/* USB Host/Device mode */
-	u32	epsetupstat;	/* Endpoint Setup Status */
-	u32	epprime;	/* Endpoint Initialize */
-	u32	epflush;	/* Endpoint De-initialize */
-	u32	epstatus;	/* Endpoint Status */
-	u32	epcomplete;	/* Endpoint Interrupt On Complete */
-	u32	epctrlx[16];	/* Endpoint Control, where x = 0.. 15 */
-	u32	mcr;		/* Mux Control */
-	u32	isr;		/* Interrupt Status */
-	u32	ier;		/* Interrupt Enable */
+    u32	usbcmd;		/* Command register */
+    u32	usbsts;		/* Status register */
+    u32	usbintr;	/* Interrupt enable */
+    u32	frindex;	/* Frame index */
+    u32	reserved1[1];
+    u32	deviceaddr;	/* Device Address */
+    u32	eplistaddr;	/* Endpoint List Address */
+    u32	ttctrl;		/* HOST TT status and control */
+    u32	burstsize;	/* Programmable Burst Size */
+    u32	txfilltuning;	/* Host Transmit Pre-Buffer Packet Tuning */
+    u32	reserved[4];
+    u32	epnak;		/* Endpoint NAK */
+    u32	epnaken;	/* Endpoint NAK Enable */
+    u32	configflag;	/* Configured Flag register */
+    u32	portsc[VUSBHS_MAX_PORTS]; /* Port Status/Control x, x = 1..8 */
+    u32	otgsc;
+    u32	usbmode;	/* USB Host/Device mode */
+    u32	epsetupstat;	/* Endpoint Setup Status */
+    u32	epprime;	/* Endpoint Initialize */
+    u32	epflush;	/* Endpoint De-initialize */
+    u32	epstatus;	/* Endpoint Status */
+    u32	epcomplete;	/* Endpoint Interrupt On Complete */
+    u32	epctrlx[16];	/* Endpoint Control, where x = 0.. 15 */
+    u32	mcr;		/* Mux Control */
+    u32	isr;		/* Interrupt Status */
+    u32	ier;		/* Interrupt Enable */
 };
 
 struct mv_udc {
-	struct usb_gadget		gadget;
-	struct usb_gadget_driver	*driver;
-	spinlock_t			lock;
-	struct completion		*done;
-	struct platform_device		*dev;
-	int				irq;
+    struct usb_gadget		gadget;
+    struct usb_gadget_driver	*driver;
+    spinlock_t			lock;
+    struct completion		*done;
+    struct platform_device		*dev;
+    int				irq;
 
-	struct mv_cap_regs __iomem	*cap_regs;
-	struct mv_op_regs __iomem	*op_regs;
-	void __iomem                    *phy_regs;
-	unsigned int			max_eps;
-	struct mv_dqh			*ep_dqh;
-	size_t				ep_dqh_size;
-	dma_addr_t			ep_dqh_dma;
+    struct mv_cap_regs __iomem	*cap_regs;
+    struct mv_op_regs __iomem	*op_regs;
+    void __iomem                    *phy_regs;
+    unsigned int			max_eps;
+    struct mv_dqh			*ep_dqh;
+    size_t				ep_dqh_size;
+    dma_addr_t			ep_dqh_dma;
 
-	struct dma_pool			*dtd_pool;
-	struct mv_ep			*eps;
+    struct dma_pool			*dtd_pool;
+    struct mv_ep			*eps;
 
-	struct mv_dtd			*dtd_head;
-	struct mv_dtd			*dtd_tail;
-	unsigned int			dtd_entries;
+    struct mv_dtd			*dtd_head;
+    struct mv_dtd			*dtd_tail;
+    unsigned int			dtd_entries;
 
-	struct mv_req			*status_req;
-	struct usb_ctrlrequest		local_setup_buff;
+    struct mv_req			*status_req;
+    struct usb_ctrlrequest		local_setup_buff;
 
-	unsigned int		resume_state;	/* USB state to resume */
-	unsigned int		usb_state;	/* USB current state */
-	unsigned int		ep0_state;	/* Endpoint zero state */
-	unsigned int		ep0_dir;
+    unsigned int		resume_state;	/* USB state to resume */
+    unsigned int		usb_state;	/* USB current state */
+    unsigned int		ep0_state;	/* Endpoint zero state */
+    unsigned int		ep0_dir;
 
-	unsigned int		dev_addr;
-	unsigned int		test_mode;
+    unsigned int		dev_addr;
+    unsigned int		test_mode;
 
-	int			errors;
-	unsigned		softconnect:1,
-				vbus_active:1,
-				remote_wakeup:1,
-				softconnected:1,
-				force_fs:1,
-				clock_gating:1,
-				active:1,
-				stopped:1;      /* stop bit is setted */
+    int			errors;
+    unsigned		softconnect:1,
+                    vbus_active:1,
+                    remote_wakeup:1,
+                    softconnected:1,
+                    force_fs:1,
+                    clock_gating:1,
+                    active:1,
+                    stopped:1;      /* stop bit is setted */
 
-	struct work_struct	vbus_work;
-	struct workqueue_struct *qwork;
+    struct work_struct	vbus_work;
+    struct workqueue_struct *qwork;
 
-	struct usb_phy		*transceiver;
+    struct usb_phy		*transceiver;
 
-	struct mv_usb_platform_data     *pdata;
+    struct mv_usb_platform_data     *pdata;
 
-	/* some SOC has mutiple clock sources for USB*/
-	unsigned int    clknum;
-	struct clk      *clk[0];
+    /* some SOC has mutiple clock sources for USB*/
+    unsigned int    clknum;
+    struct clk      *clk[0];
 };
 
 /* endpoint data structure */
 struct mv_ep {
-	struct usb_ep		ep;
-	struct mv_udc		*udc;
-	struct list_head	queue;
-	struct mv_dqh		*dqh;
-	const struct usb_endpoint_descriptor	*desc;
-	u32			direction;
-	char			name[14];
-	unsigned		stopped:1,
-				wedge:1,
-				ep_type:2,
-				ep_num:8;
+    struct usb_ep		ep;
+    struct mv_udc		*udc;
+    struct list_head	queue;
+    struct mv_dqh		*dqh;
+    const struct usb_endpoint_descriptor	*desc;
+    u32			direction;
+    char			name[14];
+    unsigned		stopped:1,
+                    wedge:1,
+                    ep_type:2,
+                    ep_num:8;
 };
 
 /* request data structure */
 struct mv_req {
-	struct usb_request	req;
-	struct mv_dtd		*dtd, *head, *tail;
-	struct mv_ep		*ep;
-	struct list_head	queue;
-	unsigned int            test_mode;
-	unsigned		dtd_count;
-	unsigned		mapped:1;
+    struct usb_request	req;
+    struct mv_dtd		*dtd, *head, *tail;
+    struct mv_ep		*ep;
+    struct list_head	queue;
+    unsigned int            test_mode;
+    unsigned		dtd_count;
+    unsigned		mapped:1;
 };
 
 #define EP_QUEUE_HEAD_MULT_POS			30
@@ -268,21 +268,21 @@ struct mv_req {
 #define EP_MAX_LENGTH_TRANSFER			0x4000
 
 struct mv_dqh {
-	/* Bits 16..26 Bit 15 is Interrupt On Setup */
-	u32	max_packet_length;
-	u32	curr_dtd_ptr;		/* Current dTD Pointer */
-	u32	next_dtd_ptr;		/* Next dTD Pointer */
-	/* Total bytes (16..30), IOC (15), INT (8), STS (0-7) */
-	u32	size_ioc_int_sts;
-	u32	buff_ptr0;		/* Buffer pointer Page 0 (12-31) */
-	u32	buff_ptr1;		/* Buffer pointer Page 1 (12-31) */
-	u32	buff_ptr2;		/* Buffer pointer Page 2 (12-31) */
-	u32	buff_ptr3;		/* Buffer pointer Page 3 (12-31) */
-	u32	buff_ptr4;		/* Buffer pointer Page 4 (12-31) */
-	u32	reserved1;
-	/* 8 bytes of setup data that follows the Setup PID */
-	u8	setup_buffer[8];
-	u32	reserved2[4];
+    /* Bits 16..26 Bit 15 is Interrupt On Setup */
+    u32	max_packet_length;
+    u32	curr_dtd_ptr;		/* Current dTD Pointer */
+    u32	next_dtd_ptr;		/* Next dTD Pointer */
+    /* Total bytes (16..30), IOC (15), INT (8), STS (0-7) */
+    u32	size_ioc_int_sts;
+    u32	buff_ptr0;		/* Buffer pointer Page 0 (12-31) */
+    u32	buff_ptr1;		/* Buffer pointer Page 1 (12-31) */
+    u32	buff_ptr2;		/* Buffer pointer Page 2 (12-31) */
+    u32	buff_ptr3;		/* Buffer pointer Page 3 (12-31) */
+    u32	buff_ptr4;		/* Buffer pointer Page 4 (12-31) */
+    u32	reserved1;
+    /* 8 bytes of setup data that follows the Setup PID */
+    u8	setup_buffer[8];
+    u32	reserved2[4];
 };
 
 
@@ -299,17 +299,17 @@ struct mv_dqh {
 #define DTD_LENGTH_BIT_POS		(16)
 
 struct mv_dtd {
-	u32	dtd_next;
-	u32	size_ioc_sts;
-	u32	buff_ptr0;		/* Buffer pointer Page 0 */
-	u32	buff_ptr1;		/* Buffer pointer Page 1 */
-	u32	buff_ptr2;		/* Buffer pointer Page 2 */
-	u32	buff_ptr3;		/* Buffer pointer Page 3 */
-	u32	buff_ptr4;		/* Buffer pointer Page 4 */
-	u32	scratch_ptr;
-	/* 32 bytes */
-	dma_addr_t td_dma;		/* dma address for this td */
-	struct mv_dtd *next_dtd_virt;
+    u32	dtd_next;
+    u32	size_ioc_sts;
+    u32	buff_ptr0;		/* Buffer pointer Page 0 */
+    u32	buff_ptr1;		/* Buffer pointer Page 1 */
+    u32	buff_ptr2;		/* Buffer pointer Page 2 */
+    u32	buff_ptr3;		/* Buffer pointer Page 3 */
+    u32	buff_ptr4;		/* Buffer pointer Page 4 */
+    u32	scratch_ptr;
+    /* 32 bytes */
+    dma_addr_t td_dma;		/* dma address for this td */
+    struct mv_dtd *next_dtd_virt;
 };
 
 #endif

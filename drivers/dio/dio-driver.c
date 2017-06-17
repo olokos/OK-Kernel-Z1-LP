@@ -27,41 +27,39 @@
 
 const struct dio_device_id *
 dio_match_device(const struct dio_device_id *ids,
-		   const struct dio_dev *d)
-{
-	while (ids->id) {
-		if (ids->id == DIO_WILDCARD)
-			return ids;
-		if (DIO_NEEDSSECID(ids->id & 0xff)) {
-			if (ids->id == d->id)
-				return ids;
-		} else {
-			if ((ids->id & 0xff) == (d->id & 0xff))
-				return ids;
-		}
-		ids++;
-	}
-	return NULL;
+                 const struct dio_dev *d) {
+    while (ids->id) {
+        if (ids->id == DIO_WILDCARD)
+            return ids;
+        if (DIO_NEEDSSECID(ids->id & 0xff)) {
+            if (ids->id == d->id)
+                return ids;
+        } else {
+            if ((ids->id & 0xff) == (d->id & 0xff))
+                return ids;
+        }
+        ids++;
+    }
+    return NULL;
 }
 
-static int dio_device_probe(struct device *dev)
-{
-	int error = 0;
-	struct dio_driver *drv = to_dio_driver(dev->driver);
-	struct dio_dev *d = to_dio_dev(dev);
+static int dio_device_probe(struct device *dev) {
+    int error = 0;
+    struct dio_driver *drv = to_dio_driver(dev->driver);
+    struct dio_dev *d = to_dio_dev(dev);
 
-	if (!d->driver && drv->probe) {
-		const struct dio_device_id *id;
+    if (!d->driver && drv->probe) {
+        const struct dio_device_id *id;
 
-		id = dio_match_device(drv->id_table, d);
-		if (id)
-			error = drv->probe(d, id);
-		if (error >= 0) {
-			d->driver = drv;
-			error = 0;
-		}
-	}
-	return error;
+        id = dio_match_device(drv->id_table, d);
+        if (id)
+            error = drv->probe(d, id);
+        if (error >= 0) {
+            d->driver = drv;
+            error = 0;
+        }
+    }
+    return error;
 }
 
 
@@ -73,14 +71,13 @@ static int dio_device_probe(struct device *dev)
  *  Returns zero or a negative error value.
  */
 
-int dio_register_driver(struct dio_driver *drv)
-{
-	/* initialize common driver fields */
-	drv->driver.name = drv->name;
-	drv->driver.bus = &dio_bus_type;
+int dio_register_driver(struct dio_driver *drv) {
+    /* initialize common driver fields */
+    drv->driver.name = drv->name;
+    drv->driver.bus = &dio_bus_type;
 
-	/* register with core */
-	return driver_register(&drv->driver);
+    /* register with core */
+    return driver_register(&drv->driver);
 }
 
 
@@ -94,9 +91,8 @@ int dio_register_driver(struct dio_driver *drv)
  *  driverless.
  */
 
-void dio_unregister_driver(struct dio_driver *drv)
-{
-	driver_unregister(&drv->driver);
+void dio_unregister_driver(struct dio_driver *drv) {
+    driver_unregister(&drv->driver);
 }
 
 
@@ -110,29 +106,27 @@ void dio_unregister_driver(struct dio_driver *drv)
  *  dio_device_id structure or %NULL if there is no match.
  */
 
-static int dio_bus_match(struct device *dev, struct device_driver *drv)
-{
-	struct dio_dev *d = to_dio_dev(dev);
-	struct dio_driver *dio_drv = to_dio_driver(drv);
-	const struct dio_device_id *ids = dio_drv->id_table;
+static int dio_bus_match(struct device *dev, struct device_driver *drv) {
+    struct dio_dev *d = to_dio_dev(dev);
+    struct dio_driver *dio_drv = to_dio_driver(drv);
+    const struct dio_device_id *ids = dio_drv->id_table;
 
-	if (!ids)
-		return 0;
+    if (!ids)
+        return 0;
 
-	return dio_match_device(ids, d) ? 1 : 0;
+    return dio_match_device(ids, d) ? 1 : 0;
 }
 
 
 struct bus_type dio_bus_type = {
-	.name	= "dio",
-	.match	= dio_bus_match,
-	.probe	= dio_device_probe,
+    .name	= "dio",
+    .match	= dio_bus_match,
+    .probe	= dio_device_probe,
 };
 
 
-static int __init dio_driver_init(void)
-{
-	return bus_register(&dio_bus_type);
+static int __init dio_driver_init(void) {
+    return bus_register(&dio_bus_type);
 }
 
 postcore_initcall(dio_driver_init);

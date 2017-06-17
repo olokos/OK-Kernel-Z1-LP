@@ -85,47 +85,47 @@
 #define NG_SBE_2T3E3_COOKIE     0x03800891
 
 typedef struct t3e3_param {
-	u_int8_t frame_mode;		/* FRAME_MODE_* */
-	u_int8_t crc;			/* CRC_* */
-	u_int8_t receiver_on;		/* ON/OFF */
-	u_int8_t transmitter_on;	/* ON/OFF */
-	u_int8_t frame_type;		/* FRAME_TYPE_* */
-	u_int8_t panel;			/* PANEL_* */
-	u_int8_t line_build_out;	/* ON/OFF */
-	u_int8_t receive_equalization;	/* ON/OFF */
-	u_int8_t transmit_all_ones;	/* ON/OFF */
-	u_int8_t loopback;		/* LOOPBACK_* */
-	u_int8_t clock_source;		/* TIMING_* */
-	u_int8_t scrambler;		/* SCRAMBLER_* */
-	u_int8_t pad_count;		/* PAD_COUNT_* */
-	u_int8_t log_level;		/* LOG_LEVEL_* - unused */
-	u_int8_t fractional_mode;	/* FRACTIONAL_MODE_* */
-	u_int8_t bandwidth_start;	/* 0-255 */
-	u_int8_t bandwidth_stop;	/* 0-255 */
+    u_int8_t frame_mode;		/* FRAME_MODE_* */
+    u_int8_t crc;			/* CRC_* */
+    u_int8_t receiver_on;		/* ON/OFF */
+    u_int8_t transmitter_on;	/* ON/OFF */
+    u_int8_t frame_type;		/* FRAME_TYPE_* */
+    u_int8_t panel;			/* PANEL_* */
+    u_int8_t line_build_out;	/* ON/OFF */
+    u_int8_t receive_equalization;	/* ON/OFF */
+    u_int8_t transmit_all_ones;	/* ON/OFF */
+    u_int8_t loopback;		/* LOOPBACK_* */
+    u_int8_t clock_source;		/* TIMING_* */
+    u_int8_t scrambler;		/* SCRAMBLER_* */
+    u_int8_t pad_count;		/* PAD_COUNT_* */
+    u_int8_t log_level;		/* LOG_LEVEL_* - unused */
+    u_int8_t fractional_mode;	/* FRACTIONAL_MODE_* */
+    u_int8_t bandwidth_start;	/* 0-255 */
+    u_int8_t bandwidth_stop;	/* 0-255 */
 } t3e3_param_t;
 
 typedef struct t3e3_stats {
-	u_int64_t in_bytes;
-	u32 in_packets, in_dropped;
-	u32 in_errors, in_error_desc, in_error_coll, in_error_drib,
-		in_error_crc, in_error_mii;
-	u_int64_t out_bytes;
-	u32 out_packets, out_dropped;
-	u32 out_errors, out_error_jab, out_error_lost_carr,
-		out_error_no_carr, out_error_link_fail, out_error_underflow,
-		out_error_dereferred;
-	u_int8_t LOC, LOF, OOF, LOS, AIS, FERF, IDLE, AIC, FEAC;
-	u_int16_t FEBE_code;
-	u32 LCV, FRAMING_BIT, PARITY_ERROR, FEBE_count, CP_BIT;
+    u_int64_t in_bytes;
+    u32 in_packets, in_dropped;
+    u32 in_errors, in_error_desc, in_error_coll, in_error_drib,
+        in_error_crc, in_error_mii;
+    u_int64_t out_bytes;
+    u32 out_packets, out_dropped;
+    u32 out_errors, out_error_jab, out_error_lost_carr,
+        out_error_no_carr, out_error_link_fail, out_error_underflow,
+        out_error_dereferred;
+    u_int8_t LOC, LOF, OOF, LOS, AIS, FERF, IDLE, AIC, FEAC;
+    u_int16_t FEBE_code;
+    u32 LCV, FRAMING_BIT, PARITY_ERROR, FEBE_count, CP_BIT;
 } t3e3_stats_t;
 
 
 typedef struct t3e3_resp {
-	union {
-		t3e3_param_t param;
-		t3e3_stats_t stats;
-		u32 data;
-	} u;
+    union {
+        t3e3_param_t param;
+        t3e3_stats_t stats;
+        u32 data;
+    } u;
 } t3e3_resp_t;
 
 #endif /* CTRL_H */

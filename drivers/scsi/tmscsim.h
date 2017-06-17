@@ -24,42 +24,41 @@
 ; SCSI Request Block
 ;-----------------------------------------------------------------------
 */
-struct dc390_srb
-{
+struct dc390_srb {
 //u8		CmdBlock[12];
 
-struct dc390_srb	*pNextSRB;
-struct dc390_dcb	*pSRBDCB;
-struct scsi_cmnd	*pcmd;
-struct scatterlist	*pSegmentList;
+    struct dc390_srb	*pNextSRB;
+    struct dc390_dcb	*pSRBDCB;
+    struct scsi_cmnd	*pcmd;
+    struct scatterlist	*pSegmentList;
 
-struct scatterlist Segmentx;	/* make a one entry of S/G list table */
+    struct scatterlist Segmentx;	/* make a one entry of S/G list table */
 
-unsigned long	SGBusAddr;	/*;a segment starting address as seen by AM53C974A
+    unsigned long	SGBusAddr;	/*;a segment starting address as seen by AM53C974A
 				  in CPU endianness. We're only getting 32-bit bus
 				  addresses by default */
-unsigned long	SGToBeXferLen;	/*; to be xfer length */
-unsigned long	TotalXferredLen;
-unsigned long	SavedTotXLen;
-unsigned long	Saved_Ptr;
-u32		SRBState;
+    unsigned long	SGToBeXferLen;	/*; to be xfer length */
+    unsigned long	TotalXferredLen;
+    unsigned long	SavedTotXLen;
+    unsigned long	Saved_Ptr;
+    u32		SRBState;
 
-u8		SRBStatus;
-u8		SRBFlag;	/*; b0-AutoReqSense,b6-Read,b7-write */
-				/*; b4-settimeout,b5-Residual valid */
-u8		AdaptStatus;
-u8		TargetStatus;
+    u8		SRBStatus;
+    u8		SRBFlag;	/*; b0-AutoReqSense,b6-Read,b7-write */
+    /*; b4-settimeout,b5-Residual valid */
+    u8		AdaptStatus;
+    u8		TargetStatus;
 
-u8		ScsiPhase;
-s8		TagNumber;
-u8		SGIndex;
-u8		SGcount;
+    u8		ScsiPhase;
+    s8		TagNumber;
+    u8		SGIndex;
+    u8		SGcount;
 
-u8		MsgCnt;
-u8		EndMessage;
+    u8		MsgCnt;
+    u8		EndMessage;
 
-u8		MsgInBuf[6];
-u8		MsgOutBuf[6];
+    u8		MsgInBuf[6];
+    u8		MsgOutBuf[6];
 
 //u8		IORBFlag;	/*;81h-Reset, 2-retry */
 };
@@ -70,32 +69,31 @@ u8		MsgOutBuf[6];
 ; Device Control Block
 ;-----------------------------------------------------------------------
 */
-struct dc390_dcb
-{
-struct dc390_dcb	*pNextDCB;
-struct dc390_acb	*pDCBACB;
+struct dc390_dcb {
+    struct dc390_dcb	*pNextDCB;
+    struct dc390_acb	*pDCBACB;
 
-/* Queued SRBs */
-struct dc390_srb	*pGoingSRB;
-struct dc390_srb	*pGoingLast;
-struct dc390_srb	*pActiveSRB;
-u8		GoingSRBCnt;
+    /* Queued SRBs */
+    struct dc390_srb	*pGoingSRB;
+    struct dc390_srb	*pGoingLast;
+    struct dc390_srb	*pActiveSRB;
+    u8		GoingSRBCnt;
 
-u32		TagMask;
+    u32		TagMask;
 
-u8		TargetID;	/*; SCSI Target ID  (SCSI Only) */
-u8		TargetLUN;	/*; SCSI Log.  Unit (SCSI Only) */
-u8		DevMode;
-u8		DCBFlag;
+    u8		TargetID;	/*; SCSI Target ID  (SCSI Only) */
+    u8		TargetLUN;	/*; SCSI Log.  Unit (SCSI Only) */
+    u8		DevMode;
+    u8		DCBFlag;
 
-u8		CtrlR1;
-u8		CtrlR3;
-u8		CtrlR4;
+    u8		CtrlR1;
+    u8		CtrlR3;
+    u8		CtrlR4;
 
-u8		SyncMode;	/*; 0:async mode */
-u8		NegoPeriod;	/*;for nego. */
-u8		SyncPeriod;	/*;for reg. */
-u8		SyncOffset;	/*;for reg. and nego.(low nibble) */
+    u8		SyncMode;	/*; 0:async mode */
+    u8		NegoPeriod;	/*;for nego. */
+    u8		SyncPeriod;	/*;for reg. */
+    u8		SyncOffset;	/*;for reg. and nego.(low nibble) */
 };
 
 
@@ -104,53 +102,52 @@ u8		SyncOffset;	/*;for reg. and nego.(low nibble) */
 ; Adapter Control Block
 ;-----------------------------------------------------------------------
 */
-struct dc390_acb
-{
-struct Scsi_Host *pScsiHost;
-u16		IOPortBase;
-u8		IRQLevel;
-u8		status;
+struct dc390_acb {
+    struct Scsi_Host *pScsiHost;
+    u16		IOPortBase;
+    u8		IRQLevel;
+    u8		status;
 
-u8		SRBCount;
-u8		AdapterIndex;	/*; nth Adapter this driver */
-u8		DCBCnt;
+    u8		SRBCount;
+    u8		AdapterIndex;	/*; nth Adapter this driver */
+    u8		DCBCnt;
 
-u8		TagMaxNum;
-u8		ACBFlag;
-u8		Gmode2;
-u8		scan_devices;
+    u8		TagMaxNum;
+    u8		ACBFlag;
+    u8		Gmode2;
+    u8		scan_devices;
 
-struct dc390_dcb	*pLinkDCB;
-struct dc390_dcb	*pLastDCB;
-struct dc390_dcb	*pDCBRunRobin;
+    struct dc390_dcb	*pLinkDCB;
+    struct dc390_dcb	*pLastDCB;
+    struct dc390_dcb	*pDCBRunRobin;
 
-struct dc390_dcb	*pActiveDCB;
-struct dc390_srb	*pFreeSRB;
-struct dc390_srb	*pTmpSRB;
+    struct dc390_dcb	*pActiveDCB;
+    struct dc390_srb	*pFreeSRB;
+    struct dc390_srb	*pTmpSRB;
 
-u8		msgin123[4];
-u8		Connected;
-u8		pad;
+    u8		msgin123[4];
+    u8		Connected;
+    u8		pad;
 
 #if defined(USE_SPINLOCKS) && USE_SPINLOCKS > 1 && (defined(CONFIG_SMP) || DEBUG_SPINLOCKS > 0)
-spinlock_t	lock;
+    spinlock_t	lock;
 #endif
-u8		sel_timeout;
-u8		glitch_cfg;
+    u8		sel_timeout;
+    u8		glitch_cfg;
 
-u8		MsgLen;
-u8		Ignore_IRQ;	/* Not used */
+    u8		MsgLen;
+    u8		Ignore_IRQ;	/* Not used */
 
-struct pci_dev	*pdev;
+    struct pci_dev	*pdev;
 
-unsigned long	Cmds;
-u32		SelLost;
-u32		SelConn;
-u32		CmdInQ;
-u32		CmdOutOfSRB;
+    unsigned long	Cmds;
+    u32		SelLost;
+    u32		SelConn;
+    u32		CmdInQ;
+    u32		CmdOutOfSRB;
 
-struct dc390_srb	TmpSRB;
-struct dc390_srb	SRB_array[MAX_SRB_CNT]; 	/* 50 SRBs */
+    struct dc390_srb	TmpSRB;
+    struct dc390_srb	SRB_array[MAX_SRB_CNT]; 	/* 50 SRBs */
 };
 
 
@@ -301,7 +298,7 @@ struct dc390_srb	SRB_array[MAX_SRB_CNT]; 	/* 50 SRBs */
  *	SISC query queue
  */
 typedef struct {
-	dma_addr_t		saved_dma_handle;
+    dma_addr_t		saved_dma_handle;
 } dc390_cmd_scp_t;
 
 /*
@@ -309,12 +306,11 @@ typedef struct {
 ; EEPROM byte offset
 ;==========================================================
 */
-typedef  struct  _EEprom
-{
-u8	EE_MODE1;
-u8	EE_SPEED;
-u8	xx1;
-u8	xx2;
+typedef  struct  _EEprom {
+    u8	EE_MODE1;
+    u8	EE_SPEED;
+    u8	xx1;
+    u8	xx2;
 } EEprom, *PEEprom;
 
 #define REAL_EE_ADAPT_SCSI_ID 64
@@ -391,7 +387,7 @@ u8	xx2;
 #define PARITY_ERR		BIT5
 #define COUNT_2_ZERO		BIT4
 #define GROUP_CODE_VALID	BIT3
-#define SCSI_PHASE_MASK 	(BIT2+BIT1+BIT0) 
+#define SCSI_PHASE_MASK 	(BIT2+BIT1+BIT0)
 /* BIT2: MSG phase; BIT1: C/D physe; BIT0: I/O phase */
 
 /*; Interrupt Status Reg.(+14H) (r) */
@@ -487,7 +483,7 @@ u8	xx2;
 ;==========================================================
 ; SCSI Chip register address offset
 ;==========================================================
-;Registers are rw unless declared otherwise 
+;Registers are rw unless declared otherwise
 */
 #define CtcReg_Low	0x00	/* r	curr. transfer count */
 #define CtcReg_Mid	0x04	/* r */
@@ -499,7 +495,7 @@ u8	xx2;
 #define Sync_Period	0x18	/* w */
 #define Sync_Offset	0x1C	/* w */
 #define Clk_Factor	0x24	/* w */
-#define CtrlReg1	0x20	
+#define CtrlReg1	0x20
 #define CtrlReg2	0x2C
 #define CtrlReg3	0x30
 #define CtrlReg4	0x34

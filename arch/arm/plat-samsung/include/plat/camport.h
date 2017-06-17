@@ -12,8 +12,8 @@
 #define __PLAT_SAMSUNG_CAMPORT_H_ __FILE__
 
 enum s5p_camport_id {
-	S5P_CAMPORT_A,
-	S5P_CAMPORT_B,
+    S5P_CAMPORT_A,
+    S5P_CAMPORT_B,
 };
 
 /*

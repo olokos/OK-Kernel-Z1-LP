@@ -26,176 +26,167 @@
 #define DIAG_TEST_CONNECTED	0
 
 struct diag_test_dev {
-	char *read_buf;
-	struct work_struct read_w;
-	unsigned long	flags;
+    char *read_buf;
+    struct work_struct read_w;
+    unsigned long	flags;
 
-	struct diag_bridge_ops	ops;
+    struct diag_bridge_ops	ops;
 };
 static struct diag_test_dev *__dev;
 static struct dentry *dent;
 
 static void
-diag_test_read_complete_cb(void *d, char *buf, size_t size, size_t actual)
-{
-	if (actual < 0) {
-		pr_err("%s: read complete err\n", __func__);
-		return;
-	}
+diag_test_read_complete_cb(void *d, char *buf, size_t size, size_t actual) {
+    if (actual < 0) {
+        pr_err("%s: read complete err\n", __func__);
+        return;
+    }
 
-	print_hex_dump(KERN_INFO, "to_host:", 0, 1, 1, buf, actual, false);
+    print_hex_dump(KERN_INFO, "to_host:", 0, 1, 1, buf, actual, false);
 }
-static void diag_test_read_work(struct work_struct *w)
-{
-	struct diag_test_dev *dev =
-		container_of(w, struct diag_test_dev, read_w);
+static void diag_test_read_work(struct work_struct *w) {
+    struct diag_test_dev *dev =
+        container_of(w, struct diag_test_dev, read_w);
 
-	memset(dev->read_buf, 0, RD_BUF_SIZE);
-	diag_bridge_read(dev->read_buf, RD_BUF_SIZE);
+    memset(dev->read_buf, 0, RD_BUF_SIZE);
+    diag_bridge_read(dev->read_buf, RD_BUF_SIZE);
 }
 
 static void
-diag_test_write_complete_cb(void *d, char *buf, size_t size, size_t actual)
-{
-	struct diag_test_dev *dev = d;
+diag_test_write_complete_cb(void *d, char *buf, size_t size, size_t actual) {
+    struct diag_test_dev *dev = d;
 
-	if (actual > 0)
-		schedule_work(&dev->read_w);
+    if (actual > 0)
+        schedule_work(&dev->read_w);
 }
 
 #if defined(CONFIG_DEBUG_FS)
 #define DEBUG_BUF_SIZE	1024
 static ssize_t send_ping_cmd(struct file *file, const char __user *ubuf,
-				 size_t count, loff_t *ppos)
-{
-	struct diag_test_dev	*dev = __dev;
-	unsigned char		*buf;
-	int			temp = sizeof(unsigned char) * 4;
+                             size_t count, loff_t *ppos) {
+    struct diag_test_dev	*dev = __dev;
+    unsigned char		*buf;
+    int			temp = sizeof(unsigned char) * 4;
 
-	if (!dev)
-		return -ENODEV;
+    if (!dev)
+        return -ENODEV;
 
-	buf = kmalloc(temp, GFP_KERNEL);
-	if (!buf) {
-		pr_err("%s: unable to allocate mem for ping cmd\n",
-				__func__);
-		return -ENOMEM;
-	}
+    buf = kmalloc(temp, GFP_KERNEL);
+    if (!buf) {
+        pr_err("%s: unable to allocate mem for ping cmd\n",
+               __func__);
+        return -ENOMEM;
+    }
 
-	/* hdlc encoded ping command */
-	buf[0] = 0x0C;
-	buf[1] = 0x14;
-	buf[2] = 0x3A;
-	buf[3] = 0x7E;
+    /* hdlc encoded ping command */
+    buf[0] = 0x0C;
+    buf[1] = 0x14;
+    buf[2] = 0x3A;
+    buf[3] = 0x7E;
 
-	diag_bridge_write(buf, temp);
+    diag_bridge_write(buf, temp);
 
-	return count;
+    return count;
 }
 
 const struct file_operations diag_test_ping_ops = {
-	.write = send_ping_cmd,
+    .write = send_ping_cmd,
 };
 
-static void diag_test_debug_init(void)
-{
-	struct dentry *dfile;
+static void diag_test_debug_init(void) {
+    struct dentry *dfile;
 
-	dent = debugfs_create_dir("diag_test", 0);
-	if (IS_ERR(dent))
-		return;
+    dent = debugfs_create_dir("diag_test", 0);
+    if (IS_ERR(dent))
+        return;
 
-	dfile = debugfs_create_file("send_ping", 0444, dent,
-			0, &diag_test_ping_ops);
-	if (!dfile || IS_ERR(dfile))
-		debugfs_remove(dent);
+    dfile = debugfs_create_file("send_ping", 0444, dent,
+                                0, &diag_test_ping_ops);
+    if (!dfile || IS_ERR(dfile))
+        debugfs_remove(dent);
 }
 #else
 static void diag_test_debug_init(void) { }
 #endif
 
-static int diag_test_remove(struct platform_device *pdev)
-{
-	diag_bridge_close();
+static int diag_test_remove(struct platform_device *pdev) {
+    diag_bridge_close();
 
-	if (dent) {
-		debugfs_remove_recursive(dent);
-		dent = NULL;
-	}
+    if (dent) {
+        debugfs_remove_recursive(dent);
+        dent = NULL;
+    }
 
-	return 0;
+    return 0;
 }
 
-static int diag_test_probe(struct platform_device *pdev)
-{
-	struct diag_test_dev	*dev = __dev;
-	int			ret = 0;
+static int diag_test_probe(struct platform_device *pdev) {
+    struct diag_test_dev	*dev = __dev;
+    int			ret = 0;
 
-	pr_info("%s:\n", __func__);
+    pr_info("%s:\n", __func__);
 
-	ret = diag_bridge_open(&dev->ops);
-	if (ret)
-		pr_err("diag open failed: %d", ret);
+    ret = diag_bridge_open(&dev->ops);
+    if (ret)
+        pr_err("diag open failed: %d", ret);
 
 
-	diag_test_debug_init();
+    diag_test_debug_init();
 
-	return ret;
+    return ret;
 }
 
 static struct platform_driver diag_test = {
-	.remove = diag_test_remove,
-	.probe	= diag_test_probe,
-	.driver = {
-		.name = "diag_bridge",
-		.owner = THIS_MODULE,
-	},
+    .remove = diag_test_remove,
+    .probe	= diag_test_probe,
+    .driver = {
+        .name = "diag_bridge",
+        .owner = THIS_MODULE,
+    },
 };
 
-static int __init diag_test_init(void)
-{
-	struct diag_test_dev	*dev;
-	int ret = 0;
+static int __init diag_test_init(void) {
+    struct diag_test_dev	*dev;
+    int ret = 0;
 
-	pr_info("%s\n", __func__);
+    pr_info("%s\n", __func__);
 
-	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-	if (!dev)
-		return -ENOMEM;
+    dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+    if (!dev)
+        return -ENOMEM;
 
-	__dev = dev;
+    __dev = dev;
 
-	dev->ops.read_complete_cb = diag_test_read_complete_cb;
-	dev->ops.write_complete_cb = diag_test_write_complete_cb;
-	dev->read_buf = kmalloc(RD_BUF_SIZE, GFP_KERNEL);
-	if (!dev->read_buf) {
-		pr_err("%s: unable to allocate read buffer\n", __func__);
-		kfree(dev);
-		return -ENOMEM;
-	}
+    dev->ops.read_complete_cb = diag_test_read_complete_cb;
+    dev->ops.write_complete_cb = diag_test_write_complete_cb;
+    dev->read_buf = kmalloc(RD_BUF_SIZE, GFP_KERNEL);
+    if (!dev->read_buf) {
+        pr_err("%s: unable to allocate read buffer\n", __func__);
+        kfree(dev);
+        return -ENOMEM;
+    }
 
-	dev->ops.ctxt = dev;
-	INIT_WORK(&dev->read_w, diag_test_read_work);
+    dev->ops.ctxt = dev;
+    INIT_WORK(&dev->read_w, diag_test_read_work);
 
-	ret = platform_driver_register(&diag_test);
-	if (ret)
-		pr_err("%s: platform driver %s register failed %d\n",
-				__func__, diag_test.driver.name, ret);
+    ret = platform_driver_register(&diag_test);
+    if (ret)
+        pr_err("%s: platform driver %s register failed %d\n",
+               __func__, diag_test.driver.name, ret);
 
-	return ret;
+    return ret;
 }
 
-static void __exit diag_test_exit(void)
-{
-	struct diag_test_dev *dev = __dev;
+static void __exit diag_test_exit(void) {
+    struct diag_test_dev *dev = __dev;
 
-	pr_info("%s:\n", __func__);
+    pr_info("%s:\n", __func__);
 
-	if (test_bit(DIAG_TEST_CONNECTED, &dev->flags))
-		diag_bridge_close();
+    if (test_bit(DIAG_TEST_CONNECTED, &dev->flags))
+        diag_bridge_close();
 
-	kfree(dev->read_buf);
-	kfree(dev);
+    kfree(dev->read_buf);
+    kfree(dev);
 
 }
 

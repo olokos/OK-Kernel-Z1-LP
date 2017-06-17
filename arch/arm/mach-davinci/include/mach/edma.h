@@ -59,14 +59,14 @@
 
 /* PaRAM slots are laid out like this */
 struct edmacc_param {
-	unsigned int opt;
-	unsigned int src;
-	unsigned int a_b_cnt;
-	unsigned int dst;
-	unsigned int src_dst_bidx;
-	unsigned int link_bcntrld;
-	unsigned int src_dst_cidx;
-	unsigned int ccnt;
+    unsigned int opt;
+    unsigned int src;
+    unsigned int a_b_cnt;
+    unsigned int dst;
+    unsigned int src_dst_bidx;
+    unsigned int link_bcntrld;
+    unsigned int src_dst_cidx;
+    unsigned int ccnt;
 };
 
 #define CCINT0_INTERRUPT     16
@@ -158,30 +158,30 @@ struct edmacc_param {
 #define DMA_TC2_ERROR 4
 
 enum address_mode {
-	INCR = 0,
-	FIFO = 1
+    INCR = 0,
+    FIFO = 1
 };
 
 enum fifo_width {
-	W8BIT = 0,
-	W16BIT = 1,
-	W32BIT = 2,
-	W64BIT = 3,
-	W128BIT = 4,
-	W256BIT = 5
+    W8BIT = 0,
+    W16BIT = 1,
+    W32BIT = 2,
+    W64BIT = 3,
+    W128BIT = 4,
+    W256BIT = 5
 };
 
 enum dma_event_q {
-	EVENTQ_0 = 0,
-	EVENTQ_1 = 1,
-	EVENTQ_2 = 2,
-	EVENTQ_3 = 3,
-	EVENTQ_DEFAULT = -1
+    EVENTQ_0 = 0,
+    EVENTQ_1 = 1,
+    EVENTQ_2 = 2,
+    EVENTQ_3 = 3,
+    EVENTQ_DEFAULT = -1
 };
 
 enum sync_dimension {
-	ASYNC = 0,
-	ABSYNC = 1
+    ASYNC = 0,
+    ABSYNC = 1
 };
 
 #define EDMA_CTLR_CHAN(ctlr, chan)	(((ctlr) << 16) | (chan))
@@ -198,8 +198,8 @@ enum sync_dimension {
 
 /* alloc/free DMA channels and their dedicated parameter RAM slots */
 int edma_alloc_channel(int channel,
-	void (*callback)(unsigned channel, u16 ch_status, void *data),
-	void *data, enum dma_event_q);
+                       void (*callback)(unsigned channel, u16 ch_status, void *data),
+                       void *data, enum dma_event_q);
 void edma_free_channel(unsigned channel);
 
 /* alloc/free parameter RAM slots */
@@ -212,14 +212,14 @@ int edma_free_cont_slots(unsigned slot, int count);
 
 /* calls that operate on part of a parameter RAM slot */
 void edma_set_src(unsigned slot, dma_addr_t src_port,
-				enum address_mode mode, enum fifo_width);
+                  enum address_mode mode, enum fifo_width);
 void edma_set_dest(unsigned slot, dma_addr_t dest_port,
-				 enum address_mode mode, enum fifo_width);
+                   enum address_mode mode, enum fifo_width);
 void edma_get_position(unsigned slot, dma_addr_t *src, dma_addr_t *dst);
 void edma_set_src_index(unsigned slot, s16 src_bidx, s16 src_cidx);
 void edma_set_dest_index(unsigned slot, s16 dest_bidx, s16 dest_cidx);
 void edma_set_transfer_params(unsigned slot, u16 acnt, u16 bcnt, u16 ccnt,
-		u16 bcnt_rld, enum sync_dimension sync_mode);
+                              u16 bcnt_rld, enum sync_dimension sync_mode);
 void edma_link(unsigned from, unsigned to);
 void edma_unlink(unsigned from);
 
@@ -237,31 +237,31 @@ void edma_resume(unsigned channel);
 
 struct edma_rsv_info {
 
-	const s16	(*rsv_chans)[2];
-	const s16	(*rsv_slots)[2];
+    const s16	(*rsv_chans)[2];
+    const s16	(*rsv_slots)[2];
 };
 
 /* platform_data for EDMA driver */
 struct edma_soc_info {
 
-	/* how many dma resources of each type */
-	unsigned	n_channel;
-	unsigned	n_region;
-	unsigned	n_slot;
-	unsigned	n_tc;
-	unsigned	n_cc;
-	/*
-	 * Default queue is expected to be a low-priority queue.
-	 * This way, long transfers on the default queue started
-	 * by the codec engine will not cause audio defects.
-	 */
-	enum dma_event_q	default_queue;
+    /* how many dma resources of each type */
+    unsigned	n_channel;
+    unsigned	n_region;
+    unsigned	n_slot;
+    unsigned	n_tc;
+    unsigned	n_cc;
+    /*
+     * Default queue is expected to be a low-priority queue.
+     * This way, long transfers on the default queue started
+     * by the codec engine will not cause audio defects.
+     */
+    enum dma_event_q	default_queue;
 
-	/* Resource reservation for other cores */
-	struct edma_rsv_info	*rsv;
+    /* Resource reservation for other cores */
+    struct edma_rsv_info	*rsv;
 
-	const s8	(*queue_tc_mapping)[2];
-	const s8	(*queue_priority_mapping)[2];
+    const s8	(*queue_tc_mapping)[2];
+    const s8	(*queue_priority_mapping)[2];
 };
 
 #endif

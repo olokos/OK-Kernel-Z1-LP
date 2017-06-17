@@ -33,16 +33,15 @@
  *
  * (the type definitions are in asm/spinlock_types.h)
  */
-static inline int arch_spin_is_locked(arch_spinlock_t *lock)
-{
-	/*
-	 * Note that even if a new ticket is in the process of being
-	 * acquired, so lock->next_ticket is 1, it's still reasonable
-	 * to claim the lock is held, since it will be momentarily
-	 * if not already.  There's no need to wait for a "valid"
-	 * lock->next_ticket to become available.
-	 */
-	return lock->next_ticket != lock->current_ticket;
+static inline int arch_spin_is_locked(arch_spinlock_t *lock) {
+    /*
+     * Note that even if a new ticket is in the process of being
+     * acquired, so lock->next_ticket is 1, it's still reasonable
+     * to claim the lock is held, since it will be momentarily
+     * if not already.  There's no need to wait for a "valid"
+     * lock->next_ticket to become available.
+     */
+    return lock->next_ticket != lock->current_ticket;
 }
 
 void arch_spin_lock(arch_spinlock_t *lock);
@@ -52,12 +51,11 @@ void arch_spin_lock(arch_spinlock_t *lock);
 
 int arch_spin_trylock(arch_spinlock_t *lock);
 
-static inline void arch_spin_unlock(arch_spinlock_t *lock)
-{
-	/* For efficiency, overlap fetching the old ticket with the wmb(). */
-	int old_ticket = lock->current_ticket;
-	wmb();  /* guarantee anything modified under the lock is visible */
-	lock->current_ticket = old_ticket + TICKET_QUANTUM;
+static inline void arch_spin_unlock(arch_spinlock_t *lock) {
+    /* For efficiency, overlap fetching the old ticket with the wmb(). */
+    int old_ticket = lock->current_ticket;
+    wmb();  /* guarantee anything modified under the lock is visible */
+    lock->current_ticket = old_ticket + TICKET_QUANTUM;
 }
 
 void arch_spin_unlock_wait(arch_spinlock_t *lock);
@@ -80,17 +78,15 @@ void arch_spin_unlock_wait(arch_spinlock_t *lock);
 /**
  * arch_read_can_lock() - would read_trylock() succeed?
  */
-static inline int arch_read_can_lock(arch_rwlock_t *rwlock)
-{
-	return (rwlock->lock << _RD_COUNT_WIDTH) == 0;
+static inline int arch_read_can_lock(arch_rwlock_t *rwlock) {
+    return (rwlock->lock << _RD_COUNT_WIDTH) == 0;
 }
 
 /**
  * arch_write_can_lock() - would write_trylock() succeed?
  */
-static inline int arch_write_can_lock(arch_rwlock_t *rwlock)
-{
-	return rwlock->lock == 0;
+static inline int arch_write_can_lock(arch_rwlock_t *rwlock) {
+    return rwlock->lock == 0;
 }
 
 /**

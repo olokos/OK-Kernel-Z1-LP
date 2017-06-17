@@ -36,49 +36,47 @@
 #define uint32 unsigned int
 
 struct au1200_lcd {
-	volatile uint32	reserved0;
-	volatile uint32	screen;
-	volatile uint32	backcolor;
-	volatile uint32	horztiming;
-	volatile uint32	verttiming;
-	volatile uint32	clkcontrol;
-	volatile uint32	pwmdiv;
-	volatile uint32	pwmhi;
-	volatile uint32	reserved1;
-	volatile uint32	winenable;
-	volatile uint32	colorkey;
-	volatile uint32	colorkeymsk;
-	struct
-	{
-		volatile uint32	cursorctrl;
-		volatile uint32	cursorpos;
-		volatile uint32	cursorcolor0;
-		volatile uint32	cursorcolor1;
-		volatile uint32	cursorcolor2;
-		uint32	cursorcolor3;
-	} hwc;
-	volatile uint32	intstatus;
-	volatile uint32	intenable;
-	volatile uint32	outmask;
-	volatile uint32	fifoctrl;
-	uint32	reserved2[(0x0100-0x0058)/4];
-	struct
-	{
-		volatile uint32	winctrl0;
-		volatile uint32	winctrl1;
-		volatile uint32	winctrl2;
-		volatile uint32	winbuf0;
-		volatile uint32	winbuf1;
-		volatile uint32	winbufctrl;
-		uint32	winreserved0;
-		uint32	winreserved1;
-	} window[4];
+    volatile uint32	reserved0;
+    volatile uint32	screen;
+    volatile uint32	backcolor;
+    volatile uint32	horztiming;
+    volatile uint32	verttiming;
+    volatile uint32	clkcontrol;
+    volatile uint32	pwmdiv;
+    volatile uint32	pwmhi;
+    volatile uint32	reserved1;
+    volatile uint32	winenable;
+    volatile uint32	colorkey;
+    volatile uint32	colorkeymsk;
+    struct {
+        volatile uint32	cursorctrl;
+        volatile uint32	cursorpos;
+        volatile uint32	cursorcolor0;
+        volatile uint32	cursorcolor1;
+        volatile uint32	cursorcolor2;
+        uint32	cursorcolor3;
+    } hwc;
+    volatile uint32	intstatus;
+    volatile uint32	intenable;
+    volatile uint32	outmask;
+    volatile uint32	fifoctrl;
+    uint32	reserved2[(0x0100-0x0058)/4];
+    struct {
+        volatile uint32	winctrl0;
+        volatile uint32	winctrl1;
+        volatile uint32	winctrl2;
+        volatile uint32	winbuf0;
+        volatile uint32	winbuf1;
+        volatile uint32	winbufctrl;
+        uint32	winreserved0;
+        uint32	winreserved1;
+    } window[4];
 
-	uint32	reserved3[(0x0400-0x0180)/4];
+    uint32	reserved3[(0x0400-0x0180)/4];
 
-	volatile uint32	palette[(0x0800-0x0400)/4];
+    volatile uint32	palette[(0x0800-0x0400)/4];
 
-	volatile uint8	cursorpattern[256];
+    volatile uint8	cursorpattern[256];
 };
 
 /* lcd_screen */
@@ -322,49 +320,47 @@ struct au1200_lcd {
 #define uint32 unsigned int
 
 struct au1200_lcd {
-	volatile uint32	reserved0;
-	volatile uint32	screen;
-	volatile uint32	backcolor;
-	volatile uint32	horztiming;
-	volatile uint32	verttiming;
-	volatile uint32	clkcontrol;
-	volatile uint32	pwmdiv;
-	volatile uint32	pwmhi;
-	volatile uint32	reserved1;
-	volatile uint32	winenable;
-	volatile uint32	colorkey;
-	volatile uint32	colorkeymsk;
-	struct
-	{
-		volatile uint32	cursorctrl;
-		volatile uint32	cursorpos;
-		volatile uint32	cursorcolor0;
-		volatile uint32	cursorcolor1;
-		volatile uint32	cursorcolor2;
-		uint32	cursorcolor3;
-	} hwc;
-	volatile uint32	intstatus;
-	volatile uint32	intenable;
-	volatile uint32	outmask;
-	volatile uint32	fifoctrl;
-	uint32	reserved2[(0x0100-0x0058)/4];
-	struct
-	{
-		volatile uint32	winctrl0;
-		volatile uint32	winctrl1;
-		volatile uint32	winctrl2;
-		volatile uint32	winbuf0;
-		volatile uint32	winbuf1;
-		volatile uint32	winbufctrl;
-		uint32	winreserved0;
-		uint32	winreserved1;
-	} window[4];
+    volatile uint32	reserved0;
+    volatile uint32	screen;
+    volatile uint32	backcolor;
+    volatile uint32	horztiming;
+    volatile uint32	verttiming;
+    volatile uint32	clkcontrol;
+    volatile uint32	pwmdiv;
+    volatile uint32	pwmhi;
+    volatile uint32	reserved1;
+    volatile uint32	winenable;
+    volatile uint32	colorkey;
+    volatile uint32	colorkeymsk;
+    struct {
+        volatile uint32	cursorctrl;
+        volatile uint32	cursorpos;
+        volatile uint32	cursorcolor0;
+        volatile uint32	cursorcolor1;
+        volatile uint32	cursorcolor2;
+        uint32	cursorcolor3;
+    } hwc;
+    volatile uint32	intstatus;
+    volatile uint32	intenable;
+    volatile uint32	outmask;
+    volatile uint32	fifoctrl;
+    uint32	reserved2[(0x0100-0x0058)/4];
+    struct {
+        volatile uint32	winctrl0;
+        volatile uint32	winctrl1;
+        volatile uint32	winctrl2;
+        volatile uint32	winbuf0;
+        volatile uint32	winbuf1;
+        volatile uint32	winbufctrl;
+        uint32	winreserved0;
+        uint32	winreserved1;
+    } window[4];
 
-	uint32	reserved3[(0x0400-0x0180)/4];
+    uint32	reserved3[(0x0400-0x0180)/4];
 
-	volatile uint32	palette[(0x0800-0x0400)/4];
+    volatile uint32	palette[(0x0800-0x0400)/4];
 
-	volatile uint8	cursorpattern[256];
+    volatile uint8	cursorpattern[256];
 };
 
 /* lcd_screen */

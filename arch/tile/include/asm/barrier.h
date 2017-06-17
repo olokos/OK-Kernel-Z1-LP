@@ -83,39 +83,37 @@
  * Issue an uncacheable load to each memory controller, then
  * wait until those loads have completed.
  */
-static inline void __mb_incoherent(void)
-{
-	long clobber_r10;
-	asm volatile("swint2"
-		     : "=R10" (clobber_r10)
-		     : "R10" (HV_SYS_fence_incoherent)
-		     : "r0", "r1", "r2", "r3", "r4",
-		       "r5", "r6", "r7", "r8", "r9",
-		       "r11", "r12", "r13", "r14",
-		       "r15", "r16", "r17", "r18", "r19",
-		       "r20", "r21", "r22", "r23", "r24",
-		       "r25", "r26", "r27", "r28", "r29");
+static inline void __mb_incoherent(void) {
+    long clobber_r10;
+    asm volatile("swint2"
+                 : "=R10" (clobber_r10)
+                 : "R10" (HV_SYS_fence_incoherent)
+                 : "r0", "r1", "r2", "r3", "r4",
+                 "r5", "r6", "r7", "r8", "r9",
+                 "r11", "r12", "r13", "r14",
+                 "r15", "r16", "r17", "r18", "r19",
+                 "r20", "r21", "r22", "r23", "r24",
+                 "r25", "r26", "r27", "r28", "r29");
 }
 #endif
 
 /* Fence to guarantee visibility of stores to incoherent memory. */
 static inline void
-mb_incoherent(void)
-{
-	__insn_mf();
+mb_incoherent(void) {
+    __insn_mf();
 
 #if !CHIP_HAS_MF_WAITS_FOR_VICTIMS()
-	{
+    {
 #if CHIP_HAS_TILE_WRITE_PENDING()
-		const unsigned long WRITE_TIMEOUT_CYCLES = 400;
-		unsigned long start = get_cycles_low();
-		do {
-			if (__insn_mfspr(SPR_TILE_WRITE_PENDING) == 0)
-				return;
-		} while ((get_cycles_low() - start) < WRITE_TIMEOUT_CYCLES);
+        const unsigned long WRITE_TIMEOUT_CYCLES = 400;
+        unsigned long start = get_cycles_low();
+        do {
+            if (__insn_mfspr(SPR_TILE_WRITE_PENDING) == 0)
+                return;
+        } while ((get_cycles_low() - start) < WRITE_TIMEOUT_CYCLES);
 #endif /* CHIP_HAS_TILE_WRITE_PENDING() */
-		(void) __mb_incoherent();
-	}
+        (void) __mb_incoherent();
+    }
 #endif /* CHIP_HAS_MF_WAITS_FOR_VICTIMS() */
 }
 

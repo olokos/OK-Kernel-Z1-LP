@@ -21,14 +21,14 @@
 #define __ASM_ARCH_XC_H
 
 struct xc {
-	int no;
-	unsigned int type;
-	unsigned int version;
-	void __iomem *xpec_base;
-	void __iomem *xmac_base;
-	void __iomem *sram_base;
-	int irq;
-	struct device *dev;
+    int no;
+    unsigned int type;
+    unsigned int version;
+    void __iomem *xpec_base;
+    void __iomem *xmac_base;
+    void __iomem *sram_base;
+    int irq;
+    struct device *dev;
 };
 
 int xc_reset(struct xc *x);

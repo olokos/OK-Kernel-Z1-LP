@@ -32,31 +32,31 @@
 #define KBC_MAX_KEY	(KBC_MAX_ROW * KBC_MAX_COL)
 
 enum tegra_pin_type {
-	PIN_CFG_IGNORE,
-	PIN_CFG_COL,
-	PIN_CFG_ROW,
+    PIN_CFG_IGNORE,
+    PIN_CFG_COL,
+    PIN_CFG_ROW,
 };
 
 struct tegra_kbc_pin_cfg {
-	enum tegra_pin_type type;
-	unsigned char num;
+    enum tegra_pin_type type;
+    unsigned char num;
 };
 
 struct tegra_kbc_wake_key {
-	u8 row:4;
-	u8 col:4;
+    u8 row:4;
+    u8 col:4;
 };
 
 struct tegra_kbc_platform_data {
-	unsigned int debounce_cnt;
-	unsigned int repeat_cnt;
+    unsigned int debounce_cnt;
+    unsigned int repeat_cnt;
 
-	struct tegra_kbc_pin_cfg pin_cfg[KBC_MAX_GPIO];
-	const struct matrix_keymap_data *keymap_data;
+    struct tegra_kbc_pin_cfg pin_cfg[KBC_MAX_GPIO];
+    const struct matrix_keymap_data *keymap_data;
 
-	u32 wakeup_key;
-	bool wakeup;
-	bool use_fn_map;
-	bool use_ghost_filter;
+    u32 wakeup_key;
+    bool wakeup;
+    bool use_fn_map;
+    bool use_ghost_filter;
 };
 #endif

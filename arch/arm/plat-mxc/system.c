@@ -37,37 +37,35 @@ static void __iomem *wdog_base;
 /*
  * Reset the system. It is called by machine_restart().
  */
-void mxc_restart(char mode, const char *cmd)
-{
-	unsigned int wcr_enable;
+void mxc_restart(char mode, const char *cmd) {
+    unsigned int wcr_enable;
 
-	if (cpu_is_mx1()) {
-		wcr_enable = (1 << 0);
-	} else {
-		struct clk *clk;
+    if (cpu_is_mx1()) {
+        wcr_enable = (1 << 0);
+    } else {
+        struct clk *clk;
 
-		clk = clk_get_sys("imx2-wdt.0", NULL);
-		if (!IS_ERR(clk))
-			clk_prepare_enable(clk);
-		wcr_enable = (1 << 2);
-	}
+        clk = clk_get_sys("imx2-wdt.0", NULL);
+        if (!IS_ERR(clk))
+            clk_prepare_enable(clk);
+        wcr_enable = (1 << 2);
+    }
 
-	/* Assert SRS signal */
-	__raw_writew(wcr_enable, wdog_base);
+    /* Assert SRS signal */
+    __raw_writew(wcr_enable, wdog_base);
 
-	/* wait for reset to assert... */
-	mdelay(500);
+    /* wait for reset to assert... */
+    mdelay(500);
 
-	printk(KERN_ERR "Watchdog reset failed to assert reset\n");
+    printk(KERN_ERR "Watchdog reset failed to assert reset\n");
 
-	/* delay to allow the serial port to show the message */
-	mdelay(50);
+    /* delay to allow the serial port to show the message */
+    mdelay(50);
 
-	/* we'll take a jump through zero as a poor second */
-	soft_restart(0);
+    /* we'll take a jump through zero as a poor second */
+    soft_restart(0);
 }
 
-void mxc_arch_reset_init(void __iomem *base)
-{
-	wdog_base = base;
+void mxc_arch_reset_init(void __iomem *base) {
+    wdog_base = base;
 }

@@ -49,13 +49,13 @@
 */
 
 int i_APCI1032_ConfigDigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				  struct comedi_insn *insn, unsigned int *data);
+                                  struct comedi_insn *insn, unsigned int *data);
 
 int i_APCI1032_Read1DigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				 struct comedi_insn *insn, unsigned int *data);
+                                 struct comedi_insn *insn, unsigned int *data);
 
 int i_APCI1032_ReadMoreDigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				    struct comedi_insn *insn, unsigned int *data);
+                                    struct comedi_insn *insn, unsigned int *data);
 
 /* Interrupt functions..... */
 

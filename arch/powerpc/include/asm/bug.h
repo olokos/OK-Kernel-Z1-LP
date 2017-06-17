@@ -18,22 +18,25 @@
 #include <asm/asm-offsets.h>
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 .macro EMIT_BUG_ENTRY addr,file,line,flags
-	 .section __bug_table,"a"
-5001:	 PPC_LONG \addr, 5002f
-	 .short \line, \flags
-	 .org 5001b+BUG_ENTRY_SIZE
-	 .previous
-	 .section .rodata,"a"
-5002:	 .asciz "\file"
-	 .previous
+.section __bug_table,"a"
+5001:
+PPC_LONG \addr, 5002f
+.short \line, \flags
+.org 5001b+BUG_ENTRY_SIZE
+.previous
+.section .rodata,"a"
+5002:
+.asciz "\file"
+.previous
 .endm
 #else
 .macro EMIT_BUG_ENTRY addr,file,line,flags
-	 .section __bug_table,"a"
-5001:	 PPC_LONG \addr
-	 .short \flags
-	 .org 5001b+BUG_ENTRY_SIZE
-	 .previous
+.section __bug_table,"a"
+5001:
+PPC_LONG \addr
+.short \flags
+.org 5001b+BUG_ENTRY_SIZE
+.previous
 .endm
 #endif /* verbose */
 

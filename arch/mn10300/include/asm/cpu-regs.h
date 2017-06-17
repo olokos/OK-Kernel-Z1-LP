@@ -332,10 +332,10 @@ asm(" .am33_2\n");
 #define ATOMIC_OPS_BASE_ADDR 0xc0000a00
 #ifndef __ASSEMBLY__
 asm(
-	"_AAR	= 0\n"
-	"_AAR2	= 4\n"
-	"_ADR	= 8\n"
-	"_ASR	= 12\n");
+    "_AAR	= 0\n"
+    "_AAR2	= 4\n"
+    "_ADR	= 8\n"
+    "_ASR	= 12\n");
 #else
 #define _AAR		0
 #define _AAR2		4

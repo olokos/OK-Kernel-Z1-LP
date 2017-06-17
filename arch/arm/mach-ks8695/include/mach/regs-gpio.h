@@ -42,7 +42,7 @@
 #define IOPC_IOEINT0TM		(7 << 0)	/* GPIO Pin for External/Soft Interrupt 0 Trigger Mode */
 #define IOPC_IOEINT0_MODE(x)	((x) << 0)
 
- /* Trigger Modes */
+/* Trigger Modes */
 #define IOPC_TM_LOW		(0)		/* Level Detection (Active Low) */
 #define IOPC_TM_HIGH		(1)		/* Level Detection (Active High) */
 #define IOPC_TM_RISING		(2)		/* Rising Edge Detection */

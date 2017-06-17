@@ -55,10 +55,10 @@
 # ifndef __ASSEMBLY__
 
 struct ia64_fpreg {
-	union {
-		unsigned long bits[2];
-		long double __dummy;	/* force 16-byte alignment */
-	} u;
+    union {
+        unsigned long bits[2];
+        long double __dummy;	/* force 16-byte alignment */
+    } u;
 };
 
 # endif /* __ASSEMBLY__ */

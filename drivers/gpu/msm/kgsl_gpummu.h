@@ -40,36 +40,36 @@ extern struct kgsl_mmu_ops gpummu_ops;
 extern struct kgsl_mmu_pt_ops gpummu_pt_ops;
 
 struct kgsl_tlbflushfilter {
-	unsigned int *base;
-	unsigned int size;
+    unsigned int *base;
+    unsigned int size;
 };
 
 struct kgsl_gpummu_pt {
-	struct kgsl_memdesc  base;
-	unsigned int   last_superpte;
-	/* Maintain filter to manage tlb flushing */
-	struct kgsl_tlbflushfilter tlbflushfilter;
+    struct kgsl_memdesc  base;
+    unsigned int   last_superpte;
+    /* Maintain filter to manage tlb flushing */
+    struct kgsl_tlbflushfilter tlbflushfilter;
 };
 
 struct kgsl_ptpool_chunk {
-	size_t size;
-	unsigned int count;
-	int dynamic;
+    size_t size;
+    unsigned int count;
+    int dynamic;
 
-	void *data;
-	phys_addr_t phys;
+    void *data;
+    phys_addr_t phys;
 
-	unsigned long *bitmap;
-	struct list_head list;
+    unsigned long *bitmap;
+    struct list_head list;
 };
 
 struct kgsl_ptpool {
-	size_t ptsize;
-	struct mutex lock;
-	struct list_head list;
-	int entries;
-	int static_entries;
-	int chunks;
+    size_t ptsize;
+    struct mutex lock;
+    struct list_head list;
+    int entries;
+    int static_entries;
+    int chunks;
 };
 
 void *kgsl_gpummu_ptpool_init(int entries);

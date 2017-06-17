@@ -16,17 +16,17 @@
 #include <asm/processor.h>
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	__u32			status;		/* thread synchronous flags */
-	__u32			cpu;
-	int			preempt_count; /* 0 => preemptable, <0 => BUG */
-	mm_segment_t		addr_limit;	/* thread address space */
-	struct restart_block	restart_block;
-	unsigned long		previous_sp;	/* sp of previous stack in case
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    __u32			status;		/* thread synchronous flags */
+    __u32			cpu;
+    int			preempt_count; /* 0 => preemptable, <0 => BUG */
+    mm_segment_t		addr_limit;	/* thread address space */
+    struct restart_block	restart_block;
+    unsigned long		previous_sp;	/* sp of previous stack in case
 						   of nested IRQ stacks */
-	__u8			supervisor_stack[0];
+    __u8			supervisor_stack[0];
 };
 
 #endif
@@ -67,25 +67,24 @@ struct thread_info {
 register unsigned long current_stack_pointer asm("r15") __used;
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
 #if defined(CONFIG_SUPERH64)
-	__asm__ __volatile__ ("getcon	cr17, %0" : "=r" (ti));
+    __asm__ __volatile__ ("getcon	cr17, %0" : "=r" (ti));
 #elif defined(CONFIG_CPU_HAS_SR_RB)
-	__asm__ __volatile__ ("stc	r7_bank, %0" : "=r" (ti));
+    __asm__ __volatile__ ("stc	r7_bank, %0" : "=r" (ti));
 #else
-	unsigned long __dummy;
+    unsigned long __dummy;
 
-	__asm__ __volatile__ (
-		"mov	r15, %0\n\t"
-		"and	%1, %0\n\t"
-		: "=&r" (ti), "=r" (__dummy)
-		: "1" (~(THREAD_SIZE - 1))
-		: "memory");
+    __asm__ __volatile__ (
+        "mov	r15, %0\n\t"
+        "and	%1, %0\n\t"
+        : "=&r" (ti), "=r" (__dummy)
+        : "1" (~(THREAD_SIZE - 1))
+        : "memory");
 #endif
 
-	return ti;
+    return ti;
 }
 
 /* thread information allocation */
@@ -166,11 +165,10 @@ extern void init_thread_xstate(void);
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK	1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->status |= TS_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->status |= TS_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
 }
 #endif	/* !__ASSEMBLY__ */
 

@@ -35,19 +35,18 @@
  * bit 0 is the LSB of addr; bit 32 is the LSB of (addr+1).
  */
 static __inline__ void
-set_bit (int nr, volatile void *addr)
-{
-	__u32 bit, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+set_bit (int nr, volatile void *addr) {
+    __u32 bit, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	bit = 1 << (nr & 31);
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old | bit;
-	} while (cmpxchg_acq(m, old, new) != old);
+    m = (volatile __u32 *) addr + (nr >> 5);
+    bit = 1 << (nr & 31);
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old | bit;
+    } while (cmpxchg_acq(m, old, new) != old);
 }
 
 /**
@@ -60,9 +59,8 @@ set_bit (int nr, volatile void *addr)
  * may be that only one operation succeeds.
  */
 static __inline__ void
-__set_bit (int nr, volatile void *addr)
-{
-	*((__u32 *) addr + (nr >> 5)) |= (1 << (nr & 31));
+__set_bit (int nr, volatile void *addr) {
+    *((__u32 *) addr + (nr >> 5)) |= (1 << (nr & 31));
 }
 
 /*
@@ -82,19 +80,18 @@ __set_bit (int nr, volatile void *addr)
  * in order to ensure changes are visible on other processors.
  */
 static __inline__ void
-clear_bit (int nr, volatile void *addr)
-{
-	__u32 mask, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+clear_bit (int nr, volatile void *addr) {
+    __u32 mask, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	mask = ~(1 << (nr & 31));
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old & mask;
-	} while (cmpxchg_acq(m, old, new) != old);
+    m = (volatile __u32 *) addr + (nr >> 5);
+    mask = ~(1 << (nr & 31));
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old & mask;
+    } while (cmpxchg_acq(m, old, new) != old);
 }
 
 /**
@@ -106,19 +103,18 @@ clear_bit (int nr, volatile void *addr)
  * contain a memory barrier suitable for unlock type operations.
  */
 static __inline__ void
-clear_bit_unlock (int nr, volatile void *addr)
-{
-	__u32 mask, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+clear_bit_unlock (int nr, volatile void *addr) {
+    __u32 mask, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	mask = ~(1 << (nr & 31));
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old & mask;
-	} while (cmpxchg_rel(m, old, new) != old);
+    m = (volatile __u32 *) addr + (nr >> 5);
+    mask = ~(1 << (nr & 31));
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old & mask;
+    } while (cmpxchg_rel(m, old, new) != old);
 }
 
 /**
@@ -130,12 +126,11 @@ clear_bit_unlock (int nr, volatile void *addr)
  * with release semantics. See also arch_spin_unlock().
  */
 static __inline__ void
-__clear_bit_unlock(int nr, void *addr)
-{
-	__u32 * const m = (__u32 *) addr + (nr >> 5);
-	__u32 const new = *m & ~(1 << (nr & 31));
+__clear_bit_unlock(int nr, void *addr) {
+    __u32 * const m = (__u32 *) addr + (nr >> 5);
+    __u32 const new = *m & ~(1 << (nr & 31));
 
-	ia64_st4_rel_nta(m, new);
+    ia64_st4_rel_nta(m, new);
 }
 
 /**
@@ -148,9 +143,8 @@ __clear_bit_unlock(int nr, void *addr)
  * may be that only one operation succeeds.
  */
 static __inline__ void
-__clear_bit (int nr, volatile void *addr)
-{
-	*((__u32 *) addr + (nr >> 5)) &= ~(1 << (nr & 31));
+__clear_bit (int nr, volatile void *addr) {
+    *((__u32 *) addr + (nr >> 5)) &= ~(1 << (nr & 31));
 }
 
 /**
@@ -163,19 +157,18 @@ __clear_bit (int nr, volatile void *addr)
  * restricted to acting on a single-word quantity.
  */
 static __inline__ void
-change_bit (int nr, volatile void *addr)
-{
-	__u32 bit, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+change_bit (int nr, volatile void *addr) {
+    __u32 bit, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	bit = (1 << (nr & 31));
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old ^ bit;
-	} while (cmpxchg_acq(m, old, new) != old);
+    m = (volatile __u32 *) addr + (nr >> 5);
+    bit = (1 << (nr & 31));
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old ^ bit;
+    } while (cmpxchg_acq(m, old, new) != old);
 }
 
 /**
@@ -188,9 +181,8 @@ change_bit (int nr, volatile void *addr)
  * may be that only one operation succeeds.
  */
 static __inline__ void
-__change_bit (int nr, volatile void *addr)
-{
-	*((__u32 *) addr + (nr >> 5)) ^= (1 << (nr & 31));
+__change_bit (int nr, volatile void *addr) {
+    *((__u32 *) addr + (nr >> 5)) ^= (1 << (nr & 31));
 }
 
 /**
@@ -198,24 +190,23 @@ __change_bit (int nr, volatile void *addr)
  * @nr: Bit to set
  * @addr: Address to count from
  *
- * This operation is atomic and cannot be reordered.  
+ * This operation is atomic and cannot be reordered.
  * It also implies the acquisition side of the memory barrier.
  */
 static __inline__ int
-test_and_set_bit (int nr, volatile void *addr)
-{
-	__u32 bit, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+test_and_set_bit (int nr, volatile void *addr) {
+    __u32 bit, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	bit = 1 << (nr & 31);
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old | bit;
-	} while (cmpxchg_acq(m, old, new) != old);
-	return (old & bit) != 0;
+    m = (volatile __u32 *) addr + (nr >> 5);
+    bit = 1 << (nr & 31);
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old | bit;
+    } while (cmpxchg_acq(m, old, new) != old);
+    return (old & bit) != 0;
 }
 
 /**
@@ -232,19 +223,18 @@ test_and_set_bit (int nr, volatile void *addr)
  * @nr: Bit to set
  * @addr: Address to count from
  *
- * This operation is non-atomic and can be reordered.  
+ * This operation is non-atomic and can be reordered.
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
 static __inline__ int
-__test_and_set_bit (int nr, volatile void *addr)
-{
-	__u32 *p = (__u32 *) addr + (nr >> 5);
-	__u32 m = 1 << (nr & 31);
-	int oldbitset = (*p & m) != 0;
+__test_and_set_bit (int nr, volatile void *addr) {
+    __u32 *p = (__u32 *) addr + (nr >> 5);
+    __u32 m = 1 << (nr & 31);
+    int oldbitset = (*p & m) != 0;
 
-	*p |= m;
-	return oldbitset;
+    *p |= m;
+    return oldbitset;
 }
 
 /**
@@ -252,24 +242,23 @@ __test_and_set_bit (int nr, volatile void *addr)
  * @nr: Bit to clear
  * @addr: Address to count from
  *
- * This operation is atomic and cannot be reordered.  
+ * This operation is atomic and cannot be reordered.
  * It also implies the acquisition side of the memory barrier.
  */
 static __inline__ int
-test_and_clear_bit (int nr, volatile void *addr)
-{
-	__u32 mask, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+test_and_clear_bit (int nr, volatile void *addr) {
+    __u32 mask, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	mask = ~(1 << (nr & 31));
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old & mask;
-	} while (cmpxchg_acq(m, old, new) != old);
-	return (old & ~mask) != 0;
+    m = (volatile __u32 *) addr + (nr >> 5);
+    mask = ~(1 << (nr & 31));
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old & mask;
+    } while (cmpxchg_acq(m, old, new) != old);
+    return (old & ~mask) != 0;
 }
 
 /**
@@ -277,19 +266,18 @@ test_and_clear_bit (int nr, volatile void *addr)
  * @nr: Bit to clear
  * @addr: Address to count from
  *
- * This operation is non-atomic and can be reordered.  
+ * This operation is non-atomic and can be reordered.
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
 static __inline__ int
-__test_and_clear_bit(int nr, volatile void * addr)
-{
-	__u32 *p = (__u32 *) addr + (nr >> 5);
-	__u32 m = 1 << (nr & 31);
-	int oldbitset = (*p & m) != 0;
+__test_and_clear_bit(int nr, volatile void * addr) {
+    __u32 *p = (__u32 *) addr + (nr >> 5);
+    __u32 m = 1 << (nr & 31);
+    int oldbitset = (*p & m) != 0;
 
-	*p &= ~m;
-	return oldbitset;
+    *p &= ~m;
+    return oldbitset;
 }
 
 /**
@@ -297,24 +285,23 @@ __test_and_clear_bit(int nr, volatile void * addr)
  * @nr: Bit to change
  * @addr: Address to count from
  *
- * This operation is atomic and cannot be reordered.  
+ * This operation is atomic and cannot be reordered.
  * It also implies the acquisition side of the memory barrier.
  */
 static __inline__ int
-test_and_change_bit (int nr, volatile void *addr)
-{
-	__u32 bit, old, new;
-	volatile __u32 *m;
-	CMPXCHG_BUGCHECK_DECL
+test_and_change_bit (int nr, volatile void *addr) {
+    __u32 bit, old, new;
+    volatile __u32 *m;
+    CMPXCHG_BUGCHECK_DECL
 
-	m = (volatile __u32 *) addr + (nr >> 5);
-	bit = (1 << (nr & 31));
-	do {
-		CMPXCHG_BUGCHECK(m);
-		old = *m;
-		new = old ^ bit;
-	} while (cmpxchg_acq(m, old, new) != old);
-	return (old & bit) != 0;
+    m = (volatile __u32 *) addr + (nr >> 5);
+    bit = (1 << (nr & 31));
+    do {
+        CMPXCHG_BUGCHECK(m);
+        old = *m;
+        new = old ^ bit;
+    } while (cmpxchg_acq(m, old, new) != old);
+    return (old & bit) != 0;
 }
 
 /**
@@ -325,20 +312,18 @@ test_and_change_bit (int nr, volatile void *addr)
  * This operation is non-atomic and can be reordered.
  */
 static __inline__ int
-__test_and_change_bit (int nr, void *addr)
-{
-	__u32 old, bit = (1 << (nr & 31));
-	__u32 *m = (__u32 *) addr + (nr >> 5);
+__test_and_change_bit (int nr, void *addr) {
+    __u32 old, bit = (1 << (nr & 31));
+    __u32 *m = (__u32 *) addr + (nr >> 5);
 
-	old = *m;
-	*m = old ^ bit;
-	return (old & bit) != 0;
+    old = *m;
+    *m = old ^ bit;
+    return (old & bit) != 0;
 }
 
 static __inline__ int
-test_bit (int nr, const volatile void *addr)
-{
-	return 1 & (((const volatile __u32 *) addr)[nr >> 5] >> (nr & 31));
+test_bit (int nr, const volatile void *addr) {
+    return 1 & (((const volatile __u32 *) addr)[nr >> 5] >> (nr & 31));
 }
 
 /**
@@ -349,12 +334,11 @@ test_bit (int nr, const volatile void *addr)
  * Undefined if no zero exists, so code should check against ~0UL first...
  */
 static inline unsigned long
-ffz (unsigned long x)
-{
-	unsigned long result;
+ffz (unsigned long x) {
+    unsigned long result;
 
-	result = ia64_popcnt(x & (~x - 1));
-	return result;
+    result = ia64_popcnt(x & (~x - 1));
+    return result;
 }
 
 /**
@@ -364,12 +348,11 @@ ffz (unsigned long x)
  * Undefined if no bit exists, so code should check against 0 first.
  */
 static __inline__ unsigned long
-__ffs (unsigned long x)
-{
-	unsigned long result;
+__ffs (unsigned long x) {
+    unsigned long result;
 
-	result = ia64_popcnt((x-1) & ~x);
-	return result;
+    result = ia64_popcnt((x-1) & ~x);
+    return result;
 }
 
 #ifdef __KERNEL__
@@ -379,13 +362,12 @@ __ffs (unsigned long x)
  * for x==0.  Bits are numbered from 0..63 (e.g., ia64_fls(9) == 3).
  */
 static inline unsigned long
-ia64_fls (unsigned long x)
-{
-	long double d = x;
-	long exp;
+ia64_fls (unsigned long x) {
+    long double d = x;
+    long exp;
 
-	exp = ia64_getf_exp(d);
-	return exp - 0xffff;
+    exp = ia64_getf_exp(d);
+    return exp - 0xffff;
 }
 
 /*
@@ -393,18 +375,17 @@ ia64_fls (unsigned long x)
  * bits are numbered from 1..32 (e.g., fls(9) == 4).
  */
 static inline int
-fls (int t)
-{
-	unsigned long x = t & 0xffffffffu;
+fls (int t) {
+    unsigned long x = t & 0xffffffffu;
 
-	if (!x)
-		return 0;
-	x |= x >> 1;
-	x |= x >> 2;
-	x |= x >> 4;
-	x |= x >> 8;
-	x |= x >> 16;
-	return ia64_popcnt(x);
+    if (!x)
+        return 0;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return ia64_popcnt(x);
 }
 
 /*
@@ -412,15 +393,14 @@ fls (int t)
  * Bits are numbered from 0..63 (e.g., __fls(9) == 3).
  */
 static inline unsigned long
-__fls (unsigned long x)
-{
-	x |= x >> 1;
-	x |= x >> 2;
-	x |= x >> 4;
-	x |= x >> 8;
-	x |= x >> 16;
-	x |= x >> 32;
-	return ia64_popcnt(x) - 1;
+__fls (unsigned long x) {
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    x |= x >> 32;
+    return ia64_popcnt(x) - 1;
 }
 
 #include <asm-generic/bitops/fls64.h>
@@ -437,11 +417,10 @@ __fls (unsigned long x)
  * hweightN: returns the hamming weight (i.e. the number
  * of bits set) of a N-bit word
  */
-static __inline__ unsigned long __arch_hweight64(unsigned long x)
-{
-	unsigned long result;
-	result = ia64_popcnt(x);
-	return result;
+static __inline__ unsigned long __arch_hweight64(unsigned long x) {
+    unsigned long result;
+    result = ia64_popcnt(x);
+    return result;
 }
 
 #define __arch_hweight32(x) ((unsigned int) __arch_hweight64((x) & 0xfffffffful))

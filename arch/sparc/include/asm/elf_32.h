@@ -78,16 +78,16 @@ typedef unsigned long elf_greg_t;
 typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 
 typedef struct {
-	union {
-		unsigned long	pr_regs[32];
-		double		pr_dregs[16];
-	} pr_fr;
-	unsigned long __unused;
-	unsigned long	pr_fsr;
-	unsigned char	pr_qcnt;
-	unsigned char	pr_q_entrysize;
-	unsigned char	pr_en;
-	unsigned int	pr_q[64];
+    union {
+        unsigned long	pr_regs[32];
+        double		pr_dregs[16];
+    } pr_fr;
+    unsigned long __unused;
+    unsigned long	pr_fsr;
+    unsigned char	pr_qcnt;
+    unsigned char	pr_q_entrysize;
+    unsigned char	pr_en;
+    unsigned int	pr_q[64];
 } elf_fpregset_t;
 
 #include <asm/mbus.h>

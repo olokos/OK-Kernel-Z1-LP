@@ -16,46 +16,46 @@
 #include <linux/errno.h>
 
 enum msm_gpiomux_setting {
-	GPIOMUX_ACTIVE = 0,
-	GPIOMUX_SUSPENDED,
-	GPIOMUX_NSETTINGS
+    GPIOMUX_ACTIVE = 0,
+    GPIOMUX_SUSPENDED,
+    GPIOMUX_NSETTINGS
 };
 
 enum gpiomux_drv {
-	GPIOMUX_DRV_2MA = 0,
-	GPIOMUX_DRV_4MA,
-	GPIOMUX_DRV_6MA,
-	GPIOMUX_DRV_8MA,
-	GPIOMUX_DRV_10MA,
-	GPIOMUX_DRV_12MA,
-	GPIOMUX_DRV_14MA,
-	GPIOMUX_DRV_16MA,
+    GPIOMUX_DRV_2MA = 0,
+    GPIOMUX_DRV_4MA,
+    GPIOMUX_DRV_6MA,
+    GPIOMUX_DRV_8MA,
+    GPIOMUX_DRV_10MA,
+    GPIOMUX_DRV_12MA,
+    GPIOMUX_DRV_14MA,
+    GPIOMUX_DRV_16MA,
 };
 
 enum gpiomux_func {
-	GPIOMUX_FUNC_GPIO = 0,
-	GPIOMUX_FUNC_1,
-	GPIOMUX_FUNC_2,
-	GPIOMUX_FUNC_3,
-	GPIOMUX_FUNC_4,
-	GPIOMUX_FUNC_5,
-	GPIOMUX_FUNC_6,
-	GPIOMUX_FUNC_7,
-	GPIOMUX_FUNC_8,
-	GPIOMUX_FUNC_9,
-	GPIOMUX_FUNC_A,
-	GPIOMUX_FUNC_B,
-	GPIOMUX_FUNC_C,
-	GPIOMUX_FUNC_D,
-	GPIOMUX_FUNC_E,
-	GPIOMUX_FUNC_F,
+    GPIOMUX_FUNC_GPIO = 0,
+    GPIOMUX_FUNC_1,
+    GPIOMUX_FUNC_2,
+    GPIOMUX_FUNC_3,
+    GPIOMUX_FUNC_4,
+    GPIOMUX_FUNC_5,
+    GPIOMUX_FUNC_6,
+    GPIOMUX_FUNC_7,
+    GPIOMUX_FUNC_8,
+    GPIOMUX_FUNC_9,
+    GPIOMUX_FUNC_A,
+    GPIOMUX_FUNC_B,
+    GPIOMUX_FUNC_C,
+    GPIOMUX_FUNC_D,
+    GPIOMUX_FUNC_E,
+    GPIOMUX_FUNC_F,
 };
 
 enum gpiomux_pull {
-	GPIOMUX_PULL_NONE = 0,
-	GPIOMUX_PULL_DOWN,
-	GPIOMUX_PULL_KEEPER,
-	GPIOMUX_PULL_UP,
+    GPIOMUX_PULL_NONE = 0,
+    GPIOMUX_PULL_DOWN,
+    GPIOMUX_PULL_KEEPER,
+    GPIOMUX_PULL_UP,
 };
 
 /* Direction settings are only meaningful when GPIOMUX_FUNC_GPIO is selected.
@@ -64,16 +64,16 @@ enum gpiomux_pull {
  * for your target for more details.
  */
 enum gpiomux_dir {
-	GPIOMUX_IN = 0,
-	GPIOMUX_OUT_HIGH,
-	GPIOMUX_OUT_LOW,
+    GPIOMUX_IN = 0,
+    GPIOMUX_OUT_HIGH,
+    GPIOMUX_OUT_LOW,
 };
 
 struct gpiomux_setting {
-	enum gpiomux_func func;
-	enum gpiomux_drv  drv;
-	enum gpiomux_pull pull;
-	enum gpiomux_dir  dir;
+    enum gpiomux_func func;
+    enum gpiomux_drv  drv;
+    enum gpiomux_pull pull;
+    enum gpiomux_dir  dir;
 };
 
 /**
@@ -91,8 +91,8 @@ struct gpiomux_setting {
  *           the line is suspended, or its reference count is 0.
  */
 struct msm_gpiomux_config {
-	unsigned gpio;
-	struct gpiomux_setting *settings[GPIOMUX_NSETTINGS];
+    unsigned gpio;
+    struct gpiomux_setting *settings[GPIOMUX_NSETTINGS];
 };
 
 /**
@@ -105,17 +105,17 @@ struct msm_gpiomux_config {
  * @ncfg: The number of configs in the array.
  */
 struct msm_gpiomux_configs {
-	struct msm_gpiomux_config *cfg;
-	size_t                     ncfg;
+    struct msm_gpiomux_config *cfg;
+    size_t                     ncfg;
 };
 
 /* Provide an enum and an API to write to misc TLMM registers */
 enum msm_tlmm_misc_reg {
-	TLMM_ETM_MODE_REG = 0x2014,
-	TLMM_SDC2_HDRV_PULL_CTL = 0x2048,
-	TLMM_SPARE_REG = 0x2024,
-	TLMM_CDC_HDRV_CTL = 0x2054,
-	TLMM_CDC_HDRV_PULL_CTL = 0x2058,
+    TLMM_ETM_MODE_REG = 0x2014,
+    TLMM_SDC2_HDRV_PULL_CTL = 0x2048,
+    TLMM_SPARE_REG = 0x2024,
+    TLMM_CDC_HDRV_CTL = 0x2054,
+    TLMM_CDC_HDRV_PULL_CTL = 0x2058,
 };
 
 #ifdef CONFIG_MSM_GPIOMUX
@@ -140,7 +140,7 @@ void msm_gpiomux_install(struct msm_gpiomux_config *configs, unsigned nconfigs);
  * to hardware. Just store the settings to be retrieved at a later time
  */
 void msm_gpiomux_install_nowrite(struct msm_gpiomux_config *configs,
-				unsigned nconfigs);
+                                 unsigned nconfigs);
 
 /* Increment a gpio's reference count, possibly activating the line. */
 int __must_check msm_gpiomux_get(unsigned gpio);
@@ -157,7 +157,7 @@ int msm_gpiomux_put(unsigned gpio);
  * else function returns 0
  */
 int msm_gpiomux_write(unsigned gpio, enum msm_gpiomux_setting which,
-	struct gpiomux_setting *setting, struct gpiomux_setting *old_setting);
+                      struct gpiomux_setting *setting, struct gpiomux_setting *old_setting);
 
 /* Architecture-internal function for use by the framework only.
  * This function can assume the following:
@@ -177,39 +177,33 @@ int msm_tlmm_misc_reg_read(enum msm_tlmm_misc_reg misc_reg);
 void msm_tlmm_misc_reg_write(enum msm_tlmm_misc_reg misc_reg, int val);
 
 #else
-static inline int msm_gpiomux_init(size_t ngpio)
-{
-	return -ENOSYS;
+static inline int msm_gpiomux_init(size_t ngpio) {
+    return -ENOSYS;
 }
 
 static inline void
 msm_gpiomux_install(struct msm_gpiomux_config *configs, unsigned nconfigs) {}
 
-static inline int __must_check msm_gpiomux_get(unsigned gpio)
-{
-	return -ENOSYS;
+static inline int __must_check msm_gpiomux_get(unsigned gpio) {
+    return -ENOSYS;
 }
 
-static inline int msm_gpiomux_put(unsigned gpio)
-{
-	return -ENOSYS;
+static inline int msm_gpiomux_put(unsigned gpio) {
+    return -ENOSYS;
 }
 
 static inline int msm_gpiomux_write(unsigned gpio,
-	enum msm_gpiomux_setting which, struct gpiomux_setting *setting,
-	struct gpiomux_setting *old_setting)
-{
-	return -ENOSYS;
+                                    enum msm_gpiomux_setting which, struct gpiomux_setting *setting,
+                                    struct gpiomux_setting *old_setting) {
+    return -ENOSYS;
 }
 
-static inline int msm_tlmm_misc_reg_read(enum msm_tlmm_misc_reg misc_reg)
-{
-	return -ENOSYS;
+static inline int msm_tlmm_misc_reg_read(enum msm_tlmm_misc_reg misc_reg) {
+    return -ENOSYS;
 }
 
 static inline void msm_tlmm_misc_reg_write(enum msm_tlmm_misc_reg misc_reg,
-						int val)
-{
+        int val) {
 }
 
 #endif

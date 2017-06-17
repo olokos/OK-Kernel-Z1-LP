@@ -113,12 +113,12 @@
 struct mpq_streambuffer;
 
 typedef void (*mpq_streambuffer_pkt_dispose_cb) (
-	struct mpq_streambuffer *sbuff,
-	void *user_data);
+    struct mpq_streambuffer *sbuff,
+    void *user_data);
 
 enum mpq_streambuffer_mode {
-	MPQ_STREAMBUFFER_BUFFER_MODE_RING,
-	MPQ_STREAMBUFFER_BUFFER_MODE_LINEAR
+    MPQ_STREAMBUFFER_BUFFER_MODE_RING,
+    MPQ_STREAMBUFFER_BUFFER_MODE_LINEAR
 };
 
 /**
@@ -135,14 +135,14 @@ enum mpq_streambuffer_mode {
  * buffer that has been
  */
 struct mpq_streambuffer {
-	struct dvb_ringbuffer raw_data;
-	struct dvb_ringbuffer packet_data;
-	struct mpq_streambuffer_buffer_desc *buffers;
-	enum mpq_streambuffer_mode mode;
-	u32 buffers_num;
-	u32 pending_buffers_count;
-	mpq_streambuffer_pkt_dispose_cb cb;
-	void *cb_user_data;
+    struct dvb_ringbuffer raw_data;
+    struct dvb_ringbuffer packet_data;
+    struct mpq_streambuffer_buffer_desc *buffers;
+    enum mpq_streambuffer_mode mode;
+    u32 buffers_num;
+    u32 pending_buffers_count;
+    mpq_streambuffer_pkt_dispose_cb cb;
+    void *cb_user_data;
 };
 
 /**
@@ -155,11 +155,11 @@ struct mpq_streambuffer {
  * @write_ptr:	initial write pointer value (should normally be 0)
  */
 struct mpq_streambuffer_buffer_desc {
-	int	handle;
-	void	*base;
-	u32	size;
-	u32	read_ptr;
-	u32	write_ptr;
+    int	handle;
+    void	*base;
+    u32	size;
+    u32	read_ptr;
+    u32	write_ptr;
 };
 
 /**
@@ -177,10 +177,10 @@ struct mpq_streambuffer_buffer_desc {
  * private user-data bytes
  */
 struct mpq_streambuffer_packet_header {
-	u32 user_data_len;
-	int raw_data_handle;
-	u32 raw_data_offset;
-	u32 raw_data_len;
+    u32 user_data_len;
+    int raw_data_handle;
+    u32 raw_data_offset;
+    u32 raw_data_len;
 } __packed;
 
 /**
@@ -203,12 +203,12 @@ struct mpq_streambuffer_packet_header {
  * written to the next free buffer.
  */
 int mpq_streambuffer_init(
-		struct mpq_streambuffer *sbuff,
-		enum mpq_streambuffer_mode mode,
-		struct mpq_streambuffer_buffer_desc *data_buffers,
-		u32 data_buff_num,
-		void *packet_buff,
-		size_t packet_buff_size);
+    struct mpq_streambuffer *sbuff,
+    enum mpq_streambuffer_mode mode,
+    struct mpq_streambuffer_buffer_desc *data_buffers,
+    u32 data_buff_num,
+    void *packet_buff,
+    size_t packet_buff_size);
 
 /**
  * mpq_streambuffer_terminate - Terminate stream buffer
@@ -237,8 +237,8 @@ void mpq_streambuffer_terminate(struct mpq_streambuffer *sbuff);
  * or ask to read the data back from the buffer using mpq_ringbuffer_pkt_read
  */
 ssize_t mpq_streambuffer_pkt_next(
-		struct mpq_streambuffer *sbuff,
-		ssize_t idx, size_t *pktlen);
+    struct mpq_streambuffer *sbuff,
+    ssize_t idx, size_t *pktlen);
 
 /**
  * mpq_streambuffer_pkt_read - Reads out the packet from the provided index.
@@ -258,10 +258,10 @@ ssize_t mpq_streambuffer_pkt_next(
  * buffer has enough space for the private user-data length
  */
 ssize_t mpq_streambuffer_pkt_read(
-		struct mpq_streambuffer *sbuff,
-		size_t idx,
-		struct mpq_streambuffer_packet_header *packet,
-		u8 *user_data);
+    struct mpq_streambuffer *sbuff,
+    size_t idx,
+    struct mpq_streambuffer_packet_header *packet,
+    u8 *user_data);
 
 /**
  * mpq_streambuffer_pkt_dispose - Disposes a packet from the packet buffer
@@ -277,9 +277,9 @@ ssize_t mpq_streambuffer_pkt_read(
  * for the respective data pointed by the packet if dispose_data is set.
  */
 int mpq_streambuffer_pkt_dispose(
-		struct mpq_streambuffer *sbuff,
-		size_t idx,
-		int dispose_data);
+    struct mpq_streambuffer *sbuff,
+    size_t idx,
+    int dispose_data);
 
 /**
  * mpq_streambuffer_pkt_write - Write a new packet to the packet buffer.
@@ -291,9 +291,9 @@ int mpq_streambuffer_pkt_dispose(
  * Return  error status, -ENOSPC if there's no space to write the packet
  */
 int mpq_streambuffer_pkt_write(
-		struct mpq_streambuffer *sbuff,
-		struct mpq_streambuffer_packet_header *packet,
-		u8 *user_data);
+    struct mpq_streambuffer *sbuff,
+    struct mpq_streambuffer_packet_header *packet,
+    u8 *user_data);
 
 /**
  * mpq_streambuffer_data_write - Write data to raw-data buffer
@@ -306,8 +306,8 @@ int mpq_streambuffer_pkt_write(
  *			no space to write the data
  */
 ssize_t mpq_streambuffer_data_write(
-		struct mpq_streambuffer *sbuff,
-		const u8 *buf, size_t len);
+    struct mpq_streambuffer *sbuff,
+    const u8 *buf, size_t len);
 
 /**
  * mpq_streambuffer_data_write_deposit - Advances the raw-buffer write pointer.
@@ -319,8 +319,8 @@ ssize_t mpq_streambuffer_data_write(
  * Return  error status
  */
 int mpq_streambuffer_data_write_deposit(
-		struct mpq_streambuffer *sbuff,
-		size_t len);
+    struct mpq_streambuffer *sbuff,
+    size_t len);
 
 /**
  * mpq_streambuffer_data_read - Reads out raw-data to the provided buffer.
@@ -338,8 +338,8 @@ int mpq_streambuffer_data_write_deposit(
  * mpq_streambuffer_data_read_dispose
  */
 ssize_t mpq_streambuffer_data_read(
-		struct mpq_streambuffer *sbuff,
-		u8 *buf, size_t len);
+    struct mpq_streambuffer *sbuff,
+    u8 *buf, size_t len);
 
 /**
  * mpq_streambuffer_data_read_user
@@ -348,8 +348,8 @@ ssize_t mpq_streambuffer_data_read(
  * buffer.
  */
 ssize_t mpq_streambuffer_data_read_user(
-		struct mpq_streambuffer *sbuff,
-		u8 __user *buf, size_t len);
+    struct mpq_streambuffer *sbuff,
+    u8 __user *buf, size_t len);
 
 /**
  * mpq_streambuffer_data_read_dispose - Advances the raw-buffer read pointer.
@@ -365,8 +365,8 @@ ssize_t mpq_streambuffer_data_read_user(
  * raw-data buffer using mpq_streambuffer_pkt_dispose.
  */
 int mpq_streambuffer_data_read_dispose(
-		struct mpq_streambuffer *sbuff,
-		size_t len);
+    struct mpq_streambuffer *sbuff,
+    size_t len);
 /**
  * mpq_streambuffer_get_buffer_handle - Returns the current linear buffer
  * ION handle.
@@ -384,9 +384,9 @@ int mpq_streambuffer_data_read_dispose(
  * -EPERM if stream buffer specified was not initialized with linear support.
  */
 int mpq_streambuffer_get_buffer_handle(
-	struct mpq_streambuffer *sbuff,
-	int read_buffer,
-	int *handle);
+    struct mpq_streambuffer *sbuff,
+    int read_buffer,
+    int *handle);
 
 /**
  * mpq_streambuffer_data_free - Returns number of free bytes in data buffer.
@@ -396,7 +396,7 @@ int mpq_streambuffer_get_buffer_handle(
  * current write buffer only.
  */
 ssize_t mpq_streambuffer_data_free(
-	struct mpq_streambuffer *sbuff);
+    struct mpq_streambuffer *sbuff);
 
 /**
  * mpq_streambuffer_data_avail - Returns number of bytes in data buffer that
@@ -407,7 +407,7 @@ ssize_t mpq_streambuffer_data_free(
  * current read buffer only.
  */
 ssize_t mpq_streambuffer_data_avail(
-	struct mpq_streambuffer *sbuff);
+    struct mpq_streambuffer *sbuff);
 
 /**
  * mpq_streambuffer_register_pkt_dispose - Registers a callback to notify on
@@ -421,9 +421,9 @@ ssize_t mpq_streambuffer_data_avail(
  * -EINVAL if arguments are invalid
  */
 int mpq_streambuffer_register_pkt_dispose(
-	struct mpq_streambuffer *sbuff,
-	mpq_streambuffer_pkt_dispose_cb cb_func,
-	void *user_data);
+    struct mpq_streambuffer *sbuff,
+    mpq_streambuffer_pkt_dispose_cb cb_func,
+    void *user_data);
 
 /**
  * mpq_streambuffer_data_rw_offset - returns read/write offsets of current data
@@ -437,9 +437,9 @@ int mpq_streambuffer_register_pkt_dispose(
  * -EINVAL if arguments are invalid
  */
 int mpq_streambuffer_get_data_rw_offset(
-	struct mpq_streambuffer *sbuff,
-	u32 *read_offset,
-	u32 *write_offset);
+    struct mpq_streambuffer *sbuff,
+    u32 *read_offset,
+    u32 *write_offset);
 
 #endif /* _MPQ_STREAM_BUFFER_H */
 

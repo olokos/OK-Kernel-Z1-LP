@@ -21,24 +21,24 @@
 #include "tcm.h"
 
 enum tiler_fmt {
-	TILFMT_8BIT = 0,
-	TILFMT_16BIT,
-	TILFMT_32BIT,
-	TILFMT_PAGE,
-	TILFMT_NFORMATS
+    TILFMT_8BIT = 0,
+    TILFMT_16BIT,
+    TILFMT_32BIT,
+    TILFMT_PAGE,
+    TILFMT_NFORMATS
 };
 
 struct pat_area {
-	u32 x0:8;
-	u32 y0:8;
-	u32 x1:8;
-	u32 y1:8;
+    u32 x0:8;
+    u32 y0:8;
+    u32 x1:8;
+    u32 y1:8;
 };
 
 struct tiler_block {
-	struct list_head alloc_node;	/* node for global block list */
-	struct tcm_area area;		/* area */
-	enum tiler_fmt fmt;		/* format */
+    struct list_head alloc_node;	/* node for global block list */
+    struct tcm_area area;		/* area */
+    enum tiler_fmt fmt;		/* format */
 };
 
 /* bits representing the same slot in DMM-TILER hw-block */
@@ -79,12 +79,12 @@ int tiler_map_show(struct seq_file *s, void *arg);
 
 /* pin/unpin */
 int tiler_pin(struct tiler_block *block, struct page **pages,
-		uint32_t npages, uint32_t roll, bool wait);
+              uint32_t npages, uint32_t roll, bool wait);
 int tiler_unpin(struct tiler_block *block);
 
 /* reserve/release */
 struct tiler_block *tiler_reserve_2d(enum tiler_fmt fmt, uint16_t w, uint16_t h,
-				uint16_t align);
+                                     uint16_t align);
 struct tiler_block *tiler_reserve_1d(size_t size);
 int tiler_release(struct tiler_block *block);
 
@@ -99,36 +99,33 @@ bool dmm_is_initialized(void);
 extern struct platform_driver omap_dmm_driver;
 
 /* GEM bo flags -> tiler fmt */
-static inline enum tiler_fmt gem2fmt(uint32_t flags)
-{
-	switch (flags & OMAP_BO_TILED) {
-	case OMAP_BO_TILED_8:
-		return TILFMT_8BIT;
-	case OMAP_BO_TILED_16:
-		return TILFMT_16BIT;
-	case OMAP_BO_TILED_32:
-		return TILFMT_32BIT;
-	default:
-		return TILFMT_PAGE;
-	}
+static inline enum tiler_fmt gem2fmt(uint32_t flags) {
+    switch (flags & OMAP_BO_TILED) {
+    case OMAP_BO_TILED_8:
+                return TILFMT_8BIT;
+        case OMAP_BO_TILED_16:
+            return TILFMT_16BIT;
+        case OMAP_BO_TILED_32:
+            return TILFMT_32BIT;
+        default:
+            return TILFMT_PAGE;
+        }
+    }
+
+    static inline bool validfmt(enum tiler_fmt fmt) {
+    switch (fmt) {
+    case TILFMT_8BIT:
+    case TILFMT_16BIT:
+    case TILFMT_32BIT:
+    case TILFMT_PAGE:
+        return true;
+    default:
+        return false;
+    }
 }
 
-static inline bool validfmt(enum tiler_fmt fmt)
-{
-	switch (fmt) {
-	case TILFMT_8BIT:
-	case TILFMT_16BIT:
-	case TILFMT_32BIT:
-	case TILFMT_PAGE:
-		return true;
-	default:
-		return false;
-	}
-}
-
-static inline int dmm_is_available(void)
-{
-	return cpu_is_omap44xx();
+static inline int dmm_is_available(void) {
+    return cpu_is_omap44xx();
 }
 
 #endif

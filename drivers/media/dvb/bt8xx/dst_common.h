@@ -96,72 +96,71 @@
 
 struct dst_state {
 
-	struct i2c_adapter* i2c;
+    struct i2c_adapter* i2c;
 
-	struct bt878* bt;
+    struct bt878* bt;
 
-	/* configuration settings */
-	const struct dst_config* config;
+    /* configuration settings */
+    const struct dst_config* config;
 
-	struct dvb_frontend frontend;
+    struct dvb_frontend frontend;
 
-	/* private ASIC data */
-	u8 tx_tuna[10];
-	u8 rx_tuna[10];
-	u8 rxbuffer[10];
-	u8 diseq_flags;
-	u8 dst_type;
-	u32 type_flags;
-	u32 frequency;		/* intermediate frequency in kHz for QPSK */
-	fe_spectral_inversion_t inversion;
-	u32 symbol_rate;	/* symbol rate in Symbols per second */
-	fe_code_rate_t fec;
-	fe_sec_voltage_t voltage;
-	fe_sec_tone_mode_t tone;
-	u32 decode_freq;
-	u8 decode_lock;
-	u16 decode_strength;
-	u16 decode_snr;
-	unsigned long cur_jiff;
-	u8 k22;
-	u32 bandwidth;
-	u32 dst_hw_cap;
-	u8 dst_fw_version;
-	fe_sec_mini_cmd_t minicmd;
-	fe_modulation_t modulation;
-	u8 messages[256];
-	u8 mac_address[8];
-	u8 fw_version[8];
-	u8 card_info[8];
-	u8 vendor[8];
-	u8 board_info[8];
-	u32 tuner_type;
-	char *tuner_name;
-	struct mutex dst_mutex;
-	u8 fw_name[8];
-	struct dvb_device *dst_ca;
+    /* private ASIC data */
+    u8 tx_tuna[10];
+    u8 rx_tuna[10];
+    u8 rxbuffer[10];
+    u8 diseq_flags;
+    u8 dst_type;
+    u32 type_flags;
+    u32 frequency;		/* intermediate frequency in kHz for QPSK */
+    fe_spectral_inversion_t inversion;
+    u32 symbol_rate;	/* symbol rate in Symbols per second */
+    fe_code_rate_t fec;
+    fe_sec_voltage_t voltage;
+    fe_sec_tone_mode_t tone;
+    u32 decode_freq;
+    u8 decode_lock;
+    u16 decode_strength;
+    u16 decode_snr;
+    unsigned long cur_jiff;
+    u8 k22;
+    u32 bandwidth;
+    u32 dst_hw_cap;
+    u8 dst_fw_version;
+    fe_sec_mini_cmd_t minicmd;
+    fe_modulation_t modulation;
+    u8 messages[256];
+    u8 mac_address[8];
+    u8 fw_version[8];
+    u8 card_info[8];
+    u8 vendor[8];
+    u8 board_info[8];
+    u32 tuner_type;
+    char *tuner_name;
+    struct mutex dst_mutex;
+    u8 fw_name[8];
+    struct dvb_device *dst_ca;
 };
 
 struct tuner_types {
-	u32 tuner_type;
-	char *tuner_name;
-	char *board_name;
-	char *fw_name;
+    u32 tuner_type;
+    char *tuner_name;
+    char *board_name;
+    char *fw_name;
 };
 
 struct dst_types {
-	char *device_id;
-	int offset;
-	u8 dst_type;
-	u32 type_flags;
-	u32 dst_feature;
-	u32 tuner_type;
+    char *device_id;
+    int offset;
+    u8 dst_type;
+    u32 type_flags;
+    u32 dst_feature;
+    u32 tuner_type;
 };
 
-struct dst_config
-{
-	/* the ASIC i2c address */
-	u8 demod_address;
+struct dst_config {
+    /* the ASIC i2c address */
+    u8 demod_address;
 };
 
 int rdc_reset_state(struct dst_state *state);

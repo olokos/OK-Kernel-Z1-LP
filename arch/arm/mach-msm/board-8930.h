@@ -62,12 +62,12 @@
  */
 #ifndef MSM8930_PHASE_2
 extern struct pm8xxx_regulator_platform_data
-	msm_pm8921_regulator_pdata[] __devinitdata;
+    msm_pm8921_regulator_pdata[] __devinitdata;
 
 extern int msm_pm8921_regulator_pdata_len __devinitdata;
 
 extern struct gpio_regulator_platform_data
-	msm_gpio_regulator_pdata[] __devinitdata;
+    msm_gpio_regulator_pdata[] __devinitdata;
 
 extern struct rpm_regulator_platform_data msm_rpm_regulator_pdata __devinitdata;
 
@@ -82,46 +82,46 @@ extern struct regulator_init_data msm8930_pm8917_saw_regulator_core0_pdata;
 extern struct regulator_init_data msm8930_pm8917_saw_regulator_core1_pdata;
 
 extern struct pm8xxx_regulator_platform_data
-	msm8930_pm8038_regulator_pdata[] __devinitdata;
+    msm8930_pm8038_regulator_pdata[] __devinitdata;
 extern int msm8930_pm8038_regulator_pdata_len __devinitdata;
 
 extern struct pm8xxx_regulator_platform_data
-	msm8930_pm8917_regulator_pdata[] __devinitdata;
+    msm8930_pm8917_regulator_pdata[] __devinitdata;
 extern int msm8930_pm8917_regulator_pdata_len __devinitdata;
 
 #define MSM8930_GPIO_VREG_ID_EXT_5V		0
 #define MSM8930_GPIO_VREG_ID_EXT_OTG_SW		1
 
 extern struct gpio_regulator_platform_data
-	msm8930_pm8038_gpio_regulator_pdata[] __devinitdata;
+    msm8930_pm8038_gpio_regulator_pdata[] __devinitdata;
 extern struct gpio_regulator_platform_data
-	msm8930_pm8917_gpio_regulator_pdata[] __devinitdata;
+    msm8930_pm8917_gpio_regulator_pdata[] __devinitdata;
 
 extern struct rpm_regulator_platform_data
-	msm8930_pm8038_rpm_regulator_pdata __devinitdata;
+    msm8930_pm8038_rpm_regulator_pdata __devinitdata;
 extern struct rpm_regulator_platform_data
-	msm8930_pm8917_rpm_regulator_pdata __devinitdata;
+    msm8930_pm8917_rpm_regulator_pdata __devinitdata;
 
 #if defined(CONFIG_GPIO_SX150X) || defined(CONFIG_GPIO_SX150X_MODULE)
 enum {
-	GPIO_EXPANDER_IRQ_BASE = (PM8038_IRQ_BASE + PM8038_NR_IRQS),
-	GPIO_EXPANDER_GPIO_BASE = (PM8038_MPP_BASE + PM8917_NR_MPPS),
-	/* CAM Expander */
-	GPIO_CAM_EXPANDER_BASE = GPIO_EXPANDER_GPIO_BASE,
-	GPIO_CAM_GP_STROBE_READY = GPIO_CAM_EXPANDER_BASE,
-	GPIO_CAM_GP_AFBUSY,
-	GPIO_CAM_GP_STROBE_CE,
-	GPIO_CAM_GP_CAM1MP_XCLR,
-	GPIO_CAM_GP_CAMIF_RESET_N,
-	GPIO_CAM_GP_XMT_FLASH_INT,
-	GPIO_CAM_GP_LED_EN1,
-	GPIO_CAM_GP_LED_EN2,
+    GPIO_EXPANDER_IRQ_BASE = (PM8038_IRQ_BASE + PM8038_NR_IRQS),
+    GPIO_EXPANDER_GPIO_BASE = (PM8038_MPP_BASE + PM8917_NR_MPPS),
+    /* CAM Expander */
+    GPIO_CAM_EXPANDER_BASE = GPIO_EXPANDER_GPIO_BASE,
+    GPIO_CAM_GP_STROBE_READY = GPIO_CAM_EXPANDER_BASE,
+    GPIO_CAM_GP_AFBUSY,
+    GPIO_CAM_GP_STROBE_CE,
+    GPIO_CAM_GP_CAM1MP_XCLR,
+    GPIO_CAM_GP_CAMIF_RESET_N,
+    GPIO_CAM_GP_XMT_FLASH_INT,
+    GPIO_CAM_GP_LED_EN1,
+    GPIO_CAM_GP_LED_EN2,
 
 };
 #endif
 
 enum {
-	SX150X_CAM,
+    SX150X_CAM,
 };
 
 #endif

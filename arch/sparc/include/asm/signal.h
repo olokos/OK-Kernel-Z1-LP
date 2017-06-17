@@ -115,14 +115,14 @@
 typedef unsigned long __old_sigset_t;            /* at least 32 bits */
 
 typedef struct {
-       unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } __new_sigset_t;
 
 /* A SunOS sigstack */
 struct sigstack {
-	/* XXX 32-bit pointers pinhead XXX */
-	char *the_stack;
-	int   cur_status;
+    /* XXX 32-bit pointers pinhead XXX */
+    char *the_stack;
+    int   cur_status;
 };
 
 /* Sigvec flags */
@@ -180,30 +180,30 @@ struct sigstack {
 #include <asm-generic/signal-defs.h>
 
 struct __new_sigaction {
-	__sighandler_t		sa_handler;
-	unsigned long		sa_flags;
-	__sigrestore_t		sa_restorer;  /* not used by Linux/SPARC yet */
-	__new_sigset_t		sa_mask;
+    __sighandler_t		sa_handler;
+    unsigned long		sa_flags;
+    __sigrestore_t		sa_restorer;  /* not used by Linux/SPARC yet */
+    __new_sigset_t		sa_mask;
 };
 
 struct __old_sigaction {
-	__sighandler_t		sa_handler;
-	__old_sigset_t		sa_mask;
-	unsigned long		sa_flags;
-	void			(*sa_restorer)(void);  /* not used by Linux/SPARC yet */
+    __sighandler_t		sa_handler;
+    __old_sigset_t		sa_mask;
+    unsigned long		sa_flags;
+    void			(*sa_restorer)(void);  /* not used by Linux/SPARC yet */
 };
 
 typedef struct sigaltstack {
-	void			__user *ss_sp;
-	int			ss_flags;
-	size_t			ss_size;
+    void			__user *ss_sp;
+    int			ss_flags;
+    size_t			ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
 
 struct k_sigaction {
-	struct			__new_sigaction sa;
-	void			__user *ka_restorer;
+    struct			__new_sigaction sa;
+    void			__user *ka_restorer;
 };
 
 #define ptrace_signal_deliver(regs, cookie) do { } while (0)

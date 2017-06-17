@@ -242,9 +242,9 @@ typedef struct {			    	\
 
 //apparently not needed (CFG_CNF_COUNTRY)
 typedef struct CHANNEL_SET {				//channel set structure used in the CFG_CNF_COUNTRY LTV
-	hcf_16	first_channel;
-	hcf_16	number_of_channels;
-	hcf_16	max_tx_output_level;
+    hcf_16	first_channel;
+    hcf_16	number_of_channels;
+    hcf_16	max_tx_output_level;
 } CHANNEL_SET;
 
 typedef struct KEY_STRCT {					// key structure used in the CFG_DEFAULT_KEYS LTV
@@ -253,26 +253,26 @@ typedef struct KEY_STRCT {					// key structure used in the CFG_DEFAULT_KEYS LTV
 } KEY_STRCT;
 
 typedef struct SCAN_RS_STRCT {				// Scan Result structure used in the CFG_SCAN LTV
-	hcf_16	channel_id;
-	hcf_16	noise_level;
-	hcf_16	signal_level;
-	hcf_8	bssid[6];
-	hcf_16	beacon_interval_time;
-	hcf_16	capability;
-	hcf_16	ssid_len;
-	hcf_8	ssid_val[32];
+    hcf_16	channel_id;
+    hcf_16	noise_level;
+    hcf_16	signal_level;
+    hcf_8	bssid[6];
+    hcf_16	beacon_interval_time;
+    hcf_16	capability;
+    hcf_16	ssid_len;
+    hcf_8	ssid_val[32];
 } SCAN_RS_STRCT;
 
 typedef struct CFG_RANGE_SPEC_STRCT {		// range specification structure used in CFG_RANGES, CFG_RANGE1 etc
-	hcf_16	variant;
-	hcf_16	bottom;
-	hcf_16	top;
+    hcf_16	variant;
+    hcf_16	bottom;
+    hcf_16	top;
 } CFG_RANGE_SPEC_STRCT;
 
 typedef struct CFG_RANGE_SPEC_BYTE_STRCT {	// byte oriented range specification structure used in CFG_RANGE_B LTV
-	hcf_8	variant[2];
-	hcf_8	bottom[2];
-	hcf_8	top[2];
+    hcf_8	variant[2];
+    hcf_8	bottom[2];
+    hcf_8	top[2];
 } CFG_RANGE_SPEC_BYTE_STRCT;
 
 //used to set up "T" functionality for Info frames, i.e. log info frames in MSF supplied buffer and MailBox
@@ -280,13 +280,13 @@ XX1( RID_LOG, unsigned short FAR*, bufp )
 typedef RID_LOG_STRCT  FAR *RID_LOGP;
 XX1( CFG_RID_LOG, RID_LOGP, recordp )
 
- X1( LTV,		val[1] )												/*minimum LTV proto typ	*/
- X1( LTV_MAX,	val[HCF_MAX_LTV] )										/*maximum LTV proto typ	*/
+X1( LTV,		val[1] )												/*minimum LTV proto typ	*/
+X1( LTV_MAX,	val[HCF_MAX_LTV] )										/*maximum LTV proto typ	*/
 XX2( CFG_REG_MB, hcf_16* , mb_addr, hcf_16, mb_size )
 
 typedef struct CFG_MB_INFO_FRAG {	// specification of buffer fragment
-	unsigned short FAR*	frag_addr;
-	hcf_16				frag_len;
+    unsigned short FAR*	frag_addr;
+    hcf_16				frag_len;
 } CFG_MB_INFO_FRAG;
 
 /* Mail Box Info Block structures,
@@ -309,28 +309,28 @@ typedef MSF_ASSERT_RTN /*can't link FAR*/ * MSF_ASSERT_RTNP;
 XX2( CFG_REG_ASSERT_RTNP, hcf_16, lvl, MSF_ASSERT_RTNP, rtnp )
 #endif // HCF_ASSERT_LNK_MSF_RTN / HCF_ASSERT_RT_MSF_RTN
 
- X1( CFG_HCF_OPT, val[20] )											  	/*(Compile time) options	*/
- X3( CFG_CMD_HCF, cmd, mode, add_info )									/*HCF Engineering command	*/
+X1( CFG_HCF_OPT, val[20] )											  	/*(Compile time) options	*/
+X3( CFG_CMD_HCF, cmd, mode, add_info )									/*HCF Engineering command	*/
 
 typedef struct {
-	hcf_16		len;
-	hcf_16		typ;
-	hcf_16		mode;			// PROG_STOP/VOLATILE [FLASH/SEEPROM/SEEPROM_READBACK]
-	hcf_16		segment_size;  	// size of the segment in bytes
-	hcf_32		nic_addr;  		// destination address (in NIC memory)
-	hcf_16		flags;			// 0x0001	: CRC Yes/No
+    hcf_16		len;
+    hcf_16		typ;
+    hcf_16		mode;			// PROG_STOP/VOLATILE [FLASH/SEEPROM/SEEPROM_READBACK]
+    hcf_16		segment_size;  	// size of the segment in bytes
+    hcf_32		nic_addr;  		// destination address (in NIC memory)
+    hcf_16		flags;			// 0x0001	: CRC Yes/No
 //	hcf_32		flags;			// 0x0001	: CRC Yes/No
-	/* ;? still not the whole story
-	 * flags is extended from 16 to 32 bits to force that compiling FW.C produces the same structures
-	 * in memory as FUPU4 BIN files.
-	 * Note that the problem arises from the violation of the constraint to use packing at byte boundaries
-	 * as was stipulated in the WCI-specification
-	 * The Pack pragma can't resolve this issue, because that impacts all members of the structure with
-	 * disregard of their actual size, so aligning host_addr under MSVC 1.5 at 4 bytes, also aligns
-	 * len, typ etc on 4 bytes
-	 * */
+    /* ;? still not the whole story
+     * flags is extended from 16 to 32 bits to force that compiling FW.C produces the same structures
+     * in memory as FUPU4 BIN files.
+     * Note that the problem arises from the violation of the constraint to use packing at byte boundaries
+     * as was stipulated in the WCI-specification
+     * The Pack pragma can't resolve this issue, because that impacts all members of the structure with
+     * disregard of their actual size, so aligning host_addr under MSVC 1.5 at 4 bytes, also aligns
+     * len, typ etc on 4 bytes
+     * */
 //	hcf_16		pad; 	 		//!! be careful alignment problems for Bin download versus C download
-	hcf_8 FAR   *host_addr;  	// source address (in Host memory)
+    hcf_8 FAR   *host_addr;  	// source address (in Host memory)
 } CFG_PROG_STRCT; // segment_descp;
 
 // a structure used for transporting debug-related information from firmware
@@ -363,92 +363,92 @@ XX3( CFG_RANGE7,	hcf_16, role, hcf_16, id, CFG_RANGE_SPEC_STRCT, var_rec[ 7] ) /
 XX3( CFG_RANGE20,	hcf_16, role, hcf_16, id, CFG_RANGE_SPEC_STRCT, var_rec[20] ) /*Actor range (20 variants)		*/
 
 /*Frames */
- X3( CFG_ASSOC_STAT,  assoc_stat, station_addr[3], val[46] ) 	/*Association status, basic					*/
- X2( CFG_ASSOC_STAT3, assoc_stat, station_addr[3] ) 								/*assoc_stat:3			*/
- X3( CFG_ASSOC_STAT1, assoc_stat, station_addr[3], frame_body[43] )					/*assoc_stat:1			*/
- X4( CFG_ASSOC_STAT2, assoc_stat, station_addr[3], old_ap_addr[3], frame_body[43] )	/*assoc_stat:2			*/
+X3( CFG_ASSOC_STAT,  assoc_stat, station_addr[3], val[46] ) 	/*Association status, basic					*/
+X2( CFG_ASSOC_STAT3, assoc_stat, station_addr[3] ) 								/*assoc_stat:3			*/
+X3( CFG_ASSOC_STAT1, assoc_stat, station_addr[3], frame_body[43] )					/*assoc_stat:1			*/
+X4( CFG_ASSOC_STAT2, assoc_stat, station_addr[3], old_ap_addr[3], frame_body[43] )	/*assoc_stat:2			*/
 
 /*Static Configurations */
- X1( CFG_CNF_PORT_TYPE,				port_type			 ) /*[STA] Connection control characteristics				*/
- X1( CFG_MAC_ADDR,					mac_addr[3] 		 ) /*general: FC01,FC08,FC11,FC12,FC13,FC14,FC15,FC16 		*/
- X1( CFG_CNF_OWN_MAC_ADDR,			mac_addr[3]			 )
- X1( CFG_ID,						ssid[17]			 ) /*0xFC02, 0xFC04, 0xFC0E 								*/
+X1( CFG_CNF_PORT_TYPE,				port_type			 ) /*[STA] Connection control characteristics				*/
+X1( CFG_MAC_ADDR,					mac_addr[3] 		 ) /*general: FC01,FC08,FC11,FC12,FC13,FC14,FC15,FC16 		*/
+X1( CFG_CNF_OWN_MAC_ADDR,			mac_addr[3]			 )
+X1( CFG_ID,						ssid[17]			 ) /*0xFC02, 0xFC04, 0xFC0E 								*/
 /*	X1( CFG_DESIRED_SSID,			ssid[17]			 )	see Dynamic Configurations								*/
- X1( CFG_CNF_OWN_CHANNEL,			channel				 ) /*Communication channel for BSS creation					*/
- X1( CFG_CNF_OWN_SSID,				ssid[17]			 )
- X1( CFG_CNF_OWN_ATIM_WINDOW,		atim_window			 )
- X1( CFG_CNF_SYSTEM_SCALE,			system_scale		 )
- X1( CFG_CNF_MAX_DATA_LEN,			max_data_len		 )
- X1( CFG_CNF_WDS_ADDR,				mac_addr[3]			 ) /*[STA] MAC Address of corresponding WDS Link node		*/
- X1( CFG_CNF_PM_ENABLED,			pm_enabled			 ) /*[STA] Switch for ESS Power Management (PM) On/Off		*/
- X1( CFG_CNF_PM_EPS,				pm_eps				 ) /*[STA] Switch for ESS PM EPS/PS Mode					*/
- X1( CFG_CNF_MCAST_RX,				mcast_rx			 ) /*[STA] Switch for ESS PM Multicast reception On/Off		*/
- X1( CFG_CNF_MAX_SLEEP_DURATION,	duration			 ) /*[STA] Maximum sleep time for ESS PM					*/
- X1( CFG_CNF_PM_HOLDOVER_DURATION,	duration			 ) /*[STA] Holdover time for ESS PM							*/
- X1( CFG_CNF_OWN_NAME,				ssid[17]			 ) /*Identification text for diagnostic purposes			*/
- X1( CFG_CNF_OWN_DTIM_PERIOD,		period				 ) /*[AP] Beacon intervals between successive DTIMs			*/
- X1( CFG_CNF_WDS_ADDR1,				mac_addr[3]			 ) /*[AP] Port 1 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_WDS_ADDR2,				mac_addr[3]			 ) /*[AP] Port 2 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_WDS_ADDR3,				mac_addr[3]			 ) /*[AP] Port 3 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_WDS_ADDR4,				mac_addr[3]			 ) /*[AP] Port 4 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_WDS_ADDR5,				mac_addr[3]			 ) /*[AP] Port 5 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_WDS_ADDR6,				mac_addr[3]			 ) /*[AP] Port 6 MAC Adrs of corresponding WDS Link node	*/
- X1( CFG_CNF_MCAST_PM_BUF,			mcast_pm_buf		 ) /*[AP] Switch for PM buffering of Multicast Messages	*/
- X1( CFG_CNF_REJECT_ANY,			reject_any			 ) /*[AP] Switch for PM buffering of Multicast Messages	*/
+X1( CFG_CNF_OWN_CHANNEL,			channel				 ) /*Communication channel for BSS creation					*/
+X1( CFG_CNF_OWN_SSID,				ssid[17]			 )
+X1( CFG_CNF_OWN_ATIM_WINDOW,		atim_window			 )
+X1( CFG_CNF_SYSTEM_SCALE,			system_scale		 )
+X1( CFG_CNF_MAX_DATA_LEN,			max_data_len		 )
+X1( CFG_CNF_WDS_ADDR,				mac_addr[3]			 ) /*[STA] MAC Address of corresponding WDS Link node		*/
+X1( CFG_CNF_PM_ENABLED,			pm_enabled			 ) /*[STA] Switch for ESS Power Management (PM) On/Off		*/
+X1( CFG_CNF_PM_EPS,				pm_eps				 ) /*[STA] Switch for ESS PM EPS/PS Mode					*/
+X1( CFG_CNF_MCAST_RX,				mcast_rx			 ) /*[STA] Switch for ESS PM Multicast reception On/Off		*/
+X1( CFG_CNF_MAX_SLEEP_DURATION,	duration			 ) /*[STA] Maximum sleep time for ESS PM					*/
+X1( CFG_CNF_PM_HOLDOVER_DURATION,	duration			 ) /*[STA] Holdover time for ESS PM							*/
+X1( CFG_CNF_OWN_NAME,				ssid[17]			 ) /*Identification text for diagnostic purposes			*/
+X1( CFG_CNF_OWN_DTIM_PERIOD,		period				 ) /*[AP] Beacon intervals between successive DTIMs			*/
+X1( CFG_CNF_WDS_ADDR1,				mac_addr[3]			 ) /*[AP] Port 1 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_WDS_ADDR2,				mac_addr[3]			 ) /*[AP] Port 2 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_WDS_ADDR3,				mac_addr[3]			 ) /*[AP] Port 3 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_WDS_ADDR4,				mac_addr[3]			 ) /*[AP] Port 4 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_WDS_ADDR5,				mac_addr[3]			 ) /*[AP] Port 5 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_WDS_ADDR6,				mac_addr[3]			 ) /*[AP] Port 6 MAC Adrs of corresponding WDS Link node	*/
+X1( CFG_CNF_MCAST_PM_BUF,			mcast_pm_buf		 ) /*[AP] Switch for PM buffering of Multicast Messages	*/
+X1( CFG_CNF_REJECT_ANY,			reject_any			 ) /*[AP] Switch for PM buffering of Multicast Messages	*/
 //X1( CFG_CNF_ENCRYPTION_ENABLED,	encryption			 ) /*specify encryption type of Tx/Rx messages				*/
- X1( CFG_CNF_ENCRYPTION,			encryption			 ) /*specify encryption type of Tx/Rx messages				*/
- X1( CFG_CNF_AUTHENTICATION,		authentication		 ) /*selects Authentication algorithm						*/
- X1( CFG_CNF_EXCL_UNENCRYPTED,		exclude_unencrypted	 ) /*[AP] Switch for 'clear-text' rx message acceptance		*/
- X1( CFG_CNF_MCAST_RATE,			mcast_rate			 ) /*Transmit Data rate for Multicast frames				*/
- X1( CFG_CNF_INTRA_BSS_RELAY,		intra_bss_relay		 ) /*[AP] Switch for IntraBBS relay							*/
- X1( CFG_CNF_MICRO_WAVE,			micro_wave			 ) /*MicroWave (Robustness)									*/
- X1( CFG_CNF_LOAD_BALANCING,		load_balancing		 ) /*Load Balancing	  (Boolean, 0=OFF, 1=ON, default=1)		*/
- X1( CFG_CNF_MEDIUM_DISTRIBUTION,	medium_distribution	 ) /*Medium Distribution (Boolean, 0=OFF, 1=ON, default=1)	*/
- X1( CFG_CNF_GROUP_ADDR_FILTER,		group_addr_filter	 ) /*Group Address Filter								   	*/
- X1( CFG_CNF_TX_POW_LVL,			tx_pow_lvl			 ) /*Tx Power Level										   	*/
+X1( CFG_CNF_ENCRYPTION,			encryption			 ) /*specify encryption type of Tx/Rx messages				*/
+X1( CFG_CNF_AUTHENTICATION,		authentication		 ) /*selects Authentication algorithm						*/
+X1( CFG_CNF_EXCL_UNENCRYPTED,		exclude_unencrypted	 ) /*[AP] Switch for 'clear-text' rx message acceptance		*/
+X1( CFG_CNF_MCAST_RATE,			mcast_rate			 ) /*Transmit Data rate for Multicast frames				*/
+X1( CFG_CNF_INTRA_BSS_RELAY,		intra_bss_relay		 ) /*[AP] Switch for IntraBBS relay							*/
+X1( CFG_CNF_MICRO_WAVE,			micro_wave			 ) /*MicroWave (Robustness)									*/
+X1( CFG_CNF_LOAD_BALANCING,		load_balancing		 ) /*Load Balancing	  (Boolean, 0=OFF, 1=ON, default=1)		*/
+X1( CFG_CNF_MEDIUM_DISTRIBUTION,	medium_distribution	 ) /*Medium Distribution (Boolean, 0=OFF, 1=ON, default=1)	*/
+X1( CFG_CNF_GROUP_ADDR_FILTER,		group_addr_filter	 ) /*Group Address Filter								   	*/
+X1( CFG_CNF_TX_POW_LVL,			tx_pow_lvl			 ) /*Tx Power Level										   	*/
 XX4( CFG_CNF_COUNTRY_INFO,								 \
-		hcf_16, n_channel_sets, hcf_16, country_code[2], \
-		hcf_16, environment, CHANNEL_SET, channel_set[1] ) /*Current Country Info  									*/
+     hcf_16, n_channel_sets, hcf_16, country_code[2], \
+     hcf_16, environment, CHANNEL_SET, channel_set[1] ) /*Current Country Info  									*/
 XX4( CFG_CNF_COUNTRY_INFO_MAX,							 \
-		hcf_16, n_channel_sets, hcf_16, country_code[2], \
-		hcf_16, environment, CHANNEL_SET, channel_set[14]) /*Current Country Info  									*/
+     hcf_16, n_channel_sets, hcf_16, country_code[2], \
+     hcf_16, environment, CHANNEL_SET, channel_set[14]) /*Current Country Info  									*/
 
 /*Dynamic Configurations */
- X1( CFG_DESIRED_SSID,			ssid[17]					 )	/*[STA] Service Set identification for connection	*/
+X1( CFG_DESIRED_SSID,			ssid[17]					 )	/*[STA] Service Set identification for connection	*/
 #define GROUP_ADDR_SIZE			(32 * 6)						//32 6-byte MAC-addresses
- X1( CFG_GROUP_ADDR,			mac_addr[GROUP_ADDR_SIZE/2]	 )	/*[STA] Multicast MAC Addresses for Rx-message		*/
- X1( CFG_CREATE_IBSS,			create_ibss					 )	/*[STA] Switch for IBSS creation On/Off				*/
- X1( CFG_RTS_THRH,				rts_thrh					 )	/*[STA] Frame length used for RTS/CTS handshake		*/
- X1( CFG_TX_RATE_CNTL,			tx_rate_cntl				 )	/*[STA] Data rate control for message transmission	*/
- X1( CFG_PROMISCUOUS_MODE,		promiscuous_mode			 )	/*[STA] Switch for Promiscuous mode reception On/Of	*/
- X1( CFG_WOL,					wake_on_lan					 )	/*[STA] Switch for Wake-On-LAN mode					*/
- X1( CFG_RTS_THRH0,				rts_thrh					 )	/*[AP] Port 0 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH1,				rts_thrh					 )	/*[AP] Port 1 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH2,				rts_thrh					 )	/*[AP] Port 2 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH3,				rts_thrh					 )	/*[AP] Port 3 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH4,				rts_thrh					 )	/*[AP] Port 4 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH5,				rts_thrh					 )	/*[AP] Port 5 frame length for RTS/CTS handshake	*/
- X1( CFG_RTS_THRH6,				rts_thrh					 )	/*[AP] Port 6 frame length for RTS/CTS handshake	*/
- X1( CFG_TX_RATE_CNTL0,			rate_cntl 					 )	/*[AP] Port 0 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL1,			rate_cntl					 )	/*[AP] Port 1 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL2,			rate_cntl					 )	/*[AP] Port 2 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL3,			rate_cntl					 )	/*[AP] Port 3 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL4,			rate_cntl					 )	/*[AP] Port 4 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL5,			rate_cntl					 )	/*[AP] Port 5 data rate control for transmission	*/
- X1( CFG_TX_RATE_CNTL6,			rate_cntl					 )	/*[AP] Port 6 data rate control for transmission	*/
+X1( CFG_GROUP_ADDR,			mac_addr[GROUP_ADDR_SIZE/2]	 )	/*[STA] Multicast MAC Addresses for Rx-message		*/
+X1( CFG_CREATE_IBSS,			create_ibss					 )	/*[STA] Switch for IBSS creation On/Off				*/
+X1( CFG_RTS_THRH,				rts_thrh					 )	/*[STA] Frame length used for RTS/CTS handshake		*/
+X1( CFG_TX_RATE_CNTL,			tx_rate_cntl				 )	/*[STA] Data rate control for message transmission	*/
+X1( CFG_PROMISCUOUS_MODE,		promiscuous_mode			 )	/*[STA] Switch for Promiscuous mode reception On/Of	*/
+X1( CFG_WOL,					wake_on_lan					 )	/*[STA] Switch for Wake-On-LAN mode					*/
+X1( CFG_RTS_THRH0,				rts_thrh					 )	/*[AP] Port 0 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH1,				rts_thrh					 )	/*[AP] Port 1 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH2,				rts_thrh					 )	/*[AP] Port 2 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH3,				rts_thrh					 )	/*[AP] Port 3 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH4,				rts_thrh					 )	/*[AP] Port 4 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH5,				rts_thrh					 )	/*[AP] Port 5 frame length for RTS/CTS handshake	*/
+X1( CFG_RTS_THRH6,				rts_thrh					 )	/*[AP] Port 6 frame length for RTS/CTS handshake	*/
+X1( CFG_TX_RATE_CNTL0,			rate_cntl 					 )	/*[AP] Port 0 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL1,			rate_cntl					 )	/*[AP] Port 1 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL2,			rate_cntl					 )	/*[AP] Port 2 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL3,			rate_cntl					 )	/*[AP] Port 3 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL4,			rate_cntl					 )	/*[AP] Port 4 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL5,			rate_cntl					 )	/*[AP] Port 5 data rate control for transmission	*/
+X1( CFG_TX_RATE_CNTL6,			rate_cntl					 )	/*[AP] Port 6 data rate control for transmission	*/
 XX1( CFG_DEFAULT_KEYS,			KEY_STRCT, key[4]			 )	/*defines set of encryption keys					*/
- X1( CFG_TX_KEY_ID,				tx_key_id					 )	/*select key for encryption of Tx messages			*/
- X1( CFG_SCAN_SSID,				ssid[17]					 )	/*identification for connection						*/
- X5( CFG_ADD_TKIP_DEFAULT_KEY,								 \
-		 tkip_key_id_info, tkip_key_iv_info[4], tkip_key[8], \
-		 tx_mic_key[4], rx_mic_key[4] 						 )	/*										       		*/
- X6( CFG_ADD_TKIP_MAPPED_KEY,	bssid[3], tkip_key[8], 		 \
-		 tsc[4], rsc[4], tx_mic_key[4], rx_mic_key[4] 		 )	/*										       		*/
- X1( CFG_SET_WPA_AUTHENTICATION_SUITE, 						 \
-		 ssn_authentication_suite							 )	/*											   		*/
- X1( CFG_REMOVE_TKIP_DEFAULT_KEY,tkip_key_id				 )	/*											   		*/
- X1( CFG_TICK_TIME,				tick_time					 )	/*Auxiliary Timer tick interval						*/
- X1( CFG_DDS_TICK_TIME,			tick_time					 )	/*Disconnected DeepSleep Timer tick interval		*/
+X1( CFG_TX_KEY_ID,				tx_key_id					 )	/*select key for encryption of Tx messages			*/
+X1( CFG_SCAN_SSID,				ssid[17]					 )	/*identification for connection						*/
+X5( CFG_ADD_TKIP_DEFAULT_KEY,								 \
+    tkip_key_id_info, tkip_key_iv_info[4], tkip_key[8], \
+    tx_mic_key[4], rx_mic_key[4] 						 )	/*										       		*/
+X6( CFG_ADD_TKIP_MAPPED_KEY,	bssid[3], tkip_key[8], 		 \
+    tsc[4], rsc[4], tx_mic_key[4], rx_mic_key[4] 		 )	/*										       		*/
+X1( CFG_SET_WPA_AUTHENTICATION_SUITE, 						 \
+    ssn_authentication_suite							 )	/*											   		*/
+X1( CFG_REMOVE_TKIP_DEFAULT_KEY,tkip_key_id				 )	/*											   		*/
+X1( CFG_TICK_TIME,				tick_time					 )	/*Auxiliary Timer tick interval						*/
+X1( CFG_DDS_TICK_TIME,			tick_time					 )	/*Disconnected DeepSleep Timer tick interval		*/
 
 /**********************************************************************
 * Added for Pattern-matching WakeOnLan. (See firmware design note WMDN281C)
@@ -459,86 +459,86 @@ XX1( CFG_DEFAULT_KEYS,			KEY_STRCT, key[4]			 )	/*defines set of encryption keys
 #define WOL_BUF_SIZE	(WOL_PATTERNS * (WOL_PATTERN_LEN + WOL_MASK_LEN + 6) / 2)
 X2( CFG_WOL_PATTERNS, nPatterns, buffer[WOL_BUF_SIZE]		 )  /*[STA] WakeOnLan pattern match, room for 5 patterns*/
 
- X5( CFG_SUP_RANGE,		role, id, variant, bottom, top				   ) /*[PRI] Primary Supplier compatibility range		*/
+X5( CFG_SUP_RANGE,		role, id, variant, bottom, top				   ) /*[PRI] Primary Supplier compatibility range		*/
 /* NIC Information */
- X4( CFG_IDENTITY,			comp_id, variant, version_major, version_minor ) /*identification Prototype							*/
+X4( CFG_IDENTITY,			comp_id, variant, version_major, version_minor ) /*identification Prototype							*/
 #define CFG_DRV_IDENTITY_STRCT	CFG_IDENTITY_STRCT
 #define CFG_PRI_IDENTITY_STRCT	CFG_IDENTITY_STRCT
 #define CFG_NIC_IDENTITY_STRCT	CFG_IDENTITY_STRCT
 #define CFG_FW_IDENTITY_STRCT	CFG_IDENTITY_STRCT
- X1( CFG_RID_INF_MIN,		y											   ) /*lowest value representing an Information RID		*/
- X1( CFG_MAX_LOAD_TIME,		max_load_time								   ) /*[PRI] Max response time of the Download command	*/
- X3( CFG_DL_BUF,			buf_page, buf_offset, buf_len				   ) /*[PRI] Download buffer location and size			*/
+X1( CFG_RID_INF_MIN,		y											   ) /*lowest value representing an Information RID		*/
+X1( CFG_MAX_LOAD_TIME,		max_load_time								   ) /*[PRI] Max response time of the Download command	*/
+X3( CFG_DL_BUF,			buf_page, buf_offset, buf_len				   ) /*[PRI] Download buffer location and size			*/
 // X5( CFG_PRI_SUP_RANGE,		role, id, variant, bottom, top				   ) /*[PRI] Primary Supplier compatibility range		*/
- X5( CFG_CFI_ACT_RANGES_PRI,role, id, variant, bottom, top				   ) /*[PRI] Controller Actor compatibility ranges		*/
+X5( CFG_CFI_ACT_RANGES_PRI,role, id, variant, bottom, top				   ) /*[PRI] Controller Actor compatibility ranges		*/
 // X5( CFG_NIC_HSI_SUP_RANGE,	role, id, variant, bottom, top				   ) /*H/W - S/W I/F supplier range						*/
- X1( CFG_NIC_SERIAL_NUMBER,	serial_number[17]							   ) /*[PRI] Network I/F Card serial number				*/
- X5( CFG_NIC_MFI_SUP_RANGE,	role, id, variant, bottom, top				   ) /*[PRI] Modem I/F Supplier compatibility range		*/
- X5( CFG_NIC_CFI_SUP_RANGE,	role, id, variant, bottom, top				   ) /*[PRI] Controller I/F Supplier compatibility range*/
+X1( CFG_NIC_SERIAL_NUMBER,	serial_number[17]							   ) /*[PRI] Network I/F Card serial number				*/
+X5( CFG_NIC_MFI_SUP_RANGE,	role, id, variant, bottom, top				   ) /*[PRI] Modem I/F Supplier compatibility range		*/
+X5( CFG_NIC_CFI_SUP_RANGE,	role, id, variant, bottom, top				   ) /*[PRI] Controller I/F Supplier compatibility range*/
 //H-I X1( CFG_CHANNEL_LIST,		channel_list								   ) /*Allowed communication channels					*/
 //H-I XX2( CFG_REG_DOMAINS,		hcf_16, num_domain, hcf_8, reg_domains[10]	   ) /*List of intended regulatory domains				*/
- X1( CFG_NIC_TEMP_TYPE,		temp_type									   ) /*Hardware temperature range code					*/
+X1( CFG_NIC_TEMP_TYPE,		temp_type									   ) /*Hardware temperature range code					*/
 //H-I X1( CFG_CIS,				cis[240]									   ) /*PC Card Standard Card Information Structure		*/
- X5( CFG_NIC_PROFILE,													   \
-		 profile_code, capability_options, allowed_data_rates, val4, val5  ) /*Card Profile										*/
+X5( CFG_NIC_PROFILE,													   \
+    profile_code, capability_options, allowed_data_rates, val4, val5  ) /*Card Profile										*/
 // X5( CFG_FW_SUP_RANGE,		role, id, variant, bottom, top				   ) /*[STA] Station I/F Supplier compatibility range	*/
- X5( CFG_MFI_ACT_RANGES,	role, id, variant, bottom, top				   ) /*[STA] Modem I/F Actor compatibility ranges		*/
- X5( CFG_CFI_ACT_RANGES_STA,role, id, variant, bottom, top				   ) /*[STA] Controller I/F Actor compatibility ranges	*/
- X5( CFG_MFI_ACT_RANGES_STA,role, id, variant, bottom, top				   ) /*[STA] Controller I/F Actor compatibility ranges	*/
- X1( CFG_NIC_BUS_TYPE,		nic_bus_type								   ) /*NIC bustype derived from BUSSEL host I/F signals */
+X5( CFG_MFI_ACT_RANGES,	role, id, variant, bottom, top				   ) /*[STA] Modem I/F Actor compatibility ranges		*/
+X5( CFG_CFI_ACT_RANGES_STA,role, id, variant, bottom, top				   ) /*[STA] Controller I/F Actor compatibility ranges	*/
+X5( CFG_MFI_ACT_RANGES_STA,role, id, variant, bottom, top				   ) /*[STA] Controller I/F Actor compatibility ranges	*/
+X1( CFG_NIC_BUS_TYPE,		nic_bus_type								   ) /*NIC bustype derived from BUSSEL host I/F signals */
 
 /*	MAC INFORMATION	*/
- X1( CFG_PORT_STAT,				port_stat							 ) /*[STA] Actual MAC Port connection control status		*/
- X1( CFG_CUR_SSID,				ssid[17]							 ) /*[STA] Identification of the actually connected SS		*/
- X1( CFG_CUR_BSSID,				mac_addr[3]							 ) /*[STA] Identification of the actually connected BSS		*/
- X3( CFG_COMMS_QUALITY,			coms_qual, signal_lvl, noise_lvl	 ) /*[STA] Quality of the Basic Service Set connection		*/
- X1( CFG_CUR_TX_RATE,			rate								 ) /*[STA] Actual transmit data rate						*/
- X1( CFG_CUR_BEACON_INTERVAL,	interval							 ) /*Beacon transmit interval time for BSS creation			*/
+X1( CFG_PORT_STAT,				port_stat							 ) /*[STA] Actual MAC Port connection control status		*/
+X1( CFG_CUR_SSID,				ssid[17]							 ) /*[STA] Identification of the actually connected SS		*/
+X1( CFG_CUR_BSSID,				mac_addr[3]							 ) /*[STA] Identification of the actually connected BSS		*/
+X3( CFG_COMMS_QUALITY,			coms_qual, signal_lvl, noise_lvl	 ) /*[STA] Quality of the Basic Service Set connection		*/
+X1( CFG_CUR_TX_RATE,			rate								 ) /*[STA] Actual transmit data rate						*/
+X1( CFG_CUR_BEACON_INTERVAL,	interval							 ) /*Beacon transmit interval time for BSS creation			*/
 #if (HCF_TYPE) & HCF_TYPE_WARP
- X11( CFG_CUR_SCALE_THRH,											 \
-	 carrier_detect_thrh_cck, carrier_detect_thrh_ofdm, defer_thrh,	 \
-	 energy_detect_thrh, rssi_on_thrh_deviation, 					 \
-	 rssi_off_thrh_deviation, cck_drop_thrh, ofdm_drop_thrh, 		 \
-	 cell_search_thrh, out_of_range_thrh, delta_snr				 )
+X11( CFG_CUR_SCALE_THRH,											 \
+     carrier_detect_thrh_cck, carrier_detect_thrh_ofdm, defer_thrh,	 \
+     energy_detect_thrh, rssi_on_thrh_deviation, 					 \
+     rssi_off_thrh_deviation, cck_drop_thrh, ofdm_drop_thrh, 		 \
+     cell_search_thrh, out_of_range_thrh, delta_snr				 )
 #else
- X6( CFG_CUR_SCALE_THRH,											 \
-	 energy_detect_thrh, carrier_detect_thrh, defer_thrh, 			 \
-	 cell_search_thrh, out_of_range_thrh, delta_snr					 ) /*Actual System Scale thresholds settings				*/
+X6( CFG_CUR_SCALE_THRH,											 \
+    energy_detect_thrh, carrier_detect_thrh, defer_thrh, 			 \
+    cell_search_thrh, out_of_range_thrh, delta_snr					 ) /*Actual System Scale thresholds settings				*/
 #endif // HCF_TYPE_WARP
- X1( CFG_PROTOCOL_RSP_TIME,		time								 ) /*Max time to await a response to a request message		*/
- X1( CFG_CUR_SHORT_RETRY_LIMIT,	limit								 ) /*Max number of transmit attempts for short frames		*/
- X1( CFG_CUR_LONG_RETRY_LIMIT,	limit								 ) /*Max number of transmit attempts for long frames		*/
- X1( CFG_MAX_TX_LIFETIME,		time								 ) /*Max transmit frame handling duration					*/
- X1( CFG_MAX_RX_LIFETIME,		time								 ) /*Max received frame handling duration					*/
- X1( CFG_CF_POLLABLE,			cf_pollable							 ) /*[STA] Contention Free pollable capability indication	*/
- X2( CFG_AUTHENTICATION_ALGORITHMS,authentication_type, type_enabled ) /*Authentication Algorithm								*/
- X1( CFG_PRIVACY_OPT_IMPLEMENTED,privacy_opt_implemented			 ) /*WEP Option availability indication						*/
- X1( CFG_CUR_REMOTE_RATES,		rates								 ) /*CurrentRemoteRates										*/
- X1( CFG_CUR_USED_RATES,		rates								 ) /*CurrentUsedRates										*/
- X1( CFG_CUR_SYSTEM_SCALE,		current_system_scale				 ) /*CurrentUsedRates										*/
- X1( CFG_CUR_TX_RATE1,			rate 								 ) /*[AP] Actual Port 1 transmit data rate					*/
- X1( CFG_CUR_TX_RATE2,			rate								 ) /*[AP] Actual Port 2 transmit data rate					*/
- X1( CFG_CUR_TX_RATE3,			rate								 ) /*[AP] Actual Port 3 transmit data rate					*/
- X1( CFG_CUR_TX_RATE4,			rate								 ) /*[AP] Actual Port 4 transmit data rate					*/
- X1( CFG_CUR_TX_RATE5,			rate								 ) /*[AP] Actual Port 5 transmit data rate					*/
- X1( CFG_CUR_TX_RATE6,			rate								 ) /*[AP] Actual Port 6 transmit data rate					*/
- X1( CFG_OWN_MAC_ADDR,			mac_addr[3]							 ) /*[AP] Unique local node MAC Address						*/
- X3( CFG_PCF_INFO,				medium_occupancy_limit, 			 \
-		 						cfp_period, cfp_max_duration 		 ) /*[AP] Point Coordination Function capability info		*/
- X1( CFG_CUR_WPA_INFO_ELEMENT, ssn_info_element[1]				 	 ) /*    													*/
- X4( CFG_CUR_TKIP_IV_INFO, 											 \
-		 tkip_seq_cnt0[4], tkip_seq_cnt1[4], 						 \
-		 tkip_seq_cnt2[4], tkip_seq_cnt3[4]  						 ) /*    													*/
- X2( CFG_CUR_ASSOC_REQ_INFO,	frame_type, frame_body[1]			 ) /*	0xFD8C												*/
- X2( CFG_CUR_ASSOC_RESP_INFO,	frame_type, frame_body[1]			 ) /*	0xFD8D												*/
+X1( CFG_PROTOCOL_RSP_TIME,		time								 ) /*Max time to await a response to a request message		*/
+X1( CFG_CUR_SHORT_RETRY_LIMIT,	limit								 ) /*Max number of transmit attempts for short frames		*/
+X1( CFG_CUR_LONG_RETRY_LIMIT,	limit								 ) /*Max number of transmit attempts for long frames		*/
+X1( CFG_MAX_TX_LIFETIME,		time								 ) /*Max transmit frame handling duration					*/
+X1( CFG_MAX_RX_LIFETIME,		time								 ) /*Max received frame handling duration					*/
+X1( CFG_CF_POLLABLE,			cf_pollable							 ) /*[STA] Contention Free pollable capability indication	*/
+X2( CFG_AUTHENTICATION_ALGORITHMS,authentication_type, type_enabled ) /*Authentication Algorithm								*/
+X1( CFG_PRIVACY_OPT_IMPLEMENTED,privacy_opt_implemented			 ) /*WEP Option availability indication						*/
+X1( CFG_CUR_REMOTE_RATES,		rates								 ) /*CurrentRemoteRates										*/
+X1( CFG_CUR_USED_RATES,		rates								 ) /*CurrentUsedRates										*/
+X1( CFG_CUR_SYSTEM_SCALE,		current_system_scale				 ) /*CurrentUsedRates										*/
+X1( CFG_CUR_TX_RATE1,			rate 								 ) /*[AP] Actual Port 1 transmit data rate					*/
+X1( CFG_CUR_TX_RATE2,			rate								 ) /*[AP] Actual Port 2 transmit data rate					*/
+X1( CFG_CUR_TX_RATE3,			rate								 ) /*[AP] Actual Port 3 transmit data rate					*/
+X1( CFG_CUR_TX_RATE4,			rate								 ) /*[AP] Actual Port 4 transmit data rate					*/
+X1( CFG_CUR_TX_RATE5,			rate								 ) /*[AP] Actual Port 5 transmit data rate					*/
+X1( CFG_CUR_TX_RATE6,			rate								 ) /*[AP] Actual Port 6 transmit data rate					*/
+X1( CFG_OWN_MAC_ADDR,			mac_addr[3]							 ) /*[AP] Unique local node MAC Address						*/
+X3( CFG_PCF_INFO,				medium_occupancy_limit, 			 \
+    cfp_period, cfp_max_duration 		 ) /*[AP] Point Coordination Function capability info		*/
+X1( CFG_CUR_WPA_INFO_ELEMENT, ssn_info_element[1]				 	 ) /*    													*/
+X4( CFG_CUR_TKIP_IV_INFO, 											 \
+    tkip_seq_cnt0[4], tkip_seq_cnt1[4], 						 \
+    tkip_seq_cnt2[4], tkip_seq_cnt3[4]  						 ) /*    													*/
+X2( CFG_CUR_ASSOC_REQ_INFO,	frame_type, frame_body[1]			 ) /*	0xFD8C												*/
+X2( CFG_CUR_ASSOC_RESP_INFO,	frame_type, frame_body[1]			 ) /*	0xFD8D												*/
 
 
 /*	Modem INFORMATION */
- X1( CFG_PHY_TYPE,				phy_type 							 ) /*Physical layer type indication							*/
- X1( CFG_CUR_CHANNEL,			current_channel						 ) /*Actual frequency channel used for transmission			*/
- X1( CFG_CUR_POWER_STATE,		current_power_state					 ) /*Actual power consumption status						*/
- X1( CFG_CCAMODE,				cca_mode							 ) /*Clear channel assessment mode indication				*/
- X1( CFG_SUPPORTED_DATA_RATES,	rates[5]							 ) /*Data rates capability information						*/
+X1( CFG_PHY_TYPE,				phy_type 							 ) /*Physical layer type indication							*/
+X1( CFG_CUR_CHANNEL,			current_channel						 ) /*Actual frequency channel used for transmission			*/
+X1( CFG_CUR_POWER_STATE,		current_power_state					 ) /*Actual power consumption status						*/
+X1( CFG_CCAMODE,				cca_mode							 ) /*Clear channel assessment mode indication				*/
+X1( CFG_SUPPORTED_DATA_RATES,	rates[5]							 ) /*Data rates capability information						*/
 
 
 /* FRAMES */
@@ -1012,12 +1012,12 @@ XX1( CFG_SCAN,					SCAN_RS_STRCT, scan_result[32]		 ) /*Scan results											*
 #define CFG_PRS_SCAN					0xF102		//Probe Response Scan results
 
 #define CFG_LINK_STAT 					0xF200		//Link Status
-	/* 1 through 5 are F/W defined values, produced by CFG_LINK_STAT frame
-	 * 1 through 5 are shared by CFG_LINK_STAT, IFB_LinkStat and IFB_DSLinkStat
-	 * 1 plays a double role as CFG_LINK_STAT_CONNECTED and as bit reflecting:
-	 *	 - connected: ON
-	 *	 - disconnected: OFF
-	 */
+/* 1 through 5 are F/W defined values, produced by CFG_LINK_STAT frame
+ * 1 through 5 are shared by CFG_LINK_STAT, IFB_LinkStat and IFB_DSLinkStat
+ * 1 plays a double role as CFG_LINK_STAT_CONNECTED and as bit reflecting:
+ *	 - connected: ON
+ *	 - disconnected: OFF
+ */
 #define 	CFG_LINK_STAT_CONNECTED			0x0001
 #define 	CFG_LINK_STAT_DISCONNECTED		0x0002
 #define 	CFG_LINK_STAT_AP_CHANGE			0x0003
@@ -1042,13 +1042,13 @@ typedef LTV_STRCT FAR *	LTVP;   // i.s.o #define LTVP LTV_STRCT FAR *
 
 #if defined WVLAN_42 || defined WVLAN_43 //;?keepup with legacy a little while longer (4aug2003)
 typedef struct DUI_STRCT {			/* "legacy", still used by WVLAN42/43, NDIS drivers use WLAPI			*/
-	void  FAR	*ifbp;				/* Pointer to IFB
+    void  FAR	*ifbp;				/* Pointer to IFB
 									 *	returned from MSF to USF by uil_connect
 				 					 *	passed from USF to MSF as a "magic cookie" by all other UIL function calls
 				 					 */
-	hcf_16		stat;				// status returned from MSF to USF
-	hcf_16		fun;				// command code from USF to MSF
-	LTV_STRCT	ltv;				/* LTV structure
+    hcf_16		stat;				// status returned from MSF to USF
+    hcf_16		fun;				// command code from USF to MSF
+    LTV_STRCT	ltv;				/* LTV structure
 			 						 *** during uil_put_info:
 						 			 *	  the L, T and V-fields carry information from USF to MSF
 									 *** during uil_get_info:
@@ -1061,43 +1061,43 @@ typedef DUI_STRCT FAR *	DUIP;
 
 
 typedef struct CFG_CMD_NIC_STRCT {	// CFG_CMD_NIC (0x0860)		Hermes Engineering command
-	hcf_16	len;					//default length of RID
-	hcf_16	typ;					//RID identification as defined by Hermes
-	hcf_16	cmd;					//Command code (0x003F) and control bits (0xFFC0)
-	hcf_16	parm0;					//parameters for Hermes Param0 register
-	hcf_16	parm1;					//parameters for Hermes Param1 register
-	hcf_16	parm2;					//parameters for Hermes Param2 register
-	hcf_16	stat;					//result code from Hermes Status register
-	hcf_16	resp0;					//responses from Hermes Resp0 register
-	hcf_16	resp1;					//responses from Hermes Resp1 register
-	hcf_16	resp2;					//responses from Hermes Resp2 register
-	hcf_16	hcf_stat;				//result code from cmd_exe routine
-	hcf_16	ifb_err_cmd;			//IFB_ErrCmd
-	hcf_16	ifb_err_qualifier;		//IFB_ErrQualifier
+    hcf_16	len;					//default length of RID
+    hcf_16	typ;					//RID identification as defined by Hermes
+    hcf_16	cmd;					//Command code (0x003F) and control bits (0xFFC0)
+    hcf_16	parm0;					//parameters for Hermes Param0 register
+    hcf_16	parm1;					//parameters for Hermes Param1 register
+    hcf_16	parm2;					//parameters for Hermes Param2 register
+    hcf_16	stat;					//result code from Hermes Status register
+    hcf_16	resp0;					//responses from Hermes Resp0 register
+    hcf_16	resp1;					//responses from Hermes Resp1 register
+    hcf_16	resp2;					//responses from Hermes Resp2 register
+    hcf_16	hcf_stat;				//result code from cmd_exe routine
+    hcf_16	ifb_err_cmd;			//IFB_ErrCmd
+    hcf_16	ifb_err_qualifier;		//IFB_ErrQualifier
 } CFG_CMD_NIC_STRCT;
 
 
 typedef struct CFG_DRV_INFO_STRCT {		//CFG_DRV_INFO (0x0825) driver information
-	hcf_16	len;					//default length of RID
-	hcf_16	typ;					//RID identification as defined by Hermes
-	hcf_8	driver_name[8];			//Driver name, 8 bytes, right zero padded
-	hcf_16	driver_version;			//BCD 2 digit major and 2 digit minor driver version
-	hcf_16	HCF_version;   			//BCD 2 digit major and 2 digit minor HCF version
-	hcf_16	driver_stat;			//
-	hcf_16	IO_address;				//base IO address used by NIC
-	hcf_16	IO_range;				//range of IO addresses used by NIC
-	hcf_16	IRQ_number;				//Interrupt used by NIC
-	hcf_16	card_stat;				/*NIC status
+    hcf_16	len;					//default length of RID
+    hcf_16	typ;					//RID identification as defined by Hermes
+    hcf_8	driver_name[8];			//Driver name, 8 bytes, right zero padded
+    hcf_16	driver_version;			//BCD 2 digit major and 2 digit minor driver version
+    hcf_16	HCF_version;   			//BCD 2 digit major and 2 digit minor HCF version
+    hcf_16	driver_stat;			//
+    hcf_16	IO_address;				//base IO address used by NIC
+    hcf_16	IO_range;				//range of IO addresses used by NIC
+    hcf_16	IRQ_number;				//Interrupt used by NIC
+    hcf_16	card_stat;				/*NIC status
 									@*	0x8000	Card present
 									@*	0x4000	Card Enabled
 									@*	0x2000	Driver incompatible with NIC Primary Functions
 									@*	0x1000	Driver incompatible with NIC Station Functions				*/
-	hcf_16	frame_type;				/*Frame type
+    hcf_16	frame_type;				/*Frame type
 									@*	0x000	802.3
 									@*	0x008	802.11														*/
-	hcf_32	drv_info;				/*driver specific info
+    hcf_32	drv_info;				/*driver specific info
 									 * CE: virtual I/O base													*/
-}CFG_DRV_INFO_STRCT;
+} CFG_DRV_INFO_STRCT;
 
 #define COMP_ID_FW_PRI					21		//Primary Functions Firmware
 #define COMP_ID_FW_INTERMEDIATE			22		//Intermediate Functions Firmware
@@ -1134,7 +1134,7 @@ typedef struct CFG_DRV_INFO_STRCT {		//CFG_DRV_INFO (0x0825) driver information
 #define COMP_ROLE_SUPL					0x00	//supplier
 #define COMP_ROLE_ACT					0x01	//actor
 
-												//Supplier			  - actor
+//Supplier			  - actor
 #define COMP_ID_MFI						0x01	//Modem		 		  - Firmware	I/F
 #define COMP_ID_CFI						0x02	//Controller		  - Firmware	I/F
 #define COMP_ID_PRI						0x03	//Primary Firmware	  - Driver		I/F

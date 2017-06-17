@@ -31,7 +31,7 @@ unsigned int do_csum(const void *voidptr, int len);
  */
 #define csum_partial_copy_nocheck csum_partial_copy_nocheck
 __wsum csum_partial_copy_nocheck(const void *src, void *dst,
-					int len, __wsum sum);
+                                 int len, __wsum sum);
 
 /*
  * computes the checksum of the TCP/UDP pseudo-header
@@ -39,11 +39,11 @@ __wsum csum_partial_copy_nocheck(const void *src, void *dst,
  */
 #define csum_tcpudp_nofold csum_tcpudp_nofold
 __wsum csum_tcpudp_nofold(unsigned long saddr, unsigned long daddr,
-	unsigned short len, unsigned short proto, __wsum sum);
+                          unsigned short len, unsigned short proto, __wsum sum);
 
 #define csum_tcpudp_magic csum_tcpudp_magic
 __sum16 csum_tcpudp_magic(unsigned long saddr, unsigned long daddr,
-	unsigned short len, unsigned short proto, __wsum sum);
+                          unsigned short len, unsigned short proto, __wsum sum);
 
 #include <asm-generic/checksum.h>
 

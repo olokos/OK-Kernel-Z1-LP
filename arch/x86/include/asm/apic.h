@@ -37,8 +37,7 @@
 #if defined(CONFIG_X86_LOCAL_APIC) && defined(CONFIG_X86_32)
 extern void generic_apic_probe(void);
 #else
-static inline void generic_apic_probe(void)
-{
+static inline void generic_apic_probe(void) {
 }
 #endif
 
@@ -53,15 +52,13 @@ extern unsigned int lapic_timer_frequency;
 #ifdef CONFIG_SMP
 extern void __inquire_remote_apic(int apicid);
 #else /* CONFIG_SMP */
-static inline void __inquire_remote_apic(int apicid)
-{
+static inline void __inquire_remote_apic(int apicid) {
 }
 #endif /* CONFIG_SMP */
 
-static inline void default_inquire_remote_apic(int apicid)
-{
-	if (apic_verbosity >= APIC_DEBUG)
-		__inquire_remote_apic(apicid);
+static inline void default_inquire_remote_apic(int apicid) {
+    if (apic_verbosity >= APIC_DEBUG)
+        __inquire_remote_apic(apicid);
 }
 
 /*
@@ -72,9 +69,8 @@ static inline void default_inquire_remote_apic(int apicid)
  * which set smp presence flag as well so we are safe
  * to use this helper too).
  */
-static inline bool apic_from_smp_config(void)
-{
-	return smp_found_config && !disable_apic;
+static inline bool apic_from_smp_config(void) {
+    return smp_found_config && !disable_apic;
 }
 
 /*
@@ -87,9 +83,8 @@ static inline bool apic_from_smp_config(void)
 #ifdef CONFIG_X86_64
 extern int is_vsmp_box(void);
 #else
-static inline int is_vsmp_box(void)
-{
-	return 0;
+static inline int is_vsmp_box(void) {
+    return 0;
 }
 #endif
 extern void xapic_wait_icr_idle(void);
@@ -97,18 +92,16 @@ extern u32 safe_xapic_wait_icr_idle(void);
 extern void xapic_icr_write(u32, u32);
 extern int setup_profiling_timer(unsigned int);
 
-static inline void native_apic_mem_write(u32 reg, u32 v)
-{
-	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
+static inline void native_apic_mem_write(u32 reg, u32 v) {
+    volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
 
-	alternative_io("movl %0, %1", "xchgl %0, %1", X86_FEATURE_11AP,
-		       ASM_OUTPUT2("=r" (v), "=m" (*addr)),
-		       ASM_OUTPUT2("0" (v), "m" (*addr)));
+    alternative_io("movl %0, %1", "xchgl %0, %1", X86_FEATURE_11AP,
+                   ASM_OUTPUT2("=r" (v), "=m" (*addr)),
+                   ASM_OUTPUT2("0" (v), "m" (*addr)));
 }
 
-static inline u32 native_apic_mem_read(u32 reg)
-{
-	return *((volatile u32 *)(APIC_BASE + reg));
+static inline u32 native_apic_mem_read(u32 reg) {
+    return *((volatile u32 *)(APIC_BASE + reg));
 }
 
 extern void native_apic_wait_icr_idle(void);
@@ -124,54 +117,47 @@ extern int x2apic_mode;
  * sending the IPI through x2apic wrmsr. We need a serializing instruction or
  * mfence for this.
  */
-static inline void x2apic_wrmsr_fence(void)
-{
-	asm volatile("mfence" : : : "memory");
+static inline void x2apic_wrmsr_fence(void) {
+    asm volatile("mfence" : : : "memory");
 }
 
-static inline void native_apic_msr_write(u32 reg, u32 v)
-{
-	if (reg == APIC_DFR || reg == APIC_ID || reg == APIC_LDR ||
-	    reg == APIC_LVR)
-		return;
+static inline void native_apic_msr_write(u32 reg, u32 v) {
+    if (reg == APIC_DFR || reg == APIC_ID || reg == APIC_LDR ||
+            reg == APIC_LVR)
+        return;
 
-	wrmsr(APIC_BASE_MSR + (reg >> 4), v, 0);
+    wrmsr(APIC_BASE_MSR + (reg >> 4), v, 0);
 }
 
-static inline u32 native_apic_msr_read(u32 reg)
-{
-	u64 msr;
+static inline u32 native_apic_msr_read(u32 reg) {
+    u64 msr;
 
-	if (reg == APIC_DFR)
-		return -1;
+    if (reg == APIC_DFR)
+        return -1;
 
-	rdmsrl(APIC_BASE_MSR + (reg >> 4), msr);
-	return (u32)msr;
+    rdmsrl(APIC_BASE_MSR + (reg >> 4), msr);
+    return (u32)msr;
 }
 
-static inline void native_x2apic_wait_icr_idle(void)
-{
-	/* no need to wait for icr idle in x2apic */
-	return;
+static inline void native_x2apic_wait_icr_idle(void) {
+    /* no need to wait for icr idle in x2apic */
+    return;
 }
 
-static inline u32 native_safe_x2apic_wait_icr_idle(void)
-{
-	/* no need to wait for icr idle in x2apic */
-	return 0;
+static inline u32 native_safe_x2apic_wait_icr_idle(void) {
+    /* no need to wait for icr idle in x2apic */
+    return 0;
 }
 
-static inline void native_x2apic_icr_write(u32 low, u32 id)
-{
-	wrmsrl(APIC_BASE_MSR + (APIC_ICR >> 4), ((__u64) id) << 32 | low);
+static inline void native_x2apic_icr_write(u32 low, u32 id) {
+    wrmsrl(APIC_BASE_MSR + (APIC_ICR >> 4), ((__u64) id) << 32 | low);
 }
 
-static inline u64 native_x2apic_icr_read(void)
-{
-	unsigned long val;
+static inline u64 native_x2apic_icr_read(void) {
+    unsigned long val;
 
-	rdmsrl(APIC_BASE_MSR + (APIC_ICR >> 4), val);
-	return val;
+    rdmsrl(APIC_BASE_MSR + (APIC_ICR >> 4), val);
+    return val;
 }
 
 extern int x2apic_phys;
@@ -179,40 +165,33 @@ extern int x2apic_preenabled;
 extern void check_x2apic(void);
 extern void enable_x2apic(void);
 extern void x2apic_icr_write(u32 low, u32 id);
-static inline int x2apic_enabled(void)
-{
-	u64 msr;
+static inline int x2apic_enabled(void) {
+    u64 msr;
 
-	if (!cpu_has_x2apic)
-		return 0;
+    if (!cpu_has_x2apic)
+        return 0;
 
-	rdmsrl(MSR_IA32_APICBASE, msr);
-	if (msr & X2APIC_ENABLE)
-		return 1;
-	return 0;
+    rdmsrl(MSR_IA32_APICBASE, msr);
+    if (msr & X2APIC_ENABLE)
+        return 1;
+    return 0;
 }
 
 #define x2apic_supported()	(cpu_has_x2apic)
-static inline void x2apic_force_phys(void)
-{
-	x2apic_phys = 1;
+static inline void x2apic_force_phys(void) {
+    x2apic_phys = 1;
 }
 #else
-static inline void disable_x2apic(void)
-{
+static inline void disable_x2apic(void) {
 }
-static inline void check_x2apic(void)
-{
+static inline void check_x2apic(void) {
 }
-static inline void enable_x2apic(void)
-{
+static inline void enable_x2apic(void) {
 }
-static inline int x2apic_enabled(void)
-{
-	return 0;
+static inline int x2apic_enabled(void) {
+    return 0;
 }
-static inline void x2apic_force_phys(void)
-{
+static inline void x2apic_force_phys(void) {
 }
 
 #define	nox2apic	0
@@ -249,9 +228,8 @@ extern int apic_force_enable(unsigned long addr);
 #ifdef CONFIG_X86_64
 extern int apic_is_clustered_box(void);
 #else
-static inline int apic_is_clustered_box(void)
-{
-	return 0;
+static inline int apic_is_clustered_box(void) {
+    return 0;
 }
 #endif
 
@@ -283,99 +261,99 @@ static inline void disable_local_APIC(void) { }
  * James Cleverdon.
  */
 struct apic {
-	char *name;
+    char *name;
 
-	int (*probe)(void);
-	int (*acpi_madt_oem_check)(char *oem_id, char *oem_table_id);
-	int (*apic_id_valid)(int apicid);
-	int (*apic_id_registered)(void);
+    int (*probe)(void);
+    int (*acpi_madt_oem_check)(char *oem_id, char *oem_table_id);
+    int (*apic_id_valid)(int apicid);
+    int (*apic_id_registered)(void);
 
-	u32 irq_delivery_mode;
-	u32 irq_dest_mode;
+    u32 irq_delivery_mode;
+    u32 irq_dest_mode;
 
-	const struct cpumask *(*target_cpus)(void);
+    const struct cpumask *(*target_cpus)(void);
 
-	int disable_esr;
+    int disable_esr;
 
-	int dest_logical;
-	unsigned long (*check_apicid_used)(physid_mask_t *map, int apicid);
-	unsigned long (*check_apicid_present)(int apicid);
+    int dest_logical;
+    unsigned long (*check_apicid_used)(physid_mask_t *map, int apicid);
+    unsigned long (*check_apicid_present)(int apicid);
 
-	void (*vector_allocation_domain)(int cpu, struct cpumask *retmask);
-	void (*init_apic_ldr)(void);
+    void (*vector_allocation_domain)(int cpu, struct cpumask *retmask);
+    void (*init_apic_ldr)(void);
 
-	void (*ioapic_phys_id_map)(physid_mask_t *phys_map, physid_mask_t *retmap);
+    void (*ioapic_phys_id_map)(physid_mask_t *phys_map, physid_mask_t *retmap);
 
-	void (*setup_apic_routing)(void);
-	int (*multi_timer_check)(int apic, int irq);
-	int (*cpu_present_to_apicid)(int mps_cpu);
-	void (*apicid_to_cpu_present)(int phys_apicid, physid_mask_t *retmap);
-	void (*setup_portio_remap)(void);
-	int (*check_phys_apicid_present)(int phys_apicid);
-	void (*enable_apic_mode)(void);
-	int (*phys_pkg_id)(int cpuid_apic, int index_msb);
+    void (*setup_apic_routing)(void);
+    int (*multi_timer_check)(int apic, int irq);
+    int (*cpu_present_to_apicid)(int mps_cpu);
+    void (*apicid_to_cpu_present)(int phys_apicid, physid_mask_t *retmap);
+    void (*setup_portio_remap)(void);
+    int (*check_phys_apicid_present)(int phys_apicid);
+    void (*enable_apic_mode)(void);
+    int (*phys_pkg_id)(int cpuid_apic, int index_msb);
 
-	/*
-	 * When one of the next two hooks returns 1 the apic
-	 * is switched to this. Essentially they are additional
-	 * probe functions:
-	 */
-	int (*mps_oem_check)(struct mpc_table *mpc, char *oem, char *productid);
+    /*
+     * When one of the next two hooks returns 1 the apic
+     * is switched to this. Essentially they are additional
+     * probe functions:
+     */
+    int (*mps_oem_check)(struct mpc_table *mpc, char *oem, char *productid);
 
-	unsigned int (*get_apic_id)(unsigned long x);
-	unsigned long (*set_apic_id)(unsigned int id);
-	unsigned long apic_id_mask;
+    unsigned int (*get_apic_id)(unsigned long x);
+    unsigned long (*set_apic_id)(unsigned int id);
+    unsigned long apic_id_mask;
 
-	unsigned int (*cpu_mask_to_apicid)(const struct cpumask *cpumask);
-	unsigned int (*cpu_mask_to_apicid_and)(const struct cpumask *cpumask,
-					       const struct cpumask *andmask);
+    unsigned int (*cpu_mask_to_apicid)(const struct cpumask *cpumask);
+    unsigned int (*cpu_mask_to_apicid_and)(const struct cpumask *cpumask,
+                                           const struct cpumask *andmask);
 
-	/* ipi */
-	void (*send_IPI_mask)(const struct cpumask *mask, int vector);
-	void (*send_IPI_mask_allbutself)(const struct cpumask *mask,
-					 int vector);
-	void (*send_IPI_allbutself)(int vector);
-	void (*send_IPI_all)(int vector);
-	void (*send_IPI_self)(int vector);
+    /* ipi */
+    void (*send_IPI_mask)(const struct cpumask *mask, int vector);
+    void (*send_IPI_mask_allbutself)(const struct cpumask *mask,
+                                     int vector);
+    void (*send_IPI_allbutself)(int vector);
+    void (*send_IPI_all)(int vector);
+    void (*send_IPI_self)(int vector);
 
-	/* wakeup_secondary_cpu */
-	int (*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
+    /* wakeup_secondary_cpu */
+    int (*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
 
-	int trampoline_phys_low;
-	int trampoline_phys_high;
+    int trampoline_phys_low;
+    int trampoline_phys_high;
 
-	void (*wait_for_init_deassert)(atomic_t *deassert);
-	void (*smp_callin_clear_local_apic)(void);
-	void (*inquire_remote_apic)(int apicid);
+    void (*wait_for_init_deassert)(atomic_t *deassert);
+    void (*smp_callin_clear_local_apic)(void);
+    void (*inquire_remote_apic)(int apicid);
 
-	/* apic ops */
-	u32 (*read)(u32 reg);
-	void (*write)(u32 reg, u32 v);
-	u64 (*icr_read)(void);
-	void (*icr_write)(u32 low, u32 high);
-	void (*wait_icr_idle)(void);
-	u32 (*safe_wait_icr_idle)(void);
+    /* apic ops */
+    u32 (*read)(u32 reg);
+    void (*write)(u32 reg, u32 v);
+    u64 (*icr_read)(void);
+    void (*icr_write)(u32 low, u32 high);
+    void (*wait_icr_idle)(void);
+    u32 (*safe_wait_icr_idle)(void);
 
 #ifdef CONFIG_X86_32
-	/*
-	 * Called very early during boot from get_smp_config().  It should
-	 * return the logical apicid.  x86_[bios]_cpu_to_apicid is
-	 * initialized before this function is called.
-	 *
-	 * If logical apicid can't be determined that early, the function
-	 * may return BAD_APICID.  Logical apicid will be configured after
-	 * init_apic_ldr() while bringing up CPUs.  Note that NUMA affinity
-	 * won't be applied properly during early boot in this case.
-	 */
-	int (*x86_32_early_logical_apicid)(int cpu);
+    /*
+     * Called very early during boot from get_smp_config().  It should
+     * return the logical apicid.  x86_[bios]_cpu_to_apicid is
+     * initialized before this function is called.
+     *
+     * If logical apicid can't be determined that early, the function
+     * may return BAD_APICID.  Logical apicid will be configured after
+     * init_apic_ldr() while bringing up CPUs.  Note that NUMA affinity
+     * won't be applied properly during early boot in this case.
+     */
+    int (*x86_32_early_logical_apicid)(int cpu);
 
-	/*
-	 * Optional method called from setup_local_APIC() after logical
-	 * apicid is guaranteed to be known to initialize apicid -> node
-	 * mapping if NUMA initialization hasn't done so already.  Don't
-	 * add new users.
-	 */
-	int (*x86_32_numa_cpu_node)(int cpu);
+    /*
+     * Optional method called from setup_local_APIC() after logical
+     * apicid is guaranteed to be known to initialize apicid -> node
+     * mapping if NUMA initialization hasn't done so already.  Don't
+     * add new users.
+     */
+    int (*x86_32_numa_cpu_node)(int cpu);
 #endif
 };
 
@@ -416,66 +394,64 @@ extern int wakeup_secondary_cpu_via_nmi(int apicid, unsigned long start_eip);
 
 #ifdef CONFIG_X86_LOCAL_APIC
 
-static inline u32 apic_read(u32 reg)
-{
-	return apic->read(reg);
+static inline u32 apic_read(u32 reg) {
+    return apic->read(reg);
 }
 
-static inline void apic_write(u32 reg, u32 val)
-{
-	apic->write(reg, val);
+static inline void apic_write(u32 reg, u32 val) {
+    apic->write(reg, val);
 }
 
-static inline u64 apic_icr_read(void)
-{
-	return apic->icr_read();
+static inline u64 apic_icr_read(void) {
+    return apic->icr_read();
 }
 
-static inline void apic_icr_write(u32 low, u32 high)
-{
-	apic->icr_write(low, high);
+static inline void apic_icr_write(u32 low, u32 high) {
+    apic->icr_write(low, high);
 }
 
-static inline void apic_wait_icr_idle(void)
-{
-	apic->wait_icr_idle();
+static inline void apic_wait_icr_idle(void) {
+    apic->wait_icr_idle();
 }
 
-static inline u32 safe_apic_wait_icr_idle(void)
-{
-	return apic->safe_wait_icr_idle();
+static inline u32 safe_apic_wait_icr_idle(void) {
+    return apic->safe_wait_icr_idle();
 }
 
 #else /* CONFIG_X86_LOCAL_APIC */
 
-static inline u32 apic_read(u32 reg) { return 0; }
+static inline u32 apic_read(u32 reg) {
+    return 0;
+}
 static inline void apic_write(u32 reg, u32 val) { }
-static inline u64 apic_icr_read(void) { return 0; }
+static inline u64 apic_icr_read(void) {
+    return 0;
+}
 static inline void apic_icr_write(u32 low, u32 high) { }
 static inline void apic_wait_icr_idle(void) { }
-static inline u32 safe_apic_wait_icr_idle(void) { return 0; }
+static inline u32 safe_apic_wait_icr_idle(void) {
+    return 0;
+}
 
 #endif /* CONFIG_X86_LOCAL_APIC */
 
-static inline void ack_APIC_irq(void)
-{
-	/*
-	 * ack_APIC_irq() actually gets compiled as a single instruction
-	 * ... yummie.
-	 */
+static inline void ack_APIC_irq(void) {
+    /*
+     * ack_APIC_irq() actually gets compiled as a single instruction
+     * ... yummie.
+     */
 
-	/* Docs say use 0 for future compatibility */
-	apic_write(APIC_EOI, 0);
+    /* Docs say use 0 for future compatibility */
+    apic_write(APIC_EOI, 0);
 }
 
-static inline unsigned default_get_apic_id(unsigned long x)
-{
-	unsigned int ver = GET_APIC_VERSION(apic_read(APIC_LVR));
+static inline unsigned default_get_apic_id(unsigned long x) {
+    unsigned int ver = GET_APIC_VERSION(apic_read(APIC_LVR));
 
-	if (APIC_XAPIC(ver) || boot_cpu_has(X86_FEATURE_EXTD_APICID))
-		return (x >> 24) & 0xFF;
-	else
-		return (x >> 24) & 0x0F;
+    if (APIC_XAPIC(ver) || boot_cpu_has(X86_FEATURE_EXTD_APICID))
+        return (x >> 24) & 0xFF;
+    else
+        return (x >> 24) & 0x0F;
 }
 
 /*
@@ -495,11 +471,10 @@ extern int default_cpu_present_to_apicid(int mps_cpu);
 extern int default_check_phys_apicid_present(int phys_apicid);
 #endif
 
-static inline void default_wait_for_init_deassert(atomic_t *deassert)
-{
-	while (!atomic_read(deassert))
-		cpu_relax();
-	return;
+static inline void default_wait_for_init_deassert(atomic_t *deassert) {
+    while (!atomic_read(deassert))
+        cpu_relax();
+    return;
 }
 
 extern void generic_bigsmp_probe(void);
@@ -511,30 +486,27 @@ extern void generic_bigsmp_probe(void);
 
 #define APIC_DFR_VALUE	(APIC_DFR_FLAT)
 
-static inline const struct cpumask *default_target_cpus(void)
-{
+static inline const struct cpumask *default_target_cpus(void) {
 #ifdef CONFIG_SMP
-	return cpu_online_mask;
+    return cpu_online_mask;
 #else
-	return cpumask_of(0);
+    return cpumask_of(0);
 #endif
 }
 
 DECLARE_EARLY_PER_CPU(u16, x86_bios_cpu_apicid);
 
 
-static inline unsigned int read_apic_id(void)
-{
-	unsigned int reg;
+static inline unsigned int read_apic_id(void) {
+    unsigned int reg;
 
-	reg = apic_read(APIC_ID);
+    reg = apic_read(APIC_ID);
 
-	return apic->get_apic_id(reg);
+    return apic->get_apic_id(reg);
 }
 
-static inline int default_apic_id_valid(int apicid)
-{
-	return (apicid < 255);
+static inline int default_apic_id_valid(int apicid) {
+    return (apicid < 255);
 }
 
 extern void default_setup_apic_routing(void);
@@ -543,9 +515,8 @@ extern struct apic apic_noop;
 
 #ifdef CONFIG_X86_32
 
-static inline int noop_x86_32_early_logical_apicid(int cpu)
-{
-	return BAD_APICID;
+static inline int noop_x86_32_early_logical_apicid(int cpu) {
+    return BAD_APICID;
 }
 
 /*
@@ -557,74 +528,63 @@ static inline int noop_x86_32_early_logical_apicid(int cpu)
  */
 extern void default_init_apic_ldr(void);
 
-static inline int default_apic_id_registered(void)
-{
-	return physid_isset(read_apic_id(), phys_cpu_present_map);
+static inline int default_apic_id_registered(void) {
+    return physid_isset(read_apic_id(), phys_cpu_present_map);
 }
 
-static inline int default_phys_pkg_id(int cpuid_apic, int index_msb)
-{
-	return cpuid_apic >> index_msb;
+static inline int default_phys_pkg_id(int cpuid_apic, int index_msb) {
+    return cpuid_apic >> index_msb;
 }
 
 #endif
 
 static inline unsigned int
-default_cpu_mask_to_apicid(const struct cpumask *cpumask)
-{
-	return cpumask_bits(cpumask)[0] & APIC_ALL_CPUS;
+default_cpu_mask_to_apicid(const struct cpumask *cpumask) {
+    return cpumask_bits(cpumask)[0] & APIC_ALL_CPUS;
 }
 
 static inline unsigned int
 default_cpu_mask_to_apicid_and(const struct cpumask *cpumask,
-			       const struct cpumask *andmask)
-{
-	unsigned long mask1 = cpumask_bits(cpumask)[0];
-	unsigned long mask2 = cpumask_bits(andmask)[0];
-	unsigned long mask3 = cpumask_bits(cpu_online_mask)[0];
+                               const struct cpumask *andmask) {
+    unsigned long mask1 = cpumask_bits(cpumask)[0];
+    unsigned long mask2 = cpumask_bits(andmask)[0];
+    unsigned long mask3 = cpumask_bits(cpu_online_mask)[0];
 
-	return (unsigned int)(mask1 & mask2 & mask3);
+    return (unsigned int)(mask1 & mask2 & mask3);
 }
 
-static inline unsigned long default_check_apicid_used(physid_mask_t *map, int apicid)
-{
-	return physid_isset(apicid, *map);
+static inline unsigned long default_check_apicid_used(physid_mask_t *map, int apicid) {
+    return physid_isset(apicid, *map);
 }
 
-static inline unsigned long default_check_apicid_present(int bit)
-{
-	return physid_isset(bit, phys_cpu_present_map);
+static inline unsigned long default_check_apicid_present(int bit) {
+    return physid_isset(bit, phys_cpu_present_map);
 }
 
-static inline void default_ioapic_phys_id_map(physid_mask_t *phys_map, physid_mask_t *retmap)
-{
-	*retmap = *phys_map;
+static inline void default_ioapic_phys_id_map(physid_mask_t *phys_map, physid_mask_t *retmap) {
+    *retmap = *phys_map;
 }
 
-static inline int __default_cpu_present_to_apicid(int mps_cpu)
-{
-	if (mps_cpu < nr_cpu_ids && cpu_present(mps_cpu))
-		return (int)per_cpu(x86_bios_cpu_apicid, mps_cpu);
-	else
-		return BAD_APICID;
+static inline int __default_cpu_present_to_apicid(int mps_cpu) {
+    if (mps_cpu < nr_cpu_ids && cpu_present(mps_cpu))
+        return (int)per_cpu(x86_bios_cpu_apicid, mps_cpu);
+    else
+        return BAD_APICID;
 }
 
 static inline int
-__default_check_phys_apicid_present(int phys_apicid)
-{
-	return physid_isset(phys_apicid, phys_cpu_present_map);
+__default_check_phys_apicid_present(int phys_apicid) {
+    return physid_isset(phys_apicid, phys_cpu_present_map);
 }
 
 #ifdef CONFIG_X86_32
-static inline int default_cpu_present_to_apicid(int mps_cpu)
-{
-	return __default_cpu_present_to_apicid(mps_cpu);
+static inline int default_cpu_present_to_apicid(int mps_cpu) {
+    return __default_cpu_present_to_apicid(mps_cpu);
 }
 
 static inline int
-default_check_phys_apicid_present(int phys_apicid)
-{
-	return __default_check_phys_apicid_present(phys_apicid);
+default_check_phys_apicid_present(int phys_apicid) {
+    return __default_check_phys_apicid_present(phys_apicid);
 }
 #else
 extern int default_cpu_present_to_apicid(int mps_cpu);

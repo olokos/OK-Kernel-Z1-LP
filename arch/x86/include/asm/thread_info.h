@@ -24,24 +24,24 @@ struct exec_domain;
 #include <linux/atomic.h>
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	__u32			flags;		/* low level flags */
-	__u32			status;		/* thread synchronous flags */
-	__u32			cpu;		/* current CPU */
-	int			preempt_count;	/* 0 => preemptable,
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    __u32			flags;		/* low level flags */
+    __u32			status;		/* thread synchronous flags */
+    __u32			cpu;		/* current CPU */
+    int			preempt_count;	/* 0 => preemptable,
 						   <0 => BUG */
-	mm_segment_t		addr_limit;
-	struct restart_block    restart_block;
-	void __user		*sysenter_return;
+    mm_segment_t		addr_limit;
+    struct restart_block    restart_block;
+    void __user		*sysenter_return;
 #ifdef CONFIG_X86_32
-	unsigned long           previous_esp;   /* ESP of the previous stack in
+    unsigned long           previous_esp;   /* ESP of the previous stack in
 						   case of nested (IRQ) stacks
 						*/
-	__u8			supervisor_stack[0];
+    __u8			supervisor_stack[0];
 #endif
-	unsigned int		sig_on_uaccess_error:1;
-	unsigned int		uaccess_err:1;	/* uaccess failed */
+    unsigned int		sig_on_uaccess_error:1;
+    unsigned int		uaccess_err:1;	/* uaccess failed */
 };
 
 #define INIT_THREAD_INFO(tsk)			\
@@ -188,10 +188,9 @@ struct thread_info {
 register unsigned long current_stack_pointer asm("esp") __used;
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	return (struct thread_info *)
-		(current_stack_pointer & ~(THREAD_SIZE - 1));
+static inline struct thread_info *current_thread_info(void) {
+    return (struct thread_info *)
+           (current_stack_pointer & ~(THREAD_SIZE - 1));
 }
 
 #else /* !__ASSEMBLY__ */
@@ -219,12 +218,11 @@ static inline struct thread_info *current_thread_info(void)
 #ifndef __ASSEMBLY__
 DECLARE_PER_CPU(unsigned long, kernel_stack);
 
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	ti = (void *)(percpu_read_stable(kernel_stack) +
-		      KERNEL_STACK_OFFSET - THREAD_SIZE);
-	return ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    ti = (void *)(percpu_read_stable(kernel_stack) +
+                  KERNEL_STACK_OFFSET - THREAD_SIZE);
+    return ti;
 }
 
 #else /* !__ASSEMBLY__ */
@@ -260,23 +258,21 @@ static inline struct thread_info *current_thread_info(void)
 
 #ifndef __ASSEMBLY__
 #define HAVE_SET_RESTORE_SIGMASK	1
-static inline void set_restore_sigmask(void)
-{
-	struct thread_info *ti = current_thread_info();
-	ti->status |= TS_RESTORE_SIGMASK;
-	set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
+static inline void set_restore_sigmask(void) {
+    struct thread_info *ti = current_thread_info();
+    ti->status |= TS_RESTORE_SIGMASK;
+    set_bit(TIF_SIGPENDING, (unsigned long *)&ti->flags);
 }
 
-static inline bool is_ia32_task(void)
-{
+static inline bool is_ia32_task(void) {
 #ifdef CONFIG_X86_32
-	return true;
+    return true;
 #endif
 #ifdef CONFIG_IA32_EMULATION
-	if (current_thread_info()->status & TS_COMPAT)
-		return true;
+    if (current_thread_info()->status & TS_COMPAT)
+        return true;
 #endif
-	return false;
+    return false;
 }
 #endif	/* !__ASSEMBLY__ */
 

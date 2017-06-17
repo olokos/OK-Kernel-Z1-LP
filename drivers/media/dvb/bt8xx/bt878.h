@@ -104,49 +104,48 @@
 extern int bt878_num;
 
 struct bt878 {
-	struct mutex gpio_lock;
-	unsigned int nr;
-	unsigned int bttv_nr;
-	struct i2c_adapter *adapter;
-	struct pci_dev *dev;
-	unsigned int id;
-	unsigned int TS_Size;
-	unsigned char revision;
-	unsigned int irq;
-	unsigned long bt878_adr;
-	volatile void __iomem *bt878_mem; /* function 1 */
+    struct mutex gpio_lock;
+    unsigned int nr;
+    unsigned int bttv_nr;
+    struct i2c_adapter *adapter;
+    struct pci_dev *dev;
+    unsigned int id;
+    unsigned int TS_Size;
+    unsigned char revision;
+    unsigned int irq;
+    unsigned long bt878_adr;
+    volatile void __iomem *bt878_mem; /* function 1 */
 
-	volatile u32 finished_block;
-	volatile u32 last_block;
-	u32 block_count;
-	u32 block_bytes;
-	u32 line_bytes;
-	u32 line_count;
+    volatile u32 finished_block;
+    volatile u32 last_block;
+    u32 block_count;
+    u32 block_bytes;
+    u32 line_bytes;
+    u32 line_count;
 
-	u32 buf_size;
-	u8 *buf_cpu;
-	dma_addr_t buf_dma;
+    u32 buf_size;
+    u8 *buf_cpu;
+    dma_addr_t buf_dma;
 
-	u32 risc_size;
-	__le32 *risc_cpu;
-	dma_addr_t risc_dma;
-	u32 risc_pos;
+    u32 risc_size;
+    __le32 *risc_cpu;
+    dma_addr_t risc_dma;
+    u32 risc_pos;
 
-	struct tasklet_struct tasklet;
-	int shutdown;
+    struct tasklet_struct tasklet;
+    int shutdown;
 };
 
 extern struct bt878 bt878[BT878_MAX];
 
 void bt878_start(struct bt878 *bt, u32 controlreg, u32 op_sync_orin,
-		u32 irq_err_ignore);
+                 u32 irq_err_ignore);
 void bt878_stop(struct bt878 *bt);
 
 #if defined(__powerpc__)	/* big-endian */
-static inline void io_st_le32(volatile unsigned __iomem *addr, unsigned val)
-{
-	st_le32(addr, val);
-	eieio();
+static inline void io_st_le32(volatile unsigned __iomem *addr, unsigned val) {
+    st_le32(addr, val);
+    eieio();
 }
 
 #define bmtwrite(dat,adr)  io_st_le32((adr),(dat))

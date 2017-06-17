@@ -21,17 +21,17 @@
 #include <asm/irq.h>
 
 typedef struct {
-	unsigned int __softirq_pending;
-	long idle_timestamp;
+    unsigned int __softirq_pending;
+    long idle_timestamp;
 
-	/* Hard interrupt statistics. */
-	unsigned int irq_timer_count;
-	unsigned int irq_syscall_count;
-	unsigned int irq_resched_count;
-	unsigned int irq_hv_flush_count;
-	unsigned int irq_call_count;
-	unsigned int irq_hv_msg_count;
-	unsigned int irq_dev_intr_count;
+    /* Hard interrupt statistics. */
+    unsigned int irq_timer_count;
+    unsigned int irq_syscall_count;
+    unsigned int irq_resched_count;
+    unsigned int irq_hv_flush_count;
+    unsigned int irq_call_count;
+    unsigned int irq_hv_msg_count;
+    unsigned int irq_dev_intr_count;
 
 } ____cacheline_aligned irq_cpustat_t;
 

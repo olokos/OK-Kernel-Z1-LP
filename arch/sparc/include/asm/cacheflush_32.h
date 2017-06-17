@@ -32,8 +32,8 @@ BTFIXUPDEF_CALL(void, local_flush_sig_insns, struct mm_struct *, unsigned long)
 extern void smp_flush_cache_all(void);
 extern void smp_flush_cache_mm(struct mm_struct *mm);
 extern void smp_flush_cache_range(struct vm_area_struct *vma,
-				  unsigned long start,
-				  unsigned long end);
+                                  unsigned long start,
+                                  unsigned long end);
 extern void smp_flush_cache_page(struct vm_area_struct *vma, unsigned long page);
 
 extern void smp_flush_page_to_ram(unsigned long page);

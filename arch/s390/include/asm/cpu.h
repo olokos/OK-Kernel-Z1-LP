@@ -14,12 +14,11 @@
 
 #include <linux/types.h>
 
-struct cpuid
-{
-	unsigned int version :	8;
-	unsigned int ident   : 24;
-	unsigned int machine : 16;
-	unsigned int unused  : 16;
+struct cpuid {
+    unsigned int version :	8;
+    unsigned int ident   : 24;
+    unsigned int machine : 16;
+    unsigned int unused  : 16;
 } __attribute__ ((packed, aligned(8)));
 
 #endif /* __ASSEMBLY__ */

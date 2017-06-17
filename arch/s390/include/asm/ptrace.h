@@ -186,22 +186,19 @@
 #include <linux/stddef.h>
 #include <linux/types.h>
 
-typedef union
-{
-	float   f;
-	double  d;
-        __u64   ui;
-	struct
-	{
-		__u32 hi;
-		__u32 lo;
-	} fp;
+typedef union {
+    float   f;
+    double  d;
+    __u64   ui;
+    struct {
+        __u32 hi;
+        __u32 lo;
+    } fp;
 } freg_t;
 
-typedef struct
-{
-	__u32   fpc;
-	freg_t  fprs[NUM_FPRS];              
+typedef struct {
+    __u32   fpc;
+    freg_t  fprs[NUM_FPRS];
 } s390_fp_regs;
 
 #define FPC_EXCEPTION_MASK      0xF8000000
@@ -211,16 +208,14 @@ typedef struct
 #define FPC_VALID_MASK          0xF8F8FF03
 
 /* this typedef defines how a Program Status Word looks like */
-typedef struct 
-{
-        unsigned long mask;
-        unsigned long addr;
+typedef struct {
+    unsigned long mask;
+    unsigned long addr;
 } __attribute__ ((aligned(8))) psw_t;
 
-typedef struct
-{
-	__u32	mask;
-	__u32	addr;
+typedef struct {
+    __u32	mask;
+    __u32	addr;
 } __attribute__ ((aligned(8))) psw_compat_t;
 
 #ifndef __s390x__
@@ -291,25 +286,22 @@ extern long psw_user_bits;
 /*
  * The s390_regs structure is used to define the elf_gregset_t.
  */
-typedef struct
-{
-	psw_t psw;
-	unsigned long gprs[NUM_GPRS];
-	unsigned int  acrs[NUM_ACRS];
-	unsigned long orig_gpr2;
+typedef struct {
+    psw_t psw;
+    unsigned long gprs[NUM_GPRS];
+    unsigned int  acrs[NUM_ACRS];
+    unsigned long orig_gpr2;
 } s390_regs;
 
-typedef struct
-{
-	psw_compat_t	psw;
-	__u32		gprs[NUM_GPRS];
-	__u32		acrs[NUM_ACRS];
-	__u32		orig_gpr2;
+typedef struct {
+    psw_compat_t	psw;
+    __u32		gprs[NUM_GPRS];
+    __u32		acrs[NUM_ACRS];
+    __u32		orig_gpr2;
 } s390_compat_regs;
 
-typedef struct
-{
-	__u32		gprs_high[NUM_GPRS];
+typedef struct {
+    __u32		gprs_high[NUM_GPRS];
 } s390_compat_regs_high;
 
 #ifdef __KERNEL__
@@ -318,47 +310,46 @@ typedef struct
  * The pt_regs struct defines the way the registers are stored on
  * the stack during a system call.
  */
-struct pt_regs 
-{
-	unsigned long args[1];
-	psw_t psw;
-	unsigned long gprs[NUM_GPRS];
-	unsigned long orig_gpr2;
-	unsigned int int_code;
-	unsigned long int_parm_long;
+struct pt_regs {
+    unsigned long args[1];
+    psw_t psw;
+    unsigned long gprs[NUM_GPRS];
+    unsigned long orig_gpr2;
+    unsigned int int_code;
+    unsigned long int_parm_long;
 };
 
 /*
  * Program event recording (PER) register set.
  */
 struct per_regs {
-	unsigned long control;		/* PER control bits */
-	unsigned long start;		/* PER starting address */
-	unsigned long end;		/* PER ending address */
+    unsigned long control;		/* PER control bits */
+    unsigned long start;		/* PER starting address */
+    unsigned long end;		/* PER ending address */
 };
 
 /*
  * PER event contains information about the cause of the last PER exception.
  */
 struct per_event {
-	unsigned short cause;		/* PER code, ATMID and AI */
-	unsigned long address;		/* PER address */
-	unsigned char paid;		/* PER access identification */
+    unsigned short cause;		/* PER code, ATMID and AI */
+    unsigned long address;		/* PER address */
+    unsigned char paid;		/* PER access identification */
 };
 
 /*
  * Simplified per_info structure used to decode the ptrace user space ABI.
  */
 struct per_struct_kernel {
-	unsigned long cr9;		/* PER control bits */
-	unsigned long cr10;		/* PER starting address */
-	unsigned long cr11;		/* PER ending address */
-	unsigned long bits;		/* Obsolete software bits */
-	unsigned long starting_addr;	/* User specified start address */
-	unsigned long ending_addr;	/* User specified end address */
-	unsigned short perc_atmid;	/* PER trap ATMID */
-	unsigned long address;		/* PER trap instruction address */
-	unsigned char access_id;	/* PER trap access identification */
+    unsigned long cr9;		/* PER control bits */
+    unsigned long cr10;		/* PER starting address */
+    unsigned long cr11;		/* PER ending address */
+    unsigned long bits;		/* Obsolete software bits */
+    unsigned long starting_addr;	/* User specified start address */
+    unsigned long ending_addr;	/* User specified end address */
+    unsigned short perc_atmid;	/* PER trap ATMID */
+    unsigned long address;		/* PER trap instruction address */
+    unsigned char access_id;	/* PER trap access identification */
 };
 
 #define PER_EVENT_MASK			0xE9000000UL
@@ -382,94 +373,88 @@ struct per_struct_kernel {
  * touch or even look at it if you don't want to modify the user-space
  * ptrace interface. In particular stay away from it for in-kernel PER.
  */
-typedef struct
-{
-	unsigned long cr[NUM_CR_WORDS];
+typedef struct {
+    unsigned long cr[NUM_CR_WORDS];
 } per_cr_words;
 
 #define PER_EM_MASK 0xE8000000UL
 
-typedef	struct
-{
+typedef	struct {
 #ifdef __s390x__
-	unsigned                       : 32;
+    unsigned                       : 32;
 #endif /* __s390x__ */
-	unsigned em_branching          : 1;
-	unsigned em_instruction_fetch  : 1;
-	/*
-	 * Switching on storage alteration automatically fixes
-	 * the storage alteration event bit in the users std.
-	 */
-	unsigned em_storage_alteration : 1;
-	unsigned em_gpr_alt_unused     : 1;
-	unsigned em_store_real_address : 1;
-	unsigned                       : 3;
-	unsigned branch_addr_ctl       : 1;
-	unsigned                       : 1;
-	unsigned storage_alt_space_ctl : 1;
-	unsigned                       : 21;
-	unsigned long starting_addr;
-	unsigned long ending_addr;
+    unsigned em_branching          : 1;
+    unsigned em_instruction_fetch  : 1;
+    /*
+     * Switching on storage alteration automatically fixes
+     * the storage alteration event bit in the users std.
+     */
+    unsigned em_storage_alteration : 1;
+    unsigned em_gpr_alt_unused     : 1;
+    unsigned em_store_real_address : 1;
+    unsigned                       : 3;
+    unsigned branch_addr_ctl       : 1;
+    unsigned                       : 1;
+    unsigned storage_alt_space_ctl : 1;
+    unsigned                       : 21;
+    unsigned long starting_addr;
+    unsigned long ending_addr;
 } per_cr_bits;
 
-typedef struct
-{
-	unsigned short perc_atmid;
-	unsigned long address;
-	unsigned char access_id;
+typedef struct {
+    unsigned short perc_atmid;
+    unsigned long address;
+    unsigned char access_id;
 } per_lowcore_words;
 
-typedef struct
-{
-	unsigned perc_branching          : 1;
-	unsigned perc_instruction_fetch  : 1;
-	unsigned perc_storage_alteration : 1;
-	unsigned perc_gpr_alt_unused     : 1;
-	unsigned perc_store_real_address : 1;
-	unsigned                         : 3;
-	unsigned atmid_psw_bit_31        : 1;
-	unsigned atmid_validity_bit      : 1;
-	unsigned atmid_psw_bit_32        : 1;
-	unsigned atmid_psw_bit_5         : 1;
-	unsigned atmid_psw_bit_16        : 1;
-	unsigned atmid_psw_bit_17        : 1;
-	unsigned si                      : 2;
-	unsigned long address;
-	unsigned                         : 4;
-	unsigned access_id               : 4;
+typedef struct {
+    unsigned perc_branching          : 1;
+    unsigned perc_instruction_fetch  : 1;
+    unsigned perc_storage_alteration : 1;
+    unsigned perc_gpr_alt_unused     : 1;
+    unsigned perc_store_real_address : 1;
+    unsigned                         : 3;
+    unsigned atmid_psw_bit_31        : 1;
+    unsigned atmid_validity_bit      : 1;
+    unsigned atmid_psw_bit_32        : 1;
+    unsigned atmid_psw_bit_5         : 1;
+    unsigned atmid_psw_bit_16        : 1;
+    unsigned atmid_psw_bit_17        : 1;
+    unsigned si                      : 2;
+    unsigned long address;
+    unsigned                         : 4;
+    unsigned access_id               : 4;
 } per_lowcore_bits;
 
-typedef struct
-{
-	union {
-		per_cr_words   words;
-		per_cr_bits    bits;
-	} control_regs;
-	/*
-	 * Use these flags instead of setting em_instruction_fetch
-	 * directly they are used so that single stepping can be
-	 * switched on & off while not affecting other tracing
-	 */
-	unsigned  single_step       : 1;
-	unsigned  instruction_fetch : 1;
-	unsigned                    : 30;
-	/*
-	 * These addresses are copied into cr10 & cr11 if single
-	 * stepping is switched off
-	 */
-	unsigned long starting_addr;
-	unsigned long ending_addr;
-	union {
-		per_lowcore_words words;
-		per_lowcore_bits  bits;
-	} lowcore; 
+typedef struct {
+    union {
+        per_cr_words   words;
+        per_cr_bits    bits;
+    } control_regs;
+    /*
+     * Use these flags instead of setting em_instruction_fetch
+     * directly they are used so that single stepping can be
+     * switched on & off while not affecting other tracing
+     */
+    unsigned  single_step       : 1;
+    unsigned  instruction_fetch : 1;
+    unsigned                    : 30;
+    /*
+     * These addresses are copied into cr10 & cr11 if single
+     * stepping is switched off
+     */
+    unsigned long starting_addr;
+    unsigned long ending_addr;
+    union {
+        per_lowcore_words words;
+        per_lowcore_bits  bits;
+    } lowcore;
 } per_struct;
 
-typedef struct
-{
-	unsigned int  len;
-	unsigned long kernel_addr;
-	unsigned long process_addr;
+typedef struct {
+    unsigned int  len;
+    unsigned long kernel_addr;
+    unsigned long process_addr;
 } ptrace_area;
 
 /*
@@ -492,19 +477,17 @@ typedef struct
  */
 #define PTRACE_PROT                       21
 
-typedef enum
-{
-	ptprot_set_access_watchpoint,
-	ptprot_set_write_watchpoint,
-	ptprot_disable_watchpoint
+typedef enum {
+    ptprot_set_access_watchpoint,
+    ptprot_set_write_watchpoint,
+    ptprot_disable_watchpoint
 } ptprot_flags;
 
-typedef struct
-{
-	unsigned long lowaddr;
-	unsigned long hiaddr;
-	ptprot_flags prot;
-} ptprot_area;                     
+typedef struct {
+    unsigned long lowaddr;
+    unsigned long hiaddr;
+    ptprot_flags prot;
+} ptprot_area;
 
 /* Sequence of bytes for breakpoint illegal instruction.  */
 #define S390_BREAKPOINT     {0x0,0x1}
@@ -516,20 +499,19 @@ typedef struct
  * The user_regs_struct defines the way the user registers are
  * store on the stack for signal handling.
  */
-struct user_regs_struct
-{
-	psw_t psw;
-	unsigned long gprs[NUM_GPRS];
-	unsigned int  acrs[NUM_ACRS];
-	unsigned long orig_gpr2;
-	s390_fp_regs fp_regs;
-	/*
-	 * These per registers are in here so that gdb can modify them
-	 * itself as there is no "official" ptrace interface for hardware
-	 * watchpoints. This is the way intel does it.
-	 */
-	per_struct per_info;
-	unsigned long ieee_instruction_pointer;	/* obsolete, always 0 */
+struct user_regs_struct {
+    psw_t psw;
+    unsigned long gprs[NUM_GPRS];
+    unsigned int  acrs[NUM_ACRS];
+    unsigned long orig_gpr2;
+    s390_fp_regs fp_regs;
+    /*
+     * These per registers are in here so that gdb can modify them
+     * itself as there is no "official" ptrace interface for hardware
+     * watchpoints. This is the way intel does it.
+     */
+    per_struct per_info;
+    unsigned long ieee_instruction_pointer;	/* obsolete, always 0 */
 };
 
 #ifdef __KERNEL__
@@ -543,9 +525,8 @@ struct user_regs_struct
 #define user_stack_pointer(regs)((regs)->gprs[15])
 #define profile_pc(regs) instruction_pointer(regs)
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	return regs->gprs[2];
+static inline long regs_return_value(struct pt_regs *regs) {
+    return regs->gprs[2];
 }
 
 int regs_query_register_offset(const char *name);
@@ -553,9 +534,8 @@ const char *regs_query_register_name(unsigned int offset);
 unsigned long regs_get_register(struct pt_regs *regs, unsigned int offset);
 unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n);
 
-static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-{
-	return regs->gprs[15] & PSW_ADDR_INSN;
+static inline unsigned long kernel_stack_pointer(struct pt_regs *regs) {
+    return regs->gprs[15] & PSW_ADDR_INSN;
 }
 
 #endif /* __KERNEL__ */

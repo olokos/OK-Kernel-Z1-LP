@@ -13,9 +13,8 @@
 /*
  * allow userspace to flush the instruction cache
  */
-asmlinkage long sys_cacheflush(unsigned long start, unsigned long end)
-{
-	if (end < start)
-		return -EINVAL;
-	return 0;
+asmlinkage long sys_cacheflush(unsigned long start, unsigned long end) {
+    if (end < start)
+        return -EINVAL;
+    return 0;
 }

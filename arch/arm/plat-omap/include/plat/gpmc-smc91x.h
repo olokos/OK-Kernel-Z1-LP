@@ -16,13 +16,13 @@
 #define GPMC_WRITE_MON		(1 << 7) /* GPMC_CONFIG1_WAIT_WRITE_MON */
 
 struct omap_smc91x_platform_data {
-	int	cs;
-	int	gpio_irq;
-	int	gpio_pwrdwn;
-	int	gpio_reset;
-	int	wait_pin;	/* Optional GPMC_CONFIG1_WAITPINSELECT */
-	u32	flags;
-	int	(*retime)(void);
+    int	cs;
+    int	gpio_irq;
+    int	gpio_pwrdwn;
+    int	gpio_reset;
+    int	wait_pin;	/* Optional GPMC_CONFIG1_WAITPINSELECT */
+    u32	flags;
+    int	(*retime)(void);
 };
 
 #if defined(CONFIG_SMC91X) || \
@@ -34,8 +34,7 @@ extern void gpmc_smc91x_init(struct omap_smc91x_platform_data *d);
 
 #define board_smc91x_data	NULL
 
-static inline void gpmc_smc91x_init(struct omap_smc91x_platform_data *d)
-{
+static inline void gpmc_smc91x_init(struct omap_smc91x_platform_data *d) {
 }
 
 #endif

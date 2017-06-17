@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2002 Jeff Dike (jdike@karaya.com)
  * Licensed under the GPL
  */
@@ -8,7 +8,7 @@
 
 /* thread_info has a mm_segment_t in it, so put the definition up here */
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #include <linux/thread_info.h>
@@ -138,7 +138,7 @@ extern int strnlen_user(const void __user *str, int len);
 		__private_ret = 0;					\
 	}								\
 	__private_ret;							\
-}) 
+})
 
 #define get_user(x, ptr) \
 ({ \
@@ -169,10 +169,9 @@ extern int strnlen_user(const void __user *str, int len);
 
 #define strlen_user(str) strnlen_user(str, ~0U >> 1)
 
-struct exception_table_entry
-{
-        unsigned long insn;
-	unsigned long fixup;
+struct exception_table_entry {
+    unsigned long insn;
+    unsigned long fixup;
 };
 
 #endif

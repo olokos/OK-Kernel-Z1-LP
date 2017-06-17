@@ -19,7 +19,7 @@
 
 /* mm/fault.c */
 void do_page_fault(struct pt_regs *, int fault_num,
-		   unsigned long address, unsigned long write);
+                   unsigned long address, unsigned long write);
 #if CHIP_HAS_TILE_DMA() || CHIP_HAS_SN_PROC()
 void do_async_page_fault(struct pt_regs *);
 #endif
@@ -30,15 +30,15 @@ void do_async_page_fault(struct pt_regs *);
  * additional save/restore code in the intvec.S caller.
  */
 struct intvec_state {
-	void *handler;
-	unsigned long vecnum;
-	unsigned long fault_num;
-	unsigned long info;
-	unsigned long retval;
+    void *handler;
+    unsigned long vecnum;
+    unsigned long fault_num;
+    unsigned long info;
+    unsigned long retval;
 };
 struct intvec_state do_page_fault_ics(struct pt_regs *regs, int fault_num,
-				      unsigned long address,
-				      unsigned long info);
+                                      unsigned long address,
+                                      unsigned long info);
 #endif
 
 /* kernel/traps.c */

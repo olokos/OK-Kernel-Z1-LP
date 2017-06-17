@@ -19,60 +19,52 @@
  * using special load/store instructions.
  */
 
-static inline u16 get_unaligned_le16(const void *p)
-{
-	const u8 *_p = p;
-	return _p[0] | _p[1] << 8;
+static inline u16 get_unaligned_le16(const void *p) {
+    const u8 *_p = p;
+    return _p[0] | _p[1] << 8;
 }
 
-static inline u16 get_unaligned_be16(const void *p)
-{
-	const u8 *_p = p;
-	return _p[0] << 8 | _p[1];
+static inline u16 get_unaligned_be16(const void *p) {
+    const u8 *_p = p;
+    return _p[0] << 8 | _p[1];
 }
 
-static inline void put_unaligned_le16(u16 val, void *p)
-{
-	u8 *_p = p;
-	_p[0] = val;
-	_p[1] = val >> 8;
+static inline void put_unaligned_le16(u16 val, void *p) {
+    u8 *_p = p;
+    _p[0] = val;
+    _p[1] = val >> 8;
 }
 
-static inline void put_unaligned_be16(u16 val, void *p)
-{
-	u8 *_p = p;
-	_p[0] = val >> 8;
-	_p[1] = val;
+static inline void put_unaligned_be16(u16 val, void *p) {
+    u8 *_p = p;
+    _p[0] = val >> 8;
+    _p[1] = val;
 }
 
-static inline u32 get_unaligned32(const void *p)
-{
-	u32 val = (u32) p;
-	asm (" ldnw	.d1t1	*%0,%0\n"
-	     " nop     4\n"
-	     : "+a"(val));
-	return val;
+static inline u32 get_unaligned32(const void *p) {
+    u32 val = (u32) p;
+    asm (" ldnw	.d1t1	*%0,%0\n"
+         " nop     4\n"
+         : "+a"(val));
+    return val;
 }
 
-static inline void put_unaligned32(u32 val, void *p)
-{
-	asm volatile (" stnw	.d2t1	%0,*%1\n"
-		      : : "a"(val), "b"(p) : "memory");
+static inline void put_unaligned32(u32 val, void *p) {
+    asm volatile (" stnw	.d2t1	%0,*%1\n"
+                  : : "a"(val), "b"(p) : "memory");
 }
 
-static inline u64 get_unaligned64(const void *p)
-{
-	u64 val;
-	asm volatile (" ldndw	.d1t1	*%1,%0\n"
-		      " nop     4\n"
-		      : "=a"(val) : "a"(p));
-	return val;
+static inline u64 get_unaligned64(const void *p) {
+    u64 val;
+    asm volatile (" ldndw	.d1t1	*%1,%0\n"
+                  " nop     4\n"
+                  : "=a"(val) : "a"(p));
+    return val;
 }
 
-static inline void put_unaligned64(u64 val, const void *p)
-{
-	asm volatile (" stndw	.d2t1	%0,*%1\n"
-		      : : "a"(val), "b"(p) : "memory");
+static inline void put_unaligned64(u64 val, const void *p) {
+    asm volatile (" stndw	.d2t1	%0,*%1\n"
+                  : : "a"(val), "b"(p) : "memory");
 }
 
 #ifdef CONFIG_CPU_BIG_ENDIAN

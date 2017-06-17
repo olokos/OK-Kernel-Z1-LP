@@ -50,83 +50,82 @@
 #include "core.h"
 
 static struct map_desc realview_pb1176_io_desc[] __initdata = {
-	{
-		.virtual	= IO_ADDRESS(REALVIEW_SYS_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_SYS_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_GIC_CPU_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_GIC_CPU_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_GIC_DIST_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_GIC_DIST_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_DC1176_GIC_CPU_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_DC1176_GIC_CPU_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_DC1176_GIC_DIST_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_DC1176_GIC_DIST_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_SCTL_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_SCTL_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_TIMER0_1_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_TIMER0_1_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_TIMER2_3_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_TIMER2_3_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	}, {
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_L220_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_L220_BASE),
-		.length		= SZ_8K,
-		.type		= MT_DEVICE,
-	},
+    {
+        .virtual	= IO_ADDRESS(REALVIEW_SYS_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_SYS_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_GIC_CPU_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_GIC_CPU_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_GIC_DIST_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_GIC_DIST_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_DC1176_GIC_CPU_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_DC1176_GIC_CPU_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_DC1176_GIC_DIST_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_DC1176_GIC_DIST_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_SCTL_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_SCTL_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_TIMER0_1_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_TIMER0_1_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_TIMER2_3_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_TIMER2_3_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    }, {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_L220_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_L220_BASE),
+        .length		= SZ_8K,
+        .type		= MT_DEVICE,
+    },
 #ifdef CONFIG_DEBUG_LL
-	{
-		.virtual	= IO_ADDRESS(REALVIEW_PB1176_UART0_BASE),
-		.pfn		= __phys_to_pfn(REALVIEW_PB1176_UART0_BASE),
-		.length		= SZ_4K,
-		.type		= MT_DEVICE,
-	},
+    {
+        .virtual	= IO_ADDRESS(REALVIEW_PB1176_UART0_BASE),
+        .pfn		= __phys_to_pfn(REALVIEW_PB1176_UART0_BASE),
+        .length		= SZ_4K,
+        .type		= MT_DEVICE,
+    },
 #endif
 };
 
-static void __init realview_pb1176_map_io(void)
-{
-	iotable_init(realview_pb1176_io_desc, ARRAY_SIZE(realview_pb1176_io_desc));
+static void __init realview_pb1176_map_io(void) {
+    iotable_init(realview_pb1176_io_desc, ARRAY_SIZE(realview_pb1176_io_desc));
 }
 
 static struct pl061_platform_data gpio0_plat_data = {
-	.gpio_base	= 0,
+    .gpio_base	= 0,
 };
 
 static struct pl061_platform_data gpio1_plat_data = {
-	.gpio_base	= 8,
+    .gpio_base	= 8,
 };
 
 static struct pl061_platform_data gpio2_plat_data = {
-	.gpio_base	= 16,
+    .gpio_base	= 16,
 };
 
 static struct pl022_ssp_controller ssp0_plat_data = {
-	.bus_id = 0,
-	.enable_dma = 0,
-	.num_chipselect = 1,
+    .bus_id = 0,
+    .enable_dma = 0,
+    .num_chipselect = 1,
 };
 
 /*
@@ -178,221 +177,216 @@ APB_DEVICE(ssp0,	"dev:ssp0",	PB1176_SSP,	&ssp0_plat_data);
 AHB_DEVICE(clcd,	"dev:clcd",	PB1176_CLCD,	&clcd_plat_data);
 
 static struct amba_device *amba_devs[] __initdata = {
-	&uart0_device,
-	&uart1_device,
-	&uart2_device,
-	&uart3_device,
-	&uart4_device,
-	&smc_device,
-	&clcd_device,
-	&sctl_device,
-	&wdog_device,
-	&gpio0_device,
-	&gpio1_device,
-	&gpio2_device,
-	&rtc_device,
-	&sci0_device,
-	&ssp0_device,
-	&aaci_device,
-	&mmc0_device,
-	&kmi0_device,
-	&kmi1_device,
+    &uart0_device,
+    &uart1_device,
+    &uart2_device,
+    &uart3_device,
+    &uart4_device,
+    &smc_device,
+    &clcd_device,
+    &sctl_device,
+    &wdog_device,
+    &gpio0_device,
+    &gpio1_device,
+    &gpio2_device,
+    &rtc_device,
+    &sci0_device,
+    &ssp0_device,
+    &aaci_device,
+    &mmc0_device,
+    &kmi0_device,
+    &kmi1_device,
 };
 
 /*
  * RealView PB1176 platform devices
  */
 static struct resource realview_pb1176_flash_resources[] = {
-	{
-		.start		= REALVIEW_PB1176_FLASH_BASE,
-		.end		= REALVIEW_PB1176_FLASH_BASE + REALVIEW_PB1176_FLASH_SIZE - 1,
-		.flags		= IORESOURCE_MEM,
-	},
+    {
+        .start		= REALVIEW_PB1176_FLASH_BASE,
+        .end		= REALVIEW_PB1176_FLASH_BASE + REALVIEW_PB1176_FLASH_SIZE - 1,
+        .flags		= IORESOURCE_MEM,
+    },
 #ifdef CONFIG_REALVIEW_PB1176_SECURE_FLASH
-	{
-		.start		= REALVIEW_PB1176_SEC_FLASH_BASE,
-		.end		= REALVIEW_PB1176_SEC_FLASH_BASE + REALVIEW_PB1176_SEC_FLASH_SIZE - 1,
-		.flags		= IORESOURCE_MEM,
-	},
+    {
+        .start		= REALVIEW_PB1176_SEC_FLASH_BASE,
+        .end		= REALVIEW_PB1176_SEC_FLASH_BASE + REALVIEW_PB1176_SEC_FLASH_SIZE - 1,
+        .flags		= IORESOURCE_MEM,
+    },
 #endif
 };
 
 static struct physmap_flash_data pb1176_rom_pdata = {
-	.probe_type	= "map_rom",
-	.width		= 4,
-	.nr_parts	= 0,
+    .probe_type	= "map_rom",
+    .width		= 4,
+    .nr_parts	= 0,
 };
 
 static struct resource pb1176_rom_resources[] = {
-	/*
-	 * This exposes the PB1176 DevChip ROM as an MTD ROM mapping.
-	 * The reference manual states that this is actually a pseudo-ROM
-	 * programmed in NVRAM.
-	 */
-	{
-		.start		= REALVIEW_DC1176_ROM_BASE,
-		.end		= REALVIEW_DC1176_ROM_BASE + SZ_16K - 1,
-		.flags		= IORESOURCE_MEM,
-	}
+    /*
+     * This exposes the PB1176 DevChip ROM as an MTD ROM mapping.
+     * The reference manual states that this is actually a pseudo-ROM
+     * programmed in NVRAM.
+     */
+    {
+        .start		= REALVIEW_DC1176_ROM_BASE,
+        .end		= REALVIEW_DC1176_ROM_BASE + SZ_16K - 1,
+        .flags		= IORESOURCE_MEM,
+    }
 };
 
 static struct platform_device pb1176_rom_device = {
-	.name		= "physmap-flash",
-	.id		= -1,
-	.num_resources	= ARRAY_SIZE(pb1176_rom_resources),
-	.resource	= pb1176_rom_resources,
-	.dev = {
-		.platform_data = &pb1176_rom_pdata,
-	},
+    .name		= "physmap-flash",
+    .id		= -1,
+    .num_resources	= ARRAY_SIZE(pb1176_rom_resources),
+    .resource	= pb1176_rom_resources,
+    .dev = {
+        .platform_data = &pb1176_rom_pdata,
+    },
 };
 
 static struct resource realview_pb1176_smsc911x_resources[] = {
-	[0] = {
-		.start		= REALVIEW_PB1176_ETH_BASE,
-		.end		= REALVIEW_PB1176_ETH_BASE + SZ_64K - 1,
-		.flags		= IORESOURCE_MEM,
-	},
-	[1] = {
-		.start		= IRQ_PB1176_ETH,
-		.end		= IRQ_PB1176_ETH,
-		.flags		= IORESOURCE_IRQ,
-	},
+    [0] = {
+        .start		= REALVIEW_PB1176_ETH_BASE,
+        .end		= REALVIEW_PB1176_ETH_BASE + SZ_64K - 1,
+        .flags		= IORESOURCE_MEM,
+    },
+    [1] = {
+        .start		= IRQ_PB1176_ETH,
+        .end		= IRQ_PB1176_ETH,
+        .flags		= IORESOURCE_IRQ,
+    },
 };
 
 static struct resource realview_pb1176_isp1761_resources[] = {
-	[0] = {
-		.start		= REALVIEW_PB1176_USB_BASE,
-		.end		= REALVIEW_PB1176_USB_BASE + SZ_128K - 1,
-		.flags		= IORESOURCE_MEM,
-	},
-	[1] = {
-		.start		= IRQ_PB1176_USB,
-		.end		= IRQ_PB1176_USB,
-		.flags		= IORESOURCE_IRQ,
-	},
+    [0] = {
+        .start		= REALVIEW_PB1176_USB_BASE,
+        .end		= REALVIEW_PB1176_USB_BASE + SZ_128K - 1,
+        .flags		= IORESOURCE_MEM,
+    },
+    [1] = {
+        .start		= IRQ_PB1176_USB,
+        .end		= IRQ_PB1176_USB,
+        .flags		= IORESOURCE_IRQ,
+    },
 };
 
 static struct resource pmu_resource = {
-	.start		= IRQ_DC1176_CORE_PMU,
-	.end		= IRQ_DC1176_CORE_PMU,
-	.flags		= IORESOURCE_IRQ,
+    .start		= IRQ_DC1176_CORE_PMU,
+    .end		= IRQ_DC1176_CORE_PMU,
+    .flags		= IORESOURCE_IRQ,
 };
 
 static struct platform_device pmu_device = {
-	.name			= "arm-pmu",
-	.id			= ARM_PMU_DEVICE_CPU,
-	.num_resources		= 1,
-	.resource		= &pmu_resource,
+    .name			= "arm-pmu",
+    .id			= ARM_PMU_DEVICE_CPU,
+    .num_resources		= 1,
+    .resource		= &pmu_resource,
 };
 
 static struct resource char_lcd_resources[] = {
-	{
-		.start = REALVIEW_CHAR_LCD_BASE,
-		.end   = (REALVIEW_CHAR_LCD_BASE + SZ_4K - 1),
-		.flags = IORESOURCE_MEM,
-	},
-	{
-		.start	= IRQ_PB1176_CHARLCD,
-		.end	= IRQ_PB1176_CHARLCD,
-		.flags	= IORESOURCE_IRQ,
-	},
+    {
+        .start = REALVIEW_CHAR_LCD_BASE,
+        .end   = (REALVIEW_CHAR_LCD_BASE + SZ_4K - 1),
+        .flags = IORESOURCE_MEM,
+    },
+    {
+        .start	= IRQ_PB1176_CHARLCD,
+        .end	= IRQ_PB1176_CHARLCD,
+        .flags	= IORESOURCE_IRQ,
+    },
 };
 
 static struct platform_device char_lcd_device = {
-	.name		=	"arm-charlcd",
-	.id		=	-1,
-	.num_resources	=	ARRAY_SIZE(char_lcd_resources),
-	.resource	=	char_lcd_resources,
+    .name		=	"arm-charlcd",
+    .id		=	-1,
+    .num_resources	=	ARRAY_SIZE(char_lcd_resources),
+    .resource	=	char_lcd_resources,
 };
 
-static void __init gic_init_irq(void)
-{
-	/* ARM1176 DevChip GIC, primary */
-	gic_init(0, IRQ_DC1176_GIC_START,
-		 __io_address(REALVIEW_DC1176_GIC_DIST_BASE),
-		 __io_address(REALVIEW_DC1176_GIC_CPU_BASE));
+static void __init gic_init_irq(void) {
+    /* ARM1176 DevChip GIC, primary */
+    gic_init(0, IRQ_DC1176_GIC_START,
+             __io_address(REALVIEW_DC1176_GIC_DIST_BASE),
+             __io_address(REALVIEW_DC1176_GIC_CPU_BASE));
 
-	/* board GIC, secondary */
-	gic_init(1, IRQ_PB1176_GIC_START,
-		 __io_address(REALVIEW_PB1176_GIC_DIST_BASE),
-		 __io_address(REALVIEW_PB1176_GIC_CPU_BASE));
-	gic_cascade_irq(1, IRQ_DC1176_PB_IRQ1);
+    /* board GIC, secondary */
+    gic_init(1, IRQ_PB1176_GIC_START,
+             __io_address(REALVIEW_PB1176_GIC_DIST_BASE),
+             __io_address(REALVIEW_PB1176_GIC_CPU_BASE));
+    gic_cascade_irq(1, IRQ_DC1176_PB_IRQ1);
 }
 
-static void __init realview_pb1176_timer_init(void)
-{
-	timer0_va_base = __io_address(REALVIEW_PB1176_TIMER0_1_BASE);
-	timer1_va_base = __io_address(REALVIEW_PB1176_TIMER0_1_BASE) + 0x20;
-	timer2_va_base = __io_address(REALVIEW_PB1176_TIMER2_3_BASE);
-	timer3_va_base = __io_address(REALVIEW_PB1176_TIMER2_3_BASE) + 0x20;
+static void __init realview_pb1176_timer_init(void) {
+    timer0_va_base = __io_address(REALVIEW_PB1176_TIMER0_1_BASE);
+    timer1_va_base = __io_address(REALVIEW_PB1176_TIMER0_1_BASE) + 0x20;
+    timer2_va_base = __io_address(REALVIEW_PB1176_TIMER2_3_BASE);
+    timer3_va_base = __io_address(REALVIEW_PB1176_TIMER2_3_BASE) + 0x20;
 
-	realview_timer_init(IRQ_DC1176_TIMER0);
+    realview_timer_init(IRQ_DC1176_TIMER0);
 }
 
 static struct sys_timer realview_pb1176_timer = {
-	.init		= realview_pb1176_timer_init,
+    .init		= realview_pb1176_timer_init,
 };
 
-static void realview_pb1176_restart(char mode, const char *cmd)
-{
-	void __iomem *reset_ctrl = __io_address(REALVIEW_SYS_RESETCTL);
-	void __iomem *lock_ctrl = __io_address(REALVIEW_SYS_LOCK);
-	__raw_writel(REALVIEW_SYS_LOCK_VAL, lock_ctrl);
-	__raw_writel(REALVIEW_PB1176_SYS_SOFT_RESET, reset_ctrl);
-	dsb();
+static void realview_pb1176_restart(char mode, const char *cmd) {
+    void __iomem *reset_ctrl = __io_address(REALVIEW_SYS_RESETCTL);
+    void __iomem *lock_ctrl = __io_address(REALVIEW_SYS_LOCK);
+    __raw_writel(REALVIEW_SYS_LOCK_VAL, lock_ctrl);
+    __raw_writel(REALVIEW_PB1176_SYS_SOFT_RESET, reset_ctrl);
+    dsb();
 }
 
 static void realview_pb1176_fixup(struct tag *tags, char **from,
-				  struct meminfo *meminfo)
-{
-	/*
-	 * RealView PB1176 only has 128MB of RAM mapped at 0.
-	 */
-	meminfo->bank[0].start = 0;
-	meminfo->bank[0].size = SZ_128M;
-	meminfo->nr_banks = 1;
+                                  struct meminfo *meminfo) {
+    /*
+     * RealView PB1176 only has 128MB of RAM mapped at 0.
+     */
+    meminfo->bank[0].start = 0;
+    meminfo->bank[0].size = SZ_128M;
+    meminfo->nr_banks = 1;
 }
 
-static void __init realview_pb1176_init(void)
-{
-	int i;
+static void __init realview_pb1176_init(void) {
+    int i;
 
 #ifdef CONFIG_CACHE_L2X0
-	/* 128Kb (16Kb/way) 8-way associativity. evmon/parity/share enabled. */
-	l2x0_init(__io_address(REALVIEW_PB1176_L220_BASE), 0x00730000, 0xfe000fff);
+    /* 128Kb (16Kb/way) 8-way associativity. evmon/parity/share enabled. */
+    l2x0_init(__io_address(REALVIEW_PB1176_L220_BASE), 0x00730000, 0xfe000fff);
 #endif
 
-	realview_flash_register(realview_pb1176_flash_resources,
-				ARRAY_SIZE(realview_pb1176_flash_resources));
-	platform_device_register(&pb1176_rom_device);
-	realview_eth_register(NULL, realview_pb1176_smsc911x_resources);
-	platform_device_register(&realview_i2c_device);
-	realview_usb_register(realview_pb1176_isp1761_resources);
-	platform_device_register(&pmu_device);
-	platform_device_register(&char_lcd_device);
+    realview_flash_register(realview_pb1176_flash_resources,
+                            ARRAY_SIZE(realview_pb1176_flash_resources));
+    platform_device_register(&pb1176_rom_device);
+    realview_eth_register(NULL, realview_pb1176_smsc911x_resources);
+    platform_device_register(&realview_i2c_device);
+    realview_usb_register(realview_pb1176_isp1761_resources);
+    platform_device_register(&pmu_device);
+    platform_device_register(&char_lcd_device);
 
-	for (i = 0; i < ARRAY_SIZE(amba_devs); i++) {
-		struct amba_device *d = amba_devs[i];
-		amba_device_register(d, &iomem_resource);
-	}
+    for (i = 0; i < ARRAY_SIZE(amba_devs); i++) {
+        struct amba_device *d = amba_devs[i];
+        amba_device_register(d, &iomem_resource);
+    }
 
 #ifdef CONFIG_LEDS
-	leds_event = realview_leds_event;
+    leds_event = realview_leds_event;
 #endif
 }
 
 MACHINE_START(REALVIEW_PB1176, "ARM-RealView PB1176")
-	/* Maintainer: ARM Ltd/Deep Blue Solutions Ltd */
-	.atag_offset	= 0x100,
-	.fixup		= realview_pb1176_fixup,
-	.map_io		= realview_pb1176_map_io,
-	.init_early	= realview_init_early,
-	.init_irq	= gic_init_irq,
-	.timer		= &realview_pb1176_timer,
-	.handle_irq	= gic_handle_irq,
-	.init_machine	= realview_pb1176_init,
+/* Maintainer: ARM Ltd/Deep Blue Solutions Ltd */
+.atag_offset	= 0x100,
+    .fixup		= realview_pb1176_fixup,
+         .map_io		= realview_pb1176_map_io,
+             .init_early	= realview_init_early,
+              .init_irq	= gic_init_irq,
+                 .timer		= &realview_pb1176_timer,
+                      .handle_irq	= gic_handle_irq,
+                       .init_machine	= realview_pb1176_init,
 #ifdef CONFIG_ZONE_DMA
-	.dma_zone_size	= SZ_256M,
+                          .dma_zone_size	= SZ_256M,
 #endif
-	.restart	= realview_pb1176_restart,
-MACHINE_END
+                            .restart	= realview_pb1176_restart,
+                                MACHINE_END

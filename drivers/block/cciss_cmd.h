@@ -20,7 +20,7 @@
 
 /* Unit Attentions ASCQ's as defined for the MSA2012sa */
 
-	/* These ASCQ's defined for ASC = POWER_OR_RESET */
+/* These ASCQ's defined for ASC = POWER_OR_RESET */
 #define POWER_ON_RESET			0x00
 #define POWER_ON_REBOOT			0x01
 #define SCSI_BUS_RESET			0x02
@@ -29,7 +29,7 @@
 #define TRANSCEIVER_SE			0x05
 #define TRANSCEIVER_LVD			0x06
 
-	/* These ASCQ's defined for ASC = STATE_CHANGED */
+/* These ASCQ's defined for ASC = STATE_CHANGED */
 #define RESERVATION_PREEMPTED		0x03
 #define ASYM_ACCESS_CHANGED		0x06
 #define LUN_CAPACITY_CHANGED		0x09
@@ -63,49 +63,44 @@
 #define CFGTBL_BusType_Ultra3   0x00000002l
 #define CFGTBL_BusType_Fibre1G  0x00000100l
 #define CFGTBL_BusType_Fibre2G  0x00000200l
-typedef struct _vals32
-{
-        __u32   lower;
-        __u32   upper;
+typedef struct _vals32 {
+    __u32   lower;
+    __u32   upper;
 } vals32;
 
-typedef union _u64bit
-{
-   vals32	val32;
-   __u64	val;
+typedef union _u64bit {
+    vals32	val32;
+    __u64	val;
 } u64bit;
 
 /* Type defs used in the following structs */
-#define QWORD vals32 
+#define QWORD vals32
 
 /* STRUCTURES */
 #define CISS_MAX_PHYS_LUN	1024
 /* SCSI-3 Cmmands */
 
-#pragma pack(1)	
+#pragma pack(1)
 
 #define CISS_INQUIRY 0x12
 /* Date returned */
-typedef struct _InquiryData_struct
-{
-  BYTE data_byte[36];
+typedef struct _InquiryData_struct {
+    BYTE data_byte[36];
 } InquiryData_struct;
 
 #define CISS_REPORT_LOG 0xc2    /* Report Logical LUNs */
 #define CISS_REPORT_PHYS 0xc3   /* Report Physical LUNs */
 /* Data returned */
-typedef struct _ReportLUNdata_struct
-{
-  BYTE LUNListLength[4];
-  DWORD reserved;
-  BYTE LUN[CISS_MAX_LUN][8];
+typedef struct _ReportLUNdata_struct {
+    BYTE LUNListLength[4];
+    DWORD reserved;
+    BYTE LUN[CISS_MAX_LUN][8];
 } ReportLunData_struct;
 
-#define CCISS_READ_CAPACITY 0x25 /* Read Capacity */ 
-typedef struct _ReadCapdata_struct
-{
-  BYTE total_size[4];	/* Total size in blocks */
-  BYTE block_size[4];	/* Size of blocks in bytes */
+#define CCISS_READ_CAPACITY 0x25 /* Read Capacity */
+typedef struct _ReadCapdata_struct {
+    BYTE total_size[4];	/* Total size in blocks */
+    BYTE block_size[4];	/* Size of blocks in bytes */
 } ReadCapdata_struct;
 
 #define CCISS_READ_CAPACITY_16 0x9e /* Read Capacity 16 */
@@ -115,14 +110,13 @@ typedef struct _ReadCapdata_struct
 
 #define CCISS_READ_CAPACITY_16_SERVICE_ACT 0x10
 
-typedef struct _ReadCapdata_struct_16
-{
-	BYTE total_size[8];   /* Total size in blocks */
-	BYTE block_size[4];   /* Size of blocks in bytes */
-	BYTE prot_en:1;       /* protection enable bit */
-	BYTE rto_en:1;        /* reference tag own enable bit */
-	BYTE reserved:6;      /* reserved bits */
-	BYTE reserved2[18];   /* reserved bytes per spec */
+typedef struct _ReadCapdata_struct_16 {
+    BYTE total_size[8];   /* Total size in blocks */
+    BYTE block_size[4];   /* Size of blocks in bytes */
+    BYTE prot_en:1;       /* protection enable bit */
+    BYTE rto_en:1;        /* reference tag own enable bit */
+    BYTE reserved:6;      /* reserved bits */
+    BYTE reserved2[18];   /* reserved bytes per spec */
 } ReadCapdata_struct_16;
 
 /* Define the supported read/write commands for cciss based controllers */
@@ -155,20 +149,20 @@ typedef struct _ReadCapdata_struct_16
 #define CTLR_LUNID "\0\0\0\0\0\0\0\0"
 
 typedef struct _CommandListHeader_struct {
-  BYTE              ReplyQueue;
-  BYTE              SGList;
-  HWORD             SGTotal;
-  QWORD             Tag;
-  LUNAddr_struct    LUN;
+    BYTE              ReplyQueue;
+    BYTE              SGList;
+    HWORD             SGTotal;
+    QWORD             Tag;
+    LUNAddr_struct    LUN;
 } CommandListHeader_struct;
 typedef struct _ErrDescriptor_struct {
-  QWORD  Addr;
-  DWORD  Len;
+    QWORD  Addr;
+    DWORD  Len;
 } ErrDescriptor_struct;
 typedef struct _SGDescriptor_struct {
-  QWORD  Addr;
-  DWORD  Len;
-  DWORD  Ext;
+    QWORD  Addr;
+    DWORD  Len;
+    DWORD  Ext;
 } SGDescriptor_struct;
 
 /* Command types */
@@ -195,75 +189,75 @@ typedef struct _SGDescriptor_struct {
 #define DIRECT_LOOKUP_SHIFT 5
 
 typedef struct _CommandList_struct {
-  CommandListHeader_struct Header;
-  RequestBlock_struct      Request;
-  ErrDescriptor_struct     ErrDesc;
-  SGDescriptor_struct      SG[MAXSGENTRIES];
-	/* information associated with the command */ 
-  __u32			   busaddr; /* physical address of this record */
-  ErrorInfo_struct * 	   err_info; /* pointer to the allocated mem */ 
-  int			   ctlr;
-  int			   cmd_type; 
-  long			   cmdindex;
-  struct list_head list;
-  struct request *	   rq;
-  struct completion *waiting;
-  int	 retry_count;
-  void * scsi_cmd;
-  char pad[PADSIZE];
+    CommandListHeader_struct Header;
+    RequestBlock_struct      Request;
+    ErrDescriptor_struct     ErrDesc;
+    SGDescriptor_struct      SG[MAXSGENTRIES];
+    /* information associated with the command */
+    __u32			   busaddr; /* physical address of this record */
+    ErrorInfo_struct * 	   err_info; /* pointer to the allocated mem */
+    int			   ctlr;
+    int			   cmd_type;
+    long			   cmdindex;
+    struct list_head list;
+    struct request *	   rq;
+    struct completion *waiting;
+    int	 retry_count;
+    void * scsi_cmd;
+    char pad[PADSIZE];
 } CommandList_struct;
 
 /* Configuration Table Structure */
 typedef struct _HostWrite_struct {
-  DWORD TransportRequest;
-  DWORD Reserved;
-  DWORD CoalIntDelay;
-  DWORD CoalIntCount;
+    DWORD TransportRequest;
+    DWORD Reserved;
+    DWORD CoalIntDelay;
+    DWORD CoalIntCount;
 } HostWrite_struct;
 
 typedef struct _CfgTable_struct {
-  BYTE             Signature[4];
-  DWORD            SpecValence;
+    BYTE             Signature[4];
+    DWORD            SpecValence;
 #define SIMPLE_MODE	0x02
 #define PERFORMANT_MODE	0x04
 #define MEMQ_MODE	0x08
-  DWORD            TransportSupport;
-  DWORD            TransportActive;
-  HostWrite_struct HostWrite;
-  DWORD            CmdsOutMax;
-  DWORD            BusTypes;
-  DWORD            TransMethodOffset;
-  BYTE             ServerName[16];
-  DWORD            HeartBeat;
-  DWORD            SCSI_Prefetch;
-  DWORD            MaxSGElements;
-  DWORD            MaxLogicalUnits;
-  DWORD            MaxPhysicalDrives;
-  DWORD            MaxPhysicalDrivesPerLogicalUnit;
-  DWORD            MaxPerformantModeCommands;
-  u8		   reserved[0x78 - 0x58];
-  u32		   misc_fw_support; /* offset 0x78 */
+    DWORD            TransportSupport;
+    DWORD            TransportActive;
+    HostWrite_struct HostWrite;
+    DWORD            CmdsOutMax;
+    DWORD            BusTypes;
+    DWORD            TransMethodOffset;
+    BYTE             ServerName[16];
+    DWORD            HeartBeat;
+    DWORD            SCSI_Prefetch;
+    DWORD            MaxSGElements;
+    DWORD            MaxLogicalUnits;
+    DWORD            MaxPhysicalDrives;
+    DWORD            MaxPhysicalDrivesPerLogicalUnit;
+    DWORD            MaxPerformantModeCommands;
+    u8		   reserved[0x78 - 0x58];
+    u32		   misc_fw_support; /* offset 0x78 */
 #define MISC_FW_DOORBELL_RESET (0x02)
 #define MISC_FW_DOORBELL_RESET2 (0x10)
-	u8	   driver_version[32];
+    u8	   driver_version[32];
 } CfgTable_struct;
 
 struct TransTable_struct {
-  u32 BlockFetch0;
-  u32 BlockFetch1;
-  u32 BlockFetch2;
-  u32 BlockFetch3;
-  u32 BlockFetch4;
-  u32 BlockFetch5;
-  u32 BlockFetch6;
-  u32 BlockFetch7;
-  u32 RepQSize;
-  u32 RepQCount;
-  u32 RepQCtrAddrLow32;
-  u32 RepQCtrAddrHigh32;
-  u32 RepQAddr0Low32;
-  u32 RepQAddr0High32;
+    u32 BlockFetch0;
+    u32 BlockFetch1;
+    u32 BlockFetch2;
+    u32 BlockFetch3;
+    u32 BlockFetch4;
+    u32 BlockFetch5;
+    u32 BlockFetch6;
+    u32 BlockFetch7;
+    u32 RepQSize;
+    u32 RepQCount;
+    u32 RepQCtrAddrLow32;
+    u32 RepQCtrAddrHigh32;
+    u32 RepQAddr0Low32;
+    u32 RepQAddr0High32;
 };
 
-#pragma pack()	 
+#pragma pack()
 #endif /* CCISS_CMD_H */

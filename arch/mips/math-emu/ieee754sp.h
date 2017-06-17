@@ -50,20 +50,19 @@
 #define SPDNORMX	SPDNORMx(xm, xe)
 #define SPDNORMY	SPDNORMx(ym, ye)
 
-static inline ieee754sp buildsp(int s, int bx, unsigned m)
-{
-	ieee754sp r;
+static inline ieee754sp buildsp(int s, int bx, unsigned m) {
+    ieee754sp r;
 
-	assert((s) == 0 || (s) == 1);
-	assert((bx) >= SP_EMIN - 1 + SP_EBIAS
-	       && (bx) <= SP_EMAX + 1 + SP_EBIAS);
-	assert(((m) >> SP_MBITS) == 0);
+    assert((s) == 0 || (s) == 1);
+    assert((bx) >= SP_EMIN - 1 + SP_EBIAS
+           && (bx) <= SP_EMAX + 1 + SP_EBIAS);
+    assert(((m) >> SP_MBITS) == 0);
 
-	r.parts.sign = s;
-	r.parts.bexp = bx;
-	r.parts.mant = m;
+    r.parts.sign = s;
+    r.parts.bexp = bx;
+    r.parts.mant = m;
 
-	return r;
+    return r;
 }
 
 extern int ieee754sp_isnan(ieee754sp);

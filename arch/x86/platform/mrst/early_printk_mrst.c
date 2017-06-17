@@ -67,33 +67,33 @@
 #define SR_DCOL				(1 << 6)
 
 struct dw_spi_reg {
-	u32	ctrl0;
-	u32	ctrl1;
-	u32	ssienr;
-	u32	mwcr;
-	u32	ser;
-	u32	baudr;
-	u32	txfltr;
-	u32	rxfltr;
-	u32	txflr;
-	u32	rxflr;
-	u32	sr;
-	u32	imr;
-	u32	isr;
-	u32	risr;
-	u32	txoicr;
-	u32	rxoicr;
-	u32	rxuicr;
-	u32	msticr;
-	u32	icr;
-	u32	dmacr;
-	u32	dmatdlr;
-	u32	dmardlr;
-	u32	idr;
-	u32	version;
+    u32	ctrl0;
+    u32	ctrl1;
+    u32	ssienr;
+    u32	mwcr;
+    u32	ser;
+    u32	baudr;
+    u32	txfltr;
+    u32	rxfltr;
+    u32	txflr;
+    u32	rxflr;
+    u32	sr;
+    u32	imr;
+    u32	isr;
+    u32	risr;
+    u32	txoicr;
+    u32	rxoicr;
+    u32	rxuicr;
+    u32	msticr;
+    u32	icr;
+    u32	dmacr;
+    u32	dmatdlr;
+    u32	dmardlr;
+    u32	idr;
+    u32	version;
 
-	/* Currently operates as 32 bits, though only the low 16 bits matter */
-	u32	dr;
+    /* Currently operates as 32 bits, though only the low 16 bits matter */
+    u32	dr;
 } __packed;
 
 #define dw_readl(dw, name)		__raw_readl(&(dw)->name)
@@ -110,135 +110,129 @@ static struct kmsg_dumper dw_dumper;
 static int dumper_registered;
 
 static void dw_kmsg_dump(struct kmsg_dumper *dumper,
-			enum kmsg_dump_reason reason,
-			const char *s1, unsigned long l1,
-			const char *s2, unsigned long l2)
-{
-	int i;
+                         enum kmsg_dump_reason reason,
+                         const char *s1, unsigned long l1,
+                         const char *s2, unsigned long l2) {
+    int i;
 
-	/* When run to this, we'd better re-init the HW */
-	mrst_early_console_init();
+    /* When run to this, we'd better re-init the HW */
+    mrst_early_console_init();
 
-	for (i = 0; i < l1; i++)
-		early_mrst_console.write(&early_mrst_console, s1 + i, 1);
-	for (i = 0; i < l2; i++)
-		early_mrst_console.write(&early_mrst_console, s2 + i, 1);
+    for (i = 0; i < l1; i++)
+        early_mrst_console.write(&early_mrst_console, s1 + i, 1);
+    for (i = 0; i < l2; i++)
+        early_mrst_console.write(&early_mrst_console, s2 + i, 1);
 }
 
 /* Set the ratio rate to 115200, 8n1, IRQ disabled */
-static void max3110_write_config(void)
-{
-	u16 config;
+static void max3110_write_config(void) {
+    u16 config;
 
-	config = 0xc001;
-	dw_writel(pspi, dr, config);
+    config = 0xc001;
+    dw_writel(pspi, dr, config);
 }
 
 /* Translate char to a eligible word and send to max3110 */
-static void max3110_write_data(char c)
-{
-	u16 data;
+static void max3110_write_data(char c) {
+    u16 data;
 
-	data = 0x8000 | c;
-	dw_writel(pspi, dr, data);
+    data = 0x8000 | c;
+    dw_writel(pspi, dr, data);
 }
 
-void mrst_early_console_init(void)
-{
-	u32 ctrlr0 = 0;
-	u32 spi0_cdiv;
-	u32 freq; /* Freqency info only need be searched once */
+void mrst_early_console_init(void) {
+    u32 ctrlr0 = 0;
+    u32 spi0_cdiv;
+    u32 freq; /* Freqency info only need be searched once */
 
-	/* Base clk is 100 MHz, the actual clk = 100M / (clk_divider + 1) */
-	pclk_spi0 = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE,
-							MRST_CLK_SPI0_REG);
-	spi0_cdiv = ((*pclk_spi0) & 0xe00) >> 9;
-	freq = 100000000 / (spi0_cdiv + 1);
+    /* Base clk is 100 MHz, the actual clk = 100M / (clk_divider + 1) */
+    pclk_spi0 = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE,
+                MRST_CLK_SPI0_REG);
+    spi0_cdiv = ((*pclk_spi0) & 0xe00) >> 9;
+    freq = 100000000 / (spi0_cdiv + 1);
 
-	if (mrst_identify_cpu() == MRST_CPU_CHIP_PENWELL)
-		mrst_spi_paddr = MRST_REGBASE_SPI1;
+    if (mrst_identify_cpu() == MRST_CPU_CHIP_PENWELL)
+        mrst_spi_paddr = MRST_REGBASE_SPI1;
 
-	pspi = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE,
-						mrst_spi_paddr);
+    pspi = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE,
+            mrst_spi_paddr);
 
-	/* Disable SPI controller */
-	dw_writel(pspi, ssienr, 0);
+    /* Disable SPI controller */
+    dw_writel(pspi, ssienr, 0);
 
-	/* Set control param, 8 bits, transmit only mode */
-	ctrlr0 = dw_readl(pspi, ctrl0);
+    /* Set control param, 8 bits, transmit only mode */
+    ctrlr0 = dw_readl(pspi, ctrl0);
 
-	ctrlr0 &= 0xfcc0;
-	ctrlr0 |= 0xf | (SPI_FRF_SPI << SPI_FRF_OFFSET)
-		      | (SPI_TMOD_TO << SPI_TMOD_OFFSET);
-	dw_writel(pspi, ctrl0, ctrlr0);
+    ctrlr0 &= 0xfcc0;
+    ctrlr0 |= 0xf | (SPI_FRF_SPI << SPI_FRF_OFFSET)
+              | (SPI_TMOD_TO << SPI_TMOD_OFFSET);
+    dw_writel(pspi, ctrl0, ctrlr0);
 
-	/*
-	 * Change the spi0 clk to comply with 115200 bps, use 100000 to
-	 * calculate the clk dividor to make the clock a little slower
-	 * than real baud rate.
-	 */
-	dw_writel(pspi, baudr, freq/100000);
+    /*
+     * Change the spi0 clk to comply with 115200 bps, use 100000 to
+     * calculate the clk dividor to make the clock a little slower
+     * than real baud rate.
+     */
+    dw_writel(pspi, baudr, freq/100000);
 
-	/* Disable all INT for early phase */
-	dw_writel(pspi, imr, 0x0);
+    /* Disable all INT for early phase */
+    dw_writel(pspi, imr, 0x0);
 
-	/* Set the cs to spi-uart */
-	dw_writel(pspi, ser, 0x2);
+    /* Set the cs to spi-uart */
+    dw_writel(pspi, ser, 0x2);
 
-	/* Enable the HW, the last step for HW init */
-	dw_writel(pspi, ssienr, 0x1);
+    /* Enable the HW, the last step for HW init */
+    dw_writel(pspi, ssienr, 0x1);
 
-	/* Set the default configuration */
-	max3110_write_config();
+    /* Set the default configuration */
+    max3110_write_config();
 
-	/* Register the kmsg dumper */
-	if (!dumper_registered) {
-		dw_dumper.dump = dw_kmsg_dump;
-		kmsg_dump_register(&dw_dumper);
-		dumper_registered = 1;
-	}
+    /* Register the kmsg dumper */
+    if (!dumper_registered) {
+        dw_dumper.dump = dw_kmsg_dump;
+        kmsg_dump_register(&dw_dumper);
+        dumper_registered = 1;
+    }
 }
 
 /* Slave select should be called in the read/write function */
-static void early_mrst_spi_putc(char c)
-{
-	unsigned int timeout;
-	u32 sr;
+static void early_mrst_spi_putc(char c) {
+    unsigned int timeout;
+    u32 sr;
 
-	timeout = MRST_SPI_TIMEOUT;
-	/* Early putc needs to make sure the TX FIFO is not full */
-	while (--timeout) {
-		sr = dw_readl(pspi, sr);
-		if (!(sr & SR_TF_NOT_FULL))
-			cpu_relax();
-		else
-			break;
-	}
+    timeout = MRST_SPI_TIMEOUT;
+    /* Early putc needs to make sure the TX FIFO is not full */
+    while (--timeout) {
+        sr = dw_readl(pspi, sr);
+        if (!(sr & SR_TF_NOT_FULL))
+            cpu_relax();
+        else
+            break;
+    }
 
-	if (!timeout)
-		pr_warning("MRST earlycon: timed out\n");
-	else
-		max3110_write_data(c);
+    if (!timeout)
+        pr_warning("MRST earlycon: timed out\n");
+    else
+        max3110_write_data(c);
 }
 
 /* Early SPI only uses polling mode */
-static void early_mrst_spi_write(struct console *con, const char *str, unsigned n)
-{
-	int i;
+static void early_mrst_spi_write(struct console *con, const char *str, unsigned n) {
+    int i;
 
-	for (i = 0; i < n && *str; i++) {
-		if (*str == '\n')
-			early_mrst_spi_putc('\r');
-		early_mrst_spi_putc(*str);
-		str++;
-	}
+    for (i = 0; i < n && *str; i++) {
+        if (*str == '\n')
+            early_mrst_spi_putc('\r');
+        early_mrst_spi_putc(*str);
+        str++;
+    }
 }
 
 struct console early_mrst_console = {
-	.name =		"earlymrst",
-	.write =	early_mrst_spi_write,
-	.flags =	CON_PRINTBUFFER,
-	.index =	-1,
+    .name =		"earlymrst",
+    .write =	early_mrst_spi_write,
+    .flags =	CON_PRINTBUFFER,
+    .index =	-1,
 };
 
 /*
@@ -249,79 +243,76 @@ struct console early_mrst_console = {
 
 static void __iomem *phsu;
 
-void hsu_early_console_init(const char *s)
-{
-	unsigned long paddr, port = 0;
-	u8 lcr;
+void hsu_early_console_init(const char *s) {
+    unsigned long paddr, port = 0;
+    u8 lcr;
 
-	/*
-	 * Select the early HSU console port if specified by user in the
-	 * kernel command line.
-	 */
-	if (*s && !kstrtoul(s, 10, &port))
-		port = clamp_val(port, 0, 2);
+    /*
+     * Select the early HSU console port if specified by user in the
+     * kernel command line.
+     */
+    if (*s && !kstrtoul(s, 10, &port))
+        port = clamp_val(port, 0, 2);
 
-	paddr = HSU_PORT_BASE + port * 0x80;
-	phsu = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE, paddr);
+    paddr = HSU_PORT_BASE + port * 0x80;
+    phsu = (void *)set_fixmap_offset_nocache(FIX_EARLYCON_MEM_BASE, paddr);
 
-	/* Disable FIFO */
-	writeb(0x0, phsu + UART_FCR);
+    /* Disable FIFO */
+    writeb(0x0, phsu + UART_FCR);
 
-	/* Set to default 115200 bps, 8n1 */
-	lcr = readb(phsu + UART_LCR);
-	writeb((0x80 | lcr), phsu + UART_LCR);
-	writeb(0x18, phsu + UART_DLL);
-	writeb(lcr,  phsu + UART_LCR);
-	writel(0x3600, phsu + UART_MUL*4);
+    /* Set to default 115200 bps, 8n1 */
+    lcr = readb(phsu + UART_LCR);
+    writeb((0x80 | lcr), phsu + UART_LCR);
+    writeb(0x18, phsu + UART_DLL);
+    writeb(lcr,  phsu + UART_LCR);
+    writel(0x3600, phsu + UART_MUL*4);
 
-	writeb(0x8, phsu + UART_MCR);
-	writeb(0x7, phsu + UART_FCR);
-	writeb(0x3, phsu + UART_LCR);
+    writeb(0x8, phsu + UART_MCR);
+    writeb(0x7, phsu + UART_FCR);
+    writeb(0x3, phsu + UART_LCR);
 
-	/* Clear IRQ status */
-	readb(phsu + UART_LSR);
-	readb(phsu + UART_RX);
-	readb(phsu + UART_IIR);
-	readb(phsu + UART_MSR);
+    /* Clear IRQ status */
+    readb(phsu + UART_LSR);
+    readb(phsu + UART_RX);
+    readb(phsu + UART_IIR);
+    readb(phsu + UART_MSR);
 
-	/* Enable FIFO */
-	writeb(0x7, phsu + UART_FCR);
+    /* Enable FIFO */
+    writeb(0x7, phsu + UART_FCR);
 }
 
 #define BOTH_EMPTY (UART_LSR_TEMT | UART_LSR_THRE)
 
-static void early_hsu_putc(char ch)
-{
-	unsigned int timeout = 10000; /* 10ms */
-	u8 status;
+static void early_hsu_putc(char ch) {
+    unsigned int timeout = 10000; /* 10ms */
+    u8 status;
 
-	while (--timeout) {
-		status = readb(phsu + UART_LSR);
-		if (status & BOTH_EMPTY)
-			break;
-		udelay(1);
-	}
+    while (--timeout) {
+        status = readb(phsu + UART_LSR);
+        if (status & BOTH_EMPTY)
+            break;
+        udelay(1);
+    }
 
-	/* Only write the char when there was no timeout */
-	if (timeout)
-		writeb(ch, phsu + UART_TX);
+    /* Only write the char when there was no timeout */
+    if (timeout)
+        writeb(ch, phsu + UART_TX);
 }
 
-static void early_hsu_write(struct console *con, const char *str, unsigned n)
-{
-	int i;
+static void early_hsu_write(struct console *con, const char *str, unsigned n) {
+    int i;
 
-	for (i = 0; i < n && *str; i++) {
-		if (*str == '\n')
-			early_hsu_putc('\r');
-		early_hsu_putc(*str);
-		str++;
-	}
+    for (i = 0; i < n && *str; i++) {
+        if (*str == '\n')
+            early_hsu_putc('\r');
+        early_hsu_putc(*str);
+        str++;
+    }
 }
 
 struct console early_hsu_console = {
-	.name =		"earlyhsu",
-	.write =	early_hsu_write,
-	.flags =	CON_PRINTBUFFER,
-	.index =	-1,
+    .name =		"earlyhsu",
+    .write =	early_hsu_write,
+    .flags =	CON_PRINTBUFFER,
+    .index =	-1,
 };

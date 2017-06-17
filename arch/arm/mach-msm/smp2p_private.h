@@ -127,23 +127,23 @@
 	SMP2P_SET_BITS(val, SMP2P_RMT_DATA_MASK, SMP2P_RMT_DATA_BIT, data)
 
 enum {
-	SMP2P_LB_CMD_NOOP = 0x0,
-	SMP2P_LB_CMD_ECHO,
-	SMP2P_LB_CMD_CLEARALL,
-	SMP2P_LB_CMD_PINGPONG,
-	SMP2P_LB_CMD_RSPIN_START,
-	SMP2P_LB_CMD_RSPIN_LOCKED,
-	SMP2P_LB_CMD_RSPIN_UNLOCKED,
-	SMP2P_LB_CMD_RSPIN_END,
+    SMP2P_LB_CMD_NOOP = 0x0,
+    SMP2P_LB_CMD_ECHO,
+    SMP2P_LB_CMD_CLEARALL,
+    SMP2P_LB_CMD_PINGPONG,
+    SMP2P_LB_CMD_RSPIN_START,
+    SMP2P_LB_CMD_RSPIN_LOCKED,
+    SMP2P_LB_CMD_RSPIN_UNLOCKED,
+    SMP2P_LB_CMD_RSPIN_END,
 };
 #define SMP2P_RLPB_IGNORE 0x40
 #define SMP2P_RLPB_ENTRY_NAME "smp2p"
 
 /* Debug Logging Macros */
 enum {
-	MSM_SMP2P_INFO = 1U << 0,
-	MSM_SMP2P_DEBUG = 1U << 1,
-	MSM_SMP2P_GPIO = 1U << 2,
+    MSM_SMP2P_INFO = 1U << 0,
+    MSM_SMP2P_DEBUG = 1U << 1,
+    MSM_SMP2P_GPIO = 1U << 2,
 };
 
 #define SMP2P_IPC_LOG_STR(x...) do { \
@@ -173,10 +173,10 @@ enum {
 
 
 enum msm_smp2p_edge_state {
-	SMP2P_EDGE_STATE_CLOSED,
-	SMP2P_EDGE_STATE_OPENING,
-	SMP2P_EDGE_STATE_OPENED,
-	SMP2P_EDGE_STATE_FAILED = 0xff,
+    SMP2P_EDGE_STATE_CLOSED,
+    SMP2P_EDGE_STATE_OPENING,
+    SMP2P_EDGE_STATE_OPENED,
+    SMP2P_EDGE_STATE_FAILED = 0xff,
 };
 
 /**
@@ -189,37 +189,37 @@ enum msm_smp2p_edge_state {
  * @flags:  Flags (bits 31:2 reserved)
  */
 struct smp2p_smem {
-	uint32_t magic;
-	uint32_t feature_version;
-	uint32_t rem_loc_proc_id;
-	uint32_t valid_total_ent;
-	uint32_t flags;
+    uint32_t magic;
+    uint32_t feature_version;
+    uint32_t rem_loc_proc_id;
+    uint32_t valid_total_ent;
+    uint32_t flags;
 };
 
 struct smp2p_entry_v1 {
-	char name[SMP2P_MAX_ENTRY_NAME];
-	uint32_t entry;
+    char name[SMP2P_MAX_ENTRY_NAME];
+    uint32_t entry;
 };
 
 struct smp2p_smem_item {
-	struct smp2p_smem header;
-	struct smp2p_entry_v1 entries[SMP2P_MAX_ENTRY];
+    struct smp2p_smem header;
+    struct smp2p_entry_v1 entries[SMP2P_MAX_ENTRY];
 };
 
 /* Mock object for internal loopback testing. */
 struct msm_smp2p_remote_mock {
-	struct smp2p_smem_item remote_item;
-	int rx_interrupt_count;
-	int (*rx_interrupt)(void);
-	void (*tx_interrupt)(void);
+    struct smp2p_smem_item remote_item;
+    int rx_interrupt_count;
+    int (*rx_interrupt)(void);
+    void (*tx_interrupt)(void);
 
-	bool item_exists;
-	bool initialized;
-	struct completion cb_completion;
+    bool item_exists;
+    bool initialized;
+    struct completion cb_completion;
 };
 
 void smp2p_init_header(struct smp2p_smem *header_ptr, int local_pid,
-		int remote_pid, uint32_t features, uint32_t version);
+                       int remote_pid, uint32_t features, uint32_t version);
 void *msm_smp2p_get_remote_mock(void);
 int smp2p_remote_mock_rx_interrupt(void);
 int smp2p_reset_mock_edge(void);
@@ -233,15 +233,15 @@ int smp2p_get_debug_mask(void);
 
 /* Inbound / outbound Interrupt configuration. */
 struct smp2p_interrupt_config {
-	bool is_configured;
-	uint32_t *out_int_ptr;
-	uint32_t out_int_mask;
-	int in_int_id;
-	const char *name;
+    bool is_configured;
+    uint32_t *out_int_ptr;
+    uint32_t out_int_mask;
+    int in_int_id;
+    const char *name;
 
-	/* interrupt stats */
-	unsigned in_interrupt_count;
-	unsigned out_interrupt_count;
+    /* interrupt stats */
+    unsigned in_interrupt_count;
+    unsigned out_interrupt_count;
 };
 
 struct smp2p_interrupt_config *smp2p_get_interrupt_config(void);

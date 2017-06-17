@@ -752,13 +752,13 @@ void rts51x_release_cards(struct rts51x_chip *chip);
 int switch_ssc_clock(struct rts51x_chip *chip, int clk);
 int switch_normal_clock(struct rts51x_chip *chip, int clk);
 int card_rw(struct scsi_cmnd *srb, struct rts51x_chip *chip, u32 sec_addr,
-	    u16 sec_cnt);
+            u16 sec_cnt);
 u8 get_lun_card(struct rts51x_chip *chip, unsigned int lun);
 int card_share_mode(struct rts51x_chip *chip, int card);
 int rts51x_select_card(struct rts51x_chip *chip, int card);
 void eject_card(struct rts51x_chip *chip, unsigned int lun);
 void trans_dma_enable(enum dma_data_direction dir, struct rts51x_chip *chip,
-		      u32 byte_cnt, u8 pack_size);
+                      u32 byte_cnt, u8 pack_size);
 int enable_card_clock(struct rts51x_chip *chip, u8 card);
 int disable_card_clock(struct rts51x_chip *chip, u8 card);
 int card_power_on(struct rts51x_chip *chip, u8 card);
@@ -767,115 +767,101 @@ int toggle_gpio(struct rts51x_chip *chip, u8 gpio);
 int turn_on_led(struct rts51x_chip *chip, u8 gpio);
 int turn_off_led(struct rts51x_chip *chip, u8 gpio);
 
-static inline int check_card_ready(struct rts51x_chip *chip, unsigned int lun)
-{
-	if (chip->card_ready & chip->lun2card[lun])
-		return 1;
+static inline int check_card_ready(struct rts51x_chip *chip, unsigned int lun) {
+    if (chip->card_ready & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline int check_card_exist(struct rts51x_chip *chip, unsigned int lun)
-{
-	if (chip->card_exist & chip->lun2card[lun])
-		return 1;
+static inline int check_card_exist(struct rts51x_chip *chip, unsigned int lun) {
+    if (chip->card_exist & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline int check_card_wp(struct rts51x_chip *chip, unsigned int lun)
-{
-	if (chip->card_wp & chip->lun2card[lun])
-		return 1;
+static inline int check_card_wp(struct rts51x_chip *chip, unsigned int lun) {
+    if (chip->card_wp & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline int check_card_fail(struct rts51x_chip *chip, unsigned int lun)
-{
-	if (chip->card_fail & chip->lun2card[lun])
-		return 1;
+static inline int check_card_fail(struct rts51x_chip *chip, unsigned int lun) {
+    if (chip->card_fail & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline int check_card_ejected(struct rts51x_chip *chip, unsigned int lun)
-{
-	if (chip->card_ejected & chip->lun2card[lun])
-		return 1;
+static inline int check_card_ejected(struct rts51x_chip *chip, unsigned int lun) {
+    if (chip->card_ejected & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
 static inline int check_fake_card_ready(struct rts51x_chip *chip,
-					unsigned int lun)
-{
-	if (chip->fake_card_ready & chip->lun2card[lun])
-		return 1;
+                                        unsigned int lun) {
+    if (chip->fake_card_ready & chip->lun2card[lun])
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline u8 get_lun2card(struct rts51x_chip *chip, unsigned int lun)
-{
-	return chip->lun2card[lun];
+static inline u8 get_lun2card(struct rts51x_chip *chip, unsigned int lun) {
+    return chip->lun2card[lun];
 }
 
-static inline int check_lun_mc(struct rts51x_chip *chip, unsigned int lun)
-{
-	return CHK_BIT(chip->lun_mc, lun);
+static inline int check_lun_mc(struct rts51x_chip *chip, unsigned int lun) {
+    return CHK_BIT(chip->lun_mc, lun);
 }
 
-static inline void set_lun_mc(struct rts51x_chip *chip, unsigned int lun)
-{
-	SET_BIT(chip->lun_mc, lun);
+static inline void set_lun_mc(struct rts51x_chip *chip, unsigned int lun) {
+    SET_BIT(chip->lun_mc, lun);
 }
 
-static inline void clear_lun_mc(struct rts51x_chip *chip, unsigned int lun)
-{
-	CLR_BIT(chip->lun_mc, lun);
+static inline void clear_lun_mc(struct rts51x_chip *chip, unsigned int lun) {
+    CLR_BIT(chip->lun_mc, lun);
 }
 
-static inline int switch_clock(struct rts51x_chip *chip, int clk)
-{
-	int retval = 0;
+static inline int switch_clock(struct rts51x_chip *chip, int clk) {
+    int retval = 0;
 
-	if (chip->asic_code)
-		retval = switch_ssc_clock(chip, clk);
-	else
-		retval = switch_normal_clock(chip, clk);
+    if (chip->asic_code)
+        retval = switch_ssc_clock(chip, clk);
+    else
+        retval = switch_normal_clock(chip, clk);
 
-	return retval;
+    return retval;
 }
 
-static inline void rts51x_clear_xd_error(struct rts51x_chip *chip)
-{
-	rts51x_ep0_write_register(chip, CARD_STOP,
-				  XD_STOP | XD_CLR_ERR, XD_STOP | XD_CLR_ERR);
+static inline void rts51x_clear_xd_error(struct rts51x_chip *chip) {
+    rts51x_ep0_write_register(chip, CARD_STOP,
+                              XD_STOP | XD_CLR_ERR, XD_STOP | XD_CLR_ERR);
 
-	rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
-	rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
-	rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
+    rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
+    rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
+    rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
 }
 
-static inline void rts51x_clear_sd_error(struct rts51x_chip *chip)
-{
-	rts51x_ep0_write_register(chip, CARD_STOP,
-				  SD_STOP | SD_CLR_ERR, SD_STOP | SD_CLR_ERR);
+static inline void rts51x_clear_sd_error(struct rts51x_chip *chip) {
+    rts51x_ep0_write_register(chip, CARD_STOP,
+                              SD_STOP | SD_CLR_ERR, SD_STOP | SD_CLR_ERR);
 
-	rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
-	rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
-	rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
+    rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
+    rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
+    rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
 }
 
-static inline void rts51x_clear_ms_error(struct rts51x_chip *chip)
-{
-	rts51x_ep0_write_register(chip, CARD_STOP,
-				  MS_STOP | MS_CLR_ERR, MS_STOP | MS_CLR_ERR);
+static inline void rts51x_clear_ms_error(struct rts51x_chip *chip) {
+    rts51x_ep0_write_register(chip, CARD_STOP,
+                              MS_STOP | MS_CLR_ERR, MS_STOP | MS_CLR_ERR);
 
-	rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
-	rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
-	rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
+    rts51x_ep0_write_register(chip, MC_FIFO_CTL, FIFO_FLUSH, FIFO_FLUSH);
+    rts51x_ep0_write_register(chip, MC_DMA_RST, DMA_RESET, DMA_RESET);
+    rts51x_ep0_write_register(chip, SFSM_ED, 0xf8, 0xf8);
 }
 
 #endif /* __RTS51X_CARD_H */

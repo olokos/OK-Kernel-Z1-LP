@@ -47,128 +47,128 @@
 /* 8bit ALU logic operations */
 struct ins_format1 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	immediate	: 8,
-			source		: 9,
-			destination	: 9,
-			ret		: 1,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	immediate	: 8,
+                  source		: 9,
+                  destination	: 9,
+                  ret		: 1,
+                  opcode		: 4,
+                  parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			ret		: 1,
-			destination	: 9,
-			source		: 9,
-			immediate	: 8;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    ret		: 1,
+                    destination	: 9,
+                    source		: 9,
+                    immediate	: 8;
 #endif
 };
 
 /* 8bit ALU shift/rotate operations */
 struct ins_format2 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	shift_control	: 8,
-			source		: 9,
-			destination	: 9,
-			ret		: 1,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	shift_control	: 8,
+                  source		: 9,
+                  destination	: 9,
+                  ret		: 1,
+                  opcode		: 4,
+                  parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			ret		: 1,
-			destination	: 9,
-			source		: 9,
-			shift_control	: 8;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    ret		: 1,
+                    destination	: 9,
+                    source		: 9,
+                    shift_control	: 8;
 #endif
 };
 
 /* 8bit branch control operations */
 struct ins_format3 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	immediate	: 8,
-			source		: 9,
-			address		: 10,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	immediate	: 8,
+                  source		: 9,
+                  address		: 10,
+                  opcode		: 4,
+                  parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			address		: 10,
-			source		: 9,
-			immediate	: 8;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    address		: 10,
+                    source		: 9,
+                    immediate	: 8;
 #endif
 };
 
 /* 16bit ALU logic operations */
 struct ins_format4 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	opcode_ext	: 8,
-			source		: 9,
-			destination	: 9,
-			ret		: 1,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	opcode_ext	: 8,
+                 source		: 9,
+                 destination	: 9,
+                 ret		: 1,
+                 opcode		: 4,
+                 parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			ret		: 1,
-			destination	: 9,
-			source		: 9,
-			opcode_ext	: 8;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    ret		: 1,
+                    destination	: 9,
+                    source		: 9,
+                    opcode_ext	: 8;
 #endif
 };
 
 /* 16bit branch control operations */
 struct ins_format5 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	opcode_ext	: 8,
-			source		: 9,
-			address		: 10,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	opcode_ext	: 8,
+                 source		: 9,
+                 address		: 10,
+                 opcode		: 4,
+                 parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			address		: 10,
-			source		: 9,
-			opcode_ext	: 8;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    address		: 10,
+                    source		: 9,
+                    opcode_ext	: 8;
 #endif
 };
 
 /*  Far branch operations */
 struct ins_format6 {
 #ifdef __LITTLE_ENDIAN
-	uint32_t	page		: 3,
-			opcode_ext	: 5,
-			source		: 9,
-			address		: 10,
-			opcode		: 4,
-			parity		: 1;
+    uint32_t	page		: 3,
+                      opcode_ext	: 5,
+                      source		: 9,
+                      address		: 10,
+                      opcode		: 4,
+                      parity		: 1;
 #else
-	uint32_t	parity		: 1,
-			opcode		: 4,
-			address		: 10,
-			source		: 9,
-			opcode_ext	: 5,
-			page		: 3;
+    uint32_t	parity		: 1,
+                    opcode		: 4,
+                    address		: 10,
+                    source		: 9,
+                    opcode_ext	: 5,
+                    page		: 3;
 #endif
 };
 
 union ins_formats {
-		struct ins_format1 format1;
-		struct ins_format2 format2;
-		struct ins_format3 format3;
-		struct ins_format4 format4;
-		struct ins_format5 format5;
-		struct ins_format6 format6;
-		uint8_t		   bytes[4];
-		uint32_t	   integer;
+    struct ins_format1 format1;
+    struct ins_format2 format2;
+    struct ins_format3 format3;
+    struct ins_format4 format4;
+    struct ins_format5 format5;
+    struct ins_format6 format6;
+    uint8_t		   bytes[4];
+    uint32_t	   integer;
 };
 struct instruction {
-	union	ins_formats format;
-	u_int	srcline;
-	struct symbol *patch_label;
-	STAILQ_ENTRY(instruction) links;
+    union	ins_formats format;
+    u_int	srcline;
+    struct symbol *patch_label;
+    STAILQ_ENTRY(instruction) links;
 };
 
 #define	AIC_OP_OR	0x0
@@ -195,7 +195,7 @@ struct instruction {
 #define	AIC_OP_SHR	0x20
 #define	AIC_OP_ROR	0x30
 
-/* 16bit Ops. Low byte main opcode.  High byte extended opcode. */ 
+/* 16bit Ops. Low byte main opcode.  High byte extended opcode. */
 #define	AIC_OP_OR16	0x8005
 #define	AIC_OP_AND16	0x8105
 #define	AIC_OP_XOR16	0x8205

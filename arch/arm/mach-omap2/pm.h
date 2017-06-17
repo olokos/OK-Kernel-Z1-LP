@@ -28,13 +28,11 @@ extern int (*omap_pm_suspend)(void);
 extern int omap3_opp_init(void);
 extern int omap4_opp_init(void);
 #else
-static inline int omap3_opp_init(void)
-{
-	return -EINVAL;
+static inline int omap3_opp_init(void) {
+    return -EINVAL;
 }
-static inline int omap4_opp_init(void)
-{
-	return -EINVAL;
+static inline int omap4_opp_init(void) {
+    return -EINVAL;
 }
 #endif
 
@@ -45,17 +43,16 @@ static inline int omap4_opp_init(void)
  * omap3_pm_init_cpuidle
  */
 struct cpuidle_params {
-	u32 exit_latency;	/* exit_latency = sleep + wake-up latencies */
-	u32 target_residency;
-	u8 valid;		/* validates the C-state */
+    u32 exit_latency;	/* exit_latency = sleep + wake-up latencies */
+    u32 target_residency;
+    u8 valid;		/* validates the C-state */
 };
 
 #if defined(CONFIG_PM) && defined(CONFIG_CPU_IDLE)
 extern void omap3_pm_init_cpuidle(struct cpuidle_params *cpuidle_board_params);
 #else
 static
-inline void omap3_pm_init_cpuidle(struct cpuidle_params *cpuidle_board_params)
-{
+inline void omap3_pm_init_cpuidle(struct cpuidle_params *cpuidle_board_params) {
 }
 #endif
 
@@ -79,7 +76,7 @@ extern void omap24xx_idle_loop_suspend(void);
 extern unsigned int omap24xx_idle_loop_suspend_sz;
 
 extern void omap24xx_cpu_suspend(u32 dll_ctrl, void __iomem *sdrc_dlla_ctrl,
-					void __iomem *sdrc_power);
+                                 void __iomem *sdrc_power);
 extern unsigned int omap24xx_cpu_suspend_sz;
 
 /* 3xxx */
@@ -113,9 +110,8 @@ static inline void enable_omap3630_toggle_l2_on_restore(void) { }
 extern int omap_devinit_smartreflex(void);
 extern void omap_enable_smartreflex_on_init(void);
 #else
-static inline int omap_devinit_smartreflex(void)
-{
-	return -EINVAL;
+static inline int omap_devinit_smartreflex(void) {
+    return -EINVAL;
 }
 
 static inline void omap_enable_smartreflex_on_init(void) {}
@@ -126,13 +122,11 @@ extern int omap3_twl_init(void);
 extern int omap4_twl_init(void);
 extern int omap3_twl_set_sr_bit(bool enable);
 #else
-static inline int omap3_twl_init(void)
-{
-	return -EINVAL;
+static inline int omap3_twl_init(void) {
+    return -EINVAL;
 }
-static inline int omap4_twl_init(void)
-{
-	return -EINVAL;
+static inline int omap4_twl_init(void) {
+    return -EINVAL;
 }
 #endif
 

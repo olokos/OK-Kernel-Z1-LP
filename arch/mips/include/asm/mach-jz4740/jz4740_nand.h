@@ -20,15 +20,15 @@
 #include <linux/mtd/partitions.h>
 
 struct jz_nand_platform_data {
-	int			num_partitions;
-	struct mtd_partition	*partitions;
+    int			num_partitions;
+    struct mtd_partition	*partitions;
 
-	struct nand_ecclayout	*ecc_layout;
+    struct nand_ecclayout	*ecc_layout;
 
-	unsigned int busy_gpio;
+    unsigned int busy_gpio;
 
-	void (*ident_callback)(struct platform_device *, struct nand_chip *,
-				struct mtd_partition **, int *num_partitions);
+    void (*ident_callback)(struct platform_device *, struct nand_chip *,
+                           struct mtd_partition **, int *num_partitions);
 };
 
 #endif

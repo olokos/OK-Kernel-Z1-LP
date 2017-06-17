@@ -34,24 +34,24 @@
  * Use the DMA feature on PXA chips
  */
 #ifdef CONFIG_ARCH_PXA
-  #define SMC_USE_PXA_DMA	1
-  #define SMC_USE_16BIT		0
-  #define SMC_USE_32BIT		1
-  #define SMC_IRQ_SENSE		IRQF_TRIGGER_FALLING
+#define SMC_USE_PXA_DMA	1
+#define SMC_USE_16BIT		0
+#define SMC_USE_32BIT		1
+#define SMC_IRQ_SENSE		IRQF_TRIGGER_FALLING
 #elif defined(CONFIG_SH_MAGIC_PANEL_R2)
-  #define SMC_USE_16BIT		0
-  #define SMC_USE_32BIT		1
-  #define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
+#define SMC_USE_16BIT		0
+#define SMC_USE_32BIT		1
+#define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
 #elif defined(CONFIG_ARCH_OMAP3)
-  #define SMC_USE_16BIT		0
-  #define SMC_USE_32BIT		1
-  #define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
-  #define SMC_MEM_RESERVED	1
+#define SMC_USE_16BIT		0
+#define SMC_USE_32BIT		1
+#define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
+#define SMC_MEM_RESERVED	1
 #elif defined(CONFIG_ARCH_OMAP2)
-  #define SMC_USE_16BIT		0
-  #define SMC_USE_32BIT		1
-  #define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
-  #define SMC_MEM_RESERVED	1
+#define SMC_USE_16BIT		0
+#define SMC_USE_32BIT		1
+#define SMC_IRQ_SENSE		IRQF_TRIGGER_LOW
+#define SMC_MEM_RESERVED	1
 #else
 /*
  * Default configuration
@@ -66,53 +66,53 @@
 
 /* store this information for the driver.. */
 struct smc911x_local {
-	/*
-	 * If I have to wait until the DMA is finished and ready to reload a
-	 * packet, I will store the skbuff here. Then, the DMA will send it
-	 * out and free it.
-	 */
-	struct sk_buff *pending_tx_skb;
+    /*
+     * If I have to wait until the DMA is finished and ready to reload a
+     * packet, I will store the skbuff here. Then, the DMA will send it
+     * out and free it.
+     */
+    struct sk_buff *pending_tx_skb;
 
-	/* version/revision of the SMC911x chip */
-	u16 version;
-	u16 revision;
+    /* version/revision of the SMC911x chip */
+    u16 version;
+    u16 revision;
 
-	/* FIFO sizes */
-	int tx_fifo_kb;
-	int tx_fifo_size;
-	int rx_fifo_size;
-	int afc_cfg;
+    /* FIFO sizes */
+    int tx_fifo_kb;
+    int tx_fifo_size;
+    int rx_fifo_size;
+    int afc_cfg;
 
-	/* Contains the current active receive/phy mode */
-	int ctl_rfduplx;
-	int ctl_rspeed;
+    /* Contains the current active receive/phy mode */
+    int ctl_rfduplx;
+    int ctl_rspeed;
 
-	u32 msg_enable;
-	u32 phy_type;
-	struct mii_if_info mii;
+    u32 msg_enable;
+    u32 phy_type;
+    struct mii_if_info mii;
 
-	/* work queue */
-	struct work_struct phy_configure;
+    /* work queue */
+    struct work_struct phy_configure;
 
-	int tx_throttle;
-	spinlock_t lock;
+    int tx_throttle;
+    spinlock_t lock;
 
-	struct net_device *netdev;
+    struct net_device *netdev;
 
 #ifdef SMC_USE_DMA
-	/* DMA needs the physical address of the chip */
-	u_long physaddr;
-	int rxdma;
-	int txdma;
-	int rxdma_active;
-	int txdma_active;
-	struct sk_buff *current_rx_skb;
-	struct sk_buff *current_tx_skb;
-	struct device *dev;
+    /* DMA needs the physical address of the chip */
+    u_long physaddr;
+    int rxdma;
+    int txdma;
+    int rxdma_active;
+    int txdma_active;
+    struct sk_buff *current_rx_skb;
+    struct sk_buff *current_tx_skb;
+    struct device *dev;
 #endif
-	void __iomem *base;
+    void __iomem *base;
 #ifdef SMC_DYNAMIC_BUS_CONFIG
-	struct smc911x_platdata cfg;
+    struct smc911x_platdata cfg;
 #endif
 };
 
@@ -121,72 +121,68 @@ struct smc911x_local {
  */
 
 #ifdef SMC_DYNAMIC_BUS_CONFIG
-static inline unsigned int SMC_inl(struct smc911x_local *lp, int reg)
-{
-	void __iomem *ioaddr = lp->base + reg;
+static inline unsigned int SMC_inl(struct smc911x_local *lp, int reg) {
+    void __iomem *ioaddr = lp->base + reg;
 
-	if (lp->cfg.flags & SMC911X_USE_32BIT)
-		return readl(ioaddr);
+    if (lp->cfg.flags & SMC911X_USE_32BIT)
+        return readl(ioaddr);
 
-	if (lp->cfg.flags & SMC911X_USE_16BIT)
-		return readw(ioaddr) | (readw(ioaddr + 2) << 16);
+    if (lp->cfg.flags & SMC911X_USE_16BIT)
+        return readw(ioaddr) | (readw(ioaddr + 2) << 16);
 
-	BUG();
+    BUG();
 }
 
 static inline void SMC_outl(unsigned int value, struct smc911x_local *lp,
-			    int reg)
-{
-	void __iomem *ioaddr = lp->base + reg;
+                            int reg) {
+    void __iomem *ioaddr = lp->base + reg;
 
-	if (lp->cfg.flags & SMC911X_USE_32BIT) {
-		writel(value, ioaddr);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_32BIT) {
+        writel(value, ioaddr);
+        return;
+    }
 
-	if (lp->cfg.flags & SMC911X_USE_16BIT) {
-		writew(value & 0xffff, ioaddr);
-		writew(value >> 16, ioaddr + 2);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_16BIT) {
+        writew(value & 0xffff, ioaddr);
+        writew(value >> 16, ioaddr + 2);
+        return;
+    }
 
-	BUG();
+    BUG();
 }
 
 static inline void SMC_insl(struct smc911x_local *lp, int reg,
-			      void *addr, unsigned int count)
-{
-	void __iomem *ioaddr = lp->base + reg;
+                            void *addr, unsigned int count) {
+    void __iomem *ioaddr = lp->base + reg;
 
-	if (lp->cfg.flags & SMC911X_USE_32BIT) {
-		readsl(ioaddr, addr, count);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_32BIT) {
+        readsl(ioaddr, addr, count);
+        return;
+    }
 
-	if (lp->cfg.flags & SMC911X_USE_16BIT) {
-		readsw(ioaddr, addr, count * 2);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_16BIT) {
+        readsw(ioaddr, addr, count * 2);
+        return;
+    }
 
-	BUG();
+    BUG();
 }
 
 static inline void SMC_outsl(struct smc911x_local *lp, int reg,
-			     void *addr, unsigned int count)
-{
-	void __iomem *ioaddr = lp->base + reg;
+                             void *addr, unsigned int count) {
+    void __iomem *ioaddr = lp->base + reg;
 
-	if (lp->cfg.flags & SMC911X_USE_32BIT) {
-		writesl(ioaddr, addr, count);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_32BIT) {
+        writesl(ioaddr, addr, count);
+        return;
+    }
 
-	if (lp->cfg.flags & SMC911X_USE_16BIT) {
-		writesw(ioaddr, addr, count * 2);
-		return;
-	}
+    if (lp->cfg.flags & SMC911X_USE_16BIT) {
+        writesw(ioaddr, addr, count * 2);
+        return;
+    }
 
-	BUG();
+    BUG();
 }
 #else
 #if	SMC_USE_16BIT
@@ -247,24 +243,23 @@ static int rx_dmalen, tx_dmalen;
 
 static inline void
 smc_pxa_dma_insl(struct smc911x_local *lp, u_long physaddr,
-		int reg, int dma, u_char *buf, int len)
-{
-	/* 64 bit alignment is required for memory to memory DMA */
-	if ((long)buf & 4) {
-		*((u32 *)buf) = SMC_inl(lp, reg);
-		buf += 4;
-		len--;
-	}
+                 int reg, int dma, u_char *buf, int len) {
+    /* 64 bit alignment is required for memory to memory DMA */
+    if ((long)buf & 4) {
+        *((u32 *)buf) = SMC_inl(lp, reg);
+        buf += 4;
+        len--;
+    }
 
-	len *= 4;
-	rx_dmabuf = dma_map_single(lp->dev, buf, len, DMA_FROM_DEVICE);
-	rx_dmalen = len;
-	DCSR(dma) = DCSR_NODESC;
-	DTADR(dma) = rx_dmabuf;
-	DSADR(dma) = physaddr + reg;
-	DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
-		DCMD_WIDTH4 | DCMD_ENDIRQEN | (DCMD_LENGTH & rx_dmalen));
-	DCSR(dma) = DCSR_NODESC | DCSR_RUN;
+    len *= 4;
+    rx_dmabuf = dma_map_single(lp->dev, buf, len, DMA_FROM_DEVICE);
+    rx_dmalen = len;
+    DCSR(dma) = DCSR_NODESC;
+    DTADR(dma) = rx_dmabuf;
+    DSADR(dma) = physaddr + reg;
+    DCMD(dma) = (DCMD_INCTRGADDR | DCMD_BURST32 |
+                 DCMD_WIDTH4 | DCMD_ENDIRQEN | (DCMD_LENGTH & rx_dmalen));
+    DCSR(dma) = DCSR_NODESC | DCSR_RUN;
 }
 #endif
 
@@ -275,24 +270,23 @@ smc_pxa_dma_insl(struct smc911x_local *lp, u_long physaddr,
 
 static inline void
 smc_pxa_dma_outsl(struct smc911x_local *lp, u_long physaddr,
-		int reg, int dma, u_char *buf, int len)
-{
-	/* 64 bit alignment is required for memory to memory DMA */
-	if ((long)buf & 4) {
-		SMC_outl(*((u32 *)buf), lp, reg);
-		buf += 4;
-		len--;
-	}
+                  int reg, int dma, u_char *buf, int len) {
+    /* 64 bit alignment is required for memory to memory DMA */
+    if ((long)buf & 4) {
+        SMC_outl(*((u32 *)buf), lp, reg);
+        buf += 4;
+        len--;
+    }
 
-	len *= 4;
-	tx_dmabuf = dma_map_single(lp->dev, buf, len, DMA_TO_DEVICE);
-	tx_dmalen = len;
-	DCSR(dma) = DCSR_NODESC;
-	DSADR(dma) = tx_dmabuf;
-	DTADR(dma) = physaddr + reg;
-	DCMD(dma) = (DCMD_INCSRCADDR | DCMD_BURST32 |
-		DCMD_WIDTH4 | DCMD_ENDIRQEN | (DCMD_LENGTH & tx_dmalen));
-	DCSR(dma) = DCSR_NODESC | DCSR_RUN;
+    len *= 4;
+    tx_dmabuf = dma_map_single(lp->dev, buf, len, DMA_TO_DEVICE);
+    tx_dmalen = len;
+    DCSR(dma) = DCSR_NODESC;
+    DSADR(dma) = tx_dmabuf;
+    DTADR(dma) = physaddr + reg;
+    DCMD(dma) = (DCMD_INCSRCADDR | DCMD_BURST32 |
+                 DCMD_WIDTH4 | DCMD_ENDIRQEN | (DCMD_LENGTH & tx_dmalen));
+    DCSR(dma) = DCSR_NODESC | DCSR_RUN;
 }
 #endif
 #endif	 /* SMC_USE_PXA_DMA */
@@ -689,20 +683,20 @@ smc_pxa_dma_outsl(struct smc911x_local *lp, u_long physaddr,
 #define CHIP_9218	0x118A
 
 struct chip_id {
-	u16 id;
-	char *name;
+    u16 id;
+    char *name;
 };
 
 static const struct chip_id chip_ids[] =  {
-	{ CHIP_9115, "LAN9115" },
-	{ CHIP_9116, "LAN9116" },
-	{ CHIP_9117, "LAN9117" },
-	{ CHIP_9118, "LAN9118" },
-	{ CHIP_9211, "LAN9211" },
-	{ CHIP_9215, "LAN9215" },
-	{ CHIP_9217, "LAN9217" },
-	{ CHIP_9218, "LAN9218" },
-	{ 0, NULL },
+    { CHIP_9115, "LAN9115" },
+    { CHIP_9116, "LAN9116" },
+    { CHIP_9117, "LAN9117" },
+    { CHIP_9118, "LAN9118" },
+    { CHIP_9211, "LAN9211" },
+    { CHIP_9215, "LAN9215" },
+    { CHIP_9217, "LAN9217" },
+    { CHIP_9218, "LAN9218" },
+    { 0, NULL },
 };
 
 #define IS_REV_A(x)	((x & 0xFFFF)==0)

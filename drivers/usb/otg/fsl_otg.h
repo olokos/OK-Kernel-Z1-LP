@@ -301,88 +301,87 @@
 #define SET_OTG_STATE(otg_ptr, newstate)	((otg_ptr)->state = newstate)
 
 struct usb_dr_mmap {
-	/* Capability register */
-	u8 res1[256];
-	u16 caplength;		/* Capability Register Length */
-	u16 hciversion;		/* Host Controller Interface Version */
-	u32 hcsparams;		/* Host Controller Structual Parameters */
-	u32 hccparams;		/* Host Controller Capability Parameters */
-	u8 res2[20];
-	u32 dciversion;		/* Device Controller Interface Version */
-	u32 dccparams;		/* Device Controller Capability Parameters */
-	u8 res3[24];
-	/* Operation register */
-	u32 usbcmd;		/* USB Command Register */
-	u32 usbsts;		/* USB Status Register */
-	u32 usbintr;		/* USB Interrupt Enable Register */
-	u32 frindex;		/* Frame Index Register */
-	u8 res4[4];
-	u32 deviceaddr;		/* Device Address */
-	u32 endpointlistaddr;	/* Endpoint List Address Register */
-	u8 res5[4];
-	u32 burstsize;		/* Master Interface Data Burst Size Register */
-	u32 txttfilltuning;	/* Transmit FIFO Tuning Controls Register */
-	u8 res6[8];
-	u32 ulpiview;		/* ULPI register access */
-	u8 res7[12];
-	u32 configflag;		/* Configure Flag Register */
-	u32 portsc;		/* Port 1 Status and Control Register */
-	u8 res8[28];
-	u32 otgsc;		/* On-The-Go Status and Control */
-	u32 usbmode;		/* USB Mode Register */
-	u32 endptsetupstat;	/* Endpoint Setup Status Register */
-	u32 endpointprime;	/* Endpoint Initialization Register */
-	u32 endptflush;		/* Endpoint Flush Register */
-	u32 endptstatus;	/* Endpoint Status Register */
-	u32 endptcomplete;	/* Endpoint Complete Register */
-	u32 endptctrl[6];	/* Endpoint Control Registers */
-	u8 res9[552];
-	u32 snoop1;
-	u32 snoop2;
-	u32 age_cnt_thresh;	/* Age Count Threshold Register */
-	u32 pri_ctrl;		/* Priority Control Register */
-	u32 si_ctrl;		/* System Interface Control Register */
-	u8 res10[236];
-	u32 control;		/* General Purpose Control Register */
+    /* Capability register */
+    u8 res1[256];
+    u16 caplength;		/* Capability Register Length */
+    u16 hciversion;		/* Host Controller Interface Version */
+    u32 hcsparams;		/* Host Controller Structual Parameters */
+    u32 hccparams;		/* Host Controller Capability Parameters */
+    u8 res2[20];
+    u32 dciversion;		/* Device Controller Interface Version */
+    u32 dccparams;		/* Device Controller Capability Parameters */
+    u8 res3[24];
+    /* Operation register */
+    u32 usbcmd;		/* USB Command Register */
+    u32 usbsts;		/* USB Status Register */
+    u32 usbintr;		/* USB Interrupt Enable Register */
+    u32 frindex;		/* Frame Index Register */
+    u8 res4[4];
+    u32 deviceaddr;		/* Device Address */
+    u32 endpointlistaddr;	/* Endpoint List Address Register */
+    u8 res5[4];
+    u32 burstsize;		/* Master Interface Data Burst Size Register */
+    u32 txttfilltuning;	/* Transmit FIFO Tuning Controls Register */
+    u8 res6[8];
+    u32 ulpiview;		/* ULPI register access */
+    u8 res7[12];
+    u32 configflag;		/* Configure Flag Register */
+    u32 portsc;		/* Port 1 Status and Control Register */
+    u8 res8[28];
+    u32 otgsc;		/* On-The-Go Status and Control */
+    u32 usbmode;		/* USB Mode Register */
+    u32 endptsetupstat;	/* Endpoint Setup Status Register */
+    u32 endpointprime;	/* Endpoint Initialization Register */
+    u32 endptflush;		/* Endpoint Flush Register */
+    u32 endptstatus;	/* Endpoint Status Register */
+    u32 endptcomplete;	/* Endpoint Complete Register */
+    u32 endptctrl[6];	/* Endpoint Control Registers */
+    u8 res9[552];
+    u32 snoop1;
+    u32 snoop2;
+    u32 age_cnt_thresh;	/* Age Count Threshold Register */
+    u32 pri_ctrl;		/* Priority Control Register */
+    u32 si_ctrl;		/* System Interface Control Register */
+    u8 res10[236];
+    u32 control;		/* General Purpose Control Register */
 };
 
 struct fsl_otg_timer {
-	unsigned long expires;	/* Number of count increase to timeout */
-	unsigned long count;	/* Tick counter */
-	void (*function)(unsigned long);	/* Timeout function */
-	unsigned long data;	/* Data passed to function */
-	struct list_head list;
+    unsigned long expires;	/* Number of count increase to timeout */
+    unsigned long count;	/* Tick counter */
+    void (*function)(unsigned long);	/* Timeout function */
+    unsigned long data;	/* Data passed to function */
+    struct list_head list;
 };
 
 inline struct fsl_otg_timer *otg_timer_initializer
-(void (*function)(unsigned long), unsigned long expires, unsigned long data)
-{
-	struct fsl_otg_timer *timer;
+(void (*function)(unsigned long), unsigned long expires, unsigned long data) {
+    struct fsl_otg_timer *timer;
 
-	timer = kmalloc(sizeof(struct fsl_otg_timer), GFP_KERNEL);
-	if (!timer)
-		return NULL;
-	timer->function = function;
-	timer->expires = expires;
-	timer->data = data;
-	return timer;
+    timer = kmalloc(sizeof(struct fsl_otg_timer), GFP_KERNEL);
+    if (!timer)
+        return NULL;
+    timer->function = function;
+    timer->expires = expires;
+    timer->data = data;
+    return timer;
 }
 
 struct fsl_otg {
-	struct usb_phy phy;
-	struct otg_fsm fsm;
-	struct usb_dr_mmap *dr_mem_map;
-	struct delayed_work otg_event;
+    struct usb_phy phy;
+    struct otg_fsm fsm;
+    struct usb_dr_mmap *dr_mem_map;
+    struct delayed_work otg_event;
 
-	/* used for usb host */
-	struct work_struct work_wq;
-	u8	host_working;
+    /* used for usb host */
+    struct work_struct work_wq;
+    u8	host_working;
 
-	int irq;
+    int irq;
 };
 
 struct fsl_otg_config {
-	u8 otg_port;
+    u8 otg_port;
 };
 
 /* For SRP and HNP handle */

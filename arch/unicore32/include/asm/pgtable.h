@@ -191,7 +191,9 @@ PTE_BIT_FUNC(mkdirty,   |= PTE_DIRTY);
 PTE_BIT_FUNC(mkold,     &= ~PTE_YOUNG);
 PTE_BIT_FUNC(mkyoung,   |= PTE_YOUNG);
 
-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
+}
 
 /*
  * Mark the prot value as uncacheable.
@@ -240,11 +242,10 @@ static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
 /* Find an entry in the third-level page table.. */
 #define __pte_index(addr)	(((addr) >> PAGE_SHIFT) & (PTRS_PER_PTE - 1))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	const unsigned long mask = PTE_EXEC | PTE_WRITE | PTE_READ;
-	pte_val(pte) = (pte_val(pte) & ~mask) | (pgprot_val(newprot) & mask);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    const unsigned long mask = PTE_EXEC | PTE_WRITE | PTE_READ;
+    pte_val(pte) = (pte_val(pte) & ~mask) | (pgprot_val(newprot) & mask);
+    return pte;
 }
 
 extern pgd_t swapper_pg_dir[PTRS_PER_PGD];

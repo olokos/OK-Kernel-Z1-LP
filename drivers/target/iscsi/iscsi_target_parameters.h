@@ -2,23 +2,23 @@
 #define ISCSI_PARAMETERS_H
 
 struct iscsi_extra_response {
-	char key[64];
-	char value[32];
-	struct list_head er_list;
+    char key[64];
+    char value[32];
+    struct list_head er_list;
 } ____cacheline_aligned;
 
 struct iscsi_param {
-	char *name;
-	char *value;
-	u8 set_param;
-	u8 phase;
-	u8 scope;
-	u8 sender;
-	u8 type;
-	u8 use;
-	u16 type_range;
-	u32 state;
-	struct list_head p_list;
+    char *name;
+    char *value;
+    u8 set_param;
+    u8 phase;
+    u8 scope;
+    u8 sender;
+    u8 type;
+    u8 use;
+    u16 type_range;
+    u32 state;
+    struct list_head p_list;
 } ____cacheline_aligned;
 
 extern int iscsi_login_rx_data(struct iscsi_conn *, char *, int);
@@ -30,7 +30,7 @@ extern int iscsi_create_default_params(struct iscsi_param_list **);
 extern int iscsi_set_keys_to_negotiate(int, struct iscsi_param_list *);
 extern int iscsi_set_keys_irrelevant_for_discovery(struct iscsi_param_list *);
 extern int iscsi_copy_param_list(struct iscsi_param_list **,
-			struct iscsi_param_list *, int);
+                                 struct iscsi_param_list *, int);
 extern int iscsi_change_param_value(char *, struct iscsi_param_list *, int);
 extern void iscsi_release_param_list(struct iscsi_param_list *);
 extern struct iscsi_param *iscsi_find_param_from_key(char *, struct iscsi_param_list *);
@@ -38,12 +38,12 @@ extern int iscsi_extract_key_value(char *, char **, char **);
 extern int iscsi_update_param_value(struct iscsi_param *, char *);
 extern int iscsi_decode_text_input(u8, u8, char *, u32, struct iscsi_param_list *);
 extern int iscsi_encode_text_output(u8, u8, char *, u32 *,
-			struct iscsi_param_list *);
+                                    struct iscsi_param_list *);
 extern int iscsi_check_negotiated_keys(struct iscsi_param_list *);
 extern void iscsi_set_connection_parameters(struct iscsi_conn_ops *,
-			struct iscsi_param_list *);
+        struct iscsi_param_list *);
 extern void iscsi_set_session_parameters(struct iscsi_sess_ops *,
-			struct iscsi_param_list *, int);
+        struct iscsi_param_list *, int);
 
 #define YES				"Yes"
 #define NO				"No"

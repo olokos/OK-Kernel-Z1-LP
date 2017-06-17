@@ -53,223 +53,212 @@ static int pnx833x_wdt_alive;
 static int pnx833x_wdt_timeout = PNX_WATCHDOG_TIMEOUT;
 module_param(pnx833x_wdt_timeout, int, 0);
 MODULE_PARM_DESC(timeout, "Watchdog timeout in Mhz. (68Mhz clock), default="
-			__MODULE_STRING(PNX_TIMEOUT_VALUE) "(30 seconds).");
+                 __MODULE_STRING(PNX_TIMEOUT_VALUE) "(30 seconds).");
 
 static bool nowayout = WATCHDOG_NOWAYOUT;
 module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-					__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+                 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 
 #define START_DEFAULT	1
 static int start_enabled = START_DEFAULT;
 module_param(start_enabled, int, 0);
 MODULE_PARM_DESC(start_enabled, "Watchdog is started on module insertion "
-				"(default=" __MODULE_STRING(START_DEFAULT) ")");
+                 "(default=" __MODULE_STRING(START_DEFAULT) ")");
 
-static void pnx833x_wdt_start(void)
-{
-	/* Enable watchdog causing reset. */
-	PNX833X_REG(PNX833X_RESET + PNX833X_RESET_CONFIG) |= 0x1;
-	/* Set timeout.*/
-	PNX833X_REG(PNX833X_CONFIG +
-		PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = pnx833x_wdt_timeout;
-	/* Enable watchdog. */
-	PNX833X_REG(PNX833X_CONFIG +
-				PNX833X_CONFIG_CPU_COUNTERS_CONTROL) |= 0x1;
+static void pnx833x_wdt_start(void) {
+    /* Enable watchdog causing reset. */
+    PNX833X_REG(PNX833X_RESET + PNX833X_RESET_CONFIG) |= 0x1;
+    /* Set timeout.*/
+    PNX833X_REG(PNX833X_CONFIG +
+                PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = pnx833x_wdt_timeout;
+    /* Enable watchdog. */
+    PNX833X_REG(PNX833X_CONFIG +
+                PNX833X_CONFIG_CPU_COUNTERS_CONTROL) |= 0x1;
 
-	pr_info("Started watchdog timer\n");
+    pr_info("Started watchdog timer\n");
 }
 
-static void pnx833x_wdt_stop(void)
-{
-	/* Disable watchdog causing reset. */
-	PNX833X_REG(PNX833X_RESET + PNX833X_CONFIG) &= 0xFFFFFFFE;
-	/* Disable watchdog.*/
-	PNX833X_REG(PNX833X_CONFIG +
-			PNX833X_CONFIG_CPU_COUNTERS_CONTROL) &= 0xFFFFFFFE;
+static void pnx833x_wdt_stop(void) {
+    /* Disable watchdog causing reset. */
+    PNX833X_REG(PNX833X_RESET + PNX833X_CONFIG) &= 0xFFFFFFFE;
+    /* Disable watchdog.*/
+    PNX833X_REG(PNX833X_CONFIG +
+                PNX833X_CONFIG_CPU_COUNTERS_CONTROL) &= 0xFFFFFFFE;
 
-	pr_info("Stopped watchdog timer\n");
+    pr_info("Stopped watchdog timer\n");
 }
 
-static void pnx833x_wdt_ping(void)
-{
-	PNX833X_REG(PNX833X_CONFIG +
-		PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = pnx833x_wdt_timeout;
+static void pnx833x_wdt_ping(void) {
+    PNX833X_REG(PNX833X_CONFIG +
+                PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = pnx833x_wdt_timeout;
 }
 
 /*
  *	Allow only one person to hold it open
  */
-static int pnx833x_wdt_open(struct inode *inode, struct file *file)
-{
-	if (test_and_set_bit(0, &pnx833x_wdt_alive))
-		return -EBUSY;
+static int pnx833x_wdt_open(struct inode *inode, struct file *file) {
+    if (test_and_set_bit(0, &pnx833x_wdt_alive))
+        return -EBUSY;
 
-	if (nowayout)
-		__module_get(THIS_MODULE);
+    if (nowayout)
+        __module_get(THIS_MODULE);
 
-	/* Activate timer */
-	if (!start_enabled)
-		pnx833x_wdt_start();
+    /* Activate timer */
+    if (!start_enabled)
+        pnx833x_wdt_start();
 
-	pnx833x_wdt_ping();
+    pnx833x_wdt_ping();
 
-	pr_info("Started watchdog timer\n");
+    pr_info("Started watchdog timer\n");
 
-	return nonseekable_open(inode, file);
+    return nonseekable_open(inode, file);
 }
 
-static int pnx833x_wdt_release(struct inode *inode, struct file *file)
-{
-	/* Shut off the timer.
-	 * Lock it in if it's a module and we defined ...NOWAYOUT */
-	if (!nowayout)
-		pnx833x_wdt_stop(); /* Turn the WDT off */
+static int pnx833x_wdt_release(struct inode *inode, struct file *file) {
+    /* Shut off the timer.
+     * Lock it in if it's a module and we defined ...NOWAYOUT */
+    if (!nowayout)
+        pnx833x_wdt_stop(); /* Turn the WDT off */
 
-	clear_bit(0, &pnx833x_wdt_alive);
-	return 0;
+    clear_bit(0, &pnx833x_wdt_alive);
+    return 0;
 }
 
-static ssize_t pnx833x_wdt_write(struct file *file, const char *data, size_t len, loff_t *ppos)
-{
-	/* Refresh the timer. */
-	if (len)
-		pnx833x_wdt_ping();
+static ssize_t pnx833x_wdt_write(struct file *file, const char *data, size_t len, loff_t *ppos) {
+    /* Refresh the timer. */
+    if (len)
+        pnx833x_wdt_ping();
 
-	return len;
+    return len;
 }
 
 static long pnx833x_wdt_ioctl(struct file *file, unsigned int cmd,
-							unsigned long arg)
-{
-	int options, new_timeout = 0;
-	uint32_t timeout, timeout_left = 0;
+                              unsigned long arg) {
+    int options, new_timeout = 0;
+    uint32_t timeout, timeout_left = 0;
 
-	static const struct watchdog_info ident = {
-		.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
-		.firmware_version = 0,
-		.identity = "Hardware Watchdog for PNX833x",
-	};
+    static const struct watchdog_info ident = {
+        .options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
+        .firmware_version = 0,
+        .identity = "Hardware Watchdog for PNX833x",
+    };
 
-	switch (cmd) {
-	default:
-		return -ENOTTY;
+    switch (cmd) {
+    default:
+        return -ENOTTY;
 
-	case WDIOC_GETSUPPORT:
-		if (copy_to_user((struct watchdog_info *)arg,
-				 &ident, sizeof(ident)))
-			return -EFAULT;
-		return 0;
+    case WDIOC_GETSUPPORT:
+        if (copy_to_user((struct watchdog_info *)arg,
+                         &ident, sizeof(ident)))
+            return -EFAULT;
+        return 0;
 
-	case WDIOC_GETSTATUS:
-	case WDIOC_GETBOOTSTATUS:
-		return put_user(0, (int *)arg);
+    case WDIOC_GETSTATUS:
+    case WDIOC_GETBOOTSTATUS:
+        return put_user(0, (int *)arg);
 
-	case WDIOC_SETOPTIONS:
-		if (get_user(options, (int *)arg))
-			return -EFAULT;
+    case WDIOC_SETOPTIONS:
+        if (get_user(options, (int *)arg))
+            return -EFAULT;
 
-		if (options & WDIOS_DISABLECARD)
-			pnx833x_wdt_stop();
+        if (options & WDIOS_DISABLECARD)
+            pnx833x_wdt_stop();
 
-		if (options & WDIOS_ENABLECARD)
-			pnx833x_wdt_start();
+        if (options & WDIOS_ENABLECARD)
+            pnx833x_wdt_start();
 
-		return 0;
+        return 0;
 
-	case WDIOC_KEEPALIVE:
-		pnx833x_wdt_ping();
-		return 0;
+    case WDIOC_KEEPALIVE:
+        pnx833x_wdt_ping();
+        return 0;
 
-	case WDIOC_SETTIMEOUT:
-	{
-		if (get_user(new_timeout, (int *)arg))
-			return -EFAULT;
+    case WDIOC_SETTIMEOUT: {
+        if (get_user(new_timeout, (int *)arg))
+            return -EFAULT;
 
-		pnx833x_wdt_timeout = new_timeout;
-		PNX833X_REG(PNX833X_CONFIG +
-			PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = new_timeout;
-		return put_user(new_timeout, (int *)arg);
-	}
+        pnx833x_wdt_timeout = new_timeout;
+        PNX833X_REG(PNX833X_CONFIG +
+                    PNX833X_CONFIG_CPU_WATCHDOG_COMPARE) = new_timeout;
+        return put_user(new_timeout, (int *)arg);
+    }
 
-	case WDIOC_GETTIMEOUT:
-		timeout = PNX833X_REG(PNX833X_CONFIG +
-					PNX833X_CONFIG_CPU_WATCHDOG_COMPARE);
-		return put_user(timeout, (int *)arg);
+    case WDIOC_GETTIMEOUT:
+        timeout = PNX833X_REG(PNX833X_CONFIG +
+                              PNX833X_CONFIG_CPU_WATCHDOG_COMPARE);
+        return put_user(timeout, (int *)arg);
 
-	case WDIOC_GETTIMELEFT:
-		timeout_left = PNX833X_REG(PNX833X_CONFIG +
-						PNX833X_CONFIG_CPU_WATCHDOG);
-		return put_user(timeout_left, (int *)arg);
+    case WDIOC_GETTIMELEFT:
+        timeout_left = PNX833X_REG(PNX833X_CONFIG +
+                                   PNX833X_CONFIG_CPU_WATCHDOG);
+        return put_user(timeout_left, (int *)arg);
 
-	}
+    }
 }
 
 static int pnx833x_wdt_notify_sys(struct notifier_block *this,
-					unsigned long code, void *unused)
-{
-	if (code == SYS_DOWN || code == SYS_HALT)
-		pnx833x_wdt_stop(); /* Turn the WDT off */
+                                  unsigned long code, void *unused) {
+    if (code == SYS_DOWN || code == SYS_HALT)
+        pnx833x_wdt_stop(); /* Turn the WDT off */
 
-	return NOTIFY_DONE;
+    return NOTIFY_DONE;
 }
 
 static const struct file_operations pnx833x_wdt_fops = {
-	.owner		= THIS_MODULE,
-	.llseek		= no_llseek,
-	.write		= pnx833x_wdt_write,
-	.unlocked_ioctl	= pnx833x_wdt_ioctl,
-	.open		= pnx833x_wdt_open,
-	.release	= pnx833x_wdt_release,
+    .owner		= THIS_MODULE,
+    .llseek		= no_llseek,
+    .write		= pnx833x_wdt_write,
+    .unlocked_ioctl	= pnx833x_wdt_ioctl,
+    .open		= pnx833x_wdt_open,
+    .release	= pnx833x_wdt_release,
 };
 
 static struct miscdevice pnx833x_wdt_miscdev = {
-	.minor		= WATCHDOG_MINOR,
-	.name		= "watchdog",
-	.fops		= &pnx833x_wdt_fops,
+    .minor		= WATCHDOG_MINOR,
+    .name		= "watchdog",
+    .fops		= &pnx833x_wdt_fops,
 };
 
 static struct notifier_block pnx833x_wdt_notifier = {
-	.notifier_call = pnx833x_wdt_notify_sys,
+    .notifier_call = pnx833x_wdt_notify_sys,
 };
 
-static int __init watchdog_init(void)
-{
-	int ret, cause;
+static int __init watchdog_init(void) {
+    int ret, cause;
 
-	/* Lets check the reason for the reset.*/
-	cause = PNX833X_REG(PNX833X_RESET);
-	/*If bit 31 is set then watchdog was cause of reset.*/
-	if (cause & 0x80000000) {
-		pr_info("The system was previously reset due to the watchdog firing - please investigate...\n");
-	}
+    /* Lets check the reason for the reset.*/
+    cause = PNX833X_REG(PNX833X_RESET);
+    /*If bit 31 is set then watchdog was cause of reset.*/
+    if (cause & 0x80000000) {
+        pr_info("The system was previously reset due to the watchdog firing - please investigate...\n");
+    }
 
-	ret = register_reboot_notifier(&pnx833x_wdt_notifier);
-	if (ret) {
-		pr_err("cannot register reboot notifier (err=%d)\n", ret);
-		return ret;
-	}
+    ret = register_reboot_notifier(&pnx833x_wdt_notifier);
+    if (ret) {
+        pr_err("cannot register reboot notifier (err=%d)\n", ret);
+        return ret;
+    }
 
-	ret = misc_register(&pnx833x_wdt_miscdev);
-	if (ret) {
-		pr_err("cannot register miscdev on minor=%d (err=%d)\n",
-		       WATCHDOG_MINOR, ret);
-		unregister_reboot_notifier(&pnx833x_wdt_notifier);
-		return ret;
-	}
+    ret = misc_register(&pnx833x_wdt_miscdev);
+    if (ret) {
+        pr_err("cannot register miscdev on minor=%d (err=%d)\n",
+               WATCHDOG_MINOR, ret);
+        unregister_reboot_notifier(&pnx833x_wdt_notifier);
+        return ret;
+    }
 
-	pr_info("Hardware Watchdog Timer for PNX833x: Version 0.1\n");
+    pr_info("Hardware Watchdog Timer for PNX833x: Version 0.1\n");
 
-	if (start_enabled)
-		pnx833x_wdt_start();
+    if (start_enabled)
+        pnx833x_wdt_start();
 
-	return 0;
+    return 0;
 }
 
-static void __exit watchdog_exit(void)
-{
-	misc_deregister(&pnx833x_wdt_miscdev);
-	unregister_reboot_notifier(&pnx833x_wdt_notifier);
+static void __exit watchdog_exit(void) {
+    misc_deregister(&pnx833x_wdt_miscdev);
+    unregister_reboot_notifier(&pnx833x_wdt_notifier);
 }
 
 module_init(watchdog_init);

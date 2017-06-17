@@ -18,16 +18,14 @@
 #ifdef CONFIG_SPI
 int spi_eeprom_register(int busid, int chipid, int size);
 int spi_eeprom_read(int busid, int chipid,
-		    int address, unsigned char *buf, int len);
+                    int address, unsigned char *buf, int len);
 #else
-static inline int spi_eeprom_register(int busid, int chipid, int size)
-{
-	return -ENODEV;
+static inline int spi_eeprom_register(int busid, int chipid, int size) {
+    return -ENODEV;
 }
 static inline int spi_eeprom_read(int busid, int chipid,
-				  int address, unsigned char *buf, int len)
-{
-	return -ENODEV;
+                                  int address, unsigned char *buf, int len) {
+    return -ENODEV;
 }
 #endif
 

@@ -68,8 +68,7 @@
 
 
 
-enum
-{
+enum {
     TRACE_CODE_MLM_STATE,
     TRACE_CODE_SME_STATE,
     TRACE_CODE_TX_MGMT,

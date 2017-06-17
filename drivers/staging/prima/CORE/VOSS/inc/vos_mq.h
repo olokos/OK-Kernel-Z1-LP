@@ -60,8 +60,7 @@
 /// \note This is mapped directly to the tSirMsgQ for backward
 ///       compatibility with the legacy MAC code.
 
-typedef struct vos_msg_s
-{
+typedef struct vos_msg_s {
     v_U16_t type;
     /*
      * This field can be used as sequence number/dialog token for matching
@@ -94,8 +93,7 @@ typedef struct vos_msg_s
   ------------------------------------------------------------------------*/
 
 /// Message Queue IDs
-typedef enum
-{
+typedef enum {
     /// Message Queue ID for messages bound for SME
     VOS_MQ_ID_SME = VOS_MODULE_ID_SME,
 

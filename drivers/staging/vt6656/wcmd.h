@@ -116,8 +116,8 @@ typedef enum tagCMD_STATE {
 void vResetCommandTimer(void *hDeviceContext);
 
 BOOL bScheduleCommand(void *hDeviceContext,
-		      CMD_CODE eCommand,
-		      PBYTE pbyItem0);
+                      CMD_CODE eCommand,
+                      PBYTE pbyItem0);
 
 void vRunCommand(void *hDeviceContext);
 

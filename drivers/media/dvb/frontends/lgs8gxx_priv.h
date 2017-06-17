@@ -27,11 +27,11 @@
 #define LGS8913_PRIV_H
 
 struct lgs8gxx_state {
-	struct i2c_adapter *i2c;
-	/* configuration settings */
-	const struct lgs8gxx_config *config;
-	struct dvb_frontend frontend;
-	u16 curr_gi; /* current guard interval */
+    struct i2c_adapter *i2c;
+    /* configuration settings */
+    const struct lgs8gxx_config *config;
+    struct dvb_frontend frontend;
+    u16 curr_gi; /* current guard interval */
 };
 
 #define SC_MASK		0x1C	/* Sub-Carrier Modulation Mask */

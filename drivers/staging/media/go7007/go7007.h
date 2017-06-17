@@ -27,37 +27,37 @@
 #define	GO7007IOC_G_BITRATE	_IOR('V', BASE_VIDIOC_PRIVATE + 1, int)
 
 enum go7007_aspect_ratio {
-	GO7007_ASPECT_RATIO_1_1 = 0,
-	GO7007_ASPECT_RATIO_4_3_NTSC = 1,
-	GO7007_ASPECT_RATIO_4_3_PAL = 2,
-	GO7007_ASPECT_RATIO_16_9_NTSC = 3,
-	GO7007_ASPECT_RATIO_16_9_PAL = 4,
+    GO7007_ASPECT_RATIO_1_1 = 0,
+    GO7007_ASPECT_RATIO_4_3_NTSC = 1,
+    GO7007_ASPECT_RATIO_4_3_PAL = 2,
+    GO7007_ASPECT_RATIO_16_9_NTSC = 3,
+    GO7007_ASPECT_RATIO_16_9_PAL = 4,
 };
 
 /* Used to set generic compression parameters */
 struct go7007_comp_params {
-	__u32 gop_size;
-	__u32 max_b_frames;
-	enum go7007_aspect_ratio aspect_ratio;
-	__u32 flags;
-	__u32 reserved[8];
+    __u32 gop_size;
+    __u32 max_b_frames;
+    enum go7007_aspect_ratio aspect_ratio;
+    __u32 flags;
+    __u32 reserved[8];
 };
 
 #define GO7007_COMP_CLOSED_GOP		0x00000001
 #define GO7007_COMP_OMIT_SEQ_HEADER	0x00000002
 
 enum go7007_mpeg_video_standard {
-	GO7007_MPEG_VIDEO_MPEG1 = 0,
-	GO7007_MPEG_VIDEO_MPEG2 = 1,
-	GO7007_MPEG_VIDEO_MPEG4 = 2,
+    GO7007_MPEG_VIDEO_MPEG1 = 0,
+    GO7007_MPEG_VIDEO_MPEG2 = 1,
+    GO7007_MPEG_VIDEO_MPEG4 = 2,
 };
 
 /* Used to set parameters for V4L2_PIX_FMT_MPEG format */
 struct go7007_mpeg_params {
-	enum go7007_mpeg_video_standard mpeg_video_standard;
-	__u32 flags;
-	__u32 pali;
-	__u32 reserved[8];
+    enum go7007_mpeg_video_standard mpeg_video_standard;
+    __u32 flags;
+    __u32 pali;
+    __u32 reserved[8];
 };
 
 #define GO7007_MPEG_FORCE_DVD_MODE	0x00000001
@@ -84,18 +84,18 @@ struct go7007_mpeg_params {
 #define GO7007_MPEG4_PROFILE_AS_L5		GO7007_MPEG_PROFILE(4, 0xf5)
 
 struct go7007_md_params {
-	__u16 region;
-	__u16 trigger;
-	__u16 pixel_threshold;
-	__u16 motion_threshold;
-	__u32 reserved[8];
+    __u16 region;
+    __u16 trigger;
+    __u16 pixel_threshold;
+    __u16 motion_threshold;
+    __u32 reserved[8];
 };
 
 struct go7007_md_region {
-	__u16 region;
-	__u16 flags;
-	struct v4l2_clip *clips;
-	__u32 reserved[8];
+    __u16 region;
+    __u16 flags;
+    struct v4l2_clip *clips;
+    __u32 reserved[8];
 };
 
 #define	GO7007IOC_S_MPEG_PARAMS	_IOWR('V', BASE_VIDIOC_PRIVATE + 2, \

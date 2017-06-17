@@ -39,8 +39,8 @@ int mobicore_release(struct mc_instance *instance);
  * Returns 0 if OK
  */
 int mobicore_allocate_wsm(struct mc_instance *instance,
-			  unsigned long requested_size, uint32_t *handle,
-			  void **virt_kernel_addr);
+                          unsigned long requested_size, uint32_t *handle,
+                          void **virt_kernel_addr);
 
 /*
  * mobicore_free() - Free a WSM buffer allocated with mobicore_allocate_wsm
@@ -61,7 +61,7 @@ int mobicore_free_wsm(struct mc_instance *instance, uint32_t handle);
  * Returns 0 if no error
  */
 int mobicore_map_vmem(struct mc_instance *instance, void *addr,
-		      uint32_t len, uint32_t *handle);
+                      uint32_t len, uint32_t *handle);
 
 /*
  * mobicore_unmap_vmem() - Unmap a virtual memory buffer from MobiCore

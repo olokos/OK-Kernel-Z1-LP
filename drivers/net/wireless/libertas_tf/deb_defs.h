@@ -86,16 +86,15 @@ do { if ((lbtf_debug & (grp)) == (grp)) \
 #define lbtf_deb_macops(fmt, args...)      LBTF_DEB_LL(LBTF_DEB_MACOPS, " thread", fmt, ##args)
 
 #ifdef DEBUG
-static inline void lbtf_deb_hex(unsigned int grp, const char *prompt, u8 *buf, int len)
-{
-	char newprompt[32];
+static inline void lbtf_deb_hex(unsigned int grp, const char *prompt, u8 *buf, int len) {
+    char newprompt[32];
 
-	if (len &&
-	    (lbtf_debug & LBTF_DEB_HEX) &&
-	    (lbtf_debug & grp))	{
-		snprintf(newprompt, sizeof(newprompt), DRV_NAME " %s: ", prompt);
-		print_hex_dump_bytes(prompt, DUMP_PREFIX_NONE, buf, len);
-	}
+    if (len &&
+            (lbtf_debug & LBTF_DEB_HEX) &&
+            (lbtf_debug & grp))	{
+        snprintf(newprompt, sizeof(newprompt), DRV_NAME " %s: ", prompt);
+        print_hex_dump_bytes(prompt, DUMP_PREFIX_NONE, buf, len);
+    }
 }
 #else
 #define lbtf_deb_hex(grp, prompt, buf, len)	do {} while (0)

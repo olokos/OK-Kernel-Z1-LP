@@ -151,43 +151,41 @@
 #include <asm/div64.h>
 
 static inline unsigned int
-s3c2443_get_mpll(unsigned int pllval, unsigned int baseclk)
-{
-	unsigned int mdiv, pdiv, sdiv;
-	uint64_t fvco;
+s3c2443_get_mpll(unsigned int pllval, unsigned int baseclk) {
+    unsigned int mdiv, pdiv, sdiv;
+    uint64_t fvco;
 
-	mdiv = pllval >> S3C2443_PLLCON_MDIVSHIFT;
-	pdiv = pllval >> S3C2443_PLLCON_PDIVSHIFT;
-	sdiv = pllval >> S3C2443_PLLCON_SDIVSHIFT;
+    mdiv = pllval >> S3C2443_PLLCON_MDIVSHIFT;
+    pdiv = pllval >> S3C2443_PLLCON_PDIVSHIFT;
+    sdiv = pllval >> S3C2443_PLLCON_SDIVSHIFT;
 
-	mdiv &= S3C2443_PLLCON_MDIVMASK;
-	pdiv &= S3C2443_PLLCON_PDIVMASK;
-	sdiv &= S3C2443_PLLCON_SDIVMASK;
+    mdiv &= S3C2443_PLLCON_MDIVMASK;
+    pdiv &= S3C2443_PLLCON_PDIVMASK;
+    sdiv &= S3C2443_PLLCON_SDIVMASK;
 
-	fvco = (uint64_t)baseclk * (2 * (mdiv + 8));
-	do_div(fvco, pdiv << sdiv);
+    fvco = (uint64_t)baseclk * (2 * (mdiv + 8));
+    do_div(fvco, pdiv << sdiv);
 
-	return (unsigned int)fvco;
+    return (unsigned int)fvco;
 }
 
 static inline unsigned int
-s3c2443_get_epll(unsigned int pllval, unsigned int baseclk)
-{
-	unsigned int mdiv, pdiv, sdiv;
-	uint64_t fvco;
+s3c2443_get_epll(unsigned int pllval, unsigned int baseclk) {
+    unsigned int mdiv, pdiv, sdiv;
+    uint64_t fvco;
 
-	mdiv = pllval >> S3C2443_PLLCON_MDIVSHIFT;
-	pdiv = pllval >> S3C2443_PLLCON_PDIVSHIFT;
-	sdiv = pllval >> S3C2443_PLLCON_SDIVSHIFT;
+    mdiv = pllval >> S3C2443_PLLCON_MDIVSHIFT;
+    pdiv = pllval >> S3C2443_PLLCON_PDIVSHIFT;
+    sdiv = pllval >> S3C2443_PLLCON_SDIVSHIFT;
 
-	mdiv &= S3C2443_PLLCON_MDIVMASK;
-	pdiv &= S3C2443_PLLCON_PDIVMASK;
-	sdiv &= S3C2443_PLLCON_SDIVMASK;
+    mdiv &= S3C2443_PLLCON_MDIVMASK;
+    pdiv &= S3C2443_PLLCON_PDIVMASK;
+    sdiv &= S3C2443_PLLCON_SDIVMASK;
 
-	fvco = (uint64_t)baseclk * (mdiv + 8);
-	do_div(fvco, (pdiv + 2) << sdiv);
+    fvco = (uint64_t)baseclk * (mdiv + 8);
+    do_div(fvco, (pdiv + 2) << sdiv);
 
-	return (unsigned int)fvco;
+    return (unsigned int)fvco;
 }
 
 #endif /*  __ASM_ARM_REGS_S3C2443_CLOCK */

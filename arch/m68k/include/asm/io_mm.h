@@ -96,66 +96,70 @@ extern int isa_sex;
  * be compiled in so the case statement will be optimised away
  */
 
-static inline u8 __iomem *isa_itb(unsigned long addr)
-{
-  switch(ISA_TYPE)
-    {
+static inline u8 __iomem *isa_itb(unsigned long addr) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_Q40
-    case ISA_TYPE_Q40: return (u8 __iomem *)Q40_ISA_IO_B(addr);
+    case ISA_TYPE_Q40:
+        return (u8 __iomem *)Q40_ISA_IO_B(addr);
 #endif
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: return (u8 __iomem *)AG_ISA_IO_B(addr);
+    case ISA_TYPE_AG:
+        return (u8 __iomem *)AG_ISA_IO_B(addr);
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default:
+        return NULL; /* avoid warnings, just in case */
     }
 }
-static inline u16 __iomem *isa_itw(unsigned long addr)
-{
-  switch(ISA_TYPE)
-    {
+static inline u16 __iomem *isa_itw(unsigned long addr) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_Q40
-    case ISA_TYPE_Q40: return (u16 __iomem *)Q40_ISA_IO_W(addr);
+    case ISA_TYPE_Q40:
+        return (u16 __iomem *)Q40_ISA_IO_W(addr);
 #endif
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: return (u16 __iomem *)AG_ISA_IO_W(addr);
+    case ISA_TYPE_AG:
+        return (u16 __iomem *)AG_ISA_IO_W(addr);
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default:
+        return NULL; /* avoid warnings, just in case */
     }
 }
-static inline u32 __iomem *isa_itl(unsigned long addr)
-{
-  switch(ISA_TYPE)
-    {
+static inline u32 __iomem *isa_itl(unsigned long addr) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: return (u32 __iomem *)AG_ISA_IO_W(addr);
+    case ISA_TYPE_AG:
+        return (u32 __iomem *)AG_ISA_IO_W(addr);
 #endif
-    default: return 0; /* avoid warnings, just in case */
+    default:
+        return 0; /* avoid warnings, just in case */
     }
 }
-static inline u8 __iomem *isa_mtb(unsigned long addr)
-{
-  switch(ISA_TYPE)
-    {
+static inline u8 __iomem *isa_mtb(unsigned long addr) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_Q40
-    case ISA_TYPE_Q40: return (u8 __iomem *)Q40_ISA_MEM_B(addr);
+    case ISA_TYPE_Q40:
+        return (u8 __iomem *)Q40_ISA_MEM_B(addr);
 #endif
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: return (u8 __iomem *)addr;
+    case ISA_TYPE_AG:
+        return (u8 __iomem *)addr;
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default:
+        return NULL; /* avoid warnings, just in case */
     }
 }
-static inline u16 __iomem *isa_mtw(unsigned long addr)
-{
-  switch(ISA_TYPE)
-    {
+static inline u16 __iomem *isa_mtw(unsigned long addr) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_Q40
-    case ISA_TYPE_Q40: return (u16 __iomem *)Q40_ISA_MEM_W(addr);
+    case ISA_TYPE_Q40:
+        return (u16 __iomem *)Q40_ISA_MEM_W(addr);
 #endif
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: return (u16 __iomem *)addr;
+    case ISA_TYPE_AG:
+        return (u16 __iomem *)addr;
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default:
+        return NULL; /* avoid warnings, just in case */
     }
 }
 
@@ -176,17 +180,19 @@ static inline u16 __iomem *isa_mtw(unsigned long addr)
 	(ISA_SEX ? out_be16(isa_mtw((unsigned long)(p)),(val))	\
 		 : out_le16(isa_mtw((unsigned long)(p)),(val)))
 
-static inline void isa_delay(void)
-{
-  switch(ISA_TYPE)
-    {
+static inline void isa_delay(void) {
+    switch(ISA_TYPE) {
 #ifdef CONFIG_Q40
-    case ISA_TYPE_Q40: isa_outb(0,0x80); break;
+    case ISA_TYPE_Q40:
+        isa_outb(0,0x80);
+        break;
 #endif
 #ifdef CONFIG_AMIGA_PCMCIA
-    case ISA_TYPE_AG: break;
+    case ISA_TYPE_AG:
+        break;
 #endif
-    default: break; /* avoid warnings */
+    default:
+        break; /* avoid warnings */
     }
 }
 
@@ -280,36 +286,29 @@ static inline void isa_delay(void)
 
 #define mmiowb()
 
-static inline void __iomem *ioremap(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void __iomem *ioremap(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
-static inline void __iomem *ioremap_nocache(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void __iomem *ioremap_nocache(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
 static inline void __iomem *ioremap_writethrough(unsigned long physaddr,
-					 unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
+        unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
 }
 static inline void __iomem *ioremap_fullcache(unsigned long physaddr,
-				      unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
+        unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
 }
 
-static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
-{
-	__builtin_memset((void __force *) addr, val, count);
+static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count) {
+    __builtin_memset((void __force *) addr, val, count);
 }
-static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
-{
-	__builtin_memcpy(dst, (void __force *) src, count);
+static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count) {
+    __builtin_memcpy(dst, (void __force *) src, count);
 }
-static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
-{
-	__builtin_memcpy((void __force *) dst, src, count);
+static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count) {
+    __builtin_memcpy((void __force *) dst, src, count);
 }
 
 #ifndef CONFIG_SUN3

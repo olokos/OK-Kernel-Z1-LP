@@ -81,11 +81,11 @@
 #define REGS_ERR(r) ((r)->fault_type)
 
 struct uml_pt_regs {
-	unsigned long gp[MAX_REG_NR];
-	unsigned long fp[HOST_FP_SIZE];
-	struct faultinfo faultinfo;
-	long syscall;
-	int is_user;
+    unsigned long gp[MAX_REG_NR];
+    unsigned long fp[HOST_FP_SIZE];
+    struct faultinfo faultinfo;
+    long syscall;
+    int is_user;
 };
 
 #define EMPTY_UML_PT_REGS { }
@@ -135,7 +135,7 @@ extern int user_context(unsigned long sp);
 #define UPT_SYSCALL_ARG6(r) UPT_R9(r)
 
 struct syscall_args {
-	unsigned long args[6];
+    unsigned long args[6];
 };
 
 #define SYSCALL_ARGS(r) ((struct syscall_args) \
@@ -150,8 +150,7 @@ struct syscall_args {
 
 #define UPT_FAULTINFO(r) (&(r)->faultinfo)
 
-static inline void arch_init_registers(int pid)
-{
+static inline void arch_init_registers(int pid) {
 }
 
 #endif

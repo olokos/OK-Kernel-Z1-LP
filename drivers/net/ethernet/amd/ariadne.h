@@ -36,13 +36,13 @@
  */
 
 
-    /*
-     *	Am79C960 PCnet-ISA
-     */
+/*
+ *	Am79C960 PCnet-ISA
+ */
 
 struct Am79C960 {
     volatile u_short AddressPROM[8];
-				/* IEEE Address PROM (Unused in the Ariadne) */
+    /* IEEE Address PROM (Unused in the Ariadne) */
     volatile u_short RDP;	/* Register Data Port */
     volatile u_short RAP;	/* Register Address Port */
     volatile u_short Reset;	/* Reset Chip on Read Access */
@@ -50,14 +50,14 @@ struct Am79C960 {
 };
 
 
-    /*
-     *	Am79C960 Control and Status Registers
-     *
-     *	These values are already swap()ed!!
-     *
-     *	Only registers marked with a `-' are intended for network software
-     *	access
-     */
+/*
+ *	Am79C960 Control and Status Registers
+ *
+ *	These values are already swap()ed!!
+ *
+ *	Only registers marked with a `-' are intended for network software
+ *	access
+ */
 
 #define CSR0		0x0000	/* - PCnet-ISA Controller Status */
 #define CSR1		0x0100	/* - IADR[15:0] */
@@ -155,11 +155,11 @@ struct Am79C960 {
 #define CSR124		0x7c00	/* - Buffer Management Unit Test */
 
 
-    /*
-     *	Am79C960 ISA Control and Status Registers
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Am79C960 ISA Control and Status Registers
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define ISACSR0		0x0000	/* Master Mode Read Active */
 #define ISACSR1		0x0100	/* Master Mode Write Active */
@@ -170,11 +170,11 @@ struct Am79C960 {
 #define ISACSR7		0x0700	/* LED3 Status */
 
 
-    /*
-     *	Bit definitions for CSR0 (PCnet-ISA Controller Status)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for CSR0 (PCnet-ISA Controller Status)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define ERR		0x0080	/* Error */
 #define BABL		0x0040	/* Babble: Transmitted too many bits */
@@ -194,11 +194,11 @@ struct Am79C960 {
 #define INIT		0x0100	/* Initialize */
 
 
-    /*
-     *	Bit definitions for CSR3 (Interrupt Masks and Deferral Control)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for CSR3 (Interrupt Masks and Deferral Control)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define BABLM		0x0040	/* Babble Mask */
 #define MISSM		0x0010	/* Missed Frame Mask */
@@ -210,11 +210,11 @@ struct Am79C960 {
 #define EMBA		0x0800	/* Enable Modified Back-off Algorithm */
 
 
-    /*
-     *	Bit definitions for CSR4 (Test and Features Control)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for CSR4 (Test and Features Control)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define ENTST		0x0080	/* Enable Test Mode */
 #define DMAPLUS		0x0040	/* Disable Burst Transaction Counter */
@@ -232,11 +232,11 @@ struct Am79C960 {
 #define JABM		0x0100	/* Jabber Error Mask */
 
 
-    /*
-     *	Bit definitions for CSR15 (Mode Register)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for CSR15 (Mode Register)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define PROM		0x0080	/* Promiscuous Mode */
 #define DRCVBC		0x0040	/* Disable Receive Broadcast */
@@ -256,20 +256,20 @@ struct Am79C960 {
 #define DRX		0x0100	/* Disable Receiver */
 
 
-    /*
-     *	Bit definitions for ISACSR2 (Miscellaneous Configuration)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for ISACSR2 (Miscellaneous Configuration)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define ASEL		0x0200	/* Media Interface Port Auto Select */
 
 
-    /*
-     *	Bit definitions for ISACSR5-7 (LED1-3 Status)
-     *
-     *	These values are already swap()ed!!
-     */
+/*
+ *	Bit definitions for ISACSR5-7 (LED1-3 Status)
+ *
+ *	These values are already swap()ed!!
+ */
 
 #define LEDOUT		0x0080	/* Current LED Status */
 #define PSE		0x8000	/* Pulse Stretcher Enable */
@@ -280,9 +280,9 @@ struct Am79C960 {
 #define COLE		0x0100	/* Enable Collision Signal */
 
 
-    /*
-     *	Receive Descriptor Ring Entry
-     */
+/*
+ *	Receive Descriptor Ring Entry
+ */
 
 struct RDRE {
     volatile u_short RMD0;	/* LADR[15:0] */
@@ -292,9 +292,9 @@ struct RDRE {
 };
 
 
-    /*
-     *	Transmit Descriptor Ring Entry
-     */
+/*
+ *	Transmit Descriptor Ring Entry
+ */
 
 struct TDRE {
     volatile u_short TMD0;	/* LADR[15:0] */
@@ -304,9 +304,9 @@ struct TDRE {
 };
 
 
-    /*
-     *	Receive Flags
-     */
+/*
+ *	Receive Flags
+ */
 
 #define RF_OWN		0x0080	/* PCnet-ISA controller owns the descriptor */
 #define RF_ERR		0x0040	/* Error */
@@ -318,9 +318,9 @@ struct TDRE {
 #define RF_ENP		0x0001	/* End of Packet */
 
 
-    /*
-     *	Transmit Flags
-     */
+/*
+ *	Transmit Flags
+ */
 
 #define TF_OWN		0x0080	/* PCnet-ISA controller owns the descriptor */
 #define TF_ERR		0x0040	/* Error */
@@ -332,9 +332,9 @@ struct TDRE {
 #define TF_ENP		0x0001	/* End of Packet */
 
 
-    /*
-     *	Error Flags
-     */
+/*
+ *	Error Flags
+ */
 
 #define EF_BUFF		0x0080	/* Buffer Error */
 #define EF_UFLO		0x0040	/* Underflow Error */
@@ -345,9 +345,9 @@ struct TDRE {
 
 
 
-    /*
-     *	MC68230 Parallel Interface/Timer
-     */
+/*
+ *	MC68230 Parallel Interface/Timer
+ */
 
 struct MC68230 {
     volatile u_char PGCR;	/* Port General Control Register */
@@ -399,9 +399,9 @@ struct MC68230 {
 };
 
 
-    /*
-     *	Ariadne Expansion Board Structure
-     */
+/*
+ *	Ariadne Expansion Board Structure
+ */
 
 #define ARIADNE_LANCE		0x360
 

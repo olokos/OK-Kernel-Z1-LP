@@ -1,23 +1,23 @@
-/* 
-* Copyright (C) ST-Ericsson AP Pte Ltd 2010 
+/*
+* Copyright (C) ST-Ericsson AP Pte Ltd 2010
 *
 * ISP1763 Linux OTG Controller driver : hal
-* 
-* This program is free software; you can redistribute it and/or modify it under the terms of 
-* the GNU General Public License as published by the Free Software Foundation; version 
-* 2 of the License. 
-* 
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY  
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  
-* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more  
-* details. 
-* 
-* You should have received a copy of the GNU General Public License 
-* along with this program; if not, write to the Free Software 
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
-* 
+*
+* This program is free software; you can redistribute it and/or modify it under the terms of
+* the GNU General Public License as published by the Free Software Foundation; version
+* 2 of the License.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT ANY
+* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*
 * This is a hardware abstraction layer header file.
-* 
+*
 * Author : wired support <wired.support@stericsson.com>
 *
 */
@@ -35,7 +35,7 @@
 
 //#define MSEC_INT_BASED
 #ifdef MSEC_INT_BASED
-#define THREAD_BASED 
+#define THREAD_BASED
 #endif
 
 #ifndef DATABUS_WIDTH_16
@@ -234,58 +234,58 @@
 
 struct isp1763_driver;
 typedef struct _isp1763_id {
-	u16 idVendor;
-	u16 idProduct;
-	u32 driver_info;
+    u16 idVendor;
+    u16 idProduct;
+    u32 driver_info;
 } isp1763_id;
 
 typedef struct isp1763_dev {
-	/*added for pci device */
-#ifdef  NON_PCI 
-		struct platform_device *dev;
+    /*added for pci device */
+#ifdef  NON_PCI
+    struct platform_device *dev;
 #else /*PCI*/
-	struct pci_dev *pcidev;
+    struct pci_dev *pcidev;
 #endif
-	struct isp1763_driver *driver;	/* which driver has allocated this device */
-	void *driver_data;	/* data private to the host controller driver */
-	void *otg_driver_data;	/*data private for otg controler */
-	unsigned char index;	/* local controller (HC/DC/OTG) */
-	unsigned int irq;	/*Interrupt Channel allocated for this device */
-	void (*handler) (struct isp1763_dev * dev, void *isr_data);	/* Interrupt Serrvice Routine */
-	void *isr_data;		/* isr data of the driver */
-	unsigned long int_reg;	/* Interrupt register */
-	unsigned long alt_int_reg;	/* Interrupt register 2 */
-	unsigned long start;
-	unsigned long length;
-	struct resource *mem_res;
-	unsigned long io_base;	/* Start Io address space for this device */
-	unsigned long io_len;	/* IO address space length for this device */
+    struct isp1763_driver *driver;	/* which driver has allocated this device */
+    void *driver_data;	/* data private to the host controller driver */
+    void *otg_driver_data;	/*data private for otg controler */
+    unsigned char index;	/* local controller (HC/DC/OTG) */
+    unsigned int irq;	/*Interrupt Channel allocated for this device */
+    void (*handler) (struct isp1763_dev * dev, void *isr_data);	/* Interrupt Serrvice Routine */
+    void *isr_data;		/* isr data of the driver */
+    unsigned long int_reg;	/* Interrupt register */
+    unsigned long alt_int_reg;	/* Interrupt register 2 */
+    unsigned long start;
+    unsigned long length;
+    struct resource *mem_res;
+    unsigned long io_base;	/* Start Io address space for this device */
+    unsigned long io_len;	/* IO address space length for this device */
 
-	unsigned long chip_id;	/* Chip Id */
+    unsigned long chip_id;	/* Chip Id */
 
-	char name[80];		/* device name */
-	int active;		/* device status */
+    char name[80];		/* device name */
+    int active;		/* device status */
 
-	/* DMA resources should come here */
-	unsigned long dma;
-	u8 *baseaddress;	/*base address for i/o ops */
-	u8 *dmabase;
-	isp1763_id *id;
+    /* DMA resources should come here */
+    unsigned long dma;
+    u8 *baseaddress;	/*base address for i/o ops */
+    u8 *dmabase;
+    isp1763_id *id;
 } isp1763_dev_t;
 
 
 typedef struct isp1763_driver {
-	char *name;
-	unsigned long index;	/* HC or DC or OTG */
-	isp1763_id *id;		/*device ids */
-	int (*probe) (struct isp1763_dev * dev, isp1763_id * id);	/* New device inserted */
-	void (*remove) (struct isp1763_dev * dev);	/* Device removed (NULL if not a hot-plug capable driver) */
-	
-	void (*suspend) (struct isp1763_dev * dev);	/* Device suspended */
-	void (*resume) (struct isp1763_dev * dev);	/* Device woken up */
-	void (*remotewakeup) (struct isp1763_dev *dev);  /* Remote Wakeup */
-	void (*powerup) (struct isp1763_dev *dev);  /* Device poweup mode */
-	void (*powerdown)	(struct isp1763_dev *dev); /* Device power down mode */
+    char *name;
+    unsigned long index;	/* HC or DC or OTG */
+    isp1763_id *id;		/*device ids */
+    int (*probe) (struct isp1763_dev * dev, isp1763_id * id);	/* New device inserted */
+    void (*remove) (struct isp1763_dev * dev);	/* Device removed (NULL if not a hot-plug capable driver) */
+
+    void (*suspend) (struct isp1763_dev * dev);	/* Device suspended */
+    void (*resume) (struct isp1763_dev * dev);	/* Device woken up */
+    void (*remotewakeup) (struct isp1763_dev *dev);  /* Remote Wakeup */
+    void (*powerup) (struct isp1763_dev *dev);  /* Device poweup mode */
+    void (*powerdown)	(struct isp1763_dev *dev); /* Device power down mode */
 } isp_1763_driver_t;
 
 struct usb_device *phci_register_otg_device(struct isp1763_dev *dev);
@@ -297,7 +297,7 @@ int phci_enumerate_otg_port(struct isp1763_dev *dev, u32 command);
 extern int isp1763_register_driver(struct isp1763_driver *drv);
 extern void isp1763_unregister_driver(struct isp1763_driver *drv);
 extern int isp1763_request_irq(void (*handler)(struct isp1763_dev * dev, void *isr_data),
-		      struct isp1763_dev *dev, void *isr_data);
+                               struct isp1763_dev *dev, void *isr_data);
 extern void isp1763_free_irq(struct isp1763_dev *dev, void *isr_data);
 
 extern u32 isp1763_reg_read32(isp1763_dev_t * dev, u16 reg, u32 data);
@@ -307,7 +307,7 @@ extern void isp1763_reg_write32(isp1763_dev_t * dev, u16 reg, u32 data);
 extern void isp1763_reg_write16(isp1763_dev_t * dev, u16 reg, u16 data);
 extern void isp1763_reg_write8(struct isp1763_dev *dev, u16 reg, u8 data);
 extern int isp1763_mem_read(isp1763_dev_t * dev, u32 start_add,
-		     u32 end_add, u32 * buffer, u32 length, u16 dir);
+                            u32 end_add, u32 * buffer, u32 length, u16 dir);
 extern int isp1763_mem_write(isp1763_dev_t * dev, u32 start_add,
-		      u32 end_add, u32 * buffer, u32 length, u16 dir);
+                             u32 end_add, u32 * buffer, u32 length, u16 dir);
 #endif /* __HAL_INTF_H__ */

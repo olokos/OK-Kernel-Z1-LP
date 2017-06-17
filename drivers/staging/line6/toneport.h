@@ -18,35 +18,35 @@
 #include "driver.h"
 
 struct usb_line6_toneport {
-	/**
-		Generic Line6 USB data.
-	*/
-	struct usb_line6 line6;
+    /**
+    	Generic Line6 USB data.
+    */
+    struct usb_line6 line6;
 
-	/**
-		Source selector.
-	*/
-	int source;
+    /**
+    	Source selector.
+    */
+    int source;
 
-	/**
-		Serial number of device.
-	*/
-	int serial_number;
+    /**
+    	Serial number of device.
+    */
+    int serial_number;
 
-	/**
-		Firmware version (x 100).
-	*/
-	int firmware_version;
+    /**
+    	Firmware version (x 100).
+    */
+    int firmware_version;
 
-	/**
-		 Timer for delayed PCM startup.
-	*/
-	struct timer_list timer;
+    /**
+    	 Timer for delayed PCM startup.
+    */
+    struct timer_list timer;
 };
 
 extern void line6_toneport_disconnect(struct usb_interface *interface);
 extern int line6_toneport_init(struct usb_interface *interface,
-			       struct usb_line6_toneport *toneport);
+                               struct usb_line6_toneport *toneport);
 extern void line6_toneport_reset_resume(struct usb_line6_toneport *toneport);
 
 #endif

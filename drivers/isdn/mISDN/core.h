@@ -45,11 +45,11 @@ extern int			get_mdevice_count(void);
 #define MGR_OPT_NETWORK		25
 
 extern int	connect_Bstack(struct mISDNdevice *, struct mISDNchannel *,
-			       u_int, struct sockaddr_mISDN *);
+                           u_int, struct sockaddr_mISDN *);
 extern int	connect_layer1(struct mISDNdevice *, struct mISDNchannel *,
-			       u_int, struct sockaddr_mISDN *);
+                           u_int, struct sockaddr_mISDN *);
 extern int	create_l2entity(struct mISDNdevice *, struct mISDNchannel *,
-				u_int, struct sockaddr_mISDN *);
+                            u_int, struct sockaddr_mISDN *);
 
 extern int	create_stack(struct mISDNdevice *);
 extern int	create_teimanager(struct mISDNdevice *);

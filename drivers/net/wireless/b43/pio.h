@@ -56,98 +56,90 @@
 
 
 struct b43_pio_txpacket {
-	/* Pointer to the TX queue we belong to. */
-	struct b43_pio_txqueue *queue;
-	/* The TX data packet. */
-	struct sk_buff *skb;
-	/* Index in the (struct b43_pio_txqueue)->packets array. */
-	u8 index;
+    /* Pointer to the TX queue we belong to. */
+    struct b43_pio_txqueue *queue;
+    /* The TX data packet. */
+    struct sk_buff *skb;
+    /* Index in the (struct b43_pio_txqueue)->packets array. */
+    u8 index;
 
-	struct list_head list;
+    struct list_head list;
 };
 
 struct b43_pio_txqueue {
-	struct b43_wldev *dev;
-	u16 mmio_base;
+    struct b43_wldev *dev;
+    u16 mmio_base;
 
-	/* The device queue buffer size in bytes. */
-	u16 buffer_size;
-	/* The number of used bytes in the device queue buffer. */
-	u16 buffer_used;
-	/* The number of packets that can still get queued.
-	 * This is decremented on queueing a packet and incremented
-	 * after receiving the transmit status. */
-	u16 free_packet_slots;
+    /* The device queue buffer size in bytes. */
+    u16 buffer_size;
+    /* The number of used bytes in the device queue buffer. */
+    u16 buffer_used;
+    /* The number of packets that can still get queued.
+     * This is decremented on queueing a packet and incremented
+     * after receiving the transmit status. */
+    u16 free_packet_slots;
 
-	/* True, if the mac80211 queue was stopped due to overflow at TX. */
-	bool stopped;
-	/* Our b43 queue index number */
-	u8 index;
-	/* The mac80211 QoS queue priority. */
-	u8 queue_prio;
+    /* True, if the mac80211 queue was stopped due to overflow at TX. */
+    bool stopped;
+    /* Our b43 queue index number */
+    u8 index;
+    /* The mac80211 QoS queue priority. */
+    u8 queue_prio;
 
-	/* Buffer for TX packet meta data. */
-	struct b43_pio_txpacket packets[B43_PIO_MAX_NR_TXPACKETS];
-	struct list_head packets_list;
+    /* Buffer for TX packet meta data. */
+    struct b43_pio_txpacket packets[B43_PIO_MAX_NR_TXPACKETS];
+    struct list_head packets_list;
 
-	/* Shortcut to the 802.11 core revision. This is to
-	 * avoid horrible pointer dereferencing in the fastpaths. */
-	u8 rev;
+    /* Shortcut to the 802.11 core revision. This is to
+     * avoid horrible pointer dereferencing in the fastpaths. */
+    u8 rev;
 };
 
 struct b43_pio_rxqueue {
-	struct b43_wldev *dev;
-	u16 mmio_base;
+    struct b43_wldev *dev;
+    u16 mmio_base;
 
-	/* Shortcut to the 802.11 core revision. This is to
-	 * avoid horrible pointer dereferencing in the fastpaths. */
-	u8 rev;
+    /* Shortcut to the 802.11 core revision. This is to
+     * avoid horrible pointer dereferencing in the fastpaths. */
+    u8 rev;
 };
 
 
-static inline u16 b43_piotx_read16(struct b43_pio_txqueue *q, u16 offset)
-{
-	return b43_read16(q->dev, q->mmio_base + offset);
+static inline u16 b43_piotx_read16(struct b43_pio_txqueue *q, u16 offset) {
+    return b43_read16(q->dev, q->mmio_base + offset);
 }
 
-static inline u32 b43_piotx_read32(struct b43_pio_txqueue *q, u16 offset)
-{
-	return b43_read32(q->dev, q->mmio_base + offset);
+static inline u32 b43_piotx_read32(struct b43_pio_txqueue *q, u16 offset) {
+    return b43_read32(q->dev, q->mmio_base + offset);
 }
 
 static inline void b43_piotx_write16(struct b43_pio_txqueue *q,
-				     u16 offset, u16 value)
-{
-	b43_write16(q->dev, q->mmio_base + offset, value);
+                                     u16 offset, u16 value) {
+    b43_write16(q->dev, q->mmio_base + offset, value);
 }
 
 static inline void b43_piotx_write32(struct b43_pio_txqueue *q,
-				     u16 offset, u32 value)
-{
-	b43_write32(q->dev, q->mmio_base + offset, value);
+                                     u16 offset, u32 value) {
+    b43_write32(q->dev, q->mmio_base + offset, value);
 }
 
 
-static inline u16 b43_piorx_read16(struct b43_pio_rxqueue *q, u16 offset)
-{
-	return b43_read16(q->dev, q->mmio_base + offset);
+static inline u16 b43_piorx_read16(struct b43_pio_rxqueue *q, u16 offset) {
+    return b43_read16(q->dev, q->mmio_base + offset);
 }
 
-static inline u32 b43_piorx_read32(struct b43_pio_rxqueue *q, u16 offset)
-{
-	return b43_read32(q->dev, q->mmio_base + offset);
+static inline u32 b43_piorx_read32(struct b43_pio_rxqueue *q, u16 offset) {
+    return b43_read32(q->dev, q->mmio_base + offset);
 }
 
 static inline void b43_piorx_write16(struct b43_pio_rxqueue *q,
-				     u16 offset, u16 value)
-{
-	b43_write16(q->dev, q->mmio_base + offset, value);
+                                     u16 offset, u16 value) {
+    b43_write16(q->dev, q->mmio_base + offset, value);
 }
 
 static inline void b43_piorx_write32(struct b43_pio_rxqueue *q,
-				     u16 offset, u32 value)
-{
-	b43_write32(q->dev, q->mmio_base + offset, value);
+                                     u16 offset, u32 value) {
+    b43_write32(q->dev, q->mmio_base + offset, value);
 }
 
 
@@ -156,7 +148,7 @@ void b43_pio_free(struct b43_wldev *dev);
 
 int b43_pio_tx(struct b43_wldev *dev, struct sk_buff *skb);
 void b43_pio_handle_txstatus(struct b43_wldev *dev,
-			     const struct b43_txstatus *status);
+                             const struct b43_txstatus *status);
 void b43_pio_rx(struct b43_pio_rxqueue *q);
 
 void b43_pio_tx_suspend(struct b43_wldev *dev);

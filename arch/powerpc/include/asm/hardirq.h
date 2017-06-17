@@ -5,11 +5,11 @@
 #include <linux/irq.h>
 
 typedef struct {
-	unsigned int __softirq_pending;
-	unsigned int timer_irqs;
-	unsigned int pmu_irqs;
-	unsigned int mce_exceptions;
-	unsigned int spurious_irqs;
+    unsigned int __softirq_pending;
+    unsigned int timer_irqs;
+    unsigned int pmu_irqs;
+    unsigned int mce_exceptions;
+    unsigned int spurious_irqs;
 } ____cacheline_aligned irq_cpustat_t;
 
 DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
@@ -18,9 +18,8 @@ DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
 
 #define local_softirq_pending()	__get_cpu_var(irq_stat).__softirq_pending
 
-static inline void ack_bad_irq(unsigned int irq)
-{
-	printk(KERN_CRIT "unexpected IRQ trap at vector %02x\n", irq);
+static inline void ack_bad_irq(unsigned int irq) {
+    printk(KERN_CRIT "unexpected IRQ trap at vector %02x\n", irq);
 }
 
 extern u64 arch_irq_stat_cpu(unsigned int cpu);

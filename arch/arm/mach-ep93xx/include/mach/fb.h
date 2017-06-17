@@ -42,15 +42,15 @@ struct fb_info;
 					 EP93XXFB_PIXEL_DATA_ENABLE)
 
 struct ep93xxfb_mach_info {
-	unsigned int			num_modes;
-	const struct fb_videomode	*modes;
-	const struct fb_videomode	*default_mode;
-	int				bpp;
-	unsigned int			flags;
+    unsigned int			num_modes;
+    const struct fb_videomode	*modes;
+    const struct fb_videomode	*default_mode;
+    int				bpp;
+    unsigned int			flags;
 
-	int	(*setup)(struct platform_device *pdev);
-	void	(*teardown)(struct platform_device *pdev);
-	void	(*blank)(int blank_mode, struct fb_info *info);
+    int	(*setup)(struct platform_device *pdev);
+    void	(*teardown)(struct platform_device *pdev);
+    void	(*blank)(int blank_mode, struct fb_info *info);
 };
 
 #endif /* __ASM_ARCH_EP93XXFB_H */

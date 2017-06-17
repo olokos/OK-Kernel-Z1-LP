@@ -10,44 +10,44 @@
 
 // This define the Tx/Rx directions
 typedef enum _TR_SELECT {
-	TX_DIR = 0,
-	RX_DIR = 1,
+    TX_DIR = 0,
+    RX_DIR = 1,
 } TR_SELECT, *PTR_SELECT;
 
-typedef struct _TS_COMMON_INFO{
-	struct list_head		List;
-	struct timer_list		SetupTimer;
-	struct timer_list		InactTimer;
-	u8				Addr[6];
-	TSPEC_BODY			TSpec;
-	QOS_TCLAS			TClass[TCLAS_NUM];
-	u8				TClasProc;
-	u8				TClasNum;
+typedef struct _TS_COMMON_INFO {
+    struct list_head		List;
+    struct timer_list		SetupTimer;
+    struct timer_list		InactTimer;
+    u8				Addr[6];
+    TSPEC_BODY			TSpec;
+    QOS_TCLAS			TClass[TCLAS_NUM];
+    u8				TClasProc;
+    u8				TClasNum;
 } TS_COMMON_INFO, *PTS_COMMON_INFO;
 
-typedef struct _TX_TS_RECORD{
-	TS_COMMON_INFO		TsCommonInfo;
-	u16				TxCurSeq;
-	BA_RECORD			TxPendingBARecord;  	// For BA Originator
-	BA_RECORD			TxAdmittedBARecord;	// For BA Originator
+typedef struct _TX_TS_RECORD {
+    TS_COMMON_INFO		TsCommonInfo;
+    u16				TxCurSeq;
+    BA_RECORD			TxPendingBARecord;  	// For BA Originator
+    BA_RECORD			TxAdmittedBARecord;	// For BA Originator
 //	QOS_DL_RECORD		DLRecord;
-	u8				bAddBaReqInProgress;
-	u8				bAddBaReqDelayed;
-	u8				bUsingBa;
-	struct timer_list		TsAddBaTimer;
-	u8				num;
+    u8				bAddBaReqInProgress;
+    u8				bAddBaReqDelayed;
+    u8				bUsingBa;
+    struct timer_list		TsAddBaTimer;
+    u8				num;
 } TX_TS_RECORD, *PTX_TS_RECORD;
 
 typedef struct _RX_TS_RECORD {
-	TS_COMMON_INFO		TsCommonInfo;
-	u16				RxIndicateSeq;
-	u16				RxTimeoutIndicateSeq;
-	struct list_head		RxPendingPktList;
-	struct timer_list		RxPktPendingTimer;
-	BA_RECORD			RxAdmittedBARecord;	 // For BA Recipient
-	u16				RxLastSeqNum;
-	u8				RxLastFragNum;
-	u8				num;
+    TS_COMMON_INFO		TsCommonInfo;
+    u16				RxIndicateSeq;
+    u16				RxTimeoutIndicateSeq;
+    struct list_head		RxPendingPktList;
+    struct timer_list		RxPktPendingTimer;
+    BA_RECORD			RxAdmittedBARecord;	 // For BA Recipient
+    u16				RxLastSeqNum;
+    u8				RxLastFragNum;
+    u8				num;
 //	QOS_DL_RECORD		DLRecord;
 } RX_TS_RECORD, *PRX_TS_RECORD;
 

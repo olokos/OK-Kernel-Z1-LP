@@ -150,97 +150,97 @@
 
 /* supported chipsets */
 enum intel_chips {
-	INTEL_830M,
-	INTEL_845G,
-	INTEL_85XGM,
-	INTEL_852GM,
-	INTEL_852GME,
-	INTEL_854,
-	INTEL_855GM,
-	INTEL_855GME,
-	INTEL_865G,
-	INTEL_915G,
-	INTEL_915GM,
-	INTEL_945G,
-	INTEL_945GM,
-	INTEL_945GME,
-	INTEL_965G,
-	INTEL_965GM,
+    INTEL_830M,
+    INTEL_845G,
+    INTEL_85XGM,
+    INTEL_852GM,
+    INTEL_852GME,
+    INTEL_854,
+    INTEL_855GM,
+    INTEL_855GME,
+    INTEL_865G,
+    INTEL_915G,
+    INTEL_915GM,
+    INTEL_945G,
+    INTEL_945GM,
+    INTEL_945GME,
+    INTEL_965G,
+    INTEL_965GM,
 };
 
 struct intelfb_hwstate {
-	u32 vga0_divisor;
-	u32 vga1_divisor;
-	u32 vga_pd;
-	u32 dpll_a;
-	u32 dpll_b;
-	u32 fpa0;
-	u32 fpa1;
-	u32 fpb0;
-	u32 fpb1;
-	u32 palette_a[PALETTE_8_ENTRIES];
-	u32 palette_b[PALETTE_8_ENTRIES];
-	u32 htotal_a;
-	u32 hblank_a;
-	u32 hsync_a;
-	u32 vtotal_a;
-	u32 vblank_a;
-	u32 vsync_a;
-	u32 src_size_a;
-	u32 bclrpat_a;
-	u32 htotal_b;
-	u32 hblank_b;
-	u32 hsync_b;
-	u32 vtotal_b;
-	u32 vblank_b;
-	u32 vsync_b;
-	u32 src_size_b;
-	u32 bclrpat_b;
-	u32 adpa;
-	u32 dvoa;
-	u32 dvob;
-	u32 dvoc;
-	u32 dvoa_srcdim;
-	u32 dvob_srcdim;
-	u32 dvoc_srcdim;
-	u32 lvds;
-	u32 pipe_a_conf;
-	u32 pipe_b_conf;
-	u32 disp_arb;
-	u32 cursor_a_control;
-	u32 cursor_b_control;
-	u32 cursor_a_base;
-	u32 cursor_b_base;
-	u32 cursor_size;
-	u32 disp_a_ctrl;
-	u32 disp_b_ctrl;
-	u32 disp_a_base;
-	u32 disp_b_base;
-	u32 cursor_a_palette[4];
-	u32 cursor_b_palette[4];
-	u32 disp_a_stride;
-	u32 disp_b_stride;
-	u32 vgacntrl;
-	u32 add_id;
-	u32 swf0x[7];
-	u32 swf1x[7];
-	u32 swf3x[3];
-	u32 fence[8];
-	u32 instpm;
-	u32 mem_mode;
-	u32 fw_blc_0;
-	u32 fw_blc_1;
-	u16 hwstam;
-	u16 ier;
-	u16 iir;
-	u16 imr;
+    u32 vga0_divisor;
+    u32 vga1_divisor;
+    u32 vga_pd;
+    u32 dpll_a;
+    u32 dpll_b;
+    u32 fpa0;
+    u32 fpa1;
+    u32 fpb0;
+    u32 fpb1;
+    u32 palette_a[PALETTE_8_ENTRIES];
+    u32 palette_b[PALETTE_8_ENTRIES];
+    u32 htotal_a;
+    u32 hblank_a;
+    u32 hsync_a;
+    u32 vtotal_a;
+    u32 vblank_a;
+    u32 vsync_a;
+    u32 src_size_a;
+    u32 bclrpat_a;
+    u32 htotal_b;
+    u32 hblank_b;
+    u32 hsync_b;
+    u32 vtotal_b;
+    u32 vblank_b;
+    u32 vsync_b;
+    u32 src_size_b;
+    u32 bclrpat_b;
+    u32 adpa;
+    u32 dvoa;
+    u32 dvob;
+    u32 dvoc;
+    u32 dvoa_srcdim;
+    u32 dvob_srcdim;
+    u32 dvoc_srcdim;
+    u32 lvds;
+    u32 pipe_a_conf;
+    u32 pipe_b_conf;
+    u32 disp_arb;
+    u32 cursor_a_control;
+    u32 cursor_b_control;
+    u32 cursor_a_base;
+    u32 cursor_b_base;
+    u32 cursor_size;
+    u32 disp_a_ctrl;
+    u32 disp_b_ctrl;
+    u32 disp_a_base;
+    u32 disp_b_base;
+    u32 cursor_a_palette[4];
+    u32 cursor_b_palette[4];
+    u32 disp_a_stride;
+    u32 disp_b_stride;
+    u32 vgacntrl;
+    u32 add_id;
+    u32 swf0x[7];
+    u32 swf1x[7];
+    u32 swf3x[3];
+    u32 fence[8];
+    u32 instpm;
+    u32 mem_mode;
+    u32 fw_blc_0;
+    u32 fw_blc_1;
+    u16 hwstam;
+    u16 ier;
+    u16 iir;
+    u16 imr;
 };
 
 struct intelfb_heap_data {
-	u32 physical;
-	u8 __iomem *virtual;
-	u32 offset;		/* in GATT pages */
-	u32 size;		/* in bytes */
+    u32 physical;
+    u8 __iomem *virtual;
+    u32 offset;		/* in GATT pages */
+    u32 size;		/* in bytes */
 };
 
 #ifdef CONFIG_FB_INTEL_I2C
@@ -264,103 +264,103 @@ struct intelfb_output_rec {
 };
 
 struct intelfb_vsync {
-	wait_queue_head_t wait;
-	unsigned int count;
-	int pan_display;
-	u32 pan_offset;
+    wait_queue_head_t wait;
+    unsigned int count;
+    int pan_display;
+    u32 pan_offset;
 };
 
 struct intelfb_info {
-	struct fb_info *info;
-	struct fb_ops  *fbops;
-	struct pci_dev *pdev;
+    struct fb_info *info;
+    struct fb_ops  *fbops;
+    struct pci_dev *pdev;
 
-	struct intelfb_hwstate save_state;
+    struct intelfb_hwstate save_state;
 
-	/* agpgart structs */
-	struct agp_memory *gtt_fb_mem;     /* use all stolen memory or vram */
-	struct agp_memory *gtt_ring_mem;   /* ring buffer */
-	struct agp_memory *gtt_cursor_mem; /* hw cursor */
+    /* agpgart structs */
+    struct agp_memory *gtt_fb_mem;     /* use all stolen memory or vram */
+    struct agp_memory *gtt_ring_mem;   /* ring buffer */
+    struct agp_memory *gtt_cursor_mem; /* hw cursor */
 
-	/* use a gart reserved fb mem */
-	u8 fbmem_gart;
+    /* use a gart reserved fb mem */
+    u8 fbmem_gart;
 
-	/* mtrr support */
-	int mtrr_reg;
-	u32 has_mtrr;
+    /* mtrr support */
+    int mtrr_reg;
+    u32 has_mtrr;
 
-	/* heap data */
-	struct intelfb_heap_data aperture;
-	struct intelfb_heap_data fb;
-	struct intelfb_heap_data ring;
-	struct intelfb_heap_data cursor;
+    /* heap data */
+    struct intelfb_heap_data aperture;
+    struct intelfb_heap_data fb;
+    struct intelfb_heap_data ring;
+    struct intelfb_heap_data cursor;
 
-	/* mmio regs */
-	u32 mmio_base_phys;
-	u8 __iomem *mmio_base;
+    /* mmio regs */
+    u32 mmio_base_phys;
+    u8 __iomem *mmio_base;
 
-	/* fb start offset (in bytes) */
-	u32 fb_start;
+    /* fb start offset (in bytes) */
+    u32 fb_start;
 
-	/* ring buffer */
-	u32 ring_head;
-	u32 ring_tail;
-	u32 ring_tail_mask;
-	u32 ring_space;
-	u32 ring_lockup;
+    /* ring buffer */
+    u32 ring_head;
+    u32 ring_tail;
+    u32 ring_tail_mask;
+    u32 ring_space;
+    u32 ring_lockup;
 
-	/* palette */
-	u32 pseudo_palette[16];
+    /* palette */
+    u32 pseudo_palette[16];
 
-	/* chip info */
-	int pci_chipset;
-	int chipset;
-	const char *name;
-	int mobile;
+    /* chip info */
+    int pci_chipset;
+    int chipset;
+    const char *name;
+    int mobile;
 
-	/* current mode */
-	int bpp, depth;
-	u32 visual;
-	int xres, yres, pitch;
-	int pixclock;
+    /* current mode */
+    int bpp, depth;
+    u32 visual;
+    int xres, yres, pitch;
+    int pixclock;
 
-	/* current pipe */
-	int pipe;
+    /* current pipe */
+    int pipe;
 
-	/* some flags */
-	int accel;
-	int hwcursor;
-	int fixed_mode;
-	int ring_active;
-	int flag;
-	unsigned long irq_flags;
-	int open;
+    /* some flags */
+    int accel;
+    int hwcursor;
+    int fixed_mode;
+    int ring_active;
+    int flag;
+    unsigned long irq_flags;
+    int open;
 
-	/* vsync */
-	struct intelfb_vsync vsync;
-	spinlock_t int_lock;
+    /* vsync */
+    struct intelfb_vsync vsync;
+    spinlock_t int_lock;
 
-	/* hw cursor */
-	int cursor_on;
-	int cursor_blanked;
-	u8  cursor_src[64];
+    /* hw cursor */
+    int cursor_on;
+    int cursor_blanked;
+    u8  cursor_src[64];
 
-	/* initial parameters */
-	int initial_vga;
-	struct fb_var_screeninfo initial_var;
-	u32 initial_fb_base;
-	u32 initial_video_ram;
-	u32 initial_pitch;
+    /* initial parameters */
+    int initial_vga;
+    struct fb_var_screeninfo initial_var;
+    u32 initial_fb_base;
+    u32 initial_video_ram;
+    u32 initial_pitch;
 
-	/* driver registered */
-	int registered;
+    /* driver registered */
+    int registered;
 
-	/* index into plls */
-	int pll_index;
+    /* index into plls */
+    int pll_index;
 
-	/* outputs */
-	int num_outputs;
-	struct intelfb_output_rec output[MAX_OUTPUTS];
+    /* outputs */
+    int num_outputs;
+    struct intelfb_output_rec output[MAX_OUTPUTS];
 };
 
 #define IS_I9XX(dinfo) (((dinfo)->chipset == INTEL_915G) ||	\

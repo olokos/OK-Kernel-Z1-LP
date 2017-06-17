@@ -211,144 +211,141 @@
  * Data structure for handling APECS machine checks:
  */
 
-struct el_apecs_mikasa_sysdata_mcheck
-{
-	unsigned long coma_gcr;
-	unsigned long coma_edsr;
-	unsigned long coma_ter;
-	unsigned long coma_elar;
-	unsigned long coma_ehar;
-	unsigned long coma_ldlr;
-	unsigned long coma_ldhr;
-	unsigned long coma_base0;
-	unsigned long coma_base1;
-	unsigned long coma_base2;
-	unsigned long coma_base3;
-	unsigned long coma_cnfg0;
-	unsigned long coma_cnfg1;
-	unsigned long coma_cnfg2;
-	unsigned long coma_cnfg3;
-	unsigned long epic_dcsr;
-	unsigned long epic_pear;
-	unsigned long epic_sear;
-	unsigned long epic_tbr1;
-	unsigned long epic_tbr2;
-	unsigned long epic_pbr1;
-	unsigned long epic_pbr2;
-	unsigned long epic_pmr1;
-	unsigned long epic_pmr2;
-	unsigned long epic_harx1;
-	unsigned long epic_harx2;
-	unsigned long epic_pmlt;
-	unsigned long epic_tag0;
-	unsigned long epic_tag1;
-	unsigned long epic_tag2;
-	unsigned long epic_tag3;
-	unsigned long epic_tag4;
-	unsigned long epic_tag5;
-	unsigned long epic_tag6;
-	unsigned long epic_tag7;
-	unsigned long epic_data0;
-	unsigned long epic_data1;
-	unsigned long epic_data2;
-	unsigned long epic_data3;
-	unsigned long epic_data4;
-	unsigned long epic_data5;
-	unsigned long epic_data6;
-	unsigned long epic_data7;
+struct el_apecs_mikasa_sysdata_mcheck {
+    unsigned long coma_gcr;
+    unsigned long coma_edsr;
+    unsigned long coma_ter;
+    unsigned long coma_elar;
+    unsigned long coma_ehar;
+    unsigned long coma_ldlr;
+    unsigned long coma_ldhr;
+    unsigned long coma_base0;
+    unsigned long coma_base1;
+    unsigned long coma_base2;
+    unsigned long coma_base3;
+    unsigned long coma_cnfg0;
+    unsigned long coma_cnfg1;
+    unsigned long coma_cnfg2;
+    unsigned long coma_cnfg3;
+    unsigned long epic_dcsr;
+    unsigned long epic_pear;
+    unsigned long epic_sear;
+    unsigned long epic_tbr1;
+    unsigned long epic_tbr2;
+    unsigned long epic_pbr1;
+    unsigned long epic_pbr2;
+    unsigned long epic_pmr1;
+    unsigned long epic_pmr2;
+    unsigned long epic_harx1;
+    unsigned long epic_harx2;
+    unsigned long epic_pmlt;
+    unsigned long epic_tag0;
+    unsigned long epic_tag1;
+    unsigned long epic_tag2;
+    unsigned long epic_tag3;
+    unsigned long epic_tag4;
+    unsigned long epic_tag5;
+    unsigned long epic_tag6;
+    unsigned long epic_tag7;
+    unsigned long epic_data0;
+    unsigned long epic_data1;
+    unsigned long epic_data2;
+    unsigned long epic_data3;
+    unsigned long epic_data4;
+    unsigned long epic_data5;
+    unsigned long epic_data6;
+    unsigned long epic_data7;
 
-	unsigned long pceb_vid;
-	unsigned long pceb_did;
-	unsigned long pceb_revision;
-	unsigned long pceb_command;
-	unsigned long pceb_status;
-	unsigned long pceb_latency;
-	unsigned long pceb_control;
-	unsigned long pceb_arbcon;
-	unsigned long pceb_arbpri;
+    unsigned long pceb_vid;
+    unsigned long pceb_did;
+    unsigned long pceb_revision;
+    unsigned long pceb_command;
+    unsigned long pceb_status;
+    unsigned long pceb_latency;
+    unsigned long pceb_control;
+    unsigned long pceb_arbcon;
+    unsigned long pceb_arbpri;
 
-	unsigned long esc_id;
-	unsigned long esc_revision;
-	unsigned long esc_int0;
-	unsigned long esc_int1;
-	unsigned long esc_elcr0;
-	unsigned long esc_elcr1;
-	unsigned long esc_last_eisa;
-	unsigned long esc_nmi_stat;
+    unsigned long esc_id;
+    unsigned long esc_revision;
+    unsigned long esc_int0;
+    unsigned long esc_int1;
+    unsigned long esc_elcr0;
+    unsigned long esc_elcr1;
+    unsigned long esc_last_eisa;
+    unsigned long esc_nmi_stat;
 
-	unsigned long pci_ir;
-	unsigned long pci_imr;
-	unsigned long svr_mgr;
+    unsigned long pci_ir;
+    unsigned long pci_imr;
+    unsigned long svr_mgr;
 };
 
 /* This for the normal APECS machines.  */
-struct el_apecs_sysdata_mcheck
-{
-	unsigned long coma_gcr;
-	unsigned long coma_edsr;
-	unsigned long coma_ter;
-	unsigned long coma_elar;
-	unsigned long coma_ehar;
-	unsigned long coma_ldlr;
-	unsigned long coma_ldhr;
-	unsigned long coma_base0;
-	unsigned long coma_base1;
-	unsigned long coma_base2;
-	unsigned long coma_cnfg0;
-	unsigned long coma_cnfg1;
-	unsigned long coma_cnfg2;
-	unsigned long epic_dcsr;
-	unsigned long epic_pear;
-	unsigned long epic_sear;
-	unsigned long epic_tbr1;
-	unsigned long epic_tbr2;
-	unsigned long epic_pbr1;
-	unsigned long epic_pbr2;
-	unsigned long epic_pmr1;
-	unsigned long epic_pmr2;
-	unsigned long epic_harx1;
-	unsigned long epic_harx2;
-	unsigned long epic_pmlt;
-	unsigned long epic_tag0;
-	unsigned long epic_tag1;
-	unsigned long epic_tag2;
-	unsigned long epic_tag3;
-	unsigned long epic_tag4;
-	unsigned long epic_tag5;
-	unsigned long epic_tag6;
-	unsigned long epic_tag7;
-	unsigned long epic_data0;
-	unsigned long epic_data1;
-	unsigned long epic_data2;
-	unsigned long epic_data3;
-	unsigned long epic_data4;
-	unsigned long epic_data5;
-	unsigned long epic_data6;
-	unsigned long epic_data7;
+struct el_apecs_sysdata_mcheck {
+    unsigned long coma_gcr;
+    unsigned long coma_edsr;
+    unsigned long coma_ter;
+    unsigned long coma_elar;
+    unsigned long coma_ehar;
+    unsigned long coma_ldlr;
+    unsigned long coma_ldhr;
+    unsigned long coma_base0;
+    unsigned long coma_base1;
+    unsigned long coma_base2;
+    unsigned long coma_cnfg0;
+    unsigned long coma_cnfg1;
+    unsigned long coma_cnfg2;
+    unsigned long epic_dcsr;
+    unsigned long epic_pear;
+    unsigned long epic_sear;
+    unsigned long epic_tbr1;
+    unsigned long epic_tbr2;
+    unsigned long epic_pbr1;
+    unsigned long epic_pbr2;
+    unsigned long epic_pmr1;
+    unsigned long epic_pmr2;
+    unsigned long epic_harx1;
+    unsigned long epic_harx2;
+    unsigned long epic_pmlt;
+    unsigned long epic_tag0;
+    unsigned long epic_tag1;
+    unsigned long epic_tag2;
+    unsigned long epic_tag3;
+    unsigned long epic_tag4;
+    unsigned long epic_tag5;
+    unsigned long epic_tag6;
+    unsigned long epic_tag7;
+    unsigned long epic_data0;
+    unsigned long epic_data1;
+    unsigned long epic_data2;
+    unsigned long epic_data3;
+    unsigned long epic_data4;
+    unsigned long epic_data5;
+    unsigned long epic_data6;
+    unsigned long epic_data7;
 };
 
-struct el_apecs_procdata
-{
-	unsigned long paltemp[32];  /* PAL TEMP REGS. */
-	/* EV4-specific fields */
-	unsigned long exc_addr;     /* Address of excepting instruction. */
-	unsigned long exc_sum;      /* Summary of arithmetic traps. */
-	unsigned long exc_mask;     /* Exception mask (from exc_sum). */
-	unsigned long iccsr;        /* IBox hardware enables. */
-	unsigned long pal_base;     /* Base address for PALcode. */
-	unsigned long hier;         /* Hardware Interrupt Enable. */
-	unsigned long hirr;         /* Hardware Interrupt Request. */
-	unsigned long csr;          /* D-stream fault info. */
-	unsigned long dc_stat;      /* D-cache status (ECC/Parity Err). */
-	unsigned long dc_addr;      /* EV3 Phys Addr for ECC/DPERR. */
-	unsigned long abox_ctl;     /* ABox Control Register. */
-	unsigned long biu_stat;     /* BIU Status. */
-	unsigned long biu_addr;     /* BUI Address. */
-	unsigned long biu_ctl;      /* BIU Control. */
-	unsigned long fill_syndrome;/* For correcting ECC errors. */
-	unsigned long fill_addr;    /* Cache block which was being read */
-	unsigned long va;           /* Effective VA of fault or miss. */
-	unsigned long bc_tag;       /* Backup Cache Tag Probe Results.*/
+struct el_apecs_procdata {
+    unsigned long paltemp[32];  /* PAL TEMP REGS. */
+    /* EV4-specific fields */
+    unsigned long exc_addr;     /* Address of excepting instruction. */
+    unsigned long exc_sum;      /* Summary of arithmetic traps. */
+    unsigned long exc_mask;     /* Exception mask (from exc_sum). */
+    unsigned long iccsr;        /* IBox hardware enables. */
+    unsigned long pal_base;     /* Base address for PALcode. */
+    unsigned long hier;         /* Hardware Interrupt Enable. */
+    unsigned long hirr;         /* Hardware Interrupt Request. */
+    unsigned long csr;          /* D-stream fault info. */
+    unsigned long dc_stat;      /* D-cache status (ECC/Parity Err). */
+    unsigned long dc_addr;      /* EV3 Phys Addr for ECC/DPERR. */
+    unsigned long abox_ctl;     /* ABox Control Register. */
+    unsigned long biu_stat;     /* BIU Status. */
+    unsigned long biu_addr;     /* BUI Address. */
+    unsigned long biu_ctl;      /* BIU Control. */
+    unsigned long fill_syndrome;/* For correcting ECC errors. */
+    unsigned long fill_addr;    /* Cache block which was being read */
+    unsigned long va;           /* Effective VA of fault or miss. */
+    unsigned long bc_tag;       /* Backup Cache Tag Probe Results.*/
 };
 
 
@@ -383,113 +380,103 @@ struct el_apecs_procdata
 		}						\
 	} while (0)
 
-__EXTERN_INLINE unsigned int apecs_ioread8(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long result, base_and_type;
+__EXTERN_INLINE unsigned int apecs_ioread8(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long result, base_and_type;
 
-	if (addr >= APECS_DENSE_MEM) {
-		addr -= APECS_DENSE_MEM;
-		APECS_SET_HAE;
-		base_and_type = APECS_SPARSE_MEM + 0x00;
-	} else {
-		addr -= APECS_IO;
-		base_and_type = APECS_IO + 0x00;
-	}
+    if (addr >= APECS_DENSE_MEM) {
+        addr -= APECS_DENSE_MEM;
+        APECS_SET_HAE;
+        base_and_type = APECS_SPARSE_MEM + 0x00;
+    } else {
+        addr -= APECS_IO;
+        base_and_type = APECS_IO + 0x00;
+    }
 
-	result = *(vip) ((addr << 5) + base_and_type);
-	return __kernel_extbl(result, addr & 3);
+    result = *(vip) ((addr << 5) + base_and_type);
+    return __kernel_extbl(result, addr & 3);
 }
 
-__EXTERN_INLINE void apecs_iowrite8(u8 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long w, base_and_type;
+__EXTERN_INLINE void apecs_iowrite8(u8 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long w, base_and_type;
 
-	if (addr >= APECS_DENSE_MEM) {
-		addr -= APECS_DENSE_MEM;
-		APECS_SET_HAE;
-		base_and_type = APECS_SPARSE_MEM + 0x00;
-	} else {
-		addr -= APECS_IO;
-		base_and_type = APECS_IO + 0x00;
-	}
+    if (addr >= APECS_DENSE_MEM) {
+        addr -= APECS_DENSE_MEM;
+        APECS_SET_HAE;
+        base_and_type = APECS_SPARSE_MEM + 0x00;
+    } else {
+        addr -= APECS_IO;
+        base_and_type = APECS_IO + 0x00;
+    }
 
-	w = __kernel_insbl(b, addr & 3);
-	*(vuip) ((addr << 5) + base_and_type) = w;
+    w = __kernel_insbl(b, addr & 3);
+    *(vuip) ((addr << 5) + base_and_type) = w;
 }
 
-__EXTERN_INLINE unsigned int apecs_ioread16(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long result, base_and_type;
+__EXTERN_INLINE unsigned int apecs_ioread16(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long result, base_and_type;
 
-	if (addr >= APECS_DENSE_MEM) {
-		addr -= APECS_DENSE_MEM;
-		APECS_SET_HAE;
-		base_and_type = APECS_SPARSE_MEM + 0x08;
-	} else {
-		addr -= APECS_IO;
-		base_and_type = APECS_IO + 0x08;
-	}
+    if (addr >= APECS_DENSE_MEM) {
+        addr -= APECS_DENSE_MEM;
+        APECS_SET_HAE;
+        base_and_type = APECS_SPARSE_MEM + 0x08;
+    } else {
+        addr -= APECS_IO;
+        base_and_type = APECS_IO + 0x08;
+    }
 
-	result = *(vip) ((addr << 5) + base_and_type);
-	return __kernel_extwl(result, addr & 3);
+    result = *(vip) ((addr << 5) + base_and_type);
+    return __kernel_extwl(result, addr & 3);
 }
 
-__EXTERN_INLINE void apecs_iowrite16(u16 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long w, base_and_type;
+__EXTERN_INLINE void apecs_iowrite16(u16 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long w, base_and_type;
 
-	if (addr >= APECS_DENSE_MEM) {
-		addr -= APECS_DENSE_MEM;
-		APECS_SET_HAE;
-		base_and_type = APECS_SPARSE_MEM + 0x08;
-	} else {
-		addr -= APECS_IO;
-		base_and_type = APECS_IO + 0x08;
-	}
+    if (addr >= APECS_DENSE_MEM) {
+        addr -= APECS_DENSE_MEM;
+        APECS_SET_HAE;
+        base_and_type = APECS_SPARSE_MEM + 0x08;
+    } else {
+        addr -= APECS_IO;
+        base_and_type = APECS_IO + 0x08;
+    }
 
-	w = __kernel_inswl(b, addr & 3);
-	*(vuip) ((addr << 5) + base_and_type) = w;
+    w = __kernel_inswl(b, addr & 3);
+    *(vuip) ((addr << 5) + base_and_type) = w;
 }
 
-__EXTERN_INLINE unsigned int apecs_ioread32(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	if (addr < APECS_DENSE_MEM)
-		addr = ((addr - APECS_IO) << 5) + APECS_IO + 0x18;
-	return *(vuip)addr;
+__EXTERN_INLINE unsigned int apecs_ioread32(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    if (addr < APECS_DENSE_MEM)
+        addr = ((addr - APECS_IO) << 5) + APECS_IO + 0x18;
+    return *(vuip)addr;
 }
 
-__EXTERN_INLINE void apecs_iowrite32(u32 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	if (addr < APECS_DENSE_MEM)
-		addr = ((addr - APECS_IO) << 5) + APECS_IO + 0x18;
-	*(vuip)addr = b;
+__EXTERN_INLINE void apecs_iowrite32(u32 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    if (addr < APECS_DENSE_MEM)
+        addr = ((addr - APECS_IO) << 5) + APECS_IO + 0x18;
+    *(vuip)addr = b;
 }
 
-__EXTERN_INLINE void __iomem *apecs_ioportmap(unsigned long addr)
-{
-	return (void __iomem *)(addr + APECS_IO);
+__EXTERN_INLINE void __iomem *apecs_ioportmap(unsigned long addr) {
+    return (void __iomem *)(addr + APECS_IO);
 }
 
 __EXTERN_INLINE void __iomem *apecs_ioremap(unsigned long addr,
-					    unsigned long size)
-{
-	return (void __iomem *)(addr + APECS_DENSE_MEM);
+        unsigned long size) {
+    return (void __iomem *)(addr + APECS_DENSE_MEM);
 }
 
-__EXTERN_INLINE int apecs_is_ioaddr(unsigned long addr)
-{
-	return addr >= IDENT_ADDR + 0x180000000UL;
+__EXTERN_INLINE int apecs_is_ioaddr(unsigned long addr) {
+    return addr >= IDENT_ADDR + 0x180000000UL;
 }
 
-__EXTERN_INLINE int apecs_is_mmio(const volatile void __iomem *addr)
-{
-	return (unsigned long)addr >= APECS_DENSE_MEM;
+__EXTERN_INLINE int apecs_is_mmio(const volatile void __iomem *addr) {
+    return (unsigned long)addr >= APECS_DENSE_MEM;
 }
 
 #undef APECS_SET_HAE

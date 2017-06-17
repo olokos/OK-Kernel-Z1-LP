@@ -19,24 +19,23 @@
 }
 
 static struct plat_serial8250_port uart8250_data[] = {
-	PORT(0x3F8, 4),
-	PORT(0x2F8, 3),
-	PORT(0x3E8, 4),
-	PORT(0x2E8, 3),
-	{ },
+    PORT(0x3F8, 4),
+    PORT(0x2F8, 3),
+    PORT(0x3E8, 4),
+    PORT(0x2E8, 3),
+    { },
 };
 
 static struct platform_device uart8250_device = {
-	.name			= "serial8250",
-	.id			= PLAT8250_DEV_PLATFORM,
-	.dev			= {
-		.platform_data	= uart8250_data,
-	},
+    .name			= "serial8250",
+    .id			= PLAT8250_DEV_PLATFORM,
+    .dev			= {
+        .platform_data	= uart8250_data,
+    },
 };
 
-static int __init uart8250_init(void)
-{
-	return platform_device_register(&uart8250_device);
+static int __init uart8250_init(void) {
+    return platform_device_register(&uart8250_device);
 }
 
 module_init(uart8250_init);

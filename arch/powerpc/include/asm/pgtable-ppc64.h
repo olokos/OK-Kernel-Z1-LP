@@ -202,48 +202,46 @@
 
 /* Atomic PTE updates */
 static inline unsigned long pte_update(struct mm_struct *mm,
-				       unsigned long addr,
-				       pte_t *ptep, unsigned long clr,
-				       int huge)
-{
+                                       unsigned long addr,
+                                       pte_t *ptep, unsigned long clr,
+                                       int huge) {
 #ifdef PTE_ATOMIC_UPDATES
-	unsigned long old, tmp;
+    unsigned long old, tmp;
 
-	__asm__ __volatile__(
-	"1:	ldarx	%0,0,%3		# pte_update\n\
+    __asm__ __volatile__(
+        "1:	ldarx	%0,0,%3		# pte_update\n\
 	andi.	%1,%0,%6\n\
 	bne-	1b \n\
 	andc	%1,%0,%4 \n\
 	stdcx.	%1,0,%3 \n\
 	bne-	1b"
-	: "=&r" (old), "=&r" (tmp), "=m" (*ptep)
-	: "r" (ptep), "r" (clr), "m" (*ptep), "i" (_PAGE_BUSY)
-	: "cc" );
+        : "=&r" (old), "=&r" (tmp), "=m" (*ptep)
+        : "r" (ptep), "r" (clr), "m" (*ptep), "i" (_PAGE_BUSY)
+        : "cc" );
 #else
-	unsigned long old = pte_val(*ptep);
-	*ptep = __pte(old & ~clr);
+    unsigned long old = pte_val(*ptep);
+    *ptep = __pte(old & ~clr);
 #endif
-	/* huge pages use the old page table lock */
-	if (!huge)
-		assert_pte_locked(mm, addr);
+    /* huge pages use the old page table lock */
+    if (!huge)
+        assert_pte_locked(mm, addr);
 
 #ifdef CONFIG_PPC_STD_MMU_64
-	if (old & _PAGE_HASHPTE)
-		hpte_need_flush(mm, addr, ptep, old, huge);
+    if (old & _PAGE_HASHPTE)
+        hpte_need_flush(mm, addr, ptep, old, huge);
 #endif
 
-	return old;
+    return old;
 }
 
 static inline int __ptep_test_and_clear_young(struct mm_struct *mm,
-					      unsigned long addr, pte_t *ptep)
-{
-	unsigned long old;
+        unsigned long addr, pte_t *ptep) {
+    unsigned long old;
 
-       	if ((pte_val(*ptep) & (_PAGE_ACCESSED | _PAGE_HASHPTE)) == 0)
-		return 0;
-	old = pte_update(mm, addr, ptep, _PAGE_ACCESSED, 0);
-	return (old & _PAGE_ACCESSED) != 0;
+    if ((pte_val(*ptep) & (_PAGE_ACCESSED | _PAGE_HASHPTE)) == 0)
+        return 0;
+    old = pte_update(mm, addr, ptep, _PAGE_ACCESSED, 0);
+    return (old & _PAGE_ACCESSED) != 0;
 }
 #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
 #define ptep_test_and_clear_young(__vma, __addr, __ptep)		   \
@@ -255,22 +253,20 @@ static inline int __ptep_test_and_clear_young(struct mm_struct *mm,
 
 #define __HAVE_ARCH_PTEP_SET_WRPROTECT
 static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr,
-				      pte_t *ptep)
-{
+                                      pte_t *ptep) {
 
-	if ((pte_val(*ptep) & _PAGE_RW) == 0)
-		return;
+    if ((pte_val(*ptep) & _PAGE_RW) == 0)
+        return;
 
-	pte_update(mm, addr, ptep, _PAGE_RW, 0);
+    pte_update(mm, addr, ptep, _PAGE_RW, 0);
 }
 
 static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
-					   unsigned long addr, pte_t *ptep)
-{
-	if ((pte_val(*ptep) & _PAGE_RW) == 0)
-		return;
+        unsigned long addr, pte_t *ptep) {
+    if ((pte_val(*ptep) & _PAGE_RW) == 0)
+        return;
 
-	pte_update(mm, addr, ptep, _PAGE_RW, 1);
+    pte_update(mm, addr, ptep, _PAGE_RW, 1);
 }
 
 /*
@@ -291,43 +287,40 @@ static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
 
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-				       unsigned long addr, pte_t *ptep)
-{
-	unsigned long old = pte_update(mm, addr, ptep, ~0UL, 0);
-	return __pte(old);
+                                       unsigned long addr, pte_t *ptep) {
+    unsigned long old = pte_update(mm, addr, ptep, ~0UL, 0);
+    return __pte(old);
 }
 
 static inline void pte_clear(struct mm_struct *mm, unsigned long addr,
-			     pte_t * ptep)
-{
-	pte_update(mm, addr, ptep, ~0UL, 0);
+                             pte_t * ptep) {
+    pte_update(mm, addr, ptep, ~0UL, 0);
 }
 
 
 /* Set the dirty and/or accessed bits atomically in a linux PTE, this
  * function doesn't need to flush the hash entry
  */
-static inline void __ptep_set_access_flags(pte_t *ptep, pte_t entry)
-{
-	unsigned long bits = pte_val(entry) &
-		(_PAGE_DIRTY | _PAGE_ACCESSED | _PAGE_RW | _PAGE_EXEC);
+static inline void __ptep_set_access_flags(pte_t *ptep, pte_t entry) {
+    unsigned long bits = pte_val(entry) &
+                         (_PAGE_DIRTY | _PAGE_ACCESSED | _PAGE_RW | _PAGE_EXEC);
 
 #ifdef PTE_ATOMIC_UPDATES
-	unsigned long old, tmp;
+    unsigned long old, tmp;
 
-	__asm__ __volatile__(
-	"1:	ldarx	%0,0,%4\n\
+    __asm__ __volatile__(
+        "1:	ldarx	%0,0,%4\n\
 		andi.	%1,%0,%6\n\
 		bne-	1b \n\
 		or	%0,%3,%0\n\
 		stdcx.	%0,0,%4\n\
 		bne-	1b"
-	:"=&r" (old), "=&r" (tmp), "=m" (*ptep)
-	:"r" (bits), "r" (ptep), "m" (*ptep), "i" (_PAGE_BUSY)
-	:"cc");
+        :"=&r" (old), "=&r" (tmp), "=m" (*ptep)
+        :"r" (bits), "r" (ptep), "m" (*ptep), "i" (_PAGE_BUSY)
+        :"cc");
 #else
-	unsigned long old = pte_val(*ptep);
-	*ptep = __pte(old | bits);
+    unsigned long old = pte_val(*ptep);
+    *ptep = __pte(old | bits);
 #endif
 }
 
@@ -358,35 +351,33 @@ void pgtable_cache_init(void);
  * find_linux_pte returns the address of a linux pte for a given
  * effective address and directory.  If not found, it returns zero.
  */
-static inline pte_t *find_linux_pte(pgd_t *pgdir, unsigned long ea)
-{
-	pgd_t *pg;
-	pud_t *pu;
-	pmd_t *pm;
-	pte_t *pt = NULL;
+static inline pte_t *find_linux_pte(pgd_t *pgdir, unsigned long ea) {
+    pgd_t *pg;
+    pud_t *pu;
+    pmd_t *pm;
+    pte_t *pt = NULL;
 
-	pg = pgdir + pgd_index(ea);
-	if (!pgd_none(*pg)) {
-		pu = pud_offset(pg, ea);
-		if (!pud_none(*pu)) {
-			pm = pmd_offset(pu, ea);
-			if (pmd_present(*pm))
-				pt = pte_offset_kernel(pm, ea);
-		}
-	}
-	return pt;
+    pg = pgdir + pgd_index(ea);
+    if (!pgd_none(*pg)) {
+        pu = pud_offset(pg, ea);
+        if (!pud_none(*pu)) {
+            pm = pmd_offset(pu, ea);
+            if (pmd_present(*pm))
+                pt = pte_offset_kernel(pm, ea);
+        }
+    }
+    return pt;
 }
 
 #ifdef CONFIG_HUGETLB_PAGE
 pte_t *find_linux_pte_or_hugepte(pgd_t *pgdir, unsigned long ea,
-				 unsigned *shift);
+                                 unsigned *shift);
 #else
 static inline pte_t *find_linux_pte_or_hugepte(pgd_t *pgdir, unsigned long ea,
-					       unsigned *shift)
-{
-	if (shift)
-		*shift = 0;
-	return find_linux_pte(pgdir, ea);
+        unsigned *shift) {
+    if (shift)
+        *shift = 0;
+    return find_linux_pte(pgdir, ea);
 }
 #endif /* !CONFIG_HUGETLB_PAGE */
 

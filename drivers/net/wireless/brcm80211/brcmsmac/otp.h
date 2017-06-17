@@ -31,6 +31,6 @@
 #define OTP_SZ_MAX		(6144/8)	/* maximum bytes in one CIS */
 
 extern int otp_read_region(struct si_pub *sih, int region, u16 *data,
-			   uint *wlen);
+                           uint *wlen);
 
 #endif				/* _BRCM_OTP_H_ */

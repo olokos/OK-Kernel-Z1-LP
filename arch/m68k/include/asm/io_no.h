@@ -22,13 +22,11 @@
 /*
  * swap functions are sometimes needed to interface little-endian hardware
  */
-static inline unsigned short _swapw(volatile unsigned short v)
-{
+static inline unsigned short _swapw(volatile unsigned short v) {
     return ((v << 8) | (v >> 8));
 }
 
-static inline unsigned int _swapl(volatile unsigned long v)
-{
+static inline unsigned int _swapl(volatile unsigned long v) {
     return ((v << 24) | ((v & 0xff00) << 8) | ((v & 0xff0000) >> 8) | (v >> 24));
 }
 
@@ -54,52 +52,46 @@ static inline unsigned int _swapl(volatile unsigned long v)
 #define __raw_writew writew
 #define __raw_writel writel
 
-static inline void io_outsb(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned char *ap = (volatile unsigned char *) addr;
-	unsigned char *bp = (unsigned char *) buf;
-	while (len--)
-		*ap = *bp++;
+static inline void io_outsb(unsigned int addr, void *buf, int len) {
+    volatile unsigned char *ap = (volatile unsigned char *) addr;
+    unsigned char *bp = (unsigned char *) buf;
+    while (len--)
+        *ap = *bp++;
 }
 
-static inline void io_outsw(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*ap = _swapw(*bp++);
+static inline void io_outsw(unsigned int addr, void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *ap = _swapw(*bp++);
 }
 
-static inline void io_outsl(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned int *ap = (volatile unsigned int *) addr;
-	unsigned int *bp = (unsigned int *) buf;
-	while (len--)
-		*ap = _swapl(*bp++);
+static inline void io_outsl(unsigned int addr, void *buf, int len) {
+    volatile unsigned int *ap = (volatile unsigned int *) addr;
+    unsigned int *bp = (unsigned int *) buf;
+    while (len--)
+        *ap = _swapl(*bp++);
 }
 
-static inline void io_insb(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned char *ap = (volatile unsigned char *) addr;
-	unsigned char *bp = (unsigned char *) buf;
-	while (len--)
-		*bp++ = *ap;
+static inline void io_insb(unsigned int addr, void *buf, int len) {
+    volatile unsigned char *ap = (volatile unsigned char *) addr;
+    unsigned char *bp = (unsigned char *) buf;
+    while (len--)
+        *bp++ = *ap;
 }
 
-static inline void io_insw(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned short *ap = (volatile unsigned short *) addr;
-	unsigned short *bp = (unsigned short *) buf;
-	while (len--)
-		*bp++ = _swapw(*ap);
+static inline void io_insw(unsigned int addr, void *buf, int len) {
+    volatile unsigned short *ap = (volatile unsigned short *) addr;
+    unsigned short *bp = (unsigned short *) buf;
+    while (len--)
+        *bp++ = _swapw(*ap);
 }
 
-static inline void io_insl(unsigned int addr, void *buf, int len)
-{
-	volatile unsigned int *ap = (volatile unsigned int *) addr;
-	unsigned int *bp = (unsigned int *) buf;
-	while (len--)
-		*bp++ = _swapl(*ap);
+static inline void io_insl(unsigned int addr, void *buf, int len) {
+    volatile unsigned int *ap = (volatile unsigned int *) addr;
+    unsigned int *bp = (unsigned int *) buf;
+    while (len--)
+        *bp++ = _swapl(*ap);
 }
 
 #define mmiowb()
@@ -144,25 +136,20 @@ static inline void io_insl(unsigned int addr, void *buf, int len)
 #define IOMAP_NOCACHE_NONSER		2
 #define IOMAP_WRITETHROUGH		3
 
-static inline void *__ioremap(unsigned long physaddr, unsigned long size, int cacheflag)
-{
-	return (void *) physaddr;
+static inline void *__ioremap(unsigned long physaddr, unsigned long size, int cacheflag) {
+    return (void *) physaddr;
 }
-static inline void *ioremap(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void *ioremap(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
-static inline void *ioremap_nocache(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
+static inline void *ioremap_nocache(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_NOCACHE_SER);
 }
-static inline void *ioremap_writethrough(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
+static inline void *ioremap_writethrough(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_WRITETHROUGH);
 }
-static inline void *ioremap_fullcache(unsigned long physaddr, unsigned long size)
-{
-	return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
+static inline void *ioremap_fullcache(unsigned long physaddr, unsigned long size) {
+    return __ioremap(physaddr, size, IOMAP_FULL_CACHING);
 }
 
 #define	iounmap(addr)	do { } while(0)

@@ -38,54 +38,54 @@ struct dm_transaction_manager;
  * Infomation about the values stored within the btree.
  */
 struct dm_btree_value_type {
-	void *context;
+    void *context;
 
-	/*
-	 * The size in bytes of each value.
-	 */
-	uint32_t size;
+    /*
+     * The size in bytes of each value.
+     */
+    uint32_t size;
 
-	/*
-	 * Any of these methods can be safely set to NULL if you do not
-	 * need the corresponding feature.
-	 */
+    /*
+     * Any of these methods can be safely set to NULL if you do not
+     * need the corresponding feature.
+     */
 
-	/*
-	 * The btree is making a duplicate of the value, for instance
-	 * because previously-shared btree nodes have now diverged.
-	 * @value argument is the new copy that the copy function may modify.
-	 * (Probably it just wants to increment a reference count
-	 * somewhere.) This method is _not_ called for insertion of a new
-	 * value: It is assumed the ref count is already 1.
-	 */
-	void (*inc)(void *context, void *value);
+    /*
+     * The btree is making a duplicate of the value, for instance
+     * because previously-shared btree nodes have now diverged.
+     * @value argument is the new copy that the copy function may modify.
+     * (Probably it just wants to increment a reference count
+     * somewhere.) This method is _not_ called for insertion of a new
+     * value: It is assumed the ref count is already 1.
+     */
+    void (*inc)(void *context, void *value);
 
-	/*
-	 * This value is being deleted.  The btree takes care of freeing
-	 * the memory pointed to by @value.  Often the del function just
-	 * needs to decrement a reference count somewhere.
-	 */
-	void (*dec)(void *context, void *value);
+    /*
+     * This value is being deleted.  The btree takes care of freeing
+     * the memory pointed to by @value.  Often the del function just
+     * needs to decrement a reference count somewhere.
+     */
+    void (*dec)(void *context, void *value);
 
-	/*
-	 * A test for equality between two values.  When a value is
-	 * overwritten with a new one, the old one has the dec method
-	 * called _unless_ the new and old value are deemed equal.
-	 */
-	int (*equal)(void *context, void *value1, void *value2);
+    /*
+     * A test for equality between two values.  When a value is
+     * overwritten with a new one, the old one has the dec method
+     * called _unless_ the new and old value are deemed equal.
+     */
+    int (*equal)(void *context, void *value1, void *value2);
 };
 
 /*
  * The shape and contents of a btree.
  */
 struct dm_btree_info {
-	struct dm_transaction_manager *tm;
+    struct dm_transaction_manager *tm;
 
-	/*
-	 * Number of nested btrees. (Not the depth of a single tree.)
-	 */
-	unsigned levels;
-	struct dm_btree_value_type value_type;
+    /*
+     * Number of nested btrees. (Not the depth of a single tree.)
+     */
+    unsigned levels;
+    struct dm_btree_value_type value_type;
 };
 
 /*
@@ -107,14 +107,14 @@ int dm_btree_del(struct dm_btree_info *info, dm_block_t root);
  * Tries to find a key that matches exactly.  O(ln(n))
  */
 int dm_btree_lookup(struct dm_btree_info *info, dm_block_t root,
-		    uint64_t *keys, void *value_le);
+                    uint64_t *keys, void *value_le);
 
 /*
  * Insertion (or overwrite an existing value).  O(ln(n))
  */
 int dm_btree_insert(struct dm_btree_info *info, dm_block_t root,
-		    uint64_t *keys, void *value, dm_block_t *new_root)
-		    __dm_written_to_disk(value);
+                    uint64_t *keys, void *value, dm_block_t *new_root)
+__dm_written_to_disk(value);
 
 /*
  * A variant of insert that indicates whether it actually inserted or just
@@ -122,9 +122,9 @@ int dm_btree_insert(struct dm_btree_info *info, dm_block_t root,
  * tree.
  */
 int dm_btree_insert_notify(struct dm_btree_info *info, dm_block_t root,
-			   uint64_t *keys, void *value, dm_block_t *new_root,
-			   int *inserted)
-			   __dm_written_to_disk(value);
+                           uint64_t *keys, void *value, dm_block_t *new_root,
+                           int *inserted)
+__dm_written_to_disk(value);
 
 /*
  * Remove a key if present.  This doesn't remove empty sub trees.  Normally
@@ -132,7 +132,7 @@ int dm_btree_insert_notify(struct dm_btree_info *info, dm_block_t root,
  * correct behaviour.  O(ln(n)).
  */
 int dm_btree_remove(struct dm_btree_info *info, dm_block_t root,
-		    uint64_t *keys, dm_block_t *new_root);
+                    uint64_t *keys, dm_block_t *new_root);
 
 /*
  * Returns < 0 on failure.  Otherwise the number of key entries that have
@@ -140,6 +140,6 @@ int dm_btree_remove(struct dm_btree_info *info, dm_block_t root,
  * no highest key.
  */
 int dm_btree_find_highest_key(struct dm_btree_info *info, dm_block_t root,
-			      uint64_t *result_keys);
+                              uint64_t *result_keys);
 
 #endif	/* _LINUX_DM_BTREE_H */

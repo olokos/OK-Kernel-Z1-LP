@@ -32,21 +32,20 @@ extern struct clk_ops clk_ops_rpm;
 extern struct clk_ops clk_ops_rpm_branch;
 
 struct rpm_clk {
-	const int rpm_res_type;
-	const int rpm_key;
-	const int rpm_clk_id;
-	const int rpm_status_id;
-	const bool active_only;
-	bool enabled;
-	bool branch; /* true: RPM only accepts 1 for ON and 0 for OFF */
-	struct clk_rpmrs_data *rpmrs_data;
-	struct rpm_clk *peer;
-	struct clk c;
+    const int rpm_res_type;
+    const int rpm_key;
+    const int rpm_clk_id;
+    const int rpm_status_id;
+    const bool active_only;
+    bool enabled;
+    bool branch; /* true: RPM only accepts 1 for ON and 0 for OFF */
+    struct clk_rpmrs_data *rpmrs_data;
+    struct rpm_clk *peer;
+    struct clk c;
 };
 
-static inline struct rpm_clk *to_rpm_clk(struct clk *clk)
-{
-	return container_of(clk, struct rpm_clk, c);
+static inline struct rpm_clk *to_rpm_clk(struct clk *clk) {
+    return container_of(clk, struct rpm_clk, c);
 }
 
 /*

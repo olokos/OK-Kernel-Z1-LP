@@ -28,109 +28,104 @@
 static DEFINE_SPINLOCK(x3proto_gpio_lock);
 static unsigned int x3proto_gpio_irq_map[NR_BASEBOARD_GPIOS] = { 0, };
 
-static int x3proto_gpio_direction_input(struct gpio_chip *chip, unsigned gpio)
-{
-	unsigned long flags;
-	unsigned int data;
+static int x3proto_gpio_direction_input(struct gpio_chip *chip, unsigned gpio) {
+    unsigned long flags;
+    unsigned int data;
 
-	spin_lock_irqsave(&x3proto_gpio_lock, flags);
-	data = __raw_readw(KEYCTLR);
-	data |= (1 << gpio);
-	__raw_writew(data, KEYCTLR);
-	spin_unlock_irqrestore(&x3proto_gpio_lock, flags);
+    spin_lock_irqsave(&x3proto_gpio_lock, flags);
+    data = __raw_readw(KEYCTLR);
+    data |= (1 << gpio);
+    __raw_writew(data, KEYCTLR);
+    spin_unlock_irqrestore(&x3proto_gpio_lock, flags);
 
-	return 0;
+    return 0;
 }
 
-static int x3proto_gpio_get(struct gpio_chip *chip, unsigned gpio)
-{
-	return !!(__raw_readw(KEYDETR) & (1 << gpio));
+static int x3proto_gpio_get(struct gpio_chip *chip, unsigned gpio) {
+    return !!(__raw_readw(KEYDETR) & (1 << gpio));
 }
 
-static int x3proto_gpio_to_irq(struct gpio_chip *chip, unsigned gpio)
-{
-	return x3proto_gpio_irq_map[gpio];
+static int x3proto_gpio_to_irq(struct gpio_chip *chip, unsigned gpio) {
+    return x3proto_gpio_irq_map[gpio];
 }
 
-static void x3proto_gpio_irq_handler(unsigned int irq, struct irq_desc *desc)
-{
-	struct irq_data *data = irq_get_irq_data(irq);
-	struct irq_chip *chip = irq_data_get_irq_chip(data);
-	unsigned long mask;
-	int pin;
+static void x3proto_gpio_irq_handler(unsigned int irq, struct irq_desc *desc) {
+    struct irq_data *data = irq_get_irq_data(irq);
+    struct irq_chip *chip = irq_data_get_irq_chip(data);
+    unsigned long mask;
+    int pin;
 
-	chip->irq_mask_ack(data);
+    chip->irq_mask_ack(data);
 
-	mask = __raw_readw(KEYDETR);
+    mask = __raw_readw(KEYDETR);
 
-	for_each_set_bit(pin, &mask, NR_BASEBOARD_GPIOS)
-		generic_handle_irq(x3proto_gpio_to_irq(NULL, pin));
+    for_each_set_bit(pin, &mask, NR_BASEBOARD_GPIOS)
+    generic_handle_irq(x3proto_gpio_to_irq(NULL, pin));
 
-	chip->irq_unmask(data);
+    chip->irq_unmask(data);
 }
 
 struct gpio_chip x3proto_gpio_chip = {
-	.label			= "x3proto-gpio",
-	.direction_input	= x3proto_gpio_direction_input,
-	.get			= x3proto_gpio_get,
-	.to_irq			= x3proto_gpio_to_irq,
-	.base			= -1,
-	.ngpio			= NR_BASEBOARD_GPIOS,
+    .label			= "x3proto-gpio",
+    .direction_input	= x3proto_gpio_direction_input,
+    .get			= x3proto_gpio_get,
+    .to_irq			= x3proto_gpio_to_irq,
+    .base			= -1,
+    .ngpio			= NR_BASEBOARD_GPIOS,
 };
 
-int __init x3proto_gpio_setup(void)
-{
-	int ilsel;
-	int ret, i;
+int __init x3proto_gpio_setup(void) {
+    int ilsel;
+    int ret, i;
 
-	ilsel = ilsel_enable(ILSEL_KEY);
-	if (unlikely(ilsel < 0))
-		return ilsel;
+    ilsel = ilsel_enable(ILSEL_KEY);
+    if (unlikely(ilsel < 0))
+        return ilsel;
 
-	ret = gpiochip_add(&x3proto_gpio_chip);
-	if (unlikely(ret))
-		goto err_gpio;
+    ret = gpiochip_add(&x3proto_gpio_chip);
+    if (unlikely(ret))
+        goto err_gpio;
 
-	for (i = 0; i < NR_BASEBOARD_GPIOS; i++) {
-		unsigned long flags;
-		int irq = create_irq();
+    for (i = 0; i < NR_BASEBOARD_GPIOS; i++) {
+        unsigned long flags;
+        int irq = create_irq();
 
-		if (unlikely(irq < 0)) {
-			ret = -EINVAL;
-			goto err_irq;
-		}
+        if (unlikely(irq < 0)) {
+            ret = -EINVAL;
+            goto err_irq;
+        }
 
-		spin_lock_irqsave(&x3proto_gpio_lock, flags);
-		x3proto_gpio_irq_map[i] = irq;
-		irq_set_chip_and_handler_name(irq, &dummy_irq_chip,
-					      handle_simple_irq, "gpio");
-		spin_unlock_irqrestore(&x3proto_gpio_lock, flags);
-	}
+        spin_lock_irqsave(&x3proto_gpio_lock, flags);
+        x3proto_gpio_irq_map[i] = irq;
+        irq_set_chip_and_handler_name(irq, &dummy_irq_chip,
+                                      handle_simple_irq, "gpio");
+        spin_unlock_irqrestore(&x3proto_gpio_lock, flags);
+    }
 
-	pr_info("registering '%s' support, handling GPIOs %u -> %u, "
-		"bound to IRQ %u\n",
-		x3proto_gpio_chip.label, x3proto_gpio_chip.base,
-		x3proto_gpio_chip.base + x3proto_gpio_chip.ngpio,
-		ilsel);
+    pr_info("registering '%s' support, handling GPIOs %u -> %u, "
+            "bound to IRQ %u\n",
+            x3proto_gpio_chip.label, x3proto_gpio_chip.base,
+            x3proto_gpio_chip.base + x3proto_gpio_chip.ngpio,
+            ilsel);
 
-	irq_set_chained_handler(ilsel, x3proto_gpio_irq_handler);
-	irq_set_irq_wake(ilsel, 1);
+    irq_set_chained_handler(ilsel, x3proto_gpio_irq_handler);
+    irq_set_irq_wake(ilsel, 1);
 
-	return 0;
+    return 0;
 
 err_irq:
-	for (; i >= 0; --i)
-		if (x3proto_gpio_irq_map[i])
-			destroy_irq(x3proto_gpio_irq_map[i]);
+    for (; i >= 0; --i)
+        if (x3proto_gpio_irq_map[i])
+            destroy_irq(x3proto_gpio_irq_map[i]);
 
-	ret = gpiochip_remove(&x3proto_gpio_chip);
-	if (unlikely(ret))
-		pr_err("Failed deregistering GPIO\n");
+    ret = gpiochip_remove(&x3proto_gpio_chip);
+    if (unlikely(ret))
+        pr_err("Failed deregistering GPIO\n");
 
 err_gpio:
-	synchronize_irq(ilsel);
+    synchronize_irq(ilsel);
 
-	ilsel_disable(ILSEL_KEY);
+    ilsel_disable(ILSEL_KEY);
 
-	return ret;
+    return ret;
 }

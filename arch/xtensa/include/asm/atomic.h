@@ -64,21 +64,20 @@
  *
  * Atomically adds @i to @v.
  */
-static inline void atomic_add(int i, atomic_t * v)
-{
+static inline void atomic_add(int i, atomic_t * v) {
     unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15, "__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0              \n\t"
-	"add     %0, %0, %1             \n\t"
-	"s32i    %0, %2, 0              \n\t"
-	"wsr     a15, "__stringify(PS)"       \n\t"
-	"rsync                          \n"
-	: "=&a" (vval)
-	: "a" (i), "a" (v)
-	: "a15", "memory"
-	);
+        "rsil    a15, "__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0              \n\t"
+        "add     %0, %0, %1             \n\t"
+        "s32i    %0, %2, 0              \n\t"
+        "wsr     a15, "__stringify(PS)"       \n\t"
+        "rsync                          \n"
+        : "=&a" (vval)
+        : "a" (i), "a" (v)
+        : "a15", "memory"
+    );
 }
 
 /**
@@ -88,61 +87,58 @@ static inline void atomic_add(int i, atomic_t * v)
  *
  * Atomically subtracts @i from @v.
  */
-static inline void atomic_sub(int i, atomic_t *v)
-{
+static inline void atomic_sub(int i, atomic_t *v) {
     unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15, "__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0              \n\t"
-	"sub     %0, %0, %1             \n\t"
-	"s32i    %0, %2, 0              \n\t"
-	"wsr     a15, "__stringify(PS)"       \n\t"
-	"rsync                          \n"
-	: "=&a" (vval)
-	: "a" (i), "a" (v)
-	: "a15", "memory"
-	);
+        "rsil    a15, "__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0              \n\t"
+        "sub     %0, %0, %1             \n\t"
+        "s32i    %0, %2, 0              \n\t"
+        "wsr     a15, "__stringify(PS)"       \n\t"
+        "rsync                          \n"
+        : "=&a" (vval)
+        : "a" (i), "a" (v)
+        : "a15", "memory"
+    );
 }
 
 /*
  * We use atomic_{add|sub}_return to define other functions.
  */
 
-static inline int atomic_add_return(int i, atomic_t * v)
-{
-     unsigned int vval;
+static inline int atomic_add_return(int i, atomic_t * v) {
+    unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0             \n\t"
-	"add     %0, %0, %1            \n\t"
-	"s32i    %0, %2, 0             \n\t"
-	"wsr     a15, "__stringify(PS)"      \n\t"
-	"rsync                         \n"
-	: "=&a" (vval)
-	: "a" (i), "a" (v)
-	: "a15", "memory"
-	);
+        "rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0             \n\t"
+        "add     %0, %0, %1            \n\t"
+        "s32i    %0, %2, 0             \n\t"
+        "wsr     a15, "__stringify(PS)"      \n\t"
+        "rsync                         \n"
+        : "=&a" (vval)
+        : "a" (i), "a" (v)
+        : "a15", "memory"
+    );
 
     return vval;
 }
 
-static inline int atomic_sub_return(int i, atomic_t * v)
-{
+static inline int atomic_sub_return(int i, atomic_t * v) {
     unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0             \n\t"
-	"sub     %0, %0, %1            \n\t"
-	"s32i    %0, %2, 0             \n\t"
-	"wsr     a15, "__stringify(PS)"       \n\t"
-	"rsync                         \n"
-	: "=&a" (vval)
-	: "a" (i), "a" (v)
-	: "a15", "memory"
-	);
+        "rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0             \n\t"
+        "sub     %0, %0, %1            \n\t"
+        "s32i    %0, %2, 0             \n\t"
+        "wsr     a15, "__stringify(PS)"       \n\t"
+        "rsync                         \n"
+        : "=&a" (vval)
+        : "a" (i), "a" (v)
+        : "a15", "memory"
+    );
 
     return vval;
 }
@@ -233,56 +229,53 @@ static inline int atomic_sub_return(int i, atomic_t * v)
  * Atomically adds @a to @v, so long as it was not @u.
  * Returns the old value of @v.
  */
-static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	int c, old;
-	c = atomic_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
-	return c;
+static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u) {
+    int c, old;
+    c = atomic_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
+    return c;
 }
 
 
-static inline void atomic_clear_mask(unsigned int mask, atomic_t *v)
-{
+static inline void atomic_clear_mask(unsigned int mask, atomic_t *v) {
     unsigned int all_f = -1;
     unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0             \n\t"
-	"xor     %1, %4, %3            \n\t"
-	"and     %0, %0, %4            \n\t"
-	"s32i    %0, %2, 0             \n\t"
-	"wsr     a15, "__stringify(PS)"      \n\t"
-	"rsync                         \n"
-	: "=&a" (vval), "=a" (mask)
-	: "a" (v), "a" (all_f), "1" (mask)
-	: "a15", "memory"
-	);
+        "rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0             \n\t"
+        "xor     %1, %4, %3            \n\t"
+        "and     %0, %0, %4            \n\t"
+        "s32i    %0, %2, 0             \n\t"
+        "wsr     a15, "__stringify(PS)"      \n\t"
+        "rsync                         \n"
+        : "=&a" (vval), "=a" (mask)
+        : "a" (v), "a" (all_f), "1" (mask)
+        : "a15", "memory"
+    );
 }
 
-static inline void atomic_set_mask(unsigned int mask, atomic_t *v)
-{
+static inline void atomic_set_mask(unsigned int mask, atomic_t *v) {
     unsigned int vval;
 
     __asm__ __volatile__(
-	"rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
-	"l32i    %0, %2, 0             \n\t"
-	"or      %0, %0, %1            \n\t"
-	"s32i    %0, %2, 0             \n\t"
-	"wsr     a15, "__stringify(PS)"       \n\t"
-	"rsync                         \n"
-	: "=&a" (vval)
-	: "a" (mask), "a" (v)
-	: "a15", "memory"
-	);
+        "rsil    a15,"__stringify(LOCKLEVEL)"\n\t"
+        "l32i    %0, %2, 0             \n\t"
+        "or      %0, %0, %1            \n\t"
+        "s32i    %0, %2, 0             \n\t"
+        "wsr     a15, "__stringify(PS)"       \n\t"
+        "rsync                         \n"
+        : "=&a" (vval)
+        : "a" (mask), "a" (v)
+        : "a15", "memory"
+    );
 }
 
 /* Atomic operations are already serializing */

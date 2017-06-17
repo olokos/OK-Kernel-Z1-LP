@@ -108,56 +108,56 @@
 #define	SKFPIOCTL	SIOCDEVPRIVATE
 
 struct s_skfp_ioctl {
-	unsigned short cmd;                /* Command to run */
-	unsigned short len;                /* Length of the data buffer */
-	unsigned char __user *data;        /* Pointer to the data buffer */
+    unsigned short cmd;                /* Command to run */
+    unsigned short len;                /* Length of the data buffer */
+    unsigned char __user *data;        /* Pointer to the data buffer */
 };
 
-/* 
-** Recognised ioctl commands for the driver 
+/*
+** Recognised ioctl commands for the driver
 */
 #define SKFP_GET_STATS		0x05 /* Get the driver statistics */
 #define SKFP_CLR_STATS		0x06 /* Zero out the driver statistics */
 
 // The per-adapter driver structure
 struct s_smt_os {
-	struct net_device *dev;
-	struct net_device *next_module;
-	u32	bus_type;		/* bus type (0 == PCI, 1 == EISA) */
-	struct pci_dev 	pdev;		/* PCI device structure */
-	
-	unsigned long base_addr;
-	unsigned char factory_mac_addr[8];
-	ulong	SharedMemSize;
-	ulong	SharedMemHeap;
-	void*	SharedMemAddr;
-	dma_addr_t SharedMemDMA;
+    struct net_device *dev;
+    struct net_device *next_module;
+    u32	bus_type;		/* bus type (0 == PCI, 1 == EISA) */
+    struct pci_dev 	pdev;		/* PCI device structure */
 
-	ulong	QueueSkb;
-	struct	sk_buff_head SendSkbQueue;
+    unsigned long base_addr;
+    unsigned char factory_mac_addr[8];
+    ulong	SharedMemSize;
+    ulong	SharedMemHeap;
+    void*	SharedMemAddr;
+    dma_addr_t SharedMemDMA;
 
-	ulong	MaxFrameSize;
-	u8	ResetRequested;
+    ulong	QueueSkb;
+    struct	sk_buff_head SendSkbQueue;
 
-	// MAC statistics structure
-	struct fddi_statistics MacStat;
+    ulong	MaxFrameSize;
+    u8	ResetRequested;
 
-	// receive into this local buffer if no skb available
-	// data will be not valid, because multiple RxDs can
-	// point here at the same time, it must be at least
-	// MAX_FRAME_SIZE bytes in size
-	unsigned char *LocalRxBuffer;
-	dma_addr_t LocalRxBufferDMA;
-	
-	// Version (required by SMT module).
-	u_long smc_version ;
+    // MAC statistics structure
+    struct fddi_statistics MacStat;
 
-	// Required by Hardware Module (HWM).
-	struct hw_modul hwm ;
-	
-	// For SMP-savety
-	spinlock_t DriverLock;
-	
+    // receive into this local buffer if no skb available
+    // data will be not valid, because multiple RxDs can
+    // point here at the same time, it must be at least
+    // MAX_FRAME_SIZE bytes in size
+    unsigned char *LocalRxBuffer;
+    dma_addr_t LocalRxBufferDMA;
+
+    // Version (required by SMT module).
+    u_long smc_version ;
+
+    // Required by Hardware Module (HWM).
+    struct hw_modul hwm ;
+
+    // For SMP-savety
+    spinlock_t DriverLock;
+
 };
 
 typedef struct s_smt_os skfddi_priv;

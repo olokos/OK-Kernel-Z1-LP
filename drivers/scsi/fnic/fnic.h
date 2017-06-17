@@ -108,32 +108,32 @@ do {								\
 extern const char *fnic_state_str[];
 
 enum fnic_intx_intr_index {
-	FNIC_INTX_WQ_RQ_COPYWQ,
-	FNIC_INTX_ERR,
-	FNIC_INTX_NOTIFY,
-	FNIC_INTX_INTR_MAX,
+    FNIC_INTX_WQ_RQ_COPYWQ,
+    FNIC_INTX_ERR,
+    FNIC_INTX_NOTIFY,
+    FNIC_INTX_INTR_MAX,
 };
 
 enum fnic_msix_intr_index {
-	FNIC_MSIX_RQ,
-	FNIC_MSIX_WQ,
-	FNIC_MSIX_WQ_COPY,
-	FNIC_MSIX_ERR_NOTIFY,
-	FNIC_MSIX_INTR_MAX,
+    FNIC_MSIX_RQ,
+    FNIC_MSIX_WQ,
+    FNIC_MSIX_WQ_COPY,
+    FNIC_MSIX_ERR_NOTIFY,
+    FNIC_MSIX_INTR_MAX,
 };
 
 struct fnic_msix_entry {
-	int requested;
-	char devname[IFNAMSIZ];
-	irqreturn_t (*isr)(int, void *);
-	void *devid;
+    int requested;
+    char devname[IFNAMSIZ];
+    irqreturn_t (*isr)(int, void *);
+    void *devid;
 };
 
 enum fnic_state {
-	FNIC_IN_FC_MODE = 0,
-	FNIC_IN_FC_TRANS_ETH_MODE,
-	FNIC_IN_ETH_MODE,
-	FNIC_IN_ETH_TRANS_FC_MODE,
+    FNIC_IN_FC_MODE = 0,
+    FNIC_IN_FC_TRANS_ETH_MODE,
+    FNIC_IN_ETH_MODE,
+    FNIC_IN_ETH_TRANS_FC_MODE,
 };
 
 #define FNIC_WQ_COPY_MAX 1
@@ -145,84 +145,83 @@ struct mempool;
 
 /* Per-instance private data structure */
 struct fnic {
-	struct fc_lport *lport;
-	struct fcoe_ctlr ctlr;		/* FIP FCoE controller structure */
-	struct vnic_dev_bar bar0;
+    struct fc_lport *lport;
+    struct fcoe_ctlr ctlr;		/* FIP FCoE controller structure */
+    struct vnic_dev_bar bar0;
 
-	struct msix_entry msix_entry[FNIC_MSIX_INTR_MAX];
-	struct fnic_msix_entry msix[FNIC_MSIX_INTR_MAX];
+    struct msix_entry msix_entry[FNIC_MSIX_INTR_MAX];
+    struct fnic_msix_entry msix[FNIC_MSIX_INTR_MAX];
 
-	struct vnic_stats *stats;
-	unsigned long stats_time;	/* time of stats update */
-	struct vnic_nic_cfg *nic_cfg;
-	char name[IFNAMSIZ];
-	struct timer_list notify_timer; /* used for MSI interrupts */
+    struct vnic_stats *stats;
+    unsigned long stats_time;	/* time of stats update */
+    struct vnic_nic_cfg *nic_cfg;
+    char name[IFNAMSIZ];
+    struct timer_list notify_timer; /* used for MSI interrupts */
 
-	unsigned int err_intr_offset;
-	unsigned int link_intr_offset;
+    unsigned int err_intr_offset;
+    unsigned int link_intr_offset;
 
-	unsigned int wq_count;
-	unsigned int cq_count;
+    unsigned int wq_count;
+    unsigned int cq_count;
 
-	u32 vlan_hw_insert:1;	        /* let hw insert the tag */
-	u32 in_remove:1;                /* fnic device in removal */
-	u32 stop_rx_link_events:1;      /* stop proc. rx frames, link events */
+    u32 vlan_hw_insert:1;	        /* let hw insert the tag */
+    u32 in_remove:1;                /* fnic device in removal */
+    u32 stop_rx_link_events:1;      /* stop proc. rx frames, link events */
 
-	struct completion *remove_wait; /* device remove thread blocks */
+    struct completion *remove_wait; /* device remove thread blocks */
 
-	enum fnic_state state;
-	spinlock_t fnic_lock;
+    enum fnic_state state;
+    spinlock_t fnic_lock;
 
-	u16 vlan_id;	                /* VLAN tag including priority */
-	u8 data_src_addr[ETH_ALEN];
-	u64 fcp_input_bytes;		/* internal statistic */
-	u64 fcp_output_bytes;		/* internal statistic */
-	u32 link_down_cnt;
-	int link_status;
+    u16 vlan_id;	                /* VLAN tag including priority */
+    u8 data_src_addr[ETH_ALEN];
+    u64 fcp_input_bytes;		/* internal statistic */
+    u64 fcp_output_bytes;		/* internal statistic */
+    u32 link_down_cnt;
+    int link_status;
 
-	struct list_head list;
-	struct pci_dev *pdev;
-	struct vnic_fc_config config;
-	struct vnic_dev *vdev;
-	unsigned int raw_wq_count;
-	unsigned int wq_copy_count;
-	unsigned int rq_count;
-	int fw_ack_index[FNIC_WQ_COPY_MAX];
-	unsigned short fw_ack_recd[FNIC_WQ_COPY_MAX];
-	unsigned short wq_copy_desc_low[FNIC_WQ_COPY_MAX];
-	unsigned int intr_count;
-	u32 __iomem *legacy_pba;
-	struct fnic_host_tag *tags;
-	mempool_t *io_req_pool;
-	mempool_t *io_sgl_pool[FNIC_SGL_NUM_CACHES];
-	spinlock_t io_req_lock[FNIC_IO_LOCKS];	/* locks for scsi cmnds */
+    struct list_head list;
+    struct pci_dev *pdev;
+    struct vnic_fc_config config;
+    struct vnic_dev *vdev;
+    unsigned int raw_wq_count;
+    unsigned int wq_copy_count;
+    unsigned int rq_count;
+    int fw_ack_index[FNIC_WQ_COPY_MAX];
+    unsigned short fw_ack_recd[FNIC_WQ_COPY_MAX];
+    unsigned short wq_copy_desc_low[FNIC_WQ_COPY_MAX];
+    unsigned int intr_count;
+    u32 __iomem *legacy_pba;
+    struct fnic_host_tag *tags;
+    mempool_t *io_req_pool;
+    mempool_t *io_sgl_pool[FNIC_SGL_NUM_CACHES];
+    spinlock_t io_req_lock[FNIC_IO_LOCKS];	/* locks for scsi cmnds */
 
-	struct work_struct link_work;
-	struct work_struct frame_work;
-	struct sk_buff_head frame_queue;
-	struct sk_buff_head tx_queue;
+    struct work_struct link_work;
+    struct work_struct frame_work;
+    struct sk_buff_head frame_queue;
+    struct sk_buff_head tx_queue;
 
-	/* copy work queue cache line section */
-	____cacheline_aligned struct vnic_wq_copy wq_copy[FNIC_WQ_COPY_MAX];
-	/* completion queue cache line section */
-	____cacheline_aligned struct vnic_cq cq[FNIC_CQ_MAX];
+    /* copy work queue cache line section */
+    ____cacheline_aligned struct vnic_wq_copy wq_copy[FNIC_WQ_COPY_MAX];
+    /* completion queue cache line section */
+    ____cacheline_aligned struct vnic_cq cq[FNIC_CQ_MAX];
 
-	spinlock_t wq_copy_lock[FNIC_WQ_COPY_MAX];
+    spinlock_t wq_copy_lock[FNIC_WQ_COPY_MAX];
 
-	/* work queue cache line section */
-	____cacheline_aligned struct vnic_wq wq[FNIC_WQ_MAX];
-	spinlock_t wq_lock[FNIC_WQ_MAX];
+    /* work queue cache line section */
+    ____cacheline_aligned struct vnic_wq wq[FNIC_WQ_MAX];
+    spinlock_t wq_lock[FNIC_WQ_MAX];
 
-	/* receive queue cache line section */
-	____cacheline_aligned struct vnic_rq rq[FNIC_RQ_MAX];
+    /* receive queue cache line section */
+    ____cacheline_aligned struct vnic_rq rq[FNIC_RQ_MAX];
 
-	/* interrupt resource cache line section */
-	____cacheline_aligned struct vnic_intr intr[FNIC_MSIX_INTR_MAX];
+    /* interrupt resource cache line section */
+    ____cacheline_aligned struct vnic_intr intr[FNIC_MSIX_INTR_MAX];
 };
 
-static inline struct fnic *fnic_from_ctlr(struct fcoe_ctlr *fip)
-{
-	return container_of(fip, struct fnic, ctlr);
+static inline struct fnic *fnic_from_ctlr(struct fcoe_ctlr *fip) {
+    return container_of(fip, struct fnic, ctlr);
 }
 
 extern struct workqueue_struct *fnic_event_queue;
@@ -259,7 +258,7 @@ int fnic_wq_copy_cmpl_handler(struct fnic *fnic, int);
 int fnic_wq_cmpl_handler(struct fnic *fnic, int);
 int fnic_flogi_reg_handler(struct fnic *fnic, u32);
 void fnic_wq_copy_cleanup_handler(struct vnic_wq_copy *wq,
-				  struct fcpio_host_req *desc);
+                                  struct fcpio_host_req *desc);
 int fnic_fw_reset_handler(struct fnic *fnic);
 void fnic_terminate_rport_io(struct fc_rport *);
 const char *fnic_state_to_str(unsigned int state);

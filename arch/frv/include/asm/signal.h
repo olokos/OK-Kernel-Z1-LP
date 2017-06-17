@@ -17,23 +17,23 @@ typedef unsigned long sigset_t;
 
 #ifdef __KERNEL__
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
 };
 
 #else
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-	union {
-	  __sighandler_t _sa_handler;
-	  void (*_sa_sigaction)(int, struct siginfo *, void *);
-	} _u;
-	sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    union {
+        __sighandler_t _sa_handler;
+        void (*_sa_sigaction)(int, struct siginfo *, void *);
+    } _u;
+    sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 #define sa_handler	_u._sa_handler

@@ -35,20 +35,20 @@
 #include <linux/types.h>
 
 enum {
-	B43legacy_ANTENNA0,	  /* Antenna 0 */
-	B43legacy_ANTENNA1,	  /* Antenna 0 */
-	B43legacy_ANTENNA_AUTO1,  /* Automatic, starting with antenna 1 */
-	B43legacy_ANTENNA_AUTO0,  /* Automatic, starting with antenna 0 */
+    B43legacy_ANTENNA0,	  /* Antenna 0 */
+    B43legacy_ANTENNA1,	  /* Antenna 0 */
+    B43legacy_ANTENNA_AUTO1,  /* Automatic, starting with antenna 1 */
+    B43legacy_ANTENNA_AUTO0,  /* Automatic, starting with antenna 0 */
 
-	B43legacy_ANTENNA_AUTO	= B43legacy_ANTENNA_AUTO0,
-	B43legacy_ANTENNA_DEFAULT = B43legacy_ANTENNA_AUTO,
+    B43legacy_ANTENNA_AUTO	= B43legacy_ANTENNA_AUTO0,
+    B43legacy_ANTENNA_DEFAULT = B43legacy_ANTENNA_AUTO,
 };
 
 enum {
-	B43legacy_INTERFMODE_NONE,
-	B43legacy_INTERFMODE_NONWLAN,
-	B43legacy_INTERFMODE_MANUALWLAN,
-	B43legacy_INTERFMODE_AUTOWLAN,
+    B43legacy_INTERFMODE_NONE,
+    B43legacy_INTERFMODE_NONWLAN,
+    B43legacy_INTERFMODE_MANUALWLAN,
+    B43legacy_INTERFMODE_AUTOWLAN,
 };
 
 /*** PHY Registers ***/
@@ -201,9 +201,9 @@ void b43legacy_phy_lo_adjust(struct b43legacy_wldev *dev, int fixed);
 void b43legacy_phy_lo_mark_all_unused(struct b43legacy_wldev *dev);
 
 void b43legacy_phy_set_baseband_attenuation(struct b43legacy_wldev *dev,
-					    u16 baseband_attenuation);
+        u16 baseband_attenuation);
 
 void b43legacy_power_saving_ctl_bits(struct b43legacy_wldev *dev,
-				     int bit25, int bit26);
+                                     int bit25, int bit26);
 
 #endif /* B43legacy_PHY_H_ */

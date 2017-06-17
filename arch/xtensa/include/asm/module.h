@@ -13,9 +13,8 @@
 #ifndef _XTENSA_MODULE_H
 #define _XTENSA_MODULE_H
 
-struct mod_arch_specific
-{
-	/* No special elements, yet. */
+struct mod_arch_specific {
+    /* No special elements, yet. */
 };
 
 #define MODULE_ARCH_VERMAGIC "xtensa-" __stringify(XCHAL_CORE_ID) " "

@@ -52,15 +52,15 @@ struct samsung_gpio_chip;
  * @sa s3c_gpio_getpull
  */
 struct samsung_gpio_cfg {
-	unsigned int	cfg_eint;
+    unsigned int	cfg_eint;
 
-	samsung_gpio_pull_t	(*get_pull)(struct samsung_gpio_chip *chip, unsigned offs);
-	int		(*set_pull)(struct samsung_gpio_chip *chip, unsigned offs,
-				    samsung_gpio_pull_t pull);
+    samsung_gpio_pull_t	(*get_pull)(struct samsung_gpio_chip *chip, unsigned offs);
+    int		(*set_pull)(struct samsung_gpio_chip *chip, unsigned offs,
+                        samsung_gpio_pull_t pull);
 
-	unsigned (*get_config)(struct samsung_gpio_chip *chip, unsigned offs);
-	int	 (*set_config)(struct samsung_gpio_chip *chip, unsigned offs,
-			       unsigned config);
+    unsigned (*get_config)(struct samsung_gpio_chip *chip, unsigned offs);
+    int	 (*set_config)(struct samsung_gpio_chip *chip, unsigned offs,
+                       unsigned config);
 };
 
 #define S3C_GPIO_SPECIAL_MARK	(0xfffffff0)
@@ -121,7 +121,7 @@ extern unsigned s3c_gpio_getcfg(unsigned int pin);
  * @sa s3c_gpio_cfgpin.
  */
 extern int s3c_gpio_cfgpin_range(unsigned int start, unsigned int nr,
-				 unsigned int cfg);
+                                 unsigned int cfg);
 
 /* Define values for the pull-{up,down} available for each gpio pin.
  *
@@ -172,12 +172,11 @@ extern samsung_gpio_pull_t s3c_gpio_getpull(unsigned int pin);
  * @sa s3c_gpio_cfgpin_range
  */
 extern int s3c_gpio_cfgall_range(unsigned int start, unsigned int nr,
-				 unsigned int cfg, samsung_gpio_pull_t pull);
+                                 unsigned int cfg, samsung_gpio_pull_t pull);
 
 static inline int s3c_gpio_cfgrange_nopull(unsigned int pin, unsigned int size,
-					   unsigned int cfg)
-{
-	return s3c_gpio_cfgall_range(pin, size, cfg, S3C_GPIO_PULL_NONE);
+        unsigned int cfg) {
+    return s3c_gpio_cfgall_range(pin, size, cfg, S3C_GPIO_PULL_NONE);
 }
 
 /* Define values for the drvstr available for each gpio pin.

@@ -40,28 +40,27 @@ static atomic_t suspending;
  * Return value:
  * 	0 on success / other on failure
  **/
-static int pseries_suspend_begin(suspend_state_t state)
-{
-	long vasi_state, rc;
-	unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
+static int pseries_suspend_begin(suspend_state_t state) {
+    long vasi_state, rc;
+    unsigned long retbuf[PLPAR_HCALL_BUFSIZE];
 
-	/* Make sure the state is valid */
-	rc = plpar_hcall(H_VASI_STATE, retbuf, stream_id);
+    /* Make sure the state is valid */
+    rc = plpar_hcall(H_VASI_STATE, retbuf, stream_id);
 
-	vasi_state = retbuf[0];
+    vasi_state = retbuf[0];
 
-	if (rc) {
-		pr_err("pseries_suspend_begin: vasi_state returned %ld\n",rc);
-		return rc;
-	} else if (vasi_state == H_VASI_ENABLED) {
-		return -EAGAIN;
-	} else if (vasi_state != H_VASI_SUSPENDING) {
-		pr_err("pseries_suspend_begin: vasi_state returned state %ld\n",
-		       vasi_state);
-		return -EIO;
-	}
+    if (rc) {
+        pr_err("pseries_suspend_begin: vasi_state returned %ld\n",rc);
+        return rc;
+    } else if (vasi_state == H_VASI_ENABLED) {
+        return -EAGAIN;
+    } else if (vasi_state != H_VASI_SUSPENDING) {
+        pr_err("pseries_suspend_begin: vasi_state returned state %ld\n",
+               vasi_state);
+        return -EIO;
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -70,11 +69,10 @@ static int pseries_suspend_begin(suspend_state_t state)
  * Makes the H_JOIN call to suspend the CPU
  *
  **/
-static int pseries_suspend_cpu(void)
-{
-	if (atomic_read(&suspending))
-		return rtas_suspend_cpu(&suspend_data);
-	return 0;
+static int pseries_suspend_cpu(void) {
+    if (atomic_read(&suspending))
+        return rtas_suspend_cpu(&suspend_data);
+    return 0;
 }
 
 /**
@@ -83,13 +81,12 @@ static int pseries_suspend_cpu(void)
  * Return value:
  * 	0 on success / other on failure
  **/
-static int pseries_suspend_enter(suspend_state_t state)
-{
-	int rc = rtas_suspend_last_cpu(&suspend_data);
+static int pseries_suspend_enter(suspend_state_t state) {
+    int rc = rtas_suspend_last_cpu(&suspend_data);
 
-	atomic_set(&suspending, 0);
-	atomic_set(&suspend_data.done, 1);
-	return rc;
+    atomic_set(&suspending, 0);
+    atomic_set(&suspend_data.done, 1);
+    return rc;
 }
 
 /**
@@ -98,15 +95,14 @@ static int pseries_suspend_enter(suspend_state_t state)
  * Return value:
  * 	0 on success / other on failure
  **/
-static int pseries_prepare_late(void)
-{
-	atomic_set(&suspending, 1);
-	atomic_set(&suspend_data.working, 0);
-	atomic_set(&suspend_data.done, 0);
-	atomic_set(&suspend_data.error, 0);
-	suspend_data.complete = &suspend_work;
-	INIT_COMPLETION(suspend_work);
-	return 0;
+static int pseries_prepare_late(void) {
+    atomic_set(&suspending, 1);
+    atomic_set(&suspend_data.working, 0);
+    atomic_set(&suspend_data.done, 0);
+    atomic_set(&suspend_data.error, 0);
+    suspend_data.complete = &suspend_work;
+    INIT_COMPLETION(suspend_work);
+    return 0;
 }
 
 /**
@@ -123,47 +119,46 @@ static int pseries_prepare_late(void)
  * 	number of bytes printed to buffer / other on failure
  **/
 static ssize_t store_hibernate(struct device *dev,
-			       struct device_attribute *attr,
-			       const char *buf, size_t count)
-{
-	int rc;
+                               struct device_attribute *attr,
+                               const char *buf, size_t count) {
+    int rc;
 
-	if (!capable(CAP_SYS_ADMIN))
-		return -EPERM;
+    if (!capable(CAP_SYS_ADMIN))
+        return -EPERM;
 
-	stream_id = simple_strtoul(buf, NULL, 16);
+    stream_id = simple_strtoul(buf, NULL, 16);
 
-	do {
-		rc = pseries_suspend_begin(PM_SUSPEND_MEM);
-		if (rc == -EAGAIN)
-			ssleep(1);
-	} while (rc == -EAGAIN);
+    do {
+        rc = pseries_suspend_begin(PM_SUSPEND_MEM);
+        if (rc == -EAGAIN)
+            ssleep(1);
+    } while (rc == -EAGAIN);
 
-	if (!rc) {
-		stop_topology_update();
-		rc = pm_suspend(PM_SUSPEND_MEM);
-		start_topology_update();
-	}
+    if (!rc) {
+        stop_topology_update();
+        rc = pm_suspend(PM_SUSPEND_MEM);
+        start_topology_update();
+    }
 
-	stream_id = 0;
+    stream_id = 0;
 
-	if (!rc)
-		rc = count;
-	return rc;
+    if (!rc)
+        rc = count;
+    return rc;
 }
 
 static DEVICE_ATTR(hibernate, S_IWUSR, NULL, store_hibernate);
 
 static struct bus_type suspend_subsys = {
-	.name = "power",
-	.dev_name = "power",
+    .name = "power",
+    .dev_name = "power",
 };
 
 static const struct platform_suspend_ops pseries_suspend_ops = {
-	.valid		= suspend_valid_only_mem,
-	.begin		= pseries_suspend_begin,
-	.prepare_late	= pseries_prepare_late,
-	.enter		= pseries_suspend_enter,
+    .valid		= suspend_valid_only_mem,
+    .begin		= pseries_suspend_begin,
+    .prepare_late	= pseries_prepare_late,
+    .enter		= pseries_suspend_enter,
 };
 
 /**
@@ -172,24 +167,23 @@ static const struct platform_suspend_ops pseries_suspend_ops = {
  * Return value:
  * 	0 on success / other on failure
  **/
-static int pseries_suspend_sysfs_register(struct device *dev)
-{
-	int rc;
+static int pseries_suspend_sysfs_register(struct device *dev) {
+    int rc;
 
-	if ((rc = subsys_system_register(&suspend_subsys, NULL)))
-		return rc;
+    if ((rc = subsys_system_register(&suspend_subsys, NULL)))
+        return rc;
 
-	dev->id = 0;
-	dev->bus = &suspend_subsys;
+    dev->id = 0;
+    dev->bus = &suspend_subsys;
 
-	if ((rc = device_create_file(suspend_subsys.dev_root, &dev_attr_hibernate)))
-		goto subsys_unregister;
+    if ((rc = device_create_file(suspend_subsys.dev_root, &dev_attr_hibernate)))
+        goto subsys_unregister;
 
-	return 0;
+    return 0;
 
 subsys_unregister:
-	bus_unregister(&suspend_subsys);
-	return rc;
+    bus_unregister(&suspend_subsys);
+    return rc;
 }
 
 /**
@@ -198,23 +192,22 @@ subsys_unregister:
  * Return value:
  * 	0 on success / other on failure
  **/
-static int __init pseries_suspend_init(void)
-{
-	int rc;
+static int __init pseries_suspend_init(void) {
+    int rc;
 
-	if (!machine_is(pseries) || !firmware_has_feature(FW_FEATURE_LPAR))
-		return 0;
+    if (!machine_is(pseries) || !firmware_has_feature(FW_FEATURE_LPAR))
+        return 0;
 
-	suspend_data.token = rtas_token("ibm,suspend-me");
-	if (suspend_data.token == RTAS_UNKNOWN_SERVICE)
-		return 0;
+    suspend_data.token = rtas_token("ibm,suspend-me");
+    if (suspend_data.token == RTAS_UNKNOWN_SERVICE)
+        return 0;
 
-	if ((rc = pseries_suspend_sysfs_register(&suspend_dev)))
-		return rc;
+    if ((rc = pseries_suspend_sysfs_register(&suspend_dev)))
+        return rc;
 
-	ppc_md.suspend_disable_cpu = pseries_suspend_cpu;
-	suspend_set_ops(&pseries_suspend_ops);
-	return 0;
+    ppc_md.suspend_disable_cpu = pseries_suspend_cpu;
+    suspend_set_ops(&pseries_suspend_ops);
+    return 0;
 }
 
 __initcall(pseries_suspend_init);

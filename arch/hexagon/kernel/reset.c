@@ -19,20 +19,16 @@
 #include <linux/smp.h>
 #include <asm/hexagon_vm.h>
 
-void machine_power_off(void)
-{
-	smp_send_stop();
-	__vmstop();
+void machine_power_off(void) {
+    smp_send_stop();
+    __vmstop();
 }
 
-void machine_halt(void)
-{
+void machine_halt(void) {
 }
 
-void machine_restart(char *cmd)
-{
+void machine_restart(char *cmd) {
 }
 
-void pm_power_off(void)
-{
+void pm_power_off(void) {
 }

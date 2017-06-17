@@ -35,20 +35,18 @@ extern void get_memcfg_numa(void);
  */
 extern int highbits_to_node[];
 
-static inline int pfn_to_nid(unsigned long pfn)
-{
-	return highbits_to_node[__pfn_to_highbits(pfn)];
+static inline int pfn_to_nid(unsigned long pfn) {
+    return highbits_to_node[__pfn_to_highbits(pfn)];
 }
 
 #define kern_addr_valid(kaddr)	virt_addr_valid((void *)kaddr)
 
-static inline int pfn_valid(int pfn)
-{
-	int nid = pfn_to_nid(pfn);
+static inline int pfn_valid(int pfn) {
+    int nid = pfn_to_nid(pfn);
 
-	if (nid >= 0)
-		return (pfn < node_end_pfn(nid));
-	return 0;
+    if (nid >= 0)
+        return (pfn < node_end_pfn(nid));
+    return 0;
 }
 
 /* Information on the NUMA nodes that we compute early */

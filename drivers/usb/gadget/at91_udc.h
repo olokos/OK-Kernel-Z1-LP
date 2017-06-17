@@ -92,22 +92,22 @@
 	(AT91_UDP_ENDBUSRES | AT91_UDP_RXRSM | AT91_UDP_RXSUSP)
 
 struct at91_ep {
-	struct usb_ep			ep;
-	struct list_head		queue;
-	struct at91_udc			*udc;
-	void __iomem			*creg;
+    struct usb_ep			ep;
+    struct list_head		queue;
+    struct at91_udc			*udc;
+    void __iomem			*creg;
 
-	unsigned			maxpacket:16;
-	u8				int_mask;
-	unsigned			is_pingpong:1;
+    unsigned			maxpacket:16;
+    u8				int_mask;
+    unsigned			is_pingpong:1;
 
-	unsigned			stopped:1;
-	unsigned			is_in:1;
-	unsigned			is_iso:1;
-	unsigned			fifo_bank:1;
+    unsigned			stopped:1;
+    unsigned			is_in:1;
+    unsigned			is_iso:1;
+    unsigned			fifo_bank:1;
 
-	const struct usb_endpoint_descriptor
-					*desc;
+    const struct usb_endpoint_descriptor
+        *desc;
 };
 
 /*
@@ -115,38 +115,37 @@ struct at91_ep {
  * access protection for chip registers or driver state
  */
 struct at91_udc {
-	struct usb_gadget		gadget;
-	struct at91_ep			ep[NUM_ENDPOINTS];
-	struct usb_gadget_driver	*driver;
-	unsigned			vbus:1;
-	unsigned			enabled:1;
-	unsigned			clocked:1;
-	unsigned			suspended:1;
-	unsigned			req_pending:1;
-	unsigned			wait_for_addr_ack:1;
-	unsigned			wait_for_config_ack:1;
-	unsigned			selfpowered:1;
-	unsigned			active_suspend:1;
-	u8				addr;
-	struct at91_udc_data		board;
-	struct clk			*iclk, *fclk;
-	struct platform_device		*pdev;
-	struct proc_dir_entry		*pde;
-	void __iomem			*udp_baseaddr;
-	int				udp_irq;
-	spinlock_t			lock;
-	struct timer_list		vbus_timer;
-	struct work_struct		vbus_timer_work;
+    struct usb_gadget		gadget;
+    struct at91_ep			ep[NUM_ENDPOINTS];
+    struct usb_gadget_driver	*driver;
+    unsigned			vbus:1;
+    unsigned			enabled:1;
+    unsigned			clocked:1;
+    unsigned			suspended:1;
+    unsigned			req_pending:1;
+    unsigned			wait_for_addr_ack:1;
+    unsigned			wait_for_config_ack:1;
+    unsigned			selfpowered:1;
+    unsigned			active_suspend:1;
+    u8				addr;
+    struct at91_udc_data		board;
+    struct clk			*iclk, *fclk;
+    struct platform_device		*pdev;
+    struct proc_dir_entry		*pde;
+    void __iomem			*udp_baseaddr;
+    int				udp_irq;
+    spinlock_t			lock;
+    struct timer_list		vbus_timer;
+    struct work_struct		vbus_timer_work;
 };
 
-static inline struct at91_udc *to_udc(struct usb_gadget *g)
-{
-	return container_of(g, struct at91_udc, gadget);
+static inline struct at91_udc *to_udc(struct usb_gadget *g) {
+    return container_of(g, struct at91_udc, gadget);
 }
 
 struct at91_request {
-	struct usb_request		req;
-	struct list_head		queue;
+    struct usb_request		req;
+    struct list_head		queue;
 };
 
 /*-------------------------------------------------------------------------*/

@@ -23,8 +23,7 @@
 
 #include "sbew_ioc.h"
 
-enum
-{
+enum {
     // C4_GET_PORT = 0,
     // C4_SET_PORT,
     // C4_GET_CHAN,
@@ -56,8 +55,7 @@ enum
 // #define C4_RW_MSYC           XXX
 // #define C4_RW_PLD            XXX
 
-struct c4_chan_stats_wrap
-{
+struct c4_chan_stats_wrap {
     int         channum;
     struct sbecom_chan_stats stats;
 };

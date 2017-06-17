@@ -45,109 +45,109 @@
  * loop for given size as immediate
  */
 
-	.macro	__loopi ar, at, size, incr
+.macro	__loopi ar, at, size, incr
 
 #if XCHAL_HAVE_LOOPS
-		movi	\at, ((\size + \incr - 1) / (\incr))
-		loop	\at, 99f
+movi	\at, ((\size + \incr - 1) / (\incr))
+loop	\at, 99f
 #else
-		addi	\at, \ar, \size
-		98:
+addi	\at, \ar, \size
+98:
 #endif
 
-	.endm
+.endm
 
 /*
  * loop for given size in register
  */
 
-	.macro	__loops	ar, as, at, incr_log2, mask_log2, cond, ncond
+.macro	__loops	ar, as, at, incr_log2, mask_log2, cond, ncond
 
 #if XCHAL_HAVE_LOOPS
-		.ifgt \incr_log2 - 1
-			addi	\at, \as, (1 << \incr_log2) - 1
-			.ifnc \mask_log2,
-				extui	\at, \at, \incr_log2, \mask_log2
-			.else
-				srli	\at, \at, \incr_log2
-			.endif
-		.endif
-		loop\cond	\at, 99f
+.ifgt \incr_log2 - 1
+addi	\at, \as, (1 << \incr_log2) - 1
+.ifnc \mask_log2,
+      extui	\at, \at, \incr_log2, \mask_log2
+      .else
+      srli	\at, \at, \incr_log2
+      .endif
+      .endif
+      loop\cond	\at, 99f
 #else
-		.ifnc \mask_log2,
-			extui	\at, \as, \incr_log2, \mask_log2
-		.else
-			.ifnc \ncond,
-				srli	\at, \as, \incr_log2
-			.endif
-		.endif
-		.ifnc \ncond,
-			b\ncond	\at, 99f
+.ifnc \mask_log2,
+      extui	\at, \as, \incr_log2, \mask_log2
+      .else
+      .ifnc \ncond,
+      srli	\at, \as, \incr_log2
+      .endif
+      .endif
+      .ifnc \ncond,
+      b\ncond	\at, 99f
 
-		.endif
-		.ifnc \mask_log2,
-			slli	\at, \at, \incr_log2
-			add	\at, \ar, \at
-		.else
-			add	\at, \ar, \as
-		.endif
+      .endif
+      .ifnc \mask_log2,
+      slli	\at, \at, \incr_log2
+      add	\at, \ar, \at
+      .else
+      add	\at, \ar, \as
+      .endif
 #endif
-		98:
+      98:
 
-	.endm
+      .endm
 
-/*
- * loop from ar to ax
- */
+      /*
+       * loop from ar to ax
+       */
 
-	.macro	__loopt	ar, as, at, incr_log2
+      .macro	__loopt	ar, as, at, incr_log2
 
 #if XCHAL_HAVE_LOOPS
-		sub	\at, \as, \ar
-		.ifgt	\incr_log2 - 1
-			addi	\at, \at, (1 << \incr_log2) - 1
-			srli	\at, \at, \incr_log2
-		.endif
-		loop	\at, 99f
+      sub	\at, \as, \ar
+      .ifgt	\incr_log2 - 1
+      addi	\at, \at, (1 << \incr_log2) - 1
+      srli	\at, \at, \incr_log2
+      .endif
+      loop	\at, 99f
 #else
-		98:
+      98:
 #endif
 
-	.endm
+      .endm
 
-/*
- * restart loop. registers must be unchanged
- */
+      /*
+       * restart loop. registers must be unchanged
+       */
 
-	.macro	__loop	as
+      .macro	__loop	as
 
 #if XCHAL_HAVE_LOOPS
-		loop	\as, 99f
+      loop	\as, 99f
 #else
-		98:
+      98:
 #endif
 
-	.endm
+      .endm
 
-/*
- * end of loop with no increment of the address.
- */
+      /*
+       * end of loop with no increment of the address.
+       */
 
-	.macro	__endl	ar, as
+      .macro	__endl	ar, as
 #if !XCHAL_HAVE_LOOPS
-		bltu	\ar, \as, 98b
+      bltu	\ar, \as, 98b
 #endif
-		99:
-	.endm
+      99:
+      .endm
 
-/*
- * end of loop with increment of the address.
- */
+      /*
+       * end of loop with increment of the address.
+       */
 
-	.macro	__endla	ar, as, incr
-		addi	\ar, \ar, \incr
-		__endl	\ar \as
-	.endm
+      .macro	__endla	ar, as, incr
+      addi	\ar, \ar, \incr
+      __endl	\ar \as
+      .endm
 
 
 #endif /* _XTENSA_ASMMACRO_H */

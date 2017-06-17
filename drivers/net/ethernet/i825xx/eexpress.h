@@ -148,26 +148,26 @@
 #define FD_NoEOF(s) (((s) & 0x0040) != 0)
 
 struct rfd_header {
-	volatile unsigned long flags;
-	volatile unsigned short link;
-	volatile unsigned short rbd_offset;
-	volatile unsigned short dstaddr1;
-	volatile unsigned short dstaddr2;
-	volatile unsigned short dstaddr3;
-	volatile unsigned short srcaddr1;
-	volatile unsigned short srcaddr2;
-	volatile unsigned short srcaddr3;
-	volatile unsigned short length;
+    volatile unsigned long flags;
+    volatile unsigned short link;
+    volatile unsigned short rbd_offset;
+    volatile unsigned short dstaddr1;
+    volatile unsigned short dstaddr2;
+    volatile unsigned short dstaddr3;
+    volatile unsigned short srcaddr1;
+    volatile unsigned short srcaddr2;
+    volatile unsigned short srcaddr3;
+    volatile unsigned short length;
 
-	/* This is actually a Receive Buffer Descriptor.  The way we
-	 * arrange memory means that an RBD always follows the RFD that
-	 * points to it, so they might as well be in the same structure.
-	 */
-	volatile unsigned short actual_count;
-	volatile unsigned short next_rbd;
-	volatile unsigned short buf_addr1;
-	volatile unsigned short buf_addr2;
-	volatile unsigned short size;
+    /* This is actually a Receive Buffer Descriptor.  The way we
+     * arrange memory means that an RBD always follows the RFD that
+     * points to it, so they might as well be in the same structure.
+     */
+    volatile unsigned short actual_count;
+    volatile unsigned short next_rbd;
+    volatile unsigned short buf_addr1;
+    volatile unsigned short buf_addr2;
+    volatile unsigned short size;
 };
 
 /* Returned data from the Time Domain Reflectometer */

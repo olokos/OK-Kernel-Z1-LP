@@ -63,8 +63,7 @@
  * -------------------------------------------------------------------------*/
 
 #define LINUX_LOCK_COOKIE 0x12345678
-enum
-{
+enum {
     LOCK_RELEASED = 0x11223344,
     LOCK_ACQUIRED,
     LOCK_DESTROYED
@@ -119,24 +118,20 @@ enum
 
     ( *** return value not considered yet )
   --------------------------------------------------------------------------*/
-VOS_STATUS vos_lock_init ( vos_lock_t *lock )
-{
+VOS_STATUS vos_lock_init ( vos_lock_t *lock ) {
 
     //check for invalid pointer
-    if ( lock == NULL)
-    {
+    if ( lock == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: NULL pointer passed in",__func__);
         return VOS_STATUS_E_FAULT;
     }
     // check for 'already initialized' lock
-    if ( LINUX_LOCK_COOKIE == lock->cookie )
-    {
+    if ( LINUX_LOCK_COOKIE == lock->cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: already initialized lock",__func__);
         return VOS_STATUS_E_BUSY;
     }
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return VOS_STATUS_E_FAULT;
     }
@@ -175,30 +170,25 @@ VOS_STATUS vos_lock_init ( vos_lock_t *lock )
 
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_lock_acquire ( vos_lock_t* lock )
-{
+VOS_STATUS vos_lock_acquire ( vos_lock_t* lock ) {
     int rc;
     //Check for invalid pointer
-    if ( lock == NULL )
-    {
+    if ( lock == NULL ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: NULL pointer passed in",__func__);
         return VOS_STATUS_E_FAULT;
     }
     // check if lock refers to an initialized object
-    if ( LINUX_LOCK_COOKIE != lock->cookie )
-    {
+    if ( LINUX_LOCK_COOKIE != lock->cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: uninitialized lock",__func__);
         return VOS_STATUS_E_INVAL;
     }
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return VOS_STATUS_E_FAULT;
     }
     if ((lock->processID == current->pid) &&
-            (lock->state == LOCK_ACQUIRED))
-    {
+            (lock->state == LOCK_ACQUIRED)) {
         lock->refcount++;
 #ifdef VOS_NESTED_LOCK_DEBUG
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,"%s: %x %d %d", __func__, lock, current->pid, lock->refcount);
@@ -208,8 +198,7 @@ VOS_STATUS vos_lock_acquire ( vos_lock_t* lock )
     // Acquire a Lock
     mutex_lock( &lock->m_lock );
     rc = mutex_is_locked( &lock->m_lock );
-    if (rc == 0)
-    {
+    if (rc == 0) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: unable to lock mutex (rc = %d)", __func__, rc);
         return VOS_STATUS_E_FAILURE;
@@ -219,15 +208,12 @@ VOS_STATUS vos_lock_acquire ( vos_lock_t* lock )
 #ifdef VOS_NESTED_LOCK_DEBUG
     VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,"%s: %x %d", __func__, lock, current->pid);
 #endif
-    if ( LOCK_DESTROYED != lock->state )
-    {
+    if ( LOCK_DESTROYED != lock->state ) {
         lock->processID = current->pid;
         lock->refcount++;
         lock->state    = LOCK_ACQUIRED;
         return VOS_STATUS_SUCCESS;
-    }
-    else
-    {
+    } else {
         // lock is already destroyed
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: Lock is already destroyed", __func__);
         mutex_unlock(&lock->m_lock);
@@ -264,24 +250,20 @@ VOS_STATUS vos_lock_acquire ( vos_lock_t* lock )
 
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_lock_release ( vos_lock_t *lock )
-{
+VOS_STATUS vos_lock_release ( vos_lock_t *lock ) {
     //Check for invalid pointer
-    if ( lock == NULL )
-    {
+    if ( lock == NULL ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: NULL pointer passed in",__func__);
         return VOS_STATUS_E_FAULT;
     }
 
     // check if lock refers to an uninitialized object
-    if ( LINUX_LOCK_COOKIE != lock->cookie )
-    {
+    if ( LINUX_LOCK_COOKIE != lock->cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: uninitialized lock",__func__);
         return VOS_STATUS_E_INVAL;
     }
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return VOS_STATUS_E_FAULT;
     }
@@ -289,8 +271,7 @@ VOS_STATUS vos_lock_release ( vos_lock_t *lock )
     // CurrentThread = GetCurrentThreadId();
     // Check thread ID of caller against thread ID
     // of the thread which acquire the lock
-    if ( lock->processID != current->pid )
-    {
+    if ( lock->processID != current->pid ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: current task pid does not match original task pid!!",__func__);
 #ifdef VOS_NESTED_LOCK_DEBUG
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_INFO,"%s: Lock held by=%d being released by=%d", __func__, lock->processID, current->pid);
@@ -299,8 +280,7 @@ VOS_STATUS vos_lock_release ( vos_lock_t *lock )
         return VOS_STATUS_E_PERM;
     }
     if ((lock->processID == current->pid) &&
-            (lock->state == LOCK_ACQUIRED))
-    {
+            (lock->state == LOCK_ACQUIRED)) {
         if (lock->refcount > 0) lock->refcount--;
     }
 #ifdef VOS_NESTED_LOCK_DEBUG
@@ -352,30 +332,25 @@ VOS_STATUS vos_lock_release ( vos_lock_t *lock )
           unknown reasons
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_lock_destroy( vos_lock_t *lock )
-{
+VOS_STATUS vos_lock_destroy( vos_lock_t *lock ) {
     //Check for invalid pointer
-    if ( NULL == lock )
-    {
+    if ( NULL == lock ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: NULL pointer passed in", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
-    if ( LINUX_LOCK_COOKIE != lock->cookie )
-    {
+    if ( LINUX_LOCK_COOKIE != lock->cookie ) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: uninitialized lock", __func__);
         return VOS_STATUS_E_INVAL;
     }
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return VOS_STATUS_E_FAULT;
     }
 
     // check if lock is released
-    if (!mutex_trylock(&lock->m_lock))
-    {
+    if (!mutex_trylock(&lock->m_lock)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: lock is not released", __func__);
         return VOS_STATUS_E_BUSY;
     }
@@ -411,8 +386,7 @@ VOS_STATUS vos_lock_destroy( vos_lock_t *lock )
           is ready to be used.
   --------------------------------------------------------------------------*/
 
-VOS_STATUS vos_spin_lock_init(vos_spin_lock_t *pLock)
-{
+VOS_STATUS vos_spin_lock_init(vos_spin_lock_t *pLock) {
     spin_lock_init(pLock);
 
     return VOS_STATUS_SUCCESS;
@@ -434,8 +408,7 @@ VOS_STATUS vos_spin_lock_init(vos_spin_lock_t *pLock)
 
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_spin_lock_acquire(vos_spin_lock_t *pLock)
-{
+VOS_STATUS vos_spin_lock_acquire(vos_spin_lock_t *pLock) {
     spin_lock(pLock);
     return VOS_STATUS_SUCCESS;
 }
@@ -455,8 +428,7 @@ VOS_STATUS vos_spin_lock_acquire(vos_spin_lock_t *pLock)
 
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_spin_lock_release(vos_spin_lock_t *pLock)
-{
+VOS_STATUS vos_spin_lock_release(vos_spin_lock_t *pLock) {
     spin_unlock(pLock);
     return VOS_STATUS_SUCCESS;
 }
@@ -472,8 +444,7 @@ VOS_STATUS vos_spin_lock_release(vos_spin_lock_t *pLock)
 
   \sa
   ------------------------------------------------------------------------*/
-VOS_STATUS vos_spin_lock_destroy(vos_spin_lock_t *pLock)
-{
+VOS_STATUS vos_spin_lock_destroy(vos_spin_lock_t *pLock) {
 
     return VOS_STATUS_SUCCESS;
 }

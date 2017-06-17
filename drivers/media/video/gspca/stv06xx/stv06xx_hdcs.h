@@ -141,67 +141,67 @@ static int hdcs_set_gain(struct gspca_dev *gspca_dev, __s32 val);
 static int hdcs_get_gain(struct gspca_dev *gspca_dev, __s32 *val);
 
 const struct stv06xx_sensor stv06xx_sensor_hdcs1x00 = {
-	.name = "HP HDCS-1000/1100",
-	.i2c_flush = 0,
-	.i2c_addr = (0x55 << 1),
-	.i2c_len = 1,
+    .name = "HP HDCS-1000/1100",
+    .i2c_flush = 0,
+    .i2c_addr = (0x55 << 1),
+    .i2c_len = 1,
 
-	/* FIXME (see if we can lower min_packet_size, needs testing, and also
-	   adjusting framerate when the bandwidth gets lower) */
-	.min_packet_size = { 847 },
-	.max_packet_size = { 847 },
+    /* FIXME (see if we can lower min_packet_size, needs testing, and also
+       adjusting framerate when the bandwidth gets lower) */
+    .min_packet_size = { 847 },
+    .max_packet_size = { 847 },
 
-	.init = hdcs_init,
-	.probe = hdcs_probe_1x00,
-	.start = hdcs_start,
-	.stop = hdcs_stop,
-	.disconnect = hdcs_disconnect,
-	.dump = hdcs_dump,
+    .init = hdcs_init,
+    .probe = hdcs_probe_1x00,
+    .start = hdcs_start,
+    .stop = hdcs_stop,
+    .disconnect = hdcs_disconnect,
+    .dump = hdcs_dump,
 };
 
 const struct stv06xx_sensor stv06xx_sensor_hdcs1020 = {
-	.name = "HDCS-1020",
-	.i2c_flush = 0,
-	.i2c_addr = (0x55 << 1),
-	.i2c_len = 1,
+    .name = "HDCS-1020",
+    .i2c_flush = 0,
+    .i2c_addr = (0x55 << 1),
+    .i2c_len = 1,
 
-	/* FIXME (see if we can lower min_packet_size, needs testing, and also
-	   adjusting framerate when the bandwidthm gets lower) */
-	.min_packet_size = { 847 },
-	.max_packet_size = { 847 },
+    /* FIXME (see if we can lower min_packet_size, needs testing, and also
+       adjusting framerate when the bandwidthm gets lower) */
+    .min_packet_size = { 847 },
+    .max_packet_size = { 847 },
 
-	.init = hdcs_init,
-	.probe = hdcs_probe_1020,
-	.start = hdcs_start,
-	.stop = hdcs_stop,
-	.dump = hdcs_dump,
+    .init = hdcs_init,
+    .probe = hdcs_probe_1020,
+    .start = hdcs_start,
+    .stop = hdcs_stop,
+    .dump = hdcs_dump,
 };
 
 static const u16 stv_bridge_init[][2] = {
-	{STV_ISO_ENABLE, 0},
-	{STV_REG23, 0},
-	{STV_REG00, 0x1d},
-	{STV_REG01, 0xb5},
-	{STV_REG02, 0xa8},
-	{STV_REG03, 0x95},
-	{STV_REG04, 0x07},
+    {STV_ISO_ENABLE, 0},
+    {STV_REG23, 0},
+    {STV_REG00, 0x1d},
+    {STV_REG01, 0xb5},
+    {STV_REG02, 0xa8},
+    {STV_REG03, 0x95},
+    {STV_REG04, 0x07},
 
-	{STV_SCAN_RATE, 0x20},
-	{STV_Y_CTRL, 0x01},
-	{STV_X_CTRL, 0x0a}
+    {STV_SCAN_RATE, 0x20},
+    {STV_Y_CTRL, 0x01},
+    {STV_X_CTRL, 0x0a}
 };
 
 static const u8 stv_sensor_init[][2] = {
-	/* Clear status (writing 1 will clear the corresponding status bit) */
-	{HDCS_STATUS, BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2) | BIT(1)},
-	/* Disable all interrupts */
-	{HDCS_IMASK, 0x00},
-	{HDCS_PCTRL, BIT(6) | BIT(5) | BIT(1) | BIT(0)},
-	{HDCS_PDRV,  0x00},
-	{HDCS_ICTRL, BIT(5)},
-	{HDCS_ITMG,  BIT(4) | BIT(1)},
-	/* ADC output resolution to 10 bits */
-	{HDCS_ADCCTRL, 10}
+    /* Clear status (writing 1 will clear the corresponding status bit) */
+    {HDCS_STATUS, BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2) | BIT(1)},
+    /* Disable all interrupts */
+    {HDCS_IMASK, 0x00},
+    {HDCS_PCTRL, BIT(6) | BIT(5) | BIT(1) | BIT(0)},
+    {HDCS_PDRV,  0x00},
+    {HDCS_ICTRL, BIT(5)},
+    {HDCS_ITMG,  BIT(4) | BIT(1)},
+    /* ADC output resolution to 10 bits */
+    {HDCS_ADCCTRL, 10}
 };
 
 #endif

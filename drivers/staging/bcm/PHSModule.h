@@ -2,20 +2,20 @@
 #define BCM_MINIPORT_PHSMODULE_H
 
 int PHSTransmit(PMINI_ADAPTER Adapter,
-					struct sk_buff **pPacket,
-					 USHORT Vcid,
-					 B_UINT16 uiClassifierRuleID,
-					 BOOLEAN bHeaderSuppressionEnabled,
-					 PUINT PacketLen,
-					 UCHAR bEthCSSupport);
+                struct sk_buff **pPacket,
+                USHORT Vcid,
+                B_UINT16 uiClassifierRuleID,
+                BOOLEAN bHeaderSuppressionEnabled,
+                PUINT PacketLen,
+                UCHAR bEthCSSupport);
 
 int PHSReceive(PMINI_ADAPTER Adapter,
-					USHORT usVcid,
-					struct sk_buff *packet,
-					UINT *punPacketLen,
-					UCHAR *pucEthernetHdr,
-					UINT
-					);
+               USHORT usVcid,
+               struct sk_buff *packet,
+               UINT *punPacketLen,
+               UCHAR *pucEthernetHdr,
+               UINT
+              );
 
 
 void DumpDataPacketHeader(PUCHAR pPkt);

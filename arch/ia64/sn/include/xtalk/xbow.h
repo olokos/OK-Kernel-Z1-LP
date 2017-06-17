@@ -22,34 +22,34 @@
 
 /* Register set for each xbow link */
 typedef volatile struct xb_linkregs_s {
-/*
- * we access these through synergy unswizzled space, so the address
- * gets twiddled (i.e. references to 0x4 actually go to 0x0 and vv.)
- * That's why we put the register first and filler second.
- */
-	u32 link_ibf;
-	u32 filler0;	/* filler for proper alignment */
-	u32 link_control;
-	u32 filler1;
-	u32 link_status;
-	u32 filler2;
-	u32 link_arb_upper;
-	u32 filler3;
-	u32 link_arb_lower;
-	u32 filler4;
-	u32 link_status_clr;
-	u32 filler5;
-	u32 link_reset;
-	u32 filler6;
-	u32 link_aux_status;
-	u32 filler7;
+    /*
+     * we access these through synergy unswizzled space, so the address
+     * gets twiddled (i.e. references to 0x4 actually go to 0x0 and vv.)
+     * That's why we put the register first and filler second.
+     */
+    u32 link_ibf;
+    u32 filler0;	/* filler for proper alignment */
+    u32 link_control;
+    u32 filler1;
+    u32 link_status;
+    u32 filler2;
+    u32 link_arb_upper;
+    u32 filler3;
+    u32 link_arb_lower;
+    u32 filler4;
+    u32 link_status_clr;
+    u32 filler5;
+    u32 link_reset;
+    u32 filler6;
+    u32 link_aux_status;
+    u32 filler7;
 } xb_linkregs_t;
 
 typedef volatile struct xbow_s {
-	/* standard widget configuration 0x000000-0x000057 */
-	struct widget_cfg xb_widget;  /* 0x000000 */
+    /* standard widget configuration 0x000000-0x000057 */
+    struct widget_cfg xb_widget;  /* 0x000000 */
 
-	/* helper fieldnames for accessing bridge widget */
+    /* helper fieldnames for accessing bridge widget */
 
 #define xb_wid_id 		xb_widget.w_id
 #define xb_wid_stat 		xb_widget.w_status
@@ -63,49 +63,49 @@ typedef volatile struct xbow_s {
 #define xb_wid_llp 		xb_widget.w_llp_cfg
 #define xb_wid_stat_clr 	xb_widget.w_tflush
 
-/*
- * we access these through synergy unswizzled space, so the address
- * gets twiddled (i.e. references to 0x4 actually go to 0x0 and vv.)
- * That's why we put the register first and filler second.
- */
-	/* xbow-specific widget configuration    0x000058-0x0000FF */
-	u32 xb_wid_arb_reload; /* 0x00005C */
-	u32 _pad_000058;
-	u32 xb_perf_ctr_a;	/* 0x000064 */
-	u32 _pad_000060;
-	u32 xb_perf_ctr_b;	/* 0x00006c */
-	u32 _pad_000068;
-	u32 xb_nic;		/* 0x000074 */
-	u32 _pad_000070;
+    /*
+     * we access these through synergy unswizzled space, so the address
+     * gets twiddled (i.e. references to 0x4 actually go to 0x0 and vv.)
+     * That's why we put the register first and filler second.
+     */
+    /* xbow-specific widget configuration    0x000058-0x0000FF */
+    u32 xb_wid_arb_reload; /* 0x00005C */
+    u32 _pad_000058;
+    u32 xb_perf_ctr_a;	/* 0x000064 */
+    u32 _pad_000060;
+    u32 xb_perf_ctr_b;	/* 0x00006c */
+    u32 _pad_000068;
+    u32 xb_nic;		/* 0x000074 */
+    u32 _pad_000070;
 
-	/* Xbridge only */
-	u32 xb_w0_rst_fnc;	/* 0x00007C */
-	u32 _pad_000078;
-	u32 xb_l8_rst_fnc;	/* 0x000084 */
-	u32 _pad_000080;
-	u32 xb_l9_rst_fnc;	/* 0x00008c */
-	u32 _pad_000088;
-	u32 xb_la_rst_fnc;	/* 0x000094 */
-	u32 _pad_000090;
-	u32 xb_lb_rst_fnc;	/* 0x00009c */
-	u32 _pad_000098;
-	u32 xb_lc_rst_fnc;	/* 0x0000a4 */
-	u32 _pad_0000a0;
-	u32 xb_ld_rst_fnc;	/* 0x0000ac */
-	u32 _pad_0000a8;
-	u32 xb_le_rst_fnc;	/* 0x0000b4 */
-	u32 _pad_0000b0;
-	u32 xb_lf_rst_fnc;	/* 0x0000bc */
-	u32 _pad_0000b8;
-	u32 xb_lock;		/* 0x0000c4 */
-	u32 _pad_0000c0;
-	u32 xb_lock_clr;	/* 0x0000cc */
-	u32 _pad_0000c8;
-	/* end of Xbridge only */
-	u32 _pad_0000d0[12];
+    /* Xbridge only */
+    u32 xb_w0_rst_fnc;	/* 0x00007C */
+    u32 _pad_000078;
+    u32 xb_l8_rst_fnc;	/* 0x000084 */
+    u32 _pad_000080;
+    u32 xb_l9_rst_fnc;	/* 0x00008c */
+    u32 _pad_000088;
+    u32 xb_la_rst_fnc;	/* 0x000094 */
+    u32 _pad_000090;
+    u32 xb_lb_rst_fnc;	/* 0x00009c */
+    u32 _pad_000098;
+    u32 xb_lc_rst_fnc;	/* 0x0000a4 */
+    u32 _pad_0000a0;
+    u32 xb_ld_rst_fnc;	/* 0x0000ac */
+    u32 _pad_0000a8;
+    u32 xb_le_rst_fnc;	/* 0x0000b4 */
+    u32 _pad_0000b0;
+    u32 xb_lf_rst_fnc;	/* 0x0000bc */
+    u32 _pad_0000b8;
+    u32 xb_lock;		/* 0x0000c4 */
+    u32 _pad_0000c0;
+    u32 xb_lock_clr;	/* 0x0000cc */
+    u32 _pad_0000c8;
+    /* end of Xbridge only */
+    u32 _pad_0000d0[12];
 
-	/* Link Specific Registers, port 8..15   0x000100-0x000300 */
-	xb_linkregs_t xb_link_raw[MAX_XBOW_PORTS];
+    /* Link Specific Registers, port 8..15   0x000100-0x000300 */
+    xb_linkregs_t xb_link_raw[MAX_XBOW_PORTS];
 } xbow_t;
 
 #define xb_link(p) xb_link_raw[(p) & (MAX_XBOW_PORTS - 1)]

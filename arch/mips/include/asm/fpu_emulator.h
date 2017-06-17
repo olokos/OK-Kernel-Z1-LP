@@ -30,12 +30,12 @@
 #ifdef CONFIG_DEBUG_FS
 
 struct mips_fpu_emulator_stats {
-	local_t emulated;
-	local_t loads;
-	local_t stores;
-	local_t cp1ops;
-	local_t cp1xops;
-	local_t errors;
+    local_t emulated;
+    local_t loads;
+    local_t stores;
+    local_t cp1ops;
+    local_t cp1xops;
+    local_t errors;
 };
 
 DECLARE_PER_CPU(struct mips_fpu_emulator_stats, fpuemustats);
@@ -52,7 +52,7 @@ do {									\
 #endif /* CONFIG_DEBUG_FS */
 
 extern int mips_dsemul(struct pt_regs *regs, mips_instruction ir,
-	unsigned long cpc);
+                       unsigned long cpc);
 extern int do_dsemulret(struct pt_regs *xcp);
 
 /*

@@ -4,7 +4,7 @@ FILE:
 
 DESCRIPTION:
    Declaration of structures used by the Qualcomm Linux USB Network driver
-   
+
 FUNCTIONS:
    none
 
@@ -43,15 +43,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <linux/kthread.h>
 
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION( 2,6,24 ))
-   #include "usbnet.h"
+#include "usbnet.h"
 #else
-   #include <linux/usb/usbnet.h>
+#include <linux/usb/usbnet.h>
 #endif
 
 #if (LINUX_VERSION_CODE > KERNEL_VERSION( 2,6,25 ))
-   #include <linux/fdtable.h>
+#include <linux/fdtable.h>
 #else
-   #include <linux/file.h>
+#include <linux/file.h>
 #endif
 
 // DBG macro
@@ -70,19 +70,18 @@ struct sQCUSBNet;
 //
 //    Structure that defines an entry in a Read Memory linked list
 /*=========================================================================*/
-typedef struct sReadMemList
-{
-   /* Data buffer */
-   void *                     mpData;
-   
-   /* Transaction ID */
-   u16                        mTransactionID;
+typedef struct sReadMemList {
+    /* Data buffer */
+    void *                     mpData;
 
-   /* Size of data buffer */
-   u16                        mDataSize;
+    /* Transaction ID */
+    u16                        mTransactionID;
 
-   /* Next entry in linked list */
-   struct sReadMemList *      mpNext;
+    /* Size of data buffer */
+    u16                        mDataSize;
+
+    /* Next entry in linked list */
+    struct sReadMemList *      mpNext;
 
 } sReadMemList;
 
@@ -91,19 +90,18 @@ typedef struct sReadMemList
 //
 //    Structure that defines an entry in a Notification linked list
 /*=========================================================================*/
-typedef struct sNotifyList
-{
-   /* Function to be run when data becomes available */
-   void                  (* mpNotifyFunct)(struct sQCUSBNet *, u16, void *);
-   
-   /* Transaction ID */
-   u16                   mTransactionID;
+typedef struct sNotifyList {
+    /* Function to be run when data becomes available */
+    void                  (* mpNotifyFunct)(struct sQCUSBNet *, u16, void *);
 
-   /* Data to provide as parameter to mpNotifyFunct */
-   void *                mpData;
-   
-   /* Next entry in linked list */
-   struct sNotifyList *  mpNext;
+    /* Transaction ID */
+    u16                   mTransactionID;
+
+    /* Data to provide as parameter to mpNotifyFunct */
+    void *                mpData;
+
+    /* Next entry in linked list */
+    struct sNotifyList *  mpNext;
 
 } sNotifyList;
 
@@ -112,13 +110,12 @@ typedef struct sNotifyList
 //
 //    Structure that defines an entry in a URB linked list
 /*=========================================================================*/
-typedef struct sURBList
-{
-   /* The current URB */
-   struct urb *       mpURB;
+typedef struct sURBList {
+    /* The current URB */
+    struct urb *       mpURB;
 
-   /* Next entry in linked list */
-   struct sURBList *  mpNext;
+    /* Next entry in linked list */
+    struct sURBList *  mpNext;
 
 } sURBList;
 
@@ -128,27 +125,26 @@ typedef struct sURBList
 //    Structure that defines an entry in a Client Memory linked list
 //      Stores data specific to a Service Type and Client ID
 /*=========================================================================*/
-typedef struct sClientMemList
-{
-   /* Client ID for this Client */
-   u16                          mClientID;
+typedef struct sClientMemList {
+    /* Client ID for this Client */
+    u16                          mClientID;
 
-   /* Linked list of Read entries */
-   /*    Stores data read from device before sending to client */
-   sReadMemList *               mpList;
-   
-   /* Linked list of Notification entries */
-   /*    Stores notification functions to be run as data becomes 
-         available or the device is removed */
-   sNotifyList *                mpReadNotifyList;
+    /* Linked list of Read entries */
+    /*    Stores data read from device before sending to client */
+    sReadMemList *               mpList;
 
-   /* Linked list of URB entries */
-   /*    Stores pointers to outstanding URBs which need canceled 
-         when the client is deregistered or the device is removed */
-   sURBList *                   mpURBList;
-   
-   /* Next entry in linked list */
-   struct sClientMemList *      mpNext;
+    /* Linked list of Notification entries */
+    /*    Stores notification functions to be run as data becomes
+          available or the device is removed */
+    sNotifyList *                mpReadNotifyList;
+
+    /* Linked list of URB entries */
+    /*    Stores pointers to outstanding URBs which need canceled
+          when the client is deregistered or the device is removed */
+    sURBList *                   mpURBList;
+
+    /* Next entry in linked list */
+    struct sClientMemList *      mpNext;
 
 } sClientMemList;
 
@@ -158,22 +154,21 @@ typedef struct sClientMemList
 //    Structure that defines a USB Setup packet for Control URBs
 //    Taken from USB CDC specifications
 /*=========================================================================*/
-typedef struct sURBSetupPacket
-{
-   /* Request type */
-   u8    mRequestType;
+typedef struct sURBSetupPacket {
+    /* Request type */
+    u8    mRequestType;
 
-   /* Request code */
-   u8    mRequestCode;
+    /* Request code */
+    u8    mRequestCode;
 
-   /* Value */
-   u16   mValue;
+    /* Value */
+    u16   mValue;
 
-   /* Index */
-   u16   mIndex;
+    /* Index */
+    u16   mIndex;
 
-   /* Length of Control URB */
-   u16   mLength;
+    /* Length of Control URB */
+    u16   mLength;
 
 } sURBSetupPacket;
 
@@ -185,34 +180,33 @@ typedef struct sURBSetupPacket
 // Struct sAutoPM
 //
 //    Structure used to manage AutoPM thread which determines whether the
-//    device is in use or may enter autosuspend.  Also submits net 
+//    device is in use or may enter autosuspend.  Also submits net
 //    transmissions asynchronously.
 /*=========================================================================*/
-typedef struct sAutoPM
-{
-   /* Thread for atomic autopm function */
-   struct task_struct *       mpThread;
+typedef struct sAutoPM {
+    /* Thread for atomic autopm function */
+    struct task_struct *       mpThread;
 
-   /* Up this semaphore when it's time for the thread to work */
-   struct semaphore           mThreadDoWork;
+    /* Up this semaphore when it's time for the thread to work */
+    struct semaphore           mThreadDoWork;
 
-   /* Time to exit? */
-   bool                       mbExit;
+    /* Time to exit? */
+    bool                       mbExit;
 
-   /* List of URB's queued to be sent to the device */
-   sURBList *                 mpURBList;
+    /* List of URB's queued to be sent to the device */
+    sURBList *                 mpURBList;
 
-   /* URB list lock (for adding and removing elements) */
-   spinlock_t                 mURBListLock;
-   
-   /* Active URB */
-   struct urb *               mpActiveURB;
+    /* URB list lock (for adding and removing elements) */
+    spinlock_t                 mURBListLock;
 
-   /* Active URB lock (for adding and removing elements) */
-   spinlock_t                 mActiveURBLock;
-   
-   /* Duplicate pointer to USB device interface */
-   struct usb_interface *     mpIntf;
+    /* Active URB */
+    struct urb *               mpActiveURB;
+
+    /* Active URB lock (for adding and removing elements) */
+    spinlock_t                 mActiveURBLock;
+
+    /* Duplicate pointer to USB device interface */
+    struct usb_interface *     mpIntf;
 
 } sAutoPM;
 
@@ -222,41 +216,40 @@ typedef struct sAutoPM
 //
 //    Structure that defines the data for the QMI device
 /*=========================================================================*/
-typedef struct sQMIDev
-{
-   /* Device number */
-   dev_t                      mDevNum;
+typedef struct sQMIDev {
+    /* Device number */
+    dev_t                      mDevNum;
 
-   /* Device class */
-   struct class *             mpDevClass;
+    /* Device class */
+    struct class *             mpDevClass;
 
-   /* cdev struct */
-   struct cdev                mCdev;
+    /* cdev struct */
+    struct cdev                mCdev;
 
-   /* Pointer to read URB */
-   struct urb *               mpReadURB;
+    /* Pointer to read URB */
+    struct urb *               mpReadURB;
 
-   /* Read setup packet */
-   sURBSetupPacket *          mpReadSetupPacket;
+    /* Read setup packet */
+    sURBSetupPacket *          mpReadSetupPacket;
 
-   /* Read buffer attached to current read URB */
-   void *                     mpReadBuffer;
-   
-   /* Inturrupt URB */
-   /*    Used to asynchronously notify when read data is available */
-   struct urb *               mpIntURB;
+    /* Read buffer attached to current read URB */
+    void *                     mpReadBuffer;
 
-   /* Buffer used by Inturrupt URB */
-   void *                     mpIntBuffer;
-   
-   /* Pointer to memory linked list for all clients */
-   sClientMemList *           mpClientMemList;
-   
-   /* Spinlock for client Memory entries */
-   spinlock_t                 mClientMemLock;
+    /* Inturrupt URB */
+    /*    Used to asynchronously notify when read data is available */
+    struct urb *               mpIntURB;
 
-   /* Transaction ID associated with QMICTL "client" */
-   atomic_t                   mQMICTLTransactionID;
+    /* Buffer used by Inturrupt URB */
+    void *                     mpIntBuffer;
+
+    /* Pointer to memory linked list for all clients */
+    sClientMemList *           mpClientMemList;
+
+    /* Spinlock for client Memory entries */
+    spinlock_t                 mClientMemLock;
+
+    /* Transaction ID associated with QMICTL "client" */
+    atomic_t                   mQMICTLTransactionID;
 
 } sQMIDev;
 
@@ -265,37 +258,36 @@ typedef struct sQMIDev
 //
 //    Structure that defines the data associated with the Qualcomm USB device
 /*=========================================================================*/
-typedef struct sQCUSBNet
-{
-   /* Net device structure */
-   struct usbnet *        mpNetDev;
+typedef struct sQCUSBNet {
+    /* Net device structure */
+    struct usbnet *        mpNetDev;
 
-   /* Usb device interface */
-   struct usb_interface * mpIntf;
-   
-   /* Pointers to usbnet_open and usbnet_stop functions */
-   int                  (* mpUSBNetOpen)(struct net_device *);
-   int                  (* mpUSBNetStop)(struct net_device *);
-   
-   /* Reason(s) why interface is down */
-   /* Used by Q*DownReason */
-   unsigned long          mDownReason;
+    /* Usb device interface */
+    struct usb_interface * mpIntf;
+
+    /* Pointers to usbnet_open and usbnet_stop functions */
+    int                  (* mpUSBNetOpen)(struct net_device *);
+    int                  (* mpUSBNetStop)(struct net_device *);
+
+    /* Reason(s) why interface is down */
+    /* Used by Q*DownReason */
+    unsigned long          mDownReason;
 #define NO_NDIS_CONNECTION    0
 #define CDC_CONNECTION_SPEED  1
 #define DRIVER_SUSPENDED      2
 #define NET_IFACE_STOPPED     3
 
-   /* QMI "device" status */
-   bool                   mbQMIValid;
+    /* QMI "device" status */
+    bool                   mbQMIValid;
 
-   /* QMI "device" memory */
-   sQMIDev                mQMIDev;
+    /* QMI "device" memory */
+    sQMIDev                mQMIDev;
 
-   /* Device MEID */
-   char                   mMEID[14];
-   
-   /* AutoPM thread */
-   sAutoPM                mAutoPM;
+    /* Device MEID */
+    char                   mMEID[14];
+
+    /* AutoPM thread */
+    sAutoPM                mAutoPM;
 
 } sQCUSBNet;
 
@@ -305,13 +297,12 @@ typedef struct sQCUSBNet
 //    Structure that defines the storage each file handle contains
 //       Relates the file handle to a client
 /*=========================================================================*/
-typedef struct sQMIFilpStorage
-{
-   /* Client ID */
-   u16                  mClientID;
-   
-   /* Device pointer */
-   sQCUSBNet *          mpDev;
+typedef struct sQMIFilpStorage {
+    /* Client ID */
+    u16                  mClientID;
+
+    /* Device pointer */
+    sQCUSBNet *          mpDev;
 
 } sQMIFilpStorage;
 

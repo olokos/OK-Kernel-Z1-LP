@@ -47,60 +47,58 @@ extern void init_fec_ioports(struct fs_platform_info*);
 extern void init_smc_ioports(struct fs_uart_platform_info*);
 static phys_addr_t immrbase = -1;
 
-phys_addr_t get_immrbase(void)
-{
-	struct device_node *soc;
+phys_addr_t get_immrbase(void) {
+    struct device_node *soc;
 
-	if (immrbase != -1)
-		return immrbase;
+    if (immrbase != -1)
+        return immrbase;
 
-	soc = of_find_node_by_type(NULL, "soc");
-	if (soc) {
-		int size;
-		u32 naddr;
-		const u32 *prop = of_get_property(soc, "#address-cells", &size);
+    soc = of_find_node_by_type(NULL, "soc");
+    if (soc) {
+        int size;
+        u32 naddr;
+        const u32 *prop = of_get_property(soc, "#address-cells", &size);
 
-		if (prop && size == 4)
-			naddr = *prop;
-		else
-			naddr = 2;
+        if (prop && size == 4)
+            naddr = *prop;
+        else
+            naddr = 2;
 
-		prop = of_get_property(soc, "ranges", &size);
-		if (prop)
-			immrbase = of_translate_address(soc, prop + naddr);
+        prop = of_get_property(soc, "ranges", &size);
+        if (prop)
+            immrbase = of_translate_address(soc, prop + naddr);
 
-		of_node_put(soc);
-	}
+        of_node_put(soc);
+    }
 
-	return immrbase;
+    return immrbase;
 }
 
 EXPORT_SYMBOL(get_immrbase);
 
 static u32 sysfreq = -1;
 
-u32 fsl_get_sys_freq(void)
-{
-	struct device_node *soc;
-	const u32 *prop;
-	int size;
+u32 fsl_get_sys_freq(void) {
+    struct device_node *soc;
+    const u32 *prop;
+    int size;
 
-	if (sysfreq != -1)
-		return sysfreq;
+    if (sysfreq != -1)
+        return sysfreq;
 
-	soc = of_find_node_by_type(NULL, "soc");
-	if (!soc)
-		return -1;
+    soc = of_find_node_by_type(NULL, "soc");
+    if (!soc)
+        return -1;
 
-	prop = of_get_property(soc, "clock-frequency", &size);
-	if (!prop || size != sizeof(*prop) || *prop == 0)
-		prop = of_get_property(soc, "bus-frequency", &size);
+    prop = of_get_property(soc, "clock-frequency", &size);
+    if (!prop || size != sizeof(*prop) || *prop == 0)
+        prop = of_get_property(soc, "bus-frequency", &size);
 
-	if (prop && size == sizeof(*prop))
-		sysfreq = *prop;
+    if (prop && size == sizeof(*prop))
+        sysfreq = *prop;
 
-	of_node_put(soc);
-	return sysfreq;
+    of_node_put(soc);
+    return sysfreq;
 }
 EXPORT_SYMBOL(fsl_get_sys_freq);
 
@@ -108,103 +106,100 @@ EXPORT_SYMBOL(fsl_get_sys_freq);
 
 static u32 brgfreq = -1;
 
-u32 get_brgfreq(void)
-{
-	struct device_node *node;
-	const unsigned int *prop;
-	int size;
+u32 get_brgfreq(void) {
+    struct device_node *node;
+    const unsigned int *prop;
+    int size;
 
-	if (brgfreq != -1)
-		return brgfreq;
+    if (brgfreq != -1)
+        return brgfreq;
 
-	node = of_find_compatible_node(NULL, NULL, "fsl,cpm-brg");
-	if (node) {
-		prop = of_get_property(node, "clock-frequency", &size);
-		if (prop && size == 4)
-			brgfreq = *prop;
+    node = of_find_compatible_node(NULL, NULL, "fsl,cpm-brg");
+    if (node) {
+        prop = of_get_property(node, "clock-frequency", &size);
+        if (prop && size == 4)
+            brgfreq = *prop;
 
-		of_node_put(node);
-		return brgfreq;
-	}
+        of_node_put(node);
+        return brgfreq;
+    }
 
-	/* Legacy device binding -- will go away when no users are left. */
-	node = of_find_node_by_type(NULL, "cpm");
-	if (!node)
-		node = of_find_compatible_node(NULL, NULL, "fsl,qe");
-	if (!node)
-		node = of_find_node_by_type(NULL, "qe");
+    /* Legacy device binding -- will go away when no users are left. */
+    node = of_find_node_by_type(NULL, "cpm");
+    if (!node)
+        node = of_find_compatible_node(NULL, NULL, "fsl,qe");
+    if (!node)
+        node = of_find_node_by_type(NULL, "qe");
 
-	if (node) {
-		prop = of_get_property(node, "brg-frequency", &size);
-		if (prop && size == 4)
-			brgfreq = *prop;
+    if (node) {
+        prop = of_get_property(node, "brg-frequency", &size);
+        if (prop && size == 4)
+            brgfreq = *prop;
 
-		if (brgfreq == -1 || brgfreq == 0) {
-			prop = of_get_property(node, "bus-frequency", &size);
-			if (prop && size == 4)
-				brgfreq = *prop / 2;
-		}
-		of_node_put(node);
-	}
+        if (brgfreq == -1 || brgfreq == 0) {
+            prop = of_get_property(node, "bus-frequency", &size);
+            if (prop && size == 4)
+                brgfreq = *prop / 2;
+        }
+        of_node_put(node);
+    }
 
-	return brgfreq;
+    return brgfreq;
 }
 
 EXPORT_SYMBOL(get_brgfreq);
 
 static u32 fs_baudrate = -1;
 
-u32 get_baudrate(void)
-{
-	struct device_node *node;
+u32 get_baudrate(void) {
+    struct device_node *node;
 
-	if (fs_baudrate != -1)
-		return fs_baudrate;
+    if (fs_baudrate != -1)
+        return fs_baudrate;
 
-	node = of_find_node_by_type(NULL, "serial");
-	if (node) {
-		int size;
-		const unsigned int *prop = of_get_property(node,
-				"current-speed", &size);
+    node = of_find_node_by_type(NULL, "serial");
+    if (node) {
+        int size;
+        const unsigned int *prop = of_get_property(node,
+                                   "current-speed", &size);
 
-		if (prop)
-			fs_baudrate = *prop;
-		of_node_put(node);
-	}
+        if (prop)
+            fs_baudrate = *prop;
+        of_node_put(node);
+    }
 
-	return fs_baudrate;
+    return fs_baudrate;
 }
 
 EXPORT_SYMBOL(get_baudrate);
 #endif /* CONFIG_CPM2 */
 
 #ifdef CONFIG_FIXED_PHY
-static int __init of_add_fixed_phys(void)
-{
-	int ret;
-	struct device_node *np;
-	u32 *fixed_link;
-	struct fixed_phy_status status = {};
+static int __init of_add_fixed_phys(void) {
+    int ret;
+    struct device_node *np;
+    u32 *fixed_link;
+    struct fixed_phy_status status = {};
 
-	for_each_node_by_name(np, "ethernet") {
-		fixed_link  = (u32 *)of_get_property(np, "fixed-link", NULL);
-		if (!fixed_link)
-			continue;
+    for_each_node_by_name(np, "ethernet") {
+        fixed_link  = (u32 *)of_get_property(np, "fixed-link", NULL);
+        if (!fixed_link)
+            continue;
 
-		status.link = 1;
-		status.duplex = fixed_link[1];
-		status.speed = fixed_link[2];
-		status.pause = fixed_link[3];
-		status.asym_pause = fixed_link[4];
+        status.link = 1;
+        status.duplex = fixed_link[1];
+        status.speed = fixed_link[2];
+        status.pause = fixed_link[3];
+        status.asym_pause = fixed_link[4];
 
-		ret = fixed_phy_add(PHY_POLL, fixed_link[0], &status);
-		if (ret) {
-			of_node_put(np);
-			return ret;
-		}
-	}
+        ret = fixed_phy_add(PHY_POLL, fixed_link[0], &status);
+        if (ret) {
+            of_node_put(np);
+            return ret;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 arch_initcall(of_add_fixed_phys);
 #endif /* CONFIG_FIXED_PHY */
@@ -212,39 +207,37 @@ arch_initcall(of_add_fixed_phys);
 #if defined(CONFIG_FSL_SOC_BOOKE) || defined(CONFIG_PPC_86xx)
 static __be32 __iomem *rstcr;
 
-static int __init setup_rstcr(void)
-{
-	struct device_node *np;
+static int __init setup_rstcr(void) {
+    struct device_node *np;
 
-	for_each_node_by_name(np, "global-utilities") {
-		if ((of_get_property(np, "fsl,has-rstcr", NULL))) {
-			rstcr = of_iomap(np, 0) + 0xb0;
-			if (!rstcr)
-				printk (KERN_ERR "Error: reset control "
-						"register not mapped!\n");
-			break;
-		}
-	}
+    for_each_node_by_name(np, "global-utilities") {
+        if ((of_get_property(np, "fsl,has-rstcr", NULL))) {
+            rstcr = of_iomap(np, 0) + 0xb0;
+            if (!rstcr)
+                printk (KERN_ERR "Error: reset control "
+                        "register not mapped!\n");
+            break;
+        }
+    }
 
-	if (!rstcr && ppc_md.restart == fsl_rstcr_restart)
-		printk(KERN_ERR "No RSTCR register, warm reboot won't work\n");
+    if (!rstcr && ppc_md.restart == fsl_rstcr_restart)
+        printk(KERN_ERR "No RSTCR register, warm reboot won't work\n");
 
-	if (np)
-		of_node_put(np);
+    if (np)
+        of_node_put(np);
 
-	return 0;
+    return 0;
 }
 
 arch_initcall(setup_rstcr);
 
-void fsl_rstcr_restart(char *cmd)
-{
-	local_irq_disable();
-	if (rstcr)
-		/* set reset control register */
-		out_be32(rstcr, 0x2);	/* HRESET_REQ */
+void fsl_rstcr_restart(char *cmd) {
+    local_irq_disable();
+    if (rstcr)
+        /* set reset control register */
+        out_be32(rstcr, 0x2);	/* HRESET_REQ */
 
-	while (1) ;
+    while (1) ;
 }
 #endif
 
@@ -260,10 +253,9 @@ EXPORT_SYMBOL(diu_ops);
  * to initiate a partition restart when we're running under the Freescale
  * hypervisor.
  */
-void fsl_hv_restart(char *cmd)
-{
-	pr_info("hv restart\n");
-	fh_partition_restart(-1);
+void fsl_hv_restart(char *cmd) {
+    pr_info("hv restart\n");
+    fh_partition_restart(-1);
 }
 
 /*
@@ -273,8 +265,7 @@ void fsl_hv_restart(char *cmd)
  * function pointers, to shut down the partition when we're running under
  * the Freescale hypervisor.
  */
-void fsl_hv_halt(void)
-{
-	pr_info("hv exit\n");
-	fh_partition_stop(-1);
+void fsl_hv_halt(void) {
+    pr_info("hv exit\n");
+    fh_partition_stop(-1);
 }

@@ -18,9 +18,9 @@
 #include <asm/ptrace.h>
 
 struct swsusp_arch_regs {
-	struct cpu_context_save	cpu_context;	/* cpu context */
+    struct cpu_context_save	cpu_context;	/* cpu context */
 #ifdef CONFIG_UNICORE_FPU_F64
-	struct fp_state		fpstate __attribute__((aligned(8)));
+    struct fp_state		fpstate __attribute__((aligned(8)));
 #endif
 };
 #endif

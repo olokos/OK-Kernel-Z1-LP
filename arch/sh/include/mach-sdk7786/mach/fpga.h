@@ -142,14 +142,12 @@ extern void sdk7786_nmi_init(void);
  */
 #define SDK7786_FPGA_I2CADDR(reg)	((reg) >> 3)
 
-static inline u16 fpga_read_reg(unsigned int reg)
-{
-	return ioread16(sdk7786_fpga_base + reg);
+static inline u16 fpga_read_reg(unsigned int reg) {
+    return ioread16(sdk7786_fpga_base + reg);
 }
 
-static inline void fpga_write_reg(u16 val, unsigned int reg)
-{
-	iowrite16(val, sdk7786_fpga_base + reg);
+static inline void fpga_write_reg(u16 val, unsigned int reg) {
+    iowrite16(val, sdk7786_fpga_base + reg);
 }
 
 #endif /* __MACH_SDK7786_FPGA_H */

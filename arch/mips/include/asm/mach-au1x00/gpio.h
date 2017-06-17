@@ -18,11 +18,10 @@
  * SYS_PININPUTEN is written to at least once.  On Au1550/Au1200/Au1300 this
  * register enables use of GPIOs as wake source.
  */
-static inline void alchemy_gpio1_input_enable(void)
-{
-	void __iomem *base = (void __iomem *)KSEG1ADDR(AU1000_SYS_PHYS_ADDR);
-	__raw_writel(0, base + 0x110);		/* the write op is key */
-	wmb();
+static inline void alchemy_gpio1_input_enable(void) {
+    void __iomem *base = (void __iomem *)KSEG1ADDR(AU1000_SYS_PHYS_ADDR);
+    __raw_writel(0, base + 0x110);		/* the write op is key */
+    wmb();
 }
 
 
@@ -54,15 +53,14 @@ static inline void alchemy_gpio1_input_enable(void)
 
 /* wraps the cpu-dependent irq_to_gpio functions */
 /* FIXME: gpiolib needs an irq_to_gpio hook */
-static inline int __au_irq_to_gpio(unsigned int irq)
-{
-	switch (alchemy_get_cputype()) {
-	case ALCHEMY_CPU_AU1000...ALCHEMY_CPU_AU1200:
-		return alchemy_irq_to_gpio(irq);
-	case ALCHEMY_CPU_AU1300:
-		return au1300_irq_to_gpio(irq);
-	}
-	return -EINVAL;
+static inline int __au_irq_to_gpio(unsigned int irq) {
+    switch (alchemy_get_cputype()) {
+    case ALCHEMY_CPU_AU1000...ALCHEMY_CPU_AU1200:
+        return alchemy_irq_to_gpio(irq);
+    case ALCHEMY_CPU_AU1300:
+        return au1300_irq_to_gpio(irq);
+    }
+    return -EINVAL;
 }
 
 

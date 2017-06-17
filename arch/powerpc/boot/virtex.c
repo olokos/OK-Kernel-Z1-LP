@@ -25,76 +25,74 @@
 #define UART_LCR_DLAB		0x80 	/* Divisor latch access bit */
 #define UART_LCR_WLEN8		0x03 	/* Wordlength: 8 bits */
 
-static int virtex_ns16550_console_init(void *devp)
-{
-	unsigned char *reg_base;
-	u32 reg_shift, reg_offset, clk, spd;
-	u16 divisor;
-	int n;
+static int virtex_ns16550_console_init(void *devp) {
+    unsigned char *reg_base;
+    u32 reg_shift, reg_offset, clk, spd;
+    u16 divisor;
+    int n;
 
-	if (dt_get_virtual_reg(devp, (void **)&reg_base, 1) < 1)
-		return -1;
+    if (dt_get_virtual_reg(devp, (void **)&reg_base, 1) < 1)
+        return -1;
 
-	n = getprop(devp, "reg-offset", &reg_offset, sizeof(reg_offset));
-	if (n == sizeof(reg_offset))
-		reg_base += reg_offset;
+    n = getprop(devp, "reg-offset", &reg_offset, sizeof(reg_offset));
+    if (n == sizeof(reg_offset))
+        reg_base += reg_offset;
 
-	n = getprop(devp, "reg-shift", &reg_shift, sizeof(reg_shift));
-	if (n != sizeof(reg_shift))
-		reg_shift = 0;
+    n = getprop(devp, "reg-shift", &reg_shift, sizeof(reg_shift));
+    if (n != sizeof(reg_shift))
+        reg_shift = 0;
 
-	n = getprop(devp, "current-speed", (void *)&spd, sizeof(spd));
-	if (n != sizeof(spd))
-		spd = 9600;
+    n = getprop(devp, "current-speed", (void *)&spd, sizeof(spd));
+    if (n != sizeof(spd))
+        spd = 9600;
 
-	/* should there be a default clock rate?*/
-	n = getprop(devp, "clock-frequency", (void *)&clk, sizeof(clk));
-	if (n != sizeof(clk))
-		return -1;
+    /* should there be a default clock rate?*/
+    n = getprop(devp, "clock-frequency", (void *)&clk, sizeof(clk));
+    if (n != sizeof(clk))
+        return -1;
 
-	divisor = clk / (16 * spd);
+    divisor = clk / (16 * spd);
 
-	/* Access baud rate */
-	out_8(reg_base + (UART_LCR << reg_shift), UART_LCR_DLAB);
+    /* Access baud rate */
+    out_8(reg_base + (UART_LCR << reg_shift), UART_LCR_DLAB);
 
-	/* Baud rate based on input clock */
-	out_8(reg_base + (UART_DLL << reg_shift), divisor & 0xFF);
-	out_8(reg_base + (UART_DLM << reg_shift), divisor >> 8);
+    /* Baud rate based on input clock */
+    out_8(reg_base + (UART_DLL << reg_shift), divisor & 0xFF);
+    out_8(reg_base + (UART_DLM << reg_shift), divisor >> 8);
 
-	/* 8 data, 1 stop, no parity */
-	out_8(reg_base + (UART_LCR << reg_shift), UART_LCR_WLEN8);
+    /* 8 data, 1 stop, no parity */
+    out_8(reg_base + (UART_LCR << reg_shift), UART_LCR_WLEN8);
 
-	/* RTS/DTR */
-	out_8(reg_base + (UART_MCR << reg_shift), UART_MCR_RTS | UART_MCR_DTR);
+    /* RTS/DTR */
+    out_8(reg_base + (UART_MCR << reg_shift), UART_MCR_RTS | UART_MCR_DTR);
 
-	/* Clear transmitter and receiver */
-	out_8(reg_base + (UART_FCR << reg_shift),
-				UART_FCR_CLEAR_XMIT | UART_FCR_CLEAR_RCVR);
-	return 0;
+    /* Clear transmitter and receiver */
+    out_8(reg_base + (UART_FCR << reg_shift),
+          UART_FCR_CLEAR_XMIT | UART_FCR_CLEAR_RCVR);
+    return 0;
 }
 
 /* For virtex, the kernel may be loaded without using a bootloader and if so
    some UARTs need more setup than is provided in the normal console init
 */
-int platform_specific_init(void)
-{
-	void *devp;
-	char devtype[MAX_PROP_LEN];
-	char path[MAX_PATH_LEN];
+int platform_specific_init(void) {
+    void *devp;
+    char devtype[MAX_PROP_LEN];
+    char path[MAX_PATH_LEN];
 
-	devp = finddevice("/chosen");
-	if (devp == NULL)
-		return -1;
+    devp = finddevice("/chosen");
+    if (devp == NULL)
+        return -1;
 
-	if (getprop(devp, "linux,stdout-path", path, MAX_PATH_LEN) > 0) {
-		devp = finddevice(path);
-		if (devp == NULL)
-			return -1;
+    if (getprop(devp, "linux,stdout-path", path, MAX_PATH_LEN) > 0) {
+        devp = finddevice(path);
+        if (devp == NULL)
+            return -1;
 
-		if ((getprop(devp, "device_type", devtype, sizeof(devtype)) > 0)
-				&& !strcmp(devtype, "serial")
-				&& (dt_is_compatible(devp, "ns16550")))
-				virtex_ns16550_console_init(devp);
-	}
-	return 0;
+        if ((getprop(devp, "device_type", devtype, sizeof(devtype)) > 0)
+                && !strcmp(devtype, "serial")
+                && (dt_is_compatible(devp, "ns16550")))
+            virtex_ns16550_console_init(devp);
+    }
+    return 0;
 }

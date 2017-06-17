@@ -42,37 +42,36 @@
 #define HS_CSR_DHA	0x0001
 
 struct slot {
-	u8 number;
-	unsigned int devfn;
-	struct pci_bus *bus;
-	struct pci_dev *dev;
-	unsigned int extracting;
-	struct hotplug_slot *hotplug_slot;
-	struct list_head slot_list;
+    u8 number;
+    unsigned int devfn;
+    struct pci_bus *bus;
+    struct pci_dev *dev;
+    unsigned int extracting;
+    struct hotplug_slot *hotplug_slot;
+    struct list_head slot_list;
 };
 
 struct cpci_hp_controller_ops {
-	int (*query_enum) (void);
-	int (*enable_irq) (void);
-	int (*disable_irq) (void);
-	int (*check_irq) (void *dev_id);
-	int (*hardware_test) (struct slot* slot, u32 value);
-	u8  (*get_power) (struct slot* slot);
-	int (*set_power) (struct slot* slot, int value);
+    int (*query_enum) (void);
+    int (*enable_irq) (void);
+    int (*disable_irq) (void);
+    int (*check_irq) (void *dev_id);
+    int (*hardware_test) (struct slot* slot, u32 value);
+    u8  (*get_power) (struct slot* slot);
+    int (*set_power) (struct slot* slot, int value);
 };
 
 struct cpci_hp_controller {
-	unsigned int irq;
-	unsigned long irq_flags;
-	char *devname;
-	void *dev_id;
-	char *name;
-	struct cpci_hp_controller_ops *ops;
+    unsigned int irq;
+    unsigned long irq_flags;
+    char *devname;
+    void *dev_id;
+    char *name;
+    struct cpci_hp_controller_ops *ops;
 };
 
-static inline const char *slot_name(struct slot *slot)
-{
-	return hotplug_slot_name(slot->hotplug_slot);
+static inline const char *slot_name(struct slot *slot) {
+    return hotplug_slot_name(slot->hotplug_slot);
 }
 
 extern int cpci_hp_register_controller(struct cpci_hp_controller *controller);

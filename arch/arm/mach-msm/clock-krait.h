@@ -42,58 +42,56 @@ static struct div_clk clk_name = {		\
 }
 
 struct hfpll_data {
-	const u32 mode_offset;
-	const u32 l_offset;
-	const u32 m_offset;
-	const u32 n_offset;
-	const u32 user_offset;
-	const u32 droop_offset;
-	const u32 config_offset;
-	const u32 status_offset;
+    const u32 mode_offset;
+    const u32 l_offset;
+    const u32 m_offset;
+    const u32 n_offset;
+    const u32 user_offset;
+    const u32 droop_offset;
+    const u32 config_offset;
+    const u32 status_offset;
 
-	const u32 droop_val;
-	u32 config_val;
-	const u32 user_val;
-	u32 user_vco_mask;
-	unsigned long low_vco_max_rate;
+    const u32 droop_val;
+    u32 config_val;
+    const u32 user_val;
+    u32 user_vco_mask;
+    unsigned long low_vco_max_rate;
 
-	unsigned long min_rate;
-	unsigned long max_rate;
+    unsigned long min_rate;
+    unsigned long max_rate;
 };
 
 struct hfpll_clk {
-	void  * __iomem base;
-	struct hfpll_data const *d;
-	unsigned long	src_rate;
-	int		init_done;
+    void  * __iomem base;
+    struct hfpll_data const *d;
+    unsigned long	src_rate;
+    int		init_done;
 
-	struct clk	c;
+    struct clk	c;
 };
 
-static inline struct hfpll_clk *to_hfpll_clk(struct clk *c)
-{
-	return container_of(c, struct hfpll_clk, c);
+static inline struct hfpll_clk *to_hfpll_clk(struct clk *c) {
+    return container_of(c, struct hfpll_clk, c);
 }
 
 extern struct clk_ops clk_ops_hfpll;
 
 struct avs_data {
-	unsigned long	*rate;
-	u32		*dscr;
-	int		num;
+    unsigned long	*rate;
+    u32		*dscr;
+    int		num;
 };
 
 struct kpss_core_clk {
-	int		id;
-	u32		cp15_iaddr;
-	u32		l2_slp_delay;
-	struct avs_data	*avs_tbl;
-	struct clk	c;
+    int		id;
+    u32		cp15_iaddr;
+    u32		l2_slp_delay;
+    struct avs_data	*avs_tbl;
+    struct clk	c;
 };
 
-static inline struct kpss_core_clk *to_kpss_core_clk(struct clk *c)
-{
-	return container_of(c, struct kpss_core_clk, c);
+static inline struct kpss_core_clk *to_kpss_core_clk(struct clk *c) {
+    return container_of(c, struct kpss_core_clk, c);
 }
 
 extern struct clk_ops clk_ops_kpss_cpu;

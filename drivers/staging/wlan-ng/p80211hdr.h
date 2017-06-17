@@ -148,27 +148,27 @@
 /* Generic 802.11 Header types */
 
 struct p80211_hdr_a3 {
-	u16 fc;
-	u16 dur;
-	u8 a1[ETH_ALEN];
-	u8 a2[ETH_ALEN];
-	u8 a3[ETH_ALEN];
-	u16 seq;
+    u16 fc;
+    u16 dur;
+    u8 a1[ETH_ALEN];
+    u8 a2[ETH_ALEN];
+    u8 a3[ETH_ALEN];
+    u16 seq;
 } __packed;
 
 struct p80211_hdr_a4 {
-	u16 fc;
-	u16 dur;
-	u8 a1[ETH_ALEN];
-	u8 a2[ETH_ALEN];
-	u8 a3[ETH_ALEN];
-	u16 seq;
-	u8 a4[ETH_ALEN];
+    u16 fc;
+    u16 dur;
+    u8 a1[ETH_ALEN];
+    u8 a2[ETH_ALEN];
+    u8 a3[ETH_ALEN];
+    u16 seq;
+    u8 a4[ETH_ALEN];
 } __packed;
 
 union p80211_hdr {
-	struct p80211_hdr_a3 a3;
-	struct p80211_hdr_a4 a4;
+    struct p80211_hdr_a3 a3;
+    struct p80211_hdr_a4 a4;
 } __packed;
 
 /* Frame and header length macros */
@@ -186,28 +186,27 @@ union p80211_hdr {
 #define WLAN_FCS_LEN			4
 
 /* ftcl in HOST order */
-static inline u16 p80211_headerlen(u16 fctl)
-{
-	u16 hdrlen = 0;
+static inline u16 p80211_headerlen(u16 fctl) {
+    u16 hdrlen = 0;
 
-	switch (WLAN_GET_FC_FTYPE(fctl)) {
-	case WLAN_FTYPE_MGMT:
-		hdrlen = WLAN_HDR_A3_LEN;
-		break;
-	case WLAN_FTYPE_DATA:
-		hdrlen = WLAN_HDR_A3_LEN;
-		if (WLAN_GET_FC_TODS(fctl) && WLAN_GET_FC_FROMDS(fctl))
-			hdrlen += ETH_ALEN;
-		break;
-	case WLAN_FTYPE_CTL:
-		hdrlen = WLAN_CTL_FRAMELEN(WLAN_GET_FC_FSTYPE(fctl)) -
-		    WLAN_FCS_LEN;
-		break;
-	default:
-		hdrlen = WLAN_HDR_A3_LEN;
-	}
+    switch (WLAN_GET_FC_FTYPE(fctl)) {
+    case WLAN_FTYPE_MGMT:
+        hdrlen = WLAN_HDR_A3_LEN;
+        break;
+    case WLAN_FTYPE_DATA:
+        hdrlen = WLAN_HDR_A3_LEN;
+        if (WLAN_GET_FC_TODS(fctl) && WLAN_GET_FC_FROMDS(fctl))
+            hdrlen += ETH_ALEN;
+        break;
+    case WLAN_FTYPE_CTL:
+        hdrlen = WLAN_CTL_FRAMELEN(WLAN_GET_FC_FSTYPE(fctl)) -
+                 WLAN_FCS_LEN;
+        break;
+    default:
+        hdrlen = WLAN_HDR_A3_LEN;
+    }
 
-	return hdrlen;
+    return hdrlen;
 }
 
 #endif /* _P80211HDR_H */

@@ -29,9 +29,8 @@
 
 struct pwc_device;
 
-struct pwc_dec1_private
-{
-	int version;
+struct pwc_dec1_private {
+    int version;
 };
 
 void pwc_dec1_init(struct pwc_device *pdev, const unsigned char *cmd);

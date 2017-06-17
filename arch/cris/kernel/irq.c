@@ -45,25 +45,23 @@
  * are re-enabled or not.
  */
 
-asmlinkage void do_IRQ(int irq, struct pt_regs * regs)
-{
-	unsigned long sp;
-	struct pt_regs *old_regs = set_irq_regs(regs);
-	irq_enter();
-	sp = rdsp();
-	if (unlikely((sp & (PAGE_SIZE - 1)) < (PAGE_SIZE/8))) {
-		printk("do_IRQ: stack overflow: %lX\n", sp);
-		show_stack(NULL, (unsigned long *)sp);
-	}
-	generic_handle_irq(irq);
-	irq_exit();
-	set_irq_regs(old_regs);
+asmlinkage void do_IRQ(int irq, struct pt_regs * regs) {
+    unsigned long sp;
+    struct pt_regs *old_regs = set_irq_regs(regs);
+    irq_enter();
+    sp = rdsp();
+    if (unlikely((sp & (PAGE_SIZE - 1)) < (PAGE_SIZE/8))) {
+        printk("do_IRQ: stack overflow: %lX\n", sp);
+        show_stack(NULL, (unsigned long *)sp);
+    }
+    generic_handle_irq(irq);
+    irq_exit();
+    set_irq_regs(old_regs);
 }
 
-void weird_irq(void)
-{
-	local_irq_disable();
-	printk("weird irq\n");
-	while(1);
+void weird_irq(void) {
+    local_irq_disable();
+    printk("weird irq\n");
+    while(1);
 }
 

@@ -25,9 +25,8 @@
  * If no error occurred, the driver remains registered even if
  * no device was claimed during registration.
  */
-int tc_register_driver(struct tc_driver *tdrv)
-{
-	return driver_register(&tdrv->driver);
+int tc_register_driver(struct tc_driver *tdrv) {
+    return driver_register(&tdrv->driver);
 }
 EXPORT_SYMBOL(tc_register_driver);
 
@@ -40,9 +39,8 @@ EXPORT_SYMBOL(tc_register_driver);
  * each device it was responsible for, and marks those devices as
  * driverless.
  */
-void tc_unregister_driver(struct tc_driver *tdrv)
-{
-	driver_unregister(&tdrv->driver);
+void tc_unregister_driver(struct tc_driver *tdrv) {
+    driver_unregister(&tdrv->driver);
 }
 EXPORT_SYMBOL(tc_unregister_driver);
 
@@ -57,19 +55,18 @@ EXPORT_SYMBOL(tc_unregister_driver);
  * tc_device_id structure or %NULL if there is no match.
  */
 const struct tc_device_id *tc_match_device(struct tc_driver *tdrv,
-					   struct tc_dev *tdev)
-{
-	const struct tc_device_id *id = tdrv->id_table;
+        struct tc_dev *tdev) {
+    const struct tc_device_id *id = tdrv->id_table;
 
-	if (id) {
-		while (id->name[0] || id->vendor[0]) {
-			if (strcmp(tdev->name, id->name) == 0 &&
-			    strcmp(tdev->vendor, id->vendor) == 0)
-				return id;
-			id++;
-		}
-	}
-	return NULL;
+    if (id) {
+        while (id->name[0] || id->vendor[0]) {
+            if (strcmp(tdev->name, id->name) == 0 &&
+                    strcmp(tdev->vendor, id->vendor) == 0)
+                return id;
+            id++;
+        }
+    }
+    return NULL;
 }
 EXPORT_SYMBOL(tc_match_device);
 
@@ -83,28 +80,26 @@ EXPORT_SYMBOL(tc_match_device);
  * system is in its list of supported devices.  Returns 1 if there
  * is a match or 0 otherwise.
  */
-static int tc_bus_match(struct device *dev, struct device_driver *drv)
-{
-	struct tc_dev *tdev = to_tc_dev(dev);
-	struct tc_driver *tdrv = to_tc_driver(drv);
-	const struct tc_device_id *id;
+static int tc_bus_match(struct device *dev, struct device_driver *drv) {
+    struct tc_dev *tdev = to_tc_dev(dev);
+    struct tc_driver *tdrv = to_tc_driver(drv);
+    const struct tc_device_id *id;
 
-	id = tc_match_device(tdrv, tdev);
-	if (id)
-		return 1;
+    id = tc_match_device(tdrv, tdev);
+    if (id)
+        return 1;
 
-	return 0;
+    return 0;
 }
 
 struct bus_type tc_bus_type = {
-	.name	= "tc",
-	.match	= tc_bus_match,
+    .name	= "tc",
+    .match	= tc_bus_match,
 };
 EXPORT_SYMBOL(tc_bus_type);
 
-static int __init tc_driver_init(void)
-{
-	return bus_register(&tc_bus_type);
+static int __init tc_driver_init(void) {
+    return bus_register(&tc_bus_type);
 }
 
 postcore_initcall(tc_driver_init);

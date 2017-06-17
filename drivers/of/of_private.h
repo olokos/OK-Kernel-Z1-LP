@@ -30,11 +30,11 @@
  * an entry in aliases_lookup list.
  */
 struct alias_prop {
-	struct list_head link;
-	const char *alias;
-	struct device_node *np;
-	int id;
-	char stem[0];
+    struct list_head link;
+    const char *alias;
+    struct device_node *np;
+    int id;
+    char stem[0];
 };
 
 extern struct mutex of_aliases_mutex;

@@ -68,8 +68,7 @@
 /*---------------------------------------------------------------------------
    Enumeration of the various QoS status types that would be reported to HDD
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     //async: once PE notifies successful TSPEC negotiation, or CSR notifies for
     //successful reassoc, notifies HDD with current QoS Params
     SME_QOS_STATUS_SETUP_SUCCESS_IND = 0,
@@ -147,8 +146,7 @@ typedef enum
 
    From 802.1D/802.11e/WMM specifications (all refer to same table)
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     SME_QOS_WMM_UP_BE      = 0,
     SME_QOS_WMM_UP_BK      = 1,
     SME_QOS_WMM_UP_RESV    = 2,    /* Reserved                              */
@@ -168,8 +166,7 @@ typedef enum
    From 802.11e/WMM specifications
 ---------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     SME_QOS_WMM_TS_DIR_UPLINK   = 0,
     SME_QOS_WMM_TS_DIR_DOWNLINK = 1,
     SME_QOS_WMM_TS_DIR_RESV     = 2,   /* Reserved                          */
@@ -183,8 +180,7 @@ typedef enum
    From 802.11 WMM specification
 ---------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     SME_QOS_WMM_TS_ACK_POLICY_NORMAL_ACK   = 0,
     SME_QOS_WMM_TS_ACK_POLICY_RESV1 = 1,
     SME_QOS_WMM_TS_ACK_POLICY_RESV2     = 2,   /* Reserved                          */
@@ -197,8 +193,7 @@ typedef enum
 
    See suggestive values above
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t              burst_size_defn;
     sme_QosWmmAckPolicyType    ack_policy;
     sme_QosWmmUpType    up;        /* User priority                    */
@@ -210,8 +205,7 @@ typedef struct
 /*---------------------------------------------------------------------------
     The WMM TSPEC Element (from the WMM spec)
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     sme_QosWmmTsInfoType            ts_info;
     v_U16_t                         nominal_msdu_size;
     v_U16_t                         maximum_msdu_size;

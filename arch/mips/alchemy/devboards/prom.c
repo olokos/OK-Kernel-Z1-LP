@@ -42,28 +42,26 @@
 #define ALCHEMY_BOARD_DEFAULT_MEMSIZE	0x08000000
 #endif
 
-void __init prom_init(void)
-{
-	unsigned char *memsize_str;
-	unsigned long memsize;
+void __init prom_init(void) {
+    unsigned char *memsize_str;
+    unsigned long memsize;
 
-	prom_argc = (int)fw_arg0;
-	prom_argv = (char **)fw_arg1;
-	prom_envp = (char **)fw_arg2;
+    prom_argc = (int)fw_arg0;
+    prom_argv = (char **)fw_arg1;
+    prom_envp = (char **)fw_arg2;
 
-	prom_init_cmdline();
-	memsize_str = prom_getenv("memsize");
-	if (!memsize_str || strict_strtoul(memsize_str, 0, &memsize))
-		memsize = ALCHEMY_BOARD_DEFAULT_MEMSIZE;
+    prom_init_cmdline();
+    memsize_str = prom_getenv("memsize");
+    if (!memsize_str || strict_strtoul(memsize_str, 0, &memsize))
+        memsize = ALCHEMY_BOARD_DEFAULT_MEMSIZE;
 
-	add_memory_region(0, memsize, BOOT_MEM_RAM);
+    add_memory_region(0, memsize, BOOT_MEM_RAM);
 }
 
-void prom_putchar(unsigned char c)
-{
+void prom_putchar(unsigned char c) {
 #ifdef CONFIG_MIPS_DB1300
-	alchemy_uart_putchar(AU1300_UART2_PHYS_ADDR, c);
+    alchemy_uart_putchar(AU1300_UART2_PHYS_ADDR, c);
 #else
-	alchemy_uart_putchar(AU1000_UART0_PHYS_ADDR, c);
+    alchemy_uart_putchar(AU1000_UART0_PHYS_ADDR, c);
 #endif
 }

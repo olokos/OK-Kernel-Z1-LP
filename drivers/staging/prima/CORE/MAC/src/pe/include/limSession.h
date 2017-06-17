@@ -53,8 +53,7 @@
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     tSirMacBeaconInterval   beaconInterval;
     tANI_U8                 fShortPreamble;
     tANI_U8                 llaCoexist;
@@ -67,8 +66,7 @@ typedef struct
     tANI_U8                 gHTObssMode;
 } tBeaconParams, *tpBeaconParams;
 
-typedef struct sPESession           // Added to Support BT-AMP
-{
+typedef struct sPESession {         // Added to Support BT-AMP
     /* To check session table is in use or free*/
     tANI_U8                 available;
     tANI_U8                 peSessionId;

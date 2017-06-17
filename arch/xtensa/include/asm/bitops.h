@@ -34,11 +34,10 @@
 
 #if XCHAL_HAVE_NSA
 
-static inline unsigned long __cntlz (unsigned long x)
-{
-	int lz;
-	asm ("nsau %0, %1" : "=r" (lz) : "r" (x));
-	return lz;
+static inline unsigned long __cntlz (unsigned long x) {
+    int lz;
+    asm ("nsau %0, %1" : "=r" (lz) : "r" (x));
+    return lz;
 }
 
 /*
@@ -46,18 +45,16 @@ static inline unsigned long __cntlz (unsigned long x)
  * bit 0 is the LSB of addr; bit 32 is the LSB of (addr+1).
  */
 
-static inline int ffz(unsigned long x)
-{
-	return 31 - __cntlz(~x & -~x);
+static inline int ffz(unsigned long x) {
+    return 31 - __cntlz(~x & -~x);
 }
 
 /*
  * __ffs: Find first bit set in word. Return 0 for bit 0
  */
 
-static inline int __ffs(unsigned long x)
-{
-	return 31 - __cntlz(x & -x);
+static inline int __ffs(unsigned long x) {
+    return 31 - __cntlz(x & -x);
 }
 
 /*
@@ -66,9 +63,8 @@ static inline int __ffs(unsigned long x)
  * differs in spirit from the above ffz (man ffs).
  */
 
-static inline int ffs(unsigned long x)
-{
-	return 32 - __cntlz(x & -x);
+static inline int ffs(unsigned long x) {
+    return 32 - __cntlz(x & -x);
 }
 
 /*
@@ -76,9 +72,8 @@ static inline int ffs(unsigned long x)
  * Note fls(0) = 0, fls(1) = 1, fls(0x80000000) = 32.
  */
 
-static inline int fls (unsigned int x)
-{
-	return 32 - __cntlz(x);
+static inline int fls (unsigned int x) {
+    return 32 - __cntlz(x);
 }
 
 /**
@@ -87,9 +82,8 @@ static inline int fls (unsigned int x)
  *
  * Undefined if no set bit exists, so code should check against 0 first.
  */
-static inline unsigned long __fls(unsigned long word)
-{
-	return 31 - __cntlz(word);
+static inline unsigned long __fls(unsigned long word) {
+    return 31 - __cntlz(word);
 }
 #else
 

@@ -49,8 +49,8 @@
  * inconsistency.
  */
 struct amo {
-        u64 variable;
-        u64 unused[7];
+    u64 variable;
+    u64 unused[7];
 };
 
 

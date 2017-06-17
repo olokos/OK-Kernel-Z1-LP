@@ -53,48 +53,46 @@
 
 #define CCLR0	0x20
 
-static irqreturn_t timer_interrupt(int irq, void *dev_id)
-{
-	h8300_timer_tick();
-	ctrl_bclr(0, TPUBASE + _TSR);
-	return IRQ_HANDLED;
+static irqreturn_t timer_interrupt(int irq, void *dev_id) {
+    h8300_timer_tick();
+    ctrl_bclr(0, TPUBASE + _TSR);
+    return IRQ_HANDLED;
 }
 
 static struct irqaction tpu_irq = {
-	.name		= "tpu",
-	.handler	= timer_interrupt,
-	.flags		= IRQF_DISABLED | IRQF_TIMER,
+    .name		= "tpu",
+    .handler	= timer_interrupt,
+    .flags		= IRQF_DISABLED | IRQF_TIMER,
 };
 
 static const int __initdata divide_rate[] = {
 #if CONFIG_H8300_TPU_CH == 0
-	1,4,16,64,0,0,0,0,
+    1,4,16,64,0,0,0,0,
 #elif (CONFIG_H8300_TPU_CH == 1) || (CONFIG_H8300_TPU_CH == 5)
-	1,4,16,64,0,0,256,0,
+    1,4,16,64,0,0,256,0,
 #elif (CONFIG_H8300_TPU_CH == 2) || (CONFIG_H8300_TPU_CH == 4)
-	1,4,16,64,0,0,0,1024,
+    1,4,16,64,0,0,0,1024,
 #elif CONFIG_H8300_TPU_CH == 3
-	1,4,16,64,0,1024,256,4096,
+    1,4,16,64,0,1024,256,4096,
 #endif
 };
 
-void __init h8300_timer_setup(void)
-{
-	unsigned int cnt;
-	unsigned int div;
+void __init h8300_timer_setup(void) {
+    unsigned int cnt;
+    unsigned int div;
 
-	calc_param(cnt, div, divide_rate, 0x10000);
+    calc_param(cnt, div, divide_rate, 0x10000);
 
-	setup_irq(TPUIRQ, &tpu_irq);
+    setup_irq(TPUIRQ, &tpu_irq);
 
-	/* TPU module enabled */
-	ctrl_bclr(3, MSTPCRH);
+    /* TPU module enabled */
+    ctrl_bclr(3, MSTPCRH);
 
-	ctrl_outb(0, TSTR);
-	ctrl_outb(CCLR0 | div, TPUBASE + _TCR);
-	ctrl_outb(0, TPUBASE + _TMDR);
-	ctrl_outw(0, TPUBASE + _TIOR);
-	ctrl_outb(0x01, TPUBASE + _TIER);
-	ctrl_outw(cnt, TPUBASE + _GRA);
-	ctrl_bset(CONFIG_H8300_TPU_CH, TSTR);
+    ctrl_outb(0, TSTR);
+    ctrl_outb(CCLR0 | div, TPUBASE + _TCR);
+    ctrl_outb(0, TPUBASE + _TMDR);
+    ctrl_outw(0, TPUBASE + _TIOR);
+    ctrl_outb(0x01, TPUBASE + _TIER);
+    ctrl_outw(cnt, TPUBASE + _GRA);
+    ctrl_bset(CONFIG_H8300_TPU_CH, TSTR);
 }

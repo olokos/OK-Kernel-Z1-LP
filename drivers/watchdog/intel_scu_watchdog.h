@@ -43,20 +43,20 @@
 #define FREQ_ADJUSTMENT 8
 
 struct intel_scu_watchdog_dev {
-	ulong driver_open;
-	ulong driver_closed;
-	u32 timer_started;
-	u32 timer_set;
-	u32 threshold;
-	u32 soft_threshold;
-	u32 __iomem *timer_load_count_addr;
-	u32 __iomem *timer_current_value_addr;
-	u32 __iomem *timer_control_addr;
-	u32 __iomem *timer_clear_interrupt_addr;
-	u32 __iomem *timer_interrupt_status_addr;
-	struct sfi_timer_table_entry *timer_tbl_ptr;
-	struct notifier_block intel_scu_notifier;
-	struct miscdevice miscdev;
+    ulong driver_open;
+    ulong driver_closed;
+    u32 timer_started;
+    u32 timer_set;
+    u32 threshold;
+    u32 soft_threshold;
+    u32 __iomem *timer_load_count_addr;
+    u32 __iomem *timer_current_value_addr;
+    u32 __iomem *timer_control_addr;
+    u32 __iomem *timer_clear_interrupt_addr;
+    u32 __iomem *timer_interrupt_status_addr;
+    struct sfi_timer_table_entry *timer_tbl_ptr;
+    struct notifier_block intel_scu_notifier;
+    struct miscdevice miscdev;
 };
 
 extern int sfi_mtimer_num;

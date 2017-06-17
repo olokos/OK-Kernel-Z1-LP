@@ -229,21 +229,21 @@
 #ifndef __ASSEMBLY__
 
 typedef union	hubni_port_error_u {
-	u64	nipe_reg_value;
-	struct {
-	    u64	nipe_rsvd:	26,	/* unused */
-		nipe_lnk_reset:	 1,	/* link reset */
-		nipe_intl_err:	 1,	/* internal error */
-		nipe_bad_msg:	 1,	/* bad message */
-		nipe_bad_dest:	 1,	/* bad dest	*/
-		nipe_fifo_ovfl:	 1,	/* fifo overflow */
-		nipe_rsvd1:	 1,	/* unused */
-		nipe_credit_to:	 4,	/* credit timeout */
-		nipe_tail_to:	 4,	/* tail timeout */
-		nipe_retry_cnt:	 8,	/* retry error count */
-		nipe_cb_cnt:	 8,	/* checkbit error count */
-		nipe_sn_cnt:	 8;	/* sequence number count */
-	} nipe_fields_s;
+    u64	nipe_reg_value;
+    struct {
+        u64	nipe_rsvd:	26,	/* unused */
+             nipe_lnk_reset:	 1,	/* link reset */
+             nipe_intl_err:	 1,	/* internal error */
+             nipe_bad_msg:	 1,	/* bad message */
+             nipe_bad_dest:	 1,	/* bad dest	*/
+             nipe_fifo_ovfl:	 1,	/* fifo overflow */
+             nipe_rsvd1:	 1,	/* unused */
+             nipe_credit_to:	 4,	/* credit timeout */
+             nipe_tail_to:	 4,	/* tail timeout */
+             nipe_retry_cnt:	 8,	/* retry error count */
+             nipe_cb_cnt:	 8,	/* checkbit error count */
+             nipe_sn_cnt:	 8;	/* sequence number count */
+    } nipe_fields_s;
 } hubni_port_error_t;
 
 #define NI_LLP_RETRY_MAX	0xff

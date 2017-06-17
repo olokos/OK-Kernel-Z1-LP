@@ -185,284 +185,284 @@ do {							\
 
 /* List of remote processor supported */
 enum remote_procs {
-	MDM = 1,
-	MDM2 = 2,
-	MDM3 = 3,
-	MDM4 = 4,
-	QSC = 5,
+    MDM = 1,
+    MDM2 = 2,
+    MDM3 = 3,
+    MDM4 = 4,
+    QSC = 5,
 };
 
 struct diag_pkt_header_t {
-	uint8_t cmd_code;
-	uint8_t subsys_id;
-	uint16_t subsys_cmd_code;
+    uint8_t cmd_code;
+    uint8_t subsys_id;
+    uint16_t subsys_cmd_code;
 } __packed;
 
 struct diag_master_table {
-	uint16_t cmd_code;
-	uint16_t subsys_id;
-	uint32_t client_id;
-	uint16_t cmd_code_lo;
-	uint16_t cmd_code_hi;
-	int process_id;
+    uint16_t cmd_code;
+    uint16_t subsys_id;
+    uint32_t client_id;
+    uint16_t cmd_code_lo;
+    uint16_t cmd_code_hi;
+    int process_id;
 };
 
 struct bindpkt_params_per_process {
-	/* Name of the synchronization object associated with this proc */
-	char sync_obj_name[MAX_SYNC_OBJ_NAME_SIZE];
-	uint32_t count;	/* Number of entries in this bind */
-	struct bindpkt_params *params; /* first bind params */
+    /* Name of the synchronization object associated with this proc */
+    char sync_obj_name[MAX_SYNC_OBJ_NAME_SIZE];
+    uint32_t count;	/* Number of entries in this bind */
+    struct bindpkt_params *params; /* first bind params */
 };
 
 struct bindpkt_params {
-	uint16_t cmd_code;
-	uint16_t subsys_id;
-	uint16_t cmd_code_lo;
-	uint16_t cmd_code_hi;
-	/* For Central Routing, used to store Processor number */
-	uint16_t proc_id;
-	uint32_t event_id;
-	uint32_t log_code;
-	/* For Central Routing, used to store SMD channel pointer */
-	uint32_t client_id;
+    uint16_t cmd_code;
+    uint16_t subsys_id;
+    uint16_t cmd_code_lo;
+    uint16_t cmd_code_hi;
+    /* For Central Routing, used to store Processor number */
+    uint16_t proc_id;
+    uint32_t event_id;
+    uint32_t log_code;
+    /* For Central Routing, used to store SMD channel pointer */
+    uint32_t client_id;
 };
 
 struct diag_write_device {
-	void *buf;
-	int length;
+    void *buf;
+    int length;
 };
 
 struct diag_client_map {
-	char name[20];
-	int pid;
+    char name[20];
+    int pid;
 };
 
 struct real_time_vote_t {
-	uint16_t proc;
-	uint8_t real_time_vote;
+    uint16_t proc;
+    uint8_t real_time_vote;
 };
 
 /* This structure is defined in USB header file */
 #ifndef CONFIG_DIAG_OVER_USB
 struct diag_request {
-	char *buf;
-	int length;
-	int actual;
-	int status;
-	void *context;
+    char *buf;
+    int length;
+    int actual;
+    int status;
+    void *context;
 };
 #endif
 
 struct diag_smd_info {
-	int peripheral;	/* The peripheral this smd channel communicates with */
-	int type;	/* The type of smd channel (data, control, dci) */
-	uint16_t peripheral_mask;
-	int encode_hdlc; /* Whether data is raw and needs to be hdlc encoded */
+    int peripheral;	/* The peripheral this smd channel communicates with */
+    int type;	/* The type of smd channel (data, control, dci) */
+    uint16_t peripheral_mask;
+    int encode_hdlc; /* Whether data is raw and needs to be hdlc encoded */
 
-	smd_channel_t *ch;
-	smd_channel_t *ch_save;
+    smd_channel_t *ch;
+    smd_channel_t *ch_save;
 
-	struct mutex smd_ch_mutex;
+    struct mutex smd_ch_mutex;
 
-	int in_busy_1;
-	int in_busy_2;
-	spinlock_t in_busy_lock;
+    int in_busy_1;
+    int in_busy_2;
+    spinlock_t in_busy_lock;
 
-	unsigned char *buf_in_1;
-	unsigned char *buf_in_2;
+    unsigned char *buf_in_1;
+    unsigned char *buf_in_2;
 
-	unsigned char *buf_in_1_raw;
-	unsigned char *buf_in_2_raw;
+    unsigned char *buf_in_1_raw;
+    unsigned char *buf_in_2_raw;
 
-	unsigned int buf_in_1_size;
-	unsigned int buf_in_2_size;
+    unsigned int buf_in_1_size;
+    unsigned int buf_in_2_size;
 
-	unsigned int buf_in_1_raw_size;
-	unsigned int buf_in_2_raw_size;
+    unsigned int buf_in_1_raw_size;
+    unsigned int buf_in_2_raw_size;
 
-	struct diag_request *write_ptr_1;
-	struct diag_request *write_ptr_2;
+    struct diag_request *write_ptr_1;
+    struct diag_request *write_ptr_2;
 
-	struct workqueue_struct *wq;
+    struct workqueue_struct *wq;
 
-	struct work_struct diag_read_smd_work;
-	struct work_struct diag_notify_update_smd_work;
-	int notify_context;
-	struct work_struct diag_general_smd_work;
-	int general_context;
+    struct work_struct diag_read_smd_work;
+    struct work_struct diag_notify_update_smd_work;
+    int notify_context;
+    struct work_struct diag_general_smd_work;
+    int general_context;
 
-	/*
-	 * Function ptr for function to call to process the data that
-	 * was just read from the smd channel
-	 */
-	int (*process_smd_read_data)(struct diag_smd_info *smd_info,
-						void *buf, int num_bytes);
+    /*
+     * Function ptr for function to call to process the data that
+     * was just read from the smd channel
+     */
+    int (*process_smd_read_data)(struct diag_smd_info *smd_info,
+                                 void *buf, int num_bytes);
 };
 
 struct diagchar_dev {
 
-	/* State for the char driver */
-	unsigned int major;
-	unsigned int minor_start;
-	int num;
-	struct cdev *cdev;
-	char *name;
-	int dropped_count;
-	struct class *diagchar_class;
-	struct device *diag_dev;
-	int ref_count;
-	struct mutex diagchar_mutex;
-	wait_queue_head_t wait_q;
-	wait_queue_head_t smd_wait_q;
-	struct diag_client_map *client_map;
-	int *data_ready;
-	int num_clients;
-	int polling_reg_flag;
-	struct diag_write_device *buf_tbl;
-	unsigned int buf_tbl_size;
-	int use_device_tree;
-	int supports_separate_cmdrsp;
-	int supports_apps_hdlc_encoding;
-	/* The state requested in the STM command */
-	int stm_state_requested[NUM_STM_PROCESSORS];
-	/* The current STM state */
-	int stm_state[NUM_STM_PROCESSORS];
-	/* Whether or not the peripheral supports STM */
-	int peripheral_supports_stm[NUM_SMD_CONTROL_CHANNELS];
-	/* DCI related variables */
-	struct list_head dci_req_list;
-	struct list_head dci_client_list;
-	int dci_tag;
-	int dci_client_id;
-	struct mutex dci_mutex;
-	int num_dci_client;
-	unsigned char *apps_dci_buf;
-	int dci_state;
-	struct workqueue_struct *diag_dci_wq;
-	/* Memory pool parameters */
-	unsigned int itemsize;
-	unsigned int poolsize;
-	unsigned int itemsize_hdlc;
-	unsigned int poolsize_hdlc;
-	unsigned int itemsize_user;
-	unsigned int poolsize_user;
-	unsigned int itemsize_write_struct;
-	unsigned int poolsize_write_struct;
-	unsigned int itemsize_dci;
-	unsigned int poolsize_dci;
-	unsigned int debug_flag;
-	/* State for the mempool for the char driver */
-	mempool_t *diagpool;
-	mempool_t *diag_hdlc_pool;
-	mempool_t *diag_user_pool;
-	mempool_t *diag_write_struct_pool;
-	mempool_t *diag_dci_pool;
-	spinlock_t diag_mem_lock;
-	int count;
-	int count_hdlc_pool;
-	int count_user_pool;
-	int count_write_struct_pool;
-	int count_dci_pool;
-	int used;
-	/* Buffers for masks */
-	struct mutex diag_cntl_mutex;
-	struct diag_ctrl_event_mask *event_mask;
-	struct diag_ctrl_log_mask *log_mask;
-	struct diag_ctrl_msg_mask *msg_mask;
-	struct diag_ctrl_feature_mask *feature_mask;
-	struct mutex log_mask_mutex;
-	/* State for diag forwarding */
-	struct diag_smd_info smd_data[NUM_SMD_DATA_CHANNELS];
-	struct diag_smd_info smd_cntl[NUM_SMD_CONTROL_CHANNELS];
-	struct diag_smd_info smd_dci[NUM_SMD_DCI_CHANNELS];
-	struct diag_smd_info smd_cmd[NUM_SMD_CMD_CHANNELS];
-	struct diag_smd_info smd_dci_cmd[NUM_SMD_DCI_CMD_CHANNELS];
-	int rcvd_feature_mask[NUM_SMD_CONTROL_CHANNELS];
-	int separate_cmdrsp[NUM_SMD_CONTROL_CHANNELS];
-	unsigned char *usb_buf_out;
-	unsigned char *apps_rsp_buf;
-	unsigned char *user_space_data_buf;
-	/* buffer for updating mask to peripherals */
-	unsigned char *buf_msg_mask_update;
-	unsigned char *buf_log_mask_update;
-	unsigned char *buf_event_mask_update;
-	unsigned char *buf_feature_mask_update;
-	int read_len_legacy;
-	struct mutex diag_hdlc_mutex;
-	unsigned char *hdlc_buf;
-	unsigned hdlc_count;
-	unsigned hdlc_escape;
-	int in_busy_pktdata;
-	/* Variables for non real time mode */
-	int real_time_mode;
-	int real_time_update_busy;
-	uint16_t proc_active_mask;
-	uint16_t proc_rt_vote_mask;
-	struct mutex real_time_mutex;
-	struct work_struct diag_real_time_work;
-	struct workqueue_struct *diag_real_time_wq;
+    /* State for the char driver */
+    unsigned int major;
+    unsigned int minor_start;
+    int num;
+    struct cdev *cdev;
+    char *name;
+    int dropped_count;
+    struct class *diagchar_class;
+    struct device *diag_dev;
+    int ref_count;
+    struct mutex diagchar_mutex;
+    wait_queue_head_t wait_q;
+    wait_queue_head_t smd_wait_q;
+    struct diag_client_map *client_map;
+    int *data_ready;
+    int num_clients;
+    int polling_reg_flag;
+    struct diag_write_device *buf_tbl;
+    unsigned int buf_tbl_size;
+    int use_device_tree;
+    int supports_separate_cmdrsp;
+    int supports_apps_hdlc_encoding;
+    /* The state requested in the STM command */
+    int stm_state_requested[NUM_STM_PROCESSORS];
+    /* The current STM state */
+    int stm_state[NUM_STM_PROCESSORS];
+    /* Whether or not the peripheral supports STM */
+    int peripheral_supports_stm[NUM_SMD_CONTROL_CHANNELS];
+    /* DCI related variables */
+    struct list_head dci_req_list;
+    struct list_head dci_client_list;
+    int dci_tag;
+    int dci_client_id;
+    struct mutex dci_mutex;
+    int num_dci_client;
+    unsigned char *apps_dci_buf;
+    int dci_state;
+    struct workqueue_struct *diag_dci_wq;
+    /* Memory pool parameters */
+    unsigned int itemsize;
+    unsigned int poolsize;
+    unsigned int itemsize_hdlc;
+    unsigned int poolsize_hdlc;
+    unsigned int itemsize_user;
+    unsigned int poolsize_user;
+    unsigned int itemsize_write_struct;
+    unsigned int poolsize_write_struct;
+    unsigned int itemsize_dci;
+    unsigned int poolsize_dci;
+    unsigned int debug_flag;
+    /* State for the mempool for the char driver */
+    mempool_t *diagpool;
+    mempool_t *diag_hdlc_pool;
+    mempool_t *diag_user_pool;
+    mempool_t *diag_write_struct_pool;
+    mempool_t *diag_dci_pool;
+    spinlock_t diag_mem_lock;
+    int count;
+    int count_hdlc_pool;
+    int count_user_pool;
+    int count_write_struct_pool;
+    int count_dci_pool;
+    int used;
+    /* Buffers for masks */
+    struct mutex diag_cntl_mutex;
+    struct diag_ctrl_event_mask *event_mask;
+    struct diag_ctrl_log_mask *log_mask;
+    struct diag_ctrl_msg_mask *msg_mask;
+    struct diag_ctrl_feature_mask *feature_mask;
+    struct mutex log_mask_mutex;
+    /* State for diag forwarding */
+    struct diag_smd_info smd_data[NUM_SMD_DATA_CHANNELS];
+    struct diag_smd_info smd_cntl[NUM_SMD_CONTROL_CHANNELS];
+    struct diag_smd_info smd_dci[NUM_SMD_DCI_CHANNELS];
+    struct diag_smd_info smd_cmd[NUM_SMD_CMD_CHANNELS];
+    struct diag_smd_info smd_dci_cmd[NUM_SMD_DCI_CMD_CHANNELS];
+    int rcvd_feature_mask[NUM_SMD_CONTROL_CHANNELS];
+    int separate_cmdrsp[NUM_SMD_CONTROL_CHANNELS];
+    unsigned char *usb_buf_out;
+    unsigned char *apps_rsp_buf;
+    unsigned char *user_space_data_buf;
+    /* buffer for updating mask to peripherals */
+    unsigned char *buf_msg_mask_update;
+    unsigned char *buf_log_mask_update;
+    unsigned char *buf_event_mask_update;
+    unsigned char *buf_feature_mask_update;
+    int read_len_legacy;
+    struct mutex diag_hdlc_mutex;
+    unsigned char *hdlc_buf;
+    unsigned hdlc_count;
+    unsigned hdlc_escape;
+    int in_busy_pktdata;
+    /* Variables for non real time mode */
+    int real_time_mode;
+    int real_time_update_busy;
+    uint16_t proc_active_mask;
+    uint16_t proc_rt_vote_mask;
+    struct mutex real_time_mutex;
+    struct work_struct diag_real_time_work;
+    struct workqueue_struct *diag_real_time_wq;
 #ifdef CONFIG_DIAG_OVER_USB
-	int usb_connected;
-	struct usb_diag_ch *legacy_ch;
-	struct work_struct diag_proc_hdlc_work;
-	struct work_struct diag_read_work;
-	struct work_struct diag_usb_connect_work;
-	struct work_struct diag_usb_disconnect_work;
+    int usb_connected;
+    struct usb_diag_ch *legacy_ch;
+    struct work_struct diag_proc_hdlc_work;
+    struct work_struct diag_read_work;
+    struct work_struct diag_usb_connect_work;
+    struct work_struct diag_usb_disconnect_work;
 #endif
-	struct workqueue_struct *diag_wq;
-	struct workqueue_struct *diag_usb_wq;
-	struct work_struct diag_drain_work;
-	struct workqueue_struct *diag_cntl_wq;
-	uint8_t *msg_masks;
-	uint8_t msg_status;
-	uint8_t *log_masks;
-	uint8_t log_status;
-	uint8_t *event_masks;
-	uint8_t event_status;
-	uint8_t log_on_demand_support;
-	struct diag_master_table *table;
-	uint8_t *pkt_buf;
-	int pkt_length;
-	uint8_t *dci_pkt_buf; /* For Apps DCI packets */
-	uint32_t dci_pkt_length;
-	int in_busy_dcipktdata;
-	struct diag_request *usb_read_ptr;
-	struct diag_request *write_ptr_svc;
-	int logging_mode;
-	int mask_check;
-	int logging_process_id;
-	struct task_struct *socket_process;
-	struct task_struct *callback_process;
+    struct workqueue_struct *diag_wq;
+    struct workqueue_struct *diag_usb_wq;
+    struct work_struct diag_drain_work;
+    struct workqueue_struct *diag_cntl_wq;
+    uint8_t *msg_masks;
+    uint8_t msg_status;
+    uint8_t *log_masks;
+    uint8_t log_status;
+    uint8_t *event_masks;
+    uint8_t event_status;
+    uint8_t log_on_demand_support;
+    struct diag_master_table *table;
+    uint8_t *pkt_buf;
+    int pkt_length;
+    uint8_t *dci_pkt_buf; /* For Apps DCI packets */
+    uint32_t dci_pkt_length;
+    int in_busy_dcipktdata;
+    struct diag_request *usb_read_ptr;
+    struct diag_request *write_ptr_svc;
+    int logging_mode;
+    int mask_check;
+    int logging_process_id;
+    struct task_struct *socket_process;
+    struct task_struct *callback_process;
 #ifdef CONFIG_DIAG_SDIO_PIPE
-	unsigned char *buf_in_sdio;
-	unsigned char *usb_buf_mdm_out;
-	struct sdio_channel *sdio_ch;
-	int read_len_mdm;
-	int in_busy_sdio;
-	struct usb_diag_ch *mdm_ch;
-	struct work_struct diag_read_mdm_work;
-	struct workqueue_struct *diag_sdio_wq;
-	struct work_struct diag_read_sdio_work;
-	struct work_struct diag_close_sdio_work;
-	struct diag_request *usb_read_mdm_ptr;
-	struct diag_request *write_ptr_mdm;
+    unsigned char *buf_in_sdio;
+    unsigned char *usb_buf_mdm_out;
+    struct sdio_channel *sdio_ch;
+    int read_len_mdm;
+    int in_busy_sdio;
+    struct usb_diag_ch *mdm_ch;
+    struct work_struct diag_read_mdm_work;
+    struct workqueue_struct *diag_sdio_wq;
+    struct work_struct diag_read_sdio_work;
+    struct work_struct diag_close_sdio_work;
+    struct diag_request *usb_read_mdm_ptr;
+    struct diag_request *write_ptr_mdm;
 #endif
 #ifdef CONFIG_DIAGFWD_BRIDGE_CODE
-	/* common for all bridges */
-	struct work_struct diag_connect_work;
-	struct work_struct diag_disconnect_work;
-	/* SGLTE variables */
-	int lcid;
-	unsigned char *buf_in_smux;
-	int in_busy_smux;
-	int diag_smux_enabled;
-	int smux_connected;
-	struct diag_request *write_ptr_mdm;
+    /* common for all bridges */
+    struct work_struct diag_connect_work;
+    struct work_struct diag_disconnect_work;
+    /* SGLTE variables */
+    int lcid;
+    unsigned char *buf_in_smux;
+    int in_busy_smux;
+    int diag_smux_enabled;
+    int smux_connected;
+    struct diag_request *write_ptr_mdm;
 #endif
-	/* Wakeup source related variables */
-	spinlock_t ws_lock;
-	int ws_ref_count;
-	int copy_count;
+    /* Wakeup source related variables */
+    spinlock_t ws_lock;
+    int ws_ref_count;
+    int copy_count;
 };
 
 extern struct diag_bridge_dev *diag_bridge;

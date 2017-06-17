@@ -15,14 +15,12 @@
 
 #define RTC_PORT(x)	(0x70 + (x))
 
-static unsigned char CMOS_READ(unsigned long addr)
-{
-	return mace->isa.rtc[addr << 8];
+static unsigned char CMOS_READ(unsigned long addr) {
+    return mace->isa.rtc[addr << 8];
 }
 
-static inline void CMOS_WRITE(unsigned char data, unsigned long addr)
-{
-	mace->isa.rtc[addr << 8] = data;
+static inline void CMOS_WRITE(unsigned char data, unsigned long addr) {
+    mace->isa.rtc[addr << 8] = data;
 }
 
 /*

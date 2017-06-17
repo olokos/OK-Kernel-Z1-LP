@@ -27,46 +27,46 @@
 #define MDP3_MAX_BUF_QUEUE 8
 
 struct mdp3_buffer_queue {
-	struct mdp3_img_data img_data[MDP3_MAX_BUF_QUEUE];
-	int count;
-	int push_idx;
-	int pop_idx;
+    struct mdp3_img_data img_data[MDP3_MAX_BUF_QUEUE];
+    int count;
+    int push_idx;
+    int pop_idx;
 };
 
 struct mdp3_session_data {
-	struct mutex lock;
-	int status;
-	struct mdp3_dma *dma;
-	struct mdss_panel_data *panel;
-	struct mdp3_intf *intf;
-	struct msm_fb_data_type *mfd;
-	ktime_t vsync_time;
-	struct timer_list vsync_timer;
-	int vsync_period;
-	struct sysfs_dirent *vsync_event_sd;
-	struct mdp_overlay overlay;
-	struct mdp_overlay req_overlay;
-	struct mdp3_buffer_queue bufq_in;
-	struct mdp3_buffer_queue bufq_out;
-	struct work_struct clk_off_work;
-	struct work_struct dma_done_work;
-	atomic_t dma_done_cnt;
-	int histo_status;
-	struct mutex histo_lock;
-	int lut_sel;
-	int cc_vect_sel;
-	bool vsync_before_commit;
-	bool first_commit;
-	int clk_on;
-	struct blocking_notifier_head notifier_head;
+    struct mutex lock;
+    int status;
+    struct mdp3_dma *dma;
+    struct mdss_panel_data *panel;
+    struct mdp3_intf *intf;
+    struct msm_fb_data_type *mfd;
+    ktime_t vsync_time;
+    struct timer_list vsync_timer;
+    int vsync_period;
+    struct sysfs_dirent *vsync_event_sd;
+    struct mdp_overlay overlay;
+    struct mdp_overlay req_overlay;
+    struct mdp3_buffer_queue bufq_in;
+    struct mdp3_buffer_queue bufq_out;
+    struct work_struct clk_off_work;
+    struct work_struct dma_done_work;
+    atomic_t dma_done_cnt;
+    int histo_status;
+    struct mutex histo_lock;
+    int lut_sel;
+    int cc_vect_sel;
+    bool vsync_before_commit;
+    bool first_commit;
+    int clk_on;
+    struct blocking_notifier_head notifier_head;
 
-	int vsync_enabled;
-	atomic_t vsync_countdown; /* Used to count down  */
-	bool in_splash_screen;
+    int vsync_enabled;
+    atomic_t vsync_countdown; /* Used to count down  */
+    bool in_splash_screen;
 
-	bool dma_active;
-	struct completion dma_completion;
-	int (*wait_for_dma_done)(struct mdp3_session_data *session);
+    bool dma_active;
+    struct completion dma_completion;
+    int (*wait_for_dma_done)(struct mdp3_session_data *session);
 };
 
 int mdp3_ctrl_init(struct msm_fb_data_type *mfd);

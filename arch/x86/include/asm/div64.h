@@ -39,23 +39,22 @@
 	__mod;							\
 })
 
-static inline u64 div_u64_rem(u64 dividend, u32 divisor, u32 *remainder)
-{
-	union {
-		u64 v64;
-		u32 v32[2];
-	} d = { dividend };
-	u32 upper;
+static inline u64 div_u64_rem(u64 dividend, u32 divisor, u32 *remainder) {
+    union {
+        u64 v64;
+        u32 v32[2];
+    } d = { dividend };
+    u32 upper;
 
-	upper = d.v32[1];
-	d.v32[1] = 0;
-	if (upper >= divisor) {
-		d.v32[1] = upper / divisor;
-		upper %= divisor;
-	}
-	asm ("divl %2" : "=a" (d.v32[0]), "=d" (*remainder) :
-		"rm" (divisor), "0" (d.v32[0]), "1" (upper));
-	return d.v64;
+    upper = d.v32[1];
+    d.v32[1] = 0;
+    if (upper >= divisor) {
+        d.v32[1] = upper / divisor;
+        upper %= divisor;
+    }
+    asm ("divl %2" : "=a" (d.v32[0]), "=d" (*remainder) :
+         "rm" (divisor), "0" (d.v32[0]), "1" (upper));
+    return d.v64;
 }
 #define div_u64_rem	div_u64_rem
 

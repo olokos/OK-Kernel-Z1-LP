@@ -16,10 +16,10 @@
 #include <asm/bootinfo.h>
 
 struct mips_machine {
-	unsigned long		mach_type;
-	const char		*mach_id;
-	const char		*mach_name;
-	void			(*mach_setup)(void);
+    unsigned long		mach_type;
+    const char		*mach_id;
+    const char		*mach_name;
+    void			(*mach_setup)(void);
 };
 
 #define MIPS_MACHINE(_type, _id, _name, _setup)			\
@@ -45,10 +45,14 @@ void mips_machine_setup(void) __init;
 void mips_set_machine_name(const char *name) __init;
 char *mips_get_machine_name(void);
 #else
-static inline int mips_machtype_setup(char *id) { return 1; }
+static inline int mips_machtype_setup(char *id) {
+    return 1;
+}
 static inline void mips_machine_setup(void) { }
 static inline void mips_set_machine_name(const char *name) { }
-static inline char *mips_get_machine_name(void) { return NULL; }
+static inline char *mips_get_machine_name(void) {
+    return NULL;
+}
 #endif /* CONFIG_MIPS_MACHINE */
 
 #endif /* __ASM_MIPS_MACHINE_H */

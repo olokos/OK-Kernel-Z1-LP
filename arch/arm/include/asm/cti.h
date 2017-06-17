@@ -50,9 +50,9 @@
  * cti struct used to operate cti registers.
  */
 struct cti {
-	void __iomem *base;
-	int irq;
-	int trig_out_for_irq;
+    void __iomem *base;
+    int irq;
+    int trig_out_for_irq;
 };
 
 /**
@@ -67,11 +67,10 @@ struct cti {
  * @base, @irq and @trig_out to cti.
  */
 static inline void cti_init(struct cti *cti,
-	void __iomem *base, int irq, int trig_out)
-{
-	cti->base = base;
-	cti->irq  = irq;
-	cti->trig_out_for_irq = trig_out;
+                            void __iomem *base, int irq, int trig_out) {
+    cti->base = base;
+    cti->irq  = irq;
+    cti->trig_out_for_irq = trig_out;
 }
 
 /**
@@ -85,18 +84,17 @@ static inline void cti_init(struct cti *cti,
  * out of @trig_out using the channel @chan.
  */
 static inline void cti_map_trigger(struct cti *cti,
-	int trig_in, int trig_out, int chan)
-{
-	void __iomem *base = cti->base;
-	unsigned long val;
+                                   int trig_in, int trig_out, int chan) {
+    void __iomem *base = cti->base;
+    unsigned long val;
 
-	val = __raw_readl(base + CTIINEN + trig_in * 4);
-	val |= BIT(chan);
-	__raw_writel(val, base + CTIINEN + trig_in * 4);
+    val = __raw_readl(base + CTIINEN + trig_in * 4);
+    val |= BIT(chan);
+    __raw_writel(val, base + CTIINEN + trig_in * 4);
 
-	val = __raw_readl(base + CTIOUTEN + trig_out * 4);
-	val |= BIT(chan);
-	__raw_writel(val, base + CTIOUTEN + trig_out * 4);
+    val = __raw_readl(base + CTIOUTEN + trig_out * 4);
+    val |= BIT(chan);
+    __raw_writel(val, base + CTIOUTEN + trig_out * 4);
 }
 
 /**
@@ -105,9 +103,8 @@ static inline void cti_map_trigger(struct cti *cti,
  *
  * enable the cti module
  */
-static inline void cti_enable(struct cti *cti)
-{
-	__raw_writel(0x1, cti->base + CTICONTROL);
+static inline void cti_enable(struct cti *cti) {
+    __raw_writel(0x1, cti->base + CTICONTROL);
 }
 
 /**
@@ -116,9 +113,8 @@ static inline void cti_enable(struct cti *cti)
  *
  * enable the cti module
  */
-static inline void cti_disable(struct cti *cti)
-{
-	__raw_writel(0, cti->base + CTICONTROL);
+static inline void cti_disable(struct cti *cti) {
+    __raw_writel(0, cti->base + CTICONTROL);
 }
 
 /**
@@ -127,14 +123,13 @@ static inline void cti_disable(struct cti *cti)
  *
  * clear the cti irq
  */
-static inline void cti_irq_ack(struct cti *cti)
-{
-	void __iomem *base = cti->base;
-	unsigned long val;
+static inline void cti_irq_ack(struct cti *cti) {
+    void __iomem *base = cti->base;
+    unsigned long val;
 
-	val = __raw_readl(base + CTIINTACK);
-	val |= BIT(cti->trig_out_for_irq);
-	__raw_writel(val, base + CTIINTACK);
+    val = __raw_readl(base + CTIINTACK);
+    val |= BIT(cti->trig_out_for_irq);
+    __raw_writel(val, base + CTIINTACK);
 }
 
 /**
@@ -144,17 +139,16 @@ static inline void cti_irq_ack(struct cti *cti)
  * unlock the cti module, or else any writes to the cti
  * module is not allowed.
  */
-static inline void cti_unlock(struct cti *cti)
-{
-	void __iomem *base = cti->base;
-	unsigned long val;
+static inline void cti_unlock(struct cti *cti) {
+    void __iomem *base = cti->base;
+    unsigned long val;
 
-	val = __raw_readl(base + LOCKSTATUS);
+    val = __raw_readl(base + LOCKSTATUS);
 
-	if (val & 1) {
-		val = LOCKCODE;
-		__raw_writel(val, base + LOCKACCESS);
-	}
+    if (val & 1) {
+        val = LOCKCODE;
+        __raw_writel(val, base + LOCKACCESS);
+    }
 }
 
 /**
@@ -164,16 +158,15 @@ static inline void cti_unlock(struct cti *cti)
  * lock the cti module, so any writes to the cti
  * module will be not allowed.
  */
-static inline void cti_lock(struct cti *cti)
-{
-	void __iomem *base = cti->base;
-	unsigned long val;
+static inline void cti_lock(struct cti *cti) {
+    void __iomem *base = cti->base;
+    unsigned long val;
 
-	val = __raw_readl(base + LOCKSTATUS);
+    val = __raw_readl(base + LOCKSTATUS);
 
-	if (!(val & 1)) {
-		val = ~LOCKCODE;
-		__raw_writel(val, base + LOCKACCESS);
-	}
+    if (!(val & 1)) {
+        val = ~LOCKCODE;
+        __raw_writel(val, base + LOCKACCESS);
+    }
 }
 #endif

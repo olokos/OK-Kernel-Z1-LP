@@ -134,12 +134,12 @@
 
 /* IDX buffer size should be a multiple of the index entry size from the chip */
 struct cx18_enc_idx_entry {
-	__le32 length;
-	__le32 offset_low;
-	__le32 offset_high;
-	__le32 flags;
-	__le32 pts_low;
-	__le32 pts_high;
+    __le32 length;
+    __le32 offset_low;
+    __le32 offset_high;
+    __le32 flags;
+    __le32 pts_low;
+    __le32 pts_high;
 } __attribute__ ((packed));
 #define CX18_UNIT_ENC_IDX_BUFSIZE \
 	(sizeof(struct cx18_enc_idx_entry) * V4L2_ENC_IDX_ENTRIES)
@@ -255,10 +255,10 @@ struct cx18_enc_idx_entry {
 extern int cx18_debug;
 
 struct cx18_options {
-	int megabytes[CX18_MAX_STREAMS]; /* Size in megabytes of each stream */
-	int cardtype;		/* force card type on load */
-	int tuner;		/* set tuner on load */
-	int radio;		/* enable/disable radio */
+    int megabytes[CX18_MAX_STREAMS]; /* Size in megabytes of each stream */
+    int cardtype;		/* force card type on load */
+    int tuner;		/* set tuner on load */
+    int radio;		/* enable/disable radio */
 };
 
 /* per-mdl bit flags */
@@ -299,49 +299,49 @@ struct cx18_options {
 	(&pos->member == (head))
 
 struct cx18_buffer {
-	struct list_head list;
-	dma_addr_t dma_handle;
-	char *buf;
+    struct list_head list;
+    dma_addr_t dma_handle;
+    char *buf;
 
-	u32 bytesused;
-	u32 readpos;
+    u32 bytesused;
+    u32 readpos;
 };
 
 struct cx18_mdl {
-	struct list_head list;
-	u32 id;		/* index into cx->scb->cpu_mdl[] of 1st cx18_mdl_ent */
+    struct list_head list;
+    u32 id;		/* index into cx->scb->cpu_mdl[] of 1st cx18_mdl_ent */
 
-	unsigned int skipped;
-	unsigned long m_flags;
+    unsigned int skipped;
+    unsigned long m_flags;
 
-	struct list_head buf_list;
-	struct cx18_buffer *curr_buf; /* current buffer in list for reading */
+    struct list_head buf_list;
+    struct cx18_buffer *curr_buf; /* current buffer in list for reading */
 
-	u32 bytesused;
-	u32 readpos;
+    u32 bytesused;
+    u32 readpos;
 };
 
 struct cx18_queue {
-	struct list_head list;
-	atomic_t depth;
-	u32 bytesused;
-	spinlock_t lock;
+    struct list_head list;
+    atomic_t depth;
+    u32 bytesused;
+    spinlock_t lock;
 };
 
 struct cx18_stream; /* forward reference */
 
 struct cx18_dvb {
-	struct cx18_stream *stream;
-	struct dmx_frontend hw_frontend;
-	struct dmx_frontend mem_frontend;
-	struct dmxdev dmxdev;
-	struct dvb_adapter dvb_adapter;
-	struct dvb_demux demux;
-	struct dvb_frontend *fe;
-	struct dvb_net dvbnet;
-	int enabled;
-	int feeding;
-	struct mutex feedlock;
+    struct cx18_stream *stream;
+    struct dmx_frontend hw_frontend;
+    struct dmx_frontend mem_frontend;
+    struct dmxdev dmxdev;
+    struct dvb_adapter dvb_adapter;
+    struct dvb_demux demux;
+    struct dvb_frontend *fe;
+    struct dvb_net dvbnet;
+    int enabled;
+    int feeding;
+    struct mutex feedlock;
 };
 
 struct cx18;	 /* forward reference */
@@ -358,87 +358,85 @@ struct cx18_scb; /* forward reference */
 	     (CX18_F_EWO_MB_STALE_UPON_RECEIPT | CX18_F_EWO_MB_STALE_WHILE_PROC)
 
 struct cx18_in_work_order {
-	struct work_struct work;
-	atomic_t pending;
-	struct cx18 *cx;
-	unsigned long flags;
-	int rpu;
-	struct cx18_mailbox mb;
-	struct cx18_mdl_ack mdl_ack[CX18_MAX_MDL_ACKS];
-	char *str;
+    struct work_struct work;
+    atomic_t pending;
+    struct cx18 *cx;
+    unsigned long flags;
+    int rpu;
+    struct cx18_mailbox mb;
+    struct cx18_mdl_ack mdl_ack[CX18_MAX_MDL_ACKS];
+    char *str;
 };
 
 #define CX18_INVALID_TASK_HANDLE 0xffffffff
 
 struct cx18_stream {
-	/* These first five fields are always set, even if the stream
-	   is not actually created. */
-	struct video_device *video_dev;	/* NULL when stream not created */
-	struct cx18_dvb *dvb;		/* DVB / Digital Transport */
-	struct cx18 *cx; 		/* for ease of use */
-	const char *name;		/* name of the stream */
-	int type;			/* stream type */
-	u32 handle;			/* task handle */
-	unsigned int mdl_base_idx;
+    /* These first five fields are always set, even if the stream
+       is not actually created. */
+    struct video_device *video_dev;	/* NULL when stream not created */
+    struct cx18_dvb *dvb;		/* DVB / Digital Transport */
+    struct cx18 *cx; 		/* for ease of use */
+    const char *name;		/* name of the stream */
+    int type;			/* stream type */
+    u32 handle;			/* task handle */
+    unsigned int mdl_base_idx;
 
-	u32 id;
-	unsigned long s_flags;	/* status flags, see above */
-	int dma;		/* can be PCI_DMA_TODEVICE,
+    u32 id;
+    unsigned long s_flags;	/* status flags, see above */
+    int dma;		/* can be PCI_DMA_TODEVICE,
 				   PCI_DMA_FROMDEVICE or
 				   PCI_DMA_NONE */
-	wait_queue_head_t waitq;
+    wait_queue_head_t waitq;
 
-	/* Buffers */
-	struct list_head buf_pool;	/* buffers not attached to an MDL */
-	u32 buffers;			/* total buffers owned by this stream */
-	u32 buf_size;			/* size in bytes of a single buffer */
+    /* Buffers */
+    struct list_head buf_pool;	/* buffers not attached to an MDL */
+    u32 buffers;			/* total buffers owned by this stream */
+    u32 buf_size;			/* size in bytes of a single buffer */
 
-	/* MDL sizes - all stream MDLs are the same size */
-	u32 bufs_per_mdl;
-	u32 mdl_size;		/* total bytes in all buffers in a mdl */
+    /* MDL sizes - all stream MDLs are the same size */
+    u32 bufs_per_mdl;
+    u32 mdl_size;		/* total bytes in all buffers in a mdl */
 
-	/* MDL Queues */
-	struct cx18_queue q_free;	/* free - in rotation, not committed */
-	struct cx18_queue q_busy;	/* busy - in use by firmware */
-	struct cx18_queue q_full;	/* full - data for user apps */
-	struct cx18_queue q_idle;	/* idle - not in rotation */
+    /* MDL Queues */
+    struct cx18_queue q_free;	/* free - in rotation, not committed */
+    struct cx18_queue q_busy;	/* busy - in use by firmware */
+    struct cx18_queue q_full;	/* full - data for user apps */
+    struct cx18_queue q_idle;	/* idle - not in rotation */
 
-	struct work_struct out_work_order;
+    struct work_struct out_work_order;
 
-	/* Videobuf for YUV video */
-	u32 pixelformat;
-	u32 vb_bytes_per_frame;
-	struct list_head vb_capture;    /* video capture queue */
-	spinlock_t vb_lock;
-	struct timer_list vb_timeout;
+    /* Videobuf for YUV video */
+    u32 pixelformat;
+    u32 vb_bytes_per_frame;
+    struct list_head vb_capture;    /* video capture queue */
+    spinlock_t vb_lock;
+    struct timer_list vb_timeout;
 
-	struct videobuf_queue vbuf_q;
-	spinlock_t vbuf_q_lock; /* Protect vbuf_q */
-	enum v4l2_buf_type vb_type;
+    struct videobuf_queue vbuf_q;
+    spinlock_t vbuf_q_lock; /* Protect vbuf_q */
+    enum v4l2_buf_type vb_type;
 };
 
 struct cx18_videobuf_buffer {
-	/* Common video buffer sub-system struct */
-	struct videobuf_buffer vb;
-	v4l2_std_id tvnorm; /* selected tv norm */
-	u32 bytes_used;
+    /* Common video buffer sub-system struct */
+    struct videobuf_buffer vb;
+    v4l2_std_id tvnorm; /* selected tv norm */
+    u32 bytes_used;
 };
 
 struct cx18_open_id {
-	struct v4l2_fh fh;
-	u32 open_id;
-	int type;
-	struct cx18 *cx;
+    struct v4l2_fh fh;
+    u32 open_id;
+    int type;
+    struct cx18 *cx;
 };
 
-static inline struct cx18_open_id *fh2id(struct v4l2_fh *fh)
-{
-	return container_of(fh, struct cx18_open_id, fh);
+static inline struct cx18_open_id *fh2id(struct v4l2_fh *fh) {
+    return container_of(fh, struct cx18_open_id, fh);
 }
 
-static inline struct cx18_open_id *file2id(struct file *file)
-{
-	return fh2id(file->private_data);
+static inline struct cx18_open_id *file2id(struct file *file) {
+    return fh2id(file->private_data);
 }
 
 /* forward declaration of struct defined in cx18-cards.h */
@@ -497,185 +495,184 @@ static const u32 vbi_hblank_samples_50Hz = 284; /* 4 byte EAV + 280 anc/fill */
 #define CX18_VBI_FRAMES 32
 
 struct vbi_info {
-	/* Current state of v4l2 VBI settings for this device */
-	struct v4l2_format in;
-	struct v4l2_sliced_vbi_format *sliced_in; /* pointer to in.fmt.sliced */
-	u32 count;    /* Count of VBI data lines: 60 Hz: 12 or 50 Hz: 18 */
-	u32 start[2]; /* First VBI data line per field: 10 & 273 or 6 & 318 */
+    /* Current state of v4l2 VBI settings for this device */
+    struct v4l2_format in;
+    struct v4l2_sliced_vbi_format *sliced_in; /* pointer to in.fmt.sliced */
+    u32 count;    /* Count of VBI data lines: 60 Hz: 12 or 50 Hz: 18 */
+    u32 start[2]; /* First VBI data line per field: 10 & 273 or 6 & 318 */
 
-	u32 frame; /* Count of VBI buffers/frames received from Encoder */
+    u32 frame; /* Count of VBI buffers/frames received from Encoder */
 
-	/*
-	 * Vars for creation and insertion of MPEG Private Stream 1 packets
-	 * of sliced VBI data into an MPEG PS
-	 */
+    /*
+     * Vars for creation and insertion of MPEG Private Stream 1 packets
+     * of sliced VBI data into an MPEG PS
+     */
 
-	/* Boolean: create and insert Private Stream 1 packets into the PS */
-	int insert_mpeg;
+    /* Boolean: create and insert Private Stream 1 packets into the PS */
+    int insert_mpeg;
 
-	/*
-	 * Buffer for the maximum of 2 * 18 * packet_size sliced VBI lines.
-	 * Used in cx18-vbi.c only for collecting sliced data, and as a source
-	 * during conversion of sliced VBI data into MPEG Priv Stream 1 packets.
-	 * We don't need to save state here, but the array may have been a bit
-	 * too big (2304 bytes) to alloc from the stack.
-	 */
-	struct v4l2_sliced_vbi_data sliced_data[36];
+    /*
+     * Buffer for the maximum of 2 * 18 * packet_size sliced VBI lines.
+     * Used in cx18-vbi.c only for collecting sliced data, and as a source
+     * during conversion of sliced VBI data into MPEG Priv Stream 1 packets.
+     * We don't need to save state here, but the array may have been a bit
+     * too big (2304 bytes) to alloc from the stack.
+     */
+    struct v4l2_sliced_vbi_data sliced_data[36];
 
-	/*
-	 * A ring buffer of driver-generated MPEG-2 PS
-	 * Program Pack/Private Stream 1 packets for sliced VBI data insertion
-	 * into the MPEG PS stream.
-	 *
-	 * In each sliced_mpeg_data[] buffer is:
-	 * 	16 byte MPEG-2 PS Program Pack Header
-	 * 	16 byte MPEG-2 Private Stream 1 PES Header
-	 * 	 4 byte magic number: "itv0" or "ITV0"
-	 * 	 4 byte first  field line mask, if "itv0"
-	 * 	 4 byte second field line mask, if "itv0"
-	 * 	36 lines, if "ITV0"; or <36 lines, if "itv0"; of sliced VBI data
-	 *
-	 * 	Each line in the payload is
-	 *	 1 byte line header derived from the SDID (WSS, CC, VPS, etc.)
-	 *	42 bytes of line data
-	 *
-	 * That's a maximum 1552 bytes of payload in the Private Stream 1 packet
-	 * which is the payload size a PVR-350 (CX23415) MPEG decoder will
-	 * accept for VBI data. So, including the headers, it's a maximum 1584
-	 * bytes total.
-	 */
+    /*
+     * A ring buffer of driver-generated MPEG-2 PS
+     * Program Pack/Private Stream 1 packets for sliced VBI data insertion
+     * into the MPEG PS stream.
+     *
+     * In each sliced_mpeg_data[] buffer is:
+     * 	16 byte MPEG-2 PS Program Pack Header
+     * 	16 byte MPEG-2 Private Stream 1 PES Header
+     * 	 4 byte magic number: "itv0" or "ITV0"
+     * 	 4 byte first  field line mask, if "itv0"
+     * 	 4 byte second field line mask, if "itv0"
+     * 	36 lines, if "ITV0"; or <36 lines, if "itv0"; of sliced VBI data
+     *
+     * 	Each line in the payload is
+     *	 1 byte line header derived from the SDID (WSS, CC, VPS, etc.)
+     *	42 bytes of line data
+     *
+     * That's a maximum 1552 bytes of payload in the Private Stream 1 packet
+     * which is the payload size a PVR-350 (CX23415) MPEG decoder will
+     * accept for VBI data. So, including the headers, it's a maximum 1584
+     * bytes total.
+     */
 #define CX18_SLICED_MPEG_DATA_MAXSZ	1584
-	/* copy_vbi_buf() needs 8 temp bytes on the end for the worst case */
+    /* copy_vbi_buf() needs 8 temp bytes on the end for the worst case */
 #define CX18_SLICED_MPEG_DATA_BUFSZ	(CX18_SLICED_MPEG_DATA_MAXSZ+8)
-	u8 *sliced_mpeg_data[CX18_VBI_FRAMES];
-	u32 sliced_mpeg_size[CX18_VBI_FRAMES];
+    u8 *sliced_mpeg_data[CX18_VBI_FRAMES];
+    u32 sliced_mpeg_size[CX18_VBI_FRAMES];
 
-	/* Count of Program Pack/Program Stream 1 packets inserted into PS */
-	u32 inserted_frame;
+    /* Count of Program Pack/Program Stream 1 packets inserted into PS */
+    u32 inserted_frame;
 
-	/*
-	 * A dummy driver stream transfer mdl & buffer with a copy of the next
-	 * sliced_mpeg_data[] buffer for output to userland apps.
-	 * Only used in cx18-fileops.c, but its state needs to persist at times.
-	 */
-	struct cx18_mdl sliced_mpeg_mdl;
-	struct cx18_buffer sliced_mpeg_buf;
+    /*
+     * A dummy driver stream transfer mdl & buffer with a copy of the next
+     * sliced_mpeg_data[] buffer for output to userland apps.
+     * Only used in cx18-fileops.c, but its state needs to persist at times.
+     */
+    struct cx18_mdl sliced_mpeg_mdl;
+    struct cx18_buffer sliced_mpeg_buf;
 };
 
 /* Per cx23418, per I2C bus private algo callback data */
 struct cx18_i2c_algo_callback_data {
-	struct cx18 *cx;
-	int bus_index;   /* 0 or 1 for the cx23418's 1st or 2nd I2C bus */
+    struct cx18 *cx;
+    int bus_index;   /* 0 or 1 for the cx23418's 1st or 2nd I2C bus */
 };
 
 #define CX18_MAX_MMIO_WR_RETRIES 10
 
 /* Struct to hold info about cx18 cards */
 struct cx18 {
-	int instance;
-	struct pci_dev *pci_dev;
-	struct v4l2_device v4l2_dev;
-	struct v4l2_subdev *sd_av;     /* A/V decoder/digitizer sub-device */
-	struct v4l2_subdev *sd_extmux; /* External multiplexer sub-dev */
+    int instance;
+    struct pci_dev *pci_dev;
+    struct v4l2_device v4l2_dev;
+    struct v4l2_subdev *sd_av;     /* A/V decoder/digitizer sub-device */
+    struct v4l2_subdev *sd_extmux; /* External multiplexer sub-dev */
 
-	const struct cx18_card *card;	/* card information */
-	const char *card_name;  /* full name of the card */
-	const struct cx18_card_tuner_i2c *card_i2c; /* i2c addresses to probe for tuner */
-	u8 is_50hz;
-	u8 is_60hz;
-	u8 nof_inputs;		/* number of video inputs */
-	u8 nof_audio_inputs;	/* number of audio inputs */
-	u32 v4l2_cap;		/* V4L2 capabilities of card */
-	u32 hw_flags; 		/* Hardware description of the board */
-	unsigned int free_mdl_idx;
-	struct cx18_scb __iomem *scb; /* pointer to SCB */
-	struct mutex epu2apu_mb_lock; /* protect driver to chip mailbox in SCB*/
-	struct mutex epu2cpu_mb_lock; /* protect driver to chip mailbox in SCB*/
+    const struct cx18_card *card;	/* card information */
+    const char *card_name;  /* full name of the card */
+    const struct cx18_card_tuner_i2c *card_i2c; /* i2c addresses to probe for tuner */
+    u8 is_50hz;
+    u8 is_60hz;
+    u8 nof_inputs;		/* number of video inputs */
+    u8 nof_audio_inputs;	/* number of audio inputs */
+    u32 v4l2_cap;		/* V4L2 capabilities of card */
+    u32 hw_flags; 		/* Hardware description of the board */
+    unsigned int free_mdl_idx;
+    struct cx18_scb __iomem *scb; /* pointer to SCB */
+    struct mutex epu2apu_mb_lock; /* protect driver to chip mailbox in SCB*/
+    struct mutex epu2cpu_mb_lock; /* protect driver to chip mailbox in SCB*/
 
-	struct cx18_av_state av_state;
+    struct cx18_av_state av_state;
 
-	/* codec settings */
-	struct cx2341x_handler cxhdl;
-	u32 filter_mode;
-	u32 temporal_strength;
-	u32 spatial_strength;
+    /* codec settings */
+    struct cx2341x_handler cxhdl;
+    u32 filter_mode;
+    u32 temporal_strength;
+    u32 spatial_strength;
 
-	/* dualwatch */
-	unsigned long dualwatch_jiffies;
-	u32 dualwatch_stereo_mode;
+    /* dualwatch */
+    unsigned long dualwatch_jiffies;
+    u32 dualwatch_stereo_mode;
 
-	struct mutex serialize_lock;    /* mutex used to serialize open/close/start/stop/ioctl operations */
-	struct cx18_options options; 	/* User options */
-	int stream_buffers[CX18_MAX_STREAMS]; /* # of buffers for each stream */
-	int stream_buf_size[CX18_MAX_STREAMS]; /* Stream buffer size */
-	struct cx18_stream streams[CX18_MAX_STREAMS]; 	/* Stream data */
-	struct snd_cx18_card *alsa; /* ALSA interface for PCM capture stream */
-	void (*pcm_announce_callback)(struct snd_cx18_card *card, u8 *pcm_data,
-				      size_t num_bytes);
+    struct mutex serialize_lock;    /* mutex used to serialize open/close/start/stop/ioctl operations */
+    struct cx18_options options; 	/* User options */
+    int stream_buffers[CX18_MAX_STREAMS]; /* # of buffers for each stream */
+    int stream_buf_size[CX18_MAX_STREAMS]; /* Stream buffer size */
+    struct cx18_stream streams[CX18_MAX_STREAMS]; 	/* Stream data */
+    struct snd_cx18_card *alsa; /* ALSA interface for PCM capture stream */
+    void (*pcm_announce_callback)(struct snd_cx18_card *card, u8 *pcm_data,
+                                  size_t num_bytes);
 
-	unsigned long i_flags;  /* global cx18 flags */
-	atomic_t ana_capturing;	/* count number of active analog capture streams */
-	atomic_t tot_capturing;	/* total count number of active capture streams */
-	int search_pack_header;
+    unsigned long i_flags;  /* global cx18 flags */
+    atomic_t ana_capturing;	/* count number of active analog capture streams */
+    atomic_t tot_capturing;	/* total count number of active capture streams */
+    int search_pack_header;
 
-	int open_id;		/* incremented each time an open occurs, used as
+    int open_id;		/* incremented each time an open occurs, used as
 				   unique ID. Starts at 1, so 0 can be used as
 				   uninitialized value in the stream->id. */
 
-	u32 base_addr;
+    u32 base_addr;
 
-	u8 card_rev;
-	void __iomem *enc_mem, *reg_mem;
+    u8 card_rev;
+    void __iomem *enc_mem, *reg_mem;
 
-	struct vbi_info vbi;
+    struct vbi_info vbi;
 
-	u64 mpg_data_received;
-	u64 vbi_data_inserted;
+    u64 mpg_data_received;
+    u64 vbi_data_inserted;
 
-	wait_queue_head_t mb_apu_waitq;
-	wait_queue_head_t mb_cpu_waitq;
-	wait_queue_head_t cap_w;
-	/* when the current DMA is finished this queue is woken up */
-	wait_queue_head_t dma_waitq;
+    wait_queue_head_t mb_apu_waitq;
+    wait_queue_head_t mb_cpu_waitq;
+    wait_queue_head_t cap_w;
+    /* when the current DMA is finished this queue is woken up */
+    wait_queue_head_t dma_waitq;
 
-	u32 sw1_irq_mask;
-	u32 sw2_irq_mask;
-	u32 hw2_irq_mask;
+    u32 sw1_irq_mask;
+    u32 sw2_irq_mask;
+    u32 hw2_irq_mask;
 
-	struct workqueue_struct *in_work_queue;
-	char in_workq_name[11]; /* "cx18-NN-in" */
-	struct cx18_in_work_order in_work_order[CX18_MAX_IN_WORK_ORDERS];
-	char epu_debug_str[256]; /* CX18_EPU_DEBUG is rare: use shared space */
+    struct workqueue_struct *in_work_queue;
+    char in_workq_name[11]; /* "cx18-NN-in" */
+    struct cx18_in_work_order in_work_order[CX18_MAX_IN_WORK_ORDERS];
+    char epu_debug_str[256]; /* CX18_EPU_DEBUG is rare: use shared space */
 
-	/* i2c */
-	struct i2c_adapter i2c_adap[2];
-	struct i2c_algo_bit_data i2c_algo[2];
-	struct cx18_i2c_algo_callback_data i2c_algo_cb_data[2];
+    /* i2c */
+    struct i2c_adapter i2c_adap[2];
+    struct i2c_algo_bit_data i2c_algo[2];
+    struct cx18_i2c_algo_callback_data i2c_algo_cb_data[2];
 
-	struct IR_i2c_init_data ir_i2c_init_data;
+    struct IR_i2c_init_data ir_i2c_init_data;
 
-	/* gpio */
-	u32 gpio_dir;
-	u32 gpio_val;
-	struct mutex gpio_lock;
-	struct v4l2_subdev sd_gpiomux;
-	struct v4l2_subdev sd_resetctrl;
+    /* gpio */
+    u32 gpio_dir;
+    u32 gpio_val;
+    struct mutex gpio_lock;
+    struct v4l2_subdev sd_gpiomux;
+    struct v4l2_subdev sd_resetctrl;
 
-	/* v4l2 and User settings */
+    /* v4l2 and User settings */
 
-	/* codec settings */
-	u32 audio_input;
-	u32 active_input;
-	v4l2_std_id std;
-	v4l2_std_id tuner_std;	/* The norm of the tuner (fixed) */
+    /* codec settings */
+    u32 audio_input;
+    u32 active_input;
+    v4l2_std_id std;
+    v4l2_std_id tuner_std;	/* The norm of the tuner (fixed) */
 
-	/* Used for cx18-alsa module loading */
-	struct work_struct request_module_wk;
+    /* Used for cx18-alsa module loading */
+    struct work_struct request_module_wk;
 };
 
-static inline struct cx18 *to_cx18(struct v4l2_device *v4l2_dev)
-{
-	return container_of(v4l2_dev, struct cx18, v4l2_dev);
+static inline struct cx18 *to_cx18(struct v4l2_device *v4l2_dev) {
+    return container_of(v4l2_dev, struct cx18, v4l2_dev);
 }
 
 /* cx18 extensions to be loaded */
@@ -697,9 +694,8 @@ void cx18_read_eeprom(struct cx18 *cx, struct tveeprom *tv);
 int cx18_init_on_first_open(struct cx18 *cx);
 
 /* Test if the current VBI mode is raw (1) or sliced (0) */
-static inline int cx18_raw_vbi(const struct cx18 *cx)
-{
-	return cx->vbi.in.type == V4L2_BUF_TYPE_VBI_CAPTURE;
+static inline int cx18_raw_vbi(const struct cx18 *cx) {
+    return cx->vbi.in.type == V4L2_BUF_TYPE_VBI_CAPTURE;
 }
 
 /* Call the specified callback for all subdevs with a grp_id bit matching the

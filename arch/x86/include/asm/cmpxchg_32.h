@@ -20,18 +20,17 @@
  * instruction to be executed atomically.  We need to have the reader
  * side to see the coherent 64bit value.
  */
-static inline void set_64bit(volatile u64 *ptr, u64 value)
-{
-	u32 low  = value;
-	u32 high = value >> 32;
-	u64 prev = *ptr;
+static inline void set_64bit(volatile u64 *ptr, u64 value) {
+    u32 low  = value;
+    u32 high = value >> 32;
+    u64 prev = *ptr;
 
-	asm volatile("\n1:\t"
-		     LOCK_PREFIX "cmpxchg8b %0\n\t"
-		     "jnz 1b"
-		     : "=m" (*ptr), "+A" (prev)
-		     : "b" (low), "c" (high)
-		     : "memory");
+    asm volatile("\n1:\t"
+                 LOCK_PREFIX "cmpxchg8b %0\n\t"
+                 "jnz 1b"
+                 : "=m" (*ptr), "+A" (prev)
+                 : "b" (low), "c" (high)
+                 : "memory");
 }
 
 #ifdef CONFIG_X86_CMPXCHG
@@ -47,30 +46,28 @@ static inline void set_64bit(volatile u64 *ptr, u64 value)
 					       (unsigned long long)(n)))
 #endif
 
-static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
-{
-	u64 prev;
-	asm volatile(LOCK_PREFIX "cmpxchg8b %1"
-		     : "=A" (prev),
-		       "+m" (*ptr)
-		     : "b" ((u32)new),
-		       "c" ((u32)(new >> 32)),
-		       "0" (old)
-		     : "memory");
-	return prev;
+static inline u64 __cmpxchg64(volatile u64 *ptr, u64 old, u64 new) {
+    u64 prev;
+    asm volatile(LOCK_PREFIX "cmpxchg8b %1"
+                 : "=A" (prev),
+                 "+m" (*ptr)
+                 : "b" ((u32)new),
+                 "c" ((u32)(new >> 32)),
+                 "0" (old)
+                 : "memory");
+    return prev;
 }
 
-static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new)
-{
-	u64 prev;
-	asm volatile("cmpxchg8b %1"
-		     : "=A" (prev),
-		       "+m" (*ptr)
-		     : "b" ((u32)new),
-		       "c" ((u32)(new >> 32)),
-		       "0" (old)
-		     : "memory");
-	return prev;
+static inline u64 __cmpxchg64_local(volatile u64 *ptr, u64 old, u64 new) {
+    u64 prev;
+    asm volatile("cmpxchg8b %1"
+                 : "=A" (prev),
+                 "+m" (*ptr)
+                 : "b" ((u32)new),
+                 "c" ((u32)(new >> 32)),
+                 "0" (old)
+                 : "memory");
+    return prev;
 }
 
 #ifndef CONFIG_X86_CMPXCHG
@@ -85,17 +82,16 @@ extern unsigned long cmpxchg_386_u16(volatile void *, u16, u16);
 extern unsigned long cmpxchg_386_u32(volatile void *, u32, u32);
 
 static inline unsigned long cmpxchg_386(volatile void *ptr, unsigned long old,
-					unsigned long new, int size)
-{
-	switch (size) {
-	case 1:
-		return cmpxchg_386_u8(ptr, old, new);
-	case 2:
-		return cmpxchg_386_u16(ptr, old, new);
-	case 4:
-		return cmpxchg_386_u32(ptr, old, new);
-	}
-	return old;
+                                        unsigned long new, int size) {
+    switch (size) {
+    case 1:
+        return cmpxchg_386_u8(ptr, old, new);
+    case 2:
+        return cmpxchg_386_u16(ptr, old, new);
+    case 4:
+        return cmpxchg_386_u32(ptr, old, new);
+    }
+    return old;
 }
 
 #define cmpxchg(ptr, o, n)						\

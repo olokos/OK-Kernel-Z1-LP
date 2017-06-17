@@ -118,14 +118,13 @@
 #define FH_MEM_CBBC_20_31_UPPER_BOUND		(FH_MEM_LOWER_BOUND + 0xB80)
 
 /* Find TFD CB base pointer for given queue */
-static inline unsigned int FH_MEM_CBBC_QUEUE(unsigned int chnl)
-{
-	if (chnl < 16)
-		return FH_MEM_CBBC_0_15_LOWER_BOUND + 4 * chnl;
-	if (chnl < 20)
-		return FH_MEM_CBBC_16_19_LOWER_BOUND + 4 * (chnl - 16);
-	WARN_ON_ONCE(chnl >= 32);
-	return FH_MEM_CBBC_20_31_LOWER_BOUND + 4 * (chnl - 20);
+static inline unsigned int FH_MEM_CBBC_QUEUE(unsigned int chnl) {
+    if (chnl < 16)
+        return FH_MEM_CBBC_0_15_LOWER_BOUND + 4 * chnl;
+    if (chnl < 20)
+        return FH_MEM_CBBC_16_19_LOWER_BOUND + 4 * (chnl - 16);
+    WARN_ON_ONCE(chnl >= 32);
+    return FH_MEM_CBBC_20_31_LOWER_BOUND + 4 * (chnl - 20);
 }
 
 
@@ -447,11 +446,11 @@ static inline unsigned int FH_MEM_CBBC_QUEUE(unsigned int chnl)
  * 	which was transferred
  */
 struct iwl_rb_status {
-	__le16 closed_rb_num;
-	__le16 closed_fr_num;
-	__le16 finished_rb_num;
-	__le16 finished_fr_nam;
-	__le32 __unused;
+    __le16 closed_rb_num;
+    __le16 closed_fr_num;
+    __le16 finished_rb_num;
+    __le16 finished_fr_nam;
+    __le32 __unused;
 } __packed;
 
 
@@ -461,9 +460,8 @@ struct iwl_rb_status {
 #define IWL_TX_DMA_MASK        DMA_BIT_MASK(36)
 #define IWL_NUM_OF_TBS		20
 
-static inline u8 iwl_get_dma_hi_addr(dma_addr_t addr)
-{
-	return (sizeof(addr) > sizeof(u32) ? (addr >> 16) >> 16 : 0) & 0xF;
+static inline u8 iwl_get_dma_hi_addr(dma_addr_t addr) {
+    return (sizeof(addr) > sizeof(u32) ? (addr >> 16) >> 16 : 0) & 0xF;
 }
 /**
  * struct iwl_tfd_tb transmit buffer descriptor within transmit frame descriptor
@@ -476,8 +474,8 @@ static inline u8 iwl_get_dma_hi_addr(dma_addr_t addr)
  *	     4-15 length of the tx buffer
  */
 struct iwl_tfd_tb {
-	__le32 lo;
-	__le16 hi_n_len;
+    __le32 lo;
+    __le16 hi_n_len;
 } __packed;
 
 /**
@@ -509,10 +507,10 @@ struct iwl_tfd_tb {
  * A maximum of 255 (not 256!) TFDs may be on a queue waiting for Tx.
  */
 struct iwl_tfd {
-	u8 __reserved1[3];
-	u8 num_tbs;
-	struct iwl_tfd_tb tbs[IWL_NUM_OF_TBS];
-	__le32 __pad;
+    u8 __reserved1[3];
+    u8 num_tbs;
+    struct iwl_tfd_tb tbs[IWL_NUM_OF_TBS];
+    __le32 __pad;
 } __packed;
 
 /* Keep Warm Size */
@@ -527,7 +525,7 @@ struct iwl_tfd {
  *	       12-16 - station index
  */
 struct iwlagn_scd_bc_tbl {
-	__le16 tfd_offset[TFD_QUEUE_BC_SIZE];
+    __le16 tfd_offset[TFD_QUEUE_BC_SIZE];
 } __packed;
 
 #endif /* !__iwl_fh_h__ */

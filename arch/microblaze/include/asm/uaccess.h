@@ -68,7 +68,7 @@
  * on our cache or tlb entries.
  */
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -77,10 +77,9 @@ extern unsigned long search_exception_table(unsigned long);
 #ifndef CONFIG_MMU
 
 /* Check against bounds of physical memory */
-static inline int ___range_ok(unsigned long addr, unsigned long size)
-{
-	return ((addr < memory_start) ||
-		((addr + size - 1) > (memory_start + memory_size - 1)));
+static inline int ___range_ok(unsigned long addr, unsigned long size) {
+    return ((addr < memory_start) ||
+            ((addr + size - 1) > (memory_start + memory_size - 1)));
 }
 
 #define __range_ok(addr, size) \
@@ -112,36 +111,34 @@ static inline int ___range_ok(unsigned long addr, unsigned long size)
 #endif
 
 extern unsigned long __copy_tofrom_user(void __user *to,
-		const void __user *from, unsigned long size);
+                                        const void __user *from, unsigned long size);
 
 /* Return: number of not copied bytes, i.e. 0 if OK or non-zero if fail. */
 static inline unsigned long __must_check __clear_user(void __user *to,
-							unsigned long n)
-{
-	/* normal memset with two words to __ex_table */
-	__asm__ __volatile__ (				\
-			"1:	sb	r0, %1, r0;"	\
-			"	addik	%0, %0, -1;"	\
-			"	bneid	%0, 1b;"	\
-			"	addik	%1, %1, 1;"	\
-			"2:			"	\
-			__EX_TABLE_SECTION		\
-			".word	1b,2b;"			\
-			".previous;"			\
-		: "=r"(n), "=r"(to)			\
-		: "0"(n), "1"(to)
-	);
-	return n;
+        unsigned long n) {
+    /* normal memset with two words to __ex_table */
+    __asm__ __volatile__ (				\
+                                        "1:	sb	r0, %1, r0;"	\
+                                        "	addik	%0, %0, -1;"	\
+                                        "	bneid	%0, 1b;"	\
+                                        "	addik	%1, %1, 1;"	\
+                                        "2:			"	\
+                                        __EX_TABLE_SECTION		\
+                                        ".word	1b,2b;"			\
+                                        ".previous;"			\
+                                        : "=r"(n), "=r"(to)			\
+                                        : "0"(n), "1"(to)
+                         );
+    return n;
 }
 
 static inline unsigned long __must_check clear_user(void __user *to,
-							unsigned long n)
-{
-	might_sleep();
-	if (unlikely(!access_ok(VERIFY_WRITE, to, n)))
-		return n;
+        unsigned long n) {
+    might_sleep();
+    if (unlikely(!access_ok(VERIFY_WRITE, to, n)))
+        return n;
 
-	return __clear_user(to, n);
+    return __clear_user(to, n);
 }
 
 /* put_user and get_user macros */
@@ -362,12 +359,11 @@ extern long __user_bad(void);
 		__copy_from_user((to), (from), (n))
 
 static inline long copy_from_user(void *to,
-		const void __user *from, unsigned long n)
-{
-	might_sleep();
-	if (access_ok(VERIFY_READ, from, n))
-		return __copy_from_user(to, from, n);
-	return n;
+                                  const void __user *from, unsigned long n) {
+    might_sleep();
+    if (access_ok(VERIFY_READ, from, n))
+        return __copy_from_user(to, from, n);
+    return n;
 }
 
 #define __copy_to_user(to, from, n)	\
@@ -376,12 +372,11 @@ static inline long copy_from_user(void *to,
 #define __copy_to_user_inatomic(to, from, n) __copy_to_user((to), (from), (n))
 
 static inline long copy_to_user(void __user *to,
-		const void *from, unsigned long n)
-{
-	might_sleep();
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __copy_to_user(to, from, n);
-	return n;
+                                const void *from, unsigned long n) {
+    might_sleep();
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __copy_to_user(to, from, n);
+    return n;
 }
 
 /*
@@ -392,11 +387,10 @@ extern int __strncpy_user(char *to, const char __user *from, int len);
 #define __strncpy_from_user	__strncpy_user
 
 static inline long
-strncpy_from_user(char *dst, const char __user *src, long count)
-{
-	if (!access_ok(VERIFY_READ, src, 1))
-		return -EFAULT;
-	return __strncpy_from_user(dst, src, count);
+strncpy_from_user(char *dst, const char __user *src, long count) {
+    if (!access_ok(VERIFY_READ, src, 1))
+        return -EFAULT;
+    return __strncpy_from_user(dst, src, count);
 }
 
 /*
@@ -406,11 +400,10 @@ strncpy_from_user(char *dst, const char __user *src, long count)
  */
 extern int __strnlen_user(const char __user *sstr, int len);
 
-static inline long strnlen_user(const char __user *src, long n)
-{
-	if (!access_ok(VERIFY_READ, src, 1))
-		return 0;
-	return __strnlen_user(src, n);
+static inline long strnlen_user(const char __user *src, long n) {
+    if (!access_ok(VERIFY_READ, src, 1))
+        return 0;
+    return __strnlen_user(src, n);
 }
 
 #endif  /* __ASSEMBLY__ */

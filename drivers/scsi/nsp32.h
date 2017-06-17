@@ -38,23 +38,23 @@
  * MODEL
  */
 enum {
-	MODEL_IODATA        = 0,
-	MODEL_KME           = 1,
-	MODEL_WORKBIT       = 2,
-	MODEL_LOGITEC       = 3,
-	MODEL_PCI_WORKBIT   = 4,
-	MODEL_PCI_LOGITEC   = 5,
-	MODEL_PCI_MELCO     = 6,
+    MODEL_IODATA        = 0,
+    MODEL_KME           = 1,
+    MODEL_WORKBIT       = 2,
+    MODEL_LOGITEC       = 3,
+    MODEL_PCI_WORKBIT   = 4,
+    MODEL_PCI_LOGITEC   = 5,
+    MODEL_PCI_MELCO     = 6,
 };
 
 static char * nsp32_model[] = {
-	"I-O DATA CBSC-II CardBus card",
-	"KME SCSI CardBus card",
-	"Workbit duo SCSI CardBus card",
-	"Logitec CardBus card with external ROM",
-	"Workbit / I-O DATA PCI card",
-	"Logitec PCI card with external ROM",
-	"Melco CardBus/PCI card with external ROM",
+    "I-O DATA CBSC-II CardBus card",
+    "KME SCSI CardBus card",
+    "Workbit duo SCSI CardBus card",
+    "Logitec CardBus card with external ROM",
+    "Workbit / I-O DATA PCI card",
+    "Logitec PCI card with external ROM",
+    "Melco CardBus/PCI card with external ROM",
 };
 
 
@@ -446,29 +446,29 @@ typedef u16 u16_le;
 #define NSP32_SG_SIZE		SG_ALL
 
 typedef struct _nsp32_sgtable {
-	/* values must be little endian */
-	u32_le addr; /* transfer address */
-	u32_le len;  /* transfer length. BIT(31) is for SGT_END mark */
+    /* values must be little endian */
+    u32_le addr; /* transfer address */
+    u32_le len;  /* transfer length. BIT(31) is for SGT_END mark */
 } __attribute__ ((packed)) nsp32_sgtable;
 
 typedef struct _nsp32_sglun {
-	nsp32_sgtable sgt[NSP32_SG_SIZE+1];	/* SG table */
+    nsp32_sgtable sgt[NSP32_SG_SIZE+1];	/* SG table */
 } __attribute__ ((packed)) nsp32_sglun;
 #define NSP32_SG_TABLE_SIZE (sizeof(nsp32_sgtable) * NSP32_SG_SIZE * MAX_TARGET * MAX_LUN)
 
 /* Auto parameter mode memory map.   */
 /* All values must be little endian. */
 typedef struct _nsp32_autoparam {
-	u8     cdb[4 * 0x10];    /* SCSI Command                      */
-	u32_le msgout;           /* outgoing messages                 */
-	u8     syncreg;          /* sync register value               */
-	u8     ackwidth;         /* ack width register value          */
-	u8     target_id;        /* target/host device id             */
-	u8     sample_reg;       /* hazard killer sampling rate       */
-	u16_le command_control;  /* command control register          */
-	u16_le transfer_control; /* transfer control register         */
-	u32_le sgt_pointer;      /* SG table physical address for DMA */
-	u32_le dummy[2];
+    u8     cdb[4 * 0x10];    /* SCSI Command                      */
+    u32_le msgout;           /* outgoing messages                 */
+    u8     syncreg;          /* sync register value               */
+    u8     ackwidth;         /* ack width register value          */
+    u8     target_id;        /* target/host device id             */
+    u8     sample_reg;       /* hazard killer sampling rate       */
+    u16_le command_control;  /* command control register          */
+    u16_le transfer_control; /* transfer control register         */
+    u32_le sgt_pointer;      /* SG table physical address for DMA */
+    u32_le dummy[2];
 } __attribute__ ((packed)) nsp32_autoparam;  /* must be packed struct */
 
 /*
@@ -494,13 +494,13 @@ typedef struct _nsp32_autoparam {
 #define MSGIN03			BIT(1)		/* Auto Msg In 03 Flag  */
 
 typedef struct _nsp32_lunt {
-	struct scsi_cmnd	*SCpnt;	    /* Current Handling struct scsi_cmnd */
-	unsigned long	 save_datp;  /* Save Data Pointer - saved position from initial address */
-	int		 msgin03;	/* auto msg in 03 flag     */
-	unsigned int	 sg_num;	/* Total number of SG entries */
-	int		 cur_entry;	/* Current SG entry number */
-	nsp32_sglun     *sglun;		/* sg table per lun        */
-	dma_addr_t       sglun_paddr;   /* sglun physical address  */
+    struct scsi_cmnd	*SCpnt;	    /* Current Handling struct scsi_cmnd */
+    unsigned long	 save_datp;  /* Save Data Pointer - saved position from initial address */
+    int		 msgin03;	/* auto msg in 03 flag     */
+    unsigned int	 sg_num;	/* Total number of SG entries */
+    int		 cur_entry;	/* Current SG entry number */
+    nsp32_sglun     *sglun;		/* sg table per lun        */
+    dma_addr_t       sglun_paddr;   /* sglun physical address  */
 } nsp32_lunt;
 
 
@@ -513,11 +513,11 @@ typedef struct _nsp32_lunt {
 
 
 typedef struct _nsp32_sync_table {
-	unsigned char	period_num;	/* period number                  */
-	unsigned char	ackwidth;	/* ack width designated by period */
-	unsigned char	start_period;	/* search range - start period    */
-	unsigned char	end_period;	/* search range - end period      */
-	unsigned char   sample_rate;    /* hazard killer parameter        */
+    unsigned char	period_num;	/* period number                  */
+    unsigned char	ackwidth;	/* ack width designated by period */
+    unsigned char	start_period;	/* search range - start period    */
+    unsigned char	end_period;	/* search range - end period      */
+    unsigned char   sample_rate;    /* hazard killer parameter        */
 } nsp32_sync_table;
 
 
@@ -544,61 +544,61 @@ typedef struct _nsp32_sync_table {
 #define TO_SYNCREG(period, offset) (((period) & 0x0f) << 4 | ((offset) & 0x0f))
 
 typedef struct _nsp32_target {
-	unsigned char	syncreg;	/* value for SYNCREG   */
-	unsigned char	ackwidth;	/* value for ACKWIDTH  */
-	unsigned char   period;         /* sync period (0-255) */
-	unsigned char	offset;		/* sync offset (0-15)  */
-	int		sync_flag;	/* SDTR_*, 0           */
-	int		limit_entry;	/* max speed limit entry designated
+    unsigned char	syncreg;	/* value for SYNCREG   */
+    unsigned char	ackwidth;	/* value for ACKWIDTH  */
+    unsigned char   period;         /* sync period (0-255) */
+    unsigned char	offset;		/* sync offset (0-15)  */
+    int		sync_flag;	/* SDTR_*, 0           */
+    int		limit_entry;	/* max speed limit entry designated
 					   by EEPROM configuration */
-	unsigned char   sample_reg;     /* SREQ hazard killer register */
+    unsigned char   sample_reg;     /* SREQ hazard killer register */
 } nsp32_target;
 
 typedef struct _nsp32_hw_data {
-	int           IrqNumber;
-	int           BaseAddress;
-	int           NumAddress;
-	void __iomem *MmioAddress;
+    int           IrqNumber;
+    int           BaseAddress;
+    int           NumAddress;
+    void __iomem *MmioAddress;
 #define NSP32_MMIO_OFFSET 0x0800
-	unsigned long MmioLength;
+    unsigned long MmioLength;
 
-	struct scsi_cmnd *CurrentSC;
+    struct scsi_cmnd *CurrentSC;
 
-	struct pci_dev             *Pci;
-	const struct pci_device_id *pci_devid;
-	struct Scsi_Host           *Host;
-	spinlock_t                  Lock;
+    struct pci_dev             *Pci;
+    const struct pci_device_id *pci_devid;
+    struct Scsi_Host           *Host;
+    spinlock_t                  Lock;
 
-	char info_str[100];
+    char info_str[100];
 
-	/* allocated memory region */
-	nsp32_sglun      *sg_list;	/* sglist virtuxal address         */
-	dma_addr_t	  sg_paddr;     /* physical address of hw_sg_table */
-	nsp32_autoparam  *autoparam;	/* auto parameter transfer region  */
-	dma_addr_t	  auto_paddr;	/* physical address of autoparam   */
-	int 		  cur_entry;	/* current sgt entry               */
+    /* allocated memory region */
+    nsp32_sglun      *sg_list;	/* sglist virtuxal address         */
+    dma_addr_t	  sg_paddr;     /* physical address of hw_sg_table */
+    nsp32_autoparam  *autoparam;	/* auto parameter transfer region  */
+    dma_addr_t	  auto_paddr;	/* physical address of autoparam   */
+    int 		  cur_entry;	/* current sgt entry               */
 
-	/* target/LUN */
-	nsp32_lunt       *cur_lunt;	/* Current connected LUN table */
-	nsp32_lunt        lunt[MAX_TARGET][MAX_LUN];  /* All LUN table */
+    /* target/LUN */
+    nsp32_lunt       *cur_lunt;	/* Current connected LUN table */
+    nsp32_lunt        lunt[MAX_TARGET][MAX_LUN];  /* All LUN table */
 
-	nsp32_target     *cur_target;	/* Current connected SCSI ID    */
-	nsp32_target	  target[MAX_TARGET];	     /* SCSI ID */
-	int		  cur_id;	/* Current connected target ID  */
-	int		  cur_lun;	/* Current connected target LUN */
+    nsp32_target     *cur_target;	/* Current connected SCSI ID    */
+    nsp32_target	  target[MAX_TARGET];	     /* SCSI ID */
+    int		  cur_id;	/* Current connected target ID  */
+    int		  cur_lun;	/* Current connected target LUN */
 
-	/* behavior setting parameters */
-	int		  trans_method;	/* transfer method flag            */
-	int		  resettime;	/* Reset time                      */
-	int 		  clock;       	/* clock dividing flag             */
-	nsp32_sync_table *synct;	/* sync_table determined by clock  */
-	int		  syncnum;	/* the max number of synct element */
+    /* behavior setting parameters */
+    int		  trans_method;	/* transfer method flag            */
+    int		  resettime;	/* Reset time                      */
+    int 		  clock;       	/* clock dividing flag             */
+    nsp32_sync_table *synct;	/* sync_table determined by clock  */
+    int		  syncnum;	/* the max number of synct element */
 
-	/* message buffer */
-	unsigned char msgoutbuf[MSGOUTBUF_MAX]; /* msgout buffer    */
-	char	      msgout_len;		/* msgoutbuf length */
-	unsigned char msginbuf [MSGINBUF_MAX];	/* megin buffer     */
-	char	      msgin_len;		/* msginbuf length  */
+    /* message buffer */
+    unsigned char msgoutbuf[MSGOUTBUF_MAX]; /* msgout buffer    */
+    char	      msgout_len;		/* msgoutbuf length */
+    unsigned char msginbuf [MSGINBUF_MAX];	/* megin buffer     */
+    char	      msgin_len;		/* msginbuf length  */
 
 } nsp32_hw_data;
 

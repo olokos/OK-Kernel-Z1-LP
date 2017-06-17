@@ -45,61 +45,61 @@
  *BIT 16-31: PACKET_LEN_WITH_PADDING (Bytes)
  */
 struct mux_hdr {
-	__u8	padding_info;
-	__u8	mux_id;
-	__le16	pkt_len_w_padding;
+    __u8	padding_info;
+    __u8	mux_id;
+    __le16	pkt_len_w_padding;
 } __packed;
 
 struct rmnet_ctrl_dev {
 
-	/*for debugging purpose*/
-	char			name[CTRL_DEV_MAX_LEN];
+    /*for debugging purpose*/
+    char			name[CTRL_DEV_MAX_LEN];
 
-	struct cdev		cdev;
-	struct device		*devicep;
-	unsigned		ch_id;
+    struct cdev		cdev;
+    struct device		*devicep;
+    unsigned		ch_id;
 
-	/*to identify the usb device*/
-	unsigned		id;
+    /*to identify the usb device*/
+    unsigned		id;
 
-	struct usb_interface	*intf;
-	unsigned int		int_pipe;
-	struct urb		*rcvurb;
-	struct urb		*inturb;
-	struct usb_anchor	tx_submitted;
-	struct usb_anchor	rx_submitted;
-	void			*rcvbuf;
-	void			*intbuf;
-	struct usb_ctrlrequest	*in_ctlreq;
+    struct usb_interface	*intf;
+    unsigned int		int_pipe;
+    struct urb		*rcvurb;
+    struct urb		*inturb;
+    struct usb_anchor	tx_submitted;
+    struct usb_anchor	rx_submitted;
+    void			*rcvbuf;
+    void			*intbuf;
+    struct usb_ctrlrequest	*in_ctlreq;
 
-	spinlock_t		rx_lock;
-	struct mutex		dev_lock;
-	struct list_head	rx_list;
-	wait_queue_head_t	read_wait_queue;
-	wait_queue_head_t	open_wait_queue;
+    spinlock_t		rx_lock;
+    struct mutex		dev_lock;
+    struct list_head	rx_list;
+    wait_queue_head_t	read_wait_queue;
+    wait_queue_head_t	open_wait_queue;
 
-	struct workqueue_struct	*wq;
-	struct work_struct	get_encap_work;
+    struct workqueue_struct	*wq;
+    struct work_struct	get_encap_work;
 
-	unsigned long		status;
+    unsigned long		status;
 
-	bool			claimed;
+    bool			claimed;
 
-	unsigned int		mdm_wait_timeout;
+    unsigned int		mdm_wait_timeout;
 
-	/*input control lines (DSR, CTS, CD, RI)*/
-	unsigned int		cbits_tolocal;
-	/*output control lines (DTR, RTS)*/
-	unsigned int		cbits_tomdm;
+    /*input control lines (DSR, CTS, CD, RI)*/
+    unsigned int		cbits_tolocal;
+    /*output control lines (DTR, RTS)*/
+    unsigned int		cbits_tomdm;
 
-	/*counters*/
-	unsigned int		snd_encap_cmd_cnt;
-	unsigned int		get_encap_resp_cnt;
-	unsigned int		resp_avail_cnt;
-	unsigned int		get_encap_failure_cnt;
-	unsigned int		set_ctrl_line_state_cnt;
-	unsigned int		tx_ctrl_err_cnt;
-	unsigned int		zlp_cnt;
+    /*counters*/
+    unsigned int		snd_encap_cmd_cnt;
+    unsigned int		get_encap_resp_cnt;
+    unsigned int		resp_avail_cnt;
+    unsigned int		get_encap_failure_cnt;
+    unsigned int		set_ctrl_line_state_cnt;
+    unsigned int		tx_ctrl_err_cnt;
+    unsigned int		zlp_cnt;
 };
 
 extern struct workqueue_struct	*usbnet_wq;
@@ -109,9 +109,9 @@ extern int rmnet_usb_ctrl_suspend(struct rmnet_ctrl_dev *dev);
 extern int rmnet_usb_ctrl_init(int num_devs, int insts_per_dev);
 extern void rmnet_usb_ctrl_exit(int num_devs, int insts_per_dev);
 extern int rmnet_usb_ctrl_probe(struct usb_interface *intf,
-				struct usb_host_endpoint *int_in,
-				unsigned long rmnet_devnum,
-				unsigned long *data);
+                                struct usb_host_endpoint *int_in,
+                                unsigned long rmnet_devnum,
+                                unsigned long *data);
 extern void rmnet_usb_ctrl_disconnect(struct rmnet_ctrl_dev *);
 
 #endif /* __RMNET_USB_H*/

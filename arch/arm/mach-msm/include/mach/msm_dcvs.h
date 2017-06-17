@@ -25,31 +25,31 @@
 				     */
 
 enum msm_core_idle_state {
-	MSM_DCVS_IDLE_ENTER,
-	MSM_DCVS_IDLE_EXIT,
+    MSM_DCVS_IDLE_ENTER,
+    MSM_DCVS_IDLE_EXIT,
 };
 
 enum msm_core_control_event {
-	MSM_DCVS_ENABLE_IDLE_PULSE,
-	MSM_DCVS_DISABLE_IDLE_PULSE,
-	MSM_DCVS_ENABLE_HIGH_LATENCY_MODES,
-	MSM_DCVS_DISABLE_HIGH_LATENCY_MODES,
+    MSM_DCVS_ENABLE_IDLE_PULSE,
+    MSM_DCVS_DISABLE_IDLE_PULSE,
+    MSM_DCVS_ENABLE_HIGH_LATENCY_MODES,
+    MSM_DCVS_DISABLE_HIGH_LATENCY_MODES,
 };
 
 struct msm_dcvs_sync_rule {
-	unsigned long cpu_khz;
-	unsigned long gpu_floor_khz;
+    unsigned long cpu_khz;
+    unsigned long gpu_floor_khz;
 };
 
 struct msm_dcvs_platform_data {
-	struct msm_dcvs_sync_rule *sync_rules;
-	unsigned num_sync_rules;
-	unsigned long gpu_max_nom_khz;
+    struct msm_dcvs_sync_rule *sync_rules;
+    unsigned num_sync_rules;
+    unsigned long gpu_max_nom_khz;
 };
 
 struct msm_gov_platform_data {
-	struct msm_dcvs_core_info *info;
-	int latency;
+    struct msm_dcvs_core_info *info;
+    int latency;
 };
 
 /**
@@ -62,8 +62,8 @@ struct msm_gov_platform_data {
 #ifdef CONFIG_MSM_DCVS
 void msm_dcvs_register_cpu_freq(uint32_t freq, uint32_t voltage);
 #else
-static inline void msm_dcvs_register_cpu_freq(uint32_t freq, uint32_t voltage)
-{}
+static inline void msm_dcvs_register_cpu_freq(uint32_t freq, uint32_t voltage) {
+}
 #endif
 
 /**
@@ -81,7 +81,7 @@ static inline void msm_dcvs_register_cpu_freq(uint32_t freq, uint32_t voltage)
  * Send idle state notifications to the msm_dcvs driver
  */
 int msm_dcvs_idle(int dcvs_core_id, enum msm_core_idle_state state,
-		uint32_t iowaited);
+                  uint32_t iowaited);
 
 /**
  * struct msm_dcvs_core_info
@@ -90,14 +90,14 @@ int msm_dcvs_idle(int dcvs_core_id, enum msm_core_idle_state state,
  * before the sink driver can be registered.
  */
 struct msm_dcvs_core_info {
-	int					num_cores;
-	int					*sensors;
-	int					thermal_poll_ms;
-	struct msm_dcvs_freq_entry		*freq_tbl;
-	struct msm_dcvs_core_param		core_param;
-	struct msm_dcvs_algo_param		algo_param;
-	struct msm_dcvs_energy_curve_coeffs	energy_coeffs;
-	struct msm_dcvs_power_params		power_param;
+    int					num_cores;
+    int					*sensors;
+    int					thermal_poll_ms;
+    struct msm_dcvs_freq_entry		*freq_tbl;
+    struct msm_dcvs_core_param		core_param;
+    struct msm_dcvs_algo_param		algo_param;
+    struct msm_dcvs_energy_curve_coeffs	energy_coeffs;
+    struct msm_dcvs_power_params		power_param;
 };
 
 /**
@@ -116,15 +116,15 @@ struct msm_dcvs_core_info {
  * Cores that need to run synchronously must share the same group id.
  */
 extern int msm_dcvs_register_core(
-	enum msm_dcvs_core_type type,
-	int type_core_num,
-	struct msm_dcvs_core_info *info,
-	int (*set_frequency)(int type_core_num, unsigned int freq),
-	unsigned int (*get_frequency)(int type_core_num),
-	int (*idle_enable)(int type_core_num,
-				enum msm_core_control_event event),
-	int (*set_floor_frequency)(int type_core_num, unsigned int freq),
-	int sensor);
+    enum msm_dcvs_core_type type,
+    int type_core_num,
+    struct msm_dcvs_core_info *info,
+    int (*set_frequency)(int type_core_num, unsigned int freq),
+    unsigned int (*get_frequency)(int type_core_num),
+    int (*idle_enable)(int type_core_num,
+                       enum msm_core_control_event event),
+    int (*set_floor_frequency)(int type_core_num, unsigned int freq),
+    int sensor);
 
 /**
  * msm_dcvs_freq_sink_start

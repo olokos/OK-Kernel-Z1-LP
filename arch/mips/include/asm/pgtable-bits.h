@@ -153,25 +153,24 @@
  * pte_to_entrylo converts a page table entry (PTE) into a Mips
  * entrylo0/1 value.
  */
-static inline uint64_t pte_to_entrylo(unsigned long pte_val)
-{
-	if (kernel_uses_smartmips_rixi) {
-		int sa;
+static inline uint64_t pte_to_entrylo(unsigned long pte_val) {
+    if (kernel_uses_smartmips_rixi) {
+        int sa;
 #ifdef CONFIG_32BIT
-		sa = 31 - _PAGE_NO_READ_SHIFT;
+        sa = 31 - _PAGE_NO_READ_SHIFT;
 #else
-		sa = 63 - _PAGE_NO_READ_SHIFT;
+        sa = 63 - _PAGE_NO_READ_SHIFT;
 #endif
-		/*
-		 * C has no way to express that this is a DSRL
-		 * _PAGE_NO_EXEC_SHIFT followed by a ROTR 2.  Luckily
-		 * in the fast path this is done in assembly
-		 */
-		return (pte_val >> _PAGE_GLOBAL_SHIFT) |
-			((pte_val & (_PAGE_NO_EXEC | _PAGE_NO_READ)) << sa);
-	}
+        /*
+         * C has no way to express that this is a DSRL
+         * _PAGE_NO_EXEC_SHIFT followed by a ROTR 2.  Luckily
+         * in the fast path this is done in assembly
+         */
+        return (pte_val >> _PAGE_GLOBAL_SHIFT) |
+               ((pte_val & (_PAGE_NO_EXEC | _PAGE_NO_READ)) << sa);
+    }
 
-	return pte_val >> _PAGE_GLOBAL_SHIFT;
+    return pte_val >> _PAGE_GLOBAL_SHIFT;
 }
 #endif
 

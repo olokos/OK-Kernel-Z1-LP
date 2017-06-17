@@ -69,81 +69,81 @@
  */
 
 struct ib_uverbs_device {
-	struct kref				ref;
-	int					num_comp_vectors;
-	struct completion			comp;
-	struct device			       *dev;
-	struct ib_device		       *ib_dev;
-	int					devnum;
-	struct cdev			        cdev;
-	struct rb_root				xrcd_tree;
-	struct mutex				xrcd_tree_mutex;
+    struct kref				ref;
+    int					num_comp_vectors;
+    struct completion			comp;
+    struct device			       *dev;
+    struct ib_device		       *ib_dev;
+    int					devnum;
+    struct cdev			        cdev;
+    struct rb_root				xrcd_tree;
+    struct mutex				xrcd_tree_mutex;
 };
 
 struct ib_uverbs_event_file {
-	struct kref				ref;
-	int					is_async;
-	struct ib_uverbs_file		       *uverbs_file;
-	spinlock_t				lock;
-	int					is_closed;
-	wait_queue_head_t			poll_wait;
-	struct fasync_struct		       *async_queue;
-	struct list_head			event_list;
+    struct kref				ref;
+    int					is_async;
+    struct ib_uverbs_file		       *uverbs_file;
+    spinlock_t				lock;
+    int					is_closed;
+    wait_queue_head_t			poll_wait;
+    struct fasync_struct		       *async_queue;
+    struct list_head			event_list;
 };
 
 struct ib_uverbs_file {
-	struct kref				ref;
-	struct mutex				mutex;
-	struct ib_uverbs_device		       *device;
-	struct ib_ucontext		       *ucontext;
-	struct ib_event_handler			event_handler;
-	struct ib_uverbs_event_file	       *async_file;
+    struct kref				ref;
+    struct mutex				mutex;
+    struct ib_uverbs_device		       *device;
+    struct ib_ucontext		       *ucontext;
+    struct ib_event_handler			event_handler;
+    struct ib_uverbs_event_file	       *async_file;
 };
 
 struct ib_uverbs_event {
-	union {
-		struct ib_uverbs_async_event_desc	async;
-		struct ib_uverbs_comp_event_desc	comp;
-	}					desc;
-	struct list_head			list;
-	struct list_head			obj_list;
-	u32				       *counter;
+    union {
+        struct ib_uverbs_async_event_desc	async;
+        struct ib_uverbs_comp_event_desc	comp;
+    }					desc;
+    struct list_head			list;
+    struct list_head			obj_list;
+    u32				       *counter;
 };
 
 struct ib_uverbs_mcast_entry {
-	struct list_head	list;
-	union ib_gid 		gid;
-	u16 			lid;
+    struct list_head	list;
+    union ib_gid 		gid;
+    u16 			lid;
 };
 
 struct ib_uevent_object {
-	struct ib_uobject	uobject;
-	struct list_head	event_list;
-	u32			events_reported;
+    struct ib_uobject	uobject;
+    struct list_head	event_list;
+    u32			events_reported;
 };
 
 struct ib_uxrcd_object {
-	struct ib_uobject	uobject;
-	atomic_t		refcnt;
+    struct ib_uobject	uobject;
+    atomic_t		refcnt;
 };
 
 struct ib_usrq_object {
-	struct ib_uevent_object	uevent;
-	struct ib_uxrcd_object *uxrcd;
+    struct ib_uevent_object	uevent;
+    struct ib_uxrcd_object *uxrcd;
 };
 
 struct ib_uqp_object {
-	struct ib_uevent_object	uevent;
-	struct list_head 	mcast_list;
+    struct ib_uevent_object	uevent;
+    struct list_head 	mcast_list;
 };
 
 struct ib_ucq_object {
-	struct ib_uobject	uobject;
-	struct ib_uverbs_file  *uverbs_file;
-	struct list_head	comp_list;
-	struct list_head	async_list;
-	u32			comp_events_reported;
-	u32			async_events_reported;
+    struct ib_uobject	uobject;
+    struct ib_uverbs_file  *uverbs_file;
+    struct list_head	comp_list;
+    struct list_head	async_list;
+    u32			comp_events_reported;
+    u32			async_events_reported;
 };
 
 extern spinlock_t ib_uverbs_idr_lock;
@@ -159,21 +159,21 @@ extern struct idr ib_uverbs_xrcd_idr;
 void idr_remove_uobj(struct idr *idp, struct ib_uobject *uobj);
 
 struct file *ib_uverbs_alloc_event_file(struct ib_uverbs_file *uverbs_file,
-					int is_async);
+                                        int is_async);
 struct ib_uverbs_event_file *ib_uverbs_lookup_comp_file(int fd);
 
 void ib_uverbs_release_ucq(struct ib_uverbs_file *file,
-			   struct ib_uverbs_event_file *ev_file,
-			   struct ib_ucq_object *uobj);
+                           struct ib_uverbs_event_file *ev_file,
+                           struct ib_ucq_object *uobj);
 void ib_uverbs_release_uevent(struct ib_uverbs_file *file,
-			      struct ib_uevent_object *uobj);
+                              struct ib_uevent_object *uobj);
 
 void ib_uverbs_comp_handler(struct ib_cq *cq, void *cq_context);
 void ib_uverbs_cq_event_handler(struct ib_event *event, void *context_ptr);
 void ib_uverbs_qp_event_handler(struct ib_event *event, void *context_ptr);
 void ib_uverbs_srq_event_handler(struct ib_event *event, void *context_ptr);
 void ib_uverbs_event_handler(struct ib_event_handler *handler,
-			     struct ib_event *event);
+                             struct ib_event *event);
 void ib_uverbs_dealloc_xrcd(struct ib_uverbs_device *dev, struct ib_xrcd *xrcd);
 
 #define IB_UVERBS_DECLARE_CMD(name)					\

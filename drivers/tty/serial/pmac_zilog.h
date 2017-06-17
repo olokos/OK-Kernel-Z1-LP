@@ -6,33 +6,33 @@
  */
 #define MAX_ZS_PORTS	4
 
-/* 
+/*
  * We wrap our port structure around the generic uart_port.
  */
 #define NUM_ZSREGS    17
 
 struct uart_pmac_port {
-	struct uart_port		port;
-	struct uart_pmac_port		*mate;
+    struct uart_port		port;
+    struct uart_pmac_port		*mate;
 
 #ifdef CONFIG_PPC_PMAC
-	/* macio_dev for the escc holding this port (maybe be null on
-	 * early inited port)
-	 */
-	struct macio_dev		*dev;
-	/* device node to this port, this points to one of 2 childs
-	 * of "escc" node (ie. ch-a or ch-b)
-	 */
-	struct device_node		*node;
+    /* macio_dev for the escc holding this port (maybe be null on
+     * early inited port)
+     */
+    struct macio_dev		*dev;
+    /* device node to this port, this points to one of 2 childs
+     * of "escc" node (ie. ch-a or ch-b)
+     */
+    struct device_node		*node;
 #else
-	struct platform_device		*pdev;
+    struct platform_device		*pdev;
 #endif
 
-	/* Port type as obtained from device tree (IRDA, modem, ...) */
-	int				port_type;
-	u8				curregs[NUM_ZSREGS];
+    /* Port type as obtained from device tree (IRDA, modem, ...) */
+    int				port_type;
+    u8				curregs[NUM_ZSREGS];
 
-	unsigned int			flags;
+    unsigned int			flags;
 #define PMACZILOG_FLAG_IS_CONS		0x00000001
 #define PMACZILOG_FLAG_IS_KGDB		0x00000002
 #define PMACZILOG_FLAG_MODEM_STATUS	0x00000004
@@ -48,31 +48,30 @@ struct uart_pmac_port {
 #define PMACZILOG_FLAG_IS_EXTCLK	0x00008000
 #define PMACZILOG_FLAG_BREAK		0x00010000
 
-	unsigned char			parity_mask;
-	unsigned char			prev_status;
+    unsigned char			parity_mask;
+    unsigned char			prev_status;
 
-	volatile u8			__iomem *control_reg;
-	volatile u8			__iomem *data_reg;
+    volatile u8			__iomem *control_reg;
+    volatile u8			__iomem *data_reg;
 
 #ifdef CONFIG_PPC_PMAC
-	unsigned int			tx_dma_irq;
-	unsigned int			rx_dma_irq;
-	volatile struct dbdma_regs	__iomem *tx_dma_regs;
-	volatile struct dbdma_regs	__iomem *rx_dma_regs;
+    unsigned int			tx_dma_irq;
+    unsigned int			rx_dma_irq;
+    volatile struct dbdma_regs	__iomem *tx_dma_regs;
+    volatile struct dbdma_regs	__iomem *rx_dma_regs;
 #endif
 
-	unsigned char			irq_name[8];
+    unsigned char			irq_name[8];
 
-	struct ktermios			termios_cache;
+    struct ktermios			termios_cache;
 };
 
 #define to_pmz(p) ((struct uart_pmac_port *)(p))
 
-static inline struct uart_pmac_port *pmz_get_port_A(struct uart_pmac_port *uap)
-{
-	if (uap->flags & PMACZILOG_FLAG_IS_CHANNEL_A)
-		return uap;
-	return uap->mate;
+static inline struct uart_pmac_port *pmz_get_port_A(struct uart_pmac_port *uap) {
+    if (uap->flags & PMACZILOG_FLAG_IS_CHANNEL_A)
+        return uap;
+    return uap->mate;
 }
 
 /*
@@ -81,33 +80,28 @@ static inline struct uart_pmac_port *pmz_get_port_A(struct uart_pmac_port *uap)
  * though if we try to use this driver on older machines, we might have
  * to add it back
  */
-static inline u8 read_zsreg(struct uart_pmac_port *port, u8 reg)
-{
-	if (reg != 0)
-		writeb(reg, port->control_reg);
-	return readb(port->control_reg);
+static inline u8 read_zsreg(struct uart_pmac_port *port, u8 reg) {
+    if (reg != 0)
+        writeb(reg, port->control_reg);
+    return readb(port->control_reg);
 }
 
-static inline void write_zsreg(struct uart_pmac_port *port, u8 reg, u8 value)
-{
-	if (reg != 0)
-		writeb(reg, port->control_reg);
-	writeb(value, port->control_reg);
+static inline void write_zsreg(struct uart_pmac_port *port, u8 reg, u8 value) {
+    if (reg != 0)
+        writeb(reg, port->control_reg);
+    writeb(value, port->control_reg);
 }
 
-static inline u8 read_zsdata(struct uart_pmac_port *port)
-{
-	return readb(port->data_reg);
+static inline u8 read_zsdata(struct uart_pmac_port *port) {
+    return readb(port->data_reg);
 }
 
-static inline void write_zsdata(struct uart_pmac_port *port, u8 data)
-{
-	writeb(data, port->data_reg);
+static inline void write_zsdata(struct uart_pmac_port *port, u8 data) {
+    writeb(data, port->data_reg);
 }
 
-static inline void zssync(struct uart_pmac_port *port)
-{
-	(void)readb(port->control_reg);
+static inline void zssync(struct uart_pmac_port *port) {
+    (void)readb(port->control_reg);
 }
 
 /* Conversion routines to/from brg time constants from/to bits

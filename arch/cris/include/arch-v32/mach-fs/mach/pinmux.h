@@ -7,25 +7,25 @@
 #define PORT_E 3
 
 enum pin_mode {
-  pinmux_none = 0,
-  pinmux_fixed,
-  pinmux_gpio,
-  pinmux_iop
+    pinmux_none = 0,
+    pinmux_fixed,
+    pinmux_gpio,
+    pinmux_iop
 };
 
 enum fixed_function {
-  pinmux_ser1,
-  pinmux_ser2,
-  pinmux_ser3,
-  pinmux_sser0,
-  pinmux_sser1,
-  pinmux_ata0,
-  pinmux_ata1,
-  pinmux_ata2,
-  pinmux_ata3,
-  pinmux_ata,
-  pinmux_eth1,
-  pinmux_timer
+    pinmux_ser1,
+    pinmux_ser2,
+    pinmux_ser3,
+    pinmux_sser0,
+    pinmux_sser1,
+    pinmux_ata0,
+    pinmux_ata1,
+    pinmux_ata2,
+    pinmux_ata3,
+    pinmux_ata,
+    pinmux_eth1,
+    pinmux_timer
 };
 
 int crisv32_pinmux_init(void);

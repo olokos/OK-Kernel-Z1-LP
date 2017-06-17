@@ -67,8 +67,7 @@ input is too large, however, the invalid exception is raised and the largest
 positive or negative integer is returned.
 -------------------------------------------------------------------------------
 */
-static int32 roundAndPackInt32( struct roundingData *roundData, flag zSign, bits64 absZ )
-{
+static int32 roundAndPackInt32( struct roundingData *roundData, flag zSign, bits64 absZ ) {
     int8 roundingMode;
     flag roundNearestEven;
     int8 roundIncrement, roundBits;
@@ -80,13 +79,11 @@ static int32 roundAndPackInt32( struct roundingData *roundData, flag zSign, bits
     if ( ! roundNearestEven ) {
         if ( roundingMode == float_round_to_zero ) {
             roundIncrement = 0;
-        }
-        else {
+        } else {
             roundIncrement = 0x7F;
             if ( zSign ) {
                 if ( roundingMode == float_round_up ) roundIncrement = 0;
-            }
-            else {
+            } else {
                 if ( roundingMode == float_round_down ) roundIncrement = 0;
             }
         }
@@ -110,8 +107,7 @@ static int32 roundAndPackInt32( struct roundingData *roundData, flag zSign, bits
 Returns the fraction bits of the single-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE bits32 extractFloat32Frac( float32 a )
-{
+INLINE bits32 extractFloat32Frac( float32 a ) {
 
     return a & 0x007FFFFF;
 
@@ -122,8 +118,7 @@ INLINE bits32 extractFloat32Frac( float32 a )
 Returns the exponent bits of the single-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE int16 extractFloat32Exp( float32 a )
-{
+INLINE int16 extractFloat32Exp( float32 a ) {
 
     return ( a>>23 ) & 0xFF;
 
@@ -135,8 +130,7 @@ Returns the sign bit of the single-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
 #if 0	/* in softfloat.h */
-INLINE flag extractFloat32Sign( float32 a )
-{
+INLINE flag extractFloat32Sign( float32 a ) {
 
     return a>>31;
 
@@ -152,8 +146,7 @@ significand are stored at the locations pointed to by `zExpPtr' and
 -------------------------------------------------------------------------------
 */
 static void
- normalizeFloat32Subnormal( bits32 aSig, int16 *zExpPtr, bits32 *zSigPtr )
-{
+normalizeFloat32Subnormal( bits32 aSig, int16 *zExpPtr, bits32 *zSigPtr ) {
     int8 shiftCount;
 
     shiftCount = countLeadingZeros32( aSig ) - 8;
@@ -174,21 +167,20 @@ than the desired result exponent whenever `zSig' is a complete, normalized
 significand.
 -------------------------------------------------------------------------------
 */
-INLINE float32 packFloat32( flag zSign, int16 zExp, bits32 zSig )
-{
+INLINE float32 packFloat32( flag zSign, int16 zExp, bits32 zSig ) {
 #if 0
-   float32 f;
-   __asm__("@ packFloat32				\n\
+    float32 f;
+    __asm__("@ packFloat32				\n\
    	    mov %0, %1, asl #31				\n\
    	    orr %0, %2, asl #23				\n\
    	    orr %0, %3"
-   	    : /* no outputs */
-   	    : "g" (f), "g" (zSign), "g" (zExp), "g" (zSig)
-   	    : "cc");
-   return f;
+            : /* no outputs */
+            : "g" (f), "g" (zSign), "g" (zExp), "g" (zSig)
+            : "cc");
+    return f;
 #else
     return ( ( (bits32) zSign )<<31 ) + ( ( (bits32) zExp )<<23 ) + zSig;
-#endif 
+#endif
 }
 
 /*
@@ -214,8 +206,7 @@ The handling of underflow and overflow follows the IEC/IEEE Standard for
 Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float32 roundAndPackFloat32( struct roundingData *roundData, flag zSign, int16 zExp, bits32 zSig )
-{
+static float32 roundAndPackFloat32( struct roundingData *roundData, flag zSign, int16 zExp, bits32 zSig ) {
     int8 roundingMode;
     flag roundNearestEven;
     int8 roundIncrement, roundBits;
@@ -227,13 +218,11 @@ static float32 roundAndPackFloat32( struct roundingData *roundData, flag zSign, 
     if ( ! roundNearestEven ) {
         if ( roundingMode == float_round_to_zero ) {
             roundIncrement = 0;
-        }
-        else {
+        } else {
             roundIncrement = 0x7F;
             if ( zSign ) {
                 if ( roundingMode == float_round_up ) roundIncrement = 0;
-            }
-            else {
+            } else {
                 if ( roundingMode == float_round_down ) roundIncrement = 0;
             }
         }
@@ -241,15 +230,15 @@ static float32 roundAndPackFloat32( struct roundingData *roundData, flag zSign, 
     roundBits = zSig & 0x7F;
     if ( 0xFD <= (bits16) zExp ) {
         if (    ( 0xFD < zExp )
-             || (    ( zExp == 0xFD )
-                  && ( (sbits32) ( zSig + roundIncrement ) < 0 ) )
+                || (    ( zExp == 0xFD )
+                        && ( (sbits32) ( zSig + roundIncrement ) < 0 ) )
            ) {
             roundData->exception |= float_flag_overflow | float_flag_inexact;
             return packFloat32( zSign, 0xFF, 0 ) - ( roundIncrement == 0 );
         }
         if ( zExp < 0 ) {
             isTiny =
-                   ( float_detect_tininess == float_tininess_before_rounding )
+                ( float_detect_tininess == float_tininess_before_rounding )
                 || ( zExp < -1 )
                 || ( zSig + roundIncrement < 0x80000000 );
             shift32RightJamming( zSig, - zExp, &zSig );
@@ -277,8 +266,7 @@ point exponent.
 -------------------------------------------------------------------------------
 */
 static float32
- normalizeRoundAndPackFloat32( struct roundingData *roundData, flag zSign, int16 zExp, bits32 zSig )
-{
+normalizeRoundAndPackFloat32( struct roundingData *roundData, flag zSign, int16 zExp, bits32 zSig ) {
     int8 shiftCount;
 
     shiftCount = countLeadingZeros32( zSig ) - 1;
@@ -291,8 +279,7 @@ static float32
 Returns the fraction bits of the double-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE bits64 extractFloat64Frac( float64 a )
-{
+INLINE bits64 extractFloat64Frac( float64 a ) {
 
     return a & LIT64( 0x000FFFFFFFFFFFFF );
 
@@ -303,8 +290,7 @@ INLINE bits64 extractFloat64Frac( float64 a )
 Returns the exponent bits of the double-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE int16 extractFloat64Exp( float64 a )
-{
+INLINE int16 extractFloat64Exp( float64 a ) {
 
     return ( a>>52 ) & 0x7FF;
 
@@ -316,8 +302,7 @@ Returns the sign bit of the double-precision floating-point value `a'.
 -------------------------------------------------------------------------------
 */
 #if 0	/* in softfloat.h */
-INLINE flag extractFloat64Sign( float64 a )
-{
+INLINE flag extractFloat64Sign( float64 a ) {
 
     return a>>63;
 
@@ -333,8 +318,7 @@ significand are stored at the locations pointed to by `zExpPtr' and
 -------------------------------------------------------------------------------
 */
 static void
- normalizeFloat64Subnormal( bits64 aSig, int16 *zExpPtr, bits64 *zSigPtr )
-{
+normalizeFloat64Subnormal( bits64 aSig, int16 *zExpPtr, bits64 *zSigPtr ) {
     int8 shiftCount;
 
     shiftCount = countLeadingZeros64( aSig ) - 11;
@@ -355,8 +339,7 @@ than the desired result exponent whenever `zSig' is a complete, normalized
 significand.
 -------------------------------------------------------------------------------
 */
-INLINE float64 packFloat64( flag zSign, int16 zExp, bits64 zSig )
-{
+INLINE float64 packFloat64( flag zSign, int16 zExp, bits64 zSig ) {
 
     return ( ( (bits64) zSign )<<63 ) + ( ( (bits64) zExp )<<52 ) + zSig;
 
@@ -385,8 +368,7 @@ The handling of underflow and overflow follows the IEC/IEEE Standard for
 Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float64 roundAndPackFloat64( struct roundingData *roundData, flag zSign, int16 zExp, bits64 zSig )
-{
+static float64 roundAndPackFloat64( struct roundingData *roundData, flag zSign, int16 zExp, bits64 zSig ) {
     int8 roundingMode;
     flag roundNearestEven;
     int16 roundIncrement, roundBits;
@@ -398,13 +380,11 @@ static float64 roundAndPackFloat64( struct roundingData *roundData, flag zSign, 
     if ( ! roundNearestEven ) {
         if ( roundingMode == float_round_to_zero ) {
             roundIncrement = 0;
-        }
-        else {
+        } else {
             roundIncrement = 0x3FF;
             if ( zSign ) {
                 if ( roundingMode == float_round_up ) roundIncrement = 0;
-            }
-            else {
+            } else {
                 if ( roundingMode == float_round_down ) roundIncrement = 0;
             }
         }
@@ -412,8 +392,8 @@ static float64 roundAndPackFloat64( struct roundingData *roundData, flag zSign, 
     roundBits = zSig & 0x3FF;
     if ( 0x7FD <= (bits16) zExp ) {
         if (    ( 0x7FD < zExp )
-             || (    ( zExp == 0x7FD )
-                  && ( (sbits64) ( zSig + roundIncrement ) < 0 ) )
+                || (    ( zExp == 0x7FD )
+                        && ( (sbits64) ( zSig + roundIncrement ) < 0 ) )
            ) {
             //register int lr = __builtin_return_address(0);
             //printk("roundAndPackFloat64 called from 0x%08x\n",lr);
@@ -422,7 +402,7 @@ static float64 roundAndPackFloat64( struct roundingData *roundData, flag zSign, 
         }
         if ( zExp < 0 ) {
             isTiny =
-                   ( float_detect_tininess == float_tininess_before_rounding )
+                ( float_detect_tininess == float_tininess_before_rounding )
                 || ( zExp < -1 )
                 || ( zSig + roundIncrement < LIT64( 0x8000000000000000 ) );
             shift64RightJamming( zSig, - zExp, &zSig );
@@ -450,8 +430,7 @@ point exponent.
 -------------------------------------------------------------------------------
 */
 static float64
- normalizeRoundAndPackFloat64( struct roundingData *roundData, flag zSign, int16 zExp, bits64 zSig )
-{
+normalizeRoundAndPackFloat64( struct roundingData *roundData, flag zSign, int16 zExp, bits64 zSig ) {
     int8 shiftCount;
 
     shiftCount = countLeadingZeros64( zSig ) - 1;
@@ -467,8 +446,7 @@ Returns the fraction bits of the extended double-precision floating-point
 value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE bits64 extractFloatx80Frac( floatx80 a )
-{
+INLINE bits64 extractFloatx80Frac( floatx80 a ) {
 
     return a.low;
 
@@ -480,8 +458,7 @@ Returns the exponent bits of the extended double-precision floating-point
 value `a'.
 -------------------------------------------------------------------------------
 */
-INLINE int32 extractFloatx80Exp( floatx80 a )
-{
+INLINE int32 extractFloatx80Exp( floatx80 a ) {
 
     return a.high & 0x7FFF;
 
@@ -493,8 +470,7 @@ Returns the sign bit of the extended double-precision floating-point value
 `a'.
 -------------------------------------------------------------------------------
 */
-INLINE flag extractFloatx80Sign( floatx80 a )
-{
+INLINE flag extractFloatx80Sign( floatx80 a ) {
 
     return a.high>>15;
 
@@ -509,8 +485,7 @@ and significand are stored at the locations pointed to by `zExpPtr' and
 -------------------------------------------------------------------------------
 */
 static void
- normalizeFloatx80Subnormal( bits64 aSig, int32 *zExpPtr, bits64 *zSigPtr )
-{
+normalizeFloatx80Subnormal( bits64 aSig, int32 *zExpPtr, bits64 *zSigPtr ) {
     int8 shiftCount;
 
     shiftCount = countLeadingZeros64( aSig );
@@ -525,8 +500,7 @@ Packs the sign `zSign', exponent `zExp', and significand `zSig' into an
 extended double-precision floating-point value, returning the result.
 -------------------------------------------------------------------------------
 */
-INLINE floatx80 packFloatx80( flag zSign, int32 zExp, bits64 zSig )
-{
+INLINE floatx80 packFloatx80( flag zSign, int32 zExp, bits64 zSig ) {
     floatx80 z;
 
     z.low = zSig;
@@ -562,10 +536,9 @@ Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
 static floatx80
- roundAndPackFloatx80(
-     struct roundingData *roundData, flag zSign, int32 zExp, bits64 zSig0, bits64 zSig1
- )
-{
+roundAndPackFloatx80(
+    struct roundingData *roundData, flag zSign, int32 zExp, bits64 zSig0, bits64 zSig1
+) {
     int8 roundingMode, roundingPrecision;
     flag roundNearestEven, increment, isTiny;
     int64 roundIncrement, roundMask, roundBits;
@@ -577,25 +550,21 @@ static floatx80
     if ( roundingPrecision == 64 ) {
         roundIncrement = LIT64( 0x0000000000000400 );
         roundMask = LIT64( 0x00000000000007FF );
-    }
-    else if ( roundingPrecision == 32 ) {
+    } else if ( roundingPrecision == 32 ) {
         roundIncrement = LIT64( 0x0000008000000000 );
         roundMask = LIT64( 0x000000FFFFFFFFFF );
-    }
-    else {
+    } else {
         goto precision80;
     }
     zSig0 |= ( zSig1 != 0 );
     if ( ! roundNearestEven ) {
         if ( roundingMode == float_round_to_zero ) {
             roundIncrement = 0;
-        }
-        else {
+        } else {
             roundIncrement = roundMask;
             if ( zSign ) {
                 if ( roundingMode == float_round_up ) roundIncrement = 0;
-            }
-            else {
+            } else {
                 if ( roundingMode == float_round_down ) roundIncrement = 0;
             }
         }
@@ -603,13 +572,13 @@ static floatx80
     roundBits = zSig0 & roundMask;
     if ( 0x7FFD <= (bits32) ( zExp - 1 ) ) {
         if (    ( 0x7FFE < zExp )
-             || ( ( zExp == 0x7FFE ) && ( zSig0 + roundIncrement < zSig0 ) )
+                || ( ( zExp == 0x7FFE ) && ( zSig0 + roundIncrement < zSig0 ) )
            ) {
             goto overflow;
         }
         if ( zExp <= 0 ) {
             isTiny =
-                   ( float_detect_tininess == float_tininess_before_rounding )
+                ( float_detect_tininess == float_tininess_before_rounding )
                 || ( zExp < 0 )
                 || ( zSig0 <= zSig0 + roundIncrement );
             shift64RightJamming( zSig0, 1 - zExp, &zSig0 );
@@ -640,34 +609,32 @@ static floatx80
     zSig0 &= ~ roundMask;
     if ( zSig0 == 0 ) zExp = 0;
     return packFloatx80( zSign, zExp, zSig0 );
- precision80:
+precision80:
     increment = ( (sbits64) zSig1 < 0 );
     if ( ! roundNearestEven ) {
         if ( roundingMode == float_round_to_zero ) {
             increment = 0;
-        }
-        else {
+        } else {
             if ( zSign ) {
                 increment = ( roundingMode == float_round_down ) && zSig1;
-            }
-            else {
+            } else {
                 increment = ( roundingMode == float_round_up ) && zSig1;
             }
         }
     }
     if ( 0x7FFD <= (bits32) ( zExp - 1 ) ) {
         if (    ( 0x7FFE < zExp )
-             || (    ( zExp == 0x7FFE )
-                  && ( zSig0 == LIT64( 0xFFFFFFFFFFFFFFFF ) )
-                  && increment
-                )
+                || (    ( zExp == 0x7FFE )
+                        && ( zSig0 == LIT64( 0xFFFFFFFFFFFFFFFF ) )
+                        && increment
+                   )
            ) {
             roundMask = 0;
- overflow:
+overflow:
             roundData->exception |= float_flag_overflow | float_flag_inexact;
             if (    ( roundingMode == float_round_to_zero )
-                 || ( zSign && ( roundingMode == float_round_up ) )
-                 || ( ! zSign && ( roundingMode == float_round_down ) )
+                    || ( zSign && ( roundingMode == float_round_up ) )
+                    || ( ! zSign && ( roundingMode == float_round_down ) )
                ) {
                 return packFloatx80( zSign, 0x7FFE, ~ roundMask );
             }
@@ -675,7 +642,7 @@ static floatx80
         }
         if ( zExp <= 0 ) {
             isTiny =
-                   ( float_detect_tininess == float_tininess_before_rounding )
+                ( float_detect_tininess == float_tininess_before_rounding )
                 || ( zExp < 0 )
                 || ! increment
                 || ( zSig0 < LIT64( 0xFFFFFFFFFFFFFFFF ) );
@@ -685,12 +652,10 @@ static floatx80
             if ( zSig1 ) roundData->exception |= float_flag_inexact;
             if ( roundNearestEven ) {
                 increment = ( (sbits64) zSig1 < 0 );
-            }
-            else {
+            } else {
                 if ( zSign ) {
                     increment = ( roundingMode == float_round_down ) && zSig1;
-                }
-                else {
+                } else {
                     increment = ( roundingMode == float_round_up ) && zSig1;
                 }
             }
@@ -708,15 +673,13 @@ static floatx80
         if ( zSig0 == 0 ) {
             ++zExp;
             zSig0 = LIT64( 0x8000000000000000 );
-        }
-        else {
+        } else {
             zSig0 &= ~ ( ( zSig1 + zSig1 == 0 ) & roundNearestEven );
         }
-    }
-    else {
+    } else {
         if ( zSig0 == 0 ) zExp = 0;
     }
-    
+
     return packFloatx80( zSign, zExp, zSig0 );
 }
 
@@ -731,10 +694,9 @@ normalized.
 -------------------------------------------------------------------------------
 */
 static floatx80
- normalizeRoundAndPackFloatx80(
-     struct roundingData *roundData, flag zSign, int32 zExp, bits64 zSig0, bits64 zSig1
- )
-{
+normalizeRoundAndPackFloatx80(
+    struct roundingData *roundData, flag zSign, int32 zExp, bits64 zSig0, bits64 zSig1
+) {
     int8 shiftCount;
 
     if ( zSig0 == 0 ) {
@@ -759,8 +721,7 @@ the single-precision floating-point format.  The conversion is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 int32_to_float32(struct roundingData *roundData, int32 a)
-{
+float32 int32_to_float32(struct roundingData *roundData, int32 a) {
     flag zSign;
 
     if ( a == 0 ) return 0;
@@ -777,8 +738,7 @@ the double-precision floating-point format.  The conversion is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 int32_to_float64( int32 a )
-{
+float64 int32_to_float64( int32 a ) {
     flag aSign;
     uint32 absA;
     int8 shiftCount;
@@ -803,8 +763,7 @@ is performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 int32_to_floatx80( int32 a )
-{
+floatx80 int32_to_floatx80( int32 a ) {
     flag zSign;
     uint32 absA;
     int8 shiftCount;
@@ -832,8 +791,7 @@ positive integer is returned.  Otherwise, if the conversion overflows, the
 largest integer with the same sign as `a' is returned.
 -------------------------------------------------------------------------------
 */
-int32 float32_to_int32( struct roundingData *roundData, float32 a )
-{
+int32 float32_to_int32( struct roundingData *roundData, float32 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits32 aSig;
@@ -863,8 +821,7 @@ conversion overflows, the largest integer with the same sign as `a' is
 returned.
 -------------------------------------------------------------------------------
 */
-int32 float32_to_int32_round_to_zero( float32 a )
-{
+int32 float32_to_int32_round_to_zero( float32 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits32 aSig;
@@ -879,8 +836,7 @@ int32 float32_to_int32_round_to_zero( float32 a )
         float_raise( float_flag_invalid );
         if ( ! aSign || ( ( aExp == 0xFF ) && aSig ) ) return 0x7FFFFFFF;
         return 0x80000000;
-    }
-    else if ( aExp <= 0x7E ) {
+    } else if ( aExp <= 0x7E ) {
         if ( aExp | aSig ) float_raise( float_flag_inexact );
         return 0;
     }
@@ -901,8 +857,7 @@ performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float32_to_float64( float32 a )
-{
+float64 float32_to_float64( float32 a ) {
     flag aSign;
     int16 aExp;
     bits32 aSig;
@@ -933,8 +888,7 @@ is performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 float32_to_floatx80( float32 a )
-{
+floatx80 float32_to_floatx80( float32 a ) {
     flag aSign;
     int16 aExp;
     bits32 aSig;
@@ -965,8 +919,7 @@ operation is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_round_to_int( struct roundingData *roundData, float32 a )
-{
+float32 float32_round_to_int( struct roundingData *roundData, float32 a ) {
     flag aSign;
     int16 aExp;
     bits32 lastBitMask, roundBitsMask;
@@ -986,14 +939,14 @@ float32 float32_round_to_int( struct roundingData *roundData, float32 a )
         roundData->exception |= float_flag_inexact;
         aSign = extractFloat32Sign( a );
         switch ( roundingMode ) {
-         case float_round_nearest_even:
+        case float_round_nearest_even:
             if ( ( aExp == 0x7E ) && extractFloat32Frac( a ) ) {
                 return packFloat32( aSign, 0x7F, 0 );
             }
             break;
-         case float_round_down:
+        case float_round_down:
             return aSign ? 0xBF800000 : 0;
-         case float_round_up:
+        case float_round_up:
             return aSign ? 0x80000000 : 0x3F800000;
         }
         return packFloat32( aSign, 0, 0 );
@@ -1005,8 +958,7 @@ float32 float32_round_to_int( struct roundingData *roundData, float32 a )
     if ( roundingMode == float_round_nearest_even ) {
         z += lastBitMask>>1;
         if ( ( z & roundBitsMask ) == 0 ) z &= ~ lastBitMask;
-    }
-    else if ( roundingMode != float_round_to_zero ) {
+    } else if ( roundingMode != float_round_to_zero ) {
         if ( extractFloat32Sign( z ) ^ ( roundingMode == float_round_up ) ) {
             z += roundBitsMask;
         }
@@ -1026,8 +978,7 @@ addition is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float32 addFloat32Sigs( struct roundingData *roundData, float32 a, float32 b, flag zSign )
-{
+static float32 addFloat32Sigs( struct roundingData *roundData, float32 a, float32 b, flag zSign ) {
     int16 aExp, bExp, zExp;
     bits32 aSig, bSig, zSig;
     int16 expDiff;
@@ -1046,28 +997,24 @@ static float32 addFloat32Sigs( struct roundingData *roundData, float32 a, float3
         }
         if ( bExp == 0 ) {
             --expDiff;
-        }
-        else {
+        } else {
             bSig |= 0x20000000;
         }
         shift32RightJamming( bSig, expDiff, &bSig );
         zExp = aExp;
-    }
-    else if ( expDiff < 0 ) {
+    } else if ( expDiff < 0 ) {
         if ( bExp == 0xFF ) {
             if ( bSig ) return propagateFloat32NaN( a, b );
             return packFloat32( zSign, 0xFF, 0 );
         }
         if ( aExp == 0 ) {
             ++expDiff;
-        }
-        else {
+        } else {
             aSig |= 0x20000000;
         }
         shift32RightJamming( aSig, - expDiff, &aSig );
         zExp = bExp;
-    }
-    else {
+    } else {
         if ( aExp == 0xFF ) {
             if ( aSig | bSig ) return propagateFloat32NaN( a, b );
             return a;
@@ -1084,7 +1031,7 @@ static float32 addFloat32Sigs( struct roundingData *roundData, float32 a, float3
         zSig = aSig + bSig;
         ++zExp;
     }
- roundAndPack:
+roundAndPack:
     return roundAndPackFloat32( roundData, zSign, zExp, zSig );
 
 }
@@ -1098,8 +1045,7 @@ result is a NaN.  The subtraction is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float32 subFloat32Sigs( struct roundingData *roundData, float32 a, float32 b, flag zSign )
-{
+static float32 subFloat32Sigs( struct roundingData *roundData, float32 a, float32 b, flag zSign ) {
     int16 aExp, bExp, zExp;
     bits32 aSig, bSig, zSig;
     int16 expDiff;
@@ -1125,41 +1071,39 @@ static float32 subFloat32Sigs( struct roundingData *roundData, float32 a, float3
     if ( bSig < aSig ) goto aBigger;
     if ( aSig < bSig ) goto bBigger;
     return packFloat32( roundData->mode == float_round_down, 0, 0 );
- bExpBigger:
+bExpBigger:
     if ( bExp == 0xFF ) {
         if ( bSig ) return propagateFloat32NaN( a, b );
         return packFloat32( zSign ^ 1, 0xFF, 0 );
     }
     if ( aExp == 0 ) {
         ++expDiff;
-    }
-    else {
+    } else {
         aSig |= 0x40000000;
     }
     shift32RightJamming( aSig, - expDiff, &aSig );
     bSig |= 0x40000000;
- bBigger:
+bBigger:
     zSig = bSig - aSig;
     zExp = bExp;
     zSign ^= 1;
     goto normalizeRoundAndPack;
- aExpBigger:
+aExpBigger:
     if ( aExp == 0xFF ) {
         if ( aSig ) return propagateFloat32NaN( a, b );
         return a;
     }
     if ( bExp == 0 ) {
         --expDiff;
-    }
-    else {
+    } else {
         bSig |= 0x40000000;
     }
     shift32RightJamming( bSig, expDiff, &bSig );
     aSig |= 0x40000000;
- aBigger:
+aBigger:
     zSig = aSig - bSig;
     zExp = aExp;
- normalizeRoundAndPack:
+normalizeRoundAndPack:
     --zExp;
     return normalizeRoundAndPackFloat32( roundData, zSign, zExp, zSig );
 
@@ -1172,16 +1116,14 @@ and `b'.  The operation is performed according to the IEC/IEEE Standard for
 Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_add( struct roundingData *roundData, float32 a, float32 b )
-{
+float32 float32_add( struct roundingData *roundData, float32 a, float32 b ) {
     flag aSign, bSign;
 
     aSign = extractFloat32Sign( a );
     bSign = extractFloat32Sign( b );
     if ( aSign == bSign ) {
         return addFloat32Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return subFloat32Sigs( roundData, a, b, aSign );
     }
 
@@ -1194,16 +1136,14 @@ Returns the result of subtracting the single-precision floating-point values
 for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_sub( struct roundingData *roundData, float32 a, float32 b )
-{
+float32 float32_sub( struct roundingData *roundData, float32 a, float32 b ) {
     flag aSign, bSign;
 
     aSign = extractFloat32Sign( a );
     bSign = extractFloat32Sign( b );
     if ( aSign == bSign ) {
         return subFloat32Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return addFloat32Sigs( roundData, a, b, aSign );
     }
 
@@ -1216,8 +1156,7 @@ Returns the result of multiplying the single-precision floating-point values
 for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_mul( struct roundingData *roundData, float32 a, float32 b )
-{
+float32 float32_mul( struct roundingData *roundData, float32 a, float32 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, zExp;
     bits32 aSig, bSig;
@@ -1277,8 +1216,7 @@ by the corresponding value `b'.  The operation is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_div( struct roundingData *roundData, float32 a, float32 b )
-{
+float32 float32_div( struct roundingData *roundData, float32 a, float32 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, zExp;
     bits32 aSig, bSig, zSig;
@@ -1344,8 +1282,7 @@ with respect to the corresponding value `b'.  The operation is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_rem( struct roundingData *roundData, float32 a, float32 b )
-{
+float32 float32_rem( struct roundingData *roundData, float32 a, float32 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, expDiff;
     bits32 aSig, bSig;
@@ -1401,13 +1338,11 @@ float32 float32_rem( struct roundingData *roundData, float32 a, float32 b )
             q >>= 32 - expDiff;
             bSig >>= 2;
             aSig = ( ( aSig>>1 )<<( expDiff - 1 ) ) - bSig * q;
-        }
-        else {
+        } else {
             aSig >>= 2;
             bSig >>= 2;
         }
-    }
-    else {
+    } else {
         if ( bSig <= aSig ) aSig -= bSig;
         aSig64 = ( (bits64) aSig )<<40;
         bSig64 = ( (bits64) bSig )<<40;
@@ -1447,8 +1382,7 @@ The operation is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float32_sqrt( struct roundingData *roundData, float32 a )
-{
+float32 float32_sqrt( struct roundingData *roundData, float32 a ) {
     flag aSign;
     int16 aExp, zExp;
     bits32 aSig, zSig;
@@ -1478,8 +1412,7 @@ float32 float32_sqrt( struct roundingData *roundData, float32 a )
     if ( ( zSig & 0x7F ) <= 5 ) {
         if ( zSig < 2 ) {
             zSig = 0xFFFFFFFF;
-        }
-        else {
+        } else {
             aSig >>= aExp & 1;
             term = ( (bits64) zSig ) * zSig;
             rem = ( ( (bits64) aSig )<<32 ) - term;
@@ -1502,11 +1435,10 @@ corresponding value `b', and 0 otherwise.  The comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_eq( float32 a, float32 b )
-{
+flag float32_eq( float32 a, float32 b ) {
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         if ( float32_is_signaling_nan( a ) || float32_is_signaling_nan( b ) ) {
             float_raise( float_flag_invalid );
@@ -1525,12 +1457,11 @@ performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_le( float32 a, float32 b )
-{
+flag float32_le( float32 a, float32 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -1549,12 +1480,11 @@ the corresponding value `b', and 0 otherwise.  The comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_lt( float32 a, float32 b )
-{
+flag float32_lt( float32 a, float32 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -1574,11 +1504,10 @@ if either operand is a NaN.  Otherwise, the comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_eq_signaling( float32 a, float32 b )
-{
+flag float32_eq_signaling( float32 a, float32 b ) {
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -1595,13 +1524,12 @@ cause an exception.  Otherwise, the comparison is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_le_quiet( float32 a, float32 b )
-{
+flag float32_le_quiet( float32 a, float32 b ) {
     flag aSign, bSign;
     //int16 aExp, bExp;
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -1621,12 +1549,11 @@ exception.  Otherwise, the comparison is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float32_lt_quiet( float32 a, float32 b )
-{
+flag float32_lt_quiet( float32 a, float32 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat32Exp( a ) == 0xFF ) && extractFloat32Frac( a ) )
-         || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
+            || ( ( extractFloat32Exp( b ) == 0xFF ) && extractFloat32Frac( b ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -1649,8 +1576,7 @@ positive integer is returned.  Otherwise, if the conversion overflows, the
 largest integer with the same sign as `a' is returned.
 -------------------------------------------------------------------------------
 */
-int32 float64_to_int32( struct roundingData *roundData, float64 a )
-{
+int32 float64_to_int32( struct roundingData *roundData, float64 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits64 aSig;
@@ -1677,8 +1603,7 @@ conversion overflows, the largest integer with the same sign as `a' is
 returned.
 -------------------------------------------------------------------------------
 */
-int32 float64_to_int32_round_to_zero( float64 a )
-{
+int32 float64_to_int32_round_to_zero( float64 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits64 aSig, savedASig;
@@ -1691,8 +1616,7 @@ int32 float64_to_int32_round_to_zero( float64 a )
     if ( shiftCount < 21 ) {
         if ( ( aExp == 0x7FF ) && aSig ) aSign = 0;
         goto invalid;
-    }
-    else if ( 52 < shiftCount ) {
+    } else if ( 52 < shiftCount ) {
         if ( aExp || aSig ) float_raise( float_flag_inexact );
         return 0;
     }
@@ -1702,7 +1626,7 @@ int32 float64_to_int32_round_to_zero( float64 a )
     z = aSig;
     if ( aSign ) z = - z;
     if ( ( z < 0 ) ^ aSign ) {
- invalid:
+invalid:
         float_raise( float_flag_invalid );
         return aSign ? 0x80000000 : 0x7FFFFFFF;
     }
@@ -1724,8 +1648,7 @@ positive integer is returned.  Otherwise, if the conversion overflows, the
 largest positive integer is returned.
 -------------------------------------------------------------------------------
 */
-int32 float64_to_uint32( struct roundingData *roundData, float64 a )
-{
+int32 float64_to_uint32( struct roundingData *roundData, float64 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits64 aSig;
@@ -1750,8 +1673,7 @@ Arithmetic, except that the conversion is always rounded toward zero.  If
 conversion overflows, the largest positive integer is returned.
 -------------------------------------------------------------------------------
 */
-int32 float64_to_uint32_round_to_zero( float64 a )
-{
+int32 float64_to_uint32_round_to_zero( float64 a ) {
     flag aSign;
     int16 aExp, shiftCount;
     bits64 aSig, savedASig;
@@ -1764,8 +1686,7 @@ int32 float64_to_uint32_round_to_zero( float64 a )
     if ( shiftCount < 21 ) {
         if ( ( aExp == 0x7FF ) && aSig ) aSign = 0;
         goto invalid;
-    }
-    else if ( 52 < shiftCount ) {
+    } else if ( 52 < shiftCount ) {
         if ( aExp || aSig ) float_raise( float_flag_inexact );
         return 0;
     }
@@ -1775,7 +1696,7 @@ int32 float64_to_uint32_round_to_zero( float64 a )
     z = aSig;
     if ( aSign ) z = - z;
     if ( ( z < 0 ) ^ aSign ) {
- invalid:
+invalid:
         float_raise( float_flag_invalid );
         return aSign ? 0x80000000 : 0x7FFFFFFF;
     }
@@ -1793,8 +1714,7 @@ performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 float64_to_float32( struct roundingData *roundData, float64 a )
-{
+float32 float64_to_float32( struct roundingData *roundData, float64 a ) {
     flag aSign;
     int16 aExp;
     bits64 aSig;
@@ -1827,8 +1747,7 @@ is performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 float64_to_floatx80( float64 a )
-{
+floatx80 float64_to_floatx80( float64 a ) {
     flag aSign;
     int16 aExp;
     bits64 aSig;
@@ -1860,8 +1779,7 @@ operation is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_round_to_int( struct roundingData *roundData, float64 a )
-{
+float64 float64_round_to_int( struct roundingData *roundData, float64 a ) {
     flag aSign;
     int16 aExp;
     bits64 lastBitMask, roundBitsMask;
@@ -1880,16 +1798,16 @@ float64 float64_round_to_int( struct roundingData *roundData, float64 a )
         roundData->exception |= float_flag_inexact;
         aSign = extractFloat64Sign( a );
         switch ( roundData->mode ) {
-         case float_round_nearest_even:
+        case float_round_nearest_even:
             if ( ( aExp == 0x3FE ) && extractFloat64Frac( a ) ) {
                 return packFloat64( aSign, 0x3FF, 0 );
             }
             break;
-         case float_round_down:
+        case float_round_down:
             return aSign ? LIT64( 0xBFF0000000000000 ) : 0;
-         case float_round_up:
+        case float_round_up:
             return
-            aSign ? LIT64( 0x8000000000000000 ) : LIT64( 0x3FF0000000000000 );
+                aSign ? LIT64( 0x8000000000000000 ) : LIT64( 0x3FF0000000000000 );
         }
         return packFloat64( aSign, 0, 0 );
     }
@@ -1901,8 +1819,7 @@ float64 float64_round_to_int( struct roundingData *roundData, float64 a )
     if ( roundingMode == float_round_nearest_even ) {
         z += lastBitMask>>1;
         if ( ( z & roundBitsMask ) == 0 ) z &= ~ lastBitMask;
-    }
-    else if ( roundingMode != float_round_to_zero ) {
+    } else if ( roundingMode != float_round_to_zero ) {
         if ( extractFloat64Sign( z ) ^ ( roundingMode == float_round_up ) ) {
             z += roundBitsMask;
         }
@@ -1922,8 +1839,7 @@ addition is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float64 addFloat64Sigs( struct roundingData *roundData, float64 a, float64 b, flag zSign )
-{
+static float64 addFloat64Sigs( struct roundingData *roundData, float64 a, float64 b, flag zSign ) {
     int16 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig;
     int16 expDiff;
@@ -1942,28 +1858,24 @@ static float64 addFloat64Sigs( struct roundingData *roundData, float64 a, float6
         }
         if ( bExp == 0 ) {
             --expDiff;
-        }
-        else {
+        } else {
             bSig |= LIT64( 0x2000000000000000 );
         }
         shift64RightJamming( bSig, expDiff, &bSig );
         zExp = aExp;
-    }
-    else if ( expDiff < 0 ) {
+    } else if ( expDiff < 0 ) {
         if ( bExp == 0x7FF ) {
             if ( bSig ) return propagateFloat64NaN( a, b );
             return packFloat64( zSign, 0x7FF, 0 );
         }
         if ( aExp == 0 ) {
             ++expDiff;
-        }
-        else {
+        } else {
             aSig |= LIT64( 0x2000000000000000 );
         }
         shift64RightJamming( aSig, - expDiff, &aSig );
         zExp = bExp;
-    }
-    else {
+    } else {
         if ( aExp == 0x7FF ) {
             if ( aSig | bSig ) return propagateFloat64NaN( a, b );
             return a;
@@ -1980,7 +1892,7 @@ static float64 addFloat64Sigs( struct roundingData *roundData, float64 a, float6
         zSig = aSig + bSig;
         ++zExp;
     }
- roundAndPack:
+roundAndPack:
     return roundAndPackFloat64( roundData, zSign, zExp, zSig );
 
 }
@@ -1994,8 +1906,7 @@ result is a NaN.  The subtraction is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static float64 subFloat64Sigs( struct roundingData *roundData, float64 a, float64 b, flag zSign )
-{
+static float64 subFloat64Sigs( struct roundingData *roundData, float64 a, float64 b, flag zSign ) {
     int16 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig;
     int16 expDiff;
@@ -2021,41 +1932,39 @@ static float64 subFloat64Sigs( struct roundingData *roundData, float64 a, float6
     if ( bSig < aSig ) goto aBigger;
     if ( aSig < bSig ) goto bBigger;
     return packFloat64( roundData->mode == float_round_down, 0, 0 );
- bExpBigger:
+bExpBigger:
     if ( bExp == 0x7FF ) {
         if ( bSig ) return propagateFloat64NaN( a, b );
         return packFloat64( zSign ^ 1, 0x7FF, 0 );
     }
     if ( aExp == 0 ) {
         ++expDiff;
-    }
-    else {
+    } else {
         aSig |= LIT64( 0x4000000000000000 );
     }
     shift64RightJamming( aSig, - expDiff, &aSig );
     bSig |= LIT64( 0x4000000000000000 );
- bBigger:
+bBigger:
     zSig = bSig - aSig;
     zExp = bExp;
     zSign ^= 1;
     goto normalizeRoundAndPack;
- aExpBigger:
+aExpBigger:
     if ( aExp == 0x7FF ) {
         if ( aSig ) return propagateFloat64NaN( a, b );
         return a;
     }
     if ( bExp == 0 ) {
         --expDiff;
-    }
-    else {
+    } else {
         bSig |= LIT64( 0x4000000000000000 );
     }
     shift64RightJamming( bSig, expDiff, &bSig );
     aSig |= LIT64( 0x4000000000000000 );
- aBigger:
+aBigger:
     zSig = aSig - bSig;
     zExp = aExp;
- normalizeRoundAndPack:
+normalizeRoundAndPack:
     --zExp;
     return normalizeRoundAndPackFloat64( roundData, zSign, zExp, zSig );
 
@@ -2068,16 +1977,14 @@ and `b'.  The operation is performed according to the IEC/IEEE Standard for
 Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_add( struct roundingData *roundData, float64 a, float64 b )
-{
+float64 float64_add( struct roundingData *roundData, float64 a, float64 b ) {
     flag aSign, bSign;
 
     aSign = extractFloat64Sign( a );
     bSign = extractFloat64Sign( b );
     if ( aSign == bSign ) {
         return addFloat64Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return subFloat64Sigs( roundData, a, b, aSign );
     }
 
@@ -2090,16 +1997,14 @@ Returns the result of subtracting the double-precision floating-point values
 for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_sub( struct roundingData *roundData, float64 a, float64 b )
-{
+float64 float64_sub( struct roundingData *roundData, float64 a, float64 b ) {
     flag aSign, bSign;
 
     aSign = extractFloat64Sign( a );
     bSign = extractFloat64Sign( b );
     if ( aSign == bSign ) {
         return subFloat64Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return addFloat64Sigs( roundData, a, b, aSign );
     }
 
@@ -2112,8 +2017,7 @@ Returns the result of multiplying the double-precision floating-point values
 for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_mul( struct roundingData *roundData, float64 a, float64 b )
-{
+float64 float64_mul( struct roundingData *roundData, float64 a, float64 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig0, zSig1;
@@ -2171,8 +2075,7 @@ by the corresponding value `b'.  The operation is performed according to
 the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_div( struct roundingData *roundData, float64 a, float64 b )
-{
+float64 float64_div( struct roundingData *roundData, float64 a, float64 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig;
@@ -2242,8 +2145,7 @@ with respect to the corresponding value `b'.  The operation is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_rem( struct roundingData *roundData, float64 a, float64 b )
-{
+float64 float64_rem( struct roundingData *roundData, float64 a, float64 b ) {
     flag aSign, bSign, zSign;
     int16 aExp, bExp, expDiff;
     bits64 aSig, bSig;
@@ -2301,8 +2203,7 @@ float64 float64_rem( struct roundingData *roundData, float64 a, float64 b )
         q >>= 64 - expDiff;
         bSig >>= 2;
         aSig = ( ( aSig>>1 )<<( expDiff - 1 ) ) - bSig * q;
-    }
-    else {
+    } else {
         aSig >>= 2;
         bSig >>= 2;
     }
@@ -2328,8 +2229,7 @@ The operation is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 float64_sqrt( struct roundingData *roundData, float64 a )
-{
+float64 float64_sqrt( struct roundingData *roundData, float64 a ) {
     flag aSign;
     int16 aExp, zExp;
     bits64 aSig, zSig;
@@ -2363,8 +2263,7 @@ float64 float64_sqrt( struct roundingData *roundData, float64 a )
     if ( ( zSig & 0x3FF ) <= 5 ) {
         if ( zSig < 2 ) {
             zSig = LIT64( 0xFFFFFFFFFFFFFFFF );
-        }
-        else {
+        } else {
             aSig <<= 2;
             mul64To128( zSig, zSig, &term0, &term1 );
             sub128( aSig, 0, term0, term1, &rem0, &rem1 );
@@ -2389,11 +2288,10 @@ corresponding value `b', and 0 otherwise.  The comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_eq( float64 a, float64 b )
-{
+flag float64_eq( float64 a, float64 b ) {
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         if ( float64_is_signaling_nan( a ) || float64_is_signaling_nan( b ) ) {
             float_raise( float_flag_invalid );
@@ -2412,12 +2310,11 @@ performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_le( float64 a, float64 b )
-{
+flag float64_le( float64 a, float64 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -2436,12 +2333,11 @@ the corresponding value `b', and 0 otherwise.  The comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_lt( float64 a, float64 b )
-{
+flag float64_lt( float64 a, float64 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -2461,11 +2357,10 @@ if either operand is a NaN.  Otherwise, the comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_eq_signaling( float64 a, float64 b )
-{
+flag float64_eq_signaling( float64 a, float64 b ) {
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -2482,13 +2377,12 @@ cause an exception.  Otherwise, the comparison is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_le_quiet( float64 a, float64 b )
-{
+flag float64_le_quiet( float64 a, float64 b ) {
     flag aSign, bSign;
     //int16 aExp, bExp;
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -2508,12 +2402,11 @@ exception.  Otherwise, the comparison is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag float64_lt_quiet( float64 a, float64 b )
-{
+flag float64_lt_quiet( float64 a, float64 b ) {
     flag aSign, bSign;
 
     if (    ( ( extractFloat64Exp( a ) == 0x7FF ) && extractFloat64Frac( a ) )
-         || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
+            || ( ( extractFloat64Exp( b ) == 0x7FF ) && extractFloat64Frac( b ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -2538,8 +2431,7 @@ largest positive integer is returned.  Otherwise, if the conversion
 overflows, the largest integer with the same sign as `a' is returned.
 -------------------------------------------------------------------------------
 */
-int32 floatx80_to_int32( struct roundingData *roundData, floatx80 a )
-{
+int32 floatx80_to_int32( struct roundingData *roundData, floatx80 a ) {
     flag aSign;
     int32 aExp, shiftCount;
     bits64 aSig;
@@ -2566,8 +2458,7 @@ Otherwise, if the conversion overflows, the largest integer with the same
 sign as `a' is returned.
 -------------------------------------------------------------------------------
 */
-int32 floatx80_to_int32_round_to_zero( floatx80 a )
-{
+int32 floatx80_to_int32_round_to_zero( floatx80 a ) {
     flag aSign;
     int32 aExp, shiftCount;
     bits64 aSig, savedASig;
@@ -2580,8 +2471,7 @@ int32 floatx80_to_int32_round_to_zero( floatx80 a )
     if ( shiftCount < 32 ) {
         if ( ( aExp == 0x7FFF ) && (bits64) ( aSig<<1 ) ) aSign = 0;
         goto invalid;
-    }
-    else if ( 63 < shiftCount ) {
+    } else if ( 63 < shiftCount ) {
         if ( aExp || aSig ) float_raise( float_flag_inexact );
         return 0;
     }
@@ -2590,7 +2480,7 @@ int32 floatx80_to_int32_round_to_zero( floatx80 a )
     z = aSig;
     if ( aSign ) z = - z;
     if ( ( z < 0 ) ^ aSign ) {
- invalid:
+invalid:
         float_raise( float_flag_invalid );
         return aSign ? 0x80000000 : 0x7FFFFFFF;
     }
@@ -2609,8 +2499,7 @@ conversion is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float32 floatx80_to_float32( struct roundingData *roundData, floatx80 a )
-{
+float32 floatx80_to_float32( struct roundingData *roundData, floatx80 a ) {
     flag aSign;
     int32 aExp;
     bits64 aSig;
@@ -2638,8 +2527,7 @@ conversion is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-float64 floatx80_to_float64( struct roundingData *roundData, floatx80 a )
-{
+float64 floatx80_to_float64( struct roundingData *roundData, floatx80 a ) {
     flag aSign;
     int32 aExp;
     bits64 aSig, zSig;
@@ -2667,8 +2555,7 @@ value.  The operation is performed according to the IEC/IEEE Standard for
 Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_round_to_int( struct roundingData *roundData, floatx80 a )
-{
+floatx80 floatx80_round_to_int( struct roundingData *roundData, floatx80 a ) {
     flag aSign;
     int32 aExp;
     bits64 lastBitMask, roundBitsMask;
@@ -2684,27 +2571,27 @@ floatx80 floatx80_round_to_int( struct roundingData *roundData, floatx80 a )
     }
     if ( aExp <= 0x3FFE ) {
         if (    ( aExp == 0 )
-             && ( (bits64) ( extractFloatx80Frac( a )<<1 ) == 0 ) ) {
+                && ( (bits64) ( extractFloatx80Frac( a )<<1 ) == 0 ) ) {
             return a;
         }
         roundData->exception |= float_flag_inexact;
         aSign = extractFloatx80Sign( a );
         switch ( roundData->mode ) {
-         case float_round_nearest_even:
+        case float_round_nearest_even:
             if ( ( aExp == 0x3FFE ) && (bits64) ( extractFloatx80Frac( a )<<1 )
                ) {
                 return
                     packFloatx80( aSign, 0x3FFF, LIT64( 0x8000000000000000 ) );
             }
             break;
-         case float_round_down:
+        case float_round_down:
             return
-                  aSign ?
-                      packFloatx80( 1, 0x3FFF, LIT64( 0x8000000000000000 ) )
+                aSign ?
+                packFloatx80( 1, 0x3FFF, LIT64( 0x8000000000000000 ) )
                 : packFloatx80( 0, 0, 0 );
-         case float_round_up:
+        case float_round_up:
             return
-                  aSign ? packFloatx80( 1, 0, 0 )
+                aSign ? packFloatx80( 1, 0, 0 )
                 : packFloatx80( 0, 0x3FFF, LIT64( 0x8000000000000000 ) );
         }
         return packFloatx80( aSign, 0, 0 );
@@ -2717,8 +2604,7 @@ floatx80 floatx80_round_to_int( struct roundingData *roundData, floatx80 a )
     if ( roundingMode == float_round_nearest_even ) {
         z.low += lastBitMask>>1;
         if ( ( z.low & roundBitsMask ) == 0 ) z.low &= ~ lastBitMask;
-    }
-    else if ( roundingMode != float_round_to_zero ) {
+    } else if ( roundingMode != float_round_to_zero ) {
         if ( extractFloatx80Sign( z ) ^ ( roundingMode == float_round_up ) ) {
             z.low += roundBitsMask;
         }
@@ -2742,8 +2628,7 @@ The addition is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static floatx80 addFloatx80Sigs( struct roundingData *roundData, floatx80 a, floatx80 b, flag zSign )
-{
+static floatx80 addFloatx80Sigs( struct roundingData *roundData, floatx80 a, floatx80 b, flag zSign ) {
     int32 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig0, zSig1;
     int32 expDiff;
@@ -2761,8 +2646,7 @@ static floatx80 addFloatx80Sigs( struct roundingData *roundData, floatx80 a, flo
         if ( bExp == 0 ) --expDiff;
         shift64ExtraRightJamming( bSig, 0, expDiff, &bSig, &zSig1 );
         zExp = aExp;
-    }
-    else if ( expDiff < 0 ) {
+    } else if ( expDiff < 0 ) {
         if ( bExp == 0x7FFF ) {
             if ( (bits64) ( bSig<<1 ) ) return propagateFloatx80NaN( a, b );
             return packFloatx80( zSign, 0x7FFF, LIT64( 0x8000000000000000 ) );
@@ -2770,8 +2654,7 @@ static floatx80 addFloatx80Sigs( struct roundingData *roundData, floatx80 a, flo
         if ( aExp == 0 ) ++expDiff;
         shift64ExtraRightJamming( aSig, 0, - expDiff, &aSig, &zSig1 );
         zExp = bExp;
-    }
-    else {
+    } else {
         if ( aExp == 0x7FFF ) {
             if ( (bits64) ( ( aSig | bSig )<<1 ) ) {
                 return propagateFloatx80NaN( a, b );
@@ -2787,15 +2670,15 @@ static floatx80 addFloatx80Sigs( struct roundingData *roundData, floatx80 a, flo
         zExp = aExp;
         goto shiftRight1;
     }
-    
+
     zSig0 = aSig + bSig;
 
-    if ( (sbits64) zSig0 < 0 ) goto roundAndPack; 
- shiftRight1:
+    if ( (sbits64) zSig0 < 0 ) goto roundAndPack;
+shiftRight1:
     shift64ExtraRightJamming( zSig0, zSig1, 1, &zSig0, &zSig1 );
     zSig0 |= LIT64( 0x8000000000000000 );
     ++zExp;
- roundAndPack:
+roundAndPack:
     return
         roundAndPackFloatx80(
             roundData, zSign, zExp, zSig0, zSig1 );
@@ -2811,8 +2694,7 @@ result is a NaN.  The subtraction is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-static floatx80 subFloatx80Sigs( struct roundingData *roundData, floatx80 a, floatx80 b, flag zSign )
-{
+static floatx80 subFloatx80Sigs( struct roundingData *roundData, floatx80 a, floatx80 b, flag zSign ) {
     int32 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig0, zSig1;
     int32 expDiff;
@@ -2843,29 +2725,29 @@ static floatx80 subFloatx80Sigs( struct roundingData *roundData, floatx80 a, flo
     if ( bSig < aSig ) goto aBigger;
     if ( aSig < bSig ) goto bBigger;
     return packFloatx80( roundData->mode == float_round_down, 0, 0 );
- bExpBigger:
+bExpBigger:
     if ( bExp == 0x7FFF ) {
         if ( (bits64) ( bSig<<1 ) ) return propagateFloatx80NaN( a, b );
         return packFloatx80( zSign ^ 1, 0x7FFF, LIT64( 0x8000000000000000 ) );
     }
     if ( aExp == 0 ) ++expDiff;
     shift128RightJamming( aSig, 0, - expDiff, &aSig, &zSig1 );
- bBigger:
+bBigger:
     sub128( bSig, 0, aSig, zSig1, &zSig0, &zSig1 );
     zExp = bExp;
     zSign ^= 1;
     goto normalizeRoundAndPack;
- aExpBigger:
+aExpBigger:
     if ( aExp == 0x7FFF ) {
         if ( (bits64) ( aSig<<1 ) ) return propagateFloatx80NaN( a, b );
         return a;
     }
     if ( bExp == 0 ) --expDiff;
     shift128RightJamming( bSig, 0, expDiff, &bSig, &zSig1 );
- aBigger:
+aBigger:
     sub128( aSig, 0, bSig, zSig1, &zSig0, &zSig1 );
     zExp = aExp;
- normalizeRoundAndPack:
+normalizeRoundAndPack:
     return
         normalizeRoundAndPackFloatx80(
             roundData, zSign, zExp, zSig0, zSig1 );
@@ -2879,19 +2761,17 @@ values `a' and `b'.  The operation is performed according to the IEC/IEEE
 Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_add( struct roundingData *roundData, floatx80 a, floatx80 b )
-{
+floatx80 floatx80_add( struct roundingData *roundData, floatx80 a, floatx80 b ) {
     flag aSign, bSign;
-    
+
     aSign = extractFloatx80Sign( a );
     bSign = extractFloatx80Sign( b );
     if ( aSign == bSign ) {
         return addFloatx80Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return subFloatx80Sigs( roundData, a, b, aSign );
     }
-    
+
 }
 
 /*
@@ -2901,16 +2781,14 @@ point values `a' and `b'.  The operation is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_sub( struct roundingData *roundData, floatx80 a, floatx80 b )
-{
+floatx80 floatx80_sub( struct roundingData *roundData, floatx80 a, floatx80 b ) {
     flag aSign, bSign;
 
     aSign = extractFloatx80Sign( a );
     bSign = extractFloatx80Sign( b );
     if ( aSign == bSign ) {
         return subFloatx80Sigs( roundData, a, b, aSign );
-    }
-    else {
+    } else {
         return addFloatx80Sigs( roundData, a, b, aSign );
     }
 
@@ -2923,8 +2801,7 @@ point values `a' and `b'.  The operation is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_mul( struct roundingData *roundData, floatx80 a, floatx80 b )
-{
+floatx80 floatx80_mul( struct roundingData *roundData, floatx80 a, floatx80 b ) {
     flag aSign, bSign, zSign;
     int32 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig0, zSig1;
@@ -2939,7 +2816,7 @@ floatx80 floatx80_mul( struct roundingData *roundData, floatx80 a, floatx80 b )
     zSign = aSign ^ bSign;
     if ( aExp == 0x7FFF ) {
         if (    (bits64) ( aSig<<1 )
-             || ( ( bExp == 0x7FFF ) && (bits64) ( bSig<<1 ) ) ) {
+                || ( ( bExp == 0x7FFF ) && (bits64) ( bSig<<1 ) ) ) {
             return propagateFloatx80NaN( a, b );
         }
         if ( ( bExp | bSig ) == 0 ) goto invalid;
@@ -2948,7 +2825,7 @@ floatx80 floatx80_mul( struct roundingData *roundData, floatx80 a, floatx80 b )
     if ( bExp == 0x7FFF ) {
         if ( (bits64) ( bSig<<1 ) ) return propagateFloatx80NaN( a, b );
         if ( ( aExp | aSig ) == 0 ) {
- invalid:
+invalid:
             roundData->exception |= float_flag_invalid;
             z.low = floatx80_default_nan_low;
             z.high = floatx80_default_nan_high;
@@ -2984,8 +2861,7 @@ value `a' by the corresponding value `b'.  The operation is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_div( struct roundingData *roundData, floatx80 a, floatx80 b )
-{
+floatx80 floatx80_div( struct roundingData *roundData, floatx80 a, floatx80 b ) {
     flag aSign, bSign, zSign;
     int32 aExp, bExp, zExp;
     bits64 aSig, bSig, zSig0, zSig1;
@@ -3014,7 +2890,7 @@ floatx80 floatx80_div( struct roundingData *roundData, floatx80 a, floatx80 b )
     if ( bExp == 0 ) {
         if ( bSig == 0 ) {
             if ( ( aExp | aSig ) == 0 ) {
- invalid:
+invalid:
                 roundData->exception |= float_flag_invalid;
                 z.low = floatx80_default_nan_low;
                 z.high = floatx80_default_nan_high;
@@ -3066,8 +2942,7 @@ Returns the remainder of the extended double-precision floating-point value
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_rem( struct roundingData *roundData, floatx80 a, floatx80 b )
-{
+floatx80 floatx80_rem( struct roundingData *roundData, floatx80 a, floatx80 b ) {
     flag aSign, bSign, zSign;
     int32 aExp, bExp, expDiff;
     bits64 aSig0, aSig1, bSig;
@@ -3082,7 +2957,7 @@ floatx80 floatx80_rem( struct roundingData *roundData, floatx80 a, floatx80 b )
     bSign = extractFloatx80Sign( b );
     if ( aExp == 0x7FFF ) {
         if (    (bits64) ( aSig0<<1 )
-             || ( ( bExp == 0x7FFF ) && (bits64) ( bSig<<1 ) ) ) {
+                || ( ( bExp == 0x7FFF ) && (bits64) ( bSig<<1 ) ) ) {
             return propagateFloatx80NaN( a, b );
         }
         goto invalid;
@@ -3093,7 +2968,7 @@ floatx80 floatx80_rem( struct roundingData *roundData, floatx80 a, floatx80 b )
     }
     if ( bExp == 0 ) {
         if ( bSig == 0 ) {
- invalid:
+invalid:
             roundData->exception |= float_flag_invalid;
             z.low = floatx80_default_nan_low;
             z.high = floatx80_default_nan_high;
@@ -3138,15 +3013,14 @@ floatx80 floatx80_rem( struct roundingData *roundData, floatx80 a, floatx80 b )
             ++q;
             sub128( aSig0, aSig1, term0, term1, &aSig0, &aSig1 );
         }
-    }
-    else {
+    } else {
         term1 = 0;
         term0 = bSig;
     }
     sub128( term0, term1, aSig0, aSig1, &alternateASig0, &alternateASig1 );
     if (    lt128( alternateASig0, alternateASig1, aSig0, aSig1 )
-         || (    eq128( alternateASig0, alternateASig1, aSig0, aSig1 )
-              && ( q & 1 ) )
+            || (    eq128( alternateASig0, alternateASig1, aSig0, aSig1 )
+                    && ( q & 1 ) )
        ) {
         aSig0 = alternateASig0;
         aSig1 = alternateASig1;
@@ -3166,8 +3040,7 @@ value `a'.  The operation is performed according to the IEC/IEEE Standard
 for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-floatx80 floatx80_sqrt( struct roundingData *roundData, floatx80 a )
-{
+floatx80 floatx80_sqrt( struct roundingData *roundData, floatx80 a ) {
     flag aSign;
     int32 aExp, zExp;
     bits64 aSig0, aSig1, zSig0, zSig1;
@@ -3185,7 +3058,7 @@ floatx80 floatx80_sqrt( struct roundingData *roundData, floatx80 a )
     }
     if ( aSign ) {
         if ( ( aExp | aSig0 ) == 0 ) return a;
- invalid:
+invalid:
         roundData->exception |= float_flag_invalid;
         z.low = floatx80_default_nan_low;
         z.high = floatx80_default_nan_high;
@@ -3244,25 +3117,24 @@ performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_eq( floatx80 a, floatx80 b )
-{
+flag floatx80_eq( floatx80 a, floatx80 b ) {
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         if (    floatx80_is_signaling_nan( a )
-             || floatx80_is_signaling_nan( b ) ) {
+                || floatx80_is_signaling_nan( b ) ) {
             float_raise( float_flag_invalid );
         }
         return 0;
     }
     return
-           ( a.low == b.low )
+        ( a.low == b.low )
         && (    ( a.high == b.high )
-             || (    ( a.low == 0 )
-                  && ( (bits16) ( ( a.high | b.high )<<1 ) == 0 ) )
+                || (    ( a.low == 0 )
+                        && ( (bits16) ( ( a.high | b.high )<<1 ) == 0 ) )
            );
 
 }
@@ -3275,14 +3147,13 @@ comparison is performed according to the IEC/IEEE Standard for Binary
 Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_le( floatx80 a, floatx80 b )
-{
+flag floatx80_le( floatx80 a, floatx80 b ) {
     flag aSign, bSign;
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -3291,12 +3162,12 @@ flag floatx80_le( floatx80 a, floatx80 b )
     bSign = extractFloatx80Sign( b );
     if ( aSign != bSign ) {
         return
-               aSign
+            aSign
             || (    ( ( (bits16) ( ( a.high | b.high )<<1 ) ) | a.low | b.low )
-                 == 0 );
+                    == 0 );
     }
     return
-          aSign ? le128( b.high, b.low, a.high, a.low )
+        aSign ? le128( b.high, b.low, a.high, a.low )
         : le128( a.high, a.low, b.high, b.low );
 
 }
@@ -3309,14 +3180,13 @@ is performed according to the IEC/IEEE Standard for Binary Floating-point
 Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_lt( floatx80 a, floatx80 b )
-{
+flag floatx80_lt( floatx80 a, floatx80 b ) {
     flag aSign, bSign;
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
@@ -3325,12 +3195,12 @@ flag floatx80_lt( floatx80 a, floatx80 b )
     bSign = extractFloatx80Sign( b );
     if ( aSign != bSign ) {
         return
-               aSign
+            aSign
             && (    ( ( (bits16) ( ( a.high | b.high )<<1 ) ) | a.low | b.low )
-                 != 0 );
+                    != 0 );
     }
     return
-          aSign ? lt128( b.high, b.low, a.high, a.low )
+        aSign ? lt128( b.high, b.low, a.high, a.low )
         : lt128( a.high, a.low, b.high, b.low );
 
 }
@@ -3343,22 +3213,21 @@ raised if either operand is a NaN.  Otherwise, the comparison is performed
 according to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_eq_signaling( floatx80 a, floatx80 b )
-{
+flag floatx80_eq_signaling( floatx80 a, floatx80 b ) {
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         float_raise( float_flag_invalid );
         return 0;
     }
     return
-           ( a.low == b.low )
+        ( a.low == b.low )
         && (    ( a.high == b.high )
-             || (    ( a.low == 0 )
-                  && ( (bits16) ( ( a.high | b.high )<<1 ) == 0 ) )
+                || (    ( a.low == 0 )
+                        && ( (bits16) ( ( a.high | b.high )<<1 ) == 0 ) )
            );
 
 }
@@ -3371,14 +3240,13 @@ do not cause an exception.  Otherwise, the comparison is performed according
 to the IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_le_quiet( floatx80 a, floatx80 b )
-{
+flag floatx80_le_quiet( floatx80 a, floatx80 b ) {
     flag aSign, bSign;
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -3387,12 +3255,12 @@ flag floatx80_le_quiet( floatx80 a, floatx80 b )
     bSign = extractFloatx80Sign( b );
     if ( aSign != bSign ) {
         return
-               aSign
+            aSign
             || (    ( ( (bits16) ( ( a.high | b.high )<<1 ) ) | a.low | b.low )
-                 == 0 );
+                    == 0 );
     }
     return
-          aSign ? le128( b.high, b.low, a.high, a.low )
+        aSign ? le128( b.high, b.low, a.high, a.low )
         : le128( a.high, a.low, b.high, b.low );
 
 }
@@ -3405,14 +3273,13 @@ an exception.  Otherwise, the comparison is performed according to the
 IEC/IEEE Standard for Binary Floating-point Arithmetic.
 -------------------------------------------------------------------------------
 */
-flag floatx80_lt_quiet( floatx80 a, floatx80 b )
-{
+flag floatx80_lt_quiet( floatx80 a, floatx80 b ) {
     flag aSign, bSign;
 
     if (    (    ( extractFloatx80Exp( a ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( a )<<1 ) )
-         || (    ( extractFloatx80Exp( b ) == 0x7FFF )
-              && (bits64) ( extractFloatx80Frac( b )<<1 ) )
+                 && (bits64) ( extractFloatx80Frac( a )<<1 ) )
+            || (    ( extractFloatx80Exp( b ) == 0x7FFF )
+                    && (bits64) ( extractFloatx80Frac( b )<<1 ) )
        ) {
         /* Do nothing, even if NaN as we're quiet */
         return 0;
@@ -3421,12 +3288,12 @@ flag floatx80_lt_quiet( floatx80 a, floatx80 b )
     bSign = extractFloatx80Sign( b );
     if ( aSign != bSign ) {
         return
-               aSign
+            aSign
             && (    ( ( (bits16) ( ( a.high | b.high )<<1 ) ) | a.low | b.low )
-                 != 0 );
+                    != 0 );
     }
     return
-          aSign ? lt128( b.high, b.low, a.high, a.low )
+        aSign ? lt128( b.high, b.low, a.high, a.low )
         : lt128( a.high, a.low, b.high, b.low );
 
 }

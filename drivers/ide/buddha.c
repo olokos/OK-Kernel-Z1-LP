@@ -29,9 +29,9 @@
 #include <asm/amigaints.h>
 
 
-    /*
-     *  The Buddha has 2 IDE interfaces, the Catweasel has 3, X-Surf has 2
-     */
+/*
+ *  The Buddha has 2 IDE interfaces, the Catweasel has 3, X-Surf has 2
+ */
 
 #define BUDDHA_NUM_HWIFS	2
 #define CATWEASEL_NUM_HWIFS	3
@@ -39,9 +39,9 @@
 
 #define MAX_NUM_HWIFS		3
 
-    /*
-     *  Bases of the IDE interfaces (relative to the board address)
-     */
+/*
+ *  Bases of the IDE interfaces (relative to the board address)
+ */
 
 #define BUDDHA_BASE1	0x800
 #define BUDDHA_BASE2	0xa00
@@ -55,18 +55,18 @@ static u_int buddha_bases[CATWEASEL_NUM_HWIFS] __initdata = {
 };
 
 static u_int xsurf_bases[XSURF_NUM_HWIFS] __initdata = {
-     XSURF_BASE1, XSURF_BASE2
+    XSURF_BASE1, XSURF_BASE2
 };
 
-    /*
-     *  Offsets from one of the above bases
-     */
+/*
+ *  Offsets from one of the above bases
+ */
 
 #define BUDDHA_CONTROL	0x11a
 
-    /*
-     *  Other registers
-     */
+/*
+ *  Other registers
+ */
 
 #define BUDDHA_IRQ1	0xf00		/* MSB = 1, Harddisk is source of */
 #define BUDDHA_IRQ2	0xf40		/* interrupt */
@@ -86,9 +86,9 @@ static int xsurf_irqports[XSURF_NUM_HWIFS] __initdata = {
 #define BUDDHA_IRQ_MR	0xfc0		/* master interrupt enable */
 
 
-    /*
-     *  Board information
-     */
+/*
+ *  Board information
+ */
 
 typedef enum BuddhaType_Enum {
     BOARD_BUDDHA, BOARD_CATWEASEL, BOARD_XSURF
@@ -96,22 +96,20 @@ typedef enum BuddhaType_Enum {
 
 static const char *buddha_board_name[] = { "Buddha", "Catweasel", "X-Surf" };
 
-    /*
-     *  Check and acknowledge the interrupt status
-     */
+/*
+ *  Check and acknowledge the interrupt status
+ */
 
-static int buddha_test_irq(ide_hwif_t *hwif)
-{
+static int buddha_test_irq(ide_hwif_t *hwif) {
     unsigned char ch;
 
     ch = z_readb(hwif->io_ports.irq_addr);
     if (!(ch & 0x80))
-	    return 0;
+        return 0;
     return 1;
 }
 
-static void xsurf_clear_irq(ide_drive_t *drive)
-{
+static void xsurf_clear_irq(ide_drive_t *drive) {
     /*
      * X-Surf needs 0 written to IRQ register to ensure ISA bit A11 stays at 0
      */
@@ -119,118 +117,116 @@ static void xsurf_clear_irq(ide_drive_t *drive)
 }
 
 static void __init buddha_setup_ports(struct ide_hw *hw, unsigned long base,
-				      unsigned long ctl, unsigned long irq_port)
-{
-	int i;
+                                      unsigned long ctl, unsigned long irq_port) {
+    int i;
 
-	memset(hw, 0, sizeof(*hw));
+    memset(hw, 0, sizeof(*hw));
 
-	hw->io_ports.data_addr = base;
+    hw->io_ports.data_addr = base;
 
-	for (i = 1; i < 8; i++)
-		hw->io_ports_array[i] = base + 2 + i * 4;
+    for (i = 1; i < 8; i++)
+        hw->io_ports_array[i] = base + 2 + i * 4;
 
-	hw->io_ports.ctl_addr = ctl;
-	hw->io_ports.irq_addr = irq_port;
+    hw->io_ports.ctl_addr = ctl;
+    hw->io_ports.irq_addr = irq_port;
 
-	hw->irq = IRQ_AMIGA_PORTS;
+    hw->irq = IRQ_AMIGA_PORTS;
 }
 
 static const struct ide_port_ops buddha_port_ops = {
-	.test_irq		= buddha_test_irq,
+    .test_irq		= buddha_test_irq,
 };
 
 static const struct ide_port_ops xsurf_port_ops = {
-	.clear_irq		= xsurf_clear_irq,
-	.test_irq		= buddha_test_irq,
+    .clear_irq		= xsurf_clear_irq,
+    .test_irq		= buddha_test_irq,
 };
 
 static const struct ide_port_info buddha_port_info = {
-	.port_ops		= &buddha_port_ops,
-	.host_flags		= IDE_HFLAG_MMIO | IDE_HFLAG_NO_DMA,
-	.irq_flags		= IRQF_SHARED,
-	.chipset		= ide_generic,
+    .port_ops		= &buddha_port_ops,
+    .host_flags		= IDE_HFLAG_MMIO | IDE_HFLAG_NO_DMA,
+    .irq_flags		= IRQF_SHARED,
+    .chipset		= ide_generic,
 };
 
-    /*
-     *  Probe for a Buddha or Catweasel IDE interface
-     */
+/*
+ *  Probe for a Buddha or Catweasel IDE interface
+ */
 
-static int __init buddha_init(void)
-{
-	struct zorro_dev *z = NULL;
-	u_long buddha_board = 0;
-	BuddhaType type;
-	int buddha_num_hwifs, i;
+static int __init buddha_init(void) {
+    struct zorro_dev *z = NULL;
+    u_long buddha_board = 0;
+    BuddhaType type;
+    int buddha_num_hwifs, i;
 
-	while ((z = zorro_find_device(ZORRO_WILDCARD, z))) {
-		unsigned long board;
-		struct ide_hw hw[MAX_NUM_HWIFS], *hws[MAX_NUM_HWIFS];
-		struct ide_port_info d = buddha_port_info;
+    while ((z = zorro_find_device(ZORRO_WILDCARD, z))) {
+        unsigned long board;
+        struct ide_hw hw[MAX_NUM_HWIFS], *hws[MAX_NUM_HWIFS];
+        struct ide_port_info d = buddha_port_info;
 
-		if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_BUDDHA) {
-			buddha_num_hwifs = BUDDHA_NUM_HWIFS;
-			type=BOARD_BUDDHA;
-		} else if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_CATWEASEL) {
-			buddha_num_hwifs = CATWEASEL_NUM_HWIFS;
-			type=BOARD_CATWEASEL;
-		} else if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_X_SURF) {
-			buddha_num_hwifs = XSURF_NUM_HWIFS;
-			type=BOARD_XSURF;
-			d.port_ops = &xsurf_port_ops;
-		} else 
-			continue;
-		
-		board = z->resource.start;
+        if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_BUDDHA) {
+            buddha_num_hwifs = BUDDHA_NUM_HWIFS;
+            type=BOARD_BUDDHA;
+        } else if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_CATWEASEL) {
+            buddha_num_hwifs = CATWEASEL_NUM_HWIFS;
+            type=BOARD_CATWEASEL;
+        } else if (z->id == ZORRO_PROD_INDIVIDUAL_COMPUTERS_X_SURF) {
+            buddha_num_hwifs = XSURF_NUM_HWIFS;
+            type=BOARD_XSURF;
+            d.port_ops = &xsurf_port_ops;
+        } else
+            continue;
 
-		if(type != BOARD_XSURF) {
-			if (!request_mem_region(board+BUDDHA_BASE1, 0x800, "IDE"))
-				continue;
-		} else {
-			if (!request_mem_region(board+XSURF_BASE1, 0x1000, "IDE"))
-				continue;
-			if (!request_mem_region(board+XSURF_BASE2, 0x1000, "IDE"))
-				goto fail_base2;
-			if (!request_mem_region(board+XSURF_IRQ1, 0x8, "IDE")) {
-				release_mem_region(board+XSURF_BASE2, 0x1000);
+        board = z->resource.start;
+
+        if(type != BOARD_XSURF) {
+            if (!request_mem_region(board+BUDDHA_BASE1, 0x800, "IDE"))
+                continue;
+        } else {
+            if (!request_mem_region(board+XSURF_BASE1, 0x1000, "IDE"))
+                continue;
+            if (!request_mem_region(board+XSURF_BASE2, 0x1000, "IDE"))
+                goto fail_base2;
+            if (!request_mem_region(board+XSURF_IRQ1, 0x8, "IDE")) {
+                release_mem_region(board+XSURF_BASE2, 0x1000);
 fail_base2:
-				release_mem_region(board+XSURF_BASE1, 0x1000);
-				continue;
-			}
-		}	  
-		buddha_board = ZTWO_VADDR(board);
-		
-		/* write to BUDDHA_IRQ_MR to enable the board IRQ */
-		/* X-Surf doesn't have this.  IRQs are always on */
-		if (type != BOARD_XSURF)
-			z_writeb(0, buddha_board+BUDDHA_IRQ_MR);
+                release_mem_region(board+XSURF_BASE1, 0x1000);
+                continue;
+            }
+        }
+        buddha_board = ZTWO_VADDR(board);
 
-		printk(KERN_INFO "ide: %s IDE controller\n",
-				 buddha_board_name[type]);
+        /* write to BUDDHA_IRQ_MR to enable the board IRQ */
+        /* X-Surf doesn't have this.  IRQs are always on */
+        if (type != BOARD_XSURF)
+            z_writeb(0, buddha_board+BUDDHA_IRQ_MR);
 
-		for (i = 0; i < buddha_num_hwifs; i++) {
-			unsigned long base, ctl, irq_port;
+        printk(KERN_INFO "ide: %s IDE controller\n",
+               buddha_board_name[type]);
 
-			if (type != BOARD_XSURF) {
-				base = buddha_board + buddha_bases[i];
-				ctl = base + BUDDHA_CONTROL;
-				irq_port = buddha_board + buddha_irqports[i];
-			} else {
-				base = buddha_board + xsurf_bases[i];
-				/* X-Surf has no CS1* (Control/AltStat) */
-				ctl = 0;
-				irq_port = buddha_board + xsurf_irqports[i];
-			}
+        for (i = 0; i < buddha_num_hwifs; i++) {
+            unsigned long base, ctl, irq_port;
 
-			buddha_setup_ports(&hw[i], base, ctl, irq_port);
+            if (type != BOARD_XSURF) {
+                base = buddha_board + buddha_bases[i];
+                ctl = base + BUDDHA_CONTROL;
+                irq_port = buddha_board + buddha_irqports[i];
+            } else {
+                base = buddha_board + xsurf_bases[i];
+                /* X-Surf has no CS1* (Control/AltStat) */
+                ctl = 0;
+                irq_port = buddha_board + xsurf_irqports[i];
+            }
 
-			hws[i] = &hw[i];
-		}
+            buddha_setup_ports(&hw[i], base, ctl, irq_port);
 
-		ide_host_add(&d, hws, i, NULL);
-	}
+            hws[i] = &hw[i];
+        }
 
-	return 0;
+        ide_host_add(&d, hws, i, NULL);
+    }
+
+    return 0;
 }
 
 module_init(buddha_init);

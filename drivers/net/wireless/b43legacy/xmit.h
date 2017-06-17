@@ -22,23 +22,23 @@ _b43legacy_declare_plcp_hdr(6);
 
 /* TX header for v3 firmware */
 struct b43legacy_txhdr_fw3 {
-	__le32 mac_ctl;				/* MAC TX control */
-	__le16 mac_frame_ctl;			/* Copy of the FrameControl */
-	__le16 tx_fes_time_norm;		/* TX FES Time Normal */
-	__le16 phy_ctl;				/* PHY TX control */
-	__u8 iv[16];				/* Encryption IV */
-	__u8 tx_receiver[6];			/* TX Frame Receiver address */
-	__le16 tx_fes_time_fb;			/* TX FES Time Fallback */
-	struct b43legacy_plcp_hdr4 rts_plcp_fb;	/* RTS fallback PLCP */
-	__le16 rts_dur_fb;			/* RTS fallback duration */
-	struct b43legacy_plcp_hdr4 plcp_fb;	/* Fallback PLCP */
-	__le16 dur_fb;				/* Fallback duration */
-	PAD_BYTES(2);
-	__le16 cookie;
-	__le16 unknown_scb_stuff;
-	struct b43legacy_plcp_hdr6 rts_plcp;	/* RTS PLCP */
-	__u8 rts_frame[18];			/* The RTS frame (if used) */
-	struct b43legacy_plcp_hdr6 plcp;
+    __le32 mac_ctl;				/* MAC TX control */
+    __le16 mac_frame_ctl;			/* Copy of the FrameControl */
+    __le16 tx_fes_time_norm;		/* TX FES Time Normal */
+    __le16 phy_ctl;				/* PHY TX control */
+    __u8 iv[16];				/* Encryption IV */
+    __u8 tx_receiver[6];			/* TX Frame Receiver address */
+    __le16 tx_fes_time_fb;			/* TX FES Time Fallback */
+    struct b43legacy_plcp_hdr4 rts_plcp_fb;	/* RTS fallback PLCP */
+    __le16 rts_dur_fb;			/* RTS fallback duration */
+    struct b43legacy_plcp_hdr4 plcp_fb;	/* Fallback PLCP */
+    __le16 dur_fb;				/* Fallback duration */
+    PAD_BYTES(2);
+    __le16 cookie;
+    __le16 unknown_scb_stuff;
+    struct b43legacy_plcp_hdr6 rts_plcp;	/* RTS PLCP */
+    __u8 rts_frame[18];			/* The RTS frame (if used) */
+    struct b43legacy_plcp_hdr6 plcp;
 } __packed;
 
 /* MAC TX control */
@@ -79,65 +79,65 @@ struct b43legacy_txhdr_fw3 {
 
 
 int b43legacy_generate_txhdr(struct b43legacy_wldev *dev,
-			      u8 *txhdr,
-			      const unsigned char *fragment_data,
-			      unsigned int fragment_len,
-			      struct ieee80211_tx_info *info,
-			      u16 cookie);
+                             u8 *txhdr,
+                             const unsigned char *fragment_data,
+                             unsigned int fragment_len,
+                             struct ieee80211_tx_info *info,
+                             u16 cookie);
 
 
 /* Transmit Status */
 struct b43legacy_txstatus {
-	u16 cookie;	/* The cookie from the txhdr */
-	u16 seq;	/* Sequence number */
-	u8 phy_stat;	/* PHY TX status */
-	u8 frame_count;	/* Frame transmit count */
-	u8 rts_count;	/* RTS transmit count */
-	u8 supp_reason;	/* Suppression reason */
-	/* flags */
-	u8 pm_indicated;/* PM mode indicated to AP */
-	u8 intermediate;/* Intermediate status notification */
-	u8 for_ampdu;	/* Status is for an AMPDU (afterburner) */
-	u8 acked;	/* Wireless ACK received */
+    u16 cookie;	/* The cookie from the txhdr */
+    u16 seq;	/* Sequence number */
+    u8 phy_stat;	/* PHY TX status */
+    u8 frame_count;	/* Frame transmit count */
+    u8 rts_count;	/* RTS transmit count */
+    u8 supp_reason;	/* Suppression reason */
+    /* flags */
+    u8 pm_indicated;/* PM mode indicated to AP */
+    u8 intermediate;/* Intermediate status notification */
+    u8 for_ampdu;	/* Status is for an AMPDU (afterburner) */
+    u8 acked;	/* Wireless ACK received */
 };
 
 /* txstatus supp_reason values */
 enum {
-	B43legacy_TXST_SUPP_NONE,	/* Not suppressed */
-	B43legacy_TXST_SUPP_PMQ,	/* Suppressed due to PMQ entry */
-	B43legacy_TXST_SUPP_FLUSH,	/* Suppressed due to flush request */
-	B43legacy_TXST_SUPP_PREV,	/* Previous fragment failed */
-	B43legacy_TXST_SUPP_CHAN,	/* Channel mismatch */
-	B43legacy_TXST_SUPP_LIFE,	/* Lifetime expired */
-	B43legacy_TXST_SUPP_UNDER,	/* Buffer underflow */
-	B43legacy_TXST_SUPP_ABNACK,	/* Afterburner NACK */
+    B43legacy_TXST_SUPP_NONE,	/* Not suppressed */
+    B43legacy_TXST_SUPP_PMQ,	/* Suppressed due to PMQ entry */
+    B43legacy_TXST_SUPP_FLUSH,	/* Suppressed due to flush request */
+    B43legacy_TXST_SUPP_PREV,	/* Previous fragment failed */
+    B43legacy_TXST_SUPP_CHAN,	/* Channel mismatch */
+    B43legacy_TXST_SUPP_LIFE,	/* Lifetime expired */
+    B43legacy_TXST_SUPP_UNDER,	/* Buffer underflow */
+    B43legacy_TXST_SUPP_ABNACK,	/* Afterburner NACK */
 };
 
 /* Transmit Status as received through DMA/PIO on old chips */
 struct b43legacy_hwtxstatus {
-	PAD_BYTES(4);
-	__le16 cookie;
-	u8 flags;
-	u8 count;
-	PAD_BYTES(2);
-	__le16 seq;
-	u8 phy_stat;
-	PAD_BYTES(1);
+    PAD_BYTES(4);
+    __le16 cookie;
+    u8 flags;
+    u8 count;
+    PAD_BYTES(2);
+    __le16 seq;
+    u8 phy_stat;
+    PAD_BYTES(1);
 } __packed;
 
 
 /* Receive header for v3 firmware. */
 struct b43legacy_rxhdr_fw3 {
-	__le16 frame_len;	/* Frame length */
-	PAD_BYTES(2);
-	__le16 phy_status0;	/* PHY RX Status 0 */
-	__u8 jssi;		/* PHY RX Status 1: JSSI */
-	__u8 sig_qual;		/* PHY RX Status 1: Signal Quality */
-	PAD_BYTES(2);		/* PHY RX Status 2 */
-	__le16 phy_status3;	/* PHY RX Status 3 */
-	__le16 mac_status;	/* MAC RX status */
-	__le16 mac_time;
-	__le16 channel;
+    __le16 frame_len;	/* Frame length */
+    PAD_BYTES(2);
+    __le16 phy_status0;	/* PHY RX Status 0 */
+    __u8 jssi;		/* PHY RX Status 1: JSSI */
+    __u8 sig_qual;		/* PHY RX Status 1: Signal Quality */
+    PAD_BYTES(2);		/* PHY RX Status 2 */
+    __le16 phy_status3;	/* PHY RX Status 3 */
+    __le16 mac_status;	/* MAC RX status */
+    __le16 mac_time;
+    __le16 channel;
 } __packed;
 
 
@@ -192,17 +192,17 @@ u8 b43legacy_plcp_get_ratecode_cck(const u8 bitrate);
 u8 b43legacy_plcp_get_ratecode_ofdm(const u8 bitrate);
 
 void b43legacy_generate_plcp_hdr(struct b43legacy_plcp_hdr4 *plcp,
-			       const u16 octets, const u8 bitrate);
+                                 const u16 octets, const u8 bitrate);
 
 void b43legacy_rx(struct b43legacy_wldev *dev,
-		struct sk_buff *skb,
-		const void *_rxhdr);
+                  struct sk_buff *skb,
+                  const void *_rxhdr);
 
 void b43legacy_handle_txstatus(struct b43legacy_wldev *dev,
-			       const struct b43legacy_txstatus *status);
+                               const struct b43legacy_txstatus *status);
 
 void b43legacy_handle_hwtxstatus(struct b43legacy_wldev *dev,
-				 const struct b43legacy_hwtxstatus *hw);
+                                 const struct b43legacy_hwtxstatus *hw);
 
 void b43legacy_tx_suspend(struct b43legacy_wldev *dev);
 void b43legacy_tx_resume(struct b43legacy_wldev *dev);
@@ -210,14 +210,14 @@ void b43legacy_tx_resume(struct b43legacy_wldev *dev);
 
 #define B43legacy_NR_QOSPARMS	22
 enum {
-	B43legacy_QOSPARM_TXOP = 0,
-	B43legacy_QOSPARM_CWMIN,
-	B43legacy_QOSPARM_CWMAX,
-	B43legacy_QOSPARM_CWCUR,
-	B43legacy_QOSPARM_AIFS,
-	B43legacy_QOSPARM_BSLOTS,
-	B43legacy_QOSPARM_REGGAP,
-	B43legacy_QOSPARM_STATUS,
+    B43legacy_QOSPARM_TXOP = 0,
+    B43legacy_QOSPARM_CWMIN,
+    B43legacy_QOSPARM_CWMAX,
+    B43legacy_QOSPARM_CWCUR,
+    B43legacy_QOSPARM_AIFS,
+    B43legacy_QOSPARM_BSLOTS,
+    B43legacy_QOSPARM_REGGAP,
+    B43legacy_QOSPARM_STATUS,
 };
 
 void b43legacy_qos_init(struct b43legacy_wldev *dev);
@@ -227,35 +227,32 @@ void b43legacy_qos_init(struct b43legacy_wldev *dev);
  * to "raw-format" and back. The firmware API changed for this at some revision.
  * We need to account for that here. */
 static inline
-int b43legacy_new_kidx_api(struct b43legacy_wldev *dev)
-{
-	/* FIXME: Not sure the change was at rev 351 */
-	return (dev->fw.rev >= 351);
+int b43legacy_new_kidx_api(struct b43legacy_wldev *dev) {
+    /* FIXME: Not sure the change was at rev 351 */
+    return (dev->fw.rev >= 351);
 }
 static inline
-u8 b43legacy_kidx_to_fw(struct b43legacy_wldev *dev, u8 raw_kidx)
-{
-	u8 firmware_kidx;
-	if (b43legacy_new_kidx_api(dev))
-		firmware_kidx = raw_kidx;
-	else {
-		if (raw_kidx >= 4) /* Is per STA key? */
-			firmware_kidx = raw_kidx - 4;
-		else
-			firmware_kidx = raw_kidx; /* TX default key */
-	}
-	return firmware_kidx;
+u8 b43legacy_kidx_to_fw(struct b43legacy_wldev *dev, u8 raw_kidx) {
+    u8 firmware_kidx;
+    if (b43legacy_new_kidx_api(dev))
+        firmware_kidx = raw_kidx;
+    else {
+        if (raw_kidx >= 4) /* Is per STA key? */
+            firmware_kidx = raw_kidx - 4;
+        else
+            firmware_kidx = raw_kidx; /* TX default key */
+    }
+    return firmware_kidx;
 }
 static inline
-u8 b43legacy_kidx_to_raw(struct b43legacy_wldev *dev, u8 firmware_kidx)
-{
-	u8 raw_kidx;
-	if (b43legacy_new_kidx_api(dev))
-		raw_kidx = firmware_kidx;
-	else
-		/* RX default keys or per STA keys */
-		raw_kidx = firmware_kidx + 4;
-	return raw_kidx;
+u8 b43legacy_kidx_to_raw(struct b43legacy_wldev *dev, u8 firmware_kidx) {
+    u8 raw_kidx;
+    if (b43legacy_new_kidx_api(dev))
+        raw_kidx = firmware_kidx;
+    else
+        /* RX default keys or per STA keys */
+        raw_kidx = firmware_kidx + 4;
+    return raw_kidx;
 }
 
 #endif /* B43legacy_XMIT_H_ */

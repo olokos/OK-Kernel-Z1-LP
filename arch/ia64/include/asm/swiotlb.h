@@ -9,8 +9,7 @@ extern int swiotlb;
 extern void pci_swiotlb_init(void);
 #else
 #define swiotlb 0
-static inline void pci_swiotlb_init(void)
-{
+static inline void pci_swiotlb_init(void) {
 }
 #endif
 

@@ -34,47 +34,43 @@
 
 static void __iomem *icoll_base = MXS_IO_ADDRESS(MXS_ICOLL_BASE_ADDR);
 
-static void icoll_ack_irq(struct irq_data *d)
-{
-	/*
-	 * The Interrupt Collector is able to prioritize irqs.
-	 * Currently only level 0 is used. So acking can use
-	 * BV_ICOLL_LEVELACK_IRQLEVELACK__LEVEL0 unconditionally.
-	 */
-	__raw_writel(BV_ICOLL_LEVELACK_IRQLEVELACK__LEVEL0,
-			icoll_base + HW_ICOLL_LEVELACK);
+static void icoll_ack_irq(struct irq_data *d) {
+    /*
+     * The Interrupt Collector is able to prioritize irqs.
+     * Currently only level 0 is used. So acking can use
+     * BV_ICOLL_LEVELACK_IRQLEVELACK__LEVEL0 unconditionally.
+     */
+    __raw_writel(BV_ICOLL_LEVELACK_IRQLEVELACK__LEVEL0,
+                 icoll_base + HW_ICOLL_LEVELACK);
 }
 
-static void icoll_mask_irq(struct irq_data *d)
-{
-	__raw_writel(BM_ICOLL_INTERRUPTn_ENABLE,
-			icoll_base + HW_ICOLL_INTERRUPTn_CLR(d->irq));
+static void icoll_mask_irq(struct irq_data *d) {
+    __raw_writel(BM_ICOLL_INTERRUPTn_ENABLE,
+                 icoll_base + HW_ICOLL_INTERRUPTn_CLR(d->irq));
 }
 
-static void icoll_unmask_irq(struct irq_data *d)
-{
-	__raw_writel(BM_ICOLL_INTERRUPTn_ENABLE,
-			icoll_base + HW_ICOLL_INTERRUPTn_SET(d->irq));
+static void icoll_unmask_irq(struct irq_data *d) {
+    __raw_writel(BM_ICOLL_INTERRUPTn_ENABLE,
+                 icoll_base + HW_ICOLL_INTERRUPTn_SET(d->irq));
 }
 
 static struct irq_chip mxs_icoll_chip = {
-	.irq_ack = icoll_ack_irq,
-	.irq_mask = icoll_mask_irq,
-	.irq_unmask = icoll_unmask_irq,
+    .irq_ack = icoll_ack_irq,
+    .irq_mask = icoll_mask_irq,
+    .irq_unmask = icoll_unmask_irq,
 };
 
-void __init icoll_init_irq(void)
-{
-	int i;
+void __init icoll_init_irq(void) {
+    int i;
 
-	/*
-	 * Interrupt Collector reset, which initializes the priority
-	 * for each irq to level 0.
-	 */
-	mxs_reset_block(icoll_base + HW_ICOLL_CTRL);
+    /*
+     * Interrupt Collector reset, which initializes the priority
+     * for each irq to level 0.
+     */
+    mxs_reset_block(icoll_base + HW_ICOLL_CTRL);
 
-	for (i = 0; i < MXS_INTERNAL_IRQS; i++) {
-		irq_set_chip_and_handler(i, &mxs_icoll_chip, handle_level_irq);
-		set_irq_flags(i, IRQF_VALID);
-	}
+    for (i = 0; i < MXS_INTERNAL_IRQS; i++) {
+        irq_set_chip_and_handler(i, &mxs_icoll_chip, handle_level_irq);
+        set_irq_flags(i, IRQF_VALID);
+    }
 }

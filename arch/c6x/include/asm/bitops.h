@@ -35,14 +35,13 @@
  * Note __ffs(0) = undef, __ffs(1) = 0, __ffs(0x80000000) = 31.
  *
  */
-static inline unsigned long __ffs(unsigned long x)
-{
-	asm (" bitr  .M1  %0,%0\n"
-	     " nop\n"
-	     " lmbd  .L1  1,%0,%0\n"
-	     : "+a"(x));
+static inline unsigned long __ffs(unsigned long x) {
+    asm (" bitr  .M1  %0,%0\n"
+         " nop\n"
+         " lmbd  .L1  1,%0,%0\n"
+         : "+a"(x));
 
-	return x;
+    return x;
 }
 
 /*
@@ -60,14 +59,13 @@ static inline unsigned long __ffs(unsigned long x)
  * This is defined the same way as ffs.
  * Note fls(0) = 0, fls(1) = 1, fls(0x80000000) = 32.
  */
-static inline int fls(int x)
-{
-	if (!x)
-		return 0;
+static inline int fls(int x) {
+    if (!x)
+        return 0;
 
-	asm (" lmbd  .L1  1,%0,%0\n" : "+a"(x));
+    asm (" lmbd  .L1  1,%0,%0\n" : "+a"(x));
 
-	return 32 - x;
+    return 32 - x;
 }
 
 /**
@@ -79,12 +77,11 @@ static inline int fls(int x)
  * differs in spirit from the above ffz (man ffs).
  * Note ffs(0) = 0, ffs(1) = 1, ffs(0x80000000) = 32.
  */
-static inline int ffs(int x)
-{
-	if (!x)
-		return 0;
+static inline int ffs(int x) {
+    if (!x)
+        return 0;
 
-	return __ffs(x) + 1;
+    return __ffs(x) + 1;
 }
 
 #include <asm-generic/bitops/__fls.h>

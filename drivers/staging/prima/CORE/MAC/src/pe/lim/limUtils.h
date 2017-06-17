@@ -45,8 +45,7 @@
 #include "limScanResultUtils.h"
 #include "limTimerUtils.h"
 #include "limTrace.h"
-typedef enum
-{
+typedef enum {
     ONE_BYTE   = 1,
     TWO_BYTE   = 2
 } eSizeOfLenField;
@@ -74,24 +73,20 @@ typedef enum
     *pCurVal = (tLimBAState)(((pSta->baState >> tid*2) & 0x3));\
 }
 
-typedef struct sAddBaInfo
-{
+typedef struct sAddBaInfo {
     tANI_U16 fBaEnable : 1;
     tANI_U16 startingSeqNum: 12;
     tANI_U16 reserved : 3;
 } tAddBaInfo, *tpAddBaInfo;
 
-typedef struct sAddBaCandidate
-{
+typedef struct sAddBaCandidate {
     tSirMacAddr staAddr;
     tAddBaInfo baInfo[STACFG_MAX_TC];
 } tAddBaCandidate, *tpAddBaCandidate;
 
 #ifdef WLAN_FEATURE_11W
-typedef union uPmfSaQueryTimerId
-{
-    struct
-    {
+typedef union uPmfSaQueryTimerId {
+    struct {
         tANI_U8 sessionId;
         tANI_U16 peerIdx;
     } fields;
@@ -99,16 +94,14 @@ typedef union uPmfSaQueryTimerId
 } tPmfSaQueryTimerId, *tpPmfSaQueryTimerId;
 #endif
 
-typedef enum offset
-{
+typedef enum offset {
     BW20,
     BW40PLUS,
     BW40MINUS,
     BWALL
 } offset_t;
 
-typedef struct op_class_map
-{
+typedef struct op_class_map {
     tANI_U8 op_class;
     tANI_U8 ch_spacing;
     offset_t    offset;
@@ -227,8 +220,7 @@ void limPrepareFor11hChannelSwitch(tpAniSirGlobal pMac, tpPESession psessionEntr
 void limSwitchChannelCback(tpAniSirGlobal pMac, eHalStatus status,
                            tANI_U32 *data, tpPESession psessionEntry);
 
-static inline tSirRFBand limGetRFBand(tANI_U8 channel)
-{
+static inline tSirRFBand limGetRFBand(tANI_U8 channel) {
     if ((channel >= SIR_11A_CHANNEL_BEGIN) &&
             (channel <= SIR_11A_CHANNEL_END))
         return SIR_BAND_5_GHZ;
@@ -242,8 +234,7 @@ static inline tSirRFBand limGetRFBand(tANI_U8 channel)
 
 
 static inline tSirRetStatus
-limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry)
-{
+limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry) {
     if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
         *staid = 1;
     else if (psessionEntry->limSystemRole == eLIM_STA_ROLE)
@@ -255,16 +246,14 @@ limGetMgmtStaid(tpAniSirGlobal pMac, tANI_U16 *staid, tpPESession psessionEntry)
 }
 
 static inline tANI_U8
-limIsSystemInSetMimopsState(tpAniSirGlobal pMac)
-{
+limIsSystemInSetMimopsState(tpAniSirGlobal pMac) {
     if (pMac->lim.gLimMlmState == eLIM_MLM_WT_SET_MIMOPS_STATE)
         return true;
     return false;
 }
 
 static inline tANI_U8
-isEnteringMimoPS(tSirMacHTMIMOPowerSaveState curState, tSirMacHTMIMOPowerSaveState newState)
-{
+isEnteringMimoPS(tSirMacHTMIMOPowerSaveState curState, tSirMacHTMIMOPowerSaveState newState) {
     if (curState == eSIR_HT_MIMO_PS_NO_LIMIT &&
             (newState == eSIR_HT_MIMO_PS_DYNAMIC ||newState == eSIR_HT_MIMO_PS_STATIC))
         return TRUE;
@@ -313,8 +302,7 @@ void limGetBDfromRxPacket(tpAniSirGlobal pMac, void *body, tANI_U32 **pBD);
  * \return Result of X^Y
  *
  */
-static inline tANI_U32 utilsPowerXY( tANI_U16 base, tANI_U16 power )
-{
+static inline tANI_U32 utilsPowerXY( tANI_U16 base, tANI_U16 power ) {
     tANI_U32 result = 1, i;
 
     for( i = 0; i < power; i++ )
@@ -425,8 +413,7 @@ tANI_BOOLEAN limCheckHTChanBondModeChange(tpAniSirGlobal pMac,
         tANI_U8 staId);
 #ifdef FEATURE_WLAN_DIAG_SUPPORT
 
-typedef enum
-{
+typedef enum {
     WLAN_PE_DIAG_SCAN_REQ_EVENT = 0,
     WLAN_PE_DIAG_SCAN_ABORT_IND_EVENT,
     WLAN_PE_DIAG_SCAN_RSP_EVENT,

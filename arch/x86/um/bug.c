@@ -10,12 +10,11 @@
  * that's not relevant in skas mode.
  */
 
-int is_valid_bugaddr(unsigned long eip)
-{
-	unsigned short ud2;
+int is_valid_bugaddr(unsigned long eip) {
+    unsigned short ud2;
 
-	if (probe_kernel_address((unsigned short __user *)eip, ud2))
-		return 0;
+    if (probe_kernel_address((unsigned short __user *)eip, ud2))
+        return 0;
 
-	return ud2 == 0x0b0f;
+    return ud2 == 0x0b0f;
 }

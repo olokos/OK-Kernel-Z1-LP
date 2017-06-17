@@ -31,11 +31,11 @@
 
 #include "nouveau_fb.h"
 struct nouveau_fbdev {
-	struct drm_fb_helper helper;
-	struct nouveau_framebuffer nouveau_fb;
-	struct list_head fbdev_list;
-	struct drm_device *dev;
-	unsigned int saved_flags;
+    struct drm_fb_helper helper;
+    struct nouveau_framebuffer nouveau_fb;
+    struct list_head fbdev_list;
+    struct drm_device *dev;
+    unsigned int saved_flags;
 };
 
 void nouveau_fbcon_restore(void);

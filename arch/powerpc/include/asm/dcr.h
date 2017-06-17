@@ -69,9 +69,9 @@ typedef dcr_host_mmio_t dcr_host_t;
  */
 struct device_node;
 extern unsigned int dcr_resource_start(const struct device_node *np,
-				       unsigned int index);
+                                       unsigned int index);
 extern unsigned int dcr_resource_len(const struct device_node *np,
-				     unsigned int index);
+                                     unsigned int index);
 #endif /* CONFIG_PPC_DCR */
 #endif /* __ASSEMBLY__ */
 #endif /* __KERNEL__ */

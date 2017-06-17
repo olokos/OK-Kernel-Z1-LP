@@ -16,39 +16,35 @@
 struct device;
 
 struct ramdump_segment {
-	unsigned long address;
-	unsigned long size;
+    unsigned long address;
+    unsigned long size;
 };
 
 #ifdef CONFIG_MSM_SUBSYSTEM_RESTART
 void *create_ramdump_device(const char *dev_name, struct device *parent);
 void destroy_ramdump_device(void *dev);
 int do_ramdump(void *handle, struct ramdump_segment *segments,
-		int nsegments);
+               int nsegments);
 int do_elf_ramdump(void *handle, struct ramdump_segment *segments,
-		int nsegments);
+                   int nsegments);
 
 #else
 static inline void *create_ramdump_device(const char *dev_name,
-		struct device *parent)
-{
-	return NULL;
+        struct device *parent) {
+    return NULL;
 }
 
-static inline void destroy_ramdump_device(void *dev)
-{
+static inline void destroy_ramdump_device(void *dev) {
 }
 
 static inline int do_ramdump(void *handle, struct ramdump_segment *segments,
-		int nsegments)
-{
-	return -ENODEV;
+                             int nsegments) {
+    return -ENODEV;
 }
 
 static inline int do_elf_ramdump(void *handle, struct ramdump_segment *segments,
-		int nsegments)
-{
-	return -ENODEV;
+                                 int nsegments) {
+    return -ENODEV;
 }
 #endif /* CONFIG_MSM_SUBSYSTEM_RESTART */
 

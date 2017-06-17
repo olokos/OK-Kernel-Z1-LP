@@ -26,96 +26,93 @@
 #define GPIO_ON                1
 #define GPIO_OFF               0
 
-static int msm_send_ext_buck_votes(int gpio_num, int settling_time)
-{
-	int rc;
-	int gpio_status_sleep = GPIO_OFF;
-	int gpio_status_active = GPIO_ON;
+static int msm_send_ext_buck_votes(int gpio_num, int settling_time) {
+    int rc;
+    int gpio_status_sleep = GPIO_OFF;
+    int gpio_status_active = GPIO_ON;
 
-	struct msm_rpm_kvp kvp_sleep[] = {
-		{
-			.key = RPM_GPIO_STAT_KEY,
-			.data = (void *)&gpio_status_sleep,
-			.length = sizeof(gpio_status_sleep),
-		}
-	};
+    struct msm_rpm_kvp kvp_sleep[] = {
+        {
+            .key = RPM_GPIO_STAT_KEY,
+            .data = (void *)&gpio_status_sleep,
+            .length = sizeof(gpio_status_sleep),
+        }
+    };
 
-	struct msm_rpm_kvp kvp_active[] = {
-		{
-			.key = RPM_GPIO_NUMB_KEY,
-			.data = (void *)&gpio_num,
-			.length = sizeof(gpio_num),
-		},
-		{
-			.key = RPM_GPIO_STAT_KEY,
-			.data = (void *)&gpio_status_active,
-			.length = sizeof(gpio_status_active),
-		},
-		{
-			.key = RPM_GPIO_SETT_KEY,
-			.data = (void *)&settling_time,
-			.length = sizeof(settling_time),
-		},
-	};
+    struct msm_rpm_kvp kvp_active[] = {
+        {
+            .key = RPM_GPIO_NUMB_KEY,
+            .data = (void *)&gpio_num,
+            .length = sizeof(gpio_num),
+        },
+        {
+            .key = RPM_GPIO_STAT_KEY,
+            .data = (void *)&gpio_status_active,
+            .length = sizeof(gpio_status_active),
+        },
+        {
+            .key = RPM_GPIO_SETT_KEY,
+            .data = (void *)&settling_time,
+            .length = sizeof(settling_time),
+        },
+    };
 
-	rc = msm_rpm_send_message(MSM_RPM_CTX_ACTIVE_SET,
-		RPM_REQUEST_TYPE_GPIO, RPM_GPIO_RESOURCE_ID, kvp_active,
-							ARRAY_SIZE(kvp_active));
-	WARN(rc < 0, "RPM GPIO toggling (active set) did not enable!\n");
+    rc = msm_rpm_send_message(MSM_RPM_CTX_ACTIVE_SET,
+                              RPM_REQUEST_TYPE_GPIO, RPM_GPIO_RESOURCE_ID, kvp_active,
+                              ARRAY_SIZE(kvp_active));
+    WARN(rc < 0, "RPM GPIO toggling (active set) did not enable!\n");
 
-	rc = msm_rpm_send_message(MSM_RPM_CTX_SLEEP_SET,
-		RPM_REQUEST_TYPE_GPIO, RPM_GPIO_RESOURCE_ID, kvp_sleep,
-							ARRAY_SIZE(kvp_sleep));
-	WARN(rc < 0, "RPM GPIO toggling (sleep set) did not enable!\n");
+    rc = msm_rpm_send_message(MSM_RPM_CTX_SLEEP_SET,
+                              RPM_REQUEST_TYPE_GPIO, RPM_GPIO_RESOURCE_ID, kvp_sleep,
+                              ARRAY_SIZE(kvp_sleep));
+    WARN(rc < 0, "RPM GPIO toggling (sleep set) did not enable!\n");
 
-	return rc;
+    return rc;
 }
 
-static int msm_ext_buck_probe(struct platform_device *pdev)
-{
-	char *key = NULL;
-	int gpio_num;
-	int settling_time_us;
-	int ret = 0;
+static int msm_ext_buck_probe(struct platform_device *pdev) {
+    char *key = NULL;
+    int gpio_num;
+    int settling_time_us;
+    int ret = 0;
 
-	key = "qcom,gpio-num";
-	ret = of_property_read_u32(pdev->dev.of_node, key, &gpio_num);
-	if (ret) {
-		pr_err("%s: Cannot read %s from dt (ret:%d)\n",
-						__func__, key, ret);
-		return ret;
-	}
+    key = "qcom,gpio-num";
+    ret = of_property_read_u32(pdev->dev.of_node, key, &gpio_num);
+    if (ret) {
+        pr_err("%s: Cannot read %s from dt (ret:%d)\n",
+               __func__, key, ret);
+        return ret;
+    }
 
-	key = "qcom,settling-time-us";
-	ret = of_property_read_u32(pdev->dev.of_node, key,
-					&settling_time_us);
-	if (ret) {
-		pr_err("%s: Cannot read %s from dt (ret:%d)\n",
-						__func__, key, ret);
-		return ret;
-	}
+    key = "qcom,settling-time-us";
+    ret = of_property_read_u32(pdev->dev.of_node, key,
+                               &settling_time_us);
+    if (ret) {
+        pr_err("%s: Cannot read %s from dt (ret:%d)\n",
+               __func__, key, ret);
+        return ret;
+    }
 
-	ret = msm_send_ext_buck_votes(gpio_num, settling_time_us);
+    ret = msm_send_ext_buck_votes(gpio_num, settling_time_us);
 
-	return ret;
+    return ret;
 }
 
 static struct of_device_id msm_ext_buck_table[] = {
-	{.compatible = "qcom,ext-buck-control"},
-	{},
+    {.compatible = "qcom,ext-buck-control"},
+    {},
 };
 
 static struct platform_driver msm_ext_buck_driver = {
-	.probe = msm_ext_buck_probe,
-	.driver = {
-		.name = "ext-buck-control",
-		.owner = THIS_MODULE,
-		.of_match_table = msm_ext_buck_table,
-	},
+    .probe = msm_ext_buck_probe,
+    .driver = {
+        .name = "ext-buck-control",
+        .owner = THIS_MODULE,
+        .of_match_table = msm_ext_buck_table,
+    },
 };
 
-static int __init msm_ext_buck_init(void)
-{
-	return platform_driver_register(&msm_ext_buck_driver);
+static int __init msm_ext_buck_init(void) {
+    return platform_driver_register(&msm_ext_buck_driver);
 }
 late_initcall(msm_ext_buck_init);

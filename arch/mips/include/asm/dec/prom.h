@@ -24,7 +24,7 @@
  * Many of these will work for MIPSen as well!
  */
 #define VEC_RESET		(u64 *)CKSEG1ADDR(0x1fc00000)
-							/* Prom base address */
+/* Prom base address */
 
 #define PMAX_PROM_ENTRY(x)	(VEC_RESET + (x))	/* Prom jump table */
 
@@ -78,8 +78,8 @@
  * Used by rex_getbitmap().
  */
 typedef struct {
-	int pagesize;
-	unsigned char bitmap[0];
+    int pagesize;
+    unsigned char bitmap[0];
 } memmap;
 
 
@@ -117,7 +117,7 @@ int __DEC_PROM_O32(_rex_bootinit, (int (*)(void)));
 int __DEC_PROM_O32(_rex_bootread, (int (*)(void)));
 int __DEC_PROM_O32(_rex_getbitmap, (int (*)(memmap *), memmap *));
 unsigned long *__DEC_PROM_O32(_rex_slot_address,
-			     (unsigned long *(*)(int), int));
+                              (unsigned long *(*)(int), int));
 void *__DEC_PROM_O32(_rex_gettcinfo, (void *(*)(void)));
 int __DEC_PROM_O32(_rex_getsysid, (int (*)(void)));
 void __DEC_PROM_O32(_rex_clear_cache, (void (*)(void)));

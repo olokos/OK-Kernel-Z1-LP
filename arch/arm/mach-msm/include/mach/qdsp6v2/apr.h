@@ -16,29 +16,29 @@
 #include <linux/mutex.h>
 
 enum apr_subsys_state {
-	APR_SUBSYS_DOWN,
-	APR_SUBSYS_UP,
-	APR_SUBSYS_LOADED,
+    APR_SUBSYS_DOWN,
+    APR_SUBSYS_UP,
+    APR_SUBSYS_LOADED,
 };
 
 struct apr_q6 {
-	void *pil;
-	atomic_t q6_state;
-	atomic_t modem_state;
-	struct mutex lock;
+    void *pil;
+    atomic_t q6_state;
+    atomic_t modem_state;
+    struct mutex lock;
 };
 
 struct apr_hdr {
-	uint16_t hdr_field;
-	uint16_t pkt_size;
-	uint8_t src_svc;
-	uint8_t src_domain;
-	uint16_t src_port;
-	uint8_t dest_svc;
-	uint8_t dest_domain;
-	uint16_t dest_port;
-	uint32_t token;
-	uint32_t opcode;
+    uint16_t hdr_field;
+    uint16_t pkt_size;
+    uint8_t src_svc;
+    uint8_t src_domain;
+    uint16_t src_port;
+    uint8_t dest_svc;
+    uint8_t dest_domain;
+    uint16_t dest_port;
+    uint32_t token;
+    uint32_t opcode;
 };
 
 #define APR_HDR_LEN(hdr_len) ((hdr_len)/4)
@@ -104,58 +104,58 @@ struct apr_hdr {
 #define LPASS_RESTART_READY	0x1001
 
 struct apr_client_data {
-	uint16_t reset_event;
-	uint16_t reset_proc;
-	uint16_t payload_size;
-	uint16_t hdr_len;
-	uint16_t msg_type;
-	uint16_t src;
-	uint16_t dest_svc;
-	uint16_t src_port;
-	uint16_t dest_port;
-	uint32_t token;
-	uint32_t opcode;
-	void *payload;
+    uint16_t reset_event;
+    uint16_t reset_proc;
+    uint16_t payload_size;
+    uint16_t hdr_len;
+    uint16_t msg_type;
+    uint16_t src;
+    uint16_t dest_svc;
+    uint16_t src_port;
+    uint16_t dest_port;
+    uint32_t token;
+    uint32_t opcode;
+    void *payload;
 };
 
 typedef int32_t (*apr_fn)(struct apr_client_data *data, void *priv);
 
 struct apr_svc {
-	uint16_t id;
-	uint16_t dest_id;
-	uint16_t client_id;
-	uint8_t rvd;
-	uint8_t port_cnt;
-	uint8_t svc_cnt;
-	uint8_t need_reset;
-	apr_fn port_fn[APR_MAX_PORTS];
-	void *port_priv[APR_MAX_PORTS];
-	apr_fn fn;
-	void *priv;
-	struct mutex m_lock;
-	spinlock_t w_lock;
+    uint16_t id;
+    uint16_t dest_id;
+    uint16_t client_id;
+    uint8_t rvd;
+    uint8_t port_cnt;
+    uint8_t svc_cnt;
+    uint8_t need_reset;
+    apr_fn port_fn[APR_MAX_PORTS];
+    void *port_priv[APR_MAX_PORTS];
+    apr_fn fn;
+    void *priv;
+    struct mutex m_lock;
+    spinlock_t w_lock;
 };
 
 struct apr_client {
-	uint8_t id;
-	uint8_t svc_cnt;
-	uint8_t rvd;
-	struct mutex m_lock;
-	struct apr_svc_ch_dev *handle;
-	struct apr_svc svc[APR_SVC_MAX];
+    uint8_t id;
+    uint8_t svc_cnt;
+    uint8_t rvd;
+    struct mutex m_lock;
+    struct apr_svc_ch_dev *handle;
+    struct apr_svc svc[APR_SVC_MAX];
 };
 
 int apr_load_adsp_image(void);
 struct apr_client *apr_get_client(int dest_id, int client_id);
 int apr_wait_for_device_up(int dest_id);
 int apr_get_svc(const char *svc_name, int dest_id, int *client_id,
-		int *svc_idx, int *svc_id);
+                int *svc_idx, int *svc_id);
 void apr_cb_func(void *buf, int len, void *priv);
 struct apr_svc *apr_register(char *dest, char *svc_name, apr_fn svc_fn,
-					uint32_t src_port, void *priv);
+                             uint32_t src_port, void *priv);
 void *apr_fill_hdr(void *handle, uint32_t *buf, uint16_t src_port,
-			uint16_t msg_type, uint16_t dest_port,
-			uint32_t token, uint32_t opcode, uint16_t len);
+                   uint16_t msg_type, uint16_t dest_port,
+                   uint32_t token, uint32_t opcode, uint16_t len);
 
 int apr_send_pkt(void *handle, uint32_t *buf);
 int apr_deregister(void *handle);

@@ -83,23 +83,19 @@ ci_t       *CI;                 /* dummy pointer to board ZEROE's data -
 
 
 void
-sbecom_set_loglevel (int d)
-{
+sbecom_set_loglevel (int d) {
     /*
      * The code within the following -if- clause is a backdoor debug facility
      * which can be used to display the state of a board's channel.
      */
-    if (d > LOG_DEBUG)
-    {
+    if (d > LOG_DEBUG) {
         unsigned int channum = d - (LOG_DEBUG + 1);     /* convert to ZERO
                                                          * relativity */
 
         (void) musycc_dump_ring ((ci_t *) CI, channum); /* CI implies support
                                                          * for card 0 only */
-    } else
-    {
-        if (cxt1e1_log_level != d)
-        {
+    } else {
+        if (cxt1e1_log_level != d) {
             pr_info("log level changed from %d to %d\n", cxt1e1_log_level, d);
             cxt1e1_log_level = d;          /* set new */
         } else
@@ -109,20 +105,17 @@ sbecom_set_loglevel (int d)
 
 
 mch_t      *
-c4_find_chan (int channum)
-{
+c4_find_chan (int channum) {
     ci_t       *ci;
     mch_t      *ch;
     int         portnum, gchan;
 
     for (ci = c4_list; ci; ci = ci->next)
         for (portnum = 0; portnum < ci->max_port; portnum++)
-            for (gchan = 0; gchan < MUSYCC_NCHANS; gchan++)
-            {
-                if ((ch = ci->port[portnum].chan[gchan]))
-                {
+            for (gchan = 0; gchan < MUSYCC_NCHANS; gchan++) {
+                if ((ch = ci->port[portnum].chan[gchan])) {
                     if ((ch->state != UNASSIGNED) &&
-                        (ch->channum == channum))
+                            (ch->channum == channum))
                         return (ch);
                 }
             }
@@ -131,8 +124,7 @@ c4_find_chan (int channum)
 
 
 ci_t       *__init
-c4_new (void *hi)
-{
+c4_new (void *hi) {
     ci_t       *ci;
 
 #ifdef SBE_MAP_DEBUG
@@ -141,8 +133,7 @@ c4_new (void *hi)
 #endif
 
     ci = (ci_t *) OS_kmalloc (sizeof (ci_t));
-    if (ci)
-    {
+    if (ci) {
         ci->hdw_info = hi;
         ci->state = C_INIT;         /* mark as hardware not available */
         ci->next = c4_list;
@@ -193,8 +184,7 @@ c4_new (void *hi)
 #define COMET_LBCMD_READ  0x80  /* read only (do not set, return read value) */
 
 void
-checkPorts (ci_t * ci)
-{
+checkPorts (ci_t * ci) {
 #ifndef CONFIG_SBE_PMCC4_NCOMM
     /*
      * PORT POINT - NCOMM needs to avoid this code since the polling of
@@ -208,17 +198,14 @@ checkPorts (ci_t * ci)
     u_int8_t portnum;
 
     LEDval = 0;
-    for (portnum = 0; portnum < ci->max_port; portnum++)
-    {
+    for (portnum = 0; portnum < ci->max_port; portnum++) {
         copyVal = 0x12f & (ci->alarmed[portnum]);       /* port's alarm record */
         comet = ci->port[portnum].cometbase;
         value = pci_read_32 ((u_int32_t *) &comet->cdrc_ists) & sbeLinkMask;    /* link loss reg */
 
-        if (value & sbeLinkChange)  /* is there a change in the link stuff */
-        {
+        if (value & sbeLinkChange) { /* is there a change in the link stuff */
             /* if there's been a change (above) and yet it's the same (below) */
-            if (!(((copyVal >> 3) & sbeLinkDown) ^ (value & sbeLinkDown)))
-            {
+            if (!(((copyVal >> 3) & sbeLinkDown) ^ (value & sbeLinkDown))) {
                 if (value & sbeLinkDown)
                     pr_warning("%s: Port %d momentarily recovered.\n",
                                ci->devname, portnum);
@@ -228,8 +215,7 @@ checkPorts (ci_t * ci)
             } else if (value & sbeLinkDown)
                 pr_warning("%s: Warning: Port %d link is down.\n",
                            ci->devname, portnum);
-            else
-            {
+            else {
                 pr_warning("%s: Port %d link has recovered.\n",
                            ci->devname, portnum);
                 copyVal |= 0x20;    /* record link transition to up */
@@ -240,12 +226,11 @@ checkPorts (ci_t * ci)
                                      * save others */
         if (value & sbeLinkDown)
             copyVal |= 0x08;        /* record link status (now) */
-        else
-        {                           /* if link is up, do this */
+        else {
+            /* if link is up, do this */
             copyVal |= 0x40;        /* LED indicate link is up    */
             /* Alarm things & the like ... first if E1, then if T1 */
-            if (IS_FRAME_ANY_E1 (ci->port[portnum].p.port_mode))
-            {
+            if (IS_FRAME_ANY_E1 (ci->port[portnum].p.port_mode)) {
                 /*
                  * first check Codeword (SaX) changes & CRC and
                  * sub-multi-frame errors
@@ -255,8 +240,8 @@ checkPorts (ci_t * ci)
                  * vs. alarms
                  */
                 value = pci_read_32 ((u_int32_t *) &comet->e1_frmr_nat_ists);   /* codeword */
-                if (value & 0x1f)
-                {                   /* if errors (crc or smf only) */
+                if (value & 0x1f) {
+                    /* if errors (crc or smf only) */
                     if (value & 0x10)
                         pr_warning("%s: E1 Port %d Codeword Sa4 change detected.\n",
                                    ci->devname, portnum);
@@ -274,8 +259,8 @@ checkPorts (ci_t * ci)
                                    ci->devname, portnum);
                 }
                 value = pci_read_32 ((u_int32_t *) &comet->e1_frmr_mists);      /* crc & smf */
-                if (value & 0x3)
-                {                   /* if errors (crc or smf only) */
+                if (value & 0x3) {
+                    /* if errors (crc or smf only) */
                     if (value & sbeE1CRC)
                         pr_warning("%s: E1 Port %d CRC-4 error(s) detected.\n",
                                    ci->devname, portnum);
@@ -291,94 +276,79 @@ checkPorts (ci_t * ci)
                 /* RAI,RMAI,.,.,LOF,AIS,.,. ==>  RMAI,.,.,.,.,.,RAI,LOF,AIS */
                 /* see 0x97 */
                 value = (value >> 2);
-                if (value & 0x30)
-                {
+                if (value & 0x30) {
                     if (value & 0x20)
                         value |= 0x40;  /* RAI */
                     if (value & 0x10)
                         value |= 0x100; /* RMAI */
                     value &= ~0x30;
                 }                   /* finished packing alarm in handy order */
-                if (value != (copyVal & sbeE1AlarmsMask))
-                {                   /* if alarms changed */
+                if (value != (copyVal & sbeE1AlarmsMask)) {
+                    /* if alarms changed */
                     copyVal |= 0x10;/* change LED status   */
-                    if ((copyVal & sbeRedAlm) && !(value & sbeRedAlm))
-                    {
+                    if ((copyVal & sbeRedAlm) && !(value & sbeRedAlm)) {
                         copyVal &= ~sbeRedAlm;
                         pr_warning("%s: E1 Port %d LOF alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeRedAlm) && (value & sbeRedAlm))
-                    {
+                    } else if (!(copyVal & sbeRedAlm) && (value & sbeRedAlm)) {
                         copyVal |= sbeRedAlm;
                         pr_warning("%s: E1 Warning: Port %d LOF alarm.\n",
                                    ci->devname, portnum);
-                    } else if ((copyVal & sbeYelAlm) && !(value & sbeYelAlm))
-                    {
+                    } else if ((copyVal & sbeYelAlm) && !(value & sbeYelAlm)) {
                         copyVal &= ~sbeYelAlm;
                         pr_warning("%s: E1 Port %d RAI alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeYelAlm) && (value & sbeYelAlm))
-                    {
+                    } else if (!(copyVal & sbeYelAlm) && (value & sbeYelAlm)) {
                         copyVal |= sbeYelAlm;
                         pr_warning("%s: E1 Warning: Port %d RAI alarm.\n",
                                    ci->devname, portnum);
-                    } else if ((copyVal & sbeE1RMAI) && !(value & sbeE1RMAI))
-                    {
+                    } else if ((copyVal & sbeE1RMAI) && !(value & sbeE1RMAI)) {
                         copyVal &= ~sbeE1RMAI;
                         pr_warning("%s: E1 Port %d RMAI alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeE1RMAI) && (value & sbeE1RMAI))
-                    {
+                    } else if (!(copyVal & sbeE1RMAI) && (value & sbeE1RMAI)) {
                         copyVal |= sbeE1RMAI;
                         pr_warning("%s: E1 Warning: Port %d RMAI alarm.\n",
                                    ci->devname, portnum);
-                    } else if ((copyVal & sbeAISAlm) && !(value & sbeAISAlm))
-                    {
+                    } else if ((copyVal & sbeAISAlm) && !(value & sbeAISAlm)) {
                         copyVal &= ~sbeAISAlm;
                         pr_warning("%s: E1 Port %d AIS alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeAISAlm) && (value & sbeAISAlm))
-                    {
+                    } else if (!(copyVal & sbeAISAlm) && (value & sbeAISAlm)) {
                         copyVal |= sbeAISAlm;
                         pr_warning("%s: E1 Warning: Port %d AIS alarm.\n",
                                    ci->devname, portnum);
                     }
                 }
                 /* end of E1 alarm code */
-            } else
-            {                       /* if a T1 mode */
+            } else {
+                /* if a T1 mode */
                 value = pci_read_32 ((u_int32_t *) &comet->t1_almi_ists);       /* alarms */
                 value &= sbeAlarmsMask;
-                if (value != (copyVal & sbeAlarmsMask))
-                {                   /* if alarms changed */
+                if (value != (copyVal & sbeAlarmsMask)) {
+                    /* if alarms changed */
                     copyVal |= 0x10;/* change LED status   */
-                    if ((copyVal & sbeRedAlm) && !(value & sbeRedAlm))
-                    {
+                    if ((copyVal & sbeRedAlm) && !(value & sbeRedAlm)) {
                         copyVal &= ~sbeRedAlm;
                         pr_warning("%s: Port %d red alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeRedAlm) && (value & sbeRedAlm))
-                    {
+                    } else if (!(copyVal & sbeRedAlm) && (value & sbeRedAlm)) {
                         copyVal |= sbeRedAlm;
                         pr_warning("%s: Warning: Port %d red alarm.\n",
                                    ci->devname, portnum);
-                    } else if ((copyVal & sbeYelAlm) && !(value & sbeYelAlm))
-                    {
+                    } else if ((copyVal & sbeYelAlm) && !(value & sbeYelAlm)) {
                         copyVal &= ~sbeYelAlm;
                         pr_warning("%s: Port %d yellow (RAI) alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeYelAlm) && (value & sbeYelAlm))
-                    {
+                    } else if (!(copyVal & sbeYelAlm) && (value & sbeYelAlm)) {
                         copyVal |= sbeYelAlm;
                         pr_warning("%s: Warning: Port %d yellow (RAI) alarm.\n",
                                    ci->devname, portnum);
-                    } else if ((copyVal & sbeAISAlm) && !(value & sbeAISAlm))
-                    {
+                    } else if ((copyVal & sbeAISAlm) && !(value & sbeAISAlm)) {
                         copyVal &= ~sbeAISAlm;
                         pr_warning("%s: Port %d blue (AIS) alarm ended.\n",
                                    ci->devname, portnum);
-                    } else if (!(copyVal & sbeAISAlm) && (value & sbeAISAlm))
-                    {
+                    } else if (!(copyVal & sbeAISAlm) && (value & sbeAISAlm)) {
                         copyVal |= sbeAISAlm;
                         pr_warning("%s: Warning: Port %d blue (AIS) alarm.\n",
                                    ci->devname, portnum);
@@ -401,17 +371,17 @@ checkPorts (ci_t * ci)
          * requests
          */
 
-        if (IS_FRAME_ANY_T1 (ci->port[portnum].p.port_mode))
-        {                           /* if a T1 mode  */
+        if (IS_FRAME_ANY_T1 (ci->port[portnum].p.port_mode)) {
+            /* if a T1 mode  */
             /*
              * begin in-band (SF) loopback code detection -- start by reading
              * command
              */
             value = pci_read_32 ((u_int32_t *) &comet->ibcd_ies);       /* detect reg. */
             value &= 0x3;           /* trim to handy bits */
-            if (value & 0x2)
-            {                       /* activate loopback (sets for deactivate
-                                     * code length) */
+            if (value & 0x2) {
+                /* activate loopback (sets for deactivate
+                 * code length) */
                 copyVal = c4_loop_port (ci, portnum, COMET_LBCMD_READ); /* read line loopback
                                                                          * mode */
                 if (copyVal != COMET_MDIAG_LINELB)      /* don't do it again if
@@ -419,9 +389,9 @@ checkPorts (ci_t * ci)
                     c4_loop_port (ci, portnum, COMET_MDIAG_LINELB);     /* put port in line
                                                                          * loopback mode */
             }
-            if (value & 0x1)
-            {                       /* deactivate loopback (sets for activate
-                                     * code length) */
+            if (value & 0x1) {
+                /* deactivate loopback (sets for activate
+                 * code length) */
                 copyVal = c4_loop_port (ci, portnum, COMET_LBCMD_READ); /* read line loopback
                                                                          * mode */
                 if (copyVal != COMET_MDIAG_LBOFF)       /* don't do it again if
@@ -430,8 +400,8 @@ checkPorts (ci_t * ci)
                                                                          * loopback mode */
             }
         }
-        if (IS_FRAME_ANY_T1ESF (ci->port[portnum].p.port_mode))
-        {                           /* if a T1 ESF mode  */
+        if (IS_FRAME_ANY_T1ESF (ci->port[portnum].p.port_mode)) {
+            /* if a T1 ESF mode  */
             /* begin ESF loopback code */
             value = pci_read_32 ((u_int32_t *) &comet->t1_rboc_sts) & 0x3f;     /* read command */
             if (value == 0x07)
@@ -459,10 +429,8 @@ checkPorts (ci_t * ci)
 
 
 STATIC void
-c4_watchdog (ci_t * ci)
-{
-    if (drvr_state != SBE_DRVR_AVAILABLE)
-    {
+c4_watchdog (ci_t * ci) {
+    if (drvr_state != SBE_DRVR_AVAILABLE) {
         if (cxt1e1_log_level >= LOG_MONITOR)
             pr_info("drvr not available (%x)\n", drvr_state);
         return;
@@ -474,23 +442,19 @@ c4_watchdog (ci_t * ci)
 
 
 void
-c4_cleanup (void)
-{
+c4_cleanup (void) {
     ci_t       *ci, *next;
     mpi_t      *pi;
     int         portnum, j;
 
     ci = c4_list;
-    while (ci)
-    {
+    while (ci) {
         next = ci->next;            /* protect <next> from upcoming <free> */
         pci_write_32 ((u_int32_t *) &ci->cpldbase->leds, PMCC4_CPLD_LED_OFF);
-        for (portnum = 0; portnum < ci->max_port; portnum++)
-        {
+        for (portnum = 0; portnum < ci->max_port; portnum++) {
             pi = &ci->port[portnum];
             c4_wq_port_cleanup (pi);
-            for (j = 0; j < MUSYCC_NCHANS; j++)
-            {
+            for (j = 0; j < MUSYCC_NCHANS; j++) {
                 if (pi->chan[j])
                     OS_kfree (pi->chan[j]);     /* free mch_t struct */
             }
@@ -512,8 +476,7 @@ c4_cleanup (void)
  */
 
 int
-c4_get_portcfg (ci_t * ci)
-{
+c4_get_portcfg (ci_t * ci) {
     comet_t    *comet;
     int         portnum, mask;
     u_int32_t   wdata, rdata;
@@ -521,8 +484,7 @@ c4_get_portcfg (ci_t * ci)
     wdata = COMET_MDIAG_LBOFF;      /* take port out of any loopback mode */
 
     mask = 0;
-    for (portnum = 0; portnum < MUSYCC_NPORTS; portnum++)
-    {
+    for (portnum = 0; portnum < MUSYCC_NPORTS; portnum++) {
         comet = ci->port[portnum].cometbase;
         pci_write_32 ((u_int32_t *) &comet->mdiag, wdata);
         rdata = pci_read_32 ((u_int32_t *) &comet->mdiag) & COMET_MDIAG_LBMASK;
@@ -536,8 +498,7 @@ c4_get_portcfg (ci_t * ci)
 /* nothing herein should generate interrupts */
 
 status_t    __init
-c4_init (ci_t * ci, u_char *func0, u_char *func1)
-{
+c4_init (ci_t * ci, u_char *func0, u_char *func1) {
     mpi_t      *pi;
     mch_t      *ch;
     static u_int32_t count = 0;
@@ -565,8 +526,7 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
         int         pmsk;
 
         /* need comet addresses available for determination of hardware build */
-        for (portnum = 0; portnum < MUSYCC_NPORTS; portnum++)
-        {
+        for (portnum = 0; portnum < MUSYCC_NPORTS; portnum++) {
             pi = &ci->port[portnum];
             pi->cometbase = (comet_t *) ((u_int32_t *) (func1 + COMET_OFFSET (portnum)));
             pi->reg = (struct musycc_globalr *) ((u_char *) ci->reg + (portnum * 0x800));
@@ -578,8 +538,7 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
 #endif
         }
         pmsk = c4_get_portcfg (ci);
-        switch (pmsk)
-        {
+        switch (pmsk) {
         case 0x1:
             ci->max_port = 1;
             break;
@@ -606,8 +565,7 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
 #endif
     }
 
-    for (portnum = 0; portnum < ci->max_port; portnum++)
-    {
+    for (portnum = 0; portnum < ci->max_port; portnum++) {
         pi = &ci->port[portnum];
         pi->up = ci;
         pi->sr_last = 0xffffffff;
@@ -617,18 +575,15 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
         OS_sem_init (&pi->sr_sem_busy, SEM_AVAILABLE);
         OS_sem_init (&pi->sr_sem_wait, SEM_TAKEN);
 
-        for (j = 0; j < 32; j++)
-        {
+        for (j = 0; j < 32; j++) {
             pi->fifomap[j] = -1;
             pi->tsm[j] = 0;         /* no assignments, all available */
         }
 
         /* allocate channel structures for this port */
-        for (j = 0; j < MUSYCC_NCHANS; j++)
-        {
+        for (j = 0; j < MUSYCC_NCHANS; j++) {
             ch = OS_kmalloc (sizeof (mch_t));
-            if (ch)
-            {
+            if (ch) {
                 pi->chan[j] = ch;
                 ch->state = UNASSIGNED;
                 ch->up = pi;
@@ -638,8 +593,7 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
                 ch->p.port = portnum;
                 ch->p.channum = (-1);   /* channel assignment not yet known */
                 ch->p.mode_56k = 0; /* default is 64kbps mode */
-            } else
-            {
+            } else {
                 pr_warning("failed mch_t malloc, port %d channel %d size %u.\n",
                            portnum, j, (unsigned int) sizeof (mch_t));
                 break;
@@ -670,8 +624,7 @@ c4_init (ci_t * ci, u_char *func0, u_char *func1)
 /* better be fully setup to handle interrupts when you call this */
 
 status_t    __init
-c4_init2 (ci_t * ci)
-{
+c4_init2 (ci_t * ci) {
     status_t    ret;
 
     /* PORT POINT: this routine generates first interrupt */
@@ -698,8 +651,7 @@ c4_init2 (ci_t * ci)
 /* This function sets the loopback mode (or clears it, as the case may be). */
 
 int
-c4_loop_port (ci_t * ci, int portnum, u_int8_t cmd)
-{
+c4_loop_port (ci_t * ci, int portnum, u_int8_t cmd) {
     comet_t    *comet;
     volatile u_int32_t loopValue;
 
@@ -709,10 +661,8 @@ c4_loop_port (ci_t * ci, int portnum, u_int8_t cmd)
     if (cmd & COMET_LBCMD_READ)
         return loopValue;           /* return the read value */
 
-    if (loopValue != cmd)
-    {
-        switch (cmd)
-        {
+    if (loopValue != cmd) {
+        switch (cmd) {
         case COMET_MDIAG_LINELB:
             /* set(SF)loopback down (turn off) code length to 6 bits */
             pci_write_32 ((u_int32_t *) &comet->ibcd_cfg, 0x05);
@@ -728,14 +678,12 @@ c4_loop_port (ci_t * ci, int portnum, u_int8_t cmd)
             pr_info("%s: loopback mode changed to %2x from %2x on Port %d\n",
                     ci->devname, cmd, loopValue, portnum);
         loopValue = pci_read_32 ((u_int32_t *) &comet->mdiag) & COMET_MDIAG_LBMASK;
-        if (loopValue != cmd)
-        {
+        if (loopValue != cmd) {
             if (cxt1e1_log_level >= LOG_ERROR)
                 pr_info("%s: write to loop register failed, unknown state for Port %d\n",
                         ci->devname, portnum);
         }
-    } else
-    {
+    } else {
         if (cxt1e1_log_level >= LOG_WARN)
             pr_info("%s: loopback already in that mode (%2x)\n",
                     ci->devname, loopValue);
@@ -757,8 +705,7 @@ c4_loop_port (ci_t * ci, int portnum, u_int8_t cmd)
  */
 
 status_t
-c4_frame_rw (ci_t * ci, struct sbecom_port_param * pp)
-{
+c4_frame_rw (ci_t * ci, struct sbecom_port_param * pp) {
     comet_t    *comet;
     volatile u_int32_t data;
 
@@ -768,9 +715,9 @@ c4_frame_rw (ci_t * ci, struct sbecom_port_param * pp)
     comet = ci->port[pp->portnum].cometbase;
     data = pci_read_32 ((u_int32_t *) comet + pp->port_mode) & 0xff;
 
-    if (pp->portP)
-    {                               /* control says this is a register
-                                     * _write_ */
+    if (pp->portP) {
+        /* control says this is a register
+         * _write_ */
         if (pp->portStatus == data)
             pr_info("%s: Port %d already that value!  Writing again anyhow.\n",
                     ci->devname, pp->portnum);
@@ -796,8 +743,7 @@ c4_frame_rw (ci_t * ci, struct sbecom_port_param * pp)
  */
 
 status_t
-c4_pld_rw (ci_t * ci, struct sbecom_port_param * pp)
-{
+c4_pld_rw (ci_t * ci, struct sbecom_port_param * pp) {
     volatile u_int32_t *regaddr;
     volatile u_int32_t data;
     int         regnum = pp->port_mode;
@@ -805,9 +751,9 @@ c4_pld_rw (ci_t * ci, struct sbecom_port_param * pp)
     regaddr = (u_int32_t *) ci->cpldbase + regnum;
     data = pci_read_32 ((u_int32_t *) regaddr) & 0xff;
 
-    if (pp->portP)
-    {                               /* control says this is a register
-                                     * _write_ */
+    if (pp->portP) {
+        /* control says this is a register
+         * _write_ */
         pp->portP = (u_int8_t) data;
         pci_write_32 ((u_int32_t *) regaddr, pp->portStatus);
         data = pci_read_32 ((u_int32_t *) regaddr) & 0xff;
@@ -834,8 +780,7 @@ c4_pld_rw (ci_t * ci, struct sbecom_port_param * pp)
  */
 
 status_t
-c4_musycc_rw (ci_t * ci, struct c4_musycc_param * mcp)
-{
+c4_musycc_rw (ci_t * ci, struct c4_musycc_param * mcp) {
     mpi_t      *pi;
     volatile u_int32_t *dph;    /* hardware implemented register */
     u_int32_t  *dpr = 0;        /* RAM image of registers for group command
@@ -869,20 +814,18 @@ c4_musycc_rw (ci_t * ci, struct c4_musycc_param * mcp)
             ramread = 1;
     }
     /* read register from RAM or hardware, depending... */
-    if (ramread)
-    {
+    if (ramread) {
         data = *dpr;
         //pr_info("c4_musycc_rw: RAM addr %p  read data %x (portno %x offset %x RAM ramread %x)\n", dpr, data, portnum, offset, ramread); /* RLD DEBUG */
-    } else
-    {
+    } else {
         data = pci_read_32 ((u_int32_t *) dph);
         //pr_info("c4_musycc_rw: REG addr %p  read data %x (portno %x offset %x RAM ramread %x)\n", dph, data, portnum, offset, ramread); /* RLD DEBUG */
     }
 
 
-    if (mcp->RWportnum & 0x80)
-    {                               /* control says this is a register
-                                     * _write_ */
+    if (mcp->RWportnum & 0x80) {
+        /* control says this is a register
+         * _write_ */
         if (mcp->value == data)
             pr_info("%s: musycc grp%d already that value! writing again anyhow.\n",
                     ci->devname, (mcp->RWportnum & 0x7));
@@ -898,8 +841,7 @@ c4_musycc_rw (ci_t * ci, struct c4_musycc_param * mcp)
 }
 
 status_t
-c4_get_port (ci_t * ci, int portnum)
-{
+c4_get_port (ci_t * ci, int portnum) {
     if (portnum >= ci->max_port)    /* sanity check */
         return ENXIO;
 
@@ -913,8 +855,7 @@ c4_get_port (ci_t * ci, int portnum)
 }
 
 status_t
-c4_set_port (ci_t * ci, int portnum)
-{
+c4_set_port (ci_t * ci, int portnum) {
     mpi_t      *pi;
     struct sbecom_port_param *pp;
     int         e1mode;
@@ -927,8 +868,7 @@ c4_set_port (ci_t * ci, int portnum)
     pi = &ci->port[portnum];
     pp = &ci->port[portnum].p;
     e1mode = IS_FRAME_ANY_E1 (pp->port_mode);
-    if (cxt1e1_log_level >= LOG_MONITOR2)
-    {
+    if (cxt1e1_log_level >= LOG_MONITOR2) {
         pr_info("%s: c4_set_port[%d]:  entered, e1mode = %x, openchans %d.\n",
                 ci->devname,
                 portnum, e1mode, pi->openchans);
@@ -968,7 +908,7 @@ c4_set_port (ci_t * ci, int portnum)
                                                          * for T1 * fix */
                                 MUSYCC_GRCD_COFAIRQ_DISABLE |
                                 MUSYCC_GRCD_MC_ENABLE |
-                       (MUSYCC_GRCD_POLLTH_32 << MUSYCC_GRCD_POLLTH_SHIFT));
+                                (MUSYCC_GRCD_POLLTH_32 << MUSYCC_GRCD_POLLTH_SHIFT));
 
     pi->regram->pcd =
         __constant_cpu_to_le32 ((e1mode ? 1 : 0) |
@@ -977,11 +917,10 @@ c4_set_port (ci_t * ci, int portnum)
                                 MUSYCC_PCD_RXDATA_RISING);
 
     /* Message length descriptor */
-       pi->regram->mld = __constant_cpu_to_le32 (cxt1e1_max_mru | (cxt1e1_max_mru << 16));
+    pi->regram->mld = __constant_cpu_to_le32 (cxt1e1_max_mru | (cxt1e1_max_mru << 16));
 
     /* tsm algorithm */
-    for (i = 0; i < 32; i++)
-    {
+    for (i = 0; i < 32; i++) {
 
         /*** ASSIGNMENT NOTES:                             ***/
         /*** Group's channel  ZERO  unavailable if E1.     ***/
@@ -989,17 +928,14 @@ c4_set_port (ci_t * ci, int portnum)
         /*** Group's channels 24-31 unavailable if T1.     ***/
 
         if (((i == 0) && e1mode) ||
-            ((i == 16) && ((pp->port_mode == CFG_FRAME_E1CRC_CAS) || (pp->port_mode == CFG_FRAME_E1CRC_CAS_AMI)))
-            || ((i > 23) && (!e1mode)))
-        {
+                ((i == 16) && ((pp->port_mode == CFG_FRAME_E1CRC_CAS) || (pp->port_mode == CFG_FRAME_E1CRC_CAS_AMI)))
+                || ((i > 23) && (!e1mode))) {
             pi->tsm[i] = 0xff;      /* make tslot unavailable for this mode */
-        } else
-        {
+        } else {
             pi->tsm[i] = 0x00;      /* make tslot available for assignment */
         }
     }
-    for (i = 0; i < MUSYCC_NCHANS; i++)
-    {
+    for (i = 0; i < MUSYCC_NCHANS; i++) {
         pi->regram->ttsm[i] = 0;
         pi->regram->rtsm[i] = 0;
     }
@@ -1018,8 +954,7 @@ c4_set_port (ci_t * ci, int portnum)
 unsigned int max_int = 0;
 
 status_t
-c4_new_chan (ci_t * ci, int portnum, int channum, void *user)
-{
+c4_new_chan (ci_t * ci, int portnum, int channum, void *user) {
     mpi_t      *pi;
     mch_t      *ch;
     int         gchan;
@@ -1032,8 +967,7 @@ c4_new_chan (ci_t * ci, int portnum, int channum, void *user)
 
     pi = &(ci->port[portnum]);
     /* find any available channel within this port */
-    for (gchan = 0; gchan < MUSYCC_NCHANS; gchan++)
-    {
+    for (gchan = 0; gchan < MUSYCC_NCHANS; gchan++) {
         ch = pi->chan[gchan];
         if (ch && ch->state == UNASSIGNED)      /* no assignment is good! */
             break;
@@ -1072,8 +1006,7 @@ c4_new_chan (ci_t * ci, int portnum, int channum, void *user)
     {
         ci->first_if = ci->last_if = user;
         ci->first_channum = ci->last_channum = channum;
-    } else
-    {
+    } else {
         ci->last_if = user;
         if (ci->last_channum < channum) /* higher number channel found */
             ci->last_channum = channum;
@@ -1082,8 +1015,7 @@ c4_new_chan (ci_t * ci, int portnum, int channum, void *user)
 }
 
 status_t
-c4_del_chan (int channum)
-{
+c4_del_chan (int channum) {
     mch_t      *ch;
 
     if (!(ch = c4_find_chan (channum)))
@@ -1098,8 +1030,7 @@ c4_del_chan (int channum)
 }
 
 status_t
-c4_del_chan_stats (int channum)
-{
+c4_del_chan_stats (int channum) {
     mch_t      *ch;
 
     if (!(ch = c4_find_chan (channum)))
@@ -1111,8 +1042,7 @@ c4_del_chan_stats (int channum)
 
 
 status_t
-c4_set_chan (int channum, struct sbecom_chan_param * p)
-{
+c4_set_chan (int channum, struct sbecom_chan_param * p) {
     mch_t      *ch;
     int         i, x = 0;
 
@@ -1121,13 +1051,12 @@ c4_set_chan (int channum, struct sbecom_chan_param * p)
 
 #if 1
     if (ch->p.card != p->card ||
-        ch->p.port != p->port ||
-        ch->p.channum != p->channum)
+            ch->p.port != p->port ||
+            ch->p.channum != p->channum)
         return EINVAL;
 #endif
 
-    if (!(ch->up->group_is_set))
-    {
+    if (!(ch->up->group_is_set)) {
         return EIO;                 /* out of order, SET_PORT command
                                      * required prior to first group's
                                      * SET_CHAN command */
@@ -1138,8 +1067,8 @@ c4_set_chan (int channum, struct sbecom_chan_param * p)
      */
 
     if (ch->p.status != p->status || ch->p.chan_mode != p->chan_mode ||
-        ch->p.data_inv != p->data_inv || ch->p.intr_mask != p->intr_mask ||
-        ch->txd_free < ch->txd_num) /* to clear out queued messages */
+            ch->p.data_inv != p->data_inv || ch->p.intr_mask != p->intr_mask ||
+            ch->txd_free < ch->txd_num) /* to clear out queued messages */
         x = 1;                      /* we have a change requested */
     for (i = 0; i < 32; i++)        /* check for timeslot mapping changes */
         if (ch->p.bitmask[i] != p->bitmask[i])
@@ -1162,8 +1091,7 @@ c4_set_chan (int channum, struct sbecom_chan_param * p)
 
 
 status_t
-c4_get_chan (int channum, struct sbecom_chan_param * p)
-{
+c4_get_chan (int channum, struct sbecom_chan_param * p) {
     mch_t      *ch;
 
     if (!(ch = c4_find_chan (channum)))
@@ -1173,8 +1101,7 @@ c4_get_chan (int channum, struct sbecom_chan_param * p)
 }
 
 status_t
-c4_get_chan_stats (int channum, struct sbecom_chan_stats * p)
-{
+c4_get_chan_stats (int channum, struct sbecom_chan_stats * p) {
     mch_t      *ch;
 
     if (!(ch = c4_find_chan (channum)))
@@ -1185,29 +1112,24 @@ c4_get_chan_stats (int channum, struct sbecom_chan_stats * p)
 }
 
 STATIC int
-c4_fifo_alloc (mpi_t * pi, int chan, int *len)
-{
+c4_fifo_alloc (mpi_t * pi, int chan, int *len) {
     int         i, l = 0, start = 0, max = 0, maxstart = 0;
 
-    for (i = 0; i < 32; i++)
-    {
-        if (pi->fifomap[i] != -1)
-        {
+    for (i = 0; i < 32; i++) {
+        if (pi->fifomap[i] != -1) {
             l = 0;
             start = i + 1;
             continue;
         }
         ++l;
-        if (l > max)
-        {
+        if (l > max) {
             max = l;
             maxstart = start;
         }
         if (max == *len)
             break;
     }
-    if (max != *len)
-    {
+    if (max != *len) {
         if (cxt1e1_log_level >= LOG_WARN)
             pr_info("%s: wanted to allocate %d fifo space, but got only %d\n",
                     pi->up->devname, *len, max);
@@ -1222,8 +1144,7 @@ c4_fifo_alloc (mpi_t * pi, int chan, int *len)
 }
 
 void
-c4_fifo_free (mpi_t * pi, int chan)
-{
+c4_fifo_free (mpi_t * pi, int chan) {
     int         i;
 
     if (cxt1e1_log_level >= LOG_DEBUG)
@@ -1236,8 +1157,7 @@ c4_fifo_free (mpi_t * pi, int chan)
 
 
 status_t
-c4_chan_up (ci_t * ci, int channum)
-{
+c4_chan_up (ci_t * ci, int channum) {
     mpi_t      *pi;
     mch_t      *ch;
     struct mbuf *m;
@@ -1249,8 +1169,7 @@ c4_chan_up (ci_t * ci, int channum)
 
     if (!(ch = c4_find_chan (channum)))
         return ENOENT;
-    if (ch->state == UP)
-    {
+    if (ch->state == UP) {
         if (cxt1e1_log_level >= LOG_MONITOR)
             pr_info("%s: channel already UP, graceful early exit\n",
                     ci->devname);
@@ -1260,12 +1179,9 @@ c4_chan_up (ci_t * ci, int channum)
     gchan = ch->gchan;
     /* find nts ('number of timeslots') */
     nts = 0;
-    for (i = 0; i < 32; i++)
-    {
-        if (ch->p.bitmask[i] & pi->tsm[i])
-        {
-            if (1 || cxt1e1_log_level >= LOG_WARN)
-            {
+    for (i = 0; i < 32; i++) {
+        if (ch->p.bitmask[i] & pi->tsm[i]) {
+            if (1 || cxt1e1_log_level >= LOG_WARN) {
                 pr_info("%s: c4_chan_up[%d] EINVAL (attempt to cfg in-use or unavailable TimeSlot[%d])\n",
                         ci->devname, channum, i);
                 pr_info("+ ask4 %x, currently %x\n",
@@ -1279,8 +1195,7 @@ c4_chan_up (ci_t * ci, int channum)
     }
 
     nbuf = nts / 8 ? nts / 8 : 1;
-    if (!nbuf)
-    {
+    if (!nbuf) {
         /* if( cxt1e1_log_level >= LOG_WARN)  */
         pr_info("%s: c4_chan_up[%d] ENOBUFS (no TimeSlots assigned)\n",
                 ci->devname, channum);
@@ -1301,8 +1216,7 @@ c4_chan_up (ci_t * ci, int channum)
 
         ccd = musycc_chan_proto (ch->p.chan_mode) << MUSYCC_CCD_PROTO_SHIFT;
         if ((ch->p.chan_mode == CFG_CH_PROTO_ISLP_MODE) ||
-            (ch->p.chan_mode == CFG_CH_PROTO_TRANS))
-        {
+                (ch->p.chan_mode == CFG_CH_PROTO_TRANS)) {
             ccd |= MUSYCC_CCD_FCS_XFER; /* Non FSC Mode */
         }
         ccd |= 2 << MUSYCC_CCD_MAX_LENGTH;      /* Select second MTU */
@@ -1334,8 +1248,7 @@ c4_chan_up (ci_t * ci, int channum)
      * the defaults, then use the changed values.  Otherwise, use Transparent
      * mode's specific minimum default settings.
      */
-    if (ch->p.chan_mode == CFG_CH_PROTO_TRANS)
-    {
+    if (ch->p.chan_mode == CFG_CH_PROTO_TRANS) {
         if (max_rxdesc_used == max_rxdesc_default)      /* use default setting */
             max_rxdesc_used = MUSYCC_RXDESC_TRANS;
         if (max_txdesc_used == max_txdesc_default)      /* use default setting */
@@ -1364,26 +1277,22 @@ c4_chan_up (ci_t * ci, int channum)
     ch->mdr = OS_kmalloc (sizeof (struct mdesc) * rxnum);
     ch->mdt = OS_kmalloc (sizeof (struct mdesc) * txnum);
     if (ch->p.chan_mode == CFG_CH_PROTO_TRANS)
-               tmp = __constant_cpu_to_le32 (cxt1e1_max_mru | EOBIRQ_ENABLE);
+        tmp = __constant_cpu_to_le32 (cxt1e1_max_mru | EOBIRQ_ENABLE);
     else
-               tmp = __constant_cpu_to_le32 (cxt1e1_max_mru);
+        tmp = __constant_cpu_to_le32 (cxt1e1_max_mru);
 
-    for (i = 0, md = ch->mdr; i < rxnum; i++, md++)
-    {
-        if (i == (rxnum - 1))
-        {
+    for (i = 0, md = ch->mdr; i < rxnum; i++, md++) {
+        if (i == (rxnum - 1)) {
             md->snext = &ch->mdr[0];/* wrapness */
-        } else
-        {
+        } else {
             md->snext = &ch->mdr[i + 1];
         }
         md->next = cpu_to_le32 (OS_vtophys (md->snext));
 
-               if (!(m = OS_mem_token_alloc (cxt1e1_max_mru)))
-        {
+        if (!(m = OS_mem_token_alloc (cxt1e1_max_mru))) {
             if (cxt1e1_log_level >= LOG_MONITOR)
                 pr_info("%s: c4_chan_up[%d] - token alloc failure, size = %d.\n",
-                                               ci->devname, channum, cxt1e1_max_mru);
+                        ci->devname, channum, cxt1e1_max_mru);
             goto errfree;
         }
         md->mem_token = m;
@@ -1394,18 +1303,15 @@ c4_chan_up (ci_t * ci, int channum)
                                                  * need to byteSwap */
     }
 
-    for (i = 0, md = ch->mdt; i < txnum; i++, md++)
-    {
+    for (i = 0, md = ch->mdt; i < txnum; i++, md++) {
         md->status = HOST_TX_OWNED; /* Host owns TX descriptor ** CODING
                                      * NOTE: HOST_TX_OWNED = 0 so no need to
                                      * byteSwap */
         md->mem_token = 0;
         md->data = 0;
-        if (i == (txnum - 1))
-        {
+        if (i == (txnum - 1)) {
             md->snext = &ch->mdt[0];/* wrapness */
-        } else
-        {
+        } else {
             md->snext = &ch->mdt[i + 1];
         }
         md->next = cpu_to_le32 (OS_vtophys (md->snext));
@@ -1426,16 +1332,14 @@ c4_chan_up (ci_t * ci, int channum)
 
     /* Activate the Channel */
     FLUSH_MEM_WRITE ();
-    if (ch->p.status & RX_ENABLED)
-    {
+    if (ch->p.status & RX_ENABLED) {
 #ifdef RLD_TRANS_DEBUG
         pr_info("++ c4_chan_up() CHAN RX ACTIVATE: chan %d\n", ch->channum);
 #endif
         ch->ch_start_rx = 0;        /* we are restarting RX... */
         musycc_serv_req (pi, SR_CHANNEL_ACTIVATE | SR_RX_DIRECTION | gchan);
     }
-    if (ch->p.status & TX_ENABLED)
-    {
+    if (ch->p.status & TX_ENABLED) {
 #ifdef RLD_TRANS_DEBUG
         pr_info("++ c4_chan_up() CHAN TX ACTIVATE: chan %d <delayed>\n", ch->channum);
 #endif
@@ -1448,8 +1352,7 @@ c4_chan_up (ci_t * ci, int channum)
     return 0;
 
 errfree:
-    while (i > 0)
-    {
+    while (i > 0) {
         /* Don't leak all the previously allocated mbufs in this loop */
         i--;
         OS_mem_token_free (ch->mdr[i].mem_token);
@@ -1467,8 +1370,7 @@ errfree:
 /* stop the hardware from servicing & interrupting */
 
 void
-c4_stopwd (ci_t * ci)
-{
+c4_stopwd (ci_t * ci) {
     OS_stop_watchdog (&ci->wd);
     SD_SEM_TAKE (&ci->sem_wdbusy, "_stop_");    /* ensure WD not running */
     SD_SEM_GIVE (&ci->sem_wdbusy);
@@ -1476,8 +1378,7 @@ c4_stopwd (ci_t * ci)
 
 
 void
-sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
-{
+sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn) {
     char       *np;
     u_int32_t   sn = 0;
     int         i;
@@ -1491,8 +1392,7 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
     bip->brd_pci_speed = BINFO_PCI_SPEED_unk;   /* PCI speed not yet
                                                  * determinable */
 
-    if (ci->first_if)
-    {
+    if (ci->first_if) {
         {
             struct net_device *dev;
 
@@ -1502,8 +1402,7 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
         strncpy (bip->first_iname, np, CHNM_STRLEN - 1);
     } else
         strcpy (bip->first_iname, "<NULL>");
-    if (ci->last_if)
-    {
+    if (ci->last_if) {
         {
             struct net_device *dev;
 
@@ -1514,19 +1413,15 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
     } else
         strcpy (bip->last_iname, "<NULL>");
 
-    if (bsn)
-    {
-        for (i = 0; i < 3; i++)
-        {
+    if (bsn) {
+        for (i = 0; i < 3; i++) {
             bip->brd_mac_addr[i] = *bsn++;
         }
-        for (; i < 6; i++)
-        {
+        for (; i < 6; i++) {
             bip->brd_mac_addr[i] = *bsn;
             sn = (sn << 8) | *bsn++;
         }
-    } else
-    {
+    } else {
         for (i = 0; i < 6; i++)
             bip->brd_mac_addr[i] = 0;
     }
@@ -1535,8 +1430,7 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
 
 
 status_t
-c4_get_iidinfo (ci_t * ci, struct sbe_iid_info * iip)
-{
+c4_get_iidinfo (ci_t * ci, struct sbe_iid_info * iip) {
     struct net_device *dev;
     char       *np;
 
@@ -1554,15 +1448,13 @@ void        (*nciInterrupt[MAX_BOARDS][4]) (void);
 extern void wanpmcC4T1E1_hookInterrupt (int cardID, int deviceID, void *handler);
 
 void
-wanpmcC4T1E1_hookInterrupt (int cardID, int deviceID, void *handler)
-{
+wanpmcC4T1E1_hookInterrupt (int cardID, int deviceID, void *handler) {
     if (cardID < MAX_BOARDS)    /* sanity check */
         nciInterrupt[cardID][deviceID] = handler;
 }
 
 irqreturn_t
-c4_ebus_intr_th_handler (void *devp)
-{
+c4_ebus_intr_th_handler (void *devp) {
     ci_t       *ci = (ci_t *) devp;
     volatile u_int32_t ists;
     int         handled = 0;
@@ -1571,26 +1463,22 @@ c4_ebus_intr_th_handler (void *devp)
     /* which COMET caused the interrupt */
     brdno = ci->brdno;
     ists = pci_read_32 ((u_int32_t *) &ci->cpldbase->intr);
-    if (ists & PMCC4_CPLD_INTR_CMT_1)
-    {
+    if (ists & PMCC4_CPLD_INTR_CMT_1) {
         handled = 0x1;
         if (nciInterrupt[brdno][0] != NULL)
             (*nciInterrupt[brdno][0]) ();
     }
-    if (ists & PMCC4_CPLD_INTR_CMT_2)
-    {
+    if (ists & PMCC4_CPLD_INTR_CMT_2) {
         handled |= 0x2;
         if (nciInterrupt[brdno][1] != NULL)
             (*nciInterrupt[brdno][1]) ();
     }
-    if (ists & PMCC4_CPLD_INTR_CMT_3)
-    {
+    if (ists & PMCC4_CPLD_INTR_CMT_3) {
         handled |= 0x4;
         if (nciInterrupt[brdno][2] != NULL)
             (*nciInterrupt[brdno][2]) ();
     }
-    if (ists & PMCC4_CPLD_INTR_CMT_4)
-    {
+    if (ists & PMCC4_CPLD_INTR_CMT_4) {
         handled |= 0x8;
         if (nciInterrupt[brdno][3] != NULL)
             (*nciInterrupt[brdno][3]) ();
@@ -1607,16 +1495,13 @@ c4_ebus_intr_th_handler (void *devp)
 
 
 unsigned long
-wanpmcC4T1E1_getBaseAddress (int cardID, int deviceID)
-{
+wanpmcC4T1E1_getBaseAddress (int cardID, int deviceID) {
     ci_t       *ci;
     unsigned long base = 0;
 
     ci = c4_list;
-    while (ci)
-    {
-        if (ci->brdno == cardID)    /* found valid device */
-        {
+    while (ci) {
+        if (ci->brdno == cardID) {  /* found valid device */
             if (deviceID < ci->max_port)        /* comet is supported */
                 base = ((unsigned long) ci->port[deviceID].cometbase);
             break;

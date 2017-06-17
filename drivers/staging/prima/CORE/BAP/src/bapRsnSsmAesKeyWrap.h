@@ -46,8 +46,7 @@
 #define ANI_SSM_AES_KEY_WRAP_BLOCK_SIZE 8 // Bytes
 #define AES_BLOCK_SIZE 16 // Bytes
 
-typedef union uAniU32ValAry
-{
+typedef union uAniU32ValAry {
     tANI_U32 val;
     char ary[sizeof(tANI_U32)];
 } tAniU32ValAry;

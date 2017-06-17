@@ -18,14 +18,12 @@ extern const struct dev_pm_ops stmpe_dev_pm_ops;
 
 #ifdef STMPE_DUMP_BYTES
 static inline void stmpe_dump_bytes(const char *str, const void *buf,
-				    size_t len)
-{
-	print_hex_dump_bytes(str, DUMP_PREFIX_OFFSET, buf, len);
+                                    size_t len) {
+    print_hex_dump_bytes(str, DUMP_PREFIX_OFFSET, buf, len);
 }
 #else
 static inline void stmpe_dump_bytes(const char *str, const void *buf,
-				    size_t len)
-{
+                                    size_t len) {
 }
 #endif
 
@@ -38,9 +36,9 @@ static inline void stmpe_dump_bytes(const char *str, const void *buf,
  *		enable and altfunc callbacks
  */
 struct stmpe_variant_block {
-	struct mfd_cell		*cell;
-	int			irq;
-	enum stmpe_block	block;
+    struct mfd_cell		*cell;
+    int			irq;
+    enum stmpe_block	block;
 };
 
 /**
@@ -61,18 +59,18 @@ struct stmpe_variant_block {
  * @enable_autosleep: callback to configure autosleep with specified timeout
  */
 struct stmpe_variant_info {
-	const char *name;
-	u16 id_val;
-	u16 id_mask;
-	int num_gpios;
-	int af_bits;
-	const u8 *regs;
-	struct stmpe_variant_block *blocks;
-	int num_blocks;
-	int num_irqs;
-	int (*enable)(struct stmpe *stmpe, unsigned int blocks, bool enable);
-	int (*get_altfunc)(struct stmpe *stmpe, enum stmpe_block block);
-	int (*enable_autosleep)(struct stmpe *stmpe, int autosleep_timeout);
+    const char *name;
+    u16 id_val;
+    u16 id_mask;
+    int num_gpios;
+    int af_bits;
+    const u8 *regs;
+    struct stmpe_variant_block *blocks;
+    int num_blocks;
+    int num_irqs;
+    int (*enable)(struct stmpe *stmpe, unsigned int blocks, bool enable);
+    int (*get_altfunc)(struct stmpe *stmpe, enum stmpe_block block);
+    int (*enable_autosleep)(struct stmpe *stmpe, int autosleep_timeout);
 };
 
 /**
@@ -85,16 +83,16 @@ struct stmpe_variant_info {
  * @init: client init routine, called during probe
  */
 struct stmpe_client_info {
-	void *data;
-	int irq;
-	void *client;
-	struct device *dev;
-	int (*read_byte)(struct stmpe *stmpe, u8 reg);
-	int (*write_byte)(struct stmpe *stmpe, u8 reg, u8 val);
-	int (*read_block)(struct stmpe *stmpe, u8 reg, u8 len, u8 *values);
-	int (*write_block)(struct stmpe *stmpe, u8 reg, u8 len,
-			const u8 *values);
-	void (*init)(struct stmpe *stmpe);
+    void *data;
+    int irq;
+    void *client;
+    struct device *dev;
+    int (*read_byte)(struct stmpe *stmpe, u8 reg);
+    int (*write_byte)(struct stmpe *stmpe, u8 reg, u8 val);
+    int (*read_block)(struct stmpe *stmpe, u8 reg, u8 len, u8 *values);
+    int (*write_block)(struct stmpe *stmpe, u8 reg, u8 len,
+                       const u8 *values);
+    void (*init)(struct stmpe *stmpe);
 };
 
 int stmpe_probe(struct stmpe_client_info *ci, int partnum);

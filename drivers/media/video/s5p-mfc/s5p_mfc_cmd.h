@@ -18,7 +18,7 @@
 #define MAX_H2R_ARG	4
 
 struct s5p_mfc_cmd_args {
-	unsigned int	arg[MAX_H2R_ARG];
+    unsigned int	arg[MAX_H2R_ARG];
 };
 
 int s5p_mfc_sys_init_cmd(struct s5p_mfc_dev *dev);

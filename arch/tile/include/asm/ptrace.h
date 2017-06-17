@@ -54,24 +54,24 @@ typedef uint_reg_t pt_reg_t;
  * system call or exception.  "struct sigcontext" has the same shape.
  */
 struct pt_regs {
-	/* Saved main processor registers; 56..63 are special. */
-	/* tp, sp, and lr must immediately follow regs[] for aliasing. */
-	pt_reg_t regs[53];
-	pt_reg_t tp;		/* aliases regs[TREG_TP] */
-	pt_reg_t sp;		/* aliases regs[TREG_SP] */
-	pt_reg_t lr;		/* aliases regs[TREG_LR] */
+    /* Saved main processor registers; 56..63 are special. */
+    /* tp, sp, and lr must immediately follow regs[] for aliasing. */
+    pt_reg_t regs[53];
+    pt_reg_t tp;		/* aliases regs[TREG_TP] */
+    pt_reg_t sp;		/* aliases regs[TREG_SP] */
+    pt_reg_t lr;		/* aliases regs[TREG_LR] */
 
-	/* Saved special registers. */
-	pt_reg_t pc;		/* stored in EX_CONTEXT_K_0 */
-	pt_reg_t ex1;		/* stored in EX_CONTEXT_K_1 (PL and ICS bit) */
-	pt_reg_t faultnum;	/* fault number (INT_SWINT_1 for syscall) */
-	pt_reg_t orig_r0;	/* r0 at syscall entry, else zero */
-	pt_reg_t flags;		/* flags (see below) */
+    /* Saved special registers. */
+    pt_reg_t pc;		/* stored in EX_CONTEXT_K_0 */
+    pt_reg_t ex1;		/* stored in EX_CONTEXT_K_1 (PL and ICS bit) */
+    pt_reg_t faultnum;	/* fault number (INT_SWINT_1 for syscall) */
+    pt_reg_t orig_r0;	/* r0 at syscall entry, else zero */
+    pt_reg_t flags;		/* flags (see below) */
 #if !CHIP_HAS_CMPEXCH()
-	pt_reg_t pad[3];
+    pt_reg_t pad[3];
 #else
-	pt_reg_t cmpexch;	/* value of CMPEXCH_VALUE SPR at interrupt */
-	pt_reg_t pad[2];
+    pt_reg_t cmpexch;	/* value of CMPEXCH_VALUE SPR at interrupt */
+    pt_reg_t pad[2];
 #endif
 };
 
@@ -120,20 +120,20 @@ extern void do_syscall_trace(void);
  * Also update defines in assembler section if it changes
  */
 struct single_step_state {
-	/* the page to which we will write hacked-up bundles */
-	void __user *buffer;
+    /* the page to which we will write hacked-up bundles */
+    void __user *buffer;
 
-	union {
-		int flags;
-		struct {
-			unsigned long is_enabled:1, update:1, update_reg:6;
-		};
-	};
+    union {
+        int flags;
+        struct {
+            unsigned long is_enabled:1, update:1, update_reg:6;
+        };
+    };
 
-	unsigned long orig_pc;		/* the original PC */
-	unsigned long next_pc;		/* return PC if no branch (PC + 1) */
-	unsigned long branch_next_pc;	/* return PC if we did branch/jump */
-	unsigned long update_value;	/* value to restore to update_target */
+    unsigned long orig_pc;		/* the original PC */
+    unsigned long next_pc;		/* return PC if no branch (PC + 1) */
+    unsigned long branch_next_pc;	/* return PC if we did branch/jump */
+    unsigned long update_value;	/* value to restore to update_target */
 };
 
 /* Single-step the instruction at regs->pc */
@@ -145,7 +145,7 @@ extern void single_step_execve(void);
 struct task_struct;
 
 extern void send_sigtrap(struct task_struct *tsk, struct pt_regs *regs,
-			 int error_code);
+                         int error_code);
 
 #ifdef __tilegx__
 /* We need this since sigval_t has a user pointer in it, for GETSIGINFO etc. */

@@ -177,26 +177,25 @@
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_int_set_config(unsigned int interrupt,
-	uint32_t config, unsigned int priority, uint32_t destination)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
-	register uintptr_t r5 __asm__("r5");
-	register uintptr_t r6 __asm__("r6");
+        uint32_t config, unsigned int priority, uint32_t destination) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
+    register uintptr_t r5 __asm__("r5");
+    register uintptr_t r6 __asm__("r6");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_SET_CONFIG);
-	r3  = interrupt;
-	r4  = config;
-	r5  = priority;
-	r6  = destination;
+    r11 = EV_HCALL_TOKEN(EV_INT_SET_CONFIG);
+    r3  = interrupt;
+    r4  = config;
+    r5  = priority;
+    r6  = destination;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "+r" (r4), "+r" (r5), "+r" (r6)
-		: : EV_HCALL_CLOBBERS4
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "+r" (r4), "+r" (r5), "+r" (r6)
+                          : : EV_HCALL_CLOBBERS4
+                         );
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -209,27 +208,26 @@ static inline unsigned int ev_int_set_config(unsigned int interrupt,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_int_get_config(unsigned int interrupt,
-	uint32_t *config, unsigned int *priority, uint32_t *destination)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
-	register uintptr_t r5 __asm__("r5");
-	register uintptr_t r6 __asm__("r6");
+        uint32_t *config, unsigned int *priority, uint32_t *destination) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
+    register uintptr_t r5 __asm__("r5");
+    register uintptr_t r6 __asm__("r6");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_GET_CONFIG);
-	r3 = interrupt;
+    r11 = EV_HCALL_TOKEN(EV_INT_GET_CONFIG);
+    r3 = interrupt;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "=r" (r4), "=r" (r5), "=r" (r6)
-		: : EV_HCALL_CLOBBERS4
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "=r" (r4), "=r" (r5), "=r" (r6)
+                          : : EV_HCALL_CLOBBERS4
+                         );
 
-	*config = r4;
-	*priority = r5;
-	*destination = r6;
+    *config = r4;
+    *priority = r5;
+    *destination = r6;
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -240,22 +238,21 @@ static inline unsigned int ev_int_get_config(unsigned int interrupt,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_int_set_mask(unsigned int interrupt,
-	unsigned int mask)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
+        unsigned int mask) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_SET_MASK);
-	r3 = interrupt;
-	r4 = mask;
+    r11 = EV_HCALL_TOKEN(EV_INT_SET_MASK);
+    r3 = interrupt;
+    r4 = mask;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "+r" (r4)
-		: : EV_HCALL_CLOBBERS2
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "+r" (r4)
+                          : : EV_HCALL_CLOBBERS2
+                         );
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -266,23 +263,22 @@ static inline unsigned int ev_int_set_mask(unsigned int interrupt,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_int_get_mask(unsigned int interrupt,
-	unsigned int *mask)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
+        unsigned int *mask) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_GET_MASK);
-	r3 = interrupt;
+    r11 = EV_HCALL_TOKEN(EV_INT_GET_MASK);
+    r3 = interrupt;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "=r" (r4)
-		: : EV_HCALL_CLOBBERS2
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "=r" (r4)
+                          : : EV_HCALL_CLOBBERS2
+                         );
 
-	*mask = r4;
+    *mask = r4;
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -295,20 +291,19 @@ static inline unsigned int ev_int_get_mask(unsigned int interrupt,
  *
  * Returns 0 for success, or an error code.
  */
-static inline unsigned int ev_int_eoi(unsigned int interrupt)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
+static inline unsigned int ev_int_eoi(unsigned int interrupt) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_EOI);
-	r3 = interrupt;
+    r11 = EV_HCALL_TOKEN(EV_INT_EOI);
+    r3 = interrupt;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3)
-		: : EV_HCALL_CLOBBERS1
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3)
+                          : : EV_HCALL_CLOBBERS1
+                         );
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -323,34 +318,33 @@ static inline unsigned int ev_int_eoi(unsigned int interrupt)
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_byte_channel_send(unsigned int handle,
-	unsigned int *count, const char buffer[EV_BYTE_CHANNEL_MAX_BYTES])
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
-	register uintptr_t r5 __asm__("r5");
-	register uintptr_t r6 __asm__("r6");
-	register uintptr_t r7 __asm__("r7");
-	register uintptr_t r8 __asm__("r8");
-	const uint32_t *p = (const uint32_t *) buffer;
+        unsigned int *count, const char buffer[EV_BYTE_CHANNEL_MAX_BYTES]) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
+    register uintptr_t r5 __asm__("r5");
+    register uintptr_t r6 __asm__("r6");
+    register uintptr_t r7 __asm__("r7");
+    register uintptr_t r8 __asm__("r8");
+    const uint32_t *p = (const uint32_t *) buffer;
 
-	r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_SEND);
-	r3 = handle;
-	r4 = *count;
-	r5 = be32_to_cpu(p[0]);
-	r6 = be32_to_cpu(p[1]);
-	r7 = be32_to_cpu(p[2]);
-	r8 = be32_to_cpu(p[3]);
+    r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_SEND);
+    r3 = handle;
+    r4 = *count;
+    r5 = be32_to_cpu(p[0]);
+    r6 = be32_to_cpu(p[1]);
+    r7 = be32_to_cpu(p[2]);
+    r8 = be32_to_cpu(p[3]);
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3),
-		  "+r" (r4), "+r" (r5), "+r" (r6), "+r" (r7), "+r" (r8)
-		: : EV_HCALL_CLOBBERS6
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3),
+                          "+r" (r4), "+r" (r5), "+r" (r6), "+r" (r7), "+r" (r8)
+                          : : EV_HCALL_CLOBBERS6
+                         );
 
-	*count = r4;
+    *count = r4;
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -366,34 +360,33 @@ static inline unsigned int ev_byte_channel_send(unsigned int handle,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_byte_channel_receive(unsigned int handle,
-	unsigned int *count, char buffer[EV_BYTE_CHANNEL_MAX_BYTES])
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
-	register uintptr_t r5 __asm__("r5");
-	register uintptr_t r6 __asm__("r6");
-	register uintptr_t r7 __asm__("r7");
-	register uintptr_t r8 __asm__("r8");
-	uint32_t *p = (uint32_t *) buffer;
+        unsigned int *count, char buffer[EV_BYTE_CHANNEL_MAX_BYTES]) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
+    register uintptr_t r5 __asm__("r5");
+    register uintptr_t r6 __asm__("r6");
+    register uintptr_t r7 __asm__("r7");
+    register uintptr_t r8 __asm__("r8");
+    uint32_t *p = (uint32_t *) buffer;
 
-	r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_RECEIVE);
-	r3 = handle;
-	r4 = *count;
+    r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_RECEIVE);
+    r3 = handle;
+    r4 = *count;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "+r" (r4),
-		  "=r" (r5), "=r" (r6), "=r" (r7), "=r" (r8)
-		: : EV_HCALL_CLOBBERS6
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "+r" (r4),
+                          "=r" (r5), "=r" (r6), "=r" (r7), "=r" (r8)
+                          : : EV_HCALL_CLOBBERS6
+                         );
 
-	*count = r4;
-	p[0] = cpu_to_be32(r5);
-	p[1] = cpu_to_be32(r6);
-	p[2] = cpu_to_be32(r7);
-	p[3] = cpu_to_be32(r8);
+    *count = r4;
+    p[0] = cpu_to_be32(r5);
+    p[1] = cpu_to_be32(r6);
+    p[2] = cpu_to_be32(r7);
+    p[3] = cpu_to_be32(r8);
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -409,25 +402,24 @@ static inline unsigned int ev_byte_channel_receive(unsigned int handle,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_byte_channel_poll(unsigned int handle,
-	unsigned int *rx_count,	unsigned int *tx_count)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
-	register uintptr_t r5 __asm__("r5");
+        unsigned int *rx_count,	unsigned int *tx_count) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
+    register uintptr_t r5 __asm__("r5");
 
-	r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_POLL);
-	r3 = handle;
+    r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_POLL);
+    r3 = handle;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "=r" (r4), "=r" (r5)
-		: : EV_HCALL_CLOBBERS3
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "=r" (r4), "=r" (r5)
+                          : : EV_HCALL_CLOBBERS3
+                         );
 
-	*rx_count = r4;
-	*tx_count = r5;
+    *rx_count = r4;
+    *tx_count = r5;
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -443,23 +435,22 @@ static inline unsigned int ev_byte_channel_poll(unsigned int handle,
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int ev_int_iack(unsigned int handle,
-	unsigned int *vector)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
-	register uintptr_t r4 __asm__("r4");
+                                       unsigned int *vector) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
+    register uintptr_t r4 __asm__("r4");
 
-	r11 = EV_HCALL_TOKEN(EV_INT_IACK);
-	r3 = handle;
+    r11 = EV_HCALL_TOKEN(EV_INT_IACK);
+    r3 = handle;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3), "=r" (r4)
-		: : EV_HCALL_CLOBBERS2
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3), "=r" (r4)
+                          : : EV_HCALL_CLOBBERS2
+                         );
 
-	*vector = r4;
+    *vector = r4;
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -468,20 +459,19 @@ static inline unsigned int ev_int_iack(unsigned int handle,
  *
  * Returns 0 for success, or an error code.
  */
-static inline unsigned int ev_doorbell_send(unsigned int handle)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
+static inline unsigned int ev_doorbell_send(unsigned int handle) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
 
-	r11 = EV_HCALL_TOKEN(EV_DOORBELL_SEND);
-	r3 = handle;
+    r11 = EV_HCALL_TOKEN(EV_DOORBELL_SEND);
+    r3 = handle;
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "+r" (r3)
-		: : EV_HCALL_CLOBBERS1
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "+r" (r3)
+                          : : EV_HCALL_CLOBBERS1
+                         );
 
-	return r3;
+    return r3;
 }
 
 /**
@@ -489,19 +479,18 @@ static inline unsigned int ev_doorbell_send(unsigned int handle)
  *
  * Returns 0 for success, or an error code.
  */
-static inline unsigned int ev_idle(void)
-{
-	register uintptr_t r11 __asm__("r11");
-	register uintptr_t r3 __asm__("r3");
+static inline unsigned int ev_idle(void) {
+    register uintptr_t r11 __asm__("r11");
+    register uintptr_t r3 __asm__("r3");
 
-	r11 = EV_HCALL_TOKEN(EV_IDLE);
+    r11 = EV_HCALL_TOKEN(EV_IDLE);
 
-	__asm__ __volatile__ ("sc 1"
-		: "+r" (r11), "=r" (r3)
-		: : EV_HCALL_CLOBBERS1
-	);
+    __asm__ __volatile__ ("sc 1"
+                          : "+r" (r11), "=r" (r3)
+                          : : EV_HCALL_CLOBBERS1
+                         );
 
-	return r3;
+    return r3;
 }
 
 #endif

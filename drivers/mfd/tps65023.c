@@ -29,94 +29,88 @@
 
 static struct i2c_client *tpsclient;
 
-int tps65023_set_dcdc1_level(int mvolts)
-{
-	int val;
-	int ret;
+int tps65023_set_dcdc1_level(int mvolts) {
+    int val;
+    int ret;
 
-	if (!tpsclient)
-		return -ENODEV;
+    if (!tpsclient)
+        return -ENODEV;
 
-	if (mvolts < 800 || mvolts > 1600)
-		return -EINVAL;
+    if (mvolts < 800 || mvolts > 1600)
+        return -EINVAL;
 
-	if (mvolts == 1600)
-		val = 0x1F;
-	else
-		val = ((mvolts - 800)/25) & 0x1F;
+    if (mvolts == 1600)
+        val = 0x1F;
+    else
+        val = ((mvolts - 800)/25) & 0x1F;
 
-	ret = i2c_smbus_write_byte_data(tpsclient, TPS65023_DEFCORE, val);
+    ret = i2c_smbus_write_byte_data(tpsclient, TPS65023_DEFCORE, val);
 
-	if (!ret)
-		ret = i2c_smbus_write_byte_data(tpsclient,
-				TPS65023_CON_CTRL2, 0x80);
+    if (!ret)
+        ret = i2c_smbus_write_byte_data(tpsclient,
+                                        TPS65023_CON_CTRL2, 0x80);
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(tps65023_set_dcdc1_level);
 
-int tps65023_get_dcdc1_level(int *mvolts)
-{
-	int val;
+int tps65023_get_dcdc1_level(int *mvolts) {
+    int val;
 
-	if (!tpsclient)
-		return -ENODEV;
+    if (!tpsclient)
+        return -ENODEV;
 
-	val = i2c_smbus_read_byte_data(tpsclient, TPS65023_DEFCORE) & 0x1F;
+    val = i2c_smbus_read_byte_data(tpsclient, TPS65023_DEFCORE) & 0x1F;
 
-	if (val == 0x1F)
-		*mvolts = 1600;
-	else
-		*mvolts = (val * 25) + 800;
-	return 0;
+    if (val == 0x1F)
+        *mvolts = 1600;
+    else
+        *mvolts = (val * 25) + 800;
+    return 0;
 }
 EXPORT_SYMBOL(tps65023_get_dcdc1_level);
 
 static int tps65023_probe(struct i2c_client *client,
-		const struct i2c_device_id *dev_id)
-{
-	if (!i2c_check_functionality(client->adapter,
-				I2C_FUNC_SMBUS_BYTE_DATA)) {
-		printk(KERN_ERR "TPS65023 does not support SMBUS_BYTE_DATA.\n");
-		return -EINVAL;
-	}
+                          const struct i2c_device_id *dev_id) {
+    if (!i2c_check_functionality(client->adapter,
+                                 I2C_FUNC_SMBUS_BYTE_DATA)) {
+        printk(KERN_ERR "TPS65023 does not support SMBUS_BYTE_DATA.\n");
+        return -EINVAL;
+    }
 
-	tpsclient = client;
-	printk(KERN_INFO "TPS65023: PMIC probed.\n");
-	return 0;
+    tpsclient = client;
+    printk(KERN_INFO "TPS65023: PMIC probed.\n");
+    return 0;
 }
 
-static int __devexit tps65023_remove(struct i2c_client *client)
-{
-	tpsclient = NULL;
-	return 0;
+static int __devexit tps65023_remove(struct i2c_client *client) {
+    tpsclient = NULL;
+    return 0;
 }
 
 static const struct i2c_device_id tps65023_id[] = {
-	{ "tps65023", 0 },
-	{ }
+    { "tps65023", 0 },
+    { }
 };
 MODULE_DEVICE_TABLE(i2c, tps65023_id);
 
 static struct i2c_driver tps65023_driver = {
-	.driver = {
-		.name   = "tps65023",
-		.owner  = THIS_MODULE,
-	},
-	.probe  = tps65023_probe,
-	.remove = __devexit_p(tps65023_remove),
-	.id_table = tps65023_id,
+    .driver = {
+        .name   = "tps65023",
+        .owner  = THIS_MODULE,
+    },
+    .probe  = tps65023_probe,
+    .remove = __devexit_p(tps65023_remove),
+    .id_table = tps65023_id,
 };
 
-static int __init tps65023_init(void)
-{
-	return i2c_add_driver(&tps65023_driver);
+static int __init tps65023_init(void) {
+    return i2c_add_driver(&tps65023_driver);
 }
 
 
-static void __exit tps65023_exit(void)
-{
-	i2c_del_driver(&tps65023_driver);
+static void __exit tps65023_exit(void) {
+    i2c_del_driver(&tps65023_driver);
 }
 
 module_init(tps65023_init);

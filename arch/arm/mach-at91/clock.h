@@ -16,16 +16,16 @@
 
 
 struct clk {
-	struct list_head node;
-	const char	*name;		/* unique clock name */
-	struct clk_lookup cl;
-	unsigned long	rate_hz;
-	struct clk	*parent;
-	u32		pmc_mask;
-	void		(*mode)(struct clk *, int);
-	unsigned	id:3;		/* PCK0..4, or 32k/main/a/b */
-	unsigned	type;		/* clock type */
-	u16		users;
+    struct list_head node;
+    const char	*name;		/* unique clock name */
+    struct clk_lookup cl;
+    unsigned long	rate_hz;
+    struct clk	*parent;
+    u32		pmc_mask;
+    void		(*mode)(struct clk *, int);
+    unsigned	id:3;		/* PCK0..4, or 32k/main/a/b */
+    unsigned	type;		/* clock type */
+    u16		users;
 };
 
 

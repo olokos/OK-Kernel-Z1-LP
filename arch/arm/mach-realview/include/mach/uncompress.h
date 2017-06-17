@@ -34,41 +34,38 @@
 /*
  * Return the UART base address
  */
-static inline unsigned long get_uart_base(void)
-{
-	if (machine_is_realview_eb())
-		return REALVIEW_EB_UART0_BASE;
-	else if (machine_is_realview_pb11mp())
-		return REALVIEW_PB11MP_UART0_BASE;
-	else if (machine_is_realview_pb1176())
-		return REALVIEW_PB1176_UART0_BASE;
-	else if (machine_is_realview_pba8())
-		return REALVIEW_PBA8_UART0_BASE;
-	else if (machine_is_realview_pbx())
-		return REALVIEW_PBX_UART0_BASE;
-	else
-		return 0;
+static inline unsigned long get_uart_base(void) {
+    if (machine_is_realview_eb())
+        return REALVIEW_EB_UART0_BASE;
+    else if (machine_is_realview_pb11mp())
+        return REALVIEW_PB11MP_UART0_BASE;
+    else if (machine_is_realview_pb1176())
+        return REALVIEW_PB1176_UART0_BASE;
+    else if (machine_is_realview_pba8())
+        return REALVIEW_PBA8_UART0_BASE;
+    else if (machine_is_realview_pbx())
+        return REALVIEW_PBX_UART0_BASE;
+    else
+        return 0;
 }
 
 /*
  * This does not append a newline
  */
-static inline void putc(int c)
-{
-	unsigned long base = get_uart_base();
+static inline void putc(int c) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 5))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 5))
+        barrier();
 
-	AMBA_UART_DR(base) = c;
+    AMBA_UART_DR(base) = c;
 }
 
-static inline void flush(void)
-{
-	unsigned long base = get_uart_base();
+static inline void flush(void) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 3))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 3))
+        barrier();
 }
 
 /*

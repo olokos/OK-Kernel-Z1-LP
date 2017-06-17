@@ -65,34 +65,34 @@ extern const struct il_ops il3945_ops;
 extern struct il_mod_params il3945_mod_params;
 
 struct il3945_rate_scale_data {
-	u64 data;
-	s32 success_counter;
-	s32 success_ratio;
-	s32 counter;
-	s32 average_tpt;
-	unsigned long stamp;
+    u64 data;
+    s32 success_counter;
+    s32 success_ratio;
+    s32 counter;
+    s32 average_tpt;
+    unsigned long stamp;
 };
 
 struct il3945_rs_sta {
-	spinlock_t lock;
-	struct il_priv *il;
-	s32 *expected_tpt;
-	unsigned long last_partial_flush;
-	unsigned long last_flush;
-	u32 flush_time;
-	u32 last_tx_packets;
-	u32 tx_packets;
-	u8 tgg;
-	u8 flush_pending;
-	u8 start_rate;
-	struct timer_list rate_scale_flush;
-	struct il3945_rate_scale_data win[RATE_COUNT_3945];
+    spinlock_t lock;
+    struct il_priv *il;
+    s32 *expected_tpt;
+    unsigned long last_partial_flush;
+    unsigned long last_flush;
+    u32 flush_time;
+    u32 last_tx_packets;
+    u32 tx_packets;
+    u8 tgg;
+    u8 flush_pending;
+    u8 start_rate;
+    struct timer_list rate_scale_flush;
+    struct il3945_rate_scale_data win[RATE_COUNT_3945];
 #ifdef CONFIG_MAC80211_DEBUGFS
-	struct dentry *rs_sta_dbgfs_stats_table_file;
+    struct dentry *rs_sta_dbgfs_stats_table_file;
 #endif
 
-	/* used to be in sta_info */
-	int last_txrate_idx;
+    /* used to be in sta_info */
+    int last_txrate_idx;
 };
 
 /*
@@ -100,14 +100,14 @@ struct il3945_rs_sta {
  * 3945 and 4965!
  */
 struct il3945_sta_priv {
-	struct il_station_priv_common common;
-	struct il3945_rs_sta rs_sta;
+    struct il_station_priv_common common;
+    struct il3945_rs_sta rs_sta;
 };
 
 enum il3945_antenna {
-	IL_ANTENNA_DIVERSITY,
-	IL_ANTENNA_MAIN,
-	IL_ANTENNA_AUX
+    IL_ANTENNA_DIVERSITY,
+    IL_ANTENNA_MAIN,
+    IL_ANTENNA_AUX
 };
 
 /*
@@ -141,13 +141,13 @@ enum il3945_antenna {
 #define IEEE80211_FRAME_LEN             (IEEE80211_DATA_LEN + IEEE80211_HLEN)
 
 struct il3945_frame {
-	union {
-		struct ieee80211_hdr frame;
-		struct il3945_tx_beacon_cmd beacon;
-		u8 raw[IEEE80211_FRAME_LEN];
-		u8 cmd[360];
-	} u;
-	struct list_head list;
+    union {
+        struct ieee80211_hdr frame;
+        struct il3945_tx_beacon_cmd beacon;
+        u8 raw[IEEE80211_FRAME_LEN];
+        u8 cmd[360];
+    } u;
+    struct list_head list;
 };
 
 #define SEQ_TO_SN(seq) (((seq) & IEEE80211_SCTL_SEQ) >> 4)
@@ -171,11 +171,11 @@ struct il3945_frame {
 #define STA_PS_STATUS_SLEEP            1
 
 struct il3945_ibss_seq {
-	u8 mac[ETH_ALEN];
-	u16 seq_num;
-	u16 frag_num;
-	unsigned long packet_time;
-	struct list_head list;
+    u8 mac[ETH_ALEN];
+    u16 seq_num;
+    u16 frag_num;
+    unsigned long packet_time;
+    struct list_head list;
 };
 
 #define IL_RX_HDR(x) ((struct il3945_rx_frame_hdr *)(\
@@ -197,10 +197,10 @@ extern int il3945_calc_db_from_ratio(int sig_ratio);
 extern void il3945_rx_replenish(void *data);
 extern void il3945_rx_queue_reset(struct il_priv *il, struct il_rx_queue *rxq);
 extern unsigned int il3945_fill_beacon_frame(struct il_priv *il,
-					     struct ieee80211_hdr *hdr,
-					     int left);
+        struct ieee80211_hdr *hdr,
+        int left);
 extern int il3945_dump_nic_event_log(struct il_priv *il, bool full_log,
-				     char **buf, bool display);
+                                     char **buf, bool display);
 extern void il3945_dump_nic_error_log(struct il_priv *il);
 
 /******************************************************************************
@@ -230,18 +230,18 @@ extern void il3945_hw_txq_ctx_free(struct il_priv *il);
 extern void il3945_hw_txq_ctx_stop(struct il_priv *il);
 extern int il3945_hw_nic_reset(struct il_priv *il);
 extern int il3945_hw_txq_attach_buf_to_tfd(struct il_priv *il,
-					   struct il_tx_queue *txq,
-					   dma_addr_t addr, u16 len, u8 reset,
-					   u8 pad);
+        struct il_tx_queue *txq,
+        dma_addr_t addr, u16 len, u8 reset,
+        u8 pad);
 extern void il3945_hw_txq_free_tfd(struct il_priv *il, struct il_tx_queue *txq);
 extern int il3945_hw_get_temperature(struct il_priv *il);
 extern int il3945_hw_tx_queue_init(struct il_priv *il, struct il_tx_queue *txq);
 extern unsigned int il3945_hw_get_beacon_cmd(struct il_priv *il,
-					     struct il3945_frame *frame,
-					     u8 rate);
+        struct il3945_frame *frame,
+        u8 rate);
 void il3945_hw_build_tx_cmd_rate(struct il_priv *il, struct il_device_cmd *cmd,
-				 struct ieee80211_tx_info *info,
-				 struct ieee80211_hdr *hdr, int sta_id);
+                                 struct ieee80211_tx_info *info,
+                                 struct ieee80211_hdr *hdr, int sta_id);
 extern int il3945_hw_reg_send_txpower(struct il_priv *il);
 extern int il3945_hw_reg_set_txpower(struct il_priv *il, s8 power);
 extern void il3945_hdl_stats(struct il_priv *il, struct il_rx_buf *rxb);
@@ -297,9 +297,9 @@ extern const struct il3945_rate_info il3945_rates[RATE_COUNT_3945];
  * DO NOT ALTER THIS STRUCTURE!!!
  */
 struct il3945_eeprom_txpower_sample {
-	u8 gain_idx;		/* idx into power (gain) setup table ... */
-	s8 power;		/* ... for this pwr level for this chnl group */
-	u16 v_det;		/* PA output voltage */
+    u8 gain_idx;		/* idx into power (gain) setup table ... */
+    s8 power;		/* ... for this pwr level for this chnl group */
+    u16 v_det;		/* PA output voltage */
 } __packed;
 
 /*
@@ -311,15 +311,15 @@ struct il3945_eeprom_txpower_sample {
  * DO NOT ALTER THIS STRUCTURE!!!
  */
 struct il3945_eeprom_txpower_group {
-	struct il3945_eeprom_txpower_sample samples[5];	/* 5 power levels */
-	s32 a, b, c, d, e;	/* coefficients for voltage->power
+    struct il3945_eeprom_txpower_sample samples[5];	/* 5 power levels */
+    s32 a, b, c, d, e;	/* coefficients for voltage->power
 				 * formula (signed) */
-	s32 Fa, Fb, Fc, Fd, Fe;	/* these modify coeffs based on
+    s32 Fa, Fb, Fc, Fd, Fe;	/* these modify coeffs based on
 				 * frequency (signed) */
-	s8 saturation_power;	/* highest power possible by h/w in this
+    s8 saturation_power;	/* highest power possible by h/w in this
 				 * band */
-	u8 group_channel;	/* "representative" channel # in this band */
-	s16 temperature;	/* h/w temperature at factory calib this band
+    u8 group_channel;	/* "representative" channel # in this band */
+    s16 temperature;	/* h/w temperature at factory calib this band
 				 * (signed) */
 } __packed;
 
@@ -330,94 +330,94 @@ struct il3945_eeprom_txpower_group {
  * Data copied from EEPROM.
  */
 struct il3945_eeprom_temperature_corr {
-	u32 Ta;
-	u32 Tb;
-	u32 Tc;
-	u32 Td;
-	u32 Te;
+    u32 Ta;
+    u32 Tb;
+    u32 Tc;
+    u32 Td;
+    u32 Te;
 } __packed;
 
 /*
  * EEPROM map
  */
 struct il3945_eeprom {
-	u8 reserved0[16];
-	u16 device_id;		/* abs.ofs: 16 */
-	u8 reserved1[2];
-	u16 pmc;		/* abs.ofs: 20 */
-	u8 reserved2[20];
-	u8 mac_address[6];	/* abs.ofs: 42 */
-	u8 reserved3[58];
-	u16 board_revision;	/* abs.ofs: 106 */
-	u8 reserved4[11];
-	u8 board_pba_number[9];	/* abs.ofs: 119 */
-	u8 reserved5[8];
-	u16 version;		/* abs.ofs: 136 */
-	u8 sku_cap;		/* abs.ofs: 138 */
-	u8 leds_mode;		/* abs.ofs: 139 */
-	u16 oem_mode;
-	u16 wowlan_mode;	/* abs.ofs: 142 */
-	u16 leds_time_interval;	/* abs.ofs: 144 */
-	u8 leds_off_time;	/* abs.ofs: 146 */
-	u8 leds_on_time;	/* abs.ofs: 147 */
-	u8 almgor_m_version;	/* abs.ofs: 148 */
-	u8 antenna_switch_type;	/* abs.ofs: 149 */
-	u8 reserved6[42];
-	u8 sku_id[4];		/* abs.ofs: 192 */
+    u8 reserved0[16];
+    u16 device_id;		/* abs.ofs: 16 */
+    u8 reserved1[2];
+    u16 pmc;		/* abs.ofs: 20 */
+    u8 reserved2[20];
+    u8 mac_address[6];	/* abs.ofs: 42 */
+    u8 reserved3[58];
+    u16 board_revision;	/* abs.ofs: 106 */
+    u8 reserved4[11];
+    u8 board_pba_number[9];	/* abs.ofs: 119 */
+    u8 reserved5[8];
+    u16 version;		/* abs.ofs: 136 */
+    u8 sku_cap;		/* abs.ofs: 138 */
+    u8 leds_mode;		/* abs.ofs: 139 */
+    u16 oem_mode;
+    u16 wowlan_mode;	/* abs.ofs: 142 */
+    u16 leds_time_interval;	/* abs.ofs: 144 */
+    u8 leds_off_time;	/* abs.ofs: 146 */
+    u8 leds_on_time;	/* abs.ofs: 147 */
+    u8 almgor_m_version;	/* abs.ofs: 148 */
+    u8 antenna_switch_type;	/* abs.ofs: 149 */
+    u8 reserved6[42];
+    u8 sku_id[4];		/* abs.ofs: 192 */
 
-/*
- * Per-channel regulatory data.
- *
- * Each channel that *might* be supported by 3945 has a fixed location
- * in EEPROM containing EEPROM_CHANNEL_* usage flags (LSB) and max regulatory
- * txpower (MSB).
- *
- * Entries immediately below are for 20 MHz channel width.
- *
- * 2.4 GHz channels 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
- */
-	u16 band_1_count;	/* abs.ofs: 196 */
-	struct il_eeprom_channel band_1_channels[14];	/* abs.ofs: 198 */
+    /*
+     * Per-channel regulatory data.
+     *
+     * Each channel that *might* be supported by 3945 has a fixed location
+     * in EEPROM containing EEPROM_CHANNEL_* usage flags (LSB) and max regulatory
+     * txpower (MSB).
+     *
+     * Entries immediately below are for 20 MHz channel width.
+     *
+     * 2.4 GHz channels 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+     */
+    u16 band_1_count;	/* abs.ofs: 196 */
+    struct il_eeprom_channel band_1_channels[14];	/* abs.ofs: 198 */
 
-/*
- * 4.9 GHz channels 183, 184, 185, 187, 188, 189, 192, 196,
- * 5.0 GHz channels 7, 8, 11, 12, 16
- * (4915-5080MHz) (none of these is ever supported)
- */
-	u16 band_2_count;	/* abs.ofs: 226 */
-	struct il_eeprom_channel band_2_channels[13];	/* abs.ofs: 228 */
+    /*
+     * 4.9 GHz channels 183, 184, 185, 187, 188, 189, 192, 196,
+     * 5.0 GHz channels 7, 8, 11, 12, 16
+     * (4915-5080MHz) (none of these is ever supported)
+     */
+    u16 band_2_count;	/* abs.ofs: 226 */
+    struct il_eeprom_channel band_2_channels[13];	/* abs.ofs: 228 */
 
-/*
- * 5.2 GHz channels 34, 36, 38, 40, 42, 44, 46, 48, 52, 56, 60, 64
- * (5170-5320MHz)
- */
-	u16 band_3_count;	/* abs.ofs: 254 */
-	struct il_eeprom_channel band_3_channels[12];	/* abs.ofs: 256 */
+    /*
+     * 5.2 GHz channels 34, 36, 38, 40, 42, 44, 46, 48, 52, 56, 60, 64
+     * (5170-5320MHz)
+     */
+    u16 band_3_count;	/* abs.ofs: 254 */
+    struct il_eeprom_channel band_3_channels[12];	/* abs.ofs: 256 */
 
-/*
- * 5.5 GHz channels 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140
- * (5500-5700MHz)
- */
-	u16 band_4_count;	/* abs.ofs: 280 */
-	struct il_eeprom_channel band_4_channels[11];	/* abs.ofs: 282 */
+    /*
+     * 5.5 GHz channels 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140
+     * (5500-5700MHz)
+     */
+    u16 band_4_count;	/* abs.ofs: 280 */
+    struct il_eeprom_channel band_4_channels[11];	/* abs.ofs: 282 */
 
-/*
- * 5.7 GHz channels 145, 149, 153, 157, 161, 165
- * (5725-5825MHz)
- */
-	u16 band_5_count;	/* abs.ofs: 304 */
-	struct il_eeprom_channel band_5_channels[6];	/* abs.ofs: 306 */
+    /*
+     * 5.7 GHz channels 145, 149, 153, 157, 161, 165
+     * (5725-5825MHz)
+     */
+    u16 band_5_count;	/* abs.ofs: 304 */
+    struct il_eeprom_channel band_5_channels[6];	/* abs.ofs: 306 */
 
-	u8 reserved9[194];
+    u8 reserved9[194];
 
-/*
- * 3945 Txpower calibration data.
- */
+    /*
+     * 3945 Txpower calibration data.
+     */
 #define IL_NUM_TX_CALIB_GROUPS 5
-	struct il3945_eeprom_txpower_group groups[IL_NUM_TX_CALIB_GROUPS];
-/* abs.ofs: 512 */
-	struct il3945_eeprom_temperature_corr corrections;	/* abs.ofs: 832 */
-	u8 reserved16[172];	/* fill out to full 1024 byte block */
+    struct il3945_eeprom_txpower_group groups[IL_NUM_TX_CALIB_GROUPS];
+    /* abs.ofs: 512 */
+    struct il3945_eeprom_temperature_corr corrections;	/* abs.ofs: 832 */
+    u8 reserved16[172];	/* fill out to full 1024 byte block */
 } __packed;
 
 #define IL3945_EEPROM_IMG_SIZE 1024
@@ -463,16 +463,15 @@ struct il3945_eeprom {
 #define IL39_MAX_BSM_SIZE IL39_RTC_INST_SIZE
 
 static inline int
-il3945_hw_valid_rtc_data_addr(u32 addr)
-{
-	return (addr >= IL39_RTC_DATA_LOWER_BOUND &&
-		addr < IL39_RTC_DATA_UPPER_BOUND);
+il3945_hw_valid_rtc_data_addr(u32 addr) {
+    return (addr >= IL39_RTC_DATA_LOWER_BOUND &&
+            addr < IL39_RTC_DATA_UPPER_BOUND);
 }
 
 /* Base physical address of il3945_shared is provided to FH39_TSSR_CBB_BASE
  * and &il3945_shared.rx_read_ptr[0] is provided to FH39_RCSR_RPTR_ADDR(0) */
 struct il3945_shared {
-	__le32 tx_base_ptr[8];
+    __le32 tx_base_ptr[8];
 } __packed;
 
 /************************************/
@@ -584,14 +583,14 @@ struct il3945_shared {
 #define FH39_RSSR_CHNL0_RX_STATUS_CHNL_IDLE			(0x01000000)
 
 struct il3945_tfd_tb {
-	__le32 addr;
-	__le32 len;
+    __le32 addr;
+    __le32 len;
 } __packed;
 
 struct il3945_tfd {
-	__le32 control_flags;
-	struct il3945_tfd_tb tbs[4];
-	u8 __pad[28];
+    __le32 control_flags;
+    struct il3945_tfd_tb tbs[4];
+    u8 __pad[28];
 } __packed;
 
 #ifdef CONFIG_IWLEGACY_DEBUGFS

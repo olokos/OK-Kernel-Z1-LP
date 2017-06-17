@@ -39,10 +39,10 @@
 #define MSR_KVM_STEAL_TIME  0x4b564d03
 
 struct kvm_steal_time {
-	__u64 steal;
-	__u32 version;
-	__u32 flags;
-	__u32 pad[12];
+    __u64 steal;
+    __u32 version;
+    __u32 flags;
+    __u32 pad[12];
 };
 
 #define KVM_STEAL_ALIGNMENT_BITS 5
@@ -61,32 +61,32 @@ struct kvm_steal_time {
 
 /* Payload for KVM_HC_MMU_OP */
 struct kvm_mmu_op_header {
-	__u32 op;
-	__u32 pad;
+    __u32 op;
+    __u32 pad;
 };
 
 struct kvm_mmu_op_write_pte {
-	struct kvm_mmu_op_header header;
-	__u64 pte_phys;
-	__u64 pte_val;
+    struct kvm_mmu_op_header header;
+    __u64 pte_phys;
+    __u64 pte_val;
 };
 
 struct kvm_mmu_op_flush_tlb {
-	struct kvm_mmu_op_header header;
+    struct kvm_mmu_op_header header;
 };
 
 struct kvm_mmu_op_release_pt {
-	struct kvm_mmu_op_header header;
-	__u64 pt_phys;
+    struct kvm_mmu_op_header header;
+    __u64 pt_phys;
 };
 
 #define KVM_PV_REASON_PAGE_NOT_PRESENT 1
 #define KVM_PV_REASON_PAGE_READY 2
 
 struct kvm_vcpu_pv_apf_data {
-	__u32 reason;
-	__u8 pad[60];
-	__u32 enabled;
+    __u32 reason;
+    __u8 pad[60];
+    __u32 enabled;
 };
 
 #ifdef __KERNEL__
@@ -111,83 +111,76 @@ extern int kvm_register_clock(char *txt);
  * noted by the particular hypercall.
  */
 
-static inline long kvm_hypercall0(unsigned int nr)
-{
-	long ret;
-	asm volatile(KVM_HYPERCALL
-		     : "=a"(ret)
-		     : "a"(nr)
-		     : "memory");
-	return ret;
+static inline long kvm_hypercall0(unsigned int nr) {
+    long ret;
+    asm volatile(KVM_HYPERCALL
+                 : "=a"(ret)
+                 : "a"(nr)
+                 : "memory");
+    return ret;
 }
 
-static inline long kvm_hypercall1(unsigned int nr, unsigned long p1)
-{
-	long ret;
-	asm volatile(KVM_HYPERCALL
-		     : "=a"(ret)
-		     : "a"(nr), "b"(p1)
-		     : "memory");
-	return ret;
+static inline long kvm_hypercall1(unsigned int nr, unsigned long p1) {
+    long ret;
+    asm volatile(KVM_HYPERCALL
+                 : "=a"(ret)
+                 : "a"(nr), "b"(p1)
+                 : "memory");
+    return ret;
 }
 
 static inline long kvm_hypercall2(unsigned int nr, unsigned long p1,
-				  unsigned long p2)
-{
-	long ret;
-	asm volatile(KVM_HYPERCALL
-		     : "=a"(ret)
-		     : "a"(nr), "b"(p1), "c"(p2)
-		     : "memory");
-	return ret;
+                                  unsigned long p2) {
+    long ret;
+    asm volatile(KVM_HYPERCALL
+                 : "=a"(ret)
+                 : "a"(nr), "b"(p1), "c"(p2)
+                 : "memory");
+    return ret;
 }
 
 static inline long kvm_hypercall3(unsigned int nr, unsigned long p1,
-				  unsigned long p2, unsigned long p3)
-{
-	long ret;
-	asm volatile(KVM_HYPERCALL
-		     : "=a"(ret)
-		     : "a"(nr), "b"(p1), "c"(p2), "d"(p3)
-		     : "memory");
-	return ret;
+                                  unsigned long p2, unsigned long p3) {
+    long ret;
+    asm volatile(KVM_HYPERCALL
+                 : "=a"(ret)
+                 : "a"(nr), "b"(p1), "c"(p2), "d"(p3)
+                 : "memory");
+    return ret;
 }
 
 static inline long kvm_hypercall4(unsigned int nr, unsigned long p1,
-				  unsigned long p2, unsigned long p3,
-				  unsigned long p4)
-{
-	long ret;
-	asm volatile(KVM_HYPERCALL
-		     : "=a"(ret)
-		     : "a"(nr), "b"(p1), "c"(p2), "d"(p3), "S"(p4)
-		     : "memory");
-	return ret;
+                                  unsigned long p2, unsigned long p3,
+                                  unsigned long p4) {
+    long ret;
+    asm volatile(KVM_HYPERCALL
+                 : "=a"(ret)
+                 : "a"(nr), "b"(p1), "c"(p2), "d"(p3), "S"(p4)
+                 : "memory");
+    return ret;
 }
 
-static inline int kvm_para_available(void)
-{
-	unsigned int eax, ebx, ecx, edx;
-	char signature[13];
+static inline int kvm_para_available(void) {
+    unsigned int eax, ebx, ecx, edx;
+    char signature[13];
 
-	if (boot_cpu_data.cpuid_level < 0)
-		return 0;	/* So we don't blow up on old processors */
+    if (boot_cpu_data.cpuid_level < 0)
+        return 0;	/* So we don't blow up on old processors */
 
-	cpuid(KVM_CPUID_SIGNATURE, &eax, &ebx, &ecx, &edx);
-	memcpy(signature + 0, &ebx, 4);
-	memcpy(signature + 4, &ecx, 4);
-	memcpy(signature + 8, &edx, 4);
-	signature[12] = 0;
+    cpuid(KVM_CPUID_SIGNATURE, &eax, &ebx, &ecx, &edx);
+    memcpy(signature + 0, &ebx, 4);
+    memcpy(signature + 4, &ecx, 4);
+    memcpy(signature + 8, &edx, 4);
+    signature[12] = 0;
 
-	if (strcmp(signature, "KVMKVMKVM") == 0)
-		return 1;
+    if (strcmp(signature, "KVMKVMKVM") == 0)
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static inline unsigned int kvm_arch_para_features(void)
-{
-	return cpuid_eax(KVM_CPUID_FEATURES);
+static inline unsigned int kvm_arch_para_features(void) {
+    return cpuid_eax(KVM_CPUID_FEATURES);
 }
 
 #ifdef CONFIG_KVM_GUEST
@@ -200,14 +193,12 @@ extern void kvm_disable_steal_time(void);
 #define kvm_guest_init() do { } while (0)
 #define kvm_async_pf_task_wait(T) do {} while(0)
 #define kvm_async_pf_task_wake(T) do {} while(0)
-static inline u32 kvm_read_and_reset_pf_reason(void)
-{
-	return 0;
+static inline u32 kvm_read_and_reset_pf_reason(void) {
+    return 0;
 }
 
-static inline void kvm_disable_steal_time(void)
-{
-	return;
+static inline void kvm_disable_steal_time(void) {
+    return;
 }
 #endif
 

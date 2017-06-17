@@ -5,9 +5,8 @@
 
 #include <asm/mmzone.h>
 
-static inline int cpu_to_node(int cpu)
-{
-	return numa_cpu_lookup_table[cpu];
+static inline int cpu_to_node(int cpu) {
+    return numa_cpu_lookup_table[cpu];
 }
 
 #define parent_node(node)	(node)
@@ -20,9 +19,8 @@ struct pci_bus;
 #ifdef CONFIG_PCI
 extern int pcibus_to_node(struct pci_bus *pbus);
 #else
-static inline int pcibus_to_node(struct pci_bus *pbus)
-{
-	return -1;
+static inline int pcibus_to_node(struct pci_bus *pbus) {
+    return -1;
 }
 #endif
 
@@ -66,9 +64,8 @@ static inline int pcibus_to_node(struct pci_bus *pbus)
 #endif /* CONFIG_SMP */
 
 extern cpumask_t cpu_core_map[NR_CPUS];
-static inline const struct cpumask *cpu_coregroup_mask(int cpu)
-{
-        return &cpu_core_map[cpu];
+static inline const struct cpumask *cpu_coregroup_mask(int cpu) {
+    return &cpu_core_map[cpu];
 }
 
 #endif /* _ASM_SPARC64_TOPOLOGY_H */

@@ -11,8 +11,8 @@
 #include <linux/clkdev.h>
 
 struct omap_clk {
-	u16				cpu;
-	struct clk_lookup		lk;
+    u16				cpu;
+    struct clk_lookup		lk;
 };
 
 #define CLK(dev, con, ck, cp) 		\

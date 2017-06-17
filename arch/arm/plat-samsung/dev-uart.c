@@ -20,26 +20,26 @@
 /* uart devices */
 
 static struct platform_device s3c24xx_uart_device0 = {
-	.id		= 0,
+    .id		= 0,
 };
 
 static struct platform_device s3c24xx_uart_device1 = {
-	.id		= 1,
+    .id		= 1,
 };
 
 static struct platform_device s3c24xx_uart_device2 = {
-	.id		= 2,
+    .id		= 2,
 };
 
 static struct platform_device s3c24xx_uart_device3 = {
-	.id		= 3,
+    .id		= 3,
 };
 
 struct platform_device *s3c24xx_uart_src[4] = {
-	&s3c24xx_uart_device0,
-	&s3c24xx_uart_device1,
-	&s3c24xx_uart_device2,
-	&s3c24xx_uart_device3,
+    &s3c24xx_uart_device0,
+    &s3c24xx_uart_device1,
+    &s3c24xx_uart_device2,
+    &s3c24xx_uart_device3,
 };
 
 struct platform_device *s3c24xx_uart_devs[4] = {

@@ -23,7 +23,7 @@ u8 NVReadDacData(struct nvidia_par *par);
 
 /* in nv_hw.c */
 void NVCalcStateExt(struct nvidia_par *par, struct _riva_hw_state *,
-		    int, int, int, int, int, int);
+                    int, int, int, int, int, int);
 void NVLoadStateExt(struct nvidia_par *par, struct _riva_hw_state *);
 void NVUnloadStateExt(struct nvidia_par *par, struct _riva_hw_state *);
 void NVSetStartAddress(struct nvidia_par *par, u32);
@@ -35,7 +35,7 @@ void NVLockUnlock(struct nvidia_par *par, int);
 void nvidia_create_i2c_busses(struct nvidia_par *par);
 void nvidia_delete_i2c_busses(struct nvidia_par *par);
 int nvidia_probe_i2c_connector(struct fb_info *info, int conn,
-			       u8 ** out_edid);
+                               u8 ** out_edid);
 #else
 #define nvidia_create_i2c_busses(...)
 #define nvidia_delete_i2c_busses(...)
@@ -44,23 +44,22 @@ int nvidia_probe_i2c_connector(struct fb_info *info, int conn,
 
 #ifdef CONFIG_PPC_OF
 int nvidia_probe_of_connector(struct fb_info *info, int conn,
-			      u8 ** out_edid);
+                              u8 ** out_edid);
 #else
 static inline int nvidia_probe_of_connector(struct fb_info *info, int conn,
-				      u8 ** out_edid)
-{
-	return -1;
+        u8 ** out_edid) {
+    return -1;
 }
 #endif
 
 /* in nv_accel.c */
 extern void NVResetGraphics(struct fb_info *info);
 extern void nvidiafb_copyarea(struct fb_info *info,
-			      const struct fb_copyarea *region);
+                              const struct fb_copyarea *region);
 extern void nvidiafb_fillrect(struct fb_info *info,
-			      const struct fb_fillrect *rect);
+                              const struct fb_fillrect *rect);
 extern void nvidiafb_imageblit(struct fb_info *info,
-			       const struct fb_image *image);
+                               const struct fb_image *image);
 extern int nvidiafb_sync(struct fb_info *info);
 
 /* in nv_backlight.h */

@@ -45,14 +45,12 @@
 
 typedef wpt_uint8 wpt_macAddr[6];
 
-enum
-{
+enum {
     eWLAN_PAL_FALSE = 0,
     eWLAN_PAL_TRUE = 1,
 };
 
-typedef enum
-{
+typedef enum {
     eWLAN_MODULE_DAL,
     eWLAN_MODULE_DAL_CTRL,
     eWLAN_MODULE_DAL_DATA,
@@ -63,8 +61,7 @@ typedef enum
 } wpt_moduleid;
 
 
-typedef struct
-{
+typedef struct {
     //BIT order is most likely little endian.
     //This structure is for netowkr-order byte array (or big-endian byte order)
 #ifndef WLAN_PAL_BIG_ENDIAN_BIT
@@ -100,8 +97,7 @@ typedef struct
 
 } wpt_FrameCtrl;
 
-typedef struct
-{
+typedef struct {
     /* Frame control field */
     wpt_FrameCtrl frameCtrl;
     /* Duration ID */
@@ -120,8 +116,7 @@ typedef struct
     wpt_uint16  usQosCtrl;
 } wpt_80211Header;
 
-typedef struct
-{
+typedef struct {
     wpt_macAddr dest;
     wpt_macAddr sec;
     wpt_uint16 lenOrType;

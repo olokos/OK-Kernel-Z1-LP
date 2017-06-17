@@ -30,29 +30,29 @@ struct kgsl_device;
  */
 TRACE_EVENT(kgsl_z180_irq_status,
 
-	TP_PROTO(struct kgsl_device *device, unsigned int status),
+            TP_PROTO(struct kgsl_device *device, unsigned int status),
 
-	TP_ARGS(device, status),
+            TP_ARGS(device, status),
 
-	TP_STRUCT__entry(
-		__string(device_name, device->name)
-		__field(unsigned int, status)
-	),
+            TP_STRUCT__entry(
+                __string(device_name, device->name)
+                __field(unsigned int, status)
+            ),
 
-	TP_fast_assign(
-		__assign_str(device_name, device->name);
-		__entry->status = status;
-	),
+            TP_fast_assign(
+                __assign_str(device_name, device->name);
+                __entry->status = status;
+            ),
 
-	TP_printk(
-		"d_name=%s status=%s",
-		__get_str(device_name),
-		__entry->status ? __print_flags(__entry->status, "|",
-			{ REG_VGC_IRQSTATUS__MH_MASK, "MH" },
-			{ REG_VGC_IRQSTATUS__G2D_MASK, "G2D" },
-			{ REG_VGC_IRQSTATUS__FIFO_MASK, "FIFO" }) : "None"
-	)
-);
+            TP_printk(
+                "d_name=%s status=%s",
+                __get_str(device_name),
+                __entry->status ? __print_flags(__entry->status, "|",
+{ REG_VGC_IRQSTATUS__MH_MASK, "MH" },
+{ REG_VGC_IRQSTATUS__G2D_MASK, "G2D" },
+{ REG_VGC_IRQSTATUS__FIFO_MASK, "FIFO" }) : "None"
+            )
+           );
 
 #endif /* _Z180_TRACE_H */
 

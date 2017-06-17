@@ -22,7 +22,7 @@ static inline void prefill_possible_map(void) {}
 #endif /* CONFIG_SMP */
 
 struct x86_cpu {
-	struct cpu cpu;
+    struct cpu cpu;
 };
 
 #ifdef CONFIG_HOTPLUG_CPU

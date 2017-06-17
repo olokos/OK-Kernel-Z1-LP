@@ -216,9 +216,9 @@
 #include <linux/sched.h>
 
 struct cpu_tlb_fns {
-	void (*flush_user_range)(unsigned long, unsigned long, struct vm_area_struct *);
-	void (*flush_kern_range)(unsigned long, unsigned long);
-	unsigned long tlb_flags;
+    void (*flush_user_range)(unsigned long, unsigned long, struct vm_area_struct *);
+    void (*flush_kern_range)(unsigned long, unsigned long);
+    unsigned long tlb_flags;
 };
 
 /*
@@ -333,122 +333,118 @@ extern struct cpu_tlb_fns cpu_tlb;
 #define tlb_op(f, regs, arg)	__tlb_op(f, "p15, 0, %0, " regs, arg)
 #define tlb_l2_op(f, regs, arg)	__tlb_op(f, "p15, 1, %0, " regs, arg)
 
-static inline void local_flush_tlb_all(void)
-{
-	const int zero = 0;
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+static inline void local_flush_tlb_all(void) {
+    const int zero = 0;
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	if (tlb_flag(TLB_WB))
-		dsb();
+    if (tlb_flag(TLB_WB))
+        dsb();
 
-	tlb_op(TLB_V3_FULL, "c6, c0, 0", zero);
-	tlb_op(TLB_V4_U_FULL | TLB_V6_U_FULL, "c8, c7, 0", zero);
-	tlb_op(TLB_V4_D_FULL | TLB_V6_D_FULL, "c8, c6, 0", zero);
-	tlb_op(TLB_V4_I_FULL | TLB_V6_I_FULL, "c8, c5, 0", zero);
-	tlb_op(TLB_V7_UIS_FULL, "c8, c3, 0", zero);
+    tlb_op(TLB_V3_FULL, "c6, c0, 0", zero);
+    tlb_op(TLB_V4_U_FULL | TLB_V6_U_FULL, "c8, c7, 0", zero);
+    tlb_op(TLB_V4_D_FULL | TLB_V6_D_FULL, "c8, c6, 0", zero);
+    tlb_op(TLB_V4_I_FULL | TLB_V6_I_FULL, "c8, c5, 0", zero);
+    tlb_op(TLB_V7_UIS_FULL, "c8, c3, 0", zero);
 
-	if (tlb_flag(TLB_BARRIER)) {
-		dsb();
-		isb();
-	}
+    if (tlb_flag(TLB_BARRIER)) {
+        dsb();
+        isb();
+    }
 }
 
-static inline void local_flush_tlb_mm(struct mm_struct *mm)
-{
-	const int zero = 0;
-	const int asid = ASID(mm);
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+static inline void local_flush_tlb_mm(struct mm_struct *mm) {
+    const int zero = 0;
+    const int asid = ASID(mm);
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	if (tlb_flag(TLB_WB))
-		dsb();
+    if (tlb_flag(TLB_WB))
+        dsb();
 
-	if (possible_tlb_flags & (TLB_V3_FULL|TLB_V4_U_FULL|TLB_V4_D_FULL|TLB_V4_I_FULL)) {
-		if (cpumask_test_cpu(get_cpu(), mm_cpumask(mm))) {
-			tlb_op(TLB_V3_FULL, "c6, c0, 0", zero);
-			tlb_op(TLB_V4_U_FULL, "c8, c7, 0", zero);
-			tlb_op(TLB_V4_D_FULL, "c8, c6, 0", zero);
-			tlb_op(TLB_V4_I_FULL, "c8, c5, 0", zero);
-		}
-		put_cpu();
-	}
+    if (possible_tlb_flags & (TLB_V3_FULL|TLB_V4_U_FULL|TLB_V4_D_FULL|TLB_V4_I_FULL)) {
+        if (cpumask_test_cpu(get_cpu(), mm_cpumask(mm))) {
+            tlb_op(TLB_V3_FULL, "c6, c0, 0", zero);
+            tlb_op(TLB_V4_U_FULL, "c8, c7, 0", zero);
+            tlb_op(TLB_V4_D_FULL, "c8, c6, 0", zero);
+            tlb_op(TLB_V4_I_FULL, "c8, c5, 0", zero);
+        }
+        put_cpu();
+    }
 
-	tlb_op(TLB_V6_U_ASID, "c8, c7, 2", asid);
-	tlb_op(TLB_V6_D_ASID, "c8, c6, 2", asid);
-	tlb_op(TLB_V6_I_ASID, "c8, c5, 2", asid);
+    tlb_op(TLB_V6_U_ASID, "c8, c7, 2", asid);
+    tlb_op(TLB_V6_D_ASID, "c8, c6, 2", asid);
+    tlb_op(TLB_V6_I_ASID, "c8, c5, 2", asid);
 #ifdef CONFIG_ARM_ERRATA_720789
-	tlb_op(TLB_V7_UIS_ASID, "c8, c3, 0", zero);
+    tlb_op(TLB_V7_UIS_ASID, "c8, c3, 0", zero);
 #else
-	tlb_op(TLB_V7_UIS_ASID, "c8, c3, 2", asid);
+    tlb_op(TLB_V7_UIS_ASID, "c8, c3, 2", asid);
 #endif
 
-	if (tlb_flag(TLB_BARRIER))
-		dsb();
+    if (tlb_flag(TLB_BARRIER))
+        dsb();
 }
 
 static inline void
-local_flush_tlb_page(struct vm_area_struct *vma, unsigned long uaddr)
-{
-	const int zero = 0;
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+local_flush_tlb_page(struct vm_area_struct *vma, unsigned long uaddr) {
+    const int zero = 0;
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	uaddr = (uaddr & PAGE_MASK) | ASID(vma->vm_mm);
+    uaddr = (uaddr & PAGE_MASK) | ASID(vma->vm_mm);
 
-	if (tlb_flag(TLB_WB))
-		dsb();
+    if (tlb_flag(TLB_WB))
+        dsb();
 
-	if (possible_tlb_flags & (TLB_V3_PAGE|TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
-	    cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm))) {
-		tlb_op(TLB_V3_PAGE, "c6, c0, 0", uaddr);
-		tlb_op(TLB_V4_U_PAGE, "c8, c7, 1", uaddr);
-		tlb_op(TLB_V4_D_PAGE, "c8, c6, 1", uaddr);
-		tlb_op(TLB_V4_I_PAGE, "c8, c5, 1", uaddr);
-		if (!tlb_flag(TLB_V4_I_PAGE) && tlb_flag(TLB_V4_I_FULL))
-			asm("mcr p15, 0, %0, c8, c5, 0" : : "r" (zero) : "cc");
-	}
+    if (possible_tlb_flags & (TLB_V3_PAGE|TLB_V4_U_PAGE|TLB_V4_D_PAGE|TLB_V4_I_PAGE|TLB_V4_I_FULL) &&
+            cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm))) {
+        tlb_op(TLB_V3_PAGE, "c6, c0, 0", uaddr);
+        tlb_op(TLB_V4_U_PAGE, "c8, c7, 1", uaddr);
+        tlb_op(TLB_V4_D_PAGE, "c8, c6, 1", uaddr);
+        tlb_op(TLB_V4_I_PAGE, "c8, c5, 1", uaddr);
+        if (!tlb_flag(TLB_V4_I_PAGE) && tlb_flag(TLB_V4_I_FULL))
+            asm("mcr p15, 0, %0, c8, c5, 0" : : "r" (zero) : "cc");
+    }
 
-	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", uaddr);
-	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", uaddr);
-	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", uaddr);
+    tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", uaddr);
+    tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", uaddr);
+    tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", uaddr);
 #if defined(CONFIG_ARM_ERRATA_720789) || defined(CONFIG_ARCH_MSM8X60)
-	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", uaddr & PAGE_MASK);
+    tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", uaddr & PAGE_MASK);
 #else
-	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", uaddr);
+    tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", uaddr);
 #endif
 
-	if (tlb_flag(TLB_BARRIER))
-		dsb();
+    if (tlb_flag(TLB_BARRIER))
+        dsb();
 }
 
-static inline void local_flush_tlb_kernel_page(unsigned long kaddr)
-{
-	const int zero = 0;
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+static inline void local_flush_tlb_kernel_page(unsigned long kaddr) {
+    const int zero = 0;
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	kaddr &= PAGE_MASK;
+    kaddr &= PAGE_MASK;
 
-	if (tlb_flag(TLB_WB))
-		dsb();
+    if (tlb_flag(TLB_WB))
+        dsb();
 
-	tlb_op(TLB_V3_PAGE, "c6, c0, 0", kaddr);
-	tlb_op(TLB_V4_U_PAGE, "c8, c7, 1", kaddr);
-	tlb_op(TLB_V4_D_PAGE, "c8, c6, 1", kaddr);
-	tlb_op(TLB_V4_I_PAGE, "c8, c5, 1", kaddr);
-	if (!tlb_flag(TLB_V4_I_PAGE) && tlb_flag(TLB_V4_I_FULL))
-		asm("mcr p15, 0, %0, c8, c5, 0" : : "r" (zero) : "cc");
+    tlb_op(TLB_V3_PAGE, "c6, c0, 0", kaddr);
+    tlb_op(TLB_V4_U_PAGE, "c8, c7, 1", kaddr);
+    tlb_op(TLB_V4_D_PAGE, "c8, c6, 1", kaddr);
+    tlb_op(TLB_V4_I_PAGE, "c8, c5, 1", kaddr);
+    if (!tlb_flag(TLB_V4_I_PAGE) && tlb_flag(TLB_V4_I_FULL))
+        asm("mcr p15, 0, %0, c8, c5, 0" : : "r" (zero) : "cc");
 
-	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", kaddr);
-	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", kaddr);
-	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", kaddr);
+    tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", kaddr);
+    tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", kaddr);
+    tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", kaddr);
 #ifdef CONFIG_ARCH_MSM8X60
-	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", kaddr);
+    tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", kaddr);
 #else
-	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
+    tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
 #endif
 
-	if (tlb_flag(TLB_BARRIER)) {
-		dsb();
-		isb();
-	}
+    if (tlb_flag(TLB_BARRIER)) {
+        dsb();
+        isb();
+    }
 }
 
 /*
@@ -464,23 +460,21 @@ static inline void local_flush_tlb_kernel_page(unsigned long kaddr)
  *	these operations.  This is typically used when we are removing
  *	PMD entries.
  */
-static inline void flush_pmd_entry(void *pmd)
-{
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+static inline void flush_pmd_entry(void *pmd) {
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	tlb_op(TLB_DCLEAN, "c7, c10, 1	@ flush_pmd", pmd);
-	tlb_l2_op(TLB_L2CLEAN_FR, "c15, c9, 1  @ L2 flush_pmd", pmd);
+    tlb_op(TLB_DCLEAN, "c7, c10, 1	@ flush_pmd", pmd);
+    tlb_l2_op(TLB_L2CLEAN_FR, "c15, c9, 1  @ L2 flush_pmd", pmd);
 
-	if (tlb_flag(TLB_WB))
-		dsb();
+    if (tlb_flag(TLB_WB))
+        dsb();
 }
 
-static inline void clean_pmd_entry(void *pmd)
-{
-	const unsigned int __tlb_flag = __cpu_tlb_flags;
+static inline void clean_pmd_entry(void *pmd) {
+    const unsigned int __tlb_flag = __cpu_tlb_flags;
 
-	tlb_op(TLB_DCLEAN, "c7, c10, 1	@ flush_pmd", pmd);
-	tlb_l2_op(TLB_L2CLEAN_FR, "c15, c9, 1  @ L2 flush_pmd", pmd);
+    tlb_op(TLB_DCLEAN, "c7, c10, 1	@ flush_pmd", pmd);
+    tlb_l2_op(TLB_L2CLEAN_FR, "c15, c9, 1  @ L2 flush_pmd", pmd);
 }
 
 #undef tlb_op
@@ -518,11 +512,10 @@ extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
  */
 #if __LINUX_ARM_ARCH__ < 6
 extern void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-	pte_t *ptep);
+                             pte_t *ptep);
 #else
 static inline void update_mmu_cache(struct vm_area_struct *vma,
-				    unsigned long addr, pte_t *ptep)
-{
+                                    unsigned long addr, pte_t *ptep) {
 }
 #endif
 

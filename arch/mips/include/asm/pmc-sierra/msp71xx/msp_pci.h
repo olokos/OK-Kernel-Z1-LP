@@ -74,8 +74,7 @@
 typedef volatile unsigned int pcireg;
 typedef void * volatile ppcireg;
 
-struct pci_block_copy
-{
+struct pci_block_copy {
     pcireg   unused1; /* +0x00 */
     pcireg   unused2; /* +0x04 */
     ppcireg  unused3; /* +0x08 */
@@ -90,8 +89,7 @@ struct pci_block_copy
     ppcireg  unusedC; /* +0x2C */
 };
 
-enum
-{
+enum {
     config_device_vendor,  /* 0 */
     config_status_command, /* 1 */
     config_class_revision, /* 2 */
@@ -116,8 +114,7 @@ enum
     config_maxregs         /* 21 - number of registers */
 };
 
-struct msp_pci_regs
-{
+struct msp_pci_regs {
     pcireg hop_unused_00; /* +0x00 */
     pcireg hop_unused_04; /* +0x04 */
     pcireg hop_unused_08; /* +0x08 */
@@ -198,8 +195,8 @@ struct msp_pci_regs
 #define BPCI_RESETCTL_RI (1<<14)   /* PCI reset in */
 
 extern struct msp_pci_regs msp_pci_regs
-			__attribute__((section(".register")));
+__attribute__((section(".register")));
 extern unsigned long msp_pci_config_space
-			__attribute__((section(".register")));
+__attribute__((section(".register")));
 
 #endif /* !_MSP_PCI_H_ */

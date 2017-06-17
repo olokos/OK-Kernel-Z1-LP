@@ -24,12 +24,12 @@ struct platform_device;
  * @phy_enable: pointer to a callback controlling D-PHY enable/reset
  */
 struct s5p_platform_mipi_csis {
-	unsigned long clk_rate;
-	u8 lanes;
-	u8 alignment;
-	u8 hs_settle;
-	bool fixed_phy_vdd;
-	int (*phy_enable)(struct platform_device *pdev, bool on);
+    unsigned long clk_rate;
+    u8 lanes;
+    u8 alignment;
+    u8 hs_settle;
+    bool fixed_phy_vdd;
+    int (*phy_enable)(struct platform_device *pdev, bool on);
 };
 
 /**

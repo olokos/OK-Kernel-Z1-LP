@@ -31,8 +31,8 @@ EXPORT_SYMBOL(init_task);
  */
 
 union thread_union init_thread_union __init_task_data =
-	{ INIT_THREAD_INFO(init_task) };
+{ INIT_THREAD_INFO(init_task) };
 
 union thread_union cpu0_irqstack
-	__attribute__((__section__(".data..init_irqstack"))) =
-		{ INIT_THREAD_INFO(init_task) };
+    __attribute__((__section__(".data..init_irqstack"))) =
+{ INIT_THREAD_INFO(init_task) };

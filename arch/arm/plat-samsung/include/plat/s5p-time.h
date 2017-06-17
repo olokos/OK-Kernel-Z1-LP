@@ -15,16 +15,16 @@
 
 /* S5P HR-Timer Clock mode */
 enum s5p_timer_mode {
-	S5P_PWM0,
-	S5P_PWM1,
-	S5P_PWM2,
-	S5P_PWM3,
-	S5P_PWM4,
+    S5P_PWM0,
+    S5P_PWM1,
+    S5P_PWM2,
+    S5P_PWM3,
+    S5P_PWM4,
 };
 
 struct s5p_timer_source {
-	unsigned int event_id;
-	unsigned int source_id;
+    unsigned int event_id;
+    unsigned int source_id;
 };
 
 /* Be able to sleep for atleast 4 seconds (usually more) */
@@ -35,6 +35,6 @@ struct s5p_timer_source {
 #define PERIODIC		1
 
 extern void __init s5p_set_timer_source(enum s5p_timer_mode event,
-					enum s5p_timer_mode source);
+                                        enum s5p_timer_mode source);
 extern	struct sys_timer s5p_timer;
 #endif /* __ASM_PLAT_S5P_TIME_H */

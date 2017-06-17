@@ -2,13 +2,13 @@
  * Linux OS Independent Layer
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -47,21 +47,21 @@ extern uint32 g_assert_type;
 
 
 #if defined(BCMASSERT_LOG)
-	#define ASSERT(exp) \
+#define ASSERT(exp) \
 	  do { if (!(exp)) osl_assert(#exp, __FILE__, __LINE__); } while (0)
 extern void osl_assert(const char *exp, const char *file, int line);
 #else
-	#ifdef __GNUC__
-		#define GCC_VERSION \
+#ifdef __GNUC__
+#define GCC_VERSION \
 			(__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-		#if GCC_VERSION > 30100
-			#define ASSERT(exp)	do {} while (0)
-		#else
-			
-			#define ASSERT(exp)
-		#endif 
-	#endif 
-#endif 
+#if GCC_VERSION > 30100
+#define ASSERT(exp)	do {} while (0)
+#else
+
+#define ASSERT(exp)
+#endif
+#endif
+#endif
 
 
 #define	OSL_DELAY(usec)		osl_delay(usec)
@@ -91,12 +91,12 @@ extern struct pci_dev *osl_pci_device(osl_t *osh);
 
 
 typedef struct {
-	bool pkttag;
-	uint pktalloced; 	
-	bool mmbus;		
-	pktfree_cb_fn_t tx_fn;  
-	void *tx_ctx;		
-	void	*unused[3];
+    bool pkttag;
+    uint pktalloced;
+    bool mmbus;
+    pktfree_cb_fn_t tx_fn;
+    void *tx_ctx;
+    void	*unused[3];
 } osl_pubinfo_t;
 
 #define PKTFREESETCB(osh, _tx_fn, _tx_ctx)		\
@@ -109,12 +109,12 @@ typedef struct {
 
 #define BUS_SWAP32(v)		(v)
 
-	#define MALLOC(osh, size)	osl_malloc((osh), (size))
-	#define MFREE(osh, addr, size)	osl_mfree((osh), (addr), (size))
-	#define MALLOCED(osh)		osl_malloced((osh))
-	extern void *osl_malloc(osl_t *osh, uint size);
-	extern void osl_mfree(osl_t *osh, void *addr, uint size);
-	extern uint osl_malloced(osl_t *osh);
+#define MALLOC(osh, size)	osl_malloc((osh), (size))
+#define MFREE(osh, addr, size)	osl_mfree((osh), (addr), (size))
+#define MALLOCED(osh)		osl_malloced((osh))
+extern void *osl_malloc(osl_t *osh, uint size);
+extern void osl_mfree(osl_t *osh, void *addr, uint size);
+extern uint osl_malloced(osl_t *osh);
 
 #define NATIVE_MALLOC(osh, size)		kmalloc(size, GFP_ATOMIC)
 #define NATIVE_MFREE(osh, addr, size)	kfree(addr)
@@ -133,8 +133,8 @@ extern void *osl_dma_alloc_consistent(osl_t *osh, uint size, uint16 align, uint 
 extern void osl_dma_free_consistent(osl_t *osh, void *va, uint size, ulong pa);
 
 
-#define	DMA_TX	1	
-#define	DMA_RX	2	
+#define	DMA_TX	1
+#define	DMA_RX	2
 
 
 #define	DMA_UNMAP(osh, pa, size, direction, p, dmah) \
@@ -146,30 +146,30 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 #define OSL_DMADDRWIDTH(osh, addrwidth) do {} while (0)
 
 
-	#include <bcmsdh.h>
-	#define OSL_WRITE_REG(osh, r, v) (bcmsdh_reg_write(NULL, (uintptr)(r), sizeof(*(r)), (v)))
-	#define OSL_READ_REG(osh, r) (bcmsdh_reg_read(NULL, (uintptr)(r), sizeof(*(r))))
+#include <bcmsdh.h>
+#define OSL_WRITE_REG(osh, r, v) (bcmsdh_reg_write(NULL, (uintptr)(r), sizeof(*(r)), (v)))
+#define OSL_READ_REG(osh, r) (bcmsdh_reg_read(NULL, (uintptr)(r), sizeof(*(r))))
 
-	#define SELECT_BUS_WRITE(osh, mmap_op, bus_op) if (((osl_pubinfo_t*)(osh))->mmbus) \
+#define SELECT_BUS_WRITE(osh, mmap_op, bus_op) if (((osl_pubinfo_t*)(osh))->mmbus) \
 		mmap_op else bus_op
-	#define SELECT_BUS_READ(osh, mmap_op, bus_op) (((osl_pubinfo_t*)(osh))->mmbus) ? \
+#define SELECT_BUS_READ(osh, mmap_op, bus_op) (((osl_pubinfo_t*)(osh))->mmbus) ? \
 		mmap_op : bus_op
 
 #define OSL_ERROR(bcmerror)	osl_error(bcmerror)
 extern int osl_error(int bcmerror);
 
 
-#define	PKTBUFSZ	2048   
+#define	PKTBUFSZ	2048
 
 
-#include <linuxver.h>           
-#include <linux/kernel.h>       
-#include <linux/string.h>       
+#include <linuxver.h>
+#include <linux/kernel.h>
+#include <linux/string.h>
 
 #define OSL_SYSUPTIME()		((uint32)jiffies * (1000 / HZ))
 #define	printf(fmt, args...)	printk(fmt , ## args)
-#include <linux/kernel.h>	
-#include <linux/string.h>	
+#include <linux/kernel.h>
+#include <linux/string.h>
 
 #define	bcopy(src, dst, len)	memcpy((dst), (src), (len))
 #define	bcmp(b1, b2, len)	memcmp((b1), (b2), (len))
@@ -226,7 +226,7 @@ extern int osl_error(int bcmerror);
 #define	OSL_GETCYCLES(x)	rdtscl((x))
 #else
 #define OSL_GETCYCLES(x)	((x) = 0)
-#endif 
+#endif
 
 
 #define	BUSPROBE(val, addr)	({ (val) = R_REG(NULL, (addr)); 0; })
@@ -236,7 +236,7 @@ extern int osl_error(int bcmerror);
 #define	REG_MAP(pa, size)	ioremap_nocache((unsigned long)(pa), (unsigned long)(size))
 #else
 #define REG_MAP(pa, size)       (void *)(0)
-#endif 
+#endif
 #define	REG_UNMAP(va)		iounmap((va))
 
 
@@ -245,7 +245,7 @@ extern int osl_error(int bcmerror);
 #define	BZERO_SM(r, len)	memset((r), '\0', (len))
 
 
-#include <linuxver.h>		
+#include <linuxver.h>
 
 
 #define	PKTGET(osh, len, send)		osl_pktget((osh), (len))
@@ -256,7 +256,7 @@ extern int osl_error(int bcmerror);
 #ifdef CONFIG_DHD_USE_STATIC_BUF
 #define	PKTGET_STATIC(osh, len, send)		osl_pktget_static((osh), (len))
 #define	PKTFREE_STATIC(osh, skb, send)		osl_pktfree_static((osh), (skb), (send))
-#endif 
+#endif
 #define	PKTDATA(osh, skb)		(((struct sk_buff*)(skb))->data)
 #define	PKTLEN(osh, skb)		(((struct sk_buff*)(skb))->len)
 #define PKTHEADROOM(osh, skb)		(PKTDATA(osh, skb)-(((struct sk_buff*)(skb))->head))
@@ -275,15 +275,15 @@ extern int osl_error(int bcmerror);
 #ifdef CTFPOOL
 #define	CTFPOOL_REFILL_THRESH	3
 typedef struct ctfpool {
-	void		*head;
-	spinlock_t	lock;
-	uint		max_obj;
-	uint		curr_obj;
-	uint		obj_size;
-	uint		refills;
-	uint		fast_allocs;
-	uint 		fast_frees;
-	uint 		slow_allocs;
+    void		*head;
+    spinlock_t	lock;
+    uint		max_obj;
+    uint		curr_obj;
+    uint		obj_size;
+    uint		refills;
+    uint		fast_allocs;
+    uint 		fast_frees;
+    uint 		slow_allocs;
 } ctfpool_t;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 22)
 #define	FASTBUF	(1 << 16)
@@ -305,7 +305,7 @@ typedef struct ctfpool {
 #define	PKTISFAST(osh, skb)	((((struct sk_buff*)(skb))->__unused) & FASTBUF)
 #define	PKTISCTF(osh, skb)	((((struct sk_buff*)(skb))->__unused) & CTFBUF)
 #define	PKTFAST(osh, skb)	(((struct sk_buff*)(skb))->__unused)
-#endif 
+#endif
 
 #define	CTFPOOLPTR(osh, skb)	(((struct sk_buff*)(skb))->sk)
 #define	CTFPOOLHEAD(osh, skb)	(((ctfpool_t *)((struct sk_buff*)(skb))->sk)->head)
@@ -315,7 +315,7 @@ extern void osl_ctfpool_replenish(osl_t *osh, uint thresh);
 extern int32 osl_ctfpool_init(osl_t *osh, uint numobj, uint size);
 extern void osl_ctfpool_cleanup(osl_t *osh);
 extern void osl_ctfpool_stats(osl_t *osh, void *b);
-#endif 
+#endif
 
 
 #ifdef HNDCTF
@@ -324,17 +324,17 @@ extern void osl_ctfpool_stats(osl_t *osh, void *b);
 #define	PKTSETSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->mac_len |= SKIPCT)
 #define	PKTCLRSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->mac_len &= (~SKIPCT))
 #define	PKTSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->mac_len & SKIPCT)
-#else 
+#else
 #define	SKIPCT	(1 << 2)
 #define	PKTSETSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->__unused |= SKIPCT)
 #define	PKTCLRSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->__unused &= (~SKIPCT))
 #define	PKTSKIPCT(osh, skb)	(((struct sk_buff*)(skb))->__unused & SKIPCT)
-#endif 
-#else 
+#endif
+#else
 #define	PKTSETSKIPCT(osh, skb)
 #define	PKTCLRSKIPCT(osh, skb)
 #define	PKTSKIPCT(osh, skb)
-#endif 
+#endif
 
 extern void osl_pktfree(osl_t *osh, void *skb, bool send);
 extern void *osl_pktget_static(osl_t *osh, uint len);
@@ -363,8 +363,8 @@ extern struct sk_buff *osl_pkt_tonative(osl_t *osh, void *pkt);
 #ifdef PKTC
 
 struct chain_node {
-	struct sk_buff	*link;
-	unsigned int	flags:3, pkts:9, bytes:20;
+    struct sk_buff	*link;
+    unsigned int	flags:3, pkts:9, bytes:20;
 };
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 14)
@@ -394,13 +394,13 @@ do { \
 		PKTFREE((osh), (skb), (send)); \
 	} \
 } while (0)
-#endif 
+#endif
 
-#else 
+#else
 
 
 
-	#define ASSERT(exp)	do {} while (0)
+#define ASSERT(exp)	do {} while (0)
 
 
 #define MALLOC(o, l) malloc(l)
@@ -417,6 +417,6 @@ do { \
 extern void bcopy(const void *src, void *dst, size_t len);
 extern int bcmp(const void *b1, const void *b2, size_t len);
 extern void bzero(void *b, size_t len);
-#endif 
+#endif
 
-#endif	
+#endif

@@ -87,7 +87,7 @@
 
 #define AT91_IO_SIZE		(0xFFFFFFFF - AT91_IO_PHYS_BASE + 1)
 
- /* Convert a physical IO address to virtual IO address */
+/* Convert a physical IO address to virtual IO address */
 #define AT91_IO_P2V(x)		((x) - AT91_IO_PHYS_BASE + AT91_IO_VIRT_BASE)
 
 /*
@@ -96,7 +96,7 @@
 #define AT91_VA_BASE_SYS	AT91_IO_P2V(AT91_BASE_SYS)
 #define AT91_VA_BASE_EMAC	AT91_IO_P2V(AT91RM9200_BASE_EMAC)
 
- /* Internal SRAM is mapped below the IO devices */
+/* Internal SRAM is mapped below the IO devices */
 #define AT91_SRAM_MAX		SZ_1M
 #define AT91_VIRT_BASE		(AT91_IO_VIRT_BASE - AT91_SRAM_MAX)
 

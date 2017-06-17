@@ -5,12 +5,12 @@
  *
  */
 struct pvc_defs {
-	volatile u32 *reg;
-	u32 data_shift;
-	u32 data_mask;
-	u32 e;
-	u32 rw;
-	u32 rs;
+    volatile u32 *reg;
+    u32 data_shift;
+    u32 data_mask;
+    u32 e;
+    u32 rw;
+    u32 rs;
 };
 
 extern struct pvc_defs *picvue;

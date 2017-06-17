@@ -57,38 +57,38 @@ int ili9341_on(void);
 
 /* Structure that defines an SPS end point for a BAM pipe. */
 struct qpic_sps_endpt {
-	struct sps_pipe *handle;
-	struct sps_connect config;
-	struct sps_register_event bam_event;
-	struct completion completion;
+    struct sps_pipe *handle;
+    struct sps_connect config;
+    struct sps_register_event bam_event;
+    struct completion completion;
 };
 
 struct qpic_data_type {
-	u32 rev;
-	struct platform_device *pdev;
-	size_t qpic_reg_size;
-	u32 qpic_phys;
-	char __iomem *qpic_base;
-	u32 irq;
-	u32 irq_ena;
-	u32 res_init;
-	void *fb_virt;
-	u32 fb_phys;
-	void *cmd_buf_virt;
-	u32 cmd_buf_phys;
-	struct qpic_sps_endpt qpic_endpt;
-	u32 sps_init;
-	u32 irq_requested;
-	struct mdss_panel_data *panel_data;
+    u32 rev;
+    struct platform_device *pdev;
+    size_t qpic_reg_size;
+    u32 qpic_phys;
+    char __iomem *qpic_base;
+    u32 irq;
+    u32 irq_ena;
+    u32 res_init;
+    void *fb_virt;
+    u32 fb_phys;
+    void *cmd_buf_virt;
+    u32 cmd_buf_phys;
+    struct qpic_sps_endpt qpic_endpt;
+    u32 sps_init;
+    u32 irq_requested;
+    struct mdss_panel_data *panel_data;
 };
 
 u32 qpic_send_frame(
-		u32 x_start,
-		u32 y_start,
-		u32 x_end,
-		u32 y_end,
-		u32 *data,
-		u32 total_bytes);
+    u32 x_start,
+    u32 y_start,
+    u32 x_end,
+    u32 y_end,
+    u32 *data,
+    u32 total_bytes);
 
 u32 qpic_panel_get_framerate(void);
 

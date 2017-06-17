@@ -30,105 +30,105 @@
 #define chipcHw_BASE_ADDRESS    MM_IO_BASE_CHIPC
 
 typedef struct {
-	uint32_t ChipId;	/* Chip ID */
-	uint32_t DDRClock;	/* PLL1 Channel 1 for DDR clock */
-	uint32_t ARMClock;	/* PLL1 Channel 2 for ARM clock */
-	uint32_t ESWClock;	/* PLL1 Channel 3 for ESW system clock */
-	uint32_t VPMClock;	/* PLL1 Channel 4 for VPM clock */
-	uint32_t ESW125Clock;	/* PLL1 Channel 5 for ESW 125MHz clock */
-	uint32_t UARTClock;	/* PLL1 Channel 6 for UART clock */
-	uint32_t SDIO0Clock;	/* PLL1 Channel 7 for SDIO 0 clock */
-	uint32_t SDIO1Clock;	/* PLL1 Channel 8 for SDIO 1 clock */
-	uint32_t SPIClock;	/* PLL1 Channel 9 for SPI master Clock  */
-	uint32_t ETMClock;	/* PLL1 Channel 10 for ARM ETM Clock  */
+    uint32_t ChipId;	/* Chip ID */
+    uint32_t DDRClock;	/* PLL1 Channel 1 for DDR clock */
+    uint32_t ARMClock;	/* PLL1 Channel 2 for ARM clock */
+    uint32_t ESWClock;	/* PLL1 Channel 3 for ESW system clock */
+    uint32_t VPMClock;	/* PLL1 Channel 4 for VPM clock */
+    uint32_t ESW125Clock;	/* PLL1 Channel 5 for ESW 125MHz clock */
+    uint32_t UARTClock;	/* PLL1 Channel 6 for UART clock */
+    uint32_t SDIO0Clock;	/* PLL1 Channel 7 for SDIO 0 clock */
+    uint32_t SDIO1Clock;	/* PLL1 Channel 8 for SDIO 1 clock */
+    uint32_t SPIClock;	/* PLL1 Channel 9 for SPI master Clock  */
+    uint32_t ETMClock;	/* PLL1 Channel 10 for ARM ETM Clock  */
 
-	uint32_t ACLKClock;	/* ACLK Clock (Divider) */
-	uint32_t OTPClock;	/* OTP Clock  (Divider) */
-	uint32_t I2CClock;	/* I2C Clock (CK_13m) (Divider) */
-	uint32_t I2S0Clock;	/* I2S0 Clock (Divider) */
-	uint32_t RTBUSClock;	/* RTBUS (DDR PHY Config.) Clock (Divider) */
-	uint32_t pad1;
-	uint32_t APM100Clock;	/* APM 100MHz CLK Clock (Divider) */
-	uint32_t TSCClock;	/* TSC Clock (Divider) */
-	uint32_t LEDClock;	/* LED Clock (Divider) */
+    uint32_t ACLKClock;	/* ACLK Clock (Divider) */
+    uint32_t OTPClock;	/* OTP Clock  (Divider) */
+    uint32_t I2CClock;	/* I2C Clock (CK_13m) (Divider) */
+    uint32_t I2S0Clock;	/* I2S0 Clock (Divider) */
+    uint32_t RTBUSClock;	/* RTBUS (DDR PHY Config.) Clock (Divider) */
+    uint32_t pad1;
+    uint32_t APM100Clock;	/* APM 100MHz CLK Clock (Divider) */
+    uint32_t TSCClock;	/* TSC Clock (Divider) */
+    uint32_t LEDClock;	/* LED Clock (Divider) */
 
-	uint32_t USBClock;	/* PLL2 Channel 1 for USB clock */
-	uint32_t LCDClock;	/* PLL2 Channel 2 for LCD clock */
-	uint32_t APMClock;	/* PLL2 Channel 3 for APM 200 MHz clock */
+    uint32_t USBClock;	/* PLL2 Channel 1 for USB clock */
+    uint32_t LCDClock;	/* PLL2 Channel 2 for LCD clock */
+    uint32_t APMClock;	/* PLL2 Channel 3 for APM 200 MHz clock */
 
-	uint32_t BusIntfClock;	/* Bus interface clock */
+    uint32_t BusIntfClock;	/* Bus interface clock */
 
-	uint32_t PLLStatus;	/* PLL status register (PLL1) */
-	uint32_t PLLConfig;	/* PLL configuration register  (PLL1) */
-	uint32_t PLLPreDivider;	/* PLL pre-divider control register (PLL1) */
-	uint32_t PLLDivider;	/* PLL divider control register (PLL1) */
-	uint32_t PLLControl1;	/* PLL analog control register #1 (PLL1) */
-	uint32_t PLLControl2;	/* PLL analog control register #2 (PLL1) */
+    uint32_t PLLStatus;	/* PLL status register (PLL1) */
+    uint32_t PLLConfig;	/* PLL configuration register  (PLL1) */
+    uint32_t PLLPreDivider;	/* PLL pre-divider control register (PLL1) */
+    uint32_t PLLDivider;	/* PLL divider control register (PLL1) */
+    uint32_t PLLControl1;	/* PLL analog control register #1 (PLL1) */
+    uint32_t PLLControl2;	/* PLL analog control register #2 (PLL1) */
 
-	uint32_t I2S1Clock;	/* I2S1 Clock  */
-	uint32_t AudioEnable;	/* Enable/ disable audio channel */
-	uint32_t SoftReset1;	/* Reset blocks */
-	uint32_t SoftReset2;	/* Reset blocks */
-	uint32_t Spare1;	/* Phase align interrupts */
-	uint32_t Sticky;	/* Sticky bits */
-	uint32_t MiscCtrl;	/* Misc. control */
-	uint32_t pad3[3];
+    uint32_t I2S1Clock;	/* I2S1 Clock  */
+    uint32_t AudioEnable;	/* Enable/ disable audio channel */
+    uint32_t SoftReset1;	/* Reset blocks */
+    uint32_t SoftReset2;	/* Reset blocks */
+    uint32_t Spare1;	/* Phase align interrupts */
+    uint32_t Sticky;	/* Sticky bits */
+    uint32_t MiscCtrl;	/* Misc. control */
+    uint32_t pad3[3];
 
-	uint32_t PLLStatus2;	/* PLL status register (PLL2) */
-	uint32_t PLLConfig2;	/* PLL configuration register  (PLL2) */
-	uint32_t PLLPreDivider2;	/* PLL pre-divider control register (PLL2) */
-	uint32_t PLLDivider2;	/* PLL divider control register (PLL2) */
-	uint32_t PLLControl12;	/* PLL analog control register #1 (PLL2) */
-	uint32_t PLLControl22;	/* PLL analog control register #2 (PLL2) */
+    uint32_t PLLStatus2;	/* PLL status register (PLL2) */
+    uint32_t PLLConfig2;	/* PLL configuration register  (PLL2) */
+    uint32_t PLLPreDivider2;	/* PLL pre-divider control register (PLL2) */
+    uint32_t PLLDivider2;	/* PLL divider control register (PLL2) */
+    uint32_t PLLControl12;	/* PLL analog control register #1 (PLL2) */
+    uint32_t PLLControl22;	/* PLL analog control register #2 (PLL2) */
 
-	uint32_t DDRPhaseCtrl1;	/* DDR Clock Phase Alignment control1 */
-	uint32_t VPMPhaseCtrl1;	/* VPM Clock Phase Alignment control1 */
-	uint32_t PhaseAlignStatus;	/* DDR/VPM Clock Phase Alignment Status */
-	uint32_t PhaseCtrlStatus;	/* DDR/VPM Clock HW DDR/VPM ph_ctrl and load_ch Status */
-	uint32_t DDRPhaseCtrl2;	/* DDR Clock Phase Alignment control2 */
-	uint32_t VPMPhaseCtrl2;	/* VPM Clock Phase Alignment control2 */
-	uint32_t pad4[9];
+    uint32_t DDRPhaseCtrl1;	/* DDR Clock Phase Alignment control1 */
+    uint32_t VPMPhaseCtrl1;	/* VPM Clock Phase Alignment control1 */
+    uint32_t PhaseAlignStatus;	/* DDR/VPM Clock Phase Alignment Status */
+    uint32_t PhaseCtrlStatus;	/* DDR/VPM Clock HW DDR/VPM ph_ctrl and load_ch Status */
+    uint32_t DDRPhaseCtrl2;	/* DDR Clock Phase Alignment control2 */
+    uint32_t VPMPhaseCtrl2;	/* VPM Clock Phase Alignment control2 */
+    uint32_t pad4[9];
 
-	uint32_t SoftOTP1;	/* Software OTP control */
-	uint32_t SoftOTP2;	/* Software OTP control */
-	uint32_t SoftStraps;	/* Software strap */
-	uint32_t PinStraps;	/* Pin Straps */
-	uint32_t DiffOscCtrl;	/* Diff oscillator control */
-	uint32_t DiagsCtrl;	/* Diagnostic control */
-	uint32_t DiagsOutputCtrl;	/* Diagnostic output enable */
-	uint32_t DiagsReadBackCtrl;	/* Diagnostic read back control */
+    uint32_t SoftOTP1;	/* Software OTP control */
+    uint32_t SoftOTP2;	/* Software OTP control */
+    uint32_t SoftStraps;	/* Software strap */
+    uint32_t PinStraps;	/* Pin Straps */
+    uint32_t DiffOscCtrl;	/* Diff oscillator control */
+    uint32_t DiagsCtrl;	/* Diagnostic control */
+    uint32_t DiagsOutputCtrl;	/* Diagnostic output enable */
+    uint32_t DiagsReadBackCtrl;	/* Diagnostic read back control */
 
-	uint32_t LcdPifMode;	/* LCD/PIF Pin Sharing MUX Mode */
+    uint32_t LcdPifMode;	/* LCD/PIF Pin Sharing MUX Mode */
 
-	uint32_t GpioMux_0_7;	/* Pin Sharing MUX0 Control */
-	uint32_t GpioMux_8_15;	/* Pin Sharing MUX1 Control */
-	uint32_t GpioMux_16_23;	/* Pin Sharing MUX2 Control */
-	uint32_t GpioMux_24_31;	/* Pin Sharing MUX3 Control */
-	uint32_t GpioMux_32_39;	/* Pin Sharing MUX4 Control */
-	uint32_t GpioMux_40_47;	/* Pin Sharing MUX5 Control */
-	uint32_t GpioMux_48_55;	/* Pin Sharing MUX6 Control */
-	uint32_t GpioMux_56_63;	/* Pin Sharing MUX7 Control */
+    uint32_t GpioMux_0_7;	/* Pin Sharing MUX0 Control */
+    uint32_t GpioMux_8_15;	/* Pin Sharing MUX1 Control */
+    uint32_t GpioMux_16_23;	/* Pin Sharing MUX2 Control */
+    uint32_t GpioMux_24_31;	/* Pin Sharing MUX3 Control */
+    uint32_t GpioMux_32_39;	/* Pin Sharing MUX4 Control */
+    uint32_t GpioMux_40_47;	/* Pin Sharing MUX5 Control */
+    uint32_t GpioMux_48_55;	/* Pin Sharing MUX6 Control */
+    uint32_t GpioMux_56_63;	/* Pin Sharing MUX7 Control */
 
-	uint32_t GpioSR_0_7;	/* Slew rate for GPIO 0 - 7 */
-	uint32_t GpioSR_8_15;	/* Slew rate for GPIO 8 - 15 */
-	uint32_t GpioSR_16_23;	/* Slew rate for GPIO 16 - 23 */
-	uint32_t GpioSR_24_31;	/* Slew rate for GPIO 24 - 31 */
-	uint32_t GpioSR_32_39;	/* Slew rate for GPIO 32 - 39 */
-	uint32_t GpioSR_40_47;	/* Slew rate for GPIO 40 - 47 */
-	uint32_t GpioSR_48_55;	/* Slew rate for GPIO 48 - 55 */
-	uint32_t GpioSR_56_63;	/* Slew rate for GPIO 56 - 63 */
-	uint32_t MiscSR_0_7;	/* Slew rate for MISC 0 - 7 */
-	uint32_t MiscSR_8_15;	/* Slew rate for MISC 8 - 15 */
+    uint32_t GpioSR_0_7;	/* Slew rate for GPIO 0 - 7 */
+    uint32_t GpioSR_8_15;	/* Slew rate for GPIO 8 - 15 */
+    uint32_t GpioSR_16_23;	/* Slew rate for GPIO 16 - 23 */
+    uint32_t GpioSR_24_31;	/* Slew rate for GPIO 24 - 31 */
+    uint32_t GpioSR_32_39;	/* Slew rate for GPIO 32 - 39 */
+    uint32_t GpioSR_40_47;	/* Slew rate for GPIO 40 - 47 */
+    uint32_t GpioSR_48_55;	/* Slew rate for GPIO 48 - 55 */
+    uint32_t GpioSR_56_63;	/* Slew rate for GPIO 56 - 63 */
+    uint32_t MiscSR_0_7;	/* Slew rate for MISC 0 - 7 */
+    uint32_t MiscSR_8_15;	/* Slew rate for MISC 8 - 15 */
 
-	uint32_t GpioPull_0_15;	/* Pull up registers for GPIO 0 - 15 */
-	uint32_t GpioPull_16_31;	/* Pull up registers for GPIO 16 - 31 */
-	uint32_t GpioPull_32_47;	/* Pull up registers for GPIO 32 - 47 */
-	uint32_t GpioPull_48_63;	/* Pull up registers for GPIO 48 - 63 */
-	uint32_t MiscPull_0_15;	/* Pull up registers for MISC 0 - 15 */
+    uint32_t GpioPull_0_15;	/* Pull up registers for GPIO 0 - 15 */
+    uint32_t GpioPull_16_31;	/* Pull up registers for GPIO 16 - 31 */
+    uint32_t GpioPull_32_47;	/* Pull up registers for GPIO 32 - 47 */
+    uint32_t GpioPull_48_63;	/* Pull up registers for GPIO 48 - 63 */
+    uint32_t MiscPull_0_15;	/* Pull up registers for MISC 0 - 15 */
 
-	uint32_t GpioInput_0_31;	/* Input type for GPIO 0 - 31 */
-	uint32_t GpioInput_32_63;	/* Input type for GPIO 32 - 63 */
-	uint32_t MiscInput_0_15;	/* Input type for MISC 0 - 16 */
+    uint32_t GpioInput_0_31;	/* Input type for GPIO 0 - 31 */
+    uint32_t GpioInput_32_63;	/* Input type for GPIO 32 - 63 */
+    uint32_t MiscInput_0_15;	/* Input type for MISC 0 - 16 */
 } chipcHw_REG_t;
 
 #define pChipcHw  ((volatile chipcHw_REG_t *) chipcHw_BASE_ADDRESS)
@@ -166,20 +166,20 @@ typedef struct {
 #define chipcHw_REG_PLL_CLOCK_PHASE_CONTROL_MASK        0x00003F00	/* Phase control mask */
 #define chipcHw_REG_PLL_CLOCK_MDIV_MASK                 0x000000FF	/* Clock post divider mask
 
-									   00000000 = divide-by-256
-									   00000001 = divide-by-1
-									   00000010 = divide-by-2
-									   00000011 = divide-by-3
-									   00000100 = divide-by-4
-									   00000101 = divide-by-5
-									   00000110 = divide-by-6
-									   .
-									   .
-									   11111011 = divide-by-251
-									   11111100 = divide-by-252
-									   11111101 = divide-by-253
-									   11111110 = divide-by-254
-									 */
+00000000 = divide-by-256
+           00000001 = divide-by-1
+                      00000010 = divide-by-2
+                                 00000011 = divide-by-3
+                                         00000100 = divide-by-4
+                                                 00000101 = divide-by-5
+                                                         00000110 = divide-by-6
+                                                                 .
+                                                                 .
+                                                                 11111011 = divide-by-251
+                                                                         11111100 = divide-by-252
+                                                                                 11111101 = divide-by-253
+                                                                                         11111110 = divide-by-254
+                                                                                                 */
 
 #define chipcHw_REG_DIV_CLOCK_SOURCE_OTHER              0x00040000	/* NON-PLL clock source select */
 #define chipcHw_REG_DIV_CLOCK_BYPASS_SELECT             0x00020000	/* NON-PLL clock bypass enable */
@@ -217,7 +217,7 @@ typedef struct {
 
 #define chipcHw_REG_ACLKClock_CLK_DIV_MASK              0x3
 
-/* System booting strap options */
+                                                                                                 /* System booting strap options */
 #define chipcHw_STRAPS_SOFT_OVERRIDE                    0x00000001	/* Software Strap Override */
 
 #define chipcHw_STRAPS_BOOT_DEVICE_NAND_FLASH_8         0x00000000	/* 8 bit NAND FLASH Boot */
@@ -227,12 +227,12 @@ typedef struct {
 #define chipcHw_STRAPS_BOOT_DEVICE_UART                 0x00000008	/* UART Boot */
 #define chipcHw_STRAPS_BOOT_DEVICE_MASK                 0x0000000E	/* Mask */
 
-/* System boot option */
+                                                                                                 /* System boot option */
 #define chipcHw_STRAPS_BOOT_OPTION_BROM                 0x00000000	/* Boot from Boot ROM */
 #define chipcHw_STRAPS_BOOT_OPTION_ARAM                 0x00000020	/* Boot from ARAM */
 #define chipcHw_STRAPS_BOOT_OPTION_NOR                  0x00000030	/* Boot from NOR flash */
 
-/* NAND Flash page size strap options */
+                                                                                                 /* NAND Flash page size strap options */
 #define chipcHw_STRAPS_NAND_PAGESIZE_512                0x00000000	/* NAND FLASH page size of 512 bytes */
 #define chipcHw_STRAPS_NAND_PAGESIZE_2048               0x00000040	/* NAND FLASH page size of 2048 bytes */
 #define chipcHw_STRAPS_NAND_PAGESIZE_4096               0x00000080	/* NAND FLASH page size of 4096 bytes */
@@ -242,27 +242,27 @@ typedef struct {
 #define chipcHw_STRAPS_NAND_EXTRA_CYCLE                 0x00000400	/* NAND FLASH address cycle configuration */
 #define chipcHw_STRAPS_REBOOT_TO_UART                   0x00000800	/* Reboot to UART on error */
 
-/* Secure boot mode strap options */
+                                                                                                 /* Secure boot mode strap options */
 #define chipcHw_STRAPS_BOOT_MODE_NORMAL                 0x00000000	/* Normal Boot */
 #define chipcHw_STRAPS_BOOT_MODE_DBG_SW                 0x00000100	/* Software debugging Boot */
 #define chipcHw_STRAPS_BOOT_MODE_DBG_BOOT               0x00000200	/* Boot rom debugging Boot */
 #define chipcHw_STRAPS_BOOT_MODE_NORMAL_QUIET           0x00000300	/* Normal Boot (Quiet BootRom) */
 #define chipcHw_STRAPS_BOOT_MODE_MASK                   0x00000300	/* Mask */
 
-/* Slave Mode straps */
+                                                                                                 /* Slave Mode straps */
 #define chipcHw_STRAPS_I2CS                             0x02000000	/* I2C Slave  */
 #define chipcHw_STRAPS_SPIS                             0x01000000	/* SPI Slave  */
 
-/* Strap pin options */
+                                                                                                 /* Strap pin options */
 #define chipcHw_REG_SW_STRAPS                           ((pChipcHw->PinStraps & 0x0000FC00) >> 10)
 
-/* PIF/LCD pin sharing defines */
+                                                                                                 /* PIF/LCD pin sharing defines */
 #define chipcHw_REG_LCD_PIN_ENABLE                      0x00000001	/* LCD Controller is used and the pins have LCD functions */
 #define chipcHw_REG_PIF_PIN_ENABLE                      0x00000002	/* LCD pins are used to perform PIF functions  */
 
 #define chipcHw_GPIO_COUNT                              61	/* Number of GPIO pin accessible thorugh CHIPC */
 
-/* NOTE: Any changes to these constants will require a corresponding change to chipcHw_str.c */
+                                                                                                 /* NOTE: Any changes to these constants will require a corresponding change to chipcHw_str.c */
 #define chipcHw_REG_GPIO_MUX_KEYPAD                     0x00000001	/* GPIO mux for Keypad */
 #define chipcHw_REG_GPIO_MUX_I2CH                       0x00000002	/* GPIO mux for I2CH */
 #define chipcHw_REG_GPIO_MUX_SPI                        0x00000003	/* GPIO mux for SPI */
@@ -283,7 +283,7 @@ typedef struct {
 
 #define chipcHw_REG_SLEW_RATE_HIGH                      0x00000000	/* High speed slew rate */
 #define chipcHw_REG_SLEW_RATE_NORMAL                    0x00000008	/* Normal slew rate */
-							/* Pins beyond 42 are defined by skipping 8 bits within the register */
+                                                                                                 /* Pins beyond 42 are defined by skipping 8 bits within the register */
 #define chipcHw_REG_SLEW_RATE(pin)                      (((pin) > 42) ? (&pChipcHw->GpioSR_0_7 + (((pin) + 2) >> 3)) : (&pChipcHw->GpioSR_0_7 + ((pin) >> 3)))
 #define chipcHw_REG_SLEW_RATE_POSITION(pin)             (((pin) > 42) ? ((((pin) + 2) & 0x00000007) << 2) : (((pin) & 0x00000007) << 2))
 #define chipcHw_REG_SLEW_RATE_MASK                      0x00000008	/* Mask */
@@ -295,7 +295,7 @@ typedef struct {
 #define chipcHw_REG_CURRENT_STRENGTH_10mA               0x00000006	/* Current driving strength 10 milli ampere */
 #define chipcHw_REG_CURRENT_STRENGTH_12mA               0x00000007	/* Current driving strength 12 milli ampere */
 #define chipcHw_REG_CURRENT_MASK                        0x00000007	/* Mask */
-							/* Pins beyond 42 are defined by skipping 8 bits */
+                                                                                                 /* Pins beyond 42 are defined by skipping 8 bits */
 #define chipcHw_REG_CURRENT(pin)                        (((pin) > 42) ? (&pChipcHw->GpioSR_0_7 + (((pin) + 2) >> 3)) : (&pChipcHw->GpioSR_0_7 + ((pin) >> 3)))
 #define chipcHw_REG_CURRENT_POSITION(pin)               (((pin) > 42) ? ((((pin) + 2) & 0x00000007) << 2) : (((pin) & 0x00000007) << 2))
 
@@ -303,18 +303,18 @@ typedef struct {
 #define chipcHw_REG_PULL_UP                             0x00000001	/* Pull up register enable */
 #define chipcHw_REG_PULL_DOWN                           0x00000002	/* Pull down register enable */
 #define chipcHw_REG_PULLUP_MASK                         0x00000003	/* Mask */
-							/* Pins beyond 42 are defined by skipping 4 bits */
+                                                                                                 /* Pins beyond 42 are defined by skipping 4 bits */
 #define chipcHw_REG_PULLUP(pin)                         (((pin) > 42) ? (&pChipcHw->GpioPull_0_15 + (((pin) + 2) >> 4)) : (&pChipcHw->GpioPull_0_15 + ((pin) >> 4)))
 #define chipcHw_REG_PULLUP_POSITION(pin)                (((pin) > 42) ? ((((pin) + 2) & 0x0000000F) << 1) : (((pin) & 0x0000000F) << 1))
 
 #define chipcHw_REG_INPUTTYPE_CMOS                      0x00000000	/* Normal CMOS logic */
 #define chipcHw_REG_INPUTTYPE_ST                        0x00000001	/* High speed Schmitt Trigger */
 #define chipcHw_REG_INPUTTYPE_MASK                      0x00000001	/* Mask */
-							/* Pins beyond 42 are defined by skipping 2 bits */
+                                                                                                 /* Pins beyond 42 are defined by skipping 2 bits */
 #define chipcHw_REG_INPUTTYPE(pin)                      (((pin) > 42) ? (&pChipcHw->GpioInput_0_31 + (((pin) + 2) >> 5)) : (&pChipcHw->GpioInput_0_31 + ((pin) >> 5)))
 #define chipcHw_REG_INPUTTYPE_POSITION(pin)             (((pin) > 42) ? ((((pin) + 2) & 0x0000001F)) : (((pin) & 0x0000001F)))
 
-/* Device connected to the bus clock */
+                                                                                                 /* Device connected to the bus clock */
 #define chipcHw_REG_BUS_CLOCK_ARM                       0x00000001	/* Bus interface clock for ARM */
 #define chipcHw_REG_BUS_CLOCK_VDEC                      0x00000002	/* Bus interface clock for VDEC */
 #define chipcHw_REG_BUS_CLOCK_ARAM                      0x00000004	/* Bus interface clock for ARAM */
@@ -348,7 +348,7 @@ typedef struct {
 #define chipcHw_REG_BUS_CLOCK_BROM                      0x40000000	/* Bus interface clock for Boot ROM */
 #define chipcHw_REG_BUS_CLOCK_TSC                       0x80000000	/* Bus interface clock for Touch screen */
 
-/* Software resets defines */
+                                                                                                 /* Software resets defines */
 #define chipcHw_REG_SOFT_RESET_VPM_GLOBAL_HOLD          0x0000000080000000ULL	/* Reset Global VPM and hold */
 #define chipcHw_REG_SOFT_RESET_VPM_HOLD                 0x0000000040000000ULL	/* Reset VPM and hold */
 #define chipcHw_REG_SOFT_RESET_VPM_GLOBAL               0x0000000020000000ULL	/* Reset Global VPM */
@@ -400,7 +400,7 @@ typedef struct {
 #define chipcHw_REG_SOFT_RESET_ARM_UNHOLD               0x2000000000000000ULL	/* Unhold ARM reset  */
 #define chipcHw_REG_SOFT_RESET_UNHOLD_MASK              0xF000000000000000ULL	/* Mask to handle unhold request */
 
-/* Audio channel control defines */
+                                                                                                 /* Audio channel control defines */
 #define chipcHw_REG_AUDIO_CHANNEL_ENABLE_ALL            0x00000001	/* Enable all audio channel */
 #define chipcHw_REG_AUDIO_CHANNEL_ENABLE_A              0x00000002	/* Enable channel A */
 #define chipcHw_REG_AUDIO_CHANNEL_ENABLE_B              0x00000004	/* Enable channel B */
@@ -410,7 +410,7 @@ typedef struct {
 #define chipcHw_REG_AUDIO_CHANNEL_ENABLE_PCM1_CLOCK     0x00000040	/* Enable PCM1 clock */
 #define chipcHw_REG_AUDIO_CHANNEL_ENABLE_APM_CLOCK      0x00000080	/* Enable APM clock */
 
-/* Misc. chip control defines */
+                                                                                                 /* Misc. chip control defines */
 #define chipcHw_REG_MISC_CTRL_GE_SEL                    0x00040000	/* Select GE2/GE3 */
 #define chipcHw_REG_MISC_CTRL_I2S1_CLOCK_ONCHIP         0x00000000	/* Use on chip clock for I2S1 */
 #define chipcHw_REG_MISC_CTRL_I2S1_CLOCK_GPIO           0x00020000	/* Use external clock via GPIO pin 26 for I2S1 */
@@ -424,7 +424,7 @@ typedef struct {
 #define chipcHw_REG_MISC_CTRL_USB_POWERON               0xFFFFFFFE	/* Power up USB */
 #define chipcHw_REG_MISC_CTRL_USB_POWEROFF              0x00000001	/* Power down USB */
 
-/* OTP configuration defines */
+                                                                                                 /* OTP configuration defines */
 #define chipcHw_REG_OTP_SECURITY_OFF                    0x0000020000000000ULL	/* Security support is OFF */
 #define chipcHw_REG_OTP_SPU_SLOW                        0x0000010000000000ULL	/* Limited SPU throughput */
 #define chipcHw_REG_OTP_LCD_SPEED                       0x0000000600000000ULL	/* Set VPM speed one */
@@ -449,7 +449,7 @@ typedef struct {
 #define chipcHw_REG_OTP_ETH_PHY_DISABLE                 0x0000000000000006ULL	/* Disable ethernet PHY */
 #define chipcHw_REG_OTP_VPM_DISABLE                     0x0000000000000001ULL	/* Disable VPM */
 
-/* Sticky bit defines */
+                                                                                                 /* Sticky bit defines */
 #define chipcHw_REG_STICKY_BOOT_DONE                    0x00000001	/* Boot done */
 #define chipcHw_REG_STICKY_SOFT_RESET                   0x00000002	/* ARM soft reset */
 #define chipcHw_REG_STICKY_GENERAL_1                    0x00000004	/* General purpose bit 1 */
@@ -464,12 +464,12 @@ typedef struct {
 #define chipcHw_REG_STICKY_WDOG_RESET                   0x00000800	/* Watchdog reset */
 #define chipcHw_REG_STICKY_OTP_RESET                    0x00001000	/* OTP reset */
 
-							/* HW phase alignment defines *//* Spare1 register definitions */
+                                                                                                 /* HW phase alignment defines *//* Spare1 register definitions */
 #define chipcHw_REG_SPARE1_DDR_PHASE_INTR_ENABLE        0x80000000	/* Enable DDR phase align panic interrupt */
 #define chipcHw_REG_SPARE1_VPM_PHASE_INTR_ENABLE        0x40000000	/* Enable VPM phase align panic interrupt */
 #define chipcHw_REG_SPARE1_VPM_BUS_ACCESS_ENABLE        0x00000002	/* Enable access to VPM using system BUS */
 #define chipcHw_REG_SPARE1_DDR_BUS_ACCESS_ENABLE        0x00000001	/* Enable access to DDR using system BUS */
-							/* DDRPhaseCtrl1 register definitions */
+                                                                                                 /* DDRPhaseCtrl1 register definitions */
 #define chipcHw_REG_DDR_SW_PHASE_CTRL_ENABLE            0x80000000	/* Enable DDR SW phase alignment */
 #define chipcHw_REG_DDR_HW_PHASE_CTRL_ENABLE            0x40000000	/* Enable DDR HW phase alignment */
 #define chipcHw_REG_DDR_PHASE_VALUE_GE_MASK             0x0000007F	/* DDR lower threshold for phase alignment */
@@ -478,7 +478,7 @@ typedef struct {
 #define chipcHw_REG_DDR_PHASE_VALUE_LE_SHIFT            16
 #define chipcHw_REG_DDR_PHASE_ALIGN_WAIT_CYCLE_MASK     0x0000FFFF	/* BUS Cycle to wait to run next DDR phase alignment */
 #define chipcHw_REG_DDR_PHASE_ALIGN_WAIT_CYCLE_SHIFT    0
-							/* VPMPhaseCtrl1 register definitions */
+                                                                                                 /* VPMPhaseCtrl1 register definitions */
 #define chipcHw_REG_VPM_SW_PHASE_CTRL_ENABLE            0x80000000	/* Enable VPM SW phase alignment */
 #define chipcHw_REG_VPM_HW_PHASE_CTRL_ENABLE            0x40000000	/* Enable VPM HW phase alignment */
 #define chipcHw_REG_VPM_PHASE_VALUE_GE_MASK             0x0000007F	/* VPM lower threshold for phase alignment */
@@ -487,7 +487,7 @@ typedef struct {
 #define chipcHw_REG_VPM_PHASE_VALUE_LE_SHIFT            16
 #define chipcHw_REG_VPM_PHASE_ALIGN_WAIT_CYCLE_MASK     0x0000FFFF	/* BUS Cycle to wait to complete the VPM phase alignment */
 #define chipcHw_REG_VPM_PHASE_ALIGN_WAIT_CYCLE_SHIFT    0
-							/* PhaseAlignStatus register definitions */
+                                                                                                 /* PhaseAlignStatus register definitions */
 #define chipcHw_REG_DDR_TIMEOUT_INTR_STATUS             0x80000000	/* DDR time out interrupt status */
 #define chipcHw_REG_DDR_PHASE_STATUS_MASK               0x0000007F	/* DDR phase status value */
 #define chipcHw_REG_DDR_PHASE_STATUS_SHIFT              24
@@ -502,7 +502,7 @@ typedef struct {
 #define chipcHw_REG_VPM_LOAD                            0x00000040	/* Load VPM phase status */
 #define chipcHw_REG_VPM_PHASE_CTRL_MASK                 0x0000003F	/* VPM phase control value */
 #define chipcHw_REG_VPM_PHASE_CTRL_SHIFT                0
-							/* DDRPhaseCtrl2 register definitions */
+                                                                                                 /* DDRPhaseCtrl2 register definitions */
 #define chipcHw_REG_DDR_INTR_SERVICED                   0x02000000	/* Acknowledge that interrupt was serviced */
 #define chipcHw_REG_DDR_TIMEOUT_INTR_ENABLE             0x01000000	/* Enable time out interrupt */
 #define chipcHw_REG_DDR_LOAD_COUNT_PHASE_CTRL_MASK      0x0000000F	/* Wait before toggling load_ch */
@@ -511,7 +511,7 @@ typedef struct {
 #define chipcHw_REG_DDR_TOTAL_LOAD_COUNT_CTRL_SHIFT     16
 #define chipcHw_REG_DDR_PHASE_TIMEOUT_COUNT_MASK        0x0000FFFF	/* Time out value for DDR HW phase alignment */
 #define chipcHw_REG_DDR_PHASE_TIMEOUT_COUNT_SHIFT       0
-							/* VPMPhaseCtrl2 register definitions */
+                                                                                                 /* VPMPhaseCtrl2 register definitions */
 #define chipcHw_REG_VPM_INTR_SELECT_MASK                0x00000003	/* Interrupt select */
 #define chipcHw_REG_VPM_INTR_SELECT_SHIFT               26
 #define chipcHw_REG_VPM_INTR_DISABLE                    0x00000000

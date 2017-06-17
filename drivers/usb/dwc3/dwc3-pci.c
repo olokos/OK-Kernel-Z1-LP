@@ -49,121 +49,119 @@
 #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3	0xabcd
 
 struct dwc3_pci {
-	struct device		*dev;
-	struct platform_device	*dwc3;
+    struct device		*dev;
+    struct platform_device	*dwc3;
 };
 
 static int __devinit dwc3_pci_probe(struct pci_dev *pci,
-		const struct pci_device_id *id)
-{
-	struct resource		res[2];
-	struct platform_device	*dwc3;
-	struct dwc3_pci		*glue;
-	int			ret = -ENOMEM;
-	int			devid;
-	struct device		*dev = &pci->dev;
+                                    const struct pci_device_id *id) {
+    struct resource		res[2];
+    struct platform_device	*dwc3;
+    struct dwc3_pci		*glue;
+    int			ret = -ENOMEM;
+    int			devid;
+    struct device		*dev = &pci->dev;
 
-	glue = devm_kzalloc(dev, sizeof(*glue), GFP_KERNEL);
-	if (!glue) {
-		dev_err(dev, "not enough memory\n");
-		return -ENOMEM;
-	}
+    glue = devm_kzalloc(dev, sizeof(*glue), GFP_KERNEL);
+    if (!glue) {
+        dev_err(dev, "not enough memory\n");
+        return -ENOMEM;
+    }
 
-	glue->dev = dev;
+    glue->dev = dev;
 
-	ret = pci_enable_device(pci);
-	if (ret) {
-		dev_err(dev, "failed to enable pci device\n");
-		return -ENODEV;
-	}
+    ret = pci_enable_device(pci);
+    if (ret) {
+        dev_err(dev, "failed to enable pci device\n");
+        return -ENODEV;
+    }
 
-	pci_set_power_state(pci, PCI_D0);
-	pci_set_master(pci);
+    pci_set_power_state(pci, PCI_D0);
+    pci_set_master(pci);
 
-	devid = dwc3_get_device_id();
-	if (devid < 0) {
-		ret = -ENOMEM;
-		goto err1;
-	}
+    devid = dwc3_get_device_id();
+    if (devid < 0) {
+        ret = -ENOMEM;
+        goto err1;
+    }
 
-	dwc3 = platform_device_alloc("dwc3", devid);
-	if (!dwc3) {
-		dev_err(dev, "couldn't allocate dwc3 device\n");
-		ret = -ENOMEM;
-		goto err1;
-	}
+    dwc3 = platform_device_alloc("dwc3", devid);
+    if (!dwc3) {
+        dev_err(dev, "couldn't allocate dwc3 device\n");
+        ret = -ENOMEM;
+        goto err1;
+    }
 
-	memset(res, 0x00, sizeof(struct resource) * ARRAY_SIZE(res));
+    memset(res, 0x00, sizeof(struct resource) * ARRAY_SIZE(res));
 
-	res[0].start	= pci_resource_start(pci, 0);
-	res[0].end	= pci_resource_end(pci, 0);
-	res[0].name	= "dwc_usb3";
-	res[0].flags	= IORESOURCE_MEM;
+    res[0].start	= pci_resource_start(pci, 0);
+    res[0].end	= pci_resource_end(pci, 0);
+    res[0].name	= "dwc_usb3";
+    res[0].flags	= IORESOURCE_MEM;
 
-	res[1].start	= pci->irq;
-	res[1].name	= "dwc_usb3";
-	res[1].flags	= IORESOURCE_IRQ;
+    res[1].start	= pci->irq;
+    res[1].name	= "dwc_usb3";
+    res[1].flags	= IORESOURCE_IRQ;
 
-	ret = platform_device_add_resources(dwc3, res, ARRAY_SIZE(res));
-	if (ret) {
-		dev_err(dev, "couldn't add resources to dwc3 device\n");
-		goto err2;
-	}
+    ret = platform_device_add_resources(dwc3, res, ARRAY_SIZE(res));
+    if (ret) {
+        dev_err(dev, "couldn't add resources to dwc3 device\n");
+        goto err2;
+    }
 
-	pci_set_drvdata(pci, glue);
+    pci_set_drvdata(pci, glue);
 
-	dma_set_coherent_mask(&dwc3->dev, dev->coherent_dma_mask);
+    dma_set_coherent_mask(&dwc3->dev, dev->coherent_dma_mask);
 
-	dwc3->dev.dma_mask = dev->dma_mask;
-	dwc3->dev.dma_parms = dev->dma_parms;
-	dwc3->dev.parent = dev;
-	glue->dwc3 = dwc3;
+    dwc3->dev.dma_mask = dev->dma_mask;
+    dwc3->dev.dma_parms = dev->dma_parms;
+    dwc3->dev.parent = dev;
+    glue->dwc3 = dwc3;
 
-	ret = platform_device_add(dwc3);
-	if (ret) {
-		dev_err(dev, "failed to register dwc3 device\n");
-		goto err3;
-	}
+    ret = platform_device_add(dwc3);
+    if (ret) {
+        dev_err(dev, "failed to register dwc3 device\n");
+        goto err3;
+    }
 
-	return 0;
+    return 0;
 
 err3:
-	pci_set_drvdata(pci, NULL);
-	platform_device_put(dwc3);
+    pci_set_drvdata(pci, NULL);
+    platform_device_put(dwc3);
 
 err2:
-	dwc3_put_device_id(devid);
+    dwc3_put_device_id(devid);
 
 err1:
-	pci_disable_device(pci);
+    pci_disable_device(pci);
 
-	return ret;
+    return ret;
 }
 
-static void __devexit dwc3_pci_remove(struct pci_dev *pci)
-{
-	struct dwc3_pci	*glue = pci_get_drvdata(pci);
+static void __devexit dwc3_pci_remove(struct pci_dev *pci) {
+    struct dwc3_pci	*glue = pci_get_drvdata(pci);
 
-	dwc3_put_device_id(glue->dwc3->id);
-	platform_device_unregister(glue->dwc3);
-	pci_set_drvdata(pci, NULL);
-	pci_disable_device(pci);
+    dwc3_put_device_id(glue->dwc3->id);
+    platform_device_unregister(glue->dwc3);
+    pci_set_drvdata(pci, NULL);
+    pci_disable_device(pci);
 }
 
 static DEFINE_PCI_DEVICE_TABLE(dwc3_pci_id_table) = {
-	{
-		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS,
-				PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3),
-	},
-	{  }	/* Terminating Entry */
+    {
+        PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS,
+        PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3),
+    },
+    {  }	/* Terminating Entry */
 };
 MODULE_DEVICE_TABLE(pci, dwc3_pci_id_table);
 
 static struct pci_driver dwc3_pci_driver = {
-	.name		= "dwc3-pci",
-	.id_table	= dwc3_pci_id_table,
-	.probe		= dwc3_pci_probe,
-	.remove		= __devexit_p(dwc3_pci_remove),
+    .name		= "dwc3-pci",
+    .id_table	= dwc3_pci_id_table,
+    .probe		= dwc3_pci_probe,
+    .remove		= __devexit_p(dwc3_pci_remove),
 };
 
 MODULE_AUTHOR("Felipe Balbi <balbi@ti.com>");

@@ -21,33 +21,33 @@
 
 /* Connection Setup */
 extern int capi_conn_req(const char *calledPN, struct sk_buff **buf,
-			 int proto);
+                         int proto);
 extern int capi_decode_conn_conf(struct pcbit_chan *chan, struct sk_buff *skb,
-				 int *complete);
+                                 int *complete);
 
 extern int capi_decode_conn_ind(struct pcbit_chan *chan, struct sk_buff *skb,
-				struct callb_data *info);
+                                struct callb_data *info);
 extern int capi_conn_resp(struct pcbit_chan *chan, struct sk_buff **skb);
 
 extern int capi_conn_active_req(struct pcbit_chan *chan, struct sk_buff **skb);
 extern int capi_decode_conn_actv_conf(struct pcbit_chan *chan,
-				      struct sk_buff *skb);
+                                      struct sk_buff *skb);
 
 extern int capi_decode_conn_actv_ind(struct pcbit_chan *chan,
-				     struct sk_buff *skb);
+                                     struct sk_buff *skb);
 extern int capi_conn_active_resp(struct pcbit_chan *chan,
-				 struct sk_buff **skb);
+                                 struct sk_buff **skb);
 
 /* Data */
 extern int capi_select_proto_req(struct pcbit_chan *chan, struct sk_buff **skb,
-				 int outgoing);
+                                 int outgoing);
 extern int capi_decode_sel_proto_conf(struct pcbit_chan *chan,
-				      struct sk_buff *skb);
+                                      struct sk_buff *skb);
 
 extern int capi_activate_transp_req(struct pcbit_chan *chan,
-				    struct sk_buff **skb);
+                                    struct sk_buff **skb);
 extern int capi_decode_actv_trans_conf(struct pcbit_chan *chan,
-				       struct sk_buff *skb);
+                                       struct sk_buff *skb);
 
 extern int capi_tdata_req(struct pcbit_chan *chan, struct sk_buff *skb);
 extern int capi_tdata_resp(struct pcbit_chan *chan, struct sk_buff **skb);
@@ -63,19 +63,18 @@ extern int capi_decode_debug_188(u_char *hdr, ushort hdrlen);
 #endif
 
 static inline struct pcbit_chan *
-capi_channel(struct pcbit_dev *dev, struct sk_buff *skb)
-{
-	ushort callref;
+capi_channel(struct pcbit_dev *dev, struct sk_buff *skb) {
+    ushort callref;
 
-	callref = *((ushort *)skb->data);
-	skb_pull(skb, 2);
+    callref = *((ushort *)skb->data);
+    skb_pull(skb, 2);
 
-	if (dev->b1->callref == callref)
-		return dev->b1;
-	else if (dev->b2->callref == callref)
-		return dev->b2;
+    if (dev->b1->callref == callref)
+        return dev->b1;
+    else if (dev->b2->callref == callref)
+        return dev->b2;
 
-	return NULL;
+    return NULL;
 }
 
 #endif

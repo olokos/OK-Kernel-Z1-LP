@@ -1,24 +1,24 @@
-/* 
-* Copyright (C) ST-Ericsson AP Pte Ltd 2010 
+/*
+* Copyright (C) ST-Ericsson AP Pte Ltd 2010
 *
 * ISP1763 Linux OTG Controller driver : host
-* 
-* This program is free software; you can redistribute it and/or modify it under the terms of 
-* the GNU General Public License as published by the Free Software Foundation; version 
-* 2 of the License. 
-* 
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY  
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS  
-* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more  
-* details. 
-* 
-* You should have received a copy of the GNU General Public License 
-* along with this program; if not, write to the Free Software 
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
-* 
+*
+* This program is free software; you can redistribute it and/or modify it under the terms of
+* the GNU General Public License as published by the Free Software Foundation; version
+* 2 of the License.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT ANY
+* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*
 * Refer to file ~/drivers/usb/host/ehci-dbg.h for copyright owners (kernel version 2.6.9)
-* Code is modified for ST-Ericsson product 
-* 
+* Code is modified for ST-Ericsson product
+*
 * Author : wired support <wired.support@stericsson.com>
 *
 */
@@ -110,51 +110,51 @@
 #define PTD_FRAME_MASK		0x1f
 /*periodic list*/
 struct _periodic_list {
-	int framenumber;
-	struct list_head sitd_itd_head;
-	char high_speed;	/*1 - HS ; 0 - FS*/
-	u16 ptdlocation;
+    int framenumber;
+    struct list_head sitd_itd_head;
+    char high_speed;	/*1 - HS ; 0 - FS*/
+    u16 ptdlocation;
 };
 typedef	struct _periodic_list periodic_list;
 
 
 /*iso ptd*/
 struct _isp1763_isoptd {
-	u32 td_info1;
-	u32 td_info2;
-	u32 td_info3;
-	u32 td_info4;
-	u32 td_info5;
-	u32 td_info6;
-	u32 td_info7;
-	u32 td_info8;
+    u32 td_info1;
+    u32 td_info2;
+    u32 td_info3;
+    u32 td_info4;
+    u32 td_info5;
+    u32 td_info6;
+    u32 td_info7;
+    u32 td_info8;
 } __attribute__	((aligned(32)));
 
 typedef	struct _isp1763_isoptd isp1763_isoptd;
 
 struct _isp1763_qhint {
-	u32 td_info1;
-	u32 td_info2;
-	u32 td_info3;
-	u32 td_info4;
-	u32 td_info5;
+    u32 td_info1;
+    u32 td_info2;
+    u32 td_info3;
+    u32 td_info4;
+    u32 td_info5;
 #define	INT_UNDERRUN (1	<< 2)
 #define	INT_BABBLE    (1 << 1)
 #define	INT_EXACT     (1 << 0)
-	u32 td_info6;
-	u32 td_info7;
-	u32 td_info8;
+    u32 td_info6;
+    u32 td_info7;
+    u32 td_info8;
 } __attribute__	((aligned(32)));
 
 typedef	struct _isp1763_qhint isp1763_qhint;
 
 
 struct _isp1763_qha {
-	u32 td_info1;		/* First 32 bit	*/
-	u32 td_info2;		/* Second 32 bit */
-	u32 td_info3;		/* third 32 bit	*/
-	u32 td_info4;		/* fourth 32 bit */
-	u32 reserved[4];
+    u32 td_info1;		/* First 32 bit	*/
+    u32 td_info2;		/* Second 32 bit */
+    u32 td_info3;		/* third 32 bit	*/
+    u32 td_info4;		/* fourth 32 bit */
+    u32 reserved[4];
 };
 typedef	struct _isp1763_qha isp1763_qha, *pisp1763_qha;
 
@@ -164,43 +164,43 @@ typedef	struct _isp1763_qha isp1763_qha, *pisp1763_qha;
 /*this does not	cover all interrupts in	1763 chip*/
 typedef	struct _ehci_regs {
 
-	/*standard ehci	registers */
-	u32 command;
-	u32 usbinterrupt;
-	u32 usbstatus;
-	u32 hcsparams;
-	u32 frameindex;
+    /*standard ehci	registers */
+    u32 command;
+    u32 usbinterrupt;
+    u32 usbstatus;
+    u32 hcsparams;
+    u32 frameindex;
 
-	/*isp1763 interrupt specific registers */
-	u16 hwmodecontrol;
-	u16 interrupt;
-	u16 interruptenable;
-	u32 interruptthreshold;
-	u16 iso_irq_mask_or;
-	u16 int_irq_mask_or;
-	u16 atl_irq_mask_or;
-	u16 iso_irq_mask_and;
-	u16 int_irq_mask_and;
-	u16 atl_irq_mask_and;
-	u16 buffer_status;
+    /*isp1763 interrupt specific registers */
+    u16 hwmodecontrol;
+    u16 interrupt;
+    u16 interruptenable;
+    u32 interruptthreshold;
+    u16 iso_irq_mask_or;
+    u16 int_irq_mask_or;
+    u16 atl_irq_mask_or;
+    u16 iso_irq_mask_and;
+    u16 int_irq_mask_and;
+    u16 atl_irq_mask_and;
+    u16 buffer_status;
 
-	/*isp1763 initialization registers */
-	u32 reset;
-	u32 configflag;
-	u32 ports[4];
-	u32 pwrdwn_ctrl;
+    /*isp1763 initialization registers */
+    u32 reset;
+    u32 configflag;
+    u32 ports[4];
+    u32 pwrdwn_ctrl;
 
-	/*isp1763 transfer specific registers */
-	u16 isotddonemap;
-	u16 inttddonemap;
-	u16 atltddonemap;
-	u16 isotdskipmap;
-	u16 inttdskipmap;
-	u16 atltdskipmap;
-	u16 isotdlastmap;
-	u16 inttdlastmap;
-	u16 atltdlastmap;
-	u16 scratch;
+    /*isp1763 transfer specific registers */
+    u16 isotddonemap;
+    u16 inttddonemap;
+    u16 atltddonemap;
+    u16 isotdskipmap;
+    u16 inttdskipmap;
+    u16 atltdskipmap;
+    u16 isotdlastmap;
+    u16 inttdlastmap;
+    u16 atltdlastmap;
+    u16 scratch;
 
 } ehci_regs, *pehci_regs;
 
@@ -208,19 +208,19 @@ typedef	struct _ehci_regs {
 #define MEM_KV
 #ifdef MEM_KV
 typedef struct isp1763_mem_addr {
-	u32 phy_addr;		/* Physical address of the memory */
-	u32 virt_addr;		/* after ioremap() function call */
-	u8 num_alloc;		/* In case n*smaller size is allocated then for clearing purpose */
-	u32 blk_size;		/*block size */
-	u8 blk_num;		/* number of the block */
-	u8 used;		/*used/free */
+    u32 phy_addr;		/* Physical address of the memory */
+    u32 virt_addr;		/* after ioremap() function call */
+    u8 num_alloc;		/* In case n*smaller size is allocated then for clearing purpose */
+    u32 blk_size;		/*block size */
+    u8 blk_num;		/* number of the block */
+    u8 used;		/*used/free */
 } isp1763_mem_addr_t;
 #else
 typedef struct isp1763_mem_addr {
-	void *phy_addr;		/* Physical address of the memory */
-	void *virt_addr;	/* after ioremap() function call */
-	u8 usage;
-	u32 blk_size;		/*block size */
+    void *phy_addr;		/* Physical address of the memory */
+    void *virt_addr;	/* after ioremap() function call */
+    u8 usage;
+    u32 blk_size;		/*block size */
 } isp1763_mem_addr_t;
 
 #endif
@@ -237,73 +237,73 @@ typedef struct isp1763_mem_addr {
 #define	QH_NEXT(dma)	cpu_to_le32((u32)dma)
 
 struct ehci_qh {
-	/* first part defined by EHCI spec */
-	u32 hw_next;		/* see EHCI 3.6.1 */
-	u32 hw_info1;		/* see EHCI 3.6.2 */
+    /* first part defined by EHCI spec */
+    u32 hw_next;		/* see EHCI 3.6.1 */
+    u32 hw_info1;		/* see EHCI 3.6.2 */
 
-	u32 hw_info2;		/* see EHCI 3.6.2 */
-	u32 hw_current;		/* qtd list - see EHCI 3.6.4 */
+    u32 hw_info2;		/* see EHCI 3.6.2 */
+    u32 hw_current;		/* qtd list - see EHCI 3.6.4 */
 
-	/* qtd overlay (hardware parts of a struct ehci_qtd) */
-	u32 hw_qtd_next;
-	u32 hw_alt_next;
-	u32 hw_token;
-	u32 hw_buf[5];
-	u32 hw_buf_hi[5];
-	
-	/* the rest is HCD-private */
-	dma_addr_t qh_dma;	/* address of qh */
-	struct list_head qtd_list;	/* sw qtd list */
-	struct ehci_qtd	*dummy;
-	struct ehci_qh *reclaim;	/* next	to reclaim */
+    /* qtd overlay (hardware parts of a struct ehci_qtd) */
+    u32 hw_qtd_next;
+    u32 hw_alt_next;
+    u32 hw_token;
+    u32 hw_buf[5];
+    u32 hw_buf_hi[5];
 
-	atomic_t refcount;
-	wait_queue_head_t waitforcomplete;
-	unsigned stamp;
+    /* the rest is HCD-private */
+    dma_addr_t qh_dma;	/* address of qh */
+    struct list_head qtd_list;	/* sw qtd list */
+    struct ehci_qtd	*dummy;
+    struct ehci_qh *reclaim;	/* next	to reclaim */
 
-	u8 qh_state;
+    atomic_t refcount;
+    wait_queue_head_t waitforcomplete;
+    unsigned stamp;
 
-	/* periodic schedule info */
-	u8 usecs;		/* intr	bandwidth */
-	u8 gap_uf;		/* uframes split/csplit	gap */
-	u8 c_usecs;		/* ... split completion	bw */
-	unsigned short period;	/* polling interval */
-	unsigned short start;	/* where polling starts	*/
-	u8 datatoggle;		/*data toggle */
+    u8 qh_state;
 
-	/*handling the ping stuffs */
-	u8 ping;		/*ping bit */
+    /* periodic schedule info */
+    u8 usecs;		/* intr	bandwidth */
+    u8 gap_uf;		/* uframes split/csplit	gap */
+    u8 c_usecs;		/* ... split completion	bw */
+    unsigned short period;	/* polling interval */
+    unsigned short start;	/* where polling starts	*/
+    u8 datatoggle;		/*data toggle */
 
-	/*qtd <-> ptd management */
+    /*handling the ping stuffs */
+    u8 ping;		/*ping bit */
 
-	u32 qtd_ptd_index;	/* Td-PTD map index for	this ptd */
-	u32 type;		/* endpoint type */
+    /*qtd <-> ptd management */
 
-	/*iso stuffs */
-	struct usb_host_endpoint *ep;
-	int next_uframe;	/*next uframe for this endpoint	*/
-	struct list_head itd_list;	/*list of tds to this endpoint */
-	isp1763_mem_addr_t memory_addr;
-	struct _periodic_list periodic_list;
-	/*scheduling requirements for this endpoint */
-	u32 ssplit;
-	u32 csplit;
-	u8 totalptds;   // total number of PTDs needed for current URB
-	u8 actualptds;	// scheduled PTDs until now for current URB
+    u32 qtd_ptd_index;	/* Td-PTD map index for	this ptd */
+    u32 type;		/* endpoint type */
+
+    /*iso stuffs */
+    struct usb_host_endpoint *ep;
+    int next_uframe;	/*next uframe for this endpoint	*/
+    struct list_head itd_list;	/*list of tds to this endpoint */
+    isp1763_mem_addr_t memory_addr;
+    struct _periodic_list periodic_list;
+    /*scheduling requirements for this endpoint */
+    u32 ssplit;
+    u32 csplit;
+    u8 totalptds;   // total number of PTDs needed for current URB
+    u8 actualptds;	// scheduled PTDs until now for current URB
 };
 
 /* urb private part for	the driver. */
 typedef	struct {
-	struct ehci_qh *qh;
-	u16 length;		/* number of tds associated with this request */
-	u16 td_cnt;		/* number of tds already serviced */
-	int state;		/* State machine state when URB	is deleted  */
-	int timeout;		/* timeout for bulk transfers */
-	wait_queue_head_t wait;	/* wait	State machine state when URB is	deleted	*/
-	/*FIX solve the	full speed dying */
-	struct timer_list urb_timer;
-	struct list_head qtd_list;
-	struct ehci_qtd	*qtd[0];	/* list	pointer	to all corresponding TDs associated with this request */
+    struct ehci_qh *qh;
+    u16 length;		/* number of tds associated with this request */
+    u16 td_cnt;		/* number of tds already serviced */
+    int state;		/* State machine state when URB	is deleted  */
+    int timeout;		/* timeout for bulk transfers */
+    wait_queue_head_t wait;	/* wait	State machine state when URB is	deleted	*/
+    /*FIX solve the	full speed dying */
+    struct timer_list urb_timer;
+    struct list_head qtd_list;
+    struct ehci_qtd	*qtd[0];	/* list	pointer	to all corresponding TDs associated with this request */
 
 } urb_priv_t;
 
@@ -333,9 +333,9 @@ typedef	struct {
 #define EHCI_ITD_BUFFPTR	0xfffff000	/*buffer pointer */
 
 struct ehci_sitd {
-	/* first part defined by EHCI spec */
-	u32 hw_next;		/* see EHCI 3.3.1 */
-	u32 hw_transaction[8];	/* see EHCI 3.3.2 */
+    /* first part defined by EHCI spec */
+    u32 hw_next;		/* see EHCI 3.3.1 */
+    u32 hw_transaction[8];	/* see EHCI 3.3.2 */
 #define EHCI_ISOC_ACTIVE	(1<<31)	/* activate transfer this slot */
 #define EHCI_ISOC_BUF_ERR	(1<<30)	/* Data buffer error */
 #define EHCI_ISOC_BABBLE	(1<<29)	/* babble detected */
@@ -344,36 +344,36 @@ struct ehci_sitd {
 #define EHCI_ITD_LENGTH(tok)	(((tok)>>16) & 0x7fff)
 #define EHCI_ITD_IOC		(1 << 15)	/* interrupt on complete */
 
-	u32 hw_bufp[7];		/* see EHCI 3.3.3 */
-	u32 hw_bufp_hi[7];	/* Appendix B */
+    u32 hw_bufp[7];		/* see EHCI 3.3.3 */
+    u32 hw_bufp_hi[7];	/* Appendix B */
 
-	/* the rest is HCD-private */
-	dma_addr_t sitd_dma;	/* for this itd */
-	struct urb *urb;
-	struct list_head sitd_list;	/* list of urb frames' itds */
-	dma_addr_t buf_dma;	/* frame's buffer address */
+    /* the rest is HCD-private */
+    dma_addr_t sitd_dma;	/* for this itd */
+    struct urb *urb;
+    struct list_head sitd_list;	/* list of urb frames' itds */
+    dma_addr_t buf_dma;	/* frame's buffer address */
 
-	/* for now, only one hw_transaction per itd */
-	u32 transaction;
-	u16 index;		/* in urb->iso_frame_desc */
-	u16 uframe;		/* in periodic schedule */
-	u16 usecs;
-	/*memory address */
-	struct isp1763_mem_addr mem_addr;
-	int length;
-	u32 framenumber;
-	u32 ptdframe;
-	int sitd_index;
-	/*scheduling fields */
-	u32 ssplit;
-	u32 csplit;
-	u32 start_frame;
+    /* for now, only one hw_transaction per itd */
+    u32 transaction;
+    u16 index;		/* in urb->iso_frame_desc */
+    u16 uframe;		/* in periodic schedule */
+    u16 usecs;
+    /*memory address */
+    struct isp1763_mem_addr mem_addr;
+    int length;
+    u32 framenumber;
+    u32 ptdframe;
+    int sitd_index;
+    /*scheduling fields */
+    u32 ssplit;
+    u32 csplit;
+    u32 start_frame;
 };
 
 struct ehci_itd	{
-	/* first part defined by EHCI spec */
-	u32 hw_next;		/* see EHCI 3.3.1 */
-	u32 hw_transaction[8];	/* see EHCI 3.3.2 */
+    /* first part defined by EHCI spec */
+    u32 hw_next;		/* see EHCI 3.3.1 */
+    u32 hw_transaction[8];	/* see EHCI 3.3.2 */
 #define	EHCI_ISOC_ACTIVE	(1<<31)	/* activate transfer this slot */
 #define	EHCI_ISOC_BUF_ERR	(1<<30)	/* Data	buffer error */
 #define	EHCI_ISOC_BABBLE	(1<<29)	/* babble detected */
@@ -382,30 +382,30 @@ struct ehci_itd	{
 #define	EHCI_ITD_LENGTH(tok)	(((tok)>>16) & 0x7fff)
 #define	EHCI_ITD_IOC		(1 << 15)	/* interrupt on	complete */
 
-	u32 hw_bufp[7];		/* see EHCI 3.3.3 */
-	u32 hw_bufp_hi[7];	/* Appendix B */
+    u32 hw_bufp[7];		/* see EHCI 3.3.3 */
+    u32 hw_bufp_hi[7];	/* Appendix B */
 
-	/* the rest is HCD-private */
-	dma_addr_t itd_dma;	/* for this itd	*/
-	struct urb *urb;
-	struct list_head itd_list;	/* list	of urb frames' itds */
-	dma_addr_t buf_dma;	/* frame's buffer address */
-	u8 num_of_pkts;		/*number of packets for this ITD */
-	/* for now, only one hw_transaction per	itd */
-	u32 transaction;
-	u16 index;		/* in urb->iso_frame_desc */
-	u16 uframe;		/* in periodic schedule	*/
-	u16 usecs;
-	/*memory address */
-	struct isp1763_mem_addr	mem_addr;
-	int length;
-	u32 multi;
-	u32 framenumber;
-	u32 ptdframe;
-	int itd_index;
-	/*scheduling fields */
-	u32 ssplit;
-	u32 csplit;
+    /* the rest is HCD-private */
+    dma_addr_t itd_dma;	/* for this itd	*/
+    struct urb *urb;
+    struct list_head itd_list;	/* list	of urb frames' itds */
+    dma_addr_t buf_dma;	/* frame's buffer address */
+    u8 num_of_pkts;		/*number of packets for this ITD */
+    /* for now, only one hw_transaction per	itd */
+    u32 transaction;
+    u16 index;		/* in urb->iso_frame_desc */
+    u16 uframe;		/* in periodic schedule	*/
+    u16 usecs;
+    /*memory address */
+    struct isp1763_mem_addr	mem_addr;
+    int length;
+    u32 multi;
+    u32 framenumber;
+    u32 ptdframe;
+    int itd_index;
+    /*scheduling fields */
+    u32 ssplit;
+    u32 csplit;
 };
 
 /*
@@ -417,25 +417,25 @@ struct ehci_itd	{
  * used	with control, bulk, and	interrupt transfers.
  */
 struct ehci_qtd	{
-	/* first part defined by EHCI spec */
-	u32 hw_next;		/* see EHCI 3.5.1 */
-	u32 hw_alt_next;	/* see EHCI 3.5.2 */
-	u32 hw_token;		/* see EHCI 3.5.3 */
+    /* first part defined by EHCI spec */
+    u32 hw_next;		/* see EHCI 3.5.1 */
+    u32 hw_alt_next;	/* see EHCI 3.5.2 */
+    u32 hw_token;		/* see EHCI 3.5.3 */
 
-	u32 hw_buf[5];		/* see EHCI 3.5.4 */
-	u32 hw_buf_hi[5];	/* Appendix B */
+    u32 hw_buf[5];		/* see EHCI 3.5.4 */
+    u32 hw_buf_hi[5];	/* Appendix B */
 
-	/* the rest is HCD-private */
-	dma_addr_t qtd_dma;	/* qtd address */
-	struct list_head qtd_list;	/* sw qtd list */
-	struct urb *urb;	/* qtd's urb */
-	size_t length;		/* length of buffer */
-	u32 state;		/*state	of the qtd */
+    /* the rest is HCD-private */
+    dma_addr_t qtd_dma;	/* qtd address */
+    struct list_head qtd_list;	/* sw qtd list */
+    struct urb *urb;	/* qtd's urb */
+    size_t length;		/* length of buffer */
+    u32 state;		/*state	of the qtd */
 #define	QTD_STATE_NEW			0x100
 #define	QTD_STATE_DONE			0x200
 #define	QTD_STATE_SCHEDULED		0x400
 #define	QTD_STATE_LAST			0x800
-	struct isp1763_mem_addr	mem_addr;
+    struct isp1763_mem_addr	mem_addr;
 };
 
 #define	QTD_TOGGLE			(1 << 31)	/* data	toggle */
@@ -463,10 +463,10 @@ struct _isp1763_hcd;
 #include <linux/usb/hcd.h>
 
 #define USBNET
-#ifdef USBNET 
+#ifdef USBNET
 struct isp1763_async_cleanup_urb {
-        struct list_head urb_list;
-        struct urb *urb;
+    struct list_head urb_list;
+    struct urb *urb;
 };
 #endif
 
@@ -474,56 +474,56 @@ struct isp1763_async_cleanup_urb {
 /*host controller*/
 typedef	struct _phci_hcd {
 
-	struct usb_hcd usb_hcd;
-	spinlock_t lock;
+    struct usb_hcd usb_hcd;
+    spinlock_t lock;
 
-	/* async schedule support */
-	struct ehci_qh *async;
-	struct ehci_qh *reclaim;
-	/* periodic schedule support */
-	unsigned periodic_size;
-	int next_uframe;	/* scan	periodic, start	here */
-	int periodic_sched;	/* periodic activity count */
-	int periodic_more_urb;
-	struct usb_device *otgdev;	/*otg deice, with address 2 */
-	struct timer_list rh_timer;	/* drives root hub */
-	struct list_head dev_list;	/* devices on this bus */
-	struct list_head urb_list;	/*iso testing */
+    /* async schedule support */
+    struct ehci_qh *async;
+    struct ehci_qh *reclaim;
+    /* periodic schedule support */
+    unsigned periodic_size;
+    int next_uframe;	/* scan	periodic, start	here */
+    int periodic_sched;	/* periodic activity count */
+    int periodic_more_urb;
+    struct usb_device *otgdev;	/*otg deice, with address 2 */
+    struct timer_list rh_timer;	/* drives root hub */
+    struct list_head dev_list;	/* devices on this bus */
+    struct list_head urb_list;	/*iso testing */
 
-	/*msec break in	interrupts */
-	atomic_t nuofsofs;
-	atomic_t missedsofs;
+    /*msec break in	interrupts */
+    atomic_t nuofsofs;
+    atomic_t missedsofs;
 
-	struct isp1763_dev *dev;
-	/*hw info */
-	u8 *iobase;
-	u32 iolength;
-	u8 *plxiobase;
-	u32 plxiolength;
+    struct isp1763_dev *dev;
+    /*hw info */
+    u8 *iobase;
+    u32 iolength;
+    u8 *plxiobase;
+    u32 plxiolength;
 
-	int irq;		/* irq allocated */
-	int state;		/*state	of the host controller */
-	unsigned long reset_done[EHCI_MAX_ROOT_PORTS];
-	ehci_regs regs;
+    int irq;		/* irq allocated */
+    int state;		/*state	of the host controller */
+    unsigned long reset_done[EHCI_MAX_ROOT_PORTS];
+    ehci_regs regs;
 
-	struct _isp1763_qha qha;
-	struct _isp1763_qhint qhint;
-	struct _isp1763_isoptd isotd;
+    struct _isp1763_qha qha;
+    struct _isp1763_qhint qhint;
+    struct _isp1763_isoptd isotd;
 
-	struct tasklet_struct tasklet;
-	/*this timer is	going to run every 20 msec */
-	struct timer_list watchdog;
-	void (*worker_function)	(struct	_phci_hcd * hcd);
-	struct _periodic_list periodic_list[PTD_PERIODIC_SIZE];
-#ifdef USBNET 
-	struct isp1763_async_cleanup_urb cleanup_urb;
+    struct tasklet_struct tasklet;
+    /*this timer is	going to run every 20 msec */
+    struct timer_list watchdog;
+    void (*worker_function)	(struct	_phci_hcd * hcd);
+    struct _periodic_list periodic_list[PTD_PERIODIC_SIZE];
+#ifdef USBNET
+    struct isp1763_async_cleanup_urb cleanup_urb;
 #endif
 } phci_hcd, *pphci_hcd;
 
 /*usb_device->hcpriv, points to	this structure*/
 typedef	struct hcd_dev {
-	struct list_head dev_list;
-	struct list_head urb_list;
+    struct list_head dev_list;
+    struct list_head urb_list;
 } hcd_dev;
 
 #define	usb_hcd_to_pehci_hcd(hcd)   container_of(hcd, struct _phci_hcd,	usb_hcd)
@@ -535,39 +535,37 @@ typedef	struct hcd_dev {
 #define	qha_free(c,x) kmem_cache_free(c,x)
 static kmem_cache_t *qha_cache,	*qh_cache, *qtd_cache;
 static int
-phci_hcd_mem_init(void)
-{
-	/* qha TDs accessed by controllers and host */
-	qha_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
-				      SLAB_HWCACHE_ALIGN, NULL,	NULL);
-	if (!qha_cache)	{
-		printk("no TD cache?");
-		return -ENOMEM;
-	}
+phci_hcd_mem_init(void) {
+    /* qha TDs accessed by controllers and host */
+    qha_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
+                                  SLAB_HWCACHE_ALIGN, NULL,	NULL);
+    if (!qha_cache)	{
+        printk("no TD cache?");
+        return -ENOMEM;
+    }
 
-	/* qh TDs accessed by controllers and host */
-	qh_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
-				     SLAB_HWCACHE_ALIGN, NULL, NULL);
-	if (!qh_cache) {
-		printk("no TD cache?");
-		return -ENOMEM;
-	}
+    /* qh TDs accessed by controllers and host */
+    qh_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
+                                 SLAB_HWCACHE_ALIGN, NULL, NULL);
+    if (!qh_cache) {
+        printk("no TD cache?");
+        return -ENOMEM;
+    }
 
-	/* qtd	accessed by controllers	and host */
-	qtd_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
-				      SLAB_HWCACHE_ALIGN, NULL,	NULL);
-	if (!qtd_cache)	{
-		printk("no TD cache?");
-		return -ENOMEM;
-	}
-	return 0;
+    /* qtd	accessed by controllers	and host */
+    qtd_cache = kmem_cache_create("phci_ptd", sizeof(isp1763_qha), 0,
+                                  SLAB_HWCACHE_ALIGN, NULL,	NULL);
+    if (!qtd_cache)	{
+        printk("no TD cache?");
+        return -ENOMEM;
+    }
+    return 0;
 }
 static void
-phci_mem_cleanup(void)
-{
-	if (qha_cache && kmem_cache_destroy(qha_cache))
-		err("td_cache remained");
-	qha_cache = 0;
+phci_mem_cleanup(void) {
+    if (qha_cache && kmem_cache_destroy(qha_cache))
+        err("td_cache remained");
+    qha_cache = 0;
 }
 #else
 
@@ -606,9 +604,8 @@ phci_mem_cleanup(void)
 #endif
 static void phci_hcd_mem_init(void);
 static inline void
-phci_mem_cleanup(void)
-{
-	return;
+phci_mem_cleanup(void) {
+    return;
 }
 
 #endif
@@ -633,7 +630,7 @@ phci_mem_cleanup(void)
 #define	PORT_PE				(1<<2)	/* port	enable */
 #define	PORT_CSC			(1<<1)	/* connect status change */
 #define	PORT_CONNECT			(1<<0)	/* device connected */
-#define PORT_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_OCC)	
+#define PORT_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_OCC)
 /*Legends,
  * ATL	  control, bulk	transfer
  * INTL	  interrupt transfer
@@ -687,34 +684,34 @@ phci_mem_cleanup(void)
 
 /*information of the td	in headers of host memory*/
 typedef	struct td_ptd_map {
-	u32 state;		/* ACTIVE, NEW,	TO_BE_REMOVED */
-	u8 datatoggle;		/*to preserve the data toggle for ATL/ISTL transfers */
-	u32 ptd_bitmap;		/* Bitmap of this ptd in HC headers */
-	u32 ptd_header_addr;	/* headers address of  this td */
-	u32 ptd_data_addr;	/*data address of this td to write in and read from */
-	/*this is address is actual RAM	address	not the	CPU address
-	 * RAM address = (CPU ADDRESS-0x400) >>	3
-	 * */
-	u32 ptd_ram_data_addr;
-	u8 lasttd;		/*last td , complete the transfer */
-	struct ehci_qh *qh;	/* endpoint */
-	struct ehci_qtd	*qtd;	/* qtds	for this endpoint */
-	struct ehci_itd	*itd;	/*itd pointer */
-	struct ehci_sitd *sitd;	/*itd pointer */
-	/*iso specific only */
-	u32 grouptdmap;		/*if td	need to	complete with error, then process all the tds
+    u32 state;		/* ACTIVE, NEW,	TO_BE_REMOVED */
+    u8 datatoggle;		/*to preserve the data toggle for ATL/ISTL transfers */
+    u32 ptd_bitmap;		/* Bitmap of this ptd in HC headers */
+    u32 ptd_header_addr;	/* headers address of  this td */
+    u32 ptd_data_addr;	/*data address of this td to write in and read from */
+    /*this is address is actual RAM	address	not the	CPU address
+     * RAM address = (CPU ADDRESS-0x400) >>	3
+     * */
+    u32 ptd_ram_data_addr;
+    u8 lasttd;		/*last td , complete the transfer */
+    struct ehci_qh *qh;	/* endpoint */
+    struct ehci_qtd	*qtd;	/* qtds	for this endpoint */
+    struct ehci_itd	*itd;	/*itd pointer */
+    struct ehci_sitd *sitd;	/*itd pointer */
+    /*iso specific only */
+    u32 grouptdmap;		/*if td	need to	complete with error, then process all the tds
 				   in the groupmap    */
 } td_ptd_map_t;
 
 /*buffer(ATL/ISTL/INTL)	managemnet*/
 typedef	struct td_ptd_map_buff {
-	u8 buffer_type;		/* Buffer type:	BUFF_TYPE_ATL/INTL/ISTL0/ISTL1 */
-	u8 active_ptds;		/* number of active td's in the	buffer */
-	u8 total_ptds;		/* Total number	of td's	present	in the buffer (active +	tobe removed + skip) */
-	u8 max_ptds;		/* Maximum number of ptd's(32) this buffer can withstand */
-	u16 active_ptd_bitmap;	/* Active PTD's	bitmap */
-	u16 pending_ptd_bitmap;	/* skip	PTD's bitmap */
-	td_ptd_map_t map_list[TD_PTD_MAX_BUFF_TDS];	/* td_ptd_map list */
+    u8 buffer_type;		/* Buffer type:	BUFF_TYPE_ATL/INTL/ISTL0/ISTL1 */
+    u8 active_ptds;		/* number of active td's in the	buffer */
+    u8 total_ptds;		/* Total number	of td's	present	in the buffer (active +	tobe removed + skip) */
+    u8 max_ptds;		/* Maximum number of ptd's(32) this buffer can withstand */
+    u16 active_ptd_bitmap;	/* Active PTD's	bitmap */
+    u16 pending_ptd_bitmap;	/* skip	PTD's bitmap */
+    td_ptd_map_t map_list[TD_PTD_MAX_BUFF_TDS];	/* td_ptd_map list */
 } td_ptd_map_buff_t;
 
 

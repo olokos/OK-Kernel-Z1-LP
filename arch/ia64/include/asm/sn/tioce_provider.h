@@ -19,43 +19,43 @@
  * PROM VERSION.
  */
 struct tioce_common {
-	struct pcibus_bussoft	ce_pcibus;	/* common pciio header */
+    struct pcibus_bussoft	ce_pcibus;	/* common pciio header */
 
-	u32		ce_rev;
-	u64		ce_kernel_private;
-	u64		ce_prom_private;
+    u32		ce_rev;
+    u64		ce_kernel_private;
+    u64		ce_prom_private;
 };
 
 struct tioce_kernel {
-	struct tioce_common	*ce_common;
-	spinlock_t		ce_lock;
-	struct list_head	ce_dmamap_list;
+    struct tioce_common	*ce_common;
+    spinlock_t		ce_lock;
+    struct list_head	ce_dmamap_list;
 
-	u64		ce_ate40_shadow[TIOCE_NUM_M40_ATES];
-	u64		ce_ate3240_shadow[TIOCE_NUM_M3240_ATES];
-	u32		ce_ate3240_pagesize;
+    u64		ce_ate40_shadow[TIOCE_NUM_M40_ATES];
+    u64		ce_ate3240_shadow[TIOCE_NUM_M3240_ATES];
+    u32		ce_ate3240_pagesize;
 
-	u8			ce_port1_secondary;
+    u8			ce_port1_secondary;
 
-	/* per-port resources */
-	struct {
-		int 		dirmap_refcnt;
-		u64	dirmap_shadow;
-	} ce_port[TIOCE_NUM_PORTS];
+    /* per-port resources */
+    struct {
+        int 		dirmap_refcnt;
+        u64	dirmap_shadow;
+    } ce_port[TIOCE_NUM_PORTS];
 };
 
 struct tioce_dmamap {
-	struct list_head	ce_dmamap_list;	/* headed by tioce_kernel */
-	u32		refcnt;
+    struct list_head	ce_dmamap_list;	/* headed by tioce_kernel */
+    u32		refcnt;
 
-	u64		nbytes;		/* # bytes mapped */
+    u64		nbytes;		/* # bytes mapped */
 
-	u64		ct_start;	/* coretalk start address */
-	u64		pci_start;	/* bus start address */
+    u64		ct_start;	/* coretalk start address */
+    u64		pci_start;	/* bus start address */
 
-	u64		__iomem *ate_hw;/* hw ptr of first ate in map */
-	u64		*ate_shadow;	/* shadow ptr of firat ate */
-	u16		ate_count;	/* # ate's in the map */
+    u64		__iomem *ate_hw;/* hw ptr of first ate in map */
+    u64		*ate_shadow;	/* shadow ptr of firat ate */
+    u16		ate_count;	/* # ate's in the map */
 };
 
 extern int tioce_init_provider(void);

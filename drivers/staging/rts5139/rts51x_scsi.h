@@ -136,8 +136,8 @@ struct rts51x_chip;
 void scsi_show_command(struct scsi_cmnd *srb);
 void set_sense_type(struct rts51x_chip *chip, unsigned int lun, int sense_type);
 void set_sense_data(struct rts51x_chip *chip, unsigned int lun, u8 err_code,
-		    u8 sense_key, u32 info, u8 asc, u8 ascq, u8 sns_key_info0,
-		    u16 sns_key_info1);
+                    u8 sense_key, u32 info, u8 asc, u8 ascq, u8 sns_key_info0,
+                    u16 sns_key_info1);
 
 int rts51x_scsi_handler(struct scsi_cmnd *srb, struct rts51x_chip *chip);
 
@@ -149,7 +149,7 @@ const char *host_info(struct Scsi_Host *host);
 int slave_alloc(struct scsi_device *sdev);
 int slave_configure(struct scsi_device *sdev);
 int proc_info(struct Scsi_Host *host, char *buffer,
-	      char **start, off_t offset, int length, int inout);
+              char **start, off_t offset, int length, int inout);
 #if 0 /* LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 37) */
 int queuecommand(struct scsi_cmnd *srb, void (*done) (struct scsi_cmnd *));
 #else

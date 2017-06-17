@@ -56,14 +56,13 @@ struct acpiphp_slot;
  * struct slot - slot information for each *physical* slot
  */
 struct slot {
-	struct hotplug_slot	*hotplug_slot;
-	struct acpiphp_slot	*acpi_slot;
-	struct hotplug_slot_info info;
+    struct hotplug_slot	*hotplug_slot;
+    struct acpiphp_slot	*acpi_slot;
+    struct hotplug_slot_info info;
 };
 
-static inline const char *slot_name(struct slot *slot)
-{
-	return hotplug_slot_name(slot->hotplug_slot);
+static inline const char *slot_name(struct slot *slot) {
+    return hotplug_slot_name(slot->hotplug_slot);
 }
 
 /*
@@ -72,25 +71,25 @@ static inline const char *slot_name(struct slot *slot)
  * for each bridge device in ACPI namespace
  */
 struct acpiphp_bridge {
-	struct list_head list;
-	acpi_handle handle;
-	struct acpiphp_slot *slots;
+    struct list_head list;
+    acpi_handle handle;
+    struct acpiphp_slot *slots;
 
-	/* Ejectable PCI-to-PCI bridge (PCI bridge and PCI function) */
-	struct acpiphp_func *func;
+    /* Ejectable PCI-to-PCI bridge (PCI bridge and PCI function) */
+    struct acpiphp_func *func;
 
-	int type;
-	int nr_slots;
+    int type;
+    int nr_slots;
 
-	u32 flags;
+    u32 flags;
 
-	/* This bus (host bridge) or Secondary bus (PCI-to-PCI bridge) */
-	struct pci_bus *pci_bus;
+    /* This bus (host bridge) or Secondary bus (PCI-to-PCI bridge) */
+    struct pci_bus *pci_bus;
 
-	/* PCI-to-PCI bridge device */
-	struct pci_dev *pci_dev;
+    /* PCI-to-PCI bridge device */
+    struct pci_dev *pci_dev;
 
-	spinlock_t res_lock;
+    spinlock_t res_lock;
 };
 
 
@@ -100,17 +99,17 @@ struct acpiphp_bridge {
  * PCI slot information for each *physical* PCI slot
  */
 struct acpiphp_slot {
-	struct acpiphp_slot *next;
-	struct acpiphp_bridge *bridge;	/* parent */
-	struct list_head funcs;		/* one slot may have different
+    struct acpiphp_slot *next;
+    struct acpiphp_bridge *bridge;	/* parent */
+    struct list_head funcs;		/* one slot may have different
 					   objects (i.e. for each function) */
-	struct slot *slot;
-	struct mutex crit_sect;
+    struct slot *slot;
+    struct mutex crit_sect;
 
-	u8		device;		/* pci device# */
+    u8		device;		/* pci device# */
 
-	unsigned long long sun;		/* ACPI _SUN (slot unique number) */
-	u32		flags;		/* see below */
+    unsigned long long sun;		/* ACPI _SUN (slot unique number) */
+    u32		flags;		/* see below */
 };
 
 
@@ -121,15 +120,15 @@ struct acpiphp_slot {
  * typically 8 objects per slot (i.e. for each PCI function)
  */
 struct acpiphp_func {
-	struct acpiphp_slot *slot;	/* parent */
-	struct acpiphp_bridge *bridge;	/* Ejectable PCI-to-PCI bridge */
+    struct acpiphp_slot *slot;	/* parent */
+    struct acpiphp_bridge *bridge;	/* Ejectable PCI-to-PCI bridge */
 
-	struct list_head sibling;
-	struct notifier_block nb;
-	acpi_handle	handle;
+    struct list_head sibling;
+    struct notifier_block nb;
+    acpi_handle	handle;
 
-	u8		function;	/* pci function# */
-	u32		flags;		/* see below */
+    u8		function;	/* pci function# */
+    u32		flags;		/* see below */
 };
 
 /*
@@ -138,11 +137,10 @@ struct acpiphp_func {
  * ACPI has no generic method of setting/getting attention status
  * this allows for device specific driver registration
  */
-struct acpiphp_attention_info
-{
-	int (*set_attn)(struct hotplug_slot *slot, u8 status);
-	int (*get_attn)(struct hotplug_slot *slot, u8 *status);
-	struct module *owner;
+struct acpiphp_attention_info {
+    int (*set_attn)(struct hotplug_slot *slot, u8 status);
+    int (*get_attn)(struct hotplug_slot *slot, u8 *status);
+    struct module *owner;
 };
 
 /* PCI bus bridge HID */

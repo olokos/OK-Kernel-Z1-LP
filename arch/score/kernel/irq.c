@@ -45,67 +45,63 @@
 /*
  * handles all normal device IRQs
  */
-asmlinkage void do_IRQ(int irq)
-{
-	irq_enter();
-	generic_handle_irq(irq);
-	irq_exit();
+asmlinkage void do_IRQ(int irq) {
+    irq_enter();
+    generic_handle_irq(irq);
+    irq_exit();
 }
 
-static void score_mask(struct irq_data *d)
-{
-	unsigned int irq_source = 63 - d->irq;
+static void score_mask(struct irq_data *d) {
+    unsigned int irq_source = 63 - d->irq;
 
-	if (irq_source < 32)
-		__raw_writel((__raw_readl(SCORE_PIC + INT_MASKL) | \
-			(1 << irq_source)), SCORE_PIC + INT_MASKL);
-	else
-		__raw_writel((__raw_readl(SCORE_PIC + INT_MASKH) | \
-			(1 << (irq_source - 32))), SCORE_PIC + INT_MASKH);
+    if (irq_source < 32)
+        __raw_writel((__raw_readl(SCORE_PIC + INT_MASKL) | \
+                      (1 << irq_source)), SCORE_PIC + INT_MASKL);
+    else
+        __raw_writel((__raw_readl(SCORE_PIC + INT_MASKH) | \
+                      (1 << (irq_source - 32))), SCORE_PIC + INT_MASKH);
 }
 
-static void score_unmask(struct irq_data *d)
-{
-	unsigned int irq_source = 63 - d->irq;
+static void score_unmask(struct irq_data *d) {
+    unsigned int irq_source = 63 - d->irq;
 
-	if (irq_source < 32)
-		__raw_writel((__raw_readl(SCORE_PIC + INT_MASKL) & \
-			~(1 << irq_source)), SCORE_PIC + INT_MASKL);
-	else
-		__raw_writel((__raw_readl(SCORE_PIC + INT_MASKH) & \
-			~(1 << (irq_source - 32))), SCORE_PIC + INT_MASKH);
+    if (irq_source < 32)
+        __raw_writel((__raw_readl(SCORE_PIC + INT_MASKL) & \
+                      ~(1 << irq_source)), SCORE_PIC + INT_MASKL);
+    else
+        __raw_writel((__raw_readl(SCORE_PIC + INT_MASKH) & \
+                      ~(1 << (irq_source - 32))), SCORE_PIC + INT_MASKH);
 }
 
 struct irq_chip score_irq_chip = {
-	.name		= "Score7-level",
-	.irq_mask	= score_mask,
-	.irq_mask_ack	= score_mask,
-	.irq_unmask	= score_unmask,
+    .name		= "Score7-level",
+    .irq_mask	= score_mask,
+    .irq_mask_ack	= score_mask,
+    .irq_unmask	= score_unmask,
 };
 
 /*
  * initialise the interrupt system
  */
-void __init init_IRQ(void)
-{
-	int index;
-	unsigned long target_addr;
+void __init init_IRQ(void) {
+    int index;
+    unsigned long target_addr;
 
-	for (index = 0; index < NR_IRQS; ++index)
-		irq_set_chip_and_handler(index, &score_irq_chip,
-					 handle_level_irq);
+    for (index = 0; index < NR_IRQS; ++index)
+        irq_set_chip_and_handler(index, &score_irq_chip,
+                                 handle_level_irq);
 
-	for (target_addr = IRQ_VECTOR_BASE_ADDR;
-		target_addr <= IRQ_VECTOR_END_ADDR;
-		target_addr += IRQ_VECTOR_SIZE)
-		memcpy((void *)target_addr, \
-			interrupt_exception_vector, IRQ_VECTOR_SIZE);
+    for (target_addr = IRQ_VECTOR_BASE_ADDR;
+            target_addr <= IRQ_VECTOR_END_ADDR;
+            target_addr += IRQ_VECTOR_SIZE)
+        memcpy((void *)target_addr, \
+               interrupt_exception_vector, IRQ_VECTOR_SIZE);
 
-	__raw_writel(0xffffffff, SCORE_PIC + INT_MASKL);
-	__raw_writel(0xffffffff, SCORE_PIC + INT_MASKH);
+    __raw_writel(0xffffffff, SCORE_PIC + INT_MASKL);
+    __raw_writel(0xffffffff, SCORE_PIC + INT_MASKH);
 
-	__asm__ __volatile__(
-		"mtcr	%0, cr3\n\t"
-		: : "r" (EXCEPTION_VECTOR_BASE_ADDR | \
-			VECTOR_ADDRESS_OFFSET_MODE16));
+    __asm__ __volatile__(
+        "mtcr	%0, cr3\n\t"
+        : : "r" (EXCEPTION_VECTOR_BASE_ADDR | \
+                 VECTOR_ADDRESS_OFFSET_MODE16));
 }

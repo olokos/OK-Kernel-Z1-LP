@@ -25,36 +25,36 @@
 #ifdef CONFIG_PPC_EMULATED_STATS
 
 struct ppc_emulated_entry {
-	const char *name;
-	atomic_t val;
+    const char *name;
+    atomic_t val;
 };
 
 extern struct ppc_emulated {
 #ifdef CONFIG_ALTIVEC
-	struct ppc_emulated_entry altivec;
+    struct ppc_emulated_entry altivec;
 #endif
-	struct ppc_emulated_entry dcba;
-	struct ppc_emulated_entry dcbz;
-	struct ppc_emulated_entry fp_pair;
-	struct ppc_emulated_entry isel;
-	struct ppc_emulated_entry mcrxr;
-	struct ppc_emulated_entry mfpvr;
-	struct ppc_emulated_entry multiple;
-	struct ppc_emulated_entry popcntb;
-	struct ppc_emulated_entry spe;
-	struct ppc_emulated_entry string;
-	struct ppc_emulated_entry unaligned;
+    struct ppc_emulated_entry dcba;
+    struct ppc_emulated_entry dcbz;
+    struct ppc_emulated_entry fp_pair;
+    struct ppc_emulated_entry isel;
+    struct ppc_emulated_entry mcrxr;
+    struct ppc_emulated_entry mfpvr;
+    struct ppc_emulated_entry multiple;
+    struct ppc_emulated_entry popcntb;
+    struct ppc_emulated_entry spe;
+    struct ppc_emulated_entry string;
+    struct ppc_emulated_entry unaligned;
 #ifdef CONFIG_MATH_EMULATION
-	struct ppc_emulated_entry math;
+    struct ppc_emulated_entry math;
 #elif defined(CONFIG_8XX_MINIMAL_FPEMU)
-	struct ppc_emulated_entry 8xx;
+    struct ppc_emulated_entry 8xx;
 #endif
 #ifdef CONFIG_VSX
-	struct ppc_emulated_entry vsx;
+    struct ppc_emulated_entry vsx;
 #endif
 #ifdef CONFIG_PPC64
-	struct ppc_emulated_entry mfdscr;
-	struct ppc_emulated_entry mtdscr;
+    struct ppc_emulated_entry mfdscr;
+    struct ppc_emulated_entry mtdscr;
 #endif
 } ppc_emulated;
 

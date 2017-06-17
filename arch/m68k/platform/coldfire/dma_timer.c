@@ -34,32 +34,30 @@
 #define DMA_DTMR_CLK_DIV_16	(2 << 1)
 #define DMA_DTMR_ENABLE		(1 << 0)
 
-static cycle_t cf_dt_get_cycles(struct clocksource *cs)
-{
-	return __raw_readl(DTCN0);
+static cycle_t cf_dt_get_cycles(struct clocksource *cs) {
+    return __raw_readl(DTCN0);
 }
 
 static struct clocksource clocksource_cf_dt = {
-	.name		= "coldfire_dma_timer",
-	.rating		= 200,
-	.read		= cf_dt_get_cycles,
-	.mask		= CLOCKSOURCE_MASK(32),
-	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
+    .name		= "coldfire_dma_timer",
+    .rating		= 200,
+    .read		= cf_dt_get_cycles,
+    .mask		= CLOCKSOURCE_MASK(32),
+    .flags		= CLOCK_SOURCE_IS_CONTINUOUS,
 };
 
-static int __init  init_cf_dt_clocksource(void)
-{
-	/*
-	 * We setup DMA timer 0 in free run mode. This incrementing counter is
-	 * used as a highly precious clock source. With MCF_CLOCK = 150 MHz we
-	 * get a ~213 ns resolution and the 32bit register will overflow almost
-	 * every 15 minutes.
-	 */
-	__raw_writeb(0x00, DTXMR0);
-	__raw_writeb(0x00, DTER0);
-	__raw_writel(0x00000000, DTRR0);
-	__raw_writew(DMA_DTMR_CLK_DIV_16 | DMA_DTMR_ENABLE, DTMR0);
-	return clocksource_register_hz(&clocksource_cf_dt, DMA_FREQ);
+static int __init  init_cf_dt_clocksource(void) {
+    /*
+     * We setup DMA timer 0 in free run mode. This incrementing counter is
+     * used as a highly precious clock source. With MCF_CLOCK = 150 MHz we
+     * get a ~213 ns resolution and the 32bit register will overflow almost
+     * every 15 minutes.
+     */
+    __raw_writeb(0x00, DTXMR0);
+    __raw_writeb(0x00, DTER0);
+    __raw_writel(0x00000000, DTRR0);
+    __raw_writew(DMA_DTMR_CLK_DIV_16 | DMA_DTMR_ENABLE, DTMR0);
+    return clocksource_register_hz(&clocksource_cf_dt, DMA_FREQ);
 }
 
 arch_initcall(init_cf_dt_clocksource);
@@ -67,15 +65,13 @@ arch_initcall(init_cf_dt_clocksource);
 #define CYC2NS_SCALE_FACTOR 10 /* 2^10, carefully chosen */
 #define CYC2NS_SCALE	((1000000 << CYC2NS_SCALE_FACTOR) / (DMA_FREQ / 1000))
 
-static unsigned long long cycles2ns(unsigned long cycl)
-{
-	return (unsigned long long) ((unsigned long long)cycl *
-			CYC2NS_SCALE) >> CYC2NS_SCALE_FACTOR;
+static unsigned long long cycles2ns(unsigned long cycl) {
+    return (unsigned long long) ((unsigned long long)cycl *
+                                 CYC2NS_SCALE) >> CYC2NS_SCALE_FACTOR;
 }
 
-unsigned long long sched_clock(void)
-{
-	unsigned long cycl = __raw_readl(DTCN0);
+unsigned long long sched_clock(void) {
+    unsigned long cycl = __raw_readl(DTCN0);
 
-	return cycles2ns(cycl);
+    return cycles2ns(cycl);
 }

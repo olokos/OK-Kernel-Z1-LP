@@ -73,9 +73,8 @@ const BYTE abyOUIPSK[4]     = { 0x00, 0x0F, 0xAC, 0x02 };
 -*/
 void
 WPA2_ClearRSN (
-     PKnownBSS        pBSSNode
-    )
-{
+    PKnownBSS        pBSSNode
+) {
     int ii;
 
     pBSSNode->bWPA2Valid = FALSE;
@@ -108,10 +107,9 @@ WPA2_ClearRSN (
 -*/
 void
 WPA2vParseRSN (
-     PKnownBSS        pBSSNode,
-     PWLAN_IE_RSN     pRSN
-    )
-{
+    PKnownBSS        pBSSNode,
+    PWLAN_IE_RSN     pRSN
+) {
     int                 i, j;
     WORD                m = 0, n = 0;
     PBYTE               pbyOUI;
@@ -135,7 +133,7 @@ WPA2vParseRSN (
 
     // information element header makes sense
     if ((pRSN->byElementID == WLAN_EID_RSN) &&
-        (pRSN->wVersion == 1)) {
+            (pRSN->wVersion == 1)) {
 
         DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Legal 802.11i RSN\n");
 
@@ -262,9 +260,8 @@ WPA2vParseRSN (
 -*/
 unsigned int
 WPA2uSetIEs(void *pMgmtHandle,
-     PWLAN_IE_RSN pRSNIEs
-    )
-{
+            PWLAN_IE_RSN pRSNIEs
+           ) {
     PSMgmtObject    pMgmt = (PSMgmtObject) pMgmtHandle;
     PBYTE           pbyBuffer = NULL;
     unsigned int            ii = 0;
@@ -274,8 +271,8 @@ WPA2uSetIEs(void *pMgmtHandle,
         return(0);
     }
     if (((pMgmt->eAuthenMode == WMAC_AUTH_WPA2) ||
-         (pMgmt->eAuthenMode == WMAC_AUTH_WPA2PSK)) &&
-        (pMgmt->pCurrBSS != NULL)) {
+            (pMgmt->eAuthenMode == WMAC_AUTH_WPA2PSK)) &&
+            (pMgmt->pCurrBSS != NULL)) {
         /* WPA2 IE */
         pbyBuffer = (PBYTE) pRSNIEs;
         pRSNIEs->byElementID = WLAN_EID_RSN;
@@ -336,25 +333,25 @@ WPA2uSetIEs(void *pMgmtHandle,
         }
         pRSNIEs->len +=2;
 
-	if ((pMgmt->gsPMKIDCache.BSSIDInfoCount > 0) &&
-	    (pMgmt->bRoaming == TRUE) &&
-            (pMgmt->eAuthenMode == WMAC_AUTH_WPA2)) {
-		/* RSN PMKID, pointer to PMKID count */
-		pwPMKID = (PWORD)(&pRSNIEs->abyRSN[18]);
-		*pwPMKID = 0;                     /* Initialize PMKID count */
-		pbyBuffer = &pRSNIEs->abyRSN[20];    /* Point to PMKID list */
-		for (ii = 0; ii < pMgmt->gsPMKIDCache.BSSIDInfoCount; ii++) {
-			if (!memcmp(&pMgmt->
-				    gsPMKIDCache.BSSIDInfo[ii].abyBSSID[0],
-				    pMgmt->abyCurrBSSID,
-				    ETH_ALEN)) {
-				(*pwPMKID)++;
-				memcpy(pbyBuffer,
-			pMgmt->gsPMKIDCache.BSSIDInfo[ii].abyPMKID,
-				       16);
-				pbyBuffer += 16;
-			}
-		}
+        if ((pMgmt->gsPMKIDCache.BSSIDInfoCount > 0) &&
+                (pMgmt->bRoaming == TRUE) &&
+                (pMgmt->eAuthenMode == WMAC_AUTH_WPA2)) {
+            /* RSN PMKID, pointer to PMKID count */
+            pwPMKID = (PWORD)(&pRSNIEs->abyRSN[18]);
+            *pwPMKID = 0;                     /* Initialize PMKID count */
+            pbyBuffer = &pRSNIEs->abyRSN[20];    /* Point to PMKID list */
+            for (ii = 0; ii < pMgmt->gsPMKIDCache.BSSIDInfoCount; ii++) {
+                if (!memcmp(&pMgmt->
+                            gsPMKIDCache.BSSIDInfo[ii].abyBSSID[0],
+                            pMgmt->abyCurrBSSID,
+                            ETH_ALEN)) {
+                    (*pwPMKID)++;
+                    memcpy(pbyBuffer,
+                           pMgmt->gsPMKIDCache.BSSIDInfo[ii].abyPMKID,
+                           16);
+                    pbyBuffer += 16;
+                }
+            }
             if (*pwPMKID != 0) {
                 pRSNIEs->len += (2 + (*pwPMKID)*16);
             } else {

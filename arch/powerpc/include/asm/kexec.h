@@ -60,12 +60,11 @@ typedef void (*crash_shutdown_t)(void);
  * via panic or invoking dump using sysrq-trigger.
  */
 static inline void crash_setup_regs(struct pt_regs *newregs,
-					struct pt_regs *oldregs)
-{
-	if (oldregs)
-		memcpy(newregs, oldregs, sizeof(*newregs));
-	else
-		ppc_save_regs(newregs);
+                                    struct pt_regs *oldregs) {
+    if (oldregs)
+        memcpy(newregs, oldregs, sizeof(*newregs));
+    else
+        ppc_save_regs(newregs);
 }
 
 extern void kexec_smp_wait(void);	/* get and clear naca physid, wait for
@@ -90,21 +89,20 @@ extern void machine_kexec_mask_interrupts(void);
 #else /* !CONFIG_KEXEC */
 static inline void crash_kexec_secondary(struct pt_regs *regs) { }
 
-static inline int overlaps_crashkernel(unsigned long start, unsigned long size)
-{
-	return 0;
+static inline int overlaps_crashkernel(unsigned long start, unsigned long size) {
+    return 0;
 }
 
-static inline void reserve_crashkernel(void) { ; }
-
-static inline int crash_shutdown_register(crash_shutdown_t handler)
-{
-	return 0;
+static inline void reserve_crashkernel(void) {
+    ;
 }
 
-static inline int crash_shutdown_unregister(crash_shutdown_t handler)
-{
-	return 0;
+static inline int crash_shutdown_register(crash_shutdown_t handler) {
+    return 0;
+}
+
+static inline int crash_shutdown_unregister(crash_shutdown_t handler) {
+    return 0;
 }
 
 #endif /* CONFIG_KEXEC */

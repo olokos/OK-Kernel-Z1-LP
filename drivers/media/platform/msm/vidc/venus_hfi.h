@@ -50,41 +50,41 @@
 #define VIDC_MAX_NAME_LENGTH 64
 
 struct hfi_queue_table_header {
-	u32 qtbl_version;
-	u32 qtbl_size;
-	u32 qtbl_qhdr0_offset;
-	u32 qtbl_qhdr_size;
-	u32 qtbl_num_q;
-	u32 qtbl_num_active_q;
+    u32 qtbl_version;
+    u32 qtbl_size;
+    u32 qtbl_qhdr0_offset;
+    u32 qtbl_qhdr_size;
+    u32 qtbl_num_q;
+    u32 qtbl_num_active_q;
 };
 
 struct hfi_queue_header {
-	u32 qhdr_status;
-	u32 qhdr_start_addr;
-	u32 qhdr_type;
-	u32 qhdr_q_size;
-	u32 qhdr_pkt_size;
-	u32 qhdr_pkt_drop_cnt;
-	u32 qhdr_rx_wm;
-	u32 qhdr_tx_wm;
-	u32 qhdr_rx_req;
-	u32 qhdr_tx_req;
-	u32 qhdr_rx_irq_status;
-	u32 qhdr_tx_irq_status;
-	u32 qhdr_read_idx;
-	u32 qhdr_write_idx;
+    u32 qhdr_status;
+    u32 qhdr_start_addr;
+    u32 qhdr_type;
+    u32 qhdr_q_size;
+    u32 qhdr_pkt_size;
+    u32 qhdr_pkt_drop_cnt;
+    u32 qhdr_rx_wm;
+    u32 qhdr_tx_wm;
+    u32 qhdr_rx_req;
+    u32 qhdr_tx_req;
+    u32 qhdr_rx_irq_status;
+    u32 qhdr_tx_irq_status;
+    u32 qhdr_read_idx;
+    u32 qhdr_write_idx;
 };
 
 struct hfi_mem_map_table {
-	u32 mem_map_num_entries;
-	u32 *mem_map_table_base_addr;
+    u32 mem_map_num_entries;
+    u32 *mem_map_table_base_addr;
 };
 
 struct hfi_mem_map {
-	u32 virtual_addr;
-	u32 physical_addr;
-	u32 size;
-	u32 attr;
+    u32 virtual_addr;
+    u32 physical_addr;
+    u32 size;
+    u32 attr;
 };
 
 #define VIDC_IFACEQ_TABLE_SIZE (sizeof(struct hfi_queue_table_header) \
@@ -104,132 +104,132 @@ struct hfi_mem_map {
 	(VIDC_IFACEQ_QUEUE_SIZE * VIDC_IFACEQ_NUMQ))
 
 enum vidc_hw_reg {
-	VIDC_HWREG_CTRL_STATUS =  0x1,
-	VIDC_HWREG_QTBL_INFO =  0x2,
-	VIDC_HWREG_QTBL_ADDR =  0x3,
-	VIDC_HWREG_CTRLR_RESET =  0x4,
-	VIDC_HWREG_IFACEQ_FWRXREQ =  0x5,
-	VIDC_HWREG_IFACEQ_FWTXREQ =  0x6,
-	VIDC_HWREG_VHI_SOFTINTEN =  0x7,
-	VIDC_HWREG_VHI_SOFTINTSTATUS =  0x8,
-	VIDC_HWREG_VHI_SOFTINTCLR =  0x9,
-	VIDC_HWREG_HVI_SOFTINTEN =  0xA,
+    VIDC_HWREG_CTRL_STATUS =  0x1,
+    VIDC_HWREG_QTBL_INFO =  0x2,
+    VIDC_HWREG_QTBL_ADDR =  0x3,
+    VIDC_HWREG_CTRLR_RESET =  0x4,
+    VIDC_HWREG_IFACEQ_FWRXREQ =  0x5,
+    VIDC_HWREG_IFACEQ_FWTXREQ =  0x6,
+    VIDC_HWREG_VHI_SOFTINTEN =  0x7,
+    VIDC_HWREG_VHI_SOFTINTSTATUS =  0x8,
+    VIDC_HWREG_VHI_SOFTINTCLR =  0x9,
+    VIDC_HWREG_HVI_SOFTINTEN =  0xA,
 };
 
 enum bus_index {
-	BUS_IDX_ENC_OCMEM,
-	BUS_IDX_DEC_OCMEM,
-	BUS_IDX_ENC_DDR,
-	BUS_IDX_DEC_DDR,
-	BUS_IDX_MAX
+    BUS_IDX_ENC_OCMEM,
+    BUS_IDX_DEC_OCMEM,
+    BUS_IDX_ENC_DDR,
+    BUS_IDX_DEC_DDR,
+    BUS_IDX_MAX
 };
 
 enum clock_state {
-	DISABLED_UNPREPARED,
-	ENABLED_PREPARED,
-	DISABLED_PREPARED
+    DISABLED_UNPREPARED,
+    ENABLED_PREPARED,
+    DISABLED_PREPARED
 };
 
 struct vidc_mem_addr {
-	u8 *align_device_addr;
-	u8 *align_virtual_addr;
-	u32 mem_size;
-	struct msm_smem *mem_data;
+    u8 *align_device_addr;
+    u8 *align_virtual_addr;
+    u32 mem_size;
+    struct msm_smem *mem_data;
 };
 
 struct vidc_iface_q_info {
-	void *q_hdr;
-	struct vidc_mem_addr q_array;
+    void *q_hdr;
+    struct vidc_mem_addr q_array;
 };
 
 /* Internal data used in vidc_hal not exposed to msm_vidc*/
 
 struct hal_data {
-	u32 irq;
-	u32 device_base_addr;
-	u8 *register_base_addr;
+    u32 irq;
+    u32 device_base_addr;
+    u8 *register_base_addr;
 };
 
 enum vidc_clocks {
-	VCODEC_NONE,
-	VCODEC_CLK,
-	VCODEC_AHB_CLK,
-	VCODEC_AXI_CLK,
-	VCODEC_OCMEM_CLK,
-	VCODEC_MAX_CLKS
+    VCODEC_NONE,
+    VCODEC_CLK,
+    VCODEC_AHB_CLK,
+    VCODEC_AXI_CLK,
+    VCODEC_OCMEM_CLK,
+    VCODEC_MAX_CLKS
 };
 
 struct venus_core_clock {
-	char name[VIDC_MAX_NAME_LENGTH];
-	struct clk *clk;
-	u32 count;
-	struct load_freq_table load_freq_tbl[8];
+    char name[VIDC_MAX_NAME_LENGTH];
+    struct clk *clk;
+    u32 count;
+    struct load_freq_table load_freq_tbl[8];
 };
 
 struct venus_bus_info {
-	u32 ddr_handle[MSM_VIDC_MAX_DEVICES];
-	u32 ocmem_handle[MSM_VIDC_MAX_DEVICES];
+    u32 ddr_handle[MSM_VIDC_MAX_DEVICES];
+    u32 ocmem_handle[MSM_VIDC_MAX_DEVICES];
 };
 
 struct on_chip_mem {
-	struct ocmem_buf *buf;
-	struct notifier_block vidc_ocmem_nb;
-	void *handle;
+    struct ocmem_buf *buf;
+    struct notifier_block vidc_ocmem_nb;
+    void *handle;
 };
 
 struct venus_resources {
-	struct msm_vidc_fw fw;
-	struct venus_core_clock clock[VCODEC_MAX_CLKS];
-	struct venus_bus_info bus_info;
-	struct on_chip_mem ocmem;
+    struct msm_vidc_fw fw;
+    struct venus_core_clock clock[VCODEC_MAX_CLKS];
+    struct venus_bus_info bus_info;
+    struct on_chip_mem ocmem;
 };
 
 enum venus_hfi_state {
-	VENUS_STATE_DEINIT = 1,
-	VENUS_STATE_INIT,
+    VENUS_STATE_DEINIT = 1,
+    VENUS_STATE_INIT,
 };
 
 struct venus_hfi_device {
-	struct list_head list;
-	struct list_head sess_head;
-	u32 intr_status;
-	u32 device_id;
-	u32 clk_load;
-	u32 bus_load[MSM_VIDC_MAX_DEVICES];
-	enum clock_state clk_state;
-	bool power_enabled;
-	enum vidc_clocks clk_gating_level;
-	struct mutex read_lock;
-	struct mutex write_lock;
-	struct mutex clk_pwr_lock;
-	struct mutex session_lock;
-	msm_vidc_callback callback;
-	struct vidc_mem_addr iface_q_table;
-	struct vidc_mem_addr qdss;
-	struct vidc_mem_addr sfr;
-	struct vidc_mem_addr mem_addr;
-	struct vidc_iface_q_info iface_queues[VIDC_IFACEQ_NUMQ];
-	struct smem_client *hal_client;
-	struct hal_data *hal_data;
-	struct workqueue_struct *vidc_workq;
-	struct workqueue_struct *venus_pm_workq;
-	int spur_count;
-	int reg_count;
-	int pc_num_cmds;
-	u32 base_addr;
-	u32 register_base;
-	u32 register_size;
-	u32 irq;
-	int clk_cnt;
-	int pwr_cnt;
-	struct venus_resources resources;
-	struct msm_vidc_platform_resources *res;
-	struct regulator *gdsc;
-	enum venus_hfi_state state;
+    struct list_head list;
+    struct list_head sess_head;
+    u32 intr_status;
+    u32 device_id;
+    u32 clk_load;
+    u32 bus_load[MSM_VIDC_MAX_DEVICES];
+    enum clock_state clk_state;
+    bool power_enabled;
+    enum vidc_clocks clk_gating_level;
+    struct mutex read_lock;
+    struct mutex write_lock;
+    struct mutex clk_pwr_lock;
+    struct mutex session_lock;
+    msm_vidc_callback callback;
+    struct vidc_mem_addr iface_q_table;
+    struct vidc_mem_addr qdss;
+    struct vidc_mem_addr sfr;
+    struct vidc_mem_addr mem_addr;
+    struct vidc_iface_q_info iface_queues[VIDC_IFACEQ_NUMQ];
+    struct smem_client *hal_client;
+    struct hal_data *hal_data;
+    struct workqueue_struct *vidc_workq;
+    struct workqueue_struct *venus_pm_workq;
+    int spur_count;
+    int reg_count;
+    int pc_num_cmds;
+    u32 base_addr;
+    u32 register_base;
+    u32 register_size;
+    u32 irq;
+    int clk_cnt;
+    int pwr_cnt;
+    struct venus_resources resources;
+    struct msm_vidc_platform_resources *res;
+    struct regulator *gdsc;
+    enum venus_hfi_state state;
 };
 
 void venus_hfi_delete_device(void *device);
 int venus_hfi_initialize(struct hfi_device *hdev, u32 device_id,
-		struct msm_vidc_platform_resources *res,
-		hfi_cmd_response_callback callback);
+                         struct msm_vidc_platform_resources *res,
+                         hfi_cmd_response_callback callback);
 #endif

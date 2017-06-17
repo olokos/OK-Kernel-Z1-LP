@@ -27,26 +27,26 @@
 #define __KVM_HAVE_PPC_SMT
 
 struct kvm_regs {
-	__u64 pc;
-	__u64 cr;
-	__u64 ctr;
-	__u64 lr;
-	__u64 xer;
-	__u64 msr;
-	__u64 srr0;
-	__u64 srr1;
-	__u64 pid;
+    __u64 pc;
+    __u64 cr;
+    __u64 ctr;
+    __u64 lr;
+    __u64 xer;
+    __u64 msr;
+    __u64 srr0;
+    __u64 srr1;
+    __u64 pid;
 
-	__u64 sprg0;
-	__u64 sprg1;
-	__u64 sprg2;
-	__u64 sprg3;
-	__u64 sprg4;
-	__u64 sprg5;
-	__u64 sprg6;
-	__u64 sprg7;
+    __u64 sprg0;
+    __u64 sprg1;
+    __u64 sprg2;
+    __u64 sprg3;
+    __u64 sprg4;
+    __u64 sprg5;
+    __u64 sprg6;
+    __u64 sprg7;
 
-	__u64 gpr[32];
+    __u64 gpr[32];
 };
 
 #define KVM_SREGS_E_IMPL_NONE	0
@@ -158,104 +158,104 @@ struct kvm_regs {
  * just received from KVM_GET_SREGS is always a no-op.
  */
 struct kvm_sregs {
-	__u32 pvr;
-	union {
-		struct {
-			__u64 sdr1;
-			struct {
-				struct {
-					__u64 slbe;
-					__u64 slbv;
-				} slb[64];
-			} ppc64;
-			struct {
-				__u32 sr[16];
-				__u64 ibat[8];
-				__u64 dbat[8];
-			} ppc32;
-		} s;
-		struct {
-			union {
-				struct { /* KVM_SREGS_E_IMPL_FSL */
-					__u32 features; /* KVM_SREGS_E_FSL_ */
-					__u32 svr;
-					__u64 mcar;
-					__u32 hid0;
+    __u32 pvr;
+    union {
+        struct {
+            __u64 sdr1;
+            struct {
+                struct {
+                    __u64 slbe;
+                    __u64 slbv;
+                } slb[64];
+            } ppc64;
+            struct {
+                __u32 sr[16];
+                __u64 ibat[8];
+                __u64 dbat[8];
+            } ppc32;
+        } s;
+        struct {
+            union {
+                struct { /* KVM_SREGS_E_IMPL_FSL */
+                    __u32 features; /* KVM_SREGS_E_FSL_ */
+                    __u32 svr;
+                    __u64 mcar;
+                    __u32 hid0;
 
-					/* KVM_SREGS_E_FSL_PIDn */
-					__u32 pid1, pid2;
-				} fsl;
-				__u8 pad[256];
-			} impl;
+                    /* KVM_SREGS_E_FSL_PIDn */
+                    __u32 pid1, pid2;
+                } fsl;
+                __u8 pad[256];
+            } impl;
 
-			__u32 features; /* KVM_SREGS_E_ */
-			__u32 impl_id;	/* KVM_SREGS_E_IMPL_ */
-			__u32 update_special; /* KVM_SREGS_E_UPDATE_ */
-			__u32 pir;	/* read-only */
-			__u64 sprg8;
-			__u64 sprg9;	/* E.ED */
-			__u64 csrr0;
-			__u64 dsrr0;	/* E.ED */
-			__u64 mcsrr0;
-			__u32 csrr1;
-			__u32 dsrr1;	/* E.ED */
-			__u32 mcsrr1;
-			__u32 esr;
-			__u64 dear;
-			__u64 ivpr;
-			__u64 mcivpr;
-			__u64 mcsr;	/* KVM_SREGS_E_UPDATE_MCSR */
+            __u32 features; /* KVM_SREGS_E_ */
+            __u32 impl_id;	/* KVM_SREGS_E_IMPL_ */
+            __u32 update_special; /* KVM_SREGS_E_UPDATE_ */
+            __u32 pir;	/* read-only */
+            __u64 sprg8;
+            __u64 sprg9;	/* E.ED */
+            __u64 csrr0;
+            __u64 dsrr0;	/* E.ED */
+            __u64 mcsrr0;
+            __u32 csrr1;
+            __u32 dsrr1;	/* E.ED */
+            __u32 mcsrr1;
+            __u32 esr;
+            __u64 dear;
+            __u64 ivpr;
+            __u64 mcivpr;
+            __u64 mcsr;	/* KVM_SREGS_E_UPDATE_MCSR */
 
-			__u32 tsr;	/* KVM_SREGS_E_UPDATE_TSR */
-			__u32 tcr;
-			__u32 decar;
-			__u32 dec;	/* KVM_SREGS_E_UPDATE_DEC */
+            __u32 tsr;	/* KVM_SREGS_E_UPDATE_TSR */
+            __u32 tcr;
+            __u32 decar;
+            __u32 dec;	/* KVM_SREGS_E_UPDATE_DEC */
 
-			/*
-			 * Userspace can read TB directly, but the
-			 * value reported here is consistent with "dec".
-			 *
-			 * Read-only.
-			 */
-			__u64 tb;
+            /*
+             * Userspace can read TB directly, but the
+             * value reported here is consistent with "dec".
+             *
+             * Read-only.
+             */
+            __u64 tb;
 
-			__u32 dbsr;	/* KVM_SREGS_E_UPDATE_DBSR */
-			__u32 dbcr[3];
-			__u32 iac[4];
-			__u32 dac[2];
-			__u32 dvc[2];
-			__u8 num_iac;	/* read-only */
-			__u8 num_dac;	/* read-only */
-			__u8 num_dvc;	/* read-only */
-			__u8 pad;
+            __u32 dbsr;	/* KVM_SREGS_E_UPDATE_DBSR */
+            __u32 dbcr[3];
+            __u32 iac[4];
+            __u32 dac[2];
+            __u32 dvc[2];
+            __u8 num_iac;	/* read-only */
+            __u8 num_dac;	/* read-only */
+            __u8 num_dvc;	/* read-only */
+            __u8 pad;
 
-			__u32 epr;	/* EXP */
-			__u32 vrsave;	/* a.k.a. USPRG0 */
-			__u32 epcr;	/* KVM_SREGS_E_64 */
+            __u32 epr;	/* EXP */
+            __u32 vrsave;	/* a.k.a. USPRG0 */
+            __u32 epcr;	/* KVM_SREGS_E_64 */
 
-			__u32 mas0;
-			__u32 mas1;
-			__u64 mas2;
-			__u64 mas7_3;
-			__u32 mas4;
-			__u32 mas6;
+            __u32 mas0;
+            __u32 mas1;
+            __u64 mas2;
+            __u64 mas7_3;
+            __u32 mas4;
+            __u32 mas6;
 
-			__u32 ivor_low[16]; /* IVOR0-15 */
-			__u32 ivor_high[18]; /* IVOR32+, plus room to expand */
+            __u32 ivor_low[16]; /* IVOR0-15 */
+            __u32 ivor_high[18]; /* IVOR32+, plus room to expand */
 
-			__u32 mmucfg;	/* read-only */
-			__u32 eptcfg;	/* E.PT, read-only */
-			__u32 tlbcfg[4];/* read-only */
-			__u32 tlbps[4]; /* read-only */
+            __u32 mmucfg;	/* read-only */
+            __u32 eptcfg;	/* E.PT, read-only */
+            __u32 tlbcfg[4];/* read-only */
+            __u32 tlbps[4]; /* read-only */
 
-			__u32 eplc, epsc; /* E.PD */
-		} e;
-		__u8 pad[1020];
-	} u;
+            __u32 eplc, epsc; /* E.PD */
+        } e;
+        __u8 pad[1020];
+    } u;
 };
 
 struct kvm_fpu {
-	__u64 fpr[32];
+    __u64 fpr[32];
 };
 
 struct kvm_debug_exit_arch {
@@ -280,48 +280,48 @@ struct kvm_sync_regs {
 
 /* for KVM_CAP_SPAPR_TCE */
 struct kvm_create_spapr_tce {
-	__u64 liobn;
-	__u32 window_size;
+    __u64 liobn;
+    __u32 window_size;
 };
 
 /* for KVM_ALLOCATE_RMA */
 struct kvm_allocate_rma {
-	__u64 rma_size;
+    __u64 rma_size;
 };
 
 struct kvm_book3e_206_tlb_entry {
-	__u32 mas8;
-	__u32 mas1;
-	__u64 mas2;
-	__u64 mas7_3;
+    __u32 mas8;
+    __u32 mas1;
+    __u64 mas2;
+    __u64 mas7_3;
 };
 
 struct kvm_book3e_206_tlb_params {
-	/*
-	 * For mmu types KVM_MMU_FSL_BOOKE_NOHV and KVM_MMU_FSL_BOOKE_HV:
-	 *
-	 * - The number of ways of TLB0 must be a power of two between 2 and
-	 *   16.
-	 * - TLB1 must be fully associative.
-	 * - The size of TLB0 must be a multiple of the number of ways, and
-	 *   the number of sets must be a power of two.
-	 * - The size of TLB1 may not exceed 64 entries.
-	 * - TLB0 supports 4 KiB pages.
-	 * - The page sizes supported by TLB1 are as indicated by
-	 *   TLB1CFG (if MMUCFG[MAVN] = 0) or TLB1PS (if MMUCFG[MAVN] = 1)
-	 *   as returned by KVM_GET_SREGS.
-	 * - TLB2 and TLB3 are reserved, and their entries in tlb_sizes[]
-	 *   and tlb_ways[] must be zero.
-	 *
-	 * tlb_ways[n] = tlb_sizes[n] means the array is fully associative.
-	 *
-	 * KVM will adjust TLBnCFG based on the sizes configured here,
-	 * though arrays greater than 2048 entries will have TLBnCFG[NENTRY]
-	 * set to zero.
-	 */
-	__u32 tlb_sizes[4];
-	__u32 tlb_ways[4];
-	__u32 reserved[8];
+    /*
+     * For mmu types KVM_MMU_FSL_BOOKE_NOHV and KVM_MMU_FSL_BOOKE_HV:
+     *
+     * - The number of ways of TLB0 must be a power of two between 2 and
+     *   16.
+     * - TLB1 must be fully associative.
+     * - The size of TLB0 must be a multiple of the number of ways, and
+     *   the number of sets must be a power of two.
+     * - The size of TLB1 may not exceed 64 entries.
+     * - TLB0 supports 4 KiB pages.
+     * - The page sizes supported by TLB1 are as indicated by
+     *   TLB1CFG (if MMUCFG[MAVN] = 0) or TLB1PS (if MMUCFG[MAVN] = 1)
+     *   as returned by KVM_GET_SREGS.
+     * - TLB2 and TLB3 are reserved, and their entries in tlb_sizes[]
+     *   and tlb_ways[] must be zero.
+     *
+     * tlb_ways[n] = tlb_sizes[n] means the array is fully associative.
+     *
+     * KVM will adjust TLBnCFG based on the sizes configured here,
+     * though arrays greater than 2048 entries will have TLBnCFG[NENTRY]
+     * set to zero.
+     */
+    __u32 tlb_sizes[4];
+    __u32 tlb_ways[4];
+    __u32 reserved[8];
 };
 
 #define KVM_REG_PPC_HIOR	(KVM_REG_PPC | KVM_REG_SIZE_U64 | 0x1)

@@ -37,46 +37,45 @@ extern void pcie_clear_root_pme_status(struct pci_dev *dev);
 #ifdef CONFIG_HOTPLUG_PCI_PCIE
 extern bool pciehp_msi_disabled;
 
-static inline bool pciehp_no_msi(void)
-{
-	return pciehp_msi_disabled;
+static inline bool pciehp_no_msi(void) {
+    return pciehp_msi_disabled;
 }
 
 #else  /* !CONFIG_HOTPLUG_PCI_PCIE */
-static inline bool pciehp_no_msi(void) { return false; }
+static inline bool pciehp_no_msi(void) {
+    return false;
+}
 #endif /* !CONFIG_HOTPLUG_PCI_PCIE */
 
 #ifdef CONFIG_PCIE_PME
 extern bool pcie_pme_msi_disabled;
 
-static inline void pcie_pme_disable_msi(void)
-{
-	pcie_pme_msi_disabled = true;
+static inline void pcie_pme_disable_msi(void) {
+    pcie_pme_msi_disabled = true;
 }
 
-static inline bool pcie_pme_no_msi(void)
-{
-	return pcie_pme_msi_disabled;
+static inline bool pcie_pme_no_msi(void) {
+    return pcie_pme_msi_disabled;
 }
 
 extern void pcie_pme_interrupt_enable(struct pci_dev *dev, bool enable);
 #else /* !CONFIG_PCIE_PME */
 static inline void pcie_pme_disable_msi(void) {}
-static inline bool pcie_pme_no_msi(void) { return false; }
+static inline bool pcie_pme_no_msi(void) {
+    return false;
+}
 static inline void pcie_pme_interrupt_enable(struct pci_dev *dev, bool en) {}
 #endif /* !CONFIG_PCIE_PME */
 
 #ifdef CONFIG_ACPI
 extern int pcie_port_acpi_setup(struct pci_dev *port, int *mask);
 
-static inline int pcie_port_platform_notify(struct pci_dev *port, int *mask)
-{
-	return pcie_port_acpi_setup(port, mask);
+static inline int pcie_port_platform_notify(struct pci_dev *port, int *mask) {
+    return pcie_port_acpi_setup(port, mask);
 }
 #else /* !CONFIG_ACPI */
-static inline int pcie_port_platform_notify(struct pci_dev *port, int *mask)
-{
-	return 0;
+static inline int pcie_port_platform_notify(struct pci_dev *port, int *mask) {
+    return 0;
 }
 #endif /* !CONFIG_ACPI */
 

@@ -32,9 +32,9 @@
  * @multi_comp:	use to signal multiple events.
  *
  */
-struct sync_object{
-	struct completion comp;
-	struct completion *multi_comp;
+struct sync_object {
+    struct completion comp;
+    struct completion *multi_comp;
 };
 
 /**
@@ -44,10 +44,9 @@ struct sync_object{
  * Set the initial state for a sync_event element.
  */
 
-static inline void sync_init_event(struct sync_object *event)
-{
-	init_completion(&event->comp);
-	event->multi_comp = NULL;
+static inline void sync_init_event(struct sync_object *event) {
+    init_completion(&event->comp);
+    event->multi_comp = NULL;
 }
 
 /**
@@ -57,10 +56,9 @@ static inline void sync_init_event(struct sync_object *event)
  * This function reset to the initial state to @event.
  */
 
-static inline void sync_reset_event(struct sync_object *event)
-{
-	INIT_COMPLETION(event->comp);
-	event->multi_comp = NULL;
+static inline void sync_reset_event(struct sync_object *event) {
+    INIT_COMPLETION(event->comp);
+    event->multi_comp = NULL;
 }
 
 /**
@@ -85,18 +83,17 @@ void sync_set_event(struct sync_object *event);
  */
 
 static inline int sync_wait_on_event(struct sync_object *event,
-							unsigned timeout)
-{
-	int res;
+                                     unsigned timeout) {
+    int res;
 
-	res = wait_for_completion_interruptible_timeout(&event->comp,
-						msecs_to_jiffies(timeout));
-	if (!res)
-		res = -ETIME;
-	else if (res > 0)
-		res = 0;
+    res = wait_for_completion_interruptible_timeout(&event->comp,
+            msecs_to_jiffies(timeout));
+    if (!res)
+        res = -ETIME;
+    else if (res > 0)
+        res = 0;
 
-	return res;
+    return res;
 }
 
 /**
@@ -113,7 +110,7 @@ static inline int sync_wait_on_event(struct sync_object *event,
  */
 
 int sync_wait_on_multiple_events(struct sync_object **events,
-				     unsigned count, unsigned timeout,
-				     unsigned *index);
+                                 unsigned count, unsigned timeout,
+                                 unsigned *index);
 
 #endif /* _SYNC_H */

@@ -116,40 +116,40 @@
  */
 typedef struct uioc {
 
-/* User Apps: */
+    /* User Apps: */
 
-	uint8_t			signature[EXT_IOCTL_SIGN_SZ];
-	uint16_t		mb_type;
-	uint16_t		app_type;
-	uint32_t		opcode;
-	uint32_t		adapno;
-	uint64_t		cmdbuf;
-	uint32_t		xferlen;
-	uint32_t		data_dir;
-	int32_t			status;
-	uint8_t			reserved[128];
+    uint8_t			signature[EXT_IOCTL_SIGN_SZ];
+    uint16_t		mb_type;
+    uint16_t		app_type;
+    uint32_t		opcode;
+    uint32_t		adapno;
+    uint64_t		cmdbuf;
+    uint32_t		xferlen;
+    uint32_t		data_dir;
+    int32_t			status;
+    uint8_t			reserved[128];
 
-/* Driver Data: */
-	void __user *		user_data;
-	uint32_t		user_data_len;
+    /* Driver Data: */
+    void __user *		user_data;
+    uint32_t		user_data_len;
 
-	/* 64bit alignment */
-	uint32_t                pad_for_64bit_align;
+    /* 64bit alignment */
+    uint32_t                pad_for_64bit_align;
 
-	mraid_passthru_t	__user *user_pthru;
+    mraid_passthru_t	__user *user_pthru;
 
-	mraid_passthru_t	*pthru32;
-	dma_addr_t		pthru32_h;
+    mraid_passthru_t	*pthru32;
+    dma_addr_t		pthru32_h;
 
-	struct list_head	list;
-	void			(*done)(struct uioc*);
+    struct list_head	list;
+    void			(*done)(struct uioc*);
 
-	caddr_t			buf_vaddr;
-	dma_addr_t		buf_paddr;
-	int8_t			pool_index;
-	uint8_t			free_buf;
+    caddr_t			buf_vaddr;
+    dma_addr_t		buf_paddr;
+    int8_t			pool_index;
+    uint8_t			free_buf;
 
-	uint8_t			timedout;
+    uint8_t			timedout;
 
 } __attribute__ ((aligned(1024),packed)) uioc_t;
 
@@ -174,21 +174,21 @@ typedef struct uioc {
  */
 typedef struct mraid_hba_info {
 
-	uint16_t	pci_vendor_id;
-	uint16_t	pci_device_id;
-	uint16_t	subsys_vendor_id;
-	uint16_t	subsys_device_id;
+    uint16_t	pci_vendor_id;
+    uint16_t	pci_device_id;
+    uint16_t	subsys_vendor_id;
+    uint16_t	subsys_device_id;
 
-	uint64_t	baseport;
-	uint8_t		pci_bus;
-	uint8_t		pci_dev_fn;
-	uint8_t		pci_slot;
-	uint8_t		irq;
+    uint64_t	baseport;
+    uint8_t		pci_bus;
+    uint8_t		pci_dev_fn;
+    uint8_t		pci_slot;
+    uint8_t		irq;
 
-	uint32_t	unique_id;
-	uint32_t	host_no;
+    uint32_t	unique_id;
+    uint32_t	host_no;
 
-	uint8_t		num_ldrv;
+    uint8_t		num_ldrv;
 } __attribute__ ((aligned(256), packed)) mraid_hba_info_t;
 
 
@@ -208,16 +208,16 @@ typedef struct mraid_hba_info {
  */
 typedef struct mcontroller {
 
-	uint64_t	base;
-	uint8_t		irq;
-	uint8_t		numldrv;
-	uint8_t		pcibus;
-	uint16_t	pcidev;
-	uint8_t		pcifun;
-	uint16_t	pciid;
-	uint16_t	pcivendor;
-	uint8_t		pcislot;
-	uint32_t	uid;
+    uint64_t	base;
+    uint8_t		irq;
+    uint8_t		numldrv;
+    uint8_t		pcibus;
+    uint16_t	pcidev;
+    uint8_t		pcifun;
+    uint16_t	pciid;
+    uint16_t	pcivendor;
+    uint8_t		pcislot;
+    uint32_t	uid;
 
 } __attribute__ ((packed)) mcontroller_t;
 
@@ -233,12 +233,12 @@ typedef struct mcontroller {
  * @in_use	: If pool already in use, attach new block
  */
 typedef struct mm_dmapool {
-	caddr_t		vaddr;
-	dma_addr_t	paddr;
-	uint32_t	buf_size;
-	struct dma_pool	*handle;
-	spinlock_t	lock;
-	uint8_t		in_use;
+    caddr_t		vaddr;
+    dma_addr_t	paddr;
+    uint32_t	buf_size;
+    struct dma_pool	*handle;
+    spinlock_t	lock;
+    uint8_t		in_use;
 } mm_dmapool_t;
 
 
@@ -266,30 +266,30 @@ typedef struct mm_dmapool {
 
 typedef struct mraid_mmadp {
 
-/* Filled by driver */
+    /* Filled by driver */
 
-	uint32_t		unique_id;
-	uint32_t		drvr_type;
-	unsigned long		drvr_data;
-	uint16_t		timeout;
-	uint8_t			max_kioc;
+    uint32_t		unique_id;
+    uint32_t		drvr_type;
+    unsigned long		drvr_data;
+    uint16_t		timeout;
+    uint8_t			max_kioc;
 
-	struct pci_dev		*pdev;
+    struct pci_dev		*pdev;
 
-	int(*issue_uioc)(unsigned long, uioc_t *, uint32_t);
+    int(*issue_uioc)(unsigned long, uioc_t *, uint32_t);
 
-/* Maintained by common module */
-	uint32_t		quiescent;
+    /* Maintained by common module */
+    uint32_t		quiescent;
 
-	struct list_head	list;
-	uioc_t			*kioc_list;
-	struct list_head	kioc_pool;
-	spinlock_t		kioc_pool_lock;
-	struct semaphore	kioc_semaphore;
+    struct list_head	list;
+    uioc_t			*kioc_list;
+    struct list_head	kioc_pool;
+    spinlock_t		kioc_pool_lock;
+    struct semaphore	kioc_semaphore;
 
-	mbox64_t		*mbox_list;
-	struct dma_pool		*pthru_dma_pool;
-	mm_dmapool_t		dma_pool_list[MAX_DMA_POOLS];
+    mbox64_t		*mbox_list;
+    struct dma_pool		*pthru_dma_pool;
+    mm_dmapool_t		dma_pool_list[MAX_DMA_POOLS];
 
 } mraid_mmadp_t;
 

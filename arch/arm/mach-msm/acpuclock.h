@@ -23,30 +23,30 @@
  * enum setrate_reason - Reasons for use with acpuclk_set_rate()
  */
 enum setrate_reason {
-	SETRATE_CPUFREQ = 0,
-	SETRATE_SWFI,
-	SETRATE_PC,
-	SETRATE_HOTPLUG,
-	SETRATE_INIT,
+    SETRATE_CPUFREQ = 0,
+    SETRATE_SWFI,
+    SETRATE_PC,
+    SETRATE_HOTPLUG,
+    SETRATE_INIT,
 };
 
 /**
  * struct acpuclk_pdata - Platform data for acpuclk
  */
 struct acpuclk_pdata {
-	unsigned long max_speed_delta_khz;
-	unsigned int max_axi_khz;
+    unsigned long max_speed_delta_khz;
+    unsigned int max_axi_khz;
 };
 
 /**
  * struct acpuclk_data - Function pointers and data for function implementations
  */
 struct acpuclk_data {
-	unsigned long (*get_rate)(int cpu);
-	int (*set_rate)(int cpu, unsigned long rate, enum setrate_reason);
-	uint32_t switch_time_us;
-	unsigned long power_collapse_khz;
-	unsigned long wait_for_irq_khz;
+    unsigned long (*get_rate)(int cpu);
+    int (*set_rate)(int cpu, unsigned long rate, enum setrate_reason);
+    uint32_t switch_time_us;
+    unsigned long power_collapse_khz;
+    unsigned long wait_for_irq_khz;
 };
 
 /**

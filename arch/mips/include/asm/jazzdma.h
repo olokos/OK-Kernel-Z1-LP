@@ -48,8 +48,8 @@ extern int vdma_get_enable(int channel);
  * VDMA pagetable entry description
  */
 typedef volatile struct VDMA_PGTBL_ENTRY {
-	unsigned int frame;		/* physical frame no. */
-	unsigned int owner;		/* owner of this entry (0=free) */
+    unsigned int frame;		/* physical frame no. */
+    unsigned int owner;		/* owner of this entry (0=free) */
 } VDMA_PGTBL_ENTRY;
 
 
@@ -58,13 +58,13 @@ typedef volatile struct VDMA_PGTBL_ENTRY {
  * in the R4030 MCT_ADR chip
  */
 #define JAZZ_R4030_CHNL_MODE	0xE0000100	/* 8 DMA Channel Mode Registers, */
-						/* 0xE0000100,120,140... */
+/* 0xE0000100,120,140... */
 #define JAZZ_R4030_CHNL_ENABLE  0xE0000108	/* 8 DMA Channel Enable Regs, */
-						/* 0xE0000108,128,148... */
+/* 0xE0000108,128,148... */
 #define JAZZ_R4030_CHNL_COUNT   0xE0000110	/* 8 DMA Channel Byte Cnt Regs, */
-						/* 0xE0000110,130,150... */
+/* 0xE0000110,130,150... */
 #define JAZZ_R4030_CHNL_ADDR	0xE0000118	/* 8 DMA Channel Address Regs, */
-						/* 0xE0000118,138,158... */
+/* 0xE0000118,138,158... */
 
 /* channel enable register bits */
 

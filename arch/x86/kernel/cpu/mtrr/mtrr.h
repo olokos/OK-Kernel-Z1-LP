@@ -12,25 +12,25 @@
 extern unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
 
 struct mtrr_ops {
-	u32	vendor;
-	u32	use_intel_if;
-	void	(*set)(unsigned int reg, unsigned long base,
-		       unsigned long size, mtrr_type type);
-	void	(*set_all)(void);
+    u32	vendor;
+    u32	use_intel_if;
+    void	(*set)(unsigned int reg, unsigned long base,
+                   unsigned long size, mtrr_type type);
+    void	(*set_all)(void);
 
-	void	(*get)(unsigned int reg, unsigned long *base,
-		       unsigned long *size, mtrr_type *type);
-	int	(*get_free_region)(unsigned long base, unsigned long size,
-				   int replace_reg);
-	int	(*validate_add_page)(unsigned long base, unsigned long size,
-				     unsigned int type);
-	int	(*have_wrcomb)(void);
+    void	(*get)(unsigned int reg, unsigned long *base,
+                   unsigned long *size, mtrr_type *type);
+    int	(*get_free_region)(unsigned long base, unsigned long size,
+                           int replace_reg);
+    int	(*validate_add_page)(unsigned long base, unsigned long size,
+                             unsigned int type);
+    int	(*have_wrcomb)(void);
 };
 
 extern int generic_get_free_region(unsigned long base, unsigned long size,
-				   int replace_reg);
+                                   int replace_reg);
 extern int generic_validate_add_page(unsigned long base, unsigned long size,
-				     unsigned int type);
+                                     unsigned int type);
 
 extern const struct mtrr_ops generic_mtrr_ops;
 
@@ -38,11 +38,11 @@ extern int positive_have_wrcomb(void);
 
 /* library functions for processor-specific routines */
 struct set_mtrr_context {
-	unsigned long	flags;
-	unsigned long	cr4val;
-	u32		deftype_lo;
-	u32		deftype_hi;
-	u32		ccr3;
+    unsigned long	flags;
+    unsigned long	cr4val;
+    u32		deftype_lo;
+    u32		deftype_hi;
+    u32		ccr3;
 };
 
 void set_mtrr_done(struct set_mtrr_context *ctxt);
@@ -50,7 +50,7 @@ void set_mtrr_cache_disable(struct set_mtrr_context *ctxt);
 void set_mtrr_prepare_save(struct set_mtrr_context *ctxt);
 
 void fill_mtrr_var_range(unsigned int index,
-		u32 base_lo, u32 base_hi, u32 mask_lo, u32 mask_hi);
+                         u32 base_lo, u32 base_hi, u32 mask_lo, u32 mask_hi);
 void get_mtrr_state(void);
 
 extern void set_mtrr_ops(const struct mtrr_ops *ops);

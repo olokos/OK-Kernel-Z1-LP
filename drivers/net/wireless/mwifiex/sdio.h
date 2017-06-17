@@ -255,72 +255,70 @@
 
 /* data structure for SDIO MPA TX */
 struct mwifiex_sdio_mpa_tx {
-	/* multiport tx aggregation buffer pointer */
-	u8 *buf;
-	u32 buf_len;
-	u32 pkt_cnt;
-	u16 ports;
-	u16 start_port;
-	u8 enabled;
-	u32 buf_size;
-	u32 pkt_aggr_limit;
+    /* multiport tx aggregation buffer pointer */
+    u8 *buf;
+    u32 buf_len;
+    u32 pkt_cnt;
+    u16 ports;
+    u16 start_port;
+    u8 enabled;
+    u32 buf_size;
+    u32 pkt_aggr_limit;
 };
 
 struct mwifiex_sdio_mpa_rx {
-	u8 *buf;
-	u32 buf_len;
-	u32 pkt_cnt;
-	u16 ports;
-	u16 start_port;
+    u8 *buf;
+    u32 buf_len;
+    u32 pkt_cnt;
+    u16 ports;
+    u16 start_port;
 
-	struct sk_buff *skb_arr[SDIO_MP_AGGR_DEF_PKT_LIMIT];
-	u32 len_arr[SDIO_MP_AGGR_DEF_PKT_LIMIT];
+    struct sk_buff *skb_arr[SDIO_MP_AGGR_DEF_PKT_LIMIT];
+    u32 len_arr[SDIO_MP_AGGR_DEF_PKT_LIMIT];
 
-	u8 enabled;
-	u32 buf_size;
-	u32 pkt_aggr_limit;
+    u8 enabled;
+    u32 buf_size;
+    u32 pkt_aggr_limit;
 };
 
 int mwifiex_bus_register(void);
 void mwifiex_bus_unregister(void);
 
 struct sdio_mmc_card {
-	struct sdio_func *func;
-	struct mwifiex_adapter *adapter;
+    struct sdio_func *func;
+    struct mwifiex_adapter *adapter;
 
-	u16 mp_rd_bitmap;
-	u16 mp_wr_bitmap;
+    u16 mp_rd_bitmap;
+    u16 mp_wr_bitmap;
 
-	u16 mp_end_port;
-	u16 mp_data_port_mask;
+    u16 mp_end_port;
+    u16 mp_data_port_mask;
 
-	u8 curr_rd_port;
-	u8 curr_wr_port;
+    u8 curr_rd_port;
+    u8 curr_wr_port;
 
-	u8 *mp_regs;
+    u8 *mp_regs;
 
-	struct mwifiex_sdio_mpa_tx mpa_tx;
-	struct mwifiex_sdio_mpa_rx mpa_rx;
+    struct mwifiex_sdio_mpa_tx mpa_tx;
+    struct mwifiex_sdio_mpa_rx mpa_rx;
 };
 
 /*
  * .cmdrsp_complete handler
  */
 static inline int mwifiex_sdio_cmdrsp_complete(struct mwifiex_adapter *adapter,
-					       struct sk_buff *skb)
-{
-	dev_kfree_skb_any(skb);
-	return 0;
+        struct sk_buff *skb) {
+    dev_kfree_skb_any(skb);
+    return 0;
 }
 
 /*
  * .event_complete handler
  */
 static inline int mwifiex_sdio_event_complete(struct mwifiex_adapter *adapter,
-					      struct sk_buff *skb)
-{
-	dev_kfree_skb_any(skb);
-	return 0;
+        struct sk_buff *skb) {
+    dev_kfree_skb_any(skb);
+    return 0;
 }
 
 #endif /* _MWIFIEX_SDIO_H */

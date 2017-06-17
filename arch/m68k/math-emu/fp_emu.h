@@ -130,15 +130,15 @@ extern const struct fp_ext fp_Inf;
  * set, reset or clear a bit in the fp status register
  */
 .macro	fp_set_sr	bit
-	bset	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
+bset	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
 .endm
 
 .macro	fp_clr_sr	bit
-	bclr	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
+bclr	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
 .endm
 
 .macro	fp_tst_sr	bit
-	btst	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
+btst	#(\bit&7),(FPD_FPSR+3-(\bit/8),FPDATA)
 .endm
 
 #endif /* __ASSEMBLY__ */

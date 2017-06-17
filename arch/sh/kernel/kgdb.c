@@ -44,83 +44,82 @@
 #define STEP_OPCODE             0xc33d
 
 /* Calculate the new address for after a step */
-static short *get_step_address(struct pt_regs *linux_regs)
-{
-	insn_size_t op = __raw_readw(linux_regs->pc);
-	long addr;
+static short *get_step_address(struct pt_regs *linux_regs) {
+    insn_size_t op = __raw_readw(linux_regs->pc);
+    long addr;
 
-	/* BT */
-	if (OPCODE_BT(op)) {
-		if (linux_regs->sr & SR_T_BIT_MASK)
-			addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
-		else
-			addr = linux_regs->pc + 2;
-	}
+    /* BT */
+    if (OPCODE_BT(op)) {
+        if (linux_regs->sr & SR_T_BIT_MASK)
+            addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
+        else
+            addr = linux_regs->pc + 2;
+    }
 
-	/* BTS */
-	else if (OPCODE_BTS(op)) {
-		if (linux_regs->sr & SR_T_BIT_MASK)
-			addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
-		else
-			addr = linux_regs->pc + 4;	/* Not in delay slot */
-	}
+    /* BTS */
+    else if (OPCODE_BTS(op)) {
+        if (linux_regs->sr & SR_T_BIT_MASK)
+            addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
+        else
+            addr = linux_regs->pc + 4;	/* Not in delay slot */
+    }
 
-	/* BF */
-	else if (OPCODE_BF(op)) {
-		if (!(linux_regs->sr & SR_T_BIT_MASK))
-			addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
-		else
-			addr = linux_regs->pc + 2;
-	}
+    /* BF */
+    else if (OPCODE_BF(op)) {
+        if (!(linux_regs->sr & SR_T_BIT_MASK))
+            addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
+        else
+            addr = linux_regs->pc + 2;
+    }
 
-	/* BFS */
-	else if (OPCODE_BFS(op)) {
-		if (!(linux_regs->sr & SR_T_BIT_MASK))
-			addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
-		else
-			addr = linux_regs->pc + 4;	/* Not in delay slot */
-	}
+    /* BFS */
+    else if (OPCODE_BFS(op)) {
+        if (!(linux_regs->sr & SR_T_BIT_MASK))
+            addr = linux_regs->pc + 4 + OPCODE_BTF_DISP(op);
+        else
+            addr = linux_regs->pc + 4;	/* Not in delay slot */
+    }
 
-	/* BRA */
-	else if (OPCODE_BRA(op))
-		addr = linux_regs->pc + 4 + OPCODE_BRA_DISP(op);
+    /* BRA */
+    else if (OPCODE_BRA(op))
+        addr = linux_regs->pc + 4 + OPCODE_BRA_DISP(op);
 
-	/* BRAF */
-	else if (OPCODE_BRAF(op))
-		addr = linux_regs->pc + 4
-		    + linux_regs->regs[OPCODE_BRAF_REG(op)];
+    /* BRAF */
+    else if (OPCODE_BRAF(op))
+        addr = linux_regs->pc + 4
+               + linux_regs->regs[OPCODE_BRAF_REG(op)];
 
-	/* BSR */
-	else if (OPCODE_BSR(op))
-		addr = linux_regs->pc + 4 + OPCODE_BSR_DISP(op);
+    /* BSR */
+    else if (OPCODE_BSR(op))
+        addr = linux_regs->pc + 4 + OPCODE_BSR_DISP(op);
 
-	/* BSRF */
-	else if (OPCODE_BSRF(op))
-		addr = linux_regs->pc + 4
-		    + linux_regs->regs[OPCODE_BSRF_REG(op)];
+    /* BSRF */
+    else if (OPCODE_BSRF(op))
+        addr = linux_regs->pc + 4
+               + linux_regs->regs[OPCODE_BSRF_REG(op)];
 
-	/* JMP */
-	else if (OPCODE_JMP(op))
-		addr = linux_regs->regs[OPCODE_JMP_REG(op)];
+    /* JMP */
+    else if (OPCODE_JMP(op))
+        addr = linux_regs->regs[OPCODE_JMP_REG(op)];
 
-	/* JSR */
-	else if (OPCODE_JSR(op))
-		addr = linux_regs->regs[OPCODE_JSR_REG(op)];
+    /* JSR */
+    else if (OPCODE_JSR(op))
+        addr = linux_regs->regs[OPCODE_JSR_REG(op)];
 
-	/* RTS */
-	else if (OPCODE_RTS(op))
-		addr = linux_regs->pr;
+    /* RTS */
+    else if (OPCODE_RTS(op))
+        addr = linux_regs->pr;
 
-	/* RTE */
-	else if (OPCODE_RTE(op))
-		addr = linux_regs->regs[15];
+    /* RTE */
+    else if (OPCODE_RTE(op))
+        addr = linux_regs->regs[15];
 
-	/* Other */
-	else
-		addr = linux_regs->pc + instruction_size(op);
+    /* Other */
+    else
+        addr = linux_regs->pc + instruction_size(op);
 
-	flush_icache_range(addr, addr + instruction_size(op));
-	return (short *)addr;
+    flush_icache_range(addr, addr + instruction_size(op));
+    return (short *)addr;
 }
 
 /*
@@ -135,196 +134,183 @@ static short *get_step_address(struct pt_regs *linux_regs)
 static unsigned long stepped_address;
 static insn_size_t stepped_opcode;
 
-static void do_single_step(struct pt_regs *linux_regs)
-{
-	/* Determine where the target instruction will send us to */
-	unsigned short *addr = get_step_address(linux_regs);
+static void do_single_step(struct pt_regs *linux_regs) {
+    /* Determine where the target instruction will send us to */
+    unsigned short *addr = get_step_address(linux_regs);
 
-	stepped_address = (int)addr;
+    stepped_address = (int)addr;
 
-	/* Replace it */
-	stepped_opcode = __raw_readw((long)addr);
-	*addr = STEP_OPCODE;
+    /* Replace it */
+    stepped_opcode = __raw_readw((long)addr);
+    *addr = STEP_OPCODE;
 
-	/* Flush and return */
-	flush_icache_range((long)addr, (long)addr +
-			   instruction_size(stepped_opcode));
+    /* Flush and return */
+    flush_icache_range((long)addr, (long)addr +
+                       instruction_size(stepped_opcode));
 }
 
 /* Undo a single step */
-static void undo_single_step(struct pt_regs *linux_regs)
-{
-	/* If we have stepped, put back the old instruction */
-	/* Use stepped_address in case we stopped elsewhere */
-	if (stepped_opcode != 0) {
-		__raw_writew(stepped_opcode, stepped_address);
-		flush_icache_range(stepped_address, stepped_address + 2);
-	}
+static void undo_single_step(struct pt_regs *linux_regs) {
+    /* If we have stepped, put back the old instruction */
+    /* Use stepped_address in case we stopped elsewhere */
+    if (stepped_opcode != 0) {
+        __raw_writew(stepped_opcode, stepped_address);
+        flush_icache_range(stepped_address, stepped_address + 2);
+    }
 
-	stepped_opcode = 0;
+    stepped_opcode = 0;
 }
 
-void pt_regs_to_gdb_regs(unsigned long *gdb_regs, struct pt_regs *regs)
-{
-	int i;
+void pt_regs_to_gdb_regs(unsigned long *gdb_regs, struct pt_regs *regs) {
+    int i;
 
-	for (i = 0; i < 16; i++)
-		gdb_regs[GDB_R0 + i] = regs->regs[i];
+    for (i = 0; i < 16; i++)
+        gdb_regs[GDB_R0 + i] = regs->regs[i];
 
-	gdb_regs[GDB_PC] = regs->pc;
-	gdb_regs[GDB_PR] = regs->pr;
-	gdb_regs[GDB_SR] = regs->sr;
-	gdb_regs[GDB_GBR] = regs->gbr;
-	gdb_regs[GDB_MACH] = regs->mach;
-	gdb_regs[GDB_MACL] = regs->macl;
+    gdb_regs[GDB_PC] = regs->pc;
+    gdb_regs[GDB_PR] = regs->pr;
+    gdb_regs[GDB_SR] = regs->sr;
+    gdb_regs[GDB_GBR] = regs->gbr;
+    gdb_regs[GDB_MACH] = regs->mach;
+    gdb_regs[GDB_MACL] = regs->macl;
 
-	__asm__ __volatile__ ("stc vbr, %0" : "=r" (gdb_regs[GDB_VBR]));
+    __asm__ __volatile__ ("stc vbr, %0" : "=r" (gdb_regs[GDB_VBR]));
 }
 
-void gdb_regs_to_pt_regs(unsigned long *gdb_regs, struct pt_regs *regs)
-{
-	int i;
+void gdb_regs_to_pt_regs(unsigned long *gdb_regs, struct pt_regs *regs) {
+    int i;
 
-	for (i = 0; i < 16; i++)
-		regs->regs[GDB_R0 + i] = gdb_regs[GDB_R0 + i];
+    for (i = 0; i < 16; i++)
+        regs->regs[GDB_R0 + i] = gdb_regs[GDB_R0 + i];
 
-	regs->pc = gdb_regs[GDB_PC];
-	regs->pr = gdb_regs[GDB_PR];
-	regs->sr = gdb_regs[GDB_SR];
-	regs->gbr = gdb_regs[GDB_GBR];
-	regs->mach = gdb_regs[GDB_MACH];
-	regs->macl = gdb_regs[GDB_MACL];
+    regs->pc = gdb_regs[GDB_PC];
+    regs->pr = gdb_regs[GDB_PR];
+    regs->sr = gdb_regs[GDB_SR];
+    regs->gbr = gdb_regs[GDB_GBR];
+    regs->mach = gdb_regs[GDB_MACH];
+    regs->macl = gdb_regs[GDB_MACL];
 }
 
-void sleeping_thread_to_gdb_regs(unsigned long *gdb_regs, struct task_struct *p)
-{
-	gdb_regs[GDB_R15] = p->thread.sp;
-	gdb_regs[GDB_PC] = p->thread.pc;
+void sleeping_thread_to_gdb_regs(unsigned long *gdb_regs, struct task_struct *p) {
+    gdb_regs[GDB_R15] = p->thread.sp;
+    gdb_regs[GDB_PC] = p->thread.pc;
 }
 
 int kgdb_arch_handle_exception(int e_vector, int signo, int err_code,
-			       char *remcomInBuffer, char *remcomOutBuffer,
-			       struct pt_regs *linux_regs)
-{
-	unsigned long addr;
-	char *ptr;
+                               char *remcomInBuffer, char *remcomOutBuffer,
+                               struct pt_regs *linux_regs) {
+    unsigned long addr;
+    char *ptr;
 
-	/* Undo any stepping we may have done */
-	undo_single_step(linux_regs);
+    /* Undo any stepping we may have done */
+    undo_single_step(linux_regs);
 
-	switch (remcomInBuffer[0]) {
-	case 'c':
-	case 's':
-		/* try to read optional parameter, pc unchanged if no parm */
-		ptr = &remcomInBuffer[1];
-		if (kgdb_hex2long(&ptr, &addr))
-			linux_regs->pc = addr;
-	case 'D':
-	case 'k':
-		atomic_set(&kgdb_cpu_doing_single_step, -1);
+    switch (remcomInBuffer[0]) {
+    case 'c':
+    case 's':
+        /* try to read optional parameter, pc unchanged if no parm */
+        ptr = &remcomInBuffer[1];
+        if (kgdb_hex2long(&ptr, &addr))
+            linux_regs->pc = addr;
+    case 'D':
+    case 'k':
+        atomic_set(&kgdb_cpu_doing_single_step, -1);
 
-		if (remcomInBuffer[0] == 's') {
-			do_single_step(linux_regs);
-			kgdb_single_step = 1;
+        if (remcomInBuffer[0] == 's') {
+            do_single_step(linux_regs);
+            kgdb_single_step = 1;
 
-			atomic_set(&kgdb_cpu_doing_single_step,
-				   raw_smp_processor_id());
-		}
+            atomic_set(&kgdb_cpu_doing_single_step,
+                       raw_smp_processor_id());
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/* this means that we do not want to exit from the handler: */
-	return -1;
+    /* this means that we do not want to exit from the handler: */
+    return -1;
 }
 
-unsigned long kgdb_arch_pc(int exception, struct pt_regs *regs)
-{
-	if (exception == 60)
-		return instruction_pointer(regs) - 2;
-	return instruction_pointer(regs);
+unsigned long kgdb_arch_pc(int exception, struct pt_regs *regs) {
+    if (exception == 60)
+        return instruction_pointer(regs) - 2;
+    return instruction_pointer(regs);
 }
 
-void kgdb_arch_set_pc(struct pt_regs *regs, unsigned long ip)
-{
-	regs->pc = ip;
+void kgdb_arch_set_pc(struct pt_regs *regs, unsigned long ip) {
+    regs->pc = ip;
 }
 
 /*
  * The primary entry points for the kgdb debug trap table entries.
  */
-BUILD_TRAP_HANDLER(singlestep)
-{
-	unsigned long flags;
-	TRAP_HANDLER_DECL;
+BUILD_TRAP_HANDLER(singlestep) {
+    unsigned long flags;
+    TRAP_HANDLER_DECL;
 
-	local_irq_save(flags);
-	regs->pc -= instruction_size(__raw_readw(regs->pc - 4));
-	kgdb_handle_exception(0, SIGTRAP, 0, regs);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    regs->pc -= instruction_size(__raw_readw(regs->pc - 4));
+    kgdb_handle_exception(0, SIGTRAP, 0, regs);
+    local_irq_restore(flags);
 }
 
-static int __kgdb_notify(struct die_args *args, unsigned long cmd)
-{
-	int ret;
+static int __kgdb_notify(struct die_args *args, unsigned long cmd) {
+    int ret;
 
-	switch (cmd) {
-	case DIE_BREAKPOINT:
-		/*
-		 * This means a user thread is single stepping
-		 * a system call which should be ignored
-		 */
-		if (test_thread_flag(TIF_SINGLESTEP))
-			return NOTIFY_DONE;
+    switch (cmd) {
+    case DIE_BREAKPOINT:
+        /*
+         * This means a user thread is single stepping
+         * a system call which should be ignored
+         */
+        if (test_thread_flag(TIF_SINGLESTEP))
+            return NOTIFY_DONE;
 
-		ret = kgdb_handle_exception(args->trapnr & 0xff, args->signr,
-					    args->err, args->regs);
-		if (ret)
-			return NOTIFY_DONE;
+        ret = kgdb_handle_exception(args->trapnr & 0xff, args->signr,
+                                    args->err, args->regs);
+        if (ret)
+            return NOTIFY_DONE;
 
-		break;
-	}
+        break;
+    }
 
-	return NOTIFY_STOP;
+    return NOTIFY_STOP;
 }
 
 static int
-kgdb_notify(struct notifier_block *self, unsigned long cmd, void *ptr)
-{
-	unsigned long flags;
-	int ret;
+kgdb_notify(struct notifier_block *self, unsigned long cmd, void *ptr) {
+    unsigned long flags;
+    int ret;
 
-	local_irq_save(flags);
-	ret = __kgdb_notify(ptr, cmd);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ret = __kgdb_notify(ptr, cmd);
+    local_irq_restore(flags);
 
-	return ret;
+    return ret;
 }
 
 static struct notifier_block kgdb_notifier = {
-	.notifier_call	= kgdb_notify,
+    .notifier_call	= kgdb_notify,
 
-	/*
-	 * Lowest-prio notifier priority, we want to be notified last:
-	 */
-	.priority	= -INT_MAX,
+    /*
+     * Lowest-prio notifier priority, we want to be notified last:
+     */
+    .priority	= -INT_MAX,
 };
 
-int kgdb_arch_init(void)
-{
-	return register_die_notifier(&kgdb_notifier);
+int kgdb_arch_init(void) {
+    return register_die_notifier(&kgdb_notifier);
 }
 
-void kgdb_arch_exit(void)
-{
-	unregister_die_notifier(&kgdb_notifier);
+void kgdb_arch_exit(void) {
+    unregister_die_notifier(&kgdb_notifier);
 }
 
 struct kgdb_arch arch_kgdb_ops = {
-	/* Breakpoint instruction: trapa #0x3c */
+    /* Breakpoint instruction: trapa #0x3c */
 #ifdef CONFIG_CPU_LITTLE_ENDIAN
-	.gdb_bpt_instr		= { 0x3c, 0xc3 },
+    .gdb_bpt_instr		= { 0x3c, 0xc3 },
 #else
-	.gdb_bpt_instr		= { 0xc3, 0x3c },
+    .gdb_bpt_instr		= { 0xc3, 0x3c },
 #endif
 };

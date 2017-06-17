@@ -22,36 +22,34 @@
 #include "exynos_hdmi.h"
 
 static int s5p_ddc_probe(struct i2c_client *client,
-			const struct i2c_device_id *dev_id)
-{
-	hdmi_attach_ddc_client(client);
+                         const struct i2c_device_id *dev_id) {
+    hdmi_attach_ddc_client(client);
 
-	dev_info(&client->adapter->dev, "attached s5p_ddc "
-		"into i2c adapter successfully\n");
+    dev_info(&client->adapter->dev, "attached s5p_ddc "
+             "into i2c adapter successfully\n");
 
-	return 0;
+    return 0;
 }
 
-static int s5p_ddc_remove(struct i2c_client *client)
-{
-	dev_info(&client->adapter->dev, "detached s5p_ddc "
-		"from i2c adapter successfully\n");
+static int s5p_ddc_remove(struct i2c_client *client) {
+    dev_info(&client->adapter->dev, "detached s5p_ddc "
+             "from i2c adapter successfully\n");
 
-	return 0;
+    return 0;
 }
 
 static struct i2c_device_id ddc_idtable[] = {
-	{"s5p_ddc", 0},
-	{ },
+    {"s5p_ddc", 0},
+    { },
 };
 
 struct i2c_driver ddc_driver = {
-	.driver = {
-		.name = "s5p_ddc",
-		.owner = THIS_MODULE,
-	},
-	.id_table	= ddc_idtable,
-	.probe		= s5p_ddc_probe,
-	.remove		= __devexit_p(s5p_ddc_remove),
-	.command		= NULL,
+    .driver = {
+        .name = "s5p_ddc",
+        .owner = THIS_MODULE,
+    },
+    .id_table	= ddc_idtable,
+    .probe		= s5p_ddc_probe,
+    .remove		= __devexit_p(s5p_ddc_remove),
+    .command		= NULL,
 };

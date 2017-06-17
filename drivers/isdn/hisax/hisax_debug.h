@@ -38,33 +38,32 @@
 
 
 static void __attribute__((unused))
-dump_packet(const char *name, const u_char *data, int pkt_len)
-{
+dump_packet(const char *name, const u_char *data, int pkt_len) {
 #define DUMP_HDR_SIZE 20
 #define DUMP_TLR_SIZE 8
-	if (pkt_len) {
-		int i, len1, len2;
+    if (pkt_len) {
+        int i, len1, len2;
 
-		printk(KERN_DEBUG "%s: length=%d,data=", name, pkt_len);
+        printk(KERN_DEBUG "%s: length=%d,data=", name, pkt_len);
 
-		if (pkt_len > DUMP_HDR_SIZE + DUMP_TLR_SIZE) {
-			len1 = DUMP_HDR_SIZE;
-			len2 = DUMP_TLR_SIZE;
-		} else {
-			len1 = pkt_len > DUMP_HDR_SIZE ? DUMP_HDR_SIZE : pkt_len;
-			len2 = 0;
-		}
-		for (i = 0; i < len1; ++i) {
-			printk("%.2x", data[i]);
-		}
-		if (len2) {
-			printk("..");
-			for (i = pkt_len-DUMP_TLR_SIZE; i < pkt_len; ++i) {
-				printk("%.2x", data[i]);
-			}
-		}
-		printk("\n");
-	}
+        if (pkt_len > DUMP_HDR_SIZE + DUMP_TLR_SIZE) {
+            len1 = DUMP_HDR_SIZE;
+            len2 = DUMP_TLR_SIZE;
+        } else {
+            len1 = pkt_len > DUMP_HDR_SIZE ? DUMP_HDR_SIZE : pkt_len;
+            len2 = 0;
+        }
+        for (i = 0; i < len1; ++i) {
+            printk("%.2x", data[i]);
+        }
+        if (len2) {
+            printk("..");
+            for (i = pkt_len-DUMP_TLR_SIZE; i < pkt_len; ++i) {
+                printk("%.2x", data[i]);
+            }
+        }
+        printk("\n");
+    }
 #undef DUMP_HDR_SIZE
 #undef DUMP_TLR_SIZE
 }

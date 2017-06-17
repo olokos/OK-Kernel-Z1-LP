@@ -48,12 +48,12 @@
  * of this - but this is handled by the appropriate driver.
  */
 struct omap_opp_def {
-	char *hwmod_name;
+    char *hwmod_name;
 
-	unsigned long freq;
-	unsigned long u_volt;
+    unsigned long freq;
+    unsigned long u_volt;
 
-	bool default_available;
+    bool default_available;
 };
 
 /*
@@ -81,7 +81,7 @@ struct omap_opp_def {
 
 /* Use this to initialize the default table */
 extern int __init omap_init_opp_table(struct omap_opp_def *opp_def,
-		u32 opp_def_size);
+                                      u32 opp_def_size);
 
 
 extern struct omap_volt_data omap34xx_vddmpu_volt_data[];

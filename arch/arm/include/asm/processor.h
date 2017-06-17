@@ -2,7 +2,7 @@
  *  arch/arm/include/asm/processor.h
  *
  *  Copyright (C) 1995-1999 Russell King
- * 
+ *
  * Copyright (c) 2014, NVIDIA CORPORATION. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -36,17 +36,17 @@ extern unsigned int cold_boot;
 
 struct debug_info {
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
-	struct perf_event	*hbp[ARM_MAX_HBP_SLOTS];
+    struct perf_event	*hbp[ARM_MAX_HBP_SLOTS];
 #endif
 };
 
 struct thread_struct {
-							/* fault info	  */
-	unsigned long		address;
-	unsigned long		trap_no;
-	unsigned long		error_code;
-							/* debugging	  */
-	struct debug_info	debug;
+    /* fault info	  */
+    unsigned long		address;
+    unsigned long		trap_no;
+    unsigned long		error_code;
+    /* debugging	  */
+    struct debug_info	debug;
 };
 
 #define INIT_THREAD  {	}
@@ -112,13 +112,12 @@ extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
 #if __LINUX_ARM_ARCH__ >= 5
 
 #define ARCH_HAS_PREFETCH
-static inline void prefetch(const void *ptr)
-{
-	__asm__ __volatile__(
-		"pld\t%a0"
-		:
-		: "p" (ptr)
-		: "cc");
+static inline void prefetch(const void *ptr) {
+    __asm__ __volatile__(
+        "pld\t%a0"
+        :
+        : "p" (ptr)
+        : "cc");
 }
 
 #define ARCH_HAS_PREFETCHW

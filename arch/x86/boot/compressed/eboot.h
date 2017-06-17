@@ -21,41 +21,41 @@
 #define PIXEL_FORMAT_MAX				4
 
 struct efi_pixel_bitmask {
-	u32 red_mask;
-	u32 green_mask;
-	u32 blue_mask;
-	u32 reserved_mask;
+    u32 red_mask;
+    u32 green_mask;
+    u32 blue_mask;
+    u32 reserved_mask;
 };
 
 struct efi_graphics_output_mode_info {
-	u32 version;
-	u32 horizontal_resolution;
-	u32 vertical_resolution;
-	int pixel_format;
-	struct efi_pixel_bitmask pixel_information;
-	u32 pixels_per_scan_line;
+    u32 version;
+    u32 horizontal_resolution;
+    u32 vertical_resolution;
+    int pixel_format;
+    struct efi_pixel_bitmask pixel_information;
+    u32 pixels_per_scan_line;
 } __packed;
 
 struct efi_graphics_output_protocol_mode {
-	u32 max_mode;
-	u32 mode;
-	unsigned long info;
-	unsigned long size_of_info;
-	u64 frame_buffer_base;
-	unsigned long frame_buffer_size;
+    u32 max_mode;
+    u32 mode;
+    unsigned long info;
+    unsigned long size_of_info;
+    u64 frame_buffer_base;
+    unsigned long frame_buffer_size;
 } __packed;
 
 struct efi_graphics_output_protocol {
-	void *query_mode;
-	unsigned long set_mode;
-	unsigned long blt;
-	struct efi_graphics_output_protocol_mode *mode;
+    void *query_mode;
+    unsigned long set_mode;
+    unsigned long blt;
+    struct efi_graphics_output_protocol_mode *mode;
 };
 
 struct efi_uga_draw_protocol {
-	void *get_mode;
-	void *set_mode;
-	void *blt;
+    void *get_mode;
+    void *set_mode;
+    void *blt;
 };
 
 #endif /* BOOT_COMPRESSED_EBOOT_H */

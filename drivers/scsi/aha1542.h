@@ -80,22 +80,21 @@
 
 /* Mailbox Definition 5.2.1 and 5.2.2 */
 struct mailbox {
-  unchar status;		/* Command/Status */
-  unchar ccbptr[3];		/* msb, .., lsb */
+    unchar status;		/* Command/Status */
+    unchar ccbptr[3];		/* msb, .., lsb */
 };
 
 /* This is used with scatter-gather */
 struct chain {
-  unchar datalen[3];		/* Size of this part of chain */
-  unchar dataptr[3];		/* Location of data */
+    unchar datalen[3];		/* Size of this part of chain */
+    unchar dataptr[3];		/* Location of data */
 };
 
 /* These belong in scsi.h also */
-static inline void any2scsi(u8 *p, u32 v)
-{
-	p[0] = v >> 16;
-	p[1] = v >> 8;
-	p[2] = v;
+static inline void any2scsi(u8 *p, u32 v) {
+    p[0] = v >> 16;
+    p[1] = v >> 8;
+    p[2] = v;
 }
 
 #define scsi2int(up) ( (((long)*(up)) << 16) + (((long)(up)[1]) << 8) + ((long)(up)[2]) )
@@ -113,22 +112,22 @@ static inline void any2scsi(u8 *p, u32 v)
 #define MAX_SENSE 14
 
 struct ccb {			/* Command Control Block 5.3 */
-  unchar op;			/* Command Control Block Operation Code */
-  unchar idlun;			/* op=0,2:Target Id, op=1:Initiator Id */
-				/* Outbound data transfer, length is checked*/
-				/* Inbound data transfer, length is checked */
-				/* Logical Unit Number */
-  unchar cdblen;		/* SCSI Command Length */
-  unchar rsalen;		/* Request Sense Allocation Length/Disable */
-  unchar datalen[3];		/* Data Length (msb, .., lsb) */
-  unchar dataptr[3];		/* Data Pointer */
-  unchar linkptr[3];		/* Link Pointer */
-  unchar commlinkid;		/* Command Linking Identifier */
-  unchar hastat;		/* Host Adapter Status (HASTAT) */
-  unchar tarstat;		/* Target Device Status */
-  unchar reserved[2];
-  unchar cdb[MAX_CDB+MAX_SENSE];/* SCSI Command Descriptor Block */
-				/* REQUEST SENSE */
+    unchar op;			/* Command Control Block Operation Code */
+    unchar idlun;			/* op=0,2:Target Id, op=1:Initiator Id */
+    /* Outbound data transfer, length is checked*/
+    /* Inbound data transfer, length is checked */
+    /* Logical Unit Number */
+    unchar cdblen;		/* SCSI Command Length */
+    unchar rsalen;		/* Request Sense Allocation Length/Disable */
+    unchar datalen[3];		/* Data Length (msb, .., lsb) */
+    unchar dataptr[3];		/* Data Pointer */
+    unchar linkptr[3];		/* Link Pointer */
+    unchar commlinkid;		/* Command Linking Identifier */
+    unchar hastat;		/* Host Adapter Status (HASTAT) */
+    unchar tarstat;		/* Target Device Status */
+    unchar reserved[2];
+    unchar cdb[MAX_CDB+MAX_SENSE];/* SCSI Command Descriptor Block */
+    /* REQUEST SENSE */
 };
 
 static int aha1542_detect(struct scsi_host_template *);
@@ -141,7 +140,7 @@ static int aha1542_old_abort(Scsi_Cmnd * SCpnt);
 static int aha1542_old_reset(Scsi_Cmnd *, unsigned int);
 #endif
 static int aha1542_biosparam(struct scsi_device *, struct block_device *,
-		sector_t, int *);
+                             sector_t, int *);
 
 #define AHA1542_MAILBOXES 8
 #define AHA1542_SCATTER 16

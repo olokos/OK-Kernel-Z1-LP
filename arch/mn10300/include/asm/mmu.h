@@ -12,7 +12,7 @@
  * MMU context
  */
 typedef struct {
-	unsigned long	tlbpid[NR_CPUS];	/* TLB PID for this process on
+    unsigned long	tlbpid[NR_CPUS];	/* TLB PID for this process on
 						 * each CPU */
 } mm_context_t;
 

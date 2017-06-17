@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012, Broadcom Corporation
  * All Rights Reserved.
- * 
+ *
  * This is UNPUBLISHED PROPRIETARY SOURCE CODE of Broadcom Corporation;
  * the contents of this file may not be disclosed to third parties, copied
  * or duplicated in any form, in whole or in part, without the prior
@@ -102,65 +102,65 @@
 #define TIMEOUT		5000	/* Timeout for usb commands */
 
 struct bcm_device_id {
-	char	*name;
-	uint32	vend;
-	uint32	prod;
+    char	*name;
+    uint32	vend;
+    uint32	prod;
 };
 
 typedef struct {
-	uint32	state;
-	uint32	bytes;
+    uint32	state;
+    uint32	bytes;
 } rdl_state_t;
 
 typedef struct {
-	uint32	chip;		/* Chip id */
-	uint32	chiprev;	/* Chip rev */
-	uint32  ramsize;    /* Size of RAM */
-	uint32  remapbase;   /* Current remap base address */
-	uint32  boardtype;   /* Type of board */
-	uint32  boardrev;    /* Board revision */
+    uint32	chip;		/* Chip id */
+    uint32	chiprev;	/* Chip rev */
+    uint32  ramsize;    /* Size of RAM */
+    uint32  remapbase;   /* Current remap base address */
+    uint32  boardtype;   /* Type of board */
+    uint32  boardrev;    /* Board revision */
 } bootrom_id_t;
 
 /* struct for backplane & jtag accesses */
 typedef struct {
-	uint32	cmd;		/* tag to identify the cmd */
-	uint32	addr;		/* backplane address for write */
-	uint32	len;		/* length of data: 1, 2, 4 bytes */
-	uint32	data;		/* data to write */
+    uint32	cmd;		/* tag to identify the cmd */
+    uint32	addr;		/* backplane address for write */
+    uint32	len;		/* length of data: 1, 2, 4 bytes */
+    uint32	data;		/* data to write */
 } hwacc_t;
 
 /* struct for backplane */
 typedef struct {
-	uint32  cmd;            /* tag to identify the cmd */
-	uint32  addr;           /* backplane address for write */
-	uint32  len;            /* length of data: 1, 2, 4 bytes */
-	uint8   data[1];                /* data to write */
+    uint32  cmd;            /* tag to identify the cmd */
+    uint32  addr;           /* backplane address for write */
+    uint32  len;            /* length of data: 1, 2, 4 bytes */
+    uint8   data[1];                /* data to write */
 } hwacc_blk_t;
 
 #ifndef LINUX_POSTMOGRIFY_REMOVAL
 typedef struct {
-	uint32  chip;           /* Chip id */
-	uint32  chiprev;        /* Chip rev */
-	uint32  ccrev;          /* Chipcommon core rev */
-	uint32  siclock;        /* Backplane clock */
+    uint32  chip;           /* Chip id */
+    uint32  chiprev;        /* Chip rev */
+    uint32  ccrev;          /* Chipcommon core rev */
+    uint32  siclock;        /* Backplane clock */
 } jtagd_id_t;
 
 /* Jtag configuration structure */
 typedef struct {
-	uint32	cmd;		/* tag to identify the cmd */
-	uint8	clkd;		/* Jtag clock divisor */
-	uint8	disgpio;	/* Gpio to disable external driver */
-	uint8	irsz;		/* IR size for readreg/writereg */
-	uint8	drsz;		/* DR size for readreg/writereg */
+    uint32	cmd;		/* tag to identify the cmd */
+    uint8	clkd;		/* Jtag clock divisor */
+    uint8	disgpio;	/* Gpio to disable external driver */
+    uint8	irsz;		/* IR size for readreg/writereg */
+    uint8	drsz;		/* DR size for readreg/writereg */
 
-	uint8	bigend;		/* Big endian */
-	uint8	mode;		/* Current mode */
-	uint16	delay;		/* Delay between jtagm "simple commands" */
+    uint8	bigend;		/* Big endian */
+    uint8	mode;		/* Current mode */
+    uint16	delay;		/* Delay between jtagm "simple commands" */
 
-	uint32	retries;	/* Number of retries for jtagm operations */
-	uint32	ctrl;		/* Jtag control reg copy */
-	uint32	ir_lvbase;	/* Bits to add to IR values in LV tap */
-	uint32	dretries;	/* Number of retries for dma operations */
+    uint32	retries;	/* Number of retries for jtagm operations */
+    uint32	ctrl;		/* Jtag control reg copy */
+    uint32	ir_lvbase;	/* Bits to add to IR values in LV tap */
+    uint32	dretries;	/* Number of retries for dma operations */
 } jtagconf_t;
 
 /* struct for jtag scan */
@@ -169,19 +169,19 @@ typedef struct {
 #define USB_IR_WORDS	(MAX_USB_IR_BITS / 32)
 #define USB_DR_WORDS	(MAX_USB_DR_BITS / 32)
 typedef struct {
-	uint32	cmd;		/* tag to identify the cmd */
-	uint32	irsz;		/* IR size in bits */
-	uint32	drsz;		/* DR size in bits */
-	uint32	ts;		/* Terminal state (def, pause, rti) */
-	uint32	data[USB_IR_WORDS + USB_DR_WORDS];	/* IR & DR data */
+    uint32	cmd;		/* tag to identify the cmd */
+    uint32	irsz;		/* IR size in bits */
+    uint32	drsz;		/* DR size in bits */
+    uint32	ts;		/* Terminal state (def, pause, rti) */
+    uint32	data[USB_IR_WORDS + USB_DR_WORDS];	/* IR & DR data */
 } scjt_t;
 #endif /* LINUX_POSTMOGRIFY_REMOVAL */
 
 /* struct for querying nvram params from bootloader */
 #define QUERY_STRING_MAX 32
 typedef struct {
-	uint32  cmd;                    /* tag to identify the cmd */
-	char    var[QUERY_STRING_MAX];  /* param name */
+    uint32  cmd;                    /* tag to identify the cmd */
+    char    var[QUERY_STRING_MAX];  /* param name */
 } nvparam_t;
 
 typedef void (*exec_fn_t)(void *sih);

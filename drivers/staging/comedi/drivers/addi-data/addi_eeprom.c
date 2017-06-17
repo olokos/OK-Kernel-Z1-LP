@@ -60,25 +60,25 @@ You should also find the complete GPL in the COPYING file accompanying this sour
 #define EEPROM_TIMER_WATCHDOG_COUNTER	10
 
 struct str_Functionality {
-	unsigned char b_Type;
-	unsigned short w_Address;
+    unsigned char b_Type;
+    unsigned short w_Address;
 };
 
 struct str_MainHeader {
-	unsigned short w_HeaderSize;
-	unsigned char b_Nfunctions;
-	struct str_Functionality s_Functions[7];
+    unsigned short w_HeaderSize;
+    unsigned char b_Nfunctions;
+    struct str_Functionality s_Functions[7];
 };
 
 struct str_DigitalInputHeader {
-	unsigned short w_Nchannel;
-	unsigned char b_Interruptible;
-	unsigned short w_NinterruptLogic;
+    unsigned short w_Nchannel;
+    unsigned char b_Interruptible;
+    unsigned short w_NinterruptLogic;
 };
 
 struct str_DigitalOutputHeader {
 
-	unsigned short w_Nchannel;
+    unsigned short w_Nchannel;
 };
 
 
@@ -86,72 +86,72 @@ struct str_DigitalOutputHeader {
 
 struct str_TimerDetails {
 
-	unsigned short w_HeaderSize;
-	unsigned char b_Resolution;
-	unsigned char b_Mode;		/*  in case of Watchdog it is functionality */
-	unsigned short w_MinTiming;
-	unsigned char b_TimeBase;
+    unsigned short w_HeaderSize;
+    unsigned char b_Resolution;
+    unsigned char b_Mode;		/*  in case of Watchdog it is functionality */
+    unsigned short w_MinTiming;
+    unsigned char b_TimeBase;
 };
 
 struct str_TimerMainHeader {
 
 
-	unsigned short w_Ntimer;
-	struct str_TimerDetails s_TimerDetails[4];	/*   supports 4 timers */
+    unsigned short w_Ntimer;
+    struct str_TimerDetails s_TimerDetails[4];	/*   supports 4 timers */
 };
 
 
 struct str_AnalogOutputHeader {
-	unsigned short w_Nchannel;
-	unsigned char b_Resolution;
+    unsigned short w_Nchannel;
+    unsigned char b_Resolution;
 };
 
 struct str_AnalogInputHeader {
-	unsigned short w_Nchannel;
-	unsigned short w_MinConvertTiming;
-	unsigned short w_MinDelayTiming;
-	unsigned char b_HasDma;
-	unsigned char b_Resolution;
+    unsigned short w_Nchannel;
+    unsigned short w_MinConvertTiming;
+    unsigned short w_MinDelayTiming;
+    unsigned char b_HasDma;
+    unsigned char b_Resolution;
 };
 
 
-		/*****************************************/
-		/*            Read Header Functions              */
-		/*****************************************/
+/*****************************************/
+/*            Read Header Functions              */
+/*****************************************/
 
 int i_EepromReadMainHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, struct comedi_device *dev);
+                           char *pc_PCIChipInformation, struct comedi_device *dev);
 
 int i_EepromReadDigitalInputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_DigitalInputHeader *s_Header);
+                                   char *pc_PCIChipInformation, unsigned short w_Address,
+                                   struct str_DigitalInputHeader *s_Header);
 
 int i_EepromReadDigitalOutputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_DigitalOutputHeader *s_Header);
+                                    char *pc_PCIChipInformation, unsigned short w_Address,
+                                    struct str_DigitalOutputHeader *s_Header);
 
 int i_EepromReadTimerHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_TimerMainHeader *s_Header);
+                            char *pc_PCIChipInformation, unsigned short w_Address,
+                            struct str_TimerMainHeader *s_Header);
 
 int i_EepromReadAnlogOutputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_AnalogOutputHeader *s_Header);
+                                  char *pc_PCIChipInformation, unsigned short w_Address,
+                                  struct str_AnalogOutputHeader *s_Header);
 
 int i_EepromReadAnlogInputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_AnalogInputHeader *s_Header);
+                                 char *pc_PCIChipInformation, unsigned short w_Address,
+                                 struct str_AnalogInputHeader *s_Header);
 
-		/******************************************/
-		/*      Eeprom Specific Functions                         */
-		/******************************************/
+/******************************************/
+/*      Eeprom Specific Functions                         */
+/******************************************/
 unsigned short w_EepromReadWord(unsigned short w_PCIBoardEepromAddress, char *pc_PCIChipInformation,
-	unsigned short w_EepromStartAddress);
+                                unsigned short w_EepromStartAddress);
 void v_EepromWaitBusy(unsigned short w_PCIBoardEepromAddress);
 void v_EepromClock76(unsigned int dw_Address, unsigned int dw_RegisterValue);
 void v_EepromWaitBusy(unsigned short w_PCIBoardEepromAddress);
 void v_EepromSendCommand76(unsigned int dw_Address, unsigned int dw_EepromCommand,
-	unsigned char b_DataLengthInBits);
+                           unsigned char b_DataLengthInBits);
 void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned short *pw_Value);
 
 /*
@@ -176,179 +176,173 @@ void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned
 */
 
 unsigned short w_EepromReadWord(unsigned short w_PCIBoardEepromAddress, char *pc_PCIChipInformation,
-	unsigned short w_EepromStartAddress)
-{
+                                unsigned short w_EepromStartAddress) {
 
-	unsigned char b_Counter = 0;
+    unsigned char b_Counter = 0;
 
-	unsigned char b_ReadByte = 0;
+    unsigned char b_ReadByte = 0;
 
-	unsigned char b_ReadLowByte = 0;
+    unsigned char b_ReadLowByte = 0;
 
-	unsigned char b_ReadHighByte = 0;
+    unsigned char b_ReadHighByte = 0;
 
-	unsigned char b_SelectedAddressLow = 0;
+    unsigned char b_SelectedAddressLow = 0;
 
-	unsigned char b_SelectedAddressHigh = 0;
+    unsigned char b_SelectedAddressHigh = 0;
 
-	unsigned short w_ReadWord = 0;
+    unsigned short w_ReadWord = 0;
 
-	/**************************/
+    /**************************/
 
-	/* Test the PCI chip type */
+    /* Test the PCI chip type */
 
-	/**************************/
+    /**************************/
 
-	if ((!strcmp(pc_PCIChipInformation, "S5920")) ||
-		(!strcmp(pc_PCIChipInformation, "S5933")))
-	{
+    if ((!strcmp(pc_PCIChipInformation, "S5920")) ||
+            (!strcmp(pc_PCIChipInformation, "S5933"))) {
 
-		for (b_Counter = 0; b_Counter < 2; b_Counter++)
-		{
+        for (b_Counter = 0; b_Counter < 2; b_Counter++) {
 
-			b_SelectedAddressLow = (w_EepromStartAddress + b_Counter) % 256;	/* Read the low 8 bit part */
+            b_SelectedAddressLow = (w_EepromStartAddress + b_Counter) % 256;	/* Read the low 8 bit part */
 
-			b_SelectedAddressHigh = (w_EepromStartAddress + b_Counter) / 256;	/* Read the high 8 bit part */
+            b_SelectedAddressHigh = (w_EepromStartAddress + b_Counter) / 256;	/* Read the high 8 bit part */
 
-	      /************************************/
+            /************************************/
 
-			/* Select the load low address mode */
+            /* Select the load low address mode */
 
-	      /************************************/
+            /************************************/
 
-			outb(NVCMD_LOAD_LOW, w_PCIBoardEepromAddress + 0x3F);
+            outb(NVCMD_LOAD_LOW, w_PCIBoardEepromAddress + 0x3F);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /************************/
+            /************************/
 
-			/* Load the low address */
+            /* Load the low address */
 
-	      /************************/
+            /************************/
 
-			outb(b_SelectedAddressLow,
-				w_PCIBoardEepromAddress + 0x3E);
+            outb(b_SelectedAddressLow,
+                 w_PCIBoardEepromAddress + 0x3E);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /*************************************/
+            /*************************************/
 
-			/* Select the load high address mode */
+            /* Select the load high address mode */
 
-	      /*************************************/
+            /*************************************/
 
-			outb(NVCMD_LOAD_HIGH, w_PCIBoardEepromAddress + 0x3F);
+            outb(NVCMD_LOAD_HIGH, w_PCIBoardEepromAddress + 0x3F);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /*************************/
+            /*************************/
 
-			/* Load the high address */
+            /* Load the high address */
 
-	      /*************************/
+            /*************************/
 
-			outb(b_SelectedAddressHigh,
-				w_PCIBoardEepromAddress + 0x3E);
+            outb(b_SelectedAddressHigh,
+                 w_PCIBoardEepromAddress + 0x3E);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /************************/
+            /************************/
 
-			/* Select the READ mode */
+            /* Select the READ mode */
 
-	      /************************/
+            /************************/
 
-			outb(NVCMD_BEGIN_READ, w_PCIBoardEepromAddress + 0x3F);
+            outb(NVCMD_BEGIN_READ, w_PCIBoardEepromAddress + 0x3F);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /*****************************/
+            /*****************************/
 
-			/* Read data into the EEPROM */
+            /* Read data into the EEPROM */
 
-	      /*****************************/
+            /*****************************/
 
-			b_ReadByte = inb(w_PCIBoardEepromAddress + 0x3E);
+            b_ReadByte = inb(w_PCIBoardEepromAddress + 0x3E);
 
-	      /****************/
+            /****************/
 
-			/* Wait on busy */
+            /* Wait on busy */
 
-	      /****************/
+            /****************/
 
-			v_EepromWaitBusy(w_PCIBoardEepromAddress);
+            v_EepromWaitBusy(w_PCIBoardEepromAddress);
 
-	      /*********************************/
+            /*********************************/
 
-			/* Select the upper address part */
+            /* Select the upper address part */
 
-	      /*********************************/
+            /*********************************/
 
-			if (b_Counter == 0)
-			{
+            if (b_Counter == 0) {
 
-				b_ReadLowByte = b_ReadByte;
+                b_ReadLowByte = b_ReadByte;
 
-			}	/*  if(b_Counter==0) */
+            }	/*  if(b_Counter==0) */
 
-			else
-			{
+            else {
 
-				b_ReadHighByte = b_ReadByte;
+                b_ReadHighByte = b_ReadByte;
 
-			}	/*  if(b_Counter==0) */
+            }	/*  if(b_Counter==0) */
 
-		}		/*  for (b_Counter=0; b_Counter<2; b_Counter++) */
+        }		/*  for (b_Counter=0; b_Counter<2; b_Counter++) */
 
-		w_ReadWord = (b_ReadLowByte | (((unsigned short) b_ReadHighByte) * 256));
+        w_ReadWord = (b_ReadLowByte | (((unsigned short) b_ReadHighByte) * 256));
 
-	}			/*  end of if ((!strcmp(pc_PCIChipInformation, "S5920")) || (!strcmp(pc_PCIChipInformation, "S5933"))) */
+    }			/*  end of if ((!strcmp(pc_PCIChipInformation, "S5920")) || (!strcmp(pc_PCIChipInformation, "S5933"))) */
 
-	if (!strcmp(pc_PCIChipInformation, "93C76"))
-	{
+    if (!strcmp(pc_PCIChipInformation, "93C76")) {
 
-	   /*************************************/
+        /*************************************/
 
-		/* Read 16 bit from the EEPROM 93C76 */
+        /* Read 16 bit from the EEPROM 93C76 */
 
-	   /*************************************/
+        /*************************************/
 
-		v_EepromCs76Read(w_PCIBoardEepromAddress, w_EepromStartAddress,
-			&w_ReadWord);
+        v_EepromCs76Read(w_PCIBoardEepromAddress, w_EepromStartAddress,
+                         &w_ReadWord);
 
-	}
+    }
 
-	return w_ReadWord;
+    return w_ReadWord;
 
 }
 
@@ -380,38 +374,36 @@ unsigned short w_EepromReadWord(unsigned short w_PCIBoardEepromAddress, char *pc
 
 */
 
-void v_EepromWaitBusy(unsigned short w_PCIBoardEepromAddress)
-{
+void v_EepromWaitBusy(unsigned short w_PCIBoardEepromAddress) {
 
-	unsigned char b_EepromBusy = 0;
+    unsigned char b_EepromBusy = 0;
 
-	do
-	{
+    do {
 
-	   /*************/
+        /*************/
 
-		/* IMPORTANT */
+        /* IMPORTANT */
 
-	   /*************/
+        /*************/
 
-	   /************************************************************************/
+        /************************************************************************/
 
-		/* An error has been written in the AMCC 5933 book at the page B-13 */
+        /* An error has been written in the AMCC 5933 book at the page B-13 */
 
-		/* Ex: if you read a byte and look for the busy statusEEPROM=0x80 and   */
+        /* Ex: if you read a byte and look for the busy statusEEPROM=0x80 and   */
 
-		/*      the operator register is AMCC_OP_REG_MCSR+3 */
+        /*      the operator register is AMCC_OP_REG_MCSR+3 */
 
-		/*      unsigned short read  EEPROM=0x8000 andAMCC_OP_REG_MCSR+2                  */
+        /*      unsigned short read  EEPROM=0x8000 andAMCC_OP_REG_MCSR+2                  */
 
-		/*      unsigned int read  EEPROM=0x80000000 and AMCC_OP_REG_MCSR */
+        /*      unsigned int read  EEPROM=0x80000000 and AMCC_OP_REG_MCSR */
 
-	   /************************************************************************/
+        /************************************************************************/
 
-		b_EepromBusy = inb(w_PCIBoardEepromAddress + 0x3F);
-		b_EepromBusy = b_EepromBusy & 0x80;
+        b_EepromBusy = inb(w_PCIBoardEepromAddress + 0x3F);
+        b_EepromBusy = b_EepromBusy & 0x80;
 
-	} while (b_EepromBusy == 0x80);
+    } while (b_EepromBusy == 0x80);
 
 }
 
@@ -445,40 +437,39 @@ void v_EepromWaitBusy(unsigned short w_PCIBoardEepromAddress)
 
 */
 
-void v_EepromClock76(unsigned int dw_Address, unsigned int dw_RegisterValue)
-{
+void v_EepromClock76(unsigned int dw_Address, unsigned int dw_RegisterValue) {
 
-   /************************/
+    /************************/
 
-	/* Set EEPROM clock Low */
+    /* Set EEPROM clock Low */
 
-   /************************/
+    /************************/
 
-	outl(dw_RegisterValue & 0x6, dw_Address);
+    outl(dw_RegisterValue & 0x6, dw_Address);
 
-   /***************/
+    /***************/
 
-	/* Wait 0.1 ms */
+    /* Wait 0.1 ms */
 
-   /***************/
+    /***************/
 
-	udelay(100);
+    udelay(100);
 
-   /*************************/
+    /*************************/
 
-	/* Set EEPROM clock High */
+    /* Set EEPROM clock High */
 
-   /*************************/
+    /*************************/
 
-	outl(dw_RegisterValue | 0x1, dw_Address);
+    outl(dw_RegisterValue | 0x1, dw_Address);
 
-   /***************/
+    /***************/
 
-	/* Wait 0.1 ms */
+    /* Wait 0.1 ms */
 
-   /***************/
+    /***************/
 
-	udelay(100);
+    udelay(100);
 
 }
 
@@ -517,103 +508,99 @@ void v_EepromClock76(unsigned int dw_Address, unsigned int dw_RegisterValue)
 */
 
 void v_EepromSendCommand76(unsigned int dw_Address, unsigned int dw_EepromCommand,
-	unsigned char b_DataLengthInBits)
-{
+                           unsigned char b_DataLengthInBits) {
 
-	char c_BitPos = 0;
+    char c_BitPos = 0;
 
-	unsigned int dw_RegisterValue = 0;
+    unsigned int dw_RegisterValue = 0;
 
-   /*****************************/
+    /*****************************/
 
-	/* Enable EEPROM Chip Select */
+    /* Enable EEPROM Chip Select */
 
-   /*****************************/
+    /*****************************/
 
-	dw_RegisterValue = 0x2;
+    dw_RegisterValue = 0x2;
 
-   /********************************************************************/
+    /********************************************************************/
 
-	/* Toggle EEPROM's Chip select to get it out of Shift Register Mode */
+    /* Toggle EEPROM's Chip select to get it out of Shift Register Mode */
 
-   /********************************************************************/
+    /********************************************************************/
 
-	outl(dw_RegisterValue, dw_Address);
+    outl(dw_RegisterValue, dw_Address);
 
-   /***************/
+    /***************/
 
-	/* Wait 0.1 ms */
+    /* Wait 0.1 ms */
 
-   /***************/
+    /***************/
 
-	udelay(100);
+    udelay(100);
 
-   /*******************************************/
+    /*******************************************/
 
-	/* Send EEPROM command - one bit at a time */
+    /* Send EEPROM command - one bit at a time */
 
-   /*******************************************/
+    /*******************************************/
 
-	for (c_BitPos = (b_DataLengthInBits - 1); c_BitPos >= 0; c_BitPos--)
-	{
+    for (c_BitPos = (b_DataLengthInBits - 1); c_BitPos >= 0; c_BitPos--) {
 
-      /**********************************/
+        /**********************************/
 
-		/* Check if current bit is 0 or 1 */
+        /* Check if current bit is 0 or 1 */
 
-      /**********************************/
+        /**********************************/
 
-		if (dw_EepromCommand & (1 << c_BitPos))
-		{
+        if (dw_EepromCommand & (1 << c_BitPos)) {
 
-	 /***********/
+            /***********/
 
-			/* Write 1 */
+            /* Write 1 */
 
-	 /***********/
+            /***********/
 
-			dw_RegisterValue = dw_RegisterValue | 0x4;
+            dw_RegisterValue = dw_RegisterValue | 0x4;
 
-		}
+        }
 
-		else
-		{
+        else {
 
-	 /***********/
+            /***********/
 
-			/* Write 0 */
+            /* Write 0 */
 
-	 /***********/
+            /***********/
 
-			dw_RegisterValue = dw_RegisterValue & 0x3;
+            dw_RegisterValue = dw_RegisterValue & 0x3;
 
-		}
+        }
 
-      /*********************/
+        /*********************/
 
-		/* Write the command */
+        /* Write the command */
 
-      /*********************/
+        /*********************/
 
-		outl(dw_RegisterValue, dw_Address);
+        outl(dw_RegisterValue, dw_Address);
 
-      /***************/
+        /***************/
 
-		/* Wait 0.1 ms */
+        /* Wait 0.1 ms */
 
-      /***************/
+        /***************/
 
-		udelay(100);
+        udelay(100);
 
-      /****************************/
+        /****************************/
 
-		/* Trigger the EEPROM clock */
+        /* Trigger the EEPROM clock */
 
-      /****************************/
+        /****************************/
 
-		v_EepromClock76(dw_Address, dw_RegisterValue);
+        v_EepromClock76(dw_Address, dw_RegisterValue);
 
-	}
+    }
 
 }
 
@@ -651,136 +638,132 @@ void v_EepromSendCommand76(unsigned int dw_Address, unsigned int dw_EepromComman
 
 */
 
-void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned short *pw_Value)
-{
+void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned short *pw_Value) {
 
-        char c_BitPos = 0;
+    char c_BitPos = 0;
 
-	unsigned int dw_RegisterValue = 0;
+    unsigned int dw_RegisterValue = 0;
 
-	unsigned int dw_RegisterValueRead = 0;
+    unsigned int dw_RegisterValueRead = 0;
 
-   /*************************************************/
+    /*************************************************/
 
-	/* Send EEPROM read command and offset to EEPROM */
+    /* Send EEPROM read command and offset to EEPROM */
 
-   /*************************************************/
+    /*************************************************/
 
-	v_EepromSendCommand76(dw_Address, (EE_READ << 4) | (w_offset / 2),
-		EE76_CMD_LEN);
+    v_EepromSendCommand76(dw_Address, (EE_READ << 4) | (w_offset / 2),
+                          EE76_CMD_LEN);
 
-   /*******************************/
+    /*******************************/
 
-	/* Get the last register value */
+    /* Get the last register value */
 
-   /*******************************/
+    /*******************************/
 
-	dw_RegisterValue = (((w_offset / 2) & 0x1) << 2) | 0x2;
+    dw_RegisterValue = (((w_offset / 2) & 0x1) << 2) | 0x2;
 
-   /*****************************/
+    /*****************************/
 
-	/* Set the 16-bit value of 0 */
+    /* Set the 16-bit value of 0 */
 
-   /*****************************/
+    /*****************************/
 
-	*pw_Value = 0;
+    *pw_Value = 0;
 
-   /************************/
+    /************************/
 
-	/* Get the 16-bit value */
+    /* Get the 16-bit value */
 
-   /************************/
+    /************************/
 
-	for (c_BitPos = 0; c_BitPos < 16; c_BitPos++)
-	{
+    for (c_BitPos = 0; c_BitPos < 16; c_BitPos++) {
 
-      /****************************/
+        /****************************/
 
-		/* Trigger the EEPROM clock */
+        /* Trigger the EEPROM clock */
 
-      /****************************/
+        /****************************/
 
-		v_EepromClock76(dw_Address, dw_RegisterValue);
+        v_EepromClock76(dw_Address, dw_RegisterValue);
 
-      /**********************/
+        /**********************/
 
-		/* Get the result bit */
+        /* Get the result bit */
 
-      /**********************/
+        /**********************/
 
-		dw_RegisterValueRead = inl(dw_Address);
+        dw_RegisterValueRead = inl(dw_Address);
 
-      /***************/
+        /***************/
 
-		/* Wait 0.1 ms */
+        /* Wait 0.1 ms */
 
-      /***************/
+        /***************/
 
-		udelay(100);
+        udelay(100);
 
-      /***************************************/
+        /***************************************/
 
-		/* Get bit value and shift into result */
+        /* Get bit value and shift into result */
 
-      /***************************************/
+        /***************************************/
 
-		if (dw_RegisterValueRead & 0x8)
-		{
+        if (dw_RegisterValueRead & 0x8) {
 
-	 /**********/
+            /**********/
 
-			/* Read 1 */
+            /* Read 1 */
 
-	 /**********/
+            /**********/
 
-			*pw_Value = (*pw_Value << 1) | 0x1;
+            *pw_Value = (*pw_Value << 1) | 0x1;
 
-		}
+        }
 
-		else
-		{
+        else {
 
-	 /**********/
+            /**********/
 
-			/* Read 0 */
+            /* Read 0 */
 
-	 /**********/
+            /**********/
 
-			*pw_Value = (*pw_Value << 1);
+            *pw_Value = (*pw_Value << 1);
 
-		}
+        }
 
-	}
+    }
 
-   /*************************/
+    /*************************/
 
-	/* Clear all EEPROM bits */
+    /* Clear all EEPROM bits */
 
-   /*************************/
+    /*************************/
 
-	dw_RegisterValue = 0x0;
+    dw_RegisterValue = 0x0;
 
-   /********************************************************************/
+    /********************************************************************/
 
-	/* Toggle EEPROM's Chip select to get it out of Shift Register Mode */
+    /* Toggle EEPROM's Chip select to get it out of Shift Register Mode */
 
-   /********************************************************************/
+    /********************************************************************/
 
-	outl(dw_RegisterValue, dw_Address);
+    outl(dw_RegisterValue, dw_Address);
 
-   /***************/
+    /***************/
 
-	/* Wait 0.1 ms */
+    /* Wait 0.1 ms */
 
-   /***************/
+    /***************/
 
-	udelay(100);
+    udelay(100);
 
 }
 
-	/******************************************/
-	/*      EEPROM HEADER READ FUNCTIONS      */
-	/******************************************/
+/******************************************/
+/*      EEPROM HEADER READ FUNCTIONS      */
+/******************************************/
 
 /*
 +----------------------------------------------------------------------------+
@@ -803,123 +786,122 @@ void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned
 */
 
 int i_EepromReadMainHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, struct comedi_device *dev)
-{
-	unsigned short w_Temp, i, w_Count = 0;
-	unsigned int ui_Temp;
-	struct str_MainHeader s_MainHeader;
-	struct str_DigitalInputHeader s_DigitalInputHeader;
-	struct str_DigitalOutputHeader s_DigitalOutputHeader;
-	/* struct str_TimerMainHeader     s_TimerMainHeader,s_WatchdogMainHeader; */
-	struct str_AnalogOutputHeader s_AnalogOutputHeader;
-	struct str_AnalogInputHeader s_AnalogInputHeader;
+                           char *pc_PCIChipInformation, struct comedi_device *dev) {
+    unsigned short w_Temp, i, w_Count = 0;
+    unsigned int ui_Temp;
+    struct str_MainHeader s_MainHeader;
+    struct str_DigitalInputHeader s_DigitalInputHeader;
+    struct str_DigitalOutputHeader s_DigitalOutputHeader;
+    /* struct str_TimerMainHeader     s_TimerMainHeader,s_WatchdogMainHeader; */
+    struct str_AnalogOutputHeader s_AnalogOutputHeader;
+    struct str_AnalogInputHeader s_AnalogInputHeader;
 
-	/* Read size */
-	s_MainHeader.w_HeaderSize =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + 8);
+    /* Read size */
+    s_MainHeader.w_HeaderSize =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + 8);
 
-	/* Read nbr of functionality */
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + 10);
-	s_MainHeader.b_Nfunctions = (unsigned char) w_Temp & 0x00FF;
+    /* Read nbr of functionality */
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + 10);
+    s_MainHeader.b_Nfunctions = (unsigned char) w_Temp & 0x00FF;
 
-	/* Read functionality details */
-	for (i = 0; i < s_MainHeader.b_Nfunctions; i++) {
-		/* Read Type */
-		w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-			pc_PCIChipInformation, 0x100 + 12 + w_Count);
-		s_MainHeader.s_Functions[i].b_Type = (unsigned char) w_Temp & 0x3F;
-		w_Count = w_Count + 2;
-		/* Read Address */
-		s_MainHeader.s_Functions[i].w_Address =
-			w_EepromReadWord(w_PCIBoardEepromAddress,
-			pc_PCIChipInformation, 0x100 + 12 + w_Count);
-		w_Count = w_Count + 2;
-	}
+    /* Read functionality details */
+    for (i = 0; i < s_MainHeader.b_Nfunctions; i++) {
+        /* Read Type */
+        w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                                  pc_PCIChipInformation, 0x100 + 12 + w_Count);
+        s_MainHeader.s_Functions[i].b_Type = (unsigned char) w_Temp & 0x3F;
+        w_Count = w_Count + 2;
+        /* Read Address */
+        s_MainHeader.s_Functions[i].w_Address =
+            w_EepromReadWord(w_PCIBoardEepromAddress,
+                             pc_PCIChipInformation, 0x100 + 12 + w_Count);
+        w_Count = w_Count + 2;
+    }
 
-	/* Display main header info */
-	for (i = 0; i < s_MainHeader.b_Nfunctions; i++) {
+    /* Display main header info */
+    for (i = 0; i < s_MainHeader.b_Nfunctions; i++) {
 
-		switch (s_MainHeader.s_Functions[i].b_Type) {
-		case EEPROM_DIGITALINPUT:
-			i_EepromReadDigitalInputHeader(w_PCIBoardEepromAddress,
-				pc_PCIChipInformation,
-				s_MainHeader.s_Functions[i].w_Address,
-				&s_DigitalInputHeader);
-			devpriv->s_EeParameters.i_NbrDiChannel =
-				s_DigitalInputHeader.w_Nchannel;
-			break;
+        switch (s_MainHeader.s_Functions[i].b_Type) {
+        case EEPROM_DIGITALINPUT:
+            i_EepromReadDigitalInputHeader(w_PCIBoardEepromAddress,
+                                           pc_PCIChipInformation,
+                                           s_MainHeader.s_Functions[i].w_Address,
+                                           &s_DigitalInputHeader);
+            devpriv->s_EeParameters.i_NbrDiChannel =
+                s_DigitalInputHeader.w_Nchannel;
+            break;
 
-		case EEPROM_DIGITALOUTPUT:
-			i_EepromReadDigitalOutputHeader(w_PCIBoardEepromAddress,
-				pc_PCIChipInformation,
-				s_MainHeader.s_Functions[i].w_Address,
-				&s_DigitalOutputHeader);
-			devpriv->s_EeParameters.i_NbrDoChannel =
-				s_DigitalOutputHeader.w_Nchannel;
-			ui_Temp = 0xffffffff;
-			devpriv->s_EeParameters.i_DoMaxdata =
-				ui_Temp >> (32 -
-					devpriv->s_EeParameters.i_NbrDoChannel);
-			break;
+        case EEPROM_DIGITALOUTPUT:
+            i_EepromReadDigitalOutputHeader(w_PCIBoardEepromAddress,
+                                            pc_PCIChipInformation,
+                                            s_MainHeader.s_Functions[i].w_Address,
+                                            &s_DigitalOutputHeader);
+            devpriv->s_EeParameters.i_NbrDoChannel =
+                s_DigitalOutputHeader.w_Nchannel;
+            ui_Temp = 0xffffffff;
+            devpriv->s_EeParameters.i_DoMaxdata =
+                ui_Temp >> (32 -
+                            devpriv->s_EeParameters.i_NbrDoChannel);
+            break;
 
-		case EEPROM_ANALOGINPUT:
-			i_EepromReadAnlogInputHeader(w_PCIBoardEepromAddress,
-				pc_PCIChipInformation,
-				s_MainHeader.s_Functions[i].w_Address,
-				&s_AnalogInputHeader);
-			if (!(strcmp(this_board->pc_DriverName, "apci3200")))
-				devpriv->s_EeParameters.i_NbrAiChannel =
-					s_AnalogInputHeader.w_Nchannel * 4;
-			else
-				devpriv->s_EeParameters.i_NbrAiChannel =
-					s_AnalogInputHeader.w_Nchannel;
-			devpriv->s_EeParameters.i_Dma =
-				s_AnalogInputHeader.b_HasDma;
-			devpriv->s_EeParameters.ui_MinAcquisitiontimeNs =
-				(unsigned int) s_AnalogInputHeader.w_MinConvertTiming *
-				1000;
-			devpriv->s_EeParameters.ui_MinDelaytimeNs =
-				(unsigned int) s_AnalogInputHeader.w_MinDelayTiming *
-				1000;
-			ui_Temp = 0xffff;
-			devpriv->s_EeParameters.i_AiMaxdata =
-				ui_Temp >> (16 -
-				s_AnalogInputHeader.b_Resolution);
-			break;
+        case EEPROM_ANALOGINPUT:
+            i_EepromReadAnlogInputHeader(w_PCIBoardEepromAddress,
+                                         pc_PCIChipInformation,
+                                         s_MainHeader.s_Functions[i].w_Address,
+                                         &s_AnalogInputHeader);
+            if (!(strcmp(this_board->pc_DriverName, "apci3200")))
+                devpriv->s_EeParameters.i_NbrAiChannel =
+                    s_AnalogInputHeader.w_Nchannel * 4;
+            else
+                devpriv->s_EeParameters.i_NbrAiChannel =
+                    s_AnalogInputHeader.w_Nchannel;
+            devpriv->s_EeParameters.i_Dma =
+                s_AnalogInputHeader.b_HasDma;
+            devpriv->s_EeParameters.ui_MinAcquisitiontimeNs =
+                (unsigned int) s_AnalogInputHeader.w_MinConvertTiming *
+                1000;
+            devpriv->s_EeParameters.ui_MinDelaytimeNs =
+                (unsigned int) s_AnalogInputHeader.w_MinDelayTiming *
+                1000;
+            ui_Temp = 0xffff;
+            devpriv->s_EeParameters.i_AiMaxdata =
+                ui_Temp >> (16 -
+                            s_AnalogInputHeader.b_Resolution);
+            break;
 
-		case EEPROM_ANALOGOUTPUT:
-			i_EepromReadAnlogOutputHeader(w_PCIBoardEepromAddress,
-				pc_PCIChipInformation,
-				s_MainHeader.s_Functions[i].w_Address,
-				&s_AnalogOutputHeader);
-			devpriv->s_EeParameters.i_NbrAoChannel =
-				s_AnalogOutputHeader.w_Nchannel;
-			ui_Temp = 0xffff;
-			devpriv->s_EeParameters.i_AoMaxdata =
-				ui_Temp >> (16 -
-				s_AnalogOutputHeader.b_Resolution);
-			break;
+        case EEPROM_ANALOGOUTPUT:
+            i_EepromReadAnlogOutputHeader(w_PCIBoardEepromAddress,
+                                          pc_PCIChipInformation,
+                                          s_MainHeader.s_Functions[i].w_Address,
+                                          &s_AnalogOutputHeader);
+            devpriv->s_EeParameters.i_NbrAoChannel =
+                s_AnalogOutputHeader.w_Nchannel;
+            ui_Temp = 0xffff;
+            devpriv->s_EeParameters.i_AoMaxdata =
+                ui_Temp >> (16 -
+                            s_AnalogOutputHeader.b_Resolution);
+            break;
 
-		case EEPROM_TIMER:
-			/* Timer subdevice present */
-			devpriv->s_EeParameters.i_Timer = 1;
-			break;
+        case EEPROM_TIMER:
+            /* Timer subdevice present */
+            devpriv->s_EeParameters.i_Timer = 1;
+            break;
 
-		case EEPROM_WATCHDOG:
-			/* Timer subdevice present */
-			devpriv->s_EeParameters.i_Timer = 1;
-			break;
+        case EEPROM_WATCHDOG:
+            /* Timer subdevice present */
+            devpriv->s_EeParameters.i_Timer = 1;
+            break;
 
-		case EEPROM_TIMER_WATCHDOG_COUNTER:
-			/* Timer subdevice present */
-			devpriv->s_EeParameters.i_Timer = 1;
-			break;
-		}
-	}
+        case EEPROM_TIMER_WATCHDOG_COUNTER:
+            /* Timer subdevice present */
+            devpriv->s_EeParameters.i_Timer = 1;
+            break;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -944,27 +926,26 @@ int i_EepromReadMainHeader(unsigned short w_PCIBoardEepromAddress,
 +----------------------------------------------------------------------------+
 */
 int i_EepromReadDigitalInputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_DigitalInputHeader *s_Header)
-{
-	unsigned short w_Temp;
+                                   char *pc_PCIChipInformation, unsigned short w_Address,
+                                   struct str_DigitalInputHeader *s_Header) {
+    unsigned short w_Temp;
 
-	/*  read nbr of channels */
-	s_Header->w_Nchannel =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 6);
+    /*  read nbr of channels */
+    s_Header->w_Nchannel =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 6);
 
-	/*  interruptible or not */
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + 8);
-	s_Header->b_Interruptible = (unsigned char) (w_Temp >> 7) & 0x01;
+    /*  interruptible or not */
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + 8);
+    s_Header->b_Interruptible = (unsigned char) (w_Temp >> 7) & 0x01;
 
-/* How many interruptible logic */
-	s_Header->w_NinterruptLogic =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 10);
+    /* How many interruptible logic */
+    s_Header->w_NinterruptLogic =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 10);
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -989,14 +970,13 @@ int i_EepromReadDigitalInputHeader(unsigned short w_PCIBoardEepromAddress,
 +----------------------------------------------------------------------------+
 */
 int i_EepromReadDigitalOutputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_DigitalOutputHeader *s_Header)
-{
-/* Read Nbr channels */
-	s_Header->w_Nchannel =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 6);
-	return 0;
+                                    char *pc_PCIChipInformation, unsigned short w_Address,
+                                    struct str_DigitalOutputHeader *s_Header) {
+    /* Read Nbr channels */
+    s_Header->w_Nchannel =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 6);
+    return 0;
 }
 
 /*
@@ -1020,48 +1000,47 @@ int i_EepromReadDigitalOutputHeader(unsigned short w_PCIBoardEepromAddress,
 +----------------------------------------------------------------------------+
 */
 int i_EepromReadTimerHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_TimerMainHeader *s_Header)
-{
+                            char *pc_PCIChipInformation, unsigned short w_Address,
+                            struct str_TimerMainHeader *s_Header) {
 
-	unsigned short i, w_Size = 0, w_Temp;
+    unsigned short i, w_Size = 0, w_Temp;
 
-/* Read No of Timer */
-	s_Header->w_Ntimer =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 6);
-/* Read header size */
+    /* Read No of Timer */
+    s_Header->w_Ntimer =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 6);
+    /* Read header size */
 
-	for (i = 0; i < s_Header->w_Ntimer; i++) {
-		s_Header->s_TimerDetails[i].w_HeaderSize =
-			w_EepromReadWord(w_PCIBoardEepromAddress,
-			pc_PCIChipInformation,
-			0x100 + w_Address + 8 + w_Size + 0);
-		w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-			pc_PCIChipInformation,
-			0x100 + w_Address + 8 + w_Size + 2);
+    for (i = 0; i < s_Header->w_Ntimer; i++) {
+        s_Header->s_TimerDetails[i].w_HeaderSize =
+            w_EepromReadWord(w_PCIBoardEepromAddress,
+                             pc_PCIChipInformation,
+                             0x100 + w_Address + 8 + w_Size + 0);
+        w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                                  pc_PCIChipInformation,
+                                  0x100 + w_Address + 8 + w_Size + 2);
 
-		/* Read Resolution */
-		s_Header->s_TimerDetails[i].b_Resolution =
-			(unsigned char) (w_Temp >> 10) & 0x3F;
+        /* Read Resolution */
+        s_Header->s_TimerDetails[i].b_Resolution =
+            (unsigned char) (w_Temp >> 10) & 0x3F;
 
-		/* Read Mode */
-		s_Header->s_TimerDetails[i].b_Mode =
-			(unsigned char) (w_Temp >> 4) & 0x3F;
+        /* Read Mode */
+        s_Header->s_TimerDetails[i].b_Mode =
+            (unsigned char) (w_Temp >> 4) & 0x3F;
 
-		w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-			pc_PCIChipInformation,
-			0x100 + w_Address + 8 + w_Size + 4);
+        w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                                  pc_PCIChipInformation,
+                                  0x100 + w_Address + 8 + w_Size + 4);
 
-		/* Read MinTiming */
-		s_Header->s_TimerDetails[i].w_MinTiming = (w_Temp >> 6) & 0x3FF;
+        /* Read MinTiming */
+        s_Header->s_TimerDetails[i].w_MinTiming = (w_Temp >> 6) & 0x3FF;
 
-		/* Read Timebase */
-		s_Header->s_TimerDetails[i].b_TimeBase = (unsigned char) (w_Temp) & 0x3F;
-		w_Size += s_Header->s_TimerDetails[i].w_HeaderSize;
-	}
+        /* Read Timebase */
+        s_Header->s_TimerDetails[i].b_TimeBase = (unsigned char) (w_Temp) & 0x3F;
+        w_Size += s_Header->s_TimerDetails[i].w_HeaderSize;
+    }
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -1086,19 +1065,18 @@ int i_EepromReadTimerHeader(unsigned short w_PCIBoardEepromAddress,
 */
 
 int i_EepromReadAnlogOutputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_AnalogOutputHeader *s_Header)
-{
-	unsigned short w_Temp;
-	/*  No of channels for 1st hard component */
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + 10);
-	s_Header->w_Nchannel = (w_Temp >> 4) & 0x03FF;
-	/*  Resolution for 1st hard component */
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + 16);
-	s_Header->b_Resolution = (unsigned char) (w_Temp >> 8) & 0xFF;
-	return 0;
+                                  char *pc_PCIChipInformation, unsigned short w_Address,
+                                  struct str_AnalogOutputHeader *s_Header) {
+    unsigned short w_Temp;
+    /*  No of channels for 1st hard component */
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + 10);
+    s_Header->w_Nchannel = (w_Temp >> 4) & 0x03FF;
+    /*  Resolution for 1st hard component */
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + 16);
+    s_Header->b_Resolution = (unsigned char) (w_Temp >> 8) & 0xFF;
+    return 0;
 }
 
 /*
@@ -1124,39 +1102,36 @@ int i_EepromReadAnlogOutputHeader(unsigned short w_PCIBoardEepromAddress,
 
 /* Reads only for ONE  hardware component */
 int i_EepromReadAnlogInputHeader(unsigned short w_PCIBoardEepromAddress,
-	char *pc_PCIChipInformation, unsigned short w_Address,
-	struct str_AnalogInputHeader *s_Header)
-{
-	unsigned short w_Temp, w_Offset;
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + 10);
-	s_Header->w_Nchannel = (w_Temp >> 4) & 0x03FF;
-	s_Header->w_MinConvertTiming =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 16);
-	s_Header->w_MinDelayTiming =
-		w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
-		0x100 + w_Address + 30);
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + 20);
-	s_Header->b_HasDma = (w_Temp >> 13) & 0x01;	/*  whether dma present or not */
+                                 char *pc_PCIChipInformation, unsigned short w_Address,
+                                 struct str_AnalogInputHeader *s_Header) {
+    unsigned short w_Temp, w_Offset;
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + 10);
+    s_Header->w_Nchannel = (w_Temp >> 4) & 0x03FF;
+    s_Header->w_MinConvertTiming =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 16);
+    s_Header->w_MinDelayTiming =
+        w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation,
+                         0x100 + w_Address + 30);
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + 20);
+    s_Header->b_HasDma = (w_Temp >> 13) & 0x01;	/*  whether dma present or not */
 
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation, 0x100 + w_Address + 72);	/*  reading Y */
-	w_Temp = w_Temp & 0x00FF;
-	if (w_Temp)		/* Y>0 */
-	{
-		w_Offset = 74 + (2 * w_Temp) + (10 * (1 + (w_Temp / 16)));	/*  offset of first analog input single header */
-		w_Offset = w_Offset + 2;	/*  resolution */
-	} else			/* Y=0 */
-	{
-		w_Offset = 74;
-		w_Offset = w_Offset + 2;	/*  resolution */
-	}
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress, pc_PCIChipInformation, 0x100 + w_Address + 72);	/*  reading Y */
+    w_Temp = w_Temp & 0x00FF;
+    if (w_Temp) {	/* Y>0 */
+        w_Offset = 74 + (2 * w_Temp) + (10 * (1 + (w_Temp / 16)));	/*  offset of first analog input single header */
+        w_Offset = w_Offset + 2;	/*  resolution */
+    } else {		/* Y=0 */
+        w_Offset = 74;
+        w_Offset = w_Offset + 2;	/*  resolution */
+    }
 
-/* read Resolution */
-	w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
-		pc_PCIChipInformation, 0x100 + w_Address + w_Offset);
-	s_Header->b_Resolution = w_Temp & 0x001F;	/*  last 5 bits */
+    /* read Resolution */
+    w_Temp = w_EepromReadWord(w_PCIBoardEepromAddress,
+                              pc_PCIChipInformation, 0x100 + w_Address + w_Offset);
+    s_Header->b_Resolution = w_Temp & 0x001F;	/*  last 5 bits */
 
-	return 0;
+    return 0;
 }

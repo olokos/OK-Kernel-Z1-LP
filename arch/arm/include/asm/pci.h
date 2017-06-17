@@ -12,28 +12,24 @@ extern unsigned long pcibios_min_io;
 extern unsigned long pcibios_min_mem;
 #define PCIBIOS_MIN_MEM pcibios_min_mem
 
-static inline int pcibios_assign_all_busses(void)
-{
-	return pci_has_flag(PCI_REASSIGN_ALL_RSRC);
+static inline int pcibios_assign_all_busses(void) {
+    return pci_has_flag(PCI_REASSIGN_ALL_RSRC);
 }
 
 #ifdef CONFIG_PCI_DOMAINS
-static inline int pci_domain_nr(struct pci_bus *bus)
-{
-	struct pci_sys_data *root = bus->sysdata;
+static inline int pci_domain_nr(struct pci_bus *bus) {
+    struct pci_sys_data *root = bus->sysdata;
 
-	return root->domain;
+    return root->domain;
 }
 
-static inline int pci_proc_domain(struct pci_bus *bus)
-{
-	return pci_domain_nr(bus);
+static inline int pci_proc_domain(struct pci_bus *bus) {
+    return pci_domain_nr(bus);
 }
 #endif /* CONFIG_PCI_DOMAINS */
 
-static inline void pcibios_penalize_isa_irq(int irq, int active)
-{
-	/* We don't do dynamic PCI IRQ allocation */
+static inline void pcibios_penalize_isa_irq(int irq, int active) {
+    /* We don't do dynamic PCI IRQ allocation */
 }
 
 /*
@@ -45,11 +41,10 @@ static inline void pcibios_penalize_isa_irq(int irq, int active)
 
 #ifdef CONFIG_PCI
 static inline void pci_dma_burst_advice(struct pci_dev *pdev,
-					enum pci_dma_burst_strategy *strat,
-					unsigned long *strategy_parameter)
-{
-	*strat = PCI_DMA_BURST_INFINITY;
-	*strategy_parameter = ~0UL;
+                                        enum pci_dma_burst_strategy *strat,
+                                        unsigned long *strategy_parameter) {
+    *strat = PCI_DMA_BURST_INFINITY;
+    *strategy_parameter = ~0UL;
 }
 #endif
 
@@ -60,11 +55,10 @@ extern int pci_mmap_page_range(struct pci_dev *dev, struct vm_area_struct *vma,
 /*
  * Dummy implementation; always return 0.
  */
-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-{
-	return 0;
+static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel) {
+    return 0;
 }
 
 #endif /* __KERNEL__ */
- 
+
 #endif

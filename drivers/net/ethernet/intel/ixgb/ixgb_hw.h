@@ -35,66 +35,66 @@
 
 /* Enums */
 typedef enum {
-	ixgb_mac_unknown = 0,
-	ixgb_82597,
-	ixgb_num_macs
+    ixgb_mac_unknown = 0,
+    ixgb_82597,
+    ixgb_num_macs
 } ixgb_mac_type;
 
 /* Types of physical layer modules */
 typedef enum {
-	ixgb_phy_type_unknown = 0,
-	ixgb_phy_type_g6005,	/* 850nm, MM fiber, XPAK transceiver */
-	ixgb_phy_type_g6104,	/* 1310nm, SM fiber, XPAK transceiver */
-	ixgb_phy_type_txn17201,	/* 850nm, MM fiber, XPAK transceiver */
-	ixgb_phy_type_txn17401,	/* 1310nm, SM fiber, XENPAK transceiver */
-	ixgb_phy_type_bcm	/* SUN specific board */
+    ixgb_phy_type_unknown = 0,
+    ixgb_phy_type_g6005,	/* 850nm, MM fiber, XPAK transceiver */
+    ixgb_phy_type_g6104,	/* 1310nm, SM fiber, XPAK transceiver */
+    ixgb_phy_type_txn17201,	/* 850nm, MM fiber, XPAK transceiver */
+    ixgb_phy_type_txn17401,	/* 1310nm, SM fiber, XENPAK transceiver */
+    ixgb_phy_type_bcm	/* SUN specific board */
 } ixgb_phy_type;
 
 /* XPAK transceiver vendors, for the SR adapters */
 typedef enum {
-	ixgb_xpak_vendor_intel,
-	ixgb_xpak_vendor_infineon
+    ixgb_xpak_vendor_intel,
+    ixgb_xpak_vendor_infineon
 } ixgb_xpak_vendor;
 
 /* Media Types */
 typedef enum {
-	ixgb_media_type_unknown = 0,
-	ixgb_media_type_fiber = 1,
-	ixgb_media_type_copper = 2,
-	ixgb_num_media_types
+    ixgb_media_type_unknown = 0,
+    ixgb_media_type_fiber = 1,
+    ixgb_media_type_copper = 2,
+    ixgb_num_media_types
 } ixgb_media_type;
 
 /* Flow Control Settings */
 typedef enum {
-	ixgb_fc_none = 0,
-	ixgb_fc_rx_pause = 1,
-	ixgb_fc_tx_pause = 2,
-	ixgb_fc_full = 3,
-	ixgb_fc_default = 0xFF
+    ixgb_fc_none = 0,
+    ixgb_fc_rx_pause = 1,
+    ixgb_fc_tx_pause = 2,
+    ixgb_fc_full = 3,
+    ixgb_fc_default = 0xFF
 } ixgb_fc_type;
 
 /* PCI bus types */
 typedef enum {
-	ixgb_bus_type_unknown = 0,
-	ixgb_bus_type_pci,
-	ixgb_bus_type_pcix
+    ixgb_bus_type_unknown = 0,
+    ixgb_bus_type_pci,
+    ixgb_bus_type_pcix
 } ixgb_bus_type;
 
 /* PCI bus speeds */
 typedef enum {
-	ixgb_bus_speed_unknown = 0,
-	ixgb_bus_speed_33,
-	ixgb_bus_speed_66,
-	ixgb_bus_speed_100,
-	ixgb_bus_speed_133,
-	ixgb_bus_speed_reserved
+    ixgb_bus_speed_unknown = 0,
+    ixgb_bus_speed_33,
+    ixgb_bus_speed_66,
+    ixgb_bus_speed_100,
+    ixgb_bus_speed_133,
+    ixgb_bus_speed_reserved
 } ixgb_bus_speed;
 
 /* PCI bus widths */
 typedef enum {
-	ixgb_bus_width_unknown = 0,
-	ixgb_bus_width_32,
-	ixgb_bus_width_64
+    ixgb_bus_width_unknown = 0,
+    ixgb_bus_width_32,
+    ixgb_bus_width_64
 } ixgb_bus_width;
 
 #define IXGB_EEPROM_SIZE    64	/* Size in words */
@@ -110,7 +110,7 @@ typedef enum {
 #define IXGB_DELAY_AFTER_EE_RESET      10	/* allow 10ms after the EEPROM reset        */
 
 #define IXGB_DELAY_USECS_AFTER_LINK_RESET    13	/* allow 13 microseconds after the reset    */
-					   /* NOTE: this is MICROSECONDS               */
+/* NOTE: this is MICROSECONDS               */
 #define MAX_RESET_ITERATIONS            8	/* number of iterations to get things right */
 
 /* General Registers */
@@ -523,12 +523,12 @@ typedef enum {
  * in which case the structure must be packed in some compiler-specific
  * manner. */
 struct ixgb_rx_desc {
-	__le64 buff_addr;
-	__le16 length;
-	__le16 reserved;
-	u8 status;
-	u8 errors;
-	__le16 special;
+    __le64 buff_addr;
+    __le16 length;
+    __le16 reserved;
+    u8 status;
+    u8 errors;
+    __le16 special;
 };
 
 #define IXGB_RX_DESC_STATUS_DD    0x01
@@ -556,11 +556,11 @@ struct ixgb_rx_desc {
  * in which case the structure must be packed in some compiler-specific
  * manner. */
 struct ixgb_tx_desc {
-	__le64 buff_addr;
-	__le32 cmd_type_len;
-	u8 status;
-	u8 popts;
-	__le16 vlan;
+    __le64 buff_addr;
+    __le32 cmd_type_len;
+    u8 status;
+    u8 popts;
+    __le16 vlan;
 };
 
 #define IXGB_TX_DESC_LENGTH_MASK    0x000FFFFF
@@ -583,16 +583,16 @@ struct ixgb_tx_desc {
 #define IXGB_TX_DESC_SPECIAL_PRI_SHIFT  IXGB_RX_DESC_SPECIAL_PRI_SHIFT	/* Priority is in upper 3 of 16 */
 
 struct ixgb_context_desc {
-	u8 ipcss;
-	u8 ipcso;
-	__le16 ipcse;
-	u8 tucss;
-	u8 tucso;
-	__le16 tucse;
-	__le32 cmd_type_len;
-	u8 status;
-	u8 hdr_len;
-	__le16 mss;
+    u8 ipcss;
+    u8 ipcso;
+    __le16 ipcse;
+    u8 tucss;
+    u8 tucso;
+    __le16 tucse;
+    __le32 cmd_type_len;
+    u8 status;
+    u8 hdr_len;
+    __le16 mss;
 };
 
 #define IXGB_CONTEXT_DESC_CMD_TCP 0x01000000
@@ -625,22 +625,22 @@ struct ixgb_context_desc {
 
 /* This structure takes a 64k flash and maps it for identification commands */
 struct ixgb_flash_buffer {
-	u8 manufacturer_id;
-	u8 device_id;
-	u8 filler1[0x2AA8];
-	u8 cmd2;
-	u8 filler2[0x2AAA];
-	u8 cmd1;
-	u8 filler3[0xAAAA];
+    u8 manufacturer_id;
+    u8 device_id;
+    u8 filler1[0x2AA8];
+    u8 cmd2;
+    u8 filler2[0x2AAA];
+    u8 cmd1;
+    u8 filler3[0xAAAA];
 };
 
 /* Flow control parameters */
 struct ixgb_fc {
-	u32 high_water;	/* Flow Control High-water          */
-	u32 low_water;	/* Flow Control Low-water           */
-	u16 pause_time;	/* Flow Control Pause timer         */
-	bool send_xon;		/* Flow control send XON            */
-	ixgb_fc_type type;	/* Type of flow control             */
+    u32 high_water;	/* Flow Control High-water          */
+    u32 low_water;	/* Flow Control Low-water           */
+    u16 pause_time;	/* Flow Control Pause timer         */
+    bool send_xon;		/* Flow control send XON            */
+    ixgb_fc_type type;	/* Type of flow control             */
 };
 
 /* The historical defaults for the flow control values are given below. */
@@ -655,107 +655,107 @@ struct ixgb_fc {
 
 /* Bus parameters */
 struct ixgb_bus {
-	ixgb_bus_speed speed;
-	ixgb_bus_width width;
-	ixgb_bus_type type;
+    ixgb_bus_speed speed;
+    ixgb_bus_width width;
+    ixgb_bus_type type;
 };
 
 struct ixgb_hw {
-	u8 __iomem *hw_addr;/* Base Address of the hardware     */
-	void *back;		/* Pointer to OS-dependent struct   */
-	struct ixgb_fc fc;	/* Flow control parameters          */
-	struct ixgb_bus bus;	/* Bus parameters                   */
-	u32 phy_id;	/* Phy Identifier                   */
-	u32 phy_addr;	/* XGMII address of Phy             */
-	ixgb_mac_type mac_type;	/* Identifier for MAC controller    */
-	ixgb_phy_type phy_type;	/* Transceiver/phy identifier       */
-	u32 max_frame_size;	/* Maximum frame size supported     */
-	u32 mc_filter_type;	/* Multicast filter hash type       */
-	u32 num_mc_addrs;	/* Number of current Multicast addrs */
-	u8 curr_mac_addr[ETH_ALEN];	/* Individual address currently programmed in MAC */
-	u32 num_tx_desc;	/* Number of Transmit descriptors   */
-	u32 num_rx_desc;	/* Number of Receive descriptors    */
-	u32 rx_buffer_size;	/* Size of Receive buffer           */
-	bool link_up;		/* true if link is valid            */
-	bool adapter_stopped;	/* State of adapter                 */
-	u16 device_id;	/* device id from PCI configuration space */
-	u16 vendor_id;	/* vendor id from PCI configuration space */
-	u8 revision_id;	/* revision id from PCI configuration space */
-	u16 subsystem_vendor_id;	/* subsystem vendor id from PCI configuration space */
-	u16 subsystem_id;	/* subsystem id from PCI configuration space */
-	u32 bar0;		/* Base Address registers           */
-	u32 bar1;
-	u32 bar2;
-	u32 bar3;
-	u16 pci_cmd_word;	/* PCI command register id from PCI configuration space */
-	__le16 eeprom[IXGB_EEPROM_SIZE];	/* EEPROM contents read at init time  */
-	unsigned long io_base;	/* Our I/O mapped location */
-	u32 lastLFC;
-	u32 lastRFC;
+    u8 __iomem *hw_addr;/* Base Address of the hardware     */
+    void *back;		/* Pointer to OS-dependent struct   */
+    struct ixgb_fc fc;	/* Flow control parameters          */
+    struct ixgb_bus bus;	/* Bus parameters                   */
+    u32 phy_id;	/* Phy Identifier                   */
+    u32 phy_addr;	/* XGMII address of Phy             */
+    ixgb_mac_type mac_type;	/* Identifier for MAC controller    */
+    ixgb_phy_type phy_type;	/* Transceiver/phy identifier       */
+    u32 max_frame_size;	/* Maximum frame size supported     */
+    u32 mc_filter_type;	/* Multicast filter hash type       */
+    u32 num_mc_addrs;	/* Number of current Multicast addrs */
+    u8 curr_mac_addr[ETH_ALEN];	/* Individual address currently programmed in MAC */
+    u32 num_tx_desc;	/* Number of Transmit descriptors   */
+    u32 num_rx_desc;	/* Number of Receive descriptors    */
+    u32 rx_buffer_size;	/* Size of Receive buffer           */
+    bool link_up;		/* true if link is valid            */
+    bool adapter_stopped;	/* State of adapter                 */
+    u16 device_id;	/* device id from PCI configuration space */
+    u16 vendor_id;	/* vendor id from PCI configuration space */
+    u8 revision_id;	/* revision id from PCI configuration space */
+    u16 subsystem_vendor_id;	/* subsystem vendor id from PCI configuration space */
+    u16 subsystem_id;	/* subsystem id from PCI configuration space */
+    u32 bar0;		/* Base Address registers           */
+    u32 bar1;
+    u32 bar2;
+    u32 bar3;
+    u16 pci_cmd_word;	/* PCI command register id from PCI configuration space */
+    __le16 eeprom[IXGB_EEPROM_SIZE];	/* EEPROM contents read at init time  */
+    unsigned long io_base;	/* Our I/O mapped location */
+    u32 lastLFC;
+    u32 lastRFC;
 };
 
 /* Statistics reported by the hardware */
 struct ixgb_hw_stats {
-	u64 tprl;
-	u64 tprh;
-	u64 gprcl;
-	u64 gprch;
-	u64 bprcl;
-	u64 bprch;
-	u64 mprcl;
-	u64 mprch;
-	u64 uprcl;
-	u64 uprch;
-	u64 vprcl;
-	u64 vprch;
-	u64 jprcl;
-	u64 jprch;
-	u64 gorcl;
-	u64 gorch;
-	u64 torl;
-	u64 torh;
-	u64 rnbc;
-	u64 ruc;
-	u64 roc;
-	u64 rlec;
-	u64 crcerrs;
-	u64 icbc;
-	u64 ecbc;
-	u64 mpc;
-	u64 tptl;
-	u64 tpth;
-	u64 gptcl;
-	u64 gptch;
-	u64 bptcl;
-	u64 bptch;
-	u64 mptcl;
-	u64 mptch;
-	u64 uptcl;
-	u64 uptch;
-	u64 vptcl;
-	u64 vptch;
-	u64 jptcl;
-	u64 jptch;
-	u64 gotcl;
-	u64 gotch;
-	u64 totl;
-	u64 toth;
-	u64 dc;
-	u64 plt64c;
-	u64 tsctc;
-	u64 tsctfc;
-	u64 ibic;
-	u64 rfc;
-	u64 lfc;
-	u64 pfrc;
-	u64 pftc;
-	u64 mcfrc;
-	u64 mcftc;
-	u64 xonrxc;
-	u64 xontxc;
-	u64 xoffrxc;
-	u64 xofftxc;
-	u64 rjc;
+    u64 tprl;
+    u64 tprh;
+    u64 gprcl;
+    u64 gprch;
+    u64 bprcl;
+    u64 bprch;
+    u64 mprcl;
+    u64 mprch;
+    u64 uprcl;
+    u64 uprch;
+    u64 vprcl;
+    u64 vprch;
+    u64 jprcl;
+    u64 jprch;
+    u64 gorcl;
+    u64 gorch;
+    u64 torl;
+    u64 torh;
+    u64 rnbc;
+    u64 ruc;
+    u64 roc;
+    u64 rlec;
+    u64 crcerrs;
+    u64 icbc;
+    u64 ecbc;
+    u64 mpc;
+    u64 tptl;
+    u64 tpth;
+    u64 gptcl;
+    u64 gptch;
+    u64 bptcl;
+    u64 bptch;
+    u64 mptcl;
+    u64 mptch;
+    u64 uptcl;
+    u64 uptch;
+    u64 vptcl;
+    u64 vptch;
+    u64 jptcl;
+    u64 jptch;
+    u64 gotcl;
+    u64 gotch;
+    u64 totl;
+    u64 toth;
+    u64 dc;
+    u64 plt64c;
+    u64 tsctc;
+    u64 tsctfc;
+    u64 ibic;
+    u64 rfc;
+    u64 lfc;
+    u64 pfrc;
+    u64 pftc;
+    u64 mcfrc;
+    u64 mcftc;
+    u64 xonrxc;
+    u64 xontxc;
+    u64 xoffrxc;
+    u64 xofftxc;
+    u64 rjc;
 };
 
 /* Function Prototypes */
@@ -766,20 +766,20 @@ extern void ixgb_check_for_link(struct ixgb_hw *hw);
 extern bool ixgb_check_for_bad_link(struct ixgb_hw *hw);
 
 extern void ixgb_rar_set(struct ixgb_hw *hw,
-				u8 *addr,
-				u32 index);
+                         u8 *addr,
+                         u32 index);
 
 
 /* Filters (multicast, vlan, receive) */
 extern void ixgb_mc_addr_list_update(struct ixgb_hw *hw,
-				   u8 *mc_addr_list,
-				   u32 mc_addr_count,
-				   u32 pad);
+                                     u8 *mc_addr_list,
+                                     u32 mc_addr_count,
+                                     u32 pad);
 
 /* Vfta functions */
 extern void ixgb_write_vfta(struct ixgb_hw *hw,
-				 u32 offset,
-				 u32 value);
+                            u32 offset,
+                            u32 value);
 
 /* Access functions to eeprom data */
 void ixgb_get_ee_mac_addr(struct ixgb_hw *hw, u8 *mac_addr);
@@ -792,8 +792,8 @@ __le16 ixgb_get_eeprom_word(struct ixgb_hw *hw, u16 index);
 void ixgb_led_on(struct ixgb_hw *hw);
 void ixgb_led_off(struct ixgb_hw *hw);
 void ixgb_write_pci_cfg(struct ixgb_hw *hw,
-			 u32 reg,
-			 u16 * value);
+                        u32 reg,
+                        u16 * value);
 
 
 #endif /* _IXGB_HW_H_ */

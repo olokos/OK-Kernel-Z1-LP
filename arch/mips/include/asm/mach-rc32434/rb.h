@@ -59,28 +59,28 @@
 #define BIT_TO_MASK(x)	(1 << x)
 
 struct dev_reg {
-	u32	base;
-	u32	mask;
-	u32	ctl;
-	u32	timing;
+    u32	base;
+    u32	mask;
+    u32	ctl;
+    u32	timing;
 };
 
 struct korina_device {
-	char *name;
-	unsigned char mac[6];
-	struct net_device *dev;
+    char *name;
+    unsigned char mac[6];
+    struct net_device *dev;
 };
 
 struct cf_device {
-	int gpio_pin;
-	void *dev;
-	struct gendisk *gd;
+    int gpio_pin;
+    void *dev;
+    struct gendisk *gd;
 };
 
 struct mpmc_device {
-	unsigned char	state;
-	spinlock_t	lock;
-	void __iomem 	*base;
+    unsigned char	state;
+    spinlock_t	lock;
+    void __iomem 	*base;
 };
 
 extern void set_latch_u5(unsigned char or_mask, unsigned char nand_mask);

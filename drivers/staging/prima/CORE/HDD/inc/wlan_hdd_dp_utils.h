@@ -58,16 +58,14 @@
 
 typedef struct list_head hdd_list_node_t;
 
-typedef struct hdd_list_s
-{
+typedef struct hdd_list_s {
     hdd_list_node_t anchor;
     v_SIZE_t count;
     v_SIZE_t max_size;
     spinlock_t lock;
 } hdd_list_t;
 
-typedef struct
-{
+typedef struct {
     hdd_list_node_t anchor;
     struct sk_buff *skb;
     int userPriority;
@@ -78,24 +76,20 @@ typedef struct
 /**-----------------------------------------------------------------------------
   Function declarations and documenation
  ----------------------------------------------------------------------------*/
-VOS_INLINE_FN v_VOID_t hdd_list_init( hdd_list_t *pList, v_SIZE_t max_size)
-{
+VOS_INLINE_FN v_VOID_t hdd_list_init( hdd_list_t *pList, v_SIZE_t max_size) {
     INIT_LIST_HEAD( &pList->anchor );
     pList->count = 0;
     pList->max_size = max_size;
     spin_lock_init(&pList->lock);
 }
 
-VOS_INLINE_FN v_VOID_t hdd_list_destroy( hdd_list_t *pList )
-{
-    if ( pList->count !=0 )
-    {
+VOS_INLINE_FN v_VOID_t hdd_list_destroy( hdd_list_t *pList ) {
+    if ( pList->count !=0 ) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "%s: list length not equal to zero",__func__);
     }
 }
 
-VOS_INLINE_FN v_VOID_t hdd_list_size( hdd_list_t *pList, v_SIZE_t *pSize )
-{
+VOS_INLINE_FN v_VOID_t hdd_list_size( hdd_list_t *pList, v_SIZE_t *pSize ) {
     *pSize = pList->count;
 }
 

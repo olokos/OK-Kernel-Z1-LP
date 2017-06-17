@@ -2,8 +2,8 @@
  * rocket_int.h --- internal header file for rocket.c
  *
  * Written by Theodore Ts'o, Copyright 1997.
- * Copyright 1997 Comtrol Corporation.  
- * 
+ * Copyright 1997 Comtrol Corporation.
+ *
  */
 
 /*
@@ -37,39 +37,34 @@ typedef unsigned int DWordIO_t;
  * instruction.
  */
 
-static inline void sOutB(unsigned short port, unsigned char value)
-{
+static inline void sOutB(unsigned short port, unsigned char value) {
 #ifdef ROCKET_DEBUG_IO
-	printk(KERN_DEBUG "sOutB(%x, %x)...\n", port, value);
+    printk(KERN_DEBUG "sOutB(%x, %x)...\n", port, value);
 #endif
-	outb_p(value, port);
+    outb_p(value, port);
 }
 
-static inline void sOutW(unsigned short port, unsigned short value)
-{
+static inline void sOutW(unsigned short port, unsigned short value) {
 #ifdef ROCKET_DEBUG_IO
-	printk(KERN_DEBUG "sOutW(%x, %x)...\n", port, value);
+    printk(KERN_DEBUG "sOutW(%x, %x)...\n", port, value);
 #endif
-	outw_p(value, port);
+    outw_p(value, port);
 }
 
-static inline void out32(unsigned short port, Byte_t *p)
-{
-	u32 value = get_unaligned_le32(p);
+static inline void out32(unsigned short port, Byte_t *p) {
+    u32 value = get_unaligned_le32(p);
 #ifdef ROCKET_DEBUG_IO
-	printk(KERN_DEBUG "out32(%x, %lx)...\n", port, value);
+    printk(KERN_DEBUG "out32(%x, %lx)...\n", port, value);
 #endif
-	outl_p(value, port);
+    outl_p(value, port);
 }
 
-static inline unsigned char sInB(unsigned short port)
-{
-	return inb_p(port);
+static inline unsigned char sInB(unsigned short port) {
+    return inb_p(port);
 }
 
-static inline unsigned short sInW(unsigned short port)
-{
-	return inw_p(port);
+static inline unsigned short sInW(unsigned short port) {
+    return inw_p(port);
 }
 
 /* This is used to move arrays of bytes so byte swapping isn't appropriate. */
@@ -301,67 +296,67 @@ Channel Register Offsets - Indexed - Internal - Fixed
 
 /* Controller level information structure */
 typedef struct {
-	int CtlID;
-	int CtlNum;
-	int BusType;
-	int boardType;
-	int isUPCI;
-	WordIO_t PCIIO;
-	WordIO_t PCIIO2;
-	ByteIO_t MBaseIO;
-	ByteIO_t MReg1IO;
-	ByteIO_t MReg2IO;
-	ByteIO_t MReg3IO;
-	Byte_t MReg2;
-	Byte_t MReg3;
-	int NumAiop;
-	int AltChanRingIndicator;
-	ByteIO_t UPCIRingInd;
-	WordIO_t AiopIO[AIOP_CTL_SIZE];
-	ByteIO_t AiopIntChanIO[AIOP_CTL_SIZE];
-	int AiopID[AIOP_CTL_SIZE];
-	int AiopNumChan[AIOP_CTL_SIZE];
-	Word_t *AiopIntrBits;
+    int CtlID;
+    int CtlNum;
+    int BusType;
+    int boardType;
+    int isUPCI;
+    WordIO_t PCIIO;
+    WordIO_t PCIIO2;
+    ByteIO_t MBaseIO;
+    ByteIO_t MReg1IO;
+    ByteIO_t MReg2IO;
+    ByteIO_t MReg3IO;
+    Byte_t MReg2;
+    Byte_t MReg3;
+    int NumAiop;
+    int AltChanRingIndicator;
+    ByteIO_t UPCIRingInd;
+    WordIO_t AiopIO[AIOP_CTL_SIZE];
+    ByteIO_t AiopIntChanIO[AIOP_CTL_SIZE];
+    int AiopID[AIOP_CTL_SIZE];
+    int AiopNumChan[AIOP_CTL_SIZE];
+    Word_t *AiopIntrBits;
 } CONTROLLER_T;
 
 typedef CONTROLLER_T CONTROLLER_t;
 
 /* Channel level information structure */
 typedef struct {
-	CONTROLLER_T *CtlP;
-	int AiopNum;
-	int ChanID;
-	int ChanNum;
-	int rtsToggle;
+    CONTROLLER_T *CtlP;
+    int AiopNum;
+    int ChanID;
+    int ChanNum;
+    int rtsToggle;
 
-	ByteIO_t Cmd;
-	ByteIO_t IntChan;
-	ByteIO_t IntMask;
-	DWordIO_t IndexAddr;
-	WordIO_t IndexData;
+    ByteIO_t Cmd;
+    ByteIO_t IntChan;
+    ByteIO_t IntMask;
+    DWordIO_t IndexAddr;
+    WordIO_t IndexData;
 
-	WordIO_t TxRxData;
-	WordIO_t ChanStat;
-	WordIO_t TxRxCount;
-	ByteIO_t IntID;
+    WordIO_t TxRxData;
+    WordIO_t ChanStat;
+    WordIO_t TxRxCount;
+    ByteIO_t IntID;
 
-	Word_t TxFIFO;
-	Word_t TxFIFOPtrs;
-	Word_t RxFIFO;
-	Word_t RxFIFOPtrs;
-	Word_t TxPrioCnt;
-	Word_t TxPrioPtr;
-	Word_t TxPrioBuf;
+    Word_t TxFIFO;
+    Word_t TxFIFOPtrs;
+    Word_t RxFIFO;
+    Word_t RxFIFOPtrs;
+    Word_t TxPrioCnt;
+    Word_t TxPrioPtr;
+    Word_t TxPrioBuf;
 
-	Byte_t R[RREGDATASIZE];
+    Byte_t R[RREGDATASIZE];
 
-	Byte_t BaudDiv[4];
-	Byte_t TxControl[4];
-	Byte_t RxControl[4];
-	Byte_t TxEnables[4];
-	Byte_t TxCompare[4];
-	Byte_t TxReplace1[4];
-	Byte_t TxReplace2[4];
+    Byte_t BaudDiv[4];
+    Byte_t TxControl[4];
+    Byte_t RxControl[4];
+    Byte_t TxEnables[4];
+    Byte_t TxCompare[4];
+    Byte_t TxReplace1[4];
+    Byte_t TxReplace2[4];
 } CHANNEL_T;
 
 typedef CHANNEL_T CHANNEL_t;
@@ -838,7 +833,7 @@ Call:     sPCIGetControllerIntStatus(CtlP)
           CONTROLLER_T *CtlP; Ptr to controller structure
 Return:   unsigned char: The controller interrupt status in the lower 4
                          bits and bit 4.  Bits 0 through 3 represent AIOP's 0
-                         through 3 respectively. Bit 4 is set if the int 
+                         through 3 respectively. Bit 4 is set if the int
 			 was generated from periodic. If a bit is set the
 			 AIOP is interrupting.
 */
@@ -901,7 +896,7 @@ Function: sResetAiopByNum
 Purpose:  Reset the AIOP by number
 Call:     sResetAiopByNum(CTLP,AIOPNUM)
 	CONTROLLER_T CTLP; Ptr to controller structure
-	AIOPNUM; AIOP index 
+	AIOPNUM; AIOP index
 */
 #define sResetAiopByNum(CTLP,AIOPNUM) \
 do { \
@@ -1124,29 +1119,29 @@ Warnings: This function writes the data byte without checking to see if
  */
 
 struct r_port {
-	int magic;
-	struct tty_port port;
-	int line;
-	int flags;		/* Don't yet match the ASY_ flags!! */
-	unsigned int board:3;
-	unsigned int aiop:2;
-	unsigned int chan:3;
-	CONTROLLER_t *ctlp;
-	CHANNEL_t channel;
-	int intmask;
-	int xmit_fifo_room;	/* room in xmit fifo */
-	unsigned char *xmit_buf;
-	int xmit_head;
-	int xmit_tail;
-	int xmit_cnt;
-	int cd_status;
-	int ignore_status_mask;
-	int read_status_mask;
-	int cps;
+    int magic;
+    struct tty_port port;
+    int line;
+    int flags;		/* Don't yet match the ASY_ flags!! */
+    unsigned int board:3;
+    unsigned int aiop:2;
+    unsigned int chan:3;
+    CONTROLLER_t *ctlp;
+    CHANNEL_t channel;
+    int intmask;
+    int xmit_fifo_room;	/* room in xmit fifo */
+    unsigned char *xmit_buf;
+    int xmit_head;
+    int xmit_tail;
+    int xmit_cnt;
+    int cd_status;
+    int ignore_status_mask;
+    int read_status_mask;
+    int cps;
 
-	struct completion close_wait;	/* Not yet matching the core */
-	spinlock_t slock;
-	struct mutex write_mtx;
+    struct completion close_wait;	/* Not yet matching the core */
+    spinlock_t slock;
+    struct mutex write_mtx;
 };
 
 #define RPORT_MAGIC 0x525001
@@ -1199,16 +1194,16 @@ struct r_port {
 #define PCI_DEVICE_ID_RP6M		0x000C	/* RocketModem 6 port                    */
 #define PCI_DEVICE_ID_RP4M		0x000D	/* RocketModem 4 port                    */
 #define PCI_DEVICE_ID_RP2_232           0x000E	/* Rocketport Plus 2 port RS232          */
-#define PCI_DEVICE_ID_RP2_422           0x000F	/* Rocketport Plus 2 port RS422          */ 
+#define PCI_DEVICE_ID_RP2_422           0x000F	/* Rocketport Plus 2 port RS422          */
 
 /* Universal PCI boards  */
-#define PCI_DEVICE_ID_URP32INTF		0x0801	/* Rocketport UPCI 32 port w/external I/F */ 
+#define PCI_DEVICE_ID_URP32INTF		0x0801	/* Rocketport UPCI 32 port w/external I/F */
 #define PCI_DEVICE_ID_URP8INTF		0x0802	/* Rocketport UPCI 8 port w/external I/F  */
 #define PCI_DEVICE_ID_URP16INTF		0x0803	/* Rocketport UPCI 16 port w/external I/F */
 #define PCI_DEVICE_ID_URP8OCTA		0x0805	/* Rocketport UPCI 8 port w/octa cable    */
 #define PCI_DEVICE_ID_UPCI_RM3_8PORT    0x080C	/* Rocketmodem III 8 port                 */
 #define PCI_DEVICE_ID_UPCI_RM3_4PORT    0x080D	/* Rocketmodem III 4 port                 */
 
-/* Compact PCI device */ 
+/* Compact PCI device */
 #define PCI_DEVICE_ID_CRP16INTF		0x0903	/* Rocketport Compact PCI 16 port w/external I/F */
 

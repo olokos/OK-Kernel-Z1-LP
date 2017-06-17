@@ -57,15 +57,14 @@ static struct watchdog_device *wdd;
  *	We only ping when the watchdog device is running.
  */
 
-static int watchdog_ping(struct watchdog_device *wddev)
-{
-	if (test_bit(WDOG_ACTIVE, &wddev->status)) {
-		if (wddev->ops->ping)
-			return wddev->ops->ping(wddev);  /* ping the watchdog */
-		else
-			return wddev->ops->start(wddev); /* restart watchdog */
-	}
-	return 0;
+static int watchdog_ping(struct watchdog_device *wddev) {
+    if (test_bit(WDOG_ACTIVE, &wddev->status)) {
+        if (wddev->ops->ping)
+            return wddev->ops->ping(wddev);  /* ping the watchdog */
+        else
+            return wddev->ops->start(wddev); /* restart watchdog */
+    }
+    return 0;
 }
 
 /*
@@ -77,18 +76,17 @@ static int watchdog_ping(struct watchdog_device *wddev)
  *	failure.
  */
 
-static int watchdog_start(struct watchdog_device *wddev)
-{
-	int err;
+static int watchdog_start(struct watchdog_device *wddev) {
+    int err;
 
-	if (!test_bit(WDOG_ACTIVE, &wddev->status)) {
-		err = wddev->ops->start(wddev);
-		if (err < 0)
-			return err;
+    if (!test_bit(WDOG_ACTIVE, &wddev->status)) {
+        err = wddev->ops->start(wddev);
+        if (err < 0)
+            return err;
 
-		set_bit(WDOG_ACTIVE, &wddev->status);
-	}
-	return 0;
+        set_bit(WDOG_ACTIVE, &wddev->status);
+    }
+    return 0;
 }
 
 /*
@@ -101,24 +99,23 @@ static int watchdog_start(struct watchdog_device *wddev)
  *	If the 'nowayout' feature was set, the watchdog cannot be stopped.
  */
 
-static int watchdog_stop(struct watchdog_device *wddev)
-{
-	int err = -EBUSY;
+static int watchdog_stop(struct watchdog_device *wddev) {
+    int err = -EBUSY;
 
-	if (test_bit(WDOG_NO_WAY_OUT, &wddev->status)) {
-		pr_info("%s: nowayout prevents watchdog to be stopped!\n",
-							wddev->info->identity);
-		return err;
-	}
+    if (test_bit(WDOG_NO_WAY_OUT, &wddev->status)) {
+        pr_info("%s: nowayout prevents watchdog to be stopped!\n",
+                wddev->info->identity);
+        return err;
+    }
 
-	if (test_bit(WDOG_ACTIVE, &wddev->status)) {
-		err = wddev->ops->stop(wddev);
-		if (err < 0)
-			return err;
+    if (test_bit(WDOG_ACTIVE, &wddev->status)) {
+        err = wddev->ops->stop(wddev);
+        if (err < 0)
+            return err;
 
-		clear_bit(WDOG_ACTIVE, &wddev->status);
-	}
-	return 0;
+        clear_bit(WDOG_ACTIVE, &wddev->status);
+    }
+    return 0;
 }
 
 /*
@@ -134,32 +131,31 @@ static int watchdog_stop(struct watchdog_device *wddev)
  */
 
 static ssize_t watchdog_write(struct file *file, const char __user *data,
-						size_t len, loff_t *ppos)
-{
-	size_t i;
-	char c;
+                              size_t len, loff_t *ppos) {
+    size_t i;
+    char c;
 
-	if (len == 0)
-		return 0;
+    if (len == 0)
+        return 0;
 
-	/*
-	 * Note: just in case someone wrote the magic character
-	 * five months ago...
-	 */
-	clear_bit(WDOG_ALLOW_RELEASE, &wdd->status);
+    /*
+     * Note: just in case someone wrote the magic character
+     * five months ago...
+     */
+    clear_bit(WDOG_ALLOW_RELEASE, &wdd->status);
 
-	/* scan to see whether or not we got the magic character */
-	for (i = 0; i != len; i++) {
-		if (get_user(c, data + i))
-			return -EFAULT;
-		if (c == 'V')
-			set_bit(WDOG_ALLOW_RELEASE, &wdd->status);
-	}
+    /* scan to see whether or not we got the magic character */
+    for (i = 0; i != len; i++) {
+        if (get_user(c, data + i))
+            return -EFAULT;
+        if (c == 'V')
+            set_bit(WDOG_ALLOW_RELEASE, &wdd->status);
+    }
 
-	/* someone wrote to us, so we send the watchdog a keepalive ping */
-	watchdog_ping(wdd);
+    /* someone wrote to us, so we send the watchdog a keepalive ping */
+    watchdog_ping(wdd);
 
-	return len;
+    return len;
 }
 
 /*
@@ -173,77 +169,76 @@ static ssize_t watchdog_write(struct file *file, const char __user *data,
  */
 
 static long watchdog_ioctl(struct file *file, unsigned int cmd,
-							unsigned long arg)
-{
-	void __user *argp = (void __user *)arg;
-	int __user *p = argp;
-	unsigned int val;
-	int err;
+                           unsigned long arg) {
+    void __user *argp = (void __user *)arg;
+    int __user *p = argp;
+    unsigned int val;
+    int err;
 
-	if (wdd->ops->ioctl) {
-		err = wdd->ops->ioctl(wdd, cmd, arg);
-		if (err != -ENOIOCTLCMD)
-			return err;
-	}
+    if (wdd->ops->ioctl) {
+        err = wdd->ops->ioctl(wdd, cmd, arg);
+        if (err != -ENOIOCTLCMD)
+            return err;
+    }
 
-	switch (cmd) {
-	case WDIOC_GETSUPPORT:
-		return copy_to_user(argp, wdd->info,
-			sizeof(struct watchdog_info)) ? -EFAULT : 0;
-	case WDIOC_GETSTATUS:
-		val = wdd->ops->status ? wdd->ops->status(wdd) : 0;
-		return put_user(val, p);
-	case WDIOC_GETBOOTSTATUS:
-		return put_user(wdd->bootstatus, p);
-	case WDIOC_SETOPTIONS:
-		if (get_user(val, p))
-			return -EFAULT;
-		if (val & WDIOS_DISABLECARD) {
-			err = watchdog_stop(wdd);
-			if (err < 0)
-				return err;
-		}
-		if (val & WDIOS_ENABLECARD) {
-			err = watchdog_start(wdd);
-			if (err < 0)
-				return err;
-		}
-		return 0;
-	case WDIOC_KEEPALIVE:
-		if (!(wdd->info->options & WDIOF_KEEPALIVEPING))
-			return -EOPNOTSUPP;
-		watchdog_ping(wdd);
-		return 0;
-	case WDIOC_SETTIMEOUT:
-		if ((wdd->ops->set_timeout == NULL) ||
-		    !(wdd->info->options & WDIOF_SETTIMEOUT))
-			return -EOPNOTSUPP;
-		if (get_user(val, p))
-			return -EFAULT;
-		if ((wdd->max_timeout != 0) &&
-		    (val < wdd->min_timeout || val > wdd->max_timeout))
-				return -EINVAL;
-		err = wdd->ops->set_timeout(wdd, val);
-		if (err < 0)
-			return err;
-		/* If the watchdog is active then we send a keepalive ping
-		 * to make sure that the watchdog keep's running (and if
-		 * possible that it takes the new timeout) */
-		watchdog_ping(wdd);
-		/* Fall */
-	case WDIOC_GETTIMEOUT:
-		/* timeout == 0 means that we don't know the timeout */
-		if (wdd->timeout == 0)
-			return -EOPNOTSUPP;
-		return put_user(wdd->timeout, p);
-	case WDIOC_GETTIMELEFT:
-		if (!wdd->ops->get_timeleft)
-			return -EOPNOTSUPP;
+    switch (cmd) {
+    case WDIOC_GETSUPPORT:
+        return copy_to_user(argp, wdd->info,
+                            sizeof(struct watchdog_info)) ? -EFAULT : 0;
+    case WDIOC_GETSTATUS:
+        val = wdd->ops->status ? wdd->ops->status(wdd) : 0;
+        return put_user(val, p);
+    case WDIOC_GETBOOTSTATUS:
+        return put_user(wdd->bootstatus, p);
+    case WDIOC_SETOPTIONS:
+        if (get_user(val, p))
+            return -EFAULT;
+        if (val & WDIOS_DISABLECARD) {
+            err = watchdog_stop(wdd);
+            if (err < 0)
+                return err;
+        }
+        if (val & WDIOS_ENABLECARD) {
+            err = watchdog_start(wdd);
+            if (err < 0)
+                return err;
+        }
+        return 0;
+    case WDIOC_KEEPALIVE:
+        if (!(wdd->info->options & WDIOF_KEEPALIVEPING))
+            return -EOPNOTSUPP;
+        watchdog_ping(wdd);
+        return 0;
+    case WDIOC_SETTIMEOUT:
+        if ((wdd->ops->set_timeout == NULL) ||
+                !(wdd->info->options & WDIOF_SETTIMEOUT))
+            return -EOPNOTSUPP;
+        if (get_user(val, p))
+            return -EFAULT;
+        if ((wdd->max_timeout != 0) &&
+                (val < wdd->min_timeout || val > wdd->max_timeout))
+            return -EINVAL;
+        err = wdd->ops->set_timeout(wdd, val);
+        if (err < 0)
+            return err;
+        /* If the watchdog is active then we send a keepalive ping
+         * to make sure that the watchdog keep's running (and if
+         * possible that it takes the new timeout) */
+        watchdog_ping(wdd);
+    /* Fall */
+    case WDIOC_GETTIMEOUT:
+        /* timeout == 0 means that we don't know the timeout */
+        if (wdd->timeout == 0)
+            return -EOPNOTSUPP;
+        return put_user(wdd->timeout, p);
+    case WDIOC_GETTIMELEFT:
+        if (!wdd->ops->get_timeleft)
+            return -EOPNOTSUPP;
 
-		return put_user(wdd->ops->get_timeleft(wdd), p);
-	default:
-		return -ENOTTY;
-	}
+        return put_user(wdd->ops->get_timeleft(wdd), p);
+    default:
+        return -ENOTTY;
+    }
 }
 
 /*
@@ -256,33 +251,32 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
  *	it can only be opened once.
  */
 
-static int watchdog_open(struct inode *inode, struct file *file)
-{
-	int err = -EBUSY;
+static int watchdog_open(struct inode *inode, struct file *file) {
+    int err = -EBUSY;
 
-	/* the watchdog is single open! */
-	if (test_and_set_bit(WDOG_DEV_OPEN, &wdd->status))
-		return -EBUSY;
+    /* the watchdog is single open! */
+    if (test_and_set_bit(WDOG_DEV_OPEN, &wdd->status))
+        return -EBUSY;
 
-	/*
-	 * If the /dev/watchdog device is open, we don't want the module
-	 * to be unloaded.
-	 */
-	if (!try_module_get(wdd->ops->owner))
-		goto out;
+    /*
+     * If the /dev/watchdog device is open, we don't want the module
+     * to be unloaded.
+     */
+    if (!try_module_get(wdd->ops->owner))
+        goto out;
 
-	err = watchdog_start(wdd);
-	if (err < 0)
-		goto out_mod;
+    err = watchdog_start(wdd);
+    if (err < 0)
+        goto out_mod;
 
-	/* dev/watchdog is a virtual (and thus non-seekable) filesystem */
-	return nonseekable_open(inode, file);
+    /* dev/watchdog is a virtual (and thus non-seekable) filesystem */
+    return nonseekable_open(inode, file);
 
 out_mod:
-	module_put(wdd->ops->owner);
+    module_put(wdd->ops->owner);
 out:
-	clear_bit(WDOG_DEV_OPEN, &wdd->status);
-	return err;
+    clear_bit(WDOG_DEV_OPEN, &wdd->status);
+    return err;
 }
 
 /*
@@ -295,46 +289,45 @@ out:
  *	was not set), else the watchdog will keep running.
  */
 
-static int watchdog_release(struct inode *inode, struct file *file)
-{
-	int err = -EBUSY;
+static int watchdog_release(struct inode *inode, struct file *file) {
+    int err = -EBUSY;
 
-	/*
-	 * We only stop the watchdog if we received the magic character
-	 * or if WDIOF_MAGICCLOSE is not set. If nowayout was set then
-	 * watchdog_stop will fail.
-	 */
-	if (test_and_clear_bit(WDOG_ALLOW_RELEASE, &wdd->status) ||
-	    !(wdd->info->options & WDIOF_MAGICCLOSE))
-		err = watchdog_stop(wdd);
+    /*
+     * We only stop the watchdog if we received the magic character
+     * or if WDIOF_MAGICCLOSE is not set. If nowayout was set then
+     * watchdog_stop will fail.
+     */
+    if (test_and_clear_bit(WDOG_ALLOW_RELEASE, &wdd->status) ||
+            !(wdd->info->options & WDIOF_MAGICCLOSE))
+        err = watchdog_stop(wdd);
 
-	/* If the watchdog was not stopped, send a keepalive ping */
-	if (err < 0) {
-		pr_crit("%s: watchdog did not stop!\n", wdd->info->identity);
-		watchdog_ping(wdd);
-	}
+    /* If the watchdog was not stopped, send a keepalive ping */
+    if (err < 0) {
+        pr_crit("%s: watchdog did not stop!\n", wdd->info->identity);
+        watchdog_ping(wdd);
+    }
 
-	/* Allow the owner module to be unloaded again */
-	module_put(wdd->ops->owner);
+    /* Allow the owner module to be unloaded again */
+    module_put(wdd->ops->owner);
 
-	/* make sure that /dev/watchdog can be re-opened */
-	clear_bit(WDOG_DEV_OPEN, &wdd->status);
+    /* make sure that /dev/watchdog can be re-opened */
+    clear_bit(WDOG_DEV_OPEN, &wdd->status);
 
-	return 0;
+    return 0;
 }
 
 static const struct file_operations watchdog_fops = {
-	.owner		= THIS_MODULE,
-	.write		= watchdog_write,
-	.unlocked_ioctl	= watchdog_ioctl,
-	.open		= watchdog_open,
-	.release	= watchdog_release,
+    .owner		= THIS_MODULE,
+    .write		= watchdog_write,
+    .unlocked_ioctl	= watchdog_ioctl,
+    .open		= watchdog_open,
+    .release	= watchdog_release,
 };
 
 static struct miscdevice watchdog_miscdev = {
-	.minor		= WATCHDOG_MINOR,
-	.name		= "watchdog",
-	.fops		= &watchdog_fops,
+    .minor		= WATCHDOG_MINOR,
+    .name		= "watchdog",
+    .fops		= &watchdog_fops,
 };
 
 /*
@@ -345,31 +338,30 @@ static struct miscdevice watchdog_miscdev = {
  *	is actually a miscdevice and thus we set it up like that.
  */
 
-int watchdog_dev_register(struct watchdog_device *watchdog)
-{
-	int err;
+int watchdog_dev_register(struct watchdog_device *watchdog) {
+    int err;
 
-	/* Only one device can register for /dev/watchdog */
-	if (test_and_set_bit(0, &watchdog_dev_busy)) {
-		pr_err("only one watchdog can use /dev/watchdog\n");
-		return -EBUSY;
-	}
+    /* Only one device can register for /dev/watchdog */
+    if (test_and_set_bit(0, &watchdog_dev_busy)) {
+        pr_err("only one watchdog can use /dev/watchdog\n");
+        return -EBUSY;
+    }
 
-	wdd = watchdog;
+    wdd = watchdog;
 
-	err = misc_register(&watchdog_miscdev);
-	if (err != 0) {
-		pr_err("%s: cannot register miscdev on minor=%d (err=%d)\n",
-		       watchdog->info->identity, WATCHDOG_MINOR, err);
-		goto out;
-	}
+    err = misc_register(&watchdog_miscdev);
+    if (err != 0) {
+        pr_err("%s: cannot register miscdev on minor=%d (err=%d)\n",
+               watchdog->info->identity, WATCHDOG_MINOR, err);
+        goto out;
+    }
 
-	return 0;
+    return 0;
 
 out:
-	wdd = NULL;
-	clear_bit(0, &watchdog_dev_busy);
-	return err;
+    wdd = NULL;
+    clear_bit(0, &watchdog_dev_busy);
+    return err;
 }
 
 /*
@@ -379,21 +371,20 @@ out:
  *	Deregister the /dev/watchdog device.
  */
 
-int watchdog_dev_unregister(struct watchdog_device *watchdog)
-{
-	/* Check that a watchdog device was registered in the past */
-	if (!test_bit(0, &watchdog_dev_busy) || !wdd)
-		return -ENODEV;
+int watchdog_dev_unregister(struct watchdog_device *watchdog) {
+    /* Check that a watchdog device was registered in the past */
+    if (!test_bit(0, &watchdog_dev_busy) || !wdd)
+        return -ENODEV;
 
-	/* We can only unregister the watchdog device that was registered */
-	if (watchdog != wdd) {
-		pr_err("%s: watchdog was not registered as /dev/watchdog\n",
-		       watchdog->info->identity);
-		return -ENODEV;
-	}
+    /* We can only unregister the watchdog device that was registered */
+    if (watchdog != wdd) {
+        pr_err("%s: watchdog was not registered as /dev/watchdog\n",
+               watchdog->info->identity);
+        return -ENODEV;
+    }
 
-	misc_deregister(&watchdog_miscdev);
-	wdd = NULL;
-	clear_bit(0, &watchdog_dev_busy);
-	return 0;
+    misc_deregister(&watchdog_miscdev);
+    wdd = NULL;
+    clear_bit(0, &watchdog_dev_busy);
+    return 0;
 }

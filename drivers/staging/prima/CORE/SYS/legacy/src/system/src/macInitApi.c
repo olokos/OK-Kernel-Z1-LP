@@ -60,30 +60,23 @@ extern tSirRetStatus halProcessStartEvent(tpAniSirGlobal pMac);
 
 tSirRetStatus macReset(tpAniSirGlobal pMac, tANI_U32 rc);
 
-tSirRetStatus macPreStart(tHalHandle hHal)
-{
+tSirRetStatus macPreStart(tHalHandle hHal) {
     tSirRetStatus status = eSIR_SUCCESS;
     tANI_BOOLEAN memAllocFailed = eANI_BOOLEAN_FALSE;
     tpAniSirGlobal pMac = (tpAniSirGlobal) hHal;
     tANI_U8 i;
 
-    for(i=0; i<MAX_DUMP_TABLE_ENTRY; i++)
-    {
+    for(i=0; i<MAX_DUMP_TABLE_ENTRY; i++) {
         pMac->dumpTableEntry[i] = vos_mem_malloc(sizeof(tDumpModuleEntry));
-        if ( NULL == pMac->dumpTableEntry[i] )
-        {
+        if ( NULL == pMac->dumpTableEntry[i] ) {
             memAllocFailed = eANI_BOOLEAN_TRUE;
             break;
-        }
-        else
-        {
+        } else {
             vos_mem_set(pMac->dumpTableEntry[i], sizeof(tSirMbMsg), 0);
         }
     }
-    if( memAllocFailed )
-    {
-        while(i>0)
-        {
+    if( memAllocFailed ) {
+        while(i>0) {
             i--;
             vos_mem_free(pMac->dumpTableEntry[i]);
         }
@@ -99,13 +92,11 @@ tSirRetStatus macPreStart(tHalHandle hHal)
     return status;
 }
 
-tSirRetStatus macStart(tHalHandle hHal, void* pHalMacStartParams)
-{
+tSirRetStatus macStart(tHalHandle hHal, void* pHalMacStartParams) {
     tSirRetStatus status = eSIR_SUCCESS;
     tpAniSirGlobal pMac = (tpAniSirGlobal) hHal;
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_ASSERT(0);
         status = eSIR_FAILURE;
         return status;
@@ -115,27 +106,21 @@ tSirRetStatus macStart(tHalHandle hHal, void* pHalMacStartParams)
 
     sysLog(pMac, LOG2, FL("called\n"));
 
-    do
-    {
+    do {
         pMac->pResetMsg = vos_mem_malloc(sizeof(tSirMbMsg));
-        if ( NULL == pMac->pResetMsg )
-        {
+        if ( NULL == pMac->pResetMsg ) {
             sysLog(pMac, LOGE, FL("pMac->pResetMsg is NULL\n"));
             status = eSIR_FAILURE;
             break;
-        }
-        else
-        {
+        } else {
             vos_mem_set(pMac->pResetMsg, sizeof(tSirMbMsg), 0);
         }
 
-        if (pMac->gDriverType != eDRIVER_TYPE_MFG)
-        {
+        if (pMac->gDriverType != eDRIVER_TYPE_MFG) {
             status = peStart(pMac);
         }
 
-    }
-    while(0);
+    } while(0);
     pMac->sys.abort = false;
 
     return status;
@@ -151,22 +136,19 @@ tSirRetStatus macStart(tHalHandle hHal, void* pHalMacStartParams)
 \return tSirRetStatus
   -------------------------------------------------------------*/
 
-tSirRetStatus macStop(tHalHandle hHal, tHalStopType stopType)
-{
+tSirRetStatus macStop(tHalHandle hHal, tHalStopType stopType) {
     tANI_U8 i;
     tpAniSirGlobal pMac = (tpAniSirGlobal) hHal;
     peStop(pMac);
     cfgCleanup( pMac );
     // need to free memory if not called in reset context.
     // in reset context this memory will be freed by HDD.
-    if(false == pMac->sys.abort)
-    {
+    if(false == pMac->sys.abort) {
         vos_mem_free(pMac->pResetMsg);
         pMac->pResetMsg = NULL;
     }
     /* Free the DumpTableEntry */
-    for(i=0; i<MAX_DUMP_TABLE_ENTRY; i++)
-    {
+    for(i=0; i<MAX_DUMP_TABLE_ENTRY; i++) {
         vos_mem_free(pMac->dumpTableEntry[i]);
     }
 
@@ -183,8 +165,7 @@ tSirRetStatus macStop(tHalHandle hHal, tHalStopType stopType)
 \return tSirRetStatus
   -------------------------------------------------------------*/
 
-tSirRetStatus macOpen(tHalHandle *pHalHandle, tHddHandle hHdd, tMacOpenParameters *pMacOpenParms)
-{
+tSirRetStatus macOpen(tHalHandle *pHalHandle, tHddHandle hHdd, tMacOpenParameters *pMacOpenParms) {
     tpAniSirGlobal pMac = NULL;
 
     if(pHalHandle == NULL)
@@ -241,8 +222,7 @@ tSirRetStatus macOpen(tHalHandle *pHalHandle, tHddHandle hHdd, tMacOpenParameter
 \return none
   -------------------------------------------------------------*/
 
-tSirRetStatus macClose(tHalHandle hHal)
-{
+tSirRetStatus macClose(tHalHandle hHal) {
 
     tpAniSirGlobal pMac = (tpAniSirGlobal) hHal;
 
@@ -267,8 +247,7 @@ tSirRetStatus macClose(tHalHandle hHal)
 \return    tSirRetStatus.
   -------------------------------------------------------------*/
 
-tSirRetStatus macReset(tpAniSirGlobal pMac, tANI_U32 rc)
-{
+tSirRetStatus macReset(tpAniSirGlobal pMac, tANI_U32 rc) {
     tSirRetStatus status = eSIR_SUCCESS;
     sysLog(pMac, LOGE, FL("*************No-op. Need to call WDA reset function \n"));
     return status;
@@ -294,12 +273,10 @@ tSirRetStatus macReset(tpAniSirGlobal pMac, tANI_U32 rc)
  */
 
 void
-macSysResetReq(tpAniSirGlobal pMac, tANI_U32 rc)
-{
+macSysResetReq(tpAniSirGlobal pMac, tANI_U32 rc) {
     sysLog(pMac, LOGE, FL("Reason Code = 0x%X\n"),rc);
 
-    switch (rc)
-    {
+    switch (rc) {
     case eSIR_STOP_BSS:
     case eSIR_SME_BSS_RESTART:
     case eSIR_RADIO_HW_SWITCH_STATUS_IS_OFF:
@@ -340,8 +317,7 @@ macSysResetReq(tpAniSirGlobal pMac, tANI_U32 rc)
  */
 
 void
-macSysResetReqFromHDD(void *pMac, tANI_U32 rc)
-{
+macSysResetReqFromHDD(void *pMac, tANI_U32 rc) {
     macSysResetReq( (tpAniSirGlobal)pMac, rc );
 }
 

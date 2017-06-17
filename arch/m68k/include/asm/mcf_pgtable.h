@@ -156,51 +156,58 @@
  */
 #define mk_pte(page, pgprot) pfn_pte(page_to_pfn(page), (pgprot))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_val(pte) = (pte_val(pte) & CF_PAGE_CHG_MASK) | pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) = (pte_val(pte) & CF_PAGE_CHG_MASK) | pgprot_val(newprot);
+    return pte;
 }
 
 #define pmd_set(pmdp, ptep) do {} while (0)
 
-static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
-{
-	pgd_val(*pgdp) = virt_to_phys(pmdp);
+static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp) {
+    pgd_val(*pgdp) = virt_to_phys(pmdp);
 }
 
 #define __pte_page(pte)	((unsigned long) (pte_val(pte) & PAGE_MASK))
 #define __pmd_page(pmd)	((unsigned long) (pmd_val(pmd)))
 
-static inline int pte_none(pte_t pte)
-{
-	return !pte_val(pte);
+static inline int pte_none(pte_t pte) {
+    return !pte_val(pte);
 }
 
-static inline int pte_present(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_VALID;
+static inline int pte_present(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_VALID;
 }
 
 static inline void pte_clear(struct mm_struct *mm, unsigned long addr,
-	pte_t *ptep)
-{
-	pte_val(*ptep) = 0;
+                             pte_t *ptep) {
+    pte_val(*ptep) = 0;
 }
 
 #define pte_pagenr(pte)	((__pte_page(pte) - PAGE_OFFSET) >> PAGE_SHIFT)
 #define pte_page(pte)	virt_to_page(__pte_page(pte))
 
-static inline int pmd_none2(pmd_t *pmd) { return !pmd_val(*pmd); }
+static inline int pmd_none2(pmd_t *pmd) {
+    return !pmd_val(*pmd);
+}
 #define pmd_none(pmd) pmd_none2(&(pmd))
-static inline int pmd_bad2(pmd_t *pmd) { return 0; }
+static inline int pmd_bad2(pmd_t *pmd) {
+    return 0;
+}
 #define pmd_bad(pmd) pmd_bad2(&(pmd))
 #define pmd_present(pmd) (!pmd_none2(&(pmd)))
-static inline void pmd_clear(pmd_t *pmdp) { pmd_val(*pmdp) = 0; }
+static inline void pmd_clear(pmd_t *pmdp) {
+    pmd_val(*pmdp) = 0;
+}
 
-static inline int pgd_none(pgd_t pgd) { return 0; }
-static inline int pgd_bad(pgd_t pgd) { return 0; }
-static inline int pgd_present(pgd_t pgd) { return 1; }
+static inline int pgd_none(pgd_t pgd) {
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd) {
+    return 0;
+}
+static inline int pgd_present(pgd_t pgd) {
+    return 1;
+}
 static inline void pgd_clear(pgd_t *pgdp) {}
 
 #define pte_ERROR(e) \
@@ -218,116 +225,96 @@ static inline void pgd_clear(pgd_t *pgdp) {}
  * Undefined behaviour if not...
  * [we have the full set here even if they don't change from m68k]
  */
-static inline int pte_read(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_READABLE;
+static inline int pte_read(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_READABLE;
 }
 
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_WRITABLE;
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_WRITABLE;
 }
 
-static inline int pte_exec(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_EXEC;
+static inline int pte_exec(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_EXEC;
 }
 
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_DIRTY;
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_DIRTY;
 }
 
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_ACCESSED;
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_ACCESSED;
 }
 
-static inline int pte_file(pte_t pte)
-{
-	return pte_val(pte) & CF_PAGE_FILE;
+static inline int pte_file(pte_t pte) {
+    return pte_val(pte) & CF_PAGE_FILE;
 }
 
-static inline int pte_special(pte_t pte)
-{
-	return 0;
+static inline int pte_special(pte_t pte) {
+    return 0;
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_WRITABLE;
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_WRITABLE;
+    return pte;
 }
 
-static inline pte_t pte_rdprotect(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_READABLE;
-	return pte;
+static inline pte_t pte_rdprotect(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_READABLE;
+    return pte;
 }
 
-static inline pte_t pte_exprotect(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_EXEC;
-	return pte;
+static inline pte_t pte_exprotect(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_EXEC;
+    return pte;
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_DIRTY;
+    return pte;
 }
 
-static inline pte_t pte_mkold(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_ACCESSED;
+    return pte;
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) |= CF_PAGE_WRITABLE;
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= CF_PAGE_WRITABLE;
+    return pte;
 }
 
-static inline pte_t pte_mkread(pte_t pte)
-{
-	pte_val(pte) |= CF_PAGE_READABLE;
-	return pte;
+static inline pte_t pte_mkread(pte_t pte) {
+    pte_val(pte) |= CF_PAGE_READABLE;
+    return pte;
 }
 
-static inline pte_t pte_mkexec(pte_t pte)
-{
-	pte_val(pte) |= CF_PAGE_EXEC;
-	return pte;
+static inline pte_t pte_mkexec(pte_t pte) {
+    pte_val(pte) |= CF_PAGE_EXEC;
+    return pte;
 }
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	pte_val(pte) |= CF_PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_val(pte) |= CF_PAGE_DIRTY;
+    return pte;
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	pte_val(pte) |= CF_PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_val(pte) |= CF_PAGE_ACCESSED;
+    return pte;
 }
 
-static inline pte_t pte_mknocache(pte_t pte)
-{
-	pte_val(pte) |= 0x80 | (pte_val(pte) & ~0x40);
-	return pte;
+static inline pte_t pte_mknocache(pte_t pte) {
+    pte_val(pte) |= 0x80 | (pte_val(pte) & ~0x40);
+    return pte;
 }
 
-static inline pte_t pte_mkcache(pte_t pte)
-{
-	pte_val(pte) &= ~CF_PAGE_NOCACHE;
-	return pte;
+static inline pte_t pte_mkcache(pte_t pte) {
+    pte_val(pte) &= ~CF_PAGE_NOCACHE;
+    return pte;
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	return pte;
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
 }
 
 #define swapper_pg_dir kernel_pg_dir
@@ -347,9 +334,8 @@ extern pgd_t kernel_pg_dir[PTRS_PER_PGD];
 /*
  * Find an entry in the second-level pagetable.
  */
-static inline pmd_t *pmd_offset(pgd_t *pgd, unsigned long address)
-{
-	return (pmd_t *) pgd;
+static inline pmd_t *pmd_offset(pgd_t *pgd, unsigned long address) {
+    return (pmd_t *) pgd;
 }
 
 /*
@@ -362,46 +348,42 @@ static inline pmd_t *pmd_offset(pgd_t *pgd, unsigned long address)
 /*
  * Disable caching for page at given kernel virtual address.
  */
-static inline void nocache_page(void *vaddr)
-{
-	pgd_t *dir;
-	pmd_t *pmdp;
-	pte_t *ptep;
-	unsigned long addr = (unsigned long) vaddr;
+static inline void nocache_page(void *vaddr) {
+    pgd_t *dir;
+    pmd_t *pmdp;
+    pte_t *ptep;
+    unsigned long addr = (unsigned long) vaddr;
 
-	dir = pgd_offset_k(addr);
-	pmdp = pmd_offset(dir, addr);
-	ptep = pte_offset_kernel(pmdp, addr);
-	*ptep = pte_mknocache(*ptep);
+    dir = pgd_offset_k(addr);
+    pmdp = pmd_offset(dir, addr);
+    ptep = pte_offset_kernel(pmdp, addr);
+    *ptep = pte_mknocache(*ptep);
 }
 
 /*
  * Enable caching for page at given kernel virtual address.
  */
-static inline void cache_page(void *vaddr)
-{
-	pgd_t *dir;
-	pmd_t *pmdp;
-	pte_t *ptep;
-	unsigned long addr = (unsigned long) vaddr;
+static inline void cache_page(void *vaddr) {
+    pgd_t *dir;
+    pmd_t *pmdp;
+    pte_t *ptep;
+    unsigned long addr = (unsigned long) vaddr;
 
-	dir = pgd_offset_k(addr);
-	pmdp = pmd_offset(dir, addr);
-	ptep = pte_offset_kernel(pmdp, addr);
-	*ptep = pte_mkcache(*ptep);
+    dir = pgd_offset_k(addr);
+    pmdp = pmd_offset(dir, addr);
+    ptep = pte_offset_kernel(pmdp, addr);
+    *ptep = pte_mkcache(*ptep);
 }
 
 #define PTE_FILE_MAX_BITS	21
 #define PTE_FILE_SHIFT		11
 
-static inline unsigned long pte_to_pgoff(pte_t pte)
-{
-	return pte_val(pte) >> PTE_FILE_SHIFT;
+static inline unsigned long pte_to_pgoff(pte_t pte) {
+    return pte_val(pte) >> PTE_FILE_SHIFT;
 }
 
-static inline pte_t pgoff_to_pte(unsigned pgoff)
-{
-	return __pte((pgoff << PTE_FILE_SHIFT) + CF_PAGE_FILE);
+static inline pte_t pgoff_to_pte(unsigned pgoff) {
+    return __pte((pgoff << PTE_FILE_SHIFT) + CF_PAGE_FILE);
 }
 
 /*

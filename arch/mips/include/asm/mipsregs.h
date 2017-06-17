@@ -1439,65 +1439,61 @@ do {									\
  *
  * It is responsibility of the caller to take care of any TLB hazards.
  */
-static inline void tlb_probe(void)
-{
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbp\n\t"
-		".set reorder");
+static inline void tlb_probe(void) {
+    __asm__ __volatile__(
+        ".set noreorder\n\t"
+        "tlbp\n\t"
+        ".set reorder");
 }
 
-static inline void tlb_read(void)
-{
+static inline void tlb_read(void) {
 #if MIPS34K_MISSED_ITLB_WAR
-	int res = 0;
+    int res = 0;
 
-	__asm__ __volatile__(
-	"	.set	push					\n"
-	"	.set	noreorder				\n"
-	"	.set	noat					\n"
-	"	.set	mips32r2				\n"
-	"	.word	0x41610001		# dvpe $1	\n"
-	"	move	%0, $1					\n"
-	"	ehb						\n"
-	"	.set	pop					\n"
-	: "=r" (res));
+    __asm__ __volatile__(
+        "	.set	push					\n"
+        "	.set	noreorder				\n"
+        "	.set	noat					\n"
+        "	.set	mips32r2				\n"
+        "	.word	0x41610001		# dvpe $1	\n"
+        "	move	%0, $1					\n"
+        "	ehb						\n"
+        "	.set	pop					\n"
+        : "=r" (res));
 
-	instruction_hazard();
+    instruction_hazard();
 #endif
 
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbr\n\t"
-		".set reorder");
+    __asm__ __volatile__(
+        ".set noreorder\n\t"
+        "tlbr\n\t"
+        ".set reorder");
 
 #if MIPS34K_MISSED_ITLB_WAR
-	if ((res & _ULCAST_(1)))
-		__asm__ __volatile__(
-		"	.set	push				\n"
-		"	.set	noreorder			\n"
-		"	.set	noat				\n"
-		"	.set	mips32r2			\n"
-		"	.word	0x41600021	# evpe		\n"
-		"	ehb					\n"
-		"	.set	pop				\n");
+    if ((res & _ULCAST_(1)))
+        __asm__ __volatile__(
+            "	.set	push				\n"
+            "	.set	noreorder			\n"
+            "	.set	noat				\n"
+            "	.set	mips32r2			\n"
+            "	.word	0x41600021	# evpe		\n"
+            "	ehb					\n"
+            "	.set	pop				\n");
 #endif
 }
 
-static inline void tlb_write_indexed(void)
-{
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbwi\n\t"
-		".set reorder");
+static inline void tlb_write_indexed(void) {
+    __asm__ __volatile__(
+        ".set noreorder\n\t"
+        "tlbwi\n\t"
+        ".set reorder");
 }
 
-static inline void tlb_write_random(void)
-{
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbwr\n\t"
-		".set reorder");
+static inline void tlb_write_random(void) {
+    __asm__ __volatile__(
+        ".set noreorder\n\t"
+        "tlbwr\n\t"
+        ".set reorder");
 }
 
 /*
@@ -1554,23 +1550,22 @@ change_c0_##name(unsigned int change, unsigned int val)		\
  * This is a duplicate of dmt() in mipsmtregs.h to avoid problems with
  * header file recursion.
  */
-static inline unsigned int __dmt(void)
-{
-	int res;
+static inline unsigned int __dmt(void) {
+    int res;
 
-	__asm__ __volatile__(
-	"	.set	push						\n"
-	"	.set	mips32r2					\n"
-	"	.set	noat						\n"
-	"	.word	0x41610BC1			# dmt $1	\n"
-	"	ehb							\n"
-	"	move	%0, $1						\n"
-	"	.set	pop						\n"
-	: "=r" (res));
+    __asm__ __volatile__(
+        "	.set	push						\n"
+        "	.set	mips32r2					\n"
+        "	.set	noat						\n"
+        "	.word	0x41610BC1			# dmt $1	\n"
+        "	ehb							\n"
+        "	move	%0, $1						\n"
+        "	.set	pop						\n"
+        : "=r" (res));
 
-	instruction_hazard();
+    instruction_hazard();
 
-	return res;
+    return res;
 }
 
 #define __VPECONTROL_TE_SHIFT	15
@@ -1578,21 +1573,19 @@ static inline unsigned int __dmt(void)
 
 #define __EMT_ENABLE		__VPECONTROL_TE
 
-static inline void __emt(unsigned int previous)
-{
-	if ((previous & __EMT_ENABLE))
-		__asm__ __volatile__(
-		"	.set	mips32r2				\n"
-		"	.word	0x41600be1		# emt		\n"
-		"	ehb						\n"
-		"	.set	mips0					\n");
+static inline void __emt(unsigned int previous) {
+    if ((previous & __EMT_ENABLE))
+        __asm__ __volatile__(
+            "	.set	mips32r2				\n"
+            "	.word	0x41600be1		# emt		\n"
+            "	ehb						\n"
+            "	.set	mips0					\n");
 }
 
-static inline void __ehb(void)
-{
-	__asm__ __volatile__(
-	"	.set	mips32r2					\n"
-	"	ehb							\n"		"	.set	mips0						\n");
+static inline void __ehb(void) {
+    __asm__ __volatile__(
+        "	.set	mips32r2					\n"
+        "	ehb							\n"		"	.set	mips0						\n");
 }
 
 /*

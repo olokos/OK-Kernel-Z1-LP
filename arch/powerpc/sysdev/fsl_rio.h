@@ -55,52 +55,52 @@
 #define MAX_PORT_NUM		4
 
 struct rio_atmu_regs {
-	 u32 rowtar;
-	 u32 rowtear;
-	 u32 rowbar;
-	 u32 pad1;
-	 u32 rowar;
-	 u32 pad2[3];
+    u32 rowtar;
+    u32 rowtear;
+    u32 rowbar;
+    u32 pad1;
+    u32 rowar;
+    u32 pad2[3];
 };
 
 struct rio_dbell_ring {
-	void *virt;
-	dma_addr_t phys;
+    void *virt;
+    dma_addr_t phys;
 };
 
 struct rio_port_write_msg {
-	 void *virt;
-	 dma_addr_t phys;
-	 u32 msg_count;
-	 u32 err_count;
-	 u32 discard_count;
+    void *virt;
+    dma_addr_t phys;
+    u32 msg_count;
+    u32 err_count;
+    u32 discard_count;
 };
 
 struct fsl_rio_dbell {
-	struct rio_mport *mport[MAX_PORT_NUM];
-	struct device *dev;
-	struct rio_dbell_regs __iomem *dbell_regs;
-	struct rio_dbell_ring dbell_ring;
-	int bellirq;
+    struct rio_mport *mport[MAX_PORT_NUM];
+    struct device *dev;
+    struct rio_dbell_regs __iomem *dbell_regs;
+    struct rio_dbell_ring dbell_ring;
+    int bellirq;
 };
 
 struct fsl_rio_pw {
-	struct device *dev;
-	struct rio_pw_regs __iomem *pw_regs;
-	struct rio_port_write_msg port_write_msg;
-	int pwirq;
-	struct work_struct pw_work;
-	struct kfifo pw_fifo;
-	spinlock_t pw_fifo_lock;
+    struct device *dev;
+    struct rio_pw_regs __iomem *pw_regs;
+    struct rio_port_write_msg port_write_msg;
+    int pwirq;
+    struct work_struct pw_work;
+    struct kfifo pw_fifo;
+    spinlock_t pw_fifo_lock;
 };
 
 struct rio_priv {
-	struct device *dev;
-	void __iomem *regs_win;
-	struct rio_atmu_regs __iomem *atmu_regs;
-	struct rio_atmu_regs __iomem *maint_atmu_regs;
-	void __iomem *maint_win;
-	void *rmm_handle; /* RapidIO message manager(unit) Handle */
+    struct device *dev;
+    void __iomem *regs_win;
+    struct rio_atmu_regs __iomem *atmu_regs;
+    struct rio_atmu_regs __iomem *maint_atmu_regs;
+    void __iomem *maint_win;
+    void *rmm_handle; /* RapidIO message manager(unit) Handle */
 };
 
 extern void __iomem *rio_regs_win;
@@ -112,22 +112,22 @@ extern struct fsl_rio_dbell *dbell;
 extern struct fsl_rio_pw *pw;
 
 extern int fsl_rio_setup_rmu(struct rio_mport *mport,
-	struct device_node *node);
+                             struct device_node *node);
 extern int fsl_rio_port_write_init(struct fsl_rio_pw *pw);
 extern int fsl_rio_pw_enable(struct rio_mport *mport, int enable);
 extern void fsl_rio_port_error_handler(int offset);
 extern int fsl_rio_doorbell_init(struct fsl_rio_dbell *dbell);
 
 extern int fsl_rio_doorbell_send(struct rio_mport *mport,
-				int index, u16 destid, u16 data);
+                                 int index, u16 destid, u16 data);
 extern int fsl_add_outb_message(struct rio_mport *mport,
-	struct rio_dev *rdev,
-	int mbox, void *buffer, size_t len);
+                                struct rio_dev *rdev,
+                                int mbox, void *buffer, size_t len);
 extern int fsl_open_outb_mbox(struct rio_mport *mport,
-	void *dev_id, int mbox, int entries);
+                              void *dev_id, int mbox, int entries);
 extern void fsl_close_outb_mbox(struct rio_mport *mport, int mbox);
 extern int fsl_open_inb_mbox(struct rio_mport *mport,
-	void *dev_id, int mbox, int entries);
+                             void *dev_id, int mbox, int entries);
 extern void fsl_close_inb_mbox(struct rio_mport *mport, int mbox);
 extern int fsl_add_inb_buffer(struct rio_mport *mport, int mbox, void *buf);
 extern void *fsl_get_inb_message(struct rio_mport *mport, int mbox);

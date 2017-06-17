@@ -60,8 +60,8 @@
  * DSP structure and data
  */
 struct sh_dsp_struct {
-	unsigned long dsp_regs[14];
-	long status;
+    unsigned long dsp_regs[14];
+    long status;
 };
 
 /*
@@ -69,48 +69,48 @@ struct sh_dsp_struct {
  */
 
 struct sh_fpu_hard_struct {
-	unsigned long fp_regs[16];
-	unsigned long xfp_regs[16];
-	unsigned long fpscr;
-	unsigned long fpul;
+    unsigned long fp_regs[16];
+    unsigned long xfp_regs[16];
+    unsigned long fpscr;
+    unsigned long fpul;
 
-	long status; /* software status information */
+    long status; /* software status information */
 };
 
 /* Dummy fpu emulator  */
 struct sh_fpu_soft_struct {
-	unsigned long fp_regs[16];
-	unsigned long xfp_regs[16];
-	unsigned long fpscr;
-	unsigned long fpul;
+    unsigned long fp_regs[16];
+    unsigned long xfp_regs[16];
+    unsigned long fpscr;
+    unsigned long fpul;
 
-	unsigned char lookahead;
-	unsigned long entry_pc;
+    unsigned char lookahead;
+    unsigned long entry_pc;
 };
 
 union thread_xstate {
-	struct sh_fpu_hard_struct hardfpu;
-	struct sh_fpu_soft_struct softfpu;
+    struct sh_fpu_hard_struct hardfpu;
+    struct sh_fpu_soft_struct softfpu;
 };
 
 struct thread_struct {
-	/* Saved registers when thread is descheduled */
-	unsigned long sp;
-	unsigned long pc;
+    /* Saved registers when thread is descheduled */
+    unsigned long sp;
+    unsigned long pc;
 
-	/* Various thread flags, see SH_THREAD_xxx */
-	unsigned long flags;
+    /* Various thread flags, see SH_THREAD_xxx */
+    unsigned long flags;
 
-	/* Save middle states of ptrace breakpoints */
-	struct perf_event *ptrace_bps[HBP_NUM];
+    /* Save middle states of ptrace breakpoints */
+    struct perf_event *ptrace_bps[HBP_NUM];
 
 #ifdef CONFIG_SH_DSP
-	/* Dsp status information */
-	struct sh_dsp_struct dsp_status;
+    /* Dsp status information */
+    struct sh_dsp_struct dsp_status;
 #endif
 
-	/* Extended processor state */
-	union thread_xstate *xstate;
+    /* Extended processor state */
+    union thread_xstate *xstate;
 };
 
 #define INIT_THREAD  {						\
@@ -142,28 +142,26 @@ extern int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags);
  * FPU lazy state save handling.
  */
 
-static __inline__ void disable_fpu(void)
-{
-	unsigned long __dummy;
+static __inline__ void disable_fpu(void) {
+    unsigned long __dummy;
 
-	/* Set FD flag in SR */
-	__asm__ __volatile__("stc	sr, %0\n\t"
-			     "or	%1, %0\n\t"
-			     "ldc	%0, sr"
-			     : "=&r" (__dummy)
-			     : "r" (SR_FD));
+    /* Set FD flag in SR */
+    __asm__ __volatile__("stc	sr, %0\n\t"
+                         "or	%1, %0\n\t"
+                         "ldc	%0, sr"
+                         : "=&r" (__dummy)
+                         : "r" (SR_FD));
 }
 
-static __inline__ void enable_fpu(void)
-{
-	unsigned long __dummy;
+static __inline__ void enable_fpu(void) {
+    unsigned long __dummy;
 
-	/* Clear out FD flag in SR */
-	__asm__ __volatile__("stc	sr, %0\n\t"
-			     "and	%1, %0\n\t"
-			     "ldc	%0, sr"
-			     : "=&r" (__dummy)
-			     : "r" (~SR_FD));
+    /* Clear out FD flag in SR */
+    __asm__ __volatile__("stc	sr, %0\n\t"
+                         "and	%1, %0\n\t"
+                         "ldc	%0, sr"
+                         : "=&r" (__dummy)
+                         : "r" (~SR_FD));
 }
 
 /* Double presision, NANS as NANS, rounding to nearest, no exceptions */
@@ -178,13 +176,12 @@ static __inline__ void enable_fpu(void)
 #define thread_saved_pc(tsk)	(tsk->thread.pc)
 
 void show_trace(struct task_struct *tsk, unsigned long *sp,
-		struct pt_regs *regs);
+                struct pt_regs *regs);
 
 #ifdef CONFIG_DUMP_CODE
 void show_code(struct pt_regs *regs);
 #else
-static inline void show_code(struct pt_regs *regs)
-{
+static inline void show_code(struct pt_regs *regs) {
 }
 #endif
 
@@ -199,14 +196,12 @@ extern unsigned long get_wchan(struct task_struct *p);
 #define ARCH_HAS_PREFETCH
 #define ARCH_HAS_PREFETCHW
 
-static inline void prefetch(const void *x)
-{
-	__builtin_prefetch(x, 0, 3);
+static inline void prefetch(const void *x) {
+    __builtin_prefetch(x, 0, 3);
 }
 
-static inline void prefetchw(const void *x)
-{
-	__builtin_prefetch(x, 1, 3);
+static inline void prefetchw(const void *x) {
+    __builtin_prefetch(x, 1, 3);
 }
 #endif
 

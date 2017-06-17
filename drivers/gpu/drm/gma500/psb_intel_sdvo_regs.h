@@ -64,30 +64,30 @@ struct psb_intel_sdvo_caps {
 /** This matches the EDID DTD structure, more or less */
 struct psb_intel_sdvo_dtd {
     struct {
-	u16 clock;		/**< pixel clock, in 10kHz units */
-	u8 h_active;		/**< lower 8 bits (pixels) */
-	u8 h_blank;		/**< lower 8 bits (pixels) */
-	u8 h_high;		/**< upper 4 bits each h_active, h_blank */
-	u8 v_active;		/**< lower 8 bits (lines) */
-	u8 v_blank;		/**< lower 8 bits (lines) */
-	u8 v_high;		/**< upper 4 bits each v_active, v_blank */
+        u16 clock;		/**< pixel clock, in 10kHz units */
+        u8 h_active;		/**< lower 8 bits (pixels) */
+        u8 h_blank;		/**< lower 8 bits (pixels) */
+        u8 h_high;		/**< upper 4 bits each h_active, h_blank */
+        u8 v_active;		/**< lower 8 bits (lines) */
+        u8 v_blank;		/**< lower 8 bits (lines) */
+        u8 v_high;		/**< upper 4 bits each v_active, v_blank */
     } part1;
 
     struct {
-	u8 h_sync_off;	/**< lower 8 bits, from hblank start */
-	u8 h_sync_width;	/**< lower 8 bits (pixels) */
-	/** lower 4 bits each vsync offset, vsync width */
-	u8 v_sync_off_width;
-	/**
-	 * 2 high bits of hsync offset, 2 high bits of hsync width,
-	 * bits 4-5 of vsync offset, and 2 high bits of vsync width.
-	 */
-	u8 sync_off_width_high;
-	u8 dtd_flags;
-	u8 sdvo_flags;
-	/** bits 6-7 of vsync offset at bits 6-7 */
-	u8 v_sync_off_high;
-	u8 reserved;
+        u8 h_sync_off;	/**< lower 8 bits, from hblank start */
+        u8 h_sync_width;	/**< lower 8 bits (pixels) */
+        /** lower 4 bits each vsync offset, vsync width */
+        u8 v_sync_off_width;
+        /**
+         * 2 high bits of hsync offset, 2 high bits of hsync width,
+         * bits 4-5 of vsync offset, and 2 high bits of vsync width.
+         */
+        u8 sync_off_width_high;
+        u8 dtd_flags;
+        u8 sdvo_flags;
+        /** bits 6-7 of vsync offset at bits 6-7 */
+        u8 v_sync_off_high;
+        u8 reserved;
     } part2;
 } __attribute__((packed));
 
@@ -666,7 +666,7 @@ struct psb_intel_sdvo_enhancement_limits_reply {
 #define SDVO_CMD_SET_TV_LUMA_FILTER			0x79
 struct psb_intel_sdvo_enhancements_arg {
     u16 value;
-}__attribute__((packed));
+} __attribute__((packed));
 
 #define SDVO_CMD_GET_DOT_CRAWL				0x70
 #define SDVO_CMD_SET_DOT_CRAWL				0x71
@@ -688,16 +688,16 @@ struct psb_intel_sdvo_enhancements_arg {
 #define SDVO_CMD_GET_SUPP_ENCODE	0x9d
 #define SDVO_CMD_GET_ENCODE		0x9e
 #define SDVO_CMD_SET_ENCODE		0x9f
-  #define SDVO_ENCODE_DVI	0x0
-  #define SDVO_ENCODE_HDMI	0x1
+#define SDVO_ENCODE_DVI	0x0
+#define SDVO_ENCODE_HDMI	0x1
 #define SDVO_CMD_SET_PIXEL_REPLI	0x8b
 #define SDVO_CMD_GET_PIXEL_REPLI	0x8c
 #define SDVO_CMD_GET_COLORIMETRY_CAP	0x8d
 #define SDVO_CMD_SET_COLORIMETRY	0x8e
-  #define SDVO_COLORIMETRY_RGB256   0x0
-  #define SDVO_COLORIMETRY_RGB220   0x1
-  #define SDVO_COLORIMETRY_YCrCb422 0x3
-  #define SDVO_COLORIMETRY_YCrCb444 0x4
+#define SDVO_COLORIMETRY_RGB256   0x0
+#define SDVO_COLORIMETRY_RGB220   0x1
+#define SDVO_COLORIMETRY_YCrCb422 0x3
+#define SDVO_COLORIMETRY_YCrCb444 0x4
 #define SDVO_CMD_GET_COLORIMETRY	0x8f
 #define SDVO_CMD_GET_AUDIO_ENCRYPT_PREFER 0x90
 #define SDVO_CMD_SET_AUDIO_STAT		0x91
@@ -711,9 +711,9 @@ struct psb_intel_sdvo_enhancements_arg {
 #define SDVO_CMD_GET_HBUF_DATA		0x99
 #define SDVO_CMD_SET_HBUF_TXRATE	0x9a
 #define SDVO_CMD_GET_HBUF_TXRATE	0x9b
-  #define SDVO_HBUF_TX_DISABLED	(0 << 6)
-  #define SDVO_HBUF_TX_ONCE	(2 << 6)
-  #define SDVO_HBUF_TX_VSYNC	(3 << 6)
+#define SDVO_HBUF_TX_DISABLED	(0 << 6)
+#define SDVO_HBUF_TX_ONCE	(2 << 6)
+#define SDVO_HBUF_TX_VSYNC	(3 << 6)
 #define SDVO_CMD_GET_AUDIO_TX_INFO	0x9c
 #define SDVO_NEED_TO_STALL  (1 << 7)
 

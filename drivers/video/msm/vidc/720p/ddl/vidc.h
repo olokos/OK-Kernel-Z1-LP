@@ -2239,24 +2239,24 @@ VIDC_REG_1137_METADATA_DISPLAY_INDEX_SHFT          0
 #define VIDC_720P_CMD_MFC_ENGINE_RESET 0x7
 
 enum vidc_720p_endian {
-	VIDC_720P_BIG_ENDIAN = 0x0,
-	VIDC_720P_LITTLE_ENDIAN = 0x1
+    VIDC_720P_BIG_ENDIAN = 0x0,
+    VIDC_720P_LITTLE_ENDIAN = 0x1
 };
 
 enum vidc_720p_memory_access_method {
-	VIDC_720P_TILE_LINEAR = 0,
-	VIDC_720P_TILE_16x16 = 2,
-	VIDC_720P_TILE_64x32 = 3
+    VIDC_720P_TILE_LINEAR = 0,
+    VIDC_720P_TILE_16x16 = 2,
+    VIDC_720P_TILE_64x32 = 3
 };
 
 enum vidc_720p_interrupt_control_mode {
-	VIDC_720P_INTERRUPT_MODE = 0,
-	VIDC_720P_POLL_MODE = 1
+    VIDC_720P_INTERRUPT_MODE = 0,
+    VIDC_720P_POLL_MODE = 1
 };
 
 enum vidc_720p_interrupt_level_selection {
-	VIDC_720P_INTERRUPT_LEVEL_SEL = 0,
-	VIDC_720P_INTERRUPT_PULSE_SEL = 1
+    VIDC_720P_INTERRUPT_LEVEL_SEL = 0,
+    VIDC_720P_INTERRUPT_PULSE_SEL = 1
 };
 
 #define VIDC_720P_INTR_BUFFER_FULL             0x002
@@ -2266,57 +2266,57 @@ enum vidc_720p_interrupt_level_selection {
 #define VIDC_720P_INTR_FRAME_DONE              0x100
 
 enum vidc_720p_enc_dec_selection {
-	VIDC_720P_DECODER = 0,
-	VIDC_720P_ENCODER = 1
+    VIDC_720P_DECODER = 0,
+    VIDC_720P_ENCODER = 1
 };
 
 enum vidc_720p_codec {
-	VIDC_720P_MPEG4 = 0,
-	VIDC_720P_H264 = 1,
-	VIDC_720P_DIVX = 2,
-	VIDC_720P_XVID = 3,
-	VIDC_720P_H263 = 4,
-	VIDC_720P_MPEG2 = 5,
-	VIDC_720P_VC1 = 6
+    VIDC_720P_MPEG4 = 0,
+    VIDC_720P_H264 = 1,
+    VIDC_720P_DIVX = 2,
+    VIDC_720P_XVID = 3,
+    VIDC_720P_H263 = 4,
+    VIDC_720P_MPEG2 = 5,
+    VIDC_720P_VC1 = 6
 };
 
 enum vidc_720p_frame {
-	VIDC_720P_NOTCODED = 0,
-	VIDC_720P_IFRAME = 1,
-	VIDC_720P_PFRAME = 2,
-	VIDC_720P_BFRAME = 3,
-	VIDC_720P_IDRFRAME = 4
+    VIDC_720P_NOTCODED = 0,
+    VIDC_720P_IFRAME = 1,
+    VIDC_720P_PFRAME = 2,
+    VIDC_720P_BFRAME = 3,
+    VIDC_720P_IDRFRAME = 4
 };
 
 enum vidc_720p_entropy_sel {
-	VIDC_720P_ENTROPY_SEL_CAVLC = 0,
-	VIDC_720P_ENTROPY_SEL_CABAC = 1
+    VIDC_720P_ENTROPY_SEL_CAVLC = 0,
+    VIDC_720P_ENTROPY_SEL_CABAC = 1
 };
 
 enum vidc_720p_cabac_model {
-	VIDC_720P_CABAC_MODEL_NUMBER_0 = 0,
-	VIDC_720P_CABAC_MODEL_NUMBER_1 = 1,
-	VIDC_720P_CABAC_MODEL_NUMBER_2 = 2
+    VIDC_720P_CABAC_MODEL_NUMBER_0 = 0,
+    VIDC_720P_CABAC_MODEL_NUMBER_1 = 1,
+    VIDC_720P_CABAC_MODEL_NUMBER_2 = 2
 };
 
 enum vidc_720p_DBConfig {
-	VIDC_720P_DB_ALL_BLOCKING_BOUNDARY = 0,
-	VIDC_720P_DB_DISABLE = 1,
-	VIDC_720P_DB_SKIP_SLICE_BOUNDARY = 2
+    VIDC_720P_DB_ALL_BLOCKING_BOUNDARY = 0,
+    VIDC_720P_DB_DISABLE = 1,
+    VIDC_720P_DB_SKIP_SLICE_BOUNDARY = 2
 };
 
 enum vidc_720p_MSlice_selection {
-	VIDC_720P_MSLICE_BY_MB_COUNT = 0,
-	VIDC_720P_MSLICE_BY_BYTE_COUNT = 1,
-	VIDC_720P_MSLICE_BY_GOB = 2,
-	VIDC_720P_MSLICE_OFF = 3
+    VIDC_720P_MSLICE_BY_MB_COUNT = 0,
+    VIDC_720P_MSLICE_BY_BYTE_COUNT = 1,
+    VIDC_720P_MSLICE_BY_GOB = 2,
+    VIDC_720P_MSLICE_OFF = 3
 };
 
 enum vidc_720p_display_status {
-	VIDC_720P_DECODE_ONLY = 0,
-	VIDC_720P_DECODE_AND_DISPLAY = 1,
-	VIDC_720P_DISPLAY_ONLY = 2,
-	VIDC_720P_EMPTY_BUFFER = 3
+    VIDC_720P_DECODE_ONLY = 0,
+    VIDC_720P_DECODE_AND_DISPLAY = 1,
+    VIDC_720P_DISPLAY_ONLY = 2,
+    VIDC_720P_EMPTY_BUFFER = 3
 };
 
 #define VIDC_720P_ENC_IFRAME_REQ       0x1
@@ -2336,76 +2336,76 @@ enum vidc_720p_display_status {
 #define VIDC_720P_METADATA_ENABLE_PASSTHROUGH  0x40
 
 struct vidc_720p_dec_disp_info {
-	enum vidc_720p_display_status disp_status;
-	u32 resl_change;
-	u32 reconfig_flush_done;
-	u32 img_size_x;
-	u32 img_size_y;
-	u32 y_addr;
-	u32 c_addr;
-	u32 tag_top;
-	u32 pic_time_top;
-	u32 disp_is_interlace;
-	u32 tag_bottom;
-	u32 pic_time_bottom;
-	u32 metadata_exists;
-	u32 crop_exists;
-	u32 crop_right_offset;
-	u32 crop_left_offset;
-	u32 crop_bottom_offset;
-	u32 crop_top_offset;
-	u32 input_frame;
-	u32 input_bytes_consumed;
-	u32 input_is_interlace;
-	u32 input_frame_num;
+    enum vidc_720p_display_status disp_status;
+    u32 resl_change;
+    u32 reconfig_flush_done;
+    u32 img_size_x;
+    u32 img_size_y;
+    u32 y_addr;
+    u32 c_addr;
+    u32 tag_top;
+    u32 pic_time_top;
+    u32 disp_is_interlace;
+    u32 tag_bottom;
+    u32 pic_time_bottom;
+    u32 metadata_exists;
+    u32 crop_exists;
+    u32 crop_right_offset;
+    u32 crop_left_offset;
+    u32 crop_bottom_offset;
+    u32 crop_top_offset;
+    u32 input_frame;
+    u32 input_bytes_consumed;
+    u32 input_is_interlace;
+    u32 input_frame_num;
 };
 
 struct vidc_720p_seq_hdr_info {
-	u32 img_size_x;
-	u32 img_size_y;
-	u32 dec_frm_size;
-	u32 min_num_dpb;
-	u32 min_dpb_size;
-	u32 profile;
-	u32 level;
-	u32 progressive;
-	u32 data_partitioned;
-	u32  crop_exists;
-	u32  crop_right_offset;
-	u32  crop_left_offset;
-	u32  crop_bottom_offset;
-	u32  crop_top_offset;
+    u32 img_size_x;
+    u32 img_size_y;
+    u32 dec_frm_size;
+    u32 min_num_dpb;
+    u32 min_dpb_size;
+    u32 profile;
+    u32 level;
+    u32 progressive;
+    u32 data_partitioned;
+    u32  crop_exists;
+    u32  crop_right_offset;
+    u32  crop_left_offset;
+    u32  crop_bottom_offset;
+    u32  crop_top_offset;
 };
 
 struct vidc_720p_enc_frame_info {
-	u32 enc_size;
-	u32 frame;
-	u32 metadata_exists;
+    u32 enc_size;
+    u32 frame;
+    u32 metadata_exists;
 };
 
 void vidc_720p_set_device_virtual_base(u8 *core_virtual_base_addr);
 
 void vidc_720p_init(char **ppsz_version, u32 i_firmware_size,
-	u32 *pi_firmware_address, enum vidc_720p_endian dma_endian,
-	u32 interrupt_off,
-	enum vidc_720p_interrupt_level_selection	interrupt_sel,
-	u32 interrupt_mask);
+                    u32 *pi_firmware_address, enum vidc_720p_endian dma_endian,
+                    u32 interrupt_off,
+                    enum vidc_720p_interrupt_level_selection	interrupt_sel,
+                    u32 interrupt_mask);
 
 u32 vidc_720p_do_sw_reset(void);
 
 u32 vidc_720p_reset_is_success(void);
 
 void vidc_720p_start_cpu(enum vidc_720p_endian dma_endian,
-		u32 *icontext_bufferstart, u32 *debug_core_dump_addr,
-		u32  debug_buffer_size);
+                         u32 *icontext_bufferstart, u32 *debug_core_dump_addr,
+                         u32  debug_buffer_size);
 
 u32 vidc_720p_cpu_start(void);
 
 void vidc_720p_stop_fw(void);
 
 void vidc_720p_get_interrupt_status(u32 *interrupt_status,
-		u32 *cmd_err_status, u32 *disp_pic_err_status,
-		u32 *op_failed);
+                                    u32 *cmd_err_status, u32 *disp_pic_err_status,
+                                    u32 *op_failed);
 
 void vidc_720p_interrupt_done_clear(void);
 
@@ -2413,14 +2413,14 @@ void vidc_720p_submit_command(u32 ch_id, u32 cmd_id);
 
 
 void vidc_720p_set_channel(u32 i_ch_id,
-	enum vidc_720p_enc_dec_selection enc_dec_sel,
-	enum vidc_720p_codec codec, u32 *pi_fw, u32 i_firmware_size);
+                           enum vidc_720p_enc_dec_selection enc_dec_sel,
+                           enum vidc_720p_codec codec, u32 *pi_fw, u32 i_firmware_size);
 
 u32 vidc_720p_engine_reset(u32 ch_id,
-   enum vidc_720p_endian dma_endian,
-   enum vidc_720p_interrupt_level_selection interrupt_sel,
-   u32 interrupt_mask
-);
+                           enum vidc_720p_endian dma_endian,
+                           enum vidc_720p_interrupt_level_selection interrupt_sel,
+                           u32 interrupt_mask
+                          );
 
 void vidc_720p_encode_set_profile(u32 i_profile, u32 i_level);
 
@@ -2429,7 +2429,7 @@ void vidc_720p_set_frame_size(u32 i_size_x, u32 i_size_y);
 void vidc_720p_encode_set_fps(u32 i_rc_frame_rate);
 
 void vidc_720p_encode_set_vop_time(u32 vop_time_resolution,
-		u32 vop_time_increment);
+                                   u32 vop_time_increment);
 
 void vidc_720p_encode_set_hec_period(u32 hec_period);
 
@@ -2438,7 +2438,7 @@ void vidc_720p_encode_set_short_header(u32 i_short_header);
 void vidc_720p_encode_set_qp_params(u32 i_max_qp, u32 i_min_qp);
 
 void vidc_720p_encode_set_rc_config(u32 enable_frame_level_rc,
-		u32 enable_mb_level_rc_flag, u32 i_frame_qp, u32 pframe_qp);
+                                    u32 enable_mb_level_rc_flag, u32 i_frame_qp, u32 pframe_qp);
 
 void vidc_720p_encode_set_bit_rate(u32 i_target_bitrate);
 
@@ -2449,65 +2449,65 @@ void vidc_720p_encode_set_control_param(u32 param_val);
 void vidc_720p_encode_set_frame_level_rc_params(u32 i_reaction_coeff);
 
 void vidc_720p_encode_set_mb_level_rc_params(u32 dark_region_as_flag,
-	u32 smooth_region_as_flag, u32 static_region_as_flag,
-	u32 activity_region_flag);
+        u32 smooth_region_as_flag, u32 static_region_as_flag,
+        u32 activity_region_flag);
 
 void vidc_720p_encode_set_entropy_control(enum vidc_720p_entropy_sel \
-		entropy_sel,
-		enum vidc_720p_cabac_model cabac_model_number);
+        entropy_sel,
+        enum vidc_720p_cabac_model cabac_model_number);
 
 void vidc_720p_encode_set_db_filter_control(enum vidc_720p_DBConfig
-		db_config, u32 i_slice_alpha_offset, u32 i_slice_beta_offset);
+        db_config, u32 i_slice_alpha_offset, u32 i_slice_beta_offset);
 
 void vidc_720p_encode_set_intra_refresh_mb_number(u32 i_cir_mb_number);
 
 void vidc_720p_encode_set_multi_slice_info(
-		enum vidc_720p_MSlice_selection m_slice_sel,
-		u32 multi_slice_size);
+    enum vidc_720p_MSlice_selection m_slice_sel,
+    u32 multi_slice_size);
 
 void vidc_720p_encode_set_dpb_buffer(u32 *pi_enc_dpb_addr, u32 alloc_len);
 
 void vidc_720p_set_deblock_line_buffer(u32 *pi_deblock_line_buffer_start,
-		u32 alloc_len);
+                                       u32 alloc_len);
 
 void vidc_720p_encode_set_i_period(u32 i_i_period);
 
 void vidc_720p_encode_init_codec(u32 i_ch_id,
-	enum vidc_720p_memory_access_method memory_access_model);
+                                 enum vidc_720p_memory_access_method memory_access_model);
 
 void vidc_720p_encode_unalign_bitstream(u32 upper_unalign_word,
-	u32 lower_unalign_word);
+                                        u32 lower_unalign_word);
 
 void vidc_720p_encode_set_seq_header_buffer(u32 ext_buffer_start,
-	u32 ext_buffer_end, u32 start_byte_num);
+        u32 ext_buffer_end, u32 start_byte_num);
 
 void vidc_720p_encode_frame(u32 ch_id, u32 ext_buffer_start,
-	u32 ext_buffer_end, u32 start_byte_number,
-	u32 y_addr, u32 c_addr);
+                            u32 ext_buffer_end, u32 start_byte_number,
+                            u32 y_addr, u32 c_addr);
 
 void vidc_720p_encode_get_header(u32 *pi_enc_header_size);
 
 void vidc_720p_enc_frame_info
-	(struct vidc_720p_enc_frame_info *enc_frame_info);
+(struct vidc_720p_enc_frame_info *enc_frame_info);
 
 void vidc_720p_decode_bitstream_header(u32 ch_id, u32 dec_unit_size,
-	u32 start_byte_num, u32 ext_buffer_start, u32 ext_buffer_end,
-	enum vidc_720p_memory_access_method memory_access_model,
-	u32 decode_order);
+                                       u32 start_byte_num, u32 ext_buffer_start, u32 ext_buffer_end,
+                                       enum vidc_720p_memory_access_method memory_access_model,
+                                       u32 decode_order);
 
 void vidc_720p_decode_get_seq_hdr_info
-    (struct vidc_720p_seq_hdr_info *seq_hdr_info);
+(struct vidc_720p_seq_hdr_info *seq_hdr_info);
 
 void vidc_720p_decode_set_dpb_release_buffer_mask
-    (u32 i_dpb_release_buffer_mask);
+(u32 i_dpb_release_buffer_mask);
 
 void vidc_720p_decode_set_dpb_buffers(u32 i_buf_index, u32 *pi_dpb_buffer);
 
 void vidc_720p_decode_set_comv_buffer
-    (u32 *pi_dpb_comv_buffer, u32 alloc_len);
+(u32 *pi_dpb_comv_buffer, u32 alloc_len);
 
 void vidc_720p_decode_set_dpb_details
-    (u32 num_dpb, u32 alloc_len, u32 *ref_buffer);
+(u32 num_dpb, u32 alloc_len, u32 *ref_buffer);
 
 void vidc_720p_decode_set_mpeg4Post_filter(u32 enable_post_filter);
 
@@ -2518,14 +2518,14 @@ void vidc_720p_decode_set_mpeg4_data_partitionbuffer(u32 *vsp_buf_start);
 void vidc_720p_decode_setH264VSPBuffer(u32 *pi_vsp_temp_buffer_start);
 
 void vidc_720p_decode_frame(u32 ch_id, u32 ext_buffer_start,
-		u32 ext_buffer_end, u32 dec_unit_size,
-		u32 start_byte_num, u32 input_frame_tag);
+                            u32 ext_buffer_end, u32 dec_unit_size,
+                            u32 start_byte_num, u32 input_frame_tag);
 
 void vidc_720p_issue_eos(u32 i_ch_id);
 void vidc_720p_eos_info(u32 *disp_status, u32 *resl_change);
 
 void vidc_720p_decode_display_info
-    (struct vidc_720p_dec_disp_info *disp_info);
+(struct vidc_720p_dec_disp_info *disp_info);
 
 void vidc_720p_decode_skip_frm_details(u32 *free_luma_dpb);
 

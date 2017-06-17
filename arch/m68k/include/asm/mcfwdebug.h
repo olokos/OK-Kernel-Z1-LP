@@ -3,7 +3,7 @@
 /*
  *	mcfdebug.h -- ColdFire Debug Module support.
  *
- * 	(C) Copyright 2001, Lineo Inc. (www.lineo.com) 
+ * 	(C) Copyright 2001, Lineo Inc. (www.lineo.com)
  */
 
 /****************************************************************************/
@@ -90,28 +90,28 @@
  * some pointer fiddling is performed to ensure this.
  */
 static inline void wdebug(int reg, unsigned long data) {
-	unsigned short dbg_spc[6];
-	unsigned short *dbg;
+    unsigned short dbg_spc[6];
+    unsigned short *dbg;
 
-	// Force alignment to long word boundary
-	dbg = (unsigned short *)((((unsigned long)dbg_spc) + 3) & 0xfffffffc);
+    // Force alignment to long word boundary
+    dbg = (unsigned short *)((((unsigned long)dbg_spc) + 3) & 0xfffffffc);
 
-	// Build up the debug instruction
-	dbg[0] = 0x2c80 | (reg & 0xf);
-	dbg[1] = (data >> 16) & 0xffff;
-	dbg[2] = data & 0xffff;
-	dbg[3] = 0;
+    // Build up the debug instruction
+    dbg[0] = 0x2c80 | (reg & 0xf);
+    dbg[1] = (data >> 16) & 0xffff;
+    dbg[2] = data & 0xffff;
+    dbg[3] = 0;
 
-	// Perform the wdebug instruction
+    // Perform the wdebug instruction
 #if 0
-	// This strain is for gas which doesn't have the wdebug instructions defined
-	asm(	"move.l	%0, %%a0\n\t"
-		".word	0xfbd0\n\t"
-		".word	0x0003\n\t"
-	    :: "g" (dbg) : "a0");
+    // This strain is for gas which doesn't have the wdebug instructions defined
+    asm(	"move.l	%0, %%a0\n\t"
+            ".word	0xfbd0\n\t"
+            ".word	0x0003\n\t"
+            :: "g" (dbg) : "a0");
 #else
-	// And this is for when it does
-	asm(	"wdebug	(%0)" :: "a" (dbg));
+    // And this is for when it does
+    asm(	"wdebug	(%0)" :: "a" (dbg));
 #endif
 }
 

@@ -54,7 +54,9 @@
 
 typedef pte_t *pte_addr_t;
 
-static inline int pte_file(pte_t pte) { return 0; }
+static inline int pte_file(pte_t pte) {
+    return 0;
+}
 
 /*
  * ZERO_PAGE is a global shared page that is always zero: used
@@ -93,7 +95,7 @@ extern unsigned int kobjsize(const void *objp);
 
 #include <asm-generic/pgtable.h>
 
-#else 
+#else
 
 /*
  * dummy tlb and user structures.

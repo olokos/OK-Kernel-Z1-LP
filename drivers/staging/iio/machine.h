@@ -18,7 +18,7 @@
  *			consumer side.
  */
 struct iio_map {
-	const char *adc_channel_label;
-	const char *consumer_dev_name;
-	const char *consumer_channel;
+    const char *adc_channel_label;
+    const char *consumer_dev_name;
+    const char *consumer_channel;
 };

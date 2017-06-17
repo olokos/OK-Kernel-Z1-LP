@@ -111,10 +111,10 @@ typedef unsigned long elf_greg_t;
 typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 
 typedef struct {
-	unsigned long	pr_regs[32];
-	unsigned long	pr_fsr;
-	unsigned long	pr_gsr;
-	unsigned long	pr_fprs;
+    unsigned long	pr_regs[32];
+    unsigned long	pr_fsr;
+    unsigned long	pr_gsr;
+    unsigned long	pr_fprs;
 } elf_fpregset_t;
 
 /* Format of 32-bit elf_gregset_t is:
@@ -129,37 +129,37 @@ typedef unsigned int compat_elf_greg_t;
 typedef compat_elf_greg_t compat_elf_gregset_t[COMPAT_ELF_NGREG];
 
 typedef struct {
-	union {
-		unsigned int	pr_regs[32];
-		unsigned long	pr_dregs[16];
-	} pr_fr;
-	unsigned int __unused;
-	unsigned int	pr_fsr;
-	unsigned char	pr_qcnt;
-	unsigned char	pr_q_entrysize;
-	unsigned char	pr_en;
-	unsigned int	pr_q[64];
+    union {
+        unsigned int	pr_regs[32];
+        unsigned long	pr_dregs[16];
+    } pr_fr;
+    unsigned int __unused;
+    unsigned int	pr_fsr;
+    unsigned char	pr_qcnt;
+    unsigned char	pr_q_entrysize;
+    unsigned char	pr_en;
+    unsigned int	pr_q[64];
 } compat_elf_fpregset_t;
 
 /* UltraSparc extensions.  Still unused, but will be eventually.  */
 typedef struct {
-	unsigned int pr_type;
-	unsigned int pr_align;
-	union {
-		struct {
-			union {
-				unsigned int	pr_regs[32];
-				unsigned long	pr_dregs[16];
-				long double	pr_qregs[8];
-			} pr_xfr;
-		} pr_v8p;
-		unsigned int	pr_xfsr;
-		unsigned int	pr_fprs;
-		unsigned int	pr_xg[8];
-		unsigned int	pr_xo[8];
-		unsigned long	pr_tstate;
-		unsigned int	pr_filler[8];
-	} pr_un;
+    unsigned int pr_type;
+    unsigned int pr_align;
+    union {
+        struct {
+            union {
+                unsigned int	pr_regs[32];
+                unsigned long	pr_dregs[16];
+                long double	pr_qregs[8];
+            } pr_xfr;
+        } pr_v8p;
+        unsigned int	pr_xfsr;
+        unsigned int	pr_fprs;
+        unsigned int	pr_xg[8];
+        unsigned int	pr_xo[8];
+        unsigned long	pr_tstate;
+        unsigned int	pr_filler[8];
+    } pr_un;
 } elf_xregset_t;
 
 /*

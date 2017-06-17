@@ -103,121 +103,121 @@
  * DMAx engines Command Descriptor Block Type
  */
 struct dma_cdb {
-	/*
-	 * Basic CDB structure (Table 20-17, p.499, 440spe_um_1_22.pdf)
-	 */
-	u8	pad0[2];        /* reserved */
-	u8	attr;		/* attributes */
-	u8	opc;		/* opcode */
-	u32	sg1u;		/* upper SG1 address */
-	u32	sg1l;		/* lower SG1 address */
-	u32	cnt;		/* SG count, 3B used */
-	u32	sg2u;		/* upper SG2 address */
-	u32	sg2l;		/* lower SG2 address */
-	u32	sg3u;		/* upper SG3 address */
-	u32	sg3l;		/* lower SG3 address */
+    /*
+     * Basic CDB structure (Table 20-17, p.499, 440spe_um_1_22.pdf)
+     */
+    u8	pad0[2];        /* reserved */
+    u8	attr;		/* attributes */
+    u8	opc;		/* opcode */
+    u32	sg1u;		/* upper SG1 address */
+    u32	sg1l;		/* lower SG1 address */
+    u32	cnt;		/* SG count, 3B used */
+    u32	sg2u;		/* upper SG2 address */
+    u32	sg2l;		/* lower SG2 address */
+    u32	sg3u;		/* upper SG3 address */
+    u32	sg3l;		/* lower SG3 address */
 };
 
 /*
  * DMAx hardware registers (p.515 in 440SPe UM 1.22)
  */
 struct dma_regs {
-	u32	cpfpl;
-	u32	cpfph;
-	u32	csfpl;
-	u32	csfph;
-	u32	dsts;
-	u32	cfg;
-	u8	pad0[0x8];
-	u16	cpfhp;
-	u16	cpftp;
-	u16	csfhp;
-	u16	csftp;
-	u8	pad1[0x8];
-	u32	acpl;
-	u32	acph;
-	u32	s1bpl;
-	u32	s1bph;
-	u32	s2bpl;
-	u32	s2bph;
-	u32	s3bpl;
-	u32	s3bph;
-	u8	pad2[0x10];
-	u32	earl;
-	u32	earh;
-	u8	pad3[0x8];
-	u32	seat;
-	u32	sead;
-	u32	op;
-	u32	fsiz;
+    u32	cpfpl;
+    u32	cpfph;
+    u32	csfpl;
+    u32	csfph;
+    u32	dsts;
+    u32	cfg;
+    u8	pad0[0x8];
+    u16	cpfhp;
+    u16	cpftp;
+    u16	csfhp;
+    u16	csftp;
+    u8	pad1[0x8];
+    u32	acpl;
+    u32	acph;
+    u32	s1bpl;
+    u32	s1bph;
+    u32	s2bpl;
+    u32	s2bph;
+    u32	s3bpl;
+    u32	s3bph;
+    u8	pad2[0x10];
+    u32	earl;
+    u32	earh;
+    u8	pad3[0x8];
+    u32	seat;
+    u32	sead;
+    u32	op;
+    u32	fsiz;
 };
 
 /*
  * I2O hardware registers (p.528 in 440SPe UM 1.22)
  */
 struct i2o_regs {
-	u32	ists;
-	u32	iseat;
-	u32	isead;
-	u8	pad0[0x14];
-	u32	idbel;
-	u8	pad1[0xc];
-	u32	ihis;
-	u32	ihim;
-	u8	pad2[0x8];
-	u32	ihiq;
-	u32	ihoq;
-	u8	pad3[0x8];
-	u32	iopis;
-	u32	iopim;
-	u32	iopiq;
-	u8	iopoq;
-	u8	pad4[3];
-	u16	iiflh;
-	u16	iiflt;
-	u16	iiplh;
-	u16	iiplt;
-	u16	ioflh;
-	u16	ioflt;
-	u16	ioplh;
-	u16	ioplt;
-	u32	iidc;
-	u32	ictl;
-	u32	ifcpp;
-	u8	pad5[0x4];
-	u16	mfac0;
-	u16	mfac1;
-	u16	mfac2;
-	u16	mfac3;
-	u16	mfac4;
-	u16	mfac5;
-	u16	mfac6;
-	u16	mfac7;
-	u16	ifcfh;
-	u16	ifcht;
-	u8	pad6[0x4];
-	u32	iifmc;
-	u32	iodb;
-	u32	iodbc;
-	u32	ifbal;
-	u32	ifbah;
-	u32	ifsiz;
-	u32	ispd0;
-	u32	ispd1;
-	u32	ispd2;
-	u32	ispd3;
-	u32	ihipl;
-	u32	ihiph;
-	u32	ihopl;
-	u32	ihoph;
-	u32	iiipl;
-	u32	iiiph;
-	u32	iiopl;
-	u32	iioph;
-	u32	ifcpl;
-	u32	ifcph;
-	u8	pad7[0x8];
-	u32	iopt;
+    u32	ists;
+    u32	iseat;
+    u32	isead;
+    u8	pad0[0x14];
+    u32	idbel;
+    u8	pad1[0xc];
+    u32	ihis;
+    u32	ihim;
+    u8	pad2[0x8];
+    u32	ihiq;
+    u32	ihoq;
+    u8	pad3[0x8];
+    u32	iopis;
+    u32	iopim;
+    u32	iopiq;
+    u8	iopoq;
+    u8	pad4[3];
+    u16	iiflh;
+    u16	iiflt;
+    u16	iiplh;
+    u16	iiplt;
+    u16	ioflh;
+    u16	ioflt;
+    u16	ioplh;
+    u16	ioplt;
+    u32	iidc;
+    u32	ictl;
+    u32	ifcpp;
+    u8	pad5[0x4];
+    u16	mfac0;
+    u16	mfac1;
+    u16	mfac2;
+    u16	mfac3;
+    u16	mfac4;
+    u16	mfac5;
+    u16	mfac6;
+    u16	mfac7;
+    u16	ifcfh;
+    u16	ifcht;
+    u8	pad6[0x4];
+    u32	iifmc;
+    u32	iodb;
+    u32	iodbc;
+    u32	ifbal;
+    u32	ifbah;
+    u32	ifsiz;
+    u32	ispd0;
+    u32	ispd1;
+    u32	ispd2;
+    u32	ispd3;
+    u32	ihipl;
+    u32	ihiph;
+    u32	ihopl;
+    u32	ihoph;
+    u32	iiipl;
+    u32	iiiph;
+    u32	iiopl;
+    u32	iioph;
+    u32	ifcpl;
+    u32	ifcph;
+    u8	pad7[0x8];
+    u32	iopt;
 };
 
 #endif /* _PPC440SPE_DMA_H */

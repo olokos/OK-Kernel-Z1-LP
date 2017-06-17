@@ -30,22 +30,21 @@
  *
  * Grabs the current RTC seconds counter and adjusts it to the Unix Epoch.
  */
-static void aica_rtc_gettimeofday(struct timespec *ts)
-{
-	unsigned long val1, val2;
+static void aica_rtc_gettimeofday(struct timespec *ts) {
+    unsigned long val1, val2;
 
-	do {
-		val1 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
-			(__raw_readl(AICA_RTC_SECS_L) & 0xffff);
+    do {
+        val1 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
+               (__raw_readl(AICA_RTC_SECS_L) & 0xffff);
 
-		val2 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
-			(__raw_readl(AICA_RTC_SECS_L) & 0xffff);
-	} while (val1 != val2);
+        val2 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
+               (__raw_readl(AICA_RTC_SECS_L) & 0xffff);
+    } while (val1 != val2);
 
-	ts->tv_sec = val1 - TWENTY_YEARS;
+    ts->tv_sec = val1 - TWENTY_YEARS;
 
-	/* Can't get nanoseconds with just a seconds counter. */
-	ts->tv_nsec = 0;
+    /* Can't get nanoseconds with just a seconds counter. */
+    ts->tv_nsec = 0;
 }
 
 /**
@@ -54,28 +53,26 @@ static void aica_rtc_gettimeofday(struct timespec *ts)
  *
  * Adjusts the given @tv to the AICA Epoch and sets the RTC seconds counter.
  */
-static int aica_rtc_settimeofday(const time_t secs)
-{
-	unsigned long val1, val2;
-	unsigned long adj = secs + TWENTY_YEARS;
+static int aica_rtc_settimeofday(const time_t secs) {
+    unsigned long val1, val2;
+    unsigned long adj = secs + TWENTY_YEARS;
 
-	do {
-		__raw_writel((adj & 0xffff0000) >> 16, AICA_RTC_SECS_H);
-		__raw_writel((adj & 0xffff), AICA_RTC_SECS_L);
+    do {
+        __raw_writel((adj & 0xffff0000) >> 16, AICA_RTC_SECS_H);
+        __raw_writel((adj & 0xffff), AICA_RTC_SECS_L);
 
-		val1 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
-			(__raw_readl(AICA_RTC_SECS_L) & 0xffff);
+        val1 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
+               (__raw_readl(AICA_RTC_SECS_L) & 0xffff);
 
-		val2 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
-			(__raw_readl(AICA_RTC_SECS_L) & 0xffff);
-	} while (val1 != val2);
+        val2 = ((__raw_readl(AICA_RTC_SECS_H) & 0xffff) << 16) |
+               (__raw_readl(AICA_RTC_SECS_L) & 0xffff);
+    } while (val1 != val2);
 
-	return 0;
+    return 0;
 }
 
-void aica_time_init(void)
-{
-	rtc_sh_get_time = aica_rtc_gettimeofday;
-	rtc_sh_set_time = aica_rtc_settimeofday;
+void aica_time_init(void) {
+    rtc_sh_get_time = aica_rtc_gettimeofday;
+    rtc_sh_set_time = aica_rtc_settimeofday;
 }
 

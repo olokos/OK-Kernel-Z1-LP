@@ -31,23 +31,23 @@
 int mhl_msc_clear(struct mhl_tx_ctrl *mhl_ctrl);
 
 int mhl_msc_command_done(struct mhl_tx_ctrl *mhl_ctrl,
-			 struct msc_command_struct *req);
+                         struct msc_command_struct *req);
 
 int mhl_msc_send_set_int(struct mhl_tx_ctrl *mhl_ctrl,
-			 u8 offset, u8 mask, u8 priority);
+                         u8 offset, u8 mask, u8 priority);
 
 int mhl_msc_send_write_stat(struct mhl_tx_ctrl *mhl_ctrl,
-			    u8 offset, u8 value);
+                            u8 offset, u8 value);
 int mhl_msc_send_msc_msg(struct mhl_tx_ctrl *mhl_ctrl,
-			 u8 sub_cmd, u8 cmd_data);
+                         u8 sub_cmd, u8 cmd_data);
 
 int mhl_msc_recv_set_int(struct mhl_tx_ctrl *mhl_ctrl,
-			 u8 offset, u8 set_int);
+                         u8 offset, u8 set_int);
 
 int mhl_msc_recv_write_stat(struct mhl_tx_ctrl *mhl_ctrl,
-			    u8 offset, u8 value);
+                            u8 offset, u8 value);
 int mhl_msc_recv_msc_msg(struct mhl_tx_ctrl *mhl_ctrl,
-			 u8 sub_cmd, u8 cmd_data);
+                         u8 sub_cmd, u8 cmd_data);
 void mhl_msc_send_work(struct work_struct *work);
 
 void mhl_rcp_key_release_work(struct work_struct *work);
@@ -57,15 +57,15 @@ void mhl_rcp_key_release_timer(unsigned long data);
 void mhl_screen_notify(struct mhl_tx_ctrl *mhl_ctrl, int screen_mode);
 
 void mhl_set_mouse_move_distance_dx(struct mhl_tx_ctrl *mhl_ctrl,
-				    int mouse_move_distance_dx);
+                                    int mouse_move_distance_dx);
 
 void mhl_set_mouse_move_distance_dy(struct mhl_tx_ctrl *mhl_ctrl,
-				    int mouse_move_distance_dy);
+                                    int mouse_move_distance_dy);
 
 /******************************************************************/
 /* Tx should implement these APIs */
 int mhl_send_msc_command(struct mhl_tx_ctrl *mhl_ctrl,
-			 struct msc_command_struct *req);
+                         struct msc_command_struct *req);
 void mhl_read_scratchpad(struct mhl_tx_ctrl *mhl_ctrl);
 void mhl_drive_hpd(struct mhl_tx_ctrl *mhl_ctrl, uint8_t to_state);
 void mhl_tmds_ctrl(struct mhl_tx_ctrl *ctrl, uint8_t on);

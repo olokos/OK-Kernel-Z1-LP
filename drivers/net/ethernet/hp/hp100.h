@@ -38,7 +38,7 @@
 #define HP100_REG_HW_ID		0x00	/* R:  (16) Unique card ID           */
 #define HP100_REG_TRACE		0x00	/* W:  (16) Used for debug output    */
 #define HP100_REG_PAGING	0x02	/* R:  (16),15:4 Card ID             */
-					/* W:  (16),3:0 Switch pages         */
+/* W:  (16),3:0 Switch pages         */
 #define HP100_REG_OPTION_LSW	0x04	/* RW: (16) Select card functions    */
 #define HP100_REG_OPTION_MSW	0x06	/* RW: (16) Select card functions    */
 
@@ -60,7 +60,7 @@
 #define HP100_REG_RX_PDL        0x1a	/* R: (8) BM: # rx pdl not executed */
 #define HP100_REG_TX_PDL        0x1b	/* R: (8) BM: # tx pdl not executed */
 #define HP100_REG_RX_PDA        0x18	/* W: (32) BM: Up to 31 addresses */
-					/*             which point to a PDL */
+/*             which point to a PDL */
 #define HP100_REG_SL_EARLY      0x1c	/*    (32) Enhanced Slave Early Rx */
 #define HP100_REG_STAT_DROPPED  0x20	/* R (12) Dropped Packet Counter */
 #define HP100_REG_STAT_ERRORED  0x22	/* R (8) Errored Packet Counter */
@@ -155,11 +155,11 @@
  */
 #define HP100_CHIPID_MASK        0xFFF0
 #define HP100_CHIPID_SHASTA      0x5350	/* Not 802.12 compliant */
-					 /* EISA BM/SL, MCA16/32 SL, ISA SL */
+/* EISA BM/SL, MCA16/32 SL, ISA SL */
 #define HP100_CHIPID_RAINIER     0x5360	/* Not 802.12 compliant EISA BM, */
-					 /* PCI SL, MCA16/32 SL, ISA SL */
+/* PCI SL, MCA16/32 SL, ISA SL */
 #define HP100_CHIPID_LASSEN      0x5370	/* 802.12 compliant PCI BM, PCI SL */
-					 /* LRF supported */
+/* LRF supported */
 
 /*
  *  Option Registers I and II
@@ -167,24 +167,24 @@
  */
 #define HP100_DEBUG_EN		0x8000	/* 0:Dis., 1:Enable Debug Dump Ptr. */
 #define HP100_RX_HDR		0x4000	/* 0:Dis., 1:Enable putting pkt into */
-					/*   system mem. before Rx interrupt */
+/*   system mem. before Rx interrupt */
 #define HP100_MMAP_DIS		0x2000	/* 0:Enable, 1:Disable mem.mapping. */
-					/*   MMAP_DIS must be 0 and MEM_EN */
-					/*   must be 1 for memory-mapped */
-					/*   mode to be enabled */
+/*   MMAP_DIS must be 0 and MEM_EN */
+/*   must be 1 for memory-mapped */
+/*   mode to be enabled */
 #define HP100_EE_EN		0x1000	/* 0:Disable,1:Enable EEPROM writing */
 #define HP100_BM_WRITE		0x0800	/* 0:Slave, 1:Bus Master for Tx data */
 #define HP100_BM_READ		0x0400	/* 0:Slave, 1:Bus Master for Rx data */
 #define HP100_TRI_INT		0x0200	/* 0:Don't, 1:Do tri-state the int */
 #define HP100_MEM_EN		0x0040	/* Config program set this to */
-					/*   0:Disable, 1:Enable mem map. */
-					/*   See MMAP_DIS. */
+/*   0:Disable, 1:Enable mem map. */
+/*   See MMAP_DIS. */
 #define HP100_IO_EN		0x0020	/* 1:Enable I/O transfers */
 #define HP100_BOOT_EN		0x0010	/* 1:Enable boot ROM access */
 #define HP100_FAKE_INT		0x0008	/* 1:int */
 #define HP100_INT_EN		0x0004	/* 1:Enable ints from card */
 #define HP100_HW_RST		0x0002	/* 0:Reset, 1:Out of reset */
-					/* NIC reset on 0 to 1 transition */
+/* NIC reset on 0 to 1 transition */
 
 /*
  *  Option Register III
@@ -193,9 +193,9 @@
 #define HP100_PRIORITY_TX	0x0080	/* 1:Do all Tx pkts as priority */
 #define HP100_EE_LOAD		0x0040	/* 1:EEPROM loading, 0 when done */
 #define HP100_ADV_NXT_PKT	0x0004	/* 1:Advance to next pkt in Rx queue */
-					/*   h/w will set to 0 when done */
+/*   h/w will set to 0 when done */
 #define HP100_TX_CMD		0x0002	/* 1:Tell h/w download done, h/w */
-					/*   will set to 0 when done */
+/*   will set to 0 when done */
 
 /*
  * Interrupt Status Registers I and II
@@ -229,7 +229,7 @@
 #define HP100_IRQ_SCRAMBLE      0x40
 #define HP100_BOND_HP           0x20
 #define HP100_LEVEL_IRQ		0x10	/* 0:Edge, 1:Level type interrupts. */
-					/* (Only valid on EISA cards) */
+/* (Only valid on EISA cards) */
 #define HP100_IRQMASK		0x0F	/* Isolate the IRQ bits */
 
 /*
@@ -244,12 +244,12 @@
  * (Page HW_MAP, BM, Offset 0x0f)
  */
 #define HP100_BM_BURST_RD       0x01	/* EISA only: 1=Use burst trans. fm system */
-					/* memory to chip (tx) */
+/* memory to chip (tx) */
 #define HP100_BM_BURST_WR       0x02	/* EISA only: 1=Use burst trans. fm system */
-					/* memory to chip (rx) */
+/* memory to chip (rx) */
 #define HP100_BM_MASTER		0x04	/* 0:Slave, 1:BM mode */
 #define HP100_BM_PAGE_CK        0x08	/* This bit should be set whenever in */
-					/* an EISA system */
+/* an EISA system */
 #define HP100_BM_PCI_8CLK       0x40	/* ... cycles 8 clocks apart */
 
 
@@ -258,15 +258,15 @@
  * (Page HW_MAP, MODECTRL1, Offset0x10)
  */
 #define HP100_TX_DUALQ          0x10
-   /* If set and BM -> dual tx pda queues */
+/* If set and BM -> dual tx pda queues */
 #define HP100_ISR_CLRMODE       0x02	/* If set ISR will clear all pending */
-				       /* interrupts on read (etr only?) */
+/* interrupts on read (etr only?) */
 #define HP100_EE_NOLOAD         0x04	/* Status whether res will be loaded */
-				       /* from the eeprom */
+/* from the eeprom */
 #define HP100_TX_CNT_FLG        0x08	/* Controls Early TX Reg Cnt Field */
 #define HP100_PDL_USE3          0x10	/* If set BM engine will read only */
-				       /* first three data elements of a PDL */
-				       /* on the first access. */
+/* first three data elements of a PDL */
+/* on the first access. */
 #define HP100_BUSTYPE_MASK      0xe0	/* Three bit bus type info */
 
 /*
@@ -274,12 +274,12 @@
  * (Page HW_MAP, MODECTRL2, Offset0x11)
  */
 #define HP100_EE_MASK           0x0f	/* Tell EEPROM circuit not to load */
-				       /* certain resources */
+/* certain resources */
 #define HP100_DIS_CANCEL        0x20	/* For tx dualq mode operation */
 #define HP100_EN_PDL_WB         0x40	/* 1: Status of PDL completion may be */
-				       /* written back to system mem */
+/* written back to system mem */
 #define HP100_EN_BUS_FAIL       0x80	/* Enables bus-fail portion of misc */
-				       /* interrupt */
+/* interrupt */
 
 /*
  * PCI Configuration and Control Register I
@@ -287,9 +287,9 @@
  */
 #define HP100_LO_MEM            0x01	/* 1: Mapped Mem requested below 1MB */
 #define HP100_NO_MEM            0x02	/* 1: Disables Req for sysmem to PCI */
-				       /* bios */
+/* bios */
 #define HP100_USE_ISA           0x04	/* 1: isa type decodes will occur */
-				       /* simultaneously with PCI decodes */
+/* simultaneously with PCI decodes */
 #define HP100_IRQ_HI_MASK       0xf0	/* pgmed by pci bios */
 #define HP100_PCI_IRQ_HI_MASK   0x78	/* Isolate 4 bits for PCI IRQ  */
 
@@ -302,7 +302,7 @@
 #define HP100_MWI               0x08	/* 1: en. PCI memory write invalidate */
 #define HP100_ARB_MODE          0x10	/* Select PCI arbitor type */
 #define HP100_STOP_EN           0x20	/* Enables PCI state machine to issue */
-				       /* pci stop if cascade not ready */
+/* pci stop if cascade not ready */
 #define HP100_IGNORE_PAR        0x40	/* 1: PCI state machine ignores parity */
 #define HP100_PCI_RESET         0x80	/* 0->1: Reset PCI block */
 
@@ -332,8 +332,8 @@
  * (Page EEPROM_CTRL, EEPROM_CTRL, Offset 0x08)
  */
 #define HP100_EEPROM_LOAD	0x0001	/* 0->1 loads EEPROM into registers. */
-					/* When it goes back to 0, load is   */
-					/* complete. This should take ~600us. */
+/* When it goes back to 0, load is   */
+/* complete. This should take ~600us. */
 
 /*
  * 10MB LAN Control and Configuration Register I
@@ -345,7 +345,7 @@
 #define HP100_LINK_BEAT_DIS	0x08	/* 0:Enable, 1:Disable link beat */
 #define HP100_LINK_BEAT_ST	0x04	/* 0:No, 1:Yes link beat being Rx */
 #define HP100_R_ROL_ST		0x02	/* 0:No, 1:Yes Rx twisted pair has */
-					/*             been reversed */
+/*             been reversed */
 #define HP100_AUI_ST		0x01	/* 0:No, 1:Yes use AUI on TP card */
 
 /*
@@ -353,7 +353,7 @@
  * (Page MAC_CTRL, 10_LAN_CFG_2, Offset 0x09)
  */
 #define HP100_SQU_ST		0x01	/* 0:No, 1:Yes collision signal sent */
-					/*       after Tx.Only used for AUI. */
+/*       after Tx.Only used for AUI. */
 #define HP100_FULLDUP           0x02	/* 1: LXT901 XCVR fullduplx enabled */
 #define HP100_DOT3_MAC          0x04	/* 1: DOT 3 Mac sel. unless Autosel */
 
@@ -372,9 +372,9 @@
 #define HP100_FRAME_FORMAT	0x08	/* 0:802.3, 1:802.5 frames */
 #define HP100_BRIDGE		0x04	/* 0:No, 1:Yes tell hub i am a bridge */
 #define HP100_PROM_MODE		0x02	/* 0:No, 1:Yes tell hub card is */
-					/*         promiscuous */
+/*         promiscuous */
 #define HP100_REPEATER		0x01	/* 0:No, 1:Yes tell hub MAC wants to */
-					/*         be a cascaded repeater */
+/*         be a cascaded repeater */
 
 /*
  * 100MB LAN Control and Configuration Register
@@ -383,16 +383,16 @@
 #define HP100_VG_SEL	        0x80	/* 0:No, 1:Yes use 100 Mbit MAC */
 #define HP100_LINK_UP_ST	0x40	/* 0:No, 1:Yes endnode logged in */
 #define HP100_LINK_CABLE_ST	0x20	/* 0:No, 1:Yes cable can hear tones */
-					/*         from  hub */
+/*         from  hub */
 #define HP100_LOAD_ADDR		0x10	/* 0->1 card addr will be sent  */
-					/* 100ms later the link status  */
-					/* bits are valid */
+/* 100ms later the link status  */
+/* bits are valid */
 #define HP100_LINK_CMD		0x08	/* 0->1 link will attempt to log in. */
-					/* 100ms later the link status */
-					/* bits are valid */
+/* 100ms later the link status */
+/* bits are valid */
 #define HP100_TRN_DONE          0x04	/* NEW ETR-Chips only: Will be reset */
-					/* after LinkUp Cmd is given and set */
-					/* when training has completed. */
+/* after LinkUp Cmd is given and set */
+/* when training has completed. */
 #define HP100_LINK_GOOD_ST	0x02	/* 0:No, 1:Yes cable passed training */
 #define HP100_VG_RESET		0x01	/* 0:Yes, 1:No reset the 100VG MAC */
 
@@ -428,13 +428,13 @@
 #define HP100_TR_MODE		0x80	/* 0:No, 1:Yes support Token Ring formats */
 #define HP100_TX_SAME		0x40	/* 0:No, 1:Yes Tx same packet continuous */
 #define HP100_LBK_XCVR		0x20	/* 0:No, 1:Yes loopback through MAC & */
-					/*   transceiver */
+/*   transceiver */
 #define HP100_LBK_MAC		0x10	/* 0:No, 1:Yes loopback through MAC */
 #define HP100_CRC_I		0x08	/* 0:No, 1:Yes inhibit CRC on Tx packets */
 #define HP100_ACCNA             0x04	/* 1: For 802.5: Accept only token ring
 					 * group addr that maches NA mask */
 #define HP100_KEEP_CRC		0x02	/* 0:No, 1:Yes keep CRC on Rx packets. */
-					/*   The length will reflect this. */
+/*   The length will reflect this. */
 #define HP100_ACCFA             0x01	/* 1: For 802.5: Accept only functional
 					 * addrs that match FA mask (page1) */
 #define HP100_MAC2MODEMASK	0x02
@@ -501,7 +501,7 @@
 #define HP100_MALLOW_CONFIGURE       0x0f00	/* C bit */
 #define HP100_MALLOW_DUPADDR         0x1000	/* D bit */
 #define HP100_HUB_MACVER             0xe000	/* R: 3 bit 802.12 MAC/RMAC training */
-					     /*    protocol of repeater */
+/*    protocol of repeater */
 
 /* ****************************************************************************** */
 
@@ -537,15 +537,15 @@
 /* Ethernet Packet Sizes */
 #define MIN_ETHER_SIZE          60
 #define MAX_ETHER_SIZE          1514	/* Needed for preallocation of */
-					/* skb buffer when busmastering */
+/* skb buffer when busmastering */
 
 /* Tx or Rx Ring Entry */
 typedef struct hp100_ring {
-	u_int *pdl;		/* Address of PDLs PDH, dword before
+    u_int *pdl;		/* Address of PDLs PDH, dword before
 				 * this address is used for rx hdr */
-	u_int pdl_paddr;	/* Physical address of PDL */
-	struct sk_buff *skb;
-	struct hp100_ring *next;
+    u_int pdl_paddr;	/* Physical address of PDL */
+    struct sk_buff *skb;
+    struct hp100_ring *next;
 } hp100_ring_t;
 
 
@@ -561,12 +561,12 @@ typedef struct hp100_ring {
 #define HP100_SKEW_ERR		0x2000	/* 0:No, 1:Yes skew out of range */
 #define HP100_BAD_SYMBOL_ERR	0x1000	/* 0:No, 1:Yes invalid symbol received */
 #define HP100_RCV_IPM_ERR	0x0800	/* 0:No, 1:Yes pkt had an invalid packet */
-					/*   marker */
+/*   marker */
 #define HP100_SYMBOL_BAL_ERR	0x0400	/* 0:No, 1:Yes symbol balance error */
 #define HP100_VG_ALN_ERR	0x0200	/* 0:No, 1:Yes non-octet received */
 #define HP100_TRUNC_ERR		0x0100	/* 0:No, 1:Yes the packet was truncated */
 #define HP100_RUNT_ERR		0x0040	/* 0:No, 1:Yes pkt length < Min Pkt */
-					/*   Length Reg. */
+/*   Length Reg. */
 #define HP100_ALN_ERR		0x0010	/* 0:No, 1:Yes align error. */
 #define HP100_CRC_ERR		0x0008	/* 0:No, 1:Yes CRC occurred. */
 

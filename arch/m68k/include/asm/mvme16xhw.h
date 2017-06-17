@@ -10,30 +10,30 @@
 extern long mvme_bdid_ptr;
 
 typedef struct {
-	char	bdid[4];
-	u_char	rev, mth, day, yr;
-	u_short	size, reserved;
-	u_short	brdno;
-	char brdsuffix[2];
-	u_long	options;
-	u_short	clun, dlun, ctype, dnum;
-	u_long	option2;
+    char	bdid[4];
+    u_char	rev, mth, day, yr;
+    u_short	size, reserved;
+    u_short	brdno;
+    char brdsuffix[2];
+    u_long	options;
+    u_short	clun, dlun, ctype, dnum;
+    u_long	option2;
 } t_bdid, *p_bdid;
 
 
 typedef struct {
-	u_char	ack_icr,
-		flt_icr,
-		sel_icr,
-		pe_icr,
-		bsy_icr,
-		spare1,
-		isr,
-		cr,
-		spare2,
-		spare3,
-		spare4,
-		data;
+    u_char	ack_icr,
+            flt_icr,
+            sel_icr,
+            pe_icr,
+            bsy_icr,
+            spare1,
+            isr,
+            cr,
+            spare2,
+            spare3,
+            spare4,
+            data;
 } MVMElp, *MVMElpPtr;
 
 #define MVME_LPR_BASE	0xfff42030
@@ -41,15 +41,15 @@ typedef struct {
 #define mvmelp   ((*(volatile MVMElpPtr)(MVME_LPR_BASE)))
 
 typedef struct {
-	unsigned char
-		ctrl,
-		bcd_sec,
-		bcd_min,
-		bcd_hr,
-		bcd_dow,
-		bcd_dom,
-		bcd_mth,
-		bcd_year;
+    unsigned char
+    ctrl,
+    bcd_sec,
+    bcd_min,
+    bcd_hr,
+    bcd_dow,
+    bcd_dom,
+    bcd_mth,
+    bcd_year;
 } MK48T08_t, *MK48T08ptr_t;
 
 #define RTC_WRITE	0x80

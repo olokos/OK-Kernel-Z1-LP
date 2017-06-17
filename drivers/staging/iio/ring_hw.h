@@ -15,8 +15,8 @@
  * @private:	device specific data
  */
 struct iio_hw_buffer {
-	struct iio_buffer buf;
-	void *private;
+    struct iio_buffer buf;
+    void *private;
 };
 
 #define iio_to_hw_buf(r) container_of(r, struct iio_hw_buffer, buf)

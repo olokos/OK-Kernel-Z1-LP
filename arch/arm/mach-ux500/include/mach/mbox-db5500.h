@@ -44,20 +44,20 @@ typedef void mbox_recv_cb_t (u32 mbox_msg, void *priv);
   *			id has been allocated by someone.
   */
 struct mbox {
-	struct list_head list;
-	struct platform_device *pdev;
-	mbox_recv_cb_t *cb;
-	void *client_data;
-	void __iomem *virtbase_peer;
-	void __iomem *virtbase_local;
-	u32 buffer[MBOX_BUF_SIZE];
-	char name[MBOX_NAME_SIZE];
-	struct completion buffer_available;
-	u8 client_blocked;
-	spinlock_t lock;
-	u8 write_index;
-	u8 read_index;
-	bool allocated;
+    struct list_head list;
+    struct platform_device *pdev;
+    mbox_recv_cb_t *cb;
+    void *client_data;
+    void __iomem *virtbase_peer;
+    void __iomem *virtbase_local;
+    u32 buffer[MBOX_BUF_SIZE];
+    char name[MBOX_NAME_SIZE];
+    struct completion buffer_available;
+    u8 client_blocked;
+    spinlock_t lock;
+    u8 write_index;
+    u8 read_index;
+    bool allocated;
 };
 
 /**

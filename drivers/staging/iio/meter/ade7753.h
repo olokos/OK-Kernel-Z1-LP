@@ -65,10 +65,10 @@
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct ade7753_state {
-	struct spi_device	*us;
-	struct mutex		buf_lock;
-	u8			tx[ADE7753_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADE7753_MAX_RX];
+    struct spi_device	*us;
+    struct mutex		buf_lock;
+    u8			tx[ADE7753_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADE7753_MAX_RX];
 };
 
 #endif

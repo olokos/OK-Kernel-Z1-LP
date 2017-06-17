@@ -25,25 +25,25 @@
 #endif
 
 struct msm_dmov_errdata {
-	uint32_t flush[6];
+    uint32_t flush[6];
 };
 
 struct msm_dmov_cmd {
-	struct list_head list;
-	unsigned int cmdptr;
-	void (*complete_func)(struct msm_dmov_cmd *cmd,
-			      unsigned int result,
-			      struct msm_dmov_errdata *err);
-	void (*exec_func)(struct msm_dmov_cmd *cmd);
-	struct work_struct work;
-	unsigned id;    /* For internal use */
-	void *user;	/* Pointer for caller's reference */
-	u8 toflush;
+    struct list_head list;
+    unsigned int cmdptr;
+    void (*complete_func)(struct msm_dmov_cmd *cmd,
+                          unsigned int result,
+                          struct msm_dmov_errdata *err);
+    void (*exec_func)(struct msm_dmov_cmd *cmd);
+    struct work_struct work;
+    unsigned id;    /* For internal use */
+    void *user;	/* Pointer for caller's reference */
+    u8 toflush;
 };
 
 struct msm_dmov_pdata {
-	int sd;
-	size_t sd_size;
+    int sd;
+    size_t sd_size;
 };
 
 void msm_dmov_enqueue_cmd(unsigned id, struct msm_dmov_cmd *cmd);
@@ -295,28 +295,28 @@ int msm_dmov_exec_cmd(unsigned id, unsigned int cmdptr);
 
 /* Single Item Mode */
 typedef struct {
-	unsigned cmd;
-	unsigned src;
-	unsigned dst;
-	unsigned len;
+    unsigned cmd;
+    unsigned src;
+    unsigned dst;
+    unsigned len;
 } dmov_s;
 
 /* Scatter/Gather Mode */
 typedef struct {
-	unsigned cmd;
-	unsigned src_dscr;
-	unsigned dst_dscr;
-	unsigned _reserved;
+    unsigned cmd;
+    unsigned src_dscr;
+    unsigned dst_dscr;
+    unsigned _reserved;
 } dmov_sg;
 
 /* Box mode */
 typedef struct {
-	uint32_t cmd;
-	uint32_t src_row_addr;
-	uint32_t dst_row_addr;
-	uint32_t src_dst_len;
-	uint32_t num_rows;
-	uint32_t row_offset;
+    uint32_t cmd;
+    uint32_t src_row_addr;
+    uint32_t dst_row_addr;
+    uint32_t src_dst_len;
+    uint32_t num_rows;
+    uint32_t row_offset;
 } dmov_box;
 
 /* bits for the cmd field of the above structures */

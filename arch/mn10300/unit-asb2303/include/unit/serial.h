@@ -51,8 +51,7 @@
 
 #ifndef __ASSEMBLY__
 
-static inline void __debug_to_serial(const char *p, int n)
-{
+static inline void __debug_to_serial(const char *p, int n) {
 }
 
 #endif /* !__ASSEMBLY__ */
@@ -112,26 +111,25 @@ do {						\
 } while (0)
 #define FLOWCTL_QUERY(LINE)	({ GDBPORT_SERIAL_MSR & UART_MSR_##LINE; })
 
-static inline void __debug_to_serial(const char *p, int n)
-{
-	char ch;
+static inline void __debug_to_serial(const char *p, int n) {
+    char ch;
 
-	FLOWCTL_SET(DTR);
+    FLOWCTL_SET(DTR);
 
-	for (; n > 0; n--) {
-		LSR_WAIT_FOR(THRE);
-		FLOWCTL_WAIT_FOR(CTS);
+    for (; n > 0; n--) {
+        LSR_WAIT_FOR(THRE);
+        FLOWCTL_WAIT_FOR(CTS);
 
-		ch = *p++;
-		if (ch == 0x0a) {
-			GDBPORT_SERIAL_TX = 0x0d;
-			LSR_WAIT_FOR(THRE);
-			FLOWCTL_WAIT_FOR(CTS);
-		}
-		GDBPORT_SERIAL_TX = ch;
-	}
+        ch = *p++;
+        if (ch == 0x0a) {
+            GDBPORT_SERIAL_TX = 0x0d;
+            LSR_WAIT_FOR(THRE);
+            FLOWCTL_WAIT_FOR(CTS);
+        }
+        GDBPORT_SERIAL_TX = ch;
+    }
 
-	FLOWCTL_CLEAR(DTR);
+    FLOWCTL_CLEAR(DTR);
 }
 
 #endif /* !__ASSEMBLY__ */

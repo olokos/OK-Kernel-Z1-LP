@@ -74,7 +74,7 @@
 #include <asm/uaccess.h>
 #include <asm/io.h>
 
-    /* Override mptbase.h by pre-defining these! */
+/* Override mptbase.h by pre-defining these! */
 #define MODULEAUTHOR	"LSI Corporation"
 
 #include "mptbase.h"

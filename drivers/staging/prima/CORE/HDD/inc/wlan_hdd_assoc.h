@@ -42,8 +42,7 @@
 /* Timeout (in ms) for Link to Up before Registering Station */
 #define ASSOC_LINKUP_TIMEOUT 60
 #define IBSS_BROADCAST_STAID 0
-typedef enum
-{
+typedef enum {
     /** Not associated in Infra or participating in an IBSS / Ad-hoc network.*/
     eConnectionState_NotConnected,
 
@@ -65,8 +64,7 @@ typedef enum
 
 } eConnectionState;
 /**This structure stores the connection information */
-typedef struct connection_info_s
-{
+typedef struct connection_info_s {
     /** connection state of the NIC.*/
     eConnectionState connState;
 

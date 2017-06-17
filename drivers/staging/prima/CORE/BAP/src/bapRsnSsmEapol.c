@@ -173,13 +173,11 @@ static int
 addEapolHeaders(tAniPacket *packet,
                 tAniMacAddr dstMac,
                 tAniMacAddr srcMac,
-                v_U8_t eapolType)
-{
+                v_U8_t eapolType) {
     int retVal;
     v_U16_t len;
 
-    do
-    {
+    do {
         retVal = aniAsfPacketGetLen(packet);
         if( !ANI_IS_STATUS_SUCCESS( retVal ) ) break;
 
@@ -209,8 +207,7 @@ addEapolHeaders(tAniPacket *packet,
 
         retVal = aniAsfPacketPrependBuffer(packet, dstMac, sizeof(tAniMacAddr));
         if( !ANI_IS_STATUS_SUCCESS( retVal ) ) break;
-    }
-    while( 0 );
+    } while( 0 );
 
     return retVal;
 }
@@ -238,8 +235,7 @@ addEapolHeaders(tAniPacket *packet,
 int
 aniEapolWriteStart(tAniPacket *packet,
                    tAniMacAddr dstMac,
-                   tAniMacAddr srcMac)
-{
+                   tAniMacAddr srcMac) {
     return ( addEapolHeaders(packet, dstMac, srcMac, ANI_EAPOL_TYPE_START) );
 }
 
@@ -268,8 +264,7 @@ aniEapolWriteStart(tAniPacket *packet,
 int
 aniEapolWriteEapPacket(tAniPacket *eapPacket,
                        tAniMacAddr dstMac,
-                       tAniMacAddr srcMac)
-{
+                       tAniMacAddr srcMac) {
     return( addEapolHeaders(eapPacket, dstMac, srcMac, ANI_EAPOL_TYPE_PACKET) );
 }
 
@@ -300,8 +295,7 @@ int
 aniEapolParse(tAniPacket *packet,
               v_U8_t **dstMac,
               v_U8_t **srcMac,
-              v_U8_t **type)
-{
+              v_U8_t **type) {
     v_U16_t frameType;
     v_U8_t *ptr;
     int retVal;
@@ -311,8 +305,7 @@ aniEapolParse(tAniPacket *packet,
         return ANI_E_ILLEGAL_ARG;
 
     retVal = aniAsfPacketGetBytes(packet, &ptr);
-    if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-    {
+    if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
         return retVal;
     }
 
@@ -345,14 +338,10 @@ aniEapolParse(tAniPacket *packet,
      * Note: EAPOL body len does not include headers
      */
     tmp = aniAsfPacketGetLen(packet) - EAPOL_RX_HEADER_SIZE;
-    if (retVal > tmp)
-    {
+    if (retVal > tmp) {
         retVal = ANI_E_ILLEGAL_ARG;
-    }
-    else
-    {
-        if (retVal < tmp)
-        {
+    } else {
+        if (retVal < tmp) {
             retVal = aniAsfPacketTruncateFromRear(packet, tmp - retVal);
         }
     }
@@ -392,18 +381,15 @@ aniEapolWriteKey(v_U32_t cryptHandle,
                  int descType,
                  void *keyDescData,
                  v_U8_t *micKey,
-                 v_U32_t micKeyLen)
-{
+                 v_U32_t micKeyLen) {
     int retVal;
 
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
-    do
-    {
+    do {
         if ((descType == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW)
-                || (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN))
-        {
+                || (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN)) {
 
             retVal = writeRsnKeyDesc(packet,
                                      (tAniEapolRsnKeyDesc *) keyDescData,
@@ -411,8 +397,7 @@ aniEapolWriteKey(v_U32_t cryptHandle,
                                      // ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW
                                      // or ANI_EAPOL_KEY_DESC_TYPE_RSN
                                      descType);
-            if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-            {
+            if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
                 break;
             }
 
@@ -425,14 +410,11 @@ aniEapolWriteKey(v_U32_t cryptHandle,
                                     micKey, micKeyLen);
             if( !ANI_IS_STATUS_SUCCESS(retVal) ) break;
 
-        }
-        else
-        {
+        } else {
             VOS_ASSERT( 0 );
             return ANI_E_ILLEGAL_ARG;
         }
-    }
-    while( 0 );
+    } while( 0 );
 
     return retVal;
 }
@@ -469,8 +451,7 @@ aniEapolWriteKey(v_U32_t cryptHandle,
 int
 aniEapolParseKey(tAniPacket *packet,
                  int *descType,
-                 void **keyDescData)
-{
+                 void **keyDescData) {
     int retVal;
     v_U8_t *bytes;
     v_U32_t eapolFrameLen;
@@ -478,8 +459,7 @@ aniEapolParseKey(tAniPacket *packet,
     if (packet == NULL)
         return ANI_E_NULL_VALUE;
 
-    do
-    {
+    do {
         eapolFrameLen = aniAsfPacketGetLen(packet);
 
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO, "Supp parsing EAPOL-Key frame of len %d\n",
@@ -492,8 +472,7 @@ aniEapolParseKey(tAniPacket *packet,
         if( !ANI_IS_STATUS_SUCCESS(retVal) ) break;
 
         if (*bytes == ANI_EAPOL_KEY_DESC_TYPE_RSN ||
-                *bytes == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW)
-        {
+                *bytes == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW) {
             tAniEapolRsnKeyDesc *rsnDesc = NULL;
 
             //*descType = ANI_EAPOL_KEY_DESC_TYPE_RSN;
@@ -502,9 +481,7 @@ aniEapolParseKey(tAniPacket *packet,
             retVal = parseRsnKeyDesc(packet, &rsnDesc);
             if( !ANI_IS_STATUS_SUCCESS(retVal) ) break;
             *keyDescData = rsnDesc;
-        }
-        else
-        {
+        } else {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "Supp received unknown EAPOL-Key descriptor: %d\n",
                        *bytes);
@@ -513,8 +490,7 @@ aniEapolParseKey(tAniPacket *packet,
         }
 
         aniAsfPacketMoveLeft(packet, eapolFrameLen);
-    }
-    while( 0 );
+    } while( 0 );
 
     return retVal;
 }
@@ -523,22 +499,19 @@ aniEapolParseKey(tAniPacket *packet,
 
 static int
 parseRsnKeyDesc(tAniPacket *packet,
-                tAniEapolRsnKeyDesc **rsnDescPtr)
-{
+                tAniEapolRsnKeyDesc **rsnDescPtr) {
     int retVal = ANI_OK;
     int len;
     v_U8_t *bytes;
     tAniEapolRsnKeyDesc *rsnDesc = NULL;
 
-    do
-    {
+    do {
         aniAsfPacketTruncateFromFront(packet, 1); // Desc-Type
 
         rsnDesc = (tAniEapolRsnKeyDesc *)
                   vos_mem_malloc( sizeof(tAniEapolRsnKeyDesc) );
 
-        if (rsnDesc == NULL)
-        {
+        if (rsnDesc == NULL) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "Supp could not malloc EAPOL-Key Descriptor for RSN\n");
             retVal = ANI_E_MALLOC_FAILED;
@@ -549,96 +522,81 @@ parseRsnKeyDesc(tAniPacket *packet,
         if (retVal != ANI_OK) break;
 
         retVal = aniAsfPacketGet16(packet, &rsnDesc->keyLen);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
 
         len = sizeof(rsnDesc->replayCounter);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->replayCounter, bytes, len);
 
         len = sizeof(rsnDesc->keyNonce);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->keyNonce, bytes, len);
 
         len = sizeof(rsnDesc->keyIv);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->keyIv, bytes, len);
 
         len = sizeof(rsnDesc->keyRecvSeqCounter);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->keyRecvSeqCounter, bytes, len);
 
         len = sizeof(rsnDesc->keyId);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->keyId, bytes, len);
 
         len = sizeof(rsnDesc->keyMic);
         retVal = aniAsfPacketGetN(packet, len, &bytes);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
         vos_mem_copy(rsnDesc->keyMic, bytes, len);
 
         retVal = aniAsfPacketGet16(packet, &rsnDesc->keyDataLen);
-        if (retVal != ANI_OK)
-        {
+        if (retVal != ANI_OK) {
             break;
         }
 
         len = rsnDesc->keyDataLen;
-        if (len > 0)
-        {
+        if (len > 0) {
             // We have a key
             retVal = aniAsfPacketGetN(packet, len, &bytes);
-            if (retVal != ANI_OK)
-            {
+            if (retVal != ANI_OK) {
                 break;
             }
             rsnDesc->keyData = (v_U8_t*)vos_mem_malloc(len);
-            if (rsnDesc->keyData == NULL)
-            {
+            if (rsnDesc->keyData == NULL) {
                 VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR, "Could not allocate RSN key bytes!\n");
                 VOS_ASSERT( 0 );
                 retVal = ANI_E_MALLOC_FAILED;
                 break;
             }
             vos_mem_copy(rsnDesc->keyData, bytes, len);
-        }
-        else
-        {
+        } else {
             rsnDesc->keyData = NULL;
         }
 
         *rsnDescPtr = rsnDesc;
 
-    }
-    while( 0 );
+    } while( 0 );
 
-    if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-    {
+    if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
         vos_mem_free(rsnDesc);
     }
 
@@ -647,14 +605,12 @@ parseRsnKeyDesc(tAniPacket *packet,
 
 static int
 parseRsnKeyInfo(tAniPacket *packet,
-                tAniRsnKeyInfo *info)
-{
+                tAniRsnKeyInfo *info) {
     v_U16_t tmp;
     int retVal;
 
     retVal = aniAsfPacketGet16(packet, &tmp);
-    if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-    {
+    if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
         return retVal;
     }
 
@@ -690,12 +646,10 @@ parseRsnKeyInfo(tAniPacket *packet,
 static int
 writeRsnKeyDesc(tAniPacket *packet,
                 tAniEapolRsnKeyDesc *rsnDesc,
-                v_U8_t keyDescType)
-{
+                v_U8_t keyDescType) {
     int retVal;
 
-    do
-    {
+    do {
         // This can be either ANI_EAPOL_KEY_DESC_TYPE_RSN
         // or ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW
         retVal = aniAsfPacketAppend8(packet, keyDescType);
@@ -741,22 +695,19 @@ writeRsnKeyDesc(tAniPacket *packet,
         retVal = aniAsfPacketAppend16(packet, rsnDesc->keyDataLen);
         if( !ANI_IS_STATUS_SUCCESS( retVal ) ) break;
 
-        if (rsnDesc->keyDataLen != 0)
-        {
+        if (rsnDesc->keyDataLen != 0) {
             retVal = aniAsfPacketAppendBuffer(packet,
                                               rsnDesc->keyData,
                                               rsnDesc->keyDataLen);
             if( !ANI_IS_STATUS_SUCCESS( retVal ) ) break;
         }
-    }
-    while( 0 );
+    } while( 0 );
 
     return retVal;
 }
 
 static int
-writeRsnKeyInfo(tAniPacket *packet, tAniRsnKeyInfo *info)
-{
+writeRsnKeyInfo(tAniPacket *packet, tAniRsnKeyInfo *info) {
     int retVal;
     v_U16_t tmp;
     v_U16_t infoValue;
@@ -806,8 +757,7 @@ writeRsnKeyMic(v_U32_t cryptHandle,
                tAniPacket *eapolFrame,
                tAniEapolRsnKeyDesc *rsnDesc,
                v_U8_t *micKey,
-               v_U32_t micKeyLen)
-{
+               v_U32_t micKeyLen) {
     int retVal = ANI_OK;
     int len;
 
@@ -817,20 +767,15 @@ writeRsnKeyMic(v_U32_t cryptHandle,
 
     // Sanity check the arguments and return if no MIC generation is
     // needed
-    if (micKey != NULL)
-    {
-        if (micKeyLen == 0 || !rsnDesc->info.micFlag)
-        {
+    if (micKey != NULL) {
+        if (micKeyLen == 0 || !rsnDesc->info.micFlag) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "Supp MIC key provided but micKeyLen or micFlag is not set!\n");
             VOS_ASSERT( 0 );
             return ANI_E_ILLEGAL_ARG;
         }
-    }
-    else
-    {
-        if (rsnDesc->info.micFlag)
-        {
+    } else {
+        if (rsnDesc->info.micFlag) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "Supp micFlag is set but MIC key not provided!\n");
             VOS_ASSERT( 0 );
@@ -841,8 +786,7 @@ writeRsnKeyMic(v_U32_t cryptHandle,
     }
 
     len = aniAsfPacketGetBytes(eapolFrame, &ptr);
-    if( !ANI_IS_STATUS_SUCCESS( len ) )
-    {
+    if( !ANI_IS_STATUS_SUCCESS( len ) ) {
         return len;
     }
 
@@ -855,25 +799,18 @@ writeRsnKeyMic(v_U32_t cryptHandle,
     ptr += EAPOL_VERSION_POS + SNAP_HEADER_SIZE;
     len -= (EAPOL_VERSION_POS + SNAP_HEADER_SIZE);
 
-    if (rsnDesc->info.keyDescVers == ANI_EAPOL_KEY_DESC_VERS_AES)
-    {
-        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, ptr, len, micKey, micKeyLen, result) ) )
-        {
+    if (rsnDesc->info.keyDescVers == ANI_EAPOL_KEY_DESC_VERS_AES) {
+        if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, ptr, len, micKey, micKeyLen, result) ) ) {
             retVal = ANI_OK;
-        }
-        else
-        {
+        } else {
             retVal = ANI_ERROR;
         }
-    }
-    else
-    {
+    } else {
         VOS_ASSERT( 0 );
         retVal = ANI_E_ILLEGAL_ARG;
     }
 
-    if (retVal == ANI_OK)
-    {
+    if (retVal == ANI_OK) {
         // Copy only 16B which is the smaller of the two and the same as
         // ANI_EAPOL_KEY_RSN_MIC_SIZE
         vos_mem_copy(micPos, result, VOS_DIGEST_MD5_SIZE);
@@ -900,14 +837,10 @@ aniEapolKeyCheckMic(v_U32_t cryptHandle,
                     int descType,
                     void *keyDescData,
                     v_U8_t *micKey,
-                    v_U32_t micKeyLen)
-{
-    if (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW)
-    {
+                    v_U32_t micKeyLen) {
+    if (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW) {
         return checkRsnKeyMic(cryptHandle, eapolFrame, keyDescData, micKey, micKeyLen);
-    }
-    else
-    {
+    } else {
         VOS_ASSERT( 0 );
         return ANI_E_ILLEGAL_ARG;
     }
@@ -919,8 +852,7 @@ checkRsnKeyMic(v_U32_t cryptHandle,
                tAniPacket *eapolFrame,
                tAniEapolRsnKeyDesc *rsnDesc,
                v_U8_t *micKey,
-               v_U32_t micKeyLen)
-{
+               v_U32_t micKeyLen) {
     int retVal = ANI_ERROR;
     int len;
 
@@ -930,15 +862,13 @@ checkRsnKeyMic(v_U32_t cryptHandle,
     v_U8_t result[VOS_DIGEST_SHA1_SIZE]; // Larger of the two
     v_U8_t incomingMic[ANI_EAPOL_KEY_RSN_MIC_SIZE];
 
-    if (!rsnDesc->info.micFlag)
-    {
+    if (!rsnDesc->info.micFlag) {
         VOS_ASSERT( 0 );
         return ANI_E_ILLEGAL_ARG;
     }
 
     len = aniAsfPacketGetBytes(eapolFrame, &ptr);
-    if( ANI_IS_STATUS_SUCCESS( len ) )
-    {
+    if( ANI_IS_STATUS_SUCCESS( len ) ) {
         micPos = ptr + ANI_SSM_RSN_KEY_MIC_OFFSET;
 
         // Skip to the EAPOL version field for MIC computation
@@ -949,23 +879,17 @@ checkRsnKeyMic(v_U32_t cryptHandle,
         vos_mem_copy( incomingMic, micPos, ANI_EAPOL_KEY_RSN_MIC_SIZE );
         vos_mem_zero( micPos, ANI_EAPOL_KEY_RSN_MIC_SIZE );
 
-        if (rsnDesc->info.keyDescVers == ANI_EAPOL_KEY_DESC_VERS_AES)
-        {
-            if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, ptr, len, micKey, micKeyLen, result) ) )
-            {
+        if (rsnDesc->info.keyDescVers == ANI_EAPOL_KEY_DESC_VERS_AES) {
+            if( VOS_IS_STATUS_SUCCESS( vos_sha1_hmac_str(cryptHandle, ptr, len, micKey, micKeyLen, result) ) ) {
                 retVal = ANI_OK;
             }
-        }
-        else
-        {
+        } else {
             VOS_ASSERT( 0 );
             retVal = ANI_E_ILLEGAL_ARG;
         }
 
-        if (retVal == ANI_OK)
-        {
-            if ( !vos_mem_compare(incomingMic, result, ANI_EAPOL_KEY_RSN_MIC_SIZE))
-            {
+        if (retVal == ANI_OK) {
+            if ( !vos_mem_compare(incomingMic, result, ANI_EAPOL_KEY_RSN_MIC_SIZE)) {
                 retVal = ANI_E_MIC_FAILED;
             }
         }
@@ -985,23 +909,18 @@ checkRsnKeyMic(v_U32_t cryptHandle,
  * @return ANI_OK if the operation succeeds
  */
 int
-aniEapolKeyFreeDesc(int descType, void *keyDescData)
-{
+aniEapolKeyFreeDesc(int descType, void *keyDescData) {
     tAniEapolRsnKeyDesc *rsnDesc;
 
-    if( keyDescData )
-    {
+    if( keyDescData ) {
         if ((descType == ANI_EAPOL_KEY_DESC_TYPE_RSN_NEW)
-                || (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN))
-        {
+                || (descType == ANI_EAPOL_KEY_DESC_TYPE_RSN)) {
 
             rsnDesc = (tAniEapolRsnKeyDesc *) keyDescData;
             if (rsnDesc->keyData != NULL)
                 vos_mem_free(rsnDesc->keyData);
 
-        }
-        else
-        {
+        } else {
 
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        "Supp asked to free illegal type: %d\n", descType);
@@ -1015,10 +934,8 @@ aniEapolKeyFreeDesc(int descType, void *keyDescData)
 }
 
 v_U8_t *
-aniEapolType2Str(v_U8_t type)
-{
-    switch (type)
-    {
+aniEapolType2Str(v_U8_t type) {
+    switch (type) {
     case ANI_EAPOL_TYPE_PACKET:
         return (v_U8_t *)ANI_EAPOL_TYPE_PACKET_STR;
         break;
@@ -1041,34 +958,28 @@ aniEapolType2Str(v_U8_t type)
 }
 
 
-void bapRsnEapolHandler( v_PVOID_t pvFsm, tAniPacket *packet, v_BOOL_t fIsAuth )
-{
+void bapRsnEapolHandler( v_PVOID_t pvFsm, tAniPacket *packet, v_BOOL_t fIsAuth ) {
     int retVal;
     v_U8_t *dstMac = NULL;
     v_U8_t *srcMac = NULL;
     v_U8_t *type = NULL;
 
     retVal = aniEapolParse(packet, &dstMac, &srcMac, &type);
-    if ( retVal >= 0 )
-    {
+    if ( retVal >= 0 ) {
         retVal = ANI_OK;
 
         // Sanity check that a PAE role has been assigned to it,
         // and then dispatch to the appropriate handler
 
-        if( fIsAuth )
-        {
+        if( fIsAuth ) {
             tAuthRsnFsm *fsm = (tAuthRsnFsm *)pvFsm;
             authEapolHandler( fsm, packet, dstMac, srcMac, type );
-        }
-        else
-        {
+        } else {
             tSuppRsnFsm *fsm = (tSuppRsnFsm *)pvFsm;
             suppEapolHandler(fsm, packet, dstMac, srcMac, type);
         } // switch statement
     } // Successfully parsed EAPOL
-    else
-    {
+    else {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "eapolHandler Received bad EAPOL message of len %d (status=%d)\n",
                    aniAsfPacketGetLen(packet), retVal );
@@ -1077,8 +988,7 @@ void bapRsnEapolHandler( v_PVOID_t pvFsm, tAniPacket *packet, v_BOOL_t fIsAuth )
 }
 
 
-int bapRsnFormPktFromVosPkt( tAniPacket **ppPacket, vos_pkt_t *pVosPacket )
-{
+int bapRsnFormPktFromVosPkt( tAniPacket **ppPacket, vos_pkt_t *pVosPacket ) {
     int retVal = ANI_ERROR;
     VOS_STATUS status;
     v_U16_t uPktLen;
@@ -1087,12 +997,10 @@ int bapRsnFormPktFromVosPkt( tAniPacket **ppPacket, vos_pkt_t *pVosPacket )
     v_U8_t *pFrame;
     tAniPacket *pAniPacket = NULL;
 
-    do
-    {
+    do {
         status = vos_pkt_get_packet_length( pVosPacket, &uPktLen );
         if( !VOS_IS_STATUS_SUCCESS(status) ) break;
-        if( (uPktLen < BAP_RSN_ETHERNET_3_HEADER_LEN) )
-        {
+        if( (uPktLen < BAP_RSN_ETHERNET_3_HEADER_LEN) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        " authRsnRxFrameHandler receive eapol packet size (%d) too small (%d)\n",
                        uPktLen, BAP_RSN_ETHERNET_3_HEADER_LEN );
@@ -1101,8 +1009,7 @@ int bapRsnFormPktFromVosPkt( tAniPacket **ppPacket, vos_pkt_t *pVosPacket )
         status = vos_pkt_peek_data( pVosPacket, 0, (v_VOID_t *)&pFrame, uPktLen );
         if( !VOS_IS_STATUS_SUCCESS(status) ) break;
         retVal = aniAsfPacketAllocateExplicit(&pAniPacket, uPktLen, 0 );
-        if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-        {
+        if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        " authRsnRxFrameHandler failed to get buffer size (%d) \n",
                        uPktLen );
@@ -1119,22 +1026,17 @@ int bapRsnFormPktFromVosPkt( tAniPacket **ppPacket, vos_pkt_t *pVosPacket )
         VOS_ASSERT( uPktLen > 0 );
         retVal = aniAsfPacketAppendBuffer( pAniPacket, pFrame + BAP_RSN_ETHERNET_3_HEADER_LEN,
                                            uPktLen );
-        if( !ANI_IS_STATUS_SUCCESS( retVal ) )
-        {
+        if( !ANI_IS_STATUS_SUCCESS( retVal ) ) {
             VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                        " authRsnRxFrameHandler cannot retrieve eapol payload size (%d)\n",
                        uPktLen );
             break;
         }
-    }
-    while( 0 );
+    } while( 0 );
 
-    if( ANI_IS_STATUS_SUCCESS( retVal ) )
-    {
+    if( ANI_IS_STATUS_SUCCESS( retVal ) ) {
         *ppPacket = pAniPacket;
-    }
-    else if( pAniPacket )
-    {
+    } else if( pAniPacket ) {
         aniAsfPacketFree( pAniPacket );
     }
 

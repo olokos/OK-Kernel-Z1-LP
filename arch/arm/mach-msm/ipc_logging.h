@@ -41,19 +41,19 @@
  * structure since they will be ignored by the extraction tool.
  */
 struct ipc_log_page_header {
-	uint32_t magic;
-	uint32_t nmagic;
-	uint32_t page_num;
-	uint16_t read_offset;
-	uint16_t write_offset;
-	uint64_t log_id;
-	uint64_t start_time;
-	uint64_t end_time;
-	int64_t ctx_offset;
+    uint32_t magic;
+    uint32_t nmagic;
+    uint32_t page_num;
+    uint16_t read_offset;
+    uint16_t write_offset;
+    uint64_t log_id;
+    uint64_t start_time;
+    uint64_t end_time;
+    int64_t ctx_offset;
 
-	/* add local data structures after this point */
-	struct list_head list;
-	uint16_t nd_read_offset;
+    /* add local data structures after this point */
+    struct list_head list;
+    uint16_t nd_read_offset;
 };
 
 /**
@@ -66,8 +66,8 @@ struct ipc_log_page_header {
  * the structure into a single kernel page.
  */
 struct ipc_log_page {
-	struct ipc_log_page_header hdr;
-	char data[PAGE_SIZE - sizeof(struct ipc_log_page_header)];
+    struct ipc_log_page_header hdr;
+    char data[PAGE_SIZE - sizeof(struct ipc_log_page_header)];
 };
 
 /**
@@ -97,46 +97,46 @@ struct ipc_log_page {
  * @read_avail:  Completed when new data is added to the log
  */
 struct ipc_log_context {
-	uint32_t magic;
-	uint32_t nmagic;
-	uint32_t version;
-	uint16_t user_version;
-	uint16_t header_size;
-	uint64_t log_id;
-	char name[IPC_LOG_MAX_CONTEXT_NAME_LEN];
+    uint32_t magic;
+    uint32_t nmagic;
+    uint32_t version;
+    uint16_t user_version;
+    uint16_t header_size;
+    uint64_t log_id;
+    char name[IPC_LOG_MAX_CONTEXT_NAME_LEN];
 
-	/* add local data structures after this point */
-	struct list_head list;
-	struct list_head page_list;
-	struct ipc_log_page *first_page;
-	struct ipc_log_page *last_page;
-	struct ipc_log_page *write_page;
-	struct ipc_log_page *read_page;
-	struct ipc_log_page *nd_read_page;
+    /* add local data structures after this point */
+    struct list_head list;
+    struct list_head page_list;
+    struct ipc_log_page *first_page;
+    struct ipc_log_page *last_page;
+    struct ipc_log_page *write_page;
+    struct ipc_log_page *read_page;
+    struct ipc_log_page *nd_read_page;
 
-	uint32_t write_avail;
-	struct dentry *dent;
-	struct list_head dfunc_info_list;
-	spinlock_t context_lock_lhb1;
-	struct completion read_avail;
+    uint32_t write_avail;
+    struct dentry *dent;
+    struct list_head dfunc_info_list;
+    spinlock_t context_lock_lhb1;
+    struct completion read_avail;
 };
 
 struct dfunc_info {
-	struct list_head list;
-	int type;
-	void (*dfunc) (struct encode_context *, struct decode_context *);
+    struct list_head list;
+    int type;
+    void (*dfunc) (struct encode_context *, struct decode_context *);
 };
 
 enum {
-	TSV_TYPE_INVALID,
-	TSV_TYPE_TIMESTAMP,
-	TSV_TYPE_POINTER,
-	TSV_TYPE_INT32,
-	TSV_TYPE_BYTE_ARRAY,
+    TSV_TYPE_INVALID,
+    TSV_TYPE_TIMESTAMP,
+    TSV_TYPE_POINTER,
+    TSV_TYPE_INT32,
+    TSV_TYPE_BYTE_ARRAY,
 };
 
 enum {
-	OUTPUT_DEBUGFS,
+    OUTPUT_DEBUGFS,
 };
 
 #define IPC_LOG_CONTEXT_MAGIC_NUM 0x25874452
@@ -150,14 +150,12 @@ enum {
 void check_and_create_debugfs(void);
 
 void create_ctx_debugfs(struct ipc_log_context *ctxt,
-			const char *mod_name);
+                        const char *mod_name);
 #else
-void check_and_create_debugfs(void)
-{
+void check_and_create_debugfs(void) {
 }
 
-void create_ctx_debugfs(struct ipc_log_context *ctxt, const char *mod_name)
-{
+void create_ctx_debugfs(struct ipc_log_context *ctxt, const char *mod_name) {
 }
 #endif
 

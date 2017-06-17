@@ -83,19 +83,16 @@
 #define MXS_TOG_ADDR		0xc
 
 #ifndef __ASSEMBLER__
-static inline void __mxs_setl(u32 mask, void __iomem *reg)
-{
-	__raw_writel(mask, reg + MXS_SET_ADDR);
+static inline void __mxs_setl(u32 mask, void __iomem *reg) {
+    __raw_writel(mask, reg + MXS_SET_ADDR);
 }
 
-static inline void __mxs_clrl(u32 mask, void __iomem *reg)
-{
-	__raw_writel(mask, reg + MXS_CLR_ADDR);
+static inline void __mxs_clrl(u32 mask, void __iomem *reg) {
+    __raw_writel(mask, reg + MXS_CLR_ADDR);
 }
 
-static inline void __mxs_togl(u32 mask, void __iomem *reg)
-{
-	__raw_writel(mask, reg + MXS_TOG_ADDR);
+static inline void __mxs_togl(u32 mask, void __iomem *reg) {
+    __raw_writel(mask, reg + MXS_TOG_ADDR);
 }
 
 /*
@@ -103,14 +100,12 @@ static inline void __mxs_togl(u32 mask, void __iomem *reg)
  */
 #define MXS_CHIPID (MXS_IO_ADDRESS(MXS_DIGCTL_BASE_ADDR) + HW_DIGCTL_CHIPID)
 
-static inline int cpu_is_mx23(void)
-{
-	return ((__raw_readl(MXS_CHIPID) >> 16) == 0x3780);
+static inline int cpu_is_mx23(void) {
+    return ((__raw_readl(MXS_CHIPID) >> 16) == 0x3780);
 }
 
-static inline int cpu_is_mx28(void)
-{
-	return ((__raw_readl(MXS_CHIPID) >> 16) == 0x2800);
+static inline int cpu_is_mx28(void) {
+    return ((__raw_readl(MXS_CHIPID) >> 16) == 0x2800);
 }
 #endif
 

@@ -71,9 +71,8 @@
  * in %g2 (ie. index of the faulting instruction in the range).
  */
 
-struct exception_table_entry
-{
-        unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -108,7 +107,9 @@ __get_user_check((x),__gu_addr,sizeof(*(ptr)),__typeof__(*(ptr))); })
 #define __put_user(x,ptr) __put_user_nocheck((__typeof__(*(ptr)))(x),(ptr),sizeof(*(ptr)))
 #define __get_user(x,ptr) __get_user_nocheck((x),(ptr),sizeof(*(ptr)),__typeof__(*(ptr)))
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) ((struct __large_struct __user *)(x))
 
 #define __put_user_check(x,addr,size) ({ \
@@ -247,91 +248,82 @@ extern int __get_user_bad(void);
 
 extern unsigned long __copy_user(void __user *to, const void __user *from, unsigned long size);
 
-static inline unsigned long copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (n && __access_ok((unsigned long) to, n))
-		return __copy_user(to, (__force void __user *) from, n);
-	else
-		return n;
+static inline unsigned long copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (n && __access_ok((unsigned long) to, n))
+        return __copy_user(to, (__force void __user *) from, n);
+    else
+        return n;
 }
 
-static inline unsigned long __copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	return __copy_user(to, (__force void __user *) from, n);
+static inline unsigned long __copy_to_user(void __user *to, const void *from, unsigned long n) {
+    return __copy_user(to, (__force void __user *) from, n);
 }
 
-static inline unsigned long copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (n && __access_ok((unsigned long) from, n))
-		return __copy_user((__force void __user *) to, from, n);
-	else
-		return n;
+static inline unsigned long copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (n && __access_ok((unsigned long) from, n))
+        return __copy_user((__force void __user *) to, from, n);
+    else
+        return n;
 }
 
-static inline unsigned long __copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	return __copy_user((__force void __user *) to, from, n);
+static inline unsigned long __copy_from_user(void *to, const void __user *from, unsigned long n) {
+    return __copy_user((__force void __user *) to, from, n);
 }
 
 #define __copy_to_user_inatomic __copy_to_user
 #define __copy_from_user_inatomic __copy_from_user
 
-static inline unsigned long __clear_user(void __user *addr, unsigned long size)
-{
-	unsigned long ret;
+static inline unsigned long __clear_user(void __user *addr, unsigned long size) {
+    unsigned long ret;
 
-	__asm__ __volatile__ (
-		".section __ex_table,#alloc\n\t"
-		".align 4\n\t"
-		".word 1f,3\n\t"
-		".previous\n\t"
-		"mov %2, %%o1\n"
-		"1:\n\t"
-		"call __bzero\n\t"
-		" mov %1, %%o0\n\t"
-		"mov %%o0, %0\n"
-		: "=r" (ret) : "r" (addr), "r" (size) :
-		"o0", "o1", "o2", "o3", "o4", "o5", "o7",
-		"g1", "g2", "g3", "g4", "g5", "g7", "cc");
+    __asm__ __volatile__ (
+        ".section __ex_table,#alloc\n\t"
+        ".align 4\n\t"
+        ".word 1f,3\n\t"
+        ".previous\n\t"
+        "mov %2, %%o1\n"
+        "1:\n\t"
+        "call __bzero\n\t"
+        " mov %1, %%o0\n\t"
+        "mov %%o0, %0\n"
+        : "=r" (ret) : "r" (addr), "r" (size) :
+        "o0", "o1", "o2", "o3", "o4", "o5", "o7",
+        "g1", "g2", "g3", "g4", "g5", "g7", "cc");
 
-	return ret;
+    return ret;
 }
 
-static inline unsigned long clear_user(void __user *addr, unsigned long n)
-{
-	if (n && __access_ok((unsigned long) addr, n))
-		return __clear_user(addr, n);
-	else
-		return n;
+static inline unsigned long clear_user(void __user *addr, unsigned long n) {
+    if (n && __access_ok((unsigned long) addr, n))
+        return __clear_user(addr, n);
+    else
+        return n;
 }
 
 extern long __strncpy_from_user(char *dest, const char __user *src, long count);
 
-static inline long strncpy_from_user(char *dest, const char __user *src, long count)
-{
-	if (__access_ok((unsigned long) src, count))
-		return __strncpy_from_user(dest, src, count);
-	else
-		return -EFAULT;
+static inline long strncpy_from_user(char *dest, const char __user *src, long count) {
+    if (__access_ok((unsigned long) src, count))
+        return __strncpy_from_user(dest, src, count);
+    else
+        return -EFAULT;
 }
 
 extern long __strlen_user(const char __user *);
 extern long __strnlen_user(const char __user *, long len);
 
-static inline long strlen_user(const char __user *str)
-{
-	if (!access_ok(VERIFY_READ, str, 0))
-		return 0;
-	else
-		return __strlen_user(str);
+static inline long strlen_user(const char __user *str) {
+    if (!access_ok(VERIFY_READ, str, 0))
+        return 0;
+    else
+        return __strlen_user(str);
 }
 
-static inline long strnlen_user(const char __user *str, long len)
-{
-	if (!access_ok(VERIFY_READ, str, 0))
-		return 0;
-	else
-		return __strnlen_user(str, len);
+static inline long strnlen_user(const char __user *str, long len) {
+    if (!access_ok(VERIFY_READ, str, 0))
+        return 0;
+    else
+        return __strnlen_user(str, len);
 }
 
 #endif  /* __ASSEMBLY__ */

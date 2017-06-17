@@ -153,16 +153,16 @@
 
 /* For Fast Baud Rate Calculation */
 struct sirfsoc_baudrate_to_regv {
-	unsigned int baud_rate;
-	unsigned int reg_val;
+    unsigned int baud_rate;
+    unsigned int reg_val;
 };
 
 struct sirfsoc_uart_port {
-	unsigned char			hw_flow_ctrl;
-	unsigned char			ms_enabled;
+    unsigned char			hw_flow_ctrl;
+    unsigned char			ms_enabled;
 
-	struct uart_port		port;
-	struct pinctrl			*p;
+    struct uart_port		port;
+    struct pinctrl			*p;
 };
 
 /* Hardware Flow Control */

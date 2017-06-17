@@ -31,27 +31,25 @@
  */
 
 asmlinkage long _sys_clone(unsigned long clone_flags, unsigned long newsp,
-			   int __user *parent_tid, int __user *child_tid,
-			   struct pt_regs *regs)
-{
-	long ret;
+                           int __user *parent_tid, int __user *child_tid,
+                           struct pt_regs *regs) {
+    long ret;
 
-	/* FIXME: Is alignment necessary? */
-	/* newsp = ALIGN(newsp, 4); */
+    /* FIXME: Is alignment necessary? */
+    /* newsp = ALIGN(newsp, 4); */
 
-	if (!newsp)
-		newsp = regs->sp;
+    if (!newsp)
+        newsp = regs->sp;
 
-	ret = do_fork(clone_flags, newsp, regs, 0, parent_tid, child_tid);
+    ret = do_fork(clone_flags, newsp, regs, 0, parent_tid, child_tid);
 
-	return ret;
+    return ret;
 }
 
-asmlinkage int _sys_fork(struct pt_regs *regs)
-{
+asmlinkage int _sys_fork(struct pt_regs *regs) {
 #ifdef CONFIG_MMU
-	return do_fork(SIGCHLD, regs->sp, regs, 0, NULL, NULL);
+    return do_fork(SIGCHLD, regs->sp, regs, 0, NULL, NULL);
 #else
-	return -EINVAL;
+    return -EINVAL;
 #endif
 }

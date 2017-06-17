@@ -5,14 +5,14 @@
 #include <stdbool.h>
 
 struct str_node {
-	struct rb_node rb_node;
-	const char     *s;
+    struct rb_node rb_node;
+    const char     *s;
 };
 
 struct strlist {
-	struct rb_root entries;
-	unsigned int   nr_entries;
-	bool	       dupstr;
+    struct rb_root entries;
+    unsigned int   nr_entries;
+    bool	       dupstr;
 };
 
 struct strlist *strlist__new(bool dupstr, const char *slist);
@@ -25,34 +25,29 @@ int strlist__add(struct strlist *self, const char *str);
 struct str_node *strlist__entry(const struct strlist *self, unsigned int idx);
 struct str_node *strlist__find(struct strlist *self, const char *entry);
 
-static inline bool strlist__has_entry(struct strlist *self, const char *entry)
-{
-	return strlist__find(self, entry) != NULL;
+static inline bool strlist__has_entry(struct strlist *self, const char *entry) {
+    return strlist__find(self, entry) != NULL;
 }
 
-static inline bool strlist__empty(const struct strlist *self)
-{
-	return self->nr_entries == 0;
+static inline bool strlist__empty(const struct strlist *self) {
+    return self->nr_entries == 0;
 }
 
-static inline unsigned int strlist__nr_entries(const struct strlist *self)
-{
-	return self->nr_entries;
+static inline unsigned int strlist__nr_entries(const struct strlist *self) {
+    return self->nr_entries;
 }
 
 /* For strlist iteration */
-static inline struct str_node *strlist__first(struct strlist *self)
-{
-	struct rb_node *rn = rb_first(&self->entries);
-	return rn ? rb_entry(rn, struct str_node, rb_node) : NULL;
+static inline struct str_node *strlist__first(struct strlist *self) {
+    struct rb_node *rn = rb_first(&self->entries);
+    return rn ? rb_entry(rn, struct str_node, rb_node) : NULL;
 }
-static inline struct str_node *strlist__next(struct str_node *sn)
-{
-	struct rb_node *rn;
-	if (!sn)
-		return NULL;
-	rn = rb_next(&sn->rb_node);
-	return rn ? rb_entry(rn, struct str_node, rb_node) : NULL;
+static inline struct str_node *strlist__next(struct str_node *sn) {
+    struct rb_node *rn;
+    if (!sn)
+        return NULL;
+    rn = rb_next(&sn->rb_node);
+    return rn ? rb_entry(rn, struct str_node, rb_node) : NULL;
 }
 
 /**

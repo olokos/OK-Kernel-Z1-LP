@@ -116,24 +116,24 @@
  * files.  The structure is keyed off the 'rate' field.
  */
 struct omap_sdrc_params {
-	unsigned long rate;
-	u32 actim_ctrla;
-	u32 actim_ctrlb;
-	u32 rfr_ctrl;
-	u32 mr;
+    unsigned long rate;
+    u32 actim_ctrla;
+    u32 actim_ctrlb;
+    u32 rfr_ctrl;
+    u32 mr;
 };
 
 #if defined(CONFIG_ARCH_OMAP2) || defined(CONFIG_ARCH_OMAP3)
 void omap2_sdrc_init(struct omap_sdrc_params *sdrc_cs0,
-			    struct omap_sdrc_params *sdrc_cs1);
+                     struct omap_sdrc_params *sdrc_cs1);
 #else
 static inline void __init omap2_sdrc_init(struct omap_sdrc_params *sdrc_cs0,
-					  struct omap_sdrc_params *sdrc_cs1) {};
+        struct omap_sdrc_params *sdrc_cs1) {};
 #endif
 
 int omap2_sdrc_get_params(unsigned long r,
-			  struct omap_sdrc_params **sdrc_cs0,
-			  struct omap_sdrc_params **sdrc_cs1);
+                          struct omap_sdrc_params **sdrc_cs0,
+                          struct omap_sdrc_params **sdrc_cs1);
 void omap2_sms_save_context(void);
 void omap2_sms_restore_context(void);
 
@@ -144,11 +144,11 @@ void omap2_sms_write_rot_physical_ba(u32 val, unsigned ctx);
 #ifdef CONFIG_ARCH_OMAP2
 
 struct memory_timings {
-	u32 m_type;		/* ddr = 1, sdr = 0 */
-	u32 dll_mode;		/* use lock mode = 1, unlock mode = 0 */
-	u32 slow_dll_ctrl;	/* unlock mode, dll value for slow speed */
-	u32 fast_dll_ctrl;	/* unlock mode, dll value for fast speed */
-	u32 base_cs;		/* base chip select to use for calculations */
+    u32 m_type;		/* ddr = 1, sdr = 0 */
+    u32 dll_mode;		/* use lock mode = 1, unlock mode = 0 */
+    u32 slow_dll_ctrl;	/* unlock mode, dll value for slow speed */
+    u32 fast_dll_ctrl;	/* unlock mode, dll value for fast speed */
+    u32 base_cs;		/* base chip select to use for calculations */
 };
 
 extern void omap2xxx_sdrc_init_params(u32 force_lock_to_unlock_mode);

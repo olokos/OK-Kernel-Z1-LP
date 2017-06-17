@@ -46,26 +46,24 @@
 #define CAPIDTMF_RECV_DIGIT_BUFFER_SIZE      32
 #define CAPIDTMF_RECV_STATE_IDLE             0x00
 #define CAPIDTMF_RECV_STATE_DTMF_ACTIVE      0x01
-typedef struct tag_capidtmf_recv_state
-{
-	byte digit_buffer[CAPIDTMF_RECV_DIGIT_BUFFER_SIZE];
-	word digit_write_pos;
-	word digit_read_pos;
-	word indication_state;
-	word indication_state_ack;
-	long goertzel_buffer[2][CAPIDTMF_RECV_TOTAL_FREQUENCY_COUNT];
-	word min_gap_duration;
-	word min_digit_duration;
-	word cycle_counter;
-	word current_digit_on_time;
-	word current_digit_off_time;
-	byte current_digit_value;
-	byte state;
+typedef struct tag_capidtmf_recv_state {
+    byte digit_buffer[CAPIDTMF_RECV_DIGIT_BUFFER_SIZE];
+    word digit_write_pos;
+    word digit_read_pos;
+    word indication_state;
+    word indication_state_ack;
+    long goertzel_buffer[2][CAPIDTMF_RECV_TOTAL_FREQUENCY_COUNT];
+    word min_gap_duration;
+    word min_digit_duration;
+    word cycle_counter;
+    word current_digit_on_time;
+    word current_digit_off_time;
+    byte current_digit_value;
+    byte state;
 } t_capidtmf_recv_state;
-typedef struct tag_capidtmf_state
-{
-	byte ulaw;
-	t_capidtmf_recv_state recv;
+typedef struct tag_capidtmf_state {
+    byte ulaw;
+    t_capidtmf_recv_state recv;
 } t_capidtmf_state;
 word capidtmf_recv_indication(t_capidtmf_state *p_state, byte *buffer);
 void capidtmf_recv_block(t_capidtmf_state *p_state, byte *buffer, word length);

@@ -195,668 +195,646 @@ uint32_t msm_jtag_save_cntr[NR_CPUS];
 uint32_t msm_jtag_restore_cntr[NR_CPUS];
 
 struct dbg_cpu_ctx {
-	void __iomem		*base;
-	uint32_t		*state;
+    void __iomem		*base;
+    uint32_t		*state;
 };
 
 struct dbg_ctx {
-	uint8_t			arch;
-	uint8_t			nr_wp;
-	uint8_t			nr_bp;
-	uint8_t			nr_ctx_cmp;
-	struct dbg_cpu_ctx	*cpu_ctx[NR_CPUS];
-	bool			save_restore_enabled[NR_CPUS];
+    uint8_t			arch;
+    uint8_t			nr_wp;
+    uint8_t			nr_bp;
+    uint8_t			nr_ctx_cmp;
+    struct dbg_cpu_ctx	*cpu_ctx[NR_CPUS];
+    bool			save_restore_enabled[NR_CPUS];
 };
 static struct dbg_ctx dbg;
 
 struct etm_cpu_ctx {
-	void __iomem		*base;
-	struct device		*dev;
-	uint32_t		*state;
+    void __iomem		*base;
+    struct device		*dev;
+    uint32_t		*state;
 };
 
 struct etm_ctx {
-	uint8_t			arch;
-	uint8_t			nr_addr_cmp;
-	uint8_t			nr_data_cmp;
-	uint8_t			nr_cntr;
-	uint8_t			nr_ext_inp;
-	uint8_t			nr_ext_out;
-	uint8_t			nr_ctxid_cmp;
-	struct etm_cpu_ctx	*cpu_ctx[NR_CPUS];
-	bool			save_restore_enabled[NR_CPUS];
-	bool			os_lock_present;
+    uint8_t			arch;
+    uint8_t			nr_addr_cmp;
+    uint8_t			nr_data_cmp;
+    uint8_t			nr_cntr;
+    uint8_t			nr_ext_inp;
+    uint8_t			nr_ext_out;
+    uint8_t			nr_ctxid_cmp;
+    struct etm_cpu_ctx	*cpu_ctx[NR_CPUS];
+    bool			save_restore_enabled[NR_CPUS];
+    bool			os_lock_present;
 };
 
 static struct etm_ctx etm;
 
 static struct clk *clock[NR_CPUS];
 
-static void etm_os_lock(struct etm_cpu_ctx *etmdata)
-{
-	uint32_t count;
+static void etm_os_lock(struct etm_cpu_ctx *etmdata) {
+    uint32_t count;
 
-	if (etm.os_lock_present) {
-		etm_write(etmdata, OSLOCK_MAGIC, ETMOSLAR);
-		/* Ensure OS lock is set before proceeding */
-		mb();
-		for (count = TIMEOUT_US; BVAL(etm_read(etmdata, ETMSR), 1) != 1
-							&& count > 0; count--)
-			udelay(1);
-		if (count == 0)
-			pr_err_ratelimited(
-				"timeout while setting prog bit, ETMSR: %#x\n",
-						etm_read(etmdata, ETMSR));
-	}
+    if (etm.os_lock_present) {
+        etm_write(etmdata, OSLOCK_MAGIC, ETMOSLAR);
+        /* Ensure OS lock is set before proceeding */
+        mb();
+        for (count = TIMEOUT_US; BVAL(etm_read(etmdata, ETMSR), 1) != 1
+                && count > 0; count--)
+            udelay(1);
+        if (count == 0)
+            pr_err_ratelimited(
+                "timeout while setting prog bit, ETMSR: %#x\n",
+                etm_read(etmdata, ETMSR));
+    }
 }
 
-static void etm_os_unlock(struct etm_cpu_ctx *etmdata)
-{
-	if (etm.os_lock_present) {
-		/* Ensure all writes are complete before clearing OS lock */
-		mb();
-		etm_write(etmdata, 0x0, ETMOSLAR);
-	}
+static void etm_os_unlock(struct etm_cpu_ctx *etmdata) {
+    if (etm.os_lock_present) {
+        /* Ensure all writes are complete before clearing OS lock */
+        mb();
+        etm_write(etmdata, 0x0, ETMOSLAR);
+    }
 }
 
-static void etm_set_pwrdwn(struct etm_cpu_ctx *etmdata)
-{
-	uint32_t etmcr;
+static void etm_set_pwrdwn(struct etm_cpu_ctx *etmdata) {
+    uint32_t etmcr;
 
-	/* ensure all writes are complete before setting pwrdwn */
-	mb();
-	etmcr = etm_read(etmdata, ETMCR);
-	etmcr |= BIT(0);
-	etm_write(etmdata, etmcr, ETMCR);
+    /* ensure all writes are complete before setting pwrdwn */
+    mb();
+    etmcr = etm_read(etmdata, ETMCR);
+    etmcr |= BIT(0);
+    etm_write(etmdata, etmcr, ETMCR);
 }
 
-static void etm_clr_pwrdwn(struct etm_cpu_ctx *etmdata)
-{
-	uint32_t etmcr;
+static void etm_clr_pwrdwn(struct etm_cpu_ctx *etmdata) {
+    uint32_t etmcr;
 
-	etmcr = etm_read(etmdata, ETMCR);
-	etmcr &= ~BIT(0);
-	etm_write(etmdata, etmcr, ETMCR);
-	/* ensure pwrup completes before subsequent register accesses */
-	mb();
+    etmcr = etm_read(etmdata, ETMCR);
+    etmcr &= ~BIT(0);
+    etm_write(etmdata, etmcr, ETMCR);
+    /* ensure pwrup completes before subsequent register accesses */
+    mb();
 }
 
-static void etm_set_prog(struct etm_cpu_ctx *etmdata)
-{
-	uint32_t etmcr;
-	int count;
+static void etm_set_prog(struct etm_cpu_ctx *etmdata) {
+    uint32_t etmcr;
+    int count;
 
-	etmcr = etm_read(etmdata, ETMCR);
-	etmcr |= BIT(10);
-	etm_write(etmdata, etmcr, ETMCR);
-	for (count = TIMEOUT_US; BVAL(etm_read(etmdata, ETMSR), 1) != 1
-				&& count > 0; count--)
-		udelay(1);
-	WARN(count == 0, "timeout while setting prog bit, ETMSR: %#x\n",
-	     etm_read(etmdata, ETMSR));
+    etmcr = etm_read(etmdata, ETMCR);
+    etmcr |= BIT(10);
+    etm_write(etmdata, etmcr, ETMCR);
+    for (count = TIMEOUT_US; BVAL(etm_read(etmdata, ETMSR), 1) != 1
+            && count > 0; count--)
+        udelay(1);
+    WARN(count == 0, "timeout while setting prog bit, ETMSR: %#x\n",
+         etm_read(etmdata, ETMSR));
 }
 
-static inline void etm_save_state(struct etm_cpu_ctx *etmdata)
-{
-	int i, j;
+static inline void etm_save_state(struct etm_cpu_ctx *etmdata) {
+    int i, j;
 
-	i = 0;
-	ETM_UNLOCK(etmdata);
+    i = 0;
+    ETM_UNLOCK(etmdata);
 
-	switch (etm.arch) {
-	case ETM_ARCH_V3_5:
-		etm_os_lock(etmdata);
+    switch (etm.arch) {
+    case ETM_ARCH_V3_5:
+        etm_os_lock(etmdata);
 
-		etmdata->state[i++] = etm_read(etmdata, ETMTRIGGER);
-		etmdata->state[i++] = etm_read(etmdata, ETMASICCTLR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSR);
-		etmdata->state[i++] = etm_read(etmdata, ETMTSSCR);
-		etmdata->state[i++] = etm_read(etmdata, ETMTECR2);
-		etmdata->state[i++] = etm_read(etmdata, ETMTEEVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMTECR1);
-		etmdata->state[i++] = etm_read(etmdata, ETMFFLR);
-		etmdata->state[i++] = etm_read(etmdata, ETMVDEVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMVDCR1);
-		etmdata->state[i++] = etm_read(etmdata, ETMVDCR3);
-		for (j = 0; j < etm.nr_addr_cmp; j++) {
-			etmdata->state[i++] = etm_read(etmdata,
-								ETMACVRn(j));
-			etmdata->state[i++] = etm_read(etmdata,
-								ETMACTRn(j));
-		}
-		for (j = 0; j < etm.nr_data_cmp; j++) {
-			etmdata->state[i++] = etm_read(etmdata,
-								ETMDCVRn(j));
-			etmdata->state[i++] = etm_read(etmdata,
-								ETMDCMRn(j));
-		}
-		for (j = 0; j < etm.nr_cntr; j++) {
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMCNTRLDVRn(j));
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMCNTENRn(j));
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMCNTRLDEVRn(j));
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMCNTVRn(j));
-		}
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ12EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ21EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ23EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ31EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ32EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQ13EVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSQR);
-		for (j = 0; j < etm.nr_ext_out; j++)
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMEXTOUTEVRn(j));
-		for (j = 0; j < etm.nr_ctxid_cmp; j++)
-			etmdata->state[i++] = etm_read(etmdata,
-							ETMCIDCVRn(j));
-		etmdata->state[i++] = etm_read(etmdata, ETMCIDCMR);
-		etmdata->state[i++] = etm_read(etmdata, ETMSYNCFR);
-		etmdata->state[i++] = etm_read(etmdata, ETMEXTINSELR);
-		etmdata->state[i++] = etm_read(etmdata, ETMTSEVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMAUXCR);
-		etmdata->state[i++] = etm_read(etmdata, ETMTRACEIDR);
-		etmdata->state[i++] = etm_read(etmdata, ETMVMIDCVR);
-		etmdata->state[i++] = etm_read(etmdata, ETMCLAIMCLR);
-		etmdata->state[i++] = etm_read(etmdata, ETMCR);
-		break;
-	default:
-		pr_err_ratelimited("unsupported etm arch %d in %s\n", etm.arch,
-								__func__);
-	}
+        etmdata->state[i++] = etm_read(etmdata, ETMTRIGGER);
+        etmdata->state[i++] = etm_read(etmdata, ETMASICCTLR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSR);
+        etmdata->state[i++] = etm_read(etmdata, ETMTSSCR);
+        etmdata->state[i++] = etm_read(etmdata, ETMTECR2);
+        etmdata->state[i++] = etm_read(etmdata, ETMTEEVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMTECR1);
+        etmdata->state[i++] = etm_read(etmdata, ETMFFLR);
+        etmdata->state[i++] = etm_read(etmdata, ETMVDEVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMVDCR1);
+        etmdata->state[i++] = etm_read(etmdata, ETMVDCR3);
+        for (j = 0; j < etm.nr_addr_cmp; j++) {
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMACVRn(j));
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMACTRn(j));
+        }
+        for (j = 0; j < etm.nr_data_cmp; j++) {
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMDCVRn(j));
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMDCMRn(j));
+        }
+        for (j = 0; j < etm.nr_cntr; j++) {
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMCNTRLDVRn(j));
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMCNTENRn(j));
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMCNTRLDEVRn(j));
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMCNTVRn(j));
+        }
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ12EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ21EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ23EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ31EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ32EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQ13EVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSQR);
+        for (j = 0; j < etm.nr_ext_out; j++)
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMEXTOUTEVRn(j));
+        for (j = 0; j < etm.nr_ctxid_cmp; j++)
+            etmdata->state[i++] = etm_read(etmdata,
+                                           ETMCIDCVRn(j));
+        etmdata->state[i++] = etm_read(etmdata, ETMCIDCMR);
+        etmdata->state[i++] = etm_read(etmdata, ETMSYNCFR);
+        etmdata->state[i++] = etm_read(etmdata, ETMEXTINSELR);
+        etmdata->state[i++] = etm_read(etmdata, ETMTSEVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMAUXCR);
+        etmdata->state[i++] = etm_read(etmdata, ETMTRACEIDR);
+        etmdata->state[i++] = etm_read(etmdata, ETMVMIDCVR);
+        etmdata->state[i++] = etm_read(etmdata, ETMCLAIMCLR);
+        etmdata->state[i++] = etm_read(etmdata, ETMCR);
+        break;
+    default:
+        pr_err_ratelimited("unsupported etm arch %d in %s\n", etm.arch,
+                           __func__);
+    }
 
-	ETM_LOCK(etmdata);
+    ETM_LOCK(etmdata);
 }
 
-static inline void etm_restore_state(struct etm_cpu_ctx *etmdata)
-{
-	int i, j;
+static inline void etm_restore_state(struct etm_cpu_ctx *etmdata) {
+    int i, j;
 
-	i = 0;
-	ETM_UNLOCK(etmdata);
+    i = 0;
+    ETM_UNLOCK(etmdata);
 
-	switch (etm.arch) {
-	case ETM_ARCH_V3_5:
-		etm_os_lock(etmdata);
+    switch (etm.arch) {
+    case ETM_ARCH_V3_5:
+        etm_os_lock(etmdata);
 
-		etm_clr_pwrdwn(etmdata);
-		etm_write(etmdata, etmdata->state[i++], ETMTRIGGER);
-		etm_write(etmdata, etmdata->state[i++], ETMASICCTLR);
-		etm_write(etmdata, etmdata->state[i++], ETMSR);
-		etm_write(etmdata, etmdata->state[i++], ETMTSSCR);
-		etm_write(etmdata, etmdata->state[i++], ETMTECR2);
-		etm_write(etmdata, etmdata->state[i++], ETMTEEVR);
-		etm_write(etmdata, etmdata->state[i++], ETMTECR1);
-		etm_write(etmdata, etmdata->state[i++], ETMFFLR);
-		etm_write(etmdata, etmdata->state[i++], ETMVDEVR);
-		etm_write(etmdata, etmdata->state[i++], ETMVDCR1);
-		etm_write(etmdata, etmdata->state[i++], ETMVDCR3);
-		for (j = 0; j < etm.nr_addr_cmp; j++) {
-			etm_write(etmdata, etmdata->state[i++],
-								ETMACVRn(j));
-			etm_write(etmdata, etmdata->state[i++],
-								ETMACTRn(j));
-		}
-		for (j = 0; j < etm.nr_data_cmp; j++) {
-			etm_write(etmdata, etmdata->state[i++],
-								ETMDCVRn(j));
-			etm_write(etmdata, etmdata->state[i++],
-								ETMDCMRn(j));
-		}
-		for (j = 0; j < etm.nr_cntr; j++) {
-			etm_write(etmdata, etmdata->state[i++],
-							ETMCNTRLDVRn(j));
-			etm_write(etmdata, etmdata->state[i++],
-							ETMCNTENRn(j));
-			etm_write(etmdata, etmdata->state[i++],
-							ETMCNTRLDEVRn(j));
-			etm_write(etmdata, etmdata->state[i++],
-							ETMCNTVRn(j));
-		}
-		etm_write(etmdata, etmdata->state[i++], ETMSQ12EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQ21EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQ23EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQ31EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQ32EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQ13EVR);
-		etm_write(etmdata, etmdata->state[i++], ETMSQR);
-		for (j = 0; j < etm.nr_ext_out; j++)
-			etm_write(etmdata, etmdata->state[i++],
-							ETMEXTOUTEVRn(j));
-		for (j = 0; j < etm.nr_ctxid_cmp; j++)
-			etm_write(etmdata, etmdata->state[i++],
-							ETMCIDCVRn(j));
-		etm_write(etmdata, etmdata->state[i++], ETMCIDCMR);
-		etm_write(etmdata, etmdata->state[i++], ETMSYNCFR);
-		etm_write(etmdata, etmdata->state[i++], ETMEXTINSELR);
-		etm_write(etmdata, etmdata->state[i++], ETMTSEVR);
-		etm_write(etmdata, etmdata->state[i++], ETMAUXCR);
-		etm_write(etmdata, etmdata->state[i++], ETMTRACEIDR);
-		etm_write(etmdata, etmdata->state[i++], ETMVMIDCVR);
-		etm_write(etmdata, etmdata->state[i++], ETMCLAIMSET);
-		/*
-		 * Set ETMCR at last as we dont know the saved status of pwrdwn
-		 * bit
-		 */
-		etm_write(etmdata, etmdata->state[i++], ETMCR);
+        etm_clr_pwrdwn(etmdata);
+        etm_write(etmdata, etmdata->state[i++], ETMTRIGGER);
+        etm_write(etmdata, etmdata->state[i++], ETMASICCTLR);
+        etm_write(etmdata, etmdata->state[i++], ETMSR);
+        etm_write(etmdata, etmdata->state[i++], ETMTSSCR);
+        etm_write(etmdata, etmdata->state[i++], ETMTECR2);
+        etm_write(etmdata, etmdata->state[i++], ETMTEEVR);
+        etm_write(etmdata, etmdata->state[i++], ETMTECR1);
+        etm_write(etmdata, etmdata->state[i++], ETMFFLR);
+        etm_write(etmdata, etmdata->state[i++], ETMVDEVR);
+        etm_write(etmdata, etmdata->state[i++], ETMVDCR1);
+        etm_write(etmdata, etmdata->state[i++], ETMVDCR3);
+        for (j = 0; j < etm.nr_addr_cmp; j++) {
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMACVRn(j));
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMACTRn(j));
+        }
+        for (j = 0; j < etm.nr_data_cmp; j++) {
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMDCVRn(j));
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMDCMRn(j));
+        }
+        for (j = 0; j < etm.nr_cntr; j++) {
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMCNTRLDVRn(j));
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMCNTENRn(j));
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMCNTRLDEVRn(j));
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMCNTVRn(j));
+        }
+        etm_write(etmdata, etmdata->state[i++], ETMSQ12EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQ21EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQ23EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQ31EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQ32EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQ13EVR);
+        etm_write(etmdata, etmdata->state[i++], ETMSQR);
+        for (j = 0; j < etm.nr_ext_out; j++)
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMEXTOUTEVRn(j));
+        for (j = 0; j < etm.nr_ctxid_cmp; j++)
+            etm_write(etmdata, etmdata->state[i++],
+                      ETMCIDCVRn(j));
+        etm_write(etmdata, etmdata->state[i++], ETMCIDCMR);
+        etm_write(etmdata, etmdata->state[i++], ETMSYNCFR);
+        etm_write(etmdata, etmdata->state[i++], ETMEXTINSELR);
+        etm_write(etmdata, etmdata->state[i++], ETMTSEVR);
+        etm_write(etmdata, etmdata->state[i++], ETMAUXCR);
+        etm_write(etmdata, etmdata->state[i++], ETMTRACEIDR);
+        etm_write(etmdata, etmdata->state[i++], ETMVMIDCVR);
+        etm_write(etmdata, etmdata->state[i++], ETMCLAIMSET);
+        /*
+         * Set ETMCR at last as we dont know the saved status of pwrdwn
+         * bit
+         */
+        etm_write(etmdata, etmdata->state[i++], ETMCR);
 
-		etm_os_unlock(etmdata);
-		break;
-	default:
-		pr_err_ratelimited("unsupported etm arch %d in %s\n", etm.arch,
-								__func__);
-	}
+        etm_os_unlock(etmdata);
+        break;
+    default:
+        pr_err_ratelimited("unsupported etm arch %d in %s\n", etm.arch,
+                           __func__);
+    }
 
-	ETM_LOCK(etmdata);
+    ETM_LOCK(etmdata);
 }
 
-static inline void dbg_save_state(struct dbg_cpu_ctx *dbgdata)
-{
-	int i, j;
+static inline void dbg_save_state(struct dbg_cpu_ctx *dbgdata) {
+    int i, j;
 
-	i = 0;
-	DBG_UNLOCK(dbgdata);
+    i = 0;
+    DBG_UNLOCK(dbgdata);
 
-	switch (dbg.arch) {
-	case ARM_DEBUG_ARCH_V7B:
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGWFAR);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGVCR);
-		for (j = 0; j < dbg.nr_bp; j++) {
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGBVRn(j));
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGBCRn(j));
-		}
-		for (j = 0; j < dbg.nr_wp; j++) {
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGWVRn(j));
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGWCRn(j));
-		}
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGPRCR);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRTXext);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRRXext);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDSCRext);
-		break;
-	case ARM_DEBUG_ARCH_V7p1:
-		/* Set OS Lock */
-		dbg_write(dbgdata, OSLOCK_MAGIC, DBGOSLAR);
-		/* Ensure OS lock is set before proceeding */
-		mb();
+    switch (dbg.arch) {
+    case ARM_DEBUG_ARCH_V7B:
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGWFAR);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGVCR);
+        for (j = 0; j < dbg.nr_bp; j++) {
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGBVRn(j));
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGBCRn(j));
+        }
+        for (j = 0; j < dbg.nr_wp; j++) {
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGWVRn(j));
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGWCRn(j));
+        }
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGPRCR);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRTXext);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRRXext);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDSCRext);
+        break;
+    case ARM_DEBUG_ARCH_V7p1:
+        /* Set OS Lock */
+        dbg_write(dbgdata, OSLOCK_MAGIC, DBGOSLAR);
+        /* Ensure OS lock is set before proceeding */
+        mb();
 
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGWFAR);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGVCR);
-		for (j = 0; j < dbg.nr_bp; j++) {
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGBVRn(j));
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGBCRn(j));
-		}
-		for (j = 0; j < dbg.nr_wp; j++) {
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGWVRn(j));
-			dbgdata->state[i++] =  dbg_read(dbgdata, DBGWCRn(j));
-		}
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGPRCR);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGCLAIMCLR);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRTXext);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRRXext);
-		dbgdata->state[i++] =  dbg_read(dbgdata, DBGDSCRext);
-		break;
-	}
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGWFAR);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGVCR);
+        for (j = 0; j < dbg.nr_bp; j++) {
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGBVRn(j));
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGBCRn(j));
+        }
+        for (j = 0; j < dbg.nr_wp; j++) {
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGWVRn(j));
+            dbgdata->state[i++] =  dbg_read(dbgdata, DBGWCRn(j));
+        }
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGPRCR);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGCLAIMCLR);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRTXext);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDTRRXext);
+        dbgdata->state[i++] =  dbg_read(dbgdata, DBGDSCRext);
+        break;
+    }
 
-	DBG_LOCK(dbgdata);
+    DBG_LOCK(dbgdata);
 }
 
-static inline void dbg_restore_state(struct dbg_cpu_ctx *dbgdata)
-{
-	int i, j;
+static inline void dbg_restore_state(struct dbg_cpu_ctx *dbgdata) {
+    int i, j;
 
-	i = 0;
-	DBG_UNLOCK(dbgdata);
+    i = 0;
+    DBG_UNLOCK(dbgdata);
 
-	switch (dbg.arch) {
-	case ARM_DEBUG_ARCH_V7B:
-		dbg_write(dbgdata, dbgdata->state[i++], DBGWFAR);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGVCR);
-		for (j = 0; j < dbg.nr_bp; j++) {
-			dbg_write(dbgdata, dbgdata->state[i++], DBGBVRn(j));
-			dbg_write(dbgdata, dbgdata->state[i++], DBGBCRn(j));
-		}
-		for (j = 0; j < dbg.nr_wp; j++) {
-			dbg_write(dbgdata, dbgdata->state[i++], DBGWVRn(j));
-			dbg_write(dbgdata, dbgdata->state[i++], DBGWCRn(j));
-		}
-		dbg_write(dbgdata, dbgdata->state[i++], DBGPRCR);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGDTRTXext);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGDTRRXext);
-		dbg_write(dbgdata, dbgdata->state[i++] & DBGDSCR_MASK,
-								DBGDSCRext);
-		break;
-	case ARM_DEBUG_ARCH_V7p1:
-		/* Set OS lock. Lock will already be set after power collapse
-		 * but this write is included to ensure it is set.
-		 */
-		dbg_write(dbgdata, OSLOCK_MAGIC, DBGOSLAR);
-		/* Ensure OS lock is set before proceeding */
-		mb();
+    switch (dbg.arch) {
+    case ARM_DEBUG_ARCH_V7B:
+        dbg_write(dbgdata, dbgdata->state[i++], DBGWFAR);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGVCR);
+        for (j = 0; j < dbg.nr_bp; j++) {
+            dbg_write(dbgdata, dbgdata->state[i++], DBGBVRn(j));
+            dbg_write(dbgdata, dbgdata->state[i++], DBGBCRn(j));
+        }
+        for (j = 0; j < dbg.nr_wp; j++) {
+            dbg_write(dbgdata, dbgdata->state[i++], DBGWVRn(j));
+            dbg_write(dbgdata, dbgdata->state[i++], DBGWCRn(j));
+        }
+        dbg_write(dbgdata, dbgdata->state[i++], DBGPRCR);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGDTRTXext);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGDTRRXext);
+        dbg_write(dbgdata, dbgdata->state[i++] & DBGDSCR_MASK,
+                  DBGDSCRext);
+        break;
+    case ARM_DEBUG_ARCH_V7p1:
+        /* Set OS lock. Lock will already be set after power collapse
+         * but this write is included to ensure it is set.
+         */
+        dbg_write(dbgdata, OSLOCK_MAGIC, DBGOSLAR);
+        /* Ensure OS lock is set before proceeding */
+        mb();
 
-		dbg_write(dbgdata, dbgdata->state[i++], DBGWFAR);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGVCR);
-		for (j = 0; j < dbg.nr_bp; j++) {
-			dbg_write(dbgdata, dbgdata->state[i++], DBGBVRn(j));
-			dbg_write(dbgdata, dbgdata->state[i++], DBGBCRn(j));
-		}
-		for (j = 0; j < dbg.nr_wp; j++) {
-			dbg_write(dbgdata, dbgdata->state[i++], DBGWVRn(j));
-			dbg_write(dbgdata, dbgdata->state[i++], DBGWCRn(j));
-		}
-		dbg_write(dbgdata, dbgdata->state[i++], DBGPRCR);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGCLAIMSET);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGDTRTXext);
-		dbg_write(dbgdata, dbgdata->state[i++], DBGDTRRXext);
-		dbg_write(dbgdata, dbgdata->state[i++] & DBGDSCR_MASK,
-								DBGDSCRext);
-		/* Ensure all writes are completing before clearing OS lock */
-		mb();
-		dbg_write(dbgdata, 0x0, DBGOSLAR);
-		/* Ensure OS lock is cleared before proceeding */
-		mb();
-		break;
-	}
+        dbg_write(dbgdata, dbgdata->state[i++], DBGWFAR);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGVCR);
+        for (j = 0; j < dbg.nr_bp; j++) {
+            dbg_write(dbgdata, dbgdata->state[i++], DBGBVRn(j));
+            dbg_write(dbgdata, dbgdata->state[i++], DBGBCRn(j));
+        }
+        for (j = 0; j < dbg.nr_wp; j++) {
+            dbg_write(dbgdata, dbgdata->state[i++], DBGWVRn(j));
+            dbg_write(dbgdata, dbgdata->state[i++], DBGWCRn(j));
+        }
+        dbg_write(dbgdata, dbgdata->state[i++], DBGPRCR);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGCLAIMSET);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGDTRTXext);
+        dbg_write(dbgdata, dbgdata->state[i++], DBGDTRRXext);
+        dbg_write(dbgdata, dbgdata->state[i++] & DBGDSCR_MASK,
+                  DBGDSCRext);
+        /* Ensure all writes are completing before clearing OS lock */
+        mb();
+        dbg_write(dbgdata, 0x0, DBGOSLAR);
+        /* Ensure OS lock is cleared before proceeding */
+        mb();
+        break;
+    }
 
-	DBG_LOCK(dbgdata);
+    DBG_LOCK(dbgdata);
 }
 
-void msm_jtag_save_state(void)
-{
-	int cpu;
+void msm_jtag_save_state(void) {
+    int cpu;
 
-	cpu = raw_smp_processor_id();
+    cpu = raw_smp_processor_id();
 
-	msm_jtag_save_cntr[cpu]++;
-	/* ensure counter is updated before moving forward */
-	mb();
+    msm_jtag_save_cntr[cpu]++;
+    /* ensure counter is updated before moving forward */
+    mb();
 
-	if (dbg.save_restore_enabled[cpu])
-		dbg_save_state(dbg.cpu_ctx[cpu]);
-	if (etm.save_restore_enabled[cpu])
-		etm_save_state(etm.cpu_ctx[cpu]);
+    if (dbg.save_restore_enabled[cpu])
+        dbg_save_state(dbg.cpu_ctx[cpu]);
+    if (etm.save_restore_enabled[cpu])
+        etm_save_state(etm.cpu_ctx[cpu]);
 }
 EXPORT_SYMBOL(msm_jtag_save_state);
 
-void msm_jtag_restore_state(void)
-{
-	int cpu;
+void msm_jtag_restore_state(void) {
+    int cpu;
 
-	cpu = raw_smp_processor_id();
+    cpu = raw_smp_processor_id();
 
-	/* Attempt restore only if save has been done. If power collapse
-	 * is disabled, hotplug off of non-boot core will result in WFI
-	 * and hence msm_jtag_save_state will not occur. Subsequently,
-	 * during hotplug on of non-boot core when msm_jtag_restore_state
-	 * is called via msm_platform_secondary_init, this check will help
-	 * bail us out without restoring.
-	 */
-	if (msm_jtag_save_cntr[cpu] == msm_jtag_restore_cntr[cpu])
-		return;
-	else if (msm_jtag_save_cntr[cpu] != msm_jtag_restore_cntr[cpu] + 1)
-		pr_err_ratelimited("jtag imbalance, save:%lu, restore:%lu\n",
-				   (unsigned long)msm_jtag_save_cntr[cpu],
-				   (unsigned long)msm_jtag_restore_cntr[cpu]);
+    /* Attempt restore only if save has been done. If power collapse
+     * is disabled, hotplug off of non-boot core will result in WFI
+     * and hence msm_jtag_save_state will not occur. Subsequently,
+     * during hotplug on of non-boot core when msm_jtag_restore_state
+     * is called via msm_platform_secondary_init, this check will help
+     * bail us out without restoring.
+     */
+    if (msm_jtag_save_cntr[cpu] == msm_jtag_restore_cntr[cpu])
+        return;
+    else if (msm_jtag_save_cntr[cpu] != msm_jtag_restore_cntr[cpu] + 1)
+        pr_err_ratelimited("jtag imbalance, save:%lu, restore:%lu\n",
+                           (unsigned long)msm_jtag_save_cntr[cpu],
+                           (unsigned long)msm_jtag_restore_cntr[cpu]);
 
-	msm_jtag_restore_cntr[cpu]++;
-	/* ensure counter is updated before moving forward */
-	mb();
+    msm_jtag_restore_cntr[cpu]++;
+    /* ensure counter is updated before moving forward */
+    mb();
 
-	if (dbg.save_restore_enabled[cpu])
-		dbg_restore_state(dbg.cpu_ctx[cpu]);
-	if (etm.save_restore_enabled[cpu])
-		etm_restore_state(etm.cpu_ctx[cpu]);
+    if (dbg.save_restore_enabled[cpu])
+        dbg_restore_state(dbg.cpu_ctx[cpu]);
+    if (etm.save_restore_enabled[cpu])
+        etm_restore_state(etm.cpu_ctx[cpu]);
 }
 EXPORT_SYMBOL(msm_jtag_restore_state);
 
-static inline bool etm_arch_supported(uint8_t arch)
-{
-	switch (arch) {
-	case ETM_ARCH_V3_5:
-		break;
-	default:
-		return false;
-	}
-	return true;
+static inline bool etm_arch_supported(uint8_t arch) {
+    switch (arch) {
+    case ETM_ARCH_V3_5:
+        break;
+    default:
+        return false;
+    }
+    return true;
 }
 
-static void __devinit etm_os_lock_init(struct etm_cpu_ctx *etmdata)
-{
-	uint32_t etmoslsr;
+static void __devinit etm_os_lock_init(struct etm_cpu_ctx *etmdata) {
+    uint32_t etmoslsr;
 
-	etmoslsr = etm_read(etmdata, ETMOSLSR);
-	if (!BVAL(etmoslsr, 0) && !BVAL(etmoslsr, 3))
-		etm.os_lock_present = false;
-	else
-		etm.os_lock_present = true;
+    etmoslsr = etm_read(etmdata, ETMOSLSR);
+    if (!BVAL(etmoslsr, 0) && !BVAL(etmoslsr, 3))
+        etm.os_lock_present = false;
+    else
+        etm.os_lock_present = true;
 }
 
-static void __devinit etm_init_arch_data(void *info)
-{
-	uint32_t etmidr;
-	uint32_t etmccr;
-	struct etm_cpu_ctx  *etmdata = info;
+static void __devinit etm_init_arch_data(void *info) {
+    uint32_t etmidr;
+    uint32_t etmccr;
+    struct etm_cpu_ctx  *etmdata = info;
 
-	/*
-	 * Clear power down bit since when this bit is set writes to
-	 * certain registers might be ignored.
-	 */
-	ETM_UNLOCK(etmdata);
+    /*
+     * Clear power down bit since when this bit is set writes to
+     * certain registers might be ignored.
+     */
+    ETM_UNLOCK(etmdata);
 
-	etm_os_lock_init(etmdata);
+    etm_os_lock_init(etmdata);
 
-	etm_clr_pwrdwn(etmdata);
-	/* Set prog bit. It will be set from reset but this is included to
-	 * ensure it is set
-	 */
-	etm_set_prog(etmdata);
+    etm_clr_pwrdwn(etmdata);
+    /* Set prog bit. It will be set from reset but this is included to
+     * ensure it is set
+     */
+    etm_set_prog(etmdata);
 
-	/* find all capabilities */
-	etmidr = etm_read(etmdata, ETMIDR);
-	etm.arch = BMVAL(etmidr, 4, 11);
+    /* find all capabilities */
+    etmidr = etm_read(etmdata, ETMIDR);
+    etm.arch = BMVAL(etmidr, 4, 11);
 
-	etmccr = etm_read(etmdata, ETMCCR);
-	etm.nr_addr_cmp = BMVAL(etmccr, 0, 3) * 2;
-	etm.nr_data_cmp = BMVAL(etmccr, 4, 7);
-	etm.nr_cntr = BMVAL(etmccr, 13, 15);
-	etm.nr_ext_inp = BMVAL(etmccr, 17, 19);
-	etm.nr_ext_out = BMVAL(etmccr, 20, 22);
-	etm.nr_ctxid_cmp = BMVAL(etmccr, 24, 25);
+    etmccr = etm_read(etmdata, ETMCCR);
+    etm.nr_addr_cmp = BMVAL(etmccr, 0, 3) * 2;
+    etm.nr_data_cmp = BMVAL(etmccr, 4, 7);
+    etm.nr_cntr = BMVAL(etmccr, 13, 15);
+    etm.nr_ext_inp = BMVAL(etmccr, 17, 19);
+    etm.nr_ext_out = BMVAL(etmccr, 20, 22);
+    etm.nr_ctxid_cmp = BMVAL(etmccr, 24, 25);
 
-	etm_set_pwrdwn(etmdata);
+    etm_set_pwrdwn(etmdata);
 
-	ETM_LOCK(etmdata);
+    ETM_LOCK(etmdata);
 }
 
 static int __devinit jtag_mm_etm_probe(struct platform_device *pdev,
-								uint32_t cpu)
-{
-	struct etm_cpu_ctx *etmdata;
-	struct resource *res;
-	struct device *dev = &pdev->dev;
+                                       uint32_t cpu) {
+    struct etm_cpu_ctx *etmdata;
+    struct resource *res;
+    struct device *dev = &pdev->dev;
 
-	/* Allocate memory per cpu */
-	etmdata = devm_kzalloc(dev, sizeof(struct etm_cpu_ctx), GFP_KERNEL);
-	if (!etmdata)
-		return -ENOMEM;
+    /* Allocate memory per cpu */
+    etmdata = devm_kzalloc(dev, sizeof(struct etm_cpu_ctx), GFP_KERNEL);
+    if (!etmdata)
+        return -ENOMEM;
 
-	etm.cpu_ctx[cpu] = etmdata;
+    etm.cpu_ctx[cpu] = etmdata;
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "etm-base");
+    res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "etm-base");
 
-	etmdata->base = devm_ioremap(dev, res->start, resource_size(res));
-	if (!etmdata->base)
-		return -EINVAL;
+    etmdata->base = devm_ioremap(dev, res->start, resource_size(res));
+    if (!etmdata->base)
+        return -EINVAL;
 
-	/* Allocate etm state save space per core */
-	etmdata->state = devm_kzalloc(dev,
-			(MAX_ETM_STATE_SIZE * sizeof(uint32_t)), GFP_KERNEL);
-	if (!etmdata->state)
-		return -ENOMEM;
+    /* Allocate etm state save space per core */
+    etmdata->state = devm_kzalloc(dev,
+                                  (MAX_ETM_STATE_SIZE * sizeof(uint32_t)), GFP_KERNEL);
+    if (!etmdata->state)
+        return -ENOMEM;
 
-	if (cpu == 0) {
-		if (smp_call_function_single(cpu, etm_init_arch_data,
-								etmdata, 1))
-			dev_err(dev, "Jtagmm: ETM arch init failed\n");
-	}
-	if (etm_arch_supported(etm.arch)) {
-		if (scm_get_feat_version(TZ_DBG_ETM_FEAT_ID) < TZ_DBG_ETM_VER)
-			etm.save_restore_enabled[cpu] = true;
-		else
-			pr_info("etm save-restore supported by TZ\n");
-	} else
-		pr_info("etm arch %u not supported\n", etm.arch);
-	return 0;
+    if (cpu == 0) {
+        if (smp_call_function_single(cpu, etm_init_arch_data,
+                                     etmdata, 1))
+            dev_err(dev, "Jtagmm: ETM arch init failed\n");
+    }
+    if (etm_arch_supported(etm.arch)) {
+        if (scm_get_feat_version(TZ_DBG_ETM_FEAT_ID) < TZ_DBG_ETM_VER)
+            etm.save_restore_enabled[cpu] = true;
+        else
+            pr_info("etm save-restore supported by TZ\n");
+    } else
+        pr_info("etm arch %u not supported\n", etm.arch);
+    return 0;
 }
 
-static inline bool dbg_arch_supported(uint8_t arch)
-{
-	switch (arch) {
-	case ARM_DEBUG_ARCH_V7B:
-	case ARM_DEBUG_ARCH_V7p1:
-		break;
-	default:
-		return false;
-	}
-	return true;
+static inline bool dbg_arch_supported(uint8_t arch) {
+    switch (arch) {
+    case ARM_DEBUG_ARCH_V7B:
+    case ARM_DEBUG_ARCH_V7p1:
+        break;
+    default:
+        return false;
+    }
+    return true;
 }
 
-static void __devinit dbg_init_arch_data(void *info)
-{
-	uint32_t dbgdidr;
-	struct dbg_cpu_ctx *dbgdata = info;
+static void __devinit dbg_init_arch_data(void *info) {
+    uint32_t dbgdidr;
+    struct dbg_cpu_ctx *dbgdata = info;
 
-	/* This will run on core0 so use it to populate parameters */
-	dbgdidr = dbg_read(dbgdata, DBGDIDR);
-	dbg.arch = BMVAL(dbgdidr, 16, 19);
-	dbg.nr_ctx_cmp = BMVAL(dbgdidr, 20, 23) + 1;
-	dbg.nr_bp = BMVAL(dbgdidr, 24, 27) + 1;
-	dbg.nr_wp = BMVAL(dbgdidr, 28, 31) + 1;
+    /* This will run on core0 so use it to populate parameters */
+    dbgdidr = dbg_read(dbgdata, DBGDIDR);
+    dbg.arch = BMVAL(dbgdidr, 16, 19);
+    dbg.nr_ctx_cmp = BMVAL(dbgdidr, 20, 23) + 1;
+    dbg.nr_bp = BMVAL(dbgdidr, 24, 27) + 1;
+    dbg.nr_wp = BMVAL(dbgdidr, 28, 31) + 1;
 }
 
 
 
 static int __devinit jtag_mm_dbg_probe(struct platform_device *pdev,
-								uint32_t cpu)
-{
-	struct dbg_cpu_ctx *dbgdata;
-	struct resource *res;
-	struct device *dev = &pdev->dev;
+                                       uint32_t cpu) {
+    struct dbg_cpu_ctx *dbgdata;
+    struct resource *res;
+    struct device *dev = &pdev->dev;
 
-	/* Allocate memory per cpu */
-	dbgdata = devm_kzalloc(dev, sizeof(struct dbg_cpu_ctx), GFP_KERNEL);
-	if (!dbgdata)
-		return -ENOMEM;
+    /* Allocate memory per cpu */
+    dbgdata = devm_kzalloc(dev, sizeof(struct dbg_cpu_ctx), GFP_KERNEL);
+    if (!dbgdata)
+        return -ENOMEM;
 
-	dbg.cpu_ctx[cpu] = dbgdata;
+    dbg.cpu_ctx[cpu] = dbgdata;
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "debug-base");
+    res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "debug-base");
 
-	dbgdata->base = devm_ioremap(dev, res->start, resource_size(res));
-	if (!dbgdata->base)
-		return -EINVAL;
+    dbgdata->base = devm_ioremap(dev, res->start, resource_size(res));
+    if (!dbgdata->base)
+        return -EINVAL;
 
-	/* Allocate etm state save space per core */
-	dbgdata->state = devm_kzalloc(dev,
-			(MAX_DBG_STATE_SIZE * sizeof(uint32_t)), GFP_KERNEL);
-	if (!dbgdata->state)
-		return -ENOMEM;
+    /* Allocate etm state save space per core */
+    dbgdata->state = devm_kzalloc(dev,
+                                  (MAX_DBG_STATE_SIZE * sizeof(uint32_t)), GFP_KERNEL);
+    if (!dbgdata->state)
+        return -ENOMEM;
 
-	if (cpu == 0) {
-		if (smp_call_function_single(cpu, dbg_init_arch_data,
-								dbgdata, 1))
-			dev_err(dev, "Jtagmm: Dbg arch init failed\n");
-	}
-	if (dbg_arch_supported(dbg.arch)) {
-		if (scm_get_feat_version(TZ_DBG_ETM_FEAT_ID) < TZ_DBG_ETM_VER)
-			dbg.save_restore_enabled[cpu] = true;
-		else
-			pr_info("dbg save-restore supported by TZ\n");
-	} else
-		pr_info("dbg arch %u not supported\n", dbg.arch);
-	return 0;
+    if (cpu == 0) {
+        if (smp_call_function_single(cpu, dbg_init_arch_data,
+                                     dbgdata, 1))
+            dev_err(dev, "Jtagmm: Dbg arch init failed\n");
+    }
+    if (dbg_arch_supported(dbg.arch)) {
+        if (scm_get_feat_version(TZ_DBG_ETM_FEAT_ID) < TZ_DBG_ETM_VER)
+            dbg.save_restore_enabled[cpu] = true;
+        else
+            pr_info("dbg save-restore supported by TZ\n");
+    } else
+        pr_info("dbg arch %u not supported\n", dbg.arch);
+    return 0;
 }
 
-static int __devinit jtag_mm_probe(struct platform_device *pdev)
-{
-	int etm_ret, dbg_ret, ret;
-	static uint32_t cpu;
-	static uint32_t count;
-	struct device *dev = &pdev->dev;
+static int __devinit jtag_mm_probe(struct platform_device *pdev) {
+    int etm_ret, dbg_ret, ret;
+    static uint32_t cpu;
+    static uint32_t count;
+    struct device *dev = &pdev->dev;
 
-	if (msm_jtag_fuse_apps_access_disabled())
-		return -EPERM;
+    if (msm_jtag_fuse_apps_access_disabled())
+        return -EPERM;
 
-	cpu = count;
-	count++;
+    cpu = count;
+    count++;
 
-	clock[cpu] = devm_clk_get(dev, "core_clk");
-	if (IS_ERR(clock[cpu])) {
-		ret = PTR_ERR(clock[cpu]);
-		return ret;
-	}
+    clock[cpu] = devm_clk_get(dev, "core_clk");
+    if (IS_ERR(clock[cpu])) {
+        ret = PTR_ERR(clock[cpu]);
+        return ret;
+    }
 
-	ret = clk_set_rate(clock[cpu], CORESIGHT_CLK_RATE_TRACE);
-	if (ret)
-		return ret;
+    ret = clk_set_rate(clock[cpu], CORESIGHT_CLK_RATE_TRACE);
+    if (ret)
+        return ret;
 
-	ret = clk_prepare_enable(clock[cpu]);
-	if (ret)
-		return ret;
+    ret = clk_prepare_enable(clock[cpu]);
+    if (ret)
+        return ret;
 
-	platform_set_drvdata(pdev, clock[cpu]);
+    platform_set_drvdata(pdev, clock[cpu]);
 
-	etm_ret  = jtag_mm_etm_probe(pdev, cpu);
+    etm_ret  = jtag_mm_etm_probe(pdev, cpu);
 
-	dbg_ret = jtag_mm_dbg_probe(pdev, cpu);
+    dbg_ret = jtag_mm_dbg_probe(pdev, cpu);
 
-	/* The probe succeeds even when only one of the etm and dbg probes
-	 * succeeds. This allows us to save-restore etm and dbg registers
-	 * independently.
-	 */
-	if (etm_ret && dbg_ret) {
-		clk_disable_unprepare(clock[cpu]);
-		ret = etm_ret;
-	} else
-		ret = 0;
-	return ret;
+    /* The probe succeeds even when only one of the etm and dbg probes
+     * succeeds. This allows us to save-restore etm and dbg registers
+     * independently.
+     */
+    if (etm_ret && dbg_ret) {
+        clk_disable_unprepare(clock[cpu]);
+        ret = etm_ret;
+    } else
+        ret = 0;
+    return ret;
 }
 
-static int __devexit jtag_mm_remove(struct platform_device *pdev)
-{
-	struct clk *clock = platform_get_drvdata(pdev);
+static int __devexit jtag_mm_remove(struct platform_device *pdev) {
+    struct clk *clock = platform_get_drvdata(pdev);
 
-	clk_disable_unprepare(clock);
-	return 0;
+    clk_disable_unprepare(clock);
+    return 0;
 }
 
 static struct of_device_id msm_qdss_mm_match[] = {
-	{ .compatible = "qcom,jtag-mm"},
-	{}
+    { .compatible = "qcom,jtag-mm"},
+    {}
 };
 
 static struct platform_driver jtag_mm_driver = {
-	.probe          = jtag_mm_probe,
-	.remove         = __devexit_p(jtag_mm_remove),
-	.driver         = {
-		.name   = "msm-jtag-mm",
-		.owner	= THIS_MODULE,
-		.of_match_table	= msm_qdss_mm_match,
-		},
+    .probe          = jtag_mm_probe,
+    .remove         = __devexit_p(jtag_mm_remove),
+    .driver         = {
+        .name   = "msm-jtag-mm",
+        .owner	= THIS_MODULE,
+        .of_match_table	= msm_qdss_mm_match,
+    },
 };
 
-static int __init jtag_mm_init(void)
-{
-	return platform_driver_register(&jtag_mm_driver);
+static int __init jtag_mm_init(void) {
+    return platform_driver_register(&jtag_mm_driver);
 }
 module_init(jtag_mm_init);
 
-static void __exit jtag_mm_exit(void)
-{
-	platform_driver_unregister(&jtag_mm_driver);
+static void __exit jtag_mm_exit(void) {
+    platform_driver_unregister(&jtag_mm_driver);
 }
 module_exit(jtag_mm_exit);
 

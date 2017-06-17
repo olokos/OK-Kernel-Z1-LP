@@ -25,44 +25,41 @@
 #define UART_BASE	0x10009000
 #define UART_BASE_RS1	0x1c090000
 
-static unsigned long get_uart_base(void)
-{
-	unsigned long mpcore_periph;
+static unsigned long get_uart_base(void) {
+    unsigned long mpcore_periph;
 
-	/*
-	 * Make an educated guess regarding the memory map:
-	 * - the original A9 core tile, which has MPCore peripherals
-	 *   located at 0x1e000000, should use UART at 0x10009000
-	 * - all other (RS1 complaint) tiles use UART mapped
-	 *   at 0x1c090000
-	 */
-	asm("mrc p15, 4, %0, c15, c0, 0" : "=r" (mpcore_periph));
+    /*
+     * Make an educated guess regarding the memory map:
+     * - the original A9 core tile, which has MPCore peripherals
+     *   located at 0x1e000000, should use UART at 0x10009000
+     * - all other (RS1 complaint) tiles use UART mapped
+     *   at 0x1c090000
+     */
+    asm("mrc p15, 4, %0, c15, c0, 0" : "=r" (mpcore_periph));
 
-	if (mpcore_periph == 0x1e000000)
-		return UART_BASE;
-	else
-		return UART_BASE_RS1;
+    if (mpcore_periph == 0x1e000000)
+        return UART_BASE;
+    else
+        return UART_BASE_RS1;
 }
 
 /*
  * This does not append a newline
  */
-static inline void putc(int c)
-{
-	unsigned long base = get_uart_base();
+static inline void putc(int c) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 5))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 5))
+        barrier();
 
-	AMBA_UART_DR(base) = c;
+    AMBA_UART_DR(base) = c;
 }
 
-static inline void flush(void)
-{
-	unsigned long base = get_uart_base();
+static inline void flush(void) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 3))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 3))
+        barrier();
 }
 
 /*

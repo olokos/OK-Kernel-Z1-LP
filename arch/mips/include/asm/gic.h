@@ -304,15 +304,15 @@
 		 GIC_SH_MAP_TO_VPE_REG_BIT(vpe))
 
 struct gic_pcpu_mask {
-       DECLARE_BITMAP(pcpu_mask, GIC_NUM_INTRS);
+    DECLARE_BITMAP(pcpu_mask, GIC_NUM_INTRS);
 };
 
 struct gic_pending_regs {
-       DECLARE_BITMAP(pending, GIC_NUM_INTRS);
+    DECLARE_BITMAP(pending, GIC_NUM_INTRS);
 };
 
 struct gic_intrmask_regs {
-       DECLARE_BITMAP(intrmask, GIC_NUM_INTRS);
+    DECLARE_BITMAP(intrmask, GIC_NUM_INTRS);
 };
 
 /*
@@ -320,19 +320,19 @@ struct gic_intrmask_regs {
  * in building ipi_map.
  */
 struct gic_intr_map {
-	unsigned int cpunum;	/* Directed to this CPU */
+    unsigned int cpunum;	/* Directed to this CPU */
 #define GIC_UNUSED		0xdead			/* Dummy data */
-	unsigned int pin;	/* Directed to this Pin */
-	unsigned int polarity;	/* Polarity : +/-	*/
-	unsigned int trigtype;	/* Trigger  : Edge/Levl */
-	unsigned int flags;	/* Misc flags	*/
+    unsigned int pin;	/* Directed to this Pin */
+    unsigned int polarity;	/* Polarity : +/-	*/
+    unsigned int trigtype;	/* Trigger  : Edge/Levl */
+    unsigned int flags;	/* Misc flags	*/
 #define GIC_FLAG_IPI           0x01
 #define GIC_FLAG_TRANSPARENT   0x02
 };
 
 extern void gic_init(unsigned long gic_base_addr,
-	unsigned long gic_addrspace_size, struct gic_intr_map *intrmap,
-	unsigned int intrmap_size, unsigned int irqbase);
+                     unsigned long gic_addrspace_size, struct gic_intr_map *intrmap,
+                     unsigned int intrmap_size, unsigned int irqbase);
 
 extern unsigned int gic_get_int(void);
 extern void gic_send_ipi(unsigned int intr);

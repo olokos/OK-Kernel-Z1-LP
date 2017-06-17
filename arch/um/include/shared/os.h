@@ -39,92 +39,82 @@
  * (if they are wrong here, they are wrong there...).
  */
 struct uml_stat {
-	int                ust_dev;        /* device */
-	unsigned long long ust_ino;        /* inode */
-	int                ust_mode;       /* protection */
-	int                ust_nlink;      /* number of hard links */
-	int                ust_uid;        /* user ID of owner */
-	int                ust_gid;        /* group ID of owner */
-	unsigned long long ust_size;       /* total size, in bytes */
-	int                ust_blksize;    /* blocksize for filesystem I/O */
-	unsigned long long ust_blocks;     /* number of blocks allocated */
-	unsigned long      ust_atime;      /* time of last access */
-	unsigned long      ust_mtime;      /* time of last modification */
-	unsigned long      ust_ctime;      /* time of last change */
+    int                ust_dev;        /* device */
+    unsigned long long ust_ino;        /* inode */
+    int                ust_mode;       /* protection */
+    int                ust_nlink;      /* number of hard links */
+    int                ust_uid;        /* user ID of owner */
+    int                ust_gid;        /* group ID of owner */
+    unsigned long long ust_size;       /* total size, in bytes */
+    int                ust_blksize;    /* blocksize for filesystem I/O */
+    unsigned long long ust_blocks;     /* number of blocks allocated */
+    unsigned long      ust_atime;      /* time of last access */
+    unsigned long      ust_mtime;      /* time of last modification */
+    unsigned long      ust_ctime;      /* time of last change */
 };
 
 struct openflags {
-	unsigned int r : 1;
-	unsigned int w : 1;
-	unsigned int s : 1;	/* O_SYNC */
-	unsigned int c : 1;	/* O_CREAT */
-	unsigned int t : 1;	/* O_TRUNC */
-	unsigned int a : 1;	/* O_APPEND */
-	unsigned int e : 1;	/* O_EXCL */
-	unsigned int cl : 1;    /* FD_CLOEXEC */
+    unsigned int r : 1;
+    unsigned int w : 1;
+    unsigned int s : 1;	/* O_SYNC */
+    unsigned int c : 1;	/* O_CREAT */
+    unsigned int t : 1;	/* O_TRUNC */
+    unsigned int a : 1;	/* O_APPEND */
+    unsigned int e : 1;	/* O_EXCL */
+    unsigned int cl : 1;    /* FD_CLOEXEC */
 };
 
 #define OPENFLAGS() ((struct openflags) { .r = 0, .w = 0, .s = 0, .c = 0, \
 					  .t = 0, .a = 0, .e = 0, .cl = 0 })
 
-static inline struct openflags of_read(struct openflags flags)
-{
-	flags.r = 1;
-	return flags;
+static inline struct openflags of_read(struct openflags flags) {
+    flags.r = 1;
+    return flags;
 }
 
-static inline struct openflags of_write(struct openflags flags)
-{
-	flags.w = 1;
-	return flags;
+static inline struct openflags of_write(struct openflags flags) {
+    flags.w = 1;
+    return flags;
 }
 
-static inline struct openflags of_rdwr(struct openflags flags)
-{
-	return of_read(of_write(flags));
+static inline struct openflags of_rdwr(struct openflags flags) {
+    return of_read(of_write(flags));
 }
 
-static inline struct openflags of_set_rw(struct openflags flags, int r, int w)
-{
-	flags.r = r;
-	flags.w = w;
-	return flags;
+static inline struct openflags of_set_rw(struct openflags flags, int r, int w) {
+    flags.r = r;
+    flags.w = w;
+    return flags;
 }
 
-static inline struct openflags of_sync(struct openflags flags)
-{
-	flags.s = 1;
-	return flags;
+static inline struct openflags of_sync(struct openflags flags) {
+    flags.s = 1;
+    return flags;
 }
 
-static inline struct openflags of_create(struct openflags flags)
-{
-	flags.c = 1;
-	return flags;
+static inline struct openflags of_create(struct openflags flags) {
+    flags.c = 1;
+    return flags;
 }
 
-static inline struct openflags of_trunc(struct openflags flags)
-{
-	flags.t = 1;
-	return flags;
+static inline struct openflags of_trunc(struct openflags flags) {
+    flags.t = 1;
+    return flags;
 }
 
-static inline struct openflags of_append(struct openflags flags)
-{
-	flags.a = 1;
-	return flags;
+static inline struct openflags of_append(struct openflags flags) {
+    flags.a = 1;
+    return flags;
 }
 
-static inline struct openflags of_excl(struct openflags flags)
-{
-	flags.e = 1;
-	return flags;
+static inline struct openflags of_excl(struct openflags flags) {
+    flags.e = 1;
+    return flags;
 }
 
-static inline struct openflags of_cloexec(struct openflags flags)
-{
-	flags.cl = 1;
-	return flags;
+static inline struct openflags of_cloexec(struct openflags flags) {
+    flags.cl = 1;
+    return flags;
 }
 
 /* file.c */
@@ -159,11 +149,11 @@ extern int os_file_mode(const char *file, struct openflags *mode_out);
 extern int os_lock_file(int fd, int excl);
 extern void os_flush_stdout(void);
 extern int os_stat_filesystem(char *path, long *bsize_out,
-			      long long *blocks_out, long long *bfree_out,
-			      long long *bavail_out, long long *files_out,
-			      long long *ffree_out, void *fsid_out,
-			      int fsid_size, long *namelen_out,
-			      long *spare_out);
+                              long long *blocks_out, long long *bfree_out,
+                              long long *bavail_out, long long *files_out,
+                              long long *ffree_out, void *fsid_out,
+                              int fsid_size, long *namelen_out,
+                              long *spare_out);
 extern int os_change_dir(char *dir);
 extern int os_fchange_dir(int fd);
 extern unsigned os_major(unsigned long long dev);
@@ -194,9 +184,9 @@ extern void init_new_thread_signals(void);
 extern int run_kernel_thread(int (*fn)(void *), void *arg, jmp_buf **jmp_ptr);
 
 extern int os_map_memory(void *virt, int fd, unsigned long long off,
-			 unsigned long len, int r, int w, int x);
+                         unsigned long len, int r, int w, int x);
 extern int os_protect_memory(void *addr, unsigned long len,
-			     int r, int w, int x);
+                             int r, int w, int x);
 extern int os_unmap_memory(void *addr, int len);
 extern int os_drop_memory(void *addr, int length);
 extern int can_drop_memory(void);
@@ -207,7 +197,7 @@ extern int execvp_noalloc(char *buf, const char *file, char *const argv[]);
 /* helper.c */
 extern int run_helper(void (*pre_exec)(void *), void *pre_data, char **argv);
 extern int run_helper_thread(int (*proc)(void *), void *arg,
-			     unsigned int flags, unsigned long *stack_out);
+                             unsigned int flags, unsigned long *stack_out);
 extern int helper_wait(int pid);
 
 
@@ -245,18 +235,18 @@ extern long long os_nsecs(void);
 
 /* skas/mem.c */
 extern long run_syscall_stub(struct mm_id * mm_idp,
-			     int syscall, unsigned long *args, long expected,
-			     void **addr, int done);
+                             int syscall, unsigned long *args, long expected,
+                             void **addr, int done);
 extern long syscall_stub_data(struct mm_id * mm_idp,
-			      unsigned long *data, int data_count,
-			      void **addr, void **stub_addr);
+                              unsigned long *data, int data_count,
+                              void **addr, void **stub_addr);
 extern int map(struct mm_id * mm_idp, unsigned long virt,
-	       unsigned long len, int prot, int phys_fd,
-	       unsigned long long offset, int done, void **data);
+               unsigned long len, int prot, int phys_fd,
+               unsigned long long offset, int done, void **data);
 extern int unmap(struct mm_id * mm_idp, unsigned long addr, unsigned long len,
-		 int done, void **data);
+                 int done, void **data);
 extern int protect(struct mm_id * mm_idp, unsigned long addr,
-		   unsigned long len, unsigned int prot, int done, void **data);
+                   unsigned long len, unsigned int prot, int done, void **data);
 
 /* skas/process.c */
 extern int is_skas_winch(int pid, int fd, void *data);
@@ -264,12 +254,12 @@ extern int start_userspace(unsigned long stub_stack);
 extern int copy_context_skas0(unsigned long stack, int pid);
 extern void userspace(struct uml_pt_regs *regs);
 extern int map_stub_pages(int fd, unsigned long code, unsigned long data,
-			  unsigned long stack);
+                          unsigned long stack);
 extern void new_thread(void *stack, jmp_buf *buf, void (*handler)(void));
 extern void switch_threads(jmp_buf *me, jmp_buf *you);
 extern int start_idle_thread(void *stack, jmp_buf *switch_buf);
 extern void initial_thread_cb_skas(void (*proc)(void *),
-				 void *arg);
+                                   void *arg);
 extern void halt_skas(void);
 extern void reboot_skas(void);
 
@@ -277,9 +267,9 @@ extern void reboot_skas(void);
 extern int os_waiting_for_events(struct irq_fd *active_fds);
 extern int os_create_pollfd(int fd, int events, void *tmp_pfd, int size_tmpfds);
 extern void os_free_irq_by_cb(int (*test)(struct irq_fd *, void *), void *arg,
-		struct irq_fd *active_fds, struct irq_fd ***last_irq_ptr2);
+                              struct irq_fd *active_fds, struct irq_fd ***last_irq_ptr2);
 extern void os_free_irq_later(struct irq_fd *active_fds,
-		int irq, void *dev_id);
+                              int irq, void *dev_id);
 extern int os_get_pollfd(int i);
 extern void os_set_pollfd(int i, int fd);
 extern void os_set_ioignore(void);

@@ -84,8 +84,8 @@
 
 /* These macros reverse the bytes during the move, converting little-endian to big endian */
 
-			  /* Big Endian      <==        Little Endian */
-			  /*  Hi...Lo                     Lo...Hi     */
+/* Big Endian      <==        Little Endian */
+/*  Hi...Lo                     Lo...Hi     */
 /* 16-bit source, 16/32/64 destination */
 
 #define ACPI_MOVE_16_TO_16(d, s)        {((  u8 *)(void *)(d))[0] = ((u8 *)(void *)(s))[1];\

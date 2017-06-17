@@ -31,8 +31,8 @@ struct clk_lookup;
 struct clk;
 
 enum clk_reset_action {
-	CLK_RESET_DEASSERT	= 0,
-	CLK_RESET_ASSERT	= 1
+    CLK_RESET_DEASSERT	= 0,
+    CLK_RESET_ASSERT	= 1
 };
 
 /* Rate is maximum clock rate in Hz */

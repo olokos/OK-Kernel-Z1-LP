@@ -67,7 +67,7 @@
     (r) = __r;						\
   } while (0)
 extern unsigned long __udiv_qrnnd (unsigned int *, unsigned int,
-				   unsigned int , unsigned int);
+                                   unsigned int , unsigned int);
 #endif
 
 #define UDIV_NEEDS_NORMALIZATION 0

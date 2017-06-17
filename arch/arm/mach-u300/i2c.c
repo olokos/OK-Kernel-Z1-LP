@@ -48,10 +48,10 @@
 
 #ifdef CONFIG_AB3100_CORE
 static struct regulator_consumer_supply supply_ldo_c[] = {
-	{
-		.dev_name = "ab3100-codec",
-		.supply = "vaudio", /* Powers the codec */
-	},
+    {
+        .dev_name = "ab3100-codec",
+        .supply = "vaudio", /* Powers the codec */
+    },
 };
 
 /*
@@ -59,30 +59,30 @@ static struct regulator_consumer_supply supply_ldo_c[] = {
  * in order to shut down the system.
  */
 static struct regulator_consumer_supply supply_ldo_d[] = {
-	{
-		.supply = "vana15", /* Powers the SoC (CPU etc) */
-	},
+    {
+        .supply = "vana15", /* Powers the SoC (CPU etc) */
+    },
 };
 
 static struct regulator_consumer_supply supply_ldo_g[] = {
-	{
-		.dev_name = "mmci",
-		.supply = "vmmc", /* Powers MMC/SD card */
-	},
+    {
+        .dev_name = "mmci",
+        .supply = "vmmc", /* Powers MMC/SD card */
+    },
 };
 
 static struct regulator_consumer_supply supply_ldo_h[] = {
-	{
-		.dev_name = "xgam_pdi",
-		.supply = "vdisp", /* Powers camera, display etc */
-	},
+    {
+        .dev_name = "xgam_pdi",
+        .supply = "vdisp", /* Powers camera, display etc */
+    },
 };
 
 static struct regulator_consumer_supply supply_ldo_k[] = {
-	{
-		.dev_name = "irda",
-		.supply = "vir", /* Power IrDA */
-	},
+    {
+        .dev_name = "irda",
+        .supply = "vir", /* Power IrDA */
+    },
 };
 
 /*
@@ -90,9 +90,9 @@ static struct regulator_consumer_supply supply_ldo_k[] = {
  * external power.
  */
 static struct regulator_consumer_supply supply_ldo_ext[] = {
-	{
-		.supply = "vext", /* External power */
-	},
+    {
+        .supply = "vext", /* External power */
+    },
 };
 
 /* Preset (hardware defined) voltages for these regulators */
@@ -101,189 +101,188 @@ static struct regulator_consumer_supply supply_ldo_ext[] = {
 #define LDO_D_VOLTAGE 2650000
 
 static struct ab3100_platform_data ab3100_plf_data = {
-	.reg_constraints = {
-		/* LDO A routing and constraints */
-		{
-			.constraints = {
-				.name = "vrad",
-				.min_uV = LDO_A_VOLTAGE,
-				.max_uV = LDO_A_VOLTAGE,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.always_on = 1,
-				.boot_on = 1,
-			},
-		},
-		/* LDO C routing and constraints */
-		{
-			.constraints = {
-				.min_uV = LDO_C_VOLTAGE,
-				.max_uV = LDO_C_VOLTAGE,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_c),
-			.consumer_supplies = supply_ldo_c,
-		},
-		/* LDO D routing and constraints */
-		{
-			.constraints = {
-				.min_uV = LDO_D_VOLTAGE,
-				.max_uV = LDO_D_VOLTAGE,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask = REGULATOR_CHANGE_STATUS,
-				/*
-				 * Actually this is boot_on but we need
-				 * to reference count it externally to
-				 * be able to shut down the system.
-				 */
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_d),
-			.consumer_supplies = supply_ldo_d,
-		},
-		/* LDO E routing and constraints */
-		{
-			.constraints = {
-				.name = "vio",
-				.min_uV = 1800000,
-				.max_uV = 1800000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.always_on = 1,
-				.boot_on = 1,
-			},
-		},
-		/* LDO F routing and constraints */
-		{
-			.constraints = {
-				.name = "vana25",
-				.min_uV = 2500000,
-				.max_uV = 2500000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.always_on = 1,
-				.boot_on = 1,
-			},
-		},
-		/* LDO G routing and constraints */
-		{
-			.constraints = {
-				.min_uV = 1500000,
-				.max_uV = 2850000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask =
-				REGULATOR_CHANGE_VOLTAGE |
-				REGULATOR_CHANGE_STATUS,
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_g),
-			.consumer_supplies = supply_ldo_g,
-		},
-		/* LDO H routing and constraints */
-		{
-			.constraints = {
-				.min_uV = 1200000,
-				.max_uV = 2750000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask =
-				REGULATOR_CHANGE_VOLTAGE |
-				REGULATOR_CHANGE_STATUS,
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_h),
-			.consumer_supplies = supply_ldo_h,
-		},
-		/* LDO K routing and constraints */
-		{
-			.constraints = {
-				.min_uV = 1800000,
-				.max_uV = 2750000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask =
-				REGULATOR_CHANGE_VOLTAGE |
-				REGULATOR_CHANGE_STATUS,
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_k),
-			.consumer_supplies = supply_ldo_k,
-		},
-		/* External regulator interface. No fixed voltage specified.
-		 * If we knew the voltage of the external regulator and it
-		 * was connected on the board, we could add the (fixed)
-		 * voltage for it here.
-		 */
-		{
-			.constraints = {
-				.min_uV = 0,
-				.max_uV = 0,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask =
-				REGULATOR_CHANGE_STATUS,
-			},
-			.num_consumer_supplies = ARRAY_SIZE(supply_ldo_ext),
-			.consumer_supplies = supply_ldo_ext,
-		},
-		/* Buck converter routing and constraints */
-		{
-			.constraints = {
-				.name = "vcore",
-				.min_uV = 1200000,
-				.max_uV = 1800000,
-				.valid_modes_mask = REGULATOR_MODE_NORMAL,
-				.valid_ops_mask =
-				REGULATOR_CHANGE_VOLTAGE,
-				.always_on = 1,
-				.boot_on = 1,
-			},
-		},
-	},
-	.reg_initvals = {
-		LDO_A_SETTING,
-		LDO_C_SETTING,
-		LDO_E_SETTING,
-		LDO_E_SLEEP_SETTING,
-		LDO_F_SETTING,
-		LDO_G_SETTING,
-		LDO_H_SETTING,
-		LDO_K_SETTING,
-		LDO_EXT_SETTING,
-		BUCK_SETTING,
-		BUCK_SLEEP_SETTING,
-		LDO_D_SETTING,
-	},
+    .reg_constraints = {
+        /* LDO A routing and constraints */
+        {
+            .constraints = {
+                .name = "vrad",
+                .min_uV = LDO_A_VOLTAGE,
+                .max_uV = LDO_A_VOLTAGE,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .always_on = 1,
+                .boot_on = 1,
+            },
+        },
+        /* LDO C routing and constraints */
+        {
+            .constraints = {
+                .min_uV = LDO_C_VOLTAGE,
+                .max_uV = LDO_C_VOLTAGE,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_c),
+            .consumer_supplies = supply_ldo_c,
+        },
+        /* LDO D routing and constraints */
+        {
+            .constraints = {
+                .min_uV = LDO_D_VOLTAGE,
+                .max_uV = LDO_D_VOLTAGE,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask = REGULATOR_CHANGE_STATUS,
+                /*
+                 * Actually this is boot_on but we need
+                 * to reference count it externally to
+                 * be able to shut down the system.
+                 */
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_d),
+            .consumer_supplies = supply_ldo_d,
+        },
+        /* LDO E routing and constraints */
+        {
+            .constraints = {
+                .name = "vio",
+                .min_uV = 1800000,
+                .max_uV = 1800000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .always_on = 1,
+                .boot_on = 1,
+            },
+        },
+        /* LDO F routing and constraints */
+        {
+            .constraints = {
+                .name = "vana25",
+                .min_uV = 2500000,
+                .max_uV = 2500000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .always_on = 1,
+                .boot_on = 1,
+            },
+        },
+        /* LDO G routing and constraints */
+        {
+            .constraints = {
+                .min_uV = 1500000,
+                .max_uV = 2850000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask =
+                REGULATOR_CHANGE_VOLTAGE |
+                REGULATOR_CHANGE_STATUS,
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_g),
+            .consumer_supplies = supply_ldo_g,
+        },
+        /* LDO H routing and constraints */
+        {
+            .constraints = {
+                .min_uV = 1200000,
+                .max_uV = 2750000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask =
+                REGULATOR_CHANGE_VOLTAGE |
+                REGULATOR_CHANGE_STATUS,
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_h),
+            .consumer_supplies = supply_ldo_h,
+        },
+        /* LDO K routing and constraints */
+        {
+            .constraints = {
+                .min_uV = 1800000,
+                .max_uV = 2750000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask =
+                REGULATOR_CHANGE_VOLTAGE |
+                REGULATOR_CHANGE_STATUS,
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_k),
+            .consumer_supplies = supply_ldo_k,
+        },
+        /* External regulator interface. No fixed voltage specified.
+         * If we knew the voltage of the external regulator and it
+         * was connected on the board, we could add the (fixed)
+         * voltage for it here.
+         */
+        {
+            .constraints = {
+                .min_uV = 0,
+                .max_uV = 0,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask =
+                REGULATOR_CHANGE_STATUS,
+            },
+            .num_consumer_supplies = ARRAY_SIZE(supply_ldo_ext),
+            .consumer_supplies = supply_ldo_ext,
+        },
+        /* Buck converter routing and constraints */
+        {
+            .constraints = {
+                .name = "vcore",
+                .min_uV = 1200000,
+                .max_uV = 1800000,
+                .valid_modes_mask = REGULATOR_MODE_NORMAL,
+                .valid_ops_mask =
+                REGULATOR_CHANGE_VOLTAGE,
+                .always_on = 1,
+                .boot_on = 1,
+            },
+        },
+    },
+    .reg_initvals = {
+        LDO_A_SETTING,
+        LDO_C_SETTING,
+        LDO_E_SETTING,
+        LDO_E_SLEEP_SETTING,
+        LDO_F_SETTING,
+        LDO_G_SETTING,
+        LDO_H_SETTING,
+        LDO_K_SETTING,
+        LDO_EXT_SETTING,
+        BUCK_SETTING,
+        BUCK_SLEEP_SETTING,
+        LDO_D_SETTING,
+    },
 };
 #endif
 
 static struct i2c_board_info __initdata bus0_i2c_board_info[] = {
 #ifdef CONFIG_AB3100_CORE
-	{
-		.type = "ab3100",
-		.addr = 0x48,
-		.irq = IRQ_U300_IRQ0_EXT,
-		.platform_data = &ab3100_plf_data,
-	},
+    {
+        .type = "ab3100",
+        .addr = 0x48,
+        .irq = IRQ_U300_IRQ0_EXT,
+        .platform_data = &ab3100_plf_data,
+    },
 #else
-	{ },
+    { },
 #endif
 };
 
 static struct i2c_board_info __initdata bus1_i2c_board_info[] = {
 #ifdef CONFIG_MACH_U300_BS335
-	{
-		.type = "fwcam",
-		.addr = 0x10,
-	},
-	{
-		.type = "fwcam",
-		.addr = 0x5d,
-	},
+    {
+        .type = "fwcam",
+        .addr = 0x10,
+    },
+    {
+        .type = "fwcam",
+        .addr = 0x5d,
+    },
 #else
-	{ },
+    { },
 #endif
 };
 
-void __init u300_i2c_register_board_devices(void)
-{
-	i2c_register_board_info(0, bus0_i2c_board_info,
-				ARRAY_SIZE(bus0_i2c_board_info));
-	/*
-	 * This makes the core shut down all unused regulators
-	 * after all the initcalls have completed.
-	 */
-	regulator_has_full_constraints();
-	i2c_register_board_info(1, bus1_i2c_board_info,
-				ARRAY_SIZE(bus1_i2c_board_info));
+void __init u300_i2c_register_board_devices(void) {
+    i2c_register_board_info(0, bus0_i2c_board_info,
+                            ARRAY_SIZE(bus0_i2c_board_info));
+    /*
+     * This makes the core shut down all unused regulators
+     * after all the initcalls have completed.
+     */
+    regulator_has_full_constraints();
+    i2c_register_board_info(1, bus1_i2c_board_info,
+                            ARRAY_SIZE(bus1_i2c_board_info));
 }

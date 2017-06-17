@@ -35,7 +35,7 @@
 #define IRQ_PBA8_GPIO0		(IRQ_PBA8_GIC_START + 6)	/* GPIO 0 */
 #define IRQ_PBA8_GPIO1		(IRQ_PBA8_GIC_START + 7)	/* GPIO 1 */
 #define IRQ_PBA8_GPIO2		(IRQ_PBA8_GIC_START + 8)	/* GPIO 2 */
-								/* 9 reserved */
+/* 9 reserved */
 #define IRQ_PBA8_RTC		(IRQ_PBA8_GIC_START + 10)	/* Real Time Clock */
 #define IRQ_PBA8_SSP		(IRQ_PBA8_GIC_START + 11)	/* Synchronous Serial Port */
 #define IRQ_PBA8_UART0		(IRQ_PBA8_GIC_START + 12)	/* UART 0 on development chip */

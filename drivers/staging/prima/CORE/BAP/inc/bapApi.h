@@ -376,11 +376,9 @@ typedef v_PVOID_t tBtampHandle, *ptBtampHandle;
 /*---------------------------------------------------------------------------
   HCI Event union
 ---------------------------------------------------------------------------*/
-typedef struct sBtampHCI_Event
-{
+typedef struct sBtampHCI_Event {
     v_U8_t  bapHCIEventCode;  /* The event code.  To dis-ambiguate. */
-    union
-    {
+    union {
         tBtampTLVHCI_Channel_Selected_Event  btampChannelSelectedEvent;
         tBtampTLVHCI_Command_Complete_Event btampCommandCompleteEvent ;
         tBtampTLVHCI_Command_Status_Event btampCommandStatusEvent ;
@@ -407,8 +405,7 @@ typedef struct sBtampHCI_Event
 } tBtampHCI_Event, *tpBtampHCI_Event;
 
 /* 802.3 header */
-typedef struct
-{
+typedef struct {
     /* Destination address field */
     v_U8_t   vDA[VOS_MAC_ADDR_SIZE];
 
@@ -474,8 +471,7 @@ typedef struct
 #endif
 
 /* BT AMP configuration items */
-typedef struct
-{
+typedef struct {
     /* user preferred channel on which we start the link */
     v_U8_t   ucPreferredChannel;
 

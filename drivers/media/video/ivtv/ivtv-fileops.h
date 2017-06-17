@@ -24,9 +24,9 @@
 /* Testing/Debugging */
 int ivtv_v4l2_open(struct file *filp);
 ssize_t ivtv_v4l2_read(struct file *filp, char __user *buf, size_t count,
-		      loff_t * pos);
+                       loff_t * pos);
 ssize_t ivtv_v4l2_write(struct file *filp, const char __user *buf, size_t count,
-		       loff_t * pos);
+                        loff_t * pos);
 int ivtv_v4l2_close(struct file *filp);
 unsigned int ivtv_v4l2_enc_poll(struct file *filp, poll_table * wait);
 unsigned int ivtv_v4l2_dec_poll(struct file *filp, poll_table * wait);

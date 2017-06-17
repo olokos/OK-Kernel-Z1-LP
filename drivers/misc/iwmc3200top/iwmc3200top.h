@@ -85,23 +85,23 @@
 #define CMD_HDR_SIGNATURE_MSK		BIT(0xffff << CMD_HDR_SIGNATURE_POS)
 
 enum {
-	IWMC_OPCODE_PING = 0,
-	IWMC_OPCODE_READ = 1,
-	IWMC_OPCODE_WRITE = 2,
-	IWMC_OPCODE_JUMP = 3,
-	IWMC_OPCODE_REBOOT = 4,
-	IWMC_OPCODE_PERSISTENT_WRITE = 5,
-	IWMC_OPCODE_PERSISTENT_READ = 6,
-	IWMC_OPCODE_READ_MODIFY_WRITE = 7,
-	IWMC_OPCODE_LAST_COMMAND = 15
+    IWMC_OPCODE_PING = 0,
+    IWMC_OPCODE_READ = 1,
+    IWMC_OPCODE_WRITE = 2,
+    IWMC_OPCODE_JUMP = 3,
+    IWMC_OPCODE_REBOOT = 4,
+    IWMC_OPCODE_PERSISTENT_WRITE = 5,
+    IWMC_OPCODE_PERSISTENT_READ = 6,
+    IWMC_OPCODE_READ_MODIFY_WRITE = 7,
+    IWMC_OPCODE_LAST_COMMAND = 15
 };
 
 struct iwmct_fw_load_hdr {
-	__le32 cmd;
-	__le32 target_addr;
-	__le32 data_size;
-	__le32 block_chksm;
-	u8 data[0];
+    __le32 cmd;
+    __le32 target_addr;
+    __le32 data_size;
+    __le32 block_chksm;
+    u8 data[0];
 };
 
 /**
@@ -109,16 +109,16 @@ struct iwmct_fw_load_hdr {
  * holds all sw components versions
  */
 struct iwmct_fw_hdr {
-	u8 top_major;
-	u8 top_minor;
-	u8 top_revision;
-	u8 gps_major;
-	u8 gps_minor;
-	u8 gps_revision;
-	u8 bt_major;
-	u8 bt_minor;
-	u8 bt_revision;
-	u8 tic_name[31];
+    u8 top_major;
+    u8 top_minor;
+    u8 top_revision;
+    u8 gps_major;
+    u8 gps_minor;
+    u8 gps_revision;
+    u8 bt_major;
+    u8 bt_minor;
+    u8 bt_revision;
+    u8 tic_name[31];
 };
 
 /**
@@ -128,9 +128,9 @@ struct iwmct_fw_hdr {
  * @target_addr: download address
  */
 struct iwmct_fw_sec_hdr {
-	u8 type[4];
-	__le32 data_size;
-	__le32 target_addr;
+    u8 type[4];
+    __le32 data_size;
+    __le32 target_addr;
 };
 
 /**
@@ -143,55 +143,55 @@ struct iwmct_fw_sec_hdr {
  * @entry_point: address to jump in fw kick-off
  */
 struct iwmct_parser {
-	const u8 *file;
-	size_t file_size;
-	size_t cur_pos;
-	u8 *buf;
-	size_t buf_size;
-	u32 entry_point;
-	struct iwmct_fw_hdr versions;
+    const u8 *file;
+    size_t file_size;
+    size_t cur_pos;
+    u8 *buf;
+    size_t buf_size;
+    u32 entry_point;
+    struct iwmct_fw_hdr versions;
 };
 
 
 struct iwmct_work_struct {
-	struct list_head list;
-	ssize_t iosize;
+    struct list_head list;
+    ssize_t iosize;
 };
 
 struct iwmct_dbg {
-	int blocks;
-	bool dump;
-	bool jump;
-	bool direct;
-	bool checksum;
-	bool fw_download;
-	int block_size;
-	int download_trans_blks;
+    int blocks;
+    bool dump;
+    bool jump;
+    bool direct;
+    bool checksum;
+    bool fw_download;
+    int block_size;
+    int download_trans_blks;
 
-	char label_fw[256];
+    char label_fw[256];
 };
 
 struct iwmct_debugfs;
 
 struct iwmct_priv {
-	struct sdio_func *func;
-	struct iwmct_debugfs *dbgfs;
-	struct iwmct_parser parser;
-	atomic_t reset;
-	atomic_t dev_sync;
-	u32 trans_len;
-	u32 barker;
-	struct iwmct_dbg dbg;
+    struct sdio_func *func;
+    struct iwmct_debugfs *dbgfs;
+    struct iwmct_parser parser;
+    atomic_t reset;
+    atomic_t dev_sync;
+    u32 trans_len;
+    u32 barker;
+    struct iwmct_dbg dbg;
 
-	/* drivers work items */
-	struct work_struct bus_rescan_worker;
-	struct work_struct isr_worker;
+    /* drivers work items */
+    struct work_struct bus_rescan_worker;
+    struct work_struct isr_worker;
 
-	/* drivers wait queue */
-	wait_queue_head_t wait_q;
+    /* drivers wait queue */
+    wait_queue_head_t wait_q;
 
-	/* rx request list */
-	struct list_head read_req_list;
+    /* rx request list */
+    struct list_head read_req_list;
 };
 
 extern int iwmct_tx(struct iwmct_priv *priv, void *src, int count);

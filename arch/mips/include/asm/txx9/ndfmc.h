@@ -14,17 +14,17 @@
 #define NDFMC_PLAT_FLAG_DUMMYWRITE	0x08
 
 struct txx9ndfmc_platform_data {
-	unsigned int shift;
-	unsigned int gbus_clock;
-	unsigned int hold;		/* hold time in nanosecond */
-	unsigned int spw;		/* strobe pulse width in nanosecond */
-	unsigned int flags;
-	unsigned char ch_mask;		/* available channel bitmask */
-	unsigned char wp_mask;		/* write-protect bitmask */
-	unsigned char wide_mask;	/* 16bit-nand bitmask */
+    unsigned int shift;
+    unsigned int gbus_clock;
+    unsigned int hold;		/* hold time in nanosecond */
+    unsigned int spw;		/* strobe pulse width in nanosecond */
+    unsigned int flags;
+    unsigned char ch_mask;		/* available channel bitmask */
+    unsigned char wp_mask;		/* write-protect bitmask */
+    unsigned char wide_mask;	/* 16bit-nand bitmask */
 };
 
 void txx9_ndfmc_init(unsigned long baseaddr,
-		     const struct txx9ndfmc_platform_data *plat_data);
+                     const struct txx9ndfmc_platform_data *plat_data);
 
 #endif /* __ASM_TXX9_NDFMC_H */

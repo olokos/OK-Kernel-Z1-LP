@@ -29,36 +29,36 @@ struct exec_domain;
 #include <asm/types.h>
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 struct cpu_context_save {
-	__u32	r4;
-	__u32	r5;
-	__u32	r6;
-	__u32	r7;
-	__u32	r8;
-	__u32	r9;
-	__u32	r10;
-	__u32	r11;
-	__u32	r12;
-	__u32	r13;
-	__u32	r14;
-	__u32	r15;
-	__u32	r16;
-	__u32	r17;
-	__u32	r18;
-	__u32	r19;
-	__u32	r20;
-	__u32	r21;
-	__u32	r22;
-	__u32	r23;
-	__u32	r24;
-	__u32	r25;
-	__u32	r26;
-	__u32	fp;
-	__u32	sp;
-	__u32	pc;
+    __u32	r4;
+    __u32	r5;
+    __u32	r6;
+    __u32	r7;
+    __u32	r8;
+    __u32	r9;
+    __u32	r10;
+    __u32	r11;
+    __u32	r12;
+    __u32	r13;
+    __u32	r14;
+    __u32	r15;
+    __u32	r16;
+    __u32	r17;
+    __u32	r18;
+    __u32	r19;
+    __u32	r20;
+    __u32	r21;
+    __u32	r22;
+    __u32	r23;
+    __u32	r24;
+    __u32	r25;
+    __u32	r26;
+    __u32	fp;
+    __u32	sp;
+    __u32	pc;
 };
 
 /*
@@ -66,20 +66,20 @@ struct cpu_context_save {
  * __switch_to() assumes cpu_context follows immediately after cpu_domain.
  */
 struct thread_info {
-	unsigned long		flags;		/* low level flags */
-	int			preempt_count;	/* 0 => preemptable */
-						/* <0 => bug */
-	mm_segment_t		addr_limit;	/* address limit */
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	__u32			cpu;		/* cpu */
-	struct cpu_context_save	cpu_context;	/* cpu context */
-	__u32			syscall;	/* syscall number */
-	__u8			used_cp[16];	/* thread used copro */
+    unsigned long		flags;		/* low level flags */
+    int			preempt_count;	/* 0 => preemptable */
+    /* <0 => bug */
+    mm_segment_t		addr_limit;	/* address limit */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    __u32			cpu;		/* cpu */
+    struct cpu_context_save	cpu_context;	/* cpu context */
+    __u32			syscall;	/* syscall number */
+    __u8			used_cp[16];	/* thread used copro */
 #ifdef CONFIG_UNICORE_FPU_F64
-	struct fp_state		fpstate __attribute__((aligned(8)));
+    struct fp_state		fpstate __attribute__((aligned(8)));
 #endif
-	struct restart_block	restart_block;
+    struct restart_block	restart_block;
 };
 
 #define INIT_THREAD_INFO(tsk)						\
@@ -102,10 +102,9 @@ struct thread_info {
  */
 static inline struct thread_info *current_thread_info(void) __attribute_const__;
 
-static inline struct thread_info *current_thread_info(void)
-{
-	register unsigned long sp asm ("sp");
-	return (struct thread_info *)(sp & ~(THREAD_SIZE - 1));
+static inline struct thread_info *current_thread_info(void) {
+    register unsigned long sp asm ("sp");
+    return (struct thread_info *)(sp & ~(THREAD_SIZE - 1));
 }
 
 #define thread_saved_pc(tsk)	\

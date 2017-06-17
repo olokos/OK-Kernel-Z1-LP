@@ -103,7 +103,7 @@
 /* Bitfields in CTRLB */
 #define	ATC_SIF(i)		(0x3 & (i))	/* Src tx done via AHB-Lite Interface i */
 #define	ATC_DIF(i)		((0x3 & (i)) <<  4)	/* Dst tx done via AHB-Lite Interface i */
-				  /* Specify AHB interfaces */
+/* Specify AHB interfaces */
 #define AT_DMA_MEM_IF		0 /* interface 0 as memory interface */
 #define AT_DMA_PER_IF		1 /* interface 1 as peripheral interface */
 
@@ -147,14 +147,14 @@
 
 /* LLI == Linked List Item; aka DMA buffer descriptor */
 struct at_lli {
-	/* values that are not changed by hardware */
-	dma_addr_t	saddr;
-	dma_addr_t	daddr;
-	/* value that may get written back: */
-	u32		ctrla;
-	/* more values that are not changed by hardware */
-	u32		ctrlb;
-	dma_addr_t	dscr;	/* chain to next lli */
+    /* values that are not changed by hardware */
+    dma_addr_t	saddr;
+    dma_addr_t	daddr;
+    /* value that may get written back: */
+    u32		ctrla;
+    /* more values that are not changed by hardware */
+    u32		ctrlb;
+    dma_addr_t	dscr;	/* chain to next lli */
 };
 
 /**
@@ -165,20 +165,19 @@ struct at_lli {
  * @len: total transaction bytecount
  */
 struct at_desc {
-	/* FIRST values the hardware uses */
-	struct at_lli			lli;
+    /* FIRST values the hardware uses */
+    struct at_lli			lli;
 
-	/* THEN values for driver housekeeping */
-	struct list_head		tx_list;
-	struct dma_async_tx_descriptor	txd;
-	struct list_head		desc_node;
-	size_t				len;
+    /* THEN values for driver housekeeping */
+    struct list_head		tx_list;
+    struct dma_async_tx_descriptor	txd;
+    struct list_head		desc_node;
+    size_t				len;
 };
 
 static inline struct at_desc *
-txd_to_at_desc(struct dma_async_tx_descriptor *txd)
-{
-	return container_of(txd, struct at_desc, txd);
+txd_to_at_desc(struct dma_async_tx_descriptor *txd) {
+    return container_of(txd, struct at_desc, txd);
 }
 
 
@@ -190,9 +189,9 @@ txd_to_at_desc(struct dma_async_tx_descriptor *txd)
  * Manipulated with atomic operations.
  */
 enum atc_status {
-	ATC_IS_ERROR = 0,
-	ATC_IS_PAUSED = 1,
-	ATC_IS_CYCLIC = 24,
+    ATC_IS_ERROR = 0,
+    ATC_IS_PAUSED = 1,
+    ATC_IS_CYCLIC = 24,
 };
 
 /**
@@ -215,23 +214,23 @@ enum atc_status {
  * @descs_allocated: records the actual size of the descriptor pool
  */
 struct at_dma_chan {
-	struct dma_chan		chan_common;
-	struct at_dma		*device;
-	void __iomem		*ch_regs;
-	u8			mask;
-	unsigned long		status;
-	struct tasklet_struct	tasklet;
-	u32			save_cfg;
-	u32			save_dscr;
-	struct dma_slave_config dma_sconfig;
+    struct dma_chan		chan_common;
+    struct at_dma		*device;
+    void __iomem		*ch_regs;
+    u8			mask;
+    unsigned long		status;
+    struct tasklet_struct	tasklet;
+    u32			save_cfg;
+    u32			save_dscr;
+    struct dma_slave_config dma_sconfig;
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	/* these other elements are all protected by lock */
-	struct list_head	active_list;
-	struct list_head	queue;
-	struct list_head	free_list;
-	unsigned int		descs_allocated;
+    /* these other elements are all protected by lock */
+    struct list_head	active_list;
+    struct list_head	queue;
+    struct list_head	free_list;
+    unsigned int		descs_allocated;
 };
 
 #define	channel_readl(atchan, name) \
@@ -240,9 +239,8 @@ struct at_dma_chan {
 #define	channel_writel(atchan, name, val) \
 	__raw_writel((val), (atchan)->ch_regs + ATC_##name##_OFFSET)
 
-static inline struct at_dma_chan *to_at_dma_chan(struct dma_chan *dchan)
-{
-	return container_of(dchan, struct at_dma_chan, chan_common);
+static inline struct at_dma_chan *to_at_dma_chan(struct dma_chan *dchan) {
+    return container_of(dchan, struct at_dma_chan, chan_common);
 }
 
 /*
@@ -251,29 +249,27 @@ static inline struct at_dma_chan *to_at_dma_chan(struct dma_chan *dchan)
  *
  * This can be done by finding most significant bit set.
  */
-static inline void convert_burst(u32 *maxburst)
-{
-	if (*maxburst > 1)
-		*maxburst = fls(*maxburst) - 2;
-	else
-		*maxburst = 0;
+static inline void convert_burst(u32 *maxburst) {
+    if (*maxburst > 1)
+        *maxburst = fls(*maxburst) - 2;
+    else
+        *maxburst = 0;
 }
 
 /*
  * Fix sconfig's bus width according to at_hdmac.
  * 1 byte -> 0, 2 bytes -> 1, 4 bytes -> 2.
  */
-static inline u8 convert_buswidth(enum dma_slave_buswidth addr_width)
-{
-	switch (addr_width) {
-	case DMA_SLAVE_BUSWIDTH_2_BYTES:
-		return 1;
-	case DMA_SLAVE_BUSWIDTH_4_BYTES:
-		return 2;
-	default:
-		/* For 1 byte width or fallback */
-		return 0;
-	}
+static inline u8 convert_buswidth(enum dma_slave_buswidth addr_width) {
+    switch (addr_width) {
+    case DMA_SLAVE_BUSWIDTH_2_BYTES:
+        return 1;
+    case DMA_SLAVE_BUSWIDTH_4_BYTES:
+        return 2;
+    default:
+        /* For 1 byte width or fallback */
+        return 0;
+    }
 }
 
 /*--  Controller  ------------------------------------------------------*/
@@ -290,16 +286,16 @@ static inline u8 convert_buswidth(enum dma_slave_buswidth addr_width)
  * @chan: channels table to store at_dma_chan structures
  */
 struct at_dma {
-	struct dma_device	dma_common;
-	void __iomem		*regs;
-	struct clk		*clk;
-	u32			save_imr;
+    struct dma_device	dma_common;
+    void __iomem		*regs;
+    struct clk		*clk;
+    u32			save_imr;
 
-	u8			all_chan_mask;
+    u8			all_chan_mask;
 
-	struct dma_pool		*dma_desc_pool;
-	/* AT THE END channels table */
-	struct at_dma_chan	chan[0];
+    struct dma_pool		*dma_desc_pool;
+    /* AT THE END channels table */
+    struct at_dma_chan	chan[0];
 };
 
 #define	dma_readl(atdma, name) \
@@ -307,77 +303,69 @@ struct at_dma {
 #define	dma_writel(atdma, name, val) \
 	__raw_writel((val), (atdma)->regs + AT_DMA_##name)
 
-static inline struct at_dma *to_at_dma(struct dma_device *ddev)
-{
-	return container_of(ddev, struct at_dma, dma_common);
+static inline struct at_dma *to_at_dma(struct dma_device *ddev) {
+    return container_of(ddev, struct at_dma, dma_common);
 }
 
 
 /*--  Helper functions  ------------------------------------------------*/
 
-static struct device *chan2dev(struct dma_chan *chan)
-{
-	return &chan->dev->device;
+static struct device *chan2dev(struct dma_chan *chan) {
+    return &chan->dev->device;
 }
-static struct device *chan2parent(struct dma_chan *chan)
-{
-	return chan->dev->device.parent;
+static struct device *chan2parent(struct dma_chan *chan) {
+    return chan->dev->device.parent;
 }
 
 #if defined(VERBOSE_DEBUG)
-static void vdbg_dump_regs(struct at_dma_chan *atchan)
-{
-	struct at_dma	*atdma = to_at_dma(atchan->chan_common.device);
+static void vdbg_dump_regs(struct at_dma_chan *atchan) {
+    struct at_dma	*atdma = to_at_dma(atchan->chan_common.device);
 
-	dev_err(chan2dev(&atchan->chan_common),
-		"  channel %d : imr = 0x%x, chsr = 0x%x\n",
-		atchan->chan_common.chan_id,
-		dma_readl(atdma, EBCIMR),
-		dma_readl(atdma, CHSR));
+    dev_err(chan2dev(&atchan->chan_common),
+            "  channel %d : imr = 0x%x, chsr = 0x%x\n",
+            atchan->chan_common.chan_id,
+            dma_readl(atdma, EBCIMR),
+            dma_readl(atdma, CHSR));
 
-	dev_err(chan2dev(&atchan->chan_common),
-		"  channel: s0x%x d0x%x ctrl0x%x:0x%x cfg0x%x l0x%x\n",
-		channel_readl(atchan, SADDR),
-		channel_readl(atchan, DADDR),
-		channel_readl(atchan, CTRLA),
-		channel_readl(atchan, CTRLB),
-		channel_readl(atchan, CFG),
-		channel_readl(atchan, DSCR));
+    dev_err(chan2dev(&atchan->chan_common),
+            "  channel: s0x%x d0x%x ctrl0x%x:0x%x cfg0x%x l0x%x\n",
+            channel_readl(atchan, SADDR),
+            channel_readl(atchan, DADDR),
+            channel_readl(atchan, CTRLA),
+            channel_readl(atchan, CTRLB),
+            channel_readl(atchan, CFG),
+            channel_readl(atchan, DSCR));
 }
 #else
 static void vdbg_dump_regs(struct at_dma_chan *atchan) {}
 #endif
 
-static void atc_dump_lli(struct at_dma_chan *atchan, struct at_lli *lli)
-{
-	dev_printk(KERN_CRIT, chan2dev(&atchan->chan_common),
-			"  desc: s0x%x d0x%x ctrl0x%x:0x%x l0x%x\n",
-			lli->saddr, lli->daddr,
-			lli->ctrla, lli->ctrlb, lli->dscr);
+static void atc_dump_lli(struct at_dma_chan *atchan, struct at_lli *lli) {
+    dev_printk(KERN_CRIT, chan2dev(&atchan->chan_common),
+               "  desc: s0x%x d0x%x ctrl0x%x:0x%x l0x%x\n",
+               lli->saddr, lli->daddr,
+               lli->ctrla, lli->ctrlb, lli->dscr);
 }
 
 
-static void atc_setup_irq(struct at_dma *atdma, int chan_id, int on)
-{
-	u32 ebci;
+static void atc_setup_irq(struct at_dma *atdma, int chan_id, int on) {
+    u32 ebci;
 
-	/* enable interrupts on buffer transfer completion & error */
-	ebci =    AT_DMA_BTC(chan_id)
-		| AT_DMA_ERR(chan_id);
-	if (on)
-		dma_writel(atdma, EBCIER, ebci);
-	else
-		dma_writel(atdma, EBCIDR, ebci);
+    /* enable interrupts on buffer transfer completion & error */
+    ebci =    AT_DMA_BTC(chan_id)
+              | AT_DMA_ERR(chan_id);
+    if (on)
+        dma_writel(atdma, EBCIER, ebci);
+    else
+        dma_writel(atdma, EBCIDR, ebci);
 }
 
-static void atc_enable_chan_irq(struct at_dma *atdma, int chan_id)
-{
-	atc_setup_irq(atdma, chan_id, 1);
+static void atc_enable_chan_irq(struct at_dma *atdma, int chan_id) {
+    atc_setup_irq(atdma, chan_id, 1);
 }
 
-static void atc_disable_chan_irq(struct at_dma *atdma, int chan_id)
-{
-	atc_setup_irq(atdma, chan_id, 0);
+static void atc_disable_chan_irq(struct at_dma *atdma, int chan_id) {
+    atc_setup_irq(atdma, chan_id, 0);
 }
 
 
@@ -385,44 +373,40 @@ static void atc_disable_chan_irq(struct at_dma *atdma, int chan_id)
  * atc_chan_is_enabled - test if given channel is enabled
  * @atchan: channel we want to test status
  */
-static inline int atc_chan_is_enabled(struct at_dma_chan *atchan)
-{
-	struct at_dma	*atdma = to_at_dma(atchan->chan_common.device);
+static inline int atc_chan_is_enabled(struct at_dma_chan *atchan) {
+    struct at_dma	*atdma = to_at_dma(atchan->chan_common.device);
 
-	return !!(dma_readl(atdma, CHSR) & atchan->mask);
+    return !!(dma_readl(atdma, CHSR) & atchan->mask);
 }
 
 /**
  * atc_chan_is_paused - test channel pause/resume status
  * @atchan: channel we want to test status
  */
-static inline int atc_chan_is_paused(struct at_dma_chan *atchan)
-{
-	return test_bit(ATC_IS_PAUSED, &atchan->status);
+static inline int atc_chan_is_paused(struct at_dma_chan *atchan) {
+    return test_bit(ATC_IS_PAUSED, &atchan->status);
 }
 
 /**
  * atc_chan_is_cyclic - test if given channel has cyclic property set
  * @atchan: channel we want to test status
  */
-static inline int atc_chan_is_cyclic(struct at_dma_chan *atchan)
-{
-	return test_bit(ATC_IS_CYCLIC, &atchan->status);
+static inline int atc_chan_is_cyclic(struct at_dma_chan *atchan) {
+    return test_bit(ATC_IS_CYCLIC, &atchan->status);
 }
 
 /**
  * set_desc_eol - set end-of-link to descriptor so it will end transfer
  * @desc: descriptor, signle or at the end of a chain, to end chain on
  */
-static void set_desc_eol(struct at_desc *desc)
-{
-	u32 ctrlb = desc->lli.ctrlb;
+static void set_desc_eol(struct at_desc *desc) {
+    u32 ctrlb = desc->lli.ctrlb;
 
-	ctrlb &= ~ATC_IEN;
-	ctrlb |= ATC_SRC_DSCR_DIS | ATC_DST_DSCR_DIS;
+    ctrlb &= ~ATC_IEN;
+    ctrlb |= ATC_SRC_DSCR_DIS | ATC_DST_DSCR_DIS;
 
-	desc->lli.ctrlb = ctrlb;
-	desc->lli.dscr = 0;
+    desc->lli.ctrlb = ctrlb;
+    desc->lli.dscr = 0;
 }
 
 #endif /* AT_HDMAC_REGS_H */

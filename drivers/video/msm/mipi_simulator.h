@@ -14,6 +14,6 @@
 #define MIPI_SIMULATOR_H
 
 int mipi_simulator_device_register(struct msm_panel_info *pinfo,
-					u32 channel, u32 panel);
+                                   u32 channel, u32 panel);
 
 #endif  /* MIPI_SIMULATOR_H */

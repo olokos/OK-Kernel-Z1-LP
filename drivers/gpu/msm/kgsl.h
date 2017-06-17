@@ -73,12 +73,11 @@
 */
 
 static inline void KGSL_STATS_ADD(uint32_t size, atomic_t *stat,
-		atomic_t *max)
-{
-	uint32_t ret = atomic_add_return(size, stat);
+                                  atomic_t *max) {
+    uint32_t ret = atomic_add_return(size, stat);
 
-	if (ret > atomic_read(max))
-		atomic_set(max, ret);
+    if (ret > atomic_read(max))
+        atomic_set(max, ret);
 }
 
 #define KGSL_MAX_NUMIBS 100000
@@ -87,41 +86,41 @@ struct kgsl_device;
 struct kgsl_context;
 
 struct kgsl_driver {
-	struct cdev cdev;
-	dev_t major;
-	struct class *class;
-	/* Virtual device for managing the core */
-	struct device virtdev;
-	/* Kobjects for storing pagetable and process statistics */
-	struct kobject *ptkobj;
-	struct kobject *prockobj;
-	struct kgsl_device *devp[KGSL_DEVICE_MAX];
+    struct cdev cdev;
+    dev_t major;
+    struct class *class;
+    /* Virtual device for managing the core */
+    struct device virtdev;
+    /* Kobjects for storing pagetable and process statistics */
+    struct kobject *ptkobj;
+    struct kobject *prockobj;
+    struct kgsl_device *devp[KGSL_DEVICE_MAX];
 
-	/* Global lilst of open processes */
-	struct list_head process_list;
-	/* Global list of pagetables */
-	struct list_head pagetable_list;
-	/* Spinlock for accessing the pagetable list */
-	spinlock_t ptlock;
-	/* Mutex for accessing the process list */
-	struct mutex process_mutex;
+    /* Global lilst of open processes */
+    struct list_head process_list;
+    /* Global list of pagetables */
+    struct list_head pagetable_list;
+    /* Spinlock for accessing the pagetable list */
+    spinlock_t ptlock;
+    /* Mutex for accessing the process list */
+    struct mutex process_mutex;
 
-	/* Mutex for protecting the device list */
-	struct mutex devlock;
+    /* Mutex for protecting the device list */
+    struct mutex devlock;
 
-	void *ptpool;
+    void *ptpool;
 
-	struct {
-		atomic_t vmalloc;
-		atomic_t vmalloc_max;
-		atomic_t page_alloc;
-		atomic_t page_alloc_max;
-		atomic_t coherent;
-		atomic_t coherent_max;
-		atomic_t mapped;
-		atomic_t mapped_max;
-	} stats;
-	unsigned int full_cache_threshold;
+    struct {
+        atomic_t vmalloc;
+        atomic_t vmalloc_max;
+        atomic_t page_alloc;
+        atomic_t page_alloc_max;
+        atomic_t coherent;
+        atomic_t coherent_max;
+        atomic_t mapped;
+        atomic_t mapped_max;
+    } stats;
+    unsigned int full_cache_threshold;
 };
 
 extern struct kgsl_driver kgsl_driver;
@@ -131,12 +130,12 @@ struct kgsl_memdesc;
 struct kgsl_cmdbatch;
 
 struct kgsl_memdesc_ops {
-	int (*vmflags)(struct kgsl_memdesc *);
-	int (*vmfault)(struct kgsl_memdesc *, struct vm_area_struct *,
-		       struct vm_fault *);
-	void (*free)(struct kgsl_memdesc *memdesc);
-	int (*map_kernel)(struct kgsl_memdesc *);
-	void (*unmap_kernel)(struct kgsl_memdesc *);
+    int (*vmflags)(struct kgsl_memdesc *);
+    int (*vmfault)(struct kgsl_memdesc *, struct vm_area_struct *,
+                   struct vm_fault *);
+    void (*free)(struct kgsl_memdesc *memdesc);
+    int (*map_kernel)(struct kgsl_memdesc *);
+    void (*unmap_kernel)(struct kgsl_memdesc *);
 };
 
 /* Internal definitions for memdesc->priv */
@@ -150,19 +149,19 @@ struct kgsl_memdesc_ops {
 
 /* shared memory allocation */
 struct kgsl_memdesc {
-	struct kgsl_pagetable *pagetable;
-	void *hostptr; /* kernel virtual address */
-	unsigned int hostptr_count; /* number of threads using hostptr */
-	unsigned long useraddr; /* userspace address */
-	unsigned int gpuaddr;
-	phys_addr_t physaddr;
-	unsigned int size;
-	unsigned int priv; /* Internal flags and settings */
-	struct scatterlist *sg;
-	unsigned int sglen; /* Active entries in the sglist */
-	unsigned int sglen_alloc;  /* Allocated entries in the sglist */
-	struct kgsl_memdesc_ops *ops;
-	unsigned int flags; /* Flags set from userspace */
+    struct kgsl_pagetable *pagetable;
+    void *hostptr; /* kernel virtual address */
+    unsigned int hostptr_count; /* number of threads using hostptr */
+    unsigned long useraddr; /* userspace address */
+    unsigned int gpuaddr;
+    phys_addr_t physaddr;
+    unsigned int size;
+    unsigned int priv; /* Internal flags and settings */
+    struct scatterlist *sg;
+    unsigned int sglen; /* Active entries in the sglist */
+    unsigned int sglen_alloc;  /* Allocated entries in the sglist */
+    struct kgsl_memdesc_ops *ops;
+    unsigned int flags; /* Flags set from userspace */
 };
 
 /* List of different memory entry types */
@@ -175,19 +174,19 @@ struct kgsl_memdesc {
 #define KGSL_MEM_ENTRY_MAX    5
 
 struct kgsl_mem_entry {
-	struct kref refcount;
-	struct kgsl_memdesc memdesc;
-	int memtype;
-	void *priv_data;
-	struct rb_node node;
-	unsigned int id;
-	unsigned int context_id;
-	/* back pointer to private structure under whose context this
-	* allocation is made */
-	struct kgsl_process_private *priv;
-	/* Initialized to 0, set to 1 when entry is marked for freeing */
-	int pending_free;
-	struct kgsl_device_private *dev_priv;
+    struct kref refcount;
+    struct kgsl_memdesc memdesc;
+    int memtype;
+    void *priv_data;
+    struct rb_node node;
+    unsigned int id;
+    unsigned int context_id;
+    /* back pointer to private structure under whose context this
+    * allocation is made */
+    struct kgsl_process_private *priv;
+    /* Initialized to 0, set to 1 when entry is marked for freeing */
+    int pending_free;
+    struct kgsl_device_private *dev_priv;
 };
 
 #ifdef CONFIG_MSM_KGSL_MMU_PAGE_FAULT
@@ -200,23 +199,23 @@ void kgsl_mem_entry_destroy(struct kref *kref);
 int kgsl_postmortem_dump(struct kgsl_device *device, int manual);
 
 struct kgsl_mem_entry *kgsl_get_mem_entry(struct kgsl_device *device,
-		phys_addr_t ptbase, unsigned int gpuaddr, unsigned int size);
+        phys_addr_t ptbase, unsigned int gpuaddr, unsigned int size);
 
 struct kgsl_mem_entry *kgsl_sharedmem_find_region(
-	struct kgsl_process_private *private, unsigned int gpuaddr,
-	size_t size);
+    struct kgsl_process_private *private, unsigned int gpuaddr,
+    size_t size);
 
 void kgsl_get_memory_usage(char *str, size_t len, unsigned int memflags);
 
 void kgsl_signal_event(struct kgsl_device *device,
-		struct kgsl_context *context, unsigned int timestamp,
-		unsigned int type);
+                       struct kgsl_context *context, unsigned int timestamp,
+                       unsigned int type);
 
 void kgsl_signal_events(struct kgsl_device *device,
-		struct kgsl_context *context, unsigned int type);
+                        struct kgsl_context *context, unsigned int type);
 
 void kgsl_cancel_events(struct kgsl_device *device,
-	void *owner);
+                        void *owner);
 
 extern const struct dev_pm_ops kgsl_pm_ops;
 
@@ -224,12 +223,12 @@ int kgsl_suspend_driver(struct platform_device *pdev, pm_message_t state);
 int kgsl_resume_driver(struct platform_device *pdev);
 
 void kgsl_trace_regwrite(struct kgsl_device *device, unsigned int offset,
-		unsigned int value);
+                         unsigned int value);
 
 void kgsl_trace_issueibcmds(struct kgsl_device *device, int id,
-		struct kgsl_cmdbatch *cmdbatch,
-		unsigned int timestamp, unsigned int flags,
-		int result, unsigned int type);
+                            struct kgsl_cmdbatch *cmdbatch,
+                            unsigned int timestamp, unsigned int flags,
+                            int result, unsigned int type);
 
 int kgsl_open_device(struct kgsl_device *device);
 
@@ -239,89 +238,80 @@ int kgsl_close_device(struct kgsl_device *device);
 extern int kgsl_drm_init(struct platform_device *dev);
 extern void kgsl_drm_exit(void);
 #else
-static inline int kgsl_drm_init(struct platform_device *dev)
-{
-	return 0;
+static inline int kgsl_drm_init(struct platform_device *dev) {
+    return 0;
 }
 
-static inline void kgsl_drm_exit(void)
-{
+static inline void kgsl_drm_exit(void) {
 }
 #endif
 
 static inline int kgsl_gpuaddr_in_memdesc(const struct kgsl_memdesc *memdesc,
-				unsigned int gpuaddr, unsigned int size)
-{
-	/* set a minimum size to search for */
-	if (!size)
-		size = 1;
+        unsigned int gpuaddr, unsigned int size) {
+    /* set a minimum size to search for */
+    if (!size)
+        size = 1;
 
-	/* don't overflow */
-	if (size > UINT_MAX - gpuaddr)
-		return 0;
+    /* don't overflow */
+    if (size > UINT_MAX - gpuaddr)
+        return 0;
 
-	if (gpuaddr >= memdesc->gpuaddr &&
-	    ((gpuaddr + size) <= (memdesc->gpuaddr + memdesc->size))) {
-		return 1;
-	}
-	return 0;
+    if (gpuaddr >= memdesc->gpuaddr &&
+            ((gpuaddr + size) <= (memdesc->gpuaddr + memdesc->size))) {
+        return 1;
+    }
+    return 0;
 }
 
-static inline void *kgsl_memdesc_map(struct kgsl_memdesc *memdesc)
-{
-	if (memdesc->ops && memdesc->ops->map_kernel)
-		memdesc->ops->map_kernel(memdesc);
+static inline void *kgsl_memdesc_map(struct kgsl_memdesc *memdesc) {
+    if (memdesc->ops && memdesc->ops->map_kernel)
+        memdesc->ops->map_kernel(memdesc);
 
-	return memdesc->hostptr;
+    return memdesc->hostptr;
 }
 
-static inline void kgsl_memdesc_unmap(struct kgsl_memdesc *memdesc)
-{
-	if (memdesc->ops && memdesc->ops->unmap_kernel)
-		memdesc->ops->unmap_kernel(memdesc);
+static inline void kgsl_memdesc_unmap(struct kgsl_memdesc *memdesc) {
+    if (memdesc->ops && memdesc->ops->unmap_kernel)
+        memdesc->ops->unmap_kernel(memdesc);
 }
 static inline uint8_t *kgsl_gpuaddr_to_vaddr(struct kgsl_memdesc *memdesc,
-					     unsigned int gpuaddr)
-{
-	void *hostptr = NULL;
+        unsigned int gpuaddr) {
+    void *hostptr = NULL;
 
-	if ((gpuaddr >= memdesc->gpuaddr) &&
-		(gpuaddr < (memdesc->gpuaddr + memdesc->size)))
-		hostptr = kgsl_memdesc_map(memdesc);
+    if ((gpuaddr >= memdesc->gpuaddr) &&
+            (gpuaddr < (memdesc->gpuaddr + memdesc->size)))
+        hostptr = kgsl_memdesc_map(memdesc);
 
-	return hostptr != NULL ? hostptr + (gpuaddr - memdesc->gpuaddr) : NULL;
+    return hostptr != NULL ? hostptr + (gpuaddr - memdesc->gpuaddr) : NULL;
 }
 
-static inline int timestamp_cmp(unsigned int a, unsigned int b)
-{
-	/* check for equal */
-	if (a == b)
-		return 0;
+static inline int timestamp_cmp(unsigned int a, unsigned int b) {
+    /* check for equal */
+    if (a == b)
+        return 0;
 
-	/* check for greater-than for non-rollover case */
-	if ((a > b) && (a - b < KGSL_TIMESTAMP_WINDOW))
-		return 1;
+    /* check for greater-than for non-rollover case */
+    if ((a > b) && (a - b < KGSL_TIMESTAMP_WINDOW))
+        return 1;
 
-	/* check for greater-than for rollover case
-	 * note that <= is required to ensure that consistent
-	 * results are returned for values whose difference is
-	 * equal to the window size
-	 */
-	a += KGSL_TIMESTAMP_WINDOW;
-	b += KGSL_TIMESTAMP_WINDOW;
-	return ((a > b) && (a - b <= KGSL_TIMESTAMP_WINDOW)) ? 1 : -1;
+    /* check for greater-than for rollover case
+     * note that <= is required to ensure that consistent
+     * results are returned for values whose difference is
+     * equal to the window size
+     */
+    a += KGSL_TIMESTAMP_WINDOW;
+    b += KGSL_TIMESTAMP_WINDOW;
+    return ((a > b) && (a - b <= KGSL_TIMESTAMP_WINDOW)) ? 1 : -1;
 }
 
 static inline int
-kgsl_mem_entry_get(struct kgsl_mem_entry *entry)
-{
-	return kref_get_unless_zero(&entry->refcount);
+kgsl_mem_entry_get(struct kgsl_mem_entry *entry) {
+    return kref_get_unless_zero(&entry->refcount);
 }
 
 static inline void
-kgsl_mem_entry_put(struct kgsl_mem_entry *entry)
-{
-	kref_put(&entry->refcount, kgsl_mem_entry_destroy);
+kgsl_mem_entry_put(struct kgsl_mem_entry *entry) {
+    kref_put(&entry->refcount, kgsl_mem_entry_destroy);
 }
 
 #endif /* __KGSL_H */

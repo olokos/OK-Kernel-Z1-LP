@@ -34,14 +34,13 @@ extern void tlb_flush(struct mmu_gather *tlb);
 #include <asm-generic/tlb.h>
 
 extern void flush_hash_entry(struct mm_struct *mm, pte_t *ptep,
-			     unsigned long address);
+                             unsigned long address);
 
 static inline void __tlb_remove_tlb_entry(struct mmu_gather *tlb, pte_t *ptep,
-					  unsigned long address)
-{
+        unsigned long address) {
 #ifdef CONFIG_PPC_STD_MMU_32
-	if (pte_val(*ptep) & _PAGE_HASHPTE)
-		flush_hash_entry(tlb->mm, ptep, address);
+    if (pte_val(*ptep) & _PAGE_HASHPTE)
+        flush_hash_entry(tlb->mm, ptep, address);
 #endif
 }
 

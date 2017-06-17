@@ -51,25 +51,25 @@
  * system call/exception. As usual the registers k0/k1 aren't being saved.
  */
 struct pt_regs {
-	unsigned long pad0[6];	/* stack arguments */
-	unsigned long orig_r4;
-	unsigned long orig_r7;
-	long is_syscall;
+    unsigned long pad0[6];	/* stack arguments */
+    unsigned long orig_r4;
+    unsigned long orig_r7;
+    long is_syscall;
 
-	unsigned long regs[32];
+    unsigned long regs[32];
 
-	unsigned long cel;
-	unsigned long ceh;
+    unsigned long cel;
+    unsigned long ceh;
 
-	unsigned long sr0;	/* cnt */
-	unsigned long sr1;	/* lcr */
-	unsigned long sr2;	/* scr */
+    unsigned long sr0;	/* cnt */
+    unsigned long sr1;	/* lcr */
+    unsigned long sr2;	/* scr */
 
-	unsigned long cp0_epc;
-	unsigned long cp0_ema;
-	unsigned long cp0_psr;
-	unsigned long cp0_ecr;
-	unsigned long cp0_condition;
+    unsigned long cp0_epc;
+    unsigned long cp0_ema;
+    unsigned long cp0_psr;
+    unsigned long cp0_ecr;
+    unsigned long cp0_condition;
 };
 
 #ifdef __KERNEL__
@@ -87,7 +87,7 @@ struct task_struct;
 extern void do_syscall_trace(struct pt_regs *regs, int entryexit);
 extern int read_tsk_long(struct task_struct *, unsigned long, unsigned long *);
 extern int read_tsk_short(struct task_struct *, unsigned long,
-			 unsigned short *);
+                          unsigned short *);
 
 #define arch_has_single_step()	(1)
 

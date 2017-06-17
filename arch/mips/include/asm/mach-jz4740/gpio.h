@@ -49,9 +49,9 @@ enum jz_gpio_function {
 */
 
 struct jz_gpio_bulk_request {
-	int gpio;
-	const char *name;
-	enum jz_gpio_function function;
+    int gpio;
+    const char *name;
+    enum jz_gpio_function function;
 };
 
 #define JZ_GPIO_BULK_PIN(pin) { \

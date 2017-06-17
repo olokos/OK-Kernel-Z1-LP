@@ -17,22 +17,19 @@
 extern int devfreq_msm_cpufreq_update_bw(void);
 extern int register_devfreq_msm_cpufreq(void);
 #else
-static int devfreq_msm_cpufreq_update_bw(void)
-{
-	return 0;
+static int devfreq_msm_cpufreq_update_bw(void) {
+    return 0;
 }
-static int register_devfreq_msm_cpufreq(void)
-{
-	return 0;
+static int register_devfreq_msm_cpufreq(void) {
+    return 0;
 }
 #endif
 
 #if defined(CONFIG_CPU_FREQ_MSM)
 extern unsigned long msm_cpufreq_get_bw(void);
 #else
-extern unsigned long msm_cpufreq_get_bw(void)
-{
-	return ULONG_MAX;
+extern unsigned long msm_cpufreq_get_bw(void) {
+    return ULONG_MAX;
 }
 #endif
 

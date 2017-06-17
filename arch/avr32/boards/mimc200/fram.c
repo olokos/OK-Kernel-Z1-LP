@@ -22,55 +22,52 @@
  * The are the file operation function for user access to /dev/fram
  */
 
-static int fram_mmap(struct file *filp, struct vm_area_struct *vma)
-{
-	int ret;
+static int fram_mmap(struct file *filp, struct vm_area_struct *vma) {
+    int ret;
 
-	ret = remap_pfn_range(vma,
-		vma->vm_start,
-		virt_to_phys((void *)((unsigned long)FRAM_BASE)) >> PAGE_SHIFT,
-		vma->vm_end-vma->vm_start,
-		PAGE_SHARED);
+    ret = remap_pfn_range(vma,
+                          vma->vm_start,
+                          virt_to_phys((void *)((unsigned long)FRAM_BASE)) >> PAGE_SHIFT,
+                          vma->vm_end-vma->vm_start,
+                          PAGE_SHARED);
 
-	if (ret != 0)
-		return -EAGAIN;
+    if (ret != 0)
+        return -EAGAIN;
 
-	return 0;
+    return 0;
 }
 
 static const struct file_operations fram_fops = {
-	.owner			= THIS_MODULE,
-	.mmap			= fram_mmap,
-	.llseek			= noop_llseek,
+    .owner			= THIS_MODULE,
+    .mmap			= fram_mmap,
+    .llseek			= noop_llseek,
 };
 
 #define FRAM_MINOR	0
 
 static struct miscdevice fram_dev = {
-	FRAM_MINOR,
-	"fram",
-	&fram_fops
+    FRAM_MINOR,
+    "fram",
+    &fram_fops
 };
 
 static int __init
-fram_init(void)
-{
-	int ret;
+fram_init(void) {
+    int ret;
 
-	ret = misc_register(&fram_dev);
-	if (ret) {
-		printk(KERN_ERR "fram: can't misc_register on minor=%d\n",
-		    FRAM_MINOR);
-		return ret;
-	}
-	printk(KERN_INFO "FRAM memory driver v" FRAM_VERSION "\n");
-	return 0;
+    ret = misc_register(&fram_dev);
+    if (ret) {
+        printk(KERN_ERR "fram: can't misc_register on minor=%d\n",
+               FRAM_MINOR);
+        return ret;
+    }
+    printk(KERN_INFO "FRAM memory driver v" FRAM_VERSION "\n");
+    return 0;
 }
 
 static void __exit
-fram_cleanup_module(void)
-{
-	misc_deregister(&fram_dev);
+fram_cleanup_module(void) {
+    misc_deregister(&fram_dev);
 }
 
 module_init(fram_init);

@@ -28,74 +28,74 @@
  * #ifdefs.
  */
 struct ccsr_guts {
-	__be32	porpllsr;	/* 0x.0000 - POR PLL Ratio Status Register */
-	__be32	porbmsr;	/* 0x.0004 - POR Boot Mode Status Register */
-	__be32	porimpscr;	/* 0x.0008 - POR I/O Impedance Status and Control Register */
-	__be32	pordevsr;	/* 0x.000c - POR I/O Device Status Register */
-	__be32	pordbgmsr;	/* 0x.0010 - POR Debug Mode Status Register */
-	__be32	pordevsr2;	/* 0x.0014 - POR device status register 2 */
-	u8	res018[0x20 - 0x18];
-	__be32	porcir;		/* 0x.0020 - POR Configuration Information Register */
-	u8	res024[0x30 - 0x24];
-	__be32	gpiocr;		/* 0x.0030 - GPIO Control Register */
-	u8	res034[0x40 - 0x34];
-	__be32	gpoutdr;	/* 0x.0040 - General-Purpose Output Data Register */
-	u8	res044[0x50 - 0x44];
-	__be32	gpindr;		/* 0x.0050 - General-Purpose Input Data Register */
-	u8	res054[0x60 - 0x54];
-	__be32	pmuxcr;		/* 0x.0060 - Alternate Function Signal Multiplex Control */
-        __be32  pmuxcr2;	/* 0x.0064 - Alternate function signal multiplex control 2 */
-        __be32  dmuxcr;		/* 0x.0068 - DMA Mux Control Register */
-        u8	res06c[0x70 - 0x6c];
-	__be32	devdisr;	/* 0x.0070 - Device Disable Control */
-	__be32	devdisr2;	/* 0x.0074 - Device Disable Control 2 */
-	u8	res078[0x7c - 0x78];
-	__be32  pmjcr;		/* 0x.007c - 4 Power Management Jog Control Register */
-	__be32	powmgtcsr;	/* 0x.0080 - Power Management Status and Control Register */
-	__be32  pmrccr;		/* 0x.0084 - Power Management Reset Counter Configuration Register */
-	__be32  pmpdccr;	/* 0x.0088 - Power Management Power Down Counter Configuration Register */
-	__be32  pmcdr;		/* 0x.008c - 4Power management clock disable register */
-	__be32	mcpsumr;	/* 0x.0090 - Machine Check Summary Register */
-	__be32	rstrscr;	/* 0x.0094 - Reset Request Status and Control Register */
-	__be32  ectrstcr;	/* 0x.0098 - Exception reset control register */
-	__be32  autorstsr;	/* 0x.009c - Automatic reset status register */
-	__be32	pvr;		/* 0x.00a0 - Processor Version Register */
-	__be32	svr;		/* 0x.00a4 - System Version Register */
-	u8	res0a8[0xb0 - 0xa8];
-	__be32	rstcr;		/* 0x.00b0 - Reset Control Register */
-	u8	res0b4[0xc0 - 0xb4];
-	__be32  iovselsr;	/* 0x.00c0 - I/O voltage select status register
+    __be32	porpllsr;	/* 0x.0000 - POR PLL Ratio Status Register */
+    __be32	porbmsr;	/* 0x.0004 - POR Boot Mode Status Register */
+    __be32	porimpscr;	/* 0x.0008 - POR I/O Impedance Status and Control Register */
+    __be32	pordevsr;	/* 0x.000c - POR I/O Device Status Register */
+    __be32	pordbgmsr;	/* 0x.0010 - POR Debug Mode Status Register */
+    __be32	pordevsr2;	/* 0x.0014 - POR device status register 2 */
+    u8	res018[0x20 - 0x18];
+    __be32	porcir;		/* 0x.0020 - POR Configuration Information Register */
+    u8	res024[0x30 - 0x24];
+    __be32	gpiocr;		/* 0x.0030 - GPIO Control Register */
+    u8	res034[0x40 - 0x34];
+    __be32	gpoutdr;	/* 0x.0040 - General-Purpose Output Data Register */
+    u8	res044[0x50 - 0x44];
+    __be32	gpindr;		/* 0x.0050 - General-Purpose Input Data Register */
+    u8	res054[0x60 - 0x54];
+    __be32	pmuxcr;		/* 0x.0060 - Alternate Function Signal Multiplex Control */
+    __be32  pmuxcr2;	/* 0x.0064 - Alternate function signal multiplex control 2 */
+    __be32  dmuxcr;		/* 0x.0068 - DMA Mux Control Register */
+    u8	res06c[0x70 - 0x6c];
+    __be32	devdisr;	/* 0x.0070 - Device Disable Control */
+    __be32	devdisr2;	/* 0x.0074 - Device Disable Control 2 */
+    u8	res078[0x7c - 0x78];
+    __be32  pmjcr;		/* 0x.007c - 4 Power Management Jog Control Register */
+    __be32	powmgtcsr;	/* 0x.0080 - Power Management Status and Control Register */
+    __be32  pmrccr;		/* 0x.0084 - Power Management Reset Counter Configuration Register */
+    __be32  pmpdccr;	/* 0x.0088 - Power Management Power Down Counter Configuration Register */
+    __be32  pmcdr;		/* 0x.008c - 4Power management clock disable register */
+    __be32	mcpsumr;	/* 0x.0090 - Machine Check Summary Register */
+    __be32	rstrscr;	/* 0x.0094 - Reset Request Status and Control Register */
+    __be32  ectrstcr;	/* 0x.0098 - Exception reset control register */
+    __be32  autorstsr;	/* 0x.009c - Automatic reset status register */
+    __be32	pvr;		/* 0x.00a0 - Processor Version Register */
+    __be32	svr;		/* 0x.00a4 - System Version Register */
+    u8	res0a8[0xb0 - 0xa8];
+    __be32	rstcr;		/* 0x.00b0 - Reset Control Register */
+    u8	res0b4[0xc0 - 0xb4];
+    __be32  iovselsr;	/* 0x.00c0 - I/O voltage select status register
 					     Called 'elbcvselcr' on 86xx SOCs */
-	u8	res0c4[0x224 - 0xc4];
-	__be32  iodelay1;	/* 0x.0224 - IO delay control register 1 */
-	__be32  iodelay2;	/* 0x.0228 - IO delay control register 2 */
-	u8	res22c[0x800 - 0x22c];
-	__be32	clkdvdr;	/* 0x.0800 - Clock Divide Register */
-	u8	res804[0x900 - 0x804];
-	__be32	ircr;		/* 0x.0900 - Infrared Control Register */
-	u8	res904[0x908 - 0x904];
-	__be32	dmacr;		/* 0x.0908 - DMA Control Register */
-	u8	res90c[0x914 - 0x90c];
-	__be32	elbccr;		/* 0x.0914 - eLBC Control Register */
-	u8	res918[0xb20 - 0x918];
-	__be32	ddr1clkdr;	/* 0x.0b20 - DDR1 Clock Disable Register */
-	__be32	ddr2clkdr;	/* 0x.0b24 - DDR2 Clock Disable Register */
-	__be32	ddrclkdr;	/* 0x.0b28 - DDR Clock Disable Register */
-	u8	resb2c[0xe00 - 0xb2c];
-	__be32	clkocr;		/* 0x.0e00 - Clock Out Select Register */
-	u8	rese04[0xe10 - 0xe04];
-	__be32	ddrdllcr;	/* 0x.0e10 - DDR DLL Control Register */
-	u8	rese14[0xe20 - 0xe14];
-	__be32	lbcdllcr;	/* 0x.0e20 - LBC DLL Control Register */
-	__be32  cpfor;		/* 0x.0e24 - L2 charge pump fuse override register */
-	u8	rese28[0xf04 - 0xe28];
-	__be32	srds1cr0;	/* 0x.0f04 - SerDes1 Control Register 0 */
-	__be32	srds1cr1;	/* 0x.0f08 - SerDes1 Control Register 0 */
-	u8	resf0c[0xf2c - 0xf0c];
-	__be32  itcr;		/* 0x.0f2c - Internal transaction control register */
-	u8	resf30[0xf40 - 0xf30];
-	__be32	srds2cr0;	/* 0x.0f40 - SerDes2 Control Register 0 */
-	__be32	srds2cr1;	/* 0x.0f44 - SerDes2 Control Register 0 */
+    u8	res0c4[0x224 - 0xc4];
+    __be32  iodelay1;	/* 0x.0224 - IO delay control register 1 */
+    __be32  iodelay2;	/* 0x.0228 - IO delay control register 2 */
+    u8	res22c[0x800 - 0x22c];
+    __be32	clkdvdr;	/* 0x.0800 - Clock Divide Register */
+    u8	res804[0x900 - 0x804];
+    __be32	ircr;		/* 0x.0900 - Infrared Control Register */
+    u8	res904[0x908 - 0x904];
+    __be32	dmacr;		/* 0x.0908 - DMA Control Register */
+    u8	res90c[0x914 - 0x90c];
+    __be32	elbccr;		/* 0x.0914 - eLBC Control Register */
+    u8	res918[0xb20 - 0x918];
+    __be32	ddr1clkdr;	/* 0x.0b20 - DDR1 Clock Disable Register */
+    __be32	ddr2clkdr;	/* 0x.0b24 - DDR2 Clock Disable Register */
+    __be32	ddrclkdr;	/* 0x.0b28 - DDR Clock Disable Register */
+    u8	resb2c[0xe00 - 0xb2c];
+    __be32	clkocr;		/* 0x.0e00 - Clock Out Select Register */
+    u8	rese04[0xe10 - 0xe04];
+    __be32	ddrdllcr;	/* 0x.0e10 - DDR DLL Control Register */
+    u8	rese14[0xe20 - 0xe14];
+    __be32	lbcdllcr;	/* 0x.0e20 - LBC DLL Control Register */
+    __be32  cpfor;		/* 0x.0e24 - L2 charge pump fuse override register */
+    u8	rese28[0xf04 - 0xe28];
+    __be32	srds1cr0;	/* 0x.0f04 - SerDes1 Control Register 0 */
+    __be32	srds1cr1;	/* 0x.0f08 - SerDes1 Control Register 0 */
+    u8	resf0c[0xf2c - 0xf0c];
+    __be32  itcr;		/* 0x.0f2c - Internal transaction control register */
+    u8	resf30[0xf40 - 0xf30];
+    __be32	srds2cr0;	/* 0x.0f40 - SerDes2 Control Register 0 */
+    __be32	srds2cr1;	/* 0x.0f44 - SerDes2 Control Register 0 */
 } __attribute__ ((packed));
 
 
@@ -121,11 +121,10 @@ struct ccsr_guts {
  * device: The device to set as the source (CCSR_GUTS_DMACR_DEV_xx)
  */
 static inline void guts_set_dmacr(struct ccsr_guts __iomem *guts,
-	unsigned int co, unsigned int ch, unsigned int device)
-{
-	unsigned int shift = 16 + (8 * (1 - co) + 2 * (3 - ch));
+                                  unsigned int co, unsigned int ch, unsigned int device) {
+    unsigned int shift = 16 + (8 * (1 - co) + 2 * (3 - ch));
 
-	clrsetbits_be32(&guts->dmacr, 3 << shift, device << shift);
+    clrsetbits_be32(&guts->dmacr, 3 << shift, device << shift);
 }
 
 #define CCSR_GUTS_PMUXCR_LDPSEL		0x00010000
@@ -157,13 +156,12 @@ static inline void guts_set_dmacr(struct ccsr_guts __iomem *guts,
  * value: the new value for the bit (0 or 1)
  */
 static inline void guts_set_pmuxcr_dma(struct ccsr_guts __iomem *guts,
-	unsigned int co, unsigned int ch, unsigned int value)
-{
-	if ((ch == 0) || (ch == 3)) {
-		unsigned int shift = 2 * (co + 1) - (ch & 1) - 1;
+                                       unsigned int co, unsigned int ch, unsigned int value) {
+    if ((ch == 0) || (ch == 3)) {
+        unsigned int shift = 2 * (co + 1) - (ch & 1) - 1;
 
-		clrsetbits_be32(&guts->pmuxcr, 1 << shift, value << shift);
-	}
+        clrsetbits_be32(&guts->pmuxcr, 1 << shift, value << shift);
+    }
 }
 
 #define CCSR_GUTS_CLKDVDR_PXCKEN	0x80000000

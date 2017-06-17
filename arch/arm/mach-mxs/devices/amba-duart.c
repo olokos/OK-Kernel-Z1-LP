@@ -34,7 +34,6 @@ MXS_AMBA_DUART_DEVICE(mx23_duart, MX23);
 MXS_AMBA_DUART_DEVICE(mx28_duart, MX28);
 #endif
 
-int __init mxs_add_duart(const struct amba_device *dev)
-{
-	return mxs_add_amba_device(dev);
+int __init mxs_add_duart(const struct amba_device *dev) {
+    return mxs_add_amba_device(dev);
 }

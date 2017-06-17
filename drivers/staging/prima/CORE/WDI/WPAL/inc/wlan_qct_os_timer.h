@@ -44,8 +44,7 @@
 
 #include "vos_timer.h"
 
-typedef struct
-{
+typedef struct {
     vos_timer_t timerObj;
 } wpt_os_timer;
 

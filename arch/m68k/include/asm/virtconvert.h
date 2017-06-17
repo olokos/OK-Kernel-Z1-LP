@@ -15,14 +15,12 @@
 /*
  * Change virtual addresses to physical addresses and vv.
  */
-static inline unsigned long virt_to_phys(void *address)
-{
-	return __pa(address);
+static inline unsigned long virt_to_phys(void *address) {
+    return __pa(address);
 }
 
-static inline void *phys_to_virt(unsigned long address)
-{
-	return __va(address);
+static inline void *phys_to_virt(unsigned long address) {
+    return __va(address);
 }
 
 /* Permanent address of a page. */

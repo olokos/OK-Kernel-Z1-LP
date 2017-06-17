@@ -9,9 +9,9 @@ extern void mcount(void);
  * Used in struct thread_info
  */
 struct ftrace_ret_stack {
-	unsigned long ret;
-	unsigned long func;
-	unsigned long long calltime;
+    unsigned long ret;
+    unsigned long func;
+    unsigned long long calltime;
 };
 
 /*

@@ -104,59 +104,59 @@
 struct sisusb_usb_data;
 
 struct sisusb_urb_context {	/* urb->context for outbound bulk URBs */
-	struct sisusb_usb_data *sisusb;
-	int urbindex;
-	int *actual_length;
+    struct sisusb_usb_data *sisusb;
+    int urbindex;
+    int *actual_length;
 };
 
 struct sisusb_usb_data {
-	struct usb_device *sisusb_dev;
-	struct usb_interface *interface;
-	struct kref kref;
-	wait_queue_head_t wait_q;	/* for syncind and timeouts */
-	struct mutex lock;	/* general race avoidance */
-	unsigned int ifnum;	/* interface number of the USB device */
-	int minor;		/* minor (for logging clarity) */
-	int isopen;		/* !=0 if open */
-	int present;		/* !=0 if device is present on the bus */
-	int ready;		/* !=0 if device is ready for userland */
-	int numobufs;		/* number of obufs = number of out urbs */
-	char *obuf[NUMOBUFS], *ibuf;	/* transfer buffers */
-	int obufsize, ibufsize;
-	struct urb *sisurbout[NUMOBUFS];
-	struct urb *sisurbin;
-	unsigned char urbstatus[NUMOBUFS];
-	unsigned char completein;
-	struct sisusb_urb_context urbout_context[NUMOBUFS];
-	unsigned long flagb0;
-	unsigned long vrambase;	/* framebuffer base */
-	unsigned int vramsize;	/* framebuffer size (bytes) */
-	unsigned long mmiobase;
-	unsigned int mmiosize;
-	unsigned long ioportbase;
-	unsigned char devinit;	/* device initialized? */
-	unsigned char gfxinit;	/* graphics core initialized? */
-	unsigned short chipid, chipvendor;
-	unsigned short chiprevision;
+    struct usb_device *sisusb_dev;
+    struct usb_interface *interface;
+    struct kref kref;
+    wait_queue_head_t wait_q;	/* for syncind and timeouts */
+    struct mutex lock;	/* general race avoidance */
+    unsigned int ifnum;	/* interface number of the USB device */
+    int minor;		/* minor (for logging clarity) */
+    int isopen;		/* !=0 if open */
+    int present;		/* !=0 if device is present on the bus */
+    int ready;		/* !=0 if device is ready for userland */
+    int numobufs;		/* number of obufs = number of out urbs */
+    char *obuf[NUMOBUFS], *ibuf;	/* transfer buffers */
+    int obufsize, ibufsize;
+    struct urb *sisurbout[NUMOBUFS];
+    struct urb *sisurbin;
+    unsigned char urbstatus[NUMOBUFS];
+    unsigned char completein;
+    struct sisusb_urb_context urbout_context[NUMOBUFS];
+    unsigned long flagb0;
+    unsigned long vrambase;	/* framebuffer base */
+    unsigned int vramsize;	/* framebuffer size (bytes) */
+    unsigned long mmiobase;
+    unsigned int mmiosize;
+    unsigned long ioportbase;
+    unsigned char devinit;	/* device initialized? */
+    unsigned char gfxinit;	/* graphics core initialized? */
+    unsigned short chipid, chipvendor;
+    unsigned short chiprevision;
 #ifdef INCL_SISUSB_CON
-	struct SiS_Private *SiS_Pr;
-	unsigned long scrbuf;
-	unsigned int scrbuf_size;
-	int haveconsole, con_first, con_last;
-	int havethisconsole[MAX_NR_CONSOLES];
-	int textmodedestroyed;
-	unsigned int sisusb_num_columns;	/* real number, not vt's idea */
-	int cur_start_addr, con_rolled_over;
-	int sisusb_cursor_loc, bad_cursor_pos;
-	int sisusb_cursor_size_from;
-	int sisusb_cursor_size_to;
-	int current_font_height, current_font_512;
-	int font_backup_size, font_backup_height, font_backup_512;
-	char *font_backup;
-	int font_slot;
-	struct vc_data *sisusb_display_fg;
-	int is_gfx;
-	int con_blanked;
+    struct SiS_Private *SiS_Pr;
+    unsigned long scrbuf;
+    unsigned int scrbuf_size;
+    int haveconsole, con_first, con_last;
+    int havethisconsole[MAX_NR_CONSOLES];
+    int textmodedestroyed;
+    unsigned int sisusb_num_columns;	/* real number, not vt's idea */
+    int cur_start_addr, con_rolled_over;
+    int sisusb_cursor_loc, bad_cursor_pos;
+    int sisusb_cursor_size_from;
+    int sisusb_cursor_size_to;
+    int current_font_height, current_font_512;
+    int font_backup_size, font_backup_height, font_backup_512;
+    char *font_backup;
+    int font_slot;
+    struct vc_data *sisusb_display_fg;
+    int is_gfx;
+    int con_blanked;
 #endif
 };
 
@@ -187,9 +187,9 @@ struct sisusb_usb_data {
 #define SISUSB_TYPE_IO		1
 
 struct sisusb_packet {
-	unsigned short header;
-	u32 address;
-	u32 data;
+    unsigned short header;
+    u32 address;
+    u32 data;
 } __attribute__ ((__packed__));
 
 #define CLEARPACKET(packet) memset(packet, 0, 10)
@@ -258,36 +258,36 @@ struct sisusb_packet {
 
 /* Structure argument for SISUSB_GET_INFO ioctl  */
 struct sisusb_info {
-	__u32 sisusb_id;	/* for identifying sisusb */
+    __u32 sisusb_id;	/* for identifying sisusb */
 #define SISUSB_ID  0x53495355	/* Identify myself with 'SISU' */
-	__u8 sisusb_version;
-	__u8 sisusb_revision;
-	__u8 sisusb_patchlevel;
-	__u8 sisusb_gfxinit;	/* graphics core initialized? */
+    __u8 sisusb_version;
+    __u8 sisusb_revision;
+    __u8 sisusb_patchlevel;
+    __u8 sisusb_gfxinit;	/* graphics core initialized? */
 
-	__u32 sisusb_vrambase;
-	__u32 sisusb_mmiobase;
-	__u32 sisusb_iobase;
-	__u32 sisusb_pcibase;
+    __u32 sisusb_vrambase;
+    __u32 sisusb_mmiobase;
+    __u32 sisusb_iobase;
+    __u32 sisusb_pcibase;
 
-	__u32 sisusb_vramsize;	/* framebuffer size in bytes */
+    __u32 sisusb_vramsize;	/* framebuffer size in bytes */
 
-	__u32 sisusb_minor;
+    __u32 sisusb_minor;
 
-	__u32 sisusb_fbdevactive;	/* != 0 if framebuffer device active */
+    __u32 sisusb_fbdevactive;	/* != 0 if framebuffer device active */
 
-	__u32 sisusb_conactive;	/* != 0 if console driver active */
+    __u32 sisusb_conactive;	/* != 0 if console driver active */
 
-	__u8 sisusb_reserved[28];	/* for future use */
+    __u8 sisusb_reserved[28];	/* for future use */
 };
 
 struct sisusb_command {
-	__u8 operation;		/* see below */
-	__u8 data0;		/* operation dependent */
-	__u8 data1;		/* operation dependent */
-	__u8 data2;		/* operation dependent */
-	__u32 data3;		/* operation dependent */
-	__u32 data4;		/* for future use */
+    __u8 operation;		/* see below */
+    __u8 data0;		/* operation dependent */
+    __u8 data1;		/* operation dependent */
+    __u8 data2;		/* operation dependent */
+    __u32 data3;		/* operation dependent */
+    __u32 data4;		/* for future use */
 };
 
 #define SUCMD_GET	0x01	/* for all: data0 = index, data3 = port */

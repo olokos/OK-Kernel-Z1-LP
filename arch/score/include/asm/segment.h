@@ -4,7 +4,7 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #define KERNEL_DS	((mm_segment_t){0})

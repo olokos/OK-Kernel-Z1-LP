@@ -25,18 +25,18 @@
 #define _M68K_BOOTINFO_H
 
 
-    /*
-     *  Bootinfo definitions
-     *
-     *  This is an easily parsable and extendable structure containing all
-     *  information to be passed from the bootstrap to the kernel.
-     *
-     *  This way I hope to keep all future changes back/forewards compatible.
-     *  Thus, keep your fingers crossed...
-     *
-     *  This structure is copied right after the kernel bss by the bootstrap
-     *  routine.
-     */
+/*
+ *  Bootinfo definitions
+ *
+ *  This is an easily parsable and extendable structure containing all
+ *  information to be passed from the bootstrap to the kernel.
+ *
+ *  This way I hope to keep all future changes back/forewards compatible.
+ *  Thus, keep your fingers crossed...
+ *
+ *  This structure is copied right after the kernel bss by the bootstrap
+ *  routine.
+ */
 
 #ifndef __ASSEMBLY__
 
@@ -49,12 +49,12 @@ struct bi_record {
 #endif /* __ASSEMBLY__ */
 
 
-    /*
-     *  Tag Definitions
-     *
-     *  Machine independent tags start counting from 0x0000
-     *  Machine dependent tags start counting from 0x8000
-     */
+/*
+ *  Tag Definitions
+ *
+ *  Machine independent tags start counting from 0x0000
+ *  Machine dependent tags start counting from 0x8000
+ */
 
 #define BI_LAST			0x0000	/* last record (sentinel) */
 #define BI_MACHTYPE		0x0001	/* machine type (u_long) */
@@ -62,19 +62,19 @@ struct bi_record {
 #define BI_FPUTYPE		0x0003	/* fpu type (u_long) */
 #define BI_MMUTYPE		0x0004	/* mmu type (u_long) */
 #define BI_MEMCHUNK		0x0005	/* memory chunk address and size */
-					/* (struct mem_info) */
+/* (struct mem_info) */
 #define BI_RAMDISK		0x0006	/* ramdisk address and size */
-					/* (struct mem_info) */
+/* (struct mem_info) */
 #define BI_COMMAND_LINE		0x0007	/* kernel command line parameters */
-					/* (string) */
+/* (string) */
 
-    /*
-     *  Amiga-specific tags
-     */
+/*
+ *  Amiga-specific tags
+ */
 
 #define BI_AMIGA_MODEL		0x8000	/* model (u_long) */
 #define BI_AMIGA_AUTOCON	0x8001	/* AutoConfig device */
-					/* (struct ConfigDev) */
+/* (struct ConfigDev) */
 #define BI_AMIGA_CHIP_SIZE	0x8002	/* size of Chip RAM (u_long) */
 #define BI_AMIGA_VBLANK		0x8003	/* VBLANK frequency (u_char) */
 #define BI_AMIGA_PSFREQ		0x8004	/* power supply frequency (u_char) */
@@ -82,13 +82,13 @@ struct bi_record {
 #define BI_AMIGA_CHIPSET	0x8006	/* native chipset present (u_long) */
 #define BI_AMIGA_SERPER		0x8007	/* serial port period (u_short) */
 
-    /*
-     *  Atari-specific tags
-     */
+/*
+ *  Atari-specific tags
+ */
 
 #define BI_ATARI_MCH_COOKIE	0x8000	/* _MCH cookie from TOS (u_long) */
 #define BI_ATARI_MCH_TYPE	0x8001	/* special machine type (u_long) */
-					/* (values are ATARI_MACH_* defines */
+/* (values are ATARI_MACH_* defines */
 
 /* mch_cookie values (upper word) */
 #define ATARI_MCH_ST		0
@@ -102,9 +102,9 @@ struct bi_record {
 #define ATARI_MACH_HADES	2	/* Hades 040 or 060 */
 #define ATARI_MACH_AB40		3	/* Afterburner040 on Falcon */
 
-    /*
-     *  VME-specific tags
-     */
+/*
+ *  VME-specific tags
+ */
 
 #define BI_VME_TYPE		0x8000	/* VME sub-architecture (u_long) */
 #define BI_VME_BRDINFO		0x8001	/* VME board information (struct) */
@@ -126,9 +126,9 @@ struct bi_record {
  */
 
 
-    /*
-     *  Macintosh-specific tags (all u_long)
-     */
+/*
+ *  Macintosh-specific tags (all u_long)
+ */
 
 #define BI_MAC_MODEL		0x8000	/* Mac Gestalt ID (model type) */
 #define BI_MAC_VADDR		0x8001	/* Mac video base address */
@@ -143,10 +143,10 @@ struct bi_record {
 #define BI_MAC_CPUID		0x800a	/* Mac CPU type (sanity check) */
 #define BI_MAC_ROMBASE		0x800b	/* Mac system ROM base address */
 
-    /*
-     *  Macintosh hardware profile data - unused, see macintosh.h for
-     *  reasonable type values
-     */
+/*
+ *  Macintosh hardware profile data - unused, see macintosh.h for
+ *  reasonable type values
+ */
 
 #define BI_MAC_VIA1BASE		0x8010	/* Mac VIA1 base address (always present) */
 #define BI_MAC_VIA2BASE		0x8011	/* Mac VIA2 base address (type varies) */
@@ -167,74 +167,73 @@ struct bi_record {
 #define BI_MAC_IOP_SWIM		0x8020	/* Mac SWIM floppy IOP */
 #define BI_MAC_IOP_ADB		0x8021	/* Mac ADB IOP */
 
-    /*
-     * Mac: compatibility with old booter data format (temporarily)
-     * Fields unused with the new bootinfo can be deleted now; instead of
-     * adding new fields the struct might be splitted into a hardware address
-     * part and a hardware type part
-     */
+/*
+ * Mac: compatibility with old booter data format (temporarily)
+ * Fields unused with the new bootinfo can be deleted now; instead of
+ * adding new fields the struct might be splitted into a hardware address
+ * part and a hardware type part
+ */
 
 #ifndef __ASSEMBLY__
 
-struct mac_booter_data
-{
-	unsigned long videoaddr;
-	unsigned long videorow;
-	unsigned long videodepth;
-	unsigned long dimensions;
-	unsigned long args;
-	unsigned long boottime;
-	unsigned long gmtbias;
-	unsigned long bootver;
-	unsigned long videological;
-	unsigned long sccbase;
-	unsigned long id;
-	unsigned long memsize;
-	unsigned long serialmf;
-	unsigned long serialhsk;
-	unsigned long serialgpi;
-	unsigned long printmf;
-	unsigned long printhsk;
-	unsigned long printgpi;
-	unsigned long cpuid;
-	unsigned long rombase;
-	unsigned long adbdelay;
-	unsigned long timedbra;
+struct mac_booter_data {
+    unsigned long videoaddr;
+    unsigned long videorow;
+    unsigned long videodepth;
+    unsigned long dimensions;
+    unsigned long args;
+    unsigned long boottime;
+    unsigned long gmtbias;
+    unsigned long bootver;
+    unsigned long videological;
+    unsigned long sccbase;
+    unsigned long id;
+    unsigned long memsize;
+    unsigned long serialmf;
+    unsigned long serialhsk;
+    unsigned long serialgpi;
+    unsigned long printmf;
+    unsigned long printhsk;
+    unsigned long printgpi;
+    unsigned long cpuid;
+    unsigned long rombase;
+    unsigned long adbdelay;
+    unsigned long timedbra;
 };
 
 extern struct mac_booter_data
-	mac_bi_data;
+    mac_bi_data;
 
 #endif
 
-    /*
-     *  Apollo-specific tags
-     */
+/*
+ *  Apollo-specific tags
+ */
 
 #define BI_APOLLO_MODEL         0x8000  /* model (u_long) */
 
-    /*
-     *  HP300-specific tags
-     */
+/*
+ *  HP300-specific tags
+ */
 
 #define BI_HP300_MODEL		0x8000	/* model (u_long) */
 #define BI_HP300_UART_SCODE	0x8001	/* UART select code (u_long) */
 #define BI_HP300_UART_ADDR	0x8002	/* phys. addr of UART (u_long) */
 
-    /*
-     * Stuff for bootinfo interface versioning
-     *
-     * At the start of kernel code, a 'struct bootversion' is located.
-     * bootstrap checks for a matching version of the interface before booting
-     * a kernel, to avoid user confusion if kernel and bootstrap don't work
-     * together :-)
-     *
-     * If incompatible changes are made to the bootinfo interface, the major
-     * number below should be stepped (and the minor reset to 0) for the
-     * appropriate machine. If a change is backward-compatible, the minor
-     * should be stepped. "Backwards-compatible" means that booting will work,
-     * but certain features may not.
-     */
+/*
+ * Stuff for bootinfo interface versioning
+ *
+ * At the start of kernel code, a 'struct bootversion' is located.
+ * bootstrap checks for a matching version of the interface before booting
+ * a kernel, to avoid user confusion if kernel and bootstrap don't work
+ * together :-)
+ *
+ * If incompatible changes are made to the bootinfo interface, the major
+ * number below should be stepped (and the minor reset to 0) for the
+ * appropriate machine. If a change is backward-compatible, the minor
+ * should be stepped. "Backwards-compatible" means that booting will work,
+ * but certain features may not.
+ */
 
 #define BOOTINFOV_MAGIC			0x4249561A	/* 'BIV^Z' */
 #define MK_BI_VERSION(major,minor)	(((major)<<16)+(minor))
@@ -247,8 +246,8 @@ struct bootversion {
     unsigned short branch;
     unsigned long magic;
     struct {
-	unsigned long machtype;
-	unsigned long version;
+        unsigned long machtype;
+        unsigned long version;
     } machversions[0];
 };
 
@@ -265,9 +264,9 @@ struct bootversion {
 
 #ifdef BOOTINFO_COMPAT_1_0
 
-    /*
-     *  Backwards compatibility with bootinfo interface version 1.0
-     */
+/*
+ *  Backwards compatibility with bootinfo interface version 1.0
+ */
 
 #define COMPAT_AMIGA_BOOTI_VERSION    MK_BI_VERSION( 1, 0 )
 #define COMPAT_ATARI_BOOTI_VERSION    MK_BI_VERSION( 1, 0 )
@@ -296,30 +295,29 @@ struct compat_bi_Atari {
 
 #ifndef __ASSEMBLY__
 
-struct compat_bi_Macintosh
-{
-	unsigned long videoaddr;
-	unsigned long videorow;
-	unsigned long videodepth;
-	unsigned long dimensions;
-	unsigned long args;
-	unsigned long boottime;
-	unsigned long gmtbias;
-	unsigned long bootver;
-	unsigned long videological;
-	unsigned long sccbase;
-	unsigned long id;
-	unsigned long memsize;
-	unsigned long serialmf;
-	unsigned long serialhsk;
-	unsigned long serialgpi;
-	unsigned long printmf;
-	unsigned long printhsk;
-	unsigned long printgpi;
-	unsigned long cpuid;
-	unsigned long rombase;
-	unsigned long adbdelay;
-	unsigned long timedbra;
+struct compat_bi_Macintosh {
+    unsigned long videoaddr;
+    unsigned long videorow;
+    unsigned long videodepth;
+    unsigned long dimensions;
+    unsigned long args;
+    unsigned long boottime;
+    unsigned long gmtbias;
+    unsigned long bootver;
+    unsigned long videological;
+    unsigned long sccbase;
+    unsigned long id;
+    unsigned long memsize;
+    unsigned long serialmf;
+    unsigned long serialhsk;
+    unsigned long serialgpi;
+    unsigned long printmf;
+    unsigned long printhsk;
+    unsigned long printgpi;
+    unsigned long cpuid;
+    unsigned long rombase;
+    unsigned long adbdelay;
+    unsigned long timedbra;
 };
 
 #endif
@@ -362,9 +360,9 @@ struct compat_bootinfo {
     unsigned long ramdisk_addr;
     char command_line[COMPAT_CL_SIZE];
     union {
-	struct compat_bi_Amiga     bi_ami;
-	struct compat_bi_Atari     bi_ata;
-	struct compat_bi_Macintosh bi_mac;
+        struct compat_bi_Amiga     bi_ami;
+        struct compat_bi_Atari     bi_ata;
+        struct compat_bi_Macintosh bi_mac;
     } bi_un;
 };
 

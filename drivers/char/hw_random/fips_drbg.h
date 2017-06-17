@@ -24,12 +24,12 @@
 typedef int (*get_entropy_callback_t)(void *ctx, void *buf);
 
 struct fips_drbg_ctx_s {
-	uint32_t magic;		/* for checking that ctx is likely valid */
-	get_entropy_callback_t get_entropy_callback;
-	void *get_entropy_callback_ctx;
-	struct ctr_drbg_ctx_s ctr_drbg_ctx;
-	uint8_t fips_drbg_started;
-	uint8_t prev_hw_drbg_block[Q_HW_DRBG_BLOCK_BYTES];
+    uint32_t magic;		/* for checking that ctx is likely valid */
+    get_entropy_callback_t get_entropy_callback;
+    void *get_entropy_callback_ctx;
+    struct ctr_drbg_ctx_s ctr_drbg_ctx;
+    uint8_t fips_drbg_started;
+    uint8_t prev_hw_drbg_block[Q_HW_DRBG_BLOCK_BYTES];
 };
 
 /*

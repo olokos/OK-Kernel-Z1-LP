@@ -20,14 +20,13 @@ struct clk_ops;
 extern struct clk_ops clk_ops_voter;
 
 struct clk_voter {
-	int is_branch;
-	bool enabled;
-	struct clk c;
+    int is_branch;
+    bool enabled;
+    struct clk c;
 };
 
-static inline struct clk_voter *to_clk_voter(struct clk *clk)
-{
-	return container_of(clk, struct clk_voter, c);
+static inline struct clk_voter *to_clk_voter(struct clk *clk) {
+    return container_of(clk, struct clk_voter, c);
 }
 
 #define __DEFINE_CLK_VOTER(clk_name, _parent, _default_rate, _is_branch) \

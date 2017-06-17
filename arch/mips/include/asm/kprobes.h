@@ -52,16 +52,16 @@ void arch_remove_kprobe(struct kprobe *p);
 
 /* Architecture specific copy of original instruction*/
 struct arch_specific_insn {
-	/* copy of the original instruction */
-	kprobe_opcode_t *insn;
+    /* copy of the original instruction */
+    kprobe_opcode_t *insn;
 };
 
 struct prev_kprobe {
-	struct kprobe *kp;
-	unsigned long status;
-	unsigned long old_SR;
-	unsigned long saved_SR;
-	unsigned long saved_epc;
+    struct kprobe *kp;
+    unsigned long status;
+    unsigned long old_SR;
+    unsigned long saved_SR;
+    unsigned long saved_epc;
 };
 
 #define MAX_JPROBES_STACK_SIZE 128
@@ -78,20 +78,20 @@ struct prev_kprobe {
 
 /* per-cpu kprobe control block */
 struct kprobe_ctlblk {
-	unsigned long kprobe_status;
-	unsigned long kprobe_old_SR;
-	unsigned long kprobe_saved_SR;
-	unsigned long kprobe_saved_epc;
-	unsigned long jprobe_saved_sp;
-	struct pt_regs jprobe_saved_regs;
-	/* Per-thread fields, used while emulating branches */
-	unsigned long flags;
-	unsigned long target_epc;
-	u8 jprobes_stack[MAX_JPROBES_STACK_SIZE];
-	struct prev_kprobe prev_kprobe;
+    unsigned long kprobe_status;
+    unsigned long kprobe_old_SR;
+    unsigned long kprobe_saved_SR;
+    unsigned long kprobe_saved_epc;
+    unsigned long jprobe_saved_sp;
+    struct pt_regs jprobe_saved_regs;
+    /* Per-thread fields, used while emulating branches */
+    unsigned long flags;
+    unsigned long target_epc;
+    u8 jprobes_stack[MAX_JPROBES_STACK_SIZE];
+    struct prev_kprobe prev_kprobe;
 };
 
 extern int kprobe_exceptions_notify(struct notifier_block *self,
-				    unsigned long val, void *data);
+                                    unsigned long val, void *data);
 
 #endif				/* _ASM_KPROBES_H */

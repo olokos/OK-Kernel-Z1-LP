@@ -114,8 +114,7 @@ extern "C" {
   reasonCode take form 802.11 standard Table 7-22 to be passed to WLANSAP_DisassocSta api.
   ------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     eSAP_RC_RESERVED0,               /*0*/
     eSAP_RC_UNSPECIFIED,             /*1*/
     eSAP_RC_PREV_AUTH_INVALID,       /*2*/
@@ -143,8 +142,7 @@ typedef enum
     eSAP_RC_CHIPER_SUITE_REJECTED,   /*24*/
 } eSapReasonCode;
 
-typedef enum
-{
+typedef enum {
     eSAP_DOT11_MODE_abg = 0x0001,
     eSAP_DOT11_MODE_11a = 0x0002,
     eSAP_DOT11_MODE_11b = 0x0004,
@@ -159,28 +157,24 @@ typedef enum
 #endif
 } eSapPhyMode;
 
-typedef enum
-{
+typedef enum {
     eSAP_ACCEPT_UNLESS_DENIED = 0,
     eSAP_DENY_UNLESS_ACCEPTED = 1,
     eSAP_SUPPORT_ACCEPT_AND_DENY = 2, /* this type is added to support both accept and deny lists at the same time */
     eSAP_ALLOW_ALL = 3, /*In this mode all MAC addresses are allowed to connect*/
 } eSapMacAddrACL;
 
-typedef enum
-{
+typedef enum {
     eSAP_BLACK_LIST = 0, /* List of mac addresses NOT allowed to assoc */
     eSAP_WHITE_LIST = 1, /* List of mac addresses allowed to assoc */
 } eSapACLType;
 
-typedef enum
-{
+typedef enum {
     ADD_STA_TO_ACL      = 0, /* cmd to add STA to access control list */
     DELETE_STA_FROM_ACL = 1, /* cmd to delete STA from access control list */
 } eSapACLCmdType;
 
-typedef enum
-{
+typedef enum {
     eSAP_START_BSS_EVENT = 0, /*Event sent when BSS is started*/
     eSAP_STOP_BSS_EVENT,      /*Event sent when BSS is stopped*/
     eSAP_STA_ASSOC_IND,       /* Indicate the association request to upper layers */
@@ -204,22 +198,19 @@ typedef enum
     eSAP_MAX_ASSOC_EXCEEDED, /* Event send when a new STA is rejected association since softAP max assoc limit has reached */
 } eSapHddEvent;
 
-typedef enum
-{
+typedef enum {
     eSAP_OPEN_SYSTEM,
     eSAP_SHARED_KEY,
     eSAP_AUTO_SWITCH
 } eSapAuthType;
 
-typedef enum
-{
+typedef enum {
     eSAP_MAC_INITATED_DISASSOC = 0x10000, /*Disassociation was internally initated from CORE stack*/
     eSAP_USR_INITATED_DISASSOC /*Disassociation was internally initated from host by invoking WLANSAP_DisassocSta call*/
 } eSapDisassocReason;
 
 /*Handle boolean over here*/
-typedef enum
-{
+typedef enum {
     eSAP_FALSE,
     eSAP_TRUE,
 } eSapBool;
@@ -227,8 +218,7 @@ typedef enum
 /*---------------------------------------------------------------------------
 SAP PAL "status" and "reason" error code defines
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     eSAP_STATUS_SUCCESS,                 /* Success.  */
     eSAP_STATUS_FAILURE,                 /* General Failure.  */
     eSAP_START_BSS_CHANNEL_NOT_SELECTED, /* Channel not selected during intial scan.  */
@@ -238,15 +228,13 @@ typedef enum
 /*---------------------------------------------------------------------------
 SAP PAL "status" and "reason" error code defines
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     eSAP_WPSPBC_OVERLAP_IN120S,                 /* Overlap */
     eSAP_WPSPBC_NO_WPSPBC_PROBE_REQ_IN120S,     /* no WPS probe request in 120 second */
     eSAP_WPSPBC_ONE_WPSPBC_PROBE_REQ_IN120S,    /* One WPS probe request in 120 second  */
 } eWPSPBCOverlap;
 
-typedef enum
-{
+typedef enum {
     eSAP_RF_SUBBAND_2_4_GHZ      = 0,
     eSAP_RF_SUBBAND_5_LOW_GHZ    = 1,    //Low & Mid U-NII
     eSAP_RF_SUBBAND_5_MID_GHZ    = 2,    //ETSI
@@ -258,20 +246,17 @@ typedef enum
 /*----------------------------------------------------------------------------
  *  Typedefs
  * -------------------------------------------------------------------------*/
-typedef struct sap_StartBssCompleteEvent_s
-{
+typedef struct sap_StartBssCompleteEvent_s {
     v_U8_t  status;
     v_U8_t  operatingChannel;
     v_U16_t staId; //self StaID
 } tSap_StartBssCompleteEvent;
 
-typedef struct sap_StopBssCompleteEvent_s
-{
+typedef struct sap_StopBssCompleteEvent_s {
     v_U8_t status;
 } tSap_StopBssCompleteEvent;
 
-typedef struct sap_StationAssocIndication_s
-{
+typedef struct sap_StationAssocIndication_s {
     v_MACADDR_t  staMac;
     v_U8_t       assoId;
     v_U8_t       staId;
@@ -288,8 +273,7 @@ typedef struct sap_StationAssocIndication_s
     tANI_BOOLEAN fAuthRequired;
 } tSap_StationAssocIndication;
 
-typedef struct sap_StationAssocReassocCompleteEvent_s
-{
+typedef struct sap_StationAssocReassocCompleteEvent_s {
     v_MACADDR_t  staMac;
     v_U8_t       staId;
     v_U8_t       status;
@@ -307,8 +291,7 @@ typedef struct sap_StationAssocReassocCompleteEvent_s
     tANI_U8*     assocRespPtr;
 } tSap_StationAssocReassocCompleteEvent;
 
-typedef struct sap_StationDisassocCompleteEvent_s
-{
+typedef struct sap_StationDisassocCompleteEvent_s {
     v_MACADDR_t        staMac;
     v_U8_t             staId;    //STAID should not be used
     v_U8_t             status;
@@ -316,22 +299,19 @@ typedef struct sap_StationDisassocCompleteEvent_s
     eSapDisassocReason reason;
 } tSap_StationDisassocCompleteEvent;
 
-typedef struct sap_StationSetKeyCompleteEvent_s
-{
+typedef struct sap_StationSetKeyCompleteEvent_s {
     v_U8_t        status;
     v_MACADDR_t   peerMacAddr;
 } tSap_StationSetKeyCompleteEvent;
 
 /*struct corresponding to SAP_STA_DEL_KEY_EVENT */
-typedef struct sap_StationDeleteKeyCompleteEvent_s
-{
+typedef struct sap_StationDeleteKeyCompleteEvent_s {
     v_U8_t status;
     v_U8_t  keyId; /* Key index */
 } tSap_StationDeleteKeyCompleteEvent;
 
 /*struct corresponding to SAP_STA_MIC_FAILURE_EVENT */
-typedef struct sap_StationMICFailureEvent_s
-{
+typedef struct sap_StationMICFailureEvent_s {
     v_MACADDR_t   srcMacAddr; //address used to compute MIC
     v_MACADDR_t   staMac; //taMacAddr transmitter address
     v_MACADDR_t   dstMacAddr;
@@ -342,8 +322,7 @@ typedef struct sap_StationMICFailureEvent_s
 
 } tSap_StationMICFailureEvent;
 /*Structure to return MAC address of associated stations */
-typedef struct sap_AssocMacAddr_s
-{
+typedef struct sap_AssocMacAddr_s {
     v_MACADDR_t staMac;     /*MAC address of Station that is associated*/
     v_U8_t      assocId;        /*Association ID for the station that is associated*/
     v_U8_t      staId;            /*Station Id that is allocated to the station*/
@@ -355,16 +334,14 @@ typedef struct sap_AssocMacAddr_s
 } tSap_AssocMacAddr, *tpSap_AssocMacAddr;
 
 /*struct corresponding to SAP_ASSOC_STA_CALLBACK_EVENT */
-typedef struct sap_AssocStaListEvent_s
-{
+typedef struct sap_AssocStaListEvent_s {
     VOS_MODULE_ID      module; /* module id that was passed in WLANSAP_GetAssocStations API*/
     v_U8_t             noOfAssocSta;  /* Number of associated stations*/
     tpSap_AssocMacAddr pAssocStas; /*Pointer to pre allocated memory to obtain list of associated
                                     stations passed in WLANSAP_GetAssocStations API*/
 } tSap_AssocStaListEvent;
 
-typedef struct sap_GetWPSPBCSessionEvent_s
-{
+typedef struct sap_GetWPSPBCSessionEvent_s {
     v_U8_t         status;
     VOS_MODULE_ID  module; /* module id that was passed in WLANSAP_GetAssocStations API*/
     v_U8_t         UUID_E[16];         // Unique identifier of the AP.
@@ -372,15 +349,13 @@ typedef struct sap_GetWPSPBCSessionEvent_s
     eWPSPBCOverlap wpsPBCOverlap;
 } tSap_GetWPSPBCSessionEvent;
 
-typedef struct sap_WPSPBCProbeReqEvent_s
-{
+typedef struct sap_WPSPBCProbeReqEvent_s {
     v_U8_t             status;
     VOS_MODULE_ID      module; /* module id that was passed in WLANSAP_GetAssocStations API*/
     tSirWPSPBCProbeReq WPSPBCProbeReq;
 } tSap_WPSPBCProbeReqEvent;
 
-typedef struct sap_ManagementFrameInfo_s
-{
+typedef struct sap_ManagementFrameInfo_s {
     tANI_U32 nFrameLength;
     tANI_U8  frameType;
     tANI_U32 rxChan;            //Channel of where packet is received
@@ -389,18 +364,15 @@ typedef struct sap_ManagementFrameInfo_s
     //each frame starts and ends.
 } tSap_ManagementFrameInfo;
 
-typedef struct sap_SendActionCnf_s
-{
+typedef struct sap_SendActionCnf_s {
     eSapStatus actionSendSuccess;
 } tSap_SendActionCnf;
 
-typedef struct sap_UnknownSTAJoinEvent_s
-{
+typedef struct sap_UnknownSTAJoinEvent_s {
     v_MACADDR_t    macaddr;
 } tSap_UnknownSTAJoinEvent;
 
-typedef struct sap_MaxAssocExceededEvent_s
-{
+typedef struct sap_MaxAssocExceededEvent_s {
     v_MACADDR_t    macaddr;
 } tSap_MaxAssocExceededEvent;
 
@@ -410,11 +382,9 @@ typedef struct sap_MaxAssocExceededEvent_s
    The event id corresponding to structure  in the union is defined in comment next to the structure
 */
 
-typedef struct sap_Event_s
-{
+typedef struct sap_Event_s {
     eSapHddEvent sapHddEventCode;
-    union
-    {
+    union {
         tSap_StartBssCompleteEvent                sapStartBssCompleteEvent; /*SAP_START_BSS_EVENT*/
         tSap_StopBssCompleteEvent                 sapStopBssCompleteEvent;  /*SAP_STOP_BSS_EVENT*/
         tSap_StationAssocIndication               sapAssocIndication;       /*SAP_ASSOC_INDICATION */
@@ -434,20 +404,17 @@ typedef struct sap_Event_s
 } tSap_Event, *tpSap_Event;
 
 
-typedef __ani_attr_pre_packed struct sap_SSID
-{
+typedef __ani_attr_pre_packed struct sap_SSID {
     v_U8_t       length;
     v_U8_t       ssId[MAX_SSID_LEN];
 } __ani_attr_packed tSap_SSID_t;
 
-typedef __ani_attr_pre_packed struct sap_SSIDInfo
-{
+typedef __ani_attr_pre_packed struct sap_SSIDInfo {
     tSap_SSID_t  ssid;       /*SSID of the AP*/
     v_U8_t       ssidHidden; /*SSID shouldn't/should be broadcast in probe RSP and beacon*/
 } __ani_attr_packed tSap_SSIDInfo_t;
 
-typedef struct sap_Config
-{
+typedef struct sap_Config {
     tSap_SSIDInfo_t SSIDinfo;
     eSapPhyMode     SapHw_mode; /* Wireless Mode */
     eSapMacAddrACL  SapMacaddr_acl;
@@ -493,21 +460,18 @@ typedef struct sap_Config
 
 } tsap_Config_t;
 
-typedef enum
-{
+typedef enum {
     eSAP_WPS_PROBE_RSP_IE,
     eSAP_WPS_BEACON_IE,
     eSAP_WPS_ASSOC_RSP_IE
 } eSapWPSIE_CODE;
 
-typedef struct sSapName
-{
+typedef struct sSapName {
     v_U8_t num_name;
     v_U8_t name[MAX_NAME_SIZE];
 } tSapName;
 
-typedef struct sSapText
-{
+typedef struct sSapText {
     v_U8_t num_text;
     v_U8_t text[MAX_TEXT_SIZE];
 } tSapText;
@@ -529,8 +493,7 @@ typedef struct sSapText
 #define WPS_PROBRSP_CONFIGMETHODS_PRESENT                0x00004000
 #define WPS_PROBRSP_RF_BANDS_PRESENT                     0x00008000
 
-typedef struct sap_WPSProbeRspIE_s
-{
+typedef struct sap_WPSProbeRspIE_s {
     v_U32_t     FieldPresent;
     v_U32_t     Version;           // Version. 0x10 = version 1.0, 0x11 = etc.
     v_U32_t     wpsState;          // 1 = unconfigured, 2 = configured.
@@ -561,8 +524,7 @@ typedef struct sap_WPSProbeRspIE_s
 #define WPS_BEACON_UUIDE_PRESENT                       0x00000080
 #define WPS_BEACON_RF_BANDS_PRESENT                    0x00000100
 
-typedef struct sap_WPSBeaconIE_s
-{
+typedef struct sap_WPSBeaconIE_s {
     v_U32_t  FieldPresent;
     v_U32_t  Version;           // Version. 0x10 = version 1.0, 0x11 = etc.
     v_U32_t  wpsState;          // 1 = unconfigured, 2 = configured.
@@ -577,18 +539,15 @@ typedef struct sap_WPSBeaconIE_s
 #define WPS_ASSOCRSP_VER_PRESENT             0x00000001
 #define WPS_ASSOCRSP_RESPONSETYPE_PRESENT    0x00000002
 
-typedef struct sap_WPSAssocRspIE_s
-{
+typedef struct sap_WPSAssocRspIE_s {
     v_U32_t FieldPresent;
     v_U32_t Version;
     v_U8_t ResposeType;
 } tSap_WPSAssocRspIE;
 
-typedef struct sap_WPSIE_s
-{
+typedef struct sap_WPSIE_s {
     eSapWPSIE_CODE sapWPSIECode;
-    union
-    {
+    union {
         tSap_WPSProbeRspIE  sapWPSProbeRspIE;    /*WPS Set Probe Respose IE*/
         tSap_WPSBeaconIE    sapWPSBeaconIE;      /*WPS Set Beacon IE*/
         tSap_WPSAssocRspIE  sapWPSAssocRspIE;    /*WPS Set Assoc Response IE*/
@@ -601,8 +560,7 @@ typedef struct sap_WPSIE_s
 #define MAX_RSSI_INTERVAL     5
 #endif
 
-typedef struct sap_SoftapStats_s
-{
+typedef struct sap_SoftapStats_s {
     v_U32_t txUCFcnt;
     v_U32_t txMCFcnt;
     v_U32_t txBCFcnt;
@@ -626,8 +584,7 @@ typedef struct sap_SoftapStats_s
 
 #ifdef FEATURE_WLAN_CH_AVOID
 /* Store channel safty information */
-typedef struct
-{
+typedef struct {
     v_U16_t   channelNumber;
     v_BOOL_t  isSafe;
 } safeChannelType;

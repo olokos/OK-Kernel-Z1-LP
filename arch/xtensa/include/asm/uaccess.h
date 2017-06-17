@@ -50,10 +50,10 @@
  * On Exit:
  * 	<ad>	contains current->thread.current_ds
  */
-	.macro	get_fs	ad, sp
-	GET_CURRENT(\ad,\sp)
-	l32i	\ad, \ad, THREAD_CURRENT_DS
-	.endm
+.macro	get_fs	ad, sp
+GET_CURRENT(\ad,\sp)
+l32i	\ad, \ad, THREAD_CURRENT_DS
+.endm
 
 /*
  * set_fs sets current->thread.current_ds to some value.
@@ -65,10 +65,10 @@
  *	<at>	destroyed (actually, current)
  *	<av>	preserved, value to write
  */
-	.macro	set_fs	at, av, sp
-	GET_CURRENT(\at,\sp)
-	s32i	\av, \at, THREAD_CURRENT_DS
-	.endm
+.macro	set_fs	at, av, sp
+GET_CURRENT(\at,\sp)
+s32i	\av, \at, THREAD_CURRENT_DS
+.endm
 
 /*
  * kernel_ok determines whether we should bypass addr/size checking.
@@ -93,10 +93,10 @@
 #if ((KERNEL_DS != 0) || (USER_DS == 0))
 # error Assembly macro kernel_ok fails
 #endif
-	.macro	kernel_ok  at, sp, success
-	get_fs	\at, \sp
-	beqz	\at, \success
-	.endm
+.macro	kernel_ok  at, sp, success
+get_fs	\at, \sp
+beqz	\at, \success
+.endm
 
 /*
  * user_ok determines whether the access to user-space memory is allowed.
@@ -121,12 +121,12 @@
  * 	<as>	preserved
  * 	<at>	destroyed (actually, (TASK_SIZE + 1 - size))
  */
-	.macro	user_ok	aa, as, at, error
-	movi	\at, __XTENSA_UL_CONST(TASK_SIZE)
-	bgeu	\as, \at, \error
-	sub	\at, \at, \as
-	bgeu	\aa, \at, \error
-	.endm
+.macro	user_ok	aa, as, at, error
+movi	\at, __XTENSA_UL_CONST(TASK_SIZE)
+bgeu	\as, \at, \error
+sub	\at, \at, \as
+bgeu	\aa, \at, \error
+.endm
 
 /*
  * access_ok determines whether a memory access is allowed.  See the
@@ -151,11 +151,11 @@
  * 	<as>	preserved
  * 	<at>	destroyed
  */
-	.macro	access_ok  aa, as, at, sp, error
-	kernel_ok  \at, \sp, .Laccess_ok_\@
-	user_ok    \aa, \as, \at, \error
+.macro	access_ok  aa, as, at, sp, error
+kernel_ok  \at, \sp, .Laccess_ok_\@
+user_ok    \aa, \as, \at, \error
 .Laccess_ok_\@:
-	.endm
+.endm
 
 #else /* __ASSEMBLY__ not defined */
 
@@ -388,35 +388,31 @@ extern unsigned __xtensa_copy_user(void *to, const void *from, unsigned n);
 
 
 static inline unsigned long
-__generic_copy_from_user_nocheck(void *to, const void *from, unsigned long n)
-{
-	return __copy_user(to,from,n);
+__generic_copy_from_user_nocheck(void *to, const void *from, unsigned long n) {
+    return __copy_user(to,from,n);
 }
 
 static inline unsigned long
-__generic_copy_to_user_nocheck(void *to, const void *from, unsigned long n)
-{
-	return __copy_user(to,from,n);
+__generic_copy_to_user_nocheck(void *to, const void *from, unsigned long n) {
+    return __copy_user(to,from,n);
 }
 
 static inline unsigned long
-__generic_copy_to_user(void *to, const void *from, unsigned long n)
-{
-	prefetch(from);
-	if (access_ok(VERIFY_WRITE, to, n))
-		return __copy_user(to,from,n);
-	return n;
+__generic_copy_to_user(void *to, const void *from, unsigned long n) {
+    prefetch(from);
+    if (access_ok(VERIFY_WRITE, to, n))
+        return __copy_user(to,from,n);
+    return n;
 }
 
 static inline unsigned long
-__generic_copy_from_user(void *to, const void *from, unsigned long n)
-{
-	prefetchw(to);
-	if (access_ok(VERIFY_READ, from, n))
-		return __copy_user(to,from,n);
-	else
-		memset(to, 0, n);
-	return n;
+__generic_copy_from_user(void *to, const void *from, unsigned long n) {
+    prefetchw(to);
+    if (access_ok(VERIFY_READ, from, n))
+        return __copy_user(to,from,n);
+    else
+        memset(to, 0, n);
+    return n;
 }
 
 #define copy_to_user(to,from,n) __generic_copy_to_user((to),(from),(n))
@@ -435,19 +431,17 @@ __generic_copy_from_user(void *to, const void *from, unsigned long n)
  */
 
 static inline unsigned long
-__xtensa_clear_user(void *addr, unsigned long size)
-{
-	if ( ! memset(addr, 0, size) )
-		return size;
-	return 0;
+__xtensa_clear_user(void *addr, unsigned long size) {
+    if ( ! memset(addr, 0, size) )
+        return size;
+    return 0;
 }
 
 static inline unsigned long
-clear_user(void *addr, unsigned long size)
-{
-	if (access_ok(VERIFY_WRITE, addr, size))
-		return __xtensa_clear_user(addr, size);
-	return size ? -EFAULT : 0;
+clear_user(void *addr, unsigned long size) {
+    if (access_ok(VERIFY_WRITE, addr, size))
+        return __xtensa_clear_user(addr, size);
+    return size ? -EFAULT : 0;
 }
 
 #define __clear_user  __xtensa_clear_user
@@ -457,11 +451,10 @@ extern long __strncpy_user(char *, const char *, long);
 #define __strncpy_from_user __strncpy_user
 
 static inline long
-strncpy_from_user(char *dst, const char *src, long count)
-{
-	if (access_ok(VERIFY_READ, src, 1))
-		return __strncpy_from_user(dst, src, count);
-	return -EFAULT;
+strncpy_from_user(char *dst, const char *src, long count) {
+    if (access_ok(VERIFY_READ, src, 1))
+        return __strncpy_from_user(dst, src, count);
+    return -EFAULT;
 }
 
 
@@ -472,19 +465,17 @@ strncpy_from_user(char *dst, const char *src, long count)
  */
 extern long __strnlen_user(const char *, long);
 
-static inline long strnlen_user(const char *str, long len)
-{
-	unsigned long top = __kernel_ok ? ~0UL : TASK_SIZE - 1;
+static inline long strnlen_user(const char *str, long len) {
+    unsigned long top = __kernel_ok ? ~0UL : TASK_SIZE - 1;
 
-	if ((unsigned long)str > top)
-		return 0;
-	return __strnlen_user(str, len);
+    if ((unsigned long)str > top)
+        return 0;
+    return __strnlen_user(str, len);
 }
 
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup.unit otherwise.  */

@@ -139,15 +139,15 @@ int iwmct_log_set_filter(u8 src, u8 logmask);
 int iwmct_log_set_fw_filter(u8 src, u8 logmask);
 
 ssize_t show_iwmct_log_level(struct device *d,
-			struct device_attribute *attr, char *buf);
+                             struct device_attribute *attr, char *buf);
 ssize_t store_iwmct_log_level(struct device *d,
-			struct device_attribute *attr,
-			const char *buf, size_t count);
+                              struct device_attribute *attr,
+                              const char *buf, size_t count);
 ssize_t show_iwmct_log_level_fw(struct device *d,
-			struct device_attribute *attr, char *buf);
+                                struct device_attribute *attr, char *buf);
 ssize_t store_iwmct_log_level_fw(struct device *d,
-			struct device_attribute *attr,
-			const char *buf, size_t count);
+                                 struct device_attribute *attr,
+                                 const char *buf, size_t count);
 
 #else
 
@@ -159,9 +159,13 @@ ssize_t store_iwmct_log_level_fw(struct device *d,
 #define LOG_HEXDUMP(src, ptr, len)
 
 static inline void iwmct_log_top_message(struct iwmct_priv *priv,
-					 u8 *buf, int len) {}
-static inline int iwmct_log_set_filter(u8 src, u8 logmask) { return 0; }
-static inline int iwmct_log_set_fw_filter(u8 src, u8 logmask) { return 0; }
+        u8 *buf, int len) {}
+static inline int iwmct_log_set_filter(u8 src, u8 logmask) {
+    return 0;
+}
+static inline int iwmct_log_set_fw_filter(u8 src, u8 logmask) {
+    return 0;
+}
 
 #endif /* CONFIG_IWMC3200TOP_DEBUG */
 

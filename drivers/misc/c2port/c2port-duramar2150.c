@@ -29,87 +29,82 @@ static DEFINE_MUTEX(update_lock);
  * C2 port operations
  */
 
-static void duramar2150_c2port_access(struct c2port_device *dev, int status)
-{
-	u8 v;
+static void duramar2150_c2port_access(struct c2port_device *dev, int status) {
+    u8 v;
 
-	mutex_lock(&update_lock);
+    mutex_lock(&update_lock);
 
-	v = inb(DIR_PORT);
+    v = inb(DIR_PORT);
 
-	/* 0 = input, 1 = output */
-	if (status)
-		outb(v | (C2D | C2CK), DIR_PORT);
-	else
-		/* When access is "off" is important that both lines are set
-		 * as inputs or hi-impedance */
-		outb(v & ~(C2D | C2CK), DIR_PORT);
+    /* 0 = input, 1 = output */
+    if (status)
+        outb(v | (C2D | C2CK), DIR_PORT);
+    else
+        /* When access is "off" is important that both lines are set
+         * as inputs or hi-impedance */
+        outb(v & ~(C2D | C2CK), DIR_PORT);
 
-	mutex_unlock(&update_lock);
+    mutex_unlock(&update_lock);
 }
 
-static void duramar2150_c2port_c2d_dir(struct c2port_device *dev, int dir)
-{
-	u8 v;
+static void duramar2150_c2port_c2d_dir(struct c2port_device *dev, int dir) {
+    u8 v;
 
-	mutex_lock(&update_lock);
+    mutex_lock(&update_lock);
 
-	v = inb(DIR_PORT);
+    v = inb(DIR_PORT);
 
-	if (dir)
-		outb(v & ~C2D, DIR_PORT);
-	else
-		outb(v | C2D, DIR_PORT);
+    if (dir)
+        outb(v & ~C2D, DIR_PORT);
+    else
+        outb(v | C2D, DIR_PORT);
 
-	mutex_unlock(&update_lock);
+    mutex_unlock(&update_lock);
 }
 
-static int duramar2150_c2port_c2d_get(struct c2port_device *dev)
-{
-	return inb(DATA_PORT) & C2D;
+static int duramar2150_c2port_c2d_get(struct c2port_device *dev) {
+    return inb(DATA_PORT) & C2D;
 }
 
-static void duramar2150_c2port_c2d_set(struct c2port_device *dev, int status)
-{
-	u8 v;
+static void duramar2150_c2port_c2d_set(struct c2port_device *dev, int status) {
+    u8 v;
 
-	mutex_lock(&update_lock);
+    mutex_lock(&update_lock);
 
-	v = inb(DATA_PORT);
+    v = inb(DATA_PORT);
 
-	if (status)
-		outb(v | C2D, DATA_PORT);
-	else
-		outb(v & ~C2D, DATA_PORT);
+    if (status)
+        outb(v | C2D, DATA_PORT);
+    else
+        outb(v & ~C2D, DATA_PORT);
 
-	mutex_unlock(&update_lock);
+    mutex_unlock(&update_lock);
 }
 
-static void duramar2150_c2port_c2ck_set(struct c2port_device *dev, int status)
-{
-	u8 v;
+static void duramar2150_c2port_c2ck_set(struct c2port_device *dev, int status) {
+    u8 v;
 
-	mutex_lock(&update_lock);
+    mutex_lock(&update_lock);
 
-	v = inb(DATA_PORT);
+    v = inb(DATA_PORT);
 
-	if (status)
-		outb(v | C2CK, DATA_PORT);
-	else
-		outb(v & ~C2CK, DATA_PORT);
+    if (status)
+        outb(v | C2CK, DATA_PORT);
+    else
+        outb(v & ~C2CK, DATA_PORT);
 
-	mutex_unlock(&update_lock);
+    mutex_unlock(&update_lock);
 }
 
 static struct c2port_ops duramar2150_c2port_ops = {
-	.block_size	= 512,	/* bytes */
-	.blocks_num	= 30,	/* total flash size: 15360 bytes */
+    .block_size	= 512,	/* bytes */
+    .blocks_num	= 30,	/* total flash size: 15360 bytes */
 
-	.access		= duramar2150_c2port_access,
-	.c2d_dir	= duramar2150_c2port_c2d_dir,
-	.c2d_get	= duramar2150_c2port_c2d_get,
-	.c2d_set	= duramar2150_c2port_c2d_set,
-	.c2ck_set	= duramar2150_c2port_c2ck_set,
+    .access		= duramar2150_c2port_access,
+    .c2d_dir	= duramar2150_c2port_c2d_dir,
+    .c2d_get	= duramar2150_c2port_c2d_get,
+    .c2d_set	= duramar2150_c2port_c2d_set,
+    .c2ck_set	= duramar2150_c2port_c2ck_set,
 };
 
 static struct c2port_device *duramar2150_c2port_dev;
@@ -118,37 +113,35 @@ static struct c2port_device *duramar2150_c2port_dev;
  * Module stuff
  */
 
-static int __init duramar2150_c2port_init(void)
-{
-	struct resource *res;
-	int ret = 0;
+static int __init duramar2150_c2port_init(void) {
+    struct resource *res;
+    int ret = 0;
 
-	res = request_region(0x325, 2, "c2port");
-	if (!res)
-		return -EBUSY;
+    res = request_region(0x325, 2, "c2port");
+    if (!res)
+        return -EBUSY;
 
-	duramar2150_c2port_dev = c2port_device_register("uc",
-					&duramar2150_c2port_ops, NULL);
-	if (!duramar2150_c2port_dev) {
-		ret = -ENODEV;
-		goto free_region;
-	}
+    duramar2150_c2port_dev = c2port_device_register("uc",
+                             &duramar2150_c2port_ops, NULL);
+    if (!duramar2150_c2port_dev) {
+        ret = -ENODEV;
+        goto free_region;
+    }
 
-	return 0;
+    return 0;
 
 free_region:
-	release_region(0x325, 2);
-	return ret;
+    release_region(0x325, 2);
+    return ret;
 }
 
-static void __exit duramar2150_c2port_exit(void)
-{
-	/* Setup the GPIOs as input by default (access = 0) */
-	duramar2150_c2port_access(duramar2150_c2port_dev, 0);
+static void __exit duramar2150_c2port_exit(void) {
+    /* Setup the GPIOs as input by default (access = 0) */
+    duramar2150_c2port_access(duramar2150_c2port_dev, 0);
 
-	c2port_device_unregister(duramar2150_c2port_dev);
+    c2port_device_unregister(duramar2150_c2port_dev);
 
-	release_region(0x325, 2);
+    release_region(0x325, 2);
 }
 
 module_init(duramar2150_c2port_init);

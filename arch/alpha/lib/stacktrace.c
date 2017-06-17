@@ -37,66 +37,62 @@ typedef unsigned int instr;
 #define IS_KERNEL_TEXT(PC) ((unsigned long)(PC) > START_ADDR)
 
 static char reg_name[][4] = {
-	"v0 ", "t0 ", "t1 ", "t2 ", "t3 ", "t4 ", "t5 ", "t6 ", "t7 ",
-	"s0 ", "s1 ", "s2 ", "s3 ", "s4 ", "s5 ", "s6 ", "a0 ", "a1 ",
-	"a2 ", "a3 ", "a4 ", "a5 ", "t8 ", "t9 ", "t10", "t11", "ra ",
-	"pv ", "at ", "gp ", "sp ", "0"
+    "v0 ", "t0 ", "t1 ", "t2 ", "t3 ", "t4 ", "t5 ", "t6 ", "t7 ",
+    "s0 ", "s1 ", "s2 ", "s3 ", "s4 ", "s5 ", "s6 ", "a0 ", "a1 ",
+    "a2 ", "a3 ", "a4 ", "a5 ", "t8 ", "t9 ", "t10", "t11", "ra ",
+    "pv ", "at ", "gp ", "sp ", "0"
 };
 
 
 static instr *
-display_stored_regs(instr * pro_pc, unsigned char * sp)
-{
-	instr * ret_pc = 0;
-	int reg;
-	unsigned long value;
+display_stored_regs(instr * pro_pc, unsigned char * sp) {
+    instr * ret_pc = 0;
+    int reg;
+    unsigned long value;
 
-	printk("Prologue [<%p>], Frame %p:\n", pro_pc, sp);
-	while (!BB_END(*pro_pc))
-		if (STK_PUSH_MATCH(*pro_pc)) {
-			reg = (*pro_pc & MEM_REG) >> 21;
-			value = *(unsigned long *)(sp + (*pro_pc & MEM_OFF));
-			if (reg == 26)
-				ret_pc = (instr *)value;
-			printk("\t\t%s / 0x%016lx\n", reg_name[reg], value);
-		}
-	return ret_pc;
+    printk("Prologue [<%p>], Frame %p:\n", pro_pc, sp);
+    while (!BB_END(*pro_pc))
+        if (STK_PUSH_MATCH(*pro_pc)) {
+            reg = (*pro_pc & MEM_REG) >> 21;
+            value = *(unsigned long *)(sp + (*pro_pc & MEM_OFF));
+            if (reg == 26)
+                ret_pc = (instr *)value;
+            printk("\t\t%s / 0x%016lx\n", reg_name[reg], value);
+        }
+    return ret_pc;
 }
 
 static instr *
-seek_prologue(instr * pc)
-{
-	while (!STK_ALLOC_MATCH(*pc))
-		--pc;
-	while (!BB_END(*(pc - 1)))
-		--pc;
-	return pc;
+seek_prologue(instr * pc) {
+    while (!STK_ALLOC_MATCH(*pc))
+        --pc;
+    while (!BB_END(*(pc - 1)))
+        --pc;
+    return pc;
 }
 
 static long
-stack_increment(instr * prologue_pc)
-{
-	while (!STK_ALLOC_MATCH(*prologue_pc))
-		++prologue_pc;
+stack_increment(instr * prologue_pc) {
+    while (!STK_ALLOC_MATCH(*prologue_pc))
+        ++prologue_pc;
 
-	/* Count the bytes allocated. */
-	if ((*prologue_pc & STK_ALLOC_1M) == STK_ALLOC_1M)
-		return -(((long)(*prologue_pc) << 48) >> 48);
-	else
-		return (*prologue_pc >> 13) & 0xff;
+    /* Count the bytes allocated. */
+    if ((*prologue_pc & STK_ALLOC_1M) == STK_ALLOC_1M)
+        return -(((long)(*prologue_pc) << 48) >> 48);
+    else
+        return (*prologue_pc >> 13) & 0xff;
 }
 
 void
-stacktrace(void)
-{
-	instr * ret_pc;
-	instr * prologue = (instr *)stacktrace;
-	register unsigned char * sp __asm__ ("$30");
+stacktrace(void) {
+    instr * ret_pc;
+    instr * prologue = (instr *)stacktrace;
+    register unsigned char * sp __asm__ ("$30");
 
-	printk("\tstack trace:\n");
-	do {
-		ret_pc = display_stored_regs(prologue, sp);
-		sp += stack_increment(prologue);
-		prologue = seek_prologue(ret_pc);
-	} while (IS_KERNEL_TEXT(ret_pc));
+    printk("\tstack trace:\n");
+    do {
+        ret_pc = display_stored_regs(prologue, sp);
+        sp += stack_increment(prologue);
+        prologue = seek_prologue(ret_pc);
+    } while (IS_KERNEL_TEXT(ret_pc));
 }

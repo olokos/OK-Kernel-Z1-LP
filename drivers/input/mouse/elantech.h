@@ -109,47 +109,45 @@
  * The base position for one finger, v4 hardware
  */
 struct finger_pos {
-	unsigned int x;
-	unsigned int y;
+    unsigned int x;
+    unsigned int y;
 };
 
 struct elantech_data {
-	unsigned char reg_07;
-	unsigned char reg_10;
-	unsigned char reg_11;
-	unsigned char reg_20;
-	unsigned char reg_21;
-	unsigned char reg_22;
-	unsigned char reg_23;
-	unsigned char reg_24;
-	unsigned char reg_25;
-	unsigned char reg_26;
-	unsigned char debug;
-	unsigned char capabilities[3];
-	bool paritycheck;
-	bool jumpy_cursor;
-	bool reports_pressure;
-	unsigned char hw_version;
-	unsigned int fw_version;
-	unsigned int single_finger_reports;
-	unsigned int y_max;
-	unsigned int width;
-	struct finger_pos mt[ETP_MAX_FINGERS];
-	unsigned char parity[256];
-	int (*send_cmd)(struct psmouse *psmouse, unsigned char c, unsigned char *param);
+    unsigned char reg_07;
+    unsigned char reg_10;
+    unsigned char reg_11;
+    unsigned char reg_20;
+    unsigned char reg_21;
+    unsigned char reg_22;
+    unsigned char reg_23;
+    unsigned char reg_24;
+    unsigned char reg_25;
+    unsigned char reg_26;
+    unsigned char debug;
+    unsigned char capabilities[3];
+    bool paritycheck;
+    bool jumpy_cursor;
+    bool reports_pressure;
+    unsigned char hw_version;
+    unsigned int fw_version;
+    unsigned int single_finger_reports;
+    unsigned int y_max;
+    unsigned int width;
+    struct finger_pos mt[ETP_MAX_FINGERS];
+    unsigned char parity[256];
+    int (*send_cmd)(struct psmouse *psmouse, unsigned char c, unsigned char *param);
 };
 
 #ifdef CONFIG_MOUSE_PS2_ELANTECH
 int elantech_detect(struct psmouse *psmouse, bool set_properties);
 int elantech_init(struct psmouse *psmouse);
 #else
-static inline int elantech_detect(struct psmouse *psmouse, bool set_properties)
-{
-	return -ENOSYS;
+static inline int elantech_detect(struct psmouse *psmouse, bool set_properties) {
+    return -ENOSYS;
 }
-static inline int elantech_init(struct psmouse *psmouse)
-{
-	return -ENOSYS;
+static inline int elantech_init(struct psmouse *psmouse) {
+    return -ENOSYS;
 }
 #endif /* CONFIG_MOUSE_PS2_ELANTECH */
 

@@ -50,32 +50,29 @@ void bvme6000_set_vectors (void);
 static irq_handler_t tick_handler;
 
 
-int bvme6000_parse_bootinfo(const struct bi_record *bi)
-{
-	if (bi->tag == BI_VME_TYPE)
-		return 0;
-	else
-		return 1;
+int bvme6000_parse_bootinfo(const struct bi_record *bi) {
+    if (bi->tag == BI_VME_TYPE)
+        return 0;
+    else
+        return 1;
 }
 
-void bvme6000_reset(void)
-{
-	volatile PitRegsPtr pit = (PitRegsPtr)BVME_PIT_BASE;
+void bvme6000_reset(void) {
+    volatile PitRegsPtr pit = (PitRegsPtr)BVME_PIT_BASE;
 
-	printk ("\r\n\nCalled bvme6000_reset\r\n"
-			"\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r");
-	/* The string of returns is to delay the reset until the whole
-	 * message is output. */
-	/* Enable the watchdog, via PIT port C bit 4 */
+    printk ("\r\n\nCalled bvme6000_reset\r\n"
+            "\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r");
+    /* The string of returns is to delay the reset until the whole
+     * message is output. */
+    /* Enable the watchdog, via PIT port C bit 4 */
 
-	pit->pcddr	|= 0x10;	/* WDOG enable */
+    pit->pcddr	|= 0x10;	/* WDOG enable */
 
-	while(1)
-		;
+    while(1)
+        ;
 }
 
-static void bvme6000_get_model(char *model)
-{
+static void bvme6000_get_model(char *model) {
     sprintf(model, "BVME%d000", m68k_cputype == CPU_68060 ? 6 : 4);
 }
 
@@ -83,21 +80,19 @@ static void bvme6000_get_model(char *model)
  * This function is called during kernel startup to initialize
  * the bvme6000 IRQ handling routines.
  */
-static void __init bvme6000_init_IRQ(void)
-{
-	m68k_setup_user_interrupt(VEC_USER, 192);
+static void __init bvme6000_init_IRQ(void) {
+    m68k_setup_user_interrupt(VEC_USER, 192);
 }
 
-void __init config_bvme6000(void)
-{
+void __init config_bvme6000(void) {
     volatile PitRegsPtr pit = (PitRegsPtr)BVME_PIT_BASE;
 
     /* Board type is only set by newer versions of vmelilo/tftplilo */
     if (!vme_brdtype) {
-	if (m68k_cputype == CPU_68060)
-	    vme_brdtype = VME_TYPE_BVME6000;
-	else
-	    vme_brdtype = VME_TYPE_BVME4000;
+        if (m68k_cputype == CPU_68060)
+            vme_brdtype = VME_TYPE_BVME6000;
+        else
+            vme_brdtype = VME_TYPE_BVME4000;
     }
 #if 0
     /* Call bvme6000_set_vectors() so ABORT will work, along with BVMBug
@@ -117,7 +112,7 @@ void __init config_bvme6000(void)
     mach_get_model       = bvme6000_get_model;
 
     printk ("Board is %sconfigured as a System Controller\n",
-		*config_reg_ptr & BVME_CONFIG_SW1 ? "" : "not ");
+            *config_reg_ptr & BVME_CONFIG_SW1 ? "" : "not ");
 
     /* Now do the PIT configuration */
 
@@ -128,7 +123,7 @@ void __init config_bvme6000(void)
     pit->paddr	= 0x00;	/* All inputs for now (safest) */
     pit->pbcr	= 0x80;	/* Sub Mode 1x, H4 i/p, no DMA */
     pit->pbdr	= 0xbc | (*config_reg_ptr & BVME_CONFIG_SW1 ? 0 : 0x40);
-			/* PRI, SYSCON?, Level3, SCC clks from xtal */
+    /* PRI, SYSCON?, Level3, SCC clks from xtal */
     pit->pbddr	= 0xf3;	/* Mostly outputs */
     pit->pcdr	= 0x01;	/* PA transceiver disabled */
     pit->pcddr	= 0x03;	/* WDOG disable */
@@ -139,25 +134,23 @@ void __init config_bvme6000(void)
 }
 
 
-irqreturn_t bvme6000_abort_int (int irq, void *dev_id)
-{
-        unsigned long *new = (unsigned long *)vectors;
-        unsigned long *old = (unsigned long *)0xf8000000;
+irqreturn_t bvme6000_abort_int (int irq, void *dev_id) {
+    unsigned long *new = (unsigned long *)vectors;
+    unsigned long *old = (unsigned long *)0xf8000000;
 
-        /* Wait for button release */
-        while (*(volatile unsigned char *)BVME_LOCAL_IRQ_STAT & BVME_ABORT_STATUS)
-                ;
+    /* Wait for button release */
+    while (*(volatile unsigned char *)BVME_LOCAL_IRQ_STAT & BVME_ABORT_STATUS)
+        ;
 
-        *(new+4) = *(old+4);            /* Illegal instruction */
-        *(new+9) = *(old+9);            /* Trace */
-        *(new+47) = *(old+47);          /* Trap #15 */
-        *(new+0x1f) = *(old+0x1f);      /* ABORT switch */
-	return IRQ_HANDLED;
+    *(new+4) = *(old+4);            /* Illegal instruction */
+    *(new+9) = *(old+9);            /* Trace */
+    *(new+47) = *(old+47);          /* Trap #15 */
+    *(new+0x1f) = *(old+0x1f);      /* ABORT switch */
+    return IRQ_HANDLED;
 }
 
 
-static irqreturn_t bvme6000_timer_int (int irq, void *dev_id)
-{
+static irqreturn_t bvme6000_timer_int (int irq, void *dev_id) {
     volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
     unsigned char msr = rtc->msr & 0xc0;
 
@@ -175,8 +168,7 @@ static irqreturn_t bvme6000_timer_int (int irq, void *dev_id)
  * so divide by 8 to get the microsecond result.
  */
 
-void bvme6000_sched_init (irq_handler_t timer_routine)
-{
+void bvme6000_sched_init (irq_handler_t timer_routine) {
     volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
     unsigned char msr = rtc->msr & 0xc0;
 
@@ -184,8 +176,8 @@ void bvme6000_sched_init (irq_handler_t timer_routine)
 
     tick_handler = timer_routine;
     if (request_irq(BVME_IRQ_RTC, bvme6000_timer_int, 0,
-				"timer", bvme6000_timer_int))
-	panic ("Couldn't register timer int");
+                    "timer", bvme6000_timer_int))
+        panic ("Couldn't register timer int");
 
     rtc->t1cr_omr = 0x04;	/* Mode 2, ext clk */
     rtc->t1msb = 39999 >> 8;
@@ -202,8 +194,8 @@ void bvme6000_sched_init (irq_handler_t timer_routine)
     rtc->msr = msr;
 
     if (request_irq(BVME_IRQ_ABORT, bvme6000_abort_int, 0,
-				"abort", bvme6000_abort_int))
-	panic ("Couldn't register abort int");
+                    "abort", bvme6000_abort_int))
+        panic ("Couldn't register abort int");
 }
 
 
@@ -216,8 +208,7 @@ void bvme6000_sched_init (irq_handler_t timer_routine)
  * results...
  */
 
-unsigned long bvme6000_gettimeoffset (void)
-{
+unsigned long bvme6000_gettimeoffset (void) {
     volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
     volatile PitRegsPtr pit = (PitRegsPtr)BVME_PIT_BASE;
     unsigned char msr = rtc->msr & 0xc0;
@@ -227,23 +218,23 @@ unsigned long bvme6000_gettimeoffset (void)
     rtc->msr = 0;	/* Ensure timer registers accessible */
 
     do {
-	ov = v;
-	t1int = rtc->msr & 0x20;
-	t1op  = pit->pcdr & 0x04;
-	rtc->t1cr_omr |= 0x40;		/* Latch timer1 */
-	v = rtc->t1msb << 8;		/* Read timer1 */
-	v |= rtc->t1lsb;		/* Read timer1 */
+        ov = v;
+        t1int = rtc->msr & 0x20;
+        t1op  = pit->pcdr & 0x04;
+        rtc->t1cr_omr |= 0x40;		/* Latch timer1 */
+        v = rtc->t1msb << 8;		/* Read timer1 */
+        v |= rtc->t1lsb;		/* Read timer1 */
     } while (t1int != (rtc->msr & 0x20) ||
-		t1op != (pit->pcdr & 0x04) ||
-			abs(ov-v) > 80 ||
-				v > 39960);
+             t1op != (pit->pcdr & 0x04) ||
+             abs(ov-v) > 80 ||
+             v > 39960);
 
     v = 39999 - v;
     if (!t1op)				/* If in second half cycle.. */
-	v += 40000;
+        v += 40000;
     v /= 8;				/* Convert ticks to microseconds */
     if (t1int)
-	v += 10000;			/* Int pending, + 10ms */
+        v += 10000;			/* Int pending, + 10ms */
     rtc->msr = msr;
 
     return v;
@@ -264,45 +255,43 @@ unsigned long bvme6000_gettimeoffset (void)
  * };
  */
 
-int bvme6000_hwclk(int op, struct rtc_time *t)
-{
-	volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
-	unsigned char msr = rtc->msr & 0xc0;
+int bvme6000_hwclk(int op, struct rtc_time *t) {
+    volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
+    unsigned char msr = rtc->msr & 0xc0;
 
-	rtc->msr = 0x40;	/* Ensure clock and real-time-mode-register
+    rtc->msr = 0x40;	/* Ensure clock and real-time-mode-register
 				 * are accessible */
-	if (op)
-	{	/* Write.... */
-		rtc->t0cr_rtmr = t->tm_year%4;
-		rtc->bcd_tenms = 0;
-		rtc->bcd_sec = bin2bcd(t->tm_sec);
-		rtc->bcd_min = bin2bcd(t->tm_min);
-		rtc->bcd_hr  = bin2bcd(t->tm_hour);
-		rtc->bcd_dom = bin2bcd(t->tm_mday);
-		rtc->bcd_mth = bin2bcd(t->tm_mon + 1);
-		rtc->bcd_year = bin2bcd(t->tm_year%100);
-		if (t->tm_wday >= 0)
-			rtc->bcd_dow = bin2bcd(t->tm_wday+1);
-		rtc->t0cr_rtmr = t->tm_year%4 | 0x08;
-	}
-	else
-	{	/* Read....  */
-		do {
-			t->tm_sec  = bcd2bin(rtc->bcd_sec);
-			t->tm_min  = bcd2bin(rtc->bcd_min);
-			t->tm_hour = bcd2bin(rtc->bcd_hr);
-			t->tm_mday = bcd2bin(rtc->bcd_dom);
-			t->tm_mon  = bcd2bin(rtc->bcd_mth)-1;
-			t->tm_year = bcd2bin(rtc->bcd_year);
-			if (t->tm_year < 70)
-				t->tm_year += 100;
-			t->tm_wday = bcd2bin(rtc->bcd_dow)-1;
-		} while (t->tm_sec != bcd2bin(rtc->bcd_sec));
-	}
+    if (op) {
+        /* Write.... */
+        rtc->t0cr_rtmr = t->tm_year%4;
+        rtc->bcd_tenms = 0;
+        rtc->bcd_sec = bin2bcd(t->tm_sec);
+        rtc->bcd_min = bin2bcd(t->tm_min);
+        rtc->bcd_hr  = bin2bcd(t->tm_hour);
+        rtc->bcd_dom = bin2bcd(t->tm_mday);
+        rtc->bcd_mth = bin2bcd(t->tm_mon + 1);
+        rtc->bcd_year = bin2bcd(t->tm_year%100);
+        if (t->tm_wday >= 0)
+            rtc->bcd_dow = bin2bcd(t->tm_wday+1);
+        rtc->t0cr_rtmr = t->tm_year%4 | 0x08;
+    } else {
+        /* Read....  */
+        do {
+            t->tm_sec  = bcd2bin(rtc->bcd_sec);
+            t->tm_min  = bcd2bin(rtc->bcd_min);
+            t->tm_hour = bcd2bin(rtc->bcd_hr);
+            t->tm_mday = bcd2bin(rtc->bcd_dom);
+            t->tm_mon  = bcd2bin(rtc->bcd_mth)-1;
+            t->tm_year = bcd2bin(rtc->bcd_year);
+            if (t->tm_year < 70)
+                t->tm_year += 100;
+            t->tm_wday = bcd2bin(rtc->bcd_dow)-1;
+        } while (t->tm_sec != bcd2bin(rtc->bcd_sec));
+    }
 
-	rtc->msr = msr;
+    rtc->msr = msr;
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -312,38 +301,35 @@ int bvme6000_hwclk(int op, struct rtc_time *t)
  * wait a short while, and then set it.
  */
 
-int bvme6000_set_clock_mmss (unsigned long nowtime)
-{
-	int retval = 0;
-	short real_seconds = nowtime % 60, real_minutes = (nowtime / 60) % 60;
-	unsigned char rtc_minutes, rtc_tenms;
-	volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
-	unsigned char msr = rtc->msr & 0xc0;
-	unsigned long flags;
-	volatile int i;
+int bvme6000_set_clock_mmss (unsigned long nowtime) {
+    int retval = 0;
+    short real_seconds = nowtime % 60, real_minutes = (nowtime / 60) % 60;
+    unsigned char rtc_minutes, rtc_tenms;
+    volatile RtcPtr_t rtc = (RtcPtr_t)BVME_RTC_BASE;
+    unsigned char msr = rtc->msr & 0xc0;
+    unsigned long flags;
+    volatile int i;
 
-	rtc->msr = 0;		/* Ensure clock accessible */
-	rtc_minutes = bcd2bin (rtc->bcd_min);
+    rtc->msr = 0;		/* Ensure clock accessible */
+    rtc_minutes = bcd2bin (rtc->bcd_min);
 
-	if ((rtc_minutes < real_minutes
-		? real_minutes - rtc_minutes
-			: rtc_minutes - real_minutes) < 30)
-	{
-		local_irq_save(flags);
-		rtc_tenms = rtc->bcd_tenms;
-		while (rtc_tenms == rtc->bcd_tenms)
-			;
-		for (i = 0; i < 1000; i++)
-			;
-		rtc->bcd_min = bin2bcd(real_minutes);
-		rtc->bcd_sec = bin2bcd(real_seconds);
-		local_irq_restore(flags);
-	}
-	else
-		retval = -1;
+    if ((rtc_minutes < real_minutes
+            ? real_minutes - rtc_minutes
+            : rtc_minutes - real_minutes) < 30) {
+        local_irq_save(flags);
+        rtc_tenms = rtc->bcd_tenms;
+        while (rtc_tenms == rtc->bcd_tenms)
+            ;
+        for (i = 0; i < 1000; i++)
+            ;
+        rtc->bcd_min = bin2bcd(real_minutes);
+        rtc->bcd_sec = bin2bcd(real_seconds);
+        local_irq_restore(flags);
+    } else
+        retval = -1;
 
-	rtc->msr = msr;
+    rtc->msr = msr;
 
-	return retval;
+    return retval;
 }
 

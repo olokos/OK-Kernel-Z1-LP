@@ -160,8 +160,7 @@
 
 /// ANI proprietary Status Codes enum
 /// (present in Management response frames)
-typedef enum eSirMacPropStatusCodes
-{
+typedef enum eSirMacPropStatusCodes {
     dummy
 } tSirMacPropStatusCodes;
 
@@ -169,15 +168,13 @@ typedef enum eSirMacPropStatusCodes
  * ANI proprietary Reason Codes enum
  * (present in Deauthentication/Disassociation Management frames)
  */
-typedef enum eSirMacPropReasonCodes
-{
+typedef enum eSirMacPropReasonCodes {
     eSIR_MAC_ULA_TIMEOUT_REASON=0xFF00
 } tSirMacPropReasonCodes;
 
 
 /// Proprietary IE definition
-typedef struct sSirMacPropIE
-{
+typedef struct sSirMacPropIE {
     tANI_U8    elementID;    // SIR_MAC_ANI_PROP_IE_EID
     tANI_U8    length;
     tANI_U8    oui[3];       // ANI_OUI for Airgo products
@@ -185,21 +182,18 @@ typedef struct sSirMacPropIE
 } tSirMacPropIE, *tpSirMacPropIE;
 
 
-typedef struct sSirMacPropRateSet
-{
+typedef struct sSirMacPropRateSet {
     tANI_U8  numPropRates;
     tANI_U8  propRate[8];
 } tSirMacPropRateSet, *tpSirMacPropRateSet;
 
 
-typedef struct sSirMacPropLLSet
-{
+typedef struct sSirMacPropLLSet {
     tANI_U32  deferThreshold;
 } tSirMacPropLLSet, *tpSirMacPropLLSet;
 
 #define SIR_PROP_VERSION_STR_MAX 20
-typedef struct sSirMacPropVersion
-{
+typedef struct sSirMacPropVersion {
     tANI_U32  chip_rev;       // board, chipset info
     tANI_U8   card_type;      // Type of Card
     tANI_U8  build_version[SIR_PROP_VERSION_STR_MAX]; //build version string
@@ -247,8 +241,7 @@ typedef struct sSirMacPropVersion
 // 1) Beacons
 // 2) Probe Rsp
 //
-typedef struct sQuietBssIEStruct
-{
+typedef struct sQuietBssIEStruct {
 
     // Indicates the number of TBTT's until the next beacon
     // interval during which the next quiet interval will
@@ -277,8 +270,7 @@ typedef struct sQuietBssIEStruct
 
 } tQuietBssIEStruct, *tpQuietBssIEStruct;
 
-typedef struct sChannelSwitchPropIEStruct
-{
+typedef struct sChannelSwitchPropIEStruct {
     tANI_U8                  mode;
     tANI_U8                  primaryChannel;
     tANI_U8                  subBand;
@@ -287,8 +279,7 @@ typedef struct sChannelSwitchPropIEStruct
 } tChannelSwitchPropIEStruct, *tpChannelSwitchPropIEStruct;
 
 // generic proprietary IE structure definition
-typedef struct sSirPropIEStruct
-{
+typedef struct sSirPropIEStruct {
     tANI_U8                    aniIndicator;
 
     tANI_U8                    propRatesPresent:1;

@@ -10,27 +10,25 @@
 
 #include <asm/time.h>
 
-static cycle_t c0_hpt_read(struct clocksource *cs)
-{
-	return read_c0_count();
+static cycle_t c0_hpt_read(struct clocksource *cs) {
+    return read_c0_count();
 }
 
 static struct clocksource clocksource_mips = {
-	.name		= "MIPS",
-	.read		= c0_hpt_read,
-	.mask		= CLOCKSOURCE_MASK(32),
-	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
+    .name		= "MIPS",
+    .read		= c0_hpt_read,
+    .mask		= CLOCKSOURCE_MASK(32),
+    .flags		= CLOCK_SOURCE_IS_CONTINUOUS,
 };
 
-int __init init_r4k_clocksource(void)
-{
-	if (!cpu_has_counter || !mips_hpt_frequency)
-		return -ENXIO;
+int __init init_r4k_clocksource(void) {
+    if (!cpu_has_counter || !mips_hpt_frequency)
+        return -ENXIO;
 
-	/* Calculate a somewhat reasonable rating value */
-	clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
+    /* Calculate a somewhat reasonable rating value */
+    clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
 
-	clocksource_register_hz(&clocksource_mips, mips_hpt_frequency);
+    clocksource_register_hz(&clocksource_mips, mips_hpt_frequency);
 
-	return 0;
+    return 0;
 }

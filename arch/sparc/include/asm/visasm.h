@@ -44,18 +44,18 @@
 
 #ifndef __ASSEMBLY__
 static inline void save_and_clear_fpu(void) {
-	__asm__ __volatile__ (
-"		rd %%fprs, %%o5\n"
-"		andcc %%o5, %0, %%g0\n"
-"		be,pt %%icc, 299f\n"
-"		 sethi %%hi(298f), %%g7\n"
-"		sethi %%hi(VISenter), %%g1\n"
-"		jmpl %%g1 + %%lo(VISenter), %%g0\n"
-"		 or %%g7, %%lo(298f), %%g7\n"
-"	298:	wr %%g0, 0, %%fprs\n"
-"	299:\n"
-"		" : : "i" (FPRS_FEF|FPRS_DU) :
-		"o5", "g1", "g2", "g3", "g7", "cc");
+    __asm__ __volatile__ (
+        "		rd %%fprs, %%o5\n"
+        "		andcc %%o5, %0, %%g0\n"
+        "		be,pt %%icc, 299f\n"
+        "		 sethi %%hi(298f), %%g7\n"
+        "		sethi %%hi(VISenter), %%g1\n"
+        "		jmpl %%g1 + %%lo(VISenter), %%g0\n"
+        "		 or %%g7, %%lo(298f), %%g7\n"
+        "	298:	wr %%g0, 0, %%fprs\n"
+        "	299:\n"
+        "		" : : "i" (FPRS_FEF|FPRS_DU) :
+        "o5", "g1", "g2", "g3", "g7", "cc");
 }
 extern int vis_emul(struct pt_regs *, unsigned int);
 #endif

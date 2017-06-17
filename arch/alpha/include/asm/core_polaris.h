@@ -57,7 +57,7 @@ struct el_POLARIS_sysdata_mcheck {
  * I/O functions:
  *
  * POLARIS, the PCI/memory support chipset for the PCA56 (21164PC)
- * processors, can use either a sparse address  mapping scheme, or the 
+ * processors, can use either a sparse address  mapping scheme, or the
  * so-called byte-word PCI address space, to get at PCI memory and I/O.
  *
  * However, we will support only the BWX form.
@@ -70,25 +70,21 @@ struct el_POLARIS_sysdata_mcheck {
  * We will only support DENSE access via BWX insns.
  */
 
-__EXTERN_INLINE void __iomem *polaris_ioportmap(unsigned long addr)
-{
-	return (void __iomem *)(addr + POLARIS_DENSE_IO_BASE);
+__EXTERN_INLINE void __iomem *polaris_ioportmap(unsigned long addr) {
+    return (void __iomem *)(addr + POLARIS_DENSE_IO_BASE);
 }
 
 __EXTERN_INLINE void __iomem *polaris_ioremap(unsigned long addr,
-					      unsigned long size)
-{
-	return (void __iomem *)(addr + POLARIS_DENSE_MEM_BASE);
+        unsigned long size) {
+    return (void __iomem *)(addr + POLARIS_DENSE_MEM_BASE);
 }
 
-__EXTERN_INLINE int polaris_is_ioaddr(unsigned long addr)
-{
-	return addr >= POLARIS_SPARSE_MEM_BASE;
+__EXTERN_INLINE int polaris_is_ioaddr(unsigned long addr) {
+    return addr >= POLARIS_SPARSE_MEM_BASE;
 }
 
-__EXTERN_INLINE int polaris_is_mmio(const volatile void __iomem *addr)
-{
-	return (unsigned long)addr < POLARIS_SPARSE_IO_BASE;
+__EXTERN_INLINE int polaris_is_mmio(const volatile void __iomem *addr) {
+    return (unsigned long)addr < POLARIS_SPARSE_IO_BASE;
 }
 
 #undef __IO_PREFIX

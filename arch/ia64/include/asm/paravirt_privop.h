@@ -33,22 +33,22 @@
  */
 
 struct pv_cpu_ops {
-	void (*fc)(void *addr);
-	unsigned long (*thash)(unsigned long addr);
-	unsigned long (*get_cpuid)(int index);
-	unsigned long (*get_pmd)(int index);
-	unsigned long (*getreg)(int reg);
-	void (*setreg)(int reg, unsigned long val);
-	void (*ptcga)(unsigned long addr, unsigned long size);
-	unsigned long (*get_rr)(unsigned long index);
-	void (*set_rr)(unsigned long index, unsigned long val);
-	void (*set_rr0_to_rr4)(unsigned long val0, unsigned long val1,
-			       unsigned long val2, unsigned long val3,
-			       unsigned long val4);
-	void (*ssm_i)(void);
-	void (*rsm_i)(void);
-	unsigned long (*get_psr_i)(void);
-	void (*intrin_local_irq_restore)(unsigned long flags);
+    void (*fc)(void *addr);
+    unsigned long (*thash)(unsigned long addr);
+    unsigned long (*get_cpuid)(int index);
+    unsigned long (*get_pmd)(int index);
+    unsigned long (*getreg)(int reg);
+    void (*setreg)(int reg, unsigned long val);
+    void (*ptcga)(unsigned long addr, unsigned long size);
+    unsigned long (*get_rr)(unsigned long index);
+    void (*set_rr)(unsigned long index, unsigned long val);
+    void (*set_rr0_to_rr4)(unsigned long val0, unsigned long val1,
+                           unsigned long val2, unsigned long val3,
+                           unsigned long val4);
+    void (*ssm_i)(void);
+    void (*rsm_i)(void);
+    unsigned long (*get_psr_i)(void);
+    void (*intrin_local_irq_restore)(unsigned long flags);
 };
 
 extern struct pv_cpu_ops pv_cpu_ops;
@@ -100,10 +100,10 @@ extern unsigned long ia64_native_getreg_func(int regnum);
  * replacement of hand written assembly codes.
  */
 struct pv_cpu_asm_switch {
-	unsigned long switch_to;
-	unsigned long leave_syscall;
-	unsigned long work_processed_syscall;
-	unsigned long leave_kernel;
+    unsigned long switch_to;
+    unsigned long leave_syscall;
+    unsigned long work_processed_syscall;
+    unsigned long leave_kernel;
 };
 void paravirt_cpu_asm_init(const struct pv_cpu_asm_switch *cpu_asm_switch);
 
@@ -411,32 +411,31 @@ PARAVIRT_DEFINE_CPU_OP1(intrin_local_irq_restore, INTRIN_LOCAL_IRQ_RESTORE)
 
 static inline void
 paravirt_set_rr0_to_rr4(unsigned long val0, unsigned long val1,
-			unsigned long val2, unsigned long val3,
-			unsigned long val4)
-{
-	register unsigned long __val0 asm ("r8") = val0;
-	register unsigned long __val1 asm ("r9") = val1;
-	register unsigned long __val2 asm ("r10") = val2;
-	register unsigned long __val3 asm ("r11") = val3;
-	register unsigned long __val4 asm ("r14") = val4;
+                        unsigned long val2, unsigned long val3,
+                        unsigned long val4) {
+    register unsigned long __val0 asm ("r8") = val0;
+    register unsigned long __val1 asm ("r9") = val1;
+    register unsigned long __val2 asm ("r10") = val2;
+    register unsigned long __val3 asm ("r11") = val3;
+    register unsigned long __val4 asm ("r14") = val4;
 
-	register unsigned long ia64_clobber0 asm ("r8");
-	register unsigned long ia64_clobber1 asm ("r9");
-	register unsigned long ia64_clobber2 asm ("r10");
-	register unsigned long ia64_clobber3 asm ("r11");
-	register unsigned long ia64_clobber4 asm ("r14");
+    register unsigned long ia64_clobber0 asm ("r8");
+    register unsigned long ia64_clobber1 asm ("r9");
+    register unsigned long ia64_clobber2 asm ("r10");
+    register unsigned long ia64_clobber3 asm ("r11");
+    register unsigned long ia64_clobber4 asm ("r14");
 
-	asm volatile (paravirt_alt_bundle(__PARAVIRT_BR,
-					  PARAVIRT_TYPE(SET_RR0_TO_RR4))
-		      : "=r"(ia64_clobber0),
-			"=r"(ia64_clobber1),
-			"=r"(ia64_clobber2),
-			"=r"(ia64_clobber3),
-			"=r"(ia64_clobber4)
-		      : PARAVIRT_OP(set_rr0_to_rr4),
-			"0"(__val0), "1"(__val1), "2"(__val2),
-			"3"(__val3), "4"(__val4)
-		      : PARAVIRT_CLOBBERS5);
+    asm volatile (paravirt_alt_bundle(__PARAVIRT_BR,
+                                      PARAVIRT_TYPE(SET_RR0_TO_RR4))
+                  : "=r"(ia64_clobber0),
+                  "=r"(ia64_clobber1),
+                  "=r"(ia64_clobber2),
+                  "=r"(ia64_clobber3),
+                  "=r"(ia64_clobber4)
+                  : PARAVIRT_OP(set_rr0_to_rr4),
+                  "0"(__val0), "1"(__val1), "2"(__val2),
+                  "3"(__val3), "4"(__val4)
+                  : PARAVIRT_CLOBBERS5);
 }
 
 /* unsigned long paravirt_getreg(int reg) */

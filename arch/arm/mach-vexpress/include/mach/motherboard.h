@@ -130,15 +130,15 @@ void v2m_flags_set(u32 data);
 #define V2M_CT_ID_MASK		0xff000fff
 
 struct ct_desc {
-	u32			id;
-	const char		*name;
-	void			(*map_io)(void);
-	void			(*init_early)(void);
-	void			(*init_irq)(void);
-	void			(*init_tile)(void);
+    u32			id;
+    const char		*name;
+    void			(*map_io)(void);
+    void			(*init_early)(void);
+    void			(*init_irq)(void);
+    void			(*init_tile)(void);
 #ifdef CONFIG_SMP
-	void			(*init_cpu_map)(void);
-	void			(*smp_enable)(unsigned int);
+    void			(*init_cpu_map)(void);
+    void			(*smp_enable)(unsigned int);
 #endif
 };
 

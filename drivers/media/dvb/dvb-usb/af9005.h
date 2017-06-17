@@ -40,9 +40,9 @@ extern bool dvb_usb_af9005_led;
 /* firmware */
 #define FW_BULKOUT_SIZE 250
 enum {
-	FW_CONFIG,
-	FW_CONFIRM,
-	FW_BOOT
+    FW_CONFIG,
+    FW_CONFIRM,
+    FW_BOOT
 };
 
 /* af9005 commands */
@@ -3463,25 +3463,25 @@ enum {
 
 extern struct dvb_frontend *af9005_fe_attach(struct dvb_usb_device *d);
 extern int af9005_read_ofdm_register(struct dvb_usb_device *d, u16 reg,
-				     u8 * value);
+                                     u8 * value);
 extern int af9005_read_ofdm_registers(struct dvb_usb_device *d, u16 reg,
-				      u8 * values, int len);
+                                      u8 * values, int len);
 extern int af9005_write_ofdm_register(struct dvb_usb_device *d, u16 reg,
-				      u8 value);
+                                      u8 value);
 extern int af9005_write_ofdm_registers(struct dvb_usb_device *d, u16 reg,
-				       u8 * values, int len);
+                                       u8 * values, int len);
 extern int af9005_read_tuner_registers(struct dvb_usb_device *d, u16 reg,
-				       u8 addr, u8 * values, int len);
+                                       u8 addr, u8 * values, int len);
 extern int af9005_write_tuner_registers(struct dvb_usb_device *d, u16 reg,
-					u8 * values, int len);
+                                        u8 * values, int len);
 extern int af9005_read_register_bits(struct dvb_usb_device *d, u16 reg,
-				     u8 pos, u8 len, u8 * value);
+                                     u8 pos, u8 len, u8 * value);
 extern int af9005_write_register_bits(struct dvb_usb_device *d, u16 reg,
-				      u8 pos, u8 len, u8 value);
+                                      u8 pos, u8 len, u8 value);
 extern int af9005_send_command(struct dvb_usb_device *d, u8 command,
-			       u8 * wbuf, int wlen, u8 * rbuf, int rlen);
+                               u8 * wbuf, int wlen, u8 * rbuf, int rlen);
 extern int af9005_read_eeprom(struct dvb_usb_device *d, u8 address,
-			      u8 * values, int len);
+                              u8 * values, int len);
 extern int af9005_tuner_attach(struct dvb_usb_adapter *adap);
 extern int af9005_led_control(struct dvb_usb_device *d, int onoff);
 
@@ -3489,7 +3489,7 @@ extern u8 regmask[8];
 
 /* remote control decoder */
 extern int af9005_rc_decode(struct dvb_usb_device *d, u8 * data, int len,
-			    u32 * event, int *state);
+                            u32 * event, int *state);
 extern struct rc_map_table rc_map_af9005_table[];
 extern int rc_map_af9005_table_size;
 

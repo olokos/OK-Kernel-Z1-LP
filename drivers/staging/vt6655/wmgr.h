@@ -89,22 +89,19 @@ typedef void (*TimerFunction)(unsigned long);
 //+++ NDIS related
 
 typedef unsigned char NDIS_802_11_MAC_ADDRESS[6];
-typedef struct _NDIS_802_11_AI_REQFI
-{
+typedef struct _NDIS_802_11_AI_REQFI {
     unsigned short Capabilities;
     unsigned short ListenInterval;
     NDIS_802_11_MAC_ADDRESS  CurrentAPAddress;
 } NDIS_802_11_AI_REQFI, *PNDIS_802_11_AI_REQFI;
 
-typedef struct _NDIS_802_11_AI_RESFI
-{
+typedef struct _NDIS_802_11_AI_RESFI {
     unsigned short Capabilities;
     unsigned short StatusCode;
     unsigned short AssociationId;
 } NDIS_802_11_AI_RESFI, *PNDIS_802_11_AI_RESFI;
 
-typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION
-{
+typedef struct _NDIS_802_11_ASSOCIATION_INFORMATION {
     unsigned long Length;
     unsigned short          AvailableRequestFixedIEs;
     NDIS_802_11_AI_REQFI    RequestFixedIEs;
@@ -246,8 +243,7 @@ typedef struct tagSRxMgmtPacket {
 
 
 
-typedef struct tagSMgmtObject
-{
+typedef struct tagSMgmtObject {
 
     void *                   pAdapter;
     // MAC address
@@ -291,7 +287,7 @@ typedef struct tagSMgmtObject
     unsigned char abyDesireBSSID[WLAN_BSSID_LEN];
 
     // Adhoc or AP configuration vars
-  //unsigned char abyAdHocSSID[WLAN_IEHDR_LEN + WLAN_SSID_MAXLEN + 1];
+    //unsigned char abyAdHocSSID[WLAN_IEHDR_LEN + WLAN_SSID_MAXLEN + 1];
     unsigned short wIBSSBeaconPeriod;
     unsigned short wIBSSATIMWindow;
     unsigned int	uIBSSChannel;
@@ -402,31 +398,31 @@ typedef struct tagSMgmtObject
 void
 vMgrObjectInit(
     void *hDeviceContext
-    );
+);
 
 void
 vMgrTimerInit(
     void *hDeviceContext
-    );
+);
 
 void
 vMgrObjectReset(
     void *hDeviceContext
-    );
+);
 
 void
 vMgrAssocBeginSta(
     void *hDeviceContext,
     PSMgmtObject pMgmt,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrReAssocBeginSta(
     void *hDeviceContext,
     PSMgmtObject pMgmt,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrDisassocBeginSta(
@@ -435,33 +431,33 @@ vMgrDisassocBeginSta(
     unsigned char *abyDestAddress,
     unsigned short wReason,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrAuthenBeginSta(
     void *hDeviceContext,
     PSMgmtObject pMgmt,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrCreateOwnIBSS(
     void *hDeviceContext,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrJoinBSSBegin(
     void *hDeviceContext,
     PCMD_STATUS pStatus
-    );
+);
 
 void
 vMgrRxManagePacket(
     void *hDeviceContext,
     PSMgmtObject pMgmt,
     PSRxMgmtPacket pRxPacket
-    );
+);
 
 /*
 void
@@ -478,13 +474,13 @@ vMgrDeAuthenBeginSta(
     unsigned char *abyDestAddress,
     unsigned short wReason,
     PCMD_STATUS pStatus
-    );
+);
 
 bool
 bMgrPrepareBeaconToSend(
     void *hDeviceContext,
     PSMgmtObject pMgmt
-    );
+);
 
 
 bool
@@ -492,11 +488,11 @@ bAdd_PMKID_Candidate (
     void *hDeviceContext,
     unsigned char *pbyBSSID,
     PSRSNCapObject psRSNCapObj
-    );
+);
 
 void
 vFlush_PMKID_Candidate (
     void *hDeviceContext
-    );
+);
 
 #endif // __WMGR_H__

@@ -5,9 +5,8 @@
 
 struct task_struct;
 
-inline static struct task_struct * get_current(void)
-{
-	return current_thread_info()->task;
+inline static struct task_struct * get_current(void) {
+    return current_thread_info()->task;
 }
 
 #define current get_current()

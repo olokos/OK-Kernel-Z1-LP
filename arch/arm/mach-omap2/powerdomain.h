@@ -100,30 +100,30 @@ struct powerdomain;
  * @prcm_partition possible values are defined in mach-omap2/prcm44xx.h.
  */
 struct powerdomain {
-	const char *name;
-	union {
-		const char *name;
-		struct voltagedomain *ptr;
-	} voltdm;
-	const s16 prcm_offs;
-	const u8 pwrsts;
-	const u8 pwrsts_logic_ret;
-	const u8 flags;
-	const u8 banks;
-	const u8 pwrsts_mem_ret[PWRDM_MAX_MEM_BANKS];
-	const u8 pwrsts_mem_on[PWRDM_MAX_MEM_BANKS];
-	const u8 prcm_partition;
-	struct clockdomain *pwrdm_clkdms[PWRDM_MAX_CLKDMS];
-	struct list_head node;
-	struct list_head voltdm_node;
-	int state;
-	unsigned state_counter[PWRDM_MAX_PWRSTS];
-	unsigned ret_logic_off_counter;
-	unsigned ret_mem_off_counter[PWRDM_MAX_MEM_BANKS];
+    const char *name;
+    union {
+        const char *name;
+        struct voltagedomain *ptr;
+    } voltdm;
+    const s16 prcm_offs;
+    const u8 pwrsts;
+    const u8 pwrsts_logic_ret;
+    const u8 flags;
+    const u8 banks;
+    const u8 pwrsts_mem_ret[PWRDM_MAX_MEM_BANKS];
+    const u8 pwrsts_mem_on[PWRDM_MAX_MEM_BANKS];
+    const u8 prcm_partition;
+    struct clockdomain *pwrdm_clkdms[PWRDM_MAX_CLKDMS];
+    struct list_head node;
+    struct list_head voltdm_node;
+    int state;
+    unsigned state_counter[PWRDM_MAX_PWRSTS];
+    unsigned ret_logic_off_counter;
+    unsigned ret_mem_off_counter[PWRDM_MAX_MEM_BANKS];
 
 #ifdef CONFIG_PM_DEBUG
-	s64 timer;
-	s64 state_timer[PWRDM_MAX_PWRSTS];
+    s64 timer;
+    s64 state_timer[PWRDM_MAX_PWRSTS];
 #endif
 };
 
@@ -149,24 +149,24 @@ struct powerdomain {
  * @pwrdm_wait_transition: Wait for a pd state transition to complete
  */
 struct pwrdm_ops {
-	int	(*pwrdm_set_next_pwrst)(struct powerdomain *pwrdm, u8 pwrst);
-	int	(*pwrdm_read_next_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_read_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_read_prev_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_set_logic_retst)(struct powerdomain *pwrdm, u8 pwrst);
-	int	(*pwrdm_set_mem_onst)(struct powerdomain *pwrdm, u8 bank, u8 pwrst);
-	int	(*pwrdm_set_mem_retst)(struct powerdomain *pwrdm, u8 bank, u8 pwrst);
-	int	(*pwrdm_read_logic_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_read_prev_logic_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_read_logic_retst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_read_mem_pwrst)(struct powerdomain *pwrdm, u8 bank);
-	int	(*pwrdm_read_prev_mem_pwrst)(struct powerdomain *pwrdm, u8 bank);
-	int	(*pwrdm_read_mem_retst)(struct powerdomain *pwrdm, u8 bank);
-	int	(*pwrdm_clear_all_prev_pwrst)(struct powerdomain *pwrdm);
-	int	(*pwrdm_enable_hdwr_sar)(struct powerdomain *pwrdm);
-	int	(*pwrdm_disable_hdwr_sar)(struct powerdomain *pwrdm);
-	int	(*pwrdm_set_lowpwrstchange)(struct powerdomain *pwrdm);
-	int	(*pwrdm_wait_transition)(struct powerdomain *pwrdm);
+    int	(*pwrdm_set_next_pwrst)(struct powerdomain *pwrdm, u8 pwrst);
+    int	(*pwrdm_read_next_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_read_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_read_prev_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_set_logic_retst)(struct powerdomain *pwrdm, u8 pwrst);
+    int	(*pwrdm_set_mem_onst)(struct powerdomain *pwrdm, u8 bank, u8 pwrst);
+    int	(*pwrdm_set_mem_retst)(struct powerdomain *pwrdm, u8 bank, u8 pwrst);
+    int	(*pwrdm_read_logic_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_read_prev_logic_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_read_logic_retst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_read_mem_pwrst)(struct powerdomain *pwrdm, u8 bank);
+    int	(*pwrdm_read_prev_mem_pwrst)(struct powerdomain *pwrdm, u8 bank);
+    int	(*pwrdm_read_mem_retst)(struct powerdomain *pwrdm, u8 bank);
+    int	(*pwrdm_clear_all_prev_pwrst)(struct powerdomain *pwrdm);
+    int	(*pwrdm_enable_hdwr_sar)(struct powerdomain *pwrdm);
+    int	(*pwrdm_disable_hdwr_sar)(struct powerdomain *pwrdm);
+    int	(*pwrdm_set_lowpwrstchange)(struct powerdomain *pwrdm);
+    int	(*pwrdm_wait_transition)(struct powerdomain *pwrdm);
 };
 
 int pwrdm_register_platform_funcs(struct pwrdm_ops *custom_funcs);
@@ -176,15 +176,15 @@ int pwrdm_complete_init(void);
 struct powerdomain *pwrdm_lookup(const char *name);
 
 int pwrdm_for_each(int (*fn)(struct powerdomain *pwrdm, void *user),
-			void *user);
+                   void *user);
 int pwrdm_for_each_nolock(int (*fn)(struct powerdomain *pwrdm, void *user),
-			void *user);
+                          void *user);
 
 int pwrdm_add_clkdm(struct powerdomain *pwrdm, struct clockdomain *clkdm);
 int pwrdm_del_clkdm(struct powerdomain *pwrdm, struct clockdomain *clkdm);
 int pwrdm_for_each_clkdm(struct powerdomain *pwrdm,
-			 int (*fn)(struct powerdomain *pwrdm,
-				   struct clockdomain *clkdm));
+                         int (*fn)(struct powerdomain *pwrdm,
+                                   struct clockdomain *clkdm));
 struct voltagedomain *pwrdm_get_voltdm(struct powerdomain *pwrdm);
 
 int pwrdm_get_mem_bank_count(struct powerdomain *pwrdm);

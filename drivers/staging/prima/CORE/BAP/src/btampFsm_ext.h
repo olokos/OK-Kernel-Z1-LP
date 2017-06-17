@@ -38,8 +38,7 @@
 #define __BTAMPFSM_EXT_H__
 
 /* Events that can be sent to the state-machine */
-typedef enum
-{
+typedef enum {
     eWLAN_BAP_TIMER_CONNECT_ACCEPT_TIMEOUT=0U,
     eWLAN_BAP_MAC_CONNECT_COMPLETED
     ,

@@ -244,92 +244,92 @@ extern char spider_net_driver_name[];
 /* SPIDER_NET_GHIINT0STS bits, in reverse order so that they can be used
  * with 1 << SPIDER_NET_... */
 enum spider_net_int0_status {
-	SPIDER_NET_GPHYINT = 0,
-	SPIDER_NET_GMAC2INT,
-	SPIDER_NET_GMAC1INT,
-	SPIDER_NET_GIPSINT,
-	SPIDER_NET_GFIFOINT,
-	SPIDER_NET_GDMACINT,
-	SPIDER_NET_GSYSINT,
-	SPIDER_NET_GPWOPCMPINT,
-	SPIDER_NET_GPROPCMPINT,
-	SPIDER_NET_GPWFFINT,
-	SPIDER_NET_GRMDADRINT,
-	SPIDER_NET_GRMARPINT,
-	SPIDER_NET_GRMMPINT,
-	SPIDER_NET_GDTDEN0INT,
-	SPIDER_NET_GDDDEN0INT,
-	SPIDER_NET_GDCDEN0INT,
-	SPIDER_NET_GDBDEN0INT,
-	SPIDER_NET_GDADEN0INT,
-	SPIDER_NET_GDTFDCINT,
-	SPIDER_NET_GDDFDCINT,
-	SPIDER_NET_GDCFDCINT,
-	SPIDER_NET_GDBFDCINT,
-	SPIDER_NET_GDAFDCINT,
-	SPIDER_NET_GTTEDINT,
-	SPIDER_NET_GDTDCEINT,
-	SPIDER_NET_GRFDNMINT,
-	SPIDER_NET_GRFCNMINT,
-	SPIDER_NET_GRFBNMINT,
-	SPIDER_NET_GRFANMINT,
-	SPIDER_NET_GRFNMINT,
-	SPIDER_NET_G1TMCNTINT,
-	SPIDER_NET_GFREECNTINT
+    SPIDER_NET_GPHYINT = 0,
+    SPIDER_NET_GMAC2INT,
+    SPIDER_NET_GMAC1INT,
+    SPIDER_NET_GIPSINT,
+    SPIDER_NET_GFIFOINT,
+    SPIDER_NET_GDMACINT,
+    SPIDER_NET_GSYSINT,
+    SPIDER_NET_GPWOPCMPINT,
+    SPIDER_NET_GPROPCMPINT,
+    SPIDER_NET_GPWFFINT,
+    SPIDER_NET_GRMDADRINT,
+    SPIDER_NET_GRMARPINT,
+    SPIDER_NET_GRMMPINT,
+    SPIDER_NET_GDTDEN0INT,
+    SPIDER_NET_GDDDEN0INT,
+    SPIDER_NET_GDCDEN0INT,
+    SPIDER_NET_GDBDEN0INT,
+    SPIDER_NET_GDADEN0INT,
+    SPIDER_NET_GDTFDCINT,
+    SPIDER_NET_GDDFDCINT,
+    SPIDER_NET_GDCFDCINT,
+    SPIDER_NET_GDBFDCINT,
+    SPIDER_NET_GDAFDCINT,
+    SPIDER_NET_GTTEDINT,
+    SPIDER_NET_GDTDCEINT,
+    SPIDER_NET_GRFDNMINT,
+    SPIDER_NET_GRFCNMINT,
+    SPIDER_NET_GRFBNMINT,
+    SPIDER_NET_GRFANMINT,
+    SPIDER_NET_GRFNMINT,
+    SPIDER_NET_G1TMCNTINT,
+    SPIDER_NET_GFREECNTINT
 };
 /* GHIINT1STS bits */
 enum spider_net_int1_status {
-	SPIDER_NET_GTMFLLINT = 0,
-	SPIDER_NET_GRMFLLINT,
-	SPIDER_NET_GTMSHTINT,
-	SPIDER_NET_GDTINVDINT,
-	SPIDER_NET_GRFDFLLINT,
-	SPIDER_NET_GDDDCEINT,
-	SPIDER_NET_GDDINVDINT,
-	SPIDER_NET_GRFCFLLINT,
-	SPIDER_NET_GDCDCEINT,
-	SPIDER_NET_GDCINVDINT,
-	SPIDER_NET_GRFBFLLINT,
-	SPIDER_NET_GDBDCEINT,
-	SPIDER_NET_GDBINVDINT,
-	SPIDER_NET_GRFAFLLINT,
-	SPIDER_NET_GDADCEINT,
-	SPIDER_NET_GDAINVDINT,
-	SPIDER_NET_GDTRSERINT,
-	SPIDER_NET_GDDRSERINT,
-	SPIDER_NET_GDCRSERINT,
-	SPIDER_NET_GDBRSERINT,
-	SPIDER_NET_GDARSERINT,
-	SPIDER_NET_GDSERINT,
-	SPIDER_NET_GDTPTERINT,
-	SPIDER_NET_GDDPTERINT,
-	SPIDER_NET_GDCPTERINT,
-	SPIDER_NET_GDBPTERINT,
-	SPIDER_NET_GDAPTERINT
+    SPIDER_NET_GTMFLLINT = 0,
+    SPIDER_NET_GRMFLLINT,
+    SPIDER_NET_GTMSHTINT,
+    SPIDER_NET_GDTINVDINT,
+    SPIDER_NET_GRFDFLLINT,
+    SPIDER_NET_GDDDCEINT,
+    SPIDER_NET_GDDINVDINT,
+    SPIDER_NET_GRFCFLLINT,
+    SPIDER_NET_GDCDCEINT,
+    SPIDER_NET_GDCINVDINT,
+    SPIDER_NET_GRFBFLLINT,
+    SPIDER_NET_GDBDCEINT,
+    SPIDER_NET_GDBINVDINT,
+    SPIDER_NET_GRFAFLLINT,
+    SPIDER_NET_GDADCEINT,
+    SPIDER_NET_GDAINVDINT,
+    SPIDER_NET_GDTRSERINT,
+    SPIDER_NET_GDDRSERINT,
+    SPIDER_NET_GDCRSERINT,
+    SPIDER_NET_GDBRSERINT,
+    SPIDER_NET_GDARSERINT,
+    SPIDER_NET_GDSERINT,
+    SPIDER_NET_GDTPTERINT,
+    SPIDER_NET_GDDPTERINT,
+    SPIDER_NET_GDCPTERINT,
+    SPIDER_NET_GDBPTERINT,
+    SPIDER_NET_GDAPTERINT
 };
 /* GHIINT2STS bits */
 enum spider_net_int2_status {
-	SPIDER_NET_GPROPERINT = 0,
-	SPIDER_NET_GMCTCRSNGINT,
-	SPIDER_NET_GMCTLCOLINT,
-	SPIDER_NET_GMCTTMOTINT,
-	SPIDER_NET_GMCRCAERINT,
-	SPIDER_NET_GMCRCALERINT,
-	SPIDER_NET_GMCRALNERINT,
-	SPIDER_NET_GMCROVRINT,
-	SPIDER_NET_GMCRRNTINT,
-	SPIDER_NET_GMCRRXERINT,
-	SPIDER_NET_GTITCSERINT,
-	SPIDER_NET_GTIFMTERINT,
-	SPIDER_NET_GTIPKTRVKINT,
-	SPIDER_NET_GTISPINGINT,
-	SPIDER_NET_GTISADNGINT,
-	SPIDER_NET_GTISPDNGINT,
-	SPIDER_NET_GRIFMTERINT,
-	SPIDER_NET_GRIPKTRVKINT,
-	SPIDER_NET_GRISPINGINT,
-	SPIDER_NET_GRISADNGINT,
-	SPIDER_NET_GRISPDNGINT
+    SPIDER_NET_GPROPERINT = 0,
+    SPIDER_NET_GMCTCRSNGINT,
+    SPIDER_NET_GMCTLCOLINT,
+    SPIDER_NET_GMCTTMOTINT,
+    SPIDER_NET_GMCRCAERINT,
+    SPIDER_NET_GMCRCALERINT,
+    SPIDER_NET_GMCRALNERINT,
+    SPIDER_NET_GMCROVRINT,
+    SPIDER_NET_GMCRRNTINT,
+    SPIDER_NET_GMCRRXERINT,
+    SPIDER_NET_GTITCSERINT,
+    SPIDER_NET_GTIFMTERINT,
+    SPIDER_NET_GTIPKTRVKINT,
+    SPIDER_NET_GTISPINGINT,
+    SPIDER_NET_GTISADNGINT,
+    SPIDER_NET_GTISPDNGINT,
+    SPIDER_NET_GRIFMTERINT,
+    SPIDER_NET_GRIPKTRVKINT,
+    SPIDER_NET_GRISPINGINT,
+    SPIDER_NET_GRISADNGINT,
+    SPIDER_NET_GRISPDNGINT
 };
 
 #define SPIDER_NET_TXINT	(1 << SPIDER_NET_GDTFDCINT)
@@ -384,32 +384,32 @@ enum spider_net_int2_status {
 
 /* Descriptor, as defined by the hardware */
 struct spider_net_hw_descr {
-	u32 buf_addr;
-	u32 buf_size;
-	u32 next_descr_addr;
-	u32 dmac_cmd_status;
-	u32 result_size;
-	u32 valid_size;	/* all zeroes for tx */
-	u32 data_status;
-	u32 data_error;	/* all zeroes for tx */
+    u32 buf_addr;
+    u32 buf_size;
+    u32 next_descr_addr;
+    u32 dmac_cmd_status;
+    u32 result_size;
+    u32 valid_size;	/* all zeroes for tx */
+    u32 data_status;
+    u32 data_error;	/* all zeroes for tx */
 } __attribute__((aligned(32)));
 
 struct spider_net_descr {
-	struct spider_net_hw_descr *hwdescr;
-	struct sk_buff *skb;
-	u32 bus_addr;
-	struct spider_net_descr *next;
-	struct spider_net_descr *prev;
+    struct spider_net_hw_descr *hwdescr;
+    struct sk_buff *skb;
+    u32 bus_addr;
+    struct spider_net_descr *next;
+    struct spider_net_descr *prev;
 };
 
 struct spider_net_descr_chain {
-	spinlock_t lock;
-	struct spider_net_descr *head;
-	struct spider_net_descr *tail;
-	struct spider_net_descr *ring;
-	int num_desc;
-	struct spider_net_hw_descr *hwring;
-	dma_addr_t dma_addr;
+    spinlock_t lock;
+    struct spider_net_descr *head;
+    struct spider_net_descr *tail;
+    struct spider_net_descr *ring;
+    int num_desc;
+    struct spider_net_hw_descr *hwring;
+    dma_addr_t dma_addr;
 };
 
 /* descriptor data_status bits */
@@ -446,44 +446,44 @@ struct spider_net_descr_chain {
 					  NETIF_MSG_WOL )
 
 struct spider_net_extra_stats {
-	unsigned long rx_desc_error;
-	unsigned long tx_timeouts;
-	unsigned long alloc_rx_skb_error;
-	unsigned long rx_iommu_map_error;
-	unsigned long tx_iommu_map_error;
-	unsigned long rx_desc_unk_state;
+    unsigned long rx_desc_error;
+    unsigned long tx_timeouts;
+    unsigned long alloc_rx_skb_error;
+    unsigned long rx_iommu_map_error;
+    unsigned long tx_iommu_map_error;
+    unsigned long rx_desc_unk_state;
 };
 
 struct spider_net_card {
-	struct net_device *netdev;
-	struct pci_dev *pdev;
-	struct mii_phy phy;
+    struct net_device *netdev;
+    struct pci_dev *pdev;
+    struct mii_phy phy;
 
-	struct napi_struct napi;
+    struct napi_struct napi;
 
-	int medium;
+    int medium;
 
-	void __iomem *regs;
+    void __iomem *regs;
 
-	struct spider_net_descr_chain tx_chain;
-	struct spider_net_descr_chain rx_chain;
-	struct spider_net_descr *low_watermark;
+    struct spider_net_descr_chain tx_chain;
+    struct spider_net_descr_chain rx_chain;
+    struct spider_net_descr *low_watermark;
 
-	int aneg_count;
-	struct timer_list aneg_timer;
-	struct timer_list tx_timer;
-	struct work_struct tx_timeout_task;
-	atomic_t tx_timeout_task_counter;
-	wait_queue_head_t waitq;
-	int num_rx_ints;
-	int ignore_rx_ramfull;
+    int aneg_count;
+    struct timer_list aneg_timer;
+    struct timer_list tx_timer;
+    struct work_struct tx_timeout_task;
+    atomic_t tx_timeout_task_counter;
+    wait_queue_head_t waitq;
+    int num_rx_ints;
+    int ignore_rx_ramfull;
 
-	/* for ethtool */
-	int msg_enable;
-	struct spider_net_extra_stats spider_stats;
+    /* for ethtool */
+    int msg_enable;
+    struct spider_net_extra_stats spider_stats;
 
-	/* Must be last item in struct */
-	struct spider_net_descr darray[0];
+    /* Must be last item in struct */
+    struct spider_net_descr darray[0];
 };
 
 #endif

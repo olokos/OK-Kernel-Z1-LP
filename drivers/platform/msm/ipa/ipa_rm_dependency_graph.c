@@ -14,15 +14,14 @@
 #include "ipa_rm_dependency_graph.h"
 #include "ipa_rm_i.h"
 
-static int ipa_rm_dep_get_index(enum ipa_rm_resource_name resource_name)
-{
-	int resource_index = IPA_RM_INDEX_INVALID;
-	if (IPA_RM_RESORCE_IS_PROD(resource_name))
-		resource_index = ipa_rm_prod_index(resource_name);
-	else if (IPA_RM_RESORCE_IS_CONS(resource_name))
-		resource_index = ipa_rm_cons_index(resource_name);
+static int ipa_rm_dep_get_index(enum ipa_rm_resource_name resource_name) {
+    int resource_index = IPA_RM_INDEX_INVALID;
+    if (IPA_RM_RESORCE_IS_PROD(resource_name))
+        resource_index = ipa_rm_prod_index(resource_name);
+    else if (IPA_RM_RESORCE_IS_CONS(resource_name))
+        resource_index = ipa_rm_cons_index(resource_name);
 
-	return resource_index;
+    return resource_index;
 }
 
 /**
@@ -31,16 +30,15 @@ static int ipa_rm_dep_get_index(enum ipa_rm_resource_name resource_name)
  *
  * Returns: dependency graph on success, NULL on failure
  */
-int  ipa_rm_dep_graph_create(struct ipa_rm_dep_graph **dep_graph)
-{
-	int result = 0;
-	*dep_graph = kzalloc(sizeof(**dep_graph), GFP_KERNEL);
-	if (!*dep_graph) {
-		result = -ENOMEM;
-		goto bail;
-	}
+int  ipa_rm_dep_graph_create(struct ipa_rm_dep_graph **dep_graph) {
+    int result = 0;
+    *dep_graph = kzalloc(sizeof(**dep_graph), GFP_KERNEL);
+    if (!*dep_graph) {
+        result = -ENOMEM;
+        goto bail;
+    }
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -49,16 +47,15 @@ bail:
  *
  * Frees all resources.
  */
-void ipa_rm_dep_graph_delete(struct ipa_rm_dep_graph *graph)
-{
-	int resource_index;
-	if (!graph)
-		return;
-	for (resource_index = 0;
-			resource_index < IPA_RM_RESOURCE_MAX;
-			resource_index++)
-		kfree(graph->resource_table[resource_index]);
-	memset(graph->resource_table, 0, sizeof(graph->resource_table));
+void ipa_rm_dep_graph_delete(struct ipa_rm_dep_graph *graph) {
+    int resource_index;
+    if (!graph)
+        return;
+    for (resource_index = 0;
+            resource_index < IPA_RM_RESOURCE_MAX;
+            resource_index++)
+        kfree(graph->resource_table[resource_index]);
+    memset(graph->resource_table, 0, sizeof(graph->resource_table));
 }
 
 /**
@@ -70,29 +67,28 @@ void ipa_rm_dep_graph_delete(struct ipa_rm_dep_graph *graph)
  * Returns: 0 on success, negative on failure
  */
 int ipa_rm_dep_graph_get_resource(
-				struct ipa_rm_dep_graph *graph,
-				enum ipa_rm_resource_name resource_name,
-				struct ipa_rm_resource **resource)
-{
-	int result;
-	int resource_index;
-	if (!graph) {
-		result = -EINVAL;
-		goto bail;
-	}
-	resource_index = ipa_rm_dep_get_index(resource_name);
-	if (resource_index == IPA_RM_INDEX_INVALID) {
-		result = -EINVAL;
-		goto bail;
-	}
-	*resource = graph->resource_table[resource_index];
-	if (!*resource) {
-		result = -EINVAL;
-		goto bail;
-	}
-	result = 0;
+    struct ipa_rm_dep_graph *graph,
+    enum ipa_rm_resource_name resource_name,
+    struct ipa_rm_resource **resource) {
+    int result;
+    int resource_index;
+    if (!graph) {
+        result = -EINVAL;
+        goto bail;
+    }
+    resource_index = ipa_rm_dep_get_index(resource_name);
+    if (resource_index == IPA_RM_INDEX_INVALID) {
+        result = -EINVAL;
+        goto bail;
+    }
+    *resource = graph->resource_table[resource_index];
+    if (!*resource) {
+        result = -EINVAL;
+        goto bail;
+    }
+    result = 0;
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -103,23 +99,22 @@ bail:
  * Returns: 0 on success, negative on failure
  */
 int ipa_rm_dep_graph_add(struct ipa_rm_dep_graph *graph,
-			 struct ipa_rm_resource *resource)
-{
-	int result = 0;
-	int resource_index;
+                         struct ipa_rm_resource *resource) {
+    int result = 0;
+    int resource_index;
 
-	if (!graph || !resource) {
-		result = -EINVAL;
-		goto bail;
-	}
-	resource_index = ipa_rm_dep_get_index(resource->name);
-	if (resource_index == IPA_RM_INDEX_INVALID) {
-		result = -EINVAL;
-		goto bail;
-	}
-	graph->resource_table[resource_index] = resource;
+    if (!graph || !resource) {
+        result = -EINVAL;
+        goto bail;
+    }
+    resource_index = ipa_rm_dep_get_index(resource->name);
+    if (resource_index == IPA_RM_INDEX_INVALID) {
+        result = -EINVAL;
+        goto bail;
+    }
+    graph->resource_table[resource_index] = resource;
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -130,13 +125,12 @@ bail:
  * Returns: 0 on success, negative on failure
  */
 int ipa_rm_dep_graph_remove(struct ipa_rm_dep_graph *graph,
-		enum ipa_rm_resource_name resource_name)
-{
-	if (!graph)
-		return -EINVAL;
+                            enum ipa_rm_resource_name resource_name) {
+    if (!graph)
+        return -EINVAL;
 
-	graph->resource_table[resource_name] = NULL;
-	return 0;
+    graph->resource_table[resource_name] = NULL;
+    return 0;
 }
 
 /**
@@ -149,33 +143,32 @@ int ipa_rm_dep_graph_remove(struct ipa_rm_dep_graph *graph,
  * Returns: 0 on success, negative on failure
  */
 int ipa_rm_dep_graph_add_dependency(struct ipa_rm_dep_graph *graph,
-				    enum ipa_rm_resource_name resource_name,
-				    enum ipa_rm_resource_name depends_on_name)
-{
-	struct ipa_rm_resource *dependant = NULL;
-	struct ipa_rm_resource *dependency = NULL;
-	int result;
-	if (!graph ||
-		!IPA_RM_RESORCE_IS_PROD(resource_name) ||
-		!IPA_RM_RESORCE_IS_CONS(depends_on_name)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	if (ipa_rm_dep_graph_get_resource(graph,
-					  resource_name,
-					  &dependant)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	if (ipa_rm_dep_graph_get_resource(graph,
-					depends_on_name,
-					  &dependency)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	result = ipa_rm_resource_add_dependency(dependant, dependency);
+                                    enum ipa_rm_resource_name resource_name,
+                                    enum ipa_rm_resource_name depends_on_name) {
+    struct ipa_rm_resource *dependant = NULL;
+    struct ipa_rm_resource *dependency = NULL;
+    int result;
+    if (!graph ||
+            !IPA_RM_RESORCE_IS_PROD(resource_name) ||
+            !IPA_RM_RESORCE_IS_CONS(depends_on_name)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    if (ipa_rm_dep_graph_get_resource(graph,
+                                      resource_name,
+                                      &dependant)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    if (ipa_rm_dep_graph_get_resource(graph,
+                                      depends_on_name,
+                                      &dependency)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    result = ipa_rm_resource_add_dependency(dependant, dependency);
 bail:
-	return result;
+    return result;
 }
 
 /**
@@ -189,31 +182,30 @@ bail:
  *
  */
 int ipa_rm_dep_graph_delete_dependency(struct ipa_rm_dep_graph *graph,
-				enum ipa_rm_resource_name resource_name,
-				enum ipa_rm_resource_name depends_on_name)
-{
-	struct ipa_rm_resource *dependant = NULL;
-	struct ipa_rm_resource *dependency = NULL;
-	int result;
-	if (!graph ||
-		!IPA_RM_RESORCE_IS_PROD(resource_name) ||
-		!IPA_RM_RESORCE_IS_CONS(depends_on_name)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	if (ipa_rm_dep_graph_get_resource(graph,
-					  resource_name,
-					  &dependant)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	if (ipa_rm_dep_graph_get_resource(graph,
-					  depends_on_name,
-					  &dependency)) {
-		result = -EINVAL;
-		goto bail;
-	}
-	result = ipa_rm_resource_delete_dependency(dependant, dependency);
+                                       enum ipa_rm_resource_name resource_name,
+                                       enum ipa_rm_resource_name depends_on_name) {
+    struct ipa_rm_resource *dependant = NULL;
+    struct ipa_rm_resource *dependency = NULL;
+    int result;
+    if (!graph ||
+            !IPA_RM_RESORCE_IS_PROD(resource_name) ||
+            !IPA_RM_RESORCE_IS_CONS(depends_on_name)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    if (ipa_rm_dep_graph_get_resource(graph,
+                                      resource_name,
+                                      &dependant)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    if (ipa_rm_dep_graph_get_resource(graph,
+                                      depends_on_name,
+                                      &dependency)) {
+        result = -EINVAL;
+        goto bail;
+    }
+    result = ipa_rm_resource_delete_dependency(dependant, dependency);
 bail:
-	return result;
+    return result;
 }

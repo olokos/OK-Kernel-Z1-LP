@@ -30,125 +30,125 @@
  * RX crypto status
  */
 enum rx_crypto {
-	RX_CRYPTO_SUCCESS = 0,
-	RX_CRYPTO_FAIL_ICV = 1,
-	RX_CRYPTO_FAIL_MIC = 2,
-	RX_CRYPTO_FAIL_KEY = 3,
+    RX_CRYPTO_SUCCESS = 0,
+    RX_CRYPTO_FAIL_ICV = 1,
+    RX_CRYPTO_FAIL_MIC = 2,
+    RX_CRYPTO_FAIL_KEY = 3,
 };
 
 /*
  * Antenna values
  */
 enum antenna {
-	ANTENNA_SW_DIVERSITY = 0,
-	ANTENNA_A = 1,
-	ANTENNA_B = 2,
-	ANTENNA_HW_DIVERSITY = 3,
+    ANTENNA_SW_DIVERSITY = 0,
+    ANTENNA_A = 1,
+    ANTENNA_B = 2,
+    ANTENNA_HW_DIVERSITY = 3,
 };
 
 /*
  * Led mode values.
  */
 enum led_mode {
-	LED_MODE_DEFAULT = 0,
-	LED_MODE_TXRX_ACTIVITY = 1,
-	LED_MODE_SIGNAL_STRENGTH = 2,
-	LED_MODE_ASUS = 3,
-	LED_MODE_ALPHA = 4,
+    LED_MODE_DEFAULT = 0,
+    LED_MODE_TXRX_ACTIVITY = 1,
+    LED_MODE_SIGNAL_STRENGTH = 2,
+    LED_MODE_ASUS = 3,
+    LED_MODE_ALPHA = 4,
 };
 
 /*
  * TSF sync values
  */
 enum tsf_sync {
-	TSF_SYNC_NONE = 0,
-	TSF_SYNC_INFRA = 1,
-	TSF_SYNC_ADHOC = 2,
-	TSF_SYNC_AP_NONE = 3,
+    TSF_SYNC_NONE = 0,
+    TSF_SYNC_INFRA = 1,
+    TSF_SYNC_ADHOC = 2,
+    TSF_SYNC_AP_NONE = 3,
 };
 
 /*
  * Device states
  */
 enum dev_state {
-	STATE_DEEP_SLEEP = 0,
-	STATE_SLEEP = 1,
-	STATE_STANDBY = 2,
-	STATE_AWAKE = 3,
+    STATE_DEEP_SLEEP = 0,
+    STATE_SLEEP = 1,
+    STATE_STANDBY = 2,
+    STATE_AWAKE = 3,
 
-/*
- * Additional device states, these values are
- * not strict since they are not directly passed
- * into the device.
- */
-	STATE_RADIO_ON,
-	STATE_RADIO_OFF,
-	STATE_RADIO_IRQ_ON,
-	STATE_RADIO_IRQ_OFF,
+    /*
+     * Additional device states, these values are
+     * not strict since they are not directly passed
+     * into the device.
+     */
+    STATE_RADIO_ON,
+    STATE_RADIO_OFF,
+    STATE_RADIO_IRQ_ON,
+    STATE_RADIO_IRQ_OFF,
 };
 
 /*
  * IFS backoff values
  */
 enum ifs {
-	IFS_BACKOFF = 0,
-	IFS_SIFS = 1,
-	IFS_NEW_BACKOFF = 2,
-	IFS_NONE = 3,
+    IFS_BACKOFF = 0,
+    IFS_SIFS = 1,
+    IFS_NEW_BACKOFF = 2,
+    IFS_NONE = 3,
 };
 
 /*
  * IFS backoff values for HT devices
  */
 enum txop {
-	TXOP_HTTXOP = 0,
-	TXOP_PIFS = 1,
-	TXOP_SIFS = 2,
-	TXOP_BACKOFF = 3,
+    TXOP_HTTXOP = 0,
+    TXOP_PIFS = 1,
+    TXOP_SIFS = 2,
+    TXOP_BACKOFF = 3,
 };
 
 /*
  * Cipher types for hardware encryption
  */
 enum cipher {
-	CIPHER_NONE = 0,
-	CIPHER_WEP64 = 1,
-	CIPHER_WEP128 = 2,
-	CIPHER_TKIP = 3,
-	CIPHER_AES = 4,
-/*
- * The following fields were added by rt61pci and rt73usb.
- */
-	CIPHER_CKIP64 = 5,
-	CIPHER_CKIP128 = 6,
-	CIPHER_TKIP_NO_MIC = 7, /* Don't send to device */
+    CIPHER_NONE = 0,
+    CIPHER_WEP64 = 1,
+    CIPHER_WEP128 = 2,
+    CIPHER_TKIP = 3,
+    CIPHER_AES = 4,
+    /*
+     * The following fields were added by rt61pci and rt73usb.
+     */
+    CIPHER_CKIP64 = 5,
+    CIPHER_CKIP128 = 6,
+    CIPHER_TKIP_NO_MIC = 7, /* Don't send to device */
 
-/*
- * Max cipher type.
- * Note that CIPHER_NONE isn't counted, and CKIP64 and CKIP128
- * are excluded due to limitations in mac80211.
- */
-	CIPHER_MAX = 4,
+    /*
+     * Max cipher type.
+     * Note that CIPHER_NONE isn't counted, and CKIP64 and CKIP128
+     * are excluded due to limitations in mac80211.
+     */
+    CIPHER_MAX = 4,
 };
 
 /*
  * Rate modulations
  */
 enum rate_modulation {
-	RATE_MODE_CCK = 0,
-	RATE_MODE_OFDM = 1,
-	RATE_MODE_HT_MIX = 2,
-	RATE_MODE_HT_GREENFIELD = 3,
+    RATE_MODE_CCK = 0,
+    RATE_MODE_OFDM = 1,
+    RATE_MODE_HT_MIX = 2,
+    RATE_MODE_HT_GREENFIELD = 3,
 };
 
 /*
  * Firmware validation error codes
  */
 enum firmware_errors {
-	FW_OK,
-	FW_BAD_CRC,
-	FW_BAD_LENGTH,
-	FW_BAD_VERSION,
+    FW_OK,
+    FW_BAD_CRC,
+    FW_BAD_LENGTH,
+    FW_BAD_VERSION,
 };
 
 /*
@@ -158,18 +158,18 @@ enum firmware_errors {
  * inside the register while making sure the process remains byte order safe.
  */
 struct rt2x00_field8 {
-	u8 bit_offset;
-	u8 bit_mask;
+    u8 bit_offset;
+    u8 bit_mask;
 };
 
 struct rt2x00_field16 {
-	u16 bit_offset;
-	u16 bit_mask;
+    u16 bit_offset;
+    u16 bit_mask;
 };
 
 struct rt2x00_field32 {
-	u32 bit_offset;
-	u32 bit_mask;
+    u32 bit_offset;
+    u32 bit_mask;
 };
 
 /*

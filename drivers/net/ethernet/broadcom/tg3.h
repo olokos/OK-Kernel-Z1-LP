@@ -2413,10 +2413,10 @@
  * TG3_BDINFO_MAXLEN_FLAGS of all unused SEND_RCB indices.
  */
 struct tg3_tx_buffer_desc {
-	u32				addr_hi;
-	u32				addr_lo;
+    u32				addr_hi;
+    u32				addr_lo;
 
-	u32				len_flags;
+    u32				len_flags;
 #define TXD_FLAG_TCPUDP_CSUM		0x0001
 #define TXD_FLAG_IP_CSUM		0x0002
 #define TXD_FLAG_END			0x0004
@@ -2432,7 +2432,7 @@ struct tg3_tx_buffer_desc {
 #define TXD_FLAG_NO_CRC			0x8000
 #define TXD_LEN_SHIFT			16
 
-	u32				vlan_tag;
+    u32				vlan_tag;
 #define TXD_VLAN_TAG_SHIFT		0
 #define TXD_MSS_SHIFT			16
 };
@@ -2443,16 +2443,16 @@ struct tg3_tx_buffer_desc {
 #define TXD_SIZE			0x10UL
 
 struct tg3_rx_buffer_desc {
-	u32				addr_hi;
-	u32				addr_lo;
+    u32				addr_hi;
+    u32				addr_lo;
 
-	u32				idx_len;
+    u32				idx_len;
 #define RXD_IDX_MASK	0xffff0000
 #define RXD_IDX_SHIFT	16
 #define RXD_LEN_MASK	0x0000ffff
 #define RXD_LEN_SHIFT	0
 
-	u32				type_flags;
+    u32				type_flags;
 #define RXD_TYPE_SHIFT	16
 #define RXD_FLAGS_SHIFT	0
 
@@ -2465,13 +2465,13 @@ struct tg3_rx_buffer_desc {
 #define RXD_FLAG_TCPUDP_CSUM		0x2000
 #define RXD_FLAG_IS_TCP			0x4000
 
-	u32				ip_tcp_csum;
+    u32				ip_tcp_csum;
 #define RXD_IPCSUM_MASK		0xffff0000
 #define RXD_IPCSUM_SHIFT	16
 #define RXD_TCPCSUM_MASK	0x0000ffff
 #define RXD_TCPCSUM_SHIFT	0
 
-	u32				err_vlan;
+    u32				err_vlan;
 
 #define RXD_VLAN_MASK			0x0000ffff
 
@@ -2486,8 +2486,8 @@ struct tg3_rx_buffer_desc {
 #define RXD_ERR_HUGE_FRAME		0x01000000
 #define RXD_ERR_MASK			0xffff0000
 
-	u32				reserved;
-	u32				opaque;
+    u32				reserved;
+    u32				opaque;
 #define RXD_OPAQUE_INDEX_MASK		0x0000ffff
 #define RXD_OPAQUE_INDEX_SHIFT		0
 #define RXD_OPAQUE_RING_STD		0x00010000
@@ -2497,13 +2497,13 @@ struct tg3_rx_buffer_desc {
 };
 
 struct tg3_ext_rx_buffer_desc {
-	struct {
-		u32			addr_hi;
-		u32			addr_lo;
-	}				addrlist[3];
-	u32				len2_len1;
-	u32				resv_len3;
-	struct tg3_rx_buffer_desc	std;
+    struct {
+        u32			addr_hi;
+        u32			addr_lo;
+    }				addrlist[3];
+    u32				len2_len1;
+    u32				resv_len3;
+    struct tg3_rx_buffer_desc	std;
 };
 
 /* We only use this when testing out the DMA engine
@@ -2511,164 +2511,164 @@ struct tg3_ext_rx_buffer_desc {
  * descriptors used by the chip at NIC_SRAM_DMA_DESCS.
  */
 struct tg3_internal_buffer_desc {
-	u32				addr_hi;
-	u32				addr_lo;
-	u32				nic_mbuf;
-	/* XXX FIX THIS */
+    u32				addr_hi;
+    u32				addr_lo;
+    u32				nic_mbuf;
+    /* XXX FIX THIS */
 #ifdef __BIG_ENDIAN
-	u16				cqid_sqid;
-	u16				len;
+    u16				cqid_sqid;
+    u16				len;
 #else
-	u16				len;
-	u16				cqid_sqid;
+    u16				len;
+    u16				cqid_sqid;
 #endif
-	u32				flags;
-	u32				__cookie1;
-	u32				__cookie2;
-	u32				__cookie3;
+    u32				flags;
+    u32				__cookie1;
+    u32				__cookie2;
+    u32				__cookie3;
 };
 
 #define TG3_HW_STATUS_SIZE		0x50
 struct tg3_hw_status {
-	u32				status;
+    u32				status;
 #define SD_STATUS_UPDATED		0x00000001
 #define SD_STATUS_LINK_CHG		0x00000002
 #define SD_STATUS_ERROR			0x00000004
 
-	u32				status_tag;
+    u32				status_tag;
 
 #ifdef __BIG_ENDIAN
-	u16				rx_consumer;
-	u16				rx_jumbo_consumer;
+    u16				rx_consumer;
+    u16				rx_jumbo_consumer;
 #else
-	u16				rx_jumbo_consumer;
-	u16				rx_consumer;
+    u16				rx_jumbo_consumer;
+    u16				rx_consumer;
 #endif
 
 #ifdef __BIG_ENDIAN
-	u16				reserved;
-	u16				rx_mini_consumer;
+    u16				reserved;
+    u16				rx_mini_consumer;
 #else
-	u16				rx_mini_consumer;
-	u16				reserved;
+    u16				rx_mini_consumer;
+    u16				reserved;
 #endif
-	struct {
+    struct {
 #ifdef __BIG_ENDIAN
-		u16			tx_consumer;
-		u16			rx_producer;
+        u16			tx_consumer;
+        u16			rx_producer;
 #else
-		u16			rx_producer;
-		u16			tx_consumer;
+        u16			rx_producer;
+        u16			tx_consumer;
 #endif
-	}				idx[16];
+    }				idx[16];
 };
 
 typedef struct {
-	u32 high, low;
+    u32 high, low;
 } tg3_stat64_t;
 
 struct tg3_hw_stats {
-	u8				__reserved0[0x400-0x300];
+    u8				__reserved0[0x400-0x300];
 
-	/* Statistics maintained by Receive MAC. */
-	tg3_stat64_t			rx_octets;
-	u64				__reserved1;
-	tg3_stat64_t			rx_fragments;
-	tg3_stat64_t			rx_ucast_packets;
-	tg3_stat64_t			rx_mcast_packets;
-	tg3_stat64_t			rx_bcast_packets;
-	tg3_stat64_t			rx_fcs_errors;
-	tg3_stat64_t			rx_align_errors;
-	tg3_stat64_t			rx_xon_pause_rcvd;
-	tg3_stat64_t			rx_xoff_pause_rcvd;
-	tg3_stat64_t			rx_mac_ctrl_rcvd;
-	tg3_stat64_t			rx_xoff_entered;
-	tg3_stat64_t			rx_frame_too_long_errors;
-	tg3_stat64_t			rx_jabbers;
-	tg3_stat64_t			rx_undersize_packets;
-	tg3_stat64_t			rx_in_length_errors;
-	tg3_stat64_t			rx_out_length_errors;
-	tg3_stat64_t			rx_64_or_less_octet_packets;
-	tg3_stat64_t			rx_65_to_127_octet_packets;
-	tg3_stat64_t			rx_128_to_255_octet_packets;
-	tg3_stat64_t			rx_256_to_511_octet_packets;
-	tg3_stat64_t			rx_512_to_1023_octet_packets;
-	tg3_stat64_t			rx_1024_to_1522_octet_packets;
-	tg3_stat64_t			rx_1523_to_2047_octet_packets;
-	tg3_stat64_t			rx_2048_to_4095_octet_packets;
-	tg3_stat64_t			rx_4096_to_8191_octet_packets;
-	tg3_stat64_t			rx_8192_to_9022_octet_packets;
+    /* Statistics maintained by Receive MAC. */
+    tg3_stat64_t			rx_octets;
+    u64				__reserved1;
+    tg3_stat64_t			rx_fragments;
+    tg3_stat64_t			rx_ucast_packets;
+    tg3_stat64_t			rx_mcast_packets;
+    tg3_stat64_t			rx_bcast_packets;
+    tg3_stat64_t			rx_fcs_errors;
+    tg3_stat64_t			rx_align_errors;
+    tg3_stat64_t			rx_xon_pause_rcvd;
+    tg3_stat64_t			rx_xoff_pause_rcvd;
+    tg3_stat64_t			rx_mac_ctrl_rcvd;
+    tg3_stat64_t			rx_xoff_entered;
+    tg3_stat64_t			rx_frame_too_long_errors;
+    tg3_stat64_t			rx_jabbers;
+    tg3_stat64_t			rx_undersize_packets;
+    tg3_stat64_t			rx_in_length_errors;
+    tg3_stat64_t			rx_out_length_errors;
+    tg3_stat64_t			rx_64_or_less_octet_packets;
+    tg3_stat64_t			rx_65_to_127_octet_packets;
+    tg3_stat64_t			rx_128_to_255_octet_packets;
+    tg3_stat64_t			rx_256_to_511_octet_packets;
+    tg3_stat64_t			rx_512_to_1023_octet_packets;
+    tg3_stat64_t			rx_1024_to_1522_octet_packets;
+    tg3_stat64_t			rx_1523_to_2047_octet_packets;
+    tg3_stat64_t			rx_2048_to_4095_octet_packets;
+    tg3_stat64_t			rx_4096_to_8191_octet_packets;
+    tg3_stat64_t			rx_8192_to_9022_octet_packets;
 
-	u64				__unused0[37];
+    u64				__unused0[37];
 
-	/* Statistics maintained by Transmit MAC. */
-	tg3_stat64_t			tx_octets;
-	u64				__reserved2;
-	tg3_stat64_t			tx_collisions;
-	tg3_stat64_t			tx_xon_sent;
-	tg3_stat64_t			tx_xoff_sent;
-	tg3_stat64_t			tx_flow_control;
-	tg3_stat64_t			tx_mac_errors;
-	tg3_stat64_t			tx_single_collisions;
-	tg3_stat64_t			tx_mult_collisions;
-	tg3_stat64_t			tx_deferred;
-	u64				__reserved3;
-	tg3_stat64_t			tx_excessive_collisions;
-	tg3_stat64_t			tx_late_collisions;
-	tg3_stat64_t			tx_collide_2times;
-	tg3_stat64_t			tx_collide_3times;
-	tg3_stat64_t			tx_collide_4times;
-	tg3_stat64_t			tx_collide_5times;
-	tg3_stat64_t			tx_collide_6times;
-	tg3_stat64_t			tx_collide_7times;
-	tg3_stat64_t			tx_collide_8times;
-	tg3_stat64_t			tx_collide_9times;
-	tg3_stat64_t			tx_collide_10times;
-	tg3_stat64_t			tx_collide_11times;
-	tg3_stat64_t			tx_collide_12times;
-	tg3_stat64_t			tx_collide_13times;
-	tg3_stat64_t			tx_collide_14times;
-	tg3_stat64_t			tx_collide_15times;
-	tg3_stat64_t			tx_ucast_packets;
-	tg3_stat64_t			tx_mcast_packets;
-	tg3_stat64_t			tx_bcast_packets;
-	tg3_stat64_t			tx_carrier_sense_errors;
-	tg3_stat64_t			tx_discards;
-	tg3_stat64_t			tx_errors;
+    /* Statistics maintained by Transmit MAC. */
+    tg3_stat64_t			tx_octets;
+    u64				__reserved2;
+    tg3_stat64_t			tx_collisions;
+    tg3_stat64_t			tx_xon_sent;
+    tg3_stat64_t			tx_xoff_sent;
+    tg3_stat64_t			tx_flow_control;
+    tg3_stat64_t			tx_mac_errors;
+    tg3_stat64_t			tx_single_collisions;
+    tg3_stat64_t			tx_mult_collisions;
+    tg3_stat64_t			tx_deferred;
+    u64				__reserved3;
+    tg3_stat64_t			tx_excessive_collisions;
+    tg3_stat64_t			tx_late_collisions;
+    tg3_stat64_t			tx_collide_2times;
+    tg3_stat64_t			tx_collide_3times;
+    tg3_stat64_t			tx_collide_4times;
+    tg3_stat64_t			tx_collide_5times;
+    tg3_stat64_t			tx_collide_6times;
+    tg3_stat64_t			tx_collide_7times;
+    tg3_stat64_t			tx_collide_8times;
+    tg3_stat64_t			tx_collide_9times;
+    tg3_stat64_t			tx_collide_10times;
+    tg3_stat64_t			tx_collide_11times;
+    tg3_stat64_t			tx_collide_12times;
+    tg3_stat64_t			tx_collide_13times;
+    tg3_stat64_t			tx_collide_14times;
+    tg3_stat64_t			tx_collide_15times;
+    tg3_stat64_t			tx_ucast_packets;
+    tg3_stat64_t			tx_mcast_packets;
+    tg3_stat64_t			tx_bcast_packets;
+    tg3_stat64_t			tx_carrier_sense_errors;
+    tg3_stat64_t			tx_discards;
+    tg3_stat64_t			tx_errors;
 
-	u64				__unused1[31];
+    u64				__unused1[31];
 
-	/* Statistics maintained by Receive List Placement. */
-	tg3_stat64_t			COS_rx_packets[16];
-	tg3_stat64_t			COS_rx_filter_dropped;
-	tg3_stat64_t			dma_writeq_full;
-	tg3_stat64_t			dma_write_prioq_full;
-	tg3_stat64_t			rxbds_empty;
-	tg3_stat64_t			rx_discards;
-	tg3_stat64_t			rx_errors;
-	tg3_stat64_t			rx_threshold_hit;
+    /* Statistics maintained by Receive List Placement. */
+    tg3_stat64_t			COS_rx_packets[16];
+    tg3_stat64_t			COS_rx_filter_dropped;
+    tg3_stat64_t			dma_writeq_full;
+    tg3_stat64_t			dma_write_prioq_full;
+    tg3_stat64_t			rxbds_empty;
+    tg3_stat64_t			rx_discards;
+    tg3_stat64_t			rx_errors;
+    tg3_stat64_t			rx_threshold_hit;
 
-	u64				__unused2[9];
+    u64				__unused2[9];
 
-	/* Statistics maintained by Send Data Initiator. */
-	tg3_stat64_t			COS_out_packets[16];
-	tg3_stat64_t			dma_readq_full;
-	tg3_stat64_t			dma_read_prioq_full;
-	tg3_stat64_t			tx_comp_queue_full;
+    /* Statistics maintained by Send Data Initiator. */
+    tg3_stat64_t			COS_out_packets[16];
+    tg3_stat64_t			dma_readq_full;
+    tg3_stat64_t			dma_read_prioq_full;
+    tg3_stat64_t			tx_comp_queue_full;
 
-	/* Statistics maintained by Host Coalescing. */
-	tg3_stat64_t			ring_set_send_prod_index;
-	tg3_stat64_t			ring_status_update;
-	tg3_stat64_t			nic_irqs;
-	tg3_stat64_t			nic_avoided_irqs;
-	tg3_stat64_t			nic_tx_threshold_hit;
+    /* Statistics maintained by Host Coalescing. */
+    tg3_stat64_t			ring_set_send_prod_index;
+    tg3_stat64_t			ring_status_update;
+    tg3_stat64_t			nic_irqs;
+    tg3_stat64_t			nic_avoided_irqs;
+    tg3_stat64_t			nic_tx_threshold_hit;
 
-	/* NOT a part of the hardware statistics block format.
-	 * These stats are here as storage for tg3_periodic_fetch_stats().
-	 */
-	tg3_stat64_t			mbuf_lwm_thresh_hit;
+    /* NOT a part of the hardware statistics block format.
+     * These stats are here as storage for tg3_periodic_fetch_stats().
+     */
+    tg3_stat64_t			mbuf_lwm_thresh_hit;
 
-	u8				__reserved4[0xb00-0x9c8];
+    u8				__reserved4[0xb00-0x9c8];
 };
 
 /* 'mapping' is superfluous as the chip does not write into
@@ -2680,397 +2680,397 @@ struct tg3_hw_stats {
  * skb are built only after Hardware filled the frame.
  */
 struct ring_info {
-	u8				*data;
-	DEFINE_DMA_UNMAP_ADDR(mapping);
+    u8				*data;
+    DEFINE_DMA_UNMAP_ADDR(mapping);
 };
 
 struct tg3_tx_ring_info {
-	struct sk_buff			*skb;
-	DEFINE_DMA_UNMAP_ADDR(mapping);
-	bool				fragmented;
+    struct sk_buff			*skb;
+    DEFINE_DMA_UNMAP_ADDR(mapping);
+    bool				fragmented;
 };
 
 struct tg3_link_config {
-	/* Describes what we're trying to get. */
-	u32				advertising;
-	u16				speed;
-	u8				duplex;
-	u8				autoneg;
-	u8				flowctrl;
+    /* Describes what we're trying to get. */
+    u32				advertising;
+    u16				speed;
+    u8				duplex;
+    u8				autoneg;
+    u8				flowctrl;
 
-	/* Describes what we actually have. */
-	u8				active_flowctrl;
+    /* Describes what we actually have. */
+    u8				active_flowctrl;
 
-	u8				active_duplex;
-	u16				active_speed;
-	u32				rmt_adv;
+    u8				active_duplex;
+    u16				active_speed;
+    u32				rmt_adv;
 };
 
 struct tg3_bufmgr_config {
-	u32		mbuf_read_dma_low_water;
-	u32		mbuf_mac_rx_low_water;
-	u32		mbuf_high_water;
+    u32		mbuf_read_dma_low_water;
+    u32		mbuf_mac_rx_low_water;
+    u32		mbuf_high_water;
 
-	u32		mbuf_read_dma_low_water_jumbo;
-	u32		mbuf_mac_rx_low_water_jumbo;
-	u32		mbuf_high_water_jumbo;
+    u32		mbuf_read_dma_low_water_jumbo;
+    u32		mbuf_mac_rx_low_water_jumbo;
+    u32		mbuf_high_water_jumbo;
 
-	u32		dma_low_water;
-	u32		dma_high_water;
+    u32		dma_low_water;
+    u32		dma_high_water;
 };
 
 struct tg3_ethtool_stats {
-	/* Statistics maintained by Receive MAC. */
-	u64		rx_octets;
-	u64		rx_fragments;
-	u64		rx_ucast_packets;
-	u64		rx_mcast_packets;
-	u64		rx_bcast_packets;
-	u64		rx_fcs_errors;
-	u64		rx_align_errors;
-	u64		rx_xon_pause_rcvd;
-	u64		rx_xoff_pause_rcvd;
-	u64		rx_mac_ctrl_rcvd;
-	u64		rx_xoff_entered;
-	u64		rx_frame_too_long_errors;
-	u64		rx_jabbers;
-	u64		rx_undersize_packets;
-	u64		rx_in_length_errors;
-	u64		rx_out_length_errors;
-	u64		rx_64_or_less_octet_packets;
-	u64		rx_65_to_127_octet_packets;
-	u64		rx_128_to_255_octet_packets;
-	u64		rx_256_to_511_octet_packets;
-	u64		rx_512_to_1023_octet_packets;
-	u64		rx_1024_to_1522_octet_packets;
-	u64		rx_1523_to_2047_octet_packets;
-	u64		rx_2048_to_4095_octet_packets;
-	u64		rx_4096_to_8191_octet_packets;
-	u64		rx_8192_to_9022_octet_packets;
+    /* Statistics maintained by Receive MAC. */
+    u64		rx_octets;
+    u64		rx_fragments;
+    u64		rx_ucast_packets;
+    u64		rx_mcast_packets;
+    u64		rx_bcast_packets;
+    u64		rx_fcs_errors;
+    u64		rx_align_errors;
+    u64		rx_xon_pause_rcvd;
+    u64		rx_xoff_pause_rcvd;
+    u64		rx_mac_ctrl_rcvd;
+    u64		rx_xoff_entered;
+    u64		rx_frame_too_long_errors;
+    u64		rx_jabbers;
+    u64		rx_undersize_packets;
+    u64		rx_in_length_errors;
+    u64		rx_out_length_errors;
+    u64		rx_64_or_less_octet_packets;
+    u64		rx_65_to_127_octet_packets;
+    u64		rx_128_to_255_octet_packets;
+    u64		rx_256_to_511_octet_packets;
+    u64		rx_512_to_1023_octet_packets;
+    u64		rx_1024_to_1522_octet_packets;
+    u64		rx_1523_to_2047_octet_packets;
+    u64		rx_2048_to_4095_octet_packets;
+    u64		rx_4096_to_8191_octet_packets;
+    u64		rx_8192_to_9022_octet_packets;
 
-	/* Statistics maintained by Transmit MAC. */
-	u64		tx_octets;
-	u64		tx_collisions;
-	u64		tx_xon_sent;
-	u64		tx_xoff_sent;
-	u64		tx_flow_control;
-	u64		tx_mac_errors;
-	u64		tx_single_collisions;
-	u64		tx_mult_collisions;
-	u64		tx_deferred;
-	u64		tx_excessive_collisions;
-	u64		tx_late_collisions;
-	u64		tx_collide_2times;
-	u64		tx_collide_3times;
-	u64		tx_collide_4times;
-	u64		tx_collide_5times;
-	u64		tx_collide_6times;
-	u64		tx_collide_7times;
-	u64		tx_collide_8times;
-	u64		tx_collide_9times;
-	u64		tx_collide_10times;
-	u64		tx_collide_11times;
-	u64		tx_collide_12times;
-	u64		tx_collide_13times;
-	u64		tx_collide_14times;
-	u64		tx_collide_15times;
-	u64		tx_ucast_packets;
-	u64		tx_mcast_packets;
-	u64		tx_bcast_packets;
-	u64		tx_carrier_sense_errors;
-	u64		tx_discards;
-	u64		tx_errors;
+    /* Statistics maintained by Transmit MAC. */
+    u64		tx_octets;
+    u64		tx_collisions;
+    u64		tx_xon_sent;
+    u64		tx_xoff_sent;
+    u64		tx_flow_control;
+    u64		tx_mac_errors;
+    u64		tx_single_collisions;
+    u64		tx_mult_collisions;
+    u64		tx_deferred;
+    u64		tx_excessive_collisions;
+    u64		tx_late_collisions;
+    u64		tx_collide_2times;
+    u64		tx_collide_3times;
+    u64		tx_collide_4times;
+    u64		tx_collide_5times;
+    u64		tx_collide_6times;
+    u64		tx_collide_7times;
+    u64		tx_collide_8times;
+    u64		tx_collide_9times;
+    u64		tx_collide_10times;
+    u64		tx_collide_11times;
+    u64		tx_collide_12times;
+    u64		tx_collide_13times;
+    u64		tx_collide_14times;
+    u64		tx_collide_15times;
+    u64		tx_ucast_packets;
+    u64		tx_mcast_packets;
+    u64		tx_bcast_packets;
+    u64		tx_carrier_sense_errors;
+    u64		tx_discards;
+    u64		tx_errors;
 
-	/* Statistics maintained by Receive List Placement. */
-	u64		dma_writeq_full;
-	u64		dma_write_prioq_full;
-	u64		rxbds_empty;
-	u64		rx_discards;
-	u64		rx_errors;
-	u64		rx_threshold_hit;
+    /* Statistics maintained by Receive List Placement. */
+    u64		dma_writeq_full;
+    u64		dma_write_prioq_full;
+    u64		rxbds_empty;
+    u64		rx_discards;
+    u64		rx_errors;
+    u64		rx_threshold_hit;
 
-	/* Statistics maintained by Send Data Initiator. */
-	u64		dma_readq_full;
-	u64		dma_read_prioq_full;
-	u64		tx_comp_queue_full;
+    /* Statistics maintained by Send Data Initiator. */
+    u64		dma_readq_full;
+    u64		dma_read_prioq_full;
+    u64		tx_comp_queue_full;
 
-	/* Statistics maintained by Host Coalescing. */
-	u64		ring_set_send_prod_index;
-	u64		ring_status_update;
-	u64		nic_irqs;
-	u64		nic_avoided_irqs;
-	u64		nic_tx_threshold_hit;
+    /* Statistics maintained by Host Coalescing. */
+    u64		ring_set_send_prod_index;
+    u64		ring_status_update;
+    u64		nic_irqs;
+    u64		nic_avoided_irqs;
+    u64		nic_tx_threshold_hit;
 
-	u64		mbuf_lwm_thresh_hit;
+    u64		mbuf_lwm_thresh_hit;
 };
 
 struct tg3_rx_prodring_set {
-	u32				rx_std_prod_idx;
-	u32				rx_std_cons_idx;
-	u32				rx_jmb_prod_idx;
-	u32				rx_jmb_cons_idx;
-	struct tg3_rx_buffer_desc	*rx_std;
-	struct tg3_ext_rx_buffer_desc	*rx_jmb;
-	struct ring_info		*rx_std_buffers;
-	struct ring_info		*rx_jmb_buffers;
-	dma_addr_t			rx_std_mapping;
-	dma_addr_t			rx_jmb_mapping;
+    u32				rx_std_prod_idx;
+    u32				rx_std_cons_idx;
+    u32				rx_jmb_prod_idx;
+    u32				rx_jmb_cons_idx;
+    struct tg3_rx_buffer_desc	*rx_std;
+    struct tg3_ext_rx_buffer_desc	*rx_jmb;
+    struct ring_info		*rx_std_buffers;
+    struct ring_info		*rx_jmb_buffers;
+    dma_addr_t			rx_std_mapping;
+    dma_addr_t			rx_jmb_mapping;
 };
 
 #define TG3_IRQ_MAX_VECS_RSS		5
 #define TG3_IRQ_MAX_VECS		TG3_IRQ_MAX_VECS_RSS
 
 struct tg3_napi {
-	struct napi_struct		napi	____cacheline_aligned;
-	struct tg3			*tp;
-	struct tg3_hw_status		*hw_status;
+    struct napi_struct		napi	____cacheline_aligned;
+    struct tg3			*tp;
+    struct tg3_hw_status		*hw_status;
 
-	u32				chk_msi_cnt;
-	u32				last_tag;
-	u32				last_irq_tag;
-	u32				int_mbox;
-	u32				coal_now;
+    u32				chk_msi_cnt;
+    u32				last_tag;
+    u32				last_irq_tag;
+    u32				int_mbox;
+    u32				coal_now;
 
-	u32				consmbox ____cacheline_aligned;
-	u32				rx_rcb_ptr;
-	u32				last_rx_cons;
-	u16				*rx_rcb_prod_idx;
-	struct tg3_rx_prodring_set	prodring;
-	struct tg3_rx_buffer_desc	*rx_rcb;
+    u32				consmbox ____cacheline_aligned;
+    u32				rx_rcb_ptr;
+    u32				last_rx_cons;
+    u16				*rx_rcb_prod_idx;
+    struct tg3_rx_prodring_set	prodring;
+    struct tg3_rx_buffer_desc	*rx_rcb;
 
-	u32				tx_prod	____cacheline_aligned;
-	u32				tx_cons;
-	u32				tx_pending;
-	u32				last_tx_cons;
-	u32				prodmbox;
-	struct tg3_tx_buffer_desc	*tx_ring;
-	struct tg3_tx_ring_info		*tx_buffers;
+    u32				tx_prod	____cacheline_aligned;
+    u32				tx_cons;
+    u32				tx_pending;
+    u32				last_tx_cons;
+    u32				prodmbox;
+    struct tg3_tx_buffer_desc	*tx_ring;
+    struct tg3_tx_ring_info		*tx_buffers;
 
-	dma_addr_t			status_mapping;
-	dma_addr_t			rx_rcb_mapping;
-	dma_addr_t			tx_desc_mapping;
+    dma_addr_t			status_mapping;
+    dma_addr_t			rx_rcb_mapping;
+    dma_addr_t			tx_desc_mapping;
 
-	char				irq_lbl[IFNAMSIZ];
-	unsigned int			irq_vec;
+    char				irq_lbl[IFNAMSIZ];
+    unsigned int			irq_vec;
 };
 
 enum TG3_FLAGS {
-	TG3_FLAG_TAGGED_STATUS = 0,
-	TG3_FLAG_TXD_MBOX_HWBUG,
-	TG3_FLAG_USE_LINKCHG_REG,
-	TG3_FLAG_ERROR_PROCESSED,
-	TG3_FLAG_ENABLE_ASF,
-	TG3_FLAG_ASPM_WORKAROUND,
-	TG3_FLAG_POLL_SERDES,
-	TG3_FLAG_MBOX_WRITE_REORDER,
-	TG3_FLAG_PCIX_TARGET_HWBUG,
-	TG3_FLAG_WOL_SPEED_100MB,
-	TG3_FLAG_WOL_ENABLE,
-	TG3_FLAG_EEPROM_WRITE_PROT,
-	TG3_FLAG_NVRAM,
-	TG3_FLAG_NVRAM_BUFFERED,
-	TG3_FLAG_SUPPORT_MSI,
-	TG3_FLAG_SUPPORT_MSIX,
-	TG3_FLAG_USING_MSI,
-	TG3_FLAG_USING_MSIX,
-	TG3_FLAG_PCIX_MODE,
-	TG3_FLAG_PCI_HIGH_SPEED,
-	TG3_FLAG_PCI_32BIT,
-	TG3_FLAG_SRAM_USE_CONFIG,
-	TG3_FLAG_TX_RECOVERY_PENDING,
-	TG3_FLAG_WOL_CAP,
-	TG3_FLAG_JUMBO_RING_ENABLE,
-	TG3_FLAG_PAUSE_AUTONEG,
-	TG3_FLAG_CPMU_PRESENT,
-	TG3_FLAG_40BIT_DMA_BUG,
-	TG3_FLAG_BROKEN_CHECKSUMS,
-	TG3_FLAG_JUMBO_CAPABLE,
-	TG3_FLAG_CHIP_RESETTING,
-	TG3_FLAG_INIT_COMPLETE,
-	TG3_FLAG_TSO_BUG,
-	TG3_FLAG_MAX_RXPEND_64,
-	TG3_FLAG_TSO_CAPABLE,
-	TG3_FLAG_PCI_EXPRESS, /* BCM5785 + pci_is_pcie() */
-	TG3_FLAG_ASF_NEW_HANDSHAKE,
-	TG3_FLAG_HW_AUTONEG,
-	TG3_FLAG_IS_NIC,
-	TG3_FLAG_FLASH,
-	TG3_FLAG_HW_TSO_1,
-	TG3_FLAG_HW_TSO_2,
-	TG3_FLAG_HW_TSO_3,
-	TG3_FLAG_ICH_WORKAROUND,
-	TG3_FLAG_1SHOT_MSI,
-	TG3_FLAG_NO_FWARE_REPORTED,
-	TG3_FLAG_NO_NVRAM_ADDR_TRANS,
-	TG3_FLAG_ENABLE_APE,
-	TG3_FLAG_PROTECTED_NVRAM,
-	TG3_FLAG_5701_DMA_BUG,
-	TG3_FLAG_USE_PHYLIB,
-	TG3_FLAG_MDIOBUS_INITED,
-	TG3_FLAG_LRG_PROD_RING_CAP,
-	TG3_FLAG_RGMII_INBAND_DISABLE,
-	TG3_FLAG_RGMII_EXT_IBND_RX_EN,
-	TG3_FLAG_RGMII_EXT_IBND_TX_EN,
-	TG3_FLAG_CLKREQ_BUG,
-	TG3_FLAG_NO_NVRAM,
-	TG3_FLAG_ENABLE_RSS,
-	TG3_FLAG_ENABLE_TSS,
-	TG3_FLAG_SHORT_DMA_BUG,
-	TG3_FLAG_USE_JUMBO_BDFLAG,
-	TG3_FLAG_L1PLLPD_EN,
-	TG3_FLAG_APE_HAS_NCSI,
-	TG3_FLAG_4K_FIFO_LIMIT,
-	TG3_FLAG_RESET_TASK_PENDING,
-	TG3_FLAG_5705_PLUS,
-	TG3_FLAG_IS_5788,
-	TG3_FLAG_5750_PLUS,
-	TG3_FLAG_5780_CLASS,
-	TG3_FLAG_5755_PLUS,
-	TG3_FLAG_57765_PLUS,
-	TG3_FLAG_57765_CLASS,
-	TG3_FLAG_5717_PLUS,
+    TG3_FLAG_TAGGED_STATUS = 0,
+    TG3_FLAG_TXD_MBOX_HWBUG,
+    TG3_FLAG_USE_LINKCHG_REG,
+    TG3_FLAG_ERROR_PROCESSED,
+    TG3_FLAG_ENABLE_ASF,
+    TG3_FLAG_ASPM_WORKAROUND,
+    TG3_FLAG_POLL_SERDES,
+    TG3_FLAG_MBOX_WRITE_REORDER,
+    TG3_FLAG_PCIX_TARGET_HWBUG,
+    TG3_FLAG_WOL_SPEED_100MB,
+    TG3_FLAG_WOL_ENABLE,
+    TG3_FLAG_EEPROM_WRITE_PROT,
+    TG3_FLAG_NVRAM,
+    TG3_FLAG_NVRAM_BUFFERED,
+    TG3_FLAG_SUPPORT_MSI,
+    TG3_FLAG_SUPPORT_MSIX,
+    TG3_FLAG_USING_MSI,
+    TG3_FLAG_USING_MSIX,
+    TG3_FLAG_PCIX_MODE,
+    TG3_FLAG_PCI_HIGH_SPEED,
+    TG3_FLAG_PCI_32BIT,
+    TG3_FLAG_SRAM_USE_CONFIG,
+    TG3_FLAG_TX_RECOVERY_PENDING,
+    TG3_FLAG_WOL_CAP,
+    TG3_FLAG_JUMBO_RING_ENABLE,
+    TG3_FLAG_PAUSE_AUTONEG,
+    TG3_FLAG_CPMU_PRESENT,
+    TG3_FLAG_40BIT_DMA_BUG,
+    TG3_FLAG_BROKEN_CHECKSUMS,
+    TG3_FLAG_JUMBO_CAPABLE,
+    TG3_FLAG_CHIP_RESETTING,
+    TG3_FLAG_INIT_COMPLETE,
+    TG3_FLAG_TSO_BUG,
+    TG3_FLAG_MAX_RXPEND_64,
+    TG3_FLAG_TSO_CAPABLE,
+    TG3_FLAG_PCI_EXPRESS, /* BCM5785 + pci_is_pcie() */
+    TG3_FLAG_ASF_NEW_HANDSHAKE,
+    TG3_FLAG_HW_AUTONEG,
+    TG3_FLAG_IS_NIC,
+    TG3_FLAG_FLASH,
+    TG3_FLAG_HW_TSO_1,
+    TG3_FLAG_HW_TSO_2,
+    TG3_FLAG_HW_TSO_3,
+    TG3_FLAG_ICH_WORKAROUND,
+    TG3_FLAG_1SHOT_MSI,
+    TG3_FLAG_NO_FWARE_REPORTED,
+    TG3_FLAG_NO_NVRAM_ADDR_TRANS,
+    TG3_FLAG_ENABLE_APE,
+    TG3_FLAG_PROTECTED_NVRAM,
+    TG3_FLAG_5701_DMA_BUG,
+    TG3_FLAG_USE_PHYLIB,
+    TG3_FLAG_MDIOBUS_INITED,
+    TG3_FLAG_LRG_PROD_RING_CAP,
+    TG3_FLAG_RGMII_INBAND_DISABLE,
+    TG3_FLAG_RGMII_EXT_IBND_RX_EN,
+    TG3_FLAG_RGMII_EXT_IBND_TX_EN,
+    TG3_FLAG_CLKREQ_BUG,
+    TG3_FLAG_NO_NVRAM,
+    TG3_FLAG_ENABLE_RSS,
+    TG3_FLAG_ENABLE_TSS,
+    TG3_FLAG_SHORT_DMA_BUG,
+    TG3_FLAG_USE_JUMBO_BDFLAG,
+    TG3_FLAG_L1PLLPD_EN,
+    TG3_FLAG_APE_HAS_NCSI,
+    TG3_FLAG_4K_FIFO_LIMIT,
+    TG3_FLAG_RESET_TASK_PENDING,
+    TG3_FLAG_5705_PLUS,
+    TG3_FLAG_IS_5788,
+    TG3_FLAG_5750_PLUS,
+    TG3_FLAG_5780_CLASS,
+    TG3_FLAG_5755_PLUS,
+    TG3_FLAG_57765_PLUS,
+    TG3_FLAG_57765_CLASS,
+    TG3_FLAG_5717_PLUS,
 
-	/* Add new flags before this comment and TG3_FLAG_NUMBER_OF_FLAGS */
-	TG3_FLAG_NUMBER_OF_FLAGS,	/* Last entry in enum TG3_FLAGS */
+    /* Add new flags before this comment and TG3_FLAG_NUMBER_OF_FLAGS */
+    TG3_FLAG_NUMBER_OF_FLAGS,	/* Last entry in enum TG3_FLAGS */
 };
 
 struct tg3 {
-	/* begin "general, frequently-used members" cacheline section */
+    /* begin "general, frequently-used members" cacheline section */
 
-	/* If the IRQ handler (which runs lockless) needs to be
-	 * quiesced, the following bitmask state is used.  The
-	 * SYNC flag is set by non-IRQ context code to initiate
-	 * the quiescence.
-	 *
-	 * When the IRQ handler notices that SYNC is set, it
-	 * disables interrupts and returns.
-	 *
-	 * When all outstanding IRQ handlers have returned after
-	 * the SYNC flag has been set, the setter can be assured
-	 * that interrupts will no longer get run.
-	 *
-	 * In this way all SMP driver locks are never acquired
-	 * in hw IRQ context, only sw IRQ context or lower.
-	 */
-	unsigned int			irq_sync;
+    /* If the IRQ handler (which runs lockless) needs to be
+     * quiesced, the following bitmask state is used.  The
+     * SYNC flag is set by non-IRQ context code to initiate
+     * the quiescence.
+     *
+     * When the IRQ handler notices that SYNC is set, it
+     * disables interrupts and returns.
+     *
+     * When all outstanding IRQ handlers have returned after
+     * the SYNC flag has been set, the setter can be assured
+     * that interrupts will no longer get run.
+     *
+     * In this way all SMP driver locks are never acquired
+     * in hw IRQ context, only sw IRQ context or lower.
+     */
+    unsigned int			irq_sync;
 
-	/* SMP locking strategy:
-	 *
-	 * lock: Held during reset, PHY access, timer, and when
-	 *       updating tg3_flags.
-	 *
-	 * netif_tx_lock: Held during tg3_start_xmit. tg3_tx holds
-	 *                netif_tx_lock when it needs to call
-	 *                netif_wake_queue.
-	 *
-	 * Both of these locks are to be held with BH safety.
-	 *
-	 * Because the IRQ handler, tg3_poll, and tg3_start_xmit
-	 * are running lockless, it is necessary to completely
-	 * quiesce the chip with tg3_netif_stop and tg3_full_lock
-	 * before reconfiguring the device.
-	 *
-	 * indirect_lock: Held when accessing registers indirectly
-	 *                with IRQ disabling.
-	 */
-	spinlock_t			lock;
-	spinlock_t			indirect_lock;
+    /* SMP locking strategy:
+     *
+     * lock: Held during reset, PHY access, timer, and when
+     *       updating tg3_flags.
+     *
+     * netif_tx_lock: Held during tg3_start_xmit. tg3_tx holds
+     *                netif_tx_lock when it needs to call
+     *                netif_wake_queue.
+     *
+     * Both of these locks are to be held with BH safety.
+     *
+     * Because the IRQ handler, tg3_poll, and tg3_start_xmit
+     * are running lockless, it is necessary to completely
+     * quiesce the chip with tg3_netif_stop and tg3_full_lock
+     * before reconfiguring the device.
+     *
+     * indirect_lock: Held when accessing registers indirectly
+     *                with IRQ disabling.
+     */
+    spinlock_t			lock;
+    spinlock_t			indirect_lock;
 
-	u32				(*read32) (struct tg3 *, u32);
-	void				(*write32) (struct tg3 *, u32, u32);
-	u32				(*read32_mbox) (struct tg3 *, u32);
-	void				(*write32_mbox) (struct tg3 *, u32,
-							 u32);
-	void __iomem			*regs;
-	void __iomem			*aperegs;
-	struct net_device		*dev;
-	struct pci_dev			*pdev;
+    u32				(*read32) (struct tg3 *, u32);
+    void				(*write32) (struct tg3 *, u32, u32);
+    u32				(*read32_mbox) (struct tg3 *, u32);
+    void				(*write32_mbox) (struct tg3 *, u32,
+                                         u32);
+    void __iomem			*regs;
+    void __iomem			*aperegs;
+    struct net_device		*dev;
+    struct pci_dev			*pdev;
 
-	u32				coal_now;
-	u32				msg_enable;
+    u32				coal_now;
+    u32				msg_enable;
 
-	/* begin "tx thread" cacheline section */
-	void				(*write32_tx_mbox) (struct tg3 *, u32,
-							    u32);
-	u32				dma_limit;
+    /* begin "tx thread" cacheline section */
+    void				(*write32_tx_mbox) (struct tg3 *, u32,
+                                            u32);
+    u32				dma_limit;
 
-	/* begin "rx thread" cacheline section */
-	struct tg3_napi			napi[TG3_IRQ_MAX_VECS];
-	void				(*write32_rx_mbox) (struct tg3 *, u32,
-							    u32);
-	u32				rx_copy_thresh;
-	u32				rx_std_ring_mask;
-	u32				rx_jmb_ring_mask;
-	u32				rx_ret_ring_mask;
-	u32				rx_pending;
-	u32				rx_jumbo_pending;
-	u32				rx_std_max_post;
-	u32				rx_offset;
-	u32				rx_pkt_map_sz;
-	bool				rx_refill;
+    /* begin "rx thread" cacheline section */
+    struct tg3_napi			napi[TG3_IRQ_MAX_VECS];
+    void				(*write32_rx_mbox) (struct tg3 *, u32,
+                                            u32);
+    u32				rx_copy_thresh;
+    u32				rx_std_ring_mask;
+    u32				rx_jmb_ring_mask;
+    u32				rx_ret_ring_mask;
+    u32				rx_pending;
+    u32				rx_jumbo_pending;
+    u32				rx_std_max_post;
+    u32				rx_offset;
+    u32				rx_pkt_map_sz;
+    bool				rx_refill;
 
 
-	/* begin "everything else" cacheline(s) section */
-	unsigned long			rx_dropped;
-	unsigned long			tx_dropped;
-	struct rtnl_link_stats64	net_stats_prev;
-	struct tg3_ethtool_stats	estats_prev;
+    /* begin "everything else" cacheline(s) section */
+    unsigned long			rx_dropped;
+    unsigned long			tx_dropped;
+    struct rtnl_link_stats64	net_stats_prev;
+    struct tg3_ethtool_stats	estats_prev;
 
-	DECLARE_BITMAP(tg3_flags, TG3_FLAG_NUMBER_OF_FLAGS);
+    DECLARE_BITMAP(tg3_flags, TG3_FLAG_NUMBER_OF_FLAGS);
 
-	union {
-	unsigned long			phy_crc_errors;
-	unsigned long			last_event_jiffies;
-	};
+    union {
+        unsigned long			phy_crc_errors;
+        unsigned long			last_event_jiffies;
+    };
 
-	struct timer_list		timer;
-	u16				timer_counter;
-	u16				timer_multiplier;
-	u32				timer_offset;
-	u16				asf_counter;
-	u16				asf_multiplier;
+    struct timer_list		timer;
+    u16				timer_counter;
+    u16				timer_multiplier;
+    u32				timer_offset;
+    u16				asf_counter;
+    u16				asf_multiplier;
 
-	/* 1 second counter for transient serdes link events */
-	u32				serdes_counter;
+    /* 1 second counter for transient serdes link events */
+    u32				serdes_counter;
 #define SERDES_AN_TIMEOUT_5704S		2
 #define SERDES_PARALLEL_DET_TIMEOUT	1
 #define SERDES_AN_TIMEOUT_5714S		1
 
-	struct tg3_link_config		link_config;
-	struct tg3_bufmgr_config	bufmgr_config;
+    struct tg3_link_config		link_config;
+    struct tg3_bufmgr_config	bufmgr_config;
 
-	/* cache h/w values, often passed straight to h/w */
-	u32				rx_mode;
-	u32				tx_mode;
-	u32				mac_mode;
-	u32				mi_mode;
-	u32				misc_host_ctrl;
-	u32				grc_mode;
-	u32				grc_local_ctrl;
-	u32				dma_rwctrl;
-	u32				coalesce_mode;
-	u32				pwrmgmt_thresh;
+    /* cache h/w values, often passed straight to h/w */
+    u32				rx_mode;
+    u32				tx_mode;
+    u32				mac_mode;
+    u32				mi_mode;
+    u32				misc_host_ctrl;
+    u32				grc_mode;
+    u32				grc_local_ctrl;
+    u32				dma_rwctrl;
+    u32				coalesce_mode;
+    u32				pwrmgmt_thresh;
 
-	/* PCI block */
-	u32				pci_chip_rev_id;
-	u16				pci_cmd;
-	u8				pci_cacheline_sz;
-	u8				pci_lat_timer;
+    /* PCI block */
+    u32				pci_chip_rev_id;
+    u16				pci_cmd;
+    u8				pci_cacheline_sz;
+    u8				pci_lat_timer;
 
-	int				pci_fn;
-	int				pm_cap;
-	int				msi_cap;
-	int				pcix_cap;
-	int				pcie_readrq;
+    int				pci_fn;
+    int				pm_cap;
+    int				msi_cap;
+    int				pcix_cap;
+    int				pcie_readrq;
 
-	struct mii_bus			*mdio_bus;
-	int				mdio_irq[PHY_MAX_ADDR];
-	int				old_link;
+    struct mii_bus			*mdio_bus;
+    int				mdio_irq[PHY_MAX_ADDR];
+    int				old_link;
 
-	u8				phy_addr;
+    u8				phy_addr;
 
-	/* PHY info */
-	u32				phy_id;
+    /* PHY info */
+    u32				phy_id;
 #define TG3_PHY_ID_MASK			0xfffffff0
 #define TG3_PHY_ID_BCM5400		0x60008040
 #define TG3_PHY_ID_BCM5401		0x60008050
@@ -3103,9 +3103,9 @@ struct tg3 {
 #define TG3_PHY_ID_REV_MASK		0x0000000f
 #define TG3_PHY_REV_BCM5401_B0		0x1
 
-	/* This macro assumes the passed PHY ID is
-	 * already masked with TG3_PHY_ID_MASK.
-	 */
+    /* This macro assumes the passed PHY ID is
+     * already masked with TG3_PHY_ID_MASK.
+     */
 #define TG3_KNOWN_PHY_ID(X)		\
 	((X) == TG3_PHY_ID_BCM5400 || (X) == TG3_PHY_ID_BCM5401 || \
 	 (X) == TG3_PHY_ID_BCM5411 || (X) == TG3_PHY_ID_BCM5701 || \
@@ -3119,7 +3119,7 @@ struct tg3 {
 	 (X) == TG3_PHY_ID_BCM57765 || (X) == TG3_PHY_ID_BCM5719C || \
 	 (X) == TG3_PHY_ID_BCM8002)
 
-	u32				phy_flags;
+    u32				phy_flags;
 #define TG3_PHYFLG_IS_LOW_POWER		0x00000001
 #define TG3_PHYFLG_IS_CONNECTED		0x00000002
 #define TG3_PHYFLG_USE_MI_INTERRUPT	0x00000004
@@ -3142,25 +3142,25 @@ struct tg3 {
 #define TG3_PHYFLG_EEE_CAP		0x00040000
 #define TG3_PHYFLG_MDIX_STATE		0x00200000
 
-	u32				led_ctrl;
-	u32				phy_otp;
-	u32				setlpicnt;
-	u8				rss_ind_tbl[TG3_RSS_INDIR_TBL_SIZE];
+    u32				led_ctrl;
+    u32				phy_otp;
+    u32				setlpicnt;
+    u8				rss_ind_tbl[TG3_RSS_INDIR_TBL_SIZE];
 
 #define TG3_BPN_SIZE			24
-	char				board_part_number[TG3_BPN_SIZE];
+    char				board_part_number[TG3_BPN_SIZE];
 #define TG3_VER_SIZE			ETHTOOL_FWVERS_LEN
-	char				fw_ver[TG3_VER_SIZE];
-	u32				nic_sram_data_cfg;
-	u32				pci_clock_ctrl;
-	struct pci_dev			*pdev_peer;
+    char				fw_ver[TG3_VER_SIZE];
+    u32				nic_sram_data_cfg;
+    u32				pci_clock_ctrl;
+    struct pci_dev			*pdev_peer;
 
-	struct tg3_hw_stats		*hw_stats;
-	dma_addr_t			stats_mapping;
-	struct work_struct		reset_task;
+    struct tg3_hw_stats		*hw_stats;
+    dma_addr_t			stats_mapping;
+    struct work_struct		reset_task;
 
-	int				nvram_lock_cnt;
-	u32				nvram_size;
+    int				nvram_lock_cnt;
+    u32				nvram_size;
 #define TG3_NVRAM_SIZE_2KB		0x00000800
 #define TG3_NVRAM_SIZE_64KB		0x00010000
 #define TG3_NVRAM_SIZE_128KB		0x00020000
@@ -3169,8 +3169,8 @@ struct tg3 {
 #define TG3_NVRAM_SIZE_1MB		0x00100000
 #define TG3_NVRAM_SIZE_2MB		0x00200000
 
-	u32				nvram_pagesize;
-	u32				nvram_jedecnum;
+    u32				nvram_pagesize;
+    u32				nvram_jedecnum;
 
 #define JEDEC_ATMEL			0x1f
 #define JEDEC_ST			0x20
@@ -3197,15 +3197,15 @@ struct tg3 {
 
 #define SST_25VF0X0_PAGE_SIZE		4098
 
-	unsigned int			irq_max;
-	unsigned int			irq_cnt;
+    unsigned int			irq_max;
+    unsigned int			irq_cnt;
 
-	struct ethtool_coalesce		coal;
+    struct ethtool_coalesce		coal;
 
-	/* firmware info */
-	const char			*fw_needed;
-	const struct firmware		*fw;
-	u32				fw_len; /* includes BSS */
+    /* firmware info */
+    const char			*fw_needed;
+    const struct firmware		*fw;
+    u32				fw_len; /* includes BSS */
 };
 
 #endif /* !(_T3_H) */

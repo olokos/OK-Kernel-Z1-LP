@@ -39,12 +39,12 @@
 #define DISABLE_FLASH_PROG        16
 
 void FN_34_inthandler(struct rmi_function_info *rmifninfo,
-	unsigned int assertedIRQs);
+                      unsigned int assertedIRQs);
 int FN_34_config(struct rmi_function_info *rmifninfo);
 int FN_34_init(struct rmi_function_device *function_device);
 int FN_34_detect(struct rmi_function_info *rmifninfo,
-		struct rmi_function_descriptor *fndescr,
-		unsigned int interruptCount);
+                 struct rmi_function_descriptor *fndescr,
+                 unsigned int interruptCount);
 void FN_34_attention(struct rmi_function_info *rmifninfo);
 
 #endif

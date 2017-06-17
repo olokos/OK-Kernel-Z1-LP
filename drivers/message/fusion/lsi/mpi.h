@@ -326,21 +326,19 @@
 
 
 /* standard version format */
-typedef struct _MPI_VERSION_STRUCT
-{
+typedef struct _MPI_VERSION_STRUCT {
     U8                      Dev;                        /* 00h */
     U8                      Unit;                       /* 01h */
     U8                      Minor;                      /* 02h */
     U8                      Major;                      /* 03h */
 } MPI_VERSION_STRUCT, MPI_POINTER PTR_MPI_VERSION_STRUCT,
-  MpiVersionStruct_t, MPI_POINTER pMpiVersionStruct;
+MpiVersionStruct_t, MPI_POINTER pMpiVersionStruct;
 
-typedef union _MPI_VERSION_FORMAT
-{
+typedef union _MPI_VERSION_FORMAT {
     MPI_VERSION_STRUCT      Struct;
     U32                     Word;
 } MPI_VERSION_FORMAT, MPI_POINTER PTR_MPI_VERSION_FORMAT,
-  MpiVersionFormat_t, MPI_POINTER pMpiVersionFormat_t;
+MpiVersionFormat_t, MPI_POINTER pMpiVersionFormat_t;
 
 
 /*****************************************************************************
@@ -353,72 +351,63 @@ typedef union _MPI_VERSION_FORMAT
 /*  Simple element structures                                               */
 /****************************************************************************/
 
-typedef struct _SGE_SIMPLE32
-{
+typedef struct _SGE_SIMPLE32 {
     U32                     FlagsLength;
     U32                     Address;
 } SGE_SIMPLE32, MPI_POINTER PTR_SGE_SIMPLE32,
-  SGESimple32_t, MPI_POINTER pSGESimple32_t;
+SGESimple32_t, MPI_POINTER pSGESimple32_t;
 
-typedef struct _SGE_SIMPLE64
-{
+typedef struct _SGE_SIMPLE64 {
     U32                     FlagsLength;
     U64                     Address;
 } SGE_SIMPLE64, MPI_POINTER PTR_SGE_SIMPLE64,
-  SGESimple64_t, MPI_POINTER pSGESimple64_t;
+SGESimple64_t, MPI_POINTER pSGESimple64_t;
 
-typedef struct _SGE_SIMPLE_UNION
-{
+typedef struct _SGE_SIMPLE_UNION {
     U32                     FlagsLength;
-    union
-    {
+    union {
         U32                 Address32;
         U64                 Address64;
-    }u;
+    } u;
 } SGE_SIMPLE_UNION, MPI_POINTER PTR_SGE_SIMPLE_UNION,
-  SGESimpleUnion_t, MPI_POINTER pSGESimpleUnion_t;
+SGESimpleUnion_t, MPI_POINTER pSGESimpleUnion_t;
 
 /****************************************************************************/
 /*  Chain element structures                                                */
 /****************************************************************************/
 
-typedef struct _SGE_CHAIN32
-{
+typedef struct _SGE_CHAIN32 {
     U16                     Length;
     U8                      NextChainOffset;
     U8                      Flags;
     U32                     Address;
 } SGE_CHAIN32, MPI_POINTER PTR_SGE_CHAIN32,
-  SGEChain32_t, MPI_POINTER pSGEChain32_t;
+SGEChain32_t, MPI_POINTER pSGEChain32_t;
 
-typedef struct _SGE_CHAIN64
-{
+typedef struct _SGE_CHAIN64 {
     U16                     Length;
     U8                      NextChainOffset;
     U8                      Flags;
     U64                     Address;
 } SGE_CHAIN64, MPI_POINTER PTR_SGE_CHAIN64,
-  SGEChain64_t, MPI_POINTER pSGEChain64_t;
+SGEChain64_t, MPI_POINTER pSGEChain64_t;
 
-typedef struct _SGE_CHAIN_UNION
-{
+typedef struct _SGE_CHAIN_UNION {
     U16                     Length;
     U8                      NextChainOffset;
     U8                      Flags;
-    union
-    {
+    union {
         U32                 Address32;
         U64                 Address64;
-    }u;
+    } u;
 } SGE_CHAIN_UNION, MPI_POINTER PTR_SGE_CHAIN_UNION,
-  SGEChainUnion_t, MPI_POINTER pSGEChainUnion_t;
+SGEChainUnion_t, MPI_POINTER pSGEChainUnion_t;
 
 /****************************************************************************/
 /*  Transaction Context element                                             */
 /****************************************************************************/
 
-typedef struct _SGE_TRANSACTION32
-{
+typedef struct _SGE_TRANSACTION32 {
     U8                      Reserved;
     U8                      ContextSize;
     U8                      DetailsLength;
@@ -426,10 +415,9 @@ typedef struct _SGE_TRANSACTION32
     U32                     TransactionContext[1];
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION32, MPI_POINTER PTR_SGE_TRANSACTION32,
-  SGETransaction32_t, MPI_POINTER pSGETransaction32_t;
+SGETransaction32_t, MPI_POINTER pSGETransaction32_t;
 
-typedef struct _SGE_TRANSACTION64
-{
+typedef struct _SGE_TRANSACTION64 {
     U8                      Reserved;
     U8                      ContextSize;
     U8                      DetailsLength;
@@ -437,10 +425,9 @@ typedef struct _SGE_TRANSACTION64
     U32                     TransactionContext[2];
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION64, MPI_POINTER PTR_SGE_TRANSACTION64,
-  SGETransaction64_t, MPI_POINTER pSGETransaction64_t;
+SGETransaction64_t, MPI_POINTER pSGETransaction64_t;
 
-typedef struct _SGE_TRANSACTION96
-{
+typedef struct _SGE_TRANSACTION96 {
     U8                      Reserved;
     U8                      ContextSize;
     U8                      DetailsLength;
@@ -448,10 +435,9 @@ typedef struct _SGE_TRANSACTION96
     U32                     TransactionContext[3];
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION96, MPI_POINTER PTR_SGE_TRANSACTION96,
-  SGETransaction96_t, MPI_POINTER pSGETransaction96_t;
+SGETransaction96_t, MPI_POINTER pSGETransaction96_t;
 
-typedef struct _SGE_TRANSACTION128
-{
+typedef struct _SGE_TRANSACTION128 {
     U8                      Reserved;
     U8                      ContextSize;
     U8                      DetailsLength;
@@ -459,69 +445,61 @@ typedef struct _SGE_TRANSACTION128
     U32                     TransactionContext[4];
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION128, MPI_POINTER PTR_SGE_TRANSACTION128,
-  SGETransaction_t128, MPI_POINTER pSGETransaction_t128;
+SGETransaction_t128, MPI_POINTER pSGETransaction_t128;
 
-typedef struct _SGE_TRANSACTION_UNION
-{
+typedef struct _SGE_TRANSACTION_UNION {
     U8                      Reserved;
     U8                      ContextSize;
     U8                      DetailsLength;
     U8                      Flags;
-    union
-    {
+    union {
         U32                 TransactionContext32[1];
         U32                 TransactionContext64[2];
         U32                 TransactionContext96[3];
         U32                 TransactionContext128[4];
-    }u;
+    } u;
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION_UNION, MPI_POINTER PTR_SGE_TRANSACTION_UNION,
-  SGETransactionUnion_t, MPI_POINTER pSGETransactionUnion_t;
+SGETransactionUnion_t, MPI_POINTER pSGETransactionUnion_t;
 
 
 /****************************************************************************/
 /*  SGE IO types union  for IO SGL's                                        */
 /****************************************************************************/
 
-typedef struct _SGE_IO_UNION
-{
-    union
-    {
+typedef struct _SGE_IO_UNION {
+    union {
         SGE_SIMPLE_UNION    Simple;
         SGE_CHAIN_UNION     Chain;
     } u;
 } SGE_IO_UNION, MPI_POINTER PTR_SGE_IO_UNION,
-  SGEIOUnion_t, MPI_POINTER pSGEIOUnion_t;
+SGEIOUnion_t, MPI_POINTER pSGEIOUnion_t;
 
 /****************************************************************************/
 /*  SGE union for SGL's with Simple and Transaction elements                */
 /****************************************************************************/
 
-typedef struct _SGE_TRANS_SIMPLE_UNION
-{
-    union
-    {
+typedef struct _SGE_TRANS_SIMPLE_UNION {
+    union {
         SGE_SIMPLE_UNION        Simple;
         SGE_TRANSACTION_UNION   Transaction;
     } u;
 } SGE_TRANS_SIMPLE_UNION, MPI_POINTER PTR_SGE_TRANS_SIMPLE_UNION,
-  SGETransSimpleUnion_t, MPI_POINTER pSGETransSimpleUnion_t;
+SGETransSimpleUnion_t, MPI_POINTER pSGETransSimpleUnion_t;
 
 /****************************************************************************/
 /*  All SGE types union                                                     */
 /****************************************************************************/
 
-typedef struct _SGE_MPI_UNION
-{
-    union
-    {
+typedef struct _SGE_MPI_UNION {
+    union {
         SGE_SIMPLE_UNION        Simple;
         SGE_CHAIN_UNION         Chain;
         SGE_TRANSACTION_UNION   Transaction;
     } u;
 } SGE_MPI_UNION, MPI_POINTER PTR_SGE_MPI_UNION,
-  MPI_SGE_UNION_t, MPI_POINTER pMPI_SGE_UNION_t,
-  SGEAllUnion_t, MPI_POINTER pSGEAllUnion_t;
+MPI_SGE_UNION_t, MPI_POINTER pMPI_SGE_UNION_t,
+SGEAllUnion_t, MPI_POINTER pSGEAllUnion_t;
 
 
 /****************************************************************************/
@@ -579,7 +557,7 @@ typedef struct _SGE_MPI_UNION
 /*  SGE operation Macros                                                    */
 /****************************************************************************/
 
-         /* SIMPLE FlagsLength manipulations... */
+/* SIMPLE FlagsLength manipulations... */
 #define  MPI_SGE_SET_FLAGS(f)           ((U32)(f) << MPI_SGE_FLAGS_SHIFT)
 #define  MPI_SGE_GET_FLAGS(fl)          (((fl) & ~MPI_SGE_LENGTH_MASK) >> MPI_SGE_FLAGS_SHIFT)
 #define  MPI_SGE_LENGTH(fl)             ((fl) & MPI_SGE_LENGTH_MASK)
@@ -590,7 +568,7 @@ typedef struct _SGE_MPI_UNION
 #define  MPI_pSGE_GET_FLAGS(psg)        MPI_SGE_GET_FLAGS((psg)->FlagsLength)
 #define  MPI_pSGE_GET_LENGTH(psg)       MPI_SGE_LENGTH((psg)->FlagsLength)
 #define  MPI_pSGE_SET_FLAGS_LENGTH(psg,f,l)  (psg)->FlagsLength = MPI_SGE_SET_FLAGS_LENGTH(f,l)
-         /* CAUTION - The following are READ-MODIFY-WRITE! */
+/* CAUTION - The following are READ-MODIFY-WRITE! */
 #define  MPI_pSGE_SET_FLAGS(psg,f)      (psg)->FlagsLength |= MPI_SGE_SET_FLAGS(f)
 #define  MPI_pSGE_SET_LENGTH(psg,l)     (psg)->FlagsLength |= MPI_SGE_LENGTH(l)
 
@@ -608,8 +586,7 @@ typedef struct _SGE_MPI_UNION
 /* Standard message request header for all request messages                 */
 /****************************************************************************/
 
-typedef struct _MSG_REQUEST_HEADER
-{
+typedef struct _MSG_REQUEST_HEADER {
     U8                      Reserved[2];      /* function specific */
     U8                      ChainOffset;
     U8                      Function;
@@ -617,15 +594,14 @@ typedef struct _MSG_REQUEST_HEADER
     U8                      MsgFlags;
     U32                     MsgContext;
 } MSG_REQUEST_HEADER, MPI_POINTER PTR_MSG_REQUEST_HEADER,
-  MPIHeader_t, MPI_POINTER pMPIHeader_t;
+MPIHeader_t, MPI_POINTER pMPIHeader_t;
 
 
 /****************************************************************************/
 /*  Default Reply                                                           */
 /****************************************************************************/
 
-typedef struct _MSG_DEFAULT_REPLY
-{
+typedef struct _MSG_DEFAULT_REPLY {
     U8                      Reserved[2];      /* function specific */
     U8                      MsgLength;
     U8                      Function;
@@ -636,7 +612,7 @@ typedef struct _MSG_DEFAULT_REPLY
     U16                     IOCStatus;
     U32                     IOCLogInfo;
 } MSG_DEFAULT_REPLY, MPI_POINTER PTR_MSG_DEFAULT_REPLY,
-  MPIDefaultReply_t, MPI_POINTER pMPIDefaultReply_t;
+MPIDefaultReply_t, MPI_POINTER pMPIDefaultReply_t;
 
 
 /* MsgFlags definition for all replies */

@@ -5,7 +5,7 @@
 #define SL_NRUNIT	256		/* MAX number of X.25 channels;
 					   This can be overridden with
 					   insmod -ox25_asy_maxdev=nnn	*/
-#define SL_MTU		256	
+#define SL_MTU		256
 
 /* X25 async protocol characters. */
 #define X25_END         0x7E		/* indicates end of frame	*/
@@ -15,22 +15,22 @@
 
 
 struct x25_asy {
-  int			magic;
+    int			magic;
 
-  /* Various fields. */
-  spinlock_t		lock;
-  struct tty_struct	*tty;		/* ptr to TTY structure		*/
-  struct net_device	*dev;		/* easy for intr handling	*/
+    /* Various fields. */
+    spinlock_t		lock;
+    struct tty_struct	*tty;		/* ptr to TTY structure		*/
+    struct net_device	*dev;		/* easy for intr handling	*/
 
-  /* These are pointers to the malloc()ed frame buffers. */
-  unsigned char		*rbuff;		/* receiver buffer		*/
-  int                   rcount;         /* received chars counter       */
-  unsigned char		*xbuff;		/* transmitter buffer		*/
-  unsigned char         *xhead;         /* pointer to next byte to XMIT */
-  int                   xleft;          /* bytes left in XMIT queue     */
-  int                   buffsize;       /* Max buffers sizes            */
+    /* These are pointers to the malloc()ed frame buffers. */
+    unsigned char		*rbuff;		/* receiver buffer		*/
+    int                   rcount;         /* received chars counter       */
+    unsigned char		*xbuff;		/* transmitter buffer		*/
+    unsigned char         *xhead;         /* pointer to next byte to XMIT */
+    int                   xleft;          /* bytes left in XMIT queue     */
+    int                   buffsize;       /* Max buffers sizes            */
 
-  unsigned long		flags;		/* Flag values/ mode etc	*/
+    unsigned long		flags;		/* Flag values/ mode etc	*/
 #define SLF_INUSE	0		/* Channel in use               */
 #define SLF_ESCAPE	1               /* ESC received                 */
 #define SLF_ERROR	2               /* Parity, etc. error           */

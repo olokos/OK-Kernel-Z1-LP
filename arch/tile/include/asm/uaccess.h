@@ -53,11 +53,10 @@
  * user-accessible semantics for memory at 0xfc000000 and above 0xfc004000.
  */
 static inline int is_arch_mappable_range(unsigned long addr,
-					 unsigned long size)
-{
-	return (addr >= MEM_USER_INTRPT &&
-		addr < (MEM_USER_INTRPT + INTRPT_SIZE) &&
-		size <= (MEM_USER_INTRPT + INTRPT_SIZE) - addr);
+        unsigned long size) {
+    return (addr >= MEM_USER_INTRPT &&
+            addr < (MEM_USER_INTRPT + INTRPT_SIZE) &&
+            size <= (MEM_USER_INTRPT + INTRPT_SIZE) - addr);
 }
 #define is_arch_mappable_range is_arch_mappable_range
 #else
@@ -108,7 +107,7 @@ int __range_ok(unsigned long addr, unsigned long size);
  */
 
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 extern int fixup_exception(struct pt_regs *regs);
@@ -124,8 +123,8 @@ extern int fixup_exception(struct pt_regs *regs);
  * the caller will ignore it by virtue of casting anyway.
  */
 struct __get_user {
-	unsigned long long val;
-	int err;
+    unsigned long long val;
+    int err;
 };
 
 /*
@@ -292,21 +291,19 @@ extern int __put_user_bad(void);
  * to pagefault_disable() and pagefault_enable().
  */
 extern unsigned long __must_check __copy_to_user_inatomic(
-	void __user *to, const void *from, unsigned long n);
+    void __user *to, const void *from, unsigned long n);
 
 static inline unsigned long __must_check
-__copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	might_fault();
-	return __copy_to_user_inatomic(to, from, n);
+__copy_to_user(void __user *to, const void *from, unsigned long n) {
+    might_fault();
+    return __copy_to_user_inatomic(to, from, n);
 }
 
 static inline unsigned long __must_check
-copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		n = __copy_to_user(to, from, n);
-	return n;
+copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        n = __copy_to_user(to, from, n);
+    return n;
 }
 
 /**
@@ -332,43 +329,40 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
  * does *NOT* pad with zeros.
  */
 extern unsigned long __must_check __copy_from_user_inatomic(
-	void *to, const void __user *from, unsigned long n);
+    void *to, const void __user *from, unsigned long n);
 extern unsigned long __must_check __copy_from_user_zeroing(
-	void *to, const void __user *from, unsigned long n);
+    void *to, const void __user *from, unsigned long n);
 
 static inline unsigned long __must_check
-__copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-       might_fault();
-       return __copy_from_user_zeroing(to, from, n);
+__copy_from_user(void *to, const void __user *from, unsigned long n) {
+    might_fault();
+    return __copy_from_user_zeroing(to, from, n);
 }
 
 static inline unsigned long __must_check
-_copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (access_ok(VERIFY_READ, from, n))
-		n = __copy_from_user(to, from, n);
-	else
-		memset(to, 0, n);
-	return n;
+_copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (access_ok(VERIFY_READ, from, n))
+        n = __copy_from_user(to, from, n);
+    else
+        memset(to, 0, n);
+    return n;
 }
 
 #ifdef CONFIG_DEBUG_COPY_FROM_USER
 extern void copy_from_user_overflow(void)
-	__compiletime_warning("copy_from_user() size is not provably correct");
+__compiletime_warning("copy_from_user() size is not provably correct");
 
 static inline unsigned long __must_check copy_from_user(void *to,
-					  const void __user *from,
-					  unsigned long n)
-{
-	int sz = __compiletime_object_size(to);
+        const void __user *from,
+        unsigned long n) {
+    int sz = __compiletime_object_size(to);
 
-	if (likely(sz == -1 || sz >= n))
-		n = _copy_from_user(to, from, n);
-	else
-		copy_from_user_overflow();
+    if (likely(sz == -1 || sz >= n))
+        n = _copy_from_user(to, from, n);
+    else
+        copy_from_user_overflow();
 
-	return n;
+    return n;
 }
 #else
 #define copy_from_user _copy_from_user
@@ -390,21 +384,19 @@ static inline unsigned long __must_check copy_from_user(void *to,
  * On success, this will be zero.
  */
 extern unsigned long __copy_in_user_inatomic(
-	void __user *to, const void __user *from, unsigned long n);
+    void __user *to, const void __user *from, unsigned long n);
 
 static inline unsigned long __must_check
-__copy_in_user(void __user *to, const void __user *from, unsigned long n)
-{
-	might_sleep();
-	return __copy_in_user_inatomic(to, from, n);
+__copy_in_user(void __user *to, const void __user *from, unsigned long n) {
+    might_sleep();
+    return __copy_in_user_inatomic(to, from, n);
 }
 
 static inline unsigned long __must_check
-copy_in_user(void __user *to, const void __user *from, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n) && access_ok(VERIFY_READ, from, n))
-		n = __copy_in_user(to, from, n);
-	return n;
+copy_in_user(void __user *to, const void __user *from, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n) && access_ok(VERIFY_READ, from, n))
+        n = __copy_in_user(to, from, n);
+    return n;
 }
 #endif
 
@@ -424,10 +416,9 @@ copy_in_user(void __user *to, const void __user *from, unsigned long n)
  * consider using strnlen_user() instead.
  */
 extern long strnlen_user_asm(const char __user *str, long n);
-static inline long __must_check strnlen_user(const char __user *str, long n)
-{
-	might_fault();
-	return strnlen_user_asm(str, n);
+static inline long __must_check strnlen_user(const char __user *str, long n) {
+    might_fault();
+    return strnlen_user_asm(str, n);
 }
 #define strlen_user(str) strnlen_user(str, LONG_MAX)
 
@@ -453,17 +444,15 @@ static inline long __must_check strnlen_user(const char __user *str, long n)
  */
 extern long strncpy_from_user_asm(char *dst, const char __user *src, long);
 static inline long __must_check __strncpy_from_user(
-	char *dst, const char __user *src, long count)
-{
-	might_fault();
-	return strncpy_from_user_asm(dst, src, count);
+    char *dst, const char __user *src, long count) {
+    might_fault();
+    return strncpy_from_user_asm(dst, src, count);
 }
 static inline long __must_check strncpy_from_user(
-	char *dst, const char __user *src, long count)
-{
-	if (access_ok(VERIFY_READ, src, 1))
-		return __strncpy_from_user(dst, src, count);
-	return -EFAULT;
+    char *dst, const char __user *src, long count) {
+    if (access_ok(VERIFY_READ, src, 1))
+        return __strncpy_from_user(dst, src, count);
+    return -EFAULT;
 }
 
 /**
@@ -478,17 +467,15 @@ static inline long __must_check strncpy_from_user(
  */
 extern unsigned long clear_user_asm(void __user *mem, unsigned long len);
 static inline unsigned long __must_check __clear_user(
-	void __user *mem, unsigned long len)
-{
-	might_fault();
-	return clear_user_asm(mem, len);
+    void __user *mem, unsigned long len) {
+    might_fault();
+    return clear_user_asm(mem, len);
 }
 static inline unsigned long __must_check clear_user(
-	void __user *mem, unsigned long len)
-{
-	if (access_ok(VERIFY_WRITE, mem, len))
-		return __clear_user(mem, len);
-	return len;
+    void __user *mem, unsigned long len) {
+    if (access_ok(VERIFY_WRITE, mem, len))
+        return __clear_user(mem, len);
+    return len;
 }
 
 /**
@@ -501,22 +488,20 @@ static inline unsigned long __must_check clear_user(
  */
 extern unsigned long flush_user_asm(void __user *mem, unsigned long len);
 static inline unsigned long __must_check __flush_user(
-	void __user *mem, unsigned long len)
-{
-	int retval;
+    void __user *mem, unsigned long len) {
+    int retval;
 
-	might_fault();
-	retval = flush_user_asm(mem, len);
-	mb_incoherent();
-	return retval;
+    might_fault();
+    retval = flush_user_asm(mem, len);
+    mb_incoherent();
+    return retval;
 }
 
 static inline unsigned long __must_check flush_user(
-	void __user *mem, unsigned long len)
-{
-	if (access_ok(VERIFY_WRITE, mem, len))
-		return __flush_user(mem, len);
-	return len;
+    void __user *mem, unsigned long len) {
+    if (access_ok(VERIFY_WRITE, mem, len))
+        return __flush_user(mem, len);
+    return len;
 }
 
 /**
@@ -533,21 +518,19 @@ static inline unsigned long __must_check flush_user(
  */
 extern unsigned long inv_user_asm(void __user *mem, unsigned long len);
 static inline unsigned long __must_check __inv_user(
-	void __user *mem, unsigned long len)
-{
-	int retval;
+    void __user *mem, unsigned long len) {
+    int retval;
 
-	might_fault();
-	retval = inv_user_asm(mem, len);
-	mb_incoherent();
-	return retval;
+    might_fault();
+    retval = inv_user_asm(mem, len);
+    mb_incoherent();
+    return retval;
 }
 static inline unsigned long __must_check inv_user(
-	void __user *mem, unsigned long len)
-{
-	if (access_ok(VERIFY_WRITE, mem, len))
-		return __inv_user(mem, len);
-	return len;
+    void __user *mem, unsigned long len) {
+    if (access_ok(VERIFY_WRITE, mem, len))
+        return __inv_user(mem, len);
+    return len;
 }
 
 /**
@@ -560,21 +543,19 @@ static inline unsigned long __must_check inv_user(
  */
 extern unsigned long finv_user_asm(void __user *mem, unsigned long len);
 static inline unsigned long __must_check __finv_user(
-	void __user *mem, unsigned long len)
-{
-	int retval;
+    void __user *mem, unsigned long len) {
+    int retval;
 
-	might_fault();
-	retval = finv_user_asm(mem, len);
-	mb_incoherent();
-	return retval;
+    might_fault();
+    retval = finv_user_asm(mem, len);
+    mb_incoherent();
+    return retval;
 }
 static inline unsigned long __must_check finv_user(
-	void __user *mem, unsigned long len)
-{
-	if (access_ok(VERIFY_WRITE, mem, len))
-		return __finv_user(mem, len);
-	return len;
+    void __user *mem, unsigned long len) {
+    if (access_ok(VERIFY_WRITE, mem, len))
+        return __finv_user(mem, len);
+    return len;
 }
 
 #endif /* _ASM_TILE_UACCESS_H */

@@ -294,32 +294,32 @@
   ===========================================================================*/
 
 struct me4000_ao_info {
-	int count;
-	int fifo_count;
+    int count;
+    int fifo_count;
 };
 
 struct me4000_ai_info {
-	int count;
-	int sh_count;
-	int diff_count;
-	int ex_trig_analog;
+    int count;
+    int sh_count;
+    int diff_count;
+    int ex_trig_analog;
 };
 
 struct me4000_dio_info {
-	int count;
+    int count;
 };
 
 struct me4000_cnt_info {
-	int count;
+    int count;
 };
 
 struct me4000_board {
-	const char *name;
-	unsigned short device_id;
-	struct me4000_ao_info ao;
-	struct me4000_ai_info ai;
-	struct me4000_dio_info dio;
-	struct me4000_cnt_info cnt;
+    const char *name;
+    unsigned short device_id;
+    struct me4000_ao_info ao;
+    struct me4000_ai_info ai;
+    struct me4000_dio_info dio;
+    struct me4000_cnt_info cnt;
 };
 
 #define thisboard ((const struct me4000_board *)dev->board_ptr)
@@ -329,77 +329,77 @@ struct me4000_board {
   ===========================================================================*/
 
 struct me4000_ao_context {
-	int irq;
+    int irq;
 
-	unsigned long mirror;	/*  Store the last written value */
+    unsigned long mirror;	/*  Store the last written value */
 
-	unsigned long ctrl_reg;
-	unsigned long status_reg;
-	unsigned long fifo_reg;
-	unsigned long single_reg;
-	unsigned long timer_reg;
-	unsigned long irq_status_reg;
-	unsigned long preload_reg;
+    unsigned long ctrl_reg;
+    unsigned long status_reg;
+    unsigned long fifo_reg;
+    unsigned long single_reg;
+    unsigned long timer_reg;
+    unsigned long irq_status_reg;
+    unsigned long preload_reg;
 };
 
 struct me4000_ai_context {
-	int irq;
+    int irq;
 
-	unsigned long ctrl_reg;
-	unsigned long status_reg;
-	unsigned long channel_list_reg;
-	unsigned long data_reg;
-	unsigned long chan_timer_reg;
-	unsigned long chan_pre_timer_reg;
-	unsigned long scan_timer_low_reg;
-	unsigned long scan_timer_high_reg;
-	unsigned long scan_pre_timer_low_reg;
-	unsigned long scan_pre_timer_high_reg;
-	unsigned long start_reg;
-	unsigned long irq_status_reg;
-	unsigned long sample_counter_reg;
+    unsigned long ctrl_reg;
+    unsigned long status_reg;
+    unsigned long channel_list_reg;
+    unsigned long data_reg;
+    unsigned long chan_timer_reg;
+    unsigned long chan_pre_timer_reg;
+    unsigned long scan_timer_low_reg;
+    unsigned long scan_timer_high_reg;
+    unsigned long scan_pre_timer_low_reg;
+    unsigned long scan_pre_timer_high_reg;
+    unsigned long start_reg;
+    unsigned long irq_status_reg;
+    unsigned long sample_counter_reg;
 };
 
 struct me4000_dio_context {
-	unsigned long dir_reg;
-	unsigned long ctrl_reg;
-	unsigned long port_0_reg;
-	unsigned long port_1_reg;
-	unsigned long port_2_reg;
-	unsigned long port_3_reg;
+    unsigned long dir_reg;
+    unsigned long ctrl_reg;
+    unsigned long port_0_reg;
+    unsigned long port_1_reg;
+    unsigned long port_2_reg;
+    unsigned long port_3_reg;
 };
 
 struct me4000_cnt_context {
-	unsigned long ctrl_reg;
-	unsigned long counter_0_reg;
-	unsigned long counter_1_reg;
-	unsigned long counter_2_reg;
+    unsigned long ctrl_reg;
+    unsigned long counter_0_reg;
+    unsigned long counter_1_reg;
+    unsigned long counter_2_reg;
 };
 
 struct me4000_info {
-	unsigned long plx_regbase;	/*  PLX configuration space base address */
-	unsigned long me4000_regbase;	/*  Base address of the ME4000 */
-	unsigned long timer_regbase;	/*  Base address of the timer circuit */
-	unsigned long program_regbase;	/*  Base address to set the program pin for the xilinx */
+    unsigned long plx_regbase;	/*  PLX configuration space base address */
+    unsigned long me4000_regbase;	/*  Base address of the ME4000 */
+    unsigned long timer_regbase;	/*  Base address of the timer circuit */
+    unsigned long program_regbase;	/*  Base address to set the program pin for the xilinx */
 
-	unsigned long plx_regbase_size;	/*  PLX register set space */
-	unsigned long me4000_regbase_size;	/*  ME4000 register set space */
-	unsigned long timer_regbase_size;	/*  Timer circuit register set space */
-	unsigned long program_regbase_size;	/*  Size of program base address of the ME4000 */
+    unsigned long plx_regbase_size;	/*  PLX register set space */
+    unsigned long me4000_regbase_size;	/*  ME4000 register set space */
+    unsigned long timer_regbase_size;	/*  Timer circuit register set space */
+    unsigned long program_regbase_size;	/*  Size of program base address of the ME4000 */
 
-	unsigned int serial_no;	/*  Serial number of the board */
-	unsigned char hw_revision;	/*  Hardware revision of the board */
-	unsigned short vendor_id;	/*  Meilhaus vendor id */
-	unsigned short device_id;	/*  Device id */
+    unsigned int serial_no;	/*  Serial number of the board */
+    unsigned char hw_revision;	/*  Hardware revision of the board */
+    unsigned short vendor_id;	/*  Meilhaus vendor id */
+    unsigned short device_id;	/*  Device id */
 
-	struct pci_dev *pci_dev_p;	/*  General PCI information */
+    struct pci_dev *pci_dev_p;	/*  General PCI information */
 
-	unsigned int irq;	/*  IRQ assigned from the PCI BIOS */
+    unsigned int irq;	/*  IRQ assigned from the PCI BIOS */
 
-	struct me4000_ai_context ai_context;	/*  Analog input  specific context */
-	struct me4000_ao_context ao_context[4];	/*  Vector with analog output specific context */
-	struct me4000_dio_context dio_context;	/*  Digital I/O specific context */
-	struct me4000_cnt_context cnt_context;	/*  Counter specific context */
+    struct me4000_ai_context ai_context;	/*  Analog input  specific context */
+    struct me4000_ao_context ao_context[4];	/*  Vector with analog output specific context */
+    struct me4000_dio_context dio_context;	/*  Digital I/O specific context */
+    struct me4000_cnt_context cnt_context;	/*  Counter specific context */
 };
 
 #define info	((struct me4000_info *)dev->private)

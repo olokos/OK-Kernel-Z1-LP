@@ -76,19 +76,18 @@ extern void ____unhandled_size_in_do_div___(void);
  * - we use the MDR register to hold the MSW of the product
  */
 static inline __attribute__((const))
-unsigned __muldiv64u(unsigned val, unsigned mult, unsigned div)
-{
-	unsigned result;
+unsigned __muldiv64u(unsigned val, unsigned mult, unsigned div) {
+    unsigned result;
 
-	asm("mulu	%2,%0	\n"	/* MDR:val = val*mult */
-	    "divu	%3,%0	\n"	/* val = MDR:val/div;
+    asm("mulu	%2,%0	\n"	/* MDR:val = val*mult */
+        "divu	%3,%0	\n"	/* val = MDR:val/div;
 					 * MDR = MDR:val%div */
-	    : "=r"(result)
-	    : "0"(val), "ir"(mult), "r"(div)
-	    : CLOBBER_MDR_CC
-	    );
+        : "=r"(result)
+        : "0"(val), "ir"(mult), "r"(div)
+        : CLOBBER_MDR_CC
+       );
 
-	return result;
+    return result;
 }
 
 /*
@@ -97,19 +96,18 @@ unsigned __muldiv64u(unsigned val, unsigned mult, unsigned div)
  * - we use the MDR register to hold the MSW of the product
  */
 static inline __attribute__((const))
-signed __muldiv64s(signed val, signed mult, signed div)
-{
-	signed result;
+signed __muldiv64s(signed val, signed mult, signed div) {
+    signed result;
 
-	asm("mul	%2,%0	\n"	/* MDR:val = val*mult */
-	    "div	%3,%0	\n"	/* val = MDR:val/div;
+    asm("mul	%2,%0	\n"	/* MDR:val = val*mult */
+        "div	%3,%0	\n"	/* val = MDR:val/div;
 					 * MDR = MDR:val%div */
-	    : "=r"(result)
-	    : "0"(val), "ir"(mult), "r"(div)
-	    : CLOBBER_MDR_CC
-	    );
+        : "=r"(result)
+        : "0"(val), "ir"(mult), "r"(div)
+        : CLOBBER_MDR_CC
+       );
 
-	return result;
+    return result;
 }
 
 #endif /* _ASM_DIV64 */

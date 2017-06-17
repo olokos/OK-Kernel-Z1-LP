@@ -33,13 +33,13 @@
  * @dc_phy_errors:    No. of pulses reported for primary + extension channel
  */
 struct ath_dfs_stats {
-	u32 pulses_detected;
-	u32 datalen_discards;
-	u32 rssi_discards;
-	u32 bwinfo_discards;
-	u32 pri_phy_errors;
-	u32 ext_phy_errors;
-	u32 dc_phy_errors;
+    u32 pulses_detected;
+    u32 datalen_discards;
+    u32 rssi_discards;
+    u32 bwinfo_discards;
+    u32 pri_phy_errors;
+    u32 ext_phy_errors;
+    u32 dc_phy_errors;
 };
 
 #if defined(CONFIG_ATH9K_DFS_DEBUGFS)

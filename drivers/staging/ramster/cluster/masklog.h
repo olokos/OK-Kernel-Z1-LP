@@ -124,7 +124,7 @@
 #define MLOG_MAX_BITS 64
 
 struct mlog_bits {
-	unsigned long words[MLOG_MAX_BITS / BITS_PER_LONG];
+    unsigned long words[MLOG_MAX_BITS / BITS_PER_LONG];
 };
 
 extern struct mlog_bits r2_mlog_and_bits, r2_mlog_not_bits;

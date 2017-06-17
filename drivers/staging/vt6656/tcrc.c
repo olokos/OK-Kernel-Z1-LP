@@ -132,18 +132,17 @@ static const DWORD s_adwCrc32Table[256] = {
  * Return Value: CRC-32
  *
 -*/
-DWORD CRCdwCrc32(PBYTE pbyData, unsigned int cbByte, DWORD dwCrcSeed)
-{
-	DWORD dwCrc;
+DWORD CRCdwCrc32(PBYTE pbyData, unsigned int cbByte, DWORD dwCrcSeed) {
+    DWORD dwCrc;
 
-	dwCrc = dwCrcSeed;
-	while (cbByte--) {
-		dwCrc = s_adwCrc32Table[(BYTE)((dwCrc ^ (*pbyData)) & 0xFF)] ^
-			(dwCrc >> 8);
-		pbyData++;
-	}
+    dwCrc = dwCrcSeed;
+    while (cbByte--) {
+        dwCrc = s_adwCrc32Table[(BYTE)((dwCrc ^ (*pbyData)) & 0xFF)] ^
+                (dwCrc >> 8);
+        pbyData++;
+    }
 
-	return dwCrc;
+    return dwCrc;
 }
 
 
@@ -165,8 +164,7 @@ DWORD CRCdwCrc32(PBYTE pbyData, unsigned int cbByte, DWORD dwCrcSeed)
  * Return Value: CRC-32
  *
 -*/
-DWORD CRCdwGetCrc32(PBYTE pbyData, unsigned int cbByte)
-{
+DWORD CRCdwGetCrc32(PBYTE pbyData, unsigned int cbByte) {
     return ~CRCdwCrc32(pbyData, cbByte, 0xFFFFFFFFL);
 }
 
@@ -191,8 +189,7 @@ DWORD CRCdwGetCrc32(PBYTE pbyData, unsigned int cbByte)
  * Return Value: CRC-32
  *
 -*/
-DWORD CRCdwGetCrc32Ex(PBYTE pbyData, unsigned int cbByte, DWORD dwPreCRC)
-{
+DWORD CRCdwGetCrc32Ex(PBYTE pbyData, unsigned int cbByte, DWORD dwPreCRC) {
     return CRCdwCrc32(pbyData, cbByte, dwPreCRC);
 }
 

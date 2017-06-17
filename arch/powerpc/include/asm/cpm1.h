@@ -74,29 +74,29 @@ extern void cpm_reset(void);
  * The MBX uses SMC1 as the host serial port.
  */
 typedef struct smc_uart {
-	ushort	smc_rbase;	/* Rx Buffer descriptor base address */
-	ushort	smc_tbase;	/* Tx Buffer descriptor base address */
-	u_char	smc_rfcr;	/* Rx function code */
-	u_char	smc_tfcr;	/* Tx function code */
-	ushort	smc_mrblr;	/* Max receive buffer length */
-	uint	smc_rstate;	/* Internal */
-	uint	smc_idp;	/* Internal */
-	ushort	smc_rbptr;	/* Internal */
-	ushort	smc_ibc;	/* Internal */
-	uint	smc_rxtmp;	/* Internal */
-	uint	smc_tstate;	/* Internal */
-	uint	smc_tdp;	/* Internal */
-	ushort	smc_tbptr;	/* Internal */
-	ushort	smc_tbc;	/* Internal */
-	uint	smc_txtmp;	/* Internal */
-	ushort	smc_maxidl;	/* Maximum idle characters */
-	ushort	smc_tmpidl;	/* Temporary idle counter */
-	ushort	smc_brklen;	/* Last received break length */
-	ushort	smc_brkec;	/* rcv'd break condition counter */
-	ushort	smc_brkcr;	/* xmt break count register */
-	ushort	smc_rmask;	/* Temporary bit mask */
-	char	res1[8];	/* Reserved */
-	ushort	smc_rpbase;	/* Relocation pointer */
+    ushort	smc_rbase;	/* Rx Buffer descriptor base address */
+    ushort	smc_tbase;	/* Tx Buffer descriptor base address */
+    u_char	smc_rfcr;	/* Rx function code */
+    u_char	smc_tfcr;	/* Tx function code */
+    ushort	smc_mrblr;	/* Max receive buffer length */
+    uint	smc_rstate;	/* Internal */
+    uint	smc_idp;	/* Internal */
+    ushort	smc_rbptr;	/* Internal */
+    ushort	smc_ibc;	/* Internal */
+    uint	smc_rxtmp;	/* Internal */
+    uint	smc_tstate;	/* Internal */
+    uint	smc_tdp;	/* Internal */
+    ushort	smc_tbptr;	/* Internal */
+    ushort	smc_tbc;	/* Internal */
+    uint	smc_txtmp;	/* Internal */
+    ushort	smc_maxidl;	/* Maximum idle characters */
+    ushort	smc_tmpidl;	/* Temporary idle counter */
+    ushort	smc_brklen;	/* Last received break length */
+    ushort	smc_brkec;	/* rcv'd break condition counter */
+    ushort	smc_brkcr;	/* xmt break count register */
+    ushort	smc_rmask;	/* Temporary bit mask */
+    char	res1[8];	/* Reserved */
+    ushort	smc_rpbase;	/* Relocation pointer */
 } smc_uart_t;
 
 /* Function code bits.
@@ -126,33 +126,33 @@ typedef struct smc_uart {
  * include them in one structure.
  */
 typedef struct smc_centronics {
-	ushort	scent_rbase;
-	ushort	scent_tbase;
-	u_char	scent_cfcr;
-	u_char	scent_smask;
-	ushort	scent_mrblr;
-	uint	scent_rstate;
-	uint	scent_r_ptr;
-	ushort	scent_rbptr;
-	ushort	scent_r_cnt;
-	uint	scent_rtemp;
-	uint	scent_tstate;
-	uint	scent_t_ptr;
-	ushort	scent_tbptr;
-	ushort	scent_t_cnt;
-	uint	scent_ttemp;
-	ushort	scent_max_sl;
-	ushort	scent_sl_cnt;
-	ushort	scent_character1;
-	ushort	scent_character2;
-	ushort	scent_character3;
-	ushort	scent_character4;
-	ushort	scent_character5;
-	ushort	scent_character6;
-	ushort	scent_character7;
-	ushort	scent_character8;
-	ushort	scent_rccm;
-	ushort	scent_rccr;
+    ushort	scent_rbase;
+    ushort	scent_tbase;
+    u_char	scent_cfcr;
+    u_char	scent_smask;
+    ushort	scent_mrblr;
+    uint	scent_rstate;
+    uint	scent_r_ptr;
+    ushort	scent_rbptr;
+    ushort	scent_r_cnt;
+    uint	scent_rtemp;
+    uint	scent_tstate;
+    uint	scent_t_ptr;
+    ushort	scent_tbptr;
+    ushort	scent_t_cnt;
+    uint	scent_ttemp;
+    ushort	scent_max_sl;
+    ushort	scent_sl_cnt;
+    ushort	scent_character1;
+    ushort	scent_character2;
+    ushort	scent_character3;
+    ushort	scent_character4;
+    ushort	scent_character5;
+    ushort	scent_character6;
+    ushort	scent_character7;
+    ushort	scent_character8;
+    ushort	scent_rccm;
+    ushort	scent_rccr;
 } smc_cent_t;
 
 /* Centronics Status Mask Register.
@@ -285,23 +285,23 @@ typedef struct smc_centronics {
 #define	SCCM_RX		((unsigned char)0x01)
 
 typedef struct scc_param {
-	ushort	scc_rbase;	/* Rx Buffer descriptor base address */
-	ushort	scc_tbase;	/* Tx Buffer descriptor base address */
-	u_char	scc_rfcr;	/* Rx function code */
-	u_char	scc_tfcr;	/* Tx function code */
-	ushort	scc_mrblr;	/* Max receive buffer length */
-	uint	scc_rstate;	/* Internal */
-	uint	scc_idp;	/* Internal */
-	ushort	scc_rbptr;	/* Internal */
-	ushort	scc_ibc;	/* Internal */
-	uint	scc_rxtmp;	/* Internal */
-	uint	scc_tstate;	/* Internal */
-	uint	scc_tdp;	/* Internal */
-	ushort	scc_tbptr;	/* Internal */
-	ushort	scc_tbc;	/* Internal */
-	uint	scc_txtmp;	/* Internal */
-	uint	scc_rcrc;	/* Internal */
-	uint	scc_tcrc;	/* Internal */
+    ushort	scc_rbase;	/* Rx Buffer descriptor base address */
+    ushort	scc_tbase;	/* Tx Buffer descriptor base address */
+    u_char	scc_rfcr;	/* Rx function code */
+    u_char	scc_tfcr;	/* Tx function code */
+    ushort	scc_mrblr;	/* Max receive buffer length */
+    uint	scc_rstate;	/* Internal */
+    uint	scc_idp;	/* Internal */
+    ushort	scc_rbptr;	/* Internal */
+    ushort	scc_ibc;	/* Internal */
+    uint	scc_rxtmp;	/* Internal */
+    uint	scc_tstate;	/* Internal */
+    uint	scc_tdp;	/* Internal */
+    ushort	scc_tbptr;	/* Internal */
+    ushort	scc_tbc;	/* Internal */
+    uint	scc_txtmp;	/* Internal */
+    uint	scc_rcrc;	/* Internal */
+    uint	scc_tcrc;	/* Internal */
 } sccp_t;
 
 /* Function code bits.
@@ -311,56 +311,56 @@ typedef struct scc_param {
 /* CPM Ethernet through SCCx.
  */
 typedef struct scc_enet {
-	sccp_t	sen_genscc;
-	uint	sen_cpres;	/* Preset CRC */
-	uint	sen_cmask;	/* Constant mask for CRC */
-	uint	sen_crcec;	/* CRC Error counter */
-	uint	sen_alec;	/* alignment error counter */
-	uint	sen_disfc;	/* discard frame counter */
-	ushort	sen_pads;	/* Tx short frame pad character */
-	ushort	sen_retlim;	/* Retry limit threshold */
-	ushort	sen_retcnt;	/* Retry limit counter */
-	ushort	sen_maxflr;	/* maximum frame length register */
-	ushort	sen_minflr;	/* minimum frame length register */
-	ushort	sen_maxd1;	/* maximum DMA1 length */
-	ushort	sen_maxd2;	/* maximum DMA2 length */
-	ushort	sen_maxd;	/* Rx max DMA */
-	ushort	sen_dmacnt;	/* Rx DMA counter */
-	ushort	sen_maxb;	/* Max BD byte count */
-	ushort	sen_gaddr1;	/* Group address filter */
-	ushort	sen_gaddr2;
-	ushort	sen_gaddr3;
-	ushort	sen_gaddr4;
-	uint	sen_tbuf0data0;	/* Save area 0 - current frame */
-	uint	sen_tbuf0data1;	/* Save area 1 - current frame */
-	uint	sen_tbuf0rba;	/* Internal */
-	uint	sen_tbuf0crc;	/* Internal */
-	ushort	sen_tbuf0bcnt;	/* Internal */
-	ushort	sen_paddrh;	/* physical address (MSB) */
-	ushort	sen_paddrm;
-	ushort	sen_paddrl;	/* physical address (LSB) */
-	ushort	sen_pper;	/* persistence */
-	ushort	sen_rfbdptr;	/* Rx first BD pointer */
-	ushort	sen_tfbdptr;	/* Tx first BD pointer */
-	ushort	sen_tlbdptr;	/* Tx last BD pointer */
-	uint	sen_tbuf1data0;	/* Save area 0 - current frame */
-	uint	sen_tbuf1data1;	/* Save area 1 - current frame */
-	uint	sen_tbuf1rba;	/* Internal */
-	uint	sen_tbuf1crc;	/* Internal */
-	ushort	sen_tbuf1bcnt;	/* Internal */
-	ushort	sen_txlen;	/* Tx Frame length counter */
-	ushort	sen_iaddr1;	/* Individual address filter */
-	ushort	sen_iaddr2;
-	ushort	sen_iaddr3;
-	ushort	sen_iaddr4;
-	ushort	sen_boffcnt;	/* Backoff counter */
+    sccp_t	sen_genscc;
+    uint	sen_cpres;	/* Preset CRC */
+    uint	sen_cmask;	/* Constant mask for CRC */
+    uint	sen_crcec;	/* CRC Error counter */
+    uint	sen_alec;	/* alignment error counter */
+    uint	sen_disfc;	/* discard frame counter */
+    ushort	sen_pads;	/* Tx short frame pad character */
+    ushort	sen_retlim;	/* Retry limit threshold */
+    ushort	sen_retcnt;	/* Retry limit counter */
+    ushort	sen_maxflr;	/* maximum frame length register */
+    ushort	sen_minflr;	/* minimum frame length register */
+    ushort	sen_maxd1;	/* maximum DMA1 length */
+    ushort	sen_maxd2;	/* maximum DMA2 length */
+    ushort	sen_maxd;	/* Rx max DMA */
+    ushort	sen_dmacnt;	/* Rx DMA counter */
+    ushort	sen_maxb;	/* Max BD byte count */
+    ushort	sen_gaddr1;	/* Group address filter */
+    ushort	sen_gaddr2;
+    ushort	sen_gaddr3;
+    ushort	sen_gaddr4;
+    uint	sen_tbuf0data0;	/* Save area 0 - current frame */
+    uint	sen_tbuf0data1;	/* Save area 1 - current frame */
+    uint	sen_tbuf0rba;	/* Internal */
+    uint	sen_tbuf0crc;	/* Internal */
+    ushort	sen_tbuf0bcnt;	/* Internal */
+    ushort	sen_paddrh;	/* physical address (MSB) */
+    ushort	sen_paddrm;
+    ushort	sen_paddrl;	/* physical address (LSB) */
+    ushort	sen_pper;	/* persistence */
+    ushort	sen_rfbdptr;	/* Rx first BD pointer */
+    ushort	sen_tfbdptr;	/* Tx first BD pointer */
+    ushort	sen_tlbdptr;	/* Tx last BD pointer */
+    uint	sen_tbuf1data0;	/* Save area 0 - current frame */
+    uint	sen_tbuf1data1;	/* Save area 1 - current frame */
+    uint	sen_tbuf1rba;	/* Internal */
+    uint	sen_tbuf1crc;	/* Internal */
+    ushort	sen_tbuf1bcnt;	/* Internal */
+    ushort	sen_txlen;	/* Tx Frame length counter */
+    ushort	sen_iaddr1;	/* Individual address filter */
+    ushort	sen_iaddr2;
+    ushort	sen_iaddr3;
+    ushort	sen_iaddr4;
+    ushort	sen_boffcnt;	/* Backoff counter */
 
-	/* NOTE: Some versions of the manual have the following items
-	 * incorrectly documented.  Below is the proper order.
-	 */
-	ushort	sen_taddrh;	/* temp address (MSB) */
-	ushort	sen_taddrm;
-	ushort	sen_taddrl;	/* temp address (LSB) */
+    /* NOTE: Some versions of the manual have the following items
+     * incorrectly documented.  Below is the proper order.
+     */
+    ushort	sen_taddrh;	/* temp address (MSB) */
+    ushort	sen_taddrm;
+    ushort	sen_taddrl;	/* temp address (LSB) */
 } scc_enet_t;
 
 /* SCC Event register as used by Ethernet.
@@ -391,31 +391,31 @@ typedef struct scc_enet {
 /* SCC as UART
 */
 typedef struct scc_uart {
-	sccp_t	scc_genscc;
-	char	res1[8];	/* Reserved */
-	ushort	scc_maxidl;	/* Maximum idle chars */
-	ushort	scc_idlc;	/* temp idle counter */
-	ushort	scc_brkcr;	/* Break count register */
-	ushort	scc_parec;	/* receive parity error counter */
-	ushort	scc_frmec;	/* receive framing error counter */
-	ushort	scc_nosec;	/* receive noise counter */
-	ushort	scc_brkec;	/* receive break condition counter */
-	ushort	scc_brkln;	/* last received break length */
-	ushort	scc_uaddr1;	/* UART address character 1 */
-	ushort	scc_uaddr2;	/* UART address character 2 */
-	ushort	scc_rtemp;	/* Temp storage */
-	ushort	scc_toseq;	/* Transmit out of sequence char */
-	ushort	scc_char1;	/* control character 1 */
-	ushort	scc_char2;	/* control character 2 */
-	ushort	scc_char3;	/* control character 3 */
-	ushort	scc_char4;	/* control character 4 */
-	ushort	scc_char5;	/* control character 5 */
-	ushort	scc_char6;	/* control character 6 */
-	ushort	scc_char7;	/* control character 7 */
-	ushort	scc_char8;	/* control character 8 */
-	ushort	scc_rccm;	/* receive control character mask */
-	ushort	scc_rccr;	/* receive control character register */
-	ushort	scc_rlbc;	/* receive last break character */
+    sccp_t	scc_genscc;
+    char	res1[8];	/* Reserved */
+    ushort	scc_maxidl;	/* Maximum idle chars */
+    ushort	scc_idlc;	/* temp idle counter */
+    ushort	scc_brkcr;	/* Break count register */
+    ushort	scc_parec;	/* receive parity error counter */
+    ushort	scc_frmec;	/* receive framing error counter */
+    ushort	scc_nosec;	/* receive noise counter */
+    ushort	scc_brkec;	/* receive break condition counter */
+    ushort	scc_brkln;	/* last received break length */
+    ushort	scc_uaddr1;	/* UART address character 1 */
+    ushort	scc_uaddr2;	/* UART address character 2 */
+    ushort	scc_rtemp;	/* Temp storage */
+    ushort	scc_toseq;	/* Transmit out of sequence char */
+    ushort	scc_char1;	/* control character 1 */
+    ushort	scc_char2;	/* control character 2 */
+    ushort	scc_char3;	/* control character 3 */
+    ushort	scc_char4;	/* control character 4 */
+    ushort	scc_char5;	/* control character 5 */
+    ushort	scc_char6;	/* control character 6 */
+    ushort	scc_char7;	/* control character 7 */
+    ushort	scc_char8;	/* control character 8 */
+    ushort	scc_rccm;	/* receive control character mask */
+    ushort	scc_rccr;	/* receive control character register */
+    ushort	scc_rlbc;	/* receive last break character */
 } scc_uart_t;
 
 /* SCC Event and Mask registers when it is used as a UART.
@@ -451,32 +451,32 @@ typedef struct scc_uart {
 /* CPM Transparent mode SCC.
  */
 typedef struct scc_trans {
-	sccp_t	st_genscc;
-	uint	st_cpres;	/* Preset CRC */
-	uint	st_cmask;	/* Constant mask for CRC */
+    sccp_t	st_genscc;
+    uint	st_cpres;	/* Preset CRC */
+    uint	st_cmask;	/* Constant mask for CRC */
 } scc_trans_t;
 
 /* IIC parameter RAM.
 */
 typedef struct iic {
-	ushort	iic_rbase;	/* Rx Buffer descriptor base address */
-	ushort	iic_tbase;	/* Tx Buffer descriptor base address */
-	u_char	iic_rfcr;	/* Rx function code */
-	u_char	iic_tfcr;	/* Tx function code */
-	ushort	iic_mrblr;	/* Max receive buffer length */
-	uint	iic_rstate;	/* Internal */
-	uint	iic_rdp;	/* Internal */
-	ushort	iic_rbptr;	/* Internal */
-	ushort	iic_rbc;	/* Internal */
-	uint	iic_rxtmp;	/* Internal */
-	uint	iic_tstate;	/* Internal */
-	uint	iic_tdp;	/* Internal */
-	ushort	iic_tbptr;	/* Internal */
-	ushort	iic_tbc;	/* Internal */
-	uint	iic_txtmp;	/* Internal */
-	char	res1[4];	/* Reserved */
-	ushort	iic_rpbase;	/* Relocation pointer */
-	char	res2[2];	/* Reserved */
+    ushort	iic_rbase;	/* Rx Buffer descriptor base address */
+    ushort	iic_tbase;	/* Tx Buffer descriptor base address */
+    u_char	iic_rfcr;	/* Rx function code */
+    u_char	iic_tfcr;	/* Tx function code */
+    ushort	iic_mrblr;	/* Max receive buffer length */
+    uint	iic_rstate;	/* Internal */
+    uint	iic_rdp;	/* Internal */
+    ushort	iic_rbptr;	/* Internal */
+    ushort	iic_rbc;	/* Internal */
+    uint	iic_rxtmp;	/* Internal */
+    uint	iic_tstate;	/* Internal */
+    uint	iic_tdp;	/* Internal */
+    ushort	iic_tbptr;	/* Internal */
+    ushort	iic_tbc;	/* Internal */
+    uint	iic_txtmp;	/* Internal */
+    char	res1[4];	/* Reserved */
+    ushort	iic_rpbase;	/* Relocation pointer */
+    char	res2[2];	/* Reserved */
 } iic_t;
 
 /*
@@ -490,12 +490,12 @@ typedef struct iic {
 #define PROFF_RTMR	((uint)0x01B0)
 
 typedef struct risc_timer_pram {
-	unsigned short	tm_base;	/* RISC Timer Table Base Address */
-	unsigned short	tm_ptr;		/* RISC Timer Table Pointer (internal) */
-	unsigned short	r_tmr;		/* RISC Timer Mode Register */
-	unsigned short	r_tmv;		/* RISC Timer Valid Register */
-	unsigned long	tm_cmd;		/* RISC Timer Command Register */
-	unsigned long	tm_cnt;		/* RISC Timer Internal Count */
+    unsigned short	tm_base;	/* RISC Timer Table Base Address */
+    unsigned short	tm_ptr;		/* RISC Timer Table Pointer (internal) */
+    unsigned short	r_tmr;		/* RISC Timer Mode Register */
+    unsigned short	r_tmv;		/* RISC Timer Valid Register */
+    unsigned long	tm_cmd;		/* RISC Timer Command Register */
+    unsigned long	tm_cnt;		/* RISC Timer Internal Count */
 } rt_pram_t;
 
 /* Bits in RISC Timer Command Register */
@@ -562,43 +562,43 @@ typedef struct risc_timer_pram {
 #define CPM_PIN_OPENDRAIN 8
 
 enum cpm_port {
-	CPM_PORTA,
-	CPM_PORTB,
-	CPM_PORTC,
-	CPM_PORTD,
-	CPM_PORTE,
+    CPM_PORTA,
+    CPM_PORTB,
+    CPM_PORTC,
+    CPM_PORTD,
+    CPM_PORTE,
 };
 
 void cpm1_set_pin(enum cpm_port port, int pin, int flags);
 
 enum cpm_clk_dir {
-	CPM_CLK_RX,
-	CPM_CLK_TX,
-	CPM_CLK_RTX
+    CPM_CLK_RX,
+    CPM_CLK_TX,
+    CPM_CLK_RTX
 };
 
 enum cpm_clk_target {
-	CPM_CLK_SCC1,
-	CPM_CLK_SCC2,
-	CPM_CLK_SCC3,
-	CPM_CLK_SCC4,
-	CPM_CLK_SMC1,
-	CPM_CLK_SMC2,
+    CPM_CLK_SCC1,
+    CPM_CLK_SCC2,
+    CPM_CLK_SCC3,
+    CPM_CLK_SCC4,
+    CPM_CLK_SMC1,
+    CPM_CLK_SMC2,
 };
 
 enum cpm_clk {
-	CPM_BRG1,	/* Baud Rate Generator  1 */
-	CPM_BRG2,	/* Baud Rate Generator  2 */
-	CPM_BRG3,	/* Baud Rate Generator  3 */
-	CPM_BRG4,	/* Baud Rate Generator  4 */
-	CPM_CLK1,	/* Clock  1 */
-	CPM_CLK2,	/* Clock  2 */
-	CPM_CLK3,	/* Clock  3 */
-	CPM_CLK4,	/* Clock  4 */
-	CPM_CLK5,	/* Clock  5 */
-	CPM_CLK6,	/* Clock  6 */
-	CPM_CLK7,	/* Clock  7 */
-	CPM_CLK8,	/* Clock  8 */
+    CPM_BRG1,	/* Baud Rate Generator  1 */
+    CPM_BRG2,	/* Baud Rate Generator  2 */
+    CPM_BRG3,	/* Baud Rate Generator  3 */
+    CPM_BRG4,	/* Baud Rate Generator  4 */
+    CPM_CLK1,	/* Clock  1 */
+    CPM_CLK2,	/* Clock  2 */
+    CPM_CLK3,	/* Clock  3 */
+    CPM_CLK4,	/* Clock  4 */
+    CPM_CLK5,	/* Clock  5 */
+    CPM_CLK6,	/* Clock  6 */
+    CPM_CLK7,	/* Clock  7 */
+    CPM_CLK8,	/* Clock  8 */
 };
 
 int cpm1_clk_setup(enum cpm_clk_target target, int clock, int mode);

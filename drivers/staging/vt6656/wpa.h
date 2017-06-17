@@ -60,25 +60,25 @@
 
 void
 WPA_ClearRSN(
-     PKnownBSS        pBSSList
-    );
+    PKnownBSS        pBSSList
+);
 
 void
 WPA_ParseRSN(
-     PKnownBSS        pBSSList,
-     PWLAN_IE_RSN_EXT pRSN
-    );
+    PKnownBSS        pBSSList,
+    PWLAN_IE_RSN_EXT pRSN
+);
 
 BOOL
 WPA_SearchRSN(
     BYTE                byCmd,
     BYTE                byEncrypt,
-     PKnownBSS        pBSSList
-    );
+    PKnownBSS        pBSSList
+);
 
 BOOL
 WPAb_Is_RSN(
-     PWLAN_IE_RSN_EXT pRSN
-    );
+    PWLAN_IE_RSN_EXT pRSN
+);
 
 #endif /* __WPA_H__ */

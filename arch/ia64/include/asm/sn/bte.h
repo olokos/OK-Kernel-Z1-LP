@@ -138,16 +138,16 @@
 #define BTEFAIL_OFFSET	1
 
 typedef enum {
-	BTE_SUCCESS,		/* 0 is success */
-	BTEFAIL_DIR,		/* Directory error due to IIO access*/
-	BTEFAIL_POISON,		/* poison error on IO access (write to poison page) */
-	BTEFAIL_WERR,		/* Write error (ie WINV to a Read only line) */
-	BTEFAIL_ACCESS,		/* access error (protection violation) */
-	BTEFAIL_PWERR,		/* Partial Write Error */
-	BTEFAIL_PRERR,		/* Partial Read Error */
-	BTEFAIL_TOUT,		/* CRB Time out */
-	BTEFAIL_XTERR,		/* Incoming xtalk pkt had error bit */
-	BTEFAIL_NOTAVAIL,	/* BTE not available */
+    BTE_SUCCESS,		/* 0 is success */
+    BTEFAIL_DIR,		/* Directory error due to IIO access*/
+    BTEFAIL_POISON,		/* poison error on IO access (write to poison page) */
+    BTEFAIL_WERR,		/* Write error (ie WINV to a Read only line) */
+    BTEFAIL_ACCESS,		/* access error (protection violation) */
+    BTEFAIL_PWERR,		/* Partial Write Error */
+    BTEFAIL_PRERR,		/* Partial Read Error */
+    BTEFAIL_TOUT,		/* CRB Time out */
+    BTEFAIL_XTERR,		/* Incoming xtalk pkt had error bit */
+    BTEFAIL_NOTAVAIL,	/* BTE not available */
 } bte_result_t;
 
 #define BTEFAIL_SH2_RESP_SHORT	0x1	/* bit 000001 */
@@ -188,20 +188,20 @@ typedef enum {
  * to work with a BTE.
  */
 struct bteinfo_s {
-	volatile u64 notify ____cacheline_aligned;
-	u64 *bte_base_addr ____cacheline_aligned;
-	u64 *bte_source_addr;
-	u64 *bte_destination_addr;
-	u64 *bte_control_addr;
-	u64 *bte_notify_addr;
-	spinlock_t spinlock;
-	cnodeid_t bte_cnode;	/* cnode                            */
-	int bte_error_count;	/* Number of errors encountered     */
-	int bte_num;		/* 0 --> BTE0, 1 --> BTE1           */
-	int cleanup_active;	/* Interface is locked for cleanup  */
-	volatile bte_result_t bh_error;	/* error while processing   */
-	volatile u64 *most_rcnt_na;
-	struct bteinfo_s *btes_to_try[MAX_BTES_PER_NODE];
+    volatile u64 notify ____cacheline_aligned;
+    u64 *bte_base_addr ____cacheline_aligned;
+    u64 *bte_source_addr;
+    u64 *bte_destination_addr;
+    u64 *bte_control_addr;
+    u64 *bte_notify_addr;
+    spinlock_t spinlock;
+    cnodeid_t bte_cnode;	/* cnode                            */
+    int bte_error_count;	/* Number of errors encountered     */
+    int bte_num;		/* 0 --> BTE0, 1 --> BTE1           */
+    int cleanup_active;	/* Interface is locked for cleanup  */
+    volatile bte_result_t bh_error;	/* error while processing   */
+    volatile u64 *most_rcnt_na;
+    struct bteinfo_s *btes_to_try[MAX_BTES_PER_NODE];
 };
 
 

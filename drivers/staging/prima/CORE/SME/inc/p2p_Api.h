@@ -42,8 +42,7 @@
 #include "palTimer.h"
 #include "vos_lock.h"
 
-typedef struct sP2pPsConfig
-{
+typedef struct sP2pPsConfig {
     tANI_U8   opp_ps;
     tANI_U32  ctWindow;
     tANI_U8   count;
@@ -57,8 +56,7 @@ typedef struct sP2pPsConfig
 typedef eHalStatus (*remainOnChanCallback)( tHalHandle, void* context,
         eHalStatus status );
 
-typedef struct sRemainOnChn
-{
+typedef struct sRemainOnChn {
     tANI_U8 chn;
     tANI_U32 duration;
     remainOnChanCallback callback;
@@ -90,8 +88,7 @@ typedef struct sRemainOnChn
 #define P2P_COUNTRY_CODE_LEN 3
 
 /* Wi-Fi Direct Device Discovery Type */
-typedef enum ep2pDiscoverType
-{
+typedef enum ep2pDiscoverType {
     /** Driver must perform device discovery only using the scan phase*/
     WFD_DISCOVER_TYPE_SCAN_ONLY = 1,
     /** Driver must perform device discovery only using the find phase*/
@@ -115,39 +112,34 @@ typedef enum ep2pDiscoverType
                                     || (WFD_DISCOVER_SCAN_ONLY_SOCIAL_CHN == (t)) )
 
 /* Scan Type */
-typedef enum ep2pScanType
-{
+typedef enum ep2pScanType {
     P2P_SCAN_TYPE_ACTIVE = 1,  /**  device should perform active scans for the scan phase of device discovery */
     P2P_SCAN_TYPE_PASSIVE = 2, /** device should perform passive scanning for the scan phase of device discovery  */
     P2P_SCAN_TYPE_AUTO = 3     /** The selection of the scan type is upto the driver */
 } ep2pScanType, * ePp2pScanType;
 
 /** Listen State Discoverability */
-typedef enum ep2pListenStateDiscoverability
-{
+typedef enum ep2pListenStateDiscoverability {
     P2P_DEVICE_NOT_DISCOVERABLE, /**  Wi-Fi Direct Device Port must not make itself discoverable */
     P2P_DEVICE_AUTO_AVAILABILITY, /** Wi-Fi Direct Device Port must periodically put itself in the listen state to become discoverable*/
     P2P_DEVICE_HIGH_AVAILABILITY  /** Wi-Fi Direct Device Port must be frequently put itself in the listen state
                                  to increase the speed and reliability of remote devices discovering it */
 } ep2pListenStateDiscoverability, * ePp2pListenStateDiscoverability;
 
-typedef enum ep2pOperatingMode
-{
+typedef enum ep2pOperatingMode {
     OPERATION_MODE_INVALID,
     OPERATION_MODE_P2P_DEVICE,
     OPERATION_MODE_P2P_GROUP_OWNER,
     OPERATION_MODE_P2P_CLIENT
 } ep2pOperatingMode;
 
-typedef struct _tp2pDiscoverDeviceFilter
-{
+typedef struct _tp2pDiscoverDeviceFilter {
     tSirMacAddr DeviceID;
     v_UCHAR_t ucBitmask;
     tSirMacSSid GroupSSID;
 } tp2pDiscoverDeviceFilter;
 
-typedef struct _tp2pDiscoverRequest
-{
+typedef struct _tp2pDiscoverRequest {
     ep2pDiscoverType discoverType;
     ep2pScanType scanType;
     tANI_U32 uDiscoverTimeout;
@@ -160,8 +152,7 @@ typedef struct _tp2pDiscoverRequest
     tANI_U8 *pIEField;
 } tP2PDiscoverRequest;
 
-typedef enum _eP2PDiscoverStatus
-{
+typedef enum _eP2PDiscoverStatus {
     eP2P_DISCOVER_SUCCESS,
     eP2P_DISCOVER_FAILURE,
     eP2P_DISCOVER_ABORT,
@@ -170,22 +161,19 @@ typedef enum _eP2PDiscoverStatus
 
 typedef eHalStatus (*p2pDiscoverCompleteCallback)(tHalHandle hHal, void *pContext, eP2PDiscoverStatus discoverStatus);
 
-typedef struct sP2PGroupId
-{
+typedef struct sP2PGroupId {
     tANI_U8 present;
     tANI_U8 deviceAddress[6];
     tANI_U8 num_ssid;
     tANI_U8 ssid[32];
 } tP2PGroupId;
 
-typedef struct sP2PGroupBssid
-{
+typedef struct sP2PGroupBssid {
     tANI_U8 present;
     tANI_U8 P2PGroupBssid[6];
 } tP2PGroupBssid;
 
-typedef struct sP2PChannel
-{
+typedef struct sP2PChannel {
     tANI_U8 present;
     tANI_U8 countryString[P2P_COUNTRY_CODE_LEN];
     tANI_U8 regulatoryClass;
@@ -193,8 +181,7 @@ typedef struct sP2PChannel
 } tP2P_OperatingChannel, tP2P_ListenChannel;
 
 /** Structure contains parameters required for Wi-Fi Direct Device functionality such as device discovery, Group Owner Negotiation */
-typedef enum P2PFrameType
-{
+typedef enum P2PFrameType {
     eP2P_INVALID_FRM,
     eP2P_PROBE_REQ,
     eP2P_PROBE_RSP,
@@ -212,8 +199,7 @@ typedef enum P2PFrameType
     eP2P_DEVICE_DISCOVERY_RSP,
 } eP2PFrameType;
 
-typedef enum P2PRequest
-{
+typedef enum P2PRequest {
     eWFD_DISCOVER_REQUEST,
     eWFD_DEVICE_ID,
     eWFD_DEVICE_CAPABILITY,
@@ -233,8 +219,7 @@ typedef enum P2PRequest
     eWFD_LISTEN_CHANNEL
 } eP2PRequest;
 
-typedef struct _p2p_device_capability_config
-{
+typedef struct _p2p_device_capability_config {
     tANI_BOOLEAN bServiceDiscoveryEnabled;
     tANI_BOOLEAN bClientDiscoverabilityEnabled;
     tANI_BOOLEAN bConcurrentOperationSupported;
@@ -244,8 +229,7 @@ typedef struct _p2p_device_capability_config
     tANI_U32 WPSVersionsEnabled;
 } tp2p_device_capability_config;
 
-typedef struct _p2p_group_owner_capability_config
-{
+typedef struct _p2p_group_owner_capability_config {
     tANI_BOOLEAN bPersistentGroupEnabled;
     tANI_BOOLEAN bIntraBSSDistributionSupported;
     tANI_BOOLEAN bCrossConnectionSupported;
@@ -254,8 +238,7 @@ typedef struct _p2p_group_owner_capability_config
     tANI_U32 uMaximumGroupLimit;
 } tp2p_group_owner_capability_config;
 
-typedef struct _tP2P_ProvDiscoveryReq
-{
+typedef struct _tP2P_ProvDiscoveryReq {
     tANI_U8     dialogToken;
     tANI_U8  PeerDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U32 uSendTimeout;
@@ -266,8 +249,7 @@ typedef struct _tP2P_ProvDiscoveryReq
     tANI_U8 *IEdata;
 } tP2P_ProvDiscoveryReq;
 
-typedef struct _tP2P_ProvDiscoveryRes
-{
+typedef struct _tP2P_ProvDiscoveryRes {
     tANI_U8  dialogToken;
     tANI_U8  ReceiverDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U32 uSendTimeout;
@@ -275,8 +257,7 @@ typedef struct _tP2P_ProvDiscoveryRes
     tANI_U8 *IEdata;
 } tP2P_ProvDiscoveryRes;
 
-typedef struct p2p_go_request
-{
+typedef struct p2p_go_request {
     tANI_U8     dialogToken;
     tANI_U8    peerDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U32 uSendTimeout;
@@ -289,8 +270,7 @@ typedef struct p2p_go_request
     tANI_U8 *IEdata;
 } tP2P_go_request;
 
-typedef struct p2p_go_confirm
-{
+typedef struct p2p_go_confirm {
     tANI_U8    peerDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U8    dialog_token;
     tANI_U32 uSendTimeout;
@@ -302,8 +282,7 @@ typedef struct p2p_go_confirm
     tANI_U8 *IEdata;
 } tP2P_go_confirm;
 
-typedef struct p2p_go_response
-{
+typedef struct p2p_go_response {
     tANI_U8    peerDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U8    dialog_token;
     tANI_U32 uSendTimeout;
@@ -320,8 +299,7 @@ typedef struct p2p_go_response
 } tP2P_go_response;
 
 //Invitation Req parameters
-typedef struct p2p_invitation_request
-{
+typedef struct p2p_invitation_request {
     tANI_U8 DialogToken;
     tANI_U8 PeerDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U32 uSendTimeout;
@@ -337,8 +315,7 @@ typedef struct p2p_invitation_request
 
 
 //Invitation Response parameters
-typedef struct p2p_invitation_response
-{
+typedef struct p2p_invitation_response {
     tANI_U8 ReceiverDeviceAddress[P2P_MAC_ADDRESS_LEN];
     tANI_U8 DialogToken;
     void* RequestContext;
@@ -352,8 +329,7 @@ typedef struct p2p_invitation_response
     tANI_U8 *IEdata;
 } tP2P_invitation_response;
 
-typedef enum eOUISubType
-{
+typedef enum eOUISubType {
     eOUI_P2P_GONEGO_REQ,
     eOUI_P2P_GONEGO_RES,
     eOUI_P2P_GONEGO_CNF,
@@ -366,30 +342,26 @@ typedef enum eOUISubType
     eOUI_P2P_INVALID
 } eOUISubType;
 
-typedef enum _eP2PPort
-{
+typedef enum _eP2PPort {
     eP2PPortDevice,
     eP2PPortGroupOwner,
     eP2PPortClient
 } eP2PPort;
 
-typedef enum eListenDiscoverableState
-{
+typedef enum eListenDiscoverableState {
     eStateDisabled,
     eStateEnabled,
 
 } eListenDiscoverableState;
 
-typedef enum P2PRemainOnChnReason
-{
+typedef enum P2PRemainOnChnReason {
     eP2PRemainOnChnReasonUnknown,
     eP2PRemainOnChnReasonDiscovery, //Part of the discovery (search and listen)
     eP2PRemainOnChnReasonSendFrame, //Found peer and before sending request frame
     eP2PRemainOnChnReasonListen,    //In listen-only mode
 } eP2PRemainOnChnReason;
 
-typedef struct sGroupFormationReq
-{
+typedef struct sGroupFormationReq {
     tCsrBssid deviceAddress;
     tANI_U8 targetListenChannel;
     tANI_U8 persistent_group;
@@ -402,8 +374,7 @@ typedef struct sGroupFormationReq
     tSirMacSSid groupSsid;
 } tGroupFormationReq;
 
-typedef struct tP2PConfigParam
-{
+typedef struct tP2PConfigParam {
     v_U32_t P2POperatingChannel;
     v_U32_t P2PListenChannel;
     v_U32_t P2PPSSelection;
@@ -415,8 +386,7 @@ typedef struct tP2PConfigParam
 
 #endif
 
-typedef struct sp2pContext
-{
+typedef struct sp2pContext {
     v_CONTEXT_t vosContext;
     tHalHandle hHal;
     tANI_U8 sessionId; //Session id corresponding to P2P. On windows it is same as HDD sessionid not sme sessionid.

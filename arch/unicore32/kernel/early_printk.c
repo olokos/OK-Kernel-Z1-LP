@@ -16,21 +16,20 @@
 
 /* On-Chip-Debugger functions */
 
-static void early_ocd_write(struct console *con, const char *s, unsigned n)
-{
-	while (*s && n-- > 0) {
-		if (*s == '\n')
-			ocd_putc((int)'\r');
-		ocd_putc((int)*s);
-		s++;
-	}
+static void early_ocd_write(struct console *con, const char *s, unsigned n) {
+    while (*s && n-- > 0) {
+        if (*s == '\n')
+            ocd_putc((int)'\r');
+        ocd_putc((int)*s);
+        s++;
+    }
 }
 
 static struct console early_ocd_console = {
-	.name =		"earlyocd",
-	.write =	early_ocd_write,
-	.flags =	CON_PRINTBUFFER,
-	.index =	-1,
+    .name =		"earlyocd",
+    .write =	early_ocd_write,
+    .flags =	CON_PRINTBUFFER,
+    .index =	-1,
 };
 
 /* Direct interface for emergencies */
@@ -38,22 +37,21 @@ static struct console *early_console = &early_ocd_console;
 
 static int __initdata keep_early;
 
-static int __init setup_early_printk(char *buf)
-{
-	if (!buf)
-		return 0;
+static int __init setup_early_printk(char *buf) {
+    if (!buf)
+        return 0;
 
-	if (strstr(buf, "keep"))
-		keep_early = 1;
+    if (strstr(buf, "keep"))
+        keep_early = 1;
 
-	if (!strncmp(buf, "ocd", 3))
-		early_console = &early_ocd_console;
+    if (!strncmp(buf, "ocd", 3))
+        early_console = &early_ocd_console;
 
-	if (keep_early)
-		early_console->flags &= ~CON_BOOT;
-	else
-		early_console->flags |= CON_BOOT;
-	register_console(early_console);
-	return 0;
+    if (keep_early)
+        early_console->flags &= ~CON_BOOT;
+    else
+        early_console->flags |= CON_BOOT;
+    register_console(early_console);
+    return 0;
 }
 early_param("earlyprintk", setup_early_printk);

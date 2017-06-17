@@ -20,26 +20,26 @@
 
 /* End point parameters */
 struct sps_map_end_point {
-	u32 periph_class;	/* Peripheral device enumeration class */
-	u32 periph_phy_addr;	/* Peripheral base address */
-	u32 pipe_index;		/* Pipe index */
-	u32 event_thresh;	/* Pipe event threshold */
+    u32 periph_class;	/* Peripheral device enumeration class */
+    u32 periph_phy_addr;	/* Peripheral base address */
+    u32 pipe_index;		/* Pipe index */
+    u32 event_thresh;	/* Pipe event threshold */
 };
 
 /* Mapping connection descriptor */
 struct sps_map {
-	/* Source end point parameters */
-	struct sps_map_end_point src;
+    /* Source end point parameters */
+    struct sps_map_end_point src;
 
-	/* Destination end point parameters */
-	struct sps_map_end_point dest;
+    /* Destination end point parameters */
+    struct sps_map_end_point dest;
 
-	/* Resource parameters */
-	u32 config;	 /* Configuration (stream) identifier */
-	phys_addr_t desc_base;	 /* Physical address of descriptor FIFO */
-	u32 desc_size;	 /* Size (bytes) of descriptor FIFO */
-	phys_addr_t data_base;	 /* Physical address of data FIFO */
-	u32 data_size;	 /* Size (bytes) of data FIFO */
+    /* Resource parameters */
+    u32 config;	 /* Configuration (stream) identifier */
+    phys_addr_t desc_base;	 /* Physical address of descriptor FIFO */
+    u32 desc_size;	 /* Size (bytes) of descriptor FIFO */
+    phys_addr_t data_base;	 /* Physical address of data FIFO */
+    u32 data_size;	 /* Size (bytes) of data FIFO */
 
 };
 

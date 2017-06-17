@@ -66,32 +66,30 @@ typedef unsigned int ap_qid_t;
  * byte, followed by a 1 byte response code.
  */
 struct ap_queue_status {
-	unsigned int queue_empty	: 1;
-	unsigned int replies_waiting	: 1;
-	unsigned int queue_full		: 1;
-	unsigned int pad1		: 4;
-	unsigned int int_enabled	: 1;
-	unsigned int response_code	: 8;
-	unsigned int pad2		: 16;
+    unsigned int queue_empty	: 1;
+    unsigned int replies_waiting	: 1;
+    unsigned int queue_full		: 1;
+    unsigned int pad1		: 4;
+    unsigned int int_enabled	: 1;
+    unsigned int response_code	: 8;
+    unsigned int pad2		: 16;
 } __packed;
 
 #define AP_QUEUE_STATUS_INVALID \
 		{ 1, 1, 1, 0xF, 1, 0xFF, 0xFFFF }
 
 static inline
-int ap_queue_status_invalid_test(struct ap_queue_status *status)
-{
-	struct ap_queue_status invalid = AP_QUEUE_STATUS_INVALID;
-	return !(memcmp(status, &invalid, sizeof(struct ap_queue_status)));
+int ap_queue_status_invalid_test(struct ap_queue_status *status) {
+    struct ap_queue_status invalid = AP_QUEUE_STATUS_INVALID;
+    return !(memcmp(status, &invalid, sizeof(struct ap_queue_status)));
 }
 
 #define MAX_AP_FACILITY 31
 
-static inline int test_ap_facility(unsigned int function, unsigned int nr)
-{
-	if (nr > MAX_AP_FACILITY)
-		return 0;
-	return function & (unsigned int)(0x80000000 >> nr);
+static inline int test_ap_facility(unsigned int function, unsigned int nr) {
+    if (nr > MAX_AP_FACILITY)
+        return 0;
+    return function & (unsigned int)(0x80000000 >> nr);
 }
 
 #define AP_RESPONSE_NORMAL		0x00
@@ -131,15 +129,15 @@ struct ap_device;
 struct ap_message;
 
 struct ap_driver {
-	struct device_driver driver;
-	struct ap_device_id *ids;
+    struct device_driver driver;
+    struct ap_device_id *ids;
 
-	int (*probe)(struct ap_device *);
-	void (*remove)(struct ap_device *);
-	/* receive is called from tasklet context */
-	void (*receive)(struct ap_device *, struct ap_message *,
-			struct ap_message *);
-	int request_timeout;		/* request timeout in jiffies */
+    int (*probe)(struct ap_device *);
+    void (*remove)(struct ap_device *);
+    /* receive is called from tasklet context */
+    void (*receive)(struct ap_device *, struct ap_message *,
+                    struct ap_message *);
+    int request_timeout;		/* request timeout in jiffies */
 };
 
 #define to_ap_drv(x) container_of((x), struct ap_driver, driver)
@@ -148,41 +146,41 @@ int ap_driver_register(struct ap_driver *, struct module *, char *);
 void ap_driver_unregister(struct ap_driver *);
 
 struct ap_device {
-	struct device device;
-	struct ap_driver *drv;		/* Pointer to AP device driver. */
-	spinlock_t lock;		/* Per device lock. */
-	struct list_head list;		/* private list of all AP devices. */
+    struct device device;
+    struct ap_driver *drv;		/* Pointer to AP device driver. */
+    spinlock_t lock;		/* Per device lock. */
+    struct list_head list;		/* private list of all AP devices. */
 
-	ap_qid_t qid;			/* AP queue id. */
-	int queue_depth;		/* AP queue depth.*/
-	int device_type;		/* AP device type. */
-	int unregistered;		/* marks AP device as unregistered */
-	struct timer_list timeout;	/* Timer for request timeouts. */
-	int reset;			/* Reset required after req. timeout. */
+    ap_qid_t qid;			/* AP queue id. */
+    int queue_depth;		/* AP queue depth.*/
+    int device_type;		/* AP device type. */
+    int unregistered;		/* marks AP device as unregistered */
+    struct timer_list timeout;	/* Timer for request timeouts. */
+    int reset;			/* Reset required after req. timeout. */
 
-	int queue_count;		/* # messages currently on AP queue. */
+    int queue_count;		/* # messages currently on AP queue. */
 
-	struct list_head pendingq;	/* List of message sent to AP queue. */
-	int pendingq_count;		/* # requests on pendingq list. */
-	struct list_head requestq;	/* List of message yet to be sent. */
-	int requestq_count;		/* # requests on requestq list. */
-	int total_request_count;	/* # requests ever for this AP device. */
+    struct list_head pendingq;	/* List of message sent to AP queue. */
+    int pendingq_count;		/* # requests on pendingq list. */
+    struct list_head requestq;	/* List of message yet to be sent. */
+    int requestq_count;		/* # requests on requestq list. */
+    int total_request_count;	/* # requests ever for this AP device. */
 
-	struct ap_message *reply;	/* Per device reply message. */
+    struct ap_message *reply;	/* Per device reply message. */
 
-	void *private;			/* ap driver private pointer. */
+    void *private;			/* ap driver private pointer. */
 };
 
 #define to_ap_dev(x) container_of((x), struct ap_device, device)
 
 struct ap_message {
-	struct list_head list;		/* Request queueing. */
-	unsigned long long psmid;	/* Message id. */
-	void *message;			/* Pointer to message buffer. */
-	size_t length;			/* Message length. */
+    struct list_head list;		/* Request queueing. */
+    unsigned long long psmid;	/* Message id. */
+    void *message;			/* Pointer to message buffer. */
+    size_t length;			/* Message length. */
 
-	void *private;			/* ap driver private pointer. */
-	unsigned int special:1;		/* Used for special commands. */
+    void *private;			/* ap driver private pointer. */
+    unsigned int special:1;		/* Used for special commands. */
 };
 
 #define AP_DEVICE(dt)					\
@@ -194,11 +192,10 @@ struct ap_message {
  * Initialize a message before using. Otherwise this might result in
  * unexpected behaviour.
  */
-static inline void ap_init_message(struct ap_message *ap_msg)
-{
-	ap_msg->psmid = 0;
-	ap_msg->length = 0;
-	ap_msg->special = 0;
+static inline void ap_init_message(struct ap_message *ap_msg) {
+    ap_msg->psmid = 0;
+    ap_msg->length = 0;
+    ap_msg->special = 0;
 }
 
 /*

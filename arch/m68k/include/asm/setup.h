@@ -25,9 +25,9 @@
 
 
 
-    /*
-     *  Linux/m68k Architectures
-     */
+/*
+ *  Linux/m68k Architectures
+ */
 
 #define MACH_AMIGA    1
 #define MACH_ATARI    2
@@ -197,16 +197,16 @@ extern unsigned long m68k_machtype;
 #endif /* __KERNEL__ */
 
 
-    /*
-     *  CPU, FPU and MMU types
-     *
-     *  Note: we may rely on the following equalities:
-     *
-     *      CPU_68020 == MMU_68851
-     *      CPU_68030 == MMU_68030
-     *      CPU_68040 == FPU_68040 == MMU_68040
-     *      CPU_68060 == FPU_68060 == MMU_68060
-     */
+/*
+ *  CPU, FPU and MMU types
+ *
+ *  Note: we may rely on the following equalities:
+ *
+ *      CPU_68020 == MMU_68851
+ *      CPU_68030 == MMU_68030
+ *      CPU_68040 == FPU_68040 == MMU_68040
+ *      CPU_68060 == FPU_68060 == MMU_68060
+ */
 
 #define CPUB_68020     0
 #define CPUB_68030     1
@@ -260,10 +260,10 @@ extern unsigned long m68k_mmutype;
 extern unsigned long vme_brdtype;
 #endif
 
-    /*
-     *  m68k_is040or060 is != 0 for a '040 or higher;
-     *  used numbers are 4 for 68040 and 6 for 68060.
-     */
+/*
+ *  m68k_is040or060 is != 0 for a '040 or higher;
+ *  used numbers are 4 for 68040 and 6 for 68060.
+ */
 
 extern int m68k_is040or060;
 #endif /* !__ASSEMBLY__ */
@@ -368,16 +368,16 @@ extern int m68k_is040or060;
 #endif
 
 
-    /*
-     *  Miscellaneous
-     */
+/*
+ *  Miscellaneous
+ */
 
 #define NUM_MEMINFO	4
 
 #ifndef __ASSEMBLY__
 struct mem_info {
-	unsigned long addr;		/* physical address of memory chunk */
-	unsigned long size;		/* length of memory chunk (in bytes) */
+    unsigned long addr;		/* physical address of memory chunk */
+    unsigned long size;		/* length of memory chunk (in bytes) */
 };
 
 extern int m68k_num_memory;		/* # of memory blocks found (and used) */

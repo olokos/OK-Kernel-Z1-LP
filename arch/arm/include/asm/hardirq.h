@@ -8,9 +8,9 @@
 #define NR_IPI	7
 
 typedef struct {
-	unsigned int __softirq_pending;
+    unsigned int __softirq_pending;
 #ifdef CONFIG_SMP
-	unsigned int ipi_irqs[NR_IPI];
+    unsigned int ipi_irqs[NR_IPI];
 #endif
 } ____cacheline_aligned irq_cpustat_t;
 

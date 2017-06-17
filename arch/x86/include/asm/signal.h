@@ -28,7 +28,7 @@ struct siginfo;
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #else
@@ -128,34 +128,34 @@ extern void do_notify_resume(struct pt_regs *, void *, __u32);
 #ifdef __i386__
 # ifdef __KERNEL__
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
 };
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 # else /* __KERNEL__ */
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-	union {
-	  __sighandler_t _sa_handler;
-	  void (*_sa_sigaction)(int, struct siginfo *, void *);
-	} _u;
-	sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    union {
+        __sighandler_t _sa_handler;
+        void (*_sa_sigaction)(int, struct siginfo *, void *);
+    } _u;
+    sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 #define sa_handler	_u._sa_handler
@@ -165,22 +165,22 @@ struct sigaction {
 #else /* __i386__ */
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 #endif /* !__i386__ */
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
@@ -195,15 +195,13 @@ typedef struct sigaltstack {
 	 ? __const_sigaddset((set), (sig))  \
 	 : __gen_sigaddset((set), (sig)))
 
-static inline void __gen_sigaddset(sigset_t *set, int _sig)
-{
-	asm("btsl %1,%0" : "+m"(*set) : "Ir"(_sig - 1) : "cc");
+static inline void __gen_sigaddset(sigset_t *set, int _sig) {
+    asm("btsl %1,%0" : "+m"(*set) : "Ir"(_sig - 1) : "cc");
 }
 
-static inline void __const_sigaddset(sigset_t *set, int _sig)
-{
-	unsigned long sig = _sig - 1;
-	set->sig[sig / _NSIG_BPW] |= 1 << (sig % _NSIG_BPW);
+static inline void __const_sigaddset(sigset_t *set, int _sig) {
+    unsigned long sig = _sig - 1;
+    set->sig[sig / _NSIG_BPW] |= 1 << (sig % _NSIG_BPW);
 }
 
 #define sigdelset(set, sig)		    \
@@ -212,29 +210,25 @@ static inline void __const_sigaddset(sigset_t *set, int _sig)
 	 : __gen_sigdelset((set), (sig)))
 
 
-static inline void __gen_sigdelset(sigset_t *set, int _sig)
-{
-	asm("btrl %1,%0" : "+m"(*set) : "Ir"(_sig - 1) : "cc");
+static inline void __gen_sigdelset(sigset_t *set, int _sig) {
+    asm("btrl %1,%0" : "+m"(*set) : "Ir"(_sig - 1) : "cc");
 }
 
-static inline void __const_sigdelset(sigset_t *set, int _sig)
-{
-	unsigned long sig = _sig - 1;
-	set->sig[sig / _NSIG_BPW] &= ~(1 << (sig % _NSIG_BPW));
+static inline void __const_sigdelset(sigset_t *set, int _sig) {
+    unsigned long sig = _sig - 1;
+    set->sig[sig / _NSIG_BPW] &= ~(1 << (sig % _NSIG_BPW));
 }
 
-static inline int __const_sigismember(sigset_t *set, int _sig)
-{
-	unsigned long sig = _sig - 1;
-	return 1 & (set->sig[sig / _NSIG_BPW] >> (sig % _NSIG_BPW));
+static inline int __const_sigismember(sigset_t *set, int _sig) {
+    unsigned long sig = _sig - 1;
+    return 1 & (set->sig[sig / _NSIG_BPW] >> (sig % _NSIG_BPW));
 }
 
-static inline int __gen_sigismember(sigset_t *set, int _sig)
-{
-	int ret;
-	asm("btl %2,%1\n\tsbbl %0,%0"
-	    : "=r"(ret) : "m"(*set), "Ir"(_sig-1) : "cc");
-	return ret;
+static inline int __gen_sigismember(sigset_t *set, int _sig) {
+    int ret;
+    asm("btl %2,%1\n\tsbbl %0,%0"
+        : "=r"(ret) : "m"(*set), "Ir"(_sig-1) : "cc");
+    return ret;
 }
 
 #define sigismember(set, sig)			\
@@ -242,10 +236,9 @@ static inline int __gen_sigismember(sigset_t *set, int _sig)
 	 ? __const_sigismember((set), (sig))	\
 	 : __gen_sigismember((set), (sig)))
 
-static inline int sigfindinword(unsigned long word)
-{
-	asm("bsfl %1,%0" : "=r"(word) : "rm"(word) : "cc");
-	return word;
+static inline int sigfindinword(unsigned long word) {
+    asm("bsfl %1,%0" : "=r"(word) : "rm"(word) : "cc");
+    return word;
 }
 
 struct pt_regs;

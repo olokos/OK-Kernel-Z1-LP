@@ -133,20 +133,20 @@ static int pb0100_get_natural(struct gspca_dev *gspca_dev, __s32 *val);
 static int pb0100_set_natural(struct gspca_dev *gspca_dev, __s32 val);
 
 const struct stv06xx_sensor stv06xx_sensor_pb0100 = {
-	.name = "PB-0100",
-	.i2c_flush = 1,
-	.i2c_addr = 0xba,
-	.i2c_len = 2,
+    .name = "PB-0100",
+    .i2c_flush = 1,
+    .i2c_addr = 0xba,
+    .i2c_len = 2,
 
-	.min_packet_size = { 635, 847 },
-	.max_packet_size = { 847, 923 },
+    .min_packet_size = { 635, 847 },
+    .max_packet_size = { 847, 923 },
 
-	.init = pb0100_init,
-	.probe = pb0100_probe,
-	.start = pb0100_start,
-	.stop = pb0100_stop,
-	.dump = pb0100_dump,
-	.disconnect = pb0100_disconnect,
+    .init = pb0100_init,
+    .probe = pb0100_probe,
+    .start = pb0100_start,
+    .stop = pb0100_stop,
+    .dump = pb0100_dump,
+    .disconnect = pb0100_disconnect,
 };
 
 #endif

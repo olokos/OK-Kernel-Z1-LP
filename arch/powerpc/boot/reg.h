@@ -9,11 +9,10 @@
  * 2 of the License, or (at your option) any later version.
  */
 
-static inline u32 mfpvr(void)
-{
-	u32 pvr;
-	asm volatile ("mfpvr	%0" : "=r"(pvr));
-	return pvr;
+static inline u32 mfpvr(void) {
+    u32 pvr;
+    asm volatile ("mfpvr	%0" : "=r"(pvr));
+    return pvr;
 }
 
 #define __stringify_1(x)	#x

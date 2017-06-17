@@ -64,20 +64,20 @@ void store_screen(void);
  */
 
 struct mode_info {
-	u16 mode;		/* Mode number (vga= style) */
-	u16 x, y;		/* Width, height */
-	u16 depth;		/* Bits per pixel, 0 for text mode */
+    u16 mode;		/* Mode number (vga= style) */
+    u16 x, y;		/* Width, height */
+    u16 depth;		/* Bits per pixel, 0 for text mode */
 };
 
 struct card_info {
-	const char *card_name;
-	int (*set_mode)(struct mode_info *mode);
-	int (*probe)(void);
-	struct mode_info *modes;
-	int nmodes;		/* Number of probed modes so far */
-	int unsafe;		/* Probing is unsafe, only do after "scan" */
-	u16 xmode_first;	/* Unprobed modes to try to call anyway */
-	u16 xmode_n;		/* Size of unprobed mode range */
+    const char *card_name;
+    int (*set_mode)(struct mode_info *mode);
+    int (*probe)(void);
+    struct mode_info *modes;
+    int nmodes;		/* Number of probed modes so far */
+    int unsafe;		/* Probing is unsafe, only do after "scan" */
+    u16 xmode_first;	/* Unprobed modes to try to call anyway */
+    u16 xmode_n;		/* Size of unprobed mode range */
 };
 
 #define __videocard struct card_info __attribute__((section(".videocards")))
@@ -97,22 +97,19 @@ extern int do_restore;		/* Restore screen contents */
 extern int graphic_mode;	/* Graphics mode with linear frame buffer */
 
 /* Accessing VGA indexed registers */
-static inline u8 in_idx(u16 port, u8 index)
-{
-	outb(index, port);
-	return inb(port+1);
+static inline u8 in_idx(u16 port, u8 index) {
+    outb(index, port);
+    return inb(port+1);
 }
 
-static inline void out_idx(u8 v, u16 port, u8 index)
-{
-	outw(index+(v << 8), port);
+static inline void out_idx(u8 v, u16 port, u8 index) {
+    outw(index+(v << 8), port);
 }
 
 /* Writes a value to an indexed port and then reads the port again */
-static inline u8 tst_idx(u8 v, u16 port, u8 index)
-{
-	out_idx(port, index, v);
-	return in_idx(port, index);
+static inline u8 tst_idx(u8 v, u16 port, u8 index) {
+    out_idx(port, index, v);
+    return in_idx(port, index);
 }
 
 /* Get the I/O port of the VGA CRTC */

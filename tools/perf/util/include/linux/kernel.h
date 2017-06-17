@@ -58,37 +58,34 @@
 #define cpu_to_le32(x)	(x)
 
 static inline int
-vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
-{
-	int i;
-	ssize_t ssize = size;
+vscnprintf(char *buf, size_t size, const char *fmt, va_list args) {
+    int i;
+    ssize_t ssize = size;
 
-	i = vsnprintf(buf, size, fmt, args);
+    i = vsnprintf(buf, size, fmt, args);
 
-	return (i >= ssize) ? (ssize - 1) : i;
+    return (i >= ssize) ? (ssize - 1) : i;
 }
 
-static inline int scnprintf(char * buf, size_t size, const char * fmt, ...)
-{
-	va_list args;
-	ssize_t ssize = size;
-	int i;
+static inline int scnprintf(char * buf, size_t size, const char * fmt, ...) {
+    va_list args;
+    ssize_t ssize = size;
+    int i;
 
-	va_start(args, fmt);
-	i = vsnprintf(buf, size, fmt, args);
-	va_end(args);
+    va_start(args, fmt);
+    i = vsnprintf(buf, size, fmt, args);
+    va_end(args);
 
-	return (i >= ssize) ? (ssize - 1) : i;
+    return (i >= ssize) ? (ssize - 1) : i;
 }
 
 static inline unsigned long
-simple_strtoul(const char *nptr, char **endptr, int base)
-{
-	return strtoul(nptr, endptr, base);
+simple_strtoul(const char *nptr, char **endptr, int base) {
+    return strtoul(nptr, endptr, base);
 }
 
 int eprintf(int level,
-	    const char *fmt, ...) __attribute__((format(printf, 2, 3)));
+            const char *fmt, ...) __attribute__((format(printf, 2, 3)));
 
 #ifndef pr_fmt
 #define pr_fmt(fmt) fmt

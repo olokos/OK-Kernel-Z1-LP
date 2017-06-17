@@ -59,27 +59,23 @@
 /* We have no pud since we are a three-level page table. */
 #include <asm-generic/pgtable-nopud.h>
 
-static inline int pud_none(pud_t pud)
-{
-	return pud_val(pud) == 0;
+static inline int pud_none(pud_t pud) {
+    return pud_val(pud) == 0;
 }
 
-static inline int pud_present(pud_t pud)
-{
-	return pud_val(pud) & _PAGE_PRESENT;
+static inline int pud_present(pud_t pud) {
+    return pud_val(pud) & _PAGE_PRESENT;
 }
 
 #define pmd_ERROR(e) \
 	pr_err("%s:%d: bad pmd 0x%016llx.\n", __FILE__, __LINE__, pmd_val(e))
 
-static inline void pud_clear(pud_t *pudp)
-{
-	__pte_clear(&pudp->pgd);
+static inline void pud_clear(pud_t *pudp) {
+    __pte_clear(&pudp->pgd);
 }
 
-static inline int pud_bad(pud_t pud)
-{
-	return ((pud_val(pud) & _PAGE_ALL) != _PAGE_TABLE);
+static inline int pud_bad(pud_t pud) {
+    return ((pud_val(pud) & _PAGE_ALL) != _PAGE_TABLE);
 }
 
 /* Return the page-table frame number (ptfn) that a pud_t points at. */
@@ -100,49 +96,42 @@ static inline int pud_bad(pud_t pud)
  */
 #define pud_page(pud) pfn_to_page(HV_PTFN_TO_PFN(pud_ptfn(pud)))
 
-static inline unsigned long pud_index(unsigned long address)
-{
-	return (address >> PUD_SHIFT) & (PTRS_PER_PUD - 1);
+static inline unsigned long pud_index(unsigned long address) {
+    return (address >> PUD_SHIFT) & (PTRS_PER_PUD - 1);
 }
 
 #define pmd_offset(pud, address) \
 	((pmd_t *)pud_page_vaddr(*(pud)) + pmd_index(address))
 
-static inline void __set_pmd(pmd_t *pmdp, pmd_t pmdval)
-{
-	set_pte(pmdp, pmdval);
+static inline void __set_pmd(pmd_t *pmdp, pmd_t pmdval) {
+    set_pte(pmdp, pmdval);
 }
 
 /* Create a pmd from a PTFN and pgprot. */
-static inline pmd_t ptfn_pmd(unsigned long ptfn, pgprot_t prot)
-{
-	return hv_pte_set_ptfn(prot, ptfn);
+static inline pmd_t ptfn_pmd(unsigned long ptfn, pgprot_t prot) {
+    return hv_pte_set_ptfn(prot, ptfn);
 }
 
 /* Return the page-table frame number (ptfn) that a pmd_t points at. */
-static inline unsigned long pmd_ptfn(pmd_t pmd)
-{
-	return hv_pte_get_ptfn(pmd);
+static inline unsigned long pmd_ptfn(pmd_t pmd) {
+    return hv_pte_get_ptfn(pmd);
 }
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	__pte_clear(pmdp);
+static inline void pmd_clear(pmd_t *pmdp) {
+    __pte_clear(pmdp);
 }
 
 /* Normalize an address to having the correct high bits set. */
 #define pgd_addr_normalize pgd_addr_normalize
-static inline unsigned long pgd_addr_normalize(unsigned long addr)
-{
-	return ((long)addr << (CHIP_WORD_SIZE() - CHIP_VA_WIDTH())) >>
-		(CHIP_WORD_SIZE() - CHIP_VA_WIDTH());
+static inline unsigned long pgd_addr_normalize(unsigned long addr) {
+    return ((long)addr << (CHIP_WORD_SIZE() - CHIP_VA_WIDTH())) >>
+           (CHIP_WORD_SIZE() - CHIP_VA_WIDTH());
 }
 
 /* We don't define any pgds for these addresses. */
-static inline int pgd_addr_invalid(unsigned long addr)
-{
-	return addr >= MEM_HV_START ||
-		(addr > MEM_LOW_END && addr < MEM_HIGH_START);
+static inline int pgd_addr_invalid(unsigned long addr) {
+    return addr >= MEM_HV_START ||
+           (addr > MEM_LOW_END && addr < MEM_HIGH_START);
 }
 
 /*
@@ -150,24 +139,21 @@ static inline int pgd_addr_invalid(unsigned long addr)
  */
 #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
 static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
-					    unsigned long addr, pte_t *ptep)
-{
-	return (__insn_fetchand(&ptep->val, ~HV_PTE_ACCESSED) >>
-		HV_PTE_INDEX_ACCESSED) & 0x1;
+        unsigned long addr, pte_t *ptep) {
+    return (__insn_fetchand(&ptep->val, ~HV_PTE_ACCESSED) >>
+            HV_PTE_INDEX_ACCESSED) & 0x1;
 }
 
 #define __HAVE_ARCH_PTEP_SET_WRPROTECT
 static inline void ptep_set_wrprotect(struct mm_struct *mm,
-				      unsigned long addr, pte_t *ptep)
-{
-	__insn_fetchand(&ptep->val, ~HV_PTE_WRITABLE);
+                                      unsigned long addr, pte_t *ptep) {
+    __insn_fetchand(&ptep->val, ~HV_PTE_WRITABLE);
 }
 
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-				       unsigned long addr, pte_t *ptep)
-{
-	return hv_pte(__insn_exch(&ptep->val, 0UL));
+                                       unsigned long addr, pte_t *ptep) {
+    return hv_pte(__insn_exch(&ptep->val, 0UL));
 }
 
 #endif /* __ASSEMBLY__ */

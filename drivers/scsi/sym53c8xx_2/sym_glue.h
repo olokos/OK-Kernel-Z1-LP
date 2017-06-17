@@ -1,5 +1,5 @@
 /*
- * Device driver for the SYMBIOS/LSILOGIC 53C8XX and 53C1010 family 
+ * Device driver for the SYMBIOS/LSILOGIC 53C8XX and 53C1010 family
  * of PCI-SCSI IO processors.
  *
  * Copyright (C) 1999-2001  Gerard Roudier <groudier@free.fr>
@@ -7,7 +7,7 @@
  * This driver is derived from the Linux sym53c8xx driver.
  * Copyright (C) 1998-2000  Gerard Roudier
  *
- * The sym53c8xx driver is derived from the ncr53c8xx driver that had been 
+ * The sym53c8xx driver is derived from the ncr53c8xx driver that had been
  * a port of the FreeBSD ncr driver to Linux-1.2.13.
  *
  * The original ncr driver has been written for 386bsd and FreeBSD by
@@ -86,19 +86,19 @@
 #define	printf(args...)		printk(args)
 
 /*
- *  A 'read barrier' flushes any data that have been prefetched 
- *  by the processor due to out of order execution. Such a barrier 
- *  must notably be inserted prior to looking at data that have 
- *  been DMAed, assuming that program does memory READs in proper 
+ *  A 'read barrier' flushes any data that have been prefetched
+ *  by the processor due to out of order execution. Such a barrier
+ *  must notably be inserted prior to looking at data that have
+ *  been DMAed, assuming that program does memory READs in proper
  *  order and that the device ensured proper ordering of WRITEs.
  *
- *  A 'write barrier' prevents any previous WRITEs to pass further 
- *  WRITEs. Such barriers must be inserted each time another agent 
+ *  A 'write barrier' prevents any previous WRITEs to pass further
+ *  WRITEs. Such barriers must be inserted each time another agent
  *  relies on ordering of WRITEs.
  *
- *  Note that, due to posting of PCI memory writes, we also must 
- *  insert dummy PCI read transactions when some ordering involving 
- *  both directions over the PCI does matter. PCI transactions are 
+ *  Note that, due to posting of PCI memory writes, we also must
+ *  insert dummy PCI read transactions when some ordering involving
+ *  both directions over the PCI does matter. PCI transactions are
  *  fully ordered in each direction.
  */
 
@@ -107,7 +107,7 @@
 
 /*
  *  IO functions definition for big/little endian CPU support.
- *  For now, PCI chips are only supported in little endian addressing mode, 
+ *  For now, PCI chips are only supported in little endian addressing mode,
  */
 
 #ifdef	__BIG_ENDIAN
@@ -134,7 +134,7 @@
  *  If the CPU and the chip use same endian-ness addressing,
  *  no byte reordering is needed for script patching.
  *  Macro cpu_to_scr() is to be used for script patching.
- *  Macro scr_to_cpu() is to be used for getting a DWORD 
+ *  Macro scr_to_cpu() is to be used for getting a DWORD
  *  from the script.
  */
 
@@ -142,7 +142,7 @@
 #define scr_to_cpu(dw)	le32_to_cpu(dw)
 
 /*
- *  These ones are used as return code from 
+ *  These ones are used as return code from
  *  error recovery handlers under Linux.
  */
 #define SCSI_SUCCESS	SUCCESS
@@ -159,8 +159,8 @@
  */
 #define SYM_HAVE_SLCB
 struct sym_slcb {
-	u_short	reqtags;	/* Number of tags requested by user */
-	u_short scdev_depth;	/* Queue depth set in select_queue_depth() */
+    u_short	reqtags;	/* Number of tags requested by user */
+    u_short scdev_depth;	/* Queue depth set in select_queue_depth() */
 };
 
 /*
@@ -173,22 +173,22 @@ struct sym_slcb {
  *  System specific host data structure.
  */
 struct sym_shcb {
-	/*
-	 *  Chip and controller indentification.
-	 */
-	int		unit;
-	char		inst_name[16];
-	char		chip_name[8];
+    /*
+     *  Chip and controller indentification.
+     */
+    int		unit;
+    char		inst_name[16];
+    char		chip_name[8];
 
-	struct Scsi_Host *host;
+    struct Scsi_Host *host;
 
-	void __iomem *	ioaddr;		/* MMIO kernel io address	*/
-	void __iomem *	ramaddr;	/* RAM  kernel io address	*/
+    void __iomem *	ioaddr;		/* MMIO kernel io address	*/
+    void __iomem *	ramaddr;	/* RAM  kernel io address	*/
 
-	struct timer_list timer;	/* Timer handler link header	*/
-	u_long		lasttime;
-	u_long		settle_time;	/* Resetting the SCSI BUS	*/
-	u_char		settle_time_valid;
+    struct timer_list timer;	/* Timer handler link header	*/
+    u_long		lasttime;
+    u_long		settle_time;	/* Resetting the SCSI BUS	*/
+    u_char		settle_time_valid;
 };
 
 /*
@@ -202,30 +202,29 @@ struct sym_nvram;
  * The IO macros require a struct called 's' and are abused in sym_nvram.c
  */
 struct sym_device {
-	struct pci_dev *pdev;
-	unsigned long mmio_base;
-	unsigned long ram_base;
-	struct {
-		void __iomem *ioaddr;
-		void __iomem *ramaddr;
-	} s;
-	struct sym_chip chip;
-	struct sym_nvram *nvram;
-	u_char host_id;
+    struct pci_dev *pdev;
+    unsigned long mmio_base;
+    unsigned long ram_base;
+    struct {
+        void __iomem *ioaddr;
+        void __iomem *ramaddr;
+    } s;
+    struct sym_chip chip;
+    struct sym_nvram *nvram;
+    u_char host_id;
 };
 
 /*
  *  Driver host data structure.
  */
 struct sym_data {
-	struct sym_hcb *ncb;
-	struct completion *io_reset;		/* PCI error handling */
-	struct pci_dev *pdev;
+    struct sym_hcb *ncb;
+    struct completion *io_reset;		/* PCI error handling */
+    struct pci_dev *pdev;
 };
 
-static inline struct sym_hcb * sym_get_hcb(struct Scsi_Host *host)
-{
-	return ((struct sym_data *)host->hostdata)->ncb;
+static inline struct sym_hcb * sym_get_hcb(struct Scsi_Host *host) {
+    return ((struct sym_data *)host->hostdata)->ncb;
 }
 
 #include "sym_fw.h"
@@ -235,28 +234,25 @@ static inline struct sym_hcb * sym_get_hcb(struct Scsi_Host *host)
  *  Set the status field of a CAM CCB.
  */
 static inline void
-sym_set_cam_status(struct scsi_cmnd *cmd, int status)
-{
-	cmd->result &= ~(0xff  << 16);
-	cmd->result |= (status << 16);
+sym_set_cam_status(struct scsi_cmnd *cmd, int status) {
+    cmd->result &= ~(0xff  << 16);
+    cmd->result |= (status << 16);
 }
 
 /*
  *  Get the status field of a CAM CCB.
  */
 static inline int
-sym_get_cam_status(struct scsi_cmnd *cmd)
-{
-	return host_byte(cmd->result);
+sym_get_cam_status(struct scsi_cmnd *cmd) {
+    return host_byte(cmd->result);
 }
 
 /*
  *  Build CAM result for a successful IO and for a failed IO.
  */
-static inline void sym_set_cam_result_ok(struct sym_ccb *cp, struct scsi_cmnd *cmd, int resid)
-{
-	scsi_set_resid(cmd, resid);
-	cmd->result = (((DID_OK) << 16) + ((cp->ssss_status) & 0x7f));
+static inline void sym_set_cam_result_ok(struct sym_ccb *cp, struct scsi_cmnd *cmd, int resid) {
+    scsi_set_resid(cmd, resid);
+    cmd->result = (((DID_OK) << 16) + ((cp->ssss_status) & 0x7f));
 }
 void sym_set_cam_result_error(struct sym_hcb *np, struct sym_ccb *cp, int resid);
 

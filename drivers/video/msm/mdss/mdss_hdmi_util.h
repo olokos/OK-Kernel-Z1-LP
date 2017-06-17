@@ -229,26 +229,26 @@
 #define SIDE_BY_SIDE_HALF	0x40
 
 enum hdmi_tx_feature_type {
-	HDMI_TX_FEAT_EDID,
-	HDMI_TX_FEAT_HDCP,
-	HDMI_TX_FEAT_CEC,
-	HDMI_TX_FEAT_MAX,
+    HDMI_TX_FEAT_EDID,
+    HDMI_TX_FEAT_HDCP,
+    HDMI_TX_FEAT_CEC,
+    HDMI_TX_FEAT_MAX,
 };
 
 struct hdmi_tx_ddc_ctrl {
-	struct dss_io_data *io;
-	struct completion ddc_sw_done;
+    struct dss_io_data *io;
+    struct completion ddc_sw_done;
 };
 
 struct hdmi_tx_ddc_data {
-	char *what;
-	u8 *data_buf;
-	u32 data_len;
-	u32 dev_addr;
-	u32 offset;
-	u32 request_len;
-	u32 no_align;
-	int retry;
+    char *what;
+    u8 *data_buf;
+    u32 data_len;
+    u32 dev_addr;
+    u32 offset;
+    u32 request_len;
+    u32 no_align;
+    int retry;
 };
 
 /* video timing related utility routines */

@@ -97,116 +97,116 @@ static void *DISP_DATA_PORT;
 #define DISP_START_OSCILLATION_ADDR     0x000
 DISP_REG(DISP_START_OSCILLATION_ADDR)
 #define DISP_DRIVER_OUTPUT_CTL_ADDR     0x001
-    DISP_REG(DISP_DRIVER_OUTPUT_CTL_ADDR)
+DISP_REG(DISP_DRIVER_OUTPUT_CTL_ADDR)
 #define DISP_LCD_DRIVING_SIG_ADDR     0x002
-    DISP_REG(DISP_LCD_DRIVING_SIG_ADDR)
+DISP_REG(DISP_LCD_DRIVING_SIG_ADDR)
 #define DISP_ENTRY_MODE_ADDR            0x003
-    DISP_REG(DISP_ENTRY_MODE_ADDR)
+DISP_REG(DISP_ENTRY_MODE_ADDR)
 #define DISP_DISPLAY_CTL_1_ADDR         0x007
-    DISP_REG(DISP_DISPLAY_CTL_1_ADDR)
+DISP_REG(DISP_DISPLAY_CTL_1_ADDR)
 #define DISP_DISPLAY_CTL_2_ADDR         0x008
-    DISP_REG(DISP_DISPLAY_CTL_2_ADDR)
+DISP_REG(DISP_DISPLAY_CTL_2_ADDR)
 
 /* DISPLAY MODE 0x009 partial display not supported */
 #define DISP_POWER_SUPPLY_INTF_ADDR     0x00A
-    DISP_REG(DISP_POWER_SUPPLY_INTF_ADDR)
+DISP_REG(DISP_POWER_SUPPLY_INTF_ADDR)
 
 /* DISPLAY MODE 0x00B xZoom feature is not supported */
 #define DISP_EXT_DISPLAY_CTL_1_ADDR     0x00C
-    DISP_REG(DISP_EXT_DISPLAY_CTL_1_ADDR)
+DISP_REG(DISP_EXT_DISPLAY_CTL_1_ADDR)
 
 #define DISP_FRAME_CYCLE_CTL_ADDR       0x00D
-    DISP_REG(DISP_FRAME_CYCLE_CTL_ADDR)
+DISP_REG(DISP_FRAME_CYCLE_CTL_ADDR)
 
 #define DISP_EXT_DISPLAY_CTL_2_ADDR     0x00E
-    DISP_REG(DISP_EXT_DISPLAY_CTL_2_ADDR)
+DISP_REG(DISP_EXT_DISPLAY_CTL_2_ADDR)
 
 #define DISP_EXT_DISPLAY_CTL_3_ADDR     0x00F
-    DISP_REG(DISP_EXT_DISPLAY_CTL_3_ADDR)
+DISP_REG(DISP_EXT_DISPLAY_CTL_3_ADDR)
 
 #define DISP_LTPS_CTL_1_ADDR            0x012
-    DISP_REG(DISP_LTPS_CTL_1_ADDR)
+DISP_REG(DISP_LTPS_CTL_1_ADDR)
 #define DISP_LTPS_CTL_2_ADDR            0x013
-    DISP_REG(DISP_LTPS_CTL_2_ADDR)
+DISP_REG(DISP_LTPS_CTL_2_ADDR)
 #define DISP_LTPS_CTL_3_ADDR            0x014
-    DISP_REG(DISP_LTPS_CTL_3_ADDR)
+DISP_REG(DISP_LTPS_CTL_3_ADDR)
 #define DISP_LTPS_CTL_4_ADDR            0x018
-    DISP_REG(DISP_LTPS_CTL_4_ADDR)
+DISP_REG(DISP_LTPS_CTL_4_ADDR)
 #define DISP_LTPS_CTL_5_ADDR            0x019
-    DISP_REG(DISP_LTPS_CTL_5_ADDR)
+DISP_REG(DISP_LTPS_CTL_5_ADDR)
 #define DISP_LTPS_CTL_6_ADDR            0x01A
-    DISP_REG(DISP_LTPS_CTL_6_ADDR)
+DISP_REG(DISP_LTPS_CTL_6_ADDR)
 #define DISP_AMP_SETTING_ADDR           0x01C
-    DISP_REG(DISP_AMP_SETTING_ADDR)
+DISP_REG(DISP_AMP_SETTING_ADDR)
 #define DISP_MODE_SETTING_ADDR          0x01D
-    DISP_REG(DISP_MODE_SETTING_ADDR)
+DISP_REG(DISP_MODE_SETTING_ADDR)
 #define DISP_POFF_LN_SETTING_ADDR       0x01E
-    DISP_REG(DISP_POFF_LN_SETTING_ADDR)
+DISP_REG(DISP_POFF_LN_SETTING_ADDR)
 /* Power Contol */
 #define DISP_POWER_CTL_1_ADDR           0x100
-    DISP_REG(DISP_POWER_CTL_1_ADDR)
+DISP_REG(DISP_POWER_CTL_1_ADDR)
 #define DISP_POWER_CTL_2_ADDR           0x101
-    DISP_REG(DISP_POWER_CTL_2_ADDR)
+DISP_REG(DISP_POWER_CTL_2_ADDR)
 #define DISP_POWER_CTL_3_ADDR           0x102
-    DISP_REG(DISP_POWER_CTL_3_ADDR)
+DISP_REG(DISP_POWER_CTL_3_ADDR)
 #define DISP_POWER_CTL_4_ADDR           0x103
-    DISP_REG(DISP_POWER_CTL_4_ADDR)
+DISP_REG(DISP_POWER_CTL_4_ADDR)
 #define DISP_POWER_CTL_5_ADDR           0x104
-    DISP_REG(DISP_POWER_CTL_5_ADDR)
+DISP_REG(DISP_POWER_CTL_5_ADDR)
 #define DISP_POWER_CTL_6_ADDR           0x105
-    DISP_REG(DISP_POWER_CTL_6_ADDR)
+DISP_REG(DISP_POWER_CTL_6_ADDR)
 #define DISP_POWER_CTL_7_ADDR           0x106
-    DISP_REG(DISP_POWER_CTL_7_ADDR)
+DISP_REG(DISP_POWER_CTL_7_ADDR)
 /* RAM Access */
 #define DISP_RAM_ADDR_SET_1_ADDR        0x200
-    DISP_REG(DISP_RAM_ADDR_SET_1_ADDR)
+DISP_REG(DISP_RAM_ADDR_SET_1_ADDR)
 #define DISP_RAM_ADDR_SET_2_ADDR        0x201
-    DISP_REG(DISP_RAM_ADDR_SET_2_ADDR)
+DISP_REG(DISP_RAM_ADDR_SET_2_ADDR)
 #define DISP_CMD_RAMRD                  DISP_CMD_RAMWR
 #define DISP_CMD_RAMWR                  0x202
-    DISP_REG(DISP_CMD_RAMWR)
+DISP_REG(DISP_CMD_RAMWR)
 #define DISP_RAM_DATA_MASK_1_ADDR       0x203
-    DISP_REG(DISP_RAM_DATA_MASK_1_ADDR)
+DISP_REG(DISP_RAM_DATA_MASK_1_ADDR)
 #define DISP_RAM_DATA_MASK_2_ADDR       0x204
-    DISP_REG(DISP_RAM_DATA_MASK_2_ADDR)
+DISP_REG(DISP_RAM_DATA_MASK_2_ADDR)
 /* Gamma Control, Contrast, Gray Scale Setting */
 #define DISP_GAMMA_CONTROL_1_ADDR       0x300
-    DISP_REG(DISP_GAMMA_CONTROL_1_ADDR)
+DISP_REG(DISP_GAMMA_CONTROL_1_ADDR)
 #define DISP_GAMMA_CONTROL_2_ADDR       0x301
-    DISP_REG(DISP_GAMMA_CONTROL_2_ADDR)
+DISP_REG(DISP_GAMMA_CONTROL_2_ADDR)
 #define DISP_GAMMA_CONTROL_3_ADDR       0x302
-    DISP_REG(DISP_GAMMA_CONTROL_3_ADDR)
+DISP_REG(DISP_GAMMA_CONTROL_3_ADDR)
 #define DISP_GAMMA_CONTROL_4_ADDR       0x303
-    DISP_REG(DISP_GAMMA_CONTROL_4_ADDR)
+DISP_REG(DISP_GAMMA_CONTROL_4_ADDR)
 #define DISP_GAMMA_CONTROL_5_ADDR       0x304
-    DISP_REG(DISP_GAMMA_CONTROL_5_ADDR)
+DISP_REG(DISP_GAMMA_CONTROL_5_ADDR)
 /* Coordinate Control */
 #define DISP_VERT_SCROLL_CTL_1_ADDR     0x400
-    DISP_REG(DISP_VERT_SCROLL_CTL_1_ADDR)
+DISP_REG(DISP_VERT_SCROLL_CTL_1_ADDR)
 #define DISP_VERT_SCROLL_CTL_2_ADDR     0x401
-    DISP_REG(DISP_VERT_SCROLL_CTL_2_ADDR)
+DISP_REG(DISP_VERT_SCROLL_CTL_2_ADDR)
 #define DISP_SCREEN_1_DRV_POS_1_ADDR    0x402
-    DISP_REG(DISP_SCREEN_1_DRV_POS_1_ADDR)
+DISP_REG(DISP_SCREEN_1_DRV_POS_1_ADDR)
 #define DISP_SCREEN_1_DRV_POS_2_ADDR    0x403
-    DISP_REG(DISP_SCREEN_1_DRV_POS_2_ADDR)
+DISP_REG(DISP_SCREEN_1_DRV_POS_2_ADDR)
 #define DISP_SCREEN_2_DRV_POS_1_ADDR    0x404
-    DISP_REG(DISP_SCREEN_2_DRV_POS_1_ADDR)
+DISP_REG(DISP_SCREEN_2_DRV_POS_1_ADDR)
 #define DISP_SCREEN_2_DRV_POS_2_ADDR    0x405
-    DISP_REG(DISP_SCREEN_2_DRV_POS_2_ADDR)
+DISP_REG(DISP_SCREEN_2_DRV_POS_2_ADDR)
 #define DISP_HORZ_RAM_ADDR_POS_1_ADDR   0x406
-    DISP_REG(DISP_HORZ_RAM_ADDR_POS_1_ADDR)
+DISP_REG(DISP_HORZ_RAM_ADDR_POS_1_ADDR)
 #define DISP_HORZ_RAM_ADDR_POS_2_ADDR   0x407
-    DISP_REG(DISP_HORZ_RAM_ADDR_POS_2_ADDR)
+DISP_REG(DISP_HORZ_RAM_ADDR_POS_2_ADDR)
 #define DISP_VERT_RAM_ADDR_POS_1_ADDR   0x408
-    DISP_REG(DISP_VERT_RAM_ADDR_POS_1_ADDR)
+DISP_REG(DISP_VERT_RAM_ADDR_POS_1_ADDR)
 #define DISP_VERT_RAM_ADDR_POS_2_ADDR   0x409
-    DISP_REG(DISP_VERT_RAM_ADDR_POS_2_ADDR)
+DISP_REG(DISP_VERT_RAM_ADDR_POS_2_ADDR)
 #define DISP_TMD_700_ADDR               0x700	/*  0x700 */
-    DISP_REG(DISP_TMD_700_ADDR)
+DISP_REG(DISP_TMD_700_ADDR)
 #define DISP_TMD_015_ADDR               0x015	/*  0x700 */
-    DISP_REG(DISP_TMD_015_ADDR)
+DISP_REG(DISP_TMD_015_ADDR)
 #define DISP_TMD_305_ADDR               0x305	/*  0x700 */
-    DISP_REG(DISP_TMD_305_ADDR)
+DISP_REG(DISP_TMD_305_ADDR)
 
 /*
  * TMD QVGA Bit Definations
@@ -657,38 +657,38 @@ uint16 tmd20qvga_panel_offset;
 
 #ifdef DISP_DEVICE_8BPP
 static word convert_8_to_16_tbl[256] = {
-	0x0000, 0x2000, 0x4000, 0x6000, 0x8000, 0xA000, 0xC000, 0xE000,
-	0x0100, 0x2100, 0x4100, 0x6100, 0x8100, 0xA100, 0xC100, 0xE100,
-	0x0200, 0x2200, 0x4200, 0x6200, 0x8200, 0xA200, 0xC200, 0xE200,
-	0x0300, 0x2300, 0x4300, 0x6300, 0x8300, 0xA300, 0xC300, 0xE300,
-	0x0400, 0x2400, 0x4400, 0x6400, 0x8400, 0xA400, 0xC400, 0xE400,
-	0x0500, 0x2500, 0x4500, 0x6500, 0x8500, 0xA500, 0xC500, 0xE500,
-	0x0600, 0x2600, 0x4600, 0x6600, 0x8600, 0xA600, 0xC600, 0xE600,
-	0x0700, 0x2700, 0x4700, 0x6700, 0x8700, 0xA700, 0xC700, 0xE700,
-	0x0008, 0x2008, 0x4008, 0x6008, 0x8008, 0xA008, 0xC008, 0xE008,
-	0x0108, 0x2108, 0x4108, 0x6108, 0x8108, 0xA108, 0xC108, 0xE108,
-	0x0208, 0x2208, 0x4208, 0x6208, 0x8208, 0xA208, 0xC208, 0xE208,
-	0x0308, 0x2308, 0x4308, 0x6308, 0x8308, 0xA308, 0xC308, 0xE308,
-	0x0408, 0x2408, 0x4408, 0x6408, 0x8408, 0xA408, 0xC408, 0xE408,
-	0x0508, 0x2508, 0x4508, 0x6508, 0x8508, 0xA508, 0xC508, 0xE508,
-	0x0608, 0x2608, 0x4608, 0x6608, 0x8608, 0xA608, 0xC608, 0xE608,
-	0x0708, 0x2708, 0x4708, 0x6708, 0x8708, 0xA708, 0xC708, 0xE708,
-	0x0010, 0x2010, 0x4010, 0x6010, 0x8010, 0xA010, 0xC010, 0xE010,
-	0x0110, 0x2110, 0x4110, 0x6110, 0x8110, 0xA110, 0xC110, 0xE110,
-	0x0210, 0x2210, 0x4210, 0x6210, 0x8210, 0xA210, 0xC210, 0xE210,
-	0x0310, 0x2310, 0x4310, 0x6310, 0x8310, 0xA310, 0xC310, 0xE310,
-	0x0410, 0x2410, 0x4410, 0x6410, 0x8410, 0xA410, 0xC410, 0xE410,
-	0x0510, 0x2510, 0x4510, 0x6510, 0x8510, 0xA510, 0xC510, 0xE510,
-	0x0610, 0x2610, 0x4610, 0x6610, 0x8610, 0xA610, 0xC610, 0xE610,
-	0x0710, 0x2710, 0x4710, 0x6710, 0x8710, 0xA710, 0xC710, 0xE710,
-	0x0018, 0x2018, 0x4018, 0x6018, 0x8018, 0xA018, 0xC018, 0xE018,
-	0x0118, 0x2118, 0x4118, 0x6118, 0x8118, 0xA118, 0xC118, 0xE118,
-	0x0218, 0x2218, 0x4218, 0x6218, 0x8218, 0xA218, 0xC218, 0xE218,
-	0x0318, 0x2318, 0x4318, 0x6318, 0x8318, 0xA318, 0xC318, 0xE318,
-	0x0418, 0x2418, 0x4418, 0x6418, 0x8418, 0xA418, 0xC418, 0xE418,
-	0x0518, 0x2518, 0x4518, 0x6518, 0x8518, 0xA518, 0xC518, 0xE518,
-	0x0618, 0x2618, 0x4618, 0x6618, 0x8618, 0xA618, 0xC618, 0xE618,
-	0x0718, 0x2718, 0x4718, 0x6718, 0x8718, 0xA718, 0xC718, 0xE718
+    0x0000, 0x2000, 0x4000, 0x6000, 0x8000, 0xA000, 0xC000, 0xE000,
+    0x0100, 0x2100, 0x4100, 0x6100, 0x8100, 0xA100, 0xC100, 0xE100,
+    0x0200, 0x2200, 0x4200, 0x6200, 0x8200, 0xA200, 0xC200, 0xE200,
+    0x0300, 0x2300, 0x4300, 0x6300, 0x8300, 0xA300, 0xC300, 0xE300,
+    0x0400, 0x2400, 0x4400, 0x6400, 0x8400, 0xA400, 0xC400, 0xE400,
+    0x0500, 0x2500, 0x4500, 0x6500, 0x8500, 0xA500, 0xC500, 0xE500,
+    0x0600, 0x2600, 0x4600, 0x6600, 0x8600, 0xA600, 0xC600, 0xE600,
+    0x0700, 0x2700, 0x4700, 0x6700, 0x8700, 0xA700, 0xC700, 0xE700,
+    0x0008, 0x2008, 0x4008, 0x6008, 0x8008, 0xA008, 0xC008, 0xE008,
+    0x0108, 0x2108, 0x4108, 0x6108, 0x8108, 0xA108, 0xC108, 0xE108,
+    0x0208, 0x2208, 0x4208, 0x6208, 0x8208, 0xA208, 0xC208, 0xE208,
+    0x0308, 0x2308, 0x4308, 0x6308, 0x8308, 0xA308, 0xC308, 0xE308,
+    0x0408, 0x2408, 0x4408, 0x6408, 0x8408, 0xA408, 0xC408, 0xE408,
+    0x0508, 0x2508, 0x4508, 0x6508, 0x8508, 0xA508, 0xC508, 0xE508,
+    0x0608, 0x2608, 0x4608, 0x6608, 0x8608, 0xA608, 0xC608, 0xE608,
+    0x0708, 0x2708, 0x4708, 0x6708, 0x8708, 0xA708, 0xC708, 0xE708,
+    0x0010, 0x2010, 0x4010, 0x6010, 0x8010, 0xA010, 0xC010, 0xE010,
+    0x0110, 0x2110, 0x4110, 0x6110, 0x8110, 0xA110, 0xC110, 0xE110,
+    0x0210, 0x2210, 0x4210, 0x6210, 0x8210, 0xA210, 0xC210, 0xE210,
+    0x0310, 0x2310, 0x4310, 0x6310, 0x8310, 0xA310, 0xC310, 0xE310,
+    0x0410, 0x2410, 0x4410, 0x6410, 0x8410, 0xA410, 0xC410, 0xE410,
+    0x0510, 0x2510, 0x4510, 0x6510, 0x8510, 0xA510, 0xC510, 0xE510,
+    0x0610, 0x2610, 0x4610, 0x6610, 0x8610, 0xA610, 0xC610, 0xE610,
+    0x0710, 0x2710, 0x4710, 0x6710, 0x8710, 0xA710, 0xC710, 0xE710,
+    0x0018, 0x2018, 0x4018, 0x6018, 0x8018, 0xA018, 0xC018, 0xE018,
+    0x0118, 0x2118, 0x4118, 0x6118, 0x8118, 0xA118, 0xC118, 0xE118,
+    0x0218, 0x2218, 0x4218, 0x6218, 0x8218, 0xA218, 0xC218, 0xE218,
+    0x0318, 0x2318, 0x4318, 0x6318, 0x8318, 0xA318, 0xC318, 0xE318,
+    0x0418, 0x2418, 0x4418, 0x6418, 0x8418, 0xA418, 0xC418, 0xE418,
+    0x0518, 0x2518, 0x4518, 0x6518, 0x8518, 0xA518, 0xC518, 0xE518,
+    0x0618, 0x2618, 0x4618, 0x6618, 0x8618, 0xA618, 0xC618, 0xE618,
+    0x0718, 0x2718, 0x4718, 0x6718, 0x8718, 0xA718, 0xC718, 0xE718
 };
 #endif /* DISP_DEVICE_8BPP */
 
@@ -702,418 +702,409 @@ static void tmd20qvga_set_revId(int);
 
 /* future use */
 void tmd20qvga_disp_clear_screen_area(word start_row, word end_row,
-				      word start_column, word end_column);
+                                      word start_column, word end_column);
 
-static void tmd20qvga_set_revId(int id)
-{
+static void tmd20qvga_set_revId(int id) {
 
-	tmd20qvga_lcd_rev = id;
+    tmd20qvga_lcd_rev = id;
 
-	if (tmd20qvga_lcd_rev == 1)
-		tmd20qvga_panel_offset = 0x10;
-	else
-		tmd20qvga_panel_offset = 0;
+    if (tmd20qvga_lcd_rev == 1)
+        tmd20qvga_panel_offset = 0x10;
+    else
+        tmd20qvga_panel_offset = 0;
 }
 
-static void tmd20qvga_disp_init(struct platform_device *pdev)
-{
-	struct msm_fb_data_type *mfd;
+static void tmd20qvga_disp_init(struct platform_device *pdev) {
+    struct msm_fb_data_type *mfd;
 
-	if (disp_initialized)
-		return;
+    if (disp_initialized)
+        return;
 
-	mfd = platform_get_drvdata(pdev);
+    mfd = platform_get_drvdata(pdev);
 
-	DISP_CMD_PORT = mfd->cmd_port;
-	DISP_DATA_PORT = mfd->data_port;
+    DISP_CMD_PORT = mfd->cmd_port;
+    DISP_DATA_PORT = mfd->data_port;
 
 #ifdef TMD20QVGA_LCD_18BPP
-	tmd20qvga_set_revId(2);
+    tmd20qvga_set_revId(2);
 #else
-	tmd20qvga_set_revId(1);
+    tmd20qvga_set_revId(1);
 #endif
 
-	disp_initialized = TRUE;
-	tmd20qvga_disp_set_contrast();
-	tmd20qvga_disp_set_display_area(0, QVGA_HEIGHT - 1);
+    disp_initialized = TRUE;
+    tmd20qvga_disp_set_contrast();
+    tmd20qvga_disp_set_display_area(0, QVGA_HEIGHT - 1);
 }
 
-static void tmd20qvga_disp_set_rect(int x, int y, int xres, int yres)
-{
-	if (!disp_initialized)
-		return;
+static void tmd20qvga_disp_set_rect(int x, int y, int xres, int yres) {
+    if (!disp_initialized)
+        return;
 
-	DISP_SET_RECT(y, y + yres - 1, x, x + xres - 1);
+    DISP_SET_RECT(y, y + yres - 1, x, x + xres - 1);
 
-	DISP_CMD_OUT(DISP_CMD_RAMWR);
+    DISP_CMD_OUT(DISP_CMD_RAMWR);
 }
 
-static void tmd20qvga_disp_set_display_area(word start_row, word end_row)
-{
-	word start_driving = start_row;
-	word end_driving = end_row;
+static void tmd20qvga_disp_set_display_area(word start_row, word end_row) {
+    word start_driving = start_row;
+    word end_driving = end_row;
 
-	if (!disp_initialized)
-		return;
+    if (!disp_initialized)
+        return;
 
-	/* Range checking
-	 */
-	if (end_driving >= QVGA_HEIGHT)
-		end_driving = QVGA_HEIGHT - 1;
-	if (start_driving > end_driving) {
-		/* Probably Backwards Switch */
-		start_driving = end_driving;
-		end_driving = start_row;	/* Has not changed */
-		if (end_driving >= QVGA_HEIGHT)
-			end_driving = QVGA_HEIGHT - 1;
-	}
+    /* Range checking
+     */
+    if (end_driving >= QVGA_HEIGHT)
+        end_driving = QVGA_HEIGHT - 1;
+    if (start_driving > end_driving) {
+        /* Probably Backwards Switch */
+        start_driving = end_driving;
+        end_driving = start_row;	/* Has not changed */
+        if (end_driving >= QVGA_HEIGHT)
+            end_driving = QVGA_HEIGHT - 1;
+    }
 
-	if ((start_driving == disp_area_start_row)
-	    && (end_driving == disp_area_end_row))
-		return;
+    if ((start_driving == disp_area_start_row)
+            && (end_driving == disp_area_end_row))
+        return;
 
-	disp_area_start_row = start_driving;
-	disp_area_end_row = end_driving;
+    disp_area_start_row = start_driving;
+    disp_area_end_row = end_driving;
 
-	DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR,
-		       DISP_VAL_IF(start_driving & 0x100,
-				   DISP_BITMASK_SS18) |
-		       DISP_VAL_IF(start_driving & 0x080,
-				   DISP_BITMASK_SS17) |
-		       DISP_VAL_IF(start_driving & 0x040,
-				   DISP_BITMASK_SS16) |
-		       DISP_VAL_IF(start_driving & 0x020,
-				   DISP_BITMASK_SS15) |
-		       DISP_VAL_IF(start_driving & 0x010,
-				   DISP_BITMASK_SS14) |
-		       DISP_VAL_IF(start_driving & 0x008,
-				   DISP_BITMASK_SS13) |
-		       DISP_VAL_IF(start_driving & 0x004,
-				   DISP_BITMASK_SS12) |
-		       DISP_VAL_IF(start_driving & 0x002,
-				   DISP_BITMASK_SS11) |
-		       DISP_VAL_IF(start_driving & 0x001, DISP_BITMASK_SS10));
+    DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR,
+                   DISP_VAL_IF(start_driving & 0x100,
+                               DISP_BITMASK_SS18) |
+                   DISP_VAL_IF(start_driving & 0x080,
+                               DISP_BITMASK_SS17) |
+                   DISP_VAL_IF(start_driving & 0x040,
+                               DISP_BITMASK_SS16) |
+                   DISP_VAL_IF(start_driving & 0x020,
+                               DISP_BITMASK_SS15) |
+                   DISP_VAL_IF(start_driving & 0x010,
+                               DISP_BITMASK_SS14) |
+                   DISP_VAL_IF(start_driving & 0x008,
+                               DISP_BITMASK_SS13) |
+                   DISP_VAL_IF(start_driving & 0x004,
+                               DISP_BITMASK_SS12) |
+                   DISP_VAL_IF(start_driving & 0x002,
+                               DISP_BITMASK_SS11) |
+                   DISP_VAL_IF(start_driving & 0x001, DISP_BITMASK_SS10));
 
-	DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR,
-			DISP_VAL_IF(end_driving & 0x100, DISP_BITMASK_SE18) |
-			DISP_VAL_IF(end_driving & 0x080, DISP_BITMASK_SE17) |
-			DISP_VAL_IF(end_driving & 0x040, DISP_BITMASK_SE16) |
-			DISP_VAL_IF(end_driving & 0x020, DISP_BITMASK_SE15) |
-			DISP_VAL_IF(end_driving & 0x010, DISP_BITMASK_SE14) |
-			DISP_VAL_IF(end_driving & 0x008, DISP_BITMASK_SE13) |
-			DISP_VAL_IF(end_driving & 0x004, DISP_BITMASK_SE12) |
-			DISP_VAL_IF(end_driving & 0x002, DISP_BITMASK_SE11) |
-			DISP_VAL_IF(end_driving & 0x001, DISP_BITMASK_SE10));
+    DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR,
+                   DISP_VAL_IF(end_driving & 0x100, DISP_BITMASK_SE18) |
+                   DISP_VAL_IF(end_driving & 0x080, DISP_BITMASK_SE17) |
+                   DISP_VAL_IF(end_driving & 0x040, DISP_BITMASK_SE16) |
+                   DISP_VAL_IF(end_driving & 0x020, DISP_BITMASK_SE15) |
+                   DISP_VAL_IF(end_driving & 0x010, DISP_BITMASK_SE14) |
+                   DISP_VAL_IF(end_driving & 0x008, DISP_BITMASK_SE13) |
+                   DISP_VAL_IF(end_driving & 0x004, DISP_BITMASK_SE12) |
+                   DISP_VAL_IF(end_driving & 0x002, DISP_BITMASK_SE11) |
+                   DISP_VAL_IF(end_driving & 0x001, DISP_BITMASK_SE10));
 }
 
-static int tmd20qvga_disp_off(struct platform_device *pdev)
-{
-	if (!disp_initialized)
-		tmd20qvga_disp_init(pdev);
+static int tmd20qvga_disp_off(struct platform_device *pdev) {
+    if (!disp_initialized)
+        tmd20qvga_disp_init(pdev);
 
-	if (display_on) {
-		if (tmd20qvga_lcd_rev == 2) {
-			DISP_WRITE_OUT(DISP_POFF_LN_SETTING_ADDR, 0x000A);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xFFEE);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xF812);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xE811);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xC011);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x4011);
-			WAIT_MSEC(20);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0010);
+    if (display_on) {
+        if (tmd20qvga_lcd_rev == 2) {
+            DISP_WRITE_OUT(DISP_POFF_LN_SETTING_ADDR, 0x000A);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xFFEE);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xF812);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xE811);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xC011);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x4011);
+            WAIT_MSEC(20);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0010);
 
-		} else {
-			DISP_WRITE_OUT(DISP_POFF_LN_SETTING_ADDR, 0x000F);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BFE);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BED);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(40);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x00CD);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(20);
-			DISP_WRITE_OUT(DISP_START_OSCILLATION_ADDR, 0x0);
-		}
+        } else {
+            DISP_WRITE_OUT(DISP_POFF_LN_SETTING_ADDR, 0x000F);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BFE);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BED);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x00CD);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(20);
+            DISP_WRITE_OUT(DISP_START_OSCILLATION_ADDR, 0x0);
+        }
 
-		DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0004);
-		DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0000);
+        DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0004);
+        DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0000);
 
-		display_on = FALSE;
-	}
+        display_on = FALSE;
+    }
 
-	return 0;
+    return 0;
 }
 
-static int tmd20qvga_disp_on(struct platform_device *pdev)
-{
-	if (!disp_initialized)
-		tmd20qvga_disp_init(pdev);
+static int tmd20qvga_disp_on(struct platform_device *pdev) {
+    if (!disp_initialized)
+        tmd20qvga_disp_init(pdev);
 
-	if (!display_on) {
-		/* Deep Stand-by -> Stand-by */
-		DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
-		WAIT_MSEC(1);
-		DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
-		WAIT_MSEC(1);
-		DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
-		WAIT_MSEC(1);
+    if (!display_on) {
+        /* Deep Stand-by -> Stand-by */
+        DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
+        WAIT_MSEC(1);
+        DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
+        WAIT_MSEC(1);
+        DISP_CMD_OUT(DISP_START_OSCILLATION_ADDR);
+        WAIT_MSEC(1);
 
-		/* OFF -> Deep Stan-By -> Stand-by */
-		/* let's change the state from "Stand-by" to "Sleep" */
-		DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0005);
-		WAIT_MSEC(1);
+        /* OFF -> Deep Stan-By -> Stand-by */
+        /* let's change the state from "Stand-by" to "Sleep" */
+        DISP_WRITE_OUT(DISP_MODE_SETTING_ADDR, 0x0005);
+        WAIT_MSEC(1);
 
-		/* Sleep -> Displaying */
-		DISP_WRITE_OUT(DISP_START_OSCILLATION_ADDR, 0x0001);
-		DISP_WRITE_OUT(DISP_DRIVER_OUTPUT_CTL_ADDR, 0x0127);
-		DISP_WRITE_OUT(DISP_LCD_DRIVING_SIG_ADDR, 0x200);
-		/* fast write mode */
-		DISP_WRITE_OUT(DISP_ENTRY_MODE_ADDR, 0x0130);
-		if (tmd20qvga_lcd_rev == 2)
-			DISP_WRITE_OUT(DISP_TMD_700_ADDR, 0x0003);
-		/* back porch = 14 + front porch = 2 --> 16 lines */
-		if (tmd20qvga_lcd_rev == 2) {
+        /* Sleep -> Displaying */
+        DISP_WRITE_OUT(DISP_START_OSCILLATION_ADDR, 0x0001);
+        DISP_WRITE_OUT(DISP_DRIVER_OUTPUT_CTL_ADDR, 0x0127);
+        DISP_WRITE_OUT(DISP_LCD_DRIVING_SIG_ADDR, 0x200);
+        /* fast write mode */
+        DISP_WRITE_OUT(DISP_ENTRY_MODE_ADDR, 0x0130);
+        if (tmd20qvga_lcd_rev == 2)
+            DISP_WRITE_OUT(DISP_TMD_700_ADDR, 0x0003);
+        /* back porch = 14 + front porch = 2 --> 16 lines */
+        if (tmd20qvga_lcd_rev == 2) {
 #ifdef TMD20QVGA_LCD_18BPP
-			/* 256k color */
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x0000);
+            /* 256k color */
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x0000);
 #else
-			/* 65k color */
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x4000);
+            /* 65k color */
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x4000);
 #endif
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_2_ADDR, 0x0302);
-		} else {
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_2_ADDR, 0x0302);
+        } else {
 #ifdef TMD20QVGA_LCD_18BPP
-			/* 256k color */
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x0004);
+            /* 256k color */
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x0004);
 #else
-			/* 65k color */
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x4004);
+            /* 65k color */
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_1_ADDR, 0x4004);
 #endif
-			DISP_WRITE_OUT(DISP_DISPLAY_CTL_2_ADDR, 0x020E);
-		}
-		/* 16 bit one transfer */
-		if (tmd20qvga_lcd_rev == 2) {
-			DISP_WRITE_OUT(DISP_EXT_DISPLAY_CTL_1_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_FRAME_CYCLE_CTL_ADDR, 0x0010);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_1_ADDR, 0x0302);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_2_ADDR, 0x0102);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_3_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_TMD_015_ADDR, 0x2000);
+            DISP_WRITE_OUT(DISP_DISPLAY_CTL_2_ADDR, 0x020E);
+        }
+        /* 16 bit one transfer */
+        if (tmd20qvga_lcd_rev == 2) {
+            DISP_WRITE_OUT(DISP_EXT_DISPLAY_CTL_1_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_FRAME_CYCLE_CTL_ADDR, 0x0010);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_1_ADDR, 0x0302);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_2_ADDR, 0x0102);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_3_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_TMD_015_ADDR, 0x2000);
 
-			DISP_WRITE_OUT(DISP_AMP_SETTING_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0304);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0403);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0101);
-			DISP_WRITE_OUT(DISP_TMD_305_ADDR, 0);
+            DISP_WRITE_OUT(DISP_AMP_SETTING_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0304);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0403);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0101);
+            DISP_WRITE_OUT(DISP_TMD_305_ADDR, 0);
 
-			DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR, 0x013F);
+            DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR, 0x013F);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_3_ADDR, 0x077D);
+            DISP_WRITE_OUT(DISP_POWER_CTL_3_ADDR, 0x077D);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_4_ADDR, 0x0005);
-			DISP_WRITE_OUT(DISP_POWER_CTL_5_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_POWER_CTL_6_ADDR, 0x0015);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xC010);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_4_ADDR, 0x0005);
+            DISP_WRITE_OUT(DISP_POWER_CTL_5_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_POWER_CTL_6_ADDR, 0x0015);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xC010);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x0001);
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xFFFE);
-			WAIT_MSEC(60);
-		} else {
-			DISP_WRITE_OUT(DISP_EXT_DISPLAY_CTL_1_ADDR, 0x0001);
-			DISP_WRITE_OUT(DISP_FRAME_CYCLE_CTL_ADDR, 0x0010);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_1_ADDR, 0x0301);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_2_ADDR, 0x0001);
-			DISP_WRITE_OUT(DISP_LTPS_CTL_3_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_AMP_SETTING_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0507);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0405);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0607);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0502);
-			DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0301);
-			DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR, 0x013F);
-			DISP_WRITE_OUT(DISP_POWER_CTL_3_ADDR, 0x0795);
+            DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x0001);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0xFFFE);
+            WAIT_MSEC(60);
+        } else {
+            DISP_WRITE_OUT(DISP_EXT_DISPLAY_CTL_1_ADDR, 0x0001);
+            DISP_WRITE_OUT(DISP_FRAME_CYCLE_CTL_ADDR, 0x0010);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_1_ADDR, 0x0301);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_2_ADDR, 0x0001);
+            DISP_WRITE_OUT(DISP_LTPS_CTL_3_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_AMP_SETTING_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0507);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0405);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0607);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0502);
+            DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0301);
+            DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_1_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_SCREEN_1_DRV_POS_2_ADDR, 0x013F);
+            DISP_WRITE_OUT(DISP_POWER_CTL_3_ADDR, 0x0795);
 
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0102);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0102);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_4_ADDR, 0x0450);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0103);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_4_ADDR, 0x0450);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0103);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_5_ADDR, 0x0008);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0104);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_5_ADDR, 0x0008);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0104);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_6_ADDR, 0x0C00);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0105);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_6_ADDR, 0x0C00);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0105);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_7_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0106);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_7_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0106);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0801);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(1);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0801);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(1);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x001F);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0101);
-			WAIT_MSEC(60);
+            DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x001F);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0101);
+            WAIT_MSEC(60);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x009F);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0101);
-			WAIT_MSEC(10);
+            DISP_WRITE_OUT(DISP_POWER_CTL_2_ADDR, 0x009F);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0101);
+            WAIT_MSEC(10);
 
-			DISP_WRITE_OUT(DISP_HORZ_RAM_ADDR_POS_1_ADDR, 0x0010);
-			DISP_WRITE_OUT(DISP_HORZ_RAM_ADDR_POS_2_ADDR, 0x00FF);
-			DISP_WRITE_OUT(DISP_VERT_RAM_ADDR_POS_1_ADDR, 0x0000);
-			DISP_WRITE_OUT(DISP_VERT_RAM_ADDR_POS_2_ADDR, 0x013F);
-			/* RAM starts at address 0x10 */
-			DISP_WRITE_OUT(DISP_RAM_ADDR_SET_1_ADDR, 0x0010);
-			DISP_WRITE_OUT(DISP_RAM_ADDR_SET_2_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_HORZ_RAM_ADDR_POS_1_ADDR, 0x0010);
+            DISP_WRITE_OUT(DISP_HORZ_RAM_ADDR_POS_2_ADDR, 0x00FF);
+            DISP_WRITE_OUT(DISP_VERT_RAM_ADDR_POS_1_ADDR, 0x0000);
+            DISP_WRITE_OUT(DISP_VERT_RAM_ADDR_POS_2_ADDR, 0x013F);
+            /* RAM starts at address 0x10 */
+            DISP_WRITE_OUT(DISP_RAM_ADDR_SET_1_ADDR, 0x0010);
+            DISP_WRITE_OUT(DISP_RAM_ADDR_SET_2_ADDR, 0x0000);
 
-			/* lcd controller uses internal clock, not ext. vsync */
-			DISP_CMD_OUT(DISP_CMD_RAMWR);
+            /* lcd controller uses internal clock, not ext. vsync */
+            DISP_CMD_OUT(DISP_CMD_RAMWR);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0881);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0881);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(40);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BE1);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-			WAIT_MSEC(40);
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BE1);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+            WAIT_MSEC(40);
 
-			DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BFF);
-			DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
-		}
-		display_on = TRUE;
-	}
+            DISP_WRITE_OUT(DISP_POWER_CTL_1_ADDR, 0x0BFF);
+            DISP_WRITE_OUT(DISP_POWER_SUPPLY_INTF_ADDR, 0x0100);
+        }
+        display_on = TRUE;
+    }
 
-	return 0;
+    return 0;
 }
 
-static void tmd20qvga_disp_set_contrast(void)
-{
+static void tmd20qvga_disp_set_contrast(void) {
 #if (defined(TMD20QVGA_LCD_18BPP))
 
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0302);
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0403);
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0F07);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR, 0x0302);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR, 0x0403);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0F07);
 
 #else
-	int newcontrast = 0x46;
+    int newcontrast = 0x46;
 
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_1_ADDR, 0x0403);
 
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR,
-			DISP_VAL_IF(newcontrast & 0x0001, DISP_BITMASK_PKP20) |
-			DISP_VAL_IF(newcontrast & 0x0002, DISP_BITMASK_PKP21) |
-			DISP_VAL_IF(newcontrast & 0x0004, DISP_BITMASK_PKP22) |
-			DISP_VAL_IF(newcontrast & 0x0010, DISP_BITMASK_PKP30) |
-			DISP_VAL_IF(newcontrast & 0x0020, DISP_BITMASK_PKP31) |
-			DISP_VAL_IF(newcontrast & 0x0040, DISP_BITMASK_PKP32));
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_2_ADDR,
+                   DISP_VAL_IF(newcontrast & 0x0001, DISP_BITMASK_PKP20) |
+                   DISP_VAL_IF(newcontrast & 0x0002, DISP_BITMASK_PKP21) |
+                   DISP_VAL_IF(newcontrast & 0x0004, DISP_BITMASK_PKP22) |
+                   DISP_VAL_IF(newcontrast & 0x0010, DISP_BITMASK_PKP30) |
+                   DISP_VAL_IF(newcontrast & 0x0020, DISP_BITMASK_PKP31) |
+                   DISP_VAL_IF(newcontrast & 0x0040, DISP_BITMASK_PKP32));
 
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR,
-			DISP_VAL_IF(newcontrast & 0x0010, DISP_BITMASK_PKP40) |
-			DISP_VAL_IF(newcontrast & 0x0020, DISP_BITMASK_PKP41) |
-			DISP_VAL_IF(newcontrast & 0x0040, DISP_BITMASK_PKP42) |
-			DISP_VAL_IF(newcontrast & 0x0001, DISP_BITMASK_PKP50) |
-			DISP_VAL_IF(newcontrast & 0x0002, DISP_BITMASK_PKP51) |
-			DISP_VAL_IF(newcontrast & 0x0004, DISP_BITMASK_PKP52));
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_3_ADDR,
+                   DISP_VAL_IF(newcontrast & 0x0010, DISP_BITMASK_PKP40) |
+                   DISP_VAL_IF(newcontrast & 0x0020, DISP_BITMASK_PKP41) |
+                   DISP_VAL_IF(newcontrast & 0x0040, DISP_BITMASK_PKP42) |
+                   DISP_VAL_IF(newcontrast & 0x0001, DISP_BITMASK_PKP50) |
+                   DISP_VAL_IF(newcontrast & 0x0002, DISP_BITMASK_PKP51) |
+                   DISP_VAL_IF(newcontrast & 0x0004, DISP_BITMASK_PKP52));
 
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
-	DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0F07);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_4_ADDR, 0x0303);
+    DISP_WRITE_OUT(DISP_GAMMA_CONTROL_5_ADDR, 0x0F07);
 
 #endif /* defined(TMD20QVGA_LCD_18BPP) */
 
 }	/* End disp_set_contrast */
 
 void tmd20qvga_disp_clear_screen_area
-    (word start_row, word end_row, word start_column, word end_column) {
-	int32 i;
+(word start_row, word end_row, word start_column, word end_column) {
+    int32 i;
 
-	/* Clear the display screen */
-	DISP_SET_RECT(start_row, end_row, start_column, end_column);
-	DISP_CMD_OUT(DISP_CMD_RAMWR);
-	i = (end_row - start_row + 1) * (end_column - start_column + 1);
-	for (; i > 0; i--)
-		DISP_DATA_OUT_16TO18BPP(0x0);
+    /* Clear the display screen */
+    DISP_SET_RECT(start_row, end_row, start_column, end_column);
+    DISP_CMD_OUT(DISP_CMD_RAMWR);
+    i = (end_row - start_row + 1) * (end_column - start_column + 1);
+    for (; i > 0; i--)
+        DISP_DATA_OUT_16TO18BPP(0x0);
 }
 
-static int __init tmd20qvga_probe(struct platform_device *pdev)
-{
-	msm_fb_add_device(pdev);
+static int __init tmd20qvga_probe(struct platform_device *pdev) {
+    msm_fb_add_device(pdev);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver this_driver = {
-	.probe  = tmd20qvga_probe,
-	.driver = {
-		.name   = "ebi2_tmd_qvga",
-	},
+    .probe  = tmd20qvga_probe,
+    .driver = {
+        .name   = "ebi2_tmd_qvga",
+    },
 };
 
 static struct msm_fb_panel_data tmd20qvga_panel_data = {
-	.on = tmd20qvga_disp_on,
-	.off = tmd20qvga_disp_off,
-	.set_rect = tmd20qvga_disp_set_rect,
+    .on = tmd20qvga_disp_on,
+    .off = tmd20qvga_disp_off,
+    .set_rect = tmd20qvga_disp_set_rect,
 };
 
 static struct platform_device this_device = {
-	.name   = "ebi2_tmd_qvga",
-	.id	= 0,
-	.dev	= {
-		.platform_data = &tmd20qvga_panel_data,
-	}
+    .name   = "ebi2_tmd_qvga",
+    .id	= 0,
+    .dev	= {
+        .platform_data = &tmd20qvga_panel_data,
+    }
 };
 
-static int __init tmd20qvga_init(void)
-{
-	int ret;
-	struct msm_panel_info *pinfo;
+static int __init tmd20qvga_init(void) {
+    int ret;
+    struct msm_panel_info *pinfo;
 
-	ret = platform_driver_register(&this_driver);
-	if (!ret) {
-		pinfo = &tmd20qvga_panel_data.panel_info;
-		pinfo->xres = 240;
-		pinfo->yres = 320;
-		MSM_FB_SINGLE_MODE_PANEL(pinfo);
-		pinfo->type = EBI2_PANEL;
-		pinfo->pdest = DISPLAY_1;
-		pinfo->wait_cycle = 0x808000;
+    ret = platform_driver_register(&this_driver);
+    if (!ret) {
+        pinfo = &tmd20qvga_panel_data.panel_info;
+        pinfo->xres = 240;
+        pinfo->yres = 320;
+        MSM_FB_SINGLE_MODE_PANEL(pinfo);
+        pinfo->type = EBI2_PANEL;
+        pinfo->pdest = DISPLAY_1;
+        pinfo->wait_cycle = 0x808000;
 #ifdef TMD20QVGA_LCD_18BPP
-		pinfo->bpp = 18;
+        pinfo->bpp = 18;
 #else
-		pinfo->bpp = 16;
+        pinfo->bpp = 16;
 #endif
-		pinfo->fb_num = 2;
-		pinfo->lcd.vsync_enable = TRUE;
-		pinfo->lcd.refx100 = 6000;
-		pinfo->lcd.v_back_porch = 16;
-		pinfo->lcd.v_front_porch = 4;
-		pinfo->lcd.v_pulse_width = 0;
-		pinfo->lcd.hw_vsync_mode = FALSE;
-		pinfo->lcd.vsync_notifier_period = 0;
+        pinfo->fb_num = 2;
+        pinfo->lcd.vsync_enable = TRUE;
+        pinfo->lcd.refx100 = 6000;
+        pinfo->lcd.v_back_porch = 16;
+        pinfo->lcd.v_front_porch = 4;
+        pinfo->lcd.v_pulse_width = 0;
+        pinfo->lcd.hw_vsync_mode = FALSE;
+        pinfo->lcd.vsync_notifier_period = 0;
 
-		ret = platform_device_register(&this_device);
-		if (ret)
-			platform_driver_unregister(&this_driver);
-	}
+        ret = platform_device_register(&this_device);
+        if (ret)
+            platform_driver_unregister(&this_driver);
+    }
 
-	return ret;
+    return ret;
 }
 
 module_init(tmd20qvga_init);

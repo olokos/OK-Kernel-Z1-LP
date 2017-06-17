@@ -150,8 +150,7 @@ WLAN_BAPReadFailedContactCounter
     tBtampTLVHCI_Read_Failed_Contact_Counter_Cmd  *pBapHCIReadFailedContactCounter,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPReadFailedContactCounter */
@@ -195,8 +194,7 @@ WLAN_BAPResetFailedContactCounter
     tBtampTLVHCI_Reset_Failed_Contact_Counter_Cmd *pBapHCIResetFailedContactCounter,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPResetFailedContactCounter */
@@ -242,8 +240,7 @@ WLAN_BAPReadLinkQuality
     tBtampTLVHCI_Read_Link_Quality_Cmd *pBapHCIReadLinkQuality,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     v_U8_t         phyLinkHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -253,8 +250,7 @@ WLAN_BAPReadLinkQuality
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIReadLinkQuality) ||
-            (NULL == pBapHCIEvent))
-    {
+            (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -269,15 +265,12 @@ WLAN_BAPReadLinkQuality
         = phyLinkHandle;
     pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Quality.link_quality = 0;
 
-    if (phyLinkHandle != btampContext->phy_link_handle)
-    {
+    if (phyLinkHandle != btampContext->phy_link_handle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid Physical link handle in %s", __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Quality.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         /* Get the Link quality indication status from control block.
            Link quality value is being updated on the SME callback */
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Link_Quality.link_quality
@@ -338,8 +331,7 @@ WLAN_BAPReadRSSI
     tBtampTLVHCI_Read_RSSI_Cmd *pBapHCIReadRSSI,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     VOS_STATUS     vosStatus;
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     v_U8_t         phyLinkHandle;
@@ -350,8 +342,7 @@ WLAN_BAPReadRSSI
 
     /* Validate params */
     if ((NULL == btampHandle) || (NULL == pBapHCIReadRSSI) ||
-            (NULL == pBapHCIEvent))
-    {
+            (NULL == pBapHCIEvent)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid input parameters in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -366,27 +357,21 @@ WLAN_BAPReadRSSI
         = phyLinkHandle;
     pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_RSSI.rssi = 0;
 
-    if (phyLinkHandle != btampContext->phy_link_handle)
-    {
+    if (phyLinkHandle != btampContext->phy_link_handle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "Invalid Physical link handle in %s", __func__);
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_RSSI.status
             = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         /* Get the RSSI value for this station (physical link) */
         vosStatus = WLANTL_GetRssi(btampContext->pvosGCtx, btampContext->ucSTAId,
                                    &pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_RSSI.rssi);
 
-        if (VOS_STATUS_SUCCESS == vosStatus)
-        {
+        if (VOS_STATUS_SUCCESS == vosStatus) {
             /* GetRssi success, indicate the to upper layer */
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_RSSI.status
                 = WLANBAP_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             /* API failed, indicate unspecified error to upper layer */
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_RSSI.status
                 = WLANBAP_ERROR_UNSPECIFIED_ERROR;
@@ -443,17 +428,14 @@ WLAN_BAPReadLocalAMPInfo
     tBtampTLVHCI_Read_Local_AMP_Information_Cmd *pBapHCIReadLocalAMPInfo,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
     /* Validate params */
-    if (pBapHCIReadLocalAMPInfo == NULL)
-    {
+    if (pBapHCIReadLocalAMPInfo == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -546,8 +528,7 @@ WLAN_BAPReadLocalAMPAssoc
     tBtampTLVHCI_Read_Local_AMP_Assoc_Cmd   *pBapHCIReadLocalAMPAssoc,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     VOS_STATUS  vosStatus;
     ptBtampContext btampContext = (ptBtampContext) btampHandle; /* btampContext value */
     tHalHandle hHal;
@@ -557,16 +538,14 @@ WLAN_BAPReadLocalAMPAssoc
 
 
     /* Validate params */
-    if ((pBapHCIReadLocalAMPAssoc == NULL) || (NULL == btampHandle))
-    {
+    if ((pBapHCIReadLocalAMPAssoc == NULL) || (NULL == btampHandle)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "param is NULL in %s", __func__);
 
         return VOS_STATUS_E_FAULT;
     }
     hHal = VOS_GET_HAL_CB(btampContext->pvosGCtx);
-    if (NULL == hHal)
-    {
+    if (NULL == hHal) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "hHal is NULL in %s", __func__);
         return VOS_STATUS_E_FAULT;
@@ -603,8 +582,7 @@ WLAN_BAPReadLocalAMPAssoc
     /* JEZ090303: This logic should return a single channel list with the */
     /* selected channel, if we have one. */
     //if (btampContext->channel)
-    if (1)
-    {
+    if (1) {
         /* Return the local Preferred Channel List */
         /* Return both the Regulatory Info and one channel list */
         btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.present = 1;
@@ -618,31 +596,23 @@ WLAN_BAPReadLocalAMPAssoc
         btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[0][2] = 0;
 
         if (( BT_INITIATOR == btampContext->BAPDeviceRole ) &&
-                ( 0 != btampContext->channel ))
-        {
+                ( 0 != btampContext->channel )) {
             btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][0] = btampContext->channel;
             btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][1] = 0x01; //we are AP - we start on their 1st preferred channel
             btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][2] = 0x11;
-        }
-        else
-        {
-            if (btampContext->config.ucPreferredChannel)
-            {
+        } else {
+            if (btampContext->config.ucPreferredChannel) {
                 btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][0] = btampContext->config.ucPreferredChannel;
                 btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][1] =
                     0x0B - btampContext->config.ucPreferredChannel + 1;
-            }
-            else
-            {
+            } else {
                 btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][0] = 0x01;
                 btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][1] = 0x0B; //all channels for 1 to 11
             }
 
             btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.triplets[1][2] = 0x11;
         }
-    }
-    else
-    {
+    } else {
         /* Return the local Preferred Channel List */
         /* Return only the Regulatory Info */
         btamp_ASSOC.AMP_Assoc_Preferred_Channel_List.present = 1;
@@ -736,8 +706,7 @@ vosStatus = btampPackAMP_ASSOC(
         = BTAMP_TLV_HCI_READ_LOCAL_AMP_ASSOC_CMD;
     /*Validate the Physical handle*/
     if(pBapHCIReadLocalAMPAssoc->phy_link_handle !=
-            btampContext->phy_link_handle)
-    {
+            btampContext->phy_link_handle) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH,
                    "%s: Wrong Physical Link handle in Read Local AMP Assoc cmd: current: %x, new: %x", __func__,
                    btampContext->phy_link_handle,
@@ -745,8 +714,7 @@ vosStatus = btampPackAMP_ASSOC(
 
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Read_Local_AMP_Assoc.status
             = WLANBAP_ERROR_NO_CNCT;
-    }
-    else
+    } else
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Read_Local_AMP_Assoc.status
             = WLANBAP_STATUS_SUCCESS;
     pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Read_Read_Local_AMP_Assoc.phy_link_handle
@@ -797,8 +765,7 @@ WLAN_BAPWriteRemoteAMPAssoc
     tBtampTLVHCI_Write_Remote_AMP_ASSOC_Cmd   *pBapHCIWriteRemoteAMPAssoc,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tWLAN_BAPEvent bapEvent; /* State machine event */
     VOS_STATUS  vosStatus;
     tBtampHCI_Event bapHCIEvent;
@@ -809,8 +776,7 @@ WLAN_BAPWriteRemoteAMPAssoc
     v_U8_t status;    /* return the BT-AMP status here */
 
     /* Validate params */
-    if (pBapHCIWriteRemoteAMPAssoc == NULL)
-    {
+    if (pBapHCIWriteRemoteAMPAssoc == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -836,8 +802,7 @@ WLAN_BAPWriteRemoteAMPAssoc
     pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Write_Remote_AMP_Assoc.phy_link_handle
         = pBapHCIWriteRemoteAMPAssoc->phy_link_handle;
 
-    if(WLANBAP_ERROR_NO_SUITABLE_CHANNEL == status)
-    {
+    if(WLANBAP_ERROR_NO_SUITABLE_CHANNEL == status) {
         /* Format the Physical Link Complete event to return... */
         bapHCIEvent.bapHCIEventCode = BTAMP_TLV_HCI_PHYSICAL_LINK_COMPLETE_EVENT;
         bapHCIEvent.u.btampPhysicalLinkCompleteEvent.present = 1;

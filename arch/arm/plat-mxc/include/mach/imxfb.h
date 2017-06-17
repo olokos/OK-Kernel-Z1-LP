@@ -52,32 +52,32 @@
 #define DMACR_TM(x)	((x) & 0xf)
 
 struct imx_fb_videomode {
-	struct fb_videomode mode;
-	u32 pcr;
-	unsigned char	bpp;
+    struct fb_videomode mode;
+    u32 pcr;
+    unsigned char	bpp;
 };
 
 struct imx_fb_platform_data {
-	struct imx_fb_videomode *mode;
-	int		num_modes;
+    struct imx_fb_videomode *mode;
+    int		num_modes;
 
-	u_int		cmap_greyscale:1,
-			cmap_inverse:1,
-			cmap_static:1,
-			unused:29;
+    u_int		cmap_greyscale:1,
+                cmap_inverse:1,
+                cmap_static:1,
+                unused:29;
 
-	u_int		pwmr;
-	u_int		lscr1;
-	u_int		dmacr;
+    u_int		pwmr;
+    u_int		lscr1;
+    u_int		dmacr;
 
-	u_char * fixed_screen_cpu;
-	dma_addr_t fixed_screen_dma;
+    u_char * fixed_screen_cpu;
+    dma_addr_t fixed_screen_dma;
 
-	int (*init)(struct platform_device *);
-	void (*exit)(struct platform_device *);
+    int (*init)(struct platform_device *);
+    void (*exit)(struct platform_device *);
 
-	void (*lcd_power)(int);
-	void (*backlight_power)(int);
+    void (*lcd_power)(int);
+    void (*backlight_power)(int);
 };
 
 void set_imx_fb_info(struct imx_fb_platform_data *);

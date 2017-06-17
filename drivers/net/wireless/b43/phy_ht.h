@@ -46,12 +46,12 @@
 
 /* Values for PHY registers used on channel switching */
 struct b43_phy_ht_channeltab_e_phy {
-	u16 bw1;
-	u16 bw2;
-	u16 bw3;
-	u16 bw4;
-	u16 bw5;
-	u16 bw6;
+    u16 bw1;
+    u16 bw2;
+    u16 bw3;
+    u16 bw4;
+    u16 bw5;
+    u16 bw6;
 };
 
 

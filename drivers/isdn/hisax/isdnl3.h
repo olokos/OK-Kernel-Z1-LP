@@ -18,9 +18,9 @@
 #define L3_DEB_SI	0x20
 
 struct stateentry {
-	int state;
-	int primitive;
-	void (*rout) (struct l3_process *, u8, void *);
+    int state;
+    int primitive;
+    void (*rout) (struct l3_process *, u8, void *);
 };
 
 #define l3_debug(st, fmt, args...) HiSax_putstatus(st->l1.hardware, "l3 ", fmt, ## args)

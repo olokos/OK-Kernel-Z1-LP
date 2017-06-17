@@ -29,13 +29,13 @@
 
 /*  descriptor block used for chained dma transfers */
 struct plx_dma_desc {
-	volatile uint32_t pci_start_addr;
-	volatile uint32_t local_start_addr;
-	/* transfer_size is in bytes, only first 23 bits of register are used */
-	volatile uint32_t transfer_size;
-	/* address of next descriptor (quad word aligned), plus some
-	 * additional bits (see PLX_DMA0_DESCRIPTOR_REG) */
-	volatile uint32_t next;
+    volatile uint32_t pci_start_addr;
+    volatile uint32_t local_start_addr;
+    /* transfer_size is in bytes, only first 23 bits of register are used */
+    volatile uint32_t transfer_size;
+    /* address of next descriptor (quad word aligned), plus some
+     * additional bits (see PLX_DMA0_DESCRIPTOR_REG) */
+    volatile uint32_t next;
 };
 
 /**********************************************************************
@@ -66,33 +66,33 @@ struct plx_dma_desc {
 #define PLX_MARB_REG         0x8	/* L, Local Arbitration Register */
 #define PLX_DMAARB_REG      0xac
 enum marb_bits {
-	MARB_LLT_MASK = 0x000000ff,	/* Local Bus Latency Timer */
-	MARB_LPT_MASK = 0x0000ff00,	/* Local Bus Pause Timer */
-	MARB_LTEN = 0x00010000,	/* Latency Timer Enable */
-	MARB_LPEN = 0x00020000,	/* Pause Timer Enable */
-	MARB_BREQ = 0x00040000,	/* Local Bus BREQ Enable */
-	MARB_DMA_PRIORITY_MASK = 0x00180000,
-	MARB_LBDS_GIVE_UP_BUS_MODE = 0x00200000,	/* local bus direct slave give up bus mode */
-	MARB_DS_LLOCK_ENABLE = 0x00400000,	/* direct slave LLOCKo# enable */
-	MARB_PCI_REQUEST_MODE = 0x00800000,
-	MARB_PCIv21_MODE = 0x01000000,	/* pci specification v2.1 mode */
-	MARB_PCI_READ_NO_WRITE_MODE = 0x02000000,
-	MARB_PCI_READ_WITH_WRITE_FLUSH_MODE = 0x04000000,
-	MARB_GATE_TIMER_WITH_BREQ = 0x08000000,	/* gate local bus latency timer with BREQ */
-	MARB_PCI_READ_NO_FLUSH_MODE = 0x10000000,
-	MARB_USE_SUBSYSTEM_IDS = 0x20000000,
+    MARB_LLT_MASK = 0x000000ff,	/* Local Bus Latency Timer */
+    MARB_LPT_MASK = 0x0000ff00,	/* Local Bus Pause Timer */
+    MARB_LTEN = 0x00010000,	/* Latency Timer Enable */
+    MARB_LPEN = 0x00020000,	/* Pause Timer Enable */
+    MARB_BREQ = 0x00040000,	/* Local Bus BREQ Enable */
+    MARB_DMA_PRIORITY_MASK = 0x00180000,
+    MARB_LBDS_GIVE_UP_BUS_MODE = 0x00200000,	/* local bus direct slave give up bus mode */
+    MARB_DS_LLOCK_ENABLE = 0x00400000,	/* direct slave LLOCKo# enable */
+    MARB_PCI_REQUEST_MODE = 0x00800000,
+    MARB_PCIv21_MODE = 0x01000000,	/* pci specification v2.1 mode */
+    MARB_PCI_READ_NO_WRITE_MODE = 0x02000000,
+    MARB_PCI_READ_WITH_WRITE_FLUSH_MODE = 0x04000000,
+    MARB_GATE_TIMER_WITH_BREQ = 0x08000000,	/* gate local bus latency timer with BREQ */
+    MARB_PCI_READ_NO_FLUSH_MODE = 0x10000000,
+    MARB_USE_SUBSYSTEM_IDS = 0x20000000,
 };
 
 #define PLX_BIGEND_REG 0xc
 enum bigend_bits {
-	BIGEND_CONFIG = 0x1,	/* use big endian ordering for configuration register accesses */
-	BIGEND_DIRECT_MASTER = 0x2,
-	BIGEND_DIRECT_SLAVE_LOCAL0 = 0x4,
-	BIGEND_ROM = 0x8,
-	BIGEND_BYTE_LANE = 0x10,	/* use byte lane consisting of most significant bits instead of least significant */
-	BIGEND_DIRECT_SLAVE_LOCAL1 = 0x20,
-	BIGEND_DMA1 = 0x40,
-	BIGEND_DMA0 = 0x80,
+    BIGEND_CONFIG = 0x1,	/* use big endian ordering for configuration register accesses */
+    BIGEND_DIRECT_MASTER = 0x2,
+    BIGEND_DIRECT_SLAVE_LOCAL0 = 0x4,
+    BIGEND_ROM = 0x8,
+    BIGEND_BYTE_LANE = 0x10,	/* use byte lane consisting of most significant bits instead of least significant */
+    BIGEND_DIRECT_SLAVE_LOCAL1 = 0x20,
+    BIGEND_DMA1 = 0x40,
+    BIGEND_DMA0 = 0x80,
 };
 
 /* Note: The Expansion ROM  stuff is only relevant to the PC environment.
@@ -380,50 +380,49 @@ enum bigend_bits {
 #define MBX_ADDR_SPACE_360 0x80	/* wanXL100s/200/400 */
 #define MBX_ADDR_MASK_360 (MBX_ADDR_SPACE_360-1)
 
-static inline int plx9080_abort_dma(void __iomem *iobase, unsigned int channel)
-{
-	void __iomem *dma_cs_addr;
-	uint8_t dma_status;
-	const int timeout = 10000;
-	unsigned int i;
+static inline int plx9080_abort_dma(void __iomem *iobase, unsigned int channel) {
+    void __iomem *dma_cs_addr;
+    uint8_t dma_status;
+    const int timeout = 10000;
+    unsigned int i;
 
-	if (channel)
-		dma_cs_addr = iobase + PLX_DMA1_CS_REG;
-	else
-		dma_cs_addr = iobase + PLX_DMA0_CS_REG;
+    if (channel)
+        dma_cs_addr = iobase + PLX_DMA1_CS_REG;
+    else
+        dma_cs_addr = iobase + PLX_DMA0_CS_REG;
 
-	/*  abort dma transfer if necessary */
-	dma_status = readb(dma_cs_addr);
-	if ((dma_status & PLX_DMA_EN_BIT) == 0)
-		return 0;
+    /*  abort dma transfer if necessary */
+    dma_status = readb(dma_cs_addr);
+    if ((dma_status & PLX_DMA_EN_BIT) == 0)
+        return 0;
 
-	/*  wait to make sure done bit is zero */
-	for (i = 0; (dma_status & PLX_DMA_DONE_BIT) && i < timeout; i++) {
-		udelay(1);
-		dma_status = readb(dma_cs_addr);
-	}
-	if (i == timeout) {
-		printk
-		    ("plx9080: cancel() timed out waiting for dma %i done clear\n",
-		     channel);
-		return -ETIMEDOUT;
-	}
-	/*  disable and abort channel */
-	writeb(PLX_DMA_ABORT_BIT, dma_cs_addr);
-	/*  wait for dma done bit */
-	dma_status = readb(dma_cs_addr);
-	for (i = 0; (dma_status & PLX_DMA_DONE_BIT) == 0 && i < timeout; i++) {
-		udelay(1);
-		dma_status = readb(dma_cs_addr);
-	}
-	if (i == timeout) {
-		printk
-		    ("plx9080: cancel() timed out waiting for dma %i done set\n",
-		     channel);
-		return -ETIMEDOUT;
-	}
+    /*  wait to make sure done bit is zero */
+    for (i = 0; (dma_status & PLX_DMA_DONE_BIT) && i < timeout; i++) {
+        udelay(1);
+        dma_status = readb(dma_cs_addr);
+    }
+    if (i == timeout) {
+        printk
+        ("plx9080: cancel() timed out waiting for dma %i done clear\n",
+         channel);
+        return -ETIMEDOUT;
+    }
+    /*  disable and abort channel */
+    writeb(PLX_DMA_ABORT_BIT, dma_cs_addr);
+    /*  wait for dma done bit */
+    dma_status = readb(dma_cs_addr);
+    for (i = 0; (dma_status & PLX_DMA_DONE_BIT) == 0 && i < timeout; i++) {
+        udelay(1);
+        dma_status = readb(dma_cs_addr);
+    }
+    if (i == timeout) {
+        printk
+        ("plx9080: cancel() timed out waiting for dma %i done set\n",
+         channel);
+        return -ETIMEDOUT;
+    }
 
-	return 0;
+    return 0;
 }
 
 #endif /* __COMEDI_PLX9080_H */

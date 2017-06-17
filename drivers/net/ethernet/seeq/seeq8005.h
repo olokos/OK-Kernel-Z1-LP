@@ -125,16 +125,16 @@
 #define SEEQCFG2_RESET		(0x8000)	/* software Hard-reset bit */
 
 struct seeq_pkt_hdr {
-	unsigned short	next;			/* address of next packet header */
-	unsigned char	babble_int:1,		/* enable int on >1514 byte packet */
-			coll_int:1,		/* enable int on collision */
-			coll_16_int:1,		/* enable int on >15 collision */
-			xmit_int:1,		/* enable int on success (or xmit with <15 collision) */
-			unused:1,
-			data_follows:1,		/* if not set, process this as a header and pointer only */
-			chain_cont:1,		/* if set, more headers in chain 		only cmd bit valid in recv header */
-			xmit_recv:1;		/* if set, a xmit packet, else a receive packet.*/
-	unsigned char	status;
+    unsigned short	next;			/* address of next packet header */
+    unsigned char	babble_int:1,		/* enable int on >1514 byte packet */
+               coll_int:1,		/* enable int on collision */
+               coll_16_int:1,		/* enable int on >15 collision */
+               xmit_int:1,		/* enable int on success (or xmit with <15 collision) */
+               unused:1,
+               data_follows:1,		/* if not set, process this as a header and pointer only */
+               chain_cont:1,		/* if set, more headers in chain 		only cmd bit valid in recv header */
+               xmit_recv:1;		/* if set, a xmit packet, else a receive packet.*/
+    unsigned char	status;
 };
 
 #define SEEQPKTH_BAB_INT_EN	(0x01)		/* xmit only */

@@ -111,34 +111,34 @@
 #define ATOM_IO_IIO		0x80
 
 struct card_info {
-	struct drm_device *dev;
-	void (* reg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
-        uint32_t (* reg_read)(struct card_info *, uint32_t);          /*  filled by driver */
-	void (* ioreg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
-        uint32_t (* ioreg_read)(struct card_info *, uint32_t);          /*  filled by driver */
-	void (* mc_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
-        uint32_t (* mc_read)(struct card_info *, uint32_t);          /*  filled by driver */
-	void (* pll_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
-        uint32_t (* pll_read)(struct card_info *, uint32_t);          /*  filled by driver */
+    struct drm_device *dev;
+    void (* reg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
+    uint32_t (* reg_read)(struct card_info *, uint32_t);          /*  filled by driver */
+    void (* ioreg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
+    uint32_t (* ioreg_read)(struct card_info *, uint32_t);          /*  filled by driver */
+    void (* mc_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
+    uint32_t (* mc_read)(struct card_info *, uint32_t);          /*  filled by driver */
+    void (* pll_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
+    uint32_t (* pll_read)(struct card_info *, uint32_t);          /*  filled by driver */
 };
 
 struct atom_context {
-	struct card_info *card;
-	struct mutex mutex;
-	void *bios;
-	uint32_t cmd_table, data_table;
-	uint16_t *iio;
+    struct card_info *card;
+    struct mutex mutex;
+    void *bios;
+    uint32_t cmd_table, data_table;
+    uint16_t *iio;
 
-	uint16_t data_block;
-	uint32_t fb_base;
-	uint32_t divmul[2];
-	uint16_t io_attr;
-	uint16_t reg_block;
-	uint8_t shift;
-	int cs_equal, cs_above;
-	int io_mode;
-	uint32_t *scratch;
-	int scratch_size_bytes;
+    uint16_t data_block;
+    uint32_t fb_base;
+    uint32_t divmul[2];
+    uint16_t io_attr;
+    uint16_t reg_block;
+    uint8_t shift;
+    int cs_equal, cs_above;
+    int io_mode;
+    uint32_t *scratch;
+    int scratch_size_bytes;
 };
 
 extern int atom_debug;
@@ -148,9 +148,9 @@ int atom_execute_table(struct atom_context *, int, uint32_t *);
 int atom_asic_init(struct atom_context *);
 void atom_destroy(struct atom_context *);
 bool atom_parse_data_header(struct atom_context *ctx, int index, uint16_t *size,
-			    uint8_t *frev, uint8_t *crev, uint16_t *data_start);
+                            uint8_t *frev, uint8_t *crev, uint16_t *data_start);
 bool atom_parse_cmd_header(struct atom_context *ctx, int index,
-			   uint8_t *frev, uint8_t *crev);
+                           uint8_t *frev, uint8_t *crev);
 int atom_allocate_fb_scratch(struct atom_context *ctx);
 #include "atom-types.h"
 #include "atombios.h"

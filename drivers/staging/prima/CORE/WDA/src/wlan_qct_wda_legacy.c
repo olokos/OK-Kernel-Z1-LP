@@ -78,8 +78,7 @@
  */
 
 tSirRetStatus
-wdaPostCtrlMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg)
-{
+wdaPostCtrlMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg) {
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_WDA, (vos_msg_t *) pMsg))
         return eSIR_FAILURE;
     else
@@ -105,19 +104,16 @@ wdaPostCtrlMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg)
  */
 
 tSirRetStatus
-wdaPostCfgMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg)
-{
+wdaPostCfgMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg) {
     tSirRetStatus rc = eSIR_SUCCESS;
 
-    do
-    {
+    do {
         // For Windows based MAC, instead of posting message to different
         // queues we will call the handler routines directly
 
         cfgProcessMbMsg(pMac, (tSirMbMsg*)pMsg->bodyptr);
         rc = eSIR_SUCCESS;
-    }
-    while (0);
+    } while (0);
 
     return rc;
 } // halMntPostMsg()
@@ -147,8 +143,7 @@ wdaPostCfgMsg(tpAniSirGlobal pMac, tSirMsgQ *pMsg)
  * @return NONE
  */
 
-tSirRetStatus uMacPostCtrlMsg(void* pSirGlobal, tSirMbMsg* pMb)
-{
+tSirRetStatus uMacPostCtrlMsg(void* pSirGlobal, tSirMbMsg* pMb) {
     tSirMsgQ msg;
     tpAniSirGlobal pMac = (tpAniSirGlobal)pSirGlobal;
 
@@ -167,8 +162,7 @@ tSirRetStatus uMacPostCtrlMsg(void* pSirGlobal, tSirMbMsg* pMb)
 
     // second parameter, 'wait option', to palAllocateMemory is ignored on Windows
     pMbLocal = vos_mem_malloc(pMb->msgLen);
-    if ( NULL == pMbLocal )
-    {
+    if ( NULL == pMbLocal ) {
         WDALOGE( wdaLog(pMac, LOGE, FL("Buffer Allocation failed!")));
         return eSIR_FAILURE;
     }
@@ -176,8 +170,7 @@ tSirRetStatus uMacPostCtrlMsg(void* pSirGlobal, tSirMbMsg* pMb)
     vos_mem_copy((void *)pMbLocal, (void *)pMb, pMb->msgLen);
     msg.bodyptr = pMbLocal;
 
-    switch (msg.type & HAL_MMH_MB_MSG_TYPE_MASK)
-    {
+    switch (msg.type & HAL_MMH_MB_MSG_TYPE_MASK) {
     case WDA_MSG_TYPES_BEGIN:    // Posts a message to the HAL MsgQ
         wdaPostCtrlMsg(pMac, &msg);
         break;
@@ -222,13 +215,11 @@ tSirRetStatus uMacPostCtrlMsg(void* pSirGlobal, tSirMbMsg* pMb)
  * Get the global HAL system role.
  * ---------------------------------------------------------
  */
-tBssSystemRole wdaGetGlobalSystemRole(tpAniSirGlobal pMac)
-{
+tBssSystemRole wdaGetGlobalSystemRole(tpAniSirGlobal pMac) {
     v_VOID_t * pVosContext = vos_get_global_context(VOS_MODULE_ID_WDA, NULL);
     tWDA_CbContext *wdaContext =
         vos_get_context(VOS_MODULE_ID_WDA, pVosContext);
-    if(NULL == wdaContext)
-    {
+    if(NULL == wdaContext) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "%s:WDA context is NULL", __func__);
         VOS_ASSERT(0);

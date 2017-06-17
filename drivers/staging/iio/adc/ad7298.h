@@ -31,26 +31,26 @@
  */
 
 struct ad7298_platform_data {
-	/* External Vref voltage applied */
-	u16				vref_mv;
+    /* External Vref voltage applied */
+    u16				vref_mv;
 };
 
 struct ad7298_state {
-	struct spi_device		*spi;
-	struct regulator		*reg;
-	size_t				d_size;
-	u16				int_vref_mv;
-	unsigned			ext_ref;
-	struct spi_transfer		ring_xfer[10];
-	struct spi_transfer		scan_single_xfer[3];
-	struct spi_message		ring_msg;
-	struct spi_message		scan_single_msg;
-	/*
-	 * DMA (thus cache coherency maintenance) requires the
-	 * transfer buffers to live in their own cache lines.
-	 */
-	unsigned short			rx_buf[8] ____cacheline_aligned;
-	unsigned short			tx_buf[2];
+    struct spi_device		*spi;
+    struct regulator		*reg;
+    size_t				d_size;
+    u16				int_vref_mv;
+    unsigned			ext_ref;
+    struct spi_transfer		ring_xfer[10];
+    struct spi_transfer		scan_single_xfer[3];
+    struct spi_message		ring_msg;
+    struct spi_message		scan_single_msg;
+    /*
+     * DMA (thus cache coherency maintenance) requires the
+     * transfer buffers to live in their own cache lines.
+     */
+    unsigned short			rx_buf[8] ____cacheline_aligned;
+    unsigned short			tx_buf[2];
 };
 
 #ifdef CONFIG_IIO_BUFFER
@@ -59,13 +59,11 @@ void ad7298_ring_cleanup(struct iio_dev *indio_dev);
 #else /* CONFIG_IIO_BUFFER */
 
 static inline int
-ad7298_register_ring_funcs_and_init(struct iio_dev *indio_dev)
-{
-	return 0;
+ad7298_register_ring_funcs_and_init(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void ad7298_ring_cleanup(struct iio_dev *indio_dev)
-{
+static inline void ad7298_ring_cleanup(struct iio_dev *indio_dev) {
 }
 #endif /* CONFIG_IIO_BUFFER */
 #endif /* IIO_ADC_AD7298_H_ */

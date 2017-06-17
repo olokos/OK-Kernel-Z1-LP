@@ -34,9 +34,8 @@ extern int __put_kernel_bad(void);
 extern int __put_user_bad(void);
 
 static inline long access_ok(int type, const void __user * addr,
-		unsigned long size)
-{
-	return 1;
+                             unsigned long size) {
+    return 1;
 }
 
 #define put_user __put_user
@@ -59,12 +58,12 @@ static inline long access_ok(int type, const void __user * addr,
 /*
  * The exception table contains two values: the first is an address
  * for an instruction that is allowed to fault, and the second is
- * the address to the fixup routine. 
+ * the address to the fixup routine.
  */
 
 struct exception_table_entry {
-	unsigned long insn;  /* address of insn that is allowed to fault.   */
-	long fixup;          /* fixup routine */
+    unsigned long insn;  /* address of insn that is allowed to fault.   */
+    long fixup;          /* fixup routine */
 };
 
 #define ASM_EXCEPTIONTABLE_ENTRY( fault_addr, except_addr )\
@@ -77,9 +76,9 @@ struct exception_table_entry {
  * if a fixup routine is available.
  */
 struct exception_data {
-	unsigned long fault_ip;
-	unsigned long fault_space;
-	unsigned long fault_addr;
+    unsigned long fault_ip;
+    unsigned long fault_space;
+    unsigned long fault_addr;
 };
 
 #define __get_user(x,ptr)                               \
@@ -242,25 +241,24 @@ unsigned long copy_in_user(void __user *dst, const void __user *src, unsigned lo
 
 extern void copy_from_user_overflow(void)
 #ifdef CONFIG_DEBUG_STRICT_USER_COPY_CHECKS
-        __compiletime_error("copy_from_user() buffer size is not provably correct")
+__compiletime_error("copy_from_user() buffer size is not provably correct")
 #else
-        __compiletime_warning("copy_from_user() buffer size is not provably correct")
+__compiletime_warning("copy_from_user() buffer size is not provably correct")
 #endif
 ;
 
 static inline unsigned long __must_check copy_from_user(void *to,
-                                          const void __user *from,
-                                          unsigned long n)
-{
-        int sz = __compiletime_object_size(to);
-        int ret = -EFAULT;
+        const void __user *from,
+        unsigned long n) {
+    int sz = __compiletime_object_size(to);
+    int ret = -EFAULT;
 
-        if (likely(sz == -1 || !__builtin_constant_p(n) || sz >= n))
-                ret = __copy_from_user(to, from, n);
-        else
-                copy_from_user_overflow();
+    if (likely(sz == -1 || !__builtin_constant_p(n) || sz >= n))
+        ret = __copy_from_user(to, from, n);
+    else
+        copy_from_user_overflow();
 
-        return ret;
+    return ret;
 }
 
 struct pt_regs;

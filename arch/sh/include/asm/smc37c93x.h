@@ -68,14 +68,14 @@
 
 #ifndef __ASSEMBLY__
 typedef struct uart_reg {
-	volatile __u16 rbr;
-	volatile __u16 ier;
-	volatile __u16 iir;
-	volatile __u16 lcr;
-	volatile __u16 mcr;
-	volatile __u16 lsr;
-	volatile __u16 msr;
-	volatile __u16 scr;
+    volatile __u16 rbr;
+    volatile __u16 ier;
+    volatile __u16 iir;
+    volatile __u16 lcr;
+    volatile __u16 mcr;
+    volatile __u16 lsr;
+    volatile __u16 msr;
+    volatile __u16 scr;
 } uart_reg;
 #endif /* ! __ASSEMBLY__ */
 

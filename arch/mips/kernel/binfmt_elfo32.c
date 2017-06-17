@@ -76,38 +76,36 @@ extern void elf32_core_copy_regs(elf_gregset_t grp, struct pt_regs *regs);
 #include <linux/math64.h>
 
 #define elf_prstatus elf_prstatus32
-struct elf_prstatus32
-{
-	struct elf_siginfo pr_info;	/* Info associated with signal */
-	short	pr_cursig;		/* Current signal */
-	unsigned int pr_sigpend;	/* Set of pending signals */
-	unsigned int pr_sighold;	/* Set of held signals */
-	pid_t	pr_pid;
-	pid_t	pr_ppid;
-	pid_t	pr_pgrp;
-	pid_t	pr_sid;
-	struct compat_timeval pr_utime;	/* User time */
-	struct compat_timeval pr_stime;	/* System time */
-	struct compat_timeval pr_cutime;/* Cumulative user time */
-	struct compat_timeval pr_cstime;/* Cumulative system time */
-	elf_gregset_t pr_reg;	/* GP registers */
-	int pr_fpvalid;		/* True if math co-processor being used.  */
+struct elf_prstatus32 {
+    struct elf_siginfo pr_info;	/* Info associated with signal */
+    short	pr_cursig;		/* Current signal */
+    unsigned int pr_sigpend;	/* Set of pending signals */
+    unsigned int pr_sighold;	/* Set of held signals */
+    pid_t	pr_pid;
+    pid_t	pr_ppid;
+    pid_t	pr_pgrp;
+    pid_t	pr_sid;
+    struct compat_timeval pr_utime;	/* User time */
+    struct compat_timeval pr_stime;	/* System time */
+    struct compat_timeval pr_cutime;/* Cumulative user time */
+    struct compat_timeval pr_cstime;/* Cumulative system time */
+    elf_gregset_t pr_reg;	/* GP registers */
+    int pr_fpvalid;		/* True if math co-processor being used.  */
 };
 
 #define elf_prpsinfo elf_prpsinfo32
-struct elf_prpsinfo32
-{
-	char	pr_state;	/* numeric process state */
-	char	pr_sname;	/* char for pr_state */
-	char	pr_zomb;	/* zombie */
-	char	pr_nice;	/* nice val */
-	unsigned int pr_flag;	/* flags */
-	__kernel_uid_t	pr_uid;
-	__kernel_gid_t	pr_gid;
-	pid_t	pr_pid, pr_ppid, pr_pgrp, pr_sid;
-	/* Lots missing */
-	char	pr_fname[16];	/* filename of executable */
-	char	pr_psargs[ELF_PRARGSZ];	/* initial part of arg list */
+struct elf_prpsinfo32 {
+    char	pr_state;	/* numeric process state */
+    char	pr_sname;	/* char for pr_state */
+    char	pr_zomb;	/* zombie */
+    char	pr_nice;	/* nice val */
+    unsigned int pr_flag;	/* flags */
+    __kernel_uid_t	pr_uid;
+    __kernel_gid_t	pr_gid;
+    pid_t	pr_pid, pr_ppid, pr_pgrp, pr_sid;
+    /* Lots missing */
+    char	pr_fname[16];	/* filename of executable */
+    char	pr_psargs[ELF_PRARGSZ];	/* initial part of arg list */
 };
 
 #define elf_caddr_t	u32
@@ -115,37 +113,35 @@ struct elf_prpsinfo32
 
 #define jiffies_to_timeval jiffies_to_compat_timeval
 static inline void
-jiffies_to_compat_timeval(unsigned long jiffies, struct compat_timeval *value)
-{
-	/*
-	 * Convert jiffies to nanoseconds and separate with
-	 * one divide.
-	 */
-	u64 nsec = (u64)jiffies * TICK_NSEC;
-	u32 rem;
-	value->tv_sec = div_u64_rem(nsec, NSEC_PER_SEC, &rem);
-	value->tv_usec = rem / NSEC_PER_USEC;
+jiffies_to_compat_timeval(unsigned long jiffies, struct compat_timeval *value) {
+    /*
+     * Convert jiffies to nanoseconds and separate with
+     * one divide.
+     */
+    u64 nsec = (u64)jiffies * TICK_NSEC;
+    u32 rem;
+    value->tv_sec = div_u64_rem(nsec, NSEC_PER_SEC, &rem);
+    value->tv_usec = rem / NSEC_PER_USEC;
 }
 
-void elf32_core_copy_regs(elf_gregset_t grp, struct pt_regs *regs)
-{
-	int i;
+void elf32_core_copy_regs(elf_gregset_t grp, struct pt_regs *regs) {
+    int i;
 
-	for (i = 0; i < EF_R0; i++)
-		grp[i] = 0;
-	grp[EF_R0] = 0;
-	for (i = 1; i <= 31; i++)
-		grp[EF_R0 + i] = (elf_greg_t) regs->regs[i];
-	grp[EF_R26] = 0;
-	grp[EF_R27] = 0;
-	grp[EF_LO] = (elf_greg_t) regs->lo;
-	grp[EF_HI] = (elf_greg_t) regs->hi;
-	grp[EF_CP0_EPC] = (elf_greg_t) regs->cp0_epc;
-	grp[EF_CP0_BADVADDR] = (elf_greg_t) regs->cp0_badvaddr;
-	grp[EF_CP0_STATUS] = (elf_greg_t) regs->cp0_status;
-	grp[EF_CP0_CAUSE] = (elf_greg_t) regs->cp0_cause;
+    for (i = 0; i < EF_R0; i++)
+        grp[i] = 0;
+    grp[EF_R0] = 0;
+    for (i = 1; i <= 31; i++)
+        grp[EF_R0 + i] = (elf_greg_t) regs->regs[i];
+    grp[EF_R26] = 0;
+    grp[EF_R27] = 0;
+    grp[EF_LO] = (elf_greg_t) regs->lo;
+    grp[EF_HI] = (elf_greg_t) regs->hi;
+    grp[EF_CP0_EPC] = (elf_greg_t) regs->cp0_epc;
+    grp[EF_CP0_BADVADDR] = (elf_greg_t) regs->cp0_badvaddr;
+    grp[EF_CP0_STATUS] = (elf_greg_t) regs->cp0_status;
+    grp[EF_CP0_CAUSE] = (elf_greg_t) regs->cp0_cause;
 #ifdef EF_UNUSED0
-	grp[EF_UNUSED0] = 0;
+    grp[EF_UNUSED0] = 0;
 #endif
 }
 

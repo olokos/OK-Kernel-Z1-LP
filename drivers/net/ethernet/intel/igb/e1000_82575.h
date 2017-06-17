@@ -80,31 +80,31 @@ extern void igb_rx_fifo_flush_82575(struct e1000_hw *hw);
 
 /* Receive Descriptor - Advanced */
 union e1000_adv_rx_desc {
-	struct {
-		__le64 pkt_addr;             /* Packet buffer address */
-		__le64 hdr_addr;             /* Header buffer address */
-	} read;
-	struct {
-		struct {
-			struct {
-				__le16 pkt_info;   /* RSS type, Packet type */
-				__le16 hdr_info;   /* Split Header,
+    struct {
+        __le64 pkt_addr;             /* Packet buffer address */
+        __le64 hdr_addr;             /* Header buffer address */
+    } read;
+    struct {
+        struct {
+            struct {
+                __le16 pkt_info;   /* RSS type, Packet type */
+                __le16 hdr_info;   /* Split Header,
 						    * header buffer length */
-			} lo_dword;
-			union {
-				__le32 rss;          /* RSS Hash */
-				struct {
-					__le16 ip_id;    /* IP id */
-					__le16 csum;     /* Packet Checksum */
-				} csum_ip;
-			} hi_dword;
-		} lower;
-		struct {
-			__le32 status_error;     /* ext status/error */
-			__le16 length;           /* Packet length */
-			__le16 vlan;             /* VLAN tag */
-		} upper;
-	} wb;  /* writeback */
+            } lo_dword;
+            union {
+                __le32 rss;          /* RSS Hash */
+                struct {
+                    __le16 ip_id;    /* IP id */
+                    __le16 csum;     /* Packet Checksum */
+                } csum_ip;
+            } hi_dword;
+        } lower;
+        struct {
+            __le32 status_error;     /* ext status/error */
+            __le16 length;           /* Packet length */
+            __le16 vlan;             /* VLAN tag */
+        } upper;
+    } wb;  /* writeback */
 };
 
 #define E1000_RXDADV_HDRBUFLEN_MASK      0x7FE0
@@ -114,16 +114,16 @@ union e1000_adv_rx_desc {
 
 /* Transmit Descriptor - Advanced */
 union e1000_adv_tx_desc {
-	struct {
-		__le64 buffer_addr;    /* Address of descriptor's data buf */
-		__le32 cmd_type_len;
-		__le32 olinfo_status;
-	} read;
-	struct {
-		__le64 rsvd;       /* Reserved */
-		__le32 nxtseq_seed;
-		__le32 status;
-	} wb;
+    struct {
+        __le64 buffer_addr;    /* Address of descriptor's data buf */
+        __le32 cmd_type_len;
+        __le32 olinfo_status;
+    } read;
+    struct {
+        __le64 rsvd;       /* Reserved */
+        __le32 nxtseq_seed;
+        __le32 status;
+    } wb;
 };
 
 /* Adv Transmit Descriptor Config Masks */
@@ -140,10 +140,10 @@ union e1000_adv_tx_desc {
 
 /* Context descriptors */
 struct e1000_adv_tx_context_desc {
-	__le32 vlan_macip_lens;
-	__le32 seqnum_seed;
-	__le32 type_tucmd_mlhl;
-	__le32 mss_l4len_idx;
+    __le32 vlan_macip_lens;
+    __le32 seqnum_seed;
+    __le32 type_tucmd_mlhl;
+    __le32 mss_l4len_idx;
 };
 
 #define E1000_ADVTXD_MACLEN_SHIFT    9  /* Adv ctxt desc mac len shift */

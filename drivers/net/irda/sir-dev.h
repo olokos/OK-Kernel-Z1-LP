@@ -4,9 +4,9 @@
  *
  *	Copyright (c) 2002 Martin Diehl
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License as 
- *	published by the Free Software Foundation; either version 2 of 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as
+ *	published by the Free Software Foundation; either version 2 of
  *	the License, or (at your option) any later version.
  *
  ********************************************************************/
@@ -21,11 +21,11 @@
 #include <net/irda/irda_device.h>		// iobuff_t
 
 struct sir_fsm {
-	struct semaphore	sem;
-	struct delayed_work	work;
-	unsigned		state, substate;
-	int			param;
-	int			result;
+    struct semaphore	sem;
+    struct delayed_work	work;
+    unsigned		state, substate;
+    int			param;
+    int			result;
 };
 
 #define SIRDEV_STATE_WAIT_TX_COMPLETE	0x0100
@@ -66,37 +66,37 @@ struct sir_dev;
 
 struct dongle_driver {
 
-	struct module *owner;
+    struct module *owner;
 
-	const char *driver_name;
+    const char *driver_name;
 
-	IRDA_DONGLE type;
+    IRDA_DONGLE type;
 
-	int	(*open)(struct sir_dev *dev);
-	int	(*close)(struct sir_dev *dev);
-	int	(*reset)(struct sir_dev *dev);
-	int	(*set_speed)(struct sir_dev *dev, unsigned speed);
+    int	(*open)(struct sir_dev *dev);
+    int	(*close)(struct sir_dev *dev);
+    int	(*reset)(struct sir_dev *dev);
+    int	(*set_speed)(struct sir_dev *dev, unsigned speed);
 
-	struct list_head dongle_list;
+    struct list_head dongle_list;
 };
 
 struct sir_driver {
 
-	struct module *owner;
+    struct module *owner;
 
-	const char *driver_name;
+    const char *driver_name;
 
-	int qos_mtt_bits;
+    int qos_mtt_bits;
 
-	int (*chars_in_buffer)(struct sir_dev *dev);
-	void (*wait_until_sent)(struct sir_dev *dev);
-	int (*set_speed)(struct sir_dev *dev, unsigned speed);
-	int (*set_dtr_rts)(struct sir_dev *dev, int dtr, int rts);
+    int (*chars_in_buffer)(struct sir_dev *dev);
+    void (*wait_until_sent)(struct sir_dev *dev);
+    int (*set_speed)(struct sir_dev *dev, unsigned speed);
+    int (*set_dtr_rts)(struct sir_dev *dev, int dtr, int rts);
 
-	int (*do_write)(struct sir_dev *dev, const unsigned char *ptr, size_t len);
+    int (*do_write)(struct sir_dev *dev, const unsigned char *ptr, size_t len);
 
-	int (*start_dev)(struct sir_dev *dev);
-	int (*stop_dev)(struct sir_dev *dev);
+    int (*start_dev)(struct sir_dev *dev);
+    int (*stop_dev)(struct sir_dev *dev);
 };
 
 
@@ -127,63 +127,58 @@ extern int sirdev_schedule_request(struct sir_dev *dev, int state, unsigned para
 
 /* inline helpers */
 
-static inline int sirdev_schedule_speed(struct sir_dev *dev, unsigned speed)
-{
-	return sirdev_schedule_request(dev, SIRDEV_STATE_SET_SPEED, speed);
+static inline int sirdev_schedule_speed(struct sir_dev *dev, unsigned speed) {
+    return sirdev_schedule_request(dev, SIRDEV_STATE_SET_SPEED, speed);
 }
 
-static inline int sirdev_schedule_dongle_open(struct sir_dev *dev, int dongle_id)
-{
-	return sirdev_schedule_request(dev, SIRDEV_STATE_DONGLE_OPEN, dongle_id);
+static inline int sirdev_schedule_dongle_open(struct sir_dev *dev, int dongle_id) {
+    return sirdev_schedule_request(dev, SIRDEV_STATE_DONGLE_OPEN, dongle_id);
 }
 
-static inline int sirdev_schedule_dongle_close(struct sir_dev *dev)
-{
-	return sirdev_schedule_request(dev, SIRDEV_STATE_DONGLE_CLOSE, 0);
+static inline int sirdev_schedule_dongle_close(struct sir_dev *dev) {
+    return sirdev_schedule_request(dev, SIRDEV_STATE_DONGLE_CLOSE, 0);
 }
 
-static inline int sirdev_schedule_dtr_rts(struct sir_dev *dev, int dtr, int rts)
-{
-	int	dtrrts;
+static inline int sirdev_schedule_dtr_rts(struct sir_dev *dev, int dtr, int rts) {
+    int	dtrrts;
 
-	dtrrts = ((dtr) ? 0x02 : 0x00) | ((rts) ? 0x01 : 0x00);
-	return sirdev_schedule_request(dev, SIRDEV_STATE_SET_DTR_RTS, dtrrts);
+    dtrrts = ((dtr) ? 0x02 : 0x00) | ((rts) ? 0x01 : 0x00);
+    return sirdev_schedule_request(dev, SIRDEV_STATE_SET_DTR_RTS, dtrrts);
 }
 
 #if 0
-static inline int sirdev_schedule_mode(struct sir_dev *dev, int mode)
-{
-	return sirdev_schedule_request(dev, SIRDEV_STATE_SET_MODE, mode);
+static inline int sirdev_schedule_mode(struct sir_dev *dev, int mode) {
+    return sirdev_schedule_request(dev, SIRDEV_STATE_SET_MODE, mode);
 }
 #endif
 
 
 struct sir_dev {
-	struct net_device *netdev;
+    struct net_device *netdev;
 
-	struct irlap_cb    *irlap;
+    struct irlap_cb    *irlap;
 
-	struct qos_info qos;
+    struct qos_info qos;
 
-	char hwname[32];
+    char hwname[32];
 
-	struct sir_fsm fsm;
-	atomic_t enable_rx;
-	int raw_tx;
-	spinlock_t tx_lock;
+    struct sir_fsm fsm;
+    atomic_t enable_rx;
+    int raw_tx;
+    spinlock_t tx_lock;
 
-	u32 new_speed;
- 	u32 flags;
+    u32 new_speed;
+    u32 flags;
 
-	unsigned	speed;
+    unsigned	speed;
 
-	iobuff_t tx_buff;          /* Transmit buffer */
-	iobuff_t rx_buff;          /* Receive buffer */
-	struct sk_buff *tx_skb;
+    iobuff_t tx_buff;          /* Transmit buffer */
+    iobuff_t rx_buff;          /* Receive buffer */
+    struct sk_buff *tx_skb;
 
-	const struct dongle_driver * dongle_drv;
-	const struct sir_driver * drv;
-	void *priv;
+    const struct dongle_driver * dongle_drv;
+    const struct sir_driver * drv;
+    void *priv;
 
 };
 

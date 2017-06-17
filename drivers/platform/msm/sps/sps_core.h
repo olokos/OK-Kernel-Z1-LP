@@ -41,8 +41,8 @@
 
 /* Connection mapping control struct */
 struct sps_rm {
-	struct list_head connections_q;
-	struct mutex lock;
+    struct list_head connections_q;
+    struct mutex lock;
 };
 
 /**

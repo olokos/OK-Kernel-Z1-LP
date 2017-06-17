@@ -76,28 +76,28 @@
 #define TX4927_NUM_PIO	16
 
 struct tx4927_sdramc_reg {
-	u64 cr[4];
-	u64 unused0[4];
-	u64 tr;
-	u64 unused1[2];
-	u64 cmd;
+    u64 cr[4];
+    u64 unused0[4];
+    u64 tr;
+    u64 unused1[2];
+    u64 cmd;
 };
 
 struct tx4927_ebusc_reg {
-	u64 cr[8];
+    u64 cr[8];
 };
 
 struct tx4927_ccfg_reg {
-	u64 ccfg;
-	u64 crir;
-	u64 pcfg;
-	u64 toea;
-	u64 clkctr;
-	u64 unused0;
-	u64 garbc;
-	u64 unused1;
-	u64 unused2;
-	u64 ramp;
+    u64 ccfg;
+    u64 crir;
+    u64 pcfg;
+    u64 toea;
+    u64 clkctr;
+    u64 unused0;
+    u64 garbc;
+    u64 unused1;
+    u64 unused2;
+    u64 ramp;
 };
 
 /*
@@ -213,48 +213,43 @@ struct tx4927_ccfg_reg {
 	(64 >> ((__u32)(TX4927_EBUSC_CR(ch) >> 20) & 0x3))
 
 /* utilities */
-static inline void txx9_clear64(__u64 __iomem *adr, __u64 bits)
-{
+static inline void txx9_clear64(__u64 __iomem *adr, __u64 bits) {
 #ifdef CONFIG_32BIT
-	unsigned long flags;
-	local_irq_save(flags);
+    unsigned long flags;
+    local_irq_save(flags);
 #endif
-	____raw_writeq(____raw_readq(adr) & ~bits, adr);
+    ____raw_writeq(____raw_readq(adr) & ~bits, adr);
 #ifdef CONFIG_32BIT
-	local_irq_restore(flags);
+    local_irq_restore(flags);
 #endif
 }
-static inline void txx9_set64(__u64 __iomem *adr, __u64 bits)
-{
+static inline void txx9_set64(__u64 __iomem *adr, __u64 bits) {
 #ifdef CONFIG_32BIT
-	unsigned long flags;
-	local_irq_save(flags);
+    unsigned long flags;
+    local_irq_save(flags);
 #endif
-	____raw_writeq(____raw_readq(adr) | bits, adr);
+    ____raw_writeq(____raw_readq(adr) | bits, adr);
 #ifdef CONFIG_32BIT
-	local_irq_restore(flags);
+    local_irq_restore(flags);
 #endif
 }
 
 /* These functions are not interrupt safe. */
-static inline void tx4927_ccfg_clear(__u64 bits)
-{
-	____raw_writeq(____raw_readq(&tx4927_ccfgptr->ccfg)
-		       & ~(TX4927_CCFG_W1CBITS | bits),
-		       &tx4927_ccfgptr->ccfg);
+static inline void tx4927_ccfg_clear(__u64 bits) {
+    ____raw_writeq(____raw_readq(&tx4927_ccfgptr->ccfg)
+                   & ~(TX4927_CCFG_W1CBITS | bits),
+                   &tx4927_ccfgptr->ccfg);
 }
-static inline void tx4927_ccfg_set(__u64 bits)
-{
-	____raw_writeq((____raw_readq(&tx4927_ccfgptr->ccfg)
-			& ~TX4927_CCFG_W1CBITS) | bits,
-		       &tx4927_ccfgptr->ccfg);
+static inline void tx4927_ccfg_set(__u64 bits) {
+    ____raw_writeq((____raw_readq(&tx4927_ccfgptr->ccfg)
+                    & ~TX4927_CCFG_W1CBITS) | bits,
+                   &tx4927_ccfgptr->ccfg);
 }
-static inline void tx4927_ccfg_change(__u64 change, __u64 new)
-{
-	____raw_writeq((____raw_readq(&tx4927_ccfgptr->ccfg)
-			& ~(TX4927_CCFG_W1CBITS | change)) |
-		       new,
-		       &tx4927_ccfgptr->ccfg);
+static inline void tx4927_ccfg_change(__u64 change, __u64 new) {
+    ____raw_writeq((____raw_readq(&tx4927_ccfgptr->ccfg)
+                    & ~(TX4927_CCFG_W1CBITS | change)) |
+                   new,
+                   &tx4927_ccfgptr->ccfg);
 }
 
 unsigned int tx4927_get_mem_size(void);

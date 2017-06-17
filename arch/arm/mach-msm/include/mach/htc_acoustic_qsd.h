@@ -16,7 +16,7 @@
 #define _ARCH_ARM_MACH_MSM_HTC_ACOUSTIC_QSD_H_
 
 struct qsd_acoustic_ops {
-	void (*enable_mic_bias)(int en);
+    void (*enable_mic_bias)(int en);
 };
 
 void acoustic_register_ops(struct qsd_acoustic_ops *ops);

@@ -55,55 +55,54 @@
 #define ARCH_REVISON_9200_PQFP	(1 << 0)
 
 enum at91_soc_type {
-	/* 920T */
-	AT91_SOC_RM9200,
+    /* 920T */
+    AT91_SOC_RM9200,
 
-	/* SAM92xx */
-	AT91_SOC_SAM9260, AT91_SOC_SAM9261, AT91_SOC_SAM9263,
+    /* SAM92xx */
+    AT91_SOC_SAM9260, AT91_SOC_SAM9261, AT91_SOC_SAM9263,
 
-	/* SAM9Gxx */
-	AT91_SOC_SAM9G10, AT91_SOC_SAM9G20, AT91_SOC_SAM9G45,
+    /* SAM9Gxx */
+    AT91_SOC_SAM9G10, AT91_SOC_SAM9G20, AT91_SOC_SAM9G45,
 
-	/* SAM9RL */
-	AT91_SOC_SAM9RL,
+    /* SAM9RL */
+    AT91_SOC_SAM9RL,
 
-	/* SAM9X5 */
-	AT91_SOC_SAM9X5,
+    /* SAM9X5 */
+    AT91_SOC_SAM9X5,
 
-	/* Unknown type */
-	AT91_SOC_NONE
+    /* Unknown type */
+    AT91_SOC_NONE
 };
 
 enum at91_soc_subtype {
-	/* RM9200 */
-	AT91_SOC_RM9200_BGA, AT91_SOC_RM9200_PQFP,
+    /* RM9200 */
+    AT91_SOC_RM9200_BGA, AT91_SOC_RM9200_PQFP,
 
-	/* SAM9260 */
-	AT91_SOC_SAM9XE,
+    /* SAM9260 */
+    AT91_SOC_SAM9XE,
 
-	/* SAM9G45 */
-	AT91_SOC_SAM9G45ES, AT91_SOC_SAM9M10, AT91_SOC_SAM9G46, AT91_SOC_SAM9M11,
+    /* SAM9G45 */
+    AT91_SOC_SAM9G45ES, AT91_SOC_SAM9M10, AT91_SOC_SAM9G46, AT91_SOC_SAM9M11,
 
-	/* SAM9X5 */
-	AT91_SOC_SAM9G15, AT91_SOC_SAM9G35, AT91_SOC_SAM9X35,
-	AT91_SOC_SAM9G25, AT91_SOC_SAM9X25,
+    /* SAM9X5 */
+    AT91_SOC_SAM9G15, AT91_SOC_SAM9G35, AT91_SOC_SAM9X35,
+    AT91_SOC_SAM9G25, AT91_SOC_SAM9X25,
 
-	/* Unknown subtype */
-	AT91_SOC_SUBTYPE_NONE
+    /* Unknown subtype */
+    AT91_SOC_SUBTYPE_NONE
 };
 
 struct at91_socinfo {
-	unsigned int type, subtype;
-	unsigned int cidr, exid;
+    unsigned int type, subtype;
+    unsigned int cidr, exid;
 };
 
 extern struct at91_socinfo at91_soc_initdata;
 const char *at91_get_soc_type(struct at91_socinfo *c);
 const char *at91_get_soc_subtype(struct at91_socinfo *c);
 
-static inline int at91_soc_is_detected(void)
-{
-	return at91_soc_initdata.type != AT91_SOC_NONE;
+static inline int at91_soc_is_detected(void) {
+    return at91_soc_initdata.type != AT91_SOC_NONE;
 }
 
 #ifdef CONFIG_ARCH_AT91RM9200

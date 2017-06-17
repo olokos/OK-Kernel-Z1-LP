@@ -23,22 +23,22 @@
 #define VCD_RESTRK_HZ_PER_1000_PERFLVL 1580250
 
 struct res_trk_context {
-	struct device *device;
-	u32 irq_num;
-	struct mutex lock;
-	struct clk *hclk;
-	struct clk *hclk_div2;
-	struct clk *pclk;
-	unsigned long hclk_rate;
-	unsigned int clock_enabled;
-	unsigned int rail_enabled;
-	struct regulator *regulator;
-	struct msm_vidc_platform_data *vidc_platform_data;
-	u32 core_type;
-	int memtype;
-	u32 secure_session;
-	struct ion_client *res_ion_client;
-	enum ddl_mem_area res_mem_type;
+    struct device *device;
+    u32 irq_num;
+    struct mutex lock;
+    struct clk *hclk;
+    struct clk *hclk_div2;
+    struct clk *pclk;
+    unsigned long hclk_rate;
+    unsigned int clock_enabled;
+    unsigned int rail_enabled;
+    struct regulator *regulator;
+    struct msm_vidc_platform_data *vidc_platform_data;
+    u32 core_type;
+    int memtype;
+    u32 secure_session;
+    struct ion_client *res_ion_client;
+    enum ddl_mem_area res_mem_type;
 };
 
 #if DEBUG

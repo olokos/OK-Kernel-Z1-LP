@@ -21,7 +21,7 @@
 
 /* ARM level 3 (MMU) table with 512 entries. Size: 4k */
 struct mmutable {
-	uint64_t	table_entries[MC_ARM_MMU_TABLE_ENTRIES];
+    uint64_t	table_entries[MC_ARM_MMU_TABLE_ENTRIES];
 };
 
 /* There is 1 table in each page. */
@@ -39,7 +39,7 @@ struct mmutable {
 
 /* ARM level 2 (MMU) table with 256 entries. Size: 1k */
 struct mmutable {
-	uint32_t	table_entries[MC_ARM_MMU_TABLE_ENTRIES];
+    uint32_t	table_entries[MC_ARM_MMU_TABLE_ENTRIES];
 };
 
 /* There are 4 tables in each page. */
@@ -48,20 +48,20 @@ struct mmutable {
 
 /* Store for four MMU tables in one 4kb page*/
 struct mc_mmu_table_store {
-	struct mmutable table[MMU_TABLES_PER_PAGE];
+    struct mmutable table[MMU_TABLES_PER_PAGE];
 };
 
 /* Usage and maintenance information about mc_mmu_table_store */
 struct mc_mmu_tables_set {
-	struct list_head		list;
-	/* kernel virtual address */
-	struct mc_mmu_table_store	*kernel_virt;
-	/* physical address */
-	phys_addr_t			phys;
-	/* pointer to page struct */
-	struct page			*page;
-	/* How many pages from this set are used */
-	atomic_t			used_tables;
+    struct list_head		list;
+    /* kernel virtual address */
+    struct mc_mmu_table_store	*kernel_virt;
+    /* physical address */
+    phys_addr_t			phys;
+    /* pointer to page struct */
+    struct page			*page;
+    /* How many pages from this set are used */
+    atomic_t			used_tables;
 };
 
 /*
@@ -72,38 +72,38 @@ struct mc_mmu_tables_set {
  * the MMU table and a handle for this table is returned to the user.
  */
 struct mc_mmu_table {
-	struct list_head	list;
-	/* Table lock */
-	struct mutex		lock;
-	/* handle as communicated to user mode */
-	unsigned int		handle;
-	/* Number of references kept to this MMU table */
-	atomic_t		usage;
-	/* owner of this MMU table */
-	struct mc_instance	*owner;
-	/* set describing where our MMU table is stored */
-	struct mc_mmu_tables_set	*set;
-	/* index into MMU table set */
-	unsigned int		idx;
-	/* size of buffer */
-	unsigned int		pages;
-	/* virtual address*/
-	void			*virt;
-	/* physical address */
-	phys_addr_t		phys;
+    struct list_head	list;
+    /* Table lock */
+    struct mutex		lock;
+    /* handle as communicated to user mode */
+    unsigned int		handle;
+    /* Number of references kept to this MMU table */
+    atomic_t		usage;
+    /* owner of this MMU table */
+    struct mc_instance	*owner;
+    /* set describing where our MMU table is stored */
+    struct mc_mmu_tables_set	*set;
+    /* index into MMU table set */
+    unsigned int		idx;
+    /* size of buffer */
+    unsigned int		pages;
+    /* virtual address*/
+    void			*virt;
+    /* physical address */
+    phys_addr_t		phys;
 };
 
 /* MobiCore Driver Memory context data. */
 struct mc_mem_context {
-	struct mc_instance	*daemon_inst;
-	/* Backing store for MMU tables */
-	struct list_head	mmu_tables_sets;
-	/* Bookkeeping for used MMU tables */
-	struct list_head	mmu_tables;
-	/* Bookkeeping for free MMU tables */
-	struct list_head	free_mmu_tables;
-	/* semaphore to synchronize access to above lists */
-	struct mutex		table_lock;
+    struct mc_instance	*daemon_inst;
+    /* Backing store for MMU tables */
+    struct list_head	mmu_tables_sets;
+    /* Bookkeeping for used MMU tables */
+    struct list_head	mmu_tables;
+    /* Bookkeeping for free MMU tables */
+    struct list_head	free_mmu_tables;
+    /* semaphore to synchronize access to above lists */
+    struct mutex		table_lock;
 };
 
 /*
@@ -111,7 +111,7 @@ struct mc_mem_context {
  * That is, create respective table entries.
  */
 struct mc_mmu_table *mc_alloc_mmu_table(struct mc_instance *instance,
-	struct task_struct *task, void *wsm_buffer, unsigned int wsm_len);
+                                        struct task_struct *task, void *wsm_buffer, unsigned int wsm_len);
 
 /* Delete all the MMU tables associated with an instance */
 void mc_clear_mmu_tables(struct mc_instance *instance);

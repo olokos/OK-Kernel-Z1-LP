@@ -96,7 +96,7 @@
 #define TIOCSLCKTRMIOS	0x5457
 #define TIOCSERGSTRUCT	0x80d85458	/* _IOR('T', 88, struct async_struct) 0x5458 */ /* For debugging only */
 #define TIOCSERGETLSR   _IOR('T', 89, unsigned int) /* 0x5459 */ /* Get line status register */
-  /* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
 # define TIOCSER_TEMT    0x01	/* Transmitter physically empty */
 #define TIOCSERGETMULTI 0x80A8545A	/* _IOR('T', 90, struct serial_multiport_struct) 0x545A */ /* Get multiport config */
 #define TIOCSERSETMULTI 0x40A8545B	/* _IOW('T', 91, struct serial_multiport_struct) 0x545B */ /* Set multiport config */

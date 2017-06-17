@@ -23,9 +23,9 @@
     (r) = __r;							\
   } while (0)
 extern unsigned long __udiv_qrnnd (unsigned long *, unsigned long,
-				   unsigned long , unsigned long);
+                                   unsigned long , unsigned long);
 
-#define UDIV_NEEDS_NORMALIZATION 1  
+#define UDIV_NEEDS_NORMALIZATION 1
 
 #define abort()			goto bad_insn
 

@@ -1,9 +1,8 @@
 #ifndef _ALPHA_MODULE_H
 #define _ALPHA_MODULE_H
 
-struct mod_arch_specific
-{
-	unsigned int gotsecindex;
+struct mod_arch_specific {
+    unsigned int gotsecindex;
 };
 
 #define Elf_Sym Elf64_Sym

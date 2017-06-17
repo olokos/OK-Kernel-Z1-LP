@@ -58,8 +58,7 @@
 #endif
 #define QWLAN_HAL_DXE0_MASTERID  5
 
-typedef struct sHalBdGeneric
-{
+typedef struct sHalBdGeneric {
     /* 0x00 */
     // ENDIAN BEGIN
     tANI_U32 dpuRF : 8;
@@ -114,16 +113,14 @@ typedef struct sHalBdGeneric
  * PDU without BD
  */
 
-typedef struct sHalPdu
-{
+typedef struct sHalPdu {
     tANI_U8 payload[124];
     tANI_U32 nextPduIdx;                     /* LSB 16 bits */
 //} __ani_attr_packed __ani_attr_aligned_4 tHalPdu, *tpHalPdu;
 } tHalPdu, *tpHalPdu;
 
 /* UAPSD parameters passed per AC to HAL from TL */
-typedef struct sUapsdInfo
-{
+typedef struct sUapsdInfo {
     tANI_U8  staidx;        // STA index
     tANI_U8  ac;            // Access Category
     tANI_U8  up;            // User Priority
@@ -437,8 +434,7 @@ v_BOOL_t WLANHAL_IsHwFrameTxTranslationCapable(v_PVOID_t pVosGCtx, tANI_U8 staId
 // A data structure identifying all of the variables
 // in a typical A-MPDU/BA setup
 //
-typedef struct sBAParams
-{
+typedef struct sBAParams {
 
     // A unique BA Session ID that has been assigned by HAL
     // for the curent BA Session
@@ -460,8 +456,7 @@ typedef struct sBAParams
 // TL -> HAL
 // tSirMsgQ.type = SIR_HAL_HDD_ADDBA_RSP
 //
-typedef struct sAddBARsp
-{
+typedef struct sAddBARsp {
     // Message Type
     tANI_U16 mesgType;
 
@@ -480,8 +475,7 @@ typedef struct sAddBARsp
 // tSirMsgQ.reserved = 0
 // tSirMsgQ.body = "allocated" instance of tpAddBAInd
 //
-typedef struct sAddBAInd
-{
+typedef struct sAddBAInd {
 
     // Message Type
     tANI_U16 mesgType;
@@ -504,8 +498,7 @@ typedef struct sAddBAInd
 // tSirMsgQ.reserved = 0
 // tSirMsgQ.body = "allocated" instance of tpDelBAInd
 //
-typedef struct sDelBAInd
-{
+typedef struct sDelBAInd {
     tANI_U8 staIdx;
 
     tANI_U8 baTID;
@@ -528,8 +521,7 @@ typedef struct sDelBAInd
 // TL -> HAL
 // tSirMsgQ.type = SIR_HAL_TL_FLUSH_AC_REQ
 //
-typedef struct sFlushACReq
-{
+typedef struct sFlushACReq {
     // Message Type
     tANI_U16 mesgType;
 
@@ -549,8 +541,7 @@ typedef struct sFlushACReq
 // HAL -> TL
 // tSirMsgQ.type = SIR_HAL_TL_FLUSH_AC_RSP
 //
-typedef struct sFlushACRsp
-{
+typedef struct sFlushACRsp {
     // Message Type
     tANI_U16 mesgType;
 

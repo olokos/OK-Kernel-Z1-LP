@@ -62,9 +62,8 @@ extern int early_cpu_to_node(int cpu);
 #else	/* !CONFIG_DEBUG_PER_CPU_MAPS */
 
 /* Same function but used if called before per_cpu areas are setup */
-static inline int early_cpu_to_node(int cpu)
-{
-	return early_per_cpu(x86_cpu_to_node_map, cpu);
+static inline int early_cpu_to_node(int cpu) {
+    return early_per_cpu(x86_cpu_to_node_map, cpu);
 }
 
 #endif /* !CONFIG_DEBUG_PER_CPU_MAPS */
@@ -76,9 +75,8 @@ extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
 extern const struct cpumask *cpumask_of_node(int node);
 #else
 /* Returns a pointer to the cpumask of CPUs on Node 'node'. */
-static inline const struct cpumask *cpumask_of_node(int node)
-{
-	return node_to_cpumask_map[node];
+static inline const struct cpumask *cpumask_of_node(int node) {
+    return node_to_cpumask_map[node];
 }
 #endif
 
@@ -135,18 +133,16 @@ extern int __node_distance(int, int);
 
 #else /* !CONFIG_NUMA */
 
-static inline int numa_node_id(void)
-{
-	return 0;
+static inline int numa_node_id(void) {
+    return 0;
 }
 /*
  * indicate override:
  */
 #define numa_node_id numa_node_id
 
-static inline int early_cpu_to_node(int cpu)
-{
-	return 0;
+static inline int early_cpu_to_node(int cpu) {
+    return 0;
 }
 
 static inline void setup_node_to_cpumask_map(void) { }
@@ -167,8 +163,7 @@ extern const struct cpumask *cpu_coregroup_mask(int cpu);
 #define arch_provides_topology_pointers		yes
 #endif
 
-static inline void arch_fix_phys_package_id(int num, u32 slot)
-{
+static inline void arch_fix_phys_package_id(int num, u32 slot) {
 }
 
 struct pci_bus;
@@ -184,12 +179,10 @@ void x86_pci_root_bus_resources(int bus, struct list_head *resources);
 extern int get_mp_bus_to_node(int busnum);
 extern void set_mp_bus_to_node(int busnum, int node);
 #else
-static inline int get_mp_bus_to_node(int busnum)
-{
-	return 0;
+static inline int get_mp_bus_to_node(int busnum) {
+    return 0;
 }
-static inline void set_mp_bus_to_node(int busnum, int node)
-{
+static inline void set_mp_bus_to_node(int busnum, int node) {
 }
 #endif
 

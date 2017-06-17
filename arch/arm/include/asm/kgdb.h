@@ -39,9 +39,8 @@
 
 #ifndef	__ASSEMBLY__
 
-static inline void arch_kgdb_breakpoint(void)
-{
-	asm(".word 0xe7ffdeff");
+static inline void arch_kgdb_breakpoint(void) {
+    asm(".word 0xe7ffdeff");
 }
 
 extern void kgdb_handle_bus_error(void);

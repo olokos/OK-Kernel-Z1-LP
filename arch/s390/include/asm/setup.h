@@ -43,9 +43,9 @@
 #define CHUNK_CRASHK	 5
 
 struct mem_chunk {
-	unsigned long addr;
-	unsigned long size;
-	int type;
+    unsigned long addr;
+    unsigned long size;
+    int type;
 };
 
 extern struct mem_chunk memory_chunk[];
@@ -55,7 +55,7 @@ extern unsigned long memory_end;
 
 void detect_memory_layout(struct mem_chunk chunk[]);
 void create_mem_hole(struct mem_chunk memory_chunk[], unsigned long addr,
-		     unsigned long size, int type);
+                     unsigned long size, int type);
 
 #define PRIMARY_SPACE_MODE	0
 #define ACCESS_REGISTER_MODE	1

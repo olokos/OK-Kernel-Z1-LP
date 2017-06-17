@@ -169,7 +169,7 @@
 
 #if defined(CONFIG_MEM_MT48LC16M8A2TG_75) || \
     defined(CONFIG_MEM_MT48LC8M32B2B5_7)
-  /*SDRAM INFORMATION: */
+/*SDRAM INFORMATION: */
 #define SDRAM_Tref  64		/* Refresh period in milliseconds   */
 #define SDRAM_NRA   4096	/* Number of row addresses in SDRAM */
 #define SDRAM_CL    CL_3
@@ -180,14 +180,14 @@
     defined(CONFIG_MEM_MT48LC32M16A2TG_75) || \
     defined(CONFIG_MEM_MT48LC16M16A2TG_75) || \
     defined(CONFIG_MEM_MT48LC32M8A2_75)
-  /*SDRAM INFORMATION: */
+/*SDRAM INFORMATION: */
 #define SDRAM_Tref  64		/* Refresh period in milliseconds   */
 #define SDRAM_NRA   8192	/* Number of row addresses in SDRAM */
 #define SDRAM_CL    CL_3
 #endif
 
 #if defined(CONFIG_MEM_MT48H32M16LFCJ_75)
-  /*SDRAM INFORMATION: */
+/*SDRAM INFORMATION: */
 #define SDRAM_Tref  64		/* Refresh period in milliseconds   */
 #define SDRAM_NRA   8192	/* Number of row addresses in SDRAM */
 #define SDRAM_CL    CL_2

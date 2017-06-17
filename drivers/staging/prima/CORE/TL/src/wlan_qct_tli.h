@@ -249,8 +249,7 @@ when        who    what, where, why
 /*---------------------------------------------------------------------------
   TL signals for TX thread
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*Suspend signal - following serialization of a HAL suspend request*/
     WLANTL_TX_SIG_SUSPEND = 0,
 
@@ -286,8 +285,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   TL signals for RX thread
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
 
     /* Forwarding RX cached frames */
     WLANTL_RX_FWD_CACHED  = 0,
@@ -297,8 +295,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   STA Event type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Transmit frame event */
     WLANTL_TX_EVENT = 0,
 
@@ -334,8 +331,7 @@ typedef VOS_STATUS (*WLANTL_STAFuncType)( v_PVOID_t     pAdapter,
 /*---------------------------------------------------------------------------
   STA FSM Entry type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WLANTL_STAFuncType  pfnSTATbl[WLANTL_MAX_EVENT];
 } WLANTL_STAFsmEntryType;
 
@@ -376,8 +372,7 @@ VOS_STATUS WLANTL_STATxDisc( v_PVOID_t     pAdapter,
                              v_BOOL_t      bForwardIAPPwithLLC);
 
 /* TL State Machine */
-STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] =
-{
+STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] = {
     /* WLANTL_STA_INIT */
     { {
             NULL,      /* WLANTL_TX_EVENT - no packets should get transmitted*/
@@ -414,8 +409,7 @@ STATIC const WLANTL_STAFsmEntryType tlSTAFsm[WLANTL_STA_MAX_STATE] =
 #define WLANTL_MAX_WINSIZE      64
 #define WLANTL_MAX_BA_SESSION   40
 
-typedef struct
-{
+typedef struct {
     v_BOOL_t     isAvailable;
     v_U64_t      ullReplayCounter[WLANTL_MAX_WINSIZE];
     v_PVOID_t    arrayBuffer[WLANTL_MAX_WINSIZE];
@@ -426,8 +420,7 @@ typedef struct
  * After timer expired, Qed frames have to be routed to upper layer
  * WLANTL_TIMER_EXPIER_UDATA_T is user data type for timer callback
  */
-typedef struct
-{
+typedef struct {
     /* Global contect, HAL, HDD need this */
     v_PVOID_t          pAdapter;
 
@@ -440,8 +433,7 @@ typedef struct
     v_U8_t             TID;
 } WLANTL_TIMER_EXPIER_UDATA_T;
 
-typedef struct
-{
+typedef struct {
     /*specifies if re-order session exists*/
     v_U8_t             ucExists;
 
@@ -484,8 +476,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   UAPSD information
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* flag set when a UAPSD session with triggers generated in fw is being set*/
     v_U8_t              ucSet;
 } WLANTL_UAPSDInfoType;
@@ -493,8 +484,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   per-STA cache info
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U16_t               cacheSize;
     v_TIME_t              cacheInitTime;
     v_TIME_t              cacheDoneTime;
@@ -505,8 +495,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   STA Client type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* Flag that keeps track of registration; only one STA with unique
        ID allowed */
     v_U8_t                        ucExists;
@@ -702,8 +691,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   BAP Client type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* flag that keeps track of registration; only one non-data BT-AMP client
        allowed */
     v_U8_t                    ucExists;
@@ -725,8 +713,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   Management Frame Client type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* flag that keeps track of registration; only one management frame
        client allowed */
     v_U8_t                       ucExists;
@@ -738,8 +725,7 @@ typedef struct
     vos_pkt_t*                   vosPendingDataBuff;
 } WLANTL_MgmtFrmClientType;
 
-typedef struct
-{
+typedef struct {
     WLANTL_TrafficStatusChangedCBType  trafficCB;
     WLANTL_HO_TRAFFIC_STATUS_TYPE      trafficStatus;
     v_U32_t                            idleThreshold;
@@ -752,8 +738,7 @@ typedef struct
     v_PVOID_t                          usrCtxt;
 } WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE;
 
-typedef struct
-{
+typedef struct {
     v_S7_t                          rssiValue;
     v_U8_t                          triggerEvent[WLANTL_HS_NUM_CLIENT];
     v_PVOID_t                       usrCtxt[WLANTL_HS_NUM_CLIENT];
@@ -762,8 +747,7 @@ typedef struct
     v_U8_t                          numClient;
 } WLANTL_HO_RSSI_INDICATION_TYPE;
 
-typedef struct
-{
+typedef struct {
     v_U8_t                             numThreshold;
     v_U8_t                             regionNumber;
     v_S7_t                             historyRSSI;
@@ -772,8 +756,7 @@ typedef struct
     v_U32_t                            fwNotification;
 } WLANTL_CURRENT_HO_STATE_TYPE;
 
-typedef struct
-{
+typedef struct {
     WLANTL_HO_RSSI_INDICATION_TYPE       registeredInd[WLANTL_MAX_AVAIL_THRESHOLD];
     WLANTL_CURRENT_HO_STATE_TYPE         currentHOState;
     WLANTL_HO_TRAFFIC_STATUS_HANDLE_TYPE currentTraffic;
@@ -784,8 +767,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   TL control block type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* TL configuration information */
     WLANTL_ConfigInfoType     tlConfigInfo;
 

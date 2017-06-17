@@ -63,8 +63,7 @@ typedef struct vos_pkt_t vos_pkt_t;
 
 
 /// data vector
-typedef struct
-{
+typedef struct {
     /// address of data
     v_VOID_t *pData;
 
@@ -76,8 +75,7 @@ typedef struct
 
 
 /// voss Packet Types
-typedef enum
-{
+typedef enum {
     /// voss Packet is used to transmit 802.11 Management frames.
     VOS_PKT_TYPE_TX_802_11_MGMT,
 
@@ -97,8 +95,7 @@ typedef enum
 
 /// user IDs.   These IDs are needed on the vos_pkt_get/set_user_data_ptr()
 /// to identify the user area in the voss Packet.
-typedef enum
-{
+typedef enum {
     VOS_PKT_USER_DATA_ID_TL =0,
     VOS_PKT_USER_DATA_ID_BAL,
     VOS_PKT_USER_DATA_ID_WDA,

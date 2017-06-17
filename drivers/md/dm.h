@@ -33,9 +33,9 @@
  * List of devices that a metadevice uses and should open/close.
  */
 struct dm_dev_internal {
-	struct list_head list;
-	atomic_t count;
-	struct dm_dev dm_dev;
+    struct list_head list;
+    atomic_t count;
+    struct dm_dev dm_dev;
 };
 
 struct dm_table;
@@ -46,13 +46,13 @@ struct dm_md_mempools;
  *---------------------------------------------------------------*/
 void dm_table_destroy(struct dm_table *t);
 void dm_table_event_callback(struct dm_table *t,
-			     void (*fn)(void *), void *context);
+                             void (*fn)(void *), void *context);
 struct dm_target *dm_table_get_target(struct dm_table *t, unsigned int index);
 struct dm_target *dm_table_find_target(struct dm_table *t, sector_t sector);
 int dm_calculate_queue_limits(struct dm_table *table,
-			      struct queue_limits *limits);
+                              struct queue_limits *limits);
 void dm_table_set_restrictions(struct dm_table *t, struct request_queue *q,
-			       struct queue_limits *limits);
+                               struct queue_limits *limits);
 struct list_head *dm_table_get_devices(struct dm_table *t);
 void dm_table_presuspend_targets(struct dm_table *t);
 void dm_table_postsuspend_targets(struct dm_table *t);
@@ -95,7 +95,7 @@ void dm_target_exit(void);
 struct target_type *dm_get_target_type(const char *name);
 void dm_put_target_type(struct target_type *tt);
 int dm_target_iterate(void (*iter_func)(struct target_type *tt,
-					void *param), void *param);
+                                        void *param), void *param);
 
 int dm_split_args(int *argc, char ***argvp, char *input);
 
@@ -142,7 +142,7 @@ int dm_open_count(struct mapped_device *md);
 int dm_lock_for_deletion(struct mapped_device *md);
 
 int dm_kobject_uevent(struct mapped_device *md, enum kobject_action action,
-		      unsigned cookie);
+                      unsigned cookie);
 
 int dm_io_init(void);
 void dm_io_exit(void);

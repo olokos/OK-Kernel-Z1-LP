@@ -37,79 +37,77 @@
 #define WINDOW_SIZE	0x00200000
 
 static struct map_info ts5500_map = {
-	.name = "TS-5500 Flash",
-	.size = WINDOW_SIZE,
-	.bankwidth = 1,
-	.phys = WINDOW_ADDR
+    .name = "TS-5500 Flash",
+    .size = WINDOW_SIZE,
+    .bankwidth = 1,
+    .phys = WINDOW_ADDR
 };
 
 static struct mtd_partition ts5500_partitions[] = {
-	{
-		.name = "Drive A",
-		.offset = 0,
-		.size = 0x0e0000
-	},
-	{
-		.name = "BIOS",
-		.offset = 0x0e0000,
-		.size = 0x020000,
-	},
-	{
-		.name = "Drive B",
-		.offset = 0x100000,
-		.size = 0x100000
-	}
+    {
+        .name = "Drive A",
+        .offset = 0,
+        .size = 0x0e0000
+    },
+    {
+        .name = "BIOS",
+        .offset = 0x0e0000,
+        .size = 0x020000,
+    },
+    {
+        .name = "Drive B",
+        .offset = 0x100000,
+        .size = 0x100000
+    }
 };
 
 #define NUM_PARTITIONS ARRAY_SIZE(ts5500_partitions)
 
 static struct mtd_info *mymtd;
 
-static int __init init_ts5500_map(void)
-{
-	int rc = 0;
+static int __init init_ts5500_map(void) {
+    int rc = 0;
 
-	ts5500_map.virt = ioremap_nocache(ts5500_map.phys, ts5500_map.size);
+    ts5500_map.virt = ioremap_nocache(ts5500_map.phys, ts5500_map.size);
 
-	if (!ts5500_map.virt) {
-		printk(KERN_ERR "Failed to ioremap_nocache\n");
-		rc = -EIO;
-		goto err2;
-	}
+    if (!ts5500_map.virt) {
+        printk(KERN_ERR "Failed to ioremap_nocache\n");
+        rc = -EIO;
+        goto err2;
+    }
 
-	simple_map_init(&ts5500_map);
+    simple_map_init(&ts5500_map);
 
-	mymtd = do_map_probe("jedec_probe", &ts5500_map);
-	if (!mymtd)
-		mymtd = do_map_probe("map_rom", &ts5500_map);
+    mymtd = do_map_probe("jedec_probe", &ts5500_map);
+    if (!mymtd)
+        mymtd = do_map_probe("map_rom", &ts5500_map);
 
-	if (!mymtd) {
-		rc = -ENXIO;
-		goto err1;
-	}
+    if (!mymtd) {
+        rc = -ENXIO;
+        goto err1;
+    }
 
-	mymtd->owner = THIS_MODULE;
-	mtd_device_register(mymtd, ts5500_partitions, NUM_PARTITIONS);
+    mymtd->owner = THIS_MODULE;
+    mtd_device_register(mymtd, ts5500_partitions, NUM_PARTITIONS);
 
-	return 0;
+    return 0;
 
 err1:
-	iounmap(ts5500_map.virt);
+    iounmap(ts5500_map.virt);
 err2:
-	return rc;
+    return rc;
 }
 
-static void __exit cleanup_ts5500_map(void)
-{
-	if (mymtd) {
-		mtd_device_unregister(mymtd);
-		map_destroy(mymtd);
-	}
+static void __exit cleanup_ts5500_map(void) {
+    if (mymtd) {
+        mtd_device_unregister(mymtd);
+        map_destroy(mymtd);
+    }
 
-	if (ts5500_map.virt) {
-		iounmap(ts5500_map.virt);
-		ts5500_map.virt = NULL;
-	}
+    if (ts5500_map.virt) {
+        iounmap(ts5500_map.virt);
+        ts5500_map.virt = NULL;
+    }
 }
 
 module_init(init_ts5500_map);

@@ -29,54 +29,54 @@
 #define BAM_HANDLE_INVALID         0
 
 enum bam_irq {
-	BAM_DEV_IRQ_RDY_TO_SLEEP = 0x00000001,
-	BAM_DEV_IRQ_HRESP_ERROR = 0x00000002,
-	BAM_DEV_IRQ_ERROR = 0x00000004,
-	BAM_DEV_IRQ_TIMER = 0x00000010,
+    BAM_DEV_IRQ_RDY_TO_SLEEP = 0x00000001,
+    BAM_DEV_IRQ_HRESP_ERROR = 0x00000002,
+    BAM_DEV_IRQ_ERROR = 0x00000004,
+    BAM_DEV_IRQ_TIMER = 0x00000010,
 };
 
 /* Pipe interrupt mask */
 enum bam_pipe_irq {
-	/* BAM finishes descriptor which has INT bit selected */
-	BAM_PIPE_IRQ_DESC_INT = 0x00000001,
-	/* Inactivity timer Expires */
-	BAM_PIPE_IRQ_TIMER = 0x00000002,
-	/* Wakeup peripheral (i.e. USB) */
-	BAM_PIPE_IRQ_WAKE = 0x00000004,
-	/* Producer - no free space for adding a descriptor */
-	/* Consumer - no descriptors for processing */
-	BAM_PIPE_IRQ_OUT_OF_DESC = 0x00000008,
-	/* Pipe Error interrupt */
-	BAM_PIPE_IRQ_ERROR = 0x00000010,
-	/* End-Of-Transfer */
-	BAM_PIPE_IRQ_EOT = 0x00000020,
-	/* Pipe RESET unsuccessful */
-	BAM_PIPE_IRQ_RST_ERROR = 0x00000040,
-	/* Errorneous Hresponse by AHB MASTER */
-	BAM_PIPE_IRQ_HRESP_ERROR = 0x00000080,
+    /* BAM finishes descriptor which has INT bit selected */
+    BAM_PIPE_IRQ_DESC_INT = 0x00000001,
+    /* Inactivity timer Expires */
+    BAM_PIPE_IRQ_TIMER = 0x00000002,
+    /* Wakeup peripheral (i.e. USB) */
+    BAM_PIPE_IRQ_WAKE = 0x00000004,
+    /* Producer - no free space for adding a descriptor */
+    /* Consumer - no descriptors for processing */
+    BAM_PIPE_IRQ_OUT_OF_DESC = 0x00000008,
+    /* Pipe Error interrupt */
+    BAM_PIPE_IRQ_ERROR = 0x00000010,
+    /* End-Of-Transfer */
+    BAM_PIPE_IRQ_EOT = 0x00000020,
+    /* Pipe RESET unsuccessful */
+    BAM_PIPE_IRQ_RST_ERROR = 0x00000040,
+    /* Errorneous Hresponse by AHB MASTER */
+    BAM_PIPE_IRQ_HRESP_ERROR = 0x00000080,
 };
 
 /* Halt Type */
 enum bam_halt {
-	BAM_HALT_OFF = 0,
-	BAM_HALT_ON = 1,
+    BAM_HALT_OFF = 0,
+    BAM_HALT_ON = 1,
 };
 
 /* Threshold values of the DMA channels */
 enum bam_dma_thresh_dma {
-	BAM_DMA_THRESH_512 = 0x3,
-	BAM_DMA_THRESH_256 = 0x2,
-	BAM_DMA_THRESH_128 = 0x1,
-	BAM_DMA_THRESH_64 = 0x0,
+    BAM_DMA_THRESH_512 = 0x3,
+    BAM_DMA_THRESH_256 = 0x2,
+    BAM_DMA_THRESH_128 = 0x1,
+    BAM_DMA_THRESH_64 = 0x0,
 };
 
 /* Weight values of the DMA channels */
 enum bam_dma_weight_dma {
-	BAM_DMA_WEIGHT_HIGH = 7,
-	BAM_DMA_WEIGHT_MED = 3,
-	BAM_DMA_WEIGHT_LOW = 1,
-	BAM_DMA_WEIGHT_DEFAULT = BAM_DMA_WEIGHT_LOW,
-	BAM_DMA_WEIGHT_DISABLE = 0,
+    BAM_DMA_WEIGHT_HIGH = 7,
+    BAM_DMA_WEIGHT_MED = 3,
+    BAM_DMA_WEIGHT_LOW = 1,
+    BAM_DMA_WEIGHT_DEFAULT = BAM_DMA_WEIGHT_LOW,
+    BAM_DMA_WEIGHT_DISABLE = 0,
 };
 
 
@@ -85,36 +85,36 @@ enum bam_dma_weight_dma {
 
 /* Parameters for sps_bam_pipe_connect() */
 struct sps_bam_connect_param {
-	/* which end point must be initialized */
-	enum sps_mode mode;
+    /* which end point must be initialized */
+    enum sps_mode mode;
 
-	/* OR'd connection end point options (see SPS_O defines) */
-	u32 options;
+    /* OR'd connection end point options (see SPS_O defines) */
+    u32 options;
 
-	/* SETPEND/MTI interrupt generation parameters */
-	u32 irq_gen_addr;
-	u32 irq_gen_data;
+    /* SETPEND/MTI interrupt generation parameters */
+    u32 irq_gen_addr;
+    u32 irq_gen_data;
 
 };
 
 /* Event registration struct */
 struct sps_bam_event_reg {
-	/* Client's event object handle */
-	struct completion *xfer_done;
-	void (*callback)(struct sps_event_notify *notify);
+    /* Client's event object handle */
+    struct completion *xfer_done;
+    void (*callback)(struct sps_event_notify *notify);
 
-	/* Event trigger mode */
-	enum sps_trigger mode;
+    /* Event trigger mode */
+    enum sps_trigger mode;
 
-	/* User pointer that will be provided in event payload data */
-	void *user;
+    /* User pointer that will be provided in event payload data */
+    void *user;
 
 };
 
 /* Descriptor FIFO cache entry */
 struct sps_bam_desc_cache {
-	struct sps_iovec iovec;
-	void *user; /* User pointer registered with this transfer */
+    struct sps_iovec iovec;
+    void *user; /* User pointer registered with this transfer */
 };
 
 /* Forward declaration */
@@ -122,97 +122,97 @@ struct sps_bam;
 
 /* System mode control */
 struct sps_bam_sys_mode {
-	/* Descriptor FIFO control */
-	u8 *desc_buf; /* Descriptor FIFO for BAM pipe */
-	u32 desc_offset; /* Next new descriptor to be written to hardware */
-	u32 acked_offset; /* Next descriptor to be retired by software */
+    /* Descriptor FIFO control */
+    u8 *desc_buf; /* Descriptor FIFO for BAM pipe */
+    u32 desc_offset; /* Next new descriptor to be written to hardware */
+    u32 acked_offset; /* Next descriptor to be retired by software */
 
-	/* Descriptor cache control (!no_queue only) */
-	u8 *desc_cache; /* Software cache of descriptor FIFO contents */
-	u32 cache_offset; /* Next descriptor to be cached (ack_xfers only) */
+    /* Descriptor cache control (!no_queue only) */
+    u8 *desc_cache; /* Software cache of descriptor FIFO contents */
+    u32 cache_offset; /* Next descriptor to be cached (ack_xfers only) */
 
-	/* User pointers associated with cached descriptors */
-	void **user_ptrs;
+    /* User pointers associated with cached descriptors */
+    void **user_ptrs;
 
-	/* Event handling */
-	struct sps_bam_event_reg event_regs[SPS_EVENT_INDEX(SPS_EVENT_MAX)];
-	struct list_head events_q;
+    /* Event handling */
+    struct sps_bam_event_reg event_regs[SPS_EVENT_INDEX(SPS_EVENT_MAX)];
+    struct list_head events_q;
 
-	struct sps_q_event event;	/* Temp storage for event creation */
-	int no_queue;	/* Whether events are queued */
-	int ack_xfers;	/* Whether client must ACK all descriptors */
-	int handler_eot; /* Whether EOT handling is in progress (debug) */
+    struct sps_q_event event;	/* Temp storage for event creation */
+    int no_queue;	/* Whether events are queued */
+    int ack_xfers;	/* Whether client must ACK all descriptors */
+    int handler_eot; /* Whether EOT handling is in progress (debug) */
 
-	/* Statistics */
+    /* Statistics */
 #ifdef SPS_BAM_STATISTICS
-	u32 desc_wr_count;
-	u32 desc_rd_count;
-	u32 user_ptrs_count;
-	u32 user_found;
-	u32 int_flags;
-	u32 eot_flags;
-	u32 callback_events;
-	u32 wait_events;
-	u32 queued_events;
-	u32 get_events;
-	u32 get_iovecs;
+    u32 desc_wr_count;
+    u32 desc_rd_count;
+    u32 user_ptrs_count;
+    u32 user_found;
+    u32 int_flags;
+    u32 eot_flags;
+    u32 callback_events;
+    u32 wait_events;
+    u32 queued_events;
+    u32 get_events;
+    u32 get_iovecs;
 #endif /* SPS_BAM_STATISTICS */
 };
 
 /* BAM pipe descriptor */
 struct sps_pipe {
-	struct list_head list;
+    struct list_head list;
 
-	/* Client state */
-	u32 client_state;
-	struct sps_bam *bam;
-	struct sps_connect connect;
-	const struct sps_connection *map;
+    /* Client state */
+    u32 client_state;
+    struct sps_bam *bam;
+    struct sps_connect connect;
+    const struct sps_connection *map;
 
-	/* Pipe parameters */
-	u32 state;
-	u32 pipe_index;
-	u32 pipe_index_mask;
-	u32 irq_mask;
-	int polled;
-	int hybrid;
-	u32 irq_gen_addr;
-	enum sps_mode mode;
-	u32 num_descs; /* Size (number of elements) of descriptor FIFO */
-	u32 desc_size; /* Size (bytes) of descriptor FIFO */
-	int wake_up_is_one_shot; /* Whether WAKEUP event is a one-shot or not */
+    /* Pipe parameters */
+    u32 state;
+    u32 pipe_index;
+    u32 pipe_index_mask;
+    u32 irq_mask;
+    int polled;
+    int hybrid;
+    u32 irq_gen_addr;
+    enum sps_mode mode;
+    u32 num_descs; /* Size (number of elements) of descriptor FIFO */
+    u32 desc_size; /* Size (bytes) of descriptor FIFO */
+    int wake_up_is_one_shot; /* Whether WAKEUP event is a one-shot or not */
 
-	/* System mode control */
-	struct sps_bam_sys_mode sys;
+    /* System mode control */
+    struct sps_bam_sys_mode sys;
 
-	bool disconnecting;
+    bool disconnecting;
 };
 
 /* BAM device descriptor */
 struct sps_bam {
-	struct list_head list;
+    struct list_head list;
 
-	/* BAM device properties, including connection defaults */
-	struct sps_bam_props props;
+    /* BAM device properties, including connection defaults */
+    struct sps_bam_props props;
 
-	/* BAM device state */
-	u32 state;
-	struct mutex lock;
-	void *base; /* BAM virtual base address */
-	u32 version;
-	spinlock_t isr_lock;
-	spinlock_t connection_lock;
-	unsigned long irqsave_flags;
+    /* BAM device state */
+    u32 state;
+    struct mutex lock;
+    void *base; /* BAM virtual base address */
+    u32 version;
+    spinlock_t isr_lock;
+    spinlock_t connection_lock;
+    unsigned long irqsave_flags;
 
-	/* Pipe state */
-	u32 pipe_active_mask;
-	u32 pipe_remote_mask;
-	struct sps_pipe *pipes[BAM_MAX_PIPES];
-	struct list_head pipes_q;
+    /* Pipe state */
+    u32 pipe_active_mask;
+    u32 pipe_remote_mask;
+    struct sps_pipe *pipes[BAM_MAX_PIPES];
+    struct list_head pipes_q;
 
-	/* Statistics */
-	u32 irq_from_disabled_pipe;
-	u32 event_trigger_failures;
+    /* Statistics */
+    u32 irq_from_disabled_pipe;
+    u32 event_trigger_failures;
 
 };
 
@@ -328,7 +328,7 @@ void sps_bam_pipe_free(struct sps_bam *dev, u32 pipe_index);
  *
  */
 int sps_bam_pipe_connect(struct sps_pipe *client,
-			const struct sps_bam_connect_param *params);
+                         const struct sps_bam_connect_param *params);
 
 /**
  * Disconnect a BAM pipe connection
@@ -405,7 +405,7 @@ int sps_bam_pipe_disable(struct sps_bam *dev, u32 pipe_index);
  *
  */
 int sps_bam_pipe_reg_event(struct sps_bam *dev, u32 pipe_index,
-			   struct sps_register_event *reg);
+                           struct sps_register_event *reg);
 
 /**
  * Submit a transfer of a single buffer to a BAM pipe
@@ -428,7 +428,7 @@ int sps_bam_pipe_reg_event(struct sps_bam *dev, u32 pipe_index,
  *
  */
 int sps_bam_pipe_transfer_one(struct sps_bam *dev, u32 pipe_index, u32 addr,
-			      u32 size, void *user, u32 flags);
+                              u32 size, void *user, u32 flags);
 
 /**
  * Submit a transfer to a BAM pipe
@@ -445,7 +445,7 @@ int sps_bam_pipe_transfer_one(struct sps_bam *dev, u32 pipe_index, u32 addr,
  *
  */
 int sps_bam_pipe_transfer(struct sps_bam *dev, u32 pipe_index,
-			 struct sps_transfer *transfer);
+                          struct sps_transfer *transfer);
 
 /**
  * Get a BAM pipe event
@@ -462,7 +462,7 @@ int sps_bam_pipe_transfer(struct sps_bam *dev, u32 pipe_index,
  *
  */
 int sps_bam_pipe_get_event(struct sps_bam *dev, u32 pipe_index,
-			   struct sps_event_notify *notify);
+                           struct sps_event_notify *notify);
 
 /**
  * Get processed I/O vector
@@ -479,7 +479,7 @@ int sps_bam_pipe_get_event(struct sps_bam *dev, u32 pipe_index,
  * @return 0 on success, negative value on error
  */
 int sps_bam_pipe_get_iovec(struct sps_bam *dev, u32 pipe_index,
-			   struct sps_iovec *iovec);
+                           struct sps_iovec *iovec);
 
 /**
  * Determine whether a BAM pipe descriptor FIFO is empty
@@ -550,8 +550,8 @@ int sps_bam_set_satellite(struct sps_bam *dev, u32 pipe_index);
  *
  */
 int sps_bam_pipe_timer_ctrl(struct sps_bam *dev, u32 pipe_index,
-			    struct sps_timer_ctrl *timer_ctrl,
-			    struct sps_timer_result *timer_result);
+                            struct sps_timer_ctrl *timer_ctrl,
+                            struct sps_timer_result *timer_result);
 
 
 /**
@@ -566,6 +566,6 @@ int sps_bam_pipe_timer_ctrl(struct sps_bam *dev, u32 pipe_index,
  *
  */
 int sps_bam_pipe_get_unused_desc_num(struct sps_bam *dev, u32 pipe_index,
-					u32 *desc_num);
+                                     u32 *desc_num);
 
 #endif	/* _SPSBAM_H_ */

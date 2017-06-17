@@ -35,111 +35,108 @@
  */
 #define MSIC_PWRBTNM    (1 << 0)
 
-static irqreturn_t mfld_pb_isr(int irq, void *dev_id)
-{
-	struct input_dev *input = dev_id;
-	int ret;
-	u8 pbstat;
+static irqreturn_t mfld_pb_isr(int irq, void *dev_id) {
+    struct input_dev *input = dev_id;
+    int ret;
+    u8 pbstat;
 
-	ret = intel_msic_reg_read(INTEL_MSIC_PBSTATUS, &pbstat);
-	dev_dbg(input->dev.parent, "PB_INT status= %d\n", pbstat);
+    ret = intel_msic_reg_read(INTEL_MSIC_PBSTATUS, &pbstat);
+    dev_dbg(input->dev.parent, "PB_INT status= %d\n", pbstat);
 
-	if (ret < 0) {
-		dev_err(input->dev.parent, "Read error %d while reading"
-			       " MSIC_PB_STATUS\n", ret);
-	} else {
-		input_event(input, EV_KEY, KEY_POWER,
-			       !(pbstat & MSIC_PB_LEVEL));
-		input_sync(input);
-	}
+    if (ret < 0) {
+        dev_err(input->dev.parent, "Read error %d while reading"
+                " MSIC_PB_STATUS\n", ret);
+    } else {
+        input_event(input, EV_KEY, KEY_POWER,
+                    !(pbstat & MSIC_PB_LEVEL));
+        input_sync(input);
+    }
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
-static int __devinit mfld_pb_probe(struct platform_device *pdev)
-{
-	struct input_dev *input;
-	int irq = platform_get_irq(pdev, 0);
-	int error;
+static int __devinit mfld_pb_probe(struct platform_device *pdev) {
+    struct input_dev *input;
+    int irq = platform_get_irq(pdev, 0);
+    int error;
 
-	if (irq < 0)
-		return -EINVAL;
+    if (irq < 0)
+        return -EINVAL;
 
-	input = input_allocate_device();
-	if (!input) {
-		dev_err(&pdev->dev, "Input device allocation error\n");
-		return -ENOMEM;
-	}
+    input = input_allocate_device();
+    if (!input) {
+        dev_err(&pdev->dev, "Input device allocation error\n");
+        return -ENOMEM;
+    }
 
-	input->name = pdev->name;
-	input->phys = "power-button/input0";
-	input->id.bustype = BUS_HOST;
-	input->dev.parent = &pdev->dev;
+    input->name = pdev->name;
+    input->phys = "power-button/input0";
+    input->id.bustype = BUS_HOST;
+    input->dev.parent = &pdev->dev;
 
-	input_set_capability(input, EV_KEY, KEY_POWER);
+    input_set_capability(input, EV_KEY, KEY_POWER);
 
-	error = request_threaded_irq(irq, NULL, mfld_pb_isr, IRQF_NO_SUSPEND,
-			DRIVER_NAME, input);
-	if (error) {
-		dev_err(&pdev->dev, "Unable to request irq %d for mfld power"
-				"button\n", irq);
-		goto err_free_input;
-	}
+    error = request_threaded_irq(irq, NULL, mfld_pb_isr, IRQF_NO_SUSPEND,
+                                 DRIVER_NAME, input);
+    if (error) {
+        dev_err(&pdev->dev, "Unable to request irq %d for mfld power"
+                "button\n", irq);
+        goto err_free_input;
+    }
 
-	error = input_register_device(input);
-	if (error) {
-		dev_err(&pdev->dev, "Unable to register input dev, error "
-				"%d\n", error);
-		goto err_free_irq;
-	}
+    error = input_register_device(input);
+    if (error) {
+        dev_err(&pdev->dev, "Unable to register input dev, error "
+                "%d\n", error);
+        goto err_free_irq;
+    }
 
-	platform_set_drvdata(pdev, input);
+    platform_set_drvdata(pdev, input);
 
-	/*
-	 * SCU firmware might send power button interrupts to IA core before
-	 * kernel boots and doesn't get EOI from IA core. The first bit of
-	 * MSIC reg 0x21 is kept masked, and SCU firmware doesn't send new
-	 * power interrupt to Android kernel. Unmask the bit when probing
-	 * power button in kernel.
-	 * There is a very narrow race between irq handler and power button
-	 * initialization. The race happens rarely. So we needn't worry
-	 * about it.
-	 */
-	error = intel_msic_reg_update(INTEL_MSIC_IRQLVL1MSK, 0, MSIC_PWRBTNM);
-	if (error) {
-		dev_err(&pdev->dev, "Unable to clear power button interrupt, "
-				"error: %d\n", error);
-		goto err_free_irq;
-	}
+    /*
+     * SCU firmware might send power button interrupts to IA core before
+     * kernel boots and doesn't get EOI from IA core. The first bit of
+     * MSIC reg 0x21 is kept masked, and SCU firmware doesn't send new
+     * power interrupt to Android kernel. Unmask the bit when probing
+     * power button in kernel.
+     * There is a very narrow race between irq handler and power button
+     * initialization. The race happens rarely. So we needn't worry
+     * about it.
+     */
+    error = intel_msic_reg_update(INTEL_MSIC_IRQLVL1MSK, 0, MSIC_PWRBTNM);
+    if (error) {
+        dev_err(&pdev->dev, "Unable to clear power button interrupt, "
+                "error: %d\n", error);
+        goto err_free_irq;
+    }
 
-	return 0;
+    return 0;
 
 err_free_irq:
-	free_irq(irq, input);
+    free_irq(irq, input);
 err_free_input:
-	input_free_device(input);
-	return error;
+    input_free_device(input);
+    return error;
 }
 
-static int __devexit mfld_pb_remove(struct platform_device *pdev)
-{
-	struct input_dev *input = platform_get_drvdata(pdev);
-	int irq = platform_get_irq(pdev, 0);
+static int __devexit mfld_pb_remove(struct platform_device *pdev) {
+    struct input_dev *input = platform_get_drvdata(pdev);
+    int irq = platform_get_irq(pdev, 0);
 
-	free_irq(irq, input);
-	input_unregister_device(input);
-	platform_set_drvdata(pdev, NULL);
+    free_irq(irq, input);
+    input_unregister_device(input);
+    platform_set_drvdata(pdev, NULL);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver mfld_pb_driver = {
-	.driver = {
-		.name = DRIVER_NAME,
-		.owner = THIS_MODULE,
-	},
-	.probe	= mfld_pb_probe,
-	.remove	= __devexit_p(mfld_pb_remove),
+    .driver = {
+        .name = DRIVER_NAME,
+        .owner = THIS_MODULE,
+    },
+    .probe	= mfld_pb_probe,
+    .remove	= __devexit_p(mfld_pb_remove),
 };
 
 module_platform_driver(mfld_pb_driver);

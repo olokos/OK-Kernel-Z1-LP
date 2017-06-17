@@ -22,26 +22,26 @@
  */
 
 struct sgioc_uart_regs {
-	u8 _ctrl1[3];
-	volatile u8 ctrl1;
-	u8 _data1[3];
-	volatile u8 data1;
-	u8 _ctrl2[3];
-	volatile u8 ctrl2;
-	u8 _data2[3];
-	volatile u8 data2;
+    u8 _ctrl1[3];
+    volatile u8 ctrl1;
+    u8 _data1[3];
+    volatile u8 data1;
+    u8 _ctrl2[3];
+    volatile u8 ctrl2;
+    u8 _data2[3];
+    volatile u8 data2;
 };
 
 struct sgioc_keyb_regs {
-	u8 _data[3];
-	volatile u8 data;
-	u8 _command[3];
-	volatile u8 command;
+    u8 _data[3];
+    volatile u8 data;
+    u8 _command[3];
+    volatile u8 command;
 };
 
 struct sgint_regs {
-	u8 _istat0[3];
-	volatile u8 istat0;		/* Interrupt status zero */
+    u8 _istat0[3];
+    volatile u8 istat0;		/* Interrupt status zero */
 #define SGINT_ISTAT0_FFULL	0x01
 #define SGINT_ISTAT0_SCSI0	0x02
 #define SGINT_ISTAT0_SCSI1	0x04
@@ -50,10 +50,10 @@ struct sgint_regs {
 #define SGINT_ISTAT0_PPORT	0x20
 #define SGINT_ISTAT0_HPC2	0x40
 #define SGINT_ISTAT0_LIO2	0x80
-	u8 _imask0[3];
-	volatile u8 imask0;		/* Interrupt mask zero */
-	u8 _istat1[3];
-	volatile u8 istat1;		/* Interrupt status one */
+    u8 _imask0[3];
+    volatile u8 imask0;		/* Interrupt mask zero */
+    u8 _istat1[3];
+    volatile u8 istat1;		/* Interrupt status one */
 #define SGINT_ISTAT1_ISDNI	0x01
 #define SGINT_ISTAT1_PWR	0x02
 #define SGINT_ISTAT1_ISDNH	0x04
@@ -62,29 +62,29 @@ struct sgint_regs {
 #define SGINT_ISTAT1_AFAIL	0x20
 #define SGINT_ISTAT1_VIDEO	0x40
 #define SGINT_ISTAT1_GIO2	0x80
-	u8 _imask1[3];
-	volatile u8 imask1;		/* Interrupt mask one */
-	u8 _vmeistat[3];
-	volatile u8 vmeistat;		/* VME interrupt status */
-	u8 _cmeimask0[3];
-	volatile u8 cmeimask0;		/* VME interrupt mask zero */
-	u8 _cmeimask1[3];
-	volatile u8 cmeimask1;		/* VME interrupt mask one */
-	u8 _cmepol[3];
-	volatile u8 cmepol;		/* VME polarity */
-	u8 _tclear[3];
-	volatile u8 tclear;
-	u8 _errstat[3];
-	volatile u8 errstat;	/* Error status reg, reserved on INT2 */
-	u32 _unused0[2];
-	u8 _tcnt0[3];
-	volatile u8 tcnt0;		/* counter 0 */
-	u8 _tcnt1[3];
-	volatile u8 tcnt1;		/* counter 1 */
-	u8 _tcnt2[3];
-	volatile u8 tcnt2;		/* counter 2 */
-	u8 _tcword[3];
-	volatile u8 tcword;		/* control word */
+    u8 _imask1[3];
+    volatile u8 imask1;		/* Interrupt mask one */
+    u8 _vmeistat[3];
+    volatile u8 vmeistat;		/* VME interrupt status */
+    u8 _cmeimask0[3];
+    volatile u8 cmeimask0;		/* VME interrupt mask zero */
+    u8 _cmeimask1[3];
+    volatile u8 cmeimask1;		/* VME interrupt mask one */
+    u8 _cmepol[3];
+    volatile u8 cmepol;		/* VME polarity */
+    u8 _tclear[3];
+    volatile u8 tclear;
+    u8 _errstat[3];
+    volatile u8 errstat;	/* Error status reg, reserved on INT2 */
+    u32 _unused0[2];
+    u8 _tcnt0[3];
+    volatile u8 tcnt0;		/* counter 0 */
+    u8 _tcnt1[3];
+    volatile u8 tcnt1;		/* counter 1 */
+    u8 _tcnt2[3];
+    volatile u8 tcnt2;		/* counter 2 */
+    u8 _tcword[3];
+    volatile u8 tcword;		/* control word */
 #define SGINT_TCWORD_BCD	0x01	/* Use BCD mode for counters */
 #define SGINT_TCWORD_MMASK	0x0e	/* Mode bitmask. */
 #define SGINT_TCWORD_MITC	0x00	/* IRQ on terminal count (doesn't work) */
@@ -118,52 +118,52 @@ struct sgint_regs {
 extern u8 sgi_ioc_reset, sgi_ioc_write;
 
 struct sgioc_regs {
-	struct pi1_regs pport;
-	u32 _unused0[2];
-	struct sgioc_uart_regs uart;
-	struct sgioc_keyb_regs kbdmouse;
-	u8 _gcsel[3];
-	volatile u8 gcsel;
-	u8 _genctrl[3];
-	volatile u8 genctrl;
-	u8 _panel[3];
-	volatile u8 panel;
+    struct pi1_regs pport;
+    u32 _unused0[2];
+    struct sgioc_uart_regs uart;
+    struct sgioc_keyb_regs kbdmouse;
+    u8 _gcsel[3];
+    volatile u8 gcsel;
+    u8 _genctrl[3];
+    volatile u8 genctrl;
+    u8 _panel[3];
+    volatile u8 panel;
 #define SGIOC_PANEL_POWERON	0x01
 #define SGIOC_PANEL_POWERINTR	0x02
 #define SGIOC_PANEL_VOLDNINTR	0x10
 #define SGIOC_PANEL_VOLDNHOLD	0x20
 #define SGIOC_PANEL_VOLUPINTR	0x40
 #define SGIOC_PANEL_VOLUPHOLD	0x80
-	u32 _unused1;
-	u8 _sysid[3];
-	volatile u8 sysid;
+    u32 _unused1;
+    u8 _sysid[3];
+    volatile u8 sysid;
 #define SGIOC_SYSID_FULLHOUSE	0x01
 #define SGIOC_SYSID_BOARDREV(x)	(((x) & 0x1e) >> 1)
 #define SGIOC_SYSID_CHIPREV(x)	(((x) & 0xe0) >> 5)
-	u32 _unused2;
-	u8 _read[3];
-	volatile u8 read;
-	u32 _unused3;
-	u8 _dmasel[3];
-	volatile u8 dmasel;
+    u32 _unused2;
+    u8 _read[3];
+    volatile u8 read;
+    u32 _unused3;
+    u8 _dmasel[3];
+    volatile u8 dmasel;
 #define SGIOC_DMASEL_SCLK10MHZ	0x00	/* use 10MHZ serial clock */
 #define SGIOC_DMASEL_ISDNB	0x01	/* enable isdn B */
 #define SGIOC_DMASEL_ISDNA	0x02	/* enable isdn A */
 #define SGIOC_DMASEL_PPORT	0x04	/* use parallel DMA */
 #define SGIOC_DMASEL_SCLK667MHZ	0x10	/* use 6.67MHZ serial clock */
 #define SGIOC_DMASEL_SCLKEXT	0x20	/* use external serial clock */
-	u32 _unused4;
-	u8 _reset[3];
-	volatile u8 reset;
+    u32 _unused4;
+    u8 _reset[3];
+    volatile u8 reset;
 #define SGIOC_RESET_PPORT	0x01	/* 0=parport reset, 1=nornal */
 #define SGIOC_RESET_KBDMOUSE	0x02	/* 0=kbdmouse reset, 1=normal */
 #define SGIOC_RESET_EISA	0x04	/* 0=eisa reset, 1=normal */
 #define SGIOC_RESET_ISDN	0x08	/* 0=isdn reset, 1=normal */
 #define SGIOC_RESET_LC0OFF	0x10	/* guiness: turn led off (red, else green) */
 #define SGIOC_RESET_LC1OFF	0x20	/* guiness: turn led off (green, else amber) */
-	u32 _unused5;
-	u8 _write[3];
-	volatile u8 write;
+    u32 _unused5;
+    u8 _write[3];
+    volatile u8 write;
 #define SGIOC_WRITE_NTHRESH	0x01	/* use 4.5db threshold */
 #define SGIOC_WRITE_TPSPEED	0x02	/* use 100ohm TP speed */
 #define SGIOC_WRITE_EPSEL	0x04	/* force cable mode: 1=AUI 0=TP */
@@ -172,10 +172,10 @@ struct sgioc_regs {
 #define SGIOC_WRITE_U0AMODE	0x20	/* 1=PC 0=MAC UART mode */
 #define SGIOC_WRITE_MLO		0x40	/* 1=4.75V 0=+5V */
 #define SGIOC_WRITE_MHI		0x80	/* 1=5.25V 0=+5V */
-	u32 _unused6;
-	struct sgint_regs int3;
-	u32 _unused7[16];
-	volatile u32 extio;		/* FullHouse only */
+    u32 _unused6;
+    struct sgint_regs int3;
+    u32 _unused7[16];
+    volatile u32 extio;		/* FullHouse only */
 #define EXTIO_S0_IRQ_3		0x8000	/* S0: vid.vsync */
 #define EXTIO_S0_IRQ_2		0x4000	/* S0: gfx.fifofull */
 #define EXTIO_S0_IRQ_1		0x2000	/* S0: gfx.int */

@@ -59,27 +59,25 @@
 #define ACPI_FLUSH_CPU_CACHE()
 
 static inline int
-ia64_acpi_acquire_global_lock (unsigned int *lock)
-{
-	unsigned int old, new, val;
-	do {
-		old = *lock;
-		new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
-		val = ia64_cmpxchg4_acq(lock, new, old);
-	} while (unlikely (val != old));
-	return (new < 3) ? -1 : 0;
+ia64_acpi_acquire_global_lock (unsigned int *lock) {
+    unsigned int old, new, val;
+    do {
+        old = *lock;
+        new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
+        val = ia64_cmpxchg4_acq(lock, new, old);
+    } while (unlikely (val != old));
+    return (new < 3) ? -1 : 0;
 }
 
 static inline int
-ia64_acpi_release_global_lock (unsigned int *lock)
-{
-	unsigned int old, new, val;
-	do {
-		old = *lock;
-		new = old & ~0x3;
-		val = ia64_cmpxchg4_acq(lock, new, old);
-	} while (unlikely (val != old));
-	return old & 0x1;
+ia64_acpi_release_global_lock (unsigned int *lock) {
+    unsigned int old, new, val;
+    do {
+        old = *lock;
+        new = old & ~0x3;
+        val = ia64_cmpxchg4_acq(lock, new, old);
+    } while (unlikely (val != old));
+    return old & 0x1;
 }
 
 #define ACPI_ACQUIRE_GLOBAL_LOCK(facs, Acq)				\
@@ -101,24 +99,23 @@ static inline void pci_acpi_crs_quirks(void) { }
 #ifdef CONFIG_IA64_GENERIC
 const char *acpi_get_sysname (void);
 #else
-static inline const char *acpi_get_sysname (void)
-{
+static inline const char *acpi_get_sysname (void) {
 # if defined (CONFIG_IA64_HP_SIM)
-	return "hpsim";
+    return "hpsim";
 # elif defined (CONFIG_IA64_HP_ZX1)
-	return "hpzx1";
+    return "hpzx1";
 # elif defined (CONFIG_IA64_HP_ZX1_SWIOTLB)
-	return "hpzx1_swiotlb";
+    return "hpzx1_swiotlb";
 # elif defined (CONFIG_IA64_SGI_SN2)
-	return "sn2";
+    return "sn2";
 # elif defined (CONFIG_IA64_SGI_UV)
-	return "uv";
+    return "uv";
 # elif defined (CONFIG_IA64_DIG)
-	return "dig";
+    return "dig";
 # elif defined (CONFIG_IA64_XEN_GUEST)
-	return "xen";
+    return "xen";
 # elif defined(CONFIG_IA64_DIG_VTD)
-	return "dig_vtd";
+    return "dig_vtd";
 # else
 #	error Unknown platform.  Fix acpi.c.
 # endif
@@ -157,10 +154,11 @@ extern int __devinitdata pxm_to_nid_map[MAX_PXM_DOMAINS];
 extern int __initdata nid_to_pxm_map[MAX_NUMNODES];
 #endif
 
-static inline bool arch_has_acpi_pdc(void) { return true; }
-static inline void arch_acpi_set_pdc_bits(u32 *buf)
-{
-	buf[2] |= ACPI_PDC_EST_CAPABILITY_SMP;
+static inline bool arch_has_acpi_pdc(void) {
+    return true;
+}
+static inline void arch_acpi_set_pdc_bits(u32 *buf) {
+    buf[2] |= ACPI_PDC_EST_CAPABILITY_SMP;
 }
 
 #define acpi_unlazy_tlb(x)
@@ -170,26 +168,25 @@ extern cpumask_t early_cpu_possible_map;
 #define for_each_possible_early_cpu(cpu)  \
 	for_each_cpu_mask((cpu), early_cpu_possible_map)
 
-static inline void per_cpu_scan_finalize(int min_cpus, int reserve_cpus)
-{
-	int low_cpu, high_cpu;
-	int cpu;
-	int next_nid = 0;
+static inline void per_cpu_scan_finalize(int min_cpus, int reserve_cpus) {
+    int low_cpu, high_cpu;
+    int cpu;
+    int next_nid = 0;
 
-	low_cpu = cpus_weight(early_cpu_possible_map);
+    low_cpu = cpus_weight(early_cpu_possible_map);
 
-	high_cpu = max(low_cpu, min_cpus);
-	high_cpu = min(high_cpu + reserve_cpus, NR_CPUS);
+    high_cpu = max(low_cpu, min_cpus);
+    high_cpu = min(high_cpu + reserve_cpus, NR_CPUS);
 
-	for (cpu = low_cpu; cpu < high_cpu; cpu++) {
-		cpu_set(cpu, early_cpu_possible_map);
-		if (node_cpuid[cpu].nid == NUMA_NO_NODE) {
-			node_cpuid[cpu].nid = next_nid;
-			next_nid++;
-			if (next_nid >= num_online_nodes())
-				next_nid = 0;
-		}
-	}
+    for (cpu = low_cpu; cpu < high_cpu; cpu++) {
+        cpu_set(cpu, early_cpu_possible_map);
+        if (node_cpuid[cpu].nid == NUMA_NO_NODE) {
+            node_cpuid[cpu].nid = next_nid;
+            next_nid++;
+            if (next_nid >= num_online_nodes())
+                next_nid = 0;
+        }
+    }
 }
 #endif /* CONFIG_ACPI_NUMA */
 

@@ -31,21 +31,21 @@
 
 /* Status register (ms int, small fifo, IO)*/
 #define R592_STATUS			0x10
-							/* Parallel INT bits */
+/* Parallel INT bits */
 #define R592_STATUS_P_CMDNACK		(1 << 16)	/* INT reg: NACK (parallel mode) */
 #define R592_STATUS_P_BREQ		(1 << 17)	/* INT reg: card ready (parallel mode)*/
 #define R592_STATUS_P_INTERR		(1 << 18)	/* INT reg: int error (parallel mode)*/
 #define R592_STATUS_P_CED		(1 << 19)	/* INT reg: command done (parallel mode) */
 
-							/* Fifo status */
+/* Fifo status */
 #define R592_STATUS_SFIFO_FULL		(1 << 20)	/* Small Fifo almost full (last chunk is written) */
 #define R592_STATUS_SFIFO_EMPTY		(1 << 21)	/* Small Fifo empty */
 
-							/* Error detection via CRC */
+/* Error detection via CRC */
 #define R592_STATUS_SEND_ERR		(1 << 24)	/* Send failed */
 #define R592_STATUS_RECV_ERR		(1 << 25)	/* Receive failed */
 
-							/* Card state */
+/* Card state */
 #define R592_STATUS_RDY			(1 << 28)	/* RDY signal received */
 #define R592_STATUS_CED			(1 << 29)	/* INT: Command done (serial mode)*/
 #define R592_STATUS_SFIFO_INPUT		(1 << 30)	/* Small fifo received data*/
@@ -129,28 +129,28 @@
 #define R592_REG_3C			0x3C
 
 struct r592_device {
-	struct pci_dev *pci_dev;
-	struct memstick_host	*host;		/* host backpointer */
-	struct memstick_request *req;		/* current request */
+    struct pci_dev *pci_dev;
+    struct memstick_host	*host;		/* host backpointer */
+    struct memstick_request *req;		/* current request */
 
-	/* Registers, IRQ */
-	void __iomem *mmio;
-	int irq;
-	spinlock_t irq_lock;
-	spinlock_t io_thread_lock;
-	struct timer_list detect_timer;
+    /* Registers, IRQ */
+    void __iomem *mmio;
+    int irq;
+    spinlock_t irq_lock;
+    spinlock_t io_thread_lock;
+    struct timer_list detect_timer;
 
-	struct task_struct *io_thread;
-	bool parallel_mode;
+    struct task_struct *io_thread;
+    bool parallel_mode;
 
-	DECLARE_KFIFO(pio_fifo, u8, sizeof(u32));
+    DECLARE_KFIFO(pio_fifo, u8, sizeof(u32));
 
-	/* DMA area */
-	int dma_capable;
-	int dma_error;
-	struct completion dma_done;
-	void *dummy_dma_page;
-	dma_addr_t dummy_dma_page_physical_address;
+    /* DMA area */
+    int dma_capable;
+    int dma_error;
+    struct completion dma_done;
+    void *dummy_dma_page;
+    dma_addr_t dummy_dma_page_physical_address;
 
 };
 

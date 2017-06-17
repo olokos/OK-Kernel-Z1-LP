@@ -30,10 +30,8 @@
 #include "wlan_hdd_trace.h"
 #include "wlan_hdd_main.h"
 
-static tANI_U8* hddTraceGetEventString(tANI_U32 code)
-{
-    switch(code)
-    {
+static tANI_U8* hddTraceGetEventString(tANI_U32 code) {
+    switch(code) {
         CASE_RETURN_STRING(TRACE_CODE_HDD_OPEN_REQUEST);
         CASE_RETURN_STRING(TRACE_CODE_HDD_STOP_REQUEST);
         CASE_RETURN_STRING(TRACE_CODE_HDD_TX_TIMEOUT);
@@ -95,14 +93,12 @@ static tANI_U8* hddTraceGetEventString(tANI_U32 code)
     }
 }
 
-void hddTraceDump(void *pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex)
-{
+void hddTraceDump(void *pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex) {
     hddLog(LOGE, "%04d    %012u  S%d    %-14s  %-30s(0x%x) ",
            recIndex, pRecord->time, pRecord->session,
            "HDD Event:", hddTraceGetEventString(pRecord->code), pRecord->data);
 }
 
-void hddTraceInit()
-{
+void hddTraceInit() {
     vosTraceRegister(VOS_MODULE_ID_HDD, (tpvosTraceCb)&hddTraceDump);
 }

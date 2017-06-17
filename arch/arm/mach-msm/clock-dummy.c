@@ -12,48 +12,42 @@
 
 #include <mach/clk-provider.h>
 
-static int dummy_clk_reset(struct clk *clk, enum clk_reset_action action)
-{
-	return 0;
+static int dummy_clk_reset(struct clk *clk, enum clk_reset_action action) {
+    return 0;
 }
 
-static int dummy_clk_set_rate(struct clk *clk, unsigned long rate)
-{
-	clk->rate = rate;
-	return 0;
+static int dummy_clk_set_rate(struct clk *clk, unsigned long rate) {
+    clk->rate = rate;
+    return 0;
 }
 
-static int dummy_clk_set_max_rate(struct clk *clk, unsigned long rate)
-{
-	return 0;
+static int dummy_clk_set_max_rate(struct clk *clk, unsigned long rate) {
+    return 0;
 }
 
-static int dummy_clk_set_flags(struct clk *clk, unsigned flags)
-{
-	return 0;
+static int dummy_clk_set_flags(struct clk *clk, unsigned flags) {
+    return 0;
 }
 
-static unsigned long dummy_clk_get_rate(struct clk *clk)
-{
-	return clk->rate;
+static unsigned long dummy_clk_get_rate(struct clk *clk) {
+    return clk->rate;
 }
 
-static long dummy_clk_round_rate(struct clk *clk, unsigned long rate)
-{
-	return rate;
+static long dummy_clk_round_rate(struct clk *clk, unsigned long rate) {
+    return rate;
 }
 
 struct clk_ops clk_ops_dummy = {
-	.reset = dummy_clk_reset,
-	.set_rate = dummy_clk_set_rate,
-	.set_max_rate = dummy_clk_set_max_rate,
-	.set_flags = dummy_clk_set_flags,
-	.get_rate = dummy_clk_get_rate,
-	.round_rate = dummy_clk_round_rate,
+    .reset = dummy_clk_reset,
+    .set_rate = dummy_clk_set_rate,
+    .set_max_rate = dummy_clk_set_max_rate,
+    .set_flags = dummy_clk_set_flags,
+    .get_rate = dummy_clk_get_rate,
+    .round_rate = dummy_clk_round_rate,
 };
 
 struct clk dummy_clk = {
-	.dbg_name = "dummy_clk",
-	.ops = &clk_ops_dummy,
-	CLK_INIT(dummy_clk),
+    .dbg_name = "dummy_clk",
+    .ops = &clk_ops_dummy,
+    CLK_INIT(dummy_clk),
 };

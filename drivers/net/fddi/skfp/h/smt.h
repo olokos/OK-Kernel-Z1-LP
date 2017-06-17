@@ -34,8 +34,8 @@
 #define SMT_VID_2 0x0002		/* V 7.2 */
 
 struct smt_sid {
-	u_char	sid_oem[2] ;			/* implementation spec. */
-	struct fddi_addr sid_node ;		/* node address */
+    u_char	sid_oem[2] ;			/* implementation spec. */
+    struct fddi_addr sid_node ;		/* node address */
 } ;
 
 typedef u_char	t_station_id[8] ;
@@ -48,15 +48,15 @@ typedef u_char	t_station_id[8] ;
  * (FC starts at offset 3)
  */
 _packed struct smt_header {
-	struct fddi_addr    	smt_dest ;	/* destination address */
-	struct fddi_addr	smt_source ;	/* source address */
-	u_char			smt_class ;	/* NIF, SIF ... */
-	u_char			smt_type ;	/* req., response .. */
-	u_short			smt_version ;	/* version id */
-	u_int			smt_tid ;	/* transaction ID */
-	struct smt_sid		smt_sid ;	/* station ID */
-	u_short			smt_pad ;	/* pad with 0 */
-	u_short			smt_len ;	/* length of info field */
+    struct fddi_addr    	smt_dest ;	/* destination address */
+    struct fddi_addr	smt_source ;	/* source address */
+    u_char			smt_class ;	/* NIF, SIF ... */
+    u_char			smt_type ;	/* req., response .. */
+    u_short			smt_version ;	/* version id */
+    u_int			smt_tid ;	/* transaction ID */
+    struct smt_sid		smt_sid ;	/* station ID */
+    u_short			smt_pad ;	/* pad with 0 */
+    u_short			smt_len ;	/* length of info field */
 } ;
 #define SWAP_SMTHEADER	"662sl8ss"
 
@@ -105,8 +105,8 @@ _packed struct smt_header {
  */
 
 struct smt_para {
-	u_short	p_type ;		/* type */
-	u_short	p_len ;			/* length of parameter */
+    u_short	p_type ;		/* type */
+    u_short	p_len ;			/* length of parameter */
 } ;
 
 #define PARA_LEN	(sizeof(struct smt_para))
@@ -121,9 +121,9 @@ struct smt_para {
 #define SWAP_SMT_P_UNA	"s6"
 
 struct smt_p_una {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	una_pad ;
-	struct fddi_addr una_node ;	/* node address, zero if unknown */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	una_pad ;
+    struct fddi_addr una_node ;	/* node address, zero if unknown */
 } ;
 
 /*
@@ -136,11 +136,11 @@ struct smt_p_una {
 #define SMT_SDE_CONCENTRATOR	1	/* concentrator */
 
 struct smt_p_sde {
-	struct smt_para	para ;		/* generic parameter header */
-	u_char	sde_type ;		/* station type */
-	u_char	sde_mac_count ;		/* number of MACs */
-	u_char	sde_non_master ;	/* number of A,B or S ports */
-	u_char	sde_master ;		/* number of S ports on conc. */
+    struct smt_para	para ;		/* generic parameter header */
+    u_char	sde_type ;		/* station type */
+    u_char	sde_mac_count ;		/* number of MACs */
+    u_char	sde_non_master ;	/* number of A,B or S ports */
+    u_char	sde_master ;		/* number of S ports on conc. */
 } ;
 
 /*
@@ -150,10 +150,10 @@ struct smt_p_sde {
 #define SWAP_SMT_P_STATE	"scc"
 
 struct smt_p_state {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	st_pad ;
-	u_char	st_topology ;		/* topology */
-	u_char	st_dupl_addr ;		/* duplicate address detected */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	st_pad ;
+    u_char	st_topology ;		/* topology */
+    u_char	st_dupl_addr ;		/* duplicate address detected */
 } ;
 #define SMT_ST_WRAPPED		(1<<0)	/* station wrapped */
 #define SMT_ST_UNATTACHED	(1<<1)	/* unattached concentrator */
@@ -172,8 +172,8 @@ struct smt_p_state {
 #define SMT_P_TIMESTAMP	0x0004		/* time stamp */
 #define SWAP_SMT_P_TIMESTAMP	"8"
 struct smt_p_timestamp {
-	struct smt_para	para ;		/* generic parameter header */
-	u_char	ts_time[8] ;		/* time, resolution 80nS, unique */
+    struct smt_para	para ;		/* generic parameter header */
+    u_char	ts_time[8] ;		/* time, resolution 80nS, unique */
 } ;
 
 /*
@@ -183,9 +183,9 @@ struct smt_p_timestamp {
 #define SWAP_SMT_P_POLICY	"ss"
 
 struct smt_p_policy {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	pl_config ;
-	u_short pl_connect ;		/* bit string POLICY_AA ... */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	pl_config ;
+    u_short pl_connect ;		/* bit string POLICY_AA ... */
 } ;
 #define SMT_PL_HOLD		1	/* hold policy supported (Dual MAC) */
 
@@ -200,11 +200,11 @@ struct smt_p_policy {
  * for a SAS, the 2nd one is null
  */
 struct smt_p_latency {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	lt_phyout_idx1 ;	/* index */
-	u_short	lt_latency1 ;		/* latency , unit : byte clock */
-	u_short	lt_phyout_idx2 ;	/* 0 if SAS */
-	u_short	lt_latency2 ;		/* 0 if SAS */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	lt_phyout_idx1 ;	/* index */
+    u_short	lt_latency1 ;		/* latency , unit : byte clock */
+    u_short	lt_phyout_idx2 ;	/* 0 if SAS */
+    u_short	lt_latency2 ;		/* 0 if SAS */
 } ;
 
 /*
@@ -214,11 +214,11 @@ struct smt_p_latency {
 #define SWAP_SMT_P_NEIGHBORS	"ss66"
 
 struct smt_p_neighbor {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	nb_mib_index ;		/* MIB index */
-	u_short	nb_mac_index ;		/* n+1 .. n+m, m = #MACs, n = #PHYs */
-	struct fddi_addr nb_una ;	/* UNA , 0 for unknown */
-	struct fddi_addr nb_dna ;	/* DNA , 0 for unknown */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	nb_mib_index ;		/* MIB index */
+    u_short	nb_mac_index ;		/* n+1 .. n+m, m = #MACs, n = #PHYs */
+    struct fddi_addr nb_una ;	/* UNA , 0 for unknown */
+    struct fddi_addr nb_dna ;	/* DNA , 0 for unknown */
 } ;
 
 /*
@@ -238,20 +238,20 @@ struct smt_p_neighbor {
 #define SMT_RM_MAC	1
 
 struct smt_phy_rec {
-	u_short	phy_mib_index ;		/* MIB index */
-	u_char	phy_type ;		/* A/B/S/M */
-	u_char	phy_connect_state ;	/* disabled/connecting/active */
-	u_char	phy_remote_type ;	/* A/B/S/M */
-	u_char	phy_remote_mac ;	/* none/remote */
-	u_short	phy_resource_idx ;	/* 1 .. n */
+    u_short	phy_mib_index ;		/* MIB index */
+    u_char	phy_type ;		/* A/B/S/M */
+    u_char	phy_connect_state ;	/* disabled/connecting/active */
+    u_char	phy_remote_type ;	/* A/B/S/M */
+    u_char	phy_remote_mac ;	/* none/remote */
+    u_short	phy_resource_idx ;	/* 1 .. n */
 } ;
 
 /*
  * MAC record
  */
 struct smt_mac_rec {
-	struct fddi_addr mac_addr ;		/* MAC address */
-	u_short		mac_resource_idx ;	/* n+1 .. n+m */
+    struct fddi_addr mac_addr ;		/* MAC address */
+    u_short		mac_resource_idx ;	/* n+1 .. n+m */
 } ;
 
 /*
@@ -263,9 +263,9 @@ struct smt_mac_rec {
 #define SWAP_SMT_P_PATH	"[6s]"
 
 struct smt_p_path {
-	struct smt_para	para ;		/* generic parameter header */
-	struct smt_phy_rec	pd_phy[2] ;	/* PHY A */
-	struct smt_mac_rec	pd_mac ;	/* MAC record */
+    struct smt_para	para ;		/* generic parameter header */
+    struct smt_phy_rec	pd_phy[2] ;	/* PHY A */
+    struct smt_mac_rec	pd_mac ;	/* MAC record */
 } ;
 
 /*
@@ -275,18 +275,18 @@ struct smt_p_path {
 #define SWAP_SMT_P_MAC_STATUS	"sslllllllll"
 
 struct smt_p_mac_status {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short st_mib_index ;		/* MIB index */
-	u_short	st_mac_index ;		/* n+1 .. n+m */
-	u_int	st_t_req ;		/* T_Req */
-	u_int	st_t_neg ;		/* T_Neg */
-	u_int	st_t_max ;		/* T_Max */
-	u_int	st_tvx_value ;		/* TVX_Value */
-	u_int	st_t_min ;		/* T_Min */
-	u_int	st_sba ;		/* synchr. bandwidth alloc */
-	u_int	st_frame_ct ;		/* frame counter */
-	u_int	st_error_ct ;		/* error counter */
-	u_int	st_lost_ct ;		/* lost frames counter */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short st_mib_index ;		/* MIB index */
+    u_short	st_mac_index ;		/* n+1 .. n+m */
+    u_int	st_t_req ;		/* T_Req */
+    u_int	st_t_neg ;		/* T_Neg */
+    u_int	st_t_max ;		/* T_Max */
+    u_int	st_tvx_value ;		/* TVX_Value */
+    u_int	st_t_min ;		/* T_Min */
+    u_int	st_sba ;		/* synchr. bandwidth alloc */
+    u_int	st_frame_ct ;		/* frame counter */
+    u_int	st_error_ct ;		/* error counter */
+    u_int	st_lost_ct ;		/* lost frames counter */
 } ;
 
 /*
@@ -298,15 +298,15 @@ struct smt_p_mac_status {
  * units of lem_cutoff,lem_alarm,lem_estimate : 10**-x
  */
 struct smt_p_lem {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	lem_mib_index ;		/* MIB index */
-	u_short	lem_phy_index ;		/* 1 .. n */
-	u_char	lem_pad2 ;		/* be nice and make it even . */
-	u_char	lem_cutoff ;		/* 0x4 .. 0xf, default 0x7 */
-	u_char	lem_alarm ;		/* 0x4 .. 0xf, default 0x8 */
-	u_char	lem_estimate ;		/* 0x0 .. 0xff */
-	u_int	lem_reject_ct ;		/* 0x00000000 .. 0xffffffff */
-	u_int	lem_ct ;		/* 0x00000000 .. 0xffffffff */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	lem_mib_index ;		/* MIB index */
+    u_short	lem_phy_index ;		/* 1 .. n */
+    u_char	lem_pad2 ;		/* be nice and make it even . */
+    u_char	lem_cutoff ;		/* 0x4 .. 0xf, default 0x7 */
+    u_char	lem_alarm ;		/* 0x4 .. 0xf, default 0x8 */
+    u_char	lem_estimate ;		/* 0x0 .. 0xff */
+    u_int	lem_reject_ct ;		/* 0x00000000 .. 0xffffffff */
+    u_int	lem_ct ;		/* 0x00000000 .. 0xffffffff */
 } ;
 
 /*
@@ -316,11 +316,11 @@ struct smt_p_lem {
 #define SWAP_SMT_P_MAC_COUNTER	"ssll"
 
 struct smt_p_mac_counter {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	mc_mib_index ;		/* MIB index */
-	u_short	mc_index ;		/* mac index */
-	u_int	mc_receive_ct ;		/* receive counter */
-	u_int	mc_transmit_ct ;	/* transmit counter */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	mc_mib_index ;		/* MIB index */
+    u_short	mc_index ;		/* mac index */
+    u_int	mc_receive_ct ;		/* receive counter */
+    u_int	mc_transmit_ct ;	/* transmit counter */
 } ;
 
 /*
@@ -330,10 +330,10 @@ struct smt_p_mac_counter {
 #define SWAP_SMT_P_MAC_FNC	"ssl"
 
 struct smt_p_mac_fnc {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	nc_mib_index ;		/* MIB index */
-	u_short	nc_index ;		/* mac index */
-	u_int	nc_counter ;		/* not copied counter */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	nc_mib_index ;		/* MIB index */
+    u_short	nc_index ;		/* mac index */
+    u_int	nc_counter ;		/* not copied counter */
 } ;
 
 
@@ -344,10 +344,10 @@ struct smt_p_mac_fnc {
 #define SWAP_SMT_P_PRIORITY	"ssl"
 
 struct smt_p_priority {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	pr_mib_index ;		/* MIB index */
-	u_short	pr_index ;		/* mac index */
-	u_int	pr_priority[7] ;	/* priority values */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	pr_mib_index ;		/* MIB index */
+    u_short	pr_index ;		/* mac index */
+    u_int	pr_priority[7] ;	/* priority values */
 } ;
 
 /*
@@ -357,10 +357,10 @@ struct smt_p_priority {
 #define SWAP_SMT_P_EB	"ssl"
 
 struct smt_p_eb {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	eb_mib_index ;		/* MIB index */
-	u_short	eb_index ;		/* phy index */
-	u_int	eb_error_ct ;		/* # of eb overflows */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	eb_mib_index ;		/* MIB index */
+    u_short	eb_index ;		/* phy index */
+    u_int	eb_error_ct ;		/* # of eb overflows */
 } ;
 
 /*
@@ -370,8 +370,8 @@ struct smt_p_eb {
 #define SWAP_SMT_P_MANUFACTURER	""
 
 struct smp_p_manufacturer {
-	struct smt_para	para ;		/* generic parameter header */
-	u_char mf_data[32] ;		/* OUI + arbitrary data */
+    struct smt_para	para ;		/* generic parameter header */
+    u_char mf_data[32] ;		/* OUI + arbitrary data */
 } ;
 
 /*
@@ -381,8 +381,8 @@ struct smp_p_manufacturer {
 #define SWAP_SMT_P_USER	""
 
 struct smp_p_user {
-	struct smt_para	para ;		/* generic parameter header */
-	u_char us_data[32] ;		/* arbitrary data */
+    struct smt_para	para ;		/* generic parameter header */
+    u_char us_data[32] ;		/* arbitrary data */
 } ;
 
 
@@ -394,8 +394,8 @@ struct smp_p_user {
 #define SWAP_SMT_P_ECHODATA	""
 
 struct smt_p_echo {
-	struct smt_para	para ;		/* generic parameter header */
-	u_char	ec_data[SMT_MAX_ECHO_LEN-4] ;	/* echo data */
+    struct smt_para	para ;		/* generic parameter header */
+    u_char	ec_data[SMT_MAX_ECHO_LEN-4] ;	/* echo data */
 } ;
 
 /*
@@ -405,8 +405,8 @@ struct smt_p_echo {
 #define SWAP_SMT_P_REASON	"l"
 
 struct smt_p_reason {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int	rdf_reason ;		/* CLASS/VERSION */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int	rdf_reason ;		/* CLASS/VERSION */
 } ;
 #define SMT_RDF_CLASS	0x00000001	/* class not supported */
 #define SMT_RDF_VERSION	0x00000002	/* version not supported */
@@ -427,9 +427,9 @@ struct smt_p_reason {
 #define SWAP_SMT_P_REFUSED	"l"
 
 struct smt_p_refused {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int	ref_fc ;		/* 3 bytes 0 + FC */
-	struct smt_header	ref_header ;	/* refused header */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int	ref_fc ;		/* 3 bytes 0 + FC */
+    struct smt_header	ref_header ;	/* refused header */
 } ;
 
 /*
@@ -439,12 +439,12 @@ struct smt_p_refused {
 #define SWAP_SMT_P_VERSION	"sccss"
 
 struct smt_p_version {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	v_pad ;
-	u_char	v_n ;			/* 1 .. 0xff, #versions */
-	u_char	v_index ;		/* 1 .. 0xff, index of op. v. */
-	u_short	v_version[1] ;		/* list of min. 1 version */
-	u_short	v_pad2 ;		/* pad if necessary */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	v_pad ;
+    u_char	v_n ;			/* 1 .. 0xff, #versions */
+    u_char	v_index ;		/* 1 .. 0xff, index of op. v. */
+    u_short	v_version[1] ;		/* list of min. 1 version */
+    u_short	v_pad2 ;		/* pad if necessary */
 } ;
 
 /*
@@ -453,8 +453,8 @@ struct smt_p_version {
 #define	SWAP_SMT_P0015		"l"
 
 struct smt_p_0015 {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		res_type ;	/* recsource type */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		res_type ;	/* recsource type */
 } ;
 
 #define	SYNC_BW		0x00000001L	/* Synchronous Bandwidth */
@@ -465,15 +465,15 @@ struct smt_p_0015 {
 #define	SWAP_SMT_P0016		"l"
 
 struct smt_p_0016 {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		sba_cmd ;	/* command for the SBA */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		sba_cmd ;	/* command for the SBA */
 } ;
 
 #define	REQUEST_ALLOCATION	0x1	/* req allocation of sync bandwidth */
 #define	REPORT_ALLOCATION	0x2	/* rep of sync bandwidth allocation */
 #define	CHANGE_ALLOCATION	0x3	/* forces a station using sync band-*/
-					/* width to change its current allo-*/
-					/* cation */
+/* width to change its current allo-*/
+/* cation */
 
 /*
  * P17 : SBA Payload Request
@@ -481,8 +481,8 @@ struct smt_p_0016 {
 #define	SWAP_SMT_P0017		"l"
 
 struct smt_p_0017 {
-	struct smt_para	para ;		/* generic parameter header */
-	int		sba_pl_req ;	/* total sync bandwidth measured in */
+    struct smt_para	para ;		/* generic parameter header */
+    int		sba_pl_req ;	/* total sync bandwidth measured in */
 } ;					/* bytes per 125 us */
 
 /*
@@ -491,8 +491,8 @@ struct smt_p_0017 {
 #define	SWAP_SMT_P0018		"l"
 
 struct smt_p_0018 {
-	struct smt_para	para ;		/* generic parameter header */
-	int		sba_ov_req ;	/* total sync bandwidth req for overhead*/
+    struct smt_para	para ;		/* generic parameter header */
+    int		sba_ov_req ;	/* total sync bandwidth req for overhead*/
 } ;					/* measuered in bytes per T_Neg */
 
 /*
@@ -501,9 +501,9 @@ struct smt_p_0018 {
 #define	SWAP_SMT_P0019		"s6"
 
 struct smt_p_0019 {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short		sba_pad ;
-	struct fddi_addr alloc_addr ;	/* Allocation Address */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short		sba_pad ;
+    struct fddi_addr alloc_addr ;	/* Allocation Address */
 } ;
 
 /*
@@ -512,8 +512,8 @@ struct smt_p_0019 {
 #define	SWAP_SMT_P001A		"l"
 
 struct smt_p_001a {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		category ;	/* Allocator defined classification */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		category ;	/* Allocator defined classification */
 } ;
 
 /*
@@ -522,8 +522,8 @@ struct smt_p_001a {
 #define	SWAP_SMT_P001B		"l"
 
 struct smt_p_001b {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		max_t_neg ;	/* longest T_NEG for the sync service*/
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		max_t_neg ;	/* longest T_NEG for the sync service*/
 } ;
 
 /*
@@ -532,8 +532,8 @@ struct smt_p_001b {
 #define	SWAP_SMT_P001C		"l"
 
 struct smt_p_001c {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		min_seg_siz ;	/* smallest number of bytes per frame*/
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		min_seg_siz ;	/* smallest number of bytes per frame*/
 } ;
 
 /*
@@ -542,8 +542,8 @@ struct smt_p_001c {
 #define	SWAP_SMT_P001D		"l"
 
 struct smt_p_001d {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		allocatable ;	/* total sync bw available for alloc */
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		allocatable ;	/* total sync bw available for alloc */
 } ;
 
 /*
@@ -554,11 +554,11 @@ struct smt_p_001d {
 /* #define SWAP_SMT_P_FSC	"ssss" */
 
 struct smt_p_fsc {
-	struct smt_para	para ;		/* generic parameter header */
-	u_short	fsc_pad0 ;
-	u_short	fsc_mac_index ;		/* mac index 1 .. ff */
-	u_short	fsc_pad1 ;
-	u_short	fsc_value ;		/* FSC_TYPE[0-2] */
+    struct smt_para	para ;		/* generic parameter header */
+    u_short	fsc_pad0 ;
+    u_short	fsc_mac_index ;		/* mac index 1 .. ff */
+    u_short	fsc_pad1 ;
+    u_short	fsc_value ;		/* FSC_TYPE[0-2] */
 } ;
 
 #define FSC_TYPE0	0		/* "normal" node (A/C handling) */
@@ -575,8 +575,8 @@ struct smt_p_fsc {
  */
 #define SWAP_SMT_P1048	"ll"
 struct smt_p_1048 {
-	u_int p1048_flag ;
-	u_int p1048_cf_state ;
+    u_int p1048_flag ;
+    u_int p1048_cf_state ;
 } ;
 
 /*
@@ -586,50 +586,50 @@ struct smt_p_1048 {
  */
 #define SWAP_SMT_P208C	"4lss66"
 struct smt_p_208c {
-	u_int			p208c_flag ;
-	u_short			p208c_pad ;
-	u_short			p208c_dupcondition ;
-	struct	fddi_addr	p208c_fddilong ;
-	struct	fddi_addr	p208c_fddiunalong ;
+    u_int			p208c_flag ;
+    u_short			p208c_pad ;
+    u_short			p208c_dupcondition ;
+    struct	fddi_addr	p208c_fddilong ;
+    struct	fddi_addr	p208c_fddiunalong ;
 } ;
 
 #define SWAP_SMT_P208D	"4lllll"
 struct smt_p_208d {
-	u_int			p208d_flag ;
-	u_int			p208d_frame_ct ;
-	u_int			p208d_error_ct ;
-	u_int			p208d_lost_ct ;
-	u_int			p208d_ratio ;
+    u_int			p208d_flag ;
+    u_int			p208d_frame_ct ;
+    u_int			p208d_error_ct ;
+    u_int			p208d_lost_ct ;
+    u_int			p208d_ratio ;
 } ;
 
 #define SWAP_SMT_P208E	"4llll"
 struct smt_p_208e {
-	u_int			p208e_flag ;
-	u_int			p208e_not_copied ;
-	u_int			p208e_copied ;
-	u_int			p208e_not_copied_ratio ;
+    u_int			p208e_flag ;
+    u_int			p208e_not_copied ;
+    u_int			p208e_copied ;
+    u_int			p208e_not_copied_ratio ;
 } ;
 
 #define SWAP_SMT_P208F	"4ll6666s6"
 
 struct smt_p_208f {
-	u_int			p208f_multiple ;
-	u_int			p208f_nacondition ;
-	struct fddi_addr	p208f_old_una ;
-	struct fddi_addr	p208f_new_una ;
-	struct fddi_addr	p208f_old_dna ;
-	struct fddi_addr	p208f_new_dna ;
-	u_short			p208f_curren_path ;
-	struct fddi_addr	p208f_smt_address ;
+    u_int			p208f_multiple ;
+    u_int			p208f_nacondition ;
+    struct fddi_addr	p208f_old_una ;
+    struct fddi_addr	p208f_new_una ;
+    struct fddi_addr	p208f_old_dna ;
+    struct fddi_addr	p208f_new_dna ;
+    u_short			p208f_curren_path ;
+    struct fddi_addr	p208f_smt_address ;
 } ;
 
 #define SWAP_SMT_P2090	"4lssl"
 
 struct smt_p_2090 {
-	u_int			p2090_multiple ;
-	u_short			p2090_availablepaths ;
-	u_short			p2090_currentpath ;
-	u_int			p2090_requestedpaths ;
+    u_int			p2090_multiple ;
+    u_short			p2090_availablepaths ;
+    u_short			p2090_currentpath ;
+    u_int			p2090_requestedpaths ;
 } ;
 
 /*
@@ -648,64 +648,64 @@ struct smt_p_2090 {
 #define	SWAP_SMT_P320B	"42s"
 
 struct	smt_p_320b {
-	struct smt_para para ;	/* generic parameter header */
-	u_int	mib_index ;
-	u_short path_pad ;
-	u_short	path_index ;
+    struct smt_para para ;	/* generic parameter header */
+    u_int	mib_index ;
+    u_short path_pad ;
+    u_short	path_index ;
 } ;
 
 #define	SWAP_SMT_P320F	"4l"
 
 struct	smt_p_320f {
-	struct smt_para para ;	/* generic parameter header */
-	u_int	mib_index ;
-	u_int	mib_payload ;
+    struct smt_para para ;	/* generic parameter header */
+    u_int	mib_index ;
+    u_int	mib_payload ;
 } ;
 
 #define	SWAP_SMT_P3210	"4l"
 
 struct	smt_p_3210 {
-	struct smt_para para ;	/* generic parameter header */
-	u_int	mib_index ;
-	u_int	mib_overhead ;
+    struct smt_para para ;	/* generic parameter header */
+    u_int	mib_index ;
+    u_int	mib_overhead ;
 } ;
 
 #define SWAP_SMT_P4050	"4l1111ll"
 
 struct smt_p_4050 {
-	u_int			p4050_flag ;
-	u_char			p4050_pad ;
-	u_char			p4050_cutoff ;
-	u_char			p4050_alarm ;
-	u_char			p4050_estimate ;
-	u_int			p4050_reject_ct ;
-	u_int			p4050_ct ;
+    u_int			p4050_flag ;
+    u_char			p4050_pad ;
+    u_char			p4050_cutoff ;
+    u_char			p4050_alarm ;
+    u_char			p4050_estimate ;
+    u_int			p4050_reject_ct ;
+    u_int			p4050_ct ;
 } ;
 
 #define SWAP_SMT_P4051	"4lssss"
 struct smt_p_4051 {
-	u_int			p4051_multiple ;
-	u_short			p4051_porttype ;
-	u_short			p4051_connectstate ;
-	u_short			p4051_pc_neighbor ;
-	u_short			p4051_pc_withhold ;
+    u_int			p4051_multiple ;
+    u_short			p4051_porttype ;
+    u_short			p4051_connectstate ;
+    u_short			p4051_pc_neighbor ;
+    u_short			p4051_pc_withhold ;
 } ;
 
 #define SWAP_SMT_P4052	"4ll"
 struct smt_p_4052 {
-	u_int			p4052_flag ;
-	u_int			p4052_eberrorcount ;
+    u_int			p4052_flag ;
+    u_int			p4052_eberrorcount ;
 } ;
 
 #define SWAP_SMT_P4053	"4lsslss"
 
 struct smt_p_4053 {
-	u_int			p4053_multiple ;
-	u_short			p4053_availablepaths ;
-	u_short			p4053_currentpath ;
-	u_int			p4053_requestedpaths ;
-	u_short			p4053_mytype ;
-	u_short			p4053_neighbortype ;
+    u_int			p4053_multiple ;
+    u_short			p4053_availablepaths ;
+    u_short			p4053_currentpath ;
+    u_int			p4053_requestedpaths ;
+    u_short			p4053_mytype ;
+    u_short			p4053_neighbortype ;
 } ;
 
 
@@ -713,9 +713,9 @@ struct smt_p_4053 {
 #define SWAP_SMT_P_SETCOUNT	"l8"
 
 struct smt_p_setcount {
-	struct smt_para	para ;		/* generic parameter header */
-	u_int		count ;
-	u_char		timestamp[8] ;
+    struct smt_para	para ;		/* generic parameter header */
+    u_int		count ;
+    u_char		timestamp[8] ;
 } ;
 
 /*
@@ -726,12 +726,12 @@ struct smt_p_setcount {
  * NIF : neighbor information frames
  */
 struct smt_nif {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_una	una ;		/* UNA */
-	struct smt_p_sde	sde ;		/* station descriptor */
-	struct smt_p_state	state ;		/* station state */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_una	una ;		/* UNA */
+    struct smt_p_sde	sde ;		/* station descriptor */
+    struct smt_p_state	state ;		/* station state */
 #ifdef	SMT6_10
-	struct smt_p_fsc	fsc ;		/* frame status cap. */
+    struct smt_p_fsc	fsc ;		/* frame status cap. */
 #endif
 } ;
 
@@ -739,36 +739,36 @@ struct smt_nif {
  * SIF : station information frames
  */
 struct smt_sif_config {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_timestamp	ts ;		/* time stamp */
-	struct smt_p_sde	sde ;		/* station descriptor */
-	struct smt_p_version	version ;	/* supported versions */
-	struct smt_p_state	state ;		/* station state */
-	struct smt_p_policy	policy ;	/* station policy */
-	struct smt_p_latency	latency ;	/* path latency */
-	struct smt_p_neighbor	neighbor ;	/* neighbors, we have only one*/
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_timestamp	ts ;		/* time stamp */
+    struct smt_p_sde	sde ;		/* station descriptor */
+    struct smt_p_version	version ;	/* supported versions */
+    struct smt_p_state	state ;		/* station state */
+    struct smt_p_policy	policy ;	/* station policy */
+    struct smt_p_latency	latency ;	/* path latency */
+    struct smt_p_neighbor	neighbor ;	/* neighbors, we have only one*/
 #ifdef	OPT_PMF
-	struct smt_p_setcount	setcount ;	 /* Set Count mandatory */
+    struct smt_p_setcount	setcount ;	 /* Set Count mandatory */
 #endif
-	/* WARNING : path MUST BE LAST FIELD !!! (see smt.c:smt_fill_path) */
-	struct smt_p_path	path ;		/* path descriptor */
+    /* WARNING : path MUST BE LAST FIELD !!! (see smt.c:smt_fill_path) */
+    struct smt_p_path	path ;		/* path descriptor */
 } ;
 #define SIZEOF_SMT_SIF_CONFIG	(sizeof(struct smt_sif_config)- \
 				 sizeof(struct smt_p_path))
 
 struct smt_sif_operation {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_timestamp	ts ;		/* time stamp */
-	struct smt_p_mac_status	status ;	/* mac status */
-	struct smt_p_mac_counter mc ;		/* MAC counter */
-	struct smt_p_mac_fnc 	fnc ;		/* MAC frame not copied */
-	struct smp_p_manufacturer man ;		/* manufacturer field */
-	struct smp_p_user	user ;		/* user field */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_timestamp	ts ;		/* time stamp */
+    struct smt_p_mac_status	status ;	/* mac status */
+    struct smt_p_mac_counter mc ;		/* MAC counter */
+    struct smt_p_mac_fnc 	fnc ;		/* MAC frame not copied */
+    struct smp_p_manufacturer man ;		/* manufacturer field */
+    struct smp_p_user	user ;		/* user field */
 #ifdef	OPT_PMF
-	struct smt_p_setcount	setcount ;	 /* Set Count mandatory */
+    struct smt_p_setcount	setcount ;	 /* Set Count mandatory */
 #endif
-	/* must be last */
-	struct smt_p_lem	lem[1] ;	/* phy lem status */
+    /* must be last */
+    struct smt_p_lem	lem[1] ;	/* phy lem status */
 } ;
 #define SIZEOF_SMT_SIF_OPERATION	(sizeof(struct smt_sif_operation)- \
 					 sizeof(struct smt_p_lem))
@@ -777,8 +777,8 @@ struct smt_sif_operation {
  * ECF : echo frame
  */
 struct smt_ecf {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_echo	ec_echo ;	/* echo parameter */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_echo	ec_echo ;	/* echo parameter */
 } ;
 #define SMT_ECF_LEN	(sizeof(struct smt_header)+sizeof(struct smt_para))
 
@@ -786,78 +786,78 @@ struct smt_ecf {
  * RDF : request denied frame
  */
 struct smt_rdf {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_reason	reason ;	/* reason code */
-	struct smt_p_version	version ;	/* supported versions */
-	struct smt_p_refused	refused ;	/* refused frame fragment */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_reason	reason ;	/* reason code */
+    struct smt_p_version	version ;	/* supported versions */
+    struct smt_p_refused	refused ;	/* refused frame fragment */
 } ;
 
 /*
  * SBA Request Allocation Response Frame
  */
 struct smt_sba_alc_res {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_0015	s_type ;	/* resource type */
-	struct smt_p_0016	cmd ;		/* SBA command */
-	struct smt_p_reason	reason ;	/* reason code */
-	struct smt_p_320b	path ;		/* path type */
-	struct smt_p_320f	payload ;	/* current SBA payload */
-	struct smt_p_3210	overhead ;	/* current SBA overhead */
-	struct smt_p_0019	a_addr ;	/* Allocation Address */
-	struct smt_p_001a	cat ;		/* Category - from the request */
-	struct smt_p_001d	alloc ;		/* SBA Allocatable */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_0015	s_type ;	/* resource type */
+    struct smt_p_0016	cmd ;		/* SBA command */
+    struct smt_p_reason	reason ;	/* reason code */
+    struct smt_p_320b	path ;		/* path type */
+    struct smt_p_320f	payload ;	/* current SBA payload */
+    struct smt_p_3210	overhead ;	/* current SBA overhead */
+    struct smt_p_0019	a_addr ;	/* Allocation Address */
+    struct smt_p_001a	cat ;		/* Category - from the request */
+    struct smt_p_001d	alloc ;		/* SBA Allocatable */
 } ;
 
 /*
  * SBA Request Allocation Request Frame
  */
 struct smt_sba_alc_req {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_0015	s_type ;	/* resource type */
-	struct smt_p_0016	cmd ;		/* SBA command */
-	struct smt_p_320b	path ;		/* path type */
-	struct smt_p_0017	pl_req ;	/* requested payload */
-	struct smt_p_0018	ov_req ;	/* requested SBA overhead */
-	struct smt_p_320f	payload ;	/* current SBA payload */
-	struct smt_p_3210	overhead ;	/* current SBA overhead */
-	struct smt_p_0019	a_addr ;	/* Allocation Address */
-	struct smt_p_001a	cat ;		/* Category - from the request */
-	struct smt_p_001b	tneg ;		/* max T-NEG */
-	struct smt_p_001c	segm ;		/* minimum segment size */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_0015	s_type ;	/* resource type */
+    struct smt_p_0016	cmd ;		/* SBA command */
+    struct smt_p_320b	path ;		/* path type */
+    struct smt_p_0017	pl_req ;	/* requested payload */
+    struct smt_p_0018	ov_req ;	/* requested SBA overhead */
+    struct smt_p_320f	payload ;	/* current SBA payload */
+    struct smt_p_3210	overhead ;	/* current SBA overhead */
+    struct smt_p_0019	a_addr ;	/* Allocation Address */
+    struct smt_p_001a	cat ;		/* Category - from the request */
+    struct smt_p_001b	tneg ;		/* max T-NEG */
+    struct smt_p_001c	segm ;		/* minimum segment size */
 } ;
 
 /*
  * SBA Change Allocation Request Frame
  */
 struct smt_sba_chg {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_0015	s_type ;	/* resource type */
-	struct smt_p_0016	cmd ;		/* SBA command */
-	struct smt_p_320b	path ;		/* path type */
-	struct smt_p_320f	payload ;	/* current SBA payload */
-	struct smt_p_3210	overhead ;	/* current SBA overhead */
-	struct smt_p_001a	cat ;		/* Category - from the request */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_0015	s_type ;	/* resource type */
+    struct smt_p_0016	cmd ;		/* SBA command */
+    struct smt_p_320b	path ;		/* path type */
+    struct smt_p_320f	payload ;	/* current SBA payload */
+    struct smt_p_3210	overhead ;	/* current SBA overhead */
+    struct smt_p_001a	cat ;		/* Category - from the request */
 } ;
 
 /*
  * SBA Report Allocation Request Frame
  */
 struct smt_sba_rep_req {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_0015	s_type ;	/* resource type */
-	struct smt_p_0016	cmd ;		/* SBA command */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_0015	s_type ;	/* resource type */
+    struct smt_p_0016	cmd ;		/* SBA command */
 } ;
 
 /*
  * SBA Report Allocation Response Frame
  */
 struct smt_sba_rep_res {
-	struct smt_header	smt ;		/* generic header */
-	struct smt_p_0015	s_type ;	/* resource type */
-	struct smt_p_0016	cmd ;		/* SBA command */
-	struct smt_p_320b	path ;		/* path type */
-	struct smt_p_320f	payload ;	/* current SBA payload */
-	struct smt_p_3210	overhead ;	/* current SBA overhead */
+    struct smt_header	smt ;		/* generic header */
+    struct smt_p_0015	s_type ;	/* resource type */
+    struct smt_p_0016	cmd ;		/* SBA command */
+    struct smt_p_320b	path ;		/* path type */
+    struct smt_p_320f	payload ;	/* current SBA payload */
+    struct smt_p_3210	overhead ;	/* current SBA overhead */
 } ;
 
 /*

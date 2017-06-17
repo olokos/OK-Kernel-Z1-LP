@@ -30,7 +30,7 @@
 /*
 ** We don't have DMA channels... well V-class does but the
 ** Dynamic DMA Mapping interface will support them... right? :^)
-** Note: this is not relevant right now for PA-RISC, but we cannot 
+** Note: this is not relevant right now for PA-RISC, but we cannot
 ** leave this as undefined because some things (e.g. sound)
 ** won't compile :-(
 */
@@ -70,13 +70,11 @@
 #define DMA2_MASK_ALL_REG       0xDE    /* all-channels mask (w) */
 #define DMA2_EXT_MODE_REG	(0x400 | DMA2_MODE_REG)
 
-static __inline__ unsigned long claim_dma_lock(void)
-{
-	return 0;
+static __inline__ unsigned long claim_dma_lock(void) {
+    return 0;
 }
 
-static __inline__ void release_dma_lock(unsigned long flags)
-{
+static __inline__ void release_dma_lock(unsigned long flags) {
 }
 
 
@@ -88,38 +86,35 @@ static __inline__ void release_dma_lock(unsigned long flags)
  *
  * Assumes DMA flip-flop is clear.
  */
-static __inline__ int get_dma_residue(unsigned int dmanr)
-{
-	unsigned int io_port = (dmanr<=3)? ((dmanr&3)<<1) + 1 + IO_DMA1_BASE
-					 : ((dmanr&3)<<2) + 2 + IO_DMA2_BASE;
+static __inline__ int get_dma_residue(unsigned int dmanr) {
+    unsigned int io_port = (dmanr<=3)? ((dmanr&3)<<1) + 1 + IO_DMA1_BASE
+                           : ((dmanr&3)<<2) + 2 + IO_DMA2_BASE;
 
-	/* using short to get 16-bit wrap around */
-	unsigned short count;
+    /* using short to get 16-bit wrap around */
+    unsigned short count;
 
-	count = 1 + dma_inb(io_port);
-	count += dma_inb(io_port) << 8;
-	
-	return (dmanr<=3)? count : (count<<1);
+    count = 1 + dma_inb(io_port);
+    count += dma_inb(io_port) << 8;
+
+    return (dmanr<=3)? count : (count<<1);
 }
 
 /* enable/disable a specific DMA channel */
-static __inline__ void enable_dma(unsigned int dmanr)
-{
+static __inline__ void enable_dma(unsigned int dmanr) {
 #ifdef CONFIG_SUPERIO
-	if (dmanr<=3)
-		dma_outb(dmanr,  DMA1_MASK_REG);
-	else
-		dma_outb(dmanr & 3,  DMA2_MASK_REG);
+    if (dmanr<=3)
+        dma_outb(dmanr,  DMA1_MASK_REG);
+    else
+        dma_outb(dmanr & 3,  DMA2_MASK_REG);
 #endif
 }
 
-static __inline__ void disable_dma(unsigned int dmanr)
-{
+static __inline__ void disable_dma(unsigned int dmanr) {
 #ifdef CONFIG_SUPERIO
-	if (dmanr<=3)
-		dma_outb(dmanr | 4,  DMA1_MASK_REG);
-	else
-		dma_outb((dmanr & 3) | 4,  DMA2_MASK_REG);
+    if (dmanr<=3)
+        dma_outb(dmanr | 4,  DMA1_MASK_REG);
+    else
+        dma_outb((dmanr & 3) | 4,  DMA2_MASK_REG);
 #endif
 }
 
@@ -133,13 +128,11 @@ static __inline__ void disable_dma(unsigned int dmanr)
  * --- In order to do that, the DMA routines below should ---
  * --- only be used while holding the DMA lock ! ---
  */
-static __inline__ void clear_dma_ff(unsigned int dmanr)
-{
+static __inline__ void clear_dma_ff(unsigned int dmanr) {
 }
 
 /* set mode (above) for a specific DMA channel */
-static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
-{
+static __inline__ void set_dma_mode(unsigned int dmanr, char mode) {
 }
 
 /* Set only the page register bits of the transfer address.
@@ -147,16 +140,14 @@ static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
  * the lower 16 bits of the DMA current address register, but a 64k boundary
  * may have been crossed.
  */
-static __inline__ void set_dma_page(unsigned int dmanr, char pagenr)
-{
+static __inline__ void set_dma_page(unsigned int dmanr, char pagenr) {
 }
 
 
 /* Set transfer address & page bits for specific DMA channel.
  * Assumes dma flipflop is clear.
  */
-static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
-{
+static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a) {
 }
 
 
@@ -168,8 +159,7 @@ static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
  * Assumes dma flip-flop is clear.
  * NOTE 2: "count" represents _bytes_ and must be even for channels 5-7.
  */
-static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
-{
+static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count) {
 }
 
 

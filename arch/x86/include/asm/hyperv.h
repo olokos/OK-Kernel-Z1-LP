@@ -48,11 +48,11 @@
 #define HV_X64_MSR_VP_INDEX_AVAILABLE		(1 << 6)
 /* Virtual system reset MSR (HV_X64_MSR_RESET) is available*/
 #define HV_X64_MSR_RESET_AVAILABLE		(1 << 7)
- /*
-  * Access statistics pages MSRs (HV_X64_MSR_STATS_PARTITION_RETAIL_PAGE,
-  * HV_X64_MSR_STATS_PARTITION_INTERNAL_PAGE, HV_X64_MSR_STATS_VP_RETAIL_PAGE,
-  * HV_X64_MSR_STATS_VP_INTERNAL_PAGE) available
-  */
+/*
+ * Access statistics pages MSRs (HV_X64_MSR_STATS_PARTITION_RETAIL_PAGE,
+ * HV_X64_MSR_STATS_PARTITION_INTERNAL_PAGE, HV_X64_MSR_STATS_VP_RETAIL_PAGE,
+ * HV_X64_MSR_STATS_VP_INTERNAL_PAGE) available
+ */
 #define HV_X64_MSR_STAT_PAGES_AVAILABLE		(1 << 8)
 
 /*
@@ -97,10 +97,10 @@
  * Implementation recommendations. Indicates which behaviors the hypervisor
  * recommends the OS implement for optimal performance.
  */
- /*
-  * Recommend using hypercall for address space switches rather
-  * than MOV to CR3 instruction
-  */
+/*
+ * Recommend using hypercall for address space switches rather
+ * than MOV to CR3 instruction
+ */
 #define HV_X64_MWAIT_RECOMMENDED		(1 << 0)
 /* Recommend using hypercall for local TLB flushes rather
  * than INVLPG or MOV to CR3 instructions */

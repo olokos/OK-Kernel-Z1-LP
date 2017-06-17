@@ -65,52 +65,52 @@ static int debug;
 #define RX_BUF_LEN 32
 
 struct nvt_dev {
-	struct pnp_dev *pdev;
-	struct rc_dev *rdev;
+    struct pnp_dev *pdev;
+    struct rc_dev *rdev;
 
-	spinlock_t nvt_lock;
+    spinlock_t nvt_lock;
 
-	/* for rx */
-	u8 buf[RX_BUF_LEN];
-	unsigned int pkts;
+    /* for rx */
+    u8 buf[RX_BUF_LEN];
+    unsigned int pkts;
 
-	struct {
-		spinlock_t lock;
-		u8 buf[TX_BUF_LEN];
-		unsigned int buf_count;
-		unsigned int cur_buf_num;
-		wait_queue_head_t queue;
-		u8 tx_state;
-	} tx;
+    struct {
+        spinlock_t lock;
+        u8 buf[TX_BUF_LEN];
+        unsigned int buf_count;
+        unsigned int cur_buf_num;
+        wait_queue_head_t queue;
+        u8 tx_state;
+    } tx;
 
-	/* EFER Config register index/data pair */
-	u8 cr_efir;
-	u8 cr_efdr;
+    /* EFER Config register index/data pair */
+    u8 cr_efir;
+    u8 cr_efdr;
 
-	/* hardware I/O settings */
-	unsigned long cir_addr;
-	unsigned long cir_wake_addr;
-	int cir_irq;
-	int cir_wake_irq;
+    /* hardware I/O settings */
+    unsigned long cir_addr;
+    unsigned long cir_wake_addr;
+    int cir_irq;
+    int cir_wake_irq;
 
-	/* hardware id */
-	u8 chip_major;
-	u8 chip_minor;
+    /* hardware id */
+    u8 chip_major;
+    u8 chip_minor;
 
-	/* hardware features */
-	bool hw_learning_capable;
-	bool hw_tx_capable;
+    /* hardware features */
+    bool hw_learning_capable;
+    bool hw_tx_capable;
 
-	/* rx settings */
-	bool learning_enabled;
-	bool carrier_detect_enabled;
+    /* rx settings */
+    bool learning_enabled;
+    bool carrier_detect_enabled;
 
-	/* track cir wake state */
-	u8 wake_state;
-	/* for study */
-	u8 study_state;
-	/* carrier period = 1 / frequency */
-	u32 carrier;
+    /* track cir wake state */
+    u8 wake_state;
+    /* for study */
+    u8 study_state;
+    /* carrier period = 1 / frequency */
+    u32 carrier;
 };
 
 /* study states */

@@ -77,8 +77,7 @@
  * -------------------------------------------------------------------------*/
 /*! @brief AC/Queue Index values for Linux Qdisc to operate on different traffic.
 */
-typedef enum
-{
+typedef enum {
     HDD_LINUX_AC_VO = 0,
     HDD_LINUX_AC_VI = 1,
     HDD_LINUX_AC_BE = 2,
@@ -88,8 +87,7 @@ typedef enum
 
 /*! @brief types of classification supported
 */
-typedef enum
-{
+typedef enum {
     HDD_WMM_CLASSIFICATION_DSCP = 0,
     HDD_WMM_CLASSIFICATION_802_1Q = 1
 
@@ -97,16 +95,14 @@ typedef enum
 
 /*! @brief UAPSD state
 */
-typedef enum
-{
+typedef enum {
     HDD_WMM_NON_UAPSD = 0,
     HDD_WMM_UAPSD = 1
 
 } hdd_wmm_uapsd_state_t;
 
 
-typedef enum
-{
+typedef enum {
     //STA can associate with any AP, & HDD looks at the SME notification after
     // association to find out if associated with QAP and acts accordingly
     HDD_WMM_USER_MODE_AUTO = 0,
@@ -128,8 +124,7 @@ typedef enum
 
 /*! @brief WMM Qos instance control block
 */
-typedef struct
-{
+typedef struct {
     struct list_head             node;
     v_U32_t                      handle;
     v_U32_t                      qosFlowId;
@@ -142,8 +137,7 @@ typedef struct
 
 /*! @brief WMM related per-AC state & status info
 */
-typedef struct
-{
+typedef struct {
     // does the AP require access to this AC?
     v_BOOL_t                     wmmAcAccessRequired;
 
@@ -190,8 +184,7 @@ typedef struct
 
 /*! @brief WMM state & status info
 */
-typedef struct
-{
+typedef struct {
     struct list_head             wmmContextList;
     struct mutex                 wmmLock;
     hdd_wmm_ac_status_t          wmmAcStatus[WLANTL_MAX_AC];

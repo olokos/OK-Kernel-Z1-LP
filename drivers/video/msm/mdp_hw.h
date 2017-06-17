@@ -21,52 +21,52 @@
 #include <mach/msm_fb.h>
 
 typedef void (*mdp_dma_start_func_t)(void *private_data, uint32_t addr,
-				     uint32_t stride, uint32_t width,
-				     uint32_t height, uint32_t x, uint32_t y);
+                                     uint32_t stride, uint32_t width,
+                                     uint32_t height, uint32_t x, uint32_t y);
 
 struct mdp_out_interface {
-	uint32_t		registered:1;
-	void			*priv;
+    uint32_t		registered:1;
+    void			*priv;
 
-	/* If the interface client wants to get DMA_DONE events */
-	uint32_t		dma_mask;
-	mdp_dma_start_func_t	dma_start;
+    /* If the interface client wants to get DMA_DONE events */
+    uint32_t		dma_mask;
+    mdp_dma_start_func_t	dma_start;
 
-	struct msmfb_callback	*dma_cb;
-	wait_queue_head_t	dma_waitqueue;
+    struct msmfb_callback	*dma_cb;
+    wait_queue_head_t	dma_waitqueue;
 
-	/* If the interface client wants to be notified of non-DMA irqs,
-	 * e.g. LCDC/TV-out frame start */
-	uint32_t		irq_mask;
-	struct msmfb_callback	*irq_cb;
+    /* If the interface client wants to be notified of non-DMA irqs,
+     * e.g. LCDC/TV-out frame start */
+    uint32_t		irq_mask;
+    struct msmfb_callback	*irq_cb;
 };
 
 struct mdp_info {
-	spinlock_t lock;
-	struct mdp_device mdp_dev;
-	char * __iomem base;
-	int irq;
-	struct clk *clk;
-	struct clk *ebi1_clk;
-	struct mdp_out_interface out_if[MSM_MDP_NUM_INTERFACES];
-	int format;
-	int pack_pattern;
-	bool dma_config_dirty;
+    spinlock_t lock;
+    struct mdp_device mdp_dev;
+    char * __iomem base;
+    int irq;
+    struct clk *clk;
+    struct clk *ebi1_clk;
+    struct mdp_out_interface out_if[MSM_MDP_NUM_INTERFACES];
+    int format;
+    int pack_pattern;
+    bool dma_config_dirty;
 };
 
 extern int mdp_out_if_register(struct mdp_device *mdp_dev, int interface,
-			       void *private_data, uint32_t dma_mask,
-			       mdp_dma_start_func_t dma_start);
+                               void *private_data, uint32_t dma_mask,
+                               mdp_dma_start_func_t dma_start);
 
 extern int mdp_out_if_req_irq(struct mdp_device *mdp_dev, int interface,
-			      uint32_t mask, struct msmfb_callback *cb);
+                              uint32_t mask, struct msmfb_callback *cb);
 
 struct mdp_blit_req;
 struct mdp_device;
 int mdp_ppp_blit(const struct mdp_info *mdp, struct mdp_blit_req *req,
-		 struct file *src_file, unsigned long src_start,
-		 unsigned long src_len, struct file *dst_file,
-		 unsigned long dst_start, unsigned long dst_len);
+                 struct file *src_file, unsigned long src_start,
+                 unsigned long src_len, struct file *dst_file,
+                 unsigned long dst_start, unsigned long dst_len);
 
 void mdp_ppp_dump_debug(const struct mdp_info *mdp);
 

@@ -21,8 +21,8 @@
  */
 extern asmlinkage
 struct task_struct *__switch_to(struct thread_struct *prev_thread,
-				struct thread_struct *next_thread,
-				struct task_struct *prev);
+                                struct thread_struct *next_thread,
+                                struct task_struct *prev);
 
 #define switch_to(prev, next, last)					\
 do {									\

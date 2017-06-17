@@ -163,38 +163,38 @@
  * result in a short logout frame, uncorrectable ones in a long one.
  */
 struct el_lca_mcheck_short {
-	struct el_common	h;		/* common logout header */
-	unsigned long		esr;		/* error-status register */
-	unsigned long		ear;		/* error-address register */
-	unsigned long		dc_stat;	/* dcache status register */
-	unsigned long		ioc_stat0;	/* I/O controller status register 0 */
-	unsigned long		ioc_stat1;	/* I/O controller status register 1 */
+    struct el_common	h;		/* common logout header */
+    unsigned long		esr;		/* error-status register */
+    unsigned long		ear;		/* error-address register */
+    unsigned long		dc_stat;	/* dcache status register */
+    unsigned long		ioc_stat0;	/* I/O controller status register 0 */
+    unsigned long		ioc_stat1;	/* I/O controller status register 1 */
 };
 
 struct el_lca_mcheck_long {
-	struct el_common	h;		/* common logout header */
-	unsigned long		pt[31];		/* PAL temps */
-	unsigned long		exc_addr;	/* exception address */
-	unsigned long		pad1[3];
-	unsigned long		pal_base;	/* PALcode base address */
-	unsigned long		hier;		/* hw interrupt enable */
-	unsigned long		hirr;		/* hw interrupt request */
-	unsigned long		mm_csr;		/* MMU control & status */
-	unsigned long		dc_stat;	/* data cache status */
-	unsigned long		dc_addr;	/* data cache addr register */
-	unsigned long		abox_ctl;	/* address box control register */
-	unsigned long		esr;		/* error status register */
-	unsigned long		ear;		/* error address register */
-	unsigned long		car;		/* cache control register */
-	unsigned long		ioc_stat0;	/* I/O controller status register 0 */
-	unsigned long		ioc_stat1;	/* I/O controller status register 1 */
-	unsigned long		va;		/* virtual address register */
+    struct el_common	h;		/* common logout header */
+    unsigned long		pt[31];		/* PAL temps */
+    unsigned long		exc_addr;	/* exception address */
+    unsigned long		pad1[3];
+    unsigned long		pal_base;	/* PALcode base address */
+    unsigned long		hier;		/* hw interrupt enable */
+    unsigned long		hirr;		/* hw interrupt request */
+    unsigned long		mm_csr;		/* MMU control & status */
+    unsigned long		dc_stat;	/* data cache status */
+    unsigned long		dc_addr;	/* data cache addr register */
+    unsigned long		abox_ctl;	/* address box control register */
+    unsigned long		esr;		/* error status register */
+    unsigned long		ear;		/* error address register */
+    unsigned long		car;		/* cache control register */
+    unsigned long		ioc_stat0;	/* I/O controller status register 0 */
+    unsigned long		ioc_stat1;	/* I/O controller status register 1 */
+    unsigned long		va;		/* virtual address register */
 };
 
 union el_lca {
-	struct el_common *		c;
-	struct el_lca_mcheck_long *	l;
-	struct el_lca_mcheck_short *	s;
+    struct el_common *		c;
+    struct el_lca_mcheck_long *	l;
+    struct el_lca_mcheck_short *	s;
 };
 
 #ifdef __KERNEL__
@@ -229,113 +229,103 @@ union el_lca {
 	} while (0)
 
 
-__EXTERN_INLINE unsigned int lca_ioread8(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long result, base_and_type;
+__EXTERN_INLINE unsigned int lca_ioread8(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long result, base_and_type;
 
-	if (addr >= LCA_DENSE_MEM) {
-		addr -= LCA_DENSE_MEM;
-		LCA_SET_HAE;
-		base_and_type = LCA_SPARSE_MEM + 0x00;
-	} else {
-		addr -= LCA_IO;
-		base_and_type = LCA_IO + 0x00;
-	}
+    if (addr >= LCA_DENSE_MEM) {
+        addr -= LCA_DENSE_MEM;
+        LCA_SET_HAE;
+        base_and_type = LCA_SPARSE_MEM + 0x00;
+    } else {
+        addr -= LCA_IO;
+        base_and_type = LCA_IO + 0x00;
+    }
 
-	result = *(vip) ((addr << 5) + base_and_type);
-	return __kernel_extbl(result, addr & 3);
+    result = *(vip) ((addr << 5) + base_and_type);
+    return __kernel_extbl(result, addr & 3);
 }
 
-__EXTERN_INLINE void lca_iowrite8(u8 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long w, base_and_type;
+__EXTERN_INLINE void lca_iowrite8(u8 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long w, base_and_type;
 
-	if (addr >= LCA_DENSE_MEM) {
-		addr -= LCA_DENSE_MEM;
-		LCA_SET_HAE;
-		base_and_type = LCA_SPARSE_MEM + 0x00;
-	} else {
-		addr -= LCA_IO;
-		base_and_type = LCA_IO + 0x00;
-	}
+    if (addr >= LCA_DENSE_MEM) {
+        addr -= LCA_DENSE_MEM;
+        LCA_SET_HAE;
+        base_and_type = LCA_SPARSE_MEM + 0x00;
+    } else {
+        addr -= LCA_IO;
+        base_and_type = LCA_IO + 0x00;
+    }
 
-	w = __kernel_insbl(b, addr & 3);
-	*(vuip) ((addr << 5) + base_and_type) = w;
+    w = __kernel_insbl(b, addr & 3);
+    *(vuip) ((addr << 5) + base_and_type) = w;
 }
 
-__EXTERN_INLINE unsigned int lca_ioread16(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long result, base_and_type;
+__EXTERN_INLINE unsigned int lca_ioread16(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long result, base_and_type;
 
-	if (addr >= LCA_DENSE_MEM) {
-		addr -= LCA_DENSE_MEM;
-		LCA_SET_HAE;
-		base_and_type = LCA_SPARSE_MEM + 0x08;
-	} else {
-		addr -= LCA_IO;
-		base_and_type = LCA_IO + 0x08;
-	}
+    if (addr >= LCA_DENSE_MEM) {
+        addr -= LCA_DENSE_MEM;
+        LCA_SET_HAE;
+        base_and_type = LCA_SPARSE_MEM + 0x08;
+    } else {
+        addr -= LCA_IO;
+        base_and_type = LCA_IO + 0x08;
+    }
 
-	result = *(vip) ((addr << 5) + base_and_type);
-	return __kernel_extwl(result, addr & 3);
+    result = *(vip) ((addr << 5) + base_and_type);
+    return __kernel_extwl(result, addr & 3);
 }
 
-__EXTERN_INLINE void lca_iowrite16(u16 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	unsigned long w, base_and_type;
+__EXTERN_INLINE void lca_iowrite16(u16 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    unsigned long w, base_and_type;
 
-	if (addr >= LCA_DENSE_MEM) {
-		addr -= LCA_DENSE_MEM;
-		LCA_SET_HAE;
-		base_and_type = LCA_SPARSE_MEM + 0x08;
-	} else {
-		addr -= LCA_IO;
-		base_and_type = LCA_IO + 0x08;
-	}
+    if (addr >= LCA_DENSE_MEM) {
+        addr -= LCA_DENSE_MEM;
+        LCA_SET_HAE;
+        base_and_type = LCA_SPARSE_MEM + 0x08;
+    } else {
+        addr -= LCA_IO;
+        base_and_type = LCA_IO + 0x08;
+    }
 
-	w = __kernel_inswl(b, addr & 3);
-	*(vuip) ((addr << 5) + base_and_type) = w;
+    w = __kernel_inswl(b, addr & 3);
+    *(vuip) ((addr << 5) + base_and_type) = w;
 }
 
-__EXTERN_INLINE unsigned int lca_ioread32(void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	if (addr < LCA_DENSE_MEM)
-		addr = ((addr - LCA_IO) << 5) + LCA_IO + 0x18;
-	return *(vuip)addr;
+__EXTERN_INLINE unsigned int lca_ioread32(void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    if (addr < LCA_DENSE_MEM)
+        addr = ((addr - LCA_IO) << 5) + LCA_IO + 0x18;
+    return *(vuip)addr;
 }
 
-__EXTERN_INLINE void lca_iowrite32(u32 b, void __iomem *xaddr)
-{
-	unsigned long addr = (unsigned long) xaddr;
-	if (addr < LCA_DENSE_MEM)
-		addr = ((addr - LCA_IO) << 5) + LCA_IO + 0x18;
-	*(vuip)addr = b;
+__EXTERN_INLINE void lca_iowrite32(u32 b, void __iomem *xaddr) {
+    unsigned long addr = (unsigned long) xaddr;
+    if (addr < LCA_DENSE_MEM)
+        addr = ((addr - LCA_IO) << 5) + LCA_IO + 0x18;
+    *(vuip)addr = b;
 }
 
-__EXTERN_INLINE void __iomem *lca_ioportmap(unsigned long addr)
-{
-	return (void __iomem *)(addr + LCA_IO);
+__EXTERN_INLINE void __iomem *lca_ioportmap(unsigned long addr) {
+    return (void __iomem *)(addr + LCA_IO);
 }
 
 __EXTERN_INLINE void __iomem *lca_ioremap(unsigned long addr,
-					  unsigned long size)
-{
-	return (void __iomem *)(addr + LCA_DENSE_MEM);
+        unsigned long size) {
+    return (void __iomem *)(addr + LCA_DENSE_MEM);
 }
 
-__EXTERN_INLINE int lca_is_ioaddr(unsigned long addr)
-{
-	return addr >= IDENT_ADDR + 0x120000000UL;
+__EXTERN_INLINE int lca_is_ioaddr(unsigned long addr) {
+    return addr >= IDENT_ADDR + 0x120000000UL;
 }
 
-__EXTERN_INLINE int lca_is_mmio(const volatile void __iomem *addr)
-{
-	return (unsigned long)addr >= LCA_DENSE_MEM;
+__EXTERN_INLINE int lca_is_mmio(const volatile void __iomem *addr) {
+    return (unsigned long)addr >= LCA_DENSE_MEM;
 }
 
 #undef vip

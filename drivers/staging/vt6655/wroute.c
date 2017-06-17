@@ -65,8 +65,7 @@ static int          msglevel                =MSG_LEVEL_INFO;
  * Return Value: true if packet duplicate; otherwise false
  *
  */
-bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDataLen, unsigned int uNodeIndex)
-{
+bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDataLen, unsigned int uNodeIndex) {
     PSMgmtObject    pMgmt = pDevice->pMgmt;
     PSTxDesc        pHeadTD, pLastTD;
     unsigned int cbFrameBodySize;
@@ -113,7 +112,7 @@ bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDat
     }
 
     if (pDevice->bEnableHostWEP) {
-	if (uNodeIndex < MAX_NODE_NUM + 1) {
+        if (uNodeIndex < MAX_NODE_NUM + 1) {
             pTransmitKey = &STempKey;
             pTransmitKey->byCipherSuite = pMgmt->sNodeDBTable[uNodeIndex].byCipherSuite;
             pTransmitKey->dwKeyIndex = pMgmt->sNodeDBTable[uNodeIndex].dwKeyIndex;
@@ -121,9 +120,9 @@ bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDat
             pTransmitKey->dwTSC47_16 = pMgmt->sNodeDBTable[uNodeIndex].dwTSC47_16;
             pTransmitKey->wTSC15_0 = pMgmt->sNodeDBTable[uNodeIndex].wTSC15_0;
             memcpy(pTransmitKey->abyKey,
-                &pMgmt->sNodeDBTable[uNodeIndex].abyWepKey[0],
-                pTransmitKey->uKeyLength
-                );
+                   &pMgmt->sNodeDBTable[uNodeIndex].abyWepKey[0],
+                   pTransmitKey->uKeyLength
+                  );
         }
     }
 
@@ -143,7 +142,7 @@ bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDat
             }
         } else {
             if ((pDevice->eCurrentPHYType == PHY_TYPE_11A) &&
-                (pDevice->uConnectionRate <= RATE_6M)) {
+                    (pDevice->uConnectionRate <= RATE_6M)) {
                 pDevice->wCurrentRate = RATE_6M;
             } else {
                 if (pDevice->uConnectionRate >= RATE_54M)
@@ -152,8 +151,7 @@ bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDat
                     pDevice->wCurrentRate = (unsigned short)pDevice->uConnectionRate;
             }
         }
-    }
-    else {
+    } else {
         pDevice->wCurrentRate = pDevice->pMgmt->sNodeDBTable[uNodeIndex].wTxDataRate;
     }
 
@@ -165,7 +163,7 @@ bool ROUTEbRelay (PSDevice pDevice, unsigned char *pbySkbData, unsigned int uDat
                         &pDevice->sTxEthHeader, pbySkbData, pTransmitKey, uNodeIndex,
                         &uMACfragNum,
                         &cbHeaderSize
-                        );
+                       );
 
     if (MACbIsRegBitsOn(pDevice->PortOffset, MAC_REG_PSCTL, PSCTL_PS)) {
         // Disable PS

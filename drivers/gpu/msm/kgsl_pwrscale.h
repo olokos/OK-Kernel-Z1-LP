@@ -21,26 +21,26 @@
 #define KGSL_GOVERNOR_CALL_INTERVAL 5
 
 struct kgsl_power_stats {
-	u64 busy_time;
-	u64 ram_time;
-	u64 ram_wait;
+    u64 busy_time;
+    u64 ram_time;
+    u64 ram_wait;
 };
 
 struct kgsl_pwrscale {
-	struct devfreq *devfreq;
-	struct devfreq_dev_profile profile;
-	unsigned int freq_table[KGSL_MAX_PWRLEVELS];
-	char last_governor[DEVFREQ_NAME_LEN];
-	struct kgsl_power_stats accum_stats;
-	bool enabled;
-	s64 time;
-	s64 on_time;
-	struct srcu_notifier_head nh;
-	struct workqueue_struct *devfreq_wq;
-	struct work_struct devfreq_suspend_ws;
-	struct work_struct devfreq_resume_ws;
-	struct work_struct devfreq_notify_ws;
-	unsigned long next_governor_call;
+    struct devfreq *devfreq;
+    struct devfreq_dev_profile profile;
+    unsigned int freq_table[KGSL_MAX_PWRLEVELS];
+    char last_governor[DEVFREQ_NAME_LEN];
+    struct kgsl_power_stats accum_stats;
+    bool enabled;
+    s64 time;
+    s64 on_time;
+    struct srcu_notifier_head nh;
+    struct workqueue_struct *devfreq_wq;
+    struct work_struct devfreq_suspend_ws;
+    struct work_struct devfreq_resume_ws;
+    struct work_struct devfreq_notify_ws;
+    unsigned long next_governor_call;
 };
 
 int kgsl_pwrscale_init(struct device *dev, const char *governor);

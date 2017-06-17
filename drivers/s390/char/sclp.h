@@ -71,9 +71,9 @@ typedef unsigned int sclp_cmdw_t;
 #define GDS_KEY_SELFDEFTEXTMSG	0x31
 
 enum sclp_pm_event {
-	SCLP_PM_EVENT_FREEZE,
-	SCLP_PM_EVENT_THAW,
-	SCLP_PM_EVENT_RESTORE,
+    SCLP_PM_EVENT_FREEZE,
+    SCLP_PM_EVENT_THAW,
+    SCLP_PM_EVENT_RESTORE,
 };
 
 #define SCLP_PANIC_PRIO		1
@@ -82,10 +82,10 @@ enum sclp_pm_event {
 typedef u32 sccb_mask_t;	/* ATTENTION: assumes 32bit mask !!! */
 
 struct sccb_header {
-	u16	length;
-	u8	function_code;
-	u8	control_mask[3];
-	u16	response_code;
+    u16	length;
+    u8	function_code;
+    u8	control_mask[3];
+    u16	response_code;
 } __attribute__((packed));
 
 extern u64 sclp_facilities;
@@ -96,31 +96,31 @@ extern u64 sclp_facilities;
 
 
 struct gds_subvector {
-	u8	length;
-	u8	key;
+    u8	length;
+    u8	key;
 } __attribute__((packed));
 
 struct gds_vector {
-	u16	length;
-	u16	gds_id;
+    u16	length;
+    u16	gds_id;
 } __attribute__((packed));
 
 struct evbuf_header {
-	u16	length;
-	u8	type;
-	u8	flags;
-	u16	_reserved;
+    u16	length;
+    u8	type;
+    u8	flags;
+    u16	_reserved;
 } __attribute__((packed));
 
 struct sclp_req {
-	struct list_head list;		/* list_head for request queueing. */
-	sclp_cmdw_t command;		/* sclp command to execute */
-	void	*sccb;			/* pointer to the sccb to execute */
-	char	status;			/* status of this request */
-	int     start_count;		/* number of SVCs done for this req */
-	/* Callback that is called after reaching final status. */
-	void (*callback)(struct sclp_req *, void *data);
-	void *callback_data;
+    struct list_head list;		/* list_head for request queueing. */
+    sclp_cmdw_t command;		/* sclp command to execute */
+    void	*sccb;			/* pointer to the sccb to execute */
+    char	status;			/* status of this request */
+    int     start_count;		/* number of SVCs done for this req */
+    /* Callback that is called after reaching final status. */
+    void (*callback)(struct sclp_req *, void *data);
+    void *callback_data;
 };
 
 #define SCLP_REQ_FILLED	  0x00	/* request is ready to be processed */
@@ -132,23 +132,23 @@ struct sclp_req {
 /* function pointers that a high level driver has to use for registration */
 /* of some routines it wants to be called from the low level driver */
 struct sclp_register {
-	struct list_head list;
-	/* User wants to receive: */
-	sccb_mask_t receive_mask;
-	/* User wants to send: */
-	sccb_mask_t send_mask;
-	/* H/W can receive: */
-	sccb_mask_t sclp_receive_mask;
-	/* H/W can send: */
-	sccb_mask_t sclp_send_mask;
-	/* called if event type availability changes */
-	void (*state_change_fn)(struct sclp_register *);
-	/* called for events in cp_receive_mask/sclp_receive_mask */
-	void (*receiver_fn)(struct evbuf_header *);
-	/* called for power management events */
-	void (*pm_event_fn)(struct sclp_register *, enum sclp_pm_event);
-	/* pm event posted flag */
-	int pm_event_posted;
+    struct list_head list;
+    /* User wants to receive: */
+    sccb_mask_t receive_mask;
+    /* User wants to send: */
+    sccb_mask_t send_mask;
+    /* H/W can receive: */
+    sccb_mask_t sclp_receive_mask;
+    /* H/W can send: */
+    sccb_mask_t sclp_send_mask;
+    /* called if event type availability changes */
+    void (*state_change_fn)(struct sclp_register *);
+    /* called for events in cp_receive_mask/sclp_receive_mask */
+    void (*receiver_fn)(struct evbuf_header *);
+    /* called for power management events */
+    void (*pm_event_fn)(struct sclp_register *, enum sclp_pm_event);
+    /* pm event posted flag */
+    int pm_event_posted;
 };
 
 /* externals from sclp.c */
@@ -169,45 +169,40 @@ void sclp_sdias_exit(void);
 /* VM uses EBCDIC 037, LPAR+native(SE+HMC) use EBCDIC 500 */
 /* translate single character from ASCII to EBCDIC */
 static inline unsigned char
-sclp_ascebc(unsigned char ch)
-{
-	return (MACHINE_IS_VM) ? _ascebc[ch] : _ascebc_500[ch];
+sclp_ascebc(unsigned char ch) {
+    return (MACHINE_IS_VM) ? _ascebc[ch] : _ascebc_500[ch];
 }
 
 /* translate string from EBCDIC to ASCII */
 static inline void
-sclp_ebcasc_str(unsigned char *str, int nr)
-{
-	(MACHINE_IS_VM) ? EBCASC(str, nr) : EBCASC_500(str, nr);
+sclp_ebcasc_str(unsigned char *str, int nr) {
+    (MACHINE_IS_VM) ? EBCASC(str, nr) : EBCASC_500(str, nr);
 }
 
 /* translate string from ASCII to EBCDIC */
 static inline void
-sclp_ascebc_str(unsigned char *str, int nr)
-{
-	(MACHINE_IS_VM) ? ASCEBC(str, nr) : ASCEBC_500(str, nr);
+sclp_ascebc_str(unsigned char *str, int nr) {
+    (MACHINE_IS_VM) ? ASCEBC(str, nr) : ASCEBC_500(str, nr);
 }
 
 static inline struct gds_vector *
-sclp_find_gds_vector(void *start, void *end, u16 id)
-{
-	struct gds_vector *v;
+sclp_find_gds_vector(void *start, void *end, u16 id) {
+    struct gds_vector *v;
 
-	for (v = start; (void *) v < end; v = (void *) v + v->length)
-		if (v->gds_id == id)
-			return v;
-	return NULL;
+    for (v = start; (void *) v < end; v = (void *) v + v->length)
+        if (v->gds_id == id)
+            return v;
+    return NULL;
 }
 
 static inline struct gds_subvector *
-sclp_find_gds_subvector(void *start, void *end, u8 key)
-{
-	struct gds_subvector *sv;
+sclp_find_gds_subvector(void *start, void *end, u8 key) {
+    struct gds_subvector *sv;
 
-	for (sv = start; (void *) sv < end; sv = (void *) sv + sv->length)
-		if (sv->key == key)
-			return sv;
-	return NULL;
+    for (sv = start; (void *) sv < end; sv = (void *) sv + sv->length)
+        if (sv->key == key)
+            return sv;
+    return NULL;
 }
 
 #endif	 /* __SCLP_H__ */

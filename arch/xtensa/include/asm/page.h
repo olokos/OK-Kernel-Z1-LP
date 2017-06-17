@@ -100,9 +100,15 @@
  * These are used to make use of C type-checking..
  */
 
-typedef struct { unsigned long pte; } pte_t;		/* page table entry */
-typedef struct { unsigned long pgd; } pgd_t;		/* PGD table entry */
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;		/* page table entry */
+typedef struct {
+    unsigned long pgd;
+} pgd_t;		/* PGD table entry */
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 typedef struct page *pgtable_t;
 
 #define pte_val(x)	((x).pte)
@@ -120,11 +126,10 @@ typedef struct page *pgtable_t;
 
 #if XCHAL_HAVE_NSA
 
-static inline __attribute_const__ int get_order(unsigned long size)
-{
-	int lz;
-	asm ("nsau %0, %1" : "=r" (lz) : "r" ((size - 1) >> PAGE_SHIFT));
-	return 32 - lz;
+static inline __attribute_const__ int get_order(unsigned long size) {
+    int lz;
+    asm ("nsau %0, %1" : "=r" (lz) : "r" ((size - 1) >> PAGE_SHIFT));
+    return 32 - lz;
 }
 
 #else

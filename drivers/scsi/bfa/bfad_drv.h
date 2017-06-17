@@ -101,9 +101,9 @@
 #define MAX_MSIX_ENTRY 22
 
 struct bfad_msix_s {
-	struct bfad_s *bfad;
-	struct msix_entry msix;
-	char name[32];
+    struct bfad_s *bfad;
+    struct msix_entry msix;
+    char name[32];
 };
 
 /*
@@ -111,177 +111,177 @@ struct bfad_msix_s {
  * needed between trace utility and driver version
  */
 enum {
-	BFA_TRC_LDRV_BFAD		= 1,
-	BFA_TRC_LDRV_IM			= 2,
-	BFA_TRC_LDRV_BSG		= 3,
+    BFA_TRC_LDRV_BFAD		= 1,
+    BFA_TRC_LDRV_IM			= 2,
+    BFA_TRC_LDRV_BSG		= 3,
 };
 
 enum bfad_port_pvb_type {
-	BFAD_PORT_PHYS_BASE = 0,
-	BFAD_PORT_PHYS_VPORT = 1,
-	BFAD_PORT_VF_BASE = 2,
-	BFAD_PORT_VF_VPORT = 3,
+    BFAD_PORT_PHYS_BASE = 0,
+    BFAD_PORT_PHYS_VPORT = 1,
+    BFAD_PORT_VF_BASE = 2,
+    BFAD_PORT_VF_VPORT = 3,
 };
 
 /*
  * PORT data structure
  */
 struct bfad_port_s {
-	struct list_head list_entry;
-	struct bfad_s	*bfad;
-	struct bfa_fcs_lport_s *fcs_port;
-	u32	roles;
-	s32		flags;
-	u32	supported_fc4s;
-	enum bfad_port_pvb_type pvb_type;
-	struct bfad_im_port_s *im_port;	/* IM specific data */
-	/* port debugfs specific data */
-	struct dentry *port_debugfs_root;
+    struct list_head list_entry;
+    struct bfad_s	*bfad;
+    struct bfa_fcs_lport_s *fcs_port;
+    u32	roles;
+    s32		flags;
+    u32	supported_fc4s;
+    enum bfad_port_pvb_type pvb_type;
+    struct bfad_im_port_s *im_port;	/* IM specific data */
+    /* port debugfs specific data */
+    struct dentry *port_debugfs_root;
 };
 
 /*
  * VPORT data structure
  */
 struct bfad_vport_s {
-	struct bfad_port_s     drv_port;
-	struct bfa_fcs_vport_s fcs_vport;
-	struct completion *comp_del;
-	struct list_head list_entry;
+    struct bfad_port_s     drv_port;
+    struct bfa_fcs_vport_s fcs_vport;
+    struct completion *comp_del;
+    struct list_head list_entry;
 };
 
 /*
  * VF data structure
  */
 struct bfad_vf_s {
-	bfa_fcs_vf_t    fcs_vf;
-	struct bfad_port_s    base_port;	/* base port for vf */
-	struct bfad_s   *bfad;
+    bfa_fcs_vf_t    fcs_vf;
+    struct bfad_port_s    base_port;	/* base port for vf */
+    struct bfad_s   *bfad;
 };
 
 struct bfad_cfg_param_s {
-	u32	rport_del_timeout;
-	u32	ioc_queue_depth;
-	u32	lun_queue_depth;
-	u32	io_max_sge;
-	u32	binding_method;
+    u32	rport_del_timeout;
+    u32	ioc_queue_depth;
+    u32	lun_queue_depth;
+    u32	io_max_sge;
+    u32	binding_method;
 };
 
 union bfad_tmp_buf {
-	/* From struct bfa_adapter_attr_s */
-	char		manufacturer[BFA_ADAPTER_MFG_NAME_LEN];
-	char		serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
-	char		model[BFA_ADAPTER_MODEL_NAME_LEN];
-	char		fw_ver[BFA_VERSION_LEN];
-	char		optrom_ver[BFA_VERSION_LEN];
+    /* From struct bfa_adapter_attr_s */
+    char		manufacturer[BFA_ADAPTER_MFG_NAME_LEN];
+    char		serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
+    char		model[BFA_ADAPTER_MODEL_NAME_LEN];
+    char		fw_ver[BFA_VERSION_LEN];
+    char		optrom_ver[BFA_VERSION_LEN];
 
-	/* From struct bfa_ioc_pci_attr_s */
-	u8		chip_rev[BFA_IOC_CHIP_REV_LEN];  /*  chip revision */
+    /* From struct bfa_ioc_pci_attr_s */
+    u8		chip_rev[BFA_IOC_CHIP_REV_LEN];  /*  chip revision */
 
-	wwn_t		wwn[BFA_FCS_MAX_LPORTS];
+    wwn_t		wwn[BFA_FCS_MAX_LPORTS];
 };
 
 /*
  * BFAD (PCI function) data structure
  */
 struct bfad_s {
-	bfa_sm_t	sm;	/* state machine */
-	struct list_head list_entry;
-	struct bfa_s	bfa;
-	struct bfa_fcs_s bfa_fcs;
-	struct pci_dev *pcidev;
-	const char *pci_name;
-	struct bfa_pcidev_s hal_pcidev;
-	struct bfa_ioc_pci_attr_s pci_attr;
-	void __iomem   *pci_bar0_kva;
-	void __iomem   *pci_bar2_kva;
-	struct completion comp;
-	struct completion suspend;
-	struct completion enable_comp;
-	struct completion disable_comp;
-	bfa_boolean_t   disable_active;
-	struct bfad_port_s     pport;	/* physical port of the BFAD */
-	struct bfa_meminfo_s meminfo;
-	struct bfa_iocfc_cfg_s   ioc_cfg;
-	u32	inst_no;	/* BFAD instance number */
-	u32	bfad_flags;
-	spinlock_t      bfad_lock;
-	struct task_struct *bfad_tsk;
-	struct bfad_cfg_param_s cfg_data;
-	struct bfad_msix_s msix_tab[MAX_MSIX_ENTRY];
-	int		nvec;
-	char	adapter_name[BFA_ADAPTER_SYM_NAME_LEN];
-	char	port_name[BFA_ADAPTER_SYM_NAME_LEN];
-	struct timer_list hal_tmo;
-	unsigned long   hs_start;
-	struct bfad_im_s *im;		/* IM specific data */
-	struct bfa_trc_mod_s  *trcmod;
-	struct bfa_plog_s      plog_buf;
-	int		ref_count;
-	union bfad_tmp_buf tmp_buf;
-	struct fc_host_statistics link_stats;
-	struct list_head pbc_vport_list;
-	/* debugfs specific data */
-	char *regdata;
-	u32 reglen;
-	struct dentry *bfad_dentry_files[5];
-	struct list_head	free_aen_q;
-	struct list_head	active_aen_q;
-	struct bfa_aen_entry_s	aen_list[BFA_AEN_MAX_ENTRY];
-	spinlock_t		bfad_aen_spinlock;
-	struct list_head	vport_list;
+    bfa_sm_t	sm;	/* state machine */
+    struct list_head list_entry;
+    struct bfa_s	bfa;
+    struct bfa_fcs_s bfa_fcs;
+    struct pci_dev *pcidev;
+    const char *pci_name;
+    struct bfa_pcidev_s hal_pcidev;
+    struct bfa_ioc_pci_attr_s pci_attr;
+    void __iomem   *pci_bar0_kva;
+    void __iomem   *pci_bar2_kva;
+    struct completion comp;
+    struct completion suspend;
+    struct completion enable_comp;
+    struct completion disable_comp;
+    bfa_boolean_t   disable_active;
+    struct bfad_port_s     pport;	/* physical port of the BFAD */
+    struct bfa_meminfo_s meminfo;
+    struct bfa_iocfc_cfg_s   ioc_cfg;
+    u32	inst_no;	/* BFAD instance number */
+    u32	bfad_flags;
+    spinlock_t      bfad_lock;
+    struct task_struct *bfad_tsk;
+    struct bfad_cfg_param_s cfg_data;
+    struct bfad_msix_s msix_tab[MAX_MSIX_ENTRY];
+    int		nvec;
+    char	adapter_name[BFA_ADAPTER_SYM_NAME_LEN];
+    char	port_name[BFA_ADAPTER_SYM_NAME_LEN];
+    struct timer_list hal_tmo;
+    unsigned long   hs_start;
+    struct bfad_im_s *im;		/* IM specific data */
+    struct bfa_trc_mod_s  *trcmod;
+    struct bfa_plog_s      plog_buf;
+    int		ref_count;
+    union bfad_tmp_buf tmp_buf;
+    struct fc_host_statistics link_stats;
+    struct list_head pbc_vport_list;
+    /* debugfs specific data */
+    char *regdata;
+    u32 reglen;
+    struct dentry *bfad_dentry_files[5];
+    struct list_head	free_aen_q;
+    struct list_head	active_aen_q;
+    struct bfa_aen_entry_s	aen_list[BFA_AEN_MAX_ENTRY];
+    spinlock_t		bfad_aen_spinlock;
+    struct list_head	vport_list;
 };
 
 /* BFAD state machine events */
 enum bfad_sm_event {
-	BFAD_E_CREATE			= 1,
-	BFAD_E_KTHREAD_CREATE_FAILED	= 2,
-	BFAD_E_INIT			= 3,
-	BFAD_E_INIT_SUCCESS		= 4,
-	BFAD_E_INIT_FAILED		= 5,
-	BFAD_E_INTR_INIT_FAILED		= 6,
-	BFAD_E_FCS_EXIT_COMP		= 7,
-	BFAD_E_EXIT_COMP		= 8,
-	BFAD_E_STOP			= 9
+    BFAD_E_CREATE			= 1,
+    BFAD_E_KTHREAD_CREATE_FAILED	= 2,
+    BFAD_E_INIT			= 3,
+    BFAD_E_INIT_SUCCESS		= 4,
+    BFAD_E_INIT_FAILED		= 5,
+    BFAD_E_INTR_INIT_FAILED		= 6,
+    BFAD_E_FCS_EXIT_COMP		= 7,
+    BFAD_E_EXIT_COMP		= 8,
+    BFAD_E_STOP			= 9
 };
 
 /*
  * RPORT data structure
  */
 struct bfad_rport_s {
-	struct bfa_fcs_rport_s fcs_rport;
+    struct bfa_fcs_rport_s fcs_rport;
 };
 
 struct bfad_buf_info {
-	void		*virt;
-	dma_addr_t      phys;
-	u32	size;
+    void		*virt;
+    dma_addr_t      phys;
+    u32	size;
 };
 
 struct bfad_fcxp {
-	struct bfad_port_s    *port;
-	struct bfa_rport_s *bfa_rport;
-	bfa_status_t    req_status;
-	u16	tag;
-	u16	rsp_len;
-	u16	rsp_maxlen;
-	u8		use_ireqbuf;
-	u8		use_irspbuf;
-	u32	num_req_sgles;
-	u32	num_rsp_sgles;
-	struct fchs_s	fchs;
-	void		*reqbuf_info;
-	void		*rspbuf_info;
-	struct bfa_sge_s  *req_sge;
-	struct bfa_sge_s  *rsp_sge;
-	fcxp_send_cb_t  send_cbfn;
-	void		*send_cbarg;
-	void		*bfa_fcxp;
-	struct completion comp;
+    struct bfad_port_s    *port;
+    struct bfa_rport_s *bfa_rport;
+    bfa_status_t    req_status;
+    u16	tag;
+    u16	rsp_len;
+    u16	rsp_maxlen;
+    u8		use_ireqbuf;
+    u8		use_irspbuf;
+    u32	num_req_sgles;
+    u32	num_rsp_sgles;
+    struct fchs_s	fchs;
+    void		*reqbuf_info;
+    void		*rspbuf_info;
+    struct bfa_sge_s  *req_sge;
+    struct bfa_sge_s  *rsp_sge;
+    fcxp_send_cb_t  send_cbfn;
+    void		*send_cbarg;
+    void		*bfa_fcxp;
+    struct completion comp;
 };
 
 struct bfad_hal_comp {
-	bfa_status_t    status;
-	struct completion comp;
+    bfa_status_t    status;
+    struct completion comp;
 };
 
 #define BFA_LOG(level, bfad, mask, fmt, arg...)				\
@@ -291,10 +291,10 @@ do {									\
 } while (0)
 
 bfa_status_t	bfad_vport_create(struct bfad_s *bfad, u16 vf_id,
-				  struct bfa_lport_cfg_s *port_cfg,
-				  struct device *dev);
+                                  struct bfa_lport_cfg_s *port_cfg,
+                                  struct device *dev);
 bfa_status_t	bfad_vf_create(struct bfad_s *bfad, u16 vf_id,
-			       struct bfa_lport_cfg_s *port_cfg);
+                               struct bfa_lport_cfg_s *port_cfg);
 bfa_status_t	bfad_cfg_pport(struct bfad_s *bfad, enum bfa_lport_role role);
 bfa_status_t	bfad_drv_init(struct bfad_s *bfad);
 bfa_status_t	bfad_start_ops(struct bfad_s *bfad);

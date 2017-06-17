@@ -18,10 +18,10 @@
  * enum rpm_vreg_id - RPM regulator ID numbers (both real and pin control)
  */
 enum rpm_vreg_id_8974 {
-	RPM_VREG_ID_PM8941_S1,
-	RPM_VREG_ID_PM8941_S2,
-	RPM_VREG_ID_PM8941_L12,
-	RPM_VREG_ID_PM8941_MAX,
+    RPM_VREG_ID_PM8941_S1,
+    RPM_VREG_ID_PM8941_S2,
+    RPM_VREG_ID_PM8941_L12,
+    RPM_VREG_ID_PM8941_MAX,
 };
 
 #endif

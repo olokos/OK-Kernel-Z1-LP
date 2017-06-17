@@ -27,19 +27,19 @@
  */
 
 struct kgsl_snapshot_header {
-	__u32 magic; /* Magic identifier */
-	__u32 gpuid; /* GPU ID - see above */
-	/* Added in snapshot version 2 */
-	__u32 chipid; /* Chip ID from the GPU */
+    __u32 magic; /* Magic identifier */
+    __u32 gpuid; /* GPU ID - see above */
+    /* Added in snapshot version 2 */
+    __u32 chipid; /* Chip ID from the GPU */
 } __packed;
 
 /* Section header */
 #define SNAPSHOT_SECTION_MAGIC 0xABCD
 
 struct kgsl_snapshot_section_header {
-	__u16 magic; /* Magic identifier */
-	__u16 id;    /* Type of section */
-	__u32 size;  /* Size of the section including this header */
+    __u16 magic; /* Magic identifier */
+    __u16 id;    /* Type of section */
+    __u32 size;  /* Size of the section including this header */
 } __packed;
 
 /* Section identifiers */
@@ -65,21 +65,21 @@ struct kgsl_snapshot_section_header {
 #define SNAPSHOT_STATE_RUNNING 1
 
 struct kgsl_snapshot_linux {
-	int osid;                   /* subsection OS identifier */
-	int state;		    /* 1 if the thread is running, 0 for hung */
-	__u32 seconds;		    /* Unix timestamp for the snapshot */
-	__u32 power_flags;            /* Current power flags */
-	__u32 power_level;            /* Current power level */
-	__u32 power_interval_timeout; /* Power interval timeout */
-	__u32 grpclk;                 /* Current GP clock value */
-	__u32 busclk;		    /* Current busclk value */
-	__u32 ptbase;		    /* Current ptbase */
-	__u32 pid;		    /* PID of the process that owns the PT */
-	__u32 current_context;	    /* ID of the current context */
-	__u32 ctxtcount;	    /* Number of contexts appended to section */
-	unsigned char release[32];  /* kernel release */
-	unsigned char version[32];  /* kernel version */
-	unsigned char comm[16];	    /* Name of the process that owns the PT */
+    int osid;                   /* subsection OS identifier */
+    int state;		    /* 1 if the thread is running, 0 for hung */
+    __u32 seconds;		    /* Unix timestamp for the snapshot */
+    __u32 power_flags;            /* Current power flags */
+    __u32 power_level;            /* Current power level */
+    __u32 power_interval_timeout; /* Power interval timeout */
+    __u32 grpclk;                 /* Current GP clock value */
+    __u32 busclk;		    /* Current busclk value */
+    __u32 ptbase;		    /* Current ptbase */
+    __u32 pid;		    /* PID of the process that owns the PT */
+    __u32 current_context;	    /* ID of the current context */
+    __u32 ctxtcount;	    /* Number of contexts appended to section */
+    unsigned char release[32];  /* kernel release */
+    unsigned char version[32];  /* kernel version */
+    unsigned char comm[16];	    /* Name of the process that owns the PT */
 } __packed;
 
 /*
@@ -89,55 +89,55 @@ struct kgsl_snapshot_linux {
  */
 
 struct kgsl_snapshot_linux_context {
-	__u32 id;			/* The context ID */
-	__u32 timestamp_queued;		/* The last queued timestamp */
-	__u32 timestamp_retired;	/* The last timestamp retired by HW */
+    __u32 id;			/* The context ID */
+    __u32 timestamp_queued;		/* The last queued timestamp */
+    __u32 timestamp_retired;	/* The last timestamp retired by HW */
 };
 
 /* Ringbuffer sub-section header */
 struct kgsl_snapshot_rb {
-	int start;  /* dword at the start of the dump */
-	int end;    /* dword at the end of the dump */
-	int rbsize; /* Size (in dwords) of the ringbuffer */
-	int wptr;   /* Current index of the CPU write pointer */
-	int rptr;   /* Current index of the GPU read pointer */
-	int count;  /* Number of dwords in the dump */
+    int start;  /* dword at the start of the dump */
+    int end;    /* dword at the end of the dump */
+    int rbsize; /* Size (in dwords) of the ringbuffer */
+    int wptr;   /* Current index of the CPU write pointer */
+    int rptr;   /* Current index of the GPU read pointer */
+    int count;  /* Number of dwords in the dump */
 } __packed;
 
 /* Replay or Memory list section, both sections have same header */
 struct kgsl_snapshot_replay_mem_list {
-	/*
-	 * Number of IBs to replay for replay section or
-	 * number of memory list entries for mem list section
-	 */
-	int num_entries;
-	/* Pagetable base to which the replay IBs or memory entries belong */
-	__u32 ptbase;
+    /*
+     * Number of IBs to replay for replay section or
+     * number of memory list entries for mem list section
+     */
+    int num_entries;
+    /* Pagetable base to which the replay IBs or memory entries belong */
+    __u32 ptbase;
 } __packed;
 
 /* Indirect buffer sub-section header */
 struct kgsl_snapshot_ib {
-	__u32 gpuaddr; /* GPU address of the the IB */
-	__u32 ptbase;  /* Base for the pagetable the GPU address is valid in */
-	int size;    /* Size of the IB */
+    __u32 gpuaddr; /* GPU address of the the IB */
+    __u32 ptbase;  /* Base for the pagetable the GPU address is valid in */
+    int size;    /* Size of the IB */
 } __packed;
 
 /* Register sub-section header */
 struct kgsl_snapshot_regs {
-	__u32 count; /* Number of register pairs in the section */
+    __u32 count; /* Number of register pairs in the section */
 } __packed;
 
 /* Indexed register sub-section header */
 struct kgsl_snapshot_indexed_regs {
-	__u32 index_reg; /* Offset of the index register for this section */
-	__u32 data_reg;  /* Offset of the data register for this section */
-	int start;     /* Starting index */
-	int count;     /* Number of dwords in the data */
+    __u32 index_reg; /* Offset of the index register for this section */
+    __u32 data_reg;  /* Offset of the data register for this section */
+    int start;     /* Starting index */
+    int count;     /* Number of dwords in the data */
 } __packed;
 
 /* Istore sub-section header */
 struct kgsl_snapshot_istore {
-	int count;   /* Number of instructions in the istore */
+    int count;   /* Number of instructions in the istore */
 } __packed;
 
 /* Debug data sub-section header */
@@ -159,13 +159,13 @@ struct kgsl_snapshot_istore {
 #define SNAPSHOT_DEBUG_CP_MERCIU 12
 
 struct kgsl_snapshot_debug {
-	int type;    /* Type identifier for the attached tata */
-	int size;   /* Size of the section in dwords */
+    int type;    /* Type identifier for the attached tata */
+    int size;   /* Size of the section in dwords */
 } __packed;
 
 struct kgsl_snapshot_debugbus {
-	int id;	   /* Debug bus ID */
-	int count; /* Number of dwords in the dump */
+    int id;	   /* Debug bus ID */
+    int count; /* Number of dwords in the dump */
 } __packed;
 
 #define SNAPSHOT_GPU_OBJECT_SHADER  1
@@ -173,10 +173,10 @@ struct kgsl_snapshot_debugbus {
 #define SNAPSHOT_GPU_OBJECT_GENERIC 3
 
 struct kgsl_snapshot_gpu_object {
-	int type;      /* Type of GPU object */
-	__u32 gpuaddr; /* GPU address of the the object */
-	__u32 ptbase;  /* Base for the pagetable the GPU address is valid in */
-	int size;    /* Size of the object (in dwords) */
+    int type;      /* Type of GPU object */
+    __u32 gpuaddr; /* GPU address of the the object */
+    __u32 ptbase;  /* Base for the pagetable the GPU address is valid in */
+    int size;    /* Size of the object (in dwords) */
 };
 
 #ifdef __KERNEL__
@@ -209,45 +209,44 @@ struct kgsl_device;
  */
 
 static inline void *kgsl_snapshot_add_section(struct kgsl_device *device,
-	u16 id, void *snapshot, int *remain,
-	int (*func)(struct kgsl_device *, void *, int, void *), void *priv)
-{
-	struct kgsl_snapshot_section_header *header = snapshot;
-	void *data = snapshot + sizeof(*header);
-	int ret = 0;
+        u16 id, void *snapshot, int *remain,
+        int (*func)(struct kgsl_device *, void *, int, void *), void *priv) {
+    struct kgsl_snapshot_section_header *header = snapshot;
+    void *data = snapshot + sizeof(*header);
+    int ret = 0;
 
-	/*
-	 * Sanity check to make sure there is enough for the header.  The
-	 * callback will check to make sure there is enough for the rest
-	 * of the data.  If there isn't enough room then don't advance the
-	 * pointer.
-	 */
+    /*
+     * Sanity check to make sure there is enough for the header.  The
+     * callback will check to make sure there is enough for the rest
+     * of the data.  If there isn't enough room then don't advance the
+     * pointer.
+     */
 
-	if (*remain < sizeof(*header))
-		return snapshot;
+    if (*remain < sizeof(*header))
+        return snapshot;
 
-	/* It is legal to have no function (i.e. - make an empty section) */
+    /* It is legal to have no function (i.e. - make an empty section) */
 
-	if (func) {
-		ret = func(device, data, *remain, priv);
+    if (func) {
+        ret = func(device, data, *remain, priv);
 
-		/*
-		 * If there wasn't enough room for the data then don't bother
-		 * setting up the header.
-		 */
+        /*
+         * If there wasn't enough room for the data then don't bother
+         * setting up the header.
+         */
 
-		if (ret == 0)
-			return snapshot;
-	}
+        if (ret == 0)
+            return snapshot;
+    }
 
-	header->magic = SNAPSHOT_SECTION_MAGIC;
-	header->id = id;
-	header->size = ret + sizeof(*header);
+    header->magic = SNAPSHOT_SECTION_MAGIC;
+    header->id = id;
+    header->size = ret + sizeof(*header);
 
-	/* Decrement the room left in the snapshot region */
-	*remain -= header->size;
-	/* Advance the pointer to the end of the next function */
-	return snapshot + header->size;
+    /* Decrement the room left in the snapshot region */
+    *remain -= header->size;
+    /* Advance the pointer to the end of the next function */
+    return snapshot + header->size;
 }
 
 /* A common helper function to dump a range of registers.  This will be used in
@@ -276,19 +275,19 @@ static inline void *kgsl_snapshot_add_section(struct kgsl_device *device,
  */
 
 struct kgsl_snapshot_registers {
-	unsigned int *regs;  /* Pointer to the array of register ranges */
-	int count;	     /* Number of entries in the array */
+    unsigned int *regs;  /* Pointer to the array of register ranges */
+    int count;	     /* Number of entries in the array */
 };
 
 struct kgsl_snapshot_registers_list {
-	/* Pointer to an array of register lists */
-	struct kgsl_snapshot_registers *registers;
-	/* Number of registers lists in the array */
-	int count;
+    /* Pointer to an array of register lists */
+    struct kgsl_snapshot_registers *registers;
+    /* Number of registers lists in the array */
+    int count;
 };
 
 int kgsl_snapshot_dump_regs(struct kgsl_device *device, void *snapshot,
-	int remain, void *priv);
+                            int remain, void *priv);
 
 /*
  * A common helper function to dump a set of indexed registers. Use it
@@ -307,24 +306,24 @@ int kgsl_snapshot_dump_regs(struct kgsl_device *device, void *snapshot,
  */
 
 struct kgsl_snapshot_indexed_registers {
-	unsigned int index; /* Offset of the index register */
-	unsigned int data;  /* Offset of the data register */
-	unsigned int start;	/* Index to start with */
-	unsigned int count; /* Number of values to read from the pair */
+    unsigned int index; /* Offset of the index register */
+    unsigned int data;  /* Offset of the data register */
+    unsigned int start;	/* Index to start with */
+    unsigned int count; /* Number of values to read from the pair */
 };
 
 /* Helper function to snapshot a section of indexed registers */
 
 void *kgsl_snapshot_indexed_registers(struct kgsl_device *device,
-	void *snapshot, int *remain, unsigned int index,
-	unsigned int data, unsigned int start, unsigned int count);
+                                      void *snapshot, int *remain, unsigned int index,
+                                      unsigned int data, unsigned int start, unsigned int count);
 
 /* Freeze a GPU buffer so it can be dumped in the snapshot */
 int kgsl_snapshot_get_object(struct kgsl_device *device, phys_addr_t ptbase,
-	unsigned int gpuaddr, unsigned int size, unsigned int type);
+                             unsigned int gpuaddr, unsigned int size, unsigned int type);
 
 int kgsl_snapshot_have_object(struct kgsl_device *device, phys_addr_t ptbase,
-	unsigned int gpuaddr, unsigned int size);
+                              unsigned int gpuaddr, unsigned int size);
 
 #endif
 #endif

@@ -32,26 +32,26 @@
 
 /* RGMII bridge */
 struct rgmii_regs {
-	u32 fer;		/* Function enable register */
-	u32 ssr;		/* Speed select register */
+    u32 fer;		/* Function enable register */
+    u32 ssr;		/* Speed select register */
 };
 
 /* RGMII device */
 struct rgmii_instance {
-	struct rgmii_regs __iomem	*base;
+    struct rgmii_regs __iomem	*base;
 
-	/* RGMII bridge flags */
-	int				flags;
+    /* RGMII bridge flags */
+    int				flags;
 #define EMAC_RGMII_FLAG_HAS_MDIO	0x00000001
 
-	/* Only one EMAC whacks us at a time */
-	struct mutex			lock;
+    /* Only one EMAC whacks us at a time */
+    struct mutex			lock;
 
-	/* number of EMACs using this RGMII bridge */
-	int				users;
+    /* number of EMACs using this RGMII bridge */
+    int				users;
 
-	/* OF device instance */
-	struct platform_device		*ofdev;
+    /* OF device instance */
+    struct platform_device		*ofdev;
 };
 
 #ifdef CONFIG_IBM_EMAC_RGMII

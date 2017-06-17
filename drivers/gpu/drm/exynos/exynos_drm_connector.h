@@ -29,6 +29,6 @@
 #define _EXYNOS_DRM_CONNECTOR_H_
 
 struct drm_connector *exynos_drm_connector_create(struct drm_device *dev,
-						   struct drm_encoder *encoder);
+        struct drm_encoder *encoder);
 
 #endif

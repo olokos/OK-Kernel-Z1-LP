@@ -20,22 +20,22 @@
 #include "mdss_hdmi_util.h"
 
 enum hdmi_hdcp_state {
-	HDCP_STATE_INACTIVE,
-	HDCP_STATE_AUTHENTICATING,
-	HDCP_STATE_AUTHENTICATED,
-	HDCP_STATE_AUTH_FAIL
+    HDCP_STATE_INACTIVE,
+    HDCP_STATE_AUTHENTICATING,
+    HDCP_STATE_AUTHENTICATED,
+    HDCP_STATE_AUTH_FAIL
 };
 
 struct hdmi_hdcp_init_data {
-	struct dss_io_data *core_io;
-	struct dss_io_data *qfprom_io;
-	struct mutex *mutex;
-	struct kobject *sysfs_kobj;
-	struct workqueue_struct *workq;
-	void *cb_data;
-	void (*notify_status)(void *cb_data, enum hdmi_hdcp_state status);
+    struct dss_io_data *core_io;
+    struct dss_io_data *qfprom_io;
+    struct mutex *mutex;
+    struct kobject *sysfs_kobj;
+    struct workqueue_struct *workq;
+    void *cb_data;
+    void (*notify_status)(void *cb_data, enum hdmi_hdcp_state status);
 
-	struct hdmi_tx_ddc_ctrl *ddc_ctrl;
+    struct hdmi_tx_ddc_ctrl *ddc_ctrl;
 };
 
 const char *hdcp_state_name(enum hdmi_hdcp_state hdcp_state);

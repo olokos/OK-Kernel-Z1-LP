@@ -561,9 +561,9 @@
 #define CR_1000T_HD_CAPS         0x0100 /* Advertise 1000T HD capability */
 #define CR_1000T_FD_CAPS         0x0200 /* Advertise 1000T FD capability  */
 #define CR_1000T_MS_VALUE        0x0800 /* 1=Configure PHY as Master */
-					/* 0=Configure PHY as Slave */
+/* 0=Configure PHY as Slave */
 #define CR_1000T_MS_ENABLE       0x1000 /* 1=Master/Slave manual config value */
-					/* 0=Automatic Master/Slave config */
+/* 0=Automatic Master/Slave config */
 
 /* 1000BASE-T Status Register */
 #define SR_1000T_REMOTE_RX_STATUS 0x1000 /* Remote receiver OK */
@@ -709,7 +709,7 @@
 #define M88E1000_PSCR_POLARITY_REVERSAL 0x0002 /* 1=Polarity Reversal enabled */
 /* 1=CLK125 low, 0=CLK125 toggling */
 #define M88E1000_PSCR_MDI_MANUAL_MODE  0x0000  /* MDI Crossover Mode bits 6:5 */
-					       /* Manual MDI configuration */
+/* Manual MDI configuration */
 #define M88E1000_PSCR_MDIX_MANUAL_MODE 0x0020  /* Manual MDIX configuration */
 /* 1000BASE-T: Auto crossover, 100BASE-TX/10BASE-T: MDI Mode */
 #define M88E1000_PSCR_AUTO_X_1000T     0x0040

@@ -3,7 +3,7 @@
  * Filename:      irda-usb.h
  * Version:       0.10
  * Description:   IrDA-USB Driver
- * Status:        Experimental 
+ * Status:        Experimental
  * Author:        Dag Brattli <dag@brattli.net>
  *
  *	Copyright (C) 2001, Roman Weissgaerber <weissg@vienna.at>
@@ -12,7 +12,7 @@
  *      Copyright (C) 2004, SigmaTel, Inc. <irquality@sigmatel.com>
  *      Copyright (C) 2005, Milan Beno <beno@pobox.sk>
  *      Copyright (C) 2006, Nick FEdchik <nick@fedchik.org.ua>
- *          
+ *
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation; either version 2 of the License, or
@@ -68,7 +68,7 @@
 /* Send speed command in case of timeout, just for trying to get things sane */
 #define IU_BUG_KICK_TIMEOUT
 /* Show the USB class descriptor */
-#undef IU_DUMP_CLASS_DESC 
+#undef IU_DUMP_CLASS_DESC
 /* Assume a minimum round trip latency for USB transfer (in us)...
  * USB transfer are done in the next USB slot if there is no traffic
  * (1/19 msec) and is done at 12 Mb/s :
@@ -115,16 +115,16 @@
                                     USB_IRDA_STIR421X_HEADER)
 
 struct irda_class_desc {
-	__u8  bLength;
-	__u8  bDescriptorType;
-	__le16 bcdSpecRevision;
-	__u8  bmDataSize;
-	__u8  bmWindowSize;
-	__u8  bmMinTurnaroundTime;
-	__le16 wBaudRate;
-	__u8  bmAdditionalBOFs;
-	__u8  bIrdaRateSniff;
-	__u8  bMaxUnicastList;
+    __u8  bLength;
+    __u8  bDescriptorType;
+    __le16 bcdSpecRevision;
+    __u8  bmDataSize;
+    __u8  bmWindowSize;
+    __u8  bmMinTurnaroundTime;
+    __le16 wBaudRate;
+    __u8  bmAdditionalBOFs;
+    __u8  bIrdaRateSniff;
+    __u8  bMaxUnicastList;
 } __packed;
 
 /* class specific interface request to get the IrDA-USB class descriptor
@@ -134,42 +134,42 @@ struct irda_class_desc {
 #define STIR421X_MAX_PATCH_DOWNLOAD_SIZE 1023
 
 struct irda_usb_cb {
-	struct irda_class_desc *irda_desc;
-	struct usb_device *usbdev;	/* init: probe_irda */
-	struct usb_interface *usbintf;	/* init: probe_irda */
-	int netopen;			/* Device is active for network */
-	int present;			/* Device is present on the bus */
-	__u32 capability;		/* Capability of the hardware */
-	__u8  bulk_in_ep;		/* Rx Endpoint assignments */
-	__u8  bulk_out_ep;		/* Tx Endpoint assignments */
-	__u16 bulk_out_mtu;		/* Max Tx packet size in bytes */
-	__u8  bulk_int_ep;		/* Interrupt Endpoint assignments */
+    struct irda_class_desc *irda_desc;
+    struct usb_device *usbdev;	/* init: probe_irda */
+    struct usb_interface *usbintf;	/* init: probe_irda */
+    int netopen;			/* Device is active for network */
+    int present;			/* Device is present on the bus */
+    __u32 capability;		/* Capability of the hardware */
+    __u8  bulk_in_ep;		/* Rx Endpoint assignments */
+    __u8  bulk_out_ep;		/* Tx Endpoint assignments */
+    __u16 bulk_out_mtu;		/* Max Tx packet size in bytes */
+    __u8  bulk_int_ep;		/* Interrupt Endpoint assignments */
 
-	__u8  max_rx_urb;
-	struct urb **rx_urb;	        /* URBs used to receive data frames */
-	struct urb *idle_rx_urb;	/* Pointer to idle URB in Rx path */
-	struct urb *tx_urb;		/* URB used to send data frames */
-	struct urb *speed_urb;		/* URB used to send speed commands */
-	
-	struct net_device *netdev;	/* Yes! we are some kind of netdev. */
-	struct irlap_cb   *irlap;	/* The link layer we are binded to */
-	struct qos_info qos;
-	char *speed_buff;		/* Buffer for speed changes */
-	char *tx_buff;
+    __u8  max_rx_urb;
+    struct urb **rx_urb;	        /* URBs used to receive data frames */
+    struct urb *idle_rx_urb;	/* Pointer to idle URB in Rx path */
+    struct urb *tx_urb;		/* URB used to send data frames */
+    struct urb *speed_urb;		/* URB used to send speed commands */
 
-	struct timeval stamp;
-	struct timeval now;
+    struct net_device *netdev;	/* Yes! we are some kind of netdev. */
+    struct irlap_cb   *irlap;	/* The link layer we are binded to */
+    struct qos_info qos;
+    char *speed_buff;		/* Buffer for speed changes */
+    char *tx_buff;
 
-	spinlock_t lock;		/* For serializing Tx operations */
+    struct timeval stamp;
+    struct timeval now;
 
-	__u16 xbofs;			/* Current xbofs setting */
-	__s16 new_xbofs;		/* xbofs we need to set */
-	__u32 speed;			/* Current speed */
-	__s32 new_speed;		/* speed we need to set */
+    spinlock_t lock;		/* For serializing Tx operations */
 
-	__u8 header_length;             /* USB-IrDA frame header size */
-	int needspatch;        		/* device needs firmware patch */
+    __u16 xbofs;			/* Current xbofs setting */
+    __s16 new_xbofs;		/* xbofs we need to set */
+    __u32 speed;			/* Current speed */
+    __s32 new_speed;		/* speed we need to set */
 
-	struct timer_list rx_defer_timer;	/* Wait for Rx error to clear */
+    __u8 header_length;             /* USB-IrDA frame header size */
+    int needspatch;        		/* device needs firmware patch */
+
+    struct timer_list rx_defer_timer;	/* Wait for Rx error to clear */
 };
 

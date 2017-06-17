@@ -64,38 +64,38 @@
 
 
 struct btmrvl_sdio_card_reg {
-	u8 cfg;
-	u8 host_int_mask;
-	u8 host_intstatus;
-	u8 card_status;
-	u8 sq_read_base_addr_a0;
-	u8 sq_read_base_addr_a1;
-	u8 card_revision;
-	u8 card_fw_status0;
-	u8 card_fw_status1;
-	u8 card_rx_len;
-	u8 card_rx_unit;
-	u8 io_port_0;
-	u8 io_port_1;
-	u8 io_port_2;
+    u8 cfg;
+    u8 host_int_mask;
+    u8 host_intstatus;
+    u8 card_status;
+    u8 sq_read_base_addr_a0;
+    u8 sq_read_base_addr_a1;
+    u8 card_revision;
+    u8 card_fw_status0;
+    u8 card_fw_status1;
+    u8 card_rx_len;
+    u8 card_rx_unit;
+    u8 io_port_0;
+    u8 io_port_1;
+    u8 io_port_2;
 };
 
 struct btmrvl_sdio_card {
-	struct sdio_func *func;
-	u32 ioport;
-	const char *helper;
-	const char *firmware;
-	const struct btmrvl_sdio_card_reg *reg;
-	u16 sd_blksz_fw_dl;
-	u8 rx_unit;
-	struct btmrvl_private *priv;
+    struct sdio_func *func;
+    u32 ioport;
+    const char *helper;
+    const char *firmware;
+    const struct btmrvl_sdio_card_reg *reg;
+    u16 sd_blksz_fw_dl;
+    u8 rx_unit;
+    struct btmrvl_private *priv;
 };
 
 struct btmrvl_sdio_device {
-	const char *helper;
-	const char *firmware;
-	const struct btmrvl_sdio_card_reg *reg;
-	u16 sd_blksz_fw_dl;
+    const char *helper;
+    const char *firmware;
+    const struct btmrvl_sdio_card_reg *reg;
+    u16 sd_blksz_fw_dl;
 };
 
 

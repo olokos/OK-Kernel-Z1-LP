@@ -102,11 +102,10 @@
 /* Data Format used for MAN_TRACE_IND (no MI-element used)          */
 /*------------------------------------------------------------------*/
 typedef struct mi_xlog_hdr_s MI_XLOG_HDR;
-struct mi_xlog_hdr_s
-{
-	unsigned long  time;   /* Timestamp in msec units                 */
-	unsigned short size;   /* Size of data that follows               */
-	unsigned short code;   /* code of trace event                     */
+struct mi_xlog_hdr_s {
+    unsigned long  time;   /* Timestamp in msec units                 */
+    unsigned short size;   /* Size of data that follows               */
+    unsigned short code;   /* code of trace event                     */
 };                       /* unspecified data follows this header    */
 
 /*------------------------------------------------------------------*/

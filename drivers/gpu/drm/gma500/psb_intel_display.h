@@ -22,7 +22,7 @@
 
 bool psb_intel_pipe_has_type(struct drm_crtc *crtc, int type);
 void psb_intel_crtc_gamma_set(struct drm_crtc *crtc, u16 *red,
-			 u16 *green, u16 *blue, uint32_t type, uint32_t size);
+                              u16 *green, u16 *blue, uint32_t type, uint32_t size);
 void psb_intel_crtc_destroy(struct drm_crtc *crtc);
 
 #endif

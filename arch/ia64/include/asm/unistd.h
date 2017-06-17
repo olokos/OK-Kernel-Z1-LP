@@ -356,20 +356,20 @@
 extern long __ia64_syscall (long a0, long a1, long a2, long a3, long a4, long nr);
 
 asmlinkage unsigned long sys_mmap(
-				unsigned long addr, unsigned long len,
-				int prot, int flags,
-				int fd, long off);
+    unsigned long addr, unsigned long len,
+    int prot, int flags,
+    int fd, long off);
 asmlinkage unsigned long sys_mmap2(
-				unsigned long addr, unsigned long len,
-				int prot, int flags,
-				int fd, long pgoff);
+    unsigned long addr, unsigned long len,
+    int prot, int flags,
+    int fd, long pgoff);
 struct pt_regs;
 struct sigaction;
 asmlinkage long sys_ia64_pipe(void);
 asmlinkage long sys_rt_sigaction(int sig,
-				 const struct sigaction __user *act,
-				 struct sigaction __user *oact,
-				 size_t sigsetsize);
+                                 const struct sigaction __user *act,
+                                 struct sigaction __user *oact,
+                                 size_t sigsetsize);
 
 /*
  * "Conditional" syscalls

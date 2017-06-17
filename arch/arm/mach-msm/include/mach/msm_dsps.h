@@ -28,9 +28,9 @@
  * @clock - clock handle, reserved for the driver.
  */
 struct dsps_clk_info {
-	const char *name;
-	u32 rate;
-	struct clk *clock;
+    const char *name;
+    u32 rate;
+    struct clk *clock;
 };
 
 /**
@@ -43,11 +43,11 @@ struct dsps_clk_info {
  * @is_owner - reserved for the driver.
  */
 struct dsps_gpio_info {
-	const char *name;
-	int num;
-	int on_val;
-	int off_val;
-	int is_owner;
+    const char *name;
+    int num;
+    int on_val;
+    int off_val;
+    int is_owner;
 };
 
 /**
@@ -58,9 +58,9 @@ struct dsps_gpio_info {
  * @reg - reserved for the driver.
  */
 struct dsps_regulator_info {
-	const char *name;
-	int volt;
-	struct regulator *reg;
+    const char *name;
+    int volt;
+    struct regulator *reg;
 };
 
 /**
@@ -80,18 +80,18 @@ struct dsps_regulator_info {
  * @signature - signature for validity check.
  */
 struct msm_dsps_platform_data {
-	const char *pil_name;
-	struct dsps_clk_info *clks;
-	int clks_num;
-	struct dsps_gpio_info *gpios;
-	int gpios_num;
-	struct dsps_regulator_info *regs;
-	int regs_num;
-	int dsps_pwr_ctl_en;
-	void (*init)(struct msm_dsps_platform_data *data);
-	int ppss_pause_reg;
-	int ppss_wdog_unmasked_int_en_reg;
-	u32 signature;
+    const char *pil_name;
+    struct dsps_clk_info *clks;
+    int clks_num;
+    struct dsps_gpio_info *gpios;
+    int gpios_num;
+    struct dsps_regulator_info *regs;
+    int regs_num;
+    int dsps_pwr_ctl_en;
+    void (*init)(struct msm_dsps_platform_data *data);
+    int ppss_pause_reg;
+    int ppss_wdog_unmasked_int_en_reg;
+    u32 signature;
 };
 
 #endif /* _MSM_DSPS_H_ */

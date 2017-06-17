@@ -12,14 +12,12 @@
 #include <mach/io.h>
 
 /* virt_to_phys will only work when address is in P1 or P2 */
-static __inline__ unsigned long virt_to_phys(volatile void *address)
-{
-	return PHYSADDR(address);
+static __inline__ unsigned long virt_to_phys(volatile void *address) {
+    return PHYSADDR(address);
 }
 
-static __inline__ void * phys_to_virt(unsigned long address)
-{
-	return (void *)P1SEGADDR(address);
+static __inline__ void * phys_to_virt(unsigned long address) {
+    return (void *)P1SEGADDR(address);
 }
 
 #define cached_to_phys(addr)	((unsigned long)PHYSADDR(addr))
@@ -39,30 +37,24 @@ extern void __raw_readsb(const void __iomem *addr, void *data, int bytelen);
 extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
 extern void __raw_readsl(const void __iomem *addr, void *data, int longlen);
 
-static inline void __raw_writeb(u8 v, volatile void __iomem *addr)
-{
-	*(volatile u8 __force *)addr = v;
+static inline void __raw_writeb(u8 v, volatile void __iomem *addr) {
+    *(volatile u8 __force *)addr = v;
 }
-static inline void __raw_writew(u16 v, volatile void __iomem *addr)
-{
-	*(volatile u16 __force *)addr = v;
+static inline void __raw_writew(u16 v, volatile void __iomem *addr) {
+    *(volatile u16 __force *)addr = v;
 }
-static inline void __raw_writel(u32 v, volatile void __iomem *addr)
-{
-	*(volatile u32 __force *)addr = v;
+static inline void __raw_writel(u32 v, volatile void __iomem *addr) {
+    *(volatile u32 __force *)addr = v;
 }
 
-static inline u8 __raw_readb(const volatile void __iomem *addr)
-{
-	return *(const volatile u8 __force *)addr;
+static inline u8 __raw_readb(const volatile void __iomem *addr) {
+    return *(const volatile u8 __force *)addr;
 }
-static inline u16 __raw_readw(const volatile void __iomem *addr)
-{
-	return *(const volatile u16 __force *)addr;
+static inline u16 __raw_readw(const volatile void __iomem *addr) {
+    return *(const volatile u16 __force *)addr;
 }
-static inline u32 __raw_readl(const volatile void __iomem *addr)
-{
-	return *(const volatile u32 __force *)addr;
+static inline u32 __raw_readl(const volatile void __iomem *addr) {
+    return *(const volatile u32 __force *)addr;
 }
 
 /* Convert I/O port address to virtual address */
@@ -247,21 +239,18 @@ BUILDSTRING(l, u32)
 #endif
 
 static inline void memcpy_fromio(void * to, const volatile void __iomem *from,
-				 unsigned long count)
-{
-	memcpy(to, (const void __force *)from, count);
+                                 unsigned long count) {
+    memcpy(to, (const void __force *)from, count);
 }
 
 static inline void  memcpy_toio(volatile void __iomem *to, const void * from,
-				unsigned long count)
-{
-	memcpy((void __force *)to, from, count);
+                                unsigned long count) {
+    memcpy((void __force *)to, from, count);
 }
 
 static inline void memset_io(volatile void __iomem *addr, unsigned char val,
-			     unsigned long count)
-{
-	memset((void __force *)addr, val, count);
+                             unsigned long count) {
+    memset((void __force *)addr, val, count);
 }
 
 #define mmiowb()
@@ -269,7 +258,7 @@ static inline void memset_io(volatile void __iomem *addr, unsigned char val,
 #define IO_SPACE_LIMIT	0xffffffff
 
 extern void __iomem *__ioremap(unsigned long offset, size_t size,
-			       unsigned long flags);
+                               unsigned long flags);
 extern void __iounmap(void __iomem *addr);
 
 /*

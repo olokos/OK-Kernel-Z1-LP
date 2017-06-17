@@ -1,5 +1,5 @@
 
- /***************************************************************************\
+/***************************************************************************\
 |*                                                                           *|
 |*       Copyright 2003 NVIDIA, Corporation.  All rights reserved.           *|
 |*                                                                           *|
@@ -36,7 +36,7 @@
 |*     all U.S. Government End Users  acquire the source code  with only     *|
 |*     those rights set forth herein.                                        *|
 |*                                                                           *|
- \***************************************************************************/
+\***************************************************************************/
 
 /*
  * GPL Licensing Note - According to Mark Vojkovich, author of the Xorg/

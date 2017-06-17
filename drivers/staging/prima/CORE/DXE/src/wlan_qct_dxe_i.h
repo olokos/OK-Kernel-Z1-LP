@@ -407,8 +407,7 @@ when           who        what, where, why
 
 #define WLANDXE_TX_LOW_RES_THRESHOLD     (5)
 
-typedef enum
-{
+typedef enum {
     WLANDXE_ERROR_NONE                = 0,
     WLANDXE_ERROR_SAHB_ERR            = 1,
     WLANDXE_ERROR_H2H_RD_BUS_ERR      = 2,
@@ -459,27 +458,23 @@ typedef enum
  * -------------------------------------------------------------------------*/
 /* DMA Channel Q handle Method type
   * Linear handle or circular */
-typedef enum
-{
+typedef enum {
     WLANDXE_CHANNEL_HANDLE_LINEAR,
     WLANDXE_CHANNEL_HANDLE_CIRCULA
 } WLANDXE_ChannelHandleType;
 
-typedef enum
-{
+typedef enum {
     WLANDXE_TX_COMP_INT_LR_THRESHOLD,
     WLANDXE_TX_COMP_INT_PER_K_FRAMES,
     WLANDXE_TX_COMP_INT_TIMER
 } WLANDXE_TXCompIntEnableType;
 
-typedef enum
-{
+typedef enum {
     WLANDXE_SHORT_DESCRIPTOR,
     WLANDXE_LONG_DESCRIPTOR
 } WLANDXE_DescriptorType;
 
-typedef enum
-{
+typedef enum {
     WLANDXE_DMA_CHANNEL_0,
     WLANDXE_DMA_CHANNEL_1,
     WLANDXE_DMA_CHANNEL_2,
@@ -491,8 +486,7 @@ typedef enum
 } WLANDXE_DMAChannelType;
 
 /** DXE HW Long Descriptor format */
-typedef struct
-{
+typedef struct {
     wpt_uint32                      srcMemAddrL;
     wpt_uint32                      srcMemAddrH;
     wpt_uint32                      dstMemAddrL;
@@ -503,8 +497,7 @@ typedef struct
 
 
 /** DXE HW Short Descriptor format */
-typedef struct tDXEShortDesc
-{
+typedef struct tDXEShortDesc {
     wpt_uint32                      srcMemAddrL;
     wpt_uint32                      dstMemAddrL;
     wpt_uint32                      phyNextL;
@@ -513,10 +506,8 @@ typedef struct tDXEShortDesc
 
 /* DXE Descriptor Data Type
   * Pick up from GEN5 */
-typedef struct
-{
-    union
-    {
+typedef struct {
+    union {
         wpt_uint32                   ctrl;
         wpt_uint32                   valid          :1;     //0 = DMA stop, 1 = DMA continue with this descriptor
         wpt_uint32                   transferType   :2;     //0 = Host to Host space
@@ -533,15 +524,13 @@ typedef struct
         wpt_uint32                   transferSize   :14;    //14 bits used - ignored for BMU transfers, only used for host to host transfers?
     } descCtrl;
     wpt_uint32                      xfrSize;
-    union
-    {
+    union {
         WLANDXE_LongDesc             dxe_long_desc;
         WLANDXE_ShortDesc            dxe_short_desc;
     } dxedesc;
 } WLANDXE_DescType;
 
-typedef struct
-{
+typedef struct {
     void                            *nextCtrlBlk;
     wpt_packet                      *xfrFrame;
     WLANDXE_DescType                *linkedDesc;
@@ -552,8 +541,7 @@ typedef struct
 #endif /* FEATURE_R33D */
 } WLANDXE_DescCtrlBlkType;
 
-typedef struct
-{
+typedef struct {
     /* Q handle method, linear or ring */
     WLANDXE_ChannelHandleType       queueMethod;
 
@@ -590,8 +578,7 @@ typedef struct
     /* From now on, added for PRIMA  */
 } WLANDXE_ChannelConfigType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32                      chDXEBaseAddr;
     wpt_uint32                      chDXEStatusRegAddr;
     wpt_uint32                      chDXEDesclRegAddr;
@@ -605,8 +592,7 @@ typedef struct
     wpt_uint32                      chDXESadrhRegAddr;
 } WLANDXE_ChannelRegisterType;
 
-typedef struct
-{
+typedef struct {
     wpt_uint32                      refWQ_swapped;
     wpt_boolean                     chEnabled;
     wpt_boolean                     chConfigured;
@@ -623,8 +609,7 @@ typedef struct
     wpt_uint32                      intMask;
 } WLANDXE_ChannelExConfigType;
 
-typedef struct
-{
+typedef struct {
     WDTS_ChannelType                channelType;
     WLANDXE_DescCtrlBlkType        *headCtrlBlk;
     WLANDXE_DescCtrlBlkType        *tailCtrlBlk;
@@ -652,8 +637,7 @@ typedef struct
     wpt_msg                        *healthMonitorMsg;
 } WLANDXE_ChannelCBType;
 
-typedef struct
-{
+typedef struct {
     WLANDXE_TXCompIntEnableType     txIntEnable;
     unsigned int                    txLowResourceThreshold_LoPriCh;
     unsigned int                    txLowResourceThreshold_HiPriCh;
@@ -662,8 +646,7 @@ typedef struct
     unsigned int                    txInterruptEnablePeriod;
 } WLANDXE_TxCompIntConfigType;
 
-typedef struct
-{
+typedef struct {
     WLANDXE_ChannelCBType           dxeChannel[WDTS_CHANNEL_MAX];
     WLANDXE_RxFrameReadyCbType      rxReadyCB;
     WLANDXE_TxCompleteCbType        txCompCB;

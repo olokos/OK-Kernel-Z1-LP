@@ -73,8 +73,7 @@ SIDE EFFECTS
 ============================================================================*/
 void
 WDI_DS_PrepareBDHeader (wpt_packet* palPacket,
-                        wpt_uint8 ucDisableHWFrmXtl, wpt_uint8 alignment)
-{
+                        wpt_uint8 ucDisableHWFrmXtl, wpt_uint8 alignment) {
     void*          pvBDHeader;
     wpt_uint8      ucHeaderOffset;
     wpt_uint8      ucHeaderLen;
@@ -101,21 +100,16 @@ WDI_DS_PrepareBDHeader (wpt_packet* palPacket,
       - MPDU length - this is a 16b field - needs swapping
       --------------------------------------------------------------------*/
 
-    if ( ucDisableHWFrmXtl )
-    {
+    if ( ucDisableHWFrmXtl ) {
         ucHeaderOffset = WDI_TX_BD_HEADER_SIZE;
         ucHeaderLen = WDI_802_11_HEADER_LEN;
-        if ( 0 != ucQosEnabled )
-        {
+        if ( 0 != ucQosEnabled ) {
             ucHeaderLen += WDI_802_11_HEADER_QOS_CTL;
         }
-        if ( 0 != ucWDSEnabled)
-        {
+        if ( 0 != ucWDSEnabled) {
             ucHeaderLen    += WDI_802_11_HEADER_ADDR4_LEN;
         }
-    }
-    else
-    {
+    } else {
         ucHeaderOffset = WDI_TX_BD_HEADER_SIZE+WDI_802_11_MAX_HEADER_LEN;
         ucHeaderLen = WDI_802_3_HEADER_LEN;
     }
@@ -159,8 +153,7 @@ WDI_DS_BdMemPoolType:     Memory pool pointer
  * Create a memory pool which is DMA capabale
  */
 WDI_Status WDI_DS_MemPoolCreate(WDI_DS_BdMemPoolType *memPool, wpt_uint8 chunkSize,
-                                wpt_uint8 numChunks)
-{
+                                wpt_uint8 numChunks) {
     wpt_uint8 staLoop;
 
     //Allocate all the max size and align them to a double word boundary. The first 8 bytes are control bytes.
@@ -178,8 +171,7 @@ WDI_Status WDI_DS_MemPoolCreate(WDI_DS_BdMemPoolType *memPool, wpt_uint8 chunkSi
     wpalMemoryZero(memPool->AllocationBitmap, (numChunks/32+1)*sizeof(wpt_uint32));
 
     //Initialize resource infor per STA
-    for(staLoop = 0; staLoop < WDI_DS_MAX_STA_ID; staLoop++)
-    {
+    for(staLoop = 0; staLoop < WDI_DS_MAX_STA_ID; staLoop++) {
         memPool->numChunkSTA[staLoop].STAIndex = 0xFF;
         memPool->numChunkSTA[staLoop].numChunkReservedBySTA = 0;
         memPool->numChunkSTA[staLoop].validIdx = 0;
@@ -191,8 +183,7 @@ WDI_Status WDI_DS_MemPoolCreate(WDI_DS_BdMemPoolType *memPool, wpt_uint8 chunkSi
 /*
  * Destroy the memory pool
  */
-void WDI_DS_MemPoolDestroy(WDI_DS_BdMemPoolType *memPool)
-{
+void WDI_DS_MemPoolDestroy(WDI_DS_BdMemPoolType *memPool) {
     //Allocate all the max size.
     wpalDmaMemoryFree(memPool->pVirtBaseAddress);
     wpalMemoryFree(memPool->AllocationBitmap);
@@ -201,19 +192,15 @@ void WDI_DS_MemPoolDestroy(WDI_DS_BdMemPoolType *memPool)
 /*
  * Allocate chunk memory
  */
-WPT_STATIC WPT_INLINE int find_leading_zero_and_setbit(wpt_uint32 *bitmap, wpt_uint32 maxNumPool)
-{
+WPT_STATIC WPT_INLINE int find_leading_zero_and_setbit(wpt_uint32 *bitmap, wpt_uint32 maxNumPool) {
     wpt_uint32 i,j, word;
     int ret_val = -1;
 
-    for(i=0; i < (maxNumPool/32 + 1); i++)
-    {
+    for(i=0; i < (maxNumPool/32 + 1); i++) {
         j = 0;
         word = bitmap[i];
-        for(j=0; j< 32; j++)
-        {
-            if((word & 1) == 0)
-            {
+        for(j=0; j< 32; j++) {
+            if((word & 1) == 0) {
                 bitmap[i] |= (1 << j);
                 return((i<<5) + j);
             }
@@ -224,13 +211,11 @@ WPT_STATIC WPT_INLINE int find_leading_zero_and_setbit(wpt_uint32 *bitmap, wpt_u
 }
 
 void *WDI_DS_MemPoolAlloc(WDI_DS_BdMemPoolType *memPool, void **pPhysAddress,
-                          WDI_ResPoolType wdiResPool)
-{
+                          WDI_ResPoolType wdiResPool) {
     wpt_uint32 index;
     void *pVirtAddress;
     wpt_uint32 maxNumPool;
-    switch(wdiResPool)
-    {
+    switch(wdiResPool) {
     case WDI_MGMT_POOL_ID:
         maxNumPool = WDI_DS_HI_PRI_RES_NUM;
         break;
@@ -241,14 +226,12 @@ void *WDI_DS_MemPoolAlloc(WDI_DS_BdMemPoolType *memPool, void **pPhysAddress,
         return NULL;
     }
 
-    if(maxNumPool == memPool->numChunks)
-    {
+    if(maxNumPool == memPool->numChunks) {
         return NULL;
     }
     //Find the leading 0 in the allocation bitmap
 
-    if((index = find_leading_zero_and_setbit(memPool->AllocationBitmap, maxNumPool)) == -EPERM)
-    {
+    if((index = find_leading_zero_and_setbit(memPool->AllocationBitmap, maxNumPool)) == -EPERM) {
         //DbgBreakPoint();
         DTI_TRACE(  DTI_TRACE_LEVEL_INFO, "WDI_DS_MemPoolAlloc: index:%d(NULL), numChunks:%d",
                     index, memPool->numChunks );
@@ -268,8 +251,7 @@ void *WDI_DS_MemPoolAlloc(WDI_DS_BdMemPoolType *memPool, void **pPhysAddress,
 /*
  * Free chunk memory
  */
-void  WDI_DS_MemPoolFree(WDI_DS_BdMemPoolType *memPool, void *pVirtAddress, void *pPhysAddress)
-{
+void  WDI_DS_MemPoolFree(WDI_DS_BdMemPoolType *memPool, void *pVirtAddress, void *pPhysAddress) {
     wpt_uint32 index =
         ((wpt_uint8 *)pVirtAddress - (wpt_uint8 *)memPool->pVirtBaseAddress - 8)/memPool->chunkSize;
     wpt_uint32 word = memPool->AllocationBitmap[index/32];
@@ -290,8 +272,7 @@ void  WDI_DS_MemPoolFree(WDI_DS_BdMemPoolType *memPool, void *pVirtAddress, void
  @see
  @return Result of the function call
 */
-wpt_uint32 WDI_DS_GetAvailableResCount(WDI_DS_BdMemPoolType *pMemPool)
-{
+wpt_uint32 WDI_DS_GetAvailableResCount(WDI_DS_BdMemPoolType *pMemPool) {
     return pMemPool->numChunks;
 }
 
@@ -305,10 +286,8 @@ wpt_uint32 WDI_DS_GetAvailableResCount(WDI_DS_BdMemPoolType *pMemPool)
  @see
  @return Result of the function call
 */
-WDI_Status WDI_DS_MemPoolAddSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staIndex)
-{
-    if(memPool->numChunkSTA[staIndex].STAIndex != 0xFF)
-    {
+WDI_Status WDI_DS_MemPoolAddSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staIndex) {
+    if(memPool->numChunkSTA[staIndex].STAIndex != 0xFF) {
         /* Already using this slot? Do nothing */
         return WDI_STATUS_SUCCESS;
     }
@@ -329,10 +308,8 @@ WDI_Status WDI_DS_MemPoolAddSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staInde
  @see
  @return Result of the function call
 */
-WDI_Status WDI_DS_MemPoolDelSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staIndex)
-{
-    if(memPool->numChunkSTA[staIndex].STAIndex == 0xFF)
-    {
+WDI_Status WDI_DS_MemPoolDelSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staIndex) {
+    if(memPool->numChunkSTA[staIndex].STAIndex == 0xFF) {
         /* Empty this slot? error, bad argument */
         return WDI_STATUS_E_FAILURE;
     }
@@ -352,8 +329,7 @@ WDI_Status WDI_DS_MemPoolDelSTA(WDI_DS_BdMemPoolType *memPool, wpt_uint8 staInde
  @see
  @return Result of the function call
 */
-wpt_uint32 WDI_DS_MemPoolGetRsvdResCountPerSTA(WDI_DS_BdMemPoolType *pMemPool, wpt_uint8  staId)
-{
+wpt_uint32 WDI_DS_MemPoolGetRsvdResCountPerSTA(WDI_DS_BdMemPoolType *pMemPool, wpt_uint8  staId) {
     return pMemPool->numChunkSTA[staId].numChunkReservedBySTA;
 }
 
@@ -365,11 +341,9 @@ wpt_uint32 WDI_DS_MemPoolGetRsvdResCountPerSTA(WDI_DS_BdMemPoolType *pMemPool, w
  @see
  @return Result of the function call
 */
-void WDI_DS_MemPoolIncreaseReserveCount(WDI_DS_BdMemPoolType *memPool, wpt_uint8  staId)
-{
+void WDI_DS_MemPoolIncreaseReserveCount(WDI_DS_BdMemPoolType *memPool, wpt_uint8  staId) {
 
-    if((memPool->numChunkSTA[staId].validIdx) && (staId < WDI_DS_MAX_STA_ID))
-    {
+    if((memPool->numChunkSTA[staId].validIdx) && (staId < WDI_DS_MAX_STA_ID)) {
         memPool->numChunkSTA[staId].numChunkReservedBySTA++;
     }
     return;
@@ -383,17 +357,14 @@ void WDI_DS_MemPoolIncreaseReserveCount(WDI_DS_BdMemPoolType *memPool, wpt_uint8
  @see
  @return Result of the function call
 */
-void WDI_DS_MemPoolDecreaseReserveCount(WDI_DS_BdMemPoolType *memPool, wpt_uint8  staId)
-{
-    if(0 == memPool->numChunkSTA[staId].numChunkReservedBySTA)
-    {
+void WDI_DS_MemPoolDecreaseReserveCount(WDI_DS_BdMemPoolType *memPool, wpt_uint8  staId) {
+    if(0 == memPool->numChunkSTA[staId].numChunkReservedBySTA) {
         DTI_TRACE( DTI_TRACE_LEVEL_ERROR,
                    "SAT %d reserved resource count cannot be smaller than 0", staId );
         return;
     }
 
-    if((memPool->numChunkSTA[staId].validIdx) && (staId < WDI_DS_MAX_STA_ID))
-    {
+    if((memPool->numChunkSTA[staId].validIdx) && (staId < WDI_DS_MAX_STA_ID)) {
         memPool->numChunkSTA[staId].numChunkReservedBySTA--;
     }
     return;

@@ -312,49 +312,49 @@
  */
 
 struct err_stack_format {
-	u64	sk_addr	   : 33,   /* address */
-		sk_cmd	   :  8,   /* message command */
-		sk_crb_sts : 10,   /* status from RRB or WRB */
-		sk_rw_rb   :  1,   /* RRB == 0, WRB == 1 */
-		sk_crb_num :  3,   /* WRB (0 to 7) or RRB (0 to 4) */
-		sk_t5_req  :  3,   /* RRB T5 request number */
-		sk_suppl   :  3,   /* lowest 3 bit of supplemental */
-		sk_err_type:  3;   /* error type	*/
+    u64	sk_addr	   : 33,   /* address */
+        sk_cmd	   :  8,   /* message command */
+        sk_crb_sts : 10,   /* status from RRB or WRB */
+        sk_rw_rb   :  1,   /* RRB == 0, WRB == 1 */
+        sk_crb_num :  3,   /* WRB (0 to 7) or RRB (0 to 4) */
+        sk_t5_req  :  3,   /* RRB T5 request number */
+        sk_suppl   :  3,   /* lowest 3 bit of supplemental */
+        sk_err_type:  3;   /* error type	*/
 };
 
 typedef union pi_err_stack {
-	u64	pi_stk_word;
-	struct	err_stack_format pi_stk_fmt;
+    u64	pi_stk_word;
+    struct	err_stack_format pi_stk_fmt;
 } pi_err_stack_t;
 
 struct err_status0_format {
-	u64	s0_valid   :  1,   /* Valid */
-		s0_ovr_run :  1,   /* Overrun, spooled to memory */
-		s0_addr	   : 37,   /* address */
-		s0_cmd	   :  8,   /* message command */
-		s0_supl	   : 11,   /* message supplemental field */
-		s0_t5_req  :  3,   /* RRB T5 request number */
-		s0_err_type:  3;   /* error type */
+    u64	s0_valid   :  1,   /* Valid */
+        s0_ovr_run :  1,   /* Overrun, spooled to memory */
+        s0_addr	   : 37,   /* address */
+        s0_cmd	   :  8,   /* message command */
+        s0_supl	   : 11,   /* message supplemental field */
+        s0_t5_req  :  3,   /* RRB T5 request number */
+        s0_err_type:  3;   /* error type */
 };
 
 typedef union pi_err_stat0 {
-	u64	pi_stat0_word;
-	struct err_status0_format pi_stat0_fmt;
+    u64	pi_stat0_word;
+    struct err_status0_format pi_stat0_fmt;
 } pi_err_stat0_t;
 
 struct err_status1_format {
-	u64	s1_src	   : 11,   /* message source */
-		s1_crb_sts : 10,   /* status from RRB or WRB */
-		s1_rw_rb   :  1,   /* RRB == 0, WRB == 1 */
-		s1_crb_num :  3,   /* WRB (0 to 7) or RRB (0 to 4) */
-		s1_inval_cnt:10,   /* signed invalidate counter RRB */
-		s1_to_cnt  :  8,   /* crb timeout counter */
-		s1_spl_cnt : 21;   /* number spooled to memory */
+    u64	s1_src	   : 11,   /* message source */
+         s1_crb_sts : 10,   /* status from RRB or WRB */
+         s1_rw_rb   :  1,   /* RRB == 0, WRB == 1 */
+         s1_crb_num :  3,   /* WRB (0 to 7) or RRB (0 to 4) */
+         s1_inval_cnt:10,   /* signed invalidate counter RRB */
+         s1_to_cnt  :  8,   /* crb timeout counter */
+         s1_spl_cnt : 21;   /* number spooled to memory */
 };
 
 typedef union pi_err_stat1 {
-	u64	pi_stat1_word;
-	struct err_status1_format pi_stat1_fmt;
+    u64	pi_stat1_word;
+    struct err_status1_format pi_stat1_fmt;
 } pi_err_stat1_t;
 
 typedef u64	rtc_time_t;

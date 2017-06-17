@@ -15,23 +15,21 @@ struct pl022_ssp_controller;
 
 static inline struct platform_device *
 db8500_add_ske_keypad(struct device *parent,
-		      struct ske_keypad_platform_data *pdata,
-		      size_t size)
-{
-	struct resource resources[] = {
-		DEFINE_RES_MEM(U8500_SKE_BASE, SZ_4K),
-		DEFINE_RES_IRQ(IRQ_DB8500_KB),
-	};
+                      struct ske_keypad_platform_data *pdata,
+                      size_t size) {
+    struct resource resources[] = {
+        DEFINE_RES_MEM(U8500_SKE_BASE, SZ_4K),
+        DEFINE_RES_IRQ(IRQ_DB8500_KB),
+    };
 
-	return platform_device_register_resndata(parent, "nmk-ske-keypad", -1,
-						 resources, 2, pdata, size);
+    return platform_device_register_resndata(parent, "nmk-ske-keypad", -1,
+            resources, 2, pdata, size);
 }
 
 static inline struct amba_device *
 db8500_add_ssp(struct device *parent, const char *name, resource_size_t base,
-	       int irq, struct pl022_ssp_controller *pdata)
-{
-	return dbx500_add_amba_device(parent, name, base, irq, pdata, 0);
+               int irq, struct pl022_ssp_controller *pdata) {
+    return dbx500_add_amba_device(parent, name, base, irq, pdata, 0);
 }
 
 

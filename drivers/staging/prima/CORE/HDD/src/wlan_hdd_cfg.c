@@ -61,147 +61,123 @@
 #include <wlan_hdd_misc.h>
 
 #if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
-static void cbNotifySetRoamPrefer5GHz(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetRoamPrefer5GHz(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateRoamPrefer5GHz((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nRoamPrefer5GHz);
 }
 
-static void cbNotifySetImmediateRoamRssiDiff(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetImmediateRoamRssiDiff(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateImmediateRoamRssiDiff((tHalHandle)(pHddCtx->hHal),
                                     pHddCtx->cfg_ini->nImmediateRoamRssiDiff);
 }
 
-static void cbNotifySetRoamRssiDiff(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetRoamRssiDiff(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateRoamRssiDiff((tHalHandle)(pHddCtx->hHal),
                            pHddCtx->cfg_ini->RoamRssiDiff);
 }
 
-static void cbNotifySetFastTransitionEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetFastTransitionEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateFastTransitionEnabled((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->isFastTransitionEnabled);
 }
 
-static void cbNotifySetRoamIntraBand(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetRoamIntraBand(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_setRoamIntraBand((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nRoamIntraBand);
 }
 
-static void cbNotifySetWESMode(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetWESMode(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_UpdateWESMode((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->isWESModeEnabled);
 }
 
-static void cbNotifySetRoamScanNProbes(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetRoamScanNProbes(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateRoamScanNProbes((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nProbes);
 }
 
-static void cbNotifySetRoamScanHomeAwayTime(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetRoamScanHomeAwayTime(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateRoamScanHomeAwayTime((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nRoamScanHomeAwayTime, eANI_BOOLEAN_TRUE);
 }
 #endif
 
 #ifdef FEATURE_WLAN_OKC
-static void cbNotifySetOkcFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetOkcFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
 }
 #endif
 
 #ifdef FEATURE_WLAN_LFR
-static void NotifyIsFastRoamIniFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void NotifyIsFastRoamIniFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_UpdateIsFastRoamIniFeatureEnabled((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->isFastRoamIniFeatureEnabled );
 }
 
-static void NotifyIsMAWCIniFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void NotifyIsMAWCIniFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     /* at the point this routine is called, the value in the cfg_ini table has already been updated */
     sme_UpdateIsMAWCIniFeatureEnabled((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->MAWCEnabled );
 }
 #endif
 
 #ifdef FEATURE_WLAN_ESE
-static void cbNotifySetEseFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetEseFeatureEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_UpdateIsEseFeatureEnabled((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->isEseIniFeatureEnabled );
 }
 #endif
 
-static void cbNotifySetFwRssiMonitoring(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetFwRssiMonitoring(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_UpdateConfigFwRssiMonitoring((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->fEnableFwRssiMonitoring );
 }
 
 #ifdef WLAN_FEATURE_NEIGHBOR_ROAMING
-static void cbNotifySetNeighborLookupRssiThreshold(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetNeighborLookupRssiThreshold(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_setNeighborLookupRssiThreshold((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nNeighborLookupRssiThreshold );
 }
 
-static void cbNotifySetNeighborScanPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetNeighborScanPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_setNeighborScanPeriod((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nNeighborScanPeriod );
 }
 
-static void cbNotifySetNeighborResultsRefreshPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetNeighborResultsRefreshPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_setNeighborScanRefreshPeriod((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nNeighborResultsRefreshPeriod );
 }
 
-static void cbNotifySetEmptyScanRefreshPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetEmptyScanRefreshPeriod(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_UpdateEmptyScanRefreshPeriod((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nEmptyScanRefreshPeriod);
 }
 
-static void cbNotifySetNeighborScanMinChanTime(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetNeighborScanMinChanTime(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     // at the point this routine is called, the value in the cfg_ini table has already been updated
     sme_setNeighborScanMinChanTime((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nNeighborScanMinChanTime);
 }
 
-static void cbNotifySetNeighborScanMaxChanTime(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetNeighborScanMaxChanTime(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_setNeighborScanMaxChanTime((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->nNeighborScanMaxChanTime);
 }
 #endif
 
-static void cbNotifySetEnableSSR(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetEnableSSR(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateEnableSSR((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->enableSSR);
 }
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-static void cbNotifyUpdateRoamScanOffloadEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifyUpdateRoamScanOffloadEnabled(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateRoamScanOffloadEnabled((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->isRoamOffloadScanEnabled);
-    if (0 == pHddCtx->cfg_ini->isRoamOffloadScanEnabled)
-    {
+    if (0 == pHddCtx->cfg_ini->isRoamOffloadScanEnabled) {
         pHddCtx->cfg_ini->bFastRoamInConIniFeatureEnabled = 0;
         sme_UpdateEnableFastRoamInConcurrency((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->bFastRoamInConIniFeatureEnabled );
     }
 }
 
-static void cbNotifySetEnableFastRoamInConcurrency(hdd_context_t *pHddCtx, unsigned long NotifyId)
-{
+static void cbNotifySetEnableFastRoamInConcurrency(hdd_context_t *pHddCtx, unsigned long NotifyId) {
     sme_UpdateEnableFastRoamInConcurrency((tHalHandle)(pHddCtx->hHal), pHddCtx->cfg_ini->bFastRoamInConIniFeatureEnabled );
 }
 
 #endif
 
-REG_TABLE_ENTRY g_registry_table[] =
-{
+REG_TABLE_ENTRY g_registry_table[] = {
     REG_VARIABLE( CFG_RTS_THRESHOLD_NAME, WLAN_PARAM_Integer,
     hdd_config_t, RTSThreshold,
     VAR_FLAGS_OPTIONAL | VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT,
@@ -3241,32 +3217,25 @@ REG_TABLE_ENTRY g_registry_table[] =
  * Function returns NULL if no new line character was found before end of
  * string was reached
  */
-static char* get_next_line(char* str, char *str_end)
-{
+static char* get_next_line(char* str, char *str_end) {
     char c;
 
-    if( str == NULL || *str == '\0')
-    {
+    if( str == NULL || *str == '\0') {
         return NULL;
     }
 
     c = *str;
-    while(c != '\n'  && c != '\0' && c != 0xd)
-    {
+    while(c != '\n'  && c != '\0' && c != 0xd) {
         str = str + 1;
-        if (str > str_end)
-        {
+        if (str > str_end) {
             return str;
         }
         c = *str;
     }
 
-    if (c == '\0' )
-    {
+    if (c == '\0' ) {
         return NULL;
-    }
-    else
-    {
+    } else {
         return (str+1);
     }
 
@@ -3311,8 +3280,7 @@ static char *i_trim(char *str)
 
 
 //Structure to store each entry in qcom_cfg.ini file
-typedef struct
-{
+typedef struct {
     char *name;
     char *value;
 } tCfgIniEntry;
@@ -3321,12 +3289,10 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t * pHddCtx,
                                      tCfgIniEntry* iniTable, unsigned long entries);
 
 #ifdef WLAN_CFG_DEBUG
-void dump_cfg_ini (tCfgIniEntry* iniTable, unsigned long entries)
-{
+void dump_cfg_ini (tCfgIniEntry* iniTable, unsigned long entries) {
     unsigned long i;
 
-    for (i = 0; i < entries; i++)
-    {
+    for (i = 0; i < entries; i++) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "%s entry Name=[%s] value=[%s]",
                   WLAN_INI_FILE, iniTable[i].name, iniTable[i].value);
     }
@@ -3337,8 +3303,7 @@ void dump_cfg_ini (tCfgIniEntry* iniTable, unsigned long entries)
  * This function reads the qcom_cfg.ini file and
  * parses each 'Name=Value' pair in the ini file
  */
-VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
-{
+VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx) {
     int status, i=0;
     /** Pointer for firmware image data */
     const struct firmware *fw = NULL;
@@ -3353,14 +3318,12 @@ VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
 
     status = request_firmware(&fw, WLAN_INI_FILE, pHddCtx->parent_dev);
 
-    if(status)
-    {
+    if(status) {
         hddLog(VOS_TRACE_LEVEL_FATAL, "%s: request_firmware failed %d",__func__, status);
         vos_status = VOS_STATUS_E_FAILURE;
         goto config_exit;
     }
-    if(!fw || !fw->data || !fw->size)
-    {
+    if(!fw || !fw->data || !fw->size) {
         hddLog(VOS_TRACE_LEVEL_FATAL, "%s: %s download failed",
                __func__, WLAN_INI_FILE);
         vos_status = VOS_STATUS_E_FAILURE;
@@ -3371,8 +3334,7 @@ VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
 
     buffer = (char*)vos_mem_malloc(fw->size);
 
-    if(NULL == buffer)
-    {
+    if(NULL == buffer) {
         hddLog(VOS_TRACE_LEVEL_FATAL, "%s: kmalloc failure",__func__);
         release_firmware(fw);
         return VOS_STATUS_E_FAILURE;
@@ -3382,8 +3344,7 @@ VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
     vos_mem_copy((void*)buffer,(void *)fw->data, fw->size);
     size = fw->size;
 
-    while (buffer != NULL)
-    {
+    while (buffer != NULL) {
         /*
          * get_next_line function used to modify the \n and \r delimiter
          * to \0 before returning, without checking if it is over parsing the
@@ -3394,15 +3355,12 @@ VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
          * buffer address and modifying the buffer value.
          */
         line = get_next_line(buffer, (pTemp + (fw->size-1)));
-        if(line > (pTemp + fw->size))
-        {
+        if(line > (pTemp + fw->size)) {
             hddLog(VOS_TRACE_LEVEL_FATAL, "%s: INI file seems to be corrupted",
                    __func__);
             vos_status = VOS_STATUS_E_FAILURE;
             goto config_exit;
-        }
-        else if(line)
-        {
+        } else if(line) {
             *(line - 1) = '\0';
         }
 
@@ -3410,37 +3368,28 @@ VOS_STATUS hdd_parse_config_ini(hdd_context_t* pHddCtx)
 
         hddLog(LOG1, "%s: item", buffer);
 
-        if(strlen((char*)buffer) == 0 || *buffer == '#')
-        {
+        if(strlen((char*)buffer) == 0 || *buffer == '#') {
             buffer = line;
             continue;
-        }
-        else if(strncmp(buffer, "END", 3) == 0 )
-        {
+        } else if(strncmp(buffer, "END", 3) == 0 ) {
             break;
-        }
-        else
-        {
+        } else {
             name = buffer;
             while(*buffer != '=' && *buffer != '\0')
                 buffer++;
-            if(*buffer != '\0')
-            {
+            if(*buffer != '\0') {
                 *buffer++ = '\0';
                 i_trim(name);
-                if(strlen (name) != 0)
-                {
+                if(strlen (name) != 0) {
                     buffer = i_trim(buffer);
-                    if(strlen(buffer)>0)
-                    {
+                    if(strlen(buffer)>0) {
                         value = buffer;
                         while(!i_isspace(*buffer) && *buffer != '\0')
                             buffer++;
                         *buffer = '\0';
                         cfgIniTable[i].name= name;
                         cfgIniTable[i++].value= value;
-                        if(i >= MAX_CFG_INI_ITEMS)
-                        {
+                        if(i >= MAX_CFG_INI_ITEMS) {
                             hddLog(LOGE,"%s: Number of items in %s > %d",
                                    __func__, WLAN_INI_FILE, MAX_CFG_INI_ITEMS);
                             break;
@@ -3462,8 +3411,7 @@ config_exit:
 }
 
 
-static void print_hdd_cfg(hdd_context_t *pHddCtx)
-{
+static void print_hdd_cfg(hdd_context_t *pHddCtx) {
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "*********Config values in HDD Adapter*******");
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [RTSThreshold] Value = %u",pHddCtx->cfg_ini->RTSThreshold) ;
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Name = [OperatingChannel] Value = [%u]",pHddCtx->cfg_ini->OperatingChannel);
@@ -3661,8 +3609,7 @@ static void print_hdd_cfg(hdd_context_t *pHddCtx)
 
 #define CFG_VALUE_MAX_LEN 256
 #define CFG_ENTRY_MAX_LEN (32+CFG_VALUE_MAX_LEN)
-VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen)
-{
+VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen) {
     unsigned int idx;
     REG_TABLE_ENTRY *pRegEntry = g_registry_table;
     unsigned long cRegTableEntries  = sizeof(g_registry_table) / sizeof( g_registry_table[ 0 ]);
@@ -3678,36 +3625,25 @@ VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen)
     // start with an empty string
     *pCur = '\0';
 
-    for ( idx = 0; idx < cRegTableEntries; idx++, pRegEntry++ )
-    {
+    for ( idx = 0; idx < cRegTableEntries; idx++, pRegEntry++ ) {
         pField = ( (v_U8_t *)pHddCtx->cfg_ini) + pRegEntry->VarOffset;
 
         if ( ( WLAN_PARAM_Integer       == pRegEntry->RegType ) ||
                 ( WLAN_PARAM_SignedInteger == pRegEntry->RegType ) ||
-                ( WLAN_PARAM_HexInteger    == pRegEntry->RegType ) )
-        {
+                ( WLAN_PARAM_HexInteger    == pRegEntry->RegType ) ) {
             value = 0;
             memcpy( &value, pField, pRegEntry->VarSize );
-            if ( WLAN_PARAM_HexInteger == pRegEntry->RegType )
-            {
+            if ( WLAN_PARAM_HexInteger == pRegEntry->RegType ) {
                 fmt = "%x";
-            }
-            else if ( WLAN_PARAM_SignedInteger == pRegEntry->RegType )
-            {
+            } else if ( WLAN_PARAM_SignedInteger == pRegEntry->RegType ) {
                 fmt = "%d";
-            }
-            else
-            {
+            } else {
                 fmt = "%u";
             }
             snprintf(valueStr, CFG_VALUE_MAX_LEN, fmt, value);
-        }
-        else if ( WLAN_PARAM_String == pRegEntry->RegType )
-        {
+        } else if ( WLAN_PARAM_String == pRegEntry->RegType ) {
             snprintf(valueStr, CFG_VALUE_MAX_LEN, "%s", (char *)pField);
-        }
-        else if ( WLAN_PARAM_MacAddr == pRegEntry->RegType )
-        {
+        } else if ( WLAN_PARAM_MacAddr == pRegEntry->RegType ) {
             pMacAddr = (v_MACADDR_t *) pField;
             snprintf(valueStr, CFG_VALUE_MAX_LEN,
                      "%02x:%02x:%02x:%02x:%02x:%02x",
@@ -3717,9 +3653,7 @@ VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen)
                      pMacAddr->bytes[3],
                      pMacAddr->bytes[4],
                      pMacAddr->bytes[5]);
-        }
-        else
-        {
+        } else {
             snprintf(valueStr, CFG_VALUE_MAX_LEN, "(unhandled)");
         }
         curlen = scnprintf(configStr, CFG_ENTRY_MAX_LEN,
@@ -3732,17 +3666,14 @@ VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen)
         // ideally we want to return the config to the application
         // however the config is too big so we just printk() for now
 #ifdef RETURN_IN_BUFFER
-        if (curlen <= buflen)
-        {
+        if (curlen <= buflen) {
             // copy string + '\0'
             memcpy(pCur, configStr, curlen+1);
 
             // account for addition;
             pCur += curlen;
             buflen -= curlen;
-        }
-        else
-        {
+        } else {
             // buffer space exhausted, return what we have
             return VOS_STATUS_E_RESOURCES;
         }
@@ -3761,15 +3692,12 @@ VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen)
 }
 
 static VOS_STATUS find_cfg_item (tCfgIniEntry* iniTable, unsigned long entries,
-                                 char *name, char** value)
-{
+                                 char *name, char** value) {
     VOS_STATUS status = VOS_STATUS_E_FAILURE;
     unsigned long i;
 
-    for (i = 0; i < entries; i++)
-    {
-        if (strcmp(iniTable[i].name, name) == 0)
-        {
+    for (i = 0; i < entries; i++) {
+        if (strcmp(iniTable[i].name, name) == 0) {
             *value = iniTable[i].value;
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "Found %s entry for Name=[%s] Value=[%s] ",
                       WLAN_INI_FILE, name, *value);
@@ -3780,8 +3708,7 @@ static VOS_STATUS find_cfg_item (tCfgIniEntry* iniTable, unsigned long entries,
     return status;
 }
 
-static int parseHexDigit(char c)
-{
+static int parseHexDigit(char c) {
     if (c >= '0' && c <= '9')
         return c-'0';
     if (c >= 'a' && c <= 'f')
@@ -3793,8 +3720,7 @@ static int parseHexDigit(char c)
 }
 
 
-static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTable, unsigned long entries)
-{
+static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTable, unsigned long entries) {
     VOS_STATUS match_status = VOS_STATUS_E_FAILURE;
     VOS_STATUS ret_status = VOS_STATUS_SUCCESS;
     unsigned int idx;
@@ -3812,21 +3738,18 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
     int rv;
 
     // sanity test
-    if (MAX_CFG_INI_ITEMS < cRegTableEntries)
-    {
+    if (MAX_CFG_INI_ITEMS < cRegTableEntries) {
         hddLog(LOGE, "%s: MAX_CFG_INI_ITEMS too small, must be at least %ld",
                __func__, cRegTableEntries);
     }
 
-    for ( idx = 0; idx < cRegTableEntries; idx++, pRegEntry++ )
-    {
+    for ( idx = 0; idx < cRegTableEntries; idx++, pRegEntry++ ) {
         //Calculate the address of the destination field in the structure.
         pField = ( (v_U8_t *)pStructBase )+ pRegEntry->VarOffset;
 
         match_status = find_cfg_item(iniTable, entries, pRegEntry->RegName, &value_str);
 
-        if( (match_status != VOS_STATUS_SUCCESS) && ( pRegEntry->Flags & VAR_FLAGS_REQUIRED ) )
-        {
+        if( (match_status != VOS_STATUS_SUCCESS) && ( pRegEntry->Flags & VAR_FLAGS_REQUIRED ) ) {
             // If we could not read the cfg item and it is required, this is an error.
             hddLog(LOGE, "%s: Failed to read required config parameter %s",
                    __func__, pRegEntry->RegName);
@@ -3835,64 +3758,50 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
         }
 
         if ( ( WLAN_PARAM_Integer    == pRegEntry->RegType ) ||
-                ( WLAN_PARAM_HexInteger == pRegEntry->RegType ) )
-        {
+                ( WLAN_PARAM_HexInteger == pRegEntry->RegType ) ) {
             // If successfully read from the registry, use the value read.
             // If not, use the default value.
-            if ( match_status == VOS_STATUS_SUCCESS && (WLAN_PARAM_Integer == pRegEntry->RegType))
-            {
+            if ( match_status == VOS_STATUS_SUCCESS && (WLAN_PARAM_Integer == pRegEntry->RegType)) {
                 rv = kstrtou32(value_str, 10, &value);
-                if (rv < 0)
-                {
+                if (rv < 0) {
                     hddLog(LOGE, "%s: Reg Parameter %s invalid. Enforcing default",
                            __func__, pRegEntry->RegName);
                     value = pRegEntry->VarDefault;
                 }
-            }
-            else if ( match_status == VOS_STATUS_SUCCESS && (WLAN_PARAM_HexInteger == pRegEntry->RegType))
-            {
+            } else if ( match_status == VOS_STATUS_SUCCESS && (WLAN_PARAM_HexInteger == pRegEntry->RegType)) {
                 rv = kstrtou32(value_str, 16, &value);
-                if (rv < 0)
-                {
+                if (rv < 0) {
                     hddLog(LOGE, "%s: Reg paramter %s invalid. Enforcing default",
                            __func__, pRegEntry->RegName);
                     value = pRegEntry->VarDefault;
                 }
-            }
-            else
-            {
+            } else {
                 value = pRegEntry->VarDefault;
             }
 
             // If this parameter needs range checking, do it here.
-            if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK )
-            {
-                if ( value > pRegEntry->VarMax )
-                {
+            if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK ) {
+                if ( value > pRegEntry->VarMax ) {
                     hddLog(LOGE, "%s: Reg Parameter %s > allowed Maximum [%u > %lu]. Enforcing Maximum",
                            __func__, pRegEntry->RegName, value, pRegEntry->VarMax );
                     value = pRegEntry->VarMax;
                 }
 
-                if ( value < pRegEntry->VarMin )
-                {
+                if ( value < pRegEntry->VarMin ) {
                     hddLog(LOGE, "%s: Reg Parameter %s < allowed Minimum [%u < %lu]. Enforcing Minimum",
                            __func__, pRegEntry->RegName, value, pRegEntry->VarMin);
                     value = pRegEntry->VarMin;
                 }
             }
             // If this parameter needs range checking, do it here.
-            else if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT )
-            {
-                if ( value > pRegEntry->VarMax )
-                {
+            else if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT ) {
+                if ( value > pRegEntry->VarMax ) {
                     hddLog(LOGE, "%s: Reg Parameter %s > allowed Maximum [%u > %lu]. Enforcing Default= %lu",
                            __func__, pRegEntry->RegName, value, pRegEntry->VarMax, pRegEntry->VarDefault  );
                     value = pRegEntry->VarDefault;
                 }
 
-                if ( value < pRegEntry->VarMin )
-                {
+                if ( value < pRegEntry->VarMin ) {
                     hddLog(LOGE, "%s: Reg Parameter %s < allowed Minimum [%u < %lu]. Enforcing Default= %lu",
                            __func__, pRegEntry->RegName, value, pRegEntry->VarMin, pRegEntry->VarDefault  );
                     value = pRegEntry->VarDefault;
@@ -3901,39 +3810,30 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
 
             // Move the variable into the output field.
             memcpy( pField, &value, pRegEntry->VarSize );
-        }
-        else if ( WLAN_PARAM_SignedInteger == pRegEntry->RegType )
-        {
+        } else if ( WLAN_PARAM_SignedInteger == pRegEntry->RegType ) {
             // If successfully read from the registry, use the value read.
             // If not, use the default value.
-            if (VOS_STATUS_SUCCESS == match_status)
-            {
+            if (VOS_STATUS_SUCCESS == match_status) {
                 rv = kstrtos32(value_str, 10, &svalue);
-                if (rv < 0)
-                {
+                if (rv < 0) {
                     hddLog(VOS_TRACE_LEVEL_WARN, "%s: Reg Parameter %s invalid. Enforcing Default",
                            __func__, pRegEntry->RegName);
                     svalue = (v_S31_t)pRegEntry->VarDefault;
                 }
-            }
-            else
-            {
+            } else {
                 svalue = (v_S31_t)pRegEntry->VarDefault;
             }
 
             // If this parameter needs range checking, do it here.
-            if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK )
-            {
-                if ( svalue > (v_S31_t)pRegEntry->VarMax )
-                {
+            if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK ) {
+                if ( svalue > (v_S31_t)pRegEntry->VarMax ) {
                     hddLog(LOGE, "%s: Reg Parameter %s > allowed Maximum "
                            "[%d > %d]. Enforcing Maximum", __func__,
                            pRegEntry->RegName, svalue, (int)pRegEntry->VarMax );
                     svalue = (v_S31_t)pRegEntry->VarMax;
                 }
 
-                if ( svalue < (v_S31_t)pRegEntry->VarMin )
-                {
+                if ( svalue < (v_S31_t)pRegEntry->VarMin ) {
                     hddLog(LOGE, "%s: Reg Parameter %s < allowed Minimum "
                            "[%d < %d]. Enforcing Minimum",  __func__,
                            pRegEntry->RegName, svalue, (int)pRegEntry->VarMin);
@@ -3941,10 +3841,8 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
                 }
             }
             // If this parameter needs range checking, do it here.
-            else if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT )
-            {
-                if ( svalue > (v_S31_t)pRegEntry->VarMax )
-                {
+            else if ( pRegEntry->Flags & VAR_FLAGS_RANGE_CHECK_ASSUME_DEFAULT ) {
+                if ( svalue > (v_S31_t)pRegEntry->VarMax ) {
                     hddLog(LOGE, "%s: Reg Parameter %s > allowed Maximum "
                            "[%d > %d]. Enforcing Default= %d",
                            __func__, pRegEntry->RegName, svalue,
@@ -3953,8 +3851,7 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
                     svalue = (v_S31_t)pRegEntry->VarDefault;
                 }
 
-                if ( svalue < (v_S31_t)pRegEntry->VarMin )
-                {
+                if ( svalue < (v_S31_t)pRegEntry->VarMin ) {
                     hddLog(LOGE, "%s: Reg Parameter %s < allowed Minimum "
                            "[%d < %d]. Enforcing Default= %d",
                            __func__, pRegEntry->RegName, svalue,
@@ -3968,76 +3865,59 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
             memcpy( pField, &svalue, pRegEntry->VarSize );
         }
         // Handle string parameters
-        else if ( WLAN_PARAM_String == pRegEntry->RegType )
-        {
+        else if ( WLAN_PARAM_String == pRegEntry->RegType ) {
 #ifdef WLAN_CFG_DEBUG
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_HIGH, "RegName = %s, VarOffset %u VarSize %u VarDefault %s",
                       pRegEntry->RegName, pRegEntry->VarOffset, pRegEntry->VarSize, (char*)pRegEntry->VarDefault);
 #endif
 
-            if ( match_status == VOS_STATUS_SUCCESS)
-            {
+            if ( match_status == VOS_STATUS_SUCCESS) {
                 len_value_str = strlen(value_str);
 
-                if(len_value_str > (pRegEntry->VarSize - 1))
-                {
+                if(len_value_str > (pRegEntry->VarSize - 1)) {
                     hddLog(LOGE, "%s: Invalid Value=[%s] specified for Name=[%s] in %s",
                            __func__, value_str, pRegEntry->RegName, WLAN_INI_FILE);
                     cbOutString = utilMin( strlen( (char *)pRegEntry->VarDefault ), pRegEntry->VarSize - 1 );
                     memcpy( pField, (void *)(pRegEntry->VarDefault), cbOutString );
                     ( (v_U8_t *)pField )[ cbOutString ] = '\0';
-                }
-                else
-                {
+                } else {
                     memcpy( pField, (void *)(value_str), len_value_str);
                     ( (v_U8_t *)pField )[ len_value_str ] = '\0';
                 }
-            }
-            else
-            {
+            } else {
                 // Failed to read the string parameter from the registry.  Use the default.
                 cbOutString = utilMin( strlen( (char *)pRegEntry->VarDefault ), pRegEntry->VarSize - 1 );
                 memcpy( pField, (void *)(pRegEntry->VarDefault), cbOutString );
                 ( (v_U8_t *)pField )[ cbOutString ] = '\0';
             }
-        }
-        else if ( WLAN_PARAM_MacAddr == pRegEntry->RegType )
-        {
-            if(pRegEntry->VarSize != VOS_MAC_ADDR_SIZE)
-            {
+        } else if ( WLAN_PARAM_MacAddr == pRegEntry->RegType ) {
+            if(pRegEntry->VarSize != VOS_MAC_ADDR_SIZE) {
                 hddLog(LOGE, "%s: Invalid VarSize %u for Name=[%s]",
                        __func__, pRegEntry->VarSize, pRegEntry->RegName);
                 continue;
             }
             candidate = (char*)pRegEntry->VarDefault;
-            if ( match_status == VOS_STATUS_SUCCESS)
-            {
+            if ( match_status == VOS_STATUS_SUCCESS) {
                 len_value_str = strlen(value_str);
-                if(len_value_str != (VOS_MAC_ADDR_SIZE*2))
-                {
+                if(len_value_str != (VOS_MAC_ADDR_SIZE*2)) {
                     hddLog(LOGE, "%s: Invalid MAC addr [%s] specified for Name=[%s] in %s",
                            __func__, value_str, pRegEntry->RegName, WLAN_INI_FILE);
-                }
-                else
+                } else
                     candidate = value_str;
             }
             //parse the string and store it in the byte array
-            for(i=0; i<VOS_MAC_ADDR_SIZE; i++)
-            {
+            for(i=0; i<VOS_MAC_ADDR_SIZE; i++) {
                 ((char*)pField)[i] =
                     (char)(parseHexDigit(candidate[i*2])*16 + parseHexDigit(candidate[i*2+1]));
             }
-        }
-        else
-        {
+        } else {
             hddLog(LOGE, "%s: Unknown param type for name[%s] in registry table",
                    __func__, pRegEntry->RegName);
         }
 
         // did we successfully parse a cfg item for this parameter?
         if( (match_status == VOS_STATUS_SUCCESS) &&
-                (idx < MAX_CFG_INI_ITEMS) )
-        {
+                (idx < MAX_CFG_INI_ITEMS) ) {
             set_bit(idx, (void *)&pHddCtx->cfg_ini->bExplicitCfg);
         }
     }
@@ -4047,10 +3927,8 @@ static VOS_STATUS hdd_apply_cfg_ini( hdd_context_t *pHddCtx, tCfgIniEntry* iniTa
     return( ret_status );
 }
 
-eCsrPhyMode hdd_cfg_xlate_to_csr_phy_mode( eHddDot11Mode dot11Mode )
-{
-    switch (dot11Mode)
-    {
+eCsrPhyMode hdd_cfg_xlate_to_csr_phy_mode( eHddDot11Mode dot11Mode ) {
+    switch (dot11Mode) {
     case (eHDD_DOT11_MODE_abg):
         return eCSR_DOT11_MODE_abg;
     case (eHDD_DOT11_MODE_11b):
@@ -4078,8 +3956,7 @@ eCsrPhyMode hdd_cfg_xlate_to_csr_phy_mode( eHddDot11Mode dot11Mode )
 
 }
 
-static void hdd_set_btc_config(hdd_context_t *pHddCtx)
-{
+static void hdd_set_btc_config(hdd_context_t *pHddCtx) {
     hdd_config_t *pConfig = pHddCtx->cfg_ini;
     tSmeBtcConfig btcParams;
     int i;
@@ -4104,15 +3981,13 @@ static void hdd_set_btc_config(hdd_context_t *pHddCtx)
     btcParams.btcDhcpProtOnA2dp = pConfig->btcDhcpProtOnA2dp;
     btcParams.btcDhcpProtOnSco = pConfig->btcDhcpProtOnSco;
 
-    for (i = 0; i < 10; i++)
-    {
+    for (i = 0; i < 10; i++) {
         btcParams.mwsCoexVictimWANFreq[i] = pConfig->mwsCoexVictimWANFreq[i];
         btcParams.mwsCoexVictimWLANFreq[i] = pConfig->mwsCoexVictimWLANFreq[i];
         btcParams.mwsCoexVictimConfig[i] = pConfig->mwsCoexVictimConfig[i];
         btcParams.mwsCoexVictimConfig2[i] = pConfig->mwsCoexVictimConfig2[i];
     }
-    for (i = 0; i < 6; i++)
-    {
+    for (i = 0; i < 6; i++) {
         btcParams.mwsCoexConfig[i] = pConfig->mwsCoexConfig[i];
     }
     btcParams.mwsCoexModemBackoff = pConfig->mwsCoexModemBackoff;
@@ -4121,42 +3996,35 @@ static void hdd_set_btc_config(hdd_context_t *pHddCtx)
     sme_BtcSetConfig(pHddCtx->hHal, &btcParams);
 }
 
-static void hdd_set_power_save_config(hdd_context_t *pHddCtx, tSmeConfigParams *smeConfig)
-{
+static void hdd_set_power_save_config(hdd_context_t *pHddCtx, tSmeConfigParams *smeConfig) {
     hdd_config_t *pConfig = pHddCtx->cfg_ini;
 
     tPmcBmpsConfigParams bmpsParams;
 
     sme_GetConfigPowerSave(pHddCtx->hHal, ePMC_BEACON_MODE_POWER_SAVE, &bmpsParams);
 
-    if (strcmp(pConfig->PowerUsageControl, "Min") == 0)
-    {
+    if (strcmp(pConfig->PowerUsageControl, "Min") == 0) {
         smeConfig->csrConfig.impsSleepTime   = pConfig->nImpsMinSleepTime;
         bmpsParams.bmpsPeriod                = pConfig->nBmpsMinListenInterval;
         bmpsParams.enableBeaconEarlyTermination = pConfig->fEnableBeaconEarlyTermination;
         bmpsParams.bcnEarlyTermWakeInterval  = pConfig->bcnEarlyTermWakeInterval;
     }
-    if (strcmp(pConfig->PowerUsageControl, "Max") == 0)
-    {
+    if (strcmp(pConfig->PowerUsageControl, "Max") == 0) {
         smeConfig->csrConfig.impsSleepTime   = pConfig->nImpsMaxSleepTime;
         bmpsParams.bmpsPeriod                = pConfig->nBmpsMaxListenInterval;
         bmpsParams.enableBeaconEarlyTermination = pConfig->fEnableBeaconEarlyTermination;
         bmpsParams.bcnEarlyTermWakeInterval  = pConfig->bcnEarlyTermWakeInterval;
     }
-    if (strcmp(pConfig->PowerUsageControl, "Mod") == 0)
-    {
+    if (strcmp(pConfig->PowerUsageControl, "Mod") == 0) {
         smeConfig->csrConfig.impsSleepTime   = pConfig->nImpsModSleepTime;
         bmpsParams.bmpsPeriod                = pConfig->nBmpsModListenInterval;
         bmpsParams.enableBeaconEarlyTermination = pConfig->fEnableBeaconEarlyTermination;
         bmpsParams.bcnEarlyTermWakeInterval  = pConfig->bcnEarlyTermWakeInterval;
     }
 
-    if (pConfig->fIsImpsEnabled)
-    {
+    if (pConfig->fIsImpsEnabled) {
         sme_EnablePowerSave (pHddCtx->hHal, ePMC_IDLE_MODE_POWER_SAVE);
-    }
-    else
-    {
+    } else {
         sme_DisablePowerSave (pHddCtx->hHal, ePMC_IDLE_MODE_POWER_SAVE);
     }
 
@@ -4164,47 +4032,38 @@ static void hdd_set_power_save_config(hdd_context_t *pHddCtx, tSmeConfigParams *
       If Value set to 0 Driver/Core Stack internally control the Power saving mechanism */
     sme_SetHostPowerSave (pHddCtx->hHal, pConfig->isAndroidPsEn);
 
-    if (pConfig->fIsBmpsEnabled)
-    {
+    if (pConfig->fIsBmpsEnabled) {
         sme_EnablePowerSave (pHddCtx->hHal, ePMC_BEACON_MODE_POWER_SAVE);
-    }
-    else
-    {
+    } else {
         sme_DisablePowerSave (pHddCtx->hHal, ePMC_BEACON_MODE_POWER_SAVE);
     }
 
     bmpsParams.trafficMeasurePeriod = pConfig->nAutoBmpsTimerValue;
 
-    if (sme_SetConfigPowerSave(pHddCtx->hHal, ePMC_BEACON_MODE_POWER_SAVE, &bmpsParams)== eHAL_STATUS_FAILURE)
-    {
+    if (sme_SetConfigPowerSave(pHddCtx->hHal, ePMC_BEACON_MODE_POWER_SAVE, &bmpsParams)== eHAL_STATUS_FAILURE) {
         hddLog(LOGE, "SetConfigPowerSave failed to set BMPS params");
     }
 
-    if(pConfig->fIsAutoBmpsTimerEnabled)
-    {
+    if(pConfig->fIsAutoBmpsTimerEnabled) {
         sme_StartAutoBmpsTimer(pHddCtx->hHal);
     }
 
 }
 
 #ifdef WLAN_FEATURE_NEIGHBOR_ROAMING
-static VOS_STATUS hdd_string_to_u8_array( char *str, tANI_U8 *intArray, tANI_U8 *len, tANI_U8 intArrayMaxLen )
-{
+static VOS_STATUS hdd_string_to_u8_array( char *str, tANI_U8 *intArray, tANI_U8 *len, tANI_U8 intArrayMaxLen ) {
     char *s = str;
 
-    if( str == NULL || intArray == NULL || len == NULL )
-    {
+    if( str == NULL || intArray == NULL || len == NULL ) {
         return VOS_STATUS_E_INVAL;
     }
     *len = 0;
 
-    while ( (s != NULL) && (*len < intArrayMaxLen) )
-    {
+    while ( (s != NULL) && (*len < intArrayMaxLen) ) {
         int val;
         //Increment length only if sscanf succesfully extracted one element.
         //Any other return value means error. Ignore it.
-        if( sscanf(s, "%d", &val ) == 1 )
-        {
+        if( sscanf(s, "%d", &val ) == 1 ) {
             intArray[*len] = (tANI_U8) val;
             *len += 1;
         }
@@ -4219,8 +4078,7 @@ static VOS_STATUS hdd_string_to_u8_array( char *str, tANI_U8 *intArray, tANI_U8 
 #endif
 
 
-v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
-{
+v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx ) {
     v_BOOL_t  fStatus = TRUE;
 #ifdef WLAN_SOFTAP_VSTA_FEATURE
     tANI_U32 val;
@@ -4232,130 +4090,105 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     tANI_U16 temp16;
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_SHORT_GI_20MHZ,
-                     pConfig->ShortGI20MhzEnable, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     pConfig->ShortGI20MhzEnable, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_SHORT_GI_20MHZ to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_CAL_CONTROL, pConfig->Calibration,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_CAL_CONTROL to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_CAL_PERIOD, pConfig->CalibrationPeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_CAL_PERIOD to CCM");
     }
 
-    if ( 0 != pConfig->Cfg1Id )
-    {
+    if ( 0 != pConfig->Cfg1Id ) {
         if (ccmCfgSetInt(pHddCtx->hHal, pConfig->Cfg1Id, pConfig->Cfg1Value, NULL,
-                         eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE, "Could not pass on Cfg1Id to CCM");
         }
 
     }
 
-    if ( 0 != pConfig->Cfg2Id )
-    {
+    if ( 0 != pConfig->Cfg2Id ) {
         if (ccmCfgSetInt(pHddCtx->hHal, pConfig->Cfg2Id, pConfig->Cfg2Value,
-                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE, "Could not pass on Cfg2Id to CCM");
         }
     }
 
-    if ( 0 != pConfig->Cfg3Id )
-    {
+    if ( 0 != pConfig->Cfg3Id ) {
         if (ccmCfgSetInt(pHddCtx->hHal, pConfig->Cfg3Id, pConfig->Cfg3Value,
-                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE, "Could not pass on Cfg3Id to CCM");
         }
     }
 
-    if ( 0 != pConfig->Cfg4Id )
-    {
+    if ( 0 != pConfig->Cfg4Id ) {
         if (ccmCfgSetInt(pHddCtx->hHal, pConfig->Cfg4Id, pConfig->Cfg4Value,
-                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE, "Could not pass on Cfg4Id to CCM");
         }
     }
 
-    if ( 0 != pConfig->Cfg5Id )
-    {
+    if ( 0 != pConfig->Cfg5Id ) {
         if (ccmCfgSetInt(pHddCtx->hHal, pConfig->Cfg5Id, pConfig->Cfg5Value,
-                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE, "Could not pass on Cfg5Id to CCM");
         }
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_BA_AUTO_SETUP, pConfig->BlockAckAutoSetup,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_BA_AUTO_SETUP to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_FIXED_RATE, pConfig->TxRate,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_FIXED_RATE to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_RX_AMPDU_FACTOR,
-                     pConfig->MaxRxAmpduFactor, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     pConfig->MaxRxAmpduFactor, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Could not pass on WNI_CFG_HT_AMPDU_PARAMS_MAX_RX_AMPDU_FACTOR to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_SHORT_PREAMBLE, pConfig->fIsShortPreamble,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Could not pass on WNI_CFG_SHORT_PREAMBLE to CCM");
     }
 
-    if (pConfig->fIsAutoIbssBssid)
-    {
+    if (pConfig->fIsAutoIbssBssid) {
         if (ccmCfgSetStr(pHddCtx->hHal, WNI_CFG_BSSID, (v_U8_t *)"000000000000",
-                         sizeof(v_BYTE_t) * VOS_MAC_ADDR_SIZE, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         sizeof(v_BYTE_t) * VOS_MAC_ADDR_SIZE, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE,"Could not pass on WNI_CFG_BSSID to CCM");
         }
-    }
-    else
-    {
-        if ( VOS_FALSE == vos_is_macaddr_group( &pConfig->IbssBssid ))
-        {
+    } else {
+        if ( VOS_FALSE == vos_is_macaddr_group( &pConfig->IbssBssid )) {
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO_MED,
                        "MAC Addr (IBSS BSSID) read from Registry is: " MAC_ADDRESS_STR,
                        MAC_ADDR_ARRAY(pConfig->IbssBssid.bytes));
             if (ccmCfgSetStr(pHddCtx->hHal, WNI_CFG_BSSID, pConfig->IbssBssid.bytes,
-                             sizeof(v_BYTE_t) * VOS_MAC_ADDR_SIZE, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-            {
+                             sizeof(v_BYTE_t) * VOS_MAC_ADDR_SIZE, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE,"Could not pass on WNI_CFG_BSSID to CCM");
             }
-        }
-        else
-        {
+        } else {
             fStatus = FALSE;
             hddLog(LOGE,"Could not pass on WNI_CFG_BSSID to CCM");
         }
@@ -4363,8 +4196,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PASSIVE_MINIMUM_CHANNEL_TIME,
                      pConfig->nPassiveMinChnTime, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_PASSIVE_MINIMUM_CHANNEL_TIME"
                " to CCM\n");
@@ -4372,127 +4204,109 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PASSIVE_MAXIMUM_CHANNEL_TIME,
                      pConfig->nPassiveMaxChnTime, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_PASSIVE_MAXIMUM_CHANNEL_TIME"
                " to CCM\n");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_BEACON_INTERVAL, pConfig->nBeaconInterval,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_BEACON_INTERVAL to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_PS_POLL, pConfig->nMaxPsPoll,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_PS_POLL to CCM");
     }
 
-    if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_CURRENT_RX_ANTENNA, pConfig-> nRxAnt, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+    if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_CURRENT_RX_ANTENNA, pConfig-> nRxAnt, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Failure: Could not pass on WNI_CFG_CURRENT_RX_ANTENNA configuration info to HAL"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_LOW_GAIN_OVERRIDE, pConfig->fIsLowGainOverride,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_LOW_GAIN_OVERRIDE to HAL");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RSSI_FILTER_PERIOD, pConfig->nRssiFilterPeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_RSSI_FILTER_PERIOD to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_IGNORE_DTIM, pConfig->fIgnoreDtim,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_IGNORE_DTIM configuration to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PS_ENABLE_HEART_BEAT, pConfig->fEnableFwHeartBeatMonitoring,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Failure: Could not pass on WNI_CFG_PS_HEART_BEAT configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PS_ENABLE_BCN_FILTER, pConfig->fEnableFwBeaconFiltering,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Failure: Could not pass on WNI_CFG_PS_BCN_FILTER configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PS_ENABLE_RSSI_MONITOR, pConfig->fEnableFwRssiMonitoring,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Failure: Could not pass on WNI_CFG_PS_RSSI_MONITOR configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PS_DATA_INACTIVITY_TIMEOUT, pConfig->nDataInactivityTimeout,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_PS_DATA_INACTIVITY_TIMEOUT configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_NTH_BEACON_FILTER, pConfig->nthBeaconFilter,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_NTH_BEACON_FILTER configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_LTE_COEX, pConfig->enableLTECoex,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_LTE_COEX to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_PHY_AGC_LISTEN_MODE, pConfig->nEnableListenMode,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_PHY_AGC_LISTEN_MODE to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_AP_KEEP_ALIVE_TIMEOUT, pConfig->apKeepAlivePeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_AP_KEEP_ALIVE_TIMEOUT to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_GO_KEEP_ALIVE_TIMEOUT, pConfig->goKeepAlivePeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_GO_KEEP_ALIVE_TIMEOUT to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_AP_LINK_MONITOR_TIMEOUT, pConfig->apLinkMonitorPeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_AP_LINK_MONITOR_TIMEOUT to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_GO_LINK_MONITOR_TIMEOUT, pConfig->goLinkMonitorPeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_GO_LINK_MONITOR_TIMEOUT to CCM");
     }
@@ -4500,22 +4314,19 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
 #if defined WLAN_FEATURE_VOWIFI
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RRM_ENABLED, pConfig->fRrmEnable,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_RRM_ENABLE configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RRM_OPERATING_CHAN_MAX, pConfig->nInChanMeasMaxDuration,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_RRM_OPERATING_CHAN_MAX configuration info to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RRM_NON_OPERATING_CHAN_MAX, pConfig->nOutChanMeasMaxDuration,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_RRM_OUT_CHAN_MAX configuration info to CCM");
     }
@@ -4525,140 +4336,120 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 #endif
 
         if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_SINGLE_TID_RC, pConfig->bSingleTidRc,
-                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
             fStatus = FALSE;
             hddLog(LOGE,"Failure: Could not pass on WNI_CFG_SINGLE_TID_RC configuration info to CCM");
         }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TELE_BCN_WAKEUP_EN, pConfig->teleBcnWakeupEn,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_TELE_BCN_WAKEUP_EN configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TELE_BCN_TRANS_LI, pConfig->nTeleBcnTransListenInterval,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_TELE_BCN_TRANS_LI configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TELE_BCN_MAX_LI, pConfig->nTeleBcnMaxListenInterval,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_TELE_BCN_MAX_LI configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TELE_BCN_TRANS_LI_IDLE_BCNS, pConfig->nTeleBcnTransLiNumIdleBeacons,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_TELE_BCN_TRANS_LI_IDLE_BCNS configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TELE_BCN_MAX_LI_IDLE_BCNS, pConfig->nTeleBcnMaxLiNumIdleBeacons,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_TELE_BCN_MAX_LI_IDLE_BCNS configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RF_SETTLING_TIME_CLK, pConfig->rfSettlingTimeUs,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_RF_SETTLING_TIME_CLK configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_INFRA_STA_KEEP_ALIVE_PERIOD, pConfig->infraStaKeepAlivePeriod,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_INFRA_STA_KEEP_ALIVE_PERIOD configuration info to CCM"  );
     }
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_DYNAMIC_PS_POLL_VALUE, pConfig->dynamicPsPollValue,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_DYNAMIC_PS_POLL_VALUE configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PS_NULLDATA_AP_RESP_TIMEOUT, pConfig->nNullDataApRespTimeout,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_PS_NULLDATA_DELAY_TIMEOUT configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_AP_DATA_AVAIL_POLL_PERIOD, pConfig->apDataAvailPollPeriodInMs,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_AP_DATA_AVAIL_POLL_PERIOD configuration info to CCM"  );
     }
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_FRAGMENTATION_THRESHOLD, pConfig->FragmentationThreshold,
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_FRAGMENTATION_THRESHOLD configuration info to CCM"  );
     }
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RTS_THRESHOLD, pConfig->RTSThreshold,
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_RTS_THRESHOLD configuration info to CCM"  );
     }
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_11D_ENABLED, pConfig->Is11dSupportEnabled,
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_11D_ENABLED configuration info to CCM"  );
     }
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_HEART_BEAT_THRESHOLD, pConfig->HeartbeatThresh24,
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_HEART_BEAT_THRESHOLD configuration info to CCM"  );
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_AP_DATA_AVAIL_POLL_PERIOD, pConfig->apDataAvailPollPeriodInMs,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_AP_DATA_AVAIL_POLL_PERIOD configuration info to CCM"  );
     }
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_CLOSE_LOOP,
                     pConfig->enableCloseLoop, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_CLOSE_LOOP to CCM");
     }
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TX_PWR_CTRL_ENABLE,
                     pConfig->enableAutomaticTxPowerControl, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TX_PWR_CTRL_ENABLE to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_SHORT_GI_40MHZ,
-                     pConfig->ShortGI40MhzEnable, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     pConfig->ShortGI40MhzEnable, NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_SHORT_GI_40MHZ to CCM");
     }
 
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_MC_ADDR_LIST, pConfig->fEnableMCAddrList,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_MC_ADDR_LIST to CCM");
     }
@@ -4669,8 +4460,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     /* we update only the least significant 2 bits in the corresponding fields */
     if( (pConfig->dot11Mode == eHDD_DOT11_MODE_AUTO) ||
             (pConfig->dot11Mode == eHDD_DOT11_MODE_11ac_ONLY) ||
-            (pConfig->dot11Mode == eHDD_DOT11_MODE_11ac) )
-    {
+            (pConfig->dot11Mode == eHDD_DOT11_MODE_11ac) ) {
         {
             tANI_U32 temp = 0;
 
@@ -4679,8 +4469,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
             if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_BASIC_MCS_SET,
                             temp, NULL, eANI_BOOLEAN_FALSE)
-                    ==eHAL_STATUS_FAILURE)
-            {
+                    ==eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE, "Could not pass on WNI_CFG_VHT_BASIC_MCS_SET to CCM");
             }
@@ -4690,8 +4479,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
             if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_RX_MCS_MAP,
                             temp, NULL, eANI_BOOLEAN_FALSE)
-                    ==eHAL_STATUS_FAILURE)
-            {
+                    ==eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE, "Could not pass on WNI_CFG_VHT_RX_MCS_MAP to CCM");
             }
@@ -4701,23 +4489,20 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
             if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_TX_MCS_MAP,
                             temp, NULL, eANI_BOOLEAN_FALSE)
-                    ==eHAL_STATUS_FAILURE)
-            {
+                    ==eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE, "Could not pass on WNI_CFG_VHT_TX_MCS_MAP to CCM");
             }
             /* Currently shortGI40Mhz is used for shortGI80Mhz */
             if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_SHORT_GI_80MHZ,
                              pConfig->ShortGI40MhzEnable, NULL, eANI_BOOLEAN_FALSE)
-                    == eHAL_STATUS_FAILURE)
-            {
+                    == eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE, "Could not pass WNI_VHT_SHORT_GI_80MHZ to CCM\n");
             }
             if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_AMPDU_LEN_EXPONENT,
                              pConfig->gVhtMaxAmpduLenExp, NULL, eANI_BOOLEAN_FALSE)
-                    ==eHAL_STATUS_FAILURE)
-            {
+                    ==eHAL_STATUS_FAILURE) {
                 fStatus = FALSE;
                 hddLog(LOGE, "Could not pass on WNI_CFG_VHT_AMPDU_LEN_EXPONENT to CCM");
             }
@@ -4727,16 +4512,14 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 #endif
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_NUM_BUFF_ADVERT,pConfig->numBuffAdvert,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_NUM_BUFF_ADVERT to CCM");
     }
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_HT_RX_STBC,
                     pConfig->enableRxSTBC, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_HT_RX_STBC to CCM");
     }
@@ -4749,83 +4532,70 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_HT_CAP_INFO,
                     temp32, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_HT_CAP_INFO to CCM");
     }
 
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_VHT_RXSTBC,
                     pConfig->enableRxSTBC, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_VHT_RXSTBC to CCM");
     }
 
 #ifdef WLAN_SOFTAP_VSTA_FEATURE
-    if(pConfig->fEnableVSTASupport)
-    {
+    if(pConfig->fEnableVSTASupport) {
         ccmCfgGetInt(pHddCtx->hHal, WNI_CFG_ASSOC_STA_LIMIT, &val);
         if( val <= WNI_CFG_ASSOC_STA_LIMIT_STADEF)
             val = WNI_CFG_ASSOC_STA_LIMIT_STAMAX;
-    }
-    else
-    {
+    } else {
         val = WNI_CFG_ASSOC_STA_LIMIT_STADEF;
     }
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ASSOC_STA_LIMIT, val,
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,"Failure: Could not pass on WNI_CFG_ASSOC_STA_LIMIT configuration info to CCM"  );
     }
 #endif
     if(ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_LPWR_IMG_TRANSITION,
                     pConfig->enableLpwrImgTransition, NULL, eANI_BOOLEAN_FALSE)
-            ==eHAL_STATUS_FAILURE)
-    {
+            ==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_LPWR_IMG_TRANSITION to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_MCC_ADAPTIVE_SCHED, pConfig->enableMCCAdaptiveScheduler,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_MCC_ADAPTIVE_SCHED to CCM");
     }
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_DISABLE_LDPC_WITH_TXBF_AP, pConfig->disableLDPCWithTxbfAP,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_DISABLE_LDPC_WITH_TXBF_AP to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_DYNAMIC_THRESHOLD_ZERO, pConfig->retryLimitZero,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_DYNAMIC_THRESHOLD_ZERO to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_DYNAMIC_THRESHOLD_ONE, pConfig->retryLimitOne,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_DYNAMIC_THRESHOLD_ONE to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_DYNAMIC_THRESHOLD_TWO, pConfig->retryLimitTwo,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_DYNAMIC_THRESHOLD_TWO to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_MEDIUM_TIME, pConfig->cfgMaxMediumTime,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_MEDIUM_TIME to CCM");
     }
@@ -4834,14 +4604,12 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_QOS_WMM_UAPSD_MASK,
                      pConfig->fTDLSUapsdMask, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_QOS_WMM_UAPSD_MASK to CCM");
     }
 
-    if (TRUE == pConfig->fEnableTDLSScanCoexSupport)
-    {
+    if (TRUE == pConfig->fEnableTDLSScanCoexSupport) {
         /* TDLSScanCoexistance feature is supported when the DUT acts as only
          * the Sleep STA and hence explicitly disable the BufferSta capability
          * on the DUT. DUT's Buffer STA capability is explicitly disabled to
@@ -4851,38 +4619,33 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     }
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_BUF_STA_ENABLED,
                      pConfig->fEnableTDLSBufferSta, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_BUF_STA_ENABLED to CCM");
     }
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_PUAPSD_INACT_TIME,
                      pConfig->fTDLSPuapsdInactivityTimer, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_PUAPSD_INACT_TIME to CCM");
     }
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_RX_FRAME_THRESHOLD,
                      pConfig->fTDLSRxFrameThreshold, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_RX_FRAME_THRESHOLD to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_OFF_CHANNEL_ENABLED,
                      pConfig->fEnableTDLSOffChannel, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_BUF_STA_ENABLED to CCM\n");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_TDLS_WMM_MODE_ENABLED,
                      pConfig->fEnableTDLSWmmMode, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_TDLS_WMM_MODE_ENABLED to CCM\n");
     }
@@ -4891,16 +4654,14 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_ADAPT_RX_DRAIN,
                      pConfig->fEnableAdaptRxDrain, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_ADAPT_RX_DRAIN to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_FLEX_CONNECT_POWER_FACTOR,
                      pConfig->flexConnectPowerFactor, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Failure: Could not pass on "
                "WNI_CFG_FLEX_CONNECT_POWER_FACTOR to CCM");
@@ -4908,16 +4669,14 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ANTENNA_DIVESITY,
                      pConfig->antennaDiversity, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ANTENNA_DIVESITY to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ATH_DISABLE,
                      pConfig->cfgAthDisable, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ATH_DISABLE to CCM");
     }
@@ -4925,8 +4684,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_ACTIVE_WLAN_LEN,
                      pConfig->cfgBtcActiveWlanLen,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_BTC_ACTIVE_WLAN_LEN to CCM");
     }
@@ -4934,8 +4692,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_ACTIVE_BT_LEN,
                      pConfig->cfgBtcActiveBtLen,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_BTC_ACTIVE_BT_LEN to CCM");
     }
@@ -4943,8 +4700,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_SAP_ACTIVE_WLAN_LEN,
                      pConfig->cfgBtcSapActiveWlanLen,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_BTC_ACTIVE_WLAN_LEN to CCM");
     }
@@ -4952,32 +4708,28 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_SAP_ACTIVE_BT_LEN,
                      pConfig->cfgBtcSapActiveBtLen,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_BTC_ACTIVE_BT_LEN to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ASD_PROBE_INTERVAL,
                      pConfig->gAsdProbeInterval, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ASD_PROBE_INTERVAL to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ASD_TRIGGER_THRESHOLD,
                      pConfig->gAsdTriggerThreshold, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ASD_TRIGGER_THRESHOLD to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ASD_RTT_RSSI_HYST_THRESHOLD,
                      pConfig->gAsdRTTRssiHystThreshold, NULL,
-                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ASD_RSSI_HYST_THRESHOLD to CCM");
     }
@@ -4985,8 +4737,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_DEBUG_P2P_REMAIN_ON_CHANNEL,
                      pConfig->debugP2pRemainOnChannel,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE,
                "Could not pass on WNI_CFG_DEBUG_P2P_REMAIN_ON_CHANNEL to CCM");
@@ -4995,8 +4746,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_CTS2S_DURING_SCO,
                      pConfig->cfgBtcCTS2SduringSCO,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_BTC_CTS2S_DURING_SCO to CCM");
     }
@@ -5004,23 +4754,20 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if(ccmCfgSetInt(pHddCtx->hHal,
                     WNI_CFG_DEFAULT_RATE_INDEX_24GHZ,
                     defHddRateToDefCfgRate(pConfig->defaultRateIndex24Ghz),
-                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                    NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_DEFAULT_RATE_INDEX_24GHZ to"
                " CCM\n");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RA_FILTER_ENABLE, pConfig->cfgRAFilterEnable,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_RA_FILTER_ENABLE to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_RA_RATE_LIMIT_INTERVAL, pConfig->cfgRARateLimitInterval,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_RA_FILTER_ENABLE to CCM");
     }
@@ -5028,8 +4775,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_FATAL_HID_NSNIFF_BLK_GUIDANCE,
                      pConfig->cfgBtcFatalHidnSniffBlkGuidance,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on"
                "WNI_CFG_BTC_FATAL_HID_NSNIFF_BLK_GUIDANCE to CCM");
@@ -5038,8 +4784,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_CRITICAL_HID_NSNIFF_BLK_GUIDANCE,
                      pConfig->cfgBtcCriticalHidnSniffBlkGuidance,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on"
                "WNI_CFG_BTC_CRITICAL_HID_NSNIFF_BLK_GUIDANCE to CCM");
@@ -5048,8 +4793,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_DYN_A2DP_TX_QUEUE_THOLD,
                      pConfig->cfgBtcA2dpTxQueueThold,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on"
                "WNI_CFG_BTC_DYN_A2DP_TX_QUEUE_THOLD to CCM");
@@ -5058,8 +4802,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
     if (ccmCfgSetInt(pHddCtx->hHal,
                      WNI_CFG_BTC_DYN_OPP_TX_QUEUE_THOLD,
                      pConfig->cfgBtcOppTxQueueThold,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on"
                "WNI_CFG_BTC_DYN_OPP_TX_QUEUE_THOLD to CCM");
@@ -5068,96 +4811,84 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 #ifdef WLAN_FEATURE_11W
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PMF_SA_QUERY_MAX_RETRIES,
                      pConfig->pmfSaQueryMaxRetries, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_SA_QUERY_MAX_RETRIES to CCM");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_PMF_SA_QUERY_RETRY_INTERVAL,
                      pConfig->pmfSaQueryRetryInterval, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_SA_QUERY_RETRY_INTERVAL to CCM");
     }
 #endif
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_CONSEC_SP,
                      pConfig->maxUapsdConsecSP, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_CONSEC_SP");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_CONSEC_RX_CNT,
                      pConfig->maxUapsdConsecRxCnt, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_CONSEC_RX_CNT");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_CONSEC_TX_CNT,
                      pConfig->maxUapsdConsecTxCnt, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_CONSEC_TX_CNT");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_CONSEC_TX_CNT_MEAS_WINDOW,
                      pConfig->uapsdConsecTxCntMeasWindow, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_CONSEC_TX_CNT_MEAS_WINDOW");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_CONSEC_RX_CNT_MEAS_WINDOW,
                      pConfig->uapsdConsecRxCntMeasWindow, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_CONSEC_RX_CNT_MEAS_WINDOW");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_PSPOLL_IN_WMM_UAPSD_PS_MODE,
                      pConfig->maxPsPollInWmmUapsdMode, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_PSPOLL_IN_WMM_UAPSD_PS_MODE");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_MAX_UAPSD_INACTIVITY_INTERVALS,
                      pConfig->maxUapsdInactivityIntervals, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_MAX_UAPSD_INACTIVITY_INTERVALS");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_DYNAMIC_WMMPS,
                      pConfig->enableDynamicWMMPS, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_ENABLE_DYNAMIC_WMMPS");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_BURST_MODE_BE_TXOP_VALUE,
                      pConfig->burstModeTXOPValue, NULL,
-                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on WNI_CFG_BURST_MODE_BE_TXOP_VALUE ");
     }
 
     if (ccmCfgSetInt(pHddCtx->hHal, WNI_CFG_ENABLE_DYNAMIC_RA_START_RATE,
                      pConfig->enableDynamicRAStartRate,
-                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         fStatus = FALSE;
         hddLog(LOGE, "Could not pass on"
                "WNI_CFG_ENABLE_DYNAMIC_RA_START_RATE to CCM");
@@ -5178,8 +4909,7 @@ v_BOOL_t hdd_update_config_dat( hdd_context_t *pHddCtx )
 
   --------------------------------------------------------------------------*/
 
-VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
-{
+VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx ) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     eHalStatus halStatus;
     tpSmeConfigParams smeConfig;
@@ -5187,8 +4917,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     hdd_config_t *pConfig = pHddCtx->cfg_ini;
 
     smeConfig = vos_mem_malloc(sizeof(tSmeConfigParams));
-    if (NULL == smeConfig)
-    {
+    if (NULL == smeConfig) {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, "%s smeConfig allocation failed",__func__);
         return eHAL_STATUS_FAILED_ALLOC;
     }
@@ -5212,13 +4941,10 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
             (pConfig->dot11Mode == eHDD_DOT11_MODE_11b) ||
             (pConfig->dot11Mode == eHDD_DOT11_MODE_11g) ||
             (pConfig->dot11Mode == eHDD_DOT11_MODE_11b_ONLY) ||
-            (pConfig->dot11Mode == eHDD_DOT11_MODE_11g_ONLY))
-    {
+            (pConfig->dot11Mode == eHDD_DOT11_MODE_11g_ONLY)) {
         smeConfig->csrConfig.channelBondingMode24GHz  = 0;
         smeConfig->csrConfig.channelBondingMode5GHz  = 0;
-    }
-    else
-    {
+    } else {
         smeConfig->csrConfig.channelBondingMode24GHz   = pConfig->nChannelBondingMode24GHz;
         smeConfig->csrConfig.channelBondingMode5GHz   = pConfig->nChannelBondingMode5GHz;
     }
@@ -5281,12 +5007,9 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     smeConfig->csrConfig.ProprietaryRatesEnabled   = 0;
     smeConfig->csrConfig.HeartbeatThresh50         = 40;
     smeConfig->csrConfig.bandCapability            = pConfig->nBandCapability;
-    if (pConfig->nBandCapability == eCSR_BAND_24)
-    {
+    if (pConfig->nBandCapability == eCSR_BAND_24) {
         smeConfig->csrConfig.Is11hSupportEnabled       = 0;
-    }
-    else
-    {
+    } else {
         smeConfig->csrConfig.Is11hSupportEnabled       = pConfig->Is11hSupportEnabled;
     }
     smeConfig->csrConfig.cbChoice                  = 0;
@@ -5304,17 +5027,14 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     smeConfig->csrConfig.fFirstScanOnly2GChnl      = pConfig->enableFirstScan2GOnly;
 
     //FIXME 11d config is hardcoded
-    if ( VOS_STA_SAP_MODE != hdd_get_conparam())
-    {
+    if ( VOS_STA_SAP_MODE != hdd_get_conparam()) {
         smeConfig->csrConfig.Csr11dinfo.Channels.numChannels = 0;
 
         /* if there is a requirement that HDD will control the default
          * channel list & country code (say from .ini file) we need to
          * add some logic here. Otherwise the default 11d info should
          * come from NV as per our current implementation */
-    }
-    else
-    {
+    } else {
         VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                    "AP country Code %s", pConfig->apCntryCode);
 
@@ -5334,8 +5054,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
 #endif
 #ifdef FEATURE_WLAN_ESE
     smeConfig->csrConfig.isEseIniFeatureEnabled = pConfig->isEseIniFeatureEnabled;
-    if( pConfig->isEseIniFeatureEnabled )
-    {
+    if( pConfig->isEseIniFeatureEnabled ) {
         pConfig->isFastTransitionEnabled = TRUE;
     }
 #endif
@@ -5349,8 +5068,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     smeConfig->csrConfig.isRoamOffloadScanEnabled = pConfig->isRoamOffloadScanEnabled;
     smeConfig->csrConfig.bFastRoamInConIniFeatureEnabled = pConfig->bFastRoamInConIniFeatureEnabled;
 
-    if (0 == smeConfig->csrConfig.isRoamOffloadScanEnabled)
-    {
+    if (0 == smeConfig->csrConfig.isRoamOffloadScanEnabled) {
         /* Disable roaming in concurrency if roam scan offload is disabled */
         smeConfig->csrConfig.bFastRoamInConIniFeatureEnabled = 0;
     }
@@ -5365,8 +5083,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     smeConfig->csrConfig.neighborRoamConfig.nNeighborResultsRefreshPeriod = pConfig->nNeighborResultsRefreshPeriod;
     smeConfig->csrConfig.neighborRoamConfig.nEmptyScanRefreshPeriod = pConfig->nEmptyScanRefreshPeriod;
     //Making Forced 5G roaming to tightly coupled with the gEnableFirstScan2GOnly=1 only.
-    if(pConfig->enableFirstScan2GOnly)
-    {
+    if(pConfig->enableFirstScan2GOnly) {
         smeConfig->csrConfig.neighborRoamConfig.nNeighborInitialForcedRoamTo5GhEnable = pConfig->nNeighborInitialForcedRoamTo5GhEnable;
     }
     hdd_string_to_u8_array( pConfig->neighborScanChanList,
@@ -5409,8 +5126,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
     smeConfig->fDeferIMPSTime = pHddCtx->cfg_ini->deferImpsTime;
 
     halStatus = sme_UpdateConfig( pHddCtx->hHal, smeConfig);
-    if ( !HAL_STATUS_SUCCESS( halStatus ) )
-    {
+    if ( !HAL_STATUS_SUCCESS( halStatus ) ) {
         status = VOS_STATUS_E_FAILURE;
         hddLog(LOGE, "sme_UpdateConfig() return failure %d", halStatus);
     }
@@ -5434,8 +5150,7 @@ VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx )
 
   --------------------------------------------------------------------------*/
 
-VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
-{
+VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command) {
     size_t tableSize = sizeof(g_registry_table)/sizeof(g_registry_table[0]);
     REG_TABLE_ENTRY *pRegEntry;
     char *clone;
@@ -5456,8 +5171,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     // clone the command so that we can manipulate it
     clone = kstrdup(command, GFP_ATOMIC);
-    if (NULL == clone)
-    {
+    if (NULL == clone) {
         hddLog(LOGE, "%s: memory allocation failure, unable to process [%s]",
                __func__, command);
         return vstatus;
@@ -5469,8 +5183,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     // get rid of leading/trailing whitespace
     pCmd = i_trim(pCmd);
-    if ('\0' == *pCmd)
-    {
+    if ('\0' == *pCmd) {
         // only whitespace
         hddLog(LOGE, "%s: invalid command, only whitespace:[%s]",
                __func__, command);
@@ -5479,12 +5192,10 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     // parse the <name> = <value>
     name = pCmd;
-    while (('=' != *pCmd) && ('\0' != *pCmd))
-    {
+    while (('=' != *pCmd) && ('\0' != *pCmd)) {
         pCmd++;
     }
-    if ('\0' == *pCmd)
-    {
+    if ('\0' == *pCmd) {
         // did not find '='
         hddLog(LOGE, "%s: invalid command, no '=':[%s]",
                __func__, command);
@@ -5494,8 +5205,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
     // replace '=' with NUL to terminate the <name>
     *pCmd++ = '\0';
     name = i_trim(name);
-    if ('\0' == *name)
-    {
+    if ('\0' == *name) {
         // did not find a name
         hddLog(LOGE, "%s: invalid command, no <name>:[%s]",
                __func__, command);
@@ -5503,8 +5213,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
     }
 
     value_str = i_trim(pCmd);
-    if ('\0' == *value_str)
-    {
+    if ('\0' == *value_str) {
         // did not find a value
         hddLog(LOGE, "%s: invalid command, no <value>:[%s]",
                __func__, command);
@@ -5512,16 +5221,13 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
     }
 
     // lookup the configuration item
-    for (idx = 0; idx < tableSize; idx++)
-    {
-        if (0 == strcmp(name, g_registry_table[idx].RegName))
-        {
+    for (idx = 0; idx < tableSize; idx++) {
+        if (0 == strcmp(name, g_registry_table[idx].RegName)) {
             // found a match
             break;
         }
     }
-    if (tableSize == idx)
-    {
+    if (tableSize == idx) {
         // did not match the name
         hddLog(LOGE, "%s: invalid command, unknown configuration item:[%s]",
                __func__, command);
@@ -5529,8 +5235,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
     }
 
     pRegEntry = &g_registry_table[idx];
-    if (!(pRegEntry->Flags & VAR_FLAGS_DYNAMIC_CFG))
-    {
+    if (!(pRegEntry->Flags & VAR_FLAGS_DYNAMIC_CFG)) {
         // does not support dynamic configuration
         hddLog(LOGE, "%s: invalid command, %s does not support "
                "dynamic configuration", __func__, name);
@@ -5539,21 +5244,18 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     pField = ((v_U8_t *)pHddCtx->cfg_ini) + pRegEntry->VarOffset;
 
-    switch (pRegEntry->RegType)
-    {
+    switch (pRegEntry->RegType) {
     case WLAN_PARAM_Integer:
         rv = kstrtou32(value_str, 10, &value);
         if (rv < 0)
             goto done;
-        if (value < pRegEntry->VarMin)
-        {
+        if (value < pRegEntry->VarMin) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %u < min value %lu",
                    __func__, value, pRegEntry->VarMin);
             goto done;
         }
-        if (value > pRegEntry->VarMax)
-        {
+        if (value > pRegEntry->VarMax) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %u > max value %lu",
                    __func__, value, pRegEntry->VarMax);
@@ -5566,15 +5268,13 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
         rv = kstrtou32(value_str, 16, &value);
         if (rv < 0)
             goto done;
-        if (value < pRegEntry->VarMin)
-        {
+        if (value < pRegEntry->VarMin) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %x < min value %lx",
                    __func__, value, pRegEntry->VarMin);
             goto done;
         }
-        if (value > pRegEntry->VarMax)
-        {
+        if (value > pRegEntry->VarMax) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %x > max value %lx",
                    __func__, value, pRegEntry->VarMax);
@@ -5587,15 +5287,13 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
         rv = kstrtos32(value_str, 10, &svalue);
         if (rv < 0)
             goto done;
-        if (svalue < (v_S31_t)pRegEntry->VarMin)
-        {
+        if (svalue < (v_S31_t)pRegEntry->VarMin) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %d < min value %d",
                    __func__, svalue, (int)pRegEntry->VarMin);
             goto done;
         }
-        if (svalue > (v_S31_t)pRegEntry->VarMax)
-        {
+        if (svalue > (v_S31_t)pRegEntry->VarMax) {
             // out of range
             hddLog(LOGE, "%s: invalid command, value %d > max value %d",
                    __func__, svalue, (int)pRegEntry->VarMax);
@@ -5606,8 +5304,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     case WLAN_PARAM_String:
         len_value_str = strlen(value_str);
-        if (len_value_str > (pRegEntry->VarSize - 1))
-        {
+        if (len_value_str > (pRegEntry->VarSize - 1)) {
             // too big
             hddLog(LOGE,
                    "%s: invalid command, string [%s] length "
@@ -5622,8 +5319,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
 
     case WLAN_PARAM_MacAddr:
         len_value_str = strlen(value_str);
-        if (len_value_str != (VOS_MAC_ADDR_SIZE * 2))
-        {
+        if (len_value_str != (VOS_MAC_ADDR_SIZE * 2)) {
             // out of range
             hddLog(LOGE,
                    "%s: invalid command, MAC address [%s] length "
@@ -5633,8 +5329,7 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
             goto done;
         }
         //parse the string and store it in the byte array
-        for (i = 0; i < VOS_MAC_ADDR_SIZE; i++)
-        {
+        for (i = 0; i < VOS_MAC_ADDR_SIZE; i++) {
             ((char*)pField)[i] = (char)
                                  ((parseHexDigit(value_str[(i * 2)]) * 16) +
                                   parseHexDigit(value_str[(i * 2) + 1]));
@@ -5649,14 +5344,12 @@ VOS_STATUS hdd_execute_config_command(hdd_context_t *pHddCtx, char *command)
     vstatus = VOS_STATUS_SUCCESS;
 
     // config table has been modified, is there a notifier?
-    if (NULL != pRegEntry->pfnDynamicNotify)
-    {
+    if (NULL != pRegEntry->pfnDynamicNotify) {
         (pRegEntry->pfnDynamicNotify)(pHddCtx, pRegEntry->NotifyId);
     }
 
     // note that this item was explicitly configured
-    if (idx < MAX_CFG_INI_ITEMS)
-    {
+    if (idx < MAX_CFG_INI_ITEMS) {
         set_bit(idx, (void *)&pHddCtx->cfg_ini->bExplicitCfg);
     }
 done:
@@ -5676,10 +5369,8 @@ done:
 
   --------------------------------------------------------------------------*/
 
-tANI_BOOLEAN hdd_is_okc_mode_enabled(hdd_context_t *pHddCtx)
-{
-    if (NULL == pHddCtx)
-    {
+tANI_BOOLEAN hdd_is_okc_mode_enabled(hdd_context_t *pHddCtx) {
+    if (NULL == pHddCtx) {
         hddLog(VOS_TRACE_LEVEL_FATAL, "%s: pHddCtx is NULL", __func__);
         return -EINVAL;
     }

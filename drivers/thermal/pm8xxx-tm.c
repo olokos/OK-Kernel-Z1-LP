@@ -67,655 +67,632 @@
 #define TRIP_NUM			3
 
 struct pm8xxx_tm_chip {
-	struct pm8xxx_tm_core_data	cdata;
-	struct delayed_work		irq_work;
-	struct device			*dev;
-	struct thermal_zone_device	*tz_dev;
-	unsigned long			temp;
-	unsigned int			prev_stage;
-	enum thermal_device_mode	mode;
-	unsigned int			thresh;
-	unsigned int			stage;
-	unsigned int			tempstat_irq;
-	unsigned int			overtemp_irq;
-	void				*adc_handle;
+    struct pm8xxx_tm_core_data	cdata;
+    struct delayed_work		irq_work;
+    struct device			*dev;
+    struct thermal_zone_device	*tz_dev;
+    unsigned long			temp;
+    unsigned int			prev_stage;
+    enum thermal_device_mode	mode;
+    unsigned int			thresh;
+    unsigned int			stage;
+    unsigned int			tempstat_irq;
+    unsigned int			overtemp_irq;
+    void				*adc_handle;
 };
 
 enum pmic_thermal_override_mode {
-	SOFTWARE_OVERRIDE_DISABLED = 0,
-	SOFTWARE_OVERRIDE_ENABLED,
+    SOFTWARE_OVERRIDE_DISABLED = 0,
+    SOFTWARE_OVERRIDE_ENABLED,
 };
 
 /* Delay between TEMP_STAT IRQ going high and status value changing in ms. */
 #define STATUS_REGISTER_DELAY_MS	40
 
-static inline int pm8xxx_tm_read_ctrl(struct pm8xxx_tm_chip *chip, u8 *reg)
-{
-	int rc;
+static inline int pm8xxx_tm_read_ctrl(struct pm8xxx_tm_chip *chip, u8 *reg) {
+    int rc;
 
-	rc = pm8xxx_readb(chip->dev->parent,
-			  chip->cdata.reg_addr_temp_alarm_ctrl, reg);
-	if (rc)
-		pr_err("%s: pm8xxx_readb(0x%03X) failed, rc=%d\n",
-			chip->cdata.tm_name,
-			chip->cdata.reg_addr_temp_alarm_ctrl, rc);
+    rc = pm8xxx_readb(chip->dev->parent,
+                      chip->cdata.reg_addr_temp_alarm_ctrl, reg);
+    if (rc)
+        pr_err("%s: pm8xxx_readb(0x%03X) failed, rc=%d\n",
+               chip->cdata.tm_name,
+               chip->cdata.reg_addr_temp_alarm_ctrl, rc);
 
-	return rc;
+    return rc;
 }
 
-static inline int pm8xxx_tm_write_ctrl(struct pm8xxx_tm_chip *chip, u8 reg)
-{
-	int rc;
+static inline int pm8xxx_tm_write_ctrl(struct pm8xxx_tm_chip *chip, u8 reg) {
+    int rc;
 
-	rc = pm8xxx_writeb(chip->dev->parent,
-			   chip->cdata.reg_addr_temp_alarm_ctrl, reg);
-	if (rc)
-		pr_err("%s: pm8xxx_writeb(0x%03X)=0x%02X failed, rc=%d\n",
-		       chip->cdata.tm_name,
-		       chip->cdata.reg_addr_temp_alarm_ctrl, reg, rc);
+    rc = pm8xxx_writeb(chip->dev->parent,
+                       chip->cdata.reg_addr_temp_alarm_ctrl, reg);
+    if (rc)
+        pr_err("%s: pm8xxx_writeb(0x%03X)=0x%02X failed, rc=%d\n",
+               chip->cdata.tm_name,
+               chip->cdata.reg_addr_temp_alarm_ctrl, reg, rc);
 
-	return rc;
+    return rc;
 }
 
-static inline int pm8xxx_tm_write_pwm(struct pm8xxx_tm_chip *chip, u8 reg)
-{
-	int rc;
+static inline int pm8xxx_tm_write_pwm(struct pm8xxx_tm_chip *chip, u8 reg) {
+    int rc;
 
-	rc = pm8xxx_writeb(chip->dev->parent,
-			   chip->cdata.reg_addr_temp_alarm_pwm, reg);
-	if (rc)
-		pr_err("%s: pm8xxx_writeb(0x%03X)=0x%02X failed, rc=%d\n",
-			chip->cdata.tm_name,
-			chip->cdata.reg_addr_temp_alarm_pwm, reg, rc);
+    rc = pm8xxx_writeb(chip->dev->parent,
+                       chip->cdata.reg_addr_temp_alarm_pwm, reg);
+    if (rc)
+        pr_err("%s: pm8xxx_writeb(0x%03X)=0x%02X failed, rc=%d\n",
+               chip->cdata.tm_name,
+               chip->cdata.reg_addr_temp_alarm_pwm, reg, rc);
 
-	return rc;
+    return rc;
 }
 
 static inline int
 pm8xxx_tm_shutdown_override(struct pm8xxx_tm_chip *chip,
-			    enum pmic_thermal_override_mode mode)
-{
-	int rc;
-	u8 reg;
+                            enum pmic_thermal_override_mode mode) {
+    int rc;
+    u8 reg;
 
-	rc = pm8xxx_tm_read_ctrl(chip, &reg);
-	if (rc < 0)
-		return rc;
+    rc = pm8xxx_tm_read_ctrl(chip, &reg);
+    if (rc < 0)
+        return rc;
 
-	reg &= ~(TEMP_ALARM_CTRL_OVRD_MASK | TEMP_ALARM_CTRL_STATUS_MASK);
-	if (mode == SOFTWARE_OVERRIDE_ENABLED)
-		reg |= (TEMP_ALARM_CTRL_OVRD_ST3 | TEMP_ALARM_CTRL_OVRD_ST2) &
-			TEMP_ALARM_CTRL_OVRD_MASK;
+    reg &= ~(TEMP_ALARM_CTRL_OVRD_MASK | TEMP_ALARM_CTRL_STATUS_MASK);
+    if (mode == SOFTWARE_OVERRIDE_ENABLED)
+        reg |= (TEMP_ALARM_CTRL_OVRD_ST3 | TEMP_ALARM_CTRL_OVRD_ST2) &
+               TEMP_ALARM_CTRL_OVRD_MASK;
 
-	rc = pm8xxx_tm_write_ctrl(chip, reg);
+    rc = pm8xxx_tm_write_ctrl(chip, reg);
 
-	return rc;
+    return rc;
 }
 
 /*
  * This function initializes the internal temperature value based on only the
  * current thermal stage and threshold.
  */
-static int pm8xxx_tm_init_temp_no_adc(struct pm8xxx_tm_chip *chip)
-{
-	int rc;
-	u8 reg;
+static int pm8xxx_tm_init_temp_no_adc(struct pm8xxx_tm_chip *chip) {
+    int rc;
+    u8 reg;
 
-	rc = pm8xxx_tm_read_ctrl(chip, &reg);
-	if (rc < 0)
-		return rc;
+    rc = pm8xxx_tm_read_ctrl(chip, &reg);
+    if (rc < 0)
+        return rc;
 
-	chip->stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
-			>> TEMP_ALARM_CTRL_STATUS_SHIFT;
-	chip->thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
-			>> TEMP_ALARM_CTRL_THRESH_SHIFT;
+    chip->stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
+                  >> TEMP_ALARM_CTRL_STATUS_SHIFT;
+    chip->thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
+                   >> TEMP_ALARM_CTRL_THRESH_SHIFT;
 
-	if (chip->stage)
-		chip->temp = chip->thresh * TEMP_THRESH_MIN +
-			   (chip->stage - 1) * TEMP_STAGE_STEP +
-			   TEMP_THRESH_MIN;
-	else
-		chip->temp = chip->cdata.default_no_adc_temp;
+    if (chip->stage)
+        chip->temp = chip->thresh * TEMP_THRESH_MIN +
+                     (chip->stage - 1) * TEMP_STAGE_STEP +
+                     TEMP_THRESH_MIN;
+    else
+        chip->temp = chip->cdata.default_no_adc_temp;
 
-	return 0;
+    return 0;
 }
 
 /*
  * This function updates the internal temperature value based on the
  * current thermal stage and threshold as well as the previous stage
  */
-static int pm8xxx_tm_update_temp_no_adc(struct pm8xxx_tm_chip *chip)
-{
-	unsigned int stage;
-	int rc;
-	u8 reg;
+static int pm8xxx_tm_update_temp_no_adc(struct pm8xxx_tm_chip *chip) {
+    unsigned int stage;
+    int rc;
+    u8 reg;
 
-	rc = pm8xxx_tm_read_ctrl(chip, &reg);
-	if (rc < 0)
-		return rc;
+    rc = pm8xxx_tm_read_ctrl(chip, &reg);
+    if (rc < 0)
+        return rc;
 
-	stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
-		>> TEMP_ALARM_CTRL_STATUS_SHIFT;
-	chip->thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
-			>> TEMP_ALARM_CTRL_THRESH_SHIFT;
+    stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
+            >> TEMP_ALARM_CTRL_STATUS_SHIFT;
+    chip->thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
+                   >> TEMP_ALARM_CTRL_THRESH_SHIFT;
 
-	if (stage > chip->stage) {
-		/* increasing stage, use lower bound */
-		chip->temp = (stage - 1) * TEMP_STAGE_STEP
-				+ chip->thresh * TEMP_THRESH_STEP
-				+ TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
-	} else if (stage < chip->stage) {
-		/* decreasing stage, use upper bound */
-		chip->temp = stage * TEMP_STAGE_STEP
-				+ chip->thresh * TEMP_THRESH_STEP
-				- TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
-	}
+    if (stage > chip->stage) {
+        /* increasing stage, use lower bound */
+        chip->temp = (stage - 1) * TEMP_STAGE_STEP
+                     + chip->thresh * TEMP_THRESH_STEP
+                     + TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
+    } else if (stage < chip->stage) {
+        /* decreasing stage, use upper bound */
+        chip->temp = stage * TEMP_STAGE_STEP
+                     + chip->thresh * TEMP_THRESH_STEP
+                     - TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
+    }
 
-	chip->stage = stage;
+    chip->stage = stage;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_temp_no_adc(struct thermal_zone_device *thermal,
-				     unsigned long *temp)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
-	int rc;
+                                     unsigned long *temp) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
+    int rc;
 
-	if (!chip || !temp)
-		return -EINVAL;
+    if (!chip || !temp)
+        return -EINVAL;
 
-	rc = pm8xxx_tm_update_temp_no_adc(chip);
-	if (rc < 0)
-		return rc;
+    rc = pm8xxx_tm_update_temp_no_adc(chip);
+    if (rc < 0)
+        return rc;
 
-	*temp = chip->temp;
+    *temp = chip->temp;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_temp_pm8058_adc(struct thermal_zone_device *thermal,
-			      unsigned long *temp)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
-	DECLARE_COMPLETION_ONSTACK(wait);
-	struct adc_chan_result adc_result = {
-		.physical = 0lu,
-	};
-	int rc;
+        unsigned long *temp) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
+    DECLARE_COMPLETION_ONSTACK(wait);
+    struct adc_chan_result adc_result = {
+        .physical = 0lu,
+    };
+    int rc;
 
-	if (!chip || !temp)
-		return -EINVAL;
+    if (!chip || !temp)
+        return -EINVAL;
 
-	*temp = chip->temp;
+    *temp = chip->temp;
 
-	rc = adc_channel_request_conv(chip->adc_handle, &wait);
-	if (rc < 0) {
-		pr_err("%s: adc_channel_request_conv() failed, rc = %d\n",
-			__func__, rc);
-		return rc;
-	}
+    rc = adc_channel_request_conv(chip->adc_handle, &wait);
+    if (rc < 0) {
+        pr_err("%s: adc_channel_request_conv() failed, rc = %d\n",
+               __func__, rc);
+        return rc;
+    }
 
-	wait_for_completion(&wait);
+    wait_for_completion(&wait);
 
-	rc = adc_channel_read_result(chip->adc_handle, &adc_result);
-	if (rc < 0) {
-		pr_err("%s: adc_channel_read_result() failed, rc = %d\n",
-			__func__, rc);
-		return rc;
-	}
+    rc = adc_channel_read_result(chip->adc_handle, &adc_result);
+    if (rc < 0) {
+        pr_err("%s: adc_channel_read_result() failed, rc = %d\n",
+               __func__, rc);
+        return rc;
+    }
 
-	*temp = adc_result.physical;
-	chip->temp = adc_result.physical;
+    *temp = adc_result.physical;
+    chip->temp = adc_result.physical;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_temp_pm8xxx_adc(struct thermal_zone_device *thermal,
-				      unsigned long *temp)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
-	struct pm8xxx_adc_chan_result result = {
-		.physical = 0lu,
-	};
-	int rc;
+        unsigned long *temp) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
+    struct pm8xxx_adc_chan_result result = {
+        .physical = 0lu,
+    };
+    int rc;
 
-	if (!chip || !temp)
-		return -EINVAL;
+    if (!chip || !temp)
+        return -EINVAL;
 
-	*temp = chip->temp;
+    *temp = chip->temp;
 
-	rc = pm8xxx_adc_read(chip->cdata.adc_channel, &result);
-	if (rc < 0) {
-		pr_err("%s: adc_channel_read_result() failed, rc = %d\n",
-			chip->cdata.tm_name, rc);
-		return rc;
-	}
+    rc = pm8xxx_adc_read(chip->cdata.adc_channel, &result);
+    if (rc < 0) {
+        pr_err("%s: adc_channel_read_result() failed, rc = %d\n",
+               chip->cdata.tm_name, rc);
+        return rc;
+    }
 
-	*temp = result.physical;
-	chip->temp = result.physical;
+    *temp = result.physical;
+    chip->temp = result.physical;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_mode(struct thermal_zone_device *thermal,
-			      enum thermal_device_mode *mode)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
+                              enum thermal_device_mode *mode) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
 
-	if (!chip || !mode)
-		return -EINVAL;
+    if (!chip || !mode)
+        return -EINVAL;
 
-	*mode = chip->mode;
+    *mode = chip->mode;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_set_mode(struct thermal_zone_device *thermal,
-			      enum thermal_device_mode mode)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
+                              enum thermal_device_mode mode) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
 
-	if (!chip)
-		return -EINVAL;
+    if (!chip)
+        return -EINVAL;
 
-	/* Mask software override requests if they are not allowed. */
-	if (!chip->cdata.allow_software_override)
-		mode = THERMAL_DEVICE_DISABLED;
+    /* Mask software override requests if they are not allowed. */
+    if (!chip->cdata.allow_software_override)
+        mode = THERMAL_DEVICE_DISABLED;
 
-	if (mode != chip->mode) {
-		if (mode == THERMAL_DEVICE_ENABLED)
-			pm8xxx_tm_shutdown_override(chip,
-						    SOFTWARE_OVERRIDE_ENABLED);
-		else
-			pm8xxx_tm_shutdown_override(chip,
-						    SOFTWARE_OVERRIDE_DISABLED);
-	}
-	chip->mode = mode;
+    if (mode != chip->mode) {
+        if (mode == THERMAL_DEVICE_ENABLED)
+            pm8xxx_tm_shutdown_override(chip,
+                                        SOFTWARE_OVERRIDE_ENABLED);
+        else
+            pm8xxx_tm_shutdown_override(chip,
+                                        SOFTWARE_OVERRIDE_DISABLED);
+    }
+    chip->mode = mode;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_trip_type(struct thermal_zone_device *thermal,
-				   int trip, enum thermal_trip_type *type)
-{
-	if (trip < 0 || !type)
-		return -EINVAL;
+                                   int trip, enum thermal_trip_type *type) {
+    if (trip < 0 || !type)
+        return -EINVAL;
 
-	switch (trip) {
-	case TRIP_STAGE3:
-		*type = THERMAL_TRIP_CRITICAL;
-		break;
-	case TRIP_STAGE2:
-		*type = THERMAL_TRIP_HOT;
-		break;
-	case TRIP_STAGE1:
-		*type = THERMAL_TRIP_HOT;
-		break;
-	default:
-		return -EINVAL;
-	}
+    switch (trip) {
+    case TRIP_STAGE3:
+        *type = THERMAL_TRIP_CRITICAL;
+        break;
+    case TRIP_STAGE2:
+        *type = THERMAL_TRIP_HOT;
+        break;
+    case TRIP_STAGE1:
+        *type = THERMAL_TRIP_HOT;
+        break;
+    default:
+        return -EINVAL;
+    }
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_trip_temp(struct thermal_zone_device *thermal,
-				   int trip, unsigned long *temp)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
-	int thresh_temp;
+                                   int trip, unsigned long *temp) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
+    int thresh_temp;
 
-	if (!chip || trip < 0 || !temp)
-		return -EINVAL;
+    if (!chip || trip < 0 || !temp)
+        return -EINVAL;
 
-	thresh_temp = chip->thresh * TEMP_THRESH_STEP +
-			TEMP_THRESH_MIN;
+    thresh_temp = chip->thresh * TEMP_THRESH_STEP +
+                  TEMP_THRESH_MIN;
 
-	switch (trip) {
-	case TRIP_STAGE3:
-		thresh_temp += 2 * TEMP_STAGE_STEP;
-		break;
-	case TRIP_STAGE2:
-		thresh_temp += TEMP_STAGE_STEP;
-		break;
-	case TRIP_STAGE1:
-		break;
-	default:
-		return -EINVAL;
-	}
+    switch (trip) {
+    case TRIP_STAGE3:
+        thresh_temp += 2 * TEMP_STAGE_STEP;
+        break;
+    case TRIP_STAGE2:
+        thresh_temp += TEMP_STAGE_STEP;
+        break;
+    case TRIP_STAGE1:
+        break;
+    default:
+        return -EINVAL;
+    }
 
-	*temp = thresh_temp;
+    *temp = thresh_temp;
 
-	return 0;
+    return 0;
 }
 
 static int pm8xxx_tz_get_crit_temp(struct thermal_zone_device *thermal,
-				   unsigned long *temp)
-{
-	struct pm8xxx_tm_chip *chip = thermal->devdata;
+                                   unsigned long *temp) {
+    struct pm8xxx_tm_chip *chip = thermal->devdata;
 
-	if (!chip || !temp)
-		return -EINVAL;
+    if (!chip || !temp)
+        return -EINVAL;
 
-	*temp = chip->thresh * TEMP_THRESH_STEP + TEMP_THRESH_MIN +
-		2 * TEMP_STAGE_STEP;
+    *temp = chip->thresh * TEMP_THRESH_STEP + TEMP_THRESH_MIN +
+            2 * TEMP_STAGE_STEP;
 
-	return 0;
+    return 0;
 }
 
 static struct thermal_zone_device_ops pm8xxx_thermal_zone_ops_no_adc = {
-	.get_temp = pm8xxx_tz_get_temp_no_adc,
-	.get_mode = pm8xxx_tz_get_mode,
-	.set_mode = pm8xxx_tz_set_mode,
-	.get_trip_type = pm8xxx_tz_get_trip_type,
-	.get_trip_temp = pm8xxx_tz_get_trip_temp,
-	.get_crit_temp = pm8xxx_tz_get_crit_temp,
+    .get_temp = pm8xxx_tz_get_temp_no_adc,
+    .get_mode = pm8xxx_tz_get_mode,
+    .set_mode = pm8xxx_tz_set_mode,
+    .get_trip_type = pm8xxx_tz_get_trip_type,
+    .get_trip_temp = pm8xxx_tz_get_trip_temp,
+    .get_crit_temp = pm8xxx_tz_get_crit_temp,
 };
 
 static struct thermal_zone_device_ops pm8xxx_thermal_zone_ops_pm8xxx_adc = {
-	.get_temp = pm8xxx_tz_get_temp_pm8xxx_adc,
-	.get_mode = pm8xxx_tz_get_mode,
-	.set_mode = pm8xxx_tz_set_mode,
-	.get_trip_type = pm8xxx_tz_get_trip_type,
-	.get_trip_temp = pm8xxx_tz_get_trip_temp,
-	.get_crit_temp = pm8xxx_tz_get_crit_temp,
+    .get_temp = pm8xxx_tz_get_temp_pm8xxx_adc,
+    .get_mode = pm8xxx_tz_get_mode,
+    .set_mode = pm8xxx_tz_set_mode,
+    .get_trip_type = pm8xxx_tz_get_trip_type,
+    .get_trip_temp = pm8xxx_tz_get_trip_temp,
+    .get_crit_temp = pm8xxx_tz_get_crit_temp,
 };
 
 static struct thermal_zone_device_ops pm8xxx_thermal_zone_ops_pm8058_adc = {
-	.get_temp = pm8xxx_tz_get_temp_pm8058_adc,
-	.get_mode = pm8xxx_tz_get_mode,
-	.set_mode = pm8xxx_tz_set_mode,
-	.get_trip_type = pm8xxx_tz_get_trip_type,
-	.get_trip_temp = pm8xxx_tz_get_trip_temp,
-	.get_crit_temp = pm8xxx_tz_get_crit_temp,
+    .get_temp = pm8xxx_tz_get_temp_pm8058_adc,
+    .get_mode = pm8xxx_tz_get_mode,
+    .set_mode = pm8xxx_tz_set_mode,
+    .get_trip_type = pm8xxx_tz_get_trip_type,
+    .get_trip_temp = pm8xxx_tz_get_trip_temp,
+    .get_crit_temp = pm8xxx_tz_get_crit_temp,
 };
 
-static void pm8xxx_tm_work(struct work_struct *work)
-{
-	struct delayed_work *dwork
-		= container_of(work, struct delayed_work, work);
-	struct pm8xxx_tm_chip *chip
-		= container_of(dwork, struct pm8xxx_tm_chip, irq_work);
-	unsigned long temp = 0;
-	int rc, stage, thresh;
-	u8 reg;
+static void pm8xxx_tm_work(struct work_struct *work) {
+    struct delayed_work *dwork
+        = container_of(work, struct delayed_work, work);
+    struct pm8xxx_tm_chip *chip
+        = container_of(dwork, struct pm8xxx_tm_chip, irq_work);
+    unsigned long temp = 0;
+    int rc, stage, thresh;
+    u8 reg;
 
-	rc = pm8xxx_tm_read_ctrl(chip, &reg);
-	if (rc < 0)
-		goto bail;
+    rc = pm8xxx_tm_read_ctrl(chip, &reg);
+    if (rc < 0)
+        goto bail;
 
-	/* Clear status bits. */
-	if (reg & (TEMP_ALARM_CTRL_ST2_SD | TEMP_ALARM_CTRL_ST3_SD)) {
-		reg &= ~(TEMP_ALARM_CTRL_ST2_SD | TEMP_ALARM_CTRL_ST3_SD
-			 | TEMP_ALARM_CTRL_STATUS_MASK);
+    /* Clear status bits. */
+    if (reg & (TEMP_ALARM_CTRL_ST2_SD | TEMP_ALARM_CTRL_ST3_SD)) {
+        reg &= ~(TEMP_ALARM_CTRL_ST2_SD | TEMP_ALARM_CTRL_ST3_SD
+                 | TEMP_ALARM_CTRL_STATUS_MASK);
 
-		pm8xxx_tm_write_ctrl(chip, reg);
-	}
+        pm8xxx_tm_write_ctrl(chip, reg);
+    }
 
-	stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
-		>> TEMP_ALARM_CTRL_STATUS_SHIFT;
-	thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
-		>> TEMP_ALARM_CTRL_THRESH_SHIFT;
+    stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
+            >> TEMP_ALARM_CTRL_STATUS_SHIFT;
+    thresh = (reg & TEMP_ALARM_CTRL_THRESH_MASK)
+             >> TEMP_ALARM_CTRL_THRESH_SHIFT;
 
-	thermal_zone_device_update(chip->tz_dev);
+    thermal_zone_device_update(chip->tz_dev);
 
-	if (stage != chip->prev_stage) {
-		chip->prev_stage = stage;
+    if (stage != chip->prev_stage) {
+        chip->prev_stage = stage;
 
-		switch (chip->cdata.adc_type) {
-		case PM8XXX_TM_ADC_NONE:
-			rc = pm8xxx_tz_get_temp_no_adc(chip->tz_dev, &temp);
-			break;
-		case PM8XXX_TM_ADC_PM8058_ADC:
-			rc = pm8xxx_tz_get_temp_pm8058_adc(chip->tz_dev, &temp);
-			break;
-		case PM8XXX_TM_ADC_PM8XXX_ADC:
-			rc = pm8xxx_tz_get_temp_pm8xxx_adc(chip->tz_dev, &temp);
-			break;
-		}
-		if (rc < 0)
-			goto bail;
+        switch (chip->cdata.adc_type) {
+        case PM8XXX_TM_ADC_NONE:
+            rc = pm8xxx_tz_get_temp_no_adc(chip->tz_dev, &temp);
+            break;
+        case PM8XXX_TM_ADC_PM8058_ADC:
+            rc = pm8xxx_tz_get_temp_pm8058_adc(chip->tz_dev, &temp);
+            break;
+        case PM8XXX_TM_ADC_PM8XXX_ADC:
+            rc = pm8xxx_tz_get_temp_pm8xxx_adc(chip->tz_dev, &temp);
+            break;
+        }
+        if (rc < 0)
+            goto bail;
 
-		pr_crit("%s: PMIC Temp Alarm - stage=%u, threshold=%u, temp=%lu mC\n",
-			chip->cdata.tm_name, stage, thresh, temp);
+        pr_crit("%s: PMIC Temp Alarm - stage=%u, threshold=%u, temp=%lu mC\n",
+                chip->cdata.tm_name, stage, thresh, temp);
 
-		/* Notify user space */
-		sysfs_notify(&chip->tz_dev->device.kobj, NULL, "type");
-	}
+        /* Notify user space */
+        sysfs_notify(&chip->tz_dev->device.kobj, NULL, "type");
+    }
 
 bail:
-	return;
+    return;
 }
 
-static irqreturn_t pm8xxx_tm_isr(int irq, void *data)
-{
-	struct pm8xxx_tm_chip *chip = data;
+static irqreturn_t pm8xxx_tm_isr(int irq, void *data) {
+    struct pm8xxx_tm_chip *chip = data;
 
-	schedule_delayed_work(&chip->irq_work,
-		msecs_to_jiffies(STATUS_REGISTER_DELAY_MS) + 1);
+    schedule_delayed_work(&chip->irq_work,
+                          msecs_to_jiffies(STATUS_REGISTER_DELAY_MS) + 1);
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
-static int pm8xxx_tm_init_reg(struct pm8xxx_tm_chip *chip)
-{
-	int rc;
-	u8 reg;
+static int pm8xxx_tm_init_reg(struct pm8xxx_tm_chip *chip) {
+    int rc;
+    u8 reg;
 
-	rc = pm8xxx_tm_read_ctrl(chip, &reg);
-	if (rc < 0)
-		return rc;
+    rc = pm8xxx_tm_read_ctrl(chip, &reg);
+    if (rc < 0)
+        return rc;
 
-	chip->stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
-			>> TEMP_ALARM_CTRL_STATUS_SHIFT;
-	chip->temp = 0;
+    chip->stage = (reg & TEMP_ALARM_CTRL_STATUS_MASK)
+                  >> TEMP_ALARM_CTRL_STATUS_SHIFT;
+    chip->temp = 0;
 
-	/* Use temperature threshold set 0: (105, 125, 145) */
-	chip->thresh = 0;
-	reg = (chip->thresh << TEMP_ALARM_CTRL_THRESH_SHIFT)
-		& TEMP_ALARM_CTRL_THRESH_MASK;
-	rc = pm8xxx_tm_write_ctrl(chip, reg);
-	if (rc < 0)
-		return rc;
+    /* Use temperature threshold set 0: (105, 125, 145) */
+    chip->thresh = 0;
+    reg = (chip->thresh << TEMP_ALARM_CTRL_THRESH_SHIFT)
+          & TEMP_ALARM_CTRL_THRESH_MASK;
+    rc = pm8xxx_tm_write_ctrl(chip, reg);
+    if (rc < 0)
+        return rc;
 
-	/*
-	 * Set the PMIC temperature alarm module to be always on.  This ensures
-	 * that die temperature monitoring is active even if CXO is disabled
-	 * (i.e. when sleep_b is low).  This is necessary since CXO can be
-	 * disabled while the system is still heavily loaded.  Also, using
-	 * the alway-on instead of PWM-enabled configurations ensures that the
-	 * die temperature can be measured by the PMIC ADC without reconfiguring
-	 * the temperature alarm module first.
-	 */
-	rc = pm8xxx_tm_write_pwm(chip, TEMP_ALARM_PWM_EN_ALWAYS);
+    /*
+     * Set the PMIC temperature alarm module to be always on.  This ensures
+     * that die temperature monitoring is active even if CXO is disabled
+     * (i.e. when sleep_b is low).  This is necessary since CXO can be
+     * disabled while the system is still heavily loaded.  Also, using
+     * the alway-on instead of PWM-enabled configurations ensures that the
+     * die temperature can be measured by the PMIC ADC without reconfiguring
+     * the temperature alarm module first.
+     */
+    rc = pm8xxx_tm_write_pwm(chip, TEMP_ALARM_PWM_EN_ALWAYS);
 
-	return rc;
+    return rc;
 }
 
-static int pm8xxx_init_adc(struct pm8xxx_tm_chip *chip, bool enable)
-{
-	int rc = 0;
+static int pm8xxx_init_adc(struct pm8xxx_tm_chip *chip, bool enable) {
+    int rc = 0;
 
-	if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8058_ADC) {
-		if (enable) {
-			rc = adc_channel_open(chip->cdata.adc_channel,
-						&(chip->adc_handle));
-			if (rc < 0)
-				pr_err("adc_channel_open() failed.\n");
-		} else {
-			adc_channel_close(chip->adc_handle);
-		}
-	}
+    if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8058_ADC) {
+        if (enable) {
+            rc = adc_channel_open(chip->cdata.adc_channel,
+                                  &(chip->adc_handle));
+            if (rc < 0)
+                pr_err("adc_channel_open() failed.\n");
+        } else {
+            adc_channel_close(chip->adc_handle);
+        }
+    }
 
-	return rc;
+    return rc;
 }
 
-static int __devinit pm8xxx_tm_probe(struct platform_device *pdev)
-{
-	const struct pm8xxx_tm_core_data *cdata = pdev->dev.platform_data;
-	struct thermal_zone_device_ops *tz_ops;
-	struct pm8xxx_tm_chip *chip;
-	struct resource *res;
-	int rc = 0;
+static int __devinit pm8xxx_tm_probe(struct platform_device *pdev) {
+    const struct pm8xxx_tm_core_data *cdata = pdev->dev.platform_data;
+    struct thermal_zone_device_ops *tz_ops;
+    struct pm8xxx_tm_chip *chip;
+    struct resource *res;
+    int rc = 0;
 
-	if (!cdata) {
-		pr_err("missing core data\n");
-		return -EINVAL;
-	}
+    if (!cdata) {
+        pr_err("missing core data\n");
+        return -EINVAL;
+    }
 
-	chip = kzalloc(sizeof(struct pm8xxx_tm_chip), GFP_KERNEL);
-	if (chip == NULL) {
-		pr_err("kzalloc() failed.\n");
-		return -ENOMEM;
-	}
+    chip = kzalloc(sizeof(struct pm8xxx_tm_chip), GFP_KERNEL);
+    if (chip == NULL) {
+        pr_err("kzalloc() failed.\n");
+        return -ENOMEM;
+    }
 
-	chip->dev = &pdev->dev;
-	memcpy(&(chip->cdata), cdata, sizeof(struct pm8xxx_tm_core_data));
+    chip->dev = &pdev->dev;
+    memcpy(&(chip->cdata), cdata, sizeof(struct pm8xxx_tm_core_data));
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
-		chip->cdata.irq_name_temp_stat);
-	if (res) {
-		chip->tempstat_irq = res->start;
-	} else {
-		pr_err("temp stat IRQ not specified\n");
-		goto err_free_chip;
-	}
+    res = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
+                                       chip->cdata.irq_name_temp_stat);
+    if (res) {
+        chip->tempstat_irq = res->start;
+    } else {
+        pr_err("temp stat IRQ not specified\n");
+        goto err_free_chip;
+    }
 
-	res = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
-		chip->cdata.irq_name_over_temp);
-	if (res) {
-		chip->overtemp_irq = res->start;
-	} else {
-		pr_err("over temp IRQ not specified\n");
-		goto err_free_chip;
-	}
+    res = platform_get_resource_byname(pdev, IORESOURCE_IRQ,
+                                       chip->cdata.irq_name_over_temp);
+    if (res) {
+        chip->overtemp_irq = res->start;
+    } else {
+        pr_err("over temp IRQ not specified\n");
+        goto err_free_chip;
+    }
 
-	rc = pm8xxx_init_adc(chip, true);
-	if (rc < 0) {
-		pr_err("Unable to initialize adc\n");
-		goto err_free_chip;
-	}
+    rc = pm8xxx_init_adc(chip, true);
+    if (rc < 0) {
+        pr_err("Unable to initialize adc\n");
+        goto err_free_chip;
+    }
 
-	/* Select proper thermal zone ops functions based on ADC type. */
-	if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8XXX_ADC)
-		tz_ops = &pm8xxx_thermal_zone_ops_pm8xxx_adc;
-	else if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8058_ADC)
-		tz_ops = &pm8xxx_thermal_zone_ops_pm8058_adc;
-	else
-		tz_ops = &pm8xxx_thermal_zone_ops_no_adc;
+    /* Select proper thermal zone ops functions based on ADC type. */
+    if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8XXX_ADC)
+        tz_ops = &pm8xxx_thermal_zone_ops_pm8xxx_adc;
+    else if (chip->cdata.adc_type == PM8XXX_TM_ADC_PM8058_ADC)
+        tz_ops = &pm8xxx_thermal_zone_ops_pm8058_adc;
+    else
+        tz_ops = &pm8xxx_thermal_zone_ops_no_adc;
 
-	chip->tz_dev = thermal_zone_device_register(chip->cdata.tm_name,
-			TRIP_NUM, chip, tz_ops, 0, 0, 0, 0);
+    chip->tz_dev = thermal_zone_device_register(chip->cdata.tm_name,
+                   TRIP_NUM, chip, tz_ops, 0, 0, 0, 0);
 
-	if (chip->tz_dev == NULL) {
-		pr_err("thermal_zone_device_register() failed.\n");
-		rc = -ENODEV;
-		goto err_fail_adc;
-	}
+    if (chip->tz_dev == NULL) {
+        pr_err("thermal_zone_device_register() failed.\n");
+        rc = -ENODEV;
+        goto err_fail_adc;
+    }
 
-	rc = pm8xxx_tm_init_reg(chip);
-	if (rc < 0)
-		goto err_free_tz;
-	rc = pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
-	if (rc < 0)
-		goto err_free_tz;
+    rc = pm8xxx_tm_init_reg(chip);
+    if (rc < 0)
+        goto err_free_tz;
+    rc = pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
+    if (rc < 0)
+        goto err_free_tz;
 
-	if (chip->cdata.adc_type == PM8XXX_TM_ADC_NONE) {
-		rc = pm8xxx_tm_init_temp_no_adc(chip);
-		if (rc < 0)
-			goto err_free_tz;
-	}
+    if (chip->cdata.adc_type == PM8XXX_TM_ADC_NONE) {
+        rc = pm8xxx_tm_init_temp_no_adc(chip);
+        if (rc < 0)
+            goto err_free_tz;
+    }
 
-	/* Start in HW control; switch to SW control when user changes mode. */
-	chip->mode = THERMAL_DEVICE_DISABLED;
-	thermal_zone_device_update(chip->tz_dev);
+    /* Start in HW control; switch to SW control when user changes mode. */
+    chip->mode = THERMAL_DEVICE_DISABLED;
+    thermal_zone_device_update(chip->tz_dev);
 
-	INIT_DELAYED_WORK(&chip->irq_work, pm8xxx_tm_work);
+    INIT_DELAYED_WORK(&chip->irq_work, pm8xxx_tm_work);
 
-	rc = request_irq(chip->tempstat_irq, pm8xxx_tm_isr, IRQF_TRIGGER_RISING,
-		chip->cdata.irq_name_temp_stat, chip);
-	if (rc < 0) {
-		pr_err("request_irq(%d) failed: %d\n", chip->tempstat_irq, rc);
-		goto err_cancel_work;
-	}
+    rc = request_irq(chip->tempstat_irq, pm8xxx_tm_isr, IRQF_TRIGGER_RISING,
+                     chip->cdata.irq_name_temp_stat, chip);
+    if (rc < 0) {
+        pr_err("request_irq(%d) failed: %d\n", chip->tempstat_irq, rc);
+        goto err_cancel_work;
+    }
 
-	rc = request_irq(chip->overtemp_irq, pm8xxx_tm_isr, IRQF_TRIGGER_RISING,
-		chip->cdata.irq_name_over_temp, chip);
-	if (rc < 0) {
-		pr_err("request_irq(%d) failed: %d\n", chip->overtemp_irq, rc);
-		goto err_free_irq_tempstat;
-	}
+    rc = request_irq(chip->overtemp_irq, pm8xxx_tm_isr, IRQF_TRIGGER_RISING,
+                     chip->cdata.irq_name_over_temp, chip);
+    if (rc < 0) {
+        pr_err("request_irq(%d) failed: %d\n", chip->overtemp_irq, rc);
+        goto err_free_irq_tempstat;
+    }
 
-	platform_set_drvdata(pdev, chip);
+    platform_set_drvdata(pdev, chip);
 
-	pr_info("OK\n");
+    pr_info("OK\n");
 
-	return 0;
+    return 0;
 
 err_free_irq_tempstat:
-	free_irq(chip->tempstat_irq, chip);
+    free_irq(chip->tempstat_irq, chip);
 err_cancel_work:
-	cancel_delayed_work_sync(&chip->irq_work);
+    cancel_delayed_work_sync(&chip->irq_work);
 err_free_tz:
-	thermal_zone_device_unregister(chip->tz_dev);
+    thermal_zone_device_unregister(chip->tz_dev);
 err_fail_adc:
-	pm8xxx_init_adc(chip, false);
+    pm8xxx_init_adc(chip, false);
 err_free_chip:
-	kfree(chip);
-	return rc;
+    kfree(chip);
+    return rc;
 }
 
-static int __devexit pm8xxx_tm_remove(struct platform_device *pdev)
-{
-	struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
+static int __devexit pm8xxx_tm_remove(struct platform_device *pdev) {
+    struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
 
-	if (chip) {
-		platform_set_drvdata(pdev, NULL);
-		cancel_delayed_work_sync(&chip->irq_work);
-		free_irq(chip->overtemp_irq, chip);
-		free_irq(chip->tempstat_irq, chip);
-		pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
-		pm8xxx_init_adc(chip, false);
-		thermal_zone_device_unregister(chip->tz_dev);
-		kfree(chip);
-	}
-	return 0;
+    if (chip) {
+        platform_set_drvdata(pdev, NULL);
+        cancel_delayed_work_sync(&chip->irq_work);
+        free_irq(chip->overtemp_irq, chip);
+        free_irq(chip->tempstat_irq, chip);
+        pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
+        pm8xxx_init_adc(chip, false);
+        thermal_zone_device_unregister(chip->tz_dev);
+        kfree(chip);
+    }
+    return 0;
 }
 
-static void pm8xxx_tm_shutdown(struct platform_device *pdev)
-{
-	struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
+static void pm8xxx_tm_shutdown(struct platform_device *pdev) {
+    struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
 
-	pm8xxx_tm_write_pwm(chip, TEMP_ALARM_PWM_EN_NEVER);
+    pm8xxx_tm_write_pwm(chip, TEMP_ALARM_PWM_EN_NEVER);
 }
 
 #ifdef CONFIG_PM
-static int pm8xxx_tm_suspend(struct device *dev)
-{
-	struct platform_device *pdev = to_platform_device(dev);
-	struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
+static int pm8xxx_tm_suspend(struct device *dev) {
+    struct platform_device *pdev = to_platform_device(dev);
+    struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
 
-	/* Clear override bits in suspend to allow hardware control */
-	pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
+    /* Clear override bits in suspend to allow hardware control */
+    pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_DISABLED);
 
-	return 0;
+    return 0;
 }
 
-static int pm8xxx_tm_resume(struct device *dev)
-{
-	struct platform_device *pdev = to_platform_device(dev);
-	struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
+static int pm8xxx_tm_resume(struct device *dev) {
+    struct platform_device *pdev = to_platform_device(dev);
+    struct pm8xxx_tm_chip *chip = platform_get_drvdata(pdev);
 
-	/* Override hardware actions so software can control */
-	if (chip->mode == THERMAL_DEVICE_ENABLED)
-		pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_ENABLED);
+    /* Override hardware actions so software can control */
+    if (chip->mode == THERMAL_DEVICE_ENABLED)
+        pm8xxx_tm_shutdown_override(chip, SOFTWARE_OVERRIDE_ENABLED);
 
-	return 0;
+    return 0;
 }
 
 static const struct dev_pm_ops pm8xxx_tm_pm_ops = {
-	.suspend = pm8xxx_tm_suspend,
-	.resume = pm8xxx_tm_resume,
+    .suspend = pm8xxx_tm_suspend,
+    .resume = pm8xxx_tm_resume,
 };
 
 #define PM8XXX_TM_PM_OPS	(&pm8xxx_tm_pm_ops)
@@ -724,24 +701,22 @@ static const struct dev_pm_ops pm8xxx_tm_pm_ops = {
 #endif
 
 static struct platform_driver pm8xxx_tm_driver = {
-	.probe	= pm8xxx_tm_probe,
-	.remove	= __devexit_p(pm8xxx_tm_remove),
-	.shutdown = pm8xxx_tm_shutdown,
-	.driver	= {
-		.name = PM8XXX_TM_DEV_NAME,
-		.owner = THIS_MODULE,
-		.pm = PM8XXX_TM_PM_OPS,
-	},
+    .probe	= pm8xxx_tm_probe,
+    .remove	= __devexit_p(pm8xxx_tm_remove),
+    .shutdown = pm8xxx_tm_shutdown,
+    .driver	= {
+        .name = PM8XXX_TM_DEV_NAME,
+        .owner = THIS_MODULE,
+        .pm = PM8XXX_TM_PM_OPS,
+    },
 };
 
-static int __init pm8xxx_tm_init(void)
-{
-	return platform_driver_register(&pm8xxx_tm_driver);
+static int __init pm8xxx_tm_init(void) {
+    return platform_driver_register(&pm8xxx_tm_driver);
 }
 
-static void __exit pm8xxx_tm_exit(void)
-{
-	platform_driver_unregister(&pm8xxx_tm_driver);
+static void __exit pm8xxx_tm_exit(void) {
+    platform_driver_unregister(&pm8xxx_tm_driver);
 }
 
 module_init(pm8xxx_tm_init);

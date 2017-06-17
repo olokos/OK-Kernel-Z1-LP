@@ -174,20 +174,17 @@ UIL_FUN_PUT_INFO
 /*******************************************************************************
  * STRUCTURE DEFINITIONS
  ******************************************************************************/
-typedef struct
-{
+typedef struct {
     __u16   length;
     __u8    name[HCF_MAX_NAME_LEN];
 }
 wvName_t;
 
 
-typedef struct
-{
+typedef struct {
     hcf_16      len;
     hcf_16      typ;
-    union
-    {
+    union {
         hcf_8       u8[MAX_LTV_BUF_SIZE / sizeof(hcf_8)];
         hcf_16      u16[MAX_LTV_BUF_SIZE / sizeof(hcf_16)];
         hcf_32      u32[MAX_LTV_BUF_SIZE / sizeof(hcf_32)];
@@ -196,10 +193,8 @@ typedef struct
 ltv_t;
 
 
-struct uilreq
-{
-    union
-    {
+struct uilreq {
+    union {
         char    ifrn_name[IFNAMSIZ];
     } ifr_ifrn;
 
@@ -215,10 +210,8 @@ struct uilreq
 };
 
 
-struct rtsreq
-{
-    union
-    {
+struct rtsreq {
+    union {
         char    ifrn_name[IFNAMSIZ];
     }
     ifr_ifrn;

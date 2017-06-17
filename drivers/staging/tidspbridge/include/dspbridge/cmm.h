@@ -61,8 +61,8 @@
  *
  */
 extern void *cmm_calloc_buf(struct cmm_object *hcmm_mgr,
-			    u32 usize, struct cmm_attrs *pattrs,
-			    void **pp_buf_va);
+                            u32 usize, struct cmm_attrs *pattrs,
+                            void **pp_buf_va);
 
 /*
  *  ======== cmm_create ========
@@ -85,8 +85,8 @@ extern void *cmm_calloc_buf(struct cmm_object *hcmm_mgr,
  *
  */
 extern int cmm_create(struct cmm_object **ph_cmm_mgr,
-			     struct dev_object *hdev_obj,
-			     const struct cmm_mgrattrs *mgr_attrts);
+                      struct dev_object *hdev_obj,
+                      const struct cmm_mgrattrs *mgr_attrts);
 
 /*
  *  ======== cmm_destroy ========
@@ -128,7 +128,7 @@ extern int cmm_destroy(struct cmm_object *hcmm_mgr, bool force);
  *
  */
 extern int cmm_free_buf(struct cmm_object *hcmm_mgr,
-			       void *buf_pa, u32 ul_seg_id);
+                        void *buf_pa, u32 ul_seg_id);
 
 /*
  *  ======== cmm_get_handle ========
@@ -148,7 +148,7 @@ extern int cmm_free_buf(struct cmm_object *hcmm_mgr,
  *  Ensures:
  */
 extern int cmm_get_handle(void *hprocessor,
-				 struct cmm_object **ph_cmm_mgr);
+                          struct cmm_object **ph_cmm_mgr);
 
 /*
  *  ======== cmm_get_info ========
@@ -167,7 +167,7 @@ extern int cmm_get_handle(void *hprocessor,
  *
  */
 extern int cmm_get_info(struct cmm_object *hcmm_mgr,
-			       struct cmm_info *cmm_info_obj);
+                        struct cmm_info *cmm_info_obj);
 
 /*
  *  ======== cmm_register_gppsm_seg ========
@@ -198,13 +198,13 @@ extern int cmm_get_info(struct cmm_object *hcmm_mgr,
  *
  */
 extern int cmm_register_gppsm_seg(struct cmm_object *hcmm_mgr,
-					 unsigned int dw_gpp_base_pa,
-					 u32 ul_size,
-					 u32 dsp_addr_offset,
-					 s8 c_factor,
-					 unsigned int dw_dsp_base,
-					 u32 ul_dsp_size,
-					 u32 *sgmt_id, u32 gpp_base_va);
+                                  unsigned int dw_gpp_base_pa,
+                                  u32 ul_size,
+                                  u32 dsp_addr_offset,
+                                  s8 c_factor,
+                                  unsigned int dw_dsp_base,
+                                  u32 ul_dsp_size,
+                                  u32 *sgmt_id, u32 gpp_base_va);
 
 /*
  *  ======== cmm_un_register_gppsm_seg ========
@@ -224,7 +224,7 @@ extern int cmm_register_gppsm_seg(struct cmm_object *hcmm_mgr,
  *
  */
 extern int cmm_un_register_gppsm_seg(struct cmm_object *hcmm_mgr,
-					    u32 ul_seg_id);
+                                     u32 ul_seg_id);
 
 /*
  *  ======== cmm_xlator_alloc_buf ========
@@ -244,7 +244,7 @@ extern int cmm_un_register_gppsm_seg(struct cmm_object *hcmm_mgr,
  *
  */
 extern void *cmm_xlator_alloc_buf(struct cmm_xlatorobject *xlator,
-				  void *va_buf, u32 pa_size);
+                                  void *va_buf, u32 pa_size);
 
 /*
  *  ======== cmm_xlator_create ========
@@ -268,8 +268,8 @@ extern void *cmm_xlator_alloc_buf(struct cmm_xlatorobject *xlator,
  *
  */
 extern int cmm_xlator_create(struct cmm_xlatorobject **xlator,
-				    struct cmm_object *hcmm_mgr,
-				    struct cmm_xlatorattrs *xlator_attrs);
+                             struct cmm_object *hcmm_mgr,
+                             struct cmm_xlatorattrs *xlator_attrs);
 
 /*
  *  ======== cmm_xlator_free_buf ========
@@ -287,7 +287,7 @@ extern int cmm_xlator_create(struct cmm_xlatorobject **xlator,
  *
  */
 extern int cmm_xlator_free_buf(struct cmm_xlatorobject *xlator,
-				      void *buf_va);
+                               void *buf_va);
 
 /*
  *  ======== cmm_xlator_info ========
@@ -311,8 +311,8 @@ extern int cmm_xlator_free_buf(struct cmm_xlatorobject *xlator,
  *
  */
 extern int cmm_xlator_info(struct cmm_xlatorobject *xlator,
-				  u8 **paddr,
-				  u32 ul_size, u32 segm_id, bool set_info);
+                           u8 **paddr,
+                           u32 ul_size, u32 segm_id, bool set_info);
 
 /*
  *  ======== cmm_xlator_translate ========
@@ -332,6 +332,6 @@ extern int cmm_xlator_info(struct cmm_xlatorobject *xlator,
  *
  */
 extern void *cmm_xlator_translate(struct cmm_xlatorobject *xlator,
-				  void *paddr, enum cmm_xlatetype xtype);
+                                  void *paddr, enum cmm_xlatetype xtype);
 
 #endif /* CMM_ */

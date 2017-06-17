@@ -22,32 +22,30 @@
 
 #include "clock.h"
 
-static int jz4740_pm_enter(suspend_state_t state)
-{
-	jz4740_clock_suspend();
+static int jz4740_pm_enter(suspend_state_t state) {
+    jz4740_clock_suspend();
 
-	jz4740_clock_set_wait_mode(JZ4740_WAIT_MODE_SLEEP);
+    jz4740_clock_set_wait_mode(JZ4740_WAIT_MODE_SLEEP);
 
-	__asm__(".set\tmips3\n\t"
-		"wait\n\t"
-		".set\tmips0");
+    __asm__(".set\tmips3\n\t"
+            "wait\n\t"
+            ".set\tmips0");
 
-	jz4740_clock_set_wait_mode(JZ4740_WAIT_MODE_IDLE);
+    jz4740_clock_set_wait_mode(JZ4740_WAIT_MODE_IDLE);
 
-	jz4740_clock_resume();
+    jz4740_clock_resume();
 
-	return 0;
+    return 0;
 }
 
 static const struct platform_suspend_ops jz4740_pm_ops = {
-	.valid		= suspend_valid_only_mem,
-	.enter		= jz4740_pm_enter,
+    .valid		= suspend_valid_only_mem,
+    .enter		= jz4740_pm_enter,
 };
 
-static int __init jz4740_pm_init(void)
-{
-	suspend_set_ops(&jz4740_pm_ops);
-	return 0;
+static int __init jz4740_pm_init(void) {
+    suspend_set_ops(&jz4740_pm_ops);
+    return 0;
 
 }
 late_initcall(jz4740_pm_init);

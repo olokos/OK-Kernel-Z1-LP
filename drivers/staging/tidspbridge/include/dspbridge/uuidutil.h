@@ -39,7 +39,7 @@
  *      UUID string limit currently set at MAXUUIDLEN.
  */
 void uuid_uuid_to_string(struct dsp_uuid *uuid_obj, char *sz_uuid,
-			 s32 size);
+                         s32 size);
 
 /*
  *  ======== uuid_uuid_from_string ========
@@ -57,6 +57,6 @@ void uuid_uuid_to_string(struct dsp_uuid *uuid_obj, char *sz_uuid,
  *      "12345678_1234_1234_1234_123456789abc".
  */
 extern void uuid_uuid_from_string(char *sz_uuid,
-				  struct dsp_uuid *uuid_obj);
+                                  struct dsp_uuid *uuid_obj);
 
 #endif /* UUIDUTIL_ */

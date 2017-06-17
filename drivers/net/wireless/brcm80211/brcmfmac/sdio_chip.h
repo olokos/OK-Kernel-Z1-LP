@@ -55,81 +55,81 @@
 #define BRCMF_MAX_CORENUM	6
 
 struct chip_core_info {
-	u16 id;
-	u16 rev;
-	u32 base;
-	u32 wrapbase;
-	u32 caps;
-	u32 cib;
+    u16 id;
+    u16 rev;
+    u32 base;
+    u32 wrapbase;
+    u32 caps;
+    u32 cib;
 };
 
 struct chip_info {
-	u32 chip;
-	u32 chiprev;
-	u32 socitype;
-	/* core info */
-	/* always put chipcommon core at 0, bus core at 1 */
-	struct chip_core_info c_inf[BRCMF_MAX_CORENUM];
-	u32 pmurev;
-	u32 pmucaps;
-	u32 ramsize;
+    u32 chip;
+    u32 chiprev;
+    u32 socitype;
+    /* core info */
+    /* always put chipcommon core at 0, bus core at 1 */
+    struct chip_core_info c_inf[BRCMF_MAX_CORENUM];
+    u32 pmurev;
+    u32 pmucaps;
+    u32 ramsize;
 
-	bool (*iscoreup)(struct brcmf_sdio_dev *sdiodev, struct chip_info *ci,
-			 u16 coreid);
-	u32 (*corerev)(struct brcmf_sdio_dev *sdiodev, struct chip_info *ci,
-			 u16 coreid);
-	void (*coredisable)(struct brcmf_sdio_dev *sdiodev,
-			struct chip_info *ci, u16 coreid);
-	void (*resetcore)(struct brcmf_sdio_dev *sdiodev,
-			struct chip_info *ci, u16 coreid);
+    bool (*iscoreup)(struct brcmf_sdio_dev *sdiodev, struct chip_info *ci,
+                     u16 coreid);
+    u32 (*corerev)(struct brcmf_sdio_dev *sdiodev, struct chip_info *ci,
+                   u16 coreid);
+    void (*coredisable)(struct brcmf_sdio_dev *sdiodev,
+                        struct chip_info *ci, u16 coreid);
+    void (*resetcore)(struct brcmf_sdio_dev *sdiodev,
+                      struct chip_info *ci, u16 coreid);
 };
 
 struct sbconfig {
-	u32 PAD[2];
-	u32 sbipsflag;	/* initiator port ocp slave flag */
-	u32 PAD[3];
-	u32 sbtpsflag;	/* target port ocp slave flag */
-	u32 PAD[11];
-	u32 sbtmerrloga;	/* (sonics >= 2.3) */
-	u32 PAD;
-	u32 sbtmerrlog;	/* (sonics >= 2.3) */
-	u32 PAD[3];
-	u32 sbadmatch3;	/* address match3 */
-	u32 PAD;
-	u32 sbadmatch2;	/* address match2 */
-	u32 PAD;
-	u32 sbadmatch1;	/* address match1 */
-	u32 PAD[7];
-	u32 sbimstate;	/* initiator agent state */
-	u32 sbintvec;	/* interrupt mask */
-	u32 sbtmstatelow;	/* target state */
-	u32 sbtmstatehigh;	/* target state */
-	u32 sbbwa0;		/* bandwidth allocation table0 */
-	u32 PAD;
-	u32 sbimconfiglow;	/* initiator configuration */
-	u32 sbimconfighigh;	/* initiator configuration */
-	u32 sbadmatch0;	/* address match0 */
-	u32 PAD;
-	u32 sbtmconfiglow;	/* target configuration */
-	u32 sbtmconfighigh;	/* target configuration */
-	u32 sbbconfig;	/* broadcast configuration */
-	u32 PAD;
-	u32 sbbstate;	/* broadcast state */
-	u32 PAD[3];
-	u32 sbactcnfg;	/* activate configuration */
-	u32 PAD[3];
-	u32 sbflagst;	/* current sbflags */
-	u32 PAD[3];
-	u32 sbidlow;		/* identification */
-	u32 sbidhigh;	/* identification */
+    u32 PAD[2];
+    u32 sbipsflag;	/* initiator port ocp slave flag */
+    u32 PAD[3];
+    u32 sbtpsflag;	/* target port ocp slave flag */
+    u32 PAD[11];
+    u32 sbtmerrloga;	/* (sonics >= 2.3) */
+    u32 PAD;
+    u32 sbtmerrlog;	/* (sonics >= 2.3) */
+    u32 PAD[3];
+    u32 sbadmatch3;	/* address match3 */
+    u32 PAD;
+    u32 sbadmatch2;	/* address match2 */
+    u32 PAD;
+    u32 sbadmatch1;	/* address match1 */
+    u32 PAD[7];
+    u32 sbimstate;	/* initiator agent state */
+    u32 sbintvec;	/* interrupt mask */
+    u32 sbtmstatelow;	/* target state */
+    u32 sbtmstatehigh;	/* target state */
+    u32 sbbwa0;		/* bandwidth allocation table0 */
+    u32 PAD;
+    u32 sbimconfiglow;	/* initiator configuration */
+    u32 sbimconfighigh;	/* initiator configuration */
+    u32 sbadmatch0;	/* address match0 */
+    u32 PAD;
+    u32 sbtmconfiglow;	/* target configuration */
+    u32 sbtmconfighigh;	/* target configuration */
+    u32 sbbconfig;	/* broadcast configuration */
+    u32 PAD;
+    u32 sbbstate;	/* broadcast state */
+    u32 PAD[3];
+    u32 sbactcnfg;	/* activate configuration */
+    u32 PAD[3];
+    u32 sbflagst;	/* current sbflags */
+    u32 PAD[3];
+    u32 sbidlow;		/* identification */
+    u32 sbidhigh;	/* identification */
 };
 
 extern int brcmf_sdio_chip_attach(struct brcmf_sdio_dev *sdiodev,
-				  struct chip_info **ci_ptr, u32 regs);
+                                  struct chip_info **ci_ptr, u32 regs);
 extern void brcmf_sdio_chip_detach(struct chip_info **ci_ptr);
 extern void brcmf_sdio_chip_drivestrengthinit(struct brcmf_sdio_dev *sdiodev,
-					      struct chip_info *ci,
-					      u32 drivestrength);
+        struct chip_info *ci,
+        u32 drivestrength);
 extern u8 brcmf_sdio_chip_getinfidx(struct chip_info *ci, u16 coreid);
 
 

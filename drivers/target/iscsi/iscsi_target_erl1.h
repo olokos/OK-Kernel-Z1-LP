@@ -3,13 +3,13 @@
 
 extern int iscsit_dump_data_payload(struct iscsi_conn *, u32, int);
 extern int iscsit_create_recovery_datain_values_datasequenceinorder_yes(
-			struct iscsi_cmd *, struct iscsi_datain_req *);
+    struct iscsi_cmd *, struct iscsi_datain_req *);
 extern int iscsit_create_recovery_datain_values_datasequenceinorder_no(
-			struct iscsi_cmd *, struct iscsi_datain_req *);
+    struct iscsi_cmd *, struct iscsi_datain_req *);
 extern int iscsit_handle_recovery_datain_or_r2t(struct iscsi_conn *, unsigned char *,
-			u32, u32, u32, u32);
+        u32, u32, u32, u32);
 extern int iscsit_handle_status_snack(struct iscsi_conn *, u32, u32,
-			u32, u32);
+                                      u32, u32);
 extern int iscsit_handle_data_ack(struct iscsi_conn *, u32, u32, u32);
 extern int iscsit_dataout_datapduinorder_no_fbit(struct iscsi_cmd *, struct iscsi_pdu *);
 extern int iscsit_recover_dataout_sequence(struct iscsi_cmd *, u32, u32);

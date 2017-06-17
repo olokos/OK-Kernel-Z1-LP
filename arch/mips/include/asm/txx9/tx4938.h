@@ -41,22 +41,22 @@
 #define TX4938_SPI_REG		(TX4938_REG_BASE + 0xf800)
 
 struct tx4938_sramc_reg {
-	u64 cr;
+    u64 cr;
 };
 
 struct tx4938_ccfg_reg {
-	u64 ccfg;
-	u64 crir;
-	u64 pcfg;
-	u64 toea;
-	u64 clkctr;
-	u64 unused0;
-	u64 garbc;
-	u64 unused1;
-	u64 unused2;
-	u64 ramp;
-	u64 unused3;
-	u64 jmpadr;
+    u64 ccfg;
+    u64 crir;
+    u64 pcfg;
+    u64 toea;
+    u64 clkctr;
+    u64 unused0;
+    u64 garbc;
+    u64 unused1;
+    u64 unused2;
+    u64 ramp;
+    u64 unused3;
+    u64 jmpadr;
 };
 
 /*
@@ -294,14 +294,14 @@ void tx4938_mtd_init(int ch);
 void tx4938_ndfmc_init(unsigned int hold, unsigned int spw);
 
 struct tx4938ide_platform_info {
-	/*
-	 * I/O port shift, for platforms with ports that are
-	 * constantly spaced and need larger than the 1-byte
-	 * spacing used by ata_std_ports().
-	 */
-	unsigned int ioport_shift;
-	unsigned int gbus_clock;	/*  0 means no PIO mode tuning. */
-	unsigned int ebus_ch;
+    /*
+     * I/O port shift, for platforms with ports that are
+     * constantly spaced and need larger than the 1-byte
+     * spacing used by ata_std_ports().
+     */
+    unsigned int ioport_shift;
+    unsigned int gbus_clock;	/*  0 means no PIO mode tuning. */
+    unsigned int ebus_ch;
 };
 
 void tx4938_ata_init(unsigned int irq, unsigned int shift, int tune);

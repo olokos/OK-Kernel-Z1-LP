@@ -31,9 +31,9 @@
  */
 
 typedef struct display_struct {
-        char cntrl;
-        char message1[8];
-        char message2[8];
+    char cntrl;
+    char message1[8];
+    char message2[8];
 } display_struct;
 
 /*
@@ -41,9 +41,9 @@ typedef struct display_struct {
  */
 
 struct tape390_crypt_info {
-	char capability;
-	char status;
-	char medium_status;
+    char capability;
+    char status;
+    char medium_status;
 } __attribute__ ((packed));
 
 
@@ -81,13 +81,13 @@ struct tape390_crypt_info {
 #define TAPE390_KEKL_TYPE_HASH 2
 
 struct tape390_kekl {
-	unsigned char type;
-	unsigned char type_on_tape;
-	char label[65];
+    unsigned char type;
+    unsigned char type_on_tape;
+    char label[65];
 } __attribute__ ((packed));
 
 struct tape390_kekl_pair {
-	struct tape390_kekl kekl[2];
+    struct tape390_kekl kekl[2];
 } __attribute__ ((packed));
 
 /*
@@ -100,4 +100,4 @@ struct tape390_kekl_pair {
  */
 #define TAPE390_KEKL_QUERY _IOR('d', 5, struct tape390_kekl_pair)
 
-#endif 
+#endif

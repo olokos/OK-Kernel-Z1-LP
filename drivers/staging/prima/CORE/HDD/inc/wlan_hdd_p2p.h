@@ -62,8 +62,7 @@
 
 #define HDD_P2P_MAX_ROC_DURATION            1000
 
-enum hdd_rx_flags
-{
+enum hdd_rx_flags {
     HDD_RX_FLAG_DECRYPTED        = 1 << 0,
     HDD_RX_FLAG_MMIC_STRIPPED    = 1 << 1,
     HDD_RX_FLAG_IV_STRIPPED      = 1 << 2,
@@ -89,8 +88,7 @@ typedef enum  { P2P_NOT_ACTIVE,
 extern tP2PConnectionStatus globalP2PConnectionStatus;
 #endif
 
-typedef struct p2p_app_setP2pPs
-{
+typedef struct p2p_app_setP2pPs {
     tANI_U8     opp_ps;
     tANI_U32     ctWindow;
     tANI_U8     count;

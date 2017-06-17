@@ -13,11 +13,11 @@
 #ifdef __KERNEL__
 
 struct proc_info_list {
-	unsigned int		cpu_val;
-	unsigned int		cpu_mask;
-	const char		*arch_name;
-	const char		*elf_name;
-	unsigned int		elf_hwcap;
+    unsigned int		cpu_val;
+    unsigned int		cpu_mask;
+    const char		*arch_name;
+    const char		*elf_name;
+    unsigned int		elf_hwcap;
 };
 
 #else	/* __KERNEL__ */

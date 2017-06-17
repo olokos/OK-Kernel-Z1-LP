@@ -120,227 +120,227 @@
 #define DEF_MAX_CWND		0xffff
 
 struct cnic_ctx {
-	u32		cid;
-	void		*ctx;
-	dma_addr_t	mapping;
+    u32		cid;
+    void		*ctx;
+    dma_addr_t	mapping;
 };
 
 #define BNX2_MAX_CID		0x2000
 
 struct cnic_dma {
-	int		num_pages;
-	void		**pg_arr;
-	dma_addr_t	*pg_map_arr;
-	int		pgtbl_size;
-	u32		*pgtbl;
-	dma_addr_t	pgtbl_map;
+    int		num_pages;
+    void		**pg_arr;
+    dma_addr_t	*pg_map_arr;
+    int		pgtbl_size;
+    u32		*pgtbl;
+    dma_addr_t	pgtbl_map;
 };
 
 struct cnic_id_tbl {
-	spinlock_t	lock;
-	u32		start;
-	u32		max;
-	u32		next;
-	unsigned long	*table;
+    spinlock_t	lock;
+    u32		start;
+    u32		max;
+    u32		next;
+    unsigned long	*table;
 };
 
 #define CNIC_KWQ16_DATA_SIZE	128
 
 struct kwqe_16_data {
-	u8	data[CNIC_KWQ16_DATA_SIZE];
+    u8	data[CNIC_KWQ16_DATA_SIZE];
 };
 
 struct cnic_iscsi {
-	struct cnic_dma		task_array_info;
-	struct cnic_dma		r2tq_info;
-	struct cnic_dma		hq_info;
+    struct cnic_dma		task_array_info;
+    struct cnic_dma		r2tq_info;
+    struct cnic_dma		hq_info;
 };
 
 struct cnic_context {
-	u32			cid;
-	struct kwqe_16_data	*kwqe_data;
-	dma_addr_t		kwqe_data_mapping;
-	wait_queue_head_t	waitq;
-	int			wait_cond;
-	unsigned long		timestamp;
-	unsigned long		ctx_flags;
+    u32			cid;
+    struct kwqe_16_data	*kwqe_data;
+    dma_addr_t		kwqe_data_mapping;
+    wait_queue_head_t	waitq;
+    int			wait_cond;
+    unsigned long		timestamp;
+    unsigned long		ctx_flags;
 #define	CTX_FL_OFFLD_START	0
 #define	CTX_FL_DELETE_WAIT	1
 #define	CTX_FL_CID_ERROR	2
-	u8			ulp_proto_id;
-	union {
-		struct cnic_iscsi	*iscsi;
-	} proto;
+    u8			ulp_proto_id;
+    union {
+        struct cnic_iscsi	*iscsi;
+    } proto;
 };
 
 struct kcq_info {
-	struct cnic_dma	dma;
-	struct kcqe	**kcq;
+    struct cnic_dma	dma;
+    struct kcqe	**kcq;
 
-	u16		*hw_prod_idx_ptr;
-	u16		sw_prod_idx;
-	u16		*status_idx_ptr;
-	u32		io_addr;
+    u16		*hw_prod_idx_ptr;
+    u16		sw_prod_idx;
+    u16		*status_idx_ptr;
+    u32		io_addr;
 
-	u16		(*next_idx)(u16);
-	u16		(*hw_idx)(u16);
+    u16		(*next_idx)(u16);
+    u16		(*hw_idx)(u16);
 };
 
 struct iro {
-	u32 base;
-	u16 m1;
-	u16 m2;
-	u16 m3;
-	u16 size;
+    u32 base;
+    u16 m1;
+    u16 m2;
+    u16 m3;
+    u16 size;
 };
 
 struct cnic_uio_dev {
-	struct uio_info		cnic_uinfo;
-	u32			uio_dev;
+    struct uio_info		cnic_uinfo;
+    u32			uio_dev;
 
-	int			l2_ring_size;
-	void			*l2_ring;
-	dma_addr_t		l2_ring_map;
+    int			l2_ring_size;
+    void			*l2_ring;
+    dma_addr_t		l2_ring_map;
 
-	int			l2_buf_size;
-	void			*l2_buf;
-	dma_addr_t		l2_buf_map;
+    int			l2_buf_size;
+    void			*l2_buf;
+    dma_addr_t		l2_buf_map;
 
-	struct cnic_dev		*dev;
-	struct pci_dev		*pdev;
-	struct list_head	list;
+    struct cnic_dev		*dev;
+    struct pci_dev		*pdev;
+    struct list_head	list;
 };
 
 struct cnic_local {
 
-	spinlock_t cnic_ulp_lock;
-	void *ulp_handle[MAX_CNIC_ULP_TYPE];
-	unsigned long ulp_flags[MAX_CNIC_ULP_TYPE];
+    spinlock_t cnic_ulp_lock;
+    void *ulp_handle[MAX_CNIC_ULP_TYPE];
+    unsigned long ulp_flags[MAX_CNIC_ULP_TYPE];
 #define ULP_F_INIT	0
 #define ULP_F_START	1
 #define ULP_F_CALL_PENDING	2
-	struct cnic_ulp_ops __rcu *ulp_ops[MAX_CNIC_ULP_TYPE];
+    struct cnic_ulp_ops __rcu *ulp_ops[MAX_CNIC_ULP_TYPE];
 
-	unsigned long cnic_local_flags;
+    unsigned long cnic_local_flags;
 #define	CNIC_LCL_FL_KWQ_INIT		0x0
 #define	CNIC_LCL_FL_L2_WAIT		0x1
 #define	CNIC_LCL_FL_RINGS_INITED	0x2
 #define	CNIC_LCL_FL_STOP_ISCSI		0x4
 
-	struct cnic_dev *dev;
+    struct cnic_dev *dev;
 
-	struct cnic_eth_dev *ethdev;
+    struct cnic_eth_dev *ethdev;
 
-	struct cnic_uio_dev *udev;
+    struct cnic_uio_dev *udev;
 
-	int		l2_rx_ring_size;
-	int		l2_single_buf_size;
+    int		l2_rx_ring_size;
+    int		l2_single_buf_size;
 
-	u16		*rx_cons_ptr;
-	u16		*tx_cons_ptr;
-	u16		rx_cons;
-	u16		tx_cons;
+    u16		*rx_cons_ptr;
+    u16		*tx_cons_ptr;
+    u16		rx_cons;
+    u16		tx_cons;
 
-	const struct iro	*iro_arr;
+    const struct iro	*iro_arr;
 #define IRO (((struct cnic_local *) dev->cnic_priv)->iro_arr)
 
-	struct cnic_dma		kwq_info;
-	struct kwqe		**kwq;
+    struct cnic_dma		kwq_info;
+    struct kwqe		**kwq;
 
-	struct cnic_dma		kwq_16_data_info;
+    struct cnic_dma		kwq_16_data_info;
 
-	u16		max_kwq_idx;
+    u16		max_kwq_idx;
 
-	u16		kwq_prod_idx;
-	u32		kwq_io_addr;
+    u16		kwq_prod_idx;
+    u32		kwq_io_addr;
 
-	u16		*kwq_con_idx_ptr;
-	u16		kwq_con_idx;
+    u16		*kwq_con_idx_ptr;
+    u16		kwq_con_idx;
 
-	struct kcq_info	kcq1;
-	struct kcq_info	kcq2;
+    struct kcq_info	kcq1;
+    struct kcq_info	kcq2;
 
-	union {
-		void				*gen;
-		struct status_block_msix	*bnx2;
-		struct host_hc_status_block_e1x	*bnx2x_e1x;
-		/* index values - which counter to update */
-		#define SM_RX_ID		0
-		#define SM_TX_ID		1
-	} status_blk;
+    union {
+        void				*gen;
+        struct status_block_msix	*bnx2;
+        struct host_hc_status_block_e1x	*bnx2x_e1x;
+        /* index values - which counter to update */
+#define SM_RX_ID		0
+#define SM_TX_ID		1
+    } status_blk;
 
-	struct host_sp_status_block	*bnx2x_def_status_blk;
+    struct host_sp_status_block	*bnx2x_def_status_blk;
 
-	u32				status_blk_num;
-	u32				bnx2x_igu_sb_id;
-	u32				int_num;
-	u32				last_status_idx;
-	struct tasklet_struct		cnic_irq_task;
+    u32				status_blk_num;
+    u32				bnx2x_igu_sb_id;
+    u32				int_num;
+    u32				last_status_idx;
+    struct tasklet_struct		cnic_irq_task;
 
-	struct kcqe		*completed_kcq[MAX_COMPLETED_KCQE];
+    struct kcqe		*completed_kcq[MAX_COMPLETED_KCQE];
 
-	struct cnic_sock	*csk_tbl;
-	struct cnic_id_tbl	csk_port_tbl;
+    struct cnic_sock	*csk_tbl;
+    struct cnic_id_tbl	csk_port_tbl;
 
-	struct cnic_dma		gbl_buf_info;
+    struct cnic_dma		gbl_buf_info;
 
-	struct cnic_iscsi	*iscsi_tbl;
-	struct cnic_context	*ctx_tbl;
-	struct cnic_id_tbl	cid_tbl;
-	atomic_t		iscsi_conn;
-	u32			iscsi_start_cid;
+    struct cnic_iscsi	*iscsi_tbl;
+    struct cnic_context	*ctx_tbl;
+    struct cnic_id_tbl	cid_tbl;
+    atomic_t		iscsi_conn;
+    u32			iscsi_start_cid;
 
-	u32			fcoe_init_cid;
-	u32			fcoe_start_cid;
-	struct cnic_id_tbl	fcoe_cid_tbl;
+    u32			fcoe_init_cid;
+    u32			fcoe_start_cid;
+    struct cnic_id_tbl	fcoe_cid_tbl;
 
-	u32			max_cid_space;
+    u32			max_cid_space;
 
-	/* per connection parameters */
-	int			num_iscsi_tasks;
-	int			num_ccells;
-	int			task_array_size;
-	int			r2tq_size;
-	int			hq_size;
-	int			num_cqs;
+    /* per connection parameters */
+    int			num_iscsi_tasks;
+    int			num_ccells;
+    int			task_array_size;
+    int			r2tq_size;
+    int			hq_size;
+    int			num_cqs;
 
-	struct delayed_work	delete_task;
+    struct delayed_work	delete_task;
 
-	struct cnic_ctx		*ctx_arr;
-	int			ctx_blks;
-	int			ctx_blk_size;
-	unsigned long		ctx_align;
-	int			cids_per_blk;
+    struct cnic_ctx		*ctx_arr;
+    int			ctx_blks;
+    int			ctx_blk_size;
+    unsigned long		ctx_align;
+    int			cids_per_blk;
 
-	u32			chip_id;
-	int			func;
-	u32			pfid;
-	u8			port_mode;
+    u32			chip_id;
+    int			func;
+    u32			pfid;
+    u8			port_mode;
 #define CHIP_4_PORT_MODE	0
 #define CHIP_2_PORT_MODE	1
 #define CHIP_PORT_MODE_NONE	2
 
-	u32			shmem_base;
+    u32			shmem_base;
 
-	struct cnic_ops		*cnic_ops;
-	int			(*start_hw)(struct cnic_dev *);
-	void			(*stop_hw)(struct cnic_dev *);
-	void			(*setup_pgtbl)(struct cnic_dev *,
-					       struct cnic_dma *);
-	int			(*alloc_resc)(struct cnic_dev *);
-	void			(*free_resc)(struct cnic_dev *);
-	int			(*start_cm)(struct cnic_dev *);
-	void			(*stop_cm)(struct cnic_dev *);
-	void			(*enable_int)(struct cnic_dev *);
-	void			(*disable_int_sync)(struct cnic_dev *);
-	void			(*ack_int)(struct cnic_dev *);
-	void			(*close_conn)(struct cnic_sock *, u32 opcode);
+    struct cnic_ops		*cnic_ops;
+    int			(*start_hw)(struct cnic_dev *);
+    void			(*stop_hw)(struct cnic_dev *);
+    void			(*setup_pgtbl)(struct cnic_dev *,
+                                   struct cnic_dma *);
+    int			(*alloc_resc)(struct cnic_dev *);
+    void			(*free_resc)(struct cnic_dev *);
+    int			(*start_cm)(struct cnic_dev *);
+    void			(*stop_cm)(struct cnic_dev *);
+    void			(*enable_int)(struct cnic_dev *);
+    void			(*disable_int_sync)(struct cnic_dev *);
+    void			(*ack_int)(struct cnic_dev *);
+    void			(*close_conn)(struct cnic_sock *, u32 opcode);
 };
 
 struct bnx2x_bd_chain_next {
-	u32	addr_lo;
-	u32	addr_hi;
-	u8	reserved[8];
+    u32	addr_lo;
+    u32	addr_hi;
+    u8	reserved[8];
 };
 
 #define ISCSI_DEFAULT_MAX_OUTSTANDING_R2T 	(1)

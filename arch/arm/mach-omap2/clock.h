@@ -80,7 +80,7 @@ void __init omap2_clk_disable_clkdm_control(void);
 
 /* clkt_clksel.c public functions */
 u32 omap2_clksel_round_rate_div(struct clk *clk, unsigned long target_rate,
-				u32 *new_div);
+                                u32 *new_div);
 void omap2_init_clksel_parent(struct clk *clk);
 unsigned long omap2_clksel_recalc(struct clk *clk);
 long omap2_clksel_round_rate(struct clk *clk, unsigned long target_rate);
@@ -100,37 +100,34 @@ int omap2_wait_clock_ready(void __iomem *reg, u32 cval, const char *name);
 #ifdef CONFIG_ARCH_OMAP2
 void omap2xxx_clk_prepare_for_reboot(void);
 #else
-static inline void omap2xxx_clk_prepare_for_reboot(void)
-{
+static inline void omap2xxx_clk_prepare_for_reboot(void) {
 }
 #endif
 
 #ifdef CONFIG_ARCH_OMAP3
 void omap3_clk_prepare_for_reboot(void);
 #else
-static inline void omap3_clk_prepare_for_reboot(void)
-{
+static inline void omap3_clk_prepare_for_reboot(void) {
 }
 #endif
 
 #ifdef CONFIG_ARCH_OMAP4
 void omap4_clk_prepare_for_reboot(void);
 #else
-static inline void omap4_clk_prepare_for_reboot(void)
-{
+static inline void omap4_clk_prepare_for_reboot(void) {
 }
 #endif
 
 int omap2_dflt_clk_enable(struct clk *clk);
 void omap2_dflt_clk_disable(struct clk *clk);
 void omap2_clk_dflt_find_companion(struct clk *clk, void __iomem **other_reg,
-				   u8 *other_bit);
+                                   u8 *other_bit);
 void omap2_clk_dflt_find_idlest(struct clk *clk, void __iomem **idlest_reg,
-				u8 *idlest_bit, u8 *idlest_val);
+                                u8 *idlest_bit, u8 *idlest_val);
 int omap2_clk_switch_mpurate_at_boot(const char *mpurate_ck_name);
 void omap2_clk_print_new_rates(const char *hfclkin_ck_name,
-			       const char *core_ck_name,
-			       const char *mpu_ck_name);
+                               const char *core_ck_name,
+                               const char *mpu_ck_name);
 
 extern u16 cpu_mask;
 

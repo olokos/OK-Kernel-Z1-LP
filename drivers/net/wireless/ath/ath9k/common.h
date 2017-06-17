@@ -53,13 +53,13 @@
 int ath9k_cmn_padpos(__le16 frame_control);
 int ath9k_cmn_get_hw_crypto_keytype(struct sk_buff *skb);
 void ath9k_cmn_update_ichannel(struct ath9k_channel *ichan,
-			       struct ieee80211_channel *chan,
-			       enum nl80211_channel_type channel_type);
+                               struct ieee80211_channel *chan,
+                               enum nl80211_channel_type channel_type);
 struct ath9k_channel *ath9k_cmn_get_curchannel(struct ieee80211_hw *hw,
-					       struct ath_hw *ah);
+        struct ath_hw *ah);
 int ath9k_cmn_count_streams(unsigned int chainmask, int max);
 void ath9k_cmn_btcoex_bt_stomp(struct ath_common *common,
-				  enum ath_stomp_type stomp_type);
+                               enum ath_stomp_type stomp_type);
 void ath9k_cmn_update_txpow(struct ath_hw *ah, u16 cur_txpow,
-			    u16 new_txpow, u16 *txpower);
+                            u16 new_txpow, u16 *txpower);
 void ath9k_cmn_init_crypto(struct ath_hw *ah);

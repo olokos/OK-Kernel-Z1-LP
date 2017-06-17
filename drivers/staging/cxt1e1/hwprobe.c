@@ -50,8 +50,7 @@ struct s_hdw_info hdw_info[MAX_BOARDS];
 
 
 void        __init
-show_two (hdw_info_t * hi, int brdno)
-{
+show_two (hdw_info_t * hi, int brdno) {
     ci_t       *ci;
     struct pci_dev *pdev;
     char       *bid;
@@ -63,8 +62,7 @@ show_two (hdw_info_t * hi, int brdno)
 
     ci = (ci_t *)(netdev_priv(hi->ndev));
     bid = sbeid_get_bdname (ci);
-    switch (hi->promfmt)
-    {
+    switch (hi->promfmt) {
     case PROM_FORMAT_TYPE1:
         memcpy (sn, (FLD_TYPE1 *) (hi->mfg_info.pft1.Serial), 6);
         break;
@@ -79,8 +77,8 @@ show_two (hdw_info_t * hi, int brdno)
     sprintf (banner, "%s: %s  S/N %06X, MUSYCC Rev %02X",
              hi->devname, bid,
              ((sn[3] << 16) & 0xff0000) |
-              ((sn[4] << 8) & 0x00ff00) |
-              (sn[5] & 0x0000ff),
+             ((sn[4] << 8) & 0x00ff00) |
+             (sn[5] & 0x0000ff),
              (u_int8_t) hi->revid[0]);
 
     pr_info("%s\n", banner);
@@ -102,8 +100,7 @@ show_two (hdw_info_t * hi, int brdno)
 
 
 void        __init
-hdw_sn_get (hdw_info_t * hi, int brdno)
-{
+hdw_sn_get (hdw_info_t * hi, int brdno) {
     /* obtain hardware EEPROM information */
     long        addr;
 
@@ -140,8 +137,7 @@ hdw_sn_get (hdw_info_t * hi, int brdno)
             hi->mfg_info.Serial[5]);
 #endif
 
-    if ((hi->promfmt = pmc_verify_cksum (&hi->mfg_info.data)) == PROM_FORMAT_Unk)
-    {
+    if ((hi->promfmt = pmc_verify_cksum (&hi->mfg_info.data)) == PROM_FORMAT_Unk) {
         /* bad crc, data is suspect */
         if (cxt1e1_log_level >= LOG_WARN)
             pr_info("%s: EEPROM cksum error\n", hi->devname);
@@ -152,13 +148,11 @@ hdw_sn_get (hdw_info_t * hi, int brdno)
 
 
 void        __init
-prep_hdw_info (void)
-{
+prep_hdw_info (void) {
     hdw_info_t *hi;
     int         i;
 
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         hi->pci_busno = 0xff;
         hi->pci_slot = 0xff;
         hi->pci_pin[0] = 0;
@@ -172,23 +166,19 @@ prep_hdw_info (void)
 }
 
 void
-cleanup_ioremap (void)
-{
+cleanup_ioremap (void) {
     hdw_info_t *hi;
     int         i;
 
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         if (hi->pci_slot == 0xff)
             break;
-        if (hi->addr_mapped[0])
-        {
+        if (hi->addr_mapped[0]) {
             iounmap ((void *) (hi->addr_mapped[0]));
             release_mem_region ((long) hi->addr[0], hi->len[0]);
             hi->addr_mapped[0] = 0;
         }
-        if (hi->addr_mapped[1])
-        {
+        if (hi->addr_mapped[1]) {
             iounmap ((void *) (hi->addr_mapped[1]));
             release_mem_region ((long) hi->addr[1], hi->len[1]);
             hi->addr_mapped[1] = 0;
@@ -198,13 +188,11 @@ cleanup_ioremap (void)
 
 
 void
-cleanup_devs (void)
-{
+cleanup_devs (void) {
     hdw_info_t *hi;
     int         i;
 
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         if (hi->pci_slot == 0xff || !hi->ndev)
             break;
         c4_stopwd(netdev_priv(hi->ndev));
@@ -222,16 +210,14 @@ cleanup_devs (void)
 
 
 STATIC int  __init
-c4_hdw_init (struct pci_dev * pdev, int found)
-{
+c4_hdw_init (struct pci_dev * pdev, int found) {
     hdw_info_t *hi;
     int         i;
     int         fun, slot;
     unsigned char busno = 0xff;
 
     /* our MUSYCC chip supports two functions, 0 & 1 */
-    if ((fun = PCI_FUNC (pdev->devfn)) > 1)
-    {
+    if ((fun = PCI_FUNC (pdev->devfn)) > 1) {
         pr_warning("unexpected devfun: 0x%x\n", pdev->devfn);
         return 0;
     }
@@ -248,14 +234,13 @@ c4_hdw_init (struct pci_dev * pdev, int found)
      * element, identified by "slot==(0xff)".  The second part of a board's
      * functionality will match the previously loaded slot/busno.
      */
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         /*
          * match with board's first found interface, otherwise this is first
          * found
          */
         if ((hi->pci_slot == 0xff) ||   /* new board */
-            ((hi->pci_slot == slot) && (hi->bus == pdev->bus)))
+                ((hi->pci_slot == slot) && (hi->bus == pdev->bus)))
             break;                  /* found for-loop exit */
     }
     if (i == MAX_BOARDS)            /* no match in above loop means MAX
@@ -296,8 +281,7 @@ c4_hdw_init (struct pci_dev * pdev, int found)
 
 
 status_t    __init
-c4hw_attach_all (void)
-{
+c4hw_attach_all (void) {
     hdw_info_t *hi;
     struct pci_dev *pdev = NULL;
     int         found = 0, i, j;
@@ -306,44 +290,36 @@ c4hw_attach_all (void)
     prep_hdw_info ();
     /*** scan PCI bus for all possible boards */
     while ((pdev = pci_get_device (PCI_VENDOR_ID_CONEXANT,
-                                    PCI_DEVICE_ID_CN8474,
-                                    pdev)))
-    {
+                                   PCI_DEVICE_ID_CN8474,
+                                   pdev))) {
         if (c4_hdw_init (pdev, found))
             found++;
     }
-    if (!found)
-    {
+    if (!found) {
         pr_warning("No boards found\n");
         return ENODEV;
     }
     /* sanity check for consistent hardware found */
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
-        if (hi->pci_slot != 0xff && (!hi->addr[0] || !hi->addr[1]))
-        {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
+        if (hi->pci_slot != 0xff && (!hi->addr[0] || !hi->addr[1])) {
             pr_warning("%s: something very wrong with pci_get_device\n",
                        hi->devname);
             return EIO;
         }
     }
     /* bring board's memory regions on/line */
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         if (hi->pci_slot == 0xff)
             break;
-        for (j = 0; j < 2; j++)
-        {
-            if (request_mem_region (hi->addr[j], hi->len[j], hi->devname) == 0)
-            {
+        for (j = 0; j < 2; j++) {
+            if (request_mem_region (hi->addr[j], hi->len[j], hi->devname) == 0) {
                 pr_warning("%s: memory in use, addr=0x%lx, len=0x%lx ?\n",
                            hi->devname, hi->addr[j], hi->len[j]);
                 cleanup_ioremap ();
                 return ENOMEM;
             }
             hi->addr_mapped[j] = (unsigned long) ioremap (hi->addr[j], hi->len[j]);
-            if (!hi->addr_mapped[j])
-            {
+            if (!hi->addr_mapped[j]) {
                 pr_warning("%s: ioremap fails, addr=0x%lx, len=0x%lx ?\n",
                            hi->devname, hi->addr[j], hi->len[j]);
                 cleanup_ioremap ();
@@ -359,13 +335,11 @@ c4hw_attach_all (void)
     drvr_state = SBE_DRVR_AVAILABLE;
 
     /* Have now memory mapped all boards.  Now allow board's access to system */
-    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
-    {
+    for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++) {
         if (hi->pci_slot == 0xff)
             break;
         if (pci_enable_device (hi->pdev[0]) ||
-            pci_enable_device (hi->pdev[1]))
-        {
+                pci_enable_device (hi->pdev[1])) {
             drvr_state = SBE_DRVR_DOWN;
             pr_warning("%s: failed to enable card %d slot %d\n",
                        hi->devname, i, hi->pci_slot);
@@ -378,8 +352,7 @@ c4hw_attach_all (void)
         if (!(hi->ndev = c4_add_dev (hi, i, (long) hi->addr_mapped[0],
                                      (long) hi->addr_mapped[1],
                                      hi->pdev[0]->irq,
-                                     hi->pdev[1]->irq)))
-        {
+                                     hi->pdev[1]->irq))) {
             drvr_state = SBE_DRVR_DOWN;
             cleanup_ioremap ();
             /* NOTE: c4_add_dev() does its own device cleanup */

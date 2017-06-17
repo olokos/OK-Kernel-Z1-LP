@@ -19,15 +19,14 @@
 extern char input_data[];
 extern char input_data_end[];
 
-static void arch_decomp_puts(const char *ptr)
-{
-	char c;
+static void arch_decomp_puts(const char *ptr) {
+    char c;
 
-	while ((c = *ptr++) != '\0') {
-		if (c == '\n')
-			putc('\r');
-		putc(c);
-	}
+    while ((c = *ptr++) != '\0') {
+        if (c == '\n')
+            putc('\r');
+        putc(c);
+    }
 }
 #define ARCH_HAVE_DECOMP_PUTS
 

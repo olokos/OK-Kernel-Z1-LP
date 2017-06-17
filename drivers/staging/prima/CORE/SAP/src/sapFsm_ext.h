@@ -38,8 +38,7 @@
 #define __SAPFSM_EXT_H__
 
 /* Events that can be sent to the SAP state-machine */
-typedef enum
-{
+typedef enum {
     eSAP_TIMER_CONNECT_ACCEPT_TIMEOUT=0U,
     eSAP_MAC_CONNECT_COMPLETED,
     eSAP_CHANNEL_SELECTION_FAILED,

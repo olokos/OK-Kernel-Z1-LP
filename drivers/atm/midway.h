@@ -1,7 +1,7 @@
 /* drivers/atm/midway.h - Efficient Networks Midway (SAR) description */
- 
+
 /* Written 1995-1999 by Werner Almesberger, EPFL LRC/ICA */
- 
+
 
 #ifndef DRIVERS_ATM_MIDWAY_H
 #define DRIVERS_ATM_MIDWAY_H
@@ -159,10 +159,10 @@
 #define ENI155_MAGIC	0xa54b872d
 
 struct midway_eprom {
-	unsigned char mac[MAC_LEN],inv_mac[MAC_LEN];
-	unsigned char pad[36];
-	u32 serial,inv_serial;
-	u32 magic,inv_magic;
+    unsigned char mac[MAC_LEN],inv_mac[MAC_LEN];
+    unsigned char pad[36];
+    u32 serial,inv_serial;
+    u32 magic,inv_magic;
 };
 
 

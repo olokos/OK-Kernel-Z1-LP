@@ -53,7 +53,7 @@
 
 struct sec_accel_config {
 
-	u32 config;
+    u32 config;
 #define CFG_OP_MAC_ONLY		0
 #define CFG_OP_CRYPT_ONLY	1
 #define CFG_OP_MAC_CRYPT	2
@@ -79,60 +79,60 @@ struct sec_accel_config {
 #define CFG_LAST_FRAG		(2 << 30)
 #define CFG_MID_FRAG		(3 << 30)
 
-	u32 enc_p;
+    u32 enc_p;
 #define ENC_P_SRC(x)		(x)
 #define ENC_P_DST(x)		((x) << 16)
 
-	u32 enc_len;
+    u32 enc_len;
 #define ENC_LEN(x)		(x)
 
-	u32 enc_key_p;
+    u32 enc_key_p;
 #define ENC_KEY_P(x)		(x)
 
-	u32 enc_iv;
+    u32 enc_iv;
 #define ENC_IV_POINT(x)		((x) << 0)
 #define ENC_IV_BUF_POINT(x)	((x) << 16)
 
-	u32 mac_src_p;
+    u32 mac_src_p;
 #define MAC_SRC_DATA_P(x)	(x)
 #define MAC_SRC_TOTAL_LEN(x)	((x) << 16)
 
-	u32 mac_digest;
+    u32 mac_digest;
 #define MAC_DIGEST_P(x)	(x)
 #define MAC_FRAG_LEN(x)	((x) << 16)
-	u32 mac_iv;
+    u32 mac_iv;
 #define MAC_INNER_IV_P(x)	(x)
 #define MAC_OUTER_IV_P(x)	((x) << 16)
-}__attribute__ ((packed));
-	/*
-	 * /-----------\ 0
-	 * | ACCEL CFG |	4 * 8
-	 * |-----------| 0x20
-	 * | CRYPT KEY |	8 * 4
-	 * |-----------| 0x40
-	 * |  IV   IN  |	4 * 4
-	 * |-----------| 0x40 (inplace)
-	 * |  IV BUF   |	4 * 4
-	 * |-----------| 0x80
-	 * |  DATA IN  |	16 * x (max ->max_req_size)
-	 * |-----------| 0x80 (inplace operation)
-	 * |  DATA OUT |	16 * x (max ->max_req_size)
-	 * \-----------/ SRAM size
-	 */
+} __attribute__ ((packed));
+/*
+ * /-----------\ 0
+ * | ACCEL CFG |	4 * 8
+ * |-----------| 0x20
+ * | CRYPT KEY |	8 * 4
+ * |-----------| 0x40
+ * |  IV   IN  |	4 * 4
+ * |-----------| 0x40 (inplace)
+ * |  IV BUF   |	4 * 4
+ * |-----------| 0x80
+ * |  DATA IN  |	16 * x (max ->max_req_size)
+ * |-----------| 0x80 (inplace operation)
+ * |  DATA OUT |	16 * x (max ->max_req_size)
+ * \-----------/ SRAM size
+ */
 
-	/* Hashing memory map:
-	 * /-----------\ 0
-	 * | ACCEL CFG |        4 * 8
-	 * |-----------| 0x20
-	 * | Inner IV  |        5 * 4
-	 * |-----------| 0x34
-	 * | Outer IV  |        5 * 4
-	 * |-----------| 0x48
-	 * | Output BUF|        5 * 4
-	 * |-----------| 0x80
-	 * |  DATA IN  |        64 * x (max ->max_req_size)
-	 * \-----------/ SRAM size
-	 */
+/* Hashing memory map:
+ * /-----------\ 0
+ * | ACCEL CFG |        4 * 8
+ * |-----------| 0x20
+ * | Inner IV  |        5 * 4
+ * |-----------| 0x34
+ * | Outer IV  |        5 * 4
+ * |-----------| 0x48
+ * | Output BUF|        5 * 4
+ * |-----------| 0x80
+ * |  DATA IN  |        64 * x (max ->max_req_size)
+ * \-----------/ SRAM size
+ */
 #define SRAM_CONFIG		0x00
 #define SRAM_DATA_KEY_P		0x20
 #define SRAM_DATA_IV		0x40

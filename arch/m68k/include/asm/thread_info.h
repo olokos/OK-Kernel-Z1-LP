@@ -24,14 +24,14 @@
 #ifndef __ASSEMBLY__
 
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	unsigned long		flags;
-	struct exec_domain	*exec_domain;	/* execution domain */
-	mm_segment_t		addr_limit;	/* thread address space */
-	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
-	__u32			cpu;		/* should always be 0 on m68k */
-	unsigned long		tp_value;	/* thread pointer */
-	struct restart_block    restart_block;
+    struct task_struct	*task;		/* main task structure */
+    unsigned long		flags;
+    struct exec_domain	*exec_domain;	/* execution domain */
+    mm_segment_t		addr_limit;	/* thread address space */
+    int			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    __u32			cpu;		/* should always be 0 on m68k */
+    unsigned long		tp_value;	/* thread pointer */
+    struct restart_block    restart_block;
 };
 #endif /* __ASSEMBLY__ */
 
@@ -52,16 +52,15 @@ struct thread_info {
 
 #ifndef __ASSEMBLY__
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	__asm__(
-		"move.l %%sp, %0 \n\t"
-		"and.l  %1, %0"
-		: "=&d"(ti)
-		: "di" (~(THREAD_SIZE-1))
-		);
-	return ti;
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    __asm__(
+        "move.l %%sp, %0 \n\t"
+        "and.l  %1, %0"
+        : "=&d"(ti)
+        : "di" (~(THREAD_SIZE-1))
+    );
+    return ti;
 }
 #endif
 

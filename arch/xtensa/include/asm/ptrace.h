@@ -84,33 +84,33 @@
  * kernel stack during a system call or other kernel entry.
  */
 struct pt_regs {
-	unsigned long pc;		/*   4 */
-	unsigned long ps;		/*   8 */
-	unsigned long depc;		/*  12 */
-	unsigned long exccause;		/*  16 */
-	unsigned long excvaddr;		/*  20 */
-	unsigned long debugcause;	/*  24 */
-	unsigned long wmask;		/*  28 */
-	unsigned long lbeg;		/*  32 */
-	unsigned long lend;		/*  36 */
-	unsigned long lcount;		/*  40 */
-	unsigned long sar;		/*  44 */
-	unsigned long windowbase;	/*  48 */
-	unsigned long windowstart;	/*  52 */
-	unsigned long syscall;		/*  56 */
-	unsigned long icountlevel;	/*  60 */
-	int reserved[1];		/*  64 */
+    unsigned long pc;		/*   4 */
+    unsigned long ps;		/*   8 */
+    unsigned long depc;		/*  12 */
+    unsigned long exccause;		/*  16 */
+    unsigned long excvaddr;		/*  20 */
+    unsigned long debugcause;	/*  24 */
+    unsigned long wmask;		/*  28 */
+    unsigned long lbeg;		/*  32 */
+    unsigned long lend;		/*  36 */
+    unsigned long lcount;		/*  40 */
+    unsigned long sar;		/*  44 */
+    unsigned long windowbase;	/*  48 */
+    unsigned long windowstart;	/*  52 */
+    unsigned long syscall;		/*  56 */
+    unsigned long icountlevel;	/*  60 */
+    int reserved[1];		/*  64 */
 
-	/* Additional configurable registers that are used by the compiler. */
-	xtregs_opt_t xtregs_opt;
+    /* Additional configurable registers that are used by the compiler. */
+    xtregs_opt_t xtregs_opt;
 
-	/* Make sure the areg field is 16 bytes aligned. */
-	int align[0] __attribute__ ((aligned(16)));
+    /* Make sure the areg field is 16 bytes aligned. */
+    int align[0] __attribute__ ((aligned(16)));
 
-	/* current register frame.
-	 * Note: The ESF for kernel exceptions ends after 16 registers!
-	 */
-	unsigned long areg[16];		/* 128 (64) */
+    /* current register frame.
+     * Note: The ESF for kernel exceptions ends after 16 registers!
+     */
+    unsigned long areg[16];		/* 128 (64) */
 };
 
 #include <variant/core.h>

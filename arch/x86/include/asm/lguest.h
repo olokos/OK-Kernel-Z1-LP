@@ -39,54 +39,53 @@ extern void lguest_iret(void);
 extern void lguest_init(void);
 
 struct lguest_regs {
-	/* Manually saved part. */
-	unsigned long eax, ebx, ecx, edx;
-	unsigned long esi, edi, ebp;
-	unsigned long gs;
-	unsigned long fs, ds, es;
-	unsigned long trapnum, errcode;
-	/* Trap pushed part */
-	unsigned long eip;
-	unsigned long cs;
-	unsigned long eflags;
-	unsigned long esp;
-	unsigned long ss;
+    /* Manually saved part. */
+    unsigned long eax, ebx, ecx, edx;
+    unsigned long esi, edi, ebp;
+    unsigned long gs;
+    unsigned long fs, ds, es;
+    unsigned long trapnum, errcode;
+    /* Trap pushed part */
+    unsigned long eip;
+    unsigned long cs;
+    unsigned long eflags;
+    unsigned long esp;
+    unsigned long ss;
 };
 
 /* This is a guest-specific page (mapped ro) into the guest. */
 struct lguest_ro_state {
-	/* Host information we need to restore when we switch back. */
-	u32 host_cr3;
-	struct desc_ptr host_idt_desc;
-	struct desc_ptr host_gdt_desc;
-	u32 host_sp;
+    /* Host information we need to restore when we switch back. */
+    u32 host_cr3;
+    struct desc_ptr host_idt_desc;
+    struct desc_ptr host_gdt_desc;
+    u32 host_sp;
 
-	/* Fields which are used when guest is running. */
-	struct desc_ptr guest_idt_desc;
-	struct desc_ptr guest_gdt_desc;
-	struct x86_hw_tss guest_tss;
-	struct desc_struct guest_idt[IDT_ENTRIES];
-	struct desc_struct guest_gdt[GDT_ENTRIES];
+    /* Fields which are used when guest is running. */
+    struct desc_ptr guest_idt_desc;
+    struct desc_ptr guest_gdt_desc;
+    struct x86_hw_tss guest_tss;
+    struct desc_struct guest_idt[IDT_ENTRIES];
+    struct desc_struct guest_gdt[GDT_ENTRIES];
 };
 
 struct lg_cpu_arch {
-	/* The GDT entries copied into lguest_ro_state when running. */
-	struct desc_struct gdt[GDT_ENTRIES];
+    /* The GDT entries copied into lguest_ro_state when running. */
+    struct desc_struct gdt[GDT_ENTRIES];
 
-	/* The IDT entries: some copied into lguest_ro_state when running. */
-	struct desc_struct idt[IDT_ENTRIES];
+    /* The IDT entries: some copied into lguest_ro_state when running. */
+    struct desc_struct idt[IDT_ENTRIES];
 
-	/* The address of the last guest-visible pagefault (ie. cr2). */
-	unsigned long last_pagefault;
+    /* The address of the last guest-visible pagefault (ie. cr2). */
+    unsigned long last_pagefault;
 };
 
-static inline void lguest_set_ts(void)
-{
-	u32 cr0;
+static inline void lguest_set_ts(void) {
+    u32 cr0;
 
-	cr0 = read_cr0();
-	if (!(cr0 & 8))
-		write_cr0(cr0 | 8);
+    cr0 = read_cr0();
+    if (!(cr0 & 8))
+        write_cr0(cr0 | 8);
 }
 
 /* Full 4G segment descriptors, suitable for CS and DS. */

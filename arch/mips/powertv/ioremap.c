@@ -66,22 +66,21 @@ EXPORT_SYMBOL(_ior_dma_to_phys);
  * @s:		Number of bytes in the section of memory with the given delta
  *		between DMA and physical addresses.
  */
-static void setup_dma_to_phys(dma_addr_t dma, phys_addr_t delta, dma_addr_t s)
-{
-	int dma_idx, first_idx, last_idx;
-	phys_addr_t first, last;
+static void setup_dma_to_phys(dma_addr_t dma, phys_addr_t delta, dma_addr_t s) {
+    int dma_idx, first_idx, last_idx;
+    phys_addr_t first, last;
 
-	/*
-	 * Calculate the first and last indices, rounding the first up and
-	 * the second down.
-	 */
-	first = dma & ~IOR_DMA_GRAIN_MASK;
-	last = (dma + s - 1) & ~IOR_DMA_GRAIN_MASK;
-	first_idx = first >> IOR_LSBITS;		/* Convert to indices */
-	last_idx = last >> IOR_LSBITS;
+    /*
+     * Calculate the first and last indices, rounding the first up and
+     * the second down.
+     */
+    first = dma & ~IOR_DMA_GRAIN_MASK;
+    last = (dma + s - 1) & ~IOR_DMA_GRAIN_MASK;
+    first_idx = first >> IOR_LSBITS;		/* Convert to indices */
+    last_idx = last >> IOR_LSBITS;
 
-	for (dma_idx = first_idx; dma_idx <= last_idx; dma_idx++)
-		_ior_dma_to_phys[dma_idx].offset = delta >> IOR_DMA_SHIFT;
+    for (dma_idx = first_idx; dma_idx <= last_idx; dma_idx++)
+        _ior_dma_to_phys[dma_idx].offset = delta >> IOR_DMA_SHIFT;
 }
 
 /**
@@ -93,22 +92,21 @@ static void setup_dma_to_phys(dma_addr_t dma, phys_addr_t delta, dma_addr_t s)
  * @s:		Number of bytes in the section of memory with the given delta
  *		between DMA and physical addresses.
  */
-static void setup_phys_to_dma(phys_addr_t phys, dma_addr_t delta, phys_addr_t s)
-{
-	int phys_idx, first_idx, last_idx;
-	phys_addr_t first, last;
+static void setup_phys_to_dma(phys_addr_t phys, dma_addr_t delta, phys_addr_t s) {
+    int phys_idx, first_idx, last_idx;
+    phys_addr_t first, last;
 
-	/*
-	 * Calculate the first and last indices, rounding the first up and
-	 * the second down.
-	 */
-	first = phys & ~IOR_PHYS_GRAIN_MASK;
-	last = (phys + s - 1) & ~IOR_PHYS_GRAIN_MASK;
-	first_idx = first >> IOR_LSBITS;		/* Convert to indices */
-	last_idx = last >> IOR_LSBITS;
+    /*
+     * Calculate the first and last indices, rounding the first up and
+     * the second down.
+     */
+    first = phys & ~IOR_PHYS_GRAIN_MASK;
+    last = (phys + s - 1) & ~IOR_PHYS_GRAIN_MASK;
+    first_idx = first >> IOR_LSBITS;		/* Convert to indices */
+    last_idx = last >> IOR_LSBITS;
 
-	for (phys_idx = first_idx; phys_idx <= last_idx; phys_idx++)
-		_ior_phys_to_dma[phys_idx].offset = delta >> IOR_PHYS_SHIFT;
+    for (phys_idx = first_idx; phys_idx <= last_idx; phys_idx++)
+        _ior_phys_to_dma[phys_idx].offset = delta >> IOR_PHYS_SHIFT;
 }
 
 /**
@@ -120,17 +118,16 @@ static void setup_phys_to_dma(phys_addr_t phys, dma_addr_t delta, phys_addr_t s)
  * NOTE: It might be obvious, but the assumption is that all @size bytes have
  * the same offset between the physical address and the DMA address.
  */
-void ioremap_add_map(phys_addr_t phys, phys_addr_t dma, phys_addr_t size)
-{
-	if (size == 0)
-		return;
+void ioremap_add_map(phys_addr_t phys, phys_addr_t dma, phys_addr_t size) {
+    if (size == 0)
+        return;
 
-	if ((dma & IOR_DMA_GRAIN_MASK) != 0 ||
-		(phys & IOR_PHYS_GRAIN_MASK) != 0 ||
-		(size & IOR_PHYS_GRAIN_MASK) != 0)
-		pr_crit("Memory allocation must be in chunks of 0x%x bytes\n",
-			IOR_PHYS_GRAIN);
+    if ((dma & IOR_DMA_GRAIN_MASK) != 0 ||
+            (phys & IOR_PHYS_GRAIN_MASK) != 0 ||
+            (size & IOR_PHYS_GRAIN_MASK) != 0)
+        pr_crit("Memory allocation must be in chunks of 0x%x bytes\n",
+                IOR_PHYS_GRAIN);
 
-	setup_dma_to_phys(dma, phys - dma, size);
-	setup_phys_to_dma(phys, dma - phys, size);
+    setup_dma_to_phys(dma, phys - dma, size);
+    setup_phys_to_dma(phys, dma - phys, size);
 }

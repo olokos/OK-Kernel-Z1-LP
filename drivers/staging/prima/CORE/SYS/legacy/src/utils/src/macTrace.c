@@ -68,10 +68,8 @@
     \param connState - the value from the enum
     \return the string equivalent of connState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetHDDWlanConnState(tANI_U16 connState)
-{
-    switch(connState)
-    {
+tANI_U8* macTraceGetHDDWlanConnState(tANI_U16 connState) {
+    switch(connState) {
         CASE_RETURN_STRING(eConnectionState_NotConnected);
         CASE_RETURN_STRING(eConnectionState_Connecting);
         CASE_RETURN_STRING(eConnectionState_Associated);
@@ -94,10 +92,8 @@ tANI_U8* macTraceGetHDDWlanConnState(tANI_U16 connState)
     \return the string equivalent of connState
   ---------------------------------------------------------------------------*/
 #ifdef WLAN_FEATURE_P2P_DEBUG
-tANI_U8* macTraceGetP2PConnState(tANI_U16 connState)
-{
-    switch(connState)
-    {
+tANI_U8* macTraceGetP2PConnState(tANI_U16 connState) {
+    switch(connState) {
         CASE_RETURN_STRING(P2P_NOT_ACTIVE);
         CASE_RETURN_STRING(P2P_GO_NEG_PROCESS);
         CASE_RETURN_STRING(P2P_GO_NEG_COMPLETED);
@@ -123,10 +119,8 @@ tANI_U8* macTraceGetP2PConnState(tANI_U16 connState)
     \param neighbourRoamState - the value from the enum
     \return the string equivalent of neighbourRoamState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetNeighbourRoamState(tANI_U16 neighbourRoamState)
-{
-    switch(neighbourRoamState)
-    {
+tANI_U8* macTraceGetNeighbourRoamState(tANI_U16 neighbourRoamState) {
+    switch(neighbourRoamState) {
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_CLOSED);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_INIT);
         CASE_RETURN_STRING(eCSR_NEIGHBOR_ROAM_STATE_CONNECTED);
@@ -154,10 +148,8 @@ tANI_U8* macTraceGetNeighbourRoamState(tANI_U16 neighbourRoamState)
     \param csrRoamState - the value from the enum
     \return the string equivalent of csrRoamState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetcsrRoamState(tANI_U16 csrRoamState)
-{
-    switch(csrRoamState)
-    {
+tANI_U8* macTraceGetcsrRoamState(tANI_U16 csrRoamState) {
+    switch(csrRoamState) {
         CASE_RETURN_STRING(eCSR_ROAMING_STATE_STOP);
         CASE_RETURN_STRING(eCSR_ROAMING_STATE_IDLE);
         CASE_RETURN_STRING(eCSR_ROAMING_STATE_SCANNING);
@@ -178,10 +170,8 @@ tANI_U8* macTraceGetcsrRoamState(tANI_U16 csrRoamState)
     \param csrRoamSubState - the value from the enum
     \return the string equivalent of csrRoamSubState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetcsrRoamSubState(tANI_U16 csrRoamSubState)
-{
-    switch(csrRoamSubState)
-    {
+tANI_U8* macTraceGetcsrRoamSubState(tANI_U16 csrRoamSubState) {
+    switch(csrRoamSubState) {
         CASE_RETURN_STRING(eCSR_ROAM_SUBSTATE_NONE);
         CASE_RETURN_STRING(eCSR_ROAM_SUBSTATE_START_BSS_REQ);
         CASE_RETURN_STRING(eCSR_ROAM_SUBSTATE_JOIN_REQ);
@@ -215,10 +205,8 @@ tANI_U8* macTraceGetcsrRoamSubState(tANI_U16 csrRoamSubState)
     \param limState - the value from the enum
     \return the string equivalent of limState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetLimSmeState(tANI_U16 limState)
-{
-    switch(limState)
-    {
+tANI_U8* macTraceGetLimSmeState(tANI_U16 limState) {
+    switch(limState) {
         CASE_RETURN_STRING(eLIM_SME_OFFLINE_STATE);
         CASE_RETURN_STRING(eLIM_SME_IDLE_STATE);
         CASE_RETURN_STRING(eLIM_SME_SUSPEND_STATE);
@@ -256,10 +244,8 @@ tANI_U8* macTraceGetLimSmeState(tANI_U16 limState)
     \param mlmState - the value from the enum
     \return the string equivalent of mlmState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetLimMlmState(tANI_U16 mlmState)
-{
-    switch(mlmState)
-    {
+tANI_U8* macTraceGetLimMlmState(tANI_U16 mlmState) {
+    switch(mlmState) {
         CASE_RETURN_STRING(eLIM_MLM_OFFLINE_STATE);
         CASE_RETURN_STRING(eLIM_MLM_IDLE_STATE);
         CASE_RETURN_STRING(eLIM_MLM_WT_PROBE_RESP_STATE);
@@ -301,10 +287,8 @@ tANI_U8* macTraceGetLimMlmState(tANI_U16 mlmState)
     \param tlState - the value from the enum
     \return the string equivalent of tlState
   ---------------------------------------------------------------------------*/
-tANI_U8* macTraceGetTLState(tANI_U16 tlState)
-{
-    switch(tlState)
-    {
+tANI_U8* macTraceGetTLState(tANI_U16 tlState) {
+    switch(tlState) {
         CASE_RETURN_STRING(WLANTL_STA_INIT);
         CASE_RETURN_STRING(WLANTL_STA_CONNECTED);
         CASE_RETURN_STRING(WLANTL_STA_AUTHENTICATED);
@@ -317,10 +301,8 @@ tANI_U8* macTraceGetTLState(tANI_U16 tlState)
     }
 }
 
-tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
-{
-    switch( smeMsg )
-    {
+tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg ) {
+    switch( smeMsg ) {
         CASE_RETURN_STRING(eWNI_SME_START_REQ);
         CASE_RETURN_STRING(eWNI_SME_START_RSP);
         CASE_RETURN_STRING(eWNI_SME_SYS_READY_IND);
@@ -535,10 +517,8 @@ tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
 }
 
 
-tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
-{
-    switch( wdaMsg )
-    {
+tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg ) {
+    switch( wdaMsg ) {
         CASE_RETURN_STRING(WDA_APP_SETUP_NTF);
         CASE_RETURN_STRING(WDA_NIC_OPER_NTF);
         CASE_RETURN_STRING(WDA_INIT_START_REQ);
@@ -786,10 +766,8 @@ tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
     }
 }
 
-tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
-{
-    switch( limMsg )
-    {
+tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg ) {
+    switch( limMsg ) {
         CASE_RETURN_STRING(SIR_LIM_RETRY_INTERRUPT_MSG);
         CASE_RETURN_STRING(SIR_BB_XPORT_MGMT_MSG );
         CASE_RETURN_STRING(SIR_LIM_INV_KEY_INTERRUPT_MSG );
@@ -849,10 +827,8 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
     }
 }
 
-tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
-{
-    switch( cfgMsg )
-    {
+tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg ) {
+    switch( cfgMsg ) {
         CASE_RETURN_STRING(WNI_CFG_PARAM_UPDATE_IND);
         CASE_RETURN_STRING(WNI_CFG_DNLD_REQ);
         CASE_RETURN_STRING(WNI_CFG_DNLD_CNF);
@@ -868,10 +844,8 @@ tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
     }
 }
 
-tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog )
-{
-    switch( infoLog )
-    {
+tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog ) {
+    switch( infoLog ) {
         CASE_RETURN_STRING(eLOG_NODROP_MISSED_BEACON_SCENARIO);
         CASE_RETURN_STRING(eLOG_PROC_DEAUTH_FRAME_SCENARIO);
     default:
@@ -880,34 +854,28 @@ tANI_U8* macTraceGetInfoLogString( tANI_U16 infoLog )
     }
 }
 
-tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  )
-{
+tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  ) {
     return ((tANI_U8*)"PE");
     //return gVosTraceInfo[moduleId].moduleNameStr;
 }
 
-void macTraceReset(tpAniSirGlobal pMac)
-{
+void macTraceReset(tpAniSirGlobal pMac) {
 }
 
-void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data)
-{
+void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data) {
     //Today macTrace is being invoked by PE only, need to remove this function once PE is migrated to using new trace API.
     macTraceNew(pMac, VOS_MODULE_ID_PE, code, session, data);
 }
 
-void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 session, tANI_U32 data)
-{
+void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 session, tANI_U32 data) {
     vos_trace(module, code, session, data);
 }
 
-tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
-{
+tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType) {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(msgType);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(msgType);
 
-    switch(moduleId)
-    {
+    switch(moduleId) {
     case SIR_LIM_MODULE_ID:
         if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
             return macTraceGetLimMsgString((tANI_U16)msgType);

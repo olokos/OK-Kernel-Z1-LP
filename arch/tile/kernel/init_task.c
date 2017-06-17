@@ -31,7 +31,7 @@ static struct sighand_struct init_sighand = INIT_SIGHAND(init_sighand);
  * "init_task" linker map entry..
  */
 union thread_union init_thread_union __init_task_data = {
-	INIT_THREAD_INFO(init_task)
+    INIT_THREAD_INFO(init_task)
 };
 
 /*
@@ -46,7 +46,7 @@ EXPORT_SYMBOL(init_task);
  * per-CPU stack and boot info.
  */
 DEFINE_PER_CPU(unsigned long, boot_sp) =
-	(unsigned long)init_stack + THREAD_SIZE;
+    (unsigned long)init_stack + THREAD_SIZE;
 
 #ifdef CONFIG_SMP
 DEFINE_PER_CPU(unsigned long, boot_pc) = (unsigned long)start_kernel;

@@ -1,6 +1,6 @@
 /*  Architecture specific parts of HP's STI (framebuffer) driver.
  *  Structures are HP-UX compatible for XFree86 usage.
- * 
+ *
  *    Linux/PA-RISC Project (http://www.parisc-linux.org/)
  *    Copyright (C) 2001 Helge Deller (deller a parisc-linux org)
  *
@@ -70,24 +70,24 @@
 #define CRT_ID_ARTIST		S9000_ID_ARTIST	/* Artist */
 #define CRT_ID_SUMMIT		0x2FC1066B      /* Summit FX2, FX4, FX6 ... */
 #define CRT_ID_LEGO		0x35ACDA30	/* Lego FX5, FX10 ... */
-#define CRT_ID_PINNACLE		0x35ACDA16	/* Pinnacle FXe */ 
+#define CRT_ID_PINNACLE		0x35ACDA16	/* Pinnacle FXe */
 
 /* structure for ioctl(GCDESCRIBE) */
 
 #define gaddr_t unsigned long	/* FIXME: PA2.0 (64bit) portable ? */
 
 struct	grf_fbinfo {
-	unsigned int	id;		/* upper 32 bits of graphics id */
-	unsigned int	mapsize;	/* mapped size of framebuffer */
-	unsigned int	dwidth, dlength;/* x and y sizes */
-	unsigned int	width, length;	/* total x and total y size */
-	unsigned int	xlen;		/* x pitch size */
-	unsigned int	bpp, bppu;	/* bits per pixel and used bpp */
-	unsigned int	npl, nplbytes;	/* # of planes and bytes per plane */
-	char		name[32];	/* name of the device (from ROM) */
-	unsigned int	attr;		/* attributes */
-	gaddr_t 	fbbase, regbase;/* framebuffer and register base addr */
-	gaddr_t		regions[6];	/* region bases */
+    unsigned int	id;		/* upper 32 bits of graphics id */
+    unsigned int	mapsize;	/* mapped size of framebuffer */
+    unsigned int	dwidth, dlength;/* x and y sizes */
+    unsigned int	width, length;	/* total x and total y size */
+    unsigned int	xlen;		/* x pitch size */
+    unsigned int	bpp, bppu;	/* bits per pixel and used bpp */
+    unsigned int	npl, nplbytes;	/* # of planes and bytes per plane */
+    char		name[32];	/* name of the device (from ROM) */
+    unsigned int	attr;		/* attributes */
+    gaddr_t 	fbbase, regbase;/* framebuffer and register base addr */
+    gaddr_t		regions[6];	/* region bases */
 };
 
 #define	GCID		_IOR('G', 0, int)
@@ -105,7 +105,7 @@ struct	grf_fbinfo {
 #define	GCUNLOCK_MINIMUM _IO('G', 10)
 #define	GCSTATIC_CMAP	_IO('G', 11)
 #define	GCVARIABLE_CMAP _IO('G', 12)
-#define GCTERM		_IOWR('G',20,int)	/* multi-headed Tomcat */ 
+#define GCTERM		_IOWR('G',20,int)	/* multi-headed Tomcat */
 #define GCDESCRIBE	_IOR('G', 21, struct grf_fbinfo)
 #define GCFASTLOCK	_IO('G', 26)
 

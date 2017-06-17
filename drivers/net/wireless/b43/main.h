@@ -44,69 +44,63 @@ extern int b43_modparam_verbose;
 /* Logmessage verbosity levels. Update the b43_modparam_verbose helptext, if
  * you add or remove levels. */
 enum b43_verbosity {
-	B43_VERBOSITY_ERROR,
-	B43_VERBOSITY_WARN,
-	B43_VERBOSITY_INFO,
-	B43_VERBOSITY_DEBUG,
-	__B43_VERBOSITY_AFTERLAST, /* keep last */
+    B43_VERBOSITY_ERROR,
+    B43_VERBOSITY_WARN,
+    B43_VERBOSITY_INFO,
+    B43_VERBOSITY_DEBUG,
+    __B43_VERBOSITY_AFTERLAST, /* keep last */
 
-	B43_VERBOSITY_MAX = __B43_VERBOSITY_AFTERLAST - 1,
+    B43_VERBOSITY_MAX = __B43_VERBOSITY_AFTERLAST - 1,
 #if B43_DEBUG
-	B43_VERBOSITY_DEFAULT = B43_VERBOSITY_DEBUG,
+    B43_VERBOSITY_DEFAULT = B43_VERBOSITY_DEBUG,
 #else
-	B43_VERBOSITY_DEFAULT = B43_VERBOSITY_INFO,
+    B43_VERBOSITY_DEFAULT = B43_VERBOSITY_INFO,
 #endif
 };
 
 
 /* Lightweight function to convert a frequency (in Mhz) to a channel number. */
-static inline u8 b43_freq_to_channel_5ghz(int freq)
-{
-	return ((freq - 5000) / 5);
+static inline u8 b43_freq_to_channel_5ghz(int freq) {
+    return ((freq - 5000) / 5);
 }
-static inline u8 b43_freq_to_channel_2ghz(int freq)
-{
-	u8 channel;
+static inline u8 b43_freq_to_channel_2ghz(int freq) {
+    u8 channel;
 
-	if (freq == 2484)
-		channel = 14;
-	else
-		channel = (freq - 2407) / 5;
+    if (freq == 2484)
+        channel = 14;
+    else
+        channel = (freq - 2407) / 5;
 
-	return channel;
+    return channel;
 }
 
 /* Lightweight function to convert a channel number to a frequency (in Mhz). */
-static inline int b43_channel_to_freq_5ghz(u8 channel)
-{
-	return (5000 + (5 * channel));
+static inline int b43_channel_to_freq_5ghz(u8 channel) {
+    return (5000 + (5 * channel));
 }
-static inline int b43_channel_to_freq_2ghz(u8 channel)
-{
-	int freq;
+static inline int b43_channel_to_freq_2ghz(u8 channel) {
+    int freq;
 
-	if (channel == 14)
-		freq = 2484;
-	else
-		freq = 2407 + (5 * channel);
+    if (channel == 14)
+        freq = 2484;
+    else
+        freq = 2407 + (5 * channel);
 
-	return freq;
+    return freq;
 }
 
-static inline int b43_is_cck_rate(int rate)
-{
-	return (rate == B43_CCK_RATE_1MB ||
-		rate == B43_CCK_RATE_2MB ||
-		rate == B43_CCK_RATE_5MB || rate == B43_CCK_RATE_11MB);
+static inline int b43_is_cck_rate(int rate) {
+    return (rate == B43_CCK_RATE_1MB ||
+            rate == B43_CCK_RATE_2MB ||
+            rate == B43_CCK_RATE_5MB || rate == B43_CCK_RATE_11MB);
 }
 
-static inline int b43_is_ofdm_rate(int rate)
-{
-	return !b43_is_cck_rate(rate);
+static inline int b43_is_ofdm_rate(int rate) {
+    return !b43_is_cck_rate(rate);
 }
 
 u8 b43_ieee80211_antenna_sanitize(struct b43_wldev *dev,
-				  u8 antenna_nr);
+                                  u8 antenna_nr);
 
 void b43_tsf_read(struct b43_wldev *dev, u64 * tsf);
 void b43_tsf_write(struct b43_wldev *dev, u64 tsf);
@@ -138,8 +132,8 @@ void b43_mac_phy_clock_set(struct b43_wldev *dev, bool on);
 
 struct b43_request_fw_context;
 int b43_do_request_fw(struct b43_request_fw_context *ctx,
-		      const char *name,
-		      struct b43_firmware_file *fw);
+                      const char *name,
+                      struct b43_firmware_file *fw);
 void b43_do_release_fw(struct b43_firmware_file *fw);
 
 #endif /* B43_MAIN_H_ */

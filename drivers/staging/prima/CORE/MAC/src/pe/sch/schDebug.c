@@ -42,8 +42,7 @@
 #include "schDebug.h"
 #define LOG_SIZE 256
 
-void schLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...)
-{
+void schLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...) {
 
     VOS_TRACE_LEVEL  vosDebugLevel;
     char    logBuffer[LOG_SIZE];

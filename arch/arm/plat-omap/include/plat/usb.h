@@ -10,57 +10,57 @@
 #define OMAP3_HS_USB_PORTS	3
 
 enum usbhs_omap_port_mode {
-	OMAP_USBHS_PORT_MODE_UNUSED,
-	OMAP_EHCI_PORT_MODE_PHY,
-	OMAP_EHCI_PORT_MODE_TLL,
-	OMAP_EHCI_PORT_MODE_HSIC,
-	OMAP_OHCI_PORT_MODE_PHY_6PIN_DATSE0,
-	OMAP_OHCI_PORT_MODE_PHY_6PIN_DPDM,
-	OMAP_OHCI_PORT_MODE_PHY_3PIN_DATSE0,
-	OMAP_OHCI_PORT_MODE_PHY_4PIN_DPDM,
-	OMAP_OHCI_PORT_MODE_TLL_6PIN_DATSE0,
-	OMAP_OHCI_PORT_MODE_TLL_6PIN_DPDM,
-	OMAP_OHCI_PORT_MODE_TLL_3PIN_DATSE0,
-	OMAP_OHCI_PORT_MODE_TLL_4PIN_DPDM,
-	OMAP_OHCI_PORT_MODE_TLL_2PIN_DATSE0,
-	OMAP_OHCI_PORT_MODE_TLL_2PIN_DPDM
+    OMAP_USBHS_PORT_MODE_UNUSED,
+    OMAP_EHCI_PORT_MODE_PHY,
+    OMAP_EHCI_PORT_MODE_TLL,
+    OMAP_EHCI_PORT_MODE_HSIC,
+    OMAP_OHCI_PORT_MODE_PHY_6PIN_DATSE0,
+    OMAP_OHCI_PORT_MODE_PHY_6PIN_DPDM,
+    OMAP_OHCI_PORT_MODE_PHY_3PIN_DATSE0,
+    OMAP_OHCI_PORT_MODE_PHY_4PIN_DPDM,
+    OMAP_OHCI_PORT_MODE_TLL_6PIN_DATSE0,
+    OMAP_OHCI_PORT_MODE_TLL_6PIN_DPDM,
+    OMAP_OHCI_PORT_MODE_TLL_3PIN_DATSE0,
+    OMAP_OHCI_PORT_MODE_TLL_4PIN_DPDM,
+    OMAP_OHCI_PORT_MODE_TLL_2PIN_DATSE0,
+    OMAP_OHCI_PORT_MODE_TLL_2PIN_DPDM
 };
 
 struct usbhs_omap_board_data {
-	enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
+    enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
 
-	/* have to be valid if phy_reset is true and portx is in phy mode */
-	int	reset_gpio_port[OMAP3_HS_USB_PORTS];
+    /* have to be valid if phy_reset is true and portx is in phy mode */
+    int	reset_gpio_port[OMAP3_HS_USB_PORTS];
 
-	/* Set this to true for ES2.x silicon */
-	unsigned			es2_compatibility:1;
+    /* Set this to true for ES2.x silicon */
+    unsigned			es2_compatibility:1;
 
-	unsigned			phy_reset:1;
+    unsigned			phy_reset:1;
 
-	/*
-	 * Regulators for USB PHYs.
-	 * Each PHY can have a separate regulator.
-	 */
-	struct regulator		*regulator[OMAP3_HS_USB_PORTS];
+    /*
+     * Regulators for USB PHYs.
+     * Each PHY can have a separate regulator.
+     */
+    struct regulator		*regulator[OMAP3_HS_USB_PORTS];
 };
 
 struct ehci_hcd_omap_platform_data {
-	enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
-	int				reset_gpio_port[OMAP3_HS_USB_PORTS];
-	struct regulator		*regulator[OMAP3_HS_USB_PORTS];
-	unsigned			phy_reset:1;
+    enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
+    int				reset_gpio_port[OMAP3_HS_USB_PORTS];
+    struct regulator		*regulator[OMAP3_HS_USB_PORTS];
+    unsigned			phy_reset:1;
 };
 
 struct ohci_hcd_omap_platform_data {
-	enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
-	unsigned			es2_compatibility:1;
+    enum usbhs_omap_port_mode	port_mode[OMAP3_HS_USB_PORTS];
+    unsigned			es2_compatibility:1;
 };
 
 struct usbhs_omap_platform_data {
-	enum usbhs_omap_port_mode		port_mode[OMAP3_HS_USB_PORTS];
+    enum usbhs_omap_port_mode		port_mode[OMAP3_HS_USB_PORTS];
 
-	struct ehci_hcd_omap_platform_data	*ehci_data;
-	struct ohci_hcd_omap_platform_data	*ohci_data;
+    struct ehci_hcd_omap_platform_data	*ehci_data;
+    struct ohci_hcd_omap_platform_data	*ohci_data;
 };
 /*-------------------------------------------------------------------------*/
 
@@ -85,14 +85,14 @@ struct usbhs_omap_platform_data {
 #define OMAP_OHCI_BASE			OMAP2_OHCI_BASE
 
 struct omap_musb_board_data {
-	u8	interface_type;
-	u8	mode;
-	u16	power;
-	unsigned extvbus:1;
-	void	(*set_phy_power)(u8 on);
-	void	(*clear_irq)(void);
-	void	(*set_mode)(u8 mode);
-	void	(*reset)(void);
+    u8	interface_type;
+    u8	mode;
+    u16	power;
+    unsigned extvbus:1;
+    void	(*set_phy_power)(u8 on);
+    void	(*clear_irq)(void);
+    void	(*set_mode)(u8 mode);
+    void	(*reset)(void);
 };
 
 enum musb_interface    {MUSB_INTERFACE_ULPI, MUSB_INTERFACE_UTMI};
@@ -114,35 +114,29 @@ extern int omap4430_phy_suspend(struct device *dev, int suspend);
 #define OMAP2_L4_IO_OFFSET	0xb2000000
 #define OMAP2_L4_IO_ADDRESS(pa)	IOMEM((pa) + OMAP2_L4_IO_OFFSET)
 
-static inline u8 omap_readb(u32 pa)
-{
-	return __raw_readb(OMAP2_L4_IO_ADDRESS(pa));
+static inline u8 omap_readb(u32 pa) {
+    return __raw_readb(OMAP2_L4_IO_ADDRESS(pa));
 }
 
-static inline u16 omap_readw(u32 pa)
-{
-	return __raw_readw(OMAP2_L4_IO_ADDRESS(pa));
+static inline u16 omap_readw(u32 pa) {
+    return __raw_readw(OMAP2_L4_IO_ADDRESS(pa));
 }
 
-static inline u32 omap_readl(u32 pa)
-{
-	return __raw_readl(OMAP2_L4_IO_ADDRESS(pa));
+static inline u32 omap_readl(u32 pa) {
+    return __raw_readl(OMAP2_L4_IO_ADDRESS(pa));
 }
 
-static inline void omap_writeb(u8 v, u32 pa)
-{
-	__raw_writeb(v, OMAP2_L4_IO_ADDRESS(pa));
+static inline void omap_writeb(u8 v, u32 pa) {
+    __raw_writeb(v, OMAP2_L4_IO_ADDRESS(pa));
 }
 
 
-static inline void omap_writew(u16 v, u32 pa)
-{
-	__raw_writew(v, OMAP2_L4_IO_ADDRESS(pa));
+static inline void omap_writew(u16 v, u32 pa) {
+    __raw_writew(v, OMAP2_L4_IO_ADDRESS(pa));
 }
 
-static inline void omap_writel(u32 v, u32 pa)
-{
-	__raw_writel(v, OMAP2_L4_IO_ADDRESS(pa));
+static inline void omap_writel(u32 v, u32 pa) {
+    __raw_writel(v, OMAP2_L4_IO_ADDRESS(pa));
 }
 
 #endif
@@ -168,16 +162,14 @@ void omap_otg_init(struct omap_usb_config *config);
 #if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
 void omap1_usb_init(struct omap_usb_config *pdata);
 #else
-static inline void omap1_usb_init(struct omap_usb_config *pdata)
-{
+static inline void omap1_usb_init(struct omap_usb_config *pdata) {
 }
 #endif
 
 #if defined(CONFIG_ARCH_OMAP_OTG) || defined(CONFIG_ARCH_OMAP_OTG_MODULE)
 void omap2_usbfs_init(struct omap_usb_config *pdata);
 #else
-static inline void omap2_usbfs_init(struct omap_usb_config *pdata)
-{
+static inline void omap2_usbfs_init(struct omap_usb_config *pdata) {
 }
 #endif
 
@@ -252,7 +244,7 @@ static inline void omap2_usbfs_init(struct omap_usb_config *pdata)
 #	define	 B_SRP_STARTED		(1 << 7)
 #	define	 OPRT_CHG		(1 << 0)
 #define OTG_IRQ_SRC			(OTG_BASE + 0x14)	/* 16-bit */
-	// same bits as in IRQ_EN
+// same bits as in IRQ_EN
 #define OTG_OUTCTRL			(OTG_BASE + 0x18)	/* 16-bit */
 #	define	 OTGVPD			(1 << 14)
 #	define	 OTGVPU			(1 << 13)
@@ -347,18 +339,15 @@ u32 omap1_usb0_init(unsigned nwires, unsigned is_device);
 u32 omap1_usb1_init(unsigned nwires);
 u32 omap1_usb2_init(unsigned nwires, unsigned alt_pingroup);
 #else
-static inline u32 omap1_usb0_init(unsigned nwires, unsigned is_device)
-{
-	return 0;
+static inline u32 omap1_usb0_init(unsigned nwires, unsigned is_device) {
+    return 0;
 }
-static inline u32 omap1_usb1_init(unsigned nwires)
-{
-	return 0;
+static inline u32 omap1_usb1_init(unsigned nwires) {
+    return 0;
 
 }
-static inline u32 omap1_usb2_init(unsigned nwires, unsigned alt_pingroup)
-{
-	return 0;
+static inline u32 omap1_usb2_init(unsigned nwires, unsigned alt_pingroup) {
+    return 0;
 }
 #endif
 

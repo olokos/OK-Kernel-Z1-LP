@@ -109,49 +109,40 @@ typedef u32 iomux_cfg_t;
 #define MXS_IOMUX_PAD_NAKED(_bank, _pin, _muxsel) \
 		MXS_IOMUX_PAD(_bank, _pin, _muxsel, 0, 0, 0)
 
-static inline unsigned int PAD_BANK(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_BANK_MASK) >> MXS_PAD_BANK_SHIFT;
+static inline unsigned int PAD_BANK(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_BANK_MASK) >> MXS_PAD_BANK_SHIFT;
 }
 
-static inline unsigned int PAD_PIN(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_PIN_MASK) >> MXS_PAD_PIN_SHIFT;
+static inline unsigned int PAD_PIN(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_PIN_MASK) >> MXS_PAD_PIN_SHIFT;
 }
 
-static inline unsigned int PAD_MUXSEL(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_MUXSEL_MASK) >> MXS_PAD_MUXSEL_SHIFT;
+static inline unsigned int PAD_MUXSEL(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_MUXSEL_MASK) >> MXS_PAD_MUXSEL_SHIFT;
 }
 
-static inline unsigned int PAD_MA(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_MA_MASK) >> MXS_PAD_MA_SHIFT;
+static inline unsigned int PAD_MA(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_MA_MASK) >> MXS_PAD_MA_SHIFT;
 }
 
-static inline unsigned int PAD_MA_VALID(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_MA_VALID_MASK) >> MXS_PAD_MA_VALID_SHIFT;
+static inline unsigned int PAD_MA_VALID(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_MA_VALID_MASK) >> MXS_PAD_MA_VALID_SHIFT;
 }
 
-static inline unsigned int PAD_VOL(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_VOL_MASK) >> MXS_PAD_VOL_SHIFT;
+static inline unsigned int PAD_VOL(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_VOL_MASK) >> MXS_PAD_VOL_SHIFT;
 }
 
-static inline unsigned int PAD_VOL_VALID(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_VOL_VALID_MASK) >> MXS_PAD_VOL_VALID_SHIFT;
+static inline unsigned int PAD_VOL_VALID(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_VOL_VALID_MASK) >> MXS_PAD_VOL_VALID_SHIFT;
 }
 
-static inline unsigned int PAD_PULL(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_PULL_MASK) >> MXS_PAD_PULL_SHIFT;
+static inline unsigned int PAD_PULL(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_PULL_MASK) >> MXS_PAD_PULL_SHIFT;
 }
 
-static inline unsigned int PAD_PULL_VALID(iomux_cfg_t pad)
-{
-	return (pad & MXS_PAD_PULL_VALID_MASK) >> MXS_PAD_PULL_VALID_SHIFT;
+static inline unsigned int PAD_PULL_VALID(iomux_cfg_t pad) {
+    return (pad & MXS_PAD_PULL_VALID_MASK) >> MXS_PAD_PULL_VALID_SHIFT;
 }
 
 /*

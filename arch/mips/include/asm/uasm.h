@@ -124,8 +124,8 @@ Ip_u3u1u2(_ldx);
 
 /* Handle labels. */
 struct uasm_label {
-	u32 *addr;
-	int lab;
+    u32 *addr;
+    int lab;
 };
 
 void __uasminit uasm_build_label(struct uasm_label **lab, u32 *addr, int lid);
@@ -189,37 +189,34 @@ static inline void __uasminit uasm_l##lb(struct uasm_label **lab, u32 *addr) \
 #define uasm_i_ehb(buf) uasm_i_sll(buf, 0, 0, 3)
 
 static inline void uasm_i_dsrl_safe(u32 **p, unsigned int a1,
-				    unsigned int a2, unsigned int a3)
-{
-	if (a3 < 32)
-		uasm_i_dsrl(p, a1, a2, a3);
-	else
-		uasm_i_dsrl32(p, a1, a2, a3 - 32);
+                                    unsigned int a2, unsigned int a3) {
+    if (a3 < 32)
+        uasm_i_dsrl(p, a1, a2, a3);
+    else
+        uasm_i_dsrl32(p, a1, a2, a3 - 32);
 }
 
 static inline void uasm_i_drotr_safe(u32 **p, unsigned int a1,
-				     unsigned int a2, unsigned int a3)
-{
-	if (a3 < 32)
-		uasm_i_drotr(p, a1, a2, a3);
-	else
-		uasm_i_drotr32(p, a1, a2, a3 - 32);
+                                     unsigned int a2, unsigned int a3) {
+    if (a3 < 32)
+        uasm_i_drotr(p, a1, a2, a3);
+    else
+        uasm_i_drotr32(p, a1, a2, a3 - 32);
 }
 
 static inline void uasm_i_dsll_safe(u32 **p, unsigned int a1,
-				    unsigned int a2, unsigned int a3)
-{
-	if (a3 < 32)
-		uasm_i_dsll(p, a1, a2, a3);
-	else
-		uasm_i_dsll32(p, a1, a2, a3 - 32);
+                                    unsigned int a2, unsigned int a3) {
+    if (a3 < 32)
+        uasm_i_dsll(p, a1, a2, a3);
+    else
+        uasm_i_dsll32(p, a1, a2, a3 - 32);
 }
 
 /* Handle relocations. */
 struct uasm_reloc {
-	u32 *addr;
-	unsigned int type;
-	int lab;
+    u32 *addr;
+    unsigned int type;
+    int lab;
 };
 
 /* This is zero so we can use zeroed label arrays. */
@@ -230,7 +227,7 @@ void uasm_resolve_relocs(struct uasm_reloc *rel, struct uasm_label *lab);
 void uasm_move_relocs(struct uasm_reloc *rel, u32 *first, u32 *end, long off);
 void uasm_move_labels(struct uasm_label *lab, u32 *first, u32 *end, long off);
 void uasm_copy_handler(struct uasm_reloc *rel, struct uasm_label *lab,
-	u32 *first, u32 *end, u32 *target);
+                       u32 *first, u32 *end, u32 *target);
 int uasm_insn_has_bdelay(struct uasm_reloc *rel, u32 *addr);
 
 /* Convenience functions for labeled branches. */
@@ -239,11 +236,11 @@ void uasm_il_b(u32 **p, struct uasm_reloc **r, int lid);
 void uasm_il_beqz(u32 **p, struct uasm_reloc **r, unsigned int reg, int lid);
 void uasm_il_beqzl(u32 **p, struct uasm_reloc **r, unsigned int reg, int lid);
 void uasm_il_bne(u32 **p, struct uasm_reloc **r, unsigned int reg1,
-		 unsigned int reg2, int lid);
+                 unsigned int reg2, int lid);
 void uasm_il_bnez(u32 **p, struct uasm_reloc **r, unsigned int reg, int lid);
 void uasm_il_bgezl(u32 **p, struct uasm_reloc **r, unsigned int reg, int lid);
 void uasm_il_bgez(u32 **p, struct uasm_reloc **r, unsigned int reg, int lid);
 void uasm_il_bbit0(u32 **p, struct uasm_reloc **r, unsigned int reg,
-		   unsigned int bit, int lid);
+                   unsigned int bit, int lid);
 void uasm_il_bbit1(u32 **p, struct uasm_reloc **r, unsigned int reg,
-		   unsigned int bit, int lid);
+                   unsigned int bit, int lid);

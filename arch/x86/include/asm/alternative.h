@@ -43,11 +43,11 @@
 #endif
 
 struct alt_instr {
-	s32 instr_offset;	/* original instruction */
-	s32 repl_offset;	/* offset to replacement instruction */
-	u16 cpuid;		/* cpuid bit set for replacement */
-	u8  instrlen;		/* length of original instruction */
-	u8  replacementlen;	/* length of new instruction, <= instrlen */
+    s32 instr_offset;	/* original instruction */
+    s32 repl_offset;	/* offset to replacement instruction */
+    u16 cpuid;		/* cpuid bit set for replacement */
+    u8  instrlen;		/* length of original instruction */
+    u8  replacementlen;	/* length of new instruction, <= instrlen */
 };
 
 extern void alternative_instructions(void);
@@ -57,21 +57,20 @@ struct module;
 
 #ifdef CONFIG_SMP
 extern void alternatives_smp_module_add(struct module *mod, char *name,
-					void *locks, void *locks_end,
-					void *text, void *text_end);
+                                        void *locks, void *locks_end,
+                                        void *text, void *text_end);
 extern void alternatives_smp_module_del(struct module *mod);
 extern void alternatives_smp_switch(int smp);
 extern int alternatives_text_reserved(void *start, void *end);
 extern bool skip_smp_alternatives;
 #else
 static inline void alternatives_smp_module_add(struct module *mod, char *name,
-					       void *locks, void *locks_end,
-					       void *text, void *text_end) {}
+        void *locks, void *locks_end,
+        void *text, void *text_end) {}
 static inline void alternatives_smp_module_del(struct module *mod) {}
 static inline void alternatives_smp_switch(int smp) {}
-static inline int alternatives_text_reserved(void *start, void *end)
-{
-	return 0;
+static inline int alternatives_text_reserved(void *start, void *end) {
+    return 0;
 }
 #endif	/* CONFIG_SMP */
 
@@ -154,11 +153,11 @@ static inline int alternatives_text_reserved(void *start, void *end)
 struct paravirt_patch_site;
 #ifdef CONFIG_PARAVIRT
 void apply_paravirt(struct paravirt_patch_site *start,
-		    struct paravirt_patch_site *end);
+                    struct paravirt_patch_site *end);
 #else
 static inline void apply_paravirt(struct paravirt_patch_site *start,
-				  struct paravirt_patch_site *end)
-{}
+                                  struct paravirt_patch_site *end) {
+}
 #define __parainstructions	NULL
 #define __parainstructions_end	NULL
 #endif
@@ -183,9 +182,9 @@ extern void *text_poke_early(void *addr, const void *opcode, size_t len);
  * inconsistent instruction while you patch.
  */
 struct text_poke_param {
-	void *addr;
-	const void *opcode;
-	size_t len;
+    void *addr;
+    const void *opcode;
+    size_t len;
 };
 
 extern void *text_poke(void *addr, const void *opcode, size_t len);

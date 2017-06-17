@@ -40,25 +40,25 @@
 #define NR_IRQS    255
 
 extern void irq_install_pre_handler(int irq,
-				    void (*func)(unsigned int, void *, void *),
-				    void *arg1, void *arg2);
+                                    void (*func)(unsigned int, void *, void *),
+                                    void *arg1, void *arg2);
 #define irq_canonicalize(irq)	(irq)
 extern unsigned int build_irq(int inofixup, unsigned long iclr, unsigned long imap);
 extern unsigned int sun4v_build_irq(u32 devhandle, unsigned int devino);
 extern unsigned int sun4v_build_virq(u32 devhandle, unsigned int devino);
 extern unsigned int sun4v_build_msi(u32 devhandle, unsigned int *irq_p,
-				    unsigned int msi_devino_start,
-				    unsigned int msi_devino_end);
+                                    unsigned int msi_devino_start,
+                                    unsigned int msi_devino_end);
 extern void sun4v_destroy_msi(unsigned int irq);
 extern unsigned int sun4u_build_msi(u32 portid, unsigned int *irq_p,
-				    unsigned int msi_devino_start,
-				    unsigned int msi_devino_end,
-				    unsigned long imap_base,
-				    unsigned long iclr_base);
+                                    unsigned int msi_devino_start,
+                                    unsigned int msi_devino_end,
+                                    unsigned long imap_base,
+                                    unsigned long iclr_base);
 extern void sun4u_destroy_msi(unsigned int irq);
 
 extern unsigned char irq_alloc(unsigned int dev_handle,
-				    unsigned int dev_ino);
+                               unsigned int dev_ino);
 #ifdef CONFIG_PCI_MSI
 extern void irq_free(unsigned int irq);
 #endif
@@ -66,27 +66,24 @@ extern void irq_free(unsigned int irq);
 extern void __init init_IRQ(void);
 extern void fixup_irqs(void);
 
-static inline void set_softint(unsigned long bits)
-{
-	__asm__ __volatile__("wr	%0, 0x0, %%set_softint"
-			     : /* No outputs */
-			     : "r" (bits));
+static inline void set_softint(unsigned long bits) {
+    __asm__ __volatile__("wr	%0, 0x0, %%set_softint"
+                         : /* No outputs */
+                         : "r" (bits));
 }
 
-static inline void clear_softint(unsigned long bits)
-{
-	__asm__ __volatile__("wr	%0, 0x0, %%clear_softint"
-			     : /* No outputs */
-			     : "r" (bits));
+static inline void clear_softint(unsigned long bits) {
+    __asm__ __volatile__("wr	%0, 0x0, %%clear_softint"
+                         : /* No outputs */
+                         : "r" (bits));
 }
 
-static inline unsigned long get_softint(void)
-{
-	unsigned long retval;
+static inline unsigned long get_softint(void) {
+    unsigned long retval;
 
-	__asm__ __volatile__("rd	%%softint, %0"
-			     : "=r" (retval));
-	return retval;
+    __asm__ __volatile__("rd	%%softint, %0"
+                         : "=r" (retval));
+    return retval;
 }
 
 void arch_trigger_all_cpu_backtrace(void);

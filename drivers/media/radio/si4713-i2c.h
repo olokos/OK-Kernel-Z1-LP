@@ -161,54 +161,54 @@
 #define POWER_DOWN			0x00
 
 struct rds_info {
-	u32 pi;
+    u32 pi;
 #define MAX_RDS_PTY			31
-	u32 pty;
+    u32 pty;
 #define MAX_RDS_DEVIATION		90000
-	u32 deviation;
-/*
- * PSNAME is known to be defined as 8 character sized (RDS Spec).
- * However, there is receivers which scroll PSNAME 8xN sized.
- */
+    u32 deviation;
+    /*
+     * PSNAME is known to be defined as 8 character sized (RDS Spec).
+     * However, there is receivers which scroll PSNAME 8xN sized.
+     */
 #define MAX_RDS_PS_NAME			96
-	u8 ps_name[MAX_RDS_PS_NAME + 1];
-/*
- * MAX_RDS_RADIO_TEXT is known to be defined as 32 (2A group) or 64 (2B group)
- * character sized (RDS Spec).
- * However, there is receivers which scroll them as well.
- */
+    u8 ps_name[MAX_RDS_PS_NAME + 1];
+    /*
+     * MAX_RDS_RADIO_TEXT is known to be defined as 32 (2A group) or 64 (2B group)
+     * character sized (RDS Spec).
+     * However, there is receivers which scroll them as well.
+     */
 #define MAX_RDS_RADIO_TEXT		384
-	u8 radio_text[MAX_RDS_RADIO_TEXT + 1];
-	u32 enabled;
+    u8 radio_text[MAX_RDS_RADIO_TEXT + 1];
+    u32 enabled;
 };
 
 struct limiter_info {
 #define MAX_LIMITER_RELEASE_TIME	102390
-	u32 release_time;
+    u32 release_time;
 #define MAX_LIMITER_DEVIATION		90000
-	u32 deviation;
-	u32 enabled;
+    u32 deviation;
+    u32 enabled;
 };
 
 struct pilot_info {
 #define MAX_PILOT_DEVIATION		90000
-	u32 deviation;
+    u32 deviation;
 #define MAX_PILOT_FREQUENCY		19000
-	u32 frequency;
-	u32 enabled;
+    u32 frequency;
+    u32 enabled;
 };
 
 struct acomp_info {
 #define MAX_ACOMP_RELEASE_TIME		1000000
-	u32 release_time;
+    u32 release_time;
 #define MAX_ACOMP_ATTACK_TIME		5000
-	u32 attack_time;
+    u32 attack_time;
 #define MAX_ACOMP_THRESHOLD		0
 #define MIN_ACOMP_THRESHOLD		(-40)
-	s32 threshold;
+    s32 threshold;
 #define MAX_ACOMP_GAIN			20
-	u32 gain;
-	u32 enabled;
+    u32 gain;
+    u32 enabled;
 };
 
 #define SI4713_NUM_SUPPLIES		2
@@ -217,24 +217,24 @@ struct acomp_info {
  * si4713_device - private data
  */
 struct si4713_device {
-	/* v4l2_subdev and i2c reference (v4l2_subdev priv data) */
-	struct v4l2_subdev sd;
-	/* private data structures */
-	struct mutex mutex;
-	struct completion work;
-	struct rds_info rds_info;
-	struct limiter_info limiter_info;
-	struct pilot_info pilot_info;
-	struct acomp_info acomp_info;
-	struct regulator_bulk_data supplies[SI4713_NUM_SUPPLIES];
-	int gpio_reset;
-	u32 frequency;
-	u32 preemphasis;
-	u32 mute;
-	u32 power_level;
-	u32 power_state;
-	u32 antenna_capacitor;
-	u32 stereo;
-	u32 tune_rnl;
+    /* v4l2_subdev and i2c reference (v4l2_subdev priv data) */
+    struct v4l2_subdev sd;
+    /* private data structures */
+    struct mutex mutex;
+    struct completion work;
+    struct rds_info rds_info;
+    struct limiter_info limiter_info;
+    struct pilot_info pilot_info;
+    struct acomp_info acomp_info;
+    struct regulator_bulk_data supplies[SI4713_NUM_SUPPLIES];
+    int gpio_reset;
+    u32 frequency;
+    u32 preemphasis;
+    u32 mute;
+    u32 power_level;
+    u32 power_state;
+    u32 antenna_capacitor;
+    u32 stereo;
+    u32 tune_rnl;
 };
 #endif /* ifndef SI4713_I2C_H */

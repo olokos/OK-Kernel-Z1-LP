@@ -87,8 +87,8 @@
 #define STRIDE_marb_rw_int_slots 4
 /* Register rw_int_slots, scope marb, type rw */
 typedef struct {
-  unsigned int owner : 4;
-  unsigned int dummy1 : 28;
+    unsigned int owner : 4;
+    unsigned int dummy1 : 28;
 } reg_marb_rw_int_slots;
 #define REG_RD_ADDR_marb_rw_int_slots 0
 #define REG_WR_ADDR_marb_rw_int_slots 0
@@ -96,8 +96,8 @@ typedef struct {
 #define STRIDE_marb_rw_ext_slots 4
 /* Register rw_ext_slots, scope marb, type rw */
 typedef struct {
-  unsigned int owner : 4;
-  unsigned int dummy1 : 28;
+    unsigned int owner : 4;
+    unsigned int dummy1 : 28;
 } reg_marb_rw_ext_slots;
 #define REG_RD_ADDR_marb_rw_ext_slots 256
 #define REG_WR_ADDR_marb_rw_ext_slots 256
@@ -105,122 +105,122 @@ typedef struct {
 #define STRIDE_marb_rw_regs_slots 4
 /* Register rw_regs_slots, scope marb, type rw */
 typedef struct {
-  unsigned int owner : 4;
-  unsigned int dummy1 : 28;
+    unsigned int owner : 4;
+    unsigned int dummy1 : 28;
 } reg_marb_rw_regs_slots;
 #define REG_RD_ADDR_marb_rw_regs_slots 512
 #define REG_WR_ADDR_marb_rw_regs_slots 512
 
 /* Register rw_intr_mask, scope marb, type rw */
 typedef struct {
-  unsigned int bp0 : 1;
-  unsigned int bp1 : 1;
-  unsigned int bp2 : 1;
-  unsigned int bp3 : 1;
-  unsigned int dummy1 : 28;
+    unsigned int bp0 : 1;
+    unsigned int bp1 : 1;
+    unsigned int bp2 : 1;
+    unsigned int bp3 : 1;
+    unsigned int dummy1 : 28;
 } reg_marb_rw_intr_mask;
 #define REG_RD_ADDR_marb_rw_intr_mask 528
 #define REG_WR_ADDR_marb_rw_intr_mask 528
 
 /* Register rw_ack_intr, scope marb, type rw */
 typedef struct {
-  unsigned int bp0 : 1;
-  unsigned int bp1 : 1;
-  unsigned int bp2 : 1;
-  unsigned int bp3 : 1;
-  unsigned int dummy1 : 28;
+    unsigned int bp0 : 1;
+    unsigned int bp1 : 1;
+    unsigned int bp2 : 1;
+    unsigned int bp3 : 1;
+    unsigned int dummy1 : 28;
 } reg_marb_rw_ack_intr;
 #define REG_RD_ADDR_marb_rw_ack_intr 532
 #define REG_WR_ADDR_marb_rw_ack_intr 532
 
 /* Register r_intr, scope marb, type r */
 typedef struct {
-  unsigned int bp0 : 1;
-  unsigned int bp1 : 1;
-  unsigned int bp2 : 1;
-  unsigned int bp3 : 1;
-  unsigned int dummy1 : 28;
+    unsigned int bp0 : 1;
+    unsigned int bp1 : 1;
+    unsigned int bp2 : 1;
+    unsigned int bp3 : 1;
+    unsigned int dummy1 : 28;
 } reg_marb_r_intr;
 #define REG_RD_ADDR_marb_r_intr 536
 
 /* Register r_masked_intr, scope marb, type r */
 typedef struct {
-  unsigned int bp0 : 1;
-  unsigned int bp1 : 1;
-  unsigned int bp2 : 1;
-  unsigned int bp3 : 1;
-  unsigned int dummy1 : 28;
+    unsigned int bp0 : 1;
+    unsigned int bp1 : 1;
+    unsigned int bp2 : 1;
+    unsigned int bp3 : 1;
+    unsigned int dummy1 : 28;
 } reg_marb_r_masked_intr;
 #define REG_RD_ADDR_marb_r_masked_intr 540
 
 /* Register rw_stop_mask, scope marb, type rw */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_rw_stop_mask;
 #define REG_RD_ADDR_marb_rw_stop_mask 544
 #define REG_WR_ADDR_marb_rw_stop_mask 544
 
 /* Register r_stopped, scope marb, type r */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_r_stopped;
 #define REG_RD_ADDR_marb_r_stopped 548
 
 /* Register rw_no_snoop, scope marb, type rw */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_rw_no_snoop;
 #define REG_RD_ADDR_marb_rw_no_snoop 832
 #define REG_WR_ADDR_marb_rw_no_snoop 832
 
 /* Register rw_no_snoop_rq, scope marb, type rw */
 typedef struct {
-  unsigned int dummy1 : 10;
-  unsigned int cpui : 1;
-  unsigned int cpud : 1;
-  unsigned int dummy2 : 20;
+    unsigned int dummy1 : 10;
+    unsigned int cpui : 1;
+    unsigned int cpud : 1;
+    unsigned int dummy2 : 20;
 } reg_marb_rw_no_snoop_rq;
 #define REG_RD_ADDR_marb_rw_no_snoop_rq 836
 #define REG_WR_ADDR_marb_rw_no_snoop_rq 836
@@ -228,33 +228,33 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_marb_cpud                           = 0x0000000b,
-  regk_marb_cpui                           = 0x0000000a,
-  regk_marb_dma0                           = 0x00000000,
-  regk_marb_dma1                           = 0x00000001,
-  regk_marb_dma2                           = 0x00000002,
-  regk_marb_dma3                           = 0x00000003,
-  regk_marb_dma4                           = 0x00000004,
-  regk_marb_dma5                           = 0x00000005,
-  regk_marb_dma6                           = 0x00000006,
-  regk_marb_dma7                           = 0x00000007,
-  regk_marb_dma8                           = 0x00000008,
-  regk_marb_dma9                           = 0x00000009,
-  regk_marb_iop                            = 0x0000000c,
-  regk_marb_no                             = 0x00000000,
-  regk_marb_r_stopped_default              = 0x00000000,
-  regk_marb_rw_ext_slots_default           = 0x00000000,
-  regk_marb_rw_ext_slots_size              = 0x00000040,
-  regk_marb_rw_int_slots_default           = 0x00000000,
-  regk_marb_rw_int_slots_size              = 0x00000040,
-  regk_marb_rw_intr_mask_default           = 0x00000000,
-  regk_marb_rw_no_snoop_default            = 0x00000000,
-  regk_marb_rw_no_snoop_rq_default         = 0x00000000,
-  regk_marb_rw_regs_slots_default          = 0x00000000,
-  regk_marb_rw_regs_slots_size             = 0x00000004,
-  regk_marb_rw_stop_mask_default           = 0x00000000,
-  regk_marb_slave                          = 0x0000000d,
-  regk_marb_yes                            = 0x00000001
+    regk_marb_cpud                           = 0x0000000b,
+    regk_marb_cpui                           = 0x0000000a,
+    regk_marb_dma0                           = 0x00000000,
+    regk_marb_dma1                           = 0x00000001,
+    regk_marb_dma2                           = 0x00000002,
+    regk_marb_dma3                           = 0x00000003,
+    regk_marb_dma4                           = 0x00000004,
+    regk_marb_dma5                           = 0x00000005,
+    regk_marb_dma6                           = 0x00000006,
+    regk_marb_dma7                           = 0x00000007,
+    regk_marb_dma8                           = 0x00000008,
+    regk_marb_dma9                           = 0x00000009,
+    regk_marb_iop                            = 0x0000000c,
+    regk_marb_no                             = 0x00000000,
+    regk_marb_r_stopped_default              = 0x00000000,
+    regk_marb_rw_ext_slots_default           = 0x00000000,
+    regk_marb_rw_ext_slots_size              = 0x00000040,
+    regk_marb_rw_int_slots_default           = 0x00000000,
+    regk_marb_rw_int_slots_size              = 0x00000040,
+    regk_marb_rw_intr_mask_default           = 0x00000000,
+    regk_marb_rw_no_snoop_default            = 0x00000000,
+    regk_marb_rw_no_snoop_rq_default         = 0x00000000,
+    regk_marb_rw_regs_slots_default          = 0x00000000,
+    regk_marb_rw_regs_slots_size             = 0x00000004,
+    regk_marb_rw_stop_mask_default           = 0x00000000,
+    regk_marb_slave                          = 0x0000000d,
+    regk_marb_yes                            = 0x00000001
 };
 #endif /* __marb_defs_h */
 #ifndef __marb_bp_defs_h
@@ -355,44 +355,44 @@ typedef unsigned int reg_marb_bp_rw_last_addr;
 
 /* Register rw_op, scope marb_bp, type rw */
 typedef struct {
-  unsigned int rd         : 1;
-  unsigned int wr         : 1;
-  unsigned int rd_excl    : 1;
-  unsigned int pri_wr     : 1;
-  unsigned int us_rd      : 1;
-  unsigned int us_wr      : 1;
-  unsigned int us_rd_excl : 1;
-  unsigned int us_pri_wr  : 1;
-  unsigned int dummy1     : 24;
+    unsigned int rd         : 1;
+    unsigned int wr         : 1;
+    unsigned int rd_excl    : 1;
+    unsigned int pri_wr     : 1;
+    unsigned int us_rd      : 1;
+    unsigned int us_wr      : 1;
+    unsigned int us_rd_excl : 1;
+    unsigned int us_pri_wr  : 1;
+    unsigned int dummy1     : 24;
 } reg_marb_bp_rw_op;
 #define REG_RD_ADDR_marb_bp_rw_op 8
 #define REG_WR_ADDR_marb_bp_rw_op 8
 
 /* Register rw_clients, scope marb_bp, type rw */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_bp_rw_clients;
 #define REG_RD_ADDR_marb_bp_rw_clients 12
 #define REG_WR_ADDR_marb_bp_rw_clients 12
 
 /* Register rw_options, scope marb_bp, type rw */
 typedef struct {
-  unsigned int wrap : 1;
-  unsigned int dummy1 : 31;
+    unsigned int wrap : 1;
+    unsigned int dummy1 : 31;
 } reg_marb_bp_rw_options;
 #define REG_RD_ADDR_marb_bp_rw_options 16
 #define REG_WR_ADDR_marb_bp_rw_options 16
@@ -403,55 +403,55 @@ typedef unsigned int reg_marb_bp_r_brk_addr;
 
 /* Register r_brk_op, scope marb_bp, type r */
 typedef struct {
-  unsigned int rd         : 1;
-  unsigned int wr         : 1;
-  unsigned int rd_excl    : 1;
-  unsigned int pri_wr     : 1;
-  unsigned int us_rd      : 1;
-  unsigned int us_wr      : 1;
-  unsigned int us_rd_excl : 1;
-  unsigned int us_pri_wr  : 1;
-  unsigned int dummy1     : 24;
+    unsigned int rd         : 1;
+    unsigned int wr         : 1;
+    unsigned int rd_excl    : 1;
+    unsigned int pri_wr     : 1;
+    unsigned int us_rd      : 1;
+    unsigned int us_wr      : 1;
+    unsigned int us_rd_excl : 1;
+    unsigned int us_pri_wr  : 1;
+    unsigned int dummy1     : 24;
 } reg_marb_bp_r_brk_op;
 #define REG_RD_ADDR_marb_bp_r_brk_op 24
 
 /* Register r_brk_clients, scope marb_bp, type r */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_bp_r_brk_clients;
 #define REG_RD_ADDR_marb_bp_r_brk_clients 28
 
 /* Register r_brk_first_client, scope marb_bp, type r */
 typedef struct {
-  unsigned int dma0  : 1;
-  unsigned int dma1  : 1;
-  unsigned int dma2  : 1;
-  unsigned int dma3  : 1;
-  unsigned int dma4  : 1;
-  unsigned int dma5  : 1;
-  unsigned int dma6  : 1;
-  unsigned int dma7  : 1;
-  unsigned int dma8  : 1;
-  unsigned int dma9  : 1;
-  unsigned int cpui  : 1;
-  unsigned int cpud  : 1;
-  unsigned int iop   : 1;
-  unsigned int slave : 1;
-  unsigned int dummy1 : 18;
+    unsigned int dma0  : 1;
+    unsigned int dma1  : 1;
+    unsigned int dma2  : 1;
+    unsigned int dma3  : 1;
+    unsigned int dma4  : 1;
+    unsigned int dma5  : 1;
+    unsigned int dma6  : 1;
+    unsigned int dma7  : 1;
+    unsigned int dma8  : 1;
+    unsigned int dma9  : 1;
+    unsigned int cpui  : 1;
+    unsigned int cpud  : 1;
+    unsigned int iop   : 1;
+    unsigned int slave : 1;
+    unsigned int dummy1 : 18;
 } reg_marb_bp_r_brk_first_client;
 #define REG_RD_ADDR_marb_bp_r_brk_first_client 32
 
@@ -467,9 +467,9 @@ typedef unsigned int reg_marb_bp_rw_ack;
 
 /* Constants */
 enum {
-  regk_marb_bp_no                          = 0x00000000,
-  regk_marb_bp_rw_op_default               = 0x00000000,
-  regk_marb_bp_rw_options_default          = 0x00000000,
-  regk_marb_bp_yes                         = 0x00000001
+    regk_marb_bp_no                          = 0x00000000,
+    regk_marb_bp_rw_op_default               = 0x00000000,
+    regk_marb_bp_rw_options_default          = 0x00000000,
+    regk_marb_bp_yes                         = 0x00000001
 };
 #endif /* __marb_bp_defs_h */

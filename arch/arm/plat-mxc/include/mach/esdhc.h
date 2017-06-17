@@ -11,16 +11,16 @@
 #define __ASM_ARCH_IMX_ESDHC_H
 
 enum wp_types {
-	ESDHC_WP_NONE,		/* no WP, neither controller nor gpio */
-	ESDHC_WP_CONTROLLER,	/* mmc controller internal WP */
-	ESDHC_WP_GPIO,		/* external gpio pin for WP */
+    ESDHC_WP_NONE,		/* no WP, neither controller nor gpio */
+    ESDHC_WP_CONTROLLER,	/* mmc controller internal WP */
+    ESDHC_WP_GPIO,		/* external gpio pin for WP */
 };
 
 enum cd_types {
-	ESDHC_CD_NONE,		/* no CD, neither controller nor gpio */
-	ESDHC_CD_CONTROLLER,	/* mmc controller internal CD */
-	ESDHC_CD_GPIO,		/* external gpio pin for CD */
-	ESDHC_CD_PERMANENT,	/* no CD, card permanently wired to host */
+    ESDHC_CD_NONE,		/* no CD, neither controller nor gpio */
+    ESDHC_CD_CONTROLLER,	/* mmc controller internal CD */
+    ESDHC_CD_GPIO,		/* external gpio pin for CD */
+    ESDHC_CD_PERMANENT,	/* no CD, card permanently wired to host */
 };
 
 /**
@@ -35,9 +35,9 @@ enum cd_types {
  */
 
 struct esdhc_platform_data {
-	unsigned int wp_gpio;
-	unsigned int cd_gpio;
-	enum wp_types wp_type;
-	enum cd_types cd_type;
+    unsigned int wp_gpio;
+    unsigned int cd_gpio;
+    enum wp_types wp_type;
+    enum cd_types cd_type;
 };
 #endif /* __ASM_ARCH_IMX_ESDHC_H */

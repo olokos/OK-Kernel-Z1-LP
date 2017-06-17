@@ -74,41 +74,41 @@ struct go7007;
 #define GO7007_AUDIO_OKI_MODE		(1<<17)
 
 struct go7007_board_info {
-	char *firmware;
-	unsigned int flags;
-	int hpi_buffer_cap;
-	unsigned int sensor_flags;
-	int sensor_width;
-	int sensor_height;
-	int sensor_framerate;
-	int sensor_h_offset;
-	int sensor_v_offset;
-	unsigned int audio_flags;
-	int audio_rate;
-	int audio_bclk_div;
-	int audio_main_div;
-	int num_i2c_devs;
-	struct {
-		const char *type;
-		int id;
-		int addr;
-	} i2c_devs[4];
-	int num_inputs;
-	struct {
-		int video_input;
-		int audio_input;
-		char *name;
-	} inputs[4];
+    char *firmware;
+    unsigned int flags;
+    int hpi_buffer_cap;
+    unsigned int sensor_flags;
+    int sensor_width;
+    int sensor_height;
+    int sensor_framerate;
+    int sensor_h_offset;
+    int sensor_v_offset;
+    unsigned int audio_flags;
+    int audio_rate;
+    int audio_bclk_div;
+    int audio_main_div;
+    int num_i2c_devs;
+    struct {
+        const char *type;
+        int id;
+        int addr;
+    } i2c_devs[4];
+    int num_inputs;
+    struct {
+        int video_input;
+        int audio_input;
+        char *name;
+    } inputs[4];
 };
 
 struct go7007_hpi_ops {
-	int (*interface_reset)(struct go7007 *go);
-	int (*write_interrupt)(struct go7007 *go, int addr, int data);
-	int (*read_interrupt)(struct go7007 *go);
-	int (*stream_start)(struct go7007 *go);
-	int (*stream_stop)(struct go7007 *go);
-	int (*send_firmware)(struct go7007 *go, u8 *data, int len);
-	int (*send_command)(struct go7007 *go, unsigned int cmd, void *arg);
+    int (*interface_reset)(struct go7007 *go);
+    int (*write_interrupt)(struct go7007 *go, int addr, int data);
+    int (*read_interrupt)(struct go7007 *go);
+    int (*stream_start)(struct go7007 *go);
+    int (*stream_stop)(struct go7007 *go);
+    int (*send_firmware)(struct go7007 *go, u8 *data, int len);
+    int (*send_command)(struct go7007 *go, unsigned int cmd, void *arg);
 };
 
 /* The video buffer size must be a multiple of PAGE_SIZE */
@@ -116,27 +116,27 @@ struct go7007_hpi_ops {
 #define	GO7007_BUF_SIZE		(GO7007_BUF_PAGES << PAGE_SHIFT)
 
 struct go7007_buffer {
-	struct go7007 *go; /* Reverse reference for VMA ops */
-	int index; /* Reverse reference for DQBUF */
-	enum { BUF_STATE_IDLE, BUF_STATE_QUEUED, BUF_STATE_DONE } state;
-	u32 seq;
-	struct timeval timestamp;
-	struct list_head stream;
-	struct page *pages[GO7007_BUF_PAGES + 1]; /* extra for straddling */
-	unsigned long user_addr;
-	unsigned int page_count;
-	unsigned int offset;
-	unsigned int bytesused;
-	unsigned int frame_offset;
-	u32 modet_active;
-	int mapped;
+    struct go7007 *go; /* Reverse reference for VMA ops */
+    int index; /* Reverse reference for DQBUF */
+    enum { BUF_STATE_IDLE, BUF_STATE_QUEUED, BUF_STATE_DONE } state;
+    u32 seq;
+    struct timeval timestamp;
+    struct list_head stream;
+    struct page *pages[GO7007_BUF_PAGES + 1]; /* extra for straddling */
+    unsigned long user_addr;
+    unsigned int page_count;
+    unsigned int offset;
+    unsigned int bytesused;
+    unsigned int frame_offset;
+    u32 modet_active;
+    int mapped;
 };
 
 struct go7007_file {
-	struct go7007 *go;
-	struct mutex lock;
-	int buf_count;
-	struct go7007_buffer *bufs;
+    struct go7007 *go;
+    struct mutex lock;
+    int buf_count;
+    struct go7007_buffer *bufs;
 };
 
 #define	GO7007_FORMAT_MJPEG	0
@@ -150,102 +150,101 @@ struct go7007_file {
 #define GO7007_RATIO_16_9	2
 
 enum go7007_parser_state {
-	STATE_DATA,
-	STATE_00,
-	STATE_00_00,
-	STATE_00_00_01,
-	STATE_FF,
-	STATE_VBI_LEN_A,
-	STATE_VBI_LEN_B,
-	STATE_MODET_MAP,
-	STATE_UNPARSED,
+    STATE_DATA,
+    STATE_00,
+    STATE_00_00,
+    STATE_00_00_01,
+    STATE_FF,
+    STATE_VBI_LEN_A,
+    STATE_VBI_LEN_B,
+    STATE_MODET_MAP,
+    STATE_UNPARSED,
 };
 
 struct go7007 {
-	struct device *dev;
-	struct go7007_board_info *board_info;
-	unsigned int board_id;
-	int tuner_type;
-	int channel_number; /* for multi-channel boards like Adlink PCI-MPG24 */
-	char name[64];
-	struct video_device *video_dev;
-	struct v4l2_device v4l2_dev;
-	int ref_count;
-	enum { STATUS_INIT, STATUS_ONLINE, STATUS_SHUTDOWN } status;
-	spinlock_t spinlock;
-	struct mutex hw_lock;
-	int streaming;
-	int in_use;
-	int audio_enabled;
+    struct device *dev;
+    struct go7007_board_info *board_info;
+    unsigned int board_id;
+    int tuner_type;
+    int channel_number; /* for multi-channel boards like Adlink PCI-MPG24 */
+    char name[64];
+    struct video_device *video_dev;
+    struct v4l2_device v4l2_dev;
+    int ref_count;
+    enum { STATUS_INIT, STATUS_ONLINE, STATUS_SHUTDOWN } status;
+    spinlock_t spinlock;
+    struct mutex hw_lock;
+    int streaming;
+    int in_use;
+    int audio_enabled;
 
-	/* Video input */
-	int input;
-	enum { GO7007_STD_NTSC, GO7007_STD_PAL, GO7007_STD_OTHER } standard;
-	int sensor_framerate;
-	int width;
-	int height;
-	int encoder_h_offset;
-	int encoder_v_offset;
-	unsigned int encoder_h_halve:1;
-	unsigned int encoder_v_halve:1;
-	unsigned int encoder_subsample:1;
+    /* Video input */
+    int input;
+    enum { GO7007_STD_NTSC, GO7007_STD_PAL, GO7007_STD_OTHER } standard;
+    int sensor_framerate;
+    int width;
+    int height;
+    int encoder_h_offset;
+    int encoder_v_offset;
+    unsigned int encoder_h_halve:1;
+    unsigned int encoder_v_halve:1;
+    unsigned int encoder_subsample:1;
 
-	/* Encoder config */
-	int format;
-	int bitrate;
-	int fps_scale;
-	int pali;
-	int aspect_ratio;
-	int gop_size;
-	unsigned int ipb:1;
-	unsigned int closed_gop:1;
-	unsigned int repeat_seqhead:1;
-	unsigned int seq_header_enable:1;
-	unsigned int gop_header_enable:1;
-	unsigned int dvd_mode:1;
-	unsigned int interlace_coding:1;
+    /* Encoder config */
+    int format;
+    int bitrate;
+    int fps_scale;
+    int pali;
+    int aspect_ratio;
+    int gop_size;
+    unsigned int ipb:1;
+    unsigned int closed_gop:1;
+    unsigned int repeat_seqhead:1;
+    unsigned int seq_header_enable:1;
+    unsigned int gop_header_enable:1;
+    unsigned int dvd_mode:1;
+    unsigned int interlace_coding:1;
 
-	/* Motion detection */
-	unsigned int modet_enable:1;
-	struct {
-		unsigned int enable:1;
-		int pixel_threshold;
-		int motion_threshold;
-		int mb_threshold;
-	} modet[4];
-	unsigned char modet_map[1624];
-	unsigned char active_map[216];
+    /* Motion detection */
+    unsigned int modet_enable:1;
+    struct {
+        unsigned int enable:1;
+        int pixel_threshold;
+        int motion_threshold;
+        int mb_threshold;
+    } modet[4];
+    unsigned char modet_map[1624];
+    unsigned char active_map[216];
 
-	/* Video streaming */
-	struct go7007_buffer *active_buf;
-	enum go7007_parser_state state;
-	int parse_length;
-	u16 modet_word;
-	int seen_frame;
-	u32 next_seq;
-	struct list_head stream;
-	wait_queue_head_t frame_waitq;
+    /* Video streaming */
+    struct go7007_buffer *active_buf;
+    enum go7007_parser_state state;
+    int parse_length;
+    u16 modet_word;
+    int seen_frame;
+    u32 next_seq;
+    struct list_head stream;
+    wait_queue_head_t frame_waitq;
 
-	/* Audio streaming */
-	void (*audio_deliver)(struct go7007 *go, u8 *buf, int length);
-	void *snd_context;
+    /* Audio streaming */
+    void (*audio_deliver)(struct go7007 *go, u8 *buf, int length);
+    void *snd_context;
 
-	/* I2C */
-	int i2c_adapter_online;
-	struct i2c_adapter i2c_adapter;
+    /* I2C */
+    int i2c_adapter_online;
+    struct i2c_adapter i2c_adapter;
 
-	/* HPI driver */
-	struct go7007_hpi_ops *hpi_ops;
-	void *hpi_context;
-	int interrupt_available;
-	wait_queue_head_t interrupt_waitq;
-	unsigned short interrupt_value;
-	unsigned short interrupt_data;
+    /* HPI driver */
+    struct go7007_hpi_ops *hpi_ops;
+    void *hpi_context;
+    int interrupt_available;
+    wait_queue_head_t interrupt_waitq;
+    unsigned short interrupt_value;
+    unsigned short interrupt_data;
 };
 
-static inline struct go7007 *to_go7007(struct v4l2_device *v4l2_dev)
-{
-	return container_of(v4l2_dev, struct go7007, v4l2_dev);
+static inline struct go7007 *to_go7007(struct v4l2_device *v4l2_dev) {
+    return container_of(v4l2_dev, struct go7007, v4l2_dev);
 }
 
 /* All of these must be called with the hpi_lock mutex held! */
@@ -271,7 +270,7 @@ int go7007_register_encoder(struct go7007 *go);
 int go7007_start_encoder(struct go7007 *go);
 void go7007_parse_video_stream(struct go7007 *go, u8 *buf, int length);
 struct go7007 *go7007_alloc(struct go7007_board_info *board,
-					struct device *dev);
+                            struct device *dev);
 void go7007_remove(struct go7007 *go);
 
 /* go7007-fw.c */

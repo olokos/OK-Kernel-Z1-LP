@@ -147,8 +147,7 @@ typedef tANI_U32     tANI_U32_OR_PTR;
 typedef tANI_U32_OR_PTR    tANI_BUFFER_ADDR;
 // which boolean is the most usefule...or both ?
 
-typedef enum tagAniBoolean
-{
+typedef enum tagAniBoolean {
     eANI_BOOLEAN_FALSE = 0,
     eANI_BOOLEAN_TRUE,
 

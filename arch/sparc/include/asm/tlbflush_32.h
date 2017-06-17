@@ -30,8 +30,8 @@ BTFIXUPDEF_CALL(void, local_flush_tlb_page, struct vm_area_struct *, unsigned lo
 extern void smp_flush_tlb_all(void);
 extern void smp_flush_tlb_mm(struct mm_struct *mm);
 extern void smp_flush_tlb_range(struct vm_area_struct *vma,
-				  unsigned long start,
-				  unsigned long end);
+                                unsigned long start,
+                                unsigned long end);
 extern void smp_flush_tlb_page(struct vm_area_struct *mm, unsigned long page);
 
 #endif /* CONFIG_SMP */
@@ -52,9 +52,8 @@ BTFIXUPDEF_CALL(void, flush_tlb_page, struct vm_area_struct *, unsigned long)
  * This is a kludge, until I know better. --zaitcev XXX
  */
 static inline void flush_tlb_kernel_range(unsigned long start,
-					  unsigned long end)
-{
-	flush_tlb_all();
+        unsigned long end) {
+    flush_tlb_all();
 }
 
 #endif /* _SPARC_TLBFLUSH_H */

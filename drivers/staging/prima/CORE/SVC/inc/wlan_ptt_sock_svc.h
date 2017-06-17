@@ -94,19 +94,16 @@ int ptt_sock_send_msg_to_app(tAniHdr *wmsg, int radio, int src_mod, int pid, int
  * WLAN Driver, in either direction. Each msg will begin with this header and
  * will followed by the Quarky message
  */
-typedef struct sAniNlMsg
-{
+typedef struct sAniNlMsg {
     struct  nlmsghdr nlh;             // Netlink Header
     int radio;                        // unit number of the radio
     tAniHdr wmsg;                     // Airgo Message Header
 } tAniNlHdr;
-typedef struct sAniAppRegReq
-{
+typedef struct sAniAppRegReq {
     tAniNlModTypes type;              // module id
     int pid;                          // process id
 } tAniNlAppRegReq;
-typedef struct sAniNlAppRegRsp
-{
+typedef struct sAniNlAppRegRsp {
     struct nlmsghdr nlh;              // NetLink Msg Header
     int radio;                        // Radio unit
     tAniHdr wniHdr;                   // Generic WNI msg header

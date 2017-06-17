@@ -76,8 +76,8 @@
 
 /* This is used with scatter-gather */
 struct aha1740_chain {
-	u32 dataptr;		/* Location of data */
-	u32 datalen;		/* Size of this part of chain */
+    u32 dataptr;		/* Location of data */
+    u32 datalen;		/* Size of this part of chain */
 };
 
 /* These belong in scsi.h */
@@ -102,40 +102,40 @@ struct aha1740_chain {
 #define MAX_STATUS 32
 
 struct ecb {			/* Enhanced Control Block 6.1 */
-	u16 cmdw;		/* Command Word */
-	/* Flag Word 1 */
-	u16 cne:1,		/* Control Block Chaining */
-	:6, di:1,		/* Disable Interrupt */
-	:2, ses:1,		/* Suppress Underrun error */
-	:1, sg:1,		/* Scatter/Gather */
-	:1, dsb:1,		/* Disable Status Block */
-	 ars:1;			/* Automatic Request Sense */
-	/* Flag Word 2 */
-	u16 lun:3,		/* Logical Unit */
-	 tag:1,			/* Tagged Queuing */
-	 tt:2,			/* Tag Type */
-	 nd:1,			/* No Disconnect */
-	:1, dat:1,		/* Data transfer - check direction */
-	 dir:1,			/* Direction of transfer 1 = datain */
-	 st:1,			/* Suppress Transfer */
-	 chk:1,			/* Calculate Checksum */
-	:2, rec:1,:1;		/* Error Recovery */
-	u16 nil0;		/* nothing */
-	u32 dataptr;		/* Data or Scatter List ptr */
-	u32 datalen;		/* Data or Scatter List len */
-	u32 statusptr;		/* Status Block ptr */
-	u32 linkptr;		/* Chain Address */
-	u32 nil1;		/* nothing */
-	u32 senseptr;		/* Sense Info Pointer */
-	u8 senselen;		/* Sense Length */
-	u8 cdblen;		/* CDB Length */
-	u16 datacheck;		/* Data checksum */
-	u8 cdb[MAX_CDB];	/* CDB area */
-/* Hardware defined portion ends here, rest is driver defined */
-	u8 sense[MAX_SENSE];	/* Sense area */
-	u8 status[MAX_STATUS];	/* Status area */
-	Scsi_Cmnd *SCpnt;	/* Link to the SCSI Command Block */
-	void (*done) (Scsi_Cmnd *);	/* Completion Function */
+    u16 cmdw;		/* Command Word */
+    /* Flag Word 1 */
+    u16 cne:1,		/* Control Block Chaining */
+        :6, di:1,		/* Disable Interrupt */
+        :2, ses:1,		/* Suppress Underrun error */
+        :1, sg:1,		/* Scatter/Gather */
+        :1, dsb:1,		/* Disable Status Block */
+        ars:1;			/* Automatic Request Sense */
+    /* Flag Word 2 */
+    u16 lun:3,		/* Logical Unit */
+        tag:1,			/* Tagged Queuing */
+        tt:2,			/* Tag Type */
+        nd:1,			/* No Disconnect */
+        :1, dat:1,		/* Data transfer - check direction */
+        dir:1,			/* Direction of transfer 1 = datain */
+        st:1,			/* Suppress Transfer */
+        chk:1,			/* Calculate Checksum */
+        :2, rec:1,:1;		/* Error Recovery */
+    u16 nil0;		/* nothing */
+    u32 dataptr;		/* Data or Scatter List ptr */
+    u32 datalen;		/* Data or Scatter List len */
+    u32 statusptr;		/* Status Block ptr */
+    u32 linkptr;		/* Chain Address */
+    u32 nil1;		/* nothing */
+    u32 senseptr;		/* Sense Info Pointer */
+    u8 senselen;		/* Sense Length */
+    u8 cdblen;		/* CDB Length */
+    u16 datacheck;		/* Data checksum */
+    u8 cdb[MAX_CDB];	/* CDB area */
+    /* Hardware defined portion ends here, rest is driver defined */
+    u8 sense[MAX_SENSE];	/* Sense area */
+    u8 status[MAX_STATUS];	/* Status area */
+    Scsi_Cmnd *SCpnt;	/* Link to the SCSI Command Block */
+    void (*done) (Scsi_Cmnd *);	/* Completion Function */
 };
 
 #define	AHA1740CMD_NOP	 0x00	/* No OP */

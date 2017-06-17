@@ -44,7 +44,7 @@ extern void start_thread(struct pt_regs *, unsigned long, unsigned long);
  * Specifically, to hold the state necessary to perform switch_to...
  */
 struct thread_struct {
-	void *switch_sp;
+    void *switch_sp;
 };
 
 /*
@@ -61,8 +61,7 @@ struct thread_struct {
 /*
  * "Unlazying all lazy status" occurs here.
  */
-static inline void prepare_to_copy(struct task_struct *tsk)
-{
+static inline void prepare_to_copy(struct task_struct *tsk) {
 }
 
 /*
@@ -108,14 +107,14 @@ extern unsigned long get_wchan(struct task_struct *p);
  */
 
 struct hexagon_switch_stack {
-	unsigned long long	r1716;
-	unsigned long long	r1918;
-	unsigned long long	r2120;
-	unsigned long long	r2322;
-	unsigned long long	r2524;
-	unsigned long long	r2726;
-	unsigned long		fp;
-	unsigned long		lr;
+    unsigned long long	r1716;
+    unsigned long long	r1918;
+    unsigned long long	r2120;
+    unsigned long long	r2322;
+    unsigned long long	r2524;
+    unsigned long long	r2726;
+    unsigned long		fp;
+    unsigned long		lr;
 };
 
 #endif /* !__ASSEMBLY__ */

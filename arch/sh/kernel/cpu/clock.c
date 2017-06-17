@@ -20,32 +20,31 @@
 #include <asm/clock.h>
 #include <asm/machvec.h>
 
-int __init clk_init(void)
-{
-	int ret;
+int __init clk_init(void) {
+    int ret;
 
-	ret = arch_clk_init();
-	if (unlikely(ret)) {
-		pr_err("%s: CPU clock registration failed.\n", __func__);
-		return ret;
-	}
+    ret = arch_clk_init();
+    if (unlikely(ret)) {
+        pr_err("%s: CPU clock registration failed.\n", __func__);
+        return ret;
+    }
 
-	if (sh_mv.mv_clk_init) {
-		ret = sh_mv.mv_clk_init();
-		if (unlikely(ret)) {
-			pr_err("%s: machvec clock initialization failed.\n",
-			       __func__);
-			return ret;
-		}
-	}
+    if (sh_mv.mv_clk_init) {
+        ret = sh_mv.mv_clk_init();
+        if (unlikely(ret)) {
+            pr_err("%s: machvec clock initialization failed.\n",
+                   __func__);
+            return ret;
+        }
+    }
 
-	/* Kick the child clocks.. */
-	recalculate_root_clocks();
+    /* Kick the child clocks.. */
+    recalculate_root_clocks();
 
-	/* Enable the necessary init clocks */
-	clk_enable_init_clocks();
+    /* Enable the necessary init clocks */
+    clk_enable_init_clocks();
 
-	return ret;
+    return ret;
 }
 
 

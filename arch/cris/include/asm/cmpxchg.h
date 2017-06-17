@@ -3,31 +3,30 @@
 
 #include <linux/irqflags.h>
 
-static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size)
-{
-  /* since Etrax doesn't have any atomic xchg instructions, we need to disable
-     irq's (if enabled) and do it with move.d's */
-  unsigned long flags,temp;
-  local_irq_save(flags); /* save flags, including irq enable bit and shut off irqs */
-  switch (size) {
-  case 1:
-    *((unsigned char *)&temp) = x;
-    x = *(unsigned char *)ptr;
-    *(unsigned char *)ptr = *((unsigned char *)&temp);
-    break;
-  case 2:
-    *((unsigned short *)&temp) = x;
-    x = *(unsigned short *)ptr;
-    *(unsigned short *)ptr = *((unsigned short *)&temp);
-    break;
-  case 4:
-    temp = x;
-    x = *(unsigned long *)ptr;
-    *(unsigned long *)ptr = temp;
-    break;
-  }
-  local_irq_restore(flags); /* restore irq enable bit */
-  return x;
+static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size) {
+    /* since Etrax doesn't have any atomic xchg instructions, we need to disable
+       irq's (if enabled) and do it with move.d's */
+    unsigned long flags,temp;
+    local_irq_save(flags); /* save flags, including irq enable bit and shut off irqs */
+    switch (size) {
+    case 1:
+        *((unsigned char *)&temp) = x;
+        x = *(unsigned char *)ptr;
+        *(unsigned char *)ptr = *((unsigned char *)&temp);
+        break;
+    case 2:
+        *((unsigned short *)&temp) = x;
+        x = *(unsigned short *)ptr;
+        *(unsigned short *)ptr = *((unsigned short *)&temp);
+        break;
+    case 4:
+        temp = x;
+        x = *(unsigned long *)ptr;
+        *(unsigned long *)ptr = temp;
+        break;
+    }
+    local_irq_restore(flags); /* restore irq enable bit */
+    return x;
 }
 
 #define xchg(ptr,x) \

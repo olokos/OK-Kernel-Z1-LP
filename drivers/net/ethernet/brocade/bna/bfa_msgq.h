@@ -51,80 +51,80 @@ struct bfa_msgq;
 typedef void (*bfa_msgq_cmdcbfn_t)(void *cbarg, enum bfa_status status);
 
 struct bfa_msgq_cmd_entry {
-	struct list_head				qe;
-	bfa_msgq_cmdcbfn_t		cbfn;
-	void				*cbarg;
-	size_t				msg_size;
-	struct bfi_msgq_mhdr *msg_hdr;
+    struct list_head				qe;
+    bfa_msgq_cmdcbfn_t		cbfn;
+    void				*cbarg;
+    size_t				msg_size;
+    struct bfi_msgq_mhdr *msg_hdr;
 };
 
 enum bfa_msgq_cmdq_flags {
-	BFA_MSGQ_CMDQ_F_DB_UPDATE	= 1,
+    BFA_MSGQ_CMDQ_F_DB_UPDATE	= 1,
 };
 
 struct bfa_msgq_cmdq {
-	bfa_fsm_t			fsm;
-	enum bfa_msgq_cmdq_flags flags;
+    bfa_fsm_t			fsm;
+    enum bfa_msgq_cmdq_flags flags;
 
-	u16			producer_index;
-	u16			consumer_index;
-	u16			depth; /* FW Q depth is 16 bits */
-	struct bfa_dma addr;
-	struct bfa_mbox_cmd dbell_mb;
+    u16			producer_index;
+    u16			consumer_index;
+    u16			depth; /* FW Q depth is 16 bits */
+    struct bfa_dma addr;
+    struct bfa_mbox_cmd dbell_mb;
 
-	u16			token;
-	int				offset;
-	int				bytes_to_copy;
-	struct bfa_mbox_cmd copy_mb;
+    u16			token;
+    int				offset;
+    int				bytes_to_copy;
+    struct bfa_mbox_cmd copy_mb;
 
-	struct list_head		pending_q; /* pending command queue */
+    struct list_head		pending_q; /* pending command queue */
 
-	struct bfa_msgq *msgq;
+    struct bfa_msgq *msgq;
 };
 
 enum bfa_msgq_rspq_flags {
-	BFA_MSGQ_RSPQ_F_DB_UPDATE	= 1,
+    BFA_MSGQ_RSPQ_F_DB_UPDATE	= 1,
 };
 
 typedef void (*bfa_msgq_mcfunc_t)(void *cbarg, struct bfi_msgq_mhdr *mhdr);
 
 struct bfa_msgq_rspq {
-	bfa_fsm_t			fsm;
-	enum bfa_msgq_rspq_flags flags;
+    bfa_fsm_t			fsm;
+    enum bfa_msgq_rspq_flags flags;
 
-	u16			producer_index;
-	u16			consumer_index;
-	u16			depth; /* FW Q depth is 16 bits */
-	struct bfa_dma addr;
-	struct bfa_mbox_cmd dbell_mb;
+    u16			producer_index;
+    u16			consumer_index;
+    u16			depth; /* FW Q depth is 16 bits */
+    struct bfa_dma addr;
+    struct bfa_mbox_cmd dbell_mb;
 
-	int				nmclass;
-	struct {
-		bfa_msgq_mcfunc_t	cbfn;
-		void			*cbarg;
-	} rsphdlr[BFI_MC_MAX];
+    int				nmclass;
+    struct {
+        bfa_msgq_mcfunc_t	cbfn;
+        void			*cbarg;
+    } rsphdlr[BFI_MC_MAX];
 
-	struct bfa_msgq *msgq;
+    struct bfa_msgq *msgq;
 };
 
 struct bfa_msgq {
-	struct bfa_msgq_cmdq cmdq;
-	struct bfa_msgq_rspq rspq;
+    struct bfa_msgq_cmdq cmdq;
+    struct bfa_msgq_rspq rspq;
 
-	struct bfa_wc			init_wc;
-	struct bfa_mbox_cmd init_mb;
+    struct bfa_wc			init_wc;
+    struct bfa_mbox_cmd init_mb;
 
-	struct bfa_ioc_notify ioc_notify;
-	struct bfa_ioc *ioc;
+    struct bfa_ioc_notify ioc_notify;
+    struct bfa_ioc *ioc;
 };
 
 u32 bfa_msgq_meminfo(void);
 void bfa_msgq_memclaim(struct bfa_msgq *msgq, u8 *kva, u64 pa);
 void bfa_msgq_attach(struct bfa_msgq *msgq, struct bfa_ioc *ioc);
 void bfa_msgq_regisr(struct bfa_msgq *msgq, enum bfi_mclass mc,
-		     bfa_msgq_mcfunc_t cbfn, void *cbarg);
+                     bfa_msgq_mcfunc_t cbfn, void *cbarg);
 void bfa_msgq_cmd_post(struct bfa_msgq *msgq,
-		       struct bfa_msgq_cmd_entry *cmd);
+                       struct bfa_msgq_cmd_entry *cmd);
 void bfa_msgq_rsp_copy(struct bfa_msgq *msgq, u8 *buf, size_t buf_len);
 
 #endif

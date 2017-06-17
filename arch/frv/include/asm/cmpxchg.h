@@ -147,17 +147,16 @@ extern uint32_t __cmpxchg_32(uint32_t *v, uint32_t test, uint32_t new);
 #include <asm-generic/cmpxchg-local.h>
 
 static inline unsigned long __cmpxchg_local(volatile void *ptr,
-				      unsigned long old,
-				      unsigned long new, int size)
-{
-	switch (size) {
-	case 4:
-		return cmpxchg((unsigned long *)ptr, old, new);
-	default:
-		return __cmpxchg_local_generic(ptr, old, new, size);
-	}
+        unsigned long old,
+        unsigned long new, int size) {
+    switch (size) {
+    case 4:
+        return cmpxchg((unsigned long *)ptr, old, new);
+    default:
+        return __cmpxchg_local_generic(ptr, old, new, size);
+    }
 
-	return old;
+    return old;
 }
 
 /*

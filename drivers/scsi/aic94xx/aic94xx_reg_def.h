@@ -1048,7 +1048,7 @@
 #define		LmMnXFRLVL_1536		0x01
 #define		LmMnXFRLVL_2048		0x00
 
- /* mode 0-1 */
+/* mode 0-1 */
 #define LmMnSGDMACTL(LinkNum, Mode)	LmSEQ_PHY_REG(Mode, LinkNum, 0x5A)
 
 #define 	LmMnRESETSG		0x04

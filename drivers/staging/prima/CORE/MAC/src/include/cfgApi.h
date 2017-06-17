@@ -54,16 +54,14 @@
 #define CFG_HOST_WE                 0x0000004
 
 // CFG status
-typedef enum eCfgStatusTypes
-{
+typedef enum eCfgStatusTypes {
     CFG_INCOMPLETE,
     CFG_SUCCESS,
     CFG_FAILURE
 } tCfgStatusTypes;
 
 // WEP key mapping table row structure
-typedef struct
-{
+typedef struct {
     tANI_U8    keyMappingAddr[SIR_MAC_ADDR_LENGTH];
     tANI_U32   wepOn;
     tANI_U8    key[SIR_MAC_KEY_LENGTH];

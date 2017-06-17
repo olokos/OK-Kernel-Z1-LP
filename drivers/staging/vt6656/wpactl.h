@@ -41,9 +41,11 @@
 
 typedef enum { WPA_ALG_NONE, WPA_ALG_WEP, WPA_ALG_TKIP, WPA_ALG_CCMP } wpa_alg;
 typedef enum { CIPHER_NONE, CIPHER_WEP40, CIPHER_TKIP, CIPHER_CCMP,
-	       CIPHER_WEP104 } wpa_cipher;
+               CIPHER_WEP104
+             } wpa_cipher;
 typedef enum { KEY_MGMT_802_1X, KEY_MGMT_PSK, KEY_MGMT_NONE,
-	       KEY_MGMT_802_1X_NO_WPA, KEY_MGMT_WPA_NONE, KEY_MGMT_CCKM } wpa_key_mgmt;//20080717-02,<Modify> by James Li
+               KEY_MGMT_802_1X_NO_WPA, KEY_MGMT_WPA_NONE, KEY_MGMT_CCKM
+             } wpa_key_mgmt;//20080717-02,<Modify> by James Li
 
 #define AUTH_ALG_OPEN_SYSTEM	0x01
 #define AUTH_ALG_SHARED_KEY	0x02

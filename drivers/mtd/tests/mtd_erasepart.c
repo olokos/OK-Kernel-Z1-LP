@@ -38,135 +38,129 @@ static struct mtd_info *mtd;
 static unsigned char *bbt;
 static int ebcnt;
 
-static int erase_eraseblock(int ebnum)
-{
-	int err;
-	struct erase_info ei;
-	loff_t addr = ebnum * mtd->erasesize;
+static int erase_eraseblock(int ebnum) {
+    int err;
+    struct erase_info ei;
+    loff_t addr = ebnum * mtd->erasesize;
 
-	memset(&ei, 0, sizeof(struct erase_info));
-	ei.mtd  = mtd;
-	ei.addr = addr;
-	ei.len  = mtd->erasesize;
+    memset(&ei, 0, sizeof(struct erase_info));
+    ei.mtd  = mtd;
+    ei.addr = addr;
+    ei.len  = mtd->erasesize;
 
-	err = mtd_erase(mtd, &ei);
-	if (err) {
-		printk(PRINT_PREF "error %d while erasing EB %d\n", err, ebnum);
-		return err;
-	}
+    err = mtd_erase(mtd, &ei);
+    if (err) {
+        printk(PRINT_PREF "error %d while erasing EB %d\n", err, ebnum);
+        return err;
+    }
 
-	if (ei.state == MTD_ERASE_FAILED) {
-		printk(PRINT_PREF "some erase error occurred at EB %d\n",
-		       ebnum);
-		return -EIO;
-	}
+    if (ei.state == MTD_ERASE_FAILED) {
+        printk(PRINT_PREF "some erase error occurred at EB %d\n",
+               ebnum);
+        return -EIO;
+    }
 
-	return 0;
+    return 0;
 }
 
-static int erase_whole_device(void)
-{
-	int err;
-	unsigned int i;
+static int erase_whole_device(void) {
+    int err;
+    unsigned int i;
 
-	printk(PRINT_PREF "erasing whole device\n");
-	for (i = 0; i < ebcnt; ++i) {
-		if (bbt[i])
-			continue;
-		err = erase_eraseblock(i);
-		if (err)
-			return err;
-		cond_resched();
-	}
-	printk(PRINT_PREF "erased %u eraseblocks\n", i);
-	return 0;
+    printk(PRINT_PREF "erasing whole device\n");
+    for (i = 0; i < ebcnt; ++i) {
+        if (bbt[i])
+            continue;
+        err = erase_eraseblock(i);
+        if (err)
+            return err;
+        cond_resched();
+    }
+    printk(PRINT_PREF "erased %u eraseblocks\n", i);
+    return 0;
 }
 
-static int is_block_bad(int ebnum)
-{
-	int ret;
-	loff_t addr = ebnum * mtd->erasesize;
+static int is_block_bad(int ebnum) {
+    int ret;
+    loff_t addr = ebnum * mtd->erasesize;
 
-	ret = mtd_block_isbad(mtd, addr);
-	if (ret)
-		printk(PRINT_PREF "block %d is bad\n", ebnum);
-	return ret;
+    ret = mtd_block_isbad(mtd, addr);
+    if (ret)
+        printk(PRINT_PREF "block %d is bad\n", ebnum);
+    return ret;
 }
 
-static int scan_for_bad_eraseblocks(void)
-{
-	int i, bad = 0;
+static int scan_for_bad_eraseblocks(void) {
+    int i, bad = 0;
 
-	bbt = kmalloc(ebcnt, GFP_KERNEL);
-	if (!bbt) {
-		printk(PRINT_PREF "error: cannot allocate memory\n");
-		return -ENOMEM;
-	}
-	memset(bbt, 0 , ebcnt);
+    bbt = kmalloc(ebcnt, GFP_KERNEL);
+    if (!bbt) {
+        printk(PRINT_PREF "error: cannot allocate memory\n");
+        return -ENOMEM;
+    }
+    memset(bbt, 0 , ebcnt);
 
-	printk(PRINT_PREF "scanning for bad eraseblocks\n");
-	for (i = 0; i < ebcnt; ++i) {
-		bbt[i] = is_block_bad(i) ? 1 : 0;
-		if (bbt[i])
-			bad += 1;
-		cond_resched();
-	}
-	printk(PRINT_PREF "scanned %d eraseblocks, %d are bad\n", i, bad);
-	return 0;
+    printk(PRINT_PREF "scanning for bad eraseblocks\n");
+    for (i = 0; i < ebcnt; ++i) {
+        bbt[i] = is_block_bad(i) ? 1 : 0;
+        if (bbt[i])
+            bad += 1;
+        cond_resched();
+    }
+    printk(PRINT_PREF "scanned %d eraseblocks, %d are bad\n", i, bad);
+    return 0;
 }
 
-static int __init mtd_erasepart_init(void)
-{
-	int err = 0;
-	uint64_t tmp;
+static int __init mtd_erasepart_init(void) {
+    int err = 0;
+    uint64_t tmp;
 
-	printk(KERN_INFO "\n");
-	printk(KERN_INFO "=================================================\n");
-	printk(PRINT_PREF "MTD device: %d\n", dev);
+    printk(KERN_INFO "\n");
+    printk(KERN_INFO "=================================================\n");
+    printk(PRINT_PREF "MTD device: %d\n", dev);
 
-	mtd = get_mtd_device(NULL, dev);
-	if (IS_ERR(mtd)) {
-		err = PTR_ERR(mtd);
-		printk(PRINT_PREF "error: cannot get MTD device\n");
-		return err;
-	}
+    mtd = get_mtd_device(NULL, dev);
+    if (IS_ERR(mtd)) {
+        err = PTR_ERR(mtd);
+        printk(PRINT_PREF "error: cannot get MTD device\n");
+        return err;
+    }
 
-	if (mtd->type != MTD_NANDFLASH) {
-		printk(PRINT_PREF "this test requires NAND flash\n");
-		err = -ENODEV;
-		goto out2;
-	}
+    if (mtd->type != MTD_NANDFLASH) {
+        printk(PRINT_PREF "this test requires NAND flash\n");
+        err = -ENODEV;
+        goto out2;
+    }
 
-	tmp = mtd->size;
-	do_div(tmp, mtd->erasesize);
-	ebcnt = tmp;
+    tmp = mtd->size;
+    do_div(tmp, mtd->erasesize);
+    ebcnt = tmp;
 
-	printk(PRINT_PREF "MTD device size %llu, eraseblock size %u, "
-	       "page size %u, count of eraseblocks %u",
-	       (unsigned long long)mtd->size, mtd->erasesize,
-	       mtd->writesize, ebcnt);
+    printk(PRINT_PREF "MTD device size %llu, eraseblock size %u, "
+           "page size %u, count of eraseblocks %u",
+           (unsigned long long)mtd->size, mtd->erasesize,
+           mtd->writesize, ebcnt);
 
-	err = scan_for_bad_eraseblocks();
-	if (err)
-		goto out1;
+    err = scan_for_bad_eraseblocks();
+    if (err)
+        goto out1;
 
-	printk(PRINT_PREF "Erasing the whole mtd partition\n");
+    printk(PRINT_PREF "Erasing the whole mtd partition\n");
 
-	err = erase_whole_device();
+    err = erase_whole_device();
 out1:
-	kfree(bbt);
+    kfree(bbt);
 out2:
-	put_mtd_device(mtd);
-	if (err)
-		printk(PRINT_PREF "error %d occurred\n", err);
-	printk(KERN_INFO "=================================================\n");
-	return err;
+    put_mtd_device(mtd);
+    if (err)
+        printk(PRINT_PREF "error %d occurred\n", err);
+    printk(KERN_INFO "=================================================\n");
+    return err;
 }
 module_init(mtd_erasepart_init);
 
-static void __exit mtd_erasepart_exit(void)
-{
-	return;
+static void __exit mtd_erasepart_exit(void) {
+    return;
 }
 module_exit(mtd_erasepart_exit);
 

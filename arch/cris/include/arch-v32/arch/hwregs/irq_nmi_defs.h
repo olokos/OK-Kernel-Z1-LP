@@ -86,9 +86,9 @@
 
 /* Register rw_cmd, scope irq_nmi, type rw */
 typedef struct {
-  unsigned int delay : 16;
-  unsigned int op    : 2;
-  unsigned int dummy1 : 14;
+    unsigned int delay : 16;
+    unsigned int op    : 2;
+    unsigned int dummy1 : 14;
 } reg_irq_nmi_rw_cmd;
 #define REG_RD_ADDR_irq_nmi_rw_cmd 0
 #define REG_WR_ADDR_irq_nmi_rw_cmd 0
@@ -96,9 +96,9 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_irq_nmi_ack_irq                     = 0x00000002,
-  regk_irq_nmi_ack_nmi                     = 0x00000003,
-  regk_irq_nmi_irq                         = 0x00000000,
-  regk_irq_nmi_nmi                         = 0x00000001
+    regk_irq_nmi_ack_irq                     = 0x00000002,
+    regk_irq_nmi_ack_nmi                     = 0x00000003,
+    regk_irq_nmi_irq                         = 0x00000000,
+    regk_irq_nmi_nmi                         = 0x00000001
 };
 #endif /* __irq_nmi_defs_h */

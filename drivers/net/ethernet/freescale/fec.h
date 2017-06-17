@@ -85,15 +85,15 @@
  */
 #if defined(CONFIG_ARCH_MXC) || defined(CONFIG_SOC_IMX28)
 struct bufdesc {
-	unsigned short cbd_datlen;	/* Data length */
-	unsigned short cbd_sc;	/* Control and status info */
-	unsigned long cbd_bufaddr;	/* Buffer address */
+    unsigned short cbd_datlen;	/* Data length */
+    unsigned short cbd_sc;	/* Control and status info */
+    unsigned long cbd_bufaddr;	/* Buffer address */
 };
 #else
 struct bufdesc {
-	unsigned short	cbd_sc;			/* Control and status info */
-	unsigned short	cbd_datlen;		/* Data length */
-	unsigned long	cbd_bufaddr;		/* Buffer address */
+    unsigned short	cbd_sc;			/* Control and status info */
+    unsigned short	cbd_datlen;		/* Data length */
+    unsigned long	cbd_bufaddr;		/* Buffer address */
 };
 #endif
 

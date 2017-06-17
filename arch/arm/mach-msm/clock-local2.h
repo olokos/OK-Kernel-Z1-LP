@@ -32,13 +32,13 @@
  * @sys_vdd: Voltage level required for freq_hz
  */
 struct clk_freq_tbl {
-	unsigned long	freq_hz;
-	struct clk	*src_clk;
-	u32	m_val;
-	u32	n_val;
-	u32	d_val;
-	u32	div_src_val;
-	const unsigned	sys_vdd;
+    unsigned long	freq_hz;
+    struct clk	*src_clk;
+    u32	m_val;
+    u32	n_val;
+    u32	d_val;
+    u32	div_src_val;
+    const unsigned	sys_vdd;
 };
 
 #define FREQ_END	(UINT_MAX-1)
@@ -57,20 +57,19 @@ struct clk_freq_tbl {
  * @base: pointer to base address of ioremapped registers.
  */
 struct rcg_clk {
-	const u32 cmd_rcgr_reg;
+    const u32 cmd_rcgr_reg;
 
-	void   (*set_rate)(struct rcg_clk *, struct clk_freq_tbl *);
+    void   (*set_rate)(struct rcg_clk *, struct clk_freq_tbl *);
 
-	struct clk_freq_tbl *freq_tbl;
-	struct clk_freq_tbl *current_freq;
-	struct clk	c;
+    struct clk_freq_tbl *freq_tbl;
+    struct clk_freq_tbl *current_freq;
+    struct clk	c;
 
-	void *const __iomem *base;
+    void *const __iomem *base;
 };
 
-static inline struct rcg_clk *to_rcg_clk(struct clk *clk)
-{
-	return container_of(clk, struct rcg_clk, c);
+static inline struct rcg_clk *to_rcg_clk(struct clk *clk) {
+    return container_of(clk, struct rcg_clk, c);
 }
 
 extern struct clk_freq_tbl rcg_dummy_freq;
@@ -81,7 +80,7 @@ extern struct clk_freq_tbl rcg_dummy_freq;
  * @c: clk
  */
 struct fixed_clk {
-	struct clk c;
+    struct clk c;
 };
 
 /**
@@ -97,20 +96,19 @@ struct fixed_clk {
  * @base: pointer to base address of ioremapped registers.
  */
 struct branch_clk {
-	void   (*set_rate)(struct branch_clk *, struct clk_freq_tbl *);
-	struct clk c;
-	const u32 cbcr_reg;
-	const u32 bcr_reg;
-	int has_sibling;
-	u32 cur_div;
-	u32 max_div;
-	const u32 halt_check;
-	void *const __iomem *base;
+    void   (*set_rate)(struct branch_clk *, struct clk_freq_tbl *);
+    struct clk c;
+    const u32 cbcr_reg;
+    const u32 bcr_reg;
+    int has_sibling;
+    u32 cur_div;
+    u32 max_div;
+    const u32 halt_check;
+    void *const __iomem *base;
 };
 
-static inline struct branch_clk *to_branch_clk(struct clk *clk)
-{
-	return container_of(clk, struct branch_clk, c);
+static inline struct branch_clk *to_branch_clk(struct clk *clk) {
+    return container_of(clk, struct branch_clk, c);
 }
 
 /**
@@ -124,18 +122,17 @@ static inline struct branch_clk *to_branch_clk(struct clk *clk)
  * An on/off switch with a rate derived from the parent.
  */
 struct local_vote_clk {
-	struct clk c;
-	const u32 cbcr_reg;
-	const u32 vote_reg;
-	const u32 bcr_reg;
-	const u32 en_mask;
-	const u32 halt_check;
-	void *const __iomem *base;
+    struct clk c;
+    const u32 cbcr_reg;
+    const u32 vote_reg;
+    const u32 bcr_reg;
+    const u32 en_mask;
+    const u32 halt_check;
+    void *const __iomem *base;
 };
 
-static inline struct local_vote_clk *to_local_vote_clk(struct clk *clk)
-{
-	return container_of(clk, struct local_vote_clk, c);
+static inline struct local_vote_clk *to_local_vote_clk(struct clk *clk) {
+    return container_of(clk, struct local_vote_clk, c);
 }
 
 /**
@@ -146,15 +143,14 @@ static inline struct local_vote_clk *to_local_vote_clk(struct clk *clk)
  * @c: clk
 */
 struct measure_clk {
-	u64 sample_ticks;
-	u32 multiplier;
-	u32 divider;
-	struct clk c;
+    u64 sample_ticks;
+    u32 multiplier;
+    u32 divider;
+    struct clk c;
 };
 
-static inline struct measure_clk *to_measure_clk(struct clk *clk)
-{
-	return container_of(clk, struct measure_clk, c);
+static inline struct measure_clk *to_measure_clk(struct clk *clk) {
+    return container_of(clk, struct measure_clk, c);
 }
 
 /*

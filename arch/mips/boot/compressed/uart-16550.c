@@ -22,22 +22,19 @@
 #error please define the serial port address for your own machine
 #endif
 
-static inline unsigned int serial_in(int offset)
-{
-	return *((char *)PORT(offset));
+static inline unsigned int serial_in(int offset) {
+    return *((char *)PORT(offset));
 }
 
-static inline void serial_out(int offset, int value)
-{
-	*((char *)PORT(offset)) = value;
+static inline void serial_out(int offset, int value) {
+    *((char *)PORT(offset)) = value;
 }
 
-void putc(char c)
-{
-	int timeout = 1024;
+void putc(char c) {
+    int timeout = 1024;
 
-	while (((serial_in(UART_LSR) & UART_LSR_THRE) == 0) && (timeout-- > 0))
-		;
+    while (((serial_in(UART_LSR) & UART_LSR_THRE) == 0) && (timeout-- > 0))
+        ;
 
-	serial_out(UART_TX, c);
+    serial_out(UART_TX, c);
 }

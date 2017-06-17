@@ -18,10 +18,10 @@
 void msm_dsi_ahb_ctrl(int enable);
 
 int msm_dsi_io_init(struct platform_device *dev,
-				struct dss_module_power *mp);
+                    struct dss_module_power *mp);
 
 void msm_dsi_io_deinit(struct platform_device *dev,
-				struct dss_module_power *mp);
+                       struct dss_module_power *mp);
 
 int msm_dsi_clk_init(struct platform_device *dev);
 
@@ -32,16 +32,16 @@ int msm_dsi_prepare_clocks(void);
 int msm_dsi_unprepare_clocks(void);
 
 int msm_dsi_clk_set_rate(unsigned long esc_rate,
-			unsigned long dsi_rate,
-			unsigned long byte_rate,
-			unsigned long pixel_rate);
+                         unsigned long dsi_rate,
+                         unsigned long byte_rate,
+                         unsigned long pixel_rate);
 
 int msm_dsi_clk_enable(void);
 
 int msm_dsi_clk_disable(void);
 
 int msm_dsi_phy_init(unsigned char *ctrl_base,
-			struct mdss_panel_data *pdata);
+                     struct mdss_panel_data *pdata);
 
 void msm_dsi_phy_sw_reset(unsigned char *ctrl_base);
 

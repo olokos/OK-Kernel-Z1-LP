@@ -2,13 +2,13 @@
  * 802.11e protocol header file
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -45,33 +45,33 @@
 #define WME_STATUS_CODE_OFFSET		3		/* WME Status code offset */
 
 BWL_PRE_PACKED_STRUCT struct tsinfo {
-	uint8 octets[3];
+    uint8 octets[3];
 } BWL_POST_PACKED_STRUCT;
 
 typedef struct tsinfo tsinfo_t;
 
 /* 802.11e TSPEC IE */
 typedef BWL_PRE_PACKED_STRUCT struct tspec {
-	uint8 oui[DOT11_OUI_LEN];	/* WME_OUI */
-	uint8 type;					/* WME_TYPE */
-	uint8 subtype;				/* WME_SUBTYPE_TSPEC */
-	uint8 version;				/* WME_VERSION */
-	tsinfo_t tsinfo;			/* TS Info bit field */
-	uint16 nom_msdu_size;		/* (Nominal or fixed) MSDU Size (bytes) */
-	uint16 max_msdu_size;		/* Maximum MSDU Size (bytes) */
-	uint32 min_srv_interval;	/* Minimum Service Interval (us) */
-	uint32 max_srv_interval;	/* Maximum Service Interval (us) */
-	uint32 inactivity_interval;	/* Inactivity Interval (us) */
-	uint32 suspension_interval; /* Suspension Interval (us) */
-	uint32 srv_start_time;		/* Service Start Time (us) */
-	uint32 min_data_rate;		/* Minimum Data Rate (bps) */
-	uint32 mean_data_rate;		/* Mean Data Rate (bps) */
-	uint32 peak_data_rate;		/* Peak Data Rate (bps) */
-	uint32 max_burst_size;		/* Maximum Burst Size (bytes) */
-	uint32 delay_bound;			/* Delay Bound (us) */
-	uint32 min_phy_rate;		/* Minimum PHY Rate (bps) */
-	uint16 surplus_bw;			/* Surplus Bandwidth Allowance (range 1.0-8.0) */
-	uint16 medium_time;			/* Medium Time (32 us/s periods) */
+    uint8 oui[DOT11_OUI_LEN];	/* WME_OUI */
+    uint8 type;					/* WME_TYPE */
+    uint8 subtype;				/* WME_SUBTYPE_TSPEC */
+    uint8 version;				/* WME_VERSION */
+    tsinfo_t tsinfo;			/* TS Info bit field */
+    uint16 nom_msdu_size;		/* (Nominal or fixed) MSDU Size (bytes) */
+    uint16 max_msdu_size;		/* Maximum MSDU Size (bytes) */
+    uint32 min_srv_interval;	/* Minimum Service Interval (us) */
+    uint32 max_srv_interval;	/* Maximum Service Interval (us) */
+    uint32 inactivity_interval;	/* Inactivity Interval (us) */
+    uint32 suspension_interval; /* Suspension Interval (us) */
+    uint32 srv_start_time;		/* Service Start Time (us) */
+    uint32 min_data_rate;		/* Minimum Data Rate (bps) */
+    uint32 mean_data_rate;		/* Mean Data Rate (bps) */
+    uint32 peak_data_rate;		/* Peak Data Rate (bps) */
+    uint32 max_burst_size;		/* Maximum Burst Size (bytes) */
+    uint32 delay_bound;			/* Delay Bound (us) */
+    uint32 min_phy_rate;		/* Minimum PHY Rate (bps) */
+    uint16 surplus_bw;			/* Surplus Bandwidth Allowance (range 1.0-8.0) */
+    uint16 medium_time;			/* Medium Time (32 us/s periods) */
 } BWL_POST_PACKED_STRUCT tspec_t;
 
 #define WME_TSPEC_LEN	(sizeof(tspec_t))		/* not including 2-bytes of header */

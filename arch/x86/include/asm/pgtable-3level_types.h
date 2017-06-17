@@ -11,10 +11,10 @@ typedef u64	pgdval_t;
 typedef u64	pgprotval_t;
 
 typedef union {
-	struct {
-		unsigned long pte_low, pte_high;
-	};
-	pteval_t pte;
+    struct {
+        unsigned long pte_low, pte_high;
+    };
+    pteval_t pte;
 } pte_t;
 #endif	/* !__ASSEMBLY__ */
 

@@ -36,15 +36,15 @@ typedef unsigned long mm_segment_t;
  */
 
 struct thread_info {
-	struct task_struct *task;	/* main task structure */
-	struct exec_domain *exec_domain;	/* execution domain */
-	unsigned long flags;	/* low level flags */
-	int cpu;		/* cpu we're on */
-	int preempt_count;	/* 0 => preemptable, <0 => BUG */
-	mm_segment_t addr_limit;	/* address limit */
-	struct restart_block restart_block;
+    struct task_struct *task;	/* main task structure */
+    struct exec_domain *exec_domain;	/* execution domain */
+    unsigned long flags;	/* low level flags */
+    int cpu;		/* cpu we're on */
+    int preempt_count;	/* 0 => preemptable, <0 => BUG */
+    mm_segment_t addr_limit;	/* address limit */
+    struct restart_block restart_block;
 #ifndef CONFIG_SMP
-	struct l1_scratch_task_info l1_task_info;
+    struct l1_scratch_task_info l1_task_info;
 #endif
 };
 
@@ -70,11 +70,10 @@ struct thread_info {
  * boundary (currently 8K as you can see above).
  */
 __attribute_const__
-static inline struct thread_info *current_thread_info(void)
-{
-	struct thread_info *ti;
-	__asm__("%0 = sp;" : "=da"(ti));
-	return (struct thread_info *)((long)ti & ~((long)THREAD_SIZE-1));
+static inline struct thread_info *current_thread_info(void) {
+    struct thread_info *ti;
+    __asm__("%0 = sp;" : "=da"(ti));
+    return (struct thread_info *)((long)ti & ~((long)THREAD_SIZE-1));
 }
 
 #endif				/* __ASSEMBLY__ */

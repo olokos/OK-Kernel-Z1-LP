@@ -230,46 +230,40 @@ extern flag floatx80_is_nan(floatx80);
 
 #endif
 
-static inline flag extractFloat32Sign(float32 a)
-{
-	return a >> 31;
+static inline flag extractFloat32Sign(float32 a) {
+    return a >> 31;
 }
 
-static inline flag float32_eq_nocheck(float32 a, float32 b)
-{
-	return (a == b) || ((bits32) ((a | b) << 1) == 0);
+static inline flag float32_eq_nocheck(float32 a, float32 b) {
+    return (a == b) || ((bits32) ((a | b) << 1) == 0);
 }
 
-static inline flag float32_lt_nocheck(float32 a, float32 b)
-{
-	flag aSign, bSign;
+static inline flag float32_lt_nocheck(float32 a, float32 b) {
+    flag aSign, bSign;
 
-	aSign = extractFloat32Sign(a);
-	bSign = extractFloat32Sign(b);
-	if (aSign != bSign)
-		return aSign && ((bits32) ((a | b) << 1) != 0);
-	return (a != b) && (aSign ^ (a < b));
+    aSign = extractFloat32Sign(a);
+    bSign = extractFloat32Sign(b);
+    if (aSign != bSign)
+        return aSign && ((bits32) ((a | b) << 1) != 0);
+    return (a != b) && (aSign ^ (a < b));
 }
 
-static inline flag extractFloat64Sign(float64 a)
-{
-	return a >> 63;
+static inline flag extractFloat64Sign(float64 a) {
+    return a >> 63;
 }
 
-static inline flag float64_eq_nocheck(float64 a, float64 b)
-{
-	return (a == b) || ((bits64) ((a | b) << 1) == 0);
+static inline flag float64_eq_nocheck(float64 a, float64 b) {
+    return (a == b) || ((bits64) ((a | b) << 1) == 0);
 }
 
-static inline flag float64_lt_nocheck(float64 a, float64 b)
-{
-	flag aSign, bSign;
+static inline flag float64_lt_nocheck(float64 a, float64 b) {
+    flag aSign, bSign;
 
-	aSign = extractFloat64Sign(a);
-	bSign = extractFloat64Sign(b);
-	if (aSign != bSign)
-		return aSign && ((bits64) ((a | b) << 1) != 0);
-	return (a != b) && (aSign ^ (a < b));
+    aSign = extractFloat64Sign(a);
+    bSign = extractFloat64Sign(b);
+    if (aSign != bSign)
+        return aSign && ((bits64) ((a | b) << 1) != 0);
+    return (a != b) && (aSign ^ (a < b));
 }
 
 extern flag float32_is_nan( float32 a );

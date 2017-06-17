@@ -20,29 +20,27 @@
 #include "proto.h"
 
 static int
-ev6_parse_ibox(u64 i_stat, int print)
-{
-	int status = MCHK_DISPOSITION_REPORT;
+ev6_parse_ibox(u64 i_stat, int print) {
+    int status = MCHK_DISPOSITION_REPORT;
 
 #define EV6__I_STAT__PAR	(1UL << 29)
 #define EV6__I_STAT__ERRMASK	(EV6__I_STAT__PAR)
 
-	if (!(i_stat & EV6__I_STAT__ERRMASK))
-		return MCHK_DISPOSITION_UNKNOWN_ERROR;
+    if (!(i_stat & EV6__I_STAT__ERRMASK))
+        return MCHK_DISPOSITION_UNKNOWN_ERROR;
 
-	if (!print)
-		return status;
+    if (!print)
+        return status;
 
-	if (i_stat & EV6__I_STAT__PAR)
-		printk("%s    Icache parity error\n", err_print_prefix);
+    if (i_stat & EV6__I_STAT__PAR)
+        printk("%s    Icache parity error\n", err_print_prefix);
 
-	return status;
+    return status;
 }
 
 static int
-ev6_parse_mbox(u64 mm_stat, u64 d_stat, u64 c_stat, int print)
-{
-	int status = MCHK_DISPOSITION_REPORT;
+ev6_parse_mbox(u64 mm_stat, u64 d_stat, u64 c_stat, int print) {
+    int status = MCHK_DISPOSITION_REPORT;
 
 #define EV6__MM_STAT__DC_TAG_PERR	(1UL << 10)
 #define EV6__MM_STAT__ERRMASK		(EV6__MM_STAT__DC_TAG_PERR)
@@ -57,48 +55,47 @@ ev6_parse_mbox(u64 mm_stat, u64 d_stat, u64 c_stat, int print)
                                          EV6__D_STAT__ECC_ERR_LD | 	\
                                          EV6__D_STAT__SEO)
 
-	if (!(d_stat & EV6__D_STAT__ERRMASK) && 
-	    !(mm_stat & EV6__MM_STAT__ERRMASK))
-		return MCHK_DISPOSITION_UNKNOWN_ERROR;
+    if (!(d_stat & EV6__D_STAT__ERRMASK) &&
+            !(mm_stat & EV6__MM_STAT__ERRMASK))
+        return MCHK_DISPOSITION_UNKNOWN_ERROR;
 
-	if (!print)
-		return status;
+    if (!print)
+        return status;
 
-	if (mm_stat & EV6__MM_STAT__DC_TAG_PERR)
-		printk("%s    Dcache tag parity error on probe\n",
-		       err_print_prefix);
-	if (d_stat & EV6__D_STAT__TPERR_P0)
-		printk("%s    Dcache tag parity error - pipe 0\n",
-		       err_print_prefix);
-	if (d_stat & EV6__D_STAT__TPERR_P1)
-		printk("%s    Dcache tag parity error - pipe 1\n",
-		       err_print_prefix);
-	if (d_stat & EV6__D_STAT__ECC_ERR_ST)
-		printk("%s    ECC error occurred on a store\n", 
-		       err_print_prefix);
-	if (d_stat & EV6__D_STAT__ECC_ERR_LD)
-		printk("%s    ECC error occurred on a %s load\n",
-		       err_print_prefix,
-		       c_stat ? "" : "speculative ");
-	if (d_stat & EV6__D_STAT__SEO)
-		printk("%s    Dcache second error\n", err_print_prefix);
+    if (mm_stat & EV6__MM_STAT__DC_TAG_PERR)
+        printk("%s    Dcache tag parity error on probe\n",
+               err_print_prefix);
+    if (d_stat & EV6__D_STAT__TPERR_P0)
+        printk("%s    Dcache tag parity error - pipe 0\n",
+               err_print_prefix);
+    if (d_stat & EV6__D_STAT__TPERR_P1)
+        printk("%s    Dcache tag parity error - pipe 1\n",
+               err_print_prefix);
+    if (d_stat & EV6__D_STAT__ECC_ERR_ST)
+        printk("%s    ECC error occurred on a store\n",
+               err_print_prefix);
+    if (d_stat & EV6__D_STAT__ECC_ERR_LD)
+        printk("%s    ECC error occurred on a %s load\n",
+               err_print_prefix,
+               c_stat ? "" : "speculative ");
+    if (d_stat & EV6__D_STAT__SEO)
+        printk("%s    Dcache second error\n", err_print_prefix);
 
-	return status;
+    return status;
 }
 
 static int
-ev6_parse_cbox(u64 c_addr, u64 c1_syn, u64 c2_syn, 
-	       u64 c_stat, u64 c_sts, int print)
-{
-	static const char * const sourcename[] = {
-		"UNKNOWN", "UNKNOWN", "UNKNOWN",
-		"MEMORY", "BCACHE", "DCACHE",
-		"BCACHE PROBE", "BCACHE PROBE"
-	};
-	static const char * const streamname[] = { "D", "I" };
-	static const char * const bitsname[] = { "SINGLE", "DOUBLE" };
-	int status = MCHK_DISPOSITION_REPORT;
-	int source = -1, stream = -1, bits = -1;
+ev6_parse_cbox(u64 c_addr, u64 c1_syn, u64 c2_syn,
+               u64 c_stat, u64 c_sts, int print) {
+    static const char * const sourcename[] = {
+        "UNKNOWN", "UNKNOWN", "UNKNOWN",
+        "MEMORY", "BCACHE", "DCACHE",
+        "BCACHE PROBE", "BCACHE PROBE"
+    };
+    static const char * const streamname[] = { "D", "I" };
+    static const char * const bitsname[] = { "SINGLE", "DOUBLE" };
+    int status = MCHK_DISPOSITION_REPORT;
+    int source = -1, stream = -1, bits = -1;
 
 #define EV6__C_STAT__BC_PERR		(0x01)
 #define EV6__C_STAT__DC_PERR		(0x02)
@@ -127,150 +124,147 @@ ev6_parse_cbox(u64 c_addr, u64 c1_syn, u64 c2_syn,
 #define EV6__C_STS__VALID		(1 << 2)
 #define EV6__C_STS__PARITY		(1 << 3)
 
-	if (!(c_stat & EV6__C_STAT__ERRMASK))
-		return MCHK_DISPOSITION_UNKNOWN_ERROR;
+    if (!(c_stat & EV6__C_STAT__ERRMASK))
+        return MCHK_DISPOSITION_UNKNOWN_ERROR;
 
-	if (!print)
-		return status;
+    if (!print)
+        return status;
 
-	source = EXTRACT(c_stat, EV6__C_STAT__SOURCE);
-	stream = EXTRACT(c_stat, EV6__C_STAT__ISTREAM);
-	bits = EXTRACT(c_stat, EV6__C_STAT__DOUBLE);
+    source = EXTRACT(c_stat, EV6__C_STAT__SOURCE);
+    stream = EXTRACT(c_stat, EV6__C_STAT__ISTREAM);
+    bits = EXTRACT(c_stat, EV6__C_STAT__DOUBLE);
 
-	if (c_stat & EV6__C_STAT__BC_PERR) {
-		printk("%s    Bcache tag parity error\n", err_print_prefix);
-		source = -1;
-	}
+    if (c_stat & EV6__C_STAT__BC_PERR) {
+        printk("%s    Bcache tag parity error\n", err_print_prefix);
+        source = -1;
+    }
 
-	if (c_stat & EV6__C_STAT__DC_PERR) {
-		printk("%s    Dcache tag parity error\n", err_print_prefix);
-		source = -1;
-	}
+    if (c_stat & EV6__C_STAT__DC_PERR) {
+        printk("%s    Dcache tag parity error\n", err_print_prefix);
+        source = -1;
+    }
 
-	if (c_stat == EV6__C_STAT__PROBE_BC_ERR0 ||
-	    c_stat == EV6__C_STAT__PROBE_BC_ERR1) {
-		printk("%s    Bcache single-bit error on a probe hit\n",
-		       err_print_prefix);
-		source = -1;
-	}
+    if (c_stat == EV6__C_STAT__PROBE_BC_ERR0 ||
+            c_stat == EV6__C_STAT__PROBE_BC_ERR1) {
+        printk("%s    Bcache single-bit error on a probe hit\n",
+               err_print_prefix);
+        source = -1;
+    }
 
-	if (source != -1) 
-		printk("%s    %s-STREAM %s-BIT ECC error from %s\n",
-		       err_print_prefix,
-		       streamname[stream], bitsname[bits], sourcename[source]);
+    if (source != -1)
+        printk("%s    %s-STREAM %s-BIT ECC error from %s\n",
+               err_print_prefix,
+               streamname[stream], bitsname[bits], sourcename[source]);
 
-	printk("%s    Address: 0x%016llx\n"
-	         "    Syndrome[upper.lower]: %02llx.%02llx\n",
-	       err_print_prefix,
-	       c_addr,
-	       c2_syn, c1_syn);
+    printk("%s    Address: 0x%016llx\n"
+           "    Syndrome[upper.lower]: %02llx.%02llx\n",
+           err_print_prefix,
+           c_addr,
+           c2_syn, c1_syn);
 
-	if (source == EV6__C_STAT__SOURCE_MEMORY ||
-	    source == EV6__C_STAT__SOURCE_BCACHE) 
-		printk("%s    Block status: %s%s%s%s\n",
-		       err_print_prefix,
-		       (c_sts & EV6__C_STS__SHARED) ? "SHARED " : "",
-		       (c_sts & EV6__C_STS__DIRTY)  ? "DIRTY "  : "",
-		       (c_sts & EV6__C_STS__VALID)  ? "VALID "  : "",
-		       (c_sts & EV6__C_STS__PARITY) ? "PARITY " : "");
-		
-	return status;
+    if (source == EV6__C_STAT__SOURCE_MEMORY ||
+            source == EV6__C_STAT__SOURCE_BCACHE)
+        printk("%s    Block status: %s%s%s%s\n",
+               err_print_prefix,
+               (c_sts & EV6__C_STS__SHARED) ? "SHARED " : "",
+               (c_sts & EV6__C_STS__DIRTY)  ? "DIRTY "  : "",
+               (c_sts & EV6__C_STS__VALID)  ? "VALID "  : "",
+               (c_sts & EV6__C_STS__PARITY) ? "PARITY " : "");
+
+    return status;
 }
 
 void
-ev6_register_error_handlers(void)
-{
-	/* None right now. */
+ev6_register_error_handlers(void) {
+    /* None right now. */
 }
 
 int
-ev6_process_logout_frame(struct el_common *mchk_header, int print)
-{
-	struct el_common_EV6_mcheck *ev6mchk = 
-		(struct el_common_EV6_mcheck *)mchk_header;
-	int status = MCHK_DISPOSITION_UNKNOWN_ERROR;
+ev6_process_logout_frame(struct el_common *mchk_header, int print) {
+    struct el_common_EV6_mcheck *ev6mchk =
+        (struct el_common_EV6_mcheck *)mchk_header;
+    int status = MCHK_DISPOSITION_UNKNOWN_ERROR;
 
-	status |= ev6_parse_ibox(ev6mchk->I_STAT, print);
-	status |= ev6_parse_mbox(ev6mchk->MM_STAT, ev6mchk->DC_STAT, 
-				 ev6mchk->C_STAT, print);
-	status |= ev6_parse_cbox(ev6mchk->C_ADDR, ev6mchk->DC1_SYNDROME,
-				 ev6mchk->DC0_SYNDROME, ev6mchk->C_STAT,
-				 ev6mchk->C_STS, print);
+    status |= ev6_parse_ibox(ev6mchk->I_STAT, print);
+    status |= ev6_parse_mbox(ev6mchk->MM_STAT, ev6mchk->DC_STAT,
+                             ev6mchk->C_STAT, print);
+    status |= ev6_parse_cbox(ev6mchk->C_ADDR, ev6mchk->DC1_SYNDROME,
+                             ev6mchk->DC0_SYNDROME, ev6mchk->C_STAT,
+                             ev6mchk->C_STS, print);
 
-	if (!print)
-		return status;
+    if (!print)
+        return status;
 
-	if (status != MCHK_DISPOSITION_DISMISS) {
-		char *saved_err_prefix = err_print_prefix;
+    if (status != MCHK_DISPOSITION_DISMISS) {
+        char *saved_err_prefix = err_print_prefix;
 
-		/*
-		 * Dump some additional information from the frame
-		 */
-		printk("%s    EXC_ADDR: 0x%016lx   IER_CM: 0x%016lx"
-		            "   ISUM: 0x%016lx\n"
-		         "    PAL_BASE: 0x%016lx   I_CTL:  0x%016lx"
-		            "   PCTX: 0x%016lx\n",
-		       err_print_prefix,
-		       ev6mchk->EXC_ADDR, ev6mchk->IER_CM, ev6mchk->ISUM,
-		       ev6mchk->PAL_BASE, ev6mchk->I_CTL, ev6mchk->PCTX);
+        /*
+         * Dump some additional information from the frame
+         */
+        printk("%s    EXC_ADDR: 0x%016lx   IER_CM: 0x%016lx"
+               "   ISUM: 0x%016lx\n"
+               "    PAL_BASE: 0x%016lx   I_CTL:  0x%016lx"
+               "   PCTX: 0x%016lx\n",
+               err_print_prefix,
+               ev6mchk->EXC_ADDR, ev6mchk->IER_CM, ev6mchk->ISUM,
+               ev6mchk->PAL_BASE, ev6mchk->I_CTL, ev6mchk->PCTX);
 
-		if (status == MCHK_DISPOSITION_UNKNOWN_ERROR) {
-			printk("%s    UNKNOWN error, frame follows:\n",
-			       err_print_prefix);
-		} else {
-			/* had decode -- downgrade print level for frame */
-			err_print_prefix = KERN_NOTICE;
-		}
+        if (status == MCHK_DISPOSITION_UNKNOWN_ERROR) {
+            printk("%s    UNKNOWN error, frame follows:\n",
+                   err_print_prefix);
+        } else {
+            /* had decode -- downgrade print level for frame */
+            err_print_prefix = KERN_NOTICE;
+        }
 
-		mchk_dump_logout_frame(mchk_header);
+        mchk_dump_logout_frame(mchk_header);
 
-		err_print_prefix = saved_err_prefix;
-	}
+        err_print_prefix = saved_err_prefix;
+    }
 
-	return status;
+    return status;
 }
 
 void
-ev6_machine_check(unsigned long vector, unsigned long la_ptr)
-{
-	struct el_common *mchk_header = (struct el_common *)la_ptr;
+ev6_machine_check(unsigned long vector, unsigned long la_ptr) {
+    struct el_common *mchk_header = (struct el_common *)la_ptr;
 
-	/*
-	 * Sync the processor
-	 */
-	mb();
-	draina();
+    /*
+     * Sync the processor
+     */
+    mb();
+    draina();
 
-	/*
-	 * Parse the logout frame without printing first. If the only error(s)
-	 * found are have a disposition of "dismiss", then just dismiss them
-	 * and don't print any message
-	 */
-	if (ev6_process_logout_frame(mchk_header, 0) != 
-	    MCHK_DISPOSITION_DISMISS) {
-		char *saved_err_prefix = err_print_prefix;
-		err_print_prefix = KERN_CRIT;
+    /*
+     * Parse the logout frame without printing first. If the only error(s)
+     * found are have a disposition of "dismiss", then just dismiss them
+     * and don't print any message
+     */
+    if (ev6_process_logout_frame(mchk_header, 0) !=
+            MCHK_DISPOSITION_DISMISS) {
+        char *saved_err_prefix = err_print_prefix;
+        err_print_prefix = KERN_CRIT;
 
-		/*
-		 * Either a nondismissable error was detected or no
-		 * recognized error was detected  in the logout frame 
-		 * -- report the error in either case
-		 */
-		printk("%s*CPU %s Error (Vector 0x%x) reported on CPU %d:\n", 
-		       err_print_prefix,
-		       (vector == SCB_Q_PROCERR)?"Correctable":"Uncorrectable",
-		       (unsigned int)vector, (int)smp_processor_id());
-		
-		ev6_process_logout_frame(mchk_header, 1);
-		dik_show_regs(get_irq_regs(), NULL);
+        /*
+         * Either a nondismissable error was detected or no
+         * recognized error was detected  in the logout frame
+         * -- report the error in either case
+         */
+        printk("%s*CPU %s Error (Vector 0x%x) reported on CPU %d:\n",
+               err_print_prefix,
+               (vector == SCB_Q_PROCERR)?"Correctable":"Uncorrectable",
+               (unsigned int)vector, (int)smp_processor_id());
 
-		err_print_prefix = saved_err_prefix;
-	}
+        ev6_process_logout_frame(mchk_header, 1);
+        dik_show_regs(get_irq_regs(), NULL);
 
-	/* 
-	 * Release the logout frame 
-	 */
-	wrmces(0x7);
-	mb();
+        err_print_prefix = saved_err_prefix;
+    }
+
+    /*
+     * Release the logout frame
+     */
+    wrmces(0x7);
+    mb();
 }
 

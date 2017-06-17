@@ -23,30 +23,28 @@
 
 static spinlock_t leds_lock;
 
-static void ebsa110_leds_event(led_event_t ledevt)
-{
-	unsigned long flags;
+static void ebsa110_leds_event(led_event_t ledevt) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&leds_lock, flags);
+    spin_lock_irqsave(&leds_lock, flags);
 
-	switch(ledevt) {
-	case led_timer:
-		*(volatile unsigned char *)SOFT_BASE ^= 128;
-		break;
+    switch(ledevt) {
+    case led_timer:
+        *(volatile unsigned char *)SOFT_BASE ^= 128;
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 
-	spin_unlock_irqrestore(&leds_lock, flags);
+    spin_unlock_irqrestore(&leds_lock, flags);
 }
 
-static int __init leds_init(void)
-{
-	if (machine_is_ebsa110())
-		leds_event = ebsa110_leds_event;
+static int __init leds_init(void) {
+    if (machine_is_ebsa110())
+        leds_event = ebsa110_leds_event;
 
-	return 0;
+    return 0;
 }
 
 __initcall(leds_init);

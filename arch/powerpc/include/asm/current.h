@@ -15,15 +15,14 @@ struct task_struct;
 #include <linux/stddef.h>
 #include <asm/paca.h>
 
-static inline struct task_struct *get_current(void)
-{
-	struct task_struct *task;
+static inline struct task_struct *get_current(void) {
+    struct task_struct *task;
 
-	__asm__ __volatile__("ld %0,%1(13)"
-	: "=r" (task)
-	: "i" (offsetof(struct paca_struct, __current)));
+    __asm__ __volatile__("ld %0,%1(13)"
+                         : "=r" (task)
+                         : "i" (offsetof(struct paca_struct, __current)));
 
-	return task;
+    return task;
 }
 #define current	get_current()
 

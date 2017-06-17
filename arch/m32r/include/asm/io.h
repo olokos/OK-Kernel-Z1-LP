@@ -22,9 +22,8 @@
  *	this function
  */
 
-static inline unsigned long virt_to_phys(volatile void * address)
-{
-	return __pa(address);
+static inline unsigned long virt_to_phys(volatile void * address) {
+    return __pa(address);
 }
 
 /**
@@ -40,9 +39,8 @@ static inline unsigned long virt_to_phys(volatile void * address)
  *	this function
  */
 
-static inline void *phys_to_virt(unsigned long address)
-{
-	return __va(address);
+static inline void *phys_to_virt(unsigned long address) {
+    return __va(address);
 }
 
 extern void __iomem *
@@ -60,9 +58,8 @@ __ioremap(unsigned long offset, unsigned long size, unsigned long flags);
  *	address.
  */
 
-static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
-{
-	return __ioremap(offset, size, 0);
+static inline void __iomem *ioremap(unsigned long offset, unsigned long size) {
+    return __ioremap(offset, size, 0);
 }
 
 extern void iounmap(volatile void __iomem *addr);
@@ -94,34 +91,28 @@ extern void _outsb(unsigned int, const void *, unsigned long);
 extern void _outsw(unsigned int, const void *, unsigned long);
 extern void _outsl(unsigned int, const void *, unsigned long);
 
-static inline unsigned char _readb(unsigned long addr)
-{
-	return *(volatile unsigned char __force *)addr;
+static inline unsigned char _readb(unsigned long addr) {
+    return *(volatile unsigned char __force *)addr;
 }
 
-static inline unsigned short _readw(unsigned long addr)
-{
-	return *(volatile unsigned short __force *)addr;
+static inline unsigned short _readw(unsigned long addr) {
+    return *(volatile unsigned short __force *)addr;
 }
 
-static inline unsigned long _readl(unsigned long addr)
-{
-	return *(volatile unsigned long __force *)addr;
+static inline unsigned long _readl(unsigned long addr) {
+    return *(volatile unsigned long __force *)addr;
 }
 
-static inline void _writeb(unsigned char b, unsigned long addr)
-{
-	*(volatile unsigned char __force *)addr = b;
+static inline void _writeb(unsigned char b, unsigned long addr) {
+    *(volatile unsigned char __force *)addr = b;
 }
 
-static inline void _writew(unsigned short w, unsigned long addr)
-{
-	*(volatile unsigned short __force *)addr = w;
+static inline void _writew(unsigned short w, unsigned long addr) {
+    *(volatile unsigned short __force *)addr = w;
 }
 
-static inline void _writel(unsigned long l, unsigned long addr)
-{
-	*(volatile unsigned long __force *)addr = l;
+static inline void _writel(unsigned long l, unsigned long addr) {
+    *(volatile unsigned long __force *)addr = l;
 }
 
 #define inb     _inb
@@ -174,21 +165,18 @@ static inline void _writel(unsigned long l, unsigned long addr)
 #define flush_write_buffers() do { } while (0)  /* M32R_FIXME */
 
 static inline void
-memset_io(volatile void __iomem *addr, unsigned char val, int count)
-{
-	memset((void __force *) addr, val, count);
+memset_io(volatile void __iomem *addr, unsigned char val, int count) {
+    memset((void __force *) addr, val, count);
 }
 
 static inline void
-memcpy_fromio(void *dst, volatile void __iomem *src, int count)
-{
-	memcpy(dst, (void __force *) src, count);
+memcpy_fromio(void *dst, volatile void __iomem *src, int count) {
+    memcpy(dst, (void __force *) src, count);
 }
 
 static inline void
-memcpy_toio(volatile void __iomem *dst, const void *src, int count)
-{
-	memcpy((void __force *) dst, src, count);
+memcpy_toio(volatile void __iomem *dst, const void *src, int count) {
+    memcpy((void __force *) dst, src, count);
 }
 
 /*

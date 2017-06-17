@@ -16,21 +16,20 @@
 
 extern u32 ixp2000_uengine_mask;
 
-struct ixp2000_uengine_code
-{
-	u32	cpu_model_bitmask;
-	u8	cpu_min_revision;
-	u8	cpu_max_revision;
+struct ixp2000_uengine_code {
+    u32	cpu_model_bitmask;
+    u8	cpu_min_revision;
+    u8	cpu_max_revision;
 
-	u32	uengine_parameters;
+    u32	uengine_parameters;
 
-	struct ixp2000_reg_value {
-		int	reg;
-		u32	value;
-	} *initial_reg_values;
+    struct ixp2000_reg_value {
+        int	reg;
+        u32	value;
+    } *initial_reg_values;
 
-	int	num_insns;
-	u8	*insns;
+    int	num_insns;
+    u8	*insns;
 };
 
 u32 ixp2000_uengine_csr_read(int uengine, int offset);

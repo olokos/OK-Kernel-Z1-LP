@@ -131,194 +131,194 @@
 	(function_mode == VXGE_HW_FUNCTION_MODE_SRIOV_4))
 
 enum vxge_reset_event {
-	/* reset events */
-	VXGE_LL_VPATH_RESET	= 0,
-	VXGE_LL_DEVICE_RESET	= 1,
-	VXGE_LL_FULL_RESET	= 2,
-	VXGE_LL_START_RESET	= 3,
-	VXGE_LL_COMPL_RESET	= 4
+    /* reset events */
+    VXGE_LL_VPATH_RESET	= 0,
+    VXGE_LL_DEVICE_RESET	= 1,
+    VXGE_LL_FULL_RESET	= 2,
+    VXGE_LL_START_RESET	= 3,
+    VXGE_LL_COMPL_RESET	= 4
 };
 /* These flags represent the devices temporary state */
 enum vxge_device_state_t {
-__VXGE_STATE_RESET_CARD = 0,
-__VXGE_STATE_CARD_UP
+    __VXGE_STATE_RESET_CARD = 0,
+    __VXGE_STATE_CARD_UP
 };
 
 enum vxge_mac_addr_state {
-	/* mac address states */
-	VXGE_LL_MAC_ADDR_IN_LIST        = 0,
-	VXGE_LL_MAC_ADDR_IN_DA_TABLE    = 1
+    /* mac address states */
+    VXGE_LL_MAC_ADDR_IN_LIST        = 0,
+    VXGE_LL_MAC_ADDR_IN_DA_TABLE    = 1
 };
 
 struct vxge_drv_config {
-	int config_dev_cnt;
-	int total_dev_cnt;
-	int g_no_cpus;
-	unsigned int vpath_per_dev;
+    int config_dev_cnt;
+    int total_dev_cnt;
+    int g_no_cpus;
+    unsigned int vpath_per_dev;
 };
 
 struct macInfo {
-	unsigned char macaddr[ETH_ALEN];
-	unsigned char macmask[ETH_ALEN];
-	unsigned int vpath_no;
-	enum vxge_mac_addr_state state;
+    unsigned char macaddr[ETH_ALEN];
+    unsigned char macmask[ETH_ALEN];
+    unsigned int vpath_no;
+    enum vxge_mac_addr_state state;
 };
 
 struct vxge_config {
-	int		tx_pause_enable;
-	int		rx_pause_enable;
+    int		tx_pause_enable;
+    int		rx_pause_enable;
 
 #define	NEW_NAPI_WEIGHT	64
-	int		napi_weight;
-	int		intr_type;
+    int		napi_weight;
+    int		intr_type;
 #define INTA	0
 #define MSI	1
 #define MSI_X	2
 
-	int		addr_learn_en;
+    int		addr_learn_en;
 
-	u32		rth_steering:2,
-			rth_algorithm:2,
-			rth_hash_type_tcpipv4:1,
-			rth_hash_type_ipv4:1,
-			rth_hash_type_tcpipv6:1,
-			rth_hash_type_ipv6:1,
-			rth_hash_type_tcpipv6ex:1,
-			rth_hash_type_ipv6ex:1,
-			rth_bkt_sz:8;
-	int		rth_jhash_golden_ratio;
-	int		tx_steering_type;
-	int 	fifo_indicate_max_pkts;
-	struct vxge_hw_device_hw_info device_hw_info;
+    u32		rth_steering:2,
+            rth_algorithm:2,
+            rth_hash_type_tcpipv4:1,
+            rth_hash_type_ipv4:1,
+            rth_hash_type_tcpipv6:1,
+            rth_hash_type_ipv6:1,
+            rth_hash_type_tcpipv6ex:1,
+            rth_hash_type_ipv6ex:1,
+            rth_bkt_sz:8;
+    int		rth_jhash_golden_ratio;
+    int		tx_steering_type;
+    int 	fifo_indicate_max_pkts;
+    struct vxge_hw_device_hw_info device_hw_info;
 };
 
 struct vxge_msix_entry {
-	/* Mimicing the msix_entry struct of Kernel. */
-	u16 vector;
-	u16 entry;
-	u16 in_use;
-	void *arg;
+    /* Mimicing the msix_entry struct of Kernel. */
+    u16 vector;
+    u16 entry;
+    u16 in_use;
+    void *arg;
 };
 
 /* Software Statistics */
 
 struct vxge_sw_stats {
 
-	/* Virtual Path */
-	unsigned long vpaths_open;
-	unsigned long vpath_open_fail;
+    /* Virtual Path */
+    unsigned long vpaths_open;
+    unsigned long vpath_open_fail;
 
-	/* Misc. */
-	unsigned long link_up;
-	unsigned long link_down;
+    /* Misc. */
+    unsigned long link_up;
+    unsigned long link_down;
 };
 
 struct vxge_mac_addrs {
-	struct list_head item;
-	u64 macaddr;
-	u64 macmask;
-	enum vxge_mac_addr_state state;
+    struct list_head item;
+    u64 macaddr;
+    u64 macmask;
+    enum vxge_mac_addr_state state;
 };
 
 struct vxgedev;
 
 struct vxge_fifo_stats {
-	struct u64_stats_sync	syncp;
-	u64 tx_frms;
-	u64 tx_bytes;
+    struct u64_stats_sync	syncp;
+    u64 tx_frms;
+    u64 tx_bytes;
 
-	unsigned long tx_errors;
-	unsigned long txd_not_free;
-	unsigned long txd_out_of_desc;
-	unsigned long pci_map_fail;
+    unsigned long tx_errors;
+    unsigned long txd_not_free;
+    unsigned long txd_out_of_desc;
+    unsigned long pci_map_fail;
 };
 
 struct vxge_fifo {
-	struct net_device *ndev;
-	struct pci_dev *pdev;
-	struct __vxge_hw_fifo *handle;
-	struct netdev_queue *txq;
+    struct net_device *ndev;
+    struct pci_dev *pdev;
+    struct __vxge_hw_fifo *handle;
+    struct netdev_queue *txq;
 
-	int tx_steering_type;
-	int indicate_max_pkts;
+    int tx_steering_type;
+    int indicate_max_pkts;
 
-	/* Adaptive interrupt moderation parameters used in T1A */
-	unsigned long interrupt_count;
-	unsigned long jiffies;
+    /* Adaptive interrupt moderation parameters used in T1A */
+    unsigned long interrupt_count;
+    unsigned long jiffies;
 
-	u32 tx_vector_no;
-	/* Tx stats */
-	struct vxge_fifo_stats stats;
+    u32 tx_vector_no;
+    /* Tx stats */
+    struct vxge_fifo_stats stats;
 } ____cacheline_aligned;
 
 struct vxge_ring_stats {
-	struct u64_stats_sync syncp;
-	u64 rx_frms;
-	u64 rx_mcast;
-	u64 rx_bytes;
+    struct u64_stats_sync syncp;
+    u64 rx_frms;
+    u64 rx_mcast;
+    u64 rx_bytes;
 
-	unsigned long rx_errors;
-	unsigned long rx_dropped;
-	unsigned long prev_rx_frms;
-	unsigned long pci_map_fail;
-	unsigned long skb_alloc_fail;
+    unsigned long rx_errors;
+    unsigned long rx_dropped;
+    unsigned long prev_rx_frms;
+    unsigned long pci_map_fail;
+    unsigned long skb_alloc_fail;
 };
 
 struct vxge_ring {
-	struct net_device	*ndev;
-	struct pci_dev		*pdev;
-	struct __vxge_hw_ring	*handle;
-	/* The vpath id maintained in the driver -
-	 * 0 to 'maximum_vpaths_in_function - 1'
-	 */
-	int driver_id;
+    struct net_device	*ndev;
+    struct pci_dev		*pdev;
+    struct __vxge_hw_ring	*handle;
+    /* The vpath id maintained in the driver -
+     * 0 to 'maximum_vpaths_in_function - 1'
+     */
+    int driver_id;
 
-	/* Adaptive interrupt moderation parameters used in T1A */
-	unsigned long interrupt_count;
-	unsigned long jiffies;
+    /* Adaptive interrupt moderation parameters used in T1A */
+    unsigned long interrupt_count;
+    unsigned long jiffies;
 
-	/* copy of the flag indicating whether rx_hwts is to be used */
-	u32 rx_hwts:1;
+    /* copy of the flag indicating whether rx_hwts is to be used */
+    u32 rx_hwts:1;
 
-	int pkts_processed;
-	int budget;
+    int pkts_processed;
+    int budget;
 
-	struct napi_struct napi;
-	struct napi_struct *napi_p;
+    struct napi_struct napi;
+    struct napi_struct *napi_p;
 
 #define VXGE_MAX_MAC_ADDR_COUNT		30
 
-	int vlan_tag_strip;
-	u32 rx_vector_no;
-	enum vxge_hw_status last_status;
+    int vlan_tag_strip;
+    u32 rx_vector_no;
+    enum vxge_hw_status last_status;
 
-	/* Rx stats */
-	struct vxge_ring_stats stats;
+    /* Rx stats */
+    struct vxge_ring_stats stats;
 } ____cacheline_aligned;
 
 struct vxge_vpath {
-	struct vxge_fifo fifo;
-	struct vxge_ring ring;
+    struct vxge_fifo fifo;
+    struct vxge_ring ring;
 
-	struct __vxge_hw_vpath_handle *handle;
+    struct __vxge_hw_vpath_handle *handle;
 
-	/* Actual vpath id for this vpath in the device - 0 to 16 */
-	int device_id;
-	int max_mac_addr_cnt;
-	int is_configured;
-	int is_open;
-	struct vxgedev *vdev;
-	u8 macaddr[ETH_ALEN];
-	u8 macmask[ETH_ALEN];
+    /* Actual vpath id for this vpath in the device - 0 to 16 */
+    int device_id;
+    int max_mac_addr_cnt;
+    int is_configured;
+    int is_open;
+    struct vxgedev *vdev;
+    u8 macaddr[ETH_ALEN];
+    u8 macmask[ETH_ALEN];
 
 #define VXGE_MAX_LEARN_MAC_ADDR_CNT	2048
-	/* mac addresses currently programmed into NIC */
-	u16 mac_addr_cnt;
-	u16 mcast_addr_cnt;
-	struct list_head mac_addr_list;
+    /* mac addresses currently programmed into NIC */
+    u16 mac_addr_cnt;
+    u16 mcast_addr_cnt;
+    struct list_head mac_addr_list;
 
-	u32 level_err;
-	u32 level_trace;
+    u32 level_err;
+    u32 level_trace;
 };
 #define VXGE_COPY_DEBUG_INFO_TO_LL(vdev, err, trace) {	\
 	for (i = 0; i < vdev->no_of_vpath; i++) {		\
@@ -330,86 +330,86 @@ struct vxge_vpath {
 }
 
 struct vxgedev {
-	struct net_device	*ndev;
-	struct pci_dev		*pdev;
-	struct __vxge_hw_device *devh;
-	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
-	int vlan_tag_strip;
-	struct vxge_config	config;
-	unsigned long	state;
+    struct net_device	*ndev;
+    struct pci_dev		*pdev;
+    struct __vxge_hw_device *devh;
+    unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+    int vlan_tag_strip;
+    struct vxge_config	config;
+    unsigned long	state;
 
-	/* Indicates which vpath to reset */
-	unsigned long  vp_reset;
+    /* Indicates which vpath to reset */
+    unsigned long  vp_reset;
 
-	/* Timer used for polling vpath resets */
-	struct timer_list vp_reset_timer;
+    /* Timer used for polling vpath resets */
+    struct timer_list vp_reset_timer;
 
-	/* Timer used for polling vpath lockup */
-	struct timer_list vp_lockup_timer;
+    /* Timer used for polling vpath lockup */
+    struct timer_list vp_lockup_timer;
 
-	/*
-	 * Flags to track whether device is in All Multicast
-	 * or in promiscuous mode.
-	 */
-	u16		all_multi_flg;
+    /*
+     * Flags to track whether device is in All Multicast
+     * or in promiscuous mode.
+     */
+    u16		all_multi_flg;
 
-	/* A flag indicating whether rx_hwts is to be used or not. */
-	u32	rx_hwts:1,
-		titan1:1;
+    /* A flag indicating whether rx_hwts is to be used or not. */
+    u32	rx_hwts:1,
+        titan1:1;
 
-	struct vxge_msix_entry *vxge_entries;
-	struct msix_entry *entries;
-	/*
-	 * 4 for each vpath * 17;
-	 * total is 68
-	 */
+    struct vxge_msix_entry *vxge_entries;
+    struct msix_entry *entries;
+    /*
+     * 4 for each vpath * 17;
+     * total is 68
+     */
 #define	VXGE_MAX_REQUESTED_MSIX	68
 #define VXGE_INTR_STRLEN 80
-	char desc[VXGE_MAX_REQUESTED_MSIX][VXGE_INTR_STRLEN];
+    char desc[VXGE_MAX_REQUESTED_MSIX][VXGE_INTR_STRLEN];
 
-	enum vxge_hw_event cric_err_event;
+    enum vxge_hw_event cric_err_event;
 
-	int max_vpath_supported;
-	int no_of_vpath;
+    int max_vpath_supported;
+    int no_of_vpath;
 
-	struct napi_struct napi;
-	/* A debug option, when enabled and if error condition occurs,
-	 * the driver will do following steps:
-	 * - mask all interrupts
-	 * - Not clear the source of the alarm
-	 * - gracefully stop all I/O
-	 * A diagnostic dump of register and stats at this point
-	 * reveals very useful information.
-	 */
-	int exec_mode;
-	int max_config_port;
-	struct vxge_vpath	*vpaths;
+    struct napi_struct napi;
+    /* A debug option, when enabled and if error condition occurs,
+     * the driver will do following steps:
+     * - mask all interrupts
+     * - Not clear the source of the alarm
+     * - gracefully stop all I/O
+     * A diagnostic dump of register and stats at this point
+     * reveals very useful information.
+     */
+    int exec_mode;
+    int max_config_port;
+    struct vxge_vpath	*vpaths;
 
-	struct __vxge_hw_vpath_handle *vp_handles[VXGE_HW_MAX_VIRTUAL_PATHS];
-	void __iomem *bar0;
-	struct vxge_sw_stats	stats;
-	int		mtu;
-	/* Below variables are used for vpath selection to transmit a packet */
-	u8 		vpath_selector[VXGE_HW_MAX_VIRTUAL_PATHS];
-	u64		vpaths_deployed;
+    struct __vxge_hw_vpath_handle *vp_handles[VXGE_HW_MAX_VIRTUAL_PATHS];
+    void __iomem *bar0;
+    struct vxge_sw_stats	stats;
+    int		mtu;
+    /* Below variables are used for vpath selection to transmit a packet */
+    u8 		vpath_selector[VXGE_HW_MAX_VIRTUAL_PATHS];
+    u64		vpaths_deployed;
 
-	u32 		intr_cnt;
-	u32 		level_err;
-	u32 		level_trace;
-	char		fw_version[VXGE_HW_FW_STRLEN];
-	struct work_struct reset_task;
+    u32 		intr_cnt;
+    u32 		level_err;
+    u32 		level_trace;
+    char		fw_version[VXGE_HW_FW_STRLEN];
+    struct work_struct reset_task;
 };
 
 struct vxge_rx_priv {
-	struct sk_buff		*skb;
-	unsigned char		*skb_data;
-	dma_addr_t		data_dma;
-	dma_addr_t		data_size;
+    struct sk_buff		*skb;
+    unsigned char		*skb_data;
+    dma_addr_t		data_dma;
+    dma_addr_t		data_size;
 };
 
 struct vxge_tx_priv {
-	struct sk_buff		*skb;
-	dma_addr_t		dma_buffers[MAX_SKB_FRAGS+1];
+    struct sk_buff		*skb;
+    dma_addr_t		dma_buffers[MAX_SKB_FRAGS+1];
 };
 
 #define VXGE_MODULE_PARAM_INT(p, val) \

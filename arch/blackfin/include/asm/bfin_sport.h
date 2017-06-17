@@ -22,36 +22,36 @@
 
 /* Function driver which use sport must initialize the structure */
 struct sport_config {
-	/* TDM (multichannels), I2S or other mode */
-	unsigned int mode:3;
+    /* TDM (multichannels), I2S or other mode */
+    unsigned int mode:3;
 
-	/* if TDM mode is selected, channels must be set */
-	int channels;	/* Must be in 8 units */
-	unsigned int frame_delay:4;	/* Delay between frame sync pulse and first bit */
+    /* if TDM mode is selected, channels must be set */
+    int channels;	/* Must be in 8 units */
+    unsigned int frame_delay:4;	/* Delay between frame sync pulse and first bit */
 
-	/* I2S mode */
-	unsigned int right_first:1;	/* Right stereo channel first */
+    /* I2S mode */
+    unsigned int right_first:1;	/* Right stereo channel first */
 
-	/* In mormal mode, the following item need to be set */
-	unsigned int lsb_first:1;	/* order of transmit or receive data */
-	unsigned int fsync:1;	/* Frame sync required */
-	unsigned int data_indep:1;	/* data independent frame sync generated */
-	unsigned int act_low:1;	/* Active low TFS */
-	unsigned int late_fsync:1;	/* Late frame sync */
-	unsigned int tckfe:1;
-	unsigned int sec_en:1;	/* Secondary side enabled */
+    /* In mormal mode, the following item need to be set */
+    unsigned int lsb_first:1;	/* order of transmit or receive data */
+    unsigned int fsync:1;	/* Frame sync required */
+    unsigned int data_indep:1;	/* data independent frame sync generated */
+    unsigned int act_low:1;	/* Active low TFS */
+    unsigned int late_fsync:1;	/* Late frame sync */
+    unsigned int tckfe:1;
+    unsigned int sec_en:1;	/* Secondary side enabled */
 
-	/* Choose clock source */
-	unsigned int int_clk:1;	/* Internal or external clock */
+    /* Choose clock source */
+    unsigned int int_clk:1;	/* Internal or external clock */
 
-	/* If external clock is used, the following fields are ignored */
-	int serial_clk;
-	int fsync_clk;
+    /* If external clock is used, the following fields are ignored */
+    int serial_clk;
+    int fsync_clk;
 
-	unsigned int data_format:2;	/* Normal, u-law or a-law */
+    unsigned int data_format:2;	/* Normal, u-law or a-law */
 
-	int word_len;		/* How length of the word in bits, 3-32 bits */
-	int dma_enabled;
+    int word_len;		/* How length of the word in bits, 3-32 bits */
+    int dma_enabled;
 };
 
 /* Userspace interface */
@@ -70,41 +70,41 @@ struct sport_config {
  */
 #define __BFP(m) u16 m; u16 __pad_##m
 struct sport_register {
-	__BFP(tcr1);
-	__BFP(tcr2);
-	__BFP(tclkdiv);
-	__BFP(tfsdiv);
-	union {
-		u32 tx32;
-		u16 tx16;
-	};
-	u32 __pad_tx;
-	union {
-		u32 rx32;	/* use the anomaly wrapper below */
-		u16 rx16;
-	};
-	u32 __pad_rx;
-	__BFP(rcr1);
-	__BFP(rcr2);
-	__BFP(rclkdiv);
-	__BFP(rfsdiv);
-	__BFP(stat);
-	__BFP(chnl);
-	__BFP(mcmc1);
-	__BFP(mcmc2);
-	u32 mtcs0;
-	u32 mtcs1;
-	u32 mtcs2;
-	u32 mtcs3;
-	u32 mrcs0;
-	u32 mrcs1;
-	u32 mrcs2;
-	u32 mrcs3;
+    __BFP(tcr1);
+    __BFP(tcr2);
+    __BFP(tclkdiv);
+    __BFP(tfsdiv);
+    union {
+        u32 tx32;
+        u16 tx16;
+    };
+    u32 __pad_tx;
+    union {
+        u32 rx32;	/* use the anomaly wrapper below */
+        u16 rx16;
+    };
+    u32 __pad_rx;
+    __BFP(rcr1);
+    __BFP(rcr2);
+    __BFP(rclkdiv);
+    __BFP(rfsdiv);
+    __BFP(stat);
+    __BFP(chnl);
+    __BFP(mcmc1);
+    __BFP(mcmc2);
+    u32 mtcs0;
+    u32 mtcs1;
+    u32 mtcs2;
+    u32 mtcs3;
+    u32 mrcs0;
+    u32 mrcs1;
+    u32 mrcs2;
+    u32 mrcs3;
 };
 #undef __BFP
 
 struct bfin_snd_platform_data {
-	const unsigned short *pin_req;
+    const unsigned short *pin_req;
 };
 
 #define bfin_read_sport_rx32(base) \

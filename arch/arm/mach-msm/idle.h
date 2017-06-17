@@ -18,9 +18,8 @@
 extern unsigned long msm_pm_boot_vector[NR_CPUS];
 void msm_pm_boot_entry(void);
 #else
-static inline void msm_pm_boot_entry(void)
-{
-	/* empty */
+static inline void msm_pm_boot_entry(void) {
+    /* empty */
 }
 #endif
 #endif

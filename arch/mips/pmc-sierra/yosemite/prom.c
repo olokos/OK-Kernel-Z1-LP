@@ -36,46 +36,42 @@ struct callvectors *debug_vectors;
 extern unsigned long yosemite_base;
 extern unsigned long cpu_clock_freq;
 
-const char *get_system_type(void)
-{
-	return "PMC-Sierra Yosemite";
+const char *get_system_type(void) {
+    return "PMC-Sierra Yosemite";
 }
 
-static void prom_cpu0_exit(void *arg)
-{
-	void *nvram = (void *) YOSEMITE_RTC_BASE;
+static void prom_cpu0_exit(void *arg) {
+    void *nvram = (void *) YOSEMITE_RTC_BASE;
 
-	/* Ask the NVRAM/RTC/watchdog chip to assert reset in 1/16 second */
-	writeb(0x84, nvram + 0xff7);
+    /* Ask the NVRAM/RTC/watchdog chip to assert reset in 1/16 second */
+    writeb(0x84, nvram + 0xff7);
 
-	/* wait for the watchdog to go off */
-	mdelay(100 + (1000 / 16));
+    /* wait for the watchdog to go off */
+    mdelay(100 + (1000 / 16));
 
-	/* if the watchdog fails for some reason, let people know */
-	printk(KERN_NOTICE "Watchdog reset failed\n");
+    /* if the watchdog fails for some reason, let people know */
+    printk(KERN_NOTICE "Watchdog reset failed\n");
 }
 
 /*
  * Reset the NVRAM over the local bus
  */
-static void prom_exit(void)
-{
+static void prom_exit(void) {
 #ifdef CONFIG_SMP
-	if (smp_processor_id())
-		/* CPU 1 */
-		smp_call_function(prom_cpu0_exit, NULL, 1);
+    if (smp_processor_id())
+        /* CPU 1 */
+        smp_call_function(prom_cpu0_exit, NULL, 1);
 #endif
-	prom_cpu0_exit(NULL);
+    prom_cpu0_exit(NULL);
 }
 
 /*
  * Halt the system
  */
-static void prom_halt(void)
-{
-	printk(KERN_NOTICE "\n** You can safely turn off the power\n");
-	while (1)
-		__asm__(".set\tmips3\n\t" "wait\n\t" ".set\tmips0");
+static void prom_halt(void) {
+    printk(KERN_NOTICE "\n** You can safely turn off the power\n");
+    while (1)
+        __asm__(".set\tmips3\n\t" "wait\n\t" ".set\tmips0");
 }
 
 extern struct plat_smp_ops yos_smp_ops;
@@ -83,60 +79,57 @@ extern struct plat_smp_ops yos_smp_ops;
 /*
  * Init routine which accepts the variables from PMON
  */
-void __init prom_init(void)
-{
-	int argc = fw_arg0;
-	char **arg = (char **) fw_arg1;
-	char **env = (char **) fw_arg2;
-	struct callvectors *cv = (struct callvectors *) fw_arg3;
-	int i = 0;
+void __init prom_init(void) {
+    int argc = fw_arg0;
+    char **arg = (char **) fw_arg1;
+    char **env = (char **) fw_arg2;
+    struct callvectors *cv = (struct callvectors *) fw_arg3;
+    int i = 0;
 
-	/* Callbacks for halt, restart */
-	_machine_restart = (void (*)(char *)) prom_exit;
-	_machine_halt = prom_halt;
-	pm_power_off = prom_halt;
+    /* Callbacks for halt, restart */
+    _machine_restart = (void (*)(char *)) prom_exit;
+    _machine_halt = prom_halt;
+    pm_power_off = prom_halt;
 
-	debug_vectors = cv;
-	arcs_cmdline[0] = '\0';
+    debug_vectors = cv;
+    arcs_cmdline[0] = '\0';
 
-	/* Get the boot parameters */
-	for (i = 1; i < argc; i++) {
-		if (strlen(arcs_cmdline) + strlen(arg[i]) + 1 >=
-		    sizeof(arcs_cmdline))
-			break;
+    /* Get the boot parameters */
+    for (i = 1; i < argc; i++) {
+        if (strlen(arcs_cmdline) + strlen(arg[i]) + 1 >=
+                sizeof(arcs_cmdline))
+            break;
 
-		strcat(arcs_cmdline, arg[i]);
-		strcat(arcs_cmdline, " ");
-	}
+        strcat(arcs_cmdline, arg[i]);
+        strcat(arcs_cmdline, " ");
+    }
 
 #ifdef CONFIG_SERIAL_8250_CONSOLE
-	if ((strstr(arcs_cmdline, "console=ttyS")) == NULL)
-		strcat(arcs_cmdline, "console=ttyS0,115200");
+    if ((strstr(arcs_cmdline, "console=ttyS")) == NULL)
+        strcat(arcs_cmdline, "console=ttyS0,115200");
 #endif
 
-	while (*env) {
-		if (strncmp("ocd_base", *env, strlen("ocd_base")) == 0)
-			yosemite_base =
-			    simple_strtol(*env + strlen("ocd_base="), NULL,
-					  16);
+    while (*env) {
+        if (strncmp("ocd_base", *env, strlen("ocd_base")) == 0)
+            yosemite_base =
+                simple_strtol(*env + strlen("ocd_base="), NULL,
+                              16);
 
-		if (strncmp("cpuclock", *env, strlen("cpuclock")) == 0)
-			cpu_clock_freq =
-			    simple_strtol(*env + strlen("cpuclock="), NULL,
-					  10);
+        if (strncmp("cpuclock", *env, strlen("cpuclock")) == 0)
+            cpu_clock_freq =
+                simple_strtol(*env + strlen("cpuclock="), NULL,
+                              10);
 
-		env++;
-	}
+        env++;
+    }
 
-	prom_grab_secondary();
+    prom_grab_secondary();
 
-	register_smp_ops(&yos_smp_ops);
+    register_smp_ops(&yos_smp_ops);
 }
 
-void __init prom_free_prom_memory(void)
-{
+void __init prom_free_prom_memory(void) {
 }
 
-void __init prom_fixup_mem_map(unsigned long start, unsigned long end)
-{
+void __init prom_fixup_mem_map(unsigned long start, unsigned long end) {
 }

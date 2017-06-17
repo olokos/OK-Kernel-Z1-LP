@@ -112,23 +112,26 @@ extern struct page *kmap_atomic_to_page(void *ptr);
 	(void *) damlr;										  \
 })
 
-static inline void *kmap_atomic_primary(struct page *page, enum km_type type)
-{
-	unsigned long paddr;
+static inline void *kmap_atomic_primary(struct page *page, enum km_type type) {
+    unsigned long paddr;
 
-	pagefault_disable();
-	paddr = page_to_phys(page);
+    pagefault_disable();
+    paddr = page_to_phys(page);
 
-	switch (type) {
-        case 0:		return __kmap_atomic_primary(0, paddr, 2);
-        case 1:		return __kmap_atomic_primary(1, paddr, 3);
-        case 2:		return __kmap_atomic_primary(2, paddr, 4);
-        case 3:		return __kmap_atomic_primary(3, paddr, 5);
+    switch (type) {
+    case 0:
+        return __kmap_atomic_primary(0, paddr, 2);
+    case 1:
+        return __kmap_atomic_primary(1, paddr, 3);
+    case 2:
+        return __kmap_atomic_primary(2, paddr, 4);
+    case 3:
+        return __kmap_atomic_primary(3, paddr, 5);
 
-	default:
-		BUG();
-		return NULL;
-	}
+    default:
+        BUG();
+        return NULL;
+    }
 }
 
 #define __kunmap_atomic_primary(type, ampr)				\
@@ -143,18 +146,25 @@ do {									\
 	asm volatile("tlbpr %0,gr0,#4,#1" : : "r"(vaddr) : "memory");	\
 } while(0)
 
-static inline void kunmap_atomic_primary(void *kvaddr, enum km_type type)
-{
-	switch (type) {
-        case 0:		__kunmap_atomic_primary(0, 2);	break;
-        case 1:		__kunmap_atomic_primary(1, 3);	break;
-        case 2:		__kunmap_atomic_primary(2, 4);	break;
-        case 3:		__kunmap_atomic_primary(3, 5);	break;
+static inline void kunmap_atomic_primary(void *kvaddr, enum km_type type) {
+    switch (type) {
+    case 0:
+        __kunmap_atomic_primary(0, 2);
+        break;
+    case 1:
+        __kunmap_atomic_primary(1, 3);
+        break;
+    case 2:
+        __kunmap_atomic_primary(2, 4);
+        break;
+    case 3:
+        __kunmap_atomic_primary(3, 5);
+        break;
 
-	default:
-		BUG();
-	}
-	pagefault_enable();
+    default:
+        BUG();
+    }
+    pagefault_enable();
 }
 
 void *kmap_atomic(struct page *page);

@@ -22,39 +22,39 @@ struct smp_operations;
 #endif
 
 struct machine_desc {
-	unsigned int		nr;		/* architecture number	*/
-	const char		*name;		/* architecture name	*/
-	unsigned long		atag_offset;	/* tagged list (relative) */
-	const char *const 	*dt_compat;	/* array of device tree
+    unsigned int		nr;		/* architecture number	*/
+    const char		*name;		/* architecture name	*/
+    unsigned long		atag_offset;	/* tagged list (relative) */
+    const char *const 	*dt_compat;	/* array of device tree
 						 * 'compatible' strings	*/
 
-	unsigned int		nr_irqs;	/* number of IRQs */
+    unsigned int		nr_irqs;	/* number of IRQs */
 
 #ifdef CONFIG_ZONE_DMA
-	unsigned long		dma_zone_size;	/* size of DMA-able area */
+    unsigned long		dma_zone_size;	/* size of DMA-able area */
 #endif
 
-	unsigned int		video_start;	/* start of video RAM	*/
-	unsigned int		video_end;	/* end of video RAM	*/
+    unsigned int		video_start;	/* start of video RAM	*/
+    unsigned int		video_end;	/* end of video RAM	*/
 
-	unsigned char		reserve_lp0 :1;	/* never has lp0	*/
-	unsigned char		reserve_lp1 :1;	/* never has lp1	*/
-	unsigned char		reserve_lp2 :1;	/* never has lp2	*/
-	char			restart_mode;	/* default restart mode	*/
-	struct smp_operations  *smp;    /* SMP operations  */
-	void			(*fixup)(struct tag *, char **,
-					 struct meminfo *);
-	void			(*reserve)(void);/* reserve mem blocks	*/
-	void			(*map_io)(void);/* IO mapping function	*/
-	void			(*init_very_early)(void);
-	void			(*init_early)(void);
-	void			(*init_irq)(void);
-	struct sys_timer	*timer;		/* system tick timer	*/
-	void			(*init_machine)(void);
+    unsigned char		reserve_lp0 :1;	/* never has lp0	*/
+    unsigned char		reserve_lp1 :1;	/* never has lp1	*/
+    unsigned char		reserve_lp2 :1;	/* never has lp2	*/
+    char			restart_mode;	/* default restart mode	*/
+    struct smp_operations  *smp;    /* SMP operations  */
+    void			(*fixup)(struct tag *, char **,
+                             struct meminfo *);
+    void			(*reserve)(void);/* reserve mem blocks	*/
+    void			(*map_io)(void);/* IO mapping function	*/
+    void			(*init_very_early)(void);
+    void			(*init_early)(void);
+    void			(*init_irq)(void);
+    struct sys_timer	*timer;		/* system tick timer	*/
+    void			(*init_machine)(void);
 #ifdef CONFIG_MULTI_IRQ_HANDLER
-	void			(*handle_irq)(struct pt_regs *);
+    void			(*handle_irq)(struct pt_regs *);
 #endif
-	void			(*restart)(char, const char *);
+    void			(*restart)(char, const char *);
 };
 
 /*

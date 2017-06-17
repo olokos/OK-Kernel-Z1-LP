@@ -97,8 +97,7 @@ static int  ByteReverseBuilt = FALSE;
  *------------------------------------------------------------------------
  */
 
-short       mfg_template[sizeof (FLD_TYPE2)] =
-{
+short       mfg_template[sizeof (FLD_TYPE2)] = {
     PROM_FORMAT_TYPE2,          /* type; */
     0x00, 0x1A,                 /* length[2]; */
     0x00, 0x00, 0x00, 0x00,     /* Crc32[4]; */
@@ -121,8 +120,7 @@ short       mfg_template[sizeof (FLD_TYPE2)] =
  */
 
 STATIC void
-BuildByteReverse (void)
-{
+BuildByteReverse (void) {
     long        half;           /* Used to build by powers to 2 */
     int         i;
 
@@ -142,12 +140,10 @@ BuildByteReverse (void)
  */
 
 STATIC void
-eeprom_delay (void)
-{
+eeprom_delay (void) {
     int         timeout;
 
-    for (timeout = 20; timeout; --timeout)
-    {
+    for (timeout = 20; timeout; --timeout) {
         OS_uwait_dummy ();
     }
 }
@@ -162,12 +158,10 @@ eeprom_delay (void)
  */
 
 void
-eeprom_put_byte (long addr, long data, int count)
-{
+eeprom_put_byte (long addr, long data, int count) {
     u_int32_t output;
 
-    while (--count >= 0)
-    {
+    while (--count >= 0) {
         output = (data & EPROM_ACTIVE_OUT_BIT) ? 1 : 0; /* Get next data bit */
         output |= EPROM_ENCS;       /* Add Chip Select */
         data >>= 1;
@@ -187,24 +181,22 @@ eeprom_put_byte (long addr, long data, int count)
  */
 
 u_int32_t
-eeprom_get_byte (long addr)
-{
+eeprom_get_byte (long addr) {
     u_int32_t   input;
     u_int32_t   data;
     int         count;
 
-/*  Start the Reading of DATA
-**
-**  The first read is a dummy as the data is latched in the
-**  EPLD and read on the next read access to the EEPROM.
-*/
+    /*  Start the Reading of DATA
+    **
+    **  The first read is a dummy as the data is latched in the
+    **  EPLD and read on the next read access to the EEPROM.
+    */
 
     input = pci_read_32 ((u_int32_t *) addr);
 
     data = 0;
     count = NUM_OF_BITS;
-    while (--count >= 0)
-    {
+    while (--count >= 0) {
         eeprom_delay ();
         input = pci_read_32 ((u_int32_t *) addr);
 
@@ -225,8 +217,7 @@ eeprom_get_byte (long addr)
  */
 
 STATIC void
-disable_pmc_eeprom (long addr)
-{
+disable_pmc_eeprom (long addr) {
     eeprom_put_byte (addr, EPROM_EWDS, SIZE_ADDR_OP);
 
     pci_write_32 ((u_int32_t *) addr, 0);       /* this removes Chip Select
@@ -242,8 +233,7 @@ disable_pmc_eeprom (long addr)
  */
 
 STATIC void
-enable_pmc_eeprom (long addr)
-{
+enable_pmc_eeprom (long addr) {
     eeprom_put_byte (addr, EPROM_EWEN, SIZE_ADDR_OP);
 
     pci_write_32 ((u_int32_t *) addr, 0);       /* this removes Chip Select
@@ -260,8 +250,7 @@ enable_pmc_eeprom (long addr)
  */
 
 u_int32_t
-pmc_eeprom_read (long addr, long mem_offset)
-{
+pmc_eeprom_read (long addr, long mem_offset) {
     u_int32_t   data;           /* Data from chip */
 
     if (!ByteReverseBuilt)
@@ -300,8 +289,7 @@ pmc_eeprom_read (long addr, long mem_offset)
  */
 
 int
-pmc_eeprom_write (long addr, long mem_offset, u_int32_t data)
-{
+pmc_eeprom_write (long addr, long mem_offset, u_int32_t data) {
     volatile u_int32_t temp;
     int         count;
 
@@ -326,28 +314,25 @@ pmc_eeprom_write (long addr, long mem_offset, u_int32_t data)
     pci_write_32 ((u_int32_t *) addr, 0);       /* Remove Chip Select from
                                                  * EEPROM */
 
-/*
-**  Must see Data In at a low state before completing this transaction.
-**
-**  Afterwards, the data bit will return to a high state, ~6 ms, terminating
-**  the operation.
-*/
+    /*
+    **  Must see Data In at a low state before completing this transaction.
+    **
+    **  Afterwards, the data bit will return to a high state, ~6 ms, terminating
+    **  the operation.
+    */
     pci_write_32 ((u_int32_t *) addr, EPROM_ENCS);      /* Re-enable Chip Select */
     temp = pci_read_32 ((u_int32_t *) addr);    /* discard first read */
     temp = pci_read_32 ((u_int32_t *) addr);
-    if (temp & EPROM_ACTIVE_IN_BIT)
-    {
+    if (temp & EPROM_ACTIVE_IN_BIT) {
         temp = pci_read_32 ((u_int32_t *) addr);
-        if (temp & EPROM_ACTIVE_IN_BIT)
-        {
+        if (temp & EPROM_ACTIVE_IN_BIT) {
             pci_write_32 ((u_int32_t *) addr, 0);       /* Remove Chip Select
                                                          * from EEPROM */
             return (1);
         }
     }
     count = 1000;
-    while (count--)
-    {
+    while (count--) {
         for (temp = 0; temp < 0x10; temp++)
             OS_uwait_dummy ();
 
@@ -368,13 +353,11 @@ pmc_eeprom_write (long addr, long mem_offset, u_int32_t data)
  */
 
 long
-pmcGetBuffValue (char *ptr, int size)
-{
+pmcGetBuffValue (char *ptr, int size) {
     long        value = 0;
     int         index;
 
-    for (index = 0; index < size; ++index)
-    {
+    for (index = 0; index < size; ++index) {
         value <<= 8;
         value |= ptr[index] & 0xFF;
     }
@@ -389,12 +372,10 @@ pmcGetBuffValue (char *ptr, int size)
  */
 
 void
-pmcSetBuffValue (char *ptr, long value, int size)
-{
+pmcSetBuffValue (char *ptr, long value, int size) {
     int         index = size;
 
-    while (--index >= 0)
-    {
+    while (--index >= 0) {
         ptr[index] = (char) (value & 0xFF);
         value >>= 8;
     }
@@ -407,8 +388,7 @@ pmcSetBuffValue (char *ptr, long value, int size)
  */
 
 void
-pmc_eeprom_read_buffer (long addr, long mem_offset, char *dest_ptr, int size)
-{
+pmc_eeprom_read_buffer (long addr, long mem_offset, char *dest_ptr, int size) {
     while (--size >= 0)
         *dest_ptr++ = (char) pmc_eeprom_read (addr, mem_offset++);
 }
@@ -420,8 +400,7 @@ pmc_eeprom_read_buffer (long addr, long mem_offset, char *dest_ptr, int size)
  */
 
 void
-pmc_eeprom_write_buffer (long addr, long mem_offset, char *dest_ptr, int size)
-{
+pmc_eeprom_write_buffer (long addr, long mem_offset, char *dest_ptr, int size) {
     enable_pmc_eeprom (addr);
 
     while (--size >= 0)
@@ -437,17 +416,16 @@ pmc_eeprom_write_buffer (long addr, long mem_offset, char *dest_ptr, int size)
  */
 
 u_int32_t
-pmcCalcCrc_T01 (void *bufp)
-{
+pmcCalcCrc_T01 (void *bufp) {
     FLD_TYPE2  *buf = bufp;
     u_int32_t   crc;            /* CRC of the structure */
 
     /* Calc CRC for type and length fields */
     sbeCrc (
-            (u_int8_t *) &buf->type,
-            (u_int32_t) STRUCT_OFFSET (FLD_TYPE1, Crc32),
-            (u_int32_t) 0,
-            (u_int32_t *) &crc);
+        (u_int8_t *) &buf->type,
+        (u_int32_t) STRUCT_OFFSET (FLD_TYPE1, Crc32),
+        (u_int32_t) 0,
+        (u_int32_t *) &crc);
 
 #ifdef EEPROM_TYPE_DEBUG
     pr_info("sbeCrc: crc 1 calculated as %08x\n", crc); /* RLD DEBUG */
@@ -456,24 +434,23 @@ pmcCalcCrc_T01 (void *bufp)
 }
 
 u_int32_t
-pmcCalcCrc_T02 (void *bufp)
-{
+pmcCalcCrc_T02 (void *bufp) {
     FLD_TYPE2  *buf = bufp;
     u_int32_t   crc;            /* CRC of the structure */
 
     /* Calc CRC for type and length fields */
     sbeCrc (
-            (u_int8_t *) &buf->type,
-            (u_int32_t) STRUCT_OFFSET (FLD_TYPE2, Crc32),
-            (u_int32_t) 0,
-            (u_int32_t *) &crc);
+        (u_int8_t *) &buf->type,
+        (u_int32_t) STRUCT_OFFSET (FLD_TYPE2, Crc32),
+        (u_int32_t) 0,
+        (u_int32_t *) &crc);
 
     /* Calc CRC for remaining fields */
     sbeCrc (
-            (u_int8_t *) &buf->Id[0],
-            (u_int32_t) (sizeof (FLD_TYPE2) - STRUCT_OFFSET (FLD_TYPE2, Id)),
-            (u_int32_t) crc,
-            (u_int32_t *) &crc);
+        (u_int8_t *) &buf->Id[0],
+        (u_int32_t) (sizeof (FLD_TYPE2) - STRUCT_OFFSET (FLD_TYPE2, Id)),
+        (u_int32_t) crc,
+        (u_int32_t *) &crc);
 
 #ifdef EEPROM_TYPE_DEBUG
     pr_info("sbeCrc: crc 2 calculated as %08x\n", crc); /* RLD DEBUG */
@@ -493,8 +470,7 @@ pmcCalcCrc_T02 (void *bufp)
  */
 
 void
-pmc_init_seeprom (u_int32_t addr, u_int32_t serialNum)
-{
+pmc_init_seeprom (u_int32_t addr, u_int32_t serialNum) {
     PROMFORMAT  buffer;         /* Memory image of structure */
     u_int32_t   crc;            /* CRC of structure */
     time_t      createTime;
@@ -527,8 +503,7 @@ pmc_init_seeprom (u_int32_t addr, u_int32_t serialNum)
 
 
 char
-pmc_verify_cksum (void *bufp)
-{
+pmc_verify_cksum (void *bufp) {
     FLD_TYPE1  *buf1 = bufp;
     FLD_TYPE2  *buf2 = bufp;
     u_int32_t   crc1, crc2;     /* CRC read from EEPROM */
@@ -539,7 +514,7 @@ pmc_verify_cksum (void *bufp)
     pr_info("EEPROM: chksum 1 reads   as %08x\n", crc1);        /* RLD DEBUG */
 #endif
     if ((buf1->type == PROM_FORMAT_TYPE1) &&
-        (pmcCalcCrc_T01 ((void *) buf1) == crc1))
+            (pmcCalcCrc_T01 ((void *) buf1) == crc1))
         return PROM_FORMAT_TYPE1;   /* checksum type 1 verified */
 
     crc2 = pmcGetBuffValue (&buf2->Crc32[0], sizeof (buf2->Crc32));
@@ -547,7 +522,7 @@ pmc_verify_cksum (void *bufp)
     pr_info("EEPROM: chksum 2 reads   as %08x\n", crc2);        /* RLD DEBUG */
 #endif
     if ((buf2->type == PROM_FORMAT_TYPE2) &&
-        (pmcCalcCrc_T02 ((void *) buf2) == crc2))
+            (pmcCalcCrc_T02 ((void *) buf2) == crc2))
         return PROM_FORMAT_TYPE2;   /* checksum type 2 verified */
 
     return PROM_FORMAT_Unk;         /* failed to validate */

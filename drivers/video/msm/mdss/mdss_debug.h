@@ -40,38 +40,38 @@
 
 #ifdef CONFIG_DEBUG_FS
 struct mdss_debug_base {
-	struct mdss_debug_data *mdd;
-	char name[80];
-	void __iomem *base;
-	size_t off;
-	size_t cnt;
-	size_t max_offset;
-	char *buf;
-	size_t buf_len;
-	struct list_head head;
+    struct mdss_debug_data *mdd;
+    char name[80];
+    void __iomem *base;
+    size_t off;
+    size_t cnt;
+    size_t max_offset;
+    char *buf;
+    size_t buf_len;
+    struct list_head head;
 };
 
 struct debug_log {
-	struct dentry *xlog;
-	u32 xlog_enable;
-	u32 panic_on_err;
-	u32 enable_reg_dump;
+    struct dentry *xlog;
+    u32 xlog_enable;
+    u32 panic_on_err;
+    u32 enable_reg_dump;
 };
 
 struct mdss_debug_data {
-	struct dentry *root;
-	struct list_head base_list;
-	struct debug_log logd;
+    struct dentry *root;
+    struct list_head base_list;
+    struct debug_log logd;
 };
 
 int mdss_debugfs_init(struct mdss_data_type *mdata);
 int mdss_debugfs_remove(struct mdss_data_type *mdata);
 int mdss_debug_register_base(const char *name, void __iomem *base,
-				    size_t max_offset);
+                             size_t max_offset);
 int mdss_misr_set(struct mdss_data_type *mdata, struct mdp_misr *req,
-			struct mdss_mdp_ctl *ctl);
+                  struct mdss_mdp_ctl *ctl);
 int mdss_misr_get(struct mdss_data_type *mdata, struct mdp_misr *resp,
-			struct mdss_mdp_ctl *ctl);
+                  struct mdss_mdp_ctl *ctl);
 void mdss_misr_crc_collect(struct mdss_data_type *mdata, int block_id);
 
 int mdss_create_xlog_debug(struct mdss_debug_data *mdd);
@@ -81,21 +81,28 @@ void mdss_dump_reg(char __iomem *base, int len);
 void mdss_dsi_debug_check_te(struct mdss_panel_data *pdata);
 void mdss_xlog_tout_handler(const char *name, ...);
 #else
-static inline int mdss_debugfs_init(struct mdss_data_type *mdata) { return 0; }
-static inline int mdss_debugfs_remove(struct mdss_data_type *mdata)
-{ return 0; }
+static inline int mdss_debugfs_init(struct mdss_data_type *mdata) {
+    return 0;
+}
+static inline int mdss_debugfs_remove(struct mdss_data_type *mdata) {
+    return 0;
+}
 static inline int mdss_debug_register_base(const char *name, void __iomem *base,
-					size_t max_offset) { return 0; }
+        size_t max_offset) {
+    return 0;
+}
 static inline int mdss_misr_set(struct mdss_data_type *mdata,
-					struct mdp_misr *req,
-					struct mdss_mdp_ctl *ctl)
-{ return 0; }
+                                struct mdp_misr *req,
+                                struct mdss_mdp_ctl *ctl) {
+    return 0;
+}
 static inline int mdss_misr_get(struct mdss_data_type *mdata,
-					struct mdp_misr *resp,
-					struct mdss_mdp_ctl *ctl)
-{ return 0; }
+                                struct mdp_misr *resp,
+                                struct mdss_mdp_ctl *ctl) {
+    return 0;
+}
 static inline void mdss_misr_crc_collect(struct mdss_data_type *mdata,
-						int block_id) { }
+        int block_id) { }
 
 static inline int create_xlog_debug(struct mdss_data_type *mdata) { }
 static inline void mdss_xlog(const char *name, ...) { }

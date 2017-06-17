@@ -102,28 +102,27 @@
  * Returns 0 if there is no next extended capability register or returns the register offset
  * from the PCI registers base address.
  */
-static inline int xhci_find_next_cap_offset(void __iomem *base, int ext_offset)
-{
-	u32 next;
+static inline int xhci_find_next_cap_offset(void __iomem *base, int ext_offset) {
+    u32 next;
 
-	next = readl(base + ext_offset);
+    next = readl(base + ext_offset);
 
-	if (ext_offset == XHCI_HCC_PARAMS_OFFSET) {
-		/* Find the first extended capability */
-		next = XHCI_HCC_EXT_CAPS(next);
-		ext_offset = 0;
-	} else {
-		/* Find the next extended capability */
-		next = XHCI_EXT_CAPS_NEXT(next);
-	}
+    if (ext_offset == XHCI_HCC_PARAMS_OFFSET) {
+        /* Find the first extended capability */
+        next = XHCI_HCC_EXT_CAPS(next);
+        ext_offset = 0;
+    } else {
+        /* Find the next extended capability */
+        next = XHCI_EXT_CAPS_NEXT(next);
+    }
 
-	if (!next)
-		return 0;
-	/*
-	 * Address calculation from offset of extended capabilities
-	 * (or HCCPARAMS) register - see section 5.3.6 and section 7.
-	 */
-	return ext_offset + (next << 2);
+    if (!next)
+        return 0;
+    /*
+     * Address calculation from offset of extended capabilities
+     * (or HCCPARAMS) register - see section 5.3.6 and section 7.
+     */
+    return ext_offset + (next << 2);
 }
 
 /**
@@ -137,19 +136,18 @@ static inline int xhci_find_next_cap_offset(void __iomem *base, int ext_offset)
  * This uses an arbitrary limit of XHCI_MAX_EXT_CAPS extended capabilities
  * to make sure that the list doesn't contain a loop.
  */
-static inline int xhci_find_ext_cap_by_id(void __iomem *base, int ext_offset, int id)
-{
-	u32 val;
-	int limit = XHCI_MAX_EXT_CAPS;
+static inline int xhci_find_ext_cap_by_id(void __iomem *base, int ext_offset, int id) {
+    u32 val;
+    int limit = XHCI_MAX_EXT_CAPS;
 
-	while (ext_offset && limit > 0) {
-		val = readl(base + ext_offset);
-		if (XHCI_EXT_CAPS_ID(val) == id)
-			break;
-		ext_offset = xhci_find_next_cap_offset(base, ext_offset);
-		limit--;
-	}
-	if (limit > 0)
-		return ext_offset;
-	return 0;
+    while (ext_offset && limit > 0) {
+        val = readl(base + ext_offset);
+        if (XHCI_EXT_CAPS_ID(val) == id)
+            break;
+        ext_offset = xhci_find_next_cap_offset(base, ext_offset);
+        limit--;
+    }
+    if (limit > 0)
+        return ext_offset;
+    return 0;
 }

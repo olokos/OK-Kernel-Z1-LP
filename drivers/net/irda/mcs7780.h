@@ -101,34 +101,34 @@
 #define MCS_IRINRX	((__u16)0x0002)
 
 struct mcs_cb {
-	struct usb_device *usbdev;	/* init: probe_irda */
-	struct net_device *netdev;	/* network layer */
-	struct irlap_cb *irlap;	/* The link layer we are binded to */
-	struct qos_info qos;
-	unsigned int speed;	/* Current speed */
-	unsigned int new_speed;	/* new speed */
+    struct usb_device *usbdev;	/* init: probe_irda */
+    struct net_device *netdev;	/* network layer */
+    struct irlap_cb *irlap;	/* The link layer we are binded to */
+    struct qos_info qos;
+    unsigned int speed;	/* Current speed */
+    unsigned int new_speed;	/* new speed */
 
-	struct work_struct work; /* Change speed work */
+    struct work_struct work; /* Change speed work */
 
-	struct sk_buff *tx_pending;
-	char in_buf[4096];	/* transmit/receive buffer */
-	char out_buf[4096];	/* transmit/receive buffer */
-	__u8 *fifo_status;
+    struct sk_buff *tx_pending;
+    char in_buf[4096];	/* transmit/receive buffer */
+    char out_buf[4096];	/* transmit/receive buffer */
+    __u8 *fifo_status;
 
-	iobuff_t rx_buff;	/* receive unwrap state machine */
-	struct timeval rx_time;
-	spinlock_t lock;
-	int receiving;
+    iobuff_t rx_buff;	/* receive unwrap state machine */
+    struct timeval rx_time;
+    spinlock_t lock;
+    int receiving;
 
-	__u8 ep_in;
-	__u8 ep_out;
+    __u8 ep_in;
+    __u8 ep_out;
 
-	struct urb *rx_urb;
-	struct urb *tx_urb;
+    struct urb *rx_urb;
+    struct urb *tx_urb;
 
-	int transceiver_type;
-	int sir_tweak;
-	int receive_mode;
+    int transceiver_type;
+    int sir_tweak;
+    int receive_mode;
 };
 
 static int mcs_set_reg(struct mcs_cb *mcs, __u16 reg, __u16 val);
@@ -146,7 +146,7 @@ static void mcs_unwrap_fir(struct mcs_cb *mcs, __u8 *buf, int len);
 static inline int mcs_setup_urbs(struct mcs_cb *mcs);
 static inline int mcs_receive_start(struct mcs_cb *mcs);
 static inline int mcs_find_endpoints(struct mcs_cb *mcs,
-				     struct usb_host_endpoint *ep, int epnum);
+                                     struct usb_host_endpoint *ep, int epnum);
 
 static int mcs_speed_change(struct mcs_cb *mcs);
 
@@ -157,10 +157,10 @@ static int mcs_net_open(struct net_device *netdev);
 static void mcs_receive_irq(struct urb *urb);
 static void mcs_send_irq(struct urb *urb);
 static netdev_tx_t mcs_hard_xmit(struct sk_buff *skb,
-				       struct net_device *netdev);
+                                 struct net_device *netdev);
 
 static int mcs_probe(struct usb_interface *intf,
-		     const struct usb_device_id *id);
+                     const struct usb_device_id *id);
 static void mcs_disconnect(struct usb_interface *intf);
 
 #endif				/* _MCS7780_H */

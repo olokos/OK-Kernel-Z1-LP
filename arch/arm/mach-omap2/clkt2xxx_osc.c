@@ -37,15 +37,14 @@
  * clk_enable/clk_disable()-based usecounting for osc_ck should be
  * replaced with autoidle-based usecounting.
  */
-static int omap2_enable_osc_ck(struct clk *clk)
-{
-	u32 pcc;
+static int omap2_enable_osc_ck(struct clk *clk) {
+    u32 pcc;
 
-	pcc = __raw_readl(prcm_clksrc_ctrl);
+    pcc = __raw_readl(prcm_clksrc_ctrl);
 
-	__raw_writel(pcc & ~OMAP_AUTOEXTCLKMODE_MASK, prcm_clksrc_ctrl);
+    __raw_writel(pcc & ~OMAP_AUTOEXTCLKMODE_MASK, prcm_clksrc_ctrl);
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -55,22 +54,20 @@ static int omap2_enable_osc_ck(struct clk *clk)
  * clk_enable/clk_disable()-based usecounting for osc_ck should be
  * replaced with autoidle-based usecounting.
  */
-static void omap2_disable_osc_ck(struct clk *clk)
-{
-	u32 pcc;
+static void omap2_disable_osc_ck(struct clk *clk) {
+    u32 pcc;
 
-	pcc = __raw_readl(prcm_clksrc_ctrl);
+    pcc = __raw_readl(prcm_clksrc_ctrl);
 
-	__raw_writel(pcc | OMAP_AUTOEXTCLKMODE_MASK, prcm_clksrc_ctrl);
+    __raw_writel(pcc | OMAP_AUTOEXTCLKMODE_MASK, prcm_clksrc_ctrl);
 }
 
 const struct clkops clkops_oscck = {
-	.enable		= omap2_enable_osc_ck,
-	.disable	= omap2_disable_osc_ck,
+    .enable		= omap2_enable_osc_ck,
+    .disable	= omap2_disable_osc_ck,
 };
 
-unsigned long omap2_osc_clk_recalc(struct clk *clk)
-{
-	return omap2xxx_get_apll_clkin() * omap2xxx_get_sysclkdiv();
+unsigned long omap2_osc_clk_recalc(struct clk *clk) {
+    return omap2xxx_get_apll_clkin() * omap2xxx_get_sysclkdiv();
 }
 

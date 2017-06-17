@@ -42,32 +42,32 @@
 	(le16_to_cpu(_pfwhdr->signature)&0xFFF0) == 0x88C0)
 
 struct rtl92c_firmware_header {
-	__le16 signature;
-	u8 category;
-	u8 function;
-	__le16 version;
-	u8 subversion;
-	u8 rsvd1;
-	u8 month;
-	u8 date;
-	u8 hour;
-	u8 minute;
-	__le16 ramcodeSize;
-	__le16 rsvd2;
-	__le32 svnindex;
-	__le32 rsvd3;
-	__le32 rsvd4;
-	__le32 rsvd5;
+    __le16 signature;
+    u8 category;
+    u8 function;
+    __le16 version;
+    u8 subversion;
+    u8 rsvd1;
+    u8 month;
+    u8 date;
+    u8 hour;
+    u8 minute;
+    __le16 ramcodeSize;
+    __le16 rsvd2;
+    __le32 svnindex;
+    __le32 rsvd3;
+    __le32 rsvd4;
+    __le32 rsvd5;
 };
 
 enum rtl8192c_h2c_cmd {
-	H2C_AP_OFFLOAD = 0,
-	H2C_SETPWRMODE = 1,
-	H2C_JOINBSSRPT = 2,
-	H2C_RSVDPAGE = 3,
-	H2C_RSSI_REPORT = 5,
-	H2C_RA_MASK = 6,
-	MAX_H2CCMD
+    H2C_AP_OFFLOAD = 0,
+    H2C_SETPWRMODE = 1,
+    H2C_JOINBSSRPT = 2,
+    H2C_RSVDPAGE = 3,
+    H2C_RSSI_REPORT = 5,
+    H2C_RA_MASK = 6,
+    MAX_H2CCMD
 };
 
 #define pagenum_128(_len)	(u32)(((_len)>>7) + ((_len)&0x7F ? 1 : 0))
@@ -89,7 +89,7 @@ enum rtl8192c_h2c_cmd {
 
 int rtl92c_download_fw(struct ieee80211_hw *hw);
 void rtl92c_fill_h2c_cmd(struct ieee80211_hw *hw, u8 element_id,
-			 u32 cmd_len, u8 *p_cmdbuffer);
+                         u32 cmd_len, u8 *p_cmdbuffer);
 void rtl92c_firmware_selfreset(struct ieee80211_hw *hw);
 void rtl92c_set_fw_pwrmode_cmd(struct ieee80211_hw *hw, u8 mode);
 void rtl92c_set_fw_rsvdpagepkt(struct ieee80211_hw *hw, bool b_dl_finished);

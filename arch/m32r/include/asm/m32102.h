@@ -307,7 +307,7 @@
 
 #ifndef __ASSEMBLY__
 typedef struct {
-	unsigned long icucr;	/* ICU Control Register */
+    unsigned long icucr;	/* ICU Control Register */
 } icu_data_t;
 #endif
 

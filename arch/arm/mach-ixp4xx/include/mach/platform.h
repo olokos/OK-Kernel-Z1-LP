@@ -72,7 +72,7 @@ extern unsigned long ixp4xx_exp_bus_size;
 /*
  * Clock Speed Definitions.
  */
-#define IXP4XX_PERIPHERAL_BUS_CLOCK 	(66) /* 66Mhzi APB BUS   */ 
+#define IXP4XX_PERIPHERAL_BUS_CLOCK 	(66) /* 66Mhzi APB BUS   */
 #define IXP4XX_UART_XTAL        	14745600
 
 /*
@@ -81,12 +81,12 @@ extern unsigned long ixp4xx_exp_bus_size;
  * passed as platform_data.
  */
 struct ixp4xx_pata_data {
-	volatile u32	*cs0_cfg;
-	volatile u32	*cs1_cfg;
-	unsigned long	cs0_bits;
-	unsigned long	cs1_bits;
-	void __iomem	*cs0;
-	void __iomem	*cs1;
+    volatile u32	*cs0_cfg;
+    volatile u32	*cs1_cfg;
+    unsigned long	cs0_bits;
+    unsigned long	cs1_bits;
+    void __iomem	*cs0;
+    void __iomem	*cs1;
 };
 
 struct sys_timer;
@@ -97,19 +97,19 @@ struct sys_timer;
 
 /* Information about built-in Ethernet MAC interfaces */
 struct eth_plat_info {
-	u8 phy;		/* MII PHY ID, 0 - 31 */
-	u8 rxq;		/* configurable, currently 0 - 31 only */
-	u8 txreadyq;
-	u8 hwaddr[6];
+    u8 phy;		/* MII PHY ID, 0 - 31 */
+    u8 rxq;		/* configurable, currently 0 - 31 only */
+    u8 txreadyq;
+    u8 hwaddr[6];
 };
 
 /* Information about built-in HSS (synchronous serial) interfaces */
 struct hss_plat_info {
-	int (*set_clock)(int port, unsigned int clock_type);
-	int (*open)(int port, void *pdev,
-		    void (*set_carrier_cb)(void *pdev, int carrier));
-	void (*close)(int port, void *pdev);
-	u8 txreadyq;
+    int (*set_clock)(int port, unsigned int clock_type);
+    int (*open)(int port, void *pdev,
+                void (*set_carrier_cb)(void *pdev, int carrier));
+    void (*close)(int port, void *pdev);
+    u8 txreadyq;
 };
 
 /*
@@ -150,25 +150,22 @@ extern struct pci_bus *ixp4xx_scan_bus(int nr, struct pci_sys_data *sys);
 #define IXP4XX_GPIO_CLK_0		14
 #define IXP4XX_GPIO_CLK_1		15
 
-static inline void gpio_line_config(u8 line, u32 direction)
-{
-	if (direction == IXP4XX_GPIO_IN)
-		*IXP4XX_GPIO_GPOER |= (1 << line);
-	else
-		*IXP4XX_GPIO_GPOER &= ~(1 << line);
+static inline void gpio_line_config(u8 line, u32 direction) {
+    if (direction == IXP4XX_GPIO_IN)
+        *IXP4XX_GPIO_GPOER |= (1 << line);
+    else
+        *IXP4XX_GPIO_GPOER &= ~(1 << line);
 }
 
-static inline void gpio_line_get(u8 line, int *value)
-{
-	*value = (*IXP4XX_GPIO_GPINR >> line) & 0x1;
+static inline void gpio_line_get(u8 line, int *value) {
+    *value = (*IXP4XX_GPIO_GPINR >> line) & 0x1;
 }
 
-static inline void gpio_line_set(u8 line, int value)
-{
-	if (value == IXP4XX_GPIO_HIGH)
-	    *IXP4XX_GPIO_GPOUTR |= (1 << line);
-	else if (value == IXP4XX_GPIO_LOW)
-	    *IXP4XX_GPIO_GPOUTR &= ~(1 << line);
+static inline void gpio_line_set(u8 line, int value) {
+    if (value == IXP4XX_GPIO_HIGH)
+        *IXP4XX_GPIO_GPOUTR |= (1 << line);
+    else if (value == IXP4XX_GPIO_LOW)
+        *IXP4XX_GPIO_GPOUTR &= ~(1 << line);
 }
 
 #endif // __ASSEMBLY__

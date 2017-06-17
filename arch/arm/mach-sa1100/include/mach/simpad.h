@@ -121,10 +121,10 @@ void simpad_clear_cs3_bit(int value);
 
 /*--- Battery ---*/
 struct simpad_battery {
-	unsigned char ac_status;	/* line connected yes/no */
-	unsigned char status;		/* battery loading yes/no */
-	unsigned char percentage;	/* percentage loaded */
-	unsigned short life;		/* life till empty */
+    unsigned char ac_status;	/* line connected yes/no */
+    unsigned char status;		/* battery loading yes/no */
+    unsigned char percentage;	/* percentage loaded */
+    unsigned short life;		/* life till empty */
 };
 
 /* These should match the apm_bios.h definitions */

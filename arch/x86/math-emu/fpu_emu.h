@@ -109,27 +109,27 @@ extern u_char emulating;
 #define PREFIX_DEFAULT 7
 
 struct address {
-	unsigned int offset;
-	unsigned int selector:16;
-	unsigned int opcode:11;
-	unsigned int empty:5;
+    unsigned int offset;
+    unsigned int selector:16;
+    unsigned int opcode:11;
+    unsigned int empty:5;
 };
 struct fpu__reg {
-	unsigned sigl;
-	unsigned sigh;
-	short exp;
+    unsigned sigl;
+    unsigned sigh;
+    short exp;
 };
 
 typedef void (*FUNC) (void);
 typedef struct fpu__reg FPU_REG;
 typedef void (*FUNC_ST0) (FPU_REG *st0_ptr, u_char st0_tag);
 typedef struct {
-	u_char address_size, operand_size, segment;
+    u_char address_size, operand_size, segment;
 } overrides;
 /* This structure is 32 bits: */
 typedef struct {
-	overrides override;
-	u_char default_mode;
+    overrides override;
+    u_char default_mode;
 } fpu_addr_modes;
 /* PROTECTED has a restricted meaning in the emulator; it is used
    to signal that the emulator needs to do special things to ensure
@@ -166,10 +166,9 @@ extern u_char const data_sizes_16[32];
 #define signpositive(a) ( (signbyte(a) & 0x80) == 0 )
 #define signnegative(a) (signbyte(a) & 0x80)
 
-static inline void reg_copy(FPU_REG const *x, FPU_REG *y)
-{
-	*(short *)&(y->exp) = *(const short *)&(x->exp);
-	*(long long *)&(y->sigl) = *(const long long *)&(x->sigl);
+static inline void reg_copy(FPU_REG const *x, FPU_REG *y) {
+    *(short *)&(y->exp) = *(const short *)&(x->exp);
+    *(long long *)&(y->sigl) = *(const long long *)&(x->sigl);
 }
 
 #define exponent(x)  (((*(short *)&((x)->exp)) & 0x7fff) - EXTENDED_Ebias)
@@ -190,23 +189,23 @@ static inline void reg_copy(FPU_REG const *x, FPU_REG *y)
 asmlinkage int FPU_normalize(FPU_REG *x);
 asmlinkage int FPU_normalize_nuo(FPU_REG *x);
 asmlinkage int FPU_u_sub(FPU_REG const *arg1, FPU_REG const *arg2,
-			 FPU_REG * answ, unsigned int control_w, u_char sign,
-			 int expa, int expb);
+                         FPU_REG * answ, unsigned int control_w, u_char sign,
+                         int expa, int expb);
 asmlinkage int FPU_u_mul(FPU_REG const *arg1, FPU_REG const *arg2,
-			 FPU_REG * answ, unsigned int control_w, u_char sign,
-			 int expon);
+                         FPU_REG * answ, unsigned int control_w, u_char sign,
+                         int expon);
 asmlinkage int FPU_u_div(FPU_REG const *arg1, FPU_REG const *arg2,
-			 FPU_REG * answ, unsigned int control_w, u_char sign);
+                         FPU_REG * answ, unsigned int control_w, u_char sign);
 asmlinkage int FPU_u_add(FPU_REG const *arg1, FPU_REG const *arg2,
-			 FPU_REG * answ, unsigned int control_w, u_char sign,
-			 int expa, int expb);
+                         FPU_REG * answ, unsigned int control_w, u_char sign,
+                         int expa, int expb);
 asmlinkage int wm_sqrt(FPU_REG *n, int dummy1, int dummy2,
-		       unsigned int control_w, u_char sign);
+                       unsigned int control_w, u_char sign);
 asmlinkage unsigned FPU_shrx(void *l, unsigned x);
 asmlinkage unsigned FPU_shrxs(void *v, unsigned x);
 asmlinkage unsigned long FPU_div_small(unsigned long long *x, unsigned long y);
 asmlinkage int FPU_round(FPU_REG *arg, unsigned int extent, int dummy,
-			 unsigned int control_w, u_char sign);
+                         unsigned int control_w, u_char sign);
 
 #ifndef MAKING_PROTO
 #include "fpu_proto.h"

@@ -30,15 +30,13 @@
  */
 
 #ifdef CONFIG_MACH_TX49XX
-static inline bool txx9_dma_have_SMPCHN(void)
-{
-	return true;
+static inline bool txx9_dma_have_SMPCHN(void) {
+    return true;
 }
 #define TXX9_DMA_USE_SIMPLE_CHAIN
 #else
-static inline bool txx9_dma_have_SMPCHN(void)
-{
-	return false;
+static inline bool txx9_dma_have_SMPCHN(void) {
+    return false;
 }
 #endif
 
@@ -68,41 +66,41 @@ static inline bool txx9_dma_have_SMPCHN(void)
 /* Hardware register definitions. */
 struct txx9dmac_cregs {
 #if defined(CONFIG_32BIT) && !defined(CONFIG_64BIT_PHYS_ADDR)
-	TXX9_DMA_REG32(CHAR);	/* Chain Address Register */
+    TXX9_DMA_REG32(CHAR);	/* Chain Address Register */
 #else
-	u64 CHAR;		/* Chain Address Register */
+    u64 CHAR;		/* Chain Address Register */
 #endif
-	u64 SAR;		/* Source Address Register */
-	u64 DAR;		/* Destination Address Register */
-	TXX9_DMA_REG32(CNTR);	/* Count Register */
-	TXX9_DMA_REG32(SAIR);	/* Source Address Increment Register */
-	TXX9_DMA_REG32(DAIR);	/* Destination Address Increment Register */
-	TXX9_DMA_REG32(CCR);	/* Channel Control Register */
-	TXX9_DMA_REG32(CSR);	/* Channel Status Register */
+    u64 SAR;		/* Source Address Register */
+    u64 DAR;		/* Destination Address Register */
+    TXX9_DMA_REG32(CNTR);	/* Count Register */
+    TXX9_DMA_REG32(SAIR);	/* Source Address Increment Register */
+    TXX9_DMA_REG32(DAIR);	/* Destination Address Increment Register */
+    TXX9_DMA_REG32(CCR);	/* Channel Control Register */
+    TXX9_DMA_REG32(CSR);	/* Channel Status Register */
 };
 struct txx9dmac_cregs32 {
-	u32 CHAR;
-	u32 SAR;
-	u32 DAR;
-	u32 CNTR;
-	u32 SAIR;
-	u32 DAIR;
-	u32 CCR;
-	u32 CSR;
+    u32 CHAR;
+    u32 SAR;
+    u32 DAR;
+    u32 CNTR;
+    u32 SAIR;
+    u32 DAIR;
+    u32 CCR;
+    u32 CSR;
 };
 
 struct txx9dmac_regs {
-	/* per-channel registers */
-	struct txx9dmac_cregs	CHAN[TXX9_DMA_MAX_NR_CHANNELS];
-	u64	__pad[9];
-	u64	MFDR;		/* Memory Fill Data Register */
-	TXX9_DMA_REG32(MCR);	/* Master Control Register */
+    /* per-channel registers */
+    struct txx9dmac_cregs	CHAN[TXX9_DMA_MAX_NR_CHANNELS];
+    u64	__pad[9];
+    u64	MFDR;		/* Memory Fill Data Register */
+    TXX9_DMA_REG32(MCR);	/* Master Control Register */
 };
 struct txx9dmac_regs32 {
-	struct txx9dmac_cregs32	CHAN[TXX9_DMA_MAX_NR_CHANNELS];
-	u32	__pad[9];
-	u32	MFDR;
-	u32	MCR;
+    struct txx9dmac_cregs32	CHAN[TXX9_DMA_MAX_NR_CHANNELS];
+    u32	__pad[9];
+    u32	MFDR;
+    u32	MCR;
 };
 
 /* bits for MCR */
@@ -161,60 +159,58 @@ struct txx9dmac_regs32 {
 #define TXX9_DMA_CSR_SORERR	0x00000001
 
 struct txx9dmac_chan {
-	struct dma_chan		chan;
-	struct dma_device	dma;
-	struct txx9dmac_dev	*ddev;
-	void __iomem		*ch_regs;
-	struct tasklet_struct	tasklet;
-	int			irq;
-	u32			ccr;
+    struct dma_chan		chan;
+    struct dma_device	dma;
+    struct txx9dmac_dev	*ddev;
+    void __iomem		*ch_regs;
+    struct tasklet_struct	tasklet;
+    int			irq;
+    u32			ccr;
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	/* these other elements are all protected by lock */
-	struct list_head	active_list;
-	struct list_head	queue;
-	struct list_head	free_list;
+    /* these other elements are all protected by lock */
+    struct list_head	active_list;
+    struct list_head	queue;
+    struct list_head	free_list;
 
-	unsigned int		descs_allocated;
+    unsigned int		descs_allocated;
 };
 
 struct txx9dmac_dev {
-	void __iomem		*regs;
-	struct tasklet_struct	tasklet;
-	int			irq;
-	struct txx9dmac_chan	*chan[TXX9_DMA_MAX_NR_CHANNELS];
-	bool			have_64bit_regs;
-	unsigned int		descsize;
+    void __iomem		*regs;
+    struct tasklet_struct	tasklet;
+    int			irq;
+    struct txx9dmac_chan	*chan[TXX9_DMA_MAX_NR_CHANNELS];
+    bool			have_64bit_regs;
+    unsigned int		descsize;
 };
 
-static inline bool __is_dmac64(const struct txx9dmac_dev *ddev)
-{
-	return ddev->have_64bit_regs;
+static inline bool __is_dmac64(const struct txx9dmac_dev *ddev) {
+    return ddev->have_64bit_regs;
 }
 
-static inline bool is_dmac64(const struct txx9dmac_chan *dc)
-{
-	return __is_dmac64(dc->ddev);
+static inline bool is_dmac64(const struct txx9dmac_chan *dc) {
+    return __is_dmac64(dc->ddev);
 }
 
 #ifdef TXX9_DMA_USE_SIMPLE_CHAIN
 /* Hardware descriptor definition. (for simple-chain) */
 struct txx9dmac_hwdesc {
 #if defined(CONFIG_32BIT) && !defined(CONFIG_64BIT_PHYS_ADDR)
-	TXX9_DMA_REG32(CHAR);
+    TXX9_DMA_REG32(CHAR);
 #else
-	u64 CHAR;
+    u64 CHAR;
 #endif
-	u64 SAR;
-	u64 DAR;
-	TXX9_DMA_REG32(CNTR);
+    u64 SAR;
+    u64 DAR;
+    TXX9_DMA_REG32(CNTR);
 };
 struct txx9dmac_hwdesc32 {
-	u32 CHAR;
-	u32 SAR;
-	u32 DAR;
-	u32 CNTR;
+    u32 CHAR;
+    u32 SAR;
+    u32 DAR;
+    u32 CNTR;
 };
 #else
 #define txx9dmac_hwdesc txx9dmac_cregs
@@ -222,84 +218,74 @@ struct txx9dmac_hwdesc32 {
 #endif
 
 struct txx9dmac_desc {
-	/* FIRST values the hardware uses */
-	union {
-		struct txx9dmac_hwdesc hwdesc;
-		struct txx9dmac_hwdesc32 hwdesc32;
-	};
+    /* FIRST values the hardware uses */
+    union {
+        struct txx9dmac_hwdesc hwdesc;
+        struct txx9dmac_hwdesc32 hwdesc32;
+    };
 
-	/* THEN values for driver housekeeping */
-	struct list_head		desc_node ____cacheline_aligned;
-	struct list_head		tx_list;
-	struct dma_async_tx_descriptor	txd;
-	size_t				len;
+    /* THEN values for driver housekeeping */
+    struct list_head		desc_node ____cacheline_aligned;
+    struct list_head		tx_list;
+    struct dma_async_tx_descriptor	txd;
+    size_t				len;
 };
 
 #ifdef TXX9_DMA_USE_SIMPLE_CHAIN
 
-static inline bool txx9dmac_chan_INTENT(struct txx9dmac_chan *dc)
-{
-	return (dc->ccr & TXX9_DMA_CCR_INTENT) != 0;
+static inline bool txx9dmac_chan_INTENT(struct txx9dmac_chan *dc) {
+    return (dc->ccr & TXX9_DMA_CCR_INTENT) != 0;
 }
 
-static inline void txx9dmac_chan_set_INTENT(struct txx9dmac_chan *dc)
-{
-	dc->ccr |= TXX9_DMA_CCR_INTENT;
+static inline void txx9dmac_chan_set_INTENT(struct txx9dmac_chan *dc) {
+    dc->ccr |= TXX9_DMA_CCR_INTENT;
 }
 
 static inline void txx9dmac_desc_set_INTENT(struct txx9dmac_dev *ddev,
-					    struct txx9dmac_desc *desc)
-{
+        struct txx9dmac_desc *desc) {
 }
 
-static inline void txx9dmac_chan_set_SMPCHN(struct txx9dmac_chan *dc)
-{
-	dc->ccr |= TXX9_DMA_CCR_SMPCHN;
+static inline void txx9dmac_chan_set_SMPCHN(struct txx9dmac_chan *dc) {
+    dc->ccr |= TXX9_DMA_CCR_SMPCHN;
 }
 
 static inline void txx9dmac_desc_set_nosimple(struct txx9dmac_dev *ddev,
-					      struct txx9dmac_desc *desc,
-					      u32 sair, u32 dair, u32 ccr)
-{
+        struct txx9dmac_desc *desc,
+        u32 sair, u32 dair, u32 ccr) {
 }
 
 #else /* TXX9_DMA_USE_SIMPLE_CHAIN */
 
-static inline bool txx9dmac_chan_INTENT(struct txx9dmac_chan *dc)
-{
-	return true;
+static inline bool txx9dmac_chan_INTENT(struct txx9dmac_chan *dc) {
+    return true;
 }
 
-static void txx9dmac_chan_set_INTENT(struct txx9dmac_chan *dc)
-{
+static void txx9dmac_chan_set_INTENT(struct txx9dmac_chan *dc) {
 }
 
 static inline void txx9dmac_desc_set_INTENT(struct txx9dmac_dev *ddev,
-					    struct txx9dmac_desc *desc)
-{
-	if (__is_dmac64(ddev))
-		desc->hwdesc.CCR |= TXX9_DMA_CCR_INTENT;
-	else
-		desc->hwdesc32.CCR |= TXX9_DMA_CCR_INTENT;
+        struct txx9dmac_desc *desc) {
+    if (__is_dmac64(ddev))
+        desc->hwdesc.CCR |= TXX9_DMA_CCR_INTENT;
+    else
+        desc->hwdesc32.CCR |= TXX9_DMA_CCR_INTENT;
 }
 
-static inline void txx9dmac_chan_set_SMPCHN(struct txx9dmac_chan *dc)
-{
+static inline void txx9dmac_chan_set_SMPCHN(struct txx9dmac_chan *dc) {
 }
 
 static inline void txx9dmac_desc_set_nosimple(struct txx9dmac_dev *ddev,
-					      struct txx9dmac_desc *desc,
-					      u32 sai, u32 dai, u32 ccr)
-{
-	if (__is_dmac64(ddev)) {
-		desc->hwdesc.SAIR = sai;
-		desc->hwdesc.DAIR = dai;
-		desc->hwdesc.CCR = ccr;
-	} else {
-		desc->hwdesc32.SAIR = sai;
-		desc->hwdesc32.DAIR = dai;
-		desc->hwdesc32.CCR = ccr;
-	}
+        struct txx9dmac_desc *desc,
+        u32 sai, u32 dai, u32 ccr) {
+    if (__is_dmac64(ddev)) {
+        desc->hwdesc.SAIR = sai;
+        desc->hwdesc.DAIR = dai;
+        desc->hwdesc.CCR = ccr;
+    } else {
+        desc->hwdesc32.SAIR = sai;
+        desc->hwdesc32.DAIR = dai;
+        desc->hwdesc32.CCR = ccr;
+    }
 }
 
 #endif /* TXX9_DMA_USE_SIMPLE_CHAIN */

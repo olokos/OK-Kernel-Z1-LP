@@ -28,9 +28,9 @@
 	} while (0)
 
 int enic_process_set_pp_request(struct enic *enic, int vf,
-	struct enic_port_profile *prev_pp, int *restore_pp);
+                                struct enic_port_profile *prev_pp, int *restore_pp);
 int enic_process_get_pp_request(struct enic *enic, int vf,
-	int request, u16 *response);
+                                int request, u16 *response);
 int enic_is_valid_pp_vf(struct enic *enic, int vf, int *err);
 
 #endif /* _ENIC_PP_H_ */

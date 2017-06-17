@@ -20,10 +20,10 @@ extern u32 vidc_msg_pmem;
 extern u32 vidc_msg_timing;
 
 enum timing_data {
-	DEC_OP_TIME,
-	DEC_IP_TIME,
-	ENC_OP_TIME,
-	MAX_TIME_DATA
+    DEC_OP_TIME,
+    DEC_IP_TIME,
+    ENC_OP_TIME,
+    MAX_TIME_DATA
 };
 
 #define DDL_INLINE

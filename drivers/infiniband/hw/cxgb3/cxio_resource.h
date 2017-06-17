@@ -44,9 +44,9 @@
 extern int cxio_hal_init_rhdl_resource(u32 nr_rhdl);
 extern void cxio_hal_destroy_rhdl_resource(void);
 extern int cxio_hal_init_resource(struct cxio_rdev *rdev_p,
-				  u32 nr_tpt, u32 nr_pbl,
-				  u32 nr_rqt, u32 nr_qpid, u32 nr_cqid,
-				  u32 nr_pdid);
+                                  u32 nr_tpt, u32 nr_pbl,
+                                  u32 nr_rqt, u32 nr_qpid, u32 nr_cqid,
+                                  u32 nr_pdid);
 extern u32 cxio_hal_get_stag(struct cxio_hal_resource *rscp);
 extern void cxio_hal_put_stag(struct cxio_hal_resource *rscp, u32 stag);
 extern u32 cxio_hal_get_qpid(struct cxio_hal_resource *rscp);

@@ -18,10 +18,9 @@
 */
 
 /* re-define device name depending on support. */
-static inline void s3c_cfcon_setname(char *name)
-{
+static inline void s3c_cfcon_setname(char *name) {
 #ifdef CONFIG_SAMSUNG_DEV_IDE
-	s3c_device_cfcon.name = name;
+    s3c_device_cfcon.name = name;
 #endif
 }
 

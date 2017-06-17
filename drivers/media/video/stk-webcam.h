@@ -40,36 +40,36 @@
 #define STK_WARNING(str, args...)	printk(KERN_WARNING PREFIX str, ##args)
 
 struct stk_iso_buf {
-	void *data;
-	int length;
-	int read;
-	struct urb *urb;
+    void *data;
+    int length;
+    int read;
+    struct urb *urb;
 };
 
 /* Streaming IO buffers */
 struct stk_sio_buffer {
-	struct v4l2_buffer v4lbuf;
-	char *buffer;
-	int mapcount;
-	struct stk_camera *dev;
-	struct list_head list;
+    struct v4l2_buffer v4lbuf;
+    char *buffer;
+    int mapcount;
+    struct stk_camera *dev;
+    struct list_head list;
 };
 
 enum stk_mode {MODE_VGA, MODE_SXGA, MODE_CIF, MODE_QVGA, MODE_QCIF};
 
 struct stk_video {
-	enum stk_mode mode;
-	int brightness;
-	__u32 palette;
-	int hflip;
-	int vflip;
+    enum stk_mode mode;
+    int brightness;
+    __u32 palette;
+    int hflip;
+    int vflip;
 };
 
 enum stk_status {
-	S_PRESENT = 1,
-	S_INITIALISED = 2,
-	S_MEMALLOCD = 4,
-	S_STREAMING = 8,
+    S_PRESENT = 1,
+    S_INITIALISED = 2,
+    S_MEMALLOCD = 4,
+    S_STREAMING = 8,
 };
 #define is_present(dev)		((dev)->status & S_PRESENT)
 #define is_initialised(dev)	((dev)->status & S_INITIALISED)
@@ -86,38 +86,38 @@ enum stk_status {
 #define unset_streaming(dev)	((dev)->status &= ~S_STREAMING)
 
 struct regval {
-	unsigned reg;
-	unsigned val;
+    unsigned reg;
+    unsigned val;
 };
 
 struct stk_camera {
-	struct video_device vdev;
-	struct usb_device *udev;
-	struct usb_interface *interface;
-	int webcam_model;
-	struct file *owner;
+    struct video_device vdev;
+    struct usb_device *udev;
+    struct usb_interface *interface;
+    int webcam_model;
+    struct file *owner;
 
-	u8 isoc_ep;
+    u8 isoc_ep;
 
-	/* Not sure if this is right */
-	atomic_t urbs_used;
+    /* Not sure if this is right */
+    atomic_t urbs_used;
 
-	struct stk_video vsettings;
+    struct stk_video vsettings;
 
-	enum stk_status status;
+    enum stk_status status;
 
-	spinlock_t spinlock;
-	wait_queue_head_t wait_frame;
+    spinlock_t spinlock;
+    wait_queue_head_t wait_frame;
 
-	struct stk_iso_buf *isobufs;
+    struct stk_iso_buf *isobufs;
 
-	int frame_size;
-	/* Streaming buffers */
-	unsigned int n_sbufs;
-	struct stk_sio_buffer *sio_bufs;
-	struct list_head sio_avail;
-	struct list_head sio_full;
-	unsigned sequence;
+    int frame_size;
+    /* Streaming buffers */
+    unsigned int n_sbufs;
+    struct stk_sio_buffer *sio_bufs;
+    struct list_head sio_avail;
+    struct list_head sio_full;
+    unsigned sequence;
 };
 
 #define vdev_to_camera(d) container_of(d, struct stk_camera, vdev)

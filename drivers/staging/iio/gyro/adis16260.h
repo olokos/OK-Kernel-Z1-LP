@@ -92,12 +92,12 @@
  * @rx:			receive buffer
  **/
 struct adis16260_state {
-	struct spi_device	*us;
-	struct iio_trigger	*trig;
-	struct mutex		buf_lock;
-	unsigned		negate:1;
-	u8			tx[ADIS16260_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADIS16260_MAX_RX];
+    struct spi_device	*us;
+    struct iio_trigger	*trig;
+    struct mutex		buf_lock;
+    unsigned		negate:1;
+    u8			tx[ADIS16260_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADIS16260_MAX_RX];
 };
 
 int adis16260_set_irq(struct iio_dev *indio_dev, bool enable);
@@ -117,8 +117,8 @@ void adis16260_remove_trigger(struct iio_dev *indio_dev);
 int adis16260_probe_trigger(struct iio_dev *indio_dev);
 
 ssize_t adis16260_read_data_from_ring(struct device *dev,
-				      struct device_attribute *attr,
-				      char *buf);
+                                      struct device_attribute *attr,
+                                      char *buf);
 
 
 int adis16260_configure_ring(struct iio_dev *indio_dev);
@@ -126,30 +126,25 @@ void adis16260_unconfigure_ring(struct iio_dev *indio_dev);
 
 #else /* CONFIG_IIO_BUFFER */
 
-static inline void adis16260_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void adis16260_remove_trigger(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16260_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int adis16260_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
 static inline ssize_t
 adis16260_read_data_from_ring(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	return 0;
+                              struct device_attribute *attr,
+                              char *buf) {
+    return 0;
 }
 
-static int adis16260_configure_ring(struct iio_dev *indio_dev)
-{
-	return 0;
+static int adis16260_configure_ring(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void adis16260_unconfigure_ring(struct iio_dev *indio_dev)
-{
+static inline void adis16260_unconfigure_ring(struct iio_dev *indio_dev) {
 }
 
 #endif /* CONFIG_IIO_BUFFER */

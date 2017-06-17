@@ -16,17 +16,17 @@
 #include <asm/pbm.h>
 
 struct linux_pcic {
-        void __iomem            *pcic_regs;
-        unsigned long           pcic_io;
-        void __iomem            *pcic_config_space_addr;
-        void __iomem            *pcic_config_space_data;
-	struct resource		pcic_res_regs;
-	struct resource		pcic_res_io;
-	struct resource		pcic_res_cfg_addr;
-	struct resource		pcic_res_cfg_data;
-        struct linux_pbm_info   pbm;
-	struct pcic_ca2irq	*pcic_imap;
-	int			pcic_imdim;
+    void __iomem            *pcic_regs;
+    unsigned long           pcic_io;
+    void __iomem            *pcic_config_space_addr;
+    void __iomem            *pcic_config_space_data;
+    struct resource		pcic_res_regs;
+    struct resource		pcic_res_io;
+    struct resource		pcic_res_cfg_addr;
+    struct resource		pcic_res_cfg_data;
+    struct linux_pbm_info   pbm;
+    struct pcic_ca2irq	*pcic_imap;
+    int			pcic_imdim;
 };
 
 #ifdef CONFIG_PCIC_PCI
@@ -35,8 +35,12 @@ extern int pcic_probe(void);
 extern void pci_time_init(void);
 extern void sun4m_pci_init_IRQ(void);
 #else
-static inline int pcic_present(void) { return 0; }
-static inline int pcic_probe(void) { return 0; }
+static inline int pcic_present(void) {
+    return 0;
+}
+static inline int pcic_probe(void) {
+    return 0;
+}
 static inline void pci_time_init(void) {}
 static inline void sun4m_pci_init_IRQ(void) {}
 #endif

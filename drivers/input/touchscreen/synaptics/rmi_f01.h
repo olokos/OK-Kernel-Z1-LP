@@ -30,11 +30,11 @@
 #define _RMI_FUNCTION_01_H
 
 void FN_01_inthandler(struct rmi_function_info *rmifninfo,
-	unsigned int assertedIRQs);
+                      unsigned int assertedIRQs);
 int FN_01_config(struct rmi_function_info *rmifninfo);
 int FN_01_init(struct rmi_function_device *function_device);
 int FN_01_detect(struct rmi_function_info *rmifninfo,
-		struct rmi_function_descriptor *fndescr,
-		unsigned int interruptCount);
+                 struct rmi_function_descriptor *fndescr,
+                 unsigned int interruptCount);
 void FN_01_attention(struct rmi_function_info *rmifninfo);
 #endif

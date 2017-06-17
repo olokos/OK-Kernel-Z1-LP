@@ -26,10 +26,10 @@
 
 
 
-	/*****************************************************************
-	 * TLan Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * TLan Definitions
+ *
+ ****************************************************************/
 
 #define TLAN_MIN_FRAME_SIZE	64
 #define TLAN_MAX_FRAME_SIZE	1600
@@ -57,10 +57,10 @@
 					    at a time */
 
 
-	/*****************************************************************
-	 * Device Identification Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * Device Identification Definitions
+ *
+ ****************************************************************/
 
 #define PCI_DEVICE_ID_NETELLIGENT_10_T2			0xB012
 #define PCI_DEVICE_ID_NETELLIGENT_10_100_WS_5100	0xB030
@@ -75,11 +75,11 @@
 #endif
 
 struct tlan_adapter_entry {
-	u16	vendor_id;
-	u16	device_id;
-	char	*device_label;
-	u32	flags;
-	u16	addr_ofs;
+    u16	vendor_id;
+    u16	device_id;
+    char	*device_label;
+    u32	flags;
+    u16	addr_ofs;
 };
 
 #define TLAN_ADAPTER_NONE		0x00000000
@@ -98,10 +98,10 @@ struct tlan_adapter_entry {
 
 
 
-	/*****************************************************************
-	 * EISA Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * EISA Definitions
+ *
+ ****************************************************************/
 
 #define EISA_ID      0xc80   /* EISA ID Registers */
 #define EISA_ID0     0xc80   /* EISA ID Register 0 */
@@ -117,10 +117,10 @@ struct tlan_adapter_entry {
 
 
 
-	/*****************************************************************
-	 * Rx/Tx List Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * Rx/Tx List Definitions
+ *
+ ****************************************************************/
 
 #define TLAN_BUFFERS_PER_LIST	10
 #define TLAN_LAST_BUFFER	0x80000000
@@ -134,16 +134,16 @@ struct tlan_adapter_entry {
 
 
 struct tlan_buffer {
-	u32	count;
-	u32	address;
+    u32	count;
+    u32	address;
 };
 
 
 struct tlan_list {
-	u32		forward;
-	u16		c_stat;
-	u16		frame_size;
-	struct tlan_buffer buffer[TLAN_BUFFERS_PER_LIST];
+    u32		forward;
+    u16		c_stat;
+    u16		frame_size;
+    struct tlan_buffer buffer[TLAN_BUFFERS_PER_LIST];
 };
 
 
@@ -152,10 +152,10 @@ typedef u8 TLanBuffer[TLAN_MAX_FRAME_SIZE];
 
 
 
-	/*****************************************************************
-	 * PHY definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * PHY definitions
+ *
+ ****************************************************************/
 
 #define TLAN_PHY_MAX_ADDR	0x1F
 #define TLAN_PHY_NONE		0x20
@@ -163,62 +163,62 @@ typedef u8 TLanBuffer[TLAN_MAX_FRAME_SIZE];
 
 
 
-	/*****************************************************************
-	 * TLAN Private Information Structure
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * TLAN Private Information Structure
+ *
+ ****************************************************************/
 
 struct tlan_priv {
-	struct net_device       *next_device;
-	struct pci_dev		*pci_dev;
-	struct net_device       *dev;
-	void			*dma_storage;
-	dma_addr_t		dma_storage_dma;
-	unsigned int		dma_size;
-	u8			*pad_buffer;
-	struct tlan_list	*rx_list;
-	dma_addr_t		rx_list_dma;
-	u8			*rx_buffer;
-	dma_addr_t		rx_buffer_dma;
-	u32			rx_head;
-	u32			rx_tail;
-	u32			rx_eoc_count;
-	struct tlan_list	*tx_list;
-	dma_addr_t		tx_list_dma;
-	u8			*tx_buffer;
-	dma_addr_t		tx_buffer_dma;
-	u32			tx_head;
-	u32			tx_in_progress;
-	u32			tx_tail;
-	u32			tx_busy_count;
-	u32			phy_online;
-	u32			timer_set_at;
-	u32			timer_type;
-	struct timer_list	timer;
-	struct board		*adapter;
-	u32			adapter_rev;
-	u32			aui;
-	u32			debug;
-	u32			duplex;
-	u32			phy[2];
-	u32			phy_num;
-	u32			speed;
-	u8			tlan_rev;
-	u8			tlan_full_duplex;
-	spinlock_t		lock;
-	u8			link;
-	u8			is_eisa;
-	struct work_struct			tlan_tqueue;
-	u8			neg_be_verbose;
+    struct net_device       *next_device;
+    struct pci_dev		*pci_dev;
+    struct net_device       *dev;
+    void			*dma_storage;
+    dma_addr_t		dma_storage_dma;
+    unsigned int		dma_size;
+    u8			*pad_buffer;
+    struct tlan_list	*rx_list;
+    dma_addr_t		rx_list_dma;
+    u8			*rx_buffer;
+    dma_addr_t		rx_buffer_dma;
+    u32			rx_head;
+    u32			rx_tail;
+    u32			rx_eoc_count;
+    struct tlan_list	*tx_list;
+    dma_addr_t		tx_list_dma;
+    u8			*tx_buffer;
+    dma_addr_t		tx_buffer_dma;
+    u32			tx_head;
+    u32			tx_in_progress;
+    u32			tx_tail;
+    u32			tx_busy_count;
+    u32			phy_online;
+    u32			timer_set_at;
+    u32			timer_type;
+    struct timer_list	timer;
+    struct board		*adapter;
+    u32			adapter_rev;
+    u32			aui;
+    u32			debug;
+    u32			duplex;
+    u32			phy[2];
+    u32			phy_num;
+    u32			speed;
+    u8			tlan_rev;
+    u8			tlan_full_duplex;
+    spinlock_t		lock;
+    u8			link;
+    u8			is_eisa;
+    struct work_struct			tlan_tqueue;
+    u8			neg_be_verbose;
 };
 
 
 
 
-	/*****************************************************************
-	 * TLan Driver Timer Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * TLan Driver Timer Definitions
+ *
+ ****************************************************************/
 
 #define TLAN_TIMER_LINK_BEAT		1
 #define TLAN_TIMER_ACTIVITY		2
@@ -234,10 +234,10 @@ struct tlan_priv {
 
 
 
-	/*****************************************************************
-	 * TLan Driver Eeprom Definitions
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * TLan Driver Eeprom Definitions
+ *
+ ****************************************************************/
 
 #define TLAN_EEPROM_ACK		0
 #define TLAN_EEPROM_STOP	1
@@ -245,10 +245,10 @@ struct tlan_priv {
 
 
 
-	/*****************************************************************
-	 * Host Register Offsets and Contents
-	 *
-	 ****************************************************************/
+/*****************************************************************
+ * Host Register Offsets and Contents
+ *
+ ****************************************************************/
 
 #define TLAN_HOST_CMD			0x00
 #define	TLAN_HC_GO		0x80000000
@@ -443,60 +443,54 @@ struct tlan_priv {
 
 /* Routines to access internal registers. */
 
-static inline u8 tlan_dio_read8(u16 base_addr, u16 internal_addr)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	return inb((base_addr + TLAN_DIO_DATA) + (internal_addr & 0x3));
+static inline u8 tlan_dio_read8(u16 base_addr, u16 internal_addr) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    return inb((base_addr + TLAN_DIO_DATA) + (internal_addr & 0x3));
 
 }
 
 
 
 
-static inline u16 tlan_dio_read16(u16 base_addr, u16 internal_addr)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	return inw((base_addr + TLAN_DIO_DATA) + (internal_addr & 0x2));
+static inline u16 tlan_dio_read16(u16 base_addr, u16 internal_addr) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    return inw((base_addr + TLAN_DIO_DATA) + (internal_addr & 0x2));
 
 }
 
 
 
 
-static inline u32 tlan_dio_read32(u16 base_addr, u16 internal_addr)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	return inl(base_addr + TLAN_DIO_DATA);
+static inline u32 tlan_dio_read32(u16 base_addr, u16 internal_addr) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    return inl(base_addr + TLAN_DIO_DATA);
 
 }
 
 
 
 
-static inline void tlan_dio_write8(u16 base_addr, u16 internal_addr, u8 data)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	outb(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x3));
+static inline void tlan_dio_write8(u16 base_addr, u16 internal_addr, u8 data) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    outb(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x3));
 
 }
 
 
 
 
-static inline void tlan_dio_write16(u16 base_addr, u16 internal_addr, u16 data)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	outw(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x2));
+static inline void tlan_dio_write16(u16 base_addr, u16 internal_addr, u16 data) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    outw(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x2));
 
 }
 
 
 
 
-static inline void tlan_dio_write32(u16 base_addr, u16 internal_addr, u32 data)
-{
-	outw(internal_addr, base_addr + TLAN_DIO_ADR);
-	outl(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x2));
+static inline void tlan_dio_write32(u16 base_addr, u16 internal_addr, u32 data) {
+    outw(internal_addr, base_addr + TLAN_DIO_ADR);
+    outl(data, base_addr + TLAN_DIO_DATA + (internal_addr & 0x2));
 
 }
 
@@ -530,17 +524,16 @@ static inline void tlan_dio_write32(u16 base_addr, u16 internal_addr, u32 data)
  *		      DA(a,35), DA(a,41), DA(a,47)) << 5;
  *
  */
-static inline u32 tlan_hash_func(const u8 *a)
-{
-	u8     hash;
+static inline u32 tlan_hash_func(const u8 *a) {
+    u8     hash;
 
-	hash = (a[0]^a[3]);		/* & 077 */
-	hash ^= ((a[0]^a[3])>>6);	/* & 003 */
-	hash ^= ((a[1]^a[4])<<2);	/* & 074 */
-	hash ^= ((a[1]^a[4])>>4);	/* & 017 */
-	hash ^= ((a[2]^a[5])<<4);	/* & 060 */
-	hash ^= ((a[2]^a[5])>>2);	/* & 077 */
+    hash = (a[0]^a[3]);		/* & 077 */
+    hash ^= ((a[0]^a[3])>>6);	/* & 003 */
+    hash ^= ((a[1]^a[4])<<2);	/* & 074 */
+    hash ^= ((a[1]^a[4])>>4);	/* & 017 */
+    hash ^= ((a[2]^a[5])<<4);	/* & 060 */
+    hash ^= ((a[2]^a[5])>>2);	/* & 077 */
 
-	return hash & 077;
+    return hash & 077;
 }
 #endif

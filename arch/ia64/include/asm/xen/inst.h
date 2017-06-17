@@ -72,48 +72,48 @@
 	ld8 reg = [reg]
 
 .macro __MOV_FROM_IVR reg, clob
-	.ifc "\reg", "r8"
-		XEN_HYPER_GET_IVR
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		XEN_HYPER_GET_IVR
-		;;
-		mov \reg = r8
-		.exitm
-	.endif
+.ifc "\reg", "r8"
+XEN_HYPER_GET_IVR
+.exitm
+.endif
+.ifc "\clob", "r8"
+XEN_HYPER_GET_IVR
+;;
+mov \reg = r8
+           .exitm
+           .endif
 
-	mov \clob = r8
-	;;
-	XEN_HYPER_GET_IVR
-	;;
-	mov \reg = r8
-	;;
-	mov r8 = \clob
-.endm
+           mov \clob = r8
+                       ;;
+XEN_HYPER_GET_IVR
+;;
+mov \reg = r8
+           ;;
+mov r8 = \clob
+         .endm
 #define MOV_FROM_IVR(reg, clob)	__MOV_FROM_IVR reg, clob
 
-.macro __MOV_FROM_PSR pred, reg, clob
-	.ifc "\reg", "r8"
-		(\pred)	XEN_HYPER_GET_PSR;
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		(\pred)	XEN_HYPER_GET_PSR
-		;;
-		(\pred)	mov \reg = r8
-		.exitm
-	.endif
+         .macro __MOV_FROM_PSR pred, reg, clob
+         .ifc "\reg", "r8"
+         (\pred)	XEN_HYPER_GET_PSR;
+.exitm
+.endif
+.ifc "\clob", "r8"
+(\pred)	XEN_HYPER_GET_PSR
+;;
+(\pred)	mov \reg = r8
+                   .exitm
+                   .endif
 
-	(\pred)	mov \clob = r8
-	(\pred)	XEN_HYPER_GET_PSR
-	;;
-	(\pred)	mov \reg = r8
-	(\pred)	mov r8 = \clob
-.endm
+                   (\pred)	mov \clob = r8
+                                       (\pred)	XEN_HYPER_GET_PSR
+                                       ;;
+(\pred)	mov \reg = r8
+                   (\pred)	mov r8 = \clob
+                                    .endm
 #define MOV_FROM_PSR(pred, reg, clob)	__MOV_FROM_PSR pred, reg, clob
 
-/* assuming ar.itc is read with interrupt disabled. */
+                                    /* assuming ar.itc is read with interrupt disabled. */
 #define MOV_FROM_ITC(pred, pred_clob, reg, clob)		\
 (pred)	movl clob = XSI_ITC_OFFSET;				\
 	;;							\
@@ -167,160 +167,160 @@
 	;;			\
 	st8 [clob] = reg
 
-.macro ____MOV_TO_KR kr, reg, clob0, clob1
-	.ifc "\clob0", "r9"
-		.error "clob0 \clob0 must not be r9"
-	.endif
-	.ifc "\clob1", "r8"
-		.error "clob1 \clob1 must not be r8"
-	.endif
+                                    .macro ____MOV_TO_KR kr, reg, clob0, clob1
+                                    .ifc "\clob0", "r9"
+                                    .error "clob0 \clob0 must not be r9"
+                                    .endif
+                                    .ifc "\clob1", "r8"
+                                    .error "clob1 \clob1 must not be r8"
+                                    .endif
 
-	.ifnc "\reg", "r9"
-		.ifnc "\clob1", "r9"
-			mov \clob1 = r9
-		.endif
-		mov r9 = \reg
-	.endif
-	.ifnc "\clob0", "r8"
-		mov \clob0 = r8
-	.endif
-	mov r8 = \kr
-	;;
-	XEN_HYPER_SET_KR
+                                    .ifnc "\reg", "r9"
+                                    .ifnc "\clob1", "r9"
+                                    mov \clob1 = r9
+                                            .endif
+                                            mov r9 = \reg
+                                                    .endif
+                                                    .ifnc "\clob0", "r8"
+                                                    mov \clob0 = r8
+                                                            .endif
+                                                            mov r8 = \kr
+                                                                    ;;
+XEN_HYPER_SET_KR
 
-	.ifnc "\reg", "r9"
-		.ifnc "\clob1", "r9"
-			mov r9 = \clob1
-		.endif
-	.endif
-	.ifnc "\clob0", "r8"
-		mov r8 = \clob0
-	.endif
-.endm
+.ifnc "\reg", "r9"
+.ifnc "\clob1", "r9"
+mov r9 = \clob1
+         .endif
+         .endif
+         .ifnc "\clob0", "r8"
+         mov r8 = \clob0
+                  .endif
+                  .endm
 
-.macro __MOV_TO_KR kr, reg, clob0, clob1
-	.ifc "\clob0", "r9"
-		____MOV_TO_KR \kr, \reg, \clob1, \clob0
-		.exitm
-	.endif
-	.ifc "\clob1", "r8"
-		____MOV_TO_KR \kr, \reg, \clob1, \clob0
-		.exitm
-	.endif
+                  .macro __MOV_TO_KR kr, reg, clob0, clob1
+                  .ifc "\clob0", "r9"
+                  ____MOV_TO_KR \kr, \reg, \clob1, \clob0
+                  .exitm
+                  .endif
+                  .ifc "\clob1", "r8"
+                  ____MOV_TO_KR \kr, \reg, \clob1, \clob0
+                  .exitm
+                  .endif
 
-	____MOV_TO_KR \kr, \reg, \clob0, \clob1
-.endm
+                  ____MOV_TO_KR \kr, \reg, \clob0, \clob1
+                  .endm
 
 #define MOV_TO_KR(kr, reg, clob0, clob1) \
 	__MOV_TO_KR IA64_KR_ ## kr, reg, clob0, clob1
 
 
-.macro __ITC_I pred, reg, clob
-	.ifc "\reg", "r8"
-		(\pred)	XEN_HYPER_ITC_I
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		(\pred)	mov r8 = \reg
-		;;
-		(\pred)	XEN_HYPER_ITC_I
-		.exitm
-	.endif
+                  .macro __ITC_I pred, reg, clob
+                  .ifc "\reg", "r8"
+                  (\pred)	XEN_HYPER_ITC_I
+                  .exitm
+                  .endif
+                  .ifc "\clob", "r8"
+                  (\pred)	mov r8 = \reg
+                                   ;;
+(\pred)	XEN_HYPER_ITC_I
+.exitm
+.endif
 
-	(\pred)	mov \clob = r8
-	(\pred)	mov r8 = \reg
-	;;
-	(\pred)	XEN_HYPER_ITC_I
-	;;
-	(\pred)	mov r8 = \clob
-	;;
+(\pred)	mov \clob = r8
+                    (\pred)	mov r8 = \reg
+                                     ;;
+(\pred)	XEN_HYPER_ITC_I
+;;
+(\pred)	mov r8 = \clob
+                 ;;
 .endm
 #define ITC_I(pred, reg, clob)	__ITC_I pred, reg, clob
 
 .macro __ITC_D pred, reg, clob
-	.ifc "\reg", "r8"
-		(\pred)	XEN_HYPER_ITC_D
-		;;
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		(\pred)	mov r8 = \reg
-		;;
-		(\pred)	XEN_HYPER_ITC_D
-		;;
-		.exitm
-	.endif
+.ifc "\reg", "r8"
+(\pred)	XEN_HYPER_ITC_D
+;;
+.exitm
+.endif
+.ifc "\clob", "r8"
+(\pred)	mov r8 = \reg
+                 ;;
+(\pred)	XEN_HYPER_ITC_D
+;;
+.exitm
+.endif
 
-	(\pred)	mov \clob = r8
-	(\pred)	mov r8 = \reg
-	;;
-	(\pred)	XEN_HYPER_ITC_D
-	;;
-	(\pred)	mov r8 = \clob
-	;;
+(\pred)	mov \clob = r8
+                    (\pred)	mov r8 = \reg
+                                     ;;
+(\pred)	XEN_HYPER_ITC_D
+;;
+(\pred)	mov r8 = \clob
+                 ;;
 .endm
 #define ITC_D(pred, reg, clob)	__ITC_D pred, reg, clob
 
 .macro __ITC_I_AND_D pred_i, pred_d, reg, clob
-	.ifc "\reg", "r8"
-		(\pred_i)XEN_HYPER_ITC_I
-		;;
-		(\pred_d)XEN_HYPER_ITC_D
-		;;
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		mov r8 = \reg
-		;;
-		(\pred_i)XEN_HYPER_ITC_I
-		;;
-		(\pred_d)XEN_HYPER_ITC_D
-		;;
-		.exitm
-	.endif
+.ifc "\reg", "r8"
+(\pred_i)XEN_HYPER_ITC_I
+;;
+(\pred_d)XEN_HYPER_ITC_D
+;;
+.exitm
+.endif
+.ifc "\clob", "r8"
+mov r8 = \reg
+         ;;
+(\pred_i)XEN_HYPER_ITC_I
+;;
+(\pred_d)XEN_HYPER_ITC_D
+;;
+.exitm
+.endif
 
-	mov \clob = r8
-	mov r8 = \reg
-	;;
-	(\pred_i)XEN_HYPER_ITC_I
-	;;
-	(\pred_d)XEN_HYPER_ITC_D
-	;;
-	mov r8 = \clob
-	;;
+mov \clob = r8
+            mov r8 = \reg
+                     ;;
+(\pred_i)XEN_HYPER_ITC_I
+;;
+(\pred_d)XEN_HYPER_ITC_D
+;;
+mov r8 = \clob
+         ;;
 .endm
 #define ITC_I_AND_D(pred_i, pred_d, reg, clob) \
 	__ITC_I_AND_D pred_i, pred_d, reg, clob
 
 .macro __THASH pred, reg0, reg1, clob
-	.ifc "\reg0", "r8"
-		(\pred)	mov r8 = \reg1
-		(\pred)	XEN_HYPER_THASH
-		.exitm
-	.endc
-	.ifc "\reg1", "r8"
-		(\pred)	XEN_HYPER_THASH
-		;;
-		(\pred)	mov \reg0 = r8
-		;;
-		.exitm
-	.endif
-	.ifc "\clob", "r8"
-		(\pred)	mov r8 = \reg1
-		(\pred)	XEN_HYPER_THASH
-		;;
-		(\pred)	mov \reg0 = r8
-		;;
-		.exitm
-	.endif
+.ifc "\reg0", "r8"
+(\pred)	mov r8 = \reg1
+                 (\pred)	XEN_HYPER_THASH
+                 .exitm
+                 .endc
+                 .ifc "\reg1", "r8"
+                 (\pred)	XEN_HYPER_THASH
+                 ;;
+(\pred)	mov \reg0 = r8
+                    ;;
+.exitm
+.endif
+.ifc "\clob", "r8"
+(\pred)	mov r8 = \reg1
+                 (\pred)	XEN_HYPER_THASH
+                 ;;
+(\pred)	mov \reg0 = r8
+                    ;;
+.exitm
+.endif
 
-	(\pred)	mov \clob = r8
-	(\pred)	mov r8 = \reg1
-	(\pred)	XEN_HYPER_THASH
-	;;
-	(\pred)	mov \reg0 = r8
-	(\pred)	mov r8 = \clob
-	;;
+(\pred)	mov \clob = r8
+                    (\pred)	mov r8 = \reg1
+                                     (\pred)	XEN_HYPER_THASH
+                                     ;;
+(\pred)	mov \reg0 = r8
+                    (\pred)	mov r8 = \clob
+                                     ;;
 .endm
 #define THASH(pred, reg0, reg1, clob) __THASH pred, reg0, reg1, clob
 
@@ -434,7 +434,7 @@
 	st4 [clob0] = r0
 
 
-	/* FIXME: THIS CODE IS NOT NaT SAFE! */
+/* FIXME: THIS CODE IS NOT NaT SAFE! */
 #define XEN_BSW_1(clob)			\
 	mov clob = ar.unat;		\
 	movl r30 = XSI_B1NAT;		\

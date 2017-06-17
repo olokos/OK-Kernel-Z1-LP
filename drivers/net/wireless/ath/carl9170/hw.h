@@ -730,50 +730,50 @@
 #define AR9170_PRAM_SIZE		0x8000
 
 enum cpu_clock {
-	AHB_STATIC_40MHZ = 0,
-	AHB_GMODE_22MHZ = 1,
-	AHB_AMODE_20MHZ = 1,
-	AHB_GMODE_44MHZ = 2,
-	AHB_AMODE_40MHZ = 2,
-	AHB_GMODE_88MHZ = 3,
-	AHB_AMODE_80MHZ = 3
+    AHB_STATIC_40MHZ = 0,
+    AHB_GMODE_22MHZ = 1,
+    AHB_AMODE_20MHZ = 1,
+    AHB_GMODE_44MHZ = 2,
+    AHB_AMODE_40MHZ = 2,
+    AHB_GMODE_88MHZ = 3,
+    AHB_AMODE_80MHZ = 3
 };
 
 /* USB endpoints */
 enum ar9170_usb_ep {
-	/*
-	 * Control EP is always EP 0 (USB SPEC)
-	 *
-	 * The weird thing is: the original firmware has a few
-	 * comments that suggest that the actual EP numbers
-	 * are in the 1 to 10 range?!
-	 */
-	AR9170_USB_EP_CTRL		= 0,
+    /*
+     * Control EP is always EP 0 (USB SPEC)
+     *
+     * The weird thing is: the original firmware has a few
+     * comments that suggest that the actual EP numbers
+     * are in the 1 to 10 range?!
+     */
+    AR9170_USB_EP_CTRL		= 0,
 
-	AR9170_USB_EP_TX,
-	AR9170_USB_EP_RX,
-	AR9170_USB_EP_IRQ,
-	AR9170_USB_EP_CMD,
-	AR9170_USB_NUM_EXTRA_EP		= 4,
+    AR9170_USB_EP_TX,
+    AR9170_USB_EP_RX,
+    AR9170_USB_EP_IRQ,
+    AR9170_USB_EP_CMD,
+    AR9170_USB_NUM_EXTRA_EP		= 4,
 
-	__AR9170_USB_NUM_EP,
+    __AR9170_USB_NUM_EP,
 
-	__AR9170_USB_NUM_MAX_EP		= 10
+    __AR9170_USB_NUM_MAX_EP		= 10
 };
 
 enum ar9170_usb_fifo {
-	__AR9170_USB_NUM_MAX_FIFO	= 10
+    __AR9170_USB_NUM_MAX_FIFO	= 10
 };
 
 enum ar9170_tx_queues {
-	AR9170_TXQ0	= 0,
-	AR9170_TXQ1,
-	AR9170_TXQ2,
-	AR9170_TXQ3,
-	AR9170_TXQ_SPECIAL,
+    AR9170_TXQ0	= 0,
+    AR9170_TXQ1,
+    AR9170_TXQ2,
+    AR9170_TXQ3,
+    AR9170_TXQ_SPECIAL,
 
-	/* keep last */
-	__AR9170_NUM_TX_QUEUES = 5
+    /* keep last */
+    __AR9170_NUM_TX_QUEUES = 5
 };
 
 #define	AR9170_TX_STREAM_TAG		0x697e
@@ -781,10 +781,10 @@ enum ar9170_tx_queues {
 #define	AR9170_RX_STREAM_MAX_SIZE	0xffff
 
 struct ar9170_stream {
-	__le16 length;
-	__le16 tag;
+    __le16 length;
+    __le16 tag;
 
-	u8 payload[0];
+    u8 payload[0];
 } __packed __aligned(4);
 #define AR9170_STREAM_LEN				4
 

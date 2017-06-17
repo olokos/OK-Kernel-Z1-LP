@@ -18,16 +18,16 @@ int	target_emulate_noop(struct se_task *task);
 /* target_core_device.c */
 struct se_dev_entry *core_get_se_deve_from_rtpi(struct se_node_acl *, u16);
 int	core_free_device_list_for_node(struct se_node_acl *,
-		struct se_portal_group *);
+                                   struct se_portal_group *);
 void	core_dec_lacl_count(struct se_node_acl *, struct se_cmd *);
 void	core_update_device_list_access(u32, u32, struct se_node_acl *);
 int	core_update_device_list_for_node(struct se_lun *, struct se_lun_acl *,
-		u32, u32, struct se_node_acl *, struct se_portal_group *, int);
+                                     u32, u32, struct se_node_acl *, struct se_portal_group *, int);
 void	core_clear_lun_from_tpg(struct se_lun *, struct se_portal_group *);
 int	core_dev_export(struct se_device *, struct se_portal_group *,
-		struct se_lun *);
+                    struct se_lun *);
 void	core_dev_unexport(struct se_device *, struct se_portal_group *,
-		struct se_lun *);
+                          struct se_lun *);
 int	target_report_luns(struct se_task *);
 void	se_release_device_for_hba(struct se_device *);
 void	se_release_vpd_for_dev(struct se_device *);
@@ -57,17 +57,17 @@ int	se_dev_set_fabric_max_sectors(struct se_device *, u32);
 int	se_dev_set_optimal_sectors(struct se_device *, u32);
 int	se_dev_set_block_size(struct se_device *, u32);
 struct se_lun *core_dev_add_lun(struct se_portal_group *, struct se_hba *,
-		struct se_device *, u32);
+                                struct se_device *, u32);
 int	core_dev_del_lun(struct se_portal_group *, u32);
 struct se_lun *core_get_lun_from_tpg(struct se_portal_group *, u32);
 struct se_lun_acl *core_dev_init_initiator_node_lun_acl(struct se_portal_group *,
-		u32, char *, int *);
+        u32, char *, int *);
 int	core_dev_add_initiator_node_lun_acl(struct se_portal_group *,
-		struct se_lun_acl *, u32, u32);
+                                        struct se_lun_acl *, u32, u32);
 int	core_dev_del_initiator_node_lun_acl(struct se_portal_group *,
-		struct se_lun *, struct se_lun_acl *);
+                                        struct se_lun *, struct se_lun_acl *);
 void	core_dev_free_initiator_node_lun_acl(struct se_portal_group *,
-		struct se_lun_acl *lacl);
+        struct se_lun_acl *lacl);
 int	core_dev_setup_virtual_lun0(void);
 void	core_dev_release_virtual_lun0(void);
 
@@ -77,22 +77,22 @@ int	core_delete_hba(struct se_hba *);
 
 /* target_core_tmr.c */
 void	core_tmr_abort_task(struct se_device *, struct se_tmr_req *,
-			struct se_session *);
+                            struct se_session *);
 int	core_tmr_lun_reset(struct se_device *, struct se_tmr_req *,
-		struct list_head *, struct se_cmd *);
+                       struct list_head *, struct se_cmd *);
 
 /* target_core_tpg.c */
 extern struct se_device *g_lun0_dev;
 
 struct se_node_acl *__core_tpg_get_initiator_node_acl(struct se_portal_group *tpg,
-		const char *);
+        const char *);
 struct se_node_acl *core_tpg_get_initiator_node_acl(struct se_portal_group *tpg,
-		unsigned char *);
+        unsigned char *);
 void	core_tpg_add_node_to_devs(struct se_node_acl *, struct se_portal_group *);
 void	core_tpg_wait_for_nacl_pr_ref(struct se_node_acl *);
 struct se_lun *core_tpg_pre_addlun(struct se_portal_group *, u32);
 int	core_tpg_post_addlun(struct se_portal_group *, struct se_lun *,
-		u32, void *);
+                         u32, void *);
 struct se_lun *core_tpg_pre_dellun(struct se_portal_group *, u32 unpacked_lun);
 int	core_tpg_post_dellun(struct se_portal_group *, struct se_lun *);
 
@@ -105,11 +105,11 @@ u32	scsi_get_new_index(scsi_index_t);
 void	transport_subsystem_check_init(void);
 void	transport_cmd_finish_abort(struct se_cmd *, int);
 void	__transport_remove_task_from_execute_queue(struct se_task *,
-		struct se_device *);
+        struct se_device *);
 unsigned char *transport_dump_cmd_direction(struct se_cmd *);
 void	transport_dump_dev_state(struct se_device *, char *, int *);
 void	transport_dump_dev_info(struct se_device *, struct se_lun *,
-		unsigned long long, char *, int *);
+                                unsigned long long, char *, int *);
 void	transport_dump_vpd_proto_id(struct t10_vpd *, unsigned char *, int);
 int	transport_dump_vpd_assoc(struct t10_vpd *, unsigned char *, int);
 int	transport_dump_vpd_ident_type(struct t10_vpd *, unsigned char *, int);

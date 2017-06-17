@@ -90,25 +90,23 @@ do { if ((lbs_debug & (grp)) == (grp)) \
 #define lbs_deb_cfg80211(fmt, args...)  LBS_DEB_LL(LBS_DEB_CFG80211, " cfg80211", fmt, ##args)
 
 #ifdef DEBUG
-static inline void lbs_deb_hex(unsigned int grp, const char *prompt, u8 *buf, int len)
-{
-	int i = 0;
+static inline void lbs_deb_hex(unsigned int grp, const char *prompt, u8 *buf, int len) {
+    int i = 0;
 
-	if (len &&
-	    (lbs_debug & LBS_DEB_HEX) &&
-	    (lbs_debug & grp))
-	{
-		for (i = 1; i <= len; i++) {
-			if ((i & 0xf) == 1) {
-				if (i != 1)
-					printk("\n");
-				printk(DRV_NAME " %s: ", prompt);
-			}
-			printk("%02x ", (u8) * buf);
-			buf++;
-		}
-		printk("\n");
-	}
+    if (len &&
+            (lbs_debug & LBS_DEB_HEX) &&
+            (lbs_debug & grp)) {
+        for (i = 1; i <= len; i++) {
+            if ((i & 0xf) == 1) {
+                if (i != 1)
+                    printk("\n");
+                printk(DRV_NAME " %s: ", prompt);
+            }
+            printk("%02x ", (u8) * buf);
+            buf++;
+        }
+        printk("\n");
+    }
 }
 #else
 #define lbs_deb_hex(grp,prompt,buf,len)	do {} while (0)
@@ -306,75 +304,75 @@ extern u16 lbs_region_code_to_index[MRVDRV_MAX_REGION_CODE];
 /* ENUM definition */
 /* SNRNF_TYPE */
 enum SNRNF_TYPE {
-	TYPE_BEACON = 0,
-	TYPE_RXPD,
-	MAX_TYPE_B
+    TYPE_BEACON = 0,
+    TYPE_RXPD,
+    MAX_TYPE_B
 };
 
 /* SNRNF_DATA */
 enum SNRNF_DATA {
-	TYPE_NOAVG = 0,
-	TYPE_AVG,
-	MAX_TYPE_AVG
+    TYPE_NOAVG = 0,
+    TYPE_AVG,
+    MAX_TYPE_AVG
 };
 
 /* LBS_802_11_POWER_MODE */
 enum LBS_802_11_POWER_MODE {
-	LBS802_11POWERMODECAM,
-	LBS802_11POWERMODEMAX_PSP,
-	LBS802_11POWERMODEFAST_PSP,
-	/* not a real mode, defined as an upper bound */
-	LBS802_11POWEMODEMAX
+    LBS802_11POWERMODECAM,
+    LBS802_11POWERMODEMAX_PSP,
+    LBS802_11POWERMODEFAST_PSP,
+    /* not a real mode, defined as an upper bound */
+    LBS802_11POWEMODEMAX
 };
 
 /* PS_STATE */
 enum PS_STATE {
-	PS_STATE_FULL_POWER,
-	PS_STATE_AWAKE,
-	PS_STATE_PRE_SLEEP,
-	PS_STATE_SLEEP
+    PS_STATE_FULL_POWER,
+    PS_STATE_AWAKE,
+    PS_STATE_PRE_SLEEP,
+    PS_STATE_SLEEP
 };
 
 /* DNLD_STATE */
 enum DNLD_STATE {
-	DNLD_RES_RECEIVED,
-	DNLD_DATA_SENT,
-	DNLD_CMD_SENT,
-	DNLD_BOOTCMD_SENT,
+    DNLD_RES_RECEIVED,
+    DNLD_DATA_SENT,
+    DNLD_CMD_SENT,
+    DNLD_BOOTCMD_SENT,
 };
 
 /* LBS_MEDIA_STATE */
 enum LBS_MEDIA_STATE {
-	LBS_CONNECTED,
-	LBS_DISCONNECTED
+    LBS_CONNECTED,
+    LBS_DISCONNECTED
 };
 
 /* LBS_802_11_PRIVACY_FILTER */
 enum LBS_802_11_PRIVACY_FILTER {
-	LBS802_11PRIVFILTERACCEPTALL,
-	LBS802_11PRIVFILTER8021XWEP
+    LBS802_11PRIVFILTERACCEPTALL,
+    LBS802_11PRIVFILTER8021XWEP
 };
 
 /* mv_ms_type */
 enum mv_ms_type {
-	MVMS_DAT = 0,
-	MVMS_CMD = 1,
-	MVMS_TXDONE = 2,
-	MVMS_EVENT
+    MVMS_DAT = 0,
+    MVMS_CMD = 1,
+    MVMS_TXDONE = 2,
+    MVMS_EVENT
 };
 
 /* KEY_TYPE_ID */
 enum KEY_TYPE_ID {
-	KEY_TYPE_ID_WEP = 0,
-	KEY_TYPE_ID_TKIP,
-	KEY_TYPE_ID_AES
+    KEY_TYPE_ID_WEP = 0,
+    KEY_TYPE_ID_TKIP,
+    KEY_TYPE_ID_AES
 };
 
 /* KEY_INFO_WPA (applies to both TKIP and AES/CCMP) */
 enum KEY_INFO_WPA {
-	KEY_INFO_WPA_MCAST = 0x01,
-	KEY_INFO_WPA_UNICAST = 0x02,
-	KEY_INFO_WPA_ENABLED = 0x04
+    KEY_INFO_WPA_MCAST = 0x01,
+    KEY_INFO_WPA_UNICAST = 0x02,
+    KEY_INFO_WPA_ENABLED = 0x04
 };
 
 /* Default values for fwt commands. */

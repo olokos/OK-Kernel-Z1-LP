@@ -31,7 +31,9 @@ int acpi_sysfs_init(void);
 extern struct dentry *acpi_debugfs_dir;
 int acpi_debugfs_init(void);
 #else
-static inline void acpi_debugfs_init(void) { return; }
+static inline void acpi_debugfs_init(void) {
+    return;
+}
 #endif
 
 /* --------------------------------------------------------------------------
@@ -52,17 +54,17 @@ void acpi_early_processor_set_pdc(void);
                                   Embedded Controller
    -------------------------------------------------------------------------- */
 struct acpi_ec {
-	acpi_handle handle;
-	unsigned long gpe;
-	unsigned long command_addr;
-	unsigned long data_addr;
-	unsigned long global_lock;
-	unsigned long flags;
-	struct mutex lock;
-	wait_queue_head_t wait;
-	struct list_head list;
-	struct transaction *curr;
-	spinlock_t curr_lock;
+    acpi_handle handle;
+    unsigned long gpe;
+    unsigned long command_addr;
+    unsigned long data_addr;
+    unsigned long global_lock;
+    unsigned long flags;
+    struct mutex lock;
+    wait_queue_head_t wait;
+    struct list_head list;
+    struct transaction *curr;
+    spinlock_t curr_lock;
 };
 
 extern struct acpi_ec *first_ec;
@@ -86,10 +88,16 @@ void suspend_nvs_free(void);
 int suspend_nvs_save(void);
 void suspend_nvs_restore(void);
 #else
-static inline int acpi_sleep_proc_init(void) { return 0; }
-static inline int suspend_nvs_alloc(void) { return 0; }
+static inline int acpi_sleep_proc_init(void) {
+    return 0;
+}
+static inline int suspend_nvs_alloc(void) {
+    return 0;
+}
 static inline void suspend_nvs_free(void) {}
-static inline int suspend_nvs_save(void) { return 0; }
+static inline int suspend_nvs_save(void) {
+    return 0;
+}
 static inline void suspend_nvs_restore(void) {}
 #endif
 

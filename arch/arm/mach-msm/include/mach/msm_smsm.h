@@ -19,23 +19,23 @@
 
 #if defined(CONFIG_MSM_N_WAY_SMSM)
 enum {
-	SMSM_APPS_STATE,
-	SMSM_MODEM_STATE,
-	SMSM_Q6_STATE,
-	SMSM_APPS_DEM,
-	SMSM_WCNSS_STATE = SMSM_APPS_DEM,
-	SMSM_MODEM_DEM,
-	SMSM_DSPS_STATE = SMSM_MODEM_DEM,
-	SMSM_Q6_DEM,
-	SMSM_POWER_MASTER_DEM,
-	SMSM_TIME_MASTER_DEM,
+    SMSM_APPS_STATE,
+    SMSM_MODEM_STATE,
+    SMSM_Q6_STATE,
+    SMSM_APPS_DEM,
+    SMSM_WCNSS_STATE = SMSM_APPS_DEM,
+    SMSM_MODEM_DEM,
+    SMSM_DSPS_STATE = SMSM_MODEM_DEM,
+    SMSM_Q6_DEM,
+    SMSM_POWER_MASTER_DEM,
+    SMSM_TIME_MASTER_DEM,
 };
 extern uint32_t SMSM_NUM_ENTRIES;
 #else
 enum {
-	SMSM_APPS_STATE = 1,
-	SMSM_MODEM_STATE = 3,
-	SMSM_NUM_ENTRIES,
+    SMSM_APPS_STATE = 1,
+    SMSM_MODEM_STATE = 3,
+    SMSM_NUM_ENTRIES,
 };
 #endif
 
@@ -44,11 +44,11 @@ enum {
  * with SMEM PIDs, despite initial expectations.
  */
 enum {
-	SMSM_APPS = SMEM_APPS,
-	SMSM_MODEM = SMEM_MODEM,
-	SMSM_Q6 = SMEM_Q6,
-	SMSM_WCNSS,
-	SMSM_DSPS,
+    SMSM_APPS = SMEM_APPS,
+    SMSM_MODEM = SMEM_MODEM,
+    SMSM_Q6 = SMEM_Q6,
+    SMSM_WCNSS,
+    SMSM_DSPS,
 };
 extern uint32_t SMSM_NUM_HOSTS;
 
@@ -105,14 +105,14 @@ extern uint32_t SMSM_NUM_HOSTS;
 
 
 enum {
-	SMEM_APPS_Q6_SMSM = 3,
-	SMEM_Q6_APPS_SMSM = 5,
-	SMSM_NUM_INTR_MUX = 8,
+    SMEM_APPS_Q6_SMSM = 3,
+    SMEM_Q6_APPS_SMSM = 5,
+    SMSM_NUM_INTR_MUX = 8,
 };
 
 #ifdef CONFIG_MSM_SMD
 int smsm_change_state(uint32_t smsm_entry,
-		      uint32_t clear_mask, uint32_t set_mask);
+                      uint32_t clear_mask, uint32_t set_mask);
 
 /*
  * Changes the global interrupt mask.  The set and clear masks are re-applied
@@ -129,16 +129,16 @@ int smsm_change_state(uint32_t smsm_entry,
  * @returns 0 for success, < 0 for error
  */
 int smsm_change_intr_mask(uint32_t smsm_entry,
-			  uint32_t clear_mask, uint32_t set_mask);
+                          uint32_t clear_mask, uint32_t set_mask);
 int smsm_get_intr_mask(uint32_t smsm_entry, uint32_t *intr_mask);
 uint32_t smsm_get_state(uint32_t smsm_entry);
 int smsm_state_cb_register(uint32_t smsm_entry, uint32_t mask,
-	void (*notify)(void *, uint32_t old_state, uint32_t new_state),
-	void *data);
+                           void (*notify)(void *, uint32_t old_state, uint32_t new_state),
+                           void *data);
 int smsm_state_cb_deregister(uint32_t smsm_entry, uint32_t mask,
-	void (*notify)(void *, uint32_t, uint32_t), void *data);
+                             void (*notify)(void *, uint32_t, uint32_t), void *data);
 void smsm_print_sleep_info(uint32_t sleep_delay, uint32_t sleep_limit,
-	uint32_t irq_mask, uint32_t wakeup_reason, uint32_t pending_irqs);
+                           uint32_t irq_mask, uint32_t wakeup_reason, uint32_t pending_irqs);
 void smsm_reset_modem(unsigned mode);
 void smsm_reset_modem_cont(void);
 void smd_sleep_exit(void);
@@ -148,9 +148,8 @@ int smsm_check_for_modem_crash(void);
 
 #else
 static inline int smsm_change_state(uint32_t smsm_entry,
-		      uint32_t clear_mask, uint32_t set_mask)
-{
-	return -ENODEV;
+                                    uint32_t clear_mask, uint32_t set_mask) {
+    return -ENODEV;
 }
 
 /*
@@ -168,47 +167,37 @@ static inline int smsm_change_state(uint32_t smsm_entry,
  * @returns 0 for success, < 0 for error
  */
 static inline int smsm_change_intr_mask(uint32_t smsm_entry,
-			  uint32_t clear_mask, uint32_t set_mask)
-{
-	return -ENODEV;
+                                        uint32_t clear_mask, uint32_t set_mask) {
+    return -ENODEV;
 }
 
-static inline int smsm_get_intr_mask(uint32_t smsm_entry, uint32_t *intr_mask)
-{
-	return -ENODEV;
+static inline int smsm_get_intr_mask(uint32_t smsm_entry, uint32_t *intr_mask) {
+    return -ENODEV;
 }
-static inline uint32_t smsm_get_state(uint32_t smsm_entry)
-{
-	return 0;
+static inline uint32_t smsm_get_state(uint32_t smsm_entry) {
+    return 0;
 }
 static inline int smsm_state_cb_register(uint32_t smsm_entry, uint32_t mask,
-	void (*notify)(void *, uint32_t old_state, uint32_t new_state),
-	void *data)
-{
-	return -ENODEV;
+        void (*notify)(void *, uint32_t old_state, uint32_t new_state),
+        void *data) {
+    return -ENODEV;
 }
 static inline int smsm_state_cb_deregister(uint32_t smsm_entry, uint32_t mask,
-	void (*notify)(void *, uint32_t, uint32_t), void *data)
-{
-	return -ENODEV;
+        void (*notify)(void *, uint32_t, uint32_t), void *data) {
+    return -ENODEV;
 }
 static inline void smsm_print_sleep_info(uint32_t sleep_delay,
-	uint32_t sleep_limit, uint32_t irq_mask, uint32_t wakeup_reason,
-	uint32_t pending_irqs)
-{
+        uint32_t sleep_limit, uint32_t irq_mask, uint32_t wakeup_reason,
+        uint32_t pending_irqs) {
 }
-static inline void smsm_reset_modem(unsigned mode)
-{
+static inline void smsm_reset_modem(unsigned mode) {
 }
-static inline void smsm_reset_modem_cont(void)
-{
+static inline void smsm_reset_modem_cont(void) {
 }
-static inline void smd_sleep_exit(void)
-{
+static inline void smd_sleep_exit(void) {
 }
-static inline int smsm_check_for_modem_crash(void)
-{
-	return -ENODEV;
+static inline int smsm_check_for_modem_crash(void) {
+    return -ENODEV;
 }
 #endif
 #endif

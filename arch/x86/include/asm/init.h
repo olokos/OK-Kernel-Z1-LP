@@ -9,8 +9,8 @@ extern void __init zone_sizes_init(void);
 
 extern unsigned long __init
 kernel_physical_mapping_init(unsigned long start,
-			     unsigned long end,
-			     unsigned long page_size_mask);
+                             unsigned long end,
+                             unsigned long page_size_mask);
 
 
 extern unsigned long __initdata pgt_buf_start;

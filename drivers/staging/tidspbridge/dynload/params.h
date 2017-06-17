@@ -36,7 +36,7 @@
 #if defined(__TMS320C55X__) || defined(_TMS320C5XX)
 #define BITS_PER_AU 16
 #define LOG_BITS_PER_AU 4
- /* use this print string in error messages for uint32_t */
+/* use this print string in error messages for uint32_t */
 #define FMT_UI32 "0x%lx"
 #define FMT8_UI32 "%08lx"	/* same but no 0x, fixed width field */
 #else

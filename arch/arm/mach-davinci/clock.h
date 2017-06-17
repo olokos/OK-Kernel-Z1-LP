@@ -74,35 +74,35 @@
 #define PLLCMD_GOSET	BIT(0)
 
 struct pll_data {
-	u32 phys_base;
-	void __iomem *base;
-	u32 num;
-	u32 flags;
-	u32 input_rate;
-	u32 div_ratio_mask;
+    u32 phys_base;
+    void __iomem *base;
+    u32 num;
+    u32 flags;
+    u32 input_rate;
+    u32 div_ratio_mask;
 };
 #define PLL_HAS_PREDIV          0x01
 #define PLL_HAS_POSTDIV         0x02
 
 struct clk {
-	struct list_head	node;
-	struct module		*owner;
-	const char		*name;
-	unsigned long		rate;
-	unsigned long		maxrate;	/* H/W supported max rate */
-	u8			usecount;
-	u8			lpsc;
-	u8			gpsc;
-	u8			domain;
-	u32			flags;
-	struct clk              *parent;
-	struct list_head	children; 	/* list of children */
-	struct list_head	childnode;	/* parent's child list node */
-	struct pll_data         *pll_data;
-	u32                     div_reg;
-	unsigned long (*recalc) (struct clk *);
-	int (*set_rate) (struct clk *clk, unsigned long rate);
-	int (*round_rate) (struct clk *clk, unsigned long rate);
+    struct list_head	node;
+    struct module		*owner;
+    const char		*name;
+    unsigned long		rate;
+    unsigned long		maxrate;	/* H/W supported max rate */
+    u8			usecount;
+    u8			lpsc;
+    u8			gpsc;
+    u8			domain;
+    u32			flags;
+    struct clk              *parent;
+    struct list_head	children; 	/* list of children */
+    struct list_head	childnode;	/* parent's child list node */
+    struct pll_data         *pll_data;
+    u32                     div_reg;
+    unsigned long (*recalc) (struct clk *);
+    int (*set_rate) (struct clk *clk, unsigned long rate);
+    int (*round_rate) (struct clk *clk, unsigned long rate);
 };
 
 /* Clock flags: SoC-specific flags start at BIT(16) */
@@ -122,7 +122,7 @@ struct clk {
 
 int davinci_clk_init(struct clk_lookup *clocks);
 int davinci_set_pllrate(struct pll_data *pll, unsigned int prediv,
-				unsigned int mult, unsigned int postdiv);
+                        unsigned int mult, unsigned int postdiv);
 int davinci_set_sysclk_rate(struct clk *clk, unsigned long rate);
 int davinci_set_refclk_rate(unsigned long rate);
 int davinci_simple_set_rate(struct clk *clk, unsigned long rate);

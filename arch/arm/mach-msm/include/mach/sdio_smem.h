@@ -23,10 +23,10 @@ int sdio_smem_register_client(void);
 int sdio_smem_unregister_client(void);
 
 struct sdio_smem_client {
-	void *buf;
-	int size;
-	struct platform_device plat_dev;
-	int (*cb_func)(int event);
+    void *buf;
+    int size;
+    struct platform_device plat_dev;
+    int (*cb_func)(int event);
 };
 
 #endif	/* __SDIO_SMEM_H */

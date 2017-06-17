@@ -47,22 +47,22 @@
 
 /* Each receive buffer is described by a receive message descriptor (RMD) */
 struct lance_rx_desc {
-	volatile unsigned short rmd0;        /* low address of packet */
-	volatile unsigned char  rmd1_bits;   /* descriptor bits */
-	volatile unsigned char  rmd1_hadr;   /* high address of packet */
-	volatile short    length;    	    /* This length is 2s complement (negative)!
+    volatile unsigned short rmd0;        /* low address of packet */
+    volatile unsigned char  rmd1_bits;   /* descriptor bits */
+    volatile unsigned char  rmd1_hadr;   /* high address of packet */
+    volatile short    length;    	    /* This length is 2s complement (negative)!
 				     * Buffer length
 				     */
-	volatile unsigned short mblength;    /* Actual number of bytes received */
+    volatile unsigned short mblength;    /* Actual number of bytes received */
 };
 
 /* Ditto for TMD: */
 struct lance_tx_desc {
-	volatile unsigned short tmd0;        /* low address of packet */
-	volatile unsigned char  tmd1_bits;   /* descriptor bits */
-	volatile unsigned char  tmd1_hadr;   /* high address of packet */
-	volatile short    length;       	    /* Length is 2s complement (negative)! */
-	volatile unsigned short misc;
+    volatile unsigned short tmd0;        /* low address of packet */
+    volatile unsigned char  tmd1_bits;   /* descriptor bits */
+    volatile unsigned char  tmd1_hadr;   /* high address of packet */
+    volatile short    length;       	    /* Length is 2s complement (negative)! */
+    volatile unsigned short misc;
 };
 
 /* There are three memory structures accessed by the LANCE:
@@ -71,61 +71,60 @@ struct lance_tx_desc {
  * init block,the Tx and Rx rings and the buffers together in memory:
  */
 struct lance_init_block {
-        volatile unsigned short mode;            /* Pre-set mode (reg. 15) */
-        volatile unsigned char phys_addr[6];     /* Physical ethernet address */
-        volatile unsigned filter[2];             /* Multicast filter (64 bits) */
+    volatile unsigned short mode;            /* Pre-set mode (reg. 15) */
+    volatile unsigned char phys_addr[6];     /* Physical ethernet address */
+    volatile unsigned filter[2];             /* Multicast filter (64 bits) */
 
-        /* Receive and transmit ring base, along with extra bits. */
-        volatile unsigned short rx_ptr;          /* receive descriptor addr */
-        volatile unsigned short rx_len;          /* receive len and high addr */
-        volatile unsigned short tx_ptr;          /* transmit descriptor addr */
-        volatile unsigned short tx_len;          /* transmit len and high addr */
+    /* Receive and transmit ring base, along with extra bits. */
+    volatile unsigned short rx_ptr;          /* receive descriptor addr */
+    volatile unsigned short rx_len;          /* receive len and high addr */
+    volatile unsigned short tx_ptr;          /* transmit descriptor addr */
+    volatile unsigned short tx_len;          /* transmit len and high addr */
 
-        /* The Tx and Rx ring entries must be aligned on 8-byte boundaries.
-         * This will be true if this whole struct is 8-byte aligned.
-         */
-        volatile struct lance_tx_desc btx_ring[TX_RING_SIZE];
-        volatile struct lance_rx_desc brx_ring[RX_RING_SIZE];
+    /* The Tx and Rx ring entries must be aligned on 8-byte boundaries.
+     * This will be true if this whole struct is 8-byte aligned.
+     */
+    volatile struct lance_tx_desc btx_ring[TX_RING_SIZE];
+    volatile struct lance_rx_desc brx_ring[RX_RING_SIZE];
 
-        volatile char   tx_buf [TX_RING_SIZE][TX_BUFF_SIZE];
-        volatile char   rx_buf [RX_RING_SIZE][RX_BUFF_SIZE];
-        /* we use this just to make the struct big enough that we can move its startaddr
-         * in order to force alignment to an eight byte boundary.
-         */
+    volatile char   tx_buf [TX_RING_SIZE][TX_BUFF_SIZE];
+    volatile char   rx_buf [RX_RING_SIZE][RX_BUFF_SIZE];
+    /* we use this just to make the struct big enough that we can move its startaddr
+     * in order to force alignment to an eight byte boundary.
+     */
 };
 
 /* This is where we keep all the stuff the driver needs to know about.
  * I'm definitely unhappy about the mechanism for allowing specific
  * drivers to add things...
  */
-struct lance_private
-{
-        char *name;
-	unsigned long base;
-        volatile struct lance_init_block *init_block; /* CPU address of RAM */
-        volatile struct lance_init_block *lance_init_block; /* LANCE address of RAM */
+struct lance_private {
+    char *name;
+    unsigned long base;
+    volatile struct lance_init_block *init_block; /* CPU address of RAM */
+    volatile struct lance_init_block *lance_init_block; /* LANCE address of RAM */
 
-        int rx_new, tx_new;
-        int rx_old, tx_old;
+    int rx_new, tx_new;
+    int rx_old, tx_old;
 
-        int lance_log_rx_bufs, lance_log_tx_bufs;
-        int rx_ring_mod_mask, tx_ring_mod_mask;
+    int lance_log_rx_bufs, lance_log_tx_bufs;
+    int rx_ring_mod_mask, tx_ring_mod_mask;
 
-        int tpe;                                  /* TPE is selected */
-        int auto_select;                          /* cable-selection is by carrier */
-        unsigned short busmaster_regval;
+    int tpe;                                  /* TPE is selected */
+    int auto_select;                          /* cable-selection is by carrier */
+    unsigned short busmaster_regval;
 
-        unsigned int irq;                         /* IRQ to register */
+    unsigned int irq;                         /* IRQ to register */
 
-        /* This is because the HP LANCE is disgusting and you have to check
-         * a DIO-specific register every time you read/write the LANCE regs :-<
-         * [could we get away with making these some sort of macro?]
-         */
-        void (*writerap)(void *, unsigned short);
-        void (*writerdp)(void *, unsigned short);
-        unsigned short (*readrdp)(void *);
-	spinlock_t devlock;
-	char tx_full;
+    /* This is because the HP LANCE is disgusting and you have to check
+     * a DIO-specific register every time you read/write the LANCE regs :-<
+     * [could we get away with making these some sort of macro?]
+     */
+    void (*writerap)(void *, unsigned short);
+    void (*writerdp)(void *, unsigned short);
+    unsigned short (*readrdp)(void *);
+    spinlock_t devlock;
+    char tx_full;
 };
 
 /*

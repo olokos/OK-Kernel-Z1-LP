@@ -26,44 +26,44 @@
 struct isar_hw;
 
 struct isar_ch {
-	struct bchannel		bch;
-	struct isar_hw		*is;
-	struct timer_list	ftimer;
-	u8			nr;
-	u8			dpath;
-	u8			mml;
-	u8			state;
-	u8			cmd;
-	u8			mod;
-	u8			newcmd;
-	u8			newmod;
-	u8			try_mod;
-	u8			conmsg[16];
+    struct bchannel		bch;
+    struct isar_hw		*is;
+    struct timer_list	ftimer;
+    u8			nr;
+    u8			dpath;
+    u8			mml;
+    u8			state;
+    u8			cmd;
+    u8			mod;
+    u8			newcmd;
+    u8			newmod;
+    u8			try_mod;
+    u8			conmsg[16];
 };
 
 struct isar_hw {
-	struct	isar_ch	ch[2];
-	void		*hw;
-	spinlock_t	*hwlock;	/* lock HW access */
-	char		*name;
-	struct module	*owner;
-	read_reg_func	*read_reg;
-	write_reg_func	*write_reg;
-	fifo_func	*read_fifo;
-	fifo_func	*write_fifo;
-	int		(*ctrl)(void *, u32, u_long);
-	void		(*release)(struct isar_hw *);
-	int		(*init)(struct isar_hw *);
-	int		(*open)(struct isar_hw *, struct channel_req *);
-	int		(*firmware)(struct isar_hw *, const u8 *, int);
-	unsigned long	Flags;
-	int		version;
-	u8		bstat;
-	u8		iis;
-	u8		cmsb;
-	u8		clsb;
-	u8		buf[256];
-	u8		log[256];
+    struct	isar_ch	ch[2];
+    void		*hw;
+    spinlock_t	*hwlock;	/* lock HW access */
+    char		*name;
+    struct module	*owner;
+    read_reg_func	*read_reg;
+    write_reg_func	*write_reg;
+    fifo_func	*read_fifo;
+    fifo_func	*write_fifo;
+    int		(*ctrl)(void *, u32, u_long);
+    void		(*release)(struct isar_hw *);
+    int		(*init)(struct isar_hw *);
+    int		(*open)(struct isar_hw *, struct channel_req *);
+    int		(*firmware)(struct isar_hw *, const u8 *, int);
+    unsigned long	Flags;
+    int		version;
+    u8		bstat;
+    u8		iis;
+    u8		cmsb;
+    u8		clsb;
+    u8		buf[256];
+    u8		log[256];
 };
 
 #define ISAR_IRQMSK	0x04

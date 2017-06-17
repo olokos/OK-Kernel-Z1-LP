@@ -89,8 +89,7 @@
 #define DEFAULT_MIN_CHAN_TIME_DURING_MIRACAST 20
 #define DEFAULT_MAX_CHAN_TIME_DURING_MIRACAST 20
 
-typedef enum eMgmtFrmDropReason
-{
+typedef enum eMgmtFrmDropReason {
     eMGMT_DROP_NO_DROP,
     eMGMT_DROP_NOT_LAST_IBSS_BCN,
     eMGMT_DROP_INFRA_BCN_IN_IBSS,
@@ -145,14 +144,12 @@ extern tSirRetStatus limHandleIBSScoalescing(tpAniSirGlobal,
         tANI_U8 *,tpPESession);
 /// Function used by other Sirius modules to read global SME state
 static inline tLimSmeStates
-limGetSmeState(tpAniSirGlobal pMac)
-{
+limGetSmeState(tpAniSirGlobal pMac) {
     return pMac->lim.gLimSmeState;
 }
 /// Function used by other Sirius modules to read global system role
 static inline tLimSystemRole
-limGetSystemRole(tpPESession psessionEntry)
-{
+limGetSystemRole(tpPESession psessionEntry) {
     return psessionEntry->limSystemRole;
 }
 //limGetAID(tpPESession psessionEntry) { return psessionEntry->limAID; }
@@ -209,14 +206,12 @@ extern tSirRetStatus limCheckRxSeqNumber(tpAniSirGlobal pMac, tANI_U8 *pRxPacket
 #define limGet11dMode(psessionEntry, pVal) (*(pVal) = (psessionEntry)->lim11dEnabled)
 #define limGetAckPolicy(pMac, pVal)         (*(pVal) = pMac->lim.ackPolicy)
 /* ----------------------------------------------------------------------- */
-static inline void limGetPhyMode(tpAniSirGlobal pMac, tANI_U32 *phyMode, tpPESession psessionEntry)
-{
+static inline void limGetPhyMode(tpAniSirGlobal pMac, tANI_U32 *phyMode, tpPESession psessionEntry) {
     *phyMode = psessionEntry ? psessionEntry->gLimPhyMode : pMac->lim.gLimPhyMode;
 }
 
 /* ----------------------------------------------------------------------- */
-static inline void limGetRfBand(tpAniSirGlobal pMac, tSirRFBand *band, tpPESession psessionEntry)
-{
+static inline void limGetRfBand(tpAniSirGlobal pMac, tSirRFBand *band, tpPESession psessionEntry) {
     *band = psessionEntry ? psessionEntry->limRFBand : SIR_BAND_UNKNOWN;
 }
 

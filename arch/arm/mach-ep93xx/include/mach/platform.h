@@ -12,10 +12,9 @@ struct ep93xxfb_mach_info;
 struct ep93xx_keypad_platform_data;
 struct ep93xx_spi_info;
 
-struct ep93xx_eth_data
-{
-	unsigned char	dev_addr[6];
-	unsigned char	phy_id;
+struct ep93xx_eth_data {
+    unsigned char	dev_addr[6];
+    unsigned char	phy_id;
 };
 
 void ep93xx_map_io(void);
@@ -30,13 +29,13 @@ void ep93xx_init_irq(void);
 unsigned int ep93xx_chip_revision(void);
 
 void ep93xx_register_flash(unsigned int width,
-			   resource_size_t start, resource_size_t size);
+                           resource_size_t start, resource_size_t size);
 
 void ep93xx_register_eth(struct ep93xx_eth_data *data, int copy_addr);
 void ep93xx_register_i2c(struct i2c_gpio_platform_data *data,
-			 struct i2c_board_info *devices, int num);
+                         struct i2c_board_info *devices, int num);
 void ep93xx_register_spi(struct ep93xx_spi_info *info,
-			 struct spi_board_info *devices, int num);
+                         struct spi_board_info *devices, int num);
 void ep93xx_register_fb(struct ep93xxfb_mach_info *data);
 void ep93xx_register_pwm(int pwm0, int pwm1);
 int ep93xx_pwm_acquire_gpio(struct platform_device *pdev);

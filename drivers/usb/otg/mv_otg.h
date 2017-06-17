@@ -59,107 +59,107 @@
 #define T_A_DRV_RSM		5
 
 enum otg_function {
-	OTG_B_DEVICE = 0,
-	OTG_A_DEVICE
+    OTG_B_DEVICE = 0,
+    OTG_A_DEVICE
 };
 
 enum mv_otg_timer {
-	A_WAIT_BCON_TIMER = 0,
-	OTG_TIMER_NUM
+    A_WAIT_BCON_TIMER = 0,
+    OTG_TIMER_NUM
 };
 
 /* PXA OTG state machine */
 struct mv_otg_ctrl {
-	/* internal variables */
-	u8 a_set_b_hnp_en;	/* A-Device set b_hnp_en */
-	u8 b_srp_done;
-	u8 b_hnp_en;
+    /* internal variables */
+    u8 a_set_b_hnp_en;	/* A-Device set b_hnp_en */
+    u8 b_srp_done;
+    u8 b_hnp_en;
 
-	/* OTG inputs */
-	u8 a_bus_drop;
-	u8 a_bus_req;
-	u8 a_clr_err;
-	u8 a_bus_resume;
-	u8 a_bus_suspend;
-	u8 a_conn;
-	u8 a_sess_vld;
-	u8 a_srp_det;
-	u8 a_vbus_vld;
-	u8 b_bus_req;		/* B-Device Require Bus */
-	u8 b_bus_resume;
-	u8 b_bus_suspend;
-	u8 b_conn;
-	u8 b_se0_srp;
-	u8 b_sess_end;
-	u8 b_sess_vld;
-	u8 id;
-	u8 a_suspend_req;
+    /* OTG inputs */
+    u8 a_bus_drop;
+    u8 a_bus_req;
+    u8 a_clr_err;
+    u8 a_bus_resume;
+    u8 a_bus_suspend;
+    u8 a_conn;
+    u8 a_sess_vld;
+    u8 a_srp_det;
+    u8 a_vbus_vld;
+    u8 b_bus_req;		/* B-Device Require Bus */
+    u8 b_bus_resume;
+    u8 b_bus_suspend;
+    u8 b_conn;
+    u8 b_se0_srp;
+    u8 b_sess_end;
+    u8 b_sess_vld;
+    u8 id;
+    u8 a_suspend_req;
 
-	/*Timer event */
-	u8 a_aidl_bdis_timeout;
-	u8 b_ase0_brst_timeout;
-	u8 a_bidl_adis_timeout;
-	u8 a_wait_bcon_timeout;
+    /*Timer event */
+    u8 a_aidl_bdis_timeout;
+    u8 b_ase0_brst_timeout;
+    u8 a_bidl_adis_timeout;
+    u8 a_wait_bcon_timeout;
 
-	struct timer_list timer[OTG_TIMER_NUM];
+    struct timer_list timer[OTG_TIMER_NUM];
 };
 
 #define VUSBHS_MAX_PORTS	8
 
 struct mv_otg_regs {
-	u32 usbcmd;		/* Command register */
-	u32 usbsts;		/* Status register */
-	u32 usbintr;		/* Interrupt enable */
-	u32 frindex;		/* Frame index */
-	u32 reserved1[1];
-	u32 deviceaddr;		/* Device Address */
-	u32 eplistaddr;		/* Endpoint List Address */
-	u32 ttctrl;		/* HOST TT status and control */
-	u32 burstsize;		/* Programmable Burst Size */
-	u32 txfilltuning;	/* Host Transmit Pre-Buffer Packet Tuning */
-	u32 reserved[4];
-	u32 epnak;		/* Endpoint NAK */
-	u32 epnaken;		/* Endpoint NAK Enable */
-	u32 configflag;		/* Configured Flag register */
-	u32 portsc[VUSBHS_MAX_PORTS];	/* Port Status/Control x, x = 1..8 */
-	u32 otgsc;
-	u32 usbmode;		/* USB Host/Device mode */
-	u32 epsetupstat;	/* Endpoint Setup Status */
-	u32 epprime;		/* Endpoint Initialize */
-	u32 epflush;		/* Endpoint De-initialize */
-	u32 epstatus;		/* Endpoint Status */
-	u32 epcomplete;		/* Endpoint Interrupt On Complete */
-	u32 epctrlx[16];	/* Endpoint Control, where x = 0.. 15 */
-	u32 mcr;		/* Mux Control */
-	u32 isr;		/* Interrupt Status */
-	u32 ier;		/* Interrupt Enable */
+    u32 usbcmd;		/* Command register */
+    u32 usbsts;		/* Status register */
+    u32 usbintr;		/* Interrupt enable */
+    u32 frindex;		/* Frame index */
+    u32 reserved1[1];
+    u32 deviceaddr;		/* Device Address */
+    u32 eplistaddr;		/* Endpoint List Address */
+    u32 ttctrl;		/* HOST TT status and control */
+    u32 burstsize;		/* Programmable Burst Size */
+    u32 txfilltuning;	/* Host Transmit Pre-Buffer Packet Tuning */
+    u32 reserved[4];
+    u32 epnak;		/* Endpoint NAK */
+    u32 epnaken;		/* Endpoint NAK Enable */
+    u32 configflag;		/* Configured Flag register */
+    u32 portsc[VUSBHS_MAX_PORTS];	/* Port Status/Control x, x = 1..8 */
+    u32 otgsc;
+    u32 usbmode;		/* USB Host/Device mode */
+    u32 epsetupstat;	/* Endpoint Setup Status */
+    u32 epprime;		/* Endpoint Initialize */
+    u32 epflush;		/* Endpoint De-initialize */
+    u32 epstatus;		/* Endpoint Status */
+    u32 epcomplete;		/* Endpoint Interrupt On Complete */
+    u32 epctrlx[16];	/* Endpoint Control, where x = 0.. 15 */
+    u32 mcr;		/* Mux Control */
+    u32 isr;		/* Interrupt Status */
+    u32 ier;		/* Interrupt Enable */
 };
 
 struct mv_otg {
-	struct usb_phy phy;
-	struct mv_otg_ctrl otg_ctrl;
+    struct usb_phy phy;
+    struct mv_otg_ctrl otg_ctrl;
 
-	/* base address */
-	void __iomem *phy_regs;
-	void __iomem *cap_regs;
-	struct mv_otg_regs __iomem *op_regs;
+    /* base address */
+    void __iomem *phy_regs;
+    void __iomem *cap_regs;
+    struct mv_otg_regs __iomem *op_regs;
 
-	struct platform_device *pdev;
-	int irq;
-	u32 irq_status;
-	u32 irq_en;
+    struct platform_device *pdev;
+    int irq;
+    u32 irq_status;
+    u32 irq_en;
 
-	struct delayed_work work;
-	struct workqueue_struct *qwork;
+    struct delayed_work work;
+    struct workqueue_struct *qwork;
 
-	spinlock_t wq_lock;
+    spinlock_t wq_lock;
 
-	struct mv_usb_platform_data *pdata;
+    struct mv_usb_platform_data *pdata;
 
-	unsigned int active;
-	unsigned int clock_gating;
-	unsigned int clknum;
-	struct clk *clk[0];
+    unsigned int active;
+    unsigned int clock_gating;
+    unsigned int clknum;
+    struct clk *clk[0];
 };
 
 #endif

@@ -39,15 +39,15 @@ unsigned char Wb35Reg_ReadSync(struct hw_data *hw_data, u16 register_no, u32 *re
 unsigned char Wb35Reg_Write(struct hw_data *hw_data, u16 register_no, u32 register_value);
 unsigned char Wb35Reg_WriteSync(struct hw_data *hw_data, u16 register_no, u32 register_value);
 unsigned char Wb35Reg_WriteWithCallbackValue(struct hw_data *hw_data,
-							 u16 register_no,
-							 u32 register_value,
-							 s8 *value,
-							 s8 len);
+        u16 register_no,
+        u32 register_value,
+        s8 *value,
+        s8 len);
 unsigned char Wb35Reg_BurstWrite(struct hw_data *hw_data,
-					u16 register_no,
-					u32 *register_data,
-					u8 number_of_data,
-					u8 flag);
+                                 u16 register_no,
+                                 u32 *register_data,
+                                 u8 number_of_data,
+                                 u8 flag);
 
 void Wb35Reg_EP0VM(struct hw_data *hw_data);
 void Wb35Reg_EP0VM_start(struct hw_data *hw_data);

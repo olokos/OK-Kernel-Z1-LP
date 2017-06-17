@@ -26,21 +26,21 @@
 struct wf_control;
 
 struct wf_control_ops {
-	int			(*set_value)(struct wf_control *ct, s32 val);
-	int			(*get_value)(struct wf_control *ct, s32 *val);
-	s32			(*get_min)(struct wf_control *ct);
-	s32			(*get_max)(struct wf_control *ct);
-	void			(*release)(struct wf_control *ct);
-	struct module		*owner;
+    int			(*set_value)(struct wf_control *ct, s32 val);
+    int			(*get_value)(struct wf_control *ct, s32 *val);
+    s32			(*get_min)(struct wf_control *ct);
+    s32			(*get_max)(struct wf_control *ct);
+    void			(*release)(struct wf_control *ct);
+    struct module		*owner;
 };
 
 struct wf_control {
-	struct list_head	link;
-	struct wf_control_ops	*ops;
-	char			*name;
-	int			type;
-	struct kref		ref;
-	struct device_attribute	attr;
+    struct list_head	link;
+    struct wf_control_ops	*ops;
+    char			*name;
+    int			type;
+    struct kref		ref;
+    struct device_attribute	attr;
 };
 
 #define WF_CONTROL_TYPE_GENERIC		0
@@ -60,16 +60,14 @@ extern struct wf_control * wf_find_control(const char *name);
 extern int wf_get_control(struct wf_control *ct);
 extern void wf_put_control(struct wf_control *ct);
 
-static inline int wf_control_set_max(struct wf_control *ct)
-{
-	s32 vmax = ct->ops->get_max(ct);
-	return ct->ops->set_value(ct, vmax);
+static inline int wf_control_set_max(struct wf_control *ct) {
+    s32 vmax = ct->ops->get_max(ct);
+    return ct->ops->set_value(ct, vmax);
 }
 
-static inline int wf_control_set_min(struct wf_control *ct)
-{
-	s32 vmin = ct->ops->get_min(ct);
-	return ct->ops->set_value(ct, vmin);
+static inline int wf_control_set_min(struct wf_control *ct) {
+    s32 vmin = ct->ops->get_min(ct);
+    return ct->ops->set_value(ct, vmin);
 }
 
 /*
@@ -79,17 +77,17 @@ static inline int wf_control_set_min(struct wf_control *ct)
 struct wf_sensor;
 
 struct wf_sensor_ops {
-	int			(*get_value)(struct wf_sensor *sr, s32 *val);
-	void			(*release)(struct wf_sensor *sr);
-	struct module		*owner;
+    int			(*get_value)(struct wf_sensor *sr, s32 *val);
+    void			(*release)(struct wf_sensor *sr);
+    struct module		*owner;
 };
 
 struct wf_sensor {
-	struct list_head	link;
-	struct wf_sensor_ops	*ops;
-	char			*name;
-	struct kref		ref;
-	struct device_attribute	attr;
+    struct list_head	link;
+    struct wf_sensor_ops	*ops;
+    char			*name;
+    struct kref		ref;
+    struct device_attribute	attr;
 };
 
 /* Same lifetime rules as controls */

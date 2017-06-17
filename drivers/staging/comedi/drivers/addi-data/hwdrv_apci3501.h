@@ -33,9 +33,9 @@
 #define MODE1                                     1
 /* ANALOG OUTPUT RANGE */
 static struct comedi_lrange range_apci3501_ao = { 2, {
-					BIP_RANGE(10),
-					UNI_RANGE(10)
-					}
+        BIP_RANGE(10),
+        UNI_RANGE(10)
+    }
 };
 
 /* Watchdog Related Defines */
@@ -56,9 +56,9 @@ static struct comedi_lrange range_apci3501_ao = { 2, {
 
 /* AO */
 int i_APCI3501_ConfigAnalogOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				  struct comedi_insn *insn, unsigned int *data);
+                                  struct comedi_insn *insn, unsigned int *data);
 int i_APCI3501_WriteAnalogOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				 struct comedi_insn *insn, unsigned int *data);
+                                 struct comedi_insn *insn, unsigned int *data);
 
 /*
 * DI for di read INT i_APCI3501_ReadDigitalInput(struct
@@ -67,30 +67,30 @@ int i_APCI3501_WriteAnalogOutput(struct comedi_device *dev, struct comedi_subdev
 */
 
 int i_APCI3501_ReadDigitalInput(struct comedi_device *dev, struct comedi_subdevice *s,
-				struct comedi_insn *insn, unsigned int *data);
+                                struct comedi_insn *insn, unsigned int *data);
 
 /* DO */
 int i_APCI3501_ConfigDigitalOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				   struct comedi_insn *insn, unsigned int *data);
+                                   struct comedi_insn *insn, unsigned int *data);
 int i_APCI3501_WriteDigitalOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				  struct comedi_insn *insn, unsigned int *data);
+                                  struct comedi_insn *insn, unsigned int *data);
 int i_APCI3501_ReadDigitalOutput(struct comedi_device *dev, struct comedi_subdevice *s,
-				 struct comedi_insn *insn, unsigned int *data);
+                                 struct comedi_insn *insn, unsigned int *data);
 
 /* TIMER
  * timer value is passed as u seconds
  */
 
 int i_APCI3501_ConfigTimerCounterWatchdog(struct comedi_device *dev,
-					  struct comedi_subdevice *s,
-					  struct comedi_insn *insn, unsigned int *data);
+        struct comedi_subdevice *s,
+        struct comedi_insn *insn, unsigned int *data);
 int i_APCI3501_StartStopWriteTimerCounterWatchdog(struct comedi_device *dev,
-						  struct comedi_subdevice *s,
-						  struct comedi_insn *insn,
-						  unsigned int *data);
+        struct comedi_subdevice *s,
+        struct comedi_insn *insn,
+        unsigned int *data);
 int i_APCI3501_ReadTimerCounterWatchdog(struct comedi_device *dev,
-					struct comedi_subdevice *s,
-					struct comedi_insn *insn, unsigned int *data);
+                                        struct comedi_subdevice *s,
+                                        struct comedi_insn *insn, unsigned int *data);
 /* Interrupt */
 void v_APCI3501_Interrupt(int irq, void *d);
 

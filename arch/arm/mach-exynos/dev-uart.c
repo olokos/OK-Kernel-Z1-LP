@@ -35,22 +35,22 @@ EXYNOS_UART_RESOURCE(4, 2)
 EXYNOS_UART_RESOURCE(4, 3)
 
 struct s3c24xx_uart_resources exynos4_uart_resources[] __initdata = {
-	[0] = {
-		.resources	= exynos4_uart0_resource,
-		.nr_resources	= ARRAY_SIZE(exynos4_uart0_resource),
-	},
-	[1] = {
-		.resources	= exynos4_uart1_resource,
-		.nr_resources	= ARRAY_SIZE(exynos4_uart1_resource),
-	},
-	[2] = {
-		.resources	= exynos4_uart2_resource,
-		.nr_resources	= ARRAY_SIZE(exynos4_uart2_resource),
-	},
-	[3] = {
-		.resources	= exynos4_uart3_resource,
-		.nr_resources	= ARRAY_SIZE(exynos4_uart3_resource),
-	},
+    [0] = {
+        .resources	= exynos4_uart0_resource,
+        .nr_resources	= ARRAY_SIZE(exynos4_uart0_resource),
+    },
+    [1] = {
+        .resources	= exynos4_uart1_resource,
+        .nr_resources	= ARRAY_SIZE(exynos4_uart1_resource),
+    },
+    [2] = {
+        .resources	= exynos4_uart2_resource,
+        .nr_resources	= ARRAY_SIZE(exynos4_uart2_resource),
+    },
+    [3] = {
+        .resources	= exynos4_uart3_resource,
+        .nr_resources	= ARRAY_SIZE(exynos4_uart3_resource),
+    },
 };
 
 EXYNOS_UART_RESOURCE(5, 0)
@@ -59,20 +59,20 @@ EXYNOS_UART_RESOURCE(5, 2)
 EXYNOS_UART_RESOURCE(5, 3)
 
 struct s3c24xx_uart_resources exynos5_uart_resources[] __initdata = {
-	[0] = {
-		.resources	= exynos5_uart0_resource,
-		.nr_resources	= ARRAY_SIZE(exynos5_uart0_resource),
-	},
-	[1] = {
-		.resources	= exynos5_uart1_resource,
-		.nr_resources	= ARRAY_SIZE(exynos5_uart0_resource),
-	},
-	[2] = {
-		.resources	= exynos5_uart2_resource,
-		.nr_resources	= ARRAY_SIZE(exynos5_uart2_resource),
-	},
-	[3] = {
-		.resources	= exynos5_uart3_resource,
-		.nr_resources	= ARRAY_SIZE(exynos5_uart3_resource),
-	},
+    [0] = {
+        .resources	= exynos5_uart0_resource,
+        .nr_resources	= ARRAY_SIZE(exynos5_uart0_resource),
+    },
+    [1] = {
+        .resources	= exynos5_uart1_resource,
+        .nr_resources	= ARRAY_SIZE(exynos5_uart0_resource),
+    },
+    [2] = {
+        .resources	= exynos5_uart2_resource,
+        .nr_resources	= ARRAY_SIZE(exynos5_uart2_resource),
+    },
+    [3] = {
+        .resources	= exynos5_uart3_resource,
+        .nr_resources	= ARRAY_SIZE(exynos5_uart3_resource),
+    },
 };

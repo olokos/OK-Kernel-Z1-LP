@@ -113,35 +113,30 @@
 
 #define CHANSPEC_STR_LEN    8
 
-static inline int lower_20_sb(int channel)
-{
-	return channel > CH_10MHZ_APART ? (channel - CH_10MHZ_APART) : 0;
+static inline int lower_20_sb(int channel) {
+    return channel > CH_10MHZ_APART ? (channel - CH_10MHZ_APART) : 0;
 }
 
-static inline int upper_20_sb(int channel)
-{
-	return (channel < (MAXCHANNEL - CH_10MHZ_APART)) ?
-	       channel + CH_10MHZ_APART : 0;
+static inline int upper_20_sb(int channel) {
+    return (channel < (MAXCHANNEL - CH_10MHZ_APART)) ?
+           channel + CH_10MHZ_APART : 0;
 }
 
-static inline int chspec_bandunit(u16 chspec)
-{
-	return CHSPEC_IS5G(chspec) ? BAND_5G_INDEX : BAND_2G_INDEX;
+static inline int chspec_bandunit(u16 chspec) {
+    return CHSPEC_IS5G(chspec) ? BAND_5G_INDEX : BAND_2G_INDEX;
 }
 
-static inline u16 ch20mhz_chspec(int channel)
-{
-	u16 rc = channel <= CH_MAX_2G_CHANNEL ?
-		 WL_CHANSPEC_BAND_2G : WL_CHANSPEC_BAND_5G;
+static inline u16 ch20mhz_chspec(int channel) {
+    u16 rc = channel <= CH_MAX_2G_CHANNEL ?
+             WL_CHANSPEC_BAND_2G : WL_CHANSPEC_BAND_5G;
 
-	return	(u16)((u16)channel | WL_CHANSPEC_BW_20 |
-		      WL_CHANSPEC_CTL_SB_NONE | rc);
+    return	(u16)((u16)channel | WL_CHANSPEC_BW_20 |
+                  WL_CHANSPEC_CTL_SB_NONE | rc);
 }
 
-static inline int next_20mhz_chan(int channel)
-{
-	return channel < (MAXCHANNEL - CH_20MHZ_APART) ?
-	       channel + CH_20MHZ_APART : 0;
+static inline int next_20mhz_chan(int channel) {
+    return channel < (MAXCHANNEL - CH_20MHZ_APART) ?
+           channel + CH_20MHZ_APART : 0;
 }
 
 /* defined rate in 500kbps */
@@ -163,9 +158,8 @@ static inline int next_20mhz_chan(int channel)
 
 #define MCSSET_LEN	16
 
-static inline bool ac_bitmap_tst(u8 bitmap, int prec)
-{
-	return (bitmap & (1 << (prec))) != 0;
+static inline bool ac_bitmap_tst(u8 bitmap, int prec) {
+    return (bitmap & (1 << (prec))) != 0;
 }
 
 /* Enumerate crypto algorithms */
@@ -217,23 +211,23 @@ static inline bool ac_bitmap_tst(u8 bitmap, int prec)
 #define HT_CAP_RX_STBC_ONE_STREAM	0x1
 
 struct pmkid {
-	u8 BSSID[ETH_ALEN];
-	u8 PMKID[WLAN_PMKID_LEN];
+    u8 BSSID[ETH_ALEN];
+    u8 PMKID[WLAN_PMKID_LEN];
 };
 
 struct pmkid_list {
-	__le32 npmkid;
-	struct pmkid pmkid[1];
+    __le32 npmkid;
+    struct pmkid pmkid[1];
 };
 
 struct pmkid_cand {
-	u8 BSSID[ETH_ALEN];
-	u8 preauth;
+    u8 BSSID[ETH_ALEN];
+    u8 preauth;
 };
 
 struct pmkid_cand_list {
-	u32 npmkid_cand;
-	struct pmkid_cand pmkid_cand[1];
+    u32 npmkid_cand;
+    struct pmkid_cand pmkid_cand[1];
 };
 
 #endif				/* _BRCMU_WIFI_H_ */

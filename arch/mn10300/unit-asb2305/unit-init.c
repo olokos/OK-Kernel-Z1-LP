@@ -22,12 +22,11 @@
 /*
  * initialise some of the unit hardware before gdbstub is set up
  */
-asmlinkage void __init unit_init(void)
-{
+asmlinkage void __init unit_init(void) {
 #ifndef CONFIG_GDBSTUB_ON_TTYSx
-	/* set the 16550 interrupt line to level 3 if not being used for GDB */
+    /* set the 16550 interrupt line to level 3 if not being used for GDB */
 #ifdef CONFIG_EXT_SERIAL_IRQ_LEVEL
-	set_intr_level(XIRQ0, NUM2GxICR_LEVEL(CONFIG_EXT_SERIAL_IRQ_LEVEL));
+    set_intr_level(XIRQ0, NUM2GxICR_LEVEL(CONFIG_EXT_SERIAL_IRQ_LEVEL));
 #endif
 #endif /* CONFIG_GDBSTUB_ON_TTYSx */
 }
@@ -35,28 +34,26 @@ asmlinkage void __init unit_init(void)
 /*
  * initialise the rest of the unit hardware after gdbstub is ready
  */
-void __init unit_setup(void)
-{
+void __init unit_setup(void) {
 #ifdef CONFIG_PCI
-	unit_pci_init();
+    unit_pci_init();
 #endif
 }
 
 /*
  * initialise the external interrupts used by a unit of this type
  */
-void __init unit_init_IRQ(void)
-{
-	unsigned int extnum;
+void __init unit_init_IRQ(void) {
+    unsigned int extnum;
 
-	for (extnum = 0; extnum < NR_XIRQS; extnum++) {
-		switch (GET_XIRQ_TRIGGER(extnum)) {
-		case XIRQ_TRIGGER_HILEVEL:
-		case XIRQ_TRIGGER_LOWLEVEL:
-			mn10300_set_lateack_irq_type(XIRQ2IRQ(extnum));
-			break;
-		default:
-			break;
-		}
-	}
+    for (extnum = 0; extnum < NR_XIRQS; extnum++) {
+        switch (GET_XIRQ_TRIGGER(extnum)) {
+        case XIRQ_TRIGGER_HILEVEL:
+        case XIRQ_TRIGGER_LOWLEVEL:
+            mn10300_set_lateack_irq_type(XIRQ2IRQ(extnum));
+            break;
+        default:
+            break;
+        }
+    }
 }

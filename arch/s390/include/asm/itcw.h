@@ -19,11 +19,11 @@ struct itcw;
 struct tcw *itcw_get_tcw(struct itcw *itcw);
 size_t itcw_calc_size(int intrg, int max_tidaws, int intrg_max_tidaws);
 struct itcw *itcw_init(void *buffer, size_t size, int op, int intrg,
-		       int max_tidaws, int intrg_max_tidaws);
+                       int max_tidaws, int intrg_max_tidaws);
 struct dcw *itcw_add_dcw(struct itcw *itcw, u8 cmd, u8 flags, void *cd,
-			 u8 cd_count, u32 count);
+                         u8 cd_count, u32 count);
 struct tidaw *itcw_add_tidaw(struct itcw *itcw, u8 flags, void *addr,
-			     u32 count);
+                             u32 count);
 void itcw_set_data(struct itcw *itcw, void *addr, int use_tidal);
 void itcw_finalize(struct itcw *itcw);
 

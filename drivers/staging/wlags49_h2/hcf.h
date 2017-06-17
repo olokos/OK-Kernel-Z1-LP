@@ -150,7 +150,7 @@
 #define HFS_RATE				0x0008					//RxFlow/Rate
 #define 	HFS_STAT_ERR		RX_STAT_ERR				//link "natural" HCF name to "natural" MSF name
 #define HFS_TX_CNTL				0x0036
-														// H-I     H-II
+// H-I     H-II
 #define HFS_DAT_LEN				(HFS_ADDR_DEST - 2)		// 0x002C  0x0038
 #define HFS_ADDR_DEST			0x003A					// 0x002E  0x003A
 #define HFS_ADDR_SRC			(HFS_ADDR_DEST + 6)		// 0x0034  0x0040
@@ -174,14 +174,14 @@
 #define	BUF_SIZE			buf_dim[DESC_STRCT_SIZE]
 
 typedef struct DESC_STRCT {
-	hcf_16					buf_dim[2];
-	hcf_32					buf_phys_addr;
-	hcf_32					next_desc_phys_addr;	// physical address of next descriptor
-	hcf_32					desc_phys_addr;			// physical address of this descriptor
-	struct DESC_STRCT 		*next_desc_addr;
-	hcf_8	FAR				*buf_addr;
+    hcf_16					buf_dim[2];
+    hcf_32					buf_phys_addr;
+    hcf_32					next_desc_phys_addr;	// physical address of next descriptor
+    hcf_32					desc_phys_addr;			// physical address of this descriptor
+    struct DESC_STRCT 		*next_desc_addr;
+    hcf_8	FAR				*buf_addr;
 #if (HCF_EXT) & HCF_EXT_DESC_STRCT
-	void FAR			   *DESC_MSFSup;			// pointer for arbitrary use by the MSF
+    void FAR			   *DESC_MSFSup;			// pointer for arbitrary use by the MSF
 #endif // HCF_DESC_STRCT_EXT
 } DESC_STRCT;
 
@@ -197,44 +197,44 @@ typedef struct DESC_STRCT {
 //=========================================  T A L L I E S  ===================================================
 
 typedef struct  {  //Hermes Tallies (IFB substructure)
-  hcf_32	TxUnicastFrames;
-  hcf_32	TxMulticastFrames;
-  hcf_32	TxFragments;
-  hcf_32	TxUnicastOctets;
-  hcf_32	TxMulticastOctets;
-  hcf_32	TxDeferredTransmissions;
-  hcf_32	TxSingleRetryFrames;
-  hcf_32	TxMultipleRetryFrames;
-  hcf_32	TxRetryLimitExceeded;
-  hcf_32	TxDiscards;
-  hcf_32	RxUnicastFrames;
-  hcf_32	RxMulticastFrames;
-  hcf_32	RxFragments;
-  hcf_32	RxUnicastOctets;
-  hcf_32	RxMulticastOctets;
-  hcf_32	RxFCSErrors;
-  hcf_32	RxDiscardsNoBuffer;
-  hcf_32	TxDiscardsWrongSA;
-  hcf_32	RxWEPUndecryptable;
-  hcf_32	RxMsgInMsgFragments;
-  hcf_32	RxMsgInBadMsgFragments;
-  hcf_32	RxDiscardsWEPICVError;
-  hcf_32	RxDiscardsWEPExcluded;
+    hcf_32	TxUnicastFrames;
+    hcf_32	TxMulticastFrames;
+    hcf_32	TxFragments;
+    hcf_32	TxUnicastOctets;
+    hcf_32	TxMulticastOctets;
+    hcf_32	TxDeferredTransmissions;
+    hcf_32	TxSingleRetryFrames;
+    hcf_32	TxMultipleRetryFrames;
+    hcf_32	TxRetryLimitExceeded;
+    hcf_32	TxDiscards;
+    hcf_32	RxUnicastFrames;
+    hcf_32	RxMulticastFrames;
+    hcf_32	RxFragments;
+    hcf_32	RxUnicastOctets;
+    hcf_32	RxMulticastOctets;
+    hcf_32	RxFCSErrors;
+    hcf_32	RxDiscardsNoBuffer;
+    hcf_32	TxDiscardsWrongSA;
+    hcf_32	RxWEPUndecryptable;
+    hcf_32	RxMsgInMsgFragments;
+    hcf_32	RxMsgInBadMsgFragments;
+    hcf_32	RxDiscardsWEPICVError;
+    hcf_32	RxDiscardsWEPExcluded;
 #if (HCF_EXT) & HCF_EXT_TALLIES_FW
-  hcf_32	TalliesExtra[32];
+    hcf_32	TalliesExtra[32];
 #endif // HCF_EXT_TALLIES_FW
 } CFG_HERMES_TALLIES_STRCT;
 
 typedef struct  {  //HCF Tallies (IFB substructure)
-  hcf_32	NoBufInfo;  				//No buffer available for unsolicited Notify frame
-  hcf_32	NoBufMB;					//No space available in MailBox
-  hcf_32	MiscErr;					/* Command errors
+    hcf_32	NoBufInfo;  				//No buffer available for unsolicited Notify frame
+    hcf_32	NoBufMB;					//No space available in MailBox
+    hcf_32	MiscErr;					/* Command errors
   										 *  - time out on completion synchronous part Hermes Command
   										 *  - completed Hermes Command doesn't match original command
   										 *  - status of completed Hermes Command contains error bits
   										 */
 #if (HCF_EXT) & HCF_EXT_TALLIES_FW
-  hcf_32	EngCnt[8];
+    hcf_32	EngCnt[8];
 #endif // HCF_EXT_TALLIES_FW
 } CFG_HCF_TALLIES_STRCT;
 
@@ -261,108 +261,108 @@ typedef struct  {  //HCF Tallies (IFB substructure)
 #define IFB_VERSION 0x0E	 			// initially 0, to be incremented by every IFB layout change
 
 typedef struct  {
-  hcf_io		IFB_IOBase;				// I/O address of Hermes chip as passed by MSF at hcf_connect call
-  hcf_16		IFB_IORange;			// I/O Range used by Hermes chip
-  hcf_16		IFB_DLMode;				// Download Mode state
-  hcf_16		IFB_Cmd;				// cmd in progress flag, to be ack-ed before next cmd can be issued
-  hcf_16		IFB_RxFID;				// FID of "current" RxFS (non-DMA mode)
+    hcf_io		IFB_IOBase;				// I/O address of Hermes chip as passed by MSF at hcf_connect call
+    hcf_16		IFB_IORange;			// I/O Range used by Hermes chip
+    hcf_16		IFB_DLMode;				// Download Mode state
+    hcf_16		IFB_Cmd;				// cmd in progress flag, to be ack-ed before next cmd can be issued
+    hcf_16		IFB_RxFID;				// FID of "current" RxFS (non-DMA mode)
 //;?#if tx_delay option
-  hcf_16		IFB_TxFID;				// fid storage during "delayed" send
+    hcf_16		IFB_TxFID;				// fid storage during "delayed" send
 //;?#endif tx_delay option
-  hcf_16		IFB_RxLen;				//
-  hcf_16		IFB_DefunctStat;		// BAP initialization or Cmd Completion failed
-  hcf_16		IFB_ErrCmd;				// contents Status reg when error bits and/or mismatch in cmd_wait
-  hcf_16		IFB_ErrQualifier;		// contents Resp0  reg when error bits and/or mismatch in cmd_wait
-  hcf_16		IFB_lal;				// LookAhead Length
-  wci_bufp		IFB_lap;				// LookAhead Buffer pointer
-  hcf_16		IFB_LinkStat;			// Link Status
-  hcf_16		IFB_DSLinkStat;			// Link Status, new strategy introduced for DeepSleep
-  hcf_16		IFB_CarryIn;			// carry and carry-flag to move 1 byte from one get_frag to the next
-  hcf_16		IFB_CarryOut;			// carry and carry-flag to move 1 byte from one put_frag to the next
-  hcf_16		IFB_Version;			// IFB_VERSION, incremented by every SIGNIFICANT IFB layout change
-  hcf_16		IFB_CardStat;			// NIC error / F/W incompatibility status
-  hcf_16  		IFB_RscInd;				// non-DMA: TxFID available, DMA: always 1
-  hcf_16		IFB_CntlOpt;			// flags: 32 bits I/O, DMA available, DMA enabled
-  hcf_16		IFB_BusType;			// BusType, derived via CFG_NIC_BUS_TYPE
-  CFG_FW_IDENTITY_STRCT	 IFB_FWIdentity; /* keep FWIdentity/Sup and PRIIdentity/Sup in sequence
+    hcf_16		IFB_RxLen;				//
+    hcf_16		IFB_DefunctStat;		// BAP initialization or Cmd Completion failed
+    hcf_16		IFB_ErrCmd;				// contents Status reg when error bits and/or mismatch in cmd_wait
+    hcf_16		IFB_ErrQualifier;		// contents Resp0  reg when error bits and/or mismatch in cmd_wait
+    hcf_16		IFB_lal;				// LookAhead Length
+    wci_bufp		IFB_lap;				// LookAhead Buffer pointer
+    hcf_16		IFB_LinkStat;			// Link Status
+    hcf_16		IFB_DSLinkStat;			// Link Status, new strategy introduced for DeepSleep
+    hcf_16		IFB_CarryIn;			// carry and carry-flag to move 1 byte from one get_frag to the next
+    hcf_16		IFB_CarryOut;			// carry and carry-flag to move 1 byte from one put_frag to the next
+    hcf_16		IFB_Version;			// IFB_VERSION, incremented by every SIGNIFICANT IFB layout change
+    hcf_16		IFB_CardStat;			// NIC error / F/W incompatibility status
+    hcf_16  		IFB_RscInd;				// non-DMA: TxFID available, DMA: always 1
+    hcf_16		IFB_CntlOpt;			// flags: 32 bits I/O, DMA available, DMA enabled
+    hcf_16		IFB_BusType;			// BusType, derived via CFG_NIC_BUS_TYPE
+    CFG_FW_IDENTITY_STRCT	 IFB_FWIdentity; /* keep FWIdentity/Sup and PRIIdentity/Sup in sequence
 										  * because of the (dumb) copy in init() */
 #if defined MSF_COMPONENT_ID
-  CFG_SUP_RANGE_STRCT	 IFB_FWSup;
-  CFG_PRI_IDENTITY_STRCT IFB_PRIIdentity;
-  CFG_SUP_RANGE_STRCT	 IFB_PRISup;
-  CFG_SUP_RANGE_STRCT	 IFB_HSISup;
+    CFG_SUP_RANGE_STRCT	 IFB_FWSup;
+    CFG_PRI_IDENTITY_STRCT IFB_PRIIdentity;
+    CFG_SUP_RANGE_STRCT	 IFB_PRISup;
+    CFG_SUP_RANGE_STRCT	 IFB_HSISup;
 #endif // MSF_COMPONENT_ID
 #if (HCF_EXT) & HCF_EXT_INFO_LOG
-  RID_LOGP		IFB_RIDLogp;			// pointer to RID_LOG structure
+    RID_LOGP		IFB_RIDLogp;			// pointer to RID_LOG structure
 #endif // HCF_EXT_INFO_LOG
 #if HCF_PROT_TIME
-  hcf_32	 	IFB_TickIni;			// initialization of S/W counter based protection loop
+    hcf_32	 	IFB_TickIni;			// initialization of S/W counter based protection loop
 #endif // HCF_PROT_TIME
 #if (HCF_EXT) & HCF_EXT_INT_TICK
-  int			IFB_TickCnt;			// Hermes Timer Tick Counter
+    int			IFB_TickCnt;			// Hermes Timer Tick Counter
 #endif // HCF_EXT_INT_TICK
-  hcf_16 	   *IFB_MBp;				// pointer to the MailBox
-  hcf_16		IFB_MBSize;				// size of the MailBox
-  hcf_16		IFB_MBWp;				// zero-based write index into the MailBox
-  hcf_16		IFB_MBRp;				// zero-based read  index into the MailBox
-  hcf_16		IFB_MBInfoLen;			// contents of L-field of the oldest available MailBoxInfoBlock
+    hcf_16 	   *IFB_MBp;				// pointer to the MailBox
+    hcf_16		IFB_MBSize;				// size of the MailBox
+    hcf_16		IFB_MBWp;				// zero-based write index into the MailBox
+    hcf_16		IFB_MBRp;				// zero-based read  index into the MailBox
+    hcf_16		IFB_MBInfoLen;			// contents of L-field of the oldest available MailBoxInfoBlock
 #if (HCF_TYPE) & HCF_TYPE_WPA
-  hcf_16		IFB_MICTxCntl;			// MIC bit and Key index in TxControl field of TxFS
-  hcf_32		IFB_MICTxKey[2];		// calculating key
-  hcf_32		IFB_MICTx[2];   	  	// Tx MIC calculation Engine state
-  hcf_16		IFB_MICTxCarry;			// temp length, carries over from one Tx fragment to another
-  hcf_16		IFB_MICRxCarry;			// temp length, carries over from one Rx fragment to another
-  hcf_32		IFB_MICRxKey[4*2];		// 4 checking keys
-  hcf_32		IFB_MICRx[2]; 	 		// Rx MIC calculation Engine state
+    hcf_16		IFB_MICTxCntl;			// MIC bit and Key index in TxControl field of TxFS
+    hcf_32		IFB_MICTxKey[2];		// calculating key
+    hcf_32		IFB_MICTx[2];   	  	// Tx MIC calculation Engine state
+    hcf_16		IFB_MICTxCarry;			// temp length, carries over from one Tx fragment to another
+    hcf_16		IFB_MICRxCarry;			// temp length, carries over from one Rx fragment to another
+    hcf_32		IFB_MICRxKey[4*2];		// 4 checking keys
+    hcf_32		IFB_MICRx[2]; 	 		// Rx MIC calculation Engine state
 #endif // HCF_TYPE_WPA
 #if HCF_ASSERT
 #if (HCF_ASSERT) & HCF_ASSERT_MB
-  CFG_MB_INFO_RANGE1_STRCT	IFB_AssertStrct; // Add some complication to the HCF as prize for the new MSF I/F
+    CFG_MB_INFO_RANGE1_STRCT	IFB_AssertStrct; // Add some complication to the HCF as prize for the new MSF I/F
 #endif // HCF_ASSERT_MB
-  										// target of above IFB_AssertStrct
-  hcf_16		IFB_AssertLine;			//  - line number ( + encoded module name )
-  hcf_16		IFB_AssertTrace;		//  - bit based trace of all hcf_.... invocations
-  hcf_32		IFB_AssertQualifier;	//  - qualifier
-  hcf_16		IFB_AssertLvl;			// Assert Filtering, Not yet implemented
-  hcf_16		IFB_AssertWhere;		// Where parameter of the Assert macro
+    // target of above IFB_AssertStrct
+    hcf_16		IFB_AssertLine;			//  - line number ( + encoded module name )
+    hcf_16		IFB_AssertTrace;		//  - bit based trace of all hcf_.... invocations
+    hcf_32		IFB_AssertQualifier;	//  - qualifier
+    hcf_16		IFB_AssertLvl;			// Assert Filtering, Not yet implemented
+    hcf_16		IFB_AssertWhere;		// Where parameter of the Assert macro
 #if (HCF_ASSERT) & ( HCF_ASSERT_LNK_MSF_RTN | HCF_ASSERT_RT_MSF_RTN )
-  MSF_ASSERT_RTNP	IFB_AssertRtn;		// MSF Assert Call back routine (inspired by GEF, DrDobbs Nov 1998 )
+    MSF_ASSERT_RTNP	IFB_AssertRtn;		// MSF Assert Call back routine (inspired by GEF, DrDobbs Nov 1998 )
 #endif // HCF_ASSERT_LNK_MSF_RTN
 #if (HCF_ASSERT) & HCF_ASSERT_PRINTF	// engineering facilty intended as F/W debugging aid
-   hcf_16       IFB_DbgPrintF_Cnt;
-   CFG_FW_PRINTF_BUFFER_LOCATION_STRCT IFB_FwPfBuff;
+    hcf_16       IFB_DbgPrintF_Cnt;
+    CFG_FW_PRINTF_BUFFER_LOCATION_STRCT IFB_FwPfBuff;
 #endif // HCF_ASSERT_PRINTF
 #endif // HCF_ASSERT
-  hcf_16 volatile IFB_IntOffCnt;		// 0xFFFF based HCF_ACT_INT_OFF nesting counter, DeepSleep flag
+    hcf_16 volatile IFB_IntOffCnt;		// 0xFFFF based HCF_ACT_INT_OFF nesting counter, DeepSleep flag
 #if (HCF_TALLIES) & ( HCF_TALLIES_NIC | HCF_TALLIES_HCF )	//Hermes and/or HCF tally support
-  hcf_32		IFB_Silly_you_should_align;	//;?
-  hcf_16		IFB_TallyLen;			// Tally length (to build an LTV)
-  hcf_16		IFB_TallyTyp;			// Tally Type (to build an LTV)
+    hcf_32		IFB_Silly_you_should_align;	//;?
+    hcf_16		IFB_TallyLen;			// Tally length (to build an LTV)
+    hcf_16		IFB_TallyTyp;			// Tally Type (to build an LTV)
 #endif // HCF_TALLIES_NIC / HCF_TALLIES_HCF
 #if (HCF_TALLIES) & HCF_TALLIES_NIC		//Hermes tally support
-  CFG_HERMES_TALLIES_STRCT	IFB_NIC_Tallies;
+    CFG_HERMES_TALLIES_STRCT	IFB_NIC_Tallies;
 #endif // HCF_TALLIES_NIC
 #if (HCF_TALLIES) & HCF_TALLIES_HCF		//HCF tally support
-  CFG_HCF_TALLIES_STRCT		IFB_HCF_Tallies;
+    CFG_HCF_TALLIES_STRCT		IFB_HCF_Tallies;
 #endif // HCF_TALLIES_HCF
 #if HCF_DMA
-  //used for a pool of destination_address descriptor/buffers, used during tx encapsulation points to the
-  //first/last descriptor in the descriptor chain, so we can easily remove and append a packet.
-  DESC_STRCT	*IFB_FirstDesc[2];
-  DESC_STRCT	*IFB_LastDesc[2];
-  DESC_STRCT	*IFB_ConfinedDesc[2];	// pointers to descriptor used for host reclaim purposes.
-  hcf_16		IFB_DmaPackets;			// HREG_EV_[TX/RX]DMA_DONE flags, reports DMA Frame availability to MSF
+    //used for a pool of destination_address descriptor/buffers, used during tx encapsulation points to the
+    //first/last descriptor in the descriptor chain, so we can easily remove and append a packet.
+    DESC_STRCT	*IFB_FirstDesc[2];
+    DESC_STRCT	*IFB_LastDesc[2];
+    DESC_STRCT	*IFB_ConfinedDesc[2];	// pointers to descriptor used for host reclaim purposes.
+    hcf_16		IFB_DmaPackets;			// HREG_EV_[TX/RX]DMA_DONE flags, reports DMA Frame availability to MSF
 #endif // HCF_DMA
 #if (HCF_EXT) & HCF_EXT_INT_TX_EX
-  hcf_16		IFB_TxFsStat;			// Tx message monitoring
-  hcf_16		IFB_TxFsGap[2];			//;?make this robust
-  hcf_16		IFB_TxFsSwSup;
+    hcf_16		IFB_TxFsStat;			// Tx message monitoring
+    hcf_16		IFB_TxFsGap[2];			//;?make this robust
+    hcf_16		IFB_TxFsSwSup;
 #endif // HCF_EXT_INT_TX_EX
-  hcf_16		IFB_Magic;				/* "Magic" signature, to help the debugger interpret a memory dump
+    hcf_16		IFB_Magic;				/* "Magic" signature, to help the debugger interpret a memory dump
 										 * also the last field cleared at hcf_connect
 										 */
 #if (HCF_EXT) & HCF_EXT_IFB_STRCT		// for usage by the MSF
-  void FAR	   *IFB_MSFSup;				// pointer for arbitrary use by the MSF
+    void FAR	   *IFB_MSFSup;				// pointer for arbitrary use by the MSF
 #endif // HCF_EXT_IFB_STRCT_EXT
 } IFB_STRCT;
 

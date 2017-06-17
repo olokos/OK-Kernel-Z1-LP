@@ -30,28 +30,27 @@
 	}
 
 static struct plat_serial8250_port mca_data[] = {
-	PORT(0x3220, 3),
-	PORT(0x3228, 3),
-	PORT(0x4220, 3),
-	PORT(0x4228, 3),
-	PORT(0x5220, 3),
-	PORT(0x5228, 3),
-	{ },
+    PORT(0x3220, 3),
+    PORT(0x3228, 3),
+    PORT(0x4220, 3),
+    PORT(0x4228, 3),
+    PORT(0x5220, 3),
+    PORT(0x5228, 3),
+    { },
 };
 
 static struct platform_device mca_device = {
-	.name			= "serial8250",
-	.id			= PLAT8250_DEV_MCA,
-	.dev			= {
-		.platform_data	= mca_data,
-	},
+    .name			= "serial8250",
+    .id			= PLAT8250_DEV_MCA,
+    .dev			= {
+        .platform_data	= mca_data,
+    },
 };
 
-static int __init mca_init(void)
-{
-	if (!MCA_bus)
-		return -ENODEV;
-	return platform_device_register(&mca_device);
+static int __init mca_init(void) {
+    if (!MCA_bus)
+        return -ENODEV;
+    return platform_device_register(&mca_device);
 }
 
 module_init(mca_init);

@@ -29,14 +29,12 @@
 #undef scr_writew
 #undef scr_readw
 
-static inline void scr_writew(u16 val, volatile u16 *addr)
-{
-	*addr = cpu_to_le16(val);
+static inline void scr_writew(u16 val, volatile u16 *addr) {
+    *addr = cpu_to_le16(val);
 }
 
-static inline u16 scr_readw(volatile const u16 *addr)
-{
-	return le16_to_cpu(*addr);
+static inline u16 scr_readw(volatile const u16 *addr) {
+    return le16_to_cpu(*addr);
 }
 
 #define scr_memcpyw(d, s, c) memcpy(d, s, c)

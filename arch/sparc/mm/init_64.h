@@ -22,9 +22,9 @@ extern unsigned long sparc64_kern_sec_context;
 extern void mmu_info(struct seq_file *m);
 
 struct linux_prom_translation {
-	unsigned long virt;
-	unsigned long size;
-	unsigned long data;
+    unsigned long virt;
+    unsigned long size;
+    unsigned long data;
 };
 
 /* Exported for kernel TLB miss handling in ktlb.S */

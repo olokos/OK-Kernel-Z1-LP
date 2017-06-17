@@ -50,8 +50,8 @@
  *  Ensures:
  */
 extern int api_call_dev_ioctl(unsigned int cmd,
-				      union trapped_args *args,
-				      u32 *result, void *pr_ctxt);
+                              union trapped_args *args,
+                              u32 *result, void *pr_ctxt);
 
 /*
  *  ======== api_init ========
@@ -103,10 +103,10 @@ extern u32 mgrwrap_enum_proc_info(union trapped_args *args, void *pr_ctxt);
 extern u32 mgrwrap_register_object(union trapped_args *args, void *pr_ctxt);
 extern u32 mgrwrap_unregister_object(union trapped_args *args, void *pr_ctxt);
 extern u32 mgrwrap_wait_for_bridge_events(union trapped_args *args,
-					  void *pr_ctxt);
+        void *pr_ctxt);
 
 extern u32 mgrwrap_get_process_resources_info(union trapped_args *args,
-					      void *pr_ctxt);
+        void *pr_ctxt);
 
 /* CPRC (Processor) wrapper Functions */
 extern u32 procwrap_attach(union trapped_args *args, void *pr_ctxt);

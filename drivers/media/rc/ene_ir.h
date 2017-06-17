@@ -193,57 +193,57 @@ do {								\
 #define dbg_regs(format, ...)		__dbg(3, format, ## __VA_ARGS__)
 
 struct ene_device {
-	struct pnp_dev *pnp_dev;
-	struct rc_dev *rdev;
+    struct pnp_dev *pnp_dev;
+    struct rc_dev *rdev;
 
-	/* hw IO settings */
-	long hw_io;
-	int irq;
-	spinlock_t hw_lock;
+    /* hw IO settings */
+    long hw_io;
+    int irq;
+    spinlock_t hw_lock;
 
-	/* HW features */
-	int hw_revision;			/* hardware revision */
-	bool hw_use_gpio_0a;			/* gpio0a is demodulated input*/
-	bool hw_extra_buffer;			/* hardware has 'extra buffer' */
-	bool hw_fan_input;			/* fan input is IR data source */
-	bool hw_learning_and_tx_capable;	/* learning & tx capable */
-	int  pll_freq;
-	int buffer_len;
+    /* HW features */
+    int hw_revision;			/* hardware revision */
+    bool hw_use_gpio_0a;			/* gpio0a is demodulated input*/
+    bool hw_extra_buffer;			/* hardware has 'extra buffer' */
+    bool hw_fan_input;			/* fan input is IR data source */
+    bool hw_learning_and_tx_capable;	/* learning & tx capable */
+    int  pll_freq;
+    int buffer_len;
 
-	/* Extra RX buffer location */
-	int extra_buf1_address;
-	int extra_buf1_len;
-	int extra_buf2_address;
-	int extra_buf2_len;
+    /* Extra RX buffer location */
+    int extra_buf1_address;
+    int extra_buf1_len;
+    int extra_buf2_address;
+    int extra_buf2_len;
 
-	/* HW state*/
-	int r_pointer;				/* pointer to next sample to read */
-	int w_pointer;				/* pointer to next sample hw will write */
-	bool rx_fan_input_inuse;		/* is fan input in use for rx*/
-	int tx_reg;				/* current reg used for TX */
-	u8  saved_conf1;			/* saved FEC0 reg */
-	unsigned int tx_sample;			/* current sample for TX */
-	bool tx_sample_pulse;			/* current sample is pulse */
+    /* HW state*/
+    int r_pointer;				/* pointer to next sample to read */
+    int w_pointer;				/* pointer to next sample hw will write */
+    bool rx_fan_input_inuse;		/* is fan input in use for rx*/
+    int tx_reg;				/* current reg used for TX */
+    u8  saved_conf1;			/* saved FEC0 reg */
+    unsigned int tx_sample;			/* current sample for TX */
+    bool tx_sample_pulse;			/* current sample is pulse */
 
-	/* TX buffer */
-	unsigned *tx_buffer;			/* input samples buffer*/
-	int tx_pos;				/* position in that buffer */
-	int tx_len;				/* current len of tx buffer */
-	int tx_done;				/* done transmitting */
-						/* one more sample pending*/
-	struct completion tx_complete;		/* TX completion */
-	struct timer_list tx_sim_timer;
+    /* TX buffer */
+    unsigned *tx_buffer;			/* input samples buffer*/
+    int tx_pos;				/* position in that buffer */
+    int tx_len;				/* current len of tx buffer */
+    int tx_done;				/* done transmitting */
+    /* one more sample pending*/
+    struct completion tx_complete;		/* TX completion */
+    struct timer_list tx_sim_timer;
 
-	/* TX settings */
-	int tx_period;
-	int tx_duty_cycle;
-	int transmitter_mask;
+    /* TX settings */
+    int tx_period;
+    int tx_duty_cycle;
+    int transmitter_mask;
 
-	/* RX settings */
-	bool learning_mode_enabled;		/* learning input enabled */
-	bool carrier_detect_enabled;		/* carrier detect enabled */
-	int rx_period_adjust;
-	bool rx_enabled;
+    /* RX settings */
+    bool learning_mode_enabled;		/* learning input enabled */
+    bool carrier_detect_enabled;		/* carrier detect enabled */
+    int rx_period_adjust;
+    bool rx_enabled;
 };
 
 static int ene_irq_status(struct ene_device *dev);

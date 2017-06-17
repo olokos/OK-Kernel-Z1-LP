@@ -17,60 +17,60 @@
 #include <asm-generic/siginfo.h>
 
 typedef struct siginfo {
-	int si_signo;
-	int si_errno;
-	int si_code;
-	int __pad0;
+    int si_signo;
+    int si_errno;
+    int si_code;
+    int __pad0;
 
-	union {
-		int _pad[SI_PAD_SIZE];
+    union {
+        int _pad[SI_PAD_SIZE];
 
-		/* kill() */
-		struct {
-			pid_t _pid;		/* sender's pid */
-			uid_t _uid;		/* sender's uid */
-		} _kill;
+        /* kill() */
+        struct {
+            pid_t _pid;		/* sender's pid */
+            uid_t _uid;		/* sender's uid */
+        } _kill;
 
-		/* POSIX.1b timers */
-		struct {
-			timer_t _tid;		/* timer id */
-			int _overrun;		/* overrun count */
-			char _pad[sizeof(__ARCH_SI_UID_T) - sizeof(int)];
-			sigval_t _sigval;	/* must overlay ._rt._sigval! */
-			int _sys_private;	/* not to be passed to user */
-		} _timer;
+        /* POSIX.1b timers */
+        struct {
+            timer_t _tid;		/* timer id */
+            int _overrun;		/* overrun count */
+            char _pad[sizeof(__ARCH_SI_UID_T) - sizeof(int)];
+            sigval_t _sigval;	/* must overlay ._rt._sigval! */
+            int _sys_private;	/* not to be passed to user */
+        } _timer;
 
-		/* POSIX.1b signals */
-		struct {
-			pid_t _pid;		/* sender's pid */
-			uid_t _uid;		/* sender's uid */
-			sigval_t _sigval;
-		} _rt;
+        /* POSIX.1b signals */
+        struct {
+            pid_t _pid;		/* sender's pid */
+            uid_t _uid;		/* sender's uid */
+            sigval_t _sigval;
+        } _rt;
 
-		/* SIGCHLD */
-		struct {
-			pid_t _pid;		/* which child */
-			uid_t _uid;		/* sender's uid */
-			int _status;		/* exit code */
-			clock_t _utime;
-			clock_t _stime;
-		} _sigchld;
+        /* SIGCHLD */
+        struct {
+            pid_t _pid;		/* which child */
+            uid_t _uid;		/* sender's uid */
+            int _status;		/* exit code */
+            clock_t _utime;
+            clock_t _stime;
+        } _sigchld;
 
-		/* SIGILL, SIGFPE, SIGSEGV, SIGBUS */
-		struct {
-			void __user *_addr;	/* faulting insn/memory ref. */
-			int _imm;		/* immediate value for "break" */
-			unsigned int _flags;	/* see below */
-			unsigned long _isr;	/* isr */
-			short _addr_lsb;	/* lsb of faulting address */
-		} _sigfault;
+        /* SIGILL, SIGFPE, SIGSEGV, SIGBUS */
+        struct {
+            void __user *_addr;	/* faulting insn/memory ref. */
+            int _imm;		/* immediate value for "break" */
+            unsigned int _flags;	/* see below */
+            unsigned long _isr;	/* isr */
+            short _addr_lsb;	/* lsb of faulting address */
+        } _sigfault;
 
-		/* SIGPOLL */
-		struct {
-			long _band;	/* POLL_IN, POLL_OUT, POLL_MSG (XPG requires a "long") */
-			int _fd;
-		} _sigpoll;
-	} _sifields;
+        /* SIGPOLL */
+        struct {
+            long _band;	/* POLL_IN, POLL_OUT, POLL_MSG (XPG requires a "long") */
+            int _fd;
+        } _sigpoll;
+    } _sifields;
 } siginfo_t;
 
 #define si_imm		_sifields._sigfault._imm	/* as per UNIX SysV ABI spec */
@@ -121,13 +121,12 @@ typedef struct siginfo {
 #include <linux/string.h>
 
 static inline void
-copy_siginfo (siginfo_t *to, siginfo_t *from)
-{
-	if (from->si_code < 0)
-		memcpy(to, from, sizeof(siginfo_t));
-	else
-		/* _sigchld is currently the largest know union member */
-		memcpy(to, from, 4*sizeof(int) + sizeof(from->_sifields._sigchld));
+copy_siginfo (siginfo_t *to, siginfo_t *from) {
+    if (from->si_code < 0)
+        memcpy(to, from, sizeof(siginfo_t));
+    else
+        /* _sigchld is currently the largest know union member */
+        memcpy(to, from, 4*sizeof(int) + sizeof(from->_sifields._sigchld));
 }
 
 #endif /* __KERNEL__ */

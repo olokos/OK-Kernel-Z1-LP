@@ -36,27 +36,25 @@ typedef int status_t;
 #define EEPROM_OFFSET   0xC0000
 #define CPLD_OFFSET     0xD0000
 
-    struct pmcc4_timeslot_param
-    {
-        u_int8_t    card;       /* the card number */
-        u_int8_t    port;       /* the port number */
-        u_int8_t    _reserved1;
-        u_int8_t    _reserved2;
+struct pmcc4_timeslot_param {
+    u_int8_t    card;       /* the card number */
+    u_int8_t    port;       /* the port number */
+    u_int8_t    _reserved1;
+    u_int8_t    _reserved2;
 
-        /*
-         * each byte in bitmask below represents one timeslot (bitmask[0] is
-         * for timeslot 0 and so on), each bit in the byte selects timeslot
-         * bits for this channel (0xff - whole timeslot, 0x7f - 56kbps mode)
-         */
-        u_int8_t    bitmask[32];
-    };
+    /*
+     * each byte in bitmask below represents one timeslot (bitmask[0] is
+     * for timeslot 0 and so on), each bit in the byte selects timeslot
+     * bits for this channel (0xff - whole timeslot, 0x7f - 56kbps mode)
+     */
+    u_int8_t    bitmask[32];
+};
 
-    struct c4_musycc_param
-    {
-        u_int8_t    RWportnum;
-                    u_int16_t offset;
-        u_int32_t   value;
-    };
+struct c4_musycc_param {
+    u_int8_t    RWportnum;
+    u_int16_t offset;
+    u_int32_t   value;
+};
 
 /*Alarm values */
 #define sbeE1RMAI      0x100

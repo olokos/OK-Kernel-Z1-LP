@@ -73,21 +73,21 @@
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16204_state {
-	struct spi_device	*us;
-	struct iio_trigger	*trig;
-	struct mutex		buf_lock;
-	u8			tx[ADIS16204_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADIS16204_MAX_RX];
+    struct spi_device	*us;
+    struct iio_trigger	*trig;
+    struct mutex		buf_lock;
+    u8			tx[ADIS16204_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADIS16204_MAX_RX];
 };
 
 int adis16204_set_irq(struct iio_dev *indio_dev, bool enable);
 
 enum adis16204_scan {
-	ADIS16204_SCAN_SUPPLY,
-	ADIS16204_SCAN_ACC_X,
-	ADIS16204_SCAN_ACC_Y,
-	ADIS16204_SCAN_AUX_ADC,
-	ADIS16204_SCAN_TEMP,
+    ADIS16204_SCAN_SUPPLY,
+    ADIS16204_SCAN_ACC_X,
+    ADIS16204_SCAN_ACC_Y,
+    ADIS16204_SCAN_AUX_ADC,
+    ADIS16204_SCAN_TEMP,
 };
 
 #ifdef CONFIG_IIO_BUFFER
@@ -95,38 +95,33 @@ void adis16204_remove_trigger(struct iio_dev *indio_dev);
 int adis16204_probe_trigger(struct iio_dev *indio_dev);
 
 ssize_t adis16204_read_data_from_ring(struct device *dev,
-				      struct device_attribute *attr,
-				      char *buf);
+                                      struct device_attribute *attr,
+                                      char *buf);
 
 int adis16204_configure_ring(struct iio_dev *indio_dev);
 void adis16204_unconfigure_ring(struct iio_dev *indio_dev);
 
 #else /* CONFIG_IIO_BUFFER */
 
-static inline void adis16204_remove_trigger(struct iio_dev *indio_dev)
-{
+static inline void adis16204_remove_trigger(struct iio_dev *indio_dev) {
 }
 
-static inline int adis16204_probe_trigger(struct iio_dev *indio_dev)
-{
-	return 0;
+static inline int adis16204_probe_trigger(struct iio_dev *indio_dev) {
+    return 0;
 }
 
 static inline ssize_t
 adis16204_read_data_from_ring(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	return 0;
+                              struct device_attribute *attr,
+                              char *buf) {
+    return 0;
 }
 
-static int adis16204_configure_ring(struct iio_dev *indio_dev)
-{
-	return 0;
+static int adis16204_configure_ring(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void adis16204_unconfigure_ring(struct iio_dev *indio_dev)
-{
+static inline void adis16204_unconfigure_ring(struct iio_dev *indio_dev) {
 }
 
 #endif /* CONFIG_IIO_BUFFER */

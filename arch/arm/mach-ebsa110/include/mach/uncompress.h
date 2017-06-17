@@ -15,27 +15,25 @@
 /*
  * This does not append a newline
  */
-static inline void putc(int c)
-{
-	unsigned char v, *base = SERIAL_BASE;
+static inline void putc(int c) {
+    unsigned char v, *base = SERIAL_BASE;
 
-	do {
-		v = base[UART_LSR << 2];
-		barrier();
-	} while (!(v & UART_LSR_THRE));
+    do {
+        v = base[UART_LSR << 2];
+        barrier();
+    } while (!(v & UART_LSR_THRE));
 
-	base[UART_TX << 2] = c;
+    base[UART_TX << 2] = c;
 }
 
-static inline void flush(void)
-{
-	unsigned char v, *base = SERIAL_BASE;
+static inline void flush(void) {
+    unsigned char v, *base = SERIAL_BASE;
 
-	do {
-		v = base[UART_LSR << 2];
-		barrier();
-	} while ((v & (UART_LSR_TEMT|UART_LSR_THRE)) !=
-		 (UART_LSR_TEMT|UART_LSR_THRE));
+    do {
+        v = base[UART_LSR << 2];
+        barrier();
+    } while ((v & (UART_LSR_TEMT|UART_LSR_THRE)) !=
+             (UART_LSR_TEMT|UART_LSR_THRE));
 }
 
 /*

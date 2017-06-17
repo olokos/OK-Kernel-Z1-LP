@@ -65,14 +65,14 @@
 #define CBE_PM_CTR_OVERFLOW_INTR(ctr)      (1 << (31 - ((ctr) & 7)))
 
 enum pm_reg_name {
-	group_control,
-	debug_bus_control,
-	trace_address,
-	ext_tr_timer,
-	pm_status,
-	pm_control,
-	pm_interval,
-	pm_start_stop,
+    group_control,
+    debug_bus_control,
+    trace_address,
+    ext_tr_timer,
+    pm_status,
+    pm_control,
+    pm_interval,
+    pm_start_stop,
 };
 
 /* Routines for reading/writing the PMU registers. */

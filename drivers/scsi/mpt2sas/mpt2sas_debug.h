@@ -161,18 +161,17 @@
  * @sz: number of dwords
  */
 static inline void
-_debug_dump_mf(void *mpi_request, int sz)
-{
-	int i;
-	__le32 *mfp = (__le32 *)mpi_request;
+_debug_dump_mf(void *mpi_request, int sz) {
+    int i;
+    __le32 *mfp = (__le32 *)mpi_request;
 
-	printk(KERN_INFO "mf:\n\t");
-	for (i = 0; i < sz; i++) {
-		if (i && ((i % 8) == 0))
-			printk("\n\t");
-		printk("%08x ", le32_to_cpu(mfp[i]));
-	}
-	printk("\n");
+    printk(KERN_INFO "mf:\n\t");
+    for (i = 0; i < sz; i++) {
+        if (i && ((i % 8) == 0))
+            printk("\n\t");
+        printk("%08x ", le32_to_cpu(mfp[i]));
+    }
+    printk("\n");
 }
 #else
 #define _debug_dump_mf(mpi_request, sz)

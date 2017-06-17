@@ -28,7 +28,7 @@ struct page;
 
 void copy_user_page_asm(void *to, void *from);
 void copy_user_page(void *vto, void *vfrom, unsigned long vaddr,
-			   struct page *pg);
+                    struct page *pg);
 void clear_user_page(void *page, unsigned long vaddr, struct page *pg);
 
 /*
@@ -36,13 +36,21 @@ void clear_user_page(void *page, unsigned long vaddr, struct page *pg);
  */
 #define STRICT_MM_TYPECHECKS
 #ifdef STRICT_MM_TYPECHECKS
-typedef struct { unsigned long pte; } pte_t; /* either 32 or 64bit */
+typedef struct {
+    unsigned long pte;
+} pte_t; /* either 32 or 64bit */
 
 /* NOTE: even on 64 bits, these entries are __u32 because we allocate
  * the pmd and pgd in ZONE_DMA (i.e. under 4GB) */
-typedef struct { __u32 pmd; } pmd_t;
-typedef struct { __u32 pgd; } pgd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    __u32 pmd;
+} pmd_t;
+typedef struct {
+    __u32 pgd;
+} pgd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 
 #define pte_val(x)	((x).pte)
 /* These do not work lvalues, so make sure we don't use them as such. */
@@ -85,8 +93,8 @@ typedef unsigned long pgprot_t;
 typedef struct page *pgtable_t;
 
 typedef struct __physmem_range {
-	unsigned long start_pfn;
-	unsigned long pages;       /* PAGE_SIZE pages */
+    unsigned long start_pfn;
+    unsigned long pages;       /* PAGE_SIZE pages */
 } physmem_range_t;
 
 extern physmem_range_t pmem_ranges[];

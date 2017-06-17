@@ -37,8 +37,12 @@ extern void reserve_kdump_trampoline(void);
 extern void setup_kdump_trampoline(void);
 #else
 /* !CRASH_DUMP || !NONSTATIC_KERNEL */
-static inline void reserve_kdump_trampoline(void) { ; }
-static inline void setup_kdump_trampoline(void) { ; }
+static inline void reserve_kdump_trampoline(void) {
+    ;
+}
+static inline void setup_kdump_trampoline(void) {
+    ;
+}
 #endif
 
 #endif /* __ASSEMBLY__ */

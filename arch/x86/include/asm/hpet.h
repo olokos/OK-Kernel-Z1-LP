@@ -84,9 +84,8 @@ extern void hpet_msi_read(struct hpet_dev *hdev, struct msi_msg *msg);
 #ifdef CONFIG_PCI_MSI
 extern int arch_setup_hpet_msi(unsigned int irq, unsigned int id);
 #else
-static inline int arch_setup_hpet_msi(unsigned int irq, unsigned int id)
-{
-	return -EINVAL;
+static inline int arch_setup_hpet_msi(unsigned int irq, unsigned int id) {
+    return -EINVAL;
 }
 #endif
 
@@ -98,7 +97,7 @@ typedef irqreturn_t (*rtc_irq_handler)(int interrupt, void *cookie);
 extern int hpet_mask_rtc_irq_bit(unsigned long bit_mask);
 extern int hpet_set_rtc_irq_bit(unsigned long bit_mask);
 extern int hpet_set_alarm_time(unsigned char hrs, unsigned char min,
-			       unsigned char sec);
+                               unsigned char sec);
 extern int hpet_set_periodic_freq(unsigned long freq);
 extern int hpet_rtc_dropped_irq(void);
 extern int hpet_rtc_timer_init(void);
@@ -110,8 +109,12 @@ extern void hpet_unregister_irq_handler(rtc_irq_handler handler);
 
 #else /* CONFIG_HPET_TIMER */
 
-static inline int hpet_enable(void) { return 0; }
-static inline int is_hpet_enabled(void) { return 0; }
+static inline int hpet_enable(void) {
+    return 0;
+}
+static inline int is_hpet_enabled(void) {
+    return 0;
+}
 #define hpet_readl(a) 0
 
 #endif

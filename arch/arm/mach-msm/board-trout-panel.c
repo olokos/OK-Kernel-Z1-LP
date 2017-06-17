@@ -137,33 +137,33 @@
 	{ 0, 5 },
 
 struct mddi_table {
-	uint32_t reg;
-	uint32_t value;
+    uint32_t reg;
+    uint32_t value;
 };
 static struct mddi_table mddi_toshiba_init_table[] = {
-	{ DPSET0,       0x09e90046 },
-	{ DPSET1,       0x00000118 },
-	{ DPSUS,        0x00000000 },
-	{ DPRUN,        0x00000001 },
-	{ 1,            14         }, /* msleep 14 */
-	{ SYSCKENA,     0x00000001 },
-	{ CLKENB,       0x0000A1EF },  /*    # SYS.CLKENB  # Enable clocks for each module (without DCLK , i2cCLK) */
+    { DPSET0,       0x09e90046 },
+    { DPSET1,       0x00000118 },
+    { DPSUS,        0x00000000 },
+    { DPRUN,        0x00000001 },
+    { 1,            14         }, /* msleep 14 */
+    { SYSCKENA,     0x00000001 },
+    { CLKENB,       0x0000A1EF },  /*    # SYS.CLKENB  # Enable clocks for each module (without DCLK , i2cCLK) */
 
-	{ GPIODATA,     0x02000200 },  /*   # GPI .GPIODATA  # GPIO2(RESET_LCD_N) set to 0 , GPIO3(eDRAM_Power) set to 0 */
-	{ GPIODIR,      0x000030D  },  /* 24D   # GPI .GPIODIR  # Select direction of GPIO port (0,2,3,6,9 output) */
-	{ GPIOSEL,      0/*0x00000173*/},  /*   # SYS.GPIOSEL  # GPIO port multiplexing control */
-	{ GPIOPC,       0x03C300C0 },  /*   # GPI .GPIOPC  # GPIO2,3 PD cut */
-	{ WKREQ,        0x00000000 },  /*   # SYS.WKREQ  # Wake-up request event is VSYNC alignment */
+    { GPIODATA,     0x02000200 },  /*   # GPI .GPIODATA  # GPIO2(RESET_LCD_N) set to 0 , GPIO3(eDRAM_Power) set to 0 */
+    { GPIODIR,      0x000030D  },  /* 24D   # GPI .GPIODIR  # Select direction of GPIO port (0,2,3,6,9 output) */
+    { GPIOSEL,      0/*0x00000173*/},  /*   # SYS.GPIOSEL  # GPIO port multiplexing control */
+    { GPIOPC,       0x03C300C0 },  /*   # GPI .GPIOPC  # GPIO2,3 PD cut */
+    { WKREQ,        0x00000000 },  /*   # SYS.WKREQ  # Wake-up request event is VSYNC alignment */
 
-	{ GPIOIBE,      0x000003FF },
-	{ GPIOIS,       0x00000000 },
-	{ GPIOIC,       0x000003FF },
-	{ GPIOIE,       0x00000000 },
+    { GPIOIBE,      0x000003FF },
+    { GPIOIS,       0x00000000 },
+    { GPIOIC,       0x000003FF },
+    { GPIOIE,       0x00000000 },
 
-	{ GPIODATA,     0x00040004 },  /*   # GPI .GPIODATA  # eDRAM VD supply */
-	{ 1,            1          }, /* msleep 1 */
-	{ GPIODATA,     0x02040004 },  /*   # GPI .GPIODATA  # eDRAM VD supply */
-	{ DRAMPWR,      0x00000001 }, /* eDRAM power */
+    { GPIODATA,     0x00040004 },  /*   # GPI .GPIODATA  # eDRAM VD supply */
+    { 1,            1          }, /* msleep 1 */
+    { GPIODATA,     0x02040004 },  /*   # GPI .GPIODATA  # eDRAM VD supply */
+    { DRAMPWR,      0x00000001 }, /* eDRAM power */
 };
 
 #define GPIOSEL_VWAKEINT (1U << 0)
@@ -176,122 +176,118 @@ static struct vreg *vreg_mddi_1v5;
 static struct vreg *vreg_lcm_2v85;
 
 static void trout_process_mddi_table(struct msm_mddi_client_data *client_data,
-				     struct mddi_table *table, size_t count)
-{
-	int i;
-	for (i = 0; i < count; i++) {
-		uint32_t reg = table[i].reg;
-		uint32_t value = table[i].value;
+                                     struct mddi_table *table, size_t count) {
+    int i;
+    for (i = 0; i < count; i++) {
+        uint32_t reg = table[i].reg;
+        uint32_t value = table[i].value;
 
-		if (reg == 0)
-			udelay(value);
-		else if (reg == 1)
-			msleep(value);
-		else
-			client_data->remote_write(client_data, value, reg);
-	}
+        if (reg == 0)
+            udelay(value);
+        else if (reg == 1)
+            msleep(value);
+        else
+            client_data->remote_write(client_data, value, reg);
+    }
 }
 
 static int trout_mddi_toshiba_client_init(
-	struct msm_mddi_bridge_platform_data *bridge_data,
-	struct msm_mddi_client_data *client_data)
-{
-	int panel_id;
+    struct msm_mddi_bridge_platform_data *bridge_data,
+    struct msm_mddi_client_data *client_data) {
+    int panel_id;
 
-	client_data->auto_hibernate(client_data, 0);
-	trout_process_mddi_table(client_data, mddi_toshiba_init_table,
-				 ARRAY_SIZE(mddi_toshiba_init_table));
-	client_data->auto_hibernate(client_data, 1);
-	panel_id = (client_data->remote_read(client_data, GPIODATA) >> 4) & 3;
-	if (panel_id > 1) {
-		printk(KERN_WARNING "unknown panel id at mddi_enable\n");
-		return -1;
-	}
-	return 0;
+    client_data->auto_hibernate(client_data, 0);
+    trout_process_mddi_table(client_data, mddi_toshiba_init_table,
+                             ARRAY_SIZE(mddi_toshiba_init_table));
+    client_data->auto_hibernate(client_data, 1);
+    panel_id = (client_data->remote_read(client_data, GPIODATA) >> 4) & 3;
+    if (panel_id > 1) {
+        printk(KERN_WARNING "unknown panel id at mddi_enable\n");
+        return -1;
+    }
+    return 0;
 }
 
 static int trout_mddi_toshiba_client_uninit(
-	struct msm_mddi_bridge_platform_data *bridge_data,
-	struct msm_mddi_client_data *client_data)
-{
-	return 0;
+    struct msm_mddi_bridge_platform_data *bridge_data,
+    struct msm_mddi_client_data *client_data) {
+    return 0;
 }
 
 static struct resource resources_msm_fb[] = {
-	{
-		.start = MSM_FB_BASE,
-		.end = MSM_FB_BASE + MSM_FB_SIZE,
-		.flags = IORESOURCE_MEM,
-	},
+    {
+        .start = MSM_FB_BASE,
+        .end = MSM_FB_BASE + MSM_FB_SIZE,
+        .flags = IORESOURCE_MEM,
+    },
 };
 
 struct msm_mddi_bridge_platform_data toshiba_client_data = {
-	.init = trout_mddi_toshiba_client_init,
-	.uninit = trout_mddi_toshiba_client_uninit,
-	.fb_data = {
-		.xres = 320,
-		.yres = 480,
-		.width = 45,
-		.height = 67,
-		.output_format = 0,
-	},
+    .init = trout_mddi_toshiba_client_init,
+    .uninit = trout_mddi_toshiba_client_uninit,
+    .fb_data = {
+        .xres = 320,
+        .yres = 480,
+        .width = 45,
+        .height = 67,
+        .output_format = 0,
+    },
 };
 
 static struct msm_mddi_platform_data mddi_pdata = {
-	.clk_rate = 122880000,
-	.fb_resource = resources_msm_fb,
-	.num_clients = 1,
-	.client_platform_data = {
-		{
-			.product_id = (0xd263 << 16 | 0),
-			.name = "mddi_c_d263_0000",
-			.id = 0,
-			.client_data = &toshiba_client_data,
-			.clk_rate = 0,
-		},
-	},
+    .clk_rate = 122880000,
+    .fb_resource = resources_msm_fb,
+    .num_clients = 1,
+    .client_platform_data = {
+        {
+            .product_id = (0xd263 << 16 | 0),
+            .name = "mddi_c_d263_0000",
+            .id = 0,
+            .client_data = &toshiba_client_data,
+            .clk_rate = 0,
+        },
+    },
 };
 
-int __init trout_init_panel(void)
-{
-	int rc;
+int __init trout_init_panel(void) {
+    int rc;
 
-	if (!machine_is_trout())
-		return 0;
-	vreg_mddi_1v5 = vreg_get(0, "gp2");
-	if (IS_ERR(vreg_mddi_1v5))
-		return PTR_ERR(vreg_mddi_1v5);
-	vreg_lcm_2v85 = vreg_get(0, "gp4");
-	if (IS_ERR(vreg_lcm_2v85))
-		return PTR_ERR(vreg_lcm_2v85);
+    if (!machine_is_trout())
+        return 0;
+    vreg_mddi_1v5 = vreg_get(0, "gp2");
+    if (IS_ERR(vreg_mddi_1v5))
+        return PTR_ERR(vreg_mddi_1v5);
+    vreg_lcm_2v85 = vreg_get(0, "gp4");
+    if (IS_ERR(vreg_lcm_2v85))
+        return PTR_ERR(vreg_lcm_2v85);
 
-	trout_new_backlight = system_rev >= 5;
-	if (trout_new_backlight) {
-		uint32_t config = PCOM_GPIO_CFG(27, 0, GPIO_OUTPUT,
-						GPIO_NO_PULL, GPIO_8MA);
-		msm_proc_comm(PCOM_RPC_GPIO_TLMM_CONFIG_EX, &config, 0);
-	} else {
-		uint32_t config = PCOM_GPIO_CFG(27, 1, GPIO_OUTPUT,
-						GPIO_NO_PULL, GPIO_8MA);
-		msm_proc_comm(PCOM_RPC_GPIO_TLMM_CONFIG_EX, &config, 0);
+    trout_new_backlight = system_rev >= 5;
+    if (trout_new_backlight) {
+        uint32_t config = PCOM_GPIO_CFG(27, 0, GPIO_OUTPUT,
+                                        GPIO_NO_PULL, GPIO_8MA);
+        msm_proc_comm(PCOM_RPC_GPIO_TLMM_CONFIG_EX, &config, 0);
+    } else {
+        uint32_t config = PCOM_GPIO_CFG(27, 1, GPIO_OUTPUT,
+                                        GPIO_NO_PULL, GPIO_8MA);
+        msm_proc_comm(PCOM_RPC_GPIO_TLMM_CONFIG_EX, &config, 0);
 
-		gp_clk = clk_get(NULL, "gp_clk");
-		if (IS_ERR(gp_clk)) {
-			printk(KERN_ERR "trout_init_panel: could not get gp"
-			       "clock\n");
-			gp_clk = NULL;
-		}
-		rc = clk_set_rate(gp_clk, 19200000);
-		if (rc)
-			printk(KERN_ERR "trout_init_panel: set clock rate "
-			       "failed\n");
-	}
+        gp_clk = clk_get(NULL, "gp_clk");
+        if (IS_ERR(gp_clk)) {
+            printk(KERN_ERR "trout_init_panel: could not get gp"
+                   "clock\n");
+            gp_clk = NULL;
+        }
+        rc = clk_set_rate(gp_clk, 19200000);
+        if (rc)
+            printk(KERN_ERR "trout_init_panel: set clock rate "
+                   "failed\n");
+    }
 
-	rc = platform_device_register(&msm_device_mdp);
-	if (rc)
-		return rc;
-	msm_device_mddi0.dev.platform_data = &mddi_pdata;
-	return platform_device_register(&msm_device_mddi0);
+    rc = platform_device_register(&msm_device_mdp);
+    if (rc)
+        return rc;
+    msm_device_mddi0.dev.platform_data = &mddi_pdata;
+    return platform_device_register(&msm_device_mddi0);
 }
 
 device_initcall(trout_init_panel);

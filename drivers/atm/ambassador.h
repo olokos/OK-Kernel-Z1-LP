@@ -130,7 +130,7 @@
 
 #define SRB_OPEN_VC		0
 /* par_0: dwordswap(VC_number) */
-/* par_1: dwordswap(flags<<16) or wordswap(flags)*/ 
+/* par_1: dwordswap(flags<<16) or wordswap(flags)*/
 /* flags:		*/
 
 /* LANE:	0x0004		*/
@@ -182,7 +182,7 @@
 
 #define SRB_FLUSH_BUFFER_Q	15
 /* Only flags to define which buffer pool; all others must be zero */
-/* par_0: dwordswap(flags<<16) or wordswap(flags)*/ 
+/* par_0: dwordswap(flags<<16) or wordswap(flags)*/
 
 #define	SRB_GET_DMA_SPEEDS	16
 /* returns 		*/
@@ -195,7 +195,7 @@
 
 #define SRB_MODIFY_VC_FLAGS	18
 /* par_0: dwordswap(VC_number) */
-/* par_1: dwordswap(flags<<16) or wordswap(flags)*/ 
+/* par_1: dwordswap(flags<<16) or wordswap(flags)*/
 
 /* flags:		*/
 
@@ -261,17 +261,17 @@
 #define PLX_BASE 0xe0000000
 
 typedef enum {
-  host_memory_test = 1,
-  read_adapter_memory,
-  write_adapter_memory,
-  adapter_start,
-  get_version_number,
-  interrupt_host,
-  flash_erase_sector,
-  adap_download_block = 0x20,
-  adap_erase_flash,
-  adap_run_in_iram,
-  adap_end_download
+    host_memory_test = 1,
+    read_adapter_memory,
+    write_adapter_memory,
+    adapter_start,
+    get_version_number,
+    interrupt_host,
+    flash_erase_sector,
+    adap_download_block = 0x20,
+    adap_erase_flash,
+    adap_run_in_iram,
+    adap_end_download
 } loader_command;
 
 #define BAD_COMMAND                     (-1)
@@ -289,7 +289,7 @@ typedef enum {
 
 /* bit fields for mailbox[0] return values */
 
-#define GPINT_TST_FAILURE               0x00000001      
+#define GPINT_TST_FAILURE               0x00000001
 #define SUNI_DATA_PATTERN_FAILURE       0x00000002
 #define SUNI_DATA_BITS_FAILURE          0x00000004
 #define SUNI_UTOPIA_FAILURE             0x00000008
@@ -309,25 +309,25 @@ typedef enum {
 #define UNUSED_LOADER_MAILBOXES 6
 
 typedef struct {
-  u32 stuff[16];
-  union {
-    struct {
-      u32 result;
-      u32 ready;
-      u32 stuff[UNUSED_LOADER_MAILBOXES];
-    } loader;
-    struct {
-      u32 cmd_address;
-      u32 tx_address;
-      u32 rx_address[NUM_RX_POOLS];
-      u32 gen_counter;
-      u32 spare;
-    } adapter;
-  } mb;
-  u32 doorbell;
-  u32 interrupt;
-  u32 interrupt_control;
-  u32 reset_control;
+    u32 stuff[16];
+    union {
+        struct {
+            u32 result;
+            u32 ready;
+            u32 stuff[UNUSED_LOADER_MAILBOXES];
+        } loader;
+        struct {
+            u32 cmd_address;
+            u32 tx_address;
+            u32 rx_address[NUM_RX_POOLS];
+            u32 gen_counter;
+            u32 spare;
+        } adapter;
+    } mb;
+    u32 doorbell;
+    u32 interrupt;
+    u32 interrupt_control;
+    u32 reset_control;
 } amb_mem;
 
 /* RESET bit, IRQ (card to host) and doorbell (host to card) enable bits */
@@ -341,21 +341,21 @@ typedef struct {
 #define MAX_TRANSFER_DATA 11
 
 typedef struct {
-  __be32 address;
-  __be32 count;
-  __be32 data[MAX_TRANSFER_DATA];
+    __be32 address;
+    __be32 count;
+    __be32 data[MAX_TRANSFER_DATA];
 } transfer_block;
 
 typedef struct {
-  __be32 result;
-  __be32 command;
-  union {
-    transfer_block transfer;
-    __be32 version;
-    __be32 start;
-    __be32 data[MAX_COMMAND_DATA];
-  } payload;
-  __be32 valid;
+    __be32 result;
+    __be32 command;
+    union {
+        transfer_block transfer;
+        __be32 version;
+        __be32 start;
+        __be32 data[MAX_COMMAND_DATA];
+    } payload;
+    __be32 valid;
 } loader_block;
 
 /* command queue */
@@ -363,48 +363,48 @@ typedef struct {
 /* Again all data are BIG ENDIAN */
 
 typedef	struct {
-  union {
-    struct {
-      __be32 vc;
-      __be32 flags;
-      __be32 rate;
-    } open;
-    struct {
-      __be32 vc;
-      __be32 rate;
-    } modify_rate;
-    struct {
-      __be32 vc;
-      __be32 flags;
-    } modify_flags;
-    struct {
-      __be32 vc;
-    } close;
-    struct {
-      __be32 lower4;
-      __be32 upper2;
-    } bia;
-    struct {
-      __be32 address;
-    } suni;
-    struct {
-      __be32 major;
-      __be32 minor;
-    } version;
-    struct {
-      __be32 read;
-      __be32 write;
-    } speed;
-    struct {
-      __be32 flags;
-    } flush;
-    struct {
-      __be32 address;
-      __be32 data;
-    } memory;
-    __be32 par[3];
-  } args;
-  __be32 request;
+    union {
+        struct {
+            __be32 vc;
+            __be32 flags;
+            __be32 rate;
+        } open;
+        struct {
+            __be32 vc;
+            __be32 rate;
+        } modify_rate;
+        struct {
+            __be32 vc;
+            __be32 flags;
+        } modify_flags;
+        struct {
+            __be32 vc;
+        } close;
+        struct {
+            __be32 lower4;
+            __be32 upper2;
+        } bia;
+        struct {
+            __be32 address;
+        } suni;
+        struct {
+            __be32 major;
+            __be32 minor;
+        } version;
+        struct {
+            __be32 read;
+            __be32 write;
+        } speed;
+        struct {
+            __be32 flags;
+        } flush;
+        struct {
+            __be32 address;
+            __be32 data;
+        } memory;
+        __be32 par[3];
+    } args;
+    __be32 request;
 } command;
 
 /* transmit queues and associated structures */
@@ -416,50 +416,50 @@ typedef	struct {
 /* TX is described by 1+ tx_frags followed by a tx_frag_end */
 
 typedef struct {
-  __be32 bytes;
-  __be32 address;
+    __be32 bytes;
+    __be32 address;
 } tx_frag;
 
 /* apart from handle the fields here are for the adapter to play with
    and should be set to zero */
 
 typedef struct {
-  u32	handle;
-  u16	vc;
-  u16	next_descriptor_length;
-  u32	next_descriptor;
+    u32	handle;
+    u16	vc;
+    u16	next_descriptor_length;
+    u32	next_descriptor;
 #ifdef AMB_NEW_MICROCODE
-  u8    cpcs_uu;
-  u8    cpi;
-  u16   pad;
+    u8    cpcs_uu;
+    u8    cpi;
+    u16   pad;
 #endif
 } tx_frag_end;
 
 typedef struct {
-  tx_frag tx_frag;
-  tx_frag_end tx_frag_end;
-  struct sk_buff * skb;
+    tx_frag tx_frag;
+    tx_frag_end tx_frag_end;
+    struct sk_buff * skb;
 } tx_simple;
 
 #if 0
 typedef union {
-  tx_frag	fragment;
-  tx_frag_end	end_of_list;
+    tx_frag	fragment;
+    tx_frag_end	end_of_list;
 } tx_descr;
 #endif
 
 /* this "points" to the sequence of fragments and trailer */
 
 typedef	struct {
-  __be16	vc;
-  __be16	tx_descr_length;
-  __be32	tx_descr_addr;
+    __be16	vc;
+    __be16	tx_descr_length;
+    __be32	tx_descr_addr;
 } tx_in;
 
 /* handle is the handle from tx_in */
 
 typedef	struct {
-  u32 handle;
+    u32 handle;
 } tx_out;
 
 /* receive frame structure */
@@ -469,18 +469,18 @@ typedef	struct {
    number, lec-id is NOT yet supported. */
 
 typedef struct {
-  u32  handle;
-  __be16  vc;
-  __be16  lec_id; // unused
-  __be16  status;
-  __be16  length;
+    u32  handle;
+    __be16  vc;
+    __be16  lec_id; // unused
+    __be16  status;
+    __be16  length;
 } rx_out;
 
 /* buffer supply structure */
 
 typedef	struct {
-  u32 handle;
-  __be32 host_address;
+    u32 handle;
+    __be32 host_address;
 } rx_in;
 
 /* This first structure is the area in host memory where the adapter
@@ -489,162 +489,162 @@ typedef	struct {
    adapter the address of this block by sending a doorbell interrupt
    to the adapter after downloading the code and setting it going. The
    addresses have the top 10 bits set to 1010000010b -- really?
-   
+
    The host must initialise these before handing the block to the
    adapter. */
 
 typedef struct {
-  __be32 command_start;		/* SRB commands completions */
-  __be32 command_end;		/* SRB commands completions */
-  __be32 tx_start;
-  __be32 tx_end;
-  __be32 txcom_start;		/* tx completions */
-  __be32 txcom_end;		/* tx completions */
-  struct {
-    __be32 buffer_start;
-    __be32 buffer_end;
-    u32 buffer_q_get;
-    u32 buffer_q_end;
-    u32 buffer_aptr;
-    __be32 rx_start;		/* rx completions */
-    __be32 rx_end;
-    u32 rx_ptr;
-    __be32 buffer_size;		/* size of host buffer */
-  } rec_struct[NUM_RX_POOLS];
+    __be32 command_start;		/* SRB commands completions */
+    __be32 command_end;		/* SRB commands completions */
+    __be32 tx_start;
+    __be32 tx_end;
+    __be32 txcom_start;		/* tx completions */
+    __be32 txcom_end;		/* tx completions */
+    struct {
+        __be32 buffer_start;
+        __be32 buffer_end;
+        u32 buffer_q_get;
+        u32 buffer_q_end;
+        u32 buffer_aptr;
+        __be32 rx_start;		/* rx completions */
+        __be32 rx_end;
+        u32 rx_ptr;
+        __be32 buffer_size;		/* size of host buffer */
+    } rec_struct[NUM_RX_POOLS];
 #ifdef AMB_NEW_MICROCODE
-  u16 init_flags;
-  u16 talk_block_spare;
+    u16 init_flags;
+    u16 talk_block_spare;
 #endif
 } adap_talk_block;
 
 /* This structure must be kept in line with the vcr image in sarmain.h
-   
+
    This is the structure in the host filled in by the adapter by
    GET_SUNI_STATS */
 
 typedef struct {
-  u8	racp_chcs;
-  u8	racp_uhcs;
-  u16	spare;
-  u32	racp_rcell;
-  u32	tacp_tcell;
-  u32	flags;
-  u32	dropped_cells;
-  u32	dropped_frames;
+    u8	racp_chcs;
+    u8	racp_uhcs;
+    u16	spare;
+    u32	racp_rcell;
+    u32	tacp_tcell;
+    u32	flags;
+    u32	dropped_cells;
+    u32	dropped_frames;
 } suni_stats;
 
 typedef enum {
-  dead
+    dead
 } amb_flags;
 
 #define NEXTQ(current,start,limit) \
-  ( (current)+1 < (limit) ? (current)+1 : (start) ) 
+  ( (current)+1 < (limit) ? (current)+1 : (start) )
 
 typedef struct {
-  command * start;
-  command * in;
-  command * out;
-  command * limit;
+    command * start;
+    command * in;
+    command * out;
+    command * limit;
 } amb_cq_ptrs;
 
 typedef struct {
-  spinlock_t lock;
-  unsigned int pending;
-  unsigned int high;
-  unsigned int filled;
-  unsigned int maximum; // size - 1 (q implementation)
-  amb_cq_ptrs ptrs;
+    spinlock_t lock;
+    unsigned int pending;
+    unsigned int high;
+    unsigned int filled;
+    unsigned int maximum; // size - 1 (q implementation)
+    amb_cq_ptrs ptrs;
 } amb_cq;
 
 typedef struct {
-  spinlock_t lock;
-  unsigned int pending;
-  unsigned int high;
-  unsigned int filled;
-  unsigned int maximum; // size - 1 (q implementation)
-  struct {
-    tx_in * start;
-    tx_in * ptr;
-    tx_in * limit;
-  } in;
-  struct {
-    tx_out * start;
-    tx_out * ptr;
-    tx_out * limit;
-  } out;
+    spinlock_t lock;
+    unsigned int pending;
+    unsigned int high;
+    unsigned int filled;
+    unsigned int maximum; // size - 1 (q implementation)
+    struct {
+        tx_in * start;
+        tx_in * ptr;
+        tx_in * limit;
+    } in;
+    struct {
+        tx_out * start;
+        tx_out * ptr;
+        tx_out * limit;
+    } out;
 } amb_txq;
 
 typedef struct {
-  spinlock_t lock;
-  unsigned int pending;
-  unsigned int low;
-  unsigned int emptied;
-  unsigned int maximum; // size - 1 (q implementation)
-  struct {
-    rx_in * start;
-    rx_in * ptr;
-    rx_in * limit;
-  } in;
-  struct {
-    rx_out * start;
-    rx_out * ptr;
-    rx_out * limit;
-  } out;
-  unsigned int buffers_wanted;
-  unsigned int buffer_size;
+    spinlock_t lock;
+    unsigned int pending;
+    unsigned int low;
+    unsigned int emptied;
+    unsigned int maximum; // size - 1 (q implementation)
+    struct {
+        rx_in * start;
+        rx_in * ptr;
+        rx_in * limit;
+    } in;
+    struct {
+        rx_out * start;
+        rx_out * ptr;
+        rx_out * limit;
+    } out;
+    unsigned int buffers_wanted;
+    unsigned int buffer_size;
 } amb_rxq;
 
 typedef struct {
-  unsigned long tx_ok;
-  struct {
-    unsigned long ok;
-    unsigned long error;
-    unsigned long badcrc;
-    unsigned long toolong;
-    unsigned long aborted;
-    unsigned long unused;
-  } rx;
+    unsigned long tx_ok;
+    struct {
+        unsigned long ok;
+        unsigned long error;
+        unsigned long badcrc;
+        unsigned long toolong;
+        unsigned long aborted;
+        unsigned long unused;
+    } rx;
 } amb_stats;
 
 // a single struct pointed to by atm_vcc->dev_data
 
 typedef struct {
-  u8               tx_vc_bits:7;
-  u8               tx_present:1;
+    u8               tx_vc_bits:7;
+    u8               tx_present:1;
 } amb_tx_info;
 
 typedef struct {
-  unsigned char    pool;
+    unsigned char    pool;
 } amb_rx_info;
 
 typedef struct {
-  amb_rx_info      rx_info;
-  u16              tx_frame_bits;
-  unsigned int     tx_rate;
-  unsigned int     rx_rate;
+    amb_rx_info      rx_info;
+    u16              tx_frame_bits;
+    unsigned int     tx_rate;
+    unsigned int     rx_rate;
 } amb_vcc;
 
 struct amb_dev {
-  u8               irq;
-  unsigned long	   flags;
-  u32              iobase;
-  u32 *            membase;
+    u8               irq;
+    unsigned long	   flags;
+    u32              iobase;
+    u32 *            membase;
 
-  amb_cq           cq;
-  amb_txq          txq;
-  amb_rxq          rxq[NUM_RX_POOLS];
-  
-  struct mutex     vcc_sf;
-  amb_tx_info      txer[NUM_VCS];
-  struct atm_vcc * rxer[NUM_VCS];
-  unsigned int     tx_avail;
-  unsigned int     rx_avail;
-  
-  amb_stats        stats;
-  
-  struct atm_dev * atm_dev;
-  struct pci_dev * pci_dev;
-  struct timer_list housekeeping;
+    amb_cq           cq;
+    amb_txq          txq;
+    amb_rxq          rxq[NUM_RX_POOLS];
+
+    struct mutex     vcc_sf;
+    amb_tx_info      txer[NUM_VCS];
+    struct atm_vcc * rxer[NUM_VCS];
+    unsigned int     tx_avail;
+    unsigned int     rx_avail;
+
+    amb_stats        stats;
+
+    struct atm_dev * atm_dev;
+    struct pci_dev * pci_dev;
+    struct timer_list housekeeping;
 };
 
 typedef struct amb_dev amb_dev;
@@ -655,9 +655,9 @@ typedef struct amb_dev amb_dev;
 /* rate rounding */
 
 typedef enum {
-  round_up,
-  round_down,
-  round_nearest
+    round_up,
+    round_down,
+    round_nearest
 } rounding;
 
 #endif

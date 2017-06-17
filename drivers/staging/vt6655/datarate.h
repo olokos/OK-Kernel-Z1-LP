@@ -65,31 +65,31 @@ RATEvParseMaxRate(
     unsigned short *pwSuppRate,
     unsigned char *pbyTopCCKRate,
     unsigned char *pbyTopOFDMRate
-    );
+);
 
 void
 RATEvTxRateFallBack(
     void *pDeviceHandler,
     PKnownNodeDB psNodeDBTable
-    );
+);
 
 unsigned char
 RATEuSetIE(
     PWLAN_IE_SUPP_RATES pSrcRates,
     PWLAN_IE_SUPP_RATES pDstRates,
     unsigned int uRateLen
-    );
+);
 
 unsigned short
 wGetRateIdx(
     unsigned char byRate
-    );
+);
 
 
 unsigned char
 DATARATEbyGetRateIdx(
     unsigned char byRate
-    );
+);
 
 
 #endif //__DATARATE_H__

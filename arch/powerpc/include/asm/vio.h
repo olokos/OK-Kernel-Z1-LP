@@ -55,34 +55,34 @@ struct iommu_table;
  * @allocs_failed: number of DMA failures due to insufficient entitlement.
  */
 struct vio_dev {
-	const char *name;
-	const char *type;
-	uint32_t unit_address;
-	unsigned int irq;
-	struct {
-		size_t desired;
-		size_t entitled;
-		size_t allocated;
-		atomic_t allocs_failed;
-	} cmo;
-	struct device dev;
+    const char *name;
+    const char *type;
+    uint32_t unit_address;
+    unsigned int irq;
+    struct {
+        size_t desired;
+        size_t entitled;
+        size_t allocated;
+        atomic_t allocs_failed;
+    } cmo;
+    struct device dev;
 };
 
 struct vio_driver {
-	const char *name;
-	const struct vio_device_id *id_table;
-	int (*probe)(struct vio_dev *dev, const struct vio_device_id *id);
-	int (*remove)(struct vio_dev *dev);
-	/* A driver must have a get_desired_dma() function to
-	 * be loaded in a CMO environment if it uses DMA.
-	 */
-	unsigned long (*get_desired_dma)(struct vio_dev *dev);
-	const struct dev_pm_ops *pm;
-	struct device_driver driver;
+    const char *name;
+    const struct vio_device_id *id_table;
+    int (*probe)(struct vio_dev *dev, const struct vio_device_id *id);
+    int (*remove)(struct vio_dev *dev);
+    /* A driver must have a get_desired_dma() function to
+     * be loaded in a CMO environment if it uses DMA.
+     */
+    unsigned long (*get_desired_dma)(struct vio_dev *dev);
+    const struct dev_pm_ops *pm;
+    struct device_driver driver;
 };
 
 extern int __vio_register_driver(struct vio_driver *drv, struct module *owner,
-				 const char *mod_name);
+                                 const char *mod_name);
 /*
  * vio_register_driver must be a macro so that KBUILD_MODNAME can be expanded
  */
@@ -98,28 +98,25 @@ extern void __devinit vio_unregister_device(struct vio_dev *dev);
 struct device_node;
 
 extern struct vio_dev *vio_register_device_node(
-		struct device_node *node_vdev);
+    struct device_node *node_vdev);
 extern const void *vio_get_attribute(struct vio_dev *vdev, char *which,
-		int *length);
+                                     int *length);
 #ifdef CONFIG_PPC_PSERIES
 extern struct vio_dev *vio_find_node(struct device_node *vnode);
 extern int vio_enable_interrupts(struct vio_dev *dev);
 extern int vio_disable_interrupts(struct vio_dev *dev);
 #else
-static inline int vio_enable_interrupts(struct vio_dev *dev)
-{
-	return 0;
+static inline int vio_enable_interrupts(struct vio_dev *dev) {
+    return 0;
 }
 #endif
 
-static inline struct vio_driver *to_vio_driver(struct device_driver *drv)
-{
-	return container_of(drv, struct vio_driver, driver);
+static inline struct vio_driver *to_vio_driver(struct device_driver *drv) {
+    return container_of(drv, struct vio_driver, driver);
 }
 
-static inline struct vio_dev *to_vio_dev(struct device *dev)
-{
-	return container_of(dev, struct vio_dev, dev);
+static inline struct vio_dev *to_vio_dev(struct device *dev) {
+    return container_of(dev, struct vio_dev, dev);
 }
 
 #endif /* __KERNEL__ */

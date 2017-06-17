@@ -48,7 +48,9 @@
 #define __put_user(x,ptr)	__put_user_nocheck((x), (ptr), sizeof(*(ptr)))
 #define __get_user(x,ptr)	__get_user_nocheck((x), (ptr), sizeof(*(ptr)))
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct __user *)(x))
 
 #define __get_user_nocheck(x,ptr,size)				\
@@ -105,15 +107,13 @@ struct __large_struct { unsigned long buf[100]; };
 __kernel_size_t __copy_user(void *to, const void *from, __kernel_size_t n);
 
 static __always_inline unsigned long
-__copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	return __copy_user(to, (__force void *)from, n);
+__copy_from_user(void *to, const void __user *from, unsigned long n) {
+    return __copy_user(to, (__force void *)from, n);
 }
 
 static __always_inline unsigned long __must_check
-__copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	return __copy_user((__force void *)to, from, n);
+__copy_to_user(void __user *to, const void *from, unsigned long n) {
+    return __copy_user((__force void *)to, from, n);
 }
 
 #define __copy_to_user_inatomic __copy_to_user
@@ -169,27 +169,25 @@ __kernel_size_t __clear_user(void *addr, __kernel_size_t size);
 })
 
 static inline unsigned long
-copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	unsigned long __copy_from = (unsigned long) from;
-	__kernel_size_t __copy_size = (__kernel_size_t) n;
+copy_from_user(void *to, const void __user *from, unsigned long n) {
+    unsigned long __copy_from = (unsigned long) from;
+    __kernel_size_t __copy_size = (__kernel_size_t) n;
 
-	if (__copy_size && __access_ok(__copy_from, __copy_size))
-		return __copy_user(to, from, __copy_size);
+    if (__copy_size && __access_ok(__copy_from, __copy_size))
+        return __copy_user(to, from, __copy_size);
 
-	return __copy_size;
+    return __copy_size;
 }
 
 static inline unsigned long
-copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	unsigned long __copy_to = (unsigned long) to;
-	__kernel_size_t __copy_size = (__kernel_size_t) n;
+copy_to_user(void __user *to, const void *from, unsigned long n) {
+    unsigned long __copy_to = (unsigned long) to;
+    __kernel_size_t __copy_size = (__kernel_size_t) n;
 
-	if (__copy_size && __access_ok(__copy_to, __copy_size))
-		return __copy_user(to, from, __copy_size);
+    if (__copy_size && __access_ok(__copy_to, __copy_size))
+        return __copy_user(to, from, __copy_size);
 
-	return __copy_size;
+    return __copy_size;
 }
 
 /**
@@ -205,12 +203,11 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
  * On exception, returns 0.
  * If the string is too long, returns a value greater than @n.
  */
-static inline long strnlen_user(const char __user *s, long n)
-{
-	if (!__addr_ok(s))
-		return 0;
-	else
-		return __strnlen_user(s, n);
+static inline long strnlen_user(const char __user *s, long n) {
+    if (!__addr_ok(s))
+        return 0;
+    else
+        return __strnlen_user(s, n);
 }
 
 /**
@@ -242,7 +239,7 @@ static inline long strnlen_user(const char __user *s, long n)
  * on our cache or tlb entries.
  */
 struct exception_table_entry {
-	unsigned long insn, fixup;
+    unsigned long insn, fixup;
 };
 
 #if defined(CONFIG_SUPERH64) && defined(CONFIG_MMU)
@@ -256,17 +253,16 @@ const struct exception_table_entry *search_exception_tables(unsigned long addr);
 
 extern void *set_exception_table_vec(unsigned int vec, void *handler);
 
-static inline void *set_exception_table_evt(unsigned int evt, void *handler)
-{
-	return set_exception_table_vec(evt >> 5, handler);
+static inline void *set_exception_table_evt(unsigned int evt, void *handler) {
+    return set_exception_table_vec(evt >> 5, handler);
 }
 
 struct mem_access {
-	unsigned long (*from)(void *dst, const void __user *src, unsigned long cnt);
-	unsigned long (*to)(void __user *dst, const void *src, unsigned long cnt);
+    unsigned long (*from)(void *dst, const void __user *src, unsigned long cnt);
+    unsigned long (*to)(void __user *dst, const void *src, unsigned long cnt);
 };
 
 int handle_unaligned_access(insn_size_t instruction, struct pt_regs *regs,
-			    struct mem_access *ma, int, unsigned long address);
+                            struct mem_access *ma, int, unsigned long address);
 
 #endif /* __ASM_SH_UACCESS_H */

@@ -62,8 +62,7 @@ extern "C" {
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
-typedef struct vos_linux_list_s
-{
+typedef struct vos_linux_list_s {
     struct list_head anchor;
     v_SIZE_t count;
     struct mutex lock;

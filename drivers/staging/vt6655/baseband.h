@@ -124,7 +124,7 @@ BBuGetFrameTime(
     unsigned char byPktType,
     unsigned int cbFrameLength,
     unsigned short wRate
-    );
+);
 
 void
 BBvCaculateParameter (
@@ -135,7 +135,7 @@ BBvCaculateParameter (
     unsigned short *pwPhyLen,
     unsigned char *pbyPhySrv,
     unsigned char *pbyPhySgn
-    );
+);
 
 bool BBbReadEmbeded(unsigned long dwIoBase, unsigned char byBBAddr, unsigned char *pbyData);
 bool BBbWriteEmbeded(unsigned long dwIoBase, unsigned char byBBAddr, unsigned char byData);
@@ -163,12 +163,12 @@ void BBvExitDeepSleep(unsigned long dwIoBase, unsigned char byLocalID);
 void
 TimerSQ3CallBack (
     void *hDeviceContext
-    );
+);
 
 void
 TimerState1CallBack(
     void *hDeviceContext
-    );
+);
 
 void BBvAntennaDiversity(PSDevice pDevice, unsigned char byRxRate, unsigned char bySQ3);
 void

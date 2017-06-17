@@ -21,7 +21,7 @@
 #include <linux/ioport.h>
 
 struct twd_local_timer {
-	struct resource	res[2];
+    struct resource	res[2];
 };
 
 #define DEFINE_TWD_LOCAL_TIMER(name,base,irq)	\
@@ -37,8 +37,7 @@ int twd_local_timer_register(struct twd_local_timer *);
 #ifdef CONFIG_HAVE_ARM_TWD
 void twd_local_timer_of_register(void);
 #else
-static inline void twd_local_timer_of_register(void)
-{
+static inline void twd_local_timer_of_register(void) {
 }
 #endif
 

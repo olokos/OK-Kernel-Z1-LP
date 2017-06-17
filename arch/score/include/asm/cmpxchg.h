@@ -3,20 +3,21 @@
 
 #include <linux/irqflags.h>
 
-struct __xchg_dummy { unsigned long a[100]; };
+struct __xchg_dummy {
+    unsigned long a[100];
+};
 #define __xg(x) ((struct __xchg_dummy *)(x))
 
 static inline
-unsigned long __xchg(volatile unsigned long *m, unsigned long val)
-{
-	unsigned long retval;
-	unsigned long flags;
+unsigned long __xchg(volatile unsigned long *m, unsigned long val) {
+    unsigned long retval;
+    unsigned long flags;
 
-	local_irq_save(flags);
-	retval = *m;
-	*m = val;
-	local_irq_restore(flags);
-	return retval;
+    local_irq_save(flags);
+    retval = *m;
+    *m = val;
+    local_irq_restore(flags);
+    return retval;
 }
 
 #define xchg(ptr, v)						\
@@ -24,17 +25,16 @@ unsigned long __xchg(volatile unsigned long *m, unsigned long val)
 					(unsigned long)(v)))
 
 static inline unsigned long __cmpxchg(volatile unsigned long *m,
-				unsigned long old, unsigned long new)
-{
-	unsigned long retval;
-	unsigned long flags;
+                                      unsigned long old, unsigned long new) {
+    unsigned long retval;
+    unsigned long flags;
 
-	local_irq_save(flags);
-	retval = *m;
-	if (retval == old)
-		*m = new;
-	local_irq_restore(flags);
-	return retval;
+    local_irq_save(flags);
+    retval = *m;
+    if (retval == old)
+        *m = new;
+    local_irq_restore(flags);
+    return retval;
 }
 
 #define cmpxchg(ptr, o, n)					\

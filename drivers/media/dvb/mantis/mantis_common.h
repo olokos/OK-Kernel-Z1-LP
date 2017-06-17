@@ -77,101 +77,101 @@
 }
 
 enum mantis_i2c_mode {
-	MANTIS_PAGE_MODE = 0,
-	MANTIS_BYTE_MODE,
+    MANTIS_PAGE_MODE = 0,
+    MANTIS_BYTE_MODE,
 };
 
 struct mantis_pci;
 
 struct mantis_hwconfig {
-	char			*model_name;
-	char			*dev_type;
-	u32			ts_size;
+    char			*model_name;
+    char			*dev_type;
+    u32			ts_size;
 
-	enum mantis_baud	baud_rate;
-	enum mantis_parity	parity;
-	u32			bytes;
+    enum mantis_baud	baud_rate;
+    enum mantis_parity	parity;
+    u32			bytes;
 
-	irqreturn_t (*irq_handler)(int irq, void *dev_id);
-	int (*frontend_init)(struct mantis_pci *mantis, struct dvb_frontend *fe);
+    irqreturn_t (*irq_handler)(int irq, void *dev_id);
+    int (*frontend_init)(struct mantis_pci *mantis, struct dvb_frontend *fe);
 
-	u8			power;
-	u8			reset;
+    u8			power;
+    u8			reset;
 
-	enum mantis_i2c_mode	i2c_mode;
+    enum mantis_i2c_mode	i2c_mode;
 };
 
 struct mantis_pci {
-	unsigned int		verbose;
+    unsigned int		verbose;
 
-	/*	PCI stuff		*/
-	u16			vendor_id;
-	u16			device_id;
-	u16			subsystem_vendor;
-	u16			subsystem_device;
+    /*	PCI stuff		*/
+    u16			vendor_id;
+    u16			device_id;
+    u16			subsystem_vendor;
+    u16			subsystem_device;
 
-	u8			latency;
+    u8			latency;
 
-	struct pci_dev		*pdev;
+    struct pci_dev		*pdev;
 
-	unsigned long		mantis_addr;
-	void __iomem		*mmio;
+    unsigned long		mantis_addr;
+    void __iomem		*mmio;
 
-	u8			irq;
-	u8			revision;
+    u8			irq;
+    u8			revision;
 
-	unsigned int		num;
+    unsigned int		num;
 
-	/*	RISC Core		*/
-	u32			busy_block;
-	u32			last_block;
-	u8			*buf_cpu;
-	dma_addr_t		buf_dma;
-	u32			*risc_cpu;
-	dma_addr_t		risc_dma;
+    /*	RISC Core		*/
+    u32			busy_block;
+    u32			last_block;
+    u8			*buf_cpu;
+    dma_addr_t		buf_dma;
+    u32			*risc_cpu;
+    dma_addr_t		risc_dma;
 
-	struct tasklet_struct	tasklet;
+    struct tasklet_struct	tasklet;
 
-	struct i2c_adapter	adapter;
-	int			i2c_rc;
-	wait_queue_head_t	i2c_wq;
-	struct mutex		i2c_lock;
+    struct i2c_adapter	adapter;
+    int			i2c_rc;
+    wait_queue_head_t	i2c_wq;
+    struct mutex		i2c_lock;
 
-	/*	DVB stuff		*/
-	struct dvb_adapter	dvb_adapter;
-	struct dvb_frontend	*fe;
-	struct dvb_demux	demux;
-	struct dmxdev		dmxdev;
-	struct dmx_frontend	fe_hw;
-	struct dmx_frontend	fe_mem;
-	struct dvb_net		dvbnet;
+    /*	DVB stuff		*/
+    struct dvb_adapter	dvb_adapter;
+    struct dvb_frontend	*fe;
+    struct dvb_demux	demux;
+    struct dmxdev		dmxdev;
+    struct dmx_frontend	fe_hw;
+    struct dmx_frontend	fe_mem;
+    struct dvb_net		dvbnet;
 
-	u8			feeds;
+    u8			feeds;
 
-	struct mantis_hwconfig	*hwconfig;
+    struct mantis_hwconfig	*hwconfig;
 
-	u32			mantis_int_stat;
-	u32			mantis_int_mask;
+    u32			mantis_int_stat;
+    u32			mantis_int_mask;
 
-	/*	board specific		*/
-	u8			mac_address[8];
-	u32			sub_vendor_id;
-	u32			sub_device_id;
+    /*	board specific		*/
+    u8			mac_address[8];
+    u32			sub_vendor_id;
+    u32			sub_device_id;
 
-	 /*	A12 A13 A14		*/
-	u32			gpio_status;
+    /*	A12 A13 A14		*/
+    u32			gpio_status;
 
-	u32			gpif_status;
+    u32			gpif_status;
 
-	struct mantis_ca	*mantis_ca;
+    struct mantis_ca	*mantis_ca;
 
-	wait_queue_head_t	uart_wq;
-	struct work_struct	uart_work;
-	spinlock_t		uart_lock;
+    wait_queue_head_t	uart_wq;
+    struct work_struct	uart_work;
+    spinlock_t		uart_lock;
 
-	struct rc_dev		*rc;
-	char			input_name[80];
-	char			input_phys[80];
+    struct rc_dev		*rc;
+    char			input_name[80];
+    char			input_phys[80];
 };
 
 #define MANTIS_HIF_STATUS	(mantis->gpio_status)

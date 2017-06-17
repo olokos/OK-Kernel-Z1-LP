@@ -22,24 +22,20 @@
 
 #define FIRST_BOARD_GPIO	NR_GPIO_IRQS
 
-static inline int gpio_get_value(unsigned gpio)
-{
-	return __gpio_get_value(gpio);
+static inline int gpio_get_value(unsigned gpio) {
+    return __gpio_get_value(gpio);
 }
 
-static inline void gpio_set_value(unsigned gpio, int value)
-{
-	__gpio_set_value(gpio, value);
+static inline void gpio_set_value(unsigned gpio, int value) {
+    __gpio_set_value(gpio, value);
 }
 
-static inline int gpio_cansleep(unsigned gpio)
-{
-	return __gpio_cansleep(gpio);
+static inline int gpio_cansleep(unsigned gpio) {
+    return __gpio_cansleep(gpio);
 }
 
-static inline int gpio_to_irq(unsigned gpio)
-{
-	return __gpio_to_irq(gpio);
+static inline int gpio_to_irq(unsigned gpio) {
+    return __gpio_to_irq(gpio);
 }
 
 void msm_gpio_enter_sleep(int from_idle);
@@ -55,8 +51,8 @@ void msm_gpio_exit_sleep(void);
  * and facilitete group operations provided by msm_gpios_xxx()
  */
 struct msm_gpio {
-	u32 gpio_cfg;
-	const char *label;
+    u32 gpio_cfg;
+    const char *label;
 };
 
 /**
@@ -121,33 +117,33 @@ int msm_gpios_disable(const struct msm_gpio *table, int size);
 
 /* GPIO TLMM: Direction */
 enum {
-	GPIO_CFG_INPUT,
-	GPIO_CFG_OUTPUT,
+    GPIO_CFG_INPUT,
+    GPIO_CFG_OUTPUT,
 };
 
 /* GPIO TLMM: Pullup/Pulldown */
 enum {
-	GPIO_CFG_NO_PULL,
-	GPIO_CFG_PULL_DOWN,
-	GPIO_CFG_KEEPER,
-	GPIO_CFG_PULL_UP,
+    GPIO_CFG_NO_PULL,
+    GPIO_CFG_PULL_DOWN,
+    GPIO_CFG_KEEPER,
+    GPIO_CFG_PULL_UP,
 };
 
 /* GPIO TLMM: Drive Strength */
 enum {
-	GPIO_CFG_2MA,
-	GPIO_CFG_4MA,
-	GPIO_CFG_6MA,
-	GPIO_CFG_8MA,
-	GPIO_CFG_10MA,
-	GPIO_CFG_12MA,
-	GPIO_CFG_14MA,
-	GPIO_CFG_16MA,
+    GPIO_CFG_2MA,
+    GPIO_CFG_4MA,
+    GPIO_CFG_6MA,
+    GPIO_CFG_8MA,
+    GPIO_CFG_10MA,
+    GPIO_CFG_12MA,
+    GPIO_CFG_14MA,
+    GPIO_CFG_16MA,
 };
 
 enum {
-	GPIO_CFG_ENABLE,
-	GPIO_CFG_DISABLE,
+    GPIO_CFG_ENABLE,
+    GPIO_CFG_DISABLE,
 };
 
 #define GPIO_CFG(gpio, func, dir, pull, drvstr) \

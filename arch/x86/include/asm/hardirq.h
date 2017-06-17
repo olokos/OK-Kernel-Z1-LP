@@ -5,26 +5,26 @@
 #include <linux/irq.h>
 
 typedef struct {
-	unsigned int __softirq_pending;
-	unsigned int __nmi_count;	/* arch dependent */
+    unsigned int __softirq_pending;
+    unsigned int __nmi_count;	/* arch dependent */
 #ifdef CONFIG_X86_LOCAL_APIC
-	unsigned int apic_timer_irqs;	/* arch dependent */
-	unsigned int irq_spurious_count;
-	unsigned int icr_read_retry_count;
+    unsigned int apic_timer_irqs;	/* arch dependent */
+    unsigned int irq_spurious_count;
+    unsigned int icr_read_retry_count;
 #endif
-	unsigned int x86_platform_ipis;	/* arch dependent */
-	unsigned int apic_perf_irqs;
-	unsigned int apic_irq_work_irqs;
+    unsigned int x86_platform_ipis;	/* arch dependent */
+    unsigned int apic_perf_irqs;
+    unsigned int apic_irq_work_irqs;
 #ifdef CONFIG_SMP
-	unsigned int irq_resched_count;
-	unsigned int irq_call_count;
-	unsigned int irq_tlb_count;
+    unsigned int irq_resched_count;
+    unsigned int irq_call_count;
+    unsigned int irq_tlb_count;
 #endif
 #ifdef CONFIG_X86_THERMAL_VECTOR
-	unsigned int irq_thermal_count;
+    unsigned int irq_thermal_count;
 #endif
 #ifdef CONFIG_X86_MCE_THRESHOLD
-	unsigned int irq_threshold_count;
+    unsigned int irq_threshold_count;
 #endif
 } ____cacheline_aligned irq_cpustat_t;
 

@@ -21,10 +21,10 @@
 
 
 int qce_f8_req(void *handle, struct qce_f8_req *req,
-		void *cookie, qce_comp_func_ptr_t qce_cb);
+               void *cookie, qce_comp_func_ptr_t qce_cb);
 int qce_f8_multi_pkt_req(void *handle, struct qce_f8_multi_pkt_req *req,
-		void *cookie, qce_comp_func_ptr_t qce_cb);
+                         void *cookie, qce_comp_func_ptr_t qce_cb);
 int qce_f9_req(void *handle, struct qce_f9_req *req,
-		void *cookie, qce_comp_func_ptr_t qce_cb);
+               void *cookie, qce_comp_func_ptr_t qce_cb);
 
 #endif /* __CRYPTO_MSM_QCE_OTA_H */

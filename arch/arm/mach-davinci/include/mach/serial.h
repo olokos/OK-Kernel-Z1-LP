@@ -48,8 +48,8 @@
 
 #ifndef __ASSEMBLY__
 struct davinci_uart_config {
-	/* Bit field of UARTs present; bit 0 --> UART1 */
-	unsigned int enabled_uarts;
+    /* Bit field of UARTs present; bit 0 --> UART1 */
+    unsigned int enabled_uarts;
 };
 
 extern int davinci_serial_init(struct davinci_uart_config *);

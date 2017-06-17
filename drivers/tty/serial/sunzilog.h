@@ -2,15 +2,15 @@
 #define _SUNZILOG_H
 
 struct zilog_channel {
-	volatile unsigned char control;
-	volatile unsigned char __pad1;
-	volatile unsigned char data;
-	volatile unsigned char __pad2;
+    volatile unsigned char control;
+    volatile unsigned char __pad1;
+    volatile unsigned char data;
+    volatile unsigned char __pad2;
 };
 
 struct zilog_layout {
-	struct zilog_channel channelB;
-	struct zilog_channel channelA;
+    struct zilog_channel channelB;
+    struct zilog_channel channelA;
 };
 
 #define	NUM_ZSREGS	17

@@ -40,237 +40,309 @@
 typedef unsigned long IA64_INST;
 
 typedef union U_IA64_BUNDLE {
-	unsigned long i64[2];
-	struct { unsigned long template:5, slot0:41, slot1a:18,
-		slot1b:23, slot2:41; };
-	/* NOTE: following doesn't work because bitfields can't cross natural
-	   size boundaries
-	   struct { unsigned long template:5, slot0:41, slot1:41, slot2:41; }; */
+    unsigned long i64[2];
+    struct {
+        unsigned long template:5, slot0:41, slot1a:18,
+        slot1b:23, slot2:41;
+    };
+    /* NOTE: following doesn't work because bitfields can't cross natural
+       size boundaries
+       struct { unsigned long template:5, slot0:41, slot1:41, slot2:41; }; */
 } IA64_BUNDLE;
 
 typedef union U_INST64_A5 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, imm7b:7, r3:2, imm5c:5,
-		imm9d:9, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, imm7b:7, r3:2, imm5c:5,
+        imm9d:9, s:1, major:4;
+    };
 } INST64_A5;
 
 typedef union U_INST64_B4 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, btype:3, un3:3, p:1, b2:3, un11:11, x6:6,
-		wh:2, d:1, un1:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, btype:3, un3:3, p:1, b2:3, un11:11, x6:6,
+        wh:2, d:1, un1:1, major:4;
+    };
 } INST64_B4;
 
 typedef union U_INST64_B8 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, un21:21, x6:6, un4:4, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, un21:21, x6:6, un4:4, major:4;
+    };
 } INST64_B8;
 
 typedef union U_INST64_B9 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm20:20, :1, x6:6, :3, i:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm20:20, :1, x6:6, :3, i:1, major:4;
+    };
 } INST64_B9;
 
 typedef union U_INST64_I19 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm20:20, :1, x6:6, x3:3, i:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm20:20, :1, x6:6, x3:3, i:1, major:4;
+    };
 } INST64_I19;
 
 typedef union U_INST64_I26 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, ar3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, ar3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_I26;
 
 typedef union U_INST64_I27 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, imm:7, ar3:7, x6:6, x3:3, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, imm:7, ar3:7, x6:6, x3:3, s:1, major:4;
+    };
 } INST64_I27;
 
 typedef union U_INST64_I28 { /* not privileged (mov from AR) */
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, :7, ar3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, :7, ar3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_I28;
 
 typedef union U_INST64_M28 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :14, r3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :14, r3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M28;
 
 typedef union U_INST64_M29 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, ar3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, ar3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M29;
 
 typedef union U_INST64_M30 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, imm:7, ar3:7, x4:4, x2:2,
-		x3:3, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, imm:7, ar3:7, x4:4, x2:2,
+        x3:3, s:1, major:4;
+    };
 } INST64_M30;
 
 typedef union U_INST64_M31 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, :7, ar3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, :7, ar3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M31;
 
 typedef union U_INST64_M32 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, cr3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, cr3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M32;
 
 typedef union U_INST64_M33 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, :7, cr3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, :7, cr3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M33;
 
 typedef union U_INST64_M35 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, :7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, :7, x6:6, x3:3, :1, major:4;
+    };
 
 } INST64_M35;
 
 typedef union U_INST64_M36 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, :14, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, :14, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M36;
 
 typedef union U_INST64_M37 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm20a:20, :1, x4:4, x2:2, x3:3,
-		i:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm20a:20, :1, x4:4, x2:2, x3:3,
+        i:1, major:4;
+    };
 } INST64_M37;
 
 typedef union U_INST64_M41 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, :7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, :7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M41;
 
 typedef union U_INST64_M42 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, r3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, r3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M42;
 
 typedef union U_INST64_M43 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, :7, r3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, :7, r3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M43;
 
 typedef union U_INST64_M44 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm:21, x4:4, i2:2, x3:3, i:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm:21, x4:4, i2:2, x3:3, i:1, major:4;
+    };
 } INST64_M44;
 
 typedef union U_INST64_M45 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, r2:7, r3:7, x6:6, x3:3, :1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, r2:7, r3:7, x6:6, x3:3, :1, major:4;
+    };
 } INST64_M45;
 
 typedef union U_INST64_M46 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, un7:7, r3:7, x6:6,
-		x3:3, un1:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, un7:7, r3:7, x6:6,
+        x3:3, un1:1, major:4;
+    };
 } INST64_M46;
 
 typedef union U_INST64_M47 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, un14:14, r3:7, x6:6, x3:3, un1:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, un14:14, r3:7, x6:6, x3:3, un1:1, major:4;
+    };
 } INST64_M47;
 
-typedef union U_INST64_M1{
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, un7:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+typedef union U_INST64_M1 {
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, un7:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M1;
 
-typedef union U_INST64_M2{
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, r2:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+typedef union U_INST64_M2 {
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, r2:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M2;
 
-typedef union U_INST64_M3{
-	IA64_INST inst;
-	struct { unsigned long qp:6, r1:7, imm7:7, r3:7, i:1, hint:2,
-		x6:6, s:1, major:4; };
+typedef union U_INST64_M3 {
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, r1:7, imm7:7, r3:7, i:1, hint:2,
+        x6:6, s:1, major:4;
+    };
 } INST64_M3;
 
 typedef union U_INST64_M4 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, un7:7, r2:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, un7:7, r2:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M4;
 
 typedef union U_INST64_M5 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm7:7, r2:7, r3:7, i:1, hint:2,
-		x6:6, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm7:7, r2:7, r3:7, i:1, hint:2,
+        x6:6, s:1, major:4;
+    };
 } INST64_M5;
 
 typedef union U_INST64_M6 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, f1:7, un7:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, f1:7, un7:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M6;
 
 typedef union U_INST64_M9 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, f2:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, f2:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M9;
 
 typedef union U_INST64_M10 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, imm7:7, f2:7, r3:7, i:1, hint:2,
-		x6:6, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, imm7:7, f2:7, r3:7, i:1, hint:2,
+        x6:6, s:1, major:4;
+    };
 } INST64_M10;
 
 typedef union U_INST64_M12 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, f1:7, f2:7, r3:7, x:1, hint:2,
-		x6:6, m:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, f1:7, f2:7, r3:7, x:1, hint:2,
+        x6:6, m:1, major:4;
+    };
 } INST64_M12;
 
 typedef union U_INST64_M15 {
-	IA64_INST inst;
-	struct { unsigned long qp:6, :7, imm7:7, r3:7, i:1, hint:2,
-		x6:6, s:1, major:4; };
+    IA64_INST inst;
+    struct {
+        unsigned long qp:6, :7, imm7:7, r3:7, i:1, hint:2,
+        x6:6, s:1, major:4;
+    };
 } INST64_M15;
 
 typedef union U_INST64 {
-	IA64_INST inst;
-	struct { unsigned long :37, major:4; } generic;
-	INST64_A5 A5;	/* used in build_hypercall_bundle only */
-	INST64_B4 B4;	/* used in build_hypercall_bundle only */
-	INST64_B8 B8;	/* rfi, bsw.[01] */
-	INST64_B9 B9;	/* break.b */
-	INST64_I19 I19;	/* used in build_hypercall_bundle only */
-	INST64_I26 I26;	/* mov register to ar (I unit) */
-	INST64_I27 I27;	/* mov immediate to ar (I unit) */
-	INST64_I28 I28;	/* mov from ar (I unit) */
-	INST64_M1  M1;	/* ld integer */
-	INST64_M2  M2;
-	INST64_M3  M3;
-	INST64_M4  M4;	/* st integer */
-	INST64_M5  M5;
-	INST64_M6  M6;	/* ldfd floating pointer 		*/
-	INST64_M9  M9;	/* stfd floating pointer		*/
-	INST64_M10 M10;	/* stfd floating pointer		*/
-	INST64_M12 M12;     /* ldfd pair floating pointer		*/
-	INST64_M15 M15;	/* lfetch + imm update			*/
-	INST64_M28 M28;	/* purge translation cache entry	*/
-	INST64_M29 M29;	/* mov register to ar (M unit)		*/
-	INST64_M30 M30;	/* mov immediate to ar (M unit)		*/
-	INST64_M31 M31;	/* mov from ar (M unit)			*/
-	INST64_M32 M32;	/* mov reg to cr			*/
-	INST64_M33 M33;	/* mov from cr				*/
-	INST64_M35 M35;	/* mov to psr				*/
-	INST64_M36 M36;	/* mov from psr				*/
-	INST64_M37 M37;	/* break.m				*/
-	INST64_M41 M41;	/* translation cache insert		*/
-	INST64_M42 M42;	/* mov to indirect reg/translation reg insert*/
-	INST64_M43 M43;	/* mov from indirect reg		*/
-	INST64_M44 M44;	/* set/reset system mask		*/
-	INST64_M45 M45;	/* translation purge			*/
-	INST64_M46 M46;	/* translation access (tpa,tak)		*/
-	INST64_M47 M47;	/* purge translation entry		*/
+    IA64_INST inst;
+    struct {
+        unsigned long :37, major:4;
+    } generic;
+    INST64_A5 A5;	/* used in build_hypercall_bundle only */
+    INST64_B4 B4;	/* used in build_hypercall_bundle only */
+    INST64_B8 B8;	/* rfi, bsw.[01] */
+    INST64_B9 B9;	/* break.b */
+    INST64_I19 I19;	/* used in build_hypercall_bundle only */
+    INST64_I26 I26;	/* mov register to ar (I unit) */
+    INST64_I27 I27;	/* mov immediate to ar (I unit) */
+    INST64_I28 I28;	/* mov from ar (I unit) */
+    INST64_M1  M1;	/* ld integer */
+    INST64_M2  M2;
+    INST64_M3  M3;
+    INST64_M4  M4;	/* st integer */
+    INST64_M5  M5;
+    INST64_M6  M6;	/* ldfd floating pointer 		*/
+    INST64_M9  M9;	/* stfd floating pointer		*/
+    INST64_M10 M10;	/* stfd floating pointer		*/
+    INST64_M12 M12;     /* ldfd pair floating pointer		*/
+    INST64_M15 M15;	/* lfetch + imm update			*/
+    INST64_M28 M28;	/* purge translation cache entry	*/
+    INST64_M29 M29;	/* mov register to ar (M unit)		*/
+    INST64_M30 M30;	/* mov immediate to ar (M unit)		*/
+    INST64_M31 M31;	/* mov from ar (M unit)			*/
+    INST64_M32 M32;	/* mov reg to cr			*/
+    INST64_M33 M33;	/* mov from cr				*/
+    INST64_M35 M35;	/* mov to psr				*/
+    INST64_M36 M36;	/* mov from psr				*/
+    INST64_M37 M37;	/* break.m				*/
+    INST64_M41 M41;	/* translation cache insert		*/
+    INST64_M42 M42;	/* mov to indirect reg/translation reg insert*/
+    INST64_M43 M43;	/* mov from indirect reg		*/
+    INST64_M44 M44;	/* set/reset system mask		*/
+    INST64_M45 M45;	/* translation purge			*/
+    INST64_M46 M46;	/* translation access (tpa,tak)		*/
+    INST64_M47 M47;	/* purge translation entry		*/
 } INST64;
 
 #define MASK_41 ((unsigned long)0x1ffffffffff)
@@ -305,27 +377,25 @@ typedef union U_INST64 {
 	do {_tr_regions |= (1 << ((unsigned long)_ifa >> 61)); } while (0)
 
 static inline void vcpu_set_tr(struct thash_data *trp, u64 pte, u64 itir,
-		u64 va, u64 rid)
-{
-	trp->page_flags = pte;
-	trp->itir = itir;
-	trp->vadr = va;
-	trp->rid = rid;
+                               u64 va, u64 rid) {
+    trp->page_flags = pte;
+    trp->itir = itir;
+    trp->vadr = va;
+    trp->rid = rid;
 }
 
 extern u64 kvm_get_mpt_entry(u64 gpfn);
 
 /* Return I/ */
-static inline u64 __gpfn_is_io(u64 gpfn)
-{
-	u64  pte;
-	pte = kvm_get_mpt_entry(gpfn);
-	if (!(pte & GPFN_INV_MASK)) {
-		pte = pte & GPFN_IO_MASK;
-		if (pte != GPFN_PHYS_MMIO)
-			return pte;
-	}
-	return 0;
+static inline u64 __gpfn_is_io(u64 gpfn) {
+    u64  pte;
+    pte = kvm_get_mpt_entry(gpfn);
+    if (!(pte & GPFN_INV_MASK)) {
+        pte = pte & GPFN_IO_MASK;
+        if (pte != GPFN_PHYS_MMIO)
+            return pte;
+    }
+    return 0;
 }
 #endif
 #define IA64_NO_FAULT	0
@@ -389,7 +459,7 @@ static inline u64 __gpfn_is_io(u64 gpfn)
 #define _vmm_raw_spin_unlock(x) do {}while(0)
 #else
 typedef struct {
-	volatile unsigned int lock;
+    volatile unsigned int lock;
 } vmm_spinlock_t;
 #define _vmm_raw_spin_lock(x)						\
 	do {								\
@@ -415,17 +485,17 @@ while (0)
 void vmm_spin_lock(vmm_spinlock_t *lock);
 void vmm_spin_unlock(vmm_spinlock_t *lock);
 enum {
-	I_TLB = 1,
-	D_TLB = 2
+    I_TLB = 1,
+    D_TLB = 2
 };
 
 union kvm_va {
-	struct {
-		unsigned long off : 60;		/* intra-region offset */
-		unsigned long reg :  4;		/* region number */
-	} f;
-	unsigned long l;
-	void *p;
+    struct {
+        unsigned long off : 60;		/* intra-region offset */
+        unsigned long reg :  4;		/* region number */
+    } f;
+    unsigned long l;
+    void *p;
 };
 
 #define __kvm_pa(x)     ({union kvm_va _v; _v.l = (long) (x);		\
@@ -440,7 +510,7 @@ union kvm_va {
 #define _REGION_HW_WALKER(x)    ({union ia64_rr _v; _v.val = (long)(x);	\
 						_v.ve; })
 
-enum vhpt_ref{ DATA_REF, NA_REF, INST_REF, RSE_REF };
+enum vhpt_ref { DATA_REF, NA_REF, INST_REF, RSE_REF };
 enum tlb_miss_type { INSTRUCTION, DATA, REGISTER };
 
 #define VCPU(_v, _x) ((_v)->arch.vpd->_x)
@@ -449,9 +519,8 @@ enum tlb_miss_type { INSTRUCTION, DATA, REGISTER };
 #define VLSAPIC_INSVC(vcpu, i) ((vcpu)->arch.insvc[i])
 #define VLSAPIC_XTP(_v)        VMX(_v, xtp)
 
-static inline unsigned long itir_ps(unsigned long itir)
-{
-	return ((itir >> 2) & 0x3f);
+static inline unsigned long itir_ps(unsigned long itir) {
+    return ((itir >> 2) & 0x3f);
 }
 
 
@@ -459,261 +528,225 @@ static inline unsigned long itir_ps(unsigned long itir)
   VCPU control register access routines
  **************************************************************************/
 
-static inline u64 vcpu_get_itir(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, itir));
+static inline u64 vcpu_get_itir(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, itir));
 }
 
-static inline void vcpu_set_itir(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, itir) = val;
+static inline void vcpu_set_itir(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, itir) = val;
 }
 
-static inline u64 vcpu_get_ifa(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, ifa));
+static inline u64 vcpu_get_ifa(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, ifa));
 }
 
-static inline void vcpu_set_ifa(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, ifa) = val;
+static inline void vcpu_set_ifa(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, ifa) = val;
 }
 
-static inline u64 vcpu_get_iva(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, iva));
+static inline u64 vcpu_get_iva(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, iva));
 }
 
-static inline u64 vcpu_get_pta(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, pta));
+static inline u64 vcpu_get_pta(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, pta));
 }
 
-static inline u64 vcpu_get_lid(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, lid));
+static inline u64 vcpu_get_lid(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, lid));
 }
 
-static inline u64 vcpu_get_tpr(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, tpr));
+static inline u64 vcpu_get_tpr(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, tpr));
 }
 
-static inline u64 vcpu_get_eoi(struct kvm_vcpu *vcpu)
-{
-	return (0UL);		/*reads of eoi always return 0 */
+static inline u64 vcpu_get_eoi(struct kvm_vcpu *vcpu) {
+    return (0UL);		/*reads of eoi always return 0 */
 }
 
-static inline u64 vcpu_get_irr0(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, irr[0]));
+static inline u64 vcpu_get_irr0(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, irr[0]));
 }
 
-static inline u64 vcpu_get_irr1(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, irr[1]));
+static inline u64 vcpu_get_irr1(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, irr[1]));
 }
 
-static inline u64 vcpu_get_irr2(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, irr[2]));
+static inline u64 vcpu_get_irr2(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, irr[2]));
 }
 
-static inline u64 vcpu_get_irr3(struct kvm_vcpu *vcpu)
-{
-	return ((u64)VCPU(vcpu, irr[3]));
+static inline u64 vcpu_get_irr3(struct kvm_vcpu *vcpu) {
+    return ((u64)VCPU(vcpu, irr[3]));
 }
 
-static inline void vcpu_set_dcr(struct kvm_vcpu *vcpu, u64 val)
-{
-	ia64_setreg(_IA64_REG_CR_DCR, val);
+static inline void vcpu_set_dcr(struct kvm_vcpu *vcpu, u64 val) {
+    ia64_setreg(_IA64_REG_CR_DCR, val);
 }
 
-static inline void vcpu_set_isr(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, isr) = val;
+static inline void vcpu_set_isr(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, isr) = val;
 }
 
-static inline void vcpu_set_lid(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, lid) = val;
+static inline void vcpu_set_lid(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, lid) = val;
 }
 
-static inline void vcpu_set_ipsr(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, ipsr) = val;
+static inline void vcpu_set_ipsr(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, ipsr) = val;
 }
 
-static inline void vcpu_set_iip(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, iip) = val;
+static inline void vcpu_set_iip(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, iip) = val;
 }
 
-static inline void vcpu_set_ifs(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, ifs) = val;
+static inline void vcpu_set_ifs(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, ifs) = val;
 }
 
-static inline void vcpu_set_iipa(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, iipa) = val;
+static inline void vcpu_set_iipa(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, iipa) = val;
 }
 
-static inline void vcpu_set_iha(struct kvm_vcpu *vcpu, u64 val)
-{
-	VCPU(vcpu, iha) = val;
+static inline void vcpu_set_iha(struct kvm_vcpu *vcpu, u64 val) {
+    VCPU(vcpu, iha) = val;
 }
 
 
-static inline u64 vcpu_get_rr(struct kvm_vcpu *vcpu, u64 reg)
-{
-	return vcpu->arch.vrr[reg>>61];
+static inline u64 vcpu_get_rr(struct kvm_vcpu *vcpu, u64 reg) {
+    return vcpu->arch.vrr[reg>>61];
 }
 
 /**************************************************************************
   VCPU debug breakpoint register access routines
  **************************************************************************/
 
-static inline void vcpu_set_dbr(struct kvm_vcpu *vcpu, u64 reg, u64 val)
-{
-	__ia64_set_dbr(reg, val);
+static inline void vcpu_set_dbr(struct kvm_vcpu *vcpu, u64 reg, u64 val) {
+    __ia64_set_dbr(reg, val);
 }
 
-static inline void vcpu_set_ibr(struct kvm_vcpu *vcpu, u64 reg, u64 val)
-{
-	ia64_set_ibr(reg, val);
+static inline void vcpu_set_ibr(struct kvm_vcpu *vcpu, u64 reg, u64 val) {
+    ia64_set_ibr(reg, val);
 }
 
-static inline u64 vcpu_get_dbr(struct kvm_vcpu *vcpu, u64 reg)
-{
-	return ((u64)__ia64_get_dbr(reg));
+static inline u64 vcpu_get_dbr(struct kvm_vcpu *vcpu, u64 reg) {
+    return ((u64)__ia64_get_dbr(reg));
 }
 
-static inline u64 vcpu_get_ibr(struct kvm_vcpu *vcpu, u64 reg)
-{
-	return ((u64)ia64_get_ibr(reg));
+static inline u64 vcpu_get_ibr(struct kvm_vcpu *vcpu, u64 reg) {
+    return ((u64)ia64_get_ibr(reg));
 }
 
 /**************************************************************************
   VCPU performance monitor register access routines
  **************************************************************************/
-static inline void vcpu_set_pmc(struct kvm_vcpu *vcpu, u64 reg, u64 val)
-{
-	/* NOTE: Writes to unimplemented PMC registers are discarded */
-	ia64_set_pmc(reg, val);
+static inline void vcpu_set_pmc(struct kvm_vcpu *vcpu, u64 reg, u64 val) {
+    /* NOTE: Writes to unimplemented PMC registers are discarded */
+    ia64_set_pmc(reg, val);
 }
 
-static inline void vcpu_set_pmd(struct kvm_vcpu *vcpu, u64 reg, u64 val)
-{
-	/* NOTE: Writes to unimplemented PMD registers are discarded */
-	ia64_set_pmd(reg, val);
+static inline void vcpu_set_pmd(struct kvm_vcpu *vcpu, u64 reg, u64 val) {
+    /* NOTE: Writes to unimplemented PMD registers are discarded */
+    ia64_set_pmd(reg, val);
 }
 
-static inline u64 vcpu_get_pmc(struct kvm_vcpu *vcpu, u64 reg)
-{
-	/* NOTE: Reads from unimplemented PMC registers return zero */
-	return ((u64)ia64_get_pmc(reg));
+static inline u64 vcpu_get_pmc(struct kvm_vcpu *vcpu, u64 reg) {
+    /* NOTE: Reads from unimplemented PMC registers return zero */
+    return ((u64)ia64_get_pmc(reg));
 }
 
-static inline u64 vcpu_get_pmd(struct kvm_vcpu *vcpu, u64 reg)
-{
-	/* NOTE: Reads from unimplemented PMD registers return zero */
-	return ((u64)ia64_get_pmd(reg));
+static inline u64 vcpu_get_pmd(struct kvm_vcpu *vcpu, u64 reg) {
+    /* NOTE: Reads from unimplemented PMD registers return zero */
+    return ((u64)ia64_get_pmd(reg));
 }
 
-static inline unsigned long vrrtomrr(unsigned long val)
-{
-	union ia64_rr rr;
-	rr.val = val;
-	rr.rid = (rr.rid << 4) | 0xe;
-	if (rr.ps > PAGE_SHIFT)
-		rr.ps = PAGE_SHIFT;
-	rr.ve = 1;
-	return rr.val;
+static inline unsigned long vrrtomrr(unsigned long val) {
+    union ia64_rr rr;
+    rr.val = val;
+    rr.rid = (rr.rid << 4) | 0xe;
+    if (rr.ps > PAGE_SHIFT)
+        rr.ps = PAGE_SHIFT;
+    rr.ve = 1;
+    return rr.val;
 }
 
 
-static inline int highest_bits(int *dat)
-{
-	u32  bits, bitnum;
-	int i;
+static inline int highest_bits(int *dat) {
+    u32  bits, bitnum;
+    int i;
 
-	/* loop for all 256 bits */
-	for (i = 7; i >= 0 ; i--) {
-		bits = dat[i];
-		if (bits) {
-			bitnum = fls(bits);
-			return i * 32 + bitnum - 1;
-		}
-	}
-	return NULL_VECTOR;
+    /* loop for all 256 bits */
+    for (i = 7; i >= 0 ; i--) {
+        bits = dat[i];
+        if (bits) {
+            bitnum = fls(bits);
+            return i * 32 + bitnum - 1;
+        }
+    }
+    return NULL_VECTOR;
 }
 
 /*
  * The pending irq is higher than the inservice one.
  *
  */
-static inline int is_higher_irq(int pending, int inservice)
-{
-	return ((pending > inservice)
-			|| ((pending != NULL_VECTOR)
-				&& (inservice == NULL_VECTOR)));
+static inline int is_higher_irq(int pending, int inservice) {
+    return ((pending > inservice)
+            || ((pending != NULL_VECTOR)
+                && (inservice == NULL_VECTOR)));
 }
 
-static inline int is_higher_class(int pending, int mic)
-{
-	return ((pending >> 4) > mic);
+static inline int is_higher_class(int pending, int mic) {
+    return ((pending >> 4) > mic);
 }
 
 /*
  * Return 0-255 for pending irq.
  *        NULL_VECTOR: when no pending.
  */
-static inline int highest_pending_irq(struct kvm_vcpu *vcpu)
-{
-	if (VCPU(vcpu, irr[0]) & (1UL<<NMI_VECTOR))
-		return NMI_VECTOR;
-	if (VCPU(vcpu, irr[0]) & (1UL<<ExtINT_VECTOR))
-		return ExtINT_VECTOR;
+static inline int highest_pending_irq(struct kvm_vcpu *vcpu) {
+    if (VCPU(vcpu, irr[0]) & (1UL<<NMI_VECTOR))
+        return NMI_VECTOR;
+    if (VCPU(vcpu, irr[0]) & (1UL<<ExtINT_VECTOR))
+        return ExtINT_VECTOR;
 
-	return highest_bits((int *)&VCPU(vcpu, irr[0]));
+    return highest_bits((int *)&VCPU(vcpu, irr[0]));
 }
 
-static inline int highest_inservice_irq(struct kvm_vcpu *vcpu)
-{
-	if (VMX(vcpu, insvc[0]) & (1UL<<NMI_VECTOR))
-		return NMI_VECTOR;
-	if (VMX(vcpu, insvc[0]) & (1UL<<ExtINT_VECTOR))
-		return ExtINT_VECTOR;
+static inline int highest_inservice_irq(struct kvm_vcpu *vcpu) {
+    if (VMX(vcpu, insvc[0]) & (1UL<<NMI_VECTOR))
+        return NMI_VECTOR;
+    if (VMX(vcpu, insvc[0]) & (1UL<<ExtINT_VECTOR))
+        return ExtINT_VECTOR;
 
-	return highest_bits((int *)&(VMX(vcpu, insvc[0])));
+    return highest_bits((int *)&(VMX(vcpu, insvc[0])));
 }
 
 extern void vcpu_get_fpreg(struct kvm_vcpu *vcpu, unsigned long reg,
-					struct ia64_fpreg *val);
+                           struct ia64_fpreg *val);
 extern void vcpu_set_fpreg(struct kvm_vcpu *vcpu, unsigned long reg,
-					struct ia64_fpreg *val);
+                           struct ia64_fpreg *val);
 extern u64 vcpu_get_gr(struct kvm_vcpu *vcpu, unsigned long reg);
 extern void vcpu_set_gr(struct kvm_vcpu *vcpu, unsigned long reg,
-			u64 val, int nat);
+                        u64 val, int nat);
 extern unsigned long vcpu_get_psr(struct kvm_vcpu *vcpu);
 extern void vcpu_set_psr(struct kvm_vcpu *vcpu, unsigned long val);
 extern u64 vcpu_thash(struct kvm_vcpu *vcpu, u64 vadr);
 extern void vcpu_bsw0(struct kvm_vcpu *vcpu);
 extern void thash_vhpt_insert(struct kvm_vcpu *v, u64 pte,
-					u64 itir, u64 va, int type);
+                              u64 itir, u64 va, int type);
 extern struct thash_data *vhpt_lookup(u64 va);
 extern u64 guest_vhpt_lookup(u64 iha, u64 *pte);
 extern void thash_purge_entries(struct kvm_vcpu *v, u64 va, u64 ps);
 extern void thash_purge_entries_remote(struct kvm_vcpu *v, u64 va, u64 ps);
 extern u64 translate_phy_pte(u64 *pte, u64 itir, u64 va);
 extern void thash_purge_and_insert(struct kvm_vcpu *v, u64 pte,
-		u64 itir, u64 ifa, int type);
+                                   u64 itir, u64 ifa, int type);
 extern void thash_purge_all(struct kvm_vcpu *v);
 extern struct thash_data *vtlb_lookup(struct kvm_vcpu *v,
-						u64 va, int is_data);
+                                      u64 va, int is_data);
 extern int vtr_find_overlap(struct kvm_vcpu *vcpu, u64 va,
-						u64 ps, int is_data);
+                            u64 ps, int is_data);
 
 extern void vcpu_increment_iip(struct kvm_vcpu *v);
 extern void vcpu_decrement_iip(struct kvm_vcpu *vcpu);
@@ -744,7 +777,7 @@ void thash_init(struct thash_cb *hcb, u64 sz);
 void panic_vm(struct kvm_vcpu *v, const char *fmt, ...);
 u64 kvm_gpa_to_mpa(u64 gpa);
 extern u64 ia64_call_vsa(u64 proc, u64 arg1, u64 arg2, u64 arg3,
-		u64 arg4, u64 arg5, u64 arg6, u64 arg7);
+                         u64 arg4, u64 arg5, u64 arg6, u64 arg7);
 
 extern long vmm_sanity;
 

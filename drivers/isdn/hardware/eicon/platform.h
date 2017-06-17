@@ -162,18 +162,16 @@ void diva_xdi_didd_remove_adapter(int card);
 /*
 ** memory allocation
 */
-static __inline__ void *diva_os_malloc(unsigned long flags, unsigned long size)
-{
-	void *ret = NULL;
+static __inline__ void *diva_os_malloc(unsigned long flags, unsigned long size) {
+    void *ret = NULL;
 
-	if (size) {
-		ret = (void *) vmalloc((unsigned int) size);
-	}
-	return (ret);
+    if (size) {
+        ret = (void *) vmalloc((unsigned int) size);
+    }
+    return (ret);
 }
-static __inline__ void diva_os_free(unsigned long flags, void *ptr)
-{
-	vfree(ptr);
+static __inline__ void diva_os_free(unsigned long flags, void *ptr) {
+    vfree(ptr);
 }
 
 /*
@@ -188,13 +186,11 @@ void diva_os_free_message_buffer(diva_os_message_buffer_s *dmb);
 /*
 ** mSeconds waiting
 */
-static __inline__ void diva_os_sleep(dword mSec)
-{
-	msleep(mSec);
+static __inline__ void diva_os_sleep(dword mSec) {
+    msleep(mSec);
 }
-static __inline__ void diva_os_wait(dword mSec)
-{
-	mdelay(mSec);
+static __inline__ void diva_os_wait(dword mSec) {
+    mdelay(mSec);
 }
 
 /*
@@ -207,7 +203,7 @@ void PCIread(byte bus, byte func, int offset, void *data, int length, void *pci_
 **  I/O Port utilities
 */
 int diva_os_register_io_port(void *adapter, int register, unsigned long port,
-			     unsigned long length, const char *name, int id);
+                             unsigned long length, const char *name, int id);
 /*
 **  I/O port access abstraction
 */
@@ -222,9 +218,9 @@ void outpp(void __iomem *, word);
 **  IRQ
 */
 typedef struct _diva_os_adapter_irq_info {
-	byte irq_nr;
-	int  registered;
-	char irq_name[24];
+    byte irq_nr;
+    int  registered;
+    char irq_name[24];
 } diva_os_adapter_irq_info_t;
 int diva_os_register_irq(void *context, byte irq, const char *name);
 void diva_os_remove_irq(void *context, byte irq);
@@ -236,14 +232,21 @@ void diva_os_remove_irq(void *context, byte irq);
 */
 typedef long diva_os_spin_lock_magic_t;
 typedef spinlock_t diva_os_spin_lock_t;
-static __inline__ int diva_os_initialize_spin_lock(spinlock_t *lock, void *unused) { \
-	spin_lock_init(lock); return (0); }
+static __inline__ int diva_os_initialize_spin_lock(spinlock_t *lock, void *unused) {
+    \
+    spin_lock_init(lock);
+    return (0);
+}
 static __inline__ void diva_os_enter_spin_lock(diva_os_spin_lock_t *a, \
-					       diva_os_spin_lock_magic_t *old_irql, \
-					       void *dbg) { spin_lock_bh(a); }
+        diva_os_spin_lock_magic_t *old_irql, \
+        void *dbg) {
+    spin_lock_bh(a);
+}
 static __inline__ void diva_os_leave_spin_lock(diva_os_spin_lock_t *a, \
-					       diva_os_spin_lock_magic_t *old_irql, \
-					       void *dbg) { spin_unlock_bh(a); }
+        diva_os_spin_lock_magic_t *old_irql, \
+        void *dbg) {
+    spin_unlock_bh(a);
+}
 
 #define diva_os_destroy_spin_lock(a, b) do { } while (0)
 
@@ -254,10 +257,10 @@ typedef int (*diva_os_isr_callback_t)(struct _ISDN_ADAPTER *);
 typedef void (*diva_os_soft_isr_callback_t)(struct _diva_os_soft_isr *psoft_isr, void *context);
 
 typedef struct _diva_os_soft_isr {
-	void *object;
-	diva_os_soft_isr_callback_t callback;
-	void *callback_context;
-	char dpc_thread_name[24];
+    void *object;
+    diva_os_soft_isr_callback_t callback;
+    void *callback_context;
+    char dpc_thread_name[24];
 } diva_os_soft_isr_t;
 
 int diva_os_initialize_soft_isr(diva_os_soft_isr_t *psoft_isr, diva_os_soft_isr_callback_t callback, void *callback_context);
@@ -275,16 +278,14 @@ void diva_os_get_time(dword *sec, dword *usec);
 */
 typedef int diva_os_atomic_t;
 static diva_os_atomic_t __inline__
-diva_os_atomic_increment(diva_os_atomic_t *pv)
-{
-	*pv += 1;
-	return (*pv);
+diva_os_atomic_increment(diva_os_atomic_t *pv) {
+    *pv += 1;
+    return (*pv);
 }
 static diva_os_atomic_t __inline__
-diva_os_atomic_decrement(diva_os_atomic_t *pv)
-{
-	*pv -= 1;
-	return (*pv);
+diva_os_atomic_decrement(diva_os_atomic_t *pv) {
+    *pv -= 1;
+    return (*pv);
 }
 
 /*
@@ -323,21 +324,17 @@ diva_os_atomic_decrement(diva_os_atomic_t *pv)
 #define WRITE_WORD(addr, v)  writew(v, addr)
 #define WRITE_DWORD(addr, v) writel(v, addr)
 
-static inline __u16 GET_WORD(void *addr)
-{
-	return le16_to_cpu(*(__le16 *)addr);
+static inline __u16 GET_WORD(void *addr) {
+    return le16_to_cpu(*(__le16 *)addr);
 }
-static inline __u32 GET_DWORD(void *addr)
-{
-	return le32_to_cpu(*(__le32 *)addr);
+static inline __u32 GET_DWORD(void *addr) {
+    return le32_to_cpu(*(__le32 *)addr);
 }
-static inline void PUT_WORD(void *addr, __u16 v)
-{
-	*(__le16 *)addr = cpu_to_le16(v);
+static inline void PUT_WORD(void *addr, __u16 v) {
+    *(__le16 *)addr = cpu_to_le16(v);
 }
-static inline void PUT_DWORD(void *addr, __u32 v)
-{
-	*(__le32 *)addr = cpu_to_le32(v);
+static inline void PUT_DWORD(void *addr, __u32 v) {
+    *(__le32 *)addr = cpu_to_le32(v);
 }
 
 /*

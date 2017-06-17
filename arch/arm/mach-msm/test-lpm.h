@@ -15,8 +15,8 @@
 #define __ARCH_ARM_MACH_MSM_TEST_LPM_H
 
 struct lpm_test_platform_data {
-	struct msm_rpmrs_level *msm_lpm_test_levels;
-	int msm_lpm_test_level_count;
-	bool use_qtimer;
+    struct msm_rpmrs_level *msm_lpm_test_levels;
+    int msm_lpm_test_level_count;
+    bool use_qtimer;
 };
 #endif

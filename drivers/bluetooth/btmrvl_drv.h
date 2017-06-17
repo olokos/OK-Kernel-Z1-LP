@@ -33,53 +33,53 @@
 #define WAIT_UNTIL_CMD_RESP		5000
 
 struct btmrvl_thread {
-	struct task_struct *task;
-	wait_queue_head_t wait_q;
-	void *priv;
+    struct task_struct *task;
+    wait_queue_head_t wait_q;
+    void *priv;
 };
 
 struct btmrvl_device {
-	void *card;
-	struct hci_dev *hcidev;
+    void *card;
+    struct hci_dev *hcidev;
 
-	u8 dev_type;
+    u8 dev_type;
 
-	u8 tx_dnld_rdy;
+    u8 tx_dnld_rdy;
 
-	u8 psmode;
-	u8 pscmd;
-	u8 hsmode;
-	u8 hscmd;
+    u8 psmode;
+    u8 pscmd;
+    u8 hsmode;
+    u8 hscmd;
 
-	/* Low byte is gap, high byte is GPIO */
-	u16 gpio_gap;
+    /* Low byte is gap, high byte is GPIO */
+    u16 gpio_gap;
 
-	u8 hscfgcmd;
-	u8 sendcmdflag;
+    u8 hscfgcmd;
+    u8 sendcmdflag;
 };
 
 struct btmrvl_adapter {
-	u32 int_count;
-	struct sk_buff_head tx_queue;
-	u8 psmode;
-	u8 ps_state;
-	u8 hs_state;
-	u8 wakeup_tries;
-	wait_queue_head_t cmd_wait_q;
-	u8 cmd_complete;
+    u32 int_count;
+    struct sk_buff_head tx_queue;
+    u8 psmode;
+    u8 ps_state;
+    u8 hs_state;
+    u8 wakeup_tries;
+    wait_queue_head_t cmd_wait_q;
+    u8 cmd_complete;
 };
 
 struct btmrvl_private {
-	struct btmrvl_device btmrvl_dev;
-	struct btmrvl_adapter *adapter;
-	struct btmrvl_thread main_thread;
-	int (*hw_host_to_card) (struct btmrvl_private *priv,
-				u8 *payload, u16 nb);
-	int (*hw_wakeup_firmware) (struct btmrvl_private *priv);
-	int (*hw_process_int_status) (struct btmrvl_private *priv);
-	spinlock_t driver_lock;		/* spinlock used by driver */
+    struct btmrvl_device btmrvl_dev;
+    struct btmrvl_adapter *adapter;
+    struct btmrvl_thread main_thread;
+    int (*hw_host_to_card) (struct btmrvl_private *priv,
+                            u8 *payload, u16 nb);
+    int (*hw_wakeup_firmware) (struct btmrvl_private *priv);
+    int (*hw_process_int_status) (struct btmrvl_private *priv);
+    spinlock_t driver_lock;		/* spinlock used by driver */
 #ifdef CONFIG_DEBUG_FS
-	void *debugfs_data;
+    void *debugfs_data;
 #endif
 };
 
@@ -116,15 +116,15 @@ struct btmrvl_private {
 #define PS_AWAKE			0x00
 
 struct btmrvl_cmd {
-	__le16 ocf_ogf;
-	u8 length;
-	u8 data[4];
+    __le16 ocf_ogf;
+    u8 length;
+    u8 data[4];
 } __packed;
 
 struct btmrvl_event {
-	u8 ec;		/* event counter */
-	u8 length;
-	u8 data[4];
+    u8 ec;		/* event counter */
+    u8 length;
+    u8 data[4];
 } __packed;
 
 /* Prototype of global function */

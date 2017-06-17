@@ -26,9 +26,8 @@
 #define BREAK_INSTR_SIZE	4
 #define BUFMAX			((NUMREGBYTES * 2) + 512)
 #define OUTBUFMAX		((NUMREGBYTES * 2) + 512)
-static inline void arch_kgdb_breakpoint(void)
-{
-	asm(".long 0x7d821008"); /* twge r2, r2 */
+static inline void arch_kgdb_breakpoint(void) {
+    asm(".long 0x7d821008"); /* twge r2, r2 */
 }
 #define CACHE_FLUSH_IS_SAFE	1
 #define DBG_MAX_REG_NUM     70

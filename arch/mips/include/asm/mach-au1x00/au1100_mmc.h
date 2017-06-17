@@ -41,12 +41,12 @@
 #include <linux/leds.h>
 
 struct au1xmmc_platform_data {
-	int(*cd_setup)(void *mmc_host, int on);
-	int(*card_inserted)(void *mmc_host);
-	int(*card_readonly)(void *mmc_host);
-	void(*set_power)(void *mmc_host, int state);
-	struct led_classdev *led;
-	unsigned long mask_host_caps;
+    int(*cd_setup)(void *mmc_host, int on);
+    int(*card_inserted)(void *mmc_host);
+    int(*card_readonly)(void *mmc_host);
+    void(*set_power)(void *mmc_host, int state);
+    struct led_classdev *led;
+    unsigned long mask_host_caps;
 };
 
 #define SD0_BASE	0xB0600000

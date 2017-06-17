@@ -4,15 +4,15 @@
 #include <asm/irq.h>
 
 typedef struct {
-	unsigned char
-		ctrl,
-		bcd_sec,
-		bcd_min,
-		bcd_hr,
-		bcd_dow,
-		bcd_dom,
-		bcd_mth,
-		bcd_year;
+    unsigned char
+    ctrl,
+    bcd_sec,
+    bcd_min,
+    bcd_hr,
+    bcd_dow,
+    bcd_dom,
+    bcd_mth,
+    bcd_year;
 } MK48T02;
 
 #define RTC_WRITE	0x80
@@ -23,41 +23,41 @@ typedef struct {
 
 
 struct pcc_regs {
-   volatile u_long	dma_tadr;
-   volatile u_long	dma_dadr;
-   volatile u_long	dma_bcr;
-   volatile u_long	dma_hr;
-   volatile u_short	t1_preload;
-   volatile u_short	t1_count;
-   volatile u_short	t2_preload;
-   volatile u_short	t2_count;
-   volatile u_char	t1_int_cntrl;
-   volatile u_char	t1_cntrl;
-   volatile u_char	t2_int_cntrl;
-   volatile u_char	t2_cntrl;
-   volatile u_char	ac_fail;
-   volatile u_char	watchdog;
-   volatile u_char	lpt_intr;
-   volatile u_char	lpt_cntrl;
-   volatile u_char	dma_intr;
-   volatile u_char	dma_cntrl;
-   volatile u_char	bus_error;
-   volatile u_char	dma_status;
-   volatile u_char	abort;
-   volatile u_char	ta_fnctl;
-   volatile u_char	serial_cntrl;
-   volatile u_char	general_cntrl;
-   volatile u_char	lan_cntrl;
-   volatile u_char	general_status;
-   volatile u_char	scsi_interrupt;
-   volatile u_char	slave;
-   volatile u_char	soft1_cntrl;
-   volatile u_char	int_base;
-   volatile u_char	soft2_cntrl;
-   volatile u_char	revision_level;
-   volatile u_char	lpt_data;
-   volatile u_char	lpt_status;
-   };
+    volatile u_long	dma_tadr;
+    volatile u_long	dma_dadr;
+    volatile u_long	dma_bcr;
+    volatile u_long	dma_hr;
+    volatile u_short	t1_preload;
+    volatile u_short	t1_count;
+    volatile u_short	t2_preload;
+    volatile u_short	t2_count;
+    volatile u_char	t1_int_cntrl;
+    volatile u_char	t1_cntrl;
+    volatile u_char	t2_int_cntrl;
+    volatile u_char	t2_cntrl;
+    volatile u_char	ac_fail;
+    volatile u_char	watchdog;
+    volatile u_char	lpt_intr;
+    volatile u_char	lpt_cntrl;
+    volatile u_char	dma_intr;
+    volatile u_char	dma_cntrl;
+    volatile u_char	bus_error;
+    volatile u_char	dma_status;
+    volatile u_char	abort;
+    volatile u_char	ta_fnctl;
+    volatile u_char	serial_cntrl;
+    volatile u_char	general_cntrl;
+    volatile u_char	lan_cntrl;
+    volatile u_char	general_status;
+    volatile u_char	scsi_interrupt;
+    volatile u_char	slave;
+    volatile u_char	soft1_cntrl;
+    volatile u_char	int_base;
+    volatile u_char	soft2_cntrl;
+    volatile u_char	revision_level;
+    volatile u_char	lpt_data;
+    volatile u_char	lpt_status;
+};
 
 #define m147_pcc ((struct pcc_regs * volatile)0xfffe1000)
 

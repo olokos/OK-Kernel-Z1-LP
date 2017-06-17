@@ -31,12 +31,11 @@
 
 #define PWC_FPS_MAX_KIARA 6
 
-struct Kiara_table_entry
-{
-	char alternate;			/* USB alternate interface */
-	unsigned short packetsize;	/* Normal packet size */
-	unsigned short bandlength;	/* Bandlength when decompressing */
-	unsigned char mode[12];		/* precomputed mode settings for cam */
+struct Kiara_table_entry {
+    char alternate;			/* USB alternate interface */
+    unsigned short packetsize;	/* Normal packet size */
+    unsigned short bandlength;	/* Bandlength when decompressing */
+    unsigned char mode[12];		/* precomputed mode settings for cam */
 };
 
 extern const struct Kiara_table_entry Kiara_table[PSZ_MAX][PWC_FPS_MAX_KIARA][4];

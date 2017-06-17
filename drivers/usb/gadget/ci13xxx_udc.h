@@ -38,12 +38,12 @@
  *****************************************************************************/
 /* DMA layout of transfer descriptors */
 struct ci13xxx_td {
-	/* 0 */
-	u32 next;
+    /* 0 */
+    u32 next;
 #define TD_TERMINATE          BIT(0)
 #define TD_ADDR_MASK          (0xFFFFFFEUL << 5)
-	/* 1 */
-	u32 token;
+    /* 1 */
+    u32 token;
 #define TD_STATUS             (0x00FFUL <<  0)
 #define TD_STATUS_TR_ERR      BIT(3)
 #define TD_STATUS_DT_ERR      BIT(5)
@@ -52,8 +52,8 @@ struct ci13xxx_td {
 #define TD_MULTO              (0x0003UL << 10)
 #define TD_IOC                BIT(15)
 #define TD_TOTAL_BYTES        (0x7FFFUL << 16)
-	/* 2 */
-	u32 page[5];
+    /* 2 */
+    u32 page[5];
 #define TD_CURR_OFFSET        (0x0FFFUL <<  0)
 #define TD_FRAME_NUM          (0x07FFUL <<  0)
 #define TD_RESERVED_MASK      (0x0FFFUL <<  0)
@@ -61,75 +61,75 @@ struct ci13xxx_td {
 
 /* DMA layout of queue heads */
 struct ci13xxx_qh {
-	/* 0 */
-	u32 cap;
+    /* 0 */
+    u32 cap;
 #define QH_IOS                BIT(15)
 #define QH_MAX_PKT            (0x07FFUL << 16)
 #define QH_ZLT                BIT(29)
 #define QH_MULT               (0x0003UL << 30)
 #define QH_MULT_SHIFT         11
-	/* 1 */
-	u32 curr;
-	/* 2 - 8 */
-	struct ci13xxx_td        td;
-	/* 9 */
-	u32 RESERVED;
-	struct usb_ctrlrequest   setup;
+    /* 1 */
+    u32 curr;
+    /* 2 - 8 */
+    struct ci13xxx_td        td;
+    /* 9 */
+    u32 RESERVED;
+    struct usb_ctrlrequest   setup;
 } __attribute__ ((packed, aligned(4)));
 
 /* cache of larger request's original attributes */
 struct ci13xxx_multi_req {
-	unsigned             len;
-	unsigned             actual;
-	void                *buf;
+    unsigned             len;
+    unsigned             actual;
+    void                *buf;
 };
 
 /* Extension of usb_request */
 struct ci13xxx_req {
-	struct usb_request   req;
-	unsigned             map;
-	struct list_head     queue;
-	struct ci13xxx_td   *ptr;
-	dma_addr_t           dma;
-	struct ci13xxx_td   *zptr;
-	dma_addr_t           zdma;
-	struct ci13xxx_multi_req multi;
+    struct usb_request   req;
+    unsigned             map;
+    struct list_head     queue;
+    struct ci13xxx_td   *ptr;
+    dma_addr_t           dma;
+    struct ci13xxx_td   *zptr;
+    dma_addr_t           zdma;
+    struct ci13xxx_multi_req multi;
 };
 
 /* Extension of usb_ep */
 struct ci13xxx_ep {
-	struct usb_ep                          ep;
-	const struct usb_endpoint_descriptor  *desc;
-	u8                                     dir;
-	u8                                     num;
-	u8                                     type;
-	char                                   name[16];
-	struct {
-		struct list_head   queue;
-		struct ci13xxx_qh *ptr;
-		dma_addr_t         dma;
-	}                                      qh;
-	int                                    wedge;
+    struct usb_ep                          ep;
+    const struct usb_endpoint_descriptor  *desc;
+    u8                                     dir;
+    u8                                     num;
+    u8                                     type;
+    char                                   name[16];
+    struct {
+        struct list_head   queue;
+        struct ci13xxx_qh *ptr;
+        dma_addr_t         dma;
+    }                                      qh;
+    int                                    wedge;
 
-	/* global resources */
-	spinlock_t                            *lock;
-	struct device                         *device;
-	struct dma_pool                       *td_pool;
-	struct ci13xxx_td                     *last_zptr;
-	dma_addr_t                            last_zdma;
-	unsigned long dTD_update_fail_count;
-	unsigned long			      prime_fail_count;
-	int				      prime_timer_count;
-	struct timer_list		      prime_timer;
+    /* global resources */
+    spinlock_t                            *lock;
+    struct device                         *device;
+    struct dma_pool                       *td_pool;
+    struct ci13xxx_td                     *last_zptr;
+    dma_addr_t                            last_zdma;
+    unsigned long dTD_update_fail_count;
+    unsigned long			      prime_fail_count;
+    int				      prime_timer_count;
+    struct timer_list		      prime_timer;
 
-	bool                                  multi_req;
+    bool                                  multi_req;
 };
 
 struct ci13xxx;
 struct ci13xxx_udc_driver {
-	const char	*name;
-	unsigned long	 flags;
-	unsigned int nz_itc;
+    const char	*name;
+    unsigned long	 flags;
+    unsigned int nz_itc;
 #define CI13XXX_REGS_SHARED		BIT(0)
 #define CI13XXX_REQUIRE_TRANSCEIVER	BIT(1)
 #define CI13XXX_PULLUP_ON_VBUS		BIT(2)
@@ -146,38 +146,38 @@ struct ci13xxx_udc_driver {
 #define CI13XXX_CONTROLLER_DISCONNECT_EVENT		5
 #define CI13XXX_CONTROLLER_UDC_STARTED_EVENT		6
 
-	void	(*notify_event) (struct ci13xxx *udc, unsigned event);
+    void	(*notify_event) (struct ci13xxx *udc, unsigned event);
 };
 
 /* CI13XXX UDC descriptor & global resources */
 struct ci13xxx {
-	spinlock_t		  *lock;      /* ctrl register bank access */
-	void __iomem              *regs;      /* registers address space */
+    spinlock_t		  *lock;      /* ctrl register bank access */
+    void __iomem              *regs;      /* registers address space */
 
-	struct dma_pool           *qh_pool;   /* DMA pool for queue heads */
-	struct dma_pool           *td_pool;   /* DMA pool for transfer descs */
-	struct usb_request        *status;    /* ep0 status request */
-	void                      *status_buf;/* GET_STATUS buffer */
+    struct dma_pool           *qh_pool;   /* DMA pool for queue heads */
+    struct dma_pool           *td_pool;   /* DMA pool for transfer descs */
+    struct usb_request        *status;    /* ep0 status request */
+    void                      *status_buf;/* GET_STATUS buffer */
 
-	struct usb_gadget          gadget;     /* USB slave device */
-	struct ci13xxx_ep          ci13xxx_ep[ENDPT_MAX]; /* extended endpts */
-	u32                        ep0_dir;    /* ep0 direction */
+    struct usb_gadget          gadget;     /* USB slave device */
+    struct ci13xxx_ep          ci13xxx_ep[ENDPT_MAX]; /* extended endpts */
+    u32                        ep0_dir;    /* ep0 direction */
 #define ep0out ci13xxx_ep[0]
 #define ep0in  ci13xxx_ep[hw_ep_max / 2]
-	u8                         remote_wakeup; /* Is remote wakeup feature
+    u8                         remote_wakeup; /* Is remote wakeup feature
 							enabled by the host? */
-	u8                         suspended;  /* suspended by the host */
-	u8                         configured;  /* is device configured */
-	u8                         test_mode;  /* the selected test mode */
+    u8                         suspended;  /* suspended by the host */
+    u8                         configured;  /* is device configured */
+    u8                         test_mode;  /* the selected test mode */
 
-	struct delayed_work        rw_work;    /* remote wakeup delayed work */
-	struct usb_gadget_driver  *driver;     /* 3rd party gadget driver */
-	struct ci13xxx_udc_driver *udc_driver; /* device controller driver */
-	int                        vbus_active; /* is VBUS active */
-	int                        softconnect; /* is pull-up enable allowed */
-	unsigned long dTD_update_fail_count;
-	struct usb_phy            *transceiver; /* Transceiver struct */
-	bool                      skip_flush; /* skip flushing remaining EP
+    struct delayed_work        rw_work;    /* remote wakeup delayed work */
+    struct usb_gadget_driver  *driver;     /* 3rd party gadget driver */
+    struct ci13xxx_udc_driver *udc_driver; /* device controller driver */
+    int                        vbus_active; /* is VBUS active */
+    int                        softconnect; /* is pull-up enable allowed */
+    unsigned long dTD_update_fail_count;
+    struct usb_phy            *transceiver; /* Transceiver struct */
+    bool                      skip_flush; /* skip flushing remaining EP
 						upon flush timeout for the
 						first EP. */
 };

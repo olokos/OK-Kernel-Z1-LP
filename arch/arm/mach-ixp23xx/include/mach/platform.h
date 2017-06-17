@@ -14,19 +14,16 @@
 
 #ifndef __ASSEMBLY__
 
-static inline unsigned long ixp2000_reg_read(volatile void *reg)
-{
-	return *((volatile unsigned long *)reg);
+static inline unsigned long ixp2000_reg_read(volatile void *reg) {
+    return *((volatile unsigned long *)reg);
 }
 
-static inline void ixp2000_reg_write(volatile void *reg, unsigned long val)
-{
-	*((volatile unsigned long *)reg) = val;
+static inline void ixp2000_reg_write(volatile void *reg, unsigned long val) {
+    *((volatile unsigned long *)reg) = val;
 }
 
-static inline void ixp2000_reg_wrb(volatile void *reg, unsigned long val)
-{
-	*((volatile unsigned long *)reg) = val;
+static inline void ixp2000_reg_wrb(volatile void *reg, unsigned long val) {
+    *((volatile unsigned long *)reg) = val;
 }
 
 struct pci_sys_data;
@@ -48,9 +45,8 @@ extern struct sys_timer ixp23xx_timer;
 /*
  * Is system memory on the XSI or CPP bus?
  */
-static inline unsigned ixp23xx_cpp_boot(void)
-{
-	return (*IXP23XX_EXP_CFG0 & IXP23XX_EXP_CFG0_XSI_NOT_PRES);
+static inline unsigned ixp23xx_cpp_boot(void) {
+    return (*IXP23XX_EXP_CFG0 & IXP23XX_EXP_CFG0_XSI_NOT_PRES);
 }
 #endif
 

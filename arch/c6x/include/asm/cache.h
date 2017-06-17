@@ -73,18 +73,18 @@ extern void L2_cache_global_writeback(void);
 extern void L1P_cache_block_invalidate(unsigned int start, unsigned int end);
 extern void L1D_cache_block_invalidate(unsigned int start, unsigned int end);
 extern void L1D_cache_block_writeback_invalidate(unsigned int start,
-						 unsigned int end);
+        unsigned int end);
 extern void L1D_cache_block_writeback(unsigned int start, unsigned int end);
 extern void L2_cache_block_invalidate(unsigned int start, unsigned int end);
 extern void L2_cache_block_writeback(unsigned int start, unsigned int end);
 extern void L2_cache_block_writeback_invalidate(unsigned int start,
-						unsigned int end);
+        unsigned int end);
 extern void L2_cache_block_invalidate_nowait(unsigned int start,
-					     unsigned int end);
+        unsigned int end);
 extern void L2_cache_block_writeback_nowait(unsigned int start,
-					    unsigned int end);
+        unsigned int end);
 
 extern void L2_cache_block_writeback_invalidate_nowait(unsigned int start,
-						       unsigned int end);
+        unsigned int end);
 
 #endif /* _ASM_C6X_CACHE_H */

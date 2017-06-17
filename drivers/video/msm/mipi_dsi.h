@@ -55,33 +55,33 @@
 #define DSI_PANEL_MAX	8
 
 enum {		/* mipi dsi panel */
-	DSI_VIDEO_MODE,
-	DSI_CMD_MODE,
+    DSI_VIDEO_MODE,
+    DSI_CMD_MODE,
 };
 
 enum {
-	ST_DSI_CLK_OFF,
-	ST_DSI_SUSPEND,
-	ST_DSI_RESUME,
-	ST_DSI_PLAYING,
-	ST_DSI_NUM
+    ST_DSI_CLK_OFF,
+    ST_DSI_SUSPEND,
+    ST_DSI_RESUME,
+    ST_DSI_PLAYING,
+    ST_DSI_NUM
 };
 
 enum {
-	EV_DSI_UPDATE,
-	EV_DSI_DONE,
-	EV_DSI_TOUT,
-	EV_DSI_NUM
+    EV_DSI_UPDATE,
+    EV_DSI_DONE,
+    EV_DSI_TOUT,
+    EV_DSI_NUM
 };
 
 enum {
-	LANDSCAPE = 1,
-	PORTRAIT = 2,
+    LANDSCAPE = 1,
+    PORTRAIT = 2,
 };
 
 enum dsi_trigger_type {
-	DSI_CMD_MODE_DMA,
-	DSI_CMD_MODE_MDP,
+    DSI_CMD_MODE_DMA,
+    DSI_CMD_MODE_MDP,
 };
 
 #define DSI_NON_BURST_SYNCH_PULSE	0
@@ -136,46 +136,46 @@ extern char *mmss_cc_base;	/* mutimedia sub system clock control */
 extern char *mmss_sfpb_base;	/* mutimedia sub system sfpb */
 
 struct dsiphy_pll_divider_config {
-	u32 clk_rate;
-	u32 fb_divider;
-	u32 ref_divider_ratio;
-	u32 bit_clk_divider;	/* oCLK1 */
-	u32 byte_clk_divider;	/* oCLK2 */
-	u32 dsi_clk_divider;	/* oCLK3 */
+    u32 clk_rate;
+    u32 fb_divider;
+    u32 ref_divider_ratio;
+    u32 bit_clk_divider;	/* oCLK1 */
+    u32 byte_clk_divider;	/* oCLK2 */
+    u32 dsi_clk_divider;	/* oCLK3 */
 };
 
 extern struct dsiphy_pll_divider_config pll_divider_config;
 
 struct dsi_clk_mnd_table {
-	uint8 lanes;
-	uint8 bpp;
-	uint8 dsiclk_div;
-	uint8 dsiclk_m;
-	uint8 dsiclk_n;
-	uint8 dsiclk_d;
-	uint8 pclk_m;
-	uint8 pclk_n;
-	uint8 pclk_d;
+    uint8 lanes;
+    uint8 bpp;
+    uint8 dsiclk_div;
+    uint8 dsiclk_m;
+    uint8 dsiclk_n;
+    uint8 dsiclk_d;
+    uint8 pclk_m;
+    uint8 pclk_n;
+    uint8 pclk_d;
 };
 
 static const struct dsi_clk_mnd_table mnd_table[] = {
-	{ 1, 2, 8, 1, 1, 0, 1,  2, 1},
-	{ 1, 3, 8, 1, 1, 0, 1,  3, 2},
-	{ 2, 2, 4, 1, 1, 0, 1,  2, 1},
-	{ 2, 3, 4, 1, 1, 0, 1,  3, 2},
-	{ 3, 2, 1, 3, 8, 4, 3, 16, 8},
-	{ 3, 3, 1, 3, 8, 4, 1,  8, 4},
-	{ 4, 2, 2, 1, 1, 0, 1,  2, 1},
-	{ 4, 3, 2, 1, 1, 0, 1,  3, 2},
+    { 1, 2, 8, 1, 1, 0, 1,  2, 1},
+    { 1, 3, 8, 1, 1, 0, 1,  3, 2},
+    { 2, 2, 4, 1, 1, 0, 1,  2, 1},
+    { 2, 3, 4, 1, 1, 0, 1,  3, 2},
+    { 3, 2, 1, 3, 8, 4, 3, 16, 8},
+    { 3, 3, 1, 3, 8, 4, 1,  8, 4},
+    { 4, 2, 2, 1, 1, 0, 1,  2, 1},
+    { 4, 3, 2, 1, 1, 0, 1,  3, 2},
 };
 
 struct dsi_clk_desc {
-	uint32 src;
-	uint32 m;
-	uint32 n;
-	uint32 d;
-	uint32 mnd_mode;
-	uint32 pre_div_func;
+    uint32 src;
+    uint32 m;
+    uint32 n;
+    uint32 d;
+    uint32 mnd_mode;
+    uint32 pre_div_func;
 };
 
 #define DSI_HOST_HDR_SIZE	4
@@ -194,13 +194,13 @@ struct dsi_clk_desc {
 #define MIPI_DSI_LEN 8 /* 4 x 4 - 6 - 2, bytes dcs header+crc-align  */
 
 struct dsi_buf {
-	uint32 *hdr;	/* dsi host header */
-	char *start;	/* buffer start addr */
-	char *end;	/* buffer end addr */
-	int size;	/* size of buffer */
-	char *data;	/* buffer */
-	int len;	/* data length */
-	dma_addr_t dmap; /* mapped dma addr */
+    uint32 *hdr;	/* dsi host header */
+    char *start;	/* buffer start addr */
+    char *end;	/* buffer end addr */
+    int size;	/* size of buffer */
+    char *data;	/* buffer */
+    int len;	/* data length */
+    dma_addr_t dmap; /* mapped dma addr */
 };
 
 /* dcs read/write */
@@ -241,21 +241,21 @@ struct dsi_buf {
 #define DTYPE_DCS_READ2_RESP    0x22    /* 2 parameter, short */
 
 struct dsi_cmd_desc {
-	int dtype;
-	int last;
-	int vc;
-	int ack;	/* ask ACK from peripheral */
-	int wait;
-	int dlen;
-	char *payload;
+    int dtype;
+    int last;
+    int vc;
+    int ack;	/* ask ACK from peripheral */
+    int wait;
+    int dlen;
+    char *payload;
 };
 
 typedef void (*kickoff_act)(void *);
 
 struct dsi_kickoff_action {
-	struct list_head act_entry;
-	kickoff_act	action;
-	void *data;
+    struct list_head act_entry;
+    kickoff_act	action;
+    void *data;
 };
 
 
@@ -270,19 +270,19 @@ typedef void (*fxn)(u32 data);
 #define CMD_MDP3_CMD_PANEL 0x80000000  /* mdp3 only */
 
 struct dcs_cmd_req {
-	struct dsi_cmd_desc *cmds;
-	int cmds_cnt;
-	u32 flags;
-	struct dsi_buf *rbuf;
-	int rlen;	/* rx length */
-	fxn cb;
+    struct dsi_cmd_desc *cmds;
+    int cmds_cnt;
+    u32 flags;
+    struct dsi_buf *rbuf;
+    int rlen;	/* rx length */
+    fxn cb;
 };
 
 struct dcs_cmd_list {
-	int put;
-	int get;
-	int tot;
-	struct dcs_cmd_req list[CMD_REQ_MAX];
+    int put;
+    int get;
+    int tot;
+    struct dcs_cmd_req list[CMD_REQ_MAX];
 };
 
 
@@ -321,9 +321,9 @@ irqreturn_t mipi_dsi_isr(int irq, void *ptr);
 
 void mipi_set_tx_power_mode(int mode);
 void mipi_dsi_phy_init(int panel_ndx, struct msm_panel_info const *panel_info,
-	int target_type);
+                       int target_type);
 int mipi_dsi_clk_div_config(uint8 bpp, uint8 lanes,
-			    uint32 *expected_dsi_pclk);
+                            uint32 *expected_dsi_pclk);
 int mipi_dsi_clk_init(struct platform_device *pdev);
 void mipi_dsi_clk_deinit(struct device *dev);
 
@@ -335,29 +335,23 @@ void mipi_dsi_unprepare_clocks(void);
 void mipi_dsi_ahb_ctrl(u32 enable);
 void mipi_dsi_phy_ctrl(int on);
 #else
-static inline void mipi_dsi_clk_enable(void)
-{
-	/* empty */
+static inline void mipi_dsi_clk_enable(void) {
+    /* empty */
 }
-void mipi_dsi_clk_disable(void)
-{
-	/* empty */
+void mipi_dsi_clk_disable(void) {
+    /* empty */
 }
-void mipi_dsi_prepare_clocks(void)
-{
-	/* empty */
+void mipi_dsi_prepare_clocks(void) {
+    /* empty */
 }
-void mipi_dsi_unprepare_clocks(void)
-{
-	/* empty */
+void mipi_dsi_unprepare_clocks(void) {
+    /* empty */
 }
-void mipi_dsi_ahb_ctrl(u32 enable)
-{
-	/* empty */
+void mipi_dsi_ahb_ctrl(u32 enable) {
+    /* empty */
 }
-void mipi_dsi_phy_ctrl(int on)
-{
-	/* empty */
+void mipi_dsi_phy_ctrl(int on) {
+    /* empty */
 }
 #endif
 

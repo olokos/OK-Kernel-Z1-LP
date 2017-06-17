@@ -18,9 +18,9 @@
 
 #include <linux/ioport.h>
 
-    /*
-     *  Different Amiga models
-     */
+/*
+ *  Different Amiga models
+ */
 
 #define AMI_UNKNOWN	(0)
 #define AMI_500		(1)
@@ -40,9 +40,9 @@
 #define AMI_DRACO	(15)
 
 
-    /*
-     *  Chipsets
-     */
+/*
+ *  Chipsets
+ */
 
 extern unsigned long amiga_chipset;
 
@@ -52,9 +52,9 @@ extern unsigned long amiga_chipset;
 #define CS_AGA		(3)
 
 
-    /*
-     *  Miscellaneous
-     */
+/*
+ *  Miscellaneous
+ */
 
 extern unsigned long amiga_eclock;	/* 700 kHz E Peripheral Clock */
 extern unsigned long amiga_colorclock;	/* 3.5 MHz Color Clock */
@@ -179,12 +179,12 @@ struct CUSTOM {
     unsigned short intreq;
     unsigned short adkcon;
     struct {
-	unsigned short	*audlc;
-	unsigned short audlen;
-	unsigned short audper;
-	unsigned short audvol;
-	unsigned short auddat;
-	unsigned short audspare[2];
+        unsigned short	*audlc;
+        unsigned short audlen;
+        unsigned short audper;
+        unsigned short audvol;
+        unsigned short auddat;
+        unsigned short audspare[2];
     } aud[4];
     unsigned char  *bplpt[8];
     unsigned short bplcon0;
@@ -198,10 +198,10 @@ struct CUSTOM {
     unsigned short bpldat[8];
     unsigned char  *sprpt[8];
     struct {
-	unsigned short pos;
-	unsigned short ctl;
-	unsigned short dataa;
-	unsigned short datab;
+        unsigned short pos;
+        unsigned short ctl;
+        unsigned short dataa;
+        unsigned short datab;
     } spr[8];
     unsigned short color[32];
     unsigned short htotal;
@@ -247,21 +247,36 @@ struct CUSTOM {
 #define DMAF_ALL		(0x01FF)
 
 struct CIA {
-    unsigned char pra;		char pad0[0xff];
-    unsigned char prb;		char pad1[0xff];
-    unsigned char ddra;		char pad2[0xff];
-    unsigned char ddrb;		char pad3[0xff];
-    unsigned char talo;		char pad4[0xff];
-    unsigned char tahi;		char pad5[0xff];
-    unsigned char tblo;		char pad6[0xff];
-    unsigned char tbhi;		char pad7[0xff];
-    unsigned char todlo;	char pad8[0xff];
-    unsigned char todmid;	char pad9[0xff];
-    unsigned char todhi;	char pada[0x1ff];
-    unsigned char sdr;		char padb[0xff];
-    unsigned char icr;		char padc[0xff];
-    unsigned char cra;		char padd[0xff];
-    unsigned char crb;		char pade[0xff];
+    unsigned char pra;
+    char pad0[0xff];
+    unsigned char prb;
+    char pad1[0xff];
+    unsigned char ddra;
+    char pad2[0xff];
+    unsigned char ddrb;
+    char pad3[0xff];
+    unsigned char talo;
+    char pad4[0xff];
+    unsigned char tahi;
+    char pad5[0xff];
+    unsigned char tblo;
+    char pad6[0xff];
+    unsigned char tbhi;
+    char pad7[0xff];
+    unsigned char todlo;
+    char pad8[0xff];
+    unsigned char todmid;
+    char pad9[0xff];
+    unsigned char todhi;
+    char pada[0x1ff];
+    unsigned char sdr;
+    char padb[0xff];
+    unsigned char icr;
+    char padc[0xff];
+    unsigned char cra;
+    char padd[0xff];
+    unsigned char crb;
+    char pade[0xff];
 };
 
 #define zTwoBase (0x80000000)
@@ -285,59 +300,58 @@ void amiga_chip_free(void *ptr);
 unsigned long amiga_chip_avail( void ); /*MILAN*/
 extern volatile unsigned short amiga_audio_min_period;
 
-static inline void amifb_video_off(void)
-{
-	if (amiga_chipset == CS_ECS || amiga_chipset == CS_AGA) {
-		/* program Denise/Lisa for a higher maximum play rate */
-		amiga_custom.htotal = 113;        /* 31 kHz */
-		amiga_custom.vtotal = 223;        /* 70 Hz */
-		amiga_custom.beamcon0 = 0x4390;   /* HARDDIS, VAR{BEAM,VSY,HSY,CSY}EN */
-		/* suspend the monitor */
-		amiga_custom.hsstrt = amiga_custom.hsstop = 116;
-		amiga_custom.vsstrt = amiga_custom.vsstop = 226;
-		amiga_audio_min_period = 57;
-	}
+static inline void amifb_video_off(void) {
+    if (amiga_chipset == CS_ECS || amiga_chipset == CS_AGA) {
+        /* program Denise/Lisa for a higher maximum play rate */
+        amiga_custom.htotal = 113;        /* 31 kHz */
+        amiga_custom.vtotal = 223;        /* 70 Hz */
+        amiga_custom.beamcon0 = 0x4390;   /* HARDDIS, VAR{BEAM,VSY,HSY,CSY}EN */
+        /* suspend the monitor */
+        amiga_custom.hsstrt = amiga_custom.hsstop = 116;
+        amiga_custom.vsstrt = amiga_custom.vsstop = 226;
+        amiga_audio_min_period = 57;
+    }
 }
 
 struct tod3000 {
-  unsigned int  :28, second2:4;	/* lower digit */
-  unsigned int  :28, second1:4;	/* upper digit */
-  unsigned int  :28, minute2:4;	/* lower digit */
-  unsigned int  :28, minute1:4;	/* upper digit */
-  unsigned int  :28, hour2:4;	/* lower digit */
-  unsigned int  :28, hour1:4;	/* upper digit */
-  unsigned int  :28, weekday:4;
-  unsigned int  :28, day2:4;	/* lower digit */
-  unsigned int  :28, day1:4;	/* upper digit */
-  unsigned int  :28, month2:4;	/* lower digit */
-  unsigned int  :28, month1:4;	/* upper digit */
-  unsigned int  :28, year2:4;	/* lower digit */
-  unsigned int  :28, year1:4;	/* upper digit */
-  unsigned int  :28, cntrl1:4;	/* control-byte 1 */
-  unsigned int  :28, cntrl2:4;	/* control-byte 2 */
-  unsigned int  :28, cntrl3:4;	/* control-byte 3 */
+    unsigned int  :28, second2:4;	/* lower digit */
+    unsigned int  :28, second1:4;	/* upper digit */
+    unsigned int  :28, minute2:4;	/* lower digit */
+    unsigned int  :28, minute1:4;	/* upper digit */
+    unsigned int  :28, hour2:4;	/* lower digit */
+    unsigned int  :28, hour1:4;	/* upper digit */
+    unsigned int  :28, weekday:4;
+    unsigned int  :28, day2:4;	/* lower digit */
+    unsigned int  :28, day1:4;	/* upper digit */
+    unsigned int  :28, month2:4;	/* lower digit */
+    unsigned int  :28, month1:4;	/* upper digit */
+    unsigned int  :28, year2:4;	/* lower digit */
+    unsigned int  :28, year1:4;	/* upper digit */
+    unsigned int  :28, cntrl1:4;	/* control-byte 1 */
+    unsigned int  :28, cntrl2:4;	/* control-byte 2 */
+    unsigned int  :28, cntrl3:4;	/* control-byte 3 */
 };
 #define TOD3000_CNTRL1_HOLD	0
 #define TOD3000_CNTRL1_FREE	9
 #define tod_3000 ((*(volatile struct tod3000 *)(zTwoBase+0xDC0000)))
 
 struct tod2000 {
-  unsigned int  :28, second2:4;	/* lower digit */
-  unsigned int  :28, second1:4;	/* upper digit */
-  unsigned int  :28, minute2:4;	/* lower digit */
-  unsigned int  :28, minute1:4;	/* upper digit */
-  unsigned int  :28, hour2:4;	/* lower digit */
-  unsigned int  :28, hour1:4;	/* upper digit */
-  unsigned int  :28, day2:4;	/* lower digit */
-  unsigned int  :28, day1:4;	/* upper digit */
-  unsigned int  :28, month2:4;	/* lower digit */
-  unsigned int  :28, month1:4;	/* upper digit */
-  unsigned int  :28, year2:4;	/* lower digit */
-  unsigned int  :28, year1:4;	/* upper digit */
-  unsigned int  :28, weekday:4;
-  unsigned int  :28, cntrl1:4;	/* control-byte 1 */
-  unsigned int  :28, cntrl2:4;	/* control-byte 2 */
-  unsigned int  :28, cntrl3:4;	/* control-byte 3 */
+    unsigned int  :28, second2:4;	/* lower digit */
+    unsigned int  :28, second1:4;	/* upper digit */
+    unsigned int  :28, minute2:4;	/* lower digit */
+    unsigned int  :28, minute1:4;	/* upper digit */
+    unsigned int  :28, hour2:4;	/* lower digit */
+    unsigned int  :28, hour1:4;	/* upper digit */
+    unsigned int  :28, day2:4;	/* lower digit */
+    unsigned int  :28, day1:4;	/* upper digit */
+    unsigned int  :28, month2:4;	/* lower digit */
+    unsigned int  :28, month1:4;	/* upper digit */
+    unsigned int  :28, year2:4;	/* lower digit */
+    unsigned int  :28, year1:4;	/* upper digit */
+    unsigned int  :28, weekday:4;
+    unsigned int  :28, cntrl1:4;	/* control-byte 1 */
+    unsigned int  :28, cntrl2:4;	/* control-byte 2 */
+    unsigned int  :28, cntrl3:4;	/* control-byte 3 */
 };
 
 #define TOD2000_CNTRL1_HOLD	(1<<0)

@@ -9,7 +9,7 @@
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
  * the License for the specific language governing rights and
- * limitations under the License. 
+ * limitations under the License.
  *
  * The initial developer of the original code is David A. Hinds
  * <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
@@ -127,78 +127,71 @@
 #define rl_mem(socket)		((socket)->private[3])
 #define rl_config(socket)	((socket)->private[4])
 
-static void ricoh_zoom_video(struct pcmcia_socket *sock, int onoff)
-{
-        u8 reg;
-	struct yenta_socket *socket = container_of(sock, struct yenta_socket, socket);
+static void ricoh_zoom_video(struct pcmcia_socket *sock, int onoff) {
+    u8 reg;
+    struct yenta_socket *socket = container_of(sock, struct yenta_socket, socket);
 
-        reg = config_readb(socket, RL5C4XX_MISC_CONTROL);
-        if (onoff)
-                /* Zoom zoom, we will all go together, zoom zoom, zoom zoom */
-                reg |=  RL5C4XX_ZV_ENABLE;
-        else
-                reg &= ~RL5C4XX_ZV_ENABLE;
-	
-        config_writeb(socket, RL5C4XX_MISC_CONTROL, reg);
+    reg = config_readb(socket, RL5C4XX_MISC_CONTROL);
+    if (onoff)
+        /* Zoom zoom, we will all go together, zoom zoom, zoom zoom */
+        reg |=  RL5C4XX_ZV_ENABLE;
+    else
+        reg &= ~RL5C4XX_ZV_ENABLE;
+
+    config_writeb(socket, RL5C4XX_MISC_CONTROL, reg);
 }
 
-static void ricoh_set_zv(struct yenta_socket *socket)
-{
-        if(socket->dev->vendor == PCI_VENDOR_ID_RICOH)
-        {
-                switch(socket->dev->device)
-                {
-                        /* There may be more .. */
-		case  PCI_DEVICE_ID_RICOH_RL5C478:
-			socket->socket.zoom_video = ricoh_zoom_video;
-			break;  
-                }
+static void ricoh_set_zv(struct yenta_socket *socket) {
+    if(socket->dev->vendor == PCI_VENDOR_ID_RICOH) {
+        switch(socket->dev->device) {
+        /* There may be more .. */
+        case  PCI_DEVICE_ID_RICOH_RL5C478:
+            socket->socket.zoom_video = ricoh_zoom_video;
+            break;
         }
+    }
 }
 
-static void ricoh_save_state(struct yenta_socket *socket)
-{
-	rl_misc(socket) = config_readw(socket, RL5C4XX_MISC);
-	rl_ctl(socket) = config_readw(socket, RL5C4XX_16BIT_CTL);
-	rl_io(socket) = config_readw(socket, RL5C4XX_16BIT_IO_0);
-	rl_mem(socket) = config_readw(socket, RL5C4XX_16BIT_MEM_0);
-	rl_config(socket) = config_readw(socket, RL5C4XX_CONFIG);
+static void ricoh_save_state(struct yenta_socket *socket) {
+    rl_misc(socket) = config_readw(socket, RL5C4XX_MISC);
+    rl_ctl(socket) = config_readw(socket, RL5C4XX_16BIT_CTL);
+    rl_io(socket) = config_readw(socket, RL5C4XX_16BIT_IO_0);
+    rl_mem(socket) = config_readw(socket, RL5C4XX_16BIT_MEM_0);
+    rl_config(socket) = config_readw(socket, RL5C4XX_CONFIG);
 }
 
-static void ricoh_restore_state(struct yenta_socket *socket)
-{
-	config_writew(socket, RL5C4XX_MISC, rl_misc(socket));
-	config_writew(socket, RL5C4XX_16BIT_CTL, rl_ctl(socket));
-	config_writew(socket, RL5C4XX_16BIT_IO_0, rl_io(socket));
-	config_writew(socket, RL5C4XX_16BIT_MEM_0, rl_mem(socket));
-	config_writew(socket, RL5C4XX_CONFIG, rl_config(socket));
+static void ricoh_restore_state(struct yenta_socket *socket) {
+    config_writew(socket, RL5C4XX_MISC, rl_misc(socket));
+    config_writew(socket, RL5C4XX_16BIT_CTL, rl_ctl(socket));
+    config_writew(socket, RL5C4XX_16BIT_IO_0, rl_io(socket));
+    config_writew(socket, RL5C4XX_16BIT_MEM_0, rl_mem(socket));
+    config_writew(socket, RL5C4XX_CONFIG, rl_config(socket));
 }
 
 
 /*
  * Magic Ricoh initialization code..
  */
-static int ricoh_override(struct yenta_socket *socket)
-{
-	u16 config, ctl;
+static int ricoh_override(struct yenta_socket *socket) {
+    u16 config, ctl;
 
-	config = config_readw(socket, RL5C4XX_CONFIG);
+    config = config_readw(socket, RL5C4XX_CONFIG);
 
-	/* Set the default timings, don't trust the original values */
-	ctl = RL5C4XX_16CTL_IO_TIMING | RL5C4XX_16CTL_MEM_TIMING;
+    /* Set the default timings, don't trust the original values */
+    ctl = RL5C4XX_16CTL_IO_TIMING | RL5C4XX_16CTL_MEM_TIMING;
 
-	if(socket->dev->device < PCI_DEVICE_ID_RICOH_RL5C475) {
-		ctl |= RL5C46X_16CTL_LEVEL_1 | RL5C46X_16CTL_LEVEL_2;
-	} else {
-		config |= RL5C4XX_CONFIG_PREFETCH;
-	}
+    if(socket->dev->device < PCI_DEVICE_ID_RICOH_RL5C475) {
+        ctl |= RL5C46X_16CTL_LEVEL_1 | RL5C46X_16CTL_LEVEL_2;
+    } else {
+        config |= RL5C4XX_CONFIG_PREFETCH;
+    }
 
-	config_writew(socket, RL5C4XX_16BIT_CTL, ctl);
-	config_writew(socket, RL5C4XX_CONFIG, config);
+    config_writew(socket, RL5C4XX_16BIT_CTL, ctl);
+    config_writew(socket, RL5C4XX_CONFIG, config);
 
-	ricoh_set_zv(socket);
+    ricoh_set_zv(socket);
 
-	return 0;
+    return 0;
 }
 
 #endif /* CONFIG_CARDBUS */

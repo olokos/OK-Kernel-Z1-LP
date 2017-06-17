@@ -222,60 +222,60 @@
 /*====================================================================*/
 
 typedef struct scsi_info_t {
-	struct pcmcia_device	*p_dev;
-	struct Scsi_Host      *host;
-	int                    stop;
+    struct pcmcia_device	*p_dev;
+    struct Scsi_Host      *host;
+    int                    stop;
 } scsi_info_t;
 
 
 /* synchronous transfer negotiation data */
 typedef struct _sync_data {
-	unsigned int SyncNegotiation;
+    unsigned int SyncNegotiation;
 #define SYNC_NOT_YET 0
 #define SYNC_OK      1
 #define SYNC_NG      2
 
-	unsigned int  SyncPeriod;
-	unsigned int  SyncOffset;
-	unsigned char SyncRegister;
-	unsigned char AckWidth;
+    unsigned int  SyncPeriod;
+    unsigned int  SyncOffset;
+    unsigned char SyncRegister;
+    unsigned char AckWidth;
 } sync_data;
 
 typedef struct _nsp_hw_data {
-	unsigned int  BaseAddress;
-	unsigned int  NumAddress;
-	unsigned int  IrqNumber;
+    unsigned int  BaseAddress;
+    unsigned int  NumAddress;
+    unsigned int  IrqNumber;
 
-	unsigned long MmioAddress;
+    unsigned long MmioAddress;
 #define NSP_MMIO_OFFSET 0x0800
-	unsigned long MmioLength;
+    unsigned long MmioLength;
 
-	unsigned char ScsiClockDiv;
+    unsigned char ScsiClockDiv;
 
-	unsigned char TransferMode;
+    unsigned char TransferMode;
 
-	int           TimerCount;
-	int           SelectionTimeOut;
-	struct scsi_cmnd *CurrentSC;
-	//int           CurrnetTarget;
+    int           TimerCount;
+    int           SelectionTimeOut;
+    struct scsi_cmnd *CurrentSC;
+    //int           CurrnetTarget;
 
-	int           FifoCount;
+    int           FifoCount;
 
 #define MSGBUF_SIZE 20
-	unsigned char MsgBuffer[MSGBUF_SIZE];
-	int MsgLen;
+    unsigned char MsgBuffer[MSGBUF_SIZE];
+    int MsgLen;
 
 #define N_TARGET 8
-	sync_data     Sync[N_TARGET];
+    sync_data     Sync[N_TARGET];
 
-	char nspinfo[110];     /* description */
-	spinlock_t Lock;
+    char nspinfo[110];     /* description */
+    spinlock_t Lock;
 
-	scsi_info_t   *ScsiInfo; /* attach <-> detect glue */
+    scsi_info_t   *ScsiInfo; /* attach <-> detect glue */
 
 
 #ifdef NSP_DEBUG
-	int CmdId; /* Accepted command serial number.
+    int CmdId; /* Accepted command serial number.
 		      Used for debugging.             */
 #endif
 } nsp_hw_data;
@@ -293,12 +293,12 @@ static int        nsp_cs_config (struct pcmcia_device *link);
 static struct Scsi_Host *nsp_detect     (struct scsi_host_template *sht);
 static const  char      *nsp_info       (struct Scsi_Host *shpnt);
 static        int        nsp_proc_info  (
-	                                 struct Scsi_Host *host,
-					 char   *buffer,
-					 char  **start,
-					 off_t   offset,
-					 int     length,
-					 int     inout);
+    struct Scsi_Host *host,
+    char   *buffer,
+    char  **start,
+    off_t   offset,
+    int     length,
+    int     inout);
 static int nsp_queuecommand(struct Scsi_Host *h, struct scsi_cmnd *SCpnt);
 
 /* Error handler */
@@ -319,10 +319,10 @@ static int  nsp_nexus            (struct scsi_cmnd *SCpnt);
 static void nsp_scsi_done        (struct scsi_cmnd *SCpnt);
 static int  nsp_analyze_sdtr     (struct scsi_cmnd *SCpnt);
 static int  nsp_negate_signal    (struct scsi_cmnd *SCpnt,
-				  unsigned char mask, char *str);
+                                  unsigned char mask, char *str);
 static int  nsp_expect_signal    (struct scsi_cmnd *SCpnt,
-				  unsigned char current_phase,
-				  unsigned char  mask);
+                                  unsigned char current_phase,
+                                  unsigned char  mask);
 static int  nsp_xfer             (struct scsi_cmnd *SCpnt, int phase);
 static int  nsp_dataphase_bypass (struct scsi_cmnd *SCpnt);
 static int  nsp_reselected       (struct scsi_cmnd *SCpnt);
@@ -352,31 +352,31 @@ static void show_message (nsp_hw_data *data);
  * SCSI phase
  */
 enum _scsi_phase {
-	PH_UNDETERMINED ,
-	PH_ARBSTART     ,
-	PH_SELSTART     ,
-	PH_SELECTED     ,
-	PH_COMMAND      ,
-	PH_DATA         ,
-	PH_STATUS       ,
-	PH_MSG_IN       ,
-	PH_MSG_OUT      ,
-	PH_DISCONNECT   ,
-	PH_RESELECT     ,
-	PH_ABORT        ,
-	PH_RESET
+    PH_UNDETERMINED ,
+    PH_ARBSTART     ,
+    PH_SELSTART     ,
+    PH_SELECTED     ,
+    PH_COMMAND      ,
+    PH_DATA         ,
+    PH_STATUS       ,
+    PH_MSG_IN       ,
+    PH_MSG_OUT      ,
+    PH_DISCONNECT   ,
+    PH_RESELECT     ,
+    PH_ABORT        ,
+    PH_RESET
 };
 
 enum _data_in_out {
-	IO_UNKNOWN,
-	IO_IN,
-	IO_OUT
+    IO_UNKNOWN,
+    IO_IN,
+    IO_OUT
 };
 
 enum _burst_mode {
-	BURST_IO8   = 0,
-	BURST_IO32  = 1,
-	BURST_MEM32 = 2,
+    BURST_IO8   = 0,
+    BURST_IO32  = 1,
+    BURST_MEM32 = 2,
 };
 
 /**************************************************************************

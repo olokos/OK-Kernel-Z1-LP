@@ -18,9 +18,8 @@
 #include <irq.h>
 
 #ifdef CONFIG_I8259
-static inline int irq_canonicalize(int irq)
-{
-	return ((irq == I8259A_IRQ_BASE + 2) ? I8259A_IRQ_BASE + 9 : irq);
+static inline int irq_canonicalize(int irq) {
+    return ((irq == I8259A_IRQ_BASE + 2) ? I8259A_IRQ_BASE + 9 : irq);
 }
 #else
 #define irq_canonicalize(irq) (irq)	/* Sane hardware, sane code ... */
@@ -34,16 +33,14 @@ extern unsigned long irq_hwmask[];
 extern int setup_irq_smtc(unsigned int irq, struct irqaction * new,
                           unsigned long hwmask);
 
-static inline void smtc_im_ack_irq(unsigned int irq)
-{
-	if (irq_hwmask[irq] & ST0_IM)
-		set_c0_status(irq_hwmask[irq] & ST0_IM);
+static inline void smtc_im_ack_irq(unsigned int irq) {
+    if (irq_hwmask[irq] & ST0_IM)
+        set_c0_status(irq_hwmask[irq] & ST0_IM);
 }
 
 #else
 
-static inline void smtc_im_ack_irq(unsigned int irq)
-{
+static inline void smtc_im_ack_irq(unsigned int irq) {
 }
 
 #endif /* CONFIG_MIPS_MT_SMTC */
@@ -52,7 +49,7 @@ static inline void smtc_im_ack_irq(unsigned int irq)
 #include <linux/cpumask.h>
 
 extern int plat_set_irq_affinity(struct irq_data *d,
-				 const struct cpumask *affinity, bool force);
+                                 const struct cpumask *affinity, bool force);
 extern void smtc_forward_irq(struct irq_data *d);
 
 /*
@@ -66,29 +63,29 @@ extern void smtc_forward_irq(struct irq_data *d);
  * cpumask implementations, this version is optimistically assuming
  * that cpumask.h macro overhead is reasonable during interrupt dispatch.
  */
-static inline int handle_on_other_cpu(unsigned int irq)
-{
-	struct irq_data *d = irq_get_irq_data(irq);
+static inline int handle_on_other_cpu(unsigned int irq) {
+    struct irq_data *d = irq_get_irq_data(irq);
 
-	if (cpumask_test_cpu(smp_processor_id(), d->affinity))
-		return 0;
-	smtc_forward_irq(d);
-	return 1;
+    if (cpumask_test_cpu(smp_processor_id(), d->affinity))
+        return 0;
+    smtc_forward_irq(d);
+    return 1;
 }
 
 #else /* Not doing SMTC affinity */
 
-static inline int handle_on_other_cpu(unsigned int irq) { return 0; }
+static inline int handle_on_other_cpu(unsigned int irq) {
+    return 0;
+}
 
 #endif /* CONFIG_MIPS_MT_SMTC_IRQAFF */
 
 #ifdef CONFIG_MIPS_MT_SMTC_IM_BACKSTOP
 
-static inline void smtc_im_backstop(unsigned int irq)
-{
-	if (irq_hwmask[irq] & 0x0000ff00)
-		write_c0_tccontext(read_c0_tccontext() &
-				   ~(irq_hwmask[irq] & 0x0000ff00));
+static inline void smtc_im_backstop(unsigned int irq) {
+    if (irq_hwmask[irq] & 0x0000ff00)
+        write_c0_tccontext(read_c0_tccontext() &
+                           ~(irq_hwmask[irq] & 0x0000ff00));
 }
 
 /*
@@ -97,21 +94,19 @@ static inline void smtc_im_backstop(unsigned int irq)
  * functions will take over re-enabling the low-level mask.
  * Otherwise it will be done on return from exception.
  */
-static inline int smtc_handle_on_other_cpu(unsigned int irq)
-{
-	int ret = handle_on_other_cpu(irq);
+static inline int smtc_handle_on_other_cpu(unsigned int irq) {
+    int ret = handle_on_other_cpu(irq);
 
-	if (!ret)
-		smtc_im_backstop(irq);
-	return ret;
+    if (!ret)
+        smtc_im_backstop(irq);
+    return ret;
 }
 
 #else
 
 static inline void smtc_im_backstop(unsigned int irq) { }
-static inline int smtc_handle_on_other_cpu(unsigned int irq)
-{
-	return handle_on_other_cpu(irq);
+static inline int smtc_handle_on_other_cpu(unsigned int irq) {
+    return handle_on_other_cpu(irq);
 }
 
 #endif

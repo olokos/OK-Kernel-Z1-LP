@@ -149,28 +149,28 @@ MODULE_LICENSE("GPL");
 
 #ifdef CONFIG_DEBUG_FS
 struct vmballoon_stats {
-	unsigned int timer;
+    unsigned int timer;
 
-	/* allocation statistics */
-	unsigned int alloc;
-	unsigned int alloc_fail;
-	unsigned int sleep_alloc;
-	unsigned int sleep_alloc_fail;
-	unsigned int refused_alloc;
-	unsigned int refused_free;
-	unsigned int free;
+    /* allocation statistics */
+    unsigned int alloc;
+    unsigned int alloc_fail;
+    unsigned int sleep_alloc;
+    unsigned int sleep_alloc_fail;
+    unsigned int refused_alloc;
+    unsigned int refused_free;
+    unsigned int free;
 
-	/* monitor operations */
-	unsigned int lock;
-	unsigned int lock_fail;
-	unsigned int unlock;
-	unsigned int unlock_fail;
-	unsigned int target;
-	unsigned int target_fail;
-	unsigned int start;
-	unsigned int start_fail;
-	unsigned int guest_type;
-	unsigned int guest_type_fail;
+    /* monitor operations */
+    unsigned int lock;
+    unsigned int lock_fail;
+    unsigned int unlock;
+    unsigned int unlock_fail;
+    unsigned int target;
+    unsigned int target_fail;
+    unsigned int start;
+    unsigned int start_fail;
+    unsigned int guest_type;
+    unsigned int guest_type_fail;
 };
 
 #define STATS_INC(stat) (stat)++
@@ -180,38 +180,38 @@ struct vmballoon_stats {
 
 struct vmballoon {
 
-	/* list of reserved physical pages */
-	struct list_head pages;
+    /* list of reserved physical pages */
+    struct list_head pages;
 
-	/* transient list of non-balloonable pages */
-	struct list_head refused_pages;
-	unsigned int n_refused_pages;
+    /* transient list of non-balloonable pages */
+    struct list_head refused_pages;
+    unsigned int n_refused_pages;
 
-	/* balloon size in pages */
-	unsigned int size;
-	unsigned int target;
+    /* balloon size in pages */
+    unsigned int size;
+    unsigned int target;
 
-	/* reset flag */
-	bool reset_required;
+    /* reset flag */
+    bool reset_required;
 
-	/* adjustment rates (pages per second) */
-	unsigned int rate_alloc;
-	unsigned int rate_free;
+    /* adjustment rates (pages per second) */
+    unsigned int rate_alloc;
+    unsigned int rate_free;
 
-	/* slowdown page allocations for next few cycles */
-	unsigned int slow_allocation_cycles;
+    /* slowdown page allocations for next few cycles */
+    unsigned int slow_allocation_cycles;
 
 #ifdef CONFIG_DEBUG_FS
-	/* statistics */
-	struct vmballoon_stats stats;
+    /* statistics */
+    struct vmballoon_stats stats;
 
-	/* debugfs file exporting statistics */
-	struct dentry *dbg_entry;
+    /* debugfs file exporting statistics */
+    struct dentry *dbg_entry;
 #endif
 
-	struct sysinfo sysinfo;
+    struct sysinfo sysinfo;
 
-	struct delayed_work dwork;
+    struct delayed_work dwork;
 };
 
 static struct vmballoon balloon;
@@ -220,34 +220,32 @@ static struct vmballoon balloon;
  * Send "start" command to the host, communicating supported version
  * of the protocol.
  */
-static bool vmballoon_send_start(struct vmballoon *b)
-{
-	unsigned long status, dummy;
+static bool vmballoon_send_start(struct vmballoon *b) {
+    unsigned long status, dummy;
 
-	STATS_INC(b->stats.start);
+    STATS_INC(b->stats.start);
 
-	status = VMWARE_BALLOON_CMD(START, VMW_BALLOON_PROTOCOL_VERSION, dummy);
-	if (status == VMW_BALLOON_SUCCESS)
-		return true;
+    status = VMWARE_BALLOON_CMD(START, VMW_BALLOON_PROTOCOL_VERSION, dummy);
+    if (status == VMW_BALLOON_SUCCESS)
+        return true;
 
-	pr_debug("%s - failed, hv returns %ld\n", __func__, status);
-	STATS_INC(b->stats.start_fail);
-	return false;
+    pr_debug("%s - failed, hv returns %ld\n", __func__, status);
+    STATS_INC(b->stats.start_fail);
+    return false;
 }
 
-static bool vmballoon_check_status(struct vmballoon *b, unsigned long status)
-{
-	switch (status) {
-	case VMW_BALLOON_SUCCESS:
-		return true;
+static bool vmballoon_check_status(struct vmballoon *b, unsigned long status) {
+    switch (status) {
+    case VMW_BALLOON_SUCCESS:
+        return true;
 
-	case VMW_BALLOON_ERROR_RESET:
-		b->reset_required = true;
-		/* fall through */
+    case VMW_BALLOON_ERROR_RESET:
+        b->reset_required = true;
+    /* fall through */
 
-	default:
-		return false;
-	}
+    default:
+        return false;
+    }
 }
 
 /*
@@ -256,57 +254,55 @@ static bool vmballoon_check_status(struct vmballoon *b, unsigned long status)
  * is normally issued after sending "start" command and is part of
  * standard reset sequence.
  */
-static bool vmballoon_send_guest_id(struct vmballoon *b)
-{
-	unsigned long status, dummy;
+static bool vmballoon_send_guest_id(struct vmballoon *b) {
+    unsigned long status, dummy;
 
-	status = VMWARE_BALLOON_CMD(GUEST_ID, VMW_BALLOON_GUEST_ID, dummy);
+    status = VMWARE_BALLOON_CMD(GUEST_ID, VMW_BALLOON_GUEST_ID, dummy);
 
-	STATS_INC(b->stats.guest_type);
+    STATS_INC(b->stats.guest_type);
 
-	if (vmballoon_check_status(b, status))
-		return true;
+    if (vmballoon_check_status(b, status))
+        return true;
 
-	pr_debug("%s - failed, hv returns %ld\n", __func__, status);
-	STATS_INC(b->stats.guest_type_fail);
-	return false;
+    pr_debug("%s - failed, hv returns %ld\n", __func__, status);
+    STATS_INC(b->stats.guest_type_fail);
+    return false;
 }
 
 /*
  * Retrieve desired balloon size from the host.
  */
-static bool vmballoon_send_get_target(struct vmballoon *b, u32 *new_target)
-{
-	unsigned long status;
-	unsigned long target;
-	unsigned long limit;
-	u32 limit32;
+static bool vmballoon_send_get_target(struct vmballoon *b, u32 *new_target) {
+    unsigned long status;
+    unsigned long target;
+    unsigned long limit;
+    u32 limit32;
 
-	/*
-	 * si_meminfo() is cheap. Moreover, we want to provide dynamic
-	 * max balloon size later. So let us call si_meminfo() every
-	 * iteration.
-	 */
-	si_meminfo(&b->sysinfo);
-	limit = b->sysinfo.totalram;
+    /*
+     * si_meminfo() is cheap. Moreover, we want to provide dynamic
+     * max balloon size later. So let us call si_meminfo() every
+     * iteration.
+     */
+    si_meminfo(&b->sysinfo);
+    limit = b->sysinfo.totalram;
 
-	/* Ensure limit fits in 32-bits */
-	limit32 = (u32)limit;
-	if (limit != limit32)
-		return false;
+    /* Ensure limit fits in 32-bits */
+    limit32 = (u32)limit;
+    if (limit != limit32)
+        return false;
 
-	/* update stats */
-	STATS_INC(b->stats.target);
+    /* update stats */
+    STATS_INC(b->stats.target);
 
-	status = VMWARE_BALLOON_CMD(GET_TARGET, limit, target);
-	if (vmballoon_check_status(b, status)) {
-		*new_target = target;
-		return true;
-	}
+    status = VMWARE_BALLOON_CMD(GET_TARGET, limit, target);
+    if (vmballoon_check_status(b, status)) {
+        *new_target = target;
+        return true;
+    }
 
-	pr_debug("%s - failed, hv returns %ld\n", __func__, status);
-	STATS_INC(b->stats.target_fail);
-	return false;
+    pr_debug("%s - failed, hv returns %ld\n", __func__, status);
+    STATS_INC(b->stats.target_fail);
+    return false;
 }
 
 /*
@@ -315,48 +311,46 @@ static bool vmballoon_send_get_target(struct vmballoon *b, u32 *new_target)
  * check the return value and maybe submit a different page.
  */
 static int vmballoon_send_lock_page(struct vmballoon *b, unsigned long pfn,
-				     unsigned int *hv_status)
-{
-	unsigned long status, dummy;
-	u32 pfn32;
+                                    unsigned int *hv_status) {
+    unsigned long status, dummy;
+    u32 pfn32;
 
-	pfn32 = (u32)pfn;
-	if (pfn32 != pfn)
-		return -1;
+    pfn32 = (u32)pfn;
+    if (pfn32 != pfn)
+        return -1;
 
-	STATS_INC(b->stats.lock);
+    STATS_INC(b->stats.lock);
 
-	*hv_status = status = VMWARE_BALLOON_CMD(LOCK, pfn, dummy);
-	if (vmballoon_check_status(b, status))
-		return 0;
+    *hv_status = status = VMWARE_BALLOON_CMD(LOCK, pfn, dummy);
+    if (vmballoon_check_status(b, status))
+        return 0;
 
-	pr_debug("%s - ppn %lx, hv returns %ld\n", __func__, pfn, status);
-	STATS_INC(b->stats.lock_fail);
-	return 1;
+    pr_debug("%s - ppn %lx, hv returns %ld\n", __func__, pfn, status);
+    STATS_INC(b->stats.lock_fail);
+    return 1;
 }
 
 /*
  * Notify the host that guest intends to release given page back into
  * the pool of available (to the guest) pages.
  */
-static bool vmballoon_send_unlock_page(struct vmballoon *b, unsigned long pfn)
-{
-	unsigned long status, dummy;
-	u32 pfn32;
+static bool vmballoon_send_unlock_page(struct vmballoon *b, unsigned long pfn) {
+    unsigned long status, dummy;
+    u32 pfn32;
 
-	pfn32 = (u32)pfn;
-	if (pfn32 != pfn)
-		return false;
+    pfn32 = (u32)pfn;
+    if (pfn32 != pfn)
+        return false;
 
-	STATS_INC(b->stats.unlock);
+    STATS_INC(b->stats.unlock);
 
-	status = VMWARE_BALLOON_CMD(UNLOCK, pfn, dummy);
-	if (vmballoon_check_status(b, status))
-		return true;
+    status = VMWARE_BALLOON_CMD(UNLOCK, pfn, dummy);
+    if (vmballoon_check_status(b, status))
+        return true;
 
-	pr_debug("%s - ppn %lx, hv returns %ld\n", __func__, pfn, status);
-	STATS_INC(b->stats.unlock_fail);
-	return false;
+    pr_debug("%s - ppn %lx, hv returns %ld\n", __func__, pfn, status);
+    STATS_INC(b->stats.unlock_fail);
+    return false;
 }
 
 /*
@@ -365,22 +359,21 @@ static bool vmballoon_send_unlock_page(struct vmballoon *b, unsigned long pfn)
  * Unlike normal "deflate" we do not (shall not) notify host of the pages
  * being released.
  */
-static void vmballoon_pop(struct vmballoon *b)
-{
-	struct page *page, *next;
-	unsigned int count = 0;
+static void vmballoon_pop(struct vmballoon *b) {
+    struct page *page, *next;
+    unsigned int count = 0;
 
-	list_for_each_entry_safe(page, next, &b->pages, lru) {
-		list_del(&page->lru);
-		__free_page(page);
-		STATS_INC(b->stats.free);
-		b->size--;
+    list_for_each_entry_safe(page, next, &b->pages, lru) {
+        list_del(&page->lru);
+        __free_page(page);
+        STATS_INC(b->stats.free);
+        b->size--;
 
-		if (++count >= b->rate_free) {
-			count = 0;
-			cond_resched();
-		}
-	}
+        if (++count >= b->rate_free) {
+            count = 0;
+            cond_resched();
+        }
+    }
 }
 
 /*
@@ -388,16 +381,15 @@ static void vmballoon_pop(struct vmballoon *b)
  * is not  empty) and then restarting protocol. This operation normally
  * happens when host responds with VMW_BALLOON_ERROR_RESET to a command.
  */
-static void vmballoon_reset(struct vmballoon *b)
-{
-	/* free all pages, skipping monitor unlock */
-	vmballoon_pop(b);
+static void vmballoon_reset(struct vmballoon *b) {
+    /* free all pages, skipping monitor unlock */
+    vmballoon_pop(b);
 
-	if (vmballoon_send_start(b)) {
-		b->reset_required = false;
-		if (!vmballoon_send_guest_id(b))
-			pr_err("failed to send guest ID to the host\n");
-	}
+    if (vmballoon_send_start(b)) {
+        b->reset_required = false;
+        if (!vmballoon_send_guest_id(b))
+            pr_err("failed to send guest ID to the host\n");
+    }
 }
 
 /*
@@ -406,58 +398,57 @@ static void vmballoon_reset(struct vmballoon *b)
  * is satisfied. "Refused" pages are released at the end of inflation cycle
  * (when we allocate b->rate_alloc pages).
  */
-static int vmballoon_reserve_page(struct vmballoon *b, bool can_sleep)
-{
-	struct page *page;
-	gfp_t flags;
-	unsigned int hv_status;
-	int locked;
-	flags = can_sleep ? VMW_PAGE_ALLOC_CANSLEEP : VMW_PAGE_ALLOC_NOSLEEP;
+static int vmballoon_reserve_page(struct vmballoon *b, bool can_sleep) {
+    struct page *page;
+    gfp_t flags;
+    unsigned int hv_status;
+    int locked;
+    flags = can_sleep ? VMW_PAGE_ALLOC_CANSLEEP : VMW_PAGE_ALLOC_NOSLEEP;
 
-	do {
-		if (!can_sleep)
-			STATS_INC(b->stats.alloc);
-		else
-			STATS_INC(b->stats.sleep_alloc);
+    do {
+        if (!can_sleep)
+            STATS_INC(b->stats.alloc);
+        else
+            STATS_INC(b->stats.sleep_alloc);
 
-		page = alloc_page(flags);
-		if (!page) {
-			if (!can_sleep)
-				STATS_INC(b->stats.alloc_fail);
-			else
-				STATS_INC(b->stats.sleep_alloc_fail);
-			return -ENOMEM;
-		}
+        page = alloc_page(flags);
+        if (!page) {
+            if (!can_sleep)
+                STATS_INC(b->stats.alloc_fail);
+            else
+                STATS_INC(b->stats.sleep_alloc_fail);
+            return -ENOMEM;
+        }
 
-		/* inform monitor */
-		locked = vmballoon_send_lock_page(b, page_to_pfn(page), &hv_status);
-		if (locked > 0) {
-			STATS_INC(b->stats.refused_alloc);
+        /* inform monitor */
+        locked = vmballoon_send_lock_page(b, page_to_pfn(page), &hv_status);
+        if (locked > 0) {
+            STATS_INC(b->stats.refused_alloc);
 
-			if (hv_status == VMW_BALLOON_ERROR_RESET ||
-			    hv_status == VMW_BALLOON_ERROR_PPN_NOTNEEDED) {
-				__free_page(page);
-				return -EIO;
-			}
+            if (hv_status == VMW_BALLOON_ERROR_RESET ||
+                    hv_status == VMW_BALLOON_ERROR_PPN_NOTNEEDED) {
+                __free_page(page);
+                return -EIO;
+            }
 
-			/*
-			 * Place page on the list of non-balloonable pages
-			 * and retry allocation, unless we already accumulated
-			 * too many of them, in which case take a breather.
-			 */
-			list_add(&page->lru, &b->refused_pages);
-			if (++b->n_refused_pages >= VMW_BALLOON_MAX_REFUSED)
-				return -EIO;
-		}
-	} while (locked != 0);
+            /*
+             * Place page on the list of non-balloonable pages
+             * and retry allocation, unless we already accumulated
+             * too many of them, in which case take a breather.
+             */
+            list_add(&page->lru, &b->refused_pages);
+            if (++b->n_refused_pages >= VMW_BALLOON_MAX_REFUSED)
+                return -EIO;
+        }
+    } while (locked != 0);
 
-	/* track allocated page */
-	list_add(&page->lru, &b->pages);
+    /* track allocated page */
+    list_add(&page->lru, &b->pages);
 
-	/* update balloon size */
-	b->size++;
+    /* update balloon size */
+    b->size++;
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -465,38 +456,36 @@ static int vmballoon_reserve_page(struct vmballoon *b, bool can_sleep)
  * the host so it can make sure the page will be available for the guest
  * to use, if needed.
  */
-static int vmballoon_release_page(struct vmballoon *b, struct page *page)
-{
-	if (!vmballoon_send_unlock_page(b, page_to_pfn(page)))
-		return -EIO;
+static int vmballoon_release_page(struct vmballoon *b, struct page *page) {
+    if (!vmballoon_send_unlock_page(b, page_to_pfn(page)))
+        return -EIO;
 
-	list_del(&page->lru);
+    list_del(&page->lru);
 
-	/* deallocate page */
-	__free_page(page);
-	STATS_INC(b->stats.free);
+    /* deallocate page */
+    __free_page(page);
+    STATS_INC(b->stats.free);
 
-	/* update balloon size */
-	b->size--;
+    /* update balloon size */
+    b->size--;
 
-	return 0;
+    return 0;
 }
 
 /*
  * Release pages that were allocated while attempting to inflate the
  * balloon but were refused by the host for one reason or another.
  */
-static void vmballoon_release_refused_pages(struct vmballoon *b)
-{
-	struct page *page, *next;
+static void vmballoon_release_refused_pages(struct vmballoon *b) {
+    struct page *page, *next;
 
-	list_for_each_entry_safe(page, next, &b->refused_pages, lru) {
-		list_del(&page->lru);
-		__free_page(page);
-		STATS_INC(b->stats.refused_free);
-	}
+    list_for_each_entry_safe(page, next, &b->refused_pages, lru) {
+        list_del(&page->lru);
+        __free_page(page);
+        STATS_INC(b->stats.refused_free);
+    }
 
-	b->n_refused_pages = 0;
+    b->n_refused_pages = 0;
 }
 
 /*
@@ -504,181 +493,178 @@ static void vmballoon_release_refused_pages(struct vmballoon *b)
  * the rate of allocation to make sure we are not choking the rest of the
  * system.
  */
-static void vmballoon_inflate(struct vmballoon *b)
-{
-	unsigned int goal;
-	unsigned int rate;
-	unsigned int i;
-	unsigned int allocations = 0;
-	int error = 0;
-	bool alloc_can_sleep = false;
+static void vmballoon_inflate(struct vmballoon *b) {
+    unsigned int goal;
+    unsigned int rate;
+    unsigned int i;
+    unsigned int allocations = 0;
+    int error = 0;
+    bool alloc_can_sleep = false;
 
-	pr_debug("%s - size: %d, target %d\n", __func__, b->size, b->target);
+    pr_debug("%s - size: %d, target %d\n", __func__, b->size, b->target);
 
-	/*
-	 * First try NOSLEEP page allocations to inflate balloon.
-	 *
-	 * If we do not throttle nosleep allocations, we can drain all
-	 * free pages in the guest quickly (if the balloon target is high).
-	 * As a side-effect, draining free pages helps to inform (force)
-	 * the guest to start swapping if balloon target is not met yet,
-	 * which is a desired behavior. However, balloon driver can consume
-	 * all available CPU cycles if too many pages are allocated in a
-	 * second. Therefore, we throttle nosleep allocations even when
-	 * the guest is not under memory pressure. OTOH, if we have already
-	 * predicted that the guest is under memory pressure, then we
-	 * slowdown page allocations considerably.
-	 */
+    /*
+     * First try NOSLEEP page allocations to inflate balloon.
+     *
+     * If we do not throttle nosleep allocations, we can drain all
+     * free pages in the guest quickly (if the balloon target is high).
+     * As a side-effect, draining free pages helps to inform (force)
+     * the guest to start swapping if balloon target is not met yet,
+     * which is a desired behavior. However, balloon driver can consume
+     * all available CPU cycles if too many pages are allocated in a
+     * second. Therefore, we throttle nosleep allocations even when
+     * the guest is not under memory pressure. OTOH, if we have already
+     * predicted that the guest is under memory pressure, then we
+     * slowdown page allocations considerably.
+     */
 
-	goal = b->target - b->size;
-	/*
-	 * Start with no sleep allocation rate which may be higher
-	 * than sleeping allocation rate.
-	 */
-	rate = b->slow_allocation_cycles ?
-			b->rate_alloc : VMW_BALLOON_NOSLEEP_ALLOC_MAX;
+    goal = b->target - b->size;
+    /*
+     * Start with no sleep allocation rate which may be higher
+     * than sleeping allocation rate.
+     */
+    rate = b->slow_allocation_cycles ?
+           b->rate_alloc : VMW_BALLOON_NOSLEEP_ALLOC_MAX;
 
-	pr_debug("%s - goal: %d, no-sleep rate: %d, sleep rate: %d\n",
-		 __func__, goal, rate, b->rate_alloc);
+    pr_debug("%s - goal: %d, no-sleep rate: %d, sleep rate: %d\n",
+             __func__, goal, rate, b->rate_alloc);
 
-	for (i = 0; i < goal; i++) {
+    for (i = 0; i < goal; i++) {
 
-		error = vmballoon_reserve_page(b, alloc_can_sleep);
-		if (error) {
-			if (error != -ENOMEM) {
-				/*
-				 * Not a page allocation failure, stop this
-				 * cycle. Maybe we'll get new target from
-				 * the host soon.
-				 */
-				break;
-			}
+        error = vmballoon_reserve_page(b, alloc_can_sleep);
+        if (error) {
+            if (error != -ENOMEM) {
+                /*
+                 * Not a page allocation failure, stop this
+                 * cycle. Maybe we'll get new target from
+                 * the host soon.
+                 */
+                break;
+            }
 
-			if (alloc_can_sleep) {
-				/*
-				 * CANSLEEP page allocation failed, so guest
-				 * is under severe memory pressure. Quickly
-				 * decrease allocation rate.
-				 */
-				b->rate_alloc = max(b->rate_alloc / 2,
-						    VMW_BALLOON_RATE_ALLOC_MIN);
-				break;
-			}
+            if (alloc_can_sleep) {
+                /*
+                 * CANSLEEP page allocation failed, so guest
+                 * is under severe memory pressure. Quickly
+                 * decrease allocation rate.
+                 */
+                b->rate_alloc = max(b->rate_alloc / 2,
+                                    VMW_BALLOON_RATE_ALLOC_MIN);
+                break;
+            }
 
-			/*
-			 * NOSLEEP page allocation failed, so the guest is
-			 * under memory pressure. Let us slow down page
-			 * allocations for next few cycles so that the guest
-			 * gets out of memory pressure. Also, if we already
-			 * allocated b->rate_alloc pages, let's pause,
-			 * otherwise switch to sleeping allocations.
-			 */
-			b->slow_allocation_cycles = VMW_BALLOON_SLOW_CYCLES;
+            /*
+             * NOSLEEP page allocation failed, so the guest is
+             * under memory pressure. Let us slow down page
+             * allocations for next few cycles so that the guest
+             * gets out of memory pressure. Also, if we already
+             * allocated b->rate_alloc pages, let's pause,
+             * otherwise switch to sleeping allocations.
+             */
+            b->slow_allocation_cycles = VMW_BALLOON_SLOW_CYCLES;
 
-			if (i >= b->rate_alloc)
-				break;
+            if (i >= b->rate_alloc)
+                break;
 
-			alloc_can_sleep = true;
-			/* Lower rate for sleeping allocations. */
-			rate = b->rate_alloc;
-		}
+            alloc_can_sleep = true;
+            /* Lower rate for sleeping allocations. */
+            rate = b->rate_alloc;
+        }
 
-		if (++allocations > VMW_BALLOON_YIELD_THRESHOLD) {
-			cond_resched();
-			allocations = 0;
-		}
+        if (++allocations > VMW_BALLOON_YIELD_THRESHOLD) {
+            cond_resched();
+            allocations = 0;
+        }
 
-		if (i >= rate) {
-			/* We allocated enough pages, let's take a break. */
-			break;
-		}
-	}
+        if (i >= rate) {
+            /* We allocated enough pages, let's take a break. */
+            break;
+        }
+    }
 
-	/*
-	 * We reached our goal without failures so try increasing
-	 * allocation rate.
-	 */
-	if (error == 0 && i >= b->rate_alloc) {
-		unsigned int mult = i / b->rate_alloc;
+    /*
+     * We reached our goal without failures so try increasing
+     * allocation rate.
+     */
+    if (error == 0 && i >= b->rate_alloc) {
+        unsigned int mult = i / b->rate_alloc;
 
-		b->rate_alloc =
-			min(b->rate_alloc + mult * VMW_BALLOON_RATE_ALLOC_INC,
-			    VMW_BALLOON_RATE_ALLOC_MAX);
-	}
+        b->rate_alloc =
+            min(b->rate_alloc + mult * VMW_BALLOON_RATE_ALLOC_INC,
+                VMW_BALLOON_RATE_ALLOC_MAX);
+    }
 
-	vmballoon_release_refused_pages(b);
+    vmballoon_release_refused_pages(b);
 }
 
 /*
  * Decrease the size of the balloon allowing guest to use more memory.
  */
-static void vmballoon_deflate(struct vmballoon *b)
-{
-	struct page *page, *next;
-	unsigned int i = 0;
-	unsigned int goal;
-	int error;
+static void vmballoon_deflate(struct vmballoon *b) {
+    struct page *page, *next;
+    unsigned int i = 0;
+    unsigned int goal;
+    int error;
 
-	pr_debug("%s - size: %d, target %d\n", __func__, b->size, b->target);
+    pr_debug("%s - size: %d, target %d\n", __func__, b->size, b->target);
 
-	/* limit deallocation rate */
-	goal = min(b->size - b->target, b->rate_free);
+    /* limit deallocation rate */
+    goal = min(b->size - b->target, b->rate_free);
 
-	pr_debug("%s - goal: %d, rate: %d\n", __func__, goal, b->rate_free);
+    pr_debug("%s - goal: %d, rate: %d\n", __func__, goal, b->rate_free);
 
-	/* free pages to reach target */
-	list_for_each_entry_safe(page, next, &b->pages, lru) {
-		error = vmballoon_release_page(b, page);
-		if (error) {
-			/* quickly decrease rate in case of error */
-			b->rate_free = max(b->rate_free / 2,
-					   VMW_BALLOON_RATE_FREE_MIN);
-			return;
-		}
+    /* free pages to reach target */
+    list_for_each_entry_safe(page, next, &b->pages, lru) {
+        error = vmballoon_release_page(b, page);
+        if (error) {
+            /* quickly decrease rate in case of error */
+            b->rate_free = max(b->rate_free / 2,
+                               VMW_BALLOON_RATE_FREE_MIN);
+            return;
+        }
 
-		if (++i >= goal)
-			break;
-	}
+        if (++i >= goal)
+            break;
+    }
 
-	/* slowly increase rate if there were no errors */
-	b->rate_free = min(b->rate_free + VMW_BALLOON_RATE_FREE_INC,
-			   VMW_BALLOON_RATE_FREE_MAX);
+    /* slowly increase rate if there were no errors */
+    b->rate_free = min(b->rate_free + VMW_BALLOON_RATE_FREE_INC,
+                       VMW_BALLOON_RATE_FREE_MAX);
 }
 
 /*
  * Balloon work function: reset protocol, if needed, get the new size and
  * adjust balloon as needed. Repeat in 1 sec.
  */
-static void vmballoon_work(struct work_struct *work)
-{
-	struct delayed_work *dwork = to_delayed_work(work);
-	struct vmballoon *b = container_of(dwork, struct vmballoon, dwork);
-	unsigned int target;
+static void vmballoon_work(struct work_struct *work) {
+    struct delayed_work *dwork = to_delayed_work(work);
+    struct vmballoon *b = container_of(dwork, struct vmballoon, dwork);
+    unsigned int target;
 
-	STATS_INC(b->stats.timer);
+    STATS_INC(b->stats.timer);
 
-	if (b->reset_required)
-		vmballoon_reset(b);
+    if (b->reset_required)
+        vmballoon_reset(b);
 
-	if (b->slow_allocation_cycles > 0)
-		b->slow_allocation_cycles--;
+    if (b->slow_allocation_cycles > 0)
+        b->slow_allocation_cycles--;
 
-	if (vmballoon_send_get_target(b, &target)) {
-		/* update target, adjust size */
-		b->target = target;
+    if (vmballoon_send_get_target(b, &target)) {
+        /* update target, adjust size */
+        b->target = target;
 
-		if (b->size < target)
-			vmballoon_inflate(b);
-		else if (b->size > target)
-			vmballoon_deflate(b);
-	}
+        if (b->size < target)
+            vmballoon_inflate(b);
+        else if (b->size > target)
+            vmballoon_deflate(b);
+    }
 
-	/*
-	 * We are using a freezable workqueue so that balloon operations are
-	 * stopped while the system transitions to/from sleep/hibernation.
-	 */
-	queue_delayed_work(system_freezable_wq,
-			   dwork, round_jiffies_relative(HZ));
+    /*
+     * We are using a freezable workqueue so that balloon operations are
+     * stopped while the system transitions to/from sleep/hibernation.
+     */
+    queue_delayed_work(system_freezable_wq,
+                       dwork, round_jiffies_relative(HZ));
 }
 
 /*
@@ -686,153 +672,145 @@ static void vmballoon_work(struct work_struct *work)
  */
 #ifdef CONFIG_DEBUG_FS
 
-static int vmballoon_debug_show(struct seq_file *f, void *offset)
-{
-	struct vmballoon *b = f->private;
-	struct vmballoon_stats *stats = &b->stats;
+static int vmballoon_debug_show(struct seq_file *f, void *offset) {
+    struct vmballoon *b = f->private;
+    struct vmballoon_stats *stats = &b->stats;
 
-	/* format size info */
-	seq_printf(f,
-		   "target:             %8d pages\n"
-		   "current:            %8d pages\n",
-		   b->target, b->size);
+    /* format size info */
+    seq_printf(f,
+               "target:             %8d pages\n"
+               "current:            %8d pages\n",
+               b->target, b->size);
 
-	/* format rate info */
-	seq_printf(f,
-		   "rateNoSleepAlloc:   %8d pages/sec\n"
-		   "rateSleepAlloc:     %8d pages/sec\n"
-		   "rateFree:           %8d pages/sec\n",
-		   VMW_BALLOON_NOSLEEP_ALLOC_MAX,
-		   b->rate_alloc, b->rate_free);
+    /* format rate info */
+    seq_printf(f,
+               "rateNoSleepAlloc:   %8d pages/sec\n"
+               "rateSleepAlloc:     %8d pages/sec\n"
+               "rateFree:           %8d pages/sec\n",
+               VMW_BALLOON_NOSLEEP_ALLOC_MAX,
+               b->rate_alloc, b->rate_free);
 
-	seq_printf(f,
-		   "\n"
-		   "timer:              %8u\n"
-		   "start:              %8u (%4u failed)\n"
-		   "guestType:          %8u (%4u failed)\n"
-		   "lock:               %8u (%4u failed)\n"
-		   "unlock:             %8u (%4u failed)\n"
-		   "target:             %8u (%4u failed)\n"
-		   "primNoSleepAlloc:   %8u (%4u failed)\n"
-		   "primCanSleepAlloc:  %8u (%4u failed)\n"
-		   "primFree:           %8u\n"
-		   "errAlloc:           %8u\n"
-		   "errFree:            %8u\n",
-		   stats->timer,
-		   stats->start, stats->start_fail,
-		   stats->guest_type, stats->guest_type_fail,
-		   stats->lock,  stats->lock_fail,
-		   stats->unlock, stats->unlock_fail,
-		   stats->target, stats->target_fail,
-		   stats->alloc, stats->alloc_fail,
-		   stats->sleep_alloc, stats->sleep_alloc_fail,
-		   stats->free,
-		   stats->refused_alloc, stats->refused_free);
+    seq_printf(f,
+               "\n"
+               "timer:              %8u\n"
+               "start:              %8u (%4u failed)\n"
+               "guestType:          %8u (%4u failed)\n"
+               "lock:               %8u (%4u failed)\n"
+               "unlock:             %8u (%4u failed)\n"
+               "target:             %8u (%4u failed)\n"
+               "primNoSleepAlloc:   %8u (%4u failed)\n"
+               "primCanSleepAlloc:  %8u (%4u failed)\n"
+               "primFree:           %8u\n"
+               "errAlloc:           %8u\n"
+               "errFree:            %8u\n",
+               stats->timer,
+               stats->start, stats->start_fail,
+               stats->guest_type, stats->guest_type_fail,
+               stats->lock,  stats->lock_fail,
+               stats->unlock, stats->unlock_fail,
+               stats->target, stats->target_fail,
+               stats->alloc, stats->alloc_fail,
+               stats->sleep_alloc, stats->sleep_alloc_fail,
+               stats->free,
+               stats->refused_alloc, stats->refused_free);
 
-	return 0;
+    return 0;
 }
 
-static int vmballoon_debug_open(struct inode *inode, struct file *file)
-{
-	return single_open(file, vmballoon_debug_show, inode->i_private);
+static int vmballoon_debug_open(struct inode *inode, struct file *file) {
+    return single_open(file, vmballoon_debug_show, inode->i_private);
 }
 
 static const struct file_operations vmballoon_debug_fops = {
-	.owner		= THIS_MODULE,
-	.open		= vmballoon_debug_open,
-	.read		= seq_read,
-	.llseek		= seq_lseek,
-	.release	= single_release,
+    .owner		= THIS_MODULE,
+    .open		= vmballoon_debug_open,
+    .read		= seq_read,
+    .llseek		= seq_lseek,
+    .release	= single_release,
 };
 
-static int __init vmballoon_debugfs_init(struct vmballoon *b)
-{
-	int error;
+static int __init vmballoon_debugfs_init(struct vmballoon *b) {
+    int error;
 
-	b->dbg_entry = debugfs_create_file("vmmemctl", S_IRUGO, NULL, b,
-					   &vmballoon_debug_fops);
-	if (IS_ERR(b->dbg_entry)) {
-		error = PTR_ERR(b->dbg_entry);
-		pr_err("failed to create debugfs entry, error: %d\n", error);
-		return error;
-	}
+    b->dbg_entry = debugfs_create_file("vmmemctl", S_IRUGO, NULL, b,
+                                       &vmballoon_debug_fops);
+    if (IS_ERR(b->dbg_entry)) {
+        error = PTR_ERR(b->dbg_entry);
+        pr_err("failed to create debugfs entry, error: %d\n", error);
+        return error;
+    }
 
-	return 0;
+    return 0;
 }
 
-static void __exit vmballoon_debugfs_exit(struct vmballoon *b)
-{
-	debugfs_remove(b->dbg_entry);
+static void __exit vmballoon_debugfs_exit(struct vmballoon *b) {
+    debugfs_remove(b->dbg_entry);
 }
 
 #else
 
-static inline int vmballoon_debugfs_init(struct vmballoon *b)
-{
-	return 0;
+static inline int vmballoon_debugfs_init(struct vmballoon *b) {
+    return 0;
 }
 
-static inline void vmballoon_debugfs_exit(struct vmballoon *b)
-{
+static inline void vmballoon_debugfs_exit(struct vmballoon *b) {
 }
 
 #endif	/* CONFIG_DEBUG_FS */
 
-static int __init vmballoon_init(void)
-{
-	int error;
+static int __init vmballoon_init(void) {
+    int error;
 
-	/*
-	 * Check if we are running on VMware's hypervisor and bail out
-	 * if we are not.
-	 */
-	if (x86_hyper != &x86_hyper_vmware)
-		return -ENODEV;
+    /*
+     * Check if we are running on VMware's hypervisor and bail out
+     * if we are not.
+     */
+    if (x86_hyper != &x86_hyper_vmware)
+        return -ENODEV;
 
-	INIT_LIST_HEAD(&balloon.pages);
-	INIT_LIST_HEAD(&balloon.refused_pages);
+    INIT_LIST_HEAD(&balloon.pages);
+    INIT_LIST_HEAD(&balloon.refused_pages);
 
-	/* initialize rates */
-	balloon.rate_alloc = VMW_BALLOON_RATE_ALLOC_MAX;
-	balloon.rate_free = VMW_BALLOON_RATE_FREE_MAX;
+    /* initialize rates */
+    balloon.rate_alloc = VMW_BALLOON_RATE_ALLOC_MAX;
+    balloon.rate_free = VMW_BALLOON_RATE_FREE_MAX;
 
-	INIT_DELAYED_WORK(&balloon.dwork, vmballoon_work);
+    INIT_DELAYED_WORK(&balloon.dwork, vmballoon_work);
 
-	/*
-	 * Start balloon.
-	 */
-	if (!vmballoon_send_start(&balloon)) {
-		pr_err("failed to send start command to the host\n");
-		return -EIO;
-	}
+    /*
+     * Start balloon.
+     */
+    if (!vmballoon_send_start(&balloon)) {
+        pr_err("failed to send start command to the host\n");
+        return -EIO;
+    }
 
-	if (!vmballoon_send_guest_id(&balloon)) {
-		pr_err("failed to send guest ID to the host\n");
-		return -EIO;
-	}
+    if (!vmballoon_send_guest_id(&balloon)) {
+        pr_err("failed to send guest ID to the host\n");
+        return -EIO;
+    }
 
-	error = vmballoon_debugfs_init(&balloon);
-	if (error)
-		return error;
+    error = vmballoon_debugfs_init(&balloon);
+    if (error)
+        return error;
 
-	queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
+    queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
 
-	return 0;
+    return 0;
 }
 module_init(vmballoon_init);
 
-static void __exit vmballoon_exit(void)
-{
-	cancel_delayed_work_sync(&balloon.dwork);
+static void __exit vmballoon_exit(void) {
+    cancel_delayed_work_sync(&balloon.dwork);
 
-	vmballoon_debugfs_exit(&balloon);
+    vmballoon_debugfs_exit(&balloon);
 
-	/*
-	 * Deallocate all reserved memory, and reset connection with monitor.
-	 * Reset connection before deallocating memory to avoid potential for
-	 * additional spurious resets from guest touching deallocated pages.
-	 */
-	vmballoon_send_start(&balloon);
-	vmballoon_pop(&balloon);
+    /*
+     * Deallocate all reserved memory, and reset connection with monitor.
+     * Reset connection before deallocating memory to avoid potential for
+     * additional spurious resets from guest touching deallocated pages.
+     */
+    vmballoon_send_start(&balloon);
+    vmballoon_pop(&balloon);
 }
 module_exit(vmballoon_exit);

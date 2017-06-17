@@ -17,40 +17,39 @@
  * into it (errata #56). Usually the page is reserved anyways,
  * unless you have no PS/2 mouse plugged in.
  */
-void __init reserve_ebda_region(void)
-{
-	unsigned int lowmem, ebda_addr;
+void __init reserve_ebda_region(void) {
+    unsigned int lowmem, ebda_addr;
 
-	/* To determine the position of the EBDA and the */
-	/* end of conventional memory, we need to look at */
-	/* the BIOS data area. In a paravirtual environment */
-	/* that area is absent. We'll just have to assume */
-	/* that the paravirt case can handle memory setup */
-	/* correctly, without our help. */
-	if (paravirt_enabled())
-		return;
+    /* To determine the position of the EBDA and the */
+    /* end of conventional memory, we need to look at */
+    /* the BIOS data area. In a paravirtual environment */
+    /* that area is absent. We'll just have to assume */
+    /* that the paravirt case can handle memory setup */
+    /* correctly, without our help. */
+    if (paravirt_enabled())
+        return;
 
-	/* end of low (conventional) memory */
-	lowmem = *(unsigned short *)__va(BIOS_LOWMEM_KILOBYTES);
-	lowmem <<= 10;
+    /* end of low (conventional) memory */
+    lowmem = *(unsigned short *)__va(BIOS_LOWMEM_KILOBYTES);
+    lowmem <<= 10;
 
-	/* start of EBDA area */
-	ebda_addr = get_bios_ebda();
+    /* start of EBDA area */
+    ebda_addr = get_bios_ebda();
 
-	/* Fixup: bios puts an EBDA in the top 64K segment */
-	/* of conventional memory, but does not adjust lowmem. */
-	if ((lowmem - ebda_addr) <= 0x10000)
-		lowmem = ebda_addr;
+    /* Fixup: bios puts an EBDA in the top 64K segment */
+    /* of conventional memory, but does not adjust lowmem. */
+    if ((lowmem - ebda_addr) <= 0x10000)
+        lowmem = ebda_addr;
 
-	/* Fixup: bios does not report an EBDA at all. */
-	/* Some old Dells seem to need 4k anyhow (bugzilla 2990) */
-	if ((ebda_addr == 0) && (lowmem >= 0x9f000))
-		lowmem = 0x9f000;
+    /* Fixup: bios does not report an EBDA at all. */
+    /* Some old Dells seem to need 4k anyhow (bugzilla 2990) */
+    if ((ebda_addr == 0) && (lowmem >= 0x9f000))
+        lowmem = 0x9f000;
 
-	/* Paranoia: should never happen, but... */
-	if ((lowmem == 0) || (lowmem >= 0x100000))
-		lowmem = 0x9f000;
+    /* Paranoia: should never happen, but... */
+    if ((lowmem == 0) || (lowmem >= 0x100000))
+        lowmem = 0x9f000;
 
-	/* reserve all memory between lowmem and the 1MB mark */
-	memblock_reserve(lowmem, 0x100000 - lowmem);
+    /* reserve all memory between lowmem and the 1MB mark */
+    memblock_reserve(lowmem, 0x100000 - lowmem);
 }

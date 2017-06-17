@@ -70,9 +70,9 @@
 #define PREV_FEATURES_END		(1 << 20)
 
 enum preview_input_entity {
-	PREVIEW_INPUT_NONE,
-	PREVIEW_INPUT_CCDC,
-	PREVIEW_INPUT_MEMORY,
+    PREVIEW_INPUT_NONE,
+    PREVIEW_INPUT_CCDC,
+    PREVIEW_INPUT_MEMORY,
 };
 
 #define PREVIEW_OUTPUT_RESIZER		(1 << 1)
@@ -80,10 +80,10 @@ enum preview_input_entity {
 
 /* Configure byte layout of YUV image */
 enum preview_ycpos_mode {
-	YCPOS_YCrYCb = 0,
-	YCPOS_YCbYCr = 1,
-	YCPOS_CbYCrY = 2,
-	YCPOS_CrYCbY = 3
+    YCPOS_YCrYCb = 0,
+    YCPOS_YCbYCr = 1,
+    YCPOS_CbYCrY = 2,
+    YCPOS_CrYCbY = 3
 };
 
 /*
@@ -105,21 +105,21 @@ enum preview_ycpos_mode {
  * @brightness: Brightness.
  */
 struct prev_params {
-	u32 features;
-	struct omap3isp_prev_cfa cfa;
-	struct omap3isp_prev_csup csup;
-	struct omap3isp_prev_luma luma;
-	struct omap3isp_prev_nf nf;
-	struct omap3isp_prev_dcor dcor;
-	struct omap3isp_prev_gtables gamma;
-	struct omap3isp_prev_wbal wbal;
-	struct omap3isp_prev_blkadj blk_adj;
-	struct omap3isp_prev_rgbtorgb rgb2rgb;
-	struct omap3isp_prev_csc rgb2ycbcr;
-	struct omap3isp_prev_hmed hmed;
-	struct omap3isp_prev_yclimit yclimit;
-	u8 contrast;
-	u8 brightness;
+    u32 features;
+    struct omap3isp_prev_cfa cfa;
+    struct omap3isp_prev_csup csup;
+    struct omap3isp_prev_luma luma;
+    struct omap3isp_prev_nf nf;
+    struct omap3isp_prev_dcor dcor;
+    struct omap3isp_prev_gtables gamma;
+    struct omap3isp_prev_wbal wbal;
+    struct omap3isp_prev_blkadj blk_adj;
+    struct omap3isp_prev_rgbtorgb rgb2rgb;
+    struct omap3isp_prev_csc rgb2ycbcr;
+    struct omap3isp_prev_hmed hmed;
+    struct omap3isp_prev_yclimit yclimit;
+    u8 contrast;
+    u8 brightness;
 };
 
 /*
@@ -133,13 +133,13 @@ struct prev_params {
  * @wbal: Pointer to colour and digital gain configuration.
  */
 struct isptables_update {
-	u32 update;
-	u32 flag;
-	struct omap3isp_prev_nf *nf;
-	u32 *lsc;
-	struct omap3isp_prev_gtables *gamma;
-	struct omap3isp_prev_cfa *cfa;
-	struct omap3isp_prev_wbal *wbal;
+    u32 update;
+    u32 flag;
+    struct omap3isp_prev_nf *nf;
+    u32 *lsc;
+    struct omap3isp_prev_gtables *gamma;
+    struct omap3isp_prev_cfa *cfa;
+    struct omap3isp_prev_wbal *wbal;
 };
 
 /* Sink and source previewer pads */
@@ -167,25 +167,25 @@ struct isptables_update {
  * This structure is used to store the OMAP ISP Preview module Information.
  */
 struct isp_prev_device {
-	struct v4l2_subdev subdev;
-	struct media_pad pads[PREV_PADS_NUM];
-	struct v4l2_mbus_framefmt formats[PREV_PADS_NUM];
-	struct v4l2_rect crop;
+    struct v4l2_subdev subdev;
+    struct media_pad pads[PREV_PADS_NUM];
+    struct v4l2_mbus_framefmt formats[PREV_PADS_NUM];
+    struct v4l2_rect crop;
 
-	struct v4l2_ctrl_handler ctrls;
+    struct v4l2_ctrl_handler ctrls;
 
-	enum preview_input_entity input;
-	unsigned int output;
-	struct isp_video video_in;
-	struct isp_video video_out;
+    enum preview_input_entity input;
+    unsigned int output;
+    struct isp_video video_in;
+    struct isp_video video_out;
 
-	struct prev_params params;
-	unsigned int shadow_update:1;
-	enum isp_pipeline_stream_state state;
-	wait_queue_head_t wait;
-	atomic_t stopping;
-	spinlock_t lock;
-	u32 update;
+    struct prev_params params;
+    unsigned int shadow_update:1;
+    enum isp_pipeline_stream_state state;
+    wait_queue_head_t wait;
+    atomic_t stopping;
+    spinlock_t lock;
+    u32 update;
 };
 
 struct isp_device;
@@ -194,7 +194,7 @@ int omap3isp_preview_init(struct isp_device *isp);
 void omap3isp_preview_cleanup(struct isp_device *isp);
 
 int omap3isp_preview_register_entities(struct isp_prev_device *prv,
-				       struct v4l2_device *vdev);
+                                       struct v4l2_device *vdev);
 void omap3isp_preview_unregister_entities(struct isp_prev_device *prv);
 
 void omap3isp_preview_isr_frame_sync(struct isp_prev_device *prev);

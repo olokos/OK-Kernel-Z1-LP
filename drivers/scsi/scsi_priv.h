@@ -33,29 +33,29 @@ extern void scsi_destroy_command_freelist(struct Scsi_Host *shost);
 void scsi_log_send(struct scsi_cmnd *cmd);
 void scsi_log_completion(struct scsi_cmnd *cmd, int disposition);
 #else
-static inline void scsi_log_send(struct scsi_cmnd *cmd) 
-	{ };
-static inline void scsi_log_completion(struct scsi_cmnd *cmd, int disposition)
-	{ };
+static inline void scsi_log_send(struct scsi_cmnd *cmd) {
+};
+static inline void scsi_log_completion(struct scsi_cmnd *cmd, int disposition) {
+};
 #endif
 
 /* scsi_devinfo.c */
 
 /* list of keys for the lists */
 enum {
-	SCSI_DEVINFO_GLOBAL = 0,
-	SCSI_DEVINFO_SPI,
+    SCSI_DEVINFO_GLOBAL = 0,
+    SCSI_DEVINFO_SPI,
 };
 
 extern int scsi_get_device_flags(struct scsi_device *sdev,
-				 const unsigned char *vendor,
-				 const unsigned char *model);
+                                 const unsigned char *vendor,
+                                 const unsigned char *model);
 extern int scsi_get_device_flags_keyed(struct scsi_device *sdev,
-				       const unsigned char *vendor,
-				       const unsigned char *model, int key);
+                                       const unsigned char *vendor,
+                                       const unsigned char *model, int key);
 extern int scsi_dev_info_list_add_keyed(int compatible, char *vendor,
-					char *model, char *strflags,
-					int flags, int key);
+                                        char *model, char *strflags,
+                                        int flags, int key);
 extern int scsi_dev_info_list_del_keyed(char *vendor, char *model, int key);
 extern int scsi_dev_info_add_list(int key, const char *name);
 extern int scsi_dev_info_remove_list(int key);
@@ -70,10 +70,10 @@ extern int scsi_decide_disposition(struct scsi_cmnd *cmd);
 extern void scsi_eh_wakeup(struct Scsi_Host *shost);
 extern int scsi_eh_scmd_add(struct scsi_cmnd *, int);
 void scsi_eh_ready_devs(struct Scsi_Host *shost,
-			struct list_head *work_q,
-			struct list_head *done_q);
+                        struct list_head *work_q,
+                        struct list_head *done_q);
 int scsi_eh_get_sense(struct list_head *work_q,
-		      struct list_head *done_q);
+                      struct list_head *done_q);
 int scsi_noretry_cmd(struct scsi_cmnd *scmd);
 
 /* scsi_lib.c */
@@ -111,7 +111,7 @@ extern void scsi_exit_procfs(void);
 /* scsi_scan.c */
 extern int scsi_complete_async_scans(void);
 extern int scsi_scan_host_selected(struct Scsi_Host *, unsigned int,
-				   unsigned int, unsigned int, int);
+                                   unsigned int, unsigned int, int);
 extern void scsi_forget_host(struct Scsi_Host *);
 extern void scsi_rescan_device(struct device *);
 
@@ -159,11 +159,13 @@ extern void scsi_autopm_put_host(struct Scsi_Host *);
 #else
 static inline void scsi_autopm_get_target(struct scsi_target *t) {}
 static inline void scsi_autopm_put_target(struct scsi_target *t) {}
-static inline int scsi_autopm_get_host(struct Scsi_Host *h) { return 0; }
+static inline int scsi_autopm_get_host(struct Scsi_Host *h) {
+    return 0;
+}
 static inline void scsi_autopm_put_host(struct Scsi_Host *h) {}
 #endif /* CONFIG_PM_RUNTIME */
 
-/* 
+/*
  * internal scsi timeout functions: for use by mid-layer and transport
  * classes.
  */

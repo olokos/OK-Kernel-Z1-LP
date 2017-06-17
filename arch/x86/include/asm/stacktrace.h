@@ -15,37 +15,37 @@ struct thread_info;
 struct stacktrace_ops;
 
 typedef unsigned long (*walk_stack_t)(struct thread_info *tinfo,
-				      unsigned long *stack,
-				      unsigned long bp,
-				      const struct stacktrace_ops *ops,
-				      void *data,
-				      unsigned long *end,
-				      int *graph);
+                                      unsigned long *stack,
+                                      unsigned long bp,
+                                      const struct stacktrace_ops *ops,
+                                      void *data,
+                                      unsigned long *end,
+                                      int *graph);
 
 extern unsigned long
 print_context_stack(struct thread_info *tinfo,
-		    unsigned long *stack, unsigned long bp,
-		    const struct stacktrace_ops *ops, void *data,
-		    unsigned long *end, int *graph);
+                    unsigned long *stack, unsigned long bp,
+                    const struct stacktrace_ops *ops, void *data,
+                    unsigned long *end, int *graph);
 
 extern unsigned long
 print_context_stack_bp(struct thread_info *tinfo,
-		       unsigned long *stack, unsigned long bp,
-		       const struct stacktrace_ops *ops, void *data,
-		       unsigned long *end, int *graph);
+                       unsigned long *stack, unsigned long bp,
+                       const struct stacktrace_ops *ops, void *data,
+                       unsigned long *end, int *graph);
 
 /* Generic stack tracer with callbacks */
 
 struct stacktrace_ops {
-	void (*address)(void *data, unsigned long address, int reliable);
-	/* On negative return stop dumping */
-	int (*stack)(void *data, char *name);
-	walk_stack_t	walk_stack;
+    void (*address)(void *data, unsigned long address, int reliable);
+    /* On negative return stop dumping */
+    int (*stack)(void *data, char *name);
+    walk_stack_t	walk_stack;
 };
 
 void dump_trace(struct task_struct *tsk, struct pt_regs *regs,
-		unsigned long *stack, unsigned long bp,
-		const struct stacktrace_ops *ops, void *data);
+                unsigned long *stack, unsigned long bp,
+                const struct stacktrace_ops *ops, void *data);
 
 #ifdef CONFIG_X86_32
 #define STACKSLOTS_PER_LINE 8
@@ -57,44 +57,42 @@ void dump_trace(struct task_struct *tsk, struct pt_regs *regs,
 
 #ifdef CONFIG_FRAME_POINTER
 static inline unsigned long
-stack_frame(struct task_struct *task, struct pt_regs *regs)
-{
-	unsigned long bp;
+stack_frame(struct task_struct *task, struct pt_regs *regs) {
+    unsigned long bp;
 
-	if (regs)
-		return regs->bp;
+    if (regs)
+        return regs->bp;
 
-	if (task == current) {
-		/* Grab bp right from our regs */
-		get_bp(bp);
-		return bp;
-	}
+    if (task == current) {
+        /* Grab bp right from our regs */
+        get_bp(bp);
+        return bp;
+    }
 
-	/* bp is the last reg pushed by switch_to */
-	return *(unsigned long *)task->thread.sp;
+    /* bp is the last reg pushed by switch_to */
+    return *(unsigned long *)task->thread.sp;
 }
 #else
 static inline unsigned long
-stack_frame(struct task_struct *task, struct pt_regs *regs)
-{
-	return 0;
+stack_frame(struct task_struct *task, struct pt_regs *regs) {
+    return 0;
 }
 #endif
 
 extern void
 show_trace_log_lvl(struct task_struct *task, struct pt_regs *regs,
-		   unsigned long *stack, unsigned long bp, char *log_lvl);
+                   unsigned long *stack, unsigned long bp, char *log_lvl);
 
 extern void
 show_stack_log_lvl(struct task_struct *task, struct pt_regs *regs,
-		   unsigned long *sp, unsigned long bp, char *log_lvl);
+                   unsigned long *sp, unsigned long bp, char *log_lvl);
 
 extern unsigned int code_bytes;
 
 /* The form of the top of the frame on the stack */
 struct stack_frame {
-	struct stack_frame *next_frame;
-	unsigned long return_address;
+    struct stack_frame *next_frame;
+    unsigned long return_address;
 };
 
 struct stack_frame_ia32 {
@@ -102,17 +100,16 @@ struct stack_frame_ia32 {
     u32 return_address;
 };
 
-static inline unsigned long caller_frame_pointer(void)
-{
-	struct stack_frame *frame;
+static inline unsigned long caller_frame_pointer(void) {
+    struct stack_frame *frame;
 
-	get_bp(frame);
+    get_bp(frame);
 
 #ifdef CONFIG_FRAME_POINTER
-	frame = frame->next_frame;
+    frame = frame->next_frame;
 #endif
 
-	return (unsigned long)frame;
+    return (unsigned long)frame;
 }
 
 #endif /* _ASM_X86_STACKTRACE_H */

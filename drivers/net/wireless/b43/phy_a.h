@@ -96,25 +96,25 @@
 
 u16 b43_ofdmtab_read16(struct b43_wldev *dev, u16 table, u16 offset);
 void b43_ofdmtab_write16(struct b43_wldev *dev, u16 table,
-			 u16 offset, u16 value);
+                         u16 offset, u16 value);
 u32 b43_ofdmtab_read32(struct b43_wldev *dev, u16 table, u16 offset);
 void b43_ofdmtab_write32(struct b43_wldev *dev, u16 table,
-			 u16 offset, u32 value);
+                         u16 offset, u32 value);
 
 
 struct b43_phy_a {
-	/* Pointer to the table used to convert a
-	 * TSSI value to dBm-Q5.2 */
-	const s8 *tssi2dbm;
-	/* Target idle TSSI */
-	int tgt_idle_tssi;
-	/* Current idle TSSI */
-	int cur_idle_tssi;//FIXME value currently not set
+    /* Pointer to the table used to convert a
+     * TSSI value to dBm-Q5.2 */
+    const s8 *tssi2dbm;
+    /* Target idle TSSI */
+    int tgt_idle_tssi;
+    /* Current idle TSSI */
+    int cur_idle_tssi;//FIXME value currently not set
 
-	/* A-PHY TX Power control value. */
-	u16 txpwr_offset;
+    /* A-PHY TX Power control value. */
+    u16 txpwr_offset;
 
-	//TODO lots of missing stuff
+    //TODO lots of missing stuff
 };
 
 /**

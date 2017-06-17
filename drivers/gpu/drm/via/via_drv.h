@@ -44,66 +44,66 @@
 #define VIA_NUM_IRQS 4
 
 typedef struct drm_via_ring_buffer {
-	drm_local_map_t map;
-	char *virtual_start;
+    drm_local_map_t map;
+    char *virtual_start;
 } drm_via_ring_buffer_t;
 
 typedef uint32_t maskarray_t[5];
 
 typedef struct drm_via_irq {
-	atomic_t irq_received;
-	uint32_t pending_mask;
-	uint32_t enable_mask;
-	wait_queue_head_t irq_queue;
+    atomic_t irq_received;
+    uint32_t pending_mask;
+    uint32_t enable_mask;
+    wait_queue_head_t irq_queue;
 } drm_via_irq_t;
 
 typedef struct drm_via_private {
-	drm_via_sarea_t *sarea_priv;
-	drm_local_map_t *sarea;
-	drm_local_map_t *fb;
-	drm_local_map_t *mmio;
-	unsigned long agpAddr;
-	wait_queue_head_t decoder_queue[VIA_NR_XVMC_LOCKS];
-	char *dma_ptr;
-	unsigned int dma_low;
-	unsigned int dma_high;
-	unsigned int dma_offset;
-	uint32_t dma_wrap;
-	volatile uint32_t *last_pause_ptr;
-	volatile uint32_t *hw_addr_ptr;
-	drm_via_ring_buffer_t ring;
-	struct timeval last_vblank;
-	int last_vblank_valid;
-	unsigned usec_per_vblank;
-	atomic_t vbl_received;
-	drm_via_state_t hc_state;
-	char pci_buf[VIA_PCI_BUF_SIZE];
-	const uint32_t *fire_offsets[VIA_FIRE_BUF_SIZE];
-	uint32_t num_fire_offsets;
-	int chipset;
-	drm_via_irq_t via_irqs[VIA_NUM_IRQS];
-	unsigned num_irqs;
-	maskarray_t *irq_masks;
-	uint32_t irq_enable_mask;
-	uint32_t irq_pending_mask;
-	int *irq_map;
-	unsigned int idle_fault;
-	int vram_initialized;
-	struct drm_mm vram_mm;
-	int agp_initialized;
-	struct drm_mm agp_mm;
-	/** Mapping of userspace keys to mm objects */
-	struct idr object_idr;
-	unsigned long vram_offset;
-	unsigned long agp_offset;
-	drm_via_blitq_t blit_queues[VIA_NUM_BLIT_ENGINES];
-	uint32_t dma_diff;
+    drm_via_sarea_t *sarea_priv;
+    drm_local_map_t *sarea;
+    drm_local_map_t *fb;
+    drm_local_map_t *mmio;
+    unsigned long agpAddr;
+    wait_queue_head_t decoder_queue[VIA_NR_XVMC_LOCKS];
+    char *dma_ptr;
+    unsigned int dma_low;
+    unsigned int dma_high;
+    unsigned int dma_offset;
+    uint32_t dma_wrap;
+    volatile uint32_t *last_pause_ptr;
+    volatile uint32_t *hw_addr_ptr;
+    drm_via_ring_buffer_t ring;
+    struct timeval last_vblank;
+    int last_vblank_valid;
+    unsigned usec_per_vblank;
+    atomic_t vbl_received;
+    drm_via_state_t hc_state;
+    char pci_buf[VIA_PCI_BUF_SIZE];
+    const uint32_t *fire_offsets[VIA_FIRE_BUF_SIZE];
+    uint32_t num_fire_offsets;
+    int chipset;
+    drm_via_irq_t via_irqs[VIA_NUM_IRQS];
+    unsigned num_irqs;
+    maskarray_t *irq_masks;
+    uint32_t irq_enable_mask;
+    uint32_t irq_pending_mask;
+    int *irq_map;
+    unsigned int idle_fault;
+    int vram_initialized;
+    struct drm_mm vram_mm;
+    int agp_initialized;
+    struct drm_mm agp_mm;
+    /** Mapping of userspace keys to mm objects */
+    struct idr object_idr;
+    unsigned long vram_offset;
+    unsigned long agp_offset;
+    drm_via_blitq_t blit_queues[VIA_NUM_BLIT_ENGINES];
+    uint32_t dma_diff;
 } drm_via_private_t;
 
 enum via_family {
-  VIA_OTHER = 0,     /* Baseline */
-  VIA_PRO_GROUP_A,   /* Another video engine and DMA commands */
-  VIA_DX9_0          /* Same video as pro_group_a, but 3D is unsupported */
+    VIA_OTHER = 0,     /* Baseline */
+    VIA_PRO_GROUP_A,   /* Another video engine and DMA commands */
+    VIA_DX9_0          /* Same video as pro_group_a, but 3D is unsupported */
 };
 
 /* VIA MMIO register access */
@@ -151,7 +151,7 @@ extern void via_cleanup_futex(drm_via_private_t *dev_priv);
 extern void via_release_futex(drm_via_private_t *dev_priv, int context);
 
 extern void via_reclaim_buffers_locked(struct drm_device *dev,
-				       struct drm_file *file_priv);
+                                       struct drm_file *file_priv);
 extern void via_lastclose(struct drm_device *dev);
 
 extern void via_dmablit_handler(struct drm_device *dev, int engine, int from_irq);

@@ -25,19 +25,18 @@ extern unsigned long __nongprelbss __serial_clock_speed_HZ;
 
 #define __get_CLKC()	({ *(volatile unsigned long *)(0xfeff9a00); })
 
-static inline void __set_CLKC(unsigned long v)
-{
-	int tmp;
+static inline void __set_CLKC(unsigned long v) {
+    int tmp;
 
-	asm volatile("	st%I0.p	%2,%M0		\n"
-		     "	setlos	%3,%1		\n"
-		     "	membar			\n"
-		     "0:			\n"
-		     "	subicc	%1,#1,%1,icc0	\n"
-		     "	bnc	icc0,#1,0b	\n"
-		     : "=m"(*(volatile unsigned long *) 0xfeff9a00), "=r"(tmp)
-		     : "r"(v), "i"(256)
-		     : "icc0");
+    asm volatile("	st%I0.p	%2,%M0		\n"
+                 "	setlos	%3,%1		\n"
+                 "	membar			\n"
+                 "0:			\n"
+                 "	subicc	%1,#1,%1,icc0	\n"
+                 "	bnc	icc0,#1,0b	\n"
+                 : "=m"(*(volatile unsigned long *) 0xfeff9a00), "=r"(tmp)
+                 : "r"(v), "i"(256)
+                 : "icc0");
 }
 
 #define __get_TCTR()	({ *(volatile unsigned long *)(0xfeff9418); })

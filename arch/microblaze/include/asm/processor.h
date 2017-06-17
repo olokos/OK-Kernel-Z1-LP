@@ -66,13 +66,11 @@ struct thread_struct { };
 # define INIT_THREAD	{ }
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
+static inline void release_thread(struct task_struct *dead_task) {
 }
 
 /* Free all resources held by a thread. */
-static inline void exit_thread(void)
-{
+static inline void exit_thread(void) {
 }
 
 extern unsigned long thread_saved_pc(struct task_struct *t);
@@ -115,11 +113,11 @@ extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
  * constants defined below, THREAD_*.
  */
 struct thread_struct {
-	/* kernel stack pointer (must be first field in structure) */
-	unsigned long	ksp;
-	unsigned long	ksp_limit;	/* if ksp <= ksp_limit stack overflow */
-	void		*pgdir;		/* root of page-table tree */
-	struct pt_regs	*regs;		/* Pointer to saved register state */
+    /* kernel stack pointer (must be first field in structure) */
+    unsigned long	ksp;
+    unsigned long	ksp_limit;	/* if ksp <= ksp_limit stack overflow */
+    void		*pgdir;		/* root of page-table tree */
+    struct pt_regs	*regs;		/* Pointer to saved register state */
 };
 
 #  define INIT_THREAD { \
@@ -128,15 +126,13 @@ struct thread_struct {
 }
 
 /* Free all resources held by a thread. */
-extern inline void release_thread(struct task_struct *dead_task)
-{
+extern inline void release_thread(struct task_struct *dead_task) {
 }
 
 extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
 
 /* Free current thread data structures etc.  */
-static inline void exit_thread(void)
-{
+static inline void exit_thread(void) {
 }
 
 /* Return saved (kernel) PC of a blocked thread.  */

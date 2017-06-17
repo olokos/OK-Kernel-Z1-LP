@@ -47,15 +47,15 @@ void RXvMngWorkItem(void *Context);
 
 void
 RXvFreeRCB(
-     PRCB pRCB,
-     BOOL bReAllocSkb
-    );
+    PRCB pRCB,
+    BOOL bReAllocSkb
+);
 
 BOOL
 RXbBulkInProcessData(
-     PSDevice         pDevice,
-     PRCB             pRCB,
-     unsigned long            BytesToIndicate
-    );
+    PSDevice         pDevice,
+    PRCB             pRCB,
+    unsigned long            BytesToIndicate
+);
 
 #endif /* __RXTX_H__ */

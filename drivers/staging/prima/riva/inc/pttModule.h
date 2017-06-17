@@ -50,8 +50,7 @@
 // Max NV fragment size
 #define MAX_NV_BIN_SIZE 2000
 
-enum
-{
+enum {
     PTT_STATUS_SUCCESS = 0,
     PTT_STATUS_FAILURE = 1,
     PTT_MAX_VAL = 0XFFFF,
@@ -59,8 +58,7 @@ enum
 typedef tANI_U32 eQWPttStatus;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U16 drvMjr;
     tANI_U16 drvMnr;
     tANI_U16 drvPtch;
@@ -70,8 +68,7 @@ typedef PACKED_PRE struct PACKED_POST
     //FwVersionInfo fwVer;
 } sBuildReleaseParams;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_BOOLEAN agPktsDisabled; //802.11ag
     tANI_BOOLEAN bPktsDisabled;  //802.11b
     tANI_BOOLEAN slrPktsDisabled;  //deprecated in Riva
@@ -80,8 +77,7 @@ typedef PACKED_PRE struct PACKED_POST
     tANI_BOOLEAN rsvd;
 } sRxTypesDisabled;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     tANI_U32 totalRxPackets;
     tANI_U32 totalMacRxPackets;
     tANI_U32 totalMacFcsErrPackets;
@@ -92,8 +88,7 @@ typedef PACKED_PRE struct PACKED_POST
 
 /* GRAB RAM types */
 //TODO: Change Grab RAM interface as appropriate to Taurus
-typedef enum
-{
+typedef enum {
     GRAB_RAM_RXFIR,
     GRAB_RAM_ADC,
     GRAB_RAM_ADC_80,
@@ -106,16 +101,14 @@ typedef enum
 
 
 /// Enum used to specify the trigger type for the aniGrabRam API
-typedef enum eGramDumpTrigType
-{
+typedef enum eGramDumpTrigType {
     eGRAM_DUMP_UNTRIGGERED,
     eGRAM_DUMP_TRIG_ON_11A,
     eGRAM_DUMP_TRIG_ON_11B,
     eGRAM_DUMP_TRIG_ON_11A_OR_11B
 } tGramDumpTrigType;
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     //common to both transmit chains
     eHalPhyRates rate;           //current rate
     ePhyChanBondState cbState;   //current Channel bonded state
@@ -130,8 +123,7 @@ typedef PACKED_PRE struct PACKED_POST
 
 #define RXP_MAX_FILTER_IDX                64
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     uint32 rxpFilterForFTMPER[RXP_MAX_FILTER_IDX];
     uint32 max_pktlen;
     uint32 flt_disable0;
@@ -143,8 +135,7 @@ typedef PACKED_PRE struct PACKED_POST
 } sMACConfig;
 
 
-typedef PACKED_PRE struct PACKED_POST
-{
+typedef PACKED_PRE struct PACKED_POST {
     /*
      * The idea here is to store only those things which cannot be
      * handled directly within the individual function calls.

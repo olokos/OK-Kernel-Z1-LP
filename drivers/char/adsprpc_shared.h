@@ -87,90 +87,87 @@ do {\
 #define remote_arg_t    union remote_arg
 
 struct remote_buf {
-	void *pv;		/* buffer pointer */
-	int len;		/* length of buffer */
+    void *pv;		/* buffer pointer */
+    int len;		/* length of buffer */
 };
 
 union remote_arg {
-	struct remote_buf buf;	/* buffer info */
-	uint32_t h;		/* remote handle */
+    struct remote_buf buf;	/* buffer info */
+    uint32_t h;		/* remote handle */
 };
 
 struct fastrpc_ioctl_invoke {
-	uint32_t handle;	/* remote handle */
-	uint32_t sc;		/* scalars describing the data */
-	remote_arg_t *pra;	/* remote arguments list */
+    uint32_t handle;	/* remote handle */
+    uint32_t sc;		/* scalars describing the data */
+    remote_arg_t *pra;	/* remote arguments list */
 };
 
 struct fastrpc_ioctl_invoke_fd {
-	struct fastrpc_ioctl_invoke inv;
-	int *fds;		/* fd list */
+    struct fastrpc_ioctl_invoke inv;
+    int *fds;		/* fd list */
 };
 
 struct fastrpc_ioctl_munmap {
-	uint32_t vaddrout;	/* address to unmap */
-	int  size;		/* size */
+    uint32_t vaddrout;	/* address to unmap */
+    int  size;		/* size */
 };
 
 
 struct fastrpc_ioctl_mmap {
-	int fd;			/* ion fd */
-	uint32_t flags;		/* flags for dsp to map with */
-	uint32_t vaddrin;	/* optional virtual address */
-	int  size;		/* size */
-	uint32_t vaddrout;	/* dsps virtual address */
+    int fd;			/* ion fd */
+    uint32_t flags;		/* flags for dsp to map with */
+    uint32_t vaddrin;	/* optional virtual address */
+    int  size;		/* size */
+    uint32_t vaddrout;	/* dsps virtual address */
 };
 
 struct smq_null_invoke {
-	struct smq_invoke_ctx *ctx; /* invoke caller context */
-	uint32_t handle;	    /* handle to invoke */
-	uint32_t sc;		    /* scalars structure describing the data */
+    struct smq_invoke_ctx *ctx; /* invoke caller context */
+    uint32_t handle;	    /* handle to invoke */
+    uint32_t sc;		    /* scalars structure describing the data */
 };
 
 struct smq_phy_page {
-	uint32_t addr;		/* physical address */
-	uint32_t size;		/* size of contiguous region */
+    uint32_t addr;		/* physical address */
+    uint32_t size;		/* size of contiguous region */
 };
 
 struct smq_invoke_buf {
-	int num;		/* number of contiguous regions */
-	int pgidx;		/* index to start of contiguous region */
+    int num;		/* number of contiguous regions */
+    int pgidx;		/* index to start of contiguous region */
 };
 
 struct smq_invoke {
-	struct smq_null_invoke header;
-	struct smq_phy_page page;   /* remote arg and list of pages address */
+    struct smq_null_invoke header;
+    struct smq_phy_page page;   /* remote arg and list of pages address */
 };
 
 struct smq_msg {
-	uint32_t pid;           /* process group id */
-	uint32_t tid;           /* thread id */
-	struct smq_invoke invoke;
+    uint32_t pid;           /* process group id */
+    uint32_t tid;           /* thread id */
+    struct smq_invoke invoke;
 };
 
 struct smq_invoke_rsp {
-	struct smq_invoke_ctx *ctx;  /* invoke caller context */
-	int retval;	             /* invoke return value */
+    struct smq_invoke_ctx *ctx;  /* invoke caller context */
+    int retval;	             /* invoke return value */
 };
 
 static inline struct smq_invoke_buf *smq_invoke_buf_start(remote_arg_t *pra,
-							uint32_t sc)
-{
-	int len = REMOTE_SCALARS_LENGTH(sc);
-	return (struct smq_invoke_buf *)(&pra[len]);
+        uint32_t sc) {
+    int len = REMOTE_SCALARS_LENGTH(sc);
+    return (struct smq_invoke_buf *)(&pra[len]);
 }
 
 static inline struct smq_phy_page *smq_phy_page_start(uint32_t sc,
-						struct smq_invoke_buf *buf)
-{
-	int nTotal = REMOTE_SCALARS_INBUFS(sc) + REMOTE_SCALARS_OUTBUFS(sc);
-	return (struct smq_phy_page *)(&buf[nTotal]);
+        struct smq_invoke_buf *buf) {
+    int nTotal = REMOTE_SCALARS_INBUFS(sc) + REMOTE_SCALARS_OUTBUFS(sc);
+    return (struct smq_phy_page *)(&buf[nTotal]);
 }
 
-static inline int smq_invoke_buf_size(uint32_t sc, int nPages)
-{
-	struct smq_phy_page *start = smq_phy_page_start(sc, 0);
-	return (int)(&(start[nPages]));
+static inline int smq_invoke_buf_size(uint32_t sc, int nPages) {
+    struct smq_phy_page *start = smq_phy_page_start(sc, 0);
+    return (int)(&(start[nPages]));
 }
 
 #endif

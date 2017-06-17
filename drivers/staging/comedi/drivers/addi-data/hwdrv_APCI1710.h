@@ -47,25 +47,25 @@
 /* MODULE INFO STRUCTURE */
 
 static const struct comedi_lrange range_apci1710_ttl = { 4, {
-						      BIP_RANGE(10),
-						      BIP_RANGE(5),
-						      BIP_RANGE(2),
-						      BIP_RANGE(1)
-						      }
+        BIP_RANGE(10),
+        BIP_RANGE(5),
+        BIP_RANGE(2),
+        BIP_RANGE(1)
+    }
 };
 
 static const struct comedi_lrange range_apci1710_ssi = { 4, {
-						      BIP_RANGE(10),
-						      BIP_RANGE(5),
-						      BIP_RANGE(2),
-						      BIP_RANGE(1)
-						      }
+        BIP_RANGE(10),
+        BIP_RANGE(5),
+        BIP_RANGE(2),
+        BIP_RANGE(1)
+    }
 };
 
 static const struct comedi_lrange range_apci1710_inccpt = { 4, {
-							 BIP_RANGE(10),
-							 BIP_RANGE(5),
-							 BIP_RANGE(2),
-							 BIP_RANGE(1)
-							 }
+        BIP_RANGE(10),
+        BIP_RANGE(5),
+        BIP_RANGE(2),
+        BIP_RANGE(1)
+    }
 };

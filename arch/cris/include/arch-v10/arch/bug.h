@@ -17,13 +17,13 @@
 #define BUG_MAGIC  0x00001234
 
 struct bug_frame {
-	unsigned short prefix;
-	unsigned int magic;
-	unsigned short clear;
-	unsigned short movu;
-	unsigned short line;
-	unsigned short jump;
-	unsigned char *filename;
+    unsigned short prefix;
+    unsigned int magic;
+    unsigned short clear;
+    unsigned short movu;
+    unsigned short line;
+    unsigned short jump;
+    unsigned char *filename;
 };
 
 #if 0

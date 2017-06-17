@@ -10,15 +10,15 @@
 #include <linux/init.h>
 
 struct sparc64_tick_ops {
-	unsigned long long (*get_tick)(void);
-	int (*add_compare)(unsigned long);
-	unsigned long softint_mask;
-	void (*disable_irq)(void);
+    unsigned long long (*get_tick)(void);
+    int (*add_compare)(unsigned long);
+    unsigned long softint_mask;
+    void (*disable_irq)(void);
 
-	void (*init_tick)(void);
-	unsigned long (*add_tick)(unsigned long);
+    void (*init_tick)(void);
+    unsigned long (*add_tick)(unsigned long);
 
-	char *name;
+    char *name;
 };
 
 extern struct sparc64_tick_ops *tick_ops;

@@ -25,14 +25,14 @@
  *		Linus
  */
 
- /*
-  *  Bit simplified and optimized by Jan Hubicka
-  *  Support of BIGMEM added by Gerhard Wichert, Siemens AG, July 1999.
-  *
-  *  isa_memset_io, isa_memcpy_fromio, isa_memcpy_toio added,
-  *  isa_read[wl] and isa_write[wl] fixed
-  *  - Arnaldo Carvalho de Melo <acme@conectiva.com.br>
-  */
+/*
+ *  Bit simplified and optimized by Jan Hubicka
+ *  Support of BIGMEM added by Gerhard Wichert, Siemens AG, July 1999.
+ *
+ *  isa_memset_io, isa_memcpy_fromio, isa_memcpy_toio added,
+ *  isa_read[wl] and isa_write[wl] fixed
+ *  - Arnaldo Carvalho de Melo <acme@conectiva.com.br>
+ */
 
 #define ARCH_HAS_IOREMAP_WC
 
@@ -108,9 +108,8 @@ build_mmio_write(writeq, "q", unsigned long, "r", :"memory")
  *	this function
  */
 
-static inline phys_addr_t virt_to_phys(volatile void *address)
-{
-	return __pa(address);
+static inline phys_addr_t virt_to_phys(volatile void *address) {
+    return __pa(address);
 }
 
 /**
@@ -126,9 +125,8 @@ static inline phys_addr_t virt_to_phys(volatile void *address)
  *	this function
  */
 
-static inline void *phys_to_virt(phys_addr_t address)
-{
-	return __va(address);
+static inline void *phys_to_virt(phys_addr_t address) {
+    return __va(address);
 }
 
 /*
@@ -141,9 +139,8 @@ static inline void *phys_to_virt(phys_addr_t address)
  * However, we truncate the address to unsigned int to avoid undesirable
  * promitions in legacy drivers.
  */
-static inline unsigned int isa_virt_to_bus(volatile void *address)
-{
-	return (unsigned int)virt_to_phys(address);
+static inline unsigned int isa_virt_to_bus(volatile void *address) {
+    return (unsigned int)virt_to_phys(address);
 }
 #define isa_page_to_bus(page)	((unsigned int)page_to_phys(page))
 #define isa_bus_to_virt		phys_to_virt
@@ -174,14 +171,13 @@ static inline unsigned int isa_virt_to_bus(volatile void *address)
 extern void __iomem *ioremap_nocache(resource_size_t offset, unsigned long size);
 extern void __iomem *ioremap_cache(resource_size_t offset, unsigned long size);
 extern void __iomem *ioremap_prot(resource_size_t offset, unsigned long size,
-				unsigned long prot_val);
+                                  unsigned long prot_val);
 
 /*
  * The default ioremap() behavior is non-cached:
  */
-static inline void __iomem *ioremap(resource_size_t offset, unsigned long size)
-{
-	return ioremap_nocache(offset, size);
+static inline void __iomem *ioremap(resource_size_t offset, unsigned long size) {
+    return ioremap_nocache(offset, size);
 }
 
 extern void iounmap(volatile void __iomem *addr);
@@ -200,21 +196,18 @@ extern void set_iounmap_nonlazy(void);
 #define xlate_dev_kmem_ptr(p)	p
 
 static inline void
-memset_io(volatile void __iomem *addr, unsigned char val, size_t count)
-{
-	memset((void __force *)addr, val, count);
+memset_io(volatile void __iomem *addr, unsigned char val, size_t count) {
+    memset((void __force *)addr, val, count);
 }
 
 static inline void
-memcpy_fromio(void *dst, const volatile void __iomem *src, size_t count)
-{
-	memcpy(dst, (const void __force *)src, count);
+memcpy_fromio(void *dst, const volatile void __iomem *src, size_t count) {
+    memcpy(dst, (const void __force *)src, count);
 }
 
 static inline void
-memcpy_toio(volatile void __iomem *dst, const void *src, size_t count)
-{
-	memcpy((void __force *)dst, src, count);
+memcpy_toio(volatile void __iomem *dst, const void *src, size_t count) {
+    memcpy((void __force *)dst, src, count);
 }
 
 /*
@@ -235,10 +228,9 @@ memcpy_toio(volatile void __iomem *dst, const void *src, size_t count)
  *	2. Accidentally out of order processors (PPro errata #51)
  */
 
-static inline void flush_write_buffers(void)
-{
+static inline void flush_write_buffers(void) {
 #if defined(CONFIG_X86_OOSTORE) || defined(CONFIG_X86_PPRO_FENCE)
-	asm volatile("lock; addl $0,0(%%esp)": : :"memory");
+    asm volatile("lock; addl $0,0(%%esp)": : :"memory");
 #endif
 }
 
@@ -253,13 +245,12 @@ extern void io_delay_init(void);
 #include <asm/paravirt.h>
 #else
 
-static inline void slow_down_io(void)
-{
-	native_io_delay();
+static inline void slow_down_io(void) {
+    native_io_delay();
 #ifdef REALLY_SLOW_IO
-	native_io_delay();
-	native_io_delay();
-	native_io_delay();
+    native_io_delay();
+    native_io_delay();
+    native_io_delay();
 #endif
 }
 
@@ -313,7 +304,7 @@ extern void *xlate_dev_mem_ptr(unsigned long phys);
 extern void unxlate_dev_mem_ptr(unsigned long phys, void *addr);
 
 extern int ioremap_change_attr(unsigned long vaddr, unsigned long size,
-				unsigned long prot_val);
+                               unsigned long prot_val);
 extern void __iomem *ioremap_wc(resource_size_t offset, unsigned long size);
 
 /*
@@ -324,9 +315,9 @@ extern void __iomem *ioremap_wc(resource_size_t offset, unsigned long size);
 extern void early_ioremap_init(void);
 extern void early_ioremap_reset(void);
 extern void __iomem *early_ioremap(resource_size_t phys_addr,
-				   unsigned long size);
+                                   unsigned long size);
 extern void __iomem *early_memremap(resource_size_t phys_addr,
-				    unsigned long size);
+                                    unsigned long size);
 extern void early_iounmap(void __iomem *addr, unsigned long size);
 extern void fixup_early_ioremap(void);
 extern bool is_early_ioremap_ptep(pte_t *ptep);
@@ -336,7 +327,7 @@ extern bool is_early_ioremap_ptep(pte_t *ptep);
 struct bio_vec;
 
 extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
-				      const struct bio_vec *vec2);
+                                      const struct bio_vec *vec2);
 
 #define BIOVEC_PHYS_MERGEABLE(vec1, vec2)				\
 	(__BIOVEC_PHYS_MERGEABLE(vec1, vec2) &&				\

@@ -67,8 +67,8 @@
 
 /* Notification data structure. */
 struct notification {
-	uint32_t	session_id;	/* Session ID. */
-	int32_t		payload;	/* Additional notification info */
+    uint32_t	session_id;	/* Session ID. */
+    int32_t		payload;	/* Additional notification info */
 };
 
 /*
@@ -79,16 +79,16 @@ struct notification {
  * Possible negative values are given below.
  */
 enum notification_payload {
-	/* task terminated, but exit code is invalid */
-	ERR_INVALID_EXIT_CODE	= -1,
-	/* task terminated due to session end, no exit code available */
-	ERR_SESSION_CLOSE	= -2,
-	/* task terminated due to invalid operation */
-	ERR_INVALID_OPERATION	= -3,
-	/* session ID is unknown */
-	ERR_INVALID_SID		= -4,
-	/*  session is not active */
-	ERR_SID_NOT_ACTIVE	= -5
+    /* task terminated, but exit code is invalid */
+    ERR_INVALID_EXIT_CODE	= -1,
+    /* task terminated due to session end, no exit code available */
+    ERR_SESSION_CLOSE	= -2,
+    /* task terminated due to invalid operation */
+    ERR_INVALID_OPERATION	= -3,
+    /* session ID is unknown */
+    ERR_INVALID_SID		= -4,
+    /*  session is not active */
+    ERR_SID_NOT_ACTIVE	= -5
 };
 
 /*
@@ -96,9 +96,9 @@ enum notification_payload {
  * Layout as specified in the data structure specification.
  */
 struct notification_queue_header {
-	uint32_t	write_cnt;	/* Write counter. */
-	uint32_t	read_cnt;	/* Read counter. */
-	uint32_t	queue_size;	/* Queue size. */
+    uint32_t	write_cnt;	/* Write counter. */
+    uint32_t	read_cnt;	/* Read counter. */
+    uint32_t	queue_size;	/* Queue size. */
 };
 
 /*
@@ -108,10 +108,10 @@ struct notification_queue_header {
  * to be smaller than power of uint32_t (obviously 32).
  */
 struct notification_queue {
-	/* Queue header. */
-	struct notification_queue_header hdr;
-	/* Notification elements. */
-	struct notification notification[MIN_NQ_ELEM];
+    /* Queue header. */
+    struct notification_queue_header hdr;
+    /* Notification elements. */
+    struct notification notification[MIN_NQ_ELEM];
 };
 
 #endif /* _MCINQ_H_ */

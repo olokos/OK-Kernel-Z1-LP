@@ -46,15 +46,15 @@ extern unsigned int prom_boot_mapping_mode;
 extern unsigned long prom_boot_mapping_phys_high, prom_boot_mapping_phys_low;
 
 struct linux_mlist_p1275 {
-	struct linux_mlist_p1275 *theres_more;
-	unsigned long start_adr;
-	unsigned long num_bytes;
+    struct linux_mlist_p1275 *theres_more;
+    unsigned long start_adr;
+    unsigned long num_bytes;
 };
 
 struct linux_mem_p1275 {
-	struct linux_mlist_p1275 **p1275_totphys;
-	struct linux_mlist_p1275 **p1275_prommap;
-	struct linux_mlist_p1275 **p1275_available; /* What we can use */
+    struct linux_mlist_p1275 **p1275_totphys;
+    struct linux_mlist_p1275 **p1275_prommap;
+    struct linux_mlist_p1275 **p1275_available; /* What we can use */
 };
 
 /* The functions... */
@@ -141,21 +141,21 @@ extern int prom_wakeupsystem(void);
 
 /* Get unique string identifying SIMM at given physical address. */
 extern int prom_getunumber(int syndrome_code,
-			   unsigned long phys_addr,
-			   char *buf, int buflen);
+                           unsigned long phys_addr,
+                           char *buf, int buflen);
 
 /* Retain physical memory to the caller across soft resets. */
 extern int prom_retain(const char *name, unsigned long size,
-		       unsigned long align, unsigned long *paddr);
+                       unsigned long align, unsigned long *paddr);
 
 /* Load explicit I/D TLB entries into the calling processor. */
 extern long prom_itlb_load(unsigned long index,
-			   unsigned long tte_data,
-			   unsigned long vaddr);
+                           unsigned long tte_data,
+                           unsigned long vaddr);
 
 extern long prom_dtlb_load(unsigned long index,
-			   unsigned long tte_data,
-			   unsigned long vaddr);
+                           unsigned long tte_data,
+                           unsigned long vaddr);
 
 /* Map/Unmap client program address ranges.  First the format of
  * the mapping mode argument.
@@ -171,7 +171,7 @@ extern long prom_dtlb_load(unsigned long index,
 #define PROM_MAP_DEFAULT (PROM_MAP_WRITE | PROM_MAP_READ | PROM_MAP_EXEC | PROM_MAP_CACHED)
 
 extern int prom_map(int mode, unsigned long size,
-		    unsigned long vaddr, unsigned long paddr);
+                    unsigned long vaddr, unsigned long paddr);
 extern void prom_unmap(unsigned long size, unsigned long vaddr);
 
 
@@ -194,7 +194,7 @@ extern int prom_getproplen(phandle thisnode, const char *property);
  * the number of bytes the prom put into your buffer or -1 on error.
  */
 extern int prom_getproperty(phandle thisnode, const char *property,
-			    char *prop_buffer, int propbuf_size);
+                            char *prop_buffer, int propbuf_size);
 
 /* Acquire an integer property. */
 extern int prom_getint(phandle node, const char *property);
@@ -207,7 +207,7 @@ extern int prom_getbool(phandle node, const char *prop);
 
 /* Acquire a string property, null string on error. */
 extern void prom_getstring(phandle node, const char *prop, char *buf,
-			   int bufsize);
+                           int bufsize);
 
 /* Does the passed node have the given "name"? YES=1 NO=0 */
 extern int prom_nodematch(phandle thisnode, const char *name);
@@ -237,7 +237,7 @@ extern phandle prom_finddevice(const char *name);
  * Returns the number of bytes of your value that the prom took.
  */
 extern int prom_setprop(phandle node, const char *prop_name, char *prop_value,
-			int value_size);
+                        int value_size);
 
 extern phandle prom_inst2pkg(int);
 extern void prom_sun4v_guest_soft_state(void);

@@ -135,24 +135,24 @@ extern struct iwl_mod_params iwlagn_mod_params;
  * @auto_agg: enable agg. without check, default = true
  */
 struct iwl_mod_params {
-	int sw_crypto;
-	unsigned int disable_11n;
-	int amsdu_size_8K;
-	int antenna;
-	int restart_fw;
-	bool plcp_check;
-	bool ack_check;
-	int  wd_disable;
-	bool bt_coex_active;
-	int led_mode;
-	bool no_sleep_autoadjust;
-	bool power_save;
-	int power_level;
-	u32 debug_level;
-	int ant_coupling;
-	bool bt_ch_announce;
-	int wanted_ucode_alternative;
-	bool auto_agg;
+    int sw_crypto;
+    unsigned int disable_11n;
+    int amsdu_size_8K;
+    int antenna;
+    int restart_fw;
+    bool plcp_check;
+    bool ack_check;
+    int  wd_disable;
+    bool bt_coex_active;
+    int led_mode;
+    bool no_sleep_autoadjust;
+    bool power_save;
+    int power_level;
+    u32 debug_level;
+    int ant_coupling;
+    bool bt_ch_announce;
+    int wanted_ucode_alternative;
+    bool auto_agg;
 };
 
 /**
@@ -176,20 +176,20 @@ struct iwl_mod_params {
  * @use_rts_for_aggregation: use rts/cts protection for HT traffic
  */
 struct iwl_hw_params {
-	u8  num_ampdu_queues;
-	u8  tx_chains_num;
-	u8  rx_chains_num;
-	u8  valid_tx_ant;
-	u8  valid_rx_ant;
-	u8  ht40_channel;
-	bool use_rts_for_aggregation;
-	u16 sku;
-	u32 rx_page_order;
-	u32 ct_kill_threshold;
-	u32 ct_kill_exit_threshold;
-	unsigned int wd_timeout;
+    u8  num_ampdu_queues;
+    u8  tx_chains_num;
+    u8  rx_chains_num;
+    u8  valid_tx_ant;
+    u8  valid_rx_ant;
+    u8  ht40_channel;
+    bool use_rts_for_aggregation;
+    u16 sku;
+    u32 rx_page_order;
+    u32 ct_kill_threshold;
+    u32 ct_kill_exit_threshold;
+    unsigned int wd_timeout;
 
-	const struct iwl_sensitivity_ranges *sens;
+    const struct iwl_sensitivity_ranges *sens;
 };
 
 /*
@@ -202,10 +202,10 @@ struct iwl_hw_params {
  *    IWL_LED_DISABLE:	led disabled
  */
 enum iwl_led_mode {
-	IWL_LED_DEFAULT,
-	IWL_LED_RF_STATE,
-	IWL_LED_BLINK,
-	IWL_LED_DISABLE,
+    IWL_LED_DEFAULT,
+    IWL_LED_RF_STATE,
+    IWL_LED_BLINK,
+    IWL_LED_DISABLE,
 };
 
 /*
@@ -229,26 +229,26 @@ enum iwl_led_mode {
  * wd_disable: disable watchdog timer
  */
 struct iwl_base_params {
-	int eeprom_size;
-	int num_of_queues;	/* def: HW dependent */
-	int num_of_ampdu_queues;/* def: HW dependent */
-	/* for iwl_apm_init() */
-	u32 pll_cfg_val;
+    int eeprom_size;
+    int num_of_queues;	/* def: HW dependent */
+    int num_of_ampdu_queues;/* def: HW dependent */
+    /* for iwl_apm_init() */
+    u32 pll_cfg_val;
 
-	const u16 max_ll_items;
-	const bool shadow_ram_support;
-	u16 led_compensation;
-	bool adv_thermal_throttle;
-	bool support_ct_kill_exit;
-	const bool support_wimax_coexist;
-	u8 plcp_delta_threshold;
-	s32 chain_noise_scale;
-	unsigned int wd_timeout;
-	u32 max_event_log_size;
-	const bool shadow_reg_enable;
-	const bool hd_v2;
-	const bool no_idle_support;
-	const bool wd_disable;
+    const u16 max_ll_items;
+    const bool shadow_ram_support;
+    u16 led_compensation;
+    bool adv_thermal_throttle;
+    bool support_ct_kill_exit;
+    const bool support_wimax_coexist;
+    u8 plcp_delta_threshold;
+    s32 chain_noise_scale;
+    unsigned int wd_timeout;
+    u32 max_event_log_size;
+    const bool shadow_reg_enable;
+    const bool hd_v2;
+    const bool no_idle_support;
+    const bool wd_disable;
 };
 
 /*
@@ -259,20 +259,20 @@ struct iwl_base_params {
  * @bt_sco_disable: uCode should not response to BT in SCO/ESCO mode
  */
 struct iwl_bt_params {
-	bool advanced_bt_coexist;
-	u8 bt_init_traffic_load;
-	u8 bt_prio_boost;
-	u16 agg_time_limit;
-	bool bt_sco_disable;
-	bool bt_session_2;
+    bool advanced_bt_coexist;
+    u8 bt_init_traffic_load;
+    u8 bt_prio_boost;
+    u16 agg_time_limit;
+    bool bt_sco_disable;
+    bool bt_session_2;
 };
 /*
  * @use_rts_for_aggregation: use rts/cts protection for HT traffic
  */
 struct iwl_ht_params {
-	const bool ht_greenfield_support; /* if used set to true */
-	bool use_rts_for_aggregation;
-	enum ieee80211_smps_mode smps_mode;
+    const bool ht_greenfield_support; /* if used set to true */
+    bool use_rts_for_aggregation;
+    enum ieee80211_smps_mode smps_mode;
 };
 
 /**
@@ -316,34 +316,34 @@ struct iwl_ht_params {
  * release as a new hardware revision.
  */
 struct iwl_cfg {
-	/* params specific to an individual device within a device family */
-	const char *name;
-	const char *fw_name_pre;
-	const unsigned int ucode_api_max;
-	const unsigned int ucode_api_ok;
-	const unsigned int ucode_api_min;
-	const u32 max_data_size;
-	const u32 max_inst_size;
-	u8   valid_tx_ant;
-	u8   valid_rx_ant;
-	u16  eeprom_ver;
-	u16  eeprom_calib_ver;
-	const struct iwl_lib_ops *lib;
-	void (*additional_nic_config)(struct iwl_priv *priv);
-	/* params not likely to change within a device family */
-	const struct iwl_base_params *base_params;
-	/* params likely to change within a device family */
-	const struct iwl_ht_params *ht_params;
-	const struct iwl_bt_params *bt_params;
-	const bool need_temp_offset_calib; /* if used set to true */
-	const bool no_xtal_calib;
-	u8 scan_rx_antennas[IEEE80211_NUM_BANDS];
-	enum iwl_led_mode led_mode;
-	const bool adv_pm;
-	const bool rx_with_siso_diversity;
-	const bool internal_wimax_coex;
-	const bool iq_invert;
-	const bool temp_offset_v2;
+    /* params specific to an individual device within a device family */
+    const char *name;
+    const char *fw_name_pre;
+    const unsigned int ucode_api_max;
+    const unsigned int ucode_api_ok;
+    const unsigned int ucode_api_min;
+    const u32 max_data_size;
+    const u32 max_inst_size;
+    u8   valid_tx_ant;
+    u8   valid_rx_ant;
+    u16  eeprom_ver;
+    u16  eeprom_calib_ver;
+    const struct iwl_lib_ops *lib;
+    void (*additional_nic_config)(struct iwl_priv *priv);
+    /* params not likely to change within a device family */
+    const struct iwl_base_params *base_params;
+    /* params likely to change within a device family */
+    const struct iwl_ht_params *ht_params;
+    const struct iwl_bt_params *bt_params;
+    const bool need_temp_offset_calib; /* if used set to true */
+    const bool no_xtal_calib;
+    u8 scan_rx_antennas[IEEE80211_NUM_BANDS];
+    enum iwl_led_mode led_mode;
+    const bool adv_pm;
+    const bool rx_with_siso_diversity;
+    const bool internal_wimax_coex;
+    const bool iq_invert;
+    const bool temp_offset_v2;
 };
 
 /**
@@ -364,25 +364,25 @@ struct iwl_cfg {
  * @device_pointers: pointers to ucode event tables
  */
 struct iwl_shared {
-	unsigned long status;
-	u8 valid_contexts;
+    unsigned long status;
+    u8 valid_contexts;
 
-	const struct iwl_cfg *cfg;
-	struct iwl_trans *trans;
-	void *drv;
-	struct iwl_hw_params hw_params;
-	const struct iwl_fw *fw;
+    const struct iwl_cfg *cfg;
+    struct iwl_trans *trans;
+    void *drv;
+    struct iwl_hw_params hw_params;
+    const struct iwl_fw *fw;
 
-	/* eeprom -- this is in the card's little endian byte order */
-	u8 *eeprom;
+    /* eeprom -- this is in the card's little endian byte order */
+    u8 *eeprom;
 
-	/* ucode related variables */
-	enum iwl_ucode_type ucode_type;
+    /* ucode related variables */
+    enum iwl_ucode_type ucode_type;
 
-	struct {
-		u32 error_event_table;
-		u32 log_event_table;
-	} device_pointers;
+    struct {
+        u32 error_event_table;
+        u32 log_event_table;
+    } device_pointers;
 
 };
 
@@ -391,16 +391,15 @@ struct iwl_shared {
 #define trans(_m)	((_m)->shrd->trans)
 #define hw_params(_m)	((_m)->shrd->hw_params)
 
-static inline bool iwl_have_debug_level(u32 level)
-{
-	return iwlagn_mod_params.debug_level & level;
+static inline bool iwl_have_debug_level(u32 level) {
+    return iwlagn_mod_params.debug_level & level;
 }
 
 enum iwl_rxon_context_id {
-	IWL_RXON_CTX_BSS,
-	IWL_RXON_CTX_PAN,
+    IWL_RXON_CTX_BSS,
+    IWL_RXON_CTX_PAN,
 
-	NUM_IWL_RXON_CTX
+    NUM_IWL_RXON_CTX
 };
 
 int iwlagn_hw_valid_rtc_data_addr(u32 addr);

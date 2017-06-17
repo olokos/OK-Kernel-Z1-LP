@@ -5,11 +5,11 @@
 
 typedef struct {
 #ifdef CONFIG_CPU_HAS_ASID
-	unsigned int id;
-	raw_spinlock_t id_lock;
+    unsigned int id;
+    raw_spinlock_t id_lock;
 #endif
-	unsigned int kvm_seq;
-	unsigned long	sigpage;
+    unsigned int kvm_seq;
+    unsigned long	sigpage;
 } mm_context_t;
 
 #ifdef CONFIG_CPU_HAS_ASID
@@ -30,7 +30,7 @@ typedef struct {
  *  modified for 2.6 by Hyok S. Choi <hyok.choi@samsung.com>
  */
 typedef struct {
-	unsigned long		end_brk;
+    unsigned long		end_brk;
 } mm_context_t;
 
 #endif

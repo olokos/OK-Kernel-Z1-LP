@@ -50,69 +50,69 @@
 #define WACOM_QUIRK_MONITOR		0x0008
 
 enum {
-	PENPARTNER = 0,
-	GRAPHIRE,
-	WACOM_G4,
-	PTU,
-	PL,
-	DTU,
-	BAMBOO_PT,
-	WIRELESS,
-	INTUOS,
-	INTUOS3S,
-	INTUOS3,
-	INTUOS3L,
-	INTUOS4S,
-	INTUOS4,
-	INTUOS4L,
-	WACOM_24HD,
-	WACOM_21UX2,
-	CINTIQ,
-	WACOM_BEE,
-	WACOM_MO,
-	TABLETPC,
-	TABLETPC2FG,
-	MAX_TYPE
+    PENPARTNER = 0,
+    GRAPHIRE,
+    WACOM_G4,
+    PTU,
+    PL,
+    DTU,
+    BAMBOO_PT,
+    WIRELESS,
+    INTUOS,
+    INTUOS3S,
+    INTUOS3,
+    INTUOS3L,
+    INTUOS4S,
+    INTUOS4,
+    INTUOS4L,
+    WACOM_24HD,
+    WACOM_21UX2,
+    CINTIQ,
+    WACOM_BEE,
+    WACOM_MO,
+    TABLETPC,
+    TABLETPC2FG,
+    MAX_TYPE
 };
 
 struct wacom_features {
-	const char *name;
-	int pktlen;
-	int x_max;
-	int y_max;
-	int pressure_max;
-	int distance_max;
-	int type;
-	int x_resolution;
-	int y_resolution;
-	int device_type;
-	int x_phy;
-	int y_phy;
-	unsigned char unit;
-	unsigned char unitExpo;
-	int x_fuzz;
-	int y_fuzz;
-	int pressure_fuzz;
-	int distance_fuzz;
-	unsigned quirks;
+    const char *name;
+    int pktlen;
+    int x_max;
+    int y_max;
+    int pressure_max;
+    int distance_max;
+    int type;
+    int x_resolution;
+    int y_resolution;
+    int device_type;
+    int x_phy;
+    int y_phy;
+    unsigned char unit;
+    unsigned char unitExpo;
+    int x_fuzz;
+    int y_fuzz;
+    int pressure_fuzz;
+    int distance_fuzz;
+    unsigned quirks;
 };
 
 struct wacom_shared {
-	bool stylus_in_proximity;
-	bool touch_down;
+    bool stylus_in_proximity;
+    bool touch_down;
 };
 
 struct wacom_wac {
-	char name[64];
-	unsigned char *data;
-	int tool[2];
-	int id[2];
-	__u32 serial[2];
-	struct wacom_features features;
-	struct wacom_shared *shared;
-	struct input_dev *input;
-	int pid;
-	int battery_capacity;
+    char name[64];
+    unsigned char *data;
+    int tool[2];
+    int id[2];
+    __u32 serial[2];
+    struct wacom_features features;
+    struct wacom_shared *shared;
+    struct input_dev *input;
+    int pid;
+    int battery_capacity;
 };
 
 #endif

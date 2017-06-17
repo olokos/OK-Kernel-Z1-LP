@@ -37,9 +37,8 @@ static inline void variant_init_irq(void) { }
 void variant_init_irq(void) __init;
 #endif
 
-static __inline__ int irq_canonicalize(int irq)
-{
-	return (irq);
+static __inline__ int irq_canonicalize(int irq) {
+    return (irq);
 }
 
 struct irqaction;

@@ -71,22 +71,22 @@
 
 /* A doubleword (i.e. 4 byte) datatype - little-endian in HW */
 typedef union efx_dword {
-	__le32 u32[1];
+    __le32 u32[1];
 } efx_dword_t;
 
 /* A quadword (i.e. 8 byte) datatype - little-endian in HW */
 typedef union efx_qword {
-	__le64 u64[1];
-	__le32 u32[2];
-	efx_dword_t dword[2];
+    __le64 u64[1];
+    __le32 u32[2];
+    efx_dword_t dword[2];
 } efx_qword_t;
 
 /* An octword (eight-word, i.e. 16 byte) datatype - little-endian in HW */
 typedef union efx_oword {
-	__le64 u64[2];
-	efx_qword_t qword[2];
-	__le32 u32[4];
-	efx_dword_t dword[4];
+    __le64 u64[2];
+    efx_qword_t qword[2];
+    __le32 u32[4];
+    efx_dword_t dword[4];
 } efx_oword_t;
 
 /* Format string and value expanders for printk */

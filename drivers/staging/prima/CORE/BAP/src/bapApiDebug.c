@@ -150,8 +150,7 @@ WLAN_BAPReadLoopbackMode
     tBtampTLVHCI_Read_Loopback_Mode_Cmd  *pBapHCIReadLoopbackMode,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPReadLoopbackMode */
@@ -195,8 +194,7 @@ WLAN_BAPWriteLoopbackMode
     tBtampTLVHCI_Write_Loopback_Mode_Cmd   *pBapHCIWriteLoopbackMode,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
 
     return VOS_STATUS_SUCCESS;
 } /* WLAN_BAPWriteLoopbackMode */

@@ -94,10 +94,10 @@
  * @pads_cnt: ARRAY_SIZE() of pads
  */
 struct omap_board_data {
-	int			id;
-	u32			flags;
-	struct omap_device_pad	*pads;
-	int			pads_cnt;
+    int			id;
+    u32			flags;
+    struct omap_device_pad	*pads;
+    int			pads_cnt;
 };
 
 /**
@@ -111,13 +111,13 @@ struct omap_board_data {
  * @node: list node for the partitions linked list
  */
 struct omap_mux_partition {
-	const char		*name;
-	u32			flags;
-	u32			phys;
-	u32			size;
-	void __iomem		*base;
-	struct list_head	muxmodes;
-	struct list_head	node;
+    const char		*name;
+    u32			flags;
+    u32			phys;
+    u32			size;
+    void __iomem		*base;
+    struct list_head	muxmodes;
+    struct list_head	node;
 };
 
 /**
@@ -129,12 +129,12 @@ struct omap_mux_partition {
  * @partition:	mux partition
  */
 struct omap_mux {
-	u16	reg_offset;
-	u16	gpio;
+    u16	reg_offset;
+    u16	gpio;
 #ifdef CONFIG_OMAP_MUX
-	char	*muxnames[OMAP_MUX_NR_MODES];
+    char	*muxnames[OMAP_MUX_NR_MODES];
 #ifdef CONFIG_DEBUG_FS
-	char	*balls[OMAP_MUX_NR_SIDES];
+    char	*balls[OMAP_MUX_NR_SIDES];
 #endif
 #endif
 };
@@ -145,8 +145,8 @@ struct omap_mux {
  * @balls:	available balls on the package
  */
 struct omap_ball {
-	u16	reg_offset;
-	char	*balls[OMAP_MUX_NR_SIDES];
+    u16	reg_offset;
+    char	*balls[OMAP_MUX_NR_SIDES];
 };
 
 /**
@@ -155,8 +155,8 @@ struct omap_ball {
  * @mux_value:	desired mux value to set
  */
 struct omap_board_mux {
-	u16	reg_offset;
-	u16	value;
+    u16	reg_offset;
+    u16	value;
 };
 
 #define OMAP_DEVICE_PAD_REMUX		BIT(1)	/* Dynamically remux a pad,
@@ -175,13 +175,13 @@ struct omap_board_mux {
  * @mux:		mux register
  */
 struct omap_device_pad {
-	char				*name;
-	u8				flags;
-	u16				enable;
-	u16				idle;
-	u16				off;
-	struct omap_mux_partition	*partition;
-	struct omap_mux			*mux;
+    char				*name;
+    u8				flags;
+    u16				enable;
+    u16				idle;
+    u16				off;
+    struct omap_mux_partition	*partition;
+    struct omap_mux			*mux;
 };
 
 struct omap_hwmod_mux_info;
@@ -227,23 +227,19 @@ void omap_hwmod_mux(struct omap_hwmod_mux_info *hmux, u8 state);
 
 #else
 
-static inline int omap_mux_init_gpio(int gpio, int val)
-{
-	return 0;
+static inline int omap_mux_init_gpio(int gpio, int val) {
+    return 0;
 }
-static inline int omap_mux_init_signal(char *muxname, int val)
-{
-	return 0;
+static inline int omap_mux_init_signal(char *muxname, int val) {
+    return 0;
 }
 
 static inline struct omap_hwmod_mux_info *
-omap_hwmod_mux_init(struct omap_device_pad *bpads, int nr_pads)
-{
-	return NULL;
+omap_hwmod_mux_init(struct omap_device_pad *bpads, int nr_pads) {
+    return NULL;
 }
 
-static inline void omap_hwmod_mux(struct omap_hwmod_mux_info *hmux, u8 state)
-{
+static inline void omap_hwmod_mux(struct omap_hwmod_mux_info *hmux, u8 state) {
 }
 
 static struct omap_board_mux *board_mux __maybe_unused;
@@ -298,7 +294,7 @@ void omap_mux_write(struct omap_mux_partition *p, u16 val, u16 mux_offset);
  * This should be only needed for dynamic remuxing of non-gpio signals.
  */
 void omap_mux_write_array(struct omap_mux_partition *p,
-			  struct omap_board_mux *board_mux);
+                          struct omap_board_mux *board_mux);
 
 /**
  * omap2420_mux_init() - initialize mux system with board specific set
@@ -328,15 +324,15 @@ int omap3_mux_init(struct omap_board_mux *board_mux, int flags);
  * @flags:		OMAP package type used for the board
  */
 int omap4_mux_init(struct omap_board_mux *board_subset,
-	struct omap_board_mux *board_wkup_subset, int flags);
+                   struct omap_board_mux *board_wkup_subset, int flags);
 
 /**
  * omap_mux_init - private mux init function, do not call
  */
 int omap_mux_init(const char *name, u32 flags,
-		  u32 mux_pbase, u32 mux_size,
-		  struct omap_mux *superset,
-		  struct omap_mux *package_subset,
-		  struct omap_board_mux *board_mux,
-		  struct omap_ball *package_balls);
+                  u32 mux_pbase, u32 mux_size,
+                  struct omap_mux *superset,
+                  struct omap_mux *package_subset,
+                  struct omap_board_mux *board_mux,
+                  struct omap_ball *package_balls);
 

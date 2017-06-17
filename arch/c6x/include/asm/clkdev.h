@@ -5,18 +5,15 @@
 
 struct clk;
 
-static inline int __clk_get(struct clk *clk)
-{
-	return 1;
+static inline int __clk_get(struct clk *clk) {
+    return 1;
 }
 
-static inline void __clk_put(struct clk *clk)
-{
+static inline void __clk_put(struct clk *clk) {
 }
 
-static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size)
-{
-	return kzalloc(size, GFP_KERNEL);
+static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size) {
+    return kzalloc(size, GFP_KERNEL);
 }
 
 #endif /* _ASM_CLKDEV_H */

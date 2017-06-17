@@ -34,132 +34,132 @@
 #include "t4fw_api.h"
 
 enum fw_ri_wr_opcode {
-	FW_RI_RDMA_WRITE		= 0x0,	/* IETF RDMAP v1.0 ... */
-	FW_RI_READ_REQ			= 0x1,
-	FW_RI_READ_RESP			= 0x2,
-	FW_RI_SEND			= 0x3,
-	FW_RI_SEND_WITH_INV		= 0x4,
-	FW_RI_SEND_WITH_SE		= 0x5,
-	FW_RI_SEND_WITH_SE_INV		= 0x6,
-	FW_RI_TERMINATE			= 0x7,
-	FW_RI_RDMA_INIT			= 0x8,	/* CHELSIO RI specific ... */
-	FW_RI_BIND_MW			= 0x9,
-	FW_RI_FAST_REGISTER		= 0xa,
-	FW_RI_LOCAL_INV			= 0xb,
-	FW_RI_QP_MODIFY			= 0xc,
-	FW_RI_BYPASS			= 0xd,
-	FW_RI_RECEIVE			= 0xe,
+    FW_RI_RDMA_WRITE		= 0x0,	/* IETF RDMAP v1.0 ... */
+    FW_RI_READ_REQ			= 0x1,
+    FW_RI_READ_RESP			= 0x2,
+    FW_RI_SEND			= 0x3,
+    FW_RI_SEND_WITH_INV		= 0x4,
+    FW_RI_SEND_WITH_SE		= 0x5,
+    FW_RI_SEND_WITH_SE_INV		= 0x6,
+    FW_RI_TERMINATE			= 0x7,
+    FW_RI_RDMA_INIT			= 0x8,	/* CHELSIO RI specific ... */
+    FW_RI_BIND_MW			= 0x9,
+    FW_RI_FAST_REGISTER		= 0xa,
+    FW_RI_LOCAL_INV			= 0xb,
+    FW_RI_QP_MODIFY			= 0xc,
+    FW_RI_BYPASS			= 0xd,
+    FW_RI_RECEIVE			= 0xe,
 
-	FW_RI_SGE_EC_CR_RETURN		= 0xf
+    FW_RI_SGE_EC_CR_RETURN		= 0xf
 };
 
 enum fw_ri_wr_flags {
-	FW_RI_COMPLETION_FLAG		= 0x01,
-	FW_RI_NOTIFICATION_FLAG		= 0x02,
-	FW_RI_SOLICITED_EVENT_FLAG	= 0x04,
-	FW_RI_READ_FENCE_FLAG		= 0x08,
-	FW_RI_LOCAL_FENCE_FLAG		= 0x10,
-	FW_RI_RDMA_READ_INVALIDATE	= 0x20
+    FW_RI_COMPLETION_FLAG		= 0x01,
+    FW_RI_NOTIFICATION_FLAG		= 0x02,
+    FW_RI_SOLICITED_EVENT_FLAG	= 0x04,
+    FW_RI_READ_FENCE_FLAG		= 0x08,
+    FW_RI_LOCAL_FENCE_FLAG		= 0x10,
+    FW_RI_RDMA_READ_INVALIDATE	= 0x20
 };
 
 enum fw_ri_mpa_attrs {
-	FW_RI_MPA_RX_MARKER_ENABLE	= 0x01,
-	FW_RI_MPA_TX_MARKER_ENABLE	= 0x02,
-	FW_RI_MPA_CRC_ENABLE		= 0x04,
-	FW_RI_MPA_IETF_ENABLE		= 0x08
+    FW_RI_MPA_RX_MARKER_ENABLE	= 0x01,
+    FW_RI_MPA_TX_MARKER_ENABLE	= 0x02,
+    FW_RI_MPA_CRC_ENABLE		= 0x04,
+    FW_RI_MPA_IETF_ENABLE		= 0x08
 };
 
 enum fw_ri_qp_caps {
-	FW_RI_QP_RDMA_READ_ENABLE	= 0x01,
-	FW_RI_QP_RDMA_WRITE_ENABLE	= 0x02,
-	FW_RI_QP_BIND_ENABLE		= 0x04,
-	FW_RI_QP_FAST_REGISTER_ENABLE	= 0x08,
-	FW_RI_QP_STAG0_ENABLE		= 0x10
+    FW_RI_QP_RDMA_READ_ENABLE	= 0x01,
+    FW_RI_QP_RDMA_WRITE_ENABLE	= 0x02,
+    FW_RI_QP_BIND_ENABLE		= 0x04,
+    FW_RI_QP_FAST_REGISTER_ENABLE	= 0x08,
+    FW_RI_QP_STAG0_ENABLE		= 0x10
 };
 
 enum fw_ri_addr_type {
-	FW_RI_ZERO_BASED_TO		= 0x00,
-	FW_RI_VA_BASED_TO		= 0x01
+    FW_RI_ZERO_BASED_TO		= 0x00,
+    FW_RI_VA_BASED_TO		= 0x01
 };
 
 enum fw_ri_mem_perms {
-	FW_RI_MEM_ACCESS_REM_WRITE	= 0x01,
-	FW_RI_MEM_ACCESS_REM_READ	= 0x02,
-	FW_RI_MEM_ACCESS_REM		= 0x03,
-	FW_RI_MEM_ACCESS_LOCAL_WRITE	= 0x04,
-	FW_RI_MEM_ACCESS_LOCAL_READ	= 0x08,
-	FW_RI_MEM_ACCESS_LOCAL		= 0x0C
+    FW_RI_MEM_ACCESS_REM_WRITE	= 0x01,
+    FW_RI_MEM_ACCESS_REM_READ	= 0x02,
+    FW_RI_MEM_ACCESS_REM		= 0x03,
+    FW_RI_MEM_ACCESS_LOCAL_WRITE	= 0x04,
+    FW_RI_MEM_ACCESS_LOCAL_READ	= 0x08,
+    FW_RI_MEM_ACCESS_LOCAL		= 0x0C
 };
 
 enum fw_ri_stag_type {
-	FW_RI_STAG_NSMR			= 0x00,
-	FW_RI_STAG_SMR			= 0x01,
-	FW_RI_STAG_MW			= 0x02,
-	FW_RI_STAG_MW_RELAXED		= 0x03
+    FW_RI_STAG_NSMR			= 0x00,
+    FW_RI_STAG_SMR			= 0x01,
+    FW_RI_STAG_MW			= 0x02,
+    FW_RI_STAG_MW_RELAXED		= 0x03
 };
 
 enum fw_ri_data_op {
-	FW_RI_DATA_IMMD			= 0x81,
-	FW_RI_DATA_DSGL			= 0x82,
-	FW_RI_DATA_ISGL			= 0x83
+    FW_RI_DATA_IMMD			= 0x81,
+    FW_RI_DATA_DSGL			= 0x82,
+    FW_RI_DATA_ISGL			= 0x83
 };
 
 enum fw_ri_sgl_depth {
-	FW_RI_SGL_DEPTH_MAX_SQ		= 16,
-	FW_RI_SGL_DEPTH_MAX_RQ		= 4
+    FW_RI_SGL_DEPTH_MAX_SQ		= 16,
+    FW_RI_SGL_DEPTH_MAX_RQ		= 4
 };
 
 struct fw_ri_dsge_pair {
-	__be32	len[2];
-	__be64	addr[2];
+    __be32	len[2];
+    __be64	addr[2];
 };
 
 struct fw_ri_dsgl {
-	__u8	op;
-	__u8	r1;
-	__be16	nsge;
-	__be32	len0;
-	__be64	addr0;
+    __u8	op;
+    __u8	r1;
+    __be16	nsge;
+    __be32	len0;
+    __be64	addr0;
 #ifndef C99_NOT_SUPPORTED
-	struct fw_ri_dsge_pair sge[0];
+    struct fw_ri_dsge_pair sge[0];
 #endif
 };
 
 struct fw_ri_sge {
-	__be32 stag;
-	__be32 len;
-	__be64 to;
+    __be32 stag;
+    __be32 len;
+    __be64 to;
 };
 
 struct fw_ri_isgl {
-	__u8	op;
-	__u8	r1;
-	__be16	nsge;
-	__be32	r2;
+    __u8	op;
+    __u8	r1;
+    __be16	nsge;
+    __be32	r2;
 #ifndef C99_NOT_SUPPORTED
-	struct fw_ri_sge sge[0];
+    struct fw_ri_sge sge[0];
 #endif
 };
 
 struct fw_ri_immd {
-	__u8	op;
-	__u8	r1;
-	__be16	r2;
-	__be32	immdlen;
+    __u8	op;
+    __u8	r1;
+    __be16	r2;
+    __be32	immdlen;
 #ifndef C99_NOT_SUPPORTED
-	__u8	data[0];
+    __u8	data[0];
 #endif
 };
 
 struct fw_ri_tpte {
-	__be32 valid_to_pdid;
-	__be32 locread_to_qpid;
-	__be32 nosnoop_pbladdr;
-	__be32 len_lo;
-	__be32 va_hi;
-	__be32 va_lo_fbo;
-	__be32 dca_mwbcnt_pstag;
-	__be32 len_hi;
+    __be32 valid_to_pdid;
+    __be32 locread_to_qpid;
+    __be32 nosnoop_pbladdr;
+    __be32 len_lo;
+    __be32 va_hi;
+    __be32 va_lo_fbo;
+    __be32 dca_mwbcnt_pstag;
+    __be32 len_hi;
 };
 
 #define S_FW_RI_TPTE_VALID		31
@@ -260,51 +260,51 @@ struct fw_ri_tpte {
     (((x) >> S_FW_RI_TPTE_MWBCNT_PSTAG) & M_FW_RI_TPTE_MWBCNT_PSTAG)
 
 enum fw_ri_res_type {
-	FW_RI_RES_TYPE_SQ,
-	FW_RI_RES_TYPE_RQ,
-	FW_RI_RES_TYPE_CQ,
+    FW_RI_RES_TYPE_SQ,
+    FW_RI_RES_TYPE_RQ,
+    FW_RI_RES_TYPE_CQ,
 };
 
 enum fw_ri_res_op {
-	FW_RI_RES_OP_WRITE,
-	FW_RI_RES_OP_RESET,
+    FW_RI_RES_OP_WRITE,
+    FW_RI_RES_OP_RESET,
 };
 
 struct fw_ri_res {
-	union fw_ri_restype {
-		struct fw_ri_res_sqrq {
-			__u8   restype;
-			__u8   op;
-			__be16 r3;
-			__be32 eqid;
-			__be32 r4[2];
-			__be32 fetchszm_to_iqid;
-			__be32 dcaen_to_eqsize;
-			__be64 eqaddr;
-		} sqrq;
-		struct fw_ri_res_cq {
-			__u8   restype;
-			__u8   op;
-			__be16 r3;
-			__be32 iqid;
-			__be32 r4[2];
-			__be32 iqandst_to_iqandstindex;
-			__be16 iqdroprss_to_iqesize;
-			__be16 iqsize;
-			__be64 iqaddr;
-			__be32 iqns_iqro;
-			__be32 r6_lo;
-			__be64 r7;
-		} cq;
-	} u;
+    union fw_ri_restype {
+        struct fw_ri_res_sqrq {
+            __u8   restype;
+            __u8   op;
+            __be16 r3;
+            __be32 eqid;
+            __be32 r4[2];
+            __be32 fetchszm_to_iqid;
+            __be32 dcaen_to_eqsize;
+            __be64 eqaddr;
+        } sqrq;
+        struct fw_ri_res_cq {
+            __u8   restype;
+            __u8   op;
+            __be16 r3;
+            __be32 iqid;
+            __be32 r4[2];
+            __be32 iqandst_to_iqandstindex;
+            __be16 iqdroprss_to_iqesize;
+            __be16 iqsize;
+            __be64 iqaddr;
+            __be32 iqns_iqro;
+            __be32 r6_lo;
+            __be64 r7;
+        } cq;
+    } u;
 };
 
 struct fw_ri_res_wr {
-	__be32 op_nres;
-	__be32 len16_pkd;
-	__u64  cookie;
+    __be32 op_nres;
+    __be32 len16_pkd;
+    __u64  cookie;
 #ifndef C99_NOT_SUPPORTED
-	struct fw_ri_res res[0];
+    struct fw_ri_res res[0];
 #endif
 };
 
@@ -526,39 +526,39 @@ struct fw_ri_res_wr {
 #define F_FW_RI_RES_WR_IQRO	V_FW_RI_RES_WR_IQRO(1U)
 
 struct fw_ri_rdma_write_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__be64 r2;
-	__be32 plen;
-	__be32 stag_sink;
-	__be64 to_sink;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __be64 r2;
+    __be32 plen;
+    __be32 stag_sink;
+    __be64 to_sink;
 #ifndef C99_NOT_SUPPORTED
-	union {
-		struct fw_ri_immd immd_src[0];
-		struct fw_ri_isgl isgl_src[0];
-	} u;
+    union {
+        struct fw_ri_immd immd_src[0];
+        struct fw_ri_isgl isgl_src[0];
+    } u;
 #endif
 };
 
 struct fw_ri_send_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__be32 sendop_pkd;
-	__be32 stag_inv;
-	__be32 plen;
-	__be32 r3;
-	__be64 r4;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __be32 sendop_pkd;
+    __be32 stag_inv;
+    __be32 plen;
+    __be32 r3;
+    __be64 r4;
 #ifndef C99_NOT_SUPPORTED
-	union {
-		struct fw_ri_immd immd_src[0];
-		struct fw_ri_isgl isgl_src[0];
-	} u;
+    union {
+        struct fw_ri_immd immd_src[0];
+        struct fw_ri_isgl isgl_src[0];
+    } u;
 #endif
 };
 
@@ -569,47 +569,47 @@ struct fw_ri_send_wr {
     (((x) >> S_FW_RI_SEND_WR_SENDOP) & M_FW_RI_SEND_WR_SENDOP)
 
 struct fw_ri_rdma_read_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__be64 r2;
-	__be32 stag_sink;
-	__be32 to_sink_hi;
-	__be32 to_sink_lo;
-	__be32 plen;
-	__be32 stag_src;
-	__be32 to_src_hi;
-	__be32 to_src_lo;
-	__be32 r5;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __be64 r2;
+    __be32 stag_sink;
+    __be32 to_sink_hi;
+    __be32 to_sink_lo;
+    __be32 plen;
+    __be32 stag_src;
+    __be32 to_src_hi;
+    __be32 to_src_lo;
+    __be32 r5;
 };
 
 struct fw_ri_recv_wr {
-	__u8   opcode;
-	__u8   r1;
-	__u16  wrid;
-	__u8   r2[3];
-	__u8   len16;
-	struct fw_ri_isgl isgl;
+    __u8   opcode;
+    __u8   r1;
+    __u16  wrid;
+    __u8   r2[3];
+    __u8   len16;
+    struct fw_ri_isgl isgl;
 };
 
 struct fw_ri_bind_mw_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__u8   qpbinde_to_dcacpu;
-	__u8   pgsz_shift;
-	__u8   addr_type;
-	__u8   mem_perms;
-	__be32 stag_mr;
-	__be32 stag_mw;
-	__be32 r3;
-	__be64 len_mw;
-	__be64 va_fbo;
-	__be64 r4;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __u8   qpbinde_to_dcacpu;
+    __u8   pgsz_shift;
+    __u8   addr_type;
+    __u8   mem_perms;
+    __be32 stag_mr;
+    __be32 stag_mw;
+    __be32 r3;
+    __be64 len_mw;
+    __be64 va_fbo;
+    __be64 r4;
 };
 
 #define S_FW_RI_BIND_MW_WR_QPBINDE	6
@@ -633,20 +633,20 @@ struct fw_ri_bind_mw_wr {
     (((x) >> S_FW_RI_BIND_MW_WR_DCACPU) & M_FW_RI_BIND_MW_WR_DCACPU)
 
 struct fw_ri_fr_nsmr_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__u8   qpbinde_to_dcacpu;
-	__u8   pgsz_shift;
-	__u8   addr_type;
-	__u8   mem_perms;
-	__be32 stag;
-	__be32 len_hi;
-	__be32 len_lo;
-	__be32 va_hi;
-	__be32 va_lo_fbo;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __u8   qpbinde_to_dcacpu;
+    __u8   pgsz_shift;
+    __u8   addr_type;
+    __u8   mem_perms;
+    __be32 stag;
+    __be32 len_hi;
+    __be32 len_lo;
+    __be32 va_hi;
+    __be32 va_lo_fbo;
 };
 
 #define S_FW_RI_FR_NSMR_WR_QPBINDE	6
@@ -670,74 +670,74 @@ struct fw_ri_fr_nsmr_wr {
     (((x) >> S_FW_RI_FR_NSMR_WR_DCACPU) & M_FW_RI_FR_NSMR_WR_DCACPU)
 
 struct fw_ri_inv_lstag_wr {
-	__u8   opcode;
-	__u8   flags;
-	__u16  wrid;
-	__u8   r1[3];
-	__u8   len16;
-	__be32 r2;
-	__be32 stag_inv;
+    __u8   opcode;
+    __u8   flags;
+    __u16  wrid;
+    __u8   r1[3];
+    __u8   len16;
+    __be32 r2;
+    __be32 stag_inv;
 };
 
 enum fw_ri_type {
-	FW_RI_TYPE_INIT,
-	FW_RI_TYPE_FINI,
-	FW_RI_TYPE_TERMINATE
+    FW_RI_TYPE_INIT,
+    FW_RI_TYPE_FINI,
+    FW_RI_TYPE_TERMINATE
 };
 
 enum fw_ri_init_p2ptype {
-	FW_RI_INIT_P2PTYPE_RDMA_WRITE		= FW_RI_RDMA_WRITE,
-	FW_RI_INIT_P2PTYPE_READ_REQ		= FW_RI_READ_REQ,
-	FW_RI_INIT_P2PTYPE_SEND			= FW_RI_SEND,
-	FW_RI_INIT_P2PTYPE_SEND_WITH_INV	= FW_RI_SEND_WITH_INV,
-	FW_RI_INIT_P2PTYPE_SEND_WITH_SE		= FW_RI_SEND_WITH_SE,
-	FW_RI_INIT_P2PTYPE_SEND_WITH_SE_INV	= FW_RI_SEND_WITH_SE_INV,
-	FW_RI_INIT_P2PTYPE_DISABLED		= 0xf,
+    FW_RI_INIT_P2PTYPE_RDMA_WRITE		= FW_RI_RDMA_WRITE,
+    FW_RI_INIT_P2PTYPE_READ_REQ		= FW_RI_READ_REQ,
+    FW_RI_INIT_P2PTYPE_SEND			= FW_RI_SEND,
+    FW_RI_INIT_P2PTYPE_SEND_WITH_INV	= FW_RI_SEND_WITH_INV,
+    FW_RI_INIT_P2PTYPE_SEND_WITH_SE		= FW_RI_SEND_WITH_SE,
+    FW_RI_INIT_P2PTYPE_SEND_WITH_SE_INV	= FW_RI_SEND_WITH_SE_INV,
+    FW_RI_INIT_P2PTYPE_DISABLED		= 0xf,
 };
 
 struct fw_ri_wr {
-	__be32 op_compl;
-	__be32 flowid_len16;
-	__u64  cookie;
-	union fw_ri {
-		struct fw_ri_init {
-			__u8   type;
-			__u8   mpareqbit_p2ptype;
-			__u8   r4[2];
-			__u8   mpa_attrs;
-			__u8   qp_caps;
-			__be16 nrqe;
-			__be32 pdid;
-			__be32 qpid;
-			__be32 sq_eqid;
-			__be32 rq_eqid;
-			__be32 scqid;
-			__be32 rcqid;
-			__be32 ord_max;
-			__be32 ird_max;
-			__be32 iss;
-			__be32 irs;
-			__be32 hwrqsize;
-			__be32 hwrqaddr;
-			__be64 r5;
-			union fw_ri_init_p2p {
-				struct fw_ri_rdma_write_wr write;
-				struct fw_ri_rdma_read_wr read;
-				struct fw_ri_send_wr send;
-			} u;
-		} init;
-		struct fw_ri_fini {
-			__u8   type;
-			__u8   r3[7];
-			__be64 r4;
-		} fini;
-		struct fw_ri_terminate {
-			__u8   type;
-			__u8   r3[3];
-			__be32 immdlen;
-			__u8   termmsg[40];
-		} terminate;
-	} u;
+    __be32 op_compl;
+    __be32 flowid_len16;
+    __u64  cookie;
+    union fw_ri {
+        struct fw_ri_init {
+            __u8   type;
+            __u8   mpareqbit_p2ptype;
+            __u8   r4[2];
+            __u8   mpa_attrs;
+            __u8   qp_caps;
+            __be16 nrqe;
+            __be32 pdid;
+            __be32 qpid;
+            __be32 sq_eqid;
+            __be32 rq_eqid;
+            __be32 scqid;
+            __be32 rcqid;
+            __be32 ord_max;
+            __be32 ird_max;
+            __be32 iss;
+            __be32 irs;
+            __be32 hwrqsize;
+            __be32 hwrqaddr;
+            __be64 r5;
+            union fw_ri_init_p2p {
+                struct fw_ri_rdma_write_wr write;
+                struct fw_ri_rdma_read_wr read;
+                struct fw_ri_send_wr send;
+            } u;
+        } init;
+        struct fw_ri_fini {
+            __u8   type;
+            __u8   r3[7];
+            __be64 r4;
+        } fini;
+        struct fw_ri_terminate {
+            __u8   type;
+            __u8   r3[3];
+            __be32 immdlen;
+            __u8   termmsg[40];
+        } terminate;
+    } u;
 };
 
 #define S_FW_RI_WR_MPAREQBIT	7
@@ -754,32 +754,32 @@ struct fw_ri_wr {
     (((x) >> S_FW_RI_WR_P2PTYPE) & M_FW_RI_WR_P2PTYPE)
 
 struct tcp_options {
-	__be16 mss;
-	__u8 wsf;
+    __be16 mss;
+    __u8 wsf;
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	__u8:4;
-	__u8 unknown:1;
-	__u8:1;
-	__u8 sack:1;
-	__u8 tstamp:1;
+    __u8:4;
+    __u8 unknown:1;
+    __u8:1;
+    __u8 sack:1;
+    __u8 tstamp:1;
 #else
-	__u8 tstamp:1;
-	__u8 sack:1;
-	__u8:1;
-	__u8 unknown:1;
-	__u8:4;
+    __u8 tstamp:1;
+    __u8 sack:1;
+    __u8:1;
+    __u8 unknown:1;
+    __u8:4;
 #endif
 };
 
 struct cpl_pass_accept_req {
-	union opcode_tid ot;
-	__be16 rsvd;
-	__be16 len;
-	__be32 hdr_len;
-	__be16 vlan;
-	__be16 l2info;
-	__be32 tos_stid;
-	struct tcp_options tcpopt;
+    union opcode_tid ot;
+    __be16 rsvd;
+    __be16 len;
+    __be32 hdr_len;
+    __be16 vlan;
+    __be16 l2info;
+    __be32 tos_stid;
+    struct tcp_options tcpopt;
 };
 
 /* cpl_pass_accept_req.hdr_len fields */
@@ -819,8 +819,8 @@ struct cpl_pass_accept_req {
 #define G_SYN_INTF(x) (((x) >> S_SYN_INTF) & M_SYN_INTF)
 
 struct ulptx_idata {
-	__be32 cmd_more;
-	__be32 len;
+    __be32 cmd_more;
+    __be32 len;
 };
 
 #define S_ULPTX_NSGE    0

@@ -49,92 +49,88 @@ struct saved_context saved_context;
  *	needed by kernel A, so that it can operate correctly after the resume
  *	regardless of what kernel B does in the meantime.
  */
-static void __save_processor_state(struct saved_context *ctxt)
-{
+static void __save_processor_state(struct saved_context *ctxt) {
 #ifdef CONFIG_X86_32
-	mtrr_save_fixed_ranges(NULL);
+    mtrr_save_fixed_ranges(NULL);
 #endif
-	kernel_fpu_begin();
+    kernel_fpu_begin();
 
-	/*
-	 * descriptor tables
-	 */
+    /*
+     * descriptor tables
+     */
 #ifdef CONFIG_X86_32
-	store_gdt(&ctxt->gdt);
-	store_idt(&ctxt->idt);
+    store_gdt(&ctxt->gdt);
+    store_idt(&ctxt->idt);
 #else
-/* CONFIG_X86_64 */
-	store_gdt((struct desc_ptr *)&ctxt->gdt_limit);
-	store_idt((struct desc_ptr *)&ctxt->idt_limit);
+    /* CONFIG_X86_64 */
+    store_gdt((struct desc_ptr *)&ctxt->gdt_limit);
+    store_idt((struct desc_ptr *)&ctxt->idt_limit);
 #endif
-	store_tr(ctxt->tr);
+    store_tr(ctxt->tr);
 
-	/* XMM0..XMM15 should be handled by kernel_fpu_begin(). */
-	/*
-	 * segment registers
-	 */
+    /* XMM0..XMM15 should be handled by kernel_fpu_begin(). */
+    /*
+     * segment registers
+     */
 #ifdef CONFIG_X86_32
-	savesegment(es, ctxt->es);
-	savesegment(fs, ctxt->fs);
-	savesegment(gs, ctxt->gs);
-	savesegment(ss, ctxt->ss);
+    savesegment(es, ctxt->es);
+    savesegment(fs, ctxt->fs);
+    savesegment(gs, ctxt->gs);
+    savesegment(ss, ctxt->ss);
 #else
-/* CONFIG_X86_64 */
-	asm volatile ("movw %%ds, %0" : "=m" (ctxt->ds));
-	asm volatile ("movw %%es, %0" : "=m" (ctxt->es));
-	asm volatile ("movw %%fs, %0" : "=m" (ctxt->fs));
-	asm volatile ("movw %%gs, %0" : "=m" (ctxt->gs));
-	asm volatile ("movw %%ss, %0" : "=m" (ctxt->ss));
+    /* CONFIG_X86_64 */
+    asm volatile ("movw %%ds, %0" : "=m" (ctxt->ds));
+    asm volatile ("movw %%es, %0" : "=m" (ctxt->es));
+    asm volatile ("movw %%fs, %0" : "=m" (ctxt->fs));
+    asm volatile ("movw %%gs, %0" : "=m" (ctxt->gs));
+    asm volatile ("movw %%ss, %0" : "=m" (ctxt->ss));
 
-	rdmsrl(MSR_FS_BASE, ctxt->fs_base);
-	rdmsrl(MSR_GS_BASE, ctxt->gs_base);
-	rdmsrl(MSR_KERNEL_GS_BASE, ctxt->gs_kernel_base);
-	mtrr_save_fixed_ranges(NULL);
+    rdmsrl(MSR_FS_BASE, ctxt->fs_base);
+    rdmsrl(MSR_GS_BASE, ctxt->gs_base);
+    rdmsrl(MSR_KERNEL_GS_BASE, ctxt->gs_kernel_base);
+    mtrr_save_fixed_ranges(NULL);
 
-	rdmsrl(MSR_EFER, ctxt->efer);
+    rdmsrl(MSR_EFER, ctxt->efer);
 #endif
 
-	/*
-	 * control registers
-	 */
-	ctxt->cr0 = read_cr0();
-	ctxt->cr2 = read_cr2();
-	ctxt->cr3 = read_cr3();
+    /*
+     * control registers
+     */
+    ctxt->cr0 = read_cr0();
+    ctxt->cr2 = read_cr2();
+    ctxt->cr3 = read_cr3();
 #ifdef CONFIG_X86_32
-	ctxt->cr4 = read_cr4_safe();
+    ctxt->cr4 = read_cr4_safe();
 #else
-/* CONFIG_X86_64 */
-	ctxt->cr4 = read_cr4();
-	ctxt->cr8 = read_cr8();
+    /* CONFIG_X86_64 */
+    ctxt->cr4 = read_cr4();
+    ctxt->cr8 = read_cr8();
 #endif
-	ctxt->misc_enable_saved = !rdmsrl_safe(MSR_IA32_MISC_ENABLE,
-					       &ctxt->misc_enable);
+    ctxt->misc_enable_saved = !rdmsrl_safe(MSR_IA32_MISC_ENABLE,
+                                           &ctxt->misc_enable);
 }
 
 /* Needed by apm.c */
-void save_processor_state(void)
-{
-	__save_processor_state(&saved_context);
-	x86_platform.save_sched_clock_state();
+void save_processor_state(void) {
+    __save_processor_state(&saved_context);
+    x86_platform.save_sched_clock_state();
 }
 #ifdef CONFIG_X86_32
 EXPORT_SYMBOL(save_processor_state);
 #endif
 
-static void do_fpu_end(void)
-{
-	/*
-	 * Restore FPU regs if necessary.
-	 */
-	kernel_fpu_end();
+static void do_fpu_end(void) {
+    /*
+     * Restore FPU regs if necessary.
+     */
+    kernel_fpu_end();
 }
 
-static void fix_processor_context(void)
-{
-	int cpu = smp_processor_id();
-	struct tss_struct *t = &per_cpu(init_tss, cpu);
+static void fix_processor_context(void) {
+    int cpu = smp_processor_id();
+    struct tss_struct *t = &per_cpu(init_tss, cpu);
 
-	set_tss_desc(cpu, t);	/*
+    set_tss_desc(cpu, t);	/*
 				 * This just modifies memory; should not be
 				 * necessary. But... This is necessary, because
 				 * 386 hardware has concept of busy TSS or some
@@ -142,12 +138,12 @@ static void fix_processor_context(void)
 				 */
 
 #ifdef CONFIG_X86_64
-	get_cpu_gdt_table(cpu)[GDT_ENTRY_TSS].type = 9;
+    get_cpu_gdt_table(cpu)[GDT_ENTRY_TSS].type = 9;
 
-	syscall_init();				/* This sets MSR_*STAR and related */
+    syscall_init();				/* This sets MSR_*STAR and related */
 #endif
-	load_TR_desc();				/* This does ltr */
-	load_LDT(&current->active_mm->context);	/* This does lldt */
+    load_TR_desc();				/* This does ltr */
+    load_LDT(&current->active_mm->context);	/* This does lldt */
 }
 
 /**
@@ -155,84 +151,82 @@ static void fix_processor_context(void)
  *		by __save_processor_state()
  *	@ctxt - structure to load the registers contents from
  */
-static void __restore_processor_state(struct saved_context *ctxt)
-{
-	if (ctxt->misc_enable_saved)
-		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
-	/*
-	 * control registers
-	 */
-	/* cr4 was introduced in the Pentium CPU */
+static void __restore_processor_state(struct saved_context *ctxt) {
+    if (ctxt->misc_enable_saved)
+        wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
+    /*
+     * control registers
+     */
+    /* cr4 was introduced in the Pentium CPU */
 #ifdef CONFIG_X86_32
-	if (ctxt->cr4)
-		write_cr4(ctxt->cr4);
+    if (ctxt->cr4)
+        write_cr4(ctxt->cr4);
 #else
-/* CONFIG X86_64 */
-	wrmsrl(MSR_EFER, ctxt->efer);
-	write_cr8(ctxt->cr8);
-	write_cr4(ctxt->cr4);
+    /* CONFIG X86_64 */
+    wrmsrl(MSR_EFER, ctxt->efer);
+    write_cr8(ctxt->cr8);
+    write_cr4(ctxt->cr4);
 #endif
-	write_cr3(ctxt->cr3);
-	write_cr2(ctxt->cr2);
-	write_cr0(ctxt->cr0);
+    write_cr3(ctxt->cr3);
+    write_cr2(ctxt->cr2);
+    write_cr0(ctxt->cr0);
 
-	/*
-	 * now restore the descriptor tables to their proper values
-	 * ltr is done i fix_processor_context().
-	 */
+    /*
+     * now restore the descriptor tables to their proper values
+     * ltr is done i fix_processor_context().
+     */
 #ifdef CONFIG_X86_32
-	load_gdt(&ctxt->gdt);
-	load_idt(&ctxt->idt);
+    load_gdt(&ctxt->gdt);
+    load_idt(&ctxt->idt);
 #else
-/* CONFIG_X86_64 */
-	load_gdt((const struct desc_ptr *)&ctxt->gdt_limit);
-	load_idt((const struct desc_ptr *)&ctxt->idt_limit);
-#endif
-
-	/*
-	 * segment registers
-	 */
-#ifdef CONFIG_X86_32
-	loadsegment(es, ctxt->es);
-	loadsegment(fs, ctxt->fs);
-	loadsegment(gs, ctxt->gs);
-	loadsegment(ss, ctxt->ss);
-
-	/*
-	 * sysenter MSRs
-	 */
-	if (boot_cpu_has(X86_FEATURE_SEP))
-		enable_sep_cpu();
-#else
-/* CONFIG_X86_64 */
-	asm volatile ("movw %0, %%ds" :: "r" (ctxt->ds));
-	asm volatile ("movw %0, %%es" :: "r" (ctxt->es));
-	asm volatile ("movw %0, %%fs" :: "r" (ctxt->fs));
-	load_gs_index(ctxt->gs);
-	asm volatile ("movw %0, %%ss" :: "r" (ctxt->ss));
-
-	wrmsrl(MSR_FS_BASE, ctxt->fs_base);
-	wrmsrl(MSR_GS_BASE, ctxt->gs_base);
-	wrmsrl(MSR_KERNEL_GS_BASE, ctxt->gs_kernel_base);
+    /* CONFIG_X86_64 */
+    load_gdt((const struct desc_ptr *)&ctxt->gdt_limit);
+    load_idt((const struct desc_ptr *)&ctxt->idt_limit);
 #endif
 
-	/*
-	 * restore XCR0 for xsave capable cpu's.
-	 */
-	if (cpu_has_xsave)
-		xsetbv(XCR_XFEATURE_ENABLED_MASK, pcntxt_mask);
+    /*
+     * segment registers
+     */
+#ifdef CONFIG_X86_32
+    loadsegment(es, ctxt->es);
+    loadsegment(fs, ctxt->fs);
+    loadsegment(gs, ctxt->gs);
+    loadsegment(ss, ctxt->ss);
 
-	fix_processor_context();
+    /*
+     * sysenter MSRs
+     */
+    if (boot_cpu_has(X86_FEATURE_SEP))
+        enable_sep_cpu();
+#else
+    /* CONFIG_X86_64 */
+    asm volatile ("movw %0, %%ds" :: "r" (ctxt->ds));
+    asm volatile ("movw %0, %%es" :: "r" (ctxt->es));
+    asm volatile ("movw %0, %%fs" :: "r" (ctxt->fs));
+    load_gs_index(ctxt->gs);
+    asm volatile ("movw %0, %%ss" :: "r" (ctxt->ss));
 
-	do_fpu_end();
-	x86_platform.restore_sched_clock_state();
-	mtrr_bp_restore();
+    wrmsrl(MSR_FS_BASE, ctxt->fs_base);
+    wrmsrl(MSR_GS_BASE, ctxt->gs_base);
+    wrmsrl(MSR_KERNEL_GS_BASE, ctxt->gs_kernel_base);
+#endif
+
+    /*
+     * restore XCR0 for xsave capable cpu's.
+     */
+    if (cpu_has_xsave)
+        xsetbv(XCR_XFEATURE_ENABLED_MASK, pcntxt_mask);
+
+    fix_processor_context();
+
+    do_fpu_end();
+    x86_platform.restore_sched_clock_state();
+    mtrr_bp_restore();
 }
 
 /* Needed by apm.c */
-void restore_processor_state(void)
-{
-	__restore_processor_state(&saved_context);
+void restore_processor_state(void) {
+    __restore_processor_state(&saved_context);
 }
 #ifdef CONFIG_X86_32
 EXPORT_SYMBOL(restore_processor_state);

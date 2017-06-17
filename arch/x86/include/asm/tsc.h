@@ -19,30 +19,28 @@ extern unsigned int tsc_khz;
 
 extern void disable_TSC(void);
 
-static inline cycles_t get_cycles(void)
-{
-	unsigned long long ret = 0;
+static inline cycles_t get_cycles(void) {
+    unsigned long long ret = 0;
 
 #ifndef CONFIG_X86_TSC
-	if (!cpu_has_tsc)
-		return 0;
+    if (!cpu_has_tsc)
+        return 0;
 #endif
-	rdtscll(ret);
+    rdtscll(ret);
 
-	return ret;
+    return ret;
 }
 
-static __always_inline cycles_t vget_cycles(void)
-{
-	/*
-	 * We only do VDSOs on TSC capable CPUs, so this shouldn't
-	 * access boot_cpu_data (which is not VDSO-safe):
-	 */
+static __always_inline cycles_t vget_cycles(void) {
+    /*
+     * We only do VDSOs on TSC capable CPUs, so this shouldn't
+     * access boot_cpu_data (which is not VDSO-safe):
+     */
 #ifndef CONFIG_X86_TSC
-	if (!cpu_has_tsc)
-		return 0;
+    if (!cpu_has_tsc)
+        return 0;
 #endif
-	return (cycles_t)__native_read_tsc();
+    return (cycles_t)__native_read_tsc();
 }
 
 extern void tsc_init(void);

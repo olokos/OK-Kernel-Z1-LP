@@ -17,9 +17,9 @@ struct thread;
 #endif
 
 enum {
-	RINGBUF_TYPE_PADDING		= 29,
-	RINGBUF_TYPE_TIME_EXTEND	= 30,
-	RINGBUF_TYPE_TIME_STAMP		= 31,
+    RINGBUF_TYPE_PADDING		= 29,
+    RINGBUF_TYPE_TIME_EXTEND	= 30,
+    RINGBUF_TYPE_TIME_STAMP		= 31,
 };
 
 #ifndef TS_SHIFT
@@ -30,137 +30,137 @@ enum {
 #define NSECS_PER_USEC		1000ULL
 
 enum format_flags {
-	FIELD_IS_ARRAY		= 1,
-	FIELD_IS_POINTER	= 2,
-	FIELD_IS_SIGNED		= 4,
-	FIELD_IS_STRING		= 8,
-	FIELD_IS_DYNAMIC	= 16,
-	FIELD_IS_FLAG		= 32,
-	FIELD_IS_SYMBOLIC	= 64,
+    FIELD_IS_ARRAY		= 1,
+    FIELD_IS_POINTER	= 2,
+    FIELD_IS_SIGNED		= 4,
+    FIELD_IS_STRING		= 8,
+    FIELD_IS_DYNAMIC	= 16,
+    FIELD_IS_FLAG		= 32,
+    FIELD_IS_SYMBOLIC	= 64,
 };
 
 struct format_field {
-	struct format_field	*next;
-	char			*type;
-	char			*name;
-	int			offset;
-	int			size;
-	unsigned long		flags;
+    struct format_field	*next;
+    char			*type;
+    char			*name;
+    int			offset;
+    int			size;
+    unsigned long		flags;
 };
 
 struct format {
-	int			nr_common;
-	int			nr_fields;
-	struct format_field	*common_fields;
-	struct format_field	*fields;
+    int			nr_common;
+    int			nr_fields;
+    struct format_field	*common_fields;
+    struct format_field	*fields;
 };
 
 struct print_arg_atom {
-	char			*atom;
+    char			*atom;
 };
 
 struct print_arg_string {
-	char			*string;
-	int			offset;
+    char			*string;
+    int			offset;
 };
 
 struct print_arg_field {
-	char			*name;
-	struct format_field	*field;
+    char			*name;
+    struct format_field	*field;
 };
 
 struct print_flag_sym {
-	struct print_flag_sym	*next;
-	char			*value;
-	char			*str;
+    struct print_flag_sym	*next;
+    char			*value;
+    char			*str;
 };
 
 struct print_arg_typecast {
-	char 			*type;
-	struct print_arg	*item;
+    char 			*type;
+    struct print_arg	*item;
 };
 
 struct print_arg_flags {
-	struct print_arg	*field;
-	char			*delim;
-	struct print_flag_sym	*flags;
+    struct print_arg	*field;
+    char			*delim;
+    struct print_flag_sym	*flags;
 };
 
 struct print_arg_symbol {
-	struct print_arg	*field;
-	struct print_flag_sym	*symbols;
+    struct print_arg	*field;
+    struct print_flag_sym	*symbols;
 };
 
 struct print_arg;
 
 struct print_arg_op {
-	char			*op;
-	int			prio;
-	struct print_arg	*left;
-	struct print_arg	*right;
+    char			*op;
+    int			prio;
+    struct print_arg	*left;
+    struct print_arg	*right;
 };
 
 struct print_arg_func {
-	char			*name;
-	struct print_arg	*args;
+    char			*name;
+    struct print_arg	*args;
 };
 
 enum print_arg_type {
-	PRINT_NULL,
-	PRINT_ATOM,
-	PRINT_FIELD,
-	PRINT_FLAGS,
-	PRINT_SYMBOL,
-	PRINT_TYPE,
-	PRINT_STRING,
-	PRINT_OP,
+    PRINT_NULL,
+    PRINT_ATOM,
+    PRINT_FIELD,
+    PRINT_FLAGS,
+    PRINT_SYMBOL,
+    PRINT_TYPE,
+    PRINT_STRING,
+    PRINT_OP,
 };
 
 struct print_arg {
-	struct print_arg		*next;
-	enum print_arg_type		type;
-	union {
-		struct print_arg_atom		atom;
-		struct print_arg_field		field;
-		struct print_arg_typecast	typecast;
-		struct print_arg_flags		flags;
-		struct print_arg_symbol		symbol;
-		struct print_arg_func		func;
-		struct print_arg_string		string;
-		struct print_arg_op		op;
-	};
+    struct print_arg		*next;
+    enum print_arg_type		type;
+    union {
+        struct print_arg_atom		atom;
+        struct print_arg_field		field;
+        struct print_arg_typecast	typecast;
+        struct print_arg_flags		flags;
+        struct print_arg_symbol		symbol;
+        struct print_arg_func		func;
+        struct print_arg_string		string;
+        struct print_arg_op		op;
+    };
 };
 
 struct print_fmt {
-	char			*format;
-	struct print_arg	*args;
+    char			*format;
+    struct print_arg	*args;
 };
 
 struct event {
-	struct event		*next;
-	char			*name;
-	int			id;
-	int			flags;
-	struct format		format;
-	struct print_fmt	print_fmt;
-	char			*system;
+    struct event		*next;
+    char			*name;
+    int			id;
+    int			flags;
+    struct format		format;
+    struct print_fmt	print_fmt;
+    char			*system;
 };
 
 enum {
-	EVENT_FL_ISFTRACE	= 0x01,
-	EVENT_FL_ISPRINT	= 0x02,
-	EVENT_FL_ISBPRINT	= 0x04,
-	EVENT_FL_ISFUNC		= 0x08,
-	EVENT_FL_ISFUNCENT	= 0x10,
-	EVENT_FL_ISFUNCRET	= 0x20,
+    EVENT_FL_ISFTRACE	= 0x01,
+    EVENT_FL_ISPRINT	= 0x02,
+    EVENT_FL_ISBPRINT	= 0x04,
+    EVENT_FL_ISFUNC		= 0x08,
+    EVENT_FL_ISFUNCENT	= 0x10,
+    EVENT_FL_ISFUNCRET	= 0x20,
 
-	EVENT_FL_FAILED		= 0x80000000
+    EVENT_FL_FAILED		= 0x80000000
 };
 
 struct record {
-	unsigned long long ts;
-	int size;
-	void *data;
+    unsigned long long ts;
+    int size;
+    void *data;
 };
 
 struct record *trace_peek_data(int cpu);
@@ -188,51 +188,48 @@ extern int host_bigendian;
 
 int bigendian(void);
 
-static inline unsigned short __data2host2(unsigned short data)
-{
-	unsigned short swap;
+static inline unsigned short __data2host2(unsigned short data) {
+    unsigned short swap;
 
-	if (host_bigendian == file_bigendian)
-		return data;
+    if (host_bigendian == file_bigendian)
+        return data;
 
-	swap = ((data & 0xffULL) << 8) |
-		((data & (0xffULL << 8)) >> 8);
+    swap = ((data & 0xffULL) << 8) |
+           ((data & (0xffULL << 8)) >> 8);
 
-	return swap;
+    return swap;
 }
 
-static inline unsigned int __data2host4(unsigned int data)
-{
-	unsigned int swap;
+static inline unsigned int __data2host4(unsigned int data) {
+    unsigned int swap;
 
-	if (host_bigendian == file_bigendian)
-		return data;
+    if (host_bigendian == file_bigendian)
+        return data;
 
-	swap = ((data & 0xffULL) << 24) |
-		((data & (0xffULL << 8)) << 8) |
-		((data & (0xffULL << 16)) >> 8) |
-		((data & (0xffULL << 24)) >> 24);
+    swap = ((data & 0xffULL) << 24) |
+           ((data & (0xffULL << 8)) << 8) |
+           ((data & (0xffULL << 16)) >> 8) |
+           ((data & (0xffULL << 24)) >> 24);
 
-	return swap;
+    return swap;
 }
 
-static inline unsigned long long __data2host8(unsigned long long data)
-{
-	unsigned long long swap;
+static inline unsigned long long __data2host8(unsigned long long data) {
+    unsigned long long swap;
 
-	if (host_bigendian == file_bigendian)
-		return data;
+    if (host_bigendian == file_bigendian)
+        return data;
 
-	swap = ((data & 0xffULL) << 56) |
-		((data & (0xffULL << 8)) << 40) |
-		((data & (0xffULL << 16)) << 24) |
-		((data & (0xffULL << 24)) << 8) |
-		((data & (0xffULL << 32)) >> 8) |
-		((data & (0xffULL << 40)) >> 24) |
-		((data & (0xffULL << 48)) >> 40) |
-		((data & (0xffULL << 56)) >> 56);
+    swap = ((data & 0xffULL) << 56) |
+           ((data & (0xffULL << 8)) << 40) |
+           ((data & (0xffULL << 16)) << 24) |
+           ((data & (0xffULL << 24)) << 8) |
+           ((data & (0xffULL << 32)) >> 8) |
+           ((data & (0xffULL << 40)) >> 24) |
+           ((data & (0xffULL << 48)) >> 40) |
+           ((data & (0xffULL << 56)) >> 56);
 
-	return swap;
+    return swap;
 }
 
 #define data2host2(ptr)		__data2host2(*(unsigned short *)ptr)
@@ -269,36 +266,36 @@ unsigned long long eval_flag(const char *flag);
 int read_tracing_data(int fd, struct list_head *pattrs);
 
 struct tracing_data {
-	/* size is only valid if temp is 'true' */
-	ssize_t size;
-	bool temp;
-	char temp_file[50];
+    /* size is only valid if temp is 'true' */
+    ssize_t size;
+    bool temp;
+    char temp_file[50];
 };
 
 struct tracing_data *tracing_data_get(struct list_head *pattrs,
-				      int fd, bool temp);
+                                      int fd, bool temp);
 void tracing_data_put(struct tracing_data *tdata);
 
 
 /* taken from kernel/trace/trace.h */
 enum trace_flag_type {
-	TRACE_FLAG_IRQS_OFF		= 0x01,
-	TRACE_FLAG_IRQS_NOSUPPORT	= 0x02,
-	TRACE_FLAG_NEED_RESCHED		= 0x04,
-	TRACE_FLAG_HARDIRQ		= 0x08,
-	TRACE_FLAG_SOFTIRQ		= 0x10,
+    TRACE_FLAG_IRQS_OFF		= 0x01,
+    TRACE_FLAG_IRQS_NOSUPPORT	= 0x02,
+    TRACE_FLAG_NEED_RESCHED		= 0x04,
+    TRACE_FLAG_HARDIRQ		= 0x08,
+    TRACE_FLAG_SOFTIRQ		= 0x10,
 };
 
 struct scripting_ops {
-	const char *name;
-	int (*start_script) (const char *script, int argc, const char **argv);
-	int (*stop_script) (void);
-	void (*process_event) (union perf_event *event,
-			       struct perf_sample *sample,
-			       struct perf_evsel *evsel,
-			       struct machine *machine,
-			       struct thread *thread);
-	int (*generate_script) (const char *outfile);
+    const char *name;
+    int (*start_script) (const char *script, int argc, const char **argv);
+    int (*stop_script) (void);
+    void (*process_event) (union perf_event *event,
+                           struct perf_sample *sample,
+                           struct perf_evsel *evsel,
+                           struct machine *machine,
+                           struct thread *thread);
+    int (*generate_script) (const char *outfile);
 };
 
 int script_spec_register(const char *spec, struct scripting_ops *ops);
@@ -308,7 +305,7 @@ void setup_python_scripting(void);
 void setup_json_export(void);
 
 struct scripting_context {
-	void *event_data;
+    void *event_data;
 };
 
 int common_pc(struct scripting_context *context);

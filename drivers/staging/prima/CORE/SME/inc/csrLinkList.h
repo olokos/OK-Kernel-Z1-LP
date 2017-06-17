@@ -41,21 +41,18 @@
 #define LL_ACCESS_LOCK          eANI_BOOLEAN_TRUE
 #define LL_ACCESS_NOLOCK        eANI_BOOLEAN_FALSE
 
-typedef struct tagListElem
-{
+typedef struct tagListElem {
     struct tagListElem *last;
     struct tagListElem *next;
 } tListElem;
 
-typedef enum
-{
+typedef enum {
     LIST_FLAG_CLOSE = 0,
     LIST_FLAG_OPEN = 0xa1b2c4d7,
 } tListFlag;
 
 //This is a circular double link list
-typedef struct tagDblLinkList
-{
+typedef struct tagDblLinkList {
     tListElem ListHead;
     vos_lock_t Lock;
     tANI_U32  Count;

@@ -94,24 +94,24 @@ typedef struct {
 
 struct thread_struct {
 
-	/* kernel's return address and stack pointer for context switching */
-	unsigned long ra; /* kernel's a0: return address and window call size */
-	unsigned long sp; /* kernel's a1: stack pointer */
+    /* kernel's return address and stack pointer for context switching */
+    unsigned long ra; /* kernel's a0: return address and window call size */
+    unsigned long sp; /* kernel's a1: stack pointer */
 
-	mm_segment_t current_ds;    /* see uaccess.h for example uses */
+    mm_segment_t current_ds;    /* see uaccess.h for example uses */
 
-	/* struct xtensa_cpuinfo info; */
+    /* struct xtensa_cpuinfo info; */
 
-	unsigned long bad_vaddr; /* last user fault */
-	unsigned long bad_uaddr; /* last kernel fault accessing user space */
-	unsigned long error_code;
+    unsigned long bad_vaddr; /* last user fault */
+    unsigned long bad_uaddr; /* last kernel fault accessing user space */
+    unsigned long error_code;
 
-	unsigned long ibreak[XCHAL_NUM_IBREAK];
-	unsigned long dbreaka[XCHAL_NUM_DBREAK];
-	unsigned long dbreakc[XCHAL_NUM_DBREAK];
+    unsigned long ibreak[XCHAL_NUM_IBREAK];
+    unsigned long dbreaka[XCHAL_NUM_DBREAK];
+    unsigned long dbreakc[XCHAL_NUM_DBREAK];
 
-	/* Make structure 16 bytes aligned. */
-	int align[0] __attribute__ ((aligned(16)));
+    /* Make structure 16 bytes aligned. */
+    int align[0] __attribute__ ((aligned(16)));
 };
 
 

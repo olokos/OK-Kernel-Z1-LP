@@ -40,11 +40,11 @@ typedef void (*fsm_function_t)(struct fsm_instance_t *, int, void *);
  * Internal jump table for a FSM
  */
 typedef struct {
-	fsm_function_t *jumpmatrix;
-	int nr_events;
-	int nr_states;
-	const char **event_names;
-	const char **state_names;
+    fsm_function_t *jumpmatrix;
+    int nr_events;
+    int nr_states;
+    const char **event_names;
+    const char **state_names;
 } fsm;
 
 #if FSM_DEBUG_HISTORY
@@ -52,8 +52,8 @@ typedef struct {
  * Element of State/Event history used for debugging.
  */
 typedef struct {
-	int state;
-	int event;
+    int state;
+    int event;
 } fsm_history;
 #endif
 
@@ -61,16 +61,16 @@ typedef struct {
  * Representation of a FSM
  */
 typedef struct fsm_instance_t {
-	fsm *f;
-	atomic_t state;
-	char name[16];
-	void *userdata;
-	int userint;
-	wait_queue_head_t wait_q;
+    fsm *f;
+    atomic_t state;
+    char name[16];
+    void *userdata;
+    int userint;
+    wait_queue_head_t wait_q;
 #if FSM_DEBUG_HISTORY
-	int         history_index;
-	int         history_size;
-	fsm_history history[FSM_HISTORY_SIZE];
+    int         history_index;
+    int         history_size;
+    fsm_history history[FSM_HISTORY_SIZE];
 #endif
 } fsm_instance;
 
@@ -78,19 +78,19 @@ typedef struct fsm_instance_t {
  * Description of a state-event combination
  */
 typedef struct {
-	int cond_state;
-	int cond_event;
-	fsm_function_t function;
+    int cond_state;
+    int cond_event;
+    fsm_function_t function;
 } fsm_node;
 
 /**
  * Description of a FSM Timer.
  */
 typedef struct {
-	fsm_instance *fi;
-	struct timer_list tl;
-	int expire_event;
-	void *event_arg;
+    fsm_instance *fi;
+    struct timer_list tl;
+    int expire_event;
+    void *event_arg;
 } fsm_timer;
 
 /**
@@ -107,9 +107,9 @@ typedef struct {
  */
 extern fsm_instance *
 init_fsm(char *name, const char **state_names,
-	 const char **event_names,
-	 int nr_states, int nr_events, const fsm_node *tmpl,
-	 int tmpl_len, gfp_t order);
+         const char **event_names,
+         int nr_states, int nr_events, const fsm_node *tmpl,
+         int tmpl_len, gfp_t order);
 
 /**
  * Releases an FSM
@@ -140,44 +140,43 @@ fsm_record_history(fsm_instance *fi, int state, int event);
  *              !0 if state and event in range, but no action defined.
  */
 static inline int
-fsm_event(fsm_instance *fi, int event, void *arg)
-{
-	fsm_function_t r;
-	int state = atomic_read(&fi->state);
+fsm_event(fsm_instance *fi, int event, void *arg) {
+    fsm_function_t r;
+    int state = atomic_read(&fi->state);
 
-	if ((state >= fi->f->nr_states) ||
-	    (event >= fi->f->nr_events)       ) {
-		printk(KERN_ERR "fsm(%s): Invalid state st(%ld/%ld) ev(%d/%ld)\n",
-			fi->name, (long)state,(long)fi->f->nr_states, event,
-			(long)fi->f->nr_events);
+    if ((state >= fi->f->nr_states) ||
+            (event >= fi->f->nr_events)       ) {
+        printk(KERN_ERR "fsm(%s): Invalid state st(%ld/%ld) ev(%d/%ld)\n",
+               fi->name, (long)state,(long)fi->f->nr_states, event,
+               (long)fi->f->nr_events);
 #if FSM_DEBUG_HISTORY
-		fsm_print_history(fi);
+        fsm_print_history(fi);
 #endif
-		return 1;
-	}
-	r = fi->f->jumpmatrix[fi->f->nr_states * event + state];
-	if (r) {
+        return 1;
+    }
+    r = fi->f->jumpmatrix[fi->f->nr_states * event + state];
+    if (r) {
 #if FSM_DEBUG
-		printk(KERN_DEBUG "fsm(%s): state %s event %s\n",
-		       fi->name, fi->f->state_names[state],
-		       fi->f->event_names[event]);
+        printk(KERN_DEBUG "fsm(%s): state %s event %s\n",
+               fi->name, fi->f->state_names[state],
+               fi->f->event_names[event]);
 #endif
 #if FSM_DEBUG_HISTORY
-		fsm_record_history(fi, state, event);
+        fsm_record_history(fi, state, event);
 #endif
-		r(fi, event, arg);
-		return 0;
-	} else {
+        r(fi, event, arg);
+        return 0;
+    } else {
 #if FSM_DEBUG || FSM_DEBUG_HISTORY
-		printk(KERN_DEBUG "fsm(%s): no function for event %s in state %s\n",
-		       fi->name, fi->f->event_names[event],
-		       fi->f->state_names[state]);
+        printk(KERN_DEBUG "fsm(%s): no function for event %s in state %s\n",
+               fi->name, fi->f->event_names[event],
+               fi->f->state_names[state]);
 #endif
 #if FSM_DEBUG_HISTORY
-		fsm_print_history(fi);
+        fsm_print_history(fi);
 #endif
-		return !0;
-	}
+        return !0;
+    }
 }
 
 /**
@@ -188,17 +187,16 @@ fsm_event(fsm_instance *fi, int event, void *arg)
  * @param state The new state for this FSM.
  */
 static inline void
-fsm_newstate(fsm_instance *fi, int newstate)
-{
-	atomic_set(&fi->state,newstate);
+fsm_newstate(fsm_instance *fi, int newstate) {
+    atomic_set(&fi->state,newstate);
 #if FSM_DEBUG_HISTORY
-	fsm_record_history(fi, newstate, -1);
+    fsm_record_history(fi, newstate, -1);
 #endif
 #if FSM_DEBUG
-	printk(KERN_DEBUG "fsm(%s): New state %s\n", fi->name,
-		fi->f->state_names[newstate]);
+    printk(KERN_DEBUG "fsm(%s): New state %s\n", fi->name,
+           fi->f->state_names[newstate]);
 #endif
-	wake_up(&fi->wait_q);
+    wake_up(&fi->wait_q);
 }
 
 /**
@@ -209,9 +207,8 @@ fsm_newstate(fsm_instance *fi, int newstate)
  * @return The current state of the FSM.
  */
 static inline int
-fsm_getstate(fsm_instance *fi)
-{
-	return atomic_read(&fi->state);
+fsm_getstate(fsm_instance *fi) {
+    return atomic_read(&fi->state);
 }
 
 /**

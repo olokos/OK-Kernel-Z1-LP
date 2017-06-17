@@ -89,23 +89,23 @@
 
 
 enum {
-	PAT_STATUS,
-	PAT_DESCR
+    PAT_STATUS,
+    PAT_DESCR
 };
 
 struct pat_ctrl {
-	u32 start:4;
-	u32 dir:4;
-	u32 lut_id:8;
-	u32 sync:12;
-	u32 ini:4;
+    u32 start:4;
+    u32 dir:4;
+    u32 lut_id:8;
+    u32 sync:12;
+    u32 ini:4;
 };
 
 struct pat {
-	uint32_t next_pa;
-	struct pat_area area;
-	struct pat_ctrl ctrl;
-	uint32_t data_pa;
+    uint32_t next_pa;
+    struct pat_area area;
+    struct pat_ctrl ctrl;
+    uint32_t data_pa;
 };
 
 #define DMM_FIXED_RETRY_COUNT 1000
@@ -121,67 +121,67 @@ struct pat {
 struct dmm;
 
 struct dmm_txn {
-	void *engine_handle;
-	struct tcm *tcm;
+    void *engine_handle;
+    struct tcm *tcm;
 
-	uint8_t *current_va;
-	dma_addr_t current_pa;
+    uint8_t *current_va;
+    dma_addr_t current_pa;
 
-	struct pat *last_pat;
+    struct pat *last_pat;
 };
 
 struct refill_engine {
-	int id;
-	struct dmm *dmm;
-	struct tcm *tcm;
+    int id;
+    struct dmm *dmm;
+    struct tcm *tcm;
 
-	uint8_t *refill_va;
-	dma_addr_t refill_pa;
+    uint8_t *refill_va;
+    dma_addr_t refill_pa;
 
-	/* only one trans per engine for now */
-	struct dmm_txn txn;
+    /* only one trans per engine for now */
+    struct dmm_txn txn;
 
-	/* offset to lut associated with container */
-	u32 *lut_offset;
+    /* offset to lut associated with container */
+    u32 *lut_offset;
 
-	wait_queue_head_t wait_for_refill;
+    wait_queue_head_t wait_for_refill;
 
-	struct list_head idle_node;
+    struct list_head idle_node;
 };
 
 struct dmm {
-	struct device *dev;
-	void __iomem *base;
-	int irq;
+    struct device *dev;
+    void __iomem *base;
+    int irq;
 
-	struct page *dummy_page;
-	dma_addr_t dummy_pa;
+    struct page *dummy_page;
+    dma_addr_t dummy_pa;
 
-	void *refill_va;
-	dma_addr_t refill_pa;
+    void *refill_va;
+    dma_addr_t refill_pa;
 
-	/* refill engines */
-	struct semaphore engine_sem;
-	struct list_head idle_head;
-	struct refill_engine *engines;
-	int num_engines;
+    /* refill engines */
+    struct semaphore engine_sem;
+    struct list_head idle_head;
+    struct refill_engine *engines;
+    int num_engines;
 
-	/* container information */
-	int container_width;
-	int container_height;
-	int lut_width;
-	int lut_height;
-	int num_lut;
+    /* container information */
+    int container_width;
+    int container_height;
+    int lut_width;
+    int lut_height;
+    int num_lut;
 
-	/* array of LUT - TCM containers */
-	struct tcm **tcm;
+    /* array of LUT - TCM containers */
+    struct tcm **tcm;
 
-	/* LUT table storage */
-	u32 *lut;
+    /* LUT table storage */
+    u32 *lut;
 
-	/* allocation list and lock */
-	struct list_head alloc_head;
-	spinlock_t list_lock;
+    /* allocation list and lock */
+    struct list_head alloc_head;
+    spinlock_t list_lock;
 };
 
 #endif

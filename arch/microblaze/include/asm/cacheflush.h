@@ -33,20 +33,20 @@
 /* struct cache, d=dcache, i=icache, fl = flush, iv = invalidate,
  * suffix r = range */
 struct scache {
-	/* icache */
-	void (*ie)(void); /* enable */
-	void (*id)(void); /* disable */
-	void (*ifl)(void); /* flush */
-	void (*iflr)(unsigned long a, unsigned long b);
-	void (*iin)(void); /* invalidate */
-	void (*iinr)(unsigned long a, unsigned long b);
-	/* dcache */
-	void (*de)(void); /* enable */
-	void (*dd)(void); /* disable */
-	void (*dfl)(void); /* flush */
-	void (*dflr)(unsigned long a, unsigned long b);
-	void (*din)(void); /* invalidate */
-	void (*dinr)(unsigned long a, unsigned long b);
+    /* icache */
+    void (*ie)(void); /* enable */
+    void (*id)(void); /* disable */
+    void (*ifl)(void); /* flush */
+    void (*iflr)(unsigned long a, unsigned long b);
+    void (*iin)(void); /* invalidate */
+    void (*iinr)(unsigned long a, unsigned long b);
+    /* dcache */
+    void (*de)(void); /* enable */
+    void (*dd)(void); /* disable */
+    void (*dfl)(void); /* flush */
+    void (*dflr)(unsigned long a, unsigned long b);
+    void (*din)(void); /* invalidate */
+    void (*dinr)(unsigned long a, unsigned long b);
 };
 
 /* microblaze cache */

@@ -23,15 +23,13 @@
 #include <asm/kmap_types.h>
 
 
-static inline void crypto_yield(struct crypto_tfm *tfm)
-{
-	if (!in_softirq())
-		cond_resched();
+static inline void crypto_yield(struct crypto_tfm *tfm) {
+    if (!in_softirq())
+        cond_resched();
 }
 
-static inline void *crypto_tfm_ctx(struct crypto_tfm *tfm)
-{
-	return (void *)&tfm[1];
+static inline void *crypto_tfm_ctx(struct crypto_tfm *tfm) {
+    return (void *)&tfm[1];
 }
 
 struct crypto_alg *crypto_alg_lookup(const char *name);
@@ -40,9 +38,8 @@ struct crypto_alg *crypto_alg_lookup(const char *name);
 void crypto_alg_autoload(const char *name);
 struct crypto_alg *crypto_alg_mod_lookup(const char *name);
 #else
-static inline struct crypto_alg *crypto_alg_mod_lookup(const char *name)
-{
-	return crypto_alg_lookup(name);
+static inline struct crypto_alg *crypto_alg_mod_lookup(const char *name) {
+    return crypto_alg_lookup(name);
 }
 #endif
 
@@ -50,20 +47,19 @@ static inline struct crypto_alg *crypto_alg_mod_lookup(const char *name)
 int crypto_alloc_hmac_block(struct crypto_tfm *tfm);
 void crypto_free_hmac_block(struct crypto_tfm *tfm);
 #else
-static inline int crypto_alloc_hmac_block(struct crypto_tfm *tfm)
-{
-	return 0;
+static inline int crypto_alloc_hmac_block(struct crypto_tfm *tfm) {
+    return 0;
 }
 
-static inline void crypto_free_hmac_block(struct crypto_tfm *tfm)
-{ }
+static inline void crypto_free_hmac_block(struct crypto_tfm *tfm) {
+}
 #endif
 
 #ifdef CONFIG_PROC_FS
 void __init crypto_init_proc(void);
 #else
-static inline void crypto_init_proc(void)
-{ }
+static inline void crypto_init_proc(void) {
+}
 #endif
 
 int crypto_init_digest_flags(struct crypto_tfm *tfm, u32 flags);

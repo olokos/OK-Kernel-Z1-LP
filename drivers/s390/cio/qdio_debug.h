@@ -19,9 +19,8 @@ extern debug_info_t *qdio_dbf_setup;
 extern debug_info_t *qdio_dbf_error;
 
 /* sort out low debug levels early to avoid wasted sprints */
-static inline int qdio_dbf_passes(debug_info_t *dbf_grp, int level)
-{
-	return (level <= dbf_grp->level);
+static inline int qdio_dbf_passes(debug_info_t *dbf_grp, int level) {
+    return (level <= dbf_grp->level);
 }
 
 #define DBF_ERR		3	/* error conditions	*/
@@ -72,11 +71,11 @@ static inline int qdio_dbf_passes(debug_info_t *dbf_grp, int level)
 	} while (0)
 
 void qdio_allocate_dbf(struct qdio_initialize *init_data,
-		       struct qdio_irq *irq_ptr);
+                       struct qdio_irq *irq_ptr);
 void qdio_setup_debug_entries(struct qdio_irq *irq_ptr,
-			      struct ccw_device *cdev);
+                              struct ccw_device *cdev);
 void qdio_shutdown_debug_entries(struct qdio_irq *irq_ptr,
-				 struct ccw_device *cdev);
+                                 struct ccw_device *cdev);
 int qdio_debug_init(void);
 void qdio_debug_exit(void);
 

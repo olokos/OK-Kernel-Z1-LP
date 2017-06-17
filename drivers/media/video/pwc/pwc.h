@@ -199,154 +199,152 @@
 #define PSZ_MAX		6
 
 struct pwc_raw_frame {
-	__le16 type;		/* type of the webcam */
-	__le16 vbandlength;	/* Size of 4 lines compressed (used by the
+    __le16 type;		/* type of the webcam */
+    __le16 vbandlength;	/* Size of 4 lines compressed (used by the
 				   decompressor) */
-	__u8   cmd[4];		/* the four byte of the command (in case of
+    __u8   cmd[4];		/* the four byte of the command (in case of
 				   nala, only the first 3 bytes is filled) */
-	__u8   rawframe[0];	/* frame_size = H / 4 * vbandlength */
+    __u8   rawframe[0];	/* frame_size = H / 4 * vbandlength */
 } __packed;
 
 /* intermediate buffers with raw data from the USB cam */
-struct pwc_frame_buf
-{
-	struct vb2_buffer vb;	/* common v4l buffer stuff -- must be first */
-	struct list_head list;
-	void *data;
-	int filled;		/* number of bytes filled */
+struct pwc_frame_buf {
+    struct vb2_buffer vb;	/* common v4l buffer stuff -- must be first */
+    struct list_head list;
+    void *data;
+    int filled;		/* number of bytes filled */
 };
 
-struct pwc_device
-{
-	struct video_device vdev;
-	struct v4l2_device v4l2_dev;
+struct pwc_device {
+    struct video_device vdev;
+    struct v4l2_device v4l2_dev;
 
-	/* Pointer to our usb_device, may be NULL after unplug */
-	struct usb_device *udev;
-	struct mutex udevlock;
+    /* Pointer to our usb_device, may be NULL after unplug */
+    struct usb_device *udev;
+    struct mutex udevlock;
 
-	/* type of cam (645, 646, 675, 680, 690, 720, 730, 740, 750) */
-	int type;
-	int release;		/* release number */
-	int features;		/* feature bits */
+    /* type of cam (645, 646, 675, 680, 690, 720, 730, 740, 750) */
+    int type;
+    int release;		/* release number */
+    int features;		/* feature bits */
 
-	/*** Video data ***/
-	struct file *capt_file;	/* file doing video capture */
-	struct mutex capt_file_lock;
-	int vendpoint;		/* video isoc endpoint */
-	int vcinterface;	/* video control interface */
-	int valternate;		/* alternate interface needed */
-	int vframes;		/* frames-per-second */
-	int pixfmt;		/* pixelformat: V4L2_PIX_FMT_YUV420 or _PWCX */
-	int vframe_count;	/* received frames */
-	int vmax_packet_size;	/* USB maxpacket size */
-	int vlast_packet_size;	/* for frame synchronisation */
-	int visoc_errors;	/* number of contiguous ISOC errors */
-	int vbandlength;	/* compressed band length; 0 is uncompressed */
-	char vsync;		/* used by isoc handler */
-	char vmirror;		/* for ToUCaM series */
-	char power_save;	/* Do powersaving for this cam */
+    /*** Video data ***/
+    struct file *capt_file;	/* file doing video capture */
+    struct mutex capt_file_lock;
+    int vendpoint;		/* video isoc endpoint */
+    int vcinterface;	/* video control interface */
+    int valternate;		/* alternate interface needed */
+    int vframes;		/* frames-per-second */
+    int pixfmt;		/* pixelformat: V4L2_PIX_FMT_YUV420 or _PWCX */
+    int vframe_count;	/* received frames */
+    int vmax_packet_size;	/* USB maxpacket size */
+    int vlast_packet_size;	/* for frame synchronisation */
+    int visoc_errors;	/* number of contiguous ISOC errors */
+    int vbandlength;	/* compressed band length; 0 is uncompressed */
+    char vsync;		/* used by isoc handler */
+    char vmirror;		/* for ToUCaM series */
+    char power_save;	/* Do powersaving for this cam */
 
-	unsigned char cmd_buf[13];
-	unsigned char *ctrl_buf;
+    unsigned char cmd_buf[13];
+    unsigned char *ctrl_buf;
 
-	struct urb *urbs[MAX_ISO_BUFS];
-	char iso_init;
+    struct urb *urbs[MAX_ISO_BUFS];
+    char iso_init;
 
-	/* videobuf2 queue and queued buffers list */
-	struct vb2_queue vb_queue;
-	struct list_head queued_bufs;
-	spinlock_t queued_bufs_lock;
+    /* videobuf2 queue and queued buffers list */
+    struct vb2_queue vb_queue;
+    struct list_head queued_bufs;
+    spinlock_t queued_bufs_lock;
 
-	/*
-	 * Frame currently being filled, this only gets touched by the
-	 * isoc urb complete handler, and by stream start / stop since
-	 * start / stop touch it before / after starting / killing the urbs
-	 * no locking is needed around this
-	 */
-	struct pwc_frame_buf *fill_buf;
+    /*
+     * Frame currently being filled, this only gets touched by the
+     * isoc urb complete handler, and by stream start / stop since
+     * start / stop touch it before / after starting / killing the urbs
+     * no locking is needed around this
+     */
+    struct pwc_frame_buf *fill_buf;
 
-	int frame_header_size, frame_trailer_size;
-	int frame_size;
-	int frame_total_size;	/* including header & trailer */
-	int drop_frames;
+    int frame_header_size, frame_trailer_size;
+    int frame_size;
+    int frame_total_size;	/* including header & trailer */
+    int drop_frames;
 
-	union {	/* private data for decompression engine */
-		struct pwc_dec1_private dec1;
-		struct pwc_dec23_private dec23;
-	};
+    union {	/* private data for decompression engine */
+        struct pwc_dec1_private dec1;
+        struct pwc_dec23_private dec23;
+    };
 
-	/*
-	 * We have an 'image' and a 'view', where 'image' is the fixed-size img
-	 * as delivered by the camera, and 'view' is the size requested by the
-	 * program. The camera image is centered in this viewport, laced with
-	 * a gray or black border. view_min <= image <= view <= view_max;
-	 */
-	int image_mask;				/* supported sizes */
-	int width, height;			/* current resolution */
+    /*
+     * We have an 'image' and a 'view', where 'image' is the fixed-size img
+     * as delivered by the camera, and 'view' is the size requested by the
+     * program. The camera image is centered in this viewport, laced with
+     * a gray or black border. view_min <= image <= view <= view_max;
+     */
+    int image_mask;				/* supported sizes */
+    int width, height;			/* current resolution */
 
 #ifdef CONFIG_USB_PWC_INPUT_EVDEV
-	struct input_dev *button_dev;	/* webcam snapshot button input */
-	char button_phys[64];
+    struct input_dev *button_dev;	/* webcam snapshot button input */
+    char button_phys[64];
 #endif
 
-	/* controls */
-	struct v4l2_ctrl_handler	ctrl_handler;
-	u16				saturation_fmt;
-	struct v4l2_ctrl		*brightness;
-	struct v4l2_ctrl		*contrast;
-	struct v4l2_ctrl		*saturation;
-	struct v4l2_ctrl		*gamma;
-	struct {
-		/* awb / red-blue balance cluster */
-		struct v4l2_ctrl	*auto_white_balance;
-		struct v4l2_ctrl	*red_balance;
-		struct v4l2_ctrl	*blue_balance;
-		/* usb ctrl transfers are slow, so we cache things */
-		int			color_bal_valid;
-		unsigned long		last_color_bal_update; /* In jiffies */
-		s32			last_red_balance;
-		s32			last_blue_balance;
-	};
-	struct {
-		/* autogain / gain cluster */
-		struct v4l2_ctrl	*autogain;
-		struct v4l2_ctrl	*gain;
-		int			gain_valid;
-		unsigned long		last_gain_update; /* In jiffies */
-		s32			last_gain;
-	};
-	struct {
-		/* exposure_auto / exposure cluster */
-		struct v4l2_ctrl	*exposure_auto;
-		struct v4l2_ctrl	*exposure;
-		int			exposure_valid;
-		unsigned long		last_exposure_update; /* In jiffies */
-		s32			last_exposure;
-	};
-	struct v4l2_ctrl		*colorfx;
-	struct {
-		/* autocontour/contour cluster */
-		struct v4l2_ctrl	*autocontour;
-		struct v4l2_ctrl	*contour;
-	};
-	struct v4l2_ctrl		*backlight;
-	struct v4l2_ctrl		*flicker;
-	struct v4l2_ctrl		*noise_reduction;
-	struct v4l2_ctrl		*save_user;
-	struct v4l2_ctrl		*restore_user;
-	struct v4l2_ctrl		*restore_factory;
-	struct v4l2_ctrl		*awb_speed;
-	struct v4l2_ctrl		*awb_delay;
-	struct {
-		/* motor control cluster */
-		struct v4l2_ctrl	*motor_pan;
-		struct v4l2_ctrl	*motor_tilt;
-		struct v4l2_ctrl	*motor_pan_reset;
-		struct v4l2_ctrl	*motor_tilt_reset;
-	};
-	/* CODEC3 models have both gain and exposure controlled by autogain */
-	struct v4l2_ctrl		*autogain_expo_cluster[3];
+    /* controls */
+    struct v4l2_ctrl_handler	ctrl_handler;
+    u16				saturation_fmt;
+    struct v4l2_ctrl		*brightness;
+    struct v4l2_ctrl		*contrast;
+    struct v4l2_ctrl		*saturation;
+    struct v4l2_ctrl		*gamma;
+    struct {
+        /* awb / red-blue balance cluster */
+        struct v4l2_ctrl	*auto_white_balance;
+        struct v4l2_ctrl	*red_balance;
+        struct v4l2_ctrl	*blue_balance;
+        /* usb ctrl transfers are slow, so we cache things */
+        int			color_bal_valid;
+        unsigned long		last_color_bal_update; /* In jiffies */
+        s32			last_red_balance;
+        s32			last_blue_balance;
+    };
+    struct {
+        /* autogain / gain cluster */
+        struct v4l2_ctrl	*autogain;
+        struct v4l2_ctrl	*gain;
+        int			gain_valid;
+        unsigned long		last_gain_update; /* In jiffies */
+        s32			last_gain;
+    };
+    struct {
+        /* exposure_auto / exposure cluster */
+        struct v4l2_ctrl	*exposure_auto;
+        struct v4l2_ctrl	*exposure;
+        int			exposure_valid;
+        unsigned long		last_exposure_update; /* In jiffies */
+        s32			last_exposure;
+    };
+    struct v4l2_ctrl		*colorfx;
+    struct {
+        /* autocontour/contour cluster */
+        struct v4l2_ctrl	*autocontour;
+        struct v4l2_ctrl	*contour;
+    };
+    struct v4l2_ctrl		*backlight;
+    struct v4l2_ctrl		*flicker;
+    struct v4l2_ctrl		*noise_reduction;
+    struct v4l2_ctrl		*save_user;
+    struct v4l2_ctrl		*restore_user;
+    struct v4l2_ctrl		*restore_factory;
+    struct v4l2_ctrl		*awb_speed;
+    struct v4l2_ctrl		*awb_delay;
+    struct {
+        /* motor control cluster */
+        struct v4l2_ctrl	*motor_pan;
+        struct v4l2_ctrl	*motor_tilt;
+        struct v4l2_ctrl	*motor_pan_reset;
+        struct v4l2_ctrl	*motor_tilt_reset;
+    };
+    /* CODEC3 models have both gain and exposure controlled by autogain */
+    struct v4l2_ctrl		*autogain_expo_cluster[3];
 };
 
 /* Global variables */
@@ -366,12 +364,12 @@ void pwc_construct(struct pwc_device *pdev);
 /** Functions in pwc-ctrl.c */
 /* Request a certain video mode. Returns < 0 if not possible */
 extern int pwc_set_video_mode(struct pwc_device *pdev, int width, int height,
-	int pixfmt, int frames, int *compression, int send_to_cam);
+                              int pixfmt, int frames, int *compression, int send_to_cam);
 extern unsigned int pwc_get_fps(struct pwc_device *pdev, unsigned int index, unsigned int size);
 extern int pwc_set_leds(struct pwc_device *pdev, int on_value, int off_value);
 extern int pwc_get_cmos_sensor(struct pwc_device *pdev, int *sensor);
 extern int send_control_msg(struct pwc_device *pdev,
-			    u8 request, u16 value, void *buf, int buflen);
+                            u8 request, u16 value, void *buf, int buflen);
 
 /* Control get / set helpers */
 int pwc_get_u8_ctrl(struct pwc_device *pdev, u8 request, u16 value, int *data);

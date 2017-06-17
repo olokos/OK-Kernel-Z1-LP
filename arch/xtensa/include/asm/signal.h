@@ -26,7 +26,7 @@
 struct siginfo;
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #endif
@@ -121,21 +121,21 @@ typedef void (*__sighandler_t)(int);
 
 #ifdef __KERNEL__
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 #else
@@ -143,13 +143,13 @@ struct k_sigaction {
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-	union {
-	  __sighandler_t _sa_handler;
-	  void (*_sa_sigaction)(int, struct siginfo *, void *);
-	} _u;
-	sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    union {
+        __sighandler_t _sa_handler;
+        void (*_sa_sigaction)(int, struct siginfo *, void *);
+    } _u;
+    sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 #define sa_handler	_u._sa_handler
@@ -158,9 +158,9 @@ struct sigaction {
 #endif /* __KERNEL__ */
 
 typedef struct sigaltstack {
-	void *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__

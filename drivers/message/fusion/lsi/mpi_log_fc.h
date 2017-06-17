@@ -34,8 +34,7 @@
  * NOTE: Any new values should be added to the end of each subclass so that the
  *       codes remain consistent across firmware releases.
  */
-typedef enum _MpiIocLogInfoFc
-{
+typedef enum _MpiIocLogInfoFc {
     MPI_IOCLOGINFO_FC_INIT_BASE                     = 0x20000000,
     MPI_IOCLOGINFO_FC_INIT_ERROR_OUT_OF_ORDER_FRAME = 0x20000001, /* received an out of order frame - unsupported */
     MPI_IOCLOGINFO_FC_INIT_ERROR_BAD_START_OF_FRAME = 0x20000002, /* Bad Rx Frame, bad start of frame primitive */

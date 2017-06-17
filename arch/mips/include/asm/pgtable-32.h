@@ -74,33 +74,29 @@ extern pte_t invalid_pte_table[PAGE_SIZE/sizeof(pte_t)];
 /*
  * Empty pgd/pmd entries point to the invalid_pte_table.
  */
-static inline int pmd_none(pmd_t pmd)
-{
-	return pmd_val(pmd) == (unsigned long) invalid_pte_table;
+static inline int pmd_none(pmd_t pmd) {
+    return pmd_val(pmd) == (unsigned long) invalid_pte_table;
 }
 
 #define pmd_bad(pmd)		(pmd_val(pmd) & ~PAGE_MASK)
 
-static inline int pmd_present(pmd_t pmd)
-{
-	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
+static inline int pmd_present(pmd_t pmd) {
+    return pmd_val(pmd) != (unsigned long) invalid_pte_table;
 }
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
+static inline void pmd_clear(pmd_t *pmdp) {
+    pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
 }
 
 #if defined(CONFIG_64BIT_PHYS_ADDR) && defined(CONFIG_CPU_MIPS32)
 #define pte_page(x)		pfn_to_page(pte_pfn(x))
 #define pte_pfn(x)		((unsigned long)((x).pte_high >> 6))
 static inline pte_t
-pfn_pte(unsigned long pfn, pgprot_t prot)
-{
-	pte_t pte;
-	pte.pte_high = (pfn << 6) | (pgprot_val(prot) & 0x3f);
-	pte.pte_low = pgprot_val(prot);
-	return pte;
+pfn_pte(unsigned long pfn, pgprot_t prot) {
+    pte_t pte;
+    pte.pte_high = (pfn << 6) | (pgprot_val(prot) & 0x3f);
+    pte.pte_low = pgprot_val(prot);
+    return pte;
 }
 
 #else

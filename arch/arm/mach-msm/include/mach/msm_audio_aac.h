@@ -56,16 +56,16 @@
 #define AUDIO_AAC_DUAL_MONO_PL_SR  3
 
 struct msm_audio_aac_config {
-	signed short format;
-	unsigned short audio_object;
-	unsigned short ep_config;	/* 0 ~ 3 useful only obj = ERLC */
-	unsigned short aac_section_data_resilience_flag;
-	unsigned short aac_scalefactor_data_resilience_flag;
-	unsigned short aac_spectral_data_resilience_flag;
-	unsigned short sbr_on_flag;
-	unsigned short sbr_ps_on_flag;
-	unsigned short dual_mono_mode;
-	unsigned short channel_configuration;
+    signed short format;
+    unsigned short audio_object;
+    unsigned short ep_config;	/* 0 ~ 3 useful only obj = ERLC */
+    unsigned short aac_section_data_resilience_flag;
+    unsigned short aac_scalefactor_data_resilience_flag;
+    unsigned short aac_spectral_data_resilience_flag;
+    unsigned short sbr_on_flag;
+    unsigned short sbr_ps_on_flag;
+    unsigned short dual_mono_mode;
+    unsigned short channel_configuration;
 };
 
 #endif /* __MSM_AUDIO_AAC_H */

@@ -30,33 +30,32 @@
 /*
  * check that a range of addresses falls within the current address limit
  */
-static inline int ___range_ok(unsigned long addr, unsigned long size)
-{
+static inline int ___range_ok(unsigned long addr, unsigned long size) {
 #ifdef CONFIG_MMU
-	int flag = -EFAULT, tmp;
+    int flag = -EFAULT, tmp;
 
-	asm volatile (
-		"	addcc	%3,%2,%1,icc0	\n"	/* set C-flag if addr+size>4GB */
-		"	subcc.p	%1,%4,gr0,icc1	\n"	/* jump if addr+size>limit */
-		"	bc	icc0,#0,0f	\n"
-		"	bhi	icc1,#0,0f	\n"
-		"	setlos	#0,%0		\n"	/* mark okay */
-		"0:				\n"
-		: "=r"(flag), "=&r"(tmp)
-		: "r"(addr), "r"(size), "r"(get_addr_limit()), "0"(flag)
-		);
+    asm volatile (
+        "	addcc	%3,%2,%1,icc0	\n"	/* set C-flag if addr+size>4GB */
+        "	subcc.p	%1,%4,gr0,icc1	\n"	/* jump if addr+size>limit */
+        "	bc	icc0,#0,0f	\n"
+        "	bhi	icc1,#0,0f	\n"
+        "	setlos	#0,%0		\n"	/* mark okay */
+        "0:				\n"
+        : "=r"(flag), "=&r"(tmp)
+        : "r"(addr), "r"(size), "r"(get_addr_limit()), "0"(flag)
+    );
 
-	return flag;
+    return flag;
 
 #else
 
-	if (addr < memory_start ||
-	    addr > memory_end ||
-	    size > memory_end - memory_start ||
-	    addr + size > memory_end)
-		return -EFAULT;
+    if (addr < memory_start ||
+            addr > memory_end ||
+            size > memory_end - memory_start ||
+            addr + size > memory_end)
+        return -EFAULT;
 
-	return 0;
+    return 0;
 #endif
 }
 
@@ -77,9 +76,8 @@ static inline int ___range_ok(unsigned long addr, unsigned long size)
  * we don't even have to jump over them.  Further, they do not intrude
  * on our cache or tlb entries.
  */
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -278,35 +276,31 @@ extern long __memcpy_user(void *dst, const void *src, unsigned long count);
 #define __clear_user clear_user
 
 static inline unsigned long __must_check
-__copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-       might_sleep();
-       return __copy_to_user_inatomic(to, from, n);
+__copy_to_user(void __user *to, const void *from, unsigned long n) {
+    might_sleep();
+    return __copy_to_user_inatomic(to, from, n);
 }
 
 static inline unsigned long
-__copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-       might_sleep();
-       return __copy_from_user_inatomic(to, from, n);
+__copy_from_user(void *to, const void __user *from, unsigned long n) {
+    might_sleep();
+    return __copy_from_user_inatomic(to, from, n);
 }
 
-static inline long copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	unsigned long ret = n;
+static inline long copy_from_user(void *to, const void __user *from, unsigned long n) {
+    unsigned long ret = n;
 
-	if (likely(__access_ok(from, n)))
-		ret = __copy_from_user(to, from, n);
+    if (likely(__access_ok(from, n)))
+        ret = __copy_from_user(to, from, n);
 
-	if (unlikely(ret != 0))
-		memset(to + (n - ret), 0, ret);
+    if (unlikely(ret != 0))
+        memset(to + (n - ret), 0, ret);
 
-	return ret;
+    return ret;
 }
 
-static inline long copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	return likely(__access_ok(to, n)) ? __copy_to_user(to, from, n) : n;
+static inline long copy_to_user(void __user *to, const void *from, unsigned long n) {
+    return likely(__access_ok(to, n)) ? __copy_to_user(to, from, n) : n;
 }
 
 extern long strncpy_from_user(char *dst, const char __user *src, long count);

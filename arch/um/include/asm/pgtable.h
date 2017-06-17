@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
  * Copyright 2003 PathScale, Inc.
  * Derived from include/asm-i386/pgtable.h
@@ -127,63 +127,54 @@ extern unsigned long end_iomem;
  * =================================
  */
 
-static inline int pte_none(pte_t pte)
-{
-	return pte_is_zero(pte);
+static inline int pte_none(pte_t pte) {
+    return pte_is_zero(pte);
 }
 
 /*
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_read(pte_t pte)
-{ 
-	return((pte_get_bits(pte, _PAGE_USER)) &&
-	       !(pte_get_bits(pte, _PAGE_PROTNONE)));
+static inline int pte_read(pte_t pte) {
+    return((pte_get_bits(pte, _PAGE_USER)) &&
+           !(pte_get_bits(pte, _PAGE_PROTNONE)));
 }
 
-static inline int pte_exec(pte_t pte){
-	return((pte_get_bits(pte, _PAGE_USER)) &&
-	       !(pte_get_bits(pte, _PAGE_PROTNONE)));
+static inline int pte_exec(pte_t pte) {
+    return((pte_get_bits(pte, _PAGE_USER)) &&
+           !(pte_get_bits(pte, _PAGE_PROTNONE)));
 }
 
-static inline int pte_write(pte_t pte)
-{
-	return((pte_get_bits(pte, _PAGE_RW)) &&
-	       !(pte_get_bits(pte, _PAGE_PROTNONE)));
+static inline int pte_write(pte_t pte) {
+    return((pte_get_bits(pte, _PAGE_RW)) &&
+           !(pte_get_bits(pte, _PAGE_PROTNONE)));
 }
 
 /*
  * The following only works if pte_present() is not true.
  */
-static inline int pte_file(pte_t pte)
-{
-	return pte_get_bits(pte, _PAGE_FILE);
+static inline int pte_file(pte_t pte) {
+    return pte_get_bits(pte, _PAGE_FILE);
 }
 
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_get_bits(pte, _PAGE_DIRTY);
+static inline int pte_dirty(pte_t pte) {
+    return pte_get_bits(pte, _PAGE_DIRTY);
 }
 
-static inline int pte_young(pte_t pte)
-{
-	return pte_get_bits(pte, _PAGE_ACCESSED);
+static inline int pte_young(pte_t pte) {
+    return pte_get_bits(pte, _PAGE_ACCESSED);
 }
 
-static inline int pte_newpage(pte_t pte)
-{
-	return pte_get_bits(pte, _PAGE_NEWPAGE);
+static inline int pte_newpage(pte_t pte) {
+    return pte_get_bits(pte, _PAGE_NEWPAGE);
 }
 
-static inline int pte_newprot(pte_t pte)
-{ 
-	return(pte_present(pte) && (pte_get_bits(pte, _PAGE_NEWPROT)));
+static inline int pte_newprot(pte_t pte) {
+    return(pte_present(pte) && (pte_get_bits(pte, _PAGE_NEWPROT)));
 }
 
-static inline int pte_special(pte_t pte)
-{
-	return 0;
+static inline int pte_special(pte_t pte) {
+    return 0;
 }
 
 /*
@@ -192,84 +183,72 @@ static inline int pte_special(pte_t pte)
  * =================================
  */
 
-static inline pte_t pte_mknewprot(pte_t pte)
-{
-	pte_set_bits(pte, _PAGE_NEWPROT);
-	return(pte);
+static inline pte_t pte_mknewprot(pte_t pte) {
+    pte_set_bits(pte, _PAGE_NEWPROT);
+    return(pte);
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	pte_clear_bits(pte, _PAGE_DIRTY);
-	return(pte);
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_clear_bits(pte, _PAGE_DIRTY);
+    return(pte);
 }
 
-static inline pte_t pte_mkold(pte_t pte)	
-{ 
-	pte_clear_bits(pte, _PAGE_ACCESSED);
-	return(pte);
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_clear_bits(pte, _PAGE_ACCESSED);
+    return(pte);
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{ 
-	pte_clear_bits(pte, _PAGE_RW);
-	return(pte_mknewprot(pte)); 
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_clear_bits(pte, _PAGE_RW);
+    return(pte_mknewprot(pte));
 }
 
-static inline pte_t pte_mkread(pte_t pte)
-{ 
-	pte_set_bits(pte, _PAGE_USER);
-	return(pte_mknewprot(pte)); 
+static inline pte_t pte_mkread(pte_t pte) {
+    pte_set_bits(pte, _PAGE_USER);
+    return(pte_mknewprot(pte));
 }
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{ 
-	pte_set_bits(pte, _PAGE_DIRTY);
-	return(pte);
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_set_bits(pte, _PAGE_DIRTY);
+    return(pte);
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	pte_set_bits(pte, _PAGE_ACCESSED);
-	return(pte);
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_set_bits(pte, _PAGE_ACCESSED);
+    return(pte);
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)	
-{
-	pte_set_bits(pte, _PAGE_RW);
-	return(pte_mknewprot(pte)); 
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_set_bits(pte, _PAGE_RW);
+    return(pte_mknewprot(pte));
 }
 
-static inline pte_t pte_mkuptodate(pte_t pte)	
-{
-	pte_clear_bits(pte, _PAGE_NEWPAGE);
-	if(pte_present(pte))
-		pte_clear_bits(pte, _PAGE_NEWPROT);
-	return(pte); 
+static inline pte_t pte_mkuptodate(pte_t pte) {
+    pte_clear_bits(pte, _PAGE_NEWPAGE);
+    if(pte_present(pte))
+        pte_clear_bits(pte, _PAGE_NEWPROT);
+    return(pte);
 }
 
-static inline pte_t pte_mknewpage(pte_t pte)
-{
-	pte_set_bits(pte, _PAGE_NEWPAGE);
-	return(pte);
+static inline pte_t pte_mknewpage(pte_t pte) {
+    pte_set_bits(pte, _PAGE_NEWPAGE);
+    return(pte);
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	return(pte);
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return(pte);
 }
 
-static inline void set_pte(pte_t *pteptr, pte_t pteval)
-{
-	pte_copy(*pteptr, pteval);
+static inline void set_pte(pte_t *pteptr, pte_t pteval) {
+    pte_copy(*pteptr, pteval);
 
-	/* If it's a swap entry, it needs to be marked _PAGE_NEWPAGE so
-	 * fix_range knows to unmap it.  _PAGE_NEWPROT is specific to
-	 * mapped pages.
-	 */
+    /* If it's a swap entry, it needs to be marked _PAGE_NEWPAGE so
+     * fix_range knows to unmap it.  _PAGE_NEWPROT is specific to
+     * mapped pages.
+     */
 
-	*pteptr = pte_mknewpage(*pteptr);
-	if(pte_present(*pteptr)) *pteptr = pte_mknewprot(*pteptr);
+    *pteptr = pte_mknewpage(*pteptr);
+    if(pte_present(*pteptr)) *pteptr = pte_mknewprot(*pteptr);
 }
 #define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
 
@@ -291,10 +270,9 @@ static inline void set_pte(pte_t *pteptr, pte_t pteval)
 		pte_mknewprot(pte_mknewpage(pte));	\
 	pte;})
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_set_val(pte, (pte_val(pte) & _PAGE_CHG_MASK), newprot);
-	return pte; 
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_set_val(pte, (pte_val(pte) & _PAGE_CHG_MASK), newprot);
+    return pte;
 }
 
 /*

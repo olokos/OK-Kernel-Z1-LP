@@ -95,11 +95,11 @@
  * more than 16KB of space.
  */
 #if 1
-  /*
-   * This is a stupid typo: the value was _meant_ to be 131072 (0x20000), but I typed it
-   * in wrong. ;-(  To preserve backwards compatibility, we leave the kernel at the
-   * incorrect value and fix libc only.
-   */
+/*
+ * This is a stupid typo: the value was _meant_ to be 131072 (0x20000), but I typed it
+ * in wrong. ;-(  To preserve backwards compatibility, we leave the kernel at the
+ * incorrect value and fix libc only.
+ */
 # define MINSIGSTKSZ	131027	/* min. stack size for sigaltstack() */
 #else
 # define MINSIGSTKSZ	131072	/* min. stack size for sigaltstack() */
@@ -124,9 +124,9 @@
 struct siginfo;
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
@@ -137,17 +137,17 @@ typedef struct sigaltstack {
 typedef unsigned long old_sigset_t;
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 #  include <asm/sigcontext.h>

@@ -22,9 +22,9 @@
 
 #define IRQ_JPEGENC	0	/* JPEG Encoder */
 #define IRQ_JPEGDEC	1	/* JPEG Decoder */
-				/* Reserved */
+/* Reserved */
 #define IRQ_PATA	3	/* PATA Controller */
-				/* Reserved */
+/* Reserved */
 #define IRQ_DMA		5	/* DMA Controller */
 #define IRQ_EXT0	6	/* External Interrupt 0 */
 #define IRQ_EXT1	7	/* External Interrupt 1 */
@@ -43,7 +43,7 @@
 #define IRQ_SDMMC	20	/* SD/MMC Controller */
 #define IRQ_SDMMC_DMA	21	/* SD/MMC Controller DMA */
 #define IRQ_PMC_WU	22	/* Power Management Controller Wakeup */
-				/* Reserved */
+/* Reserved */
 #define IRQ_SPI0	24	/* SPI 0 */
 #define IRQ_SPI1	25	/* SPI 1 */
 #define IRQ_SPI2	26	/* SPI 2 */

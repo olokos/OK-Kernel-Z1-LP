@@ -12,11 +12,11 @@
 #include <linux/notifier.h>
 
 enum cu2_ops {
-	CU2_EXCEPTION,
-	CU2_LWC2_OP,
-	CU2_LDC2_OP,
-	CU2_SWC2_OP,
-	CU2_SDC2_OP,
+    CU2_EXCEPTION,
+    CU2_LWC2_OP,
+    CU2_LDC2_OP,
+    CU2_SWC2_OP,
+    CU2_SDC2_OP,
 };
 
 extern int register_cu2_notifier(struct notifier_block *nb);

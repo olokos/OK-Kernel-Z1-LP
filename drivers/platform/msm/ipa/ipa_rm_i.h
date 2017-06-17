@@ -31,9 +31,9 @@ int ipa_rm_cons_index(enum ipa_rm_resource_name resource_name);
  * enum ipa_rm_wq_cmd - workqueue commands
  */
 enum ipa_rm_wq_cmd {
-	IPA_RM_WQ_NOTIFY_PROD,
-	IPA_RM_WQ_NOTIFY_CONS,
-	IPA_RM_WQ_RESOURCE_CB
+    IPA_RM_WQ_NOTIFY_PROD,
+    IPA_RM_WQ_NOTIFY_CONS,
+    IPA_RM_WQ_RESOURCE_CB
 };
 
 /**
@@ -49,17 +49,17 @@ enum ipa_rm_wq_cmd {
  *	ipa_rm_register()
  */
 struct ipa_rm_wq_work_type {
-	struct work_struct		work;
-	enum ipa_rm_wq_cmd		wq_cmd;
-	enum ipa_rm_resource_name	resource_name;
-	enum ipa_rm_event		event;
-	bool				notify_registered_only;
+    struct work_struct		work;
+    enum ipa_rm_wq_cmd		wq_cmd;
+    enum ipa_rm_resource_name	resource_name;
+    enum ipa_rm_event		event;
+    bool				notify_registered_only;
 };
 
 int ipa_rm_wq_send_cmd(enum ipa_rm_wq_cmd wq_cmd,
-		enum ipa_rm_resource_name resource_name,
-		enum ipa_rm_event event,
-		bool notify_registered_only);
+                       enum ipa_rm_resource_name resource_name,
+                       enum ipa_rm_event event,
+                       bool notify_registered_only);
 
 int ipa_rm_initialize(void);
 

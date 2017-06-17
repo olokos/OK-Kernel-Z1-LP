@@ -51,22 +51,22 @@
  */
 
 struct ad9834_state {
-	struct spi_device		*spi;
-	struct regulator		*reg;
-	unsigned int			mclk;
-	unsigned short			control;
-	unsigned short			devid;
-	struct spi_transfer		xfer;
-	struct spi_message		msg;
-	struct spi_transfer		freq_xfer[2];
-	struct spi_message		freq_msg;
+    struct spi_device		*spi;
+    struct regulator		*reg;
+    unsigned int			mclk;
+    unsigned short			control;
+    unsigned short			devid;
+    struct spi_transfer		xfer;
+    struct spi_message		msg;
+    struct spi_transfer		freq_xfer[2];
+    struct spi_message		freq_msg;
 
-	/*
-	 * DMA (thus cache coherency maintenance) requires the
-	 * transfer buffers to live in their own cache lines.
-	 */
-	unsigned short			data ____cacheline_aligned;
-	unsigned short			freq_data[2] ;
+    /*
+     * DMA (thus cache coherency maintenance) requires the
+     * transfer buffers to live in their own cache lines.
+     */
+    unsigned short			data ____cacheline_aligned;
+    unsigned short			freq_data[2] ;
 };
 
 
@@ -89,13 +89,13 @@ struct ad9834_state {
  */
 
 struct ad9834_platform_data {
-	unsigned int		mclk;
-	unsigned int		freq0;
-	unsigned int		freq1;
-	unsigned short		phase0;
-	unsigned short		phase1;
-	bool			en_div2;
-	bool			en_signbit_msb_out;
+    unsigned int		mclk;
+    unsigned int		freq0;
+    unsigned int		freq1;
+    unsigned short		phase0;
+    unsigned short		phase1;
+    bool			en_div2;
+    bool			en_signbit_msb_out;
 };
 
 /**
@@ -103,10 +103,10 @@ struct ad9834_platform_data {
  */
 
 enum ad9834_supported_device_ids {
-	ID_AD9833,
-	ID_AD9834,
-	ID_AD9837,
-	ID_AD9838,
+    ID_AD9833,
+    ID_AD9834,
+    ID_AD9837,
+    ID_AD9838,
 };
 
 #endif /* IIO_DDS_AD9834_H_ */

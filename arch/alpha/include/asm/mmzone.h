@@ -38,11 +38,10 @@ extern pg_data_t node_data[];
 	(((p) >> PAGE_SHIFT) - PLAT_NODE_DATA(n)->gendata.node_start_pfn)
 #else
 static inline unsigned long
-PLAT_NODE_DATA_LOCALNR(unsigned long p, int n)
-{
-	unsigned long temp;
-	temp = p >> PAGE_SHIFT;
-	return temp - PLAT_NODE_DATA(n)->gendata.node_start_pfn;
+PLAT_NODE_DATA_LOCALNR(unsigned long p, int n) {
+    unsigned long temp;
+    temp = p >> PAGE_SHIFT;
+    return temp - PLAT_NODE_DATA(n)->gendata.node_start_pfn;
 }
 #endif
 

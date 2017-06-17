@@ -101,37 +101,37 @@ typedef unsigned int reg_dma_rw_data_buf;
 
 /* Register rw_data_ctrl, scope dma, type rw */
 typedef struct {
-  unsigned int eol     : 1;
-  unsigned int dummy1  : 2;
-  unsigned int out_eop : 1;
-  unsigned int intr    : 1;
-  unsigned int wait    : 1;
-  unsigned int dummy2  : 26;
+    unsigned int eol     : 1;
+    unsigned int dummy1  : 2;
+    unsigned int out_eop : 1;
+    unsigned int intr    : 1;
+    unsigned int wait    : 1;
+    unsigned int dummy2  : 26;
 } reg_dma_rw_data_ctrl;
 #define REG_RD_ADDR_dma_rw_data_ctrl 12
 #define REG_WR_ADDR_dma_rw_data_ctrl 12
 
 /* Register rw_data_stat, scope dma, type rw */
 typedef struct {
-  unsigned int dummy1 : 3;
-  unsigned int in_eop : 1;
-  unsigned int dummy2 : 28;
+    unsigned int dummy1 : 3;
+    unsigned int in_eop : 1;
+    unsigned int dummy2 : 28;
 } reg_dma_rw_data_stat;
 #define REG_RD_ADDR_dma_rw_data_stat 16
 #define REG_WR_ADDR_dma_rw_data_stat 16
 
 /* Register rw_data_md, scope dma, type rw */
 typedef struct {
-  unsigned int md : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_data_md;
 #define REG_RD_ADDR_dma_rw_data_md 20
 #define REG_WR_ADDR_dma_rw_data_md 20
 
 /* Register rw_data_md_s, scope dma, type rw */
 typedef struct {
-  unsigned int md_s : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md_s : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_data_md_s;
 #define REG_RD_ADDR_dma_rw_data_md_s 24
 #define REG_WR_ADDR_dma_rw_data_md_s 24
@@ -153,38 +153,38 @@ typedef unsigned int reg_dma_rw_ctxt_next;
 
 /* Register rw_ctxt_ctrl, scope dma, type rw */
 typedef struct {
-  unsigned int eol        : 1;
-  unsigned int dummy1     : 3;
-  unsigned int intr       : 1;
-  unsigned int dummy2     : 1;
-  unsigned int store_mode : 1;
-  unsigned int en         : 1;
-  unsigned int dummy3     : 24;
+    unsigned int eol        : 1;
+    unsigned int dummy1     : 3;
+    unsigned int intr       : 1;
+    unsigned int dummy2     : 1;
+    unsigned int store_mode : 1;
+    unsigned int en         : 1;
+    unsigned int dummy3     : 24;
 } reg_dma_rw_ctxt_ctrl;
 #define REG_RD_ADDR_dma_rw_ctxt_ctrl 40
 #define REG_WR_ADDR_dma_rw_ctxt_ctrl 40
 
 /* Register rw_ctxt_stat, scope dma, type rw */
 typedef struct {
-  unsigned int dummy1 : 7;
-  unsigned int dis : 1;
-  unsigned int dummy2 : 24;
+    unsigned int dummy1 : 7;
+    unsigned int dis : 1;
+    unsigned int dummy2 : 24;
 } reg_dma_rw_ctxt_stat;
 #define REG_RD_ADDR_dma_rw_ctxt_stat 44
 #define REG_WR_ADDR_dma_rw_ctxt_stat 44
 
 /* Register rw_ctxt_md0, scope dma, type rw */
 typedef struct {
-  unsigned int md0 : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md0 : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_ctxt_md0;
 #define REG_RD_ADDR_dma_rw_ctxt_md0 48
 #define REG_WR_ADDR_dma_rw_ctxt_md0 48
 
 /* Register rw_ctxt_md0_s, scope dma, type rw */
 typedef struct {
-  unsigned int md0_s : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md0_s : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_ctxt_md0_s;
 #define REG_RD_ADDR_dma_rw_ctxt_md0_s 52
 #define REG_WR_ADDR_dma_rw_ctxt_md0_s 52
@@ -251,39 +251,39 @@ typedef unsigned int reg_dma_rw_group_next;
 
 /* Register rw_group_ctrl, scope dma, type rw */
 typedef struct {
-  unsigned int eol  : 1;
-  unsigned int tol  : 1;
-  unsigned int bol  : 1;
-  unsigned int dummy1 : 1;
-  unsigned int intr : 1;
-  unsigned int dummy2 : 2;
-  unsigned int en   : 1;
-  unsigned int dummy3 : 24;
+    unsigned int eol  : 1;
+    unsigned int tol  : 1;
+    unsigned int bol  : 1;
+    unsigned int dummy1 : 1;
+    unsigned int intr : 1;
+    unsigned int dummy2 : 2;
+    unsigned int en   : 1;
+    unsigned int dummy3 : 24;
 } reg_dma_rw_group_ctrl;
 #define REG_RD_ADDR_dma_rw_group_ctrl 104
 #define REG_WR_ADDR_dma_rw_group_ctrl 104
 
 /* Register rw_group_stat, scope dma, type rw */
 typedef struct {
-  unsigned int dummy1 : 7;
-  unsigned int dis : 1;
-  unsigned int dummy2 : 24;
+    unsigned int dummy1 : 7;
+    unsigned int dis : 1;
+    unsigned int dummy2 : 24;
 } reg_dma_rw_group_stat;
 #define REG_RD_ADDR_dma_rw_group_stat 108
 #define REG_WR_ADDR_dma_rw_group_stat 108
 
 /* Register rw_group_md, scope dma, type rw */
 typedef struct {
-  unsigned int md : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_group_md;
 #define REG_RD_ADDR_dma_rw_group_md 112
 #define REG_WR_ADDR_dma_rw_group_md 112
 
 /* Register rw_group_md_s, scope dma, type rw */
 typedef struct {
-  unsigned int md_s : 16;
-  unsigned int dummy1 : 16;
+    unsigned int md_s : 16;
+    unsigned int dummy1 : 16;
 } reg_dma_rw_group_md_s;
 #define REG_RD_ADDR_dma_rw_group_md_s 116
 #define REG_WR_ADDR_dma_rw_group_md_s 116
@@ -300,85 +300,85 @@ typedef unsigned int reg_dma_rw_group_down;
 
 /* Register rw_cmd, scope dma, type rw */
 typedef struct {
-  unsigned int cont_data : 1;
-  unsigned int dummy1    : 31;
+    unsigned int cont_data : 1;
+    unsigned int dummy1    : 31;
 } reg_dma_rw_cmd;
 #define REG_RD_ADDR_dma_rw_cmd 128
 #define REG_WR_ADDR_dma_rw_cmd 128
 
 /* Register rw_cfg, scope dma, type rw */
 typedef struct {
-  unsigned int en   : 1;
-  unsigned int stop : 1;
-  unsigned int dummy1 : 30;
+    unsigned int en   : 1;
+    unsigned int stop : 1;
+    unsigned int dummy1 : 30;
 } reg_dma_rw_cfg;
 #define REG_RD_ADDR_dma_rw_cfg 132
 #define REG_WR_ADDR_dma_rw_cfg 132
 
 /* Register rw_stat, scope dma, type rw */
 typedef struct {
-  unsigned int mode           : 5;
-  unsigned int list_state     : 3;
-  unsigned int stream_cmd_src : 8;
-  unsigned int dummy1         : 8;
-  unsigned int buf            : 8;
+    unsigned int mode           : 5;
+    unsigned int list_state     : 3;
+    unsigned int stream_cmd_src : 8;
+    unsigned int dummy1         : 8;
+    unsigned int buf            : 8;
 } reg_dma_rw_stat;
 #define REG_RD_ADDR_dma_rw_stat 136
 #define REG_WR_ADDR_dma_rw_stat 136
 
 /* Register rw_intr_mask, scope dma, type rw */
 typedef struct {
-  unsigned int group      : 1;
-  unsigned int ctxt       : 1;
-  unsigned int data       : 1;
-  unsigned int in_eop     : 1;
-  unsigned int stream_cmd : 1;
-  unsigned int dummy1     : 27;
+    unsigned int group      : 1;
+    unsigned int ctxt       : 1;
+    unsigned int data       : 1;
+    unsigned int in_eop     : 1;
+    unsigned int stream_cmd : 1;
+    unsigned int dummy1     : 27;
 } reg_dma_rw_intr_mask;
 #define REG_RD_ADDR_dma_rw_intr_mask 140
 #define REG_WR_ADDR_dma_rw_intr_mask 140
 
 /* Register rw_ack_intr, scope dma, type rw */
 typedef struct {
-  unsigned int group      : 1;
-  unsigned int ctxt       : 1;
-  unsigned int data       : 1;
-  unsigned int in_eop     : 1;
-  unsigned int stream_cmd : 1;
-  unsigned int dummy1     : 27;
+    unsigned int group      : 1;
+    unsigned int ctxt       : 1;
+    unsigned int data       : 1;
+    unsigned int in_eop     : 1;
+    unsigned int stream_cmd : 1;
+    unsigned int dummy1     : 27;
 } reg_dma_rw_ack_intr;
 #define REG_RD_ADDR_dma_rw_ack_intr 144
 #define REG_WR_ADDR_dma_rw_ack_intr 144
 
 /* Register r_intr, scope dma, type r */
 typedef struct {
-  unsigned int group      : 1;
-  unsigned int ctxt       : 1;
-  unsigned int data       : 1;
-  unsigned int in_eop     : 1;
-  unsigned int stream_cmd : 1;
-  unsigned int dummy1     : 27;
+    unsigned int group      : 1;
+    unsigned int ctxt       : 1;
+    unsigned int data       : 1;
+    unsigned int in_eop     : 1;
+    unsigned int stream_cmd : 1;
+    unsigned int dummy1     : 27;
 } reg_dma_r_intr;
 #define REG_RD_ADDR_dma_r_intr 148
 
 /* Register r_masked_intr, scope dma, type r */
 typedef struct {
-  unsigned int group      : 1;
-  unsigned int ctxt       : 1;
-  unsigned int data       : 1;
-  unsigned int in_eop     : 1;
-  unsigned int stream_cmd : 1;
-  unsigned int dummy1     : 27;
+    unsigned int group      : 1;
+    unsigned int ctxt       : 1;
+    unsigned int data       : 1;
+    unsigned int in_eop     : 1;
+    unsigned int stream_cmd : 1;
+    unsigned int dummy1     : 27;
 } reg_dma_r_masked_intr;
 #define REG_RD_ADDR_dma_r_masked_intr 152
 
 /* Register rw_stream_cmd, scope dma, type rw */
 typedef struct {
-  unsigned int cmd  : 10;
-  unsigned int dummy1 : 6;
-  unsigned int n    : 8;
-  unsigned int dummy2 : 7;
-  unsigned int busy : 1;
+    unsigned int cmd  : 10;
+    unsigned int dummy1 : 6;
+    unsigned int n    : 8;
+    unsigned int dummy2 : 7;
+    unsigned int busy : 1;
 } reg_dma_rw_stream_cmd;
 #define REG_RD_ADDR_dma_rw_stream_cmd 156
 #define REG_WR_ADDR_dma_rw_stream_cmd 156
@@ -386,51 +386,51 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_dma_ack_pkt                         = 0x00000100,
-  regk_dma_anytime                         = 0x00000001,
-  regk_dma_array                           = 0x00000008,
-  regk_dma_burst                           = 0x00000020,
-  regk_dma_client                          = 0x00000002,
-  regk_dma_copy_next                       = 0x00000010,
-  regk_dma_copy_up                         = 0x00000020,
-  regk_dma_data_at_eol                     = 0x00000001,
-  regk_dma_dis_c                           = 0x00000010,
-  regk_dma_dis_g                           = 0x00000020,
-  regk_dma_idle                            = 0x00000001,
-  regk_dma_intern                          = 0x00000004,
-  regk_dma_load_c                          = 0x00000200,
-  regk_dma_load_c_n                        = 0x00000280,
-  regk_dma_load_c_next                     = 0x00000240,
-  regk_dma_load_d                          = 0x00000140,
-  regk_dma_load_g                          = 0x00000300,
-  regk_dma_load_g_down                     = 0x000003c0,
-  regk_dma_load_g_next                     = 0x00000340,
-  regk_dma_load_g_up                       = 0x00000380,
-  regk_dma_next_en                         = 0x00000010,
-  regk_dma_next_pkt                        = 0x00000010,
-  regk_dma_no                              = 0x00000000,
-  regk_dma_only_at_wait                    = 0x00000000,
-  regk_dma_restore                         = 0x00000020,
-  regk_dma_rst                             = 0x00000001,
-  regk_dma_running                         = 0x00000004,
-  regk_dma_rw_cfg_default                  = 0x00000000,
-  regk_dma_rw_cmd_default                  = 0x00000000,
-  regk_dma_rw_intr_mask_default            = 0x00000000,
-  regk_dma_rw_stat_default                 = 0x00000101,
-  regk_dma_rw_stream_cmd_default           = 0x00000000,
-  regk_dma_save_down                       = 0x00000020,
-  regk_dma_save_up                         = 0x00000020,
-  regk_dma_set_reg                         = 0x00000050,
-  regk_dma_set_w_size1                     = 0x00000190,
-  regk_dma_set_w_size2                     = 0x000001a0,
-  regk_dma_set_w_size4                     = 0x000001c0,
-  regk_dma_stopped                         = 0x00000002,
-  regk_dma_store_c                         = 0x00000002,
-  regk_dma_store_descr                     = 0x00000000,
-  regk_dma_store_g                         = 0x00000004,
-  regk_dma_store_md                        = 0x00000001,
-  regk_dma_sw                              = 0x00000008,
-  regk_dma_update_down                     = 0x00000020,
-  regk_dma_yes                             = 0x00000001
+    regk_dma_ack_pkt                         = 0x00000100,
+    regk_dma_anytime                         = 0x00000001,
+    regk_dma_array                           = 0x00000008,
+    regk_dma_burst                           = 0x00000020,
+    regk_dma_client                          = 0x00000002,
+    regk_dma_copy_next                       = 0x00000010,
+    regk_dma_copy_up                         = 0x00000020,
+    regk_dma_data_at_eol                     = 0x00000001,
+    regk_dma_dis_c                           = 0x00000010,
+    regk_dma_dis_g                           = 0x00000020,
+    regk_dma_idle                            = 0x00000001,
+    regk_dma_intern                          = 0x00000004,
+    regk_dma_load_c                          = 0x00000200,
+    regk_dma_load_c_n                        = 0x00000280,
+    regk_dma_load_c_next                     = 0x00000240,
+    regk_dma_load_d                          = 0x00000140,
+    regk_dma_load_g                          = 0x00000300,
+    regk_dma_load_g_down                     = 0x000003c0,
+    regk_dma_load_g_next                     = 0x00000340,
+    regk_dma_load_g_up                       = 0x00000380,
+    regk_dma_next_en                         = 0x00000010,
+    regk_dma_next_pkt                        = 0x00000010,
+    regk_dma_no                              = 0x00000000,
+    regk_dma_only_at_wait                    = 0x00000000,
+    regk_dma_restore                         = 0x00000020,
+    regk_dma_rst                             = 0x00000001,
+    regk_dma_running                         = 0x00000004,
+    regk_dma_rw_cfg_default                  = 0x00000000,
+    regk_dma_rw_cmd_default                  = 0x00000000,
+    regk_dma_rw_intr_mask_default            = 0x00000000,
+    regk_dma_rw_stat_default                 = 0x00000101,
+    regk_dma_rw_stream_cmd_default           = 0x00000000,
+    regk_dma_save_down                       = 0x00000020,
+    regk_dma_save_up                         = 0x00000020,
+    regk_dma_set_reg                         = 0x00000050,
+    regk_dma_set_w_size1                     = 0x00000190,
+    regk_dma_set_w_size2                     = 0x000001a0,
+    regk_dma_set_w_size4                     = 0x000001c0,
+    regk_dma_stopped                         = 0x00000002,
+    regk_dma_store_c                         = 0x00000002,
+    regk_dma_store_descr                     = 0x00000000,
+    regk_dma_store_g                         = 0x00000004,
+    regk_dma_store_md                        = 0x00000001,
+    regk_dma_sw                              = 0x00000008,
+    regk_dma_update_down                     = 0x00000020,
+    regk_dma_yes                             = 0x00000001
 };
 #endif /* __dma_defs_h */

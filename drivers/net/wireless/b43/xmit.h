@@ -22,78 +22,78 @@ _b43_declare_plcp_hdr(6);
 
 /* TX header for v4 firmware */
 struct b43_txhdr {
-	__le32 mac_ctl;			/* MAC TX control */
-	__le16 mac_frame_ctl;		/* Copy of the FrameControl field */
-	__le16 tx_fes_time_norm;	/* TX FES Time Normal */
-	__le16 phy_ctl;			/* PHY TX control */
-	__le16 phy_ctl1;		/* PHY TX control word 1 */
-	__le16 phy_ctl1_fb;		/* PHY TX control word 1 for fallback rates */
-	__le16 phy_ctl1_rts;		/* PHY TX control word 1 RTS */
-	__le16 phy_ctl1_rts_fb;		/* PHY TX control word 1 RTS for fallback rates */
-	__u8 phy_rate;			/* PHY rate */
-	__u8 phy_rate_rts;		/* PHY rate for RTS/CTS */
-	__u8 extra_ft;			/* Extra Frame Types */
-	__u8 chan_radio_code;		/* Channel Radio Code */
-	__u8 iv[16];			/* Encryption IV */
-	__u8 tx_receiver[6];		/* TX Frame Receiver address */
-	__le16 tx_fes_time_fb;		/* TX FES Time Fallback */
-	struct b43_plcp_hdr6 rts_plcp_fb; /* RTS fallback PLCP header */
-	__le16 rts_dur_fb;		/* RTS fallback duration */
-	struct b43_plcp_hdr6 plcp_fb;	/* Fallback PLCP header */
-	__le16 dur_fb;			/* Fallback duration */
-	__le16 mimo_modelen;		/* MIMO mode length */
-	__le16 mimo_ratelen_fb;		/* MIMO fallback rate length */
-	__le32 timeout;			/* Timeout */
+    __le32 mac_ctl;			/* MAC TX control */
+    __le16 mac_frame_ctl;		/* Copy of the FrameControl field */
+    __le16 tx_fes_time_norm;	/* TX FES Time Normal */
+    __le16 phy_ctl;			/* PHY TX control */
+    __le16 phy_ctl1;		/* PHY TX control word 1 */
+    __le16 phy_ctl1_fb;		/* PHY TX control word 1 for fallback rates */
+    __le16 phy_ctl1_rts;		/* PHY TX control word 1 RTS */
+    __le16 phy_ctl1_rts_fb;		/* PHY TX control word 1 RTS for fallback rates */
+    __u8 phy_rate;			/* PHY rate */
+    __u8 phy_rate_rts;		/* PHY rate for RTS/CTS */
+    __u8 extra_ft;			/* Extra Frame Types */
+    __u8 chan_radio_code;		/* Channel Radio Code */
+    __u8 iv[16];			/* Encryption IV */
+    __u8 tx_receiver[6];		/* TX Frame Receiver address */
+    __le16 tx_fes_time_fb;		/* TX FES Time Fallback */
+    struct b43_plcp_hdr6 rts_plcp_fb; /* RTS fallback PLCP header */
+    __le16 rts_dur_fb;		/* RTS fallback duration */
+    struct b43_plcp_hdr6 plcp_fb;	/* Fallback PLCP header */
+    __le16 dur_fb;			/* Fallback duration */
+    __le16 mimo_modelen;		/* MIMO mode length */
+    __le16 mimo_ratelen_fb;		/* MIMO fallback rate length */
+    __le32 timeout;			/* Timeout */
 
-	union {
-		/* Tested with 598.314, 644.1001 and 666.2 */
-		struct {
-			__le16 mimo_antenna;            /* MIMO antenna select */
-			__le16 preload_size;            /* Preload size */
-			PAD_BYTES(2);
-			__le16 cookie;                  /* TX frame cookie */
-			__le16 tx_status;               /* TX status */
-			__le16 max_n_mpdus;
-			__le16 max_a_bytes_mrt;
-			__le16 max_a_bytes_fbr;
-			__le16 min_m_bytes;
-			struct b43_plcp_hdr6 rts_plcp;  /* RTS PLCP header */
-			__u8 rts_frame[16];             /* The RTS frame (if used) */
-			PAD_BYTES(2);
-			struct b43_plcp_hdr6 plcp;      /* Main PLCP header */
-		} format_598 __packed;
+    union {
+        /* Tested with 598.314, 644.1001 and 666.2 */
+        struct {
+            __le16 mimo_antenna;            /* MIMO antenna select */
+            __le16 preload_size;            /* Preload size */
+            PAD_BYTES(2);
+            __le16 cookie;                  /* TX frame cookie */
+            __le16 tx_status;               /* TX status */
+            __le16 max_n_mpdus;
+            __le16 max_a_bytes_mrt;
+            __le16 max_a_bytes_fbr;
+            __le16 min_m_bytes;
+            struct b43_plcp_hdr6 rts_plcp;  /* RTS PLCP header */
+            __u8 rts_frame[16];             /* The RTS frame (if used) */
+            PAD_BYTES(2);
+            struct b43_plcp_hdr6 plcp;      /* Main PLCP header */
+        } format_598 __packed;
 
-		/* Tested with 410.2160, 478.104 and 508.* */
-		struct {
-			__le16 mimo_antenna;		/* MIMO antenna select */
-			__le16 preload_size;		/* Preload size */
-			PAD_BYTES(2);
-			__le16 cookie;			/* TX frame cookie */
-			__le16 tx_status;		/* TX status */
-			struct b43_plcp_hdr6 rts_plcp;	/* RTS PLCP header */
-			__u8 rts_frame[16];		/* The RTS frame (if used) */
-			PAD_BYTES(2);
-			struct b43_plcp_hdr6 plcp;	/* Main PLCP header */
-		} format_410 __packed;
+        /* Tested with 410.2160, 478.104 and 508.* */
+        struct {
+            __le16 mimo_antenna;		/* MIMO antenna select */
+            __le16 preload_size;		/* Preload size */
+            PAD_BYTES(2);
+            __le16 cookie;			/* TX frame cookie */
+            __le16 tx_status;		/* TX status */
+            struct b43_plcp_hdr6 rts_plcp;	/* RTS PLCP header */
+            __u8 rts_frame[16];		/* The RTS frame (if used) */
+            PAD_BYTES(2);
+            struct b43_plcp_hdr6 plcp;	/* Main PLCP header */
+        } format_410 __packed;
 
-		/* Tested with 351.126 */
-		struct {
-			PAD_BYTES(2);
-			__le16 cookie;			/* TX frame cookie */
-			__le16 tx_status;		/* TX status */
-			struct b43_plcp_hdr6 rts_plcp;	/* RTS PLCP header */
-			__u8 rts_frame[16];		/* The RTS frame (if used) */
-			PAD_BYTES(2);
-			struct b43_plcp_hdr6 plcp;	/* Main PLCP header */
-		} format_351 __packed;
+        /* Tested with 351.126 */
+        struct {
+            PAD_BYTES(2);
+            __le16 cookie;			/* TX frame cookie */
+            __le16 tx_status;		/* TX status */
+            struct b43_plcp_hdr6 rts_plcp;	/* RTS PLCP header */
+            __u8 rts_frame[16];		/* The RTS frame (if used) */
+            PAD_BYTES(2);
+            struct b43_plcp_hdr6 plcp;	/* Main PLCP header */
+        } format_351 __packed;
 
-	} __packed;
+    } __packed;
 } __packed;
 
 struct b43_tx_legacy_rate_phy_ctl_entry {
-	u8 bitrate;
-	u16 coding_rate;
-	u16 modulation;
+    u8 bitrate;
+    u16 coding_rate;
+    u16 modulation;
 };
 
 /* MAC TX control */
@@ -184,111 +184,110 @@ struct b43_tx_legacy_rate_phy_ctl_entry {
 
 
 static inline
-size_t b43_txhdr_size(struct b43_wldev *dev)
-{
-	switch (dev->fw.hdr_format) {
-	case B43_FW_HDR_598:
-		return 112 + sizeof(struct b43_plcp_hdr6);
-	case B43_FW_HDR_410:
-		return 104 + sizeof(struct b43_plcp_hdr6);
-	case B43_FW_HDR_351:
-		return 100 + sizeof(struct b43_plcp_hdr6);
-	}
-	return 0;
+size_t b43_txhdr_size(struct b43_wldev *dev) {
+    switch (dev->fw.hdr_format) {
+    case B43_FW_HDR_598:
+        return 112 + sizeof(struct b43_plcp_hdr6);
+    case B43_FW_HDR_410:
+        return 104 + sizeof(struct b43_plcp_hdr6);
+    case B43_FW_HDR_351:
+        return 100 + sizeof(struct b43_plcp_hdr6);
+    }
+    return 0;
 }
 
 
 int b43_generate_txhdr(struct b43_wldev *dev,
-		       u8 * txhdr,
-		       struct sk_buff *skb_frag,
-		       struct ieee80211_tx_info *txctl, u16 cookie);
+                       u8 * txhdr,
+                       struct sk_buff *skb_frag,
+                       struct ieee80211_tx_info *txctl, u16 cookie);
 
 /* Transmit Status */
 struct b43_txstatus {
-	u16 cookie;		/* The cookie from the txhdr */
-	u16 seq;		/* Sequence number */
-	u8 phy_stat;		/* PHY TX status */
-	u8 frame_count;		/* Frame transmit count */
-	u8 rts_count;		/* RTS transmit count */
-	u8 supp_reason;		/* Suppression reason */
-	/* flags */
-	u8 pm_indicated;	/* PM mode indicated to AP */
-	u8 intermediate;	/* Intermediate status notification (not final) */
-	u8 for_ampdu;		/* Status is for an AMPDU (afterburner) */
-	u8 acked;		/* Wireless ACK received */
+    u16 cookie;		/* The cookie from the txhdr */
+    u16 seq;		/* Sequence number */
+    u8 phy_stat;		/* PHY TX status */
+    u8 frame_count;		/* Frame transmit count */
+    u8 rts_count;		/* RTS transmit count */
+    u8 supp_reason;		/* Suppression reason */
+    /* flags */
+    u8 pm_indicated;	/* PM mode indicated to AP */
+    u8 intermediate;	/* Intermediate status notification (not final) */
+    u8 for_ampdu;		/* Status is for an AMPDU (afterburner) */
+    u8 acked;		/* Wireless ACK received */
 };
 
 /* txstatus supp_reason values */
 enum {
-	B43_TXST_SUPP_NONE,	/* Not suppressed */
-	B43_TXST_SUPP_PMQ,	/* Suppressed due to PMQ entry */
-	B43_TXST_SUPP_FLUSH,	/* Suppressed due to flush request */
-	B43_TXST_SUPP_PREV,	/* Previous fragment failed */
-	B43_TXST_SUPP_CHAN,	/* Channel mismatch */
-	B43_TXST_SUPP_LIFE,	/* Lifetime expired */
-	B43_TXST_SUPP_UNDER,	/* Buffer underflow */
-	B43_TXST_SUPP_ABNACK,	/* Afterburner NACK */
+    B43_TXST_SUPP_NONE,	/* Not suppressed */
+    B43_TXST_SUPP_PMQ,	/* Suppressed due to PMQ entry */
+    B43_TXST_SUPP_FLUSH,	/* Suppressed due to flush request */
+    B43_TXST_SUPP_PREV,	/* Previous fragment failed */
+    B43_TXST_SUPP_CHAN,	/* Channel mismatch */
+    B43_TXST_SUPP_LIFE,	/* Lifetime expired */
+    B43_TXST_SUPP_UNDER,	/* Buffer underflow */
+    B43_TXST_SUPP_ABNACK,	/* Afterburner NACK */
 };
 
 /* Receive header for v4 firmware. */
 struct b43_rxhdr_fw4 {
-	__le16 frame_len;	/* Frame length */
-	 PAD_BYTES(2);
-	__le16 phy_status0;	/* PHY RX Status 0 */
-	union {
-		/* RSSI for A/B/G-PHYs */
-		struct {
-			__u8 jssi;	/* PHY RX Status 1: JSSI */
-			__u8 sig_qual;	/* PHY RX Status 1: Signal Quality */
-		} __packed;
+    __le16 frame_len;	/* Frame length */
+    PAD_BYTES(2);
+    __le16 phy_status0;	/* PHY RX Status 0 */
+    union {
+        /* RSSI for A/B/G-PHYs */
+        struct {
+            __u8 jssi;	/* PHY RX Status 1: JSSI */
+            __u8 sig_qual;	/* PHY RX Status 1: Signal Quality */
+        } __packed;
 
-		/* RSSI for N-PHYs */
-		struct {
-			__s8 power0;	/* PHY RX Status 1: Power 0 */
-			__s8 power1;	/* PHY RX Status 1: Power 1 */
-		} __packed;
-	} __packed;
-	union {
-		/* HT-PHY */
-		struct {
-			PAD_BYTES(1);
-			__s8 phy_ht_power0;
-		} __packed;
+        /* RSSI for N-PHYs */
+        struct {
+            __s8 power0;	/* PHY RX Status 1: Power 0 */
+            __s8 power1;	/* PHY RX Status 1: Power 1 */
+        } __packed;
+    } __packed;
+    union {
+        /* HT-PHY */
+        struct {
+            PAD_BYTES(1);
+            __s8 phy_ht_power0;
+        } __packed;
 
-		/* RSSI for N-PHYs */
-		struct {
-			__s8 power2;
-			PAD_BYTES(1);
-		} __packed;
+        /* RSSI for N-PHYs */
+        struct {
+            __s8 power2;
+            PAD_BYTES(1);
+        } __packed;
 
-		__le16 phy_status2;	/* PHY RX Status 2 */
-	} __packed;
-	union {
-		/* HT-PHY */
-		struct {
-			__s8 phy_ht_power1;
-			__s8 phy_ht_power2;
-		} __packed;
+        __le16 phy_status2;	/* PHY RX Status 2 */
+    } __packed;
+    union {
+        /* HT-PHY */
+        struct {
+            __s8 phy_ht_power1;
+            __s8 phy_ht_power2;
+        } __packed;
 
-		__le16 phy_status3;	/* PHY RX Status 3 */
-	} __packed;
-	union {
-		/* Tested with 598.314, 644.1001 and 666.2 */
-		struct {
-			__le16 phy_status4;	/* PHY RX Status 4 */
-			__le16 phy_status5;	/* PHY RX Status 5 */
-			__le32 mac_status;	/* MAC RX status */
-			__le16 mac_time;
-			__le16 channel;
-		} format_598 __packed;
+        __le16 phy_status3;	/* PHY RX Status 3 */
+    } __packed;
+    union {
+        /* Tested with 598.314, 644.1001 and 666.2 */
+        struct {
+            __le16 phy_status4;	/* PHY RX Status 4 */
+            __le16 phy_status5;	/* PHY RX Status 5 */
+            __le32 mac_status;	/* MAC RX status */
+            __le16 mac_time;
+            __le16 channel;
+        } format_598 __packed;
 
-		/* Tested with 351.126, 410.2160, 478.104 and 508.* */
-		struct {
-			__le32 mac_status;	/* MAC RX status */
-			__le16 mac_time;
-			__le16 channel;
-		} format_351 __packed;
-	} __packed;
+        /* Tested with 351.126, 410.2160, 478.104 and 508.* */
+        struct {
+            __le32 mac_status;	/* MAC RX status */
+            __le16 mac_time;
+            __le16 channel;
+        } format_351 __packed;
+    } __packed;
 } __packed;
 
 /* PHY RX Status 0 */
@@ -347,15 +346,15 @@ u8 b43_plcp_get_ratecode_cck(const u8 bitrate);
 u8 b43_plcp_get_ratecode_ofdm(const u8 bitrate);
 
 void b43_generate_plcp_hdr(struct b43_plcp_hdr4 *plcp,
-			   const u16 octets, const u8 bitrate);
+                           const u16 octets, const u8 bitrate);
 
 void b43_rx(struct b43_wldev *dev, struct sk_buff *skb, const void *_rxhdr);
 
 void b43_handle_txstatus(struct b43_wldev *dev,
-			 const struct b43_txstatus *status);
+                         const struct b43_txstatus *status);
 bool b43_fill_txstatus_report(struct b43_wldev *dev,
-			      struct ieee80211_tx_info *report,
-			      const struct b43_txstatus *status);
+                              struct ieee80211_tx_info *report,
+                              const struct b43_txstatus *status);
 
 void b43_tx_suspend(struct b43_wldev *dev);
 void b43_tx_resume(struct b43_wldev *dev);
@@ -364,32 +363,29 @@ void b43_tx_resume(struct b43_wldev *dev);
 /* Helper functions for converting the key-table index from "firmware-format"
  * to "raw-format" and back. The firmware API changed for this at some revision.
  * We need to account for that here. */
-static inline int b43_new_kidx_api(struct b43_wldev *dev)
-{
-	/* FIXME: Not sure the change was at rev 351 */
-	return (dev->fw.rev >= 351);
+static inline int b43_new_kidx_api(struct b43_wldev *dev) {
+    /* FIXME: Not sure the change was at rev 351 */
+    return (dev->fw.rev >= 351);
 }
-static inline u8 b43_kidx_to_fw(struct b43_wldev *dev, u8 raw_kidx)
-{
-	u8 firmware_kidx;
-	if (b43_new_kidx_api(dev)) {
-		firmware_kidx = raw_kidx;
-	} else {
-		if (raw_kidx >= 4)	/* Is per STA key? */
-			firmware_kidx = raw_kidx - 4;
-		else
-			firmware_kidx = raw_kidx;	/* TX default key */
-	}
-	return firmware_kidx;
+static inline u8 b43_kidx_to_fw(struct b43_wldev *dev, u8 raw_kidx) {
+    u8 firmware_kidx;
+    if (b43_new_kidx_api(dev)) {
+        firmware_kidx = raw_kidx;
+    } else {
+        if (raw_kidx >= 4)	/* Is per STA key? */
+            firmware_kidx = raw_kidx - 4;
+        else
+            firmware_kidx = raw_kidx;	/* TX default key */
+    }
+    return firmware_kidx;
 }
-static inline u8 b43_kidx_to_raw(struct b43_wldev *dev, u8 firmware_kidx)
-{
-	u8 raw_kidx;
-	if (b43_new_kidx_api(dev))
-		raw_kidx = firmware_kidx;
-	else
-		raw_kidx = firmware_kidx + 4;	/* RX default keys or per STA keys */
-	return raw_kidx;
+static inline u8 b43_kidx_to_raw(struct b43_wldev *dev, u8 firmware_kidx) {
+    u8 raw_kidx;
+    if (b43_new_kidx_api(dev))
+        raw_kidx = firmware_kidx;
+    else
+        raw_kidx = firmware_kidx + 4;	/* RX default keys or per STA keys */
+    return raw_kidx;
 }
 
 /* struct b43_private_tx_info - TX info private to b43.
@@ -398,15 +394,14 @@ static inline u8 b43_kidx_to_raw(struct b43_wldev *dev, u8 firmware_kidx)
  * @bouncebuffer: DMA Bouncebuffer (if used)
  */
 struct b43_private_tx_info {
-	void *bouncebuffer;
+    void *bouncebuffer;
 };
 
 static inline struct b43_private_tx_info *
-b43_get_priv_tx_info(struct ieee80211_tx_info *info)
-{
-	BUILD_BUG_ON(sizeof(struct b43_private_tx_info) >
-		     sizeof(info->rate_driver_data));
-	return (struct b43_private_tx_info *)info->rate_driver_data;
+b43_get_priv_tx_info(struct ieee80211_tx_info *info) {
+    BUILD_BUG_ON(sizeof(struct b43_private_tx_info) >
+                 sizeof(info->rate_driver_data));
+    return (struct b43_private_tx_info *)info->rate_driver_data;
 }
 
 #endif /* B43_XMIT_H_ */

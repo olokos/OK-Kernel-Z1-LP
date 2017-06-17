@@ -20,18 +20,16 @@
 #define PCI_SLOT_MAXNR	32 /* Each PCI bus has 32 physical slots */
 
 static char pci_irq_tab[PCI_SLOT_MAXNR][5] __initdata = {
-	/* 0    INTA   INTB   INTC   INTD */
-	[0] = {0, 0, 0, 0, 0},		/* Slot 0: GT64120 PCI bridge */
-	[6] = {0, WRPPMC_PCI_INTA_IRQ, 0, 0, 0},
+    /* 0    INTA   INTB   INTC   INTD */
+    [0] = {0, 0, 0, 0, 0},		/* Slot 0: GT64120 PCI bridge */
+    [6] = {0, WRPPMC_PCI_INTA_IRQ, 0, 0, 0},
 };
 
-int __init pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
-{
-	return pci_irq_tab[slot][pin];
+int __init pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin) {
+    return pci_irq_tab[slot][pin];
 }
 
 /* Do platform specific device initialization at pci_enable_device() time */
-int pcibios_plat_dev_init(struct pci_dev *dev)
-{
-	return 0;
+int pcibios_plat_dev_init(struct pci_dev *dev) {
+    return 0;
 }

@@ -19,7 +19,7 @@
  * transfer in true-ide mode.
  */
 struct s3c_ide_platdata {
-	void (*setup_gpio)(void);
+    void (*setup_gpio)(void);
 };
 
 /*

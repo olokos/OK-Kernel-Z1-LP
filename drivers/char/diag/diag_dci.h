@@ -58,109 +58,109 @@ extern unsigned char dci_cumulative_event_mask[DCI_EVENT_MASK_SIZE];
 extern struct mutex dci_health_mutex;
 
 struct dci_pkt_req_entry_t {
-	int pid;
-	int uid;
-	int tag;
-	struct list_head track;
+    int pid;
+    int uid;
+    int tag;
+    struct list_head track;
 } __packed;
 
 struct diag_dci_reg_tbl_t {
-	uint32_t client_id;
-	uint16_t notification_list;
-	int signal_type;
+    uint32_t client_id;
+    uint16_t notification_list;
+    int signal_type;
 };
 
 struct diag_dci_health_t {
-	int dropped_logs;
-	int dropped_events;
-	int received_logs;
-	int received_events;
+    int dropped_logs;
+    int dropped_events;
+    int received_logs;
+    int received_events;
 };
 
 struct diag_dci_buffer_t {
-	unsigned char *data;
-	unsigned int data_len;
-	struct mutex data_mutex;
-	uint8_t in_busy;
-	uint8_t buf_type;
-	int data_source;
-	int capacity;
-	uint8_t in_list;
-	struct list_head buf_track;
+    unsigned char *data;
+    unsigned int data_len;
+    struct mutex data_mutex;
+    uint8_t in_busy;
+    uint8_t buf_type;
+    int data_source;
+    int capacity;
+    uint8_t in_list;
+    struct list_head buf_track;
 };
 
 struct diag_dci_buf_peripheral_t {
-	struct diag_dci_buffer_t *buf_curr;
-	struct diag_dci_buffer_t *buf_primary;
-	struct diag_dci_buffer_t *buf_cmd;
-	struct diag_dci_health_t health;
-	struct mutex health_mutex;
-	struct mutex buf_mutex;
+    struct diag_dci_buffer_t *buf_curr;
+    struct diag_dci_buffer_t *buf_primary;
+    struct diag_dci_buffer_t *buf_cmd;
+    struct diag_dci_health_t health;
+    struct mutex health_mutex;
+    struct mutex buf_mutex;
 };
 
 struct diag_dci_client_tbl {
-	struct diag_dci_reg_tbl_t client_info;
-	struct task_struct *client;
-	unsigned char *dci_log_mask;
-	unsigned char *dci_event_mask;
-	uint8_t real_time;
-	struct list_head track;
-	struct diag_dci_buf_peripheral_t buffers[NUM_DCI_PROC];
-	uint8_t in_service;
-	struct list_head list_write_buf;
-	struct mutex write_buf_mutex;
+    struct diag_dci_reg_tbl_t client_info;
+    struct task_struct *client;
+    unsigned char *dci_log_mask;
+    unsigned char *dci_event_mask;
+    uint8_t real_time;
+    struct list_head track;
+    struct diag_dci_buf_peripheral_t buffers[NUM_DCI_PROC];
+    uint8_t in_service;
+    struct list_head list_write_buf;
+    struct mutex write_buf_mutex;
 };
 
 struct diag_dci_health_stats {
-	struct diag_dci_health_t stats;
-	int reset_status;
+    struct diag_dci_health_t stats;
+    int reset_status;
 };
 
 struct diag_dci_health_stats_proc {
-	struct diag_dci_health_stats *health;
-	int proc;
+    struct diag_dci_health_stats *health;
+    int proc;
 };
 
 /* This is used for querying DCI Log
    or Event Mask */
 struct diag_log_event_stats {
-	uint16_t code;
-	int is_set;
+    uint16_t code;
+    int is_set;
 };
 
 struct diag_dci_pkt_rsp_header_t {
-	int type;
-	int length;
-	uint8_t delete_flag;
-	int uid;
+    int type;
+    int length;
+    uint8_t delete_flag;
+    int uid;
 } __packed;
 
 struct diag_dci_pkt_header_t {
-	uint8_t start;
-	uint8_t version;
-	uint16_t len;
-	uint8_t pkt_code;
-	int tag;
+    uint8_t start;
+    uint8_t version;
+    uint16_t len;
+    uint8_t pkt_code;
+    int tag;
 } __packed;
 
 enum {
-	DIAG_DCI_NO_ERROR = 1001,	/* No error */
-	DIAG_DCI_NO_REG,		/* Could not register */
-	DIAG_DCI_NO_MEM,		/* Failed memory allocation */
-	DIAG_DCI_NOT_SUPPORTED,	/* This particular client is not supported */
-	DIAG_DCI_HUGE_PACKET,	/* Request/Response Packet too huge */
-	DIAG_DCI_SEND_DATA_FAIL,/* writing to kernel or peripheral fails */
-	DIAG_DCI_TABLE_ERR	/* Error dealing with registration tables */
+    DIAG_DCI_NO_ERROR = 1001,	/* No error */
+    DIAG_DCI_NO_REG,		/* Could not register */
+    DIAG_DCI_NO_MEM,		/* Failed memory allocation */
+    DIAG_DCI_NOT_SUPPORTED,	/* This particular client is not supported */
+    DIAG_DCI_HUGE_PACKET,	/* Request/Response Packet too huge */
+    DIAG_DCI_SEND_DATA_FAIL,/* writing to kernel or peripheral fails */
+    DIAG_DCI_TABLE_ERR	/* Error dealing with registration tables */
 };
 
 #ifdef CONFIG_DEBUG_FS
 /* To collect debug information during each smd read */
 struct diag_dci_data_info {
-	unsigned long iteration;
-	int data_size;
-	char time_stamp[DIAG_TS_SIZE];
-	uint8_t peripheral;
-	uint8_t ch_type;
+    unsigned long iteration;
+    int data_size;
+    char time_stamp[DIAG_TS_SIZE];
+    uint8_t peripheral;
+    uint8_t ch_type;
 };
 
 extern struct diag_dci_data_info *dci_data_smd;
@@ -176,15 +176,15 @@ void diag_dci_notify_client(int peripheral_mask, int data);
 void diag_dci_wakeup_clients(void);
 void diag_process_apps_dci_read_data(int data_type, void *buf, int recd_bytes);
 int diag_process_smd_dci_read_data(struct diag_smd_info *smd_info, void *buf,
-								int recd_bytes);
+                                   int recd_bytes);
 int diag_process_dci_transaction(unsigned char *buf, int len);
 void extract_dci_pkt_rsp(unsigned char *buf, int len, int data_source,
-			 struct diag_smd_info *smd_info);
+                         struct diag_smd_info *smd_info);
 struct diag_dci_client_tbl *diag_dci_get_client_entry(void);
 /* DCI Log streaming functions */
 void create_dci_log_mask_tbl(unsigned char *tbl_buf);
 void update_dci_cumulative_log_mask(int offset, unsigned int byte_index,
-						uint8_t byte_mask);
+                                    uint8_t byte_mask);
 void diag_dci_invalidate_cumulative_log_mask(void);
 int diag_send_dci_log_mask(void);
 void extract_dci_log(unsigned char *buf, int len, int data_source);
@@ -199,7 +199,7 @@ void create_dci_event_mask_tbl(unsigned char *tbl_buf);
 int diag_dci_clear_event_mask(void);
 int diag_dci_query_event_mask(uint16_t event_id);
 void diag_dci_smd_record_info(int read_bytes, uint8_t ch_type,
-			      uint8_t peripheral);
+                              uint8_t peripheral);
 uint8_t diag_dci_get_cumulative_real_time(void);
 int diag_dci_set_real_time(uint8_t real_time);
 int diag_dci_copy_health_stats(struct diag_dci_health_stats *stats, int proc);

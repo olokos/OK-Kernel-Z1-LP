@@ -52,8 +52,7 @@
   Type declarations
   ------------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     // NONE means NO traces will be logged.  This value is in place for the
     // vos_trace_setlevel() to allow the user to turn off all traces.
     VOS_TRACE_LEVEL_NONE = 0,
@@ -111,8 +110,7 @@ typedef enum
 /*--------------------------------------------------------------------------
   Structure definition
   ------------------------------------------------------------------------*/
-typedef struct  svosTraceRecord
-{
+typedef struct  svosTraceRecord {
     v_U32_t time;
     v_U8_t module;
     v_U8_t code;
@@ -120,8 +118,7 @@ typedef struct  svosTraceRecord
     v_U32_t data;
 } tvosTraceRecord, *tpvosTraceRecord;
 
-typedef struct svosTraceData
-{
+typedef struct svosTraceData {
     // MTRACE logs are stored in ring buffer where head represents the position
     // of first record, tail represents the position of last record added till
     // now and num is the count of total record added.

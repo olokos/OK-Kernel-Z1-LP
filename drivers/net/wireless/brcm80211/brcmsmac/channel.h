@@ -38,16 +38,16 @@ brcms_c_channel_mgr_attach(struct brcms_c_info *wlc);
 extern void brcms_c_channel_mgr_detach(struct brcms_cm_info *wlc_cm);
 
 extern u8 brcms_c_channel_locale_flags_in_band(struct brcms_cm_info *wlc_cm,
-					   uint bandunit);
+        uint bandunit);
 
 extern bool brcms_c_valid_chanspec_db(struct brcms_cm_info *wlc_cm,
-				      u16 chspec);
+                                      u16 chspec);
 
 extern void brcms_c_channel_reg_limits(struct brcms_cm_info *wlc_cm,
-				   u16 chanspec,
-				   struct txpwr_limits *txpwr);
+                                       u16 chanspec,
+                                       struct txpwr_limits *txpwr);
 extern void brcms_c_channel_set_chanspec(struct brcms_cm_info *wlc_cm,
-				     u16 chanspec,
-				     u8 local_constraint_qdbm);
+        u16 chanspec,
+        u8 local_constraint_qdbm);
 
 #endif				/* _WLC_CHANNEL_H */

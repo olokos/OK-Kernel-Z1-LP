@@ -123,18 +123,16 @@
 
 /* request a non-gpio and set the PIO config */
 extern int  ltq_gpio_request(unsigned int pin, unsigned int alt0,
-	unsigned int alt1, unsigned int dir, const char *name);
+                             unsigned int alt1, unsigned int dir, const char *name);
 extern void ltq_pmu_enable(unsigned int module);
 extern void ltq_pmu_disable(unsigned int module);
 
-static inline int ltq_is_ar9(void)
-{
-	return (ltq_get_soc_type() == SOC_TYPE_AR9);
+static inline int ltq_is_ar9(void) {
+    return (ltq_get_soc_type() == SOC_TYPE_AR9);
 }
 
-static inline int ltq_is_vr9(void)
-{
-	return (ltq_get_soc_type() == SOC_TYPE_VR9);
+static inline int ltq_is_vr9(void) {
+    return (ltq_get_soc_type() == SOC_TYPE_VR9);
 }
 
 #endif /* CONFIG_SOC_TYPE_XWAY */

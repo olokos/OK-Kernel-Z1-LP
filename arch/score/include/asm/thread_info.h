@@ -28,23 +28,23 @@
  *   must also be changed
  */
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	unsigned long		tp_value;	/* thread pointer */
-	__u32			cpu;		/* current CPU */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    unsigned long		tp_value;	/* thread pointer */
+    __u32			cpu;		/* current CPU */
 
-	/* 0 => preemptable, < 0 => BUG */
-	int			preempt_count;
+    /* 0 => preemptable, < 0 => BUG */
+    int			preempt_count;
 
-	/*
-	 * thread address space:
-	 * 0-0xBFFFFFFF for user-thead
-	 * 0-0xFFFFFFFF for kernel-thread
-	 */
-	mm_segment_t		addr_limit;
-	struct restart_block	restart_block;
-	struct pt_regs		*regs;
+    /*
+     * thread address space:
+     * 0-0xBFFFFFFF for user-thead
+     * 0-0xFFFFFFFF for kernel-thread
+     */
+    mm_segment_t		addr_limit;
+    struct restart_block	restart_block;
+    struct pt_regs		*regs;
 };
 
 /*

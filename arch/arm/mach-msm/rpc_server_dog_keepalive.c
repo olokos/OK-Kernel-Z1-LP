@@ -38,39 +38,37 @@
 /* TODO: Remove server registration with _VERS when modem is upated with _COMP*/
 
 static int handle_rpc_call(struct msm_rpc_server *server,
-			   struct rpc_request_hdr *req, unsigned len)
-{
-	switch (req->procedure) {
-	case RPC_DOG_KEEPALIVE_NULL:
-		return 0;
-	case RPC_DOG_KEEPALIVE_BEACON:
-		return 0;
-	default:
-		return -ENODEV;
-	}
+                           struct rpc_request_hdr *req, unsigned len) {
+    switch (req->procedure) {
+    case RPC_DOG_KEEPALIVE_NULL:
+        return 0;
+    case RPC_DOG_KEEPALIVE_BEACON:
+        return 0;
+    default:
+        return -ENODEV;
+    }
 }
 
 static struct msm_rpc_server rpc_server[] = {
-	{
-		.prog = DOG_KEEPALIVE_PROG,
-		.vers = DOG_KEEPALIVE_VERS,
-		.rpc_call = handle_rpc_call,
-	},
-	{
-		.prog = DOG_KEEPALIVE_PROG,
-		.vers = DOG_KEEPALIVE_VERS_COMP,
-		.rpc_call = handle_rpc_call,
-	},
+    {
+        .prog = DOG_KEEPALIVE_PROG,
+        .vers = DOG_KEEPALIVE_VERS,
+        .rpc_call = handle_rpc_call,
+    },
+    {
+        .prog = DOG_KEEPALIVE_PROG,
+        .vers = DOG_KEEPALIVE_VERS_COMP,
+        .rpc_call = handle_rpc_call,
+    },
 };
 
-static int __init rpc_server_init(void)
-{
-	/* Dual server registration to support backwards compatibility vers */
-	int ret;
-	ret = msm_rpc_create_server(&rpc_server[1]);
-	if (ret < 0)
-		return ret;
-	return msm_rpc_create_server(&rpc_server[0]);
+static int __init rpc_server_init(void) {
+    /* Dual server registration to support backwards compatibility vers */
+    int ret;
+    ret = msm_rpc_create_server(&rpc_server[1]);
+    if (ret < 0)
+        return ret;
+    return msm_rpc_create_server(&rpc_server[0]);
 }
 
 

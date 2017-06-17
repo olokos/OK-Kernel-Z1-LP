@@ -117,47 +117,47 @@
 
 /* A skeleton used for sending messages to the m5602 bridge */
 static const unsigned char bridge_urb_skeleton[] = {
-	0x13, 0x00, 0x81, 0x00
+    0x13, 0x00, 0x81, 0x00
 };
 
 /* A skeleton used for sending messages to the sensor */
 static const unsigned char sensor_urb_skeleton[] = {
-	0x23, M5602_XB_GPIO_EN_H, 0x81, 0x06,
-	0x23, M5602_XB_MISC_CTRL, 0x81, 0x80,
-	0x13, M5602_XB_I2C_DEV_ADDR, 0x81, 0x00,
-	0x13, M5602_XB_I2C_REG_ADDR, 0x81, 0x00,
-	0x13, M5602_XB_I2C_DATA, 0x81, 0x00,
-	0x13, M5602_XB_I2C_CTRL, 0x81, 0x11
+    0x23, M5602_XB_GPIO_EN_H, 0x81, 0x06,
+    0x23, M5602_XB_MISC_CTRL, 0x81, 0x80,
+    0x13, M5602_XB_I2C_DEV_ADDR, 0x81, 0x00,
+    0x13, M5602_XB_I2C_REG_ADDR, 0x81, 0x00,
+    0x13, M5602_XB_I2C_DATA, 0x81, 0x00,
+    0x13, M5602_XB_I2C_CTRL, 0x81, 0x11
 };
 
 struct sd {
-	struct gspca_dev gspca_dev;
+    struct gspca_dev gspca_dev;
 
-	/* A pointer to the currently connected sensor */
-	const struct m5602_sensor *sensor;
+    /* A pointer to the currently connected sensor */
+    const struct m5602_sensor *sensor;
 
-	struct sd_desc *desc;
+    struct sd_desc *desc;
 
-	/* Sensor private data */
-	void *sensor_priv;
+    /* Sensor private data */
+    void *sensor_priv;
 
-	/* The current frame's id, used to detect frame boundaries */
-	u8 frame_id;
+    /* The current frame's id, used to detect frame boundaries */
+    u8 frame_id;
 
-	/* The current frame count */
-	u32 frame_count;
+    /* The current frame count */
+    u32 frame_count;
 };
 
 int m5602_read_bridge(
-	struct sd *sd, const u8 address, u8 *i2c_data);
+    struct sd *sd, const u8 address, u8 *i2c_data);
 
 int m5602_write_bridge(
-	struct sd *sd, const u8 address, const u8 i2c_data);
+    struct sd *sd, const u8 address, const u8 i2c_data);
 
 int m5602_write_sensor(struct sd *sd, const u8 address,
-		       u8 *i2c_data, const u8 len);
+                       u8 *i2c_data, const u8 len);
 
 int m5602_read_sensor(struct sd *sd, const u8 address,
-		      u8 *i2c_data, const u8 len);
+                      u8 *i2c_data, const u8 len);
 
 #endif

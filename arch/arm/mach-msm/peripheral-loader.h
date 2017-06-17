@@ -29,15 +29,15 @@ struct pil_priv;
  * is ignored if this is set.
  */
 struct pil_desc {
-	const char *name;
-	struct device *dev;
-	const struct pil_reset_ops *ops;
-	struct module *owner;
-	unsigned long proxy_timeout;
-	unsigned long flags;
+    const char *name;
+    struct device *dev;
+    const struct pil_reset_ops *ops;
+    struct module *owner;
+    unsigned long proxy_timeout;
+    unsigned long flags;
 #define PIL_SKIP_ENTRY_CHECK	BIT(0)
-	struct pil_priv *priv;
-	unsigned int proxy_unvote_irq;
+    struct pil_priv *priv;
+    unsigned int proxy_unvote_irq;
 };
 
 /**
@@ -52,15 +52,15 @@ struct pil_desc {
  * @shutdown: shutdown the processor
  */
 struct pil_reset_ops {
-	int (*init_image)(struct pil_desc *pil, const u8 *metadata,
-			  size_t size);
-	int (*mem_setup)(struct pil_desc *pil, phys_addr_t addr, size_t size);
-	int (*verify_blob)(struct pil_desc *pil, phys_addr_t phy_addr,
-			   size_t size);
-	int (*proxy_vote)(struct pil_desc *pil);
-	int (*auth_and_reset)(struct pil_desc *pil);
-	void (*proxy_unvote)(struct pil_desc *pil);
-	int (*shutdown)(struct pil_desc *pil);
+    int (*init_image)(struct pil_desc *pil, const u8 *metadata,
+                      size_t size);
+    int (*mem_setup)(struct pil_desc *pil, phys_addr_t addr, size_t size);
+    int (*verify_blob)(struct pil_desc *pil, phys_addr_t phy_addr,
+                       size_t size);
+    int (*proxy_vote)(struct pil_desc *pil);
+    int (*auth_and_reset)(struct pil_desc *pil);
+    void (*proxy_unvote)(struct pil_desc *pil);
+    int (*shutdown)(struct pil_desc *pil);
 };
 
 #ifdef CONFIG_MSM_PIL
@@ -71,17 +71,19 @@ extern void pil_desc_release(struct pil_desc *desc);
 extern phys_addr_t pil_get_entry_addr(struct pil_desc *desc);
 extern int pil_do_ramdump(struct pil_desc *desc, void *ramdump_dev);
 #else
-static inline int pil_desc_init(struct pil_desc *desc) { return 0; }
-static inline int pil_boot(struct pil_desc *desc) { return 0; }
+static inline int pil_desc_init(struct pil_desc *desc) {
+    return 0;
+}
+static inline int pil_boot(struct pil_desc *desc) {
+    return 0;
+}
 static inline void pil_shutdown(struct pil_desc *desc) { }
 static inline void pil_desc_release(struct pil_desc *desc) { }
-static inline phys_addr_t pil_get_entry_addr(struct pil_desc *desc)
-{
-	return 0;
+static inline phys_addr_t pil_get_entry_addr(struct pil_desc *desc) {
+    return 0;
 }
-static inline int pil_do_ramdump(struct pil_desc *desc, void *ramdump_dev)
-{
-	return 0;
+static inline int pil_do_ramdump(struct pil_desc *desc, void *ramdump_dev) {
+    return 0;
 }
 #endif
 

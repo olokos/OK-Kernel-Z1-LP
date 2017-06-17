@@ -36,67 +36,67 @@ typedef int64_t fixed;
 #define fixed1 (1LL << 32)
 
 enum ch7006_tv_norm {
-	TV_NORM_PAL,
-	TV_NORM_PAL_M,
-	TV_NORM_PAL_N,
-	TV_NORM_PAL_NC,
-	TV_NORM_PAL_60,
-	TV_NORM_NTSC_M,
-	TV_NORM_NTSC_J,
-	NUM_TV_NORMS
+    TV_NORM_PAL,
+    TV_NORM_PAL_M,
+    TV_NORM_PAL_N,
+    TV_NORM_PAL_NC,
+    TV_NORM_PAL_60,
+    TV_NORM_NTSC_M,
+    TV_NORM_NTSC_J,
+    NUM_TV_NORMS
 };
 
 struct ch7006_tv_norm_info {
-	fixed vrefresh;
-	int vdisplay;
-	int vtotal;
-	int hvirtual;
+    fixed vrefresh;
+    int vdisplay;
+    int vtotal;
+    int hvirtual;
 
-	fixed subc_freq;
-	fixed black_level;
+    fixed subc_freq;
+    fixed black_level;
 
-	uint32_t dispmode;
-	int voffset;
+    uint32_t dispmode;
+    int voffset;
 };
 
 struct ch7006_mode {
-	struct drm_display_mode mode;
+    struct drm_display_mode mode;
 
-	int enc_hdisp;
-	int enc_vdisp;
+    int enc_hdisp;
+    int enc_vdisp;
 
-	fixed subc_coeff;
-	uint32_t dispmode;
+    fixed subc_coeff;
+    uint32_t dispmode;
 
-	uint32_t valid_scales;
-	uint32_t valid_norms;
+    uint32_t valid_scales;
+    uint32_t valid_norms;
 };
 
 struct ch7006_state {
-	uint8_t regs[0x26];
+    uint8_t regs[0x26];
 };
 
 struct ch7006_priv {
-	struct ch7006_encoder_params params;
-	struct ch7006_mode *mode;
+    struct ch7006_encoder_params params;
+    struct ch7006_mode *mode;
 
-	struct ch7006_state state;
-	struct ch7006_state saved_state;
+    struct ch7006_state state;
+    struct ch7006_state saved_state;
 
-	struct drm_property *scale_property;
+    struct drm_property *scale_property;
 
-	int select_subconnector;
-	int subconnector;
-	int hmargin;
-	int vmargin;
-	enum ch7006_tv_norm norm;
-	int brightness;
-	int contrast;
-	int flicker;
-	int scale;
+    int select_subconnector;
+    int subconnector;
+    int hmargin;
+    int vmargin;
+    enum ch7006_tv_norm norm;
+    int brightness;
+    int contrast;
+    int flicker;
+    int scale;
 
-	int chip_version;
-	int last_dpms;
+    int chip_version;
+    int last_dpms;
 };
 
 #define to_ch7006_priv(x) \
@@ -111,7 +111,7 @@ extern struct ch7006_tv_norm_info ch7006_tv_norms[];
 extern struct ch7006_mode ch7006_modes[];
 
 struct ch7006_mode *ch7006_lookup_mode(struct drm_encoder *encoder,
-				       struct drm_display_mode *drm_mode);
+                                       struct drm_display_mode *drm_mode);
 
 void ch7006_setup_levels(struct drm_encoder *encoder);
 void ch7006_setup_subcarrier(struct drm_encoder *encoder);
@@ -123,9 +123,9 @@ void ch7006_write(struct i2c_client *client, uint8_t addr, uint8_t val);
 uint8_t ch7006_read(struct i2c_client *client, uint8_t addr);
 
 void ch7006_state_load(struct i2c_client *client,
-		       struct ch7006_state *state);
+                       struct ch7006_state *state);
 void ch7006_state_save(struct i2c_client *client,
-		       struct ch7006_state *state);
+                       struct ch7006_state *state);
 
 /* Some helper macros */
 
@@ -155,14 +155,12 @@ void ch7006_state_save(struct i2c_client *client,
 		((x & __mask(src, bitfield)) >> (0 ? bitfield) << (src))
 #define unbitf(bitfield, x) __unbitf(bitfield, x)
 
-static inline int interpolate(int y0, int y1, int y2, int x)
-{
-	return y1 + (x < 50 ? y1 - y0 : y2 - y1) * (x - 50) / 50;
+static inline int interpolate(int y0, int y1, int y2, int x) {
+    return y1 + (x < 50 ? y1 - y0 : y2 - y1) * (x - 50) / 50;
 }
 
-static inline int32_t round_fixed(fixed x)
-{
-	return (x + fixed1/2) >> 32;
+static inline int32_t round_fixed(fixed x) {
+    return (x + fixed1/2) >> 32;
 }
 
 #define ch7006_load_reg(client, state, reg) ch7006_write(client, reg, state->regs[reg])

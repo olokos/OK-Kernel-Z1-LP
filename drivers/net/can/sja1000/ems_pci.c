@@ -41,14 +41,14 @@ MODULE_LICENSE("GPL v2");
 #define EMS_PCI_MAX_CHAN    EMS_PCI_V2_MAX_CHAN
 
 struct ems_pci_card {
-	int version;
-	int channels;
+    int version;
+    int channels;
 
-	struct pci_dev *pci_dev;
-	struct net_device *net_dev[EMS_PCI_MAX_CHAN];
+    struct pci_dev *pci_dev;
+    struct net_device *net_dev[EMS_PCI_MAX_CHAN];
 
-	void __iomem *conf_addr;
-	void __iomem *base_addr;
+    void __iomem *conf_addr;
+    void __iomem *base_addr;
 };
 
 #define EMS_PCI_CAN_CLOCK (16000000 / 2)
@@ -103,117 +103,107 @@ struct ems_pci_card {
 #define EMS_PCI_BASE_SIZE  4096 /* size of controller area */
 
 static DEFINE_PCI_DEVICE_TABLE(ems_pci_tbl) = {
-	/* CPC-PCI v1 */
-	{PCI_VENDOR_ID_SIEMENS, 0x2104, PCI_ANY_ID, PCI_ANY_ID,},
-	/* CPC-PCI v2 */
-	{PCI_VENDOR_ID_PLX, PCI_DEVICE_ID_PLX_9030, PCI_VENDOR_ID_PLX, 0x4000},
-	/* CPC-104P v2 */
-	{PCI_VENDOR_ID_PLX, PCI_DEVICE_ID_PLX_9030, PCI_VENDOR_ID_PLX, 0x4002},
-	{0,}
+    /* CPC-PCI v1 */
+    {PCI_VENDOR_ID_SIEMENS, 0x2104, PCI_ANY_ID, PCI_ANY_ID,},
+    /* CPC-PCI v2 */
+    {PCI_VENDOR_ID_PLX, PCI_DEVICE_ID_PLX_9030, PCI_VENDOR_ID_PLX, 0x4000},
+    /* CPC-104P v2 */
+    {PCI_VENDOR_ID_PLX, PCI_DEVICE_ID_PLX_9030, PCI_VENDOR_ID_PLX, 0x4002},
+    {0,}
 };
 MODULE_DEVICE_TABLE(pci, ems_pci_tbl);
 
 /*
  * Helper to read internal registers from card logic (not CAN)
  */
-static u8 ems_pci_v1_readb(struct ems_pci_card *card, unsigned int port)
-{
-	return readb(card->base_addr + (port * 4));
+static u8 ems_pci_v1_readb(struct ems_pci_card *card, unsigned int port) {
+    return readb(card->base_addr + (port * 4));
 }
 
-static u8 ems_pci_v1_read_reg(const struct sja1000_priv *priv, int port)
-{
-	return readb(priv->reg_base + (port * 4));
+static u8 ems_pci_v1_read_reg(const struct sja1000_priv *priv, int port) {
+    return readb(priv->reg_base + (port * 4));
 }
 
 static void ems_pci_v1_write_reg(const struct sja1000_priv *priv,
-				 int port, u8 val)
-{
-	writeb(val, priv->reg_base + (port * 4));
+                                 int port, u8 val) {
+    writeb(val, priv->reg_base + (port * 4));
 }
 
-static void ems_pci_v1_post_irq(const struct sja1000_priv *priv)
-{
-	struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
+static void ems_pci_v1_post_irq(const struct sja1000_priv *priv) {
+    struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
 
-	/* reset int flag of pita */
-	writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
-	       card->conf_addr + PITA2_ICR);
+    /* reset int flag of pita */
+    writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
+           card->conf_addr + PITA2_ICR);
 }
 
-static u8 ems_pci_v2_read_reg(const struct sja1000_priv *priv, int port)
-{
-	return readb(priv->reg_base + port);
+static u8 ems_pci_v2_read_reg(const struct sja1000_priv *priv, int port) {
+    return readb(priv->reg_base + port);
 }
 
 static void ems_pci_v2_write_reg(const struct sja1000_priv *priv,
-				 int port, u8 val)
-{
-	writeb(val, priv->reg_base + port);
+                                 int port, u8 val) {
+    writeb(val, priv->reg_base + port);
 }
 
-static void ems_pci_v2_post_irq(const struct sja1000_priv *priv)
-{
-	struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
+static void ems_pci_v2_post_irq(const struct sja1000_priv *priv) {
+    struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
 
-	writel(PLX_ICSR_ENA_CLR, card->conf_addr + PLX_ICSR);
+    writel(PLX_ICSR_ENA_CLR, card->conf_addr + PLX_ICSR);
 }
 
 /*
  * Check if a CAN controller is present at the specified location
  * by trying to set 'em into the PeliCAN mode
  */
-static inline int ems_pci_check_chan(const struct sja1000_priv *priv)
-{
-	unsigned char res;
+static inline int ems_pci_check_chan(const struct sja1000_priv *priv) {
+    unsigned char res;
 
-	/* Make sure SJA1000 is in reset mode */
-	priv->write_reg(priv, REG_MOD, 1);
+    /* Make sure SJA1000 is in reset mode */
+    priv->write_reg(priv, REG_MOD, 1);
 
-	priv->write_reg(priv, REG_CDR, CDR_PELICAN);
+    priv->write_reg(priv, REG_CDR, CDR_PELICAN);
 
-	/* read reset-values */
-	res = priv->read_reg(priv, REG_CDR);
+    /* read reset-values */
+    res = priv->read_reg(priv, REG_CDR);
 
-	if (res == CDR_PELICAN)
-		return 1;
+    if (res == CDR_PELICAN)
+        return 1;
 
-	return 0;
+    return 0;
 }
 
-static void ems_pci_del_card(struct pci_dev *pdev)
-{
-	struct ems_pci_card *card = pci_get_drvdata(pdev);
-	struct net_device *dev;
-	int i = 0;
+static void ems_pci_del_card(struct pci_dev *pdev) {
+    struct ems_pci_card *card = pci_get_drvdata(pdev);
+    struct net_device *dev;
+    int i = 0;
 
-	for (i = 0; i < card->channels; i++) {
-		dev = card->net_dev[i];
+    for (i = 0; i < card->channels; i++) {
+        dev = card->net_dev[i];
 
-		if (!dev)
-			continue;
+        if (!dev)
+            continue;
 
-		dev_info(&pdev->dev, "Removing %s.\n", dev->name);
-		unregister_sja1000dev(dev);
-		free_sja1000dev(dev);
-	}
+        dev_info(&pdev->dev, "Removing %s.\n", dev->name);
+        unregister_sja1000dev(dev);
+        free_sja1000dev(dev);
+    }
 
-	if (card->base_addr != NULL)
-		pci_iounmap(card->pci_dev, card->base_addr);
+    if (card->base_addr != NULL)
+        pci_iounmap(card->pci_dev, card->base_addr);
 
-	if (card->conf_addr != NULL)
-		pci_iounmap(card->pci_dev, card->conf_addr);
+    if (card->conf_addr != NULL)
+        pci_iounmap(card->pci_dev, card->conf_addr);
 
-	kfree(card);
+    kfree(card);
 
-	pci_disable_device(pdev);
-	pci_set_drvdata(pdev, NULL);
+    pci_disable_device(pdev);
+    pci_set_drvdata(pdev, NULL);
 }
 
-static void ems_pci_card_reset(struct ems_pci_card *card)
-{
-	/* Request board reset */
-	writeb(0, card->base_addr);
+static void ems_pci_card_reset(struct ems_pci_card *card) {
+    /* Request board reset */
+    writeb(0, card->base_addr);
 }
 
 /*
@@ -221,164 +211,161 @@ static void ems_pci_card_reset(struct ems_pci_card *card)
  * CAN channel to SJA1000 Socket-CAN subsystem.
  */
 static int __devinit ems_pci_add_card(struct pci_dev *pdev,
-					const struct pci_device_id *ent)
-{
-	struct sja1000_priv *priv;
-	struct net_device *dev;
-	struct ems_pci_card *card;
-	int max_chan, conf_size, base_bar;
-	int err, i;
+                                      const struct pci_device_id *ent) {
+    struct sja1000_priv *priv;
+    struct net_device *dev;
+    struct ems_pci_card *card;
+    int max_chan, conf_size, base_bar;
+    int err, i;
 
-	/* Enabling PCI device */
-	if (pci_enable_device(pdev) < 0) {
-		dev_err(&pdev->dev, "Enabling PCI device failed\n");
-		return -ENODEV;
-	}
+    /* Enabling PCI device */
+    if (pci_enable_device(pdev) < 0) {
+        dev_err(&pdev->dev, "Enabling PCI device failed\n");
+        return -ENODEV;
+    }
 
-	/* Allocating card structures to hold addresses, ... */
-	card = kzalloc(sizeof(struct ems_pci_card), GFP_KERNEL);
-	if (card == NULL) {
-		dev_err(&pdev->dev, "Unable to allocate memory\n");
-		pci_disable_device(pdev);
-		return -ENOMEM;
-	}
+    /* Allocating card structures to hold addresses, ... */
+    card = kzalloc(sizeof(struct ems_pci_card), GFP_KERNEL);
+    if (card == NULL) {
+        dev_err(&pdev->dev, "Unable to allocate memory\n");
+        pci_disable_device(pdev);
+        return -ENOMEM;
+    }
 
-	pci_set_drvdata(pdev, card);
+    pci_set_drvdata(pdev, card);
 
-	card->pci_dev = pdev;
+    card->pci_dev = pdev;
 
-	card->channels = 0;
+    card->channels = 0;
 
-	if (pdev->vendor == PCI_VENDOR_ID_PLX) {
-		card->version = 2; /* CPC-PCI v2 */
-		max_chan = EMS_PCI_V2_MAX_CHAN;
-		base_bar = EMS_PCI_V2_BASE_BAR;
-		conf_size = EMS_PCI_V2_CONF_SIZE;
-	} else {
-		card->version = 1; /* CPC-PCI v1 */
-		max_chan = EMS_PCI_V1_MAX_CHAN;
-		base_bar = EMS_PCI_V1_BASE_BAR;
-		conf_size = EMS_PCI_V1_CONF_SIZE;
-	}
+    if (pdev->vendor == PCI_VENDOR_ID_PLX) {
+        card->version = 2; /* CPC-PCI v2 */
+        max_chan = EMS_PCI_V2_MAX_CHAN;
+        base_bar = EMS_PCI_V2_BASE_BAR;
+        conf_size = EMS_PCI_V2_CONF_SIZE;
+    } else {
+        card->version = 1; /* CPC-PCI v1 */
+        max_chan = EMS_PCI_V1_MAX_CHAN;
+        base_bar = EMS_PCI_V1_BASE_BAR;
+        conf_size = EMS_PCI_V1_CONF_SIZE;
+    }
 
-	/* Remap configuration space and controller memory area */
-	card->conf_addr = pci_iomap(pdev, 0, conf_size);
-	if (card->conf_addr == NULL) {
-		err = -ENOMEM;
-		goto failure_cleanup;
-	}
+    /* Remap configuration space and controller memory area */
+    card->conf_addr = pci_iomap(pdev, 0, conf_size);
+    if (card->conf_addr == NULL) {
+        err = -ENOMEM;
+        goto failure_cleanup;
+    }
 
-	card->base_addr = pci_iomap(pdev, base_bar, EMS_PCI_BASE_SIZE);
-	if (card->base_addr == NULL) {
-		err = -ENOMEM;
-		goto failure_cleanup;
-	}
+    card->base_addr = pci_iomap(pdev, base_bar, EMS_PCI_BASE_SIZE);
+    if (card->base_addr == NULL) {
+        err = -ENOMEM;
+        goto failure_cleanup;
+    }
 
-	if (card->version == 1) {
-		/* Configure PITA-2 parallel interface (enable MUX) */
-		writel(PITA2_MISC_CONFIG, card->conf_addr + PITA2_MISC);
+    if (card->version == 1) {
+        /* Configure PITA-2 parallel interface (enable MUX) */
+        writel(PITA2_MISC_CONFIG, card->conf_addr + PITA2_MISC);
 
-		/* Check for unique EMS CAN signature */
-		if (ems_pci_v1_readb(card, 0) != 0x55 ||
-		    ems_pci_v1_readb(card, 1) != 0xAA ||
-		    ems_pci_v1_readb(card, 2) != 0x01 ||
-		    ems_pci_v1_readb(card, 3) != 0xCB ||
-		    ems_pci_v1_readb(card, 4) != 0x11) {
-			dev_err(&pdev->dev,
-				"Not EMS Dr. Thomas Wuensche interface\n");
-			err = -ENODEV;
-			goto failure_cleanup;
-		}
-	}
+        /* Check for unique EMS CAN signature */
+        if (ems_pci_v1_readb(card, 0) != 0x55 ||
+                ems_pci_v1_readb(card, 1) != 0xAA ||
+                ems_pci_v1_readb(card, 2) != 0x01 ||
+                ems_pci_v1_readb(card, 3) != 0xCB ||
+                ems_pci_v1_readb(card, 4) != 0x11) {
+            dev_err(&pdev->dev,
+                    "Not EMS Dr. Thomas Wuensche interface\n");
+            err = -ENODEV;
+            goto failure_cleanup;
+        }
+    }
 
-	ems_pci_card_reset(card);
+    ems_pci_card_reset(card);
 
-	/* Detect available channels */
-	for (i = 0; i < max_chan; i++) {
-		dev = alloc_sja1000dev(0);
-		if (dev == NULL) {
-			err = -ENOMEM;
-			goto failure_cleanup;
-		}
+    /* Detect available channels */
+    for (i = 0; i < max_chan; i++) {
+        dev = alloc_sja1000dev(0);
+        if (dev == NULL) {
+            err = -ENOMEM;
+            goto failure_cleanup;
+        }
 
-		card->net_dev[i] = dev;
-		priv = netdev_priv(dev);
-		priv->priv = card;
-		priv->irq_flags = IRQF_SHARED;
+        card->net_dev[i] = dev;
+        priv = netdev_priv(dev);
+        priv->priv = card;
+        priv->irq_flags = IRQF_SHARED;
 
-		dev->irq = pdev->irq;
-		priv->reg_base = card->base_addr + EMS_PCI_CAN_BASE_OFFSET
-					+ (i * EMS_PCI_CAN_CTRL_SIZE);
-		if (card->version == 1) {
-			priv->read_reg  = ems_pci_v1_read_reg;
-			priv->write_reg = ems_pci_v1_write_reg;
-			priv->post_irq  = ems_pci_v1_post_irq;
-		} else {
-			priv->read_reg  = ems_pci_v2_read_reg;
-			priv->write_reg = ems_pci_v2_write_reg;
-			priv->post_irq  = ems_pci_v2_post_irq;
-		}
+        dev->irq = pdev->irq;
+        priv->reg_base = card->base_addr + EMS_PCI_CAN_BASE_OFFSET
+                         + (i * EMS_PCI_CAN_CTRL_SIZE);
+        if (card->version == 1) {
+            priv->read_reg  = ems_pci_v1_read_reg;
+            priv->write_reg = ems_pci_v1_write_reg;
+            priv->post_irq  = ems_pci_v1_post_irq;
+        } else {
+            priv->read_reg  = ems_pci_v2_read_reg;
+            priv->write_reg = ems_pci_v2_write_reg;
+            priv->post_irq  = ems_pci_v2_post_irq;
+        }
 
-		/* Check if channel is present */
-		if (ems_pci_check_chan(priv)) {
-			priv->can.clock.freq = EMS_PCI_CAN_CLOCK;
-			priv->ocr = EMS_PCI_OCR;
-			priv->cdr = EMS_PCI_CDR;
+        /* Check if channel is present */
+        if (ems_pci_check_chan(priv)) {
+            priv->can.clock.freq = EMS_PCI_CAN_CLOCK;
+            priv->ocr = EMS_PCI_OCR;
+            priv->cdr = EMS_PCI_CDR;
 
-			SET_NETDEV_DEV(dev, &pdev->dev);
+            SET_NETDEV_DEV(dev, &pdev->dev);
 
-			if (card->version == 1)
-				/* reset int flag of pita */
-				writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
-				       card->conf_addr + PITA2_ICR);
-			else
-				/* enable IRQ in PLX 9030 */
-				writel(PLX_ICSR_ENA_CLR,
-				       card->conf_addr + PLX_ICSR);
+            if (card->version == 1)
+                /* reset int flag of pita */
+                writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
+                       card->conf_addr + PITA2_ICR);
+            else
+                /* enable IRQ in PLX 9030 */
+                writel(PLX_ICSR_ENA_CLR,
+                       card->conf_addr + PLX_ICSR);
 
-			/* Register SJA1000 device */
-			err = register_sja1000dev(dev);
-			if (err) {
-				dev_err(&pdev->dev, "Registering device failed "
-							"(err=%d)\n", err);
-				free_sja1000dev(dev);
-				goto failure_cleanup;
-			}
+            /* Register SJA1000 device */
+            err = register_sja1000dev(dev);
+            if (err) {
+                dev_err(&pdev->dev, "Registering device failed "
+                        "(err=%d)\n", err);
+                free_sja1000dev(dev);
+                goto failure_cleanup;
+            }
 
-			card->channels++;
+            card->channels++;
 
-			dev_info(&pdev->dev, "Channel #%d at 0x%p, irq %d\n",
-					i + 1, priv->reg_base, dev->irq);
-		} else {
-			free_sja1000dev(dev);
-		}
-	}
+            dev_info(&pdev->dev, "Channel #%d at 0x%p, irq %d\n",
+                     i + 1, priv->reg_base, dev->irq);
+        } else {
+            free_sja1000dev(dev);
+        }
+    }
 
-	return 0;
+    return 0;
 
 failure_cleanup:
-	dev_err(&pdev->dev, "Error: %d. Cleaning Up.\n", err);
+    dev_err(&pdev->dev, "Error: %d. Cleaning Up.\n", err);
 
-	ems_pci_del_card(pdev);
+    ems_pci_del_card(pdev);
 
-	return err;
+    return err;
 }
 
 static struct pci_driver ems_pci_driver = {
-	.name = DRV_NAME,
-	.id_table = ems_pci_tbl,
-	.probe = ems_pci_add_card,
-	.remove = ems_pci_del_card,
+    .name = DRV_NAME,
+    .id_table = ems_pci_tbl,
+    .probe = ems_pci_add_card,
+    .remove = ems_pci_del_card,
 };
 
-static int __init ems_pci_init(void)
-{
-	return pci_register_driver(&ems_pci_driver);
+static int __init ems_pci_init(void) {
+    return pci_register_driver(&ems_pci_driver);
 }
 
-static void __exit ems_pci_exit(void)
-{
-	pci_unregister_driver(&ems_pci_driver);
+static void __exit ems_pci_exit(void) {
+    pci_unregister_driver(&ems_pci_driver);
 }
 
 module_init(ems_pci_init);

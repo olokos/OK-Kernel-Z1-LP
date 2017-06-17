@@ -94,8 +94,7 @@ logDump.c
 static int debug;
 
 void
-logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4)
-{
+logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4) {
     static tANI_U8 buf[MAX_LOGDUMP_SIZE + MAX_OVERFLOW_MSG];
     tANI_U16 bufLen;
     pMac->gCurrentLogSize = 0;
@@ -118,8 +117,7 @@ logPrintf(tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_
   So we print the buffer immediately and we would also aggregate where
   the TestDbg might use this buffer to print out at the application level.
   */
-int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...)
-{
+int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...) {
     tANI_S32 ret = 0;
 #ifdef WLAN_DEBUG
 
@@ -140,8 +138,7 @@ int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...)
         return 0;
 
 
-    if ((tANI_U32) ret > (MAX_LOGDUMP_SIZE - pMac->gCurrentLogSize))
-    {
+    if ((tANI_U32) ret > (MAX_LOGDUMP_SIZE - pMac->gCurrentLogSize)) {
         pBuf += (MAX_LOGDUMP_SIZE - pMac->gCurrentLogSize);
         pMac->gCurrentLogSize = MAX_LOGDUMP_SIZE;
 
@@ -165,15 +162,12 @@ int log_sprintf(tpAniSirGlobal pMac, char *pBuf, char *fmt, ...)
 }
 
 
-char* dumpLOG( tpAniSirGlobal pMac, char *p )
-{
+char* dumpLOG( tpAniSirGlobal pMac, char *p ) {
     tANI_U32 i;
 
-    for( i = SIR_FIRST_MODULE_ID; i <= SIR_LAST_MODULE_ID; i++ )
-    {
+    for( i = SIR_FIRST_MODULE_ID; i <= SIR_LAST_MODULE_ID; i++ ) {
         p += log_sprintf(pMac, p, "[0x%2x]", i);
-        switch (i)
-        {
+        switch (i) {
         case SIR_HAL_MODULE_ID:
             p += log_sprintf( pMac, p, "HAL ");
             break;
@@ -222,8 +216,7 @@ char* dumpLOG( tpAniSirGlobal pMac, char *p )
                           ": debug level is [0x%x] ",
                           pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID]);
 
-        switch( pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID] )
-        {
+        switch( pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID] ) {
         case LOGOFF:
             p += log_sprintf( pMac, p, "LOG disabled\n");
             break;
@@ -257,29 +250,23 @@ char* dumpLOG( tpAniSirGlobal pMac, char *p )
     return p;
 }
 
-char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level )
-{
+char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level ) {
     tANI_U32 i;
 
-    if((module > SIR_LAST_MODULE_ID || module < SIR_FIRST_MODULE_ID) && module != 0xff )
-    {
+    if((module > SIR_LAST_MODULE_ID || module < SIR_FIRST_MODULE_ID) && module != 0xff ) {
         p += log_sprintf( pMac, p, "Invalid module id 0x%x\n", module );
         return p;
     }
 
-    if( 0xff == module )
-    {
+    if( 0xff == module ) {
         for( i = SIR_FIRST_MODULE_ID; i <= SIR_LAST_MODULE_ID; i++ )
             pMac->utils.gLogDbgLevel[i - SIR_FIRST_MODULE_ID] = level;
-    }
-    else
-    {
+    } else {
         pMac->utils.gLogDbgLevel[module - SIR_FIRST_MODULE_ID] = level;
     }
 
 #ifdef ANI_PHY_DEBUG
-    if (module == 0xff || module == SIR_PHY_MODULE_ID)
-    {
+    if (module == 0xff || module == SIR_PHY_MODULE_ID) {
         pMac->hphy.phy.phyDebugLogLevel = level;
     }
 #endif
@@ -287,36 +274,26 @@ char* setLOGLevel( tpAniSirGlobal pMac, char *p, tANI_U32 module, tANI_U32 level
     return dumpLOG( pMac, p );
 }
 
-static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId)
-{
+static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId) {
 #define CFG_CTL_INT           0x00080000
-    if ((pMac->cfg.gCfgEntry[cfgId].control & CFG_CTL_INT) != 0)
-    {
+    if ((pMac->cfg.gCfgEntry[cfgId].control & CFG_CTL_INT) != 0) {
         tANI_U32  val;
 
         // Get integer parameter
-        if (wlan_cfgGetInt(pMac, (tANI_U16)cfgId, &val) != eSIR_SUCCESS)
-        {
+        if (wlan_cfgGetInt(pMac, (tANI_U16)cfgId, &val) != eSIR_SUCCESS) {
             sysLog(pMac, LOGE, FL("Get cfgId 0x%x failed\n"), cfgId);
-        }
-        else
-        {
+        } else {
             sysLog( pMac, LOGE, FL("WNI_CFG_%s(%d  0x%x) = %ld\n"),  gCfgParamName[cfgId], cfgId, cfgId, val );
         }
-    }
-    else
-    {
+    } else {
         tANI_U8 buf[CFG_MAX_STR_LEN] = {0} ;
         tANI_U32 valueLen ;
 
         // Get string parameter
         valueLen = CFG_MAX_STR_LEN ;
-        if (wlan_cfgGetStr(pMac, cfgId, buf, &valueLen) != eSIR_SUCCESS)
-        {
+        if (wlan_cfgGetStr(pMac, cfgId, buf, &valueLen) != eSIR_SUCCESS) {
             sysLog(pMac, LOGE, FL("Get cfgId 0x%x failed\n"), cfgId);
-        }
-        else
-        {
+        } else {
             sysLog( pMac, LOGE, FL("WNI_CFG_%s(%d  0x%x) len=%ld\n"),  gCfgParamName[cfgId], cfgId, cfgId, valueLen );
             sirDumpBuf(pMac, SIR_WDA_MODULE_ID, LOG1, buf, valueLen) ;
         }
@@ -325,8 +302,7 @@ static void Log_getCfg(tpAniSirGlobal pMac, tANI_U16 cfgId)
     return;
 }
 
-static void Log_setCfg(tpAniSirGlobal pMac, tANI_U16 cfgId, tANI_U32 val)
-{
+static void Log_setCfg(tpAniSirGlobal pMac, tANI_U16 cfgId, tANI_U32 val) {
     sysLog(pMac, LOGE, FL("Set %s(0x%x) to value 0x%x\n"),
            gCfgParamName[cfgId], cfgId, val);
 
@@ -337,8 +313,7 @@ static void Log_setCfg(tpAniSirGlobal pMac, tANI_U16 cfgId, tANI_U32 val)
 }
 
 
-char * dump_cfg_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
-{
+char * dump_cfg_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
     (void) arg2;
     (void) arg3;
     (void) arg4;
@@ -346,19 +321,15 @@ char * dump_cfg_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32
     return p;
 }
 
-char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
-{
+char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
     tANI_U32 i, startId, endId;
 
     (void) arg3;
     (void) arg4;
 
-    if (arg1 < CFG_PARAM_MAX_NUM)
-    {
+    if (arg1 < CFG_PARAM_MAX_NUM) {
         startId = arg1;
-    }
-    else
-    {
+    } else {
         p += log_sprintf( pMac, p, "Start CFGID must be less than %d\n", CFG_PARAM_MAX_NUM);
         return p;
     }
@@ -373,16 +344,14 @@ char * dump_cfg_group_get( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tA
 
     return p;
 }
-char * dump_cfg_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
-{
+char * dump_cfg_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
     (void) arg3;
     (void) arg4;
     Log_setCfg(pMac, (tANI_U16) arg1, arg2);
     return p;
 }
 
-char * dump_log_level_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
-{
+char * dump_log_level_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p) {
     (void) arg1;
     (void) arg2;
     (void) arg3;
@@ -393,14 +362,12 @@ char * dump_log_level_set( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tA
 
 
 /* Initialize the index */
-void logDumpInit(tpAniSirGlobal pMac)
-{
+void logDumpInit(tpAniSirGlobal pMac) {
     pMac->dumpTablecurrentId = 0;
 
 }
 
-void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32   nItems )
-{
+void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32   nItems ) {
 
     pMac->dumpTableEntry[pMac->dumpTablecurrentId]->nItems = nItems;
     pMac->dumpTableEntry[pMac->dumpTablecurrentId]->mindumpid = pEntry->id;
@@ -413,26 +380,22 @@ void logDumpRegisterTable( tpAniSirGlobal pMac, tDumpFuncEntry *pEntry, tANI_U32
 /*
  * print nItems from the menu list ponted to by m
  */
-static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId)
-{
+static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId) {
     tANI_U32 currentId = 0;
     tANI_U32 i, j;
     tANI_S32 ret = 0;
     tDumpFuncEntry *pEntry = NULL;
     tANI_U32 nItems = 0;
 
-    for(i = 0; i < pMac->dumpTablecurrentId; i++)
-    {
+    for(i = 0; i < pMac->dumpTablecurrentId; i++) {
         pEntry = pMac->dumpTableEntry[i]->dumpTable;
         nItems = pMac->dumpTableEntry[i]->nItems;
 
-        for (j = 0; j < nItems; j++, pEntry++)
-        {
+        for (j = 0; j < nItems; j++, pEntry++) {
             if (pEntry->description == NULL)
                 continue;
 
-            if (pEntry->id == 0)
-            {
+            if (pEntry->id == 0) {
                 ret = log_sprintf( pMac,p, "---- %s\n", pEntry->description);
 
                 if (ret <= 0)
@@ -461,65 +424,47 @@ static tANI_U32 print_menu(tpAniSirGlobal pMac, char  *p, tANI_U32 startId)
     return currentId;
 }
 
-int logRtaiDump( tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, tANI_U8 *pBuf)
-{
+int logRtaiDump( tpAniSirGlobal pMac, tANI_U32 cmd, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, tANI_U8 *pBuf) {
     char *p = (char *)pBuf;
     tANI_U32 i;
     tANI_U32 nItems = 0;
     tDumpFuncEntry *pEntry = NULL;
 
     pMac->gCurrentLogSize = 0;
-    if (debug)
-    {
+    if (debug) {
         p += log_sprintf( pMac,p, "Cmd = %d Args (0x%x,0x%x,0x%x,0x%x)\n\n",
                           cmd, arg1, arg2, arg3, arg4);
     }
 
-    if( cmd == MAX_DUMP_CMD || cmd == 0 )
-    {
+    if( cmd == MAX_DUMP_CMD || cmd == 0 ) {
         pMac->menuCurrent = print_menu(pMac, p, pMac->menuCurrent);
         return pMac->gCurrentLogSize;
     }
-    if(cmd <= HAL_LOG_DUMP_CMD_END)
-    {
+    if(cmd <= HAL_LOG_DUMP_CMD_END) {
         WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, p);
-    }
-    else
-    {
-        for(i = 0; i < pMac->dumpTablecurrentId; i++)
-        {
-            if( (cmd > pMac->dumpTableEntry[i]->mindumpid) && (cmd <= pMac->dumpTableEntry[i]->maxdumpid))
-            {
+    } else {
+        for(i = 0; i < pMac->dumpTablecurrentId; i++) {
+            if( (cmd > pMac->dumpTableEntry[i]->mindumpid) && (cmd <= pMac->dumpTableEntry[i]->maxdumpid)) {
                 pEntry = pMac->dumpTableEntry[i]->dumpTable;
                 nItems = pMac->dumpTableEntry[i]->nItems;
                 break;
-            }
-            else
-            {
+            } else {
                 continue;
             }
         }
 
-        if((nItems > 0) && (pEntry != NULL))
-        {
-            for (i = 0; i < nItems; i++, pEntry++)
-            {
-                if( cmd == pEntry->id )
-                {
-                    if ( pEntry->func != NULL )
-                    {
+        if((nItems > 0) && (pEntry != NULL)) {
+            for (i = 0; i < nItems; i++, pEntry++) {
+                if( cmd == pEntry->id ) {
+                    if ( pEntry->func != NULL ) {
                         pEntry->func(pMac, arg1, arg2, arg3, arg4, p);
-                    }
-                    else
-                    {
+                    } else {
                         p += log_sprintf( pMac,p, "Cmd not supported\n");
                     }
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             p += log_sprintf( pMac,p, "Cmd not found \n");
         }
     }

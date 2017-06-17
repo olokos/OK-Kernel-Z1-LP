@@ -168,10 +168,10 @@
  * @start_before_end:	new started before old ended
  */
 struct dt3155_stats {
-	int free_bufs_empty;
-	int corrupted_fields;
-	int dma_map_failed;
-	int start_before_end;
+    int free_bufs_empty;
+    int corrupted_fields;
+    int dma_map_failed;
+    int start_before_end;
 };
 
 /*    per board private data structure   */
@@ -193,18 +193,18 @@ struct dt3155_stats {
  * @config:		local copy of config register
  */
 struct dt3155_priv {
-	struct video_device *vdev;
-	struct pci_dev *pdev;
-	struct vb2_queue *q;
-	struct vb2_buffer *curr_buf;
-	struct mutex mux;
-	struct list_head dmaq;
-	spinlock_t lock;
-	unsigned int field_count;
-	struct dt3155_stats stats;
-	void __iomem *regs;
-	int users;
-	u8 csr2, config;
+    struct video_device *vdev;
+    struct pci_dev *pdev;
+    struct vb2_queue *q;
+    struct vb2_buffer *curr_buf;
+    struct mutex mux;
+    struct list_head dmaq;
+    spinlock_t lock;
+    unsigned int field_count;
+    struct dt3155_stats stats;
+    void __iomem *regs;
+    int users;
+    u8 csr2, config;
 };
 
 #endif /*  __KERNEL__  */

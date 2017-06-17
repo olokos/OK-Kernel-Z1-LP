@@ -92,16 +92,14 @@
 
 #define WEXT_CSCAN_SCAN_DONE_WAIT_TIME  2000
 
-typedef struct hdd_scan_info
-{
+typedef struct hdd_scan_info {
     struct net_device *dev;
     struct iw_request_info *info;
     char *start;
     char *end;
 } hdd_scan_info_t, *hdd_scan_info_tp;
 
-static v_S31_t hdd_TranslateABGRateToMbpsRate(v_U8_t *pFcRate)
-{
+static v_S31_t hdd_TranslateABGRateToMbpsRate(v_U8_t *pFcRate) {
 
     /** Slightly more sophisticated processing has to take place here.
               Basic rates are rounded DOWN.  HT rates are rounded UP.*/
@@ -109,8 +107,7 @@ static v_S31_t hdd_TranslateABGRateToMbpsRate(v_U8_t *pFcRate)
 }
 
 
-static eHalStatus hdd_AddIwStreamEvent(int cmd, int length, char* data, hdd_scan_info_t *pscanInfo, char **last_event, char **current_event )
-{
+static eHalStatus hdd_AddIwStreamEvent(int cmd, int length, char* data, hdd_scan_info_t *pscanInfo, char **last_event, char **current_event ) {
     struct iw_event event;
 
     *last_event = *current_event;
@@ -120,8 +117,7 @@ static eHalStatus hdd_AddIwStreamEvent(int cmd, int length, char* data, hdd_scan
     event.u.data.length = length;
     *current_event = iwe_stream_add_point (pscanInfo->info,*current_event, pscanInfo->end,  &event, data);
 
-    if(*last_event == *current_event)
-    {
+    if(*last_event == *current_event) {
         /* no space to add event */
         hddLog( LOGW, "%s: no space left to add event", __func__);
         return -E2BIG; /* Error code, may be E2BIG */
@@ -146,8 +142,7 @@ static eHalStatus hdd_AddIwStreamEvent(int cmd, int length, char* data, hdd_scan
 
 
 /* Extract the WPA and/or RSN IEs */
-static eHalStatus hdd_GetWPARSNIEs( v_U8_t *ieFields, v_U16_t ie_length, char **last_event, char **current_event, hdd_scan_info_t *pscanInfo )
-{
+static eHalStatus hdd_GetWPARSNIEs( v_U8_t *ieFields, v_U16_t ie_length, char **last_event, char **current_event, hdd_scan_info_t *pscanInfo ) {
     v_U8_t eid, elen, *element;
     v_U16_t tie_length=0;
 
@@ -156,8 +151,7 @@ static eHalStatus hdd_GetWPARSNIEs( v_U8_t *ieFields, v_U16_t ie_length, char **
     element = ieFields;
     tie_length = ie_length;
 
-    while( tie_length > 2 && element != NULL )
-    {
+    while( tie_length > 2 && element != NULL ) {
         eid = element[0];
         elen = element[1];
 
@@ -166,8 +160,7 @@ static eHalStatus hdd_GetWPARSNIEs( v_U8_t *ieFields, v_U16_t ie_length, char **
         if ((elen+2) > tie_length)
             break;
 
-        switch(eid)
-        {
+        switch(eid) {
         case DOT11F_EID_WPA:
         case DOT11F_EID_RSN:
 #ifdef FEATURE_WLAN_WAPI
@@ -202,8 +195,7 @@ static eHalStatus hdd_GetWPARSNIEs( v_U8_t *ieFields, v_U16_t ie_length, char **
 
   --------------------------------------------------------------------------*/
 #define MAX_CUSTOM_LEN 64
-static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResultInfo *scan_result)
-{
+static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResultInfo *scan_result) {
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(scanInfo->dev) ;
     tHalHandle hHal = WLAN_HDD_GET_HAL_CTX(pAdapter);
     tSirBssDescription *descriptor = &scan_result->BssDescriptor;
@@ -234,8 +226,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     current_event = iwe_stream_add_event(scanInfo->info,current_event, end,
                                          &event, IW_EV_ADDR_LEN);
 
-    if (last_event == current_event)
-    {
+    if (last_event == current_event) {
         /* no space to add event */
         /* Error code may be E2BIG */
         hddLog(LOGE, "hdd_IndicateScanResult: no space for SIOCGIWAP ");
@@ -248,8 +239,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     /* Protocol Name */
     event.cmd = SIOCGIWNAME;
 
-    switch (descriptor->nwType)
-    {
+    switch (descriptor->nwType) {
     case eSIR_11A_NW_TYPE:
         modestr = "a";
         break;
@@ -272,8 +262,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     current_event = iwe_stream_add_event(scanInfo->info,current_event, end,
                                          &event, IW_EV_CHAR_LEN);
 
-    if (last_event == current_event)
-    {
+    if (last_event == current_event) {
         /* no space to add event */
         hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWNAME");
         /* Error code, may be E2BIG */
@@ -292,8 +281,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     current_event = iwe_stream_add_event(scanInfo->info,current_event, end,
                                          &event, IW_EV_FREQ_LEN);
 
-    if (last_event == current_event)
-    {
+    if (last_event == current_event) {
         /* no space to add event */
         hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWFREQ");
         return -E2BIG;
@@ -307,16 +295,11 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
 
     capabilityInfo = descriptor->capabilityInfo;
 
-    if (SIR_MAC_GET_ESS(capabilityInfo))
-    {
+    if (SIR_MAC_GET_ESS(capabilityInfo)) {
         event.u.mode = IW_MODE_INFRA;
-    }
-    else if (SIR_MAC_GET_IBSS(capabilityInfo))
-    {
+    } else if (SIR_MAC_GET_IBSS(capabilityInfo)) {
         event.u.mode = IW_MODE_ADHOC;
-    }
-    else
-    {
+    } else {
         /* neither ESS or IBSS */
         event.u.mode = IW_MODE_AUTO;
     }
@@ -324,8 +307,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     current_event = iwe_stream_add_event(scanInfo->info,current_event, end,
                                          &event, IW_EV_UINT_LEN);
 
-    if (last_event == current_event)
-    {
+    if (last_event == current_event) {
         /* no space to add event */
         hddLog(LOGE, "hdd_IndicateScanResult: no space for SIOCGIWMODE");
         return -E2BIG;
@@ -333,8 +315,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     /* To extract SSID */
     ie_length = GET_IE_LEN_IN_BSS( descriptor->length );
 
-    if (ie_length > 0)
-    {
+    if (ie_length > 0) {
         /* dot11BeaconIEs is a large struct, so we make it static to
            avoid stack overflow.  This API is only invoked via ioctl,
            so it is serialized by the kernel rtnl_lock and hence does
@@ -355,8 +336,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
         pDot11SSID = &dot11BeaconIEs.SSID;
 
 
-        if (pDot11SSID->present )
-        {
+        if (pDot11SSID->present ) {
             last_event = current_event;
             vos_mem_zero (&event, sizeof (struct iw_event));
 
@@ -366,16 +346,14 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
             current_event = iwe_stream_add_point (scanInfo->info,current_event, end,
                                                   &event, (char *)scan_result->ssId.ssId);
 
-            if(last_event == current_event)
-            {
+            if(last_event == current_event) {
                 /* no space to add event */
                 hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWESSID");
                 return -E2BIG;
             }
         }
 
-        if( hdd_GetWPARSNIEs( ( tANI_U8 *) descriptor->ieFields, ie_length, &last_event, &current_event, scanInfo )  < 0    )
-        {
+        if( hdd_GetWPARSNIEs( ( tANI_U8 *) descriptor->ieFields, ie_length, &last_event, &current_event, scanInfo )  < 0    ) {
             hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWESSID");
             return -E2BIG;
         }
@@ -390,15 +368,12 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
 
         pDot11SuppRates = &dot11BeaconIEs.SuppRates;
 
-        if (pDot11SuppRates->present )
-        {
+        if (pDot11SuppRates->present ) {
             int i;
 
             numBasicRates = pDot11SuppRates->num_rates;
-            for (i=0; i<pDot11SuppRates->num_rates; i++)
-            {
-                if (0 != (pDot11SuppRates->rates[i] & 0x7F))
-                {
+            for (i=0; i<pDot11SuppRates->num_rates; i++) {
+                if (0 != (pDot11SuppRates->rates[i] & 0x7F)) {
                     event.u.bitrate.value = hdd_TranslateABGRateToMbpsRate (
                                                 &pDot11SuppRates->rates[i]);
 
@@ -411,8 +386,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
 
         pDot11ExtSuppRates = &dot11BeaconIEs.ExtSuppRates;
 
-        if (pDot11ExtSuppRates->present )
-        {
+        if (pDot11ExtSuppRates->present ) {
             int i,no_of_rates;
             maxNumRates = numBasicRates + pDot11ExtSuppRates->num_rates;
 
@@ -421,19 +395,14 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
 
             maxNumRates = VOS_MIN(maxNumRates , IW_MAX_BITRATES);
 
-            if((maxNumRates - numBasicRates) > MAX_RATES)
-            {
+            if((maxNumRates - numBasicRates) > MAX_RATES) {
                 no_of_rates = MAX_RATES;
                 hddLog( LOGW, "Accessing array out of bound that array is pDot11ExtSuppRates->rates ");
-            }
-            else
-            {
+            } else {
                 no_of_rates = maxNumRates - numBasicRates;
             }
-            for ( i=0; i< no_of_rates ; i++ )
-            {
-                if (0 != (pDot11ExtSuppRates->rates[i] & 0x7F))
-                {
+            for ( i=0; i< no_of_rates ; i++ ) {
+                if (0 != (pDot11ExtSuppRates->rates[i] & 0x7F)) {
                     event.u.bitrate.value = hdd_TranslateABGRateToMbpsRate (
                                                 &pDot11ExtSuppRates->rates[i]);
 
@@ -444,14 +413,10 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
         }
 
 
-        if ((current_pad - current_event) >= IW_EV_LCP_LEN)
-        {
+        if ((current_pad - current_event) >= IW_EV_LCP_LEN) {
             current_event = current_pad;
-        }
-        else
-        {
-            if (last_event == current_event)
-            {
+        } else {
+            if (last_event == current_event) {
                 /* no space to add event */
                 hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWRATE");
                 return -E2BIG;
@@ -464,12 +429,9 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
 
         event.cmd = SIOCGIWENCODE;
 
-        if (SIR_MAC_GET_PRIVACY(capabilityInfo))
-        {
+        if (SIR_MAC_GET_PRIVACY(capabilityInfo)) {
             event.u.data.flags = IW_ENCODE_ENABLED | IW_ENCODE_NOKEY;
-        }
-        else
-        {
+        } else {
             event.u.data.flags = IW_ENCODE_DISABLED;
         }
         event.u.data.length = 0;
@@ -477,8 +439,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
         current_event = iwe_stream_add_point(scanInfo->info,current_event, end, &event, (char *)pDot11SSID->ssid);
 
 
-        if(last_event == current_event)
-        {
+        if(last_event == current_event) {
             /* no space to add event
                    Error code, may be E2BIG */
             hddLog( LOGE, "hdd_IndicateScanResult: no space for SIOCGIWENCODE");
@@ -500,12 +461,9 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
             pAdapter->sessionCtx.station.conn_info.connState ) &&
             ( VOS_TRUE == vos_mem_compare(descriptor->bssId,
                                           pAdapter->sessionCtx.station.conn_info.bssId,
-                                          WNI_CFG_BSSID_LEN)))
-    {
+                                          WNI_CFG_BSSID_LEN))) {
         event.u.qual.level = pAdapter->rssi;
-    }
-    else
-    {
+    } else {
         event.u.qual.level = VOS_MIN ((descriptor->rssi + descriptor->sinr), 0);
     }
 
@@ -514,8 +472,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     current_event = iwe_stream_add_event(scanInfo->info,current_event,
                                          end, &event, IW_EV_QUAL_LEN);
 
-    if(last_event == current_event)
-    {
+    if(last_event == current_event) {
         /* no space to add event */
         hddLog( LOGE, "hdd_IndicateScanResult: no space for IWEVQUAL");
         return -E2BIG;
@@ -530,8 +487,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
     event.u.data.length = p - custom;
     current_event = iwe_stream_add_point (scanInfo->info,current_event, end,
                                           &event, custom);
-    if(last_event == current_event)
-    {
+    if(last_event == current_event) {
         /* no space to add event */
         hddLog( LOGE, "hdd_IndicateScanResult: no space for IWEVCUSTOM (age)");
         return -E2BIG;
@@ -558,8 +514,7 @@ static eHalStatus hdd_IndicateScanResult(hdd_scan_info_t *scanInfo, tCsrScanResu
   --------------------------------------------------------------------------*/
 
 static eHalStatus hdd_ScanRequestCallback(tHalHandle halHandle, void *pContext,
-        tANI_U32 scanId, eCsrScanStatus status)
-{
+        tANI_U32 scanId, eCsrScanStatus status) {
     struct net_device *dev = (struct net_device *) pContext;
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(dev) ;
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
@@ -577,16 +532,14 @@ static eHalStatus hdd_ScanRequestCallback(tHalHandle halHandle, void *pContext,
        we may be invoked as SME flushes its pending queue.  If that is the
        case, the underlying net_device may have already been destroyed, so
        do some quick sanity before proceeding */
-    if (pAdapter->dev != dev)
-    {
+    if (pAdapter->dev != dev) {
         hddLog(LOGW, "%s: device mismatch %p vs %p",
                __func__, pAdapter->dev, dev);
         return eHAL_STATUS_SUCCESS;
     }
 
     /* Check the scanId */
-    if (pHddCtx->scan_info.scanId != scanId)
-    {
+    if (pHddCtx->scan_info.scanId != scanId) {
         hddLog(LOGW, "%s called with mismatched scanId pHddCtx->scan_info.scanId = %d "
                "scanId = %d ", __func__, (int) pHddCtx->scan_info.scanId,
                (int) scanId);
@@ -625,8 +578,7 @@ static eHalStatus hdd_ScanRequestCallback(tHalHandle halHandle, void *pContext,
 
 
 int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
-                union iwreq_data *wrqu, char *extra)
-{
+                union iwreq_data *wrqu, char *extra) {
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(dev) ;
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
     hdd_wext_state_t *pwextBuf = WLAN_HDD_GET_WEXT_STATE_PTR(pAdapter);
@@ -641,34 +593,27 @@ int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
 
 #ifdef WLAN_BTAMP_FEATURE
     //Scan not supported when AMP traffic is on.
-    if( VOS_TRUE == WLANBAP_AmpSessionOn() )
-    {
+    if( VOS_TRUE == WLANBAP_AmpSessionOn() ) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, "%s: No scanning when AMP is on",__func__);
         return eHAL_STATUS_SUCCESS;
     }
 #endif
-    if(pHddCtx->scan_info.mScanPending == TRUE)
-    {
+    if(pHddCtx->scan_info.mScanPending == TRUE) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:mScanPending is TRUE !!!",__func__);
         return eHAL_STATUS_SUCCESS;
     }
 
-    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
-    {
+    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:LOGP in Progress. Ignore!!!",__func__);
         return eHAL_STATUS_SUCCESS;
     }
     vos_mem_zero( &scanRequest, sizeof(scanRequest));
 
-    if (NULL != wrqu->data.pointer)
-    {
+    if (NULL != wrqu->data.pointer) {
         /* set scanType, active or passive */
-        if ((IW_SCAN_TYPE_ACTIVE ==  scanReq->scan_type) || (eSIR_ACTIVE_SCAN == pHddCtx->scan_info.scan_mode))
-        {
+        if ((IW_SCAN_TYPE_ACTIVE ==  scanReq->scan_type) || (eSIR_ACTIVE_SCAN == pHddCtx->scan_info.scan_mode)) {
             scanRequest.scanType = eSIR_ACTIVE_SCAN;
-        }
-        else
-        {
+        } else {
             scanRequest.scanType = eSIR_PASSIVE_SCAN;
         }
 
@@ -676,20 +621,15 @@ int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
         vos_mem_copy(scanRequest.bssid,
                      &scanReq->bssid.sa_data, sizeof(scanRequest.bssid) );
 
-        if (wrqu->data.flags & IW_SCAN_THIS_ESSID)
-        {
+        if (wrqu->data.flags & IW_SCAN_THIS_ESSID) {
 
-            if(scanReq->essid_len)
-            {
+            if(scanReq->essid_len) {
                 scanRequest.SSIDs.numOfSSIDs = 1;
                 scanRequest.SSIDs.SSIDList =( tCsrSSIDInfo *)vos_mem_malloc(sizeof(tCsrSSIDInfo));
-                if(scanRequest.SSIDs.SSIDList)
-                {
+                if(scanRequest.SSIDs.SSIDList) {
                     scanRequest.SSIDs.SSIDList->SSID.length =             scanReq->essid_len;
                     vos_mem_copy(scanRequest.SSIDs.SSIDList->  SSID.ssId,scanReq->essid,scanReq->essid_len);
-                }
-                else
-                {
+                } else {
                     scanRequest.SSIDs.numOfSSIDs = 0;
                     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, "%s: Unable to allocate memory",__func__);
                     VOS_ASSERT(0);
@@ -701,16 +641,11 @@ int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
         scanRequest.minChnTime = scanReq->min_channel_time;
         scanRequest.maxChnTime = scanReq->max_channel_time;
 
-    }
-    else
-    {
-        if(pHddCtx->scan_info.scan_mode == eSIR_ACTIVE_SCAN)
-        {
+    } else {
+        if(pHddCtx->scan_info.scan_mode == eSIR_ACTIVE_SCAN) {
             /* set the scan type to active */
             scanRequest.scanType = eSIR_ACTIVE_SCAN;
-        }
-        else
-        {
+        } else {
             scanRequest.scanType = eSIR_PASSIVE_SCAN;
         }
 
@@ -733,23 +668,19 @@ int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
     scanRequest.requestType = eCSR_SCAN_REQUEST_FULL_SCAN;
 
     /* if previous genIE is not NULL, update ScanIE */
-    if (0 != pwextBuf->genIE.length)
-    {
+    if (0 != pwextBuf->genIE.length) {
         memset( &pHddCtx->scan_info.scanAddIE, 0, sizeof(pHddCtx->scan_info.scanAddIE) );
         memcpy( pHddCtx->scan_info.scanAddIE.addIEdata, pwextBuf->genIE.addIEdata,
                 pwextBuf->genIE.length );
         pHddCtx->scan_info.scanAddIE.length = pwextBuf->genIE.length;
         /* Maximum length of each IE is SIR_MAC_MAX_IE_LENGTH */
-        if (SIR_MAC_MAX_IE_LENGTH  >=  pwextBuf->genIE.length)
-        {
+        if (SIR_MAC_MAX_IE_LENGTH  >=  pwextBuf->genIE.length) {
             memcpy( pwextBuf->roamProfile.addIEScan,
                     pHddCtx->scan_info.scanAddIE.addIEdata,
                     pHddCtx->scan_info.scanAddIE.length);
             pwextBuf->roamProfile.nAddIEScanLength =
                 pHddCtx->scan_info.scanAddIE.length;
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "Invalid ScanIE, Length is %d", pwextBuf->genIE.length);
         }
@@ -759,15 +690,13 @@ int iw_set_scan(struct net_device *dev, struct iw_request_info *info,
 
     /* push addIEScan in scanRequset if exist */
     if (pHddCtx->scan_info.scanAddIE.addIEdata &&
-            pHddCtx->scan_info.scanAddIE.length)
-    {
+            pHddCtx->scan_info.scanAddIE.length) {
         scanRequest.uIEFieldLen = pHddCtx->scan_info.scanAddIE.length;
         scanRequest.pIEField = pHddCtx->scan_info.scanAddIE.addIEdata;
     }
 
     status = sme_ScanRequest( (WLAN_HDD_GET_CTX(pAdapter))->hHal, pAdapter->sessionId,&scanRequest, &scanId, &hdd_ScanRequestCallback, dev );
-    if (!HAL_STATUS_SUCCESS(status))
-    {
+    if (!HAL_STATUS_SUCCESS(status)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:sme_ScanRequest  fail %d!!!",__func__, status);
         goto error;
     }
@@ -804,8 +733,7 @@ error:
 
 int iw_get_scan(struct net_device *dev,
                 struct iw_request_info *info,
-                union iwreq_data *wrqu, char *extra)
-{
+                union iwreq_data *wrqu, char *extra) {
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(dev) ;
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
     tHalHandle hHal = WLAN_HDD_GET_HAL_CTX(pAdapter);
@@ -819,14 +747,12 @@ int iw_get_scan(struct net_device *dev,
               __func__, (wrqu->data.length)?wrqu->data.length:IW_SCAN_MAX_DATA);
     ENTER();
 
-    if (TRUE == pHddCtx->scan_info.mScanPending)
-    {
+    if (TRUE == pHddCtx->scan_info.mScanPending) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:mScanPending is TRUE !!!",__func__);
         return -EAGAIN;
     }
 
-    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
-    {
+    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:LOGP in Progress. Ignore!!!",__func__);
         return -EAGAIN;
     }
@@ -835,19 +761,15 @@ int iw_get_scan(struct net_device *dev,
     scanInfo.start = extra;
     scanInfo.info = info;
 
-    if (0 == wrqu->data.length)
-    {
+    if (0 == wrqu->data.length) {
         scanInfo.end = extra + IW_SCAN_MAX_DATA;
-    }
-    else
-    {
+    } else {
         scanInfo.end = extra + wrqu->data.length;
     }
 
     status = sme_ScanGetResult(hHal,pAdapter->sessionId,NULL,&pResult);
 
-    if (NULL == pResult)
-    {
+    if (NULL == pResult) {
         // no scan results
         hddLog(LOG1,"iw_get_scan: NULL Scan Result ");
         return 0;
@@ -855,11 +777,9 @@ int iw_get_scan(struct net_device *dev,
 
     pScanResult = sme_ScanResultGetFirst(hHal, pResult);
 
-    while (pScanResult)
-    {
+    while (pScanResult) {
         status = hdd_IndicateScanResult(&scanInfo, pScanResult);
-        if (0 != status)
-        {
+        if (0 != status) {
             break;
         }
         i++;
@@ -875,8 +795,7 @@ int iw_get_scan(struct net_device *dev,
 
 #if 0
 static eHalStatus hdd_CscanRequestCallback(tHalHandle halHandle, void *pContext,
-        tANI_U32 scanId, eCsrScanStatus status)
-{
+        tANI_U32 scanId, eCsrScanStatus status) {
     struct net_device *dev = (struct net_device *) pContext;
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(dev) ;
     hdd_wext_state_t *pwextBuf = WLAN_HDD_GET_WEXT_STATE_PTR(pAdapter);
@@ -891,8 +810,7 @@ static eHalStatus hdd_CscanRequestCallback(tHalHandle halHandle, void *pContext,
            (int) scanId, (int) status);
 
     /* Check the scanId */
-    if (pwextBuf->scanId != scanId)
-    {
+    if (pwextBuf->scanId != scanId) {
         hddLog(LOGW, "%s called with mismatched scanId pWextState->scanId = %d "
                "scanId = %d ", __func__, (int) pwextBuf->scanId,
                (int) scanId);
@@ -909,8 +827,7 @@ static eHalStatus hdd_CscanRequestCallback(tHalHandle halHandle, void *pContext,
 
     vos_status = vos_event_set(&pwextBuf->vosevent);
 
-    if (!VOS_IS_STATUS_SUCCESS(vos_status))
-    {
+    if (!VOS_IS_STATUS_SUCCESS(vos_status)) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, ("ERROR: HDD vos_event_set failed!!"));
         return VOS_STATUS_E_FAILURE;
     }
@@ -923,8 +840,7 @@ static eHalStatus hdd_CscanRequestCallback(tHalHandle halHandle, void *pContext,
 #endif
 
 int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
-                 union iwreq_data *wrqu, char *extra)
-{
+                 union iwreq_data *wrqu, char *extra) {
     hdd_adapter_t *pAdapter = WLAN_HDD_GET_PRIV_PTR(dev) ;
     hdd_context_t *pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
     hdd_wext_state_t *pwextBuf = WLAN_HDD_GET_WEXT_STATE_PTR(pAdapter);
@@ -938,22 +854,19 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
 
 #ifdef WLAN_BTAMP_FEATURE
     //Scan not supported when AMP traffic is on.
-    if( VOS_TRUE == WLANBAP_AmpSessionOn() )
-    {
+    if( VOS_TRUE == WLANBAP_AmpSessionOn() ) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, "%s: No scanning when AMP is on",__func__);
         return eHAL_STATUS_SUCCESS;
     }
 #endif
 
-    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress)
-    {
+    if ((WLAN_HDD_GET_CTX(pAdapter))->isLogpInProgress) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s:LOGP in Progress. Ignore!!!",__func__);
         return eHAL_STATUS_SUCCESS;
     }
 
     vos_mem_zero( &scanRequest, sizeof(scanRequest));
-    if (NULL != wrqu->data.pointer)
-    {
+    if (NULL != wrqu->data.pointer) {
         char *str_ptr = NULL;
         tCsrSSIDInfo *SsidInfo = NULL;
         int num_ssid = 0;
@@ -964,38 +877,32 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
 
         i = WEXT_CSCAN_HEADER_SIZE;
 
-        if( WEXT_CSCAN_PENDING_SECTION == str_ptr[i] )
-        {
+        if( WEXT_CSCAN_PENDING_SECTION == str_ptr[i] ) {
             scanPendingOption = (hdd_scan_pending_option_e)str_ptr[++i];
             ++i;
         }
         pHddCtx->scan_info.scan_pending_option = scanPendingOption;
 
-        if(pHddCtx->scan_info.mScanPending == TRUE)
-        {
+        if(pHddCtx->scan_info.mScanPending == TRUE) {
             hddLog(LOG1,"%s: mScanPending is TRUE",__func__);
             /* If any scan is pending, just giveup this scan request */
-            if(WEXT_SCAN_PENDING_GIVEUP == scanPendingOption)
-            {
+            if(WEXT_SCAN_PENDING_GIVEUP == scanPendingOption) {
                 pHddCtx->scan_info.waitScanResult = FALSE;
                 return eHAL_STATUS_SUCCESS;
             }
             /* If any scan pending, wait till finish current scan,
                and try this scan request when previous scan finish */
-            else if(WEXT_SCAN_PENDING_DELAY == scanPendingOption)
-            {
+            else if(WEXT_SCAN_PENDING_DELAY == scanPendingOption) {
                 pHddCtx->scan_info.waitScanResult = TRUE;
                 vos_event_reset(&pHddCtx->scan_info.scan_finished_event);
                 if(vos_wait_single_event(&pHddCtx->scan_info.scan_finished_event,
-                                         WEXT_CSCAN_SCAN_DONE_WAIT_TIME))
-                {
+                                         WEXT_CSCAN_SCAN_DONE_WAIT_TIME)) {
                     hddLog(LOG1,"%s: Previous SCAN does not finished on time",__func__);
                     return eHAL_STATUS_SUCCESS;
                 }
             }
             /* Piggyback previous scan result */
-            else if(WEXT_SCAN_PENDING_PIGGYBACK == scanPendingOption)
-            {
+            else if(WEXT_SCAN_PENDING_PIGGYBACK == scanPendingOption) {
                 pHddCtx->scan_info.waitScanResult = TRUE;
                 return eHAL_STATUS_SUCCESS;
             }
@@ -1003,11 +910,9 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         pHddCtx->scan_info.waitScanResult = FALSE;
 
         /* Check for scan IE */
-        while( WEXT_CSCAN_SSID_SECTION == str_ptr[i] )
-        {
+        while( WEXT_CSCAN_SSID_SECTION == str_ptr[i] ) {
             /* ssid_len */
-            if(str_ptr[++i] != WEXT_CSCAN_CHANNEL_SECTION)
-            {
+            if(str_ptr[++i] != WEXT_CSCAN_CHANNEL_SECTION) {
                 /* total number of ssid's */
                 num_ssid++;
                 /* increment length filed */
@@ -1017,30 +922,24 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         }
 
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: numSsid %d !!!",__func__, num_ssid);
-        if( num_ssid )
-        {
+        if( num_ssid ) {
             /* To be fixed in SME and PE: override the number of ssid with 1,
             * as SME and PE does not handle multiple SSID in scan request
             * */
             scanRequest.SSIDs.numOfSSIDs = num_ssid;
             /* Allocate num_ssid tCsrSSIDInfo structure */
             SsidInfo = scanRequest.SSIDs.SSIDList =( tCsrSSIDInfo *)vos_mem_malloc(num_ssid*sizeof(tCsrSSIDInfo));
-            if(NULL == scanRequest.SSIDs.SSIDList)
-            {
+            if(NULL == scanRequest.SSIDs.SSIDList) {
                 hddLog(VOS_TRACE_LEVEL_ERROR, "memory alloc failed SSIDInfo buffer");
                 return -ENOMEM;
             }
 
             /* copy all the ssid's and their length */
             ssid_start = WEXT_CSCAN_HEADER_SIZE + 1;/* skipping 'S' */
-            for(j = 0; j < num_ssid; j++)
-            {
-                if( SIR_MAC_MAX_SSID_LENGTH < str_ptr[ssid_start])
-                {
+            for(j = 0; j < num_ssid; j++) {
+                if( SIR_MAC_MAX_SSID_LENGTH < str_ptr[ssid_start]) {
                     scanRequest.SSIDs.numOfSSIDs -= 1;
-                }
-                else
-                {
+                } else {
                     /* get the ssid length */
                     SsidInfo->SSID.length = str_ptr[ssid_start++];
                     vos_mem_copy(SsidInfo->SSID.ssId, &str_ptr[ssid_start], SsidInfo->SSID.length);
@@ -1054,31 +953,25 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         }
 
         /* Check for Channel IE */
-        if ( WEXT_CSCAN_CHANNEL_SECTION == str_ptr[i])
-        {
-            if( str_ptr[++i] == 0 )
-            {
+        if ( WEXT_CSCAN_CHANNEL_SECTION == str_ptr[i]) {
+            if( str_ptr[++i] == 0 ) {
                 scanRequest.ChannelInfo.numOfChannels = 0;
                 scanRequest.ChannelInfo.ChannelList = NULL;
                 i++;
-            }
-            else
-            {
+            } else {
 
                 /* increment the counter */
                 scanRequest.ChannelInfo.numOfChannels = str_ptr[i++];
                 /* store temp channel list */
                 /* SME expects 1 byte channel content */
                 scanRequest.ChannelInfo.ChannelList = vos_mem_malloc(scanRequest.ChannelInfo.numOfChannels * sizeof(v_U8_t));
-                if(NULL == scanRequest.ChannelInfo.ChannelList)
-                {
+                if(NULL == scanRequest.ChannelInfo.ChannelList) {
                     hddLog(LOGE, "memory alloc failed for channel list creation");
                     status = -ENOMEM;
                     goto exit_point;
                 }
 
-                for(channelIdx = 0; channelIdx < scanRequest.ChannelInfo.numOfChannels; channelIdx++)
-                {
+                for(channelIdx = 0; channelIdx < scanRequest.ChannelInfo.numOfChannels; channelIdx++) {
                     /* SCAN request from upper layer has 2 bytes channel */
                     scanRequest.ChannelInfo.ChannelList[channelIdx] = (v_U8_t)str_ptr[i];
                     i += sizeof(v_U16_t);
@@ -1094,34 +987,26 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         /* Now i is pointing to passive dwell dwell time */
         /* 'P',min dwell time, max dwell time */
         /* next two offsets contain min and max channel time */
-        if( WEXT_CSCAN_PASV_DWELL_SECTION == (str_ptr[i]) )
-        {
+        if( WEXT_CSCAN_PASV_DWELL_SECTION == (str_ptr[i]) ) {
             /* No SSID specified, num_ssid == 0, then start paasive scan */
-            if (!num_ssid || (eSIR_PASSIVE_SCAN == pHddCtx->scan_info.scan_mode))
-            {
+            if (!num_ssid || (eSIR_PASSIVE_SCAN == pHddCtx->scan_info.scan_mode)) {
                 scanRequest.scanType = eSIR_PASSIVE_SCAN;
                 scanRequest.minChnTime = (v_U8_t)str_ptr[++i];//scanReq->min_channel_time;
                 scanRequest.maxChnTime = (v_U8_t)str_ptr[++i];//scanReq->max_channel_time;
                 i++;
-            }
-            else
-            {
+            } else {
                 i += 3;
             }
         }
 
         /* H indicates active channel time */
-        if( WEXT_CSCAN_HOME_DWELL_SECTION == (str_ptr[i]) )
-        {
-            if (num_ssid || (eSIR_ACTIVE_SCAN == pHddCtx->scan_info.scan_mode))
-            {
+        if( WEXT_CSCAN_HOME_DWELL_SECTION == (str_ptr[i]) ) {
+            if (num_ssid || (eSIR_ACTIVE_SCAN == pHddCtx->scan_info.scan_mode)) {
                 scanRequest.scanType = eSIR_ACTIVE_SCAN;
                 scanRequest.minChnTime = str_ptr[++i];//scanReq->min_channel_time;
                 scanRequest.maxChnTime = str_ptr[++i];//scanReq->max_channel_time;
                 i++;
-            }
-            else
-            {
+            } else {
                 i +=3;
             }
         }
@@ -1131,22 +1016,18 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         pHddCtx->scan_info.mScanPending = TRUE;
 
         /* if previous genIE is not NULL, update ScanIE */
-        if(0 != pwextBuf->genIE.length)
-        {
+        if(0 != pwextBuf->genIE.length) {
             memset( &pHddCtx->scan_info.scanAddIE, 0, sizeof(pHddCtx->scan_info.scanAddIE) );
             memcpy( pHddCtx->scan_info.scanAddIE.addIEdata, pwextBuf->genIE.addIEdata,
                     pwextBuf->genIE.length );
             pHddCtx->scan_info.scanAddIE.length = pwextBuf->genIE.length;
-            if (SIR_MAC_MAX_IE_LENGTH  >=  pwextBuf->genIE.length)
-            {
+            if (SIR_MAC_MAX_IE_LENGTH  >=  pwextBuf->genIE.length) {
                 memcpy( pwextBuf->roamProfile.addIEScan,
                         pHddCtx->scan_info.scanAddIE.addIEdata,
                         pHddCtx->scan_info.scanAddIE.length);
                 pwextBuf->roamProfile.nAddIEScanLength =
                     pHddCtx->scan_info.scanAddIE.length;
-            }
-            else
-            {
+            } else {
                 VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                           "Invalid ScanIE, Length is %d",
                           pwextBuf->genIE.length);
@@ -1158,16 +1039,14 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
 
         /* push addIEScan in scanRequset if exist */
         if (pHddCtx->scan_info.scanAddIE.addIEdata &&
-                pHddCtx->scan_info.scanAddIE.length)
-        {
+                pHddCtx->scan_info.scanAddIE.length) {
             scanRequest.uIEFieldLen = pHddCtx->scan_info.scanAddIE.length;
             scanRequest.pIEField = pHddCtx->scan_info.scanAddIE.addIEdata;
         }
 
         status = sme_ScanRequest( (WLAN_HDD_GET_CTX(pAdapter))->hHal,
                                   pAdapter->sessionId,&scanRequest, &scanId, &hdd_ScanRequestCallback, dev );
-        if( !HAL_STATUS_SUCCESS(status) )
-        {
+        if( !HAL_STATUS_SUCCESS(status) ) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL, "%s: SME scan fail status %d !!!",__func__, status);
             pHddCtx->scan_info.mScanPending = FALSE;
             status = -EINVAL;
@@ -1178,21 +1057,18 @@ int iw_set_cscan(struct net_device *dev, struct iw_request_info *info,
         pHddCtx->scan_info.sessionId = pAdapter->sessionId;
 
     } //end of data->pointer
-    else
-    {
+    else {
         status = -1;
     }
 
 exit_point:
 
     /* free ssidlist */
-    if (scanRequest.SSIDs.SSIDList)
-    {
+    if (scanRequest.SSIDs.SSIDList) {
         vos_mem_free(scanRequest.SSIDs.SSIDList);
     }
     /* free the channel list */
-    if(scanRequest.ChannelInfo.ChannelList)
-    {
+    if(scanRequest.ChannelInfo.ChannelList) {
         vos_mem_free((void*)scanRequest.ChannelInfo.ChannelList);
     }
 
@@ -1204,8 +1080,7 @@ exit_point:
 /* Abort any MAC scan if in progress */
 tSirAbortScanStatus hdd_abort_mac_scan(hdd_context_t* pHddCtx,
                                        tANI_U8 sessionId,
-                                       eCsrAbortReason reason)
-{
+                                       eCsrAbortReason reason) {
     return sme_AbortMacScan(pHddCtx->hHal, sessionId, reason);
 }
 

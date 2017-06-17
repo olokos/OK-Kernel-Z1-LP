@@ -31,9 +31,9 @@
  * @LTC4088_MAX_CURRENT_1A:     1A current
  */
 enum ltc4088_max_current {
-	LTC4088_MAX_CURRENT_100mA = 100,
-	LTC4088_MAX_CURRENT_500mA = 500,
-	LTC4088_MAX_CURRENT_1A = 1000,
+    LTC4088_MAX_CURRENT_100mA = 100,
+    LTC4088_MAX_CURRENT_500mA = 500,
+    LTC4088_MAX_CURRENT_1A = 1000,
 };
 
 /**
@@ -47,288 +47,278 @@ enum ltc4088_max_current {
  * @max_current:		Maximum current that is supplied at this time
  */
 struct ltc4088_chg_chip {
-	struct device		*dev;
-	struct mutex		lock;
-	struct power_supply	usb_psy;
-	unsigned int		gpio_mode_select_d0;
-	unsigned int		gpio_mode_select_d1;
-	unsigned int		gpio_mode_select_d2;
-	unsigned int		max_current;
+    struct device		*dev;
+    struct mutex		lock;
+    struct power_supply	usb_psy;
+    unsigned int		gpio_mode_select_d0;
+    unsigned int		gpio_mode_select_d1;
+    unsigned int		gpio_mode_select_d2;
+    unsigned int		max_current;
 };
 
 static enum power_supply_property pm_power_props[] = {
-	POWER_SUPPLY_PROP_CURRENT_MAX,
-	POWER_SUPPLY_PROP_ONLINE,
+    POWER_SUPPLY_PROP_CURRENT_MAX,
+    POWER_SUPPLY_PROP_ONLINE,
 };
 
 static char *pm_power_supplied_to[] = {
-	"battery",
+    "battery",
 };
 
-static int ltc4088_set_charging(struct ltc4088_chg_chip *chip, bool enable)
-{
-	mutex_lock(&chip->lock);
+static int ltc4088_set_charging(struct ltc4088_chg_chip *chip, bool enable) {
+    mutex_lock(&chip->lock);
 
-	if (enable) {
-		gpio_set_value_cansleep(chip->gpio_mode_select_d2, 0);
-	} else {
-		/* When disabling charger, set the max current to 0 also */
-		chip->max_current = 0;
-		gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d2, 1);
-	}
+    if (enable) {
+        gpio_set_value_cansleep(chip->gpio_mode_select_d2, 0);
+    } else {
+        /* When disabling charger, set the max current to 0 also */
+        chip->max_current = 0;
+        gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d2, 1);
+    }
 
-	mutex_unlock(&chip->lock);
+    mutex_unlock(&chip->lock);
 
-	return 0;
+    return 0;
 }
 
-static void ltc4088_set_max_current(struct ltc4088_chg_chip *chip, int value)
-{
-	mutex_lock(&chip->lock);
+static void ltc4088_set_max_current(struct ltc4088_chg_chip *chip, int value) {
+    mutex_lock(&chip->lock);
 
-	/* If current is less than 100mA, we can not support that granularity */
-	if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_100mA)) {
-		chip->max_current = 0;
-		gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
-	} else if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_500mA)) {
-		chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_100mA);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d0, 0);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d1, 0);
-	} else if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_1A)) {
-		chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_500mA);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d0, 0);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
-	} else {
-		chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_1A);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
-		gpio_set_value_cansleep(chip->gpio_mode_select_d1, 0);
-	}
+    /* If current is less than 100mA, we can not support that granularity */
+    if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_100mA)) {
+        chip->max_current = 0;
+        gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
+    } else if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_500mA)) {
+        chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_100mA);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d0, 0);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d1, 0);
+    } else if (value <  MAX_CURRENT_MA(LTC4088_MAX_CURRENT_1A)) {
+        chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_500mA);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d0, 0);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
+    } else {
+        chip->max_current = MAX_CURRENT_MA(LTC4088_MAX_CURRENT_1A);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
+        gpio_set_value_cansleep(chip->gpio_mode_select_d1, 0);
+    }
 
-	mutex_unlock(&chip->lock);
+    mutex_unlock(&chip->lock);
 }
 
-static void ltc4088_set_charging_off(struct ltc4088_chg_chip *chip)
-{
-	gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
-	gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
+static void ltc4088_set_charging_off(struct ltc4088_chg_chip *chip) {
+    gpio_set_value_cansleep(chip->gpio_mode_select_d0, 1);
+    gpio_set_value_cansleep(chip->gpio_mode_select_d1, 1);
 }
 
-static int ltc4088_set_initial_state(struct ltc4088_chg_chip *chip)
-{
-	int rc;
+static int ltc4088_set_initial_state(struct ltc4088_chg_chip *chip) {
+    int rc;
 
-	rc = gpio_request(chip->gpio_mode_select_d0, "ltc4088_D0");
-	if (rc) {
-		pr_err("gpio request failed for GPIO %d\n",
-				chip->gpio_mode_select_d0);
-		return rc;
-	}
+    rc = gpio_request(chip->gpio_mode_select_d0, "ltc4088_D0");
+    if (rc) {
+        pr_err("gpio request failed for GPIO %d\n",
+               chip->gpio_mode_select_d0);
+        return rc;
+    }
 
-	rc = gpio_request(chip->gpio_mode_select_d1, "ltc4088_D1");
-	if (rc) {
-		pr_err("gpio request failed for GPIO %d\n",
-				chip->gpio_mode_select_d1);
-		goto gpio_err_d0;
-	}
+    rc = gpio_request(chip->gpio_mode_select_d1, "ltc4088_D1");
+    if (rc) {
+        pr_err("gpio request failed for GPIO %d\n",
+               chip->gpio_mode_select_d1);
+        goto gpio_err_d0;
+    }
 
-	rc = gpio_request(chip->gpio_mode_select_d2, "ltc4088_D2");
-	if (rc) {
-		pr_err("gpio request failed for GPIO %d\n",
-				chip->gpio_mode_select_d2);
-		goto gpio_err_d1;
-	}
+    rc = gpio_request(chip->gpio_mode_select_d2, "ltc4088_D2");
+    if (rc) {
+        pr_err("gpio request failed for GPIO %d\n",
+               chip->gpio_mode_select_d2);
+        goto gpio_err_d1;
+    }
 
-	rc = gpio_direction_output(chip->gpio_mode_select_d0, 0);
-	if (rc) {
-		pr_err("failed to set direction for GPIO %d\n",
-				chip->gpio_mode_select_d0);
-		goto gpio_err_d2;
-	}
+    rc = gpio_direction_output(chip->gpio_mode_select_d0, 0);
+    if (rc) {
+        pr_err("failed to set direction for GPIO %d\n",
+               chip->gpio_mode_select_d0);
+        goto gpio_err_d2;
+    }
 
-	rc = gpio_direction_output(chip->gpio_mode_select_d1, 0);
-	if (rc) {
-		pr_err("failed to set direction for GPIO %d\n",
-				chip->gpio_mode_select_d1);
-		goto gpio_err_d2;
-	}
+    rc = gpio_direction_output(chip->gpio_mode_select_d1, 0);
+    if (rc) {
+        pr_err("failed to set direction for GPIO %d\n",
+               chip->gpio_mode_select_d1);
+        goto gpio_err_d2;
+    }
 
-	rc = gpio_direction_output(chip->gpio_mode_select_d2, 1);
-	if (rc) {
-		pr_err("failed to set direction for GPIO %d\n",
-				chip->gpio_mode_select_d2);
-		goto gpio_err_d2;
-	}
+    rc = gpio_direction_output(chip->gpio_mode_select_d2, 1);
+    if (rc) {
+        pr_err("failed to set direction for GPIO %d\n",
+               chip->gpio_mode_select_d2);
+        goto gpio_err_d2;
+    }
 
-	return 0;
+    return 0;
 
 gpio_err_d2:
-	gpio_free(chip->gpio_mode_select_d2);
+    gpio_free(chip->gpio_mode_select_d2);
 gpio_err_d1:
-	gpio_free(chip->gpio_mode_select_d1);
+    gpio_free(chip->gpio_mode_select_d1);
 gpio_err_d0:
-	gpio_free(chip->gpio_mode_select_d0);
-	return rc;
+    gpio_free(chip->gpio_mode_select_d0);
+    return rc;
 }
 
 static int pm_power_get_property(struct power_supply *psy,
-				  enum power_supply_property psp,
-				  union power_supply_propval *val)
-{
-	struct ltc4088_chg_chip *chip;
+                                 enum power_supply_property psp,
+                                 union power_supply_propval *val) {
+    struct ltc4088_chg_chip *chip;
 
-	if (psy->type == POWER_SUPPLY_TYPE_USB) {
-		chip = container_of(psy, struct ltc4088_chg_chip,
-						usb_psy);
-		switch (psp) {
-		case POWER_SUPPLY_PROP_ONLINE:
-			if (chip->max_current)
-				val->intval = 1;
-			else
-				val->intval = 0;
-			break;
-		case POWER_SUPPLY_PROP_CURRENT_MAX:
-			val->intval = chip->max_current;
-			break;
-		default:
-			return -EINVAL;
-		}
-	}
-	return 0;
+    if (psy->type == POWER_SUPPLY_TYPE_USB) {
+        chip = container_of(psy, struct ltc4088_chg_chip,
+                            usb_psy);
+        switch (psp) {
+        case POWER_SUPPLY_PROP_ONLINE:
+            if (chip->max_current)
+                val->intval = 1;
+            else
+                val->intval = 0;
+            break;
+        case POWER_SUPPLY_PROP_CURRENT_MAX:
+            val->intval = chip->max_current;
+            break;
+        default:
+            return -EINVAL;
+        }
+    }
+    return 0;
 }
 
 static int pm_power_set_property(struct power_supply *psy,
-				  enum power_supply_property psp,
-				  const union power_supply_propval *val)
-{
-	struct ltc4088_chg_chip *chip;
+                                 enum power_supply_property psp,
+                                 const union power_supply_propval *val) {
+    struct ltc4088_chg_chip *chip;
 
-	if (psy->type == POWER_SUPPLY_TYPE_USB) {
-		chip = container_of(psy, struct ltc4088_chg_chip, usb_psy);
-		switch (psp) {
-		case POWER_SUPPLY_PROP_TYPE:
-			psy.type = val->intval;
-			break;
-		case POWER_SUPPLY_PROP_ONLINE:
-			ltc4088_set_charging(chip, val->intval);
-			break;
-		case POWER_SUPPLY_PROP_CURRENT_MAX:
-			ltc4088_set_max_current(chip, val->intval);
-			break;
-		default:
-			return -EINVAL;
-		}
-	}
-	return 0;
+    if (psy->type == POWER_SUPPLY_TYPE_USB) {
+        chip = container_of(psy, struct ltc4088_chg_chip, usb_psy);
+        switch (psp) {
+        case POWER_SUPPLY_PROP_TYPE:
+            psy.type = val->intval;
+            break;
+        case POWER_SUPPLY_PROP_ONLINE:
+            ltc4088_set_charging(chip, val->intval);
+            break;
+        case POWER_SUPPLY_PROP_CURRENT_MAX:
+            ltc4088_set_max_current(chip, val->intval);
+            break;
+        default:
+            return -EINVAL;
+        }
+    }
+    return 0;
 }
 
-static int __devinit ltc4088_charger_probe(struct platform_device *pdev)
-{
-	int rc;
-	struct ltc4088_chg_chip *chip;
-	const struct ltc4088_charger_platform_data *pdata
-			= pdev->dev.platform_data;
+static int __devinit ltc4088_charger_probe(struct platform_device *pdev) {
+    int rc;
+    struct ltc4088_chg_chip *chip;
+    const struct ltc4088_charger_platform_data *pdata
+            = pdev->dev.platform_data;
 
-	if (!pdata) {
-		pr_err("missing platform data\n");
-		return -EINVAL;
-	}
+    if (!pdata) {
+        pr_err("missing platform data\n");
+        return -EINVAL;
+    }
 
-	chip = kzalloc(sizeof(struct ltc4088_chg_chip),
-					GFP_KERNEL);
-	if (!chip) {
-		pr_err("Cannot allocate pm_chg_chip\n");
-		return -ENOMEM;
-	}
+    chip = kzalloc(sizeof(struct ltc4088_chg_chip),
+                   GFP_KERNEL);
+    if (!chip) {
+        pr_err("Cannot allocate pm_chg_chip\n");
+        return -ENOMEM;
+    }
 
-	chip->dev = &pdev->dev;
+    chip->dev = &pdev->dev;
 
-	if (pdata->gpio_mode_select_d0 < 0 ||
-		 pdata->gpio_mode_select_d1 < 0 ||
-		 pdata->gpio_mode_select_d2 < 0) {
-		pr_err("Invalid platform data supplied\n");
-		rc = -EINVAL;
-		goto free_chip;
-	}
+    if (pdata->gpio_mode_select_d0 < 0 ||
+            pdata->gpio_mode_select_d1 < 0 ||
+            pdata->gpio_mode_select_d2 < 0) {
+        pr_err("Invalid platform data supplied\n");
+        rc = -EINVAL;
+        goto free_chip;
+    }
 
-	mutex_init(&chip->lock);
+    mutex_init(&chip->lock);
 
-	chip->gpio_mode_select_d0 = pdata->gpio_mode_select_d0;
-	chip->gpio_mode_select_d1 = pdata->gpio_mode_select_d1;
-	chip->gpio_mode_select_d2 = pdata->gpio_mode_select_d2;
+    chip->gpio_mode_select_d0 = pdata->gpio_mode_select_d0;
+    chip->gpio_mode_select_d1 = pdata->gpio_mode_select_d1;
+    chip->gpio_mode_select_d2 = pdata->gpio_mode_select_d2;
 
-	chip->usb_psy.name = "usb",
-	chip->usb_psy.type = POWER_SUPPLY_TYPE_USB,
-	chip->usb_psy.supplied_to = pm_power_supplied_to,
-	chip->usb_psy.num_supplicants = ARRAY_SIZE(pm_power_supplied_to),
-	chip->usb_psy.properties = pm_power_props,
-	chip->usb_psy.num_properties = ARRAY_SIZE(pm_power_props),
-	chip->usb_psy.get_property = pm_power_get_property,
-	chip->usb_psy.set_property = pm_power_set_property,
+    chip->usb_psy.name = "usb",
+                  chip->usb_psy.type = POWER_SUPPLY_TYPE_USB,
+                                chip->usb_psy.supplied_to = pm_power_supplied_to,
+                                              chip->usb_psy.num_supplicants = ARRAY_SIZE(pm_power_supplied_to),
+                                                            chip->usb_psy.properties = pm_power_props,
+                                                                          chip->usb_psy.num_properties = ARRAY_SIZE(pm_power_props),
+                                                                                        chip->usb_psy.get_property = pm_power_get_property,
+                                                                                                      chip->usb_psy.set_property = pm_power_set_property,
 
-	rc = power_supply_register(chip->dev, &chip->usb_psy);
-	if (rc < 0) {
-		pr_err("power_supply_register usb failed rc = %d\n", rc);
-		goto free_chip;
-	}
+                                                                                                                    rc = power_supply_register(chip->dev, &chip->usb_psy);
+    if (rc < 0) {
+        pr_err("power_supply_register usb failed rc = %d\n", rc);
+        goto free_chip;
+    }
 
-	platform_set_drvdata(pdev, chip);
+    platform_set_drvdata(pdev, chip);
 
-	rc = ltc4088_set_initial_state(chip);
-	if (rc < 0) {
-		pr_err("setting initial state failed rc = %d\n", rc);
-		goto unregister_usb;
-	}
+    rc = ltc4088_set_initial_state(chip);
+    if (rc < 0) {
+        pr_err("setting initial state failed rc = %d\n", rc);
+        goto unregister_usb;
+    }
 
-	return 0;
+    return 0;
 
 unregister_usb:
-	platform_set_drvdata(pdev, NULL);
-	power_supply_unregister(&chip->usb_psy);
+    platform_set_drvdata(pdev, NULL);
+    power_supply_unregister(&chip->usb_psy);
 free_chip:
-	kfree(chip);
+    kfree(chip);
 
-	return rc;
+    return rc;
 }
 
-static int __devexit ltc4088_charger_remove(struct platform_device *pdev)
-{
-	struct ltc4088_chg_chip *chip = platform_get_drvdata(pdev);
+static int __devexit ltc4088_charger_remove(struct platform_device *pdev) {
+    struct ltc4088_chg_chip *chip = platform_get_drvdata(pdev);
 
-	ltc4088_set_charging_off(chip);
+    ltc4088_set_charging_off(chip);
 
-	gpio_free(chip->gpio_mode_select_d2);
-	gpio_free(chip->gpio_mode_select_d1);
-	gpio_free(chip->gpio_mode_select_d0);
+    gpio_free(chip->gpio_mode_select_d2);
+    gpio_free(chip->gpio_mode_select_d1);
+    gpio_free(chip->gpio_mode_select_d0);
 
-	power_supply_unregister(&chip->usb_psy);
+    power_supply_unregister(&chip->usb_psy);
 
-	platform_set_drvdata(pdev, NULL);
-	mutex_destroy(&chip->lock);
-	kfree(chip);
+    platform_set_drvdata(pdev, NULL);
+    mutex_destroy(&chip->lock);
+    kfree(chip);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver ltc4088_charger_driver = {
-	.probe	= ltc4088_charger_probe,
-	.remove	= __devexit_p(ltc4088_charger_remove),
-	.driver	= {
-		.name	= LTC4088_CHARGER_DEV_NAME,
-		.owner	= THIS_MODULE,
-	},
+    .probe	= ltc4088_charger_probe,
+    .remove	= __devexit_p(ltc4088_charger_remove),
+    .driver	= {
+        .name	= LTC4088_CHARGER_DEV_NAME,
+        .owner	= THIS_MODULE,
+    },
 };
 
-static int __init ltc4088_charger_init(void)
-{
-	return platform_driver_register(&ltc4088_charger_driver);
+static int __init ltc4088_charger_init(void) {
+    return platform_driver_register(&ltc4088_charger_driver);
 }
 
-static void __exit ltc4088_charger_exit(void)
-{
-	platform_driver_unregister(&ltc4088_charger_driver);
+static void __exit ltc4088_charger_exit(void) {
+    platform_driver_unregister(&ltc4088_charger_driver);
 }
 
 subsys_initcall(ltc4088_charger_init);

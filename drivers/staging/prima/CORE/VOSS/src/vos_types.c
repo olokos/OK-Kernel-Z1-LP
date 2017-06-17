@@ -71,13 +71,11 @@
   \sa vos_atomic_increment_U32(), vos_atomic_decrement_U32()
 
   --------------------------------------------------------------------------*/
-uintptr_t vos_atomic_set( uintptr_t *pTarget, uintptr_t value )
-{
+uintptr_t vos_atomic_set( uintptr_t *pTarget, uintptr_t value ) {
     uintptr_t oldval;
     unsigned long flags;
 
-    if (pTarget == NULL)
-    {
+    if (pTarget == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "NULL ptr passed into %s",__func__);
         return 0;
     }
@@ -103,11 +101,9 @@ uintptr_t vos_atomic_set( uintptr_t *pTarget, uintptr_t value )
   \sa vos_atomic_decrement_U32(), vos_atomic_set_U32()
 
   --------------------------------------------------------------------------*/
-v_U32_t vos_atomic_increment_U32( v_U32_t *pTarget )
-{
+v_U32_t vos_atomic_increment_U32( v_U32_t *pTarget ) {
     unsigned long flags;
-    if (pTarget == NULL)
-    {
+    if (pTarget == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "NULL ptr passed into %s",__func__);
         return 0;
     }
@@ -131,11 +127,9 @@ v_U32_t vos_atomic_increment_U32( v_U32_t *pTarget )
   \sa vos_atomic_increment_U32(), vos_atomic_set_U32()
 
   --------------------------------------------------------------------------*/
-v_U32_t vos_atomic_decrement_U32( v_U32_t *pTarget )
-{
+v_U32_t vos_atomic_decrement_U32( v_U32_t *pTarget ) {
     unsigned long flags;
-    if (pTarget == NULL)
-    {
+    if (pTarget == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "NULL ptr passed into %s",__func__);
         return 0;
     }
@@ -146,11 +140,9 @@ v_U32_t vos_atomic_decrement_U32( v_U32_t *pTarget )
     return (*pTarget);
 }
 
-v_U32_t vos_atomic_increment_U32_by_value( v_U32_t *pTarget, v_U32_t value )
-{
+v_U32_t vos_atomic_increment_U32_by_value( v_U32_t *pTarget, v_U32_t value ) {
     unsigned long flags;
-    if (pTarget == NULL)
-    {
+    if (pTarget == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "NULL ptr passed into %s",__func__);
         return 0;
     }
@@ -160,11 +152,9 @@ v_U32_t vos_atomic_increment_U32_by_value( v_U32_t *pTarget, v_U32_t value )
     return (*pTarget);
 }
 
-v_U32_t vos_atomic_decrement_U32_by_value( v_U32_t *pTarget, v_U32_t value )
-{
+v_U32_t vos_atomic_decrement_U32_by_value( v_U32_t *pTarget, v_U32_t value ) {
     unsigned long flags;
-    if (pTarget == NULL)
-    {
+    if (pTarget == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "NULL ptr passed into %s",__func__);
         return 0;
     }
@@ -176,16 +166,14 @@ v_U32_t vos_atomic_decrement_U32_by_value( v_U32_t *pTarget, v_U32_t value )
 }
 
 
-v_U32_t vos_get_skip_ssid_check(void)
-{
+v_U32_t vos_get_skip_ssid_check(void) {
     /**This is needed by only AMSS for interoperatability **/
 
     return 1;
 }
 
 
-v_U32_t vos_get_skip_11e_check(void)
-{
+v_U32_t vos_get_skip_11e_check(void) {
     /* this is needed only for AMSS for interopratability **/
     return 1;
 }

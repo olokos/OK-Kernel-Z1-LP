@@ -24,27 +24,27 @@
 #define CSIPHY_NUM_CLK_MAX  16
 
 enum msm_csiphy_state_t {
-	CSIPHY_POWER_UP,
-	CSIPHY_POWER_DOWN,
+    CSIPHY_POWER_UP,
+    CSIPHY_POWER_DOWN,
 };
 
 struct csiphy_device {
-	struct platform_device *pdev;
-	struct msm_sd_subdev msm_sd;
-	struct v4l2_subdev subdev;
-	struct resource *mem;
-	struct resource *clk_mux_mem;
-	struct resource *irq;
-	struct resource *io;
-	struct resource *clk_mux_io;
-	void __iomem *base;
-	void __iomem *clk_mux_base;
-	struct mutex mutex;
-	uint32_t hw_version;
-	enum msm_csiphy_state_t csiphy_state;
-	struct clk *csiphy_clk[CSIPHY_NUM_CLK_MAX];
-	uint8_t ref_count;
-	uint16_t lane_mask[MAX_CSIPHY];
+    struct platform_device *pdev;
+    struct msm_sd_subdev msm_sd;
+    struct v4l2_subdev subdev;
+    struct resource *mem;
+    struct resource *clk_mux_mem;
+    struct resource *irq;
+    struct resource *io;
+    struct resource *clk_mux_io;
+    void __iomem *base;
+    void __iomem *clk_mux_base;
+    struct mutex mutex;
+    uint32_t hw_version;
+    enum msm_csiphy_state_t csiphy_state;
+    struct clk *csiphy_clk[CSIPHY_NUM_CLK_MAX];
+    uint8_t ref_count;
+    uint16_t lane_mask[MAX_CSIPHY];
 };
 
 #define VIDIOC_MSM_CSIPHY_RELEASE \

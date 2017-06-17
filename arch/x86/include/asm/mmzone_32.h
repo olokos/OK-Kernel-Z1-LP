@@ -39,22 +39,20 @@ static inline void resume_map_numa_kva(pgd_t *pgd) {}
 
 extern s8 physnode_map[];
 
-static inline int pfn_to_nid(unsigned long pfn)
-{
+static inline int pfn_to_nid(unsigned long pfn) {
 #ifdef CONFIG_NUMA
-	return((int) physnode_map[(pfn) / PAGES_PER_SECTION]);
+    return((int) physnode_map[(pfn) / PAGES_PER_SECTION]);
 #else
-	return 0;
+    return 0;
 #endif
 }
 
-static inline int pfn_valid(int pfn)
-{
-	int nid = pfn_to_nid(pfn);
+static inline int pfn_valid(int pfn) {
+    int nid = pfn_to_nid(pfn);
 
-	if (nid >= 0)
-		return (pfn < node_end_pfn(nid));
-	return 0;
+    if (nid >= 0)
+        return (pfn < node_end_pfn(nid));
+    return 0;
 }
 
 #define early_pfn_valid(pfn)	pfn_valid((pfn))

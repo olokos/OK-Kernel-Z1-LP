@@ -18,25 +18,24 @@
 /* end */
 
 enum {
-	MSM_PM_BOOT_CONFIG_TZ		    ,
-	MSM_PM_BOOT_CONFIG_RESET_VECTOR_PHYS,
-	MSM_PM_BOOT_CONFIG_RESET_VECTOR_VIRT,
-	MSM_PM_BOOT_CONFIG_REMAP_BOOT_ADDR  ,
+    MSM_PM_BOOT_CONFIG_TZ		    ,
+    MSM_PM_BOOT_CONFIG_RESET_VECTOR_PHYS,
+    MSM_PM_BOOT_CONFIG_RESET_VECTOR_VIRT,
+    MSM_PM_BOOT_CONFIG_REMAP_BOOT_ADDR  ,
 };
 
 struct msm_pm_boot_platform_data {
-	int mode;
-	phys_addr_t  p_addr;
-	void __iomem *v_addr;
+    int mode;
+    phys_addr_t  p_addr;
+    void __iomem *v_addr;
 };
 
 #ifdef CONFIG_PM
 int __init msm_pm_boot_init(struct msm_pm_boot_platform_data *pdata);
 #else
 static inline int __init msm_pm_boot_init(
-		struct msm_pm_boot_platform_data *pdata)
-{
-	return 0;
+    struct msm_pm_boot_platform_data *pdata) {
+    return 0;
 }
 #endif
 

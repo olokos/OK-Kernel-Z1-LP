@@ -228,7 +228,7 @@
 /* TX status register */
 
 #define IDLE_CHANNELS_MASK                    0x00FF
-#define ABR_CELL_COUNT_REACHED_MULT           0x0100 
+#define ABR_CELL_COUNT_REACHED_MULT           0x0100
 #define ABR_CELL_COUNT_REACHED_MASK           0xFF
 
 /* RX config register */
@@ -310,30 +310,30 @@
 typedef u8 HDW;
 
 typedef struct cell_buf {
-  HDW payload[12];
-  HDW next;
-  HDW cell_count;               // AAL5 rx bufs
-  HDW res;
-  union {
-    HDW partial_crc;            // AAL5 rx bufs
-    HDW cell_header;            // RAW     bufs
-  } u;
+    HDW payload[12];
+    HDW next;
+    HDW cell_count;               // AAL5 rx bufs
+    HDW res;
+    union {
+        HDW partial_crc;            // AAL5 rx bufs
+        HDW cell_header;            // RAW     bufs
+    } u;
 } cell_buf;
 
 typedef struct tx_ch_desc {
-  HDW rd_buf_type;
-  HDW wr_buf_type;
-  HDW partial_crc;
-  HDW cell_header;
+    HDW rd_buf_type;
+    HDW wr_buf_type;
+    HDW partial_crc;
+    HDW cell_header;
 } tx_ch_desc;
 
 typedef struct rx_ch_desc {
-  HDW wr_buf_type;
-  HDW rd_buf_type;
+    HDW wr_buf_type;
+    HDW rd_buf_type;
 } rx_ch_desc;
 
 typedef struct rx_q_entry {
-  HDW entry;
+    HDW entry;
 } rx_q_entry;
 
 #define TX_CHANS 8
@@ -358,18 +358,18 @@ typedef struct rx_q_entry {
 //    HDW                  dws[32768];
 
 typedef struct MEMMAP {
-  tx_ch_desc  tx_descs[TX_CHANS];     //  8 *    4 =    32 , 0x0020
-  cell_buf    inittxbufs[TX_CHANS];   // these are really
-  cell_buf    bufn1[BUFN1_SIZE];      // part of this pool
-  cell_buf    txfreebufstart;
-  cell_buf    txfreebufend;
-  cell_buf    rxfreebufstart;
-  cell_buf    rxfreebufend;           // 8+118+1+1+1+1+124 = 254
-  cell_buf    bufn2[BUFN2_SIZE];      // 16 *  254 =  4064 , 0x1000
-  rx_q_entry  rx_q_entries[RX_QS];    //  1 * 1024 =  1024 , 0x1400
-  cell_buf    bufn3[BUFN3_SIZE];      // 16 *  192 =  3072 , 0x2000
-  rx_ch_desc  rx_descs[MAX_VCS];      //  2 * 1024 =  2048 , 0x2800
-  cell_buf    bufn4[BUFN4_SIZE];      // 16 * 1408 = 22528 , 0x8000
+    tx_ch_desc  tx_descs[TX_CHANS];     //  8 *    4 =    32 , 0x0020
+    cell_buf    inittxbufs[TX_CHANS];   // these are really
+    cell_buf    bufn1[BUFN1_SIZE];      // part of this pool
+    cell_buf    txfreebufstart;
+    cell_buf    txfreebufend;
+    cell_buf    rxfreebufstart;
+    cell_buf    rxfreebufend;           // 8+118+1+1+1+1+124 = 254
+    cell_buf    bufn2[BUFN2_SIZE];      // 16 *  254 =  4064 , 0x1000
+    rx_q_entry  rx_q_entries[RX_QS];    //  1 * 1024 =  1024 , 0x1400
+    cell_buf    bufn3[BUFN3_SIZE];      // 16 *  192 =  3072 , 0x2000
+    rx_ch_desc  rx_descs[MAX_VCS];      //  2 * 1024 =  2048 , 0x2800
+    cell_buf    bufn4[BUFN4_SIZE];      // 16 * 1408 = 22528 , 0x8000
 } MEMMAP;
 
 #define memmap ((MEMMAP *)0)
@@ -377,86 +377,86 @@ typedef struct MEMMAP {
 /* end horizon specific bits */
 
 typedef enum {
-  aal0,
-  aal34,
-  aal5
+    aal0,
+    aal34,
+    aal5
 } hrz_aal;
 
 typedef enum {
-  tx_busy,
-  rx_busy,
-  ultra
+    tx_busy,
+    rx_busy,
+    ultra
 } hrz_flags;
 
 // a single struct pointed to by atm_vcc->dev_data
 
 typedef struct {
-  unsigned int        tx_rate;
-  unsigned int        rx_rate;
-  u16                 channel;
-  u16                 tx_xbr_bits;
-  u16                 tx_pcr_bits;
+    unsigned int        tx_rate;
+    unsigned int        rx_rate;
+    u16                 channel;
+    u16                 tx_xbr_bits;
+    u16                 tx_pcr_bits;
 #if 0
-  u16                 tx_scr_bits;
-  u16                 tx_bucket_bits;
+    u16                 tx_scr_bits;
+    u16                 tx_bucket_bits;
 #endif
-  hrz_aal             aal;
+    hrz_aal             aal;
 } hrz_vcc;
 
 struct hrz_dev {
-  
-  u32                 iobase;
-  u32 *               membase;
 
-  struct sk_buff *    rx_skb;     // skb being RXed
-  unsigned int        rx_bytes;   // bytes remaining to RX within region
-  void *              rx_addr;    // addr to send bytes to (for PIO)
-  unsigned int        rx_channel; // channel that the skb is going out on
+    u32                 iobase;
+    u32 *               membase;
 
-  struct sk_buff *    tx_skb;     // skb being TXed
-  unsigned int        tx_bytes;   // bytes remaining to TX within region
-  void *              tx_addr;    // addr to send bytes from (for PIO)
-  struct iovec *      tx_iovec;   // remaining regions
-  unsigned int        tx_regions; // number of remaining regions
+    struct sk_buff *    rx_skb;     // skb being RXed
+    unsigned int        rx_bytes;   // bytes remaining to RX within region
+    void *              rx_addr;    // addr to send bytes to (for PIO)
+    unsigned int        rx_channel; // channel that the skb is going out on
 
-  spinlock_t          mem_lock;
-  wait_queue_head_t   tx_queue;
+    struct sk_buff *    tx_skb;     // skb being TXed
+    unsigned int        tx_bytes;   // bytes remaining to TX within region
+    void *              tx_addr;    // addr to send bytes from (for PIO)
+    struct iovec *      tx_iovec;   // remaining regions
+    unsigned int        tx_regions; // number of remaining regions
 
-  u8                  irq;
-  unsigned long	      flags;
-  u8                  tx_last;
-  u8                  tx_idle;
+    spinlock_t          mem_lock;
+    wait_queue_head_t   tx_queue;
 
-  rx_q_entry *        rx_q_reset;
-  rx_q_entry *        rx_q_entry;
-  rx_q_entry *        rx_q_wrap;
+    u8                  irq;
+    unsigned long	      flags;
+    u8                  tx_last;
+    u8                  tx_idle;
 
-  struct atm_dev *    atm_dev;
+    rx_q_entry *        rx_q_reset;
+    rx_q_entry *        rx_q_entry;
+    rx_q_entry *        rx_q_wrap;
 
-  u32                 last_vc;
-  
-  int                 noof_spare_buffers;
-  u16                 spare_buffers[SPARE_BUFFER_POOL_SIZE];
+    struct atm_dev *    atm_dev;
 
-  u16                 tx_channel_record[TX_CHANS];
+    u32                 last_vc;
 
-  // this is what we follow when we get incoming data
-  u32              txer[MAX_VCS/32];
-  struct atm_vcc * rxer[MAX_VCS];
+    int                 noof_spare_buffers;
+    u16                 spare_buffers[SPARE_BUFFER_POOL_SIZE];
 
-  // cell rate allocation
-  spinlock_t       rate_lock;
-  unsigned int     rx_avail;
-  unsigned int     tx_avail;
-  
-  // dev stats
-  unsigned long    tx_cell_count;
-  unsigned long    rx_cell_count;
-  unsigned long    hec_error_count;
-  unsigned long    unassigned_cell_count;
+    u16                 tx_channel_record[TX_CHANS];
 
-  struct pci_dev * pci_dev;
-  struct timer_list housekeeping;
+    // this is what we follow when we get incoming data
+    u32              txer[MAX_VCS/32];
+    struct atm_vcc * rxer[MAX_VCS];
+
+    // cell rate allocation
+    spinlock_t       rate_lock;
+    unsigned int     rx_avail;
+    unsigned int     tx_avail;
+
+    // dev stats
+    unsigned long    tx_cell_count;
+    unsigned long    rx_cell_count;
+    unsigned long    hec_error_count;
+    unsigned long    unassigned_cell_count;
+
+    struct pci_dev * pci_dev;
+    struct timer_list housekeeping;
 };
 
 typedef struct hrz_dev hrz_dev;
@@ -499,9 +499,9 @@ typedef struct hrz_dev hrz_dev;
   wr_regl (dev, CONTROL_0_REG, rd_regl (dev, CONTROL_0_REG) &~ YELLOW_LED)
 
 typedef enum {
-  round_up,
-  round_down,
-  round_nearest
+    round_up,
+    round_down,
+    round_nearest
 } rounding;
 
 #endif /* DRIVER_ATM_HORIZON_H */

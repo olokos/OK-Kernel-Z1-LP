@@ -26,10 +26,9 @@
 
 #include <plat/gpio-cfg.h>
 
-static inline void s3c2410_gpio_cfgpin(unsigned int pin, unsigned int cfg)
-{
-	/* 1:1 mapping between cfgpin and setcfg calls at the moment */
-	s3c_gpio_cfgpin(pin, cfg);
+static inline void s3c2410_gpio_cfgpin(unsigned int pin, unsigned int cfg) {
+    /* 1:1 mapping between cfgpin and setcfg calls at the moment */
+    s3c_gpio_cfgpin(pin, cfg);
 }
 
 /* external functions for GPIO support
@@ -66,7 +65,7 @@ extern int s3c2410_gpio_getirq(unsigned int pin);
 */
 
 extern int s3c2410_gpio_irqfilter(unsigned int pin, unsigned int on,
-				  unsigned int config);
+                                  unsigned int config);
 
 /* s3c2410_gpio_pullup
  *

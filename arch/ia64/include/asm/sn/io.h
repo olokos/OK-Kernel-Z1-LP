@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is subject to the terms and conditions of the GNU General Public
  * License.  See the file "COPYING" in the main directory of this archive
  * for more details.
@@ -54,131 +54,121 @@ extern void sn_dma_flush(unsigned long);
  */
 
 static inline unsigned int
-___sn_inb (unsigned long port)
-{
-	volatile unsigned char *addr;
-	unsigned char ret = -1;
+___sn_inb (unsigned long port) {
+    volatile unsigned char *addr;
+    unsigned char ret = -1;
 
-	if ((addr = sn_io_addr(port))) {
-		ret = *addr;
-		__sn_mf_a();
-		sn_dma_flush((unsigned long)addr);
-	}
-	return ret;
+    if ((addr = sn_io_addr(port))) {
+        ret = *addr;
+        __sn_mf_a();
+        sn_dma_flush((unsigned long)addr);
+    }
+    return ret;
 }
 
 static inline unsigned int
-___sn_inw (unsigned long port)
-{
-	volatile unsigned short *addr;
-	unsigned short ret = -1;
+___sn_inw (unsigned long port) {
+    volatile unsigned short *addr;
+    unsigned short ret = -1;
 
-	if ((addr = sn_io_addr(port))) {
-		ret = *addr;
-		__sn_mf_a();
-		sn_dma_flush((unsigned long)addr);
-	}
-	return ret;
+    if ((addr = sn_io_addr(port))) {
+        ret = *addr;
+        __sn_mf_a();
+        sn_dma_flush((unsigned long)addr);
+    }
+    return ret;
 }
 
 static inline unsigned int
-___sn_inl (unsigned long port)
-{
-	volatile unsigned int *addr;
-	unsigned int ret = -1;
+___sn_inl (unsigned long port) {
+    volatile unsigned int *addr;
+    unsigned int ret = -1;
 
-	if ((addr = sn_io_addr(port))) {
-		ret = *addr;
-		__sn_mf_a();
-		sn_dma_flush((unsigned long)addr);
-	}
-	return ret;
+    if ((addr = sn_io_addr(port))) {
+        ret = *addr;
+        __sn_mf_a();
+        sn_dma_flush((unsigned long)addr);
+    }
+    return ret;
 }
 
 static inline void
-___sn_outb (unsigned char val, unsigned long port)
-{
-	volatile unsigned char *addr;
+___sn_outb (unsigned char val, unsigned long port) {
+    volatile unsigned char *addr;
 
-	if ((addr = sn_io_addr(port))) {
-		*addr = val;
-		__sn_mmiowb();
-	}
+    if ((addr = sn_io_addr(port))) {
+        *addr = val;
+        __sn_mmiowb();
+    }
 }
 
 static inline void
-___sn_outw (unsigned short val, unsigned long port)
-{
-	volatile unsigned short *addr;
+___sn_outw (unsigned short val, unsigned long port) {
+    volatile unsigned short *addr;
 
-	if ((addr = sn_io_addr(port))) {
-		*addr = val;
-		__sn_mmiowb();
-	}
+    if ((addr = sn_io_addr(port))) {
+        *addr = val;
+        __sn_mmiowb();
+    }
 }
 
 static inline void
-___sn_outl (unsigned int val, unsigned long port)
-{
-	volatile unsigned int *addr;
+___sn_outl (unsigned int val, unsigned long port) {
+    volatile unsigned int *addr;
 
-	if ((addr = sn_io_addr(port))) {
-		*addr = val;
-		__sn_mmiowb();
-	}
+    if ((addr = sn_io_addr(port))) {
+        *addr = val;
+        __sn_mmiowb();
+    }
 }
 
 /*
- * The following routines are SN Platform specific, called when 
- * a reference is made to readX/writeX set macros.  SN Platform 
- * readX set of macros ensures that Posted DMA writes on the 
+ * The following routines are SN Platform specific, called when
+ * a reference is made to readX/writeX set macros.  SN Platform
+ * readX set of macros ensures that Posted DMA writes on the
  * Bridge is flushed.
- * 
+ *
  * The routines should be self explainatory.
  */
 
 static inline unsigned char
-___sn_readb (const volatile void __iomem *addr)
-{
-	unsigned char val;
+___sn_readb (const volatile void __iomem *addr) {
+    unsigned char val;
 
-	val = *(volatile unsigned char __force *)addr;
-	__sn_mf_a();
-	sn_dma_flush((unsigned long)addr);
-        return val;
+    val = *(volatile unsigned char __force *)addr;
+    __sn_mf_a();
+    sn_dma_flush((unsigned long)addr);
+    return val;
 }
 
 static inline unsigned short
-___sn_readw (const volatile void __iomem *addr)
-{
-	unsigned short val;
+___sn_readw (const volatile void __iomem *addr) {
+    unsigned short val;
 
-	val = *(volatile unsigned short __force *)addr;
-	__sn_mf_a();
-	sn_dma_flush((unsigned long)addr);
-        return val;
+    val = *(volatile unsigned short __force *)addr;
+    __sn_mf_a();
+    sn_dma_flush((unsigned long)addr);
+    return val;
 }
 
 static inline unsigned int
-___sn_readl (const volatile void __iomem *addr)
-{
-	unsigned int val;
+___sn_readl (const volatile void __iomem *addr) {
+    unsigned int val;
 
-	val = *(volatile unsigned int __force *)addr;
-	__sn_mf_a();
-	sn_dma_flush((unsigned long)addr);
-        return val;
+    val = *(volatile unsigned int __force *)addr;
+    __sn_mf_a();
+    sn_dma_flush((unsigned long)addr);
+    return val;
 }
 
 static inline unsigned long
-___sn_readq (const volatile void __iomem *addr)
-{
-	unsigned long val;
+___sn_readq (const volatile void __iomem *addr) {
+    unsigned long val;
 
-	val = *(volatile unsigned long __force *)addr;
-	__sn_mf_a();
-	sn_dma_flush((unsigned long)addr);
-        return val;
+    val = *(volatile unsigned long __force *)addr;
+    __sn_mf_a();
+    sn_dma_flush((unsigned long)addr);
+    return val;
 }
 
 /*
@@ -191,84 +181,76 @@ ___sn_readq (const volatile void __iomem *addr)
  */
 
 static inline unsigned int
-sn_inb_fast (unsigned long port)
-{
-	volatile unsigned char *addr = (unsigned char *)port;
-	unsigned char ret;
+sn_inb_fast (unsigned long port) {
+    volatile unsigned char *addr = (unsigned char *)port;
+    unsigned char ret;
 
-	ret = *addr;
-	__sn_mf_a();
-	return ret;
+    ret = *addr;
+    __sn_mf_a();
+    return ret;
 }
 
 static inline unsigned int
-sn_inw_fast (unsigned long port)
-{
-	volatile unsigned short *addr = (unsigned short *)port;
-	unsigned short ret;
+sn_inw_fast (unsigned long port) {
+    volatile unsigned short *addr = (unsigned short *)port;
+    unsigned short ret;
 
-	ret = *addr;
-	__sn_mf_a();
-	return ret;
+    ret = *addr;
+    __sn_mf_a();
+    return ret;
 }
 
 static inline unsigned int
-sn_inl_fast (unsigned long port)
-{
-	volatile unsigned int *addr = (unsigned int *)port;
-	unsigned int ret;
+sn_inl_fast (unsigned long port) {
+    volatile unsigned int *addr = (unsigned int *)port;
+    unsigned int ret;
 
-	ret = *addr;
-	__sn_mf_a();
-	return ret;
+    ret = *addr;
+    __sn_mf_a();
+    return ret;
 }
 
 static inline unsigned char
-___sn_readb_relaxed (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned char __force *)addr;
+___sn_readb_relaxed (const volatile void __iomem *addr) {
+    return *(volatile unsigned char __force *)addr;
 }
 
 static inline unsigned short
-___sn_readw_relaxed (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned short __force *)addr;
+___sn_readw_relaxed (const volatile void __iomem *addr) {
+    return *(volatile unsigned short __force *)addr;
 }
 
 static inline unsigned int
-___sn_readl_relaxed (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned int __force *) addr;
+___sn_readl_relaxed (const volatile void __iomem *addr) {
+    return *(volatile unsigned int __force *) addr;
 }
 
 static inline unsigned long
-___sn_readq_relaxed (const volatile void __iomem *addr)
-{
-	return *(volatile unsigned long __force *) addr;
+___sn_readq_relaxed (const volatile void __iomem *addr) {
+    return *(volatile unsigned long __force *) addr;
 }
 
 struct pci_dev;
 
 static inline int
-sn_pci_set_vchan(struct pci_dev *pci_dev, unsigned long *addr, int vchan)
-{
+sn_pci_set_vchan(struct pci_dev *pci_dev, unsigned long *addr, int vchan) {
 
-	if (vchan > 1) {
-		return -1;
-	}
+    if (vchan > 1) {
+        return -1;
+    }
 
-	if (!(*addr >> 32))	/* Using a mask here would be cleaner */
-		return 0;	/* but this generates better code */
+    if (!(*addr >> 32))	/* Using a mask here would be cleaner */
+        return 0;	/* but this generates better code */
 
-	if (vchan == 1) {
-		/* Set Bit 57 */
-		*addr |= (1UL << 57);
-	} else {
-		/* Clear Bit 57 */
-		*addr &= ~(1UL << 57);
-	}
+    if (vchan == 1) {
+        /* Set Bit 57 */
+        *addr |= (1UL << 57);
+    } else {
+        /* Clear Bit 57 */
+        *addr &= ~(1UL << 57);
+    }
 
-	return 0;
+    return 0;
 }
 
 #endif	/* _ASM_SN_IO_H */

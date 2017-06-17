@@ -14,13 +14,13 @@ extern __sum16 ip_fast_csum(const void *iph, unsigned int ihl);
  * returns a 16-bit checksum, already complemented
  */
 extern __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
-					   unsigned short len,
-					   unsigned short proto,
-					   __wsum sum);
+                                 unsigned short len,
+                                 unsigned short proto,
+                                 __wsum sum);
 
 __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
-				unsigned short len, unsigned short proto,
-				__wsum sum);
+                          unsigned short len, unsigned short proto,
+                          __wsum sum);
 
 /*
  * computes the checksum of a memory block at buff, length len,
@@ -59,17 +59,16 @@ extern __sum16 ip_compute_csum(const void *buff, int len);
  *	Fold a partial checksum without adding pseudo headers
  */
 
-static inline __sum16 csum_fold(__wsum csum)
-{
-	u32 sum = (__force u32)csum;
-	sum = (sum & 0xffff) + (sum >> 16);
-	sum = (sum & 0xffff) + (sum >> 16);
-	return (__force __sum16)~sum;
+static inline __sum16 csum_fold(__wsum csum) {
+    u32 sum = (__force u32)csum;
+    sum = (sum & 0xffff) + (sum >> 16);
+    sum = (sum & 0xffff) + (sum >> 16);
+    return (__force __sum16)~sum;
 }
 
 #define _HAVE_ARCH_IPV6_CSUM
 extern __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-			       const struct in6_addr *daddr,
-			       __u32 len, unsigned short proto,
-			       __wsum sum);
+                               const struct in6_addr *daddr,
+                               __u32 len, unsigned short proto,
+                               __wsum sum);
 #endif

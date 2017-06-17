@@ -26,5 +26,5 @@ void __msm_gpio_set_intr_cfg_enable(unsigned gpio, unsigned val);
 void __msm_gpio_set_intr_cfg_type(unsigned gpio, unsigned type);
 void __gpio_tlmm_config(unsigned config);
 void __msm_gpio_install_direct_irq(unsigned gpio, unsigned irq,
-					unsigned int input_polarity);
+                                   unsigned int input_polarity);
 #endif

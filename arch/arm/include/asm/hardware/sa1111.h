@@ -411,13 +411,13 @@ extern struct bus_type sa1111_bus_type;
 #define SA1111_DEVID_PCMCIA	(1 << 9)
 
 struct sa1111_dev {
-	struct device	dev;
-	unsigned int	devid;
-	struct resource	res;
-	void __iomem	*mapbase;
-	unsigned int	skpcr_mask;
-	unsigned int	irq[6];
-	u64		dma_mask;
+    struct device	dev;
+    unsigned int	devid;
+    struct resource	res;
+    void __iomem	*mapbase;
+    unsigned int	skpcr_mask;
+    unsigned int	irq[6];
+    u64		dma_mask;
 };
 
 #define SA1111_DEV(_d)	container_of((_d), struct sa1111_dev, dev)
@@ -426,13 +426,13 @@ struct sa1111_dev {
 #define sa1111_set_drvdata(d,p)	dev_set_drvdata(&(d)->dev, p)
 
 struct sa1111_driver {
-	struct device_driver	drv;
-	unsigned int		devid;
-	int (*probe)(struct sa1111_dev *);
-	int (*remove)(struct sa1111_dev *);
-	int (*suspend)(struct sa1111_dev *, pm_message_t);
-	int (*resume)(struct sa1111_dev *);
-	void (*shutdown)(struct sa1111_dev *);
+    struct device_driver	drv;
+    unsigned int		devid;
+    int (*probe)(struct sa1111_dev *);
+    int (*remove)(struct sa1111_dev *);
+    int (*suspend)(struct sa1111_dev *, pm_message_t);
+    int (*resume)(struct sa1111_dev *);
+    void (*shutdown)(struct sa1111_dev *);
 };
 
 #define SA1111_DRV(_d)	container_of((_d), struct sa1111_driver, drv)
@@ -465,11 +465,11 @@ void sa1111_set_io(struct sa1111_dev *sadev, unsigned int bits, unsigned int v);
 void sa1111_set_sleep_io(struct sa1111_dev *sadev, unsigned int bits, unsigned int v);
 
 struct sa1111_platform_data {
-	int	irq_base;	/* base for cascaded on-chip IRQs */
-	unsigned disable_devs;
-	void	*data;
-	int	(*enable)(void *, unsigned);
-	void	(*disable)(void *, unsigned);
+    int	irq_base;	/* base for cascaded on-chip IRQs */
+    unsigned disable_devs;
+    void	*data;
+    int	(*enable)(void *, unsigned);
+    void	(*disable)(void *, unsigned);
 };
 
 #endif  /* _ASM_ARCH_SA1111 */

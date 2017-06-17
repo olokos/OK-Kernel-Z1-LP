@@ -135,10 +135,10 @@
  * Transmit descriptor, aligned to 16 bytes
  */
 struct ftmac100_txdes {
-	unsigned int	txdes0;
-	unsigned int	txdes1;
-	unsigned int	txdes2;	/* TXBUF_BADR */
-	unsigned int	txdes3;	/* not used by HW */
+    unsigned int	txdes0;
+    unsigned int	txdes1;
+    unsigned int	txdes2;	/* TXBUF_BADR */
+    unsigned int	txdes3;	/* not used by HW */
 } __attribute__ ((aligned(16)));
 
 #define	FTMAC100_TXDES0_TXPKT_LATECOL	(1 << 0)
@@ -156,10 +156,10 @@ struct ftmac100_txdes {
  * Receive descriptor, aligned to 16 bytes
  */
 struct ftmac100_rxdes {
-	unsigned int	rxdes0;
-	unsigned int	rxdes1;
-	unsigned int	rxdes2;	/* RXBUF_BADR */
-	unsigned int	rxdes3;	/* not used by HW */
+    unsigned int	rxdes0;
+    unsigned int	rxdes1;
+    unsigned int	rxdes2;	/* RXBUF_BADR */
+    unsigned int	rxdes3;	/* not used by HW */
 } __attribute__ ((aligned(16)));
 
 #define	FTMAC100_RXDES0_RFL		0x7ff

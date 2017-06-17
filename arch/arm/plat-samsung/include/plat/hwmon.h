@@ -24,9 +24,9 @@
  * hwmon expects (mV) by result = (value_read * @mult) / @div.
  */
 struct s3c_hwmon_chcfg {
-	const char	*name;
-	unsigned int	mult;
-	unsigned int	div;
+    const char	*name;
+    unsigned int	mult;
+    unsigned int	div;
 };
 
 /**
@@ -34,7 +34,7 @@ struct s3c_hwmon_chcfg {
  * @in: One configuration for each possible channel used.
  */
 struct s3c_hwmon_pdata {
-	struct s3c_hwmon_chcfg	*in[8];
+    struct s3c_hwmon_chcfg	*in[8];
 };
 
 /**

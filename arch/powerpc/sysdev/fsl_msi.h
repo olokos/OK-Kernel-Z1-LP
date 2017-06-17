@@ -26,20 +26,20 @@
 #define FSL_PIC_IP_VMPIC  0x00000003
 
 struct fsl_msi {
-	struct irq_domain *irqhost;
+    struct irq_domain *irqhost;
 
-	unsigned long cascade_irq;
+    unsigned long cascade_irq;
 
-	u32 msiir_offset; /* Offset of MSIIR, relative to start of CCSR */
-	void __iomem *msi_regs;
-	u32 feature;
-	int msi_virqs[NR_MSI_REG];
+    u32 msiir_offset; /* Offset of MSIIR, relative to start of CCSR */
+    void __iomem *msi_regs;
+    u32 feature;
+    int msi_virqs[NR_MSI_REG];
 
-	struct msi_bitmap bitmap;
+    struct msi_bitmap bitmap;
 
-	struct list_head list;          /* support multiple MSI banks */
+    struct list_head list;          /* support multiple MSI banks */
 
-	phandle phandle;
+    phandle phandle;
 };
 
 #endif /* _POWERPC_SYSDEV_FSL_MSI_H */

@@ -22,9 +22,8 @@
 
 extern struct pci_controller* pcibios_alloc_controller(void);
 
-static inline void pcibios_penalize_isa_irq(int irq)
-{
-	/* We don't do dynamic PCI IRQ allocation */
+static inline void pcibios_penalize_isa_irq(int irq) {
+    /* We don't do dynamic PCI IRQ allocation */
 }
 
 /* Assume some values. (We should revise them, if necessary) */

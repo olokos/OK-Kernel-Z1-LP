@@ -5,21 +5,21 @@
 
 struct zilog_channel {
 #ifdef __BIG_ENDIAN
-	volatile unsigned char unused0[3];
-	volatile unsigned char control;
-	volatile unsigned char unused1[3];
-	volatile unsigned char data;
+    volatile unsigned char unused0[3];
+    volatile unsigned char control;
+    volatile unsigned char unused1[3];
+    volatile unsigned char data;
 #else /* __LITTLE_ENDIAN */
-	volatile unsigned char control;
-	volatile unsigned char unused0[3];
-	volatile unsigned char data;
-	volatile unsigned char unused1[3];
+    volatile unsigned char control;
+    volatile unsigned char unused0[3];
+    volatile unsigned char data;
+    volatile unsigned char unused1[3];
 #endif
 };
 
 struct zilog_layout {
-	struct zilog_channel channelB;
-	struct zilog_channel channelA;
+    struct zilog_channel channelB;
+    struct zilog_channel channelA;
 };
 
 #define NUM_ZSREGS    16

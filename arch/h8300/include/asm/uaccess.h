@@ -15,13 +15,12 @@
 
 /* We let the MMU do all checking */
 #define access_ok(type, addr, size) __access_ok((unsigned long)addr,size)
-static inline int __access_ok(unsigned long addr, unsigned long size)
-{
+static inline int __access_ok(unsigned long addr, unsigned long size) {
 #define	RANGE_CHECK_OK(addr, size, lower, upper) \
 	(((addr) >= (lower)) && (((addr) + (size)) < (upper)))
 
-	extern unsigned long _ramend;
-	return(RANGE_CHECK_OK(addr, size, 0L, (unsigned long)&_ramend));
+    extern unsigned long _ramend;
+    return(RANGE_CHECK_OK(addr, size, 0L, (unsigned long)&_ramend));
 }
 
 /*
@@ -37,9 +36,8 @@ static inline int __access_ok(unsigned long addr, unsigned long size)
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -127,13 +125,12 @@ extern int __get_user_bad(void);
  */
 
 static inline long
-strncpy_from_user(char *dst, const char *src, long count)
-{
-	char *tmp;
-	strncpy(dst, src, count);
-	for (tmp = dst; *tmp && count > 0; tmp++, count--)
-		;
-	return(tmp - dst); /* DAVIDM should we count a NUL ?  check getname */
+strncpy_from_user(char *dst, const char *src, long count) {
+    char *tmp;
+    strncpy(dst, src, count);
+    for (tmp = dst; *tmp && count > 0; tmp++, count--)
+        ;
+    return(tmp - dst); /* DAVIDM should we count a NUL ?  check getname */
 }
 
 /*
@@ -141,9 +138,8 @@ strncpy_from_user(char *dst, const char *src, long count)
  *
  * Return 0 on exception, a value greater than N if too long
  */
-static inline long strnlen_user(const char *src, long n)
-{
-	return(strlen(src) + 1); /* DAVIDM make safer */
+static inline long strnlen_user(const char *src, long n) {
+    return(strlen(src) + 1); /* DAVIDM make safer */
 }
 
 #define strlen_user(str) strnlen_user(str, 32767)
@@ -153,10 +149,9 @@ static inline long strnlen_user(const char *src, long n)
  */
 
 static inline unsigned long
-clear_user(void *to, unsigned long n)
-{
-	memset(to, 0, n);
-	return 0;
+clear_user(void *to, unsigned long n) {
+    memset(to, 0, n);
+    return 0;
 }
 
 #endif /* _H8300_UACCESS_H */

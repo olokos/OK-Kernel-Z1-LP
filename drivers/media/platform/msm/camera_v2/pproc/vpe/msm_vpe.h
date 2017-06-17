@@ -144,112 +144,112 @@
 /* VPE_TRANSACTION_SETUP_CONFIG_LEN = 1088 */
 
 struct msm_vpe_transaction_setup_cfg {
-	uint8_t scaler_cfg[VPE_TRANSACTION_SETUP_CONFIG_LEN];
+    uint8_t scaler_cfg[VPE_TRANSACTION_SETUP_CONFIG_LEN];
 };
 
 struct vpe_subscribe_info {
-	struct v4l2_fh *vfh;
-	uint32_t active;
+    struct v4l2_fh *vfh;
+    uint32_t active;
 };
 
 enum vpe_state {
-	VPE_STATE_BOOT,
-	VPE_STATE_IDLE,
-	VPE_STATE_ACTIVE,
-	VPE_STATE_OFF,
+    VPE_STATE_BOOT,
+    VPE_STATE_IDLE,
+    VPE_STATE_ACTIVE,
+    VPE_STATE_OFF,
 };
 
 struct msm_queue_cmd {
-	struct list_head list_config;
-	struct list_head list_control;
-	struct list_head list_frame;
-	struct list_head list_pict;
-	struct list_head list_vpe_frame;
-	struct list_head list_eventdata;
-	void *command;
-	atomic_t on_heap;
-	struct timespec ts;
-	uint32_t error_code;
-	uint32_t trans_code;
+    struct list_head list_config;
+    struct list_head list_control;
+    struct list_head list_frame;
+    struct list_head list_pict;
+    struct list_head list_vpe_frame;
+    struct list_head list_eventdata;
+    void *command;
+    atomic_t on_heap;
+    struct timespec ts;
+    uint32_t error_code;
+    uint32_t trans_code;
 };
 
 struct msm_device_queue {
-	struct list_head list;
-	spinlock_t lock;
-	wait_queue_head_t wait;
-	int max;
-	int len;
-	const char *name;
+    struct list_head list;
+    spinlock_t lock;
+    wait_queue_head_t wait;
+    int max;
+    int len;
+    const char *name;
 };
 
 struct msm_vpe_tasklet_queue_cmd {
-	struct list_head list;
-	uint32_t irq_status;
-	uint8_t cmd_used;
+    struct list_head list;
+    uint32_t irq_status;
+    uint8_t cmd_used;
 };
 
 struct msm_vpe_buffer_map_info_t {
-	unsigned long len;
-	unsigned long phy_addr;
-	struct ion_handle *ion_handle;
-	struct msm_vpe_buffer_info_t buff_info;
+    unsigned long len;
+    unsigned long phy_addr;
+    struct ion_handle *ion_handle;
+    struct msm_vpe_buffer_info_t buff_info;
 };
 
 struct msm_vpe_buffer_map_list_t {
-	struct msm_vpe_buffer_map_info_t map_info;
-	struct list_head entry;
+    struct msm_vpe_buffer_map_info_t map_info;
+    struct list_head entry;
 };
 
 struct msm_vpe_buff_queue_info_t {
-	uint32_t used;
-	uint16_t session_id;
-	uint16_t stream_id;
-	struct list_head vb2_buff_head;
-	struct list_head native_buff_head;
+    uint32_t used;
+    uint16_t session_id;
+    uint16_t stream_id;
+    struct list_head vb2_buff_head;
+    struct list_head native_buff_head;
 };
 
 struct vpe_device {
-	struct platform_device *pdev;
-	struct msm_sd_subdev msm_sd;
-	struct v4l2_subdev subdev;
-	struct resource *mem;
-	struct resource *irq;
-	void __iomem *base;
-	struct clk **vpe_clk;
-	struct regulator *fs_vpe;
-	struct mutex mutex;
-	enum vpe_state state;
+    struct platform_device *pdev;
+    struct msm_sd_subdev msm_sd;
+    struct v4l2_subdev subdev;
+    struct resource *mem;
+    struct resource *irq;
+    void __iomem *base;
+    struct clk **vpe_clk;
+    struct regulator *fs_vpe;
+    struct mutex mutex;
+    enum vpe_state state;
 
-	int domain_num;
-	struct iommu_domain *domain;
-	struct device *iommu_ctx_src;
-	struct device *iommu_ctx_dst;
-	struct ion_client *client;
-	struct kref refcount;
+    int domain_num;
+    struct iommu_domain *domain;
+    struct device *iommu_ctx_src;
+    struct device *iommu_ctx_dst;
+    struct ion_client *client;
+    struct kref refcount;
 
-	/* Reusing proven tasklet from msm isp */
-	atomic_t irq_cnt;
-	uint8_t taskletq_idx;
-	spinlock_t  tasklet_lock;
-	struct list_head tasklet_q;
-	struct tasklet_struct vpe_tasklet;
-	struct msm_vpe_tasklet_queue_cmd
-	tasklet_queue_cmd[MSM_VPE_TASKLETQ_SIZE];
+    /* Reusing proven tasklet from msm isp */
+    atomic_t irq_cnt;
+    uint8_t taskletq_idx;
+    spinlock_t  tasklet_lock;
+    struct list_head tasklet_q;
+    struct tasklet_struct vpe_tasklet;
+    struct msm_vpe_tasklet_queue_cmd
+        tasklet_queue_cmd[MSM_VPE_TASKLETQ_SIZE];
 
-	struct vpe_subscribe_info vpe_subscribe_list[MAX_ACTIVE_VPE_INSTANCE];
-	uint32_t vpe_open_cnt;
+    struct vpe_subscribe_info vpe_subscribe_list[MAX_ACTIVE_VPE_INSTANCE];
+    uint32_t vpe_open_cnt;
 
-	struct msm_device_queue eventData_q; /* V4L2 Event Payload Queue */
+    struct msm_device_queue eventData_q; /* V4L2 Event Payload Queue */
 
-	/*
-	 * Processing Queue: store frame info for frames sent to
-	 * microcontroller
-	 */
-	struct msm_device_queue processing_q;
+    /*
+     * Processing Queue: store frame info for frames sent to
+     * microcontroller
+     */
+    struct msm_device_queue processing_q;
 
-	struct msm_vpe_buff_queue_info_t *buff_queue;
-	uint32_t num_buffq;
-	struct v4l2_subdev *buf_mgr_subdev;
+    struct msm_vpe_buff_queue_info_t *buff_queue;
+    uint32_t num_buffq;
+    struct v4l2_subdev *buf_mgr_subdev;
 };
 
 #endif /* __MSM_VPE_H__ */

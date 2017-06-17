@@ -32,8 +32,8 @@
 #define GUNZIP_SCRATCH_SIZE	46912
 
 struct gunzip_state {
-	z_stream s;
-	char scratch[46912];
+    z_stream s;
+    char scratch[46912];
 };
 
 void gunzip_start(struct gunzip_state *state, void *src, int srclen);

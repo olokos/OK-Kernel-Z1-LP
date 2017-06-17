@@ -76,10 +76,10 @@
 #define TP_CFG_ChipletEnable 0xFFFF	/* Enable all chiplets */
 
 typedef struct {
-	int bDSPEnabled;
-	int bShareDspIrq;
-	int bShareUartIrq;
-	DSP_3780I_CONFIG_SETTINGS rDspSettings;
+    int bDSPEnabled;
+    int bShareDspIrq;
+    int bShareUartIrq;
+    DSP_3780I_CONFIG_SETTINGS rDspSettings;
 } THINKPAD_BD_DATA;
 
 int tp3780I_InitializeBoardData(THINKPAD_BD_DATA * pBDData);

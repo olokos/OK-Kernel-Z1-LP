@@ -17,23 +17,23 @@
 #include <linux/platform_device.h>
 
 struct msm_hdmi_audio_edid_blk {
-	u8 *audio_data_blk;
-	unsigned int audio_data_blk_size; /* in bytes */
-	u8 *spk_alloc_data_blk;
-	unsigned int spk_alloc_data_blk_size; /* in bytes */
+    u8 *audio_data_blk;
+    unsigned int audio_data_blk_size; /* in bytes */
+    u8 *spk_alloc_data_blk;
+    unsigned int spk_alloc_data_blk_size; /* in bytes */
 };
 
 struct msm_hdmi_audio_codec_ops {
-	int (*audio_info_setup)(struct platform_device *pdev,
-		u32 sample_rate, u32 num_of_channels,
-		u32 channel_allocation, u32 level_shift,
-		bool down_mix);
-	int (*get_audio_edid_blk) (struct platform_device *pdev,
-		struct msm_hdmi_audio_edid_blk *blk);
-	int (*hdmi_cable_status) (struct platform_device *pdev, u32 vote);
+    int (*audio_info_setup)(struct platform_device *pdev,
+                            u32 sample_rate, u32 num_of_channels,
+                            u32 channel_allocation, u32 level_shift,
+                            bool down_mix);
+    int (*get_audio_edid_blk) (struct platform_device *pdev,
+                               struct msm_hdmi_audio_edid_blk *blk);
+    int (*hdmi_cable_status) (struct platform_device *pdev, u32 vote);
 };
 
 int msm_hdmi_register_audio_codec(struct platform_device *pdev,
-	struct msm_hdmi_audio_codec_ops *ops);
+                                  struct msm_hdmi_audio_codec_ops *ops);
 
 #endif /* __MSM_HDMI_AUDIO_CODEC_H__ */

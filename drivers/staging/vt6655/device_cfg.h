@@ -76,7 +76,7 @@ struct _version {
 
 
 
-typedef enum  _chip_type{
+typedef enum  _chip_type {
     VT3253=1
 } CHIP_TYPE, *PCHIP_TYPE;
 

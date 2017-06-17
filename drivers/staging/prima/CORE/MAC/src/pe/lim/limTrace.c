@@ -57,10 +57,8 @@ tANI_U32 gMgmtFrameStats[14];
 #define LIM_TRACE_MAX_SUBTYPES 14
 
 
-static tANI_U8* __limTraceGetTimerString( tANI_U16 timerId )
-{
-    switch( timerId )
-    {
+static tANI_U8* __limTraceGetTimerString( tANI_U16 timerId ) {
+    switch( timerId ) {
         CASE_RETURN_STRING(eLIM_MIN_CHANNEL_TIMER);
         CASE_RETURN_STRING(eLIM_MAX_CHANNEL_TIMER);
         CASE_RETURN_STRING(eLIM_JOIN_FAIL_TIMER);
@@ -102,11 +100,9 @@ static tANI_U8* __limTraceGetTimerString( tANI_U16 timerId )
 }
 
 
-static tANI_U8* __limTraceGetMgmtDropReasonString( tANI_U16 dropReason )
-{
+static tANI_U8* __limTraceGetMgmtDropReasonString( tANI_U16 dropReason ) {
 
-    switch( dropReason )
-    {
+    switch( dropReason ) {
         CASE_RETURN_STRING(eMGMT_DROP_INFRA_BCN_IN_IBSS);
         CASE_RETURN_STRING(eMGMT_DROP_INVALID_SIZE);
         CASE_RETURN_STRING(eMGMT_DROP_NON_SCAN_MODE_FRAME);
@@ -122,19 +118,16 @@ static tANI_U8* __limTraceGetMgmtDropReasonString( tANI_U16 dropReason )
 
 
 
-void limTraceInit(tpAniSirGlobal pMac)
-{
+void limTraceInit(tpAniSirGlobal pMac) {
     vosTraceRegister(VOS_MODULE_ID_PE, (tpvosTraceCb)&limTraceDump);
 }
 
 
 
 
-void limTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex)
-{
+void limTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord, tANI_U16 recIndex) {
 
-    static char *frameSubtypeStr[LIM_TRACE_MAX_SUBTYPES] =
-    {
+    static char *frameSubtypeStr[LIM_TRACE_MAX_SUBTYPES] = {
         "Association request",
         "Association response",
         "Reassociation request",
@@ -152,8 +145,7 @@ void limTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord, tANI_U16 recInd
     };
 
 
-    switch (pRecord->code)
-    {
+    switch (pRecord->code) {
     case TRACE_CODE_MLM_STATE:
         limLog(pMac, LOGE, "%04d    %012u  S%d    %-14s  %-30s(0x%x) ", recIndex, pRecord->time, pRecord->session,
                "MLM State:", limTraceGetMlmStateString((tANI_U16)pRecord->data), pRecord->data );
@@ -168,12 +160,9 @@ void limTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord, tANI_U16 recInd
         break;
 
     case TRACE_CODE_RX_MGMT:
-        if (LIM_TRACE_MAX_SUBTYPES <= LIM_TRACE_GET_SUBTYPE(pRecord->data))
-        {
+        if (LIM_TRACE_MAX_SUBTYPES <= LIM_TRACE_GET_SUBTYPE(pRecord->data)) {
             limLog(pMac, LOGE, "Wrong Subtype - %d", LIM_TRACE_GET_SUBTYPE(pRecord->data));
-        }
-        else
-        {
+        } else {
             limLog(pMac, LOGE, "%04d    %012u  S%d    %-14s  %-30s(%d)    SN: %d ", recIndex, pRecord->time, pRecord->session,
                    "RX Mgmt:", frameSubtypeStr[LIM_TRACE_GET_SUBTYPE(pRecord->data)],
                    LIM_TRACE_GET_SUBTYPE(pRecord->data),
@@ -258,14 +247,12 @@ void limTraceDump(tpAniSirGlobal pMac, tpvosTraceRecord pRecord, tANI_U16 recInd
 }
 
 
-void macTraceMsgTx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data)
-{
+void macTraceMsgTx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data) {
 
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(data);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(data);
 
-    switch(moduleId)
-    {
+    switch(moduleId) {
     case SIR_LIM_MODULE_ID:
         if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
             macTrace(pMac, TRACE_CODE_TX_LIM_MSG, session, data);
@@ -282,13 +269,11 @@ void macTraceMsgTx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data)
 }
 
 
-void macTraceMsgTxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI_U32 data)
-{
+void macTraceMsgTxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI_U32 data) {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(data);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(data);
 
-    switch(moduleId)
-    {
+    switch(moduleId) {
     case SIR_LIM_MODULE_ID:
         if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
             macTraceNew(pMac, module, TRACE_CODE_TX_LIM_MSG, session, data);
@@ -308,14 +293,12 @@ void macTraceMsgTxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI
 * bit31: Rx message defferred or not
 * bit 0-15: message ID:
 */
-void macTraceMsgRx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data)
-{
+void macTraceMsgRx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data) {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(data);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(data);
 
 
-    switch(moduleId)
-    {
+    switch(moduleId) {
     case SIR_LIM_MODULE_ID:
         if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
             macTrace(pMac, TRACE_CODE_RX_LIM_MSG, session, data);
@@ -337,14 +320,12 @@ void macTraceMsgRx(tpAniSirGlobal pMac, tANI_U8 session, tANI_U32 data)
 * bit31: Rx message defferred or not
 * bit 0-15: message ID:
 */
-void macTraceMsgRxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI_U32 data)
-{
+void macTraceMsgRxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI_U32 data) {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(data);
     tANI_U8 moduleId = (tANI_U8)MAC_TRACE_GET_MODULE_ID(data);
 
 
-    switch(moduleId)
-    {
+    switch(moduleId) {
     case SIR_LIM_MODULE_ID:
         if(msgId >= SIR_LIM_ITC_MSG_TYPES_BEGIN)
             macTraceNew(pMac, module, TRACE_CODE_RX_LIM_MSG, session, data);
@@ -362,10 +343,8 @@ void macTraceMsgRxNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 session, tANI
 
 
 
-tANI_U8* limTraceGetMlmStateString( tANI_U32 mlmState )
-{
-    switch( mlmState )
-    {
+tANI_U8* limTraceGetMlmStateString( tANI_U32 mlmState ) {
+    switch( mlmState ) {
         CASE_RETURN_STRING( eLIM_MLM_OFFLINE_STATE);
         CASE_RETURN_STRING( eLIM_MLM_IDLE_STATE);
         CASE_RETURN_STRING( eLIM_MLM_WT_PROBE_RESP_STATE);
@@ -407,10 +386,8 @@ tANI_U8* limTraceGetMlmStateString( tANI_U32 mlmState )
 }
 
 
-tANI_U8* limTraceGetSmeStateString( tANI_U32 smeState )
-{
-    switch( smeState )
-    {
+tANI_U8* limTraceGetSmeStateString( tANI_U32 smeState ) {
+    switch( smeState ) {
 
         CASE_RETURN_STRING(eLIM_SME_OFFLINE_STATE);
         CASE_RETURN_STRING(eLIM_SME_IDLE_STATE);

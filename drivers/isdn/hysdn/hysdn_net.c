@@ -35,16 +35,16 @@ module_param(hynet_enable, uint, 0);
 /* inside the definition.                                                   */
 /****************************************************************************/
 struct net_local {
-	/* Tx control lock.  This protects the transmit buffer ring
-	 * state along with the "tx full" state of the driver.  This
-	 * means all netif_queue flow control actions are protected
-	 * by this lock as well.
-	 */
-	struct net_device *dev;
-	spinlock_t lock;
-	struct sk_buff *skbs[MAX_SKB_BUFFERS];	/* pointers to tx-skbs */
-	int in_idx, out_idx;	/* indexes to buffer ring */
-	int sk_count;		/* number of buffers currently in ring */
+    /* Tx control lock.  This protects the transmit buffer ring
+     * state along with the "tx full" state of the driver.  This
+     * means all netif_queue flow control actions are protected
+     * by this lock as well.
+     */
+    struct net_device *dev;
+    spinlock_t lock;
+    struct sk_buff *skbs[MAX_SKB_BUFFERS];	/* pointers to tx-skbs */
+    int in_idx, out_idx;	/* indexes to buffer ring */
+    int sk_count;		/* number of buffers currently in ring */
 };				/* net_local */
 
 
@@ -57,27 +57,26 @@ struct net_local {
 /* there is non-reboot way to recover if something goes wrong.       */
 /*********************************************************************/
 static int
-net_open(struct net_device *dev)
-{
-	struct in_device *in_dev;
-	hysdn_card *card = dev->ml_priv;
-	int i;
+net_open(struct net_device *dev) {
+    struct in_device *in_dev;
+    hysdn_card *card = dev->ml_priv;
+    int i;
 
-	netif_start_queue(dev);	/* start tx-queueing */
+    netif_start_queue(dev);	/* start tx-queueing */
 
-	/* Fill in the MAC-level header (if not already set) */
-	if (!card->mac_addr[0]) {
-		for (i = 0; i < ETH_ALEN; i++)
-			dev->dev_addr[i] = 0xfc;
-		if ((in_dev = dev->ip_ptr) != NULL) {
-			struct in_ifaddr *ifa = in_dev->ifa_list;
-			if (ifa != NULL)
-				memcpy(dev->dev_addr + (ETH_ALEN - sizeof(ifa->ifa_local)), &ifa->ifa_local, sizeof(ifa->ifa_local));
-		}
-	} else
-		memcpy(dev->dev_addr, card->mac_addr, ETH_ALEN);
+    /* Fill in the MAC-level header (if not already set) */
+    if (!card->mac_addr[0]) {
+        for (i = 0; i < ETH_ALEN; i++)
+            dev->dev_addr[i] = 0xfc;
+        if ((in_dev = dev->ip_ptr) != NULL) {
+            struct in_ifaddr *ifa = in_dev->ifa_list;
+            if (ifa != NULL)
+                memcpy(dev->dev_addr + (ETH_ALEN - sizeof(ifa->ifa_local)), &ifa->ifa_local, sizeof(ifa->ifa_local));
+        }
+    } else
+        memcpy(dev->dev_addr, card->mac_addr, ETH_ALEN);
 
-	return (0);
+    return (0);
 }				/* net_open */
 
 /*******************************************/
@@ -85,15 +84,14 @@ net_open(struct net_device *dev)
 /* must only be called when device closed  */
 /*******************************************/
 static void
-flush_tx_buffers(struct net_local *nl)
-{
+flush_tx_buffers(struct net_local *nl) {
 
-	while (nl->sk_count) {
-		dev_kfree_skb(nl->skbs[nl->out_idx++]);		/* free skb */
-		if (nl->out_idx >= MAX_SKB_BUFFERS)
-			nl->out_idx = 0;	/* wrap around */
-		nl->sk_count--;
-	}
+    while (nl->sk_count) {
+        dev_kfree_skb(nl->skbs[nl->out_idx++]);		/* free skb */
+        if (nl->out_idx >= MAX_SKB_BUFFERS)
+            nl->out_idx = 0;	/* wrap around */
+        nl->sk_count--;
+    }
 }				/* flush_tx_buffers */
 
 
@@ -102,14 +100,13 @@ flush_tx_buffers(struct net_local *nl)
 /* deactivated.                                                      */
 /*********************************************************************/
 static int
-net_close(struct net_device *dev)
-{
+net_close(struct net_device *dev) {
 
-	netif_stop_queue(dev);	/* disable queueing */
+    netif_stop_queue(dev);	/* disable queueing */
 
-	flush_tx_buffers((struct net_local *) dev);
+    flush_tx_buffers((struct net_local *) dev);
 
-	return (0);		/* success */
+    return (0);		/* success */
 }				/* net_close */
 
 /************************************/
@@ -117,35 +114,34 @@ net_close(struct net_device *dev)
 /* new style for kernel >= 2.3.33   */
 /************************************/
 static netdev_tx_t
-net_send_packet(struct sk_buff *skb, struct net_device *dev)
-{
-	struct net_local *lp = (struct net_local *) dev;
+net_send_packet(struct sk_buff *skb, struct net_device *dev) {
+    struct net_local *lp = (struct net_local *) dev;
 
-	spin_lock_irq(&lp->lock);
+    spin_lock_irq(&lp->lock);
 
-	lp->skbs[lp->in_idx++] = skb;	/* add to buffer list */
-	if (lp->in_idx >= MAX_SKB_BUFFERS)
-		lp->in_idx = 0;	/* wrap around */
-	lp->sk_count++;		/* adjust counter */
-	dev->trans_start = jiffies;
+    lp->skbs[lp->in_idx++] = skb;	/* add to buffer list */
+    if (lp->in_idx >= MAX_SKB_BUFFERS)
+        lp->in_idx = 0;	/* wrap around */
+    lp->sk_count++;		/* adjust counter */
+    dev->trans_start = jiffies;
 
-	/* If we just used up the very last entry in the
-	 * TX ring on this device, tell the queueing
-	 * layer to send no more.
-	 */
-	if (lp->sk_count >= MAX_SKB_BUFFERS)
-		netif_stop_queue(dev);
+    /* If we just used up the very last entry in the
+     * TX ring on this device, tell the queueing
+     * layer to send no more.
+     */
+    if (lp->sk_count >= MAX_SKB_BUFFERS)
+        netif_stop_queue(dev);
 
-	/* When the TX completion hw interrupt arrives, this
-	 * is when the transmit statistics are updated.
-	 */
+    /* When the TX completion hw interrupt arrives, this
+     * is when the transmit statistics are updated.
+     */
 
-	spin_unlock_irq(&lp->lock);
+    spin_unlock_irq(&lp->lock);
 
-	if (lp->sk_count <= 3) {
-		schedule_work(&((hysdn_card *) dev->ml_priv)->irq_queue);
-	}
-	return NETDEV_TX_OK;	/* success */
+    if (lp->sk_count <= 3) {
+        schedule_work(&((hysdn_card *) dev->ml_priv)->irq_queue);
+    }
+    return NETDEV_TX_OK;	/* success */
 }				/* net_send_packet */
 
 
@@ -155,86 +151,83 @@ net_send_packet(struct sk_buff *skb, struct net_device *dev)
 /* completion                                                          */
 /***********************************************************************/
 void
-hysdn_tx_netack(hysdn_card *card)
-{
-	struct net_local *lp = card->netif;
+hysdn_tx_netack(hysdn_card *card) {
+    struct net_local *lp = card->netif;
 
-	if (!lp)
-		return;		/* non existing device */
+    if (!lp)
+        return;		/* non existing device */
 
 
-	if (!lp->sk_count)
-		return;		/* error condition */
+    if (!lp->sk_count)
+        return;		/* error condition */
 
-	lp->dev->stats.tx_packets++;
-	lp->dev->stats.tx_bytes += lp->skbs[lp->out_idx]->len;
+    lp->dev->stats.tx_packets++;
+    lp->dev->stats.tx_bytes += lp->skbs[lp->out_idx]->len;
 
-	dev_kfree_skb(lp->skbs[lp->out_idx++]);		/* free skb */
-	if (lp->out_idx >= MAX_SKB_BUFFERS)
-		lp->out_idx = 0;	/* wrap around */
+    dev_kfree_skb(lp->skbs[lp->out_idx++]);		/* free skb */
+    if (lp->out_idx >= MAX_SKB_BUFFERS)
+        lp->out_idx = 0;	/* wrap around */
 
-	if (lp->sk_count-- == MAX_SKB_BUFFERS)	/* dec usage count */
-		netif_start_queue((struct net_device *) lp);
+    if (lp->sk_count-- == MAX_SKB_BUFFERS)	/* dec usage count */
+        netif_start_queue((struct net_device *) lp);
 }				/* hysdn_tx_netack */
 
 /*****************************************************/
 /* we got a packet from the network, go and queue it */
 /*****************************************************/
 void
-hysdn_rx_netpkt(hysdn_card *card, unsigned char *buf, unsigned short len)
-{
-	struct net_local *lp = card->netif;
-	struct net_device *dev;
-	struct sk_buff *skb;
+hysdn_rx_netpkt(hysdn_card *card, unsigned char *buf, unsigned short len) {
+    struct net_local *lp = card->netif;
+    struct net_device *dev;
+    struct sk_buff *skb;
 
-	if (!lp)
-		return;		/* non existing device */
+    if (!lp)
+        return;		/* non existing device */
 
-	dev = lp->dev;
-	dev->stats.rx_bytes += len;
+    dev = lp->dev;
+    dev->stats.rx_bytes += len;
 
-	skb = dev_alloc_skb(len);
-	if (skb == NULL) {
-		printk(KERN_NOTICE "%s: Memory squeeze, dropping packet.\n",
-		       dev->name);
-		dev->stats.rx_dropped++;
-		return;
-	}
-	/* copy the data */
-	memcpy(skb_put(skb, len), buf, len);
+    skb = dev_alloc_skb(len);
+    if (skb == NULL) {
+        printk(KERN_NOTICE "%s: Memory squeeze, dropping packet.\n",
+               dev->name);
+        dev->stats.rx_dropped++;
+        return;
+    }
+    /* copy the data */
+    memcpy(skb_put(skb, len), buf, len);
 
-	/* determine the used protocol */
-	skb->protocol = eth_type_trans(skb, dev);
+    /* determine the used protocol */
+    skb->protocol = eth_type_trans(skb, dev);
 
-	dev->stats.rx_packets++;	/* adjust packet count */
+    dev->stats.rx_packets++;	/* adjust packet count */
 
-	netif_rx(skb);
+    netif_rx(skb);
 }				/* hysdn_rx_netpkt */
 
 /*****************************************************/
 /* return the pointer to a network packet to be send */
 /*****************************************************/
 struct sk_buff *
-hysdn_tx_netget(hysdn_card *card)
-{
-	struct net_local *lp = card->netif;
+hysdn_tx_netget(hysdn_card *card) {
+    struct net_local *lp = card->netif;
 
-	if (!lp)
-		return (NULL);	/* non existing device */
+    if (!lp)
+        return (NULL);	/* non existing device */
 
-	if (!lp->sk_count)
-		return (NULL);	/* nothing available */
+    if (!lp->sk_count)
+        return (NULL);	/* nothing available */
 
-	return (lp->skbs[lp->out_idx]);		/* next packet to send */
+    return (lp->skbs[lp->out_idx]);		/* next packet to send */
 }				/* hysdn_tx_netget */
 
 static const struct net_device_ops hysdn_netdev_ops = {
-	.ndo_open		= net_open,
-	.ndo_stop		= net_close,
-	.ndo_start_xmit		= net_send_packet,
-	.ndo_change_mtu		= eth_change_mtu,
-	.ndo_set_mac_address	= eth_mac_addr,
-	.ndo_validate_addr	= eth_validate_addr,
+    .ndo_open		= net_open,
+    .ndo_stop		= net_close,
+    .ndo_start_xmit		= net_send_packet,
+    .ndo_change_mtu		= eth_change_mtu,
+    .ndo_set_mac_address	= eth_mac_addr,
+    .ndo_validate_addr	= eth_validate_addr,
 };
 
 
@@ -244,46 +237,45 @@ static const struct net_device_ops hysdn_netdev_ops = {
 /* 0 announces success, else a negative error code will be returned.         */
 /*****************************************************************************/
 int
-hysdn_net_create(hysdn_card *card)
-{
-	struct net_device *dev;
-	int i;
-	struct net_local *lp;
+hysdn_net_create(hysdn_card *card) {
+    struct net_device *dev;
+    int i;
+    struct net_local *lp;
 
-	if (!card) {
-		printk(KERN_WARNING "No card-pt in hysdn_net_create!\n");
-		return (-ENOMEM);
-	}
-	hysdn_net_release(card);	/* release an existing net device */
+    if (!card) {
+        printk(KERN_WARNING "No card-pt in hysdn_net_create!\n");
+        return (-ENOMEM);
+    }
+    hysdn_net_release(card);	/* release an existing net device */
 
-	dev = alloc_etherdev(sizeof(struct net_local));
-	if (!dev) {
-		printk(KERN_WARNING "HYSDN: unable to allocate mem\n");
-		return (-ENOMEM);
-	}
+    dev = alloc_etherdev(sizeof(struct net_local));
+    if (!dev) {
+        printk(KERN_WARNING "HYSDN: unable to allocate mem\n");
+        return (-ENOMEM);
+    }
 
-	lp = netdev_priv(dev);
-	lp->dev = dev;
+    lp = netdev_priv(dev);
+    lp->dev = dev;
 
-	dev->netdev_ops = &hysdn_netdev_ops;
-	spin_lock_init(&((struct net_local *) dev)->lock);
+    dev->netdev_ops = &hysdn_netdev_ops;
+    spin_lock_init(&((struct net_local *) dev)->lock);
 
-	/* initialise necessary or informing fields */
-	dev->base_addr = card->iobase;	/* IO address */
-	dev->irq = card->irq;	/* irq */
+    /* initialise necessary or informing fields */
+    dev->base_addr = card->iobase;	/* IO address */
+    dev->irq = card->irq;	/* irq */
 
-	dev->netdev_ops = &hysdn_netdev_ops;
-	if ((i = register_netdev(dev))) {
-		printk(KERN_WARNING "HYSDN: unable to create network device\n");
-		free_netdev(dev);
-		return (i);
-	}
-	dev->ml_priv = card;	/* remember pointer to own data structure */
-	card->netif = dev;	/* setup the local pointer */
+    dev->netdev_ops = &hysdn_netdev_ops;
+    if ((i = register_netdev(dev))) {
+        printk(KERN_WARNING "HYSDN: unable to create network device\n");
+        free_netdev(dev);
+        return (i);
+    }
+    dev->ml_priv = card;	/* remember pointer to own data structure */
+    card->netif = dev;	/* setup the local pointer */
 
-	if (card->debug_flags & LOG_NET_INIT)
-		hysdn_addlog(card, "network device created");
-	return (0);		/* and return success */
+    if (card->debug_flags & LOG_NET_INIT)
+        hysdn_addlog(card, "network device created");
+    return (0);		/* and return success */
 }				/* hysdn_net_create */
 
 /***************************************************************************/
@@ -291,24 +283,23 @@ hysdn_net_create(hysdn_card *card)
 /* value 0 announces success, else a negative error code will be returned. */
 /***************************************************************************/
 int
-hysdn_net_release(hysdn_card *card)
-{
-	struct net_device *dev = card->netif;
+hysdn_net_release(hysdn_card *card) {
+    struct net_device *dev = card->netif;
 
-	if (!dev)
-		return (0);	/* non existing */
+    if (!dev)
+        return (0);	/* non existing */
 
-	card->netif = NULL;	/* clear out pointer */
-	net_close(dev);
+    card->netif = NULL;	/* clear out pointer */
+    net_close(dev);
 
-	flush_tx_buffers((struct net_local *) dev);	/* empty buffers */
+    flush_tx_buffers((struct net_local *) dev);	/* empty buffers */
 
-	unregister_netdev(dev);	/* release the device */
-	free_netdev(dev);	/* release the memory allocated */
-	if (card->debug_flags & LOG_NET_INIT)
-		hysdn_addlog(card, "network device deleted");
+    unregister_netdev(dev);	/* release the device */
+    free_netdev(dev);	/* release the memory allocated */
+    if (card->debug_flags & LOG_NET_INIT)
+        hysdn_addlog(card, "network device deleted");
 
-	return (0);		/* always successful */
+    return (0);		/* always successful */
 }				/* hysdn_net_release */
 
 /*****************************************************************************/
@@ -316,12 +307,11 @@ hysdn_net_release(hysdn_card *card)
 /* if the interface is not existing, a "-" is returned.                      */
 /*****************************************************************************/
 char *
-hysdn_net_getname(hysdn_card *card)
-{
-	struct net_device *dev = card->netif;
+hysdn_net_getname(hysdn_card *card) {
+    struct net_device *dev = card->netif;
 
-	if (!dev)
-		return ("-");	/* non existing */
+    if (!dev)
+        return ("-");	/* non existing */
 
-	return (dev->name);
+    return (dev->name);
 }				/* hysdn_net_getname */

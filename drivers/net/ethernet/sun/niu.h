@@ -1491,23 +1491,23 @@
  */
 
 struct fcram_hash_opt {
-	u64	header;
+    u64	header;
 };
 
 /* EXT=1, FMT=0 */
 struct fcram_hash_ipv4 {
-	u64	header;
-	u64	addrs;
-	u64	ports;
-	u64	action;
+    u64	header;
+    u64	addrs;
+    u64	ports;
+    u64	action;
 };
 
 /* EXT=1, FMT=1 */
 struct fcram_hash_ipv6 {
-	u64	header;
-	u64	addrs[4];
-	u64	ports;
-	u64	action;
+    u64	header;
+    u64	addrs[4];
+    u64	ports;
+    u64	action;
 };
 
 #define HASH_TBL_DATA_LOG(IDX)		(FFLP + 0x00010UL + (IDX) * 8192UL)
@@ -2400,7 +2400,7 @@ struct fcram_hash_ipv6 {
 #define  TXC_PORT_PACKET_REQ_PKT_REQ	0x000000000fff0000ULL
 #define  TXC_PORT_PACKET_REQ_PERR_ABRT	0x000000000000ffffULL
 
-	/* bits are same as TXC_INT_STAT */
+/* bits are same as TXC_INT_STAT */
 #define TXC_INT_STAT_DBG		(FZC_TXC + 0x20420UL)
 
 #define TXC_INT_STAT			(FZC_TXC + 0x20428UL)
@@ -2704,101 +2704,101 @@ struct fcram_hash_ipv6 {
 
 struct rx_pkt_hdr0 {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u8	inputport:2,
-		maccheck:1,
-		class:5;
-	u8	vlan:1,
-		llcsnap:1,
-		noport:1,
-		badip:1,
-		tcamhit:1,
-		tres:2,
-		tzfvld:1;
+    u8	inputport:2,
+     maccheck:1,
+     class:5;
+    u8	vlan:1,
+     llcsnap:1,
+     noport:1,
+     badip:1,
+     tcamhit:1,
+     tres:2,
+     tzfvld:1;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u8	class:5,
-		maccheck:1,
-		inputport:2;
-	u8	tzfvld:1,
-		tres:2,
-		tcamhit:1,
-		badip:1,
-		noport:1,
-		llcsnap:1,
-		vlan:1;
+    u8	class:5,
+        maccheck:1,
+        inputport:2;
+    u8	tzfvld:1,
+     tres:2,
+     tcamhit:1,
+     badip:1,
+     noport:1,
+     llcsnap:1,
+     vlan:1;
 #endif
 };
 
 struct rx_pkt_hdr1 {
-	u8	hwrsvd1;
-	u8	tcammatch;
+    u8	hwrsvd1;
+    u8	tcammatch;
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u8	hwrsvd2:2,
-		hashit:1,
-		exact:1,
-		hzfvld:1,
-		hashsidx:3;
+    u8	hwrsvd2:2,
+     hashit:1,
+     exact:1,
+     hzfvld:1,
+     hashsidx:3;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u8	hashsidx:3,
-		hzfvld:1,
-		exact:1,
-		hashit:1,
-		hwrsvd2:2;
+    u8	hashsidx:3,
+     hzfvld:1,
+     exact:1,
+     hashit:1,
+     hwrsvd2:2;
 #endif
-	u8	zcrsvd;
+    u8	zcrsvd;
 
-	/* Bits 11:8 of zero copy flow ID.  */
+    /* Bits 11:8 of zero copy flow ID.  */
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u8	hwrsvd3:4, zflowid0:4;
+    u8	hwrsvd3:4, zflowid0:4;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u8	zflowid0:4, hwrsvd3:4;
-#endif
-
-	/* Bits 7:0 of zero copy flow ID.  */
-	u8	zflowid1;
-
-	/* Bits 15:8 of hash value, H2.  */
-	u8	hashval2_0;
-
-	/* Bits 7:0 of hash value, H2.  */
-	u8	hashval2_1;
-
-	/* Bits 19:16 of hash value, H1.  */
-#if defined(__LITTLE_ENDIAN_BITFIELD)
-	u8	hwrsvd4:4, hashval1_0:4;
-#elif defined(__BIG_ENDIAN_BITFIELD)
-	u8	hashval1_0:4, hwrsvd4:4;
+    u8	zflowid0:4, hwrsvd3:4;
 #endif
 
-	/* Bits 15:8 of hash value, H1.  */
-	u8	hashval1_1;
+    /* Bits 7:0 of zero copy flow ID.  */
+    u8	zflowid1;
 
-	/* Bits 7:0 of hash value, H1.  */
-	u8	hashval1_2;
+    /* Bits 15:8 of hash value, H2.  */
+    u8	hashval2_0;
 
-	u8	hwrsvd5;
-	u8	hwrsvd6;
+    /* Bits 7:0 of hash value, H2.  */
+    u8	hashval2_1;
 
-	u8	usrdata_0;	/* Bits 39:32 of user data.  */
-	u8	usrdata_1;	/* Bits 31:24 of user data.  */
-	u8	usrdata_2;	/* Bits 23:16 of user data.  */
-	u8	usrdata_3;	/* Bits 15:8 of user data.  */
-	u8	usrdata_4;	/* Bits 7:0 of user data.  */
+    /* Bits 19:16 of hash value, H1.  */
+#if defined(__LITTLE_ENDIAN_BITFIELD)
+    u8	hwrsvd4:4, hashval1_0:4;
+#elif defined(__BIG_ENDIAN_BITFIELD)
+    u8	hashval1_0:4, hwrsvd4:4;
+#endif
+
+    /* Bits 15:8 of hash value, H1.  */
+    u8	hashval1_1;
+
+    /* Bits 7:0 of hash value, H1.  */
+    u8	hashval1_2;
+
+    u8	hwrsvd5;
+    u8	hwrsvd6;
+
+    u8	usrdata_0;	/* Bits 39:32 of user data.  */
+    u8	usrdata_1;	/* Bits 31:24 of user data.  */
+    u8	usrdata_2;	/* Bits 23:16 of user data.  */
+    u8	usrdata_3;	/* Bits 15:8 of user data.  */
+    u8	usrdata_4;	/* Bits 7:0 of user data.  */
 };
 
 struct tx_dma_mbox {
-	u64	tx_dma_pre_st;
-	u64	tx_cs;
-	u64	tx_ring_kick;
-	u64	tx_ring_hdl;
-	u64	resv1;
-	u32	tx_rng_err_logl;
-	u32	tx_rng_err_logh;
-	u64	resv2;
-	u64	resv3;
+    u64	tx_dma_pre_st;
+    u64	tx_cs;
+    u64	tx_ring_kick;
+    u64	tx_ring_hdl;
+    u64	resv1;
+    u32	tx_rng_err_logl;
+    u32	tx_rng_err_logh;
+    u64	resv2;
+    u64	resv3;
 };
 
 struct tx_pkt_hdr {
-	__le64	flags;
+    __le64	flags;
 #define TXHDR_PAD		0x0000000000000007ULL
 #define  TXHDR_PAD_SHIFT	0
 #define TXHDR_LEN		0x000000003fff0000ULL
@@ -2818,7 +2818,7 @@ struct tx_pkt_hdr {
 #define TXHDR_CSUM_TCP		0x4000000000000000ULL
 #define TXHDR_CSUM_UDP		0x8000000000000000ULL
 #define TXHDR_CSUM_SCTP		0xc000000000000000ULL
-	__le64	resv;
+    __le64	resv;
 };
 
 #define TX_DESC_SOP		0x8000000000000000ULL
@@ -2831,69 +2831,68 @@ struct tx_pkt_hdr {
 #define TX_DESC_SAD_SHIFT	0
 
 struct tx_buff_info {
-	struct sk_buff *skb;
-	u64 mapping;
+    struct sk_buff *skb;
+    u64 mapping;
 };
 
 struct txdma_mailbox {
-	__le64	tx_dma_pre_st;
-	__le64	tx_cs;
-	__le64	tx_ring_kick;
-	__le64	tx_ring_hdl;
-	__le64	resv1;
-	__le32	tx_rng_err_logl;
-	__le32	tx_rng_err_logh;
-	__le64	resv2[2];
+    __le64	tx_dma_pre_st;
+    __le64	tx_cs;
+    __le64	tx_ring_kick;
+    __le64	tx_ring_hdl;
+    __le64	resv1;
+    __le32	tx_rng_err_logl;
+    __le32	tx_rng_err_logh;
+    __le64	resv2[2];
 } __attribute__((aligned(64)));
 
 #define MAX_TX_RING_SIZE	256
 #define MAX_TX_DESC_LEN		4076
 
 struct tx_ring_info {
-	struct tx_buff_info	tx_buffs[MAX_TX_RING_SIZE];
-	struct niu		*np;
-	u64			tx_cs;
-	int			pending;
-	int			prod;
-	int			cons;
-	int			wrap_bit;
-	u16			last_pkt_cnt;
-	u16			tx_channel;
-	u16			mark_counter;
-	u16			mark_freq;
-	u16			mark_pending;
-	u16			__pad;
-	struct txdma_mailbox	*mbox;
-	__le64			*descr;
+    struct tx_buff_info	tx_buffs[MAX_TX_RING_SIZE];
+    struct niu		*np;
+    u64			tx_cs;
+    int			pending;
+    int			prod;
+    int			cons;
+    int			wrap_bit;
+    u16			last_pkt_cnt;
+    u16			tx_channel;
+    u16			mark_counter;
+    u16			mark_freq;
+    u16			mark_pending;
+    u16			__pad;
+    struct txdma_mailbox	*mbox;
+    __le64			*descr;
 
-	u64			tx_packets;
-	u64			tx_bytes;
-	u64			tx_errors;
+    u64			tx_packets;
+    u64			tx_bytes;
+    u64			tx_errors;
 
-	u64			mbox_dma;
-	u64			descr_dma;
-	int			max_burst;
+    u64			mbox_dma;
+    u64			descr_dma;
+    int			max_burst;
 };
 
 #define NEXT_TX(tp, index) \
 	(((index) + 1) < (tp)->pending ? ((index) + 1) : 0)
 
-static inline u32 niu_tx_avail(struct tx_ring_info *tp)
-{
-	return (tp->pending -
-		((tp->prod - tp->cons) & (MAX_TX_RING_SIZE - 1)));
+static inline u32 niu_tx_avail(struct tx_ring_info *tp) {
+    return (tp->pending -
+            ((tp->prod - tp->cons) & (MAX_TX_RING_SIZE - 1)));
 }
 
 struct rxdma_mailbox {
-	__le64	rx_dma_ctl_stat;
-	__le64	rbr_stat;
-	__le32	rbr_hdl;
-	__le32	rbr_hdh;
-	__le64	resv1;
-	__le32	rcrstat_c;
-	__le32	rcrstat_b;
-	__le64	rcrstat_a;
-	__le64	resv2[2];
+    __le64	rx_dma_ctl_stat;
+    __le64	rbr_stat;
+    __le32	rbr_hdl;
+    __le32	rbr_hdh;
+    __le64	resv1;
+    __le32	rcrstat_c;
+    __le32	rcrstat_b;
+    __le64	rcrstat_a;
+    __le64	resv2[2];
 } __attribute__((aligned(64)));
 
 #define MAX_RBR_RING_SIZE	128
@@ -2904,42 +2903,42 @@ struct rxdma_mailbox {
 #define RX_SKB_ALLOC_SIZE	128 + NET_IP_ALIGN
 
 struct rx_ring_info {
-	struct niu		*np;
-	int			rx_channel;
-	u16			rbr_block_size;
-	u16			rbr_blocks_per_page;
-	u16			rbr_sizes[4];
-	unsigned int		rcr_index;
-	unsigned int		rcr_table_size;
-	unsigned int		rbr_index;
-	unsigned int		rbr_pending;
-	unsigned int		rbr_refill_pending;
-	unsigned int		rbr_kick_thresh;
-	unsigned int		rbr_table_size;
-	struct page		**rxhash;
-	struct rxdma_mailbox	*mbox;
-	__le64			*rcr;
-	__le32			*rbr;
+    struct niu		*np;
+    int			rx_channel;
+    u16			rbr_block_size;
+    u16			rbr_blocks_per_page;
+    u16			rbr_sizes[4];
+    unsigned int		rcr_index;
+    unsigned int		rcr_table_size;
+    unsigned int		rbr_index;
+    unsigned int		rbr_pending;
+    unsigned int		rbr_refill_pending;
+    unsigned int		rbr_kick_thresh;
+    unsigned int		rbr_table_size;
+    struct page		**rxhash;
+    struct rxdma_mailbox	*mbox;
+    __le64			*rcr;
+    __le32			*rbr;
 #define RBR_DESCR_ADDR_SHIFT	12
 
-	u64			rx_packets;
-	u64			rx_bytes;
-	u64			rx_dropped;
-	u64			rx_errors;
+    u64			rx_packets;
+    u64			rx_bytes;
+    u64			rx_dropped;
+    u64			rx_errors;
 
-	u64			mbox_dma;
-	u64			rcr_dma;
-	u64			rbr_dma;
+    u64			mbox_dma;
+    u64			rcr_dma;
+    u64			rbr_dma;
 
-	/* WRED */
-	int			nonsyn_window;
-	int			nonsyn_threshold;
-	int			syn_window;
-	int			syn_threshold;
+    /* WRED */
+    int			nonsyn_window;
+    int			nonsyn_threshold;
+    int			syn_window;
+    int			syn_threshold;
 
-	/* interrupt mitigation */
-	int			rcr_pkt_threshold;
-	int			rcr_timeout;
+    /* interrupt mitigation */
+    int			rcr_pkt_threshold;
+    int			rcr_timeout;
 };
 
 #define NEXT_RCR(rp, index) \
@@ -2981,52 +2980,52 @@ struct rx_ring_info {
 #define NIU_VPD_PHY_TYPE_MAX	8
 
 struct niu_vpd {
-	char			model[NIU_VPD_MODEL_MAX];
-	char			board_model[NIU_VPD_BD_MODEL_MAX];
-	char			version[NIU_VPD_VERSION_MAX];
-	char			phy_type[NIU_VPD_PHY_TYPE_MAX];
-	u8			mac_num;
-	u8			__pad;
-	u8			local_mac[6];
-	int			fcode_major;
-	int			fcode_minor;
+    char			model[NIU_VPD_MODEL_MAX];
+    char			board_model[NIU_VPD_BD_MODEL_MAX];
+    char			version[NIU_VPD_VERSION_MAX];
+    char			phy_type[NIU_VPD_PHY_TYPE_MAX];
+    u8			mac_num;
+    u8			__pad;
+    u8			local_mac[6];
+    int			fcode_major;
+    int			fcode_minor;
 };
 
 struct niu_altmac_rdc {
-	u8			alt_mac_num;
-	u8			rdc_num;
-	u8			mac_pref;
+    u8			alt_mac_num;
+    u8			rdc_num;
+    u8			mac_pref;
 };
 
 struct niu_vlan_rdc {
-	u8			rdc_num;
-	u8			vlan_pref;
+    u8			rdc_num;
+    u8			vlan_pref;
 };
 
 struct niu_classifier {
-	struct niu_altmac_rdc	alt_mac_mappings[16];
-	struct niu_vlan_rdc	vlan_mappings[ENET_VLAN_TBL_NUM_ENTRIES];
+    struct niu_altmac_rdc	alt_mac_mappings[16];
+    struct niu_vlan_rdc	vlan_mappings[ENET_VLAN_TBL_NUM_ENTRIES];
 
-	u16			tcam_top;
-	u16			tcam_sz;
-	u16			tcam_valid_entries;
-	u16			num_alt_mac_mappings;
+    u16			tcam_top;
+    u16			tcam_sz;
+    u16			tcam_valid_entries;
+    u16			num_alt_mac_mappings;
 
-	u32			h1_init;
-	u16			h2_init;
+    u32			h1_init;
+    u16			h2_init;
 };
 
 #define NIU_NUM_RDC_TABLES	8
 #define NIU_RDC_TABLE_SLOTS	16
 
 struct rdc_table {
-	u8			rxdma_channel[NIU_RDC_TABLE_SLOTS];
+    u8			rxdma_channel[NIU_RDC_TABLE_SLOTS];
 };
 
 struct niu_rdc_tables {
-	struct rdc_table	tables[NIU_NUM_RDC_TABLES];
-	int			first_table_num;
-	int			num_tables;
+    struct rdc_table	tables[NIU_NUM_RDC_TABLES];
+    int			first_table_num;
+    int			num_tables;
 };
 
 #define PHY_TYPE_PMA_PMD	0
@@ -3035,65 +3034,65 @@ struct niu_rdc_tables {
 #define PHY_TYPE_MAX		3
 
 struct phy_probe_info {
-	u32	phy_id[PHY_TYPE_MAX][NIU_MAX_PORTS];
-	u8	phy_port[PHY_TYPE_MAX][NIU_MAX_PORTS];
-	u8	cur[PHY_TYPE_MAX];
+    u32	phy_id[PHY_TYPE_MAX][NIU_MAX_PORTS];
+    u8	phy_port[PHY_TYPE_MAX][NIU_MAX_PORTS];
+    u8	cur[PHY_TYPE_MAX];
 
-	struct device_attribute	phy_port_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
-	struct device_attribute	phy_type_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
-	struct device_attribute	phy_id_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
+    struct device_attribute	phy_port_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
+    struct device_attribute	phy_type_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
+    struct device_attribute	phy_id_attrs[PHY_TYPE_MAX * NIU_MAX_PORTS];
 };
 
 struct niu_tcam_entry {
-	u8			valid;
-	u64			key[4];
-	u64			key_mask[4];
-	u64			assoc_data;
+    u8			valid;
+    u64			key[4];
+    u64			key_mask[4];
+    u64			assoc_data;
 };
 
 struct device_node;
 union niu_parent_id {
-	struct {
-		int		domain;
-		int		bus;
-		int		device;
-	} pci;
-	struct device_node	*of;
+    struct {
+        int		domain;
+        int		bus;
+        int		device;
+    } pci;
+    struct device_node	*of;
 };
 
 struct niu;
 struct niu_parent {
-	struct platform_device	*plat_dev;
-	int			index;
+    struct platform_device	*plat_dev;
+    int			index;
 
-	union niu_parent_id	id;
+    union niu_parent_id	id;
 
-	struct niu		*ports[NIU_MAX_PORTS];
+    struct niu		*ports[NIU_MAX_PORTS];
 
-	atomic_t		refcnt;
-	struct list_head	list;
+    atomic_t		refcnt;
+    struct list_head	list;
 
-	spinlock_t		lock;
+    spinlock_t		lock;
 
-	u32			flags;
+    u32			flags;
 #define PARENT_FLGS_CLS_HWINIT	0x00000001
 
-	u32			port_phy;
+    u32			port_phy;
 #define PORT_PHY_UNKNOWN	0x00000000
 #define PORT_PHY_INVALID	0xffffffff
 #define PORT_TYPE_10G		0x01
 #define PORT_TYPE_1G		0x02
 #define PORT_TYPE_MASK		0x03
 
-	u8			rxchan_per_port[NIU_MAX_PORTS];
-	u8			txchan_per_port[NIU_MAX_PORTS];
+    u8			rxchan_per_port[NIU_MAX_PORTS];
+    u8			txchan_per_port[NIU_MAX_PORTS];
 
-	struct niu_rdc_tables	rdc_group_cfg[NIU_MAX_PORTS];
-	u8			rdc_default[NIU_MAX_PORTS];
+    struct niu_rdc_tables	rdc_group_cfg[NIU_MAX_PORTS];
+    u8			rdc_default[NIU_MAX_PORTS];
 
-	u8			ldg_map[LDN_MAX + 1];
+    u8			ldg_map[LDN_MAX + 1];
 
-	u8			plat_type;
+    u8			plat_type;
 #define PLAT_TYPE_INVALID	0x00
 #define PLAT_TYPE_ATLAS		0x01
 #define PLAT_TYPE_NIU		0x02
@@ -3101,150 +3100,150 @@ struct niu_parent {
 #define PLAT_TYPE_VF_P1		0x04
 #define PLAT_TYPE_ATCA_CP3220	0x08
 
-	u8			num_ports;
+    u8			num_ports;
 
-	u16			tcam_num_entries;
+    u16			tcam_num_entries;
 #define NIU_PCI_TCAM_ENTRIES	256
 #define NIU_NONPCI_TCAM_ENTRIES	128
 #define NIU_TCAM_ENTRIES_MAX	256
 
-	int			rxdma_clock_divider;
+    int			rxdma_clock_divider;
 
-	struct phy_probe_info	phy_probe_info;
+    struct phy_probe_info	phy_probe_info;
 
-	struct niu_tcam_entry	tcam[NIU_TCAM_ENTRIES_MAX];
+    struct niu_tcam_entry	tcam[NIU_TCAM_ENTRIES_MAX];
 
 #define	NIU_L2_PROG_CLS		2
 #define	NIU_L3_PROG_CLS		4
-	u64			l2_cls[NIU_L2_PROG_CLS];
-	u64			l3_cls[NIU_L3_PROG_CLS];
-	u64			tcam_key[12];
-	u64			flow_key[12];
-	u16			l3_cls_refcnt[NIU_L3_PROG_CLS];
-	u8			l3_cls_pid[NIU_L3_PROG_CLS];
+    u64			l2_cls[NIU_L2_PROG_CLS];
+    u64			l3_cls[NIU_L3_PROG_CLS];
+    u64			tcam_key[12];
+    u64			flow_key[12];
+    u16			l3_cls_refcnt[NIU_L3_PROG_CLS];
+    u8			l3_cls_pid[NIU_L3_PROG_CLS];
 };
 
 struct niu_ops {
-	void *(*alloc_coherent)(struct device *dev, size_t size,
-				u64 *handle, gfp_t flag);
-	void (*free_coherent)(struct device *dev, size_t size,
-			      void *cpu_addr, u64 handle);
-	u64 (*map_page)(struct device *dev, struct page *page,
-			unsigned long offset, size_t size,
-			enum dma_data_direction direction);
-	void (*unmap_page)(struct device *dev, u64 dma_address,
-			   size_t size, enum dma_data_direction direction);
-	u64 (*map_single)(struct device *dev, void *cpu_addr,
-			  size_t size,
-			  enum dma_data_direction direction);
-	void (*unmap_single)(struct device *dev, u64 dma_address,
-			     size_t size, enum dma_data_direction direction);
+    void *(*alloc_coherent)(struct device *dev, size_t size,
+                            u64 *handle, gfp_t flag);
+    void (*free_coherent)(struct device *dev, size_t size,
+                          void *cpu_addr, u64 handle);
+    u64 (*map_page)(struct device *dev, struct page *page,
+                    unsigned long offset, size_t size,
+                    enum dma_data_direction direction);
+    void (*unmap_page)(struct device *dev, u64 dma_address,
+                       size_t size, enum dma_data_direction direction);
+    u64 (*map_single)(struct device *dev, void *cpu_addr,
+                      size_t size,
+                      enum dma_data_direction direction);
+    void (*unmap_single)(struct device *dev, u64 dma_address,
+                         size_t size, enum dma_data_direction direction);
 };
 
 struct niu_link_config {
-	u32				supported;
+    u32				supported;
 
-	/* Describes what we're trying to get. */
-	u32				advertising;
-	u16				speed;
-	u8				duplex;
-	u8				autoneg;
+    /* Describes what we're trying to get. */
+    u32				advertising;
+    u16				speed;
+    u8				duplex;
+    u8				autoneg;
 
-	/* Describes what we actually have. */
-	u32				active_advertising;
-	u16				active_speed;
-	u8				active_duplex;
-	u8				active_autoneg;
+    /* Describes what we actually have. */
+    u32				active_advertising;
+    u16				active_speed;
+    u8				active_duplex;
+    u8				active_autoneg;
 #define SPEED_INVALID		0xffff
 #define DUPLEX_INVALID		0xff
 #define AUTONEG_INVALID		0xff
 
-	u8				loopback_mode;
+    u8				loopback_mode;
 #define LOOPBACK_DISABLED	0x00
 #define LOOPBACK_PHY		0x01
 #define LOOPBACK_MAC		0x02
 };
 
 struct niu_ldg {
-	struct napi_struct	napi;
-	struct niu	*np;
-	u8		ldg_num;
-	u8		timer;
-	u64		v0, v1, v2;
-	unsigned int	irq;
+    struct napi_struct	napi;
+    struct niu	*np;
+    u8		ldg_num;
+    u8		timer;
+    u64		v0, v1, v2;
+    unsigned int	irq;
 };
 
 struct niu_xmac_stats {
-	u64	tx_frames;
-	u64	tx_bytes;
-	u64	tx_fifo_errors;
-	u64	tx_overflow_errors;
-	u64	tx_max_pkt_size_errors;
-	u64	tx_underflow_errors;
+    u64	tx_frames;
+    u64	tx_bytes;
+    u64	tx_fifo_errors;
+    u64	tx_overflow_errors;
+    u64	tx_max_pkt_size_errors;
+    u64	tx_underflow_errors;
 
-	u64	rx_local_faults;
-	u64	rx_remote_faults;
-	u64	rx_link_faults;
-	u64	rx_align_errors;
-	u64	rx_frags;
-	u64	rx_mcasts;
-	u64	rx_bcasts;
-	u64	rx_hist_cnt1;
-	u64	rx_hist_cnt2;
-	u64	rx_hist_cnt3;
-	u64	rx_hist_cnt4;
-	u64	rx_hist_cnt5;
-	u64	rx_hist_cnt6;
-	u64	rx_hist_cnt7;
-	u64	rx_octets;
-	u64	rx_code_violations;
-	u64	rx_len_errors;
-	u64	rx_crc_errors;
-	u64	rx_underflows;
-	u64	rx_overflows;
+    u64	rx_local_faults;
+    u64	rx_remote_faults;
+    u64	rx_link_faults;
+    u64	rx_align_errors;
+    u64	rx_frags;
+    u64	rx_mcasts;
+    u64	rx_bcasts;
+    u64	rx_hist_cnt1;
+    u64	rx_hist_cnt2;
+    u64	rx_hist_cnt3;
+    u64	rx_hist_cnt4;
+    u64	rx_hist_cnt5;
+    u64	rx_hist_cnt6;
+    u64	rx_hist_cnt7;
+    u64	rx_octets;
+    u64	rx_code_violations;
+    u64	rx_len_errors;
+    u64	rx_crc_errors;
+    u64	rx_underflows;
+    u64	rx_overflows;
 
-	u64	pause_off_state;
-	u64	pause_on_state;
-	u64	pause_received;
+    u64	pause_off_state;
+    u64	pause_on_state;
+    u64	pause_received;
 };
 
 struct niu_bmac_stats {
-	u64	tx_underflow_errors;
-	u64	tx_max_pkt_size_errors;
-	u64	tx_bytes;
-	u64	tx_frames;
+    u64	tx_underflow_errors;
+    u64	tx_max_pkt_size_errors;
+    u64	tx_bytes;
+    u64	tx_frames;
 
-	u64	rx_overflows;
-	u64	rx_frames;
-	u64	rx_align_errors;
-	u64	rx_crc_errors;
-	u64	rx_len_errors;
+    u64	rx_overflows;
+    u64	rx_frames;
+    u64	rx_align_errors;
+    u64	rx_crc_errors;
+    u64	rx_len_errors;
 
-	u64	pause_off_state;
-	u64	pause_on_state;
-	u64	pause_received;
+    u64	pause_off_state;
+    u64	pause_on_state;
+    u64	pause_received;
 };
 
 union niu_mac_stats {
-	struct niu_xmac_stats	xmac;
-	struct niu_bmac_stats	bmac;
+    struct niu_xmac_stats	xmac;
+    struct niu_bmac_stats	bmac;
 };
 
 struct niu_phy_ops {
-	int (*serdes_init)(struct niu *np);
-	int (*xcvr_init)(struct niu *np);
-	int (*link_status)(struct niu *np, int *);
+    int (*serdes_init)(struct niu *np);
+    int (*xcvr_init)(struct niu *np);
+    int (*link_status)(struct niu *np, int *);
 };
 
 struct platform_device;
 struct niu {
-	void __iomem			*regs;
-	struct net_device		*dev;
-	struct pci_dev			*pdev;
-	struct device			*device;
-	struct niu_parent		*parent;
+    void __iomem			*regs;
+    struct net_device		*dev;
+    struct pci_dev			*pdev;
+    struct device			*device;
+    struct niu_parent		*parent;
 
-	u32				flags;
+    u32				flags;
 #define NIU_FLAGS_HOTPLUG_PHY_PRESENT	0x02000000 /* Removeable PHY detected*/
 #define NIU_FLAGS_HOTPLUG_PHY		0x01000000 /* Removeable PHY */
 #define NIU_FLAGS_VPD_VALID		0x00800000 /* VPD has valid version */
@@ -3256,51 +3255,51 @@ struct niu {
 #define NIU_FLAGS_FIBER			0x00020000 /* 0=COPPER 1=FIBER */
 #define NIU_FLAGS_XMAC			0x00010000 /* 0=BMAC 1=XMAC */
 
-	u32				msg_enable;
-	char                            irq_name[NIU_NUM_RXCHAN+NIU_NUM_TXCHAN+3][IFNAMSIZ + 6];
+    u32				msg_enable;
+    char                            irq_name[NIU_NUM_RXCHAN+NIU_NUM_TXCHAN+3][IFNAMSIZ + 6];
 
-	/* Protects hw programming, and ring state.  */
-	spinlock_t			lock;
+    /* Protects hw programming, and ring state.  */
+    spinlock_t			lock;
 
-	const struct niu_ops		*ops;
-	union niu_mac_stats		mac_stats;
+    const struct niu_ops		*ops;
+    union niu_mac_stats		mac_stats;
 
-	struct rx_ring_info		*rx_rings;
-	struct tx_ring_info		*tx_rings;
-	int				num_rx_rings;
-	int				num_tx_rings;
+    struct rx_ring_info		*rx_rings;
+    struct tx_ring_info		*tx_rings;
+    int				num_rx_rings;
+    int				num_tx_rings;
 
-	struct niu_ldg			ldg[NIU_NUM_LDG];
-	int				num_ldg;
+    struct niu_ldg			ldg[NIU_NUM_LDG];
+    int				num_ldg;
 
-	void __iomem			*mac_regs;
-	unsigned long			ipp_off;
-	unsigned long			pcs_off;
-	unsigned long			xpcs_off;
+    void __iomem			*mac_regs;
+    unsigned long			ipp_off;
+    unsigned long			pcs_off;
+    unsigned long			xpcs_off;
 
-	struct timer_list		timer;
-	u64				orig_led_state;
-	const struct niu_phy_ops	*phy_ops;
-	int				phy_addr;
+    struct timer_list		timer;
+    u64				orig_led_state;
+    const struct niu_phy_ops	*phy_ops;
+    int				phy_addr;
 
-	struct niu_link_config		link_config;
+    struct niu_link_config		link_config;
 
-	struct work_struct		reset_task;
+    struct work_struct		reset_task;
 
-	u8				port;
-	u8				mac_xcvr;
+    u8				port;
+    u8				mac_xcvr;
 #define MAC_XCVR_MII			1
 #define MAC_XCVR_PCS			2
 #define MAC_XCVR_XPCS			3
 
-	struct niu_classifier		clas;
+    struct niu_classifier		clas;
 
-	struct niu_vpd			vpd;
-	u32				eeprom_len;
+    struct niu_vpd			vpd;
+    u32				eeprom_len;
 
-	struct platform_device		*op;
-	void __iomem			*vir_regs_1;
-	void __iomem			*vir_regs_2;
+    struct platform_device		*op;
+    void __iomem			*vir_regs_1;
+    void __iomem			*vir_regs_2;
 };
 
 #endif /* _NIU_H */

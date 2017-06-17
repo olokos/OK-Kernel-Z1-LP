@@ -15,7 +15,7 @@ extern bool olpc_ofw_is_installed(void);
 	__olpc_ofw((name), ARRAY_SIZE(args), args, ARRAY_SIZE(res), res)
 
 extern int __olpc_ofw(const char *name, int nr_args, const void **args, int nr_res,
-		void **res);
+                      void **res);
 
 /* determine whether OFW is available and lives in the proper memory */
 extern void olpc_ofw_detect(void);

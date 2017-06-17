@@ -33,7 +33,7 @@
 #define IPIPE_SYNCDEFER_FLAG	15
 #define IPIPE_SYNCDEFER_MASK	(1L << IPIPE_SYNCDEFER_MASK)
 
- /* Blackfin traps -- i.e. exception vector numbers */
+/* Blackfin traps -- i.e. exception vector numbers */
 #define IPIPE_NR_FAULTS		52 /* We leave a gap after VEC_ILL_RES. */
 /* Pseudo-vectors used for kernel events */
 #define IPIPE_FIRST_EVENT	IPIPE_NR_FAULTS

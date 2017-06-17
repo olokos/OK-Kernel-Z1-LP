@@ -29,25 +29,25 @@
 
 
 enum kprobe_insn {
-	INSN_REJECTED,
-	INSN_GOOD,
-	INSN_GOOD_NO_SLOT
+    INSN_REJECTED,
+    INSN_GOOD,
+    INSN_GOOD_NO_SLOT
 };
 
 typedef enum kprobe_insn (kprobe_decode_insn_t)(kprobe_opcode_t,
-						struct arch_specific_insn *);
+        struct arch_specific_insn *);
 
 #ifdef CONFIG_THUMB2_KERNEL
 
 enum kprobe_insn thumb16_kprobe_decode_insn(kprobe_opcode_t,
-						struct arch_specific_insn *);
+        struct arch_specific_insn *);
 enum kprobe_insn thumb32_kprobe_decode_insn(kprobe_opcode_t,
-						struct arch_specific_insn *);
+        struct arch_specific_insn *);
 
 #else /* !CONFIG_THUMB2_KERNEL */
 
 enum kprobe_insn arm_kprobe_decode_insn(kprobe_opcode_t,
-					struct arch_specific_insn *);
+                                        struct arch_specific_insn *);
 #endif
 
 void __init arm_kprobe_decode_init(void);
@@ -77,36 +77,34 @@ void __init find_str_pc_offset(void);
  *	ITSTATE<1:0> are in CPSR<26:25>
  *	ITSTATE<7:2> are in CPSR<15:10>
  */
-static inline unsigned long it_advance(unsigned long cpsr)
-	{
-	if ((cpsr & 0x06000400) == 0) {
-		/* ITSTATE<2:0> == 0 means end of IT block, so clear IT state */
-		cpsr &= ~PSR_IT_MASK;
-	} else {
-		/* We need to shift left ITSTATE<4:0> */
-		const unsigned long mask = 0x06001c00;  /* Mask ITSTATE<4:0> */
-		unsigned long it = cpsr & mask;
-		it <<= 1;
-		it |= it >> (27 - 10);  /* Carry ITSTATE<2> to correct place */
-		it &= mask;
-		cpsr &= ~mask;
-		cpsr |= it;
-	}
-	return cpsr;
+static inline unsigned long it_advance(unsigned long cpsr) {
+    if ((cpsr & 0x06000400) == 0) {
+        /* ITSTATE<2:0> == 0 means end of IT block, so clear IT state */
+        cpsr &= ~PSR_IT_MASK;
+    } else {
+        /* We need to shift left ITSTATE<4:0> */
+        const unsigned long mask = 0x06001c00;  /* Mask ITSTATE<4:0> */
+        unsigned long it = cpsr & mask;
+        it <<= 1;
+        it |= it >> (27 - 10);  /* Carry ITSTATE<2> to correct place */
+        it &= mask;
+        cpsr &= ~mask;
+        cpsr |= it;
+    }
+    return cpsr;
 }
 
-static inline void __kprobes bx_write_pc(long pcv, struct pt_regs *regs)
-{
-	long cpsr = regs->ARM_cpsr;
-	if (pcv & 0x1) {
-		cpsr |= PSR_T_BIT;
-		pcv &= ~0x1;
-	} else {
-		cpsr &= ~PSR_T_BIT;
-		pcv &= ~0x2;	/* Avoid UNPREDICTABLE address allignment */
-	}
-	regs->ARM_cpsr = cpsr;
-	regs->ARM_pc = pcv;
+static inline void __kprobes bx_write_pc(long pcv, struct pt_regs *regs) {
+    long cpsr = regs->ARM_cpsr;
+    if (pcv & 0x1) {
+        cpsr |= PSR_T_BIT;
+        pcv &= ~0x1;
+    } else {
+        cpsr &= ~PSR_T_BIT;
+        pcv &= ~0x2;	/* Avoid UNPREDICTABLE address allignment */
+    }
+    regs->ARM_cpsr = cpsr;
+    regs->ARM_pc = pcv;
 }
 
 
@@ -124,12 +122,11 @@ void __init test_load_write_pc_interworking(void);
 
 #endif
 
-static inline void __kprobes load_write_pc(long pcv, struct pt_regs *regs)
-{
-	if (load_write_pc_interworks)
-		bx_write_pc(pcv, regs);
-	else
-		regs->ARM_pc = pcv;
+static inline void __kprobes load_write_pc(long pcv, struct pt_regs *regs) {
+    if (load_write_pc_interworks)
+        bx_write_pc(pcv, regs);
+    else
+        regs->ARM_pc = pcv;
 }
 
 
@@ -152,12 +149,11 @@ void __init test_alu_write_pc_interworking(void);
 
 #endif /* __LINUX_ARM_ARCH__ == 6 */
 
-static inline void __kprobes alu_write_pc(long pcv, struct pt_regs *regs)
-{
-	if (alu_write_pc_interworks)
-		bx_write_pc(pcv, regs);
-	else
-		regs->ARM_pc = pcv;
+static inline void __kprobes alu_write_pc(long pcv, struct pt_regs *regs) {
+    if (alu_write_pc_interworks)
+        bx_write_pc(pcv, regs);
+    else
+        regs->ARM_pc = pcv;
 }
 
 
@@ -285,39 +281,39 @@ kprobe_decode_ldmstm(kprobe_opcode_t insn, struct arch_specific_insn *asi);
  */
 
 enum decode_type {
-	DECODE_TYPE_END,
-	DECODE_TYPE_TABLE,
-	DECODE_TYPE_CUSTOM,
-	DECODE_TYPE_SIMULATE,
-	DECODE_TYPE_EMULATE,
-	DECODE_TYPE_OR,
-	DECODE_TYPE_REJECT,
-	NUM_DECODE_TYPES /* Must be last enum */
+    DECODE_TYPE_END,
+    DECODE_TYPE_TABLE,
+    DECODE_TYPE_CUSTOM,
+    DECODE_TYPE_SIMULATE,
+    DECODE_TYPE_EMULATE,
+    DECODE_TYPE_OR,
+    DECODE_TYPE_REJECT,
+    NUM_DECODE_TYPES /* Must be last enum */
 };
 
 #define DECODE_TYPE_BITS	4
 #define DECODE_TYPE_MASK	((1 << DECODE_TYPE_BITS) - 1)
 
 enum decode_reg_type {
-	REG_TYPE_NONE = 0, /* Not a register, ignore */
-	REG_TYPE_ANY,	   /* Any register allowed */
-	REG_TYPE_SAMEAS16, /* Register should be same as that at bits 19..16 */
-	REG_TYPE_SP,	   /* Register must be SP */
-	REG_TYPE_PC,	   /* Register must be PC */
-	REG_TYPE_NOSP,	   /* Register must not be SP */
-	REG_TYPE_NOSPPC,   /* Register must not be SP or PC */
-	REG_TYPE_NOPC,	   /* Register must not be PC */
-	REG_TYPE_NOPCWB,   /* No PC if load/store write-back flag also set */
+    REG_TYPE_NONE = 0, /* Not a register, ignore */
+    REG_TYPE_ANY,	   /* Any register allowed */
+    REG_TYPE_SAMEAS16, /* Register should be same as that at bits 19..16 */
+    REG_TYPE_SP,	   /* Register must be SP */
+    REG_TYPE_PC,	   /* Register must be PC */
+    REG_TYPE_NOSP,	   /* Register must not be SP */
+    REG_TYPE_NOSPPC,   /* Register must not be SP or PC */
+    REG_TYPE_NOPC,	   /* Register must not be PC */
+    REG_TYPE_NOPCWB,   /* No PC if load/store write-back flag also set */
 
-	/* The following types are used when the encoding for PC indicates
-	 * another instruction form. This distiction only matters for test
-	 * case coverage checks.
-	 */
-	REG_TYPE_NOPCX,	   /* Register must not be PC */
-	REG_TYPE_NOSPPCX,  /* Register must not be SP or PC */
+    /* The following types are used when the encoding for PC indicates
+     * another instruction form. This distiction only matters for test
+     * case coverage checks.
+     */
+    REG_TYPE_NOPCX,	   /* Register must not be PC */
+    REG_TYPE_NOSPPCX,  /* Register must not be SP or PC */
 
-	/* Alias to allow '0' arg to be used in REGS macro. */
-	REG_TYPE_0 = REG_TYPE_NONE
+    /* Alias to allow '0' arg to be used in REGS macro. */
+    REG_TYPE_0 = REG_TYPE_NONE
 };
 
 #define REGS(r16, r12, r8, r4, r0)	\
@@ -328,10 +324,10 @@ enum decode_reg_type {
 	(REG_TYPE_##r0)
 
 union decode_item {
-	u32			bits;
-	const union decode_item	*table;
-	kprobe_insn_handler_t	*handler;
-	kprobe_decode_insn_t	*decoder;
+    u32			bits;
+    const union decode_item	*table;
+    kprobe_insn_handler_t	*handler;
+    kprobe_decode_insn_t	*decoder;
 };
 
 
@@ -340,9 +336,9 @@ union decode_item {
 
 
 struct decode_header {
-	union decode_item	type_regs;
-	union decode_item	mask;
-	union decode_item	value;
+    union decode_item	type_regs;
+    union decode_item	mask;
+    union decode_item	value;
 };
 
 #define DECODE_HEADER(_type, _mask, _value, _regs)		\
@@ -352,8 +348,8 @@ struct decode_header {
 
 
 struct decode_table {
-	struct decode_header	header;
-	union decode_item	table;
+    struct decode_header	header;
+    union decode_item	table;
 };
 
 #define DECODE_TABLE(_mask, _value, _table)			\
@@ -362,8 +358,8 @@ struct decode_table {
 
 
 struct decode_custom {
-	struct decode_header	header;
-	union decode_item	decoder;
+    struct decode_header	header;
+    union decode_item	decoder;
 };
 
 #define DECODE_CUSTOM(_mask, _value, _decoder)			\
@@ -372,8 +368,8 @@ struct decode_custom {
 
 
 struct decode_simulate {
-	struct decode_header	header;
-	union decode_item	handler;
+    struct decode_header	header;
+    union decode_item	handler;
 };
 
 #define DECODE_SIMULATEX(_mask, _value, _handler, _regs)		\
@@ -385,8 +381,8 @@ struct decode_simulate {
 
 
 struct decode_emulate {
-	struct decode_header	header;
-	union decode_item	handler;
+    struct decode_header	header;
+    union decode_item	handler;
 };
 
 #define DECODE_EMULATEX(_mask, _value, _handler, _regs)			\
@@ -398,7 +394,7 @@ struct decode_emulate {
 
 
 struct decode_or {
-	struct decode_header	header;
+    struct decode_header	header;
 };
 
 #define DECODE_OR(_mask, _value)				\
@@ -406,7 +402,7 @@ struct decode_or {
 
 
 struct decode_reject {
-	struct decode_header	header;
+    struct decode_header	header;
 };
 
 #define DECODE_REJECT(_mask, _value)				\
@@ -422,7 +418,7 @@ extern const union decode_item kprobe_decode_arm_table[];
 
 
 int kprobe_decode_insn(kprobe_opcode_t insn, struct arch_specific_insn *asi,
-			const union decode_item *table, bool thumb16);
+                       const union decode_item *table, bool thumb16);
 
 
 #endif /* _ARM_KERNEL_KPROBES_H */

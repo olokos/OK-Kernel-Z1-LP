@@ -13,8 +13,7 @@
 
 #include <asm/processor.h>
 
-static inline void __init check_bugs(void)
-{
+static inline void __init check_bugs(void) {
 }
 
 #endif /* _ASM_BUGS_H */

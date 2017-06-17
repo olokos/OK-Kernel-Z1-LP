@@ -84,31 +84,27 @@
 
 #endif
 
-static inline void reg32_modify_and(volatile uint32_t *reg, uint32_t value)
-{
-	REG_LOCAL_IRQ_SAVE;
-	*reg &= value;
-	REG_LOCAL_IRQ_RESTORE;
+static inline void reg32_modify_and(volatile uint32_t *reg, uint32_t value) {
+    REG_LOCAL_IRQ_SAVE;
+    *reg &= value;
+    REG_LOCAL_IRQ_RESTORE;
 }
 
-static inline void reg32_modify_or(volatile uint32_t *reg, uint32_t value)
-{
-	REG_LOCAL_IRQ_SAVE;
-	*reg |= value;
-	REG_LOCAL_IRQ_RESTORE;
+static inline void reg32_modify_or(volatile uint32_t *reg, uint32_t value) {
+    REG_LOCAL_IRQ_SAVE;
+    *reg |= value;
+    REG_LOCAL_IRQ_RESTORE;
 }
 
 static inline void reg32_modify_mask(volatile uint32_t *reg, uint32_t mask,
-				     uint32_t value)
-{
-	REG_LOCAL_IRQ_SAVE;
-	*reg = (*reg & mask) | value;
-	REG_LOCAL_IRQ_RESTORE;
+                                     uint32_t value) {
+    REG_LOCAL_IRQ_SAVE;
+    *reg = (*reg & mask) | value;
+    REG_LOCAL_IRQ_RESTORE;
 }
 
-static inline void reg32_write(volatile uint32_t *reg, uint32_t value)
-{
-	*reg = value;
+static inline void reg32_write(volatile uint32_t *reg, uint32_t value) {
+    *reg = value;
 }
 
 #endif /* CSP_REG_H */

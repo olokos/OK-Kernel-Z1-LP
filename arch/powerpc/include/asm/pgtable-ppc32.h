@@ -139,15 +139,15 @@ extern int icache_44x_need_flush;
  * table entry.  flush_hash_pages is assembler (for speed) in hashtable.S.
  */
 extern int flush_hash_pages(unsigned context, unsigned long va,
-			    unsigned long pmdval, int count);
+                            unsigned long pmdval, int count);
 
 /* Add an HPTE to the hash table */
 extern void add_hash_page(unsigned context, unsigned long va,
-			  unsigned long pmdval);
+                          unsigned long pmdval);
 
 /* Flush an entry from the TLB/hash table */
 extern void flush_hash_entry(struct mm_struct *mm, pte_t *ptep,
-			     unsigned long address);
+                             unsigned long address);
 
 /*
  * PTE updates. This function is called whenever an existing
@@ -166,63 +166,61 @@ extern void flush_hash_entry(struct mm_struct *mm, pte_t *ptep,
  */
 #ifndef CONFIG_PTE_64BIT
 static inline unsigned long pte_update(pte_t *p,
-				       unsigned long clr,
-				       unsigned long set)
-{
+                                       unsigned long clr,
+                                       unsigned long set) {
 #ifdef PTE_ATOMIC_UPDATES
-	unsigned long old, tmp;
+    unsigned long old, tmp;
 
-	__asm__ __volatile__("\
+    __asm__ __volatile__("\
 1:	lwarx	%0,0,%3\n\
 	andc	%1,%0,%4\n\
 	or	%1,%1,%5\n"
-	PPC405_ERR77(0,%3)
-"	stwcx.	%1,0,%3\n\
+                         PPC405_ERR77(0,%3)
+                         "	stwcx.	%1,0,%3\n\
 	bne-	1b"
-	: "=&r" (old), "=&r" (tmp), "=m" (*p)
-	: "r" (p), "r" (clr), "r" (set), "m" (*p)
-	: "cc" );
+                         : "=&r" (old), "=&r" (tmp), "=m" (*p)
+                         : "r" (p), "r" (clr), "r" (set), "m" (*p)
+                         : "cc" );
 #else /* PTE_ATOMIC_UPDATES */
-	unsigned long old = pte_val(*p);
-	*p = __pte((old & ~clr) | set);
+    unsigned long old = pte_val(*p);
+    *p = __pte((old & ~clr) | set);
 #endif /* !PTE_ATOMIC_UPDATES */
 
 #ifdef CONFIG_44x
-	if ((old & _PAGE_USER) && (old & _PAGE_EXEC))
-		icache_44x_need_flush = 1;
+    if ((old & _PAGE_USER) && (old & _PAGE_EXEC))
+        icache_44x_need_flush = 1;
 #endif
-	return old;
+    return old;
 }
 #else /* CONFIG_PTE_64BIT */
 static inline unsigned long long pte_update(pte_t *p,
-					    unsigned long clr,
-					    unsigned long set)
-{
+        unsigned long clr,
+        unsigned long set) {
 #ifdef PTE_ATOMIC_UPDATES
-	unsigned long long old;
-	unsigned long tmp;
+    unsigned long long old;
+    unsigned long tmp;
 
-	__asm__ __volatile__("\
+    __asm__ __volatile__("\
 1:	lwarx	%L0,0,%4\n\
 	lwzx	%0,0,%3\n\
 	andc	%1,%L0,%5\n\
 	or	%1,%1,%6\n"
-	PPC405_ERR77(0,%3)
-"	stwcx.	%1,0,%4\n\
+                         PPC405_ERR77(0,%3)
+                         "	stwcx.	%1,0,%4\n\
 	bne-	1b"
-	: "=&r" (old), "=&r" (tmp), "=m" (*p)
-	: "r" (p), "r" ((unsigned long)(p) + 4), "r" (clr), "r" (set), "m" (*p)
-	: "cc" );
+                         : "=&r" (old), "=&r" (tmp), "=m" (*p)
+                         : "r" (p), "r" ((unsigned long)(p) + 4), "r" (clr), "r" (set), "m" (*p)
+                         : "cc" );
 #else /* PTE_ATOMIC_UPDATES */
-	unsigned long long old = pte_val(*p);
-	*p = __pte((old & ~(unsigned long long)clr) | set);
+    unsigned long long old = pte_val(*p);
+    *p = __pte((old & ~(unsigned long long)clr) | set);
 #endif /* !PTE_ATOMIC_UPDATES */
 
 #ifdef CONFIG_44x
-	if ((old & _PAGE_USER) && (old & _PAGE_EXEC))
-		icache_44x_need_flush = 1;
+    if ((old & _PAGE_USER) && (old & _PAGE_EXEC))
+        icache_44x_need_flush = 1;
 #endif
-	return old;
+    return old;
 }
 #endif /* CONFIG_PTE_64BIT */
 
@@ -231,46 +229,41 @@ static inline unsigned long long pte_update(pte_t *p,
  * for our hash-based implementation, we fix that up here.
  */
 #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
-static inline int __ptep_test_and_clear_young(unsigned int context, unsigned long addr, pte_t *ptep)
-{
-	unsigned long old;
-	old = pte_update(ptep, _PAGE_ACCESSED, 0);
+static inline int __ptep_test_and_clear_young(unsigned int context, unsigned long addr, pte_t *ptep) {
+    unsigned long old;
+    old = pte_update(ptep, _PAGE_ACCESSED, 0);
 #if _PAGE_HASHPTE != 0
-	if (old & _PAGE_HASHPTE) {
-		unsigned long ptephys = __pa(ptep) & PAGE_MASK;
-		flush_hash_pages(context, addr, ptephys, 1);
-	}
+    if (old & _PAGE_HASHPTE) {
+        unsigned long ptephys = __pa(ptep) & PAGE_MASK;
+        flush_hash_pages(context, addr, ptephys, 1);
+    }
 #endif
-	return (old & _PAGE_ACCESSED) != 0;
+    return (old & _PAGE_ACCESSED) != 0;
 }
 #define ptep_test_and_clear_young(__vma, __addr, __ptep) \
 	__ptep_test_and_clear_young((__vma)->vm_mm->context.id, __addr, __ptep)
 
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr,
-				       pte_t *ptep)
-{
-	return __pte(pte_update(ptep, ~_PAGE_HASHPTE, 0));
+                                       pte_t *ptep) {
+    return __pte(pte_update(ptep, ~_PAGE_HASHPTE, 0));
 }
 
 #define __HAVE_ARCH_PTEP_SET_WRPROTECT
 static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr,
-				      pte_t *ptep)
-{
-	pte_update(ptep, (_PAGE_RW | _PAGE_HWWRITE), 0);
+                                      pte_t *ptep) {
+    pte_update(ptep, (_PAGE_RW | _PAGE_HWWRITE), 0);
 }
 static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
-					   unsigned long addr, pte_t *ptep)
-{
-	ptep_set_wrprotect(mm, addr, ptep);
+        unsigned long addr, pte_t *ptep) {
+    ptep_set_wrprotect(mm, addr, ptep);
 }
 
 
-static inline void __ptep_set_access_flags(pte_t *ptep, pte_t entry)
-{
-	unsigned long bits = pte_val(entry) &
-		(_PAGE_DIRTY | _PAGE_ACCESSED | _PAGE_RW | _PAGE_EXEC);
-	pte_update(ptep, 0, bits);
+static inline void __ptep_set_access_flags(pte_t *ptep, pte_t entry) {
+    unsigned long bits = pte_val(entry) &
+                         (_PAGE_DIRTY | _PAGE_ACCESSED | _PAGE_RW | _PAGE_EXEC);
+    pte_update(ptep, 0, bits);
 }
 
 #define __HAVE_ARCH_PTE_SAME
@@ -334,7 +327,7 @@ static inline void __ptep_set_access_flags(pte_t *ptep, pte_t entry)
 #define pgtable_cache_init()	do { } while (0)
 
 extern int get_pteptr(struct mm_struct *mm, unsigned long addr, pte_t **ptep,
-		      pmd_t **pmdp);
+                      pmd_t **pmdp);
 
 #endif /* !__ASSEMBLY__ */
 

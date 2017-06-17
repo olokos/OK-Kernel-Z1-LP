@@ -38,27 +38,24 @@
 /* How big is a kernel L2 page table? */
 #define L2_KERNEL_PGTABLE_SIZE (1 << L2_KERNEL_PGTABLE_SHIFT)
 
-static inline void set_pmd(pmd_t *pmdp, pmd_t pmd)
-{
+static inline void set_pmd(pmd_t *pmdp, pmd_t pmd) {
 #ifdef CONFIG_64BIT
-	set_pte(pmdp, pmd);
+    set_pte(pmdp, pmd);
 #else
-	set_pte(&pmdp->pud.pgd, pmd.pud.pgd);
+    set_pte(&pmdp->pud.pgd, pmd.pud.pgd);
 #endif
 }
 
 static inline void pmd_populate_kernel(struct mm_struct *mm,
-				       pmd_t *pmd, pte_t *ptep)
-{
-	set_pmd(pmd, ptfn_pmd(__pa(ptep) >> HV_LOG2_PAGE_TABLE_ALIGN,
-			      __pgprot(_PAGE_PRESENT)));
+                                       pmd_t *pmd, pte_t *ptep) {
+    set_pmd(pmd, ptfn_pmd(__pa(ptep) >> HV_LOG2_PAGE_TABLE_ALIGN,
+                          __pgprot(_PAGE_PRESENT)));
 }
 
 static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
-				pgtable_t page)
-{
-	set_pmd(pmd, ptfn_pmd(HV_PFN_TO_PTFN(page_to_pfn(page)),
-			      __pgprot(_PAGE_PRESENT)));
+                                pgtable_t page) {
+    set_pmd(pmd, ptfn_pmd(HV_PFN_TO_PTFN(page_to_pfn(page)),
+                          __pgprot(_PAGE_PRESENT)));
 }
 
 /*
@@ -74,19 +71,17 @@ extern void pte_free(struct mm_struct *mm, struct page *pte);
 #define pmd_pgtable(pmd) pmd_page(pmd)
 
 static inline pte_t *
-pte_alloc_one_kernel(struct mm_struct *mm, unsigned long address)
-{
-	return pfn_to_kaddr(page_to_pfn(pte_alloc_one(mm, address)));
+pte_alloc_one_kernel(struct mm_struct *mm, unsigned long address) {
+    return pfn_to_kaddr(page_to_pfn(pte_alloc_one(mm, address)));
 }
 
-static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	BUG_ON((unsigned long)pte & (PAGE_SIZE-1));
-	pte_free(mm, virt_to_page(pte));
+static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    BUG_ON((unsigned long)pte & (PAGE_SIZE-1));
+    pte_free(mm, virt_to_page(pte));
 }
 
 extern void __pte_free_tlb(struct mmu_gather *tlb, struct page *pte,
-			   unsigned long address);
+                           unsigned long address);
 
 #define check_pgt_cache()	do { } while (0)
 

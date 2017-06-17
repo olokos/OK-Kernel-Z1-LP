@@ -33,9 +33,8 @@ unsigned long _atomic_xor(volatile unsigned long *p, unsigned long mask);
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static inline void set_bit(unsigned nr, volatile unsigned long *addr)
-{
-	_atomic_or(addr + BIT_WORD(nr), BIT_MASK(nr));
+static inline void set_bit(unsigned nr, volatile unsigned long *addr) {
+    _atomic_or(addr + BIT_WORD(nr), BIT_MASK(nr));
 }
 
 /**
@@ -52,9 +51,8 @@ static inline void set_bit(unsigned nr, volatile unsigned long *addr)
  * locking purposes, you should call smp_mb__before_clear_bit() and/or
  * smp_mb__after_clear_bit() to ensure changes are visible on other cpus.
  */
-static inline void clear_bit(unsigned nr, volatile unsigned long *addr)
-{
-	_atomic_andn(addr + BIT_WORD(nr), BIT_MASK(nr));
+static inline void clear_bit(unsigned nr, volatile unsigned long *addr) {
+    _atomic_andn(addr + BIT_WORD(nr), BIT_MASK(nr));
 }
 
 /**
@@ -67,9 +65,8 @@ static inline void clear_bit(unsigned nr, volatile unsigned long *addr)
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static inline void change_bit(unsigned nr, volatile unsigned long *addr)
-{
-	_atomic_xor(addr + BIT_WORD(nr), BIT_MASK(nr));
+static inline void change_bit(unsigned nr, volatile unsigned long *addr) {
+    _atomic_xor(addr + BIT_WORD(nr), BIT_MASK(nr));
 }
 
 /**
@@ -80,12 +77,11 @@ static inline void change_bit(unsigned nr, volatile unsigned long *addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static inline int test_and_set_bit(unsigned nr, volatile unsigned long *addr)
-{
-	unsigned long mask = BIT_MASK(nr);
-	addr += BIT_WORD(nr);
-	smp_mb();  /* barrier for proper semantics */
-	return (_atomic_or(addr, mask) & mask) != 0;
+static inline int test_and_set_bit(unsigned nr, volatile unsigned long *addr) {
+    unsigned long mask = BIT_MASK(nr);
+    addr += BIT_WORD(nr);
+    smp_mb();  /* barrier for proper semantics */
+    return (_atomic_or(addr, mask) & mask) != 0;
 }
 
 /**
@@ -96,12 +92,11 @@ static inline int test_and_set_bit(unsigned nr, volatile unsigned long *addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static inline int test_and_clear_bit(unsigned nr, volatile unsigned long *addr)
-{
-	unsigned long mask = BIT_MASK(nr);
-	addr += BIT_WORD(nr);
-	smp_mb();  /* barrier for proper semantics */
-	return (_atomic_andn(addr, mask) & mask) != 0;
+static inline int test_and_clear_bit(unsigned nr, volatile unsigned long *addr) {
+    unsigned long mask = BIT_MASK(nr);
+    addr += BIT_WORD(nr);
+    smp_mb();  /* barrier for proper semantics */
+    return (_atomic_andn(addr, mask) & mask) != 0;
 }
 
 /**
@@ -113,12 +108,11 @@ static inline int test_and_clear_bit(unsigned nr, volatile unsigned long *addr)
  * It also implies a memory barrier.
  */
 static inline int test_and_change_bit(unsigned nr,
-				      volatile unsigned long *addr)
-{
-	unsigned long mask = BIT_MASK(nr);
-	addr += BIT_WORD(nr);
-	smp_mb();  /* barrier for proper semantics */
-	return (_atomic_xor(addr, mask) & mask) != 0;
+                                      volatile unsigned long *addr) {
+    unsigned long mask = BIT_MASK(nr);
+    addr += BIT_WORD(nr);
+    smp_mb();  /* barrier for proper semantics */
+    return (_atomic_xor(addr, mask) & mask) != 0;
 }
 
 /* See discussion at smp_mb__before_atomic_dec() in <asm/atomic_32.h>. */

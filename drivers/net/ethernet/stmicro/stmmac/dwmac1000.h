@@ -36,28 +36,28 @@
 
 #define GMAC_INT_STATUS		0x00000038	/* interrupt status register */
 enum dwmac1000_irq_status {
-	time_stamp_irq = 0x0200,
-	mmc_rx_csum_offload_irq = 0x0080,
-	mmc_tx_irq = 0x0040,
-	mmc_rx_irq = 0x0020,
-	mmc_irq = 0x0010,
-	pmt_irq = 0x0008,
-	pcs_ane_irq = 0x0004,
-	pcs_link_irq = 0x0002,
-	rgmii_irq = 0x0001,
+    time_stamp_irq = 0x0200,
+    mmc_rx_csum_offload_irq = 0x0080,
+    mmc_tx_irq = 0x0040,
+    mmc_rx_irq = 0x0020,
+    mmc_irq = 0x0010,
+    pmt_irq = 0x0008,
+    pcs_ane_irq = 0x0004,
+    pcs_link_irq = 0x0002,
+    rgmii_irq = 0x0001,
 };
 #define GMAC_INT_MASK		0x0000003c	/* interrupt mask register */
 
 /* PMT Control and Status */
 #define GMAC_PMT		0x0000002c
 enum power_event {
-	pointer_reset = 0x80000000,
-	global_unicast = 0x00000200,
-	wake_up_rx_frame = 0x00000040,
-	magic_frame = 0x00000020,
-	wake_up_frame_en = 0x00000004,
-	magic_pkt_en = 0x00000002,
-	power_down = 0x00000001,
+    pointer_reset = 0x80000000,
+    global_unicast = 0x00000200,
+    wake_up_rx_frame = 0x00000040,
+    magic_frame = 0x00000020,
+    wake_up_frame_en = 0x00000004,
+    magic_pkt_en = 0x00000002,
+    power_down = 0x00000001,
 };
 
 /* GMAC HW ADDR regs */
@@ -80,9 +80,9 @@ enum power_event {
 #define GMAC_CONTROL_BE	0x00200000	/* Frame Burst Enable */
 #define GMAC_CONTROL_JE	0x00100000	/* Jumbo frame */
 enum inter_frame_gap {
-	GMAC_CONTROL_IFG_88 = 0x00040000,
-	GMAC_CONTROL_IFG_80 = 0x00020000,
-	GMAC_CONTROL_IFG_40 = 0x000e0000,
+    GMAC_CONTROL_IFG_88 = 0x00040000,
+    GMAC_CONTROL_IFG_80 = 0x00020000,
+    GMAC_CONTROL_IFG_40 = 0x000e0000,
 };
 #define GMAC_CONTROL_DCRS	0x00010000 /* Disable carrier sense during tx */
 #define GMAC_CONTROL_PS		0x00008000 /* Port Select 0:GMI 1:MII */
@@ -133,9 +133,9 @@ enum inter_frame_gap {
 #define DMA_BUS_MODE_PBL_SHIFT	8
 
 enum rx_tx_priority_ratio {
-	double_ratio = 0x00004000,	/*2:1 */
-	triple_ratio = 0x00008000,	/*3:1 */
-	quadruple_ratio = 0x0000c000,	/*4:1 */
+    double_ratio = 0x00004000,	/*2:1 */
+    triple_ratio = 0x00008000,	/*3:1 */
+    quadruple_ratio = 0x0000c000,	/*4:1 */
 };
 
 #define DMA_BUS_MODE_FB		0x00010000	/* Fixed burst */
@@ -159,29 +159,29 @@ enum rx_tx_priority_ratio {
 #define DMA_CONTROL_DFF		0x01000000 /* Disaable flushing */
 /* Threshold for Activating the FC */
 enum rfa {
-	act_full_minus_1 = 0x00800000,
-	act_full_minus_2 = 0x00800200,
-	act_full_minus_3 = 0x00800400,
-	act_full_minus_4 = 0x00800600,
+    act_full_minus_1 = 0x00800000,
+    act_full_minus_2 = 0x00800200,
+    act_full_minus_3 = 0x00800400,
+    act_full_minus_4 = 0x00800600,
 };
 /* Threshold for Deactivating the FC */
 enum rfd {
-	deac_full_minus_1 = 0x00400000,
-	deac_full_minus_2 = 0x00400800,
-	deac_full_minus_3 = 0x00401000,
-	deac_full_minus_4 = 0x00401800,
+    deac_full_minus_1 = 0x00400000,
+    deac_full_minus_2 = 0x00400800,
+    deac_full_minus_3 = 0x00401000,
+    deac_full_minus_4 = 0x00401800,
 };
 #define DMA_CONTROL_TSF		0x00200000 /* Transmit  Store and Forward */
 
 enum ttc_control {
-	DMA_CONTROL_TTC_64 = 0x00000000,
-	DMA_CONTROL_TTC_128 = 0x00004000,
-	DMA_CONTROL_TTC_192 = 0x00008000,
-	DMA_CONTROL_TTC_256 = 0x0000c000,
-	DMA_CONTROL_TTC_40 = 0x00010000,
-	DMA_CONTROL_TTC_32 = 0x00014000,
-	DMA_CONTROL_TTC_24 = 0x00018000,
-	DMA_CONTROL_TTC_16 = 0x0001c000,
+    DMA_CONTROL_TTC_64 = 0x00000000,
+    DMA_CONTROL_TTC_128 = 0x00004000,
+    DMA_CONTROL_TTC_192 = 0x00008000,
+    DMA_CONTROL_TTC_256 = 0x0000c000,
+    DMA_CONTROL_TTC_40 = 0x00010000,
+    DMA_CONTROL_TTC_32 = 0x00014000,
+    DMA_CONTROL_TTC_24 = 0x00018000,
+    DMA_CONTROL_TTC_16 = 0x0001c000,
 };
 #define DMA_CONTROL_TC_TX_MASK	0xfffe3fff
 
@@ -190,10 +190,10 @@ enum ttc_control {
 #define DMA_CONTROL_FUF		0x00000040
 
 enum rtc_control {
-	DMA_CONTROL_RTC_64 = 0x00000000,
-	DMA_CONTROL_RTC_32 = 0x00000008,
-	DMA_CONTROL_RTC_96 = 0x00000010,
-	DMA_CONTROL_RTC_128 = 0x00000018,
+    DMA_CONTROL_RTC_64 = 0x00000000,
+    DMA_CONTROL_RTC_32 = 0x00000008,
+    DMA_CONTROL_RTC_96 = 0x00000010,
+    DMA_CONTROL_RTC_128 = 0x00000018,
 };
 #define DMA_CONTROL_TC_RX_MASK	0xffffffe7
 

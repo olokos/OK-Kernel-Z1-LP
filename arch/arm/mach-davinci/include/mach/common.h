@@ -24,17 +24,17 @@ extern void __iomem *davinci_intc_base;
 extern int davinci_intc_type;
 
 struct davinci_timer_instance {
-	u32		base;
-	u32		bottom_irq;
-	u32		top_irq;
-	unsigned long	cmp_off;
-	unsigned int	cmp_irq;
+    u32		base;
+    u32		bottom_irq;
+    u32		top_irq;
+    unsigned long	cmp_off;
+    unsigned int	cmp_irq;
 };
 
 struct davinci_timer_info {
-	struct davinci_timer_instance	*timers;
-	unsigned int			clockevent_id;
-	unsigned int			clocksource_id;
+    struct davinci_timer_instance	*timers;
+    unsigned int			clockevent_id;
+    unsigned int			clocksource_id;
 };
 
 struct davinci_gpio_controller;
@@ -47,36 +47,36 @@ struct davinci_gpio_controller;
  * use.
  */
 struct davinci_soc_info {
-	struct map_desc			*io_desc;
-	unsigned long			io_desc_num;
-	u32				cpu_id;
-	u32				jtag_id;
-	u32				jtag_id_reg;
-	struct davinci_id		*ids;
-	unsigned long			ids_num;
-	struct clk_lookup		*cpu_clks;
-	u32				*psc_bases;
-	unsigned long			psc_bases_num;
-	u32				pinmux_base;
-	const struct mux_config		*pinmux_pins;
-	unsigned long			pinmux_pins_num;
-	u32				intc_base;
-	int				intc_type;
-	u8				*intc_irq_prios;
-	unsigned long			intc_irq_num;
-	u32				*intc_host_map;
-	struct davinci_timer_info	*timer_info;
-	int				gpio_type;
-	u32				gpio_base;
-	unsigned			gpio_num;
-	unsigned			gpio_irq;
-	unsigned			gpio_unbanked;
-	struct davinci_gpio_controller	*gpio_ctlrs;
-	int				gpio_ctlrs_num;
-	struct platform_device		*serial_dev;
-	struct emac_platform_data	*emac_pdata;
-	dma_addr_t			sram_dma;
-	unsigned			sram_len;
+    struct map_desc			*io_desc;
+    unsigned long			io_desc_num;
+    u32				cpu_id;
+    u32				jtag_id;
+    u32				jtag_id_reg;
+    struct davinci_id		*ids;
+    unsigned long			ids_num;
+    struct clk_lookup		*cpu_clks;
+    u32				*psc_bases;
+    unsigned long			psc_bases_num;
+    u32				pinmux_base;
+    const struct mux_config		*pinmux_pins;
+    unsigned long			pinmux_pins_num;
+    u32				intc_base;
+    int				intc_type;
+    u8				*intc_irq_prios;
+    unsigned long			intc_irq_num;
+    u32				*intc_host_map;
+    struct davinci_timer_info	*timer_info;
+    int				gpio_type;
+    u32				gpio_base;
+    unsigned			gpio_num;
+    unsigned			gpio_irq;
+    unsigned			gpio_unbanked;
+    struct davinci_gpio_controller	*gpio_ctlrs;
+    int				gpio_ctlrs_num;
+    struct platform_device		*serial_dev;
+    struct emac_platform_data	*emac_pdata;
+    dma_addr_t			sram_dma;
+    unsigned			sram_len;
 };
 
 extern struct davinci_soc_info davinci_soc_info;

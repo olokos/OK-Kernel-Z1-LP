@@ -56,8 +56,7 @@
 /* Link Service Buffer Post messages                                        */
 /****************************************************************************/
 
-typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REQUEST
-{
+typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REQUEST {
     U8                      BufferPostFlags;    /* 00h */
     U8                      BufferCount;        /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -68,23 +67,21 @@ typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REQUEST
     U32                     MsgContext;         /* 08h */
     SGE_TRANS_SIMPLE_UNION  SGL;
 } MSG_LINK_SERVICE_BUFFER_POST_REQUEST,
- MPI_POINTER PTR_MSG_LINK_SERVICE_BUFFER_POST_REQUEST,
-  LinkServiceBufferPostRequest_t, MPI_POINTER pLinkServiceBufferPostRequest_t;
+MPI_POINTER PTR_MSG_LINK_SERVICE_BUFFER_POST_REQUEST,
+LinkServiceBufferPostRequest_t, MPI_POINTER pLinkServiceBufferPostRequest_t;
 
 #define LINK_SERVICE_BUFFER_POST_FLAGS_PORT_MASK (0x01)
 
-typedef struct _WWNFORMAT
-{
+typedef struct _WWNFORMAT {
     U32                     PortNameHigh;       /* 00h */
     U32                     PortNameLow;        /* 04h */
     U32                     NodeNameHigh;       /* 08h */
     U32                     NodeNameLow;        /* 0Ch */
 } WWNFORMAT,
-  WwnFormat_t;
+WwnFormat_t;
 
 /* Link Service Buffer Post Reply */
-typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REPLY
-{
+typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REPLY {
     U8                      Flags;              /* 00h */
     U8                      Reserved;           /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -109,7 +106,7 @@ typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REPLY
     U32                     Parameter;          /* 30h */
     WWNFORMAT               Wwn;                /* 34h */
 } MSG_LINK_SERVICE_BUFFER_POST_REPLY, MPI_POINTER PTR_MSG_LINK_SERVICE_BUFFER_POST_REPLY,
-  LinkServiceBufferPostReply_t, MPI_POINTER pLinkServiceBufferPostReply_t;
+LinkServiceBufferPostReply_t, MPI_POINTER pLinkServiceBufferPostReply_t;
 
 #define MPI_LS_BUF_POST_REPLY_FLAG_NO_RSP_NEEDED    (0x80)
 
@@ -145,8 +142,7 @@ typedef struct _MSG_LINK_SERVICE_BUFFER_POST_REPLY
 /* Link Service Response messages                                           */
 /****************************************************************************/
 
-typedef struct _MSG_LINK_SERVICE_RSP_REQUEST
-{
+typedef struct _MSG_LINK_SERVICE_RSP_REQUEST {
     U8                      RspFlags;           /* 00h */
     U8                      RspLength;          /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -166,15 +162,14 @@ typedef struct _MSG_LINK_SERVICE_RSP_REQUEST
     U32                     Parameter;          /* 20h */
     SGE_SIMPLE_UNION        SGL;                /* 24h */
 } MSG_LINK_SERVICE_RSP_REQUEST, MPI_POINTER PTR_MSG_LINK_SERVICE_RSP_REQUEST,
-  LinkServiceRspRequest_t, MPI_POINTER pLinkServiceRspRequest_t;
+LinkServiceRspRequest_t, MPI_POINTER pLinkServiceRspRequest_t;
 
 #define LINK_SERVICE_RSP_FLAGS_IMMEDIATE        (0x80)
 #define LINK_SERVICE_RSP_FLAGS_PORT_MASK        (0x01)
 
 
 /* Link Service Response Reply  */
-typedef struct _MSG_LINK_SERVICE_RSP_REPLY
-{
+typedef struct _MSG_LINK_SERVICE_RSP_REPLY {
     U16                     Reserved;           /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -187,15 +182,14 @@ typedef struct _MSG_LINK_SERVICE_RSP_REPLY
     U32                     IOCLogInfo;         /* 10h */
     U32                     InitiatorIndex;     /* 14h */
 } MSG_LINK_SERVICE_RSP_REPLY, MPI_POINTER PTR_MSG_LINK_SERVICE_RSP_REPLY,
-  LinkServiceRspReply_t, MPI_POINTER pLinkServiceRspReply_t;
+LinkServiceRspReply_t, MPI_POINTER pLinkServiceRspReply_t;
 
 
 /****************************************************************************/
 /* Extended Link Service Send messages                                      */
 /****************************************************************************/
 
-typedef struct _MSG_EXLINK_SERVICE_SEND_REQUEST
-{
+typedef struct _MSG_EXLINK_SERVICE_SEND_REQUEST {
     U8                      SendFlags;          /* 00h */
     U8                      AliasIndex;         /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -205,7 +199,7 @@ typedef struct _MSG_EXLINK_SERVICE_SEND_REQUEST
     U32                     ElsCommandCode;     /* 0Ch */
     SGE_SIMPLE_UNION        SGL;                /* 10h */
 } MSG_EXLINK_SERVICE_SEND_REQUEST, MPI_POINTER PTR_MSG_EXLINK_SERVICE_SEND_REQUEST,
-  ExLinkServiceSendRequest_t, MPI_POINTER pExLinkServiceSendRequest_t;
+ExLinkServiceSendRequest_t, MPI_POINTER pExLinkServiceSendRequest_t;
 
 #define EX_LINK_SERVICE_SEND_DID_MASK           (0x00FFFFFF)
 #define EX_LINK_SERVICE_SEND_DID_SHIFT          (0)
@@ -214,8 +208,7 @@ typedef struct _MSG_EXLINK_SERVICE_SEND_REQUEST
 
 
 /* Extended Link Service Send Reply */
-typedef struct _MSG_EXLINK_SERVICE_SEND_REPLY
-{
+typedef struct _MSG_EXLINK_SERVICE_SEND_REPLY {
     U8                      Reserved;           /* 00h */
     U8                      AliasIndex;         /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -229,14 +222,13 @@ typedef struct _MSG_EXLINK_SERVICE_SEND_REPLY
     U32                     IOCLogInfo;         /* 10h */
     U32                     ResponseLength;     /* 14h */
 } MSG_EXLINK_SERVICE_SEND_REPLY, MPI_POINTER PTR_MSG_EXLINK_SERVICE_SEND_REPLY,
-  ExLinkServiceSendReply_t, MPI_POINTER pExLinkServiceSendReply_t;
+ExLinkServiceSendReply_t, MPI_POINTER pExLinkServiceSendReply_t;
 
 /****************************************************************************/
 /* FC Abort messages                                                        */
 /****************************************************************************/
 
-typedef struct _MSG_FC_ABORT_REQUEST
-{
+typedef struct _MSG_FC_ABORT_REQUEST {
     U8                      AbortFlags;                 /* 00h */
     U8                      AbortType;                  /* 01h */
     U8                      ChainOffset;                /* 02h */
@@ -247,7 +239,7 @@ typedef struct _MSG_FC_ABORT_REQUEST
     U32                     MsgContext;                 /* 08h */
     U32                     TransactionContextToAbort;  /* 0Ch */
 } MSG_FC_ABORT_REQUEST, MPI_POINTER PTR_MSG_FC_ABORT_REQUEST,
-  FcAbortRequest_t, MPI_POINTER pFcAbortRequest_t;
+FcAbortRequest_t, MPI_POINTER pFcAbortRequest_t;
 
 #define FC_ABORT_FLAG_PORT_MASK                 (0x01)
 
@@ -257,8 +249,7 @@ typedef struct _MSG_FC_ABORT_REQUEST
 #define FC_ABORT_TYPE_EXLINKSEND_REQUEST        (0x03)
 
 /* FC Abort Reply */
-typedef struct _MSG_FC_ABORT_REPLY
-{
+typedef struct _MSG_FC_ABORT_REPLY {
     U16                     Reserved;           /* 00h */
     U8                      MsgLength;          /* 02h */
     U8                      Function;           /* 03h */
@@ -270,15 +261,14 @@ typedef struct _MSG_FC_ABORT_REPLY
     U16                     IOCStatus;          /* 0Eh */
     U32                     IOCLogInfo;         /* 10h */
 } MSG_FC_ABORT_REPLY, MPI_POINTER PTR_MSG_FC_ABORT_REPLY,
-  FcAbortReply_t, MPI_POINTER pFcAbortReply_t;
+FcAbortReply_t, MPI_POINTER pFcAbortReply_t;
 
 
 /****************************************************************************/
 /* FC Common Transport Send messages                                        */
 /****************************************************************************/
 
-typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REQUEST
-{
+typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REQUEST {
     U8                      SendFlags;          /* 00h */
     U8                      AliasIndex;         /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -290,8 +280,8 @@ typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REQUEST
     U8                      Reserved1;          /* 0Fh */
     SGE_SIMPLE_UNION        SGL;                /* 10h */
 } MSG_FC_COMMON_TRANSPORT_SEND_REQUEST,
- MPI_POINTER PTR_MSG_FC_COMMON_TRANSPORT_SEND_REQUEST,
-  FcCommonTransportSendRequest_t, MPI_POINTER pFcCommonTransportSendRequest_t;
+MPI_POINTER PTR_MSG_FC_COMMON_TRANSPORT_SEND_REQUEST,
+FcCommonTransportSendRequest_t, MPI_POINTER pFcCommonTransportSendRequest_t;
 
 #define MPI_FC_CT_SEND_DID_MASK                 (0x00FFFFFF)
 #define MPI_FC_CT_SEND_DID_SHIFT                (0)
@@ -300,8 +290,7 @@ typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REQUEST
 
 
 /* FC Common Transport Send Reply */
-typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REPLY
-{
+typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REPLY {
     U8                      Reserved;           /* 00h */
     U8                      AliasIndex;         /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -315,15 +304,14 @@ typedef struct _MSG_FC_COMMON_TRANSPORT_SEND_REPLY
     U32                     IOCLogInfo;         /* 10h */
     U32                     ResponseLength;     /* 14h */
 } MSG_FC_COMMON_TRANSPORT_SEND_REPLY, MPI_POINTER PTR_MSG_FC_COMMON_TRANSPORT_SEND_REPLY,
-  FcCommonTransportSendReply_t, MPI_POINTER pFcCommonTransportSendReply_t;
+FcCommonTransportSendReply_t, MPI_POINTER pFcCommonTransportSendReply_t;
 
 
 /****************************************************************************/
 /* FC Primitive Send messages                                               */
 /****************************************************************************/
 
-typedef struct _MSG_FC_PRIMITIVE_SEND_REQUEST
-{
+typedef struct _MSG_FC_PRIMITIVE_SEND_REQUEST {
     U8                      SendFlags;          /* 00h */
     U8                      Reserved;           /* 01h */
     U8                      ChainOffset;        /* 02h */
@@ -334,7 +322,7 @@ typedef struct _MSG_FC_PRIMITIVE_SEND_REQUEST
     U32                     MsgContext;         /* 08h */
     U8                      FcPrimitive[4];     /* 0Ch */
 } MSG_FC_PRIMITIVE_SEND_REQUEST, MPI_POINTER PTR_MSG_FC_PRIMITIVE_SEND_REQUEST,
-  FcPrimitiveSendRequest_t, MPI_POINTER pFcPrimitiveSendRequest_t;
+FcPrimitiveSendRequest_t, MPI_POINTER pFcPrimitiveSendRequest_t;
 
 #define MPI_FC_PRIM_SEND_FLAGS_PORT_MASK       (0x01)
 #define MPI_FC_PRIM_SEND_FLAGS_ML_RESET_LINK   (0x02)
@@ -346,8 +334,7 @@ typedef struct _MSG_FC_PRIMITIVE_SEND_REQUEST
 #define MPI_FC_PRIM_SEND_FLAGS_FOREVER         (0x80)
 
 /* FC Primitive Send Reply */
-typedef struct _MSG_FC_PRIMITIVE_SEND_REPLY
-{
+typedef struct _MSG_FC_PRIMITIVE_SEND_REPLY {
     U8                      SendFlags;          /* 00h */
     U8                      Reserved;           /* 01h */
     U8                      MsgLength;          /* 02h */
@@ -360,7 +347,7 @@ typedef struct _MSG_FC_PRIMITIVE_SEND_REPLY
     U16                     IOCStatus;          /* 0Eh */
     U32                     IOCLogInfo;         /* 10h */
 } MSG_FC_PRIMITIVE_SEND_REPLY, MPI_POINTER PTR_MSG_FC_PRIMITIVE_SEND_REPLY,
-  FcPrimitiveSendReply_t, MPI_POINTER pFcPrimitiveSendReply_t;
+FcPrimitiveSendReply_t, MPI_POINTER pFcPrimitiveSendReply_t;
 
 #endif
 

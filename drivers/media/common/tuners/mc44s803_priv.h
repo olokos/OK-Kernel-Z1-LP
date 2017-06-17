@@ -198,11 +198,11 @@
 	(((_val) & (_reg)) >> _reg##_S)
 
 struct mc44s803_priv {
-	struct mc44s803_config *cfg;
-	struct i2c_adapter *i2c;
-	struct dvb_frontend *fe;
+    struct mc44s803_config *cfg;
+    struct i2c_adapter *i2c;
+    struct dvb_frontend *fe;
 
-	u32 frequency;
+    u32 frequency;
 };
 
 #endif

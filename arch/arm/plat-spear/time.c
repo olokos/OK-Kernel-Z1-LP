@@ -66,174 +66,168 @@ static __iomem void *gpt_base;
 static struct clk *gpt_clk;
 
 static void clockevent_set_mode(enum clock_event_mode mode,
-				struct clock_event_device *clk_event_dev);
+                                struct clock_event_device *clk_event_dev);
 static int clockevent_next_event(unsigned long evt,
-				 struct clock_event_device *clk_event_dev);
+                                 struct clock_event_device *clk_event_dev);
 
-static void spear_clocksource_init(void)
-{
-	u32 tick_rate;
-	u16 val;
+static void spear_clocksource_init(void) {
+    u32 tick_rate;
+    u16 val;
 
-	/* program the prescaler (/256)*/
-	writew(CTRL_PRESCALER256, gpt_base + CR(CLKSRC));
+    /* program the prescaler (/256)*/
+    writew(CTRL_PRESCALER256, gpt_base + CR(CLKSRC));
 
-	/* find out actual clock driving Timer */
-	tick_rate = clk_get_rate(gpt_clk);
-	tick_rate >>= CTRL_PRESCALER256;
+    /* find out actual clock driving Timer */
+    tick_rate = clk_get_rate(gpt_clk);
+    tick_rate >>= CTRL_PRESCALER256;
 
-	writew(0xFFFF, gpt_base + LOAD(CLKSRC));
+    writew(0xFFFF, gpt_base + LOAD(CLKSRC));
 
-	val = readw(gpt_base + CR(CLKSRC));
-	val &= ~CTRL_ONE_SHOT;	/* autoreload mode */
-	val |= CTRL_ENABLE ;
-	writew(val, gpt_base + CR(CLKSRC));
+    val = readw(gpt_base + CR(CLKSRC));
+    val &= ~CTRL_ONE_SHOT;	/* autoreload mode */
+    val |= CTRL_ENABLE ;
+    writew(val, gpt_base + CR(CLKSRC));
 
-	/* register the clocksource */
-	clocksource_mmio_init(gpt_base + COUNT(CLKSRC), "tmr1", tick_rate,
-		200, 16, clocksource_mmio_readw_up);
+    /* register the clocksource */
+    clocksource_mmio_init(gpt_base + COUNT(CLKSRC), "tmr1", tick_rate,
+                          200, 16, clocksource_mmio_readw_up);
 }
 
 static struct clock_event_device clkevt = {
-	.name = "tmr0",
-	.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
-	.set_mode = clockevent_set_mode,
-	.set_next_event = clockevent_next_event,
-	.shift = 0,	/* to be computed */
+    .name = "tmr0",
+    .features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
+    .set_mode = clockevent_set_mode,
+    .set_next_event = clockevent_next_event,
+    .shift = 0,	/* to be computed */
 };
 
 static void clockevent_set_mode(enum clock_event_mode mode,
-				struct clock_event_device *clk_event_dev)
-{
-	u32 period;
-	u16 val;
+                                struct clock_event_device *clk_event_dev) {
+    u32 period;
+    u16 val;
 
-	/* stop the timer */
-	val = readw(gpt_base + CR(CLKEVT));
-	val &= ~CTRL_ENABLE;
-	writew(val, gpt_base + CR(CLKEVT));
+    /* stop the timer */
+    val = readw(gpt_base + CR(CLKEVT));
+    val &= ~CTRL_ENABLE;
+    writew(val, gpt_base + CR(CLKEVT));
 
-	switch (mode) {
-	case CLOCK_EVT_MODE_PERIODIC:
-		period = clk_get_rate(gpt_clk) / HZ;
-		period >>= CTRL_PRESCALER16;
-		writew(period, gpt_base + LOAD(CLKEVT));
+    switch (mode) {
+    case CLOCK_EVT_MODE_PERIODIC:
+        period = clk_get_rate(gpt_clk) / HZ;
+        period >>= CTRL_PRESCALER16;
+        writew(period, gpt_base + LOAD(CLKEVT));
 
-		val = readw(gpt_base + CR(CLKEVT));
-		val &= ~CTRL_ONE_SHOT;
-		val |= CTRL_ENABLE | CTRL_INT_ENABLE;
-		writew(val, gpt_base + CR(CLKEVT));
+        val = readw(gpt_base + CR(CLKEVT));
+        val &= ~CTRL_ONE_SHOT;
+        val |= CTRL_ENABLE | CTRL_INT_ENABLE;
+        writew(val, gpt_base + CR(CLKEVT));
 
-		break;
-	case CLOCK_EVT_MODE_ONESHOT:
-		val = readw(gpt_base + CR(CLKEVT));
-		val |= CTRL_ONE_SHOT;
-		writew(val, gpt_base + CR(CLKEVT));
+        break;
+    case CLOCK_EVT_MODE_ONESHOT:
+        val = readw(gpt_base + CR(CLKEVT));
+        val |= CTRL_ONE_SHOT;
+        writew(val, gpt_base + CR(CLKEVT));
 
-		break;
-	case CLOCK_EVT_MODE_UNUSED:
-	case CLOCK_EVT_MODE_SHUTDOWN:
-	case CLOCK_EVT_MODE_RESUME:
+        break;
+    case CLOCK_EVT_MODE_UNUSED:
+    case CLOCK_EVT_MODE_SHUTDOWN:
+    case CLOCK_EVT_MODE_RESUME:
 
-		break;
-	default:
-		pr_err("Invalid mode requested\n");
-		break;
-	}
+        break;
+    default:
+        pr_err("Invalid mode requested\n");
+        break;
+    }
 }
 
 static int clockevent_next_event(unsigned long cycles,
-				 struct clock_event_device *clk_event_dev)
-{
-	u16 val = readw(gpt_base + CR(CLKEVT));
+                                 struct clock_event_device *clk_event_dev) {
+    u16 val = readw(gpt_base + CR(CLKEVT));
 
-	if (val & CTRL_ENABLE)
-		writew(val & ~CTRL_ENABLE, gpt_base + CR(CLKEVT));
+    if (val & CTRL_ENABLE)
+        writew(val & ~CTRL_ENABLE, gpt_base + CR(CLKEVT));
 
-	writew(cycles, gpt_base + LOAD(CLKEVT));
+    writew(cycles, gpt_base + LOAD(CLKEVT));
 
-	val |= CTRL_ENABLE | CTRL_INT_ENABLE;
-	writew(val, gpt_base + CR(CLKEVT));
+    val |= CTRL_ENABLE | CTRL_INT_ENABLE;
+    writew(val, gpt_base + CR(CLKEVT));
 
-	return 0;
+    return 0;
 }
 
-static irqreturn_t spear_timer_interrupt(int irq, void *dev_id)
-{
-	struct clock_event_device *evt = &clkevt;
+static irqreturn_t spear_timer_interrupt(int irq, void *dev_id) {
+    struct clock_event_device *evt = &clkevt;
 
-	writew(INT_STATUS, gpt_base + IR(CLKEVT));
+    writew(INT_STATUS, gpt_base + IR(CLKEVT));
 
-	evt->event_handler(evt);
+    evt->event_handler(evt);
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 static struct irqaction spear_timer_irq = {
-	.name = "timer",
-	.flags = IRQF_DISABLED | IRQF_TIMER,
-	.handler = spear_timer_interrupt
+    .name = "timer",
+    .flags = IRQF_DISABLED | IRQF_TIMER,
+    .handler = spear_timer_interrupt
 };
 
-static void __init spear_clockevent_init(void)
-{
-	u32 tick_rate;
+static void __init spear_clockevent_init(void) {
+    u32 tick_rate;
 
-	/* program the prescaler */
-	writew(CTRL_PRESCALER16, gpt_base + CR(CLKEVT));
+    /* program the prescaler */
+    writew(CTRL_PRESCALER16, gpt_base + CR(CLKEVT));
 
-	tick_rate = clk_get_rate(gpt_clk);
-	tick_rate >>= CTRL_PRESCALER16;
+    tick_rate = clk_get_rate(gpt_clk);
+    tick_rate >>= CTRL_PRESCALER16;
 
-	clockevents_calc_mult_shift(&clkevt, tick_rate, SPEAR_MIN_RANGE);
+    clockevents_calc_mult_shift(&clkevt, tick_rate, SPEAR_MIN_RANGE);
 
-	clkevt.max_delta_ns = clockevent_delta2ns(0xfff0,
-			&clkevt);
-	clkevt.min_delta_ns = clockevent_delta2ns(3, &clkevt);
+    clkevt.max_delta_ns = clockevent_delta2ns(0xfff0,
+                          &clkevt);
+    clkevt.min_delta_ns = clockevent_delta2ns(3, &clkevt);
 
-	clkevt.cpumask = cpumask_of(0);
+    clkevt.cpumask = cpumask_of(0);
 
-	clockevents_register_device(&clkevt);
+    clockevents_register_device(&clkevt);
 
-	setup_irq(SPEAR_GPT0_CHAN0_IRQ, &spear_timer_irq);
+    setup_irq(SPEAR_GPT0_CHAN0_IRQ, &spear_timer_irq);
 }
 
-void __init spear_setup_timer(void)
-{
-	int ret;
+void __init spear_setup_timer(void) {
+    int ret;
 
-	if (!request_mem_region(SPEAR_GPT0_BASE, SZ_1K, "gpt0")) {
-		pr_err("%s:cannot get IO addr\n", __func__);
-		return;
-	}
+    if (!request_mem_region(SPEAR_GPT0_BASE, SZ_1K, "gpt0")) {
+        pr_err("%s:cannot get IO addr\n", __func__);
+        return;
+    }
 
-	gpt_base = (void __iomem *)ioremap(SPEAR_GPT0_BASE, SZ_1K);
-	if (!gpt_base) {
-		pr_err("%s:ioremap failed for gpt\n", __func__);
-		goto err_mem;
-	}
+    gpt_base = (void __iomem *)ioremap(SPEAR_GPT0_BASE, SZ_1K);
+    if (!gpt_base) {
+        pr_err("%s:ioremap failed for gpt\n", __func__);
+        goto err_mem;
+    }
 
-	gpt_clk = clk_get_sys("gpt0", NULL);
-	if (!gpt_clk) {
-		pr_err("%s:couldn't get clk for gpt\n", __func__);
-		goto err_iomap;
-	}
+    gpt_clk = clk_get_sys("gpt0", NULL);
+    if (!gpt_clk) {
+        pr_err("%s:couldn't get clk for gpt\n", __func__);
+        goto err_iomap;
+    }
 
-	ret = clk_enable(gpt_clk);
-	if (ret < 0) {
-		pr_err("%s:couldn't enable gpt clock\n", __func__);
-		goto err_clk;
-	}
+    ret = clk_enable(gpt_clk);
+    if (ret < 0) {
+        pr_err("%s:couldn't enable gpt clock\n", __func__);
+        goto err_clk;
+    }
 
-	spear_clockevent_init();
-	spear_clocksource_init();
+    spear_clockevent_init();
+    spear_clocksource_init();
 
-	return;
+    return;
 
 err_clk:
-	clk_put(gpt_clk);
+    clk_put(gpt_clk);
 err_iomap:
-	iounmap(gpt_base);
+    iounmap(gpt_base);
 err_mem:
-	release_mem_region(SPEAR_GPT0_BASE, SZ_1K);
+    release_mem_region(SPEAR_GPT0_BASE, SZ_1K);
 }

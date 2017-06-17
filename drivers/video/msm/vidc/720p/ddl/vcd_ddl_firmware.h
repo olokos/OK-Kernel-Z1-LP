@@ -18,9 +18,9 @@
 #define VCD_FW_LITTLE_ENDIAN  0x1
 
 struct vcd_fw_details {
-	enum vcd_codec codec;
-	u32 *fw_buffer_addr;
-	u32 fw_size;
+    enum vcd_codec codec;
+    u32 *fw_buffer_addr;
+    u32 fw_size;
 };
 
 #define VCD_FW_PROP_BASE         0x0

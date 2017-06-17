@@ -17,15 +17,15 @@
 #define TRIZEPS4_PIC_PHYS	(PXA_CS3_PHYS)	/* Logic chip on ConXS-Board */
 #define TRIZEPS4_SDRAM_BASE	0xa0000000      /* SDRAM region */
 
-				/* Logic on ConXS-board CSFR register*/
+/* Logic on ConXS-board CSFR register*/
 #define TRIZEPS4_CFSR_PHYS	(PXA_CS3_PHYS)
-				/* Logic on ConXS-board BOCR register*/
+/* Logic on ConXS-board BOCR register*/
 #define TRIZEPS4_BOCR_PHYS	(PXA_CS3_PHYS+0x02000000)
-				/* Logic on ConXS-board IRCR register*/
+/* Logic on ConXS-board IRCR register*/
 #define TRIZEPS4_IRCR_PHYS	(PXA_CS3_PHYS+0x02400000)
-				/* Logic on ConXS-board UPSR register*/
+/* Logic on ConXS-board UPSR register*/
 #define TRIZEPS4_UPSR_PHYS	(PXA_CS3_PHYS+0x02800000)
-				/* Logic on ConXS-board DICR register*/
+/* Logic on ConXS-board DICR register*/
 #define TRIZEPS4_DICR_PHYS	(PXA_CS3_PHYS+0x03800000)
 
 /* virtual memory regions */
@@ -91,25 +91,21 @@
 #define IRCR_V2P(x)	((x) - TRIZEPS4_IRCR_VIRT + TRIZEPS4_IRCR_PHYS)
 
 #ifndef __ASSEMBLY__
-static inline unsigned short CFSR_readw(void)
-{
-	/* [Compact Flash Status Register] is read only */
-	return *((unsigned short *)CFSR_P2V(0x0C000000));
+static inline unsigned short CFSR_readw(void) {
+    /* [Compact Flash Status Register] is read only */
+    return *((unsigned short *)CFSR_P2V(0x0C000000));
 }
-static inline void BCR_writew(unsigned short value)
-{
-	/* [Board Control Regsiter] is write only */
-	*((unsigned short *)BCR_P2V(0x0E000000)) = value;
+static inline void BCR_writew(unsigned short value) {
+    /* [Board Control Regsiter] is write only */
+    *((unsigned short *)BCR_P2V(0x0E000000)) = value;
 }
-static inline void DCR_writew(unsigned short value)
-{
-	/* [Display Control Register] is write only */
-	*((unsigned short *)DCR_P2V(0x0E000000)) = value;
+static inline void DCR_writew(unsigned short value) {
+    /* [Display Control Register] is write only */
+    *((unsigned short *)DCR_P2V(0x0E000000)) = value;
 }
-static inline void IRCR_writew(unsigned short value)
-{
-	/* [InfraRed data Control Register] is write only */
-	*((unsigned short *)IRCR_P2V(0x0E000000)) = value;
+static inline void IRCR_writew(unsigned short value) {
+    /* [InfraRed data Control Register] is write only */
+    *((unsigned short *)IRCR_P2V(0x0E000000)) = value;
 }
 #else
 #define ConXS_CFSR		CFSR_P2V(0x0C000000)
@@ -119,21 +115,17 @@ static inline void IRCR_writew(unsigned short value)
 #endif
 #else
 /* for whatever baseboard define function registers */
-static inline unsigned short CFSR_readw(void)
-{
-	return 0;
+static inline unsigned short CFSR_readw(void) {
+    return 0;
 }
-static inline void BCR_writew(unsigned short value)
-{
-	;
+static inline void BCR_writew(unsigned short value) {
+    ;
 }
-static inline void DCR_writew(unsigned short value)
-{
-	;
+static inline void DCR_writew(unsigned short value) {
+    ;
 }
-static inline void IRCR_writew(unsigned short value)
-{
-	;
+static inline void IRCR_writew(unsigned short value) {
+    ;
 }
 #endif	/* CONFIG_MACH_TRIZEPS_CONXS */
 

@@ -20,44 +20,44 @@
  */
 /*
  * BEGIN_DESC
- * 
- *  File: 
+ *
+ *  File:
  *      @(#)	pa/spmath/float.h		$Revision: 1.1 $
- * 
+ *
  *  Purpose:
  *      <<please update with a synopis of the functionality provided by this file>>
- * 
+ *
  *  BE header:  no
  *
  *  Shipped:  yes
  *	/usr/conf/pa/spmath/float.h
  *
- * END_DESC  
+ * END_DESC
 */
 
 #ifdef __NO_PA_HDRS
-    PA header file -- do not include this header file for non-PA builds.
+PA header file -- do not include this header file for non-PA builds.
 #endif
 
 #include "fpbits.h"
 #include "hppa.h"
-/*
- * Want to pick up the FPU capability flags, not the PDC structures.
- * 'LOCORE' isn't really true in this case, but we don't want the C structures
- * so it suits our purposes
- */
+    /*
+     * Want to pick up the FPU capability flags, not the PDC structures.
+     * 'LOCORE' isn't really true in this case, but we don't want the C structures
+     * so it suits our purposes
+     */
 #define LOCORE
 #include "fpu.h"
 
-/*
- * Declare the basic structures for the 3 different
- * floating-point precisions.
- *        
- * Single number  
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |s|       exp     |               mantissa                      |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- */
+    /*
+     * Declare the basic structures for the 3 different
+     * floating-point precisions.
+     *
+     * Single number
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |s|       exp     |               mantissa                      |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     */
 #define	Sall(object) (object)
 #define	Ssign(object) Bitfield_extract( 0,  1,object)
 #define	Ssignedsign(object) Bitfield_signed_extract( 0,  1,object)
@@ -105,16 +105,16 @@
 #define	Is_sbit30(object) Bitfield_mask( 30,  1,object)
 #define	Is_sbit31(object) Bitfield_mask( 31,  1,object)
 
-/* 
- * Double number.
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |s|       exponent      |          mantissa part 1              |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- *
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |                    mantissa part 2                            |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- */
+    /*
+     * Double number.
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |s|       exponent      |          mantissa part 1              |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     *
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |                    mantissa part 2                            |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     */
 #define Dallp1(object) (object)
 #define Dsign(object) Bitfield_extract( 0,  1,object)
 #define Dsignedsign(object) Bitfield_signed_extract( 0,  1,object)
@@ -182,80 +182,83 @@
 #define Is_dbit30p2(object) Bitfield_mask( 30,  1,object)
 #define Is_dbit31p2(object) Bitfield_mask( 31,  1,object)
 
-/* 
- * Quad number.
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |s|          exponent           |      mantissa part 1          |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- *
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |                    mantissa part 2                            |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- *
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |                    mantissa part 3                            |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- *
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- * |                    mantissa part 4                            |
- * +-------+-------+-------+-------+-------+-------+-------+-------+
- */
-typedef struct
-    {
-    union
-	{
-	struct { unsigned qallp1; } u_qallp1;
-/* Not needed for now...
-	Bitfield_extract( 0,  1,u_qsign,qsign)
-	Bitfield_signed_extract( 0,  1,u_qsignedsign,qsignedsign)
-	Bitfield_extract( 1, 15,u_qexponent,qexponent)
-	Bitfield_extract(16, 16,u_qmantissap1,qmantissap1)
-	Bitfield_extract(16,  1,u_qsignaling,qsignaling)
-	Bitfield_extract(1,  16,u_qsignalingnan,qsignalingnan)
-	Bitfield_extract(16,  2,u_qhigh2mantissa,qhigh2mantissa)
-	Bitfield_extract( 1, 31,u_qexponentmantissap1,qexponentmantissap1)
-	Bitfield_extract( 0, 16,u_qsignexponent,qsignexponent)
-	Bitfield_extract(15,  1,u_qhidden,qhidden)
-	Bitfield_extract(14,  1,u_qhiddenoverflow,qhiddenoverflow)
-	Bitfield_extract(15,  8,u_qhiddenhigh7mantissa,qhiddenhigh7mantissa)
-	Bitfield_extract(15,  4,u_qhiddenhigh3mantissa,qhiddenhigh3mantissa)
-	Bitfield_extract(31,  1,u_qlowp1,qlowp1)
-	Bitfield_extract( 1, 31,u_qlow31p1,qlow31p1)
-	Bitfield_extract( 0,  1,u_qhighp1,qhighp1)
-	Bitfield_extract( 0,  4,u_qhigh4p1,qhigh4p1)
-	Bitfield_extract( 0, 31,u_qhigh31p1,qhigh31p1)
-  */
-	} quad_u1;
-    union
-	{
-	struct { unsigned qallp2; } u_qallp2;
-  /* Not needed for now...
-	Bitfield_extract(31,  1,u_qlowp2,qlowp2)
-	Bitfield_extract( 1, 31,u_qlow31p2,qlow31p2)
-	Bitfield_extract( 0,  1,u_qhighp2,qhighp2)
-	Bitfield_extract( 0, 31,u_qhigh31p2,qhigh31p2)
-   */
-	} quad_u2;
-    union
-	{
-	struct { unsigned qallp3; } u_qallp3;
-  /* Not needed for now...
-	Bitfield_extract(31,  1,u_qlowp3,qlowp3)
-	Bitfield_extract( 1, 31,u_qlow31p3,qlow31p3)
-	Bitfield_extract( 0,  1,u_qhighp3,qhighp3)
-	Bitfield_extract( 0, 31,u_qhigh31p3,qhigh31p3)
-   */ 
-	} quad_u3;
-    union
-	{
-	struct { unsigned qallp4; } u_qallp4;
-    /* Not need for now...
-	Bitfield_extract(31,  1,u_qlowp4,qlowp4)
-	Bitfield_extract( 1, 31,u_qlow31p4,qlow31p4)
-	Bitfield_extract( 0,  1,u_qhighp4,qhighp4)
-	Bitfield_extract( 0, 31,u_qhigh31p4,qhigh31p4)
+    /*
+     * Quad number.
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |s|          exponent           |      mantissa part 1          |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     *
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |                    mantissa part 2                            |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     *
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |                    mantissa part 3                            |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     *
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
+     * |                    mantissa part 4                            |
+     * +-------+-------+-------+-------+-------+-------+-------+-------+
      */
-	} quad_u4;
+    typedef struct {
+        union {
+            struct {
+                unsigned qallp1;
+            } u_qallp1;
+            /* Not needed for now...
+            	Bitfield_extract( 0,  1,u_qsign,qsign)
+            	Bitfield_signed_extract( 0,  1,u_qsignedsign,qsignedsign)
+            	Bitfield_extract( 1, 15,u_qexponent,qexponent)
+            	Bitfield_extract(16, 16,u_qmantissap1,qmantissap1)
+            	Bitfield_extract(16,  1,u_qsignaling,qsignaling)
+            	Bitfield_extract(1,  16,u_qsignalingnan,qsignalingnan)
+            	Bitfield_extract(16,  2,u_qhigh2mantissa,qhigh2mantissa)
+            	Bitfield_extract( 1, 31,u_qexponentmantissap1,qexponentmantissap1)
+            	Bitfield_extract( 0, 16,u_qsignexponent,qsignexponent)
+            	Bitfield_extract(15,  1,u_qhidden,qhidden)
+            	Bitfield_extract(14,  1,u_qhiddenoverflow,qhiddenoverflow)
+            	Bitfield_extract(15,  8,u_qhiddenhigh7mantissa,qhiddenhigh7mantissa)
+            	Bitfield_extract(15,  4,u_qhiddenhigh3mantissa,qhiddenhigh3mantissa)
+            	Bitfield_extract(31,  1,u_qlowp1,qlowp1)
+            	Bitfield_extract( 1, 31,u_qlow31p1,qlow31p1)
+            	Bitfield_extract( 0,  1,u_qhighp1,qhighp1)
+            	Bitfield_extract( 0,  4,u_qhigh4p1,qhigh4p1)
+            	Bitfield_extract( 0, 31,u_qhigh31p1,qhigh31p1)
+              */
+        } quad_u1;
+        union {
+            struct {
+                unsigned qallp2;
+            } u_qallp2;
+            /* Not needed for now...
+            Bitfield_extract(31,  1,u_qlowp2,qlowp2)
+            Bitfield_extract( 1, 31,u_qlow31p2,qlow31p2)
+            Bitfield_extract( 0,  1,u_qhighp2,qhighp2)
+            Bitfield_extract( 0, 31,u_qhigh31p2,qhigh31p2)
+             */
+        } quad_u2;
+        union {
+            struct {
+                unsigned qallp3;
+            } u_qallp3;
+            /* Not needed for now...
+            Bitfield_extract(31,  1,u_qlowp3,qlowp3)
+            Bitfield_extract( 1, 31,u_qlow31p3,qlow31p3)
+            Bitfield_extract( 0,  1,u_qhighp3,qhighp3)
+            Bitfield_extract( 0, 31,u_qhigh31p3,qhigh31p3)
+             */
+        } quad_u3;
+        union {
+            struct {
+                unsigned qallp4;
+            } u_qallp4;
+            /* Not need for now...
+            Bitfield_extract(31,  1,u_qlowp4,qlowp4)
+            Bitfield_extract( 1, 31,u_qlow31p4,qlow31p4)
+            Bitfield_extract( 0,  1,u_qhighp4,qhighp4)
+            Bitfield_extract( 0, 31,u_qhigh31p4,qhigh31p4)
+             */
+        } quad_u4;
     } quad_floating_point;
 
 /* Extension - An additional structure to hold the guard, round and
@@ -297,15 +300,15 @@ typedef struct
 /*
  * Declare the basic structures for the 3 different
  * fixed-point precisions.
- *        
- * Single number  
+ *
+ * Single number
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  * |s|                    integer                                  |
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  */
 typedef int sgl_integer;
 
-/* 
+/*
  * Double number.
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  * |s|                     high integer                            |
@@ -316,16 +319,16 @@ typedef int sgl_integer;
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  */
 struct dint {
-        int  wd0;
-        unsigned int wd1;
+int  wd0;
+unsigned int wd1;
 };
 
 struct dblwd {
-        unsigned int wd0;
-        unsigned int wd1;
+unsigned int wd0;
+unsigned int wd1;
 };
 
-/* 
+/*
  * Quad number.
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  * |s|                  integer part1                              |
@@ -345,10 +348,10 @@ struct dblwd {
  */
 
 struct quadwd {
-        int  wd0;
-        unsigned int wd1;
-        unsigned int wd2;
-        unsigned int wd3;
+int  wd0;
+unsigned int wd1;
+unsigned int wd2;
+unsigned int wd3;
 };
 
 typedef struct quadwd quad_integer;
@@ -360,7 +363,7 @@ typedef struct dblwd dbl_floating_point;
 typedef struct dint dbl_integer;
 typedef struct dblwd dbl_unsigned;
 
-/* 
+/*
  * Define the different precisions' parameters.
  */
 #define SGL_BITLENGTH 32
@@ -458,7 +461,7 @@ typedef int VOID;
 #define OPC_2E_UNDERFLOWEXCEPTION   0x0c
 #define OPC_2E_INEXACTEXCEPTION     0x12
 
-/* Declare exception registers equivalent to FPUs architecture 
+/* Declare exception registers equivalent to FPUs architecture
  *
  *  0 1 2 3 4 5 6 7 8 910 1 2 3 4 5 6 7 8 920 1 2 3 4 5 6 7 8 930 1
  * +-------+-------+-------+-------+-------+-------+-------+-------+

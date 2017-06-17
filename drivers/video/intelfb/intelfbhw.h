@@ -560,46 +560,46 @@
 /* function protoypes */
 extern int intelfbhw_get_chipset(struct pci_dev *pdev, struct intelfb_info *dinfo);
 extern int intelfbhw_get_memory(struct pci_dev *pdev, int *aperture_size,
-				int *stolen_size);
+                                int *stolen_size);
 extern int intelfbhw_check_non_crt(struct intelfb_info *dinfo);
 extern const char *intelfbhw_dvo_to_string(int dvo);
 extern int intelfbhw_validate_mode(struct intelfb_info *dinfo,
-				   struct fb_var_screeninfo *var);
+                                   struct fb_var_screeninfo *var);
 extern int intelfbhw_pan_display(struct fb_var_screeninfo *var,
-				 struct fb_info *info);
+                                 struct fb_info *info);
 extern void intelfbhw_do_blank(int blank, struct fb_info *info);
 extern void intelfbhw_setcolreg(struct intelfb_info *dinfo, unsigned regno,
-				unsigned red, unsigned green, unsigned blue,
-				unsigned transp);
+                                unsigned red, unsigned green, unsigned blue,
+                                unsigned transp);
 extern int intelfbhw_read_hw_state(struct intelfb_info *dinfo,
-				   struct intelfb_hwstate *hw, int flag);
+                                   struct intelfb_hwstate *hw, int flag);
 extern void intelfbhw_print_hw_state(struct intelfb_info *dinfo,
-				     struct intelfb_hwstate *hw);
+                                     struct intelfb_hwstate *hw);
 extern int intelfbhw_mode_to_hw(struct intelfb_info *dinfo,
-				struct intelfb_hwstate *hw,
-				struct fb_var_screeninfo *var);
+                                struct intelfb_hwstate *hw,
+                                struct fb_var_screeninfo *var);
 extern int intelfbhw_program_mode(struct intelfb_info *dinfo,
-				  const struct intelfb_hwstate *hw, int blank);
+                                  const struct intelfb_hwstate *hw, int blank);
 extern void intelfbhw_do_sync(struct intelfb_info *dinfo);
 extern void intelfbhw_2d_stop(struct intelfb_info *dinfo);
 extern void intelfbhw_2d_start(struct intelfb_info *dinfo);
 extern void intelfbhw_do_fillrect(struct intelfb_info *dinfo, u32 x, u32 y,
-				  u32 w, u32 h, u32 color, u32 pitch, u32 bpp,
-				  u32 rop);
+                                  u32 w, u32 h, u32 color, u32 pitch, u32 bpp,
+                                  u32 rop);
 extern void intelfbhw_do_bitblt(struct intelfb_info *dinfo, u32 curx, u32 cury,
-				u32 dstx, u32 dsty, u32 w, u32 h, u32 pitch,
-				u32 bpp);
+                                u32 dstx, u32 dsty, u32 w, u32 h, u32 pitch,
+                                u32 bpp);
 extern int intelfbhw_do_drawglyph(struct intelfb_info *dinfo, u32 fg, u32 bg,
-				  u32 w, u32 h, const u8* cdat, u32 x, u32 y,
-				  u32 pitch, u32 bpp);
+                                  u32 w, u32 h, const u8* cdat, u32 x, u32 y,
+                                  u32 pitch, u32 bpp);
 extern void intelfbhw_cursor_init(struct intelfb_info *dinfo);
 extern void intelfbhw_cursor_hide(struct intelfb_info *dinfo);
 extern void intelfbhw_cursor_show(struct intelfb_info *dinfo);
 extern void intelfbhw_cursor_setpos(struct intelfb_info *dinfo, int x, int y);
 extern void intelfbhw_cursor_setcolor(struct intelfb_info *dinfo, u32 bg,
-				      u32 fg);
+                                      u32 fg);
 extern void intelfbhw_cursor_load(struct intelfb_info *dinfo, int width,
-				  int height, u8 *data);
+                                  int height, u8 *data);
 extern void intelfbhw_cursor_reset(struct intelfb_info *dinfo);
 extern int intelfbhw_enable_irq(struct intelfb_info *dinfo);
 extern void intelfbhw_disable_irq(struct intelfb_info *dinfo);

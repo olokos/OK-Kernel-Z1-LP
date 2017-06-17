@@ -38,42 +38,42 @@
 #endif
 
 static struct resource iop3xx_i2c0_resources[] = {
-	[0] = {
-		.start	= 0xfffff680,
-		.end	= 0xfffff697,
-		.flags	= IORESOURCE_MEM,
-	},
-	[1] = {
-		.start	= IRQ_IOP3XX_I2C_0,
-		.end	= IRQ_IOP3XX_I2C_0,
-		.flags	= IORESOURCE_IRQ,
-	},
+    [0] = {
+        .start	= 0xfffff680,
+        .end	= 0xfffff697,
+        .flags	= IORESOURCE_MEM,
+    },
+    [1] = {
+        .start	= IRQ_IOP3XX_I2C_0,
+        .end	= IRQ_IOP3XX_I2C_0,
+        .flags	= IORESOURCE_IRQ,
+    },
 };
 
 struct platform_device iop3xx_i2c0_device = {
-	.name		= "IOP3xx-I2C",
-	.id		= 0,
-	.num_resources	= 2,
-	.resource	= iop3xx_i2c0_resources,
+    .name		= "IOP3xx-I2C",
+    .id		= 0,
+    .num_resources	= 2,
+    .resource	= iop3xx_i2c0_resources,
 };
 
 
 static struct resource iop3xx_i2c1_resources[] = {
-	[0] = {
-		.start	= 0xfffff6a0,
-		.end	= 0xfffff6b7,
-		.flags	= IORESOURCE_MEM,
-	},
-	[1] = {
-		.start	= IRQ_IOP3XX_I2C_1,
-		.end	= IRQ_IOP3XX_I2C_1,
-		.flags	= IORESOURCE_IRQ,
-	}
+    [0] = {
+        .start	= 0xfffff6a0,
+        .end	= 0xfffff6b7,
+        .flags	= IORESOURCE_MEM,
+    },
+    [1] = {
+        .start	= IRQ_IOP3XX_I2C_1,
+        .end	= IRQ_IOP3XX_I2C_1,
+        .flags	= IORESOURCE_IRQ,
+    }
 };
 
 struct platform_device iop3xx_i2c1_device = {
-	.name		= "IOP3xx-I2C",
-	.id		= 1,
-	.num_resources	= 2,
-	.resource	= iop3xx_i2c1_resources,
+    .name		= "IOP3xx-I2C",
+    .id		= 1,
+    .num_resources	= 2,
+    .resource	= iop3xx_i2c1_resources,
 };

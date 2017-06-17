@@ -43,13 +43,11 @@
 #define USER_DS		MAKE_MM_SEG(0xFFFFFFFF)
 #define get_ds()	(KERNEL_DS)
 
-static inline mm_segment_t get_fs(void)
-{
-	return USER_DS;
+static inline mm_segment_t get_fs(void) {
+    return USER_DS;
 }
 
-static inline void set_fs(mm_segment_t s)
-{
+static inline void set_fs(mm_segment_t s) {
 }
 
 #endif /* not CONFIG_MMU */
@@ -105,11 +103,10 @@ static inline void set_fs(mm_segment_t s)
 #ifdef CONFIG_MMU
 #define access_ok(type,addr,size) (likely(__range_ok(addr,size) == 0))
 #else
-static inline int access_ok(int type, const void *addr, unsigned long size)
-{
-	unsigned long val = (unsigned long)addr;
+static inline int access_ok(int type, const void *addr, unsigned long size) {
+    unsigned long val = (unsigned long)addr;
 
-	return ((val >= memory_start) && ((val + size) < memory_end));
+    return ((val >= memory_start) && ((val + size) < memory_end));
 }
 #endif /* CONFIG_MMU */
 
@@ -126,9 +123,8 @@ static inline int access_ok(int type, const void *addr, unsigned long size)
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 extern int fixup_exception(struct pt_regs *regs);
@@ -379,7 +375,9 @@ do {									\
 	}								\
 } while (0)
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct *)(x))
 
 /*
@@ -546,17 +544,15 @@ do {									\
  * used in fast paths and have only a small space overhead.
  */
 static inline unsigned long __generic_copy_from_user_nocheck(void *to,
-	const void __user *from, unsigned long n)
-{
-	__copy_user_zeroing(to,from,n);
-	return n;
+        const void __user *from, unsigned long n) {
+    __copy_user_zeroing(to,from,n);
+    return n;
 }
 
 static inline unsigned long __generic_copy_to_user_nocheck(void __user *to,
-	const void *from, unsigned long n)
-{
-	__copy_user(to,from,n);
-	return n;
+        const void *from, unsigned long n) {
+    __copy_user(to,from,n);
+    return n;
 }
 
 unsigned long __generic_copy_to_user(void __user *, const void *, unsigned long);
@@ -643,9 +639,9 @@ unsigned long __generic_copy_from_user(void *, const void __user *, unsigned lon
 })
 
 long __must_check strncpy_from_user(char *dst, const char __user *src,
-				long count);
+                                    long count);
 long __must_check __strncpy_from_user(char *dst,
-				const char __user *src, long count);
+                                      const char __user *src, long count);
 
 /**
  * __clear_user: - Zero a block of memory in user space, with less checking.

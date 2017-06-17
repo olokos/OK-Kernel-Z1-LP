@@ -22,34 +22,28 @@ extern void *kb_data;
 #define I8042_COMMAND_REG (*(int *)kb_cs)
 #define I8042_DATA_REG (*(int *)kb_data)
 
-static inline int i8042_read_data(void)
-{
-	return readb(kb_data);
+static inline int i8042_read_data(void) {
+    return readb(kb_data);
 }
 
-static inline int i8042_read_status(void)
-{
-	return readb(kb_cs);
+static inline int i8042_read_status(void) {
+    return readb(kb_cs);
 }
 
-static inline void i8042_write_data(int val)
-{
-	writeb(val, kb_data);
+static inline void i8042_write_data(int val) {
+    writeb(val, kb_data);
 }
 
-static inline void i8042_write_command(int val)
-{
-	writeb(val, kb_cs);
+static inline void i8042_write_command(int val) {
+    writeb(val, kb_cs);
 }
 
-static inline int i8042_platform_init(void)
-{
-	i8042_reset = 1;
-	return 0;
+static inline int i8042_platform_init(void) {
+    i8042_reset = 1;
+    return 0;
 }
 
-static inline void i8042_platform_exit(void)
-{
+static inline void i8042_platform_exit(void) {
 }
 
 #else

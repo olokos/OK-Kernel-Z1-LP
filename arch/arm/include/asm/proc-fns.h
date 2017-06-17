@@ -24,57 +24,57 @@ struct mm_struct;
  * Don't change this structure - ASM code relies on it.
  */
 extern struct processor {
-	/* MISC
-	 * get data abort address/flags
-	 */
-	void (*_data_abort)(unsigned long pc);
-	/*
-	 * Retrieve prefetch fault address
-	 */
-	unsigned long (*_prefetch_abort)(unsigned long lr);
-	/*
-	 * Set up any processor specifics
-	 */
-	void (*_proc_init)(void);
-	/*
-	 * Disable any processor specifics
-	 */
-	void (*_proc_fin)(void);
-	/*
-	 * Special stuff for a reset
-	 */
-	void (*reset)(unsigned long addr) __attribute__((noreturn));
-	/*
-	 * Idle the processor
-	 */
-	int (*_do_idle)(void);
-	/*
-	 * Processor architecture specific
-	 */
-	/*
-	 * clean a virtual address range from the
-	 * D-cache without flushing the cache.
-	 */
-	void (*dcache_clean_area)(void *addr, int size);
+    /* MISC
+     * get data abort address/flags
+     */
+    void (*_data_abort)(unsigned long pc);
+    /*
+     * Retrieve prefetch fault address
+     */
+    unsigned long (*_prefetch_abort)(unsigned long lr);
+    /*
+     * Set up any processor specifics
+     */
+    void (*_proc_init)(void);
+    /*
+     * Disable any processor specifics
+     */
+    void (*_proc_fin)(void);
+    /*
+     * Special stuff for a reset
+     */
+    void (*reset)(unsigned long addr) __attribute__((noreturn));
+    /*
+     * Idle the processor
+     */
+    int (*_do_idle)(void);
+    /*
+     * Processor architecture specific
+     */
+    /*
+     * clean a virtual address range from the
+     * D-cache without flushing the cache.
+     */
+    void (*dcache_clean_area)(void *addr, int size);
 
-	/*
-	 * Set the page table
-	 */
-	void (*switch_mm)(unsigned long pgd_phys, struct mm_struct *mm);
-	/*
-	 * Set a possibly extended PTE.  Non-extended PTEs should
-	 * ignore 'ext'.
-	 */
+    /*
+     * Set the page table
+     */
+    void (*switch_mm)(unsigned long pgd_phys, struct mm_struct *mm);
+    /*
+     * Set a possibly extended PTE.  Non-extended PTEs should
+     * ignore 'ext'.
+     */
 #ifdef CONFIG_ARM_LPAE
-	void (*set_pte_ext)(pte_t *ptep, pte_t pte);
+    void (*set_pte_ext)(pte_t *ptep, pte_t pte);
 #else
-	void (*set_pte_ext)(pte_t *ptep, pte_t pte, unsigned int ext);
+    void (*set_pte_ext)(pte_t *ptep, pte_t pte, unsigned int ext);
 #endif
 
-	/* Suspend/resume */
-	unsigned int suspend_size;
-	void (*do_suspend)(void *);
-	void (*do_resume)(void *);
+    /* Suspend/resume */
+    unsigned int suspend_size;
+    void (*do_suspend)(void *);
+    void (*do_resume)(void *);
 } processor;
 
 #ifndef MULTI_CPU

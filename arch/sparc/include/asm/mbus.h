@@ -12,21 +12,21 @@
 #include <asm/viking.h>  /* Ugh, bug city... */
 
 enum mbus_module {
-	HyperSparc        = 0,
-	Cypress           = 1,
-	Cypress_vE        = 2,
-	Cypress_vD        = 3,
-	Swift_ok          = 4,
-	Swift_bad_c       = 5,
-	Swift_lots_o_bugs = 6,
-	Tsunami           = 7,
-	Viking_12         = 8,
-	Viking_2x         = 9,
-	Viking_30         = 10,
-	Viking_35         = 11,
-	Viking_new        = 12,
-	TurboSparc	  = 13,
-	SRMMU_INVAL_MOD   = 14,
+    HyperSparc        = 0,
+    Cypress           = 1,
+    Cypress_vE        = 2,
+    Cypress_vD        = 3,
+    Swift_ok          = 4,
+    Swift_bad_c       = 5,
+    Swift_lots_o_bugs = 6,
+    Tsunami           = 7,
+    Viking_12         = 8,
+    Viking_2x         = 9,
+    Viking_30         = 10,
+    Viking_35         = 11,
+    Viking_new        = 12,
+    TurboSparc	  = 13,
+    SRMMU_INVAL_MOD   = 14,
 };
 
 extern enum mbus_module srmmu_modtype;
@@ -81,20 +81,18 @@ extern unsigned int viking_rev, swift_rev, cypress_rev;
  */
 #define TBR_ID_SHIFT            20
 
-static inline int get_cpuid(void)
-{
-	register int retval;
-	__asm__ __volatile__("rd %%tbr, %0\n\t"
-			     "srl %0, %1, %0\n\t" :
-			     "=r" (retval) :
-			     "i" (TBR_ID_SHIFT));
-	return (retval & 3);
+static inline int get_cpuid(void) {
+    register int retval;
+    __asm__ __volatile__("rd %%tbr, %0\n\t"
+                         "srl %0, %1, %0\n\t" :
+                         "=r" (retval) :
+                         "i" (TBR_ID_SHIFT));
+    return (retval & 3);
 }
 
-static inline int get_modid(void)
-{
-	return (get_cpuid() | 0x8);
+static inline int get_modid(void) {
+    return (get_cpuid() | 0x8);
 }
 
-	
+
 #endif /* !(_SPARC_MBUS_H) */

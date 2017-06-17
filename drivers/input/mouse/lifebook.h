@@ -16,16 +16,13 @@ void lifebook_module_init(void);
 int lifebook_detect(struct psmouse *psmouse, bool set_properties);
 int lifebook_init(struct psmouse *psmouse);
 #else
-static inline void lifebook_module_init(void)
-{
+static inline void lifebook_module_init(void) {
 }
-static inline int lifebook_detect(struct psmouse *psmouse, bool set_properties)
-{
-	return -ENOSYS;
+static inline int lifebook_detect(struct psmouse *psmouse, bool set_properties) {
+    return -ENOSYS;
 }
-static inline int lifebook_init(struct psmouse *psmouse)
-{
-	return -ENOSYS;
+static inline int lifebook_init(struct psmouse *psmouse) {
+    return -ENOSYS;
 }
 #endif
 

@@ -197,13 +197,12 @@ extern void sync_icache_dcache(pte_t pte);
 	((pte_val(pte) & (_PAGE_EXECUTE | _PAGE_USER)) == \
 	(_PAGE_EXECUTE | _PAGE_USER))
 
-static inline void set_pte(pte_t *ptep, pte_t pteval)
-{
-	/*  should really be using pte_exec, if it weren't declared later. */
-	if (pte_present_exec_user(pteval))
-		sync_icache_dcache(pteval);
+static inline void set_pte(pte_t *ptep, pte_t pteval) {
+    /*  should really be using pte_exec, if it weren't declared later. */
+    if (pte_present_exec_user(pteval))
+        sync_icache_dcache(pteval);
 
-	*ptep = pteval;
+    *ptep = pteval;
 }
 
 /*
@@ -216,18 +215,16 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
 #define _NULL_PMD	0x7
 #define _NULL_PTE	0x0
 
-static inline void pmd_clear(pmd_t *pmd_entry_ptr)
-{
-	 pmd_val(*pmd_entry_ptr) = _NULL_PMD;
+static inline void pmd_clear(pmd_t *pmd_entry_ptr) {
+    pmd_val(*pmd_entry_ptr) = _NULL_PMD;
 }
 
 /*
  * Conveniently, a null PTE value is invalid.
  */
 static inline void pte_clear(struct mm_struct *mm, unsigned long addr,
-				pte_t *ptep)
-{
-	pte_val(*ptep) = _NULL_PTE;
+                             pte_t *ptep) {
+    pte_val(*ptep) = _NULL_PTE;
 }
 
 #ifdef NEED_PMD_INDEX_DESPITE_BEING_2_LEVEL
@@ -263,9 +260,8 @@ static inline void pte_clear(struct mm_struct *mm, unsigned long addr,
  *
  * MIPS checks it against that "invalid pte table" thing.
  */
-static inline int pmd_none(pmd_t pmd)
-{
-	return pmd_val(pmd) == _NULL_PMD;
+static inline int pmd_none(pmd_t pmd) {
+    return pmd_val(pmd) == _NULL_PMD;
 }
 
 /**
@@ -274,9 +270,8 @@ static inline int pmd_none(pmd_t pmd)
  * save an inline instruction by defining it this
  * way, instead of simply "!pmd_none".
  */
-static inline int pmd_present(pmd_t pmd)
-{
-	return pmd_val(pmd) != (unsigned long)_NULL_PMD;
+static inline int pmd_present(pmd_t pmd) {
+    return pmd_val(pmd) != (unsigned long)_NULL_PMD;
 }
 
 /**
@@ -284,9 +279,8 @@ static inline int pmd_present(pmd_t pmd)
  * As we have no known cause of badness, it's null, as it is for many
  * architectures.
  */
-static inline int pmd_bad(pmd_t pmd)
-{
-	return 0;
+static inline int pmd_bad(pmd_t pmd) {
+    return 0;
 }
 
 /*
@@ -299,17 +293,15 @@ static inline int pmd_bad(pmd_t pmd)
  * pte_none - check if pte is mapped
  * @pte: pte_t entry
  */
-static inline int pte_none(pte_t pte)
-{
-	return pte_val(pte) == _NULL_PTE;
+static inline int pte_none(pte_t pte) {
+    return pte_val(pte) == _NULL_PTE;
 };
 
 /*
  * pte_present - check if page is present
  */
-static inline int pte_present(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_PRESENT;
+static inline int pte_present(pte_t pte) {
+    return pte_val(pte) & _PAGE_PRESENT;
 }
 
 /* mk_pte - make a PTE out of a page pointer and protection bits */
@@ -319,91 +311,78 @@ static inline int pte_present(pte_t pte)
 #define pte_page(x) pfn_to_page(pte_pfn(x))
 
 /* pte_mkold - mark PTE as not recently accessed */
-static inline pte_t pte_mkold(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_ACCESSED;
+    return pte;
 }
 
 /* pte_mkyoung - mark PTE as recently accessed */
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_ACCESSED;
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_val(pte) |= _PAGE_ACCESSED;
+    return pte;
 }
 
 /* pte_mkclean - mark page as in sync with backing store */
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_DIRTY;
+    return pte;
 }
 
 /* pte_mkdirty - mark page as modified */
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_DIRTY;
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_val(pte) |= _PAGE_DIRTY;
+    return pte;
 }
 
 /* pte_young - "is PTE marked as accessed"? */
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_ACCESSED;
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
 }
 
 /* pte_dirty - "is PTE dirty?" */
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_DIRTY;
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_DIRTY;
 }
 
 /* pte_modify - set protection bits on PTE */
-static inline pte_t pte_modify(pte_t pte, pgprot_t prot)
-{
-	pte_val(pte) &= PAGE_MASK;
-	pte_val(pte) |= pgprot_val(prot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t prot) {
+    pte_val(pte) &= PAGE_MASK;
+    pte_val(pte) |= pgprot_val(prot);
+    return pte;
 }
 
 /* pte_wrprotect - mark page as not writable */
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_WRITE;
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_WRITE;
+    return pte;
 }
 
 /* pte_mkwrite - mark page as writable */
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_WRITE;
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= _PAGE_WRITE;
+    return pte;
 }
 
 /* pte_mkexec - mark PTE as executable */
-static inline pte_t pte_mkexec(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_EXECUTE;
-	return pte;
+static inline pte_t pte_mkexec(pte_t pte) {
+    pte_val(pte) |= _PAGE_EXECUTE;
+    return pte;
 }
 
 /* pte_read - "is PTE marked as readable?" */
-static inline int pte_read(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_READ;
+static inline int pte_read(pte_t pte) {
+    return pte_val(pte) & _PAGE_READ;
 }
 
 /* pte_write - "is PTE marked as writable?" */
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_WRITE;
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_WRITE;
 }
 
 
 /* pte_exec - "is PTE marked as executable?" */
-static inline int pte_exec(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_EXECUTE;
+static inline int pte_exec(pte_t pte) {
+    return pte_val(pte) & _PAGE_EXECUTE;
 }
 
 /* __pte_to_swp_entry - extract swap entry from PTE */

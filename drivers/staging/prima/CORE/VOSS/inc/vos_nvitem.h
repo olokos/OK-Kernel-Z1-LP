@@ -54,8 +54,7 @@
 #define MAX_CHANNELS_IGNORE 10
 #define MAX_COUNTRY_IGNORE 5
 
-typedef struct sCsrIgnoreChannels
-{
+typedef struct sCsrIgnoreChannels {
     tANI_U8 countryCode[NV_FIELD_COUNTRY_CODE_SIZE];
     tANI_U16 channelList[MAX_CHANNELS_IGNORE];
     tANI_U16 channelCount;
@@ -136,8 +135,7 @@ ADD_VNV_ITEM( VNV_TABLE_VIRTUAL_RATE, 1, 4, VNV_TABLE_VIRTUAL_RATE_I ) \
   Type declarations
   ------------------------------------------------------------------------*/
 // enum of RX sensitivity table index
-typedef enum
-{
+typedef enum {
     // 11b
     MAC_RATE_11B_1_MBPS,
     MAC_RATE_11B_2_MBPS,
@@ -169,8 +167,7 @@ typedef enum
 } v_MAC_RATE_t;
 
 // enum of regulatory doamains in WLAN
-typedef enum
-{
+typedef enum {
     REGDOMAIN_FCC,
     REGDOMAIN_ETSI,
     REGDOMAIN_JAPAN,
@@ -185,8 +182,7 @@ typedef enum
 }
 v_REGDOMAIN_t;
 
-typedef enum
-{
+typedef enum {
     COUNTRY_NV,
     COUNTRY_IE,
     COUNTRY_USER,
@@ -198,16 +194,14 @@ typedef enum
 v_CountryInfoSource_t;
 
 //enum of NV version
-typedef enum
-{
+typedef enum {
     E_NV_V2,
     E_NV_V3,
     E_NV_INVALID
 } eNvVersionType;
 
 // enum of supported NV items in VOSS
-typedef enum
-{
+typedef enum {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) _name,
     VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
@@ -466,10 +460,8 @@ VOS_STATUS vos_nv_writeAtIndex( VNV_TYPE type, v_UINT_t index,
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type )
-{
-    switch (type)
-    {
+VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type ) {
+    switch (type) {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) case (_name): return (_cnt);
         VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
@@ -491,10 +483,8 @@ VOS_INLINE_FN v_SIZE_t vos_nv_getElementCount( VNV_TYPE type )
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type )
-{
-    switch (type)
-    {
+VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type ) {
+    switch (type) {
 #define ADD_VNV_ITEM(_name, _cnt, _size, _label) case (_name): return (_size);
         VNV_ITEM_TABLE
 #undef ADD_VNV_ITEM
@@ -516,8 +506,7 @@ VOS_INLINE_FN v_SIZE_t vos_nv_getElementSize( VNV_TYPE type )
   \sa
 
   -------------------------------------------------------------------------*/
-VOS_INLINE_FN v_SIZE_t vos_nv_getItemSize( VNV_TYPE type )
-{
+VOS_INLINE_FN v_SIZE_t vos_nv_getItemSize( VNV_TYPE type ) {
     return vos_nv_getElementCount(type) * vos_nv_getElementSize(type);
 }
 

@@ -55,39 +55,39 @@
 /*-------------------------------------------------------------------------*/
 
 static struct usb_device_descriptor device_desc = {
-	.bLength =		sizeof device_desc,
-	.bDescriptorType =	USB_DT_DEVICE,
+    .bLength =		sizeof device_desc,
+    .bDescriptorType =	USB_DT_DEVICE,
 
-	.bcdUSB =		cpu_to_le16(0x0200),
+    .bcdUSB =		cpu_to_le16(0x0200),
 
-	.bDeviceClass =		USB_CLASS_COMM,
-	.bDeviceSubClass =	0,
-	.bDeviceProtocol =	0,
-	/* .bMaxPacketSize0 = f(hardware) */
+    .bDeviceClass =		USB_CLASS_COMM,
+    .bDeviceSubClass =	0,
+    .bDeviceProtocol =	0,
+    /* .bMaxPacketSize0 = f(hardware) */
 
-	/* Vendor and product id can be overridden by module parameters.  */
-	.idVendor =		cpu_to_le16(CDC_VENDOR_NUM),
-	.idProduct =		cpu_to_le16(CDC_PRODUCT_NUM),
-	/* .bcdDevice = f(hardware) */
-	/* .iManufacturer = DYNAMIC */
-	/* .iProduct = DYNAMIC */
-	/* NO SERIAL NUMBER */
-	.bNumConfigurations =	1,
+    /* Vendor and product id can be overridden by module parameters.  */
+    .idVendor =		cpu_to_le16(CDC_VENDOR_NUM),
+    .idProduct =		cpu_to_le16(CDC_PRODUCT_NUM),
+    /* .bcdDevice = f(hardware) */
+    /* .iManufacturer = DYNAMIC */
+    /* .iProduct = DYNAMIC */
+    /* NO SERIAL NUMBER */
+    .bNumConfigurations =	1,
 };
 
 static struct usb_otg_descriptor otg_descriptor = {
-	.bLength =		sizeof otg_descriptor,
-	.bDescriptorType =	USB_DT_OTG,
+    .bLength =		sizeof otg_descriptor,
+    .bDescriptorType =	USB_DT_OTG,
 
-	/* REVISIT SRP-only hardware is possible, although
-	 * it would not be called "OTG" ...
-	 */
-	.bmAttributes =		USB_OTG_SRP | USB_OTG_HNP,
+    /* REVISIT SRP-only hardware is possible, although
+     * it would not be called "OTG" ...
+     */
+    .bmAttributes =		USB_OTG_SRP | USB_OTG_HNP,
 };
 
 static const struct usb_descriptor_header *otg_desc[] = {
-	(struct usb_descriptor_header *) &otg_descriptor,
-	NULL,
+    (struct usb_descriptor_header *) &otg_descriptor,
+    NULL,
 };
 
 
@@ -99,19 +99,19 @@ static const struct usb_descriptor_header *otg_desc[] = {
 static char manufacturer[50];
 
 static struct usb_string strings_dev[] = {
-	[STRING_MANUFACTURER_IDX].s = manufacturer,
-	[STRING_PRODUCT_IDX].s = DRIVER_DESC,
-	{  } /* end of list */
+    [STRING_MANUFACTURER_IDX].s = manufacturer,
+    [STRING_PRODUCT_IDX].s = DRIVER_DESC,
+    {  } /* end of list */
 };
 
 static struct usb_gadget_strings stringtab_dev = {
-	.language	= 0x0409,	/* en-us */
-	.strings	= strings_dev,
+    .language	= 0x0409,	/* en-us */
+    .strings	= strings_dev,
 };
 
 static struct usb_gadget_strings *dev_strings[] = {
-	&stringtab_dev,
-	NULL,
+    &stringtab_dev,
+    NULL,
 };
 
 static u8 hostaddr[ETH_ALEN];
@@ -121,137 +121,132 @@ static u8 hostaddr[ETH_ALEN];
 /*
  * We _always_ have both CDC ECM and CDC ACM functions.
  */
-static int __init cdc_do_config(struct usb_configuration *c)
-{
-	int	status;
+static int __init cdc_do_config(struct usb_configuration *c) {
+    int	status;
 
-	if (gadget_is_otg(c->cdev->gadget)) {
-		c->descriptors = otg_desc;
-		c->bmAttributes |= USB_CONFIG_ATT_WAKEUP;
-	}
+    if (gadget_is_otg(c->cdev->gadget)) {
+        c->descriptors = otg_desc;
+        c->bmAttributes |= USB_CONFIG_ATT_WAKEUP;
+    }
 
-	status = ecm_bind_config(c, hostaddr);
-	if (status < 0)
-		return status;
+    status = ecm_bind_config(c, hostaddr);
+    if (status < 0)
+        return status;
 
-	status = acm_bind_config(c, 0);
-	if (status < 0)
-		return status;
+    status = acm_bind_config(c, 0);
+    if (status < 0)
+        return status;
 
-	return 0;
+    return 0;
 }
 
 static struct usb_configuration cdc_config_driver = {
-	.label			= "CDC Composite (ECM + ACM)",
-	.bConfigurationValue	= 1,
-	/* .iConfiguration = DYNAMIC */
-	.bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
+    .label			= "CDC Composite (ECM + ACM)",
+    .bConfigurationValue	= 1,
+    /* .iConfiguration = DYNAMIC */
+    .bmAttributes		= USB_CONFIG_ATT_SELFPOWER,
 };
 
 /*-------------------------------------------------------------------------*/
 
-static int __init cdc_bind(struct usb_composite_dev *cdev)
-{
-	int			gcnum;
-	struct usb_gadget	*gadget = cdev->gadget;
-	int			status;
+static int __init cdc_bind(struct usb_composite_dev *cdev) {
+    int			gcnum;
+    struct usb_gadget	*gadget = cdev->gadget;
+    int			status;
 
-	if (!can_support_ecm(cdev->gadget)) {
-		dev_err(&gadget->dev, "controller '%s' not usable\n",
-				gadget->name);
-		return -EINVAL;
-	}
+    if (!can_support_ecm(cdev->gadget)) {
+        dev_err(&gadget->dev, "controller '%s' not usable\n",
+                gadget->name);
+        return -EINVAL;
+    }
 
-	/* set up network link layer */
-	status = gether_setup(cdev->gadget, hostaddr);
-	if (status < 0)
-		return status;
+    /* set up network link layer */
+    status = gether_setup(cdev->gadget, hostaddr);
+    if (status < 0)
+        return status;
 
-	/* set up serial link layer */
-	status = gserial_setup(cdev->gadget, 1);
-	if (status < 0)
-		goto fail0;
+    /* set up serial link layer */
+    status = gserial_setup(cdev->gadget, 1);
+    if (status < 0)
+        goto fail0;
 
-	gcnum = usb_gadget_controller_number(gadget);
-	if (gcnum >= 0)
-		device_desc.bcdDevice = cpu_to_le16(0x0300 | gcnum);
-	else {
-		/* We assume that can_support_ecm() tells the truth;
-		 * but if the controller isn't recognized at all then
-		 * that assumption is a bit more likely to be wrong.
-		 */
-		WARNING(cdev, "controller '%s' not recognized; trying %s\n",
-				gadget->name,
-				cdc_config_driver.label);
-		device_desc.bcdDevice =
-			cpu_to_le16(0x0300 | 0x0099);
-	}
+    gcnum = usb_gadget_controller_number(gadget);
+    if (gcnum >= 0)
+        device_desc.bcdDevice = cpu_to_le16(0x0300 | gcnum);
+    else {
+        /* We assume that can_support_ecm() tells the truth;
+         * but if the controller isn't recognized at all then
+         * that assumption is a bit more likely to be wrong.
+         */
+        WARNING(cdev, "controller '%s' not recognized; trying %s\n",
+                gadget->name,
+                cdc_config_driver.label);
+        device_desc.bcdDevice =
+            cpu_to_le16(0x0300 | 0x0099);
+    }
 
 
-	/* Allocate string descriptor numbers ... note that string
-	 * contents can be overridden by the composite_dev glue.
-	 */
+    /* Allocate string descriptor numbers ... note that string
+     * contents can be overridden by the composite_dev glue.
+     */
 
-	/* device descriptor strings: manufacturer, product */
-	snprintf(manufacturer, sizeof manufacturer, "%s %s with %s",
-		init_utsname()->sysname, init_utsname()->release,
-		gadget->name);
-	status = usb_string_id(cdev);
-	if (status < 0)
-		goto fail1;
-	strings_dev[STRING_MANUFACTURER_IDX].id = status;
-	device_desc.iManufacturer = status;
+    /* device descriptor strings: manufacturer, product */
+    snprintf(manufacturer, sizeof manufacturer, "%s %s with %s",
+             init_utsname()->sysname, init_utsname()->release,
+             gadget->name);
+    status = usb_string_id(cdev);
+    if (status < 0)
+        goto fail1;
+    strings_dev[STRING_MANUFACTURER_IDX].id = status;
+    device_desc.iManufacturer = status;
 
-	status = usb_string_id(cdev);
-	if (status < 0)
-		goto fail1;
-	strings_dev[STRING_PRODUCT_IDX].id = status;
-	device_desc.iProduct = status;
+    status = usb_string_id(cdev);
+    if (status < 0)
+        goto fail1;
+    strings_dev[STRING_PRODUCT_IDX].id = status;
+    device_desc.iProduct = status;
 
-	/* register our configuration */
-	status = usb_add_config(cdev, &cdc_config_driver, cdc_do_config);
-	if (status < 0)
-		goto fail1;
+    /* register our configuration */
+    status = usb_add_config(cdev, &cdc_config_driver, cdc_do_config);
+    if (status < 0)
+        goto fail1;
 
-	dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
-			DRIVER_DESC);
+    dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+             DRIVER_DESC);
 
-	return 0;
+    return 0;
 
 fail1:
-	gserial_cleanup();
+    gserial_cleanup();
 fail0:
-	gether_cleanup();
-	return status;
+    gether_cleanup();
+    return status;
 }
 
-static int __exit cdc_unbind(struct usb_composite_dev *cdev)
-{
-	gserial_cleanup();
-	gether_cleanup();
-	return 0;
+static int __exit cdc_unbind(struct usb_composite_dev *cdev) {
+    gserial_cleanup();
+    gether_cleanup();
+    return 0;
 }
 
 static struct usb_composite_driver cdc_driver = {
-	.name		= "g_cdc",
-	.dev		= &device_desc,
-	.strings	= dev_strings,
-	.max_speed	= USB_SPEED_HIGH,
-	.unbind		= __exit_p(cdc_unbind),
+    .name		= "g_cdc",
+    .dev		= &device_desc,
+    .strings	= dev_strings,
+    .max_speed	= USB_SPEED_HIGH,
+    .unbind		= __exit_p(cdc_unbind),
 };
 
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_AUTHOR("David Brownell");
 MODULE_LICENSE("GPL");
 
-static int __init init(void)
-{
-	return usb_composite_probe(&cdc_driver, cdc_bind);
+static int __init init(void) {
+    return usb_composite_probe(&cdc_driver, cdc_bind);
 }
 module_init(init);
 
-static void __exit cleanup(void)
-{
-	usb_composite_unregister(&cdc_driver);
+static void __exit cleanup(void) {
+    usb_composite_unregister(&cdc_driver);
 }
 module_exit(cleanup);

@@ -59,7 +59,8 @@ extern int be_verbose;
 
 /* cpuid and cpuinfo helpers  **************************/
 enum cpupower_cpu_vendor {X86_VENDOR_UNKNOWN = 0, X86_VENDOR_INTEL,
-			  X86_VENDOR_AMD, X86_VENDOR_MAX};
+                          X86_VENDOR_AMD, X86_VENDOR_MAX
+                         };
 
 #define CPUPOWER_CAP_INV_TSC		0x00000001
 #define CPUPOWER_CAP_APERF		0x00000002
@@ -72,12 +73,12 @@ enum cpupower_cpu_vendor {X86_VENDOR_UNKNOWN = 0, X86_VENDOR_INTEL,
 #define MAX_HW_PSTATES 10
 
 struct cpupower_cpu_info {
-	enum cpupower_cpu_vendor vendor;
-	unsigned int family;
-	unsigned int model;
-	unsigned int stepping;
-	/* CPU capabilities read out from cpuid */
-	unsigned long long caps;
+    enum cpupower_cpu_vendor vendor;
+    unsigned int family;
+    unsigned int model;
+    unsigned int stepping;
+    /* CPU capabilities read out from cpuid */
+    unsigned long long caps;
 };
 
 /* get_cpu_info
@@ -95,20 +96,20 @@ extern struct cpupower_cpu_info cpupower_cpu_info;
 
 /* CPU topology/hierarchy parsing ******************/
 struct cpupower_topology {
-	/* Amount of CPU cores, packages and threads per core in the system */
-	unsigned int cores;
-	unsigned int pkgs;
-	unsigned int threads; /* per core */
+    /* Amount of CPU cores, packages and threads per core in the system */
+    unsigned int cores;
+    unsigned int pkgs;
+    unsigned int threads; /* per core */
 
-	/* Array gets mallocated with cores entries, holding per core info */
-	struct {
-		int pkg;
-		int core;
-		int cpu;
+    /* Array gets mallocated with cores entries, holding per core info */
+    struct {
+        int pkg;
+        int core;
+        int cpu;
 
-		/* flags */
-		unsigned int is_online:1;
-	} *core_info;
+        /* flags */
+        unsigned int is_online:1;
+    } *core_info;
 };
 
 extern int get_cpu_topology(struct cpupower_topology *cpu_top);
@@ -133,22 +134,22 @@ extern unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu);
 /* PCI stuff ****************************/
 extern int amd_pci_get_num_boost_states(int *active, int *states);
 extern struct pci_dev *pci_acc_init(struct pci_access **pacc, int domain,
-				    int bus, int slot, int func, int vendor,
-				    int dev);
+                                    int bus, int slot, int func, int vendor,
+                                    int dev);
 extern struct pci_dev *pci_slot_func_init(struct pci_access **pacc,
-					      int slot, int func);
+        int slot, int func);
 
 /* PCI stuff ****************************/
 
 /* AMD HW pstate decoding **************************/
 
 extern int decode_pstates(unsigned int cpu, unsigned int cpu_family,
-			  int boost_states, unsigned long *pstates, int *no);
+                          int boost_states, unsigned long *pstates, int *no);
 
 /* AMD HW pstate decoding **************************/
 
 extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
-				     int *active, int * states);
+                                     int *active, int * states);
 /*
  * CPUID functions returning a single datum
  */
@@ -161,33 +162,48 @@ unsigned int cpuid_edx(unsigned int op);
 /* X86 ONLY ********************************************/
 #else
 static inline int decode_pstates(unsigned int cpu, unsigned int cpu_family,
-				 int boost_states, unsigned long *pstates,
-				 int *no)
-{ return -1; };
+                                 int boost_states, unsigned long *pstates,
+                                 int *no) {
+    return -1;
+};
 
-static inline int read_msr(int cpu, unsigned int idx, unsigned long long *val)
-{ return -1; };
-static inline int write_msr(int cpu, unsigned int idx, unsigned long long val)
-{ return -1; };
-static inline int msr_intel_set_perf_bias(unsigned int cpu, unsigned int val)
-{ return -1; };
-static inline int msr_intel_get_perf_bias(unsigned int cpu)
-{ return -1; };
-static inline unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu)
-{ return 0; };
+static inline int read_msr(int cpu, unsigned int idx, unsigned long long *val) {
+    return -1;
+};
+static inline int write_msr(int cpu, unsigned int idx, unsigned long long val) {
+    return -1;
+};
+static inline int msr_intel_set_perf_bias(unsigned int cpu, unsigned int val) {
+    return -1;
+};
+static inline int msr_intel_get_perf_bias(unsigned int cpu) {
+    return -1;
+};
+static inline unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu) {
+    return 0;
+};
 
 /* Read/Write msr ****************************/
 
 static inline int cpufreq_has_boost_support(unsigned int cpu, int *support,
-					    int *active, int * states)
-{ return -1; }
+        int *active, int * states) {
+    return -1;
+}
 
 /* cpuid and cpuinfo helpers  **************************/
 
-static inline unsigned int cpuid_eax(unsigned int op) { return 0; };
-static inline unsigned int cpuid_ebx(unsigned int op) { return 0; };
-static inline unsigned int cpuid_ecx(unsigned int op) { return 0; };
-static inline unsigned int cpuid_edx(unsigned int op) { return 0; };
+static inline unsigned int cpuid_eax(unsigned int op) {
+    return 0;
+};
+static inline unsigned int cpuid_ebx(unsigned int op) {
+    return 0;
+};
+static inline unsigned int cpuid_ecx(unsigned int op) {
+    return 0;
+};
+static inline unsigned int cpuid_edx(unsigned int op) {
+    return 0;
+};
 #endif /* defined(__i386__) || defined(__x86_64__) */
 
 #endif /* __CPUPOWERUTILS_HELPERS__ */

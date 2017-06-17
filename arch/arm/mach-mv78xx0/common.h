@@ -25,9 +25,9 @@ void mv78xx0_init_irq(void);
 
 void mv78xx0_setup_cpu_mbus(void);
 void mv78xx0_setup_pcie_io_win(int window, u32 base, u32 size,
-			       int maj, int min);
+                               int maj, int min);
 void mv78xx0_setup_pcie_mem_win(int window, u32 base, u32 size,
-				int maj, int min);
+                                int maj, int min);
 
 void mv78xx0_pcie_id(u32 *dev, u32 *rev);
 

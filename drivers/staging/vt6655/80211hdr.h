@@ -314,7 +314,7 @@ typedef struct tagWLAN_80211HDR_A3 {
     unsigned char abyAddr3[WLAN_ADDR_LEN];
     unsigned short wSeqCtl;
 
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_80211HDR_A3, *PWLAN_80211HDR_A3;
 
 typedef struct tagWLAN_80211HDR_A4 {

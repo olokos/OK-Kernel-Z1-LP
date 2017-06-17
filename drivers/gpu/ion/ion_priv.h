@@ -60,30 +60,30 @@ struct ion_buffer *ion_handle_buffer(struct ion_handle *handle);
  *			handle, used for debugging
 */
 struct ion_buffer {
-	struct kref ref;
-	union {
-		struct rb_node node;
-		struct list_head list;
-	};
-	struct ion_device *dev;
-	struct ion_heap *heap;
-	unsigned long flags;
-	size_t size;
-	union {
-		void *priv_virt;
-		ion_phys_addr_t priv_phys;
-	};
-	struct mutex lock;
-	int kmap_cnt;
-	void *vaddr;
-	int dmap_cnt;
-	struct sg_table *sg_table;
-	unsigned long *dirty;
-	struct list_head vmas;
-	/* used to track orphaned buffers */
-	int handle_count;
-	char task_comm[TASK_COMM_LEN];
-	pid_t pid;
+    struct kref ref;
+    union {
+        struct rb_node node;
+        struct list_head list;
+    };
+    struct ion_device *dev;
+    struct ion_heap *heap;
+    unsigned long flags;
+    size_t size;
+    union {
+        void *priv_virt;
+        ion_phys_addr_t priv_phys;
+    };
+    struct mutex lock;
+    int kmap_cnt;
+    void *vaddr;
+    int dmap_cnt;
+    struct sg_table *sg_table;
+    unsigned long *dirty;
+    struct list_head vmas;
+    /* used to track orphaned buffers */
+    int handle_count;
+    char task_comm[TASK_COMM_LEN];
+    pid_t pid;
 };
 void ion_buffer_destroy(struct ion_buffer *buffer);
 
@@ -105,27 +105,27 @@ void ion_buffer_destroy(struct ion_buffer *buffer);
  * @unmap_user		unmap memory to userspace
  */
 struct ion_heap_ops {
-	int (*allocate) (struct ion_heap *heap,
-			 struct ion_buffer *buffer, unsigned long len,
-			 unsigned long align, unsigned long flags);
-	void (*free) (struct ion_buffer *buffer);
-	int (*phys) (struct ion_heap *heap, struct ion_buffer *buffer,
-		     ion_phys_addr_t *addr, size_t *len);
-	struct sg_table *(*map_dma) (struct ion_heap *heap,
-					struct ion_buffer *buffer);
-	void (*unmap_dma) (struct ion_heap *heap, struct ion_buffer *buffer);
-	void * (*map_kernel) (struct ion_heap *heap, struct ion_buffer *buffer);
-	void (*unmap_kernel) (struct ion_heap *heap, struct ion_buffer *buffer);
-	int (*map_user) (struct ion_heap *mapper, struct ion_buffer *buffer,
-			 struct vm_area_struct *vma);
-	void (*unmap_user) (struct ion_heap *mapper, struct ion_buffer *buffer);
-	int (*print_debug)(struct ion_heap *heap, struct seq_file *s,
-			   const struct list_head *mem_map);
-	int (*secure_heap)(struct ion_heap *heap, int version, void *data);
-	int (*unsecure_heap)(struct ion_heap *heap, int version, void *data);
-	int (*secure_buffer)(struct ion_buffer *buffer, int version,
-				void *data, int flags);
-	int (*unsecure_buffer)(struct ion_buffer *buffer, int force_unsecure);
+    int (*allocate) (struct ion_heap *heap,
+                     struct ion_buffer *buffer, unsigned long len,
+                     unsigned long align, unsigned long flags);
+    void (*free) (struct ion_buffer *buffer);
+    int (*phys) (struct ion_heap *heap, struct ion_buffer *buffer,
+                 ion_phys_addr_t *addr, size_t *len);
+    struct sg_table *(*map_dma) (struct ion_heap *heap,
+                                 struct ion_buffer *buffer);
+    void (*unmap_dma) (struct ion_heap *heap, struct ion_buffer *buffer);
+    void * (*map_kernel) (struct ion_heap *heap, struct ion_buffer *buffer);
+    void (*unmap_kernel) (struct ion_heap *heap, struct ion_buffer *buffer);
+    int (*map_user) (struct ion_heap *mapper, struct ion_buffer *buffer,
+                     struct vm_area_struct *vma);
+    void (*unmap_user) (struct ion_heap *mapper, struct ion_buffer *buffer);
+    int (*print_debug)(struct ion_heap *heap, struct seq_file *s,
+                       const struct list_head *mem_map);
+    int (*secure_heap)(struct ion_heap *heap, int version, void *data);
+    int (*unsecure_heap)(struct ion_heap *heap, int version, void *data);
+    int (*secure_buffer)(struct ion_buffer *buffer, int version,
+                         void *data, int flags);
+    int (*unsecure_buffer)(struct ion_buffer *buffer, int force_unsecure);
 };
 
 /**
@@ -163,21 +163,21 @@ struct ion_heap_ops {
  * that are allocated from a specially reserved heap.
  */
 struct ion_heap {
-	struct plist_node node;
-	struct ion_device *dev;
-	enum ion_heap_type type;
-	struct ion_heap_ops *ops;
-	unsigned long flags;
-	unsigned int id;
-	const char *name;
-	struct shrinker shrinker;
-	void *priv;
-	struct list_head free_list;
-	size_t free_list_size;
-	struct rt_mutex lock;
-	wait_queue_head_t waitqueue;
-	struct task_struct *task;
-	int (*debug_show)(struct ion_heap *heap, struct seq_file *, void *);
+    struct plist_node node;
+    struct ion_device *dev;
+    enum ion_heap_type type;
+    struct ion_heap_ops *ops;
+    unsigned long flags;
+    unsigned int id;
+    const char *name;
+    struct shrinker shrinker;
+    void *priv;
+    struct list_head free_list;
+    size_t free_list_size;
+    struct rt_mutex lock;
+    wait_queue_head_t waitqueue;
+    struct task_struct *task;
+    int (*debug_show)(struct ion_heap *heap, struct seq_file *, void *);
 };
 
 /**
@@ -204,9 +204,9 @@ bool ion_buffer_fault_user_mappings(struct ion_buffer *buffer);
  * returns a valid device or -PTR_ERR
  */
 struct ion_device *ion_device_create(long (*custom_ioctl)
-				     (struct ion_client *client,
-				      unsigned int cmd,
-				      unsigned long arg));
+                                     (struct ion_client *client,
+                                      unsigned int cmd,
+                                      unsigned long arg));
 
 /**
  * ion_device_destroy - free and device and it's resource
@@ -222,9 +222,9 @@ void ion_device_destroy(struct ion_device *dev);
 void ion_device_add_heap(struct ion_device *dev, struct ion_heap *heap);
 
 struct pages_mem {
-	struct page **pages;
-	u32 size;
-	void (*free_fn) (const void *);
+    struct page **pages;
+    u32 size;
+    void (*free_fn) (const void *);
 };
 
 /**
@@ -234,7 +234,7 @@ struct pages_mem {
 void *ion_heap_map_kernel(struct ion_heap *, struct ion_buffer *);
 void ion_heap_unmap_kernel(struct ion_heap *, struct ion_buffer *);
 int ion_heap_map_user(struct ion_heap *, struct ion_buffer *,
-			struct vm_area_struct *);
+                      struct vm_area_struct *);
 int ion_heap_pages_zero(struct page **pages, int num_pages);
 int ion_heap_buffer_zero(struct ion_buffer *buffer);
 int ion_heap_high_order_page_zero(struct page *page, int order);
@@ -293,7 +293,7 @@ size_t ion_heap_freelist_drain(struct ion_heap *heap, size_t size);
  * ION_FLAG_FREED_FROM_SHRINKER flag.
  */
 size_t ion_heap_freelist_drain_from_shrinker(struct ion_heap *heap,
-					size_t size);
+        size_t size);
 
 /**
  * ion_heap_freelist_size - returns the size of the freelist in bytes
@@ -326,9 +326,9 @@ void ion_chunk_heap_destroy(struct ion_heap *);
  * used to back an architecture specific custom heap
  */
 ion_phys_addr_t ion_carveout_allocate(struct ion_heap *heap, unsigned long size,
-				      unsigned long align);
+                                      unsigned long align);
 void ion_carveout_free(struct ion_heap *heap, ion_phys_addr_t addr,
-		       unsigned long size);
+                       unsigned long size);
 /**
  * The carveout heap returns physical addresses, since 0 may be a valid
  * physical address, this is used to indicate allocation failed
@@ -365,14 +365,14 @@ void ion_carveout_free(struct ion_heap *heap, ion_phys_addr_t addr,
  * on many systems
  */
 struct ion_page_pool {
-	int high_count;
-	int low_count;
-	struct list_head high_items;
-	struct list_head low_items;
-	struct mutex mutex;
-	gfp_t gfp_mask;
-	unsigned int order;
-	struct plist_node list;
+    int high_count;
+    int low_count;
+    struct list_head high_items;
+    struct list_head low_items;
+    struct mutex mutex;
+    gfp_t gfp_mask;
+    unsigned int order;
+    struct plist_node list;
 };
 
 struct ion_page_pool *ion_page_pool_create(gfp_t gfp_mask, unsigned int order);
@@ -388,13 +388,13 @@ void ion_page_pool_free(struct ion_page_pool *, struct page *);
  * returns the number of items freed in pages
  */
 int ion_page_pool_shrink(struct ion_page_pool *pool, gfp_t gfp_mask,
-			  int nr_to_scan);
+                         int nr_to_scan);
 
 int ion_walk_heaps(struct ion_client *client, int heap_id, void *data,
-			int (*f)(struct ion_heap *heap, void *data));
+                   int (*f)(struct ion_heap *heap, void *data));
 
 struct ion_handle *ion_handle_get_by_id(struct ion_client *client,
-					int id);
+                                        int id);
 
 int ion_handle_put(struct ion_handle *handle);
 

@@ -92,10 +92,10 @@
 /* Receive fragment sizes; we use at most 4 fragments (for 9600 byte MTU
  * and 4K allocations) */
 enum {
-	FRAG_SZ0 = 512 - NET_IP_ALIGN,
-	FRAG_SZ1 = 1024,
-	FRAG_SZ2 = 4096,
-	FRAG_SZ3 = MLX4_EN_ALLOC_SIZE
+    FRAG_SZ0 = 512 - NET_IP_ALIGN,
+    FRAG_SZ1 = 1024,
+    FRAG_SZ2 = 4096,
+    FRAG_SZ3 = MLX4_EN_ALLOC_SIZE
 };
 #define MLX4_EN_MAX_RX_FRAGS	4
 
@@ -180,8 +180,8 @@ enum {
  */
 
 enum cq_type {
-	RX = 0,
-	TX = 1,
+    RX = 0,
+    TX = 1,
 };
 
 
@@ -194,11 +194,11 @@ enum cq_type {
 
 
 struct mlx4_en_tx_info {
-	struct sk_buff *skb;
-	u32 nr_txbb;
-	u8 linear;
-	u8 data_offset;
-	u8 inl;
+    struct sk_buff *skb;
+    u32 nr_txbb;
+    u8 linear;
+    u8 data_offset;
+    u8 inl;
 };
 
 
@@ -209,12 +209,12 @@ struct mlx4_en_tx_info {
 
 
 struct mlx4_en_tx_desc {
-	struct mlx4_wqe_ctrl_seg ctrl;
-	union {
-		struct mlx4_wqe_data_seg data; /* at least one data segment */
-		struct mlx4_wqe_lso_seg lso;
-		struct mlx4_wqe_inline_seg inl;
-	};
+    struct mlx4_wqe_ctrl_seg ctrl;
+    union {
+        struct mlx4_wqe_data_seg data; /* at least one data segment */
+        struct mlx4_wqe_lso_seg lso;
+        struct mlx4_wqe_inline_seg inl;
+    };
 };
 
 #define MLX4_EN_USE_SRQ		0x01000000
@@ -223,279 +223,278 @@ struct mlx4_en_tx_desc {
 #define MLX4_EN_CX3_HIGH_ID	0x1005
 
 struct mlx4_en_rx_alloc {
-	struct page *page;
-	u16 offset;
+    struct page *page;
+    u16 offset;
 };
 
 struct mlx4_en_tx_ring {
-	struct mlx4_hwq_resources wqres;
-	u32 size ; /* number of TXBBs */
-	u32 size_mask;
-	u16 stride;
-	u16 cqn;	/* index of port CQ associated with this ring */
-	u32 prod;
-	u32 cons;
-	u32 buf_size;
-	u32 doorbell_qpn;
-	void *buf;
-	u16 poll_cnt;
-	int blocked;
-	struct mlx4_en_tx_info *tx_info;
-	u8 *bounce_buf;
-	u32 last_nr_txbb;
-	struct mlx4_qp qp;
-	struct mlx4_qp_context context;
-	int qpn;
-	enum mlx4_qp_state qp_state;
-	struct mlx4_srq dummy;
-	unsigned long bytes;
-	unsigned long packets;
-	unsigned long tx_csum;
-	spinlock_t comp_lock;
-	struct mlx4_bf bf;
-	bool bf_enabled;
+    struct mlx4_hwq_resources wqres;
+    u32 size ; /* number of TXBBs */
+    u32 size_mask;
+    u16 stride;
+    u16 cqn;	/* index of port CQ associated with this ring */
+    u32 prod;
+    u32 cons;
+    u32 buf_size;
+    u32 doorbell_qpn;
+    void *buf;
+    u16 poll_cnt;
+    int blocked;
+    struct mlx4_en_tx_info *tx_info;
+    u8 *bounce_buf;
+    u32 last_nr_txbb;
+    struct mlx4_qp qp;
+    struct mlx4_qp_context context;
+    int qpn;
+    enum mlx4_qp_state qp_state;
+    struct mlx4_srq dummy;
+    unsigned long bytes;
+    unsigned long packets;
+    unsigned long tx_csum;
+    spinlock_t comp_lock;
+    struct mlx4_bf bf;
+    bool bf_enabled;
 };
 
 struct mlx4_en_rx_desc {
-	/* actual number of entries depends on rx ring stride */
-	struct mlx4_wqe_data_seg data[0];
+    /* actual number of entries depends on rx ring stride */
+    struct mlx4_wqe_data_seg data[0];
 };
 
 struct mlx4_en_rx_ring {
-	struct mlx4_hwq_resources wqres;
-	struct mlx4_en_rx_alloc page_alloc[MLX4_EN_MAX_RX_FRAGS];
-	u32 size ;	/* number of Rx descs*/
-	u32 actual_size;
-	u32 size_mask;
-	u16 stride;
-	u16 log_stride;
-	u16 cqn;	/* index of port CQ associated with this ring */
-	u32 prod;
-	u32 cons;
-	u32 buf_size;
-	u8  fcs_del;
-	void *buf;
-	void *rx_info;
-	unsigned long bytes;
-	unsigned long packets;
-	unsigned long csum_ok;
-	unsigned long csum_none;
+    struct mlx4_hwq_resources wqres;
+    struct mlx4_en_rx_alloc page_alloc[MLX4_EN_MAX_RX_FRAGS];
+    u32 size ;	/* number of Rx descs*/
+    u32 actual_size;
+    u32 size_mask;
+    u16 stride;
+    u16 log_stride;
+    u16 cqn;	/* index of port CQ associated with this ring */
+    u32 prod;
+    u32 cons;
+    u32 buf_size;
+    u8  fcs_del;
+    void *buf;
+    void *rx_info;
+    unsigned long bytes;
+    unsigned long packets;
+    unsigned long csum_ok;
+    unsigned long csum_none;
 };
 
 
-static inline int mlx4_en_can_lro(__be16 status)
-{
-	return (status & cpu_to_be16(MLX4_CQE_STATUS_IPV4	|
-				     MLX4_CQE_STATUS_IPV4F	|
-				     MLX4_CQE_STATUS_IPV6	|
-				     MLX4_CQE_STATUS_IPV4OPT	|
-				     MLX4_CQE_STATUS_TCP	|
-				     MLX4_CQE_STATUS_UDP	|
-				     MLX4_CQE_STATUS_IPOK)) ==
-		cpu_to_be16(MLX4_CQE_STATUS_IPV4 |
-			    MLX4_CQE_STATUS_IPOK |
-			    MLX4_CQE_STATUS_TCP);
+static inline int mlx4_en_can_lro(__be16 status) {
+    return (status & cpu_to_be16(MLX4_CQE_STATUS_IPV4	|
+                                 MLX4_CQE_STATUS_IPV4F	|
+                                 MLX4_CQE_STATUS_IPV6	|
+                                 MLX4_CQE_STATUS_IPV4OPT	|
+                                 MLX4_CQE_STATUS_TCP	|
+                                 MLX4_CQE_STATUS_UDP	|
+                                 MLX4_CQE_STATUS_IPOK)) ==
+           cpu_to_be16(MLX4_CQE_STATUS_IPV4 |
+                       MLX4_CQE_STATUS_IPOK |
+                       MLX4_CQE_STATUS_TCP);
 }
 
 struct mlx4_en_cq {
-	struct mlx4_cq          mcq;
-	struct mlx4_hwq_resources wqres;
-	int                     ring;
-	spinlock_t              lock;
-	struct net_device      *dev;
-	struct napi_struct	napi;
-	/* Per-core Tx cq processing support */
-	struct timer_list timer;
-	int size;
-	int buf_size;
-	unsigned vector;
-	enum cq_type is_tx;
-	u16 moder_time;
-	u16 moder_cnt;
-	struct mlx4_cqe *buf;
+    struct mlx4_cq          mcq;
+    struct mlx4_hwq_resources wqres;
+    int                     ring;
+    spinlock_t              lock;
+    struct net_device      *dev;
+    struct napi_struct	napi;
+    /* Per-core Tx cq processing support */
+    struct timer_list timer;
+    int size;
+    int buf_size;
+    unsigned vector;
+    enum cq_type is_tx;
+    u16 moder_time;
+    u16 moder_cnt;
+    struct mlx4_cqe *buf;
 #define MLX4_EN_OPCODE_ERROR	0x1e
 };
 
 struct mlx4_en_port_profile {
-	u32 flags;
-	u32 tx_ring_num;
-	u32 rx_ring_num;
-	u32 tx_ring_size;
-	u32 rx_ring_size;
-	u8 rx_pause;
-	u8 rx_ppp;
-	u8 tx_pause;
-	u8 tx_ppp;
-	int rss_rings;
+    u32 flags;
+    u32 tx_ring_num;
+    u32 rx_ring_num;
+    u32 tx_ring_size;
+    u32 rx_ring_size;
+    u8 rx_pause;
+    u8 rx_ppp;
+    u8 tx_pause;
+    u8 tx_ppp;
+    int rss_rings;
 };
 
 struct mlx4_en_profile {
-	int rss_xor;
-	int udp_rss;
-	u8 rss_mask;
-	u32 active_ports;
-	u32 small_pkt_int;
-	u8 no_reset;
-	struct mlx4_en_port_profile prof[MLX4_MAX_PORTS + 1];
+    int rss_xor;
+    int udp_rss;
+    u8 rss_mask;
+    u32 active_ports;
+    u32 small_pkt_int;
+    u8 no_reset;
+    struct mlx4_en_port_profile prof[MLX4_MAX_PORTS + 1];
 };
 
 struct mlx4_en_dev {
-	struct mlx4_dev         *dev;
-	struct pci_dev		*pdev;
-	struct mutex		state_lock;
-	struct net_device       *pndev[MLX4_MAX_PORTS + 1];
-	u32                     port_cnt;
-	bool			device_up;
-	struct mlx4_en_profile  profile;
-	u32			LSO_support;
-	struct workqueue_struct *workqueue;
-	struct device           *dma_device;
-	void __iomem            *uar_map;
-	struct mlx4_uar         priv_uar;
-	struct mlx4_mr		mr;
-	u32                     priv_pdn;
-	spinlock_t              uar_lock;
-	u8			mac_removed[MLX4_MAX_PORTS + 1];
+    struct mlx4_dev         *dev;
+    struct pci_dev		*pdev;
+    struct mutex		state_lock;
+    struct net_device       *pndev[MLX4_MAX_PORTS + 1];
+    u32                     port_cnt;
+    bool			device_up;
+    struct mlx4_en_profile  profile;
+    u32			LSO_support;
+    struct workqueue_struct *workqueue;
+    struct device           *dma_device;
+    void __iomem            *uar_map;
+    struct mlx4_uar         priv_uar;
+    struct mlx4_mr		mr;
+    u32                     priv_pdn;
+    spinlock_t              uar_lock;
+    u8			mac_removed[MLX4_MAX_PORTS + 1];
 };
 
 
 struct mlx4_en_rss_map {
-	int base_qpn;
-	struct mlx4_qp qps[MAX_RX_RINGS];
-	enum mlx4_qp_state state[MAX_RX_RINGS];
-	struct mlx4_qp indir_qp;
-	enum mlx4_qp_state indir_state;
+    int base_qpn;
+    struct mlx4_qp qps[MAX_RX_RINGS];
+    enum mlx4_qp_state state[MAX_RX_RINGS];
+    struct mlx4_qp indir_qp;
+    enum mlx4_qp_state indir_state;
 };
 
 struct mlx4_en_port_state {
-	int link_state;
-	int link_speed;
-	int transciver;
+    int link_state;
+    int link_speed;
+    int transciver;
 };
 
 struct mlx4_en_pkt_stats {
-	unsigned long broadcast;
-	unsigned long rx_prio[8];
-	unsigned long tx_prio[8];
+    unsigned long broadcast;
+    unsigned long rx_prio[8];
+    unsigned long tx_prio[8];
 #define NUM_PKT_STATS		17
 };
 
 struct mlx4_en_port_stats {
-	unsigned long tso_packets;
-	unsigned long queue_stopped;
-	unsigned long wake_queue;
-	unsigned long tx_timeout;
-	unsigned long rx_alloc_failed;
-	unsigned long rx_chksum_good;
-	unsigned long rx_chksum_none;
-	unsigned long tx_chksum_offload;
+    unsigned long tso_packets;
+    unsigned long queue_stopped;
+    unsigned long wake_queue;
+    unsigned long tx_timeout;
+    unsigned long rx_alloc_failed;
+    unsigned long rx_chksum_good;
+    unsigned long rx_chksum_none;
+    unsigned long tx_chksum_offload;
 #define NUM_PORT_STATS		8
 };
 
 struct mlx4_en_perf_stats {
-	u32 tx_poll;
-	u64 tx_pktsz_avg;
-	u32 inflight_avg;
-	u16 tx_coal_avg;
-	u16 rx_coal_avg;
-	u32 napi_quota;
+    u32 tx_poll;
+    u64 tx_pktsz_avg;
+    u32 inflight_avg;
+    u16 tx_coal_avg;
+    u16 rx_coal_avg;
+    u32 napi_quota;
 #define NUM_PERF_COUNTERS		6
 };
 
 struct mlx4_en_frag_info {
-	u16 frag_size;
-	u16 frag_prefix_size;
-	u16 frag_stride;
-	u16 frag_align;
-	u16 last_offset;
+    u16 frag_size;
+    u16 frag_prefix_size;
+    u16 frag_stride;
+    u16 frag_align;
+    u16 last_offset;
 
 };
 
 struct mlx4_en_priv {
-	struct mlx4_en_dev *mdev;
-	struct mlx4_en_port_profile *prof;
-	struct net_device *dev;
-	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
-	struct net_device_stats stats;
-	struct net_device_stats ret_stats;
-	struct mlx4_en_port_state port_state;
-	spinlock_t stats_lock;
+    struct mlx4_en_dev *mdev;
+    struct mlx4_en_port_profile *prof;
+    struct net_device *dev;
+    unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+    struct net_device_stats stats;
+    struct net_device_stats ret_stats;
+    struct mlx4_en_port_state port_state;
+    spinlock_t stats_lock;
 
-	unsigned long last_moder_packets[MAX_RX_RINGS];
-	unsigned long last_moder_tx_packets;
-	unsigned long last_moder_bytes[MAX_RX_RINGS];
-	unsigned long last_moder_jiffies;
-	int last_moder_time[MAX_RX_RINGS];
-	u16 rx_usecs;
-	u16 rx_frames;
-	u16 tx_usecs;
-	u16 tx_frames;
-	u32 pkt_rate_low;
-	u16 rx_usecs_low;
-	u32 pkt_rate_high;
-	u16 rx_usecs_high;
-	u16 sample_interval;
-	u16 adaptive_rx_coal;
-	u32 msg_enable;
-	u32 loopback_ok;
-	u32 validate_loopback;
+    unsigned long last_moder_packets[MAX_RX_RINGS];
+    unsigned long last_moder_tx_packets;
+    unsigned long last_moder_bytes[MAX_RX_RINGS];
+    unsigned long last_moder_jiffies;
+    int last_moder_time[MAX_RX_RINGS];
+    u16 rx_usecs;
+    u16 rx_frames;
+    u16 tx_usecs;
+    u16 tx_frames;
+    u32 pkt_rate_low;
+    u16 rx_usecs_low;
+    u32 pkt_rate_high;
+    u16 rx_usecs_high;
+    u16 sample_interval;
+    u16 adaptive_rx_coal;
+    u32 msg_enable;
+    u32 loopback_ok;
+    u32 validate_loopback;
 
-	struct mlx4_hwq_resources res;
-	int link_state;
-	int last_link_state;
-	bool port_up;
-	int port;
-	int registered;
-	int allocated;
-	int stride;
-	u64 mac;
-	int mac_index;
-	unsigned max_mtu;
-	int base_qpn;
+    struct mlx4_hwq_resources res;
+    int link_state;
+    int last_link_state;
+    bool port_up;
+    int port;
+    int registered;
+    int allocated;
+    int stride;
+    u64 mac;
+    int mac_index;
+    unsigned max_mtu;
+    int base_qpn;
 
-	struct mlx4_en_rss_map rss_map;
-	__be32 ctrl_flags;
-	u32 flags;
+    struct mlx4_en_rss_map rss_map;
+    __be32 ctrl_flags;
+    u32 flags;
 #define MLX4_EN_FLAG_PROMISC	0x1
 #define MLX4_EN_FLAG_MC_PROMISC	0x2
-	u32 tx_ring_num;
-	u32 rx_ring_num;
-	u32 rx_skb_size;
-	struct mlx4_en_frag_info frag_info[MLX4_EN_MAX_RX_FRAGS];
-	u16 num_frags;
-	u16 log_rx_info;
+    u32 tx_ring_num;
+    u32 rx_ring_num;
+    u32 rx_skb_size;
+    struct mlx4_en_frag_info frag_info[MLX4_EN_MAX_RX_FRAGS];
+    u16 num_frags;
+    u16 log_rx_info;
 
-	struct mlx4_en_tx_ring tx_ring[MAX_TX_RINGS];
-	struct mlx4_en_rx_ring rx_ring[MAX_RX_RINGS];
-	struct mlx4_en_cq tx_cq[MAX_TX_RINGS];
-	struct mlx4_en_cq rx_cq[MAX_RX_RINGS];
-	struct work_struct mcast_task;
-	struct work_struct mac_task;
-	struct work_struct watchdog_task;
-	struct work_struct linkstate_task;
-	struct delayed_work stats_task;
-	struct mlx4_en_perf_stats pstats;
-	struct mlx4_en_pkt_stats pkstats;
-	struct mlx4_en_port_stats port_stats;
-	u64 stats_bitmap;
-	char *mc_addrs;
-	int mc_addrs_cnt;
-	struct mlx4_en_stat_out_mbox hw_stats;
-	int vids[128];
-	bool wol;
-	struct device *ddev;
+    struct mlx4_en_tx_ring tx_ring[MAX_TX_RINGS];
+    struct mlx4_en_rx_ring rx_ring[MAX_RX_RINGS];
+    struct mlx4_en_cq tx_cq[MAX_TX_RINGS];
+    struct mlx4_en_cq rx_cq[MAX_RX_RINGS];
+    struct work_struct mcast_task;
+    struct work_struct mac_task;
+    struct work_struct watchdog_task;
+    struct work_struct linkstate_task;
+    struct delayed_work stats_task;
+    struct mlx4_en_perf_stats pstats;
+    struct mlx4_en_pkt_stats pkstats;
+    struct mlx4_en_port_stats port_stats;
+    u64 stats_bitmap;
+    char *mc_addrs;
+    int mc_addrs_cnt;
+    struct mlx4_en_stat_out_mbox hw_stats;
+    int vids[128];
+    bool wol;
+    struct device *ddev;
 };
 
 enum mlx4_en_wol {
-	MLX4_EN_WOL_MAGIC = (1ULL << 61),
-	MLX4_EN_WOL_ENABLED = (1ULL << 62),
+    MLX4_EN_WOL_MAGIC = (1ULL << 61),
+    MLX4_EN_WOL_ENABLED = (1ULL << 62),
 };
 
 #define MLX4_EN_WOL_DO_MODIFY (1ULL << 63)
 
 void mlx4_en_destroy_netdev(struct net_device *dev);
 int mlx4_en_init_netdev(struct mlx4_en_dev *mdev, int port,
-			struct mlx4_en_port_profile *prof);
+                        struct mlx4_en_port_profile *prof);
 
 int mlx4_en_start_port(struct net_device *dev);
 void mlx4_en_stop_port(struct net_device *dev);
@@ -504,10 +503,10 @@ void mlx4_en_free_resources(struct mlx4_en_priv *priv);
 int mlx4_en_alloc_resources(struct mlx4_en_priv *priv);
 
 int mlx4_en_create_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq,
-		      int entries, int ring, enum cq_type mode);
+                      int entries, int ring, enum cq_type mode);
 void mlx4_en_destroy_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq);
 int mlx4_en_activate_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq,
-			int cq_idx);
+                        int cq_idx);
 void mlx4_en_deactivate_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq);
 int mlx4_en_set_cq_moder(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq);
 int mlx4_en_arm_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq);
@@ -518,30 +517,30 @@ u16 mlx4_en_select_queue(struct net_device *dev, struct sk_buff *skb);
 netdev_tx_t mlx4_en_xmit(struct sk_buff *skb, struct net_device *dev);
 
 int mlx4_en_create_tx_ring(struct mlx4_en_priv *priv, struct mlx4_en_tx_ring *ring,
-			   int qpn, u32 size, u16 stride);
+                           int qpn, u32 size, u16 stride);
 void mlx4_en_destroy_tx_ring(struct mlx4_en_priv *priv, struct mlx4_en_tx_ring *ring);
 int mlx4_en_activate_tx_ring(struct mlx4_en_priv *priv,
-			     struct mlx4_en_tx_ring *ring,
-			     int cq);
+                             struct mlx4_en_tx_ring *ring,
+                             int cq);
 void mlx4_en_deactivate_tx_ring(struct mlx4_en_priv *priv,
-				struct mlx4_en_tx_ring *ring);
+                                struct mlx4_en_tx_ring *ring);
 
 int mlx4_en_create_rx_ring(struct mlx4_en_priv *priv,
-			   struct mlx4_en_rx_ring *ring,
-			   u32 size, u16 stride);
+                           struct mlx4_en_rx_ring *ring,
+                           u32 size, u16 stride);
 void mlx4_en_destroy_rx_ring(struct mlx4_en_priv *priv,
-			     struct mlx4_en_rx_ring *ring,
-			     u32 size, u16 stride);
+                             struct mlx4_en_rx_ring *ring,
+                             u32 size, u16 stride);
 int mlx4_en_activate_rx_rings(struct mlx4_en_priv *priv);
 void mlx4_en_deactivate_rx_ring(struct mlx4_en_priv *priv,
-				struct mlx4_en_rx_ring *ring);
+                                struct mlx4_en_rx_ring *ring);
 int mlx4_en_process_rx_cq(struct net_device *dev,
-			  struct mlx4_en_cq *cq,
-			  int budget);
+                          struct mlx4_en_cq *cq,
+                          int budget);
 int mlx4_en_poll_rx_cq(struct napi_struct *napi, int budget);
 void mlx4_en_fill_qp_context(struct mlx4_en_priv *priv, int size, int stride,
-			     int is_tx, int rss, int qpn, int cqn,
-			     struct mlx4_qp_context *context);
+                             int is_tx, int rss, int qpn, int cqn,
+                             struct mlx4_qp_context *context);
 void mlx4_en_sqp_event(struct mlx4_qp *qp, enum mlx4_event event);
 int mlx4_en_map_buffer(struct mlx4_buf *buf);
 void mlx4_en_unmap_buffer(struct mlx4_buf *buf);
@@ -575,7 +574,7 @@ extern const struct ethtool_ops mlx4_en_ethtool_ops;
 
 __printf(3, 4)
 int en_print(const char *level, const struct mlx4_en_priv *priv,
-	     const char *format, ...);
+             const char *format, ...);
 
 #define en_dbg(mlevel, priv, format, arg...)			\
 do {								\

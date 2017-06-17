@@ -32,7 +32,7 @@ struct task_struct;
 struct thread_struct;
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 /*
@@ -44,15 +44,15 @@ void *current_text_addr(void);
 #if CHIP_HAS_TILE_DMA()
 /* Capture the state of a suspended DMA. */
 struct tile_dma_state {
-	int enabled;
-	unsigned long src;
-	unsigned long dest;
-	unsigned long strides;
-	unsigned long chunk_size;
-	unsigned long src_chunk;
-	unsigned long dest_chunk;
-	unsigned long byte;
-	unsigned long status;
+    int enabled;
+    unsigned long src;
+    unsigned long dest;
+    unsigned long strides;
+    unsigned long chunk_size;
+    unsigned long src_chunk;
+    unsigned long dest_chunk;
+    unsigned long byte;
+    unsigned long status;
 };
 
 /*
@@ -68,10 +68,10 @@ struct tile_dma_state {
  * that occur while we are in kernel mode from DMA or the SN processor.
  */
 struct async_tlb {
-	short fault_num;         /* original fault number; 0 if none */
-	char is_fault;           /* was it a fault (vs an access violation) */
-	char is_write;           /* for fault: was it caused by a write? */
-	unsigned long address;   /* what address faulted? */
+    short fault_num;         /* original fault number; 0 if none */
+    char is_fault;           /* was it a fault (vs an access violation) */
+    char is_write;           /* for fault: was it caused by a write? */
+    unsigned long address;   /* what address faulted? */
 };
 
 #ifdef CONFIG_HARDWALL
@@ -79,57 +79,57 @@ struct hardwall_info;
 #endif
 
 struct thread_struct {
-	/* kernel stack pointer */
-	unsigned long  ksp;
-	/* kernel PC */
-	unsigned long  pc;
-	/* starting user stack pointer (for page migration) */
-	unsigned long  usp0;
-	/* pid of process that created this one */
-	pid_t creator_pid;
+    /* kernel stack pointer */
+    unsigned long  ksp;
+    /* kernel PC */
+    unsigned long  pc;
+    /* starting user stack pointer (for page migration) */
+    unsigned long  usp0;
+    /* pid of process that created this one */
+    pid_t creator_pid;
 #if CHIP_HAS_TILE_DMA()
-	/* DMA info for suspended threads (byte == 0 means no DMA state) */
-	struct tile_dma_state tile_dma_state;
+    /* DMA info for suspended threads (byte == 0 means no DMA state) */
+    struct tile_dma_state tile_dma_state;
 #endif
-	/* User EX_CONTEXT registers */
-	unsigned long ex_context[2];
-	/* User SYSTEM_SAVE registers */
-	unsigned long system_save[4];
-	/* User interrupt mask */
-	unsigned long long interrupt_mask;
-	/* User interrupt-control 0 state */
-	unsigned long intctrl_0;
+    /* User EX_CONTEXT registers */
+    unsigned long ex_context[2];
+    /* User SYSTEM_SAVE registers */
+    unsigned long system_save[4];
+    /* User interrupt mask */
+    unsigned long long interrupt_mask;
+    /* User interrupt-control 0 state */
+    unsigned long intctrl_0;
 #if CHIP_HAS_PROC_STATUS_SPR()
-	/* Any other miscellaneous processor state bits */
-	unsigned long proc_status;
+    /* Any other miscellaneous processor state bits */
+    unsigned long proc_status;
 #endif
 #if !CHIP_HAS_FIXED_INTVEC_BASE()
-	/* Interrupt base for PL0 interrupts */
-	unsigned long interrupt_vector_base;
+    /* Interrupt base for PL0 interrupts */
+    unsigned long interrupt_vector_base;
 #endif
 #if CHIP_HAS_TILE_RTF_HWM()
-	/* Tile cache retry fifo high-water mark */
-	unsigned long tile_rtf_hwm;
+    /* Tile cache retry fifo high-water mark */
+    unsigned long tile_rtf_hwm;
 #endif
 #if CHIP_HAS_DSTREAM_PF()
-	/* Data stream prefetch control */
-	unsigned long dstream_pf;
+    /* Data stream prefetch control */
+    unsigned long dstream_pf;
 #endif
 #ifdef CONFIG_HARDWALL
-	/* Is this task tied to an activated hardwall? */
-	struct hardwall_info *hardwall;
-	/* Chains this task into the list at hardwall->list. */
-	struct list_head hardwall_list;
+    /* Is this task tied to an activated hardwall? */
+    struct hardwall_info *hardwall;
+    /* Chains this task into the list at hardwall->list. */
+    struct list_head hardwall_list;
 #endif
 #if CHIP_HAS_TILE_DMA()
-	/* Async DMA TLB fault information */
-	struct async_tlb dma_async_tlb;
+    /* Async DMA TLB fault information */
+    struct async_tlb dma_async_tlb;
 #endif
 #if CHIP_HAS_SN_PROC()
-	/* Was static network processor when we were switched out? */
-	int sn_proc_running;
-	/* Async SNI TLB fault information */
-	struct async_tlb sn_async_tlb;
+    /* Was static network processor when we were switched out? */
+    int sn_proc_running;
+    /* Async SNI TLB fault information */
+    struct async_tlb sn_async_tlb;
 #endif
 };
 
@@ -198,16 +198,14 @@ DECLARE_PER_CPU(unsigned long, boot_pc);
 
 /* Do necessary setup to start up a newly executed thread. */
 static inline void start_thread(struct pt_regs *regs,
-				unsigned long pc, unsigned long usp)
-{
-	regs->pc = pc;
-	regs->sp = usp;
+                                unsigned long pc, unsigned long usp) {
+    regs->pc = pc;
+    regs->sp = usp;
 }
 
 /* Free all resources held by a thread. */
-static inline void release_thread(struct task_struct *dead_task)
-{
-	/* Nothing for now */
+static inline void release_thread(struct task_struct *dead_task) {
+    /* Nothing for now */
 }
 
 /* Prepare to copy thread state - unlazy all lazy status. */
@@ -251,10 +249,9 @@ unsigned long get_wchan(struct task_struct *p);
  * Note that this must also have compiler-barrier semantics since
  * it may be used in a busy loop reading memory.
  */
-static inline void cpu_relax(void)
-{
-	__insn_mfspr(SPR_PASS);
-	barrier();
+static inline void cpu_relax(void) {
+    __insn_mfspr(SPR_PASS);
+    barrier();
 }
 
 /* Info on this processor (see fs/proc/cpuinfo.c) */

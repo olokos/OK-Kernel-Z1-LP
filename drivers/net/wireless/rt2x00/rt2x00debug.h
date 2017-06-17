@@ -35,7 +35,7 @@ struct rt2x00_dev;
  *	as argument when using the callback function read()/write()
  */
 enum rt2x00debugfs_entry_flags {
-	RT2X00DEBUGFS_OFFSET	= (1 << 0),
+    RT2X00DEBUGFS_OFFSET	= (1 << 0),
 };
 
 #define RT2X00DEBUGFS_REGISTER_ENTRY(__name, __type)		\
@@ -53,18 +53,18 @@ struct reg##__name {						\
 } __name
 
 struct rt2x00debug {
-	/*
-	 * Reference to the modules structure.
-	 */
-	struct module *owner;
+    /*
+     * Reference to the modules structure.
+     */
+    struct module *owner;
 
-	/*
-	 * Register access entries.
-	 */
-	RT2X00DEBUGFS_REGISTER_ENTRY(csr, u32);
-	RT2X00DEBUGFS_REGISTER_ENTRY(eeprom, u16);
-	RT2X00DEBUGFS_REGISTER_ENTRY(bbp, u8);
-	RT2X00DEBUGFS_REGISTER_ENTRY(rf, u32);
+    /*
+     * Register access entries.
+     */
+    RT2X00DEBUGFS_REGISTER_ENTRY(csr, u32);
+    RT2X00DEBUGFS_REGISTER_ENTRY(eeprom, u16);
+    RT2X00DEBUGFS_REGISTER_ENTRY(bbp, u8);
+    RT2X00DEBUGFS_REGISTER_ENTRY(rf, u32);
 };
 
 #endif /* RT2X00DEBUG_H */

@@ -26,8 +26,8 @@
  * @rx_control_1: RX control word 1
  */
 struct ath5k_hw_rx_ctl {
-	u32	rx_control_0;
-	u32	rx_control_1;
+    u32	rx_control_0;
+    u32	rx_control_1;
 } __packed __aligned(4);
 
 /* RX control word 1 fields/flags */
@@ -42,8 +42,8 @@ struct ath5k_hw_rx_ctl {
  * 5210, 5211 and 5212 differ only in the fields and flags defined below
  */
 struct ath5k_hw_rx_status {
-	u32	rx_status_0;
-	u32	rx_status_1;
+    u32	rx_status_0;
+    u32	rx_status_1;
 } __packed __aligned(4);
 
 /* 5210/5211 */
@@ -125,26 +125,26 @@ struct ath5k_hw_rx_status {
  * @AR5K_RX_PHY_ERROR_CCK_RESTART: CCK Restart (?) [5212+]
  */
 enum ath5k_phy_error_code {
-	AR5K_RX_PHY_ERROR_UNDERRUN		= 0,
-	AR5K_RX_PHY_ERROR_TIMING		= 1,
-	AR5K_RX_PHY_ERROR_PARITY		= 2,
-	AR5K_RX_PHY_ERROR_RATE			= 3,
-	AR5K_RX_PHY_ERROR_LENGTH		= 4,
-	AR5K_RX_PHY_ERROR_RADAR			= 5,
-	AR5K_RX_PHY_ERROR_SERVICE		= 6,
-	AR5K_RX_PHY_ERROR_TOR			= 7,
-	AR5K_RX_PHY_ERROR_OFDM_TIMING		= 17,
-	AR5K_RX_PHY_ERROR_OFDM_SIGNAL_PARITY	= 18,
-	AR5K_RX_PHY_ERROR_OFDM_RATE_ILLEGAL	= 19,
-	AR5K_RX_PHY_ERROR_OFDM_LENGTH_ILLEGAL	= 20,
-	AR5K_RX_PHY_ERROR_OFDM_POWER_DROP	= 21,
-	AR5K_RX_PHY_ERROR_OFDM_SERVICE		= 22,
-	AR5K_RX_PHY_ERROR_OFDM_RESTART		= 23,
-	AR5K_RX_PHY_ERROR_CCK_TIMING		= 25,
-	AR5K_RX_PHY_ERROR_CCK_HEADER_CRC	= 26,
-	AR5K_RX_PHY_ERROR_CCK_RATE_ILLEGAL	= 27,
-	AR5K_RX_PHY_ERROR_CCK_SERVICE		= 30,
-	AR5K_RX_PHY_ERROR_CCK_RESTART		= 31,
+    AR5K_RX_PHY_ERROR_UNDERRUN		= 0,
+    AR5K_RX_PHY_ERROR_TIMING		= 1,
+    AR5K_RX_PHY_ERROR_PARITY		= 2,
+    AR5K_RX_PHY_ERROR_RATE			= 3,
+    AR5K_RX_PHY_ERROR_LENGTH		= 4,
+    AR5K_RX_PHY_ERROR_RADAR			= 5,
+    AR5K_RX_PHY_ERROR_SERVICE		= 6,
+    AR5K_RX_PHY_ERROR_TOR			= 7,
+    AR5K_RX_PHY_ERROR_OFDM_TIMING		= 17,
+    AR5K_RX_PHY_ERROR_OFDM_SIGNAL_PARITY	= 18,
+    AR5K_RX_PHY_ERROR_OFDM_RATE_ILLEGAL	= 19,
+    AR5K_RX_PHY_ERROR_OFDM_LENGTH_ILLEGAL	= 20,
+    AR5K_RX_PHY_ERROR_OFDM_POWER_DROP	= 21,
+    AR5K_RX_PHY_ERROR_OFDM_SERVICE		= 22,
+    AR5K_RX_PHY_ERROR_OFDM_RESTART		= 23,
+    AR5K_RX_PHY_ERROR_CCK_TIMING		= 25,
+    AR5K_RX_PHY_ERROR_CCK_HEADER_CRC	= 26,
+    AR5K_RX_PHY_ERROR_CCK_RATE_ILLEGAL	= 27,
+    AR5K_RX_PHY_ERROR_CCK_SERVICE		= 30,
+    AR5K_RX_PHY_ERROR_CCK_RESTART		= 31,
 };
 
 /**
@@ -153,8 +153,8 @@ enum ath5k_phy_error_code {
  * @tx_control_1: TX control word 1
  */
 struct ath5k_hw_2w_tx_ctl {
-	u32	tx_control_0;
-	u32	tx_control_1;
+    u32	tx_control_0;
+    u32	tx_control_1;
 } __packed __aligned(4);
 
 /* TX control word 0 fields/flags */
@@ -211,10 +211,10 @@ struct ath5k_hw_2w_tx_ctl {
  * @tx_control_3: TX control word 3
  */
 struct ath5k_hw_4w_tx_ctl {
-	u32	tx_control_0;
-	u32	tx_control_1;
-	u32	tx_control_2;
-	u32	tx_control_3;
+    u32	tx_control_0;
+    u32	tx_control_1;
+    u32	tx_control_2;
+    u32	tx_control_3;
 } __packed __aligned(4);
 
 /* TX control word 0 fields/flags */
@@ -274,8 +274,8 @@ struct ath5k_hw_4w_tx_ctl {
  * @tx_status_1: TX status word 1
  */
 struct ath5k_hw_tx_status {
-	u32	tx_status_0;
-	u32	tx_status_1;
+    u32	tx_status_0;
+    u32	tx_status_1;
 } __packed __aligned(4);
 
 /* TX status word 0 fields/flags */
@@ -314,8 +314,8 @@ struct ath5k_hw_tx_status {
  * @tx_stat: The &struct ath5k_hw_tx_status
  */
 struct ath5k_hw_5210_tx_desc {
-	struct ath5k_hw_2w_tx_ctl	tx_ctl;
-	struct ath5k_hw_tx_status	tx_stat;
+    struct ath5k_hw_2w_tx_ctl	tx_ctl;
+    struct ath5k_hw_tx_status	tx_stat;
 } __packed __aligned(4);
 
 /**
@@ -324,8 +324,8 @@ struct ath5k_hw_5210_tx_desc {
  * @tx_stat: The &struct ath5k_hw_tx_status
  */
 struct ath5k_hw_5212_tx_desc {
-	struct ath5k_hw_4w_tx_ctl	tx_ctl;
-	struct ath5k_hw_tx_status	tx_stat;
+    struct ath5k_hw_4w_tx_ctl	tx_ctl;
+    struct ath5k_hw_tx_status	tx_stat;
 } __packed __aligned(4);
 
 /**
@@ -334,8 +334,8 @@ struct ath5k_hw_5212_tx_desc {
  * @rx_stat: The &struct ath5k_hw_rx_status
  */
 struct ath5k_hw_all_rx_desc {
-	struct ath5k_hw_rx_ctl		rx_ctl;
-	struct ath5k_hw_rx_status	rx_stat;
+    struct ath5k_hw_rx_ctl		rx_ctl;
+    struct ath5k_hw_rx_status	rx_stat;
 } __packed __aligned(4);
 
 /**
@@ -347,14 +347,14 @@ struct ath5k_hw_all_rx_desc {
  * This is read and written to by the hardware
  */
 struct ath5k_desc {
-	u32	ds_link;
-	u32	ds_data;
+    u32	ds_link;
+    u32	ds_data;
 
-	union {
-		struct ath5k_hw_5210_tx_desc	ds_tx5210;
-		struct ath5k_hw_5212_tx_desc	ds_tx5212;
-		struct ath5k_hw_all_rx_desc	ds_rx;
-	} ud;
+    union {
+        struct ath5k_hw_5210_tx_desc	ds_tx5210;
+        struct ath5k_hw_5212_tx_desc	ds_tx5212;
+        struct ath5k_hw_all_rx_desc	ds_rx;
+    } ud;
 } __packed __aligned(4);
 
 #define AR5K_RXDESC_INTREQ	0x0020

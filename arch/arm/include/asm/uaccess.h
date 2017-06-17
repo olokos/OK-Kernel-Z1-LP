@@ -35,9 +35,8 @@
  * on our cache or tlb entries.
  */
 
-struct exception_table_entry
-{
-	unsigned long insn, fixup;
+struct exception_table_entry {
+    unsigned long insn, fixup;
 };
 
 extern int fixup_exception(struct pt_regs *regs);
@@ -60,10 +59,9 @@ extern int __put_user_bad(void);
 #define USER_DS		TASK_SIZE
 #define get_fs()	(current_thread_info()->addr_limit)
 
-static inline void set_fs(mm_segment_t fs)
-{
-	current_thread_info()->addr_limit = fs;
-	modify_domain(DOMAIN_KERNEL, fs ? DOMAIN_CLIENT : DOMAIN_MANAGER);
+static inline void set_fs(mm_segment_t fs) {
+    current_thread_info()->addr_limit = fs;
+    modify_domain(DOMAIN_KERNEL, fs ? DOMAIN_CLIENT : DOMAIN_MANAGER);
 }
 
 #define segment_eq(a,b)	((a) == (b))
@@ -192,8 +190,7 @@ extern int __put_user_8(void *, unsigned long long);
 #define __range_ok(addr,size)	(0)
 #define get_fs()		(KERNEL_DS)
 
-static inline void set_fs(mm_segment_t fs)
-{
+static inline void set_fs(mm_segment_t fs) {
 }
 
 #define get_user(x,p)	__get_user(x,p)
@@ -415,50 +412,45 @@ extern unsigned long __must_check __clear_user_std(void __user *addr, unsigned l
 extern unsigned long __must_check __strncpy_from_user(char *to, const char __user *from, unsigned long count);
 extern unsigned long __must_check __strnlen_user(const char __user *s, long n);
 
-static inline unsigned long __must_check copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	if (access_ok(VERIFY_READ, from, n))
-		n = __copy_from_user(to, from, n);
-	else /* security hole - plug it */
-		memset(to, 0, n);
-	return n;
+static inline unsigned long __must_check copy_from_user(void *to, const void __user *from, unsigned long n) {
+    if (access_ok(VERIFY_READ, from, n))
+        n = __copy_from_user(to, from, n);
+    else /* security hole - plug it */
+        memset(to, 0, n);
+    return n;
 }
 
-static inline unsigned long __must_check copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		n = __copy_to_user(to, from, n);
-	return n;
+static inline unsigned long __must_check copy_to_user(void __user *to, const void *from, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        n = __copy_to_user(to, from, n);
+    return n;
 }
 
 #define __copy_to_user_inatomic __copy_to_user
 #define __copy_from_user_inatomic __copy_from_user
 
-static inline unsigned long __must_check clear_user(void __user *to, unsigned long n)
-{
-	if (access_ok(VERIFY_WRITE, to, n))
-		n = __clear_user(to, n);
-	return n;
+static inline unsigned long __must_check clear_user(void __user *to, unsigned long n) {
+    if (access_ok(VERIFY_WRITE, to, n))
+        n = __clear_user(to, n);
+    return n;
 }
 
-static inline long __must_check strncpy_from_user(char *dst, const char __user *src, long count)
-{
-	long res = -EFAULT;
-	if (access_ok(VERIFY_READ, src, 1))
-		res = __strncpy_from_user(dst, src, count);
-	return res;
+static inline long __must_check strncpy_from_user(char *dst, const char __user *src, long count) {
+    long res = -EFAULT;
+    if (access_ok(VERIFY_READ, src, 1))
+        res = __strncpy_from_user(dst, src, count);
+    return res;
 }
 
 #define strlen_user(s)	strnlen_user(s, ~0UL >> 1)
 
-static inline long __must_check strnlen_user(const char __user *s, long n)
-{
-	unsigned long res = 0;
+static inline long __must_check strnlen_user(const char __user *s, long n) {
+    unsigned long res = 0;
 
-	if (__addr_ok(s))
-		res = __strnlen_user(s, n);
+    if (__addr_ok(s))
+        res = __strnlen_user(s, n);
 
-	return res;
+    return res;
 }
 
 #endif /* _ASMARM_UACCESS_H */

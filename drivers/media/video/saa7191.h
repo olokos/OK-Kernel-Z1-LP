@@ -181,17 +181,17 @@
 #define SAA7191_NORM_SECAM	3
 
 struct saa7191_status {
-	/* 0=no signal, 1=signal detected */
-	int signal;
-	/* 0=50hz (pal) signal, 1=60hz (ntsc) signal */
-	int signal_60hz;
-	/* 0=no color detected, 1=color detected */
-	int color;
+    /* 0=no signal, 1=signal detected */
+    int signal;
+    /* 0=50hz (pal) signal, 1=60hz (ntsc) signal */
+    int signal_60hz;
+    /* 0=no color detected, 1=color detected */
+    int color;
 
-	/* current SAA7191_INPUT_ */
-	int input;
-	/* current SAA7191_NORM_ */
-	int norm;
+    /* current SAA7191_INPUT_ */
+    int input;
+    /* current SAA7191_NORM_ */
+    int norm;
 };
 
 #define SAA7191_BANDPASS_MIN		0x00

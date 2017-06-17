@@ -102,8 +102,7 @@
 
 #define MAX_CHANNEL MAX_2_4GHZ_CHANNEL + NUM_5GHZ_CHANNELS
 
-typedef struct
-{
+typedef struct {
     u8 element_id;
     u8 len;
     u8 oui_1;
@@ -114,8 +113,7 @@ typedef struct
 } __attribute__((packed)) qcom_ie_age ;
 #endif
 
-enum qca_nl80211_vendor_subcmds
-{
+enum qca_nl80211_vendor_subcmds {
     QCA_NL80211_VENDOR_SUBCMD_UNSPEC = 0,
     QCA_NL80211_VENDOR_SUBCMD_TEST = 1,
 
@@ -168,8 +166,7 @@ enum qca_nl80211_vendor_subcmds
     QCA_NL80211_VENDOR_SUBCMD_GET_CONCURRENCY_MATRIX = 42
 };
 
-enum qca_nl80211_vendor_subcmds_index
-{
+enum qca_nl80211_vendor_subcmds_index {
 #ifdef FEATURE_WLAN_CH_AVOID
     QCA_NL80211_VENDOR_SUBCMD_AVOID_FREQUENCY_INDEX,
 #endif /* FEATURE_WLAN_CH_AVOID */
@@ -197,8 +194,7 @@ enum qca_nl80211_vendor_subcmds_index
     QCA_NL80211_VENDOR_SUBCMD_TDLS_STATE_CHANGE_INDEX,
 };
 
-enum qca_wlan_vendor_attr
-{
+enum qca_wlan_vendor_attr {
     QCA_WLAN_VENDOR_ATTR_INVALID = 0,
     /* used by QCA_NL80211_VENDOR_SUBCMD_DFS_CAPABILITY */
     QCA_WLAN_VENDOR_ATTR_DFS     = 1,
@@ -218,8 +214,7 @@ enum qca_wlan_vendor_attr
 };
 
 /*EXT TDLS*/
-enum qca_wlan_vendor_attr_tdls_enable
-{
+enum qca_wlan_vendor_attr_tdls_enable {
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_MAC_ADDR,
@@ -234,8 +229,7 @@ enum qca_wlan_vendor_attr_tdls_enable
         QCA_WLAN_VENDOR_ATTR_TDLS_ENABLE_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_disable
-{
+enum qca_wlan_vendor_attr_tdls_disable {
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_MAC_ADDR,
@@ -245,8 +239,7 @@ enum qca_wlan_vendor_attr_tdls_disable
         QCA_WLAN_VENDOR_ATTR_TDLS_DISABLE_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_get_status
-{
+enum qca_wlan_vendor_attr_tdls_get_status {
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_MAC_ADDR,
@@ -261,8 +254,7 @@ enum qca_wlan_vendor_attr_tdls_get_status
         QCA_WLAN_VENDOR_ATTR_TDLS_GET_STATUS_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_tdls_state
-{
+enum qca_wlan_vendor_attr_tdls_state {
     QCA_WLAN_VENDOR_ATTR_TDLS_STATE_INVALID = 0,
     /* An array of 6 x Unsigned 8-bit value */
     QCA_WLAN_VENDOR_ATTR_TDLS_STATE_MAC_ADDR,
@@ -280,8 +272,7 @@ enum qca_wlan_vendor_attr_tdls_state
 
 #ifdef WLAN_FEATURE_LINK_LAYER_STATS
 
-enum qca_wlan_vendor_attr_ll_stats_set
-{
+enum qca_wlan_vendor_attr_ll_stats_set {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_MPDU_SIZE_THRESHOLD = 1,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_AGGRESSIVE_STATS_GATHERING,
@@ -291,8 +282,7 @@ enum qca_wlan_vendor_attr_ll_stats_set
         QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_ll_stats_get
-{
+enum qca_wlan_vendor_attr_ll_stats_get {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_INVALID = 0,
     /* Unsigned 32bit value provided by the caller issuing the GET stats
      * command. When reporting the stats results, the driver uses the same
@@ -309,8 +299,7 @@ enum qca_wlan_vendor_attr_ll_stats_get
         QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_ll_stats_clr
-{
+enum qca_wlan_vendor_attr_ll_stats_clr {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_CONFIG_REQ_MASK,
     QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_CONFIG_STOP_REQ,
@@ -322,8 +311,7 @@ enum qca_wlan_vendor_attr_ll_stats_clr
         QCA_WLAN_VENDOR_ATTR_LL_STATS_CLR_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_ll_stats_results
-{
+enum qca_wlan_vendor_attr_ll_stats_results {
     QCA_WLAN_VENDOR_ATTR_LL_STATS_INVALID = 0,
     /* Unsigned 32bit value */
     QCA_WLAN_VENDOR_ATTR_LL_STATS_RESULTS_REQ_ID = 1,
@@ -559,8 +547,7 @@ enum qca_wlan_vendor_attr_ll_stats_results
 
 #ifdef WLAN_FEATURE_EXTSCAN
 
-enum qca_wlan_vendor_attr_extscan_config_params
-{
+enum qca_wlan_vendor_attr_extscan_config_params {
     QCA_WLAN_VENDOR_ATTR_EXTSCAN_SUBCMD_CONFIG_PARAM_INVALID = 0,
 
     /* Unsigned 32-bit value; Middleware provides it to the driver. Middle ware
@@ -673,8 +660,7 @@ enum qca_wlan_vendor_attr_extscan_config_params
 
 };
 
-enum qca_wlan_vendor_attr_extscan_results
-{
+enum qca_wlan_vendor_attr_extscan_results {
     QCA_WLAN_VENDOR_ATTR_EXTSCAN_RESULTS_INVALID = 0,
 
     /* Unsigned 32-bit value; must match the request Id supplied by Wi-Fi HAL
@@ -802,8 +788,7 @@ enum qca_wlan_vendor_attr_extscan_results
 };
 
 #endif /* WLAN_FEATURE_EXTSCAN */
-enum qca_wlan_vendor_attr_set_scanning_mac_oui
-{
+enum qca_wlan_vendor_attr_set_scanning_mac_oui {
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI_INVALID = 0,
     QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI = 1,
     /* keep last */
@@ -812,8 +797,7 @@ enum qca_wlan_vendor_attr_set_scanning_mac_oui
         QCA_WLAN_VENDOR_ATTR_SET_SCANNING_MAC_OUI_AFTER_LAST - 1,
 };
 
-enum qca_wlan_vendor_attr_get_supported_features
-{
+enum qca_wlan_vendor_attr_get_supported_features {
     QCA_WLAN_VENDOR_ATTR_FEATURE_SET_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_FEATURE_SET = 1,
@@ -826,8 +810,7 @@ enum qca_wlan_vendor_attr_get_supported_features
 /* NL attributes for data used by
  * QCA_NL80211_VENDOR_SUBCMD_GET_CONCURRENCY_MATRIX sub command.
  */
-enum qca_wlan_vendor_attr_get_concurrency_matrix
-{
+enum qca_wlan_vendor_attr_get_concurrency_matrix {
     QCA_WLAN_VENDOR_ATTR_GET_CONCURRENCY_MATRIX_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_GET_CONCURRENCY_MATRIX_CONFIG_PARAM_SET_SIZE_MAX = 1,
@@ -865,8 +848,7 @@ enum qca_wlan_vendor_attr_get_concurrency_matrix
 #define WIFI_FEATURE_AP_STA             0x8000   /* Support for AP STA
                                                     Concurrency */
 /* Add more features here */
-enum qca_wlan_vendor_attr_set_no_dfs_flag
-{
+enum qca_wlan_vendor_attr_set_no_dfs_flag {
     QCA_WLAN_VENDOR_ATTR_SET_NO_DFS_FLAG_INVALID = 0,
     /* Unsigned 32-bit value */
     QCA_WLAN_VENDOR_ATTR_SET_NO_DFS_FLAG = 1,
@@ -886,14 +868,12 @@ enum qca_wlan_vendor_attr_set_no_dfs_flag
 
 #ifdef FEATURE_WLAN_CH_AVOID
 #define HDD_MAX_AVOID_FREQ_RANGES   4
-typedef struct sHddAvoidFreqRange
-{
+typedef struct sHddAvoidFreqRange {
     u32 startFreq;
     u32 endFreq;
 } tHddAvoidFreqRange;
 
-typedef struct sHddAvoidFreqList
-{
+typedef struct sHddAvoidFreqList {
     u32 avoidFreqRangeCount;
     tHddAvoidFreqRange avoidFreqRange[HDD_MAX_AVOID_FREQ_RANGES];
 } tHddAvoidFreqList;

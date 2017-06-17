@@ -179,8 +179,7 @@ WLANBAP_RoamCallback
     tANI_U32 roamId,
     eRoamCmdStatus roamStatus,
     eCsrRoamResult roamResult
-)
-{
+) {
     eHalStatus  halStatus = eHAL_STATUS_SUCCESS;
     /* btampContext value */
     ptBtampContext btampContext = (ptBtampContext) pContext;
@@ -191,8 +190,7 @@ WLANBAP_RoamCallback
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, before switch on roamStatus = %d", __func__, roamStatus);
 
-    switch (roamStatus)
-    {
+    switch (roamStatus) {
     //JEZ081110: For testing purposes, with Infra STA as BT STA, this
     //actually takes care of the "eCSR_ROAM_RESULT_WDS_STARTED" case,
     //below, better than "eCSR_ROAM_RESULT_IBSS_STARTED".
@@ -202,8 +200,7 @@ WLANBAP_RoamCallback
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, CSR roamResult = %s (%d)", __func__, "eCSR_ROAM_ROAMING_START", roamResult);
         // This only gets called when CSR decides to roam on its own - due to lostlink.
 #if 0
-        if ((pCsrRoamInfo) && (pCsrRoamInfo->pConnectedProfile) && (pCsrRoamInfo->pConnectedProfile->pBssDesc))
-        {
+        if ((pCsrRoamInfo) && (pCsrRoamInfo->pConnectedProfile) && (pCsrRoamInfo->pConnectedProfile->pBssDesc)) {
             memcpy(bssid.ether_addr_octet, pCsrRoamInfo->pConnectedProfile->pBssDesc->bssId,
                    sizeof(tSirMacAddr));
             apple80211Interface->willRoam(&bssid);  // Return result isn't significant
@@ -243,8 +240,7 @@ WLANBAP_RoamCallback
         /* bapRoamCompleteCallback with eCSR_ROAM_LOSTLINK */
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, CSR roamStatus = %s (%d)", __func__, "eCSR_ROAM_LOSTLINK", roamStatus);
 
-        if (roamResult != eCSR_ROAM_RESULT_NONE)
-        {
+        if (roamResult != eCSR_ROAM_RESULT_NONE) {
             /* Fill in the event structure */
             bapEvent.event = eWLAN_BAP_MAC_READY_FOR_CONNECTIONS;
             bapEvent.params = pCsrRoamInfo;
@@ -265,8 +261,7 @@ WLANBAP_RoamCallback
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, before switch on roamResult = %d", __func__, roamResult);
 
-    switch (roamResult)
-    {
+    switch (roamResult) {
     //JEZ081110: Commented out for testing. Test relies upon IBSS.
     case eCSR_ROAM_RESULT_IBSS_STARTED:
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, CSR roamResult = %s (%d)", __func__, "eCSR_ROAM_RESULT_IBSS_STARTED", roamResult);
@@ -454,8 +449,7 @@ WLANBAP_RoamCallback
     }
 
 #if 0
-    switch (roamResult)
-    {
+    switch (roamResult) {
     case eCSR_ROAM_RESULT_IBSS_CONNECT:
         // we have an IBSS connection...
 
@@ -480,8 +474,7 @@ WLANBAP_RoamCallback
 
         btampContext->systemRole = eSYSTEM_STA_IN_IBSS_ROLE;
 
-        if (mLinkStatus == 0)
-        {
+        if (mLinkStatus == 0) {
             // enable the flow of data
             DBGLOG("%s: marking link as up in %s\n", __func__, "eCSR_ROAM_RESULT_IBSS_CONNECT");
             mLinkStatus = 1;
@@ -490,17 +483,14 @@ WLANBAP_RoamCallback
             outputQueue->start();
             // Let them know we are ready
             ((IO80211Interface*) mNetworkIF)->postMessage(APPLE80211_M_ASSOC_DONE);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link is already up in %s\n", __func__, "eCSR_ROAM_RESULT_IBSS_CONNECT");
         }
         break;
 
     case eCSR_ROAM_RESULT_IBSS_INACTIVE:
         // we have no more IBSS peers, so disable the flow of data
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_RESULT_IBSS_INACTIVE");
             mLinkStatus = (tANI_U8) 0;
             // JEZ070627: Revisit ?
@@ -510,9 +500,7 @@ WLANBAP_RoamCallback
 
             // update our state
             btampContext->mAssociated = false;
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_RESULT_IBSS_INACTIVE");
         }
 
@@ -522,15 +510,13 @@ WLANBAP_RoamCallback
         btampContext->mAssociatedStatus = APPLE80211_STATUS_SUCCESS;
         btampContext->mAssociated = true;
 
-        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc))
-        {
+        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc)) {
             ccpCsrToAppleScanResult(mPMacObject, pCsrRoamInfo->pBssDesc, &scanResult);
 
             /* Save away the IEs used by the AP */
             ccpCsrToAssocApiedata( mPMacObject, pCsrRoamInfo->pBssDesc, &(btampContext->apiedata));
 
-            if (BssidChanged((tCsrBssid*) btampContext->assocBssid, (ether_addr*) scanResult.asr_bssid))
-            {
+            if (BssidChanged((tCsrBssid*) btampContext->assocBssid, (ether_addr*) scanResult.asr_bssid)) {
                 memcpy(btampContext->assocBssid, scanResult.asr_bssid, 6);
                 ((IO80211Interface*) mNetworkIF)->postMessage(APPLE80211_M_BSSID_CHANGED );
             }
@@ -538,16 +524,13 @@ WLANBAP_RoamCallback
 
         ((IO80211Interface*) mNetworkIF)->postMessage(APPLE80211_M_ASSOC_DONE);
 
-        if (mLinkStatus == 0)
-        {
+        if (mLinkStatus == 0) {
             mLinkStatus = (tANI_U8) 1;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkUp);
             DBGLOG("%s: marking link as up in %s\n", __func__, "eCSR_ROAM_RESULT_ASSOCIATED");
             outputQueue->setCapacity(TRANSMIT_QUEUE_SIZE);
             outputQueue->start();
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link is already up in %s\n", __func__, "eCSR_ROAM_RESULT_ASSOCIATED");
         }
         break;
@@ -555,14 +538,11 @@ WLANBAP_RoamCallback
         btampContext->mAssociatedStatus = APPLE80211_STATUS_UNAVAILABLE;
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_RESULT_NOT_ASSOCIATED");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_RESULT_NOT_ASSOCIATED");
         }
         break;
@@ -571,30 +551,23 @@ WLANBAP_RoamCallback
         btampContext->mAssociatedStatus = APPLE80211_STATUS_UNSPECIFIED_FAILURE;
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_RESULT_FAILURE");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_RESULT_FAILURE");
         }
         break;
 
-    case eCSR_ROAM_RESULT_DISASSOC_IND:
-    {
+    case eCSR_ROAM_RESULT_DISASSOC_IND: {
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_RESULT_DISASSOC_IND");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_RESULT_DISASSOC_IND");
         }
 
@@ -621,18 +594,14 @@ WLANBAP_RoamCallback
     }
     break;
 
-    case eCSR_ROAM_RESULT_DEAUTH_IND:
-    {
+    case eCSR_ROAM_RESULT_DEAUTH_IND: {
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_RESULT_DEAUTH_IND");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_RESULT_DEAUTH_IND");
         }
 
@@ -663,13 +632,10 @@ WLANBAP_RoamCallback
 
         //if (eCSR_ROAM_MIC_ERROR_IND == roamStatus)  // Make sure
     {
-        if (btampContext->mTKIPCounterMeasures)
-        {
+        if (btampContext->mTKIPCounterMeasures) {
             ((IO80211Interface*) mNetworkIF)->postMessage(APPLE80211_M_MIC_ERROR_UCAST);
             DBGLOG("%s: TKIP Countermeasures in effect in %s\n", __func__, "eCSR_ROAM_RESULT_MIC_ERROR_UNICAST");
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: TKIP Countermeasures disabled in %s\n", __func__, "eCSR_ROAM_RESULT_MIC_ERROR_UNICAST");
         }
     }
@@ -679,13 +645,10 @@ WLANBAP_RoamCallback
 
         //if (eCSR_ROAM_MIC_ERROR_IND == roamStatus)  // Make sure
     {
-        if (btampContext->mTKIPCounterMeasures)
-        {
+        if (btampContext->mTKIPCounterMeasures) {
             ((IO80211Interface*) mNetworkIF)->postMessage(APPLE80211_M_MIC_ERROR_MCAST);
             DBGLOG("%s: TKIP Countermeasures in effect in %s\n", __func__, "eCSR_ROAM_RESULT_MIC_ERROR_GROUP");
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: TKIP Countermeasures disabled in %s\n", __func__, "eCSR_ROAM_RESULT_MIC_ERROR_GROUP");
         }
     }
@@ -694,14 +657,12 @@ WLANBAP_RoamCallback
     default:
         break;
     }
-    switch (roamStatus)
-    {
+    switch (roamStatus) {
     case eCSR_ROAM_ROAMING_START:
         DBGLOG("%s: In %s\n", __func__, "eCSR_ROAM_ROAMING_START");
         // This only gets called when CSR decides to roam on its own - due to lostlink.
         // Apple still needs to be told.
-        if ((pCsrRoamInfo) && (pCsrRoamInfo->pConnectedProfile) && (pCsrRoamInfo->pConnectedProfile->pBssDesc))
-        {
+        if ((pCsrRoamInfo) && (pCsrRoamInfo->pConnectedProfile) && (pCsrRoamInfo->pConnectedProfile->pBssDesc)) {
             memcpy(bssid.ether_addr_octet, pCsrRoamInfo->pConnectedProfile->pBssDesc->bssId,
                    sizeof(tSirMacAddr));
             apple80211Interface->willRoam(&bssid);  // Return result isn't significant
@@ -710,8 +671,7 @@ WLANBAP_RoamCallback
         break;
 
     case eCSR_ROAM_SHOULD_ROAM:
-        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc))
-        {
+        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc)) {
             // pCallbackInfo points to the BSS desc. Convert to Apple Scan Result.
             halStatus = ccpCsrToAppleScanResult(
                             mPMacObject,
@@ -720,8 +680,7 @@ WLANBAP_RoamCallback
             if ( halStatus != 0 )
                 return eHAL_STATUS_FAILURE;
             roamAccepted = apple80211Interface->shouldRoam(&scanResult);  // Return result is crucial
-            if (roamAccepted == true)
-            {
+            if (roamAccepted == true) {
                 // If the roam is acceptable, return SUCCESS
                 DBGLOG("%s: shouldRoam returns \"acceptable\"\n", __func__);
 //#if 0
@@ -735,9 +694,7 @@ WLANBAP_RoamCallback
                 DBGLOG("    with BSSID = " MAC_ADDR_STRING(bssid.ether_addr_octet));
 //#endif
                 return eHAL_STATUS_SUCCESS;
-            }
-            else
-            {
+            } else {
                 // If the roam is NOT acceptable, return FAILURE
                 DBGLOG("%s: shouldRoam returns \"NOT acceptable\"\n", __func__);
                 return eHAL_STATUS_FAILURE;
@@ -750,14 +707,11 @@ WLANBAP_RoamCallback
     {
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_DISASSOCIATED");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_DISASSOCIATED");
         }
     }
@@ -767,14 +721,11 @@ WLANBAP_RoamCallback
         btampContext->mAssociatedStatus = APPLE80211_STATUS_UNSPECIFIED_FAILURE;
         btampContext->mAssociated = false;
 
-        if (mLinkStatus != 0)
-        {
+        if (mLinkStatus != 0) {
             DBGLOG("%s: marking link as down in %s\n", __func__, "eCSR_ROAM_LOSTLINK");
             mLinkStatus = (tANI_U8) 0;
             ((IO80211Interface*) mNetworkIF)->setLinkState(kIO80211NetworkLinkDown);
-        }
-        else
-        {
+        } else {
             DBGLOG("%s: link already down in %s\n", __func__, "eCSR_ROAM_LOSTLINK");
         }
         break;
@@ -786,8 +737,7 @@ WLANBAP_RoamCallback
         // But, unfortunately, when eCSR_ROAM_ASSOCIATION_START gets called,
         // it doesn't have a pointer to the tBssDescription in the roaming callback
         // routines parameter p1 (pCallbackInfo in SetWextState).   So, don't use this code, yet.
-        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc)
-    {
+        if ((pCsrRoamInfo) && (pCsrRoamInfo->pBssDesc) {
         memcpy(bssid.ether_addr_octet, pCsrRoamInfo->pBssDesc->bssId, 6);
             apple80211Interface->willRoam(&bssid);  // Return result isn't significant
             DBGLOG("%s: willRoam returns\n", __func__);
@@ -867,8 +817,7 @@ WLAN_BAPPhysicalLinkCreate
     /* And I get phy_link_handle from the Command */
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tWLAN_BAPEvent bapEvent; /* State machine event */
     VOS_STATUS  vosStatus;
     /* I am using btampContext, instead of pBapPhysLinkMachine */
@@ -878,8 +827,7 @@ WLAN_BAPPhysicalLinkCreate
     BTAMPFSM_INSTANCEDATA_T *instanceVar = &(btampContext->bapPhysLinkMachine);
 
     /* Validate params */
-    if ((pBapHCIPhysLinkCreate == NULL) || (NULL == btampContext))
-    {
+    if ((pBapHCIPhysLinkCreate == NULL) || (NULL == btampContext)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR, "%s: btampHandle value: %p, pBapHCIPhysLinkCreate is %p",
                    __func__,  btampHandle, pBapHCIPhysLinkCreate);
         return VOS_STATUS_E_FAULT;
@@ -887,14 +835,11 @@ WLAN_BAPPhysicalLinkCreate
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
-    if(DISCONNECTED != instanceVar->stateVar)
-    {
+    if(DISCONNECTED != instanceVar->stateVar) {
         /* Create/Accept Phy link request in invalid state */
         status = WLANBAP_ERROR_MAX_NUM_CNCTS;
 
-    }
-    else
-    {
+    } else {
         /* Fill in the event structure */
         bapEvent.event = eWLAN_BAP_HCI_PHYSICAL_LINK_CREATE;
         bapEvent.params = pBapHCIPhysLinkCreate;
@@ -970,8 +915,7 @@ WLAN_BAPPhysicalLinkAccept
     /* And I get phy_link_handle from the Command */
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tWLAN_BAPEvent bapEvent; /* State machine event */
     VOS_STATUS  vosStatus;
     /* I am using btampContext, instead of pBapPhysLinkMachine */
@@ -981,8 +925,7 @@ WLAN_BAPPhysicalLinkAccept
     BTAMPFSM_INSTANCEDATA_T *instanceVar;
 
     /* Validate params */
-    if ((pBapHCIPhysLinkAccept == NULL) || (NULL == btampContext))
-    {
+    if ((pBapHCIPhysLinkAccept == NULL) || (NULL == btampContext)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR, "%s: btampHandle value: %p, pBapHCIPhysLinkAccept is %p",
                    __func__,  btampHandle, pBapHCIPhysLinkAccept);
         return VOS_STATUS_E_FAULT;
@@ -991,14 +934,11 @@ WLAN_BAPPhysicalLinkAccept
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     instanceVar = &(btampContext->bapPhysLinkMachine);
-    if(DISCONNECTED != instanceVar->stateVar)
-    {
+    if(DISCONNECTED != instanceVar->stateVar) {
         /* Create/Accept Phy link request in invalid state */
         status = WLANBAP_ERROR_MAX_NUM_CNCTS;
 
-    }
-    else
-    {
+    } else {
         /* Fill in the event structure */
         bapEvent.event = eWLAN_BAP_HCI_PHYSICAL_LINK_ACCEPT;
         bapEvent.params = pBapHCIPhysLinkAccept;
@@ -1071,8 +1011,7 @@ WLAN_BAPPhysicalLinkDisconnect
     tBtampTLVHCI_Disconnect_Physical_Link_Cmd   *pBapHCIPhysLinkDisconnect,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tWLAN_BAPEvent bapEvent; /* State machine event */
     VOS_STATUS  vosStatus;
     /* I am using btampContext, instead of pBapPhysLinkMachine */
@@ -1081,16 +1020,14 @@ WLAN_BAPPhysicalLinkDisconnect
     v_U8_t status;    /* return the BT-AMP status here */
 
     /* Validate params */
-    if (pBapHCIPhysLinkDisconnect == NULL)
-    {
+    if (pBapHCIPhysLinkDisconnect == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate the Physical link handle */
-    if (pBapHCIPhysLinkDisconnect->phy_link_handle != btampContext->phy_link_handle)
-    {
+    if (pBapHCIPhysLinkDisconnect->phy_link_handle != btampContext->phy_link_handle) {
         /* Format the command status event to return... */
         pBapHCIEvent->bapHCIEventCode = BTAMP_TLV_HCI_COMMAND_STATUS_EVENT;
         pBapHCIEvent->u.btampCommandStatusEvent.present = 1;
@@ -1168,8 +1105,7 @@ WLAN_BAPLogicalLinkCreate
     tBtampTLVHCI_Create_Logical_Link_Cmd   *pBapHCILogLinkCreate,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     VOS_STATUS  vosStatus;
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
@@ -1181,14 +1117,12 @@ WLAN_BAPLogicalLinkCreate
 
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
     /* Validate params */
-    if (pBapHCILogLinkCreate == NULL)
-    {
+    if (pBapHCILogLinkCreate == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -1206,47 +1140,36 @@ WLAN_BAPLogicalLinkCreate
         = BTAMP_TLV_HCI_CREATE_LOGICAL_LINK_CMD;
 
     retval = VOS_STATUS_E_FAILURE;
-    if(DISCONNECTED == instanceVar->stateVar)
-    {
+    if(DISCONNECTED == instanceVar->stateVar) {
         /* Create Logical link request in invalid state */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_NO_CNCT;
 
-    }
-    else if (CONNECTED != instanceVar->stateVar)
-    {
+    } else if (CONNECTED != instanceVar->stateVar) {
         /* Create Logical link request in invalid state */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_CMND_DISALLOWED;
-    }
-    else if (pBapHCILogLinkCreate->phy_link_handle != btampContext->phy_link_handle)
-    {
+    } else if (pBapHCILogLinkCreate->phy_link_handle != btampContext->phy_link_handle) {
         /* Invalid Physical link handle */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         btampContext->btamp_logical_link_state = WLAN_BAPLogLinkInProgress;
 
-        if( TRUE == btampContext->btamp_logical_link_cancel_pending )
-        {
+        if( TRUE == btampContext->btamp_logical_link_cancel_pending ) {
             pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                 WLANBAP_ERROR_NO_CNCT;
             bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_NO_CNCT;
             btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
             btampContext->btamp_logical_link_cancel_pending = FALSE;
-        }
-        else
-        {
+        } else {
             /* If btamp_async_logical_link_create is set, we will seralize the req
                on MC thread & handle it there after; If the above flag is not set
                respond to HCI the sync way as before */
-            if(FALSE == btampContext->btamp_async_logical_link_create)
-            {
+            if(FALSE == btampContext->btamp_async_logical_link_create) {
                 /* Allocate a logical link index for these flow specs */
                 vosStatus = WLANBAP_CreateNewLogLinkCtx(
                                 btampContext, /* per assoc btampContext value */
@@ -1255,25 +1178,20 @@ WLAN_BAPLogicalLinkCreate
                                 pBapHCILogLinkCreate->rx_flow_spec, /*  I get rx_flow_spec from the Command */
                                 &log_link_index /*  Return the logical link index here */
                             );
-                if (VOS_STATUS_SUCCESS != vosStatus)
-                {
+                if (VOS_STATUS_SUCCESS != vosStatus) {
                     /* Invalid flow spec format */
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                         WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
-                }
-                else
-                {
+                } else {
                     retval = VOS_STATUS_SUCCESS;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_STATUS_SUCCESS;
 
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status = WLANBAP_STATUS_SUCCESS;
                     btampContext->btamp_logical_link_state = WLAN_BAPLogLinkOpen;
                 }
-            }
-            else
-            {
+            } else {
                 btampContext->btamp_logical_link_req_info.phyLinkHandle =
                     pBapHCILogLinkCreate->phy_link_handle;
                 vos_mem_copy(btampContext->btamp_logical_link_req_info.txFlowSpec,
@@ -1282,12 +1200,9 @@ WLAN_BAPLogicalLinkCreate
                              pBapHCILogLinkCreate->rx_flow_spec, 18);
                 btampContext->btamp_async_logical_link_create = FALSE;
                 vosStatus = btampEstablishLogLink(btampContext);
-                if(VOS_STATUS_SUCCESS == vosStatus)
-                {
+                if(VOS_STATUS_SUCCESS == vosStatus) {
                     retval = VOS_STATUS_E_BUSY;//this will make sure event complete is not sent to HCI
-                }
-                else
-                {
+                } else {
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                         WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
@@ -1360,8 +1275,7 @@ WLAN_BAPLogicalLinkAccept
     tBtampTLVHCI_Accept_Logical_Link_Cmd   *pBapHCILogLinkAccept,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     VOS_STATUS  vosStatus;
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
@@ -1373,14 +1287,12 @@ WLAN_BAPLogicalLinkAccept
 
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
     /* Validate params */
-    if (pBapHCILogLinkAccept == NULL)
-    {
+    if (pBapHCILogLinkAccept == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -1398,46 +1310,35 @@ WLAN_BAPLogicalLinkAccept
         = BTAMP_TLV_HCI_ACCEPT_LOGICAL_LINK_CMD;
 
     retval = VOS_STATUS_E_FAILURE;
-    if(DISCONNECTED == instanceVar->stateVar)
-    {
+    if(DISCONNECTED == instanceVar->stateVar) {
         /* Create Logical link request in invalid state */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_NO_CNCT;
 
-    }
-    else if (CONNECTED != instanceVar->stateVar)
-    {
+    } else if (CONNECTED != instanceVar->stateVar) {
         /* Create Logical link request in invalid state */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_CMND_DISALLOWED;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_CMND_DISALLOWED;
-    }
-    else if (pBapHCILogLinkAccept->phy_link_handle != btampContext->phy_link_handle)
-    {
+    } else if (pBapHCILogLinkAccept->phy_link_handle != btampContext->phy_link_handle) {
         /* Invalid Physical link handle */
         pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
             WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         btampContext->btamp_logical_link_state = WLAN_BAPLogLinkInProgress;
-        if( TRUE == btampContext->btamp_logical_link_cancel_pending )
-        {
+        if( TRUE == btampContext->btamp_logical_link_cancel_pending ) {
             pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                 WLANBAP_ERROR_NO_CNCT;
             bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_NO_CNCT;
             btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
             btampContext->btamp_logical_link_cancel_pending = FALSE;
-        }
-        else
-        {
+        } else {
             /* If btamp_async_logical_link_create is set, we will seralize the req
                on MC thread & handle it there after; If the above flag is not set
                respond to HCI the sync way as before */
-            if(FALSE == btampContext->btamp_async_logical_link_create)
-            {
+            if(FALSE == btampContext->btamp_async_logical_link_create) {
                 /* Allocate a logical link index for these flow specs */
                 vosStatus = WLANBAP_CreateNewLogLinkCtx(
                                 btampContext, /* per assoc btampContext value */
@@ -1446,25 +1347,20 @@ WLAN_BAPLogicalLinkAccept
                                 pBapHCILogLinkAccept->rx_flow_spec, /*  I get rx_flow_spec from the Command */
                                 &log_link_index /*  Return the logical link index here */
                             );
-                if (VOS_STATUS_SUCCESS != vosStatus)
-                {
+                if (VOS_STATUS_SUCCESS != vosStatus) {
                     /* Invalid flow spec format */
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                         WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
-                }
-                else
-                {
+                } else {
                     retval = VOS_STATUS_SUCCESS;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_STATUS_SUCCESS;
 
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status = WLANBAP_STATUS_SUCCESS;
                     btampContext->btamp_logical_link_state = WLAN_BAPLogLinkOpen;
                 }
-            }
-            else
-            {
+            } else {
                 btampContext->btamp_logical_link_req_info.phyLinkHandle =
                     pBapHCILogLinkAccept->phy_link_handle;
                 vos_mem_copy(btampContext->btamp_logical_link_req_info.txFlowSpec,
@@ -1473,12 +1369,9 @@ WLAN_BAPLogicalLinkAccept
                              pBapHCILogLinkAccept->rx_flow_spec, 18);
                 btampContext->btamp_async_logical_link_create = FALSE;
                 vosStatus = btampEstablishLogLink(btampContext);
-                if(VOS_STATUS_SUCCESS == vosStatus)
-                {
+                if(VOS_STATUS_SUCCESS == vosStatus) {
                     retval = VOS_STATUS_E_BUSY;//this will make sure event complete is not sent to HCI
-                }
-                else
-                {
+                } else {
                     pBapHCIEvent->u.btampLogicalLinkCompleteEvent.status =
                         WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
                     bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
@@ -1550,8 +1443,7 @@ WLAN_BAPLogicalLinkDisconnect
     tBtampTLVHCI_Disconnect_Logical_Link_Cmd   *pBapHCILogLinkDisconnect,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     tBtampHCI_Event     bapHCIEvent; /* This now encodes ALL event types */
     ptBtampContext      btampContext = (ptBtampContext) btampHandle;
     tpBtampLogLinkCtx   pLogLinkContext;
@@ -1564,8 +1456,7 @@ WLAN_BAPLogicalLinkDisconnect
      Sanity check
      ------------------------------------------------------------------------*/
     if (( NULL == pBapHCILogLinkDisconnect ) ||
-            ( NULL == btampContext))
-    {
+            ( NULL == btampContext)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Critical error: Invalid input parameter on %s",
                    __func__);
@@ -1575,8 +1466,7 @@ WLAN_BAPLogicalLinkDisconnect
     /* Derive logical link index from handle */
     log_link_index = ((pBapHCILogLinkDisconnect->log_link_handle) >> 8);
 
-    if( log_link_index >= WLANBAP_MAX_LOG_LINKS )
-    {
+    if( log_link_index >= WLANBAP_MAX_LOG_LINKS ) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "Critical error: Invalid input parameter on %s",
                    __func__);
@@ -1612,8 +1502,7 @@ WLAN_BAPLogicalLinkDisconnect
 
     // Validate whether the context is active.
     if ((VOS_FALSE == pLogLinkContext->present) ||
-            (pBapHCILogLinkDisconnect->log_link_handle != pLogLinkContext->log_link_handle))
-    {
+            (pBapHCILogLinkDisconnect->log_link_handle != pLogLinkContext->log_link_handle)) {
         /* If status is failed, the platform specific layer generates the
            command status event with proper status */
         pBapHCIEvent->u.btampDisconnectLogicalLinkCompleteEvent.status =
@@ -1628,9 +1517,7 @@ WLAN_BAPLogicalLinkDisconnect
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    " Logical Link index = %d", log_link_index);
 #endif //BAP_DEBUG
-    }
-    else
-    {
+    } else {
         /* Form and return the command status event... */
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_STATUS_SUCCESS;
         pBapHCIEvent->u.btampDisconnectLogicalLinkCompleteEvent.status
@@ -1705,14 +1592,12 @@ WLAN_BAPLogicalLinkCancel
     tBtampTLVHCI_Logical_Link_Cancel_Cmd   *pBapHCILogLinkCancel,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     ptBtampContext btampContext;
     BTAMPFSM_INSTANCEDATA_T *instanceVar;
     /* Validate params */
     if ((btampHandle == NULL) || (pBapHCILogLinkCancel == NULL) ||
-            (pBapHCIEvent == NULL))
-    {
+            (pBapHCIEvent == NULL)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "%s: Null Parameters Not allowed", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1728,39 +1613,29 @@ WLAN_BAPLogicalLinkCancel
         BTAMP_TLV_HCI_LOGICAL_LINK_CANCEL_CMD;
     pBapHCIEvent->u.btampCommandCompleteEvent.num_hci_command_packets = 1;
 
-    if (pBapHCILogLinkCancel->phy_link_handle != btampContext->phy_link_handle)
-    {
+    if (pBapHCILogLinkCancel->phy_link_handle != btampContext->phy_link_handle) {
         pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Logical_Link_Cancel.status =
             WLANBAP_ERROR_NO_CNCT;
-    }
-    else
-    {
+    } else {
         /* As the logical link create is returned immediately, the logical link is
            created and so cancel can not return success.
            And it returns WLANBAP_ERROR_NO_CNCT if not connected or
            WLANBAP_ERROR_MAX_NUM_ACL_CNCTS if connected */
-        if(WLAN_BAPLogLinkClosed == btampContext->btamp_logical_link_state )
-        {
+        if(WLAN_BAPLogLinkClosed == btampContext->btamp_logical_link_state ) {
             /* Cancel Logical link request in invalid state */
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Logical_Link_Cancel.status =
                 WLANBAP_ERROR_NO_CNCT;
-        }
-        else if(WLAN_BAPLogLinkOpen == btampContext->btamp_logical_link_state )
-        {
+        } else if(WLAN_BAPLogLinkOpen == btampContext->btamp_logical_link_state ) {
             /* Cancel Logical link request in conected state */
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Logical_Link_Cancel.status =
                 WLANBAP_ERROR_MAX_NUM_ACL_CNCTS;
-        }
-        else if(WLAN_BAPLogLinkInProgress == btampContext->btamp_logical_link_state )
-        {
+        } else if(WLAN_BAPLogLinkInProgress == btampContext->btamp_logical_link_state ) {
             /* Cancel Logical link request in progress state, need to fail logical link
              creation as well */
             btampContext->btamp_logical_link_cancel_pending = TRUE;
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Logical_Link_Cancel.status =
                 WLANBAP_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             pBapHCIEvent->u.btampCommandCompleteEvent.cc_event.Logical_Link_Cancel.status =
                 WLANBAP_ERROR_NO_CNCT;
         }
@@ -1814,8 +1689,7 @@ WLAN_BAPFlowSpecModify
     tBtampTLVHCI_Flow_Spec_Modify_Cmd   *pBapHCIFlowSpecModify,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including Command Complete and Command Status*/
-)
-{
+) {
     v_U16_t                  index_for_logLinkHandle = 0;
     ptBtampContext           btampContext;
     tpBtampLogLinkCtx        pLogLinkContext;
@@ -1825,8 +1699,7 @@ WLAN_BAPFlowSpecModify
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
     /* Validate params */
     if ((btampHandle == NULL) || (pBapHCIFlowSpecModify == NULL) ||
-            (pBapHCIEvent == NULL))
-    {
+            (pBapHCIEvent == NULL)) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "%s: Null Parameters Not allowed", __func__);
         return VOS_STATUS_E_FAULT;
@@ -1858,16 +1731,13 @@ WLAN_BAPFlowSpecModify
     retval = btampUnpackTlvFlow_Spec((void *)btampContext, pBapHCIFlowSpecModify->tx_flow_spec,
                                      WLAN_BAP_PAL_FLOW_SPEC_TLV_LEN,
                                      &pLogLinkContext->btampFlowSpec);
-    if (retval != BTAMP_PARSE_SUCCESS)
-    {
+    if (retval != BTAMP_PARSE_SUCCESS) {
         /* Flow spec parsing failed, return failure */
         vosStatus = VOS_STATUS_E_FAILURE;
         pBapHCIEvent->u.btampFlowSpecModifyCompleteEvent.status =
             WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
-    }
-    else
-    {
+    } else {
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_STATUS_SUCCESS;
         pBapHCIEvent->u.btampFlowSpecModifyCompleteEvent.status
             = WLANBAP_STATUS_SUCCESS;
@@ -1892,28 +1762,23 @@ WLAN_BAPFlowSpecModify
 } /* WLAN_BAPFlowSpecModify */
 
 
-void WLAN_BAPEstablishLogicalLink(ptBtampContext btampContext)
-{
+void WLAN_BAPEstablishLogicalLink(ptBtampContext btampContext) {
     tBtampHCI_Event bapHCIEvent; /* This now encodes ALL event types */
     v_U16_t         log_link_index = 0;
     v_U16_t         index_for_logLinkCtx = 0;
     VOS_STATUS      vosStatus = VOS_STATUS_SUCCESS;
 
-    if (btampContext == NULL)
-    {
+    if (btampContext == NULL) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "%s: Null Parameters Not allowed", __func__);
         return;
     }
 
-    if( TRUE == btampContext->btamp_logical_link_cancel_pending )
-    {
+    if( TRUE == btampContext->btamp_logical_link_cancel_pending ) {
         bapHCIEvent.u.btampCommandStatusEvent.status = WLANBAP_ERROR_NO_CNCT;
         btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
         btampContext->btamp_logical_link_cancel_pending = FALSE;
-    }
-    else
-    {
+    } else {
         /* Allocate a logical link index for these flow specs */
         vosStatus = WLANBAP_CreateNewLogLinkCtx(
                         btampContext, /* per assoc btampContext value */
@@ -1922,14 +1787,11 @@ void WLAN_BAPEstablishLogicalLink(ptBtampContext btampContext)
                         btampContext->btamp_logical_link_req_info.rxFlowSpec, /*  I get rx_flow_spec from the Command */
                         &log_link_index /*  Return the logical link index here */
                     );
-        if (VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if (VOS_STATUS_SUCCESS != vosStatus) {
             /* Invalid flow spec format */
             bapHCIEvent.u.btampLogicalLinkCompleteEvent.status = WLANBAP_ERROR_INVALID_HCI_CMND_PARAM;
             btampContext->btamp_logical_link_state = WLAN_BAPLogLinkClosed;
-        }
-        else
-        {
+        } else {
             bapHCIEvent.u.btampLogicalLinkCompleteEvent.status = WLANBAP_STATUS_SUCCESS;
             btampContext->btamp_logical_link_state = WLAN_BAPLogLinkOpen;
         }

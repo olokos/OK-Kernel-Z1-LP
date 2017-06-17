@@ -27,10 +27,10 @@
 #define SCIOCLOOPTST	0x10	/* Perform loopback test */
 
 typedef struct {
-	int device;
-	int channel;
-	unsigned long command;
-	void __user *dataptr;
+    int device;
+    int channel;
+    unsigned long command;
+    void __user *dataptr;
 } scs_ioctl;
 
 /* Size of strings */
@@ -40,28 +40,28 @@ typedef struct {
 #define SCIOC_SRECSIZE		49
 
 typedef struct {
-	unsigned long tx_good;
-	unsigned long tx_bad;
-	unsigned long rx_good;
-	unsigned long rx_bad;
+    unsigned long tx_good;
+    unsigned long tx_bad;
+    unsigned long rx_good;
+    unsigned long rx_bad;
 } ChLinkStats;
 
 typedef struct {
-	char spid[49];
-	char dn[49];
-	char call_type;
-	char phy_stat;
-	ChLinkStats link_stats;
+    char spid[49];
+    char dn[49];
+    char call_type;
+    char phy_stat;
+    ChLinkStats link_stats;
 } BRIStat;
 
 typedef BRIStat POTStat;
 
 typedef struct {
-	char call_type;
-	char call_state;
-	char serv_state;
-	char phy_stat;
-	ChLinkStats link_stats;
+    char call_type;
+    char call_state;
+    char serv_state;
+    char phy_stat;
+    ChLinkStats link_stats;
 } PRIStat;
 
 typedef char PRIInfo;
@@ -70,41 +70,41 @@ typedef char POTInfo;
 
 
 typedef struct {
-	char acfa_nos;
-	char acfa_ais;
-	char acfa_los;
-	char acfa_rra;
-	char acfa_slpp;
-	char acfa_slpn;
-	char acfa_fsrf;
+    char acfa_nos;
+    char acfa_ais;
+    char acfa_los;
+    char acfa_rra;
+    char acfa_slpp;
+    char acfa_slpn;
+    char acfa_fsrf;
 } ACFAStat;
 
 typedef struct {
-	unsigned char modelid;
-	char serial_no[13];
-	char part_no[13];
-	char load_ver[11];
-	char proc_ver[11];
-	int iobase;
-	long rambase;
-	char irq;
-	long ramsize;
-	char interface;
-	char switch_type;
-	char l1_status;
-	char l2_status;
-	ChLinkStats dch_stats;
-	ACFAStat AcfaStats;
-	union {
-		PRIStat pristats[23];
-		BRIStat bristats[2];
-		POTStat potsstats[2];
-	} status;
-	union {
-		PRIInfo priinfo;
-		BRIInfo briinfo;
-		POTInfo potsinfo;
-	} info;
+    unsigned char modelid;
+    char serial_no[13];
+    char part_no[13];
+    char load_ver[11];
+    char proc_ver[11];
+    int iobase;
+    long rambase;
+    char irq;
+    long ramsize;
+    char interface;
+    char switch_type;
+    char l1_status;
+    char l2_status;
+    ChLinkStats dch_stats;
+    ACFAStat AcfaStats;
+    union {
+        PRIStat pristats[23];
+        BRIStat bristats[2];
+        POTStat potsstats[2];
+    } status;
+    union {
+        PRIInfo priinfo;
+        BRIInfo briinfo;
+        POTInfo potsinfo;
+    } info;
 } boardInfo;
 
 #endif  /*  __ISDN_SC_SCIOC_H__  */

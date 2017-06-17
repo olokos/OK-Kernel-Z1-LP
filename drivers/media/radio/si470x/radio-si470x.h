@@ -141,46 +141,46 @@
  * si470x_device - private data
  */
 struct si470x_device {
-	struct video_device *videodev;
+    struct video_device *videodev;
 
-	/* driver management */
-	unsigned int users;
+    /* driver management */
+    unsigned int users;
 
-	/* Silabs internal registers (0..15) */
-	unsigned short registers[RADIO_REGISTER_NUM];
+    /* Silabs internal registers (0..15) */
+    unsigned short registers[RADIO_REGISTER_NUM];
 
-	/* RDS receive buffer */
-	wait_queue_head_t read_queue;
-	struct mutex lock;		/* buffer locking */
-	unsigned char *buffer;		/* size is always multiple of three */
-	unsigned int buf_size;
-	unsigned int rd_index;
-	unsigned int wr_index;
+    /* RDS receive buffer */
+    wait_queue_head_t read_queue;
+    struct mutex lock;		/* buffer locking */
+    unsigned char *buffer;		/* size is always multiple of three */
+    unsigned int buf_size;
+    unsigned int rd_index;
+    unsigned int wr_index;
 
-	struct completion completion;
-	bool stci_enabled;		/* Seek/Tune Complete Interrupt */
+    struct completion completion;
+    bool stci_enabled;		/* Seek/Tune Complete Interrupt */
 
 #if defined(CONFIG_USB_SI470X) || defined(CONFIG_USB_SI470X_MODULE)
-	/* reference to USB and video device */
-	struct usb_device *usbdev;
-	struct usb_interface *intf;
+    /* reference to USB and video device */
+    struct usb_device *usbdev;
+    struct usb_interface *intf;
 
-	/* Interrupt endpoint handling */
-	char *int_in_buffer;
-	struct usb_endpoint_descriptor *int_in_endpoint;
-	struct urb *int_in_urb;
-	int int_in_running;
+    /* Interrupt endpoint handling */
+    char *int_in_buffer;
+    struct usb_endpoint_descriptor *int_in_endpoint;
+    struct urb *int_in_urb;
+    int int_in_running;
 
-	/* scratch page */
-	unsigned char software_version;
-	unsigned char hardware_version;
+    /* scratch page */
+    unsigned char software_version;
+    unsigned char hardware_version;
 
-	/* driver management */
-	unsigned char disconnected;
+    /* driver management */
+    unsigned char disconnected;
 #endif
 
 #if defined(CONFIG_I2C_SI470X) || defined(CONFIG_I2C_SI470X_MODULE)
-	struct i2c_client *client;
+    struct i2c_client *client;
 #endif
 };
 
@@ -222,4 +222,4 @@ int si470x_stop(struct si470x_device *radio);
 int si470x_fops_open(struct file *file);
 int si470x_fops_release(struct file *file);
 int si470x_vidioc_querycap(struct file *file, void *priv,
-		struct v4l2_capability *capability);
+                           struct v4l2_capability *capability);

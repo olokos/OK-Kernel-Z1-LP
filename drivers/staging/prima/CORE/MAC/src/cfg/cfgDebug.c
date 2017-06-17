@@ -41,14 +41,12 @@
 
 #include "cfgDebug.h"
 
-void cfgLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
-{
+void cfgLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
 #ifdef WLAN_DEBUG
     // Verify against current log level
     if (loglevel > pMac->utils.gLogDbgLevel[LOG_INDEX_FOR_MODULE( SIR_CFG_MODULE_ID )])
         return;
-    else
-    {
+    else {
         va_list marker;
 
         va_start( marker, pString );     /* Initialize variable arguments. */

@@ -124,36 +124,36 @@ typedef s32 klconf_off_t;
 
 
 typedef struct console_s {
-	unsigned long 	uart_base;
-	unsigned long 	config_base;
-	unsigned long 	memory_base;
-	short		baud;
-	short		flag;
-	int		type;
-	nasid_t		nasid;
-	char		wid;
-	char 		npci;
-	nic_t		baseio_nic;
+    unsigned long 	uart_base;
+    unsigned long 	config_base;
+    unsigned long 	memory_base;
+    short		baud;
+    short		flag;
+    int		type;
+    nasid_t		nasid;
+    char		wid;
+    char 		npci;
+    nic_t		baseio_nic;
 } console_t;
 
 typedef struct klc_malloc_hdr {
-        klconf_off_t km_base;
-        klconf_off_t km_limit;
-        klconf_off_t km_current;
+    klconf_off_t km_base;
+    klconf_off_t km_limit;
+    klconf_off_t km_current;
 } klc_malloc_hdr_t;
 
 /* Functions/macros needed to use this structure */
 
 typedef struct kl_config_hdr {
-	u64		ch_magic;	/* set this to KLCFGINFO_MAGIC */
-	u32		ch_version;    /* structure version number */
-	klconf_off_t	ch_malloc_hdr_off; /* offset of ch_malloc_hdr */
-	klconf_off_t	ch_cons_off;       /* offset of ch_cons */
-	klconf_off_t	ch_board_info;	/* the link list of boards */
-	console_t	ch_cons_info;	/* address info of the console */
-	klc_malloc_hdr_t ch_malloc_hdr[KLMALLOC_TYPE_MAX];
-	confidence_t	ch_sw_belief;	/* confidence that software is bad*/
-	confidence_t	ch_sn0net_belief; /* confidence that sn0net is bad */
+    u64		ch_magic;	/* set this to KLCFGINFO_MAGIC */
+    u32		ch_version;    /* structure version number */
+    klconf_off_t	ch_malloc_hdr_off; /* offset of ch_malloc_hdr */
+    klconf_off_t	ch_cons_off;       /* offset of ch_cons */
+    klconf_off_t	ch_board_info;	/* the link list of boards */
+    console_t	ch_cons_info;	/* address info of the console */
+    klc_malloc_hdr_t ch_malloc_hdr[KLMALLOC_TYPE_MAX];
+    confidence_t	ch_sw_belief;	/* confidence that software is bad*/
+    confidence_t	ch_sn0net_belief; /* confidence that sn0net is bad */
 } kl_config_hdr_t;
 
 
@@ -419,31 +419,31 @@ typedef struct kl_config_hdr {
 #define LBOARD_STRUCT_VERSION 	2
 
 typedef struct lboard_s {
-	klconf_off_t 	brd_next;         /* Next BOARD */
-	unsigned char 	struct_type;      /* type of structure, local or remote */
-	unsigned char 	brd_type;         /* type+class */
-	unsigned char 	brd_sversion;     /* version of this structure */
-        unsigned char 	brd_brevision;    /* board revision */
-        unsigned char 	brd_promver;      /* board prom version, if any */
-	unsigned char 	brd_flags;        /* Enabled, Disabled etc */
-	unsigned char 	brd_slot;         /* slot number */
-	unsigned short	brd_debugsw;      /* Debug switches */
-	moduleid_t	brd_module;       /* module to which it belongs */
-	partid_t 	brd_partition;    /* Partition number */
-        unsigned short 	brd_diagval;      /* diagnostic value */
-        unsigned short 	brd_diagparm;     /* diagnostic parameter */
-        unsigned char 	brd_inventory;    /* inventory history */
-        unsigned char 	brd_numcompts;    /* Number of components */
-        nic_t         	brd_nic;          /* Number in CAN */
-	nasid_t		brd_nasid;        /* passed parameter */
-	klconf_off_t 	brd_compts[MAX_COMPTS_PER_BRD]; /* pointers to COMPONENTS */
-	klconf_off_t 	brd_errinfo;      /* Board's error information */
-	struct lboard_s *brd_parent;	  /* Logical parent for this brd */
-	vertex_hdl_t	brd_graph_link;   /* vertex hdl to connect extern compts */
-	confidence_t	brd_confidence;	  /* confidence that the board is bad */
-	nasid_t		brd_owner;        /* who owns this board */
-	unsigned char 	brd_nic_flags;    /* To handle 8 more NICs */
-	char		brd_name[32];
+    klconf_off_t 	brd_next;         /* Next BOARD */
+    unsigned char 	struct_type;      /* type of structure, local or remote */
+    unsigned char 	brd_type;         /* type+class */
+    unsigned char 	brd_sversion;     /* version of this structure */
+    unsigned char 	brd_brevision;    /* board revision */
+    unsigned char 	brd_promver;      /* board prom version, if any */
+    unsigned char 	brd_flags;        /* Enabled, Disabled etc */
+    unsigned char 	brd_slot;         /* slot number */
+    unsigned short	brd_debugsw;      /* Debug switches */
+    moduleid_t	brd_module;       /* module to which it belongs */
+    partid_t 	brd_partition;    /* Partition number */
+    unsigned short 	brd_diagval;      /* diagnostic value */
+    unsigned short 	brd_diagparm;     /* diagnostic parameter */
+    unsigned char 	brd_inventory;    /* inventory history */
+    unsigned char 	brd_numcompts;    /* Number of components */
+    nic_t         	brd_nic;          /* Number in CAN */
+    nasid_t		brd_nasid;        /* passed parameter */
+    klconf_off_t 	brd_compts[MAX_COMPTS_PER_BRD]; /* pointers to COMPONENTS */
+    klconf_off_t 	brd_errinfo;      /* Board's error information */
+    struct lboard_s *brd_parent;	  /* Logical parent for this brd */
+    vertex_hdl_t	brd_graph_link;   /* vertex hdl to connect extern compts */
+    confidence_t	brd_confidence;	  /* confidence that the board is bad */
+    nasid_t		brd_owner;        /* who owns this board */
+    unsigned char 	brd_nic_flags;    /* To handle 8 more NICs */
+    char		brd_name[32];
 } lboard_t;
 
 
@@ -482,24 +482,24 @@ typedef struct lboard_s {
  */
 
 typedef struct klinfo_s {                  /* Generic info */
-        unsigned char   struct_type;       /* type of this structure */
-        unsigned char   struct_version;    /* version of this structure */
-        unsigned char   flags;            /* Enabled, disabled etc */
-        unsigned char   revision;         /* component revision */
-        unsigned short  diagval;          /* result of diagnostics */
-        unsigned short  diagparm;         /* diagnostic parameter */
-        unsigned char   inventory;        /* previous inventory status */
-	nic_t 		nic;              /* MUst be aligned properly */
-        unsigned char   physid;           /* physical id of component */
-        unsigned int    virtid;           /* virtual id as seen by system */
-	unsigned char	widid;	          /* Widget id - if applicable */
-	nasid_t		nasid;            /* node number - from parent */
-	char		pad1;		  /* pad out structure. */
-	char		pad2;		  /* pad out structure. */
-	COMPONENT	*arcs_compt;      /* ptr to the arcs struct for ease*/
-        klconf_off_t	errinfo;          /* component specific errors */
-        unsigned short  pad3;             /* pci fields have moved over to */
-        unsigned short  pad4;             /* klbri_t */
+    unsigned char   struct_type;       /* type of this structure */
+    unsigned char   struct_version;    /* version of this structure */
+    unsigned char   flags;            /* Enabled, disabled etc */
+    unsigned char   revision;         /* component revision */
+    unsigned short  diagval;          /* result of diagnostics */
+    unsigned short  diagparm;         /* diagnostic parameter */
+    unsigned char   inventory;        /* previous inventory status */
+    nic_t 		nic;              /* MUst be aligned properly */
+    unsigned char   physid;           /* physical id of component */
+    unsigned int    virtid;           /* virtual id as seen by system */
+    unsigned char	widid;	          /* Widget id - if applicable */
+    nasid_t		nasid;            /* node number - from parent */
+    char		pad1;		  /* pad out structure. */
+    char		pad2;		  /* pad out structure. */
+    COMPONENT	*arcs_compt;      /* ptr to the arcs struct for ease*/
+    klconf_off_t	errinfo;          /* component specific errors */
+    unsigned short  pad3;             /* pci fields have moved over to */
+    unsigned short  pad4;             /* klbri_t */
 } klinfo_t ;
 
 #define KLCONFIG_INFO_ENABLED(_i)	((_i)->flags & KLINFO_ENABLE)
@@ -586,45 +586,45 @@ typedef u64 *router_t;
  * area  on that nasid.
  */
 typedef struct klport_s {
-	nasid_t		port_nasid;
-	unsigned char	port_flag;
-	klconf_off_t	port_offset;
+    nasid_t		port_nasid;
+    unsigned char	port_flag;
+    klconf_off_t	port_offset;
 } klport_t;
 
 typedef struct klcpu_s {                          /* CPU */
-	klinfo_t 	cpu_info;
-	unsigned short 	cpu_prid;	/* Processor PRID value */
-	unsigned short 	cpu_fpirr;	/* FPU IRR value */
-	unsigned short 	cpu_speed;	/* Speed in MHZ */
-	unsigned short 	cpu_scachesz;	/* secondary cache size in MB */
-	unsigned short 	cpu_scachespeed;/* secondary cache speed in MHz */
+    klinfo_t 	cpu_info;
+    unsigned short 	cpu_prid;	/* Processor PRID value */
+    unsigned short 	cpu_fpirr;	/* FPU IRR value */
+    unsigned short 	cpu_speed;	/* Speed in MHZ */
+    unsigned short 	cpu_scachesz;	/* secondary cache size in MB */
+    unsigned short 	cpu_scachespeed;/* secondary cache speed in MHz */
 } klcpu_t ;
 
 #define CPU_STRUCT_VERSION   2
 
 typedef struct klhub_s {			/* HUB */
-	klinfo_t 	hub_info;
-	unsigned int 		hub_flags;		/* PCFG_HUB_xxx flags */
-	klport_t	hub_port;		/* hub is connected to this */
-	nic_t		hub_box_nic;		/* nic of containing box */
-	klconf_off_t	hub_mfg_nic;		/* MFG NIC string */
-	u64		hub_speed;		/* Speed of hub in HZ */
+    klinfo_t 	hub_info;
+    unsigned int 		hub_flags;		/* PCFG_HUB_xxx flags */
+    klport_t	hub_port;		/* hub is connected to this */
+    nic_t		hub_box_nic;		/* nic of containing box */
+    klconf_off_t	hub_mfg_nic;		/* MFG NIC string */
+    u64		hub_speed;		/* Speed of hub in HZ */
 } klhub_t ;
 
 typedef struct klhub_uart_s {			/* HUB */
-	klinfo_t 	hubuart_info;
-	unsigned int 		hubuart_flags;		/* PCFG_HUB_xxx flags */
-	nic_t		hubuart_box_nic;	/* nic of containing box */
+    klinfo_t 	hubuart_info;
+    unsigned int 		hubuart_flags;		/* PCFG_HUB_xxx flags */
+    nic_t		hubuart_box_nic;	/* nic of containing box */
 } klhub_uart_t ;
 
 #define MEMORY_STRUCT_VERSION   2
 
 typedef struct klmembnk_s {			/* MEMORY BANK */
-	klinfo_t 	membnk_info;
-	short 		membnk_memsz;		/* Total memory in megabytes */
-	short		membnk_dimm_select; /* bank to physical addr mapping*/
-	short		membnk_bnksz[MD_MEM_BANKS]; /* Memory bank sizes */
-	short		membnk_attr;
+    klinfo_t 	membnk_info;
+    short 		membnk_memsz;		/* Total memory in megabytes */
+    short		membnk_dimm_select; /* bank to physical addr mapping*/
+    short		membnk_bnksz[MD_MEM_BANKS]; /* Memory bank sizes */
+    short		membnk_attr;
 } klmembnk_t ;
 
 #define KLCONFIG_MEMBNK_SIZE(_info, _bank)	\
@@ -638,11 +638,11 @@ typedef struct klmembnk_s {			/* MEMORY BANK */
 #define MAX_SERIAL_NUM_SIZE 10
 
 typedef struct klmod_serial_num_s {
-      klinfo_t        snum_info;
-      union {
-              char snum_str[MAX_SERIAL_NUM_SIZE];
-              unsigned long long       snum_int;
-      } snum;
+    klinfo_t        snum_info;
+    union {
+        char snum_str[MAX_SERIAL_NUM_SIZE];
+        unsigned long long       snum_int;
+    } snum;
 } klmod_serial_num_t;
 
 /* Macros needed to access serial number structure in lboard_t.
@@ -656,67 +656,67 @@ typedef struct klmod_serial_num_s {
 #define MAX_XBOW_LINKS 16
 
 typedef struct klxbow_s {                          /* XBOW */
-	klinfo_t 	xbow_info ;
-	klport_t	xbow_port_info[MAX_XBOW_LINKS] ; /* Module number */
-        int		xbow_master_hub_link;
-        /* type of brd connected+component struct ptr+flags */
+    klinfo_t 	xbow_info ;
+    klport_t	xbow_port_info[MAX_XBOW_LINKS] ; /* Module number */
+    int		xbow_master_hub_link;
+    /* type of brd connected+component struct ptr+flags */
 } klxbow_t ;
 
 #define MAX_PCI_SLOTS 8
 
 typedef struct klpci_device_s {
-	s32	pci_device_id;	/* 32 bits of vendor/device ID. */
-	s32	pci_device_pad;	/* 32 bits of padding. */
+    s32	pci_device_id;	/* 32 bits of vendor/device ID. */
+    s32	pci_device_pad;	/* 32 bits of padding. */
 } klpci_device_t;
 
 #define BRIDGE_STRUCT_VERSION	2
 
 typedef struct klbri_s {                          /* BRIDGE */
-	klinfo_t 	bri_info ;
-	unsigned char	bri_eprominfo ;    /* IO6prom connected to bridge */
-	unsigned char	bri_bustype ;      /* PCI/VME BUS bridge/GIO */
-	pci_t    	pci_specific  ;    /* PCI Board config info */
-	klpci_device_t	bri_devices[MAX_PCI_DEVS] ;	/* PCI IDs */
-	klconf_off_t	bri_mfg_nic ;
+    klinfo_t 	bri_info ;
+    unsigned char	bri_eprominfo ;    /* IO6prom connected to bridge */
+    unsigned char	bri_bustype ;      /* PCI/VME BUS bridge/GIO */
+    pci_t    	pci_specific  ;    /* PCI Board config info */
+    klpci_device_t	bri_devices[MAX_PCI_DEVS] ;	/* PCI IDs */
+    klconf_off_t	bri_mfg_nic ;
 } klbri_t ;
 
 #define MAX_IOC3_TTY	2
 
 typedef struct klioc3_s {                          /* IOC3 */
-	klinfo_t 	ioc3_info ;
-	unsigned char	ioc3_ssram ;        /* Info about ssram */
-	unsigned char	ioc3_nvram ;        /* Info about nvram */
-	klinfo_t	ioc3_superio ;      /* Info about superio */
-	klconf_off_t	ioc3_tty_off ;
-	klinfo_t	ioc3_enet ;
-	klconf_off_t	ioc3_enet_off ;
-	klconf_off_t	ioc3_kbd_off ;
+    klinfo_t 	ioc3_info ;
+    unsigned char	ioc3_ssram ;        /* Info about ssram */
+    unsigned char	ioc3_nvram ;        /* Info about nvram */
+    klinfo_t	ioc3_superio ;      /* Info about superio */
+    klconf_off_t	ioc3_tty_off ;
+    klinfo_t	ioc3_enet ;
+    klconf_off_t	ioc3_enet_off ;
+    klconf_off_t	ioc3_kbd_off ;
 } klioc3_t ;
 
 #define MAX_VME_SLOTS 8
 
 typedef struct klvmeb_s {                          /* VME BRIDGE - PCI CTLR */
-	klinfo_t 	vmeb_info ;
-	vmeb_t		vmeb_specific ;
-	klconf_off_t   	vmeb_brdinfo[MAX_VME_SLOTS]   ;    /* VME Board config info */
+    klinfo_t 	vmeb_info ;
+    vmeb_t		vmeb_specific ;
+    klconf_off_t   	vmeb_brdinfo[MAX_VME_SLOTS]   ;    /* VME Board config info */
 } klvmeb_t ;
 
 typedef struct klvmed_s {                          /* VME DEVICE - VME BOARD */
-	klinfo_t	vmed_info ;
-	vmed_t		vmed_specific ;
-	klconf_off_t   	vmed_brdinfo[MAX_VME_SLOTS]   ;    /* VME Board config info */
+    klinfo_t	vmed_info ;
+    vmed_t		vmed_specific ;
+    klconf_off_t   	vmed_brdinfo[MAX_VME_SLOTS]   ;    /* VME Board config info */
 } klvmed_t ;
 
 #define ROUTER_VECTOR_VERS	2
 
 /* XXX - Don't we need the number of ports here?!? */
 typedef struct klrou_s {                          /* ROUTER */
-	klinfo_t 	rou_info ;
-	unsigned int		rou_flags ;           /* PCFG_ROUTER_xxx flags */
-	nic_t		rou_box_nic ;         /* nic of the containing module */
-	klport_t 	rou_port[MAX_ROUTER_PORTS + 1] ; /* array index 1 to 6 */
-	klconf_off_t	rou_mfg_nic ;     /* MFG NIC string */
-	u64	rou_vector;	  /* vector from master node */
+    klinfo_t 	rou_info ;
+    unsigned int		rou_flags ;           /* PCFG_ROUTER_xxx flags */
+    nic_t		rou_box_nic ;         /* nic of the containing module */
+    klport_t 	rou_port[MAX_ROUTER_PORTS + 1] ; /* array index 1 to 6 */
+    klconf_off_t	rou_mfg_nic ;     /* MFG NIC string */
+    u64	rou_vector;	  /* vector from master node */
 } klrou_t ;
 
 /*
@@ -732,30 +732,30 @@ typedef struct klrou_s {                          /* ROUTER */
 #define KLGFX_COOKIE	0x0c0de000
 
 typedef struct klgfx_s {		/* GRAPHICS Device */
-	klinfo_t 	gfx_info;
-	klconf_off_t    old_gndevs;	/* for compatibility with older proms */
-	klconf_off_t    old_gdoff0;	/* for compatibility with older proms */
-	unsigned int		cookie;		/* for compatibility with older proms */
-	unsigned int		moduleslot;
-	struct klgfx_s	*gfx_next_pipe;
-	graphics_t	gfx_specific;
-	klconf_off_t    pad0;		/* for compatibility with older proms */
-	klconf_off_t    gfx_mfg_nic;
+    klinfo_t 	gfx_info;
+    klconf_off_t    old_gndevs;	/* for compatibility with older proms */
+    klconf_off_t    old_gdoff0;	/* for compatibility with older proms */
+    unsigned int		cookie;		/* for compatibility with older proms */
+    unsigned int		moduleslot;
+    struct klgfx_s	*gfx_next_pipe;
+    graphics_t	gfx_specific;
+    klconf_off_t    pad0;		/* for compatibility with older proms */
+    klconf_off_t    gfx_mfg_nic;
 } klgfx_t;
 
 typedef struct klxthd_s {
-	klinfo_t 	xthd_info ;
-	klconf_off_t	xthd_mfg_nic ;        /* MFG NIC string */
+    klinfo_t 	xthd_info ;
+    klconf_off_t	xthd_mfg_nic ;        /* MFG NIC string */
 } klxthd_t ;
 
 typedef struct kltpu_s {                     /* TPU board */
-	klinfo_t 	tpu_info ;
-	klconf_off_t	tpu_mfg_nic ;        /* MFG NIC string */
+    klinfo_t 	tpu_info ;
+    klconf_off_t	tpu_mfg_nic ;        /* MFG NIC string */
 } kltpu_t ;
 
 typedef struct klgsn_s {                     /* GSN board */
-	klinfo_t 	gsn_info ;
-	klconf_off_t	gsn_mfg_nic ;        /* MFG NIC string */
+    klinfo_t 	gsn_info ;
+    klconf_off_t	gsn_mfg_nic ;        /* MFG NIC string */
 } klgsn_t ;
 
 #define MAX_SCSI_DEVS 16
@@ -768,74 +768,74 @@ typedef struct klgsn_s {                     /* GSN board */
  */
 
 typedef struct klscsi_s {                          /* SCSI Controller */
-	klinfo_t 	scsi_info ;
-	scsi_t       	scsi_specific   ;
-	unsigned char 	scsi_numdevs ;
-	klconf_off_t	scsi_devinfo[MAX_SCSI_DEVS] ;
+    klinfo_t 	scsi_info ;
+    scsi_t       	scsi_specific   ;
+    unsigned char 	scsi_numdevs ;
+    klconf_off_t	scsi_devinfo[MAX_SCSI_DEVS] ;
 } klscsi_t ;
 
 typedef struct klscdev_s {                          /* SCSI device */
-	klinfo_t 	scdev_info ;
-	struct scsidisk_data *scdev_cfg ; /* driver fills up this */
+    klinfo_t 	scdev_info ;
+    struct scsidisk_data *scdev_cfg ; /* driver fills up this */
 } klscdev_t ;
 
 typedef struct klttydev_s {                          /* TTY device */
-	klinfo_t 	ttydev_info ;
-	struct terminal_data *ttydev_cfg ; /* driver fills up this */
+    klinfo_t 	ttydev_info ;
+    struct terminal_data *ttydev_cfg ; /* driver fills up this */
 } klttydev_t ;
 
 typedef struct klenetdev_s {                          /* ENET device */
-	klinfo_t 	enetdev_info ;
-	struct net_data *enetdev_cfg ; /* driver fills up this */
+    klinfo_t 	enetdev_info ;
+    struct net_data *enetdev_cfg ; /* driver fills up this */
 } klenetdev_t ;
 
 typedef struct klkbddev_s {                          /* KBD device */
-	klinfo_t 	kbddev_info ;
-	struct keyboard_data *kbddev_cfg ; /* driver fills up this */
+    klinfo_t 	kbddev_info ;
+    struct keyboard_data *kbddev_cfg ; /* driver fills up this */
 } klkbddev_t ;
 
 typedef struct klmsdev_s {                          /* mouse device */
-        klinfo_t        msdev_info ;
-        void 		*msdev_cfg ;
+    klinfo_t        msdev_info ;
+    void 		*msdev_cfg ;
 } klmsdev_t ;
 
 #define MAX_FDDI_DEVS 10 /* XXX Is this true */
 
 typedef struct klfddi_s {                          /* FDDI */
-	klinfo_t 	fddi_info ;
-	fddi_t        	fddi_specific ;
-	klconf_off_t	fddi_devinfo[MAX_FDDI_DEVS] ;
+    klinfo_t 	fddi_info ;
+    fddi_t        	fddi_specific ;
+    klconf_off_t	fddi_devinfo[MAX_FDDI_DEVS] ;
 } klfddi_t ;
 
 typedef struct klmio_s {                          /* MIO */
-	klinfo_t 	mio_info ;
-	mio_t       	mio_specific   ;
+    klinfo_t 	mio_info ;
+    mio_t       	mio_specific   ;
 } klmio_t ;
 
 
 typedef union klcomp_s {
-	klcpu_t		kc_cpu;
-	klhub_t		kc_hub;
-	klmembnk_t 	kc_mem;
-	klxbow_t  	kc_xbow;
-	klbri_t		kc_bri;
-	klioc3_t	kc_ioc3;
-	klvmeb_t	kc_vmeb;
-	klvmed_t	kc_vmed;
-	klrou_t		kc_rou;
-	klgfx_t		kc_gfx;
-	klscsi_t	kc_scsi;
-	klscdev_t	kc_scsi_dev;
-	klfddi_t	kc_fddi;
-	klmio_t		kc_mio;
-	klmod_serial_num_t kc_snum ;
+    klcpu_t		kc_cpu;
+    klhub_t		kc_hub;
+    klmembnk_t 	kc_mem;
+    klxbow_t  	kc_xbow;
+    klbri_t		kc_bri;
+    klioc3_t	kc_ioc3;
+    klvmeb_t	kc_vmeb;
+    klvmed_t	kc_vmed;
+    klrou_t		kc_rou;
+    klgfx_t		kc_gfx;
+    klscsi_t	kc_scsi;
+    klscdev_t	kc_scsi_dev;
+    klfddi_t	kc_fddi;
+    klmio_t		kc_mio;
+    klmod_serial_num_t kc_snum ;
 } klcomp_t;
 
 typedef union kldev_s {      /* for device structure allocation */
-	klscdev_t	kc_scsi_dev ;
-	klttydev_t	kc_tty_dev ;
-	klenetdev_t	kc_enet_dev ;
-	klkbddev_t 	kc_kbd_dev ;
+    klscdev_t	kc_scsi_dev ;
+    klttydev_t	kc_tty_dev ;
+    klenetdev_t	kc_enet_dev ;
+    klkbddev_t 	kc_kbd_dev ;
 } kldev_t ;
 
 /* Data structure interface routines. TBD */
@@ -862,7 +862,7 @@ typedef union kldev_s {      /* for device structure allocation */
  */
 
 typedef union {
-	lboard_t *lbinfo ;
+    lboard_t *lbinfo ;
 } biptr_t ;
 
 

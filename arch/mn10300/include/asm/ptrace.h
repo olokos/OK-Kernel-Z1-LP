@@ -45,34 +45,34 @@
  * - the strange order is due to the MOVM instruction
  */
 struct pt_regs {
-	unsigned long		a3;		/* syscall arg 3 */
-	unsigned long		a2;		/* syscall arg 4 */
-	unsigned long		d3;		/* syscall arg 5 */
-	unsigned long		d2;		/* syscall arg 6 */
-	unsigned long		mcvf;
-	unsigned long		mcrl;
-	unsigned long		mcrh;
-	unsigned long		mdrq;
-	unsigned long		e1;
-	unsigned long		e0;
-	unsigned long		e7;
-	unsigned long		e6;
-	unsigned long		e5;
-	unsigned long		e4;
-	unsigned long		e3;
-	unsigned long		e2;
-	unsigned long		sp;
-	unsigned long		lar;
-	unsigned long		lir;
-	unsigned long		mdr;
-	unsigned long		a1;
-	unsigned long		a0;		/* syscall arg 1 */
-	unsigned long		d1;		/* syscall arg 2 */
-	unsigned long		d0;		/* syscall ret */
-	struct pt_regs		*next;		/* next frame pointer */
-	unsigned long		orig_d0;	/* syscall number */
-	unsigned long		epsw;
-	unsigned long		pc;
+    unsigned long		a3;		/* syscall arg 3 */
+    unsigned long		a2;		/* syscall arg 4 */
+    unsigned long		d3;		/* syscall arg 5 */
+    unsigned long		d2;		/* syscall arg 6 */
+    unsigned long		mcvf;
+    unsigned long		mcrl;
+    unsigned long		mcrh;
+    unsigned long		mdrq;
+    unsigned long		e1;
+    unsigned long		e0;
+    unsigned long		e7;
+    unsigned long		e6;
+    unsigned long		e5;
+    unsigned long		e4;
+    unsigned long		e3;
+    unsigned long		e2;
+    unsigned long		sp;
+    unsigned long		lar;
+    unsigned long		lir;
+    unsigned long		mdr;
+    unsigned long		a1;
+    unsigned long		a0;		/* syscall arg 1 */
+    unsigned long		d1;		/* syscall arg 2 */
+    unsigned long		d0;		/* syscall ret */
+    struct pt_regs		*next;		/* next frame pointer */
+    unsigned long		orig_d0;	/* syscall number */
+    unsigned long		epsw;
+    unsigned long		pc;
 };
 
 /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */

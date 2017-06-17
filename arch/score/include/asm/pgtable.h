@@ -45,21 +45,18 @@ extern pte_t invalid_pte_table[PAGE_SIZE/sizeof(pte_t)];
 /*
  * Empty pgd/pmd entries point to the invalid_pte_table.
  */
-static inline int pmd_none(pmd_t pmd)
-{
-	return pmd_val(pmd) == (unsigned long) invalid_pte_table;
+static inline int pmd_none(pmd_t pmd) {
+    return pmd_val(pmd) == (unsigned long) invalid_pte_table;
 }
 
 #define pmd_bad(pmd)		(pmd_val(pmd) & ~PAGE_MASK)
 
-static inline int pmd_present(pmd_t pmd)
-{
-	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
+static inline int pmd_present(pmd_t pmd) {
+    return pmd_val(pmd) != (unsigned long) invalid_pte_table;
 }
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
+static inline void pmd_clear(pmd_t *pmdp) {
+    pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
 }
 
 #define pte_page(x)		pfn_to_page(pte_pfn(x))
@@ -106,7 +103,9 @@ static inline void pmd_clear(pmd_t *pmdp)
 #define pmd_phys(pmd)		__pa((void *)pmd_val(pmd))
 #define pmd_page(pmd)		(pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT))
 #define mk_pte(page, prot)	pfn_pte(page_to_pfn(page), prot)
-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+static inline pte_t pte_mkspecial(pte_t pte) {
+    return pte;
+}
 
 #define set_pte(pteptr, pteval) (*(pteptr) = pteval)
 #define set_pte_at(mm, addr, ptep, pteval) set_pte(ptep, pteval)
@@ -162,13 +161,12 @@ static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
 
 #define pgprot_noncached pgprot_noncached
 
-static inline pgprot_t pgprot_noncached(pgprot_t _prot)
-{
-	unsigned long prot = pgprot_val(_prot);
+static inline pgprot_t pgprot_noncached(pgprot_t _prot) {
+    unsigned long prot = pgprot_val(_prot);
 
-	prot = (prot & ~_CACHE_MASK);
+    prot = (prot & ~_CACHE_MASK);
 
-	return __pgprot(prot);
+    return __pgprot(prot);
 }
 
 #define __swp_type(x)		((x).val & 0x1f)
@@ -186,68 +184,58 @@ extern unsigned long zero_page_mask;
 
 #define arch_enter_lazy_cpu_mode()	do {} while (0)
 
-static inline int pte_write(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_WRITE;
+static inline int pte_write(pte_t pte) {
+    return pte_val(pte) & _PAGE_WRITE;
 }
 
-static inline int pte_dirty(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_MODIFIED;
+static inline int pte_dirty(pte_t pte) {
+    return pte_val(pte) & _PAGE_MODIFIED;
 }
 
-static inline int pte_young(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_ACCESSED;
+static inline int pte_young(pte_t pte) {
+    return pte_val(pte) & _PAGE_ACCESSED;
 }
 
-static inline int pte_file(pte_t pte)
-{
-	return pte_val(pte) & _PAGE_FILE;
+static inline int pte_file(pte_t pte) {
+    return pte_val(pte) & _PAGE_FILE;
 }
 
 #define pte_special(pte)	(0)
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	pte_val(pte) &= ~(_PAGE_WRITE | _PAGE_SILENT_WRITE);
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~(_PAGE_WRITE | _PAGE_SILENT_WRITE);
+    return pte;
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
-	pte_val(pte) &= ~(_PAGE_MODIFIED|_PAGE_SILENT_WRITE);
-	return pte;
+static inline pte_t pte_mkclean(pte_t pte) {
+    pte_val(pte) &= ~(_PAGE_MODIFIED|_PAGE_SILENT_WRITE);
+    return pte;
 }
 
-static inline pte_t pte_mkold(pte_t pte)
-{
-	pte_val(pte) &= ~(_PAGE_ACCESSED|_PAGE_SILENT_READ);
-	return pte;
+static inline pte_t pte_mkold(pte_t pte) {
+    pte_val(pte) &= ~(_PAGE_ACCESSED|_PAGE_SILENT_READ);
+    return pte;
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_WRITE;
-	if (pte_val(pte) & _PAGE_MODIFIED)
-		pte_val(pte) |= _PAGE_SILENT_WRITE;
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= _PAGE_WRITE;
+    if (pte_val(pte) & _PAGE_MODIFIED)
+        pte_val(pte) |= _PAGE_SILENT_WRITE;
+    return pte;
 }
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_MODIFIED;
-	if (pte_val(pte) & _PAGE_WRITE)
-		pte_val(pte) |= _PAGE_SILENT_WRITE;
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    pte_val(pte) |= _PAGE_MODIFIED;
+    if (pte_val(pte) & _PAGE_WRITE)
+        pte_val(pte) |= _PAGE_SILENT_WRITE;
+    return pte;
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_ACCESSED;
-	if (pte_val(pte) & _PAGE_READ)
-		pte_val(pte) |= _PAGE_SILENT_READ;
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    pte_val(pte) |= _PAGE_ACCESSED;
+    if (pte_val(pte) & _PAGE_READ)
+        pte_val(pte) |= _PAGE_SILENT_READ;
+    return pte;
 }
 
 #define set_pmd(pmdptr, pmdval)		\
@@ -258,22 +246,20 @@ extern unsigned long pgd_current;
 extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 extern void paging_init(void);
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
 }
 
 extern void __update_tlb(struct vm_area_struct *vma,
-	unsigned long address,	pte_t pte);
+                         unsigned long address,	pte_t pte);
 extern void __update_cache(struct vm_area_struct *vma,
-	unsigned long address,	pte_t pte);
+                           unsigned long address,	pte_t pte);
 
 static inline void update_mmu_cache(struct vm_area_struct *vma,
-	unsigned long address, pte_t *ptep)
-{
-	pte_t pte = *ptep;
-	__update_tlb(vma, address, pte);
-	__update_cache(vma, address, pte);
+                                    unsigned long address, pte_t *ptep) {
+    pte_t pte = *ptep;
+    __update_tlb(vma, address, pte);
+    __update_cache(vma, address, pte);
 }
 
 #ifndef __ASSEMBLY__

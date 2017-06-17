@@ -18,16 +18,16 @@
 #ifdef CONFIG_ZORRO_NAMES
 
 struct zorro_prod_info {
-	__u16 prod;
-	unsigned short seen;
-	const char *name;
+    __u16 prod;
+    unsigned short seen;
+    const char *name;
 };
 
 struct zorro_manuf_info {
-	__u16 manuf;
-	unsigned short nr;
-	const char *name;
-	struct zorro_prod_info *prods;
+    __u16 manuf;
+    unsigned short nr;
+    const char *name;
+    struct zorro_prod_info *prods;
 };
 
 /*
@@ -56,53 +56,51 @@ static struct zorro_manuf_info __initdata zorro_manuf_list[] = {
 
 #define MANUFS (sizeof(zorro_manuf_list)/sizeof(struct zorro_manuf_info))
 
-void __init zorro_name_device(struct zorro_dev *dev)
-{
-	const struct zorro_manuf_info *manuf_p = zorro_manuf_list;
-	int i = MANUFS;
-	char *name = dev->name;
+void __init zorro_name_device(struct zorro_dev *dev) {
+    const struct zorro_manuf_info *manuf_p = zorro_manuf_list;
+    int i = MANUFS;
+    char *name = dev->name;
 
-	do {
-		if (manuf_p->manuf == ZORRO_MANUF(dev->id))
-			goto match_manuf;
-		manuf_p++;
-	} while (--i);
+    do {
+        if (manuf_p->manuf == ZORRO_MANUF(dev->id))
+            goto match_manuf;
+        manuf_p++;
+    } while (--i);
 
-	/* Couldn't find either the manufacturer nor the product */
-	sprintf(name, "Zorro device %08x", dev->id);
-	return;
+    /* Couldn't find either the manufacturer nor the product */
+    sprintf(name, "Zorro device %08x", dev->id);
+    return;
 
-	match_manuf: {
-		struct zorro_prod_info *prod_p = manuf_p->prods;
-		int i = manuf_p->nr;
+match_manuf: {
+        struct zorro_prod_info *prod_p = manuf_p->prods;
+        int i = manuf_p->nr;
 
-		while (i > 0) {
-			if (prod_p->prod ==
-			    ((ZORRO_PROD(dev->id)<<8) | ZORRO_EPC(dev->id)))
-				goto match_prod;
-			prod_p++;
-			i--;
-		}
+        while (i > 0) {
+            if (prod_p->prod ==
+                    ((ZORRO_PROD(dev->id)<<8) | ZORRO_EPC(dev->id)))
+                goto match_prod;
+            prod_p++;
+            i--;
+        }
 
-		/* Ok, found the manufacturer, but unknown product */
-		sprintf(name, "Zorro device %08x (%s)", dev->id, manuf_p->name);
-		return;
+        /* Ok, found the manufacturer, but unknown product */
+        sprintf(name, "Zorro device %08x (%s)", dev->id, manuf_p->name);
+        return;
 
-		/* Full match */
-		match_prod: {
-			char *n = name + sprintf(name, "%s %s", manuf_p->name, prod_p->name);
-			int nr = prod_p->seen + 1;
-			prod_p->seen = nr;
-			if (nr > 1)
-				sprintf(n, " (#%d)", nr);
-		}
-	}
+        /* Full match */
+match_prod: {
+            char *n = name + sprintf(name, "%s %s", manuf_p->name, prod_p->name);
+            int nr = prod_p->seen + 1;
+            prod_p->seen = nr;
+            if (nr > 1)
+                sprintf(n, " (#%d)", nr);
+        }
+    }
 }
 
 #else
 
-void __init zorro_name_device(struct zorro_dev *dev)
-{
+void __init zorro_name_device(struct zorro_dev *dev) {
 }
 
 #endif

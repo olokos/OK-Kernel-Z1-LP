@@ -23,8 +23,8 @@
 
 #ifdef __ASSEMBLY__
 
-	.section .paravirt_branches, "a"
-	.previous
+.section .paravirt_branches, "a"
+.previous
 #define PARAVIRT_PATCH_SITE_BR(type)		\
 	{					\
 	[1:] ;					\
@@ -42,9 +42,9 @@
 
 /* for binary patch */
 struct paravirt_patch_site_bundle {
-	void		*sbundle;
-	void		*ebundle;
-	unsigned long	type;
+    void		*sbundle;
+    void		*ebundle;
+    unsigned long	type;
 };
 
 /* label means the beginning of new bundle */
@@ -59,16 +59,16 @@ struct paravirt_patch_site_bundle {
 
 
 struct paravirt_patch_bundle_elem {
-	const void	*sbundle;
-	const void	*ebundle;
-	unsigned long	type;
+    const void	*sbundle;
+    const void	*ebundle;
+    unsigned long	type;
 };
 
 
 struct paravirt_patch_site_inst {
-	unsigned long	stag;
-	unsigned long	etag;
-	unsigned long	type;
+    unsigned long	stag;
+    unsigned long	etag;
+    unsigned long	type;
 };
 
 #define paravirt_alt_inst(instr, privop)				\
@@ -81,20 +81,20 @@ struct paravirt_patch_site_inst {
 	__stringify(privop) "\n"
 
 struct paravirt_patch_site_branch {
-	unsigned long	tag;
-	unsigned long	type;
+    unsigned long	tag;
+    unsigned long	type;
 };
 
 struct paravirt_patch_branch_target {
-	const void	*entry;
-	unsigned long	type;
+    const void	*entry;
+    unsigned long	type;
 };
 
 void
 __paravirt_patch_apply_branch(
-	unsigned long tag, unsigned long type,
-	const struct paravirt_patch_branch_target *entries,
-	unsigned int nr_entries);
+    unsigned long tag, unsigned long type,
+    const struct paravirt_patch_branch_target *entries,
+    unsigned int nr_entries);
 
 void
 paravirt_patch_reloc_br(unsigned long tag, const void *target);
@@ -109,17 +109,17 @@ ia64_native_patch_bundle(void *sbundle, void *ebundle, unsigned long type);
 
 unsigned long
 __paravirt_patch_apply_bundle(void *sbundle, void *ebundle, unsigned long type,
-			      const struct paravirt_patch_bundle_elem *elems,
-			      unsigned long nelems,
-			      const struct paravirt_patch_bundle_elem **found);
+                              const struct paravirt_patch_bundle_elem *elems,
+                              unsigned long nelems,
+                              const struct paravirt_patch_bundle_elem **found);
 
 void
 paravirt_patch_apply_bundle(const struct paravirt_patch_site_bundle *start,
-			    const struct paravirt_patch_site_bundle *end);
+                            const struct paravirt_patch_site_bundle *end);
 
 void
 paravirt_patch_apply_inst(const struct paravirt_patch_site_inst *start,
-			  const struct paravirt_patch_site_inst *end);
+                          const struct paravirt_patch_site_inst *end);
 
 void paravirt_patch_apply(void);
 #else

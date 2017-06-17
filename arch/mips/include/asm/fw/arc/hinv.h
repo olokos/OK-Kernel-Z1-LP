@@ -9,87 +9,87 @@
 
 /* configuration query defines */
 typedef enum configclass {
-	SystemClass,
-	ProcessorClass,
-	CacheClass,
+    SystemClass,
+    ProcessorClass,
+    CacheClass,
 #ifndef	_NT_PROM
-	MemoryClass,
-	AdapterClass,
-	ControllerClass,
-	PeripheralClass
+    MemoryClass,
+    AdapterClass,
+    ControllerClass,
+    PeripheralClass
 #else	/* _NT_PROM */
-	AdapterClass,
-	ControllerClass,
-	PeripheralClass,
-	MemoryClass
+    AdapterClass,
+    ControllerClass,
+    PeripheralClass,
+    MemoryClass
 #endif	/* _NT_PROM */
 } CONFIGCLASS;
 
 typedef enum configtype {
-	ARC,
-	CPU,
-	FPU,
-	PrimaryICache,
-	PrimaryDCache,
-	SecondaryICache,
-	SecondaryDCache,
-	SecondaryCache,
+    ARC,
+    CPU,
+    FPU,
+    PrimaryICache,
+    PrimaryDCache,
+    SecondaryICache,
+    SecondaryDCache,
+    SecondaryCache,
 #ifndef	_NT_PROM
-	Memory,
+    Memory,
 #endif
-	EISAAdapter,
-	TCAdapter,
-	SCSIAdapter,
-	DTIAdapter,
-	MultiFunctionAdapter,
-	DiskController,
-	TapeController,
-	CDROMController,
-	WORMController,
-	SerialController,
-	NetworkController,
-	DisplayController,
-	ParallelController,
-	PointerController,
-	KeyboardController,
-	AudioController,
-	OtherController,
-	DiskPeripheral,
-	FloppyDiskPeripheral,
-	TapePeripheral,
-	ModemPeripheral,
-	MonitorPeripheral,
-	PrinterPeripheral,
-	PointerPeripheral,
-	KeyboardPeripheral,
-	TerminalPeripheral,
-	LinePeripheral,
-	NetworkPeripheral,
+    EISAAdapter,
+    TCAdapter,
+    SCSIAdapter,
+    DTIAdapter,
+    MultiFunctionAdapter,
+    DiskController,
+    TapeController,
+    CDROMController,
+    WORMController,
+    SerialController,
+    NetworkController,
+    DisplayController,
+    ParallelController,
+    PointerController,
+    KeyboardController,
+    AudioController,
+    OtherController,
+    DiskPeripheral,
+    FloppyDiskPeripheral,
+    TapePeripheral,
+    ModemPeripheral,
+    MonitorPeripheral,
+    PrinterPeripheral,
+    PointerPeripheral,
+    KeyboardPeripheral,
+    TerminalPeripheral,
+    LinePeripheral,
+    NetworkPeripheral,
 #ifdef	_NT_PROM
-	Memory,
+    Memory,
 #endif
-	OtherPeripheral,
+    OtherPeripheral,
 
-	/* new stuff for IP30 */
-	/* added without moving anything */
-	/* except ANONYMOUS. */
+    /* new stuff for IP30 */
+    /* added without moving anything */
+    /* except ANONYMOUS. */
 
-	XTalkAdapter,
-	PCIAdapter,
-	GIOAdapter,
-	TPUAdapter,
+    XTalkAdapter,
+    PCIAdapter,
+    GIOAdapter,
+    TPUAdapter,
 
-	Anonymous
+    Anonymous
 } CONFIGTYPE;
 
 typedef enum {
-	Failed = 1,
-	ReadOnly = 2,
-	Removable = 4,
-	ConsoleIn = 8,
-	ConsoleOut = 16,
-	Input = 32,
-	Output = 64
+    Failed = 1,
+    ReadOnly = 2,
+    Removable = 4,
+    ConsoleIn = 8,
+    ConsoleOut = 16,
+    Input = 32,
+    Output = 64
 } IDENTIFIERFLAG;
 
 #ifndef NULL			/* for GetChild(NULL); */
@@ -97,18 +97,18 @@ typedef enum {
 #endif
 
 union key_u {
-	struct {
+    struct {
 #ifdef	_MIPSEB
-		unsigned char  c_bsize;		/* block size in lines */
-		unsigned char  c_lsize;		/* line size in bytes/tag */
-		unsigned short c_size;		/* cache size in 4K pages */
+        unsigned char  c_bsize;		/* block size in lines */
+        unsigned char  c_lsize;		/* line size in bytes/tag */
+        unsigned short c_size;		/* cache size in 4K pages */
 #else	/* _MIPSEL */
-		unsigned short c_size;		/* cache size in 4K pages */
-		unsigned char  c_lsize;		/* line size in bytes/tag */
-		unsigned char  c_bsize;		/* block size in lines */
+        unsigned short c_size;		/* cache size in 4K pages */
+        unsigned char  c_lsize;		/* line size in bytes/tag */
+        unsigned char  c_bsize;		/* block size in lines */
 #endif	/* _MIPSEL */
-	} cache;
-	ULONG FullKey;
+    } cache;
+    ULONG FullKey;
 };
 
 #if _MIPS_SIM == _MIPS_SIM_ABI64
@@ -120,56 +120,56 @@ union key_u {
 #endif
 
 typedef struct component {
-	CONFIGCLASS	Class;
-	CONFIGTYPE	Type;
-	IDENTIFIERFLAG	Flags;
-	USHORT		Version;
-	USHORT		Revision;
-	ULONG 		Key;
-	ULONG		AffinityMask;
-	ULONG		ConfigurationDataSize;
-	ULONG		IdentifierLength;
-	char		*Identifier;
+    CONFIGCLASS	Class;
+    CONFIGTYPE	Type;
+    IDENTIFIERFLAG	Flags;
+    USHORT		Version;
+    USHORT		Revision;
+    ULONG 		Key;
+    ULONG		AffinityMask;
+    ULONG		ConfigurationDataSize;
+    ULONG		IdentifierLength;
+    char		*Identifier;
 } COMPONENT;
 
 /* internal structure that holds pathname parsing data */
 struct cfgdata {
-	char *name;			/* full name */
-	int minlen;			/* minimum length to match */
-	CONFIGTYPE type;		/* type of token */
+    char *name;			/* full name */
+    int minlen;			/* minimum length to match */
+    CONFIGTYPE type;		/* type of token */
 };
 
 /* System ID */
 typedef struct systemid {
-	CHAR VendorId[8];
-	CHAR ProductId[8];
+    CHAR VendorId[8];
+    CHAR ProductId[8];
 } SYSTEMID;
 
 /* memory query functions */
 typedef enum memorytype {
-	ExceptionBlock,
-	SPBPage,			/* ARCS == SystemParameterBlock */
+    ExceptionBlock,
+    SPBPage,			/* ARCS == SystemParameterBlock */
 #ifndef	_NT_PROM
-	FreeContiguous,
-	FreeMemory,
-	BadMemory,
-	LoadedProgram,
-	FirmwareTemporary,
-	FirmwarePermanent
+    FreeContiguous,
+    FreeMemory,
+    BadMemory,
+    LoadedProgram,
+    FirmwareTemporary,
+    FirmwarePermanent
 #else	/* _NT_PROM */
-	FreeMemory,
-	BadMemory,
-	LoadedProgram,
-	FirmwareTemporary,
-	FirmwarePermanent,
-	FreeContiguous
+    FreeMemory,
+    BadMemory,
+    LoadedProgram,
+    FirmwareTemporary,
+    FirmwarePermanent,
+    FreeContiguous
 #endif	/* _NT_PROM */
 } MEMORYTYPE;
 
 typedef struct memorydescriptor {
-	MEMORYTYPE	Type;
-	LONG		BasePage;
-	LONG		PageCount;
+    MEMORYTYPE	Type;
+    LONG		BasePage;
+    LONG		PageCount;
 } MEMORYDESCRIPTOR;
 
 #endif /* _ASM_ARC_HINV_H */

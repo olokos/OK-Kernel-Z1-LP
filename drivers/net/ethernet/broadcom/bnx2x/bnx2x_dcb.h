@@ -23,8 +23,8 @@
 
 #define LLFC_DRIVER_TRAFFIC_TYPE_MAX 3 /* NW, iSCSI, FCoE */
 struct bnx2x_dcbx_app_params {
-	u32 enabled;
-	u32 traffic_type_priority[LLFC_DRIVER_TRAFFIC_TYPE_MAX];
+    u32 enabled;
+    u32 traffic_type_priority[LLFC_DRIVER_TRAFFIC_TYPE_MAX];
 };
 
 #define DCBX_COS_MAX_NUM_E2	DCBX_E2E3_MAX_NUM_COS
@@ -34,34 +34,34 @@ struct bnx2x_dcbx_app_params {
 #define DCBX_COS_MAX_NUM	BNX2X_MAX_COS_SUPPORT
 
 struct bnx2x_dcbx_cos_params {
-	u32	bw_tbl;
-	u32	pri_bitmask;
-	/*
-	 * strict priority: valid values are 0..5; 0 is highest priority.
-	 * There can't be two COSes with the same priority.
-	 */
-	u8	strict;
+    u32	bw_tbl;
+    u32	pri_bitmask;
+    /*
+     * strict priority: valid values are 0..5; 0 is highest priority.
+     * There can't be two COSes with the same priority.
+     */
+    u8	strict;
 #define BNX2X_DCBX_STRICT_INVALID			DCBX_COS_MAX_NUM
 #define BNX2X_DCBX_STRICT_COS_HIGHEST			0
 #define BNX2X_DCBX_STRICT_COS_NEXT_LOWER_PRI(sp)	((sp) + 1)
-	u8	pauseable;
+    u8	pauseable;
 };
 
 struct bnx2x_dcbx_pg_params {
-	u32 enabled;
-	u8 num_of_cos; /* valid COS entries */
-	struct bnx2x_dcbx_cos_params	cos_params[DCBX_COS_MAX_NUM];
+    u32 enabled;
+    u8 num_of_cos; /* valid COS entries */
+    struct bnx2x_dcbx_cos_params	cos_params[DCBX_COS_MAX_NUM];
 };
 
 struct bnx2x_dcbx_pfc_params {
-	u32 enabled;
-	u32 priority_non_pauseable_mask;
+    u32 enabled;
+    u32 priority_non_pauseable_mask;
 };
 
 struct bnx2x_dcbx_port_params {
-	struct bnx2x_dcbx_pfc_params pfc;
-	struct bnx2x_dcbx_pg_params  ets;
-	struct bnx2x_dcbx_app_params app;
+    struct bnx2x_dcbx_pfc_params pfc;
+    struct bnx2x_dcbx_pg_params  ets;
+    struct bnx2x_dcbx_app_params app;
 };
 
 #define BNX2X_DCBX_CONFIG_INV_VALUE			(0xFFFFFFFF)
@@ -72,47 +72,47 @@ struct bnx2x_dcbx_port_params {
 				  (bp)->dcbx_port_params.ets.enabled)
 
 struct bnx2x_config_lldp_params {
-	u32 overwrite_settings;
-	u32 msg_tx_hold;
-	u32 msg_fast_tx;
-	u32 tx_credit_max;
-	u32 msg_tx_interval;
-	u32 tx_fast;
+    u32 overwrite_settings;
+    u32 msg_tx_hold;
+    u32 msg_fast_tx;
+    u32 tx_credit_max;
+    u32 msg_tx_interval;
+    u32 tx_fast;
 };
 
 struct bnx2x_admin_priority_app_table {
-		u32 valid;
-		u32 priority;
+    u32 valid;
+    u32 priority;
 #define INVALID_TRAFFIC_TYPE_PRIORITY	(0xFFFFFFFF)
-		u32 traffic_type;
+    u32 traffic_type;
 #define TRAFFIC_TYPE_ETH		0
 #define TRAFFIC_TYPE_PORT		1
-		u32 app_id;
+    u32 app_id;
 };
 
 #define DCBX_CONFIG_MAX_APP_PROTOCOL 4
 struct bnx2x_config_dcbx_params {
-	u32 overwrite_settings;
-	u32 admin_dcbx_version;
-	u32 admin_ets_enable;
-	u32 admin_pfc_enable;
-	u32 admin_tc_supported_tx_enable;
-	u32 admin_ets_configuration_tx_enable;
-	u32 admin_ets_recommendation_tx_enable;
-	u32 admin_pfc_tx_enable;
-	u32 admin_application_priority_tx_enable;
-	u32 admin_ets_willing;
-	u32 admin_ets_reco_valid;
-	u32 admin_pfc_willing;
-	u32 admin_app_priority_willing;
-	u32 admin_configuration_bw_precentage[8];
-	u32 admin_configuration_ets_pg[8];
-	u32 admin_recommendation_bw_precentage[8];
-	u32 admin_recommendation_ets_pg[8];
-	u32 admin_pfc_bitmap;
-	struct bnx2x_admin_priority_app_table
-		admin_priority_app_table[DCBX_CONFIG_MAX_APP_PROTOCOL];
-	u32 admin_default_priority;
+    u32 overwrite_settings;
+    u32 admin_dcbx_version;
+    u32 admin_ets_enable;
+    u32 admin_pfc_enable;
+    u32 admin_tc_supported_tx_enable;
+    u32 admin_ets_configuration_tx_enable;
+    u32 admin_ets_recommendation_tx_enable;
+    u32 admin_pfc_tx_enable;
+    u32 admin_application_priority_tx_enable;
+    u32 admin_ets_willing;
+    u32 admin_ets_reco_valid;
+    u32 admin_pfc_willing;
+    u32 admin_app_priority_willing;
+    u32 admin_configuration_bw_precentage[8];
+    u32 admin_configuration_ets_pg[8];
+    u32 admin_recommendation_bw_precentage[8];
+    u32 admin_recommendation_ets_pg[8];
+    u32 admin_pfc_bitmap;
+    struct bnx2x_admin_priority_app_table
+        admin_priority_app_table[DCBX_CONFIG_MAX_APP_PROTOCOL];
+    u32 admin_default_priority;
 };
 
 #define GET_FLAGS(flags, bits)		((flags) & (bits))
@@ -120,8 +120,8 @@ struct bnx2x_config_dcbx_params {
 #define RESET_FLAGS(flags, bits)	((flags) &= ~(bits))
 
 enum {
-	DCBX_READ_LOCAL_MIB,
-	DCBX_READ_REMOTE_MIB
+    DCBX_READ_LOCAL_MIB,
+    DCBX_READ_REMOTE_MIB
 };
 
 #define ETH_TYPE_FCOE		(0x8906)
@@ -137,15 +137,15 @@ enum {
 
 
 struct cos_entry_help_data {
-	u32			pri_join_mask;
-	u32			cos_bw;
-	u8			strict;
-	bool			pausable;
+    u32			pri_join_mask;
+    u32			cos_bw;
+    u8			strict;
+    bool			pausable;
 };
 
 struct cos_help_data {
-	struct cos_entry_help_data	data[DCBX_COS_MAX_NUM];
-	u8				num_of_cos;
+    struct cos_entry_help_data	data[DCBX_COS_MAX_NUM];
+    u8				num_of_cos;
 };
 
 #define DCBX_ILLEGAL_PG				(0xFF)
@@ -172,14 +172,14 @@ struct cos_help_data {
 
 
 struct pg_entry_help_data {
-	u8	num_of_dif_pri;
-	u8	pg;
-	u32	pg_priority;
+    u8	num_of_dif_pri;
+    u8	pg;
+    u32	pg_priority;
 };
 
 struct pg_help_data {
-	struct pg_entry_help_data	data[LLFC_DRIVER_TRAFFIC_TYPE_MAX];
-	u8				num_of_pg;
+    struct pg_entry_help_data	data[LLFC_DRIVER_TRAFFIC_TYPE_MAX];
+    u8				num_of_pg;
 };
 
 /* forward DCB/PFC related declarations */
@@ -189,9 +189,9 @@ void bnx2x_dcbx_init_params(struct bnx2x *bp);
 void bnx2x_dcbx_set_state(struct bnx2x *bp, bool dcb_on, u32 dcbx_enabled);
 
 enum {
-	BNX2X_DCBX_STATE_NEG_RECEIVED = 0x1,
-	BNX2X_DCBX_STATE_TX_PAUSED,
-	BNX2X_DCBX_STATE_TX_RELEASED
+    BNX2X_DCBX_STATE_NEG_RECEIVED = 0x1,
+    BNX2X_DCBX_STATE_TX_PAUSED,
+    BNX2X_DCBX_STATE_TX_RELEASED
 };
 
 void bnx2x_dcbx_set_params(struct bnx2x *bp, u32 state);

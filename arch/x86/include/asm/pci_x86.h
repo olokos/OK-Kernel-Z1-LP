@@ -36,10 +36,10 @@ extern unsigned int pci_probe;
 extern unsigned long pirq_table_addr;
 
 enum pci_bf_sort_state {
-	pci_bf_sort_default,
-	pci_force_nobf,
-	pci_force_bf,
-	pci_dmi_bf,
+    pci_bf_sort_default,
+    pci_force_nobf,
+    pci_force_bf,
+    pci_dmi_bf,
 };
 
 /* pci-i386.c */
@@ -58,29 +58,29 @@ void pcibios_scan_specific_bus(int busn);
 /* pci-irq.c */
 
 struct irq_info {
-	u8 bus, devfn;			/* Bus, device and function */
-	struct {
-		u8 link;		/* IRQ line ID, chipset dependent,
+    u8 bus, devfn;			/* Bus, device and function */
+    struct {
+        u8 link;		/* IRQ line ID, chipset dependent,
 					   0 = not routed */
-		u16 bitmap;		/* Available IRQs */
-	} __attribute__((packed)) irq[4];
-	u8 slot;			/* Slot number, 0=onboard */
-	u8 rfu;
+        u16 bitmap;		/* Available IRQs */
+    } __attribute__((packed)) irq[4];
+    u8 slot;			/* Slot number, 0=onboard */
+    u8 rfu;
 } __attribute__((packed));
 
 struct irq_routing_table {
-	u32 signature;			/* PIRQ_SIGNATURE should be here */
-	u16 version;			/* PIRQ_VERSION */
-	u16 size;			/* Table size in bytes */
-	u8 rtr_bus, rtr_devfn;		/* Where the interrupt router lies */
-	u16 exclusive_irqs;		/* IRQs devoted exclusively to
+    u32 signature;			/* PIRQ_SIGNATURE should be here */
+    u16 version;			/* PIRQ_VERSION */
+    u16 size;			/* Table size in bytes */
+    u8 rtr_bus, rtr_devfn;		/* Where the interrupt router lies */
+    u16 exclusive_irqs;		/* IRQs devoted exclusively to
 					   PCI usage */
-	u16 rtr_vendor, rtr_device;	/* Vendor and device ID of
+    u16 rtr_vendor, rtr_device;	/* Vendor and device ID of
 					   interrupt router */
-	u32 miniport_data;		/* Crap */
-	u8 rfu[11];
-	u8 checksum;			/* Modulo 256 checksum must give 0 */
-	struct irq_info slots[0];
+    u32 miniport_data;		/* Crap */
+    u8 rfu[11];
+    u8 checksum;			/* Modulo 256 checksum must give 0 */
+    struct irq_info slots[0];
 } __attribute__((packed));
 
 extern unsigned int pcibios_irq_mask;
@@ -91,10 +91,10 @@ extern int (*pcibios_enable_irq)(struct pci_dev *dev);
 extern void (*pcibios_disable_irq)(struct pci_dev *dev);
 
 struct pci_raw_ops {
-	int (*read)(unsigned int domain, unsigned int bus, unsigned int devfn,
-						int reg, int len, u32 *val);
-	int (*write)(unsigned int domain, unsigned int bus, unsigned int devfn,
-						int reg, int len, u32 val);
+    int (*read)(unsigned int domain, unsigned int bus, unsigned int devfn,
+                int reg, int len, u32 *val);
+    int (*write)(unsigned int domain, unsigned int bus, unsigned int devfn,
+                 int reg, int len, u32 val);
 };
 
 extern const struct pci_raw_ops *raw_pci_ops;
@@ -123,14 +123,14 @@ extern void pcibios_fixup_irqs(void);
 #define PCI_MMCFG_RESOURCE_NAME_LEN (22 + 4 + 2 + 2)
 
 struct pci_mmcfg_region {
-	struct list_head list;
-	struct resource res;
-	u64 address;
-	char __iomem *virt;
-	u16 segment;
-	u8 start_bus;
-	u8 end_bus;
-	char name[PCI_MMCFG_RESOURCE_NAME_LEN];
+    struct list_head list;
+    struct resource res;
+    u64 address;
+    char __iomem *virt;
+    u16 segment;
+    u8 start_bus;
+    u8 end_bus;
+    char name[PCI_MMCFG_RESOURCE_NAME_LEN];
 };
 
 extern int __init pci_mmcfg_arch_init(void);
@@ -148,40 +148,34 @@ extern struct list_head pci_mmcfg_list;
  * accessor functions.
  * In fact just use pci_config_*, nothing else please.
  */
-static inline unsigned char mmio_config_readb(void __iomem *pos)
-{
-	u8 val;
-	asm volatile("movb (%1),%%al" : "=a" (val) : "r" (pos));
-	return val;
+static inline unsigned char mmio_config_readb(void __iomem *pos) {
+    u8 val;
+    asm volatile("movb (%1),%%al" : "=a" (val) : "r" (pos));
+    return val;
 }
 
-static inline unsigned short mmio_config_readw(void __iomem *pos)
-{
-	u16 val;
-	asm volatile("movw (%1),%%ax" : "=a" (val) : "r" (pos));
-	return val;
+static inline unsigned short mmio_config_readw(void __iomem *pos) {
+    u16 val;
+    asm volatile("movw (%1),%%ax" : "=a" (val) : "r" (pos));
+    return val;
 }
 
-static inline unsigned int mmio_config_readl(void __iomem *pos)
-{
-	u32 val;
-	asm volatile("movl (%1),%%eax" : "=a" (val) : "r" (pos));
-	return val;
+static inline unsigned int mmio_config_readl(void __iomem *pos) {
+    u32 val;
+    asm volatile("movl (%1),%%eax" : "=a" (val) : "r" (pos));
+    return val;
 }
 
-static inline void mmio_config_writeb(void __iomem *pos, u8 val)
-{
-	asm volatile("movb %%al,(%1)" : : "a" (val), "r" (pos) : "memory");
+static inline void mmio_config_writeb(void __iomem *pos, u8 val) {
+    asm volatile("movb %%al,(%1)" : : "a" (val), "r" (pos) : "memory");
 }
 
-static inline void mmio_config_writew(void __iomem *pos, u16 val)
-{
-	asm volatile("movw %%ax,(%1)" : : "a" (val), "r" (pos) : "memory");
+static inline void mmio_config_writew(void __iomem *pos, u16 val) {
+    asm volatile("movw %%ax,(%1)" : : "a" (val), "r" (pos) : "memory");
 }
 
-static inline void mmio_config_writel(void __iomem *pos, u32 val)
-{
-	asm volatile("movl %%eax,(%1)" : : "a" (val), "r" (pos) : "memory");
+static inline void mmio_config_writel(void __iomem *pos, u32 val) {
+    asm volatile("movl %%eax,(%1)" : : "a" (val), "r" (pos) : "memory");
 }
 
 #ifdef CONFIG_PCI

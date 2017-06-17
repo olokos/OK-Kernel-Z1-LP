@@ -72,19 +72,16 @@
 
 /*---------------------  Export Classes  ----------------------------*/
 
-typedef struct _CMD_MESSAGE
-{
+typedef struct _CMD_MESSAGE {
     BYTE        byData[256];
 } CMD_MESSAGE, *PCMD_MESSAGE;
 
-typedef struct _CMD_WRITE_MASK
-{
+typedef struct _CMD_WRITE_MASK {
     BYTE        byData;
     BYTE        byMask;
 } CMD_WRITE_MASK, *PCMD_WRITE_MASK;
 
-typedef struct _CMD_CARD_INIT
-{
+typedef struct _CMD_CARD_INIT {
     BYTE        byInitClass;
     BYTE        bExistSWNetAddr;
     BYTE        bySWNetAddr[6];
@@ -92,8 +89,7 @@ typedef struct _CMD_CARD_INIT
     BYTE        byLongRetryLimit;
 } CMD_CARD_INIT, *PCMD_CARD_INIT;
 
-typedef struct _RSP_CARD_INIT
-{
+typedef struct _RSP_CARD_INIT {
     BYTE        byStatus;
     BYTE        byNetAddr[6];
     BYTE        byRFType;
@@ -101,30 +97,25 @@ typedef struct _RSP_CARD_INIT
     BYTE        byMaxChannel;
 } RSP_CARD_INIT, *PRSP_CARD_INIT;
 
-typedef struct _CMD_SET_KEY
-{
+typedef struct _CMD_SET_KEY {
     WORD        wKCTL;
     BYTE        abyMacAddr[6];
     BYTE        abyKey[16];
 } CMD_SET_KEY, *PCMD_SET_KEY;
 
-typedef struct _CMD_CLRKEY_ENTRY
-{
+typedef struct _CMD_CLRKEY_ENTRY {
     BYTE        abyKeyEntry[11];
 } CMD_CLRKEY_ENTRY, *PCMD_CLRKEY_ENTRY;
 
-typedef struct _CMD_WRITE_MISCFF
-{
+typedef struct _CMD_WRITE_MISCFF {
     DWORD       adwMiscFFData[22][4];  //a key entry has only 22 dwords
 } CMD_WRITE_MISCFF, *PCMD_WRITE_MISCFF;
 
-typedef struct _CMD_SET_TSFTBTT
-{
+typedef struct _CMD_SET_TSFTBTT {
     BYTE        abyTSF_TBTT[8];
 } CMD_SET_TSFTBTT, *PCMD_SET_TSFTBTT;
 
-typedef struct _CMD_SET_SSTIFS
-{
+typedef struct _CMD_SET_SSTIFS {
     BYTE        bySIFS;
     BYTE        byDIFS;
     BYTE        byEIFS;
@@ -133,8 +124,7 @@ typedef struct _CMD_SET_SSTIFS
     BYTE        byBBCR10;
 } CMD_SET_SSTIFS, *PCMD_SET_SSTIFS;
 
-typedef struct _CMD_CHANGE_BBTYPE
-{
+typedef struct _CMD_CHANGE_BBTYPE {
     BYTE        bySIFS;
     BYTE        byDIFS;
     BYTE        byEIFS;

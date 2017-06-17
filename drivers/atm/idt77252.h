@@ -1,6 +1,6 @@
-/******************************************************************* 
+/*******************************************************************
  *
- * Copyright (c) 2000 ATecoM GmbH 
+ * Copyright (c) 2000 ATecoM GmbH
  *
  * The author may be reached at ecd@atecom.com.
  *
@@ -145,79 +145,77 @@
 /*                                                                           */
 /*****************************************************************************/
 
-struct scqe
-{
-	u32		word_1;
-	u32		word_2;
-	u32		word_3;
-	u32		word_4;
+struct scqe {
+    u32		word_1;
+    u32		word_2;
+    u32		word_3;
+    u32		word_4;
 };
 
 #define SCQ_ENTRIES	64
 #define SCQ_SIZE	(SCQ_ENTRIES * sizeof(struct scqe))
 #define SCQ_MASK	(SCQ_SIZE - 1)
 
-struct scq_info
-{
-	struct scqe		*base;
-	struct scqe		*next;
-	struct scqe		*last;
-	dma_addr_t		paddr;
-	spinlock_t		lock;
-	atomic_t		used;
-	unsigned long		trans_start;
-        unsigned long		scd;
-	spinlock_t		skblock;
-	struct sk_buff_head	transmit;
-	struct sk_buff_head	pending;
+struct scq_info {
+    struct scqe		*base;
+    struct scqe		*next;
+    struct scqe		*last;
+    dma_addr_t		paddr;
+    spinlock_t		lock;
+    atomic_t		used;
+    unsigned long		trans_start;
+    unsigned long		scd;
+    spinlock_t		skblock;
+    struct sk_buff_head	transmit;
+    struct sk_buff_head	pending;
 };
 
 struct rx_pool {
-	struct sk_buff_head	queue;
-	unsigned int		len;
+    struct sk_buff_head	queue;
+    unsigned int		len;
 };
 
 struct aal1 {
-	unsigned int		total;
-	unsigned int		count;
-	struct sk_buff		*data;
-	unsigned char		sequence;
+    unsigned int		total;
+    unsigned int		count;
+    struct sk_buff		*data;
+    unsigned char		sequence;
 };
 
 struct rate_estimator {
-	struct timer_list	timer;
-	unsigned int		interval;
-	unsigned int		ewma_log;
-	u64			cells;
-	u64			last_cells;
-	long			avcps;
-	u32			cps;
-	u32			maxcps;
+    struct timer_list	timer;
+    unsigned int		interval;
+    unsigned int		ewma_log;
+    u64			cells;
+    u64			last_cells;
+    long			avcps;
+    u32			cps;
+    u32			maxcps;
 };
 
 struct vc_map {
-	unsigned int		index;
-	unsigned long		flags;
+    unsigned int		index;
+    unsigned long		flags;
 #define VCF_TX		0
 #define VCF_RX		1
 #define VCF_IDLE	2
 #define VCF_RSV		3
-	unsigned int		class;
-	u8			init_er;
-	u8			lacr;
-	u8			max_er;
-	unsigned int		ntste;
-	spinlock_t		lock;
-	struct atm_vcc		*tx_vcc;
-	struct atm_vcc		*rx_vcc;
-	struct idt77252_dev	*card;
-	struct scq_info		*scq;		/* To keep track of the SCQ */
-	struct rate_estimator	*estimator;
-	int			scd_index;
-	union {
-		struct rx_pool	rx_pool;
-		struct aal1	aal1;
-	} rcv;
+    unsigned int		class;
+    u8			init_er;
+    u8			lacr;
+    u8			max_er;
+    unsigned int		ntste;
+    spinlock_t		lock;
+    struct atm_vcc		*tx_vcc;
+    struct atm_vcc		*rx_vcc;
+    struct idt77252_dev	*card;
+    struct scq_info		*scq;		/* To keep track of the SCQ */
+    struct rate_estimator	*estimator;
+    int			scd_index;
+    union {
+        struct rx_pool	rx_pool;
+        struct aal1	aal1;
+    } rcv;
 };
 
 /*****************************************************************************/
@@ -226,12 +224,11 @@ struct vc_map {
 /*                                                                           */
 /*****************************************************************************/
 
-struct rct_entry
-{
-	u32		word_1;
-	u32		buffer_handle;
-	u32		dma_address;
-	u32		aal5_crc32;
+struct rct_entry {
+    u32		word_1;
+    u32		buffer_handle;
+    u32		dma_address;
+    u32		aal5_crc32;
 };
 
 /*****************************************************************************/
@@ -258,17 +255,17 @@ struct rct_entry
 #define RSQ_ALIGNMENT      8192
 
 struct rsq_entry {
-	u32			word_1;
-	u32			word_2;
-	u32			word_3;
-	u32			word_4;
+    u32			word_1;
+    u32			word_2;
+    u32			word_3;
+    u32			word_4;
 };
 
 struct rsq_info {
-	struct rsq_entry	*base;
-	struct rsq_entry	*next;
-	struct rsq_entry	*last;
-	dma_addr_t		paddr;
+    struct rsq_entry	*base;
+    struct rsq_entry	*next;
+    struct rsq_entry	*last;
+    dma_addr_t		paddr;
 };
 
 
@@ -292,24 +289,21 @@ struct rsq_info {
 #define TSQ_NUM_ENTRIES    1024
 #define TSQ_ALIGNMENT      8192
 
-struct tsq_entry
-{
-	u32			word_1;
-	u32			word_2;
+struct tsq_entry {
+    u32			word_1;
+    u32			word_2;
 };
 
-struct tsq_info
-{
-	struct tsq_entry	*base;
-	struct tsq_entry	*next;
-	struct tsq_entry	*last;
-	dma_addr_t		paddr;
+struct tsq_info {
+    struct tsq_entry	*base;
+    struct tsq_entry	*next;
+    struct tsq_entry	*last;
+    dma_addr_t		paddr;
 };
 
-struct tst_info
-{
-	struct vc_map		*vc;
-	u32			tste;
+struct tst_info {
+    struct vc_map		*vc;
+    u32			tste;
 };
 
 #define TSTE_MASK		0x601fffff
@@ -331,83 +325,81 @@ struct tst_info
 #define FBQ_SIZE		(1 << FBQ_SHIFT)
 #define FBQ_MASK		(FBQ_SIZE - 1)
 
-struct sb_pool
-{
-	unsigned int		index;
-	struct sk_buff		*skb[FBQ_SIZE];
+struct sb_pool {
+    unsigned int		index;
+    struct sk_buff		*skb[FBQ_SIZE];
 };
 
 #define POOL_HANDLE(queue, index)	(((queue + 1) << 16) | (index))
 #define POOL_QUEUE(handle)		(((handle) >> 16) - 1)
 #define POOL_INDEX(handle)		((handle) & 0xffff)
 
-struct idt77252_dev
-{
-        struct tsq_info		tsq;		/* Transmit Status Queue */
-        struct rsq_info		rsq;		/* Receive Status Queue */
+struct idt77252_dev {
+    struct tsq_info		tsq;		/* Transmit Status Queue */
+    struct rsq_info		rsq;		/* Receive Status Queue */
 
-	struct pci_dev		*pcidev;	/* PCI handle (desriptor) */
-	struct atm_dev		*atmdev;	/* ATM device desriptor */
+    struct pci_dev		*pcidev;	/* PCI handle (desriptor) */
+    struct atm_dev		*atmdev;	/* ATM device desriptor */
 
-	void __iomem		*membase;	/* SAR's memory base address */
-	unsigned long		srambase;	/* SAR's sram  base address */
-	void __iomem		*fbq[4];	/* FBQ fill addresses */
+    void __iomem		*membase;	/* SAR's memory base address */
+    unsigned long		srambase;	/* SAR's sram  base address */
+    void __iomem		*fbq[4];	/* FBQ fill addresses */
 
-	struct mutex		mutex;
-	spinlock_t		cmd_lock;	/* for r/w utility/sram */
+    struct mutex		mutex;
+    spinlock_t		cmd_lock;	/* for r/w utility/sram */
 
-	unsigned long		softstat;
-	unsigned long		flags;		/* see blow */
+    unsigned long		softstat;
+    unsigned long		flags;		/* see blow */
 
-	struct work_struct	tqueue;
+    struct work_struct	tqueue;
 
-	unsigned long		tct_base;	/* TCT base address in SRAM */
-        unsigned long		rct_base;	/* RCT base address in SRAM */
-        unsigned long		rt_base;	/* Rate Table base in SRAM */
-        unsigned long		scd_base;	/* SCD base address in SRAM */
-        unsigned long		tst[2];		/* TST base address in SRAM */
-	unsigned long		abrst_base;	/* ABRST base address in SRAM */
-        unsigned long		fifo_base;	/* RX FIFO base in SRAM */
+    unsigned long		tct_base;	/* TCT base address in SRAM */
+    unsigned long		rct_base;	/* RCT base address in SRAM */
+    unsigned long		rt_base;	/* Rate Table base in SRAM */
+    unsigned long		scd_base;	/* SCD base address in SRAM */
+    unsigned long		tst[2];		/* TST base address in SRAM */
+    unsigned long		abrst_base;	/* ABRST base address in SRAM */
+    unsigned long		fifo_base;	/* RX FIFO base in SRAM */
 
-	unsigned long		irqstat[16];
+    unsigned long		irqstat[16];
 
-	unsigned int		sramsize;	/* SAR's sram size */
+    unsigned int		sramsize;	/* SAR's sram size */
 
-        unsigned int		tct_size;	/* total TCT entries */
-        unsigned int		rct_size;	/* total RCT entries */
-        unsigned int		scd_size;	/* length of SCD */
-        unsigned int		tst_size;	/* total TST entries */
-        unsigned int		tst_free;	/* free TSTEs in TST */
-        unsigned int		abrst_size;	/* size of ABRST in words */
-        unsigned int		fifo_size;	/* size of RX FIFO in words */
+    unsigned int		tct_size;	/* total TCT entries */
+    unsigned int		rct_size;	/* total RCT entries */
+    unsigned int		scd_size;	/* length of SCD */
+    unsigned int		tst_size;	/* total TST entries */
+    unsigned int		tst_free;	/* free TSTEs in TST */
+    unsigned int		abrst_size;	/* size of ABRST in words */
+    unsigned int		fifo_size;	/* size of RX FIFO in words */
 
-        unsigned int		vpibits;	/* Bits used for VPI index */
-        unsigned int		vcibits;	/* Bits used for VCI index */
-        unsigned int		vcimask;	/* Mask for VCI index */
+    unsigned int		vpibits;	/* Bits used for VPI index */
+    unsigned int		vcibits;	/* Bits used for VCI index */
+    unsigned int		vcimask;	/* Mask for VCI index */
 
-	unsigned int		utopia_pcr;	/* Utopia Itf's Cell Rate */
-	unsigned int		link_pcr;	/* PHY's Peek Cell Rate */
+    unsigned int		utopia_pcr;	/* Utopia Itf's Cell Rate */
+    unsigned int		link_pcr;	/* PHY's Peek Cell Rate */
 
-	struct vc_map		**vcs;		/* Open Connections */
-	struct vc_map		**scd2vc;	/* SCD to Connection map */
+    struct vc_map		**vcs;		/* Open Connections */
+    struct vc_map		**scd2vc;	/* SCD to Connection map */
 
-	struct tst_info		*soft_tst;	/* TST to Connection map */
-	unsigned int		tst_index;	/* Current TST in use */
-	struct timer_list	tst_timer;
-	spinlock_t		tst_lock;
-	unsigned long		tst_state;
+    struct tst_info		*soft_tst;	/* TST to Connection map */
+    unsigned int		tst_index;	/* Current TST in use */
+    struct timer_list	tst_timer;
+    spinlock_t		tst_lock;
+    unsigned long		tst_state;
 
-	struct sb_pool		sbpool[4];	/* Pool of RX skbuffs */
-	struct sk_buff		*raw_cell_head; /* Pointer to raw cell queue */
-	u32			*raw_cell_hnd;	/* Pointer to RCQ handle */
-	dma_addr_t		raw_cell_paddr;
+    struct sb_pool		sbpool[4];	/* Pool of RX skbuffs */
+    struct sk_buff		*raw_cell_head; /* Pointer to raw cell queue */
+    u32			*raw_cell_hnd;	/* Pointer to RCQ handle */
+    dma_addr_t		raw_cell_paddr;
 
-	int			index;		/* SAR's ID */
-	int			revision;	/* chip revision */
+    int			index;		/* SAR's ID */
+    int			revision;	/* chip revision */
 
-	char			name[16];	/* Device name */
+    char			name[16];	/* Device name */
 
-	struct idt77252_dev	*next;
+    struct idt77252_dev	*next;
 };
 
 
@@ -577,10 +569,10 @@ struct idt77252_dev
 #define SAR_STAT_FBQ2A      0x00000080 /* Free Buffer Queue 2 Attention   */
 #define SAR_STAT_RSQF       0x00000040 /* Receive Status Queue full       */
 #define SAR_STAT_EPDU       0x00000020 /* End Of PDU Flag                 */
-#define SAR_STAT_RAWCF      0x00000010 /* Raw Cell Flag                   */ 
+#define SAR_STAT_RAWCF      0x00000010 /* Raw Cell Flag                   */
 #define SAR_STAT_FBQ1A      0x00000008 /* Free Buffer Queue 1 Attention   */
 #define SAR_STAT_FBQ0A      0x00000004 /* Free Buffer Queue 0 Attention   */
-#define SAR_STAT_RSQAF      0x00000002 /* Receive Status Queue almost full*/  
+#define SAR_STAT_RSQAF      0x00000002 /* Receive Status Queue almost full*/
 #define SAR_STAT_RSVD2      0x00000001 /* Reserved                        */
 
 
@@ -783,9 +775,9 @@ struct idt77252_dev
 
 
 struct idt77252_skb_prv {
-	struct scqe	tbd;	/* Transmit Buffer Descriptor */
-	dma_addr_t	paddr;	/* DMA handle */
-	u32		pool;	/* sb_pool handle */
+    struct scqe	tbd;	/* Transmit Buffer Descriptor */
+    dma_addr_t	paddr;	/* DMA handle */
+    u32		pool;	/* sb_pool handle */
 };
 
 #define IDT77252_PRV_TBD(skb)	\

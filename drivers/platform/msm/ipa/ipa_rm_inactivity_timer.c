@@ -35,12 +35,12 @@
  * WWAN private - holds all relevant info about WWAN driver
  */
 struct ipa_rm_it_private {
-	bool initied;
-	enum ipa_rm_resource_name resource_name;
-	spinlock_t lock;
-	struct delayed_work work;
-	bool release_in_prog;
-	unsigned long jiffies;
+    bool initied;
+    enum ipa_rm_resource_name resource_name;
+    spinlock_t lock;
+    struct delayed_work work;
+    bool release_in_prog;
+    unsigned long jiffies;
 };
 
 static struct ipa_rm_it_private ipa_rm_it_handles[IPA_RM_RESOURCE_MAX];
@@ -60,28 +60,27 @@ static struct ipa_rm_it_private ipa_rm_it_handles[IPA_RM_RESOURCE_MAX];
  * Return codes:
  * None
  */
-static void ipa_rm_inactivity_timer_func(struct work_struct *work)
-{
+static void ipa_rm_inactivity_timer_func(struct work_struct *work) {
 
-	struct ipa_rm_it_private *me = container_of(to_delayed_work(work),
-						    struct ipa_rm_it_private,
-						    work);
-	unsigned long flags;
+    struct ipa_rm_it_private *me = container_of(to_delayed_work(work),
+                                   struct ipa_rm_it_private,
+                                   work);
+    unsigned long flags;
 
-	IPADBG("%s: timer expired for resource %d!\n", __func__,
-	    me->resource_name);
+    IPADBG("%s: timer expired for resource %d!\n", __func__,
+           me->resource_name);
 
-	/* check that release still need to be performed */
-	spin_lock_irqsave(
-		&ipa_rm_it_handles[me->resource_name].lock, flags);
-	if (ipa_rm_it_handles[me->resource_name].release_in_prog) {
-		IPADBG("%s: calling release_resource on resource %d!\n",
-		     __func__, me->resource_name);
-		ipa_rm_release_resource(me->resource_name);
-		ipa_rm_it_handles[me->resource_name].release_in_prog = false;
-	}
-	spin_unlock_irqrestore(
-		&ipa_rm_it_handles[me->resource_name].lock, flags);
+    /* check that release still need to be performed */
+    spin_lock_irqsave(
+        &ipa_rm_it_handles[me->resource_name].lock, flags);
+    if (ipa_rm_it_handles[me->resource_name].release_in_prog) {
+        IPADBG("%s: calling release_resource on resource %d!\n",
+               __func__, me->resource_name);
+        ipa_rm_release_resource(me->resource_name);
+        ipa_rm_it_handles[me->resource_name].release_in_prog = false;
+    }
+    spin_unlock_irqrestore(
+        &ipa_rm_it_handles[me->resource_name].lock, flags);
 }
 
 /**
@@ -98,32 +97,31 @@ static void ipa_rm_inactivity_timer_func(struct work_struct *work)
 * -EINVAL: invalid parameters
 */
 int ipa_rm_inactivity_timer_init(enum ipa_rm_resource_name resource_name,
-				 unsigned long msecs)
-{
-	IPADBG("%s: resource %d\n", __func__, resource_name);
+                                 unsigned long msecs) {
+    IPADBG("%s: resource %d\n", __func__, resource_name);
 
-	if (resource_name < 0 ||
-	    resource_name >= IPA_RM_RESOURCE_MAX) {
-		IPAERR("%s: Invalid parameter\n", __func__);
-		return -EINVAL;
-	}
+    if (resource_name < 0 ||
+            resource_name >= IPA_RM_RESOURCE_MAX) {
+        IPAERR("%s: Invalid parameter\n", __func__);
+        return -EINVAL;
+    }
 
-	if (ipa_rm_it_handles[resource_name].initied) {
-		IPAERR("%s: resource %d already inited\n",
-		    __func__, resource_name);
-		return -EINVAL;
-	}
+    if (ipa_rm_it_handles[resource_name].initied) {
+        IPAERR("%s: resource %d already inited\n",
+               __func__, resource_name);
+        return -EINVAL;
+    }
 
-	spin_lock_init(&ipa_rm_it_handles[resource_name].lock);
-	ipa_rm_it_handles[resource_name].resource_name = resource_name;
-	ipa_rm_it_handles[resource_name].jiffies = msecs_to_jiffies(msecs);
-	ipa_rm_it_handles[resource_name].release_in_prog = false;
+    spin_lock_init(&ipa_rm_it_handles[resource_name].lock);
+    ipa_rm_it_handles[resource_name].resource_name = resource_name;
+    ipa_rm_it_handles[resource_name].jiffies = msecs_to_jiffies(msecs);
+    ipa_rm_it_handles[resource_name].release_in_prog = false;
 
-	INIT_DELAYED_WORK(&ipa_rm_it_handles[resource_name].work,
-			  ipa_rm_inactivity_timer_func);
-	ipa_rm_it_handles[resource_name].initied = 1;
+    INIT_DELAYED_WORK(&ipa_rm_it_handles[resource_name].work,
+                      ipa_rm_inactivity_timer_func);
+    ipa_rm_it_handles[resource_name].initied = 1;
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -136,26 +134,25 @@ int ipa_rm_inactivity_timer_init(enum ipa_rm_resource_name resource_name,
 * 0: success
 * -EINVAL: invalid parameters
 */
-int ipa_rm_inactivity_timer_destroy(enum ipa_rm_resource_name resource_name)
-{
-	IPADBG("%s: resource %d\n", __func__, resource_name);
+int ipa_rm_inactivity_timer_destroy(enum ipa_rm_resource_name resource_name) {
+    IPADBG("%s: resource %d\n", __func__, resource_name);
 
-	if (resource_name < 0 ||
-	    resource_name >= IPA_RM_RESOURCE_MAX) {
-		IPAERR("%s: Invalid parameter\n", __func__);
-		return -EINVAL;
-	}
+    if (resource_name < 0 ||
+            resource_name >= IPA_RM_RESOURCE_MAX) {
+        IPAERR("%s: Invalid parameter\n", __func__);
+        return -EINVAL;
+    }
 
-	if (!ipa_rm_it_handles[resource_name].initied) {
-		IPAERR("%s: resource %d already inited\n",
-		    __func__, resource_name);
-		return -EINVAL;
-	}
+    if (!ipa_rm_it_handles[resource_name].initied) {
+        IPAERR("%s: resource %d already inited\n",
+               __func__, resource_name);
+        return -EINVAL;
+    }
 
-	memset(&ipa_rm_it_handles[resource_name], 0,
-	       sizeof(struct ipa_rm_it_private));
+    memset(&ipa_rm_it_handles[resource_name], 0,
+           sizeof(struct ipa_rm_it_private));
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -171,30 +168,29 @@ int ipa_rm_inactivity_timer_destroy(enum ipa_rm_resource_name resource_name)
 * -EINVAL: invalid parameters
 */
 int ipa_rm_inactivity_timer_request_resource(
-				enum ipa_rm_resource_name resource_name)
-{
-	int ret;
-	unsigned long flags;
-	IPADBG("%s: resource %d\n", __func__, resource_name);
+    enum ipa_rm_resource_name resource_name) {
+    int ret;
+    unsigned long flags;
+    IPADBG("%s: resource %d\n", __func__, resource_name);
 
-	if (resource_name < 0 ||
-	    resource_name >= IPA_RM_RESOURCE_MAX) {
-		IPAERR("%s: Invalid parameter\n", __func__);
-		return -EINVAL;
-	}
+    if (resource_name < 0 ||
+            resource_name >= IPA_RM_RESOURCE_MAX) {
+        IPAERR("%s: Invalid parameter\n", __func__);
+        return -EINVAL;
+    }
 
-	if (!ipa_rm_it_handles[resource_name].initied) {
-		IPAERR("%s: Not initialized\n", __func__);
-		return -EINVAL;
-	}
+    if (!ipa_rm_it_handles[resource_name].initied) {
+        IPAERR("%s: Not initialized\n", __func__);
+        return -EINVAL;
+    }
 
-	spin_lock_irqsave(&ipa_rm_it_handles[resource_name].lock, flags);
-	cancel_delayed_work(&ipa_rm_it_handles[resource_name].work);
-	ipa_rm_it_handles[resource_name].release_in_prog = false;
-	spin_unlock_irqrestore(&ipa_rm_it_handles[resource_name].lock, flags);
-	ret = ipa_rm_request_resource(resource_name);
-	IPADBG("%s: resource %d: returning %d\n", __func__, resource_name, ret);
-	return ret;
+    spin_lock_irqsave(&ipa_rm_it_handles[resource_name].lock, flags);
+    cancel_delayed_work(&ipa_rm_it_handles[resource_name].work);
+    ipa_rm_it_handles[resource_name].release_in_prog = false;
+    spin_unlock_irqrestore(&ipa_rm_it_handles[resource_name].lock, flags);
+    ret = ipa_rm_request_resource(resource_name);
+    IPADBG("%s: resource %d: returning %d\n", __func__, resource_name, ret);
+    return ret;
 }
 
 /**
@@ -213,37 +209,36 @@ int ipa_rm_inactivity_timer_request_resource(
 * -EINVAL: invalid parameters
 */
 int ipa_rm_inactivity_timer_release_resource(
-				enum ipa_rm_resource_name resource_name)
-{
-	unsigned long flags;
-	IPADBG("%s: resource %d\n", __func__, resource_name);
+    enum ipa_rm_resource_name resource_name) {
+    unsigned long flags;
+    IPADBG("%s: resource %d\n", __func__, resource_name);
 
-	if (resource_name < 0 ||
-	    resource_name >= IPA_RM_RESOURCE_MAX) {
-		IPAERR("%s: Invalid parameter\n", __func__);
-		return -EINVAL;
-	}
+    if (resource_name < 0 ||
+            resource_name >= IPA_RM_RESOURCE_MAX) {
+        IPAERR("%s: Invalid parameter\n", __func__);
+        return -EINVAL;
+    }
 
-	if (!ipa_rm_it_handles[resource_name].initied) {
-		IPAERR("%s: Not initialized\n", __func__);
-		return -EINVAL;
-	}
+    if (!ipa_rm_it_handles[resource_name].initied) {
+        IPAERR("%s: Not initialized\n", __func__);
+        return -EINVAL;
+    }
 
-	spin_lock_irqsave(&ipa_rm_it_handles[resource_name].lock, flags);
-	if (ipa_rm_it_handles[resource_name].release_in_prog) {
-		IPADBG("%s: Timer already set, not scheduling again %d\n",
-		    __func__, resource_name);
-		spin_unlock_irqrestore(
-			&ipa_rm_it_handles[resource_name].lock, flags);
-		return 0;
-	}
-	ipa_rm_it_handles[resource_name].release_in_prog = true;
-	spin_unlock_irqrestore(&ipa_rm_it_handles[resource_name].lock, flags);
+    spin_lock_irqsave(&ipa_rm_it_handles[resource_name].lock, flags);
+    if (ipa_rm_it_handles[resource_name].release_in_prog) {
+        IPADBG("%s: Timer already set, not scheduling again %d\n",
+               __func__, resource_name);
+        spin_unlock_irqrestore(
+            &ipa_rm_it_handles[resource_name].lock, flags);
+        return 0;
+    }
+    ipa_rm_it_handles[resource_name].release_in_prog = true;
+    spin_unlock_irqrestore(&ipa_rm_it_handles[resource_name].lock, flags);
 
-	IPADBG("%s: setting delayed work\n", __func__);
-	schedule_delayed_work(&ipa_rm_it_handles[resource_name].work,
-			      ipa_rm_it_handles[resource_name].jiffies);
+    IPADBG("%s: setting delayed work\n", __func__);
+    schedule_delayed_work(&ipa_rm_it_handles[resource_name].work,
+                          ipa_rm_it_handles[resource_name].jiffies);
 
-	return 0;
+    return 0;
 }
 

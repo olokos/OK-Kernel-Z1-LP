@@ -25,28 +25,27 @@
 const struct mxs_fec_data mx28_fec_data[] __initconst = {
 #define mx28_fec_data_entry(_id)					\
 	mxs_fec_data_entry(MX28, _id)
-	mx28_fec_data_entry(0),
-	mx28_fec_data_entry(1),
+    mx28_fec_data_entry(0),
+    mx28_fec_data_entry(1),
 };
 #endif
 
 struct platform_device *__init mxs_add_fec(
-		const struct mxs_fec_data *data,
-		const struct fec_platform_data *pdata)
-{
-	struct resource res[] = {
-		{
-			.start = data->iobase,
-			.end = data->iobase + SZ_16K - 1,
-			.flags = IORESOURCE_MEM,
-		}, {
-			.start = data->irq,
-			.end = data->irq,
-			.flags = IORESOURCE_IRQ,
-		},
-	};
+    const struct mxs_fec_data *data,
+    const struct fec_platform_data *pdata) {
+    struct resource res[] = {
+        {
+            .start = data->iobase,
+            .end = data->iobase + SZ_16K - 1,
+            .flags = IORESOURCE_MEM,
+        }, {
+            .start = data->irq,
+            .end = data->irq,
+            .flags = IORESOURCE_IRQ,
+        },
+    };
 
-	return mxs_add_platform_device_dmamask("imx28-fec", data->id,
-			res, ARRAY_SIZE(res), pdata, sizeof(*pdata),
-			DMA_BIT_MASK(32));
+    return mxs_add_platform_device_dmamask("imx28-fec", data->id,
+                                           res, ARRAY_SIZE(res), pdata, sizeof(*pdata),
+                                           DMA_BIT_MASK(32));
 }

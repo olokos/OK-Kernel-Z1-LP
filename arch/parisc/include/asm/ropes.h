@@ -26,63 +26,63 @@
 #define ROPES_PER_IOC	8	/* per Ike half or Pluto/Astro */
 
 struct ioc {
-	void __iomem	*ioc_hpa;	/* I/O MMU base address */
-	char		*res_map;	/* resource map, bit == pdir entry */
-	u64		*pdir_base;	/* physical base address */
-	unsigned long	ibase;		/* pdir IOV Space base - shared w/lba_pci */
-	unsigned long	imask;		/* pdir IOV Space mask - shared w/lba_pci */
+    void __iomem	*ioc_hpa;	/* I/O MMU base address */
+    char		*res_map;	/* resource map, bit == pdir entry */
+    u64		*pdir_base;	/* physical base address */
+    unsigned long	ibase;		/* pdir IOV Space base - shared w/lba_pci */
+    unsigned long	imask;		/* pdir IOV Space mask - shared w/lba_pci */
 #ifdef ZX1_SUPPORT
-	unsigned long	iovp_mask;	/* help convert IOVA to IOVP */
+    unsigned long	iovp_mask;	/* help convert IOVA to IOVP */
 #endif
-	unsigned long	*res_hint;	/* next avail IOVP - circular search */
-	spinlock_t	res_lock;
-	unsigned int	res_bitshift;	/* from the LEFT! */
-	unsigned int	res_size;	/* size of resource map in bytes */
+    unsigned long	*res_hint;	/* next avail IOVP - circular search */
+    spinlock_t	res_lock;
+    unsigned int	res_bitshift;	/* from the LEFT! */
+    unsigned int	res_size;	/* size of resource map in bytes */
 #ifdef SBA_HINT_SUPPORT
-/* FIXME : DMA HINTs not used */
-	unsigned long	hint_mask_pdir; /* bits used for DMA hints */
-	unsigned int	hint_shift_pdir;
+    /* FIXME : DMA HINTs not used */
+    unsigned long	hint_mask_pdir; /* bits used for DMA hints */
+    unsigned int	hint_shift_pdir;
 #endif
 #if DELAYED_RESOURCE_CNT > 0
-	int		saved_cnt;
-	struct sba_dma_pair {
-			dma_addr_t	iova;
-			size_t		size;
-        } saved[DELAYED_RESOURCE_CNT];
+    int		saved_cnt;
+    struct sba_dma_pair {
+        dma_addr_t	iova;
+        size_t		size;
+    } saved[DELAYED_RESOURCE_CNT];
 #endif
 
 #ifdef SBA_COLLECT_STATS
 #define SBA_SEARCH_SAMPLE	0x100
-	unsigned long	avg_search[SBA_SEARCH_SAMPLE];
-	unsigned long	avg_idx;	/* current index into avg_search */
-	unsigned long	used_pages;
-	unsigned long	msingle_calls;
-	unsigned long	msingle_pages;
-	unsigned long	msg_calls;
-	unsigned long	msg_pages;
-	unsigned long	usingle_calls;
-	unsigned long	usingle_pages;
-	unsigned long	usg_calls;
-	unsigned long	usg_pages;
+    unsigned long	avg_search[SBA_SEARCH_SAMPLE];
+    unsigned long	avg_idx;	/* current index into avg_search */
+    unsigned long	used_pages;
+    unsigned long	msingle_calls;
+    unsigned long	msingle_pages;
+    unsigned long	msg_calls;
+    unsigned long	msg_pages;
+    unsigned long	usingle_calls;
+    unsigned long	usingle_pages;
+    unsigned long	usg_calls;
+    unsigned long	usg_pages;
 #endif
-        /* STUFF We don't need in performance path */
-	unsigned int	pdir_size;	/* in bytes, determined by IOV Space size */
+    /* STUFF We don't need in performance path */
+    unsigned int	pdir_size;	/* in bytes, determined by IOV Space size */
 };
 
 struct sba_device {
-	struct sba_device	*next;  /* list of SBA's in system */
-	struct parisc_device	*dev;   /* dev found in bus walk */
-	const char		*name;
-	void __iomem		*sba_hpa; /* base address */
-	spinlock_t		sba_lock;
-	unsigned int		flags;  /* state/functionality enabled */
-	unsigned int		hw_rev;  /* HW revision of chip */
+    struct sba_device	*next;  /* list of SBA's in system */
+    struct parisc_device	*dev;   /* dev found in bus walk */
+    const char		*name;
+    void __iomem		*sba_hpa; /* base address */
+    spinlock_t		sba_lock;
+    unsigned int		flags;  /* state/functionality enabled */
+    unsigned int		hw_rev;  /* HW revision of chip */
 
-	struct resource		chip_resv; /* MMIO reserved for chip */
-	struct resource		iommu_resv; /* MMIO reserved for iommu */
+    struct resource		chip_resv; /* MMIO reserved for chip */
+    struct resource		iommu_resv; /* MMIO reserved for iommu */
 
-	unsigned int		num_ioc;  /* number of on-board IOC's */
-	struct ioc		ioc[MAX_IOC];
+    unsigned int		num_ioc;  /* number of on-board IOC's */
+    struct ioc		ioc[MAX_IOC];
 };
 
 #define ASTRO_RUNWAY_PORT	0x582
@@ -92,15 +92,15 @@ struct sba_device {
 #define PLUTO_MCKINLEY_PORT	0x880
 
 static inline int IS_ASTRO(struct parisc_device *d) {
-	return d->id.hversion == ASTRO_RUNWAY_PORT;
+    return d->id.hversion == ASTRO_RUNWAY_PORT;
 }
 
 static inline int IS_IKE(struct parisc_device *d) {
-	return d->id.hversion == IKE_MERCED_PORT;
+    return d->id.hversion == IKE_MERCED_PORT;
 }
 
 static inline int IS_PLUTO(struct parisc_device *d) {
-	return d->id.hversion == PLUTO_MCKINLEY_PORT;
+    return d->id.hversion == PLUTO_MCKINLEY_PORT;
 }
 
 #define PLUTO_IOVA_BASE	(1UL*1024*1024*1024)	/* 1GB */
@@ -204,17 +204,17 @@ static inline int IS_PLUTO(struct parisc_device *d) {
 ** lba_device: Per instance Elroy data structure
 */
 struct lba_device {
-	struct pci_hba_data	hba;
+    struct pci_hba_data	hba;
 
-	spinlock_t		lba_lock;
-	void			*iosapic_obj;
+    spinlock_t		lba_lock;
+    void			*iosapic_obj;
 
 #ifdef CONFIG_64BIT
-	void __iomem		*iop_base;	/* PA_VIEW - for IO port accessor funcs */
+    void __iomem		*iop_base;	/* PA_VIEW - for IO port accessor funcs */
 #endif
 
-	int			flags;		/* state/functionality enabled */
-	int			hw_rev;		/* HW revision of chip */
+    int			flags;		/* state/functionality enabled */
+    int			hw_rev;		/* HW revision of chip */
 };
 
 #define ELROY_HVERS		0x782
@@ -222,25 +222,25 @@ struct lba_device {
 #define QUICKSILVER_HVERS	0x784
 
 static inline int IS_ELROY(struct parisc_device *d) {
-	return (d->id.hversion == ELROY_HVERS);
+    return (d->id.hversion == ELROY_HVERS);
 }
 
 static inline int IS_MERCURY(struct parisc_device *d) {
-	return (d->id.hversion == MERCURY_HVERS);
+    return (d->id.hversion == MERCURY_HVERS);
 }
 
 static inline int IS_QUICKSILVER(struct parisc_device *d) {
-	return (d->id.hversion == QUICKSILVER_HVERS);
+    return (d->id.hversion == QUICKSILVER_HVERS);
 }
 
 static inline int agp_mode_mercury(void __iomem *hpa) {
-	u64 bus_mode;
+    u64 bus_mode;
 
-	bus_mode = readl(hpa + 0x0620);
-	if (bus_mode & 1)
-		return 1;
+    bus_mode = readl(hpa + 0x0620);
+    if (bus_mode & 1)
+        return 1;
 
-	return 0;
+    return 0;
 }
 
 /*

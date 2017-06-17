@@ -15,11 +15,11 @@
 
 /* 16550 UARTs */
 #define GROUP0_IRQ_BASE		8	/* GRP2 IRQ numbers start here */
-					/* GRP3 IRQ numbers start here */
+/* GRP3 IRQ numbers start here */
 #define GROUP1_IRQ_BASE		(GROUP0_IRQ_BASE + 32)
-					/* GRP4 IRQ numbers start here */
+/* GRP4 IRQ numbers start here */
 #define GROUP2_IRQ_BASE		(GROUP1_IRQ_BASE + 32)
-					/* GRP5 IRQ numbers start here */
+/* GRP5 IRQ numbers start here */
 #define GROUP3_IRQ_BASE		(GROUP2_IRQ_BASE + 32)
 #define GROUP4_IRQ_BASE		(GROUP3_IRQ_BASE + 32)
 

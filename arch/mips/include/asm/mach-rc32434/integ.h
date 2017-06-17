@@ -34,10 +34,10 @@
 #define INTEG0_BASE_ADDR	0x18030030
 
 struct integ {
-	u32 errcs;			/* sticky use ERRCS_ */
-	u32 wtcount;			/* Watchdog timer count reg. */
-	u32 wtcompare;			/* Watchdog timer timeout value. */
-	u32 wtc;			/* Watchdog timer control. use WTC_ */
+    u32 errcs;			/* sticky use ERRCS_ */
+    u32 wtcount;			/* Watchdog timer count reg. */
+    u32 wtcompare;			/* Watchdog timer timeout value. */
+    u32 wtc;			/* Watchdog timer control. use WTC_ */
 };
 
 /* Error counters */

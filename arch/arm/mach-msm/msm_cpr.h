@@ -96,29 +96,29 @@
  * enum cpr_mode - Modes in which cpr is used
  */
 enum cpr_mode {
-	NORMAL_MODE = 0,
-	TURBO_MODE,
-	SVS_MODE,
+    NORMAL_MODE = 0,
+    TURBO_MODE,
+    SVS_MODE,
 };
 
 /**
  * enum cpr_action - Cpr actions to be taken
  */
 enum cpr_action {
-	DOWN = 0,
-	UP,
+    DOWN = 0,
+    UP,
 };
 
 /**
  * enum cpr_interrupt
  */
 enum cpr_interrupt {
-	DONE_INT	= BIT(0),
-	MIN_INT		= BIT(1),
-	DOWN_INT	= BIT(2),
-	MID_INT		= BIT(3),
-	UP_INT		= BIT(4),
-	MAX_INT		= BIT(5),
+    DONE_INT	= BIT(0),
+    MIN_INT		= BIT(1),
+    DOWN_INT	= BIT(2),
+    MID_INT		= BIT(3),
+    UP_INT		= BIT(4),
+    MAX_INT		= BIT(5),
 };
 
 /**
@@ -127,8 +127,8 @@ enum cpr_interrupt {
  * @quot: target value for ring oscillator
  */
 struct msm_cpr_osc {
-	int gcnt;
-	uint32_t quot;
+    int gcnt;
+    uint32_t quot;
 };
 
 /**
@@ -139,15 +139,15 @@ struct msm_cpr_osc {
  * @step_quot: step Quot for CPR calcuation
  */
 struct msm_cpr_mode {
-	struct msm_cpr_osc ring_osc_data[NUM_OSC];
-	int ring_osc;
-	int32_t tgt_volt_offset;
-	uint32_t step_quot;
-	uint32_t turbo_Vmax;
-	uint32_t turbo_Vmin;
-	uint32_t nom_Vmax;
-	uint32_t nom_Vmin;
-	uint32_t calibrated_uV;
+    struct msm_cpr_osc ring_osc_data[NUM_OSC];
+    int ring_osc;
+    int32_t tgt_volt_offset;
+    uint32_t step_quot;
+    uint32_t turbo_Vmax;
+    uint32_t turbo_Vmin;
+    uint32_t nom_Vmax;
+    uint32_t nom_Vmin;
+    uint32_t calibrated_uV;
 };
 
 /**
@@ -158,41 +158,41 @@ struct msm_cpr_mode {
  * @msm_cpr_mode: structure for CPR mode data
  */
 struct msm_cpr_config {
-	unsigned long ref_clk_khz;
-	unsigned long delay_us;
-	int irq_line;
-	struct msm_cpr_mode *cpr_mode_data;
-	int min_down_step;
-	uint32_t tgt_count_div_N; /* Target Cnt(Nom) = Target Cnt(Turbo) / N */
-	uint32_t floor;
-	uint32_t ceiling;
-	uint32_t sw_vlevel;
-	uint32_t up_threshold;
-	uint32_t dn_threshold;
-	uint32_t up_margin;
-	uint32_t dn_margin;
-	uint32_t max_nom_freq;
-	uint32_t max_freq;
-	uint32_t max_quot;
-	bool disable_cpr;
-	uint32_t step_size;
-	uint32_t (*get_quot)(uint32_t max_quot, uint32_t max_freq,
-				uint32_t new_freq);
-	void (*clk_enable)(void);
+    unsigned long ref_clk_khz;
+    unsigned long delay_us;
+    int irq_line;
+    struct msm_cpr_mode *cpr_mode_data;
+    int min_down_step;
+    uint32_t tgt_count_div_N; /* Target Cnt(Nom) = Target Cnt(Turbo) / N */
+    uint32_t floor;
+    uint32_t ceiling;
+    uint32_t sw_vlevel;
+    uint32_t up_threshold;
+    uint32_t dn_threshold;
+    uint32_t up_margin;
+    uint32_t dn_margin;
+    uint32_t max_nom_freq;
+    uint32_t max_freq;
+    uint32_t max_quot;
+    bool disable_cpr;
+    uint32_t step_size;
+    uint32_t (*get_quot)(uint32_t max_quot, uint32_t max_freq,
+                         uint32_t new_freq);
+    void (*clk_enable)(void);
 };
 
 /**
 * struct msm_cpr_config -  CPR Registers
 */
 struct msm_cpr_reg {
-	uint32_t rbif_timer_interval;
-	uint32_t rbif_int_en;
-	uint32_t rbif_limit;
-	uint32_t rbif_timer_adjust;
-	uint32_t rbcpr_gcnt_target;
-	uint32_t rbcpr_step_quot;
-	uint32_t rbif_sw_level;
-	uint32_t rbcpr_ctl;
+    uint32_t rbif_timer_interval;
+    uint32_t rbif_int_en;
+    uint32_t rbif_limit;
+    uint32_t rbif_timer_adjust;
+    uint32_t rbcpr_gcnt_target;
+    uint32_t rbcpr_step_quot;
+    uint32_t rbif_sw_level;
+    uint32_t rbcpr_ctl;
 };
 
 #if defined(CONFIG_MSM_CPR) || defined(CONFIG_MSM_CPR_MODULE)
@@ -218,6 +218,8 @@ void msm_cpr_disable(void) { }
 #ifdef CONFIG_DEBUG_FS
 int msm_cpr_debug_init(void *);
 #else
-static inline int msm_cpr_debug_init(void *) { return 0; }
+static inline int msm_cpr_debug_init(void *) {
+    return 0;
+}
 #endif
 #endif /* __ARCH_ARM_MACH_MSM_CPR_H */

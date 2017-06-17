@@ -38,24 +38,24 @@
 typedef struct io_error_s {
     /* Bit fields indicating which structure fields are valid */
     union {
-	struct {
-	    unsigned                ievb_errortype:1;
-	    unsigned                ievb_widgetnum:1;
-	    unsigned                ievb_widgetdev:1;
-	    unsigned                ievb_srccpu:1;
-	    unsigned                ievb_srcnode:1;
-	    unsigned                ievb_errnode:1;
-	    unsigned                ievb_sysioaddr:1;
-	    unsigned                ievb_xtalkaddr:1;
-	    unsigned                ievb_busspace:1;
-	    unsigned                ievb_busaddr:1;
-	    unsigned                ievb_vaddr:1;
-	    unsigned                ievb_memaddr:1;
-	    unsigned		    ievb_epc:1;
-	    unsigned		    ievb_ef:1;
-	    unsigned		    ievb_tnum:1;
-	} iev_b;
-	unsigned                iev_a;
+        struct {
+            unsigned                ievb_errortype:1;
+            unsigned                ievb_widgetnum:1;
+            unsigned                ievb_widgetdev:1;
+            unsigned                ievb_srccpu:1;
+            unsigned                ievb_srcnode:1;
+            unsigned                ievb_errnode:1;
+            unsigned                ievb_sysioaddr:1;
+            unsigned                ievb_xtalkaddr:1;
+            unsigned                ievb_busspace:1;
+            unsigned                ievb_busaddr:1;
+            unsigned                ievb_vaddr:1;
+            unsigned                ievb_memaddr:1;
+            unsigned		    ievb_epc:1;
+            unsigned		    ievb_ef:1;
+            unsigned		    ievb_tnum:1;
+        } iev_b;
+        unsigned                iev_a;
     } ie_v;
 
     short                   ie_errortype;	/* error type: extra info about error */

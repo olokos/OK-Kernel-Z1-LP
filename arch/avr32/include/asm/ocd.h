@@ -520,14 +520,12 @@
 #ifndef __ASSEMBLER__
 
 /* Register access macros */
-static inline unsigned long __ocd_read(unsigned int reg)
-{
-	return __builtin_mfdr(reg);
+static inline unsigned long __ocd_read(unsigned int reg) {
+    return __builtin_mfdr(reg);
 }
 
-static inline void __ocd_write(unsigned int reg, unsigned long value)
-{
-	__builtin_mtdr(reg, value);
+static inline void __ocd_write(unsigned int reg, unsigned long value) {
+    __builtin_mtdr(reg, value);
 }
 
 #define ocd_read(reg)			__ocd_read(OCD_##reg)

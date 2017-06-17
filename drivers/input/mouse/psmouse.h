@@ -22,84 +22,84 @@
 #define PSMOUSE_RET_NAK		0xfe
 
 enum psmouse_state {
-	PSMOUSE_IGNORE,
-	PSMOUSE_INITIALIZING,
-	PSMOUSE_RESYNCING,
-	PSMOUSE_CMD_MODE,
-	PSMOUSE_ACTIVATED,
+    PSMOUSE_IGNORE,
+    PSMOUSE_INITIALIZING,
+    PSMOUSE_RESYNCING,
+    PSMOUSE_CMD_MODE,
+    PSMOUSE_ACTIVATED,
 };
 
 /* psmouse protocol handler return codes */
 typedef enum {
-	PSMOUSE_BAD_DATA,
-	PSMOUSE_GOOD_DATA,
-	PSMOUSE_FULL_PACKET
+    PSMOUSE_BAD_DATA,
+    PSMOUSE_GOOD_DATA,
+    PSMOUSE_FULL_PACKET
 } psmouse_ret_t;
 
 struct psmouse {
-	void *private;
-	struct input_dev *dev;
-	struct ps2dev ps2dev;
-	struct delayed_work resync_work;
-	char *vendor;
-	char *name;
-	unsigned char packet[8];
-	unsigned char badbyte;
-	unsigned char pktcnt;
-	unsigned char pktsize;
-	unsigned char type;
-	bool ignore_parity;
-	bool acks_disable_command;
-	unsigned int model;
-	unsigned long last;
-	unsigned long out_of_sync_cnt;
-	unsigned long num_resyncs;
-	enum psmouse_state state;
-	char devname[64];
-	char phys[32];
+    void *private;
+    struct input_dev *dev;
+    struct ps2dev ps2dev;
+    struct delayed_work resync_work;
+    char *vendor;
+    char *name;
+    unsigned char packet[8];
+    unsigned char badbyte;
+    unsigned char pktcnt;
+    unsigned char pktsize;
+    unsigned char type;
+    bool ignore_parity;
+    bool acks_disable_command;
+    unsigned int model;
+    unsigned long last;
+    unsigned long out_of_sync_cnt;
+    unsigned long num_resyncs;
+    enum psmouse_state state;
+    char devname[64];
+    char phys[32];
 
-	unsigned int rate;
-	unsigned int resolution;
-	unsigned int resetafter;
-	unsigned int resync_time;
-	bool smartscroll;	/* Logitech only */
+    unsigned int rate;
+    unsigned int resolution;
+    unsigned int resetafter;
+    unsigned int resync_time;
+    bool smartscroll;	/* Logitech only */
 
-	psmouse_ret_t (*protocol_handler)(struct psmouse *psmouse);
-	void (*set_rate)(struct psmouse *psmouse, unsigned int rate);
-	void (*set_resolution)(struct psmouse *psmouse, unsigned int resolution);
+    psmouse_ret_t (*protocol_handler)(struct psmouse *psmouse);
+    void (*set_rate)(struct psmouse *psmouse, unsigned int rate);
+    void (*set_resolution)(struct psmouse *psmouse, unsigned int resolution);
 
-	int (*reconnect)(struct psmouse *psmouse);
-	void (*disconnect)(struct psmouse *psmouse);
-	void (*cleanup)(struct psmouse *psmouse);
-	int (*poll)(struct psmouse *psmouse);
+    int (*reconnect)(struct psmouse *psmouse);
+    void (*disconnect)(struct psmouse *psmouse);
+    void (*cleanup)(struct psmouse *psmouse);
+    int (*poll)(struct psmouse *psmouse);
 
-	void (*pt_activate)(struct psmouse *psmouse);
-	void (*pt_deactivate)(struct psmouse *psmouse);
+    void (*pt_activate)(struct psmouse *psmouse);
+    void (*pt_deactivate)(struct psmouse *psmouse);
 };
 
 enum psmouse_type {
-	PSMOUSE_NONE,
-	PSMOUSE_PS2,
-	PSMOUSE_PS2PP,
-	PSMOUSE_THINKPS,
-	PSMOUSE_GENPS,
-	PSMOUSE_IMPS,
-	PSMOUSE_IMEX,
-	PSMOUSE_SYNAPTICS,
-	PSMOUSE_ALPS,
-	PSMOUSE_LIFEBOOK,
-	PSMOUSE_TRACKPOINT,
-	PSMOUSE_TOUCHKIT_PS2,
-	PSMOUSE_CORTRON,
-	PSMOUSE_HGPK,
-	PSMOUSE_ELANTECH,
-	PSMOUSE_FSP,
-	PSMOUSE_SYNAPTICS_RELATIVE,
-	PSMOUSE_AUTO		/* This one should always be last */
+    PSMOUSE_NONE,
+    PSMOUSE_PS2,
+    PSMOUSE_PS2PP,
+    PSMOUSE_THINKPS,
+    PSMOUSE_GENPS,
+    PSMOUSE_IMPS,
+    PSMOUSE_IMEX,
+    PSMOUSE_SYNAPTICS,
+    PSMOUSE_ALPS,
+    PSMOUSE_LIFEBOOK,
+    PSMOUSE_TRACKPOINT,
+    PSMOUSE_TOUCHKIT_PS2,
+    PSMOUSE_CORTRON,
+    PSMOUSE_HGPK,
+    PSMOUSE_ELANTECH,
+    PSMOUSE_FSP,
+    PSMOUSE_SYNAPTICS_RELATIVE,
+    PSMOUSE_AUTO		/* This one should always be last */
 };
 
 void psmouse_queue_work(struct psmouse *psmouse, struct delayed_work *work,
-		unsigned long delay);
+                        unsigned long delay);
 int psmouse_sliced_command(struct psmouse *psmouse, unsigned char command);
 int psmouse_reset(struct psmouse *psmouse);
 void psmouse_set_state(struct psmouse *psmouse, enum psmouse_state new_state);
@@ -109,19 +109,19 @@ int psmouse_activate(struct psmouse *psmouse);
 int psmouse_deactivate(struct psmouse *psmouse);
 
 struct psmouse_attribute {
-	struct device_attribute dattr;
-	void *data;
-	ssize_t (*show)(struct psmouse *psmouse, void *data, char *buf);
-	ssize_t (*set)(struct psmouse *psmouse, void *data,
-			const char *buf, size_t count);
-	bool protect;
+    struct device_attribute dattr;
+    void *data;
+    ssize_t (*show)(struct psmouse *psmouse, void *data, char *buf);
+    ssize_t (*set)(struct psmouse *psmouse, void *data,
+                   const char *buf, size_t count);
+    bool protect;
 };
 #define to_psmouse_attr(a)	container_of((a), struct psmouse_attribute, dattr)
 
 ssize_t psmouse_attr_show_helper(struct device *dev, struct device_attribute *attr,
-				 char *buf);
+                                 char *buf);
 ssize_t psmouse_attr_set_helper(struct device *dev, struct device_attribute *attr,
-				const char *buf, size_t count);
+                                const char *buf, size_t count);
 
 #define __PSMOUSE_DEFINE_ATTR_VAR(_name, _mode, _data, _show, _set, _protect)	\
 static struct psmouse_attribute psmouse_attr_##_name = {			\

@@ -357,22 +357,22 @@
  * @reserved6:    Reserved and not used
  */
 struct axidma_bd {
-	u32 next;	/* Physical address of next buffer descriptor */
-	u32 reserved1;
-	u32 phys;
-	u32 reserved2;
-	u32 reserved3;
-	u32 reserved4;
-	u32 cntrl;
-	u32 status;
-	u32 app0;
-	u32 app1;	/* TX start << 16 | insert */
-	u32 app2;	/* TX csum seed */
-	u32 app3;
-	u32 app4;
-	u32 sw_id_offset;
-	u32 reserved5;
-	u32 reserved6;
+    u32 next;	/* Physical address of next buffer descriptor */
+    u32 reserved1;
+    u32 phys;
+    u32 reserved2;
+    u32 reserved3;
+    u32 reserved4;
+    u32 cntrl;
+    u32 status;
+    u32 app0;
+    u32 app1;	/* TX start << 16 | insert */
+    u32 app2;	/* TX csum seed */
+    u32 app3;
+    u32 app4;
+    u32 sw_id_offset;
+    u32 reserved5;
+    u32 reserved6;
 };
 
 /**
@@ -412,49 +412,49 @@ struct axidma_bd {
  *		   can handle jumbo packets, this entry will be 1, else 0.
  */
 struct axienet_local {
-	struct net_device *ndev;
-	struct device *dev;
+    struct net_device *ndev;
+    struct device *dev;
 
-	/* Connection to PHY device */
-	struct phy_device *phy_dev;	/* Pointer to PHY device */
-	struct device_node *phy_node;
+    /* Connection to PHY device */
+    struct phy_device *phy_dev;	/* Pointer to PHY device */
+    struct device_node *phy_node;
 
-	/* MDIO bus data */
-	struct mii_bus *mii_bus;	/* MII bus reference */
-	int mdio_irqs[PHY_MAX_ADDR];	/* IRQs table for MDIO bus */
+    /* MDIO bus data */
+    struct mii_bus *mii_bus;	/* MII bus reference */
+    int mdio_irqs[PHY_MAX_ADDR];	/* IRQs table for MDIO bus */
 
-	/* IO registers, dma functions and IRQs */
-	void __iomem *regs;
-	void __iomem *dma_regs;
+    /* IO registers, dma functions and IRQs */
+    void __iomem *regs;
+    void __iomem *dma_regs;
 
-	struct tasklet_struct dma_err_tasklet;
+    struct tasklet_struct dma_err_tasklet;
 
-	int tx_irq;
-	int rx_irq;
-	u32 temac_type;
-	u32 phy_type;
+    int tx_irq;
+    int rx_irq;
+    u32 temac_type;
+    u32 phy_type;
 
-	u32 options;			/* Current options word */
-	u32 last_link;
-	u32 features;
+    u32 options;			/* Current options word */
+    u32 last_link;
+    u32 features;
 
-	/* Buffer descriptors */
-	struct axidma_bd *tx_bd_v;
-	dma_addr_t tx_bd_p;
-	struct axidma_bd *rx_bd_v;
-	dma_addr_t rx_bd_p;
-	u32 tx_bd_ci;
-	u32 tx_bd_tail;
-	u32 rx_bd_ci;
+    /* Buffer descriptors */
+    struct axidma_bd *tx_bd_v;
+    dma_addr_t tx_bd_p;
+    struct axidma_bd *rx_bd_v;
+    dma_addr_t rx_bd_p;
+    u32 tx_bd_ci;
+    u32 tx_bd_tail;
+    u32 rx_bd_ci;
 
-	u32 max_frm_size;
-	u32 jumbo_support;
+    u32 max_frm_size;
+    u32 jumbo_support;
 
-	int csum_offload_on_tx_path;
-	int csum_offload_on_rx_path;
+    int csum_offload_on_tx_path;
+    int csum_offload_on_rx_path;
 
-	u32 coalesce_count_rx;
-	u32 coalesce_count_tx;
+    u32 coalesce_count_rx;
+    u32 coalesce_count_tx;
 };
 
 /**
@@ -464,9 +464,9 @@ struct axienet_local {
  * @m_or:	Mask to be ORed for setting the option in the register
  */
 struct axienet_option {
-	u32 opt;
-	u32 reg;
-	u32 m_or;
+    u32 opt;
+    u32 reg;
+    u32 m_or;
 };
 
 /**
@@ -478,9 +478,8 @@ struct axienet_option {
  *
  * This function returns the contents of the corresponding register.
  */
-static inline u32 axienet_ior(struct axienet_local *lp, off_t offset)
-{
-	return in_be32(lp->regs + offset);
+static inline u32 axienet_ior(struct axienet_local *lp, off_t offset) {
+    return in_be32(lp->regs + offset);
 }
 
 /**
@@ -493,9 +492,8 @@ static inline u32 axienet_ior(struct axienet_local *lp, off_t offset)
  * register.
  */
 static inline void axienet_iow(struct axienet_local *lp, off_t offset,
-			       u32 value)
-{
-	out_be32((lp->regs + offset), value);
+                               u32 value) {
+    out_be32((lp->regs + offset), value);
 }
 
 /* Function prototypes visible in xilinx_axienet_mdio.c for other files */

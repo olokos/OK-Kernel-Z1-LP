@@ -21,103 +21,97 @@
 
 #include <linux/mfd/wm831x/core.h>
 
-static int __devinit wm831x_spi_probe(struct spi_device *spi)
-{
-	const struct spi_device_id *id = spi_get_device_id(spi);
-	struct wm831x *wm831x;
-	enum wm831x_parent type;
-	int ret;
+static int __devinit wm831x_spi_probe(struct spi_device *spi) {
+    const struct spi_device_id *id = spi_get_device_id(spi);
+    struct wm831x *wm831x;
+    enum wm831x_parent type;
+    int ret;
 
-	type = (enum wm831x_parent)id->driver_data;
+    type = (enum wm831x_parent)id->driver_data;
 
-	wm831x = devm_kzalloc(&spi->dev, sizeof(struct wm831x), GFP_KERNEL);
-	if (wm831x == NULL)
-		return -ENOMEM;
+    wm831x = devm_kzalloc(&spi->dev, sizeof(struct wm831x), GFP_KERNEL);
+    if (wm831x == NULL)
+        return -ENOMEM;
 
-	spi->bits_per_word = 16;
-	spi->mode = SPI_MODE_0;
+    spi->bits_per_word = 16;
+    spi->mode = SPI_MODE_0;
 
-	dev_set_drvdata(&spi->dev, wm831x);
-	wm831x->dev = &spi->dev;
+    dev_set_drvdata(&spi->dev, wm831x);
+    wm831x->dev = &spi->dev;
 
-	wm831x->regmap = devm_regmap_init_spi(spi, &wm831x_regmap_config);
-	if (IS_ERR(wm831x->regmap)) {
-		ret = PTR_ERR(wm831x->regmap);
-		dev_err(wm831x->dev, "Failed to allocate register map: %d\n",
-			ret);
-		return ret;
-	}
+    wm831x->regmap = devm_regmap_init_spi(spi, &wm831x_regmap_config);
+    if (IS_ERR(wm831x->regmap)) {
+        ret = PTR_ERR(wm831x->regmap);
+        dev_err(wm831x->dev, "Failed to allocate register map: %d\n",
+                ret);
+        return ret;
+    }
 
-	return wm831x_device_init(wm831x, type, spi->irq);
+    return wm831x_device_init(wm831x, type, spi->irq);
 }
 
-static int __devexit wm831x_spi_remove(struct spi_device *spi)
-{
-	struct wm831x *wm831x = dev_get_drvdata(&spi->dev);
+static int __devexit wm831x_spi_remove(struct spi_device *spi) {
+    struct wm831x *wm831x = dev_get_drvdata(&spi->dev);
 
-	wm831x_device_exit(wm831x);
+    wm831x_device_exit(wm831x);
 
-	return 0;
+    return 0;
 }
 
-static int wm831x_spi_suspend(struct device *dev)
-{
-	struct wm831x *wm831x = dev_get_drvdata(dev);
+static int wm831x_spi_suspend(struct device *dev) {
+    struct wm831x *wm831x = dev_get_drvdata(dev);
 
-	return wm831x_device_suspend(wm831x);
+    return wm831x_device_suspend(wm831x);
 }
 
-static void wm831x_spi_shutdown(struct spi_device *spi)
-{
-	struct wm831x *wm831x = dev_get_drvdata(&spi->dev);
+static void wm831x_spi_shutdown(struct spi_device *spi) {
+    struct wm831x *wm831x = dev_get_drvdata(&spi->dev);
 
-	wm831x_device_shutdown(wm831x);
+    wm831x_device_shutdown(wm831x);
 }
 
 static const struct dev_pm_ops wm831x_spi_pm = {
-	.freeze = wm831x_spi_suspend,
-	.suspend = wm831x_spi_suspend,
+    .freeze = wm831x_spi_suspend,
+    .suspend = wm831x_spi_suspend,
 };
 
 static const struct spi_device_id wm831x_spi_ids[] = {
-	{ "wm8310", WM8310 },
-	{ "wm8311", WM8311 },
-	{ "wm8312", WM8312 },
-	{ "wm8320", WM8320 },
-	{ "wm8321", WM8321 },
-	{ "wm8325", WM8325 },
-	{ "wm8326", WM8326 },
-	{ },
+    { "wm8310", WM8310 },
+    { "wm8311", WM8311 },
+    { "wm8312", WM8312 },
+    { "wm8320", WM8320 },
+    { "wm8321", WM8321 },
+    { "wm8325", WM8325 },
+    { "wm8326", WM8326 },
+    { },
 };
 MODULE_DEVICE_TABLE(spi, wm831x_spi_ids);
 
 static struct spi_driver wm831x_spi_driver = {
-	.driver = {
-		.name	= "wm831x",
-		.owner	= THIS_MODULE,
-		.pm	= &wm831x_spi_pm,
-	},
-	.id_table	= wm831x_spi_ids,
-	.probe		= wm831x_spi_probe,
-	.remove		= __devexit_p(wm831x_spi_remove),
-	.shutdown	= wm831x_spi_shutdown,
+    .driver = {
+        .name	= "wm831x",
+        .owner	= THIS_MODULE,
+        .pm	= &wm831x_spi_pm,
+    },
+    .id_table	= wm831x_spi_ids,
+    .probe		= wm831x_spi_probe,
+    .remove		= __devexit_p(wm831x_spi_remove),
+    .shutdown	= wm831x_spi_shutdown,
 };
 
-static int __init wm831x_spi_init(void)
-{
-	int ret;
+static int __init wm831x_spi_init(void) {
+    int ret;
 
-	ret = spi_register_driver(&wm831x_spi_driver);
-	if (ret != 0)
-		pr_err("Failed to register WM831x SPI driver: %d\n", ret);
+    ret = spi_register_driver(&wm831x_spi_driver);
+    if (ret != 0)
+        pr_err("Failed to register WM831x SPI driver: %d\n", ret);
 
-	return 0;
+    return 0;
 }
 subsys_initcall(wm831x_spi_init);
 
-static void __exit wm831x_spi_exit(void)
-{
-	spi_unregister_driver(&wm831x_spi_driver);
+static void __exit wm831x_spi_exit(void) {
+    spi_unregister_driver(&wm831x_spi_driver);
 }
 module_exit(wm831x_spi_exit);
 

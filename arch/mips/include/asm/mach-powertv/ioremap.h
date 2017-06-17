@@ -65,26 +65,26 @@
 #define IOR_DMA_SHIFT		(IOR_DMA_BITS - IOR_DMA_OFFSET_BITS)
 
 struct ior_phys_to_dma {
-	dma_addr_t offset:IOR_DMA_OFFSET_BITS __packed
-		__aligned((IOR_DMA_OFFSET_BITS / IOR_BPC));
+dma_addr_t offset:
+    IOR_DMA_OFFSET_BITS __packed
+    __aligned((IOR_DMA_OFFSET_BITS / IOR_BPC));
 };
 
 struct ior_dma_to_phys {
-	dma_addr_t offset:IOR_PHYS_OFFSET_BITS __packed
-		__aligned((IOR_PHYS_OFFSET_BITS / IOR_BPC));
+dma_addr_t offset:
+    IOR_PHYS_OFFSET_BITS __packed
+    __aligned((IOR_PHYS_OFFSET_BITS / IOR_BPC));
 };
 
 extern struct ior_phys_to_dma _ior_phys_to_dma[IOR_NUM_PHYS_TO_DMA];
 extern struct ior_dma_to_phys _ior_dma_to_phys[IOR_NUM_DMA_TO_PHYS];
 
-static inline dma_addr_t _phys_to_dma_offset_raw(phys_addr_t phys)
-{
-	return (dma_addr_t)_ior_phys_to_dma[phys >> IOR_LSBITS].offset;
+static inline dma_addr_t _phys_to_dma_offset_raw(phys_addr_t phys) {
+    return (dma_addr_t)_ior_phys_to_dma[phys >> IOR_LSBITS].offset;
 }
 
-static inline dma_addr_t _dma_to_phys_offset_raw(dma_addr_t dma)
-{
-	return (dma_addr_t)_ior_dma_to_phys[dma >> IOR_LSBITS].offset;
+static inline dma_addr_t _dma_to_phys_offset_raw(dma_addr_t dma) {
+    return (dma_addr_t)_ior_dma_to_phys[dma >> IOR_LSBITS].offset;
 }
 
 /* These are not portable and should not be used in drivers. Drivers should
@@ -92,26 +92,23 @@ static inline dma_addr_t _dma_to_phys_offset_raw(dma_addr_t dma)
  * addresses and dma_map*() and friends to map virtual addresses into DMA
  * addresses and back.
  */
-static inline dma_addr_t phys_to_dma(phys_addr_t phys)
-{
-	return phys + (_phys_to_dma_offset_raw(phys) << IOR_PHYS_SHIFT);
+static inline dma_addr_t phys_to_dma(phys_addr_t phys) {
+    return phys + (_phys_to_dma_offset_raw(phys) << IOR_PHYS_SHIFT);
 }
 
-static inline phys_addr_t dma_to_phys(dma_addr_t dma)
-{
-	return dma + (_dma_to_phys_offset_raw(dma) << IOR_DMA_SHIFT);
+static inline phys_addr_t dma_to_phys(dma_addr_t dma) {
+    return dma + (_dma_to_phys_offset_raw(dma) << IOR_DMA_SHIFT);
 }
 
 extern void ioremap_add_map(dma_addr_t phys, phys_addr_t alias,
-	dma_addr_t size);
+                            dma_addr_t size);
 
 /*
  * Allow physical addresses to be fixed up to help peripherals located
  * outside the low 32-bit range -- generic pass-through version.
  */
-static inline phys_t fixup_bigphys_addr(phys_t phys_addr, phys_t size)
-{
-	return phys_addr;
+static inline phys_t fixup_bigphys_addr(phys_t phys_addr, phys_t size) {
+    return phys_addr;
 }
 
 /*
@@ -120,48 +117,46 @@ static inline phys_t fixup_bigphys_addr(phys_t phys_addr, phys_t size)
  * kseg0 or kseg1 addresses, depending on flags.
  */
 static inline void __iomem *plat_ioremap(phys_t start, unsigned long size,
-	unsigned long flags)
-{
-	phys_addr_t start_offset;
-	void __iomem *result = NULL;
+        unsigned long flags) {
+    phys_addr_t start_offset;
+    void __iomem *result = NULL;
 
-	/* Start by checking to see whether this is an aliased address */
-	start_offset = _dma_to_phys_offset_raw(start);
+    /* Start by checking to see whether this is an aliased address */
+    start_offset = _dma_to_phys_offset_raw(start);
 
-	/*
-	 * If:
-	 * o	the memory is aliased into the first 512 MiB, and
-	 * o	the start and end are in the same RAM bank, and
-	 * o	we don't have a zero size or wrap around, and
-	 * o	we are supposed to create an uncached mapping,
-	 *	handle this is a kseg0 or kseg1 address
-	 */
-	if (start_offset != 0) {
-		phys_addr_t last;
-		dma_addr_t dma_to_phys_offset;
+    /*
+     * If:
+     * o	the memory is aliased into the first 512 MiB, and
+     * o	the start and end are in the same RAM bank, and
+     * o	we don't have a zero size or wrap around, and
+     * o	we are supposed to create an uncached mapping,
+     *	handle this is a kseg0 or kseg1 address
+     */
+    if (start_offset != 0) {
+        phys_addr_t last;
+        dma_addr_t dma_to_phys_offset;
 
-		last = start + size - 1;
-		dma_to_phys_offset =
-			_dma_to_phys_offset_raw(last) << IOR_DMA_SHIFT;
+        last = start + size - 1;
+        dma_to_phys_offset =
+            _dma_to_phys_offset_raw(last) << IOR_DMA_SHIFT;
 
-		if (dma_to_phys_offset == start_offset &&
-			size != 0 && start <= last) {
-			phys_t adjusted_start;
-			adjusted_start = start + start_offset;
-			if (flags == _CACHE_UNCACHED)
-				result = (void __iomem *) (unsigned long)
-					CKSEG1ADDR(adjusted_start);
-			else
-				result = (void __iomem *) (unsigned long)
-					CKSEG0ADDR(adjusted_start);
-		}
-	}
+        if (dma_to_phys_offset == start_offset &&
+                size != 0 && start <= last) {
+            phys_t adjusted_start;
+            adjusted_start = start + start_offset;
+            if (flags == _CACHE_UNCACHED)
+                result = (void __iomem *) (unsigned long)
+                         CKSEG1ADDR(adjusted_start);
+            else
+                result = (void __iomem *) (unsigned long)
+                         CKSEG0ADDR(adjusted_start);
+        }
+    }
 
-	return result;
+    return result;
 }
 
-static inline int plat_iounmap(const volatile void __iomem *addr)
-{
-	return 0;
+static inline int plat_iounmap(const volatile void __iomem *addr) {
+    return 0;
 }
 #endif /* __ASM_MACH_POWERTV_IOREMAP_H */

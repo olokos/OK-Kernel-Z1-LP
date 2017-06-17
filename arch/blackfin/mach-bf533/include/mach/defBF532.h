@@ -381,7 +381,7 @@
 
 /* *************  SYSTEM INTERRUPT CONTROLLER MASKS ***************** */
 
-    /* SIC_IAR0 Masks */
+/* SIC_IAR0 Masks */
 
 #define P0_IVG(x)    ((x)-7)	/* Peripheral #0 assigned IVG #x  */
 #define P1_IVG(x)    ((x)-7) << 0x4	/* Peripheral #1 assigned IVG #x  */

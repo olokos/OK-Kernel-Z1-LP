@@ -112,8 +112,7 @@ when        who    what, where, why
 /*---------------------------------------------------------------------------
   DAL Control Path Main States
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Transition in this state made upon creation and when a close request is
        received*/
     WDI_INIT_ST = 0,
@@ -139,8 +138,7 @@ typedef enum
 /*---------------------------------------------------------------------------
   DAL Control Path Scan States
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*The flag will be set to this state when init is called. Once the flag has
       this value the only two scanning API calls allowed are Scan Start and
       Scan Finished*/
@@ -169,8 +167,7 @@ typedef enum
  ---------------------------------------------------------------------------*/
 #define WDI_MAX_BSS_SESSIONS  10
 
-typedef enum
-{
+typedef enum {
     /*Init state*/
     WDI_ASSOC_INIT_ST,
 
@@ -186,8 +183,7 @@ typedef enum
 /*---------------------------------------------------------------------------
    WLAN DAL Supported Request Types
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*WLAN DAL START Request*/
     WDI_START_REQ  = 0,
 
@@ -515,8 +511,7 @@ typedef enum
 /*---------------------------------------------------------------------------
    WLAN DAL Supported Response Types
  ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /*WLAN DAL START Response*/
     WDI_START_RESP  = 0,
 
@@ -877,8 +872,7 @@ typedef enum
     WDI_MAX_RESP
 } WDI_ResponseEnumType;
 
-typedef struct
-{
+typedef struct {
     /*Flag that marks a session as being in use*/
     wpt_boolean         bInUse;
 
@@ -919,8 +913,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_ConfigBSSRspInfoType
 ---------------------------------------------------------------------------*/
-typedef WPT_PACK_PRE struct
-{
+typedef WPT_PACK_PRE struct {
     /*BSS index allocated by HAL*/
     wpt_uint8    ucBSSIdx;
 
@@ -949,8 +942,7 @@ typedef WPT_PACK_PRE struct
 /*---------------------------------------------------------------------------
   WDI_PostAssocRspInfoType
 ---------------------------------------------------------------------------*/
-typedef WPT_PACK_PRE struct
-{
+typedef WPT_PACK_PRE struct {
     /*STA Index allocated by HAL.*/
     wpt_uint16   usSTAIdx;
 
@@ -974,8 +966,7 @@ typedef WPT_PACK_PRE struct
 /*---------------------------------------------------------------------------
   WDI_LLStatsResultsType
 ---------------------------------------------------------------------------*/
-typedef WPT_PACK_PRE struct
-{
+typedef WPT_PACK_PRE struct {
     wpt_uint32 param_id;
     wpt_uint8  iface_id;
     wpt_uint32 resp_id;
@@ -988,8 +979,7 @@ typedef WPT_PACK_PRE struct
 /*---------------------------------------------------------------------------
    WLAN DAL FSM Event Info Type
  ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Events can be linked in a list - put a node in front for that, it will be
      used by wpt to link them*/
     wpt_list_node          wptListNode;
@@ -1016,8 +1006,7 @@ typedef struct
 /*---------------------------------------------------------------------------
    WLAN DAL Session Index Type
  ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*Events can be linked in a list - put a node in front for that, it will be
      used by wpt to link them*/
     wpt_list_node          wptListNode;
@@ -1031,8 +1020,7 @@ typedef struct
 /*---------------------------------------------------------------------------
    WLAN DAL Control Block Type
  ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /*magic number so callbacks can validate their context pointers*/
     wpt_uint32                  magic;
 
@@ -1295,8 +1283,7 @@ typedef WDI_Status (*WDI_RspProcFuncType)( WDI_ControlBlockType*  pWDICtx,
 /*---------------------------------------------------------------------------
   DAL Main Event type
 ---------------------------------------------------------------------------*/
-typedef enum
-{
+typedef enum {
     /* Start request received from UMAC */
     WDI_START_EVENT          = 0,
 
@@ -1341,8 +1328,7 @@ typedef WDI_Status (*WDI_MainFuncType)( WDI_ControlBlockType*  pWDICtx,
 /*---------------------------------------------------------------------------
   MAIN DAL FSM Entry type
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDI_MainFuncType  pfnMainTbl[WDI_MAX_EVENT];
 } WDI_MainFsmEntryType;
 

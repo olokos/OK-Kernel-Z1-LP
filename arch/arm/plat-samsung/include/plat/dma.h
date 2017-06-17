@@ -16,9 +16,9 @@
 #include <linux/dma-mapping.h>
 
 enum s3c2410_dma_buffresult {
-	S3C2410_RES_OK,
-	S3C2410_RES_ERR,
-	S3C2410_RES_ABORT
+    S3C2410_RES_OK,
+    S3C2410_RES_ERR,
+    S3C2410_RES_ABORT
 };
 
 /* enum s3c2410_chan_op
@@ -28,17 +28,17 @@ enum s3c2410_dma_buffresult {
 */
 
 enum s3c2410_chan_op {
-	S3C2410_DMAOP_START,
-	S3C2410_DMAOP_STOP,
-	S3C2410_DMAOP_PAUSE,
-	S3C2410_DMAOP_RESUME,
-	S3C2410_DMAOP_FLUSH,
-	S3C2410_DMAOP_TIMEOUT,		/* internal signal to handler */
-	S3C2410_DMAOP_STARTED,		/* indicate channel started */
+    S3C2410_DMAOP_START,
+    S3C2410_DMAOP_STOP,
+    S3C2410_DMAOP_PAUSE,
+    S3C2410_DMAOP_RESUME,
+    S3C2410_DMAOP_FLUSH,
+    S3C2410_DMAOP_TIMEOUT,		/* internal signal to handler */
+    S3C2410_DMAOP_STARTED,		/* indicate channel started */
 };
 
 struct s3c2410_dma_client {
-	char                *name;
+    char                *name;
 };
 
 struct s3c2410_dma_chan;
@@ -50,11 +50,11 @@ enum dma_ch;
 */
 
 typedef void (*s3c2410_dma_cbfn_t)(struct s3c2410_dma_chan *,
-				   void *buf, int size,
-				   enum s3c2410_dma_buffresult result);
+                                   void *buf, int size,
+                                   enum s3c2410_dma_buffresult result);
 
 typedef int  (*s3c2410_dma_opfn_t)(struct s3c2410_dma_chan *,
-				   enum s3c2410_chan_op );
+                                   enum s3c2410_chan_op );
 
 
 
@@ -64,7 +64,7 @@ typedef int  (*s3c2410_dma_opfn_t)(struct s3c2410_dma_chan *,
 */
 
 extern int s3c2410_dma_request(enum dma_ch channel,
-			       struct s3c2410_dma_client *, void *dev);
+                               struct s3c2410_dma_client *, void *dev);
 
 
 /* s3c2410_dma_ctrl
@@ -80,7 +80,7 @@ extern int s3c2410_dma_ctrl(enum dma_ch channel, enum s3c2410_chan_op op);
 */
 
 extern int s3c2410_dma_setflags(enum dma_ch channel,
-				unsigned int flags);
+                                unsigned int flags);
 
 /* s3c2410_dma_free
  *
@@ -97,7 +97,7 @@ extern int s3c2410_dma_free(enum dma_ch channel, struct s3c2410_dma_client *);
 */
 
 extern int s3c2410_dma_enqueue(enum dma_ch channel, void *id,
-			       dma_addr_t data, int size);
+                               dma_addr_t data, int size);
 
 /* s3c2410_dma_config
  *
@@ -112,7 +112,7 @@ extern int s3c2410_dma_config(enum dma_ch channel, int xferunit);
 */
 
 extern int s3c2410_dma_devconfig(enum dma_ch channel,
-		enum dma_data_direction source, unsigned long devaddr);
+                                 enum dma_data_direction source, unsigned long devaddr);
 
 /* s3c2410_dma_getposition
  *
@@ -120,7 +120,7 @@ extern int s3c2410_dma_devconfig(enum dma_ch channel,
 */
 
 extern int s3c2410_dma_getposition(enum dma_ch channel,
-				   dma_addr_t *src, dma_addr_t *dest);
+                                   dma_addr_t *src, dma_addr_t *dest);
 
 extern int s3c2410_dma_set_opfn(enum dma_ch, s3c2410_dma_opfn_t rtn);
 extern int s3c2410_dma_set_buffdone_fn(enum dma_ch, s3c2410_dma_cbfn_t rtn);

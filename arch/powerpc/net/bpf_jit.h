@@ -180,9 +180,8 @@ DECLARE_LOAD_FUNC(sk_load_byte_msh);
 				PPC_ORI(d, d, (uintptr_t)(i) & 0xffff);	      \
 		} } while (0);
 
-static inline bool is_nearbranch(int offset)
-{
-	return (offset < 32768) && (offset >= -32768);
+static inline bool is_nearbranch(int offset) {
+    return (offset < 32768) && (offset >= -32768);
 }
 
 /*
@@ -223,9 +222,9 @@ static inline bool is_nearbranch(int offset)
 #define SEEN_MEM_MSK 0x0ffff
 
 struct codegen_context {
-	unsigned int seen;
-	unsigned int idx;
-	int pc_ret0; /* bpf index of first RET #0 instruction (if any) */
+    unsigned int seen;
+    unsigned int idx;
+    int pc_ret0; /* bpf index of first RET #0 instruction (if any) */
 };
 
 #endif

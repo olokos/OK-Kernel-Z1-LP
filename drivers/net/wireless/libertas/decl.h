@@ -13,9 +13,9 @@
 
 /* Should be terminated by a NULL entry */
 struct lbs_fw_table {
-	int model;
-	const char *helper;
-	const char *fwname;
+    int model;
+    const char *helper;
+    const char *fwname;
 };
 
 struct lbs_private;
@@ -31,7 +31,7 @@ extern const struct ethtool_ops lbs_ethtool_ops;
 /* tx.c */
 void lbs_send_tx_feedback(struct lbs_private *priv, u32 try_count);
 netdev_tx_t lbs_hard_start_xmit(struct sk_buff *skb,
-				struct net_device *dev);
+                                struct net_device *dev);
 
 /* rx.c */
 int lbs_process_rxed_packet(struct lbs_private *priv, struct sk_buff *);
@@ -67,9 +67,9 @@ u32 lbs_fw_index_to_data_rate(u8 index);
 u8 lbs_data_rate_to_fw_index(u32 rate);
 
 int lbs_get_firmware(struct device *dev, const char *user_helper,
-			const char *user_mainfw, u32 card_model,
-			const struct lbs_fw_table *fw_table,
-			const struct firmware **helper,
-			const struct firmware **mainfw);
+                     const char *user_mainfw, u32 card_model,
+                     const struct lbs_fw_table *fw_table,
+                     const struct firmware **helper,
+                     const struct firmware **mainfw);
 
 #endif

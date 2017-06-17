@@ -38,10 +38,10 @@
 
 /* fan input sample buffer */
 #define ENE_SAMPLE_BUFFER_FAN	0xF8FB	 /* this buffer holds high byte of */
-					 /* each sample of normal buffer */
+/* each sample of normal buffer */
 
 #define ENE_FAN_SMPL_PULS_MSK	0x8000	 /* this bit of combined sample */
-					 /* if set, says that sample is pulse */
+/* if set, says that sample is pulse */
 #define ENE_FAN_VALUE_MASK	0x0FFF   /* mask for valid bits of the value */
 
 /* first firmware register */
@@ -56,7 +56,7 @@
 #define ENE_FW2_BUF_HIGH	(1 << 0) /* which half of the buffer to read */
 #define ENE_FW2_IRQ_CLR		(1 << 2) /* clear this on IRQ */
 #define ENE_FW2_GP40_AS_LEARN	(1 << 4) /* normal input is used as */
-					 /* learning input */
+/* learning input */
 #define ENE_FW2_FAN_AS_NRML_IN	(1 << 6) /* fan is used as normal input */
 #define ENE_FW2_LEARNING	(1 << 7) /* hardware supports learning and TX */
 
@@ -146,24 +146,24 @@
 	printk(level ENE_DRIVER_NAME ": " text, ## __VA_ARGS__)
 
 struct ene_device {
-	struct pnp_dev *pnp_dev;
-	struct lirc_driver *lirc_driver;
+    struct pnp_dev *pnp_dev;
+    struct lirc_driver *lirc_driver;
 
-	/* hw settings */
-	unsigned long hw_io;
-	int irq;
+    /* hw settings */
+    unsigned long hw_io;
+    int irq;
 
-	int hw_revision;			/* hardware revision */
-	int hw_learning_and_tx_capable;		/* learning capable */
-	int hw_gpio40_learning;			/* gpio40 is learning */
-	int hw_fan_as_normal_input;	/* fan input is used as regular input */
+    int hw_revision;			/* hardware revision */
+    int hw_learning_and_tx_capable;		/* learning capable */
+    int hw_gpio40_learning;			/* gpio40 is learning */
+    int hw_fan_as_normal_input;	/* fan input is used as regular input */
 
-	/* device data */
-	int idle;
-	int fan_input_inuse;
+    /* device data */
+    int idle;
+    int fan_input_inuse;
 
-	int sample;
-	int in_use;
+    int sample;
+    int in_use;
 
-	struct timeval gap_start;
+    struct timeval gap_start;
 };

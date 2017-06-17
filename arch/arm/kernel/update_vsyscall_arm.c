@@ -31,22 +31,22 @@
 #define ARM_VSYSCALL_TIMER_TV_NSEC		0xf5c
 
 struct kernel_gtod_t {
-	u64  cycle_last;
-	u64  mask;
-	u32  mult;
-	u32  shift;
-	u32  tv_sec;
-	u32  tv_nsec;
+    u64  cycle_last;
+    u64  mask;
+    u32  mult;
+    u32  shift;
+    u32  tv_sec;
+    u32  tv_nsec;
 };
 
 struct kernel_tz_t {
-	u32  tz_minuteswest;
-	u32  tz_dsttime;
+    u32  tz_minuteswest;
+    u32  tz_dsttime;
 };
 
 struct kernel_wtm_t {
-	u32  tv_sec;
-	u32  tv_nsec;
+    u32  tv_sec;
+    u32  tv_nsec;
 };
 
 /*
@@ -56,45 +56,43 @@ struct kernel_wtm_t {
  */
 void
 update_vsyscall(struct timespec *ts, struct timespec *wtm,
-	struct clocksource *c, u32 mult)
-{
-	unsigned long vectors = (unsigned long)vectors_page;
-	unsigned long flags;
-	unsigned *seqnum = (unsigned *)(vectors + ARM_VSYSCALL_TIMER_SEQ);
-	struct kernel_gtod_t *dgtod = (struct kernel_gtod_t *)(vectors +
-		ARM_VSYSCALL_TIMER_CYCLE_LAST);
-	struct kernel_wtm_t *dgwtm = (struct kernel_wtm_t *)(vectors +
-		ARM_VSYSCALL_TIMER_WTM_TV_SEC);
+                struct clocksource *c, u32 mult) {
+    unsigned long vectors = (unsigned long)vectors_page;
+    unsigned long flags;
+    unsigned *seqnum = (unsigned *)(vectors + ARM_VSYSCALL_TIMER_SEQ);
+    struct kernel_gtod_t *dgtod = (struct kernel_gtod_t *)(vectors +
+                                  ARM_VSYSCALL_TIMER_CYCLE_LAST);
+    struct kernel_wtm_t *dgwtm = (struct kernel_wtm_t *)(vectors +
+                                 ARM_VSYSCALL_TIMER_WTM_TV_SEC);
 
-	write_seqlock_irqsave(&kuh_time_lock, flags);
-	*seqnum = kuh_time_lock.sequence;
-	dgtod->cycle_last = c->cycle_last;
-	dgtod->mask = c->mask;
-	dgtod->mult = c->mult;
-	dgtod->shift = c->shift;
-	dgtod->tv_sec = ts->tv_sec;
-	dgtod->tv_nsec = ts->tv_nsec;
-	dgwtm->tv_sec = wtm->tv_sec;
-	dgwtm->tv_nsec = wtm->tv_nsec;
-	*seqnum = kuh_time_lock.sequence + 1;
-	write_sequnlock_irqrestore(&kuh_time_lock, flags);
+    write_seqlock_irqsave(&kuh_time_lock, flags);
+    *seqnum = kuh_time_lock.sequence;
+    dgtod->cycle_last = c->cycle_last;
+    dgtod->mask = c->mask;
+    dgtod->mult = c->mult;
+    dgtod->shift = c->shift;
+    dgtod->tv_sec = ts->tv_sec;
+    dgtod->tv_nsec = ts->tv_nsec;
+    dgwtm->tv_sec = wtm->tv_sec;
+    dgwtm->tv_nsec = wtm->tv_nsec;
+    *seqnum = kuh_time_lock.sequence + 1;
+    write_sequnlock_irqrestore(&kuh_time_lock, flags);
 }
 EXPORT_SYMBOL(update_vsyscall);
 
 void
-update_vsyscall_tz(void)
-{
-	unsigned long vectors = (unsigned long)vectors_page;
-	unsigned long flags;
-	unsigned *seqnum = (unsigned *)(vectors + ARM_VSYSCALL_TIMER_SEQ);
-	struct kernel_tz_t *dgtod = (struct kernel_tz_t *)(vectors +
-		ARM_VSYSCALL_TIMER_TZ);
+update_vsyscall_tz(void) {
+    unsigned long vectors = (unsigned long)vectors_page;
+    unsigned long flags;
+    unsigned *seqnum = (unsigned *)(vectors + ARM_VSYSCALL_TIMER_SEQ);
+    struct kernel_tz_t *dgtod = (struct kernel_tz_t *)(vectors +
+                                ARM_VSYSCALL_TIMER_TZ);
 
-	write_seqlock_irqsave(&kuh_time_lock, flags);
-	*seqnum = kuh_time_lock.sequence;
-	dgtod->tz_minuteswest = sys_tz.tz_minuteswest;
-	dgtod->tz_dsttime = sys_tz.tz_dsttime;
-	*seqnum = kuh_time_lock.sequence + 1;
-	write_sequnlock_irqrestore(&kuh_time_lock, flags);
+    write_seqlock_irqsave(&kuh_time_lock, flags);
+    *seqnum = kuh_time_lock.sequence;
+    dgtod->tz_minuteswest = sys_tz.tz_minuteswest;
+    dgtod->tz_dsttime = sys_tz.tz_dsttime;
+    *seqnum = kuh_time_lock.sequence + 1;
+    write_sequnlock_irqrestore(&kuh_time_lock, flags);
 }
 EXPORT_SYMBOL(update_vsyscall_tz);

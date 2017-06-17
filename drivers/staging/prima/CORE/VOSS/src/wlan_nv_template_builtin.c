@@ -135,8 +135,7 @@
 static int enumNoOfFieldArray[INDEX_ENUM_BUILTIN_MAX] =
 {7,1,9,5,40,14,3,55};
 
-_NV_TEMPLATE_ENUM NvEnumsBuiltIn[/*INDEX_ENUM_MAX*/][ENUM_ENTRIES_MAX] =
-{
+_NV_TEMPLATE_ENUM NvEnumsBuiltIn[/*INDEX_ENUM_MAX*/][ENUM_ENTRIES_MAX] = {
     {
         // INDEX_ENUM_ALL
         {"j1",INDEX_ENUM_NUM_PHY_MAX_TX_CHAINS,0,{nul}},
@@ -438,8 +437,7 @@ _NV_TEMPLATE_ENUM NvEnumsBuiltIn[/*INDEX_ENUM_MAX*/][ENUM_ENTRIES_MAX] =
 }; // END _NV_TEMPLATE_ENUM
 
 
-int getEnumNoOfFields(int enumIdx)
-{
+int getEnumNoOfFields(int enumIdx) {
 #ifdef FEATURE_WLAN_CH144
     enumNoOfFieldArray[4] = enumNoOfFieldArray[4] + 1;
 #endif
@@ -466,8 +464,7 @@ int getEnumNoOfFields(int enumIdx)
 static int tableNoOfFieldArray[TABLE_BUILTIN_MAX] =
 {14,12,2,2,16,1,2,2,23,1,1,1,4,2,13};
 
-_NV_TEMPLATE_TABLE NvTablesBuiltIn[/*TABLES_MAX*/][TABLE_ENTRIES_MAX] =
-{
+_NV_TEMPLATE_TABLE NvTablesBuiltIn[/*TABLES_MAX*/][TABLE_ENTRIES_MAX] = {
     {
         // TABLE_sHalNv
         {
@@ -1062,7 +1059,6 @@ _NV_TEMPLATE_TABLE NvTablesBuiltIn[/*TABLES_MAX*/][TABLE_ENTRIES_MAX] =
     }, //INDEX_TABLE_LAST
 }; // END _NV_TEMPLATE_TABLE
 
-int getTableNoOfFields(int tblIdx)
-{
+int getTableNoOfFields(int tblIdx) {
     return tableNoOfFieldArray[tblIdx];
 }

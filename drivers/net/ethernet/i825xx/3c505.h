@@ -87,46 +87,46 @@
  *****************************************************************/
 
 enum {
-  /*
-   * host PCB commands
-   */
-  CMD_CONFIGURE_ADAPTER_MEMORY	= 0x01,
-  CMD_CONFIGURE_82586		= 0x02,
-  CMD_STATION_ADDRESS		= 0x03,
-  CMD_DMA_DOWNLOAD		= 0x04,
-  CMD_DMA_UPLOAD		= 0x05,
-  CMD_PIO_DOWNLOAD		= 0x06,
-  CMD_PIO_UPLOAD		= 0x07,
-  CMD_RECEIVE_PACKET		= 0x08,
-  CMD_TRANSMIT_PACKET		= 0x09,
-  CMD_NETWORK_STATISTICS	= 0x0a,
-  CMD_LOAD_MULTICAST_LIST	= 0x0b,
-  CMD_CLEAR_PROGRAM		= 0x0c,
-  CMD_DOWNLOAD_PROGRAM		= 0x0d,
-  CMD_EXECUTE_PROGRAM		= 0x0e,
-  CMD_SELF_TEST			= 0x0f,
-  CMD_SET_STATION_ADDRESS	= 0x10,
-  CMD_ADAPTER_INFO		= 0x11,
-  NUM_TRANSMIT_CMDS,
+    /*
+     * host PCB commands
+     */
+    CMD_CONFIGURE_ADAPTER_MEMORY	= 0x01,
+    CMD_CONFIGURE_82586		= 0x02,
+    CMD_STATION_ADDRESS		= 0x03,
+    CMD_DMA_DOWNLOAD		= 0x04,
+    CMD_DMA_UPLOAD		= 0x05,
+    CMD_PIO_DOWNLOAD		= 0x06,
+    CMD_PIO_UPLOAD		= 0x07,
+    CMD_RECEIVE_PACKET		= 0x08,
+    CMD_TRANSMIT_PACKET		= 0x09,
+    CMD_NETWORK_STATISTICS	= 0x0a,
+    CMD_LOAD_MULTICAST_LIST	= 0x0b,
+    CMD_CLEAR_PROGRAM		= 0x0c,
+    CMD_DOWNLOAD_PROGRAM		= 0x0d,
+    CMD_EXECUTE_PROGRAM		= 0x0e,
+    CMD_SELF_TEST			= 0x0f,
+    CMD_SET_STATION_ADDRESS	= 0x10,
+    CMD_ADAPTER_INFO		= 0x11,
+    NUM_TRANSMIT_CMDS,
 
-  /*
-   * adapter PCB commands
-   */
-  CMD_CONFIGURE_ADAPTER_RESPONSE	= 0x31,
-  CMD_CONFIGURE_82586_RESPONSE		= 0x32,
-  CMD_ADDRESS_RESPONSE			= 0x33,
-  CMD_DOWNLOAD_DATA_REQUEST		= 0x34,
-  CMD_UPLOAD_DATA_REQUEST		= 0x35,
-  CMD_RECEIVE_PACKET_COMPLETE		= 0x38,
-  CMD_TRANSMIT_PACKET_COMPLETE		= 0x39,
-  CMD_NETWORK_STATISTICS_RESPONSE	= 0x3a,
-  CMD_LOAD_MULTICAST_RESPONSE		= 0x3b,
-  CMD_CLEAR_PROGRAM_RESPONSE		= 0x3c,
-  CMD_DOWNLOAD_PROGRAM_RESPONSE		= 0x3d,
-  CMD_EXECUTE_RESPONSE			= 0x3e,
-  CMD_SELF_TEST_RESPONSE		= 0x3f,
-  CMD_SET_ADDRESS_RESPONSE		= 0x40,
-  CMD_ADAPTER_INFO_RESPONSE		= 0x41
+    /*
+     * adapter PCB commands
+     */
+    CMD_CONFIGURE_ADAPTER_RESPONSE	= 0x31,
+    CMD_CONFIGURE_82586_RESPONSE		= 0x32,
+    CMD_ADDRESS_RESPONSE			= 0x33,
+    CMD_DOWNLOAD_DATA_REQUEST		= 0x34,
+    CMD_UPLOAD_DATA_REQUEST		= 0x35,
+    CMD_RECEIVE_PACKET_COMPLETE		= 0x38,
+    CMD_TRANSMIT_PACKET_COMPLETE		= 0x39,
+    CMD_NETWORK_STATISTICS_RESPONSE	= 0x3a,
+    CMD_LOAD_MULTICAST_RESPONSE		= 0x3b,
+    CMD_CLEAR_PROGRAM_RESPONSE		= 0x3c,
+    CMD_DOWNLOAD_PROGRAM_RESPONSE		= 0x3d,
+    CMD_EXECUTE_RESPONSE			= 0x3e,
+    CMD_SELF_TEST_RESPONSE		= 0x3f,
+    CMD_SET_ADDRESS_RESPONSE		= 0x40,
+    CMD_ADAPTER_INFO_RESPONSE		= 0x41
 };
 
 /* Definitions for the PCB data structure */
@@ -138,79 +138,79 @@ typedef unsigned long int     dword;
 
 /* Data structures */
 struct Memconf {
-	word	cmd_q,
-		rcv_q,
-		mcast,
-		frame,
-		rcv_b,
-		progs;
+    word	cmd_q,
+            rcv_q,
+            mcast,
+            frame,
+            rcv_b,
+            progs;
 };
 
 struct Rcv_pkt {
-	word	buf_ofs,
-		buf_seg,
-		buf_len,
-		timeout;
+    word	buf_ofs,
+            buf_seg,
+            buf_len,
+            timeout;
 };
 
 struct Xmit_pkt {
-	word	buf_ofs,
-		buf_seg,
-		pkt_len;
+    word	buf_ofs,
+            buf_seg,
+            pkt_len;
 };
 
 struct Rcv_resp {
-	word	buf_ofs,
-		buf_seg,
-		buf_len,
-		pkt_len,
-		timeout,
-		status;
-	dword	timetag;
+    word	buf_ofs,
+            buf_seg,
+            buf_len,
+            pkt_len,
+            timeout,
+            status;
+    dword	timetag;
 };
 
 struct Xmit_resp {
-	word	buf_ofs,
-		buf_seg,
-		c_stat,
-		status;
+    word	buf_ofs,
+            buf_seg,
+            c_stat,
+            status;
 };
 
 
 struct Netstat {
-	dword	tot_recv,
-		tot_xmit;
-	word	err_CRC,
-		err_align,
-		err_res,
-		err_ovrrun;
+    dword	tot_recv,
+            tot_xmit;
+    word	err_CRC,
+            err_align,
+            err_res,
+            err_ovrrun;
 };
 
 
 struct Selftest {
-	word	error;
-	union {
-		word ROM_cksum;
-		struct {
-			word ofs, seg;
-		} RAM;
-		word i82586;
-	} failure;
+    word	error;
+    union {
+        word ROM_cksum;
+        struct {
+            word ofs, seg;
+        } RAM;
+        word i82586;
+    } failure;
 };
 
 struct Info {
-	byte	minor_vers,
-		major_vers;
-	word	ROM_cksum,
-		RAM_sz,
-		free_ofs,
-		free_seg;
+    byte	minor_vers,
+            major_vers;
+    word	ROM_cksum,
+            RAM_sz,
+            free_ofs,
+            free_seg;
 };
 
 struct Memdump {
-       word size,
-            off,
-            seg;
+    word size,
+         off,
+         seg;
 };
 
 /*
@@ -219,24 +219,24 @@ between the host and the adapter is done with these. (Except for the actual
 Ethernet data, which has different packaging.)
 */
 typedef struct {
-	byte	command;
-	byte	length;
-	union	{
-		struct Memconf		memconf;
-		word			configure;
-		struct Rcv_pkt		rcv_pkt;
-		struct Xmit_pkt		xmit_pkt;
-		byte			multicast[10][6];
-		byte			eth_addr[6];
-		byte			failed;
-		struct Rcv_resp		rcv_resp;
-		struct Xmit_resp	xmit_resp;
-		struct Netstat		netstat;
-		struct Selftest		selftest;
-		struct Info		info;
-		struct Memdump    	memdump;
-		byte			raw[62];
-	} data;
+    byte	command;
+    byte	length;
+    union	{
+        struct Memconf		memconf;
+        word			configure;
+        struct Rcv_pkt		rcv_pkt;
+        struct Xmit_pkt		xmit_pkt;
+        byte			multicast[10][6];
+        byte			eth_addr[6];
+        byte			failed;
+        struct Rcv_resp		rcv_resp;
+        struct Xmit_resp	xmit_resp;
+        struct Netstat		netstat;
+        struct Selftest		selftest;
+        struct Info		info;
+        struct Memdump    	memdump;
+        byte			raw[62];
+    } data;
 } pcb_struct;
 
 /* These defines for 'configure' */
@@ -258,35 +258,35 @@ typedef struct {
 #define BACKLOG_SIZE      4
 
 typedef struct {
-	volatile short got[NUM_TRANSMIT_CMDS];	/* flags for
+    volatile short got[NUM_TRANSMIT_CMDS];	/* flags for
 						   command completion */
-	pcb_struct tx_pcb;	/* PCB for foreground sending */
-	pcb_struct rx_pcb;	/* PCB for foreground receiving */
-	pcb_struct itx_pcb;	/* PCB for background sending */
-	pcb_struct irx_pcb;	/* PCB for background receiving */
+    pcb_struct tx_pcb;	/* PCB for foreground sending */
+    pcb_struct rx_pcb;	/* PCB for foreground receiving */
+    pcb_struct itx_pcb;	/* PCB for background sending */
+    pcb_struct irx_pcb;	/* PCB for background receiving */
 
-	void *dma_buffer;
+    void *dma_buffer;
 
-	struct {
-		unsigned int length[BACKLOG_SIZE];
-		unsigned int in;
-		unsigned int out;
-	} rx_backlog;
+    struct {
+        unsigned int length[BACKLOG_SIZE];
+        unsigned int in;
+        unsigned int out;
+    } rx_backlog;
 
-	struct {
-		unsigned int direction;
-		unsigned int length;
-		struct sk_buff *skb;
-	        void *target;
-		unsigned long start_time;
-	} current_dma;
+    struct {
+        unsigned int direction;
+        unsigned int length;
+        struct sk_buff *skb;
+        void *target;
+        unsigned long start_time;
+    } current_dma;
 
-	/* flags */
-	unsigned long send_pcb_semaphore;
-	unsigned long dmaing;
-	unsigned long busy;
+    /* flags */
+    unsigned long send_pcb_semaphore;
+    unsigned long dmaing;
+    unsigned long busy;
 
-	unsigned int rx_active;  /* number of receive PCBs */
-        volatile unsigned char hcr_val;  /* what we think the HCR contains */
-        spinlock_t lock;	/* Interrupt v tx lock */
+    unsigned int rx_active;  /* number of receive PCBs */
+    volatile unsigned char hcr_val;  /* what we think the HCR contains */
+    spinlock_t lock;	/* Interrupt v tx lock */
 } elp_device;

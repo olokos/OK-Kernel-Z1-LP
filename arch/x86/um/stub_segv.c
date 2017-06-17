@@ -8,12 +8,11 @@
 #include "sysdep/mcontext.h"
 
 void __attribute__ ((__section__ (".__syscall_stub")))
-stub_segv_handler(int sig, siginfo_t *info, void *p)
-{
-	struct ucontext *uc = p;
+stub_segv_handler(int sig, siginfo_t *info, void *p) {
+    struct ucontext *uc = p;
 
-	GET_FAULTINFO_FROM_MC(*((struct faultinfo *) STUB_DATA),
-			      &uc->uc_mcontext);
-	trap_myself();
+    GET_FAULTINFO_FROM_MC(*((struct faultinfo *) STUB_DATA),
+                          &uc->uc_mcontext);
+    trap_myself();
 }
 

@@ -19,51 +19,50 @@
  * pinctrl_bind_pins() - called by the device core before probe
  * @dev: the device that is just about to probe
  */
-int pinctrl_bind_pins(struct device *dev)
-{
-	int ret;
+int pinctrl_bind_pins(struct device *dev) {
+    int ret;
 
-	dev->pins = devm_kzalloc(dev, sizeof(*(dev->pins)), GFP_KERNEL);
-	if (!dev->pins)
-		return -ENOMEM;
+    dev->pins = devm_kzalloc(dev, sizeof(*(dev->pins)), GFP_KERNEL);
+    if (!dev->pins)
+        return -ENOMEM;
 
-	dev->pins->p = devm_pinctrl_get(dev);
-	if (IS_ERR(dev->pins->p)) {
-		dev_dbg(dev, "no pinctrl handle\n");
-		ret = PTR_ERR(dev->pins->p);
-		goto cleanup_alloc;
-	}
+    dev->pins->p = devm_pinctrl_get(dev);
+    if (IS_ERR(dev->pins->p)) {
+        dev_dbg(dev, "no pinctrl handle\n");
+        ret = PTR_ERR(dev->pins->p);
+        goto cleanup_alloc;
+    }
 
-	dev->pins->default_state = pinctrl_lookup_state(dev->pins->p,
-					PINCTRL_STATE_DEFAULT);
-	if (IS_ERR(dev->pins->default_state)) {
-		dev_dbg(dev, "no default pinctrl state\n");
-		ret = 0;
-		goto cleanup_get;
-	}
+    dev->pins->default_state = pinctrl_lookup_state(dev->pins->p,
+                               PINCTRL_STATE_DEFAULT);
+    if (IS_ERR(dev->pins->default_state)) {
+        dev_dbg(dev, "no default pinctrl state\n");
+        ret = 0;
+        goto cleanup_get;
+    }
 
-	ret = pinctrl_select_state(dev->pins->p, dev->pins->default_state);
-	if (ret) {
-		dev_dbg(dev, "failed to activate default pinctrl state\n");
-		goto cleanup_get;
-	}
+    ret = pinctrl_select_state(dev->pins->p, dev->pins->default_state);
+    if (ret) {
+        dev_dbg(dev, "failed to activate default pinctrl state\n");
+        goto cleanup_get;
+    }
 
-	return 0;
+    return 0;
 
-	/*
-	 * If no pinctrl handle or default state was found for this device,
-	 * let's explicitly free the pin container in the device, there is
-	 * no point in keeping it around.
-	 */
+    /*
+     * If no pinctrl handle or default state was found for this device,
+     * let's explicitly free the pin container in the device, there is
+     * no point in keeping it around.
+     */
 cleanup_get:
-	devm_pinctrl_put(dev->pins->p);
+    devm_pinctrl_put(dev->pins->p);
 cleanup_alloc:
-	devm_kfree(dev, dev->pins);
-	dev->pins = NULL;
+    devm_kfree(dev, dev->pins);
+    dev->pins = NULL;
 
-	/* Only return deferrals */
-	if (ret != -EPROBE_DEFER)
-		ret = 0;
+    /* Only return deferrals */
+    if (ret != -EPROBE_DEFER)
+        ret = 0;
 
-	return ret;
+    return ret;
 }

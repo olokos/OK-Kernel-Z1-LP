@@ -10,8 +10,8 @@
 #ifndef __ASSEMBLY__
 
 struct amba_prom_registers {
-	unsigned int phys_addr;	/* The physical address of this register */
-	unsigned int reg_size;	/* How many bytes does this register take up? */
+    unsigned int phys_addr;	/* The physical address of this register */
+    unsigned int reg_size;	/* How many bytes does this register take up? */
 };
 
 #endif
@@ -51,11 +51,11 @@ struct amba_prom_registers {
 #define LEON23_REG_TIMER_CONTROL_EN    0x00000001 /* 1 = enable counting */
 /* 0 = hold scalar and counter */
 #define LEON23_REG_TIMER_CONTROL_RL    0x00000002 /* 1 = reload at 0 */
-						  /* 0 = stop at 0 */
+/* 0 = stop at 0 */
 #define LEON23_REG_TIMER_CONTROL_LD    0x00000004 /* 1 = load counter */
-						  /* 0 = no function */
+/* 0 = no function */
 #define LEON23_REG_TIMER_CONTROL_IQ    0x00000008 /* 1 = irq enable */
-						  /* 0 = no function */
+/* 0 = no function */
 
 /*
  *  The following defines the bits in the LEON PS/2 Status Registers.
@@ -92,48 +92,48 @@ struct amba_prom_registers {
 #ifndef __ASSEMBLY__
 
 struct leon3_irqctrl_regs_map {
-	u32 ilevel;
-	u32 ipend;
-	u32 iforce;
-	u32 iclear;
-	u32 mpstatus;
-	u32 mpbroadcast;
-	u32 notused02;
-	u32 notused03;
-	u32 ampctrl;
-	u32 icsel[2];
-	u32 notused13;
-	u32 notused20;
-	u32 notused21;
-	u32 notused22;
-	u32 notused23;
-	u32 mask[16];
-	u32 force[16];
-	/* Extended IRQ registers */
-	u32 intid[16];	/* 0xc0 */
-	u32 unused[(0x1000-0x100)/4];
+    u32 ilevel;
+    u32 ipend;
+    u32 iforce;
+    u32 iclear;
+    u32 mpstatus;
+    u32 mpbroadcast;
+    u32 notused02;
+    u32 notused03;
+    u32 ampctrl;
+    u32 icsel[2];
+    u32 notused13;
+    u32 notused20;
+    u32 notused21;
+    u32 notused22;
+    u32 notused23;
+    u32 mask[16];
+    u32 force[16];
+    /* Extended IRQ registers */
+    u32 intid[16];	/* 0xc0 */
+    u32 unused[(0x1000-0x100)/4];
 };
 
 struct leon3_apbuart_regs_map {
-	u32 data;
-	u32 status;
-	u32 ctrl;
-	u32 scaler;
+    u32 data;
+    u32 status;
+    u32 ctrl;
+    u32 scaler;
 };
 
 struct leon3_gptimerelem_regs_map {
-	u32 val;
-	u32 rld;
-	u32 ctrl;
-	u32 unused;
+    u32 val;
+    u32 rld;
+    u32 ctrl;
+    u32 unused;
 };
 
 struct leon3_gptimer_regs_map {
-	u32 scalar;
-	u32 scalar_reload;
-	u32 config;
-	u32 unused;
-	struct leon3_gptimerelem_regs_map e[8];
+    u32 scalar;
+    u32 scalar_reload;
+    u32 config;
+    u32 unused;
+    struct leon3_gptimerelem_regs_map e[8];
 };
 
 /*
@@ -144,37 +144,37 @@ struct leon3_gptimer_regs_map {
 #define AMBA_MAXAPB_DEVS_PERBUS 16
 
 struct amba_device_table {
-	int devnr;		   /* number of devices on AHB or APB bus */
-	unsigned int *addr[16];    /* addresses to the devices configuration tables */
-	unsigned int allocbits[1]; /* 0=unallocated, 1=allocated driver */
+    int devnr;		   /* number of devices on AHB or APB bus */
+    unsigned int *addr[16];    /* addresses to the devices configuration tables */
+    unsigned int allocbits[1]; /* 0=unallocated, 1=allocated driver */
 };
 
 struct amba_apbslv_device_table {
-	int devnr;		                  /* number of devices on AHB or APB bus */
-	unsigned int *addr[AMBA_MAXAPB_DEVS];     /* addresses to the devices configuration tables */
-	unsigned int apbmst[AMBA_MAXAPB_DEVS];    /* apb master if a entry is a apb slave */
-	unsigned int apbmstidx[AMBA_MAXAPB_DEVS]; /* apb master idx if a entry is a apb slave */
-	unsigned int allocbits[4];                /* 0=unallocated, 1=allocated driver */
+    int devnr;		                  /* number of devices on AHB or APB bus */
+    unsigned int *addr[AMBA_MAXAPB_DEVS];     /* addresses to the devices configuration tables */
+    unsigned int apbmst[AMBA_MAXAPB_DEVS];    /* apb master if a entry is a apb slave */
+    unsigned int apbmstidx[AMBA_MAXAPB_DEVS]; /* apb master idx if a entry is a apb slave */
+    unsigned int allocbits[4];                /* 0=unallocated, 1=allocated driver */
 };
 
 struct amba_confarea_type {
-	struct amba_confarea_type *next;/* next bus in chain */
-	struct amba_device_table ahbmst;
-	struct amba_device_table ahbslv;
-	struct amba_apbslv_device_table apbslv;
-	unsigned int apbmst;
+    struct amba_confarea_type *next;/* next bus in chain */
+    struct amba_device_table ahbmst;
+    struct amba_device_table ahbslv;
+    struct amba_apbslv_device_table apbslv;
+    unsigned int apbmst;
 };
 
 /* collect apb slaves */
 struct amba_apb_device {
-	unsigned int start, irq, bus_id;
-	struct amba_confarea_type *bus;
+    unsigned int start, irq, bus_id;
+    struct amba_confarea_type *bus;
 };
 
 /* collect ahb slaves */
 struct amba_ahb_device {
-	unsigned int start[4], irq, bus_id;
-	struct amba_confarea_type *bus;
+    unsigned int start[4], irq, bus_id;
+    struct amba_confarea_type *bus;
 };
 
 struct device_node;

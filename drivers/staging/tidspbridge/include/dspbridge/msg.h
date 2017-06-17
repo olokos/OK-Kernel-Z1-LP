@@ -40,8 +40,8 @@
  *  Ensures:
  */
 extern int msg_create(struct msg_mgr **msg_man,
-			     struct dev_object *hdev_obj,
-			     msg_onexit msg_callback);
+                      struct dev_object *hdev_obj,
+                      msg_onexit msg_callback);
 
 /*
  *  ======== msg_delete ========

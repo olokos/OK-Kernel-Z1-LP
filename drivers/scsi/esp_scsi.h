@@ -6,7 +6,7 @@
 #ifndef _ESP_SCSI_H
 #define _ESP_SCSI_H
 
-					/* Access    Description      Offset */
+/* Access    Description      Offset */
 #define ESP_TCLOW	0x00UL		/* rw  Low bits transfer count 0x00  */
 #define ESP_TCMED	0x01UL		/* rw  Mid bits transfer count 0x04  */
 #define ESP_FDATA	0x02UL		/* rw  FIFO data bits          0x08  */
@@ -235,51 +235,51 @@
 #define SYNC_DEFP_FAST            0x19   /* 10mb/s */
 
 struct esp_cmd_priv {
-	union {
-		dma_addr_t	dma_addr;
-		int		num_sg;
-	} u;
+    union {
+        dma_addr_t	dma_addr;
+        int		num_sg;
+    } u;
 
-	int			cur_residue;
-	struct scatterlist	*cur_sg;
-	int			tot_residue;
+    int			cur_residue;
+    struct scatterlist	*cur_sg;
+    int			tot_residue;
 };
 #define ESP_CMD_PRIV(CMD)	((struct esp_cmd_priv *)(&(CMD)->SCp))
 
 enum esp_rev {
-	ESP100     = 0x00,  /* NCR53C90 - very broken */
-	ESP100A    = 0x01,  /* NCR53C90A */
-	ESP236     = 0x02,
-	FAS236     = 0x03,
-	FAS100A    = 0x04,
-	FAST       = 0x05,
-	FASHME     = 0x06,
+    ESP100     = 0x00,  /* NCR53C90 - very broken */
+    ESP100A    = 0x01,  /* NCR53C90A */
+    ESP236     = 0x02,
+    FAS236     = 0x03,
+    FAS100A    = 0x04,
+    FAST       = 0x05,
+    FASHME     = 0x06,
 };
 
 struct esp_cmd_entry {
-	struct list_head	list;
+    struct list_head	list;
 
-	struct scsi_cmnd	*cmd;
+    struct scsi_cmnd	*cmd;
 
-	unsigned int		saved_cur_residue;
-	struct scatterlist	*saved_cur_sg;
-	unsigned int		saved_tot_residue;
+    unsigned int		saved_cur_residue;
+    struct scatterlist	*saved_cur_sg;
+    unsigned int		saved_tot_residue;
 
-	u8			flags;
+    u8			flags;
 #define ESP_CMD_FLAG_WRITE	0x01 /* DMA is a write */
 #define ESP_CMD_FLAG_ABORT	0x02 /* being aborted */
 #define ESP_CMD_FLAG_AUTOSENSE	0x04 /* Doing automatic REQUEST_SENSE */
 
-	u8			tag[2];
+    u8			tag[2];
 
-	u8			status;
-	u8			message;
+    u8			status;
+    u8			message;
 
-	unsigned char		*sense_ptr;
-	unsigned char		*saved_sense_ptr;
-	dma_addr_t		sense_dma;
+    unsigned char		*sense_ptr;
+    unsigned char		*saved_sense_ptr;
+    dma_addr_t		sense_dma;
 
-	struct completion	*eh_done;
+    struct completion	*eh_done;
 };
 
 /* XXX make this configurable somehow XXX */
@@ -290,22 +290,22 @@ struct esp_cmd_entry {
 #define ESP_MAX_TAG		256
 
 struct esp_lun_data {
-	struct esp_cmd_entry	*non_tagged_cmd;
-	int			num_tagged;
-	int			hold;
-	struct esp_cmd_entry	*tagged_cmds[ESP_MAX_TAG];
+    struct esp_cmd_entry	*non_tagged_cmd;
+    int			num_tagged;
+    int			hold;
+    struct esp_cmd_entry	*tagged_cmds[ESP_MAX_TAG];
 };
 
 struct esp_target_data {
-	/* These are the ESP_STP, ESP_SOFF, and ESP_CFG3 register values which
-	 * match the currently negotiated settings for this target.  The SCSI
-	 * protocol values are maintained in spi_{offset,period,wide}(starget).
-	 */
-	u8			esp_period;
-	u8			esp_offset;
-	u8			esp_config3;
+    /* These are the ESP_STP, ESP_SOFF, and ESP_CFG3 register values which
+     * match the currently negotiated settings for this target.  The SCSI
+     * protocol values are maintained in spi_{offset,period,wide}(starget).
+     */
+    u8			esp_period;
+    u8			esp_offset;
+    u8			esp_config3;
 
-	u8			flags;
+    u8			flags;
 #define ESP_TGT_WIDE		0x01
 #define ESP_TGT_DISCONNECT	0x02
 #define ESP_TGT_NEGO_WIDE	0x04
@@ -313,98 +313,98 @@ struct esp_target_data {
 #define ESP_TGT_CHECK_NEGO	0x40
 #define ESP_TGT_BROKEN		0x80
 
-	/* When ESP_TGT_CHECK_NEGO is set, on the next scsi command to this
-	 * device we will try to negotiate the following parameters.
-	 */
-	u8			nego_goal_period;
-	u8			nego_goal_offset;
-	u8			nego_goal_width;
-	u8			nego_goal_tags;
+    /* When ESP_TGT_CHECK_NEGO is set, on the next scsi command to this
+     * device we will try to negotiate the following parameters.
+     */
+    u8			nego_goal_period;
+    u8			nego_goal_offset;
+    u8			nego_goal_width;
+    u8			nego_goal_tags;
 
-	struct scsi_target	*starget;
+    struct scsi_target	*starget;
 };
 
 struct esp_event_ent {
-	u8			type;
+    u8			type;
 #define ESP_EVENT_TYPE_EVENT	0x01
 #define ESP_EVENT_TYPE_CMD	0x02
-	u8			val;
+    u8			val;
 
-	u8			sreg;
-	u8			seqreg;
-	u8			sreg2;
-	u8			ireg;
-	u8			select_state;
-	u8			event;
-	u8			__pad;
+    u8			sreg;
+    u8			seqreg;
+    u8			sreg2;
+    u8			ireg;
+    u8			select_state;
+    u8			event;
+    u8			__pad;
 };
 
 struct esp;
 struct esp_driver_ops {
-	/* Read and write the ESP 8-bit registers.  On some
-	 * applications of the ESP chip the registers are at 4-byte
-	 * instead of 1-byte intervals.
-	 */
-	void (*esp_write8)(struct esp *esp, u8 val, unsigned long reg);
-	u8 (*esp_read8)(struct esp *esp, unsigned long reg);
+    /* Read and write the ESP 8-bit registers.  On some
+     * applications of the ESP chip the registers are at 4-byte
+     * instead of 1-byte intervals.
+     */
+    void (*esp_write8)(struct esp *esp, u8 val, unsigned long reg);
+    u8 (*esp_read8)(struct esp *esp, unsigned long reg);
 
-	/* Map and unmap DMA memory.  Eventually the driver will be
-	 * converted to the generic DMA API as soon as SBUS is able to
-	 * cope with that.  At such time we can remove this.
-	 */
-	dma_addr_t (*map_single)(struct esp *esp, void *buf,
-				 size_t sz, int dir);
-	int (*map_sg)(struct esp *esp, struct scatterlist *sg,
-		      int num_sg, int dir);
-	void (*unmap_single)(struct esp *esp, dma_addr_t addr,
-			     size_t sz, int dir);
-	void (*unmap_sg)(struct esp *esp, struct scatterlist *sg,
-			 int num_sg, int dir);
+    /* Map and unmap DMA memory.  Eventually the driver will be
+     * converted to the generic DMA API as soon as SBUS is able to
+     * cope with that.  At such time we can remove this.
+     */
+    dma_addr_t (*map_single)(struct esp *esp, void *buf,
+                             size_t sz, int dir);
+    int (*map_sg)(struct esp *esp, struct scatterlist *sg,
+                  int num_sg, int dir);
+    void (*unmap_single)(struct esp *esp, dma_addr_t addr,
+                         size_t sz, int dir);
+    void (*unmap_sg)(struct esp *esp, struct scatterlist *sg,
+                     int num_sg, int dir);
 
-	/* Return non-zero if there is an IRQ pending.  Usually this
-	 * status bit lives in the DMA controller sitting in front of
-	 * the ESP.  This has to be accurate or else the ESP interrupt
-	 * handler will not run.
-	 */
-	int (*irq_pending)(struct esp *esp);
+    /* Return non-zero if there is an IRQ pending.  Usually this
+     * status bit lives in the DMA controller sitting in front of
+     * the ESP.  This has to be accurate or else the ESP interrupt
+     * handler will not run.
+     */
+    int (*irq_pending)(struct esp *esp);
 
-	/* Return the maximum allowable size of a DMA transfer for a
-	 * given buffer.
-	 */
-	u32 (*dma_length_limit)(struct esp *esp, u32 dma_addr,
-				u32 dma_len);
+    /* Return the maximum allowable size of a DMA transfer for a
+     * given buffer.
+     */
+    u32 (*dma_length_limit)(struct esp *esp, u32 dma_addr,
+                            u32 dma_len);
 
-	/* Reset the DMA engine entirely.  On return, ESP interrupts
-	 * should be enabled.  Often the interrupt enabling is
-	 * controlled in the DMA engine.
-	 */
-	void (*reset_dma)(struct esp *esp);
+    /* Reset the DMA engine entirely.  On return, ESP interrupts
+     * should be enabled.  Often the interrupt enabling is
+     * controlled in the DMA engine.
+     */
+    void (*reset_dma)(struct esp *esp);
 
-	/* Drain any pending DMA in the DMA engine after a transfer.
-	 * This is for writes to memory.
-	 */
-	void (*dma_drain)(struct esp *esp);
+    /* Drain any pending DMA in the DMA engine after a transfer.
+     * This is for writes to memory.
+     */
+    void (*dma_drain)(struct esp *esp);
 
-	/* Invalidate the DMA engine after a DMA transfer.  */
-	void (*dma_invalidate)(struct esp *esp);
+    /* Invalidate the DMA engine after a DMA transfer.  */
+    void (*dma_invalidate)(struct esp *esp);
 
-	/* Setup an ESP command that will use a DMA transfer.
-	 * The 'esp_count' specifies what transfer length should be
-	 * programmed into the ESP transfer counter registers, whereas
-	 * the 'dma_count' is the length that should be programmed into
-	 * the DMA controller.  Usually they are the same.  If 'write'
-	 * is non-zero, this transfer is a write into memory.  'cmd'
-	 * holds the ESP command that should be issued by calling
-	 * scsi_esp_cmd() at the appropriate time while programming
-	 * the DMA hardware.
-	 */
-	void (*send_dma_cmd)(struct esp *esp, u32 dma_addr, u32 esp_count,
-			     u32 dma_count, int write, u8 cmd);
+    /* Setup an ESP command that will use a DMA transfer.
+     * The 'esp_count' specifies what transfer length should be
+     * programmed into the ESP transfer counter registers, whereas
+     * the 'dma_count' is the length that should be programmed into
+     * the DMA controller.  Usually they are the same.  If 'write'
+     * is non-zero, this transfer is a write into memory.  'cmd'
+     * holds the ESP command that should be issued by calling
+     * scsi_esp_cmd() at the appropriate time while programming
+     * the DMA hardware.
+     */
+    void (*send_dma_cmd)(struct esp *esp, u32 dma_addr, u32 esp_count,
+                         u32 dma_count, int write, u8 cmd);
 
-	/* Return non-zero if the DMA engine is reporting an error
-	 * currently.
-	 */
-	int (*dma_error)(struct esp *esp);
+    /* Return non-zero if the DMA engine is reporting an error
+     * currently.
+     */
+    int (*dma_error)(struct esp *esp);
 };
 
 #define ESP_MAX_MSG_SZ		8
@@ -414,64 +414,64 @@ struct esp_driver_ops {
 #define ESP_RESELECT_TAG_LIMIT	2500
 
 struct esp {
-	void __iomem		*regs;
-	void __iomem		*dma_regs;
+    void __iomem		*regs;
+    void __iomem		*dma_regs;
 
-	const struct esp_driver_ops *ops;
+    const struct esp_driver_ops *ops;
 
-	struct Scsi_Host	*host;
-	void			*dev;
+    struct Scsi_Host	*host;
+    void			*dev;
 
-	struct esp_cmd_entry	*active_cmd;
+    struct esp_cmd_entry	*active_cmd;
 
-	struct list_head	queued_cmds;
-	struct list_head	active_cmds;
+    struct list_head	queued_cmds;
+    struct list_head	active_cmds;
 
-	u8			*command_block;
-	dma_addr_t		command_block_dma;
+    u8			*command_block;
+    dma_addr_t		command_block_dma;
 
-	unsigned int		data_dma_len;
+    unsigned int		data_dma_len;
 
-	/* The following are used to determine the cause of an IRQ. Upon every
-	 * IRQ entry we synchronize these with the hardware registers.
-	 */
-	u8			sreg;
-	u8			seqreg;
-	u8			sreg2;
-	u8			ireg;
+    /* The following are used to determine the cause of an IRQ. Upon every
+     * IRQ entry we synchronize these with the hardware registers.
+     */
+    u8			sreg;
+    u8			seqreg;
+    u8			sreg2;
+    u8			ireg;
 
-	u32			prev_hme_dmacsr;
-	u8			prev_soff;
-	u8			prev_stp;
-	u8			prev_cfg3;
-	u8			__pad;
+    u32			prev_hme_dmacsr;
+    u8			prev_soff;
+    u8			prev_stp;
+    u8			prev_cfg3;
+    u8			__pad;
 
-	struct list_head	esp_cmd_pool;
+    struct list_head	esp_cmd_pool;
 
-	struct esp_target_data	target[ESP_MAX_TARGET];
+    struct esp_target_data	target[ESP_MAX_TARGET];
 
-	int			fifo_cnt;
-	u8			fifo[16];
+    int			fifo_cnt;
+    u8			fifo[16];
 
-	struct esp_event_ent	esp_event_log[ESP_EVENT_LOG_SZ];
-	int			esp_event_cur;
+    struct esp_event_ent	esp_event_log[ESP_EVENT_LOG_SZ];
+    int			esp_event_cur;
 
-	u8			msg_out[ESP_MAX_MSG_SZ];
-	int			msg_out_len;
+    u8			msg_out[ESP_MAX_MSG_SZ];
+    int			msg_out_len;
 
-	u8			msg_in[ESP_MAX_MSG_SZ];
-	int			msg_in_len;
+    u8			msg_in[ESP_MAX_MSG_SZ];
+    int			msg_in_len;
 
-	u8			bursts;
-	u8			config1;
-	u8			config2;
+    u8			bursts;
+    u8			config1;
+    u8			config2;
 
-	u8			scsi_id;
-	u32			scsi_id_mask;
+    u8			scsi_id;
+    u32			scsi_id_mask;
 
-	enum esp_rev		rev;
+    enum esp_rev		rev;
 
-	u32			flags;
+    u32			flags;
 #define ESP_FLAG_DIFFERENTIAL	0x00000001
 #define ESP_FLAG_RESETTING	0x00000002
 #define ESP_FLAG_DOING_SLOWCMD	0x00000004
@@ -479,13 +479,13 @@ struct esp {
 #define ESP_FLAG_QUICKIRQ_CHECK	0x00000010
 #define ESP_FLAG_DISABLE_SYNC	0x00000020
 
-	u8			select_state;
+    u8			select_state;
 #define ESP_SELECT_NONE		0x00 /* Not selecting */
 #define ESP_SELECT_BASIC	0x01 /* Select w/o MSGOUT phase */
 #define ESP_SELECT_MSGOUT	0x02 /* Select with MSGOUT */
 
-	/* When we are not selecting, we are expecting an event.  */
-	u8			event;
+    /* When we are not selecting, we are expecting an event.  */
+    u8			event;
 #define ESP_EVENT_NONE		0x00
 #define ESP_EVENT_CMD_START	0x01
 #define ESP_EVENT_CMD_DONE	0x02
@@ -502,27 +502,27 @@ struct esp {
 #define ESP_EVENT_CHECK_PHASE	0x0d
 #define ESP_EVENT_RESET		0x10
 
-	/* Probed in esp_get_clock_params() */
-	u32			cfact;
-	u32			cfreq;
-	u32			ccycle;
-	u32			ctick;
-	u32			neg_defp;
-	u32			sync_defp;
+    /* Probed in esp_get_clock_params() */
+    u32			cfact;
+    u32			cfreq;
+    u32			ccycle;
+    u32			ctick;
+    u32			neg_defp;
+    u32			sync_defp;
 
-	/* Computed in esp_reset_esp() */
-	u32			max_period;
-	u32			min_period;
-	u32			radelay;
+    /* Computed in esp_reset_esp() */
+    u32			max_period;
+    u32			min_period;
+    u32			radelay;
 
-	/* Slow command state.  */
-	u8			*cmd_bytes_ptr;
-	int			cmd_bytes_left;
+    /* Slow command state.  */
+    u8			*cmd_bytes_ptr;
+    int			cmd_bytes_left;
 
-	struct completion	*eh_reset;
+    struct completion	*eh_reset;
 
-	void			*dma;
-	int			dmarev;
+    void			*dma;
+    int			dmarev;
 };
 
 /* A front-end driver for the ESP chip should do the following in

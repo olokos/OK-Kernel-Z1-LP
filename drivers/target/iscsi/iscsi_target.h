@@ -9,9 +9,9 @@ extern void iscsit_del_tiqn(struct iscsi_tiqn *);
 extern int iscsit_access_np(struct iscsi_np *, struct iscsi_portal_group *);
 extern int iscsit_deaccess_np(struct iscsi_np *, struct iscsi_portal_group *);
 extern struct iscsi_np *iscsit_add_np(struct __kernel_sockaddr_storage *,
-				char *, int);
+                                      char *, int);
 extern int iscsit_reset_np_thread(struct iscsi_np *, struct iscsi_tpg_np *,
-				struct iscsi_portal_group *);
+                                  struct iscsi_portal_group *);
 extern int iscsit_del_np(struct iscsi_np *);
 extern int iscsit_add_reject_from_cmd(u8, int, int, unsigned char *, struct iscsi_cmd *);
 extern int iscsit_logout_closesession(struct iscsi_cmd *, struct iscsi_conn *);

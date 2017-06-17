@@ -49,8 +49,8 @@
 /*  PSDevice hDeviceContext */
 
 BOOL PSbConsiderPowerDown(void *hDeviceContext,
-			  BOOL bCheckRxDMA,
-			  BOOL bCheckCountToWakeUp);
+                          BOOL bCheckRxDMA,
+                          BOOL bCheckCountToWakeUp);
 
 void PSvDisablePowerSaving(void *hDeviceContext);
 void PSvEnablePowerSaving(void *hDeviceContext, WORD wListenInterval);

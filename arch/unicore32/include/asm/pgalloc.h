@@ -34,53 +34,48 @@ extern void free_pgd_slow(struct mm_struct *mm, pgd_t *pgd);
  * Allocate one PTE table.
  */
 static inline pte_t *
-pte_alloc_one_kernel(struct mm_struct *mm, unsigned long addr)
-{
-	pte_t *pte;
+pte_alloc_one_kernel(struct mm_struct *mm, unsigned long addr) {
+    pte_t *pte;
 
-	pte = (pte_t *)__get_free_page(PGALLOC_GFP);
-	if (pte)
-		clean_dcache_area(pte, PTRS_PER_PTE * sizeof(pte_t));
+    pte = (pte_t *)__get_free_page(PGALLOC_GFP);
+    if (pte)
+        clean_dcache_area(pte, PTRS_PER_PTE * sizeof(pte_t));
 
-	return pte;
+    return pte;
 }
 
 static inline pgtable_t
-pte_alloc_one(struct mm_struct *mm, unsigned long addr)
-{
-	struct page *pte;
+pte_alloc_one(struct mm_struct *mm, unsigned long addr) {
+    struct page *pte;
 
-	pte = alloc_pages(PGALLOC_GFP, 0);
-	if (pte) {
-		if (!PageHighMem(pte)) {
-			void *page = page_address(pte);
-			clean_dcache_area(page, PTRS_PER_PTE * sizeof(pte_t));
-		}
-		pgtable_page_ctor(pte);
-	}
+    pte = alloc_pages(PGALLOC_GFP, 0);
+    if (pte) {
+        if (!PageHighMem(pte)) {
+            void *page = page_address(pte);
+            clean_dcache_area(page, PTRS_PER_PTE * sizeof(pte_t));
+        }
+        pgtable_page_ctor(pte);
+    }
 
-	return pte;
+    return pte;
 }
 
 /*
  * Free one PTE table.
  */
-static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-{
-	if (pte)
-		free_page((unsigned long)pte);
+static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte) {
+    if (pte)
+        free_page((unsigned long)pte);
 }
 
-static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
-{
-	pgtable_page_dtor(pte);
-	__free_page(pte);
+static inline void pte_free(struct mm_struct *mm, pgtable_t pte) {
+    pgtable_page_dtor(pte);
+    __free_page(pte);
 }
 
-static inline void __pmd_populate(pmd_t *pmdp, unsigned long pmdval)
-{
-	set_pmd(pmdp, __pmd(pmdval));
-	flush_pmd_entry(pmdp);
+static inline void __pmd_populate(pmd_t *pmdp, unsigned long pmdval) {
+    set_pmd(pmdp, __pmd(pmdval));
+    flush_pmd_entry(pmdp);
 }
 
 /*
@@ -88,22 +83,20 @@ static inline void __pmd_populate(pmd_t *pmdp, unsigned long pmdval)
  * of the mm address space.
  */
 static inline void
-pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmdp, pte_t *ptep)
-{
-	unsigned long pte_ptr = (unsigned long)ptep;
+pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmdp, pte_t *ptep) {
+    unsigned long pte_ptr = (unsigned long)ptep;
 
-	/*
-	 * The pmd must be loaded with the physical
-	 * address of the PTE table
-	 */
-	__pmd_populate(pmdp, __pa(pte_ptr) | _PAGE_KERNEL_TABLE);
+    /*
+     * The pmd must be loaded with the physical
+     * address of the PTE table
+     */
+    __pmd_populate(pmdp, __pa(pte_ptr) | _PAGE_KERNEL_TABLE);
 }
 
 static inline void
-pmd_populate(struct mm_struct *mm, pmd_t *pmdp, pgtable_t ptep)
-{
-	__pmd_populate(pmdp,
-			page_to_pfn(ptep) << PAGE_SHIFT | _PAGE_USER_TABLE);
+pmd_populate(struct mm_struct *mm, pmd_t *pmdp, pgtable_t ptep) {
+    __pmd_populate(pmdp,
+                   page_to_pfn(ptep) << PAGE_SHIFT | _PAGE_USER_TABLE);
 }
 #define pmd_pgtable(pmd) pmd_page(pmd)
 

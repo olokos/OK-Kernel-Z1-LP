@@ -29,9 +29,9 @@
 #define REG_WR      0x0
 
 struct fm_reg_table {
-	u8 opcode;
-	u8 type;
-	u8 *name;
+    u8 opcode;
+    u8 type;
+    u8 *name;
 };
 
 #define STEREO_GET               0
@@ -135,32 +135,32 @@ struct fm_reg_table {
 
 /* SKB helpers */
 struct fm_skb_cb {
-	__u8 fm_op;
-	struct completion *completion;
+    __u8 fm_op;
+    struct completion *completion;
 };
 
 #define fm_cb(skb) ((struct fm_skb_cb *)(skb->cb))
 
 /* FM Channel-8 command message format */
 struct fm_cmd_msg_hdr {
-	__u8 hdr;		/* Logical Channel-8 */
-	__u8 len;		/* Number of bytes follows */
-	__u8 op;		/* FM Opcode */
-	__u8 rd_wr;		/* Read/Write command */
-	__u8 dlen;		/* Length of payload */
+    __u8 hdr;		/* Logical Channel-8 */
+    __u8 len;		/* Number of bytes follows */
+    __u8 op;		/* FM Opcode */
+    __u8 rd_wr;		/* Read/Write command */
+    __u8 dlen;		/* Length of payload */
 } __attribute__ ((packed));
 
 #define FM_CMD_MSG_HDR_SIZE    5	/* sizeof(struct fm_cmd_msg_hdr) */
 
 /* FM Channel-8 event messgage format */
 struct fm_event_msg_hdr {
-	__u8 header;		/* Logical Channel-8 */
-	__u8 len;		/* Number of bytes follows */
-	__u8 status;		/* Event status */
-	__u8 num_fm_hci_cmds;	/* Number of pkts the host allowed to send */
-	__u8 op;		/* FM Opcode */
-	__u8 rd_wr;		/* Read/Write command */
-	__u8 dlen;		/* Length of payload */
+    __u8 header;		/* Logical Channel-8 */
+    __u8 len;		/* Number of bytes follows */
+    __u8 status;		/* Event status */
+    __u8 num_fm_hci_cmds;	/* Number of pkts the host allowed to send */
+    __u8 op;		/* FM Opcode */
+    __u8 rd_wr;		/* Read/Write command */
+    __u8 dlen;		/* Length of payload */
 } __attribute__ ((packed));
 
 #define FM_EVT_MSG_HDR_SIZE     7	/* sizeof(struct fm_event_msg_hdr) */
@@ -373,11 +373,11 @@ int fmc_release(struct fmdev *);
 
 void fmc_update_region_info(struct fmdev *, u8);
 int fmc_send_cmd(struct fmdev *, u8, u16,
-				void *, unsigned int, void *, int *);
+                 void *, unsigned int, void *, int *);
 int fmc_is_rds_data_available(struct fmdev *, struct file *,
-				struct poll_table_struct *);
+                              struct poll_table_struct *);
 int fmc_transfer_rds_from_internal_buff(struct fmdev *, struct file *,
-					u8 __user *, size_t);
+                                        u8 __user *, size_t);
 
 int fmc_set_freq(struct fmdev *, u32);
 int fmc_set_mode(struct fmdev *, u8);

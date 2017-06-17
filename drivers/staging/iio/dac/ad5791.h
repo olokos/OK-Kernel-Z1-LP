@@ -61,9 +61,9 @@
  */
 
 struct ad5791_platform_data {
-	u16				vref_pos_mv;
-	u16				vref_neg_mv;
-	bool				use_rbuf_gain2;
+    u16				vref_pos_mv;
+    u16				vref_neg_mv;
+    bool				use_rbuf_gain2;
 };
 
 /**
@@ -72,7 +72,7 @@ struct ad5791_platform_data {
  */
 
 struct ad5791_chip_info {
-	int (*get_lin_comp)	(unsigned int span);
+    int (*get_lin_comp)	(unsigned int span);
 };
 
 /**
@@ -87,15 +87,15 @@ struct ad5791_chip_info {
  */
 
 struct ad5791_state {
-	struct spi_device		*spi;
-	struct regulator		*reg_vdd;
-	struct regulator		*reg_vss;
-	const struct ad5791_chip_info	*chip_info;
-	unsigned short			vref_mv;
-	unsigned int			vref_neg_mv;
-	unsigned			ctrl;
-	unsigned			pwr_down_mode;
-	bool				pwr_down;
+    struct spi_device		*spi;
+    struct regulator		*reg_vdd;
+    struct regulator		*reg_vss;
+    const struct ad5791_chip_info	*chip_info;
+    unsigned short			vref_mv;
+    unsigned int			vref_neg_mv;
+    unsigned			ctrl;
+    unsigned			pwr_down_mode;
+    bool				pwr_down;
 };
 
 /**
@@ -103,10 +103,10 @@ struct ad5791_state {
  */
 
 enum ad5791_supported_device_ids {
-	ID_AD5760,
-	ID_AD5780,
-	ID_AD5781,
-	ID_AD5791,
+    ID_AD5760,
+    ID_AD5780,
+    ID_AD5781,
+    ID_AD5791,
 };
 
 #endif /* SPI_AD5791_H_ */

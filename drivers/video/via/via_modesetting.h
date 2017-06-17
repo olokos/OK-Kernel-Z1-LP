@@ -34,18 +34,18 @@
 
 
 struct display_timing {
-	u16 hor_total;
-	u16 hor_addr;
-	u16 hor_blank_start;
-	u16 hor_blank_end;
-	u16 hor_sync_start;
-	u16 hor_sync_end;
-	u16 ver_total;
-	u16 ver_addr;
-	u16 ver_blank_start;
-	u16 ver_blank_end;
-	u16 ver_sync_start;
-	u16 ver_sync_end;
+    u16 hor_total;
+    u16 hor_addr;
+    u16 hor_blank_start;
+    u16 hor_blank_end;
+    u16 hor_sync_start;
+    u16 hor_sync_end;
+    u16 ver_total;
+    u16 ver_addr;
+    u16 ver_blank_start;
+    u16 ver_blank_end;
+    u16 ver_sync_start;
+    u16 ver_sync_end;
 };
 
 

@@ -71,14 +71,14 @@
 #define RES_MASK(bits)	((1 << (bits)) - 1)
 
 enum {
-	ad7991,
-	ad7995,
-	ad7999,
-	ad7992,
-	ad7993,
-	ad7994,
-	ad7997,
-	ad7998
+    ad7991,
+    ad7995,
+    ad7999,
+    ad7992,
+    ad7993,
+    ad7994,
+    ad7997,
+    ad7998
 };
 
 struct ad799x_state;
@@ -94,23 +94,23 @@ struct ad799x_state;
  */
 
 struct ad799x_chip_info {
-	struct iio_chan_spec		channel[9];
-	int				num_channels;
-	u16				int_vref_mv;
-	u16				default_config;
-	const struct iio_info		*info;
+    struct iio_chan_spec		channel[9];
+    int				num_channels;
+    u16				int_vref_mv;
+    u16				default_config;
+    const struct iio_info		*info;
 };
 
 struct ad799x_state {
-	struct i2c_client		*client;
-	const struct ad799x_chip_info	*chip_info;
-	size_t				d_size;
-	struct iio_trigger		*trig;
-	struct regulator		*reg;
-	u16				int_vref_mv;
-	unsigned			id;
-	char				*name;
-	u16				config;
+    struct i2c_client		*client;
+    const struct ad799x_chip_info	*chip_info;
+    size_t				d_size;
+    struct iio_trigger		*trig;
+    struct regulator		*reg;
+    u16				int_vref_mv;
+    unsigned			id;
+    char				*name;
+    u16				config;
 };
 
 /*
@@ -118,7 +118,7 @@ struct ad799x_state {
  */
 
 struct ad799x_platform_data {
-	u16				vref_mv;
+    u16				vref_mv;
 };
 
 int ad7997_8_set_scan_mode(struct ad799x_state *st, unsigned mask);
@@ -129,13 +129,11 @@ void ad799x_ring_cleanup(struct iio_dev *indio_dev);
 #else /* CONFIG_AD799X_RING_BUFFER */
 
 static inline int
-ad799x_register_ring_funcs_and_init(struct iio_dev *indio_dev)
-{
-	return 0;
+ad799x_register_ring_funcs_and_init(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void ad799x_ring_cleanup(struct iio_dev *indio_dev)
-{
+static inline void ad799x_ring_cleanup(struct iio_dev *indio_dev) {
 }
 #endif /* CONFIG_AD799X_RING_BUFFER */
 #endif /* _AD799X_H_ */

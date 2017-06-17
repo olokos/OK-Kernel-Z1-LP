@@ -87,28 +87,28 @@ static const int SYSEX_EXTRA_SIZE = sizeof(line6_midi_id) + 4;
 	 Common properties of Line6 devices.
 */
 struct line6_properties {
-	/**
-		 Bit identifying this device in the line6usb driver.
-	*/
-	int device_bit;
+    /**
+    	 Bit identifying this device in the line6usb driver.
+    */
+    int device_bit;
 
-	/**
-		 Card id string (maximum 16 characters).
-		 This can be used to address the device in ALSA programs as
-		 "default:CARD=<id>"
-	*/
-	const char *id;
+    /**
+    	 Card id string (maximum 16 characters).
+    	 This can be used to address the device in ALSA programs as
+    	 "default:CARD=<id>"
+    */
+    const char *id;
 
-	/**
-		 Card short name (maximum 32 characters).
-	*/
-	const char *name;
+    /**
+    	 Card short name (maximum 32 characters).
+    */
+    const char *name;
 
-	/**
-		 Bit vector defining this device's capabilities in the
-		 line6usb driver.
-	*/
-	int capabilities;
+    /**
+    	 Bit vector defining this device's capabilities in the
+    	 line6usb driver.
+    */
+    int capabilities;
 };
 
 /**
@@ -116,122 +116,122 @@ struct line6_properties {
 	 Corresponds to a pair of USB endpoints.
 */
 struct usb_line6 {
-	/**
-		 USB device.
-	*/
-	struct usb_device *usbdev;
+    /**
+    	 USB device.
+    */
+    struct usb_device *usbdev;
 
-	/**
-		 Product id.
-	*/
-	int product;
+    /**
+    	 Product id.
+    */
+    int product;
 
-	/**
-		 Properties.
-	*/
-	const struct line6_properties *properties;
+    /**
+    	 Properties.
+    */
+    const struct line6_properties *properties;
 
-	/**
-		 Interface number.
-	*/
-	int interface_number;
+    /**
+    	 Interface number.
+    */
+    int interface_number;
 
-	/**
-		 Interval (ms).
-	*/
-	int interval;
+    /**
+    	 Interval (ms).
+    */
+    int interval;
 
-	/**
-		 Maximum size of USB packet.
-	*/
-	int max_packet_size;
+    /**
+    	 Maximum size of USB packet.
+    */
+    int max_packet_size;
 
-	/**
-		 Device representing the USB interface.
-	*/
-	struct device *ifcdev;
+    /**
+    	 Device representing the USB interface.
+    */
+    struct device *ifcdev;
 
-	/**
-		 Line6 sound card data structure.
-		 Each device has at least MIDI or PCM.
-	*/
-	struct snd_card *card;
+    /**
+    	 Line6 sound card data structure.
+    	 Each device has at least MIDI or PCM.
+    */
+    struct snd_card *card;
 
-	/**
-		 Line6 PCM device data structure.
-	*/
-	struct snd_line6_pcm *line6pcm;
+    /**
+    	 Line6 PCM device data structure.
+    */
+    struct snd_line6_pcm *line6pcm;
 
-	/**
-		 Line6 MIDI device data structure.
-	*/
-	struct snd_line6_midi *line6midi;
+    /**
+    	 Line6 MIDI device data structure.
+    */
+    struct snd_line6_midi *line6midi;
 
-	/**
-		 USB endpoint for listening to control commands.
-	*/
-	int ep_control_read;
+    /**
+    	 USB endpoint for listening to control commands.
+    */
+    int ep_control_read;
 
-	/**
-		 USB endpoint for writing control commands.
-	*/
-	int ep_control_write;
+    /**
+    	 USB endpoint for writing control commands.
+    */
+    int ep_control_write;
 
-	/**
-		 URB for listening to PODxt Pro control endpoint.
-	*/
-	struct urb *urb_listen;
+    /**
+    	 URB for listening to PODxt Pro control endpoint.
+    */
+    struct urb *urb_listen;
 
-	/**
-		 Buffer for listening to PODxt Pro control endpoint.
-	*/
-	unsigned char *buffer_listen;
+    /**
+    	 Buffer for listening to PODxt Pro control endpoint.
+    */
+    unsigned char *buffer_listen;
 
-	/**
-		 Buffer for message to be processed.
-	*/
-	unsigned char *buffer_message;
+    /**
+    	 Buffer for message to be processed.
+    */
+    unsigned char *buffer_message;
 
-	/**
-		 Length of message to be processed.
-	*/
-	int message_length;
+    /**
+    	 Length of message to be processed.
+    */
+    int message_length;
 };
 
 extern char *line6_alloc_sysex_buffer(struct usb_line6 *line6, int code1,
-				      int code2, int size);
+                                      int code2, int size);
 extern ssize_t line6_nop_read(struct device *dev,
-			      struct device_attribute *attr, char *buf);
+                              struct device_attribute *attr, char *buf);
 extern ssize_t line6_nop_write(struct device *dev,
-			       struct device_attribute *attr,
-			       const char *buf, size_t count);
+                               struct device_attribute *attr,
+                               const char *buf, size_t count);
 extern int line6_read_data(struct usb_line6 *line6, int address, void *data,
-			   size_t datalen);
+                           size_t datalen);
 extern int line6_read_serial_number(struct usb_line6 *line6,
-				    int *serial_number);
+                                    int *serial_number);
 extern int line6_send_program(struct usb_line6 *line6, int value);
 extern int line6_send_raw_message(struct usb_line6 *line6, const char *buffer,
-				  int size);
+                                  int size);
 extern int line6_send_raw_message_async(struct usb_line6 *line6,
-					const char *buffer, int size);
+                                        const char *buffer, int size);
 extern int line6_send_sysex_message(struct usb_line6 *line6,
-				    const char *buffer, int size);
+                                    const char *buffer, int size);
 extern int line6_send_sysex_message_async(struct usb_line6 *line6,
-					  const char *buffer, int size);
+        const char *buffer, int size);
 extern ssize_t line6_set_raw(struct device *dev, struct device_attribute *attr,
-			     const char *buf, size_t count);
+                             const char *buf, size_t count);
 extern void line6_start_timer(struct timer_list *timer, unsigned int msecs,
-			      void (*function) (unsigned long),
-			      unsigned long data);
+                              void (*function) (unsigned long),
+                              unsigned long data);
 extern int line6_transmit_parameter(struct usb_line6 *line6, int param,
-				    int value);
+                                    int value);
 extern int line6_version_request_async(struct usb_line6 *line6);
 extern int line6_write_data(struct usb_line6 *line6, int address, void *data,
-			    size_t datalen);
+                            size_t datalen);
 
 #ifdef CONFIG_LINE6_USB_DUMP_ANY
 extern void line6_write_hexdump(struct usb_line6 *line6, char dir,
-				const unsigned char *buffer, int size);
+                                const unsigned char *buffer, int size);
 #endif
 
 #endif

@@ -25,20 +25,17 @@ void (*pm_power_off)(void);
 
 EXPORT_SYMBOL(pm_power_off);
 
-void machine_restart(char *command)
-{
-	if (_machine_restart)
-		_machine_restart(command);
+void machine_restart(char *command) {
+    if (_machine_restart)
+        _machine_restart(command);
 }
 
-void machine_halt(void)
-{
-	if (_machine_halt)
-		_machine_halt();
+void machine_halt(void) {
+    if (_machine_halt)
+        _machine_halt();
 }
 
-void machine_power_off(void)
-{
-	if (pm_power_off)
-		pm_power_off();
+void machine_power_off(void) {
+    if (pm_power_off)
+        pm_power_off();
 }

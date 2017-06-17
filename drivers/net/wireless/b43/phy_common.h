@@ -7,7 +7,9 @@
 struct b43_wldev;
 
 /* Complex number using 2 32-bit signed integers */
-struct b43_c32 { s32 i, q; };
+struct b43_c32 {
+    s32 i, q;
+};
 
 #define CORDIC_CONVERT(value)	(((value) >= 0) ? \
 				 ((((value) >> 15) + 1) >> 1) : \
@@ -51,23 +53,23 @@ struct b43_c32 { s32 i, q; };
  * @B43_INTERFMODE_AUTOWLAN:	Automatic WLAN Interference Mitigation
  */
 enum b43_interference_mitigation {
-	B43_INTERFMODE_NONE,
-	B43_INTERFMODE_NONWLAN,
-	B43_INTERFMODE_MANUALWLAN,
-	B43_INTERFMODE_AUTOWLAN,
+    B43_INTERFMODE_NONE,
+    B43_INTERFMODE_NONWLAN,
+    B43_INTERFMODE_MANUALWLAN,
+    B43_INTERFMODE_AUTOWLAN,
 };
 
 /* Antenna identifiers */
 enum {
-	B43_ANTENNA0 = 0,	/* Antenna 0 */
-	B43_ANTENNA1 = 1,	/* Antenna 1 */
-	B43_ANTENNA_AUTO0 = 2,	/* Automatic, starting with antenna 0 */
-	B43_ANTENNA_AUTO1 = 3,	/* Automatic, starting with antenna 1 */
-	B43_ANTENNA2 = 4,
-	B43_ANTENNA3 = 8,
+    B43_ANTENNA0 = 0,	/* Antenna 0 */
+    B43_ANTENNA1 = 1,	/* Antenna 1 */
+    B43_ANTENNA_AUTO0 = 2,	/* Automatic, starting with antenna 0 */
+    B43_ANTENNA_AUTO1 = 3,	/* Automatic, starting with antenna 1 */
+    B43_ANTENNA2 = 4,
+    B43_ANTENNA3 = 8,
 
-	B43_ANTENNA_AUTO = B43_ANTENNA_AUTO0,
-	B43_ANTENNA_DEFAULT = B43_ANTENNA_AUTO,
+    B43_ANTENNA_AUTO = B43_ANTENNA_AUTO0,
+    B43_ANTENNA_DEFAULT = B43_ANTENNA_AUTO,
 };
 
 /**
@@ -77,8 +79,8 @@ enum {
  * @B43_TXPWR_RES_DONE:		No more work to do. Everything is done.
  */
 enum b43_txpwr_result {
-	B43_TXPWR_RES_NEED_ADJUST,
-	B43_TXPWR_RES_DONE,
+    B43_TXPWR_RES_NEED_ADJUST,
+    B43_TXPWR_RES_DONE,
 };
 
 /**
@@ -155,39 +157,39 @@ enum b43_txpwr_result {
  * 			Can be NULL, if not required.
  */
 struct b43_phy_operations {
-	/* Initialisation */
-	int (*allocate)(struct b43_wldev *dev);
-	void (*free)(struct b43_wldev *dev);
-	void (*prepare_structs)(struct b43_wldev *dev);
-	int (*prepare_hardware)(struct b43_wldev *dev);
-	int (*init)(struct b43_wldev *dev);
-	void (*exit)(struct b43_wldev *dev);
+    /* Initialisation */
+    int (*allocate)(struct b43_wldev *dev);
+    void (*free)(struct b43_wldev *dev);
+    void (*prepare_structs)(struct b43_wldev *dev);
+    int (*prepare_hardware)(struct b43_wldev *dev);
+    int (*init)(struct b43_wldev *dev);
+    void (*exit)(struct b43_wldev *dev);
 
-	/* Register access */
-	u16 (*phy_read)(struct b43_wldev *dev, u16 reg);
-	void (*phy_write)(struct b43_wldev *dev, u16 reg, u16 value);
-	void (*phy_maskset)(struct b43_wldev *dev, u16 reg, u16 mask, u16 set);
-	u16 (*radio_read)(struct b43_wldev *dev, u16 reg);
-	void (*radio_write)(struct b43_wldev *dev, u16 reg, u16 value);
+    /* Register access */
+    u16 (*phy_read)(struct b43_wldev *dev, u16 reg);
+    void (*phy_write)(struct b43_wldev *dev, u16 reg, u16 value);
+    void (*phy_maskset)(struct b43_wldev *dev, u16 reg, u16 mask, u16 set);
+    u16 (*radio_read)(struct b43_wldev *dev, u16 reg);
+    void (*radio_write)(struct b43_wldev *dev, u16 reg, u16 value);
 
-	/* Radio */
-	bool (*supports_hwpctl)(struct b43_wldev *dev);
-	void (*software_rfkill)(struct b43_wldev *dev, bool blocked);
-	void (*switch_analog)(struct b43_wldev *dev, bool on);
-	int (*switch_channel)(struct b43_wldev *dev, unsigned int new_channel);
-	unsigned int (*get_default_chan)(struct b43_wldev *dev);
-	void (*set_rx_antenna)(struct b43_wldev *dev, int antenna);
-	int (*interf_mitigation)(struct b43_wldev *dev,
-				 enum b43_interference_mitigation new_mode);
+    /* Radio */
+    bool (*supports_hwpctl)(struct b43_wldev *dev);
+    void (*software_rfkill)(struct b43_wldev *dev, bool blocked);
+    void (*switch_analog)(struct b43_wldev *dev, bool on);
+    int (*switch_channel)(struct b43_wldev *dev, unsigned int new_channel);
+    unsigned int (*get_default_chan)(struct b43_wldev *dev);
+    void (*set_rx_antenna)(struct b43_wldev *dev, int antenna);
+    int (*interf_mitigation)(struct b43_wldev *dev,
+                             enum b43_interference_mitigation new_mode);
 
-	/* Transmission power adjustment */
-	enum b43_txpwr_result (*recalc_txpower)(struct b43_wldev *dev,
-						bool ignore_tssi);
-	void (*adjust_txpower)(struct b43_wldev *dev);
+    /* Transmission power adjustment */
+    enum b43_txpwr_result (*recalc_txpower)(struct b43_wldev *dev,
+                                            bool ignore_tssi);
+    void (*adjust_txpower)(struct b43_wldev *dev);
 
-	/* Misc */
-	void (*pwork_15sec)(struct b43_wldev *dev);
-	void (*pwork_60sec)(struct b43_wldev *dev);
+    /* Misc */
+    void (*pwork_15sec)(struct b43_wldev *dev);
+    void (*pwork_60sec)(struct b43_wldev *dev);
 };
 
 struct b43_phy_a;
@@ -198,84 +200,84 @@ struct b43_phy_ht;
 struct b43_phy_lcn;
 
 struct b43_phy {
-	/* Hardware operation callbacks. */
-	const struct b43_phy_operations *ops;
+    /* Hardware operation callbacks. */
+    const struct b43_phy_operations *ops;
 
-	/* Most hardware context information is stored in the standard-
-	 * specific data structures pointed to by the pointers below.
-	 * Only one of them is valid (the currently enabled PHY). */
+    /* Most hardware context information is stored in the standard-
+     * specific data structures pointed to by the pointers below.
+     * Only one of them is valid (the currently enabled PHY). */
 #ifdef CONFIG_B43_DEBUG
-	/* No union for debug build to force NULL derefs in buggy code. */
-	struct {
+    /* No union for debug build to force NULL derefs in buggy code. */
+    struct {
 #else
-	union {
+    union {
 #endif
-		/* A-PHY specific information */
-		struct b43_phy_a *a;
-		/* G-PHY specific information */
-		struct b43_phy_g *g;
-		/* N-PHY specific information */
-		struct b43_phy_n *n;
-		/* LP-PHY specific information */
-		struct b43_phy_lp *lp;
-		/* HT-PHY specific information */
-		struct b43_phy_ht *ht;
-		/* LCN-PHY specific information */
-		struct b43_phy_lcn *lcn;
-	};
+        /* A-PHY specific information */
+        struct b43_phy_a *a;
+        /* G-PHY specific information */
+        struct b43_phy_g *g;
+        /* N-PHY specific information */
+        struct b43_phy_n *n;
+        /* LP-PHY specific information */
+        struct b43_phy_lp *lp;
+        /* HT-PHY specific information */
+        struct b43_phy_ht *ht;
+        /* LCN-PHY specific information */
+        struct b43_phy_lcn *lcn;
+    };
 
-	/* Band support flags. */
-	bool supports_2ghz;
-	bool supports_5ghz;
+    /* Band support flags. */
+    bool supports_2ghz;
+    bool supports_5ghz;
 
-	/* HT info */
-	bool is_40mhz;
+    /* HT info */
+    bool is_40mhz;
 
-	/* GMODE bit enabled? */
-	bool gmode;
+    /* GMODE bit enabled? */
+    bool gmode;
 
-	/* Analog Type */
-	u8 analog;
-	/* B43_PHYTYPE_ */
-	u8 type;
-	/* PHY revision number. */
-	u8 rev;
+    /* Analog Type */
+    u8 analog;
+    /* B43_PHYTYPE_ */
+    u8 type;
+    /* PHY revision number. */
+    u8 rev;
 
-	/* Count writes since last read */
-	u8 writes_counter;
+    /* Count writes since last read */
+    u8 writes_counter;
 
-	/* Radio versioning */
-	u16 radio_manuf;	/* Radio manufacturer */
-	u16 radio_ver;		/* Radio version */
-	u8 radio_rev;		/* Radio revision */
+    /* Radio versioning */
+    u16 radio_manuf;	/* Radio manufacturer */
+    u16 radio_ver;		/* Radio version */
+    u8 radio_rev;		/* Radio revision */
 
-	/* Software state of the radio */
-	bool radio_on;
+    /* Software state of the radio */
+    bool radio_on;
 
-	/* Desired TX power level (in dBm).
-	 * This is set by the user and adjusted in b43_phy_xmitpower(). */
-	int desired_txpower;
+    /* Desired TX power level (in dBm).
+     * This is set by the user and adjusted in b43_phy_xmitpower(). */
+    int desired_txpower;
 
-	/* Hardware Power Control enabled? */
-	bool hardware_power_control;
+    /* Hardware Power Control enabled? */
+    bool hardware_power_control;
 
-	/* The time (in absolute jiffies) when the next TX power output
-	 * check is needed. */
-	unsigned long next_txpwr_check_time;
+    /* The time (in absolute jiffies) when the next TX power output
+     * check is needed. */
+    unsigned long next_txpwr_check_time;
 
-	/* Current channel */
-	unsigned int channel;
-	u16 channel_freq;
-	enum nl80211_channel_type channel_type;
+    /* Current channel */
+    unsigned int channel;
+    u16 channel_freq;
+    enum nl80211_channel_type channel_type;
 
-	/* PHY TX errors counter. */
-	atomic_t txerr_cnt;
+    /* PHY TX errors counter. */
+    atomic_t txerr_cnt;
 
 #ifdef CONFIG_B43_DEBUG
-	/* PHY registers locked (w.r.t. firmware) */
-	bool phy_locked;
-	/* Radio registers locked (w.r.t. firmware) */
-	bool radio_locked;
+    /* PHY registers locked (w.r.t. firmware) */
+    bool phy_locked;
+    /* Radio registers locked (w.r.t. firmware) */
+    bool radio_locked;
 #endif /* B43_DEBUG */
 };
 
@@ -417,8 +419,8 @@ void b43_phy_txpower_check(struct b43_wldev *dev, unsigned int flags);
  *                         TSSI did not change.
  */
 enum b43_phy_txpower_check_flags {
-	B43_TXPWR_IGNORE_TIME		= (1 << 0),
-	B43_TXPWR_IGNORE_TSSI		= (1 << 1),
+    B43_TXPWR_IGNORE_TIME		= (1 << 0),
+    B43_TXPWR_IGNORE_TSSI		= (1 << 1),
 };
 
 struct work_struct;

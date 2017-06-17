@@ -17,12 +17,10 @@ extern void synchronise_count_slave(void);
 
 #else
 
-static inline void synchronise_count_master(void)
-{
+static inline void synchronise_count_master(void) {
 }
 
-static inline void synchronise_count_slave(void)
-{
+static inline void synchronise_count_slave(void) {
 }
 
 #endif

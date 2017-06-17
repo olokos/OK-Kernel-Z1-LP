@@ -87,40 +87,40 @@ typedef u64 __bitwise v64;
 typedef u32 __bitwise v32;
 
 struct fsl_dma_ld_hw {
-	v64 src_addr;
-	v64 dst_addr;
-	v64 next_ln_addr;
-	v32 count;
-	v32 reserve;
+    v64 src_addr;
+    v64 dst_addr;
+    v64 next_ln_addr;
+    v32 count;
+    v32 reserve;
 } __attribute__((aligned(32)));
 
 struct fsl_desc_sw {
-	struct fsl_dma_ld_hw hw;
-	struct list_head node;
-	struct list_head tx_list;
-	struct dma_async_tx_descriptor async_tx;
+    struct fsl_dma_ld_hw hw;
+    struct list_head node;
+    struct list_head tx_list;
+    struct dma_async_tx_descriptor async_tx;
 } __attribute__((aligned(32)));
 
 struct fsldma_chan_regs {
-	u32 mr;		/* 0x00 - Mode Register */
-	u32 sr;		/* 0x04 - Status Register */
-	u64 cdar;	/* 0x08 - Current descriptor address register */
-	u64 sar;	/* 0x10 - Source Address Register */
-	u64 dar;	/* 0x18 - Destination Address Register */
-	u32 bcr;	/* 0x20 - Byte Count Register */
-	u64 ndar;	/* 0x24 - Next Descriptor Address Register */
+    u32 mr;		/* 0x00 - Mode Register */
+    u32 sr;		/* 0x04 - Status Register */
+    u64 cdar;	/* 0x08 - Current descriptor address register */
+    u64 sar;	/* 0x10 - Source Address Register */
+    u64 dar;	/* 0x18 - Destination Address Register */
+    u32 bcr;	/* 0x20 - Byte Count Register */
+    u64 ndar;	/* 0x24 - Next Descriptor Address Register */
 };
 
 struct fsldma_chan;
 #define FSL_DMA_MAX_CHANS_PER_DEVICE 4
 
 struct fsldma_device {
-	void __iomem *regs;	/* DGSR register base */
-	struct device *dev;
-	struct dma_device common;
-	struct fsldma_chan *chan[FSL_DMA_MAX_CHANS_PER_DEVICE];
-	u32 feature;		/* The same as DMA channels */
-	int irq;		/* Channel IRQ */
+    void __iomem *regs;	/* DGSR register base */
+    struct device *dev;
+    struct dma_device common;
+    struct fsldma_chan *chan[FSL_DMA_MAX_CHANS_PER_DEVICE];
+    u32 feature;		/* The same as DMA channels */
+    int irq;		/* Channel IRQ */
 };
 
 /* Define macros for fsldma_chan->feature property */
@@ -135,25 +135,25 @@ struct fsldma_device {
 #define FSL_DMA_CHAN_START_EXT	0x00002000
 
 struct fsldma_chan {
-	char name[8];			/* Channel name */
-	struct fsldma_chan_regs __iomem *regs;
-	spinlock_t desc_lock;		/* Descriptor operation lock */
-	struct list_head ld_pending;	/* Link descriptors queue */
-	struct list_head ld_running;	/* Link descriptors queue */
-	struct dma_chan common;		/* DMA common channel */
-	struct dma_pool *desc_pool;	/* Descriptors pool */
-	struct device *dev;		/* Channel device */
-	int irq;			/* Channel IRQ */
-	int id;				/* Raw id of this channel */
-	struct tasklet_struct tasklet;
-	u32 feature;
-	bool idle;			/* DMA controller is idle */
+    char name[8];			/* Channel name */
+    struct fsldma_chan_regs __iomem *regs;
+    spinlock_t desc_lock;		/* Descriptor operation lock */
+    struct list_head ld_pending;	/* Link descriptors queue */
+    struct list_head ld_running;	/* Link descriptors queue */
+    struct dma_chan common;		/* DMA common channel */
+    struct dma_pool *desc_pool;	/* Descriptors pool */
+    struct device *dev;		/* Channel device */
+    int irq;			/* Channel IRQ */
+    int id;				/* Raw id of this channel */
+    struct tasklet_struct tasklet;
+    u32 feature;
+    bool idle;			/* DMA controller is idle */
 
-	void (*toggle_ext_pause)(struct fsldma_chan *fsl_chan, int enable);
-	void (*toggle_ext_start)(struct fsldma_chan *fsl_chan, int enable);
-	void (*set_src_loop_size)(struct fsldma_chan *fsl_chan, int size);
-	void (*set_dst_loop_size)(struct fsldma_chan *fsl_chan, int size);
-	void (*set_request_count)(struct fsldma_chan *fsl_chan, int size);
+    void (*toggle_ext_pause)(struct fsldma_chan *fsl_chan, int enable);
+    void (*toggle_ext_start)(struct fsldma_chan *fsl_chan, int enable);
+    void (*set_src_loop_size)(struct fsldma_chan *fsl_chan, int size);
+    void (*set_dst_loop_size)(struct fsldma_chan *fsl_chan, int size);
+    void (*set_request_count)(struct fsldma_chan *fsl_chan, int size);
 };
 
 #define to_fsl_chan(chan) container_of(chan, struct fsldma_chan, common)
@@ -161,29 +161,25 @@ struct fsldma_chan {
 #define tx_to_fsl_desc(tx) container_of(tx, struct fsl_desc_sw, async_tx)
 
 #ifndef __powerpc64__
-static u64 in_be64(const u64 __iomem *addr)
-{
-	return ((u64)in_be32((u32 __iomem *)addr) << 32) |
-		(in_be32((u32 __iomem *)addr + 1));
+static u64 in_be64(const u64 __iomem *addr) {
+    return ((u64)in_be32((u32 __iomem *)addr) << 32) |
+           (in_be32((u32 __iomem *)addr + 1));
 }
 
-static void out_be64(u64 __iomem *addr, u64 val)
-{
-	out_be32((u32 __iomem *)addr, val >> 32);
-	out_be32((u32 __iomem *)addr + 1, (u32)val);
+static void out_be64(u64 __iomem *addr, u64 val) {
+    out_be32((u32 __iomem *)addr, val >> 32);
+    out_be32((u32 __iomem *)addr + 1, (u32)val);
 }
 
 /* There is no asm instructions for 64 bits reverse loads and stores */
-static u64 in_le64(const u64 __iomem *addr)
-{
-	return ((u64)in_le32((u32 __iomem *)addr + 1) << 32) |
-		(in_le32((u32 __iomem *)addr));
+static u64 in_le64(const u64 __iomem *addr) {
+    return ((u64)in_le32((u32 __iomem *)addr + 1) << 32) |
+           (in_le32((u32 __iomem *)addr));
 }
 
-static void out_le64(u64 __iomem *addr, u64 val)
-{
-	out_le32((u32 __iomem *)addr + 1, val >> 32);
-	out_le32((u32 __iomem *)addr, (u32)val);
+static void out_le64(u64 __iomem *addr, u64 val) {
+    out_le32((u32 __iomem *)addr + 1, val >> 32);
+    out_le32((u32 __iomem *)addr, (u32)val);
 }
 #endif
 

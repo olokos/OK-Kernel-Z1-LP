@@ -5,39 +5,40 @@
 
 #define xchg(ptr,x) ((__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
 
-struct __xchg_dummy { unsigned long a[100]; };
+struct __xchg_dummy {
+    unsigned long a[100];
+};
 #define __xg(x) ((volatile struct __xchg_dummy *)(x))
 
-static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size)
-{
-  unsigned long tmp, flags;
+static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int size) {
+    unsigned long tmp, flags;
 
-  local_irq_save(flags);
+    local_irq_save(flags);
 
-  switch (size) {
-  case 1:
-    __asm__ __volatile__
-    ("mov.b %2,%0\n\t"
-     "mov.b %1,%2"
-    : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
-    break;
-  case 2:
-    __asm__ __volatile__
-    ("mov.w %2,%0\n\t"
-     "mov.w %1,%2"
-    : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
-    break;
-  case 4:
-    __asm__ __volatile__
-    ("mov.l %2,%0\n\t"
-     "mov.l %1,%2"
-    : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
-    break;
-  default:
-    tmp = 0;	  
-  }
-  local_irq_restore(flags);
-  return tmp;
+    switch (size) {
+    case 1:
+        __asm__ __volatile__
+        ("mov.b %2,%0\n\t"
+         "mov.b %1,%2"
+         : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
+        break;
+    case 2:
+        __asm__ __volatile__
+        ("mov.w %2,%0\n\t"
+         "mov.w %1,%2"
+         : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
+        break;
+    case 4:
+        __asm__ __volatile__
+        ("mov.l %2,%0\n\t"
+         "mov.l %1,%2"
+         : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
+        break;
+    default:
+        tmp = 0;
+    }
+    local_irq_restore(flags);
+    return tmp;
 }
 
 #include <asm-generic/cmpxchg-local.h>

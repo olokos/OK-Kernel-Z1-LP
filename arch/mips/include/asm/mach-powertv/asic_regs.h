@@ -22,13 +22,13 @@
 
 /* ASIC types */
 enum asic_type {
-	ASIC_UNKNOWN,
-	ASIC_ZEUS,
-	ASIC_CALLIOPE,
-	ASIC_CRONUS,
-	ASIC_CRONUSLITE,
-	ASIC_GAIA,
-	ASICS			/* Number of supported ASICs */
+    ASIC_UNKNOWN,
+    ASIC_ZEUS,
+    ASIC_CALLIOPE,
+    ASIC_CRONUS,
+    ASIC_CRONUSLITE,
+    ASIC_GAIA,
+    ASICS			/* Number of supported ASICs */
 };
 
 /* hardcoded values read from Chip Version registers */
@@ -56,8 +56,8 @@ enum asic_type {
 
 /* ASIC register enumeration */
 union register_map_entry {
-	unsigned long phys;
-	u32 *virt;
+    unsigned long phys;
+    u32 *virt;
 };
 
 #define REGISTER_MAP_ELEMENT(x) union register_map_entry x;
@@ -74,8 +74,7 @@ struct register_map {
  * Only adds the base to non-zero physical addresses
  */
 static inline void register_map_offset_phys(struct register_map *map,
-	unsigned long offset)
-{
+        unsigned long offset) {
 #define REGISTER_MAP_ELEMENT(x)		do {				\
 		if (map->x.phys != 0)					\
 			map->x.phys += offset;				\
@@ -89,8 +88,7 @@ static inline void register_map_offset_phys(struct register_map *map,
  * register_map_virtualize - Convert &register_map to virtual addresses
  * @map:	Pointer to &register_map to virtualize
  */
-static inline void register_map_virtualize(struct register_map *map)
-{
+static inline void register_map_virtualize(struct register_map *map) {
 #define REGISTER_MAP_ELEMENT(x)		do {				\
 		map->x.virt = (!map->x.phys) ? NULL :			\
 			UNCAC_ADDR(phys_to_virt(map->x.phys));		\

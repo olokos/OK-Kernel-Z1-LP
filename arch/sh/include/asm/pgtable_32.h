@@ -96,9 +96,8 @@
 #define _PAGE_PCC_MASK	0xe0000001
 
 /* copy the ptea attributes */
-static inline unsigned long copy_ptea_attributes(unsigned long x)
-{
-	return	((x >> 28) & 0xe) | (x & 0x1);
+static inline unsigned long copy_ptea_attributes(unsigned long x) {
+    return	((x >> 28) & 0xe) | (x & 0x1);
 }
 #endif
 
@@ -300,11 +299,10 @@ static inline unsigned long copy_ptea_attributes(unsigned long x)
  * hook is made available.
  */
 #ifdef CONFIG_X2TLB
-static inline void set_pte(pte_t *ptep, pte_t pte)
-{
-	ptep->pte_high = pte.pte_high;
-	smp_wmb();
-	ptep->pte_low = pte.pte_low;
+static inline void set_pte(pte_t *ptep, pte_t pte) {
+    ptep->pte_high = pte.pte_high;
+    smp_wmb();
+    ptep->pte_low = pte.pte_low;
 }
 #else
 #define set_pte(pteptr, pteval) (*(pteptr) = pteval)
@@ -393,16 +391,15 @@ PTE_BIT_FUNC(low, mkspecial, |= _PAGE_SPECIAL);
  */
 #define mk_pte(page, pgprot)	pfn_pte(page_to_pfn(page), (pgprot))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte.pte_low &= _PAGE_CHG_MASK;
-	pte.pte_low |= pgprot_val(newprot);
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte.pte_low &= _PAGE_CHG_MASK;
+    pte.pte_low |= pgprot_val(newprot);
 
 #ifdef CONFIG_X2TLB
-	pte.pte_high |= pgprot_val(newprot) >> 32;
+    pte.pte_high |= pgprot_val(newprot) >> 32;
 #endif
 
-	return pte;
+    return pte;
 }
 
 #define pmd_page_vaddr(pmd)	((unsigned long)pmd_val(pmd))

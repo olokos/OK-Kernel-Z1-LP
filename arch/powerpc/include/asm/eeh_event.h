@@ -27,8 +27,8 @@
  * callback.
  */
 struct eeh_event {
-	struct list_head	list;	/* to form event queue	*/
-	struct eeh_dev		*edev;	/* EEH device		*/
+    struct list_head	list;	/* to form event queue	*/
+    struct eeh_dev		*edev;	/* EEH device		*/
 };
 
 int eeh_send_failure_event(struct eeh_dev *edev);

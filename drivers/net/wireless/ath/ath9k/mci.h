@@ -84,46 +84,46 @@
 			 _mci->num_hid + _mci->num_pan + _mci->num_sco)
 
 struct ath_mci_profile_info {
-	u8 type;
-	u8 conn_handle;
-	bool start;
-	bool master;
-	bool edr;
-	u8 voice_type;
-	u16 T;		/* Voice: Tvoice, HID: Tsniff,        in slots */
-	u8 W;		/* Voice: Wvoice, HID: Sniff timeout, in slots */
-	u8 A;		/*		  HID: Sniff attempt, in slots */
-	struct list_head list;
+    u8 type;
+    u8 conn_handle;
+    bool start;
+    bool master;
+    bool edr;
+    u8 voice_type;
+    u16 T;		/* Voice: Tvoice, HID: Tsniff,        in slots */
+    u8 W;		/* Voice: Wvoice, HID: Sniff timeout, in slots */
+    u8 A;		/*		  HID: Sniff attempt, in slots */
+    struct list_head list;
 };
 
 struct ath_mci_profile_status {
-	bool is_critical;
-	bool is_link;
-	u8 conn_handle;
+    bool is_critical;
+    bool is_link;
+    u8 conn_handle;
 };
 
 struct ath_mci_profile {
-	struct list_head info;
-	DECLARE_BITMAP(status, ATH_MCI_MAX_PROFILE);
-	u16 aggr_limit;
-	u8 num_mgmt;
-	u8 num_sco;
-	u8 num_a2dp;
-	u8 num_hid;
-	u8 num_pan;
-	u8 num_other_acl;
-	u8 num_bdr;
+    struct list_head info;
+    DECLARE_BITMAP(status, ATH_MCI_MAX_PROFILE);
+    u16 aggr_limit;
+    u8 num_mgmt;
+    u8 num_sco;
+    u8 num_a2dp;
+    u8 num_hid;
+    u8 num_pan;
+    u8 num_other_acl;
+    u8 num_bdr;
 };
 
 struct ath_mci_buf {
-	void *bf_addr;		/* virtual addr of desc */
-	dma_addr_t bf_paddr;    /* physical addr of buffer */
-	u32 bf_len;		/* len of data */
+    void *bf_addr;		/* virtual addr of desc */
+    dma_addr_t bf_paddr;    /* physical addr of buffer */
+    u32 bf_len;		/* len of data */
 };
 
 struct ath_mci_coex {
-	struct ath_mci_buf sched_buf;
-	struct ath_mci_buf gpm_buf;
+    struct ath_mci_buf sched_buf;
+    struct ath_mci_buf gpm_buf;
 };
 
 void ath_mci_flush_profile(struct ath_mci_profile *mci);

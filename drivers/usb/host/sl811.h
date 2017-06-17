@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Psion Teklogix
  * Copyright (C) 2004 David Brownell
- * Copyright (C) 2001 Cypress Semiconductor Inc. 
+ * Copyright (C) 2001 Cypress Semiconductor Inc.
  */
 
 /*
@@ -118,74 +118,72 @@
 #define	PERIODIC_SIZE		(1 << LOG2_PERIODIC_SIZE)
 
 struct sl811 {
-	spinlock_t		lock;
-	void __iomem		*addr_reg;
-	void __iomem		*data_reg;
-	struct sl811_platform_data	*board;
-	struct proc_dir_entry	*pde;
+    spinlock_t		lock;
+    void __iomem		*addr_reg;
+    void __iomem		*data_reg;
+    struct sl811_platform_data	*board;
+    struct proc_dir_entry	*pde;
 
-	unsigned long		stat_insrmv;
-	unsigned long		stat_wake;
-	unsigned long		stat_sof;
-	unsigned long		stat_a;
-	unsigned long		stat_b;
-	unsigned long		stat_lost;
-	unsigned long		stat_overrun;
+    unsigned long		stat_insrmv;
+    unsigned long		stat_wake;
+    unsigned long		stat_sof;
+    unsigned long		stat_a;
+    unsigned long		stat_b;
+    unsigned long		stat_lost;
+    unsigned long		stat_overrun;
 
-	/* sw model */
-	struct timer_list	timer;
-	struct sl811h_ep	*next_periodic;
-	struct sl811h_ep	*next_async;
+    /* sw model */
+    struct timer_list	timer;
+    struct sl811h_ep	*next_periodic;
+    struct sl811h_ep	*next_async;
 
-	struct sl811h_ep	*active_a;
-	unsigned long		jiffies_a;
-	struct sl811h_ep	*active_b;
-	unsigned long		jiffies_b;
+    struct sl811h_ep	*active_a;
+    unsigned long		jiffies_a;
+    struct sl811h_ep	*active_b;
+    unsigned long		jiffies_b;
 
-	u32			port1;
-	u8			ctrl1, ctrl2, irq_enable;
-	u16			frame;
+    u32			port1;
+    u8			ctrl1, ctrl2, irq_enable;
+    u16			frame;
 
-	/* async schedule: control, bulk */
-	struct list_head	async;
+    /* async schedule: control, bulk */
+    struct list_head	async;
 
-	/* periodic schedule: interrupt, iso */
-	u16			load[PERIODIC_SIZE];
-	struct sl811h_ep	*periodic[PERIODIC_SIZE];
-	unsigned		periodic_count;
+    /* periodic schedule: interrupt, iso */
+    u16			load[PERIODIC_SIZE];
+    struct sl811h_ep	*periodic[PERIODIC_SIZE];
+    unsigned		periodic_count;
 };
 
-static inline struct sl811 *hcd_to_sl811(struct usb_hcd *hcd)
-{
-	return (struct sl811 *) (hcd->hcd_priv);
+static inline struct sl811 *hcd_to_sl811(struct usb_hcd *hcd) {
+    return (struct sl811 *) (hcd->hcd_priv);
 }
 
-static inline struct usb_hcd *sl811_to_hcd(struct sl811 *sl811)
-{
-	return container_of((void *) sl811, struct usb_hcd, hcd_priv);
+static inline struct usb_hcd *sl811_to_hcd(struct sl811 *sl811) {
+    return container_of((void *) sl811, struct usb_hcd, hcd_priv);
 }
 
 struct sl811h_ep {
-	struct usb_host_endpoint *hep;
-	struct usb_device	*udev;
+    struct usb_host_endpoint *hep;
+    struct usb_device	*udev;
 
-	u8			defctrl;
-	u8			maxpacket;
-	u8			epnum;
-	u8			nextpid;
+    u8			defctrl;
+    u8			maxpacket;
+    u8			epnum;
+    u8			nextpid;
 
-	u16			error_count;
-	u16			nak_count;
-	u16			length;		/* of current packet */
+    u16			error_count;
+    u16			nak_count;
+    u16			length;		/* of current packet */
 
-	/* periodic schedule */
-	u16			period;
-	u16			branch;
-	u16			load;
-	struct sl811h_ep	*next;
+    /* periodic schedule */
+    u16			period;
+    u16			branch;
+    u16			load;
+    struct sl811h_ep	*next;
 
-	/* async schedule */
-	struct list_head	schedule;
+    /* async schedule */
+    struct list_head	schedule;
 };
 
 /*-------------------------------------------------------------------------*/
@@ -194,50 +192,46 @@ struct sl811h_ep {
  * NOTE:  caller must hold sl811->lock.
  */
 
-static inline u8 sl811_read(struct sl811 *sl811, int reg)
-{
-	writeb(reg, sl811->addr_reg);
-	return readb(sl811->data_reg);
+static inline u8 sl811_read(struct sl811 *sl811, int reg) {
+    writeb(reg, sl811->addr_reg);
+    return readb(sl811->data_reg);
 }
 
-static inline void sl811_write(struct sl811 *sl811, int reg, u8 val)
-{
-	writeb(reg, sl811->addr_reg);
-	writeb(val, sl811->data_reg);
-}
-
-static inline void
-sl811_write_buf(struct sl811 *sl811, int addr, const void *buf, size_t count)
-{
-	const u8	*data;
-	void __iomem	*data_reg;
-
-	if (!count)
-		return;
-	writeb(addr, sl811->addr_reg);
-
-	data = buf;
-	data_reg = sl811->data_reg;
-	do {
-		writeb(*data++, data_reg);
-	} while (--count);
+static inline void sl811_write(struct sl811 *sl811, int reg, u8 val) {
+    writeb(reg, sl811->addr_reg);
+    writeb(val, sl811->data_reg);
 }
 
 static inline void
-sl811_read_buf(struct sl811 *sl811, int addr, void *buf, size_t count)
-{
-	u8 		*data;
-	void __iomem	*data_reg;
+sl811_write_buf(struct sl811 *sl811, int addr, const void *buf, size_t count) {
+    const u8	*data;
+    void __iomem	*data_reg;
 
-	if (!count)
-		return;
-	writeb(addr, sl811->addr_reg);
+    if (!count)
+        return;
+    writeb(addr, sl811->addr_reg);
 
-	data = buf;
-	data_reg = sl811->data_reg;
-	do {
-		*data++ = readb(data_reg);
-	} while (--count);
+    data = buf;
+    data_reg = sl811->data_reg;
+    do {
+        writeb(*data++, data_reg);
+    } while (--count);
+}
+
+static inline void
+sl811_read_buf(struct sl811 *sl811, int addr, void *buf, size_t count) {
+    u8 		*data;
+    void __iomem	*data_reg;
+
+    if (!count)
+        return;
+    writeb(addr, sl811->addr_reg);
+
+    data = buf;
+    data_reg = sl811->data_reg;
+    do {
+        *data++ = readb(data_reg);
+    } while (--count);
 }
 
 /*-------------------------------------------------------------------------*/

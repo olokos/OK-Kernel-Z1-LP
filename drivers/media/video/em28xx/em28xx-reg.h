@@ -48,7 +48,7 @@
 #define EM28XX_CHIPCFG2_TS_PACKETSIZE_752	0x03
 
 
-	/* GPIO/GPO registers */
+/* GPIO/GPO registers */
 #define EM2880_R04_GPO	0x04    /* em2880-em2883 only */
 #define EM28XX_R08_GPIO	0x08	/* em2820 or upper */
 
@@ -163,11 +163,11 @@
 #define EM28XX_R43_AC97BUSY	0x43
 
 #define EM28XX_R45_IR		0x45
-	/* 0x45  bit 7    - parity bit
-		 bits 6-0 - count
-	   0x46  IR brand
-	   0x47  IR data
-	 */
+/* 0x45  bit 7    - parity bit
+	 bits 6-0 - count
+   0x46  IR brand
+   0x47  IR data
+ */
 
 /* em2874 registers */
 #define EM2874_R50_IR_CONFIG    0x50
@@ -197,17 +197,17 @@
 
 /* FIXME: Need to be populated with the other chip ID's */
 enum em28xx_chip_id {
-	CHIP_ID_EM2800 = 7,
-	CHIP_ID_EM2710 = 17,
-	CHIP_ID_EM2820 = 18,	/* Also used by some em2710 */
-	CHIP_ID_EM2840 = 20,
-	CHIP_ID_EM2750 = 33,
-	CHIP_ID_EM2860 = 34,
-	CHIP_ID_EM2870 = 35,
-	CHIP_ID_EM2883 = 36,
-	CHIP_ID_EM2874 = 65,
-	CHIP_ID_EM2884 = 68,
-	CHIP_ID_EM28174 = 113,
+    CHIP_ID_EM2800 = 7,
+    CHIP_ID_EM2710 = 17,
+    CHIP_ID_EM2820 = 18,	/* Also used by some em2710 */
+    CHIP_ID_EM2840 = 20,
+    CHIP_ID_EM2750 = 33,
+    CHIP_ID_EM2860 = 34,
+    CHIP_ID_EM2870 = 35,
+    CHIP_ID_EM2883 = 36,
+    CHIP_ID_EM2874 = 65,
+    CHIP_ID_EM2884 = 68,
+    CHIP_ID_EM28174 = 113,
 };
 
 /*
@@ -217,12 +217,12 @@ enum em28xx_chip_id {
 /* Standard AC97 registers */
 #define AC97_RESET               0x00
 
-	/* Output volumes */
+/* Output volumes */
 #define AC97_MASTER_VOL          0x02
 #define AC97_LINE_LEVEL_VOL      0x04	/* Some devices use for headphones */
 #define AC97_MASTER_MONO_VOL     0x06
 
-	/* Input volumes */
+/* Input volumes */
 #define AC97_PC_BEEP_VOL         0x0a
 #define AC97_PHONE_VOL           0x0c
 #define AC97_MIC_VOL             0x0e
@@ -232,11 +232,11 @@ enum em28xx_chip_id {
 #define AC97_AUX_VOL             0x16
 #define AC97_PCM_OUT_VOL         0x18
 
-	/* capture registers */
+/* capture registers */
 #define AC97_RECORD_SELECT       0x1a
 #define AC97_RECORD_GAIN         0x1c
 
-	/* control registers */
+/* control registers */
 #define AC97_GENERAL_PURPOSE     0x20
 #define AC97_3D_CTRL             0x22
 #define AC97_AUD_INT_AND_PAG     0x24
@@ -252,14 +252,14 @@ enum em28xx_chip_id {
 #define AC97_PCM_OUT_LFE_SRATE   0x30
 #define AC97_PCM_IN_SRATE        0x32
 
-	/* For devices with more than 2 channels, extra output volumes */
+/* For devices with more than 2 channels, extra output volumes */
 #define AC97_LFE_MASTER_VOL      0x36
 #define AC97_SURR_MASTER_VOL     0x38
 
-	/* Digital SPDIF output control */
+/* Digital SPDIF output control */
 #define AC97_SPDIF_OUT_CTRL      0x3a
 
-	/* Vendor ID identifier */
+/* Vendor ID identifier */
 #define AC97_VENDOR_ID1          0x7c
 #define AC97_VENDOR_ID2          0x7e
 

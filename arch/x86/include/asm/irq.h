@@ -10,9 +10,8 @@
 #include <asm/apicdef.h>
 #include <asm/irq_vectors.h>
 
-static inline int irq_canonicalize(int irq)
-{
-	return ((irq == 2) ? 9 : irq);
+static inline int irq_canonicalize(int irq) {
+    return ((irq == 2) ? 9 : irq);
 }
 
 #ifdef CONFIG_X86_32

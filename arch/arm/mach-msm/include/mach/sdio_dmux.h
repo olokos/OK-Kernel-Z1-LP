@@ -18,21 +18,21 @@
 
 #ifdef CONFIG_MSM_SDIO_DMUX
 enum {
-	SDIO_DMUX_DATA_RMNET_0,
-	SDIO_DMUX_DATA_RMNET_1,
-	SDIO_DMUX_DATA_RMNET_2,
-	SDIO_DMUX_DATA_RMNET_3,
-	SDIO_DMUX_DATA_RMNET_4,
-	SDIO_DMUX_DATA_RMNET_5,
-	SDIO_DMUX_DATA_RMNET_6,
-	SDIO_DMUX_DATA_RMNET_7,
-	SDIO_DMUX_USB_RMNET_0,
-	SDIO_DMUX_NUM_CHANNELS
+    SDIO_DMUX_DATA_RMNET_0,
+    SDIO_DMUX_DATA_RMNET_1,
+    SDIO_DMUX_DATA_RMNET_2,
+    SDIO_DMUX_DATA_RMNET_3,
+    SDIO_DMUX_DATA_RMNET_4,
+    SDIO_DMUX_DATA_RMNET_5,
+    SDIO_DMUX_DATA_RMNET_6,
+    SDIO_DMUX_DATA_RMNET_7,
+    SDIO_DMUX_USB_RMNET_0,
+    SDIO_DMUX_NUM_CHANNELS
 };
 
 int msm_sdio_dmux_open(uint32_t id, void *priv,
-		       void (*receive_cb)(void *, struct sk_buff *),
-		       void (*write_done)(void *, struct sk_buff *));
+                       void (*receive_cb)(void *, struct sk_buff *),
+                       void (*write_done)(void *, struct sk_buff *));
 
 int msm_sdio_is_channel_in_reset(uint32_t id);
 
@@ -47,35 +47,29 @@ int msm_sdio_dmux_is_ch_low(uint32_t id);
 #else
 
 static int __maybe_unused msm_sdio_dmux_open(uint32_t id, void *priv,
-		       void (*receive_cb)(void *, struct sk_buff *),
-		       void (*write_done)(void *, struct sk_buff *))
-{
-	return -ENODEV;
+        void (*receive_cb)(void *, struct sk_buff *),
+        void (*write_done)(void *, struct sk_buff *)) {
+    return -ENODEV;
 }
 
-static int __maybe_unused msm_sdio_is_channel_in_reset(uint32_t id)
-{
-	return -ENODEV;
+static int __maybe_unused msm_sdio_is_channel_in_reset(uint32_t id) {
+    return -ENODEV;
 }
 
-static int __maybe_unused msm_sdio_dmux_close(uint32_t id)
-{
-	return -ENODEV;
+static int __maybe_unused msm_sdio_dmux_close(uint32_t id) {
+    return -ENODEV;
 }
 
-static int __maybe_unused msm_sdio_dmux_write(uint32_t id, struct sk_buff *skb)
-{
-	return -ENODEV;
+static int __maybe_unused msm_sdio_dmux_write(uint32_t id, struct sk_buff *skb) {
+    return -ENODEV;
 }
 
-static int __maybe_unused msm_sdio_dmux_is_ch_full(uint32_t id)
-{
-	return -ENODEV;
+static int __maybe_unused msm_sdio_dmux_is_ch_full(uint32_t id) {
+    return -ENODEV;
 }
 
-static int __maybe_unused msm_sdio_dmux_is_ch_low(uint32_t id)
-{
-	return -ENODEV;
+static int __maybe_unused msm_sdio_dmux_is_ch_low(uint32_t id) {
+    return -ENODEV;
 }
 
 #endif

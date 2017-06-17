@@ -109,22 +109,19 @@ typedef union geoid_u {
 #define INVALID_SLOT            (slotid_t)-1
 #define INVALID_MODULE          ((moduleid_t)-1)
 
-static inline slabid_t geo_slab(geoid_t g)
-{
-	return (g.common.type == GEO_TYPE_INVALID) ?
-		INVALID_SLAB : g.common.slab;
+static inline slabid_t geo_slab(geoid_t g) {
+    return (g.common.type == GEO_TYPE_INVALID) ?
+           INVALID_SLAB : g.common.slab;
 }
 
-static inline slotid_t geo_slot(geoid_t g)
-{
-	return (g.common.type == GEO_TYPE_INVALID) ?
-		INVALID_SLOT : g.common.slot;
+static inline slotid_t geo_slot(geoid_t g) {
+    return (g.common.type == GEO_TYPE_INVALID) ?
+           INVALID_SLOT : g.common.slot;
 }
 
-static inline moduleid_t geo_module(geoid_t g)
-{
-	return (g.common.type == GEO_TYPE_INVALID) ?
-		INVALID_MODULE : g.common.module;
+static inline moduleid_t geo_module(geoid_t g) {
+    return (g.common.type == GEO_TYPE_INVALID) ?
+           INVALID_MODULE : g.common.module;
 }
 
 extern geoid_t cnodeid_get_geoid(cnodeid_t cnode);

@@ -5,39 +5,39 @@
 #include <stdbool.h>
 
 enum parse_opt_type {
-	/* special types */
-	OPTION_END,
-	OPTION_ARGUMENT,
-	OPTION_GROUP,
-	/* options with no arguments */
-	OPTION_BIT,
-	OPTION_BOOLEAN,
-	OPTION_INCR,
-	OPTION_SET_UINT,
-	OPTION_SET_PTR,
-	/* options with arguments (usually) */
-	OPTION_STRING,
-	OPTION_INTEGER,
-	OPTION_LONG,
-	OPTION_CALLBACK,
-	OPTION_U64,
-	OPTION_UINTEGER,
+    /* special types */
+    OPTION_END,
+    OPTION_ARGUMENT,
+    OPTION_GROUP,
+    /* options with no arguments */
+    OPTION_BIT,
+    OPTION_BOOLEAN,
+    OPTION_INCR,
+    OPTION_SET_UINT,
+    OPTION_SET_PTR,
+    /* options with arguments (usually) */
+    OPTION_STRING,
+    OPTION_INTEGER,
+    OPTION_LONG,
+    OPTION_CALLBACK,
+    OPTION_U64,
+    OPTION_UINTEGER,
 };
 
 enum parse_opt_flags {
-	PARSE_OPT_KEEP_DASHDASH = 1,
-	PARSE_OPT_STOP_AT_NON_OPTION = 2,
-	PARSE_OPT_KEEP_ARGV0 = 4,
-	PARSE_OPT_KEEP_UNKNOWN = 8,
-	PARSE_OPT_NO_INTERNAL_HELP = 16,
+    PARSE_OPT_KEEP_DASHDASH = 1,
+    PARSE_OPT_STOP_AT_NON_OPTION = 2,
+    PARSE_OPT_KEEP_ARGV0 = 4,
+    PARSE_OPT_KEEP_UNKNOWN = 8,
+    PARSE_OPT_NO_INTERNAL_HELP = 16,
 };
 
 enum parse_opt_option_flags {
-	PARSE_OPT_OPTARG  = 1,
-	PARSE_OPT_NOARG   = 2,
-	PARSE_OPT_NONEG   = 4,
-	PARSE_OPT_HIDDEN  = 8,
-	PARSE_OPT_LASTARG_DEFAULT = 16,
+    PARSE_OPT_OPTARG  = 1,
+    PARSE_OPT_NOARG   = 2,
+    PARSE_OPT_NONEG   = 4,
+    PARSE_OPT_HIDDEN  = 8,
+    PARSE_OPT_LASTARG_DEFAULT = 16,
 };
 
 struct option;
@@ -84,16 +84,16 @@ typedef int parse_opt_cb(const struct option *, const char *arg, int unset);
  *   CALLBACKS can use it like they want.
  */
 struct option {
-	enum parse_opt_type type;
-	int short_name;
-	const char *long_name;
-	void *value;
-	const char *argh;
-	const char *help;
+    enum parse_opt_type type;
+    int short_name;
+    const char *long_name;
+    void *value;
+    const char *argh;
+    const char *help;
 
-	int flags;
-	parse_opt_cb *callback;
-	intptr_t defval;
+    int flags;
+    parse_opt_cb *callback;
+    intptr_t defval;
 };
 
 #define check_vtype(v, type) ( BUILD_BUG_ON_ZERO(!__builtin_types_compatible_p(typeof(v), type)) + v )
@@ -138,9 +138,9 @@ extern NORETURN void usage_with_options(const char * const *usagestr,
 /*----- incremantal advanced APIs -----*/
 
 enum {
-	PARSE_OPT_HELP = -1,
-	PARSE_OPT_DONE,
-	PARSE_OPT_UNKNOWN,
+    PARSE_OPT_HELP = -1,
+    PARSE_OPT_DONE,
+    PARSE_OPT_UNKNOWN,
 };
 
 /*
@@ -149,22 +149,22 @@ enum {
  * be modified in any way.
  */
 struct parse_opt_ctx_t {
-	const char **argv;
-	const char **out;
-	int argc, cpidx;
-	const char *opt;
-	int flags;
+    const char **argv;
+    const char **out;
+    int argc, cpidx;
+    const char *opt;
+    int flags;
 };
 
 extern int parse_options_usage(const char * const *usagestr,
-			       const struct option *opts);
+                               const struct option *opts);
 
 extern void parse_options_start(struct parse_opt_ctx_t *ctx,
-				int argc, const char **argv, int flags);
+                                int argc, const char **argv, int flags);
 
 extern int parse_options_step(struct parse_opt_ctx_t *ctx,
-			      const struct option *options,
-			      const char * const usagestr[]);
+                              const struct option *options,
+                              const char * const usagestr[]);
 
 extern int parse_options_end(struct parse_opt_ctx_t *ctx);
 

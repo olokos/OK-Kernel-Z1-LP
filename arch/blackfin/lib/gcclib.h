@@ -15,10 +15,10 @@ typedef int word_type __attribute__ ((mode(__word__)));
 typedef unsigned int UDItype __attribute__ ((mode(DI)));
 
 struct DIstruct {
-	SItype low, high;
+    SItype low, high;
 };
 
 typedef union {
-	struct DIstruct s;
-	DItype ll;
+    struct DIstruct s;
+    DItype ll;
 } DIunion;

@@ -73,8 +73,7 @@ extern "C" {
    This packet contains the scan results of the recent scan operation
    LOG_WLAN_SCAN_C                                 0x1496
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type  hdr;
     v_U8_t  eventId;
     v_U8_t  numSsid;
@@ -94,8 +93,7 @@ typedef struct
    This packet contains the information related to IBSS connection setup
    LOG_WLAN_IBSS_C                                 0x1497
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type  hdr;
     v_U8_t eventId;
     v_U8_t channelSetting;
@@ -111,8 +109,7 @@ typedef struct
    This packet contains the information related to 802.11D
    LOG_WLAN_80211D_C                               0x1498
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type  hdr;
     v_U8_t eventId;
     v_U8_t numChannel;
@@ -129,8 +126,7 @@ This is a log packet which contains below handoff information:
 - For each BSSID in candidate list, provide RSSI, QoS and security compatibility
 LOG_WLAN_HANDOFF_C                              0x1499
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t        ssid[9];
     v_U8_t        bssid[VOS_LOG_MAX_BSSID_SIZE];
     v_U8_t        channel_id;
@@ -143,8 +139,7 @@ typedef struct
 
 } vos_log_ho_ap_info;
 
-typedef struct
-{
+typedef struct {
     log_hdr_type       hdr;
     v_U32_t            num_aps;
     vos_log_ho_ap_info current_ap_info;
@@ -156,8 +151,7 @@ typedef struct
    advertised by the AP
    LOG_WLAN_QOS_EDCA_C                             0x149A
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type       hdr;
     v_U8_t             aci_be;
     v_U8_t             cw_be;
@@ -177,8 +171,7 @@ typedef struct
    This packet contains the total number of beacon received value
    LOG_WLAN_BEACON_UPDATE_C                        0x149B
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type       hdr;
     v_U32_t            bcn_rx_cnt;
 } vos_log_beacon_update_pkt_type;
@@ -187,8 +180,7 @@ typedef struct
    This packet contains the information related to a WoW patern value when set
    LOG_WLAN_POWERSAVE_WOW_ADD_PTRN_C               0x149C
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type       hdr;
     v_U8_t             pattern_id;
     v_U8_t             pattern_byte_offset;
@@ -202,8 +194,7 @@ typedef struct
    This packet contains the PHY & MAC layer statistics sent by lower layer
    _WLAN_LINKLAYER_STAT_C                       0x14A1
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U32_t retry_cnt[4];
     v_U32_t multiple_retry_cnt[4];
     v_U32_t tx_frm_cnt[4];
@@ -219,8 +210,7 @@ typedef struct
 
 } summaryStatsInfo;
 
-typedef struct
-{
+typedef struct {
     v_U32_t rx_frag_cnt;
     v_U32_t promiscuous_rx_frag_cnt;
     v_U32_t rx_input_sensitivity;
@@ -230,8 +220,7 @@ typedef struct
 
 } globalClassAStatsInfo;
 
-typedef struct
-{
+typedef struct {
     v_U32_t uc_rx_wep_unencrypted_frm_cnt;
     v_U32_t uc_rx_mic_fail_cnt;
     v_U32_t uc_tkip_icv_err;
@@ -255,8 +244,7 @@ typedef struct
 
 } globalClassBStatsInfo;
 
-typedef struct
-{
+typedef struct {
     v_U32_t rx_amsdu_cnt;
     v_U32_t rx_ampdu_cnt;
     v_U32_t tx_20_frm_cnt;
@@ -266,8 +254,7 @@ typedef struct
 
 } globalClassCStatsInfo;
 
-typedef struct
-{
+typedef struct {
     v_U32_t tx_uc_frm_cnt;
     v_U32_t tx_mc_frm_cnt;
     v_U32_t tx_bc_frm_cnt;
@@ -286,15 +273,13 @@ typedef struct
 
 } globalClassDStatsInfo;
 
-typedef struct
-{
+typedef struct {
     v_U32_t tx_frag_cnt[4];
     v_U32_t tx_ampdu_cnt;
     v_U32_t tx_mpdu_in_ampdu_cnt;
 } perStaStatsInfo;
 
-typedef struct
-{
+typedef struct {
     log_hdr_type             hdr;
     v_U8_t                   version;
     v_U8_t                   reserved[3];
@@ -312,8 +297,7 @@ typedef struct
    specific AC
    LOG_WLAN_QOS_TSPEC_C                            0x14A2
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type    hdr;
     v_U8_t          tsinfo[3];
     v_U16_t         nominal_msdu_size;
@@ -338,8 +322,7 @@ typedef struct
    LOG_TRSP_DATA_STALL_C                           0x1801
 ---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     char         channelName[4];
     v_U32_t      numDesc;
     v_U32_t      numFreeDesc;
@@ -352,8 +335,7 @@ typedef struct
     v_U32_t      numInvalDesc;
 } vos_log_data_stall_channel_type;
 
-typedef struct
-{
+typedef struct {
     log_hdr_type                     hdr;
     v_U32_t                          PowerState;
     v_U32_t                          numFreeBd;
@@ -364,8 +346,7 @@ typedef struct
    This packet contains the rssi value from BSS descriptor
    LOG_WLAN_RSSI_UPDATE_C                          0x1354
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     log_hdr_type       hdr;
     v_S7_t            rssi;
 } vos_log_rssi_pkt_type;

@@ -17,33 +17,33 @@
 #include <sound/q6adm.h>
 
 enum {
-	RX_CAL,
-	TX_CAL,
-	MAX_AUDPROC_TYPES
+    RX_CAL,
+    TX_CAL,
+    MAX_AUDPROC_TYPES
 };
 
 enum {
-	VOCPROC_CAL,
-	VOCSTRM_CAL,
-	VOCVOL_CAL,
-	MAX_VOCPROC_TYPES
+    VOCPROC_CAL,
+    VOCSTRM_CAL,
+    VOCVOL_CAL,
+    MAX_VOCPROC_TYPES
 };
 
 struct acdb_cal_block {
-	uint32_t		cal_size;
-	uint32_t		cal_kvaddr;
-	uint32_t		cal_paddr;
+    uint32_t		cal_size;
+    uint32_t		cal_kvaddr;
+    uint32_t		cal_paddr;
 };
 
 struct acdb_atomic_cal_block {
-	atomic_t		cal_size;
-	atomic_t		cal_kvaddr;
-	atomic_t		cal_paddr;
+    atomic_t		cal_size;
+    atomic_t		cal_kvaddr;
+    atomic_t		cal_paddr;
 };
 
 struct acdb_cal_data {
-	uint32_t			num_cal_blocks;
-	struct acdb_atomic_cal_block	*cal_blocks;
+    uint32_t			num_cal_blocks;
+    struct acdb_atomic_cal_block	*cal_blocks;
 };
 
 uint32_t get_voice_rx_topology(void);

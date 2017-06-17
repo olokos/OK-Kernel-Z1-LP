@@ -218,9 +218,9 @@
 
 struct ath6kl;
 struct ath6kl_bmi_target_info {
-	__le32 byte_count;   /* size of this structure */
-	__le32 version;      /* target version id */
-	__le32 type;         /* target type */
+    __le32 byte_count;   /* size of this structure */
+    __le32 version;      /* target version id */
+    __le32 type;         /* target type */
 } __packed;
 
 #define ath6kl_bmi_write_hi32(ar, item, val)				\
@@ -252,19 +252,19 @@ void ath6kl_bmi_reset(struct ath6kl *ar);
 
 int ath6kl_bmi_done(struct ath6kl *ar);
 int ath6kl_bmi_get_target_info(struct ath6kl *ar,
-			       struct ath6kl_bmi_target_info *targ_info);
+                               struct ath6kl_bmi_target_info *targ_info);
 int ath6kl_bmi_read(struct ath6kl *ar, u32 addr, u8 *buf, u32 len);
 int ath6kl_bmi_write(struct ath6kl *ar, u32 addr, u8 *buf, u32 len);
 int ath6kl_bmi_execute(struct ath6kl *ar,
-		       u32 addr, u32 *param);
+                       u32 addr, u32 *param);
 int ath6kl_bmi_set_app_start(struct ath6kl *ar,
-			     u32 addr);
+                             u32 addr);
 int ath6kl_bmi_reg_read(struct ath6kl *ar, u32 addr, u32 *param);
 int ath6kl_bmi_reg_write(struct ath6kl *ar, u32 addr, u32 param);
 int ath6kl_bmi_lz_data(struct ath6kl *ar,
-		       u8 *buf, u32 len);
+                       u8 *buf, u32 len);
 int ath6kl_bmi_lz_stream_start(struct ath6kl *ar,
-			       u32 addr);
+                               u32 addr);
 int ath6kl_bmi_fast_download(struct ath6kl *ar,
-			     u32 addr, u8 *buf, u32 len);
+                             u32 addr, u8 *buf, u32 len);
 #endif

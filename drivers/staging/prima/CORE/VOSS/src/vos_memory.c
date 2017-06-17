@@ -73,8 +73,7 @@ static v_U8_t WLAN_MEM_HEADER[] =  {0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x
 static v_U8_t WLAN_MEM_TAIL[]   =  {0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87};
 static int    memory_dbug_flag;
 
-struct s_vos_mem_struct
-{
+struct s_vos_mem_struct {
     hdd_list_node_t pNode;
     char* fileName;
     unsigned int lineNum;
@@ -99,21 +98,18 @@ struct s_vos_mem_struct
  * External Function implementation
  * ------------------------------------------------------------------------*/
 #ifdef MEMORY_DEBUG
-void vos_mem_init()
-{
+void vos_mem_init() {
     /* Initalizing the list with maximum size of 60000 */
     hdd_list_init(&vosMemList, 60000);
     memory_dbug_flag = 1;
     return;
 }
 
-void vos_mem_clean()
-{
+void vos_mem_clean() {
     v_SIZE_t listSize;
     hdd_list_size(&vosMemList, &listSize);
 
-    if(listSize)
-    {
+    if(listSize) {
         hdd_list_node_t* pNode;
         VOS_STATUS vosStatus;
 
@@ -126,23 +122,19 @@ void vos_mem_clean()
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: List is not Empty. listSize %d ", __func__, (int)listSize);
 
-        do
-        {
+        do {
             spin_lock(&vosMemList.lock);
             vosStatus = hdd_list_remove_front(&vosMemList, &pNode);
             spin_unlock(&vosMemList.lock);
-            if(VOS_STATUS_SUCCESS == vosStatus)
-            {
+            if(VOS_STATUS_SUCCESS == vosStatus) {
                 memStruct = (struct s_vos_mem_struct*)pNode;
 
                 /* Take care to log only once multiple memory leaks from
                  * the same place */
                 if(strcmp(prev_mleak_file, memStruct->fileName) ||
                         (prev_mleak_lineNum != memStruct->lineNum) ||
-                        (prev_mleak_sz !=  memStruct->size))
-                {
-                    if(mleak_cnt != 0)
-                    {
+                        (prev_mleak_sz !=  memStruct->size)) {
+                    if(mleak_cnt != 0) {
                         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                                   "%d Time Memory Leak@ File %s, @Line %d, size %d",
                                   mleak_cnt, prev_mleak_file, prev_mleak_lineNum,
@@ -157,12 +149,10 @@ void vos_mem_clean()
 
                 kfree((v_VOID_t*)memStruct);
             }
-        }
-        while(vosStatus == VOS_STATUS_SUCCESS);
+        } while(vosStatus == VOS_STATUS_SUCCESS);
 
         /* Print last memory leak from the module */
-        if(mleak_cnt)
-        {
+        if(mleak_cnt) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "%d Time memory Leak@ File %s, @Line %d, size %d",
                       mleak_cnt, prev_mleak_file, prev_mleak_lineNum,
@@ -176,17 +166,14 @@ void vos_mem_clean()
     }
 }
 
-void vos_mem_exit()
-{
-    if (memory_dbug_flag)
-    {
+void vos_mem_exit() {
+    if (memory_dbug_flag) {
         vos_mem_clean();
         hdd_list_destroy(&vosMemList);
     }
 }
 
-v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
-{
+v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum) {
     struct s_vos_mem_struct* memStruct;
     v_VOID_t* memPtr = NULL;
     v_SIZE_t new_size;
@@ -194,24 +181,20 @@ v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
     unsigned long IrqFlags;
 
 
-    if (size > (1024*1024))
-    {
+    if (size > (1024*1024)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s: called with arg > 1024K; passed in %d !!!", __func__,size);
         return NULL;
     }
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         flags = GFP_ATOMIC;
     }
 
-    if (!memory_dbug_flag)
-    {
+    if (!memory_dbug_flag) {
 #ifdef CONFIG_WCNSS_MEM_PRE_ALLOC
         v_VOID_t* pmem;
-        if (size > WCNSS_PRE_ALLOC_GET_THRESHOLD)
-        {
+        if (size > WCNSS_PRE_ALLOC_GET_THRESHOLD) {
             pmem = wcnss_prealloc_get(size);
             if (NULL != pmem)
                 return pmem;
@@ -224,8 +207,7 @@ v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
 
     memStruct = (struct s_vos_mem_struct*)kmalloc(new_size, flags);
 
-    if(memStruct != NULL)
-    {
+    if(memStruct != NULL) {
         VOS_STATUS vosStatus;
 
         memStruct->fileName = fileName;
@@ -238,8 +220,7 @@ v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
         spin_lock_irqsave(&vosMemList.lock, IrqFlags);
         vosStatus = hdd_list_insert_front(&vosMemList, &memStruct->pNode);
         spin_unlock_irqrestore(&vosMemList.lock, IrqFlags);
-        if(VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if(VOS_STATUS_SUCCESS != vosStatus) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                       "%s: Unable to insert node into List vosStatus %d", __func__, vosStatus);
         }
@@ -249,23 +230,19 @@ v_VOID_t * vos_mem_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
     return memPtr;
 }
 
-v_VOID_t vos_mem_free( v_VOID_t *ptr )
-{
+v_VOID_t vos_mem_free( v_VOID_t *ptr ) {
 
     unsigned long IrqFlags;
     if (ptr == NULL)
         return;
 
-    if (!memory_dbug_flag)
-    {
+    if (!memory_dbug_flag) {
 #ifdef CONFIG_WCNSS_MEM_PRE_ALLOC
         if (wcnss_prealloc_put(ptr))
             return;
 #endif
         kfree(ptr);
-    }
-    else
-    {
+    } else {
         VOS_STATUS vosStatus;
         struct s_vos_mem_struct* memStruct = ((struct s_vos_mem_struct*)ptr) - 1;
 
@@ -273,24 +250,19 @@ v_VOID_t vos_mem_free( v_VOID_t *ptr )
         vosStatus = hdd_list_remove_node(&vosMemList, &memStruct->pNode);
         spin_unlock_irqrestore(&vosMemList.lock, IrqFlags);
 
-        if(VOS_STATUS_SUCCESS == vosStatus)
-        {
-            if(0 == vos_mem_compare(memStruct->header, &WLAN_MEM_HEADER[0], sizeof(WLAN_MEM_HEADER)) )
-            {
+        if(VOS_STATUS_SUCCESS == vosStatus) {
+            if(0 == vos_mem_compare(memStruct->header, &WLAN_MEM_HEADER[0], sizeof(WLAN_MEM_HEADER)) ) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "Memory Header is corrupted. MemInfo: Filename %s, LineNum %d",
                           memStruct->fileName, (int)memStruct->lineNum);
             }
-            if(0 == vos_mem_compare( (v_U8_t*)ptr + memStruct->size, &WLAN_MEM_TAIL[0], sizeof(WLAN_MEM_TAIL ) ) )
-            {
+            if(0 == vos_mem_compare( (v_U8_t*)ptr + memStruct->size, &WLAN_MEM_TAIL[0], sizeof(WLAN_MEM_TAIL ) ) ) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "Memory Trailer is corrupted. MemInfo: Filename %s, LineNum %d",
                           memStruct->fileName, (int)memStruct->lineNum);
             }
             kfree((v_VOID_t*)memStruct);
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                       "%s: Unallocated memory (double free?)", __func__);
             VOS_BUG(0);
@@ -298,24 +270,20 @@ v_VOID_t vos_mem_free( v_VOID_t *ptr )
     }
 }
 #else
-v_VOID_t * vos_mem_malloc( v_SIZE_t size )
-{
+v_VOID_t * vos_mem_malloc( v_SIZE_t size ) {
     int flags = GFP_KERNEL;
 #ifdef CONFIG_WCNSS_MEM_PRE_ALLOC
     v_VOID_t* pmem;
 #endif
-    if (size > (1024*1024))
-    {
+    if (size > (1024*1024)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s: called with arg > 1024K; passed in %d !!!", __func__,size);
         return NULL;
     }
-    if (in_interrupt() || irqs_disabled() || in_atomic())
-    {
+    if (in_interrupt() || irqs_disabled() || in_atomic()) {
         flags = GFP_ATOMIC;
     }
 #ifdef CONFIG_WCNSS_MEM_PRE_ALLOC
-    if(size > WCNSS_PRE_ALLOC_GET_THRESHOLD)
-    {
+    if(size > WCNSS_PRE_ALLOC_GET_THRESHOLD) {
         pmem = wcnss_prealloc_get(size);
         if(NULL != pmem)
             return pmem;
@@ -324,8 +292,7 @@ v_VOID_t * vos_mem_malloc( v_SIZE_t size )
     return kmalloc(size, flags);
 }
 
-v_VOID_t vos_mem_free( v_VOID_t *ptr )
-{
+v_VOID_t vos_mem_free( v_VOID_t *ptr ) {
     if (ptr == NULL)
         return;
 
@@ -338,26 +305,21 @@ v_VOID_t vos_mem_free( v_VOID_t *ptr )
 }
 #endif
 
-v_VOID_t vos_mem_set( v_VOID_t *ptr, v_SIZE_t numBytes, v_BYTE_t value )
-{
-    if (ptr == NULL)
-    {
+v_VOID_t vos_mem_set( v_VOID_t *ptr, v_SIZE_t numBytes, v_BYTE_t value ) {
+    if (ptr == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s called with NULL parameter ptr", __func__);
         return;
     }
     memset(ptr, value, numBytes);
 }
 
-v_VOID_t vos_mem_zero( v_VOID_t *ptr, v_SIZE_t numBytes )
-{
-    if (0 == numBytes)
-    {
+v_VOID_t vos_mem_zero( v_VOID_t *ptr, v_SIZE_t numBytes ) {
+    if (0 == numBytes) {
         // special case where ptr can be NULL
         return;
     }
 
-    if (ptr == NULL)
-    {
+    if (ptr == NULL) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s called with NULL parameter ptr", __func__);
         return;
     }
@@ -365,16 +327,13 @@ v_VOID_t vos_mem_zero( v_VOID_t *ptr, v_SIZE_t numBytes )
 
 }
 
-v_VOID_t vos_mem_copy( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes )
-{
-    if (0 == numBytes)
-    {
+v_VOID_t vos_mem_copy( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes ) {
+    if (0 == numBytes) {
         // special case where pDst or pSrc can be NULL
         return;
     }
 
-    if ((pDst == NULL) || (pSrc==NULL))
-    {
+    if ((pDst == NULL) || (pSrc==NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s called with NULL parameter, source:%p destination:%p",
                   __func__, pSrc, pDst);
@@ -384,16 +343,13 @@ v_VOID_t vos_mem_copy( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes )
     memcpy(pDst, pSrc, numBytes);
 }
 
-v_VOID_t vos_mem_move( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes )
-{
-    if (0 == numBytes)
-    {
+v_VOID_t vos_mem_move( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes ) {
+    if (0 == numBytes) {
         // special case where pDst or pSrc can be NULL
         return;
     }
 
-    if ((pDst == NULL) || (pSrc==NULL))
-    {
+    if ((pDst == NULL) || (pSrc==NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s called with NULL parameter, source:%p destination:%p",
                   __func__, pSrc, pDst);
@@ -403,16 +359,13 @@ v_VOID_t vos_mem_move( v_VOID_t *pDst, const v_VOID_t *pSrc, v_SIZE_t numBytes )
     memmove(pDst, pSrc, numBytes);
 }
 
-v_BOOL_t vos_mem_compare( v_VOID_t *pMemory1, v_VOID_t *pMemory2, v_U32_t numBytes )
-{
-    if (0 == numBytes)
-    {
+v_BOOL_t vos_mem_compare( v_VOID_t *pMemory1, v_VOID_t *pMemory2, v_U32_t numBytes ) {
+    if (0 == numBytes) {
         // special case where pMemory1 or pMemory2 can be NULL
         return VOS_TRUE;
     }
 
-    if ((pMemory1 == NULL) || (pMemory2==NULL))
-    {
+    if ((pMemory1 == NULL) || (pMemory2==NULL)) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                   "%s called with NULL parameter, p1:%p p2:%p",
                   __func__, pMemory1, pMemory2);
@@ -454,14 +407,12 @@ v_SINT_t vos_mem_compare2( v_VOID_t *pMemory1, v_VOID_t *pMemory2, v_U32_t numBy
 
   --------------------------------------------------------------------------*/
 #ifdef MEMORY_DEBUG
-v_VOID_t * vos_mem_dma_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum)
-{
+v_VOID_t * vos_mem_dma_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t lineNum) {
     struct s_vos_mem_struct* memStruct;
     v_VOID_t* memPtr = NULL;
     v_SIZE_t new_size;
 
-    if (in_interrupt())
-    {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return NULL;
     }
@@ -473,8 +424,7 @@ v_VOID_t * vos_mem_dma_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t line
 
     memStruct = (struct s_vos_mem_struct*)kmalloc(new_size,GFP_KERNEL);
 
-    if(memStruct != NULL)
-    {
+    if(memStruct != NULL) {
         VOS_STATUS vosStatus;
 
         memStruct->fileName = fileName;
@@ -487,8 +437,7 @@ v_VOID_t * vos_mem_dma_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t line
         spin_lock(&vosMemList.lock);
         vosStatus = hdd_list_insert_front(&vosMemList, &memStruct->pNode);
         spin_unlock(&vosMemList.lock);
-        if(VOS_STATUS_SUCCESS != vosStatus)
-        {
+        if(VOS_STATUS_SUCCESS != vosStatus) {
             VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR,
                       "%s: Unable to insert node into List vosStatus %d", __func__, vosStatus);
         }
@@ -499,13 +448,11 @@ v_VOID_t * vos_mem_dma_malloc_debug( v_SIZE_t size, char* fileName, v_U32_t line
     return memPtr;
 }
 
-v_VOID_t vos_mem_dma_free( v_VOID_t *ptr )
-{
+v_VOID_t vos_mem_dma_free( v_VOID_t *ptr ) {
     if (ptr == NULL)
         return;
 
-    if (memory_dbug_flag)
-    {
+    if (memory_dbug_flag) {
         VOS_STATUS vosStatus;
         struct s_vos_mem_struct* memStruct = ((struct s_vos_mem_struct*)ptr) - 1;
 
@@ -513,31 +460,25 @@ v_VOID_t vos_mem_dma_free( v_VOID_t *ptr )
         vosStatus = hdd_list_remove_node(&vosMemList, &memStruct->pNode);
         spin_unlock(&vosMemList.lock);
 
-        if(VOS_STATUS_SUCCESS == vosStatus)
-        {
-            if(0 == vos_mem_compare(memStruct->header, &WLAN_MEM_HEADER[0], sizeof(WLAN_MEM_HEADER)) )
-            {
+        if(VOS_STATUS_SUCCESS == vosStatus) {
+            if(0 == vos_mem_compare(memStruct->header, &WLAN_MEM_HEADER[0], sizeof(WLAN_MEM_HEADER)) ) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "Memory Header is corrupted. MemInfo: Filename %s, LineNum %d",
                           memStruct->fileName, (int)memStruct->lineNum);
             }
-            if(0 == vos_mem_compare( (v_U8_t*)ptr + memStruct->size, &WLAN_MEM_TAIL[0], sizeof(WLAN_MEM_TAIL ) ) )
-            {
+            if(0 == vos_mem_compare( (v_U8_t*)ptr + memStruct->size, &WLAN_MEM_TAIL[0], sizeof(WLAN_MEM_TAIL ) ) ) {
                 VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_FATAL,
                           "Memory Trailer is corrupted. MemInfo: Filename %s, LineNum %d",
                           memStruct->fileName, (int)memStruct->lineNum);
             }
             kfree((v_VOID_t*)memStruct);
         }
-    }
-    else
+    } else
         kfree(ptr);
 }
 #else
-v_VOID_t* vos_mem_dma_malloc( v_SIZE_t size )
-{
-    if (in_interrupt())
-    {
+v_VOID_t* vos_mem_dma_malloc( v_SIZE_t size ) {
+    if (in_interrupt()) {
         VOS_TRACE(VOS_MODULE_ID_VOSS, VOS_TRACE_LEVEL_ERROR, "%s cannot be called from interrupt context!!!", __func__);
         return NULL;
     }
@@ -561,8 +502,7 @@ v_VOID_t* vos_mem_dma_malloc( v_SIZE_t size )
   \sa
 
   --------------------------------------------------------------------------*/
-v_VOID_t vos_mem_dma_free( v_VOID_t *ptr )
-{
+v_VOID_t vos_mem_dma_free( v_VOID_t *ptr ) {
     if (ptr == NULL)
         return;
     kfree(ptr);

@@ -29,24 +29,20 @@
 #define	LI_INTD		0x0080
 
 /* More special purpose macros... */
-static inline void li_pcia_write16(unsigned long reg, unsigned short v)
-{
-	*((volatile unsigned short *)(LI_PCIA_VADDR+reg))=v;
+static inline void li_pcia_write16(unsigned long reg, unsigned short v) {
+    *((volatile unsigned short *)(LI_PCIA_VADDR+reg))=v;
 }
 
-static inline unsigned short li_pcia_read16(unsigned long reg)
-{
-	 return *((volatile unsigned short *)(LI_PCIA_VADDR+reg));
+static inline unsigned short li_pcia_read16(unsigned long reg) {
+    return *((volatile unsigned short *)(LI_PCIA_VADDR+reg));
 }
 
-static inline void li_pcib_write16(unsigned long reg, unsigned short v)
-{
-	*((volatile unsigned short *)(LI_PCIB_VADDR+reg))=v;
+static inline void li_pcib_write16(unsigned long reg, unsigned short v) {
+    *((volatile unsigned short *)(LI_PCIB_VADDR+reg))=v;
 }
 
-static inline unsigned short li_pcib_read16(unsigned long reg)
-{
-	return *((volatile unsigned short *)(LI_PCIB_VADDR+reg));
+static inline unsigned short li_pcib_read16(unsigned long reg) {
+    return *((volatile unsigned short *)(LI_PCIB_VADDR+reg));
 }
 
 #endif /* _ASM_X86_VISWS_LITHIUM_H */

@@ -17,16 +17,15 @@
 #define GPIO_CFG(n)    (MSM_TLMM_BASE + 0x1000 + (0x10 * n))
 #define GPIO_IN_OUT(n) (MSM_TLMM_BASE + 0x1004 + (0x10 * n))
 
-void __msm_gpiomux_write(unsigned gpio, struct gpiomux_setting val)
-{
-	uint32_t bits;
+void __msm_gpiomux_write(unsigned gpio, struct gpiomux_setting val) {
+    uint32_t bits;
 
-	bits = (val.drv << 6) | (val.func << 2) | val.pull;
-	if (val.func == GPIOMUX_FUNC_GPIO) {
-		bits |= val.dir > GPIOMUX_IN ? BIT(9) : 0;
-		__raw_writel(val.dir == GPIOMUX_OUT_HIGH ? BIT(1) : 0,
-			GPIO_IN_OUT(gpio));
-	}
-	__raw_writel(bits, GPIO_CFG(gpio));
-	mb();
+    bits = (val.drv << 6) | (val.func << 2) | val.pull;
+    if (val.func == GPIOMUX_FUNC_GPIO) {
+        bits |= val.dir > GPIOMUX_IN ? BIT(9) : 0;
+        __raw_writel(val.dir == GPIOMUX_OUT_HIGH ? BIT(1) : 0,
+                     GPIO_IN_OUT(gpio));
+    }
+    __raw_writel(bits, GPIO_CFG(gpio));
+    mb();
 }

@@ -234,54 +234,83 @@ do {							\
  * The following only work if pte_present() is true.
  * Undefined behaviour if not..
  */
-static inline int pte_user(pte_t pte)	{ return pte_val(pte) & __PAGE_PROT_USER; }
-static inline int pte_read(pte_t pte)	{ return pte_val(pte) & __PAGE_PROT_USER; }
-static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & _PAGE_DIRTY; }
-static inline int pte_young(pte_t pte)	{ return pte_val(pte) & _PAGE_ACCESSED; }
-static inline int pte_write(pte_t pte)	{ return pte_val(pte) & __PAGE_PROT_WRITE; }
-static inline int pte_special(pte_t pte){ return 0; }
+static inline int pte_user(pte_t pte)	{
+    return pte_val(pte) & __PAGE_PROT_USER;
+}
+static inline int pte_read(pte_t pte)	{
+    return pte_val(pte) & __PAGE_PROT_USER;
+}
+static inline int pte_dirty(pte_t pte)	{
+    return pte_val(pte) & _PAGE_DIRTY;
+}
+static inline int pte_young(pte_t pte)	{
+    return pte_val(pte) & _PAGE_ACCESSED;
+}
+static inline int pte_write(pte_t pte)	{
+    return pte_val(pte) & __PAGE_PROT_WRITE;
+}
+static inline int pte_special(pte_t pte) {
+    return 0;
+}
 
 /*
  * The following only works if pte_present() is not true.
  */
-static inline int pte_file(pte_t pte)	{ return pte_val(pte) & _PAGE_FILE; }
-
-static inline pte_t pte_rdprotect(pte_t pte)
-{
-	pte_val(pte) &= ~(__PAGE_PROT_USER|__PAGE_PROT_UWAUX); return pte;
-}
-static inline pte_t pte_exprotect(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_NX; return pte;
+static inline int pte_file(pte_t pte)	{
+    return pte_val(pte) & _PAGE_FILE;
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	pte_val(pte) &= ~(__PAGE_PROT_WRITE|__PAGE_PROT_UWAUX); return pte;
+static inline pte_t pte_rdprotect(pte_t pte) {
+    pte_val(pte) &= ~(__PAGE_PROT_USER|__PAGE_PROT_UWAUX);
+    return pte;
+}
+static inline pte_t pte_exprotect(pte_t pte) {
+    pte_val(pte) |= _PAGE_NX;
+    return pte;
 }
 
-static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~_PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkold(pte_t pte)	{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)	{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkexec(pte_t pte)	{ pte_val(pte) &= ~_PAGE_NX; return pte; }
-
-static inline pte_t pte_mkread(pte_t pte)
-{
-	pte_val(pte) |= __PAGE_PROT_USER;
-	if (pte_write(pte))
-		pte_val(pte) |= __PAGE_PROT_UWAUX;
-	return pte;
-}
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) |= __PAGE_PROT_WRITE;
-	if (pte_val(pte) & __PAGE_PROT_USER)
-		pte_val(pte) |= __PAGE_PROT_UWAUX;
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    pte_val(pte) &= ~(__PAGE_PROT_WRITE|__PAGE_PROT_UWAUX);
+    return pte;
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+static inline pte_t pte_mkclean(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte)	{
+    pte_val(pte) |= _PAGE_DIRTY;
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte)	{
+    pte_val(pte) |= _PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkexec(pte_t pte)	{
+    pte_val(pte) &= ~_PAGE_NX;
+    return pte;
+}
+
+static inline pte_t pte_mkread(pte_t pte) {
+    pte_val(pte) |= __PAGE_PROT_USER;
+    if (pte_write(pte))
+        pte_val(pte) |= __PAGE_PROT_UWAUX;
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) |= __PAGE_PROT_WRITE;
+    if (pte_val(pte) & __PAGE_PROT_USER)
+        pte_val(pte) |= __PAGE_PROT_UWAUX;
+    return pte;
+}
+
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    return pte;
+}
 
 #define pte_ERROR(e) \
 	printk(KERN_ERR "%s:%d: bad pte %08lx.\n", \
@@ -325,17 +354,15 @@ static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
 /*
  * All present user pages are user-executable:
  */
-static inline int pte_exec(pte_t pte)
-{
-	return pte_user(pte);
+static inline int pte_exec(pte_t pte) {
+    return pte_user(pte);
 }
 
 /*
  * All present pages are kernel-executable:
  */
-static inline int pte_exec_kernel(pte_t pte)
-{
-	return 1;
+static inline int pte_exec_kernel(pte_t pte) {
+    return 1;
 }
 
 #define PTE_FILE_MAX_BITS	30
@@ -353,31 +380,27 @@ static inline int pte_exec_kernel(pte_t pte)
 
 static inline
 int ptep_test_and_clear_dirty(struct vm_area_struct *vma, unsigned long addr,
-			      pte_t *ptep)
-{
-	if (!pte_dirty(*ptep))
-		return 0;
-	return test_and_clear_bit(_PAGE_BIT_DIRTY, &ptep->pte);
+                              pte_t *ptep) {
+    if (!pte_dirty(*ptep))
+        return 0;
+    return test_and_clear_bit(_PAGE_BIT_DIRTY, &ptep->pte);
 }
 
 static inline
 int ptep_test_and_clear_young(struct vm_area_struct *vma, unsigned long addr,
-			      pte_t *ptep)
-{
-	if (!pte_young(*ptep))
-		return 0;
-	return test_and_clear_bit(_PAGE_BIT_ACCESSED, &ptep->pte);
+                              pte_t *ptep) {
+    if (!pte_young(*ptep))
+        return 0;
+    return test_and_clear_bit(_PAGE_BIT_ACCESSED, &ptep->pte);
 }
 
 static inline
-void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	pte_val(*ptep) &= ~(__PAGE_PROT_WRITE|__PAGE_PROT_UWAUX);
+void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_val(*ptep) &= ~(__PAGE_PROT_WRITE|__PAGE_PROT_UWAUX);
 }
 
-static inline void ptep_mkdirty(pte_t *ptep)
-{
-	set_bit(_PAGE_BIT_DIRTY, &ptep->pte);
+static inline void ptep_mkdirty(pte_t *ptep) {
+    set_bit(_PAGE_BIT_DIRTY, &ptep->pte);
 }
 
 /*
@@ -401,11 +424,10 @@ static inline void ptep_mkdirty(pte_t *ptep)
 #define mk_pte_huge(entry) \
 	((entry).pte |= _PAGE_PRESENT | _PAGE_PSE | _PAGE_VALID)
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_val(pte) &= _PAGE_CHG_MASK;
-	pte_val(pte) |= pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) &= _PAGE_CHG_MASK;
+    pte_val(pte) |= pgprot_val(newprot);
+    return pte;
 }
 
 #define page_pte(page)	page_pte_prot((page), __pgprot(0))
@@ -466,9 +488,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
  * is used to restore the previous state). Used by the SMP bootup code.
  * NOTE: this is an __init function for security reasons.
  */
-static inline int set_kernel_exec(unsigned long vaddr, int enable)
-{
-	return 0;
+static inline int set_kernel_exec(unsigned long vaddr, int enable) {
+    return 0;
 }
 
 #define pte_offset_map(dir, address) \
@@ -480,7 +501,7 @@ static inline int set_kernel_exec(unsigned long vaddr, int enable)
  * the kernel page tables containing the necessary information by tlb-mn10300.S
  */
 extern void update_mmu_cache(struct vm_area_struct *vma,
-			     unsigned long address, pte_t *ptep);
+                             unsigned long address, pte_t *ptep);
 
 #endif /* !__ASSEMBLY__ */
 

@@ -23,13 +23,13 @@ extern enum fips_status g_fips140_status;
  */
 struct fips_selftest_data {
 
-	char algo_prefix[10];
-	unsigned int ce_device;
-	bool prefix_ahash_algo;
-	bool prefix_hmac_algo;
-	bool prefix_aes_xts_algo;
-	bool prefix_aes_cbc_ecb_ctr_algo;
-	bool prefix_aead_algo;
+    char algo_prefix[10];
+    unsigned int ce_device;
+    bool prefix_ahash_algo;
+    bool prefix_hmac_algo;
+    bool prefix_aes_xts_algo;
+    bool prefix_aes_cbc_ecb_ctr_algo;
+    bool prefix_aead_algo;
 };
 
 #ifdef CONFIG_FIPS_ENABLE
@@ -51,21 +51,18 @@ int _fips_qcrypto_aead_selftest(struct fips_selftest_data *selftest_d);
 #else
 
 static inline
-int _fips_qcrypto_sha_selftest(struct fips_selftest_data *selftest_d)
-{
-	return 0;
+int _fips_qcrypto_sha_selftest(struct fips_selftest_data *selftest_d) {
+    return 0;
 }
 
 static inline
-int _fips_qcrypto_cipher_selftest(struct fips_selftest_data *selftest_d)
-{
-	return 0;
+int _fips_qcrypto_cipher_selftest(struct fips_selftest_data *selftest_d) {
+    return 0;
 }
 
 static
-inline int _fips_qcrypto_aead_selftest(struct fips_selftest_data *selftest_d)
-{
-	return 0;
+inline int _fips_qcrypto_aead_selftest(struct fips_selftest_data *selftest_d) {
+    return 0;
 }
 
 #endif  /* CONFIG_FIPS_ENABLE*/

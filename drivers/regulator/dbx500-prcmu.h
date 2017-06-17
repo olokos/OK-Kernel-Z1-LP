@@ -25,14 +25,14 @@
  *
  */
 struct dbx500_regulator_info {
-	struct device *dev;
-	struct regulator_desc desc;
-	struct regulator_dev *rdev;
-	bool is_enabled;
-	u16 epod_id;
-	bool is_ramret;
-	bool exclude_from_power_state;
-	unsigned int operating_point;
+    struct device *dev;
+    struct regulator_desc desc;
+    struct regulator_dev *rdev;
+    bool is_enabled;
+    u16 epod_id;
+    bool is_ramret;
+    bool exclude_from_power_state;
+    unsigned int operating_point;
 };
 
 void power_state_active_enable(void);
@@ -41,22 +41,20 @@ int power_state_active_disable(void);
 
 #ifdef CONFIG_REGULATOR_DEBUG
 int ux500_regulator_debug_init(struct platform_device *pdev,
-			       struct dbx500_regulator_info *regulator_info,
-			       int num_regulators);
+                               struct dbx500_regulator_info *regulator_info,
+                               int num_regulators);
 
 int ux500_regulator_debug_exit(void);
 #else
 
 static inline int ux500_regulator_debug_init(struct platform_device *pdev,
-			     struct dbx500_regulator_info *regulator_info,
-			     int num_regulators)
-{
-	return 0;
+        struct dbx500_regulator_info *regulator_info,
+        int num_regulators) {
+    return 0;
 }
 
-static inline int ux500_regulator_debug_exit(void)
-{
-	return 0;
+static inline int ux500_regulator_debug_exit(void) {
+    return 0;
 }
 
 #endif

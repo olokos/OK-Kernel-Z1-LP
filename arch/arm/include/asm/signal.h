@@ -17,7 +17,7 @@ struct siginfo;
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #else
@@ -78,7 +78,7 @@ typedef unsigned long sigset_t;
  * SA_NOCLDSTOP		flag to turn off SIGCHLD when children stop.
  * SA_NOCLDWAIT		flag on SIGCHLD to inhibit zombies.
  * SA_SIGINFO		deliver the signal with SIGINFO structs
- * SA_THIRTYTWO		delivers the signal in 32-bit mode, even if the task 
+ * SA_THIRTYTWO		delivers the signal in 32-bit mode, even if the task
  *			is running in 26-bit.
  * SA_ONSTACK		allows alternate signal stacks (see sigaltstack(2)).
  * SA_RESTART		flag to get restarting signals (which were the default long ago)
@@ -102,7 +102,7 @@ typedef unsigned long sigset_t;
 #define SA_ONESHOT	SA_RESETHAND
 
 
-/* 
+/*
  * sigaltstack controls
  */
 #define SS_ONSTACK	1
@@ -115,34 +115,34 @@ typedef unsigned long sigset_t;
 
 #ifdef __KERNEL__
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
 };
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 #else
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-	union {
-	  __sighandler_t _sa_handler;
-	  void (*_sa_sigaction)(int, struct siginfo *, void *);
-	} _u;
-	sigset_t sa_mask;
-	unsigned long sa_flags;
-	void (*sa_restorer)(void);
+    union {
+        __sighandler_t _sa_handler;
+        void (*_sa_sigaction)(int, struct siginfo *, void *);
+    } _u;
+    sigset_t sa_mask;
+    unsigned long sa_flags;
+    void (*sa_restorer)(void);
 };
 
 #define sa_handler	_u._sa_handler
@@ -151,9 +151,9 @@ struct sigaction {
 #endif /* __KERNEL__ */
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__

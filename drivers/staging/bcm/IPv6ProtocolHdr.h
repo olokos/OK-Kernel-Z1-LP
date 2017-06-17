@@ -27,84 +27,76 @@
 //typedef  unsigned short USHORT;
 //typedef  unsigned long int ULONG;
 
-typedef struct IPV6HeaderFormatTag
-{
-	UCHAR  ucVersionPrio;
-	UCHAR  aucFlowLabel[3];
-	USHORT usPayloadLength;
-	UCHAR  ucNextHeader;
-	UCHAR  ucHopLimit;
-	ULONG  ulSrcIpAddress[4];
-	ULONG  ulDestIpAddress[4];
-}IPV6Header;
+typedef struct IPV6HeaderFormatTag {
+    UCHAR  ucVersionPrio;
+    UCHAR  aucFlowLabel[3];
+    USHORT usPayloadLength;
+    UCHAR  ucNextHeader;
+    UCHAR  ucHopLimit;
+    ULONG  ulSrcIpAddress[4];
+    ULONG  ulDestIpAddress[4];
+} IPV6Header;
 
-typedef struct IPV6RoutingHeaderFormatTag
-{
-	UCHAR ucNextHeader;
-	UCHAR ucRoutingType;
-	UCHAR ucNumAddresses;
-	UCHAR ucNextAddress;
-	ULONG ulReserved;
-	//UCHAR aucAddressList[0];
+typedef struct IPV6RoutingHeaderFormatTag {
+    UCHAR ucNextHeader;
+    UCHAR ucRoutingType;
+    UCHAR ucNumAddresses;
+    UCHAR ucNextAddress;
+    ULONG ulReserved;
+    //UCHAR aucAddressList[0];
 
-}IPV6RoutingHeader;
+} IPV6RoutingHeader;
 
-typedef struct IPV6FragmentHeaderFormatTag
-{
-	UCHAR ucNextHeader;
-	UCHAR ucReserved;
-	USHORT usFragmentOffset;
-	ULONG  ulIdentification;
-}IPV6FragmentHeader;
+typedef struct IPV6FragmentHeaderFormatTag {
+    UCHAR ucNextHeader;
+    UCHAR ucReserved;
+    USHORT usFragmentOffset;
+    ULONG  ulIdentification;
+} IPV6FragmentHeader;
 
-typedef struct IPV6DestOptionsHeaderFormatTag
-{
-	UCHAR ucNextHeader;
-	UCHAR ucHdrExtLen;
-	UCHAR ucDestOptions[6];
-	//UCHAR udExtDestOptions[0];
-}IPV6DestOptionsHeader;
+typedef struct IPV6DestOptionsHeaderFormatTag {
+    UCHAR ucNextHeader;
+    UCHAR ucHdrExtLen;
+    UCHAR ucDestOptions[6];
+    //UCHAR udExtDestOptions[0];
+} IPV6DestOptionsHeader;
 
-typedef struct IPV6HopByHopOptionsHeaderFormatTag
-{
-	UCHAR ucNextHeader;
-	UCHAR ucMisc[3];
-	ULONG ulJumboPayloadLen;
-}IPV6HopByHopOptionsHeader;
+typedef struct IPV6HopByHopOptionsHeaderFormatTag {
+    UCHAR ucNextHeader;
+    UCHAR ucMisc[3];
+    ULONG ulJumboPayloadLen;
+} IPV6HopByHopOptionsHeader;
 
-typedef struct IPV6AuthenticationHeaderFormatTag
-{
-	UCHAR ucNextHeader;
-	UCHAR ucLength;
-	USHORT usReserved;
-	ULONG  ulSecurityParametersIndex;
-	//UCHAR  ucAuthenticationData[0];
+typedef struct IPV6AuthenticationHeaderFormatTag {
+    UCHAR ucNextHeader;
+    UCHAR ucLength;
+    USHORT usReserved;
+    ULONG  ulSecurityParametersIndex;
+    //UCHAR  ucAuthenticationData[0];
 
-}IPV6AuthenticationHeader;
+} IPV6AuthenticationHeader;
 
-typedef struct IPV6IcmpHeaderFormatTag
-{
-	UCHAR ucType;
-	UCHAR ucCode;
-	USHORT usChecksum;
-	//UCHAR  ucIcmpMsg[0];
+typedef struct IPV6IcmpHeaderFormatTag {
+    UCHAR ucType;
+    UCHAR ucCode;
+    USHORT usChecksum;
+    //UCHAR  ucIcmpMsg[0];
 
-}IPV6IcmpHeader;
+} IPV6IcmpHeader;
 
-typedef enum _E_IPADDR_CONTEXT
-{
-	eSrcIpAddress,
-	eDestIpAddress
+typedef enum _E_IPADDR_CONTEXT {
+    eSrcIpAddress,
+    eDestIpAddress
 
-}E_IPADDR_CONTEXT;
+} E_IPADDR_CONTEXT;
 
 
 
 //Function Prototypes
 
 USHORT	IpVersion6(PMINI_ADAPTER Adapter, /**< Pointer to the driver control structure */
-					PVOID pcIpHeader, /**<Pointer to the IP Hdr of the packet*/
-					S_CLASSIFIER_RULE *pstClassifierRule );
+                   PVOID pcIpHeader, /**<Pointer to the IP Hdr of the packet*/
+                   S_CLASSIFIER_RULE *pstClassifierRule );
 
 VOID DumpIpv6Address(ULONG *puIpv6Address);
 

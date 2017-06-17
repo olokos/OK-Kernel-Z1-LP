@@ -18,9 +18,8 @@
 /* these are here to de-mystefy the calling code, and to provide hooks */
 /* which I needed for debugging EIEM problems -PB */
 #define get_eiem() mfctl(15)
-static inline void set_eiem(unsigned long val)
-{
-	mtctl(val, 15);
+static inline void set_eiem(unsigned long val) {
+    mtctl(val, 15);
 }
 
 #define mfsp(reg)	({		\

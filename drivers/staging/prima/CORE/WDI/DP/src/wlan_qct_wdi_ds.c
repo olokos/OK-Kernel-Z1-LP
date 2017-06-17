@@ -71,8 +71,7 @@ WDI_Status WDI_DS_Register( void *pContext,
                             WDI_DS_TxCompleteCallback pfnTxCompleteCallback,
                             WDI_DS_RxPacketCallback pfnRxPacketCallback,
                             WDI_DS_TxFlowControlCallback pfnTxFlowControlCallback,
-                            void *pCallbackContext)
-{
+                            void *pCallbackContext) {
     WDI_DS_ClientDataType *pClientData;
     wpt_uint8              bssLoop;
 
@@ -81,14 +80,12 @@ WDI_Status WDI_DS_Register( void *pContext,
             NULL == pCallbackContext ||
             NULL == pfnTxCompleteCallback ||
             NULL == pfnRxPacketCallback ||
-            NULL == pfnTxFlowControlCallback)
-    {
+            NULL == pfnTxFlowControlCallback) {
         return WDI_STATUS_E_FAILURE;
     }
 
     pClientData = (WDI_DS_ClientDataType *)WDI_DS_GetDatapathContext(pContext);
-    if (NULL == pClientData)
-    {
+    if (NULL == pClientData) {
         return WDI_STATUS_MEM_FAILURE;
     }
 
@@ -99,8 +96,7 @@ WDI_Status WDI_DS_Register( void *pContext,
     pClientData->txResourceCB = pfnTxFlowControlCallback;
     pClientData->pCallbackContext = pCallbackContext;
 
-    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++)
-    {
+    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++) {
         pClientData->staIdxPerBssIdxTable[bssLoop].isUsed = 0;
         pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx = WDI_DS_INDEX_INVALID;
         pClientData->staIdxPerBssIdxTable[bssLoop].staIdx = WDI_DS_INDEX_INVALID;
@@ -123,8 +119,7 @@ WDI_Status WDI_DS_Register( void *pContext,
 
 WDI_Status WDI_DS_TxPacket(void *pContext,
                            wpt_packet *pFrame,
-                           wpt_boolean more)
-{
+                           wpt_boolean more) {
     WDI_DS_ClientDataType *pClientData;
     wpt_uint8      ucSwFrameTXXlation;
     wpt_uint8      ucUP;
@@ -144,14 +139,12 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
     WDI_Status wdiStatus;
 
     // Do Sanity checks
-    if (NULL == pContext)
-    {
+    if (NULL == pContext) {
         return WDI_STATUS_E_FAILURE;
     }
 
     pClientData = (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
-    if (NULL == pClientData || pClientData->suspend)
-    {
+    if (NULL == pClientData || pClientData->suspend) {
         return WDI_STATUS_E_FAILURE;
     }
 
@@ -170,8 +163,7 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
        Get type and subtype of the frame first
     ------------------------------------------------------------------------*/
     ucType = (ucTypeSubtype & WDI_FRAME_TYPE_MASK) >> WDI_FRAME_TYPE_OFFSET;
-    switch(ucType)
-    {
+    switch(ucType) {
     case WDI_MAC_DATA_FRAME:
 #ifdef FEATURE_WLAN_TDLS
         /* I utilizes TDLS mgmt frame always sent at BD_RATE2. (See limProcessTdls.c)
@@ -207,16 +199,14 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
 
     alignment = 0;
     WDI_DS_PrepareBDHeader(pFrame, ucSwFrameTXXlation, alignment);
-    if (pTxMetadata->isEapol)
-    {
+    if (pTxMetadata->isEapol) {
         WPAL_TRACE( eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_INFO,
                     "Packet Length is %d\n", pTxMetadata->fPktlen);
     }
     wdiStatus = WDI_FillTxBd(pContext, ucTypeSubtype, pSTAMACAddress, pAddr2MACAddress,
                              &ucUP, 1, pvBDHeader, ucTxFlag /* No ACK */, ucProtMgmtFrame, 0, isEapol, &staId);
 
-    if(WDI_STATUS_SUCCESS != wdiStatus)
-    {
+    if(WDI_STATUS_SUCCESS != wdiStatus) {
         WDI_DS_MemPoolFree(pMemPool, pvBDHeader, physBDHeader);
         return wdiStatus;
     }
@@ -224,8 +214,7 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
     pTxMetadata->staIdx = staId;
 
     // Send packet to transport layer.
-    if(eWLAN_PAL_STATUS_SUCCESS !=WDTS_TxPacket(pContext, pFrame))
-    {
+    if(eWLAN_PAL_STATUS_SUCCESS !=WDTS_TxPacket(pContext, pFrame)) {
         WDI_DS_MemPoolFree(pMemPool, pvBDHeader, physBDHeader);
         return WDI_STATUS_E_FAILURE;
     }
@@ -259,15 +248,13 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
  */
 
 
-WDI_Status WDI_DS_TxComplete(void *pContext, wpt_uint32 ucTxResReq)
-{
+WDI_Status WDI_DS_TxComplete(void *pContext, wpt_uint32 ucTxResReq) {
     // Do Sanity checks
     if(NULL == pContext)
         return WDI_STATUS_E_FAILURE;
 
     // Send notification to transport layer.
-    if(eWLAN_PAL_STATUS_SUCCESS !=WDTS_CompleteTx(pContext, ucTxResReq))
-    {
+    if(eWLAN_PAL_STATUS_SUCCESS !=WDTS_CompleteTx(pContext, ucTxResReq)) {
         return WDI_STATUS_E_FAILURE;
     }
 
@@ -283,8 +270,7 @@ WDI_Status WDI_DS_TxComplete(void *pContext, wpt_uint32 ucTxResReq)
  */
 
 
-WDI_Status WDI_DS_TxSuspend(void *pContext)
-{
+WDI_Status WDI_DS_TxSuspend(void *pContext) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
     pClientData->suspend = 1;
@@ -303,8 +289,7 @@ WDI_Status WDI_DS_TxSuspend(void *pContext)
  */
 
 
-WDI_Status WDI_DS_TxResume(void *pContext)
-{
+WDI_Status WDI_DS_TxResume(void *pContext) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
 
@@ -323,13 +308,11 @@ WDI_Status WDI_DS_TxResume(void *pContext)
  *
  */
 
-wpt_uint32 WDI_GetAvailableResCount(void *pContext,WDI_ResPoolType wdiResPool)
-{
+wpt_uint32 WDI_GetAvailableResCount(void *pContext,WDI_ResPoolType wdiResPool) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
 
-    switch(wdiResPool)
-    {
+    switch(wdiResPool) {
     case WDI_MGMT_POOL_ID:
         return (WDI_DS_HI_PRI_RES_NUM - 2*WDI_DS_GetAvailableResCount(&pClientData->mgmtMemPool));
     case WDI_DATA_POOL_ID:
@@ -347,12 +330,10 @@ wpt_uint32 WDI_GetAvailableResCount(void *pContext,WDI_ResPoolType wdiResPool)
  * Return Value: number of resources reserved per STA
  *
  */
-wpt_uint32 WDI_DS_GetReservedResCountPerSTA(void *pContext,WDI_ResPoolType wdiResPool, wpt_uint8 staId)
-{
+wpt_uint32 WDI_DS_GetReservedResCountPerSTA(void *pContext,WDI_ResPoolType wdiResPool, wpt_uint8 staId) {
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
-    switch(wdiResPool)
-    {
+    switch(wdiResPool) {
     case WDI_MGMT_POOL_ID:
         return WDI_DS_MemPoolGetRsvdResCountPerSTA(&pClientData->mgmtMemPool, staId);
     case WDI_DATA_POOL_ID:
@@ -369,22 +350,19 @@ wpt_uint32 WDI_DS_GetReservedResCountPerSTA(void *pContext,WDI_ResPoolType wdiRe
  * Return Value: number of resources reserved per STA
  *
  */
-WDI_Status WDI_DS_AddSTAMemPool(void *pContext, wpt_uint8 staIndex)
-{
+WDI_Status WDI_DS_AddSTAMemPool(void *pContext, wpt_uint8 staIndex) {
     WDI_Status status = WDI_STATUS_SUCCESS;
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
 
     status = WDI_DS_MemPoolAddSTA(&pClientData->mgmtMemPool, staIndex);
-    if(WDI_STATUS_SUCCESS != status)
-    {
+    if(WDI_STATUS_SUCCESS != status) {
         /* Add STA into MGMT memPool Fail */
         return status;
     }
 
     status = WDI_DS_MemPoolAddSTA(&pClientData->dataMemPool, staIndex);
-    if(WDI_STATUS_SUCCESS != status)
-    {
+    if(WDI_STATUS_SUCCESS != status) {
         /* Add STA into DATA memPool Fail */
         return status;
     }
@@ -399,21 +377,18 @@ WDI_Status WDI_DS_AddSTAMemPool(void *pContext, wpt_uint8 staIndex)
  * Return Value: number of resources reserved per STA
  *
  */
-WDI_Status WDI_DS_DelSTAMemPool(void *pContext, wpt_uint8 staIndex)
-{
+WDI_Status WDI_DS_DelSTAMemPool(void *pContext, wpt_uint8 staIndex) {
     WDI_Status status = WDI_STATUS_SUCCESS;
     WDI_DS_ClientDataType *pClientData =
         (WDI_DS_ClientDataType *) WDI_DS_GetDatapathContext(pContext);
 
     status = WDI_DS_MemPoolDelSTA(&pClientData->mgmtMemPool, staIndex);
-    if(WDI_STATUS_SUCCESS != status)
-    {
+    if(WDI_STATUS_SUCCESS != status) {
         /* Del STA from MGMT memPool Fail */
         return status;
     }
     status = WDI_DS_MemPoolDelSTA(&pClientData->dataMemPool, staIndex);
-    if(WDI_STATUS_SUCCESS != status)
-    {
+    if(WDI_STATUS_SUCCESS != status) {
         /* Del STA from DATA memPool Fail */
         return status;
     }
@@ -428,23 +403,19 @@ WDI_Status WDI_DS_DelSTAMemPool(void *pContext, wpt_uint8 staIndex)
  * Return Status: Found empty slot
  *
  */
-WDI_Status WDI_DS_SetStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 staIdx)
-{
+WDI_Status WDI_DS_SetStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 staIdx) {
     WDI_DS_ClientDataType *pClientData;
     wpt_uint8              bssLoop;
 
     pClientData = (WDI_DS_ClientDataType *)WDI_DS_GetDatapathContext(pContext);
-    for (bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++)
-    {
+    for (bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++) {
         if ((pClientData->staIdxPerBssIdxTable[bssLoop].isUsed) &&
                 (bssIdx == pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx) &&
-                (staIdx == pClientData->staIdxPerBssIdxTable[bssLoop].staIdx))
-        {
+                (staIdx == pClientData->staIdxPerBssIdxTable[bssLoop].staIdx)) {
             return WDI_STATUS_SUCCESS;
         }
 
-        if (0 == pClientData->staIdxPerBssIdxTable[bssLoop].isUsed)
-        {
+        if (0 == pClientData->staIdxPerBssIdxTable[bssLoop].isUsed) {
             pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx = bssIdx;
             pClientData->staIdxPerBssIdxTable[bssLoop].staIdx = staIdx;
             pClientData->staIdxPerBssIdxTable[bssLoop].isUsed = 1;
@@ -464,16 +435,13 @@ WDI_Status WDI_DS_SetStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8
  * Return Status: Found empty slot
  *
  */
-WDI_Status WDI_DS_GetStaIdxFromBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 *staIdx)
-{
+WDI_Status WDI_DS_GetStaIdxFromBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 *staIdx) {
     WDI_DS_ClientDataType *pClientData;
     wpt_uint8              bssLoop;
 
     pClientData = (WDI_DS_ClientDataType *)WDI_DS_GetDatapathContext(pContext);
-    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++)
-    {
-        if(bssIdx == pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx)
-        {
+    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++) {
+        if(bssIdx == pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx) {
             /* Found BSS index from slot */
             *staIdx = pClientData->staIdxPerBssIdxTable[bssLoop].staIdx;
             return WDI_STATUS_SUCCESS;
@@ -492,17 +460,14 @@ WDI_Status WDI_DS_GetStaIdxFromBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint
  * Return Status: Found empty slot
  *
  */
-WDI_Status WDI_DS_ClearStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 staIdx)
-{
+WDI_Status WDI_DS_ClearStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uint8 staIdx) {
     WDI_DS_ClientDataType *pClientData;
     wpt_uint8              bssLoop;
 
     pClientData = (WDI_DS_ClientDataType *)WDI_DS_GetDatapathContext(pContext);
-    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++)
-    {
+    for(bssLoop = 0; bssLoop < WDI_DS_MAX_SUPPORTED_BSS; bssLoop++) {
         if((bssIdx == pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx) &&
-                (staIdx == pClientData->staIdxPerBssIdxTable[bssLoop].staIdx))
-        {
+                (staIdx == pClientData->staIdxPerBssIdxTable[bssLoop].staIdx)) {
             pClientData->staIdxPerBssIdxTable[bssLoop].bssIdx = WDI_DS_INDEX_INVALID;
             pClientData->staIdxPerBssIdxTable[bssLoop].staIdx = WDI_DS_INDEX_INVALID;
             pClientData->staIdxPerBssIdxTable[bssLoop].isUsed = 0;
@@ -521,8 +486,7 @@ WDI_Status WDI_DS_ClearStaIdxPerBssIdx(void *pContext, wpt_uint8 bssIdx, wpt_uin
  *  len: length of buffer pointed to by pStats
  *  Return Status: None
  */
-void WDI_DS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
-{
+void WDI_DS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len) {
     return WDTS_GetTrafficStats(pStats, len);
 }
 
@@ -531,8 +495,7 @@ void WDI_DS_GetTrafficStats(WDI_TrafficStatsType** pStats, wpt_uint32 *len)
   * Parameters: None
  *  Return Status: None
  */
-void WDI_DS_DeactivateTrafficStats(void)
-{
+void WDI_DS_DeactivateTrafficStats(void) {
     return WDTS_DeactivateTrafficStats();
 }
 
@@ -541,8 +504,7 @@ void WDI_DS_DeactivateTrafficStats(void)
   * Parameters: None
  *  Return Status: None
  */
-void WDI_DS_ActivateTrafficStats(void)
-{
+void WDI_DS_ActivateTrafficStats(void) {
     return WDTS_ActivateTrafficStats();
 }
 
@@ -551,8 +513,7 @@ void WDI_DS_ActivateTrafficStats(void)
   * Parameters: None
  *  Return Status: None
  */
-void WDI_DS_ClearTrafficStats(void)
-{
+void WDI_DS_ClearTrafficStats(void) {
     return WDTS_ClearTrafficStats();
 }
 

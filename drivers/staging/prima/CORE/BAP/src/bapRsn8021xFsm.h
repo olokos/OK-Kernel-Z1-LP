@@ -81,8 +81,7 @@ typedef struct tSuppContext tSuppContext;
 /************************
  * AuthRsnFsm structure:
  *************************/
-typedef struct tagAuthRsnFsm
-{
+typedef struct tagAuthRsnFsm {
     v_U8_t currentState;
 
     tBtampContext *ctx;
@@ -117,8 +116,7 @@ typedef struct tagAuthRsnFsm
  * SuppRsnFsm structure:
  *************************/
 
-typedef struct tagSuppRsnFsm
-{
+typedef struct tagSuppRsnFsm {
 
     v_U8_t currentState;
 
@@ -149,8 +147,7 @@ typedef struct tagSuppRsnFsm
 typedef struct sAagZoneEntry tAagZoneEntry;
 typedef struct sAagSsidEntry tAagSsidEntry;
 
-typedef enum
-{
+typedef enum {
     //Internal to RSN
     //This event is triggered by RSN’s timers
     RSN_FSM_TIMER_EXPIRED,
@@ -200,8 +197,7 @@ typedef struct tEapInfo
 } tEapInfo;
 
 
-typedef enum eAniSsmAuthState
-{
+typedef enum eAniSsmAuthState {
     eANI_SSM_AUTH_STATE_INIT = 0,
     eANI_SSM_AS_PW_KEY_CONF_AWAITED,
     eANI_SSM_AS_PW_KEY_SET,
@@ -215,8 +211,7 @@ typedef enum eAniSsmAuthState
  * EAP-Message and RADIUS state that is obtained from various network
  * packets.
  */
-struct tStaContext
-{
+struct tStaContext {
 
     // STA identification information
     tAniMacAddr suppMac;
@@ -263,8 +258,7 @@ struct tStaContext
 };
 
 
-struct tSuppContext
-{
+struct tSuppContext {
 
     // AP (peer) identification information
     tAniMacAddr authMac;
@@ -289,14 +283,12 @@ struct tSuppContext
 
 };
 
-typedef struct tAniEapolKeyAvailEventData
-{
+typedef struct tAniEapolKeyAvailEventData {
     void *keyDesc;
     tAniPacket *eapolFrame;
 } tAniEapolKeyAvailEventData;
 
-typedef struct tAniAagTimerEventData
-{
+typedef struct tAniAagTimerEventData {
     vos_timer_t timer;
     void *appData;
 } tAniAagTimerEventData;
@@ -336,8 +328,7 @@ typedef void (*tAagTimerCallback)(void *data);
  * This structure stores contants used by the AuthFsm as defined in
  * [802.1X].
  */
-typedef struct tAuthFsmConsts
-{
+typedef struct tAuthFsmConsts {
     // Amount of time to ignore a misbehaving STA
     v_U16_t quietPeriod;
     // Number of reauthentication attempts allowed before ignoring STA
@@ -352,8 +343,7 @@ typedef struct tAuthFsmConsts
  * This structure stores constants used by the AuthRsnFsm as defined in
  * [802.11i].
  */
-typedef struct tAuthRsnFsmConsts
-{
+typedef struct tAuthRsnFsmConsts {
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tAuthRsnFsmConsts;
@@ -363,8 +353,7 @@ typedef struct tAuthRsnFsmConsts
  * This structure stores contants used by the SuppFsm as defined in
  * [802.1X].
  */
-typedef struct tSuppFsmConsts
-{
+typedef struct tSuppFsmConsts {
     v_U16_t authPeriod;
     v_U16_t heldPeriod;
     v_U16_t startPeriod;
@@ -375,8 +364,7 @@ typedef struct tSuppFsmConsts
  * This structure stores constants used by the SuppRsnFsm as defined in
  * [802.11i].
  */
-typedef struct tSuppRsnFsmConsts
-{
+typedef struct tSuppRsnFsmConsts {
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tSuppRsnFsmConsts;
@@ -386,8 +374,7 @@ typedef struct tSuppRsnFsmConsts
  * This structure stores constants used by the AuthRsnGroupKeyFsm as
  * defined in [802.11i].
  */
-typedef struct tAuthRsnGroupKeyFsmConsts
-{
+typedef struct tAuthRsnGroupKeyFsmConsts {
     v_U32_t timeoutPeriod;
     v_U32_t maxTries;
 } tAuthRsnGroupKeyFsmConsts;

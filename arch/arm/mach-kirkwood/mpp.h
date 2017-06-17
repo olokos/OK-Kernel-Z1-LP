@@ -22,7 +22,7 @@
 	/* available on F6281 */	((!!(_F6281)) << 17) | \
 	/* available on F6282 */	((!!(_F6282)) << 18))
 
-				/*   num sel  i  o  6180 6190 6192 6281 6282 */
+/*   num sel  i  o  6180 6190 6192 6281 6282 */
 
 #define MPP_F6180_MASK		MPP(  0, 0x0, 0, 0, 1,   0,   0,   0,   0 )
 #define MPP_F6190_MASK		MPP(  0, 0x0, 0, 0, 0,   1,   0,   0,   0 )

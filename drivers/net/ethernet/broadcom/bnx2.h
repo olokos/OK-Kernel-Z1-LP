@@ -21,26 +21,26 @@
  *  tx_bd definition
  */
 struct tx_bd {
-	u32 tx_bd_haddr_hi;
-	u32 tx_bd_haddr_lo;
-	u32 tx_bd_mss_nbytes;
-		#define TX_BD_TCP6_OFF2_SHL		(14)
-	u32 tx_bd_vlan_tag_flags;
-		#define TX_BD_FLAGS_CONN_FAULT		(1<<0)
-		#define TX_BD_FLAGS_TCP6_OFF0_MSK	(3<<1)
-		#define TX_BD_FLAGS_TCP6_OFF0_SHL	(1)
-		#define TX_BD_FLAGS_TCP_UDP_CKSUM	(1<<1)
-		#define TX_BD_FLAGS_IP_CKSUM		(1<<2)
-		#define TX_BD_FLAGS_VLAN_TAG		(1<<3)
-		#define TX_BD_FLAGS_COAL_NOW		(1<<4)
-		#define TX_BD_FLAGS_DONT_GEN_CRC	(1<<5)
-		#define TX_BD_FLAGS_END			(1<<6)
-		#define TX_BD_FLAGS_START		(1<<7)
-		#define TX_BD_FLAGS_SW_OPTION_WORD	(0x1f<<8)
-		#define TX_BD_FLAGS_TCP6_OFF4_SHL	(12)
-		#define TX_BD_FLAGS_SW_FLAGS		(1<<13)
-		#define TX_BD_FLAGS_SW_SNAP		(1<<14)
-		#define TX_BD_FLAGS_SW_LSO		(1<<15)
+    u32 tx_bd_haddr_hi;
+    u32 tx_bd_haddr_lo;
+    u32 tx_bd_mss_nbytes;
+#define TX_BD_TCP6_OFF2_SHL		(14)
+    u32 tx_bd_vlan_tag_flags;
+#define TX_BD_FLAGS_CONN_FAULT		(1<<0)
+#define TX_BD_FLAGS_TCP6_OFF0_MSK	(3<<1)
+#define TX_BD_FLAGS_TCP6_OFF0_SHL	(1)
+#define TX_BD_FLAGS_TCP_UDP_CKSUM	(1<<1)
+#define TX_BD_FLAGS_IP_CKSUM		(1<<2)
+#define TX_BD_FLAGS_VLAN_TAG		(1<<3)
+#define TX_BD_FLAGS_COAL_NOW		(1<<4)
+#define TX_BD_FLAGS_DONT_GEN_CRC	(1<<5)
+#define TX_BD_FLAGS_END			(1<<6)
+#define TX_BD_FLAGS_START		(1<<7)
+#define TX_BD_FLAGS_SW_OPTION_WORD	(0x1f<<8)
+#define TX_BD_FLAGS_TCP6_OFF4_SHL	(12)
+#define TX_BD_FLAGS_SW_FLAGS		(1<<13)
+#define TX_BD_FLAGS_SW_SNAP		(1<<14)
+#define TX_BD_FLAGS_SW_LSO		(1<<15)
 
 };
 
@@ -49,14 +49,14 @@ struct tx_bd {
  *  rx_bd definition
  */
 struct rx_bd {
-	u32 rx_bd_haddr_hi;
-	u32 rx_bd_haddr_lo;
-	u32 rx_bd_len;
-	u32 rx_bd_flags;
-		#define RX_BD_FLAGS_NOPUSH		(1<<0)
-		#define RX_BD_FLAGS_DUMMY		(1<<1)
-		#define RX_BD_FLAGS_END			(1<<2)
-		#define RX_BD_FLAGS_START		(1<<3)
+    u32 rx_bd_haddr_hi;
+    u32 rx_bd_haddr_lo;
+    u32 rx_bd_len;
+    u32 rx_bd_flags;
+#define RX_BD_FLAGS_NOPUSH		(1<<0)
+#define RX_BD_FLAGS_DUMMY		(1<<1)
+#define RX_BD_FLAGS_END			(1<<2)
+#define RX_BD_FLAGS_START		(1<<3)
 
 };
 
@@ -66,91 +66,91 @@ struct rx_bd {
  *  status_block definition
  */
 struct status_block {
-	u32 status_attn_bits;
-		#define STATUS_ATTN_BITS_LINK_STATE		(1L<<0)
-		#define STATUS_ATTN_BITS_TX_SCHEDULER_ABORT	(1L<<1)
-		#define STATUS_ATTN_BITS_TX_BD_READ_ABORT	(1L<<2)
-		#define STATUS_ATTN_BITS_TX_BD_CACHE_ABORT	(1L<<3)
-		#define STATUS_ATTN_BITS_TX_PROCESSOR_ABORT	(1L<<4)
-		#define STATUS_ATTN_BITS_TX_DMA_ABORT		(1L<<5)
-		#define STATUS_ATTN_BITS_TX_PATCHUP_ABORT	(1L<<6)
-		#define STATUS_ATTN_BITS_TX_ASSEMBLER_ABORT	(1L<<7)
-		#define STATUS_ATTN_BITS_RX_PARSER_MAC_ABORT	(1L<<8)
-		#define STATUS_ATTN_BITS_RX_PARSER_CATCHUP_ABORT	(1L<<9)
-		#define STATUS_ATTN_BITS_RX_MBUF_ABORT		(1L<<10)
-		#define STATUS_ATTN_BITS_RX_LOOKUP_ABORT	(1L<<11)
-		#define STATUS_ATTN_BITS_RX_PROCESSOR_ABORT	(1L<<12)
-		#define STATUS_ATTN_BITS_RX_V2P_ABORT		(1L<<13)
-		#define STATUS_ATTN_BITS_RX_BD_CACHE_ABORT	(1L<<14)
-		#define STATUS_ATTN_BITS_RX_DMA_ABORT		(1L<<15)
-		#define STATUS_ATTN_BITS_COMPLETION_ABORT	(1L<<16)
-		#define STATUS_ATTN_BITS_HOST_COALESCE_ABORT	(1L<<17)
-		#define STATUS_ATTN_BITS_MAILBOX_QUEUE_ABORT	(1L<<18)
-		#define STATUS_ATTN_BITS_CONTEXT_ABORT		(1L<<19)
-		#define STATUS_ATTN_BITS_CMD_SCHEDULER_ABORT	(1L<<20)
-		#define STATUS_ATTN_BITS_CMD_PROCESSOR_ABORT	(1L<<21)
-		#define STATUS_ATTN_BITS_MGMT_PROCESSOR_ABORT	(1L<<22)
-		#define STATUS_ATTN_BITS_MAC_ABORT		(1L<<23)
-		#define STATUS_ATTN_BITS_TIMER_ABORT		(1L<<24)
-		#define STATUS_ATTN_BITS_DMAE_ABORT		(1L<<25)
-		#define STATUS_ATTN_BITS_FLSH_ABORT		(1L<<26)
-		#define STATUS_ATTN_BITS_GRC_ABORT		(1L<<27)
-		#define STATUS_ATTN_BITS_EPB_ERROR		(1L<<30)
-		#define STATUS_ATTN_BITS_PARITY_ERROR		(1L<<31)
+    u32 status_attn_bits;
+#define STATUS_ATTN_BITS_LINK_STATE		(1L<<0)
+#define STATUS_ATTN_BITS_TX_SCHEDULER_ABORT	(1L<<1)
+#define STATUS_ATTN_BITS_TX_BD_READ_ABORT	(1L<<2)
+#define STATUS_ATTN_BITS_TX_BD_CACHE_ABORT	(1L<<3)
+#define STATUS_ATTN_BITS_TX_PROCESSOR_ABORT	(1L<<4)
+#define STATUS_ATTN_BITS_TX_DMA_ABORT		(1L<<5)
+#define STATUS_ATTN_BITS_TX_PATCHUP_ABORT	(1L<<6)
+#define STATUS_ATTN_BITS_TX_ASSEMBLER_ABORT	(1L<<7)
+#define STATUS_ATTN_BITS_RX_PARSER_MAC_ABORT	(1L<<8)
+#define STATUS_ATTN_BITS_RX_PARSER_CATCHUP_ABORT	(1L<<9)
+#define STATUS_ATTN_BITS_RX_MBUF_ABORT		(1L<<10)
+#define STATUS_ATTN_BITS_RX_LOOKUP_ABORT	(1L<<11)
+#define STATUS_ATTN_BITS_RX_PROCESSOR_ABORT	(1L<<12)
+#define STATUS_ATTN_BITS_RX_V2P_ABORT		(1L<<13)
+#define STATUS_ATTN_BITS_RX_BD_CACHE_ABORT	(1L<<14)
+#define STATUS_ATTN_BITS_RX_DMA_ABORT		(1L<<15)
+#define STATUS_ATTN_BITS_COMPLETION_ABORT	(1L<<16)
+#define STATUS_ATTN_BITS_HOST_COALESCE_ABORT	(1L<<17)
+#define STATUS_ATTN_BITS_MAILBOX_QUEUE_ABORT	(1L<<18)
+#define STATUS_ATTN_BITS_CONTEXT_ABORT		(1L<<19)
+#define STATUS_ATTN_BITS_CMD_SCHEDULER_ABORT	(1L<<20)
+#define STATUS_ATTN_BITS_CMD_PROCESSOR_ABORT	(1L<<21)
+#define STATUS_ATTN_BITS_MGMT_PROCESSOR_ABORT	(1L<<22)
+#define STATUS_ATTN_BITS_MAC_ABORT		(1L<<23)
+#define STATUS_ATTN_BITS_TIMER_ABORT		(1L<<24)
+#define STATUS_ATTN_BITS_DMAE_ABORT		(1L<<25)
+#define STATUS_ATTN_BITS_FLSH_ABORT		(1L<<26)
+#define STATUS_ATTN_BITS_GRC_ABORT		(1L<<27)
+#define STATUS_ATTN_BITS_EPB_ERROR		(1L<<30)
+#define STATUS_ATTN_BITS_PARITY_ERROR		(1L<<31)
 
-	u32 status_attn_bits_ack;
+    u32 status_attn_bits_ack;
 #if defined(__BIG_ENDIAN)
-	u16 status_tx_quick_consumer_index0;
-	u16 status_tx_quick_consumer_index1;
-	u16 status_tx_quick_consumer_index2;
-	u16 status_tx_quick_consumer_index3;
-	u16 status_rx_quick_consumer_index0;
-	u16 status_rx_quick_consumer_index1;
-	u16 status_rx_quick_consumer_index2;
-	u16 status_rx_quick_consumer_index3;
-	u16 status_rx_quick_consumer_index4;
-	u16 status_rx_quick_consumer_index5;
-	u16 status_rx_quick_consumer_index6;
-	u16 status_rx_quick_consumer_index7;
-	u16 status_rx_quick_consumer_index8;
-	u16 status_rx_quick_consumer_index9;
-	u16 status_rx_quick_consumer_index10;
-	u16 status_rx_quick_consumer_index11;
-	u16 status_rx_quick_consumer_index12;
-	u16 status_rx_quick_consumer_index13;
-	u16 status_rx_quick_consumer_index14;
-	u16 status_rx_quick_consumer_index15;
-	u16 status_completion_producer_index;
-	u16 status_cmd_consumer_index;
-	u16 status_idx;
-	u8 status_unused;
-	u8 status_blk_num;
+    u16 status_tx_quick_consumer_index0;
+    u16 status_tx_quick_consumer_index1;
+    u16 status_tx_quick_consumer_index2;
+    u16 status_tx_quick_consumer_index3;
+    u16 status_rx_quick_consumer_index0;
+    u16 status_rx_quick_consumer_index1;
+    u16 status_rx_quick_consumer_index2;
+    u16 status_rx_quick_consumer_index3;
+    u16 status_rx_quick_consumer_index4;
+    u16 status_rx_quick_consumer_index5;
+    u16 status_rx_quick_consumer_index6;
+    u16 status_rx_quick_consumer_index7;
+    u16 status_rx_quick_consumer_index8;
+    u16 status_rx_quick_consumer_index9;
+    u16 status_rx_quick_consumer_index10;
+    u16 status_rx_quick_consumer_index11;
+    u16 status_rx_quick_consumer_index12;
+    u16 status_rx_quick_consumer_index13;
+    u16 status_rx_quick_consumer_index14;
+    u16 status_rx_quick_consumer_index15;
+    u16 status_completion_producer_index;
+    u16 status_cmd_consumer_index;
+    u16 status_idx;
+    u8 status_unused;
+    u8 status_blk_num;
 #elif defined(__LITTLE_ENDIAN)
-	u16 status_tx_quick_consumer_index1;
-	u16 status_tx_quick_consumer_index0;
-	u16 status_tx_quick_consumer_index3;
-	u16 status_tx_quick_consumer_index2;
-	u16 status_rx_quick_consumer_index1;
-	u16 status_rx_quick_consumer_index0;
-	u16 status_rx_quick_consumer_index3;
-	u16 status_rx_quick_consumer_index2;
-	u16 status_rx_quick_consumer_index5;
-	u16 status_rx_quick_consumer_index4;
-	u16 status_rx_quick_consumer_index7;
-	u16 status_rx_quick_consumer_index6;
-	u16 status_rx_quick_consumer_index9;
-	u16 status_rx_quick_consumer_index8;
-	u16 status_rx_quick_consumer_index11;
-	u16 status_rx_quick_consumer_index10;
-	u16 status_rx_quick_consumer_index13;
-	u16 status_rx_quick_consumer_index12;
-	u16 status_rx_quick_consumer_index15;
-	u16 status_rx_quick_consumer_index14;
-	u16 status_cmd_consumer_index;
-	u16 status_completion_producer_index;
-	u8 status_blk_num;
-	u8 status_unused;
-	u16 status_idx;
+    u16 status_tx_quick_consumer_index1;
+    u16 status_tx_quick_consumer_index0;
+    u16 status_tx_quick_consumer_index3;
+    u16 status_tx_quick_consumer_index2;
+    u16 status_rx_quick_consumer_index1;
+    u16 status_rx_quick_consumer_index0;
+    u16 status_rx_quick_consumer_index3;
+    u16 status_rx_quick_consumer_index2;
+    u16 status_rx_quick_consumer_index5;
+    u16 status_rx_quick_consumer_index4;
+    u16 status_rx_quick_consumer_index7;
+    u16 status_rx_quick_consumer_index6;
+    u16 status_rx_quick_consumer_index9;
+    u16 status_rx_quick_consumer_index8;
+    u16 status_rx_quick_consumer_index11;
+    u16 status_rx_quick_consumer_index10;
+    u16 status_rx_quick_consumer_index13;
+    u16 status_rx_quick_consumer_index12;
+    u16 status_rx_quick_consumer_index15;
+    u16 status_rx_quick_consumer_index14;
+    u16 status_cmd_consumer_index;
+    u16 status_completion_producer_index;
+    u8 status_blk_num;
+    u8 status_unused;
+    u16 status_idx;
 #endif
 };
 
@@ -159,23 +159,23 @@ struct status_block {
  */
 struct status_block_msix {
 #if defined(__BIG_ENDIAN)
-	u16 status_tx_quick_consumer_index;
-	u16 status_rx_quick_consumer_index;
-	u16 status_completion_producer_index;
-	u16 status_cmd_consumer_index;
-	u32 status_unused;
-	u16 status_idx;
-	u8 status_unused2;
-	u8 status_blk_num;
+    u16 status_tx_quick_consumer_index;
+    u16 status_rx_quick_consumer_index;
+    u16 status_completion_producer_index;
+    u16 status_cmd_consumer_index;
+    u32 status_unused;
+    u16 status_idx;
+    u8 status_unused2;
+    u8 status_blk_num;
 #elif defined(__LITTLE_ENDIAN)
-	u16 status_rx_quick_consumer_index;
-	u16 status_tx_quick_consumer_index;
-	u16 status_cmd_consumer_index;
-	u16 status_completion_producer_index;
-	u32 status_unused;
-	u8 status_blk_num;
-	u8 status_unused2;
-	u16 status_idx;
+    u16 status_rx_quick_consumer_index;
+    u16 status_tx_quick_consumer_index;
+    u16 status_cmd_consumer_index;
+    u16 status_completion_producer_index;
+    u32 status_unused;
+    u8 status_blk_num;
+    u8 status_unused2;
+    u16 status_idx;
 #endif
 };
 
@@ -186,87 +186,87 @@ struct status_block_msix {
  *  statistics_block definition
  */
 struct statistics_block {
-	u32 stat_IfHCInOctets_hi;
-	u32 stat_IfHCInOctets_lo;
-	u32 stat_IfHCInBadOctets_hi;
-	u32 stat_IfHCInBadOctets_lo;
-	u32 stat_IfHCOutOctets_hi;
-	u32 stat_IfHCOutOctets_lo;
-	u32 stat_IfHCOutBadOctets_hi;
-	u32 stat_IfHCOutBadOctets_lo;
-	u32 stat_IfHCInUcastPkts_hi;
-	u32 stat_IfHCInUcastPkts_lo;
-	u32 stat_IfHCInMulticastPkts_hi;
-	u32 stat_IfHCInMulticastPkts_lo;
-	u32 stat_IfHCInBroadcastPkts_hi;
-	u32 stat_IfHCInBroadcastPkts_lo;
-	u32 stat_IfHCOutUcastPkts_hi;
-	u32 stat_IfHCOutUcastPkts_lo;
-	u32 stat_IfHCOutMulticastPkts_hi;
-	u32 stat_IfHCOutMulticastPkts_lo;
-	u32 stat_IfHCOutBroadcastPkts_hi;
-	u32 stat_IfHCOutBroadcastPkts_lo;
-	u32 stat_emac_tx_stat_dot3statsinternalmactransmiterrors;
-	u32 stat_Dot3StatsCarrierSenseErrors;
-	u32 stat_Dot3StatsFCSErrors;
-	u32 stat_Dot3StatsAlignmentErrors;
-	u32 stat_Dot3StatsSingleCollisionFrames;
-	u32 stat_Dot3StatsMultipleCollisionFrames;
-	u32 stat_Dot3StatsDeferredTransmissions;
-	u32 stat_Dot3StatsExcessiveCollisions;
-	u32 stat_Dot3StatsLateCollisions;
-	u32 stat_EtherStatsCollisions;
-	u32 stat_EtherStatsFragments;
-	u32 stat_EtherStatsJabbers;
-	u32 stat_EtherStatsUndersizePkts;
-	u32 stat_EtherStatsOverrsizePkts;
-	u32 stat_EtherStatsPktsRx64Octets;
-	u32 stat_EtherStatsPktsRx65Octetsto127Octets;
-	u32 stat_EtherStatsPktsRx128Octetsto255Octets;
-	u32 stat_EtherStatsPktsRx256Octetsto511Octets;
-	u32 stat_EtherStatsPktsRx512Octetsto1023Octets;
-	u32 stat_EtherStatsPktsRx1024Octetsto1522Octets;
-	u32 stat_EtherStatsPktsRx1523Octetsto9022Octets;
-	u32 stat_EtherStatsPktsTx64Octets;
-	u32 stat_EtherStatsPktsTx65Octetsto127Octets;
-	u32 stat_EtherStatsPktsTx128Octetsto255Octets;
-	u32 stat_EtherStatsPktsTx256Octetsto511Octets;
-	u32 stat_EtherStatsPktsTx512Octetsto1023Octets;
-	u32 stat_EtherStatsPktsTx1024Octetsto1522Octets;
-	u32 stat_EtherStatsPktsTx1523Octetsto9022Octets;
-	u32 stat_XonPauseFramesReceived;
-	u32 stat_XoffPauseFramesReceived;
-	u32 stat_OutXonSent;
-	u32 stat_OutXoffSent;
-	u32 stat_FlowControlDone;
-	u32 stat_MacControlFramesReceived;
-	u32 stat_XoffStateEntered;
-	u32 stat_IfInFramesL2FilterDiscards;
-	u32 stat_IfInRuleCheckerDiscards;
-	u32 stat_IfInFTQDiscards;
-	u32 stat_IfInMBUFDiscards;
-	u32 stat_IfInRuleCheckerP4Hit;
-	u32 stat_CatchupInRuleCheckerDiscards;
-	u32 stat_CatchupInFTQDiscards;
-	u32 stat_CatchupInMBUFDiscards;
-	u32 stat_CatchupInRuleCheckerP4Hit;
-	u32 stat_GenStat00;
-	u32 stat_GenStat01;
-	u32 stat_GenStat02;
-	u32 stat_GenStat03;
-	u32 stat_GenStat04;
-	u32 stat_GenStat05;
-	u32 stat_GenStat06;
-	u32 stat_GenStat07;
-	u32 stat_GenStat08;
-	u32 stat_GenStat09;
-	u32 stat_GenStat10;
-	u32 stat_GenStat11;
-	u32 stat_GenStat12;
-	u32 stat_GenStat13;
-	u32 stat_GenStat14;
-	u32 stat_GenStat15;
-	u32 stat_FwRxDrop;
+    u32 stat_IfHCInOctets_hi;
+    u32 stat_IfHCInOctets_lo;
+    u32 stat_IfHCInBadOctets_hi;
+    u32 stat_IfHCInBadOctets_lo;
+    u32 stat_IfHCOutOctets_hi;
+    u32 stat_IfHCOutOctets_lo;
+    u32 stat_IfHCOutBadOctets_hi;
+    u32 stat_IfHCOutBadOctets_lo;
+    u32 stat_IfHCInUcastPkts_hi;
+    u32 stat_IfHCInUcastPkts_lo;
+    u32 stat_IfHCInMulticastPkts_hi;
+    u32 stat_IfHCInMulticastPkts_lo;
+    u32 stat_IfHCInBroadcastPkts_hi;
+    u32 stat_IfHCInBroadcastPkts_lo;
+    u32 stat_IfHCOutUcastPkts_hi;
+    u32 stat_IfHCOutUcastPkts_lo;
+    u32 stat_IfHCOutMulticastPkts_hi;
+    u32 stat_IfHCOutMulticastPkts_lo;
+    u32 stat_IfHCOutBroadcastPkts_hi;
+    u32 stat_IfHCOutBroadcastPkts_lo;
+    u32 stat_emac_tx_stat_dot3statsinternalmactransmiterrors;
+    u32 stat_Dot3StatsCarrierSenseErrors;
+    u32 stat_Dot3StatsFCSErrors;
+    u32 stat_Dot3StatsAlignmentErrors;
+    u32 stat_Dot3StatsSingleCollisionFrames;
+    u32 stat_Dot3StatsMultipleCollisionFrames;
+    u32 stat_Dot3StatsDeferredTransmissions;
+    u32 stat_Dot3StatsExcessiveCollisions;
+    u32 stat_Dot3StatsLateCollisions;
+    u32 stat_EtherStatsCollisions;
+    u32 stat_EtherStatsFragments;
+    u32 stat_EtherStatsJabbers;
+    u32 stat_EtherStatsUndersizePkts;
+    u32 stat_EtherStatsOverrsizePkts;
+    u32 stat_EtherStatsPktsRx64Octets;
+    u32 stat_EtherStatsPktsRx65Octetsto127Octets;
+    u32 stat_EtherStatsPktsRx128Octetsto255Octets;
+    u32 stat_EtherStatsPktsRx256Octetsto511Octets;
+    u32 stat_EtherStatsPktsRx512Octetsto1023Octets;
+    u32 stat_EtherStatsPktsRx1024Octetsto1522Octets;
+    u32 stat_EtherStatsPktsRx1523Octetsto9022Octets;
+    u32 stat_EtherStatsPktsTx64Octets;
+    u32 stat_EtherStatsPktsTx65Octetsto127Octets;
+    u32 stat_EtherStatsPktsTx128Octetsto255Octets;
+    u32 stat_EtherStatsPktsTx256Octetsto511Octets;
+    u32 stat_EtherStatsPktsTx512Octetsto1023Octets;
+    u32 stat_EtherStatsPktsTx1024Octetsto1522Octets;
+    u32 stat_EtherStatsPktsTx1523Octetsto9022Octets;
+    u32 stat_XonPauseFramesReceived;
+    u32 stat_XoffPauseFramesReceived;
+    u32 stat_OutXonSent;
+    u32 stat_OutXoffSent;
+    u32 stat_FlowControlDone;
+    u32 stat_MacControlFramesReceived;
+    u32 stat_XoffStateEntered;
+    u32 stat_IfInFramesL2FilterDiscards;
+    u32 stat_IfInRuleCheckerDiscards;
+    u32 stat_IfInFTQDiscards;
+    u32 stat_IfInMBUFDiscards;
+    u32 stat_IfInRuleCheckerP4Hit;
+    u32 stat_CatchupInRuleCheckerDiscards;
+    u32 stat_CatchupInFTQDiscards;
+    u32 stat_CatchupInMBUFDiscards;
+    u32 stat_CatchupInRuleCheckerP4Hit;
+    u32 stat_GenStat00;
+    u32 stat_GenStat01;
+    u32 stat_GenStat02;
+    u32 stat_GenStat03;
+    u32 stat_GenStat04;
+    u32 stat_GenStat05;
+    u32 stat_GenStat06;
+    u32 stat_GenStat07;
+    u32 stat_GenStat08;
+    u32 stat_GenStat09;
+    u32 stat_GenStat10;
+    u32 stat_GenStat11;
+    u32 stat_GenStat12;
+    u32 stat_GenStat13;
+    u32 stat_GenStat14;
+    u32 stat_GenStat15;
+    u32 stat_FwRxDrop;
 };
 
 
@@ -274,41 +274,41 @@ struct statistics_block {
  *  l2_fhdr definition
  */
 struct l2_fhdr {
-	u32 l2_fhdr_status;
-		#define L2_FHDR_STATUS_RULE_CLASS	(0x7<<0)
-		#define L2_FHDR_STATUS_RULE_P2		(1<<3)
-		#define L2_FHDR_STATUS_RULE_P3		(1<<4)
-		#define L2_FHDR_STATUS_RULE_P4		(1<<5)
-		#define L2_FHDR_STATUS_L2_VLAN_TAG	(1<<6)
-		#define L2_FHDR_STATUS_L2_LLC_SNAP	(1<<7)
-		#define L2_FHDR_STATUS_RSS_HASH		(1<<8)
-		#define L2_FHDR_STATUS_IP_DATAGRAM	(1<<13)
-		#define L2_FHDR_STATUS_TCP_SEGMENT	(1<<14)
-		#define L2_FHDR_STATUS_UDP_DATAGRAM	(1<<15)
+    u32 l2_fhdr_status;
+#define L2_FHDR_STATUS_RULE_CLASS	(0x7<<0)
+#define L2_FHDR_STATUS_RULE_P2		(1<<3)
+#define L2_FHDR_STATUS_RULE_P3		(1<<4)
+#define L2_FHDR_STATUS_RULE_P4		(1<<5)
+#define L2_FHDR_STATUS_L2_VLAN_TAG	(1<<6)
+#define L2_FHDR_STATUS_L2_LLC_SNAP	(1<<7)
+#define L2_FHDR_STATUS_RSS_HASH		(1<<8)
+#define L2_FHDR_STATUS_IP_DATAGRAM	(1<<13)
+#define L2_FHDR_STATUS_TCP_SEGMENT	(1<<14)
+#define L2_FHDR_STATUS_UDP_DATAGRAM	(1<<15)
 
-		#define L2_FHDR_STATUS_SPLIT		(1<<16)
-		#define L2_FHDR_ERRORS_BAD_CRC		(1<<17)
-		#define L2_FHDR_ERRORS_PHY_DECODE	(1<<18)
-		#define L2_FHDR_ERRORS_ALIGNMENT	(1<<19)
-		#define L2_FHDR_ERRORS_TOO_SHORT	(1<<20)
-		#define L2_FHDR_ERRORS_GIANT_FRAME	(1<<21)
-		#define L2_FHDR_ERRORS_TCP_XSUM		(1<<28)
-		#define L2_FHDR_ERRORS_UDP_XSUM		(1<<31)
+#define L2_FHDR_STATUS_SPLIT		(1<<16)
+#define L2_FHDR_ERRORS_BAD_CRC		(1<<17)
+#define L2_FHDR_ERRORS_PHY_DECODE	(1<<18)
+#define L2_FHDR_ERRORS_ALIGNMENT	(1<<19)
+#define L2_FHDR_ERRORS_TOO_SHORT	(1<<20)
+#define L2_FHDR_ERRORS_GIANT_FRAME	(1<<21)
+#define L2_FHDR_ERRORS_TCP_XSUM		(1<<28)
+#define L2_FHDR_ERRORS_UDP_XSUM		(1<<31)
 
-		#define L2_FHDR_STATUS_USE_RXHASH	\
+#define L2_FHDR_STATUS_USE_RXHASH	\
 			(L2_FHDR_STATUS_TCP_SEGMENT | L2_FHDR_STATUS_RSS_HASH)
 
-	u32 l2_fhdr_hash;
+    u32 l2_fhdr_hash;
 #if defined(__BIG_ENDIAN)
-	u16 l2_fhdr_pkt_len;
-	u16 l2_fhdr_vlan_tag;
-	u16 l2_fhdr_ip_xsum;
-	u16 l2_fhdr_tcp_udp_xsum;
+    u16 l2_fhdr_pkt_len;
+    u16 l2_fhdr_vlan_tag;
+    u16 l2_fhdr_ip_xsum;
+    u16 l2_fhdr_tcp_udp_xsum;
 #elif defined(__LITTLE_ENDIAN)
-	u16 l2_fhdr_vlan_tag;
-	u16 l2_fhdr_pkt_len;
-	u16 l2_fhdr_tcp_udp_xsum;
-	u16 l2_fhdr_ip_xsum;
+    u16 l2_fhdr_vlan_tag;
+    u16 l2_fhdr_pkt_len;
+    u16 l2_fhdr_tcp_udp_xsum;
+    u16 l2_fhdr_ip_xsum;
 #endif
 };
 
@@ -6569,29 +6569,28 @@ struct l2_fhdr {
  * skb are built only after Hardware filled the frame.
  */
 struct sw_bd {
-	u8			*data;
-	DEFINE_DMA_UNMAP_ADDR(mapping);
+    u8			*data;
+    DEFINE_DMA_UNMAP_ADDR(mapping);
 };
 
 /* Its faster to compute this from data than storing it in sw_bd
  * (less cache misses)
  */
-static inline struct l2_fhdr *get_l2_fhdr(u8 *data)
-{
-	return (struct l2_fhdr *)(PTR_ALIGN(data, BNX2_RX_ALIGN) + NET_SKB_PAD);
+static inline struct l2_fhdr *get_l2_fhdr(u8 *data) {
+    return (struct l2_fhdr *)(PTR_ALIGN(data, BNX2_RX_ALIGN) + NET_SKB_PAD);
 }
 
 
 struct sw_pg {
-	struct page		*page;
-	DEFINE_DMA_UNMAP_ADDR(mapping);
+    struct page		*page;
+    DEFINE_DMA_UNMAP_ADDR(mapping);
 };
 
 struct sw_tx_bd {
-	struct sk_buff		*skb;
-	DEFINE_DMA_UNMAP_ADDR(mapping);
-	unsigned short		is_gso;
-	unsigned short		nr_frags;
+    struct sk_buff		*skb;
+    DEFINE_DMA_UNMAP_ADDR(mapping);
+    unsigned short		is_gso;
+    unsigned short		nr_frags;
 };
 
 #define SW_RXBD_RING_SIZE (sizeof(struct sw_bd) * RX_DESC_CNT)
@@ -6641,20 +6640,20 @@ struct sw_tx_bd {
 #define FLASH_BACKUP_STRAP_MASK			(0xf << 26)
 
 struct flash_spec {
-	u32 strapping;
-	u32 config1;
-	u32 config2;
-	u32 config3;
-	u32 write1;
-	u32 flags;
+    u32 strapping;
+    u32 config1;
+    u32 config2;
+    u32 config3;
+    u32 write1;
+    u32 flags;
 #define BNX2_NV_BUFFERED	0x00000001
 #define BNX2_NV_TRANSLATE	0x00000002
 #define BNX2_NV_WREN		0x00000004
-	u32 page_bits;
-	u32 page_size;
-	u32 addr_mask;
-	u32 total_size;
-	u8  *name;
+    u32 page_bits;
+    u32 page_size;
+    u32 addr_mask;
+    u32 total_size;
+    u8  *name;
 };
 
 #define BNX2_MAX_MSIX_HW_VEC	9
@@ -6667,80 +6666,80 @@ struct flash_spec {
 
 
 struct bnx2_irq {
-	irq_handler_t	handler;
-	unsigned int	vector;
-	u8		requested;
-	char		name[IFNAMSIZ + 2];
+    irq_handler_t	handler;
+    unsigned int	vector;
+    u8		requested;
+    char		name[IFNAMSIZ + 2];
 };
 
 struct bnx2_tx_ring_info {
-	u32			tx_prod_bseq;
-	u16			tx_prod;
-	u32			tx_bidx_addr;
-	u32			tx_bseq_addr;
+    u32			tx_prod_bseq;
+    u16			tx_prod;
+    u32			tx_bidx_addr;
+    u32			tx_bseq_addr;
 
-	struct tx_bd		*tx_desc_ring;
-	struct sw_tx_bd		*tx_buf_ring;
+    struct tx_bd		*tx_desc_ring;
+    struct sw_tx_bd		*tx_buf_ring;
 
-	u16			tx_cons;
-	u16			hw_tx_cons;
+    u16			tx_cons;
+    u16			hw_tx_cons;
 
-	dma_addr_t		tx_desc_mapping;
+    dma_addr_t		tx_desc_mapping;
 };
 
 struct bnx2_rx_ring_info {
-	u32			rx_prod_bseq;
-	u16			rx_prod;
-	u16			rx_cons;
+    u32			rx_prod_bseq;
+    u16			rx_prod;
+    u16			rx_cons;
 
-	u32			rx_bidx_addr;
-	u32			rx_bseq_addr;
-	u32			rx_pg_bidx_addr;
+    u32			rx_bidx_addr;
+    u32			rx_bseq_addr;
+    u32			rx_pg_bidx_addr;
 
-	u16			rx_pg_prod;
-	u16			rx_pg_cons;
+    u16			rx_pg_prod;
+    u16			rx_pg_cons;
 
-	struct sw_bd		*rx_buf_ring;
-	struct rx_bd		*rx_desc_ring[MAX_RX_RINGS];
-	struct sw_pg		*rx_pg_ring;
-	struct rx_bd		*rx_pg_desc_ring[MAX_RX_PG_RINGS];
+    struct sw_bd		*rx_buf_ring;
+    struct rx_bd		*rx_desc_ring[MAX_RX_RINGS];
+    struct sw_pg		*rx_pg_ring;
+    struct rx_bd		*rx_pg_desc_ring[MAX_RX_PG_RINGS];
 
-	dma_addr_t		rx_desc_mapping[MAX_RX_RINGS];
-	dma_addr_t		rx_pg_desc_mapping[MAX_RX_PG_RINGS];
+    dma_addr_t		rx_desc_mapping[MAX_RX_RINGS];
+    dma_addr_t		rx_pg_desc_mapping[MAX_RX_PG_RINGS];
 };
 
 struct bnx2_napi {
-	struct napi_struct	napi		____cacheline_aligned;
-	struct bnx2		*bp;
-	union {
-		struct status_block		*msi;
-		struct status_block_msix	*msix;
-	} status_blk;
-	u16			*hw_tx_cons_ptr;
-	u16			*hw_rx_cons_ptr;
-	u32 			last_status_idx;
-	u32			int_num;
+    struct napi_struct	napi		____cacheline_aligned;
+    struct bnx2		*bp;
+    union {
+        struct status_block		*msi;
+        struct status_block_msix	*msix;
+    } status_blk;
+    u16			*hw_tx_cons_ptr;
+    u16			*hw_rx_cons_ptr;
+    u32 			last_status_idx;
+    u32			int_num;
 
 #ifdef BCM_CNIC
-	u32			cnic_tag;
-	int			cnic_present;
+    u32			cnic_tag;
+    int			cnic_present;
 #endif
 
-	struct bnx2_rx_ring_info	rx_ring;
-	struct bnx2_tx_ring_info	tx_ring;
+    struct bnx2_rx_ring_info	rx_ring;
+    struct bnx2_tx_ring_info	tx_ring;
 };
 
 struct bnx2 {
-	/* Fields used in the tx and intr/napi performance paths are grouped */
-	/* together in the beginning of the structure. */
-	void __iomem		*regview;
+    /* Fields used in the tx and intr/napi performance paths are grouped */
+    /* together in the beginning of the structure. */
+    void __iomem		*regview;
 
-	struct net_device	*dev;
-	struct pci_dev		*pdev;
+    struct net_device	*dev;
+    struct pci_dev		*pdev;
 
-	atomic_t		intr_sem;
+    atomic_t		intr_sem;
 
-	u32			flags;
+    u32			flags;
 #define BNX2_FLAG_PCIX			0x00000001
 #define BNX2_FLAG_PCI_32BIT		0x00000002
 #define BNX2_FLAG_MSIX_CAP		0x00000004
@@ -6758,39 +6757,39 @@ struct bnx2 {
 #define BNX2_FLAG_BROKEN_STATS		0x00002000
 #define BNX2_FLAG_AER_ENABLED		0x00004000
 
-	struct bnx2_napi	bnx2_napi[BNX2_MAX_MSIX_VEC];
+    struct bnx2_napi	bnx2_napi[BNX2_MAX_MSIX_VEC];
 
-	u32			rx_buf_use_size;	/* useable size */
-	u32			rx_buf_size;		/* with alignment */
-	u32			rx_copy_thresh;
-	u32			rx_jumbo_thresh;
-	u32			rx_max_ring_idx;
-	u32			rx_max_pg_ring_idx;
+    u32			rx_buf_use_size;	/* useable size */
+    u32			rx_buf_size;		/* with alignment */
+    u32			rx_copy_thresh;
+    u32			rx_jumbo_thresh;
+    u32			rx_max_ring_idx;
+    u32			rx_max_pg_ring_idx;
 
-	/* TX constants */
-	int		tx_ring_size;
-	u32		tx_wake_thresh;
+    /* TX constants */
+    int		tx_ring_size;
+    u32		tx_wake_thresh;
 
 #ifdef BCM_CNIC
-	struct cnic_ops	__rcu	*cnic_ops;
-	void			*cnic_data;
+    struct cnic_ops	__rcu	*cnic_ops;
+    void			*cnic_data;
 #endif
 
-	/* End of fields used in the performance code paths. */
+    /* End of fields used in the performance code paths. */
 
-	unsigned int		current_interval;
+    unsigned int		current_interval;
 #define BNX2_TIMER_INTERVAL		HZ
 #define BNX2_SERDES_AN_TIMEOUT		(HZ / 3)
 #define BNX2_SERDES_FORCED_TIMEOUT	(HZ / 10)
 
-	struct			timer_list timer;
-	struct work_struct	reset_task;
+    struct			timer_list timer;
+    struct work_struct	reset_task;
 
-	/* Used to synchronize phy accesses. */
-	spinlock_t		phy_lock;
-	spinlock_t		indirect_lock;
+    /* Used to synchronize phy accesses. */
+    spinlock_t		phy_lock;
+    spinlock_t		indirect_lock;
 
-	u32			phy_flags;
+    u32			phy_flags;
 #define BNX2_PHY_FLAG_SERDES			0x00000001
 #define BNX2_PHY_FLAG_CRC_FIX			0x00000002
 #define BNX2_PHY_FLAG_PARALLEL_DETECT		0x00000004
@@ -6803,15 +6802,15 @@ struct bnx2 {
 #define BNX2_PHY_FLAG_FORCED_DOWN		0x00001000
 #define BNX2_PHY_FLAG_NO_PARALLEL		0x00002000
 
-	u32			mii_bmcr;
-	u32			mii_bmsr;
-	u32			mii_bmsr1;
-	u32			mii_adv;
-	u32			mii_lpa;
-	u32			mii_up1;
+    u32			mii_bmcr;
+    u32			mii_bmsr;
+    u32			mii_bmsr1;
+    u32			mii_adv;
+    u32			mii_lpa;
+    u32			mii_up1;
 
-	u32			chip_id;
-	/* chip num:16-31, rev:12-15, metal:4-11, bond_id:0-3 */
+    u32			chip_id;
+    /* chip num:16-31, rev:12-15, metal:4-11, bond_id:0-3 */
 #define CHIP_NUM(bp)			(((bp)->chip_id) & 0xffff0000)
 #define CHIP_NUM_5706			0x57060000
 #define CHIP_NUM_5708			0x57080000
@@ -6837,115 +6836,115 @@ struct bnx2 {
 
 #define CHIP_BOND_ID(bp)		(((bp)->chip_id) & 0xf)
 
-/* A serdes chip will have the first bit of the bond id set. */
+    /* A serdes chip will have the first bit of the bond id set. */
 #define CHIP_BOND_ID_SERDES_BIT		0x01
 
-	u32			phy_addr;
-	u32			phy_id;
+    u32			phy_addr;
+    u32			phy_id;
 
-	u16			bus_speed_mhz;
-	u8			wol;
+    u16			bus_speed_mhz;
+    u8			wol;
 
-	u8			pad;
+    u8			pad;
 
-	u16			fw_wr_seq;
-	u16			fw_drv_pulse_wr_seq;
+    u16			fw_wr_seq;
+    u16			fw_drv_pulse_wr_seq;
 
-	int			rx_max_ring;
-	int			rx_ring_size;
+    int			rx_max_ring;
+    int			rx_ring_size;
 
-	int			rx_max_pg_ring;
-	int			rx_pg_ring_size;
+    int			rx_max_pg_ring;
+    int			rx_pg_ring_size;
 
-	u16			tx_quick_cons_trip;
-	u16			tx_quick_cons_trip_int;
-	u16			rx_quick_cons_trip;
-	u16			rx_quick_cons_trip_int;
-	u16			comp_prod_trip;
-	u16			comp_prod_trip_int;
-	u16			tx_ticks;
-	u16			tx_ticks_int;
-	u16			com_ticks;
-	u16			com_ticks_int;
-	u16			cmd_ticks;
-	u16			cmd_ticks_int;
-	u16			rx_ticks;
-	u16			rx_ticks_int;
+    u16			tx_quick_cons_trip;
+    u16			tx_quick_cons_trip_int;
+    u16			rx_quick_cons_trip;
+    u16			rx_quick_cons_trip_int;
+    u16			comp_prod_trip;
+    u16			comp_prod_trip_int;
+    u16			tx_ticks;
+    u16			tx_ticks_int;
+    u16			com_ticks;
+    u16			com_ticks_int;
+    u16			cmd_ticks;
+    u16			cmd_ticks_int;
+    u16			rx_ticks;
+    u16			rx_ticks_int;
 
-	u32			stats_ticks;
+    u32			stats_ticks;
 
-	dma_addr_t		status_blk_mapping;
+    dma_addr_t		status_blk_mapping;
 
-	struct statistics_block	*stats_blk;
-	struct statistics_block	*temp_stats_blk;
-	dma_addr_t		stats_blk_mapping;
+    struct statistics_block	*stats_blk;
+    struct statistics_block	*temp_stats_blk;
+    dma_addr_t		stats_blk_mapping;
 
-	int			ctx_pages;
-	void			*ctx_blk[4];
-	dma_addr_t		ctx_blk_mapping[4];
+    int			ctx_pages;
+    void			*ctx_blk[4];
+    dma_addr_t		ctx_blk_mapping[4];
 
-	u32			hc_cmd;
-	u32			rx_mode;
+    u32			hc_cmd;
+    u32			rx_mode;
 
-	u16			req_line_speed;
-	u8			req_duplex;
+    u16			req_line_speed;
+    u8			req_duplex;
 
-	u8			phy_port;
-	u8			link_up;
+    u8			phy_port;
+    u8			link_up;
 
-	u16			line_speed;
-	u8			duplex;
-	u8			flow_ctrl;	/* actual flow ctrl settings */
-						/* may be different from     */
-						/* req_flow_ctrl if autoneg  */
-	u32			advertising;
+    u16			line_speed;
+    u8			duplex;
+    u8			flow_ctrl;	/* actual flow ctrl settings */
+    /* may be different from     */
+    /* req_flow_ctrl if autoneg  */
+    u32			advertising;
 
-	u8			req_flow_ctrl;	/* flow ctrl advertisement */
-						/* settings or forced      */
-						/* settings                */
-	u8			autoneg;
+    u8			req_flow_ctrl;	/* flow ctrl advertisement */
+    /* settings or forced      */
+    /* settings                */
+    u8			autoneg;
 #define AUTONEG_SPEED		1
 #define AUTONEG_FLOW_CTRL	2
 
-	u8			loopback;
+    u8			loopback;
 #define MAC_LOOPBACK		1
 #define PHY_LOOPBACK		2
 
-	u8			serdes_an_pending;
+    u8			serdes_an_pending;
 
-	u8			mac_addr[8];
+    u8			mac_addr[8];
 
-	u32			shmem_base;
+    u32			shmem_base;
 
-	char			fw_version[32];
+    char			fw_version[32];
 
-	int			pm_cap;
-	int			pcix_cap;
+    int			pm_cap;
+    int			pcix_cap;
 
-	const struct flash_spec	*flash_info;
-	u32			flash_size;
+    const struct flash_spec	*flash_info;
+    u32			flash_size;
 
-	int			status_stats_size;
+    int			status_stats_size;
 
-	struct bnx2_irq		irq_tbl[BNX2_MAX_MSIX_VEC];
-	int			irq_nvecs;
+    struct bnx2_irq		irq_tbl[BNX2_MAX_MSIX_VEC];
+    int			irq_nvecs;
 
-	u8			num_tx_rings;
-	u8			num_rx_rings;
+    u8			num_tx_rings;
+    u8			num_rx_rings;
 
-	int			num_req_tx_rings;
-	int			num_req_rx_rings;
+    int			num_req_tx_rings;
+    int			num_req_rx_rings;
 
-	u32 			leds_save;
-	u32			idle_chk_status_idx;
+    u32 			leds_save;
+    u32			idle_chk_status_idx;
 
 #ifdef BCM_CNIC
-	struct mutex		cnic_lock;
-	struct cnic_eth_dev	cnic_eth_dev;
+    struct mutex		cnic_lock;
+    struct cnic_eth_dev	cnic_eth_dev;
 #endif
 
-	const struct firmware	*mips_firmware;
-	const struct firmware	*rv2p_firmware;
+    const struct firmware	*mips_firmware;
+    const struct firmware	*rv2p_firmware;
 };
 
 #define REG_RD(bp, offset)					\
@@ -6958,53 +6957,53 @@ struct bnx2 {
 	writew(val, bp->regview + offset)
 
 struct cpu_reg {
-	u32 mode;
-	u32 mode_value_halt;
-	u32 mode_value_sstep;
+    u32 mode;
+    u32 mode_value_halt;
+    u32 mode_value_sstep;
 
-	u32 state;
-	u32 state_value_clear;
+    u32 state;
+    u32 state_value_clear;
 
-	u32 gpr0;
-	u32 evmask;
-	u32 pc;
-	u32 inst;
-	u32 bp;
+    u32 gpr0;
+    u32 evmask;
+    u32 pc;
+    u32 inst;
+    u32 bp;
 
-	u32 spad_base;
+    u32 spad_base;
 
-	u32 mips_view_base;
+    u32 mips_view_base;
 };
 
 struct bnx2_fw_file_section {
-	__be32 addr;
-	__be32 len;
-	__be32 offset;
+    __be32 addr;
+    __be32 len;
+    __be32 offset;
 };
 
 struct bnx2_mips_fw_file_entry {
-	__be32 start_addr;
-	struct bnx2_fw_file_section text;
-	struct bnx2_fw_file_section data;
-	struct bnx2_fw_file_section rodata;
+    __be32 start_addr;
+    struct bnx2_fw_file_section text;
+    struct bnx2_fw_file_section data;
+    struct bnx2_fw_file_section rodata;
 };
 
 struct bnx2_rv2p_fw_file_entry {
-	struct bnx2_fw_file_section rv2p;
-	__be32 fixup[8];
+    struct bnx2_fw_file_section rv2p;
+    __be32 fixup[8];
 };
 
 struct bnx2_mips_fw_file {
-	struct bnx2_mips_fw_file_entry com;
-	struct bnx2_mips_fw_file_entry cp;
-	struct bnx2_mips_fw_file_entry rxp;
-	struct bnx2_mips_fw_file_entry tpat;
-	struct bnx2_mips_fw_file_entry txp;
+    struct bnx2_mips_fw_file_entry com;
+    struct bnx2_mips_fw_file_entry cp;
+    struct bnx2_mips_fw_file_entry rxp;
+    struct bnx2_mips_fw_file_entry tpat;
+    struct bnx2_mips_fw_file_entry txp;
 };
 
 struct bnx2_rv2p_fw_file {
-	struct bnx2_rv2p_fw_file_entry proc1;
-	struct bnx2_rv2p_fw_file_entry proc2;
+    struct bnx2_rv2p_fw_file_entry proc1;
+    struct bnx2_rv2p_fw_file_entry proc2;
 };
 
 #define RV2P_P1_FIXUP_PAGE_SIZE_IDX		0

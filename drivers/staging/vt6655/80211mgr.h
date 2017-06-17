@@ -232,7 +232,7 @@
 typedef struct tagWLAN_IE {
     unsigned char byElementID;
     unsigned char len;
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE, *PWLAN_IE;
 
 
@@ -242,7 +242,7 @@ typedef struct tagWLAN_IE_SSID {
     unsigned char byElementID;
     unsigned char len;
     unsigned char abySSID[1];
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_SSID, *PWLAN_IE_SSID;
 
 
@@ -252,7 +252,7 @@ typedef struct tagWLAN_IE_SUPP_RATES {
     unsigned char byElementID;
     unsigned char len;
     unsigned char abyRates[1];
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_SUPP_RATES,  *PWLAN_IE_SUPP_RATES;
 
 
@@ -274,7 +274,7 @@ typedef struct tagWLAN_IE_DS_PARMS {
     unsigned char byElementID;
     unsigned char len;
     unsigned char byCurrChannel;
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_DS_PARMS,  *PWLAN_IE_DS_PARMS;
 
 
@@ -287,7 +287,7 @@ typedef struct tagWLAN_IE_CF_PARMS {
     unsigned char byCFPPeriod;
     unsigned short wCFPMaxDuration;
     unsigned short wCFPDurRemaining;
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_CF_PARMS,  *PWLAN_IE_CF_PARMS;
 
 
@@ -300,7 +300,7 @@ typedef struct tagWLAN_IE_TIM {
     unsigned char byDTIMPeriod;
     unsigned char byBitMapCtl;
     unsigned char byVirtBitMap[1];
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_TIM,  *PWLAN_IE_TIM;
 
 
@@ -310,7 +310,7 @@ typedef struct tagWLAN_IE_IBSS_PARMS {
     unsigned char byElementID;
     unsigned char len;
     unsigned short wATIMWindow;
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_IBSS_PARMS, *PWLAN_IE_IBSS_PARMS;
 
 
@@ -320,7 +320,7 @@ typedef struct tagWLAN_IE_CHALLENGE {
     unsigned char byElementID;
     unsigned char len;
     unsigned char abyChallenge[1];
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_CHALLENGE,  *PWLAN_IE_CHALLENGE;
 
 
@@ -362,7 +362,7 @@ typedef struct tagWLAN_IE_ERP {
     unsigned char byElementID;
     unsigned char len;
     unsigned char byContext;
-}__attribute__ ((__packed__))
+} __attribute__ ((__packed__))
 WLAN_IE_ERP,  *PWLAN_IE_ERP;
 
 
@@ -372,9 +372,9 @@ typedef struct _MEASEURE_REQ {
     unsigned char abyStartTime[8];
     unsigned char abyDuration[2];
 } MEASEURE_REQ, *PMEASEURE_REQ,
-  MEASEURE_REQ_BASIC, *PMEASEURE_REQ_BASIC,
-  MEASEURE_REQ_CCA, *PMEASEURE_REQ_CCA,
-  MEASEURE_REQ_RPI, *PMEASEURE_REQ_RPI;
+MEASEURE_REQ_BASIC, *PMEASEURE_REQ_BASIC,
+MEASEURE_REQ_CCA, *PMEASEURE_REQ_CCA,
+MEASEURE_REQ_RPI, *PMEASEURE_REQ_RPI;
 
 typedef struct _MEASEURE_REP_BASIC {
     unsigned char byChannel;
@@ -717,111 +717,111 @@ typedef struct tagWLAN_FR_DEAUTHEN {
 void
 vMgrEncodeBeacon(
     PWLAN_FR_BEACON  pFrame
-     );
+);
 
 void
 vMgrDecodeBeacon(
     PWLAN_FR_BEACON  pFrame
-    );
+);
 
 void
 vMgrEncodeIBSSATIM(
     PWLAN_FR_IBSSATIM   pFrame
-    );
+);
 
 void
 vMgrDecodeIBSSATIM(
     PWLAN_FR_IBSSATIM   pFrame
-    );
+);
 
 void
 vMgrEncodeDisassociation(
     PWLAN_FR_DISASSOC  pFrame
-    );
+);
 
 void
 vMgrDecodeDisassociation(
     PWLAN_FR_DISASSOC  pFrame
-    );
+);
 
 void
 vMgrEncodeAssocRequest(
     PWLAN_FR_ASSOCREQ  pFrame
-    );
+);
 
 void
 vMgrDecodeAssocRequest(
     PWLAN_FR_ASSOCREQ  pFrame
-    );
+);
 
 void
 vMgrEncodeAssocResponse(
     PWLAN_FR_ASSOCRESP  pFrame
-    );
+);
 
 void
 vMgrDecodeAssocResponse(
     PWLAN_FR_ASSOCRESP  pFrame
-    );
+);
 
 void
 vMgrEncodeReassocRequest(
     PWLAN_FR_REASSOCREQ  pFrame
-    );
+);
 
 void
 vMgrDecodeReassocRequest(
     PWLAN_FR_REASSOCREQ  pFrame
-    );
+);
 
 void
 vMgrEncodeProbeRequest(
     PWLAN_FR_PROBEREQ  pFrame
-    );
+);
 
 void
 vMgrDecodeProbeRequest(
     PWLAN_FR_PROBEREQ  pFrame
-    );
+);
 
 void
 vMgrEncodeProbeResponse(
     PWLAN_FR_PROBERESP  pFrame
-    );
+);
 
 void
 vMgrDecodeProbeResponse(
     PWLAN_FR_PROBERESP  pFrame
-    );
+);
 
 void
 vMgrEncodeAuthen(
     PWLAN_FR_AUTHEN  pFrame
-    );
+);
 
 void
 vMgrDecodeAuthen(
     PWLAN_FR_AUTHEN  pFrame
-    );
+);
 
 void
 vMgrEncodeDeauthen(
     PWLAN_FR_DEAUTHEN  pFrame
-    );
+);
 
 void
 vMgrDecodeDeauthen(
     PWLAN_FR_DEAUTHEN  pFrame
-    );
+);
 
 void
 vMgrEncodeReassocResponse(
     PWLAN_FR_REASSOCRESP  pFrame
-    );
+);
 
 void
 vMgrDecodeReassocResponse(
     PWLAN_FR_REASSOCRESP  pFrame
-    );
+);
 
 #endif// __80211MGR_H__

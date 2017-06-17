@@ -13,65 +13,65 @@
 #include <linux/irqreturn.h>
 
 struct tx4927_pcic_reg {
-	u32 pciid;
-	u32 pcistatus;
-	u32 pciccrev;
-	u32 pcicfg1;
-	u32 p2gm0plbase;		/* +10 */
-	u32 p2gm0pubase;
-	u32 p2gm1plbase;
-	u32 p2gm1pubase;
-	u32 p2gm2pbase;		/* +20 */
-	u32 p2giopbase;
-	u32 unused0;
-	u32 pcisid;
-	u32 unused1;		/* +30 */
-	u32 pcicapptr;
-	u32 unused2;
-	u32 pcicfg2;
-	u32 g2ptocnt;		/* +40 */
-	u32 unused3[15];
-	u32 g2pstatus;		/* +80 */
-	u32 g2pmask;
-	u32 pcisstatus;
-	u32 pcimask;
-	u32 p2gcfg;		/* +90 */
-	u32 p2gstatus;
-	u32 p2gmask;
-	u32 p2gccmd;
-	u32 unused4[24];		/* +a0 */
-	u32 pbareqport;		/* +100 */
-	u32 pbacfg;
-	u32 pbastatus;
-	u32 pbamask;
-	u32 pbabm;		/* +110 */
-	u32 pbacreq;
-	u32 pbacgnt;
-	u32 pbacstate;
-	u64 g2pmgbase[3];		/* +120 */
-	u64 g2piogbase;
-	u32 g2pmmask[3];		/* +140 */
-	u32 g2piomask;
-	u64 g2pmpbase[3];		/* +150 */
-	u64 g2piopbase;
-	u32 pciccfg;		/* +170 */
-	u32 pcicstatus;
-	u32 pcicmask;
-	u32 unused5;
-	u64 p2gmgbase[3];		/* +180 */
-	u64 p2giogbase;
-	u32 g2pcfgadrs;		/* +1a0 */
-	u32 g2pcfgdata;
-	u32 unused6[8];
-	u32 g2pintack;
-	u32 g2pspc;
-	u32 unused7[12];		/* +1d0 */
-	u64 pdmca;		/* +200 */
-	u64 pdmga;
-	u64 pdmpa;
-	u64 pdmctr;
-	u64 pdmcfg;		/* +220 */
-	u64 pdmsts;
+    u32 pciid;
+    u32 pcistatus;
+    u32 pciccrev;
+    u32 pcicfg1;
+    u32 p2gm0plbase;		/* +10 */
+    u32 p2gm0pubase;
+    u32 p2gm1plbase;
+    u32 p2gm1pubase;
+    u32 p2gm2pbase;		/* +20 */
+    u32 p2giopbase;
+    u32 unused0;
+    u32 pcisid;
+    u32 unused1;		/* +30 */
+    u32 pcicapptr;
+    u32 unused2;
+    u32 pcicfg2;
+    u32 g2ptocnt;		/* +40 */
+    u32 unused3[15];
+    u32 g2pstatus;		/* +80 */
+    u32 g2pmask;
+    u32 pcisstatus;
+    u32 pcimask;
+    u32 p2gcfg;		/* +90 */
+    u32 p2gstatus;
+    u32 p2gmask;
+    u32 p2gccmd;
+    u32 unused4[24];		/* +a0 */
+    u32 pbareqport;		/* +100 */
+    u32 pbacfg;
+    u32 pbastatus;
+    u32 pbamask;
+    u32 pbabm;		/* +110 */
+    u32 pbacreq;
+    u32 pbacgnt;
+    u32 pbacstate;
+    u64 g2pmgbase[3];		/* +120 */
+    u64 g2piogbase;
+    u32 g2pmmask[3];		/* +140 */
+    u32 g2piomask;
+    u64 g2pmpbase[3];		/* +150 */
+    u64 g2piopbase;
+    u32 pciccfg;		/* +170 */
+    u32 pcicstatus;
+    u32 pcicmask;
+    u32 unused5;
+    u64 p2gmgbase[3];		/* +180 */
+    u64 p2giogbase;
+    u32 g2pcfgadrs;		/* +1a0 */
+    u32 g2pcfgdata;
+    u32 unused6[8];
+    u32 g2pintack;
+    u32 g2pspc;
+    u32 unused7[12];		/* +1d0 */
+    u64 pdmca;		/* +200 */
+    u64 pdmga;
+    u64 pdmpa;
+    u64 pdmctr;
+    u64 pdmcfg;		/* +220 */
+    u64 pdmsts;
 };
 
 /* bits for PCICMD */
@@ -192,9 +192,9 @@ struct tx4927_pcic_reg {
 #define TX4927_PCIC_PDMSTS_ALL_ERR	0x0000000f
 
 struct tx4927_pcic_reg __iomem *get_tx4927_pcicptr(
-	struct pci_controller *channel);
+    struct pci_controller *channel);
 void tx4927_pcic_setup(struct tx4927_pcic_reg __iomem *pcicptr,
-		       struct pci_controller *channel, int extarb);
+                       struct pci_controller *channel, int extarb);
 void tx4927_report_pcic_status(void);
 char *tx4927_pcibios_setup(char *str);
 void tx4927_dump_pcic_settings(void);

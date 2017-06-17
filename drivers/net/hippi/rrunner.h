@@ -10,158 +10,158 @@
 
 struct rr_regs {
 
-	u32	pad0[16];
+    u32	pad0[16];
 
-	u32	HostCtrl;
-	u32	LocalCtrl;
-	u32	Pc;
-	u32	BrkPt;
+    u32	HostCtrl;
+    u32	LocalCtrl;
+    u32	Pc;
+    u32	BrkPt;
 
-/* Timer increments every 0.97 micro-seconds (unsigned int) */
-	u32	Timer_Hi;
-	u32	Timer;
-	u32	TimerRef;
-	u32	PciState;
+    /* Timer increments every 0.97 micro-seconds (unsigned int) */
+    u32	Timer_Hi;
+    u32	Timer;
+    u32	TimerRef;
+    u32	PciState;
 
-	u32	Event;
-	u32	MbEvent;
+    u32	Event;
+    u32	MbEvent;
 
-	u32	WinBase;
-	u32	WinData;
-	u32	RX_state;
-	u32	TX_state;
+    u32	WinBase;
+    u32	WinData;
+    u32	RX_state;
+    u32	TX_state;
 
-	u32	Overhead;
-	u32	ExtIo;
+    u32	Overhead;
+    u32	ExtIo;
 
-	u32	DmaWriteHostHi;
-	u32	DmaWriteHostLo;
+    u32	DmaWriteHostHi;
+    u32	DmaWriteHostLo;
 
-	u32	pad1[2];
+    u32	pad1[2];
 
-	u32	DmaReadHostHi;
-	u32	DmaReadHostLo;
+    u32	DmaReadHostHi;
+    u32	DmaReadHostLo;
 
-	u32	pad2;
+    u32	pad2;
 
-	u32	DmaReadLen;
-	u32	DmaWriteState;
+    u32	DmaReadLen;
+    u32	DmaWriteState;
 
-	u32	DmaWriteLcl;
-	u32	DmaWriteIPchecksum;
-	u32	DmaWriteLen;
-	u32	DmaReadState;
-	u32	DmaReadLcl;
-	u32	DmaReadIPchecksum;
-	u32	pad3;
+    u32	DmaWriteLcl;
+    u32	DmaWriteIPchecksum;
+    u32	DmaWriteLen;
+    u32	DmaReadState;
+    u32	DmaReadLcl;
+    u32	DmaReadIPchecksum;
+    u32	pad3;
 
-	u32	RxBase;
-	u32	RxPrd;
-	u32	RxCon;
+    u32	RxBase;
+    u32	RxPrd;
+    u32	RxCon;
 
-	u32	pad4;
+    u32	pad4;
 
-	u32	TxBase;
-	u32	TxPrd;
-	u32	TxCon;
+    u32	TxBase;
+    u32	TxPrd;
+    u32	TxCon;
 
-	u32	pad5;
+    u32	pad5;
 
-	u32	RxIndPro;
-	u32	RxIndCon;
-	u32	RxIndRef;
+    u32	RxIndPro;
+    u32	RxIndCon;
+    u32	RxIndRef;
 
-	u32	pad6;
+    u32	pad6;
 
-	u32	TxIndPro;
-	u32	TxIndCon;
-	u32	TxIndRef;
+    u32	TxIndPro;
+    u32	TxIndCon;
+    u32	TxIndRef;
 
-	u32	pad7[17];
+    u32	pad7[17];
 
-	u32	DrCmndPro;
-	u32	DrCmndCon;
-	u32	DrCmndRef;
+    u32	DrCmndPro;
+    u32	DrCmndCon;
+    u32	DrCmndRef;
 
-	u32	pad8;
+    u32	pad8;
 
-	u32	DwCmndPro;
-	u32	DwCmndCon;
-	u32	DwCmndRef;
+    u32	DwCmndPro;
+    u32	DwCmndCon;
+    u32	DwCmndRef;
 
-	u32	AssistState;
+    u32	AssistState;
 
-	u32	DrDataPro;
-	u32	DrDataCon;
-	u32	DrDataRef;
+    u32	DrDataPro;
+    u32	DrDataCon;
+    u32	DrDataRef;
 
-	u32	pad9;
+    u32	pad9;
 
-	u32	DwDataPro;
-	u32	DwDataCon;
-	u32	DwDataRef;
+    u32	DwDataPro;
+    u32	DwDataCon;
+    u32	DwDataRef;
 
-	u32	pad10[33];
+    u32	pad10[33];
 
-	u32	EvtCon;
+    u32	EvtCon;
 
-	u32	pad11[5];
+    u32	pad11[5];
 
-	u32	TxPi;
-	u32	IpRxPi;
+    u32	TxPi;
+    u32	IpRxPi;
 
-	u32	pad11a[8];
+    u32	pad11a[8];
 
-	u32	CmdRing[16];
+    u32	CmdRing[16];
 
-/* The ULA is in two registers the high order two bytes of the first
- * word contain the RunCode features.
- * ula0		res	res	byte0	byte1
- * ula1		byte2	byte3	byte4	byte5
- */
-	u32	Ula0;
-	u32	Ula1;
+    /* The ULA is in two registers the high order two bytes of the first
+     * word contain the RunCode features.
+     * ula0		res	res	byte0	byte1
+     * ula1		byte2	byte3	byte4	byte5
+     */
+    u32	Ula0;
+    u32	Ula1;
 
-	u32	RxRingHi;
-	u32	RxRingLo;
+    u32	RxRingHi;
+    u32	RxRingLo;
 
-	u32	InfoPtrHi;
-	u32	InfoPtrLo;
+    u32	InfoPtrHi;
+    u32	InfoPtrLo;
 
-	u32	Mode;
+    u32	Mode;
 
-	u32	ConRetry;
-	u32	ConRetryTmr;
+    u32	ConRetry;
+    u32	ConRetryTmr;
 
-	u32	ConTmout;
-	u32	CtatTmr;
+    u32	ConTmout;
+    u32	CtatTmr;
 
-	u32	MaxRxRng;
+    u32	MaxRxRng;
 
-	u32	IntrTmr;
-	u32	TxDataMvTimeout;
-	u32	RxDataMvTimeout;
+    u32	IntrTmr;
+    u32	TxDataMvTimeout;
+    u32	RxDataMvTimeout;
 
-	u32	EvtPrd;
-	u32	TraceIdx;
+    u32	EvtPrd;
+    u32	TraceIdx;
 
-	u32	Fail1;
-	u32	Fail2;
+    u32	Fail1;
+    u32	Fail2;
 
-	u32	DrvPrm;
+    u32	DrvPrm;
 
-	u32	FilterLA;
+    u32	FilterLA;
 
-	u32	FwRev;
-	u32	FwRes1;
-	u32	FwRes2;
-	u32	FwRes3;
+    u32	FwRev;
+    u32	FwRes1;
+    u32	FwRes2;
+    u32	FwRes3;
 
-	u32	WriteDmaThresh;
-	u32	ReadDmaThresh;
+    u32	WriteDmaThresh;
+    u32	ReadDmaThresh;
 
-	u32	pad12[325];
-	u32	Window[512];
+    u32	pad12[325];
+    u32	Window[512];
 };
 
 /*
@@ -355,15 +355,15 @@ struct rr_regs {
 
 struct event {
 #ifdef __LITTLE_ENDIAN
-	u16     index;
-	u8      ring;
-	u8      code;
+    u16     index;
+    u8      ring;
+    u8      code;
 #else
-	u8      code;
-	u8      ring;
-	u16     index;
+    u8      code;
+    u8      ring;
+    u16     index;
 #endif
-	u32     timestamp;
+    u32     timestamp;
 };
 
 /*
@@ -456,13 +456,13 @@ struct event {
 
 struct cmd {
 #ifdef __LITTLE_ENDIAN
-	u16     index;
-	u8      ring;
-	u8      code;
+    u16     index;
+    u8      ring;
+    u8      code;
 #else
-	u8      code;
-	u8      ring;
-	u16     index;
+    u8      code;
+    u8      ring;
+    u16     index;
 #endif
 };
 
@@ -488,58 +488,55 @@ struct cmd {
 
 typedef struct {
 #if (BITS_PER_LONG == 64)
-	u64 addrlo;
+    u64 addrlo;
 #else
-	u32 addrhi;
-	u32 addrlo;
+    u32 addrhi;
+    u32 addrlo;
 #endif
 } rraddr;
 
 
-static inline void set_rraddr(rraddr *ra, dma_addr_t addr)
-{
-	unsigned long baddr = addr;
+static inline void set_rraddr(rraddr *ra, dma_addr_t addr) {
+    unsigned long baddr = addr;
 #if (BITS_PER_LONG == 64)
-	ra->addrlo = baddr;
+    ra->addrlo = baddr;
 #else
     /* Don't bother setting zero every time */
-	ra->addrlo = baddr;
+    ra->addrlo = baddr;
 #endif
-	mb();
+    mb();
 }
 
 
-static inline void set_rxaddr(struct rr_regs __iomem *regs, volatile dma_addr_t addr)
-{
-	unsigned long baddr = addr;
+static inline void set_rxaddr(struct rr_regs __iomem *regs, volatile dma_addr_t addr) {
+    unsigned long baddr = addr;
 #if (BITS_PER_LONG == 64) && defined(__LITTLE_ENDIAN)
-	writel(baddr & 0xffffffff, &regs->RxRingHi);
-	writel(baddr >> 32, &regs->RxRingLo);
+    writel(baddr & 0xffffffff, &regs->RxRingHi);
+    writel(baddr >> 32, &regs->RxRingLo);
 #elif (BITS_PER_LONG == 64)
-	writel(baddr >> 32, &regs->RxRingHi);
-	writel(baddr & 0xffffffff, &regs->RxRingLo);
+    writel(baddr >> 32, &regs->RxRingHi);
+    writel(baddr & 0xffffffff, &regs->RxRingLo);
 #else
-	writel(0, &regs->RxRingHi);
-	writel(baddr, &regs->RxRingLo);
+    writel(0, &regs->RxRingHi);
+    writel(baddr, &regs->RxRingLo);
 #endif
-	mb();
+    mb();
 }
 
 
-static inline void set_infoaddr(struct rr_regs __iomem *regs, volatile dma_addr_t addr)
-{
-	unsigned long baddr = addr;
+static inline void set_infoaddr(struct rr_regs __iomem *regs, volatile dma_addr_t addr) {
+    unsigned long baddr = addr;
 #if (BITS_PER_LONG == 64) && defined(__LITTLE_ENDIAN)
-	writel(baddr & 0xffffffff, &regs->InfoPtrHi);
-	writel(baddr >> 32, &regs->InfoPtrLo);
+    writel(baddr & 0xffffffff, &regs->InfoPtrHi);
+    writel(baddr >> 32, &regs->InfoPtrLo);
 #elif (BITS_PER_LONG == 64)
-	writel(baddr >> 32, &regs->InfoPtrHi);
-	writel(baddr & 0xffffffff, &regs->InfoPtrLo);
+    writel(baddr >> 32, &regs->InfoPtrHi);
+    writel(baddr & 0xffffffff, &regs->InfoPtrLo);
 #else
-	writel(0, &regs->InfoPtrHi);
-	writel(baddr, &regs->InfoPtrLo);
+    writel(0, &regs->InfoPtrHi);
+    writel(baddr, &regs->InfoPtrLo);
 #endif
-	mb();
+    mb();
 }
 
 
@@ -554,17 +551,17 @@ static inline void set_infoaddr(struct rr_regs __iomem *regs, volatile dma_addr_
 #endif
 #define TX_TOTAL_SIZE	(TX_RING_ENTRIES * sizeof(struct tx_desc))
 
-struct tx_desc{
-	rraddr	addr;
-	u32	res;
+struct tx_desc {
+    rraddr	addr;
+    u32	res;
 #ifdef __LITTLE_ENDIAN
-	u16	size;
-	u8	pad;
-	u8	mode;
+    u16	size;
+    u8	pad;
+    u8	mode;
 #else
-	u8	mode;
-	u8	pad;
-	u16	size;
+    u8	mode;
+    u8	pad;
+    u16	size;
 #endif
 };
 
@@ -576,17 +573,17 @@ struct tx_desc{
 #endif
 #define RX_TOTAL_SIZE	(RX_RING_ENTRIES * sizeof(struct rx_desc))
 
-struct rx_desc{
-	rraddr	addr;
-	u32	res;
+struct rx_desc {
+    rraddr	addr;
+    u32	res;
 #ifdef __LITTLE_ENDIAN
-	u16	size;
-	u8	pad;
-	u8	mode;
+    u16	size;
+    u8	pad;
+    u8	mode;
 #else
-	u8	mode;
-	u8	pad;
-	u16	size;
+    u8	mode;
+    u8	pad;
+    u16	size;
 #endif
 };
 
@@ -601,9 +598,9 @@ struct rx_desc{
 
 
 struct seg_hdr {
-	u32	seg_start;
-	u32	seg_len;
-	u32	seg_eestart;
+    u32	seg_start;
+    u32	seg_len;
+    u32	seg_eestart;
 };
 
 
@@ -612,148 +609,148 @@ struct seg_hdr {
 #define EEPROM_BYTES (EEPROM_WORDS * sizeof(u32))
 
 struct eeprom_boot {
-	u32	key1;
-	u32	key2;
-	u32	sram_size;
-	struct	seg_hdr loader;
-	u32	init_chksum;
-	u32	reserved1;
+    u32	key1;
+    u32	key2;
+    u32	sram_size;
+    struct	seg_hdr loader;
+    u32	init_chksum;
+    u32	reserved1;
 };
 
 struct eeprom_manf {
-	u32	HeaderFmt;
-	u32	Firmware;
-	u32	BoardRevision;
-	u32	RoadrunnerRev;
-	char	OpticsPart[8];
-	u32	OpticsRev;
-	u32	pad1;
-	char	SramPart[8];
-	u32	SramRev;
-	u32	pad2;
-	char	EepromPart[8];
-	u32	EepromRev;
-	u32	EepromSize;
-	char	PalPart[8];
-	u32	PalRev;
-	u32	pad3;
-	char	PalCodeFile[12];
-	u32	PalCodeRev;
-	char	BoardULA[8];
-	char	SerialNo[8];
-	char	MfgDate[8];
-	char	MfgTime[8];
-	char	ModifyDate[8];
-	u32	ModCount;
-	u32	pad4[13];
+    u32	HeaderFmt;
+    u32	Firmware;
+    u32	BoardRevision;
+    u32	RoadrunnerRev;
+    char	OpticsPart[8];
+    u32	OpticsRev;
+    u32	pad1;
+    char	SramPart[8];
+    u32	SramRev;
+    u32	pad2;
+    char	EepromPart[8];
+    u32	EepromRev;
+    u32	EepromSize;
+    char	PalPart[8];
+    u32	PalRev;
+    u32	pad3;
+    char	PalCodeFile[12];
+    u32	PalCodeRev;
+    char	BoardULA[8];
+    char	SerialNo[8];
+    char	MfgDate[8];
+    char	MfgTime[8];
+    char	ModifyDate[8];
+    u32	ModCount;
+    u32	pad4[13];
 };
 
 
 struct eeprom_phase_info {
-	char	phase1File[12];
-	u32	phase1Rev;
-	char	phase1Date[8];
-	char	phase2File[12];
-	u32	phase2Rev;
-	char	phase2Date[8];
-	u32	reserved7[4];
+    char	phase1File[12];
+    u32	phase1Rev;
+    char	phase1Date[8];
+    char	phase2File[12];
+    u32	phase2Rev;
+    char	phase2Date[8];
+    u32	reserved7[4];
 };
 
 struct eeprom_rncd_info {
-	u32	FwStart;
-	u32	FwRev;
-	char	FwDate[8];
-	u32	AddrRunCodeSegs;
-	u32	FileNames;
-	char	File[13][8];
+    u32	FwStart;
+    u32	FwRev;
+    char	FwDate[8];
+    u32	AddrRunCodeSegs;
+    u32	FileNames;
+    char	File[13][8];
 };
 
 
 /* Phase 1 region (starts are word offset 0x80) */
-struct phase1_hdr{
-	u32	jump;
-	u32	noop;
-	struct seg_hdr phase2Seg;
+struct phase1_hdr {
+    u32	jump;
+    u32	noop;
+    struct seg_hdr phase2Seg;
 };
 
 struct eeprom {
-	struct eeprom_boot	boot;
-	u32			pad1[8];
-	struct eeprom_manf	manf;
-	struct eeprom_phase_info phase_info;
-	struct eeprom_rncd_info	rncd_info;
-	u32			pad2[15];
-	u32			hdr_checksum;
-	struct phase1_hdr	phase1;
+    struct eeprom_boot	boot;
+    u32			pad1[8];
+    struct eeprom_manf	manf;
+    struct eeprom_phase_info phase_info;
+    struct eeprom_rncd_info	rncd_info;
+    u32			pad2[15];
+    u32			hdr_checksum;
+    struct phase1_hdr	phase1;
 };
 
 
 struct rr_stats {
-	u32	NicTimeStamp;
-	u32	RngCreated;
-	u32	RngDeleted;
-	u32	IntrGen;
-	u32	NEvtOvfl;
-	u32	InvCmd;
-	u32	DmaReadErrs;
-	u32	DmaWriteErrs;
-	u32	StatUpdtT;
-	u32	StatUpdtC;
-	u32	WatchDog;
-	u32	Trace;
+    u32	NicTimeStamp;
+    u32	RngCreated;
+    u32	RngDeleted;
+    u32	IntrGen;
+    u32	NEvtOvfl;
+    u32	InvCmd;
+    u32	DmaReadErrs;
+    u32	DmaWriteErrs;
+    u32	StatUpdtT;
+    u32	StatUpdtC;
+    u32	WatchDog;
+    u32	Trace;
 
-	/* Serial HIPPI */
-	u32	LnkRdyEst;
-	u32	GLinkErr;
-	u32	AltFlgErr;
-	u32	OvhdBit8Sync;
-	u32	RmtSerPrtyErr;
-	u32	RmtParPrtyErr;
-	u32	RmtLoopBk;
-	u32	pad1;
+    /* Serial HIPPI */
+    u32	LnkRdyEst;
+    u32	GLinkErr;
+    u32	AltFlgErr;
+    u32	OvhdBit8Sync;
+    u32	RmtSerPrtyErr;
+    u32	RmtParPrtyErr;
+    u32	RmtLoopBk;
+    u32	pad1;
 
-	/* HIPPI tx */
-	u32	ConEst;
-	u32	ConRejS;
-	u32	ConRetry;
-	u32	ConTmOut;
-	u32	SndConDiscon;
-	u32	SndParErr;
-	u32	PktSnt;
-	u32	pad2[2];
-	u32	ShFBstSnt;
-	u64	BytSent;
-	u32	TxTimeout;
-	u32	pad3[3];
+    /* HIPPI tx */
+    u32	ConEst;
+    u32	ConRejS;
+    u32	ConRetry;
+    u32	ConTmOut;
+    u32	SndConDiscon;
+    u32	SndParErr;
+    u32	PktSnt;
+    u32	pad2[2];
+    u32	ShFBstSnt;
+    u64	BytSent;
+    u32	TxTimeout;
+    u32	pad3[3];
 
-	/* HIPPI rx */
-	u32	ConAcc;
-	u32	ConRejdiPrty;
-	u32	ConRejd64b;
-	u32	ConRejdBuf;
-	u32	RxConDiscon;
-	u32	RxConNoData;
-	u32	PktRx;
-	u32	pad4[2];
-	u32	ShFBstRx;
-	u64	BytRx;
-	u32	RxParErr;
-	u32	RxLLRCerr;
-	u32	RxBstSZerr;
-	u32	RxStateErr;
-	u32	RxRdyErr;
-	u32	RxInvULP;
-	u32	RxSpcBuf;
-	u32	RxSpcDesc;
-	u32	RxRngSpc;
-	u32	RxRngFull;
-	u32	RxPktLenErr;
-	u32	RxCksmErr;
-	u32	RxPktDrp;
-	u32	RngLowSpc;
-	u32	RngDataClose;
-	u32	RxTimeout;
-	u32	RxIdle;
+    /* HIPPI rx */
+    u32	ConAcc;
+    u32	ConRejdiPrty;
+    u32	ConRejd64b;
+    u32	ConRejdBuf;
+    u32	RxConDiscon;
+    u32	RxConNoData;
+    u32	PktRx;
+    u32	pad4[2];
+    u32	ShFBstRx;
+    u64	BytRx;
+    u32	RxParErr;
+    u32	RxLLRCerr;
+    u32	RxBstSZerr;
+    u32	RxStateErr;
+    u32	RxRdyErr;
+    u32	RxInvULP;
+    u32	RxSpcBuf;
+    u32	RxSpcDesc;
+    u32	RxRngSpc;
+    u32	RxRngFull;
+    u32	RxPktLenErr;
+    u32	RxCksmErr;
+    u32	RxPktDrp;
+    u32	RngLowSpc;
+    u32	RngDataClose;
+    u32	RxTimeout;
+    u32	RxIdle;
 };
 
 
@@ -761,32 +758,32 @@ struct rr_stats {
  * This struct is shared with the NIC firmware.
  */
 struct ring_ctrl {
-	rraddr	rngptr;
+    rraddr	rngptr;
 #ifdef __LITTLE_ENDIAN
-	u16	entries;
-	u8	pad;
-	u8	entry_size;
-	u16	pi;
-	u16	mode;
+    u16	entries;
+    u8	pad;
+    u8	entry_size;
+    u16	pi;
+    u16	mode;
 #else
-	u8	entry_size;
-	u8	pad;
-	u16	entries;
-	u16	mode;
-	u16	pi;
+    u8	entry_size;
+    u8	pad;
+    u16	entries;
+    u16	mode;
+    u16	pi;
 #endif
 };
 
 struct rr_info {
-	union {
-		struct rr_stats stats;
-		u32 stati[128];
-	} s;
-	struct ring_ctrl	evt_ctrl;
-	struct ring_ctrl	cmd_ctrl;
-	struct ring_ctrl	tx_ctrl;
-	u8			pad[464];
-	u8			trace[3072];
+    union {
+        struct rr_stats stats;
+        u32 stati[128];
+    } s;
+    struct ring_ctrl	evt_ctrl;
+    struct ring_ctrl	cmd_ctrl;
+    struct ring_ctrl	tx_ctrl;
+    u8			pad[464];
+    u8			trace[3072];
 };
 
 /*
@@ -796,30 +793,29 @@ struct rr_info {
  * aligned and do not cross cache-line boundaries.
  */
 
-struct rr_private
-{
-	struct rx_desc		*rx_ring;
-	struct tx_desc		*tx_ring;
-	struct event		*evt_ring;
-	dma_addr_t 		tx_ring_dma;
-	dma_addr_t 		rx_ring_dma;
-	dma_addr_t 		evt_ring_dma;
-	/* Alignment ok ? */
-	struct sk_buff		*rx_skbuff[RX_RING_ENTRIES];
-	struct sk_buff		*tx_skbuff[TX_RING_ENTRIES];
-	struct rr_regs		__iomem *regs;		/* Register base */
-	struct ring_ctrl	*rx_ctrl;	/* Receive ring control */
-	struct rr_info		*info;		/* Shared info page */
-	dma_addr_t 		rx_ctrl_dma;
-	dma_addr_t 		info_dma;
-	spinlock_t		lock;
-	struct timer_list	timer;
-	u32			cur_rx, cur_cmd, cur_evt;
-	u32			dirty_rx, dirty_tx;
-	u32			tx_full;
-	u32			fw_rev;
-	volatile short		fw_running;
-	struct pci_dev		*pci_dev;
+struct rr_private {
+    struct rx_desc		*rx_ring;
+    struct tx_desc		*tx_ring;
+    struct event		*evt_ring;
+    dma_addr_t 		tx_ring_dma;
+    dma_addr_t 		rx_ring_dma;
+    dma_addr_t 		evt_ring_dma;
+    /* Alignment ok ? */
+    struct sk_buff		*rx_skbuff[RX_RING_ENTRIES];
+    struct sk_buff		*tx_skbuff[TX_RING_ENTRIES];
+    struct rr_regs		__iomem *regs;		/* Register base */
+    struct ring_ctrl	*rx_ctrl;	/* Receive ring control */
+    struct rr_info		*info;		/* Shared info page */
+    dma_addr_t 		rx_ctrl_dma;
+    dma_addr_t 		info_dma;
+    spinlock_t		lock;
+    struct timer_list	timer;
+    u32			cur_rx, cur_cmd, cur_evt;
+    u32			dirty_rx, dirty_tx;
+    u32			tx_full;
+    u32			fw_rev;
+    volatile short		fw_running;
+    struct pci_dev		*pci_dev;
 };
 
 
@@ -832,13 +828,13 @@ static irqreturn_t rr_interrupt(int irq, void *dev_id);
 
 static int rr_open(struct net_device *dev);
 static netdev_tx_t rr_start_xmit(struct sk_buff *skb,
-				 struct net_device *dev);
+                                 struct net_device *dev);
 static int rr_close(struct net_device *dev);
 static int rr_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 static unsigned int rr_read_eeprom(struct rr_private *rrpriv,
-				   unsigned long offset,
-				   unsigned char *buf,
-				   unsigned long length);
+                                   unsigned long offset,
+                                   unsigned char *buf,
+                                   unsigned long length);
 static u32 rr_read_eeprom_word(struct rr_private *rrpriv, size_t offset);
 static int rr_load_firmware(struct net_device *dev);
 static inline void rr_raz_tx(struct rr_private *, struct net_device *);

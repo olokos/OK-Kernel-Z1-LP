@@ -6,20 +6,18 @@
 
 #include "numa_internal.h"
 
-void __init initmem_init(void)
-{
-	x86_numa_init();
+void __init initmem_init(void) {
+    x86_numa_init();
 }
 
-unsigned long __init numa_free_all_bootmem(void)
-{
-	unsigned long pages = 0;
-	int i;
+unsigned long __init numa_free_all_bootmem(void) {
+    unsigned long pages = 0;
+    int i;
 
-	for_each_online_node(i)
-		pages += free_all_bootmem_node(NODE_DATA(i));
+    for_each_online_node(i)
+    pages += free_all_bootmem_node(NODE_DATA(i));
 
-	pages += free_low_memory_core_early(MAX_NUMNODES);
+    pages += free_low_memory_core_early(MAX_NUMNODES);
 
-	return pages;
+    return pages;
 }

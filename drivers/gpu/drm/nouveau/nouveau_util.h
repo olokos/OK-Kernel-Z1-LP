@@ -29,14 +29,14 @@
 #define __NOUVEAU_UTIL_H__
 
 struct nouveau_bitfield {
-	u32 mask;
-	const char *name;
+    u32 mask;
+    const char *name;
 };
 
 struct nouveau_enum {
-	u32 value;
-	const char *name;
-	void *data;
+    u32 value;
+    const char *name;
+    void *data;
 };
 
 void nouveau_bitfield_print(const struct nouveau_bitfield *, u32 value);

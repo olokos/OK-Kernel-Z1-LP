@@ -10,10 +10,10 @@
 struct page;
 
 extern struct pgtable_cache_struct {
-	unsigned long *pgd_cache;
-	unsigned long *pte_cache;
-	unsigned long pgtable_cache_sz;
-	unsigned long pgd_cache_sz;
+    unsigned long *pgd_cache;
+    unsigned long *pte_cache;
+    unsigned long pgtable_cache_sz;
+    unsigned long pgd_cache_sz;
 } pgt_quicklists;
 #define pgd_quicklist           (pgt_quicklists.pgd_cache)
 #define pmd_quicklist           ((unsigned long *)0)

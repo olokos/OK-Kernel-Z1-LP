@@ -1,4 +1,4 @@
-/* muldi3.c extracted from gcc-2.7.2.3/libgcc2.c and 
+/* muldi3.c extracted from gcc-2.7.2.3/libgcc2.c and
 			   gcc-2.7.2.3/longlong.h which is: */
 /* Copyright (C) 1989, 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
 
@@ -72,26 +72,26 @@ typedef unsigned int USItype	__attribute__ ((mode (SI)));
 typedef		 int DItype	__attribute__ ((mode (DI)));
 typedef int word_type __attribute__ ((mode (__word__)));
 
-struct DIstruct {SItype high, low;};
+struct DIstruct {
+    SItype high, low;
+};
 
-typedef union
-{
-  struct DIstruct s;
-  DItype ll;
+typedef union {
+    struct DIstruct s;
+    DItype ll;
 } DIunion;
 
 DItype
-__muldi3 (DItype u, DItype v)
-{
-  DIunion w;
-  DIunion uu, vv;
+__muldi3 (DItype u, DItype v) {
+    DIunion w;
+    DIunion uu, vv;
 
-  uu.ll = u,
-  vv.ll = v;
+    uu.ll = u,
+       vv.ll = v;
 
-  w.ll = __umulsidi3 (uu.s.low, vv.s.low);
-  w.s.high += ((USItype) uu.s.low * (USItype) vv.s.high
-	       + (USItype) uu.s.high * (USItype) vv.s.low);
+    w.ll = __umulsidi3 (uu.s.low, vv.s.low);
+    w.s.high += ((USItype) uu.s.low * (USItype) vv.s.high
+                 + (USItype) uu.s.high * (USItype) vv.s.low);
 
-  return w.ll;
+    return w.ll;
 }

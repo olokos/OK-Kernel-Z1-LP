@@ -901,7 +901,7 @@
 #define  DMA26_CNT2                0x1001E4	/* DMA Table Size : Ch#26 */
 
 /* ***************************************************************************** */
- /* ITG */
+/* ITG */
 /* ***************************************************************************** */
 #define  TM_CNT_LDW                0x110000	/* Timer : Counter low */
 
@@ -1466,7 +1466,7 @@
 /* ***************************************************************************** */
 #define  I2C1_ADDR                 0x180000	/* I2C #1 address */
 #define  FLD_I2C_DADDR             0xfe000000	/* RW [31:25] I2C Device Address */
-						 /* RO [24] reserved */
+/* RO [24] reserved */
 /* ***************************************************************************** */
 #define  FLD_I2C_SADDR             0x00FFFFFF	/* RW [23:0]  I2C Sub-address */
 
@@ -1479,15 +1479,15 @@
 #define  FLD_I2C_PERIOD            0xFF000000	/* RW [31:24] */
 #define  FLD_I2C_SCL_IN            0x00200000	/* RW [21] */
 #define  FLD_I2C_SDA_IN            0x00100000	/* RW [20] */
-						 /* RO [19:18] reserved */
+/* RO [19:18] reserved */
 #define  FLD_I2C_SCL_OUT           0x00020000	/* RW [17] */
 #define  FLD_I2C_SDA_OUT           0x00010000	/* RW [16] */
-						 /* RO [15] reserved */
+/* RO [15] reserved */
 #define  FLD_I2C_DATA_LEN          0x00007000	/* RW [14:12] */
 #define  FLD_I2C_SADDR_INC         0x00000800	/* RW [11] */
-						 /* RO [10:9] reserved */
+/* RO [10:9] reserved */
 #define  FLD_I2C_SADDR_LEN         0x00000300	/* RW [9:8] */
-						 /* RO [7:6] reserved */
+/* RO [7:6] reserved */
 #define  FLD_I2C_SOFT              0x00000020	/* RW [5] */
 #define  FLD_I2C_NOSTOP            0x00000010	/* RW [4] */
 #define  FLD_I2C_EXTEND            0x00000008	/* RW [3] */

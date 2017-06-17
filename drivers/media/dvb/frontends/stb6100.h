@@ -76,38 +76,37 @@
 #define CHKRANGE(val, x, y)		(((val >= x) && (val < y)) ? 1 : 0)
 
 struct stb6100_config {
-	u8	tuner_address;
-	u32	refclock;
+    u8	tuner_address;
+    u32	refclock;
 };
 
 struct stb6100_state {
-	struct i2c_adapter *i2c;
+    struct i2c_adapter *i2c;
 
-	const struct stb6100_config	*config;
-	struct dvb_tuner_ops		ops;
-	struct dvb_frontend		*frontend;
-	struct tuner_state		status;
+    const struct stb6100_config	*config;
+    struct dvb_tuner_ops		ops;
+    struct dvb_frontend		*frontend;
+    struct tuner_state		status;
 
-	u32 frequency;
-	u32 srate;
-	u32 bandwidth;
-	u32 reference;
+    u32 frequency;
+    u32 srate;
+    u32 bandwidth;
+    u32 reference;
 };
 
 #if defined(CONFIG_DVB_STB6100) || (defined(CONFIG_DVB_STB6100_MODULE) && defined(MODULE))
 
 extern struct dvb_frontend *stb6100_attach(struct dvb_frontend *fe,
-					   const struct stb6100_config *config,
-					   struct i2c_adapter *i2c);
+        const struct stb6100_config *config,
+        struct i2c_adapter *i2c);
 
 #else
 
 static inline struct dvb_frontend *stb6100_attach(struct dvb_frontend *fe,
-						  const struct stb6100_config *config,
-						  struct i2c_adapter *i2c)
-{
-	printk(KERN_WARNING "%s: Driver disabled by Kconfig\n", __func__);
-	return NULL;
+        const struct stb6100_config *config,
+        struct i2c_adapter *i2c) {
+    printk(KERN_WARNING "%s: Driver disabled by Kconfig\n", __func__);
+    return NULL;
 }
 
 #endif //CONFIG_DVB_STB6100

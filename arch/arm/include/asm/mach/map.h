@@ -15,10 +15,10 @@
 #include <asm/io.h>
 
 struct map_desc {
-	unsigned long virtual;
-	unsigned long pfn;
-	unsigned long length;
-	unsigned int type;
+    unsigned long virtual;
+    unsigned long pfn;
+    unsigned long length;
+    unsigned int type;
 };
 
 /* types 0-3 are defined in asm/io.h */
@@ -48,10 +48,10 @@ extern const struct mem_type *get_mem_type(unsigned int type);
  * external interface to remap single page with appropriate type
  */
 extern int ioremap_page(unsigned long virt, unsigned long phys,
-			const struct mem_type *mtype);
+                        const struct mem_type *mtype);
 
 extern int ioremap_pages(unsigned long virt, unsigned long phys,
-			unsigned long size, const struct mem_type *mtype);
+                         unsigned long size, const struct mem_type *mtype);
 #else
 #define iotable_init(map,num)	do { } while (0)
 #endif

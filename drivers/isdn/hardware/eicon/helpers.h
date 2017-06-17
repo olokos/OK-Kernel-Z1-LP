@@ -26,9 +26,9 @@
 #ifndef __DIVA_XDI_CARD_CONFIG_HELPERS_INC__
 #define __DIVA_XDI_CARD_CONFIG_HELPERS_INC__
 dword diva_get_protocol_file_features(byte *File,
-				      int offset,
-				      char *IdStringBuffer,
-				      dword IdBufferSize);
+                                      int offset,
+                                      char *IdStringBuffer,
+                                      dword IdBufferSize);
 void diva_configure_protocol(PISDN_ADAPTER IoAdapter);
 /*
   Low level file access system abstraction

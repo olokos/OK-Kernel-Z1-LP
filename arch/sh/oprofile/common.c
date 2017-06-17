@@ -29,36 +29,32 @@ extern void sh_backtrace(struct pt_regs * const regs, unsigned int depth);
  */
 static char *sh_pmu_op_name;
 
-char *op_name_from_perf_id(void)
-{
-	return sh_pmu_op_name;
+char *op_name_from_perf_id(void) {
+    return sh_pmu_op_name;
 }
 
-int __init oprofile_arch_init(struct oprofile_operations *ops)
-{
-	ops->backtrace = sh_backtrace;
+int __init oprofile_arch_init(struct oprofile_operations *ops) {
+    ops->backtrace = sh_backtrace;
 
-	if (perf_num_counters() == 0)
-		return -ENODEV;
+    if (perf_num_counters() == 0)
+        return -ENODEV;
 
-	sh_pmu_op_name = kasprintf(GFP_KERNEL, "%s/%s",
-				   UTS_MACHINE, perf_pmu_name());
-	if (unlikely(!sh_pmu_op_name))
-		return -ENOMEM;
+    sh_pmu_op_name = kasprintf(GFP_KERNEL, "%s/%s",
+                               UTS_MACHINE, perf_pmu_name());
+    if (unlikely(!sh_pmu_op_name))
+        return -ENOMEM;
 
-	return oprofile_perf_init(ops);
+    return oprofile_perf_init(ops);
 }
 
-void oprofile_arch_exit(void)
-{
-	oprofile_perf_exit();
-	kfree(sh_pmu_op_name);
+void oprofile_arch_exit(void) {
+    oprofile_perf_exit();
+    kfree(sh_pmu_op_name);
 }
 #else
-int __init oprofile_arch_init(struct oprofile_operations *ops)
-{
-	ops->backtrace = sh_backtrace;
-	return -ENODEV;
+int __init oprofile_arch_init(struct oprofile_operations *ops) {
+    ops->backtrace = sh_backtrace;
+    return -ENODEV;
 }
 void oprofile_arch_exit(void) {}
 #endif /* CONFIG_HW_PERF_EVENTS */

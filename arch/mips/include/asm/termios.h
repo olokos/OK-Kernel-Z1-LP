@@ -14,49 +14,49 @@
 #include <asm/ioctls.h>
 
 struct sgttyb {
-	char	sg_ispeed;
-	char	sg_ospeed;
-	char	sg_erase;
-	char	sg_kill;
-	int	sg_flags;	/* SGI special - int, not short */
+    char	sg_ispeed;
+    char	sg_ospeed;
+    char	sg_erase;
+    char	sg_kill;
+    int	sg_flags;	/* SGI special - int, not short */
 };
 
 struct tchars {
-	char	t_intrc;
-	char	t_quitc;
-	char	t_startc;
-	char	t_stopc;
-	char	t_eofc;
-	char	t_brkc;
+    char	t_intrc;
+    char	t_quitc;
+    char	t_startc;
+    char	t_stopc;
+    char	t_eofc;
+    char	t_brkc;
 };
 
 struct ltchars {
-        char    t_suspc;        /* stop process signal */
-        char    t_dsuspc;       /* delayed stop process signal */
-        char    t_rprntc;       /* reprint line */
-        char    t_flushc;       /* flush output (toggles) */
-        char    t_werasc;       /* word erase */
-        char    t_lnextc;       /* literal next character */
+    char    t_suspc;        /* stop process signal */
+    char    t_dsuspc;       /* delayed stop process signal */
+    char    t_rprntc;       /* reprint line */
+    char    t_flushc;       /* flush output (toggles) */
+    char    t_werasc;       /* word erase */
+    char    t_lnextc;       /* literal next character */
 };
 
 /* TIOCGSIZE, TIOCSSIZE not defined yet.  Only needed for SunOS source
    compatibility anyway ... */
 
 struct winsize {
-	unsigned short ws_row;
-	unsigned short ws_col;
-	unsigned short ws_xpixel;
-	unsigned short ws_ypixel;
+    unsigned short ws_row;
+    unsigned short ws_col;
+    unsigned short ws_xpixel;
+    unsigned short ws_ypixel;
 };
 
 #define NCC	8
 struct termio {
-	unsigned short c_iflag;		/* input mode flags */
-	unsigned short c_oflag;		/* output mode flags */
-	unsigned short c_cflag;		/* control mode flags */
-	unsigned short c_lflag;		/* local mode flags */
-	char c_line;			/* line discipline */
-	unsigned char c_cc[NCCS];	/* control characters */
+    unsigned short c_iflag;		/* input mode flags */
+    unsigned short c_oflag;		/* output mode flags */
+    unsigned short c_cflag;		/* control mode flags */
+    unsigned short c_lflag;		/* local mode flags */
+    char c_line;			/* line discipline */
+    unsigned char c_cc[NCCS];	/* control characters */
 };
 
 #ifdef __KERNEL__
@@ -96,79 +96,73 @@ struct termio {
  * Translate a "termio" structure into a "termios". Ugh.
  */
 static inline int user_termio_to_kernel_termios(struct ktermios *termios,
-	struct termio __user *termio)
-{
-	unsigned short iflag, oflag, cflag, lflag;
-	unsigned int err;
+        struct termio __user *termio) {
+    unsigned short iflag, oflag, cflag, lflag;
+    unsigned int err;
 
-	if (!access_ok(VERIFY_READ, termio, sizeof(struct termio)))
-		return -EFAULT;
+    if (!access_ok(VERIFY_READ, termio, sizeof(struct termio)))
+        return -EFAULT;
 
-	err = __get_user(iflag, &termio->c_iflag);
-	termios->c_iflag = (termios->c_iflag & 0xffff0000) | iflag;
-	err |=__get_user(oflag, &termio->c_oflag);
-	termios->c_oflag = (termios->c_oflag & 0xffff0000) | oflag;
-	err |=__get_user(cflag, &termio->c_cflag);
-	termios->c_cflag = (termios->c_cflag & 0xffff0000) | cflag;
-	err |=__get_user(lflag, &termio->c_lflag);
-	termios->c_lflag = (termios->c_lflag & 0xffff0000) | lflag;
-	err |=__get_user(termios->c_line, &termio->c_line);
-	if (err)
-		return -EFAULT;
+    err = __get_user(iflag, &termio->c_iflag);
+    termios->c_iflag = (termios->c_iflag & 0xffff0000) | iflag;
+    err |=__get_user(oflag, &termio->c_oflag);
+    termios->c_oflag = (termios->c_oflag & 0xffff0000) | oflag;
+    err |=__get_user(cflag, &termio->c_cflag);
+    termios->c_cflag = (termios->c_cflag & 0xffff0000) | cflag;
+    err |=__get_user(lflag, &termio->c_lflag);
+    termios->c_lflag = (termios->c_lflag & 0xffff0000) | lflag;
+    err |=__get_user(termios->c_line, &termio->c_line);
+    if (err)
+        return -EFAULT;
 
-	if (__copy_from_user(termios->c_cc, termio->c_cc, NCC))
-		return -EFAULT;
+    if (__copy_from_user(termios->c_cc, termio->c_cc, NCC))
+        return -EFAULT;
 
-	return 0;
+    return 0;
 }
 
 /*
  * Translate a "termios" structure into a "termio". Ugh.
  */
 static inline int kernel_termios_to_user_termio(struct termio __user *termio,
-	struct ktermios *termios)
-{
-	int err;
+        struct ktermios *termios) {
+    int err;
 
-	if (!access_ok(VERIFY_WRITE, termio, sizeof(struct termio)))
-		return -EFAULT;
+    if (!access_ok(VERIFY_WRITE, termio, sizeof(struct termio)))
+        return -EFAULT;
 
-	err = __put_user(termios->c_iflag, &termio->c_iflag);
-	err |= __put_user(termios->c_oflag, &termio->c_oflag);
-	err |= __put_user(termios->c_cflag, &termio->c_cflag);
-	err |= __put_user(termios->c_lflag, &termio->c_lflag);
-	err |= __put_user(termios->c_line, &termio->c_line);
-	if (err)
-		return -EFAULT;
+    err = __put_user(termios->c_iflag, &termio->c_iflag);
+    err |= __put_user(termios->c_oflag, &termio->c_oflag);
+    err |= __put_user(termios->c_cflag, &termio->c_cflag);
+    err |= __put_user(termios->c_lflag, &termio->c_lflag);
+    err |= __put_user(termios->c_line, &termio->c_line);
+    if (err)
+        return -EFAULT;
 
-	if (__copy_to_user(termio->c_cc, termios->c_cc, NCC))
-		return -EFAULT;
+    if (__copy_to_user(termio->c_cc, termios->c_cc, NCC))
+        return -EFAULT;
 
-	return 0;
+    return 0;
 }
 
 static inline int user_termios_to_kernel_termios(struct ktermios __user *k,
-	struct termios2 *u)
-{
-	return copy_from_user(k, u, sizeof(struct termios2)) ? -EFAULT : 0;
+        struct termios2 *u) {
+    return copy_from_user(k, u, sizeof(struct termios2)) ? -EFAULT : 0;
 }
 
 static inline int kernel_termios_to_user_termios(struct termios2 __user *u,
-	struct ktermios *k)
-{
-	return copy_to_user(u, k, sizeof(struct termios2)) ? -EFAULT : 0;
+        struct ktermios *k) {
+    return copy_to_user(u, k, sizeof(struct termios2)) ? -EFAULT : 0;
 }
 
 static inline int user_termios_to_kernel_termios_1(struct ktermios *k,
-	struct termios __user *u)
-{
-	return copy_from_user(k, u, sizeof(struct termios)) ? -EFAULT : 0;
+        struct termios __user *u) {
+    return copy_from_user(k, u, sizeof(struct termios)) ? -EFAULT : 0;
 }
 
 static inline int kernel_termios_to_user_termios_1(struct termios __user *u,
-	struct ktermios *k)
-{
-	return copy_to_user(u, k, sizeof(struct termios)) ? -EFAULT : 0;
+        struct ktermios *k) {
+    return copy_to_user(u, k, sizeof(struct termios)) ? -EFAULT : 0;
 }
 
 #endif /* defined(__KERNEL__) */

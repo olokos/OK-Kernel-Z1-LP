@@ -26,73 +26,66 @@
  *     - sets ICC2.C
  *     - enables interrupts
  */
-static inline void arch_local_irq_disable(void)
-{
-	/* set Z flag, but don't change the C flag */
-	asm volatile("	andcc	gr0,gr0,gr0,icc2	\n"
-		     :
-		     :
-		     : "memory", "icc2"
-		     );
+static inline void arch_local_irq_disable(void) {
+    /* set Z flag, but don't change the C flag */
+    asm volatile("	andcc	gr0,gr0,gr0,icc2	\n"
+                 :
+                 :
+                 : "memory", "icc2"
+                );
 }
 
-static inline void arch_local_irq_enable(void)
-{
-	/* clear Z flag and then test the C flag */
-	asm volatile("  oricc	gr0,#1,gr0,icc2		\n"
-		     "	tihi	icc2,gr0,#2		\n"
-		     :
-		     :
-		     : "memory", "icc2"
-		     );
+static inline void arch_local_irq_enable(void) {
+    /* clear Z flag and then test the C flag */
+    asm volatile("  oricc	gr0,#1,gr0,icc2		\n"
+                 "	tihi	icc2,gr0,#2		\n"
+                 :
+                 :
+                 : "memory", "icc2"
+                );
 }
 
-static inline unsigned long arch_local_save_flags(void)
-{
-	unsigned long flags;
+static inline unsigned long arch_local_save_flags(void) {
+    unsigned long flags;
 
-	asm volatile("movsg ccr,%0"
-		     : "=r"(flags)
-		     :
-		     : "memory");
+    asm volatile("movsg ccr,%0"
+                 : "=r"(flags)
+                 :
+                 : "memory");
 
-	/* shift ICC2.Z to bit 0 */
-	flags >>= 26;
+    /* shift ICC2.Z to bit 0 */
+    flags >>= 26;
 
-	/* make flags 1 if interrupts disabled, 0 otherwise */
-	return flags & 1UL;
+    /* make flags 1 if interrupts disabled, 0 otherwise */
+    return flags & 1UL;
 
 }
 
-static inline unsigned long arch_local_irq_save(void)
-{
-	unsigned long flags = arch_local_save_flags();
-	arch_local_irq_disable();
-	return flags;
+static inline unsigned long arch_local_irq_save(void) {
+    unsigned long flags = arch_local_save_flags();
+    arch_local_irq_disable();
+    return flags;
 }
 
-static inline void arch_local_irq_restore(unsigned long flags)
-{
-	/* load the Z flag by turning 1 if disabled into 0 if disabled
-	 * and thus setting the Z flag but not the C flag */
-	asm volatile("  xoricc	%0,#1,gr0,icc2		\n"
-		     /* then trap if Z=0 and C=0 */
-		     "	tihi	icc2,gr0,#2		\n"
-		     :
-		     : "r"(flags)
-		     : "memory", "icc2"
-		     );
+static inline void arch_local_irq_restore(unsigned long flags) {
+    /* load the Z flag by turning 1 if disabled into 0 if disabled
+     * and thus setting the Z flag but not the C flag */
+    asm volatile("  xoricc	%0,#1,gr0,icc2		\n"
+                 /* then trap if Z=0 and C=0 */
+                 "	tihi	icc2,gr0,#2		\n"
+                 :
+                 : "r"(flags)
+                 : "memory", "icc2"
+                );
 
 }
 
-static inline bool arch_irqs_disabled_flags(unsigned long flags)
-{
-	return flags;
+static inline bool arch_irqs_disabled_flags(unsigned long flags) {
+    return flags;
 }
 
-static inline bool arch_irqs_disabled(void)
-{
-	return arch_irqs_disabled_flags(arch_local_save_flags());
+static inline bool arch_irqs_disabled(void) {
+    return arch_irqs_disabled_flags(arch_local_save_flags());
 }
 
 /*

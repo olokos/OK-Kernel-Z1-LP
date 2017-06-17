@@ -12,7 +12,7 @@
 #define _DVB_USB_DIBUSB_H_
 
 #ifndef DVB_USB_LOG_PREFIX
- #define DVB_USB_LOG_PREFIX "dibusb"
+#define DVB_USB_LOG_PREFIX "dibusb"
 #endif
 #include "dvb-usb.h"
 
@@ -97,15 +97,15 @@
 #define DIBUSB_IOCTL_CMD_DISABLE_STREAM	0x02
 
 struct dibusb_state {
-	struct dib_fe_xfer_ops ops;
-	int mt2060_present;
-	u8 tuner_addr;
+    struct dib_fe_xfer_ops ops;
+    int mt2060_present;
+    u8 tuner_addr;
 };
 
 struct dibusb_device_state {
-	/* for RC5 remote control */
-	int old_toggle;
-	int last_repeat_count;
+    /* for RC5 remote control */
+    int old_toggle;
+    int last_repeat_count;
 };
 
 extern struct i2c_algorithm dibusb_i2c_algo;

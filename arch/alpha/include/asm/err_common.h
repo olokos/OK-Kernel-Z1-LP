@@ -66,53 +66,53 @@
 #  define EL_TYPE__PAL__ENV__HOT_PLUG			(16)
 
 union el_timestamp {
-	struct {
-		u8 second;
-		u8 minute;
-		u8 hour;
-		u8 day;
-		u8 month;
-		u8 year;
-	} b;
-	u64 as_int;
+    struct {
+        u8 second;
+        u8 minute;
+        u8 hour;
+        u8 day;
+        u8 month;
+        u8 year;
+    } b;
+    u64 as_int;
 };
 
 struct el_subpacket {
-	u16 length;		/* length of header (in bytes)	*/
-	u16 class;		/* header class and type...   	*/
-	u16 type;		/* ...determine content     	*/
-	u16 revision;		/* header revision 		*/
-	union {
-		struct {	/* Class 5, Type 1 - System Error	*/
-			u32 frame_length;
-			u32 frame_packet_count;			
-		} sys_err;			
-		struct {	/* Class 5, Type 2 - System Event 	*/
-			union el_timestamp timestamp;
-			u32 frame_length;
-			u32 frame_packet_count;			
-		} sys_event;
-		struct {	/* Class 5, Type 3 - Double Error Halt	*/
-			u16 halt_code;
-			u16 reserved;
-			union el_timestamp timestamp;
-			u32 frame_length;
-			u32 frame_packet_count;
-		} err_halt;
-		struct {	/* Clasee 5, Type 19 - Logout Frame Header */
-			u32 frame_length;
-			u32 frame_flags;
-			u32 cpu_offset;	
-			u32 system_offset;
-		} logout_header;
-		struct {	/* Class 12 - Regatta			*/
-			u64 cpuid;
-			u64 data_start[1];
-		} regatta_frame;
-		struct {	/* Raw 				        */
-			u64 data_start[1];
-		} raw;
-	} by_type;
+    u16 length;		/* length of header (in bytes)	*/
+    u16 class;		/* header class and type...   	*/
+    u16 type;		/* ...determine content     	*/
+    u16 revision;		/* header revision 		*/
+    union {
+        struct {	/* Class 5, Type 1 - System Error	*/
+            u32 frame_length;
+            u32 frame_packet_count;
+        } sys_err;
+        struct {	/* Class 5, Type 2 - System Event 	*/
+            union el_timestamp timestamp;
+            u32 frame_length;
+            u32 frame_packet_count;
+        } sys_event;
+        struct {	/* Class 5, Type 3 - Double Error Halt	*/
+            u16 halt_code;
+            u16 reserved;
+            union el_timestamp timestamp;
+            u32 frame_length;
+            u32 frame_packet_count;
+        } err_halt;
+        struct {	/* Clasee 5, Type 19 - Logout Frame Header */
+            u32 frame_length;
+            u32 frame_flags;
+            u32 cpu_offset;
+            u32 system_offset;
+        } logout_header;
+        struct {	/* Class 12 - Regatta			*/
+            u64 cpuid;
+            u64 data_start[1];
+        } regatta_frame;
+        struct {	/* Raw 				        */
+            u64 data_start[1];
+        } raw;
+    } by_type;
 };
 
 #endif /* __ALPHA_ERR_COMMON_H */

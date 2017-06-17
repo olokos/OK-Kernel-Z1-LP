@@ -64,28 +64,28 @@ extern int gigaset_debuglevel;	/* "needs" cast to (enum debuglevel) */
 
 /* debug flags, combine by adding/bitwise OR */
 enum debuglevel {
-	DEBUG_INTR	  = 0x00008, /* interrupt processing */
-	DEBUG_CMD	  = 0x00020, /* sent/received LL commands */
-	DEBUG_STREAM	  = 0x00040, /* application data stream I/O events */
-	DEBUG_STREAM_DUMP = 0x00080, /* application data stream content */
-	DEBUG_LLDATA	  = 0x00100, /* sent/received LL data */
-	DEBUG_EVENT	  = 0x00200, /* event processing */
-	DEBUG_HDLC	  = 0x00800, /* M10x HDLC processing */
-	DEBUG_CHANNEL	  = 0x01000, /* channel allocation/deallocation */
-	DEBUG_TRANSCMD	  = 0x02000, /* AT-COMMANDS+RESPONSES */
-	DEBUG_MCMD	  = 0x04000, /* COMMANDS THAT ARE SENT VERY OFTEN */
-	DEBUG_INIT	  = 0x08000, /* (de)allocation+initialization of data
+    DEBUG_INTR	  = 0x00008, /* interrupt processing */
+    DEBUG_CMD	  = 0x00020, /* sent/received LL commands */
+    DEBUG_STREAM	  = 0x00040, /* application data stream I/O events */
+    DEBUG_STREAM_DUMP = 0x00080, /* application data stream content */
+    DEBUG_LLDATA	  = 0x00100, /* sent/received LL data */
+    DEBUG_EVENT	  = 0x00200, /* event processing */
+    DEBUG_HDLC	  = 0x00800, /* M10x HDLC processing */
+    DEBUG_CHANNEL	  = 0x01000, /* channel allocation/deallocation */
+    DEBUG_TRANSCMD	  = 0x02000, /* AT-COMMANDS+RESPONSES */
+    DEBUG_MCMD	  = 0x04000, /* COMMANDS THAT ARE SENT VERY OFTEN */
+    DEBUG_INIT	  = 0x08000, /* (de)allocation+initialization of data
 					structures */
-	DEBUG_SUSPEND	  = 0x10000, /* suspend/resume processing */
-	DEBUG_OUTPUT	  = 0x20000, /* output to device */
-	DEBUG_ISO	  = 0x40000, /* isochronous transfers */
-	DEBUG_IF	  = 0x80000, /* character device operations */
-	DEBUG_USBREQ	  = 0x100000, /* USB communication (except payload
+    DEBUG_SUSPEND	  = 0x10000, /* suspend/resume processing */
+    DEBUG_OUTPUT	  = 0x20000, /* output to device */
+    DEBUG_ISO	  = 0x40000, /* isochronous transfers */
+    DEBUG_IF	  = 0x80000, /* character device operations */
+    DEBUG_USBREQ	  = 0x100000, /* USB communication (except payload
 					 data) */
-	DEBUG_LOCKCMD	  = 0x200000, /* AT commands and responses when
+    DEBUG_LOCKCMD	  = 0x200000, /* AT commands and responses when
 					 MS_LOCKED */
 
-	DEBUG_ANY	  = 0x3fffff, /* print message if any of the others is
+    DEBUG_ANY	  = 0x3fffff, /* print message if any of the others is
 					 activated */
 };
 
@@ -107,7 +107,7 @@ enum debuglevel {
 #endif
 
 void gigaset_dbg_buffer(enum debuglevel level, const unsigned char *msg,
-			size_t len, const unsigned char *buf);
+                        size_t len, const unsigned char *buf);
 
 /* connection state */
 #define ZSAU_NONE			0
@@ -261,24 +261,24 @@ struct ser_bc_state;
 struct bas_bc_state;
 
 struct reply_t {
-	int	resp_code;	/* RSP_XXXX */
-	int	min_ConState;	/* <0 => ignore */
-	int	max_ConState;	/* <0 => ignore */
-	int	parameter;	/* e.g. ZSAU_XXXX <0: ignore*/
-	int	new_ConState;	/* <0 => ignore */
-	int	timeout;	/* >0 => *HZ; <=0 => TOUT_XXXX*/
-	int	action[MAXACT];	/* ACT_XXXX */
-	char	*command;	/* NULL==none */
+    int	resp_code;	/* RSP_XXXX */
+    int	min_ConState;	/* <0 => ignore */
+    int	max_ConState;	/* <0 => ignore */
+    int	parameter;	/* e.g. ZSAU_XXXX <0: ignore*/
+    int	new_ConState;	/* <0 => ignore */
+    int	timeout;	/* >0 => *HZ; <=0 => TOUT_XXXX*/
+    int	action[MAXACT];	/* ACT_XXXX */
+    char	*command;	/* NULL==none */
 };
 
 extern struct reply_t gigaset_tab_cid[];
 extern struct reply_t gigaset_tab_nocid[];
 
 struct inbuf_t {
-	struct cardstate	*cs;
-	int			inputstate;
-	int			head, tail;
-	unsigned char		data[RBUFSIZE];
+    struct cardstate	*cs;
+    int			inputstate;
+    int			head, tail;
+    unsigned char		data[RBUFSIZE];
 };
 
 /* isochronous write buffer structure
@@ -299,13 +299,13 @@ struct inbuf_t {
  *   are also filled with that value
  */
 struct isowbuf_t {
-	int		read;
-	int		nextread;
-	int		write;
-	atomic_t	writesem;
-	int		wbits;
-	unsigned char	data[BAS_OUTBUFSIZE + BAS_OUTBUFPAD];
-	unsigned char	idle;
+    int		read;
+    int		nextread;
+    int		write;
+    atomic_t	writesem;
+    int		wbits;
+    unsigned char	data[BAS_OUTBUFSIZE + BAS_OUTBUFPAD];
+    unsigned char	idle;
 };
 
 /* isochronous write URB context structure
@@ -317,10 +317,10 @@ struct isowbuf_t {
  * - status: URB completion status
  */
 struct isow_urbctx_t {
-	struct urb *urb;
-	struct bc_state *bcs;
-	int limit;
-	int status;
+    struct urb *urb;
+    struct bc_state *bcs;
+    int limit;
+    int status;
 };
 
 /* AT state structure
@@ -328,287 +328,287 @@ struct isow_urbctx_t {
  * it is currently assigned a B channel
  */
 struct at_state_t {
-	struct list_head	list;
-	int			waiting;
-	int			getstring;
-	unsigned		timer_index;
-	unsigned long		timer_expires;
-	int			timer_active;
-	unsigned int		ConState;	/* State of connection */
-	struct reply_t		*replystruct;
-	int			cid;
-	int			int_var[VAR_NUM];	/* see VAR_XXXX */
-	char			*str_var[STR_NUM];	/* see STR_XXXX */
-	unsigned		pending_commands;	/* see PC_XXXX */
-	unsigned		seq_index;
+    struct list_head	list;
+    int			waiting;
+    int			getstring;
+    unsigned		timer_index;
+    unsigned long		timer_expires;
+    int			timer_active;
+    unsigned int		ConState;	/* State of connection */
+    struct reply_t		*replystruct;
+    int			cid;
+    int			int_var[VAR_NUM];	/* see VAR_XXXX */
+    char			*str_var[STR_NUM];	/* see STR_XXXX */
+    unsigned		pending_commands;	/* see PC_XXXX */
+    unsigned		seq_index;
 
-	struct cardstate	*cs;
-	struct bc_state		*bcs;
+    struct cardstate	*cs;
+    struct bc_state		*bcs;
 };
 
 struct event_t {
-	int type;
-	void *ptr, *arg;
-	int parameter;
-	int cid;
-	struct at_state_t *at_state;
+    int type;
+    void *ptr, *arg;
+    int parameter;
+    int cid;
+    struct at_state_t *at_state;
 };
 
 /* This buffer holds all information about the used B-Channel */
 struct bc_state {
-	struct sk_buff *tx_skb;		/* Current transfer buffer to modem */
-	struct sk_buff_head squeue;	/* B-Channel send Queue */
+    struct sk_buff *tx_skb;		/* Current transfer buffer to modem */
+    struct sk_buff_head squeue;	/* B-Channel send Queue */
 
-	/* Variables for debugging .. */
-	int corrupted;			/* Counter for corrupted packages */
-	int trans_down;			/* Counter of packages (downstream) */
-	int trans_up;			/* Counter of packages (upstream) */
+    /* Variables for debugging .. */
+    int corrupted;			/* Counter for corrupted packages */
+    int trans_down;			/* Counter of packages (downstream) */
+    int trans_up;			/* Counter of packages (upstream) */
 
-	struct at_state_t at_state;
+    struct at_state_t at_state;
 
-	/* receive buffer */
-	unsigned rx_bufsize;		/* max size accepted by application */
-	struct sk_buff *rx_skb;
-	__u16 rx_fcs;
-	int inputstate;			/* see INS_XXXX */
+    /* receive buffer */
+    unsigned rx_bufsize;		/* max size accepted by application */
+    struct sk_buff *rx_skb;
+    __u16 rx_fcs;
+    int inputstate;			/* see INS_XXXX */
 
-	int channel;
+    int channel;
 
-	struct cardstate *cs;
+    struct cardstate *cs;
 
-	unsigned chstate;		/* bitmap (CHS_*) */
-	int ignore;
-	unsigned proto2;		/* layer 2 protocol (L2_*) */
-	char *commands[AT_NUM];		/* see AT_XXXX */
+    unsigned chstate;		/* bitmap (CHS_*) */
+    int ignore;
+    unsigned proto2;		/* layer 2 protocol (L2_*) */
+    char *commands[AT_NUM];		/* see AT_XXXX */
 
 #ifdef CONFIG_GIGASET_DEBUG
-	int emptycount;
+    int emptycount;
 #endif
-	int busy;
-	int use_count;
+    int busy;
+    int use_count;
 
-	/* private data of hardware drivers */
-	union {
-		struct ser_bc_state *ser;	/* serial hardware driver */
-		struct usb_bc_state *usb;	/* usb hardware driver (m105) */
-		struct bas_bc_state *bas;	/* usb hardware driver (base) */
-	} hw;
+    /* private data of hardware drivers */
+    union {
+        struct ser_bc_state *ser;	/* serial hardware driver */
+        struct usb_bc_state *usb;	/* usb hardware driver (m105) */
+        struct bas_bc_state *bas;	/* usb hardware driver (base) */
+    } hw;
 
-	void *ap;			/* associated LL application */
-	int apconnstate;		/* LL application connection state */
-	spinlock_t aplock;
+    void *ap;			/* associated LL application */
+    int apconnstate;		/* LL application connection state */
+    spinlock_t aplock;
 };
 
 struct cardstate {
-	struct gigaset_driver *driver;
-	unsigned minor_index;
-	struct device *dev;
-	struct device *tty_dev;
-	unsigned flags;
+    struct gigaset_driver *driver;
+    unsigned minor_index;
+    struct device *dev;
+    struct device *tty_dev;
+    unsigned flags;
 
-	const struct gigaset_ops *ops;
+    const struct gigaset_ops *ops;
 
-	/* Stuff to handle communication */
-	wait_queue_head_t waitqueue;
-	int waiting;
-	int mode;			/* see M_XXXX */
-	int mstate;			/* Modem state: see MS_XXXX */
-					/* only changed by the event layer */
-	int cmd_result;
+    /* Stuff to handle communication */
+    wait_queue_head_t waitqueue;
+    int waiting;
+    int mode;			/* see M_XXXX */
+    int mstate;			/* Modem state: see MS_XXXX */
+    /* only changed by the event layer */
+    int cmd_result;
 
-	int channels;
-	struct bc_state *bcs;		/* Array of struct bc_state */
+    int channels;
+    struct bc_state *bcs;		/* Array of struct bc_state */
 
-	int onechannel;			/* data and commands transmitted in one
+    int onechannel;			/* data and commands transmitted in one
 					   stream (M10x) */
 
-	spinlock_t lock;
-	struct at_state_t at_state;	/* at_state_t for cid == 0 */
-	struct list_head temp_at_states;/* list of temporary "struct
+    spinlock_t lock;
+    struct at_state_t at_state;	/* at_state_t for cid == 0 */
+    struct list_head temp_at_states;/* list of temporary "struct
 					   at_state_t"s without B channel */
 
-	struct inbuf_t *inbuf;
+    struct inbuf_t *inbuf;
 
-	struct cmdbuf_t *cmdbuf, *lastcmdbuf;
-	spinlock_t cmdlock;
-	unsigned curlen, cmdbytes;
+    struct cmdbuf_t *cmdbuf, *lastcmdbuf;
+    spinlock_t cmdlock;
+    unsigned curlen, cmdbytes;
 
-	struct tty_port port;
-	struct tasklet_struct if_wake_tasklet;
-	unsigned control_state;
+    struct tty_port port;
+    struct tasklet_struct if_wake_tasklet;
+    unsigned control_state;
 
-	unsigned fwver[4];
-	int gotfwver;
+    unsigned fwver[4];
+    int gotfwver;
 
-	unsigned running;		/* !=0 if events are handled */
-	unsigned connected;		/* !=0 if hardware is connected */
-	unsigned isdn_up;		/* !=0 after gigaset_isdn_start() */
+    unsigned running;		/* !=0 if events are handled */
+    unsigned connected;		/* !=0 if hardware is connected */
+    unsigned isdn_up;		/* !=0 after gigaset_isdn_start() */
 
-	unsigned cidmode;
+    unsigned cidmode;
 
-	int myid;			/* id for communication with LL */
-	void *iif;			/* LL interface structure */
-	unsigned short hw_hdr_len;	/* headroom needed in data skbs */
+    int myid;			/* id for communication with LL */
+    void *iif;			/* LL interface structure */
+    unsigned short hw_hdr_len;	/* headroom needed in data skbs */
 
-	struct reply_t *tabnocid;
-	struct reply_t *tabcid;
-	int cs_init;
-	int ignoreframes;		/* frames to ignore after setting up the
+    struct reply_t *tabnocid;
+    struct reply_t *tabcid;
+    int cs_init;
+    int ignoreframes;		/* frames to ignore after setting up the
 					   B channel */
-	struct mutex mutex;		/* locks this structure:
+    struct mutex mutex;		/* locks this structure:
 					 *   connected is not changed,
 					 *   hardware_up is not changed,
 					 *   MState is not changed to or from
 					 *   MS_LOCKED */
 
-	struct timer_list timer;
-	int retry_count;
-	int dle;			/* !=0 if DLE mode is active
+    struct timer_list timer;
+    int retry_count;
+    int dle;			/* !=0 if DLE mode is active
 					   (ZDLE=1 received -- M10x only) */
-	int cur_at_seq;			/* sequence of AT commands being
+    int cur_at_seq;			/* sequence of AT commands being
 					   processed */
-	int curchannel;			/* channel those commands are meant
+    int curchannel;			/* channel those commands are meant
 					   for */
-	int commands_pending;		/* flag(s) in xxx.commands_pending have
+    int commands_pending;		/* flag(s) in xxx.commands_pending have
 					   been set */
-	struct tasklet_struct event_tasklet;
-	/* tasklet for serializing AT commands.
-	 * Scheduled
-	 *   -> for modem reponses (and
-	 *      incoming data for M10x)
-	 *   -> on timeout
-	 *   -> after setting bits in
-	 *      xxx.at_state.pending_command
-	 *      (e.g. command from LL) */
-	struct tasklet_struct write_tasklet;
-	/* tasklet for serial output
-	 * (not used in base driver) */
+    struct tasklet_struct event_tasklet;
+    /* tasklet for serializing AT commands.
+     * Scheduled
+     *   -> for modem reponses (and
+     *      incoming data for M10x)
+     *   -> on timeout
+     *   -> after setting bits in
+     *      xxx.at_state.pending_command
+     *      (e.g. command from LL) */
+    struct tasklet_struct write_tasklet;
+    /* tasklet for serial output
+     * (not used in base driver) */
 
-	/* event queue */
-	struct event_t events[MAX_EVENTS];
-	unsigned ev_tail, ev_head;
-	spinlock_t ev_lock;
+    /* event queue */
+    struct event_t events[MAX_EVENTS];
+    unsigned ev_tail, ev_head;
+    spinlock_t ev_lock;
 
-	/* current modem response */
-	unsigned char respdata[MAX_RESP_SIZE + 1];
-	unsigned cbytes;
+    /* current modem response */
+    unsigned char respdata[MAX_RESP_SIZE + 1];
+    unsigned cbytes;
 
-	/* private data of hardware drivers */
-	union {
-		struct usb_cardstate *usb; /* USB hardware driver (m105) */
-		struct ser_cardstate *ser; /* serial hardware driver */
-		struct bas_cardstate *bas; /* USB hardware driver (base) */
-	} hw;
+    /* private data of hardware drivers */
+    union {
+        struct usb_cardstate *usb; /* USB hardware driver (m105) */
+        struct ser_cardstate *ser; /* serial hardware driver */
+        struct bas_cardstate *bas; /* USB hardware driver (base) */
+    } hw;
 };
 
 struct gigaset_driver {
-	struct list_head list;
-	spinlock_t lock;		/* locks minor tables and blocked */
-	struct tty_driver *tty;
-	unsigned have_tty;
-	unsigned minor;
-	unsigned minors;
-	struct cardstate *cs;
-	int blocked;
+    struct list_head list;
+    spinlock_t lock;		/* locks minor tables and blocked */
+    struct tty_driver *tty;
+    unsigned have_tty;
+    unsigned minor;
+    unsigned minors;
+    struct cardstate *cs;
+    int blocked;
 
-	const struct gigaset_ops *ops;
-	struct module *owner;
+    const struct gigaset_ops *ops;
+    struct module *owner;
 };
 
 struct cmdbuf_t {
-	struct cmdbuf_t *next, *prev;
-	int len, offset;
-	struct tasklet_struct *wake_tasklet;
-	unsigned char buf[0];
+    struct cmdbuf_t *next, *prev;
+    int len, offset;
+    struct tasklet_struct *wake_tasklet;
+    unsigned char buf[0];
 };
 
 struct bas_bc_state {
-	/* isochronous output state */
-	int		running;
-	atomic_t	corrbytes;
-	spinlock_t	isooutlock;
-	struct isow_urbctx_t	isoouturbs[BAS_OUTURBS];
-	struct isow_urbctx_t	*isooutdone, *isooutfree, *isooutovfl;
-	struct isowbuf_t	*isooutbuf;
-	unsigned numsub;		/* submitted URB counter
+    /* isochronous output state */
+    int		running;
+    atomic_t	corrbytes;
+    spinlock_t	isooutlock;
+    struct isow_urbctx_t	isoouturbs[BAS_OUTURBS];
+    struct isow_urbctx_t	*isooutdone, *isooutfree, *isooutovfl;
+    struct isowbuf_t	*isooutbuf;
+    unsigned numsub;		/* submitted URB counter
 					   (for diagnostic messages only) */
-	struct tasklet_struct	sent_tasklet;
+    struct tasklet_struct	sent_tasklet;
 
-	/* isochronous input state */
-	spinlock_t isoinlock;
-	struct urb *isoinurbs[BAS_INURBS];
-	unsigned char isoinbuf[BAS_INBUFSIZE * BAS_INURBS];
-	struct urb *isoindone;		/* completed isoc read URB */
-	int isoinstatus;		/* status of completed URB */
-	int loststatus;			/* status of dropped URB */
-	unsigned isoinlost;		/* number of bytes lost */
-	/* state of bit unstuffing algorithm
-	   (in addition to BC_state.inputstate) */
-	unsigned seqlen;		/* number of '1' bits not yet
+    /* isochronous input state */
+    spinlock_t isoinlock;
+    struct urb *isoinurbs[BAS_INURBS];
+    unsigned char isoinbuf[BAS_INBUFSIZE * BAS_INURBS];
+    struct urb *isoindone;		/* completed isoc read URB */
+    int isoinstatus;		/* status of completed URB */
+    int loststatus;			/* status of dropped URB */
+    unsigned isoinlost;		/* number of bytes lost */
+    /* state of bit unstuffing algorithm
+       (in addition to BC_state.inputstate) */
+    unsigned seqlen;		/* number of '1' bits not yet
 					   unstuffed */
-	unsigned inbyte, inbits;	/* collected bits for next byte */
-	/* statistics */
-	unsigned goodbytes;		/* bytes correctly received */
-	unsigned alignerrs;		/* frames with incomplete byte at end */
-	unsigned fcserrs;		/* FCS errors */
-	unsigned frameerrs;		/* framing errors */
-	unsigned giants;		/* long frames */
-	unsigned runts;			/* short frames */
-	unsigned aborts;		/* HDLC aborts */
-	unsigned shared0s;		/* '0' bits shared between flags */
-	unsigned stolen0s;		/* '0' stuff bits also serving as
+    unsigned inbyte, inbits;	/* collected bits for next byte */
+    /* statistics */
+    unsigned goodbytes;		/* bytes correctly received */
+    unsigned alignerrs;		/* frames with incomplete byte at end */
+    unsigned fcserrs;		/* FCS errors */
+    unsigned frameerrs;		/* framing errors */
+    unsigned giants;		/* long frames */
+    unsigned runts;			/* short frames */
+    unsigned aborts;		/* HDLC aborts */
+    unsigned shared0s;		/* '0' bits shared between flags */
+    unsigned stolen0s;		/* '0' stuff bits also serving as
 					   leading flag bits */
-	struct tasklet_struct rcvd_tasklet;
+    struct tasklet_struct rcvd_tasklet;
 };
 
 struct gigaset_ops {
-	/* Called from ev-layer.c/interface.c for sending AT commands to the
-	   device */
-	int (*write_cmd)(struct cardstate *cs, struct cmdbuf_t *cb);
+    /* Called from ev-layer.c/interface.c for sending AT commands to the
+       device */
+    int (*write_cmd)(struct cardstate *cs, struct cmdbuf_t *cb);
 
-	/* Called from interface.c for additional device control */
-	int (*write_room)(struct cardstate *cs);
-	int (*chars_in_buffer)(struct cardstate *cs);
-	int (*brkchars)(struct cardstate *cs, const unsigned char buf[6]);
+    /* Called from interface.c for additional device control */
+    int (*write_room)(struct cardstate *cs);
+    int (*chars_in_buffer)(struct cardstate *cs);
+    int (*brkchars)(struct cardstate *cs, const unsigned char buf[6]);
 
-	/* Called from ev-layer.c after setting up connection
-	 * Should call gigaset_bchannel_up(), when finished. */
-	int (*init_bchannel)(struct bc_state *bcs);
+    /* Called from ev-layer.c after setting up connection
+     * Should call gigaset_bchannel_up(), when finished. */
+    int (*init_bchannel)(struct bc_state *bcs);
 
-	/* Called from ev-layer.c after hanging up
-	 * Should call gigaset_bchannel_down(), when finished. */
-	int (*close_bchannel)(struct bc_state *bcs);
+    /* Called from ev-layer.c after hanging up
+     * Should call gigaset_bchannel_down(), when finished. */
+    int (*close_bchannel)(struct bc_state *bcs);
 
-	/* Called by gigaset_initcs() for setting up bcs->hw.xxx */
-	int (*initbcshw)(struct bc_state *bcs);
+    /* Called by gigaset_initcs() for setting up bcs->hw.xxx */
+    int (*initbcshw)(struct bc_state *bcs);
 
-	/* Called by gigaset_freecs() for freeing bcs->hw.xxx */
-	int (*freebcshw)(struct bc_state *bcs);
+    /* Called by gigaset_freecs() for freeing bcs->hw.xxx */
+    int (*freebcshw)(struct bc_state *bcs);
 
-	/* Called by gigaset_bchannel_down() for resetting bcs->hw.xxx */
-	void (*reinitbcshw)(struct bc_state *bcs);
+    /* Called by gigaset_bchannel_down() for resetting bcs->hw.xxx */
+    void (*reinitbcshw)(struct bc_state *bcs);
 
-	/* Called by gigaset_initcs() for setting up cs->hw.xxx */
-	int (*initcshw)(struct cardstate *cs);
+    /* Called by gigaset_initcs() for setting up cs->hw.xxx */
+    int (*initcshw)(struct cardstate *cs);
 
-	/* Called by gigaset_freecs() for freeing cs->hw.xxx */
-	void (*freecshw)(struct cardstate *cs);
+    /* Called by gigaset_freecs() for freeing cs->hw.xxx */
+    void (*freecshw)(struct cardstate *cs);
 
-	/* Called from common.c/interface.c for additional serial port
-	   control */
-	int (*set_modem_ctrl)(struct cardstate *cs, unsigned old_state,
-			      unsigned new_state);
-	int (*baud_rate)(struct cardstate *cs, unsigned cflag);
-	int (*set_line_ctrl)(struct cardstate *cs, unsigned cflag);
+    /* Called from common.c/interface.c for additional serial port
+       control */
+    int (*set_modem_ctrl)(struct cardstate *cs, unsigned old_state,
+                          unsigned new_state);
+    int (*baud_rate)(struct cardstate *cs, unsigned cflag);
+    int (*set_line_ctrl)(struct cardstate *cs, unsigned cflag);
 
-	/* Called from LL interface to put an skb into the send-queue.
-	 * After sending is completed, gigaset_skb_sent() must be called
-	 * with the skb's link layer header preserved. */
-	int (*send_skb)(struct bc_state *bcs, struct sk_buff *skb);
+    /* Called from LL interface to put an skb into the send-queue.
+     * After sending is completed, gigaset_skb_sent() must be called
+     * with the skb's link layer header preserved. */
+    int (*send_skb)(struct bc_state *bcs, struct sk_buff *skb);
 
-	/* Called from ev-layer.c to process a block of data
-	 * received through the common/control channel. */
-	void (*handle_input)(struct inbuf_t *inbuf);
+    /* Called from ev-layer.c to process a block of data
+     * received through the common/control channel. */
+    void (*handle_input)(struct inbuf_t *inbuf);
 
 };
 
@@ -647,7 +647,7 @@ void gigaset_isoc_input(struct inbuf_t *inbuf);
 /* Called from bas-gigaset.c to process a block of data
  * received through the isochronous channel */
 void gigaset_isoc_receive(unsigned char *src, unsigned count,
-			  struct bc_state *bcs);
+                          struct bc_state *bcs);
 
 /* Called from bas-gigaset.c to put a block of data
  * into the isochronous output buffer */
@@ -708,7 +708,7 @@ void gigaset_free_dev_sysfs(struct cardstate *cs);
 
 void gigaset_bcs_reinit(struct bc_state *bcs);
 void gigaset_at_init(struct at_state_t *at_state, struct bc_state *bcs,
-		     struct cardstate *cs, int cid);
+                     struct cardstate *cs, int cid);
 int gigaset_get_channel(struct bc_state *bcs);
 struct bc_state *gigaset_get_free_channel(struct cardstate *cs);
 void gigaset_free_channel(struct bc_state *bcs);
@@ -718,10 +718,10 @@ void gigaset_block_channels(struct cardstate *cs);
 
 /* Allocate and initialize driver structure. */
 struct gigaset_driver *gigaset_initdriver(unsigned minor, unsigned minors,
-					  const char *procname,
-					  const char *devname,
-					  const struct gigaset_ops *ops,
-					  struct module *owner);
+        const char *procname,
+        const char *devname,
+        const struct gigaset_ops *ops,
+        struct module *owner);
 
 /* Deallocate driver structure. */
 void gigaset_freedriver(struct gigaset_driver *drv);
@@ -733,8 +733,8 @@ void gigaset_blockdriver(struct gigaset_driver *drv);
 /* Allocate and initialize card state. Calls hardware dependent
    gigaset_init[b]cs(). */
 struct cardstate *gigaset_initcs(struct gigaset_driver *drv, int channels,
-				 int onechannel, int ignoreframes,
-				 int cidmode, const char *modulename);
+                                 int onechannel, int ignoreframes,
+                                 int cidmode, const char *modulename);
 
 /* Free card state. Calls hardware dependent gigaset_free[b]cs(). */
 void gigaset_freecs(struct cardstate *cs);
@@ -756,59 +756,55 @@ void gigaset_skb_sent(struct bc_state *bcs, struct sk_buff *skb);
  * ptr must be kmalloc()ed (and not be freed by the caller).
  */
 struct event_t *gigaset_add_event(struct cardstate *cs,
-				  struct at_state_t *at_state, int type,
-				  void *ptr, int parameter, void *arg);
+                                  struct at_state_t *at_state, int type,
+                                  void *ptr, int parameter, void *arg);
 
 /* Called on CONFIG1 command from frontend. */
 int gigaset_enterconfigmode(struct cardstate *cs);
 
 /* cs->lock must not be locked */
-static inline void gigaset_schedule_event(struct cardstate *cs)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&cs->lock, flags);
-	if (cs->running)
-		tasklet_schedule(&cs->event_tasklet);
-	spin_unlock_irqrestore(&cs->lock, flags);
+static inline void gigaset_schedule_event(struct cardstate *cs) {
+    unsigned long flags;
+    spin_lock_irqsave(&cs->lock, flags);
+    if (cs->running)
+        tasklet_schedule(&cs->event_tasklet);
+    spin_unlock_irqrestore(&cs->lock, flags);
 }
 
 /* Tell common.c that B channel has been closed. */
 /* cs->lock must not be locked */
-static inline void gigaset_bchannel_down(struct bc_state *bcs)
-{
-	gigaset_add_event(bcs->cs, &bcs->at_state, EV_BC_CLOSED, NULL, 0, NULL);
-	gigaset_schedule_event(bcs->cs);
+static inline void gigaset_bchannel_down(struct bc_state *bcs) {
+    gigaset_add_event(bcs->cs, &bcs->at_state, EV_BC_CLOSED, NULL, 0, NULL);
+    gigaset_schedule_event(bcs->cs);
 }
 
 /* Tell common.c that B channel has been opened. */
 /* cs->lock must not be locked */
-static inline void gigaset_bchannel_up(struct bc_state *bcs)
-{
-	gigaset_add_event(bcs->cs, &bcs->at_state, EV_BC_OPEN, NULL, 0, NULL);
-	gigaset_schedule_event(bcs->cs);
+static inline void gigaset_bchannel_up(struct bc_state *bcs) {
+    gigaset_add_event(bcs->cs, &bcs->at_state, EV_BC_OPEN, NULL, 0, NULL);
+    gigaset_schedule_event(bcs->cs);
 }
 
 /* set up next receive skb for data mode */
-static inline struct sk_buff *gigaset_new_rx_skb(struct bc_state *bcs)
-{
-	struct cardstate *cs = bcs->cs;
-	unsigned short hw_hdr_len = cs->hw_hdr_len;
+static inline struct sk_buff *gigaset_new_rx_skb(struct bc_state *bcs) {
+    struct cardstate *cs = bcs->cs;
+    unsigned short hw_hdr_len = cs->hw_hdr_len;
 
-	if (bcs->ignore) {
-		bcs->rx_skb = NULL;
-	} else {
-		bcs->rx_skb = dev_alloc_skb(bcs->rx_bufsize + hw_hdr_len);
-		if (bcs->rx_skb == NULL)
-			dev_warn(cs->dev, "could not allocate skb\n");
-		else
-			skb_reserve(bcs->rx_skb, hw_hdr_len);
-	}
-	return bcs->rx_skb;
+    if (bcs->ignore) {
+        bcs->rx_skb = NULL;
+    } else {
+        bcs->rx_skb = dev_alloc_skb(bcs->rx_bufsize + hw_hdr_len);
+        if (bcs->rx_skb == NULL)
+            dev_warn(cs->dev, "could not allocate skb\n");
+        else
+            skb_reserve(bcs->rx_skb, hw_hdr_len);
+    }
+    return bcs->rx_skb;
 }
 
 /* append received bytes to inbuf */
 int gigaset_fill_inbuf(struct inbuf_t *inbuf, const unsigned char *src,
-		       unsigned numbytes);
+                       unsigned numbytes);
 
 /* ===========================================================================
  *  Functions implemented in interface.c
@@ -816,7 +812,7 @@ int gigaset_fill_inbuf(struct inbuf_t *inbuf, const unsigned char *src,
 
 /* initialize interface */
 void gigaset_if_initdriver(struct gigaset_driver *drv, const char *procname,
-			   const char *devname);
+                           const char *devname);
 /* release interface */
 void gigaset_if_freedriver(struct gigaset_driver *drv);
 /* add minor */
@@ -825,6 +821,6 @@ void gigaset_if_init(struct cardstate *cs);
 void gigaset_if_free(struct cardstate *cs);
 /* device received data */
 void gigaset_if_receive(struct cardstate *cs,
-			unsigned char *buffer, size_t len);
+                        unsigned char *buffer, size_t len);
 
 #endif

@@ -50,34 +50,34 @@
  * Computational actions performed by the dynamic loader
  */
 enum dload_actions {
-	/* don't alter the current val (from stack or mem fetch) */
-	RACT_VAL,
-	/* set value to reference amount (from symbol reference) */
-	RACT_ASGN,
-	RACT_ADD,		/* add reference to value */
-	RACT_PCR,		/* add reference minus PC delta to value */
-	RACT_ADDISP,		/* add reference plus R_DISP */
-	RACT_ASGPC,		/* set value to section addr plus reference */
+    /* don't alter the current val (from stack or mem fetch) */
+    RACT_VAL,
+    /* set value to reference amount (from symbol reference) */
+    RACT_ASGN,
+    RACT_ADD,		/* add reference to value */
+    RACT_PCR,		/* add reference minus PC delta to value */
+    RACT_ADDISP,		/* add reference plus R_DISP */
+    RACT_ASGPC,		/* set value to section addr plus reference */
 
-	RACT_PLUS,		/* stack + */
-	RACT_SUB,		/* stack - */
-	RACT_NEG,		/* stack unary - */
+    RACT_PLUS,		/* stack + */
+    RACT_SUB,		/* stack - */
+    RACT_NEG,		/* stack unary - */
 
-	RACT_MPY,		/* stack * */
-	RACT_DIV,		/* stack / */
-	RACT_MOD,		/* stack % */
+    RACT_MPY,		/* stack * */
+    RACT_DIV,		/* stack / */
+    RACT_MOD,		/* stack % */
 
-	RACT_SR,		/* stack unsigned >> */
-	RACT_ASR,		/* stack signed >> */
-	RACT_SL,		/* stack << */
-	RACT_AND,		/* stack & */
-	RACT_OR,		/* stack | */
-	RACT_XOR,		/* stack ^ */
-	RACT_NOT,		/* stack ~ */
-	RACT_C6SECT,		/* for C60 R_SECT op */
-	RACT_C6BASE,		/* for C60 R_BASE op */
-	RACT_C6DSPL,		/* for C60 scaled 15-bit displacement */
-	RACT_PCR23T		/* for ARM Thumb long branch */
+    RACT_SR,		/* stack unsigned >> */
+    RACT_ASR,		/* stack signed >> */
+    RACT_SL,		/* stack << */
+    RACT_AND,		/* stack & */
+    RACT_OR,		/* stack | */
+    RACT_XOR,		/* stack ^ */
+    RACT_NOT,		/* stack ~ */
+    RACT_C6SECT,		/* for C60 R_SECT op */
+    RACT_C6BASE,		/* for C60 R_BASE op */
+    RACT_C6DSPL,		/* for C60 scaled 15-bit displacement */
+    RACT_PCR23T		/* for ARM Thumb long branch */
 };
 
 /*

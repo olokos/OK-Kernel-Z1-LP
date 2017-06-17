@@ -88,83 +88,75 @@
 
 #ifndef __ASSEMBLY__
 
-static inline unsigned long sun4c_get_synchronous_error(void)
-{
-	unsigned long sync_err;
+static inline unsigned long sun4c_get_synchronous_error(void) {
+    unsigned long sync_err;
 
-	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
-			     "=r" (sync_err) :
-			     "r" (AC_SYNC_ERR), "i" (ASI_CONTROL));
-	return sync_err;
+    __asm__ __volatile__("lda [%1] %2, %0\n\t" :
+                         "=r" (sync_err) :
+                         "r" (AC_SYNC_ERR), "i" (ASI_CONTROL));
+    return sync_err;
 }
 
-static inline unsigned long sun4c_get_synchronous_address(void)
-{
-	unsigned long sync_addr;
+static inline unsigned long sun4c_get_synchronous_address(void) {
+    unsigned long sync_addr;
 
-	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
-			     "=r" (sync_addr) :
-			     "r" (AC_SYNC_VA), "i" (ASI_CONTROL));
-	return sync_addr;
+    __asm__ __volatile__("lda [%1] %2, %0\n\t" :
+                         "=r" (sync_addr) :
+                         "r" (AC_SYNC_VA), "i" (ASI_CONTROL));
+    return sync_addr;
 }
 
 /* SUN4C pte, segmap, and context manipulation */
-static inline unsigned long sun4c_get_segmap(unsigned long addr)
-{
-  register unsigned long entry;
+static inline unsigned long sun4c_get_segmap(unsigned long addr) {
+    register unsigned long entry;
 
-  __asm__ __volatile__("\n\tlduba [%1] %2, %0\n\t" : 
-		       "=r" (entry) :
-		       "r" (addr), "i" (ASI_SEGMAP));
+    __asm__ __volatile__("\n\tlduba [%1] %2, %0\n\t" :
+                         "=r" (entry) :
+                         "r" (addr), "i" (ASI_SEGMAP));
 
-  return entry;
+    return entry;
 }
 
-static inline void sun4c_put_segmap(unsigned long addr, unsigned long entry)
-{
+static inline void sun4c_put_segmap(unsigned long addr, unsigned long entry) {
 
-  __asm__ __volatile__("\n\tstba %1, [%0] %2; nop; nop; nop;\n\t" : :
-		       "r" (addr), "r" (entry),
-		       "i" (ASI_SEGMAP)
-		       : "memory");
+    __asm__ __volatile__("\n\tstba %1, [%0] %2; nop; nop; nop;\n\t" : :
+                         "r" (addr), "r" (entry),
+                         "i" (ASI_SEGMAP)
+                         : "memory");
 }
 
-static inline unsigned long sun4c_get_pte(unsigned long addr)
-{
-  register unsigned long entry;
+static inline unsigned long sun4c_get_pte(unsigned long addr) {
+    register unsigned long entry;
 
-  __asm__ __volatile__("\n\tlda [%1] %2, %0\n\t" : 
-		       "=r" (entry) :
-		       "r" (addr), "i" (ASI_PTE));
-  return entry;
+    __asm__ __volatile__("\n\tlda [%1] %2, %0\n\t" :
+                         "=r" (entry) :
+                         "r" (addr), "i" (ASI_PTE));
+    return entry;
 }
 
-static inline void sun4c_put_pte(unsigned long addr, unsigned long entry)
-{
-  __asm__ __volatile__("\n\tsta %1, [%0] %2; nop; nop; nop;\n\t" : :
-		       "r" (addr), 
-		       "r" ((entry & ~(_SUN4C_PAGE_PRESENT))), "i" (ASI_PTE)
-		       : "memory");
+static inline void sun4c_put_pte(unsigned long addr, unsigned long entry) {
+    __asm__ __volatile__("\n\tsta %1, [%0] %2; nop; nop; nop;\n\t" : :
+                         "r" (addr),
+                         "r" ((entry & ~(_SUN4C_PAGE_PRESENT))), "i" (ASI_PTE)
+                         : "memory");
 }
 
-static inline int sun4c_get_context(void)
-{
-  register int ctx;
+static inline int sun4c_get_context(void) {
+    register int ctx;
 
-  __asm__ __volatile__("\n\tlduba [%1] %2, %0\n\t" :
-		       "=r" (ctx) :
-		       "r" (AC_CONTEXT), "i" (ASI_CONTROL));
+    __asm__ __volatile__("\n\tlduba [%1] %2, %0\n\t" :
+                         "=r" (ctx) :
+                         "r" (AC_CONTEXT), "i" (ASI_CONTROL));
 
-  return ctx;
+    return ctx;
 }
 
-static inline int sun4c_set_context(int ctx)
-{
-  __asm__ __volatile__("\n\tstba %0, [%1] %2; nop; nop; nop;\n\t" : :
-		       "r" (ctx), "r" (AC_CONTEXT), "i" (ASI_CONTROL)
-		       : "memory");
+static inline int sun4c_set_context(int ctx) {
+    __asm__ __volatile__("\n\tstba %0, [%1] %2; nop; nop; nop;\n\t" : :
+                         "r" (ctx), "r" (AC_CONTEXT), "i" (ASI_CONTROL)
+                         : "memory");
 
-  return ctx;
+    return ctx;
 }
 
 #endif /* !(__ASSEMBLY__) */

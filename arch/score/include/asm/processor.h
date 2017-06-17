@@ -16,7 +16,7 @@ extern void (*cpu_wait)(void);
 extern long kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
 extern unsigned long thread_saved_pc(struct task_struct *tsk);
 extern void start_thread(struct pt_regs *regs,
-			unsigned long pc, unsigned long sp);
+                         unsigned long pc, unsigned long sp);
 extern unsigned long get_wchan(struct task_struct *p);
 
 /*
@@ -49,32 +49,32 @@ extern unsigned long get_wchan(struct task_struct *p);
  * If you change thread_struct remember to change the #defines below too!
  */
 struct thread_struct {
-	unsigned long reg0, reg2, reg3;
-	unsigned long reg12, reg13, reg14, reg15, reg16;
-	unsigned long reg17, reg18, reg19, reg20, reg21;
+    unsigned long reg0, reg2, reg3;
+    unsigned long reg12, reg13, reg14, reg15, reg16;
+    unsigned long reg17, reg18, reg19, reg20, reg21;
 
-	unsigned long cp0_psr;
-	unsigned long cp0_ema;		/* Last user fault */
-	unsigned long cp0_badvaddr;	/* Last user fault */
-	unsigned long cp0_baduaddr;	/* Last kernel fault accessing USEG */
-	unsigned long error_code;
-	unsigned long trap_no;
+    unsigned long cp0_psr;
+    unsigned long cp0_ema;		/* Last user fault */
+    unsigned long cp0_badvaddr;	/* Last user fault */
+    unsigned long cp0_baduaddr;	/* Last kernel fault accessing USEG */
+    unsigned long error_code;
+    unsigned long trap_no;
 
-	unsigned long mflags;
-	unsigned long reg29;
+    unsigned long mflags;
+    unsigned long reg29;
 
-	unsigned long single_step;
-	unsigned long ss_nextcnt;
+    unsigned long single_step;
+    unsigned long ss_nextcnt;
 
-	unsigned long insn1_type;
-	unsigned long addr1;
-	unsigned long insn1;
+    unsigned long insn1_type;
+    unsigned long addr1;
+    unsigned long insn1;
 
-	unsigned long insn2_type;
-	unsigned long addr2;
-	unsigned long insn2;
+    unsigned long insn2_type;
+    unsigned long addr2;
+    unsigned long insn2;
 
-	mm_segment_t current_ds;
+    mm_segment_t current_ds;
 };
 
 #define INIT_THREAD {						\

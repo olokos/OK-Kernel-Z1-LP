@@ -55,57 +55,57 @@
 #define BIT31		   0x80000000
 
 union qos_tsinfo {
-	u8		charData[3];
-	struct {
-		u8		ucTrafficType:1;
-		u8		ucTSID:4;
-		u8		ucDirection:2;
-		u8		ucAccessPolicy:2;
-		u8		ucAggregation:1;
-		u8		ucPSB:1;
-		u8		ucUP:3;
-		u8		ucTSInfoAckPolicy:2;
-		u8		ucSchedule:1;
-		u8		ucReserved:7;
-	} field;
+    u8		charData[3];
+    struct {
+        u8		ucTrafficType:1;
+        u8		ucTSID:4;
+        u8		ucDirection:2;
+        u8		ucAccessPolicy:2;
+        u8		ucAggregation:1;
+        u8		ucPSB:1;
+        u8		ucUP:3;
+        u8		ucTSInfoAckPolicy:2;
+        u8		ucSchedule:1;
+        u8		ucReserved:7;
+    } field;
 };
 
 union tspec_body {
-	u8		charData[55];
+    u8		charData[55];
 
-	struct {
-		union qos_tsinfo TSInfo;
-		u16	NominalMSDUsize;
-		u16	MaxMSDUsize;
-		u32	MinServiceItv;
-		u32	MaxServiceItv;
-		u32	InactivityItv;
-		u32	SuspenItv;
-		u32	ServiceStartTime;
-		u32	MinDataRate;
-		u32	MeanDataRate;
-		u32	PeakDataRate;
-		u32	MaxBurstSize;
-		u32	DelayBound;
-		u32	MinPhyRate;
-		u16	SurplusBandwidthAllowance;
-		u16	MediumTime;
-	} f;
+    struct {
+        union qos_tsinfo TSInfo;
+        u16	NominalMSDUsize;
+        u16	MaxMSDUsize;
+        u32	MinServiceItv;
+        u32	MaxServiceItv;
+        u32	InactivityItv;
+        u32	SuspenItv;
+        u32	ServiceStartTime;
+        u32	MinDataRate;
+        u32	MeanDataRate;
+        u32	PeakDataRate;
+        u32	MaxBurstSize;
+        u32	DelayBound;
+        u32	MinPhyRate;
+        u16	SurplusBandwidthAllowance;
+        u16	MediumTime;
+    } f;
 };
 
 struct wmm_tspec {
-	u8		ID;
-	u8		Length;
-	u8		OUI[3];
-	u8		OUI_Type;
-	u8		OUI_SubType;
-	u8		Version;
-	union tspec_body Body;
+    u8		ID;
+    u8		Length;
+    u8		OUI[3];
+    u8		OUI_Type;
+    u8		OUI_SubType;
+    u8		Version;
+    union tspec_body Body;
 };
 
 struct octet_string {
-	u8 *Octet;
-	u16 Length;
+    u8 *Octet;
+    u16 Length;
 };
 
 #define	MAX_WMMELE_LENGTH	64
@@ -138,8 +138,8 @@ struct octet_string {
 #define SESSION_REJECT_TIMEOUT		60000
 
 enum ack_policy {
-	eAckPlc0_ACK		= 0x00,
-	eAckPlc1_NoACK		= 0x01,
+    eAckPlc0_ACK		= 0x00,
+    eAckPlc1_NoACK		= 0x01,
 };
 
 
@@ -182,11 +182,11 @@ enum ack_policy {
 	SET_BITS_TO_LE_1BYTE(_pStart, 5, 2, _val)
 
 enum qos_ie_source {
-	QOSIE_SRC_ADDTSREQ,
-	QOSIE_SRC_ADDTSRSP,
-	QOSIE_SRC_REASOCREQ,
-	QOSIE_SRC_REASOCRSP,
-	QOSIE_SRC_DELTS,
+    QOSIE_SRC_ADDTSREQ,
+    QOSIE_SRC_ADDTSRSP,
+    QOSIE_SRC_REASOCREQ,
+    QOSIE_SRC_REASOCRSP,
+    QOSIE_SRC_DELTS,
 };
 
 
@@ -241,29 +241,29 @@ enum qos_ie_source {
 #define WMM_PARAM_ELEMENT_SIZE	(8+(4*AC_PARAM_SIZE))
 
 enum qos_ele_subtype {
-	QOSELE_TYPE_INFO		= 0x00,
-	QOSELE_TYPE_PARAM	= 0x01,
+    QOSELE_TYPE_INFO		= 0x00,
+    QOSELE_TYPE_PARAM	= 0x01,
 };
 
 
 enum direction_value {
-	DIR_UP			= 0,
-	DIR_DOWN		= 1,
-	DIR_DIRECT		= 2,
-	DIR_BI_DIR		= 3,
+    DIR_UP			= 0,
+    DIR_DOWN		= 1,
+    DIR_DIRECT		= 2,
+    DIR_BI_DIR		= 3,
 };
 
 enum acm_method {
-	eAcmWay0_SwAndHw		= 0,
-	eAcmWay1_HW			= 1,
-	eAcmWay2_SW			= 2,
+    eAcmWay0_SwAndHw		= 0,
+    eAcmWay1_HW			= 1,
+    eAcmWay2_SW			= 2,
 };
 
 
 struct acm {
-	u64		UsedTime;
-	u64		MediumTime;
-	u8		HwAcmCtl;
+    u64		UsedTime;
+    u64		MediumTime;
+    u8		HwAcmCtl;
 };
 
 
@@ -284,95 +284,95 @@ struct acm {
 
 union qos_tclas {
 
-	struct _TYPE_GENERAL {
-		u8		Priority;
-		u8		ClassifierType;
-		u8		Mask;
-	} TYPE_GENERAL;
+    struct _TYPE_GENERAL {
+        u8		Priority;
+        u8		ClassifierType;
+        u8		Mask;
+    } TYPE_GENERAL;
 
-	struct _TYPE0_ETH {
-		u8		Priority;
-		u8		ClassifierType;
-		u8		Mask;
-		u8		SrcAddr[6];
-		u8		DstAddr[6];
-		u16		Type;
-	} TYPE0_ETH;
+    struct _TYPE0_ETH {
+        u8		Priority;
+        u8		ClassifierType;
+        u8		Mask;
+        u8		SrcAddr[6];
+        u8		DstAddr[6];
+        u16		Type;
+    } TYPE0_ETH;
 
-	struct _TYPE1_IPV4 {
-		u8		Priority;
-		u8		ClassifierType;
-		u8		Mask;
-		u8		Version;
-		u8		SrcIP[4];
-		u8		DstIP[4];
-		u16		SrcPort;
-		u16		DstPort;
-		u8		DSCP;
-		u8		Protocol;
-		u8		Reserved;
-	} TYPE1_IPV4;
+    struct _TYPE1_IPV4 {
+        u8		Priority;
+        u8		ClassifierType;
+        u8		Mask;
+        u8		Version;
+        u8		SrcIP[4];
+        u8		DstIP[4];
+        u16		SrcPort;
+        u16		DstPort;
+        u8		DSCP;
+        u8		Protocol;
+        u8		Reserved;
+    } TYPE1_IPV4;
 
-	struct _TYPE1_IPV6 {
-		u8		Priority;
-		u8		ClassifierType;
-		u8		Mask;
-		u8		Version;
-		u8		SrcIP[16];
-		u8		DstIP[16];
-		u16		SrcPort;
-		u16		DstPort;
-		u8		FlowLabel[3];
-	} TYPE1_IPV6;
+    struct _TYPE1_IPV6 {
+        u8		Priority;
+        u8		ClassifierType;
+        u8		Mask;
+        u8		Version;
+        u8		SrcIP[16];
+        u8		DstIP[16];
+        u16		SrcPort;
+        u16		DstPort;
+        u8		FlowLabel[3];
+    } TYPE1_IPV6;
 
-	struct _TYPE2_8021Q {
-		u8		Priority;
-		u8		ClassifierType;
-		u8		Mask;
-		u16		TagType;
-	} TYPE2_8021Q;
+    struct _TYPE2_8021Q {
+        u8		Priority;
+        u8		ClassifierType;
+        u8		Mask;
+        u16		TagType;
+    } TYPE2_8021Q;
 };
 
 struct qos_tstream {
 
-	bool			bUsed;
-	u16			MsduLifetime;
-	bool			bEstablishing;
-	u8			TimeSlotCount;
-	u8			DialogToken;
-	struct wmm_tspec TSpec;
-	struct wmm_tspec OutStandingTSpec;
-	u8			NominalPhyRate;
+    bool			bUsed;
+    u16			MsduLifetime;
+    bool			bEstablishing;
+    u8			TimeSlotCount;
+    u8			DialogToken;
+    struct wmm_tspec TSpec;
+    struct wmm_tspec OutStandingTSpec;
+    u8			NominalPhyRate;
 };
 
 struct sta_qos {
-	u8 WMMIEBuf[MAX_WMMELE_LENGTH];
-	u8 *WMMIE;
+    u8 WMMIEBuf[MAX_WMMELE_LENGTH];
+    u8 *WMMIE;
 
-	QOS_MODE QosCapability;
-	QOS_MODE CurrentQosMode;
+    QOS_MODE QosCapability;
+    QOS_MODE CurrentQosMode;
 
-	AC_UAPSD b4ac_Uapsd;
-	AC_UAPSD Curr4acUapsd;
-	u8 bInServicePeriod;
-	u8 MaxSPLength;
-	int NumBcnBeforeTrigger;
+    AC_UAPSD b4ac_Uapsd;
+    AC_UAPSD Curr4acUapsd;
+    u8 bInServicePeriod;
+    u8 MaxSPLength;
+    int NumBcnBeforeTrigger;
 
-	u8 *pWMMInfoEle;
-	u8 WMMParamEle[WMM_PARAM_ELEMENT_SIZE];
+    u8 *pWMMInfoEle;
+    u8 WMMParamEle[WMM_PARAM_ELEMENT_SIZE];
 
-	struct acm acm[4];
-	enum acm_method AcmMethod;
+    struct acm acm[4];
+    enum acm_method AcmMethod;
 
-	struct qos_tstream StaTsArray[MAX_STA_TS_COUNT];
-	u8				DialogToken;
-	struct wmm_tspec TSpec;
+    struct qos_tstream StaTsArray[MAX_STA_TS_COUNT];
+    u8				DialogToken;
+    struct wmm_tspec TSpec;
 
-	u8				QBssWirelessMode;
+    u8				QBssWirelessMode;
 
-	bool				bNoAck;
+    bool				bNoAck;
 
-	bool				bEnableRxImmBA;
+    bool				bEnableRxImmBA;
 
 };
 
@@ -391,17 +391,17 @@ struct sta_qos {
 		WriteEF2Byte((u8 *)(__pStart) + 3, __Value)
 
 struct bss_qos {
-	QOS_MODE bdQoSMode;
-	u8 bdWMMIEBuf[MAX_WMMELE_LENGTH];
-	struct octet_string bdWMMIE;
+    QOS_MODE bdQoSMode;
+    u8 bdWMMIEBuf[MAX_WMMELE_LENGTH];
+    struct octet_string bdWMMIE;
 
-	enum qos_ele_subtype EleSubType;
+    enum qos_ele_subtype EleSubType;
 
-	u8 *pWMMInfoEle;
-	u8 *pWMMParamEle;
+    u8 *pWMMInfoEle;
+    u8 *pWMMParamEle;
 
-	u8 QBssLoad[QBSS_LOAD_SIZE];
-	bool bQBssLoadValid;
+    u8 QBssLoad[QBSS_LOAD_SIZE];
+    bool bQBssLoadValid;
 };
 
 #define sQoSCtlLng	2
@@ -412,33 +412,33 @@ struct bss_qos {
 
 
 union aci_aifsn {
-	u8	charData;
+    u8	charData;
 
-	struct {
-		u8	AIFSN:4;
-		u8	acm:1;
-		u8	ACI:2;
-		u8	Reserved:1;
-	} f;
+    struct {
+        u8	AIFSN:4;
+        u8	acm:1;
+        u8	ACI:2;
+        u8	Reserved:1;
+    } f;
 };
 
 union ecw {
-	u8	charData;
-	struct {
-		u8	ECWmin:4;
-		u8	ECWmax:4;
-	} f;
+    u8	charData;
+    struct {
+        u8	ECWmin:4;
+        u8	ECWmax:4;
+    } f;
 };
 
 union ac_param {
-	u32	longData;
-	u8	charData[4];
+    u32	longData;
+    u8	charData[4];
 
-	struct {
-		union aci_aifsn AciAifsn;
-		union ecw Ecw;
-		u16		TXOPLimit;
-	} f;
+    struct {
+        union aci_aifsn AciAifsn;
+        union ecw Ecw;
+        u16		TXOPLimit;
+    } f;
 };
 
 #endif

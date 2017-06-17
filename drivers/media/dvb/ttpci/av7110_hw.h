@@ -14,29 +14,27 @@
 #define ARM_WAIT_OSD (HZ)
 
 
-enum av7110_bootstate
-{
-	BOOTSTATE_BUFFER_EMPTY	= 0,
-	BOOTSTATE_BUFFER_FULL	= 1,
-	BOOTSTATE_AV7110_BOOT_COMPLETE	= 2
+enum av7110_bootstate {
+    BOOTSTATE_BUFFER_EMPTY	= 0,
+    BOOTSTATE_BUFFER_FULL	= 1,
+    BOOTSTATE_AV7110_BOOT_COMPLETE	= 2
 };
 
-enum av7110_type_rec_play_format
-{	RP_None,
-	AudioPES,
-	AudioMp2,
-	AudioPCM,
-	VideoPES,
-	AV_PES
+enum av7110_type_rec_play_format {
+    RP_None,
+    AudioPES,
+    AudioMp2,
+    AudioPCM,
+    VideoPES,
+    AV_PES
 };
 
-enum av7110_osd_palette_type
-{
-	NoPalet =  0,	   /* No palette */
-	Pal1Bit =  2,	   /* 2 colors for 1 Bit Palette    */
-	Pal2Bit =  4,	   /* 4 colors for 2 bit palette    */
-	Pal4Bit =  16,	   /* 16 colors for 4 bit palette   */
-	Pal8Bit =  256	   /* 256 colors for 16 bit palette */
+enum av7110_osd_palette_type {
+    NoPalet =  0,	   /* No palette */
+    Pal1Bit =  2,	   /* 2 colors for 1 Bit Palette    */
+    Pal2Bit =  4,	   /* 4 colors for 2 bit palette    */
+    Pal4Bit =  16,	   /* 16 colors for 4 bit palette   */
+    Pal8Bit =  256	   /* 256 colors for 16 bit palette */
 };
 
 /* switch defines */
@@ -50,12 +48,11 @@ enum av7110_osd_palette_type
 #define FB_ON	SAA7146_GPIO_OUTHI  /* FastBlank on  (RGB-Mode) */
 #define FB_LOOP	SAA7146_GPIO_INPUT  /* FastBlank loop-through (PC graphics ???) */
 
-enum av7110_video_output_mode
-{
-	NO_OUT	     = 0,		/* disable analog output */
-	CVBS_RGB_OUT = 1,
-	CVBS_YC_OUT  = 2,
-	YC_OUT	     = 3
+enum av7110_video_output_mode {
+    NO_OUT	     = 0,		/* disable analog output */
+    CVBS_RGB_OUT = 1,
+    CVBS_YC_OUT  = 2,
+    YC_OUT	     = 3
 };
 
 /* firmware internal msg q status: */
@@ -92,121 +89,121 @@ enum av7110_video_output_mode
 
 /* firmware command codes */
 enum av7110_osd_command {
-	WCreate,
-	WDestroy,
-	WMoveD,
-	WMoveA,
-	WHide,
-	WTop,
-	DBox,
-	DLine,
-	DText,
-	Set_Font,
-	SetColor,
-	SetBlend,
-	SetWBlend,
-	SetCBlend,
-	SetNonBlend,
-	LoadBmp,
-	BlitBmp,
-	ReleaseBmp,
-	SetWTrans,
-	SetWNoTrans,
-	Set_Palette
+    WCreate,
+    WDestroy,
+    WMoveD,
+    WMoveA,
+    WHide,
+    WTop,
+    DBox,
+    DLine,
+    DText,
+    Set_Font,
+    SetColor,
+    SetBlend,
+    SetWBlend,
+    SetCBlend,
+    SetNonBlend,
+    LoadBmp,
+    BlitBmp,
+    ReleaseBmp,
+    SetWTrans,
+    SetWNoTrans,
+    Set_Palette
 };
 
 enum av7110_pid_command {
-	MultiPID,
-	VideoPID,
-	AudioPID,
-	InitFilt,
-	FiltError,
-	NewVersion,
-	CacheError,
-	AddPIDFilter,
-	DelPIDFilter,
-	Scan,
-	SetDescr,
-	SetIR,
-	FlushTSQueue
+    MultiPID,
+    VideoPID,
+    AudioPID,
+    InitFilt,
+    FiltError,
+    NewVersion,
+    CacheError,
+    AddPIDFilter,
+    DelPIDFilter,
+    Scan,
+    SetDescr,
+    SetIR,
+    FlushTSQueue
 };
 
 enum av7110_mpeg_command {
-	SelAudChannels
+    SelAudChannels
 };
 
 enum av7110_audio_command {
-	AudioDAC,
-	CabADAC,
-	ON22K,
-	OFF22K,
-	MainSwitch,
-	ADSwitch,
-	SendDiSEqC,
-	SetRegister,
-	SpdifSwitch
+    AudioDAC,
+    CabADAC,
+    ON22K,
+    OFF22K,
+    MainSwitch,
+    ADSwitch,
+    SendDiSEqC,
+    SetRegister,
+    SpdifSwitch
 };
 
 enum av7110_request_command {
-	AudioState,
-	AudioBuffState,
-	VideoState1,
-	VideoState2,
-	VideoState3,
-	CrashCounter,
-	ReqVersion,
-	ReqVCXO,
-	ReqRegister,
-	ReqSecFilterError,
-	ReqSTC
+    AudioState,
+    AudioBuffState,
+    VideoState1,
+    VideoState2,
+    VideoState3,
+    CrashCounter,
+    ReqVersion,
+    ReqVCXO,
+    ReqRegister,
+    ReqSecFilterError,
+    ReqSTC
 };
 
 enum av7110_encoder_command {
-	SetVidMode,
-	SetTestMode,
-	LoadVidCode,
-	SetMonitorType,
-	SetPanScanType,
-	SetFreezeMode,
-	SetWSSConfig
+    SetVidMode,
+    SetTestMode,
+    LoadVidCode,
+    SetMonitorType,
+    SetPanScanType,
+    SetFreezeMode,
+    SetWSSConfig
 };
 
 enum av7110_rec_play_state {
-	__Record,
-	__Stop,
-	__Play,
-	__Pause,
-	__Slow,
-	__FF_IP,
-	__Scan_I,
-	__Continue
+    __Record,
+    __Stop,
+    __Play,
+    __Pause,
+    __Slow,
+    __FF_IP,
+    __Scan_I,
+    __Continue
 };
 
 enum av7110_fw_cmd_misc {
-	AV7110_FW_VIDEO_ZOOM = 1,
-	AV7110_FW_VIDEO_COMMAND,
-	AV7110_FW_AUDIO_COMMAND
+    AV7110_FW_VIDEO_ZOOM = 1,
+    AV7110_FW_VIDEO_COMMAND,
+    AV7110_FW_AUDIO_COMMAND
 };
 
 enum av7110_command_type {
-	COMTYPE_NOCOM,
-	COMTYPE_PIDFILTER,
-	COMTYPE_MPEGDECODER,
-	COMTYPE_OSD,
-	COMTYPE_BMP,
-	COMTYPE_ENCODER,
-	COMTYPE_AUDIODAC,
-	COMTYPE_REQUEST,
-	COMTYPE_SYSTEM,
-	COMTYPE_REC_PLAY,
-	COMTYPE_COMMON_IF,
-	COMTYPE_PID_FILTER,
-	COMTYPE_PES,
-	COMTYPE_TS,
-	COMTYPE_VIDEO,
-	COMTYPE_AUDIO,
-	COMTYPE_CI_LL,
-	COMTYPE_MISC = 0x80
+    COMTYPE_NOCOM,
+    COMTYPE_PIDFILTER,
+    COMTYPE_MPEGDECODER,
+    COMTYPE_OSD,
+    COMTYPE_BMP,
+    COMTYPE_ENCODER,
+    COMTYPE_AUDIODAC,
+    COMTYPE_REQUEST,
+    COMTYPE_SYSTEM,
+    COMTYPE_REC_PLAY,
+    COMTYPE_COMMON_IF,
+    COMTYPE_PID_FILTER,
+    COMTYPE_PES,
+    COMTYPE_TS,
+    COMTYPE_VIDEO,
+    COMTYPE_AUDIO,
+    COMTYPE_CI_LL,
+    COMTYPE_MISC = 0x80
 };
 
 #define VID_NONE_PREF		0x00	/* No aspect ration processing preferred */
@@ -372,113 +369,100 @@ extern int av7110_firmversion(struct av7110 *av7110);
 extern int av7110_wait_msgstate(struct av7110 *av7110, u16 flags);
 extern int av7110_fw_cmd(struct av7110 *av7110, int type, int com, int num, ...);
 extern int av7110_fw_request(struct av7110 *av7110, u16 *request_buf,
-			     int request_buf_len, u16 *reply_buf, int reply_buf_len);
+                             int request_buf_len, u16 *reply_buf, int reply_buf_len);
 
 
 /* DEBI (saa7146 data extension bus interface) access */
 extern int av7110_debiwrite(struct av7110 *av7110, u32 config,
-			    int addr, u32 val, int count);
+                            int addr, u32 val, int count);
 extern u32 av7110_debiread(struct av7110 *av7110, u32 config,
-			   int addr, int count);
+                           int addr, int count);
 
 
 /* DEBI during interrupt */
 /* single word writes */
-static inline void iwdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count)
-{
-	av7110_debiwrite(av7110, config, addr, val, count);
+static inline void iwdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count) {
+    av7110_debiwrite(av7110, config, addr, val, count);
 }
 
 /* buffer writes */
 static inline void mwdebi(struct av7110 *av7110, u32 config, int addr,
-			  const u8 *val, int count)
-{
-	memcpy(av7110->debi_virt, val, count);
-	av7110_debiwrite(av7110, config, addr, 0, count);
+                          const u8 *val, int count) {
+    memcpy(av7110->debi_virt, val, count);
+    av7110_debiwrite(av7110, config, addr, 0, count);
 }
 
-static inline u32 irdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count)
-{
-	u32 res;
+static inline u32 irdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count) {
+    u32 res;
 
-	res=av7110_debiread(av7110, config, addr, count);
-	if (count<=4)
-		memcpy(av7110->debi_virt, (char *) &res, count);
-	return res;
+    res=av7110_debiread(av7110, config, addr, count);
+    if (count<=4)
+        memcpy(av7110->debi_virt, (char *) &res, count);
+    return res;
 }
 
 /* DEBI outside interrupts, only for count <= 4! */
-static inline void wdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count)
-{
-	unsigned long flags;
+static inline void wdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&av7110->debilock, flags);
-	av7110_debiwrite(av7110, config, addr, val, count);
-	spin_unlock_irqrestore(&av7110->debilock, flags);
+    spin_lock_irqsave(&av7110->debilock, flags);
+    av7110_debiwrite(av7110, config, addr, val, count);
+    spin_unlock_irqrestore(&av7110->debilock, flags);
 }
 
-static inline u32 rdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count)
-{
-	unsigned long flags;
-	u32 res;
+static inline u32 rdebi(struct av7110 *av7110, u32 config, int addr, u32 val, int count) {
+    unsigned long flags;
+    u32 res;
 
-	spin_lock_irqsave(&av7110->debilock, flags);
-	res=av7110_debiread(av7110, config, addr, count);
-	spin_unlock_irqrestore(&av7110->debilock, flags);
-	return res;
+    spin_lock_irqsave(&av7110->debilock, flags);
+    res=av7110_debiread(av7110, config, addr, count);
+    spin_unlock_irqrestore(&av7110->debilock, flags);
+    return res;
 }
 
 /* handle mailbox registers of the dual ported RAM */
-static inline void ARM_ResetMailBox(struct av7110 *av7110)
-{
-	unsigned long flags;
+static inline void ARM_ResetMailBox(struct av7110 *av7110) {
+    unsigned long flags;
 
-	spin_lock_irqsave(&av7110->debilock, flags);
-	av7110_debiread(av7110, DEBINOSWAP, IRQ_RX, 2);
-	av7110_debiwrite(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
-	spin_unlock_irqrestore(&av7110->debilock, flags);
+    spin_lock_irqsave(&av7110->debilock, flags);
+    av7110_debiread(av7110, DEBINOSWAP, IRQ_RX, 2);
+    av7110_debiwrite(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
+    spin_unlock_irqrestore(&av7110->debilock, flags);
 }
 
-static inline void ARM_ClearMailBox(struct av7110 *av7110)
-{
-	iwdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
+static inline void ARM_ClearMailBox(struct av7110 *av7110) {
+    iwdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
 }
 
-static inline void ARM_ClearIrq(struct av7110 *av7110)
-{
-	irdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
+static inline void ARM_ClearIrq(struct av7110 *av7110) {
+    irdebi(av7110, DEBINOSWAP, IRQ_RX, 0, 2);
 }
 
 /****************************************************************************
  * Firmware commands
  ****************************************************************************/
 
-static inline int SendDAC(struct av7110 *av7110, u8 addr, u8 data)
-{
-	return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, AudioDAC, 2, addr, data);
+static inline int SendDAC(struct av7110 *av7110, u8 addr, u8 data) {
+    return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, AudioDAC, 2, addr, data);
 }
 
-static inline int av7710_set_video_mode(struct av7110 *av7110, int mode)
-{
-	return av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetVidMode, 1, mode);
+static inline int av7710_set_video_mode(struct av7110 *av7110, int mode) {
+    return av7110_fw_cmd(av7110, COMTYPE_ENCODER, SetVidMode, 1, mode);
 }
 
-static inline int vidcom(struct av7110 *av7110, u32 com, u32 arg)
-{
-	return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_VIDEO_COMMAND, 4,
-			     (com>>16), (com&0xffff),
-			     (arg>>16), (arg&0xffff));
+static inline int vidcom(struct av7110 *av7110, u32 com, u32 arg) {
+    return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_VIDEO_COMMAND, 4,
+                         (com>>16), (com&0xffff),
+                         (arg>>16), (arg&0xffff));
 }
 
-static inline int audcom(struct av7110 *av7110, u32 com)
-{
-	return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_AUDIO_COMMAND, 2,
-			     (com>>16), (com&0xffff));
+static inline int audcom(struct av7110 *av7110, u32 com) {
+    return av7110_fw_cmd(av7110, COMTYPE_MISC, AV7110_FW_AUDIO_COMMAND, 2,
+                         (com>>16), (com&0xffff));
 }
 
-static inline int Set22K(struct av7110 *av7110, int state)
-{
-	return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, (state ? ON22K : OFF22K), 0);
+static inline int Set22K(struct av7110 *av7110, int state) {
+    return av7110_fw_cmd(av7110, COMTYPE_AUDIODAC, (state ? ON22K : OFF22K), 0);
 }
 
 

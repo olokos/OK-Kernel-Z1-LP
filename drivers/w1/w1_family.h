@@ -45,20 +45,18 @@
 
 struct w1_slave;
 
-struct w1_family_ops
-{
-	int  (* add_slave)(struct w1_slave *);
-	void (* remove_slave)(struct w1_slave *);
+struct w1_family_ops {
+    int  (* add_slave)(struct w1_slave *);
+    void (* remove_slave)(struct w1_slave *);
 };
 
-struct w1_family
-{
-	struct list_head	family_entry;
-	u8			fid;
+struct w1_family {
+    struct list_head	family_entry;
+    u8			fid;
 
-	struct w1_family_ops	*fops;
+    struct w1_family_ops	*fops;
 
-	atomic_t		refcnt;
+    atomic_t		refcnt;
 };
 
 extern spinlock_t w1_flock;

@@ -19,66 +19,63 @@
 static DEFINE_SPINLOCK(au1300_vss_lock);
 
 /* enable a block as outlined in the databook */
-static inline void __enable_block(int block)
-{
-	void __iomem *base = (void __iomem *)VSS_ADDR(block);
+static inline void __enable_block(int block) {
+    void __iomem *base = (void __iomem *)VSS_ADDR(block);
 
-	__raw_writel(3, base + VSS_CLKRST);	/* enable clock, assert reset */
-	wmb();
+    __raw_writel(3, base + VSS_CLKRST);	/* enable clock, assert reset */
+    wmb();
 
-	__raw_writel(0x01fffffe, base + VSS_GATE); /* maximum setup time */
-	wmb();
+    __raw_writel(0x01fffffe, base + VSS_GATE); /* maximum setup time */
+    wmb();
 
-	/* enable footers in sequence */
-	__raw_writel(0x01, base + VSS_FTR);
-	wmb();
-	__raw_writel(0x03, base + VSS_FTR);
-	wmb();
-	__raw_writel(0x07, base + VSS_FTR);
-	wmb();
-	__raw_writel(0x0f, base + VSS_FTR);
-	wmb();
+    /* enable footers in sequence */
+    __raw_writel(0x01, base + VSS_FTR);
+    wmb();
+    __raw_writel(0x03, base + VSS_FTR);
+    wmb();
+    __raw_writel(0x07, base + VSS_FTR);
+    wmb();
+    __raw_writel(0x0f, base + VSS_FTR);
+    wmb();
 
-	__raw_writel(0x01ffffff, base + VSS_GATE); /* start FSM too */
-	wmb();
+    __raw_writel(0x01ffffff, base + VSS_GATE); /* start FSM too */
+    wmb();
 
-	__raw_writel(2, base + VSS_CLKRST);	/* deassert reset */
-	wmb();
+    __raw_writel(2, base + VSS_CLKRST);	/* deassert reset */
+    wmb();
 
-	__raw_writel(0x1f, base + VSS_FTR);	/* enable isolation cells */
-	wmb();
+    __raw_writel(0x1f, base + VSS_FTR);	/* enable isolation cells */
+    wmb();
 }
 
 /* disable a block as outlined in the databook */
-static inline void __disable_block(int block)
-{
-	void __iomem *base = (void __iomem *)VSS_ADDR(block);
+static inline void __disable_block(int block) {
+    void __iomem *base = (void __iomem *)VSS_ADDR(block);
 
-	__raw_writel(0x0f, base + VSS_FTR);	/* disable isolation cells */
-	wmb();
-	__raw_writel(0, base + VSS_GATE);	/* disable FSM */
-	wmb();
-	__raw_writel(3, base + VSS_CLKRST);	/* assert reset */
-	wmb();
-	__raw_writel(1, base + VSS_CLKRST);	/* disable clock */
-	wmb();
-	__raw_writel(0, base + VSS_FTR);	/* disable all footers */
-	wmb();
+    __raw_writel(0x0f, base + VSS_FTR);	/* disable isolation cells */
+    wmb();
+    __raw_writel(0, base + VSS_GATE);	/* disable FSM */
+    wmb();
+    __raw_writel(3, base + VSS_CLKRST);	/* assert reset */
+    wmb();
+    __raw_writel(1, base + VSS_CLKRST);	/* disable clock */
+    wmb();
+    __raw_writel(0, base + VSS_FTR);	/* disable all footers */
+    wmb();
 }
 
-void au1300_vss_block_control(int block, int enable)
-{
-	unsigned long flags;
+void au1300_vss_block_control(int block, int enable) {
+    unsigned long flags;
 
-	if (alchemy_get_cputype() != ALCHEMY_CPU_AU1300)
-		return;
+    if (alchemy_get_cputype() != ALCHEMY_CPU_AU1300)
+        return;
 
-	/* only one block at a time */
-	spin_lock_irqsave(&au1300_vss_lock, flags);
-	if (enable)
-		__enable_block(block);
-	else
-		__disable_block(block);
-	spin_unlock_irqrestore(&au1300_vss_lock, flags);
+    /* only one block at a time */
+    spin_lock_irqsave(&au1300_vss_lock, flags);
+    if (enable)
+        __enable_block(block);
+    else
+        __disable_block(block);
+    spin_unlock_irqrestore(&au1300_vss_lock, flags);
 }
 EXPORT_SYMBOL_GPL(au1300_vss_block_control);

@@ -27,27 +27,27 @@
    stack during a system call. */
 
 struct pt_regs {
-  long     d1;
-  long     d2;
-  long     d3;
-  long     d4;
-  long     d5;
-  long     a0;
-  long     a1;
-  long     a2;
-  long     d0;
-  long     orig_d0;
-  long     stkadj;
+    long     d1;
+    long     d2;
+    long     d3;
+    long     d4;
+    long     d5;
+    long     a0;
+    long     a1;
+    long     a2;
+    long     d0;
+    long     orig_d0;
+    long     stkadj;
 #ifdef CONFIG_COLDFIRE
-  unsigned format :  4; /* frame format specifier */
-  unsigned vector : 12; /* vector offset */
-  unsigned short sr;
-  unsigned long  pc;
+    unsigned format :  4; /* frame format specifier */
+    unsigned vector : 12; /* vector offset */
+    unsigned short sr;
+    unsigned long  pc;
 #else
-  unsigned short sr;
-  unsigned long  pc;
-  unsigned format :  4; /* frame format specifier */
-  unsigned vector : 12; /* vector offset */
+    unsigned short sr;
+    unsigned long  pc;
+    unsigned format :  4; /* frame format specifier */
+    unsigned vector : 12; /* vector offset */
 #endif
 };
 
@@ -56,13 +56,13 @@ struct pt_regs {
  * switcher: it's pushed after the normal "struct pt_regs".
  */
 struct switch_stack {
-	unsigned long  d6;
-	unsigned long  d7;
-	unsigned long  a3;
-	unsigned long  a4;
-	unsigned long  a5;
-	unsigned long  a6;
-	unsigned long  retpc;
+    unsigned long  d6;
+    unsigned long  d7;
+    unsigned long  a3;
+    unsigned long  a4;
+    unsigned long  a5;
+    unsigned long  a6;
+    unsigned long  retpc;
 };
 
 /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */

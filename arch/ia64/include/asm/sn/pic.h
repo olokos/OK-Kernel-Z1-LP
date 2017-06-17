@@ -78,12 +78,12 @@ struct pic {
     u64		p_wid_stat;			/* 0x000008 */
     u64		p_wid_err_upper;		/* 0x000010 */
     u64		p_wid_err_lower;		/* 0x000018 */
-    #define p_wid_err p_wid_err_lower
+#define p_wid_err p_wid_err_lower
     u64		p_wid_control;			/* 0x000020 */
     u64		p_wid_req_timeout;		/* 0x000028 */
     u64		p_wid_int_upper;		/* 0x000030 */
     u64		p_wid_int_lower;		/* 0x000038 */
-    #define p_wid_int p_wid_int_lower
+#define p_wid_int p_wid_int_lower
     u64		p_wid_err_cmdword;		/* 0x000040 */
     u64		p_wid_llp;			/* 0x000048 */
     u64		p_wid_tflush;			/* 0x000050 */
@@ -92,7 +92,7 @@ struct pic {
     u64		p_wid_aux_err;			/* 0x000058 */
     u64		p_wid_resp_upper;		/* 0x000060 */
     u64		p_wid_resp_lower;		/* 0x000068 */
-    #define p_wid_resp p_wid_resp_lower
+#define p_wid_resp p_wid_resp_lower
     u64		p_wid_tst_pin_ctrl;		/* 0x000070 */
     u64		p_wid_addr_lkerr;		/* 0x000078 */
 
@@ -117,7 +117,7 @@ struct pic {
     u64		p_pci_cfg;			/* 0x0000C8 */
     u64		p_pci_err_upper;		/* 0x0000D0 */
     u64		p_pci_err_lower;		/* 0x0000D8 */
-    #define p_pci_err p_pci_err_lower
+#define p_pci_err p_pci_err_lower
     u64		_pad_0000E0[4];			/* 0x0000{E0..F8} */
 
     /* 0x000100-0x0001FF -- Interrupt */
@@ -139,8 +139,8 @@ struct pic {
     u64		p_wr_req_buf[4];		/* 0x0002{40,,,58} */
     u64		_pad_000260[4];			/* 0x0002{60,,,78} */
     u64		p_rrb_map[2];			/* 0x0002{80,,,88} */
-    #define p_even_resp p_rrb_map[0]			/* 0x000280 */
-    #define p_odd_resp  p_rrb_map[1]			/* 0x000288 */
+#define p_even_resp p_rrb_map[0]			/* 0x000280 */
+#define p_odd_resp  p_rrb_map[1]			/* 0x000288 */
     u64		p_resp_status;			/* 0x000290 */
     u64		p_resp_clear;			/* 0x000298 */
 
@@ -148,20 +148,20 @@ struct pic {
 
     /* 0x000300-0x0003F8 -- Buffer Address Match Registers */
     struct {
-	u64	upper;				/* 0x0003{00,,,F0} */
-	u64	lower;				/* 0x0003{08,,,F8} */
+        u64	upper;				/* 0x0003{00,,,F0} */
+        u64	lower;				/* 0x0003{08,,,F8} */
     } p_buf_addr_match[16];
 
     /* 0x000400-0x0005FF -- Performance Monitor Registers (even only) */
     struct {
-	u64	flush_w_touch;			/* 0x000{400,,,5C0} */
-	u64	flush_wo_touch;			/* 0x000{408,,,5C8} */
-	u64	inflight;			/* 0x000{410,,,5D0} */
-	u64	prefetch;			/* 0x000{418,,,5D8} */
-	u64	total_pci_retry;		/* 0x000{420,,,5E0} */
-	u64	max_pci_retry;			/* 0x000{428,,,5E8} */
-	u64	max_latency;			/* 0x000{430,,,5F0} */
-	u64	clear_all;			/* 0x000{438,,,5F8} */
+        u64	flush_w_touch;			/* 0x000{400,,,5C0} */
+        u64	flush_wo_touch;			/* 0x000{408,,,5C8} */
+        u64	inflight;			/* 0x000{410,,,5D0} */
+        u64	prefetch;			/* 0x000{418,,,5D8} */
+        u64	total_pci_retry;		/* 0x000{420,,,5E0} */
+        u64	max_pci_retry;			/* 0x000{428,,,5E8} */
+        u64	max_latency;			/* 0x000{430,,,5F0} */
+        u64	clear_all;			/* 0x000{438,,,5F8} */
     } p_buf_count[8];
 
 
@@ -179,15 +179,15 @@ struct pic {
 
     /* 0x000A00-0x000BFF -- PCI/X Read&Write Buffer */
     struct {
-	u64	p_buf_addr;			/* 0x000{A00,,,AF0} */
-	u64	p_buf_attr;			/* 0X000{A08,,,AF8} */
+        u64	p_buf_addr;			/* 0x000{A00,,,AF0} */
+        u64	p_buf_attr;			/* 0X000{A08,,,AF8} */
     } p_pcix_read_buf_64[16];
 
     struct {
-	u64	p_buf_addr;			/* 0x000{B00,,,BE0} */
-	u64	p_buf_attr;			/* 0x000{B08,,,BE8} */
-	u64	p_buf_valid;			/* 0x000{B10,,,BF0} */
-	u64	__pad1;				/* 0x000{B18,,,BF8} */
+        u64	p_buf_addr;			/* 0x000{B00,,,BE0} */
+        u64	p_buf_attr;			/* 0x000{B08,,,BE8} */
+        u64	p_buf_valid;			/* 0x000{B10,,,BF0} */
+        u64	__pad1;				/* 0x000{B18,,,BF8} */
     } p_pcix_write_buf_64[8];
 
     /* End of Local Registers -- Start of Address Map space */
@@ -211,50 +211,50 @@ struct pic {
 
     /* 0x020000-0x027FFF -- PCI Device Configuration Spaces */
     union {
-	u8		c[0x1000 / 1];			/* 0x02{0000,,,7FFF} */
-	u16	s[0x1000 / 2];			/* 0x02{0000,,,7FFF} */
-	u32	l[0x1000 / 4];			/* 0x02{0000,,,7FFF} */
-	u64	d[0x1000 / 8];			/* 0x02{0000,,,7FFF} */
-	union {
-	    u8	c[0x100 / 1];
-	    u16	s[0x100 / 2];
-	    u32	l[0x100 / 4];
-	    u64	d[0x100 / 8];
-	} f[8];
+        u8		c[0x1000 / 1];			/* 0x02{0000,,,7FFF} */
+        u16	s[0x1000 / 2];			/* 0x02{0000,,,7FFF} */
+        u32	l[0x1000 / 4];			/* 0x02{0000,,,7FFF} */
+        u64	d[0x1000 / 8];			/* 0x02{0000,,,7FFF} */
+        union {
+            u8	c[0x100 / 1];
+            u16	s[0x100 / 2];
+            u32	l[0x100 / 4];
+            u64	d[0x100 / 8];
+        } f[8];
     } p_type0_cfg_dev[8];				/* 0x02{0000,,,7FFF} */
 
     /* 0x028000-0x028FFF -- PCI Type 1 Configuration Space */
     union {
-	u8		c[0x1000 / 1];			/* 0x028000-0x029000 */
-	u16	s[0x1000 / 2];			/* 0x028000-0x029000 */
-	u32	l[0x1000 / 4];			/* 0x028000-0x029000 */
-	u64	d[0x1000 / 8];			/* 0x028000-0x029000 */
-	union {
-	    u8	c[0x100 / 1];
-	    u16	s[0x100 / 2];
-	    u32	l[0x100 / 4];
-	    u64	d[0x100 / 8];
-	} f[8];
+        u8		c[0x1000 / 1];			/* 0x028000-0x029000 */
+        u16	s[0x1000 / 2];			/* 0x028000-0x029000 */
+        u32	l[0x1000 / 4];			/* 0x028000-0x029000 */
+        u64	d[0x1000 / 8];			/* 0x028000-0x029000 */
+        union {
+            u8	c[0x100 / 1];
+            u16	s[0x100 / 2];
+            u32	l[0x100 / 4];
+            u64	d[0x100 / 8];
+        } f[8];
     } p_type1_cfg;					/* 0x028000-0x029000 */
 
     char		_pad_029000[0x030000-0x029000];
 
     /* 0x030000-0x030007 -- PCI Interrupt Acknowledge Cycle */
     union {
-	u8		c[8 / 1];
-	u16	s[8 / 2];
-	u32	l[8 / 4];
-	u64	d[8 / 8];
+        u8		c[8 / 1];
+        u16	s[8 / 2];
+        u32	l[8 / 4];
+        u64	d[8 / 8];
     } p_pci_iack;					/* 0x030000-0x030007 */
 
     char		_pad_030007[0x040000-0x030008];
 
     /* 0x040000-0x030007 -- PCIX Special Cycle */
     union {
-	u8		c[8 / 1];
-	u16	s[8 / 2];
-	u32	l[8 / 4];
-	u64	d[8 / 8];
+        u8		c[8 / 1];
+        u16	s[8 / 2];
+        u32	l[8 / 4];
+        u64	d[8 / 8];
     } p_pcix_cycle;					/* 0x040000-0x040007 */
 };
 

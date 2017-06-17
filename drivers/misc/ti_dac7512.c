@@ -27,59 +27,56 @@
 #define DRIVER_VERSION		"1.0"
 
 static ssize_t dac7512_store_val(struct device *dev,
-				 struct device_attribute *attr,
-				 const char *buf, size_t count)
-{
-	struct spi_device *spi = to_spi_device(dev);
-	unsigned char tmp[2];
-	unsigned long val;
+                                 struct device_attribute *attr,
+                                 const char *buf, size_t count) {
+    struct spi_device *spi = to_spi_device(dev);
+    unsigned char tmp[2];
+    unsigned long val;
 
-	if (strict_strtoul(buf, 10, &val) < 0)
-		return -EINVAL;
+    if (strict_strtoul(buf, 10, &val) < 0)
+        return -EINVAL;
 
-	tmp[0] = val >> 8;
-	tmp[1] = val & 0xff;
-	spi_write(spi, tmp, sizeof(tmp));
-	return count;
+    tmp[0] = val >> 8;
+    tmp[1] = val & 0xff;
+    spi_write(spi, tmp, sizeof(tmp));
+    return count;
 }
 
 static DEVICE_ATTR(value, S_IWUSR, NULL, dac7512_store_val);
 
 static struct attribute *dac7512_attributes[] = {
-	&dev_attr_value.attr,
-	NULL
+    &dev_attr_value.attr,
+    NULL
 };
 
 static const struct attribute_group dac7512_attr_group = {
-	.attrs = dac7512_attributes,
+    .attrs = dac7512_attributes,
 };
 
-static int __devinit dac7512_probe(struct spi_device *spi)
-{
-	int ret;
+static int __devinit dac7512_probe(struct spi_device *spi) {
+    int ret;
 
-	spi->bits_per_word = 8;
-	spi->mode = SPI_MODE_0;
-	ret = spi_setup(spi);
-	if (ret < 0)
-		return ret;
+    spi->bits_per_word = 8;
+    spi->mode = SPI_MODE_0;
+    ret = spi_setup(spi);
+    if (ret < 0)
+        return ret;
 
-	return sysfs_create_group(&spi->dev.kobj, &dac7512_attr_group);
+    return sysfs_create_group(&spi->dev.kobj, &dac7512_attr_group);
 }
 
-static int __devexit dac7512_remove(struct spi_device *spi)
-{
-	sysfs_remove_group(&spi->dev.kobj, &dac7512_attr_group);
-	return 0;
+static int __devexit dac7512_remove(struct spi_device *spi) {
+    sysfs_remove_group(&spi->dev.kobj, &dac7512_attr_group);
+    return 0;
 }
 
 static struct spi_driver dac7512_driver = {
-	.driver = {
-		.name	= DAC7512_DRV_NAME,
-		.owner	= THIS_MODULE,
-	},
-	.probe	= dac7512_probe,
-	.remove	= __devexit_p(dac7512_remove),
+    .driver = {
+        .name	= DAC7512_DRV_NAME,
+        .owner	= THIS_MODULE,
+    },
+    .probe	= dac7512_probe,
+    .remove	= __devexit_p(dac7512_remove),
 };
 
 module_spi_driver(dac7512_driver);

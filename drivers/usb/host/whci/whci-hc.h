@@ -47,10 +47,10 @@
  * [WHCI] section 3.2.4
  */
 struct whc_qtd {
-	__le32 status; /*< remaining transfer len and transfer status */
-	__le32 options;
-	__le64 page_list_ptr; /*< physical pointer to data buffer page list*/
-	__u8   setup[8];      /*< setup data for control transfers */
+    __le32 status; /*< remaining transfer len and transfer status */
+    __le32 options;
+    __le64 page_list_ptr; /*< physical pointer to data buffer page list*/
+    __u8   setup[8];      /*< setup data for control transfers */
 } __attribute__((packed));
 
 #define QTD_STS_ACTIVE     (1 << 31)  /* enable execution of transaction */
@@ -77,12 +77,12 @@ struct whc_qtd {
  * [WHCI] section 3.2.5
  */
 struct whc_itd {
-	__le16 presentation_time;    /*< presentation time for OUT transfers */
-	__u8   num_segments;         /*< number of data segments in segment list */
-	__u8   status;               /*< command execution status */
-	__le32 options;              /*< misc transfer options */
-	__le64 page_list_ptr;        /*< physical pointer to data buffer page list */
-	__le64 seg_list_ptr;         /*< physical pointer to segment list */
+    __le16 presentation_time;    /*< presentation time for OUT transfers */
+    __u8   num_segments;         /*< number of data segments in segment list */
+    __u8   status;               /*< command execution status */
+    __le32 options;              /*< misc transfer options */
+    __le64 page_list_ptr;        /*< physical pointer to data buffer page list */
+    __le64 seg_list_ptr;         /*< physical pointer to segment list */
 } __attribute__((packed));
 
 #define ITD_STS_ACTIVE   (1 << 7) /* enable execution of transaction */
@@ -102,7 +102,7 @@ struct whc_itd {
  * [WHCI] section 3.2.4.3
  */
 struct whc_page_list_entry {
-	__le64 buf_ptr; /*< physical pointer to buffer */
+    __le64 buf_ptr; /*< physical pointer to buffer */
 } __attribute__((packed));
 
 /**
@@ -119,10 +119,10 @@ struct whc_page_list_entry {
  * [WHCI] section 3.2.5.5
  */
 struct whc_seg_list_entry {
-	__le16 len;    /*< segment length */
-	__u8   idx;    /*< index into page list */
-	__u8   status; /*< segment status */
-	__le16 offset; /*< 12 bit offset into page */
+    __le16 len;    /*< segment length */
+    __u8   idx;    /*< index into page list */
+    __u8   status; /*< segment status */
+    __le16 offset; /*< 12 bit offset into page */
 } __attribute__((packed));
 
 /**
@@ -131,18 +131,18 @@ struct whc_seg_list_entry {
  * [WHCI] section 3.2.6
  */
 struct whc_qhead {
-	__le64 link; /*< next qset in list */
-	__le32 info1;
-	__le32 info2;
-	__le32 info3;
-	__le16 status;
-	__le16 err_count;  /*< transaction error count */
-	__le32 cur_window;
-	__le32 scratch[3]; /*< h/w scratch area */
-	union {
-		struct whc_qtd qtd;
-		struct whc_itd itd;
-	} overlay;
+    __le64 link; /*< next qset in list */
+    __le32 info1;
+    __le32 info2;
+    __le32 info3;
+    __le16 status;
+    __le16 err_count;  /*< transaction error count */
+    __le32 cur_window;
+    __le32 scratch[3]; /*< h/w scratch area */
+    union {
+        struct whc_qtd qtd;
+        struct whc_itd itd;
+    } overlay;
 } __attribute__((packed));
 
 #define QH_LINK_PTR_MASK (~0x03Full)
@@ -185,15 +185,14 @@ struct whc_qhead {
  *
  * Returns the QH type field for a USB core pipe type.
  */
-static inline unsigned usb_pipe_to_qh_type(unsigned pipe)
-{
-	static const unsigned type[] = {
-		[PIPE_ISOCHRONOUS] = QH_INFO1_TR_TYPE_ISOC,
-		[PIPE_INTERRUPT]   = QH_INFO1_TR_TYPE_INT,
-		[PIPE_CONTROL]     = QH_INFO1_TR_TYPE_CTRL,
-		[PIPE_BULK]        = QH_INFO1_TR_TYPE_BULK,
-	};
-	return type[usb_pipetype(pipe)];
+static inline unsigned usb_pipe_to_qh_type(unsigned pipe) {
+    static const unsigned type[] = {
+        [PIPE_ISOCHRONOUS] = QH_INFO1_TR_TYPE_ISOC,
+        [PIPE_INTERRUPT]   = QH_INFO1_TR_TYPE_INT,
+        [PIPE_CONTROL]     = QH_INFO1_TR_TYPE_CTRL,
+        [PIPE_BULK]        = QH_INFO1_TR_TYPE_BULK,
+    };
+    return type[usb_pipetype(pipe)];
 }
 
 /**
@@ -239,38 +238,37 @@ static inline unsigned usb_pipe_to_qh_type(unsigned pipe)
  * [WHCI] section 3.2.3
  */
 struct whc_qset {
-	struct whc_qhead qh;
-	union {
-		struct whc_qtd qtd[WHCI_QSET_TD_MAX];
-		struct whc_itd itd[WHCI_QSET_TD_MAX];
-	};
+    struct whc_qhead qh;
+    union {
+        struct whc_qtd qtd[WHCI_QSET_TD_MAX];
+        struct whc_itd itd[WHCI_QSET_TD_MAX];
+    };
 
-	/* private data for WHCD */
-	dma_addr_t qset_dma;
-	struct whc *whc;
-	struct usb_host_endpoint *ep;
-	struct list_head stds;
-	int ntds;
-	int td_start;
-	int td_end;
-	struct list_head list_node;
-	unsigned in_sw_list:1;
-	unsigned in_hw_list:1;
-	unsigned remove:1;
-	unsigned reset:1;
-	struct urb *pause_after_urb;
-	struct completion remove_complete;
-	uint16_t max_packet;
-	uint8_t max_burst;
-	uint8_t max_seq;
+    /* private data for WHCD */
+    dma_addr_t qset_dma;
+    struct whc *whc;
+    struct usb_host_endpoint *ep;
+    struct list_head stds;
+    int ntds;
+    int td_start;
+    int td_end;
+    struct list_head list_node;
+    unsigned in_sw_list:1;
+    unsigned in_hw_list:1;
+    unsigned remove:1;
+    unsigned reset:1;
+    struct urb *pause_after_urb;
+    struct completion remove_complete;
+    uint16_t max_packet;
+    uint8_t max_burst;
+    uint8_t max_seq;
 };
 
-static inline void whc_qset_set_link_ptr(u64 *ptr, u64 target)
-{
-	if (target)
-		*ptr = (*ptr & ~(QH_LINK_PTR_MASK | QH_LINK_T)) | QH_LINK_PTR(target);
-	else
-		*ptr = QH_LINK_T;
+static inline void whc_qset_set_link_ptr(u64 *ptr, u64 target) {
+    if (target)
+        *ptr = (*ptr & ~(QH_LINK_PTR_MASK | QH_LINK_T)) | QH_LINK_PTR(target);
+    else
+        *ptr = QH_LINK_T;
 }
 
 /**
@@ -279,9 +277,9 @@ static inline void whc_qset_set_link_ptr(u64 *ptr, u64 target)
  * There's one of these per connected device.
  */
 struct di_buf_entry {
-	__le32 availability_info[8]; /*< MAS availability information, one MAS per bit */
-	__le32 addr_sec_info;        /*< addressing and security info */
-	__le32 reserved[7];
+    __le32 availability_info[8]; /*< MAS availability information, one MAS per bit */
+    __le32 addr_sec_info;        /*< addressing and security info */
+    __le32 reserved[7];
 } __attribute__((packed));
 
 #define WHC_DI_SECURE           (1 << 31)
@@ -297,12 +295,12 @@ struct di_buf_entry {
  * [WHCI] section 3.2.8
  */
 struct dn_buf_entry {
-	__u8   msg_size;    /*< number of octets of valid DN data */
-	__u8   reserved1;
-	__u8   src_addr;    /*< source address */
-	__u8   status;      /*< buffer entry status */
-	__le32 tkid;        /*< TKID for source device, valid if secure bit is set */
-	__u8   dn_data[56]; /*< up to 56 octets of DN data */
+    __u8   msg_size;    /*< number of octets of valid DN data */
+    __u8   reserved1;
+    __u8   src_addr;    /*< source address */
+    __u8   status;      /*< buffer entry status */
+    __le32 tkid;        /*< TKID for source device, valid if secure bit is set */
+    __u8   dn_data[56]; /*< up to 56 octets of DN data */
 } __attribute__((packed));
 
 #define WHC_DN_STATUS_VALID  (1 << 7) /* buffer entry is valid */

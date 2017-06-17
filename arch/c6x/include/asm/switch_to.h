@@ -18,8 +18,8 @@
 struct task_struct;
 struct thread_struct;
 asmlinkage void *__switch_to(struct thread_struct *prev,
-			     struct thread_struct *next,
-			     struct task_struct *tsk);
+                             struct thread_struct *next,
+                             struct task_struct *tsk);
 
 #define switch_to(prev, next, last)				\
 	do {							\

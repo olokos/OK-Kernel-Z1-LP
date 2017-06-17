@@ -33,238 +33,234 @@ static void isar_pump_cmd(struct BCState *bcs, u_char cmd, u_char para);
 static void ll_deliver_faxstat(struct BCState *bcs, u_char status);
 
 static inline int
-waitforHIA(struct IsdnCardState *cs, int timeout)
-{
+waitforHIA(struct IsdnCardState *cs, int timeout) {
 
-	while ((cs->BC_Read_Reg(cs, 0, ISAR_HIA) & 1) && timeout) {
-		udelay(1);
-		timeout--;
-	}
-	if (!timeout)
-		printk(KERN_WARNING "HiSax: ISAR waitforHIA timeout\n");
-	return (timeout);
+    while ((cs->BC_Read_Reg(cs, 0, ISAR_HIA) & 1) && timeout) {
+        udelay(1);
+        timeout--;
+    }
+    if (!timeout)
+        printk(KERN_WARNING "HiSax: ISAR waitforHIA timeout\n");
+    return (timeout);
 }
 
 
 static int
 sendmsg(struct IsdnCardState *cs, u_char his, u_char creg, u_char len,
-	u_char *msg)
-{
-	int i;
+        u_char *msg) {
+    int i;
 
-	if (!waitforHIA(cs, 4000))
-		return (0);
+    if (!waitforHIA(cs, 4000))
+        return (0);
 #if DUMP_MBOXFRAME
-	if (cs->debug & L1_DEB_HSCX)
-		debugl1(cs, "sendmsg(%02x,%02x,%d)", his, creg, len);
+    if (cs->debug & L1_DEB_HSCX)
+        debugl1(cs, "sendmsg(%02x,%02x,%d)", his, creg, len);
 #endif
-	cs->BC_Write_Reg(cs, 0, ISAR_CTRL_H, creg);
-	cs->BC_Write_Reg(cs, 0, ISAR_CTRL_L, len);
-	cs->BC_Write_Reg(cs, 0, ISAR_WADR, 0);
-	if (msg && len) {
-		cs->BC_Write_Reg(cs, 1, ISAR_MBOX, msg[0]);
-		for (i = 1; i < len; i++)
-			cs->BC_Write_Reg(cs, 2, ISAR_MBOX, msg[i]);
+    cs->BC_Write_Reg(cs, 0, ISAR_CTRL_H, creg);
+    cs->BC_Write_Reg(cs, 0, ISAR_CTRL_L, len);
+    cs->BC_Write_Reg(cs, 0, ISAR_WADR, 0);
+    if (msg && len) {
+        cs->BC_Write_Reg(cs, 1, ISAR_MBOX, msg[0]);
+        for (i = 1; i < len; i++)
+            cs->BC_Write_Reg(cs, 2, ISAR_MBOX, msg[i]);
 #if DUMP_MBOXFRAME > 1
-		if (cs->debug & L1_DEB_HSCX_FIFO) {
-			char tmp[256], *t;
+        if (cs->debug & L1_DEB_HSCX_FIFO) {
+            char tmp[256], *t;
 
-			i = len;
-			while (i > 0) {
-				t = tmp;
-				t += sprintf(t, "sendmbox cnt %d", len);
-				QuickHex(t, &msg[len-i], (i > 64) ? 64 : i);
-				debugl1(cs, tmp);
-				i -= 64;
-			}
-		}
+            i = len;
+            while (i > 0) {
+                t = tmp;
+                t += sprintf(t, "sendmbox cnt %d", len);
+                QuickHex(t, &msg[len-i], (i > 64) ? 64 : i);
+                debugl1(cs, tmp);
+                i -= 64;
+            }
+        }
 #endif
-	}
-	cs->BC_Write_Reg(cs, 1, ISAR_HIS, his);
-	waitforHIA(cs, 10000);
-	return (1);
+    }
+    cs->BC_Write_Reg(cs, 1, ISAR_HIS, his);
+    waitforHIA(cs, 10000);
+    return (1);
 }
 
 /* Call only with IRQ disabled !!! */
 static inline void
-rcv_mbox(struct IsdnCardState *cs, struct isar_reg *ireg, u_char *msg)
-{
-	int i;
+rcv_mbox(struct IsdnCardState *cs, struct isar_reg *ireg, u_char *msg) {
+    int i;
 
-	cs->BC_Write_Reg(cs, 1, ISAR_RADR, 0);
-	if (msg && ireg->clsb) {
-		msg[0] = cs->BC_Read_Reg(cs, 1, ISAR_MBOX);
-		for (i = 1; i < ireg->clsb; i++)
-			msg[i] = cs->BC_Read_Reg(cs, 2, ISAR_MBOX);
+    cs->BC_Write_Reg(cs, 1, ISAR_RADR, 0);
+    if (msg && ireg->clsb) {
+        msg[0] = cs->BC_Read_Reg(cs, 1, ISAR_MBOX);
+        for (i = 1; i < ireg->clsb; i++)
+            msg[i] = cs->BC_Read_Reg(cs, 2, ISAR_MBOX);
 #if DUMP_MBOXFRAME > 1
-		if (cs->debug & L1_DEB_HSCX_FIFO) {
-			char tmp[256], *t;
+        if (cs->debug & L1_DEB_HSCX_FIFO) {
+            char tmp[256], *t;
 
-			i = ireg->clsb;
-			while (i > 0) {
-				t = tmp;
-				t += sprintf(t, "rcv_mbox cnt %d", ireg->clsb);
-				QuickHex(t, &msg[ireg->clsb - i], (i > 64) ? 64 : i);
-				debugl1(cs, tmp);
-				i -= 64;
-			}
-		}
+            i = ireg->clsb;
+            while (i > 0) {
+                t = tmp;
+                t += sprintf(t, "rcv_mbox cnt %d", ireg->clsb);
+                QuickHex(t, &msg[ireg->clsb - i], (i > 64) ? 64 : i);
+                debugl1(cs, tmp);
+                i -= 64;
+            }
+        }
 #endif
-	}
-	cs->BC_Write_Reg(cs, 1, ISAR_IIA, 0);
+    }
+    cs->BC_Write_Reg(cs, 1, ISAR_IIA, 0);
 }
 
 /* Call only with IRQ disabled !!! */
 static inline void
-get_irq_infos(struct IsdnCardState *cs, struct isar_reg *ireg)
-{
-	ireg->iis = cs->BC_Read_Reg(cs, 1, ISAR_IIS);
-	ireg->cmsb = cs->BC_Read_Reg(cs, 1, ISAR_CTRL_H);
-	ireg->clsb = cs->BC_Read_Reg(cs, 1, ISAR_CTRL_L);
+get_irq_infos(struct IsdnCardState *cs, struct isar_reg *ireg) {
+    ireg->iis = cs->BC_Read_Reg(cs, 1, ISAR_IIS);
+    ireg->cmsb = cs->BC_Read_Reg(cs, 1, ISAR_CTRL_H);
+    ireg->clsb = cs->BC_Read_Reg(cs, 1, ISAR_CTRL_L);
 #if DUMP_MBOXFRAME
-	if (cs->debug & L1_DEB_HSCX)
-		debugl1(cs, "irq_stat(%02x,%02x,%d)", ireg->iis, ireg->cmsb,
-			ireg->clsb);
+    if (cs->debug & L1_DEB_HSCX)
+        debugl1(cs, "irq_stat(%02x,%02x,%d)", ireg->iis, ireg->cmsb,
+                ireg->clsb);
 #endif
 }
 
 static int
 waitrecmsg(struct IsdnCardState *cs, u_char *len,
-	   u_char *msg, int maxdelay)
-{
-	int timeout = 0;
-	struct isar_reg *ir = cs->bcs[0].hw.isar.reg;
+           u_char *msg, int maxdelay) {
+    int timeout = 0;
+    struct isar_reg *ir = cs->bcs[0].hw.isar.reg;
 
 
-	while ((!(cs->BC_Read_Reg(cs, 0, ISAR_IRQBIT) & ISAR_IRQSTA)) &&
-	      (timeout++ < maxdelay))
-		udelay(1);
-	if (timeout > maxdelay) {
-		printk(KERN_WARNING"isar recmsg IRQSTA timeout\n");
-		return (0);
-	}
-	get_irq_infos(cs, ir);
-	rcv_mbox(cs, ir, msg);
-	*len = ir->clsb;
-	return (1);
+    while ((!(cs->BC_Read_Reg(cs, 0, ISAR_IRQBIT) & ISAR_IRQSTA)) &&
+            (timeout++ < maxdelay))
+        udelay(1);
+    if (timeout > maxdelay) {
+        printk(KERN_WARNING"isar recmsg IRQSTA timeout\n");
+        return (0);
+    }
+    get_irq_infos(cs, ir);
+    rcv_mbox(cs, ir, msg);
+    *len = ir->clsb;
+    return (1);
 }
 
 int
-ISARVersion(struct IsdnCardState *cs, char *s)
-{
-	int ver;
-	u_char msg[] = ISAR_MSG_HWVER;
-	u_char tmp[64];
-	u_char len;
-	u_long flags;
-	int debug;
+ISARVersion(struct IsdnCardState *cs, char *s) {
+    int ver;
+    u_char msg[] = ISAR_MSG_HWVER;
+    u_char tmp[64];
+    u_char len;
+    u_long flags;
+    int debug;
 
-	cs->cardmsg(cs, CARD_RESET,  NULL);
-	spin_lock_irqsave(&cs->lock, flags);
-	/* disable ISAR IRQ */
-	cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
-	debug = cs->debug;
-	cs->debug &= ~(L1_DEB_HSCX | L1_DEB_HSCX_FIFO);
-	if (!sendmsg(cs, ISAR_HIS_VNR, 0, 3, msg)) {
-		spin_unlock_irqrestore(&cs->lock, flags);
-		return (-1);
-	}
-	if (!waitrecmsg(cs, &len, tmp, 100000)) {
-		spin_unlock_irqrestore(&cs->lock, flags);
-		return (-2);
-	}
-	cs->debug = debug;
-	if (cs->bcs[0].hw.isar.reg->iis == ISAR_IIS_VNR) {
-		if (len == 1) {
-			ver = tmp[0] & 0xf;
-			printk(KERN_INFO "%s ISAR version %d\n", s, ver);
-		} else
-			ver = -3;
-	} else
-		ver = -4;
-	spin_unlock_irqrestore(&cs->lock, flags);
-	return (ver);
+    cs->cardmsg(cs, CARD_RESET,  NULL);
+    spin_lock_irqsave(&cs->lock, flags);
+    /* disable ISAR IRQ */
+    cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
+    debug = cs->debug;
+    cs->debug &= ~(L1_DEB_HSCX | L1_DEB_HSCX_FIFO);
+    if (!sendmsg(cs, ISAR_HIS_VNR, 0, 3, msg)) {
+        spin_unlock_irqrestore(&cs->lock, flags);
+        return (-1);
+    }
+    if (!waitrecmsg(cs, &len, tmp, 100000)) {
+        spin_unlock_irqrestore(&cs->lock, flags);
+        return (-2);
+    }
+    cs->debug = debug;
+    if (cs->bcs[0].hw.isar.reg->iis == ISAR_IIS_VNR) {
+        if (len == 1) {
+            ver = tmp[0] & 0xf;
+            printk(KERN_INFO "%s ISAR version %d\n", s, ver);
+        } else
+            ver = -3;
+    } else
+        ver = -4;
+    spin_unlock_irqrestore(&cs->lock, flags);
+    return (ver);
 }
 
 static int
-isar_load_firmware(struct IsdnCardState *cs, u_char __user *buf)
-{
-	int cfu_ret, ret, size, cnt, debug;
-	u_char len, nom, noc;
-	u_short sadr, left, *sp;
-	u_char __user *p = buf;
-	u_char *msg, *tmpmsg, *mp, tmp[64];
-	u_long flags;
-	struct isar_reg *ireg = cs->bcs[0].hw.isar.reg;
+isar_load_firmware(struct IsdnCardState *cs, u_char __user *buf) {
+    int cfu_ret, ret, size, cnt, debug;
+    u_char len, nom, noc;
+    u_short sadr, left, *sp;
+    u_char __user *p = buf;
+    u_char *msg, *tmpmsg, *mp, tmp[64];
+    u_long flags;
+    struct isar_reg *ireg = cs->bcs[0].hw.isar.reg;
 
-	struct {u_short sadr;
-		u_short len;
-		u_short d_key;
-	} blk_head;
+    struct {
+        u_short sadr;
+        u_short len;
+        u_short d_key;
+    } blk_head;
 
 #define	BLK_HEAD_SIZE 6
-	if (1 != (ret = ISARVersion(cs, "Testing"))) {
-		printk(KERN_ERR"isar_load_firmware wrong isar version %d\n", ret);
-		return (1);
-	}
-	debug = cs->debug;
+    if (1 != (ret = ISARVersion(cs, "Testing"))) {
+        printk(KERN_ERR"isar_load_firmware wrong isar version %d\n", ret);
+        return (1);
+    }
+    debug = cs->debug;
 #if DBG_LOADFIRM < 2
-	cs->debug &= ~(L1_DEB_HSCX | L1_DEB_HSCX_FIFO);
+    cs->debug &= ~(L1_DEB_HSCX | L1_DEB_HSCX_FIFO);
 #endif
 
-	cfu_ret = copy_from_user(&size, p, sizeof(int));
-	if (cfu_ret) {
-		printk(KERN_ERR "isar_load_firmware copy_from_user ret %d\n", cfu_ret);
-		return -EFAULT;
-	}
-	p += sizeof(int);
-	printk(KERN_DEBUG"isar_load_firmware size: %d\n", size);
-	cnt = 0;
-	/* disable ISAR IRQ */
-	cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
-	if (!(msg = kmalloc(256, GFP_KERNEL))) {
-		printk(KERN_ERR"isar_load_firmware no buffer\n");
-		return (1);
-	}
-	if (!(tmpmsg = kmalloc(256, GFP_KERNEL))) {
-		printk(KERN_ERR"isar_load_firmware no tmp buffer\n");
-		kfree(msg);
-		return (1);
-	}
-	spin_lock_irqsave(&cs->lock, flags);
-	/* disable ISAR IRQ */
-	cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
-	spin_unlock_irqrestore(&cs->lock, flags);
-	while (cnt < size) {
-		if ((ret = copy_from_user(&blk_head, p, BLK_HEAD_SIZE))) {
-			printk(KERN_ERR"isar_load_firmware copy_from_user ret %d\n", ret);
-			goto reterror;
-		}
+    cfu_ret = copy_from_user(&size, p, sizeof(int));
+    if (cfu_ret) {
+        printk(KERN_ERR "isar_load_firmware copy_from_user ret %d\n", cfu_ret);
+        return -EFAULT;
+    }
+    p += sizeof(int);
+    printk(KERN_DEBUG"isar_load_firmware size: %d\n", size);
+    cnt = 0;
+    /* disable ISAR IRQ */
+    cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
+    if (!(msg = kmalloc(256, GFP_KERNEL))) {
+        printk(KERN_ERR"isar_load_firmware no buffer\n");
+        return (1);
+    }
+    if (!(tmpmsg = kmalloc(256, GFP_KERNEL))) {
+        printk(KERN_ERR"isar_load_firmware no tmp buffer\n");
+        kfree(msg);
+        return (1);
+    }
+    spin_lock_irqsave(&cs->lock, flags);
+    /* disable ISAR IRQ */
+    cs->BC_Write_Reg(cs, 0, ISAR_IRQBIT, 0);
+    spin_unlock_irqrestore(&cs->lock, flags);
+    while (cnt < size) {
+        if ((ret = copy_from_user(&blk_head, p, BLK_HEAD_SIZE))) {
+            printk(KERN_ERR"isar_load_firmware copy_from_user ret %d\n", ret);
+            goto reterror;
+        }
 #ifdef __BIG_ENDIAN
-		sadr = (blk_head.sadr & 0xff) * 256 + blk_head.sadr / 256;
-		blk_head.sadr = sadr;
-		sadr = (blk_head.len & 0xff) * 256 + blk_head.len / 256;
-		blk_head.len = sadr;
-		sadr = (blk_head.d_key & 0xff) * 256 + blk_head.d_key / 256;
-		blk_head.d_key = sadr;
+        sadr = (blk_head.sadr & 0xff) * 256 + blk_head.sadr / 256;
+        blk_head.sadr = sadr;
+        sadr = (blk_head.len & 0xff) * 256 + blk_head.len / 256;
+        blk_head.len = sadr;
+        sadr = (blk_head.d_key & 0xff) * 256 + blk_head.d_key / 256;
+        blk_head.d_key = sadr;
 #endif /* __BIG_ENDIAN */
-		cnt += BLK_HEAD_SIZE;
-		p += BLK_HEAD_SIZE;
-		printk(KERN_DEBUG"isar firmware block (%#x,%5d,%#x)\n",
-		       blk_head.sadr, blk_head.len, blk_head.d_key & 0xff);
-		sadr = blk_head.sadr;
-		left = blk_head.len;
-		spin_lock_irqsave(&cs->lock, flags);
-		if (!sendmsg(cs, ISAR_HIS_DKEY, blk_head.d_key & 0xff, 0, NULL)) {
-			printk(KERN_ERR"isar sendmsg dkey failed\n");
-			ret = 1; goto reterr_unlock;
-		}
-		if (!waitrecmsg(cs, &len, tmp, 100000)) {
-			printk(KERN_ERR"isar waitrecmsg dkey failed\n");
-			ret = 1; goto reterr_unlock;
-		}
-		if ((ireg->iis != ISAR_IIS_DKEY) || ireg->cmsb || len) {
-			printk(KERN_ERR"isar wrong dkey response (%x,%x,%x)\n",
+        cnt += BLK_HEAD_SIZE;
+        p += BLK_HEAD_SIZE;
+        printk(KERN_DEBUG"isar firmware block (%#x,%5d,%#x)\n",
+               blk_head.sadr, blk_head.len, blk_head.d_key & 0xff);
+        sadr = blk_head.sadr;
+        left = blk_head.len;
+        spin_lock_irqsave(&cs->lock, flags);
+        if (!sendmsg(cs, ISAR_HIS_DKEY, blk_head.d_key & 0xff, 0, NULL)) {
+            printk(KERN_ERR"isar sendmsg dkey failed\n");
+            ret = 1;
+            goto reterr_unlock;
+        }
+        if (!waitrecmsg(cs, &len, tmp, 100000)) {
+            printk(KERN_ERR"isar waitrecmsg dkey failed\n");
+            ret = 1;
+            goto reterr_unlock;
+        }
+        if ((ireg->iis != ISAR_IIS_DKEY) || ireg->cmsb || len) {
+            printk(KERN_ERR"isar wrong dkey response (%x,%x,%x)\n",
 			       ireg->iis, ireg->cmsb, len);
 			ret = 1; goto reterr_unlock;
 		}

@@ -34,11 +34,11 @@
  */
 
 struct dsp_wdt_setting {
-	void __iomem *reg_base;
-	struct shm *sm_wdt;
-	struct tasklet_struct wdt3_tasklet;
-	struct clk *fclk;
-	struct clk *iclk;
+    void __iomem *reg_base;
+    struct shm *sm_wdt;
+    struct tasklet_struct wdt3_tasklet;
+    struct clk *fclk;
+    struct clk *iclk;
 };
 
 /**

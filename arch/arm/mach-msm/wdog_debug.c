@@ -17,24 +17,22 @@
 #define SCM_WDOG_DEBUG_BOOT_PART	0x9
 #define BOOT_PART_EN_VAL		0x5D1
 
-void msm_enable_wdog_debug(void)
-{
-	int ret;
+void msm_enable_wdog_debug(void) {
+    int ret;
 
-	ret = scm_call_atomic2(SCM_SVC_BOOT,
-			       SCM_WDOG_DEBUG_BOOT_PART, 0, BOOT_PART_EN_VAL);
-	if (ret)
-		pr_err("failed to enable wdog debug: %d\n", ret);
+    ret = scm_call_atomic2(SCM_SVC_BOOT,
+                           SCM_WDOG_DEBUG_BOOT_PART, 0, BOOT_PART_EN_VAL);
+    if (ret)
+        pr_err("failed to enable wdog debug: %d\n", ret);
 }
 EXPORT_SYMBOL(msm_enable_wdog_debug);
 
-void msm_disable_wdog_debug(void)
-{
-	int ret;
+void msm_disable_wdog_debug(void) {
+    int ret;
 
-	ret = scm_call_atomic2(SCM_SVC_BOOT,
-			       SCM_WDOG_DEBUG_BOOT_PART, 1, 0);
-	if (ret)
-		pr_err("failed to disable wdog debug: %d\n", ret);
+    ret = scm_call_atomic2(SCM_SVC_BOOT,
+                           SCM_WDOG_DEBUG_BOOT_PART, 1, 0);
+    if (ret)
+        pr_err("failed to disable wdog debug: %d\n", ret);
 }
 EXPORT_SYMBOL(msm_disable_wdog_debug);

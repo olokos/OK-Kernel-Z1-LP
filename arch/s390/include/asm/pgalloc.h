@@ -24,35 +24,34 @@ unsigned long *page_table_alloc(struct mm_struct *, unsigned long);
 void page_table_free(struct mm_struct *, unsigned long *);
 void page_table_free_rcu(struct mmu_gather *, unsigned long *);
 
-static inline void clear_table(unsigned long *s, unsigned long val, size_t n)
-{
-	typedef struct { char _[n]; } addrtype;
+static inline void clear_table(unsigned long *s, unsigned long val, size_t n) {
+    typedef struct {
+        char _[n];
+    } addrtype;
 
-	*s = val;
-	n = (n / 256) - 1;
-	asm volatile(
+    *s = val;
+    n = (n / 256) - 1;
+    asm volatile(
 #ifdef CONFIG_64BIT
-		"	mvc	8(248,%0),0(%0)\n"
+        "	mvc	8(248,%0),0(%0)\n"
 #else
-		"	mvc	4(252,%0),0(%0)\n"
+        "	mvc	4(252,%0),0(%0)\n"
 #endif
-		"0:	mvc	256(256,%0),0(%0)\n"
-		"	la	%0,256(%0)\n"
-		"	brct	%1,0b\n"
-		: "+a" (s), "+d" (n), "=m" (*(addrtype *) s)
-		: "m" (*(addrtype *) s));
+        "0:	mvc	256(256,%0),0(%0)\n"
+        "	la	%0,256(%0)\n"
+        "	brct	%1,0b\n"
+        : "+a" (s), "+d" (n), "=m" (*(addrtype *) s)
+        : "m" (*(addrtype *) s));
 }
 
-static inline void crst_table_init(unsigned long *crst, unsigned long entry)
-{
-	clear_table(crst, entry, sizeof(unsigned long)*2048);
+static inline void crst_table_init(unsigned long *crst, unsigned long entry) {
+    clear_table(crst, entry, sizeof(unsigned long)*2048);
 }
 
 #ifndef __s390x__
 
-static inline unsigned long pgd_entry_type(struct mm_struct *mm)
-{
-	return _SEGMENT_ENTRY_EMPTY;
+static inline unsigned long pgd_entry_type(struct mm_struct *mm) {
+    return _SEGMENT_ENTRY_EMPTY;
 }
 
 #define pud_alloc_one(mm,address)		({ BUG(); ((pud_t *)2); })
@@ -66,61 +65,54 @@ static inline unsigned long pgd_entry_type(struct mm_struct *mm)
 
 #else /* __s390x__ */
 
-static inline unsigned long pgd_entry_type(struct mm_struct *mm)
-{
-	if (mm->context.asce_limit <= (1UL << 31))
-		return _SEGMENT_ENTRY_EMPTY;
-	if (mm->context.asce_limit <= (1UL << 42))
-		return _REGION3_ENTRY_EMPTY;
-	return _REGION2_ENTRY_EMPTY;
+static inline unsigned long pgd_entry_type(struct mm_struct *mm) {
+    if (mm->context.asce_limit <= (1UL << 31))
+        return _SEGMENT_ENTRY_EMPTY;
+    if (mm->context.asce_limit <= (1UL << 42))
+        return _REGION3_ENTRY_EMPTY;
+    return _REGION2_ENTRY_EMPTY;
 }
 
 int crst_table_upgrade(struct mm_struct *, unsigned long limit);
 void crst_table_downgrade(struct mm_struct *, unsigned long limit);
 
-static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
-{
-	unsigned long *table = crst_table_alloc(mm);
-	if (table)
-		crst_table_init(table, _REGION3_ENTRY_EMPTY);
-	return (pud_t *) table;
+static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address) {
+    unsigned long *table = crst_table_alloc(mm);
+    if (table)
+        crst_table_init(table, _REGION3_ENTRY_EMPTY);
+    return (pud_t *) table;
 }
 #define pud_free(mm, pud) crst_table_free(mm, (unsigned long *) pud)
 
-static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long vmaddr)
-{
-	unsigned long *table = crst_table_alloc(mm);
-	if (table)
-		crst_table_init(table, _SEGMENT_ENTRY_EMPTY);
-	return (pmd_t *) table;
+static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long vmaddr) {
+    unsigned long *table = crst_table_alloc(mm);
+    if (table)
+        crst_table_init(table, _SEGMENT_ENTRY_EMPTY);
+    return (pmd_t *) table;
 }
 #define pmd_free(mm, pmd) crst_table_free(mm, (unsigned long *) pmd)
 
-static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pud_t *pud)
-{
-	pgd_val(*pgd) = _REGION2_ENTRY | __pa(pud);
+static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pud_t *pud) {
+    pgd_val(*pgd) = _REGION2_ENTRY | __pa(pud);
 }
 
-static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
-{
-	pud_val(*pud) = _REGION3_ENTRY | __pa(pmd);
+static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd) {
+    pud_val(*pud) = _REGION3_ENTRY | __pa(pmd);
 }
 
 #endif /* __s390x__ */
 
-static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-{
-	spin_lock_init(&mm->context.list_lock);
-	INIT_LIST_HEAD(&mm->context.pgtable_list);
-	INIT_LIST_HEAD(&mm->context.gmap_list);
-	return (pgd_t *) crst_table_alloc(mm);
+static inline pgd_t *pgd_alloc(struct mm_struct *mm) {
+    spin_lock_init(&mm->context.list_lock);
+    INIT_LIST_HEAD(&mm->context.pgtable_list);
+    INIT_LIST_HEAD(&mm->context.gmap_list);
+    return (pgd_t *) crst_table_alloc(mm);
 }
 #define pgd_free(mm, pgd) crst_table_free(mm, (unsigned long *) pgd)
 
 static inline void pmd_populate(struct mm_struct *mm,
-				pmd_t *pmd, pgtable_t pte)
-{
-	pmd_val(*pmd) = _SEGMENT_ENTRY + __pa(pte);
+                                pmd_t *pmd, pgtable_t pte) {
+    pmd_val(*pmd) = _SEGMENT_ENTRY + __pa(pte);
 }
 
 #define pmd_populate_kernel(mm, pmd, pte) pmd_populate(mm, pmd, pte)

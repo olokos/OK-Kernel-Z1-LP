@@ -50,11 +50,11 @@
  * They are kept together in a struct to minimize cache misses.
  */
 struct sn_hub_info_s {
-	u8 shub2;
-	u8 nasid_shift;
-	u8 as_shift;
-	u8 shub_1_1_found;
-	u16 nasid_bitmask;
+    u8 shub2;
+    u8 nasid_shift;
+    u8 as_shift;
+    u8 shub_1_1_found;
+    u16 nasid_bitmask;
 };
 DECLARE_PER_CPU(struct sn_hub_info_s, __sn_hub_info);
 #define sn_hub_info 	(&__get_cpu_var(__sn_hub_info))

@@ -68,7 +68,7 @@ void ubi_dbg_dump_mkvol_req(const struct ubi_mkvol_req *req);
 void ubi_dbg_dump_flash(struct ubi_device *ubi, int pnum, int offset, int len);
 int ubi_dbg_check_all_ff(struct ubi_device *ubi, int pnum, int offset, int len);
 int ubi_dbg_check_write(struct ubi_device *ubi, const void *buf, int pnum,
-			int offset, int len);
+                        int offset, int len);
 int ubi_debugging_init_dev(struct ubi_device *ubi);
 void ubi_debugging_exit_dev(struct ubi_device *ubi);
 int ubi_debugfs_init(void);
@@ -100,18 +100,18 @@ void ubi_debugfs_exit_dev(struct ubi_device *ubi);
  * @dfs_emulate_io_failures: debugfs knob to emulate write/erase failures
  */
 struct ubi_debug_info {
-	unsigned int chk_gen:1;
-	unsigned int chk_io:1;
-	unsigned int disable_bgt:1;
-	unsigned int emulate_bitflips:1;
-	unsigned int emulate_io_failures:1;
-	char dfs_dir_name[UBI_DFS_DIR_LEN + 1];
-	struct dentry *dfs_dir;
-	struct dentry *dfs_chk_gen;
-	struct dentry *dfs_chk_io;
-	struct dentry *dfs_disable_bgt;
-	struct dentry *dfs_emulate_bitflips;
-	struct dentry *dfs_emulate_io_failures;
+    unsigned int chk_gen:1;
+    unsigned int chk_io:1;
+    unsigned int disable_bgt:1;
+    unsigned int emulate_bitflips:1;
+    unsigned int emulate_io_failures:1;
+    char dfs_dir_name[UBI_DFS_DIR_LEN + 1];
+    struct dentry *dfs_dir;
+    struct dentry *dfs_chk_gen;
+    struct dentry *dfs_chk_io;
+    struct dentry *dfs_disable_bgt;
+    struct dentry *dfs_emulate_bitflips;
+    struct dentry *dfs_emulate_io_failures;
 };
 
 /**
@@ -121,9 +121,8 @@ struct ubi_debug_info {
  * Returns non-zero if the UBI background thread is disabled for testing
  * purposes.
  */
-static inline int ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi)
-{
-	return ubi->dbg->disable_bgt;
+static inline int ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi) {
+    return ubi->dbg->disable_bgt;
 }
 
 /**
@@ -132,11 +131,10 @@ static inline int ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi)
  *
  * Returns non-zero if a bit-flip should be emulated, otherwise returns zero.
  */
-static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi)
-{
-	if (ubi->dbg->emulate_bitflips)
-		return !(random32() % 200);
-	return 0;
+static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi) {
+    if (ubi->dbg->emulate_bitflips)
+        return !(random32() % 200);
+    return 0;
 }
 
 /**
@@ -146,11 +144,10 @@ static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi)
  * Returns non-zero if a write failure should be emulated, otherwise returns
  * zero.
  */
-static inline int ubi_dbg_is_write_failure(const struct ubi_device *ubi)
-{
-	if (ubi->dbg->emulate_io_failures)
-		return !(random32() % 500);
-	return 0;
+static inline int ubi_dbg_is_write_failure(const struct ubi_device *ubi) {
+    if (ubi->dbg->emulate_io_failures)
+        return !(random32() % 500);
+    return 0;
 }
 
 /**
@@ -160,11 +157,10 @@ static inline int ubi_dbg_is_write_failure(const struct ubi_device *ubi)
  * Returns non-zero if an erase failure should be emulated, otherwise returns
  * zero.
  */
-static inline int ubi_dbg_is_erase_failure(const struct ubi_device *ubi)
-{
-	if (ubi->dbg->emulate_io_failures)
-		return !(random32() % 400);
-	return 0;
+static inline int ubi_dbg_is_erase_failure(const struct ubi_device *ubi) {
+    if (ubi->dbg->emulate_io_failures)
+        return !(random32() % 400);
+    return 0;
 }
 
 #else
@@ -194,46 +190,90 @@ static inline int ubi_dbg_is_erase_failure(const struct ubi_device *ubi)
 #define dbg_io(fmt, ...)   ubi_dbg_msg(fmt, ##__VA_ARGS__)
 #define dbg_bld(fmt, ...)  ubi_dbg_msg(fmt, ##__VA_ARGS__)
 
-static inline void ubi_dbg_dump_stack(void)                          { return; }
+static inline void ubi_dbg_dump_stack(void)                          {
+    return;
+}
 static inline void
-ubi_dbg_dump_ec_hdr(const struct ubi_ec_hdr *ec_hdr)                 { return; }
+ubi_dbg_dump_ec_hdr(const struct ubi_ec_hdr *ec_hdr)                 {
+    return;
+}
 static inline void
-ubi_dbg_dump_vid_hdr(const struct ubi_vid_hdr *vid_hdr)              { return; }
+ubi_dbg_dump_vid_hdr(const struct ubi_vid_hdr *vid_hdr)              {
+    return;
+}
 static inline void
-ubi_dbg_dump_vol_info(const struct ubi_volume *vol)                  { return; }
+ubi_dbg_dump_vol_info(const struct ubi_volume *vol)                  {
+    return;
+}
 static inline void
-ubi_dbg_dump_vtbl_record(const struct ubi_vtbl_record *r, int idx)   { return; }
-static inline void ubi_dbg_dump_sv(const struct ubi_scan_volume *sv) { return; }
+ubi_dbg_dump_vtbl_record(const struct ubi_vtbl_record *r, int idx)   {
+    return;
+}
+static inline void ubi_dbg_dump_sv(const struct ubi_scan_volume *sv) {
+    return;
+}
 static inline void ubi_dbg_dump_seb(const struct ubi_scan_leb *seb,
-				    int type)                        { return; }
+                                    int type)                        {
+    return;
+}
 static inline void
-ubi_dbg_dump_mkvol_req(const struct ubi_mkvol_req *req)              { return; }
+ubi_dbg_dump_mkvol_req(const struct ubi_mkvol_req *req)              {
+    return;
+}
 static inline void ubi_dbg_dump_flash(struct ubi_device *ubi,
-				      int pnum, int offset, int len) { return; }
+                                      int pnum, int offset, int len) {
+    return;
+}
 static inline void
 ubi_dbg_print_hex_dump(const char *l, const char *ps, int pt, int r,
-		       int g, const void *b, size_t len, bool a)     { return; }
+                       int g, const void *b, size_t len, bool a)     {
+    return;
+}
 static inline int ubi_dbg_check_all_ff(struct ubi_device *ubi,
-				       int pnum, int offset,
-				       int len)                    { return 0; }
+                                       int pnum, int offset,
+                                       int len)                    {
+    return 0;
+}
 static inline int ubi_dbg_check_write(struct ubi_device *ubi,
-				      const void *buf, int pnum,
-				      int offset, int len)         { return 0; }
+                                      const void *buf, int pnum,
+                                      int offset, int len)         {
+    return 0;
+}
 
-static inline int ubi_debugging_init_dev(struct ubi_device *ubi)   { return 0; }
-static inline void ubi_debugging_exit_dev(struct ubi_device *ubi)  { return; }
-static inline int ubi_debugfs_init(void)                           { return 0; }
-static inline void ubi_debugfs_exit(void)                          { return; }
-static inline int ubi_debugfs_init_dev(struct ubi_device *ubi)     { return 0; }
-static inline void ubi_debugfs_exit_dev(struct ubi_device *ubi)    { return; }
+static inline int ubi_debugging_init_dev(struct ubi_device *ubi)   {
+    return 0;
+}
+static inline void ubi_debugging_exit_dev(struct ubi_device *ubi)  {
+    return;
+}
+static inline int ubi_debugfs_init(void)                           {
+    return 0;
+}
+static inline void ubi_debugfs_exit(void)                          {
+    return;
+}
+static inline int ubi_debugfs_init_dev(struct ubi_device *ubi)     {
+    return 0;
+}
+static inline void ubi_debugfs_exit_dev(struct ubi_device *ubi)    {
+    return;
+}
 
 static inline int
-ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi)              { return 0; }
-static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi) { return 0; }
+ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi)              {
+    return 0;
+}
+static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi) {
+    return 0;
+}
 static inline int
-ubi_dbg_is_write_failure(const struct ubi_device *ubi)             { return 0; }
+ubi_dbg_is_write_failure(const struct ubi_device *ubi)             {
+    return 0;
+}
 static inline int
-ubi_dbg_is_erase_failure(const struct ubi_device *ubi)             { return 0; }
+ubi_dbg_is_erase_failure(const struct ubi_device *ubi)             {
+    return 0;
+}
 
 #endif /* !CONFIG_MTD_UBI_DEBUG */
 #endif /* !__UBI_DEBUG_H__ */

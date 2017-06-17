@@ -46,15 +46,15 @@ extern void omap1_clk_disable_unused(struct clk *clk);
 #endif
 
 struct uart_clk {
-	struct clk	clk;
-	unsigned long	sysc_addr;
+    struct clk	clk;
+    unsigned long	sysc_addr;
 };
 
 /* Provide a method for preventing idling some ARM IDLECT clocks */
 struct arm_idlect1_clk {
-	struct clk	clk;
-	unsigned long	no_idle_count;
-	__u8		idlect_shift;
+    struct clk	clk;
+    unsigned long	no_idle_count;
+    __u8		idlect_shift;
 };
 
 /* ARM_CKCTL bit shifts */

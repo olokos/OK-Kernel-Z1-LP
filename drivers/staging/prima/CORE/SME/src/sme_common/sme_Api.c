@@ -127,14 +127,11 @@ eHalStatus sme_UnprotectedMgmtFrmInd( tHalHandle hHal,
 #endif
 
 //Internal SME APIs
-eHalStatus sme_AcquireGlobalLock( tSmeStruct *psSme)
-{
+eHalStatus sme_AcquireGlobalLock( tSmeStruct *psSme) {
     eHalStatus status = eHAL_STATUS_INVALID_PARAMETER;
 
-    if(psSme)
-    {
-        if( VOS_IS_STATUS_SUCCESS( vos_lock_acquire( &psSme->lkSmeGlobalLock) ) )
-        {
+    if(psSme) {
+        if( VOS_IS_STATUS_SUCCESS( vos_lock_acquire( &psSme->lkSmeGlobalLock) ) ) {
             status = eHAL_STATUS_SUCCESS;
         }
     }
@@ -143,14 +140,11 @@ eHalStatus sme_AcquireGlobalLock( tSmeStruct *psSme)
 }
 
 
-eHalStatus sme_ReleaseGlobalLock( tSmeStruct *psSme)
-{
+eHalStatus sme_ReleaseGlobalLock( tSmeStruct *psSme) {
     eHalStatus status = eHAL_STATUS_INVALID_PARAMETER;
 
-    if(psSme)
-    {
-        if( VOS_IS_STATUS_SUCCESS( vos_lock_release( &psSme->lkSmeGlobalLock) ) )
-        {
+    if(psSme) {
+        if( VOS_IS_STATUS_SUCCESS( vos_lock_release( &psSme->lkSmeGlobalLock) ) ) {
             status = eHAL_STATUS_SUCCESS;
         }
     }
@@ -160,8 +154,7 @@ eHalStatus sme_ReleaseGlobalLock( tSmeStruct *psSme)
 
 
 
-static eHalStatus initSmeCmdList(tpAniSirGlobal pMac)
-{
+static eHalStatus initSmeCmdList(tpAniSirGlobal pMac) {
     eHalStatus status;
     tSmeCmd *pCmd;
     tANI_U32 cmd_idx;
@@ -192,15 +185,13 @@ static eHalStatus initSmeCmdList(tpAniSirGlobal pMac)
     pCmd = vos_mem_malloc(sizeof(tSmeCmd) * pMac->sme.totalSmeCmd);
     if ( NULL == pCmd )
         status = eHAL_STATUS_FAILURE;
-    else
-    {
+    else {
         status = eHAL_STATUS_SUCCESS;
 
         vos_mem_set(pCmd, sizeof(tSmeCmd) * pMac->sme.totalSmeCmd, 0);
         pMac->sme.pSmeCmdBufAddr = pCmd;
 
-        for (cmd_idx = 0; cmd_idx < pMac->sme.totalSmeCmd; cmd_idx++)
-        {
+        for (cmd_idx = 0; cmd_idx < pMac->sme.totalSmeCmd; cmd_idx++) {
             csrLLInsertTail(&pMac->sme.smeCmdFreeList,
                             &pCmd[cmd_idx].Link, LL_ACCESS_LOCK);
         }
@@ -209,8 +200,7 @@ static eHalStatus initSmeCmdList(tpAniSirGlobal pMac)
     /* This timer is only to debug the active list command timeout */
 
     cmdTimeoutTimer = (vos_timer_t*)vos_mem_malloc(sizeof(vos_timer_t));
-    if (cmdTimeoutTimer)
-    {
+    if (cmdTimeoutTimer) {
         pMac->sme.smeCmdActiveList.cmdTimeoutTimer = cmdTimeoutTimer;
         vosStatus =
             vos_timer_init( pMac->sme.smeCmdActiveList.cmdTimeoutTimer,
@@ -218,14 +208,11 @@ static eHalStatus initSmeCmdList(tpAniSirGlobal pMac)
                             activeListCmdTimeoutHandle,
                             (void*) pMac);
 
-        if (!VOS_IS_STATUS_SUCCESS(vosStatus))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vosStatus)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "Init Timer fail for active list command process time out");
             vos_mem_free(pMac->sme.smeCmdActiveList.cmdTimeoutTimer);
-        }
-        else
-        {
+        } else {
             pMac->sme.smeCmdActiveList.cmdTimeoutDuration =
                 CSR_ACTIVE_LIST_CMD_TIMEOUT_VALUE;
         }
@@ -239,21 +226,18 @@ end:
 }
 
 
-void smeReleaseCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd)
-{
+void smeReleaseCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd) {
     pCmd->command = eSmeNoCommand;
     csrLLInsertTail(&pMac->sme.smeCmdFreeList, &pCmd->Link, LL_ACCESS_LOCK);
 }
 
 
 
-static void smeReleaseCmdList(tpAniSirGlobal pMac, tDblLinkList *pList)
-{
+static void smeReleaseCmdList(tpAniSirGlobal pMac, tDblLinkList *pList) {
     tListElem *pEntry;
     tSmeCmd *pCommand;
 
-    while((pEntry = csrLLRemoveHead(pList, LL_ACCESS_LOCK)) != NULL)
-    {
+    while((pEntry = csrLLRemoveHead(pList, LL_ACCESS_LOCK)) != NULL) {
         //TODO: base on command type to call release functions
         //reinitialize different command types so they can be reused
         pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
@@ -261,8 +245,7 @@ static void smeReleaseCmdList(tpAniSirGlobal pMac, tDblLinkList *pList)
     }
 }
 
-static void purgeSmeCmdList(tpAniSirGlobal pMac)
-{
+static void purgeSmeCmdList(tpAniSirGlobal pMac) {
     //release any out standing commands back to free command list
     smeReleaseCmdList(pMac, &pMac->sme.smeCmdPendingList);
     smeReleaseCmdList(pMac, &pMac->sme.smeCmdActiveList);
@@ -271,30 +254,25 @@ static void purgeSmeCmdList(tpAniSirGlobal pMac)
 }
 
 void purgeSmeSessionCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId,
-                            tDblLinkList *pList)
-{
+                            tDblLinkList *pList) {
     //release any out standing commands back to free command list
     tListElem *pEntry, *pNext;
     tSmeCmd *pCommand;
     tDblLinkList localList;
 
     vos_mem_zero(&localList, sizeof(tDblLinkList));
-    if(!HAL_STATUS_SUCCESS(csrLLOpen(pMac->hHdd, &localList)))
-    {
+    if(!HAL_STATUS_SUCCESS(csrLLOpen(pMac->hHdd, &localList))) {
         smsLog(pMac, LOGE, FL(" failed to open list"));
         return;
     }
 
     csrLLLock(pList);
     pEntry = csrLLPeekHead(pList, LL_ACCESS_NOLOCK);
-    while(pEntry != NULL)
-    {
+    while(pEntry != NULL) {
         pNext = csrLLNext(pList, pEntry, LL_ACCESS_NOLOCK);
         pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
-        if(pCommand->sessionId == sessionId)
-        {
-            if(csrLLRemoveEntry(pList, pEntry, LL_ACCESS_NOLOCK))
-            {
+        if(pCommand->sessionId == sessionId) {
+            if(csrLLRemoveEntry(pList, pEntry, LL_ACCESS_NOLOCK)) {
                 csrLLInsertTail(&localList, pEntry, LL_ACCESS_NOLOCK);
             }
         }
@@ -302,8 +280,7 @@ void purgeSmeSessionCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId,
     }
     csrLLUnlock(pList);
 
-    while( (pEntry = csrLLRemoveHead(&localList, LL_ACCESS_NOLOCK)) )
-    {
+    while( (pEntry = csrLLRemoveHead(&localList, LL_ACCESS_NOLOCK)) ) {
         pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
         smeAbortCommand(pMac, pCommand, eANI_BOOLEAN_TRUE);
     }
@@ -311,8 +288,7 @@ void purgeSmeSessionCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId,
 }
 
 
-static eHalStatus freeSmeCmdList(tpAniSirGlobal pMac)
-{
+static eHalStatus freeSmeCmdList(tpAniSirGlobal pMac) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
 
     purgeSmeCmdList(pMac);
@@ -328,22 +304,19 @@ static eHalStatus freeSmeCmdList(tpAniSirGlobal pMac)
     pMac->sme.smeCmdActiveList.cmdTimeoutTimer = NULL;
 
     status = vos_lock_acquire(&pMac->sme.lkSmeGlobalLock);
-    if(status != eHAL_STATUS_SUCCESS)
-    {
+    if(status != eHAL_STATUS_SUCCESS) {
         smsLog(pMac, LOGE,
                FL("Failed to acquire the lock status = %d"), status);
         goto done;
     }
 
-    if(NULL != pMac->sme.pSmeCmdBufAddr)
-    {
+    if(NULL != pMac->sme.pSmeCmdBufAddr) {
         vos_mem_free(pMac->sme.pSmeCmdBufAddr);
         pMac->sme.pSmeCmdBufAddr = NULL;
     }
 
     status = vos_lock_release(&pMac->sme.lkSmeGlobalLock);
-    if(status != eHAL_STATUS_SUCCESS)
-    {
+    if(status != eHAL_STATUS_SUCCESS) {
         smsLog(pMac, LOGE,
                FL("Failed to release the lock status = %d"), status);
     }
@@ -352,10 +325,8 @@ done:
 }
 
 
-void dumpCsrCommandInfo(tpAniSirGlobal pMac, tSmeCmd *pCmd)
-{
-    switch( pCmd->command )
-    {
+void dumpCsrCommandInfo(tpAniSirGlobal pMac, tSmeCmd *pCmd) {
+    switch( pCmd->command ) {
     case eSmeCommandScan:
         smsLog( pMac, LOGE, " scan command reason is %d", pCmd->u.scanCmd.reason );
         break;
@@ -385,8 +356,7 @@ void dumpCsrCommandInfo(tpAniSirGlobal pMac, tSmeCmd *pCmd)
     }
 }
 
-tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
-{
+tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac ) {
     tSmeCmd *pRetCmd = NULL, *pTempCmd = NULL;
     tListElem *pEntry;
     static int smeCommandQueueFull = 0;
@@ -395,28 +365,22 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
     // If we can get another MS Msg buffer, then we are ok.  Just link
     // the entry onto the linked list.  (We are using the linked list
     // to keep track of tfhe message buffers).
-    if ( pEntry )
-    {
+    if ( pEntry ) {
         pRetCmd = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
         /* reset when free list is available */
         smeCommandQueueFull = 0;
-    }
-    else
-    {
+    } else {
         int idx = 1;
 
         //Cannot change pRetCmd here since it needs to return later.
         pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
-        if( pEntry )
-        {
+        if( pEntry ) {
             pTempCmd = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
         }
         smsLog( pMac, LOGE, "Out of command buffer.... command (0x%X) stuck",
                 (pTempCmd) ? pTempCmd->command : eSmeNoCommand );
-        if(pTempCmd)
-        {
-            if( eSmeCsrCommandMask & pTempCmd->command )
-            {
+        if(pTempCmd) {
+            if( eSmeCsrCommandMask & pTempCmd->command ) {
                 //CSR command is stuck. See what the reason code is for that command
                 dumpCsrCommandInfo(pMac, pTempCmd);
             }
@@ -425,16 +389,14 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
         //dump what is in the pending queue
         csrLLLock(&pMac->sme.smeCmdPendingList);
         pEntry = csrLLPeekHead( &pMac->sme.smeCmdPendingList, LL_ACCESS_NOLOCK );
-        while(pEntry && !smeCommandQueueFull)
-        {
+        while(pEntry && !smeCommandQueueFull) {
             pTempCmd = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
             /* Print only 1st five commands from pending queue. */
             if (idx <= 5)
                 smsLog( pMac, LOGE, "Out of command buffer.... SME pending command #%d (0x%X)",
                         idx, pTempCmd->command );
             idx++;
-            if( eSmeCsrCommandMask & pTempCmd->command )
-            {
+            if( eSmeCsrCommandMask & pTempCmd->command ) {
                 //CSR command is stuck. See what the reason code is for that command
                 dumpCsrCommandInfo(pMac, pTempCmd);
             }
@@ -447,8 +409,7 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
         //There may be some more command in CSR's own pending queue
         csrLLLock(&pMac->roam.roamCmdPendingList);
         pEntry = csrLLPeekHead( &pMac->roam.roamCmdPendingList, LL_ACCESS_NOLOCK );
-        while(pEntry)
-        {
+        while(pEntry) {
             pTempCmd = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
             smsLog( pMac, LOGE, "Out of command buffer.... CSR pending command #%d (0x%X)",
                     idx++, pTempCmd->command );
@@ -458,8 +419,7 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
         csrLLUnlock(&pMac->roam.roamCmdPendingList);
     }
 
-    if( pRetCmd )
-    {
+    if( pRetCmd ) {
         vos_mem_set((tANI_U8 *)&pRetCmd->command, sizeof(pRetCmd->command), 0);
         vos_mem_set((tANI_U8 *)&pRetCmd->sessionId, sizeof(pRetCmd->sessionId), 0);
         vos_mem_set((tANI_U8 *)&pRetCmd->u, sizeof(pRetCmd->u), 0);
@@ -469,19 +429,14 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac )
 }
 
 
-void smePushCommand( tpAniSirGlobal pMac, tSmeCmd *pCmd, tANI_BOOLEAN fHighPriority )
-{
-    if (!SME_IS_START(pMac))
-    {
+void smePushCommand( tpAniSirGlobal pMac, tSmeCmd *pCmd, tANI_BOOLEAN fHighPriority ) {
+    if (!SME_IS_START(pMac)) {
         smsLog( pMac, LOGE, FL("Sme in stop state"));
         return;
     }
-    if ( fHighPriority )
-    {
+    if ( fHighPriority ) {
         csrLLInsertHead( &pMac->sme.smeCmdPendingList, &pCmd->Link, LL_ACCESS_LOCK );
-    }
-    else
-    {
+    } else {
         csrLLInsertTail( &pMac->sme.smeCmdPendingList, &pCmd->Link, LL_ACCESS_LOCK );
     }
 
@@ -492,20 +447,17 @@ void smePushCommand( tpAniSirGlobal pMac, tSmeCmd *pCmd, tANI_BOOLEAN fHighPrior
 }
 
 
-static eSmeCommandType smeIsFullPowerNeeded( tpAniSirGlobal pMac, tSmeCmd *pCommand )
-{
+static eSmeCommandType smeIsFullPowerNeeded( tpAniSirGlobal pMac, tSmeCmd *pCommand ) {
     eSmeCommandType pmcCommand = eSmeNoCommand;
     tANI_BOOLEAN fFullPowerNeeded = eANI_BOOLEAN_FALSE;
     tPmcState pmcState;
     eHalStatus status;
 
-    do
-    {
+    do {
         pmcState = pmcGetPmcState(pMac);
 
         status = csrIsFullPowerNeeded( pMac, pCommand, NULL, &fFullPowerNeeded );
-        if( !HAL_STATUS_SUCCESS(status) )
-        {
+        if( !HAL_STATUS_SUCCESS(status) ) {
             //PMC state is not right for the command, drop it
             return ( eSmeDropCommand );
         }
@@ -521,13 +473,10 @@ static eSmeCommandType smeIsFullPowerNeeded( tpAniSirGlobal pMac, tSmeCmd *pComm
         fFullPowerNeeded = (pmcState == IMPS &&
                             eSmeCommandRemainOnChannel == pCommand->command);
         if(fFullPowerNeeded) break;
-    }
-    while(0);
+    } while(0);
 
-    if( fFullPowerNeeded )
-    {
-        switch( pmcState )
-        {
+    if( fFullPowerNeeded ) {
+        switch( pmcState ) {
         case IMPS:
         case STANDBY:
             pmcCommand = eSmeCommandExitImps;
@@ -555,28 +504,19 @@ static eSmeCommandType smeIsFullPowerNeeded( tpAniSirGlobal pMac, tSmeCmd *pComm
 
 
 //For commands that need to do extra cleanup.
-static void smeAbortCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand, tANI_BOOLEAN fStopping )
-{
-    if( eSmePmcCommandMask & pCommand->command )
-    {
+static void smeAbortCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand, tANI_BOOLEAN fStopping ) {
+    if( eSmePmcCommandMask & pCommand->command ) {
         pmcAbortCommand( pMac, pCommand, fStopping );
-    }
-    else if ( eSmeCsrCommandMask & pCommand->command )
-    {
+    } else if ( eSmeCsrCommandMask & pCommand->command ) {
         csrAbortCommand( pMac, pCommand, fStopping );
-    }
-    else
-    {
-        switch( pCommand->command )
-        {
+    } else {
+        switch( pCommand->command ) {
         case eSmeCommandRemainOnChannel:
-            if (NULL != pCommand->u.remainChlCmd.callback)
-            {
+            if (NULL != pCommand->u.remainChlCmd.callback) {
                 remainOnChanCallback callback =
                     pCommand->u.remainChlCmd.callback;
                 /* process the msg */
-                if( callback )
-                {
+                if( callback ) {
                     callback(pMac, pCommand->u.remainChlCmd.callbackCtx,
                              eCSR_SCAN_ABORT );
                 }
@@ -591,19 +531,16 @@ static void smeAbortCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand, tANI_BOOLEA
 }
 
 tListElem *csrGetCmdToProcess(tpAniSirGlobal pMac, tDblLinkList *pList,
-                              tANI_U8 sessionId, tANI_BOOLEAN fInterlocked)
-{
+                              tANI_U8 sessionId, tANI_BOOLEAN fInterlocked) {
     tListElem *pCurEntry = NULL;
     tSmeCmd *pCommand;
 
     /* Go through the list and return the command whose session id is not
      * matching with the current ongoing scan cmd sessionId */
     pCurEntry = csrLLPeekHead( pList, LL_ACCESS_LOCK );
-    while (pCurEntry)
-    {
+    while (pCurEntry) {
         pCommand = GET_BASE_ADDR(pCurEntry, tSmeCmd, Link);
-        if (pCommand->sessionId != sessionId)
-        {
+        if (pCommand->sessionId != sessionId) {
             smsLog(pMac, LOG1, "selected the command with different sessionId");
             return pCurEntry;
         }
@@ -615,8 +552,7 @@ tListElem *csrGetCmdToProcess(tpAniSirGlobal pMac, tDblLinkList *pList,
     return NULL;
 }
 
-tANI_BOOLEAN smeProcessScanQueue(tpAniSirGlobal pMac)
-{
+tANI_BOOLEAN smeProcessScanQueue(tpAniSirGlobal pMac) {
     tListElem *pEntry;
     tSmeCmd *pCommand;
     tListElem *pSmeEntry;
@@ -625,21 +561,16 @@ tANI_BOOLEAN smeProcessScanQueue(tpAniSirGlobal pMac)
 
     csrLLLock( &pMac->sme.smeScanCmdActiveList );
     if (csrLLIsListEmpty( &pMac->sme.smeScanCmdActiveList,
-                          LL_ACCESS_NOLOCK ))
-    {
+                          LL_ACCESS_NOLOCK )) {
         if (!csrLLIsListEmpty(&pMac->sme.smeScanCmdPendingList,
-                              LL_ACCESS_LOCK))
-        {
+                              LL_ACCESS_LOCK)) {
             pEntry = csrLLPeekHead( &pMac->sme.smeScanCmdPendingList,
                                     LL_ACCESS_LOCK );
-            if (pEntry)
-            {
+            if (pEntry) {
                 pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
                 //We cannot execute any command in wait-for-key state until setKey is through.
-                if (CSR_IS_WAIT_FOR_KEY( pMac, pCommand->sessionId))
-                {
-                    if (!CSR_IS_SET_KEY_COMMAND(pCommand))
-                    {
+                if (CSR_IS_WAIT_FOR_KEY( pMac, pCommand->sessionId)) {
+                    if (!CSR_IS_SET_KEY_COMMAND(pCommand)) {
                         smsLog(pMac, LOGE,
                                "  Cannot process command(%d) while waiting for key",
                                pCommand->command);
@@ -649,12 +580,10 @@ tANI_BOOLEAN smeProcessScanQueue(tpAniSirGlobal pMac)
                 }
 
                 if ((!csrLLIsListEmpty(&pMac->sme.smeCmdActiveList,
-                                       LL_ACCESS_LOCK )))
-                {
+                                       LL_ACCESS_LOCK ))) {
                     pSmeEntry = csrLLPeekHead(&pMac->sme.smeCmdActiveList,
                                               LL_ACCESS_LOCK);
-                    if (pEntry)
-                    {
+                    if (pEntry) {
                         pSmeCommand = GET_BASE_ADDR(pEntry, tSmeCmd,
                                                     Link) ;
 
@@ -664,21 +593,18 @@ tANI_BOOLEAN smeProcessScanQueue(tpAniSirGlobal pMac)
                            smeCmdPendingList. If next scan is allowed on
                            the same interface the CSR state machine will
                            get screwed up. */
-                        if (pSmeCommand->sessionId == pCommand->sessionId)
-                        {
+                        if (pSmeCommand->sessionId == pCommand->sessionId) {
                             status = eANI_BOOLEAN_FALSE;
                             goto end;
                         }
                     }
                 }
                 if ( csrLLRemoveEntry( &pMac->sme.smeScanCmdPendingList,
-                                       pEntry, LL_ACCESS_LOCK ) )
-                {
+                                       pEntry, LL_ACCESS_LOCK ) ) {
                     csrLLInsertHead( &pMac->sme.smeScanCmdActiveList,
                                      &pCommand->Link, LL_ACCESS_NOLOCK );
 
-                    switch (pCommand->command)
-                    {
+                    switch (pCommand->command) {
                     case eSmeCommandScan:
                         smsLog(pMac, LOG1,
                                " Processing scan offload command ");
@@ -704,14 +630,12 @@ end:
     return status;
 }
 
-eHalStatus smeProcessPnoCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd)
-{
+eHalStatus smeProcessPnoCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd) {
     tpSirPNOScanReq pnoReqBuf;
     tSirMsgQ msgQ;
 
     pnoReqBuf = vos_mem_malloc(sizeof(tSirPNOScanReq));
-    if ( NULL == pnoReqBuf )
-    {
+    if ( NULL == pnoReqBuf ) {
         smsLog(pMac, LOGE, FL("failed to allocate memory"));
         return eHAL_STATUS_FAILURE;
     }
@@ -728,8 +652,7 @@ eHalStatus smeProcessPnoCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd)
     return eHAL_STATUS_SUCCESS;
 }
 
-tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac )
-{
+tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac ) {
     tANI_BOOLEAN fContinue = eANI_BOOLEAN_FALSE;
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tListElem *pEntry;
@@ -742,10 +665,8 @@ tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac )
     // pending command...
     //alwasy lock active list before locking pending list
     csrLLLock( &pMac->sme.smeCmdActiveList );
-    if ( csrLLIsListEmpty( &pMac->sme.smeCmdActiveList, LL_ACCESS_NOLOCK ) )
-    {
-        if(!csrLLIsListEmpty(&pMac->sme.smeCmdPendingList, LL_ACCESS_LOCK))
-        {
+    if ( csrLLIsListEmpty( &pMac->sme.smeCmdActiveList, LL_ACCESS_NOLOCK ) ) {
+        if(!csrLLIsListEmpty(&pMac->sme.smeCmdPendingList, LL_ACCESS_LOCK)) {
             /* If scan command is pending in the smeScanCmdActive list
              * then pick the command from smeCmdPendingList which is
              * not matching with the scan command session id.
@@ -753,12 +674,10 @@ tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac )
              * on a single session. */
             if ((pMac->fScanOffload) &&
                     (!csrLLIsListEmpty(&pMac->sme.smeScanCmdActiveList,
-                                       LL_ACCESS_LOCK)))
-            {
+                                       LL_ACCESS_LOCK))) {
                 pSmeEntry = csrLLPeekHead(&pMac->sme.smeScanCmdActiveList,
                                           LL_ACCESS_LOCK);
-                if (pSmeEntry)
-                {
+                if (pSmeEntry) {
                     pSmeCommand = GET_BASE_ADDR(pSmeEntry, tSmeCmd, Link);
 
                     pEntry = csrGetCmdToProcess(pMac,
@@ -772,18 +691,15 @@ tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac )
             //Peek the command
             pEntry = csrLLPeekHead( &pMac->sme.smeCmdPendingList, LL_ACCESS_LOCK );
 sme_process_cmd:
-            if( pEntry )
-            {
+            if( pEntry ) {
                 pCommand = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
 
                 /* Allow only disconnect command
                  * in wait-for-key state until setKey is through.
                  */
                 if( CSR_IS_WAIT_FOR_KEY( pMac, pCommand->sessionId ) &&
-                        !CSR_IS_DISCONNECT_COMMAND( pCommand ) )
-                {
-                    if( !CSR_IS_SET_KEY_COMMAND( pCommand ) )
-                    {
+                        !CSR_IS_DISCONNECT_COMMAND( pCommand ) ) {
+                    if( !CSR_IS_SET_KEY_COMMAND( pCommand ) ) {
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         smsLog(pMac, LOGE, FL("SessionId %d:  Cannot process "
                                               "command(%d) while waiting for key"),
@@ -793,50 +709,40 @@ sme_process_cmd:
                     }
                 }
                 pmcCommand = smeIsFullPowerNeeded( pMac, pCommand );
-                if( eSmeDropCommand == pmcCommand )
-                {
+                if( eSmeDropCommand == pmcCommand ) {
                     //This command is not ok for current PMC state
-                    if( csrLLRemoveEntry( &pMac->sme.smeCmdPendingList, pEntry, LL_ACCESS_LOCK ) )
-                    {
+                    if( csrLLRemoveEntry( &pMac->sme.smeCmdPendingList, pEntry, LL_ACCESS_LOCK ) ) {
                         smeAbortCommand( pMac, pCommand, eANI_BOOLEAN_FALSE );
                     }
                     csrLLUnlock( &pMac->sme.smeCmdActiveList );
                     //tell caller to continue
                     fContinue = eANI_BOOLEAN_TRUE;
                     goto sme_process_scan_queue;
-                }
-                else if( eSmeNoCommand != pmcCommand )
-                {
+                } else if( eSmeNoCommand != pmcCommand ) {
                     tExitBmpsInfo exitBmpsInfo;
                     void *pv = NULL;
                     tANI_U32 size = 0;
                     tSmeCmd *pPmcCmd = NULL;
 
-                    if( eSmeCommandExitBmps == pmcCommand )
-                    {
+                    if( eSmeCommandExitBmps == pmcCommand ) {
                         exitBmpsInfo.exitBmpsReason = eSME_REASON_OTHER;
                         pv = (void *)&exitBmpsInfo;
                         size = sizeof(tExitBmpsInfo);
                     }
                     //pmcCommand has to be one of the exit power save command
                     status = pmcPrepareCommand( pMac, pmcCommand, pv, size, &pPmcCmd );
-                    if( HAL_STATUS_SUCCESS( status ) && pPmcCmd )
-                    {
+                    if( HAL_STATUS_SUCCESS( status ) && pPmcCmd ) {
                         //Force this command to wake up the chip
                         csrLLInsertHead( &pMac->sme.smeCmdActiveList, &pPmcCmd->Link, LL_ACCESS_NOLOCK );
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         fContinue = pmcProcessCommand( pMac, pPmcCmd );
-                        if( fContinue )
-                        {
+                        if( fContinue ) {
                             //The command failed, remove it
-                            if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, &pPmcCmd->Link, LL_ACCESS_NOLOCK ) )
-                            {
+                            if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList, &pPmcCmd->Link, LL_ACCESS_NOLOCK ) ) {
                                 pmcReleaseCommand( pMac, pPmcCmd );
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         smsLog( pMac, LOGE, FL(  "Cannot issue command(0x%X) to wake up the chip. Status = %d"), pmcCommand, status );
                         //Let it retry
@@ -844,15 +750,13 @@ sme_process_cmd:
                     }
                     goto sme_process_scan_queue;
                 }
-                if ( csrLLRemoveEntry( &pMac->sme.smeCmdPendingList, pEntry, LL_ACCESS_LOCK ) )
-                {
+                if ( csrLLRemoveEntry( &pMac->sme.smeCmdPendingList, pEntry, LL_ACCESS_LOCK ) ) {
                     // we can reuse the pCommand
 
                     // Insert the command onto the ActiveList...
                     csrLLInsertHead( &pMac->sme.smeCmdActiveList, &pCommand->Link, LL_ACCESS_NOLOCK );
 
-                    if( pMac->deferImps )
-                    {
+                    if( pMac->deferImps ) {
                         /* IMPS timer is already running so stop it and
                          * it will get restarted when no command is pending
                          */
@@ -865,8 +769,7 @@ sme_process_cmd:
 
                     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                                      TRACE_CODE_SME_COMMAND, pCommand->sessionId, pCommand->command));
-                    switch ( pCommand->command )
-                    {
+                    switch ( pCommand->command ) {
 
                     case eSmeCommandScan:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
@@ -876,11 +779,9 @@ sme_process_cmd:
                     case eSmeCommandRoam:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         status  = csrRoamProcessCommand( pMac, pCommand );
-                        if(!HAL_STATUS_SUCCESS(status))
-                        {
+                        if(!HAL_STATUS_SUCCESS(status)) {
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_LOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                 csrReleaseCommandRoam( pMac, pCommand );
                             }
                         }
@@ -894,11 +795,9 @@ sme_process_cmd:
                     case eSmeCommandSetKey:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         status = csrRoamProcessSetKeyCommand( pMac, pCommand );
-                        if(!HAL_STATUS_SUCCESS(status))
-                        {
+                        if(!HAL_STATUS_SUCCESS(status)) {
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_LOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                 csrReleaseCommandSetKey( pMac, pCommand );
                             }
                         }
@@ -907,11 +806,9 @@ sme_process_cmd:
                     case eSmeCommandRemoveKey:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         status = csrRoamProcessRemoveKeyCommand( pMac, pCommand );
-                        if(!HAL_STATUS_SUCCESS(status))
-                        {
+                        if(!HAL_STATUS_SUCCESS(status)) {
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_LOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                 csrReleaseCommandRemoveKey( pMac, pCommand );
                             }
                         }
@@ -949,12 +846,10 @@ sme_process_cmd:
                     case eSmeCommandExitWowl:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         fContinue = pmcProcessCommand( pMac, pCommand );
-                        if( fContinue )
-                        {
+                        if( fContinue ) {
                             //The command failed, remove it
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_LOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                 pmcReleaseCommand( pMac, pCommand );
                             }
                         }
@@ -963,23 +858,18 @@ sme_process_cmd:
                     //Treat standby differently here because caller may not be able to handle
                     //the failure so we do our best here
                     case eSmeCommandEnterStandby:
-                        if( csrIsConnStateDisconnected( pMac, pCommand->sessionId ) )
-                        {
+                        if( csrIsConnStateDisconnected( pMac, pCommand->sessionId ) ) {
                             //It can continue
                             csrLLUnlock( &pMac->sme.smeCmdActiveList );
                             fContinue = pmcProcessCommand( pMac, pCommand );
-                            if( fContinue )
-                            {
+                            if( fContinue ) {
                                 //The command failed, remove it
                                 if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                      &pCommand->Link, LL_ACCESS_LOCK ) )
-                                {
+                                                      &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                     pmcReleaseCommand( pMac, pCommand );
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             //Need to issue a disconnect first before processing this command
                             tSmeCmd *pNewCmd;
 
@@ -987,14 +877,12 @@ sme_process_cmd:
                             fContinue = eANI_BOOLEAN_TRUE;
                             //Pull off the standby command first
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_NOLOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_NOLOCK ) ) {
                                 csrLLUnlock( &pMac->sme.smeCmdActiveList );
                                 //Need to call CSR function here because the disconnect command
                                 //is handled by CSR
                                 pNewCmd = csrGetCommandBuffer( pMac );
-                                if( NULL != pNewCmd )
-                                {
+                                if( NULL != pNewCmd ) {
                                     //Put the standby command to the head of the pending list first
                                     csrLLInsertHead( &pMac->sme.smeCmdPendingList, &pCommand->Link,
                                                      LL_ACCESS_LOCK );
@@ -1003,24 +891,18 @@ sme_process_cmd:
                                     //Put the disassoc command before the standby command
                                     csrLLInsertHead( &pMac->sme.smeCmdPendingList, &pNewCmd->Link,
                                                      LL_ACCESS_LOCK );
-                                }
-                                else
-                                {
+                                } else {
                                     //Continue the command here
                                     fContinue = pmcProcessCommand( pMac, pCommand );
-                                    if( fContinue )
-                                    {
+                                    if( fContinue ) {
                                         //The command failed, remove it
                                         if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                              &pCommand->Link, LL_ACCESS_LOCK ) )
-                                        {
+                                                              &pCommand->Link, LL_ACCESS_LOCK ) ) {
                                             pmcReleaseCommand( pMac, pCommand );
                                         }
                                     }
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 csrLLUnlock( &pMac->sme.smeCmdActiveList );
                                 smsLog( pMac, LOGE, FL(" failed to remove standby command") );
                                 VOS_ASSERT(0);
@@ -1030,8 +912,7 @@ sme_process_cmd:
                     case eSmeCommandPnoReq:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
                         status = smeProcessPnoCommand(pMac, pCommand);
-                        if (!HAL_STATUS_SUCCESS(status))
-                        {
+                        if (!HAL_STATUS_SUCCESS(status)) {
                             smsLog(pMac, LOGE,
                                    FL("failed to post SME PNO SCAN %d"), status);
                         }
@@ -1039,8 +920,7 @@ sme_process_cmd:
                         fContinue = eANI_BOOLEAN_TRUE;
 
                         if (csrLLRemoveEntry(&pMac->sme.smeCmdActiveList,
-                                             &pCommand->Link, LL_ACCESS_LOCK))
-                        {
+                                             &pCommand->Link, LL_ACCESS_LOCK)) {
                             csrReleaseCommand(pMac, pCommand);
                         }
                         break;
@@ -1049,12 +929,10 @@ sme_process_cmd:
                         csrLLUnlock( &pMac->sme.smeCmdActiveList );
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
                         fContinue = qosProcessCommand( pMac, pCommand );
-                        if( fContinue )
-                        {
+                        if( fContinue ) {
                             //The command failed, remove it
                             if( csrLLRemoveEntry( &pMac->sme.smeCmdActiveList,
-                                                  &pCommand->Link, LL_ACCESS_NOLOCK ) )
-                            {
+                                                  &pCommand->Link, LL_ACCESS_NOLOCK ) ) {
 //#ifndef WLAN_MDM_CODE_REDUCTION_OPT
                                 qosReleaseCommand( pMac, pCommand );
 //#endif /* WLAN_MDM_CODE_REDUCTION_OPT*/
@@ -1096,41 +974,31 @@ sme_process_cmd:
                         status = eHAL_STATUS_FAILURE;
                         break;
                     }
-                    if(!HAL_STATUS_SUCCESS(status))
-                    {
+                    if(!HAL_STATUS_SUCCESS(status)) {
                         fContinue = eANI_BOOLEAN_TRUE;
                     }
                 }//if(pEntry)
-                else
-                {
+                else {
                     //This is odd. Some one else pull off the command.
                     csrLLUnlock( &pMac->sme.smeCmdActiveList );
                 }
-            }
-            else
-            {
+            } else {
                 csrLLUnlock( &pMac->sme.smeCmdActiveList );
             }
-        }
-        else
-        {
+        } else {
             //No command waiting
             csrLLUnlock( &pMac->sme.smeCmdActiveList );
             //This is only used to restart an idle mode scan, it means at least one other idle scan has finished.
-            if(pMac->scan.fRestartIdleScan && eANI_BOOLEAN_FALSE == pMac->scan.fCancelIdleScan)
-            {
+            if(pMac->scan.fRestartIdleScan && eANI_BOOLEAN_FALSE == pMac->scan.fCancelIdleScan) {
                 tANI_U32 nTime = 0;
 
                 pMac->scan.fRestartIdleScan = eANI_BOOLEAN_FALSE;
-                if(!HAL_STATUS_SUCCESS(csrScanTriggerIdleScan(pMac, &nTime)))
-                {
+                if(!HAL_STATUS_SUCCESS(csrScanTriggerIdleScan(pMac, &nTime))) {
                     csrScanStartIdleScanTimer(pMac, nTime);
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         csrLLUnlock( &pMac->sme.smeCmdActiveList );
     }
 
@@ -1141,14 +1009,12 @@ sme_process_scan_queue:
     return ( fContinue );
 }
 
-void smeProcessPendingQueue( tpAniSirGlobal pMac )
-{
+void smeProcessPendingQueue( tpAniSirGlobal pMac ) {
     while( smeProcessCommand( pMac ) );
 }
 
 
-tANI_BOOLEAN smeCommandPending(tpAniSirGlobal pMac)
-{
+tANI_BOOLEAN smeCommandPending(tpAniSirGlobal pMac) {
     return ( !csrLLIsListEmpty( &pMac->sme.smeCmdActiveList, LL_ACCESS_NOLOCK ) ||
              !csrLLIsListEmpty(&pMac->sme.smeCmdPendingList, LL_ACCESS_NOLOCK) );
 }
@@ -1175,41 +1041,35 @@ tANI_BOOLEAN smeCommandPending(tpAniSirGlobal pMac)
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_Open(tHalHandle hHal)
-{
+eHalStatus sme_Open(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    do
-    {
+    do {
         pMac->sme.state = SME_STATE_STOP;
         pMac->sme.currDeviceMode = VOS_STA_MODE;
-        if( !VOS_IS_STATUS_SUCCESS( vos_lock_init( &pMac->sme.lkSmeGlobalLock ) ) )
-        {
+        if( !VOS_IS_STATUS_SUCCESS( vos_lock_init( &pMac->sme.lkSmeGlobalLock ) ) ) {
             smsLog( pMac, LOGE, "sme_Open failed init lock" );
             status = eHAL_STATUS_FAILURE;
             break;
         }
 
         status = ccmOpen(hHal);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "ccmOpen failed during initialization with status=%d", status );
             break;
         }
 
         status = csrOpen(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "csrOpen failed during initialization with status=%d", status );
             break;
         }
 
         status = pmcOpen(hHal);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "pmcOpen failed during initialization with status=%d", status );
             break;
@@ -1221,16 +1081,14 @@ eHalStatus sme_Open(tHalHandle hHal)
 
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
         status = sme_QosOpen(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "Qos open failed during initialization with status=%d", status );
             break;
         }
 
         status = btcOpen(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "btcOpen open failed during initialization with status=%d", status );
             break;
@@ -1238,8 +1096,7 @@ eHalStatus sme_Open(tHalHandle hHal)
 #endif
 #ifdef FEATURE_OEM_DATA_SUPPORT
         status = oemData_OemDataReqOpen(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog(pMac, LOGE,
                    "oemData_OemDataReqOpen failed during initialization with status=%d", status );
             break;
@@ -1251,16 +1108,14 @@ eHalStatus sme_Open(tHalHandle hHal)
 
         {
             v_PVOID_t pvosGCtx = vos_get_global_context(VOS_MODULE_ID_SAP, NULL);
-            if ( NULL == pvosGCtx )
-            {
+            if ( NULL == pvosGCtx ) {
                 smsLog( pMac, LOGE, "WLANSAP_Open open failed during initialization");
                 status = eHAL_STATUS_FAILURE;
                 break;
             }
 
             status = WLANSAP_Open( pvosGCtx );
-            if ( ! HAL_STATUS_SUCCESS( status ) )
-            {
+            if ( ! HAL_STATUS_SUCCESS( status ) ) {
                 smsLog( pMac, LOGE,
                         "WLANSAP_Open open failed during initialization with status=%d", status );
                 break;
@@ -1268,8 +1123,7 @@ eHalStatus sme_Open(tHalHandle hHal)
         }
 #if defined WLAN_FEATURE_VOWIFI
         status = rrmOpen(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE,
                     "rrmOpen open failed during initialization with status=%d", status );
             break;
@@ -1282,8 +1136,7 @@ eHalStatus sme_Open(tHalHandle hHal)
         sme_p2pOpen(pMac);
         smeTraceInit(pMac);
 
-    }
-    while (0);
+    } while (0);
 
     return status;
 }
@@ -1306,23 +1159,20 @@ eHalStatus sme_Open(tHalHandle hHal)
   \sa
 --------------------------------------------------------------------------*/
 
-eHalStatus sme_set11dinfo(tHalHandle hHal,  tpSmeConfigParams pSmeConfigParams)
-{
+eHalStatus sme_set11dinfo(tHalHandle hHal,  tpSmeConfigParams pSmeConfigParams) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SET_11DINFO, NO_SESSION, 0));
-    if (NULL == pSmeConfigParams )
-    {
+    if (NULL == pSmeConfigParams ) {
         smsLog( pMac, LOGE,
                 "Empty config param structure for SME, nothing to update");
         return status;
     }
 
     status = csrSetChannels(hHal, &pSmeConfigParams->csrConfig );
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrChangeDefaultConfigParam failed with status=%d",
                 status );
     }
@@ -1344,15 +1194,13 @@ eHalStatus sme_set11dinfo(tHalHandle hHal,  tpSmeConfigParams pSmeConfigParams)
   \sa
 --------------------------------------------------------------------------*/
 
-eHalStatus sme_getSoftApDomain(tHalHandle hHal,  v_REGDOMAIN_t *domainIdSoftAp)
-{
+eHalStatus sme_getSoftApDomain(tHalHandle hHal,  v_REGDOMAIN_t *domainIdSoftAp) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_GET_SOFTAP_DOMAIN, NO_SESSION, 0));
-    if (NULL == domainIdSoftAp )
-    {
+    if (NULL == domainIdSoftAp ) {
         smsLog( pMac, LOGE, "Uninitialized domain Id");
         return status;
     }
@@ -1364,22 +1212,19 @@ eHalStatus sme_getSoftApDomain(tHalHandle hHal,  v_REGDOMAIN_t *domainIdSoftAp)
 }
 
 
-eHalStatus sme_setRegInfo(tHalHandle hHal,  tANI_U8 *apCntryCode)
-{
+eHalStatus sme_setRegInfo(tHalHandle hHal,  tANI_U8 *apCntryCode) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SET_REGINFO, NO_SESSION, 0));
-    if (NULL == apCntryCode )
-    {
+    if (NULL == apCntryCode ) {
         smsLog( pMac, LOGE, "Empty Country Code, nothing to update");
         return status;
     }
 
     status = csrSetRegInfo(hHal, apCntryCode );
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrSetRegInfo failed with status=%d",
                 status );
     }
@@ -1404,8 +1249,7 @@ eHalStatus sme_setRegInfo(tHalHandle hHal,  tANI_U8 *apCntryCode)
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_UpdateChannelConfig(tHalHandle hHal)
-{
+eHalStatus sme_UpdateChannelConfig(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
@@ -1416,15 +1260,13 @@ eHalStatus sme_UpdateChannelConfig(tHalHandle hHal)
 }
 #endif // FEATURE_WLAN_SCAN_PNLO
 
-eHalStatus sme_UpdateChannelList(tHalHandle hHal)
-{
+eHalStatus sme_UpdateChannelList(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_SUCCESS;
 
     status = csrUpdateChannelList(pMac);
 
-    if (eHAL_STATUS_SUCCESS != status)
-    {
+    if (eHAL_STATUS_SUCCESS != status) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "failed to update the supported channel list");
     }
@@ -1452,15 +1294,13 @@ eHalStatus sme_UpdateChannelList(tHalHandle hHal)
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
-{
+eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_UPDATE_CONFIG, NO_SESSION, 0));
-    if (NULL == pSmeConfigParams )
-    {
+    if (NULL == pSmeConfigParams ) {
         smsLog( pMac, LOGE,
                 "Empty config param structure for SME, nothing to update");
         return status;
@@ -1468,16 +1308,14 @@ eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
 
     status = csrChangeDefaultConfigParam(pMac, &pSmeConfigParams->csrConfig);
 
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrChangeDefaultConfigParam failed with status=%d",
                 status );
     }
 #if defined WLAN_FEATURE_P2P_INTERNAL
     status = p2pChangeDefaultConfigParam(pMac, &pSmeConfigParams->p2pConfig);
 
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "p2pChangeDefaultConfigParam failed with status=%d",
                 status );
     }
@@ -1485,8 +1323,7 @@ eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
 #if defined WLAN_FEATURE_VOWIFI
     status = rrmChangeDefaultConfigParam(hHal, &pSmeConfigParams->rrmConfig);
 
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "rrmChangeDefaultConfigParam failed with status=%d",
                 status );
     }
@@ -1494,8 +1331,7 @@ eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
     //For SOC, CFG is set before start
     //We don't want to apply global CFG in connect state because that may cause some side affect
     if(
-        csrIsAllSessionDisconnected( pMac) )
-    {
+        csrIsAllSessionDisconnected( pMac) ) {
         csrSetGlobalCfgs(pMac);
     }
 
@@ -1504,24 +1340,21 @@ eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
 
     /* Enable channel bonding mode in 2.4GHz */
     if ((pSmeConfigParams->csrConfig.channelBondingMode24GHz == TRUE) &&
-            (IS_HT40_OBSS_SCAN_FEATURE_ENABLE))
-    {
+            (IS_HT40_OBSS_SCAN_FEATURE_ENABLE)) {
         ccmCfgSetInt(hHal,WNI_CFG_CHANNEL_BONDING_24G,
                      eANI_BOOLEAN_TRUE, NULL,eANI_BOOLEAN_FALSE);
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO_HIGH,
                   "Setting channelBondingMode24GHz:%d " ,
                   pSmeConfigParams->csrConfig.channelBondingMode24GHz);
     }
-    if (pMac->fScanOffload)
-    {
+    if (pMac->fScanOffload) {
         /* If scan offload is enabled then lim has allow the sending of
         scan request to firmware even in powersave mode. The firmware has
         to take care of exiting from power save mode */
         status = ccmCfgSetInt(hHal, WNI_CFG_SCAN_IN_POWERSAVE,
                               eANI_BOOLEAN_TRUE, NULL, eANI_BOOLEAN_FALSE);
 
-        if (eHAL_STATUS_SUCCESS != status)
-        {
+        if (eHAL_STATUS_SUCCESS != status) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "Could not pass on WNI_CFG_SCAN_IN_POWERSAVE to CCM");
         }
@@ -1536,18 +1369,15 @@ eHalStatus sme_UpdateConfig(tHalHandle hHal, tpSmeConfigParams pSmeConfigParams)
 
 #ifdef WLAN_FEATURE_GTK_OFFLOAD
 void sme_ProcessGetGtkInfoRsp( tHalHandle hHal,
-                               tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp)
-{
+                               tpSirGtkOffloadGetInfoRspParams pGtkOffloadGetInfoRsp) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return ;
     }
-    if (pMac->pmc.GtkOffloadGetInfoCB == NULL)
-    {
+    if (pMac->pmc.GtkOffloadGetInfoCB == NULL) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: HDD callback is null", __func__);
         return ;
@@ -1580,13 +1410,11 @@ void sme_ProcessGetGtkInfoRsp( tHalHandle hHal,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_ChangeConfigParams(tHalHandle hHal,
-                                  tCsrUpdateConfigParam *pUpdateConfigParam)
-{
+                                  tCsrUpdateConfigParam *pUpdateConfigParam) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (NULL == pUpdateConfigParam )
-    {
+    if (NULL == pUpdateConfigParam ) {
         smsLog( pMac, LOGE,
                 "Empty config param structure for SME, nothing to reset");
         return status;
@@ -1594,8 +1422,7 @@ eHalStatus sme_ChangeConfigParams(tHalHandle hHal,
 
     status = csrChangeConfigParams(pMac, pUpdateConfigParam);
 
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrUpdateConfigParam failed with status=%d",
                 status );
     }
@@ -1622,8 +1449,7 @@ eHalStatus sme_ChangeConfigParams(tHalHandle hHal,
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_HDDReadyInd(tHalHandle hHal)
-{
+eHalStatus sme_HDDReadyInd(tHalHandle hHal) {
     tSirSmeReadyReq Msg;
     eHalStatus status = eHAL_STATUS_FAILURE;
     tPmcPowerState powerState;
@@ -1633,18 +1459,14 @@ eHalStatus sme_HDDReadyInd(tHalHandle hHal)
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_HDDREADYIND, NO_SESSION, 0));
-    do
-    {
+    do {
 
         Msg.messageType = eWNI_SME_SYS_READY_IND;
         Msg.length      = sizeof( tSirSmeReadyReq );
 
-        if (eSIR_FAILURE != uMacPostCtrlMsg( hHal, (tSirMbMsg*)&Msg ))
-        {
+        if (eSIR_FAILURE != uMacPostCtrlMsg( hHal, (tSirMbMsg*)&Msg )) {
             status = eHAL_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             smsLog( pMac, LOGE,
                     "uMacPostCtrlMsg failed to send eWNI_SME_SYS_READY_IND");
             break;
@@ -1652,31 +1474,26 @@ eHalStatus sme_HDDReadyInd(tHalHandle hHal)
 
         status = pmcQueryPowerState( hHal, &powerState,
                                      &hwWlanSwitchState, &swWlanSwitchState );
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE, "pmcQueryPowerState failed with status=%d",
                     status );
             break;
         }
 
         if ( (ePMC_SWITCH_OFF != hwWlanSwitchState) &&
-                (ePMC_SWITCH_OFF != swWlanSwitchState) )
-        {
+                (ePMC_SWITCH_OFF != swWlanSwitchState) ) {
             status = csrReady(pMac);
-            if ( ! HAL_STATUS_SUCCESS( status ) )
-            {
+            if ( ! HAL_STATUS_SUCCESS( status ) ) {
                 smsLog( pMac, LOGE, "csrReady failed with status=%d", status );
                 break;
             }
             status = pmcReady(hHal);
-            if ( ! HAL_STATUS_SUCCESS( status ) )
-            {
+            if ( ! HAL_STATUS_SUCCESS( status ) ) {
                 smsLog( pMac, LOGE, "pmcReady failed with status=%d", status );
                 break;
             }
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
-            if(VOS_STATUS_SUCCESS != btcReady(hHal))
-            {
+            if(VOS_STATUS_SUCCESS != btcReady(hHal)) {
                 status = eHAL_STATUS_FAILURE;
                 smsLog( pMac, LOGE, "btcReady failed");
                 break;
@@ -1684,8 +1501,7 @@ eHalStatus sme_HDDReadyInd(tHalHandle hHal)
 #endif
 
 #if defined WLAN_FEATURE_VOWIFI
-            if(VOS_STATUS_SUCCESS != rrmReady(hHal))
-            {
+            if(VOS_STATUS_SUCCESS != rrmReady(hHal)) {
                 status = eHAL_STATUS_FAILURE;
                 smsLog( pMac, LOGE, "rrmReady failed");
                 break;
@@ -1693,8 +1509,7 @@ eHalStatus sme_HDDReadyInd(tHalHandle hHal)
 #endif
         }
         pMac->sme.state = SME_STATE_READY;
-    }
-    while( 0 );
+    } while( 0 );
 
     return status;
 }
@@ -1714,39 +1529,33 @@ eHalStatus sme_HDDReadyInd(tHalHandle hHal)
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_Start(tHalHandle hHal)
-{
+eHalStatus sme_Start(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    do
-    {
+    do {
         status = csrStart(pMac);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE, "csrStart failed during smeStart with status=%d",
                     status );
             break;
         }
 
         status = pmcStart(hHal);
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE, "pmcStart failed during smeStart with status=%d",
                     status );
             break;
         }
 
         status = WLANSAP_Start(vos_get_global_context(VOS_MODULE_ID_SAP, NULL));
-        if ( ! HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( ! HAL_STATUS_SUCCESS( status ) ) {
             smsLog( pMac, LOGE, "WLANSAP_Start failed during smeStart with status=%d",
                     status );
             break;
         }
         pMac->sme.state = SME_STATE_START;
-    }
-    while (0);
+    } while (0);
 
     return status;
 }
@@ -1767,19 +1576,15 @@ eHalStatus sme_Start(tHalHandle hHal)
 * Returns: eHalStatus
 *
 ******************************************************************************/
-eHalStatus sme_PCFilterMatchCountResponseHandler(tHalHandle hHal, void* pMsg)
-{
+eHalStatus sme_PCFilterMatchCountResponseHandler(tHalHandle hHal, void* pMsg) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpSirRcvFltPktMatchRsp pRcvFltPktMatchRsp = (tpSirRcvFltPktMatchRsp)pMsg;
 
-    if (NULL == pMsg)
-    {
+    if (NULL == pMsg) {
         smsLog(pMac, LOGE, "in %s msg ptr is NULL", __func__);
         status = eHAL_STATUS_FAILURE;
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOG2, "SME: entering "
                "sme_FilterMatchCountResponseHandler");
 
@@ -1809,8 +1614,7 @@ eHalStatus sme_PCFilterMatchCountResponseHandler(tHalHandle hHal, void* pMsg)
  *------------------------------------------------------------------*/
 
 eHalStatus sme_UnprotectedMgmtFrmInd( tHalHandle hHal,
-                                      tpSirSmeUnprotMgmtFrameInd pSmeMgmtFrm)
-{
+                                      tpSirSmeUnprotMgmtFrameInd pSmeMgmtFrm) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus  status = eHAL_STATUS_SUCCESS;
     tCsrRoamInfo pRoamInfo = {0};
@@ -1834,8 +1638,7 @@ eHalStatus sme_UnprotectedMgmtFrmInd( tHalHandle hHal,
  *
  *------------------------------------------------------------------*/
 
-eHalStatus sme_TsmIeInd(tHalHandle hHal, tSirSmeTsmIEInd *pSmeTsmIeInd)
-{
+eHalStatus sme_TsmIeInd(tHalHandle hHal, tSirSmeTsmIEInd *pSmeTsmIeInd) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus     status = eHAL_STATUS_SUCCESS;
     tCsrRoamInfo   pRoamInfo = {0};
@@ -1861,14 +1664,12 @@ eHalStatus sme_TsmIeInd(tHalHandle hHal, tSirSmeTsmIEInd *pSmeTsmIeInd)
     \- return Success or failure
     -------------------------------------------------------------------------*/
 eHalStatus sme_SetCCKMIe(tHalHandle hHal, tANI_U8 sessionId,
-                         tANI_U8 *pCckmIe, tANI_U8 cckmIeLen)
-{
+                         tANI_U8 *pCckmIe, tANI_U8 cckmIeLen) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus     status  = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         csrSetCCKMIe(pMac, sessionId, pCckmIe, cckmIeLen);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -1884,8 +1685,7 @@ eHalStatus sme_SetCCKMIe(tHalHandle hHal, tANI_U8 sessionId,
     \- return Success or failure
     -------------------------------------------------------------------------*/
 eHalStatus sme_SetEseBeaconRequest(tHalHandle hHal, const tANI_U8 sessionId,
-                                   const tCsrEseBeaconReq* pEseBcnReq)
-{
+                                   const tCsrEseBeaconReq* pEseBcnReq) {
     eHalStatus               status           = eSIR_SUCCESS;
     tpAniSirGlobal           pMac             = PMAC_STRUCT( hHal );
     tpSirBeaconReportReqInd  pSmeBcnReportReq = NULL;
@@ -1899,8 +1699,7 @@ eHalStatus sme_SetEseBeaconRequest(tHalHandle hHal, const tANI_U8 sessionId,
 
     //Prepare the request to send to SME.
     pSmeBcnReportReq = vos_mem_malloc(sizeof( tSirBeaconReportReqInd ));
-    if(NULL == pSmeBcnReportReq)
-    {
+    if(NULL == pSmeBcnReportReq) {
         smsLog(pMac, LOGP, "Memory Allocation Failure!!! Ese  BcnReq Ind to SME");
         return eSIR_FAILURE;
     }
@@ -1915,8 +1714,7 @@ eHalStatus sme_SetEseBeaconRequest(tHalHandle hHal, const tANI_U8 sessionId,
     pSmeBcnReportReq->channelList.numChannels = pEseBcnReq->numBcnReqIe;
     pSmeBcnReportReq->msgSource = eRRM_MSG_SOURCE_ESE_UPLOAD;
 
-    for (counter = 0; counter < pEseBcnReq->numBcnReqIe; counter++)
-    {
+    for (counter = 0; counter < pEseBcnReq->numBcnReqIe; counter++) {
         pBeaconReq = (tCsrEseBeaconReqParams *)&pEseBcnReq->bcnReq[counter];
         pSmeBcnReportReq->fMeasurementtype[counter] = pBeaconReq->scanMode;
         pSmeBcnReportReq->measurementDuration[counter] = SYS_TU_TO_MS(pBeaconReq->measurementDuration);
@@ -1938,28 +1736,24 @@ eHalStatus sme_SetEseBeaconRequest(tHalHandle hHal, const tANI_U8 sessionId,
     \- return Success or Failure.
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_getBcnMissRate(tHalHandle hHal, tANI_U8 sessionId, void *callback, void *data)
-{
+eHalStatus sme_getBcnMissRate(tHalHandle hHal, tANI_U8 sessionId, void *callback, void *data) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     VOS_STATUS vosStatus = VOS_STATUS_E_FAILURE;
     vos_msg_t vosMessage;
     tSirBcnMissRateReq *pMsg;
     tCsrRoamSession *pSession;
 
-    if ( eHAL_STATUS_SUCCESS ==  sme_AcquireGlobalLock( &pMac->sme  ) )
-    {
+    if ( eHAL_STATUS_SUCCESS ==  sme_AcquireGlobalLock( &pMac->sme  ) ) {
         pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if (!pSession)
-        {
+        if (!pSession) {
             smsLog(pMac, LOGE, FL("session %d not found"), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
         pMsg = (tSirBcnMissRateReq *) vos_mem_malloc(sizeof(tSirBcnMissRateReq));
-        if (NULL == pMsg)
-        {
+        if (NULL == pMsg) {
             smsLog(pMac, LOGE, FL("failed to allocated memory"));
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
@@ -1976,8 +1770,7 @@ eHalStatus sme_getBcnMissRate(tHalHandle hHal, tANI_U8 sessionId, void *callback
         vosMessage.bodyptr = pMsg;
         vosMessage.reserved = 0;
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Post Set TM Level MSG fail", __func__);
             vos_mem_free(pMsg);
@@ -1991,18 +1784,15 @@ eHalStatus sme_getBcnMissRate(tHalHandle hHal, tANI_U8 sessionId, void *callback
 }
 
 eHalStatus sme_EncryptMsgResponseHandler(tHalHandle hHal,
-        tpSirEncryptedDataRspParams pEncRspParams)
-{
+        tpSirEncryptedDataRspParams pEncRspParams) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return eHAL_STATUS_FAILURE;
     }
-    if (pMac->sme.pEncMsgInfoParams.pEncMsgCbk == NULL)
-    {
+    if (pMac->sme.pEncMsgInfoParams.pEncMsgCbk == NULL) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: HDD callback is null", __func__);
         return eHAL_STATUS_FAILURE;
@@ -2029,24 +1819,19 @@ eHalStatus sme_EncryptMsgResponseHandler(tHalHandle hHal,
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
-{
+eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (pMsg == NULL)
-    {
+    if (pMsg == NULL) {
         smsLog( pMac, LOGE, "Empty message for SME, nothing to process");
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( SME_IS_START(pMac) )
-        {
-            switch (pMsg->type)   // TODO: Will be modified to do a range check for msgs instead of having cases for each msgs
-            {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( SME_IS_START(pMac) ) {
+            switch (pMsg->type) { // TODO: Will be modified to do a range check for msgs instead of having cases for each msgs
             case eWNI_PMC_ENTER_BMPS_RSP:
             case eWNI_PMC_EXIT_BMPS_RSP:
             case eWNI_PMC_EXIT_BMPS_IND:
@@ -2058,14 +1843,11 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
             case eWNI_PMC_ENTER_WOWL_RSP:
             case eWNI_PMC_EXIT_WOWL_RSP:
                 //PMC
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     pmcMessageProcessor(hHal, pMsg->bodyptr);
                     status = eHAL_STATUS_SUCCESS;
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for PMC, nothing to process");
                 }
                 break;
@@ -2076,14 +1858,11 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
             case WNI_CFG_ADD_GRP_ADDR_CNF:
             case WNI_CFG_DEL_GRP_ADDR_CNF:
                 //CCM
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     ccmCfgCnfMsgHandler(hHal, pMsg->bodyptr);
                     status = eHAL_STATUS_SUCCESS;
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for CCM, nothing to process");
                 }
                 break;
@@ -2095,15 +1874,12 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
             case eWNI_SME_FT_AGGR_QOS_RSP:
 #endif
                 //QoS
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
                     status = sme_QosMsgProcessor(pMac, pMsg->type, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
 #endif
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for QoS, nothing to process");
                 }
                 break;
@@ -2113,13 +1889,10 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #if defined WLAN_VOWIFI_DEBUG
                 smsLog( pMac, LOGE, "Received RRM message. Message Id = %d", pMsg->type );
 #endif
-                if ( pMsg->bodyptr )
-                {
+                if ( pMsg->bodyptr ) {
                     status = sme_RrmMsgProcessor( pMac, pMsg->type, pMsg->bodyptr );
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty message for RRM, nothing to process");
                 }
                 break;
@@ -2128,13 +1901,10 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #ifdef FEATURE_OEM_DATA_SUPPORT
             //Handle the eWNI_SME_OEM_DATA_RSP:
             case eWNI_SME_OEM_DATA_RSP:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_HandleOemDataRsp(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for oemData_ (eWNI_SME_OEM_DATA_RSP), nothing to process");
                 }
                 smeProcessPendingQueue( pMac );
@@ -2142,84 +1912,62 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #endif
 
             case eWNI_SME_ADD_STA_SELF_RSP:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = csrProcessAddStaSessionRsp(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_ADD_STA_SELF_RSP), nothing to process");
                 }
                 break;
             case eWNI_SME_DEL_STA_SELF_RSP:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = csrProcessDelStaSessionRsp(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_DEL_STA_SELF_RSP), nothing to process");
                 }
                 break;
             case eWNI_SME_REMAIN_ON_CHN_RSP:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_remainOnChnRsp(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_REMAIN_ON_CHN_RSP), nothing to process");
                 }
                 break;
             case eWNI_SME_REMAIN_ON_CHN_RDY_IND:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_remainOnChnReady(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_REMAIN_ON_CHN_RDY_IND), nothing to process");
                 }
                 break;
             case eWNI_SME_MGMT_FRM_IND:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     sme_mgmtFrmInd(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_MGMT_FRM_IND), nothing to process");
                 }
                 break;
             case eWNI_SME_ACTION_FRAME_SEND_CNF:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_sendActionCnf(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for meas (eWNI_SME_ACTION_FRAME_SEND_CNF), nothing to process");
                 }
                 break;
             case eWNI_SME_COEX_IND:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     tSirSmeCoexInd *pSmeCoexInd = (tSirSmeCoexInd *)pMsg->bodyptr;
 
-                    if (pSmeCoexInd->coexIndType == SIR_COEX_IND_TYPE_DISABLE_AGGREGATION_IN_2p4)
-                    {
+                    if (pSmeCoexInd->coexIndType == SIR_COEX_IND_TYPE_DISABLE_AGGREGATION_IN_2p4) {
                         smsLog( pMac, LOG1, FL("SIR_COEX_IND_TYPE_DISABLE_AGGREGATION_IN_2p4"));
                         sme_RequestFullPower(hHal, NULL, NULL, eSME_REASON_OTHER);
                         pMac->isCoexScoIndSet = 1;
-                    }
-                    else if (pSmeCoexInd->coexIndType == SIR_COEX_IND_TYPE_ENABLE_AGGREGATION_IN_2p4)
-                    {
+                    } else if (pSmeCoexInd->coexIndType == SIR_COEX_IND_TYPE_ENABLE_AGGREGATION_IN_2p4) {
                         smsLog( pMac, LOG1, FL("SIR_COEX_IND_TYPE_ENABLE_AGGREGATION_IN_2p4"));
                         pMac->isCoexScoIndSet = 0;
                         sme_RequestBmps(hHal, NULL, NULL);
@@ -2227,93 +1975,73 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 
                     status = btcHandleCoexInd((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for meas (eWNI_SME_COEX_IND), nothing to process");
                 }
                 break;
 
 #ifdef FEATURE_WLAN_SCAN_PNO
             case eWNI_SME_PREF_NETWORK_FOUND_IND:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_PreferredNetworkFoundInd((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for meas (eWNI_SME_PREF_NETWORK_FOUND_IND), nothing to process");
                 }
                 break;
 #endif // FEATURE_WLAN_SCAN_PNO
 
             case eWNI_SME_TX_PER_HIT_IND:
-                if (pMac->sme.pTxPerHitCallback)
-                {
+                if (pMac->sme.pTxPerHitCallback) {
                     pMac->sme.pTxPerHitCallback(pMac->sme.pTxPerHitCbContext);
                 }
                 break;
 
             case eWNI_SME_CHANGE_COUNTRY_CODE:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_HandleChangeCountryCode((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for message (eWNI_SME_CHANGE_COUNTRY_CODE), nothing to process");
                 }
                 break;
 
             case eWNI_SME_GENERIC_CHANGE_COUNTRY_CODE:
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     status = sme_HandleGenericChangeCountryCode((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for message (eWNI_SME_GENERIC_CHANGE_COUNTRY_CODE), nothing to process");
                 }
                 break;
 
 #ifdef WLAN_FEATURE_PACKET_FILTERING
             case eWNI_PMC_PACKET_COALESCING_FILTER_MATCH_COUNT_RSP:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_PCFilterMatchCountResponseHandler((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for meas "
                            "(PACKET_COALESCING_FILTER_MATCH_COUNT_RSP), nothing to process");
                 }
                 break;
 #endif // WLAN_FEATURE_PACKET_FILTERING
-            case eWNI_SME_PRE_SWITCH_CHL_IND:
-            {
+            case eWNI_SME_PRE_SWITCH_CHL_IND: {
                 status = sme_HandlePreChannelSwitchInd(pMac);
                 break;
             }
 
-            case eWNI_SME_POST_SWITCH_CHL_IND:
-            {
+            case eWNI_SME_POST_SWITCH_CHL_IND: {
                 status = sme_HandlePostChannelSwitchInd(pMac);
                 break;
             }
 
 #ifdef WLAN_WAKEUP_EVENTS
             case eWNI_SME_WAKE_REASON_IND:
-                if(pMsg->bodyptr)
-                {
+                if(pMsg->bodyptr) {
                     status = sme_WakeReasonIndCallback((void *)pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for meas (eWNI_SME_WAKE_REASON_IND), nothing to process");
                 }
                 break;
@@ -2343,15 +2071,12 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
             case eWNI_SME_DELETE_TDLS_PEER_IND:
 #endif
             {
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     status = tdlsMsgProcessor(pMac, pMsg->type, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGE, "Empty rsp message for TDLS, \
-                        nothing to process");
+                    nothing to process");
                 }
                 break;
             }
@@ -2359,27 +2084,20 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 
 #ifdef WLAN_FEATURE_11W
             case eWNI_SME_UNPROT_MGMT_FRM_IND:
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     sme_UnprotectedMgmtFrmInd(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for meas (eWNI_SME_UNPROT_MGMT_FRM_IND), nothing to process");
                 }
                 break;
 #endif
 #if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
-            case eWNI_SME_TSM_IE_IND:
-            {
-                if (pMsg->bodyptr)
-                {
+            case eWNI_SME_TSM_IE_IND: {
+                if (pMsg->bodyptr) {
                     sme_TsmIeInd(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for (eWNI_SME_TSM_IE_IND), nothing to process");
                 }
                 break;
@@ -2393,15 +2111,12 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 
 #ifdef WLAN_FEATURE_GTK_OFFLOAD
             case eWNI_PMC_GTK_OFFLOAD_GETINFO_RSP:
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     sme_ProcessGetGtkInfoRsp(pMac, pMsg->bodyptr);
                     vos_mem_zero(pMsg->bodyptr,
                                  sizeof(tSirGtkOffloadGetInfoRspParams));
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE, "Empty rsp message for (eWNI_PMC_GTK_OFFLOAD_GETINFO_RSP), nothing to process");
                 }
                 break ;
@@ -2410,8 +2125,7 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #ifdef FEATURE_WLAN_LPHB
             /* LPHB timeout indication arrived, send IND to client */
             case eWNI_SME_LPHB_IND:
-                if (pMac->sme.pLphbIndCb)
-                {
+                if (pMac->sme.pLphbIndCb) {
                     pMac->sme.pLphbIndCb(pMac->pAdapter, pMsg->bodyptr);
                 }
                 vos_mem_free(pMsg->bodyptr);
@@ -2422,8 +2136,7 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #ifdef FEATURE_WLAN_CH_AVOID
             /* LPHB timeout indication arrived, send IND to client */
             case eWNI_SME_CH_AVOID_IND:
-                if (pMac->sme.pChAvoidNotificationCb)
-                {
+                if (pMac->sme.pChAvoidNotificationCb) {
                     VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                               "%s: CH avoid notification", __func__);
                     pMac->sme.pChAvoidNotificationCb(pMac->pAdapter, pMsg->bodyptr);
@@ -2434,13 +2147,10 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 #endif /* FEATURE_WLAN_CH_AVOID */
 
             case eWNI_SME_ENCRYPT_MSG_RSP:
-                if (pMsg->bodyptr)
-                {
+                if (pMsg->bodyptr) {
                     sme_EncryptMsgResponseHandler(pMac, pMsg->bodyptr);
                     vos_mem_free(pMsg->bodyptr);
-                }
-                else
-                {
+                } else {
                     smsLog(pMac, LOGE,
                            "Empty rsp message for (eWNI_SME_ENCRYPT_MSG_RSP),"
                            " nothing to process");
@@ -2451,45 +2161,33 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
             default:
 
                 if ( ( pMsg->type >= eWNI_SME_MSG_TYPES_BEGIN )
-                        &&  ( pMsg->type <= eWNI_SME_MSG_TYPES_END ) )
-                {
+                        &&  ( pMsg->type <= eWNI_SME_MSG_TYPES_END ) ) {
                     //CSR
-                    if (pMsg->bodyptr)
-                    {
+                    if (pMsg->bodyptr) {
                         status = csrMsgProcessor(hHal, pMsg->bodyptr);
                         vos_mem_free(pMsg->bodyptr);
-                    }
-                    else
-                    {
+                    } else {
                         smsLog( pMac, LOGE, "Empty rsp message for CSR, nothing to process");
                     }
-                }
-                else
-                {
+                } else {
                     smsLog( pMac, LOGW, "Unknown message type %d, nothing to process",
                             pMsg->type);
-                    if (pMsg->bodyptr)
-                    {
+                    if (pMsg->bodyptr) {
                         vos_mem_free(pMsg->bodyptr);
                     }
                 }
             }//switch
         } //SME_IS_START
-        else
-        {
+        else {
             smsLog( pMac, LOGW, "message type %d in stop state ignored", pMsg->type);
-            if (pMsg->bodyptr)
-            {
+            if (pMsg->bodyptr) {
                 vos_mem_free(pMsg->bodyptr);
             }
         }
         sme_ReleaseGlobalLock( &pMac->sme );
-    }
-    else
-    {
+    } else {
         smsLog( pMac, LOGW, "Locking failed, bailing out");
-        if (pMsg->bodyptr)
-        {
+        if (pMsg->bodyptr) {
             vos_mem_free(pMsg->bodyptr);
         }
     }
@@ -2500,12 +2198,9 @@ eHalStatus sme_ProcessMsg(tHalHandle hHal, vos_msg_t* pMsg)
 
 //No need to hold the global lock here because this function can only be called
 //after sme_Stop.
-v_VOID_t sme_FreeMsg( tHalHandle hHal, vos_msg_t* pMsg )
-{
-    if( pMsg )
-    {
-        if (pMsg->bodyptr)
-        {
+v_VOID_t sme_FreeMsg( tHalHandle hHal, vos_msg_t* pMsg ) {
+    if( pMsg ) {
+        if (pMsg->bodyptr) {
             vos_mem_free(pMsg->bodyptr);
         }
     }
@@ -2531,15 +2226,13 @@ v_VOID_t sme_FreeMsg( tHalHandle hHal, vos_msg_t* pMsg )
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_Stop(tHalHandle hHal, tHalStopType stopType)
-{
+eHalStatus sme_Stop(tHalHandle hHal, tHalStopType stopType) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     eHalStatus fail_status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = WLANSAP_Stop(vos_get_global_context(VOS_MODULE_ID_SAP, NULL));
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "WLANSAP_Stop failed during smeStop with status=%d",
                 status );
         fail_status = status;
@@ -2548,16 +2241,14 @@ eHalStatus sme_Stop(tHalHandle hHal, tHalStopType stopType)
     p2pStop(hHal);
 
     status = pmcStop(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "pmcStop failed during smeStop with status=%d",
                 status );
         fail_status = status;
     }
 
     status = csrStop(pMac, stopType);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrStop failed during smeStop with status=%d",
                 status );
         fail_status = status;
@@ -2567,8 +2258,7 @@ eHalStatus sme_Stop(tHalHandle hHal, tHalStopType stopType)
 
     purgeSmeCmdList(pMac);
 
-    if (!HAL_STATUS_SUCCESS( fail_status ))
-    {
+    if (!HAL_STATUS_SUCCESS( fail_status )) {
         status = fail_status;
     }
 
@@ -2596,23 +2286,20 @@ eHalStatus sme_Stop(tHalHandle hHal, tHalStopType stopType)
   \sa
 
   --------------------------------------------------------------------------*/
-eHalStatus sme_Close(tHalHandle hHal)
-{
+eHalStatus sme_Close(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     eHalStatus fail_status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = csrClose(pMac);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "csrClose failed during sme close with status=%d",
                 status );
         fail_status = status;
     }
 
     status = WLANSAP_Close(vos_get_global_context(VOS_MODULE_ID_SAP, NULL));
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "WLANSAP_close failed during sme close with status=%d",
                 status );
         fail_status = status;
@@ -2620,16 +2307,14 @@ eHalStatus sme_Close(tHalHandle hHal)
 
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
     status = btcClose(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "BTC close failed during sme close with status=%d",
                 status );
         fail_status = status;
     }
 
     status = sme_QosClose(pMac);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "Qos close failed during sme close with status=%d",
                 status );
         fail_status = status;
@@ -2637,8 +2322,7 @@ eHalStatus sme_Close(tHalHandle hHal)
 #endif
 #ifdef FEATURE_OEM_DATA_SUPPORT
     status = oemData_OemDataReqClose(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "OEM DATA REQ close failed during sme close with status=%d",
                 status );
         fail_status = status;
@@ -2646,24 +2330,21 @@ eHalStatus sme_Close(tHalHandle hHal)
 #endif
 
     status = ccmClose(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "ccmClose failed during sme close with status=%d",
                 status );
         fail_status = status;
     }
 
     status = pmcClose(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "pmcClose failed during sme close with status=%d",
                 status );
         fail_status = status;
     }
 #if defined WLAN_FEATURE_VOWIFI
     status = rrmClose(hHal);
-    if ( ! HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( ! HAL_STATUS_SUCCESS( status ) ) {
         smsLog( pMac, LOGE, "RRM close failed during sme close with status=%d",
                 status );
         fail_status = status;
@@ -2677,13 +2358,11 @@ eHalStatus sme_Close(tHalHandle hHal)
 
     freeSmeCmdList(pMac);
 
-    if( !VOS_IS_STATUS_SUCCESS( vos_lock_destroy( &pMac->sme.lkSmeGlobalLock ) ) )
-    {
+    if( !VOS_IS_STATUS_SUCCESS( vos_lock_destroy( &pMac->sme.lkSmeGlobalLock ) ) ) {
         fail_status = eHAL_STATUS_FAILURE;
     }
 
-    if (!HAL_STATUS_SUCCESS( fail_status ))
-    {
+    if (!HAL_STATUS_SUCCESS( fail_status )) {
         status = fail_status;
     }
 
@@ -2692,11 +2371,9 @@ eHalStatus sme_Close(tHalHandle hHal)
     return status;
 }
 #ifdef FEATURE_WLAN_LFR
-tANI_BOOLEAN csrIsScanAllowed(tpAniSirGlobal pMac)
-{
+tANI_BOOLEAN csrIsScanAllowed(tpAniSirGlobal pMac) {
 #if 0
-    switch(pMac->roam.neighborRoamInfo.neighborRoamState)
-    {
+    switch(pMac->roam.neighborRoamInfo.neighborRoamState) {
     case eCSR_NEIGHBOR_ROAM_STATE_REPORT_SCAN:
     case eCSR_NEIGHBOR_ROAM_STATE_PREAUTHENTICATING:
     case eCSR_NEIGHBOR_ROAM_STATE_PREAUTH_DONE:
@@ -2724,8 +2401,7 @@ tANI_BOOLEAN csrIsScanAllowed(tpAniSirGlobal pMac)
 
     \return tANI_BOOLEAN TRUE to allow scan otherwise FALSE
   ---------------------------------------------------------------------------*/
-tANI_BOOLEAN sco_isScanAllowed(tpAniSirGlobal pMac, tCsrScanRequest *pscanReq)
-{
+tANI_BOOLEAN sco_isScanAllowed(tpAniSirGlobal pMac, tCsrScanRequest *pscanReq) {
     tANI_BOOLEAN ret;
 
     if (pscanReq->p2pSearch)
@@ -2748,37 +2424,29 @@ tANI_BOOLEAN sco_isScanAllowed(tpAniSirGlobal pMac, tCsrScanRequest *pscanReq)
   ---------------------------------------------------------------------------*/
 eHalStatus sme_ScanRequest(tHalHandle hHal, tANI_U8 sessionId, tCsrScanRequest *pscanReq,
                            tANI_U32 *pScanRequestID,
-                           csrScanCompleteCallback callback, void *pContext)
-{
+                           csrScanCompleteCallback callback, void *pContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_REQ, sessionId, pscanReq->scanType));
     smsLog(pMac, LOG2, FL("enter"));
-    do
-    {
+    do {
         if(pMac->scan.fScanEnable &&
-                (pMac->isCoexScoIndSet ? sco_isScanAllowed(pMac, pscanReq) : TRUE))
-        {
+                (pMac->isCoexScoIndSet ? sco_isScanAllowed(pMac, pscanReq) : TRUE)) {
             status = sme_AcquireGlobalLock( &pMac->sme );
-            if ( HAL_STATUS_SUCCESS( status ) )
-            {
+            if ( HAL_STATUS_SUCCESS( status ) ) {
                 {
 #ifdef FEATURE_WLAN_LFR
-                    if(csrIsScanAllowed(pMac))
-                    {
+                    if(csrIsScanAllowed(pMac)) {
 #endif
                         status = csrScanRequest( hHal, sessionId, pscanReq,
                                                  pScanRequestID, callback, pContext );
-                        if ( !HAL_STATUS_SUCCESS( status ) )
-                        {
+                        if ( !HAL_STATUS_SUCCESS( status ) ) {
                             smsLog(pMac, LOGE, FL("csrScanRequest failed"
                                                   " SId=%d"), sessionId);
                         }
 #ifdef FEATURE_WLAN_LFR
-                    }
-                    else
-                    {
+                    } else {
                         smsLog(pMac, LOGE, FL("Scan denied in state %s"
                                               "(sub-state %s)"),
                                macTraceGetNeighbourRoamState(
@@ -2793,19 +2461,16 @@ eHalStatus sme_ScanRequest(tHalHandle hHal, tANI_U8 sessionId, tCsrScanRequest *
 
                 sme_ReleaseGlobalLock( &pMac->sme );
             } //sme_AcquireGlobalLock success
-            else
-            {
+            else {
                 smsLog(pMac, LOGE, FL("sme_AcquireGlobalLock failed"));
             }
         } //if(pMac->scan.fScanEnable)
-        else
-        {
+        else {
             smsLog(pMac, LOGE, FL("fScanEnable %d isCoexScoIndSet: %d "),
                    pMac->scan.fScanEnable, pMac->isCoexScoIndSet);
             status = eHAL_STATUS_RESOURCES;
         }
-    }
-    while( 0 );
+    } while( 0 );
 
     return (status);
 
@@ -2821,8 +2486,7 @@ eHalStatus sme_ScanRequest(tHalHandle hHal, tANI_U8 sessionId, tCsrScanRequest *
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_ScanGetResult(tHalHandle hHal, tANI_U8 sessionId, tCsrScanResultFilter *pFilter,
-                             tScanResultHandle *phResult)
-{
+                             tScanResultHandle *phResult) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -2830,8 +2494,7 @@ eHalStatus sme_ScanGetResult(tHalHandle hHal, tANI_U8 sessionId, tCsrScanResultF
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_GET_RESULTS, sessionId,0 ));
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanGetResult( hHal, pFilter, phResult );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2847,16 +2510,14 @@ eHalStatus sme_ScanGetResult(tHalHandle hHal, tANI_U8 sessionId, tCsrScanResultF
     This is a synchronous call
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_ScanFlushResult(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_ScanFlushResult(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_FLUSH_RESULTS, sessionId,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanFlushResult( hHal );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2870,16 +2531,14 @@ eHalStatus sme_ScanFlushResult(tHalHandle hHal, tANI_U8 sessionId)
     This is a synchronous call
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_FilterScanResults(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_FilterScanResults(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(macTraceNew(pMac, VOS_MODULE_ID_SME,
                        TRACE_CODE_SME_RX_HDD_MSG_SCAN_FLUSH_RESULTS, sessionId,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         csrScanFilterResults(pMac);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2895,14 +2554,12 @@ eHalStatus sme_FilterScanResults(tHalHandle hHal, tANI_U8 sessionId)
 *  \return eHalStatus
 *---------------------------------------------------------------------------
 */
-eHalStatus sme_FilterScanDFSResults(tHalHandle hHal)
-{
+eHalStatus sme_FilterScanDFSResults(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         csrScanFilterDFSResults(pMac);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2910,16 +2567,14 @@ eHalStatus sme_FilterScanDFSResults(tHalHandle hHal)
     return (status);
 }
 
-eHalStatus sme_ScanFlushP2PResult(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_ScanFlushP2PResult(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_FLUSH_P2PRESULTS, sessionId,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanFlushSelectiveResult( hHal, VOS_TRUE );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2936,8 +2591,7 @@ eHalStatus sme_ScanFlushP2PResult(tHalHandle hHal, tANI_U8 sessionId)
     \return tCsrScanResultInfo * - NULL if no result
   ---------------------------------------------------------------------------*/
 tCsrScanResultInfo *sme_ScanResultGetFirst(tHalHandle hHal,
-        tScanResultHandle hScanResult)
-{
+        tScanResultHandle hScanResult) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tCsrScanResultInfo *pRet = NULL;
@@ -2945,8 +2599,7 @@ tCsrScanResultInfo *sme_ScanResultGetFirst(tHalHandle hHal,
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_RESULT_GETFIRST, NO_SESSION,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         pRet = csrScanResultGetFirst( pMac, hScanResult );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2965,8 +2618,7 @@ tCsrScanResultInfo *sme_ScanResultGetFirst(tHalHandle hHal,
     \return Null if no result or reach the end
   ---------------------------------------------------------------------------*/
 tCsrScanResultInfo *sme_ScanResultGetNext(tHalHandle hHal,
-        tScanResultHandle hScanResult)
-{
+        tScanResultHandle hScanResult) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tCsrScanResultInfo *pRet = NULL;
@@ -2974,8 +2626,7 @@ tCsrScanResultInfo *sme_ScanResultGetNext(tHalHandle hHal,
     MTRACE(vos_trace(VOS_MODULE_ID_SME ,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_RESULT_GETNEXT, NO_SESSION,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         pRet = csrScanResultGetNext( pMac, hScanResult );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -2991,16 +2642,13 @@ tCsrScanResultInfo *sme_ScanResultGetNext(tHalHandle hHal,
     \param pScanReq - BG scan request structure
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_ScanSetBGScanparams(tHalHandle hHal, tANI_U8 sessionId, tCsrBGScanRequest *pScanReq)
-{
+eHalStatus sme_ScanSetBGScanparams(tHalHandle hHal, tANI_U8 sessionId, tCsrBGScanRequest *pScanReq) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if( NULL != pScanReq )
-    {
+    if( NULL != pScanReq ) {
         status = sme_AcquireGlobalLock( &pMac->sme );
-        if ( HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( HAL_STATUS_SUCCESS( status ) ) {
             status = csrScanSetBGScanparams( hHal, pScanReq );
             sme_ReleaseGlobalLock( &pMac->sme );
         }
@@ -3020,16 +2668,14 @@ eHalStatus sme_ScanSetBGScanparams(tHalHandle hHal, tANI_U8 sessionId, tCsrBGSca
     calling this function and even before this function reutrns.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_ScanResultPurge(tHalHandle hHal, tScanResultHandle hScanResult)
-{
+eHalStatus sme_ScanResultPurge(tHalHandle hHal, tScanResultHandle hScanResult) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_MSG_SCAN_RESULT_PURGE, NO_SESSION,0 ));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanResultPurge( hHal, hScanResult );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -3055,14 +2701,12 @@ eHalStatus sme_ScanResultPurge(tHalHandle hHal, tScanResultHandle hScanResult)
   ---------------------------------------------------------------------------*/
 eHalStatus sme_ScanGetPMKIDCandidateList(tHalHandle hHal, tANI_U8 sessionId,
         tPmkidCandidateInfo *pPmkidList,
-        tANI_U32 *pNumItems )
-{
+        tANI_U32 *pNumItems ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanGetPMKIDCandidateList( pMac, sessionId, pPmkidList, pNumItems );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -3091,8 +2735,7 @@ eHalStatus sme_ScanGetPMKIDCandidateList(tHalHandle hHal, tANI_U8 sessionId,
 -----------------------------------------------------------------------------*/
 eHalStatus sme_RoamRegisterLinkQualityIndCallback(tHalHandle hHal, tANI_U8 sessionId,
         csrRoamLinkQualityIndCallback   callback,
-        void                           *pContext)
-{
+        void                           *pContext) {
     return(csrRoamRegisterLinkQualityIndCallback((tpAniSirGlobal)hHal, callback, pContext));
 }
 
@@ -3106,13 +2749,11 @@ eHalStatus sme_RoamRegisterLinkQualityIndCallback(tHalHandle hHal, tANI_U8 sessi
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamRegisterCallback(tHalHandle hHal,
                                     csrRoamCompleteCallback callback,
-                                    void *pContext)
-{
+                                    void *pContext) {
     return(csrRoamRegisterCallback((tpAniSirGlobal)hHal, callback, pContext));
 }
 
-eCsrPhyMode sme_GetPhyMode(tHalHandle hHal)
-{
+eCsrPhyMode sme_GetPhyMode(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     return pMac->roam.configParam.phyMode;
 }
@@ -3123,8 +2764,7 @@ eCsrPhyMode sme_GetPhyMode(tHalHandle hHal)
     \param hHal - HAL handle
     \return channel bonding mode for 5G
   ---------------------------------------------------------------------------*/
-tANI_U32 sme_GetChannelBondingMode5G(tHalHandle hHal)
-{
+tANI_U32 sme_GetChannelBondingMode5G(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tSmeConfigParams  smeConfig;
 
@@ -3139,8 +2779,7 @@ tANI_U32 sme_GetChannelBondingMode5G(tHalHandle hHal)
     \param hHal - HAL handle
     \return channel bonding mode for 2.4G
   ---------------------------------------------------------------------------*/
-tANI_U32 sme_GetChannelBondingMode24G(tHalHandle hHal)
-{
+tANI_U32 sme_GetChannelBondingMode24G(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tSmeConfigParams  smeConfig;
 
@@ -3162,13 +2801,11 @@ tANI_U32 sme_GetChannelBondingMode24G(tHalHandle hHal)
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamConnect(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *pProfile,
-                           tANI_U32 *pRoamId)
-{
+                           tANI_U32 *pRoamId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (!pMac)
-    {
+    if (!pMac) {
         return eHAL_STATUS_FAILURE;
     }
 
@@ -3176,21 +2813,15 @@ eHalStatus sme_RoamConnect(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *
                      TRACE_CODE_SME_RX_HDD_MSG_CONNECT, sessionId, 0));
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamConnect( pMac, sessionId, pProfile, NULL, pRoamId );
-        }
-        else
-        {
+        } else {
             smsLog(pMac, LOGE, FL("invalid sessionID %d"), sessionId);
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOGE, FL("sme_AcquireGlobalLock failed"));
     }
 
@@ -3210,12 +2841,10 @@ eHalStatus sme_RoamConnect(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *
     \return eHalStatus  SUCCESS.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_SetPhyMode(tHalHandle hHal, eCsrPhyMode phyMode)
-{
+eHalStatus sme_SetPhyMode(tHalHandle hHal, eCsrPhyMode phyMode) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: invalid context", __func__);
         return eHAL_STATUS_FAILURE;
@@ -3243,8 +2872,7 @@ eHalStatus sme_SetPhyMode(tHalHandle hHal, eCsrPhyMode phyMode)
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamReassoc(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *pProfile,
                            tCsrRoamModifyProfileFields modProfileFields,
-                           tANI_U32 *pRoamId, v_BOOL_t fForce)
-{
+                           tANI_U32 *pRoamId, v_BOOL_t fForce) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -3252,26 +2880,19 @@ eHalStatus sme_RoamReassoc(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *
                      TRACE_CODE_SME_RX_HDD_ROAM_REASSOC, sessionId, 0));
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
-            if((NULL == pProfile) && (fForce == 1))
-            {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
+            if((NULL == pProfile) && (fForce == 1)) {
                 tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
                 /* to force the AP initiate fresh 802.1x authentication need to clear
                  * the PMKID cache for that set the following boolean. this is needed
                  * by the HS 2.0 passpoint certification 5.2.a and b testcases */
                 pSession->fIgnorePMKIDCache = TRUE;
                 status = csrReassoc( pMac, sessionId, &modProfileFields, pRoamId , fForce);
-            }
-            else
-            {
+            } else {
                 status = csrRoamReassoc( pMac, sessionId, pProfile, modProfileFields, pRoamId );
             }
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3287,20 +2908,15 @@ eHalStatus sme_RoamReassoc(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamProfile *
     This is an asynchronous call.
     \return eHalStatus. It returns fail if currently connected
   ---------------------------------------------------------------------------*/
-eHalStatus sme_RoamConnectToLastProfile(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_RoamConnectToLastProfile(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamConnectToLastProfile( pMac, sessionId );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3317,8 +2933,7 @@ eHalStatus sme_RoamConnectToLastProfile(tHalHandle hHal, tANI_U8 sessionId)
                      eCSR_DISCONNECT_REASON_MIC_ERROR is meanful.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_RoamDisconnect(tHalHandle hHal, tANI_U8 sessionId, eCsrRoamDisconnectReason reason)
-{
+eHalStatus sme_RoamDisconnect(tHalHandle hHal, tANI_U8 sessionId, eCsrRoamDisconnectReason reason) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -3326,14 +2941,10 @@ eHalStatus sme_RoamDisconnect(tHalHandle hHal, tANI_U8 sessionId, eCsrRoamDiscon
                      TRACE_CODE_SME_RX_HDD_ROAM_DISCONNECT, sessionId, reason));
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamDisconnect( pMac, sessionId, reason );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3349,21 +2960,16 @@ eHalStatus sme_RoamDisconnect(tHalHandle hHal, tANI_U8 sessionId, eCsrRoamDiscon
     \param sessionId - sessionId of SoftAP
     \return eHalStatus  SUCCESS  Roam callback will be called to indicate actual results
   -------------------------------------------------------------------------------*/
-eHalStatus sme_RoamStopBss(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_RoamStopBss(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamIssueStopBssCmd( pMac, sessionId, eANI_BOOLEAN_FALSE );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3381,27 +2987,21 @@ eHalStatus sme_RoamStopBss(tHalHandle hHal, tANI_U8 sessionId)
     \return eHalStatus  SUCCESS  Roam callback will be called to indicate actual results
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamDisconnectSta(tHalHandle hHal, tANI_U8 sessionId,
-                                 tANI_U8 *pPeerMacAddr)
-{
+                                 tANI_U8 *pPeerMacAddr) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( NULL == pMac )
-    {
+    if ( NULL == pMac ) {
         VOS_ASSERT(0);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamIssueDisassociateStaCmd( pMac, sessionId, pPeerMacAddr,
                      eSIR_MAC_DEAUTH_LEAVING_BSS_REASON);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3419,26 +3019,20 @@ eHalStatus sme_RoamDisconnectSta(tHalHandle hHal, tANI_U8 sessionId,
     \return eHalStatus  SUCCESS  Roam callback will be called to indicate actual results
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamDeauthSta(tHalHandle hHal, tANI_U8 sessionId,
-                             struct tagCsrDelStaParams *pDelStaParams)
-{
+                             struct tagCsrDelStaParams *pDelStaParams) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( NULL == pMac )
-    {
+    if ( NULL == pMac ) {
         VOS_ASSERT(0);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamIssueDeauthStaCmd( pMac, sessionId, pDelStaParams);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3455,26 +3049,20 @@ eHalStatus sme_RoamDeauthSta(tHalHandle hHal, tANI_U8 sessionId,
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamTKIPCounterMeasures(tHalHandle hHal, tANI_U8 sessionId,
-                                       tANI_BOOLEAN bEnable)
-{
+                                       tANI_BOOLEAN bEnable) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( NULL == pMac )
-    {
+    if ( NULL == pMac ) {
         VOS_ASSERT(0);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamIssueTkipCounterMeasures( pMac, sessionId, bEnable);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3497,26 +3085,20 @@ eHalStatus sme_RoamTKIPCounterMeasures(tHalHandle hHal, tANI_U8 sessionId,
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetAssociatedStas(tHalHandle hHal, tANI_U8 sessionId,
                                      VOS_MODULE_ID modId, void *pUsrContext,
-                                     void *pfnSapEventCallback, tANI_U8 *pAssocStasBuf)
-{
+                                     void *pfnSapEventCallback, tANI_U8 *pAssocStasBuf) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( NULL == pMac )
-    {
+    if ( NULL == pMac ) {
         VOS_ASSERT(0);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetAssociatedStas( pMac, sessionId, modId, pUsrContext, pfnSapEventCallback, pAssocStasBuf );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3537,26 +3119,20 @@ eHalStatus sme_RoamGetAssociatedStas(tHalHandle hHal, tANI_U8 sessionId,
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetWpsSessionOverlap(tHalHandle hHal, tANI_U8 sessionId,
                                         void *pUsrContext, void
-                                        *pfnSapEventCallback, v_MACADDR_t pRemoveMac)
-{
+                                        *pfnSapEventCallback, v_MACADDR_t pRemoveMac) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( NULL == pMac )
-    {
+    if ( NULL == pMac ) {
         VOS_ASSERT(0);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetWpsSessionOverlap( pMac, sessionId, pUsrContext, pfnSapEventCallback, pRemoveMac);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3573,20 +3149,15 @@ eHalStatus sme_RoamGetWpsSessionOverlap(tHalHandle hHal, tANI_U8 sessionId,
     This is a synchronous call.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_RoamGetConnectState(tHalHandle hHal, tANI_U8 sessionId, eCsrConnectState *pState)
-{
+eHalStatus sme_RoamGetConnectState(tHalHandle hHal, tANI_U8 sessionId, eCsrConnectState *pState) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetConnectState( pMac, sessionId, pState );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3606,22 +3177,17 @@ eHalStatus sme_RoamGetConnectState(tHalHandle hHal, tANI_U8 sessionId, eCsrConne
     \return eHalStatus. Failure if not connected
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetConnectProfile(tHalHandle hHal, tANI_U8 sessionId,
-                                     tCsrRoamConnectedProfile *pProfile)
-{
+                                     tCsrRoamConnectedProfile *pProfile) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ROAM_GET_CONNECTPROFILE, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetConnectProfile( pMac, sessionId, pProfile );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3640,16 +3206,14 @@ eHalStatus sme_RoamGetConnectProfile(tHalHandle hHal, tANI_U8 sessionId,
     \return eHalStatus.
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamFreeConnectProfile(tHalHandle hHal,
-                                      tCsrRoamConnectedProfile *pProfile)
-{
+                                      tCsrRoamConnectedProfile *pProfile) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ROAM_FREE_CONNECTPROFILE, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrRoamFreeConnectProfile( pMac, pProfile );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -3678,23 +3242,18 @@ eHalStatus sme_RoamFreeConnectProfile(tHalHandle hHal,
 eHalStatus sme_RoamSetPMKIDCache( tHalHandle hHal, tANI_U8 sessionId,
                                   tPmkidCacheInfo *pPMKIDCache,
                                   tANI_U32 numItems,
-                                  tANI_BOOLEAN update_entire_cache )
-{
+                                  tANI_BOOLEAN update_entire_cache ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ROAM_SET_PMKIDCACHE, sessionId, numItems));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamSetPMKIDCache( pMac, sessionId, pPMKIDCache,
                                            numItems, update_entire_cache );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3705,20 +3264,15 @@ eHalStatus sme_RoamSetPMKIDCache( tHalHandle hHal, tANI_U8 sessionId,
 
 eHalStatus sme_RoamDelPMKIDfromCache( tHalHandle hHal, tANI_U8 sessionId,
                                       tANI_U8 *pBSSId,
-                                      tANI_BOOLEAN flush_cache )
-{
+                                      tANI_BOOLEAN flush_cache ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamDelPMKIDfromCache( pMac, sessionId,
                                                pBSSId, flush_cache );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3740,20 +3294,15 @@ eHalStatus sme_RoamDelPMKIDfromCache( tHalHandle hHal, tANI_U8 sessionId,
                          big enough
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetSecurityReqIE(tHalHandle hHal, tANI_U8 sessionId, tANI_U32 *pLen,
-                                    tANI_U8 *pBuf, eCsrSecurityType secType)
-{
+                                    tANI_U8 *pBuf, eCsrSecurityType secType) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetWpaRsnReqIE( hHal, sessionId, pLen, pBuf );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3776,20 +3325,15 @@ eHalStatus sme_RoamGetSecurityReqIE(tHalHandle hHal, tANI_U8 sessionId, tANI_U32
                          big enough
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetSecurityRspIE(tHalHandle hHal, tANI_U8 sessionId, tANI_U32 *pLen,
-                                    tANI_U8 *pBuf, eCsrSecurityType secType)
-{
+                                    tANI_U8 *pBuf, eCsrSecurityType secType) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetWpaRsnRspIE( pMac, sessionId, pLen, pBuf );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3807,22 +3351,17 @@ eHalStatus sme_RoamGetSecurityRspIE(tHalHandle hHal, tANI_U8 sessionId, tANI_U32
     This is a synchronous call.
     \return tANI_U32 - the number of PMKID cache entries
   ---------------------------------------------------------------------------*/
-tANI_U32 sme_RoamGetNumPMKIDCache(tHalHandle hHal, tANI_U8 sessionId)
-{
+tANI_U32 sme_RoamGetNumPMKIDCache(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U32 numPmkidCache = 0;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             numPmkidCache = csrRoamGetNumPMKIDCache( pMac, sessionId );
             status = eHAL_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3844,20 +3383,15 @@ tANI_U32 sme_RoamGetNumPMKIDCache(tHalHandle hHal, tANI_U8 sessionId)
                          big enough
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetPMKIDCache(tHalHandle hHal, tANI_U8 sessionId, tANI_U32 *pNum,
-                                 tPmkidCacheInfo *pPmkidCache)
-{
+                                 tPmkidCacheInfo *pPmkidCache) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrRoamGetPMKIDCache( pMac, sessionId, pNum, pPmkidCache );
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3875,27 +3409,23 @@ eHalStatus sme_RoamGetPMKIDCache(tHalHandle hHal, tANI_U8 sessionId, tANI_U32 *p
     \param pParam - caller allocated memory
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_GetConfigParam(tHalHandle hHal, tSmeConfigParams *pParam)
-{
+eHalStatus sme_GetConfigParam(tHalHandle hHal, tSmeConfigParams *pParam) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_CONFIGPARAM, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetConfigParam(pMac, &pParam->csrConfig);
-        if (status != eHAL_STATUS_SUCCESS)
-        {
+        if (status != eHAL_STATUS_SUCCESS) {
             smsLog( pMac, LOGE, "%s csrGetConfigParam failed", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
             return status;
         }
 #if defined WLAN_FEATURE_P2P_INTERNAL
         status = p2pGetConfigParam(pMac, &pParam->p2pConfig);
-        if (status != eHAL_STATUS_SUCCESS)
-        {
+        if (status != eHAL_STATUS_SUCCESS) {
             smsLog( pMac, LOGE, "%s p2pGetConfigParam failed", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
             return status;
@@ -3921,8 +3451,7 @@ eHalStatus sme_GetConfigParam(tHalHandle hHal, tSmeConfigParams *pParam)
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_CfgSetInt(tHalHandle hHal, tANI_U32 cfgId, tANI_U32 ccmValue,
-                         tCcmCfgSetCallback callback, eAniBoolean toBeSaved)
-{
+                         tCcmCfgSetCallback callback, eAniBoolean toBeSaved) {
     return(ccmCfgSetInt(hHal, cfgId, ccmValue, callback, toBeSaved));
 }
 
@@ -3942,8 +3471,7 @@ eHalStatus sme_CfgSetInt(tHalHandle hHal, tANI_U32 cfgId, tANI_U32 ccmValue,
   ---------------------------------------------------------------------------*/
 eHalStatus sme_CfgSetStr(tHalHandle hHal, tANI_U32 cfgId, tANI_U8 *pStr,
                          tANI_U32 length, tCcmCfgSetCallback callback,
-                         eAniBoolean toBeSaved)
-{
+                         eAniBoolean toBeSaved) {
     return(ccmCfgSetStr(hHal, cfgId, pStr, length, callback, toBeSaved));
 }
 
@@ -3962,22 +3490,17 @@ eHalStatus sme_CfgSetStr(tHalHandle hHal, tANI_U32 cfgId, tANI_U8 *pStr,
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus sme_GetModifyProfileFields(tHalHandle hHal, tANI_U8 sessionId,
-                                      tCsrRoamModifyProfileFields * pModifyProfileFields)
-{
+                                      tCsrRoamModifyProfileFields * pModifyProfileFields) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_MODPROFFIELDS, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             status = csrGetModifyProfileFields(pMac, sessionId, pModifyProfileFields);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -3996,21 +3519,16 @@ eHalStatus sme_GetModifyProfileFields(tHalHandle hHal, tANI_U8 sessionId,
 
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HT40StopOBSSScan(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_HT40StopOBSSScan(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     smsLog(pMac, LOG2, FL("enter"));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( CSR_IS_SESSION_VALID( pMac, sessionId ) )
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if( CSR_IS_SESSION_VALID( pMac, sessionId ) ) {
             csrHT40StopOBSSScan( pMac, sessionId );
-        }
-        else
-        {
+        } else {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Invalid session sessionId %d", __func__,sessionId);
             status = eHAL_STATUS_INVALID_PARAMETER;
@@ -4034,23 +3552,20 @@ eHalStatus sme_HT40StopOBSSScan(tHalHandle hHal, tANI_U8 sessionId)
     \return eHalStatus
   --------------------------------------------------------------------------*/
 eHalStatus sme_SetConfigPowerSave(tHalHandle hHal, tPmcPowerSavingMode psMode,
-                                  void *pConfigParams)
-{
+                                  void *pConfigParams) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_CONFIG_PWRSAVE, NO_SESSION, 0));
-    if (NULL == pConfigParams )
-    {
+    if (NULL == pConfigParams ) {
         smsLog( pMac, LOGE, "Empty config param structure for PMC, "
                 "nothing to update");
         return eHAL_STATUS_FAILURE;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcSetConfigPowerSave(hHal, psMode, pConfigParams);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4068,23 +3583,20 @@ eHalStatus sme_SetConfigPowerSave(tHalHandle hHal, tPmcPowerSavingMode psMode,
     \return eHalStatus
   --------------------------------------------------------------------------*/
 eHalStatus sme_GetConfigPowerSave(tHalHandle hHal, tPmcPowerSavingMode psMode,
-                                  void *pConfigParams)
-{
+                                  void *pConfigParams) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_CONFIG_PWRSAVE, NO_SESSION, 0));
-    if (NULL == pConfigParams )
-    {
+    if (NULL == pConfigParams ) {
         smsLog( pMac, LOGE, "Empty config param structure for PMC, "
                 "nothing to update");
         return eHAL_STATUS_FAILURE;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcGetConfigPowerSave(hHal, psMode, pConfigParams);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4100,14 +3612,12 @@ eHalStatus sme_GetConfigPowerSave(tHalHandle hHal, tPmcPowerSavingMode psMode,
     \param  event - the event that has occurred
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_SignalPowerEvent (tHalHandle hHal, tPmcPowerEvent event)
-{
+eHalStatus sme_SignalPowerEvent (tHalHandle hHal, tPmcPowerEvent event) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcSignalPowerEvent(hHal, event);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4125,16 +3635,14 @@ eHalStatus sme_SignalPowerEvent (tHalHandle hHal, tPmcPowerEvent event)
                      expiry.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_EnablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode)
-{
+eHalStatus sme_EnablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ENABLE_PWRSAVE, NO_SESSION, psMode));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status =  pmcEnablePowerSave(hHal, psMode);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4151,16 +3659,14 @@ eHalStatus sme_EnablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode)
                      is purely a configuration API.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_DisablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode)
-{
+eHalStatus sme_DisablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_DISABLE_PWRSAVE, NO_SESSION, psMode));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcDisablePowerSave(hHal, psMode);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4177,8 +3683,7 @@ eHalStatus sme_DisablePowerSave (tHalHandle hHal, tPmcPowerSavingMode psMode)
 +                     is purely a configuration API.
 +    \return eHalStatus
 +  ---------------------------------------------------------------------------*/
-eHalStatus sme_SetHostPowerSave (tHalHandle hHal, v_BOOL_t psMode)
-{
+eHalStatus sme_SetHostPowerSave (tHalHandle hHal, v_BOOL_t psMode) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -4195,16 +3700,14 @@ eHalStatus sme_SetHostPowerSave (tHalHandle hHal, v_BOOL_t psMode)
     \param  hHal - The handle returned by macOpen.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_StartAutoBmpsTimer ( tHalHandle hHal)
-{
+eHalStatus sme_StartAutoBmpsTimer ( tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_START_AUTO_BMPSTIMER, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcStartAutoBmpsTimer(hHal);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4219,16 +3722,14 @@ eHalStatus sme_StartAutoBmpsTimer ( tHalHandle hHal)
     \param  hHal - The handle returned by macOpen.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_StopAutoBmpsTimer ( tHalHandle hHal)
-{
+eHalStatus sme_StopAutoBmpsTimer ( tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_STOP_AUTO_BMPSTIMER, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcStopAutoBmpsTimer(hHal);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4246,14 +3747,12 @@ eHalStatus sme_StopAutoBmpsTimer ( tHalHandle hHal)
 eHalStatus sme_QueryPowerState (
     tHalHandle hHal,
     tPmcPowerState *pPowerState,
-    tPmcSwitchState *pSwWlanSwitchState)
-{
+    tPmcSwitchState *pSwWlanSwitchState) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcQueryPowerState (hHal, pPowerState, NULL, pSwWlanSwitchState);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4269,8 +3768,7 @@ eHalStatus sme_QueryPowerState (
     \param psMode - the power saving mode
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-tANI_BOOLEAN sme_IsPowerSaveEnabled (tHalHandle hHal, tPmcPowerSavingMode psMode)
-{
+tANI_BOOLEAN sme_IsPowerSaveEnabled (tHalHandle hHal, tPmcPowerSavingMode psMode) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_BOOLEAN result = false;
@@ -4278,8 +3776,7 @@ tANI_BOOLEAN sme_IsPowerSaveEnabled (tHalHandle hHal, tPmcPowerSavingMode psMode
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_IS_PWRSAVE_ENABLED, NO_SESSION, psMode));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         result = pmcIsPowerSaveEnabled(hHal, psMode);
         sme_ReleaseGlobalLock( &pMac->sme );
         return result;
@@ -4308,16 +3805,14 @@ eHalStatus sme_RequestFullPower (
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackContext, eHalStatus status),
     void *callbackContext,
-    tRequestFullPowerReason fullPowerReason)
-{
+    tRequestFullPowerReason fullPowerReason) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_REQUEST_FULLPOWER, NO_SESSION, fullPowerReason));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRequestFullPower(hHal, callbackRoutine, callbackContext, fullPowerReason);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4340,16 +3835,14 @@ eHalStatus sme_RequestFullPower (
 eHalStatus sme_RequestBmps (
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackContext, eHalStatus status),
-    void *callbackContext)
-{
+    void *callbackContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_REQUEST_BMPS, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRequestBmps(hHal, callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4364,8 +3857,7 @@ eHalStatus sme_RequestBmps (
             entry by PMC
     \param  hHal - The handle returned by macOpen.
   ---------------------------------------------------------------------------*/
-void  sme_SetDHCPTillPowerActiveFlag(tHalHandle hHal, tANI_U8 flag)
-{
+void  sme_SetDHCPTillPowerActiveFlag(tHalHandle hHal, tANI_U8 flag) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
@@ -4391,14 +3883,12 @@ void  sme_SetDHCPTillPowerActiveFlag(tHalHandle hHal, tANI_U8 flag)
 eHalStatus sme_StartUapsd (
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackContext, eHalStatus status),
-    void *callbackContext)
-{
+    void *callbackContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcStartUapsd(hHal, callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4415,14 +3905,12 @@ eHalStatus sme_StartUapsd (
       eHAL_STATUS_SUCCESS - device is put out of UAPSD and back in BMPS state
       eHAL_STATUS_FAILURE - device cannot be brought out of UAPSD state
   ---------------------------------------------------------------------------*/
-eHalStatus sme_StopUapsd (tHalHandle hHal)
-{
+eHalStatus sme_StopUapsd (tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcStopUapsd(hHal);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4445,8 +3933,7 @@ eHalStatus sme_StopUapsd (tHalHandle hHal)
 eHalStatus sme_RequestStandby (
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackContext, eHalStatus status),
-    void *callbackContext)
-{
+    void *callbackContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -4454,8 +3941,7 @@ eHalStatus sme_RequestStandby (
                      TRACE_CODE_SME_RX_HDD_REQUEST_STANDBY, NO_SESSION, 0));
     smsLog( pMac, LOG1, FL(" called") );
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRequestStandby(hHal, callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4475,14 +3961,12 @@ eHalStatus sme_RequestStandby (
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RegisterPowerSaveCheck (
     tHalHandle hHal,
-    tANI_BOOLEAN (*checkRoutine) (void *checkContext), void *checkContext)
-{
+    tANI_BOOLEAN (*checkRoutine) (void *checkContext), void *checkContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRegisterPowerSaveCheck (hHal, checkRoutine, checkContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4500,8 +3984,7 @@ eHalStatus sme_RegisterPowerSaveCheck (
   ---------------------------------------------------------------------------*/
 eHalStatus sme_Register11dScanDoneCallback (
     tHalHandle hHal,
-    csrScanCompleteCallback callback)
-{
+    csrScanCompleteCallback callback) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
@@ -4521,14 +4004,12 @@ eHalStatus sme_Register11dScanDoneCallback (
   ---------------------------------------------------------------------------*/
 eHalStatus sme_DeregisterPowerSaveCheck (
     tHalHandle hHal,
-    tANI_BOOLEAN (*checkRoutine) (void *checkContext))
-{
+    tANI_BOOLEAN (*checkRoutine) (void *checkContext)) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcDeregisterPowerSaveCheck (hHal, checkRoutine);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4550,14 +4031,12 @@ eHalStatus sme_DeregisterPowerSaveCheck (
 eHalStatus sme_RegisterDeviceStateUpdateInd (
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackContext, tPmcState pmcState),
-    void *callbackContext)
-{
+    void *callbackContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRegisterDeviceStateUpdateInd (hHal, callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4576,14 +4055,12 @@ eHalStatus sme_RegisterDeviceStateUpdateInd (
   ---------------------------------------------------------------------------*/
 eHalStatus sme_DeregisterDeviceStateUpdateInd (
     tHalHandle hHal,
-    void (*callbackRoutine) (void *callbackContext, tPmcState pmcState))
-{
+    void (*callbackRoutine) (void *callbackContext, tPmcState pmcState)) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcDeregisterDeviceStateUpdateInd (hHal, callbackRoutine);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4606,15 +4083,13 @@ eHalStatus sme_DeregisterDeviceStateUpdateInd (
 eHalStatus sme_WowlAddBcastPattern (
     tHalHandle hHal,
     tpSirWowlAddBcastPtrn pattern,
-    tANI_U8    sessionId)
-{
+    tANI_U8    sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_WOWL_ADDBCAST_PATTERN, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcWowlAddBcastPattern (hHal, pattern, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4634,15 +4109,13 @@ eHalStatus sme_WowlAddBcastPattern (
 eHalStatus sme_WowlDelBcastPattern (
     tHalHandle hHal,
     tpSirWowlDelBcastPtrn pattern,
-    tANI_U8  sessionId)
-{
+    tANI_U8  sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_WOWL_DELBCAST_PATTERN, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcWowlDelBcastPattern (hHal, pattern, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4688,15 +4161,13 @@ eHalStatus sme_EnterWowl (
     void (*wakeIndicationCB) (void *callbackContext, tpSirWakeReasonInd pWakeReasonInd),
     void *wakeIndicationCBContext,
 #endif // WLAN_WAKEUP_EVENTS
-    tpSirSmeWowlEnterParams wowlEnterParams, tANI_U8 sessionId)
-{
+    tpSirSmeWowlEnterParams wowlEnterParams, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ENTER_WOWL, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcEnterWowl (hHal, enterWowlCallbackRoutine, enterWowlCallbackContext,
 #ifdef WLAN_WAKEUP_EVENTS
                                wakeIndicationCB, wakeIndicationCBContext,
@@ -4716,15 +4187,13 @@ eHalStatus sme_EnterWowl (
             eHAL_STATUS_FAILURE  Device cannot exit WoWLAN mode.
             eHAL_STATUS_SUCCESS  Request accepted to exit WoWLAN mode.
   ---------------------------------------------------------------------------*/
-eHalStatus sme_ExitWowl (tHalHandle hHal, tWowlExitSource wowlExitSrc)
-{
+eHalStatus sme_ExitWowl (tHalHandle hHal, tWowlExitSource wowlExitSrc) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXIT_WOWL, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcExitWowl (hHal, wowlExitSrc);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -4748,8 +4217,7 @@ eHalStatus sme_ExitWowl (tHalHandle hHal, tWowlExitSource wowlExitSrc)
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pSetKey, tANI_U32 *pRoamId)
-{
+eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pSetKey, tANI_U32 *pRoamId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U32 roamId;
@@ -4758,25 +4226,21 @@ eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pS
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_KEY, sessionId, 0));
-    if (pSetKey->keyLength > CSR_MAX_KEY_LEN)
-    {
+    if (pSetKey->keyLength > CSR_MAX_KEY_LEN) {
         smsLog(pMac, LOGE, FL("Invalid key length %d"), pSetKey->keyLength);
         return eHAL_STATUS_FAILURE;
     }
     /*Once Setkey is done, we can go in BMPS*/
-    if(pSetKey->keyLength)
-    {
+    if(pSetKey->keyLength) {
         pMac->pmc.remainInPowerActiveTillDHCP = FALSE;
         smsLog(pMac, LOG1, FL("Reset remainInPowerActiveTillDHCP"
                               " to allow BMPS"));
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         roamId = GET_NEXT_ROAM_ID(&pMac->roam);
-        if(pRoamId)
-        {
+        if(pRoamId) {
             *pRoamId = roamId;
         }
 
@@ -4789,25 +4253,20 @@ eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pS
 
         pSession = CSR_GET_SESSION(pMac, sessionId);
 
-        if(!pSession)
-        {
+        if(!pSession) {
             smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
-        if(CSR_IS_INFRA_AP(&pSession->connectedProfile))
-        {
-            if(pSetKey->keyDirection == eSIR_TX_DEFAULT)
-            {
+        if(CSR_IS_INFRA_AP(&pSession->connectedProfile)) {
+            if(pSetKey->keyDirection == eSIR_TX_DEFAULT) {
                 if ( ( eCSR_ENCRYPT_TYPE_WEP40 == pSetKey->encType ) ||
-                        ( eCSR_ENCRYPT_TYPE_WEP40_STATICKEY == pSetKey->encType ))
-                {
+                        ( eCSR_ENCRYPT_TYPE_WEP40_STATICKEY == pSetKey->encType )) {
                     pSession->pCurRoamProfile->negotiatedUCEncryptionType = eCSR_ENCRYPT_TYPE_WEP40_STATICKEY;
                 }
                 if ( ( eCSR_ENCRYPT_TYPE_WEP104 == pSetKey->encType ) ||
-                        ( eCSR_ENCRYPT_TYPE_WEP104_STATICKEY == pSetKey->encType ))
-                {
+                        ( eCSR_ENCRYPT_TYPE_WEP104_STATICKEY == pSetKey->encType )) {
                     pSession->pCurRoamProfile->negotiatedUCEncryptionType = eCSR_ENCRYPT_TYPE_WEP104_STATICKEY;
                 }
             }
@@ -4818,16 +4277,11 @@ eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pS
     }
 #ifdef DEBUG_ROAM_DELAY
     //Store sent PTK key time
-    if(pSetKey->keyDirection == eSIR_TX_RX)
-    {
+    if(pSetKey->keyDirection == eSIR_TX_RX) {
         vos_record_roam_event(e_HDD_SET_PTK_REQ, NULL, 0);
-    }
-    else if(pSetKey->keyDirection == eSIR_RX_ONLY)
-    {
+    } else if(pSetKey->keyDirection == eSIR_RX_ONLY) {
         vos_record_roam_event(e_HDD_SET_GTK_REQ, NULL, 0);
-    }
-    else
-    {
+    } else {
         return (status);
     }
 #endif
@@ -4852,8 +4306,7 @@ eHalStatus sme_RoamSetKey(tHalHandle hHal, tANI_U8 sessionId, tCsrRoamSetKey *pS
 
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RoamRemoveKey(tHalHandle hHal, tANI_U8 sessionId,
-                             tCsrRoamRemoveKey *pRemoveKey, tANI_U32 *pRoamId)
-{
+                             tCsrRoamRemoveKey *pRemoveKey, tANI_U32 *pRoamId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U32 roamId;
@@ -4861,11 +4314,9 @@ eHalStatus sme_RoamRemoveKey(tHalHandle hHal, tANI_U8 sessionId,
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_REMOVE_KEY, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         roamId = GET_NEXT_ROAM_ID(&pMac->roam);
-        if(pRoamId)
-        {
+        if(pRoamId) {
             *pRoamId = roamId;
         }
         status = csrRoamIssueRemoveKeyCommand( pMac, sessionId, pRemoveKey, roamId );
@@ -4888,14 +4339,12 @@ eHalStatus sme_RoamRemoveKey(tHalHandle hHal, tANI_U8 sessionId,
 eHalStatus sme_GetRssi(tHalHandle hHal,
                        tCsrRssiCallback callback,
                        tANI_U8 staId, tCsrBssid bssId,
-                       void *pContext, void* pVosContext)
-{
+                       void *pContext, void* pVosContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetRssi( pMac, callback,
                              staId, bssId, pContext, pVosContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -4917,14 +4366,12 @@ eHalStatus sme_GetRssi(tHalHandle hHal,
 eHalStatus sme_GetSnr(tHalHandle hHal,
                       tCsrSnrCallback callback,
                       tANI_U8 staId, tCsrBssid bssId,
-                      void *pContext)
-{
+                      void *pContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetSnr(pMac, callback,
                            staId, bssId, pContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -4945,14 +4392,12 @@ eHalStatus sme_GetSnr(tHalHandle hHal,
 eHalStatus sme_GetRoamRssi(tHalHandle hHal,
                            tCsrRssiCallback callback,
                            tANI_U8 staId, tCsrBssid bssId,
-                           void *pContext, void* pVosContext)
-{
+                           void *pContext, void* pVosContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetRoamRssi( pMac, callback,
                                  staId, bssId, pContext, pVosContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -4976,14 +4421,12 @@ eHalStatus sme_GetRoamRssi(tHalHandle hHal,
 eHalStatus sme_GetTsmStats(tHalHandle hHal,
                            tCsrTsmStatsCallback callback,
                            tANI_U8 staId, tCsrBssid bssId,
-                           void *pContext, void* pVosContext, tANI_U8 tid)
-{
+                           void *pContext, void* pVosContext, tANI_U8 tid) {
     eHalStatus     status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetTsmStats( pMac, callback,
                                  staId, bssId, pContext, pVosContext, tid);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -5012,16 +4455,14 @@ eHalStatus sme_GetStatistics(tHalHandle hHal, eCsrStatsRequesterType requesterId
                              tANI_U32 statsMask,
                              tCsrStatsCallback callback,
                              tANI_U32 periodicity, tANI_BOOLEAN cache,
-                             tANI_U8 staId, void *pContext)
-{
+                             tANI_U8 staId, void *pContext) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_STATS, NO_SESSION,  periodicity));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetStatistics( pMac, requesterId , statsMask, callback,
                                    periodicity, cache, staId, pContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -5039,15 +4480,13 @@ eHalStatus sme_GetStatistics(tHalHandle hHal, eCsrStatsRequesterType requesterId
             to get the relevant TL STA State
     \return the state as tANI_U16
   ---------------------------------------------------------------------------*/
-tANI_U16 smeGetTLSTAState(tHalHandle hHal, tANI_U8 staId)
-{
+tANI_U16 smeGetTLSTAState(tHalHandle hHal, tANI_U8 staId) {
     tANI_U16 tlSTAState = TL_INIT_STATE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_FAILURE;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         tlSTAState = csrGetTLSTAState( pMac, staId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5076,8 +4515,7 @@ tANI_U16 smeGetTLSTAState(tHalHandle hHal, tANI_U8 staId)
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U8 *pbLen)
-{
+eHalStatus sme_GetCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U8 *pbLen) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
@@ -5105,8 +4543,7 @@ eHalStatus sme_GetCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U8 *pbLen)
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_SetCountryCode(tHalHandle hHal, tANI_U8 *pCountry, tANI_BOOLEAN *pfRestartNeeded)
-{
+eHalStatus sme_SetCountryCode(tHalHandle hHal, tANI_U8 *pCountry, tANI_BOOLEAN *pfRestartNeeded) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
@@ -5123,8 +4560,7 @@ eHalStatus sme_SetCountryCode(tHalHandle hHal, tANI_U8 *pCountry, tANI_BOOLEAN *
     a restart is needed to apply the change
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus sme_ResetCountryCodeInformation(tHalHandle hHal, tANI_BOOLEAN *pfRestartNeeded)
-{
+eHalStatus sme_ResetCountryCodeInformation(tHalHandle hHal, tANI_BOOLEAN *pfRestartNeeded) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrResetCountryCodeInformation( pMac, pfRestartNeeded ) );
@@ -5141,8 +4577,7 @@ eHalStatus sme_ResetCountryCodeInformation(tHalHandle hHal, tANI_BOOLEAN *pfRest
     this contains the length of the data in pBuf. If pbuf is NULL, as input, *pbLen should be 0.
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetSupportedCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U32 *pbLen)
-{
+eHalStatus sme_GetSupportedCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U32 *pbLen) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrGetSupportedCountryCode( pMac, pBuf, pbLen ) );
@@ -5159,20 +4594,15 @@ eHalStatus sme_GetSupportedCountryCode(tHalHandle hHal, tANI_U8 *pBuf, tANI_U32 
 
                          FAILURE or RESOURCES  The API finished and failed.
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetCurrentRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t *pDomain)
-{
+eHalStatus sme_GetCurrentRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t *pDomain) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_INVALID_PARAMETER;
 
-    if( pDomain )
-    {
-        if( csrIs11dSupported( pMac ) )
-        {
+    if( pDomain ) {
+        if( csrIs11dSupported( pMac ) ) {
             *pDomain = csrGetCurrentRegulatoryDomain( pMac );
             status = eHAL_STATUS_SUCCESS;
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_FAILURE;
         }
     }
@@ -5192,8 +4622,7 @@ eHalStatus sme_GetCurrentRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t *pDomai
     a restart is needed to apply the change
     \return eHalStatus
   -------------------------------------------------------------------------------*/
-eHalStatus sme_SetRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t domainId, tANI_BOOLEAN *pfRestartNeeded)
-{
+eHalStatus sme_SetRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t domainId, tANI_BOOLEAN *pfRestartNeeded) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrSetRegulatoryDomain( pMac, domainId, pfRestartNeeded ) );
@@ -5216,8 +4645,7 @@ eHalStatus sme_SetRegulatoryDomain(tHalHandle hHal, v_REGDOMAIN_t domainId, tANI
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetRegulatoryDomainForCountry(tHalHandle hHal, tANI_U8 *pCountry, v_REGDOMAIN_t *pDomainId)
-{
+eHalStatus sme_GetRegulatoryDomainForCountry(tHalHandle hHal, tANI_U8 *pCountry, v_REGDOMAIN_t *pDomainId) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return csrGetRegulatoryDomainForCountry(pMac, pCountry, pDomainId,
@@ -5245,23 +4673,18 @@ eHalStatus sme_GetRegulatoryDomainForCountry(tHalHandle hHal, tANI_U8 *pCountry,
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetSupportedRegulatoryDomains(tHalHandle hHal, v_REGDOMAIN_t *pDomains, tANI_U32 *pNumDomains)
-{
+eHalStatus sme_GetSupportedRegulatoryDomains(tHalHandle hHal, v_REGDOMAIN_t *pDomains, tANI_U32 *pNumDomains) {
     eHalStatus status = eHAL_STATUS_INVALID_PARAMETER;
 
     //We support all domains for now
-    if( pNumDomains )
-    {
-        if( NUM_REG_DOMAINS <= *pNumDomains )
-        {
+    if( pNumDomains ) {
+        if( NUM_REG_DOMAINS <= *pNumDomains ) {
             status = eHAL_STATUS_SUCCESS;
         }
         *pNumDomains = NUM_REG_DOMAINS;
     }
-    if( HAL_STATUS_SUCCESS( status ) )
-    {
-        if( pDomains )
-        {
+    if( HAL_STATUS_SUCCESS( status ) ) {
+        if( pDomains ) {
             pDomains[0] = REGDOMAIN_FCC;
             pDomains[1] = REGDOMAIN_ETSI;
             pDomains[2] = REGDOMAIN_JAPAN;
@@ -5271,9 +4694,7 @@ eHalStatus sme_GetSupportedRegulatoryDomains(tHalHandle hHal, v_REGDOMAIN_t *pDo
             pDomains[6] = REGDOMAIN_KOREA;
             pDomains[7] = REGDOMAIN_HI_5GHZ;
             pDomains[8] = REGDOMAIN_NO_5GHZ;
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_INVALID_PARAMETER;
         }
     }
@@ -5283,32 +4704,28 @@ eHalStatus sme_GetSupportedRegulatoryDomains(tHalHandle hHal, v_REGDOMAIN_t *pDo
 
 
 //some support functions
-tANI_BOOLEAN sme_Is11dSupported(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_Is11dSupported(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrIs11dSupported( pMac ) );
 }
 
 
-tANI_BOOLEAN sme_Is11hSupported(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_Is11hSupported(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrIs11hSupported( pMac ) );
 }
 
 
-tANI_BOOLEAN sme_IsWmmSupported(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_IsWmmSupported(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return ( csrIsWmmSupported( pMac ) );
 }
 
 //Upper layer to get the list of the base channels to scan for passively 11d info from csr
-eHalStatus sme_ScanGetBaseChannels( tHalHandle hHal, tCsrChannelInfo * pChannelInfo )
-{
+eHalStatus sme_ScanGetBaseChannels( tHalHandle hHal, tCsrChannelInfo * pChannelInfo ) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     return(csrScanGetBaseChannels(pMac,pChannelInfo) );
@@ -5338,8 +4755,7 @@ eHalStatus sme_ChangeCountryCode( tHalHandle hHal,
                                   void *pContext,
                                   void* pVosContext,
                                   tAniBool countryFromUserSpace,
-                                  tAniBool sendRegHint )
-{
+                                  tAniBool sendRegHint ) {
     eHalStatus                status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal            pMac = PMAC_STRUCT( hHal );
     vos_msg_t                 msg;
@@ -5348,13 +4764,11 @@ eHalStatus sme_ChangeCountryCode( tHalHandle hHal,
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CHANGE_CNTRYCODE, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         smsLog(pMac, LOG1, FL(" called"));
 
         if ((pMac->roam.configParam.Is11dSupportEnabledOriginal == true) &&
-                (!pMac->roam.configParam.fSupplicantCountryCodeHasPriority))
-        {
+                (!pMac->roam.configParam.fSupplicantCountryCodeHasPriority)) {
 
             smsLog(pMac, LOGW, "Set Country Code Fail since the STA is associated and userspace does not have priority ");
 
@@ -5364,8 +4778,7 @@ eHalStatus sme_ChangeCountryCode( tHalHandle hHal,
         }
 
         pMsg = vos_mem_malloc(sizeof(tAniChangeCountryCodeReq));
-        if ( NULL == pMsg )
-        {
+        if ( NULL == pMsg ) {
             smsLog(pMac, LOGE, " csrChangeCountryCode: failed to allocate mem for req");
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
@@ -5384,8 +4797,7 @@ eHalStatus sme_ChangeCountryCode( tHalHandle hHal,
         msg.bodyptr = pMsg;
         msg.reserved = 0;
 
-        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg))
-        {
+        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg)) {
             smsLog(pMac, LOGE, " sme_ChangeCountryCode failed to post msg to self ");
             vos_mem_free((void *)pMsg);
             status = eHAL_STATUS_FAILURE;
@@ -5417,27 +4829,23 @@ eHalStatus sme_ChangeCountryCode( tHalHandle hHal,
 -----------------------------------------------------------------------------*/
 eHalStatus sme_GenericChangeCountryCode( tHalHandle hHal,
         tANI_U8 *pCountry,
-        v_REGDOMAIN_t reg_domain)
-{
+        v_REGDOMAIN_t reg_domain) {
     eHalStatus                status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal            pMac = PMAC_STRUCT( hHal );
     vos_msg_t                 msg;
     tAniGenericChangeCountryCodeReq *pMsg;
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return status;
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         smsLog(pMac, LOG1, FL(" called"));
         pMsg = vos_mem_malloc(sizeof(tAniGenericChangeCountryCodeReq));
-        if (NULL == pMsg)
-        {
+        if (NULL == pMsg) {
             smsLog(pMac, LOGE, " sme_GenericChangeCountryCode: failed to allocate mem for req");
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
@@ -5455,8 +4863,7 @@ eHalStatus sme_GenericChangeCountryCode( tHalHandle hHal,
         msg.bodyptr = pMsg;
         msg.reserved = 0;
 
-        if (VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg))
-        {
+        if (VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MQ_ID_SME, &msg)) {
             smsLog(pMac, LOGE, "sme_GenericChangeCountryCode failed to post msg to self");
             vos_mem_free(pMsg);
             status = eHAL_STATUS_FAILURE;
@@ -5481,13 +4888,11 @@ eHalStatus sme_GenericChangeCountryCode( tHalHandle hHal,
                          FAILURE or RESOURCES  The API finished and failed.
 
  -------------------------------------------------------------------------------*/
-eHalStatus sme_InitChannels(tHalHandle hHal)
-{
+eHalStatus sme_InitChannels(tHalHandle hHal) {
     eHalStatus          status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal      pMac = PMAC_STRUCT(hHal);
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return status;
@@ -5511,13 +4916,11 @@ eHalStatus sme_InitChannels(tHalHandle hHal)
                          FAILURE or RESOURCES  The API finished and failed.
 --------------------------------------------------------------------------*/
 
-eHalStatus sme_InitChannelsForCC(tHalHandle hHal, driver_load_type init)
-{
+eHalStatus sme_InitChannelsForCC(tHalHandle hHal, driver_load_type init) {
     eHalStatus          status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal      pMac = PMAC_STRUCT(hHal);
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return status;
@@ -5546,8 +4949,7 @@ eHalStatus sme_InitChannelsForCC(tHalHandle hHal, driver_load_type init)
   --------------------------------------------------------------------------*/
 eHalStatus sme_DHCPStartInd( tHalHandle hHal,
                              tANI_U8 device_mode,
-                             tANI_U8 sessionId )
-{
+                             tANI_U8 sessionId ) {
     eHalStatus          status;
     VOS_STATUS          vosStatus;
     tpAniSirGlobal      pMac = PMAC_STRUCT( hHal );
@@ -5556,20 +4958,17 @@ eHalStatus sme_DHCPStartInd( tHalHandle hHal,
     tCsrRoamSession     *pSession;
 
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if ( eHAL_STATUS_SUCCESS == status)
-    {
+    if ( eHAL_STATUS_SUCCESS == status) {
         pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if (!pSession)
-        {
+        if (!pSession) {
             smsLog(pMac, LOGE, FL("session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
         pMsg = (tAniDHCPInd*)vos_mem_malloc(sizeof(tAniDHCPInd));
-        if (NULL == pMsg)
-        {
+        if (NULL == pMsg) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Not able to allocate memory for dhcp start", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
@@ -5585,8 +4984,7 @@ eHalStatus sme_DHCPStartInd( tHalHandle hHal,
         vosMessage.reserved = 0;
 
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Post DHCP Start MSG fail", __func__);
             vos_mem_free(pMsg);
@@ -5612,8 +5010,7 @@ eHalStatus sme_DHCPStartInd( tHalHandle hHal,
   --------------------------------------------------------------------------*/
 eHalStatus sme_DHCPStopInd( tHalHandle hHal,
                             tANI_U8 device_mode,
-                            tANI_U8 sessionId )
-{
+                            tANI_U8 sessionId ) {
     eHalStatus          status;
     VOS_STATUS          vosStatus;
     tpAniSirGlobal      pMac = PMAC_STRUCT( hHal );
@@ -5622,20 +5019,17 @@ eHalStatus sme_DHCPStopInd( tHalHandle hHal,
     tCsrRoamSession     *pSession;
 
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if ( eHAL_STATUS_SUCCESS == status)
-    {
+    if ( eHAL_STATUS_SUCCESS == status) {
         pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if (!pSession)
-        {
+        if (!pSession) {
             smsLog(pMac, LOGE, FL("session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
         pMsg = (tAniDHCPInd*)vos_mem_malloc(sizeof(tAniDHCPInd));
-        if (NULL == pMsg)
-        {
+        if (NULL == pMsg) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Not able to allocate memory for dhcp stop", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
@@ -5653,8 +5047,7 @@ eHalStatus sme_DHCPStopInd( tHalHandle hHal,
         vosMessage.reserved = 0;
 
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Post DHCP Stop MSG fail", __func__);
             vos_mem_free(pMsg);
@@ -5682,8 +5075,7 @@ eHalStatus sme_DHCPStopInd( tHalHandle hHal,
                                    or BTC_PTA_ONLY.
             VOS_STATUS_SUCCESS    BT Event passed to HAL
   ---------------------------------------------------------------------------*/
-VOS_STATUS sme_BtcSignalBtEvent (tHalHandle hHal, tpSmeBtEvent pBtEvent)
-{
+VOS_STATUS sme_BtcSignalBtEvent (tHalHandle hHal, tpSmeBtEvent pBtEvent) {
     VOS_STATUS status = VOS_STATUS_E_FAILURE;
 
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
@@ -5691,8 +5083,7 @@ VOS_STATUS sme_BtcSignalBtEvent (tHalHandle hHal, tpSmeBtEvent pBtEvent)
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_BTC_SIGNALEVENT, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         status = btcSignalBTEvent (hHal, pBtEvent);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5712,15 +5103,13 @@ VOS_STATUS sme_BtcSignalBtEvent (tHalHandle hHal, tpSmeBtEvent pBtEvent)
             VOS_STATUS_E_FAILURE  Config not passed to HAL.
             VOS_STATUS_SUCCESS  Config passed to HAL
   ---------------------------------------------------------------------------*/
-VOS_STATUS sme_BtcSetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig)
-{
+VOS_STATUS sme_BtcSetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig) {
     VOS_STATUS status = VOS_STATUS_E_FAILURE;
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_BTC_SETCONFIG, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         status = btcSetConfig (hHal, pSmeBtcConfig);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5739,16 +5128,14 @@ VOS_STATUS sme_BtcSetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig)
             VOS_STATUS_E_FAILURE - failure
             VOS_STATUS_SUCCESS  success
   ---------------------------------------------------------------------------*/
-VOS_STATUS sme_BtcGetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig)
-{
+VOS_STATUS sme_BtcGetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig) {
     VOS_STATUS status = VOS_STATUS_E_FAILURE;
 #ifndef WLAN_MDM_CODE_REDUCTION_OPT
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_BTC_GETCONFIG, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         status = btcGetConfig (hHal, pSmeBtcConfig);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5767,13 +5154,11 @@ VOS_STATUS sme_BtcGetConfig (tHalHandle hHal, tpSmeBtcConfig pSmeBtcConfig)
 void sme_SetCfgPrivacy( tHalHandle hHal,
                         tCsrRoamProfile *pProfile,
                         tANI_BOOLEAN fPrivacy
-                      )
-{
+                      ) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_CFGPRIVACY, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         csrSetCfgPrivacy(pMac, pProfile, fPrivacy);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5792,15 +5177,13 @@ void sme_SetCfgPrivacy( tHalHandle hHal,
             VOS_STATUS_SUCCESS  success
   ---------------------------------------------------------------------------*/
 VOS_STATUS sme_NeighborReportRequest (tHalHandle hHal, tANI_U8 sessionId,
-                                      tpRrmNeighborReq pRrmNeighborReq, tpRrmNeighborRspCallbackInfo callbackInfo)
-{
+                                      tpRrmNeighborReq pRrmNeighborReq, tpRrmNeighborRspCallbackInfo callbackInfo) {
     VOS_STATUS status = VOS_STATUS_E_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_NEIGHBOR_REPORTREQ, NO_SESSION, 0));
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         status = sme_RrmNeighborReportRequest (hHal, sessionId, pRrmNeighborReq, callbackInfo);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -5815,8 +5198,7 @@ VOS_STATUS sme_NeighborReportRequest (tHalHandle hHal, tANI_U8 sessionId,
 
 //sme_DbgReadRegister
 //Caller needs to validate the input values
-VOS_STATUS sme_DbgReadRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t *pRegValue)
-{
+VOS_STATUS sme_DbgReadRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t *pRegValue) {
     VOS_STATUS   status = VOS_STATUS_E_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tPmcPowerState PowerState;
@@ -5826,10 +5208,8 @@ VOS_STATUS sme_DbgReadRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t *pRegVa
 
     /* 1) To make Quarky work in FTM mode **************************************/
 
-    if(eDRIVER_TYPE_MFG == pMac->gDriverType)
-    {
-        if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgReadRegister(regAddr, pRegValue))
-        {
+    if(eDRIVER_TYPE_MFG == pMac->gDriverType) {
+        if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgReadRegister(regAddr, pRegValue)) {
             return VOS_STATUS_SUCCESS;
         }
         return VOS_STATUS_E_FAILURE;
@@ -5838,35 +5218,26 @@ VOS_STATUS sme_DbgReadRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t *pRegVa
     /* 2) NON FTM mode driver *************************************************/
 
     /* Acquire SME global lock */
-    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme))
-    {
+    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme)) {
         return VOS_STATUS_E_FAILURE;
     }
 
-    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL)))
-    {
+    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL))) {
         /* Are we not in IMPS mode? Or are we in connected? Then we're safe*/
-        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState))
-        {
-            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgReadRegister(regAddr, pRegValue))
-            {
+        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState)) {
+            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgReadRegister(regAddr, pRegValue)) {
                 status = VOS_STATUS_SUCCESS;
-            }
-            else
-            {
+            } else {
                 status = VOS_STATUS_E_FAILURE;
             }
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_FAILURE;
         }
     }
 
     /* This is a hack for Qualky/pttWniSocket
        Current implementation doesn't allow pttWniSocket to inform Qualky an error */
-    if ( VOS_STATUS_SUCCESS != status )
-    {
+    if ( VOS_STATUS_SUCCESS != status ) {
         *pRegValue = 0xDEADBEEF;
         status = VOS_STATUS_SUCCESS;
     }
@@ -5880,8 +5251,7 @@ VOS_STATUS sme_DbgReadRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t *pRegVa
 
 //sme_DbgWriteRegister
 //Caller needs to validate the input values
-VOS_STATUS sme_DbgWriteRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t regValue)
-{
+VOS_STATUS sme_DbgWriteRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t regValue) {
     VOS_STATUS    status = VOS_STATUS_E_FAILURE;
     tpAniSirGlobal  pMac = PMAC_STRUCT(hHal);
     tPmcPowerState PowerState;
@@ -5891,10 +5261,8 @@ VOS_STATUS sme_DbgWriteRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t regVal
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_DBG_WRITEREG, NO_SESSION, 0));
-    if(eDRIVER_TYPE_MFG == pMac->gDriverType)
-    {
-        if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteRegister(regAddr, regValue))
-        {
+    if(eDRIVER_TYPE_MFG == pMac->gDriverType) {
+        if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteRegister(regAddr, regValue)) {
             return VOS_STATUS_SUCCESS;
         }
         return VOS_STATUS_E_FAILURE;
@@ -5903,27 +5271,19 @@ VOS_STATUS sme_DbgWriteRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t regVal
     /* 2) NON FTM mode driver *************************************************/
 
     /* Acquire SME global lock */
-    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme))
-    {
+    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme)) {
         return VOS_STATUS_E_FAILURE;
     }
 
-    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL)))
-    {
+    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL))) {
         /* Are we not in IMPS mode? Or are we in connected? Then we're safe*/
-        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState))
-        {
-            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteRegister(regAddr, regValue))
-            {
+        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState)) {
+            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteRegister(regAddr, regValue)) {
                 status = VOS_STATUS_SUCCESS;
-            }
-            else
-            {
+            } else {
                 status = VOS_STATUS_E_FAILURE;
             }
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_FAILURE;
         }
     }
@@ -5939,8 +5299,7 @@ VOS_STATUS sme_DbgWriteRegister(tHalHandle hHal, v_U32_t regAddr, v_U32_t regVal
 //sme_DbgReadMemory
 //Caller needs to validate the input values
 //pBuf caller allocated buffer has the length of nLen
-VOS_STATUS sme_DbgReadMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U32_t nLen)
-{
+VOS_STATUS sme_DbgReadMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U32_t nLen) {
     VOS_STATUS  status  = VOS_STATUS_E_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tPmcPowerState PowerState;
@@ -5954,10 +5313,8 @@ VOS_STATUS sme_DbgReadMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_DBG_READMEM, NO_SESSION, 0));
-    if(eDRIVER_TYPE_MFG == pMac->gDriverType)
-    {
-        if (VOS_STATUS_SUCCESS == WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, (tANI_U8*)pBuf))
-        {
+    if(eDRIVER_TYPE_MFG == pMac->gDriverType) {
+        if (VOS_STATUS_SUCCESS == WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, (tANI_U8*)pBuf)) {
             return VOS_STATUS_SUCCESS;
         }
         return VOS_STATUS_E_FAILURE;
@@ -5966,35 +5323,26 @@ VOS_STATUS sme_DbgReadMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U
     /* 2) NON FTM mode driver *************************************************/
 
     /* Acquire SME global lock */
-    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme))
-    {
+    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme)) {
         return VOS_STATUS_E_FAILURE;
     }
 
-    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL)))
-    {
+    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL))) {
         /* Are we not in IMPS mode? Or are we in connected? Then we're safe*/
-        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState))
-        {
-            if (VOS_STATUS_SUCCESS == WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, (tANI_U8 *)pBuf))
-            {
+        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState)) {
+            if (VOS_STATUS_SUCCESS == WDA_HALDumpCmdReq(pMac, cmd, arg1, arg2, arg3, arg4, (tANI_U8 *)pBuf)) {
                 status = VOS_STATUS_SUCCESS;
-            }
-            else
-            {
+            } else {
                 status = VOS_STATUS_E_FAILURE;
             }
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_FAILURE;
         }
     }
 
     /* This is a hack for Qualky/pttWniSocket
        Current implementation doesn't allow pttWniSocket to inform Qualky an error */
-    if (VOS_STATUS_SUCCESS != status)
-    {
+    if (VOS_STATUS_SUCCESS != status) {
         vos_mem_set(pBuf, nLen, 0xCD);
         status = VOS_STATUS_SUCCESS;
         smsLog(pMac, LOGE, FL(" filled with 0xCD because it cannot access the hardware"));
@@ -6009,8 +5357,7 @@ VOS_STATUS sme_DbgReadMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U
 
 //sme_DbgWriteMemory
 //Caller needs to validate the input values
-VOS_STATUS sme_DbgWriteMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U32_t nLen)
-{
+VOS_STATUS sme_DbgWriteMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_U32_t nLen) {
     VOS_STATUS    status = VOS_STATUS_E_FAILURE;
     tpAniSirGlobal  pMac = PMAC_STRUCT(hHal);
     tPmcPowerState PowerState;
@@ -6020,8 +5367,7 @@ VOS_STATUS sme_DbgWriteMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_DBG_WRITEMEM, NO_SESSION, 0));
-    if(eDRIVER_TYPE_MFG == pMac->gDriverType)
-    {
+    if(eDRIVER_TYPE_MFG == pMac->gDriverType) {
         {
             return VOS_STATUS_SUCCESS;
         }
@@ -6031,27 +5377,19 @@ VOS_STATUS sme_DbgWriteMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_
     /* 2) NON FTM mode driver *************************************************/
 
     /* Acquire SME global lock */
-    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme))
-    {
+    if (eHAL_STATUS_SUCCESS != sme_AcquireGlobalLock(&pMac->sme)) {
         return VOS_STATUS_E_FAILURE;
     }
 
-    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL)))
-    {
+    if(HAL_STATUS_SUCCESS(pmcQueryPowerState(pMac, &PowerState, NULL, NULL))) {
         /* Are we not in IMPS mode? Or are we in connected? Then we're safe*/
-        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState))
-        {
-            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteMemory(memAddr, (void *)pBuf, nLen))
-            {
+        if(!csrIsConnStateDisconnected(pMac, sessionId) || (ePMC_LOW_POWER != PowerState)) {
+            if (eWLAN_PAL_STATUS_SUCCESS == wpalDbgWriteMemory(memAddr, (void *)pBuf, nLen)) {
                 status = VOS_STATUS_SUCCESS;
-            }
-            else
-            {
+            } else {
                 status = VOS_STATUS_E_FAILURE;
             }
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_FAILURE;
         }
     }
@@ -6063,8 +5401,7 @@ VOS_STATUS sme_DbgWriteMemory(tHalHandle hHal, v_U32_t memAddr, v_U8_t *pBuf, v_
 }
 
 
-void pmcLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...)
-{
+void pmcLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...) {
     VOS_TRACE_LEVEL  vosDebugLevel;
     char    logBuffer[LOG_SIZE];
     va_list marker;
@@ -6081,14 +5418,12 @@ void pmcLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString, ...)
 }
 
 
-void smsLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
-{
+void smsLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
 #ifdef WLAN_DEBUG
     // Verify against current log level
     if ( loglevel > pMac->utils.gLogDbgLevel[LOG_INDEX_FOR_MODULE( SIR_SMS_MODULE_ID )] )
         return;
-    else
-    {
+    else {
         va_list marker;
 
         va_start( marker, pString );     /* Initialize variable arguments. */
@@ -6111,20 +5446,15 @@ void smsLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
             VOS_STATUS_SUCCESS  success
   ---------------------------------------------------------------------------*/
 VOS_STATUS sme_GetWcnssWlanCompiledVersion(tHalHandle hHal,
-        tSirVersionType *pVersion)
-{
+        tSirVersionType *pVersion) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     v_CONTEXT_t vosContext = vos_get_global_context(VOS_MODULE_ID_SME, NULL);
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
-        if( pVersion != NULL )
-        {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
+        if( pVersion != NULL ) {
             status = WDA_GetWcnssWlanCompiledVersion(vosContext, pVersion);
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_INVAL;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6145,20 +5475,15 @@ VOS_STATUS sme_GetWcnssWlanCompiledVersion(tHalHandle hHal,
             VOS_STATUS_SUCCESS  success
   ---------------------------------------------------------------------------*/
 VOS_STATUS sme_GetWcnssWlanReportedVersion(tHalHandle hHal,
-        tSirVersionType *pVersion)
-{
+        tSirVersionType *pVersion) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     v_CONTEXT_t vosContext = vos_get_global_context(VOS_MODULE_ID_SME, NULL);
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
-        if( pVersion != NULL )
-        {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
+        if( pVersion != NULL ) {
             status = WDA_GetWcnssWlanReportedVersion(vosContext, pVersion);
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_INVAL;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6180,21 +5505,16 @@ VOS_STATUS sme_GetWcnssWlanReportedVersion(tHalHandle hHal,
   ---------------------------------------------------------------------------*/
 VOS_STATUS sme_GetWcnssSoftwareVersion(tHalHandle hHal,
                                        tANI_U8 *pVersion,
-                                       tANI_U32 versionBufferSize)
-{
+                                       tANI_U32 versionBufferSize) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     v_CONTEXT_t vosContext = vos_get_global_context(VOS_MODULE_ID_SME, NULL);
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
-        if( pVersion != NULL )
-        {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
+        if( pVersion != NULL ) {
             status = WDA_GetWcnssSoftwareVersion(vosContext, pVersion,
                                                  versionBufferSize);
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_INVAL;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6216,21 +5536,16 @@ VOS_STATUS sme_GetWcnssSoftwareVersion(tHalHandle hHal,
   ---------------------------------------------------------------------------*/
 VOS_STATUS sme_GetWcnssHardwareVersion(tHalHandle hHal,
                                        tANI_U8 *pVersion,
-                                       tANI_U32 versionBufferSize)
-{
+                                       tANI_U32 versionBufferSize) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     v_CONTEXT_t vosContext = vos_get_global_context(VOS_MODULE_ID_SME, NULL);
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
-        if( pVersion != NULL )
-        {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
+        if( pVersion != NULL ) {
             status = WDA_GetWcnssHardwareVersion(vosContext, pVersion,
                                                  versionBufferSize);
-        }
-        else
-        {
+        } else {
             status = VOS_STATUS_E_INVAL;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6254,14 +5569,12 @@ VOS_STATUS sme_GetWcnssHardwareVersion(tHalHandle hHal,
     big enough and pNumItems has the number of tBkidCacheInfo.
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamSetBKIDCache( tHalHandle hHal, tANI_U32 sessionId, tBkidCacheInfo *pBKIDCache,
-                                 tANI_U32 numItems )
-{
+                                 tANI_U32 numItems ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrRoamSetBKIDCache( pMac, sessionId, pBKIDCache, numItems );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6284,14 +5597,12 @@ eHalStatus sme_RoamSetBKIDCache( tHalHandle hHal, tANI_U32 sessionId, tBkidCache
     big enough.
   ---------------------------------------------------------------------------*/
 eHalStatus sme_RoamGetBKIDCache(tHalHandle hHal, tANI_U32 *pNum,
-                                tBkidCacheInfo *pBkidCache)
-{
+                                tBkidCacheInfo *pBkidCache) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         smsLog(pMac, LOGE, FL(" !!!!!!!!!!!!!!!!!!SessionId is hardcoded"));
         status = csrRoamGetBKIDCache( pMac, 0, pNum, pBkidCache );
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6308,15 +5619,13 @@ eHalStatus sme_RoamGetBKIDCache(tHalHandle hHal, tANI_U32 *pNum,
     it is opened (by calling halOpen).
     \return tANI_U32 - the number of BKID cache entries.
   ---------------------------------------------------------------------------*/
-tANI_U32 sme_RoamGetNumBKIDCache(tHalHandle hHal, tANI_U32 sessionId)
-{
+tANI_U32 sme_RoamGetNumBKIDCache(tHalHandle hHal, tANI_U32 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U32 numBkidCache = 0;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         numBkidCache = csrRoamGetNumBKIDCache( pMac, sessionId );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6341,14 +5650,12 @@ tANI_U32 sme_RoamGetNumBKIDCache(tHalHandle hHal, tANI_U32 sessionId)
   ---------------------------------------------------------------------------*/
 eHalStatus sme_ScanGetBKIDCandidateList(tHalHandle hHal, tANI_U32 sessionId,
                                         tBkidCandidateInfo *pBkidList,
-                                        tANI_U32 *pNumItems )
-{
+                                        tANI_U32 *pNumItems ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrScanGetBKIDCandidateList( pMac, sessionId, pBkidList, pNumItems );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6371,35 +5678,28 @@ eHalStatus sme_ScanGetBKIDCandidateList(tHalHandle hHal, tANI_U32 sessionId,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_getOemDataRsp(tHalHandle hHal,
-                             tOemDataRsp **pOemDataRsp)
-{
+                             tOemDataRsp **pOemDataRsp) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    do
-    {
+    do {
         //acquire the lock for the sme object
         status = sme_AcquireGlobalLock(&pMac->sme);
 
-        if(!HAL_STATUS_SUCCESS(status))
-        {
+        if(!HAL_STATUS_SUCCESS(status)) {
             break;
         }
 
-        if(pMac->oemData.pOemDataRsp != NULL)
-        {
+        if(pMac->oemData.pOemDataRsp != NULL) {
             *pOemDataRsp = pMac->oemData.pOemDataRsp;
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_FAILURE;
         }
 
         //release the lock for the sme object
         sme_ReleaseGlobalLock( &pMac->sme );
 
-    }
-    while(0);
+    } while(0);
 
     return status;
 }
@@ -6418,25 +5718,19 @@ eHalStatus sme_OemDataReq(tHalHandle hHal,
                           tOemDataReqConfig *pOemDataReqConfig,
                           tANI_U32 *pOemDataReqID,
                           oemData_OemDataReqCompleteCallback callback,
-                          void *pContext)
-{
+                          void *pContext) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    do
-    {
+    do {
         //acquire the lock for the sme object
         status = sme_AcquireGlobalLock(&pMac->sme);
-        if(HAL_STATUS_SUCCESS(status))
-        {
+        if(HAL_STATUS_SUCCESS(status)) {
             tANI_U32 lOemDataReqId = pMac->oemData.oemDataReqID++; //let it wrap around
 
-            if(pOemDataReqID)
-            {
+            if(pOemDataReqID) {
                 *pOemDataReqID = lOemDataReqId;
-            }
-            else
-            {
+            } else {
                 sme_ReleaseGlobalLock( &pMac->sme );
                 return eHAL_STATUS_FAILURE;
             }
@@ -6446,8 +5740,7 @@ eHalStatus sme_OemDataReq(tHalHandle hHal,
             //release the lock for the sme object
             sme_ReleaseGlobalLock( &pMac->sme );
         }
-    }
-    while(0);
+    } while(0);
 
     smsLog(pMac, LOGW, "exiting function %s", __func__);
 
@@ -6478,20 +5771,15 @@ eHalStatus sme_OemDataReq(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 eHalStatus sme_OpenSession(tHalHandle hHal, csrRoamCompleteCallback callback,
                            void *pContext, tANI_U8 *pSelfMacAddr,
-                           tANI_U8 *pbSessionId)
-{
+                           tANI_U8 *pbSessionId) {
     eHalStatus status;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if( NULL == pbSessionId )
-    {
+    if( NULL == pbSessionId ) {
         status = eHAL_STATUS_INVALID_PARAMETER;
-    }
-    else
-    {
+    } else {
         status = sme_AcquireGlobalLock( &pMac->sme );
-        if ( HAL_STATUS_SUCCESS( status ) )
-        {
+        if ( HAL_STATUS_SUCCESS( status ) ) {
             status = csrRoamOpenSession(pMac, callback, pContext,
                                         pSelfMacAddr, pbSessionId);
 
@@ -6525,16 +5813,14 @@ eHalStatus sme_OpenSession(tHalHandle hHal, csrRoamCompleteCallback callback,
 
   --------------------------------------------------------------------------*/
 eHalStatus sme_CloseSession(tHalHandle hHal, tANI_U8 sessionId,
-                            csrRoamSessionCloseCallback callback, void *pContext)
-{
+                            csrRoamSessionCloseCallback callback, void *pContext) {
     eHalStatus status;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CLOSE_SESSION, sessionId, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrRoamCloseSession( pMac, sessionId, FALSE,
                                       callback, pContext );
 
@@ -6558,15 +5844,13 @@ eHalStatus sme_CloseSession(tHalHandle hHal, tANI_U8 sessionId,
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_RoamUpdateAPWPSIE(tHalHandle hHal, tANI_U8 sessionId, tSirAPWPSIEs *pAPWPSIES)
-{
+eHalStatus sme_RoamUpdateAPWPSIE(tHalHandle hHal, tANI_U8 sessionId, tSirAPWPSIEs *pAPWPSIES) {
 
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         status = csrRoamUpdateAPWPSIE( pMac, sessionId, pAPWPSIES );
 
@@ -6589,15 +5873,13 @@ eHalStatus sme_RoamUpdateAPWPSIE(tHalHandle hHal, tANI_U8 sessionId, tSirAPWPSIE
                          FAILURE or RESOURCES  The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_RoamUpdateAPWPARSNIEs(tHalHandle hHal, tANI_U8 sessionId, tSirRSNie * pAPSirRSNie)
-{
+eHalStatus sme_RoamUpdateAPWPARSNIEs(tHalHandle hHal, tANI_U8 sessionId, tSirRSNie * pAPSirRSNie) {
 
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         status = csrRoamUpdateWPARSNIEs( pMac, sessionId, pAPSirRSNie);
 
@@ -6621,15 +5903,13 @@ eHalStatus sme_RoamUpdateAPWPARSNIEs(tHalHandle hHal, tANI_U8 sessionId, tSirRSN
                         The API finished and failed.
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_ChangeMCCBeaconInterval(tHalHandle hHal, tANI_U8 sessionId)
-{
+eHalStatus sme_ChangeMCCBeaconInterval(tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     smsLog(pMac, LOG1, FL("Update Beacon PARAMS "));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrSendChngMCCBeaconInterval( pMac, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6651,15 +5931,13 @@ eHalStatus sme_ChangeMCCBeaconInterval(tHalHandle hHal, tANI_U8 sessionId)
 
 -------------------------------------------------------------------------------*/
 
-eHalStatus sme_sendBTAmpEvent(tHalHandle hHal, tSmeBtAmpEvent btAmpEvent)
-{
+eHalStatus sme_sendBTAmpEvent(tHalHandle hHal, tSmeBtAmpEvent btAmpEvent) {
     vos_msg_t msg;
     tpSmeBtAmpEvent ptrSmeBtAmpEvent = NULL;
     eHalStatus status = eHAL_STATUS_FAILURE;
 
     ptrSmeBtAmpEvent = vos_mem_malloc(sizeof(tSmeBtAmpEvent));
-    if (NULL == ptrSmeBtAmpEvent)
-    {
+    if (NULL == ptrSmeBtAmpEvent) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                   "Not able to allocate memory for BTAmp event", __func__);
         return status;
@@ -6672,8 +5950,7 @@ eHalStatus sme_sendBTAmpEvent(tHalHandle hHal, tSmeBtAmpEvent btAmpEvent)
 
     //status = halFW_SendBTAmpEventMesg(pMac, event);
 
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                   "Not able to post SIR_HAL_SIGNAL_BTAMP_EVENT message to HAL", __func__);
         vos_mem_free(ptrSmeBtAmpEvent);
@@ -6694,21 +5971,18 @@ eHalStatus sme_sendBTAmpEvent(tHalHandle hHal, tSmeBtAmpEvent btAmpEvent)
   ---------------------------------------------------------------------------*/
 eHalStatus smeIssueFastRoamNeighborAPEvent (tHalHandle hHal,
         tANI_U8 *bssid,
-        tSmeFastRoamTrigger fastRoamTrig)
-{
+        tSmeFastRoamTrigger fastRoamTrig) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tpCsrNeighborRoamControlInfo  pNeighborRoamInfo = &pMac->roam.neighborRoamInfo;
     VOS_STATUS  vosStatus = VOS_STATUS_SUCCESS;
     eHalStatus  status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: invoked", __func__);
 
-        if (eSME_ROAM_TRIGGER_SCAN == fastRoamTrig)
-        {
+        if (eSME_ROAM_TRIGGER_SCAN == fastRoamTrig) {
             smsLog(pMac, LOG1, FL("CFG Channel list scan... "));
             pNeighborRoamInfo->cfgRoamEn = eSME_ROAM_TRIGGER_SCAN;
             vos_mem_copy((void *)(&pNeighborRoamInfo->cfgRoambssId),
@@ -6717,15 +5991,12 @@ eHalStatus smeIssueFastRoamNeighborAPEvent (tHalHandle hHal,
                    MAC_ADDRESS_STR, MAC_ADDR_ARRAY(pNeighborRoamInfo->cfgRoambssId));
 
             vosStatus = csrNeighborRoamTransitToCFGChanScan(pMac);
-            if (VOS_STATUS_SUCCESS != vosStatus)
-            {
+            if (VOS_STATUS_SUCCESS != vosStatus) {
                 smsLog(pMac, LOGE,
                        FL("CFG Channel list scan state failed with status %d "),
                        vosStatus);
             }
-        }
-        else if (eSME_ROAM_TRIGGER_FAST_ROAM == fastRoamTrig)
-        {
+        } else if (eSME_ROAM_TRIGGER_FAST_ROAM == fastRoamTrig) {
             vos_mem_copy((void *)(&pNeighborRoamInfo->cfgRoambssId),
                          (void *)bssid, sizeof(tSirMacAddr));
             pNeighborRoamInfo->cfgRoamEn = eSME_ROAM_TRIGGER_FAST_ROAM;
@@ -6737,8 +6008,7 @@ eHalStatus smeIssueFastRoamNeighborAPEvent (tHalHandle hHal,
                         pMac,
                         0);
 
-            if (!VOS_IS_STATUS_SUCCESS(vosStatus))
-            {
+            if (!VOS_IS_STATUS_SUCCESS(vosStatus)) {
                 smsLog(pMac,
                        LOGE,
                        FL(" Call to csrNeighborRoamReassocIndCallback failed, status = %d"),
@@ -6757,21 +6027,17 @@ eHalStatus smeIssueFastRoamNeighborAPEvent (tHalHandle hHal,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_SetHostOffload (tHalHandle hHal, tANI_U8 sessionId,
-                               tpSirHostOffloadReq pRequest)
-{
+                               tpSirHostOffloadReq pRequest) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_FAILURE;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_HOSTOFFLOAD, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
 #ifdef WLAN_NS_OFFLOAD
-        if(SIR_IPV6_NS_OFFLOAD == pRequest->offloadType)
-        {
+        if(SIR_IPV6_NS_OFFLOAD == pRequest->offloadType) {
             status = pmcSetNSOffload( hHal, pRequest, sessionId);
-        }
-        else
+        } else
 #endif //WLAN_NS_OFFLOAD
         {
             status = pmcSetHostOffload (hHal, pRequest, sessionId);
@@ -6791,15 +6057,13 @@ eHalStatus sme_SetHostOffload (tHalHandle hHal, tANI_U8 sessionId,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_SetGTKOffload (tHalHandle hHal, tpSirGtkOffloadParams pRequest,
-                              tANI_U8 sessionId)
-{
+                              tANI_U8 sessionId) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_GTKOFFLOAD, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         status = pmcSetGTKOffload( hHal, pRequest, sessionId );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6815,15 +6079,13 @@ eHalStatus sme_SetGTKOffload (tHalHandle hHal, tpSirGtkOffloadParams pRequest,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_GetGTKOffload (tHalHandle hHal, GTKOffloadGetInfoCallback callbackRoutine,
-                              void *callbackContext, tANI_U8 sessionId )
-{
+                              void *callbackContext, tANI_U8 sessionId ) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_GTKOFFLOAD, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         pmcGetGTKOffload(hHal, callbackRoutine, callbackContext, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6840,12 +6102,10 @@ eHalStatus sme_GetGTKOffload (tHalHandle hHal, GTKOffloadGetInfoCallback callbac
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_SetKeepAlive (tHalHandle hHal, tANI_U8 sessionId,
-                             tpSirKeepAliveReq pRequest)
-{
+                             tpSirKeepAliveReq pRequest) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         status = pmcSetKeepAlive (hHal, pRequest, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6861,13 +6121,11 @@ eHalStatus sme_SetKeepAlive (tHalHandle hHal, tANI_U8 sessionId,
     \param  pRequest -  Pointer to the offload request.
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_SetPreferredNetworkList (tHalHandle hHal, tpSirPNOScanReq pRequest, tANI_U8 sessionId, void (*callbackRoutine) (void *callbackContext, tSirPrefNetworkFoundInd *pPrefNetworkFoundInd), void *callbackContext )
-{
+eHalStatus sme_SetPreferredNetworkList (tHalHandle hHal, tpSirPNOScanReq pRequest, tANI_U8 sessionId, void (*callbackRoutine) (void *callbackContext, tSirPrefNetworkFoundInd *pPrefNetworkFoundInd), void *callbackContext ) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         pmcSetPreferredNetworkList(hHal, pRequest, sessionId, callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6875,13 +6133,11 @@ eHalStatus sme_SetPreferredNetworkList (tHalHandle hHal, tpSirPNOScanReq pReques
     return (status);
 }
 
-eHalStatus sme_SetRSSIFilter(tHalHandle hHal, v_U8_t rssiThreshold)
-{
+eHalStatus sme_SetRSSIFilter(tHalHandle hHal, v_U8_t rssiThreshold) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         pmcSetRssiFilter(hHal, rssiThreshold);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6891,15 +6147,13 @@ eHalStatus sme_SetRSSIFilter(tHalHandle hHal, v_U8_t rssiThreshold)
 
 #endif // FEATURE_WLAN_SCAN_PNO
 
-eHalStatus sme_SetPowerParams(tHalHandle hHal, tSirSetPowerParamsReq* pwParams, tANI_BOOLEAN forced)
-{
+eHalStatus sme_SetPowerParams(tHalHandle hHal, tSirSetPowerParamsReq* pwParams, tANI_BOOLEAN forced) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_POWERPARAMS, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         pmcSetPowerParams(hHal, pwParams, forced);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -6916,8 +6170,7 @@ eHalStatus sme_SetPowerParams(tHalHandle hHal, tSirSetPowerParamsReq* pwParams, 
     \return tSirAbortScanStatus Abort scan status
   ---------------------------------------------------------------------------*/
 tSirAbortScanStatus sme_AbortMacScan(tHalHandle hHal, tANI_U8 sessionId,
-                                     eCsrAbortReason reason)
-{
+                                     eCsrAbortReason reason) {
     tSirAbortScanStatus scanAbortStatus = eSIR_ABORT_SCAN_FAILURE;
     eHalStatus status;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
@@ -6925,8 +6178,7 @@ tSirAbortScanStatus sme_AbortMacScan(tHalHandle hHal, tANI_U8 sessionId,
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_ABORT_MACSCAN, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         scanAbortStatus = csrScanAbortMacScan(pMac, sessionId, reason);
 
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -6943,20 +6195,17 @@ tSirAbortScanStatus sme_AbortMacScan(tHalHandle hHal, tANI_U8 sessionId,
         \returns eHAL_STATUS_SUCCESS
                 eHAL_STATUS_FAILURE
 -------------------------------------------------------------------------------*/
-eHalStatus sme_GetOperationChannel(tHalHandle hHal, tANI_U32 *pChannel, tANI_U8 sessionId)
-{
+eHalStatus sme_GetOperationChannel(tHalHandle hHal, tANI_U32 *pChannel, tANI_U8 sessionId) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tCsrRoamSession *pSession;
 
-    if (CSR_IS_SESSION_VALID( pMac, sessionId ))
-    {
+    if (CSR_IS_SESSION_VALID( pMac, sessionId )) {
         pSession = CSR_GET_SESSION( pMac, sessionId );
 
         if(( pSession->connectedProfile.BSSType == eCSR_BSS_TYPE_INFRASTRUCTURE ) ||
                 ( pSession->connectedProfile.BSSType == eCSR_BSS_TYPE_IBSS ) ||
                 ( pSession->connectedProfile.BSSType == eCSR_BSS_TYPE_INFRA_AP ) ||
-                ( pSession->connectedProfile.BSSType == eCSR_BSS_TYPE_START_IBSS ))
-        {
+                ( pSession->connectedProfile.BSSType == eCSR_BSS_TYPE_START_IBSS )) {
             *pChannel =pSession->connectedProfile.operationChannel;
             return eHAL_STATUS_SUCCESS;
         }
@@ -6976,28 +6225,24 @@ eHalStatus sme_GetOperationChannel(tHalHandle hHal, tANI_U32 *pChannel, tANI_U8 
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus sme_RegisterMgmtFrame(tHalHandle hHal, tANI_U8 sessionId,
-                                 tANI_U16 frameType, tANI_U8* matchData, tANI_U16 matchLen)
-{
+                                 tANI_U16 frameType, tANI_U8* matchData, tANI_U16 matchLen) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_REGISTER_MGMTFR, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         tSirRegisterMgmtFrame *pMsg;
         tANI_U16 len;
         tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if(!pSession)
-        {
+        if(!pSession) {
             smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
-        if( !pSession->sessionActive )
-        {
+        if( !pSession->sessionActive ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s Invalid Sessionid", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
@@ -7009,8 +6254,7 @@ eHalStatus sme_RegisterMgmtFrame(tHalHandle hHal, tANI_U8 sessionId,
         pMsg = vos_mem_malloc(len);
         if ( NULL == pMsg )
             status = eHAL_STATUS_FAILURE;
-        else
-        {
+        else {
             vos_mem_set(pMsg, len, 0);
             pMsg->messageType     = eWNI_SME_REGISTER_MGMT_FRAME_REQ;
             pMsg->length          = len;
@@ -7038,28 +6282,24 @@ eHalStatus sme_RegisterMgmtFrame(tHalHandle hHal, tANI_U8 sessionId,
     \return eHalStatus
   -------------------------------------------------------------------------------*/
 eHalStatus sme_DeregisterMgmtFrame(tHalHandle hHal, tANI_U8 sessionId,
-                                   tANI_U16 frameType, tANI_U8* matchData, tANI_U16 matchLen)
-{
+                                   tANI_U16 frameType, tANI_U8* matchData, tANI_U16 matchLen) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_DEREGISTER_MGMTFR, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         tSirRegisterMgmtFrame *pMsg;
         tANI_U16 len;
         tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if(!pSession)
-        {
+        if(!pSession) {
             smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
         }
 
-        if( !pSession->sessionActive )
-        {
+        if( !pSession->sessionActive ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s Invalid Sessionid", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
@@ -7071,8 +6311,7 @@ eHalStatus sme_DeregisterMgmtFrame(tHalHandle hHal, tANI_U8 sessionId,
         pMsg = vos_mem_malloc(len);
         if ( NULL == pMsg )
             status = eHAL_STATUS_FAILURE;
-        else
-        {
+        else {
             vos_mem_set(pMsg, len, 0);
             pMsg->messageType     = eWNI_SME_REGISTER_MGMT_FRAME_REQ;
             pMsg->length          = len;
@@ -7101,15 +6340,13 @@ eHalStatus sme_RemainOnChannel(tHalHandle hHal, tANI_U8 sessionId,
                                tANI_U8 channel, tANI_U32 duration,
                                remainOnChanCallback callback,
                                void *pContext,
-                               tANI_U8 isP2PProbeReqAllowed)
-{
+                               tANI_U8 isP2PProbeReqAllowed) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_REMAIN_ONCHAN, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         status = p2pRemainOnChannel (hHal, sessionId, channel, duration, callback, pContext,
                                      isP2PProbeReqAllowed
 #ifdef WLAN_FEATURE_P2P_INTERNAL
@@ -7130,24 +6367,20 @@ eHalStatus sme_RemainOnChannel(tHalHandle hHal, tANI_U8 sessionId,
   ---------------------------------------------------------------------------*/
 
 #ifndef WLAN_FEATURE_CONCURRENT_P2P
-eHalStatus sme_ReportProbeReq(tHalHandle hHal, tANI_U8 flag)
-{
+eHalStatus sme_ReportProbeReq(tHalHandle hHal, tANI_U8 flag) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    do
-    {
+    do {
         //acquire the lock for the sme object
         status = sme_AcquireGlobalLock(&pMac->sme);
-        if(HAL_STATUS_SUCCESS(status))
-        {
+        if(HAL_STATUS_SUCCESS(status)) {
             /* call set in context */
             pMac->p2pContext.probeReqForwarding = flag;
             //release the lock for the sme object
             sme_ReleaseGlobalLock( &pMac->sme );
         }
-    }
-    while(0);
+    } while(0);
 
     smsLog(pMac, LOGW, "exiting function %s", __func__);
 
@@ -7163,30 +6396,24 @@ eHalStatus sme_ReportProbeReq(tHalHandle hHal, tANI_U8 flag)
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 
-eHalStatus sme_updateP2pIe(tHalHandle hHal, void *p2pIe, tANI_U32 p2pIeLength)
-{
+eHalStatus sme_updateP2pIe(tHalHandle hHal, void *p2pIe, tANI_U32 p2pIeLength) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     //acquire the lock for the sme object
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if(HAL_STATUS_SUCCESS(status))
-    {
-        if(NULL != pMac->p2pContext.probeRspIe)
-        {
+    if(HAL_STATUS_SUCCESS(status)) {
+        if(NULL != pMac->p2pContext.probeRspIe) {
             vos_mem_free(pMac->p2pContext.probeRspIe);
             pMac->p2pContext.probeRspIeLength = 0;
         }
 
         pMac->p2pContext.probeRspIe = vos_mem_malloc(p2pIeLength);
-        if (NULL == pMac->p2pContext.probeRspIe)
-        {
+        if (NULL == pMac->p2pContext.probeRspIe) {
             smsLog(pMac, LOGE, "%s: Unable to allocate P2P IE", __func__);
             pMac->p2pContext.probeRspIeLength = 0;
             status = eHAL_STATUS_FAILURE;
-        }
-        else
-        {
+        } else {
             pMac->p2pContext.probeRspIeLength = p2pIeLength;
 
             sirDumpBuf( pMac, SIR_LIM_MODULE_ID, LOG2,
@@ -7215,8 +6442,7 @@ eHalStatus sme_updateP2pIe(tHalHandle hHal, void *p2pIe, tANI_U32 p2pIeLength)
 
 eHalStatus sme_sendAction(tHalHandle hHal, tANI_U8 sessionId,
                           const tANI_U8 *pBuf, tANI_U32 len,
-                          tANI_U16 wait, tANI_BOOLEAN noack)
-{
+                          tANI_U16 wait, tANI_BOOLEAN noack) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
@@ -7224,8 +6450,7 @@ eHalStatus sme_sendAction(tHalHandle hHal, tANI_U8 sessionId,
                      TRACE_CODE_SME_RX_HDD_SEND_ACTION, sessionId, 0));
     //acquire the lock for the sme object
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if(HAL_STATUS_SUCCESS(status))
-    {
+    if(HAL_STATUS_SUCCESS(status)) {
         p2pSendAction(hHal, sessionId, pBuf, len, wait, noack);
         //release the lock for the sme object
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -7236,15 +6461,13 @@ eHalStatus sme_sendAction(tHalHandle hHal, tANI_U8 sessionId,
     return(status);
 }
 
-eHalStatus sme_CancelRemainOnChannel(tHalHandle hHal, tANI_U8 sessionId )
-{
+eHalStatus sme_CancelRemainOnChannel(tHalHandle hHal, tANI_U8 sessionId ) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CANCEL_REMAIN_ONCHAN, sessionId, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         status = p2pCancelRemainOnChannel (hHal, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -7252,13 +6475,11 @@ eHalStatus sme_CancelRemainOnChannel(tHalHandle hHal, tANI_U8 sessionId )
 }
 
 //Power Save Related
-eHalStatus sme_p2pSetPs(tHalHandle hHal, tP2pPsConfig * data)
-{
+eHalStatus sme_p2pSetPs(tHalHandle hHal, tP2pPsConfig * data) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         status = p2pSetPs (hHal, data);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -7292,8 +6513,7 @@ eHalStatus sme_p2pSetPs(tHalHandle hHal, tP2pPsConfig * data)
 
 --------------------------------------------------------------------------- */
 eHalStatus sme_ConfigureRxpFilter( tHalHandle hHal,
-                                   tpSirWlanSetRxpFilters  wlanRxpFilterParam)
-{
+                                   tpSirWlanSetRxpFilters  wlanRxpFilterParam) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
@@ -7301,14 +6521,12 @@ eHalStatus sme_ConfigureRxpFilter( tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CONFIG_RXPFIL, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         /* serialize the req through MC thread */
         vosMessage.bodyptr = wlanRxpFilterParam;
         vosMessage.type         = WDA_CFG_RXP_FILTER_REQ;
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -7336,8 +6554,7 @@ eHalStatus sme_ConfigureRxpFilter( tHalHandle hHal,
 
 --------------------------------------------------------------------------- */
 eHalStatus sme_ConfigureSuspendInd( tHalHandle hHal,
-                                    tpSirWlanSuspendParam  wlanSuspendParam)
-{
+                                    tpSirWlanSuspendParam  wlanSuspendParam) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
@@ -7345,14 +6562,12 @@ eHalStatus sme_ConfigureSuspendInd( tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CONFIG_SUSPENDIND, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         /* serialize the req through MC thread */
         vosMessage.bodyptr = wlanSuspendParam;
         vosMessage.type    = WDA_WLAN_SUSPEND_IND;
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -7380,8 +6595,7 @@ eHalStatus sme_ConfigureSuspendInd( tHalHandle hHal,
 
 --------------------------------------------------------------------------- */
 eHalStatus sme_ConfigureResumeReq( tHalHandle hHal,
-                                   tpSirWlanResumeParam  wlanResumeParam)
-{
+                                   tpSirWlanResumeParam  wlanResumeParam) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
@@ -7389,14 +6603,12 @@ eHalStatus sme_ConfigureResumeReq( tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CONFIG_RESUMEREQ, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         /* serialize the req through MC thread */
         vosMessage.bodyptr = wlanResumeParam;
         vosMessage.type    = WDA_WLAN_RESUME_REQ;
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -7416,15 +6628,13 @@ eHalStatus sme_ConfigureResumeReq( tHalHandle hHal,
     \return sessionid, -1 if infra session is not connected
 
   -------------------------------------------------------------------------------*/
-tANI_S8 sme_GetInfraSessionId(tHalHandle hHal)
-{
+tANI_S8 sme_GetInfraSessionId(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tANI_S8 sessionid = -1;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         sessionid = csrGetInfraSessionId( pMac);
 
@@ -7447,14 +6657,12 @@ tANI_S8 sme_GetInfraSessionId(tHalHandle hHal)
     \return operating channel, 0 if infra session is not connected
 
   -------------------------------------------------------------------------------*/
-tANI_U8 sme_GetInfraOperationChannel( tHalHandle hHal, tANI_U8 sessionId)
-{
+tANI_U8 sme_GetInfraOperationChannel( tHalHandle hHal, tANI_U8 sessionId) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U8 channel = 0;
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         channel = csrGetInfraOperationChannel( pMac, sessionId);
 
@@ -7466,14 +6674,12 @@ tANI_U8 sme_GetInfraOperationChannel( tHalHandle hHal, tANI_U8 sessionId)
 
 //This routine will return poerating channel on which other BSS is operating to be used for concurrency mode.
 //If other BSS is not up or not connected it will return 0
-tANI_U8 sme_GetConcurrentOperationChannel( tHalHandle hHal )
-{
+tANI_U8 sme_GetConcurrentOperationChannel( tHalHandle hHal ) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     tANI_U8 channel = 0;
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         channel = csrGetConcurrentOperationChannel( pMac );
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO_HIGH, "%s: "
@@ -7499,23 +6705,18 @@ tANI_U8 sme_GetConcurrentOperationChannel( tHalHandle hHal )
 * Returns: eHalStatus
 *
 ******************************************************************************/
-eHalStatus sme_PreferredNetworkFoundInd (tHalHandle hHal, void* pMsg)
-{
+eHalStatus sme_PreferredNetworkFoundInd (tHalHandle hHal, void* pMsg) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tSirPrefNetworkFoundInd *pPrefNetworkFoundInd = (tSirPrefNetworkFoundInd *)pMsg;
     v_U8_t dumpSsId[SIR_MAC_MAX_SSID_LENGTH + 1];
     tANI_U8 ssIdLength = 0;
 
-    if (NULL == pMsg)
-    {
+    if (NULL == pMsg) {
         smsLog(pMac, LOGE, "in %s msg ptr is NULL", __func__);
         status = eHAL_STATUS_FAILURE;
-    }
-    else
-    {
-        if (pPrefNetworkFoundInd->ssId.length > 0)
-        {
+    } else {
+        if (pPrefNetworkFoundInd->ssId.length > 0) {
             ssIdLength = CSR_MIN(SIR_MAC_MAX_SSID_LENGTH,
                                  pPrefNetworkFoundInd->ssId.length);
             vos_mem_copy(dumpSsId, pPrefNetworkFoundInd->ssId.ssId, ssIdLength);
@@ -7529,32 +6730,25 @@ eHalStatus sme_PreferredNetworkFoundInd (tHalHandle hHal, void* pMsg)
             sme_ScanFlushResult(hHal,0);
 
             //Save the frame to scan result
-            if (pPrefNetworkFoundInd->mesgLen > sizeof(tSirPrefNetworkFoundInd))
-            {
+            if (pPrefNetworkFoundInd->mesgLen > sizeof(tSirPrefNetworkFoundInd)) {
                 //we may have a frame
                 status = csrScanSavePreferredNetworkFound(pMac,
                          pPrefNetworkFoundInd);
-                if (!HAL_STATUS_SUCCESS(status))
-                {
+                if (!HAL_STATUS_SUCCESS(status)) {
                     smsLog(pMac, LOGE, FL(" fail to save preferred network"));
                 }
-            }
-            else
-            {
+            } else {
                 smsLog(pMac, LOGE, FL(" not enough data length %u needed %zu"),
                        pPrefNetworkFoundInd->mesgLen, sizeof(tSirPrefNetworkFoundInd));
             }
 
             /* Call Preferred Netowrk Found Indication callback routine. */
-            if (HAL_STATUS_SUCCESS(status) && (pMac->pmc.prefNetwFoundCB != NULL))
-            {
+            if (HAL_STATUS_SUCCESS(status) && (pMac->pmc.prefNetwFoundCB != NULL)) {
                 pMac->pmc.prefNetwFoundCB(
                     pMac->pmc.preferredNetworkFoundIndCallbackContext,
                     pPrefNetworkFoundInd);
             }
-        }
-        else
-        {
+        } else {
             smsLog(pMac, LOGE, "%s: callback failed - SSID is NULL", __func__);
             status = eHAL_STATUS_FAILURE;
         }
@@ -7567,14 +6761,12 @@ eHalStatus sme_PreferredNetworkFoundInd (tHalHandle hHal, void* pMsg)
 #endif // FEATURE_WLAN_SCAN_PNO
 
 
-eHalStatus sme_GetCfgValidChannels(tHalHandle hHal, tANI_U8 *aValidChannels, tANI_U32 *len)
-{
+eHalStatus sme_GetCfgValidChannels(tHalHandle hHal, tANI_U8 *aValidChannels, tANI_U32 *len) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrGetCfgValidChannels(pMac, aValidChannels, len);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -7582,14 +6774,12 @@ eHalStatus sme_GetCfgValidChannels(tHalHandle hHal, tANI_U8 *aValidChannels, tAN
     return (status);
 }
 
-eHalStatus sme_SetCfgScanControlList(tHalHandle hHal, tANI_U8 *countryCode, tCsrChannel *pChannelList)
-{
+eHalStatus sme_SetCfgScanControlList(tHalHandle hHal, tANI_U8 *countryCode, tCsrChannel *pChannelList) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         csrSetCfgScanControlList(pMac, countryCode, pChannelList);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -7612,14 +6802,12 @@ eHalStatus sme_SetCfgScanControlList(tHalHandle hHal, tANI_U8 *countryCode, tCsr
 eHalStatus sme_SetTxPerTracking(tHalHandle hHal,
                                 void (*pCallbackfn) (void *pCallbackContext),
                                 void *pCallbackContext,
-                                tpSirTxPerTrackingParam pTxPerTrackingParam)
-{
+                                tpSirTxPerTrackingParam pTxPerTrackingParam) {
     vos_msg_t msg;
     tpSirTxPerTrackingParam pTxPerTrackingParamReq = NULL;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == sme_AcquireGlobalLock( &pMac->sme ) ) {
         pMac->sme.pTxPerHitCallback = pCallbackfn;
         pMac->sme.pTxPerHitCbContext = pCallbackContext;
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -7627,8 +6815,7 @@ eHalStatus sme_SetTxPerTracking(tHalHandle hHal,
 
     // free this memory in failure case or WDA request callback function
     pTxPerTrackingParamReq = vos_mem_malloc(sizeof(tSirTxPerTrackingParam));
-    if (NULL == pTxPerTrackingParamReq)
-    {
+    if (NULL == pTxPerTrackingParamReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to allocate memory for tSirTxPerTrackingParam", __func__);
         return eHAL_STATUS_FAILURE;
     }
@@ -7639,8 +6826,7 @@ eHalStatus sme_SetTxPerTracking(tHalHandle hHal,
     msg.reserved = 0;
     msg.bodyptr = pTxPerTrackingParamReq;
 
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_SET_TX_PER_TRACKING_REQ message to WDA", __func__);
         vos_mem_free(pTxPerTrackingParamReq);
         return eHAL_STATUS_FAILURE;
@@ -7674,8 +6860,7 @@ eHalStatus sme_SetTxPerTracking(tHalHandle hHal,
     \return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
-{
+eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf) {
     eHalStatus  status = eHAL_STATUS_SUCCESS;
     tAniChangeCountryCodeReq *pMsg;
     v_REGDOMAIN_t domainIdIoctl;
@@ -7683,12 +6868,10 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
     static uNvTables nvTables;
     pMsg = (tAniChangeCountryCodeReq *)pMsgBuf;
 
-    if (pMac->scan.fcc_constraint)
-    {
+    if (pMac->scan.fcc_constraint) {
         pMac->scan.fcc_constraint = false;
         if (VOS_TRUE== vos_mem_compare(pMac->scan.countryCodeCurrent,
-                                       pMsg->countryCode, 2))
-        {
+                                       pMsg->countryCode, 2)) {
             csrInitGetChannels(pMac);
             csrResetCountryInformation(pMac, eANI_BOOLEAN_TRUE, eANI_BOOLEAN_TRUE);
             csrScanFilterResults(pMac);
@@ -7698,21 +6881,17 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
 
 
     /* if the reset Supplicant country code command is triggered, enable 11D, reset the NV country code and return */
-    if( VOS_TRUE == vos_mem_compare(pMsg->countryCode, SME_INVALID_COUNTRY_CODE, 2) )
-    {
+    if( VOS_TRUE == vos_mem_compare(pMsg->countryCode, SME_INVALID_COUNTRY_CODE, 2) ) {
         pMac->roam.configParam.Is11dSupportEnabled = pMac->roam.configParam.Is11dSupportEnabledOriginal;
 
         vosStatus = vos_nv_readDefaultCountryTable( &nvTables );
 
         /* read the country code from NV and use it */
-        if ( VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             vos_mem_copy(pMsg->countryCode,
                          nvTables.defaultCountryTable.countryCode,
                          WNI_CFG_COUNTRY_CODE_LEN);
-        }
-        else
-        {
+        } else {
             status = eHAL_STATUS_FAILURE;
             return status;
         }
@@ -7725,13 +6904,10 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
                pMsg->countryCode[0],pMsg->countryCode[1]);
         vos_mem_copy(pMac->scan.countryCode11d, pMsg->countryCode,
                      WNI_CFG_COUNTRY_CODE_LEN);
-    }
-    else
-    {
+    } else {
         /* if Supplicant country code has priority, disable 11d */
         if(pMac->roam.configParam.fSupplicantCountryCodeHasPriority &&
-                pMsg->countryFromUserSpace)
-        {
+                pMsg->countryFromUserSpace) {
             pMac->roam.configParam.Is11dSupportEnabled = eANI_BOOLEAN_FALSE;
         }
     }
@@ -7746,8 +6922,7 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
             pMac->roam.configParam.fEnforce11dChannels &&
             pMac->roam.configParam.fEnforceCountryCodeMatch &&
             pMac->roam.configParam.fEnforceDefaultDomain &&
-            !csrSave11dCountryString(pMac, pMsg->countryCode, eANI_BOOLEAN_TRUE))
-    {
+            !csrSave11dCountryString(pMac, pMsg->countryCode, eANI_BOOLEAN_TRUE)) {
         /* All 11D related options are already enabled
          * Country string is not changed
          * Do not need do anything for country code change request */
@@ -7756,8 +6931,7 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
 
     /* Set Current Country code and Current Regulatory domain */
     status = csrSetCountryCode(pMac, pMsg->countryCode, NULL);
-    if(eHAL_STATUS_SUCCESS != status)
-    {
+    if(eHAL_STATUS_SUCCESS != status) {
         /* Supplicant country code failed. So give 11D priority */
         pMac->roam.configParam.Is11dSupportEnabled = pMac->roam.configParam.Is11dSupportEnabledOriginal;
         smsLog(pMac, LOGE, "Set Country Code Fail %d", status);
@@ -7774,13 +6948,10 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
              pMac->scan.countryCodeCurrent,
              (v_REGDOMAIN_t *) &domainIdIoctl,
              COUNTRY_QUERY);
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to get regId %d"), domainIdIoctl );
         return status;
-    }
-    else if (REGDOMAIN_WORLD == domainIdIoctl)
-    {
+    } else if (REGDOMAIN_WORLD == domainIdIoctl) {
         /* Supplicant country code is invalid, so we are on world mode now. So
            give 11D chance to update */
         pMac->roam.configParam.Is11dSupportEnabled = pMac->roam.configParam.Is11dSupportEnabledOriginal;
@@ -7790,17 +6961,13 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
 
     status = WDA_SetRegDomain(pMac, domainIdIoctl, pMsg->sendRegHint);
 
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to set regId %d"), domainIdIoctl );
         return status;
-    }
-    else
-    {
+    } else {
         //if 11d has priority, clear currentCountryBssid & countryCode11d to get
         //set again if we find AP with 11d info during scan
-        if (!pMac->roam.configParam.fSupplicantCountryCodeHasPriority)
-        {
+        if (!pMac->roam.configParam.fSupplicantCountryCodeHasPriority) {
             smsLog( pMac, LOGW, FL("Clearing currentCountryBssid, countryCode11d"));
             vos_mem_zero(&pMac->scan.currentCountryBssid, sizeof(tCsrBssid));
             vos_mem_zero( pMac->scan.countryCode11d, sizeof( pMac->scan.countryCode11d ) );
@@ -7813,8 +6980,7 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
     /* get the channels based on new cc */
     status = csrInitGetChannels( pMac );
 
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to get Channels "));
         return status;
     }
@@ -7828,8 +6994,7 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
     csrScanFilterResults(pMac);
 
 #endif
-    if( pMsg->changeCCCallback )
-    {
+    if( pMsg->changeCCCallback ) {
         ((tSmeChangeCountryCallback)(pMsg->changeCCCallback))((void *)pMsg->pDevContext);
     }
 
@@ -7854,8 +7019,7 @@ eHalStatus sme_HandleChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
 
   -------------------------------------------------------------------------------*/
 eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
-        tAniGenericChangeCountryCodeReq *pMsg)
-{
+        tAniGenericChangeCountryCodeReq *pMsg) {
     eHalStatus  status = eHAL_STATUS_SUCCESS;
     v_REGDOMAIN_t reg_domain_id;
     v_BOOL_t is11dCountry = VOS_FALSE;
@@ -7864,8 +7028,7 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
     reg_domain_id =  (v_REGDOMAIN_t)pMsg->domain_index;
 
     if (memcmp(pMsg->countryCode, pMac->scan.countryCode11d,
-               VOS_COUNTRY_CODE_LEN) == 0)
-    {
+               VOS_COUNTRY_CODE_LEN) == 0) {
         is11dCountry = VOS_TRUE;
     }
 
@@ -7874,11 +7037,9 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
      * fSupplicantCountryCodeHasPriority = 0, then revert the country code,
      * and return failure
      */
-    if (pMac->roam.configParam.Is11dSupportEnabledOriginal == true)
-    {
+    if (pMac->roam.configParam.Is11dSupportEnabledOriginal == true) {
         if ((!is11dCountry) && (!pMac->roam.configParam.fSupplicantCountryCodeHasPriority)&&
-                (!pMac->roam.configParam.fEnforceCountryCode) )
-        {
+                (!pMac->roam.configParam.fEnforceCountryCode) ) {
 
             smsLog( pMac, LOGW, FL(" incorrect country being set, nullify this request"));
 
@@ -7892,8 +7053,7 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
     }
     pMac->roam.configParam.fEnforceCountryCode = eANI_BOOLEAN_FALSE;
     /* if Supplicant country code has priority, disable 11d */
-    if (!is11dCountry && pMac->roam.configParam.fSupplicantCountryCodeHasPriority)
-    {
+    if (!is11dCountry && pMac->roam.configParam.fSupplicantCountryCodeHasPriority) {
         pMac->roam.configParam.Is11dSupportEnabled = eANI_BOOLEAN_FALSE;
         smsLog( pMac, LOG1, FL(" 11d is being  disabled"));
     }
@@ -7903,8 +7063,7 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
 
     status = WDA_SetRegDomain(pMac, reg_domain_id, eSIR_TRUE);
 
-    if (VOS_FALSE == is11dCountry )
-    {
+    if (VOS_FALSE == is11dCountry ) {
         /* overwrite the defualt country code */
         vos_mem_copy(pMac->scan.countryCodeDefault,
                      pMac->scan.countryCodeCurrent, WNI_CFG_COUNTRY_CODE_LEN);
@@ -7912,18 +7071,14 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
         pMac->scan.domainIdDefault = pMac->scan.domainIdCurrent;
     }
 
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to set regId %d"), reg_domain_id );
         return status;
-    }
-    else
-    {
+    } else {
         //if 11d has priority, clear currentCountryBssid & countryCode11d to get
         //set again if we find AP with 11d info during scan
         if((!pMac->roam.configParam.fSupplicantCountryCodeHasPriority) &&
-                (VOS_FALSE == is11dCountry ))
-        {
+                (VOS_FALSE == is11dCountry )) {
             smsLog( pMac, LOGW, FL("Clearing currentCountryBssid, countryCode11d"));
             vos_mem_zero(&pMac->scan.currentCountryBssid, sizeof(tCsrBssid));
             vos_mem_zero( pMac->scan.countryCode11d, sizeof( pMac->scan.countryCode11d ) );
@@ -7933,16 +7088,14 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
     /* get the channels based on new cc */
     status = csrInitGetChannels(pMac);
 
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to get Channels "));
         return status;
     }
 
     /* reset info based on new cc, and we are done */
     csrResetCountryInformation(pMac, eANI_BOOLEAN_TRUE, eANI_BOOLEAN_TRUE);
-    if (VOS_TRUE == is11dCountry)
-    {
+    if (VOS_TRUE == is11dCountry) {
         pMac->scan.f11dInfoApplied = eANI_BOOLEAN_TRUE;
         pMac->scan.f11dInfoReset = eANI_BOOLEAN_FALSE;
     }
@@ -7974,16 +7127,14 @@ eHalStatus sme_HandleChangeCountryCodeByUser(tpAniSirGlobal pMac,
     \return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HandleChangeCountryCodeByCore(tpAniSirGlobal pMac, tAniGenericChangeCountryCodeReq *pMsg)
-{
+eHalStatus sme_HandleChangeCountryCodeByCore(tpAniSirGlobal pMac, tAniGenericChangeCountryCodeReq *pMsg) {
     eHalStatus  status;
 
     smsLog(pMac, LOG1, FL(" called"));
 
     //this is to make sure kernel & driver are in sync in case of CC found in
     //driver but not in kernel database
-    if (('0' == pMsg->countryCode[0]) && ('0' == pMsg->countryCode[1]))
-    {
+    if (('0' == pMsg->countryCode[0]) && ('0' == pMsg->countryCode[1])) {
         smsLog( pMac, LOGW, FL("Setting countryCode11d & countryCodeCurrent to world CC"));
         vos_mem_copy(pMac->scan.countryCode11d, pMsg->countryCode,
                      WNI_CFG_COUNTRY_CODE_LEN);
@@ -7993,20 +7144,14 @@ eHalStatus sme_HandleChangeCountryCodeByCore(tpAniSirGlobal pMac, tAniGenericCha
 
     status = WDA_SetRegDomain(pMac, REGDOMAIN_WORLD, eSIR_TRUE);
 
-    if ( status != eHAL_STATUS_SUCCESS )
-    {
+    if ( status != eHAL_STATUS_SUCCESS ) {
         smsLog( pMac, LOGE, FL("  fail to set regId") );
         return status;
-    }
-    else
-    {
+    } else {
         status = csrInitGetChannels(pMac);
-        if ( status != eHAL_STATUS_SUCCESS )
-        {
+        if ( status != eHAL_STATUS_SUCCESS ) {
             smsLog( pMac, LOGE, FL("  fail to get Channels "));
-        }
-        else
-        {
+        } else {
             csrInitChannelList(pMac);
         }
     }
@@ -8034,42 +7179,33 @@ eHalStatus sme_HandleChangeCountryCodeByCore(tpAniSirGlobal pMac, tAniGenericCha
 
    -------------------------------------------------------------------------------*/
 
-void sme_DisconnectConnectedSessions(tpAniSirGlobal pMac)
-{
+void sme_DisconnectConnectedSessions(tpAniSirGlobal pMac) {
     v_U8_t i, sessionId, isChanFound = false;
     tANI_U8 currChannel;
 
-    for (sessionId=0; sessionId < CSR_ROAM_SESSION_MAX; sessionId++)
-    {
-        if (csrIsSessionClientAndConnected(pMac, sessionId))
-        {
+    for (sessionId=0; sessionId < CSR_ROAM_SESSION_MAX; sessionId++) {
+        if (csrIsSessionClientAndConnected(pMac, sessionId)) {
             isChanFound = false;
             //Session is connected.Check the channel
             currChannel = csrGetInfraOperationChannel(pMac, sessionId);
             smsLog(pMac, LOGW, "Current Operating channel : %d, session :%d",
                    currChannel, sessionId);
-            for (i=0; i < pMac->scan.base20MHzChannels.numChannels; i++)
-            {
-                if (pMac->scan.base20MHzChannels.channelList[i] == currChannel)
-                {
+            for (i=0; i < pMac->scan.base20MHzChannels.numChannels; i++) {
+                if (pMac->scan.base20MHzChannels.channelList[i] == currChannel) {
                     isChanFound = true;
                     break;
                 }
             }
 
-            if (!isChanFound)
-            {
-                for (i=0; i < pMac->scan.base40MHzChannels.numChannels; i++)
-                {
-                    if (pMac->scan.base40MHzChannels.channelList[i] == currChannel)
-                    {
+            if (!isChanFound) {
+                for (i=0; i < pMac->scan.base40MHzChannels.numChannels; i++) {
+                    if (pMac->scan.base40MHzChannels.channelList[i] == currChannel) {
                         isChanFound = true;
                         break;
                     }
                 }
             }
-            if (!isChanFound)
-            {
+            if (!isChanFound) {
                 smsLog(pMac, LOGW, "%s : Disconnect Session :%d", __func__, sessionId);
                 csrRoamDisconnect(pMac, sessionId, eCSR_DISCONNECT_REASON_UNSPECIFIED);
             }
@@ -8093,8 +7229,7 @@ void sme_DisconnectConnectedSessions(tpAniSirGlobal pMac)
     \return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HandleGenericChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf)
-{
+eHalStatus sme_HandleGenericChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBuf) {
     tAniGenericChangeCountryCodeReq *pMsg;
     v_REGDOMAIN_t reg_domain_id;
 
@@ -8102,12 +7237,9 @@ eHalStatus sme_HandleGenericChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBu
     pMsg = (tAniGenericChangeCountryCodeReq *)pMsgBuf;
     reg_domain_id =  (v_REGDOMAIN_t)pMsg->domain_index;
 
-    if (REGDOMAIN_COUNT == reg_domain_id)
-    {
+    if (REGDOMAIN_COUNT == reg_domain_id) {
         sme_HandleChangeCountryCodeByCore(pMac, pMsg);
-    }
-    else
-    {
+    } else {
         sme_HandleChangeCountryCodeByUser(pMac, pMsg);
     }
     smsLog(pMac, LOG1, FL(" returned"));
@@ -8115,8 +7247,7 @@ eHalStatus sme_HandleGenericChangeCountryCode(tpAniSirGlobal pMac,  void *pMsgBu
 }
 
 #ifdef WLAN_FEATURE_PACKET_FILTERING
-eHalStatus sme_8023MulticastList (tHalHandle hHal, tANI_U8 sessionId, tpSirRcvFltMcAddrList pMulticastAddrs)
-{
+eHalStatus sme_8023MulticastList (tHalHandle hHal, tANI_U8 sessionId, tpSirRcvFltMcAddrList pMulticastAddrs) {
     tpSirRcvFltMcAddrList   pRequestBuf;
     vos_msg_t               msg;
     tpAniSirGlobal          pMac = PMAC_STRUCT(hHal);
@@ -8131,28 +7262,24 @@ eHalStatus sme_8023MulticastList (tHalHandle hHal, tANI_U8 sessionId, tpSirRcvFl
      *Find the connected Infra / P2P_client connected session
     */
     if (CSR_IS_SESSION_VALID(pMac, sessionId) &&
-            csrIsConnStateInfra(pMac, sessionId))
-    {
+            csrIsConnStateInfra(pMac, sessionId)) {
         pSession = CSR_GET_SESSION( pMac, sessionId );
     }
 
-    if(pSession == NULL )
-    {
+    if(pSession == NULL ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Unable to find "
                   "the right session", __func__);
         return eHAL_STATUS_FAILURE;
     }
 
     pRequestBuf = vos_mem_malloc(sizeof(tSirRcvFltMcAddrList));
-    if (NULL == pRequestBuf)
-    {
+    if (NULL == pRequestBuf) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to "
                   "allocate memory for 8023 Multicast List request", __func__);
         return eHAL_STATUS_FAILED_ALLOC;
     }
 
-    if( !csrIsConnStateConnectedInfra (pMac, sessionId ))
-    {
+    if( !csrIsConnStateConnectedInfra (pMac, sessionId )) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Ignoring the "
                   "indication as we are not connected", __func__);
         vos_mem_free(pRequestBuf);
@@ -8169,8 +7296,7 @@ eHalStatus sme_8023MulticastList (tHalHandle hHal, tANI_U8 sessionId, tpSirRcvFl
     msg.type = WDA_8023_MULTICAST_LIST_REQ;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to "
                   "post WDA_8023_MULTICAST_LIST message to WDA", __func__);
         vos_mem_free(pRequestBuf);
@@ -8181,8 +7307,7 @@ eHalStatus sme_8023MulticastList (tHalHandle hHal, tANI_U8 sessionId, tpSirRcvFl
 }
 
 eHalStatus sme_ReceiveFilterSetFilter(tHalHandle hHal, tpSirRcvPktFilterCfgType pRcvPktFilterCfg,
-                                      tANI_U8 sessionId)
-{
+                                      tANI_U8 sessionId) {
     tpSirRcvPktFilterCfgType    pRequestBuf;
     v_SINT_t                allocSize;
     vos_msg_t               msg;
@@ -8198,15 +7323,13 @@ eHalStatus sme_ReceiveFilterSetFilter(tHalHandle hHal, tpSirRcvPktFilterCfgType 
 
     pRequestBuf = vos_mem_malloc(allocSize);
 
-    if (NULL == pRequestBuf)
-    {
+    if (NULL == pRequestBuf) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to "
                   "allocate memory for Receive Filter Set Filter request", __func__);
         return eHAL_STATUS_FAILED_ALLOC;
     }
 
-    if( NULL == pSession )
-    {
+    if( NULL == pSession ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Session Not found ", __func__);
         vos_mem_free(pRequestBuf);
         return eHAL_STATUS_FAILURE;
@@ -8230,8 +7353,7 @@ eHalStatus sme_ReceiveFilterSetFilter(tHalHandle hHal, tpSirRcvPktFilterCfgType 
               "params %d CT %d",
               pRequestBuf->numFieldParams, pRequestBuf->coalesceTime);
 
-    for (idx=0; idx<pRequestBuf->numFieldParams; idx++)
-    {
+    for (idx=0; idx<pRequestBuf->numFieldParams; idx++) {
 
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "Proto %d Comp Flag %d ",
@@ -8263,8 +7385,7 @@ eHalStatus sme_ReceiveFilterSetFilter(tHalHandle hHal, tpSirRcvPktFilterCfgType 
 
     }
 
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post "
                   "WDA_RECEIVE_FILTER_SET_FILTER message to WDA", __func__);
         vos_mem_free(pRequestBuf);
@@ -8277,15 +7398,13 @@ eHalStatus sme_ReceiveFilterSetFilter(tHalHandle hHal, tpSirRcvPktFilterCfgType 
 eHalStatus sme_GetFilterMatchCount(tHalHandle hHal,
                                    FilterMatchCountCallback callbackRoutine,
                                    void *callbackContext,
-                                   tANI_U8 sessionId)
-{
+                                   tANI_U8 sessionId) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
     VOS_TRACE( VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO, "+%s", __func__);
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme)))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme))) {
         pmcGetFilterMatchCount(hHal, callbackRoutine, callbackContext, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -8296,8 +7415,7 @@ eHalStatus sme_GetFilterMatchCount(tHalHandle hHal,
 }
 
 eHalStatus sme_ReceiveFilterClearFilter(tHalHandle hHal, tpSirRcvFltPktClearParam pRcvFltPktClearParam,
-                                        tANI_U8 sessionId)
-{
+                                        tANI_U8 sessionId) {
     tpSirRcvFltPktClearParam pRequestBuf;
     vos_msg_t               msg;
     tpAniSirGlobal          pMac = PMAC_STRUCT(hHal);
@@ -8307,15 +7425,13 @@ eHalStatus sme_ReceiveFilterClearFilter(tHalHandle hHal, tpSirRcvFltPktClearPara
                pRcvFltPktClearParam->filterId);
 
     pRequestBuf = vos_mem_malloc(sizeof(tSirRcvFltPktClearParam));
-    if (NULL == pRequestBuf)
-    {
+    if (NULL == pRequestBuf) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for Receive Filter "
                   "Clear Filter request", __func__);
         return eHAL_STATUS_FAILED_ALLOC;
     }
-    if( NULL == pSession )
-    {
+    if( NULL == pSession ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Session Not find ", __func__);
         vos_mem_free(pRequestBuf);
@@ -8332,8 +7448,7 @@ eHalStatus sme_ReceiveFilterClearFilter(tHalHandle hHal, tpSirRcvFltPktClearPara
     msg.type = WDA_RECEIVE_FILTER_CLEAR_FILTER_REQ;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post "
                   "WDA_RECEIVE_FILTER_CLEAR_FILTER message to WDA", __func__);
         vos_mem_free(pRequestBuf);
@@ -8352,16 +7467,14 @@ eHalStatus sme_ReceiveFilterClearFilter(tHalHandle hHal, tpSirRcvFltPktClearPara
     \param status
   ---------------------------------------------------------------------------*/
 void sme_PreChannelSwitchIndFullPowerCB(void *callbackContext,
-                                        eHalStatus status)
-{
+                                        eHalStatus status) {
     tpAniSirGlobal pMac = (tpAniSirGlobal)callbackContext;
     tSirMbMsg *pMsg;
     tANI_U16 msgLen;
 
     msgLen = (tANI_U16)(sizeof( tSirMbMsg ));
     pMsg = vos_mem_malloc(msgLen);
-    if ( NULL != pMsg )
-    {
+    if ( NULL != pMsg ) {
         vos_mem_set(pMsg, msgLen, 0);
         pMsg->type = pal_cpu_to_be16((tANI_U16)eWNI_SME_PRE_CHANNEL_SWITCH_FULL_POWER);
         pMsg->msgLen = pal_cpu_to_be16(msgLen);
@@ -8377,13 +7490,11 @@ void sme_PreChannelSwitchIndFullPowerCB(void *callbackContext,
     \param hHal
     \- The handle returned by macOpen. return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_HandlePreChannelSwitchInd(tHalHandle hHal)
-{
+eHalStatus sme_HandlePreChannelSwitchInd(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRequestFullPower(hHal, sme_PreChannelSwitchIndFullPowerCB,
                                      pMac, eSME_FULL_PWR_NEEDED_BY_CHANNEL_SWITCH);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -8398,14 +7509,12 @@ eHalStatus sme_HandlePreChannelSwitchInd(tHalHandle hHal)
     \param hHal
     \- The handle returned by macOpen. return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_HandlePostChannelSwitchInd(tHalHandle hHal)
-{
+eHalStatus sme_HandlePostChannelSwitchInd(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = pmcRequestBmps(hHal, NULL, NULL);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -8426,15 +7535,13 @@ eHalStatus sme_HandlePostChannelSwitchInd(tHalHandle hHal)
     \return TRUE/FALSE, TRUE if channel is valid
 
   -------------------------------------------------------------------------------*/
-tANI_BOOLEAN sme_IsChannelValid(tHalHandle hHal, tANI_U8 channel)
-{
+tANI_BOOLEAN sme_IsChannelValid(tHalHandle hHal, tANI_U8 channel) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tANI_BOOLEAN valid = FALSE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
 
         valid = csrRoamIsChannelValid( pMac, channel);
 
@@ -8451,14 +7558,12 @@ tANI_BOOLEAN sme_IsChannelValid(tHalHandle hHal, tANI_U8 channel)
     \eBand  band value to be configured
     \- return eHalStatus
     -------------------------------------------------------------------------*/
-eHalStatus sme_SetFreqBand(tHalHandle hHal, eCsrBand eBand)
-{
+eHalStatus sme_SetFreqBand(tHalHandle hHal, eCsrBand eBand) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrSetBand(hHal, eBand);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -8472,14 +7577,12 @@ eHalStatus sme_SetFreqBand(tHalHandle hHal, eCsrBand eBand)
     \pBand  pointer to hold band value
     \- return eHalStatus
     -------------------------------------------------------------------------*/
-eHalStatus sme_GetFreqBand(tHalHandle hHal, eCsrBand *pBand)
-{
+eHalStatus sme_GetFreqBand(tHalHandle hHal, eCsrBand *pBand) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         *pBand = csrGetCurrentBand( hHal );
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -8498,19 +7601,15 @@ eHalStatus sme_GetFreqBand(tHalHandle hHal, eCsrBand *pBand)
 
   \return eHalStatus
 ******************************************************************************/
-eHalStatus sme_WakeReasonIndCallback (tHalHandle hHal, void* pMsg)
-{
+eHalStatus sme_WakeReasonIndCallback (tHalHandle hHal, void* pMsg) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tSirWakeReasonInd *pWakeReasonInd = (tSirWakeReasonInd *)pMsg;
 
-    if (NULL == pMsg)
-    {
+    if (NULL == pMsg) {
         smsLog(pMac, LOGE, "in %s msg ptr is NULL", __func__);
         status = eHAL_STATUS_FAILURE;
-    }
-    else
-    {
+    } else {
         smsLog(pMac, LOG2, "SME: entering sme_WakeReasonIndCallback");
 
         /* Call Wake Reason Indication callback routine. */
@@ -8540,15 +7639,13 @@ eHalStatus sme_WakeReasonIndCallback (tHalHandle hHal, void* pMsg)
 
   -------------------------------------------------------------------------------*/
 eHalStatus sme_SetMaxTxPower(tHalHandle hHal, tSirMacAddr pBssid,
-                             tSirMacAddr pSelfMacAddress, v_S7_t dB)
-{
+                             tSirMacAddr pSelfMacAddress, v_S7_t dB) {
     vos_msg_t msg;
     tpMaxTxPowerParams pMaxTxParams = NULL;
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_MAXTXPOW, NO_SESSION, 0));
     pMaxTxParams = vos_mem_malloc(sizeof(tMaxTxPowerParams));
-    if (NULL == pMaxTxParams)
-    {
+    if (NULL == pMaxTxParams) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to allocate memory for pMaxTxParams", __func__);
         return eHAL_STATUS_FAILURE;
     }
@@ -8562,8 +7659,7 @@ eHalStatus sme_SetMaxTxPower(tHalHandle hHal, tSirMacAddr pBssid,
     msg.reserved = 0;
     msg.bodyptr = pMaxTxParams;
 
-    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_SET_MAX_TX_POWER_REQ message to WDA", __func__);
         vos_mem_free(pMaxTxParams);
         return eHAL_STATUS_FAILURE;
@@ -8584,14 +7680,12 @@ eHalStatus sme_SetMaxTxPower(tHalHandle hHal, tSirMacAddr pBssid,
     \- return eHalStatus
 
   ----------------------------------------------------------------------------*/
-eHalStatus sme_SetMaxTxPowerPerBand(eCsrBand band, v_S7_t dB)
-{
+eHalStatus sme_SetMaxTxPowerPerBand(eCsrBand band, v_S7_t dB) {
     vos_msg_t msg;
     tpMaxTxPowerPerBandParams pMaxTxPowerPerBandParams = NULL;
 
     pMaxTxPowerPerBandParams = vos_mem_malloc(sizeof(tMaxTxPowerPerBandParams));
-    if (NULL == pMaxTxPowerPerBandParams)
-    {
+    if (NULL == pMaxTxPowerPerBandParams) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s:Not able to allocate memory for pMaxTxPowerPerBandParams",
                   __func__);
@@ -8605,8 +7699,7 @@ eHalStatus sme_SetMaxTxPowerPerBand(eCsrBand band, v_S7_t dB)
     msg.reserved = 0;
     msg.bodyptr = pMaxTxPowerPerBandParams;
 
-    if (VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-    {
+    if (VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s:Not able to post WDA_SET_MAX_TX_POWER_PER_BAND_REQ",
                   __func__);
@@ -8630,8 +7723,7 @@ eHalStatus sme_SetMaxTxPowerPerBand(eCsrBand band, v_S7_t dB)
     \- return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_SetTxPower(tHalHandle hHal, v_U8_t sessionId, v_U8_t mW)
-{
+eHalStatus sme_SetTxPower(tHalHandle hHal, v_U8_t sessionId, v_U8_t mW) {
 
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
@@ -8640,8 +7732,7 @@ eHalStatus sme_SetTxPower(tHalHandle hHal, v_U8_t sessionId, v_U8_t mW)
                      TRACE_CODE_SME_RX_HDD_SET_TXPOW, NO_SESSION, 0));
     smsLog(pMac, LOG1, FL("set tx power %dmW"), mW);
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if (HAL_STATUS_SUCCESS(status))
-    {
+    if (HAL_STATUS_SUCCESS(status)) {
         status = csrSetTxPower(pMac, sessionId, mW);
         sme_ReleaseGlobalLock(&pMac->sme);
     }
@@ -8661,19 +7752,16 @@ eHalStatus sme_SetTxPower(tHalHandle hHal, v_U8_t sessionId, v_U8_t mW)
     \- return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_HideSSID(tHalHandle hHal, v_U8_t sessionId, v_U8_t ssidHidden)
-{
+eHalStatus sme_HideSSID(tHalHandle hHal, v_U8_t sessionId, v_U8_t ssidHidden) {
     eHalStatus status   = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tANI_U16 len;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         tpSirUpdateParams pMsg;
         tCsrRoamSession *pSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if(!pSession)
-        {
+        if(!pSession) {
             smsLog(pMac, LOGE, FL("  session %d not found "), sessionId);
             sme_ReleaseGlobalLock( &pMac->sme );
             return eHAL_STATUS_FAILURE;
@@ -8687,8 +7775,7 @@ eHalStatus sme_HideSSID(tHalHandle hHal, v_U8_t sessionId, v_U8_t ssidHidden)
         pMsg = vos_mem_malloc(len);
         if ( NULL == pMsg )
             status = eHAL_STATUS_FAILURE;
-        else
-        {
+        else {
             vos_mem_set(pMsg, sizeof(tSirUpdateParams), 0);
             pMsg->messageType     = eWNI_SME_HIDE_SSID_REQ;
             pMsg->length          = len;
@@ -8711,8 +7798,7 @@ eHalStatus sme_HideSSID(tHalHandle hHal, v_U8_t sessionId, v_U8_t ssidHidden)
     \param  tmMode - Thermal Mitigation handle mode, default 0
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_SetTmLevel(tHalHandle hHal, v_U16_t newTMLevel, v_U16_t tmMode)
-{
+eHalStatus sme_SetTmLevel(tHalHandle hHal, v_U16_t newTMLevel, v_U16_t tmMode) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS          vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
@@ -8721,11 +7807,9 @@ eHalStatus sme_SetTmLevel(tHalHandle hHal, v_U16_t newTMLevel, v_U16_t tmMode)
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_TMLEVEL, NO_SESSION, 0));
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         setTmLevelReq = (tAniSetTmLevelReq *)vos_mem_malloc(sizeof(tAniSetTmLevelReq));
-        if (NULL == setTmLevelReq)
-        {
+        if (NULL == setTmLevelReq) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Not able to allocate memory for sme_SetTmLevel", __func__);
             sme_ReleaseGlobalLock( &pMac->sme );
@@ -8739,8 +7823,7 @@ eHalStatus sme_SetTmLevel(tHalHandle hHal, v_U16_t newTMLevel, v_U16_t tmMode)
         vosMessage.bodyptr = setTmLevelReq;
         vosMessage.type    = WDA_SET_TM_LEVEL_REQ;
         vosStatus = vos_mq_post_message( VOS_MQ_ID_WDA, &vosMessage );
-        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-        {
+        if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Post Set TM Level MSG fail", __func__);
             vos_mem_free(setTmLevelReq);
@@ -8761,8 +7844,7 @@ eHalStatus sme_SetTmLevel(tHalHandle hHal, v_U16_t newTMLevel, v_U16_t tmMode)
   \return NONE
 
 ---------------------------------------------------------------------------*/
-void sme_featureCapsExchange( tHalHandle hHal)
-{
+void sme_featureCapsExchange( tHalHandle hHal) {
     v_CONTEXT_t vosContext = vos_get_global_context(VOS_MODULE_ID_SME, NULL);
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_CAPS_EXCH, NO_SESSION, 0));
@@ -8779,8 +7861,7 @@ void sme_featureCapsExchange( tHalHandle hHal)
   \return NONE
 
 ---------------------------------------------------------------------------*/
-void sme_disableFeatureCapablity(tANI_U8 feature_index)
-{
+void sme_disableFeatureCapablity(tANI_U8 feature_index) {
     WDA_disableCapablityFeature(feature_index);
 }
 
@@ -8795,8 +7876,7 @@ void sme_disableFeatureCapablity(tANI_U8 feature_index)
     \- return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetDefaultCountryCodeFrmNv(tHalHandle hHal, tANI_U8 *pCountry)
-{
+eHalStatus sme_GetDefaultCountryCodeFrmNv(tHalHandle hHal, tANI_U8 *pCountry) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_DEFCCNV, NO_SESSION, 0));
@@ -8814,8 +7894,7 @@ eHalStatus sme_GetDefaultCountryCodeFrmNv(tHalHandle hHal, tANI_U8 *pCountry)
     \- return eHalStatus
 
   -------------------------------------------------------------------------------*/
-eHalStatus sme_GetCurrentCountryCode(tHalHandle hHal, tANI_U8 *pCountry)
-{
+eHalStatus sme_GetCurrentCountryCode(tHalHandle hHal, tANI_U8 *pCountry) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_CURCC, NO_SESSION, 0));
@@ -8833,12 +7912,10 @@ eHalStatus sme_GetCurrentCountryCode(tHalHandle hHal, tANI_U8 *pCountry)
                               Not integrate till fully verification
     \- return NONE
     -------------------------------------------------------------------------*/
-void sme_transportDebug(tHalHandle hHal, v_BOOL_t displaySnapshot, v_BOOL_t toggleStallDetect)
-{
+void sme_transportDebug(tHalHandle hHal, v_BOOL_t displaySnapshot, v_BOOL_t toggleStallDetect) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: invalid context", __func__);
         return;
@@ -8852,8 +7929,7 @@ void sme_transportDebug(tHalHandle hHal, v_BOOL_t displaySnapshot, v_BOOL_t togg
     \param  hHal - HAL handle for device
     \- return NONE
     -------------------------------------------------------------------------*/
-void sme_ResetPowerValuesFor5G (tHalHandle hHal)
-{
+void sme_ResetPowerValuesFor5G (tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT (hHal);
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_RESET_PW5G, NO_SESSION, 0));
@@ -8872,16 +7948,14 @@ void sme_ResetPowerValuesFor5G (tHalHandle hHal)
     \- return Success or failure
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_UpdateRoamPrefer5GHz(tHalHandle hHal, v_BOOL_t nRoamPrefer5GHz)
-{
+eHalStatus sme_UpdateRoamPrefer5GHz(tHalHandle hHal, v_BOOL_t nRoamPrefer5GHz) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_UPDATE_RP5G, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: gRoamPrefer5GHz is changed from %d to %d", __func__,
                   pMac->roam.configParam.nRoamPrefer5GHz,
@@ -8902,16 +7976,14 @@ eHalStatus sme_UpdateRoamPrefer5GHz(tHalHandle hHal, v_BOOL_t nRoamPrefer5GHz)
     \param  nRoamIntraBand Enable/Disable Intra band roaming
     \- return Success or failure
     -------------------------------------------------------------------------*/
-eHalStatus sme_setRoamIntraBand(tHalHandle hHal, const v_BOOL_t nRoamIntraBand)
-{
+eHalStatus sme_setRoamIntraBand(tHalHandle hHal, const v_BOOL_t nRoamIntraBand) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_ROAMIBAND, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: gRoamIntraBand is changed from %d to %d", __func__,
                   pMac->roam.configParam.nRoamIntraBand,
@@ -8932,14 +8004,12 @@ eHalStatus sme_setRoamIntraBand(tHalHandle hHal, const v_BOOL_t nRoamIntraBand)
     \param  nProbes number of probe requests to be sent out
     \- return Success or failure
     -------------------------------------------------------------------------*/
-eHalStatus sme_UpdateRoamScanNProbes(tHalHandle hHal, const v_U8_t nProbes)
-{
+eHalStatus sme_UpdateRoamScanNProbes(tHalHandle hHal, const v_U8_t nProbes) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: gRoamScanNProbes is changed from %d to %d", __func__,
                   pMac->roam.configParam.nProbes,
@@ -8948,8 +8018,7 @@ eHalStatus sme_UpdateRoamScanNProbes(tHalHandle hHal, const v_U8_t nProbes)
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_NPROBES_CHANGED);
     }
@@ -8969,14 +8038,12 @@ eHalStatus sme_UpdateRoamScanNProbes(tHalHandle hHal, const v_U8_t nProbes)
     \- return Success or failure
     -------------------------------------------------------------------------*/
 eHalStatus sme_UpdateRoamScanHomeAwayTime(tHalHandle hHal, const v_U16_t nRoamScanHomeAwayTime,
-        const eAniBoolean bSendOffloadCmd)
-{
+        const eAniBoolean bSendOffloadCmd) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: gRoamScanHomeAwayTime is changed from %d to %d", __func__,
                   pMac->roam.configParam.nRoamScanHomeAwayTime,
@@ -8986,8 +8053,7 @@ eHalStatus sme_UpdateRoamScanHomeAwayTime(tHalHandle hHal, const v_U16_t nRoamSc
     }
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled && bSendOffloadCmd)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled && bSendOffloadCmd) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_HOME_AWAY_TIME_CHANGED);
     }
@@ -9002,8 +8068,7 @@ eHalStatus sme_UpdateRoamScanHomeAwayTime(tHalHandle hHal, const v_U16_t nRoamSc
     \param  hHal - HAL handle for device
     \- return Success or failure
     -------------------------------------------------------------------------*/
-v_BOOL_t sme_getRoamIntraBand(tHalHandle hHal)
-{
+v_BOOL_t sme_getRoamIntraBand(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_GET_ROAMIBAND, NO_SESSION, 0));
@@ -9016,8 +8081,7 @@ v_BOOL_t sme_getRoamIntraBand(tHalHandle hHal)
     \param  hHal - HAL handle for device
     \- return Success or failure
     -------------------------------------------------------------------------*/
-v_U8_t sme_getRoamScanNProbes(tHalHandle hHal)
-{
+v_U8_t sme_getRoamScanNProbes(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.nProbes;
 }
@@ -9028,8 +8092,7 @@ v_U8_t sme_getRoamScanNProbes(tHalHandle hHal)
     \param  hHal - HAL handle for device
     \- return Success or failure
     -------------------------------------------------------------------------*/
-v_U16_t sme_getRoamScanHomeAwayTime(tHalHandle hHal)
-{
+v_U16_t sme_getRoamScanHomeAwayTime(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.nRoamScanHomeAwayTime;
 }
@@ -9047,16 +8110,14 @@ v_U16_t sme_getRoamScanHomeAwayTime(tHalHandle hHal)
     \- return Success or failure
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_UpdateImmediateRoamRssiDiff(tHalHandle hHal, v_U8_t nImmediateRoamRssiDiff)
-{
+eHalStatus sme_UpdateImmediateRoamRssiDiff(tHalHandle hHal, v_U8_t nImmediateRoamRssiDiff) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_UPDATE_IMMRSSIDIFF, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set immediate roam rssi diff to"
                   "%d - old value is %d - roam state is %s",
@@ -9083,16 +8144,14 @@ eHalStatus sme_UpdateImmediateRoamRssiDiff(tHalHandle hHal, v_U8_t nImmediateRoa
     \- return Success or failure
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_UpdateRoamRssiDiff(tHalHandle hHal, v_U8_t RoamRssiDiff)
-{
+eHalStatus sme_UpdateRoamRssiDiff(tHalHandle hHal, v_U8_t RoamRssiDiff) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_UPDATE_RSSIDIFF, NO_SESSION, 0));
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set roam rssi diff to %d"
                   " - old value is %d - roam state is %s",
@@ -9104,8 +8163,7 @@ eHalStatus sme_UpdateRoamRssiDiff(tHalHandle hHal, v_U8_t RoamRssiDiff)
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG, REASON_RSSI_DIFF_CHANGED);
     }
 #endif
@@ -9123,16 +8181,14 @@ eHalStatus sme_UpdateRoamRssiDiff(tHalHandle hHal, v_U8_t RoamRssiDiff)
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_UpdateFastTransitionEnabled(tHalHandle hHal,
-        v_BOOL_t isFastTransitionEnabled)
-{
+        v_BOOL_t isFastTransitionEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_UPDATE_FTENABLED, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: FastTransitionEnabled is changed from %d to %d", __func__,
                   pMac->roam.configParam.isFastTransitionEnabled,
@@ -9154,14 +8210,12 @@ eHalStatus sme_UpdateFastTransitionEnabled(tHalHandle hHal,
           Other status means SME is failed to update isWESModeEnabled.
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_UpdateWESMode(tHalHandle hHal, v_BOOL_t isWESModeEnabled)
-{
+eHalStatus sme_UpdateWESMode(tHalHandle hHal, v_BOOL_t isWESModeEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set WES Mode to %d"
                   "- old value is %d - roam state is %s",
@@ -9186,16 +8240,14 @@ eHalStatus sme_UpdateWESMode(tHalHandle hHal, v_BOOL_t isWESModeEnabled)
     \return eHAL_STATUS_SUCCESS - SME update config successfully.
           Other status means SME failure to update
     -------------------------------------------------------------------------*/
-eHalStatus sme_SetRoamScanControl(tHalHandle hHal, v_BOOL_t roamScanControl)
-{
+eHalStatus sme_SetRoamScanControl(tHalHandle hHal, v_BOOL_t roamScanControl) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_SET_SCANCTRL, NO_SESSION, 0));
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set roam scan control to %d"
                   " - old value is %d - roam state is %s",
@@ -9204,14 +8256,12 @@ eHalStatus sme_SetRoamScanControl(tHalHandle hHal, v_BOOL_t roamScanControl)
                   macTraceGetNeighbourRoamState(
                       pMac->roam.neighborRoamInfo.neighborRoamState));
         pMac->roam.configParam.nRoamScanControl = roamScanControl;
-        if ( 0 == roamScanControl)
-        {
+        if ( 0 == roamScanControl) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                       "LFR runtime successfully cleared roam scan cache");
             csrFlushCfgBgScanRoamChannelList(pMac);
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-            if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-            {
+            if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
                 csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG, REASON_FLUSH_CHANNEL_LIST);
             }
 #endif
@@ -9234,12 +8284,10 @@ eHalStatus sme_SetRoamScanControl(tHalHandle hHal, v_BOOL_t roamScanControl)
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_UpdateIsFastRoamIniFeatureEnabled(tHalHandle hHal,
-        const v_BOOL_t isFastRoamIniFeatureEnabled)
-{
+        const v_BOOL_t isFastRoamIniFeatureEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (pMac->roam.configParam.isFastRoamIniFeatureEnabled == isFastRoamIniFeatureEnabled)
-    {
+    if (pMac->roam.configParam.isFastRoamIniFeatureEnabled == isFastRoamIniFeatureEnabled) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: FastRoam is already enabled or disabled, nothing to do (returning) old(%d) new(%d)", __func__,
                   pMac->roam.configParam.isFastRoamIniFeatureEnabled,
@@ -9270,11 +8318,9 @@ eHalStatus sme_UpdateIsFastRoamIniFeatureEnabled(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_ConfigFwrRoaming(tHalHandle hHal,
-                                const v_BOOL_t isFastRoamEnabled)
-{
+                                const v_BOOL_t isFastRoamEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
-    if (!pMac->roam.configParam.isFastRoamIniFeatureEnabled)
-    {
+    if (!pMac->roam.configParam.isFastRoamIniFeatureEnabled) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: FastRoam is disabled through ini", __func__);
         return  eHAL_STATUS_FAILURE;
@@ -9295,14 +8341,12 @@ eHalStatus sme_ConfigFwrRoaming(tHalHandle hHal,
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_UpdateIsMAWCIniFeatureEnabled(tHalHandle hHal,
-        const v_BOOL_t MAWCEnabled)
-{
+        const v_BOOL_t MAWCEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: MAWCEnabled is changed from %d to %d", __func__,
                   pMac->roam.configParam.MAWCEnabled,
@@ -9326,18 +8370,15 @@ eHalStatus sme_UpdateIsMAWCIniFeatureEnabled(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_UpdateEnableFastRoamInConcurrency(tHalHandle hHal,
-        v_BOOL_t bFastRoamInConIniFeatureEnabled)
-{
+        v_BOOL_t bFastRoamInConIniFeatureEnabled) {
 
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus  status  = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         pMac->roam.configParam.bFastRoamInConIniFeatureEnabled = bFastRoamInConIniFeatureEnabled;
-        if (0 == pMac->roam.configParam.isRoamOffloadScanEnabled)
-        {
+        if (0 == pMac->roam.configParam.isRoamOffloadScanEnabled) {
             pMac->roam.configParam.bFastRoamInConIniFeatureEnabled = 0;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -9361,12 +8402,10 @@ eHalStatus sme_UpdateEnableFastRoamInConcurrency(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_UpdateIsEseFeatureEnabled(tHalHandle hHal,
-        const v_BOOL_t isEseIniFeatureEnabled)
-{
+        const v_BOOL_t isEseIniFeatureEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (pMac->roam.configParam.isEseIniFeatureEnabled == isEseIniFeatureEnabled)
-    {
+    if (pMac->roam.configParam.isEseIniFeatureEnabled == isEseIniFeatureEnabled) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: Ese Mode is already enabled or disabled, nothing to do (returning) old(%d) new(%d)", __func__,
                   pMac->roam.configParam.isEseIniFeatureEnabled,
@@ -9381,14 +8420,12 @@ eHalStatus sme_UpdateIsEseFeatureEnabled(tHalHandle hHal,
     pMac->roam.configParam.isEseIniFeatureEnabled = isEseIniFeatureEnabled;
     csrNeighborRoamUpdateEseModeEnabled(pMac, isEseIniFeatureEnabled);
 
-    if(TRUE == isEseIniFeatureEnabled)
-    {
+    if(TRUE == isEseIniFeatureEnabled) {
         sme_UpdateFastTransitionEnabled(hHal, TRUE);
     }
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG, REASON_ESE_INI_CFG_CHANGED);
     }
 #endif
@@ -9408,13 +8445,11 @@ eHalStatus sme_UpdateIsEseFeatureEnabled(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_UpdateConfigFwRssiMonitoring(tHalHandle hHal,
-        v_BOOL_t fEnableFwRssiMonitoring)
-{
+        v_BOOL_t fEnableFwRssiMonitoring) {
     eHalStatus halStatus = eHAL_STATUS_SUCCESS;
 
     if (ccmCfgSetInt(hHal, WNI_CFG_PS_ENABLE_RSSI_MONITOR, fEnableFwRssiMonitoring,
-                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE)
-    {
+                     NULL, eANI_BOOLEAN_FALSE)==eHAL_STATUS_FAILURE) {
         halStatus = eHAL_STATUS_FAILURE;
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "Failure: Could not pass on WNI_CFG_PS_RSSI_MONITOR configuration info to CCM");
@@ -9433,17 +8468,14 @@ eHalStatus sme_UpdateConfigFwRssiMonitoring(tHalHandle hHal,
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_setNeighborLookupRssiThreshold(tHalHandle hHal,
-        v_U8_t neighborLookupRssiThreshold)
-{
+        v_U8_t neighborLookupRssiThreshold) {
     tpAniSirGlobal pMac    = PMAC_STRUCT( hHal );
     eHalStatus     status  = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrNeighborRoamSetLookupRssiThreshold(pMac, neighborLookupRssiThreshold);
-        if (HAL_STATUS_SUCCESS(status))
-        {
+        if (HAL_STATUS_SUCCESS(status)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                       "LFR runtime successfully set Lookup threshold to %d"
                       " - old value is %d - roam state is %s",
@@ -9468,14 +8500,12 @@ eHalStatus sme_setNeighborLookupRssiThreshold(tHalHandle hHal,
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_setNeighborReassocRssiThreshold(tHalHandle hHal,
-        v_U8_t neighborReassocRssiThreshold)
-{
+        v_U8_t neighborReassocRssiThreshold) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set Reassoc threshold to %d"
                   "- old value is %d - roam state is %s",
@@ -9502,8 +8532,7 @@ eHalStatus sme_setNeighborReassocRssiThreshold(tHalHandle hHal,
           Other status means SME is failed to update
   \sa
   --------------------------------------------------------------------------*/
-v_U8_t sme_getNeighborLookupRssiThreshold(tHalHandle hHal)
-{
+v_U8_t sme_getNeighborLookupRssiThreshold(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.neighborRoamConfig.nNeighborLookupRssiThreshold;
 }
@@ -9517,14 +8546,12 @@ v_U8_t sme_getNeighborLookupRssiThreshold(tHalHandle hHal)
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_setNeighborScanRefreshPeriod(tHalHandle hHal,
-        v_U16_t neighborScanResultsRefreshPeriod)
-{
+        v_U16_t neighborScanResultsRefreshPeriod) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set roam scan refresh period to %d"
                   " - old value is %d - roam state is %s",
@@ -9541,8 +8568,7 @@ eHalStatus sme_setNeighborScanRefreshPeriod(tHalHandle hHal,
     }
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_NEIGHBOR_SCAN_REFRESH_PERIOD_CHANGED);
     }
@@ -9563,14 +8589,12 @@ eHalStatus sme_setNeighborScanRefreshPeriod(tHalHandle hHal,
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_UpdateRoamScanOffloadEnabled(tHalHandle hHal,
-        v_BOOL_t nRoamScanOffloadEnabled)
-{
+        v_BOOL_t nRoamScanOffloadEnabled) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: gRoamScanOffloadEnabled is changed from %d to %d", __func__,
                   pMac->roam.configParam.isRoamOffloadScanEnabled,
@@ -9590,8 +8614,7 @@ eHalStatus sme_UpdateRoamScanOffloadEnabled(tHalHandle hHal,
   \return v_U16_t - Neighbor scan results refresh period value
   \sa
   --------------------------------------------------------------------------*/
-v_U16_t sme_getNeighborScanRefreshPeriod(tHalHandle hHal)
-{
+v_U16_t sme_getNeighborScanRefreshPeriod(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.neighborRoamConfig.nNeighborResultsRefreshPeriod;
 }
@@ -9604,8 +8627,7 @@ v_U16_t sme_getNeighborScanRefreshPeriod(tHalHandle hHal)
           Other status means SME is failed to update
   \sa
   --------------------------------------------------------------------------*/
-v_U16_t sme_getEmptyScanRefreshPeriod(tHalHandle hHal)
-{
+v_U16_t sme_getEmptyScanRefreshPeriod(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.neighborRoamConfig.nEmptyScanRefreshPeriod;
 }
@@ -9621,14 +8643,12 @@ v_U16_t sme_getEmptyScanRefreshPeriod(tHalHandle hHal)
     \- return Success or failure
     -------------------------------------------------------------------------*/
 
-eHalStatus sme_UpdateEmptyScanRefreshPeriod(tHalHandle hHal, v_U16_t nEmptyScanRefreshPeriod)
-{
+eHalStatus sme_UpdateEmptyScanRefreshPeriod(tHalHandle hHal, v_U16_t nEmptyScanRefreshPeriod) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set roam scan period to %d -"
                   "old value is %d - roam state is %s",
@@ -9642,8 +8662,7 @@ eHalStatus sme_UpdateEmptyScanRefreshPeriod(tHalHandle hHal, v_U16_t nEmptyScanR
     }
 
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_EMPTY_SCAN_REF_PERIOD_CHANGED);
     }
@@ -9661,14 +8680,12 @@ eHalStatus sme_UpdateEmptyScanRefreshPeriod(tHalHandle hHal, v_U16_t nEmptyScanR
     \param  nNeighborScanMinChanTime - Channel minimum dwell time
     \- return Success or failure
     -------------------------------------------------------------------------*/
-eHalStatus sme_setNeighborScanMinChanTime(tHalHandle hHal, const v_U16_t nNeighborScanMinChanTime)
-{
+eHalStatus sme_setNeighborScanMinChanTime(tHalHandle hHal, const v_U16_t nNeighborScanMinChanTime) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set channel min dwell time to %d"
                   " - old value is %d - roam state is %s",
@@ -9694,14 +8711,12 @@ eHalStatus sme_setNeighborScanMinChanTime(tHalHandle hHal, const v_U16_t nNeighb
     \param  nNeighborScanMinChanTime - Channel maximum dwell time
     \- return Success or failure
     -------------------------------------------------------------------------*/
-eHalStatus sme_setNeighborScanMaxChanTime(tHalHandle hHal, const v_U16_t nNeighborScanMaxChanTime)
-{
+eHalStatus sme_setNeighborScanMaxChanTime(tHalHandle hHal, const v_U16_t nNeighborScanMaxChanTime) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set channel max dwell time to %d"
                   " - old value is %d - roam state is %s",
@@ -9714,8 +8729,7 @@ eHalStatus sme_setNeighborScanMaxChanTime(tHalHandle hHal, const v_U16_t nNeighb
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_SCAN_CH_TIME_CHANGED);
     }
@@ -9730,8 +8744,7 @@ eHalStatus sme_setNeighborScanMaxChanTime(tHalHandle hHal, const v_U16_t nNeighb
     \param hHal - The handle returned by macOpen.
     \return v_U16_t - channel min time value
     -------------------------------------------------------------------------*/
-v_U16_t sme_getNeighborScanMinChanTime(tHalHandle hHal)
-{
+v_U16_t sme_getNeighborScanMinChanTime(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.neighborRoamInfo.cfgParams.minChannelScanTime;
 }
@@ -9742,8 +8755,7 @@ v_U16_t sme_getNeighborScanMinChanTime(tHalHandle hHal)
     \param hHal - The handle returned by macOpen.
     \return v_U16_t - channel max time value
     -------------------------------------------------------------------------*/
-v_U16_t sme_getNeighborScanMaxChanTime(tHalHandle hHal)
-{
+v_U16_t sme_getNeighborScanMaxChanTime(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.neighborRoamInfo.cfgParams.maxChannelScanTime;
 }
@@ -9758,14 +8770,12 @@ v_U16_t sme_getNeighborScanMaxChanTime(tHalHandle hHal)
     \param  nNeighborScanPeriod - neighbor scan period
     \- return Success or failure
     -------------------------------------------------------------------------*/
-eHalStatus sme_setNeighborScanPeriod(tHalHandle hHal, const v_U16_t nNeighborScanPeriod)
-{
+eHalStatus sme_setNeighborScanPeriod(tHalHandle hHal, const v_U16_t nNeighborScanPeriod) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set neighbor scan period to %d"
                   " - old value is %d - roam state is %s",
@@ -9778,8 +8788,7 @@ eHalStatus sme_setNeighborScanPeriod(tHalHandle hHal, const v_U16_t nNeighborSca
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_SCAN_HOME_TIME_CHANGED);
     }
@@ -9794,8 +8803,7 @@ eHalStatus sme_setNeighborScanPeriod(tHalHandle hHal, const v_U16_t nNeighborSca
     \param hHal - The handle returned by macOpen.
     \return v_U16_t - neighbor scan period
     -------------------------------------------------------------------------*/
-v_U16_t sme_getNeighborScanPeriod(tHalHandle hHal)
-{
+v_U16_t sme_getNeighborScanPeriod(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.neighborRoamInfo.cfgParams.neighborScanPeriod;
 }
@@ -9811,8 +8819,7 @@ v_U16_t sme_getNeighborScanPeriod(tHalHandle hHal)
   \return v_U16_t - Rssi diff value
   \sa
   --------------------------------------------------------------------------*/
-v_U8_t sme_getRoamRssiDiff(tHalHandle hHal)
-{
+v_U8_t sme_getRoamRssiDiff(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.RoamRssiDiff;
 }
@@ -9826,8 +8833,7 @@ v_U8_t sme_getRoamRssiDiff(tHalHandle hHal)
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_ChangeRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
-        tANI_U8 numChannels)
-{
+        tANI_U8 numChannels) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpCsrNeighborRoamControlInfo    pNeighborRoamInfo = &pMac->roam.neighborRoamInfo;
@@ -9836,19 +8842,13 @@ eHalStatus sme_ChangeRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
     tANI_U8 i = 0, j = 0;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if (NULL != pNeighborRoamInfo->cfgParams.channelInfo.ChannelList)
-        {
-            for (i = 0; i < pNeighborRoamInfo->cfgParams.channelInfo.numOfChannels; i++)
-            {
-                if (j < sizeof(oldChannelList))
-                {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if (NULL != pNeighborRoamInfo->cfgParams.channelInfo.ChannelList) {
+            for (i = 0; i < pNeighborRoamInfo->cfgParams.channelInfo.numOfChannels; i++) {
+                if (j < sizeof(oldChannelList)) {
                     j += snprintf(oldChannelList + j, sizeof(oldChannelList) - j," %d",
                                   pNeighborRoamInfo->cfgParams.channelInfo.ChannelList[i]);
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
@@ -9856,18 +8856,13 @@ eHalStatus sme_ChangeRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
         csrFlushCfgBgScanRoamChannelList(pMac);
         csrCreateBgScanRoamChannelList(pMac, pChannelList, numChannels);
         sme_SetRoamScanControl(hHal, 1);
-        if (NULL != pNeighborRoamInfo->cfgParams.channelInfo.ChannelList)
-        {
+        if (NULL != pNeighborRoamInfo->cfgParams.channelInfo.ChannelList) {
             j = 0;
-            for (i = 0; i < pNeighborRoamInfo->cfgParams.channelInfo.numOfChannels; i++)
-            {
-                if (j < sizeof(oldChannelList))
-                {
+            for (i = 0; i < pNeighborRoamInfo->cfgParams.channelInfo.numOfChannels; i++) {
+                if (j < sizeof(oldChannelList)) {
                     j += snprintf(newChannelList + j, sizeof(newChannelList) - j," %d",
                                   pNeighborRoamInfo->cfgParams.channelInfo.ChannelList[i]);
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
@@ -9882,8 +8877,7 @@ eHalStatus sme_ChangeRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG, REASON_CHANNEL_LIST_CHANGED);
     }
 #endif
@@ -9903,8 +8897,7 @@ eHalStatus sme_ChangeRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
   --------------------------------------------------------------------------*/
 eHalStatus sme_SetEseRoamScanChannelList(tHalHandle hHal,
         tANI_U8 *pChannelList,
-        tANI_U8 numChannels)
-{
+        tANI_U8 numChannels) {
     tpAniSirGlobal      pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpCsrNeighborRoamControlInfo    pNeighborRoamInfo = &pMac->roam.neighborRoamInfo;
@@ -9914,25 +8907,19 @@ eHalStatus sme_SetEseRoamScanChannelList(tHalHandle hHal,
     tANI_U8             i = 0, j = 0;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if (NULL != currChannelListInfo->ChannelList)
-        {
-            for (i = 0; i < currChannelListInfo->numOfChannels; i++)
-            {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if (NULL != currChannelListInfo->ChannelList) {
+            for (i = 0; i < currChannelListInfo->numOfChannels; i++) {
                 j += snprintf(oldChannelList + j, sizeof(oldChannelList) - j," %d",
                               currChannelListInfo->ChannelList[i]);
             }
         }
         status = csrCreateRoamScanChannelList(pMac, pChannelList, numChannels, csrGetCurrentBand(hHal));
 
-        if ( HAL_STATUS_SUCCESS( status ))
-        {
-            if (NULL != currChannelListInfo->ChannelList)
-            {
+        if ( HAL_STATUS_SUCCESS( status )) {
+            if (NULL != currChannelListInfo->ChannelList) {
                 j = 0;
-                for (i = 0; i < currChannelListInfo->numOfChannels; i++)
-                {
+                for (i = 0; i < currChannelListInfo->numOfChannels; i++) {
                     j += snprintf(newChannelList + j, sizeof(newChannelList) - j," %d",
                                   currChannelListInfo->ChannelList[i]);
                 }
@@ -9946,8 +8933,7 @@ eHalStatus sme_SetEseRoamScanChannelList(tHalHandle hHal,
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (pMac->roam.configParam.isRoamOffloadScanEnabled)
-    {
+    if (pMac->roam.configParam.isRoamOffloadScanEnabled) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG, REASON_CHANNEL_LIST_CHANGED);
     }
 #endif
@@ -9965,8 +8951,7 @@ eHalStatus sme_SetEseRoamScanChannelList(tHalHandle hHal,
   \sa
   --------------------------------------------------------------------------*/
 eHalStatus sme_getRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
-                                      tANI_U8 *pNumChannels)
-{
+                                      tANI_U8 *pNumChannels) {
     int i  = 0;
     tANI_U8 *pOutPtr = pChannelList;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
@@ -9974,10 +8959,8 @@ eHalStatus sme_getRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if (NULL == pNeighborRoamInfo->cfgParams.channelInfo.ChannelList)
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if (NULL == pNeighborRoamInfo->cfgParams.channelInfo.ChannelList) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_WARN,
                       "Roam Scan channel list is NOT yet initialized");
             *pNumChannels = 0;
@@ -9986,8 +8969,7 @@ eHalStatus sme_getRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
         }
 
         *pNumChannels = pNeighborRoamInfo->cfgParams.channelInfo.numOfChannels;
-        for (i = 0; i < (*pNumChannels); i++)
-        {
+        for (i = 0; i < (*pNumChannels); i++) {
             pOutPtr[i] = pNeighborRoamInfo->cfgParams.channelInfo.ChannelList[i];
         }
         pOutPtr[i] = '\0';
@@ -10004,8 +8986,7 @@ eHalStatus sme_getRoamScanChannelList(tHalHandle hHal, tANI_U8 *pChannelList,
           FALSE (0) - if feature is disabled (compile or runtime)
   \sa
   --------------------------------------------------------------------------*/
-tANI_BOOLEAN sme_getIsEseFeatureEnabled(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_getIsEseFeatureEnabled(tHalHandle hHal) {
 #ifdef FEATURE_WLAN_ESE
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return csrRoamIsEseIniFeatureEnabled(pMac);
@@ -10021,8 +9002,7 @@ tANI_BOOLEAN sme_getIsEseFeatureEnabled(tHalHandle hHal)
   \return v_U8_t - WES Mode Enabled(1)/Disabled(0)
   \sa
   --------------------------------------------------------------------------*/
-v_BOOL_t sme_GetWESMode(tHalHandle hHal)
-{
+v_BOOL_t sme_GetWESMode(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.isWESModeEnabled;
 }
@@ -10034,8 +9014,7 @@ v_BOOL_t sme_GetWESMode(tHalHandle hHal)
   \return v_BOOL_t - Enabled(1)/Disabled(0)
   \sa
   --------------------------------------------------------------------------*/
-v_BOOL_t sme_GetRoamScanControl(tHalHandle hHal)
-{
+v_BOOL_t sme_GetRoamScanControl(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.nRoamScanControl;
 }
@@ -10049,8 +9028,7 @@ v_BOOL_t sme_GetRoamScanControl(tHalHandle hHal)
           FALSE (0) - if feature is disabled (compile or runtime)
   \sa
   --------------------------------------------------------------------------*/
-tANI_BOOLEAN sme_getIsLfrFeatureEnabled(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_getIsLfrFeatureEnabled(tHalHandle hHal) {
 #ifdef FEATURE_WLAN_LFR
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.isFastRoamIniFeatureEnabled;
@@ -10067,8 +9045,7 @@ tANI_BOOLEAN sme_getIsLfrFeatureEnabled(tHalHandle hHal)
           FALSE (0) - if feature is disabled (compile or runtime)
   \sa
   --------------------------------------------------------------------------*/
-tANI_BOOLEAN sme_getIsFtFeatureEnabled(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_getIsFtFeatureEnabled(tHalHandle hHal) {
 #ifdef WLAN_FEATURE_VOWIFI_11R
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->roam.configParam.isFastTransitionEnabled;
@@ -10086,8 +9063,7 @@ tANI_BOOLEAN sme_getIsFtFeatureEnabled(tHalHandle hHal)
 
     \- return 1/0 (TRUE/FALSE)
     -------------------------------------------------------------------------*/
-tANI_U8 sme_IsFeatureSupportedByFW(tANI_U8 featEnumValue)
-{
+tANI_U8 sme_IsFeatureSupportedByFW(tANI_U8 featEnumValue) {
     return IS_FEATURE_SUPPORTED_BY_FW(featEnumValue);
 }
 
@@ -10099,8 +9075,7 @@ tANI_U8 sme_IsFeatureSupportedByFW(tANI_U8 featEnumValue)
     \- return 1/0 (TRUE/FALSE)
     -------------------------------------------------------------------------*/
 
-tANI_U8 sme_IsFeatureSupportedByDriver(tANI_U8 featEnumValue)
-{
+tANI_U8 sme_IsFeatureSupportedByDriver(tANI_U8 featEnumValue) {
     return IS_FEATURE_SUPPORTED_BY_DRIVER(featEnumValue);
 }
 
@@ -10117,15 +9092,13 @@ tANI_U8 sme_IsFeatureSupportedByDriver(tANI_U8 featEnumValue)
 VOS_STATUS sme_SendTdlsLinkEstablishParams(tHalHandle hHal,
         tANI_U8 sessionId,
         tSirMacAddr peerMac,
-        tCsrTdlsLinkEstablishParams *tdlsLinkEstablishParams)
-{
+        tCsrTdlsLinkEstablishParams *tdlsLinkEstablishParams) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock( &pMac->sme );
 
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrTdlsSendLinkEstablishParams(hHal, sessionId, peerMac, tdlsLinkEstablishParams) ;
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -10147,15 +9120,13 @@ VOS_STATUS sme_SendTdlsChanSwitchReq(tHalHandle hHal,
                                      tSirMacAddr peerMac,
                                      tANI_S32 tdlsOffCh,
                                      tANI_S32 tdlsOffChBwOffset,
-                                     tANI_U8 tdlsSwMode)
-{
+                                     tANI_U8 tdlsSwMode) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock( &pMac->sme );
 
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrTdlsSendChanSwitchReq(hHal, sessionId, peerMac,
                                           tdlsOffCh, tdlsOffChBwOffset,
                                           tdlsSwMode);
@@ -10179,15 +9150,13 @@ VOS_STATUS sme_SendTdlsChanSwitchReq(tHalHandle hHal,
     \- return VOS_STATUS_SUCCES
     -------------------------------------------------------------------------*/
 VOS_STATUS sme_SendTdlsMgmtFrame(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac,
-                                 tANI_U8 frame_type, tANI_U8 dialog, tANI_U16 statusCode, tANI_U32 peerCapability, tANI_U8 *buf, tANI_U8 len, tANI_U8 responder)
-{
+                                 tANI_U8 frame_type, tANI_U8 dialog, tANI_U16 statusCode, tANI_U32 peerCapability, tANI_U8 *buf, tANI_U8 len, tANI_U8 responder) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tCsrTdlsSendMgmt sendTdlsReq = {{0}} ;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         vos_mem_copy(sendTdlsReq.peerMac, peerMac, sizeof(tSirMacAddr)) ;
         sendTdlsReq.frameType = frame_type;
         sendTdlsReq.buf = buf;
@@ -10214,20 +9183,17 @@ VOS_STATUS sme_SendTdlsMgmtFrame(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr
     \- return VOS_STATUS_SUCCES
     -------------------------------------------------------------------------*/
 VOS_STATUS sme_ChangeTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac,
-                                 tCsrStaParams *pstaParams)
-{
+                                 tCsrStaParams *pstaParams) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
-    if (NULL == pstaParams)
-    {
+    if (NULL == pstaParams) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s :pstaParams is NULL",__func__);
         return eHAL_STATUS_FAILURE;
     }
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrTdlsChangePeerSta(hHal, sessionId, peerMac,pstaParams);
 
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -10244,14 +9210,12 @@ VOS_STATUS sme_ChangeTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr
     \param  peerMac - peer's Mac Adress.
     \- return VOS_STATUS_SUCCES
     -------------------------------------------------------------------------*/
-VOS_STATUS sme_AddTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac)
-{
+VOS_STATUS sme_AddTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrTdlsAddPeerSta(hHal, sessionId, peerMac);
 
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -10267,14 +9231,12 @@ VOS_STATUS sme_AddTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr pe
     \param  peerMac - peer's Mac Adress.
     \- return VOS_STATUS_SUCCES
     -------------------------------------------------------------------------*/
-VOS_STATUS sme_DeleteTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac)
-{
+VOS_STATUS sme_DeleteTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         status = csrTdlsDelPeerSta(hHal, sessionId, peerMac) ;
 
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -10289,8 +9251,7 @@ VOS_STATUS sme_DeleteTdlsPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr
 
     \- return void
     -------------------------------------------------------------------------*/
-void sme_SetTdlsPowerSaveProhibited(tHalHandle hHal, v_BOOL_t val)
-{
+void sme_SetTdlsPowerSaveProhibited(tHalHandle hHal, v_BOOL_t val) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     pMac->isTdlsPowerSaveProhibited = val;
@@ -10303,8 +9264,7 @@ void sme_SetTdlsPowerSaveProhibited(tHalHandle hHal, v_BOOL_t val)
 
     \- return v_BOOL_t
     -------------------------------------------------------------------------*/
-v_BOOL_t sme_IsPmcBmps(tHalHandle hHal)
-{
+v_BOOL_t sme_IsPmcBmps(tHalHandle hHal) {
     return (BMPS == pmcGetPmcState(hHal));
 }
 
@@ -10312,8 +9272,7 @@ v_BOOL_t sme_IsPmcBmps(tHalHandle hHal)
 /*
  * SME API to start TDLS discovery Procedure
  */
-VOS_STATUS sme_StartTdlsDiscoveryReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac)
-{
+VOS_STATUS sme_StartTdlsDiscoveryReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tCsrTdlsDisRequest disReq = {{0}} ;
     vos_mem_copy(disReq.peerMac, peerMac, sizeof(tSirMacAddr)) ;
@@ -10327,8 +9286,7 @@ VOS_STATUS sme_StartTdlsDiscoveryReq(tHalHandle hHal, tANI_U8 sessionId, tSirMac
  * Process TDLS discovery results
  */
 v_U8_t sme_GetTdlsDiscoveryResult(tHalHandle hHal,
-                                  tSmeTdlsDisResult *disResult, v_U8_t listType)
-{
+                                  tSmeTdlsDisResult *disResult, v_U8_t listType) {
     tCsrTdlsPeerLinkinfo *peerLinkInfo = NULL ;
     tSirTdlsPeerInfo *peerInfo = NULL ;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
@@ -10340,18 +9298,14 @@ v_U8_t sme_GetTdlsDiscoveryResult(tHalHandle hHal,
     VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
               ("TDLS peer count = %d"),disInfo->tdlsPeerCount ) ;
     pEntry = csrLLPeekHead( peerList, LL_ACCESS_LOCK );
-    while(pEntry)
-    {
+    while(pEntry) {
         peerLinkInfo = GET_BASE_ADDR( pEntry, tCsrTdlsPeerLinkinfo,
                                       tdlsPeerStaLink) ;
         peerInfo = &peerLinkInfo->tdlsDisPeerInfo ;
 
-        switch(listType)
-        {
-        case TDLS_SETUP_LIST:
-        {
-            if(TDLS_LINK_SETUP_STATE == peerInfo->tdlsPeerState)
-            {
+        switch(listType) {
+        case TDLS_SETUP_LIST: {
+            if(TDLS_LINK_SETUP_STATE == peerInfo->tdlsPeerState) {
                 vos_mem_copy(disResult[peerCnt].tdlsPeerMac,
                              peerInfo->peerMac, sizeof(tSirMacAddr));
                 disResult[peerCnt].tdlsPeerRssi = peerInfo->tdlsPeerRssi ;
@@ -10359,16 +9313,14 @@ v_U8_t sme_GetTdlsDiscoveryResult(tHalHandle hHal,
             }
             break ;
         }
-        case TDLS_DIS_LIST:
-        {
+        case TDLS_DIS_LIST: {
             vos_mem_copy(disResult[peerCnt].tdlsPeerMac,
                          peerInfo->peerMac, sizeof(tSirMacAddr));
             disResult[peerCnt].tdlsPeerRssi = peerInfo->tdlsPeerRssi ;
             peerCnt++ ;
             break ;
         }
-        default:
-        {
+        default: {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       ("unknown list type ")) ;
             break ;
@@ -10385,8 +9337,7 @@ v_U8_t sme_GetTdlsDiscoveryResult(tHalHandle hHal,
 /*
  * SME API to start TDLS link setup Procedure.
  */
-VOS_STATUS sme_StartTdlsLinkSetupReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac)
-{
+VOS_STATUS sme_StartTdlsLinkSetupReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tCsrTdlsSetupRequest setupReq = {{0}} ;
     vos_mem_copy(setupReq.peerMac, peerMac, sizeof(tSirMacAddr)) ;
@@ -10398,8 +9349,7 @@ VOS_STATUS sme_StartTdlsLinkSetupReq(tHalHandle hHal, tANI_U8 sessionId, tSirMac
 /*
  * SME API to start TDLS link Teardown Procedure.
  */
-VOS_STATUS sme_StartTdlsLinkTeardownReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac)
-{
+VOS_STATUS sme_StartTdlsLinkTeardownReq(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac) {
     VOS_STATUS status = VOS_STATUS_SUCCESS;
     tCsrTdlsTeardownRequest teardownReq = {{0}} ;
     vos_mem_copy(teardownReq.peerMac, peerMac, sizeof(tSirMacAddr)) ;
@@ -10410,23 +9360,20 @@ VOS_STATUS sme_StartTdlsLinkTeardownReq(tHalHandle hHal, tANI_U8 sessionId, tSir
 
 #endif /* FEATURE_WLAN_TDLS */
 
-eHalStatus sme_UpdateDfsSetting(tHalHandle hHal, tANI_U8 fUpdateEnableDFSChnlScan)
-{
+eHalStatus sme_UpdateDfsSetting(tHalHandle hHal, tANI_U8 fUpdateEnableDFSChnlScan) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     smsLog(pMac, LOG2, FL("enter"));
 
-    if (pMac->fActiveScanOnDFSChannels)
-    {
+    if (pMac->fActiveScanOnDFSChannels) {
         smsLog(pMac, LOG1, FL("Skip updating fEnableDFSChnlScan"
                               " as DFS feature is triggered"));
         return (status);
     }
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         pMac->scan.fEnableDFSChnlScan = fUpdateEnableDFSChnlScan;
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -10449,14 +9396,12 @@ eHalStatus sme_UpdateDfsSetting(tHalHandle hHal, tANI_U8 fUpdateEnableDFSChnlSca
             Other status means SME failed to update DFS roaming scan config.
     \sa
     -------------------------------------------------------------------------*/
-eHalStatus sme_UpdateDFSRoamMode(tHalHandle hHal, tANI_U8 allowDFSChannelRoam)
-{
+eHalStatus sme_UpdateDFSRoamMode(tHalHandle hHal, tANI_U8 allowDFSChannelRoam) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "LFR runtime successfully set AllowDFSChannelRoam Mode to "
                   "%d - old value is %d",
@@ -10466,8 +9411,7 @@ eHalStatus sme_UpdateDFSRoamMode(tHalHandle hHal, tANI_U8 allowDFSChannelRoam)
         sme_ReleaseGlobalLock( &pMac->sme );
     }
 #ifdef WLAN_FEATURE_ROAM_SCAN_OFFLOAD
-    if (csrRoamIsRoamOffloadScanEnabled(pMac))
-    {
+    if (csrRoamIsRoamOffloadScanEnabled(pMac)) {
         csrRoamOffloadScan(pMac, ROAM_SCAN_OFFLOAD_UPDATE_CFG,
                            REASON_CHANNEL_LIST_CHANGED);
     }
@@ -10490,14 +9434,12 @@ eHalStatus sme_UpdateDFSRoamMode(tHalHandle hHal, tANI_U8 allowDFSChannelRoam)
             Other status means SME failed to update DFS scan config.
     \sa
     -------------------------------------------------------------------------*/
-eHalStatus sme_UpdateDFSScanMode(tHalHandle hHal, tANI_U8 dfsScanMode)
-{
+eHalStatus sme_UpdateDFSScanMode(tHalHandle hHal, tANI_U8 dfsScanMode) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "DFS scan Mode changed to %d, old value is %d ",
                   dfsScanMode,
@@ -10521,8 +9463,7 @@ eHalStatus sme_UpdateDFSScanMode(tHalHandle hHal, tANI_U8 dfsScanMode)
             mode 2 enables active scan on DFS channels for static list
   \sa
   --------------------------------------------------------------------------*/
-v_U8_t sme_GetDFSScanMode(tHalHandle hHal)
-{
+v_U8_t sme_GetDFSScanMode(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     return pMac->scan.fEnableDFSChnlScan;
 }
@@ -10536,8 +9477,7 @@ v_U8_t sme_GetDFSScanMode(tHalHandle hHal)
             Otherwise eHAL_STATUS_SUCCESS -
     \sa
     -------------------------------------------------------------------------*/
-eHalStatus sme_HandleDFSChanScan(tHalHandle hHal)
-{
+eHalStatus sme_HandleDFSChanScan(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     tCsrChannel ChannelList;
@@ -10549,8 +9489,7 @@ eHalStatus sme_HandleDFSChanScan(tHalHandle hHal)
     ChannelList.numChannels = sizeof(ChannelList.channelList);
     status = sme_GetCfgValidChannels(hHal, (tANI_U8 *)ChannelList.channelList,
                                      (tANI_U32*)&ChannelList.numChannels);
-    if (!HAL_STATUS_SUCCESS(status))
-    {
+    if (!HAL_STATUS_SUCCESS(status)) {
         smsLog(pMac, LOGE,
                FL("Failed to get valid channel list (err=%d)"), status);
         return status;
@@ -10568,14 +9507,12 @@ eHalStatus sme_HandleDFSChanScan(tHalHandle hHal)
 /*
  * SME API to enable/disable WLAN driver initiated SSR
  */
-void sme_UpdateEnableSSR(tHalHandle hHal, tANI_BOOLEAN enableSSR)
-{
+void sme_UpdateEnableSSR(tHalHandle hHal, tANI_BOOLEAN enableSSR) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus     status = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if (HAL_STATUS_SUCCESS(status))
-    {
+    if (HAL_STATUS_SUCCESS(status)) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_DEBUG,
                   "SSR level is changed %d", enableSSR);
         /* not serializing this messsage, as this is only going
@@ -10590,8 +9527,7 @@ void sme_UpdateEnableSSR(tHalHandle hHal, tANI_BOOLEAN enableSSR)
 /*
  * SME API to determine the channel bonding mode
  */
-VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 channel)
-{
+VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 channel) {
     tSmeConfigParams  smeConfig;
     tpAniSirGlobal    pMac = PMAC_STRUCT(hHal);
 
@@ -10607,14 +9543,12 @@ VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 ch
         eCSR_DOT11_MODE_11a_ONLY != eCsrPhyMode &&
 
         eCSR_DOT11_MODE_abg != eCsrPhyMode
-    )
-    {
+    ) {
         return VOS_STATUS_SUCCESS;
     }
 
     /* If channel bonding mode is not required */
-    if ( !pMac->roam.configParam.channelBondingMode5GHz )
-    {
+    if ( !pMac->roam.configParam.channelBondingMode5GHz ) {
         return VOS_STATUS_SUCCESS;
     }
 
@@ -10623,58 +9557,42 @@ VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 ch
 
 #ifdef WLAN_FEATURE_11AC
     if ( eCSR_DOT11_MODE_11ac == eCsrPhyMode ||
-            eCSR_DOT11_MODE_11ac_ONLY == eCsrPhyMode )
-    {
+            eCSR_DOT11_MODE_11ac_ONLY == eCsrPhyMode ) {
         if ( channel== 36 || channel == 52 || channel == 100 ||
-                channel == 116 || channel == 149 )
-        {
+                channel == 116 || channel == 149 ) {
             smeConfig.csrConfig.channelBondingMode5GHz =
                 PHY_QUADRUPLE_CHANNEL_20MHZ_LOW_40MHZ_LOW - 1;
-        }
-        else if ( channel == 40 || channel == 56 || channel == 104 ||
-                  channel == 120 || channel == 153 )
-        {
+        } else if ( channel == 40 || channel == 56 || channel == 104 ||
+                    channel == 120 || channel == 153 ) {
             smeConfig.csrConfig.channelBondingMode5GHz =
                 PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_LOW - 1;
-        }
-        else if ( channel == 44 || channel == 60 || channel == 108 ||
-                  channel == 124 || channel == 157 )
-        {
+        } else if ( channel == 44 || channel == 60 || channel == 108 ||
+                    channel == 124 || channel == 157 ) {
             smeConfig.csrConfig.channelBondingMode5GHz =
                 PHY_QUADRUPLE_CHANNEL_20MHZ_LOW_40MHZ_HIGH -1;
-        }
-        else if ( channel == 48 || channel == 64 || channel == 112 ||
-                  channel == 128 || channel == 144 || channel == 161 )
-        {
+        } else if ( channel == 48 || channel == 64 || channel == 112 ||
+                    channel == 128 || channel == 144 || channel == 161 ) {
             smeConfig.csrConfig.channelBondingMode5GHz =
                 PHY_QUADRUPLE_CHANNEL_20MHZ_HIGH_40MHZ_HIGH - 1;
-        }
-        else if ( channel == 165 )
-        {
+        } else if ( channel == 165 ) {
             smeConfig.csrConfig.channelBondingMode5GHz = 0;
         }
     }
 #endif
 
     if ( eCSR_DOT11_MODE_11n == eCsrPhyMode ||
-            eCSR_DOT11_MODE_11n_ONLY == eCsrPhyMode )
-    {
+            eCSR_DOT11_MODE_11n_ONLY == eCsrPhyMode ) {
         if ( channel== 40 || channel == 48 || channel == 56 ||
                 channel == 64 || channel == 104 || channel == 112 ||
                 channel == 120 || channel == 128 || channel == 136 ||
-                channel == 144 || channel == 153 || channel == 161 )
-        {
+                channel == 144 || channel == 153 || channel == 161 ) {
             smeConfig.csrConfig.channelBondingMode5GHz = 1;
-        }
-        else if ( channel== 36 || channel == 44 || channel == 52 ||
-                  channel == 60 || channel == 100 || channel == 108 ||
-                  channel == 116 || channel == 124 || channel == 132 ||
-                  channel == 140 || channel == 149 || channel == 157 )
-        {
+        } else if ( channel== 36 || channel == 44 || channel == 52 ||
+                    channel == 60 || channel == 100 || channel == 108 ||
+                    channel == 116 || channel == 124 || channel == 132 ||
+                    channel == 140 || channel == 149 || channel == 157 ) {
             smeConfig.csrConfig.channelBondingMode5GHz = 2;
-        }
-        else if ( channel == 165 )
-        {
+        } else if ( channel == 165 ) {
             smeConfig.csrConfig.channelBondingMode5GHz = 0;
         }
     }
@@ -10687,8 +9605,7 @@ VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 ch
     */
     if (  eCSR_DOT11_MODE_11a == eCsrPhyMode ||
             eCSR_DOT11_MODE_11a_ONLY == eCsrPhyMode ||
-            eCSR_DOT11_MODE_abg == eCsrPhyMode)
-    {
+            eCSR_DOT11_MODE_abg == eCsrPhyMode) {
         smeConfig.csrConfig.channelBondingMode5GHz = 0;
     }
 
@@ -10706,8 +9623,7 @@ VOS_STATUS sme_SelectCBMode(tHalHandle hHal, eCsrPhyMode eCsrPhyMode, tANI_U8 ch
   \param currDeviceMode - Current operating device mode.
   --------------------------------------------------------------------------*/
 
-void sme_SetCurrDeviceMode (tHalHandle hHal, tVOS_CON_MODE currDeviceMode)
-{
+void sme_SetCurrDeviceMode (tHalHandle hHal, tVOS_CON_MODE currDeviceMode) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     pMac->sme.currDeviceMode = currDeviceMode;
     return;
@@ -10727,14 +9643,12 @@ void sme_SetCurrDeviceMode (tHalHandle hHal, tVOS_CON_MODE currDeviceMode)
   --------------------------------------------------------------------------*/
 
 eHalStatus sme_HandoffRequest(tHalHandle hHal,
-                              tCsrHandoffRequest *pHandoffInfo)
-{
+                              tCsrHandoffRequest *pHandoffInfo) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                   "%s: invoked", __func__);
         status = csrHandoffRequest(pMac, pHandoffInfo);
@@ -10749,11 +9663,9 @@ eHalStatus sme_HandoffRequest(tHalHandle hHal,
  * SME API to check if there is any infra station or
  * P2P client is connected
  */
-VOS_STATUS sme_isSta_p2p_clientConnected(tHalHandle hHal)
-{
+VOS_STATUS sme_isSta_p2p_clientConnected(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
-    if(csrIsInfraConnected(pMac))
-    {
+    if(csrIsInfraConnected(pMac)) {
         return VOS_STATUS_SUCCESS;
     }
     return VOS_STATUS_E_FAILURE;
@@ -10774,27 +9686,22 @@ eHalStatus sme_LPHBConfigReq
     tHalHandle hHal,
     tSirLPHBReq *lphdReq,
     void (*pCallbackfn)(void *pAdapter, void *indParam)
-)
-{
+) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS          vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
     vos_msg_t           vosMessage;
 
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if (eHAL_STATUS_SUCCESS == status)
-    {
+    if (eHAL_STATUS_SUCCESS == status) {
         if ((LPHB_SET_EN_PARAMS_INDID == lphdReq->cmd) &&
                 (NULL == pCallbackfn) &&
-                (NULL == pMac->sme.pLphbIndCb))
-        {
+                (NULL == pMac->sme.pLphbIndCb)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Indication Call back did not registered", __func__);
             sme_ReleaseGlobalLock(&pMac->sme);
             return eHAL_STATUS_FAILURE;
-        }
-        else if (NULL != pCallbackfn)
-        {
+        } else if (NULL != pCallbackfn) {
             pMac->sme.pLphbIndCb = pCallbackfn;
         }
 
@@ -10802,8 +9709,7 @@ eHalStatus sme_LPHBConfigReq
         vosMessage.bodyptr = lphdReq;
         vosMessage.type    = WDA_LPHB_CONF_REQ;
         vosStatus = vos_mq_post_message(VOS_MQ_ID_WDA, &vosMessage);
-        if (!VOS_IS_STATUS_SUCCESS(vosStatus))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vosStatus)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Post Config LPHB MSG fail", __func__);
             status = eHAL_STATUS_FAILURE;
@@ -10823,8 +9729,7 @@ eHalStatus sme_LPHBConfigReq
   \sa
   --------------------------------------------------------------------------*/
 void sme_enable_disable_split_scan (tHalHandle hHal, tANI_U8 nNumStaChan,
-                                    tANI_U8 nNumP2PChan)
-{
+                                    tANI_U8 nNumP2PChan) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     pMac->roam.configParam.nNumStaChanCombinedConc = nNumStaChan;
@@ -10847,19 +9752,16 @@ void sme_enable_disable_split_scan (tHalHandle hHal, tANI_U8 nNumStaChan,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_AddPeriodicTxPtrn(tHalHandle hHal, tSirAddPeriodicTxPtrn
-                                 *addPeriodicTxPtrnParams)
-{
+                                 *addPeriodicTxPtrnParams) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status;
     vos_msg_t msg;
 
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         msg.type     = WDA_ADD_PERIODIC_TX_PTRN_IND;
         msg.bodyptr  = addPeriodicTxPtrnParams;
 
-        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))) {
             VOS_TRACE( VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,"%s: Not able "
                        "to post WDA_ADD_PERIODIC_TX_PTRN_IND to WDA!",
                        __func__);
@@ -10883,19 +9785,16 @@ eHalStatus sme_AddPeriodicTxPtrn(tHalHandle hHal, tSirAddPeriodicTxPtrn
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_DelPeriodicTxPtrn(tHalHandle hHal, tSirDelPeriodicTxPtrn
-                                 *delPeriodicTxPtrnParams)
-{
+                                 *delPeriodicTxPtrnParams) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status;
     vos_msg_t msg;
 
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         msg.type     = WDA_DEL_PERIODIC_TX_PTRN_IND;
         msg.bodyptr  = delPeriodicTxPtrnParams;
 
-        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))) {
             VOS_TRACE( VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,"%s: Not able "
                        "to post WDA_DEL_PERIODIC_TX_PTRN_IND to WDA!",
                        __func__);
@@ -10911,30 +9810,25 @@ eHalStatus sme_DelPeriodicTxPtrn(tHalHandle hHal, tSirDelPeriodicTxPtrn
     return status;
 }
 
-void smeGetCommandQStatus( tHalHandle hHal )
-{
+void smeGetCommandQStatus( tHalHandle hHal ) {
     tSmeCmd *pTempCmd = NULL;
     tListElem *pEntry;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
-    if (NULL == pMac)
-    {
+    if (NULL == pMac) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
                   "%s: pMac is null", __func__);
         return;
     }
 
     pEntry = csrLLPeekHead( &pMac->sme.smeCmdActiveList, LL_ACCESS_LOCK );
-    if( pEntry )
-    {
+    if( pEntry ) {
         pTempCmd = GET_BASE_ADDR( pEntry, tSmeCmd, Link );
     }
     smsLog( pMac, LOGE, "Currently smeCmdActiveList has command (0x%X)",
             (pTempCmd) ? pTempCmd->command : eSmeNoCommand );
-    if(pTempCmd)
-    {
-        if( eSmeCsrCommandMask & pTempCmd->command )
-        {
+    if(pTempCmd) {
+        if( eSmeCsrCommandMask & pTempCmd->command ) {
             //CSR command is stuck. See what the reason code is for that command
             dumpCsrCommandInfo(pMac, pTempCmd);
         }
@@ -10966,18 +9860,15 @@ eHalStatus sme_SetBatchScanReq
     tHalHandle hHal, tSirSetBatchScanReq *pRequest, tANI_U8 sessionId,
     void (*callbackRoutine) (void *callbackCtx, tSirSetBatchScanRsp *pRsp),
     void *callbackContext
-)
-{
+) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if (!pMac)
-    {
+    if (!pMac) {
         return eHAL_STATUS_FAILURE;
     }
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         status = pmcSetBatchScanReq(hHal, pRequest, sessionId, callbackRoutine,
                                     callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -10993,19 +9884,16 @@ eHalStatus sme_SetBatchScanReq
     \param  rateUpdateParams - Pointer to rate update params
     \return eHalStatus
   ---------------------------------------------------------------------------*/
-eHalStatus sme_SendRateUpdateInd(tHalHandle hHal, tSirRateUpdateInd *rateUpdateParams)
-{
+eHalStatus sme_SendRateUpdateInd(tHalHandle hHal, tSirRateUpdateInd *rateUpdateParams) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     eHalStatus status;
     vos_msg_t msg;
 
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         msg.type     = WDA_RATE_UPDATE_IND;
         msg.bodyptr  = rateUpdateParams;
 
-        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))) {
             VOS_TRACE( VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,"%s: Not able "
                        "to post WDA_SET_RMC_RATE_IND to WDA!",
                        __func__);
@@ -11037,13 +9925,11 @@ eHalStatus sme_TriggerBatchScanResultInd
     tHalHandle hHal, tSirTriggerBatchScanResultInd *pRequest, tANI_U8 sessionId,
     void (*callbackRoutine) (void *callbackCtx, void *pRsp),
     void *callbackContext
-)
-{
+) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         status = pmcTriggerBatchScanResultInd(hHal, pRequest, sessionId,
                                               callbackRoutine, callbackContext);
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -11064,13 +9950,11 @@ eHalStatus sme_TriggerBatchScanResultInd
 eHalStatus sme_StopBatchScanInd
 (
     tHalHandle hHal, tSirStopBatchScanInd *pRequest, tANI_U8 sessionId
-)
-{
+) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         status = pmcStopBatchScanInd(hHal, pRequest, sessionId);
         sme_ReleaseGlobalLock( &pMac->sme );
     }
@@ -11095,8 +9979,7 @@ eHalStatus sme_AddChAvoidCallback
 (
     tHalHandle hHal,
     void (*pCallbackfn)(void *pAdapter, void *indParam)
-)
-{
+) {
     eHalStatus          status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal      pMac      = PMAC_STRUCT(hHal);
 
@@ -11104,10 +9987,8 @@ eHalStatus sme_AddChAvoidCallback
               "%s: Plug in CH AVOID CB", __func__);
 
     status = sme_AcquireGlobalLock(&pMac->sme);
-    if (eHAL_STATUS_SUCCESS == status)
-    {
-        if (NULL != pCallbackfn)
-        {
+    if (eHAL_STATUS_SUCCESS == status) {
+        if (NULL != pCallbackfn) {
             pMac->sme.pChAvoidNotificationCb = pCallbackfn;
         }
         sme_ReleaseGlobalLock(&pMac->sme);
@@ -11117,8 +9998,7 @@ eHalStatus sme_AddChAvoidCallback
 }
 #endif /* FEATURE_WLAN_CH_AVOID */
 
-void activeListCmdTimeoutHandle(void *userData)
-{
+void activeListCmdTimeoutHandle(void *userData) {
     if (NULL == userData)
         return;
     VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
@@ -11141,16 +10021,14 @@ void activeListCmdTimeoutHandle(void *userData)
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_LLStatsSetReq(tHalHandle hHal,
-                             tSirLLStatsSetReq *pLinkLayerStatsSetReq)
-{
+                             tSirLLStatsSetReq *pLinkLayerStatsSetReq) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     vos_msg_t msg;
     eHalStatus status = eHAL_STATUS_FAILURE;
     tSirLLStatsSetReq *plinkLayerSetReq;
 
     plinkLayerSetReq = vos_mem_malloc(sizeof(*plinkLayerSetReq));
-    if ( !plinkLayerSetReq)
-    {
+    if ( !plinkLayerSetReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_LINK_LAYER_STATS_SET_REQ",
@@ -11161,22 +10039,18 @@ eHalStatus sme_LLStatsSetReq(tHalHandle hHal,
     *plinkLayerSetReq = *pLinkLayerStatsSetReq;
 
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         msg.type = WDA_LINK_LAYER_STATS_SET_REQ;
         msg.reserved = 0;
         msg.bodyptr = plinkLayerSetReq;
 
-        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-        {
+        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                       "Not able to post SIR_HAL_LL_STATS_SET message to HAL", __func__);
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
-    }
-    else
-    {
+    } else {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                   "sme_AcquireGlobalLock error", __func__);
     }
@@ -11195,16 +10069,14 @@ eHalStatus sme_LLStatsSetReq(tHalHandle hHal,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_LLStatsGetReq(tHalHandle hHal,
-                             tSirLLStatsGetReq *pLinkLayerStatsGetReq)
-{
+                             tSirLLStatsGetReq *pLinkLayerStatsGetReq) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     vos_msg_t msg;
     eHalStatus status = eHAL_STATUS_FAILURE;
     tSirLLStatsGetReq *pGetStatsReq;
 
     pGetStatsReq = vos_mem_malloc(sizeof(*pGetStatsReq));
-    if ( !pGetStatsReq)
-    {
+    if ( !pGetStatsReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_LINK_LAYER_STATS_GET_REQ",
@@ -11213,21 +10085,17 @@ eHalStatus sme_LLStatsGetReq(tHalHandle hHal,
     }
     *pGetStatsReq = *pLinkLayerStatsGetReq;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         msg.type = WDA_LINK_LAYER_STATS_GET_REQ;
         msg.reserved = 0;
         msg.bodyptr = pGetStatsReq;
-        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-        {
+        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                       "Not able to post SIR_HAL_LL_STATS_GET message to HAL", __func__);
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
-    }
-    else
-    {
+    } else {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                   "sme_AcquireGlobalLock error", __func__);
     }
@@ -11246,8 +10114,7 @@ eHalStatus sme_LLStatsGetReq(tHalHandle hHal,
     \return eHalStatus
   ---------------------------------------------------------------------------*/
 eHalStatus sme_LLStatsClearReq(tHalHandle hHal,
-                               tSirLLStatsClearReq *pLinkLayerStatsClear)
-{
+                               tSirLLStatsClearReq *pLinkLayerStatsClear) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     vos_msg_t msg;
     eHalStatus status = eHAL_STATUS_FAILURE;
@@ -11256,8 +10123,7 @@ eHalStatus sme_LLStatsClearReq(tHalHandle hHal,
 
 
     pClearStatsReq = vos_mem_malloc(sizeof(*pClearStatsReq));
-    if ( !pClearStatsReq)
-    {
+    if ( !pClearStatsReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_LINK_LAYER_STATS_CLEAR_REQ",
@@ -11267,22 +10133,18 @@ eHalStatus sme_LLStatsClearReq(tHalHandle hHal,
 
     *pClearStatsReq = *pLinkLayerStatsClear;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
         msg.type = WDA_LINK_LAYER_STATS_CLEAR_REQ;
         msg.reserved = 0;
         msg.bodyptr = pClearStatsReq;
 
-        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
-        {
+        if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                       "Not able to post SIR_HAL_LL_STATS_CLEAR message to HAL", __func__);
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
-    }
-    else
-    {
+    } else {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
                   "sme_AcquireGlobalLock error", __func__);
     }
@@ -11305,15 +10167,12 @@ eHalStatus sme_SetLinkLayerStatsIndCB
     tHalHandle hHal,
     void (*callbackRoutine) (void *callbackCtx, int indType, void *pRsp,
                              tANI_U8  *macAddr)
-)
-{
+) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme )))
-    {
-        if (NULL != callbackRoutine)
-        {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ))) {
+        if (NULL != callbackRoutine) {
             pMac->sme.pLinkLayerStatsIndCallback = callbackRoutine;
         }
         sme_ReleaseGlobalLock( &pMac->sme );
@@ -11323,8 +10182,7 @@ eHalStatus sme_SetLinkLayerStatsIndCB
 }
 #endif /* WLAN_FEATURE_LINK_LAYER_STATS */
 
-eHalStatus sme_UpdateConnectDebug(tHalHandle hHal, tANI_U32 set_value)
-{
+eHalStatus sme_UpdateConnectDebug(tHalHandle hHal, tANI_U32 set_value) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     pMac->fEnableDebugLog = set_value;
@@ -11333,8 +10191,7 @@ eHalStatus sme_UpdateConnectDebug(tHalHandle hHal, tANI_U32 set_value)
 
 VOS_STATUS sme_UpdateDSCPtoUPMapping( tHalHandle hHal,
                                       sme_QosWmmUpType  *dscpmapping,
-                                      v_U8_t sessionId )
-{
+                                      v_U8_t sessionId ) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
     eHalStatus status = eHAL_STATUS_SUCCESS;
     v_U8_t i, j, peSessionId;
@@ -11342,10 +10199,8 @@ VOS_STATUS sme_UpdateDSCPtoUPMapping( tHalHandle hHal,
     tpPESession pSession = NULL;
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
-        if (!CSR_IS_SESSION_VALID( pMac, sessionId ))
-        {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
+        if (!CSR_IS_SESSION_VALID( pMac, sessionId )) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Invalid session Id %u", __func__, sessionId);
             sme_ReleaseGlobalLock( &pMac->sme);
@@ -11353,8 +10208,7 @@ VOS_STATUS sme_UpdateDSCPtoUPMapping( tHalHandle hHal,
         }
         pCsrSession = CSR_GET_SESSION( pMac, sessionId );
 
-        if (pCsrSession == NULL)
-        {
+        if (pCsrSession == NULL) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: CSR Session lookup fails %u", __func__, sessionId);
             sme_ReleaseGlobalLock( &pMac->sme);
@@ -11364,47 +10218,36 @@ VOS_STATUS sme_UpdateDSCPtoUPMapping( tHalHandle hHal,
         pSession = peFindSessionByBssid( pMac,
                                          pCsrSession->connectedProfile.bssid, &peSessionId );
 
-        if (pSession == NULL)
-        {
+        if (pSession == NULL) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: Session lookup fails for BSSID", __func__);
             sme_ReleaseGlobalLock( &pMac->sme);
             return eHAL_STATUS_FAILURE;
         }
 
-        if ( !pSession->QosMapSet.present )
-        {
+        if ( !pSession->QosMapSet.present ) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       "%s: QOS Mapping IE not present", __func__);
             sme_ReleaseGlobalLock( &pMac->sme);
             return eHAL_STATUS_FAILURE;
-        }
-        else
-        {
-            for (i = 0; i < SME_QOS_WMM_UP_MAX; i++)
-            {
+        } else {
+            for (i = 0; i < SME_QOS_WMM_UP_MAX; i++) {
                 for (j = pSession->QosMapSet.dscp_range[i][0];
-                        j <= pSession->QosMapSet.dscp_range[i][1]; j++)
-                {
+                        j <= pSession->QosMapSet.dscp_range[i][1]; j++) {
                     if ((pSession->QosMapSet.dscp_range[i][0] == 255) &&
-                            (pSession->QosMapSet.dscp_range[i][1] == 255))
-                    {
+                            (pSession->QosMapSet.dscp_range[i][1] == 255)) {
                         dscpmapping[j]= 0;
                         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                                   "%s: User Priority %d is not used in mapping",
                                   __func__, i);
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         dscpmapping[j]= i;
                     }
                 }
             }
-            for (i = 0; i< pSession->QosMapSet.num_dscp_exceptions; i++)
-            {
-                if (pSession->QosMapSet.dscp_exceptions[i][0] != 255)
-                {
+            for (i = 0; i< pSession->QosMapSet.num_dscp_exceptions; i++) {
+                if (pSession->QosMapSet.dscp_exceptions[i][0] != 255) {
                     dscpmapping[pSession->QosMapSet.dscp_exceptions[i][0] ] =
                         pSession->QosMapSet.dscp_exceptions[i][1];
                 }
@@ -11415,29 +10258,23 @@ VOS_STATUS sme_UpdateDSCPtoUPMapping( tHalHandle hHal,
     return status;
 }
 
-tANI_BOOLEAN  sme_Is11dCountrycode(tHalHandle hHal)
-{
+tANI_BOOLEAN  sme_Is11dCountrycode(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     if (VOS_TRUE == vos_mem_compare(pMac->scan.countryCodeCurrent,
-                                    pMac->scan.countryCode11d, 2))
-    {
+                                    pMac->scan.countryCode11d, 2)) {
         return eANI_BOOLEAN_TRUE;
-    }
-    else
-    {
+    } else {
         return eANI_BOOLEAN_FALSE;
     }
 }
 
-tANI_BOOLEAN  sme_SpoofMacAddrReq(tHalHandle hHal, v_MACADDR_t *macaddr)
-{
+tANI_BOOLEAN  sme_SpoofMacAddrReq(tHalHandle hHal, v_MACADDR_t *macaddr) {
     eHalStatus status   = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tANI_U16 len;
 
-    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) )
-    {
+    if ( eHAL_STATUS_SUCCESS == ( status = sme_AcquireGlobalLock( &pMac->sme ) ) ) {
         tpSirSpoofMacAddrReq pMsg;
 
         /* Create the message and send to lim */
@@ -11445,8 +10282,7 @@ tANI_BOOLEAN  sme_SpoofMacAddrReq(tHalHandle hHal, v_MACADDR_t *macaddr)
         pMsg = vos_mem_malloc(len);
         if ( NULL == pMsg )
             status = eHAL_STATUS_FAILURE;
-        else
-        {
+        else {
             vos_mem_set(pMsg, sizeof(tSirSpoofMacAddrReq), 0);
             pMsg->messageType     = eWNI_SME_MAC_SPOOF_ADDR_IND;
             pMsg->length          = len;
@@ -11471,8 +10307,7 @@ tANI_BOOLEAN  sme_SpoofMacAddrReq(tHalHandle hHal, v_MACADDR_t *macaddr)
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_GetValidChannelsByBand (tHalHandle hHal, tANI_U8 wifiBand,
-                                       tANI_U32 *aValidChannels, tANI_U8 *pNumChannels)
-{
+                                       tANI_U32 *aValidChannels, tANI_U8 *pNumChannels) {
     eHalStatus status                                   = eHAL_STATUS_SUCCESS;
     tANI_U8 chanList[WNI_CFG_VALID_CHANNEL_LIST_LEN]    = {0};
     tpAniSirGlobal pMac                                 = PMAC_STRUCT(hHal);
@@ -11480,15 +10315,13 @@ eHalStatus sme_GetValidChannelsByBand (tHalHandle hHal, tANI_U8 wifiBand,
     tANI_U8 i                                           = 0;
     tANI_U32 totValidChannels                 = WNI_CFG_VALID_CHANNEL_LIST_LEN;
 
-    if (!aValidChannels || !pNumChannels)
-    {
+    if (!aValidChannels || !pNumChannels) {
         smsLog(pMac, VOS_TRACE_LEVEL_ERROR,
                FL("Output channel list/NumChannels is NULL"));
         return eHAL_STATUS_INVALID_PARAMETER;
     }
 
-    if ((wifiBand < WIFI_BAND_UNSPECIFIED) || (wifiBand >= WIFI_BAND_MAX))
-    {
+    if ((wifiBand < WIFI_BAND_UNSPECIFIED) || (wifiBand >= WIFI_BAND_MAX)) {
         smsLog(pMac, VOS_TRACE_LEVEL_ERROR,
                FL("Invalid wifiBand (%d)"), wifiBand);
         return eHAL_STATUS_INVALID_PARAMETER;
@@ -11496,15 +10329,13 @@ eHalStatus sme_GetValidChannelsByBand (tHalHandle hHal, tANI_U8 wifiBand,
 
     status = sme_GetCfgValidChannels(hHal, &chanList[0],
                                      &totValidChannels);
-    if (!HAL_STATUS_SUCCESS(status))
-    {
+    if (!HAL_STATUS_SUCCESS(status)) {
         smsLog(pMac, VOS_TRACE_LEVEL_ERROR,
                FL("Failed to get valid channel list (err=%d)"), status);
         return status;
     }
 
-    switch (wifiBand)
-    {
+    switch (wifiBand) {
     case WIFI_BAND_UNSPECIFIED:
         smsLog(pMac, VOS_TRACE_LEVEL_INFO, FL("Unspecified wifiBand, "
                                               "return all (%d) valid channels"), totValidChannels);
@@ -11589,8 +10420,7 @@ eHalStatus sme_GetValidChannelsByBand (tHalHandle hHal, tANI_U8 wifiBand,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_EXTScanGetCapabilities (tHalHandle hHal,
-                                       tSirGetEXTScanCapabilitiesReqParams *pReq)
-{
+                                       tSirGetEXTScanCapabilitiesReqParams *pReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11599,8 +10429,7 @@ eHalStatus sme_EXTScanGetCapabilities (tHalHandle hHal,
 
     pGetEXTScanCapabilitiesReq =
         vos_mem_malloc(sizeof(*pGetEXTScanCapabilitiesReq));
-    if ( !pGetEXTScanCapabilitiesReq)
-    {
+    if ( !pGetEXTScanCapabilitiesReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_GET_CAPABILITIES_REQ",
@@ -11612,8 +10441,7 @@ eHalStatus sme_EXTScanGetCapabilities (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_GET_CAPABILITIES, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pGetEXTScanCapabilitiesReq;
         vosMessage.type    = WDA_EXTSCAN_GET_CAPABILITIES_REQ;
@@ -11634,8 +10462,7 @@ eHalStatus sme_EXTScanGetCapabilities (tHalHandle hHal,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_EXTScanStart (tHalHandle hHal,
-                             tSirEXTScanStartReqParams *pStartCmd)
-{
+                             tSirEXTScanStartReqParams *pStartCmd) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11643,8 +10470,7 @@ eHalStatus sme_EXTScanStart (tHalHandle hHal,
     tSirEXTScanStartReqParams *pextScanStartReq;
 
     pextScanStartReq = vos_mem_malloc(sizeof(*pextScanStartReq));
-    if ( !pextScanStartReq)
-    {
+    if ( !pextScanStartReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_START_REQ",
@@ -11657,8 +10483,7 @@ eHalStatus sme_EXTScanStart (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_START, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pextScanStartReq;
         vosMessage.type    = WDA_EXTSCAN_START_REQ;
@@ -11678,8 +10503,7 @@ eHalStatus sme_EXTScanStart (tHalHandle hHal,
     \param  pStopReq: Extended Scan stop structure
     \- return eHalStatus
     -------------------------------------------------------------------------*/
-eHalStatus sme_EXTScanStop(tHalHandle hHal, tSirEXTScanStopReqParams *pStopReq)
-{
+eHalStatus sme_EXTScanStop(tHalHandle hHal, tSirEXTScanStopReqParams *pStopReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11687,8 +10511,7 @@ eHalStatus sme_EXTScanStop(tHalHandle hHal, tSirEXTScanStopReqParams *pStopReq)
     tSirEXTScanStopReqParams *pEXTScanStopReq;
 
     pEXTScanStopReq = vos_mem_malloc(sizeof(*pEXTScanStopReq));
-    if ( !pEXTScanStopReq)
-    {
+    if ( !pEXTScanStopReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_STOP_REQ",
@@ -11700,14 +10523,12 @@ eHalStatus sme_EXTScanStop(tHalHandle hHal, tSirEXTScanStopReqParams *pStopReq)
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_STOP, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanStopReq;
         vosMessage.type    = WDA_EXTSCAN_STOP_REQ;
         vosStatus = vos_mq_post_message(VOS_MQ_ID_WDA, &vosMessage);
-        if (!VOS_IS_STATUS_SUCCESS(vosStatus))
-        {
+        if (!VOS_IS_STATUS_SUCCESS(vosStatus)) {
             status = eHAL_STATUS_FAILURE;
         }
         sme_ReleaseGlobalLock(&pMac->sme);
@@ -11723,8 +10544,7 @@ eHalStatus sme_EXTScanStop(tHalHandle hHal, tSirEXTScanStopReqParams *pStopReq)
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_SetBssHotlist (tHalHandle hHal,
-                              tSirEXTScanSetBssidHotListReqParams *pSetHotListReq)
-{
+                              tSirEXTScanSetBssidHotListReqParams *pSetHotListReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11733,8 +10553,7 @@ eHalStatus sme_SetBssHotlist (tHalHandle hHal,
 
     pEXTScanSetBssidHotlistReq =
         vos_mem_malloc(sizeof(*pEXTScanSetBssidHotlistReq));
-    if ( !pEXTScanSetBssidHotlistReq)
-    {
+    if ( !pEXTScanSetBssidHotlistReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_SET_BSSID_HOTLIST_REQ",
@@ -11746,8 +10565,7 @@ eHalStatus sme_SetBssHotlist (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_SET_BSS_HOTLIST, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanSetBssidHotlistReq;
         vosMessage.type    = WDA_EXTSCAN_SET_BSSID_HOTLIST_REQ;
@@ -11769,8 +10587,7 @@ eHalStatus sme_SetBssHotlist (tHalHandle hHal,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_ResetBssHotlist (tHalHandle hHal,
-                                tSirEXTScanResetBssidHotlistReqParams *pResetReq)
-{
+                                tSirEXTScanResetBssidHotlistReqParams *pResetReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11778,8 +10595,7 @@ eHalStatus sme_ResetBssHotlist (tHalHandle hHal,
     tSirEXTScanResetBssidHotlistReqParams *pEXTScanHotlistResetReq;
 
     pEXTScanHotlistResetReq = vos_mem_malloc(sizeof(*pEXTScanHotlistResetReq));
-    if ( !pEXTScanHotlistResetReq)
-    {
+    if ( !pEXTScanHotlistResetReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_RESET_BSSID_HOTLIST_REQ",
@@ -11792,8 +10608,7 @@ eHalStatus sme_ResetBssHotlist (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_RESET_BSS_HOTLIST, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanHotlistResetReq;
         vosMessage.type    = WDA_EXTSCAN_RESET_BSSID_HOTLIST_REQ;
@@ -11814,8 +10629,7 @@ eHalStatus sme_ResetBssHotlist (tHalHandle hHal,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_SetSignificantChange (tHalHandle hHal,
-                                     tSirEXTScanSetSignificantChangeReqParams *pSetSignificantChangeReq)
-{
+                                     tSirEXTScanSetSignificantChangeReqParams *pSetSignificantChangeReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11823,8 +10637,7 @@ eHalStatus sme_SetSignificantChange (tHalHandle hHal,
     tSirEXTScanSetSignificantChangeReqParams *pEXTScanSetSignificantReq;
 
     pEXTScanSetSignificantReq = vos_mem_malloc(sizeof(*pEXTScanSetSignificantReq));
-    if ( !pEXTScanSetSignificantReq)
-    {
+    if ( !pEXTScanSetSignificantReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_SET_SIGNF_RSSI_CHANGE_REQ",
@@ -11838,8 +10651,7 @@ eHalStatus sme_SetSignificantChange (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_SET_SIGNF_CHANGE, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanSetSignificantReq;
         vosMessage.type    = WDA_EXTSCAN_SET_SIGNF_RSSI_CHANGE_REQ;
@@ -11860,8 +10672,7 @@ eHalStatus sme_SetSignificantChange (tHalHandle hHal,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_ResetSignificantChange (tHalHandle hHal,
-                                       tSirEXTScanResetSignificantChangeReqParams *pResetReq)
-{
+                                       tSirEXTScanResetSignificantChangeReqParams *pResetReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11870,8 +10681,7 @@ eHalStatus sme_ResetSignificantChange (tHalHandle hHal,
 
     pEXTScanResetSignificantReq =
         vos_mem_malloc(sizeof(*pEXTScanResetSignificantReq));
-    if ( !pEXTScanResetSignificantReq)
-    {
+    if ( !pEXTScanResetSignificantReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_RESET_SIGNF_RSSI_CHANGE_REQ",
@@ -11883,8 +10693,7 @@ eHalStatus sme_ResetSignificantChange (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_RESET_SIGNF_CHANGE, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanResetSignificantReq;
         vosMessage.type    = WDA_EXTSCAN_RESET_SIGNF_RSSI_CHANGE_REQ;
@@ -11905,8 +10714,7 @@ eHalStatus sme_ResetSignificantChange (tHalHandle hHal,
     \- return eHalStatus
     -------------------------------------------------------------------------*/
 eHalStatus sme_getCachedResults (tHalHandle hHal,
-                                 tSirEXTScanGetCachedResultsReqParams *pCachedResultsReq)
-{
+                                 tSirEXTScanGetCachedResultsReqParams *pCachedResultsReq) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -11915,8 +10723,7 @@ eHalStatus sme_getCachedResults (tHalHandle hHal,
 
     pEXTScanCachedResultsReq =
         vos_mem_malloc(sizeof(*pEXTScanCachedResultsReq));
-    if ( !pEXTScanCachedResultsReq)
-    {
+    if ( !pEXTScanCachedResultsReq) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "WDA_EXTSCAN_GET_CACHED_RESULTS_REQ",
@@ -11929,8 +10736,7 @@ eHalStatus sme_getCachedResults (tHalHandle hHal,
 
     MTRACE(vos_trace(VOS_MODULE_ID_SME,
                      TRACE_CODE_SME_RX_HDD_EXTSCAN_GET_CACHED_RESULTS, NO_SESSION, 0));
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         /* Serialize the req through MC thread */
         vosMessage.bodyptr = pEXTScanCachedResultsReq;
         vosMessage.type    = WDA_EXTSCAN_GET_CACHED_RESULTS_REQ;
@@ -11945,13 +10751,11 @@ eHalStatus sme_getCachedResults (tHalHandle hHal,
 
 eHalStatus sme_EXTScanRegisterCallback (tHalHandle hHal,
                                         void (*pEXTScanIndCb)(void *, const tANI_U16, void *),
-                                        void *callbackContext)
-{
+                                        void *callbackContext) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
 
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
         pMac->sme.pEXTScanIndCb = pEXTScanIndCb;
         pMac->sme.pEXTScanCallbackContext = callbackContext;
         sme_ReleaseGlobalLock(&pMac->sme);
@@ -11959,20 +10763,17 @@ eHalStatus sme_EXTScanRegisterCallback (tHalHandle hHal,
     return(status);
 }
 
-void sme_SetMiracastMode (tHalHandle hHal,tANI_U8 mode)
-{
+void sme_SetMiracastMode (tHalHandle hHal,tANI_U8 mode) {
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
 
     pMac->miracast_mode = mode;
 }
 #endif /* WLAN_FEATURE_EXTSCAN */
 
-void sme_resetCoexEevent(tHalHandle hHal)
-{
+void sme_resetCoexEevent(tHalHandle hHal) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
-    if (pMac == NULL)
-    {
+    if (pMac == NULL) {
         printk("btc: %s pMac is NULL \n",__func__);
         return;
     }
@@ -11980,8 +10781,7 @@ void sme_resetCoexEevent(tHalHandle hHal)
     VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
               FL("isCoexScoIndSet: %d"), pMac->isCoexScoIndSet);
 
-    if (pMac->isCoexScoIndSet)
-    {
+    if (pMac->isCoexScoIndSet) {
         pMac->isCoexScoIndSet = 0;
         ccmCfgSetInt(pMac, WNI_CFG_DEL_ALL_RX_TX_BA_SESSIONS_2_4_G_BTC, 0,
                      NULL, eANI_BOOLEAN_FALSE);
@@ -11990,8 +10790,7 @@ void sme_resetCoexEevent(tHalHandle hHal)
     return;
 }
 
-void sme_disable_dfs_channel(tHalHandle hHal, bool disbale_dfs)
-{
+void sme_disable_dfs_channel(tHalHandle hHal, bool disbale_dfs) {
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
     pMac->scan.fEnableDFSChnlScan = !disbale_dfs;
     csrDisableDfsChannel(pMac);
@@ -12011,8 +10810,7 @@ void sme_disable_dfs_channel(tHalHandle hHal, bool disbale_dfs)
 eHalStatus sme_Encryptmsgsend (tHalHandle hHal,
                                u8 *pCmd,
                                int length,
-                               pEncryptMsgRSPCb encMsgCbk)
-{
+                               pEncryptMsgRSPCb encMsgCbk) {
     eHalStatus status    = eHAL_STATUS_SUCCESS;
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
     tpAniSirGlobal pMac  = PMAC_STRUCT(hHal);
@@ -12020,8 +10818,7 @@ eHalStatus sme_Encryptmsgsend (tHalHandle hHal,
     u8 *pEncryptMsg;
 
     pEncryptMsg = vos_mem_malloc(length);
-    if ( !pEncryptMsg)
-    {
+    if ( !pEncryptMsg) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   "%s: Not able to allocate memory for "
                   "SIR_HAL_ENCRYPT_MSG_REQ",
@@ -12031,8 +10828,7 @@ eHalStatus sme_Encryptmsgsend (tHalHandle hHal,
 
     vos_mem_copy(pEncryptMsg, pCmd, length);
 
-    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme)))
-    {
+    if (eHAL_STATUS_SUCCESS == (status = sme_AcquireGlobalLock(&pMac->sme))) {
 
         pMac->sme.pEncMsgInfoParams.pEncMsgCbk = encMsgCbk;
         pMac->sme.pEncMsgInfoParams.pUserData = hHal;
@@ -12047,15 +10843,13 @@ eHalStatus sme_Encryptmsgsend (tHalHandle hHal,
     }
     return(status);
 }
-tANI_BOOLEAN sme_IsCoexScoIndicationSet(tHalHandle hHal)
-{
+tANI_BOOLEAN sme_IsCoexScoIndicationSet(tHalHandle hHal) {
     eHalStatus status = eHAL_STATUS_FAILURE;
     tANI_BOOLEAN valid = FALSE;
     tpAniSirGlobal pMac = PMAC_STRUCT( hHal );
 
     status = sme_AcquireGlobalLock( &pMac->sme );
-    if ( HAL_STATUS_SUCCESS( status ) )
-    {
+    if ( HAL_STATUS_SUCCESS( status ) ) {
         valid = pMac->isCoexScoIndSet;
     }
     sme_ReleaseGlobalLock( &pMac->sme );
@@ -12063,24 +10857,20 @@ tANI_BOOLEAN sme_IsCoexScoIndicationSet(tHalHandle hHal)
 }
 
 eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
-                                       tANI_U32 iniNumBuffAdvert , tANI_U32 set_value)
-{
+                                       tANI_U32 iniNumBuffAdvert , tANI_U32 set_value) {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
     tANI_U8 mcsSet[SIZE_OF_SUPPORTED_MCS_SET];
     tANI_U32 val = SIZE_OF_SUPPORTED_MCS_SET;
 
     if (ccmCfgGetStr(hHal, WNI_CFG_SUPPORTED_MCS_SET, mcsSet, &val)
-            != eHAL_STATUS_SUCCESS)
-    {
+            != eHAL_STATUS_SUCCESS) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   FL("failed to get ini param, WNI_CFG_SUPPORTED_MCS_SET"));
         return eHAL_STATUS_FAILURE;
     }
 
-    if (set_value)
-    {
-        if (pMac->miracastVendorConfig)
-        {
+    if (set_value) {
+        if (pMac->miracastVendorConfig) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                       FL(" Miracast tuning already enabled!!"));
             return eHAL_STATUS_SUCCESS;
@@ -12090,8 +10880,7 @@ eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
                   FL("Enable Miracast tuning by disabling 64QAM rates, setting 4 blocks for aggregation and disabling probe response for broadcast probe in P2P-GO mode"));
 
         if (ccmCfgSetInt(hHal, WNI_CFG_NUM_BUFF_ADVERT, 4,
-                         NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       FL("Failure: Could not set WNI_CFG_NUM_BUFF_ADVERT"));
             return eHAL_STATUS_FAILURE;
@@ -12099,11 +10888,8 @@ eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
         /* Disable 64QAM rates ie (MCS 5,6 and 7)
          */
         mcsSet[0]=0x1F;
-    }
-    else
-    {
-        if (!pMac->miracastVendorConfig)
-        {
+    } else {
+        if (!pMac->miracastVendorConfig) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                       FL(" Miracast tuning already disabled!!"));
             return eHAL_STATUS_SUCCESS;
@@ -12114,8 +10900,7 @@ eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
                   iniNumBuffAdvert);
 
         if (ccmCfgSetInt(hHal, WNI_CFG_NUM_BUFF_ADVERT, iniNumBuffAdvert,
-                         NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-        {
+                         NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
             VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                       FL("Failure: Could not set WNI_CFG_NUM_BUFF_ADVERT"));
             return eHAL_STATUS_FAILURE;
@@ -12126,8 +10911,7 @@ eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
     }
 
     if (ccmCfgSetStr(hHal, WNI_CFG_SUPPORTED_MCS_SET, mcsSet,
-                     val, NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE)
-    {
+                     val, NULL, eANI_BOOLEAN_FALSE) == eHAL_STATUS_FAILURE) {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                   FL("Failure: Could not set WNI_CFG_SUPPORTED_MCS_SET"));
         return eHAL_STATUS_FAILURE;
@@ -12144,16 +10928,14 @@ eHalStatus sme_SetMiracastVendorConfig(tHalHandle hHal,
  *
  * Return: tANI_BOOLEAN.
  */
-tANI_BOOLEAN sme_handleSetFccChannel(tHalHandle hHal, tANI_U8 fcc_constraint)
-{
+tANI_BOOLEAN sme_handleSetFccChannel(tHalHandle hHal, tANI_U8 fcc_constraint) {
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
 
     status = sme_AcquireGlobalLock(&pMac->sme);
 
     if (eHAL_STATUS_SUCCESS == status &&
-            (!sme_Is11dSupported(hHal)) )
-    {
+            (!sme_Is11dSupported(hHal)) ) {
         pMac->scan.fcc_constraint = !fcc_constraint;
         /* update the channel list to the firmware */
         csrUpdateFCCChannelList(pMac);

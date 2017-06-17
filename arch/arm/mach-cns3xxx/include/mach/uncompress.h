@@ -18,33 +18,30 @@
 /*
  * Return the UART base address
  */
-static inline unsigned long get_uart_base(void)
-{
-	if (machine_is_cns3420vb())
-		return CNS3XXX_UART0_BASE;
-	else
-		return 0;
+static inline unsigned long get_uart_base(void) {
+    if (machine_is_cns3420vb())
+        return CNS3XXX_UART0_BASE;
+    else
+        return 0;
 }
 
 /*
  * This does not append a newline
  */
-static inline void putc(int c)
-{
-	unsigned long base = get_uart_base();
+static inline void putc(int c) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 5))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 5))
+        barrier();
 
-	AMBA_UART_DR(base) = c;
+    AMBA_UART_DR(base) = c;
 }
 
-static inline void flush(void)
-{
-	unsigned long base = get_uart_base();
+static inline void flush(void) {
+    unsigned long base = get_uart_base();
 
-	while (AMBA_UART_FR(base) & (1 << 3))
-		barrier();
+    while (AMBA_UART_FR(base) & (1 << 3))
+        barrier();
 }
 
 /*

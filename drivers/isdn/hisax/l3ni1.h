@@ -118,19 +118,19 @@
 #else /* only l3ni1_process */
 
 /* l3ni1 specific data in l3 process */
-typedef struct
-{ unsigned char invoke_id; /* used invoke id in remote ops, 0 = not active */
-	ulong ll_id; /* remebered ll id */
-	u8 remote_operation; /* handled remote operation, 0 = not active */
-	int proc; /* rememered procedure */
-	ulong remote_result; /* result of remote operation for statcallb */
-	char uus1_data[35]; /* data send during alerting or disconnect */
+typedef struct {
+    unsigned char invoke_id; /* used invoke id in remote ops, 0 = not active */
+    ulong ll_id; /* remebered ll id */
+    u8 remote_operation; /* handled remote operation, 0 = not active */
+    int proc; /* rememered procedure */
+    ulong remote_result; /* result of remote operation for statcallb */
+    char uus1_data[35]; /* data send during alerting or disconnect */
 } ni1_proc_priv;
 
 /* l3dni1 specific data in protocol stack */
-typedef struct
-{ unsigned char last_invoke_id; /* last used value for invoking */
-	unsigned char invoke_used[32]; /* 256 bits for 256 values */
+typedef struct {
+    unsigned char last_invoke_id; /* last used value for invoking */
+    unsigned char invoke_used[32]; /* 256 bits for 256 values */
 } ni1_stk_priv;
 
 #endif /* only l3dni1_process */

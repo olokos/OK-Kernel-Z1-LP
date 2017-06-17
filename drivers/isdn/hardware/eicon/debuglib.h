@@ -234,40 +234,40 @@ typedef void (*DbgLog)(unsigned short, int, char *, va_list);
 typedef void (*DbgOld)(unsigned short, char *, va_list);
 typedef void (*DbgEv)(unsigned short, unsigned long, va_list);
 typedef void (*DbgIrq)(unsigned short, int, char *, va_list);
-typedef struct _DbgHandle_
-{ char    Registered; /* driver successfully registered */
+typedef struct _DbgHandle_ {
+    char    Registered; /* driver successfully registered */
 #define DBG_HANDLE_REG_NEW 0x01  /* this (new) structure    */
 #define DBG_HANDLE_REG_OLD 0x7f  /* old structure (see below)  */
-	char    Version;  /* version of this structure  */
+    char    Version;  /* version of this structure  */
 #define DBG_HANDLE_VERSION 1   /* contains dbg_old function now */
 #define DBG_HANDLE_VER_EXT  2           /* pReserved points to extended info*/
-	short               id;   /* internal id of registered driver */
-	struct _DbgHandle_ *next;   /* ptr to next registered driver    */
-	struct /*LARGE_INTEGER*/ {
-		unsigned long LowPart;
-		long          HighPart;
-	}     regTime;  /* timestamp for registration       */
-	void               *pIrp;   /* ptr to pending i/o request       */
-	unsigned long       dbgMask;  /* current debug mask               */
-	char                drvName[128]; /* ASCII name of registered driver  */
-	char                drvTag[64]; /* revision string     */
-	DbgEnd              dbg_end;  /* function for debug closing       */
-	DbgLog              dbg_prt;  /* function for debug appending     */
-	DbgOld              dbg_old;  /* function for old debug appending */
-	DbgEv       dbg_ev;  /* function for Windows NT Eventlog */
-	DbgIrq    dbg_irq;  /* function for irql checked debug  */
-	void      *pReserved3;
+    short               id;   /* internal id of registered driver */
+    struct _DbgHandle_ *next;   /* ptr to next registered driver    */
+    struct { /*LARGE_INTEGER*/
+        unsigned long LowPart;
+        long          HighPart;
+    }     regTime;  /* timestamp for registration       */
+    void               *pIrp;   /* ptr to pending i/o request       */
+    unsigned long       dbgMask;  /* current debug mask               */
+    char                drvName[128]; /* ASCII name of registered driver  */
+    char                drvTag[64]; /* revision string     */
+    DbgEnd              dbg_end;  /* function for debug closing       */
+    DbgLog              dbg_prt;  /* function for debug appending     */
+    DbgOld              dbg_old;  /* function for old debug appending */
+    DbgEv       dbg_ev;  /* function for Windows NT Eventlog */
+    DbgIrq    dbg_irq;  /* function for irql checked debug  */
+    void      *pReserved3;
 } _DbgHandle_;
 extern _DbgHandle_ myDriverDebugHandle;
-typedef struct _OldDbgHandle_
-{ struct _OldDbgHandle_ *next;
-	void                *pIrp;
-	long    regTime[2];
-	unsigned long       dbgMask;
-	short               id;
-	char                drvName[78];
-	DbgEnd              dbg_end;
-	DbgLog              dbg_prt;
+typedef struct _OldDbgHandle_ {
+    struct _OldDbgHandle_ *next;
+    void                *pIrp;
+    long    regTime[2];
+    unsigned long       dbgMask;
+    short               id;
+    char                drvName[78];
+    DbgEnd              dbg_end;
+    DbgLog              dbg_prt;
 } _OldDbgHandle_;
 /* the differences in DbgHandles
    old:    tmp:     new:
@@ -296,21 +296,18 @@ typedef struct _OldDbgHandle_
    id, dbgMask, drvName, dbg_end and dbg_prt need special handling !
 */
 #define DBG_EXT_TYPE_CARD_TRACE     0x00000001
-typedef struct
-{
-	unsigned long ExtendedType;
-	union
-	{
-		/* DBG_EXT_TYPE_CARD_TRACE */
-		struct
-		{
-			void (*MaskChangedNotify)(void *pContext);
-			unsigned long ModuleTxtMask;
-			unsigned long DebugLevel;
-			unsigned long B_ChannelMask;
-			unsigned long LogBufferSize;
-		} CardTrace;
-	} Data;
+typedef struct {
+    unsigned long ExtendedType;
+    union {
+        /* DBG_EXT_TYPE_CARD_TRACE */
+        struct {
+            void (*MaskChangedNotify)(void *pContext);
+            unsigned long ModuleTxtMask;
+            unsigned long DebugLevel;
+            unsigned long B_ChannelMask;
+            unsigned long LogBufferSize;
+        } CardTrace;
+    } Data;
 } _DbgExtendedInfo_;
 #ifndef DIVA_NO_DEBUGLIB
 /* -------------------------------------------------------------

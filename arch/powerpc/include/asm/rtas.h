@@ -47,28 +47,28 @@
 typedef u32 rtas_arg_t;
 
 struct rtas_args {
-	u32 token;
-	u32 nargs;
-	u32 nret; 
-	rtas_arg_t args[16];
-	rtas_arg_t *rets;     /* Pointer to return values in args[]. */
-};  
+    u32 token;
+    u32 nargs;
+    u32 nret;
+    rtas_arg_t args[16];
+    rtas_arg_t *rets;     /* Pointer to return values in args[]. */
+};
 
 struct rtas_t {
-	unsigned long entry;		/* physical address pointer */
-	unsigned long base;		/* physical address pointer */
-	unsigned long size;
-	arch_spinlock_t lock;
-	struct rtas_args args;
-	struct device_node *dev;	/* virtual address pointer */
+    unsigned long entry;		/* physical address pointer */
+    unsigned long base;		/* physical address pointer */
+    unsigned long size;
+    arch_spinlock_t lock;
+    struct rtas_args args;
+    struct device_node *dev;	/* virtual address pointer */
 };
 
 struct rtas_suspend_me_data {
-	atomic_t working; /* number of cpus accessing this struct */
-	atomic_t done;
-	int token; /* ibm,suspend-me */
-	atomic_t error;
-	struct completion *complete; /* wait on this until working == 0 */
+    atomic_t working; /* number of cpus accessing this struct */
+    atomic_t done;
+    int token; /* ibm,suspend-me */
+    atomic_t error;
+    struct completion *complete; /* wait on this until working == 0 */
 };
 
 /* RTAS event classes */
@@ -124,7 +124,7 @@ struct rtas_suspend_me_data {
 #define RTAS_TYPE_INFO			0xE2
 #define RTAS_TYPE_DEALLOC		0xE3
 #define RTAS_TYPE_DUMP			0xE4
-/* I don't add PowerMGM events right now, this is a different topic */ 
+/* I don't add PowerMGM events right now, this is a different topic */
 #define RTAS_TYPE_PMGM_POWER_SW_ON	0x60
 #define RTAS_TYPE_PMGM_POWER_SW_OFF	0x61
 #define RTAS_TYPE_PMGM_LID_OPEN		0x62
@@ -148,17 +148,17 @@ struct rtas_suspend_me_data {
 #define RTAS_VECTOR_EXTERNAL_INTERRUPT	0x500
 
 struct rtas_error_log {
-	unsigned long version:8;		/* Architectural version */
-	unsigned long severity:3;		/* Severity level of error */
-	unsigned long disposition:2;		/* Degree of recovery */
-	unsigned long extended:1;		/* extended log present? */
-	unsigned long /* reserved */ :2;	/* Reserved for future use */
-	unsigned long initiator:4;		/* Initiator of event */
-	unsigned long target:4;			/* Target of failed operation */
-	unsigned long type:8;			/* General event or error*/
-	unsigned long extended_log_length:32;	/* length in bytes */
-	unsigned char buffer[1];		/* Start of extended log */
-						/* Variable length.      */
+    unsigned long version:8;		/* Architectural version */
+    unsigned long severity:3;		/* Severity level of error */
+    unsigned long disposition:2;		/* Degree of recovery */
+    unsigned long extended:1;		/* extended log present? */
+    unsigned long /* reserved */ :2;	/* Reserved for future use */
+    unsigned long initiator:4;		/* Initiator of event */
+    unsigned long target:4;			/* Target of failed operation */
+    unsigned long type:8;			/* General event or error*/
+    unsigned long extended_log_length:32;	/* length in bytes */
+    unsigned char buffer[1];		/* Start of extended log */
+    /* Variable length.      */
 };
 
 #define RTAS_V6EXT_LOG_FORMAT_EVENT_LOG	14
@@ -169,38 +169,38 @@ struct rtas_error_log {
  * from "buffer" field of struct rtas_error_log defined above.
  */
 struct rtas_ext_event_log_v6 {
-	/* Byte 0 */
-	uint32_t log_valid:1;		/* 1:Log valid */
-	uint32_t unrecoverable_error:1;	/* 1:Unrecoverable error */
-	uint32_t recoverable_error:1;	/* 1:recoverable (correctable	*/
-					/*   or successfully retried)	*/
-	uint32_t degraded_operation:1;	/* 1:Unrecoverable err, bypassed*/
-					/*   - degraded operation (e.g.	*/
-					/*   CPU or mem taken off-line)	*/
-	uint32_t predictive_error:1;
-	uint32_t new_log:1;		/* 1:"New" log (Always 1 for	*/
-					/*   data returned from RTAS	*/
-	uint32_t big_endian:1;		/* 1: Big endian */
-	uint32_t :1;			/* reserved */
-	/* Byte 1 */
-	uint32_t :8;			/* reserved */
-	/* Byte 2 */
-	uint32_t powerpc_format:1;	/* Set to 1 (indicating log is	*/
-					/* in PowerPC format		*/
-	uint32_t :3;			/* reserved */
-	uint32_t log_format:4;		/* Log format indicator. Define	*/
-					/* format used for byte 12-2047	*/
-	/* Byte 3 */
-	uint32_t :8;			/* reserved */
-	/* Byte 4-11 */
-	uint8_t reserved[8];		/* reserved */
-	/* Byte 12-15 */
-	uint32_t company_id;		/* Company ID of the company	*/
-					/* that defines the format for	*/
-					/* the vendor specific log type	*/
-	/* Byte 16-end of log */
-	uint8_t vendor_log[1];		/* Start of vendor specific log	*/
-					/* Variable length.		*/
+    /* Byte 0 */
+    uint32_t log_valid:1;		/* 1:Log valid */
+    uint32_t unrecoverable_error:1;	/* 1:Unrecoverable error */
+    uint32_t recoverable_error:1;	/* 1:recoverable (correctable	*/
+    /*   or successfully retried)	*/
+    uint32_t degraded_operation:1;	/* 1:Unrecoverable err, bypassed*/
+    /*   - degraded operation (e.g.	*/
+    /*   CPU or mem taken off-line)	*/
+    uint32_t predictive_error:1;
+    uint32_t new_log:1;		/* 1:"New" log (Always 1 for	*/
+    /*   data returned from RTAS	*/
+    uint32_t big_endian:1;		/* 1: Big endian */
+    uint32_t :1;			/* reserved */
+    /* Byte 1 */
+    uint32_t :8;			/* reserved */
+    /* Byte 2 */
+    uint32_t powerpc_format:1;	/* Set to 1 (indicating log is	*/
+    /* in PowerPC format		*/
+    uint32_t :3;			/* reserved */
+    uint32_t log_format:4;		/* Log format indicator. Define	*/
+    /* format used for byte 12-2047	*/
+    /* Byte 3 */
+    uint32_t :8;			/* reserved */
+    /* Byte 4-11 */
+    uint8_t reserved[8];		/* reserved */
+    /* Byte 12-15 */
+    uint32_t company_id;		/* Company ID of the company	*/
+    /* that defines the format for	*/
+    /* the vendor specific log type	*/
+    /* Byte 16-end of log */
+    uint8_t vendor_log[1];		/* Start of vendor specific log	*/
+    /* Variable length.		*/
 };
 
 /* pSeries event log format */
@@ -225,16 +225,16 @@ struct rtas_ext_event_log_v6 {
 
 /* Vendor specific Platform Event Log Format, Version 6, section header */
 struct pseries_errorlog {
-	uint16_t id;			/* 0x00 2-byte ASCII section ID	*/
-	uint16_t length;		/* 0x02 Section length in bytes	*/
-	uint8_t version;		/* 0x04 Section version		*/
-	uint8_t subtype;		/* 0x05 Section subtype		*/
-	uint16_t creator_component;	/* 0x06 Creator component ID	*/
-	uint8_t data[];			/* 0x08 Start of section data	*/
+    uint16_t id;			/* 0x00 2-byte ASCII section ID	*/
+    uint16_t length;		/* 0x02 Section length in bytes	*/
+    uint8_t version;		/* 0x04 Section version		*/
+    uint8_t subtype;		/* 0x05 Section subtype		*/
+    uint16_t creator_component;	/* 0x06 Creator component ID	*/
+    uint8_t data[];			/* 0x08 Start of section data	*/
 };
 
 struct pseries_errorlog *get_pseries_errorlog(struct rtas_error_log *log,
-					      uint16_t section_id);
+        uint16_t section_id);
 
 /*
  * This can be set by the rtas_flash module so that it can get called
@@ -273,7 +273,7 @@ extern unsigned int rtas_busy_delay_time(int status);
 extern unsigned int rtas_busy_delay(int status);
 
 extern int early_init_dt_scan_rtas(unsigned long node,
-		const char *uname, int depth, void *data);
+                                   const char *uname, int depth, void *data);
 
 extern void pSeries_log_error(char *buf, unsigned int err_type, int fatal);
 
@@ -295,7 +295,7 @@ static inline void rtas_cancel_event_scan(void) { }
 	(ERR_TYPE_RTAS_LOG | ERR_TYPE_KERNEL_PANIC | ERR_TYPE_KERNEL_PANIC_GZ)
 
 #define RTAS_DEBUG KERN_DEBUG "RTAS: "
- 
+
 #define RTAS_ERROR_LOG_MAX 2048
 
 /*
@@ -336,25 +336,25 @@ extern unsigned long rtas_rmo_buf;
  * required for RTAS calls that take a "config_addr" parameter.
  * See PAPR requirement 7.3.4-1 for more info.
  */
-static inline u32 rtas_config_addr(int busno, int devfn, int reg)
-{
-	return ((reg & 0xf00) << 20) | ((busno & 0xff) << 16) |
-			(devfn << 8) | (reg & 0xff);
+static inline u32 rtas_config_addr(int busno, int devfn, int reg) {
+    return ((reg & 0xf00) << 20) | ((busno & 0xff) << 16) |
+           (devfn << 8) | (reg & 0xff);
 }
 
 extern void __cpuinit rtas_give_timebase(void);
 extern void __cpuinit rtas_take_timebase(void);
 
 #ifdef CONFIG_PPC_RTAS
-static inline int page_is_rtas_user_buf(unsigned long pfn)
-{
-	unsigned long paddr = (pfn << PAGE_SHIFT);
-	if (paddr >= rtas_rmo_buf && paddr < (rtas_rmo_buf + RTAS_RMOBUF_MAX))
-		return 1;
-	return 0;
+static inline int page_is_rtas_user_buf(unsigned long pfn) {
+    unsigned long paddr = (pfn << PAGE_SHIFT);
+    if (paddr >= rtas_rmo_buf && paddr < (rtas_rmo_buf + RTAS_RMOBUF_MAX))
+        return 1;
+    return 0;
 }
 #else
-static inline int page_is_rtas_user_buf(unsigned long pfn) { return 0;}
+static inline int page_is_rtas_user_buf(unsigned long pfn) {
+    return 0;
+}
 #endif
 
 extern int call_rtas(const char *, int, int, unsigned long *, ...);

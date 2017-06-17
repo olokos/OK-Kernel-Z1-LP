@@ -127,18 +127,18 @@ struct iwl_fw;
  *	May sleep
  */
 struct iwl_op_mode_ops {
-	struct iwl_op_mode *(*start)(struct iwl_trans *trans,
-				     const struct iwl_fw *fw);
-	void (*stop)(struct iwl_op_mode *op_mode);
-	int (*rx)(struct iwl_op_mode *op_mode, struct iwl_rx_cmd_buffer *rxb,
-		  struct iwl_device_cmd *cmd);
-	void (*queue_full)(struct iwl_op_mode *op_mode, u8 ac);
-	void (*queue_not_full)(struct iwl_op_mode *op_mode, u8 ac);
-	void (*hw_rf_kill)(struct iwl_op_mode *op_mode, bool state);
-	void (*free_skb)(struct iwl_op_mode *op_mode, struct sk_buff *skb);
-	void (*nic_error)(struct iwl_op_mode *op_mode);
-	void (*cmd_queue_full)(struct iwl_op_mode *op_mode);
-	void (*nic_config)(struct iwl_op_mode *op_mode);
+    struct iwl_op_mode *(*start)(struct iwl_trans *trans,
+                                 const struct iwl_fw *fw);
+    void (*stop)(struct iwl_op_mode *op_mode);
+    int (*rx)(struct iwl_op_mode *op_mode, struct iwl_rx_cmd_buffer *rxb,
+              struct iwl_device_cmd *cmd);
+    void (*queue_full)(struct iwl_op_mode *op_mode, u8 ac);
+    void (*queue_not_full)(struct iwl_op_mode *op_mode, u8 ac);
+    void (*hw_rf_kill)(struct iwl_op_mode *op_mode, bool state);
+    void (*free_skb)(struct iwl_op_mode *op_mode, struct sk_buff *skb);
+    void (*nic_error)(struct iwl_op_mode *op_mode);
+    void (*cmd_queue_full)(struct iwl_op_mode *op_mode);
+    void (*nic_config)(struct iwl_op_mode *op_mode);
 };
 
 /**
@@ -149,63 +149,54 @@ struct iwl_op_mode_ops {
  * @ops - pointer to its own ops
  */
 struct iwl_op_mode {
-	const struct iwl_op_mode_ops *ops;
-	const struct iwl_trans *trans;
+    const struct iwl_op_mode_ops *ops;
+    const struct iwl_trans *trans;
 
-	char op_mode_specific[0] __aligned(sizeof(void *));
+    char op_mode_specific[0] __aligned(sizeof(void *));
 };
 
-static inline void iwl_op_mode_stop(struct iwl_op_mode *op_mode)
-{
-	might_sleep();
+static inline void iwl_op_mode_stop(struct iwl_op_mode *op_mode) {
+    might_sleep();
 
-	op_mode->ops->stop(op_mode);
+    op_mode->ops->stop(op_mode);
 }
 
 static inline int iwl_op_mode_rx(struct iwl_op_mode *op_mode,
-				  struct iwl_rx_cmd_buffer *rxb,
-				  struct iwl_device_cmd *cmd)
-{
-	return op_mode->ops->rx(op_mode, rxb, cmd);
+                                 struct iwl_rx_cmd_buffer *rxb,
+                                 struct iwl_device_cmd *cmd) {
+    return op_mode->ops->rx(op_mode, rxb, cmd);
 }
 
-static inline void iwl_op_mode_queue_full(struct iwl_op_mode *op_mode, u8 ac)
-{
-	op_mode->ops->queue_full(op_mode, ac);
+static inline void iwl_op_mode_queue_full(struct iwl_op_mode *op_mode, u8 ac) {
+    op_mode->ops->queue_full(op_mode, ac);
 }
 
 static inline void iwl_op_mode_queue_not_full(struct iwl_op_mode *op_mode,
-					      u8 ac)
-{
-	op_mode->ops->queue_not_full(op_mode, ac);
+        u8 ac) {
+    op_mode->ops->queue_not_full(op_mode, ac);
 }
 
 static inline void iwl_op_mode_hw_rf_kill(struct iwl_op_mode *op_mode,
-					  bool state)
-{
-	op_mode->ops->hw_rf_kill(op_mode, state);
+        bool state) {
+    op_mode->ops->hw_rf_kill(op_mode, state);
 }
 
 static inline void iwl_op_mode_free_skb(struct iwl_op_mode *op_mode,
-					struct sk_buff *skb)
-{
-	op_mode->ops->free_skb(op_mode, skb);
+                                        struct sk_buff *skb) {
+    op_mode->ops->free_skb(op_mode, skb);
 }
 
-static inline void iwl_op_mode_nic_error(struct iwl_op_mode *op_mode)
-{
-	op_mode->ops->nic_error(op_mode);
+static inline void iwl_op_mode_nic_error(struct iwl_op_mode *op_mode) {
+    op_mode->ops->nic_error(op_mode);
 }
 
-static inline void iwl_op_mode_cmd_queue_full(struct iwl_op_mode *op_mode)
-{
-	op_mode->ops->cmd_queue_full(op_mode);
+static inline void iwl_op_mode_cmd_queue_full(struct iwl_op_mode *op_mode) {
+    op_mode->ops->cmd_queue_full(op_mode);
 }
 
-static inline void iwl_op_mode_nic_config(struct iwl_op_mode *op_mode)
-{
-	might_sleep();
-	op_mode->ops->nic_config(op_mode);
+static inline void iwl_op_mode_nic_config(struct iwl_op_mode *op_mode) {
+    might_sleep();
+    op_mode->ops->nic_config(op_mode);
 }
 
 /*****************************************************

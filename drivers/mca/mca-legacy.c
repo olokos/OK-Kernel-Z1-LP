@@ -8,7 +8,7 @@
  * (C) 2002 James Bottomley <James.Bottomley@HansenPartnership.com>
  *
 **-----------------------------------------------------------------------------
-**  
+**
 **  This program is free software; you can redistribute it and/or modify
 **  it under the terms of the GNU General Public License as published by
 **  the Free Software Foundation; either version 2 of the License, or
@@ -33,29 +33,28 @@
 
 /* NOTE: This structure is stack allocated */
 struct mca_find_adapter_info {
-	int			id;
-	int			slot;
-	struct mca_device	*mca_dev;
+    int			id;
+    int			slot;
+    struct mca_device	*mca_dev;
 };
 
 /* The purpose of this iterator is to loop over all the devices and
  * find the one with the smallest slot number that's just greater than
  * or equal to the required slot with a matching id */
-static int mca_find_adapter_callback(struct device *dev, void *data)
-{
-	struct mca_find_adapter_info *info = data;
-	struct mca_device *mca_dev = to_mca_device(dev);
+static int mca_find_adapter_callback(struct device *dev, void *data) {
+    struct mca_find_adapter_info *info = data;
+    struct mca_device *mca_dev = to_mca_device(dev);
 
-	if(mca_dev->pos_id != info->id)
-		return 0;
+    if(mca_dev->pos_id != info->id)
+        return 0;
 
-	if(mca_dev->slot < info->slot)
-		return 0;
+    if(mca_dev->slot < info->slot)
+        return 0;
 
-	if(!info->mca_dev || info->mca_dev->slot >= mca_dev->slot)
-		info->mca_dev = mca_dev;
+    if(!info->mca_dev || info->mca_dev->slot >= mca_dev->slot)
+        info->mca_dev = mca_dev;
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -71,34 +70,33 @@ static int mca_find_adapter_callback(struct device *dev, void *data)
  *	Disabled adapters are not reported.
  */
 
-int mca_find_adapter(int id, int start)
-{
-	struct mca_find_adapter_info info;
+int mca_find_adapter(int id, int start) {
+    struct mca_find_adapter_info info;
 
-	if(id == 0xffff)
-		return MCA_NOTFOUND;
+    if(id == 0xffff)
+        return MCA_NOTFOUND;
 
-	info.slot = start;
-	info.id = id;
-	info.mca_dev = NULL;
+    info.slot = start;
+    info.id = id;
+    info.mca_dev = NULL;
 
-	for(;;) {
-		bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_adapter_callback);
+    for(;;) {
+        bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_adapter_callback);
 
-		if(info.mca_dev == NULL)
-			return MCA_NOTFOUND;
+        if(info.mca_dev == NULL)
+            return MCA_NOTFOUND;
 
-		if(info.mca_dev->status != MCA_ADAPTER_DISABLED)
-			break;
+        if(info.mca_dev->status != MCA_ADAPTER_DISABLED)
+            break;
 
-		/* OK, found adapter but it was disabled.  Go around
-		 * again, excluding the slot we just found */
+        /* OK, found adapter but it was disabled.  Go around
+         * again, excluding the slot we just found */
 
-		info.slot = info.mca_dev->slot + 1;
-		info.mca_dev = NULL;
-	}
-		
-	return info.mca_dev->slot;
+        info.slot = info.mca_dev->slot + 1;
+        info.mca_dev = NULL;
+    }
+
+    return info.mca_dev->slot;
 }
 EXPORT_SYMBOL(mca_find_adapter);
 
@@ -119,66 +117,63 @@ EXPORT_SYMBOL(mca_find_adapter);
  *	to scan for further cards when some may already be driven.
  */
 
-int mca_find_unused_adapter(int id, int start)
-{
-	struct mca_find_adapter_info info = { 0 };
+int mca_find_unused_adapter(int id, int start) {
+    struct mca_find_adapter_info info = { 0 };
 
-	if (!MCA_bus || id == 0xffff)
-		return MCA_NOTFOUND;
+    if (!MCA_bus || id == 0xffff)
+        return MCA_NOTFOUND;
 
-	info.slot = start;
-	info.id = id;
-	info.mca_dev = NULL;
+    info.slot = start;
+    info.id = id;
+    info.mca_dev = NULL;
 
-	for(;;) {
-		bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_adapter_callback);
+    for(;;) {
+        bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_adapter_callback);
 
-		if(info.mca_dev == NULL)
-			return MCA_NOTFOUND;
+        if(info.mca_dev == NULL)
+            return MCA_NOTFOUND;
 
-		if(info.mca_dev->status != MCA_ADAPTER_DISABLED
-		   && !info.mca_dev->driver_loaded)
-			break;
+        if(info.mca_dev->status != MCA_ADAPTER_DISABLED
+                && !info.mca_dev->driver_loaded)
+            break;
 
-		/* OK, found adapter but it was disabled or already in
-		 * use.  Go around again, excluding the slot we just
-		 * found */
+        /* OK, found adapter but it was disabled or already in
+         * use.  Go around again, excluding the slot we just
+         * found */
 
-		info.slot = info.mca_dev->slot + 1;
-		info.mca_dev = NULL;
-	}
-		
-	return info.mca_dev->slot;
+        info.slot = info.mca_dev->slot + 1;
+        info.mca_dev = NULL;
+    }
+
+    return info.mca_dev->slot;
 }
 EXPORT_SYMBOL(mca_find_unused_adapter);
 
 /* NOTE: stack allocated structure */
 struct mca_find_device_by_slot_info {
-	int			slot;
-	struct mca_device 	*mca_dev;
+    int			slot;
+    struct mca_device 	*mca_dev;
 };
 
-static int mca_find_device_by_slot_callback(struct device *dev, void *data)
-{
-	struct mca_find_device_by_slot_info *info = data;
-	struct mca_device *mca_dev = to_mca_device(dev);
+static int mca_find_device_by_slot_callback(struct device *dev, void *data) {
+    struct mca_find_device_by_slot_info *info = data;
+    struct mca_device *mca_dev = to_mca_device(dev);
 
-	if(mca_dev->slot == info->slot)
-		info->mca_dev = mca_dev;
+    if(mca_dev->slot == info->slot)
+        info->mca_dev = mca_dev;
 
-	return 0;
+    return 0;
 }
 
-struct mca_device *mca_find_device_by_slot(int slot)
-{
-	struct mca_find_device_by_slot_info info;
+struct mca_device *mca_find_device_by_slot(int slot) {
+    struct mca_find_device_by_slot_info info;
 
-	info.slot = slot;
-	info.mca_dev = NULL;
+    info.slot = slot;
+    info.mca_dev = NULL;
 
-	bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_device_by_slot_callback);
+    bus_for_each_dev(&mca_bus_type, NULL, &info, mca_find_device_by_slot_callback);
 
-	return info.mca_dev;
+    return info.mca_dev;
 }
 
 /**
@@ -190,14 +185,13 @@ struct mca_device *mca_find_device_by_slot(int slot)
  *	when it scanned the MCA space. The register value is returned.
  *	Missing or invalid registers report 0.
  */
-unsigned char mca_read_stored_pos(int slot, int reg)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+unsigned char mca_read_stored_pos(int slot, int reg) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		return 0;
+    if(!mca_dev)
+        return 0;
 
-	return mca_device_read_stored_pos(mca_dev, reg);
+    return mca_device_read_stored_pos(mca_dev, reg);
 }
 EXPORT_SYMBOL(mca_read_stored_pos);
 
@@ -213,18 +207,17 @@ EXPORT_SYMBOL(mca_read_stored_pos);
  *	deep magic required for onboard devices transparently.
  */
 
-unsigned char mca_read_pos(int slot, int reg)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+unsigned char mca_read_pos(int slot, int reg) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		return 0;
+    if(!mca_dev)
+        return 0;
 
-	return mca_device_read_pos(mca_dev, reg);
+    return mca_device_read_pos(mca_dev, reg);
 }
 EXPORT_SYMBOL(mca_read_pos);
 
-		
+
 /**
  *	mca_write_pos - read POS register from card
  *	@slot: slot number to read from
@@ -249,14 +242,13 @@ EXPORT_SYMBOL(mca_read_pos);
  *	screws up.
  */
 
-void mca_write_pos(int slot, int reg, unsigned char byte)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+void mca_write_pos(int slot, int reg, unsigned char byte) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		return;
+    if(!mca_dev)
+        return;
 
-	mca_device_write_pos(mca_dev, reg, byte);
+    mca_device_write_pos(mca_dev, reg, byte);
 }
 EXPORT_SYMBOL(mca_write_pos);
 
@@ -270,14 +262,13 @@ EXPORT_SYMBOL(mca_write_pos);
  *	name deletes any previous name.
  */
 
-void mca_set_adapter_name(int slot, char* name)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+void mca_set_adapter_name(int slot, char* name) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		return;
+    if(!mca_dev)
+        return;
 
-	mca_device_set_name(mca_dev, name);
+    mca_device_set_name(mca_dev, name);
 }
 EXPORT_SYMBOL(mca_set_adapter_name);
 
@@ -292,20 +283,19 @@ EXPORT_SYMBOL(mca_set_adapter_name);
  *	returned.
  */
 
-int mca_mark_as_used(int slot)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+int mca_mark_as_used(int slot) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		/* FIXME: this is actually a severe error */
-		return 1;
+    if(!mca_dev)
+        /* FIXME: this is actually a severe error */
+        return 1;
 
-	if(mca_device_claimed(mca_dev))
-		return 1;
+    if(mca_device_claimed(mca_dev))
+        return 1;
 
-	mca_device_set_claim(mca_dev, 1);
+    mca_device_set_claim(mca_dev, 1);
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL(mca_mark_as_used);
 
@@ -316,14 +306,13 @@ EXPORT_SYMBOL(mca_mark_as_used);
  *	Release the slot for other drives to use.
  */
 
-void mca_mark_as_unused(int slot)
-{
-	struct mca_device *mca_dev = mca_find_device_by_slot(slot);
+void mca_mark_as_unused(int slot) {
+    struct mca_device *mca_dev = mca_find_device_by_slot(slot);
 
-	if(!mca_dev)
-		return;
+    if(!mca_dev)
+        return;
 
-	mca_device_set_claim(mca_dev, 0);
+    mca_device_set_claim(mca_dev, 0);
 }
 EXPORT_SYMBOL(mca_mark_as_unused);
 

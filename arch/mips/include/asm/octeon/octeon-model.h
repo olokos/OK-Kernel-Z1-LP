@@ -280,19 +280,18 @@ static inline uint64_t cvmx_read_csr(uint64_t csr_addr);
 		)))
 
 /* NOTE: This for internal use only!!!!! */
-static inline int __octeon_is_model_runtime__(uint32_t model)
-{
-	uint32_t cpuid = cvmx_get_proc_id();
+static inline int __octeon_is_model_runtime__(uint32_t model) {
+    uint32_t cpuid = cvmx_get_proc_id();
 
-	/*
-	 * Check for special case of mismarked 3005 samples. We only
-	 * need to check if the sub model isn't being ignored
-	 */
-	if ((model & OM_CHECK_SUBMODEL) == OM_CHECK_SUBMODEL) {
-		if (cpuid == OCTEON_CN3010_PASS1 && (cvmx_read_csr(0x80011800800007B8ull) & (1ull << 34)))
-			cpuid |= 0x10;
-	}
-	return __OCTEON_IS_MODEL_COMPILE__(model, cpuid);
+    /*
+     * Check for special case of mismarked 3005 samples. We only
+     * need to check if the sub model isn't being ignored
+     */
+    if ((model & OM_CHECK_SUBMODEL) == OM_CHECK_SUBMODEL) {
+        if (cpuid == OCTEON_CN3010_PASS1 && (cvmx_read_csr(0x80011800800007B8ull) & (1ull << 34)))
+            cpuid |= 0x10;
+    }
+    return __OCTEON_IS_MODEL_COMPILE__(model, cpuid);
 }
 
 /*

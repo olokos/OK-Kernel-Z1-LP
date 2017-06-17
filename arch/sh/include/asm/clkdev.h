@@ -17,12 +17,11 @@
 
 #include <asm/clock.h>
 
-static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size)
-{
-	if (!slab_is_available())
-		return alloc_bootmem_low_pages(size);
-	else
-		return kzalloc(size, GFP_KERNEL);
+static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size) {
+    if (!slab_is_available())
+        return alloc_bootmem_low_pages(size);
+    else
+        return kzalloc(size, GFP_KERNEL);
 }
 
 #define __clk_put(clk)

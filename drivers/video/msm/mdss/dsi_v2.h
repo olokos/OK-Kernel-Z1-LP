@@ -24,17 +24,17 @@
 #define DSI_MRPS	0x04  /* Maximum Return Packet Size */
 
 struct dsi_interface {
-	int (*on)(struct mdss_panel_data *pdata);
-	int (*off)(struct mdss_panel_data *pdata);
-	int (*cont_on)(struct mdss_panel_data *pdata);
-	int (*clk_ctrl)(struct mdss_panel_data *pdata, int enable);
-	void (*op_mode_config)(int mode, struct mdss_panel_data *pdata);
-	int index;
-	void *private;
+    int (*on)(struct mdss_panel_data *pdata);
+    int (*off)(struct mdss_panel_data *pdata);
+    int (*cont_on)(struct mdss_panel_data *pdata);
+    int (*clk_ctrl)(struct mdss_panel_data *pdata, int enable);
+    void (*op_mode_config)(int mode, struct mdss_panel_data *pdata);
+    int index;
+    void *private;
 };
 
 int dsi_panel_device_register_v2(struct platform_device *pdev,
-				struct mdss_dsi_ctrl_pdata *ctrl_pdata);
+                                 struct mdss_dsi_ctrl_pdata *ctrl_pdata);
 
 void dsi_register_interface(struct dsi_interface *intf);
 
@@ -43,10 +43,10 @@ int dsi_buf_alloc(struct dsi_buf *dp, int size);
 void dsi_set_tx_power_mode(int mode);
 
 void dsi_ctrl_config_deinit(struct platform_device *pdev,
-				struct mdss_dsi_ctrl_pdata *ctrl_pdata);
+                            struct mdss_dsi_ctrl_pdata *ctrl_pdata);
 
 int dsi_ctrl_config_init(struct platform_device *pdev,
-				struct mdss_dsi_ctrl_pdata *ctrl_pdata);
+                         struct mdss_dsi_ctrl_pdata *ctrl_pdata);
 
 int dsi_ctrl_gpio_request(struct mdss_dsi_ctrl_pdata *ctrl_pdata);
 

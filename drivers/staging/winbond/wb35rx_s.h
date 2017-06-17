@@ -16,29 +16,29 @@
 // Internal variable for module
 //====================================
 struct wb35_rx {
-	u32			ByteReceived;// For calculating throughput of BulkIn
-	atomic_t		RxFireCounter;// Does Wb35Rx module fire?
+    u32			ByteReceived;// For calculating throughput of BulkIn
+    atomic_t		RxFireCounter;// Does Wb35Rx module fire?
 
-	u8	RxBuffer[ MAX_USB_RX_BUFFER_NUMBER ][ ((MAX_USB_RX_BUFFER+3) & ~0x03 ) ];
-	u16	RxBufferSize[ ((MAX_USB_RX_BUFFER_NUMBER+1) & ~0x01) ];
-	u8	RxOwner[ ((MAX_USB_RX_BUFFER_NUMBER+3) & ~0x03 ) ];//Ownership of buffer  0: SW 1:HW
+    u8	RxBuffer[ MAX_USB_RX_BUFFER_NUMBER ][ ((MAX_USB_RX_BUFFER+3) & ~0x03 ) ];
+    u16	RxBufferSize[ ((MAX_USB_RX_BUFFER_NUMBER+1) & ~0x01) ];
+    u8	RxOwner[ ((MAX_USB_RX_BUFFER_NUMBER+3) & ~0x03 ) ];//Ownership of buffer  0: SW 1:HW
 
-	u32	RxProcessIndex;//The next index to process
-	u32	RxBufferId;
-	u32	EP3vm_state;
+    u32	RxProcessIndex;//The next index to process
+    u32	RxBufferId;
+    u32	EP3vm_state;
 
-	u32	rx_halt; // For VM stopping
+    u32	rx_halt; // For VM stopping
 
-	u16	MoreDataSize;
-	u16	PacketSize;
+    u16	MoreDataSize;
+    u16	PacketSize;
 
-	u32	CurrentRxBufferId; // For complete routine usage
-	u32	Rx3UrbCancel;
+    u32	CurrentRxBufferId; // For complete routine usage
+    u32	Rx3UrbCancel;
 
-	u32	LastR1; // For RSSI reporting
-	struct urb *				RxUrb;
-	u32		Ep3ErrorCount2; // 20060625.1 Usbd for Rx DMA error count
+    u32	LastR1; // For RSSI reporting
+    struct urb *				RxUrb;
+    u32		Ep3ErrorCount2; // 20060625.1 Usbd for Rx DMA error count
 
-	int		EP3VM_status;
-	u8 *	pDRx;
+    int		EP3VM_status;
+    u8 *	pDRx;
 };

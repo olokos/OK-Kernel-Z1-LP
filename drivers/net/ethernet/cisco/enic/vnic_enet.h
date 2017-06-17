@@ -22,16 +22,16 @@
 
 /* Device-specific region: enet configuration */
 struct vnic_enet_config {
-	u32 flags;
-	u32 wq_desc_count;
-	u32 rq_desc_count;
-	u16 mtu;
-	u16 intr_timer_deprecated;
-	u8 intr_timer_type;
-	u8 intr_mode;
-	char devname[16];
-	u32 intr_timer_usec;
-	u16 loop_tag;
+    u32 flags;
+    u32 wq_desc_count;
+    u32 rq_desc_count;
+    u16 mtu;
+    u16 intr_timer_deprecated;
+    u8 intr_timer_type;
+    u8 intr_mode;
+    char devname[16];
+    u32 intr_timer_usec;
+    u16 loop_tag;
 };
 
 #define VENETF_TSO		0x1	/* TSO enabled */

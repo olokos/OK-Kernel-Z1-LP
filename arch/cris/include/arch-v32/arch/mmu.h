@@ -2,9 +2,8 @@
 #define _ASM_CRIS_ARCH_MMU_H
 
 /* MMU context type. */
-typedef struct
-{
-  unsigned int page_id;
+typedef struct {
+    unsigned int page_id;
 } mm_context_t;
 
 /* Kernel memory segments. */

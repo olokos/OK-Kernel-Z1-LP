@@ -12,9 +12,8 @@
 
 extern void phys_stext(void);
 
-static inline void trigger_address_error(void)
-{
-	phys_stext();
+static inline void trigger_address_error(void) {
+    phys_stext();
 }
 
 #define BUILD_TRAP_HANDLER(name)	\

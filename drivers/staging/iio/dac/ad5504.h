@@ -33,7 +33,7 @@
  */
 
 struct ad5504_platform_data {
-	u16				vref_mv;
+    u16				vref_mv;
 };
 
 /**
@@ -46,11 +46,11 @@ struct ad5504_platform_data {
  */
 
 struct ad5504_state {
-	struct spi_device		*spi;
-	struct regulator		*reg;
-	unsigned short			vref_mv;
-	unsigned			pwr_down_mask;
-	unsigned			pwr_down_mode;
+    struct spi_device		*spi;
+    struct regulator		*reg;
+    unsigned short			vref_mv;
+    unsigned			pwr_down_mask;
+    unsigned			pwr_down_mode;
 };
 
 /**
@@ -58,8 +58,8 @@ struct ad5504_state {
  */
 
 enum ad5504_supported_device_ids {
-	ID_AD5504,
-	ID_AD5501,
+    ID_AD5504,
+    ID_AD5501,
 };
 
 #endif /* SPI_AD5504_H_ */

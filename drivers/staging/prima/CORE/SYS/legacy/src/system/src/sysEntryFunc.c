@@ -78,8 +78,7 @@ postPTTMsgApi(tpAniSirGlobal pMac, tSirMsgQ *pMsg);
  */
 
 tSirRetStatus
-sysInitGlobals(tpAniSirGlobal pMac)
-{
+sysInitGlobals(tpAniSirGlobal pMac) {
 
     vos_mem_set((tANI_U8 *) &pMac->sys, sizeof(pMac->sys), 0);
 
@@ -111,8 +110,7 @@ sysInitGlobals(tpAniSirGlobal pMac)
  */
 tSirRetStatus
 sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
-                         tANI_U32 subType)
-{
+                         tANI_U32 subType) {
     tSirRetStatus ret;
     void*         pBd;
     tMgmtFrmDropReason dropReason;
@@ -121,8 +119,7 @@ sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
         WDA_DS_PeekRxPacketInfo( pVosPkt, (v_PVOID_t *)&pBd, VOS_FALSE );
     pMac->sys.gSysBbtReceived++;
 
-    if ( !VOS_IS_STATUS_SUCCESS(vosStatus) )
-    {
+    if ( !VOS_IS_STATUS_SUCCESS(vosStatus) ) {
         goto fail;
     }
 
@@ -132,26 +129,21 @@ sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
 
     pMac->sys.gSysFrameCount[type][subType]++;
 
-    if(type == SIR_MAC_MGMT_FRAME)
-    {
+    if(type == SIR_MAC_MGMT_FRAME) {
 
-        if( (dropReason = limIsPktCandidateForDrop(pMac, pBd, subType)) != eMGMT_DROP_NO_DROP)
-        {
+        if( (dropReason = limIsPktCandidateForDrop(pMac, pBd, subType)) != eMGMT_DROP_NO_DROP) {
             PELOG1(sysLog(pMac, LOG1, FL("Mgmt Frame %d being dropped, reason: %d\n"), subType, dropReason);)
             MTRACE(macTrace(pMac,   TRACE_CODE_RX_MGMT_DROP, NO_SESSION, dropReason);)
             goto fail;
         }
         //Post the message to PE Queue
         ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
-        if (ret != eSIR_SUCCESS)
-        {
+        if (ret != eSIR_SUCCESS) {
             PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, ret %d\n"), ret);)
             goto fail;
         }
         pMac->sys.gSysBbtPostedToLim++;
-    }
-    else if (type == SIR_MAC_DATA_FRAME)
-    {
+    } else if (type == SIR_MAC_DATA_FRAME) {
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
         /*
          * if we reached here, probably this frame can be TDLS frame.
@@ -168,19 +160,15 @@ sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
         mpduHdr = (v_U8_t *)WDA_GET_RX_MAC_HEADER(pBd) ;
 
 #define SIR_MAC_ETH_HDR_LEN                       (14)
-        if(0 != WDA_GET_RX_FT_DONE(pBd))
-        {
+        if(0 != WDA_GET_RX_FT_DONE(pBd)) {
             ethTypeOffset = mpduHdr + SIR_MAC_ETH_HDR_LEN - sizeof(ethType) ;
-        }
-        else
-        {
+        } else {
             ethTypeOffset = mpduHdr + WDA_GET_RX_MPDU_HEADER_LEN(pBd)
                             + RFC1042_HDR_LENGTH ;
         }
 
         ethType = GET_BE16(ethTypeOffset) ;
-        if(ETH_TYPE_89_0d == ethType)
-        {
+        if(ETH_TYPE_89_0d == ethType) {
 
             VOS_TRACE(VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                       ("TDLS Data Frame \n")) ;
@@ -188,13 +176,11 @@ sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
             PELOGE(sysLog(pMac, LOGE, FL("posting to TDLS frame to lim\n"));)
 
             ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
-            if (ret != eSIR_SUCCESS)
-            {
+            if (ret != eSIR_SUCCESS) {
                 PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, \
                                                         ret %d\n"), ret);)
                 goto fail;
-            }
-            else
+            } else
                 return eSIR_SUCCESS;
         }
         /* fall through if ethType != TDLS, which is error case */
@@ -203,16 +189,13 @@ sysBbtProcessMessageCore(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tANI_U32 type,
         PELOGW(sysLog(pMac, LOGW, FL("IAPP Frame...\n")););
         //Post the message to PE Queue
         ret = (tSirRetStatus) limPostMsgApi(pMac, pMsg);
-        if (ret != eSIR_SUCCESS)
-        {
+        if (ret != eSIR_SUCCESS) {
             PELOGE(sysLog(pMac, LOGE, FL("posting to LIM2 failed, ret %d\n"), ret);)
             goto fail;
         }
         pMac->sys.gSysBbtPostedToLim++;
 #endif
-    }
-    else
-    {
+    } else {
         PELOG3(sysLog(pMac, LOG3, "BBT received Invalid type %d subType %d "
                       "LIM state %X. BD dump is:\n",
                       type, subType, limGetSmeState(pMac));
@@ -231,13 +214,11 @@ fail:
 }
 
 
-void sysLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...)
-{
+void sysLog(tpAniSirGlobal pMac, tANI_U32 loglevel, const char *pString,...) {
     // Verify against current log level
     if ( loglevel > pMac->utils.gLogDbgLevel[LOG_INDEX_FOR_MODULE( SIR_SYS_MODULE_ID )] )
         return;
-    else
-    {
+    else {
         va_list marker;
 
         va_start( marker, pString );     /* Initialize variable arguments. */

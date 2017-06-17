@@ -135,8 +135,7 @@ extern "C" {
 /* like ThreadX, timer expiration handler executes at the highest     */
 /* possible priority level, i.e. DISPATCH_LEVEL.                      */
 /*--------------------------------------------------------------------*/
-typedef struct TX_TIMER_STRUCT
-{
+typedef struct TX_TIMER_STRUCT {
 #ifdef WLAN_DEBUG
 #define TIMER_MAX_NAME_LEN 50
     char timerName[TIMER_MAX_NAME_LEN];

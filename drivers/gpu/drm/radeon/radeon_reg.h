@@ -87,7 +87,7 @@
 #define ATI_DATATYPE_AYUV_444			14
 #define ATI_DATATYPE_ARGB4444			15
 
-				/* Registers for 2D/Video/Overlay */
+/* Registers for 2D/Video/Overlay */
 #define RADEON_ADAPTER_ID                   0x0f2c /* PCI */
 #define RADEON_AGP_BASE                     0x0170
 #define RADEON_AGP_CNTL                     0x0174
@@ -1081,7 +1081,7 @@
 #       define RADEON_HTOT_CNTL_VGA_EN      (1 << 28)
 #define RADEON_HTOTAL2_CNTL                 0x002e /* PLL */
 
-       /* Multimedia I2C bus */
+/* Multimedia I2C bus */
 #define RADEON_I2C_CNTL_0		    0x0090
 #       define RADEON_I2C_DONE              (1 << 0)
 #       define RADEON_I2C_NACK              (1 << 1)
@@ -1859,7 +1859,7 @@
 
 
 
-				/* Registers for 3D/TCL */
+/* Registers for 3D/TCL */
 #define RADEON_PP_BORDER_COLOR_0            0x1d40
 #define RADEON_PP_BORDER_COLOR_1            0x1d44
 #define RADEON_PP_BORDER_COLOR_2            0x1d48
@@ -3286,7 +3286,7 @@
 #define R200_SE_VTX_STATE_CNTL			0x2180
 #       define R200_UPDATE_USER_COLOR_0_ENA_MASK (1<<16)
 
-				/* Registers for CP and Microcode Engine */
+/* Registers for CP and Microcode Engine */
 #define RADEON_CP_ME_RAM_ADDR               0x07d4
 #define RADEON_CP_ME_RAM_RADDR              0x07d8
 #define RADEON_CP_ME_RAM_DATAH              0x07dc
@@ -3371,13 +3371,13 @@
 
 
 
-				/* Constants */
+/* Constants */
 /* #define RADEON_LAST_FRAME_REG               RADEON_GUI_SCRATCH_REG0 */
 /* efine RADEON_LAST_CLEAR_REG               RADEON_GUI_SCRATCH_REG2 */
 
 
 
-				/* CP packet types */
+/* CP packet types */
 #define RADEON_CP_PACKET0                           0x00000000
 #define RADEON_CP_PACKET1                           0x40000000
 #define RADEON_CP_PACKET2                           0x80000000

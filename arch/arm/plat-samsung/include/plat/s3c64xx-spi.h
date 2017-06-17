@@ -25,9 +25,9 @@ struct platform_device;
  * spi_board_info.controller_data point to it.
  */
 struct s3c64xx_spi_csinfo {
-	u8 fb_delay;
-	unsigned line;
-	void (*set_level)(unsigned line_id, int lvl);
+    u8 fb_delay;
+    unsigned line;
+    void (*set_level)(unsigned line_id, int lvl);
 };
 
 /**
@@ -43,18 +43,18 @@ struct s3c64xx_spi_csinfo {
  * @tx_st_done: Depends on tx fifo_lvl field
  */
 struct s3c64xx_spi_info {
-	int src_clk_nr;
-	bool clk_from_cmu;
+    int src_clk_nr;
+    bool clk_from_cmu;
 
-	int num_cs;
+    int num_cs;
 
-	int (*cfg_gpio)(struct platform_device *pdev);
+    int (*cfg_gpio)(struct platform_device *pdev);
 
-	/* Following two fields are for future compatibility */
-	int fifo_lvl_mask;
-	int rx_lvl_offset;
-	int high_speed;
-	int tx_st_done;
+    /* Following two fields are for future compatibility */
+    int fifo_lvl_mask;
+    int rx_lvl_offset;
+    int high_speed;
+    int tx_st_done;
 };
 
 /**
@@ -68,11 +68,11 @@ struct s3c64xx_spi_info {
  * has some chips attached to it.
  */
 extern void s3c64xx_spi0_set_platdata(struct s3c64xx_spi_info *pd,
-				      int src_clk_nr, int num_cs);
+                                      int src_clk_nr, int num_cs);
 extern void s3c64xx_spi1_set_platdata(struct s3c64xx_spi_info *pd,
-				      int src_clk_nr, int num_cs);
+                                      int src_clk_nr, int num_cs);
 extern void s3c64xx_spi2_set_platdata(struct s3c64xx_spi_info *pd,
-				      int src_clk_nr, int num_cs);
+                                      int src_clk_nr, int num_cs);
 
 /* defined by architecture to configure gpio */
 extern int s3c64xx_spi0_cfg_gpio(struct platform_device *dev);

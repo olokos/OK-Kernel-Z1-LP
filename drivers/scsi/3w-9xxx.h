@@ -52,206 +52,205 @@
 
 /* AEN string type */
 typedef struct TAG_twa_message_type {
-  unsigned int   code;
-  char*          text;
+    unsigned int   code;
+    char*          text;
 } twa_message_type;
 
 /* AEN strings */
 static twa_message_type twa_aen_table[] = {
-	{0x0000, "AEN queue empty"},
-	{0x0001, "Controller reset occurred"},
-	{0x0002, "Degraded unit detected"},
-	{0x0003, "Controller error occurred"},
-	{0x0004, "Background rebuild failed"},
-	{0x0005, "Background rebuild done"},
-	{0x0006, "Incomplete unit detected"},
-	{0x0007, "Background initialize done"},
-	{0x0008, "Unclean shutdown detected"},
-	{0x0009, "Drive timeout detected"},
-	{0x000A, "Drive error detected"},
-	{0x000B, "Rebuild started"},
-	{0x000C, "Background initialize started"},
-	{0x000D, "Entire logical unit was deleted"},
-	{0x000E, "Background initialize failed"},
-	{0x000F, "SMART attribute exceeded threshold"},
-	{0x0010, "Power supply reported AC under range"},
-	{0x0011, "Power supply reported DC out of range"},
-	{0x0012, "Power supply reported a malfunction"},
-	{0x0013, "Power supply predicted malfunction"},
-	{0x0014, "Battery charge is below threshold"},
-	{0x0015, "Fan speed is below threshold"},
-	{0x0016, "Temperature sensor is above threshold"},
-	{0x0017, "Power supply was removed"},
-	{0x0018, "Power supply was inserted"},
-	{0x0019, "Drive was removed from a bay"},
-	{0x001A, "Drive was inserted into a bay"},
-	{0x001B, "Drive bay cover door was opened"},
-	{0x001C, "Drive bay cover door was closed"},
-	{0x001D, "Product case was opened"},
-	{0x0020, "Prepare for shutdown (power-off)"},
-	{0x0021, "Downgrade UDMA mode to lower speed"},
-	{0x0022, "Upgrade UDMA mode to higher speed"},
-	{0x0023, "Sector repair completed"},
-	{0x0024, "Sbuf memory test failed"},
-	{0x0025, "Error flushing cached write data to array"},
-	{0x0026, "Drive reported data ECC error"},
-	{0x0027, "DCB has checksum error"},
-	{0x0028, "DCB version is unsupported"},
-	{0x0029, "Background verify started"},
-	{0x002A, "Background verify failed"},
-	{0x002B, "Background verify done"},
-	{0x002C, "Bad sector overwritten during rebuild"},
-	{0x002D, "Background rebuild error on source drive"},
-	{0x002E, "Replace failed because replacement drive too small"},
-	{0x002F, "Verify failed because array was never initialized"},
-	{0x0030, "Unsupported ATA drive"},
-	{0x0031, "Synchronize host/controller time"},
-	{0x0032, "Spare capacity is inadequate for some units"},
-	{0x0033, "Background migration started"},
-	{0x0034, "Background migration failed"},
-	{0x0035, "Background migration done"},
-	{0x0036, "Verify detected and fixed data/parity mismatch"},
-	{0x0037, "SO-DIMM incompatible"},
-	{0x0038, "SO-DIMM not detected"},
-	{0x0039, "Corrected Sbuf ECC error"},
-	{0x003A, "Drive power on reset detected"},
-	{0x003B, "Background rebuild paused"},
-	{0x003C, "Background initialize paused"},
-	{0x003D, "Background verify paused"},
-	{0x003E, "Background migration paused"},
-	{0x003F, "Corrupt flash file system detected"},
-	{0x0040, "Flash file system repaired"},
-	{0x0041, "Unit number assignments were lost"},
-	{0x0042, "Error during read of primary DCB"},
-	{0x0043, "Latent error found in backup DCB"},
-	{0x00FC, "Recovered/finished array membership update"},
-	{0x00FD, "Handler lockup"},
-	{0x00FE, "Retrying PCI transfer"},
-	{0x00FF, "AEN queue is full"},
-	{0xFFFFFFFF, (char*) 0}
+    {0x0000, "AEN queue empty"},
+    {0x0001, "Controller reset occurred"},
+    {0x0002, "Degraded unit detected"},
+    {0x0003, "Controller error occurred"},
+    {0x0004, "Background rebuild failed"},
+    {0x0005, "Background rebuild done"},
+    {0x0006, "Incomplete unit detected"},
+    {0x0007, "Background initialize done"},
+    {0x0008, "Unclean shutdown detected"},
+    {0x0009, "Drive timeout detected"},
+    {0x000A, "Drive error detected"},
+    {0x000B, "Rebuild started"},
+    {0x000C, "Background initialize started"},
+    {0x000D, "Entire logical unit was deleted"},
+    {0x000E, "Background initialize failed"},
+    {0x000F, "SMART attribute exceeded threshold"},
+    {0x0010, "Power supply reported AC under range"},
+    {0x0011, "Power supply reported DC out of range"},
+    {0x0012, "Power supply reported a malfunction"},
+    {0x0013, "Power supply predicted malfunction"},
+    {0x0014, "Battery charge is below threshold"},
+    {0x0015, "Fan speed is below threshold"},
+    {0x0016, "Temperature sensor is above threshold"},
+    {0x0017, "Power supply was removed"},
+    {0x0018, "Power supply was inserted"},
+    {0x0019, "Drive was removed from a bay"},
+    {0x001A, "Drive was inserted into a bay"},
+    {0x001B, "Drive bay cover door was opened"},
+    {0x001C, "Drive bay cover door was closed"},
+    {0x001D, "Product case was opened"},
+    {0x0020, "Prepare for shutdown (power-off)"},
+    {0x0021, "Downgrade UDMA mode to lower speed"},
+    {0x0022, "Upgrade UDMA mode to higher speed"},
+    {0x0023, "Sector repair completed"},
+    {0x0024, "Sbuf memory test failed"},
+    {0x0025, "Error flushing cached write data to array"},
+    {0x0026, "Drive reported data ECC error"},
+    {0x0027, "DCB has checksum error"},
+    {0x0028, "DCB version is unsupported"},
+    {0x0029, "Background verify started"},
+    {0x002A, "Background verify failed"},
+    {0x002B, "Background verify done"},
+    {0x002C, "Bad sector overwritten during rebuild"},
+    {0x002D, "Background rebuild error on source drive"},
+    {0x002E, "Replace failed because replacement drive too small"},
+    {0x002F, "Verify failed because array was never initialized"},
+    {0x0030, "Unsupported ATA drive"},
+    {0x0031, "Synchronize host/controller time"},
+    {0x0032, "Spare capacity is inadequate for some units"},
+    {0x0033, "Background migration started"},
+    {0x0034, "Background migration failed"},
+    {0x0035, "Background migration done"},
+    {0x0036, "Verify detected and fixed data/parity mismatch"},
+    {0x0037, "SO-DIMM incompatible"},
+    {0x0038, "SO-DIMM not detected"},
+    {0x0039, "Corrected Sbuf ECC error"},
+    {0x003A, "Drive power on reset detected"},
+    {0x003B, "Background rebuild paused"},
+    {0x003C, "Background initialize paused"},
+    {0x003D, "Background verify paused"},
+    {0x003E, "Background migration paused"},
+    {0x003F, "Corrupt flash file system detected"},
+    {0x0040, "Flash file system repaired"},
+    {0x0041, "Unit number assignments were lost"},
+    {0x0042, "Error during read of primary DCB"},
+    {0x0043, "Latent error found in backup DCB"},
+    {0x00FC, "Recovered/finished array membership update"},
+    {0x00FD, "Handler lockup"},
+    {0x00FE, "Retrying PCI transfer"},
+    {0x00FF, "AEN queue is full"},
+    {0xFFFFFFFF, (char*) 0}
 };
 
 /* AEN severity table */
-static char *twa_aen_severity_table[] =
-{
-	"None", "ERROR", "WARNING", "INFO", "DEBUG", (char*) 0
+static char *twa_aen_severity_table[] = {
+    "None", "ERROR", "WARNING", "INFO", "DEBUG", (char*) 0
 };
 
 /* Error strings */
 static twa_message_type twa_error_table[] = {
-	{0x0100, "SGL entry contains zero data"},
-	{0x0101, "Invalid command opcode"},
-	{0x0102, "SGL entry has unaligned address"},
-	{0x0103, "SGL size does not match command"},
-	{0x0104, "SGL entry has illegal length"},
-	{0x0105, "Command packet is not aligned"},
-	{0x0106, "Invalid request ID"},
-	{0x0107, "Duplicate request ID"},
-	{0x0108, "ID not locked"},
-	{0x0109, "LBA out of range"},
-	{0x010A, "Logical unit not supported"},
-	{0x010B, "Parameter table does not exist"},
-	{0x010C, "Parameter index does not exist"},
-	{0x010D, "Invalid field in CDB"},
-	{0x010E, "Specified port has invalid drive"},
-	{0x010F, "Parameter item size mismatch"},
-	{0x0110, "Failed memory allocation"},
-	{0x0111, "Memory request too large"},
-	{0x0112, "Out of memory segments"},
-	{0x0113, "Invalid address to deallocate"},
-	{0x0114, "Out of memory"},
-	{0x0115, "Out of heap"},
-	{0x0120, "Double degrade"},
-	{0x0121, "Drive not degraded"},
-	{0x0122, "Reconstruct error"},
-	{0x0123, "Replace not accepted"},
-	{0x0124, "Replace drive capacity too small"},
-	{0x0125, "Sector count not allowed"},
-	{0x0126, "No spares left"},
-	{0x0127, "Reconstruct error"},
-	{0x0128, "Unit is offline"},
-	{0x0129, "Cannot update status to DCB"},
-	{0x0130, "Invalid stripe handle"},
-	{0x0131, "Handle that was not locked"},
-	{0x0132, "Handle that was not empty"},
-	{0x0133, "Handle has different owner"},
-	{0x0140, "IPR has parent"},
-	{0x0150, "Illegal Pbuf address alignment"},
-	{0x0151, "Illegal Pbuf transfer length"},
-	{0x0152, "Illegal Sbuf address alignment"},
-	{0x0153, "Illegal Sbuf transfer length"},
-	{0x0160, "Command packet too large"},
-	{0x0161, "SGL exceeds maximum length"},
-	{0x0162, "SGL has too many entries"},
-	{0x0170, "Insufficient resources for rebuilder"},
-	{0x0171, "Verify error (data != parity)"},
-	{0x0180, "Requested segment not in directory of this DCB"},
-	{0x0181, "DCB segment has unsupported version"},
-	{0x0182, "DCB segment has checksum error"},
-	{0x0183, "DCB support (settings) segment invalid"},
-	{0x0184, "DCB UDB (unit descriptor block) segment invalid"},
-	{0x0185, "DCB GUID (globally unique identifier) segment invalid"},
-	{0x01A0, "Could not clear Sbuf"},
-	{0x01C0, "Flash identify failed"},
-	{0x01C1, "Flash out of bounds"},
-	{0x01C2, "Flash verify error"},
-	{0x01C3, "Flash file object not found"},
-	{0x01C4, "Flash file already present"},
-	{0x01C5, "Flash file system full"},
-	{0x01C6, "Flash file not present"},
-	{0x01C7, "Flash file size error"},
-	{0x01C8, "Bad flash file checksum"},
-	{0x01CA, "Corrupt flash file system detected"},
-	{0x01D0, "Invalid field in parameter list"},
-	{0x01D1, "Parameter list length error"},
-	{0x01D2, "Parameter item is not changeable"},
-	{0x01D3, "Parameter item is not saveable"},
-	{0x0200, "UDMA CRC error"},
-	{0x0201, "Internal CRC error"},
-	{0x0202, "Data ECC error"},
-	{0x0203, "ADP level 1 error"},
-	{0x0204, "Port timeout"},
-	{0x0205, "Drive power on reset"},
-	{0x0206, "ADP level 2 error"},
-	{0x0207, "Soft reset failed"},
-	{0x0208, "Drive not ready"},
-	{0x0209, "Unclassified port error"},
-	{0x020A, "Drive aborted command"},
-	{0x0210, "Internal CRC error"},
-	{0x0211, "PCI abort error"},
-	{0x0212, "PCI parity error"},
-	{0x0213, "Port handler error"},
-	{0x0214, "Token interrupt count error"},
-	{0x0215, "Timeout waiting for PCI transfer"},
-	{0x0216, "Corrected buffer ECC"},
-	{0x0217, "Uncorrected buffer ECC"},
-	{0x0230, "Unsupported command during flash recovery"},
-	{0x0231, "Next image buffer expected"},
-	{0x0232, "Binary image architecture incompatible"},
-	{0x0233, "Binary image has no signature"},
-	{0x0234, "Binary image has bad checksum"},
-	{0x0235, "Image downloaded overflowed buffer"},
-	{0x0240, "I2C device not found"},
-	{0x0241, "I2C transaction aborted"},
-	{0x0242, "SO-DIMM parameter(s) incompatible using defaults"},
-	{0x0243, "SO-DIMM unsupported"},
-	{0x0248, "SPI transfer status error"},
-	{0x0249, "SPI transfer timeout error"},
-	{0x0250, "Invalid unit descriptor size in CreateUnit"},
-	{0x0251, "Unit descriptor size exceeds data buffer in CreateUnit"},
-	{0x0252, "Invalid value in CreateUnit descriptor"},
-	{0x0253, "Inadequate disk space to support descriptor in CreateUnit"},
-	{0x0254, "Unable to create data channel for this unit descriptor"},
-	{0x0255, "CreateUnit descriptor specifies a drive already in use"},
-	{0x0256, "Unable to write configuration to all disks during CreateUnit"},
-	{0x0257, "CreateUnit does not support this descriptor version"},
-	{0x0258, "Invalid subunit for RAID 0 or 5 in CreateUnit"},
-	{0x0259, "Too many descriptors in CreateUnit"},
-	{0x025A, "Invalid configuration specified in CreateUnit descriptor"},
-	{0x025B, "Invalid LBA offset specified in CreateUnit descriptor"},
-	{0x025C, "Invalid stripelet size specified in CreateUnit descriptor"},
-	{0x0260, "SMART attribute exceeded threshold"},
-	{0xFFFFFFFF, (char*) 0}
+    {0x0100, "SGL entry contains zero data"},
+    {0x0101, "Invalid command opcode"},
+    {0x0102, "SGL entry has unaligned address"},
+    {0x0103, "SGL size does not match command"},
+    {0x0104, "SGL entry has illegal length"},
+    {0x0105, "Command packet is not aligned"},
+    {0x0106, "Invalid request ID"},
+    {0x0107, "Duplicate request ID"},
+    {0x0108, "ID not locked"},
+    {0x0109, "LBA out of range"},
+    {0x010A, "Logical unit not supported"},
+    {0x010B, "Parameter table does not exist"},
+    {0x010C, "Parameter index does not exist"},
+    {0x010D, "Invalid field in CDB"},
+    {0x010E, "Specified port has invalid drive"},
+    {0x010F, "Parameter item size mismatch"},
+    {0x0110, "Failed memory allocation"},
+    {0x0111, "Memory request too large"},
+    {0x0112, "Out of memory segments"},
+    {0x0113, "Invalid address to deallocate"},
+    {0x0114, "Out of memory"},
+    {0x0115, "Out of heap"},
+    {0x0120, "Double degrade"},
+    {0x0121, "Drive not degraded"},
+    {0x0122, "Reconstruct error"},
+    {0x0123, "Replace not accepted"},
+    {0x0124, "Replace drive capacity too small"},
+    {0x0125, "Sector count not allowed"},
+    {0x0126, "No spares left"},
+    {0x0127, "Reconstruct error"},
+    {0x0128, "Unit is offline"},
+    {0x0129, "Cannot update status to DCB"},
+    {0x0130, "Invalid stripe handle"},
+    {0x0131, "Handle that was not locked"},
+    {0x0132, "Handle that was not empty"},
+    {0x0133, "Handle has different owner"},
+    {0x0140, "IPR has parent"},
+    {0x0150, "Illegal Pbuf address alignment"},
+    {0x0151, "Illegal Pbuf transfer length"},
+    {0x0152, "Illegal Sbuf address alignment"},
+    {0x0153, "Illegal Sbuf transfer length"},
+    {0x0160, "Command packet too large"},
+    {0x0161, "SGL exceeds maximum length"},
+    {0x0162, "SGL has too many entries"},
+    {0x0170, "Insufficient resources for rebuilder"},
+    {0x0171, "Verify error (data != parity)"},
+    {0x0180, "Requested segment not in directory of this DCB"},
+    {0x0181, "DCB segment has unsupported version"},
+    {0x0182, "DCB segment has checksum error"},
+    {0x0183, "DCB support (settings) segment invalid"},
+    {0x0184, "DCB UDB (unit descriptor block) segment invalid"},
+    {0x0185, "DCB GUID (globally unique identifier) segment invalid"},
+    {0x01A0, "Could not clear Sbuf"},
+    {0x01C0, "Flash identify failed"},
+    {0x01C1, "Flash out of bounds"},
+    {0x01C2, "Flash verify error"},
+    {0x01C3, "Flash file object not found"},
+    {0x01C4, "Flash file already present"},
+    {0x01C5, "Flash file system full"},
+    {0x01C6, "Flash file not present"},
+    {0x01C7, "Flash file size error"},
+    {0x01C8, "Bad flash file checksum"},
+    {0x01CA, "Corrupt flash file system detected"},
+    {0x01D0, "Invalid field in parameter list"},
+    {0x01D1, "Parameter list length error"},
+    {0x01D2, "Parameter item is not changeable"},
+    {0x01D3, "Parameter item is not saveable"},
+    {0x0200, "UDMA CRC error"},
+    {0x0201, "Internal CRC error"},
+    {0x0202, "Data ECC error"},
+    {0x0203, "ADP level 1 error"},
+    {0x0204, "Port timeout"},
+    {0x0205, "Drive power on reset"},
+    {0x0206, "ADP level 2 error"},
+    {0x0207, "Soft reset failed"},
+    {0x0208, "Drive not ready"},
+    {0x0209, "Unclassified port error"},
+    {0x020A, "Drive aborted command"},
+    {0x0210, "Internal CRC error"},
+    {0x0211, "PCI abort error"},
+    {0x0212, "PCI parity error"},
+    {0x0213, "Port handler error"},
+    {0x0214, "Token interrupt count error"},
+    {0x0215, "Timeout waiting for PCI transfer"},
+    {0x0216, "Corrected buffer ECC"},
+    {0x0217, "Uncorrected buffer ECC"},
+    {0x0230, "Unsupported command during flash recovery"},
+    {0x0231, "Next image buffer expected"},
+    {0x0232, "Binary image architecture incompatible"},
+    {0x0233, "Binary image has no signature"},
+    {0x0234, "Binary image has bad checksum"},
+    {0x0235, "Image downloaded overflowed buffer"},
+    {0x0240, "I2C device not found"},
+    {0x0241, "I2C transaction aborted"},
+    {0x0242, "SO-DIMM parameter(s) incompatible using defaults"},
+    {0x0243, "SO-DIMM unsupported"},
+    {0x0248, "SPI transfer status error"},
+    {0x0249, "SPI transfer timeout error"},
+    {0x0250, "Invalid unit descriptor size in CreateUnit"},
+    {0x0251, "Unit descriptor size exceeds data buffer in CreateUnit"},
+    {0x0252, "Invalid value in CreateUnit descriptor"},
+    {0x0253, "Inadequate disk space to support descriptor in CreateUnit"},
+    {0x0254, "Unable to create data channel for this unit descriptor"},
+    {0x0255, "CreateUnit descriptor specifies a drive already in use"},
+    {0x0256, "Unable to write configuration to all disks during CreateUnit"},
+    {0x0257, "CreateUnit does not support this descriptor version"},
+    {0x0258, "Invalid subunit for RAID 0 or 5 in CreateUnit"},
+    {0x0259, "Too many descriptors in CreateUnit"},
+    {0x025A, "Invalid configuration specified in CreateUnit descriptor"},
+    {0x025B, "Invalid LBA offset specified in CreateUnit descriptor"},
+    {0x025C, "Invalid stripelet size specified in CreateUnit descriptor"},
+    {0x0260, "SMART attribute exceeded threshold"},
+    {0xFFFFFFFF, (char*) 0}
 };
 
 /* Control register bit definitions */
@@ -483,203 +482,201 @@ printk(KERN_WARNING "3w-9xxx: ERROR: (0x%02X:0x%04X): %s.\n",a,b,c); \
 
 /* Scatter Gather List Entry */
 typedef struct TAG_TW_SG_Entry {
-	dma_addr_t address;
-	u32 length;
+    dma_addr_t address;
+    u32 length;
 } TW_SG_Entry;
 
 /* Command Packet */
 typedef struct TW_Command {
-	unsigned char opcode__sgloffset;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char unit__hostid;
-	/* Second DWORD */
-	unsigned char status;
-	unsigned char flags;
-	union {
-		unsigned short block_count;
-		unsigned short parameter_count;
-	} byte6_offset;
-	union {
-		struct {
-			u32 lba;
-			TW_SG_Entry sgl[TW_ESCALADE_MAX_SGL_LENGTH];
-			dma_addr_t padding;
-		} io;
-		struct {
-			TW_SG_Entry sgl[TW_ESCALADE_MAX_SGL_LENGTH];
-			u32 padding;
-			dma_addr_t padding2;
-		} param;
-	} byte8_offset;
+    unsigned char opcode__sgloffset;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char unit__hostid;
+    /* Second DWORD */
+    unsigned char status;
+    unsigned char flags;
+    union {
+        unsigned short block_count;
+        unsigned short parameter_count;
+    } byte6_offset;
+    union {
+        struct {
+            u32 lba;
+            TW_SG_Entry sgl[TW_ESCALADE_MAX_SGL_LENGTH];
+            dma_addr_t padding;
+        } io;
+        struct {
+            TW_SG_Entry sgl[TW_ESCALADE_MAX_SGL_LENGTH];
+            u32 padding;
+            dma_addr_t padding2;
+        } param;
+    } byte8_offset;
 } TW_Command;
 
 /* Command Packet for 9000+ controllers */
 typedef struct TAG_TW_Command_Apache {
-	unsigned char opcode__reserved;
-	unsigned char unit;
-	unsigned short request_id__lunl;
-	unsigned char status;
-	unsigned char sgl_offset;
-	unsigned short sgl_entries__lunh;
-	unsigned char cdb[16];
-	TW_SG_Entry sg_list[TW_APACHE_MAX_SGL_LENGTH];
-	unsigned char padding[TW_PADDING_LENGTH];
+    unsigned char opcode__reserved;
+    unsigned char unit;
+    unsigned short request_id__lunl;
+    unsigned char status;
+    unsigned char sgl_offset;
+    unsigned short sgl_entries__lunh;
+    unsigned char cdb[16];
+    TW_SG_Entry sg_list[TW_APACHE_MAX_SGL_LENGTH];
+    unsigned char padding[TW_PADDING_LENGTH];
 } TW_Command_Apache;
 
 /* New command packet header */
 typedef struct TAG_TW_Command_Apache_Header {
-	unsigned char sense_data[TW_SENSE_DATA_LENGTH];
-	struct {
-		char reserved[4];
-		unsigned short error;
-		unsigned char padding;
-		unsigned char severity__reserved;
-	} status_block;
-	unsigned char err_specific_desc[98];
-	struct {
-		unsigned char size_header;
-		unsigned short reserved;
-		unsigned char size_sense;
-	} header_desc;
+    unsigned char sense_data[TW_SENSE_DATA_LENGTH];
+    struct {
+        char reserved[4];
+        unsigned short error;
+        unsigned char padding;
+        unsigned char severity__reserved;
+    } status_block;
+    unsigned char err_specific_desc[98];
+    struct {
+        unsigned char size_header;
+        unsigned short reserved;
+        unsigned char size_sense;
+    } header_desc;
 } TW_Command_Apache_Header;
 
 /* This struct is a union of the 2 command packets */
 typedef struct TAG_TW_Command_Full {
-	TW_Command_Apache_Header header;
-	union {
-		TW_Command oldcommand;
-		TW_Command_Apache newcommand;
-	} command;
+    TW_Command_Apache_Header header;
+    union {
+        TW_Command oldcommand;
+        TW_Command_Apache newcommand;
+    } command;
 } TW_Command_Full;
 
 /* Initconnection structure */
 typedef struct TAG_TW_Initconnect {
-	unsigned char opcode__reserved;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char res2;
-	unsigned char status;
-	unsigned char flags;
-	unsigned short message_credits;
-	u32 features;
-	unsigned short fw_srl;
-	unsigned short fw_arch_id;
-	unsigned short fw_branch;
-	unsigned short fw_build;
-	u32 result;
+    unsigned char opcode__reserved;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char res2;
+    unsigned char status;
+    unsigned char flags;
+    unsigned short message_credits;
+    u32 features;
+    unsigned short fw_srl;
+    unsigned short fw_arch_id;
+    unsigned short fw_branch;
+    unsigned short fw_build;
+    u32 result;
 } TW_Initconnect;
 
 /* Event info structure */
-typedef struct TAG_TW_Event
-{
-	unsigned int sequence_id;
-	unsigned int time_stamp_sec;
-	unsigned short aen_code;
-	unsigned char severity;
-	unsigned char retrieved;
-	unsigned char repeat_count;
-	unsigned char parameter_len;
-	unsigned char parameter_data[98];
+typedef struct TAG_TW_Event {
+    unsigned int sequence_id;
+    unsigned int time_stamp_sec;
+    unsigned short aen_code;
+    unsigned char severity;
+    unsigned char retrieved;
+    unsigned char repeat_count;
+    unsigned char parameter_len;
+    unsigned char parameter_data[98];
 } TW_Event;
 
 typedef struct TAG_TW_Ioctl_Driver_Command {
-	unsigned int control_code;
-	unsigned int status;
-	unsigned int unique_id;
-	unsigned int sequence_id;
-	unsigned int os_specific;
-	unsigned int buffer_length;
+    unsigned int control_code;
+    unsigned int status;
+    unsigned int unique_id;
+    unsigned int sequence_id;
+    unsigned int os_specific;
+    unsigned int buffer_length;
 } TW_Ioctl_Driver_Command;
 
 typedef struct TAG_TW_Ioctl_Apache {
-	TW_Ioctl_Driver_Command driver_command;
-        char padding[488];
-	TW_Command_Full firmware_command;
-	char data_buffer[1];
+    TW_Ioctl_Driver_Command driver_command;
+    char padding[488];
+    TW_Command_Full firmware_command;
+    char data_buffer[1];
 } TW_Ioctl_Buf_Apache;
 
 /* Lock structure for ioctl get/release lock */
 typedef struct TAG_TW_Lock {
-	unsigned long timeout_msec;
-	unsigned long time_remaining_msec;
-	unsigned long force_flag;
+    unsigned long timeout_msec;
+    unsigned long time_remaining_msec;
+    unsigned long force_flag;
 } TW_Lock;
 
 /* GetParam descriptor */
 typedef struct {
-	unsigned short	table_id;
-	unsigned short	parameter_id;
-	unsigned short	parameter_size_bytes;
-	unsigned short  actual_parameter_size_bytes;
-	unsigned char	data[1];
+    unsigned short	table_id;
+    unsigned short	parameter_id;
+    unsigned short	parameter_size_bytes;
+    unsigned short  actual_parameter_size_bytes;
+    unsigned char	data[1];
 } TW_Param_Apache, *PTW_Param_Apache;
 
 /* Response queue */
 typedef union TAG_TW_Response_Queue {
-	u32 response_id;
-	u32 value;
+    u32 response_id;
+    u32 value;
 } TW_Response_Queue;
 
 /* Compatibility information structure */
-typedef struct TAG_TW_Compatibility_Info
-{
-	char driver_version[32];
-	unsigned short working_srl;
-	unsigned short working_branch;
-	unsigned short working_build;
-	unsigned short driver_srl_high;
-	unsigned short driver_branch_high;
-	unsigned short driver_build_high;
-	unsigned short driver_srl_low;
-	unsigned short driver_branch_low;
-	unsigned short driver_build_low;
-	unsigned short fw_on_ctlr_srl;
-	unsigned short fw_on_ctlr_branch;
-	unsigned short fw_on_ctlr_build;
+typedef struct TAG_TW_Compatibility_Info {
+    char driver_version[32];
+    unsigned short working_srl;
+    unsigned short working_branch;
+    unsigned short working_build;
+    unsigned short driver_srl_high;
+    unsigned short driver_branch_high;
+    unsigned short driver_build_high;
+    unsigned short driver_srl_low;
+    unsigned short driver_branch_low;
+    unsigned short driver_build_low;
+    unsigned short fw_on_ctlr_srl;
+    unsigned short fw_on_ctlr_branch;
+    unsigned short fw_on_ctlr_build;
 } TW_Compatibility_Info;
 
 #pragma pack()
 
 typedef struct TAG_TW_Device_Extension {
-	u32                     __iomem *base_addr;
-	unsigned long	       	*generic_buffer_virt[TW_Q_LENGTH];
-	dma_addr_t	       	generic_buffer_phys[TW_Q_LENGTH];
-	TW_Command_Full	       	*command_packet_virt[TW_Q_LENGTH];
-	dma_addr_t		command_packet_phys[TW_Q_LENGTH];
-	struct pci_dev		*tw_pci_dev;
-	struct scsi_cmnd	*srb[TW_Q_LENGTH];
-	unsigned char		free_queue[TW_Q_LENGTH];
-	unsigned char		free_head;
-	unsigned char		free_tail;
-	unsigned char		pending_queue[TW_Q_LENGTH];
-	unsigned char		pending_head;
-	unsigned char		pending_tail;
-	int     		state[TW_Q_LENGTH];
-	unsigned int		posted_request_count;
-	unsigned int		max_posted_request_count;
-	unsigned int	        pending_request_count;
-	unsigned int		max_pending_request_count;
-	unsigned int		max_sgl_entries;
-	unsigned int		sgl_entries;
-	unsigned int		num_resets;
-	unsigned int		sector_count;
-	unsigned int		max_sector_count;
-	unsigned int		aen_count;
-	struct Scsi_Host	*host;
-	long			flags;
-	int			reset_print;
-	TW_Event                *event_queue[TW_Q_LENGTH];
-	unsigned char           error_index;
-	unsigned char		event_queue_wrapped;
-	unsigned int            error_sequence_id;
-	int                     ioctl_sem_lock;
-	u32                     ioctl_msec;
-	int			chrdev_request_id;
-	wait_queue_head_t	ioctl_wqueue;
-	struct mutex		ioctl_lock;
-	char			aen_clobber;
-	TW_Compatibility_Info	tw_compat_info;
+    u32                     __iomem *base_addr;
+    unsigned long	       	*generic_buffer_virt[TW_Q_LENGTH];
+    dma_addr_t	       	generic_buffer_phys[TW_Q_LENGTH];
+    TW_Command_Full	       	*command_packet_virt[TW_Q_LENGTH];
+    dma_addr_t		command_packet_phys[TW_Q_LENGTH];
+    struct pci_dev		*tw_pci_dev;
+    struct scsi_cmnd	*srb[TW_Q_LENGTH];
+    unsigned char		free_queue[TW_Q_LENGTH];
+    unsigned char		free_head;
+    unsigned char		free_tail;
+    unsigned char		pending_queue[TW_Q_LENGTH];
+    unsigned char		pending_head;
+    unsigned char		pending_tail;
+    int     		state[TW_Q_LENGTH];
+    unsigned int		posted_request_count;
+    unsigned int		max_posted_request_count;
+    unsigned int	        pending_request_count;
+    unsigned int		max_pending_request_count;
+    unsigned int		max_sgl_entries;
+    unsigned int		sgl_entries;
+    unsigned int		num_resets;
+    unsigned int		sector_count;
+    unsigned int		max_sector_count;
+    unsigned int		aen_count;
+    struct Scsi_Host	*host;
+    long			flags;
+    int			reset_print;
+    TW_Event                *event_queue[TW_Q_LENGTH];
+    unsigned char           error_index;
+    unsigned char		event_queue_wrapped;
+    unsigned int            error_sequence_id;
+    int                     ioctl_sem_lock;
+    u32                     ioctl_msec;
+    int			chrdev_request_id;
+    wait_queue_head_t	ioctl_wqueue;
+    struct mutex		ioctl_lock;
+    char			aen_clobber;
+    TW_Compatibility_Info	tw_compat_info;
 } TW_Device_Extension;
 
 #endif /* _3W_9XXX_H */

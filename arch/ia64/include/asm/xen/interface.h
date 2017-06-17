@@ -99,133 +99,133 @@ DEFINE_GUEST_HANDLE(xen_pfn_t);
 #define INVALID_MFN	(~0UL)
 
 union vac {
-	unsigned long value;
-	struct {
-		int a_int:1;
-		int a_from_int_cr:1;
-		int a_to_int_cr:1;
-		int a_from_psr:1;
-		int a_from_cpuid:1;
-		int a_cover:1;
-		int a_bsw:1;
-		long reserved:57;
-	};
+    unsigned long value;
+    struct {
+        int a_int:1;
+        int a_from_int_cr:1;
+        int a_to_int_cr:1;
+        int a_from_psr:1;
+        int a_from_cpuid:1;
+        int a_cover:1;
+        int a_bsw:1;
+        long reserved:57;
+    };
 };
 
 union vdc {
-	unsigned long value;
-	struct {
-		int d_vmsw:1;
-		int d_extint:1;
-		int d_ibr_dbr:1;
-		int d_pmc:1;
-		int d_to_pmd:1;
-		int d_itm:1;
-		long reserved:58;
-	};
+    unsigned long value;
+    struct {
+        int d_vmsw:1;
+        int d_extint:1;
+        int d_ibr_dbr:1;
+        int d_pmc:1;
+        int d_to_pmd:1;
+        int d_itm:1;
+        long reserved:58;
+    };
 };
 
 struct mapped_regs {
-	union vac vac;
-	union vdc vdc;
-	unsigned long virt_env_vaddr;
-	unsigned long reserved1[29];
-	unsigned long vhpi;
-	unsigned long reserved2[95];
-	union {
-		unsigned long vgr[16];
-		unsigned long bank1_regs[16];	/* bank1 regs (r16-r31)
+    union vac vac;
+    union vdc vdc;
+    unsigned long virt_env_vaddr;
+    unsigned long reserved1[29];
+    unsigned long vhpi;
+    unsigned long reserved2[95];
+    union {
+        unsigned long vgr[16];
+        unsigned long bank1_regs[16];	/* bank1 regs (r16-r31)
 						   when bank0 active */
-	};
-	union {
-		unsigned long vbgr[16];
-		unsigned long bank0_regs[16];	/* bank0 regs (r16-r31)
+    };
+    union {
+        unsigned long vbgr[16];
+        unsigned long bank0_regs[16];	/* bank0 regs (r16-r31)
 						   when bank1 active */
-	};
-	unsigned long vnat;
-	unsigned long vbnat;
-	unsigned long vcpuid[5];
-	unsigned long reserved3[11];
-	unsigned long vpsr;
-	unsigned long vpr;
-	unsigned long reserved4[76];
-	union {
-		unsigned long vcr[128];
-		struct {
-			unsigned long dcr;	/* CR0 */
-			unsigned long itm;
-			unsigned long iva;
-			unsigned long rsv1[5];
-			unsigned long pta;	/* CR8 */
-			unsigned long rsv2[7];
-			unsigned long ipsr;	/* CR16 */
-			unsigned long isr;
-			unsigned long rsv3;
-			unsigned long iip;
-			unsigned long ifa;
-			unsigned long itir;
-			unsigned long iipa;
-			unsigned long ifs;
-			unsigned long iim;	/* CR24 */
-			unsigned long iha;
-			unsigned long rsv4[38];
-			unsigned long lid;	/* CR64 */
-			unsigned long ivr;
-			unsigned long tpr;
-			unsigned long eoi;
-			unsigned long irr[4];
-			unsigned long itv;	/* CR72 */
-			unsigned long pmv;
-			unsigned long cmcv;
-			unsigned long rsv5[5];
-			unsigned long lrr0;	/* CR80 */
-			unsigned long lrr1;
-			unsigned long rsv6[46];
-		};
-	};
-	union {
-		unsigned long reserved5[128];
-		struct {
-			unsigned long precover_ifs;
-			unsigned long unat;	/* not sure if this is needed
+    };
+    unsigned long vnat;
+    unsigned long vbnat;
+    unsigned long vcpuid[5];
+    unsigned long reserved3[11];
+    unsigned long vpsr;
+    unsigned long vpr;
+    unsigned long reserved4[76];
+    union {
+        unsigned long vcr[128];
+        struct {
+            unsigned long dcr;	/* CR0 */
+            unsigned long itm;
+            unsigned long iva;
+            unsigned long rsv1[5];
+            unsigned long pta;	/* CR8 */
+            unsigned long rsv2[7];
+            unsigned long ipsr;	/* CR16 */
+            unsigned long isr;
+            unsigned long rsv3;
+            unsigned long iip;
+            unsigned long ifa;
+            unsigned long itir;
+            unsigned long iipa;
+            unsigned long ifs;
+            unsigned long iim;	/* CR24 */
+            unsigned long iha;
+            unsigned long rsv4[38];
+            unsigned long lid;	/* CR64 */
+            unsigned long ivr;
+            unsigned long tpr;
+            unsigned long eoi;
+            unsigned long irr[4];
+            unsigned long itv;	/* CR72 */
+            unsigned long pmv;
+            unsigned long cmcv;
+            unsigned long rsv5[5];
+            unsigned long lrr0;	/* CR80 */
+            unsigned long lrr1;
+            unsigned long rsv6[46];
+        };
+    };
+    union {
+        unsigned long reserved5[128];
+        struct {
+            unsigned long precover_ifs;
+            unsigned long unat;	/* not sure if this is needed
 						   until NaT arch is done */
-			int interrupt_collection_enabled; /* virtual psr.ic */
+            int interrupt_collection_enabled; /* virtual psr.ic */
 
-			/* virtual interrupt deliverable flag is
-			 * evtchn_upcall_mask in shared info area now.
-			 * interrupt_mask_addr is the address
-			 * of evtchn_upcall_mask for current vcpu
-			 */
-			unsigned char *interrupt_mask_addr;
-			int pending_interruption;
-			unsigned char vpsr_pp;
-			unsigned char vpsr_dfh;
-			unsigned char hpsr_dfh;
-			unsigned char hpsr_mfh;
-			unsigned long reserved5_1[4];
-			int metaphysical_mode;	/* 1 = use metaphys mapping
+            /* virtual interrupt deliverable flag is
+             * evtchn_upcall_mask in shared info area now.
+             * interrupt_mask_addr is the address
+             * of evtchn_upcall_mask for current vcpu
+             */
+            unsigned char *interrupt_mask_addr;
+            int pending_interruption;
+            unsigned char vpsr_pp;
+            unsigned char vpsr_dfh;
+            unsigned char hpsr_dfh;
+            unsigned char hpsr_mfh;
+            unsigned long reserved5_1[4];
+            int metaphysical_mode;	/* 1 = use metaphys mapping
 						   0 = use virtual */
-			int banknum;		/* 0 or 1, which virtual
+            int banknum;		/* 0 or 1, which virtual
 						   register bank is active */
-			unsigned long rrs[8];	/* region registers */
-			unsigned long krs[8];	/* kernel registers */
-			unsigned long tmp[16];	/* temp registers
+            unsigned long rrs[8];	/* region registers */
+            unsigned long krs[8];	/* kernel registers */
+            unsigned long tmp[16];	/* temp registers
 						   (e.g. for hyperprivops) */
 
-			/* itc paravirtualization
-			 * vAR.ITC = mAR.ITC + itc_offset
-			 * itc_last is one which was lastly passed to
-			 * the guest OS in order to prevent it from
-			 * going backwords.
-			 */
-			unsigned long itc_offset;
-			unsigned long itc_last;
-		};
-	};
+            /* itc paravirtualization
+             * vAR.ITC = mAR.ITC + itc_offset
+             * itc_last is one which was lastly passed to
+             * the guest OS in order to prevent it from
+             * going backwords.
+             */
+            unsigned long itc_offset;
+            unsigned long itc_last;
+        };
+    };
 };
 
 struct arch_vcpu_info {
-	/* nothing */
+    /* nothing */
 };
 
 /*
@@ -236,30 +236,30 @@ struct arch_vcpu_info {
  * including struct xen_ia64_memmap_info. Not the number of entries.
  */
 struct xen_ia64_memmap_info {
-	uint64_t efi_memmap_size;	/* size of EFI memory map */
-	uint64_t efi_memdesc_size;	/* size of an EFI memory map
+    uint64_t efi_memmap_size;	/* size of EFI memory map */
+    uint64_t efi_memdesc_size;	/* size of an EFI memory map
 					 * descriptor */
-	uint32_t efi_memdesc_version;	/* memory descriptor version */
-	void *memdesc[0];		/* array of efi_memory_desc_t */
+    uint32_t efi_memdesc_version;	/* memory descriptor version */
+    void *memdesc[0];		/* array of efi_memory_desc_t */
 };
 
 struct arch_shared_info {
-	/* PFN of the start_info page.	*/
-	unsigned long start_info_pfn;
+    /* PFN of the start_info page.	*/
+    unsigned long start_info_pfn;
 
-	/* Interrupt vector for event channel.	*/
-	int evtchn_vector;
+    /* Interrupt vector for event channel.	*/
+    int evtchn_vector;
 
-	/* PFN of memmap_info page */
-	unsigned int memmap_info_num_pages;	/* currently only = 1 case is
+    /* PFN of memmap_info page */
+    unsigned int memmap_info_num_pages;	/* currently only = 1 case is
 						   supported. */
-	unsigned long memmap_info_pfn;
+    unsigned long memmap_info_pfn;
 
-	uint64_t pad[31];
+    uint64_t pad[31];
 };
 
 struct xen_callback {
-	unsigned long ip;
+    unsigned long ip;
 };
 typedef struct xen_callback xen_callback_t;
 
@@ -340,16 +340,16 @@ typedef struct xen_callback xen_callback_t;
 #define XEN_IA64_OPTF_IDENT_MAP_NOT_SET	 (0)
 
 struct xen_ia64_opt_feature {
-	unsigned long cmd;	/* Which feature */
-	unsigned char on;	/* Switch feature on/off */
-	union {
-		struct {
-			/* The page protection bit mask of the pte.
-			 * This will be or'ed with the pte. */
-			unsigned long pgprot;
-			unsigned long key;	/* A protection key for itir.*/
-		};
-	};
+    unsigned long cmd;	/* Which feature */
+    unsigned char on;	/* Switch feature on/off */
+    union {
+        struct {
+            /* The page protection bit mask of the pte.
+             * This will be or'ed with the pte. */
+            unsigned long pgprot;
+            unsigned long key;	/* A protection key for itir.*/
+        };
+    };
 };
 
 #endif /* __ASSEMBLY__ */

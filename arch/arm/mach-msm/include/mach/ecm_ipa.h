@@ -21,8 +21,8 @@
  * @data: for tx path the data field is the sent socket buffer.
  */
 typedef void (*ecm_ipa_callback)(void *priv,
-		enum ipa_dp_evt_type evt,
-		unsigned long data);
+                                 enum ipa_dp_evt_type evt,
+                                 unsigned long data);
 
 /*
  * struct ecm_ipa_params - parameters for ecm_ipa initialization API
@@ -44,12 +44,12 @@ typedef void (*ecm_ipa_callback)(void *priv,
  *  should or should not configure this end-point.
  */
 struct ecm_ipa_params {
-	ecm_ipa_callback ecm_ipa_rx_dp_notify;
-	ecm_ipa_callback ecm_ipa_tx_dp_notify;
-	u8 host_ethaddr[ETH_ALEN];
-	u8 device_ethaddr[ETH_ALEN];
-	void *private;
-	bool skip_ep_cfg;
+    ecm_ipa_callback ecm_ipa_rx_dp_notify;
+    ecm_ipa_callback ecm_ipa_tx_dp_notify;
+    u8 host_ethaddr[ETH_ALEN];
+    u8 device_ethaddr[ETH_ALEN];
+    void *private;
+    bool skip_ep_cfg;
 };
 
 
@@ -58,7 +58,7 @@ struct ecm_ipa_params {
 int ecm_ipa_init(struct ecm_ipa_params *params);
 
 int ecm_ipa_connect(u32 usb_to_ipa_hdl, u32 ipa_to_usb_hdl,
-		void *priv);
+                    void *priv);
 
 int ecm_ipa_disconnect(void *priv);
 
@@ -66,24 +66,20 @@ void ecm_ipa_cleanup(void *priv);
 
 #else /* CONFIG_ECM_IPA*/
 
-int ecm_ipa_init(struct ecm_ipa_params *params)
-{
-	return 0;
+int ecm_ipa_init(struct ecm_ipa_params *params) {
+    return 0;
 }
 
 static inline int ecm_ipa_connect(u32 usb_to_ipa_hdl, u32 ipa_to_usb_hdl,
-		void *priv)
-{
-	return 0;
+                                  void *priv) {
+    return 0;
 }
 
-static inline int ecm_ipa_disconnect(void *priv)
-{
-	return 0;
+static inline int ecm_ipa_disconnect(void *priv) {
+    return 0;
 }
 
-static inline void ecm_ipa_cleanup(void *priv)
-{
+static inline void ecm_ipa_cleanup(void *priv) {
 
 }
 #endif /* CONFIG_ECM_IPA*/

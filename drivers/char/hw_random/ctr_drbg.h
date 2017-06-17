@@ -35,80 +35,80 @@
 #define MSM_NONCE_BUFFER_SIZE   (8)
 
 enum ctr_drbg_status_t {
-	CTR_DRBG_SUCCESS = 0,
-	CTR_DRBG_NEEDS_RESEED,
-	CTR_DRBG_INVALID_ARG,
-	CTR_DRBG_GENERAL_ERROR = 0xFF,
+    CTR_DRBG_SUCCESS = 0,
+    CTR_DRBG_NEEDS_RESEED,
+    CTR_DRBG_INVALID_ARG,
+    CTR_DRBG_GENERAL_ERROR = 0xFF,
 };
 
 union ctr_drbg_seed_t {
-	uint8_t as_bytes[32];
-	uint32_t as_words[8];
-	uint64_t as_64[4];
-	struct {
-		uint8_t key[16];
-		uint8_t V[16];
-	} key_V;
+    uint8_t as_bytes[32];
+    uint32_t as_words[8];
+    uint64_t as_64[4];
+    struct {
+        uint8_t key[16];
+        uint8_t V[16];
+    } key_V;
 };
 
 struct msm_ctr_tcrypt_result_s {
-	struct completion completion;
-	int err;
+    struct completion completion;
+    int err;
 };
 
 struct msm_ctr_buffer_s {
-	unsigned char *virt_addr;
+    unsigned char *virt_addr;
 };
 
 struct aes_struct_s {
-	struct crypto_ablkcipher	*tfm;
-	struct ablkcipher_request	*req;
-	struct msm_ctr_buffer_s		input;
-	struct msm_ctr_buffer_s		output;
-	struct msm_ctr_tcrypt_result_s	result;
+    struct crypto_ablkcipher	*tfm;
+    struct ablkcipher_request	*req;
+    struct msm_ctr_buffer_s		input;
+    struct msm_ctr_buffer_s		output;
+    struct msm_ctr_tcrypt_result_s	result;
 };
 
 struct ctr_drbg_ctx_s {
-	unsigned long long reseed_counter;  /* starts at 1 as per SP
+    unsigned long long reseed_counter;  /* starts at 1 as per SP
 					     * 800-90
 					     */
-	unsigned long long	reseed_interval;
-	union ctr_drbg_seed_t	seed;
-	struct aes_struct_s	aes_ctx;
-	struct aes_struct_s	df_aes_ctx;
-	uint8_t			prev_drn[MSM_AES128_BLOCK_SIZE];
-	uint8_t			continuous_test_started;
+    unsigned long long	reseed_interval;
+    union ctr_drbg_seed_t	seed;
+    struct aes_struct_s	aes_ctx;
+    struct aes_struct_s	df_aes_ctx;
+    uint8_t			prev_drn[MSM_AES128_BLOCK_SIZE];
+    uint8_t			continuous_test_started;
 };
 
 enum ctr_drbg_status_t ctr_drbg_instantiate(struct ctr_drbg_ctx_s *ctx,
-					const uint8_t *entropy,
-					size_t entropy_len_bits,
-					const uint8_t *nonce,
-					size_t nonce_len_bits,
-					unsigned long long reseed_interval);
+        const uint8_t *entropy,
+        size_t entropy_len_bits,
+        const uint8_t *nonce,
+        size_t nonce_len_bits,
+        unsigned long long reseed_interval);
 
 enum ctr_drbg_status_t ctr_drbg_reseed(struct ctr_drbg_ctx_s *ctx,
-				const void *entropy,
-				size_t entropy_len);
+                                       const void *entropy,
+                                       size_t entropy_len);
 
 enum ctr_drbg_status_t ctr_drbg_generate_w_data(struct ctr_drbg_ctx_s *ctx,
-			void *additional_input,
-			size_t additional_input_len_bits,
-			void *buffer,
-			size_t len_bits);
+        void *additional_input,
+        size_t additional_input_len_bits,
+        void *buffer,
+        size_t len_bits);
 
 enum ctr_drbg_status_t ctr_drbg_generate(struct ctr_drbg_ctx_s *ctx,
-				void *buffer,
-				size_t len);
+        void *buffer,
+        size_t len);
 
 void ctr_drbg_uninstantiate(struct ctr_drbg_ctx_s *ctx);
 
 enum ctr_drbg_status_t block_cipher_df(struct ctr_drbg_ctx_s *ctx,
-				const uint8_t *input,
-				uint32_t input_size,
-				uint8_t *output,
-				uint32_t output_size
-				);
+                                       const uint8_t *input,
+                                       uint32_t input_size,
+                                       uint8_t *output,
+                                       uint32_t output_size
+                                      );
 void ctr_aes_deinit(struct ctr_drbg_ctx_s *ctx);
 
 #endif /* __MSM_CTR_DRBG_H__ */

@@ -3,10 +3,12 @@
 
 #ifdef CONFIG_CPU_IDLE
 extern int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
-		struct cpuidle_driver *drv, int index);
+                                    struct cpuidle_driver *drv, int index);
 #else
 static inline int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
-		struct cpuidle_driver *drv, int index) { return -ENODEV; }
+        struct cpuidle_driver *drv, int index) {
+    return -ENODEV;
+}
 #endif
 
 /* Common ARM WFI state */

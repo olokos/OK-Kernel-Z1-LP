@@ -19,28 +19,28 @@
  * This is our internal structure for each serial port's state.
  */
 struct zs_port {
-	struct zs_scc	*scc;			/* Containing SCC.  */
-	struct uart_port port;			/* Underlying UART.  */
+    struct zs_scc	*scc;			/* Containing SCC.  */
+    struct uart_port port;			/* Underlying UART.  */
 
-	int		clk_mode;		/* May be 1, 16, 32, or 64.  */
+    int		clk_mode;		/* May be 1, 16, 32, or 64.  */
 
-	unsigned int	tty_break;		/* Set on BREAK condition.  */
-	int		tx_stopped;		/* Output is suspended.  */
+    unsigned int	tty_break;		/* Set on BREAK condition.  */
+    int		tx_stopped;		/* Output is suspended.  */
 
-	unsigned int	mctrl;			/* State of modem lines.  */
-	u8		brk;			/* BREAK state from RR0.  */
+    unsigned int	mctrl;			/* State of modem lines.  */
+    u8		brk;			/* BREAK state from RR0.  */
 
-	u8		regs[ZS_NUM_REGS];	/* Channel write registers.  */
+    u8		regs[ZS_NUM_REGS];	/* Channel write registers.  */
 };
 
 /*
  * Per-SCC state for locking and the interrupt handler.
  */
 struct zs_scc {
-	struct zs_port	zport[2];
-	spinlock_t	zlock;
-	atomic_t	irq_guard;
-	int		initialised;
+    struct zs_port	zport[2];
+    spinlock_t	zlock;
+    atomic_t	irq_guard;
+    int		initialised;
 };
 
 #endif /* __KERNEL__ */

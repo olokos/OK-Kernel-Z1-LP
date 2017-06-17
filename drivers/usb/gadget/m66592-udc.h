@@ -431,71 +431,71 @@
 #define M66592_MAX_BUFNUM	0x4F
 
 struct m66592_pipe_info {
-	u16	pipe;
-	u16	epnum;
-	u16	maxpacket;
-	u16	type;
-	u16	interval;
-	u16	dir_in;
+    u16	pipe;
+    u16	epnum;
+    u16	maxpacket;
+    u16	type;
+    u16	interval;
+    u16	dir_in;
 };
 
 struct m66592_request {
-	struct usb_request	req;
-	struct list_head	queue;
+    struct usb_request	req;
+    struct list_head	queue;
 };
 
 struct m66592_ep {
-	struct usb_ep		ep;
-	struct m66592		*m66592;
+    struct usb_ep		ep;
+    struct m66592		*m66592;
 
-	struct list_head	queue;
-	unsigned		busy:1;
-	unsigned		internal_ccpl:1;	/* use only control */
+    struct list_head	queue;
+    unsigned		busy:1;
+    unsigned		internal_ccpl:1;	/* use only control */
 
-	/* this member can able to after m66592_enable */
-	unsigned		use_dma:1;
-	u16			pipenum;
-	u16			type;
-	const struct usb_endpoint_descriptor	*desc;
-	/* register address */
-	unsigned long		fifoaddr;
-	unsigned long		fifosel;
-	unsigned long		fifoctr;
-	unsigned long		fifotrn;
-	unsigned long		pipectr;
+    /* this member can able to after m66592_enable */
+    unsigned		use_dma:1;
+    u16			pipenum;
+    u16			type;
+    const struct usb_endpoint_descriptor	*desc;
+    /* register address */
+    unsigned long		fifoaddr;
+    unsigned long		fifosel;
+    unsigned long		fifoctr;
+    unsigned long		fifotrn;
+    unsigned long		pipectr;
 };
 
 struct m66592 {
-	spinlock_t		lock;
-	void __iomem		*reg;
+    spinlock_t		lock;
+    void __iomem		*reg;
 #ifdef CONFIG_HAVE_CLK
-	struct clk *clk;
+    struct clk *clk;
 #endif
-	struct m66592_platdata	*pdata;
-	unsigned long		irq_trigger;
+    struct m66592_platdata	*pdata;
+    unsigned long		irq_trigger;
 
-	struct usb_gadget		gadget;
-	struct usb_gadget_driver	*driver;
+    struct usb_gadget		gadget;
+    struct usb_gadget_driver	*driver;
 
-	struct m66592_ep	ep[M66592_MAX_NUM_PIPE];
-	struct m66592_ep	*pipenum2ep[M66592_MAX_NUM_PIPE];
-	struct m66592_ep	*epaddr2ep[16];
+    struct m66592_ep	ep[M66592_MAX_NUM_PIPE];
+    struct m66592_ep	*pipenum2ep[M66592_MAX_NUM_PIPE];
+    struct m66592_ep	*epaddr2ep[16];
 
-	struct usb_request	*ep0_req;	/* for internal request */
-	__le16			ep0_data;	/* for internal request */
-	u16			old_vbus;
+    struct usb_request	*ep0_req;	/* for internal request */
+    __le16			ep0_data;	/* for internal request */
+    u16			old_vbus;
 
-	struct timer_list	timer;
+    struct timer_list	timer;
 
-	int			scount;
+    int			scount;
 
-	int			old_dvsq;
+    int			old_dvsq;
 
-	/* pipe config */
-	int bulk;
-	int interrupt;
-	int isochronous;
-	int num_dma;
+    /* pipe config */
+    int bulk;
+    int interrupt;
+    int isochronous;
+    int num_dma;
 };
 
 #define gadget_to_m66592(_gadget) container_of(_gadget, struct m66592, gadget)
@@ -525,40 +525,36 @@ struct m66592 {
 	disable_pipe_irq(m66592, pipenum, M66592_NRDYENB)
 
 /*-------------------------------------------------------------------------*/
-static inline u16 m66592_read(struct m66592 *m66592, unsigned long offset)
-{
-	return ioread16(m66592->reg + offset);
+static inline u16 m66592_read(struct m66592 *m66592, unsigned long offset) {
+    return ioread16(m66592->reg + offset);
 }
 
 static inline void m66592_read_fifo(struct m66592 *m66592,
-		unsigned long offset,
-		void *buf, unsigned long len)
-{
-	void __iomem *fifoaddr = m66592->reg + offset;
+                                    unsigned long offset,
+                                    void *buf, unsigned long len) {
+    void __iomem *fifoaddr = m66592->reg + offset;
 
-	if (m66592->pdata->on_chip) {
-		len = (len + 3) / 4;
-		ioread32_rep(fifoaddr, buf, len);
-	} else {
-		len = (len + 1) / 2;
-		ioread16_rep(fifoaddr, buf, len);
-	}
+    if (m66592->pdata->on_chip) {
+        len = (len + 3) / 4;
+        ioread32_rep(fifoaddr, buf, len);
+    } else {
+        len = (len + 1) / 2;
+        ioread16_rep(fifoaddr, buf, len);
+    }
 }
 
 static inline void m66592_write(struct m66592 *m66592, u16 val,
-				unsigned long offset)
-{
-	iowrite16(val, m66592->reg + offset);
+                                unsigned long offset) {
+    iowrite16(val, m66592->reg + offset);
 }
 
 static inline void m66592_mdfy(struct m66592 *m66592, u16 val, u16 pat,
-		unsigned long offset)
-{
-	u16 tmp;
-	tmp = m66592_read(m66592, offset);
-	tmp = tmp & (~pat);
-	tmp = tmp | val;
-	m66592_write(m66592, tmp, offset);
+                               unsigned long offset) {
+    u16 tmp;
+    tmp = m66592_read(m66592, offset);
+    tmp = tmp & (~pat);
+    tmp = tmp | val;
+    m66592_write(m66592, tmp, offset);
 }
 
 #define m66592_bclr(m66592, val, offset)	\
@@ -567,42 +563,41 @@ static inline void m66592_mdfy(struct m66592 *m66592, u16 val, u16 pat,
 			m66592_mdfy(m66592, val, 0, offset)
 
 static inline void m66592_write_fifo(struct m66592 *m66592,
-		struct m66592_ep *ep,
-		void *buf, unsigned long len)
-{
-	void __iomem *fifoaddr = m66592->reg + ep->fifoaddr;
+                                     struct m66592_ep *ep,
+                                     void *buf, unsigned long len) {
+    void __iomem *fifoaddr = m66592->reg + ep->fifoaddr;
 
-	if (m66592->pdata->on_chip) {
-		unsigned long count;
-		unsigned char *pb;
-		int i;
+    if (m66592->pdata->on_chip) {
+        unsigned long count;
+        unsigned char *pb;
+        int i;
 
-		count = len / 4;
-		iowrite32_rep(fifoaddr, buf, count);
+        count = len / 4;
+        iowrite32_rep(fifoaddr, buf, count);
 
-		if (len & 0x00000003) {
-			pb = buf + count * 4;
-			for (i = 0; i < (len & 0x00000003); i++) {
-				if (m66592_read(m66592, M66592_CFBCFG))	/* le */
-					iowrite8(pb[i], fifoaddr + (3 - i));
-				else
-					iowrite8(pb[i], fifoaddr + i);
-			}
-		}
-	} else {
-		unsigned long odd = len & 0x0001;
+        if (len & 0x00000003) {
+            pb = buf + count * 4;
+            for (i = 0; i < (len & 0x00000003); i++) {
+                if (m66592_read(m66592, M66592_CFBCFG))	/* le */
+                    iowrite8(pb[i], fifoaddr + (3 - i));
+                else
+                    iowrite8(pb[i], fifoaddr + i);
+            }
+        }
+    } else {
+        unsigned long odd = len & 0x0001;
 
-		len = len / 2;
-		iowrite16_rep(fifoaddr, buf, len);
-		if (odd) {
-			unsigned char *p = buf + len*2;
-			if (m66592->pdata->wr0_shorted_to_wr1)
-				m66592_bclr(m66592, M66592_MBW_16, ep->fifosel);
-			iowrite8(*p, fifoaddr);
-			if (m66592->pdata->wr0_shorted_to_wr1)
-				m66592_bset(m66592, M66592_MBW_16, ep->fifosel);
-		}
-	}
+        len = len / 2;
+        iowrite16_rep(fifoaddr, buf, len);
+        if (odd) {
+            unsigned char *p = buf + len*2;
+            if (m66592->pdata->wr0_shorted_to_wr1)
+                m66592_bclr(m66592, M66592_MBW_16, ep->fifosel);
+            iowrite8(*p, fifoaddr);
+            if (m66592->pdata->wr0_shorted_to_wr1)
+                m66592_bset(m66592, M66592_MBW_16, ep->fifosel);
+        }
+    }
 }
 
 #endif	/* ifndef __M66592_UDC_H__ */

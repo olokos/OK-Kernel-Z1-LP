@@ -41,21 +41,21 @@
 #endif
 
 enum {
-	usbip_debug_xmit	= (1 << 0),
-	usbip_debug_sysfs	= (1 << 1),
-	usbip_debug_urb		= (1 << 2),
-	usbip_debug_eh		= (1 << 3),
+    usbip_debug_xmit	= (1 << 0),
+    usbip_debug_sysfs	= (1 << 1),
+    usbip_debug_urb		= (1 << 2),
+    usbip_debug_eh		= (1 << 3),
 
-	usbip_debug_stub_cmp	= (1 << 8),
-	usbip_debug_stub_dev	= (1 << 9),
-	usbip_debug_stub_rx	= (1 << 10),
-	usbip_debug_stub_tx	= (1 << 11),
+    usbip_debug_stub_cmp	= (1 << 8),
+    usbip_debug_stub_dev	= (1 << 9),
+    usbip_debug_stub_rx	= (1 << 10),
+    usbip_debug_stub_tx	= (1 << 11),
 
-	usbip_debug_vhci_rh	= (1 << 8),
-	usbip_debug_vhci_hc	= (1 << 9),
-	usbip_debug_vhci_rx	= (1 << 10),
-	usbip_debug_vhci_tx	= (1 << 11),
-	usbip_debug_vhci_sysfs  = (1 << 12)
+    usbip_debug_vhci_rh	= (1 << 8),
+    usbip_debug_vhci_hc	= (1 << 9),
+    usbip_debug_vhci_rx	= (1 << 10),
+    usbip_debug_vhci_tx	= (1 << 11),
+    usbip_debug_vhci_sysfs  = (1 << 12)
 };
 
 #define usbip_dbg_flag_xmit	(usbip_debug_flag & usbip_debug_xmit)
@@ -144,11 +144,11 @@ extern struct device_attribute dev_attr_usbip_debug;
  * @ep: endpoint number
  */
 struct usbip_header_basic {
-	__u32 command;
-	__u32 seqnum;
-	__u32 devid;
-	__u32 direction;
-	__u32 ep;
+    __u32 command;
+    __u32 seqnum;
+    __u32 devid;
+    __u32 direction;
+    __u32 ep;
 } __packed;
 
 /**
@@ -161,15 +161,15 @@ struct usbip_header_basic {
  * @setup: setup data for a control request
  */
 struct usbip_header_cmd_submit {
-	__u32 transfer_flags;
-	__s32 transfer_buffer_length;
+    __u32 transfer_flags;
+    __s32 transfer_buffer_length;
 
-	/* it is difficult for usbip to sync frames (reserved only?) */
-	__s32 start_frame;
-	__s32 number_of_packets;
-	__s32 interval;
+    /* it is difficult for usbip to sync frames (reserved only?) */
+    __s32 start_frame;
+    __s32 number_of_packets;
+    __s32 interval;
 
-	unsigned char setup[8];
+    unsigned char setup[8];
 } __packed;
 
 /**
@@ -181,11 +181,11 @@ struct usbip_header_cmd_submit {
  * @error_count: number of errors for isochronous transfers
  */
 struct usbip_header_ret_submit {
-	__s32 status;
-	__s32 actual_length;
-	__s32 start_frame;
-	__s32 number_of_packets;
-	__s32 error_count;
+    __s32 status;
+    __s32 actual_length;
+    __s32 start_frame;
+    __s32 number_of_packets;
+    __s32 error_count;
 } __packed;
 
 /**
@@ -193,7 +193,7 @@ struct usbip_header_ret_submit {
  * @seqnum: the URB seqnum to unlink
  */
 struct usbip_header_cmd_unlink {
-	__u32 seqnum;
+    __u32 seqnum;
 } __packed;
 
 /**
@@ -201,7 +201,7 @@ struct usbip_header_cmd_unlink {
  * @status: return status of the request
  */
 struct usbip_header_ret_unlink {
-	__s32 status;
+    __s32 status;
 } __packed;
 
 /**
@@ -210,45 +210,45 @@ struct usbip_header_ret_unlink {
  * @u: packet type dependent header
  */
 struct usbip_header {
-	struct usbip_header_basic base;
+    struct usbip_header_basic base;
 
-	union {
-		struct usbip_header_cmd_submit	cmd_submit;
-		struct usbip_header_ret_submit	ret_submit;
-		struct usbip_header_cmd_unlink	cmd_unlink;
-		struct usbip_header_ret_unlink	ret_unlink;
-	} u;
+    union {
+        struct usbip_header_cmd_submit	cmd_submit;
+        struct usbip_header_ret_submit	ret_submit;
+        struct usbip_header_cmd_unlink	cmd_unlink;
+        struct usbip_header_ret_unlink	ret_unlink;
+    } u;
 } __packed;
 
 /*
  * This is the same as usb_iso_packet_descriptor but packed for pdu.
  */
 struct usbip_iso_packet_descriptor {
-	__u32 offset;
-	__u32 length;			/* expected length */
-	__u32 actual_length;
-	__u32 status;
+    __u32 offset;
+    __u32 length;			/* expected length */
+    __u32 actual_length;
+    __u32 status;
 } __packed;
 
 enum usbip_side {
-	USBIP_VHCI,
-	USBIP_STUB,
+    USBIP_VHCI,
+    USBIP_STUB,
 };
 
 enum usbip_status {
-	/* sdev is available. */
-	SDEV_ST_AVAILABLE = 0x01,
-	/* sdev is now used. */
-	SDEV_ST_USED,
-	/* sdev is unusable because of a fatal error. */
-	SDEV_ST_ERROR,
+    /* sdev is available. */
+    SDEV_ST_AVAILABLE = 0x01,
+    /* sdev is now used. */
+    SDEV_ST_USED,
+    /* sdev is unusable because of a fatal error. */
+    SDEV_ST_ERROR,
 
-	/* vdev does not connect a remote device. */
-	VDEV_ST_NULL,
-	/* vdev is used, but the USB address is not assigned yet */
-	VDEV_ST_NOTASSIGNED,
-	VDEV_ST_USED,
-	VDEV_ST_ERROR
+    /* vdev does not connect a remote device. */
+    VDEV_ST_NULL,
+    /* vdev is used, but the USB address is not assigned yet */
+    VDEV_ST_NOTASSIGNED,
+    VDEV_ST_USED,
+    VDEV_ST_ERROR
 };
 
 /* event handler */
@@ -270,26 +270,26 @@ enum usbip_status {
 
 /* a common structure for stub_device and vhci_device */
 struct usbip_device {
-	enum usbip_side side;
-	enum usbip_status status;
+    enum usbip_side side;
+    enum usbip_status status;
 
-	/* lock for status */
-	spinlock_t lock;
+    /* lock for status */
+    spinlock_t lock;
 
-	struct socket *tcp_socket;
+    struct socket *tcp_socket;
 
-	struct task_struct *tcp_rx;
-	struct task_struct *tcp_tx;
+    struct task_struct *tcp_rx;
+    struct task_struct *tcp_tx;
 
-	unsigned long event;
-	struct task_struct *eh;
-	wait_queue_head_t eh_waitq;
+    unsigned long event;
+    struct task_struct *eh;
+    wait_queue_head_t eh_waitq;
 
-	struct eh_ops {
-		void (*shutdown)(struct usbip_device *);
-		void (*reset)(struct usbip_device *);
-		void (*unusable)(struct usbip_device *);
-	} eh_ops;
+    struct eh_ops {
+        void (*shutdown)(struct usbip_device *);
+        void (*reset)(struct usbip_device *);
+        void (*unusable)(struct usbip_device *);
+    } eh_ops;
 };
 
 /* usbip_common.c */
@@ -300,7 +300,7 @@ int usbip_recv(struct socket *sock, void *buf, int size);
 struct socket *sockfd_to_socket(unsigned int sockfd);
 
 void usbip_pack_pdu(struct usbip_header *pdu, struct urb *urb, int cmd,
-		    int pack);
+                    int pack);
 void usbip_header_correct_endian(struct usbip_header *pdu, int send);
 
 void *usbip_alloc_iso_desc_pdu(struct urb *urb, ssize_t *bufflen);
@@ -315,16 +315,14 @@ void usbip_stop_eh(struct usbip_device *ud);
 void usbip_event_add(struct usbip_device *ud, unsigned long event);
 int usbip_event_happened(struct usbip_device *ud);
 
-static inline int interface_to_busnum(struct usb_interface *interface)
-{
-	struct usb_device *udev = interface_to_usbdev(interface);
-	return udev->bus->busnum;
+static inline int interface_to_busnum(struct usb_interface *interface) {
+    struct usb_device *udev = interface_to_usbdev(interface);
+    return udev->bus->busnum;
 }
 
-static inline int interface_to_devnum(struct usb_interface *interface)
-{
-	struct usb_device *udev = interface_to_usbdev(interface);
-	return udev->devnum;
+static inline int interface_to_devnum(struct usb_interface *interface) {
+    struct usb_device *udev = interface_to_usbdev(interface);
+    return udev->devnum;
 }
 
 #endif /* __USBIP_COMMON_H */

@@ -25,62 +25,62 @@
 #include "iohelper.h"
 
 struct isac_hw {
-	struct dchannel		dch;
-	u32			type;
-	u32			off;		/* offset to isac regs */
-	char			*name;
-	spinlock_t		*hwlock;	/* lock HW access */
-	read_reg_func		*read_reg;
-	write_reg_func		*write_reg;
-	fifo_func		*read_fifo;
-	fifo_func		*write_fifo;
-	int			(*monitor)(void *, u32, u8 *, int);
-	void			(*release)(struct isac_hw *);
-	int			(*init)(struct isac_hw *);
-	int			(*ctrl)(struct isac_hw *, u32, u_long);
-	int			(*open)(struct isac_hw *, struct channel_req *);
-	u8			*mon_tx;
-	u8			*mon_rx;
-	int			mon_txp;
-	int			mon_txc;
-	int			mon_rxp;
-	struct arcofi_msg	*arcofi_list;
-	struct timer_list	arcofitimer;
-	wait_queue_head_t	arcofi_wait;
-	u8			arcofi_bc;
-	u8			arcofi_state;
-	u8			mocr;
-	u8			adf2;
-	u8			state;
+    struct dchannel		dch;
+    u32			type;
+    u32			off;		/* offset to isac regs */
+    char			*name;
+    spinlock_t		*hwlock;	/* lock HW access */
+    read_reg_func		*read_reg;
+    write_reg_func		*write_reg;
+    fifo_func		*read_fifo;
+    fifo_func		*write_fifo;
+    int			(*monitor)(void *, u32, u8 *, int);
+    void			(*release)(struct isac_hw *);
+    int			(*init)(struct isac_hw *);
+    int			(*ctrl)(struct isac_hw *, u32, u_long);
+    int			(*open)(struct isac_hw *, struct channel_req *);
+    u8			*mon_tx;
+    u8			*mon_rx;
+    int			mon_txp;
+    int			mon_txc;
+    int			mon_rxp;
+    struct arcofi_msg	*arcofi_list;
+    struct timer_list	arcofitimer;
+    wait_queue_head_t	arcofi_wait;
+    u8			arcofi_bc;
+    u8			arcofi_state;
+    u8			mocr;
+    u8			adf2;
+    u8			state;
 };
 
 struct ipac_hw;
 
 struct hscx_hw {
-	struct bchannel		bch;
-	struct ipac_hw		*ip;
-	u8			fifo_size;
-	u8			off;	/* offset to ICA or ICB */
-	u8			slot;
-	char			log[64];
+    struct bchannel		bch;
+    struct ipac_hw		*ip;
+    u8			fifo_size;
+    u8			off;	/* offset to ICA or ICB */
+    u8			slot;
+    char			log[64];
 };
 
 struct ipac_hw {
-	struct isac_hw		isac;
-	struct hscx_hw		hscx[2];
-	char			*name;
-	void			*hw;
-	spinlock_t		*hwlock;	/* lock HW access */
-	struct module		*owner;
-	u32			type;
-	read_reg_func		*read_reg;
-	write_reg_func		*write_reg;
-	fifo_func		*read_fifo;
-	fifo_func		*write_fifo;
-	void			(*release)(struct ipac_hw *);
-	int			(*init)(struct ipac_hw *);
-	int			(*ctrl)(struct ipac_hw *, u32, u_long);
-	u8			conf;
+    struct isac_hw		isac;
+    struct hscx_hw		hscx[2];
+    char			*name;
+    void			*hw;
+    spinlock_t		*hwlock;	/* lock HW access */
+    struct module		*owner;
+    u32			type;
+    read_reg_func		*read_reg;
+    write_reg_func		*write_reg;
+    fifo_func		*read_fifo;
+    fifo_func		*write_fifo;
+    void			(*release)(struct ipac_hw *);
+    int			(*init)(struct ipac_hw *);
+    int			(*ctrl)(struct ipac_hw *, u32, u_long);
+    u8			conf;
 };
 
 #define IPAC_TYPE_ISAC		0x0010

@@ -68,28 +68,24 @@ extern cycles_t cacheflush_time;
 #define WSR_CCOMPARE(x,r) asm volatile ("wsr %0,"__stringify(CCOMPARE)"+"__stringify(x) :: "a"(r))
 #define RSR_CCOMPARE(x,r) asm volatile ("rsr %0,"__stringify(CCOMPARE)"+"__stringify(x) : "=a"(r))
 
-static inline unsigned long get_ccount (void)
-{
-	unsigned long ccount;
-	RSR_CCOUNT(ccount);
-	return ccount;
+static inline unsigned long get_ccount (void) {
+    unsigned long ccount;
+    RSR_CCOUNT(ccount);
+    return ccount;
 }
 
-static inline void set_ccount (unsigned long ccount)
-{
-	WSR_CCOUNT(ccount);
+static inline void set_ccount (unsigned long ccount) {
+    WSR_CCOUNT(ccount);
 }
 
-static inline unsigned long get_linux_timer (void)
-{
-	unsigned ccompare;
-	RSR_CCOMPARE(LINUX_TIMER, ccompare);
-	return ccompare;
+static inline unsigned long get_linux_timer (void) {
+    unsigned ccompare;
+    RSR_CCOMPARE(LINUX_TIMER, ccompare);
+    return ccompare;
 }
 
-static inline void set_linux_timer (unsigned long ccompare)
-{
-	WSR_CCOMPARE(LINUX_TIMER, ccompare);
+static inline void set_linux_timer (unsigned long ccompare) {
+    WSR_CCOMPARE(LINUX_TIMER, ccompare);
 }
 
 #endif	/* __KERNEL__ */

@@ -14,7 +14,7 @@
 #	define	UDC_SETUP_SEL		(1 << 6)
 #	define	UDC_EP_SEL		(1 << 5)
 #	define	UDC_EP_DIR		(1 << 4)
-	/* low 4 bits for endpoint number */
+/* low 4 bits for endpoint number */
 #define	UDC_DATA			(UDC_BASE + 0x08)	/* Endpoint FIFO */
 #define	UDC_CTRL			(UDC_BASE + 0x0C)	/* Endpoint control */
 #	define	UDC_CLR_HALT		(1 << 7)
@@ -74,7 +74,7 @@
 #	define	UDC_DS_CHG_IE		(1 << 3)
 #	define	UDC_EP0_IE		(1 << 0)
 #define	UDC_DMA_IRQ_EN			(UDC_BASE + 0x2C)	/* DMA irq enable */
-	/* rx/tx dma channels numbered 1-3 not 0-2 */
+/* rx/tx dma channels numbered 1-3 not 0-2 */
 #	define	UDC_TX_DONE_IE(n)	(1 << (4 * (n) - 2))
 #	define	UDC_RX_CNT_IE(n)	(1 << (4 * (n) - 3))
 #	define	UDC_RX_EOT_IE(n)	(1 << (4 * (n) - 4))
@@ -120,63 +120,63 @@
 #define	UDC_EP_RX(endpoint)		(UDC_BASE + 0x80 + (endpoint)*4)
 #	define	UDC_EPN_RX_VALID	(1 << 15)
 #	define	UDC_EPN_RX_DB		(1 << 14)
-	/* buffer size in bits 13, 12 */
+/* buffer size in bits 13, 12 */
 #	define	UDC_EPN_RX_ISO		(1 << 11)
-	/* buffer pointer in low 11 bits */
+/* buffer pointer in low 11 bits */
 #define	UDC_EP_TX(endpoint)		(UDC_BASE + 0xc0 + (endpoint)*4)
-	/* same bitfields as in RX */
+/* same bitfields as in RX */
 
 /*-------------------------------------------------------------------------*/
 
 struct omap_req {
-	struct usb_request		req;
-	struct list_head		queue;
-	unsigned			dma_bytes;
-	unsigned			mapped:1;
+    struct usb_request		req;
+    struct list_head		queue;
+    unsigned			dma_bytes;
+    unsigned			mapped:1;
 };
 
 struct omap_ep {
-	struct usb_ep			ep;
-	struct list_head		queue;
-	unsigned long			irqs;
-	struct list_head		iso;
-	const struct usb_endpoint_descriptor	*desc;
-	char				name[14];
-	u16				maxpacket;
-	u8				bEndpointAddress;
-	u8				bmAttributes;
-	unsigned			double_buf:1;
-	unsigned			stopped:1;
-	unsigned			fnf:1;
-	unsigned			has_dma:1;
-	u8				ackwait;
-	u8				dma_channel;
-	u16				dma_counter;
-	int				lch;
-	struct omap_udc			*udc;
-	struct timer_list		timer;
+    struct usb_ep			ep;
+    struct list_head		queue;
+    unsigned long			irqs;
+    struct list_head		iso;
+    const struct usb_endpoint_descriptor	*desc;
+    char				name[14];
+    u16				maxpacket;
+    u8				bEndpointAddress;
+    u8				bmAttributes;
+    unsigned			double_buf:1;
+    unsigned			stopped:1;
+    unsigned			fnf:1;
+    unsigned			has_dma:1;
+    u8				ackwait;
+    u8				dma_channel;
+    u16				dma_counter;
+    int				lch;
+    struct omap_udc			*udc;
+    struct timer_list		timer;
 };
 
 struct omap_udc {
-	struct usb_gadget		gadget;
-	struct usb_gadget_driver	*driver;
-	spinlock_t			lock;
-	struct omap_ep			ep[32];
-	u16				devstat;
-	u16				clr_halt;
-	struct usb_phy			*transceiver;
-	struct list_head		iso;
-	unsigned			softconnect:1;
-	unsigned			vbus_active:1;
-	unsigned			ep0_pending:1;
-	unsigned			ep0_in:1;
-	unsigned			ep0_set_config:1;
-	unsigned			ep0_reset_config:1;
-	unsigned			ep0_setup:1;
-	struct completion		*done;
-	struct clk			*dc_clk;
-	struct clk			*hhc_clk;
-	unsigned			clk_requested:1;
+    struct usb_gadget		gadget;
+    struct usb_gadget_driver	*driver;
+    spinlock_t			lock;
+    struct omap_ep			ep[32];
+    u16				devstat;
+    u16				clr_halt;
+    struct usb_phy			*transceiver;
+    struct list_head		iso;
+    unsigned			softconnect:1;
+    unsigned			vbus_active:1;
+    unsigned			ep0_pending:1;
+    unsigned			ep0_in:1;
+    unsigned			ep0_set_config:1;
+    unsigned			ep0_reset_config:1;
+    unsigned			ep0_setup:1;
+    struct completion		*done;
+    struct clk			*dc_clk;
+    struct clk			*hhc_clk;
+    unsigned			clk_requested:1;
 };
 
 /*-------------------------------------------------------------------------*/

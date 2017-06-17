@@ -26,7 +26,7 @@ void orion_gpio_set_valid(unsigned pin, int mode);
 
 /* Initialize gpiolib. */
 void __init orion_gpio_init(int gpio_base, int ngpio,
-			    u32 base, int mask_offset, int secondary_irq_base);
+                            u32 base, int mask_offset, int secondary_irq_base);
 
 /*
  * GPIO interrupt handling.

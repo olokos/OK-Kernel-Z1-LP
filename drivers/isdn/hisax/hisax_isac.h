@@ -11,26 +11,26 @@
 #define ISAC_IOM1	0
 
 struct isac {
-	void *priv;
+    void *priv;
 
-	u_long flags;
-	struct hisax_d_if hisax_d_if;
-	struct FsmInst l1m;
-	struct FsmTimer timer;
-	u_char mocr;
-	u_char adf2;
-	int    type;
+    u_long flags;
+    struct hisax_d_if hisax_d_if;
+    struct FsmInst l1m;
+    struct FsmTimer timer;
+    u_char mocr;
+    u_char adf2;
+    int    type;
 
-	u_char rcvbuf[MAX_DFRAME_LEN_L1];
-	int rcvidx;
+    u_char rcvbuf[MAX_DFRAME_LEN_L1];
+    int rcvidx;
 
-	struct sk_buff *tx_skb;
-	int tx_cnt;
+    struct sk_buff *tx_skb;
+    int tx_cnt;
 
-	u_char (*read_isac)      (struct isac *, u_char);
-	void   (*write_isac)     (struct isac *, u_char, u_char);
-	void   (*read_isac_fifo) (struct isac *, u_char *, int);
-	void   (*write_isac_fifo)(struct isac *, u_char *, int);
+    u_char (*read_isac)      (struct isac *, u_char);
+    void   (*write_isac)     (struct isac *, u_char, u_char);
+    void   (*read_isac_fifo) (struct isac *, u_char *, int);
+    void   (*write_isac_fifo)(struct isac *, u_char *, int);
 };
 
 void isac_init(struct isac *isac);

@@ -73,8 +73,7 @@
  * So TX sleep must be less than 100msec
  * Every 20msec TX frame will goes out.
  * 10 frame means 2seconds TX operation */
-static const hdd_tmLevelAction_t thermalMigrationAction[WLAN_HDD_TM_LEVEL_MAX] =
-{
+static const hdd_tmLevelAction_t thermalMigrationAction[WLAN_HDD_TM_LEVEL_MAX] = {
     /* TM Level 0, Do nothing, just normal operaton */
     {1, 0, 0, 0, 0xFFFFF},
     /* Tm Level 1, disable TX AMPDU */
@@ -104,8 +103,7 @@ static bool suspend_notify_sent;
    @return None
 
 ----------------------------------------------------------------------------*/
-static int wlan_suspend(hdd_context_t* pHddCtx)
-{
+static int wlan_suspend(hdd_context_t* pHddCtx) {
     long rc = 0;
 
     pVosSchedContext vosSchedContext = NULL;
@@ -113,13 +111,11 @@ static int wlan_suspend(hdd_context_t* pHddCtx)
     /* Get the global VOSS context */
     vosSchedContext = get_vos_sched_ctxt();
 
-    if(!vosSchedContext)
-    {
+    if(!vosSchedContext) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: Global VOS_SCHED context is Null",__func__);
         return 0;
     }
-    if(!vos_is_apps_power_collapse_allowed(pHddCtx))
-    {
+    if(!vos_is_apps_power_collapse_allowed(pHddCtx)) {
         /* Fail this suspend */
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, "%s: Fail wlan suspend: not in IMPS/BMPS", __func__);
         return -EPERM;
@@ -140,8 +136,7 @@ static int wlan_suspend(hdd_context_t* pHddCtx)
     /* Wait for Suspend Confirmation from Tx Thread */
     rc = wait_for_completion_interruptible_timeout(&pHddCtx->tx_sus_event_var, msecs_to_jiffies(200));
 
-    if (rc <= 0)
-    {
+    if (rc <= 0) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s: TX Thread: timeout while suspending %ld"
                   , __func__, rc);
@@ -152,8 +147,7 @@ static int wlan_suspend(hdd_context_t* pHddCtx)
          * from here.
          */
         if (!test_and_clear_bit(TX_SUSPEND_EVENT_MASK,
-                                &vosSchedContext->txEventFlag))
-        {
+                                &vosSchedContext->txEventFlag)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: TX Thread: will still suspend", __func__);
             goto tx_suspend;
@@ -176,8 +170,7 @@ tx_suspend:
     /* Wait for Suspend Confirmation from Rx Thread */
     rc = wait_for_completion_interruptible_timeout(&pHddCtx->rx_sus_event_var, msecs_to_jiffies(200));
 
-    if (rc <= 0)
-    {
+    if (rc <= 0) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s: RX Thread: timeout while suspending %ld", __func__, rc);
         /* There is a race condition here, where the RX Thread can process the
@@ -187,8 +180,7 @@ tx_suspend:
          * from here.
          */
         if (!test_and_clear_bit(RX_SUSPEND_EVENT_MASK,
-                                &vosSchedContext->rxEventFlag))
-        {
+                                &vosSchedContext->rxEventFlag)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: RX Thread: will still suspend", __func__);
             goto rx_suspend;
@@ -217,8 +209,7 @@ rx_suspend:
     /* Wait for Suspend Confirmation from MC Thread */
     rc = wait_for_completion_interruptible_timeout(&pHddCtx->mc_sus_event_var, msecs_to_jiffies(200));
 
-    if(!rc)
-    {
+    if(!rc) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_FATAL,
                   "%s: MC Thread: timeout while suspending %ld",
                   __func__, rc);
@@ -229,8 +220,7 @@ rx_suspend:
          * from here.
          */
         if (!test_and_clear_bit(MC_SUSPEND_EVENT_MASK,
-                                &vosSchedContext->mcEventFlag))
-        {
+                                &vosSchedContext->mcEventFlag)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: MC Thread: will still suspend", __func__);
             goto mc_suspend;
@@ -272,15 +262,13 @@ mc_suspend:
    @return None
 
 ----------------------------------------------------------------------------*/
-static void wlan_resume(hdd_context_t* pHddCtx)
-{
+static void wlan_resume(hdd_context_t* pHddCtx) {
     pVosSchedContext vosSchedContext = NULL;
 
     //Get the global VOSS context.
     vosSchedContext = get_vos_sched_ctxt();
 
-    if(!vosSchedContext)
-    {
+    if(!vosSchedContext) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: Global VOS_SCHED context is Null",__func__);
         return;
     }
@@ -323,8 +311,7 @@ static void wlan_resume(hdd_context_t* pHddCtx)
    @return None
 
 ----------------------------------------------------------------------------*/
-int hddDevSuspendHdlr(struct device *dev)
-{
+int hddDevSuspendHdlr(struct device *dev) {
     int ret = 0;
     hdd_context_t* pHddCtx = NULL;
 
@@ -333,29 +320,25 @@ int hddDevSuspendHdlr(struct device *dev)
     VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: WLAN suspended by platform driver",__func__);
 
     /* Get the HDD context */
-    if(!pHddCtx)
-    {
+    if(!pHddCtx) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: HDD context is Null",__func__);
         return 0;
     }
 
-    if(pHddCtx->isWlanSuspended == TRUE)
-    {
+    if(pHddCtx->isWlanSuspended == TRUE) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: WLAN is already in suspended state",__func__);
         return 0;
     }
 
     /* Suspend the wlan driver */
     ret = wlan_suspend(pHddCtx);
-    if(ret != 0)
-    {
+    if(ret != 0) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: Not able to suspend wlan",__func__);
         return ret;
     }
 
 #ifdef HAVE_WCNSS_SUSPEND_RESUME_NOTIFY
-    if(hdd_is_suspend_notify_allowed(pHddCtx))
-    {
+    if(hdd_is_suspend_notify_allowed(pHddCtx)) {
         wcnss_suspend_notify();
         suspend_notify_sent = true;
     }
@@ -374,16 +357,14 @@ int hddDevSuspendHdlr(struct device *dev)
    @return None
 
 ----------------------------------------------------------------------------*/
-int hddDevResumeHdlr(struct device *dev)
-{
+int hddDevResumeHdlr(struct device *dev) {
     hdd_context_t* pHddCtx = NULL;
 
     pHddCtx =  (hdd_context_t*)wcnss_wlan_get_drvdata(dev);
 
     VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_INFO, "%s: WLAN being resumed by Android OS",__func__);
 
-    if(pHddCtx->isWlanSuspended != TRUE)
-    {
+    if(pHddCtx->isWlanSuspended != TRUE) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_FATAL,"%s: WLAN is already in resumed state",__func__);
         return 0;
     }
@@ -391,8 +372,7 @@ int hddDevResumeHdlr(struct device *dev)
     /* Resume the wlan driver */
     wlan_resume(pHddCtx);
 #ifdef HAVE_WCNSS_SUSPEND_RESUME_NOTIFY
-    if(suspend_notify_sent == true)
-    {
+    if(suspend_notify_sent == true) {
         wcnss_resume_notify();
         suspend_notify_sent = false;
     }
@@ -401,8 +381,7 @@ int hddDevResumeHdlr(struct device *dev)
     return 0;
 }
 
-static const struct dev_pm_ops pm_ops =
-{
+static const struct dev_pm_ops pm_ops = {
     .suspend = hddDevSuspendHdlr,
     .resume = hddDevResumeHdlr,
 };
@@ -421,8 +400,7 @@ static const struct dev_pm_ops pm_ops =
         VOS_STATUS_E_FAILURE     Registration Fail
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS hddRegisterPmOps(hdd_context_t *pHddCtx)
-{
+VOS_STATUS hddRegisterPmOps(hdd_context_t *pHddCtx) {
     wcnss_wlan_set_drvdata(pHddCtx->parent_dev, pHddCtx);
 #ifndef FEATURE_R33D
     wcnss_wlan_register_pm_ops(pHddCtx->parent_dev, &pm_ops);
@@ -443,8 +421,7 @@ VOS_STATUS hddRegisterPmOps(hdd_context_t *pHddCtx)
         VOS_STATUS_E_FAILURE     De-Registration Fail
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS hddDeregisterPmOps(hdd_context_t *pHddCtx)
-{
+VOS_STATUS hddDeregisterPmOps(hdd_context_t *pHddCtx) {
 #ifndef FEATURE_R33D
     wcnss_wlan_unregister_pm_ops(pHddCtx->parent_dev, &pm_ops);
 #endif /* FEATURE_R33D */
@@ -462,13 +439,11 @@ VOS_STATUS hddDeregisterPmOps(hdd_context_t *pHddCtx)
    @return NONE
 
 ----------------------------------------------------------------------------*/
-void hddDevTmTxBlockTimeoutHandler(void *usrData)
-{
+void hddDevTmTxBlockTimeoutHandler(void *usrData) {
     hdd_context_t        *pHddCtx = (hdd_context_t *)usrData;
     hdd_adapter_t        *staAdapater;
     /* Sanity, This should not happen */
-    if(NULL == pHddCtx)
-    {
+    if(NULL == pHddCtx) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL Context", __func__);
         VOS_ASSERT(0);
@@ -477,16 +452,14 @@ void hddDevTmTxBlockTimeoutHandler(void *usrData)
 
     staAdapater = hdd_get_adapter(pHddCtx, WLAN_HDD_INFRA_STATION);
 
-    if(NULL == staAdapater)
-    {
+    if(NULL == staAdapater) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: NULL Adapter", __func__);
         VOS_ASSERT(0);
         return;
     }
 
-    if(mutex_lock_interruptible(&pHddCtx->tmInfo.tmOperationLock))
-    {
+    if(mutex_lock_interruptible(&pHddCtx->tmInfo.tmOperationLock)) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: Acquire lock fail", __func__);
         return;
@@ -513,8 +486,7 @@ void hddDevTmTxBlockTimeoutHandler(void *usrData)
    @return
 
 ----------------------------------------------------------------------------*/
-void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
-{
+void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel) {
     hdd_context_t        *pHddCtx = NULL;
     WLAN_TmLevelEnumType  newTmLevel = changedTmLevel;
     hdd_adapter_t        *staAdapater;
@@ -522,8 +494,7 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
     pHddCtx =  (hdd_context_t*)wcnss_wlan_get_drvdata(dev);
 
     if ((pHddCtx->tmInfo.currentTmLevel == newTmLevel) ||
-            (!pHddCtx->cfg_ini->thermalMitigationEnable))
-    {
+            (!pHddCtx->cfg_ini->thermalMitigationEnable)) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_WARN,
                   "%s: TM Not enabled %d or Level does not changed %d",
                   __func__, pHddCtx->cfg_ini->thermalMitigationEnable, newTmLevel);
@@ -535,8 +506,7 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
 
     /* Only STA mode support TM now
      * all other mode, TM feature should be disabled */
-    if (~VOS_STA & pHddCtx->concurrency_mode)
-    {
+    if (~VOS_STA & pHddCtx->concurrency_mode) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: CMODE 0x%x, TM disable",
                   __func__, pHddCtx->concurrency_mode);
@@ -544,8 +514,7 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
     }
 
     if ((newTmLevel < WLAN_HDD_TM_LEVEL_0) ||
-            (newTmLevel >= WLAN_HDD_TM_LEVEL_MAX))
-    {
+            (newTmLevel >= WLAN_HDD_TM_LEVEL_MAX)) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: TM level %d out of range",
                   __func__, newTmLevel);
@@ -555,8 +524,7 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
     if (newTmLevel != WLAN_HDD_TM_LEVEL_4)
         sme_SetTmLevel(pHddCtx->hHal, newTmLevel, 0);
 
-    if (mutex_lock_interruptible(&pHddCtx->tmInfo.tmOperationLock))
-    {
+    if (mutex_lock_interruptible(&pHddCtx->tmInfo.tmOperationLock)) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: Acquire lock fail", __func__);
         return;
@@ -569,13 +537,10 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
                  sizeof(hdd_tmLevelAction_t));
 
 
-    if (pHddCtx->tmInfo.tmAction.enterImps)
-    {
+    if (pHddCtx->tmInfo.tmAction.enterImps) {
         staAdapater = hdd_get_adapter(pHddCtx, WLAN_HDD_INFRA_STATION);
-        if (staAdapater)
-        {
-            if (hdd_connIsConnected(WLAN_HDD_GET_STATION_CTX_PTR(staAdapater)))
-            {
+        if (staAdapater) {
+            if (hdd_connIsConnected(WLAN_HDD_GET_STATION_CTX_PTR(staAdapater))) {
                 sme_RoamDisconnect(pHddCtx->hHal,
                                    staAdapater->sessionId,
                                    eCSR_DISCONNECT_REASON_UNSPECIFIED);
@@ -601,8 +566,7 @@ void hddDevTmLevelChangedHandler(struct device *dev, int changedTmLevel)
         VOS_STATUS_E_FAILURE     Registration Fail
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS hddDevTmRegisterNotifyCallback(hdd_context_t *pHddCtx)
-{
+VOS_STATUS hddDevTmRegisterNotifyCallback(hdd_context_t *pHddCtx) {
     VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_INFO,
               "%s: Register TM Handler", __func__);
 
@@ -635,18 +599,15 @@ VOS_STATUS hddDevTmRegisterNotifyCallback(hdd_context_t *pHddCtx)
         VOS_STATUS_E_FAILURE     Un-Registration Fail
 
 ----------------------------------------------------------------------------*/
-VOS_STATUS hddDevTmUnregisterNotifyCallback(hdd_context_t *pHddCtx)
-{
+VOS_STATUS hddDevTmUnregisterNotifyCallback(hdd_context_t *pHddCtx) {
     VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
 
     wcnss_unregister_thermal_mitigation(hddDevTmLevelChangedHandler);
 
     if(VOS_TIMER_STATE_RUNNING ==
-            vos_timer_getCurrentState(&pHddCtx->tmInfo.txSleepTimer))
-    {
+            vos_timer_getCurrentState(&pHddCtx->tmInfo.txSleepTimer)) {
         vosStatus = vos_timer_stop(&pHddCtx->tmInfo.txSleepTimer);
-        if(!VOS_IS_STATUS_SUCCESS(vosStatus))
-        {
+        if(!VOS_IS_STATUS_SUCCESS(vosStatus)) {
             VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
                       "%s: Timer stop fail", __func__);
         }
@@ -654,8 +615,7 @@ VOS_STATUS hddDevTmUnregisterNotifyCallback(hdd_context_t *pHddCtx)
 
     // Destroy the vos timer...
     vosStatus = vos_timer_destroy(&pHddCtx->tmInfo.txSleepTimer);
-    if (!VOS_IS_STATUS_SUCCESS(vosStatus))
-    {
+    if (!VOS_IS_STATUS_SUCCESS(vosStatus)) {
         VOS_TRACE(VOS_MODULE_ID_HDD,VOS_TRACE_LEVEL_ERROR,
                   "%s: Fail to destroy timer", __func__);
     }

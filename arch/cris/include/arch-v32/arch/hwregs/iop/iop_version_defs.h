@@ -86,14 +86,14 @@
 
 /* Register r_version, scope iop_version, type r */
 typedef struct {
-  unsigned int nr : 8;
-  unsigned int dummy1 : 24;
+    unsigned int nr : 8;
+    unsigned int dummy1 : 24;
 } reg_iop_version_r_version;
 #define REG_RD_ADDR_iop_version_r_version 0
 
 
 /* Constants */
 enum {
-  regk_iop_version_v1_0                    = 0x00000001
+    regk_iop_version_v1_0                    = 0x00000001
 };
 #endif /* __iop_version_defs_h */

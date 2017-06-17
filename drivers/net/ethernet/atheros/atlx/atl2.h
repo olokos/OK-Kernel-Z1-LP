@@ -81,7 +81,7 @@ static s32 atl2_reset_hw(struct atl2_hw *hw);
 static s32 atl2_read_mac_addr(struct atl2_hw *hw);
 static s32 atl2_init_hw(struct atl2_hw *hw);
 static s32 atl2_get_speed_and_duplex(struct atl2_hw *hw, u16 *speed,
-	u16 *duplex);
+                                     u16 *duplex);
 static u32 atl2_hash_mc_addr(struct atl2_hw *hw, u8 *mc_addr);
 static void atl2_hash_set(struct atl2_hw *hw, u32 hash_value);
 static s32 atl2_read_phy_reg(struct atl2_hw *hw, u16 reg_addr, u16 *phy_data);
@@ -236,10 +236,10 @@ static void atl2_force_ps(struct atl2_hw *hw);
 #define VLAN_SIZE                                               4
 
 struct tx_pkt_header {
-	unsigned pkt_size:11;
-	unsigned:4;			/* reserved */
-	unsigned ins_vlan:1;		/* txmac should insert vlan */
-	unsigned short vlan;		/* vlan tag */
+    unsigned pkt_size:11;
+    unsigned:4;			/* reserved */
+    unsigned ins_vlan:1;		/* txmac should insert vlan */
+    unsigned short vlan;		/* vlan tag */
 };
 /* FIXME: replace above bitfields with MASK/SHIFT defines below */
 #define TX_PKT_HEADER_SIZE_MASK		0x7FF
@@ -250,23 +250,23 @@ struct tx_pkt_header {
 #define TX_PKT_HEADER_VLAN_TAG_SHIFT	16
 
 struct tx_pkt_status {
-	unsigned pkt_size:11;
-	unsigned:5;		/* reserved */
-	unsigned ok:1;		/* current packet transmitted without error */
-	unsigned bcast:1;	/* broadcast packet */
-	unsigned mcast:1;	/* multicast packet */
-	unsigned pause:1;	/* transmiited a pause frame */
-	unsigned ctrl:1;
-	unsigned defer:1;    	/* current packet is xmitted with defer */
-	unsigned exc_defer:1;
-	unsigned single_col:1;
-	unsigned multi_col:1;
-	unsigned late_col:1;
-	unsigned abort_col:1;
-	unsigned underun:1;	/* current packet is aborted
+    unsigned pkt_size:11;
+    unsigned:5;		/* reserved */
+    unsigned ok:1;		/* current packet transmitted without error */
+    unsigned bcast:1;	/* broadcast packet */
+    unsigned mcast:1;	/* multicast packet */
+    unsigned pause:1;	/* transmiited a pause frame */
+    unsigned ctrl:1;
+    unsigned defer:1;    	/* current packet is xmitted with defer */
+    unsigned exc_defer:1;
+    unsigned single_col:1;
+    unsigned multi_col:1;
+    unsigned late_col:1;
+    unsigned abort_col:1;
+    unsigned underun:1;	/* current packet is aborted
 				 * due to txram underrun */
-	unsigned:3;		/* reserved */
-	unsigned update:1;	/* always 1'b1 in tx_status_buf */
+    unsigned:3;		/* reserved */
+    unsigned update:1;	/* always 1'b1 in tx_status_buf */
 };
 /* FIXME: replace above bitfields with MASK/SHIFT defines below */
 #define TX_PKT_STATUS_SIZE_MASK		0x7FF
@@ -299,26 +299,26 @@ struct tx_pkt_status {
 #define TX_PKT_STATUS_UPDATE_SHIFT	31
 
 struct rx_pkt_status {
-	unsigned pkt_size:11;	/* packet size, max 2047 bytes */
-	unsigned:5;		/* reserved */
-	unsigned ok:1;		/* current packet received ok without error */
-	unsigned bcast:1;	/* current packet is broadcast */
-	unsigned mcast:1;	/* current packet is multicast */
-	unsigned pause:1;
-	unsigned ctrl:1;
-	unsigned crc:1;		/* received a packet with crc error */
-	unsigned code:1;	/* received a packet with code error */
-	unsigned runt:1;	/* received a packet less than 64 bytes
+    unsigned pkt_size:11;	/* packet size, max 2047 bytes */
+    unsigned:5;		/* reserved */
+    unsigned ok:1;		/* current packet received ok without error */
+    unsigned bcast:1;	/* current packet is broadcast */
+    unsigned mcast:1;	/* current packet is multicast */
+    unsigned pause:1;
+    unsigned ctrl:1;
+    unsigned crc:1;		/* received a packet with crc error */
+    unsigned code:1;	/* received a packet with code error */
+    unsigned runt:1;	/* received a packet less than 64 bytes
 				 * with good crc */
-	unsigned frag:1;	/* received a packet less than 64 bytes
+    unsigned frag:1;	/* received a packet less than 64 bytes
 				 * with bad crc */
-	unsigned trunc:1;	/* current frame truncated due to rxram full */
-	unsigned align:1;	/* this packet is alignment error */
-	unsigned vlan:1;	/* this packet has vlan */
-	unsigned:3;		/* reserved */
-	unsigned update:1;
-	unsigned short vtag;	/* vlan tag */
-	unsigned:16;
+    unsigned trunc:1;	/* current frame truncated due to rxram full */
+    unsigned align:1;	/* this packet is alignment error */
+    unsigned vlan:1;	/* this packet has vlan */
+    unsigned:3;		/* reserved */
+    unsigned update:1;
+    unsigned short vtag;	/* vlan tag */
+    unsigned:16;
 };
 /* FIXME: replace above bitfields with MASK/SHIFT defines below */
 #define RX_PKT_STATUS_SIZE_MASK		0x7FF
@@ -353,87 +353,87 @@ struct rx_pkt_status {
 #define RX_PKT_STATUS_VLAN_TAG_SHIFT	32
 
 struct rx_desc {
-	struct rx_pkt_status	status;
-	unsigned char     	packet[1536-sizeof(struct rx_pkt_status)];
+    struct rx_pkt_status	status;
+    unsigned char     	packet[1536-sizeof(struct rx_pkt_status)];
 };
 
 enum atl2_speed_duplex {
-	atl2_10_half = 0,
-	atl2_10_full = 1,
-	atl2_100_half = 2,
-	atl2_100_full = 3
+    atl2_10_half = 0,
+    atl2_10_full = 1,
+    atl2_100_half = 2,
+    atl2_100_full = 3
 };
 
 struct atl2_spi_flash_dev {
-	const char *manu_name;	/* manufacturer id */
-	/* op-code */
-	u8 cmdWRSR;
-	u8 cmdREAD;
-	u8 cmdPROGRAM;
-	u8 cmdWREN;
-	u8 cmdWRDI;
-	u8 cmdRDSR;
-	u8 cmdRDID;
-	u8 cmdSECTOR_ERASE;
-	u8 cmdCHIP_ERASE;
+    const char *manu_name;	/* manufacturer id */
+    /* op-code */
+    u8 cmdWRSR;
+    u8 cmdREAD;
+    u8 cmdPROGRAM;
+    u8 cmdWREN;
+    u8 cmdWRDI;
+    u8 cmdRDSR;
+    u8 cmdRDID;
+    u8 cmdSECTOR_ERASE;
+    u8 cmdCHIP_ERASE;
 };
 
 /* Structure containing variables used by the shared code (atl2_hw.c) */
 struct atl2_hw {
-	u8 __iomem *hw_addr;
-	void *back;
+    u8 __iomem *hw_addr;
+    void *back;
 
-	u8 preamble_len;
-	u8 max_retry;          /* Retransmission maximum, afterwards the
+    u8 preamble_len;
+    u8 max_retry;          /* Retransmission maximum, afterwards the
 				* packet will be discarded. */
-	u8 jam_ipg;            /* IPG to start JAM for collision based flow
+    u8 jam_ipg;            /* IPG to start JAM for collision based flow
 				* control in half-duplex mode. In unit of
 				* 8-bit time. */
-	u8 ipgt;               /* Desired back to back inter-packet gap. The
+    u8 ipgt;               /* Desired back to back inter-packet gap. The
 				* default is 96-bit time. */
-	u8 min_ifg;            /* Minimum number of IFG to enforce in between
+    u8 min_ifg;            /* Minimum number of IFG to enforce in between
 				* RX frames. Frame gap below such IFP is
 				* dropped. */
-	u8 ipgr1;              /* 64bit Carrier-Sense window */
-	u8 ipgr2;              /* 96-bit IPG window */
-	u8 retry_buf;          /* When half-duplex mode, should hold some
+    u8 ipgr1;              /* 64bit Carrier-Sense window */
+    u8 ipgr2;              /* 96-bit IPG window */
+    u8 retry_buf;          /* When half-duplex mode, should hold some
 				* bytes for mac retry . (8*4bytes unit) */
 
-	u16 fc_rxd_hi;
-	u16 fc_rxd_lo;
-	u16 lcol;              /* Collision Window */
-	u16 max_frame_size;
+    u16 fc_rxd_hi;
+    u16 fc_rxd_lo;
+    u16 lcol;              /* Collision Window */
+    u16 max_frame_size;
 
-	u16 MediaType;
-	u16 autoneg_advertised;
-	u16 pci_cmd_word;
+    u16 MediaType;
+    u16 autoneg_advertised;
+    u16 pci_cmd_word;
 
-	u16 mii_autoneg_adv_reg;
+    u16 mii_autoneg_adv_reg;
 
-	u32 mem_rang;
-	u32 txcw;
-	u32 mc_filter_type;
-	u32 num_mc_addrs;
-	u32 collision_delta;
-	u32 tx_packet_delta;
-	u16 phy_spd_default;
+    u32 mem_rang;
+    u32 txcw;
+    u32 mc_filter_type;
+    u32 num_mc_addrs;
+    u32 collision_delta;
+    u32 tx_packet_delta;
+    u16 phy_spd_default;
 
-	u16 device_id;
-	u16 vendor_id;
-	u16 subsystem_id;
-	u16 subsystem_vendor_id;
-	u8 revision_id;
+    u16 device_id;
+    u16 vendor_id;
+    u16 subsystem_id;
+    u16 subsystem_vendor_id;
+    u8 revision_id;
 
-	/* spi flash */
-	u8 flash_vendor;
+    /* spi flash */
+    u8 flash_vendor;
 
-	u8 dma_fairness;
-	u8 mac_addr[ETH_ALEN];
-	u8 perm_mac_addr[ETH_ALEN];
+    u8 dma_fairness;
+    u8 mac_addr[ETH_ALEN];
+    u8 perm_mac_addr[ETH_ALEN];
 
-	/* FIXME */
-	/* bool phy_preamble_sup; */
-	bool phy_configured;
+    /* FIXME */
+    /* bool phy_preamble_sup; */
+    bool phy_configured;
 };
 
 #endif /* _ATL2_HW_H_ */
@@ -449,76 +449,76 @@ struct atl2_ring_header {
 
 /* board specific private data structure */
 struct atl2_adapter {
-	/* OS defined structs */
-	struct net_device *netdev;
-	struct pci_dev *pdev;
-	u32 wol;
-	u16 link_speed;
-	u16 link_duplex;
+    /* OS defined structs */
+    struct net_device *netdev;
+    struct pci_dev *pdev;
+    u32 wol;
+    u16 link_speed;
+    u16 link_duplex;
 
-	spinlock_t stats_lock;
+    spinlock_t stats_lock;
 
-	struct work_struct reset_task;
-	struct work_struct link_chg_task;
-	struct timer_list watchdog_timer;
-	struct timer_list phy_config_timer;
+    struct work_struct reset_task;
+    struct work_struct link_chg_task;
+    struct timer_list watchdog_timer;
+    struct timer_list phy_config_timer;
 
-	unsigned long cfg_phy;
-	bool mac_disabled;
+    unsigned long cfg_phy;
+    bool mac_disabled;
 
-	/* All Descriptor memory */
-	dma_addr_t	ring_dma;
-	void		*ring_vir_addr;
-	int		ring_size;
+    /* All Descriptor memory */
+    dma_addr_t	ring_dma;
+    void		*ring_vir_addr;
+    int		ring_size;
 
-	struct tx_pkt_header	*txd_ring;
-	dma_addr_t	txd_dma;
+    struct tx_pkt_header	*txd_ring;
+    dma_addr_t	txd_dma;
 
-	struct tx_pkt_status	*txs_ring;
-	dma_addr_t	txs_dma;
+    struct tx_pkt_status	*txs_ring;
+    dma_addr_t	txs_dma;
 
-	struct rx_desc	*rxd_ring;
-	dma_addr_t	rxd_dma;
+    struct rx_desc	*rxd_ring;
+    dma_addr_t	rxd_dma;
 
-	u32 txd_ring_size;         /* bytes per unit */
-	u32 txs_ring_size;         /* dwords per unit */
-	u32 rxd_ring_size;         /* 1536 bytes per unit */
+    u32 txd_ring_size;         /* bytes per unit */
+    u32 txs_ring_size;         /* dwords per unit */
+    u32 rxd_ring_size;         /* 1536 bytes per unit */
 
-	/* read /write ptr: */
-	/* host */
-	u32 txd_write_ptr;
-	u32 txs_next_clear;
-	u32 rxd_read_ptr;
+    /* read /write ptr: */
+    /* host */
+    u32 txd_write_ptr;
+    u32 txs_next_clear;
+    u32 rxd_read_ptr;
 
-	/* nic */
-	atomic_t txd_read_ptr;
-	atomic_t txs_write_ptr;
-	u32 rxd_write_ptr;
+    /* nic */
+    atomic_t txd_read_ptr;
+    atomic_t txs_write_ptr;
+    u32 rxd_write_ptr;
 
-	/* Interrupt Moderator timer ( 2us resolution) */
-	u16 imt;
-	/* Interrupt Clear timer (2us resolution) */
-	u16 ict;
+    /* Interrupt Moderator timer ( 2us resolution) */
+    u16 imt;
+    /* Interrupt Clear timer (2us resolution) */
+    u16 ict;
 
-	unsigned long flags;
-	/* structs defined in atl2_hw.h */
-	u32 bd_number;     /* board number */
-	bool pci_using_64;
-	bool have_msi;
-	struct atl2_hw hw;
+    unsigned long flags;
+    /* structs defined in atl2_hw.h */
+    u32 bd_number;     /* board number */
+    bool pci_using_64;
+    bool have_msi;
+    struct atl2_hw hw;
 
-	u32 usr_cmd;
-	/* FIXME */
-	/* u32 regs_buff[ATL2_REGS_LEN]; */
-	u32 pci_state[16];
+    u32 usr_cmd;
+    /* FIXME */
+    /* u32 regs_buff[ATL2_REGS_LEN]; */
+    u32 pci_state[16];
 
-	u32 *config_space;
+    u32 *config_space;
 };
 
 enum atl2_state_t {
-	__ATL2_TESTING,
-	__ATL2_RESETTING,
-	__ATL2_DOWN
+    __ATL2_TESTING,
+    __ATL2_RESETTING,
+    __ATL2_DOWN
 };
 
 #endif /* _ATL2_H_ */

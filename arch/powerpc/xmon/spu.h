@@ -22,51 +22,51 @@
 /* These two enums are from rel_apu/common/spu_asm_format.h */
 /* definition of instruction format */
 typedef enum {
-  RRR,
-  RI18,
-  RI16,
-  RI10,
-  RI8,
-  RI7,
-  RR,
-  LBT,
-  LBTI,
-  IDATA,
-  UNKNOWN_IFORMAT
+    RRR,
+    RI18,
+    RI16,
+    RI10,
+    RI8,
+    RI7,
+    RR,
+    LBT,
+    LBTI,
+    IDATA,
+    UNKNOWN_IFORMAT
 } spu_iformat;
 
 /* These values describe assembly instruction arguments.  They indicate
  * how to encode, range checking and which relocation to use. */
 typedef enum {
-  A_T,  /* register at pos 0 */
-  A_A,  /* register at pos 7 */
-  A_B,  /* register at pos 14 */
-  A_C,  /* register at pos 21 */
-  A_S,  /* special purpose register at pos 7 */
-  A_H,  /* channel register at pos 7 */
-  A_P,  /* parenthesis, this has to separate regs from immediates */
-  A_S3,
-  A_S6,
-  A_S7N,
-  A_S7,
-  A_U7A,
-  A_U7B,
-  A_S10B,
-  A_S10,
-  A_S11,
-  A_S11I,
-  A_S14,
-  A_S16,
-  A_S18,
-  A_R18,
-  A_U3,
-  A_U5,
-  A_U6,
-  A_U7,
-  A_U14,
-  A_X16,
-  A_U18,
-  A_MAX
+    A_T,  /* register at pos 0 */
+    A_A,  /* register at pos 7 */
+    A_B,  /* register at pos 14 */
+    A_C,  /* register at pos 21 */
+    A_S,  /* special purpose register at pos 7 */
+    A_H,  /* channel register at pos 7 */
+    A_P,  /* parenthesis, this has to separate regs from immediates */
+    A_S3,
+    A_S6,
+    A_S7N,
+    A_S7,
+    A_U7A,
+    A_U7B,
+    A_S10B,
+    A_S10,
+    A_S11,
+    A_S11I,
+    A_S14,
+    A_S16,
+    A_S18,
+    A_R18,
+    A_U3,
+    A_U5,
+    A_U6,
+    A_U7,
+    A_U14,
+    A_X16,
+    A_U18,
+    A_MAX
 } spu_aformat;
 
 enum spu_insns {
@@ -77,15 +77,14 @@ enum spu_insns {
 #include "spu-insns.h"
 #undef APUOP
 #undef APUOPFB
-        M_SPU_MAX
+    M_SPU_MAX
 };
 
-struct spu_opcode
-{
-   spu_iformat insn_type;
-   unsigned int opcode;
-   char *mnemonic;
-   int arg[5];
+struct spu_opcode {
+    spu_iformat insn_type;
+    unsigned int opcode;
+    char *mnemonic;
+    int arg[5];
 };
 
 #define SIGNED_EXTRACT(insn,size,pos) (((int)((insn) << (32-size-pos))) >> (32-size))

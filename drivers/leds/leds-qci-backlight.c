@@ -29,37 +29,34 @@
 #define EC_CMD_SET_BACKLIGHT 0xB1
 
 static void qci_backlight_store(struct led_classdev *led_cdev,
-	enum led_brightness val);
+                                enum led_brightness val);
 
 static struct platform_device *bl_pdev;
 static struct led_classdev lcd_backlight = {
-	.name = "lcd-backlight",
-	.brightness = 147,
-	.brightness_set = qci_backlight_store,
+    .name = "lcd-backlight",
+    .brightness = 147,
+    .brightness_set = qci_backlight_store,
 };
 
 static void qci_backlight_store(struct led_classdev *led_cdev,
-	enum led_brightness val)
-{
-	u16 value = val;
-	wpce_smbus_write_word_data(EC_CMD_SET_BACKLIGHT, value);
-	msleep(10);
+                                enum led_brightness val) {
+    u16 value = val;
+    wpce_smbus_write_word_data(EC_CMD_SET_BACKLIGHT, value);
+    msleep(10);
 
-	dev_dbg(&bl_pdev->dev, "[backlight_store] : value  = %d\n", value);
+    dev_dbg(&bl_pdev->dev, "[backlight_store] : value  = %d\n", value);
 }
 
-static int __init qci_backlight_init(void)
-{
-	int err = 0;
-	bl_pdev = platform_device_register_simple("backlight", 0, NULL, 0);
-	err = led_classdev_register(&bl_pdev->dev, &lcd_backlight);
-	return err;
+static int __init qci_backlight_init(void) {
+    int err = 0;
+    bl_pdev = platform_device_register_simple("backlight", 0, NULL, 0);
+    err = led_classdev_register(&bl_pdev->dev, &lcd_backlight);
+    return err;
 }
 
-static void __exit qci_backlight_exit(void)
-{
-	led_classdev_unregister(&lcd_backlight);
-	platform_device_unregister(bl_pdev);
+static void __exit qci_backlight_exit(void) {
+    led_classdev_unregister(&lcd_backlight);
+    platform_device_unregister(bl_pdev);
 }
 
 module_init(qci_backlight_init);

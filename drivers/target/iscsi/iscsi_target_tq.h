@@ -45,44 +45,44 @@ extern int iscsi_target_rx_thread(void *);
 #define ISCSI_TS_BITMAP_BITS			32768
 
 struct iscsi_thread_set {
-	/* flags used for blocking and restarting sets */
-	int	blocked_threads;
-	/* flag for creating threads */
-	int	create_threads;
-	/* flag for delaying readding to inactive list */
-	int	delay_inactive;
-	/* status for thread set */
-	int	status;
-	/* which threads have had signals sent */
-	int	signal_sent;
-	/* flag for which threads exited first */
-	int	thread_clear;
-	/* Active threads in the thread set */
-	int	thread_count;
-	/* Unique thread ID */
-	u32	thread_id;
-	/* pointer to connection if set is active */
-	struct iscsi_conn	*conn;
-	/* used for controlling ts state accesses */
-	spinlock_t	ts_state_lock;
-	/* Used for rx side post startup */
-	struct completion	rx_post_start_comp;
-	/* Used for tx side post startup */
-	struct completion	tx_post_start_comp;
-	/* used for restarting thread queue */
-	struct completion	rx_restart_comp;
-	/* used for restarting thread queue */
-	struct completion	tx_restart_comp;
-	/* used for normal unused blocking */
-	struct completion	rx_start_comp;
-	/* used for normal unused blocking */
-	struct completion	tx_start_comp;
-	/* OS descriptor for rx thread */
-	struct task_struct	*rx_thread;
-	/* OS descriptor for tx thread */
-	struct task_struct	*tx_thread;
-	/* struct iscsi_thread_set in list list head*/
-	struct list_head	ts_list;
+    /* flags used for blocking and restarting sets */
+    int	blocked_threads;
+    /* flag for creating threads */
+    int	create_threads;
+    /* flag for delaying readding to inactive list */
+    int	delay_inactive;
+    /* status for thread set */
+    int	status;
+    /* which threads have had signals sent */
+    int	signal_sent;
+    /* flag for which threads exited first */
+    int	thread_clear;
+    /* Active threads in the thread set */
+    int	thread_count;
+    /* Unique thread ID */
+    u32	thread_id;
+    /* pointer to connection if set is active */
+    struct iscsi_conn	*conn;
+    /* used for controlling ts state accesses */
+    spinlock_t	ts_state_lock;
+    /* Used for rx side post startup */
+    struct completion	rx_post_start_comp;
+    /* Used for tx side post startup */
+    struct completion	tx_post_start_comp;
+    /* used for restarting thread queue */
+    struct completion	rx_restart_comp;
+    /* used for restarting thread queue */
+    struct completion	tx_restart_comp;
+    /* used for normal unused blocking */
+    struct completion	rx_start_comp;
+    /* used for normal unused blocking */
+    struct completion	tx_start_comp;
+    /* OS descriptor for rx thread */
+    struct task_struct	*rx_thread;
+    /* OS descriptor for tx thread */
+    struct task_struct	*tx_thread;
+    /* struct iscsi_thread_set in list list head*/
+    struct list_head	ts_list;
 };
 
 #endif   /*** ISCSI_THREAD_QUEUE_H ***/

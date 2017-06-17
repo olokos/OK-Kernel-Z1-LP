@@ -18,11 +18,11 @@
 #define S3C24XX_LEDF_TRISTATE	(1<<1)		/* tristate to turn off */
 
 struct s3c24xx_led_platdata {
-	unsigned int		 gpio;
-	unsigned int		 flags;
+    unsigned int		 gpio;
+    unsigned int		 flags;
 
-	char			*name;
-	char			*def_trigger;
+    char			*name;
+    char			*def_trigger;
 };
 
 #endif /* __ASM_ARCH_LEDSGPIO_H */

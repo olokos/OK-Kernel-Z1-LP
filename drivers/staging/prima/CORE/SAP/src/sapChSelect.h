@@ -101,8 +101,7 @@
 #define SAP_24GHZ_THIRD_OVERLAP_CHAN_RSSI_EFFECT_PRIMARY      (-30) // In 2.4GHZ, Effect of Primary  Channel RSSI on Third Overlapping Channel
 #define SAP_24GHZ_FOURTH_OVERLAP_CHAN_RSSI_EFFECT_PRIMARY     (-40) // In 2.4GHZ, Effect of Primary  Channel RSSI on Fourth Overlapping Channel
 
-typedef enum
-{
+typedef enum {
     CHANNEL_1 = 1,
     CHANNEL_2,
     CHANNEL_3,
@@ -121,14 +120,12 @@ typedef enum
 * it contains the channel number, the computed weight
 */
 
-typedef struct sSapChannelListInfo
-{
+typedef struct sSapChannelListInfo {
     v_U8_t numChannel;
     v_U8_t *channelList;
 } tSapChannelListInfo;
 
-typedef struct
-{
+typedef struct {
     v_U16_t chNum;      // Channel Number
     v_U16_t channelWidth;      // Channel Width
     v_U16_t bssCount;   // bss found in scanresult for this channel
@@ -142,8 +139,7 @@ typedef struct
 * decision for the best operating channel based on dfs formula
 */
 
-typedef struct
-{
+typedef struct {
     tSapSpectChInfo *pSpectCh;//tDfsSpectChInfo *pSpectCh;  // Ptr to the channels in the entire spectrum band
     v_U8_t numSpectChans;      // Total num of channels in the spectrum
 } tSapChSelSpectInfo;//tDfsChSelParams;
@@ -151,8 +147,7 @@ typedef struct
 /**
  * Structure for channel weight calculation parameters
  */
-typedef struct sSapChSelParams
-{
+typedef struct sSapChSelParams {
     void *pSpectInfoParams;//*pDfsParams;   // Filled with tSapChSelSpectInfo
     v_U16_t numChannels;
 } tSapChSelParams;

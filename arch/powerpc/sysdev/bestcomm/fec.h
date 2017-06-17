@@ -16,8 +16,8 @@
 
 
 struct bcom_fec_bd {
-	u32	status;
-	u32	skb_pa;
+    u32	status;
+    u32	skb_pa;
 };
 
 #define BCOM_FEC_TX_BD_TFD	0x08000000ul	/* transmit frame done */

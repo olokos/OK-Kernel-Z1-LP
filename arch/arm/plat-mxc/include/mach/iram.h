@@ -26,14 +26,12 @@ void iram_free(unsigned long dma_addr, unsigned int size);
 
 #else
 
-static inline int __init iram_init(unsigned long base, unsigned long size)
-{
-	return -ENOMEM;
+static inline int __init iram_init(unsigned long base, unsigned long size) {
+    return -ENOMEM;
 }
 
-static inline void __iomem *iram_alloc(unsigned int size, unsigned long *dma_addr)
-{
-	return NULL;
+static inline void __iomem *iram_alloc(unsigned int size, unsigned long *dma_addr) {
+    return NULL;
 }
 
 static inline void iram_free(unsigned long base, unsigned long size) {}

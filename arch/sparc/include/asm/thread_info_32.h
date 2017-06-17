@@ -26,30 +26,30 @@
  */
 #define NSWINS 8
 struct thread_info {
-	unsigned long		uwinmask;
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	int			cpu;		/* cpu we're on */
-	int			preempt_count;	/* 0 => preemptable,
+    unsigned long		uwinmask;
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    int			cpu;		/* cpu we're on */
+    int			preempt_count;	/* 0 => preemptable,
 						   <0 => BUG */
-	int			softirq_count;
-	int			hardirq_count;
+    int			softirq_count;
+    int			hardirq_count;
 
-	/* Context switch saved kernel state. */
-	unsigned long ksp;	/* ... ksp __attribute__ ((aligned (8))); */
-	unsigned long kpc;
-	unsigned long kpsr;
-	unsigned long kwim;
+    /* Context switch saved kernel state. */
+    unsigned long ksp;	/* ... ksp __attribute__ ((aligned (8))); */
+    unsigned long kpc;
+    unsigned long kpsr;
+    unsigned long kwim;
 
-	/* A place to store user windows and stack pointers
-	 * when the stack needs inspection.
-	 */
-	struct reg_window32	reg_window[NSWINS];	/* align for ldd! */
-	unsigned long		rwbuf_stkptrs[NSWINS];
-	unsigned long		w_saved;
+    /* A place to store user windows and stack pointers
+     * when the stack needs inspection.
+     */
+    struct reg_window32	reg_window[NSWINS];	/* align for ldd! */
+    unsigned long		rwbuf_stkptrs[NSWINS];
+    unsigned long		w_saved;
 
-	struct restart_block	restart_block;
+    struct restart_block	restart_block;
 };
 
 /*

@@ -38,64 +38,64 @@
 
 #ifdef __LITTLE_ENDIAN
 struct ieee754dp_konst {
-	unsigned mantlo:32;
-	unsigned manthi:20;
-	unsigned bexp:11;
-	unsigned sign:1;
+    unsigned mantlo:32;
+    unsigned manthi:20;
+    unsigned bexp:11;
+    unsigned sign:1;
 };
 struct ieee754sp_konst {
-	unsigned mant:23;
-	unsigned bexp:8;
-	unsigned sign:1;
+    unsigned mant:23;
+    unsigned bexp:8;
+    unsigned sign:1;
 };
 
 typedef union _ieee754dp {
-	struct ieee754dp_konst oparts;
-	struct {
-		u64 mant:52;
-		unsigned int bexp:11;
-		unsigned int sign:1;
-	} parts;
-	u64 bits;
-	double d;
+    struct ieee754dp_konst oparts;
+    struct {
+        u64 mant:52;
+        unsigned int bexp:11;
+        unsigned int sign:1;
+    } parts;
+    u64 bits;
+    double d;
 } ieee754dp;
 
 typedef union _ieee754sp {
-	struct ieee754sp_konst parts;
-	float f;
-	u32 bits;
+    struct ieee754sp_konst parts;
+    float f;
+    u32 bits;
 } ieee754sp;
 #endif
 
 #ifdef __BIG_ENDIAN
 struct ieee754dp_konst {
-	unsigned sign:1;
-	unsigned bexp:11;
-	unsigned manthi:20;
-	unsigned mantlo:32;
+    unsigned sign:1;
+    unsigned bexp:11;
+    unsigned manthi:20;
+    unsigned mantlo:32;
 };
 
 typedef union _ieee754dp {
-	struct ieee754dp_konst oparts;
-	struct {
-		unsigned int sign:1;
-		unsigned int bexp:11;
-		u64 mant:52;
-	} parts;
-	double d;
-	u64 bits;
+    struct ieee754dp_konst oparts;
+    struct {
+        unsigned int sign:1;
+        unsigned int bexp:11;
+        u64 mant:52;
+    } parts;
+    double d;
+    u64 bits;
 } ieee754dp;
 
 struct ieee754sp_konst {
-	unsigned sign:1;
-	unsigned bexp:8;
-	unsigned mant:23;
+    unsigned sign:1;
+    unsigned bexp:8;
+    unsigned mant:23;
 };
 
 typedef union _ieee754sp {
-	struct ieee754sp_konst parts;
-	float f;
-	u32 bits;
+    struct ieee754sp_konst parts;
+    float f;
+    u32 bits;
 } ieee754sp;
 #endif
 
@@ -232,67 +232,55 @@ ieee754dp ieee754dp_sqrt(ieee754dp x);
 
 /* "normal" comparisons
 */
-static inline int ieee754sp_eq(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y, IEEE754_CEQ, 0);
+static inline int ieee754sp_eq(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y, IEEE754_CEQ, 0);
 }
 
-static inline int ieee754sp_ne(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y,
-			     IEEE754_CLT | IEEE754_CGT | IEEE754_CUN, 0);
+static inline int ieee754sp_ne(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y,
+                         IEEE754_CLT | IEEE754_CGT | IEEE754_CUN, 0);
 }
 
-static inline int ieee754sp_lt(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y, IEEE754_CLT, 0);
+static inline int ieee754sp_lt(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y, IEEE754_CLT, 0);
 }
 
-static inline int ieee754sp_le(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y, IEEE754_CLT | IEEE754_CEQ, 0);
+static inline int ieee754sp_le(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y, IEEE754_CLT | IEEE754_CEQ, 0);
 }
 
-static inline int ieee754sp_gt(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y, IEEE754_CGT, 0);
+static inline int ieee754sp_gt(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y, IEEE754_CGT, 0);
 }
 
 
-static inline int ieee754sp_ge(ieee754sp x, ieee754sp y)
-{
-	return ieee754sp_cmp(x, y, IEEE754_CGT | IEEE754_CEQ, 0);
+static inline int ieee754sp_ge(ieee754sp x, ieee754sp y) {
+    return ieee754sp_cmp(x, y, IEEE754_CGT | IEEE754_CEQ, 0);
 }
 
-static inline int ieee754dp_eq(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y, IEEE754_CEQ, 0);
+static inline int ieee754dp_eq(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y, IEEE754_CEQ, 0);
 }
 
-static inline int ieee754dp_ne(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y,
-			     IEEE754_CLT | IEEE754_CGT | IEEE754_CUN, 0);
+static inline int ieee754dp_ne(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y,
+                         IEEE754_CLT | IEEE754_CGT | IEEE754_CUN, 0);
 }
 
-static inline int ieee754dp_lt(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y, IEEE754_CLT, 0);
+static inline int ieee754dp_lt(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y, IEEE754_CLT, 0);
 }
 
-static inline int ieee754dp_le(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y, IEEE754_CLT | IEEE754_CEQ, 0);
+static inline int ieee754dp_le(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y, IEEE754_CLT | IEEE754_CEQ, 0);
 }
 
-static inline int ieee754dp_gt(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y, IEEE754_CGT, 0);
+static inline int ieee754dp_gt(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y, IEEE754_CGT, 0);
 }
 
-static inline int ieee754dp_ge(ieee754dp x, ieee754dp y)
-{
-	return ieee754dp_cmp(x, y, IEEE754_CGT | IEEE754_CEQ, 0);
+static inline int ieee754dp_ge(ieee754dp x, ieee754dp y) {
+    return ieee754dp_cmp(x, y, IEEE754_CGT | IEEE754_CEQ, 0);
 }
 
 
@@ -308,72 +296,65 @@ char *ieee754dp_tstr(ieee754dp x, int prec, int fmt, int af);
  */
 struct _ieee754_csr {
 #ifdef __BIG_ENDIAN
-	unsigned pad0:7;
-	unsigned nod:1;		/* set 1 for no denormalised numbers */
-	unsigned c:1;		/* condition */
-	unsigned pad1:5;
-	unsigned cx:6;		/* exceptions this operation */
-	unsigned mx:5;		/* exception enable  mask */
-	unsigned sx:5;		/* exceptions total */
-	unsigned rm:2;		/* current rounding mode */
+    unsigned pad0:7;
+    unsigned nod:1;		/* set 1 for no denormalised numbers */
+    unsigned c:1;		/* condition */
+    unsigned pad1:5;
+    unsigned cx:6;		/* exceptions this operation */
+    unsigned mx:5;		/* exception enable  mask */
+    unsigned sx:5;		/* exceptions total */
+    unsigned rm:2;		/* current rounding mode */
 #endif
 #ifdef __LITTLE_ENDIAN
-	unsigned rm:2;		/* current rounding mode */
-	unsigned sx:5;		/* exceptions total */
-	unsigned mx:5;		/* exception enable  mask */
-	unsigned cx:6;		/* exceptions this operation */
-	unsigned pad1:5;
-	unsigned c:1;		/* condition */
-	unsigned nod:1;		/* set 1 for no denormalised numbers */
-	unsigned pad0:7;
+    unsigned rm:2;		/* current rounding mode */
+    unsigned sx:5;		/* exceptions total */
+    unsigned mx:5;		/* exception enable  mask */
+    unsigned cx:6;		/* exceptions this operation */
+    unsigned pad1:5;
+    unsigned c:1;		/* condition */
+    unsigned nod:1;		/* set 1 for no denormalised numbers */
+    unsigned pad0:7;
 #endif
 };
 #define ieee754_csr (*(struct _ieee754_csr *)(&current->thread.fpu.fcr31))
 
-static inline unsigned ieee754_getrm(void)
-{
-	return (ieee754_csr.rm);
+static inline unsigned ieee754_getrm(void) {
+    return (ieee754_csr.rm);
 }
-static inline unsigned ieee754_setrm(unsigned rm)
-{
-	return (ieee754_csr.rm = rm);
+static inline unsigned ieee754_setrm(unsigned rm) {
+    return (ieee754_csr.rm = rm);
 }
 
 /*
  * get current exceptions
  */
-static inline unsigned ieee754_getcx(void)
-{
-	return (ieee754_csr.cx);
+static inline unsigned ieee754_getcx(void) {
+    return (ieee754_csr.cx);
 }
 
 /* test for current exception condition
  */
-static inline int ieee754_cxtest(unsigned n)
-{
-	return (ieee754_csr.cx & n);
+static inline int ieee754_cxtest(unsigned n) {
+    return (ieee754_csr.cx & n);
 }
 
 /*
  * get sticky exceptions
  */
-static inline unsigned ieee754_getsx(void)
-{
-	return (ieee754_csr.sx);
+static inline unsigned ieee754_getsx(void) {
+    return (ieee754_csr.sx);
 }
 
 /* clear sticky conditions
 */
-static inline unsigned ieee754_clrsx(void)
-{
-	return (ieee754_csr.sx = 0);
+static inline unsigned ieee754_clrsx(void) {
+    return (ieee754_csr.sx = 0);
 }
 
 /* test for sticky exception condition
  */
-static inline int ieee754_sxtest(unsigned n)
-{
-	return (ieee754_csr.sx & n);
+static inline int ieee754_sxtest(unsigned n) {
+    return (ieee754_csr.sx & n);
 }
 
 /* debugging */
@@ -440,18 +421,18 @@ extern const struct ieee754sp_konst __ieee754sp_spcvals[];
 
 /* IEEE exception context, passed to handler */
 struct ieee754xctx {
-	const char *op;		/* operation name */
-	int rt;			/* result type */
-	union {
-		ieee754sp sp;	/* single precision */
-		ieee754dp dp;	/* double precision */
+    const char *op;		/* operation name */
+    int rt;			/* result type */
+    union {
+        ieee754sp sp;	/* single precision */
+        ieee754dp dp;	/* double precision */
 #ifdef IEEE854_XP
-		ieee754xp xp;	/* extended precision */
+        ieee754xp xp;	/* extended precision */
 #endif
-		int si;		/* standard signed integer (32bits) */
-		s64 di;		/* extended signed integer (64bits) */
-	} rv;			/* default result format implied by op */
-	va_list ap;
+        int si;		/* standard signed integer (32bits) */
+        s64 di;		/* extended signed integer (64bits) */
+    } rv;			/* default result format implied by op */
+    va_list ap;
 };
 
 /* result types for xctx.rt */

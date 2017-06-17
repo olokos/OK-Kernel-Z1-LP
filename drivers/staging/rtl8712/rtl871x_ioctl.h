@@ -5,11 +5,11 @@
 #include "drv_types.h"
 
 #ifndef OID_802_11_CAPABILITY
-	#define OID_802_11_CAPABILITY                   0x0d010122
+#define OID_802_11_CAPABILITY                   0x0d010122
 #endif
 
 #ifndef OID_802_11_PMKID
-	#define OID_802_11_PMKID                        0x0d010123
+#define OID_802_11_PMKID                        0x0d010123
 #endif
 
 
@@ -42,34 +42,34 @@
 #define OID_MP_SEG4	0xFF011100
 
 enum oid_type {
-	QUERY_OID,
-	SET_OID
+    QUERY_OID,
+    SET_OID
 };
 
 struct oid_funs_node {
-	unsigned int oid_start; /*the starting number for OID*/
-	unsigned int oid_end; /*the ending number for OID*/
-	struct oid_obj_priv *node_array;
-	unsigned int array_sz; /*the size of node_array*/
-	int query_counter; /*count the number of query hits for this segment*/
-	int set_counter; /*count the number of set hits for this segment*/
+    unsigned int oid_start; /*the starting number for OID*/
+    unsigned int oid_end; /*the ending number for OID*/
+    struct oid_obj_priv *node_array;
+    unsigned int array_sz; /*the size of node_array*/
+    int query_counter; /*count the number of query hits for this segment*/
+    int set_counter; /*count the number of set hits for this segment*/
 };
 
 struct oid_par_priv {
-	void	*adapter_context;
-	uint oid;
-	void *information_buf;
-	unsigned long information_buf_len;
-	unsigned long *bytes_rw;
-	unsigned long *bytes_needed;
-	enum oid_type	type_of_oid;
-	unsigned int dbg;
+    void	*adapter_context;
+    uint oid;
+    void *information_buf;
+    unsigned long information_buf_len;
+    unsigned long *bytes_rw;
+    unsigned long *bytes_needed;
+    enum oid_type	type_of_oid;
+    unsigned int dbg;
 };
 
 struct oid_obj_priv {
-	unsigned char	dbg; /* 0: without OID debug message
+    unsigned char	dbg; /* 0: without OID debug message
 			      * 1: with OID debug message */
-	uint(*oidfuns)(struct oid_par_priv *poid_par_priv);
+    uint(*oidfuns)(struct oid_par_priv *poid_par_priv);
 };
 
 uint oid_null_function(struct oid_par_priv *poid_par_priv);
@@ -77,21 +77,21 @@ uint oid_null_function(struct oid_par_priv *poid_par_priv);
 extern struct iw_handler_def  r871x_handlers_def;
 
 extern	uint drv_query_info(
-	struct  net_device *MiniportAdapterContext,
-	uint Oid,
-	void *InformationBuffer,
-	u32 InformationBufferLength,
-	u32 *BytesWritten,
-	u32 *BytesNeeded
+    struct  net_device *MiniportAdapterContext,
+    uint Oid,
+    void *InformationBuffer,
+    u32 InformationBufferLength,
+    u32 *BytesWritten,
+    u32 *BytesNeeded
 );
 
 extern	uint drv_set_info(
-	struct  net_device *MiniportAdapterContext,
-	uint Oid,
-	void *InformationBuffer,
-	u32 InformationBufferLength,
-	u32 *BytesRead,
-	u32 *BytesNeeded
+    struct  net_device *MiniportAdapterContext,
+    uint Oid,
+    void *InformationBuffer,
+    u32 InformationBufferLength,
+    u32 *BytesRead,
+    u32 *BytesNeeded
 );
 
 #endif

@@ -23,87 +23,79 @@
 #define CPU_CONFIG_CMD 5
 #define CPU_CONFIG_QUERY_CMD 6
 
-static int query_cpu_config(void)
-{
-	struct cpu_config_query_req_resp {
-		u32	id;
-		u32	arg0;
-		u32	arg1;
-		u32	arg2;
-	} request;
-	struct cpu_config_query_resp {
-		u32	ret0;
-		u32	ret1;
-		u32	ret2;
-		u32	ret3;
-	} response = {0};
-	int ret;
+static int query_cpu_config(void) {
+    struct cpu_config_query_req_resp {
+        u32	id;
+        u32	arg0;
+        u32	arg1;
+        u32	arg2;
+    } request;
+    struct cpu_config_query_resp {
+        u32	ret0;
+        u32	ret1;
+        u32	ret2;
+        u32	ret3;
+    } response = {0};
+    int ret;
 
-	request.id = 1;
-	ret = scm_call(SCM_SVC_BOOT, CPU_CONFIG_QUERY_CMD, &request,
-			sizeof(request), &response, sizeof(response));
-	return ret ? : response.ret0;
+    request.id = 1;
+    ret = scm_call(SCM_SVC_BOOT, CPU_CONFIG_QUERY_CMD, &request,
+                   sizeof(request), &response, sizeof(response));
+    return ret ? : response.ret0;
 }
 
-static void set_cpu_config(int enable)
-{
-	struct cpu_config_req {
-		u32	id;
-		u32	arg0;
-		u32	arg1;
-		u32	arg2;
-	} request;
+static void set_cpu_config(int enable) {
+    struct cpu_config_req {
+        u32	id;
+        u32	arg0;
+        u32	arg1;
+        u32	arg2;
+    } request;
 
-	request.id = 1;
-	request.arg0 = enable;
-	scm_call(SCM_SVC_BOOT, CPU_CONFIG_CMD, &request, sizeof(request),
-			NULL, 0);
+    request.id = 1;
+    request.arg0 = enable;
+    scm_call(SCM_SVC_BOOT, CPU_CONFIG_CMD, &request, sizeof(request),
+             NULL, 0);
 }
 
-void enable_cpu_config(struct work_struct *work)
-{
-	set_cpu_config(1);
+void enable_cpu_config(struct work_struct *work) {
+    set_cpu_config(1);
 }
 
-void disable_cpu_config(struct work_struct *work)
-{
-	set_cpu_config(0);
+void disable_cpu_config(struct work_struct *work) {
+    set_cpu_config(0);
 }
 
-int cpu_config_on_each_cpu(bool enable)
-{
-	work_func_t func = enable ? enable_cpu_config : disable_cpu_config;
-	return schedule_on_each_cpu(func);
+int cpu_config_on_each_cpu(bool enable) {
+    work_func_t func = enable ? enable_cpu_config : disable_cpu_config;
+    return schedule_on_each_cpu(func);
 }
 
 static ssize_t show_cpuctl(struct sysdev_class *class,
-		struct sysdev_class_attribute *attr, char *buf)
-{
-	return snprintf(buf, PAGE_SIZE, "%d\n", query_cpu_config());
+                           struct sysdev_class_attribute *attr, char *buf) {
+    return snprintf(buf, PAGE_SIZE, "%d\n", query_cpu_config());
 }
 
 static ssize_t store_cpuctl(struct sysdev_class *class,
-		struct sysdev_class_attribute *attr, const char *buf,
-		size_t count)
-{
-	unsigned val;
-	int ret;
+                            struct sysdev_class_attribute *attr, const char *buf,
+                            size_t count) {
+    unsigned val;
+    int ret;
 
-	ret = kstrtouint(buf, 10, &val);
-	if (ret < 0)
-		return ret;
-	ret = cpu_config_on_each_cpu(val);
-	if (ret < 0)
-		return ret;
+    ret = kstrtouint(buf, 10, &val);
+    if (ret < 0)
+        return ret;
+    ret = cpu_config_on_each_cpu(val);
+    if (ret < 0)
+        return ret;
 
-	return count;
+    return count;
 }
 
 static SYSDEV_CLASS_ATTR(cpuctl, 0600, show_cpuctl, store_cpuctl);
 
-static int __init init_scm_cpu(void)
-{
-	return sysfs_create_file(&cpu_subsys.dev_root->kobj,
-			&attr_cpuctl.attr);
+static int __init init_scm_cpu(void) {
+    return sysfs_create_file(&cpu_subsys.dev_root->kobj,
+                             &attr_cpuctl.attr);
 }
 module_init(init_scm_cpu);

@@ -90,117 +90,112 @@ MODULE_PARM_DESC(out_ports, "Number of MIDI output ports");
 #define STRING_DESCRIPTION_IDX		2
 
 static struct usb_device_descriptor device_desc = {
-	.bLength =		USB_DT_DEVICE_SIZE,
-	.bDescriptorType =	USB_DT_DEVICE,
-	.bcdUSB =		__constant_cpu_to_le16(0x0200),
-	.bDeviceClass =		USB_CLASS_PER_INTERFACE,
-	.idVendor =		__constant_cpu_to_le16(DRIVER_VENDOR_NUM),
-	.idProduct =		__constant_cpu_to_le16(DRIVER_PRODUCT_NUM),
-	/* .iManufacturer =	DYNAMIC */
-	/* .iProduct =		DYNAMIC */
-	.bNumConfigurations =	1,
+    .bLength =		USB_DT_DEVICE_SIZE,
+    .bDescriptorType =	USB_DT_DEVICE,
+    .bcdUSB =		__constant_cpu_to_le16(0x0200),
+    .bDeviceClass =		USB_CLASS_PER_INTERFACE,
+    .idVendor =		__constant_cpu_to_le16(DRIVER_VENDOR_NUM),
+    .idProduct =		__constant_cpu_to_le16(DRIVER_PRODUCT_NUM),
+    /* .iManufacturer =	DYNAMIC */
+    /* .iProduct =		DYNAMIC */
+    .bNumConfigurations =	1,
 };
 
 static struct usb_string strings_dev[] = {
-	[STRING_MANUFACTURER_IDX].s	= "Grey Innovation",
-	[STRING_PRODUCT_IDX].s		= "MIDI Gadget",
-	[STRING_DESCRIPTION_IDX].s	= "MIDI",
-	{  } /* end of list */
+    [STRING_MANUFACTURER_IDX].s	= "Grey Innovation",
+    [STRING_PRODUCT_IDX].s		= "MIDI Gadget",
+    [STRING_DESCRIPTION_IDX].s	= "MIDI",
+    {  } /* end of list */
 };
 
 static struct usb_gadget_strings stringtab_dev = {
-	.language	= 0x0409,	/* en-us */
-	.strings	= strings_dev,
+    .language	= 0x0409,	/* en-us */
+    .strings	= strings_dev,
 };
 
 static struct usb_gadget_strings *dev_strings[] = {
-	&stringtab_dev,
-	NULL,
+    &stringtab_dev,
+    NULL,
 };
 
-static int __exit midi_unbind(struct usb_composite_dev *dev)
-{
-	return 0;
+static int __exit midi_unbind(struct usb_composite_dev *dev) {
+    return 0;
 }
 
 static struct usb_configuration midi_config = {
-	.label		= "MIDI Gadget",
-	.bConfigurationValue = 1,
-	/* .iConfiguration = DYNAMIC */
-	.bmAttributes	= USB_CONFIG_ATT_ONE,
-	.bMaxPower	= CONFIG_USB_GADGET_VBUS_DRAW / 2,
+    .label		= "MIDI Gadget",
+    .bConfigurationValue = 1,
+    /* .iConfiguration = DYNAMIC */
+    .bmAttributes	= USB_CONFIG_ATT_ONE,
+    .bMaxPower	= CONFIG_USB_GADGET_VBUS_DRAW / 2,
 };
 
-static int __init midi_bind_config(struct usb_configuration *c)
-{
-	return f_midi_bind_config(c, index, id,
-				  in_ports, out_ports,
-				  buflen, qlen);
+static int __init midi_bind_config(struct usb_configuration *c) {
+    return f_midi_bind_config(c, index, id,
+                              in_ports, out_ports,
+                              buflen, qlen);
 }
 
-static int __init midi_bind(struct usb_composite_dev *cdev)
-{
-	struct usb_gadget *gadget = cdev->gadget;
-	int gcnum, status;
+static int __init midi_bind(struct usb_composite_dev *cdev) {
+    struct usb_gadget *gadget = cdev->gadget;
+    int gcnum, status;
 
-	status = usb_string_id(cdev);
-	if (status < 0)
-		return status;
-	strings_dev[STRING_MANUFACTURER_IDX].id = status;
-	device_desc.iManufacturer = status;
+    status = usb_string_id(cdev);
+    if (status < 0)
+        return status;
+    strings_dev[STRING_MANUFACTURER_IDX].id = status;
+    device_desc.iManufacturer = status;
 
-	status = usb_string_id(cdev);
-	if (status < 0)
-		return status;
-	strings_dev[STRING_PRODUCT_IDX].id = status;
-	device_desc.iProduct = status;
+    status = usb_string_id(cdev);
+    if (status < 0)
+        return status;
+    strings_dev[STRING_PRODUCT_IDX].id = status;
+    device_desc.iProduct = status;
 
-	/* config description */
-	status = usb_string_id(cdev);
-	if (status < 0)
-		return status;
-	strings_dev[STRING_DESCRIPTION_IDX].id = status;
+    /* config description */
+    status = usb_string_id(cdev);
+    if (status < 0)
+        return status;
+    strings_dev[STRING_DESCRIPTION_IDX].id = status;
 
-	midi_config.iConfiguration = status;
+    midi_config.iConfiguration = status;
 
-	gcnum = usb_gadget_controller_number(gadget);
-	if (gcnum < 0) {
-		/* gmidi is so simple (no altsettings) that
-		 * it SHOULD NOT have problems with bulk-capable hardware.
-		 * so warn about unrecognized controllers, don't panic.
-		 */
-		pr_warning("%s: controller '%s' not recognized\n",
-			   __func__, gadget->name);
-		device_desc.bcdDevice = cpu_to_le16(0x9999);
-	} else {
-		device_desc.bcdDevice = cpu_to_le16(0x0200 + gcnum);
-	}
+    gcnum = usb_gadget_controller_number(gadget);
+    if (gcnum < 0) {
+        /* gmidi is so simple (no altsettings) that
+         * it SHOULD NOT have problems with bulk-capable hardware.
+         * so warn about unrecognized controllers, don't panic.
+         */
+        pr_warning("%s: controller '%s' not recognized\n",
+                   __func__, gadget->name);
+        device_desc.bcdDevice = cpu_to_le16(0x9999);
+    } else {
+        device_desc.bcdDevice = cpu_to_le16(0x0200 + gcnum);
+    }
 
-	status = usb_add_config(cdev, &midi_config, midi_bind_config);
-	if (status < 0)
-		return status;
+    status = usb_add_config(cdev, &midi_config, midi_bind_config);
+    if (status < 0)
+        return status;
 
-	pr_info("%s\n", longname);
-	return 0;
+    pr_info("%s\n", longname);
+    return 0;
 }
 
 static struct usb_composite_driver midi_driver = {
-	.name		= (char *) longname,
-	.dev		= &device_desc,
-	.strings	= dev_strings,
-	.max_speed	= USB_SPEED_HIGH,
-	.unbind		= __exit_p(midi_unbind),
+    .name		= (char *) longname,
+    .dev		= &device_desc,
+    .strings	= dev_strings,
+    .max_speed	= USB_SPEED_HIGH,
+    .unbind		= __exit_p(midi_unbind),
 };
 
-static int __init midi_init(void)
-{
-	return usb_composite_probe(&midi_driver, midi_bind);
+static int __init midi_init(void) {
+    return usb_composite_probe(&midi_driver, midi_bind);
 }
 module_init(midi_init);
 
-static void __exit midi_cleanup(void)
-{
-	usb_composite_unregister(&midi_driver);
+static void __exit midi_cleanup(void) {
+    usb_composite_unregister(&midi_driver);
 }
 module_exit(midi_cleanup);
 

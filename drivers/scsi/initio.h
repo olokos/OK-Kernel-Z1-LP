@@ -43,8 +43,8 @@
 #define MAX_TARGETS		16
 
 typedef struct {
-	unsigned short base;
-	unsigned short vec;
+    unsigned short base;
+    unsigned short vec;
 } i91u_config;
 
 /***************************************/
@@ -339,51 +339,51 @@ typedef struct {
 /*              Scatter-Gather Element Structure                        */
 /************************************************************************/
 struct sg_entry {
-	u32 data;		/* Data Pointer */
-	u32 len;		/* Data Length */
+    u32 data;		/* Data Pointer */
+    u32 len;		/* Data Length */
 };
 
 /***********************************************************************
 		SCSI Control Block
 ************************************************************************/
 struct scsi_ctrl_blk {
-	struct scsi_ctrl_blk *next;
-	u8 status;	/*4 */
-	u8 next_state;	/*5 */
-	u8 mode;		/*6 */
-	u8 msgin;	/*7 SCB_Res0 */
-	u16 sgidx;	/*8 */
-	u16 sgmax;	/*A */
+    struct scsi_ctrl_blk *next;
+    u8 status;	/*4 */
+    u8 next_state;	/*5 */
+    u8 mode;		/*6 */
+    u8 msgin;	/*7 SCB_Res0 */
+    u16 sgidx;	/*8 */
+    u16 sgmax;	/*A */
 #ifdef ALPHA
-	u32 reserved[2];	/*C */
+    u32 reserved[2];	/*C */
 #else
-	u32 reserved[3];	/*C */
+    u32 reserved[3];	/*C */
 #endif
 
-	u32 xferlen;	/*18 Current xfer len           */
-	u32 totxlen;	/*1C Total xfer len             */
-	u32 paddr;		/*20 SCB phy. Addr. */
+    u32 xferlen;	/*18 Current xfer len           */
+    u32 totxlen;	/*1C Total xfer len             */
+    u32 paddr;		/*20 SCB phy. Addr. */
 
-	u8 opcode;	/*24 SCB command code */
-	u8 flags;	/*25 SCB Flags */
-	u8 target;	/*26 Target Id */
-	u8 lun;		/*27 Lun */
-	u32 bufptr;		/*28 Data Buffer Pointer */
-	u32 buflen;		/*2C Data Allocation Length */
-	u8 sglen;	/*30 SG list # */
-	u8 senselen;	/*31 Sense Allocation Length */
-	u8 hastat;	/*32 */
-	u8 tastat;	/*33 */
-	u8 cdblen;	/*34 CDB Length */
-	u8 ident;	/*35 Identify */
-	u8 tagmsg;	/*36 Tag Message */
-	u8 tagid;	/*37 Queue Tag */
-	u8 cdb[12];	/*38 */
-	u32 sgpaddr;	/*44 SG List/Sense Buf phy. Addr. */
-	u32 senseptr;	/*48 Sense data pointer */
-	void (*post) (u8 *, u8 *);	/*4C POST routine */
-	struct scsi_cmnd *srb;	/*50 SRB Pointer */
-	struct sg_entry sglist[TOTAL_SG_ENTRY];	/*54 Start of SG list */
+    u8 opcode;	/*24 SCB command code */
+    u8 flags;	/*25 SCB Flags */
+    u8 target;	/*26 Target Id */
+    u8 lun;		/*27 Lun */
+    u32 bufptr;		/*28 Data Buffer Pointer */
+    u32 buflen;		/*2C Data Allocation Length */
+    u8 sglen;	/*30 SG list # */
+    u8 senselen;	/*31 Sense Allocation Length */
+    u8 hastat;	/*32 */
+    u8 tastat;	/*33 */
+    u8 cdblen;	/*34 CDB Length */
+    u8 ident;	/*35 Identify */
+    u8 tagmsg;	/*36 Tag Message */
+    u8 tagid;	/*37 Queue Tag */
+    u8 cdb[12];	/*38 */
+    u32 sgpaddr;	/*44 SG List/Sense Buf phy. Addr. */
+    u32 senseptr;	/*48 Sense data pointer */
+    void (*post) (u8 *, u8 *);	/*4C POST routine */
+    struct scsi_cmnd *srb;	/*50 SRB Pointer */
+    struct sg_entry sglist[TOTAL_SG_ENTRY];	/*54 Start of SG list */
 };
 
 /* Bit Definition for status */
@@ -463,12 +463,12 @@ struct scsi_ctrl_blk {
 **********************************************************************/
 
 struct target_control {
-	u16 flags;
-	u8 js_period;
-	u8 sconfig0;
-	u16 drv_flags;
-	u8 heads;
-	u8 sectors;
+    u16 flags;
+    u8 js_period;
+    u8 sconfig0;
+    u16 drv_flags;
+    u8 heads;
+    u8 sectors;
 };
 
 /***********************************************************************
@@ -496,48 +496,48 @@ struct target_control {
 	      Host Adapter Control Structure
 ************************************************************************/
 struct initio_host {
-	u16 addr;		/* 00 */
-	u16 bios_addr;		/* 02 */
-	u8 irq;			/* 04 */
-	u8 scsi_id;		/* 05 */
-	u8 max_tar;		/* 06 */
-	u8 num_scbs;		/* 07 */
+    u16 addr;		/* 00 */
+    u16 bios_addr;		/* 02 */
+    u8 irq;			/* 04 */
+    u8 scsi_id;		/* 05 */
+    u8 max_tar;		/* 06 */
+    u8 num_scbs;		/* 07 */
 
-	u8 flags;		/* 08 */
-	u8 index;		/* 09 */
-	u8 ha_id;		/* 0A */
-	u8 config;		/* 0B */
-	u16 idmask;		/* 0C */
-	u8 semaph;		/* 0E */
-	u8 phase;		/* 0F */
-	u8 jsstatus0;		/* 10 */
-	u8 jsint;		/* 11 */
-	u8 jsstatus1;		/* 12 */
-	u8 sconf1;		/* 13 */
+    u8 flags;		/* 08 */
+    u8 index;		/* 09 */
+    u8 ha_id;		/* 0A */
+    u8 config;		/* 0B */
+    u16 idmask;		/* 0C */
+    u8 semaph;		/* 0E */
+    u8 phase;		/* 0F */
+    u8 jsstatus0;		/* 10 */
+    u8 jsint;		/* 11 */
+    u8 jsstatus1;		/* 12 */
+    u8 sconf1;		/* 13 */
 
-	u8 msg[8];		/* 14 */
-	struct scsi_ctrl_blk *next_avail;	/* 1C */
-	struct scsi_ctrl_blk *scb;		/* 20 */
-	struct scsi_ctrl_blk *scb_end;		/* 24 */ /*UNUSED*/
-	struct scsi_ctrl_blk *next_pending;	/* 28 */
-	struct scsi_ctrl_blk *next_contig;	/* 2C */ /*UNUSED*/
-	struct scsi_ctrl_blk *active;		/* 30 */
-	struct target_control *active_tc;	/* 34 */
+    u8 msg[8];		/* 14 */
+    struct scsi_ctrl_blk *next_avail;	/* 1C */
+    struct scsi_ctrl_blk *scb;		/* 20 */
+    struct scsi_ctrl_blk *scb_end;		/* 24 */ /*UNUSED*/
+    struct scsi_ctrl_blk *next_pending;	/* 28 */
+    struct scsi_ctrl_blk *next_contig;	/* 2C */ /*UNUSED*/
+    struct scsi_ctrl_blk *active;		/* 30 */
+    struct target_control *active_tc;	/* 34 */
 
-	struct scsi_ctrl_blk *first_avail;	/* 38 */
-	struct scsi_ctrl_blk *last_avail;	/* 3C */
-	struct scsi_ctrl_blk *first_pending;	/* 40 */
-	struct scsi_ctrl_blk *last_pending;	/* 44 */
-	struct scsi_ctrl_blk *first_busy;	/* 48 */
-	struct scsi_ctrl_blk *last_busy;	/* 4C */
-	struct scsi_ctrl_blk *first_done;	/* 50 */
-	struct scsi_ctrl_blk *last_done;	/* 54 */
-	u8 max_tags[16];	/* 58 */
-	u8 act_tags[16];	/* 68 */
-	struct target_control targets[MAX_TARGETS];	/* 78 */
-	spinlock_t avail_lock;
-	spinlock_t semaph_lock;
-	struct pci_dev *pci_dev;
+    struct scsi_ctrl_blk *first_avail;	/* 38 */
+    struct scsi_ctrl_blk *last_avail;	/* 3C */
+    struct scsi_ctrl_blk *first_pending;	/* 40 */
+    struct scsi_ctrl_blk *last_pending;	/* 44 */
+    struct scsi_ctrl_blk *first_busy;	/* 48 */
+    struct scsi_ctrl_blk *last_busy;	/* 4C */
+    struct scsi_ctrl_blk *first_done;	/* 50 */
+    struct scsi_ctrl_blk *last_done;	/* 54 */
+    u8 max_tags[16];	/* 58 */
+    u8 act_tags[16];	/* 68 */
+    struct target_control targets[MAX_TARGETS];	/* 78 */
+    spinlock_t avail_lock;
+    spinlock_t semaph_lock;
+    struct pci_dev *pci_dev;
 };
 
 /* Bit Definition for HCB_Config */
@@ -559,47 +559,47 @@ struct initio_host {
 *******************************************************************/
 
 typedef struct _NVRAM_SCSI {	/* SCSI channel configuration   */
-	u8 NVM_ChSCSIID;	/* 0Ch -> Channel SCSI ID       */
-	u8 NVM_ChConfig1;	/* 0Dh -> Channel config 1      */
-	u8 NVM_ChConfig2;	/* 0Eh -> Channel config 2      */
-	u8 NVM_NumOfTarg;	/* 0Fh -> Number of SCSI target */
-	/* SCSI target configuration    */
-	u8 NVM_Targ0Config;	/* 10h -> Target 0 configuration */
-	u8 NVM_Targ1Config;	/* 11h -> Target 1 configuration */
-	u8 NVM_Targ2Config;	/* 12h -> Target 2 configuration */
-	u8 NVM_Targ3Config;	/* 13h -> Target 3 configuration */
-	u8 NVM_Targ4Config;	/* 14h -> Target 4 configuration */
-	u8 NVM_Targ5Config;	/* 15h -> Target 5 configuration */
-	u8 NVM_Targ6Config;	/* 16h -> Target 6 configuration */
-	u8 NVM_Targ7Config;	/* 17h -> Target 7 configuration */
-	u8 NVM_Targ8Config;	/* 18h -> Target 8 configuration */
-	u8 NVM_Targ9Config;	/* 19h -> Target 9 configuration */
-	u8 NVM_TargAConfig;	/* 1Ah -> Target A configuration */
-	u8 NVM_TargBConfig;	/* 1Bh -> Target B configuration */
-	u8 NVM_TargCConfig;	/* 1Ch -> Target C configuration */
-	u8 NVM_TargDConfig;	/* 1Dh -> Target D configuration */
-	u8 NVM_TargEConfig;	/* 1Eh -> Target E configuration */
-	u8 NVM_TargFConfig;	/* 1Fh -> Target F configuration */
+    u8 NVM_ChSCSIID;	/* 0Ch -> Channel SCSI ID       */
+    u8 NVM_ChConfig1;	/* 0Dh -> Channel config 1      */
+    u8 NVM_ChConfig2;	/* 0Eh -> Channel config 2      */
+    u8 NVM_NumOfTarg;	/* 0Fh -> Number of SCSI target */
+    /* SCSI target configuration    */
+    u8 NVM_Targ0Config;	/* 10h -> Target 0 configuration */
+    u8 NVM_Targ1Config;	/* 11h -> Target 1 configuration */
+    u8 NVM_Targ2Config;	/* 12h -> Target 2 configuration */
+    u8 NVM_Targ3Config;	/* 13h -> Target 3 configuration */
+    u8 NVM_Targ4Config;	/* 14h -> Target 4 configuration */
+    u8 NVM_Targ5Config;	/* 15h -> Target 5 configuration */
+    u8 NVM_Targ6Config;	/* 16h -> Target 6 configuration */
+    u8 NVM_Targ7Config;	/* 17h -> Target 7 configuration */
+    u8 NVM_Targ8Config;	/* 18h -> Target 8 configuration */
+    u8 NVM_Targ9Config;	/* 19h -> Target 9 configuration */
+    u8 NVM_TargAConfig;	/* 1Ah -> Target A configuration */
+    u8 NVM_TargBConfig;	/* 1Bh -> Target B configuration */
+    u8 NVM_TargCConfig;	/* 1Ch -> Target C configuration */
+    u8 NVM_TargDConfig;	/* 1Dh -> Target D configuration */
+    u8 NVM_TargEConfig;	/* 1Eh -> Target E configuration */
+    u8 NVM_TargFConfig;	/* 1Fh -> Target F configuration */
 } NVRAM_SCSI;
 
 typedef struct _NVRAM {
-/*----------header ---------------*/
-	u16 NVM_Signature;	/* 0,1: Signature */
-	u8 NVM_Size;		/* 2:   Size of data structure */
-	u8 NVM_Revision;	/* 3:   Revision of data structure */
-	/* ----Host Adapter Structure ---- */
-	u8 NVM_ModelByte0;	/* 4:   Model number (byte 0) */
-	u8 NVM_ModelByte1;	/* 5:   Model number (byte 1) */
-	u8 NVM_ModelInfo;	/* 6:   Model information         */
-	u8 NVM_NumOfCh;	/* 7:   Number of SCSI channel */
-	u8 NVM_BIOSConfig1;	/* 8:   BIOS configuration 1  */
-	u8 NVM_BIOSConfig2;	/* 9:   BIOS configuration 2  */
-	u8 NVM_HAConfig1;	/* A:   Hoat adapter configuration 1 */
-	u8 NVM_HAConfig2;	/* B:   Hoat adapter configuration 2 */
-	NVRAM_SCSI NVM_SCSIInfo[2];
-	u8 NVM_reserved[10];
-	/* ---------- CheckSum ----------       */
-	u16 NVM_CheckSum;	/* 0x3E, 0x3F: Checksum of NVRam        */
+    /*----------header ---------------*/
+    u16 NVM_Signature;	/* 0,1: Signature */
+    u8 NVM_Size;		/* 2:   Size of data structure */
+    u8 NVM_Revision;	/* 3:   Revision of data structure */
+    /* ----Host Adapter Structure ---- */
+    u8 NVM_ModelByte0;	/* 4:   Model number (byte 0) */
+    u8 NVM_ModelByte1;	/* 5:   Model number (byte 1) */
+    u8 NVM_ModelInfo;	/* 6:   Model information         */
+    u8 NVM_NumOfCh;	/* 7:   Number of SCSI channel */
+    u8 NVM_BIOSConfig1;	/* 8:   BIOS configuration 1  */
+    u8 NVM_BIOSConfig2;	/* 9:   BIOS configuration 2  */
+    u8 NVM_HAConfig1;	/* A:   Hoat adapter configuration 1 */
+    u8 NVM_HAConfig2;	/* B:   Hoat adapter configuration 2 */
+    NVRAM_SCSI NVM_SCSIInfo[2];
+    u8 NVM_reserved[10];
+    /* ---------- CheckSum ----------       */
+    u16 NVM_CheckSum;	/* 0x3E, 0x3F: Checksum of NVRam        */
 } NVRAM, *PNVRAM;
 
 /* Bios Configuration for nvram->BIOSConfig1                            */

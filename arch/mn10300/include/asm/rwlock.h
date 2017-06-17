@@ -24,7 +24,9 @@
 
 #ifndef CONFIG_SMP
 
-typedef struct { unsigned long a[100]; } __dummy_lock_t;
+typedef struct {
+    unsigned long a[100];
+} __dummy_lock_t;
 #define __dummy_lock(lock) (*(__dummy_lock_t *)(lock))
 
 #define RW_LOCK_BIAS_STR	"0x01000000"

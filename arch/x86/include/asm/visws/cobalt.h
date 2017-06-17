@@ -5,7 +5,7 @@
 
 /*
  * Cobalt SGI Visual Workstation system ASIC
- */ 
+ */
 
 #define CO_CPU_NUM_PHYS 0x1e00
 #define CO_CPU_TAB_PHYS (CO_CPU_NUM_PHYS + 2)
@@ -94,24 +94,20 @@
 #define	CO_IRQ_8259	CO_IRQ(CO_APIC_8259)
 
 #ifdef CONFIG_X86_VISWS_APIC
-static inline void co_cpu_write(unsigned long reg, unsigned long v)
-{
-	*((volatile unsigned long *)(CO_CPU_VADDR+reg))=v;
+static inline void co_cpu_write(unsigned long reg, unsigned long v) {
+    *((volatile unsigned long *)(CO_CPU_VADDR+reg))=v;
 }
 
-static inline unsigned long co_cpu_read(unsigned long reg)
-{
-	return *((volatile unsigned long *)(CO_CPU_VADDR+reg));
-}            
-             
-static inline void co_apic_write(unsigned long reg, unsigned long v)
-{
-	*((volatile unsigned long *)(CO_APIC_VADDR+reg))=v;
-}            
-             
-static inline unsigned long co_apic_read(unsigned long reg)
-{
-	return *((volatile unsigned long *)(CO_APIC_VADDR+reg));
+static inline unsigned long co_cpu_read(unsigned long reg) {
+    return *((volatile unsigned long *)(CO_CPU_VADDR+reg));
+}
+
+static inline void co_apic_write(unsigned long reg, unsigned long v) {
+    *((volatile unsigned long *)(CO_APIC_VADDR+reg))=v;
+}
+
+static inline unsigned long co_apic_read(unsigned long reg) {
+    return *((volatile unsigned long *)(CO_APIC_VADDR+reg));
 }
 #endif
 

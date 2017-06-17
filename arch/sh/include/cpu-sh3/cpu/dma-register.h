@@ -22,10 +22,10 @@
  * with their respective values as they appear in the CHCR registers.
  */
 enum {
-	XMIT_SZ_8BIT,
-	XMIT_SZ_16BIT,
-	XMIT_SZ_32BIT,
-	XMIT_SZ_128BIT,
+    XMIT_SZ_8BIT,
+    XMIT_SZ_16BIT,
+    XMIT_SZ_32BIT,
+    XMIT_SZ_128BIT,
 };
 
 /* log2(size / 8) - used to calculate number of transfers */

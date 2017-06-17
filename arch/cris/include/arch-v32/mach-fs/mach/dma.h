@@ -48,27 +48,27 @@
 #define ASYNC_SER3_RX_DMA_NBR 9		/* Asynchronous serial port 3 in. */
 
 enum dma_owner {
-  dma_eth0,
-  dma_eth1,
-  dma_iop0,
-  dma_iop1,
-  dma_ser0,
-  dma_ser1,
-  dma_ser2,
-  dma_ser3,
-  dma_sser0,
-  dma_sser1,
-  dma_ata,
-  dma_strp,
-  dma_ext0,
-  dma_ext1,
-  dma_ext2,
-  dma_ext3
+    dma_eth0,
+    dma_eth1,
+    dma_iop0,
+    dma_iop1,
+    dma_ser0,
+    dma_ser1,
+    dma_ser2,
+    dma_ser3,
+    dma_sser0,
+    dma_sser1,
+    dma_ata,
+    dma_strp,
+    dma_ext0,
+    dma_ext1,
+    dma_ext2,
+    dma_ext3
 };
 
 int crisv32_request_dma(unsigned int dmanr, const char *device_id,
-			unsigned options, unsigned bandwidth,
-			enum dma_owner owner);
+                        unsigned options, unsigned bandwidth,
+                        enum dma_owner owner);
 void crisv32_free_dma(unsigned int dmanr);
 
 /* Masks used by crisv32_request_dma options: */

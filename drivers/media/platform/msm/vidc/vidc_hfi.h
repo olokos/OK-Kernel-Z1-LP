@@ -94,23 +94,23 @@
 #define HFI_INDEX_EXTRADATA_ASPECT_RATIO	0x7F100003
 
 struct hfi_buffer_alloc_mode {
-	u32 buffer_type;
-	u32 buffer_mode;
+    u32 buffer_type;
+    u32 buffer_mode;
 };
 
 
 struct hfi_index_extradata_config {
-	int enable;
-	u32 index_extra_data_id;
+    int enable;
+    u32 index_extra_data_id;
 };
 
 struct hfi_extradata_header {
-	u32 size;
-	u32 version;
-	u32 port_index;
-	u32 type;
-	u32 data_size;
-	u8 rg_data[1];
+    u32 size;
+    u32 version;
+    u32 port_index;
+    u32 type;
+    u32 data_size;
+    u8 rg_data[1];
 };
 
 #define HFI_INTERLACE_FRAME_PROGRESSIVE					0x01
@@ -239,24 +239,24 @@ struct hfi_extradata_header {
 	(HFI_DOMAIN_BASE_VPE + HFI_ARCH_OX_OFFSET + 0x8000)
 
 struct hfi_batch_info {
-	u32 input_batch_count;
-	u32 output_batch_count;
+    u32 input_batch_count;
+    u32 output_batch_count;
 };
 
 struct hfi_buffer_count_actual {
-	u32 buffer_type;
-	u32 buffer_count_actual;
+    u32 buffer_type;
+    u32 buffer_count_actual;
 };
 
 struct hfi_buffer_requirements {
-	u32 buffer_type;
-	u32 buffer_size;
-	u32 buffer_region_size;
-	u32 buffer_hold_count;
-	u32 buffer_count_min;
-	u32 buffer_count_actual;
-	u32 contiguous;
-	u32 buffer_alignment;
+    u32 buffer_type;
+    u32 buffer_size;
+    u32 buffer_region_size;
+    u32 buffer_hold_count;
+    u32 buffer_count_min;
+    u32 buffer_count_actual;
+    u32 contiguous;
+    u32 buffer_alignment;
 };
 
 #define HFI_CHROMA_SITE_0			(HFI_OX_BASE + 0x1)
@@ -267,50 +267,50 @@ struct hfi_buffer_requirements {
 #define HFI_CHROMA_SITE_5			(HFI_OX_BASE + 0x6)
 
 struct hfi_data_payload {
-	u32 size;
-	u8 rg_data[1];
+    u32 size;
+    u8 rg_data[1];
 };
 
 struct hfi_enable_picture {
-	u32 picture_type;
+    u32 picture_type;
 };
 
 struct hfi_display_picture_buffer_count {
-	int enable;
-	u32 count;
+    int enable;
+    u32 count;
 };
 
 struct hfi_extra_data_header_config {
-	u32 type;
-	u32 buffer_type;
-	u32 version;
-	u32 port_index;
-	u32 client_extra_data_id;
+    u32 type;
+    u32 buffer_type;
+    u32 version;
+    u32 port_index;
+    u32 client_extra_data_id;
 };
 
 struct hfi_interlace_format_supported {
-	u32 buffer_type;
-	u32 format;
+    u32 buffer_type;
+    u32 format;
 };
 
 struct hfi_buffer_alloc_mode_supported {
-	u32 buffer_type;
-	u32 num_entries;
-	u32 rg_data[1];
+    u32 buffer_type;
+    u32 num_entries;
+    u32 rg_data[1];
 };
 
 struct hfi_mb_error_map {
-	u32 error_map_size;
-	u8 rg_error_map[1];
+    u32 error_map_size;
+    u8 rg_error_map[1];
 };
 
 struct hfi_metadata_pass_through {
-	int enable;
-	u32 size;
+    int enable;
+    u32 size;
 };
 
 struct hfi_multi_view_select {
-	u32 view_index;
+    u32 view_index;
 };
 
 #define HFI_PRIORITY_LOW		10
@@ -327,9 +327,9 @@ struct hfi_multi_view_select {
 #define HFI_RATE_CONTROL_CBR_CFR	(HFI_OX_BASE + 0x5)
 
 struct hfi_uncompressed_plane_actual_constraints_info {
-	u32 buffer_type;
-	u32 num_planes;
-	struct hfi_uncompressed_plane_constraints rg_plane_format[1];
+    u32 buffer_type;
+    u32 num_planes;
+    struct hfi_uncompressed_plane_constraints rg_plane_format[1];
 };
 
 #define HFI_CMD_SYS_OX_START		\
@@ -386,474 +386,474 @@ struct hfi_uncompressed_plane_actual_constraints_info {
 
 
 struct hfi_cmd_sys_session_abort_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_sys_ping_packet {
-	u32 size;
-	u32 packet_type;
-	u32 client_data;
+    u32 size;
+    u32 packet_type;
+    u32 client_data;
 };
 
 struct hfi_cmd_session_load_resources_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_start_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_stop_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_empty_buffer_compressed_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 time_stamp_hi;
-	u32 time_stamp_lo;
-	u32 flags;
-	u32 mark_target;
-	u32 mark_data;
-	u32 offset;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 input_tag;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 time_stamp_hi;
+    u32 time_stamp_lo;
+    u32 flags;
+    u32 mark_target;
+    u32 mark_data;
+    u32 offset;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 input_tag;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[1];
 };
 
 struct hfi_cmd_session_empty_buffer_uncompressed_plane0_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 view_id;
-	u32 time_stamp_hi;
-	u32 time_stamp_lo;
-	u32 flags;
-	u32 mark_target;
-	u32 mark_data;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u32 input_tag;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 view_id;
+    u32 time_stamp_hi;
+    u32 time_stamp_lo;
+    u32 flags;
+    u32 mark_target;
+    u32 mark_data;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u32 input_tag;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[1];
 };
 
 struct hfi_cmd_session_empty_buffer_uncompressed_plane1_packet {
-	u32 flags;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u8 *packet_buffer2;
-	u32 rgData[1];
+    u32 flags;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u8 *packet_buffer2;
+    u32 rgData[1];
 };
 
 struct hfi_cmd_session_empty_buffer_uncompressed_plane2_packet {
-	u32 flags;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u8 *packet_buffer3;
-	u32 rgData[1];
+    u32 flags;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u8 *packet_buffer3;
+    u32 rgData[1];
 };
 
 struct hfi_cmd_session_fill_buffer_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 stream_id;
-	u32 offset;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 output_tag;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 stream_id;
+    u32 offset;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 output_tag;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[1];
 };
 
 struct hfi_cmd_session_flush_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 flush_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 flush_type;
 };
 
 struct hfi_cmd_session_suspend_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_resume_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_get_property_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_cmd_session_release_buffer_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 buffer_type;
-	u32 buffer_size;
-	u32 extra_data_size;
-	int response_req;
-	u32 num_buffers;
-	u32 rg_buffer_info[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 buffer_type;
+    u32 buffer_size;
+    u32 extra_data_size;
+    int response_req;
+    u32 num_buffers;
+    u32 rg_buffer_info[1];
 };
 
 struct hfi_cmd_session_release_resources_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
 };
 
 struct hfi_cmd_session_parse_sequence_header_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 header_len;
-	u8 *packet_buffer;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 header_len;
+    u8 *packet_buffer;
 };
 
 struct hfi_msg_sys_session_abort_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_sys_idle_packet {
-	u32 size;
-	u32 packet_type;
+    u32 size;
+    u32 packet_type;
 };
 
 struct hfi_msg_sys_ping_ack_packet {
-	u32 size;
-	u32 packet_type;
-	u32 client_data;
+    u32 size;
+    u32 packet_type;
+    u32 client_data;
 };
 
 struct hfi_msg_sys_property_info_packet {
-	u32 size;
-	u32 packet_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_msg_session_load_resources_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_start_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_stop_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_suspend_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_resume_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_flush_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 flush_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 flush_type;
 };
 
 struct hfi_msg_session_empty_buffer_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 offset;
-	u32 filled_len;
-	u32 input_tag;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[0];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 offset;
+    u32 filled_len;
+    u32 input_tag;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[0];
 };
 
 struct hfi_msg_session_fill_buffer_done_compressed_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 time_stamp_hi;
-	u32 time_stamp_lo;
-	u32 error_type;
-	u32 flags;
-	u32 mark_target;
-	u32 mark_data;
-	u32 stats;
-	u32 offset;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 input_tag;
-	u32 output_tag;
-	u32 picture_type;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[0];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 time_stamp_hi;
+    u32 time_stamp_lo;
+    u32 error_type;
+    u32 flags;
+    u32 mark_target;
+    u32 mark_data;
+    u32 stats;
+    u32 offset;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 input_tag;
+    u32 output_tag;
+    u32 picture_type;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[0];
 };
 
 struct hfi_msg_session_fbd_uncompressed_plane0_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 stream_id;
-	u32 view_id;
-	u32 error_type;
-	u32 time_stamp_hi;
-	u32 time_stamp_lo;
-	u32 flags;
-	u32 mark_target;
-	u32 mark_data;
-	u32 stats;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u32 frame_width;
-	u32 frame_height;
-	u32 start_x_coord;
-	u32 start_y_coord;
-	u32 input_tag;
-	u32 input_tag2;
-	u32 output_tag;
-	u32 picture_type;
-	u8 *packet_buffer;
-	u8 *extra_data_buffer;
-	u32 rgData[0];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 stream_id;
+    u32 view_id;
+    u32 error_type;
+    u32 time_stamp_hi;
+    u32 time_stamp_lo;
+    u32 flags;
+    u32 mark_target;
+    u32 mark_data;
+    u32 stats;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u32 frame_width;
+    u32 frame_height;
+    u32 start_x_coord;
+    u32 start_y_coord;
+    u32 input_tag;
+    u32 input_tag2;
+    u32 output_tag;
+    u32 picture_type;
+    u8 *packet_buffer;
+    u8 *extra_data_buffer;
+    u32 rgData[0];
 };
 
 struct hfi_msg_session_fill_buffer_done_uncompressed_plane1_packet {
-	u32 flags;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u8 *packet_buffer2;
-	u32 rgData[0];
+    u32 flags;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u8 *packet_buffer2;
+    u32 rgData[0];
 };
 
 struct hfi_msg_session_fill_buffer_done_uncompressed_plane2_packet {
-	u32 flags;
-	u32 alloc_len;
-	u32 filled_len;
-	u32 offset;
-	u8 *packet_buffer3;
-	u32 rgData[0];
+    u32 flags;
+    u32 alloc_len;
+    u32 filled_len;
+    u32 offset;
+    u8 *packet_buffer3;
+    u32 rgData[0];
 };
 
 struct hfi_msg_session_parse_sequence_header_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_msg_session_property_info_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 num_properties;
-	u32 rg_property_data[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 num_properties;
+    u32 rg_property_data[1];
 };
 
 struct hfi_msg_session_release_resources_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
 };
 
 struct hfi_msg_session_release_buffers_done_packet {
-	u32 size;
-	u32 packet_type;
-	u32 session_id;
-	u32 error_type;
-	u32 num_buffers;
-	u32 rg_buffer_info[1];
+    u32 size;
+    u32 packet_type;
+    u32 session_id;
+    u32 error_type;
+    u32 num_buffers;
+    u32 rg_buffer_info[1];
 };
 
 struct hfi_extradata_mb_quantization_payload {
-	u8 rg_mb_qp[1];
+    u8 rg_mb_qp[1];
 };
 
 struct hfi_extradata_vc1_pswnd {
-	u32 ps_wnd_h_offset;
-	u32 ps_wnd_v_offset;
-	u32 ps_wnd_width;
-	u32 ps_wnd_height;
+    u32 ps_wnd_h_offset;
+    u32 ps_wnd_v_offset;
+    u32 ps_wnd_width;
+    u32 ps_wnd_height;
 };
 
 struct hfi_extradata_vc1_framedisp_payload {
-	u32 res_pic;
-	u32 ref;
-	u32 range_map_present;
-	u32 range_map_y;
-	u32 range_map_uv;
-	u32 num_pan_scan_wnds;
-	struct hfi_extradata_vc1_pswnd rg_ps_wnd[1];
+    u32 res_pic;
+    u32 ref;
+    u32 range_map_present;
+    u32 range_map_y;
+    u32 range_map_uv;
+    u32 num_pan_scan_wnds;
+    struct hfi_extradata_vc1_pswnd rg_ps_wnd[1];
 };
 
 struct hfi_extradata_vc1_seqdisp_payload {
-	u32 prog_seg_frm;
-	u32 uv_sampling_fmt;
-	u32 color_fmt_flag;
-	u32 color_primaries;
-	u32 transfer_char;
-	u32 mat_coeff;
-	u32 aspect_ratio;
-	u32 aspect_horiz;
-	u32 aspect_vert;
+    u32 prog_seg_frm;
+    u32 uv_sampling_fmt;
+    u32 color_fmt_flag;
+    u32 color_primaries;
+    u32 transfer_char;
+    u32 mat_coeff;
+    u32 aspect_ratio;
+    u32 aspect_horiz;
+    u32 aspect_vert;
 };
 
 struct hfi_extradata_timestamp_payload {
-	u32 time_stamp_low;
-	u32 time_stamp_high;
+    u32 time_stamp_low;
+    u32 time_stamp_high;
 };
 
 
 struct hfi_extradata_s3d_frame_packing_payload {
-	u32 fpa_id;
-	int cancel_flag;
-	u32 fpa_type;
-	int quin_cunx_flag;
-	u32 content_interprtation_type;
-	int spatial_flipping_flag;
-	int frame0_flipped_flag;
-	int field_views_flag;
-	int current_frame_isFrame0_flag;
-	int frame0_self_contained_flag;
-	int frame1_self_contained_flag;
-	u32 frame0_graid_pos_x;
-	u32 frame0_graid_pos_y;
-	u32 frame1_graid_pos_x;
-	u32 frame1_graid_pos_y;
-	u32 fpa_reserved_byte;
-	u32 fpa_repetition_period;
-	int fpa_extension_flag;
+    u32 fpa_id;
+    int cancel_flag;
+    u32 fpa_type;
+    int quin_cunx_flag;
+    u32 content_interprtation_type;
+    int spatial_flipping_flag;
+    int frame0_flipped_flag;
+    int field_views_flag;
+    int current_frame_isFrame0_flag;
+    int frame0_self_contained_flag;
+    int frame1_self_contained_flag;
+    u32 frame0_graid_pos_x;
+    u32 frame0_graid_pos_y;
+    u32 frame1_graid_pos_x;
+    u32 frame1_graid_pos_y;
+    u32 fpa_reserved_byte;
+    u32 fpa_repetition_period;
+    int fpa_extension_flag;
 };
 
 struct hfi_extradata_interlace_video_payload {
-	u32 format;
+    u32 format;
 };
 
 struct hfi_extradata_num_concealed_mb_payload {
-	u32 num_mb_concealed;
+    u32 num_mb_concealed;
 };
 
 struct hfi_extradata_sliceinfo {
-	u32 offset_in_stream;
-	u32 slice_length;
+    u32 offset_in_stream;
+    u32 slice_length;
 };
 
 struct hfi_extradata_multislice_info_payload {
-	u32 num_slices;
-	struct hfi_extradata_sliceinfo rg_slice_info[1];
+    u32 num_slices;
+    struct hfi_extradata_sliceinfo rg_slice_info[1];
 };
 
 struct hfi_index_extradata_input_crop_payload {
-	u32 size;
-	u32 version;
-	u32 port_index;
-	u32 left;
-	u32 top;
-	u32 width;
-	u32 height;
+    u32 size;
+    u32 version;
+    u32 port_index;
+    u32 left;
+    u32 top;
+    u32 width;
+    u32 height;
 };
 
 struct hfi_index_extradata_digital_zoom_payload {
-	u32 size;
-	u32 version;
-	u32 port_index;
-	int width;
-	int height;
+    u32 size;
+    u32 version;
+    u32 port_index;
+    int width;
+    int height;
 };
 
 struct hfi_index_extradata_aspect_ratio_payload {
-	u32 size;
-	u32 version;
-	u32 port_index;
-	u32 aspect_width;
-	u32 aspect_height;
+    u32 size;
+    u32 version;
+    u32 port_index;
+    u32 aspect_width;
+    u32 aspect_height;
 };
 struct hfi_extradata_panscan_wndw_payload {
-	u32 num_window;
-	struct hfi_extradata_vc1_pswnd wnd[1];
+    u32 num_window;
+    struct hfi_extradata_vc1_pswnd wnd[1];
 };
 
 struct hfi_extradata_frame_type_payload {
-	u32 frame_rate;
+    u32 frame_rate;
 };
 
 struct hfi_extradata_recovery_point_sei_payload {
-	u32 flag;
+    u32 flag;
 };
 
 struct hal_session {
-	struct list_head list;
-	u32 session_id;
-	u32 is_decoder;
-	void *device;
+    struct list_head list;
+    u32 session_id;
+    u32 is_decoder;
+    void *device;
 };
 
 struct hal_device_data {
-	struct list_head dev_head;
-	int dev_count;
+    struct list_head dev_head;
+    int dev_count;
 };
 
 struct msm_vidc_fw {
-	void *cookie;
+    void *cookie;
 };
 
 u32 hfi_process_msg_packet(msm_vidc_callback callback,
-		u32 device_id, struct vidc_hal_msg_pkt_hdr *msg_hdr,
-		struct list_head *sessions, struct mutex *session_lock);
+                           u32 device_id, struct vidc_hal_msg_pkt_hdr *msg_hdr,
+                           struct list_head *sessions, struct mutex *session_lock);
 #endif
 

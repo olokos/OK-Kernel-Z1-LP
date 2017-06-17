@@ -37,66 +37,63 @@ void __iomem *ath79_reset_base;
 EXPORT_SYMBOL_GPL(ath79_reset_base);
 void __iomem *ath79_ddr_base;
 
-void ath79_ddr_wb_flush(u32 reg)
-{
-	void __iomem *flush_reg = ath79_ddr_base + reg;
+void ath79_ddr_wb_flush(u32 reg) {
+    void __iomem *flush_reg = ath79_ddr_base + reg;
 
-	/* Flush the DDR write buffer. */
-	__raw_writel(0x1, flush_reg);
-	while (__raw_readl(flush_reg) & 0x1)
-		;
+    /* Flush the DDR write buffer. */
+    __raw_writel(0x1, flush_reg);
+    while (__raw_readl(flush_reg) & 0x1)
+        ;
 
-	/* It must be run twice. */
-	__raw_writel(0x1, flush_reg);
-	while (__raw_readl(flush_reg) & 0x1)
-		;
+    /* It must be run twice. */
+    __raw_writel(0x1, flush_reg);
+    while (__raw_readl(flush_reg) & 0x1)
+        ;
 }
 EXPORT_SYMBOL_GPL(ath79_ddr_wb_flush);
 
-void ath79_device_reset_set(u32 mask)
-{
-	unsigned long flags;
-	u32 reg;
-	u32 t;
+void ath79_device_reset_set(u32 mask) {
+    unsigned long flags;
+    u32 reg;
+    u32 t;
 
-	if (soc_is_ar71xx())
-		reg = AR71XX_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar724x())
-		reg = AR724X_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar913x())
-		reg = AR913X_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar933x())
-		reg = AR933X_RESET_REG_RESET_MODULE;
-	else
-		BUG();
+    if (soc_is_ar71xx())
+        reg = AR71XX_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar724x())
+        reg = AR724X_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar913x())
+        reg = AR913X_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar933x())
+        reg = AR933X_RESET_REG_RESET_MODULE;
+    else
+        BUG();
 
-	spin_lock_irqsave(&ath79_device_reset_lock, flags);
-	t = ath79_reset_rr(reg);
-	ath79_reset_wr(reg, t | mask);
-	spin_unlock_irqrestore(&ath79_device_reset_lock, flags);
+    spin_lock_irqsave(&ath79_device_reset_lock, flags);
+    t = ath79_reset_rr(reg);
+    ath79_reset_wr(reg, t | mask);
+    spin_unlock_irqrestore(&ath79_device_reset_lock, flags);
 }
 EXPORT_SYMBOL_GPL(ath79_device_reset_set);
 
-void ath79_device_reset_clear(u32 mask)
-{
-	unsigned long flags;
-	u32 reg;
-	u32 t;
+void ath79_device_reset_clear(u32 mask) {
+    unsigned long flags;
+    u32 reg;
+    u32 t;
 
-	if (soc_is_ar71xx())
-		reg = AR71XX_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar724x())
-		reg = AR724X_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar913x())
-		reg = AR913X_RESET_REG_RESET_MODULE;
-	else if (soc_is_ar933x())
-		reg = AR933X_RESET_REG_RESET_MODULE;
-	else
-		BUG();
+    if (soc_is_ar71xx())
+        reg = AR71XX_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar724x())
+        reg = AR724X_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar913x())
+        reg = AR913X_RESET_REG_RESET_MODULE;
+    else if (soc_is_ar933x())
+        reg = AR933X_RESET_REG_RESET_MODULE;
+    else
+        BUG();
 
-	spin_lock_irqsave(&ath79_device_reset_lock, flags);
-	t = ath79_reset_rr(reg);
-	ath79_reset_wr(reg, t & ~mask);
-	spin_unlock_irqrestore(&ath79_device_reset_lock, flags);
+    spin_lock_irqsave(&ath79_device_reset_lock, flags);
+    t = ath79_reset_rr(reg);
+    ath79_reset_wr(reg, t & ~mask);
+    spin_unlock_irqrestore(&ath79_device_reset_lock, flags);
 }
 EXPORT_SYMBOL_GPL(ath79_device_reset_clear);

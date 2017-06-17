@@ -17,81 +17,77 @@
 #define DCACHE_SETMASK	0
 #endif
 
-static inline void flush_cf_icache(unsigned long start, unsigned long end)
-{
-	unsigned long set;
+static inline void flush_cf_icache(unsigned long start, unsigned long end) {
+    unsigned long set;
 
-	for (set = start; set <= end; set += (0x10 - 3)) {
-		__asm__ __volatile__ (
-			"cpushl %%ic,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%ic,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%ic,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%ic,(%0)"
-			: "=a" (set)
-			: "a" (set));
-	}
+    for (set = start; set <= end; set += (0x10 - 3)) {
+        __asm__ __volatile__ (
+            "cpushl %%ic,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%ic,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%ic,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%ic,(%0)"
+            : "=a" (set)
+            : "a" (set));
+    }
 }
 
-static inline void flush_cf_dcache(unsigned long start, unsigned long end)
-{
-	unsigned long set;
+static inline void flush_cf_dcache(unsigned long start, unsigned long end) {
+    unsigned long set;
 
-	for (set = start; set <= end; set += (0x10 - 3)) {
-		__asm__ __volatile__ (
-			"cpushl %%dc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%dc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%dc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%dc,(%0)"
-			: "=a" (set)
-			: "a" (set));
-	}
+    for (set = start; set <= end; set += (0x10 - 3)) {
+        __asm__ __volatile__ (
+            "cpushl %%dc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%dc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%dc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%dc,(%0)"
+            : "=a" (set)
+            : "a" (set));
+    }
 }
 
-static inline void flush_cf_bcache(unsigned long start, unsigned long end)
-{
-	unsigned long set;
+static inline void flush_cf_bcache(unsigned long start, unsigned long end) {
+    unsigned long set;
 
-	for (set = start; set <= end; set += (0x10 - 3)) {
-		__asm__ __volatile__ (
-			"cpushl %%bc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%bc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%bc,(%0)\n\t"
-			"addq%.l #1,%0\n\t"
-			"cpushl %%bc,(%0)"
-			: "=a" (set)
-			: "a" (set));
-	}
+    for (set = start; set <= end; set += (0x10 - 3)) {
+        __asm__ __volatile__ (
+            "cpushl %%bc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%bc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%bc,(%0)\n\t"
+            "addq%.l #1,%0\n\t"
+            "cpushl %%bc,(%0)"
+            : "=a" (set)
+            : "a" (set));
+    }
 }
 
 /*
  * Cache handling functions
  */
 
-static inline void flush_icache(void)
-{
-	if (CPU_IS_COLDFIRE) {
-		flush_cf_icache(0, ICACHE_MAX_ADDR);
-	} else if (CPU_IS_040_OR_060) {
-		asm volatile (	"nop\n"
-			"	.chip	68040\n"
-			"	cpusha	%bc\n"
-			"	.chip	68k");
-	} else {
-		unsigned long tmp;
-		asm volatile (	"movec	%%cacr,%0\n"
-			"	or.w	%1,%0\n"
-			"	movec	%0,%%cacr"
-			: "=&d" (tmp)
-			: "id" (FLUSH_I));
-	}
+static inline void flush_icache(void) {
+    if (CPU_IS_COLDFIRE) {
+        flush_cf_icache(0, ICACHE_MAX_ADDR);
+    } else if (CPU_IS_040_OR_060) {
+        asm volatile (	"nop\n"
+                        "	.chip	68040\n"
+                        "	cpusha	%bc\n"
+                        "	.chip	68k");
+    } else {
+        unsigned long tmp;
+        asm volatile (	"movec	%%cacr,%0\n"
+                        "	or.w	%1,%0\n"
+                        "	movec	%0,%%cacr"
+                        : "=&d" (tmp)
+                        : "id" (FLUSH_I));
+    }
 }
 
 /*
@@ -151,10 +147,9 @@ extern void cache_push_v(unsigned long vaddr, int len);
 #define flush_cache_vmap(start, end)		flush_cache_all()
 #define flush_cache_vunmap(start, end)		flush_cache_all()
 
-static inline void flush_cache_mm(struct mm_struct *mm)
-{
-	if (mm == current->mm)
-		__flush_cache_030();
+static inline void flush_cache_mm(struct mm_struct *mm) {
+    if (mm == current->mm)
+        __flush_cache_030();
 }
 
 #define flush_cache_dup_mm(mm)			flush_cache_mm(mm)
@@ -162,48 +157,45 @@ static inline void flush_cache_mm(struct mm_struct *mm)
 /* flush_cache_range/flush_cache_page must be macros to avoid
    a dependency on linux/mm.h, which includes this file... */
 static inline void flush_cache_range(struct vm_area_struct *vma,
-				     unsigned long start,
-				     unsigned long end)
-{
-	if (vma->vm_mm == current->mm)
-	        __flush_cache_030();
+                                     unsigned long start,
+                                     unsigned long end) {
+    if (vma->vm_mm == current->mm)
+        __flush_cache_030();
 }
 
-static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vmaddr, unsigned long pfn)
-{
-	if (vma->vm_mm == current->mm)
-	        __flush_cache_030();
+static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vmaddr, unsigned long pfn) {
+    if (vma->vm_mm == current->mm)
+        __flush_cache_030();
 }
 
 
 /* Push the page at kernel virtual address and clear the icache */
 /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
-static inline void __flush_page_to_ram(void *vaddr)
-{
-	if (CPU_IS_COLDFIRE) {
-		unsigned long addr, start, end;
-		addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
-		start = addr & ICACHE_SET_MASK;
-		end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
-		if (start > end) {
-			flush_cf_bcache(0, end);
-			end = ICACHE_MAX_ADDR;
-		}
-		flush_cf_bcache(start, end);
-	} else if (CPU_IS_040_OR_060) {
-		__asm__ __volatile__("nop\n\t"
-				     ".chip 68040\n\t"
-				     "cpushp %%bc,(%0)\n\t"
-				     ".chip 68k"
-				     : : "a" (__pa(vaddr)));
-	} else {
-		unsigned long _tmp;
-		__asm__ __volatile__("movec %%cacr,%0\n\t"
-				     "orw %1,%0\n\t"
-				     "movec %0,%%cacr"
-				     : "=&d" (_tmp)
-				     : "di" (FLUSH_I));
-	}
+static inline void __flush_page_to_ram(void *vaddr) {
+    if (CPU_IS_COLDFIRE) {
+        unsigned long addr, start, end;
+        addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
+        start = addr & ICACHE_SET_MASK;
+        end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
+        if (start > end) {
+            flush_cf_bcache(0, end);
+            end = ICACHE_MAX_ADDR;
+        }
+        flush_cf_bcache(start, end);
+    } else if (CPU_IS_040_OR_060) {
+        __asm__ __volatile__("nop\n\t"
+                             ".chip 68040\n\t"
+                             "cpushp %%bc,(%0)\n\t"
+                             ".chip 68k"
+                             : : "a" (__pa(vaddr)));
+    } else {
+        unsigned long _tmp;
+        __asm__ __volatile__("movec %%cacr,%0\n\t"
+                             "orw %1,%0\n\t"
+                             "movec %0,%%cacr"
+                             : "=&d" (_tmp)
+                             : "di" (FLUSH_I));
+    }
 }
 
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
@@ -213,23 +205,21 @@ static inline void __flush_page_to_ram(void *vaddr)
 #define flush_icache_page(vma, page)	__flush_page_to_ram(page_address(page))
 
 extern void flush_icache_user_range(struct vm_area_struct *vma, struct page *page,
-				    unsigned long addr, int len);
+                                    unsigned long addr, int len);
 extern void flush_icache_range(unsigned long address, unsigned long endaddr);
 
 static inline void copy_to_user_page(struct vm_area_struct *vma,
-				     struct page *page, unsigned long vaddr,
-				     void *dst, void *src, int len)
-{
-	flush_cache_page(vma, vaddr, page_to_pfn(page));
-	memcpy(dst, src, len);
-	flush_icache_user_range(vma, page, vaddr, len);
+                                     struct page *page, unsigned long vaddr,
+                                     void *dst, void *src, int len) {
+    flush_cache_page(vma, vaddr, page_to_pfn(page));
+    memcpy(dst, src, len);
+    flush_icache_user_range(vma, page, vaddr, len);
 }
 static inline void copy_from_user_page(struct vm_area_struct *vma,
-				       struct page *page, unsigned long vaddr,
-				       void *dst, void *src, int len)
-{
-	flush_cache_page(vma, vaddr, page_to_pfn(page));
-	memcpy(dst, src, len);
+                                       struct page *page, unsigned long vaddr,
+                                       void *dst, void *src, int len) {
+    flush_cache_page(vma, vaddr, page_to_pfn(page));
+    memcpy(dst, src, len);
 }
 
 #endif /* _M68K_CACHEFLUSH_H */

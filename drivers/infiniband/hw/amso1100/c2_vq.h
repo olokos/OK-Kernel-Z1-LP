@@ -38,13 +38,13 @@
 #include "c2_provider.h"
 
 struct c2_vq_req {
-	u64 reply_msg;		/* ptr to reply msg */
-	wait_queue_head_t wait_object;	/* wait object for vq reqs */
-	atomic_t reply_ready;	/* set when reply is ready */
-	atomic_t refcnt;	/* used to cancel WRs... */
-	int event;
-	struct iw_cm_id *cm_id;
-	struct c2_qp *qp;
+    u64 reply_msg;		/* ptr to reply msg */
+    wait_queue_head_t wait_object;	/* wait object for vq reqs */
+    atomic_t reply_ready;	/* set when reply is ready */
+    atomic_t refcnt;	/* used to cancel WRs... */
+    int event;
+    struct iw_cm_id *cm_id;
+    struct c2_qp *qp;
 };
 
 extern int vq_init(struct c2_dev *c2dev);

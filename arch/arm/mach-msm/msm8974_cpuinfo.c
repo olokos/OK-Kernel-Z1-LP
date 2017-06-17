@@ -23,82 +23,76 @@
 struct dentry *cpuinfo_rootdir;
 
 struct msm8974_cpuinfo {
-	int sbin;
-	int pvs;
-	int pvs_ver;
+    int sbin;
+    int pvs;
+    int pvs_ver;
 } cpuinf;
 
-static int debugfs_sbin_get(void *data, u64 *val)
-{
-	*val = cpuinf.sbin;
+static int debugfs_sbin_get(void *data, u64 *val) {
+    *val = cpuinf.sbin;
 
-	return 0;
+    return 0;
 }
 
-static int debugfs_pvs_get(void *data, u64 *val)
-{
-	*val = cpuinf.pvs;
+static int debugfs_pvs_get(void *data, u64 *val) {
+    *val = cpuinf.pvs;
 
-	return 0;
+    return 0;
 }
 
-static int debugfs_pvs_ver_get(void *data, u64 *val)
-{
-	*val = cpuinf.pvs_ver;
+static int debugfs_pvs_ver_get(void *data, u64 *val) {
+    *val = cpuinf.pvs_ver;
 
-	return 0;
+    return 0;
 }
 
 DEFINE_SIMPLE_ATTRIBUTE(sbin_ops, debugfs_sbin_get, NULL, "%llu\n");
 DEFINE_SIMPLE_ATTRIBUTE(pvs_ops, debugfs_pvs_get, NULL, "%llu\n");
 DEFINE_SIMPLE_ATTRIBUTE(pvs_ver_ops, debugfs_pvs_ver_get, NULL, "%llu\n");
 
-static int cpuinfo_debugfs_add(void)
-{
-	cpuinfo_rootdir = debugfs_create_dir("msm8974_cpuinfo", NULL);
-	if (IS_ERR_OR_NULL(cpuinfo_rootdir)) {
-		pr_err("Failed to create cpuinfo root dir. Error: %ld\n",
-						PTR_ERR(cpuinfo_rootdir));
-		return -ENODEV;
-	}
+static int cpuinfo_debugfs_add(void) {
+    cpuinfo_rootdir = debugfs_create_dir("msm8974_cpuinfo", NULL);
+    if (IS_ERR_OR_NULL(cpuinfo_rootdir)) {
+        pr_err("Failed to create cpuinfo root dir. Error: %ld\n",
+               PTR_ERR(cpuinfo_rootdir));
+        return -ENODEV;
+    }
 
-	if (debugfs_create_file("Speedbin", S_IRUGO,
-			cpuinfo_rootdir, NULL, &sbin_ops) == NULL)
-		goto init_failed;
-	if (debugfs_create_file("PVS", S_IRUGO,
-			cpuinfo_rootdir, NULL, &pvs_ops) == NULL)
-		goto init_failed;
-	if (debugfs_create_file("PVS_Version", S_IRUGO,
-			cpuinfo_rootdir, NULL, &pvs_ver_ops) == NULL)
-		goto init_failed;
+    if (debugfs_create_file("Speedbin", S_IRUGO,
+                            cpuinfo_rootdir, NULL, &sbin_ops) == NULL)
+        goto init_failed;
+    if (debugfs_create_file("PVS", S_IRUGO,
+                            cpuinfo_rootdir, NULL, &pvs_ops) == NULL)
+        goto init_failed;
+    if (debugfs_create_file("PVS_Version", S_IRUGO,
+                            cpuinfo_rootdir, NULL, &pvs_ver_ops) == NULL)
+        goto init_failed;
 
-	return 0;
+    return 0;
 
 init_failed:
-	debugfs_remove_recursive(cpuinfo_rootdir);
-	return -ENOMEM;
+    debugfs_remove_recursive(cpuinfo_rootdir);
+    return -ENOMEM;
 }
 
-int cpuinfo_debugfs_init(int speed, int pvs, int pvs_ver)
-{
-	int rc;
+int cpuinfo_debugfs_init(int speed, int pvs, int pvs_ver) {
+    int rc;
 
-	cpuinf.sbin = speed;
-	cpuinf.pvs = pvs;
-	cpuinf.pvs_ver = pvs_ver;
+    cpuinf.sbin = speed;
+    cpuinf.pvs = pvs;
+    cpuinf.pvs_ver = pvs_ver;
 
-	rc = cpuinfo_debugfs_add();
-	if (rc < 0) {
-		pr_err("Failed to initialize msm8974 cpuinfo debugfs\n");
-		return rc;
-	}
+    rc = cpuinfo_debugfs_add();
+    if (rc < 0) {
+        pr_err("Failed to initialize msm8974 cpuinfo debugfs\n");
+        return rc;
+    }
 
-	return 0;
+    return 0;
 }
 
-static void __exit cpuinfo_exit(void)
-{
-	debugfs_remove_recursive(cpuinfo_rootdir);
+static void __exit cpuinfo_exit(void) {
+    debugfs_remove_recursive(cpuinfo_rootdir);
 }
 
 module_exit(cpuinfo_exit);

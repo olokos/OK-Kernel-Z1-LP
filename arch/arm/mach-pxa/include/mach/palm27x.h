@@ -14,11 +14,11 @@
 
 #if defined(CONFIG_MMC_PXA) || defined(CONFIG_MMC_PXA_MODULE)
 extern void __init palm27x_mmc_init(int detect, int ro, int power,
-					int power_inverted);
+                                    int power_inverted);
 #else
 static inline void palm27x_mmc_init(int detect, int ro, int power,
-					int power_inverted)
-{}
+                                    int power_inverted) {
+}
 #endif
 
 #if defined(CONFIG_SUSPEND)
@@ -32,7 +32,7 @@ extern struct pxafb_mode_info palm_320x480_lcd_mode;
 extern struct pxafb_mode_info palm_320x320_lcd_mode;
 extern struct pxafb_mode_info palm_320x320_new_lcd_mode;
 extern void __init palm27x_lcd_init(int power,
-					struct pxafb_mode_info *mode);
+                                    struct pxafb_mode_info *mode);
 #else
 #define palm27x_lcd_init(power, mode)	do {} while (0)
 #endif
@@ -40,7 +40,7 @@ extern void __init palm27x_lcd_init(int power,
 #if	defined(CONFIG_USB_PXA27X) || \
 	defined(CONFIG_USB_PXA27X_MODULE)
 extern void __init palm27x_udc_init(int vbus, int pullup,
-					int vbus_inverted);
+                                    int vbus_inverted);
 #else
 static inline void palm27x_udc_init(int vbus, int pullup, int vbus_inverted) {}
 #endif
@@ -54,7 +54,7 @@ static inline void palm27x_irda_init(int pwdn) {}
 #if	defined(CONFIG_TOUCHSCREEN_WM97XX) || \
 	defined(CONFIG_TOUCHSCREEN_WM97XX_MODULE)
 extern void __init palm27x_ac97_init(int minv, int maxv, int jack,
-					int reset);
+                                     int reset);
 #else
 static inline void palm27x_ac97_init(int minv, int maxv, int jack, int reset) {}
 #endif

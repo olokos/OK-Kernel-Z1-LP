@@ -80,8 +80,8 @@ static char *ev = "int";
 static bool nowayout = WATCHDOG_NOWAYOUT;
 module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout,
-		"Watchdog cannot be stopped once started (default="
-				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+                 "Watchdog cannot be stopped once started (default="
+                 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 
 /*
  * Some symbolic names
@@ -109,52 +109,46 @@ MODULE_PARM_DESC(ev, "Eurotech WDT event type (default is `int')");
  * Programming support
  */
 
-static inline void eurwdt_write_reg(u8 index, u8 data)
-{
-	outb(index, io);
-	outb(data, io+1);
+static inline void eurwdt_write_reg(u8 index, u8 data) {
+    outb(index, io);
+    outb(data, io+1);
 }
 
-static inline void eurwdt_lock_chip(void)
-{
-	outb(0xaa, io);
+static inline void eurwdt_lock_chip(void) {
+    outb(0xaa, io);
 }
 
-static inline void eurwdt_unlock_chip(void)
-{
-	outb(0x55, io);
-	eurwdt_write_reg(0x07, 0x08);	/* set the logical device */
+static inline void eurwdt_unlock_chip(void) {
+    outb(0x55, io);
+    eurwdt_write_reg(0x07, 0x08);	/* set the logical device */
 }
 
-static inline void eurwdt_set_timeout(int timeout)
-{
-	eurwdt_write_reg(WDT_TIMEOUT_VAL, (u8) timeout);
+static inline void eurwdt_set_timeout(int timeout) {
+    eurwdt_write_reg(WDT_TIMEOUT_VAL, (u8) timeout);
 }
 
-static inline void eurwdt_disable_timer(void)
-{
-	eurwdt_set_timeout(0);
+static inline void eurwdt_disable_timer(void) {
+    eurwdt_set_timeout(0);
 }
 
-static void eurwdt_activate_timer(void)
-{
-	eurwdt_disable_timer();
-	eurwdt_write_reg(WDT_CTRL_REG, 0x01);	/* activate the WDT */
-	eurwdt_write_reg(WDT_OUTPIN_CFG,
-		!strcmp("int", ev) ? WDT_EVENT_INT : WDT_EVENT_REBOOT);
+static void eurwdt_activate_timer(void) {
+    eurwdt_disable_timer();
+    eurwdt_write_reg(WDT_CTRL_REG, 0x01);	/* activate the WDT */
+    eurwdt_write_reg(WDT_OUTPIN_CFG,
+                     !strcmp("int", ev) ? WDT_EVENT_INT : WDT_EVENT_REBOOT);
 
-	/* Setting interrupt line */
-	if (irq == 2 || irq > 15 || irq < 0) {
-		pr_err("invalid irq number\n");
-		irq = 0;	/* if invalid we disable interrupt */
-	}
-	if (irq == 0)
-		pr_info("interrupt disabled\n");
+    /* Setting interrupt line */
+    if (irq == 2 || irq > 15 || irq < 0) {
+        pr_err("invalid irq number\n");
+        irq = 0;	/* if invalid we disable interrupt */
+    }
+    if (irq == 0)
+        pr_info("interrupt disabled\n");
 
-	eurwdt_write_reg(WDT_TIMER_CFG, irq << 4);
+    eurwdt_write_reg(WDT_TIMER_CFG, irq << 4);
 
-	eurwdt_write_reg(WDT_UNIT_SEL, WDT_UNIT_SECS);	/* we use seconds */
-	eurwdt_set_timeout(0);	/* the default timeout */
+    eurwdt_write_reg(WDT_UNIT_SEL, WDT_UNIT_SECS);	/* we use seconds */
+    eurwdt_set_timeout(0);	/* the default timeout */
 }
 
 
@@ -162,17 +156,16 @@ static void eurwdt_activate_timer(void)
  * Kernel methods.
  */
 
-static irqreturn_t eurwdt_interrupt(int irq, void *dev_id)
-{
-	pr_crit("timeout WDT timeout\n");
+static irqreturn_t eurwdt_interrupt(int irq, void *dev_id) {
+    pr_crit("timeout WDT timeout\n");
 
 #ifdef ONLY_TESTING
-	pr_crit("Would Reboot\n");
+    pr_crit("Would Reboot\n");
 #else
-	pr_crit("Initiating system reboot\n");
-	emergency_restart();
+    pr_crit("Initiating system reboot\n");
+    emergency_restart();
 #endif
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 
@@ -182,10 +175,9 @@ static irqreturn_t eurwdt_interrupt(int irq, void *dev_id)
  * Reload counter one with the watchdog timeout.
  */
 
-static void eurwdt_ping(void)
-{
-	/* Write the watchdog default value */
-	eurwdt_set_timeout(eurwdt_timeout);
+static void eurwdt_ping(void) {
+    /* Write the watchdog default value */
+    eurwdt_set_timeout(eurwdt_timeout);
 }
 
 /**
@@ -200,27 +192,26 @@ static void eurwdt_ping(void)
  */
 
 static ssize_t eurwdt_write(struct file *file, const char __user *buf,
-size_t count, loff_t *ppos)
-{
-	if (count) {
-		if (!nowayout) {
-			size_t i;
+                            size_t count, loff_t *ppos) {
+    if (count) {
+        if (!nowayout) {
+            size_t i;
 
-			eur_expect_close = 0;
+            eur_expect_close = 0;
 
-			for (i = 0; i != count; i++) {
-				char c;
-				if (get_user(c, buf + i))
-					return -EFAULT;
-				if (c == 'V')
-					eur_expect_close = 42;
-			}
-		}
-		spin_lock(&eurwdt_lock);
-		eurwdt_ping();	/* the default timeout */
-		spin_unlock(&eurwdt_lock);
-	}
-	return count;
+            for (i = 0; i != count; i++) {
+                char c;
+                if (get_user(c, buf + i))
+                    return -EFAULT;
+                if (c == 'V')
+                    eur_expect_close = 42;
+            }
+        }
+        spin_lock(&eurwdt_lock);
+        eurwdt_ping();	/* the default timeout */
+        spin_unlock(&eurwdt_lock);
+    }
+    return count;
 }
 
 /**
@@ -234,70 +225,69 @@ size_t count, loff_t *ppos)
  */
 
 static long eurwdt_ioctl(struct file *file,
-					unsigned int cmd, unsigned long arg)
-{
-	void __user *argp = (void __user *)arg;
-	int __user *p = argp;
-	static const struct watchdog_info ident = {
-		.options	  = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT
-							| WDIOF_MAGICCLOSE,
-		.firmware_version = 1,
-		.identity	  = "WDT Eurotech CPU-1220/1410",
-	};
+                         unsigned int cmd, unsigned long arg) {
+    void __user *argp = (void __user *)arg;
+    int __user *p = argp;
+    static const struct watchdog_info ident = {
+        .options	  = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT
+        | WDIOF_MAGICCLOSE,
+        .firmware_version = 1,
+        .identity	  = "WDT Eurotech CPU-1220/1410",
+    };
 
-	int time;
-	int options, retval = -EINVAL;
+    int time;
+    int options, retval = -EINVAL;
 
-	switch (cmd) {
-	case WDIOC_GETSUPPORT:
-		return copy_to_user(argp, &ident, sizeof(ident)) ? -EFAULT : 0;
+    switch (cmd) {
+    case WDIOC_GETSUPPORT:
+        return copy_to_user(argp, &ident, sizeof(ident)) ? -EFAULT : 0;
 
-	case WDIOC_GETSTATUS:
-	case WDIOC_GETBOOTSTATUS:
-		return put_user(0, p);
+    case WDIOC_GETSTATUS:
+    case WDIOC_GETBOOTSTATUS:
+        return put_user(0, p);
 
-	case WDIOC_SETOPTIONS:
-		if (get_user(options, p))
-			return -EFAULT;
-		spin_lock(&eurwdt_lock);
-		if (options & WDIOS_DISABLECARD) {
-			eurwdt_disable_timer();
-			retval = 0;
-		}
-		if (options & WDIOS_ENABLECARD) {
-			eurwdt_activate_timer();
-			eurwdt_ping();
-			retval = 0;
-		}
-		spin_unlock(&eurwdt_lock);
-		return retval;
+    case WDIOC_SETOPTIONS:
+        if (get_user(options, p))
+            return -EFAULT;
+        spin_lock(&eurwdt_lock);
+        if (options & WDIOS_DISABLECARD) {
+            eurwdt_disable_timer();
+            retval = 0;
+        }
+        if (options & WDIOS_ENABLECARD) {
+            eurwdt_activate_timer();
+            eurwdt_ping();
+            retval = 0;
+        }
+        spin_unlock(&eurwdt_lock);
+        return retval;
 
-	case WDIOC_KEEPALIVE:
-		spin_lock(&eurwdt_lock);
-		eurwdt_ping();
-		spin_unlock(&eurwdt_lock);
-		return 0;
+    case WDIOC_KEEPALIVE:
+        spin_lock(&eurwdt_lock);
+        eurwdt_ping();
+        spin_unlock(&eurwdt_lock);
+        return 0;
 
-	case WDIOC_SETTIMEOUT:
-		if (copy_from_user(&time, p, sizeof(int)))
-			return -EFAULT;
+    case WDIOC_SETTIMEOUT:
+        if (copy_from_user(&time, p, sizeof(int)))
+            return -EFAULT;
 
-		/* Sanity check */
-		if (time < 0 || time > 255)
-			return -EINVAL;
+        /* Sanity check */
+        if (time < 0 || time > 255)
+            return -EINVAL;
 
-		spin_lock(&eurwdt_lock);
-		eurwdt_timeout = time;
-		eurwdt_set_timeout(time);
-		spin_unlock(&eurwdt_lock);
-		/* Fall */
+        spin_lock(&eurwdt_lock);
+        eurwdt_timeout = time;
+        eurwdt_set_timeout(time);
+        spin_unlock(&eurwdt_lock);
+    /* Fall */
 
-	case WDIOC_GETTIMEOUT:
-		return put_user(eurwdt_timeout, p);
+    case WDIOC_GETTIMEOUT:
+        return put_user(eurwdt_timeout, p);
 
-	default:
-		return -ENOTTY;
-	}
+    default:
+        return -ENOTTY;
+    }
 }
 
 /**
@@ -309,14 +299,13 @@ static long eurwdt_ioctl(struct file *file,
  * open and on opening we load the counter.
  */
 
-static int eurwdt_open(struct inode *inode, struct file *file)
-{
-	if (test_and_set_bit(0, &eurwdt_is_open))
-		return -EBUSY;
-	eurwdt_timeout = WDT_TIMEOUT;	/* initial timeout */
-	/* Activate the WDT */
-	eurwdt_activate_timer();
-	return nonseekable_open(inode, file);
+static int eurwdt_open(struct inode *inode, struct file *file) {
+    if (test_and_set_bit(0, &eurwdt_is_open))
+        return -EBUSY;
+    eurwdt_timeout = WDT_TIMEOUT;	/* initial timeout */
+    /* Activate the WDT */
+    eurwdt_activate_timer();
+    return nonseekable_open(inode, file);
 }
 
 /**
@@ -331,17 +320,16 @@ static int eurwdt_open(struct inode *inode, struct file *file)
  * case you have to open it again very soon.
  */
 
-static int eurwdt_release(struct inode *inode, struct file *file)
-{
-	if (eur_expect_close == 42)
-		eurwdt_disable_timer();
-	else {
-		pr_crit("Unexpected close, not stopping watchdog!\n");
-		eurwdt_ping();
-	}
-	clear_bit(0, &eurwdt_is_open);
-	eur_expect_close = 0;
-	return 0;
+static int eurwdt_release(struct inode *inode, struct file *file) {
+    if (eur_expect_close == 42)
+        eurwdt_disable_timer();
+    else {
+        pr_crit("Unexpected close, not stopping watchdog!\n");
+        eurwdt_ping();
+    }
+    clear_bit(0, &eurwdt_is_open);
+    eur_expect_close = 0;
+    return 0;
 }
 
 /**
@@ -357,12 +345,11 @@ static int eurwdt_release(struct inode *inode, struct file *file)
  */
 
 static int eurwdt_notify_sys(struct notifier_block *this, unsigned long code,
-	void *unused)
-{
-	if (code == SYS_DOWN || code == SYS_HALT)
-		eurwdt_disable_timer();	/* Turn the card off */
+                             void *unused) {
+    if (code == SYS_DOWN || code == SYS_HALT)
+        eurwdt_disable_timer();	/* Turn the card off */
 
-	return NOTIFY_DONE;
+    return NOTIFY_DONE;
 }
 
 /*
@@ -371,18 +358,18 @@ static int eurwdt_notify_sys(struct notifier_block *this, unsigned long code,
 
 
 static const struct file_operations eurwdt_fops = {
-	.owner		= THIS_MODULE,
-	.llseek		= no_llseek,
-	.write		= eurwdt_write,
-	.unlocked_ioctl	= eurwdt_ioctl,
-	.open		= eurwdt_open,
-	.release	= eurwdt_release,
+    .owner		= THIS_MODULE,
+    .llseek		= no_llseek,
+    .write		= eurwdt_write,
+    .unlocked_ioctl	= eurwdt_ioctl,
+    .open		= eurwdt_open,
+    .release	= eurwdt_release,
 };
 
 static struct miscdevice eurwdt_miscdev = {
-	.minor	= WATCHDOG_MINOR,
-	.name	= "watchdog",
-	.fops	= &eurwdt_fops,
+    .minor	= WATCHDOG_MINOR,
+    .name	= "watchdog",
+    .fops	= &eurwdt_fops,
 };
 
 /*
@@ -391,7 +378,7 @@ static struct miscdevice eurwdt_miscdev = {
  */
 
 static struct notifier_block eurwdt_notifier = {
-	.notifier_call = eurwdt_notify_sys,
+    .notifier_call = eurwdt_notify_sys,
 };
 
 /**
@@ -404,15 +391,14 @@ static struct notifier_block eurwdt_notifier = {
  * module in 60 seconds or reboot.
  */
 
-static void __exit eurwdt_exit(void)
-{
-	eurwdt_lock_chip();
+static void __exit eurwdt_exit(void) {
+    eurwdt_lock_chip();
 
-	misc_deregister(&eurwdt_miscdev);
+    misc_deregister(&eurwdt_miscdev);
 
-	unregister_reboot_notifier(&eurwdt_notifier);
-	release_region(io, 2);
-	free_irq(irq, NULL);
+    unregister_reboot_notifier(&eurwdt_notifier);
+    release_region(io, 2);
+    free_irq(irq, NULL);
 }
 
 /**
@@ -423,52 +409,51 @@ static void __exit eurwdt_exit(void)
  * The open() function will actually kick the board off.
  */
 
-static int __init eurwdt_init(void)
-{
-	int ret;
+static int __init eurwdt_init(void) {
+    int ret;
 
-	ret = request_irq(irq, eurwdt_interrupt, 0, "eurwdt", NULL);
-	if (ret) {
-		pr_err("IRQ %d is not free\n", irq);
-		goto out;
-	}
+    ret = request_irq(irq, eurwdt_interrupt, 0, "eurwdt", NULL);
+    if (ret) {
+        pr_err("IRQ %d is not free\n", irq);
+        goto out;
+    }
 
-	if (!request_region(io, 2, "eurwdt")) {
-		pr_err("IO %X is not free\n", io);
-		ret = -EBUSY;
-		goto outirq;
-	}
+    if (!request_region(io, 2, "eurwdt")) {
+        pr_err("IO %X is not free\n", io);
+        ret = -EBUSY;
+        goto outirq;
+    }
 
-	ret = register_reboot_notifier(&eurwdt_notifier);
-	if (ret) {
-		pr_err("can't register reboot notifier (err=%d)\n", ret);
-		goto outreg;
-	}
+    ret = register_reboot_notifier(&eurwdt_notifier);
+    if (ret) {
+        pr_err("can't register reboot notifier (err=%d)\n", ret);
+        goto outreg;
+    }
 
-	ret = misc_register(&eurwdt_miscdev);
-	if (ret) {
-		pr_err("can't misc_register on minor=%d\n", WATCHDOG_MINOR);
-		goto outreboot;
-	}
+    ret = misc_register(&eurwdt_miscdev);
+    if (ret) {
+        pr_err("can't misc_register on minor=%d\n", WATCHDOG_MINOR);
+        goto outreboot;
+    }
 
-	eurwdt_unlock_chip();
+    eurwdt_unlock_chip();
 
-	ret = 0;
-	pr_info("Eurotech WDT driver 0.01 at %X (Interrupt %d) - timeout event: %s\n",
-		io, irq, (!strcmp("int", ev) ? "int" : "reboot"));
+    ret = 0;
+    pr_info("Eurotech WDT driver 0.01 at %X (Interrupt %d) - timeout event: %s\n",
+            io, irq, (!strcmp("int", ev) ? "int" : "reboot"));
 
 out:
-	return ret;
+    return ret;
 
 outreboot:
-	unregister_reboot_notifier(&eurwdt_notifier);
+    unregister_reboot_notifier(&eurwdt_notifier);
 
 outreg:
-	release_region(io, 2);
+    release_region(io, 2);
 
 outirq:
-	free_irq(irq, NULL);
-	goto out;
+    free_irq(irq, NULL);
+    goto out;
 }
 
 module_init(eurwdt_init);

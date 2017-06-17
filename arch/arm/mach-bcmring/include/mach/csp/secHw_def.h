@@ -51,22 +51,22 @@
 
 /* Trustzone register set */
 typedef struct {
-	volatile uint32_t status;	/* read only - reflects status of writes of 2 write registers */
-	volatile uint32_t setUnsecure;	/* write only. reads back as 0 */
-	volatile uint32_t setSecure;	/* write only. reads back as 0 */
+    volatile uint32_t status;	/* read only - reflects status of writes of 2 write registers */
+    volatile uint32_t setUnsecure;	/* write only. reads back as 0 */
+    volatile uint32_t setSecure;	/* write only. reads back as 0 */
 } secHw_TZREG_t;
 
 /* There are 2 register sets. The first is for the lower 16 bits, the 2nd */
 /* is for the higher 16 bits. */
 
 typedef enum {
-	secHw_IDX_LS = 0,
-	secHw_IDX_MS = 1,
-	secHw_IDX_NUM
+    secHw_IDX_LS = 0,
+    secHw_IDX_MS = 1,
+    secHw_IDX_NUM
 } secHw_IDX_e;
 
 typedef struct {
-	volatile secHw_TZREG_t reg[secHw_IDX_NUM];
+    volatile secHw_TZREG_t reg[secHw_IDX_NUM];
 } secHw_REGS_t;
 
 /****************************************************************************/
@@ -76,7 +76,7 @@ typedef struct {
 */
 /****************************************************************************/
 static inline void secHw_setSecure(uint32_t mask	/*  mask of type secHw_BLK_MASK_XXXXXX */
-    );
+                                  );
 
 /****************************************************************************/
 /**
@@ -85,7 +85,7 @@ static inline void secHw_setSecure(uint32_t mask	/*  mask of type secHw_BLK_MASK
 */
 /****************************************************************************/
 static inline void secHw_setUnsecure(uint32_t mask	/*  mask of type secHw_BLK_MASK_XXXXXX */
-    );
+                                    );
 
 /****************************************************************************/
 /**

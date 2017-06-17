@@ -83,136 +83,136 @@
 
 /* UCC Slow Channel Protocol Mode */
 enum ucc_slow_channel_protocol_mode {
-	UCC_SLOW_CHANNEL_PROTOCOL_MODE_QMC = 0x00000002,
-	UCC_SLOW_CHANNEL_PROTOCOL_MODE_UART = 0x00000004,
-	UCC_SLOW_CHANNEL_PROTOCOL_MODE_BISYNC = 0x00000008,
+    UCC_SLOW_CHANNEL_PROTOCOL_MODE_QMC = 0x00000002,
+    UCC_SLOW_CHANNEL_PROTOCOL_MODE_UART = 0x00000004,
+    UCC_SLOW_CHANNEL_PROTOCOL_MODE_BISYNC = 0x00000008,
 };
 
 /* UCC Slow Transparent Transmit CRC (TCRC) */
 enum ucc_slow_transparent_tcrc {
-	/* 16-bit CCITT CRC (HDLC).  (X16 + X12 + X5 + 1) */
-	UCC_SLOW_TRANSPARENT_TCRC_CCITT_CRC16 = 0x00000000,
-	/* CRC16 (BISYNC).  (X16 + X15 + X2 + 1) */
-	UCC_SLOW_TRANSPARENT_TCRC_CRC16 = 0x00004000,
-	/* 32-bit CCITT CRC (Ethernet and HDLC) */
-	UCC_SLOW_TRANSPARENT_TCRC_CCITT_CRC32 = 0x00008000,
+    /* 16-bit CCITT CRC (HDLC).  (X16 + X12 + X5 + 1) */
+    UCC_SLOW_TRANSPARENT_TCRC_CCITT_CRC16 = 0x00000000,
+    /* CRC16 (BISYNC).  (X16 + X15 + X2 + 1) */
+    UCC_SLOW_TRANSPARENT_TCRC_CRC16 = 0x00004000,
+    /* 32-bit CCITT CRC (Ethernet and HDLC) */
+    UCC_SLOW_TRANSPARENT_TCRC_CCITT_CRC32 = 0x00008000,
 };
 
 /* UCC Slow oversampling rate for transmitter (TDCR) */
 enum ucc_slow_tx_oversampling_rate {
-	/* 1x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_1 = 0x00000000,
-	/* 8x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_8 = 0x00010000,
-	/* 16x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_16 = 0x00020000,
-	/* 32x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_32 = 0x00030000,
+    /* 1x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_1 = 0x00000000,
+    /* 8x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_8 = 0x00010000,
+    /* 16x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_16 = 0x00020000,
+    /* 32x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_TX_TDCR_32 = 0x00030000,
 };
 
 /* UCC Slow Oversampling rate for receiver (RDCR)
 */
 enum ucc_slow_rx_oversampling_rate {
-	/* 1x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_1 = 0x00000000,
-	/* 8x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_8 = 0x00004000,
-	/* 16x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_16 = 0x00008000,
-	/* 32x clock mode */
-	UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_32 = 0x0000c000,
+    /* 1x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_1 = 0x00000000,
+    /* 8x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_8 = 0x00004000,
+    /* 16x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_16 = 0x00008000,
+    /* 32x clock mode */
+    UCC_SLOW_OVERSAMPLING_RATE_RX_RDCR_32 = 0x0000c000,
 };
 
 /* UCC Slow Transmitter encoding method (TENC)
 */
 enum ucc_slow_tx_encoding_method {
-	UCC_SLOW_TRANSMITTER_ENCODING_METHOD_TENC_NRZ = 0x00000000,
-	UCC_SLOW_TRANSMITTER_ENCODING_METHOD_TENC_NRZI = 0x00000100
+    UCC_SLOW_TRANSMITTER_ENCODING_METHOD_TENC_NRZ = 0x00000000,
+    UCC_SLOW_TRANSMITTER_ENCODING_METHOD_TENC_NRZI = 0x00000100
 };
 
 /* UCC Slow Receiver decoding method (RENC)
 */
 enum ucc_slow_rx_decoding_method {
-	UCC_SLOW_RECEIVER_DECODING_METHOD_RENC_NRZ = 0x00000000,
-	UCC_SLOW_RECEIVER_DECODING_METHOD_RENC_NRZI = 0x00000800
+    UCC_SLOW_RECEIVER_DECODING_METHOD_RENC_NRZ = 0x00000000,
+    UCC_SLOW_RECEIVER_DECODING_METHOD_RENC_NRZI = 0x00000800
 };
 
 /* UCC Slow Diagnostic mode (DIAG)
 */
 enum ucc_slow_diag_mode {
-	UCC_SLOW_DIAG_MODE_NORMAL = 0x00000000,
-	UCC_SLOW_DIAG_MODE_LOOPBACK = 0x00000040,
-	UCC_SLOW_DIAG_MODE_ECHO = 0x00000080,
-	UCC_SLOW_DIAG_MODE_LOOPBACK_ECHO = 0x000000c0
+    UCC_SLOW_DIAG_MODE_NORMAL = 0x00000000,
+    UCC_SLOW_DIAG_MODE_LOOPBACK = 0x00000040,
+    UCC_SLOW_DIAG_MODE_ECHO = 0x00000080,
+    UCC_SLOW_DIAG_MODE_LOOPBACK_ECHO = 0x000000c0
 };
 
 struct ucc_slow_info {
-	int ucc_num;
-	int protocol;			/* QE_CR_PROTOCOL_xxx */
-	enum qe_clock rx_clock;
-	enum qe_clock tx_clock;
-	phys_addr_t regs;
-	int irq;
-	u16 uccm_mask;
-	int data_mem_part;
-	int init_tx;
-	int init_rx;
-	u32 tx_bd_ring_len;
-	u32 rx_bd_ring_len;
-	int rx_interrupts;
-	int brkpt_support;
-	int grant_support;
-	int tsa;
-	int cdp;
-	int cds;
-	int ctsp;
-	int ctss;
-	int rinv;
-	int tinv;
-	int rtsm;
-	int rfw;
-	int tci;
-	int tend;
-	int tfl;
-	int txsy;
-	u16 max_rx_buf_length;
-	enum ucc_slow_transparent_tcrc tcrc;
-	enum ucc_slow_channel_protocol_mode mode;
-	enum ucc_slow_diag_mode diag;
-	enum ucc_slow_tx_oversampling_rate tdcr;
-	enum ucc_slow_rx_oversampling_rate rdcr;
-	enum ucc_slow_tx_encoding_method tenc;
-	enum ucc_slow_rx_decoding_method renc;
+    int ucc_num;
+    int protocol;			/* QE_CR_PROTOCOL_xxx */
+    enum qe_clock rx_clock;
+    enum qe_clock tx_clock;
+    phys_addr_t regs;
+    int irq;
+    u16 uccm_mask;
+    int data_mem_part;
+    int init_tx;
+    int init_rx;
+    u32 tx_bd_ring_len;
+    u32 rx_bd_ring_len;
+    int rx_interrupts;
+    int brkpt_support;
+    int grant_support;
+    int tsa;
+    int cdp;
+    int cds;
+    int ctsp;
+    int ctss;
+    int rinv;
+    int tinv;
+    int rtsm;
+    int rfw;
+    int tci;
+    int tend;
+    int tfl;
+    int txsy;
+    u16 max_rx_buf_length;
+    enum ucc_slow_transparent_tcrc tcrc;
+    enum ucc_slow_channel_protocol_mode mode;
+    enum ucc_slow_diag_mode diag;
+    enum ucc_slow_tx_oversampling_rate tdcr;
+    enum ucc_slow_rx_oversampling_rate rdcr;
+    enum ucc_slow_tx_encoding_method tenc;
+    enum ucc_slow_rx_decoding_method renc;
 };
 
 struct ucc_slow_private {
-	struct ucc_slow_info *us_info;
-	struct ucc_slow __iomem *us_regs; /* Ptr to memory map of UCC regs */
-	struct ucc_slow_pram *us_pram;	/* a pointer to the parameter RAM */
-	u32 us_pram_offset;
-	int enabled_tx;		/* Whether channel is enabled for Tx (ENT) */
-	int enabled_rx;		/* Whether channel is enabled for Rx (ENR) */
-	int stopped_tx;		/* Whether channel has been stopped for Tx
+    struct ucc_slow_info *us_info;
+    struct ucc_slow __iomem *us_regs; /* Ptr to memory map of UCC regs */
+    struct ucc_slow_pram *us_pram;	/* a pointer to the parameter RAM */
+    u32 us_pram_offset;
+    int enabled_tx;		/* Whether channel is enabled for Tx (ENT) */
+    int enabled_rx;		/* Whether channel is enabled for Rx (ENR) */
+    int stopped_tx;		/* Whether channel has been stopped for Tx
 				   (STOP_TX, etc.) */
-	int stopped_rx;		/* Whether channel has been stopped for Rx */
-	struct list_head confQ;	/* frames passed to chip waiting for tx */
-	u32 first_tx_bd_mask;	/* mask is used in Tx routine to save status
+    int stopped_rx;		/* Whether channel has been stopped for Rx */
+    struct list_head confQ;	/* frames passed to chip waiting for tx */
+    u32 first_tx_bd_mask;	/* mask is used in Tx routine to save status
 				   and length for first BD in a frame */
-	u32 tx_base_offset;	/* first BD in Tx BD table offset (In MURAM) */
-	u32 rx_base_offset;	/* first BD in Rx BD table offset (In MURAM) */
-	struct qe_bd *confBd;	/* next BD for confirm after Tx */
-	struct qe_bd *tx_bd;	/* next BD for new Tx request */
-	struct qe_bd *rx_bd;	/* next BD to collect after Rx */
-	void *p_rx_frame;	/* accumulating receive frame */
-	u16 *p_ucce;		/* a pointer to the event register in memory.
+    u32 tx_base_offset;	/* first BD in Tx BD table offset (In MURAM) */
+    u32 rx_base_offset;	/* first BD in Rx BD table offset (In MURAM) */
+    struct qe_bd *confBd;	/* next BD for confirm after Tx */
+    struct qe_bd *tx_bd;	/* next BD for new Tx request */
+    struct qe_bd *rx_bd;	/* next BD to collect after Rx */
+    void *p_rx_frame;	/* accumulating receive frame */
+    u16 *p_ucce;		/* a pointer to the event register in memory.
 				 */
-	u16 *p_uccm;		/* a pointer to the mask register in memory */
-	u16 saved_uccm;		/* a saved mask for the RX Interrupt bits */
+    u16 *p_uccm;		/* a pointer to the mask register in memory */
+    u16 saved_uccm;		/* a saved mask for the RX Interrupt bits */
 #ifdef STATISTICS
-	u32 tx_frames;		/* Transmitted frames counters */
-	u32 rx_frames;		/* Received frames counters (only frames
+    u32 tx_frames;		/* Transmitted frames counters */
+    u32 rx_frames;		/* Received frames counters (only frames
 				   passed to application) */
-	u32 rx_discarded;	/* Discarded frames counters (frames that
+    u32 rx_discarded;	/* Discarded frames counters (frames that
 				   were discarded by the driver due to
 				   errors) */
 #endif				/* STATISTICS */

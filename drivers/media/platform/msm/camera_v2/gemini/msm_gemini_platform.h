@@ -18,20 +18,20 @@
 #include <linux/msm_ion.h>
 #include <linux/iommu.h>
 void msm_gemini_platform_p2v(struct file  *file,
-				struct ion_handle **ionhandle);
+                             struct ion_handle **ionhandle);
 uint32_t msm_gemini_platform_v2p(int fd, uint32_t len, struct file **file,
-				struct ion_handle **ionhandle);
+                                 struct ion_handle **ionhandle);
 
 int msm_gemini_platform_clk_enable(void);
 int msm_gemini_platform_clk_disable(void);
 
 int msm_gemini_platform_init(struct platform_device *pdev,
-	struct resource **mem,
-	void **base,
-	int *irq,
-	irqreturn_t (*handler) (int, void *),
-	void *context);
+                             struct resource **mem,
+                             void **base,
+                             int *irq,
+                             irqreturn_t (*handler) (int, void *),
+                             void *context);
 int msm_gemini_platform_release(struct resource *mem, void *base, int irq,
-	void *context);
+                                void *context);
 
 #endif /* MSM_GEMINI_PLATFORM_H */

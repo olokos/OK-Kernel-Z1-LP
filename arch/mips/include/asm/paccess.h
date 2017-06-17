@@ -28,7 +28,9 @@ extern asmlinkage void handle_dbe(void);
 #define put_dbe(x, ptr) __put_dbe((x), (ptr), sizeof(*(ptr)))
 #define get_dbe(x, ptr) __get_dbe((x), (ptr), sizeof(*(ptr)))
 
-struct __large_pstruct { unsigned long buf[100]; };
+struct __large_pstruct {
+    unsigned long buf[100];
+};
 #define __mp(x) (*(struct __large_pstruct *)(x))
 
 #define __get_dbe(x, ptr, size)						\

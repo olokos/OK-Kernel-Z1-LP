@@ -49,9 +49,8 @@
 #define _3W_SAS_H
 
 /* AEN severity table */
-static char *twl_aen_severity_table[] =
-{
-	"None", "ERROR", "WARNING", "INFO", "DEBUG", NULL
+static char *twl_aen_severity_table[] = {
+    "None", "ERROR", "WARNING", "INFO", "DEBUG", NULL
 };
 
 /* Liberator register offsets */
@@ -213,183 +212,181 @@ printk(KERN_WARNING "3w-sas: ERROR: (0x%02X:0x%04X): %s.\n",a,b,c); \
 
 /* SGL entry */
 typedef struct TAG_TW_SG_Entry_ISO {
-	dma_addr_t address;
-	dma_addr_t length;
+    dma_addr_t address;
+    dma_addr_t length;
 } TW_SG_Entry_ISO;
 
 /* Old Command Packet with ISO SGL */
 typedef struct TW_Command {
-	unsigned char opcode__sgloffset;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char unit__hostid;
-	/* Second DWORD */
-	unsigned char status;
-	unsigned char flags;
-	union {
-		unsigned short block_count;
-		unsigned short parameter_count;
-	} byte6_offset;
-	union {
-		struct {
-			u32 lba;
-			TW_SG_Entry_ISO sgl[TW_LIBERATOR_MAX_SGL_LENGTH_OLD];
-			unsigned char padding[TW_PADDING_LENGTH_LIBERATOR_OLD];
-		} io;
-		struct {
-			TW_SG_Entry_ISO sgl[TW_LIBERATOR_MAX_SGL_LENGTH_OLD];
-			u32 padding;
-			unsigned char padding2[TW_PADDING_LENGTH_LIBERATOR_OLD];
-		} param;
-	} byte8_offset;
+    unsigned char opcode__sgloffset;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char unit__hostid;
+    /* Second DWORD */
+    unsigned char status;
+    unsigned char flags;
+    union {
+        unsigned short block_count;
+        unsigned short parameter_count;
+    } byte6_offset;
+    union {
+        struct {
+            u32 lba;
+            TW_SG_Entry_ISO sgl[TW_LIBERATOR_MAX_SGL_LENGTH_OLD];
+            unsigned char padding[TW_PADDING_LENGTH_LIBERATOR_OLD];
+        } io;
+        struct {
+            TW_SG_Entry_ISO sgl[TW_LIBERATOR_MAX_SGL_LENGTH_OLD];
+            u32 padding;
+            unsigned char padding2[TW_PADDING_LENGTH_LIBERATOR_OLD];
+        } param;
+    } byte8_offset;
 } TW_Command;
 
 /* New Command Packet with ISO SGL */
 typedef struct TAG_TW_Command_Apache {
-	unsigned char opcode__reserved;
-	unsigned char unit;
-	unsigned short request_id__lunl;
-	unsigned char status;
-	unsigned char sgl_offset;
-	unsigned short sgl_entries__lunh;
-	unsigned char cdb[16];
-	TW_SG_Entry_ISO sg_list[TW_LIBERATOR_MAX_SGL_LENGTH];
-	unsigned char padding[TW_PADDING_LENGTH_LIBERATOR];
+    unsigned char opcode__reserved;
+    unsigned char unit;
+    unsigned short request_id__lunl;
+    unsigned char status;
+    unsigned char sgl_offset;
+    unsigned short sgl_entries__lunh;
+    unsigned char cdb[16];
+    TW_SG_Entry_ISO sg_list[TW_LIBERATOR_MAX_SGL_LENGTH];
+    unsigned char padding[TW_PADDING_LENGTH_LIBERATOR];
 } TW_Command_Apache;
 
 /* New command packet header */
 typedef struct TAG_TW_Command_Apache_Header {
-	unsigned char sense_data[TW_SENSE_DATA_LENGTH];
-	struct {
-		char reserved[4];
-		unsigned short error;
-		unsigned char padding;
-		unsigned char severity__reserved;
-	} status_block;
-	unsigned char err_specific_desc[98];
-	struct {
-		unsigned char size_header;
-		unsigned short request_id;
-		unsigned char size_sense;
-	} header_desc;
+    unsigned char sense_data[TW_SENSE_DATA_LENGTH];
+    struct {
+        char reserved[4];
+        unsigned short error;
+        unsigned char padding;
+        unsigned char severity__reserved;
+    } status_block;
+    unsigned char err_specific_desc[98];
+    struct {
+        unsigned char size_header;
+        unsigned short request_id;
+        unsigned char size_sense;
+    } header_desc;
 } TW_Command_Apache_Header;
 
 /* This struct is a union of the 2 command packets */
 typedef struct TAG_TW_Command_Full {
-	TW_Command_Apache_Header header;
-	union {
-		TW_Command oldcommand;
-		TW_Command_Apache newcommand;
-	} command;
+    TW_Command_Apache_Header header;
+    union {
+        TW_Command oldcommand;
+        TW_Command_Apache newcommand;
+    } command;
 } TW_Command_Full;
 
 /* Initconnection structure */
 typedef struct TAG_TW_Initconnect {
-	unsigned char opcode__reserved;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char res2;
-	unsigned char status;
-	unsigned char flags;
-	unsigned short message_credits;
-	u32 features;
-	unsigned short fw_srl;
-	unsigned short fw_arch_id;
-	unsigned short fw_branch;
-	unsigned short fw_build;
-	u32 result;
+    unsigned char opcode__reserved;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char res2;
+    unsigned char status;
+    unsigned char flags;
+    unsigned short message_credits;
+    u32 features;
+    unsigned short fw_srl;
+    unsigned short fw_arch_id;
+    unsigned short fw_branch;
+    unsigned short fw_build;
+    u32 result;
 } TW_Initconnect;
 
 /* Event info structure */
-typedef struct TAG_TW_Event
-{
-	unsigned int sequence_id;
-	unsigned int time_stamp_sec;
-	unsigned short aen_code;
-	unsigned char severity;
-	unsigned char retrieved;
-	unsigned char repeat_count;
-	unsigned char parameter_len;
-	unsigned char parameter_data[98];
+typedef struct TAG_TW_Event {
+    unsigned int sequence_id;
+    unsigned int time_stamp_sec;
+    unsigned short aen_code;
+    unsigned char severity;
+    unsigned char retrieved;
+    unsigned char repeat_count;
+    unsigned char parameter_len;
+    unsigned char parameter_data[98];
 } TW_Event;
 
 typedef struct TAG_TW_Ioctl_Driver_Command {
-	unsigned int control_code;
-	unsigned int status;
-	unsigned int unique_id;
-	unsigned int sequence_id;
-	unsigned int os_specific;
-	unsigned int buffer_length;
+    unsigned int control_code;
+    unsigned int status;
+    unsigned int unique_id;
+    unsigned int sequence_id;
+    unsigned int os_specific;
+    unsigned int buffer_length;
 } TW_Ioctl_Driver_Command;
 
 typedef struct TAG_TW_Ioctl_Apache {
-	TW_Ioctl_Driver_Command driver_command;
-        char padding[488];
-	TW_Command_Full firmware_command;
-	char data_buffer[1];
+    TW_Ioctl_Driver_Command driver_command;
+    char padding[488];
+    TW_Command_Full firmware_command;
+    char data_buffer[1];
 } TW_Ioctl_Buf_Apache;
 
 /* GetParam descriptor */
 typedef struct {
-	unsigned short	table_id;
-	unsigned short	parameter_id;
-	unsigned short	parameter_size_bytes;
-	unsigned short  actual_parameter_size_bytes;
-	unsigned char	data[1];
+    unsigned short	table_id;
+    unsigned short	parameter_id;
+    unsigned short	parameter_size_bytes;
+    unsigned short  actual_parameter_size_bytes;
+    unsigned char	data[1];
 } TW_Param_Apache;
 
 /* Compatibility information structure */
-typedef struct TAG_TW_Compatibility_Info
-{
-	char driver_version[32];
-	unsigned short working_srl;
-	unsigned short working_branch;
-	unsigned short working_build;
-	unsigned short driver_srl_high;
-	unsigned short driver_branch_high;
-	unsigned short driver_build_high;
-	unsigned short driver_srl_low;
-	unsigned short driver_branch_low;
-	unsigned short driver_build_low;
-	unsigned short fw_on_ctlr_srl;
-	unsigned short fw_on_ctlr_branch;
-	unsigned short fw_on_ctlr_build;
+typedef struct TAG_TW_Compatibility_Info {
+    char driver_version[32];
+    unsigned short working_srl;
+    unsigned short working_branch;
+    unsigned short working_build;
+    unsigned short driver_srl_high;
+    unsigned short driver_branch_high;
+    unsigned short driver_build_high;
+    unsigned short driver_srl_low;
+    unsigned short driver_branch_low;
+    unsigned short driver_build_low;
+    unsigned short fw_on_ctlr_srl;
+    unsigned short fw_on_ctlr_branch;
+    unsigned short fw_on_ctlr_build;
 } TW_Compatibility_Info;
 
 #pragma pack()
 
 typedef struct TAG_TW_Device_Extension {
-	void                     __iomem *base_addr;
-	unsigned long	       	*generic_buffer_virt[TW_Q_LENGTH];
-	dma_addr_t	       	generic_buffer_phys[TW_Q_LENGTH];
-	TW_Command_Full	       	*command_packet_virt[TW_Q_LENGTH];
-	dma_addr_t		command_packet_phys[TW_Q_LENGTH];
-	TW_Command_Apache_Header *sense_buffer_virt[TW_Q_LENGTH];
-	dma_addr_t		sense_buffer_phys[TW_Q_LENGTH];
-	struct pci_dev		*tw_pci_dev;
-	struct scsi_cmnd	*srb[TW_Q_LENGTH];
-	unsigned char		free_queue[TW_Q_LENGTH];
-	unsigned char		free_head;
-	unsigned char		free_tail;
-	int     		state[TW_Q_LENGTH];
-	unsigned int		posted_request_count;
-	unsigned int		max_posted_request_count;
-	unsigned int		max_sgl_entries;
-	unsigned int		sgl_entries;
-	unsigned int		num_resets;
-	unsigned int		sector_count;
-	unsigned int		max_sector_count;
-	unsigned int		aen_count;
-	struct Scsi_Host	*host;
-	long			flags;
-	TW_Event                *event_queue[TW_Q_LENGTH];
-	unsigned char           error_index;
-	unsigned int            error_sequence_id;
-	int			chrdev_request_id;
-	wait_queue_head_t	ioctl_wqueue;
-	struct mutex		ioctl_lock;
-	TW_Compatibility_Info	tw_compat_info;
-	char			online;
+    void                     __iomem *base_addr;
+    unsigned long	       	*generic_buffer_virt[TW_Q_LENGTH];
+    dma_addr_t	       	generic_buffer_phys[TW_Q_LENGTH];
+    TW_Command_Full	       	*command_packet_virt[TW_Q_LENGTH];
+    dma_addr_t		command_packet_phys[TW_Q_LENGTH];
+    TW_Command_Apache_Header *sense_buffer_virt[TW_Q_LENGTH];
+    dma_addr_t		sense_buffer_phys[TW_Q_LENGTH];
+    struct pci_dev		*tw_pci_dev;
+    struct scsi_cmnd	*srb[TW_Q_LENGTH];
+    unsigned char		free_queue[TW_Q_LENGTH];
+    unsigned char		free_head;
+    unsigned char		free_tail;
+    int     		state[TW_Q_LENGTH];
+    unsigned int		posted_request_count;
+    unsigned int		max_posted_request_count;
+    unsigned int		max_sgl_entries;
+    unsigned int		sgl_entries;
+    unsigned int		num_resets;
+    unsigned int		sector_count;
+    unsigned int		max_sector_count;
+    unsigned int		aen_count;
+    struct Scsi_Host	*host;
+    long			flags;
+    TW_Event                *event_queue[TW_Q_LENGTH];
+    unsigned char           error_index;
+    unsigned int            error_sequence_id;
+    int			chrdev_request_id;
+    wait_queue_head_t	ioctl_wqueue;
+    struct mutex		ioctl_lock;
+    TW_Compatibility_Info	tw_compat_info;
+    char			online;
 } TW_Device_Extension;
 
 #endif /* _3W_SAS_H */

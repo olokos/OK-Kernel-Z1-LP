@@ -116,7 +116,7 @@ extern void __cpuc_dma_flush_range(unsigned long, unsigned long);
  * space" model to handle this.
  */
 extern void copy_to_user_page(struct vm_area_struct *, struct page *,
-	unsigned long, void *, const void *, unsigned long);
+                              unsigned long, void *, const void *, unsigned long);
 #define copy_from_user_page(vma, page, vaddr, dst, src, len)	\
 	do {							\
 		memcpy(dst, src, len);				\
@@ -126,21 +126,20 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
  * Convert calls to our calling convention.
  */
 /* Invalidate I-cache */
-static inline void __flush_icache_all(void)
-{
-	asm("movc	p0.c5, %0, #20;\n"
-	    "nop; nop; nop; nop; nop; nop; nop; nop\n"
-	    :
-	    : "r" (0));
+static inline void __flush_icache_all(void) {
+    asm("movc	p0.c5, %0, #20;\n"
+        "nop; nop; nop; nop; nop; nop; nop; nop\n"
+        :
+        : "r" (0));
 }
 
 #define flush_cache_all()		__cpuc_flush_kern_all()
 
 extern void flush_cache_mm(struct mm_struct *mm);
 extern void flush_cache_range(struct vm_area_struct *vma,
-		unsigned long start, unsigned long end);
+                              unsigned long start, unsigned long end);
 extern void flush_cache_page(struct vm_area_struct *vma,
-		unsigned long user_addr, unsigned long pfn);
+                             unsigned long user_addr, unsigned long pfn);
 
 #define flush_cache_dup_mm(mm) flush_cache_mm(mm)
 
@@ -200,12 +199,10 @@ extern void flush_dcache_page(struct page *);
  * data, we need to do a full cache flush to ensure that writebacks
  * don't corrupt data placed into these pages via the new mappings.
  */
-static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-{
+static inline void flush_cache_vmap(unsigned long start, unsigned long end) {
 }
 
-static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-{
+static inline void flush_cache_vunmap(unsigned long start, unsigned long end) {
 }
 
 #endif

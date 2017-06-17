@@ -61,151 +61,144 @@ MODULE_DESCRIPTION("Vitesse PHY driver");
 MODULE_AUTHOR("Kriston Carson");
 MODULE_LICENSE("GPL");
 
-int vsc824x_add_skew(struct phy_device *phydev)
-{
-	int err;
-	int extcon;
+int vsc824x_add_skew(struct phy_device *phydev) {
+    int err;
+    int extcon;
 
-	extcon = phy_read(phydev, MII_VSC8244_EXT_CON1);
+    extcon = phy_read(phydev, MII_VSC8244_EXT_CON1);
 
-	if (extcon < 0)
-		return extcon;
+    if (extcon < 0)
+        return extcon;
 
-	extcon &= ~(MII_VSC8244_EXTCON1_TX_SKEW_MASK |
-			MII_VSC8244_EXTCON1_RX_SKEW_MASK);
+    extcon &= ~(MII_VSC8244_EXTCON1_TX_SKEW_MASK |
+                MII_VSC8244_EXTCON1_RX_SKEW_MASK);
 
-	extcon |= (MII_VSC8244_EXTCON1_TX_SKEW |
-			MII_VSC8244_EXTCON1_RX_SKEW);
+    extcon |= (MII_VSC8244_EXTCON1_TX_SKEW |
+               MII_VSC8244_EXTCON1_RX_SKEW);
 
-	err = phy_write(phydev, MII_VSC8244_EXT_CON1, extcon);
+    err = phy_write(phydev, MII_VSC8244_EXT_CON1, extcon);
 
-	return err;
+    return err;
 }
 EXPORT_SYMBOL(vsc824x_add_skew);
 
-static int vsc824x_config_init(struct phy_device *phydev)
-{
-	int err;
+static int vsc824x_config_init(struct phy_device *phydev) {
+    int err;
 
-	err = phy_write(phydev, MII_VSC8244_AUX_CONSTAT,
-			MII_VSC8244_AUXCONSTAT_INIT);
-	if (err < 0)
-		return err;
+    err = phy_write(phydev, MII_VSC8244_AUX_CONSTAT,
+                    MII_VSC8244_AUXCONSTAT_INIT);
+    if (err < 0)
+        return err;
 
-	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-		err = vsc824x_add_skew(phydev);
+    if (phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+        err = vsc824x_add_skew(phydev);
 
-	return err;
+    return err;
 }
 
-static int vsc824x_ack_interrupt(struct phy_device *phydev)
-{
-	int err = 0;
-	
-	/*
-	 * Don't bother to ACK the interrupts if interrupts
-	 * are disabled.  The 824x cannot clear the interrupts
-	 * if they are disabled.
-	 */
-	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-		err = phy_read(phydev, MII_VSC8244_ISTAT);
+static int vsc824x_ack_interrupt(struct phy_device *phydev) {
+    int err = 0;
 
-	return (err < 0) ? err : 0;
+    /*
+     * Don't bother to ACK the interrupts if interrupts
+     * are disabled.  The 824x cannot clear the interrupts
+     * if they are disabled.
+     */
+    if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+        err = phy_read(phydev, MII_VSC8244_ISTAT);
+
+    return (err < 0) ? err : 0;
 }
 
-static int vsc82xx_config_intr(struct phy_device *phydev)
-{
-	int err;
+static int vsc82xx_config_intr(struct phy_device *phydev) {
+    int err;
 
-	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-		err = phy_write(phydev, MII_VSC8244_IMASK,
-			phydev->drv->phy_id == PHY_ID_VSC8244 ?
-				MII_VSC8244_IMASK_MASK :
-				MII_VSC8221_IMASK_MASK);
-	else {
-		/*
-		 * The Vitesse PHY cannot clear the interrupt
-		 * once it has disabled them, so we clear them first
-		 */
-		err = phy_read(phydev, MII_VSC8244_ISTAT);
+    if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+        err = phy_write(phydev, MII_VSC8244_IMASK,
+                        phydev->drv->phy_id == PHY_ID_VSC8244 ?
+                        MII_VSC8244_IMASK_MASK :
+                        MII_VSC8221_IMASK_MASK);
+    else {
+        /*
+         * The Vitesse PHY cannot clear the interrupt
+         * once it has disabled them, so we clear them first
+         */
+        err = phy_read(phydev, MII_VSC8244_ISTAT);
 
-		if (err < 0)
-			return err;
+        if (err < 0)
+            return err;
 
-		err = phy_write(phydev, MII_VSC8244_IMASK, 0);
-	}
+        err = phy_write(phydev, MII_VSC8244_IMASK, 0);
+    }
 
-	return err;
+    return err;
 }
 
 /* Vitesse 824x */
 static struct phy_driver vsc8244_driver = {
-	.phy_id		= PHY_ID_VSC8244,
-	.name		= "Vitesse VSC8244",
-	.phy_id_mask	= 0x000fffc0,
-	.features	= PHY_GBIT_FEATURES,
-	.flags		= PHY_HAS_INTERRUPT,
-	.config_init	= &vsc824x_config_init,
-	.config_aneg	= &genphy_config_aneg,
-	.read_status	= &genphy_read_status,
-	.ack_interrupt	= &vsc824x_ack_interrupt,
-	.config_intr	= &vsc82xx_config_intr,
-	.driver 	= { .owner = THIS_MODULE,},
+    .phy_id		= PHY_ID_VSC8244,
+    .name		= "Vitesse VSC8244",
+    .phy_id_mask	= 0x000fffc0,
+    .features	= PHY_GBIT_FEATURES,
+    .flags		= PHY_HAS_INTERRUPT,
+    .config_init	= &vsc824x_config_init,
+    .config_aneg	= &genphy_config_aneg,
+    .read_status	= &genphy_read_status,
+    .ack_interrupt	= &vsc824x_ack_interrupt,
+    .config_intr	= &vsc82xx_config_intr,
+    .driver 	= { .owner = THIS_MODULE,},
 };
 
-static int vsc8221_config_init(struct phy_device *phydev)
-{
-	int err;
+static int vsc8221_config_init(struct phy_device *phydev) {
+    int err;
 
-	err = phy_write(phydev, MII_VSC8244_AUX_CONSTAT,
-			MII_VSC8221_AUXCONSTAT_INIT);
-	return err;
+    err = phy_write(phydev, MII_VSC8244_AUX_CONSTAT,
+                    MII_VSC8221_AUXCONSTAT_INIT);
+    return err;
 
-	/* Perhaps we should set EXT_CON1 based on the interface?
-	   Options are 802.3Z SerDes or SGMII */
+    /* Perhaps we should set EXT_CON1 based on the interface?
+       Options are 802.3Z SerDes or SGMII */
 }
 
 /* Vitesse 8221 */
 static struct phy_driver vsc8221_driver = {
-	.phy_id		= PHY_ID_VSC8221,
-	.phy_id_mask	= 0x000ffff0,
-	.name		= "Vitesse VSC8221",
-	.features	= PHY_GBIT_FEATURES,
-	.flags		= PHY_HAS_INTERRUPT,
-	.config_init	= &vsc8221_config_init,
-	.config_aneg	= &genphy_config_aneg,
-	.read_status	= &genphy_read_status,
-	.ack_interrupt	= &vsc824x_ack_interrupt,
-	.config_intr	= &vsc82xx_config_intr,
-	.driver 	= { .owner = THIS_MODULE,},
+    .phy_id		= PHY_ID_VSC8221,
+    .phy_id_mask	= 0x000ffff0,
+    .name		= "Vitesse VSC8221",
+    .features	= PHY_GBIT_FEATURES,
+    .flags		= PHY_HAS_INTERRUPT,
+    .config_init	= &vsc8221_config_init,
+    .config_aneg	= &genphy_config_aneg,
+    .read_status	= &genphy_read_status,
+    .ack_interrupt	= &vsc824x_ack_interrupt,
+    .config_intr	= &vsc82xx_config_intr,
+    .driver 	= { .owner = THIS_MODULE,},
 };
 
-static int __init vsc82xx_init(void)
-{
-	int err;
+static int __init vsc82xx_init(void) {
+    int err;
 
-	err = phy_driver_register(&vsc8244_driver);
-	if (err < 0)
-		return err;
-	err = phy_driver_register(&vsc8221_driver);
-	if (err < 0)
-		phy_driver_unregister(&vsc8244_driver);
-	return err;
+    err = phy_driver_register(&vsc8244_driver);
+    if (err < 0)
+        return err;
+    err = phy_driver_register(&vsc8221_driver);
+    if (err < 0)
+        phy_driver_unregister(&vsc8244_driver);
+    return err;
 }
 
-static void __exit vsc82xx_exit(void)
-{
-	phy_driver_unregister(&vsc8244_driver);
-	phy_driver_unregister(&vsc8221_driver);
+static void __exit vsc82xx_exit(void) {
+    phy_driver_unregister(&vsc8244_driver);
+    phy_driver_unregister(&vsc8221_driver);
 }
 
 module_init(vsc82xx_init);
 module_exit(vsc82xx_exit);
 
 static struct mdio_device_id __maybe_unused vitesse_tbl[] = {
-	{ PHY_ID_VSC8244, 0x000fffc0 },
-	{ PHY_ID_VSC8221, 0x000ffff0 },
-	{ }
+    { PHY_ID_VSC8244, 0x000fffc0 },
+    { PHY_ID_VSC8221, 0x000ffff0 },
+    { }
 };
 
 MODULE_DEVICE_TABLE(mdio, vitesse_tbl);

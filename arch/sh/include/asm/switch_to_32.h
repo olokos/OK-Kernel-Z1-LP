@@ -61,7 +61,7 @@ do {									\
 #endif
 
 struct task_struct *__switch_to(struct task_struct *prev,
-				struct task_struct *next);
+                                struct task_struct *next);
 
 /*
  *	switch_to() should switch tasks to task nr n, first

@@ -169,18 +169,16 @@ extern unsigned long __pv_phys_offset;
 	: "=r" (to)					\
 	: "r" (from), "I" (type))
 
-static inline unsigned long __virt_to_phys(unsigned long x)
-{
-	unsigned long t;
-	__pv_stub(x, t, "add", __PV_BITS_31_24);
-	return t;
+static inline unsigned long __virt_to_phys(unsigned long x) {
+    unsigned long t;
+    __pv_stub(x, t, "add", __PV_BITS_31_24);
+    return t;
 }
 
-static inline unsigned long __phys_to_virt(unsigned long x)
-{
-	unsigned long t;
-	__pv_stub(x, t, "sub", __PV_BITS_31_24);
-	return t;
+static inline unsigned long __phys_to_virt(unsigned long x) {
+    unsigned long t;
+    __pv_stub(x, t, "sub", __PV_BITS_31_24);
+    return t;
 }
 #else
 #define __virt_to_phys(x)	((x) - PAGE_OFFSET + PHYS_OFFSET)
@@ -212,14 +210,12 @@ static inline unsigned long __phys_to_virt(unsigned long x)
  * translation for translating DMA addresses.  Use the driver
  * DMA support - see dma-mapping.h.
  */
-static inline phys_addr_t virt_to_phys(const volatile void *x)
-{
-	return __virt_to_phys((unsigned long)(x));
+static inline phys_addr_t virt_to_phys(const volatile void *x) {
+    return __virt_to_phys((unsigned long)(x));
 }
 
-static inline void *phys_to_virt(phys_addr_t x)
-{
-	return (void *)(__phys_to_virt((unsigned long)(x)));
+static inline void *phys_to_virt(phys_addr_t x) {
+    return (void *)(__phys_to_virt((unsigned long)(x)));
 }
 
 /*
@@ -242,14 +238,12 @@ static inline void *phys_to_virt(phys_addr_t x)
 #define __bus_to_pfn(x)	__phys_to_pfn(x)
 #endif
 
-static inline __deprecated unsigned long virt_to_bus(void *x)
-{
-	return __virt_to_bus((unsigned long)x);
+static inline __deprecated unsigned long virt_to_bus(void *x) {
+    return __virt_to_bus((unsigned long)x);
 }
 
-static inline __deprecated void *bus_to_virt(unsigned long x)
-{
-	return (void *)__bus_to_virt(x);
+static inline __deprecated void *bus_to_virt(unsigned long x) {
+    return (void *)__bus_to_virt(x);
 }
 
 /*

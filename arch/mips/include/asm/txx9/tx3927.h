@@ -23,31 +23,31 @@
 #define TX3927_PIO_REG		(TX3927_REG_BASE + 0xf500)
 
 struct tx3927_sdramc_reg {
-	volatile unsigned long cr[8];
-	volatile unsigned long tr[3];
-	volatile unsigned long cmd;
-	volatile unsigned long smrs[2];
+    volatile unsigned long cr[8];
+    volatile unsigned long tr[3];
+    volatile unsigned long cmd;
+    volatile unsigned long smrs[2];
 };
 
 struct tx3927_romc_reg {
-	volatile unsigned long cr[8];
+    volatile unsigned long cr[8];
 };
 
 struct tx3927_dma_reg {
-	struct tx3927_dma_ch_reg {
-		volatile unsigned long cha;
-		volatile unsigned long sar;
-		volatile unsigned long dar;
-		volatile unsigned long cntr;
-		volatile unsigned long sair;
-		volatile unsigned long dair;
-		volatile unsigned long ccr;
-		volatile unsigned long csr;
-	} ch[4];
-	volatile unsigned long dbr[8];
-	volatile unsigned long tdhr;
-	volatile unsigned long mcr;
-	volatile unsigned long unused0;
+    struct tx3927_dma_ch_reg {
+        volatile unsigned long cha;
+        volatile unsigned long sar;
+        volatile unsigned long dar;
+        volatile unsigned long cntr;
+        volatile unsigned long sair;
+        volatile unsigned long dair;
+        volatile unsigned long ccr;
+        volatile unsigned long csr;
+    } ch[4];
+    volatile unsigned long dbr[8];
+    volatile unsigned long tdhr;
+    volatile unsigned long mcr;
+    volatile unsigned long unused0;
 };
 
 #include <asm/byteorder.h>
@@ -73,78 +73,78 @@ struct tx3927_dma_reg {
 #endif
 
 struct tx3927_pcic_reg {
-	endian_def_s2(did, vid);
-	endian_def_s2(pcistat, pcicmd);
-	endian_def_b4(cc, scc, rpli, rid);
-	endian_def_b4(unused0, ht, mlt, cls);
-	volatile unsigned long ioba;		/* +10 */
-	volatile unsigned long mba;
-	volatile unsigned long unused1[5];
-	endian_def_s2(svid, ssvid);
-	volatile unsigned long unused2;		/* +30 */
-	endian_def_sb2(unused3, unused4, capptr);
-	volatile unsigned long unused5;
-	endian_def_b4(ml, mg, ip, il);
-	volatile unsigned long unused6;		/* +40 */
-	volatile unsigned long istat;
-	volatile unsigned long iim;
-	volatile unsigned long rrt;
-	volatile unsigned long unused7[3];		/* +50 */
-	volatile unsigned long ipbmma;
-	volatile unsigned long ipbioma;		/* +60 */
-	volatile unsigned long ilbmma;
-	volatile unsigned long ilbioma;
-	volatile unsigned long unused8[9];
-	volatile unsigned long tc;		/* +90 */
-	volatile unsigned long tstat;
-	volatile unsigned long tim;
-	volatile unsigned long tccmd;
-	volatile unsigned long pcirrt;		/* +a0 */
-	volatile unsigned long pcirrt_cmd;
-	volatile unsigned long pcirrdt;
-	volatile unsigned long unused9[3];
-	volatile unsigned long tlboap;
-	volatile unsigned long tlbiap;
-	volatile unsigned long tlbmma;		/* +c0 */
-	volatile unsigned long tlbioma;
-	volatile unsigned long sc_msg;
-	volatile unsigned long sc_be;
-	volatile unsigned long tbl;		/* +d0 */
-	volatile unsigned long unused10[3];
-	volatile unsigned long pwmng;		/* +e0 */
-	volatile unsigned long pwmngs;
-	volatile unsigned long unused11[6];
-	volatile unsigned long req_trace;		/* +100 */
-	volatile unsigned long pbapmc;
-	volatile unsigned long pbapms;
-	volatile unsigned long pbapmim;
-	volatile unsigned long bm;		/* +110 */
-	volatile unsigned long cpcibrs;
-	volatile unsigned long cpcibgs;
-	volatile unsigned long pbacs;
-	volatile unsigned long iobas;		/* +120 */
-	volatile unsigned long mbas;
-	volatile unsigned long lbc;
-	volatile unsigned long lbstat;
-	volatile unsigned long lbim;		/* +130 */
-	volatile unsigned long pcistatim;
-	volatile unsigned long ica;
-	volatile unsigned long icd;
-	volatile unsigned long iiadp;		/* +140 */
-	volatile unsigned long iscdp;
-	volatile unsigned long mmas;
-	volatile unsigned long iomas;
-	volatile unsigned long ipciaddr;		/* +150 */
-	volatile unsigned long ipcidata;
-	volatile unsigned long ipcibe;
+    endian_def_s2(did, vid);
+    endian_def_s2(pcistat, pcicmd);
+    endian_def_b4(cc, scc, rpli, rid);
+    endian_def_b4(unused0, ht, mlt, cls);
+    volatile unsigned long ioba;		/* +10 */
+    volatile unsigned long mba;
+    volatile unsigned long unused1[5];
+    endian_def_s2(svid, ssvid);
+    volatile unsigned long unused2;		/* +30 */
+    endian_def_sb2(unused3, unused4, capptr);
+    volatile unsigned long unused5;
+    endian_def_b4(ml, mg, ip, il);
+    volatile unsigned long unused6;		/* +40 */
+    volatile unsigned long istat;
+    volatile unsigned long iim;
+    volatile unsigned long rrt;
+    volatile unsigned long unused7[3];		/* +50 */
+    volatile unsigned long ipbmma;
+    volatile unsigned long ipbioma;		/* +60 */
+    volatile unsigned long ilbmma;
+    volatile unsigned long ilbioma;
+    volatile unsigned long unused8[9];
+    volatile unsigned long tc;		/* +90 */
+    volatile unsigned long tstat;
+    volatile unsigned long tim;
+    volatile unsigned long tccmd;
+    volatile unsigned long pcirrt;		/* +a0 */
+    volatile unsigned long pcirrt_cmd;
+    volatile unsigned long pcirrdt;
+    volatile unsigned long unused9[3];
+    volatile unsigned long tlboap;
+    volatile unsigned long tlbiap;
+    volatile unsigned long tlbmma;		/* +c0 */
+    volatile unsigned long tlbioma;
+    volatile unsigned long sc_msg;
+    volatile unsigned long sc_be;
+    volatile unsigned long tbl;		/* +d0 */
+    volatile unsigned long unused10[3];
+    volatile unsigned long pwmng;		/* +e0 */
+    volatile unsigned long pwmngs;
+    volatile unsigned long unused11[6];
+    volatile unsigned long req_trace;		/* +100 */
+    volatile unsigned long pbapmc;
+    volatile unsigned long pbapms;
+    volatile unsigned long pbapmim;
+    volatile unsigned long bm;		/* +110 */
+    volatile unsigned long cpcibrs;
+    volatile unsigned long cpcibgs;
+    volatile unsigned long pbacs;
+    volatile unsigned long iobas;		/* +120 */
+    volatile unsigned long mbas;
+    volatile unsigned long lbc;
+    volatile unsigned long lbstat;
+    volatile unsigned long lbim;		/* +130 */
+    volatile unsigned long pcistatim;
+    volatile unsigned long ica;
+    volatile unsigned long icd;
+    volatile unsigned long iiadp;		/* +140 */
+    volatile unsigned long iscdp;
+    volatile unsigned long mmas;
+    volatile unsigned long iomas;
+    volatile unsigned long ipciaddr;		/* +150 */
+    volatile unsigned long ipcidata;
+    volatile unsigned long ipcibe;
 };
 
 struct tx3927_ccfg_reg {
-	volatile unsigned long ccfg;
-	volatile unsigned long crir;
-	volatile unsigned long pcfg;
-	volatile unsigned long tear;
-	volatile unsigned long pdcr;
+    volatile unsigned long ccfg;
+    volatile unsigned long crir;
+    volatile unsigned long pcfg;
+    volatile unsigned long tear;
+    volatile unsigned long pdcr;
 };
 
 /*
@@ -333,7 +333,7 @@ void tx3927_time_init(unsigned int evt_tmrnr, unsigned int src_tmrnr);
 void tx3927_sio_init(unsigned int sclk, unsigned int cts_mask);
 struct pci_controller;
 void tx3927_pcic_setup(struct pci_controller *channel,
-		       unsigned long sdram_size, int extarb);
+                       unsigned long sdram_size, int extarb);
 void tx3927_setup_pcierr_irq(void);
 void tx3927_irq_init(void);
 void tx3927_mtd_init(int ch);

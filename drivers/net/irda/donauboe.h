@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      toshoboe.h
  * Version:       2.16
  * Description:   Driver for the Toshiba OBOE (or type-O or 701)
@@ -13,40 +13,40 @@
  * Modified: 2.16 Sat Jun 22 18:54:29 2002 (sync headers)
  * Modified: 2.17 Christian Gennerat <christian.gennerat@polytechnique.org>
  * Modified: 2.17 jeu sep 12 08:50:20 2002 (add lock to be used by spinlocks)
- * 
+ *
  *     Copyright (c) 1999 James McKenzie, All Rights Reserved.
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither James McKenzie nor Cambridge University admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- * 
+ *
  *     Applicable Models : Libretto 100/110CT and many more.
  *     Toshiba refers to this chip as the type-O IR port,
  *     or the type-DO IR port.
  *
  * IrDA chip set list from Toshiba Computer Engineering Corp.
- * model			method	maker	controller		Version 
- * Portege 320CT	FIR,SIR Toshiba Oboe(Triangle) 
- * Portege 3010CT	FIR,SIR Toshiba Oboe(Sydney) 
- * Portege 3015CT	FIR,SIR Toshiba Oboe(Sydney) 
- * Portege 3020CT	FIR,SIR Toshiba Oboe(Sydney) 
+ * model			method	maker	controller		Version
+ * Portege 320CT	FIR,SIR Toshiba Oboe(Triangle)
+ * Portege 3010CT	FIR,SIR Toshiba Oboe(Sydney)
+ * Portege 3015CT	FIR,SIR Toshiba Oboe(Sydney)
+ * Portege 3020CT	FIR,SIR Toshiba Oboe(Sydney)
  * Portege 7020CT	FIR,SIR ?		?
- * 
+ *
  * Satell. 4090XCDT	FIR,SIR ?		?
- * 
- * Libretto 100CT	FIR,SIR Toshiba Oboe 
- * Libretto 1000CT	FIR,SIR Toshiba Oboe 
- * 
- * TECRA750DVD		FIR,SIR Toshiba Oboe(Triangle)	REV ID=14h 
- * TECRA780			FIR,SIR Toshiba Oboe(Sandlot)	REV ID=32h,33h 
- * TECRA750CDT		FIR,SIR Toshiba Oboe(Triangle)	REV ID=13h,14h 
- * TECRA8000		FIR,SIR Toshiba Oboe(ISKUR)		REV ID=23h 
- * 
+ *
+ * Libretto 100CT	FIR,SIR Toshiba Oboe
+ * Libretto 1000CT	FIR,SIR Toshiba Oboe
+ *
+ * TECRA750DVD		FIR,SIR Toshiba Oboe(Triangle)	REV ID=14h
+ * TECRA780			FIR,SIR Toshiba Oboe(Sandlot)	REV ID=32h,33h
+ * TECRA750CDT		FIR,SIR Toshiba Oboe(Triangle)	REV ID=13h,14h
+ * TECRA8000		FIR,SIR Toshiba Oboe(ISKUR)		REV ID=23h
+ *
  ********************************************************************/
 
 /* The documentation for this chip is allegedly released         */
@@ -266,21 +266,19 @@
 #define PCI_DEVICE_ID_FIRD01 	0x0d01
 #endif
 
-struct OboeSlot
-{
-  __u16 len;                    /*Tweleve bits of packet length */
-  __u8 unused;
-  __u8 control;                 /*Slot control/status see below */
-  __u32 address;                /*Slot buffer address */
+struct OboeSlot {
+    __u16 len;                    /*Tweleve bits of packet length */
+    __u8 unused;
+    __u8 control;                 /*Slot control/status see below */
+    __u32 address;                /*Slot buffer address */
 }
 __packed;
 
 #define OBOE_NTASKS OBOE_TXRING_OFFSET_IN_SLOTS
 
-struct OboeRing
-{
-  struct OboeSlot rx[OBOE_NTASKS];
-  struct OboeSlot tx[OBOE_NTASKS];
+struct OboeRing {
+    struct OboeSlot rx[OBOE_NTASKS];
+    struct OboeSlot tx[OBOE_NTASKS];
 };
 
 #define OBOE_RING_LEN (sizeof(struct OboeRing))
@@ -292,7 +290,7 @@ struct OboeRing
 #define OBOE_CTL_TX_SIP		0x10   /*W Generate an SIP after xmittion */
 #define OBOE_CTL_TX_MKUNDER	0x08 /*W Generate an underrun error */
 #define OBOE_CTL_TX_RTCENTX	0x04 /*W Enable receiver and generate TXdone */
-     /*  After this slot is processed        */
+/*  After this slot is processed        */
 #define OBOE_CTL_TX_UNDER	0x01  /*R Set by hardware to indicate underrun */
 
 
@@ -305,57 +303,56 @@ struct OboeRing
 #define OBOE_CTL_RX_RXEOF	0x02  /*R Finished receiving on this slot */
 
 
-struct toshoboe_cb
-{
-  struct net_device *netdev;    /* Yes! we are some kind of netdevice */
-  struct tty_driver ttydev;
+struct toshoboe_cb {
+    struct net_device *netdev;    /* Yes! we are some kind of netdevice */
+    struct tty_driver ttydev;
 
-  struct irlap_cb *irlap;       /* The link layer we are binded to */
+    struct irlap_cb *irlap;       /* The link layer we are binded to */
 
-  chipio_t io;                  /* IrDA controller information */
-  struct qos_info qos;          /* QoS capabilities for this device */
+    chipio_t io;                  /* IrDA controller information */
+    struct qos_info qos;          /* QoS capabilities for this device */
 
-  __u32 flags;                  /* Interface flags */
+    __u32 flags;                  /* Interface flags */
 
-  struct pci_dev *pdev;         /*PCI device */
-  int base;                     /*IO base */
-
-
-  int txpending;                /*how many tx's are pending */
-  int txs, rxs;                 /*Which slots are we at  */
-
-  int irdad;                    /*Driver under control of netdev end  */
-  int async;                    /*Driver under control of async end   */
+    struct pci_dev *pdev;         /*PCI device */
+    int base;                     /*IO base */
 
 
-  int stopped;                  /*Stopped by some or other APM stuff */
+    int txpending;                /*how many tx's are pending */
+    int txs, rxs;                 /*Which slots are we at  */
 
-  int filter;                   /*In SIR mode do we want to receive
+    int irdad;                    /*Driver under control of netdev end  */
+    int async;                    /*Driver under control of async end   */
+
+
+    int stopped;                  /*Stopped by some or other APM stuff */
+
+    int filter;                   /*In SIR mode do we want to receive
                                    frames or byte ranges */
 
-  void *ringbuf;                /*The ring buffer */
-  struct OboeRing *ring;        /*The ring */
+    void *ringbuf;                /*The ring buffer */
+    struct OboeRing *ring;        /*The ring */
 
-  void *tx_bufs[OBOE_RING_MAX_SIZE]; /*The buffers   */
-  void *rx_bufs[OBOE_RING_MAX_SIZE];
+    void *tx_bufs[OBOE_RING_MAX_SIZE]; /*The buffers   */
+    void *rx_bufs[OBOE_RING_MAX_SIZE];
 
 
-  int speed;                    /*Current setting of the speed */
-  int new_speed;                /*Set to request a speed change */
+    int speed;                    /*Current setting of the speed */
+    int new_speed;                /*Set to request a speed change */
 
-/* The spinlock protect critical parts of the driver.
- *	Locking is done like this :
- *		spin_lock_irqsave(&self->spinlock, flags);
- *	Releasing the lock :
- *		spin_unlock_irqrestore(&self->spinlock, flags);
- */
-  spinlock_t spinlock;		
-  /* Used for the probe and diagnostics code */
-  int int_rx;
-  int int_tx;
-  int int_txunder;
-  int int_rxover;
-  int int_sip;
+    /* The spinlock protect critical parts of the driver.
+     *	Locking is done like this :
+     *		spin_lock_irqsave(&self->spinlock, flags);
+     *	Releasing the lock :
+     *		spin_unlock_irqrestore(&self->spinlock, flags);
+     */
+    spinlock_t spinlock;
+    /* Used for the probe and diagnostics code */
+    int int_rx;
+    int int_tx;
+    int int_txunder;
+    int int_rxover;
+    int int_sip;
 };
 
 

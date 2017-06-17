@@ -45,12 +45,11 @@
 				     "nop; nop; nop; nop; nop; nop;\n\t" \
 				     ".set reorder\n\t")
 
-void __init board_setup(void)
-{
-	unsigned long configpr;
+void __init board_setup(void) {
+    unsigned long configpr;
 
-	configpr = read_c0_config7();
-	configpr |= (1<<19); /* enable tlb */
-	write_c0_config7(configpr);
-	BARRIER;
+    configpr = read_c0_config7();
+    configpr |= (1<<19); /* enable tlb */
+    write_c0_config7(configpr);
+    BARRIER;
 }

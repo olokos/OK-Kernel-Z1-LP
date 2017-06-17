@@ -22,12 +22,12 @@
 #define CLK_MODE_XTAL            1	/* clock source is from crystal */
 
 struct clk {
-	const char *name;	/* clock name */
-	unsigned int type;	/* clock type */
-	unsigned int mode;	/* current mode */
-	volatile int use_bypass;	/* indicate if it's in bypass mode */
-	chipcHw_CLOCK_e csp_id;	/* clock ID for CSP CHIPC */
-	unsigned long rate_hz;	/* clock rate in Hz */
-	unsigned int use_cnt;	/* usage count */
-	struct clk *parent;	/* parent clock */
+    const char *name;	/* clock name */
+    unsigned int type;	/* clock type */
+    unsigned int mode;	/* current mode */
+    volatile int use_bypass;	/* indicate if it's in bypass mode */
+    chipcHw_CLOCK_e csp_id;	/* clock ID for CSP CHIPC */
+    unsigned long rate_hz;	/* clock rate in Hz */
+    unsigned int use_cnt;	/* usage count */
+    struct clk *parent;	/* parent clock */
 };

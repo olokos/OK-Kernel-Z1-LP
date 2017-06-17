@@ -7,13 +7,13 @@
 
 /* structure for describing the on-chip devices */
 struct pxa_device_desc {
-	const char	*dev_name;
-	const char	*drv_name;
-	int		id;
-	int		irq;
-	unsigned long	start;
-	unsigned long	size;
-	int		dma[MAX_RESOURCE_DMA];
+    const char	*dev_name;
+    const char	*drv_name;
+    int		id;
+    int		irq;
+    unsigned long	start;
+    unsigned long	size;
+    int		dma[MAX_RESOURCE_DMA];
 };
 
 #define PXA168_DEVICE(_name, _drv, _id, _irq, _start, _size, _dma...)	\

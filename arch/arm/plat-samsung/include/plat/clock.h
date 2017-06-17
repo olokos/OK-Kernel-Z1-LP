@@ -33,28 +33,28 @@ struct clk;
  * to need to be called quickly.
  */
 struct clk_ops {
-	int		    (*set_rate)(struct clk *c, unsigned long rate);
-	unsigned long	    (*get_rate)(struct clk *c);
-	unsigned long	    (*round_rate)(struct clk *c, unsigned long rate);
-	int		    (*set_parent)(struct clk *c, struct clk *parent);
+    int		    (*set_rate)(struct clk *c, unsigned long rate);
+    unsigned long	    (*get_rate)(struct clk *c);
+    unsigned long	    (*round_rate)(struct clk *c, unsigned long rate);
+    int		    (*set_parent)(struct clk *c, struct clk *parent);
 };
 
 struct clk {
-	struct list_head      list;
-	struct module        *owner;
-	struct clk           *parent;
-	const char           *name;
-	const char		*devname;
-	int		      id;
-	int		      usage;
-	unsigned long         rate;
-	unsigned long         ctrlbit;
+    struct list_head      list;
+    struct module        *owner;
+    struct clk           *parent;
+    const char           *name;
+    const char		*devname;
+    int		      id;
+    int		      usage;
+    unsigned long         rate;
+    unsigned long         ctrlbit;
 
-	struct clk_ops		*ops;
-	int		    (*enable)(struct clk *, int enable);
-	struct clk_lookup	lookup;
+    struct clk_ops		*ops;
+    int		    (*enable)(struct clk *, int enable);
+    struct clk_lookup	lookup;
 #if defined(CONFIG_PM_DEBUG) && defined(CONFIG_DEBUG_FS)
-	struct dentry		*dent;	/* For visible tree hierarchy */
+    struct dentry		*dent;	/* For visible tree hierarchy */
 #endif
 };
 
@@ -112,8 +112,8 @@ extern int s3c24xx_register_baseclocks(unsigned long xtal);
 extern void s5p_register_clocks(unsigned long xtal_freq);
 
 extern void s3c24xx_setup_clocks(unsigned long fclk,
-				 unsigned long hclk,
-				 unsigned long pclk);
+                                 unsigned long hclk,
+                                 unsigned long pclk);
 
 extern void s3c2410_setup_clocks(void);
 extern void s3c2412_setup_clocks(void);
@@ -129,8 +129,8 @@ typedef unsigned int (*pll_fn)(unsigned int reg, unsigned int base);
 
 extern void s3c2443_common_setup_clocks(pll_fn get_mpll);
 extern void s3c2443_common_init_clocks(int xtal, pll_fn get_mpll,
-				       unsigned int *divs, int nr_divs,
-				       int divmask);
+                                       unsigned int *divs, int nr_divs,
+                                       int divmask);
 
 extern int s3c2443_clkcon_enable_h(struct clk *clk, int enable);
 extern int s3c2443_clkcon_enable_p(struct clk *clk, int enable);

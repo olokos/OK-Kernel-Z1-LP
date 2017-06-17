@@ -20,25 +20,25 @@
 
 /* struct f_qdss - USB qdss function driver private structure */
 struct f_qdss {
-	struct usb_function function;
-	struct usb_composite_dev *cdev;
-	u8 ctrl_iface_id;
-	u8 data_iface_id;
-	int usb_connected;
-	struct usb_request *endless_req;
-	struct usb_ep *ctrl_out;
-	struct usb_ep *ctrl_in;
-	struct usb_ep *data;
-	struct usb_qdss_ch ch;
-	struct list_head ctrl_read_pool;
-	struct list_head ctrl_write_pool;
-	struct work_struct connect_w;
-	struct work_struct disconnect_w;
-	spinlock_t lock;
-	unsigned int data_enabled:1;
-	unsigned int ctrl_in_enabled:1;
-	unsigned int ctrl_out_enabled:1;
-	struct workqueue_struct *wq;
+    struct usb_function function;
+    struct usb_composite_dev *cdev;
+    u8 ctrl_iface_id;
+    u8 data_iface_id;
+    int usb_connected;
+    struct usb_request *endless_req;
+    struct usb_ep *ctrl_out;
+    struct usb_ep *ctrl_in;
+    struct usb_ep *data;
+    struct usb_qdss_ch ch;
+    struct list_head ctrl_read_pool;
+    struct list_head ctrl_write_pool;
+    struct work_struct connect_w;
+    struct work_struct disconnect_w;
+    spinlock_t lock;
+    unsigned int data_enabled:1;
+    unsigned int ctrl_in_enabled:1;
+    unsigned int ctrl_out_enabled:1;
+    struct workqueue_struct *wq;
 };
 
 #endif

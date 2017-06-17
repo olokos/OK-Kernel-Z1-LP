@@ -314,15 +314,15 @@
 
 /* Note: the descriptor layouts assume big-endian byte order. */
 typedef struct {
-	u32 buf0;
-	u32 buf1;		/* Base address of buffer */
-	u32 next0;		/* Address of next descriptor, if any */
-	u32 next1;
-	u16 vlan;		/* VLAN, if override enabled for this packet */
-	u16 len;		/* Length of buffer in bytes */
-	u32 misc;		/* See TSI108_TX_* above */
-	u32 reserved0;		/*reserved0 and reserved1 are added to make the desc */
-	u32 reserved1;		/* 32-byte aligned */
+    u32 buf0;
+    u32 buf1;		/* Base address of buffer */
+    u32 next0;		/* Address of next descriptor, if any */
+    u32 next1;
+    u16 vlan;		/* VLAN, if override enabled for this packet */
+    u16 len;		/* Length of buffer in bytes */
+    u32 misc;		/* See TSI108_TX_* above */
+    u32 reserved0;		/*reserved0 and reserved1 are added to make the desc */
+    u32 reserved1;		/* 32-byte aligned */
 } __attribute__ ((aligned(32))) tx_desc;
 
 #define TSI108_RX_EOF	(1 << 0)	/* End of frame; last fragment of packet */
@@ -341,16 +341,16 @@ typedef struct {
 #define TSI108_RX_SKB_SIZE 1536		/* The RX skb length */
 
 typedef struct {
-	u32 buf0;		/* Base address of buffer */
-	u32 buf1;		/* Base address of buffer */
-	u32 next0;		/* Address of next descriptor, if any */
-	u32 next1;		/* Address of next descriptor, if any */
-	u16 vlan;		/* VLAN of received packet, first frag only */
-	u16 len;		/* Length of received fragment in bytes */
-	u16 blen;		/* Length of buffer in bytes */
-	u16 misc;		/* See TSI108_RX_* above */
-	u32 reserved0;		/* reserved0 and reserved1 are added to make the desc */
-	u32 reserved1;		/* 32-byte aligned */
+    u32 buf0;		/* Base address of buffer */
+    u32 buf1;		/* Base address of buffer */
+    u32 next0;		/* Address of next descriptor, if any */
+    u32 next1;		/* Address of next descriptor, if any */
+    u16 vlan;		/* VLAN of received packet, first frag only */
+    u16 len;		/* Length of received fragment in bytes */
+    u16 blen;		/* Length of buffer in bytes */
+    u16 misc;		/* See TSI108_RX_* above */
+    u32 reserved0;		/* reserved0 and reserved1 are added to make the desc */
+    u32 reserved1;		/* 32-byte aligned */
 } __attribute__ ((aligned(32))) rx_desc;
 
 #endif				/* __TSI108_ETH_H */

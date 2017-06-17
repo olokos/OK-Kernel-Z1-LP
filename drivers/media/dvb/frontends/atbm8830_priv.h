@@ -23,10 +23,10 @@
 #define __ATBM8830_PRIV_H
 
 struct atbm_state {
-	struct i2c_adapter *i2c;
-	/* configuration settings */
-	const struct atbm8830_config *config;
-	struct dvb_frontend frontend;
+    struct i2c_adapter *i2c;
+    /* configuration settings */
+    const struct atbm8830_config *config;
+    struct dvb_frontend frontend;
 };
 
 #define REG_CHIP_ID	0x0000

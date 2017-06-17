@@ -69,15 +69,13 @@ when           who        what, where, why
 /*----------------------------------------------------------------------------
  * Preprocessor Definitions and Constants
  * -------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     WDTS_ChannelType           wlanChannel;
     WLANDXE_DMAChannelType     DMAChannel;
     WLANDXE_ChannelConfigType *channelConfig;
 } WLANDXE_ChannelMappingType;
 
-wpt_uint32 channelBaseAddressList[WLANDXE_DMA_CHANNEL_MAX] =
-{
+wpt_uint32 channelBaseAddressList[WLANDXE_DMA_CHANNEL_MAX] = {
     WLANDXE_DMA_CHAN0_BASE_ADDRESS,
     WLANDXE_DMA_CHAN1_BASE_ADDRESS,
     WLANDXE_DMA_CHAN2_BASE_ADDRESS,
@@ -87,8 +85,7 @@ wpt_uint32 channelBaseAddressList[WLANDXE_DMA_CHANNEL_MAX] =
     WLANDXE_DMA_CHAN6_BASE_ADDRESS
 };
 
-wpt_uint32 channelInterruptMask[WLANDXE_DMA_CHANNEL_MAX] =
-{
+wpt_uint32 channelInterruptMask[WLANDXE_DMA_CHANNEL_MAX] = {
     WLANDXE_INT_MASK_CHAN_0,
     WLANDXE_INT_MASK_CHAN_1,
     WLANDXE_INT_MASK_CHAN_2,
@@ -98,8 +95,7 @@ wpt_uint32 channelInterruptMask[WLANDXE_DMA_CHANNEL_MAX] =
     WLANDXE_INT_MASK_CHAN_6
 };
 
-WLANDXE_ChannelConfigType chanTXLowPriConfig =
-{
+WLANDXE_ChannelConfigType chanTXLowPriConfig = {
     /* Q handle type, Circular */
     WLANDXE_CHANNEL_HANDLE_CIRCULA,
 
@@ -137,8 +133,7 @@ WLANDXE_ChannelConfigType chanTXLowPriConfig =
     eWLAN_PAL_TRUE
 };
 
-WLANDXE_ChannelConfigType chanTXHighPriConfig =
-{
+WLANDXE_ChannelConfigType chanTXHighPriConfig = {
     /* Q handle type, Circular */
     WLANDXE_CHANNEL_HANDLE_CIRCULA,
 
@@ -176,8 +171,7 @@ WLANDXE_ChannelConfigType chanTXHighPriConfig =
     eWLAN_PAL_TRUE
 };
 
-WLANDXE_ChannelConfigType chanRXLowPriConfig =
-{
+WLANDXE_ChannelConfigType chanRXLowPriConfig = {
     /* Q handle type, Circular */
     WLANDXE_CHANNEL_HANDLE_CIRCULA,
 
@@ -216,8 +210,7 @@ WLANDXE_ChannelConfigType chanRXLowPriConfig =
     eWLAN_PAL_TRUE
 };
 
-WLANDXE_ChannelConfigType chanRXHighPriConfig =
-{
+WLANDXE_ChannelConfigType chanRXHighPriConfig = {
     /* Q handle type, Circular */
     WLANDXE_CHANNEL_HANDLE_CIRCULA,
 
@@ -256,8 +249,7 @@ WLANDXE_ChannelConfigType chanRXHighPriConfig =
 };
 
 #ifdef WLANDXE_TEST_CHANNEL_ENABLE
-WLANDXE_ChannelConfigType chanH2HTestConfig =
-{
+WLANDXE_ChannelConfigType chanH2HTestConfig = {
     /* Q handle type, Circular */
     WLANDXE_CHANNEL_HANDLE_CIRCULA,
 
@@ -297,8 +289,7 @@ WLANDXE_ChannelConfigType chanH2HTestConfig =
 };
 #endif /* WLANDXE_TEST_CHANNEL_ENABLE */
 
-WLANDXE_ChannelMappingType channelList[WDTS_CHANNEL_MAX] =
-{
+WLANDXE_ChannelMappingType channelList[WDTS_CHANNEL_MAX] = {
     {WDTS_CHANNEL_TX_LOW_PRI,  WLANDXE_DMA_CHANNEL_0, &chanTXLowPriConfig},
     {WDTS_CHANNEL_TX_HIGH_PRI, WLANDXE_DMA_CHANNEL_4, &chanTXHighPriConfig},
     {WDTS_CHANNEL_RX_LOW_PRI,  WLANDXE_DMA_CHANNEL_1, &chanRXLowPriConfig},
@@ -310,8 +301,7 @@ WLANDXE_ChannelMappingType channelList[WDTS_CHANNEL_MAX] =
 #endif /* WLANDXE_TEST_CHANNEL_ENABLE */
 };
 
-WLANDXE_TxCompIntConfigType txCompInt =
-{
+WLANDXE_TxCompIntConfigType txCompInt = {
     /* TX Complete Interrupt enable method */
     WLANDXE_TX_COMP_INT_PER_K_FRAMES,
 
@@ -348,8 +338,7 @@ WLANDXE_TxCompIntConfigType txCompInt =
 wpt_status dxeCommonDefaultConfig
 (
     WLANDXE_CtrlBlkType     *dxeCtrlBlk
-)
-{
+) {
     wpt_status                  status = eWLAN_PAL_STATUS_SUCCESS;
 
     dxeCtrlBlk->rxReadyCB     = NULL;
@@ -385,8 +374,7 @@ wpt_status dxeChannelDefaultConfig
 (
     WLANDXE_CtrlBlkType     *dxeCtrlBlk,
     WLANDXE_ChannelCBType   *channelEntry
-)
-{
+) {
     wpt_status                  status = eWLAN_PAL_STATUS_SUCCESS;
     wpt_uint32                  baseAddress;
     wpt_uint32                  dxeControlRead  = 0;
@@ -399,24 +387,20 @@ wpt_status dxeChannelDefaultConfig
     WLANDXE_ChannelMappingType *mappedChannel = NULL;
 
     /* Sanity Check */
-    if((NULL == dxeCtrlBlk) || (NULL == channelEntry))
-    {
+    if((NULL == dxeCtrlBlk) || (NULL == channelEntry)) {
         HDXE_MSG(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                  "dxeLinkDescAndCtrlBlk Channel Entry is not valid");
         return eWLAN_PAL_STATUS_E_INVAL;
     }
 
-    for(idx = 0; idx < WDTS_CHANNEL_MAX; idx++)
-    {
-        if(channelEntry->channelType == channelList[idx].wlanChannel)
-        {
+    for(idx = 0; idx < WDTS_CHANNEL_MAX; idx++) {
+        if(channelEntry->channelType == channelList[idx].wlanChannel) {
             mappedChannel = &channelList[idx];
             break;
         }
     }
 
-    if((NULL == mappedChannel) || (WDTS_CHANNEL_MAX == idx))
-    {
+    if((NULL == mappedChannel) || (WDTS_CHANNEL_MAX == idx)) {
         HDXE_MSG(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_ERROR,
                  "%s Failed to map channel", __func__);
         return eWLAN_PAL_STATUS_E_INVAL;
@@ -460,24 +444,19 @@ wpt_status dxeChannelDefaultConfig
     /* Transfer Type */
     channelEntry->extraConfig.chan_mask |= mappedChannel->channelConfig->xfrType;
     /* Use Short Descriptor, THIS LOOKS SOME WIERD, REVISIT */
-    if(!channelEntry->channelConfig.useShortDescFmt)
-    {
+    if(!channelEntry->channelConfig.useShortDescFmt) {
         channelEntry->extraConfig.chan_mask |= WLANDXE_DESC_CTRL_DFMT;
     }
     /* TX Channel, Set DIQ bit, Clear SIQ bit since source is not WQ */
     if((WDTS_CHANNEL_TX_LOW_PRI  == channelEntry->channelType) ||
-            (WDTS_CHANNEL_TX_HIGH_PRI == channelEntry->channelType))
-    {
+            (WDTS_CHANNEL_TX_HIGH_PRI == channelEntry->channelType)) {
         channelEntry->extraConfig.chan_mask |= WLANDXE_CH_CTRL_DIQ_MASK;
     }
     /* RX Channel, Set SIQ bit, Clear DIQ bit since source is not WQ */
     else if((WDTS_CHANNEL_RX_LOW_PRI  == channelEntry->channelType) ||
-            (WDTS_CHANNEL_RX_HIGH_PRI == channelEntry->channelType))
-    {
+            (WDTS_CHANNEL_RX_HIGH_PRI == channelEntry->channelType)) {
         channelEntry->extraConfig.chan_mask |= WLANDXE_CH_CTRL_SIQ_MASK;
-    }
-    else
-    {
+    } else {
         /* This is test H2H channel, TX, RX not use work Q
          * Do Nothing */
     }
@@ -511,8 +490,7 @@ wpt_status dxeChannelDefaultConfig
     /* End of Packet, RX is single fragment */
     dxeControlRead |= WLANDXE_DESC_CTRL_EOP;
     /* BD Present, default YES, B2H case it must be 0 to insert BD */
-    if(!channelEntry->channelConfig.bdPresent)
-    {
+    if(!channelEntry->channelConfig.bdPresent) {
         dxeControlRead |= WLANDXE_DESC_CTRL_BDH;
     }
     /* Channel Priority */
@@ -522,8 +500,7 @@ wpt_status dxeChannelDefaultConfig
     /* PDU Release, Release BD/PDU when DMA done */
     dxeControlRead |= WLANDXE_DESC_CTRL_PDU_REL;
     /* Use Short Descriptor, THIS LOOKS SOME WIERD, REVISIT */
-    if(!channelEntry->channelConfig.useShortDescFmt)
-    {
+    if(!channelEntry->channelConfig.useShortDescFmt) {
         dxeControlRead |= WLANDXE_DESC_CTRL_DFMT;
     }
     /* Interrupt on Descriptor done */
@@ -534,8 +511,7 @@ wpt_status dxeChannelDefaultConfig
     dxeControlRead |= WLANDXE_DESC_CTRL_BDT_SWAP;
     /* Host Little Endian */
     if((WDTS_CHANNEL_TX_LOW_PRI  == channelEntry->channelType) ||
-            (WDTS_CHANNEL_TX_HIGH_PRI == channelEntry->channelType))
-    {
+            (WDTS_CHANNEL_TX_HIGH_PRI == channelEntry->channelType)) {
         dxeControlRead |= WLANDXE_DESC_CTRL_ENDIANNESS;
     }
 
@@ -550,15 +526,13 @@ wpt_status dxeChannelDefaultConfig
     /* Transfer type, from Host 2 BMU */
     dxeControlWrite |= mappedChannel->channelConfig->xfrType;
     /* BD Present, this looks some weird ??? */
-    if(!channelEntry->channelConfig.bdPresent)
-    {
+    if(!channelEntry->channelConfig.bdPresent) {
         dxeControlWrite |= WLANDXE_DESC_CTRL_BDH;
     }
     /* Channel Priority */
     dxeControlWrite |= channelEntry->channelConfig.chPriority << WLANDXE_CH_CTRL_PRIO_OFFSET;
     /* Use Short Descriptor, THIS LOOKS SOME WIERD, REVISIT */
-    if(!channelEntry->channelConfig.useShortDescFmt)
-    {
+    if(!channelEntry->channelConfig.useShortDescFmt) {
         dxeControlWrite |= WLANDXE_DESC_CTRL_DFMT;
     }
     /* BMU Threshold select, only used H2B, not this case??? */
@@ -610,12 +584,9 @@ wpt_status dxeChannelDefaultConfig
 
     wpalGetNumRxRawPacket(&rxResourceCount);
     if((WDTS_CHANNEL_TX_LOW_PRI == channelEntry->channelType) ||
-            (0 == rxResourceCount))
-    {
+            (0 == rxResourceCount)) {
         channelEntry->numDesc         = mappedChannel->channelConfig->nDescs;
-    }
-    else
-    {
+    } else {
         channelEntry->numDesc         = rxResourceCount / 4;
     }
     channelEntry->assignedDMAChannel = mappedChannel->DMAChannel;

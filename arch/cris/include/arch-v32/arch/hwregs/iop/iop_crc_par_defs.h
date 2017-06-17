@@ -86,13 +86,13 @@
 
 /* Register rw_cfg, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int mode    : 1;
-  unsigned int crc_out : 1;
-  unsigned int rev_out : 1;
-  unsigned int inv_out : 1;
-  unsigned int trig    : 2;
-  unsigned int poly    : 3;
-  unsigned int dummy1  : 23;
+    unsigned int mode    : 1;
+    unsigned int crc_out : 1;
+    unsigned int rev_out : 1;
+    unsigned int inv_out : 1;
+    unsigned int trig    : 2;
+    unsigned int poly    : 3;
+    unsigned int dummy1  : 23;
 } reg_iop_crc_par_rw_cfg;
 #define REG_RD_ADDR_iop_crc_par_rw_cfg 0
 #define REG_WR_ADDR_iop_crc_par_rw_cfg 0
@@ -109,87 +109,87 @@ typedef unsigned int reg_iop_crc_par_rw_correct_crc;
 
 /* Register rw_ctrl, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int en : 1;
-  unsigned int dummy1 : 31;
+    unsigned int en : 1;
+    unsigned int dummy1 : 31;
 } reg_iop_crc_par_rw_ctrl;
 #define REG_RD_ADDR_iop_crc_par_rw_ctrl 12
 #define REG_WR_ADDR_iop_crc_par_rw_ctrl 12
 
 /* Register rw_set_last, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int tr_dif : 1;
-  unsigned int dummy1 : 31;
+    unsigned int tr_dif : 1;
+    unsigned int dummy1 : 31;
 } reg_iop_crc_par_rw_set_last;
 #define REG_RD_ADDR_iop_crc_par_rw_set_last 16
 #define REG_WR_ADDR_iop_crc_par_rw_set_last 16
 
 /* Register rw_wr1byte, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 8;
-  unsigned int dummy1 : 24;
+    unsigned int data : 8;
+    unsigned int dummy1 : 24;
 } reg_iop_crc_par_rw_wr1byte;
 #define REG_RD_ADDR_iop_crc_par_rw_wr1byte 20
 #define REG_WR_ADDR_iop_crc_par_rw_wr1byte 20
 
 /* Register rw_wr2byte, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 16;
-  unsigned int dummy1 : 16;
+    unsigned int data : 16;
+    unsigned int dummy1 : 16;
 } reg_iop_crc_par_rw_wr2byte;
 #define REG_RD_ADDR_iop_crc_par_rw_wr2byte 24
 #define REG_WR_ADDR_iop_crc_par_rw_wr2byte 24
 
 /* Register rw_wr3byte, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 24;
-  unsigned int dummy1 : 8;
+    unsigned int data : 24;
+    unsigned int dummy1 : 8;
 } reg_iop_crc_par_rw_wr3byte;
 #define REG_RD_ADDR_iop_crc_par_rw_wr3byte 28
 #define REG_WR_ADDR_iop_crc_par_rw_wr3byte 28
 
 /* Register rw_wr4byte, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 32;
+    unsigned int data : 32;
 } reg_iop_crc_par_rw_wr4byte;
 #define REG_RD_ADDR_iop_crc_par_rw_wr4byte 32
 #define REG_WR_ADDR_iop_crc_par_rw_wr4byte 32
 
 /* Register rw_wr1byte_last, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 8;
-  unsigned int dummy1 : 24;
+    unsigned int data : 8;
+    unsigned int dummy1 : 24;
 } reg_iop_crc_par_rw_wr1byte_last;
 #define REG_RD_ADDR_iop_crc_par_rw_wr1byte_last 36
 #define REG_WR_ADDR_iop_crc_par_rw_wr1byte_last 36
 
 /* Register rw_wr2byte_last, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 16;
-  unsigned int dummy1 : 16;
+    unsigned int data : 16;
+    unsigned int dummy1 : 16;
 } reg_iop_crc_par_rw_wr2byte_last;
 #define REG_RD_ADDR_iop_crc_par_rw_wr2byte_last 40
 #define REG_WR_ADDR_iop_crc_par_rw_wr2byte_last 40
 
 /* Register rw_wr3byte_last, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 24;
-  unsigned int dummy1 : 8;
+    unsigned int data : 24;
+    unsigned int dummy1 : 8;
 } reg_iop_crc_par_rw_wr3byte_last;
 #define REG_RD_ADDR_iop_crc_par_rw_wr3byte_last 44
 #define REG_WR_ADDR_iop_crc_par_rw_wr3byte_last 44
 
 /* Register rw_wr4byte_last, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int data : 32;
+    unsigned int data : 32;
 } reg_iop_crc_par_rw_wr4byte_last;
 #define REG_RD_ADDR_iop_crc_par_rw_wr4byte_last 48
 #define REG_WR_ADDR_iop_crc_par_rw_wr4byte_last 48
 
 /* Register r_stat, scope iop_crc_par, type r */
 typedef struct {
-  unsigned int err  : 1;
-  unsigned int busy : 1;
-  unsigned int dummy1 : 30;
+    unsigned int err  : 1;
+    unsigned int busy : 1;
+    unsigned int dummy1 : 30;
 } reg_iop_crc_par_r_stat;
 #define REG_RD_ADDR_iop_crc_par_r_stat 52
 
@@ -203,8 +203,8 @@ typedef unsigned int reg_iop_crc_par_r_crc;
 
 /* Register rw_strb_rec_dif_in, scope iop_crc_par, type rw */
 typedef struct {
-  unsigned int last : 2;
-  unsigned int dummy1 : 30;
+    unsigned int last : 2;
+    unsigned int dummy1 : 30;
 } reg_iop_crc_par_rw_strb_rec_dif_in;
 #define REG_RD_ADDR_iop_crc_par_rw_strb_rec_dif_in 64
 #define REG_WR_ADDR_iop_crc_par_rw_strb_rec_dif_in 64
@@ -212,21 +212,21 @@ typedef struct {
 
 /* Constants */
 enum {
-  regk_iop_crc_par_calc                    = 0x00000001,
-  regk_iop_crc_par_ccitt                   = 0x00000002,
-  regk_iop_crc_par_check                   = 0x00000000,
-  regk_iop_crc_par_crc16                   = 0x00000001,
-  regk_iop_crc_par_crc32                   = 0x00000000,
-  regk_iop_crc_par_crc5                    = 0x00000003,
-  regk_iop_crc_par_crc5_11                 = 0x00000004,
-  regk_iop_crc_par_dif_in                  = 0x00000002,
-  regk_iop_crc_par_hi                      = 0x00000000,
-  regk_iop_crc_par_neg                     = 0x00000002,
-  regk_iop_crc_par_no                      = 0x00000000,
-  regk_iop_crc_par_pos                     = 0x00000001,
-  regk_iop_crc_par_pos_neg                 = 0x00000003,
-  regk_iop_crc_par_rw_cfg_default          = 0x00000000,
-  regk_iop_crc_par_rw_ctrl_default         = 0x00000000,
-  regk_iop_crc_par_yes                     = 0x00000001
+    regk_iop_crc_par_calc                    = 0x00000001,
+    regk_iop_crc_par_ccitt                   = 0x00000002,
+    regk_iop_crc_par_check                   = 0x00000000,
+    regk_iop_crc_par_crc16                   = 0x00000001,
+    regk_iop_crc_par_crc32                   = 0x00000000,
+    regk_iop_crc_par_crc5                    = 0x00000003,
+    regk_iop_crc_par_crc5_11                 = 0x00000004,
+    regk_iop_crc_par_dif_in                  = 0x00000002,
+    regk_iop_crc_par_hi                      = 0x00000000,
+    regk_iop_crc_par_neg                     = 0x00000002,
+    regk_iop_crc_par_no                      = 0x00000000,
+    regk_iop_crc_par_pos                     = 0x00000001,
+    regk_iop_crc_par_pos_neg                 = 0x00000003,
+    regk_iop_crc_par_rw_cfg_default          = 0x00000000,
+    regk_iop_crc_par_rw_ctrl_default         = 0x00000000,
+    regk_iop_crc_par_yes                     = 0x00000001
 };
 #endif /* __iop_crc_par_defs_h */

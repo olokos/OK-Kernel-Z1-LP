@@ -20,9 +20,9 @@
 #include <linux/rwsem.h>
 
 struct i2c_devinfo {
-	struct list_head	list;
-	int			busnum;
-	struct i2c_board_info	board_info;
+    struct list_head	list;
+    int			busnum;
+    struct i2c_board_info	board_info;
 };
 
 /* board_lock protects board_list and first_dynamic_bus_num.

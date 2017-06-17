@@ -35,12 +35,12 @@
  * of sources for this function) and the function id.
  */
 struct rmi_function_descriptor {
-	unsigned char queryBaseAddr;
-	unsigned char commandBaseAddr;
-	unsigned char controlBaseAddr;
-	unsigned char dataBaseAddr;
-	unsigned char interruptSrcCnt;
-	unsigned char functionNum;
+    unsigned char queryBaseAddr;
+    unsigned char commandBaseAddr;
+    unsigned char controlBaseAddr;
+    unsigned char dataBaseAddr;
+    unsigned char interruptSrcCnt;
+    unsigned char functionNum;
 };
 
 /*  This encapsulates the information found using the RMI4 Function $01
@@ -57,26 +57,26 @@ struct rmi_function_descriptor {
  *  select "Synaptics RMI 4 Interfacting Guide".
  */
 struct rmi_F01_query {
-	/* The manufacturer identification byte.*/
-	unsigned char mfgid;
+    /* The manufacturer identification byte.*/
+    unsigned char mfgid;
 
-	/* The Product Properties information.*/
-	unsigned char properties;
+    /* The Product Properties information.*/
+    unsigned char properties;
 
-	/* The product info bytes.*/
-	unsigned char prod_info[2];
+    /* The product info bytes.*/
+    unsigned char prod_info[2];
 
-	/* Date Code - Year, Month, Day.*/
-	unsigned char date_code[3];
+    /* Date Code - Year, Month, Day.*/
+    unsigned char date_code[3];
 
-	/* Tester ID (14 bits).*/
-	unsigned short tester_id;
+    /* Tester ID (14 bits).*/
+    unsigned short tester_id;
 
-	/* Serial Number (14 bits).*/
-	unsigned short serial_num;
+    /* Serial Number (14 bits).*/
+    unsigned short serial_num;
 
-	/* A null-terminated string that identifies this particular product.*/
-	char prod_id[11];
+    /* A null-terminated string that identifies this particular product.*/
+    char prod_id[11];
 };
 
 /* This encapsulates the F01 Device Control control registers.
@@ -144,21 +144,21 @@ struct rmi_F11_control {
 /** This is the data read from the F19 query registers.
  */
 struct rmi_F19_query {
-	bool hasHysteresisThreshold;
-	bool hasSensitivityAdjust;
-	bool configurable;
-	unsigned char buttonCount;
+    bool hasHysteresisThreshold;
+    bool hasSensitivityAdjust;
+    bool configurable;
+    unsigned char buttonCount;
 };
 
 struct rmi_F19_control {
-	unsigned char buttonUsage;
-	unsigned char filterMode;
-	unsigned char *intEnableRegisters;
-	unsigned char *singleButtonControl;
-	unsigned char *sensorMap;
-	unsigned char *singleButtonSensitivity;
-	unsigned char globalSensitivityAdjustment;
-	unsigned char globalHysteresisThreshold;
+    unsigned char buttonUsage;
+    unsigned char filterMode;
+    unsigned char *intEnableRegisters;
+    unsigned char *singleButtonControl;
+    unsigned char *sensorMap;
+    unsigned char *singleButtonSensitivity;
+    unsigned char globalSensitivityAdjustment;
+    unsigned char globalHysteresisThreshold;
 };
 
 #endif

@@ -30,9 +30,9 @@
 #include <mach/subsystem_notif.h>
 
 struct subsys_notif_info {
-	char name[50];
-	struct srcu_notifier_head subsys_notif_rcvr_list;
-	struct list_head list;
+    char name[50];
+    struct srcu_notifier_head subsys_notif_rcvr_list;
+    struct list_head list;
 };
 
 static LIST_HEAD(subsystem_list);
@@ -43,177 +43,169 @@ static DEFINE_MUTEX(notif_add_lock);
 static void subsys_notif_reg_test_notifier(const char *);
 #endif
 
-static struct subsys_notif_info *_notif_find_subsys(const char *subsys_name)
-{
-	struct subsys_notif_info *subsys;
+static struct subsys_notif_info *_notif_find_subsys(const char *subsys_name) {
+    struct subsys_notif_info *subsys;
 
-	mutex_lock(&notif_lock);
-	list_for_each_entry(subsys, &subsystem_list, list)
-		if (!strncmp(subsys->name, subsys_name,
-				ARRAY_SIZE(subsys->name))) {
-			mutex_unlock(&notif_lock);
-			return subsys;
-		}
-	mutex_unlock(&notif_lock);
+    mutex_lock(&notif_lock);
+    list_for_each_entry(subsys, &subsystem_list, list)
+    if (!strncmp(subsys->name, subsys_name,
+                 ARRAY_SIZE(subsys->name))) {
+        mutex_unlock(&notif_lock);
+        return subsys;
+    }
+    mutex_unlock(&notif_lock);
 
-	return NULL;
+    return NULL;
 }
 
 void *subsys_notif_register_notifier(
-			const char *subsys_name, struct notifier_block *nb)
-{
-	int ret;
-	struct subsys_notif_info *subsys = _notif_find_subsys(subsys_name);
+    const char *subsys_name, struct notifier_block *nb) {
+    int ret;
+    struct subsys_notif_info *subsys = _notif_find_subsys(subsys_name);
 
-	if (!subsys) {
+    if (!subsys) {
 
-		/* Possible first time reference to this subsystem. Add it. */
-		subsys = (struct subsys_notif_info *)
-				subsys_notif_add_subsys(subsys_name);
+        /* Possible first time reference to this subsystem. Add it. */
+        subsys = (struct subsys_notif_info *)
+                 subsys_notif_add_subsys(subsys_name);
 
-		if (!subsys)
-			return ERR_PTR(-EINVAL);
-	}
+        if (!subsys)
+            return ERR_PTR(-EINVAL);
+    }
 
-	ret = srcu_notifier_chain_register(
-		&subsys->subsys_notif_rcvr_list, nb);
+    ret = srcu_notifier_chain_register(
+              &subsys->subsys_notif_rcvr_list, nb);
 
-	if (ret < 0)
-		return ERR_PTR(ret);
+    if (ret < 0)
+        return ERR_PTR(ret);
 
-	return subsys;
+    return subsys;
 }
 EXPORT_SYMBOL(subsys_notif_register_notifier);
 
 int subsys_notif_unregister_notifier(void *subsys_handle,
-				struct notifier_block *nb)
-{
-	int ret;
-	struct subsys_notif_info *subsys =
-			(struct subsys_notif_info *)subsys_handle;
+                                     struct notifier_block *nb) {
+    int ret;
+    struct subsys_notif_info *subsys =
+        (struct subsys_notif_info *)subsys_handle;
 
-	if (!subsys)
-		return -EINVAL;
+    if (!subsys)
+        return -EINVAL;
 
-	ret = srcu_notifier_chain_unregister(
-		&subsys->subsys_notif_rcvr_list, nb);
+    ret = srcu_notifier_chain_unregister(
+              &subsys->subsys_notif_rcvr_list, nb);
 
-	return ret;
+    return ret;
 }
 EXPORT_SYMBOL(subsys_notif_unregister_notifier);
 
-void *subsys_notif_add_subsys(const char *subsys_name)
-{
-	struct subsys_notif_info *subsys = NULL;
+void *subsys_notif_add_subsys(const char *subsys_name) {
+    struct subsys_notif_info *subsys = NULL;
 
-	if (!subsys_name)
-		goto done;
+    if (!subsys_name)
+        goto done;
 
-	mutex_lock(&notif_add_lock);
+    mutex_lock(&notif_add_lock);
 
-	subsys = _notif_find_subsys(subsys_name);
+    subsys = _notif_find_subsys(subsys_name);
 
-	if (subsys) {
-		mutex_unlock(&notif_add_lock);
-		goto done;
-	}
+    if (subsys) {
+        mutex_unlock(&notif_add_lock);
+        goto done;
+    }
 
-	subsys = kmalloc(sizeof(struct subsys_notif_info), GFP_KERNEL);
+    subsys = kmalloc(sizeof(struct subsys_notif_info), GFP_KERNEL);
 
-	if (!subsys) {
-		mutex_unlock(&notif_add_lock);
-		return ERR_PTR(-EINVAL);
-	}
+    if (!subsys) {
+        mutex_unlock(&notif_add_lock);
+        return ERR_PTR(-EINVAL);
+    }
 
-	strlcpy(subsys->name, subsys_name, ARRAY_SIZE(subsys->name));
+    strlcpy(subsys->name, subsys_name, ARRAY_SIZE(subsys->name));
 
-	srcu_init_notifier_head(&subsys->subsys_notif_rcvr_list);
+    srcu_init_notifier_head(&subsys->subsys_notif_rcvr_list);
 
-	INIT_LIST_HEAD(&subsys->list);
+    INIT_LIST_HEAD(&subsys->list);
 
-	mutex_lock(&notif_lock);
-	list_add_tail(&subsys->list, &subsystem_list);
-	mutex_unlock(&notif_lock);
+    mutex_lock(&notif_lock);
+    list_add_tail(&subsys->list, &subsystem_list);
+    mutex_unlock(&notif_lock);
 
-	#if defined(SUBSYS_RESTART_DEBUG)
-	subsys_notif_reg_test_notifier(subsys->name);
-	#endif
+#if defined(SUBSYS_RESTART_DEBUG)
+    subsys_notif_reg_test_notifier(subsys->name);
+#endif
 
-	mutex_unlock(&notif_add_lock);
+    mutex_unlock(&notif_add_lock);
 
 done:
-	return subsys;
+    return subsys;
 }
 EXPORT_SYMBOL(subsys_notif_add_subsys);
 
 int subsys_notif_queue_notification(void *subsys_handle,
-					enum subsys_notif_type notif_type,
-					void *data)
-{
-	int ret = 0;
-	struct subsys_notif_info *subsys =
-		(struct subsys_notif_info *) subsys_handle;
+                                    enum subsys_notif_type notif_type,
+                                    void *data) {
+    int ret = 0;
+    struct subsys_notif_info *subsys =
+        (struct subsys_notif_info *) subsys_handle;
 
-	if (!subsys)
-		return -EINVAL;
+    if (!subsys)
+        return -EINVAL;
 
-	if (notif_type < 0 || notif_type >= SUBSYS_NOTIF_TYPE_COUNT)
-		return -EINVAL;
+    if (notif_type < 0 || notif_type >= SUBSYS_NOTIF_TYPE_COUNT)
+        return -EINVAL;
 
-		ret = srcu_notifier_call_chain(
-			&subsys->subsys_notif_rcvr_list, notif_type,
-			data);
-	return ret;
+    ret = srcu_notifier_call_chain(
+              &subsys->subsys_notif_rcvr_list, notif_type,
+              data);
+    return ret;
 }
 EXPORT_SYMBOL(subsys_notif_queue_notification);
 
 #if defined(SUBSYS_RESTART_DEBUG)
-static const char *notif_to_string(enum subsys_notif_type notif_type)
-{
-	switch (notif_type) {
+static const char *notif_to_string(enum subsys_notif_type notif_type) {
+    switch (notif_type) {
 
-	case	SUBSYS_BEFORE_SHUTDOWN:
-		return __stringify(SUBSYS_BEFORE_SHUTDOWN);
+    case	SUBSYS_BEFORE_SHUTDOWN:
+        return __stringify(SUBSYS_BEFORE_SHUTDOWN);
 
-	case	SUBSYS_AFTER_SHUTDOWN:
-		return __stringify(SUBSYS_AFTER_SHUTDOWN);
+    case	SUBSYS_AFTER_SHUTDOWN:
+        return __stringify(SUBSYS_AFTER_SHUTDOWN);
 
-	case	SUBSYS_BEFORE_POWERUP:
-		return __stringify(SUBSYS_BEFORE_POWERUP);
+    case	SUBSYS_BEFORE_POWERUP:
+        return __stringify(SUBSYS_BEFORE_POWERUP);
 
-	case	SUBSYS_AFTER_POWERUP:
-		return __stringify(SUBSYS_AFTER_POWERUP);
+    case	SUBSYS_AFTER_POWERUP:
+        return __stringify(SUBSYS_AFTER_POWERUP);
 
-	default:
-		return "unknown";
-	}
+    default:
+        return "unknown";
+    }
 }
 
 static int subsys_notifier_test_call(struct notifier_block *this,
-				  unsigned long code,
-				  void *data)
-{
-	switch (code) {
+                                     unsigned long code,
+                                     void *data) {
+    switch (code) {
 
-	default:
-		printk(KERN_WARNING "%s: Notification %s from subsystem %p\n",
-			__func__, notif_to_string(code), data);
-	break;
+    default:
+        printk(KERN_WARNING "%s: Notification %s from subsystem %p\n",
+               __func__, notif_to_string(code), data);
+        break;
 
-	}
+    }
 
-	return NOTIFY_DONE;
+    return NOTIFY_DONE;
 }
 
 static struct notifier_block nb = {
-	.notifier_call = subsys_notifier_test_call,
+    .notifier_call = subsys_notifier_test_call,
 };
 
-static void subsys_notif_reg_test_notifier(const char *subsys_name)
-{
-	void *handle = subsys_notif_register_notifier(subsys_name, &nb);
-	printk(KERN_WARNING "%s: Registered test notifier, handle=%p",
-			__func__, handle);
+static void subsys_notif_reg_test_notifier(const char *subsys_name) {
+    void *handle = subsys_notif_register_notifier(subsys_name, &nb);
+    printk(KERN_WARNING "%s: Registered test notifier, handle=%p",
+           __func__, handle);
 }
 #endif
 

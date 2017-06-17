@@ -97,12 +97,12 @@
 #define TDA18218_NUM_REGS 59
 
 struct tda18218_priv {
-	struct tda18218_config *cfg;
-	struct i2c_adapter *i2c;
+    struct tda18218_config *cfg;
+    struct i2c_adapter *i2c;
 
-	u32 if_frequency;
+    u32 if_frequency;
 
-	u8 regs[TDA18218_NUM_REGS];
+    u8 regs[TDA18218_NUM_REGS];
 };
 
 #endif

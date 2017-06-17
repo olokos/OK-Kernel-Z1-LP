@@ -61,17 +61,17 @@ response to a write, is unknown.
 */
 
 struct m920x_state {
-	u16 filters[M9206_MAX_ADAPTERS][M9206_MAX_FILTERS];
-	int filtering_enabled[M9206_MAX_ADAPTERS];
-	int rep_count;
+    u16 filters[M9206_MAX_ADAPTERS][M9206_MAX_FILTERS];
+    int filtering_enabled[M9206_MAX_ADAPTERS];
+    int rep_count;
 };
 
 /* Initialisation data for the m920x
  */
 
 struct m920x_inits {
-	u16 address;
-	u8  data;
+    u16 address;
+    u8  data;
 };
 
 #endif

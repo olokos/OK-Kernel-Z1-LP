@@ -100,8 +100,7 @@
 
 /// Module IDs.  These are generic IDs that identify the various modules
 /// in the software system.
-typedef enum
-{
+typedef enum {
     VOS_MODULE_ID_BAP        = 0,
     VOS_MODULE_ID_TL         = 1,
     VOS_MODULE_ID_WDI        = 2,
@@ -130,8 +129,7 @@ typedef enum
 
 /// Concurrency role.  These are generic IDs that identify the various roles
 /// in the software system.
-typedef enum
-{
+typedef enum {
     /*ON linux maintain 1-1 corespondence with device_mode_t in hdd*/
     VOS_STA_MODE=0,
     VOS_STA_SAP_MODE=1, //to support softAp  mode . This is misleading. It means AP MODE only.
@@ -150,8 +148,7 @@ typedef enum
 //bit 1 - ap mode
 //bit 2 - p2p client mode
 //bit 3 - p2p go mode
-typedef enum
-{
+typedef enum {
     VOS_STA=1,
     VOS_SAP=2,
     VOS_STA_SAP=3, //to support sta, softAp  mode . This means STA+AP mode
@@ -168,8 +165,7 @@ typedef enum
 #endif
 #endif
 
-enum
-{
+enum {
     VOS_FALSE = 0,
     VOS_TRUE  = ( !VOS_FALSE )
 };
@@ -192,8 +188,7 @@ typedef v_VOID_t *v_CONTEXT_t;
 /// Macro defining the size of a MAC Address...
 #define VOS_MAC_ADDR_SIZE ( 6 )
 
-typedef struct
-{
+typedef struct {
     /// the bytes that make up the macAddress.
     v_BYTE_t bytes[ VOS_MAC_ADDR_SIZE ];
 
@@ -229,8 +224,7 @@ typedef struct
 
   --------------------------------------------------------------------------*/
 VOS_INLINE_FN v_BOOL_t vos_is_macaddr_equal( v_MACADDR_t *pMacAddr1,
-        v_MACADDR_t *pMacAddr2 )
-{
+        v_MACADDR_t *pMacAddr2 ) {
     return ( 0 == memcmp( pMacAddr1, pMacAddr2, VOS_MAC_ADDR_SIZE ) );
 }
 
@@ -251,8 +245,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_equal( v_MACADDR_t *pMacAddr1,
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_BOOL_t vos_is_macaddr_zero( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_BOOL_t vos_is_macaddr_zero( v_MACADDR_t *pMacAddr ) {
     v_MACADDR_t zeroMacAddr = VOS_MAC_ADDR_ZERO_INITIALIZER;
 
     return( vos_is_macaddr_equal( pMacAddr, &zeroMacAddr ) );
@@ -272,8 +265,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_zero( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_VOID_t vos_zero_macaddr( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_VOID_t vos_zero_macaddr( v_MACADDR_t *pMacAddr ) {
     memset( pMacAddr, 0, VOS_MAC_ADDR_SIZE );
 }
 
@@ -295,8 +287,7 @@ VOS_INLINE_FN v_VOID_t vos_zero_macaddr( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_BOOL_t vos_is_macaddr_group( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_BOOL_t vos_is_macaddr_group( v_MACADDR_t *pMacAddr ) {
     return( pMacAddr->bytes[ 0 ] & 0x01 );
 }
 
@@ -316,8 +307,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_group( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_BOOL_t vos_is_macaddr_broadcast( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_BOOL_t vos_is_macaddr_broadcast( v_MACADDR_t *pMacAddr ) {
     v_MACADDR_t broadcastMacAddr = VOS_MAC_ADDR_BROADCAST_INITIALIZER;
 
     return( vos_is_macaddr_equal( pMacAddr, &broadcastMacAddr ) );
@@ -338,8 +328,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_broadcast( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_BOOL_t vos_is_macaddr_multicast( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_BOOL_t vos_is_macaddr_multicast( v_MACADDR_t *pMacAddr ) {
     return( vos_is_macaddr_group( pMacAddr ) &&
             !vos_is_macaddr_broadcast( pMacAddr ) );
 }
@@ -361,8 +350,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_multicast( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_BOOL_t vos_is_macaddr_directed( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_BOOL_t vos_is_macaddr_directed( v_MACADDR_t *pMacAddr ) {
     return( !vos_is_macaddr_group( pMacAddr ) );
 }
 
@@ -380,8 +368,7 @@ VOS_INLINE_FN v_BOOL_t vos_is_macaddr_directed( v_MACADDR_t *pMacAddr )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_VOID_t vos_copy_macaddr( v_MACADDR_t *pDst, v_MACADDR_t *pSrc )
-{
+VOS_INLINE_FN v_VOID_t vos_copy_macaddr( v_MACADDR_t *pDst, v_MACADDR_t *pSrc ) {
     *pDst = *pSrc;
 }
 
@@ -400,8 +387,7 @@ VOS_INLINE_FN v_VOID_t vos_copy_macaddr( v_MACADDR_t *pDst, v_MACADDR_t *pSrc )
   \sa
 
   --------------------------------------------------------------------------*/
-VOS_INLINE_FN v_VOID_t vos_set_macaddr_broadcast( v_MACADDR_t *pMacAddr )
-{
+VOS_INLINE_FN v_VOID_t vos_set_macaddr_broadcast( v_MACADDR_t *pMacAddr ) {
     memset( pMacAddr, 0xff, VOS_MAC_ADDR_SIZE );
 }
 
@@ -424,10 +410,8 @@ uintptr_t vos_atomic_set( uintptr_t *pTarget, uintptr_t value );
 
 // TODO: the below function is a stub to perform atomic set on a BYTE
 // Clearly the function below is not an atomic function
-VOS_INLINE_FN v_U8_t vos_atomic_set_U8( v_U8_t *pVariable, v_U8_t value )
-{
-    if (pVariable == NULL)
-    {
+VOS_INLINE_FN v_U8_t vos_atomic_set_U8( v_U8_t *pVariable, v_U8_t value ) {
+    if (pVariable == NULL) {
         return 0;
     }
     *pVariable = value;

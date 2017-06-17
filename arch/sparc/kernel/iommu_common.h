@@ -36,24 +36,23 @@
 #define SG_ENT_PHYS_ADDRESS(SG)	(__pa(sg_virt((SG))))
 
 static inline int is_span_boundary(unsigned long entry,
-				   unsigned long shift,
-				   unsigned long boundary_size,
-				   struct scatterlist *outs,
-				   struct scatterlist *sg)
-{
-	unsigned long paddr = SG_ENT_PHYS_ADDRESS(outs);
-	int nr = iommu_num_pages(paddr, outs->dma_length + sg->length,
-				 IO_PAGE_SIZE);
+                                   unsigned long shift,
+                                   unsigned long boundary_size,
+                                   struct scatterlist *outs,
+                                   struct scatterlist *sg) {
+    unsigned long paddr = SG_ENT_PHYS_ADDRESS(outs);
+    int nr = iommu_num_pages(paddr, outs->dma_length + sg->length,
+                             IO_PAGE_SIZE);
 
-	return iommu_is_span_boundary(entry, nr, shift, boundary_size);
+    return iommu_is_span_boundary(entry, nr, shift, boundary_size);
 }
 
 extern unsigned long iommu_range_alloc(struct device *dev,
-				       struct iommu *iommu,
-				       unsigned long npages,
-				       unsigned long *handle);
+                                       struct iommu *iommu,
+                                       unsigned long npages,
+                                       unsigned long *handle);
 extern void iommu_range_free(struct iommu *iommu,
-			     dma_addr_t dma_addr,
-			     unsigned long npages);
+                             dma_addr_t dma_addr,
+                             unsigned long npages);
 
 #endif /* _IOMMU_COMMON_H */

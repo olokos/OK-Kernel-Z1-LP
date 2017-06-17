@@ -24,30 +24,30 @@
  *	struct
  */
 struct usbhs_pipe {
-	u32 pipe_type;	/* USB_ENDPOINT_XFER_xxx */
+    u32 pipe_type;	/* USB_ENDPOINT_XFER_xxx */
 
-	struct usbhs_priv *priv;
-	struct usbhs_fifo *fifo;
-	struct list_head list;
+    struct usbhs_priv *priv;
+    struct usbhs_fifo *fifo;
+    struct list_head list;
 
-	int maxp;
+    int maxp;
 
-	u32 flags;
+    u32 flags;
 #define USBHS_PIPE_FLAGS_IS_USED		(1 << 0)
 #define USBHS_PIPE_FLAGS_IS_DIR_IN		(1 << 1)
 #define USBHS_PIPE_FLAGS_IS_DIR_HOST		(1 << 2)
 
-	struct usbhs_pkt_handle *handler;
+    struct usbhs_pkt_handle *handler;
 
-	void *mod_private;
+    void *mod_private;
 };
 
 struct usbhs_pipe_info {
-	struct usbhs_pipe *pipe;
-	int size;	/* array size of "pipe" */
-	int bufnmb_last;	/* FIXME : driver needs good allocator */
+    struct usbhs_pipe *pipe;
+    int size;	/* array size of "pipe" */
+    int bufnmb_last;	/* FIXME : driver needs good allocator */
 
-	int (*dma_map_ctrl)(struct usbhs_pkt *pkt, int map);
+    int (*dma_map_ctrl)(struct usbhs_pkt *pkt, int map);
 };
 
 /*
@@ -80,7 +80,7 @@ void usbhs_pipe_remove(struct usbhs_priv *priv);
 int usbhs_pipe_is_dir_in(struct usbhs_pipe *pipe);
 int usbhs_pipe_is_dir_host(struct usbhs_pipe *pipe);
 void usbhs_pipe_init(struct usbhs_priv *priv,
-		     int (*dma_map_ctrl)(struct usbhs_pkt *pkt, int map));
+                     int (*dma_map_ctrl)(struct usbhs_pkt *pkt, int map));
 int usbhs_pipe_get_maxpacket(struct usbhs_pipe *pipe);
 void usbhs_pipe_clear(struct usbhs_pipe *pipe);
 int usbhs_pipe_is_accessible(struct usbhs_pipe *pipe);
@@ -90,7 +90,7 @@ void usbhs_pipe_stall(struct usbhs_pipe *pipe);
 int usbhs_pipe_is_stall(struct usbhs_pipe *pipe);
 void usbhs_pipe_select_fifo(struct usbhs_pipe *pipe, struct usbhs_fifo *fifo);
 void usbhs_pipe_config_update(struct usbhs_pipe *pipe, u16 devsel,
-			      u16 epnum, u16 maxp);
+                              u16 epnum, u16 maxp);
 
 #define usbhs_pipe_sequence_data0(pipe)	usbhs_pipe_data_sequence(pipe, 0)
 #define usbhs_pipe_sequence_data1(pipe)	usbhs_pipe_data_sequence(pipe, 1)

@@ -34,9 +34,9 @@ bfa_status_t bfad_im_port_new(struct bfad_s *bfad, struct bfad_port_s *port);
 void bfad_im_port_delete(struct bfad_s *bfad, struct bfad_port_s *port);
 void bfad_im_port_clean(struct bfad_im_port_s *im_port);
 int  bfad_im_scsi_host_alloc(struct bfad_s *bfad,
-		struct bfad_im_port_s *im_port, struct device *dev);
+                             struct bfad_im_port_s *im_port, struct device *dev);
 void bfad_im_scsi_host_free(struct bfad_s *bfad,
-				struct bfad_im_port_s *im_port);
+                            struct bfad_im_port_s *im_port);
 
 #define MAX_FCP_TARGET 1024
 #define MAX_FCP_LUN 16384
@@ -51,72 +51,72 @@ void bfad_im_scsi_host_free(struct bfad_s *bfad,
 #define IO_DONE_BIT			0
 
 struct bfad_itnim_data_s {
-	struct bfad_itnim_s *itnim;
+    struct bfad_itnim_s *itnim;
 };
 
 struct bfad_im_port_s {
-	struct bfad_s         *bfad;
-	struct bfad_port_s    *port;
-	struct work_struct port_delete_work;
-	int             idr_id;
-	u16        cur_scsi_id;
-	u16	flags;
-	struct list_head binding_list;
-	struct Scsi_Host *shost;
-	struct list_head itnim_mapped_list;
-	struct fc_vport *fc_vport;
+    struct bfad_s         *bfad;
+    struct bfad_port_s    *port;
+    struct work_struct port_delete_work;
+    int             idr_id;
+    u16        cur_scsi_id;
+    u16	flags;
+    struct list_head binding_list;
+    struct Scsi_Host *shost;
+    struct list_head itnim_mapped_list;
+    struct fc_vport *fc_vport;
 };
 
 enum bfad_itnim_state {
-	ITNIM_STATE_NONE,
-	ITNIM_STATE_ONLINE,
-	ITNIM_STATE_OFFLINE_PENDING,
-	ITNIM_STATE_OFFLINE,
-	ITNIM_STATE_TIMEOUT,
-	ITNIM_STATE_FREE,
+    ITNIM_STATE_NONE,
+    ITNIM_STATE_ONLINE,
+    ITNIM_STATE_OFFLINE_PENDING,
+    ITNIM_STATE_OFFLINE,
+    ITNIM_STATE_TIMEOUT,
+    ITNIM_STATE_FREE,
 };
 
 /*
  * Per itnim data structure
  */
 struct bfad_itnim_s {
-	struct list_head list_entry;
-	struct bfa_fcs_itnim_s fcs_itnim;
-	struct work_struct itnim_work;
-	u32        flags;
-	enum bfad_itnim_state state;
-	struct bfad_im_s *im;
-	struct bfad_im_port_s *im_port;
-	struct bfad_rport_s *drv_rport;
-	struct fc_rport *fc_rport;
-	struct bfa_itnim_s *bfa_itnim;
-	u16        scsi_tgt_id;
-	u16	   channel;
-	u16        queue_work;
-	unsigned long	last_ramp_up_time;
-	unsigned long	last_queue_full_time;
+    struct list_head list_entry;
+    struct bfa_fcs_itnim_s fcs_itnim;
+    struct work_struct itnim_work;
+    u32        flags;
+    enum bfad_itnim_state state;
+    struct bfad_im_s *im;
+    struct bfad_im_port_s *im_port;
+    struct bfad_rport_s *drv_rport;
+    struct fc_rport *fc_rport;
+    struct bfa_itnim_s *bfa_itnim;
+    u16        scsi_tgt_id;
+    u16	   channel;
+    u16        queue_work;
+    unsigned long	last_ramp_up_time;
+    unsigned long	last_queue_full_time;
 };
 
 enum bfad_binding_type {
-	FCP_PWWN_BINDING = 0x1,
-	FCP_NWWN_BINDING = 0x2,
-	FCP_FCID_BINDING = 0x3,
+    FCP_PWWN_BINDING = 0x1,
+    FCP_NWWN_BINDING = 0x2,
+    FCP_FCID_BINDING = 0x3,
 };
 
 struct bfad_fcp_binding {
-	struct list_head list_entry;
-	enum bfad_binding_type binding_type;
-	u16        scsi_target_id;
-	u32        fc_id;
-	wwn_t           nwwn;
-	wwn_t           pwwn;
+    struct list_head list_entry;
+    enum bfad_binding_type binding_type;
+    u16        scsi_target_id;
+    u32        fc_id;
+    wwn_t           nwwn;
+    wwn_t           pwwn;
 };
 
 struct bfad_im_s {
-	struct bfad_s         *bfad;
-	struct workqueue_struct *drv_workq;
-	char            drv_workq_name[KOBJ_NAME_LEN];
-	struct work_struct	aen_im_notify_work;
+    struct bfad_s         *bfad;
+    struct workqueue_struct *drv_workq;
+    char            drv_workq_name[KOBJ_NAME_LEN];
+    struct work_struct	aen_im_notify_work;
 };
 
 #define bfad_get_aen_entry(_drv, _entry) do {				\
@@ -141,14 +141,14 @@ struct bfad_im_s {
 } while (0)
 
 struct Scsi_Host *bfad_scsi_host_alloc(struct bfad_im_port_s *im_port,
-				struct bfad_s *);
+                                       struct bfad_s *);
 bfa_status_t bfad_thread_workq(struct bfad_s *bfad);
 void bfad_destroy_workq(struct bfad_im_s *im);
 void bfad_fc_host_init(struct bfad_im_port_s *im_port);
 void bfad_scsi_host_free(struct bfad_s *bfad,
-				 struct bfad_im_port_s *im_port);
+                         struct bfad_im_port_s *im_port);
 void bfad_ramp_up_qdepth(struct bfad_itnim_s *itnim,
-				 struct scsi_device *sdev);
+                         struct scsi_device *sdev);
 void bfad_handle_qfull(struct bfad_itnim_s *itnim, struct scsi_device *sdev);
 struct bfad_itnim_s *bfad_get_itnim(struct bfad_im_port_s *im_port, int id);
 

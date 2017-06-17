@@ -18,15 +18,14 @@
 #define CONSOLE_IX 0
 #define CONSOLE_OPTIONS "115200,n8"
 
-static int __init setup_serial_console(char *console_flag)
-{
-	if (console_flag &&
-		strnlen(console_flag, COMMAND_LINE_SIZE) >= 2 &&
-		(console_flag[0] != '0' || console_flag[1] != '0'))
-		add_preferred_console(CONSOLE_NAME,
-			CONSOLE_IX,
-			CONSOLE_OPTIONS);
-	return 1;
+static int __init setup_serial_console(char *console_flag) {
+    if (console_flag &&
+            strnlen(console_flag, COMMAND_LINE_SIZE) >= 2 &&
+            (console_flag[0] != '0' || console_flag[1] != '0'))
+        add_preferred_console(CONSOLE_NAME,
+                              CONSOLE_IX,
+                              CONSOLE_OPTIONS);
+    return 1;
 }
 
 /*
@@ -38,21 +37,20 @@ __setup("oemandroidboot.babe09a9=", setup_serial_console);
 #ifdef CONFIG_ANDROID_RAM_CONSOLE
 static char bootreason[128];
 
-int __init msm_boot_reason(char *s)
-{
-	int n;
+int __init msm_boot_reason(char *s) {
+    int n;
 
-	if (*s == '=')
-		s++;
-	n = snprintf(bootreason, sizeof(bootreason),
-		 "Boot info:\n"
-		 "Last boot reason: %s\n", s);
-	bootreason[n] = '\0';
-	return 1;
+    if (*s == '=')
+        s++;
+    n = snprintf(bootreason, sizeof(bootreason),
+                 "Boot info:\n"
+                 "Last boot reason: %s\n", s);
+    bootreason[n] = '\0';
+    return 1;
 }
 __setup("bootreason", msm_boot_reason);
 
 struct ram_console_platform_data ram_console_pdata = {
-	.bootinfo = bootreason,
+    .bootinfo = bootreason,
 };
 #endif

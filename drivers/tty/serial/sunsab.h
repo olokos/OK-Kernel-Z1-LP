@@ -7,120 +7,120 @@
 #define _SUNSAB_H
 
 struct sab82532_async_rd_regs {
-	u8	rfifo[0x20];	/* Receive FIFO				*/
-	u8	star;		/* Status Register			*/
-	u8	__pad1;
-	u8	mode;		/* Mode Register			*/
-	u8	timr;		/* Timer Register			*/
-	u8	xon;		/* XON Character			*/
-	u8	xoff;		/* XOFF Character			*/
-	u8	tcr;		/* Termination Character Register	*/
-	u8	dafo;		/* Data Format				*/
-	u8	rfc;		/* RFIFO Control Register		*/
-	u8	__pad2;
-	u8	rbcl;		/* Receive Byte Count Low		*/
-	u8	rbch;		/* Receive Byte Count High		*/
-	u8	ccr0;		/* Channel Configuration Register 0	*/
-	u8	ccr1;		/* Channel Configuration Register 1	*/
-	u8	ccr2;		/* Channel Configuration Register 2	*/
-	u8	ccr3;		/* Channel Configuration Register 3	*/
-	u8	__pad3[4];
-	u8	vstr;		/* Version Status Register		*/
-	u8	__pad4[3];
-	u8	gis;		/* Global Interrupt Status		*/
-	u8	ipc;		/* Interrupt Port Configuration		*/
-	u8	isr0;		/* Interrupt Status 0			*/
-	u8	isr1;		/* Interrupt Status 1			*/
-	u8	pvr;		/* Port Value Register			*/
-	u8	pis;		/* Port Interrupt Status		*/
-	u8	pcr;		/* Port Configuration Register		*/
-	u8	ccr4;		/* Channel Configuration Register 4	*/
+    u8	rfifo[0x20];	/* Receive FIFO				*/
+    u8	star;		/* Status Register			*/
+    u8	__pad1;
+    u8	mode;		/* Mode Register			*/
+    u8	timr;		/* Timer Register			*/
+    u8	xon;		/* XON Character			*/
+    u8	xoff;		/* XOFF Character			*/
+    u8	tcr;		/* Termination Character Register	*/
+    u8	dafo;		/* Data Format				*/
+    u8	rfc;		/* RFIFO Control Register		*/
+    u8	__pad2;
+    u8	rbcl;		/* Receive Byte Count Low		*/
+    u8	rbch;		/* Receive Byte Count High		*/
+    u8	ccr0;		/* Channel Configuration Register 0	*/
+    u8	ccr1;		/* Channel Configuration Register 1	*/
+    u8	ccr2;		/* Channel Configuration Register 2	*/
+    u8	ccr3;		/* Channel Configuration Register 3	*/
+    u8	__pad3[4];
+    u8	vstr;		/* Version Status Register		*/
+    u8	__pad4[3];
+    u8	gis;		/* Global Interrupt Status		*/
+    u8	ipc;		/* Interrupt Port Configuration		*/
+    u8	isr0;		/* Interrupt Status 0			*/
+    u8	isr1;		/* Interrupt Status 1			*/
+    u8	pvr;		/* Port Value Register			*/
+    u8	pis;		/* Port Interrupt Status		*/
+    u8	pcr;		/* Port Configuration Register		*/
+    u8	ccr4;		/* Channel Configuration Register 4	*/
 };
 
 struct sab82532_async_wr_regs {
-	u8	xfifo[0x20];	/* Transmit FIFO			*/
-	u8	cmdr;		/* Command Register			*/
-	u8	__pad1;
-	u8	mode;
-	u8	timr;
-	u8	xon;
-	u8	xoff;
-	u8	tcr;
-	u8	dafo;
-	u8	rfc;
-	u8	__pad2;
-	u8	xbcl;		/* Transmit Byte Count Low		*/
-	u8	xbch;		/* Transmit Byte Count High		*/
-	u8	ccr0;
-	u8	ccr1;
-	u8	ccr2;
-	u8	ccr3;
-	u8	tsax;		/* Time-Slot Assignment Reg. Transmit	*/
-	u8	tsar;		/* Time-Slot Assignment Reg. Receive	*/
-	u8	xccr;		/* Transmit Channel Capacity Register	*/
-	u8	rccr;		/* Receive Channel Capacity Register	*/
-	u8	bgr;		/* Baud Rate Generator Register		*/
-	u8	tic;		/* Transmit Immediate Character		*/
-	u8	mxn;		/* Mask XON Character			*/
-	u8	mxf;		/* Mask XOFF Character			*/
-	u8	iva;		/* Interrupt Vector Address		*/
-	u8	ipc;
-	u8	imr0;		/* Interrupt Mask Register 0		*/
-	u8	imr1;		/* Interrupt Mask Register 1		*/
-	u8	pvr;
-	u8	pim;		/* Port Interrupt Mask			*/
-	u8	pcr;
-	u8	ccr4;
+    u8	xfifo[0x20];	/* Transmit FIFO			*/
+    u8	cmdr;		/* Command Register			*/
+    u8	__pad1;
+    u8	mode;
+    u8	timr;
+    u8	xon;
+    u8	xoff;
+    u8	tcr;
+    u8	dafo;
+    u8	rfc;
+    u8	__pad2;
+    u8	xbcl;		/* Transmit Byte Count Low		*/
+    u8	xbch;		/* Transmit Byte Count High		*/
+    u8	ccr0;
+    u8	ccr1;
+    u8	ccr2;
+    u8	ccr3;
+    u8	tsax;		/* Time-Slot Assignment Reg. Transmit	*/
+    u8	tsar;		/* Time-Slot Assignment Reg. Receive	*/
+    u8	xccr;		/* Transmit Channel Capacity Register	*/
+    u8	rccr;		/* Receive Channel Capacity Register	*/
+    u8	bgr;		/* Baud Rate Generator Register		*/
+    u8	tic;		/* Transmit Immediate Character		*/
+    u8	mxn;		/* Mask XON Character			*/
+    u8	mxf;		/* Mask XOFF Character			*/
+    u8	iva;		/* Interrupt Vector Address		*/
+    u8	ipc;
+    u8	imr0;		/* Interrupt Mask Register 0		*/
+    u8	imr1;		/* Interrupt Mask Register 1		*/
+    u8	pvr;
+    u8	pim;		/* Port Interrupt Mask			*/
+    u8	pcr;
+    u8	ccr4;
 };
 
 struct sab82532_async_rw_regs {	/* Read/Write registers			*/
-	u8	__pad1[0x20];
-	u8	__pad2;
-	u8	__pad3;
-	u8	mode;
-	u8	timr;
-	u8	xon;
-	u8	xoff;
-	u8	tcr;
-	u8	dafo;
-	u8	rfc;
-	u8	__pad4;
-	u8	__pad5;
-	u8	__pad6;
-	u8	ccr0;
-	u8	ccr1;
-	u8	ccr2;
-	u8	ccr3;
-	u8	__pad7;
-	u8	__pad8;
-	u8	__pad9;
-	u8	__pad10;
-	u8	__pad11;
-	u8	__pad12;
-	u8	__pad13;
-	u8	__pad14;
-	u8	__pad15;
-	u8	ipc;
-	u8	__pad16;
-	u8	__pad17;
-	u8	pvr;
-	u8	__pad18;
-	u8	pcr;
-	u8	ccr4;
+    u8	__pad1[0x20];
+    u8	__pad2;
+    u8	__pad3;
+    u8	mode;
+    u8	timr;
+    u8	xon;
+    u8	xoff;
+    u8	tcr;
+    u8	dafo;
+    u8	rfc;
+    u8	__pad4;
+    u8	__pad5;
+    u8	__pad6;
+    u8	ccr0;
+    u8	ccr1;
+    u8	ccr2;
+    u8	ccr3;
+    u8	__pad7;
+    u8	__pad8;
+    u8	__pad9;
+    u8	__pad10;
+    u8	__pad11;
+    u8	__pad12;
+    u8	__pad13;
+    u8	__pad14;
+    u8	__pad15;
+    u8	ipc;
+    u8	__pad16;
+    u8	__pad17;
+    u8	pvr;
+    u8	__pad18;
+    u8	pcr;
+    u8	ccr4;
 };
 
 union sab82532_async_regs {
-	__volatile__ struct sab82532_async_rd_regs	r;
-	__volatile__ struct sab82532_async_wr_regs	w;
-	__volatile__ struct sab82532_async_rw_regs	rw;
+    __volatile__ struct sab82532_async_rd_regs	r;
+    __volatile__ struct sab82532_async_wr_regs	w;
+    __volatile__ struct sab82532_async_rw_regs	rw;
 };
 
 union sab82532_irq_status {
-	unsigned short			 stat;
-	struct {
-		unsigned char		 isr0;
-		unsigned char		 isr1;
-	} sreg;
+    unsigned short			 stat;
+    struct {
+        unsigned char		 isr0;
+        unsigned char		 isr1;
+    } sreg;
 };
 
 /* irqflags bits */

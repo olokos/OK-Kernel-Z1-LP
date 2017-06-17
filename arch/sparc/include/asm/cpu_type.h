@@ -5,15 +5,15 @@
  * Sparc (general) CPU types
  */
 enum sparc_cpu {
-  sun4        = 0x00,
-  sun4c       = 0x01,
-  sun4m       = 0x02,
-  sun4d       = 0x03,
-  sun4e       = 0x04,
-  sun4u       = 0x05, /* V8 ploos ploos */
-  sun_unknown = 0x06,
-  ap1000      = 0x07, /* almost a sun4m */
-  sparc_leon  = 0x08, /* Leon SoC */
+    sun4        = 0x00,
+    sun4c       = 0x01,
+    sun4m       = 0x02,
+    sun4d       = 0x03,
+    sun4e       = 0x04,
+    sun4u       = 0x05, /* V8 ploos ploos */
+    sun_unknown = 0x06,
+    ap1000      = 0x07, /* almost a sun4m */
+    sparc_leon  = 0x08, /* Leon SoC */
 };
 
 #ifdef CONFIG_SPARC32

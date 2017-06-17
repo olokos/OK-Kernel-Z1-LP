@@ -23,40 +23,40 @@
 #define ZD1201_RXSIZE		3000
 
 struct zd1201 {
-	struct usb_device	*usb;
-	int			removed;
-	struct net_device	*dev;
-	struct iw_statistics	iwstats;
+    struct usb_device	*usb;
+    int			removed;
+    struct net_device	*dev;
+    struct iw_statistics	iwstats;
 
-	int			endp_in;
-	int			endp_out;
-	int			endp_out2;
-	struct urb		*rx_urb;
-	struct urb		*tx_urb;
+    int			endp_in;
+    int			endp_out;
+    int			endp_out2;
+    struct urb		*rx_urb;
+    struct urb		*tx_urb;
 
-	unsigned char 		rxdata[ZD1201_RXSIZE];
-	int			rxlen;
-	wait_queue_head_t	rxdataq;
-	int			rxdatas;
-	struct hlist_head	fraglist;
-	unsigned char		txdata[ZD1201_RXSIZE];
+    unsigned char 		rxdata[ZD1201_RXSIZE];
+    int			rxlen;
+    wait_queue_head_t	rxdataq;
+    int			rxdatas;
+    struct hlist_head	fraglist;
+    unsigned char		txdata[ZD1201_RXSIZE];
 
-	int			ap;
-	char			essid[IW_ESSID_MAX_SIZE+1];
-	int			essidlen;
-	int			mac_enabled;
-	int			was_enabled;
-	int			monitor;
-	int			encode_enabled;
-	int			encode_restricted;
-	unsigned char		encode_keys[ZD1201_NUMKEYS][ZD1201_MAXKEYLEN];
-	int			encode_keylen[ZD1201_NUMKEYS];
+    int			ap;
+    char			essid[IW_ESSID_MAX_SIZE+1];
+    int			essidlen;
+    int			mac_enabled;
+    int			was_enabled;
+    int			monitor;
+    int			encode_enabled;
+    int			encode_restricted;
+    unsigned char		encode_keys[ZD1201_NUMKEYS][ZD1201_MAXKEYLEN];
+    int			encode_keylen[ZD1201_NUMKEYS];
 };
 
 struct zd1201_frag {
-	struct hlist_node	fnode;
-	int			seq;
-	struct sk_buff		*skb;
+    struct hlist_node	fnode;
+    int			seq;
+    struct sk_buff		*skb;
 };
 
 #define ZD1201SIWHOSTAUTH SIOCIWFIRSTPRIV

@@ -134,8 +134,7 @@ void WDA_TLI_FastHwFwdDataFrame
     v_U32_t*       puFastFwdOK,
     WLANTL_MetaInfoType*  pMetaInfo,
     WLAN_STADescType*  pStaInfo
-)
-{
+) {
     /* FIXME WDI/WDA should support this function
        once HAL supports it
      */
@@ -192,8 +191,7 @@ VOS_STATUS WDA_DS_Register
     v_U32_t                   uResTheshold,
     v_PVOID_t                 pCallbackContext,
     v_U32_t                   *uAvailableTxBuf
-)
-{
+) {
     tWDA_CbContext      *wdaContext = NULL;
     WDI_Status          wdiStatus;
 
@@ -207,8 +205,7 @@ VOS_STATUS WDA_DS_Register
             ( NULL == pfnTxPacketCallback ) ||
             ( NULL == pfnTxCompleteCallback ) ||
             ( NULL == pfnRxPacketCallback ) ||
-            ( NULL == pfnResourceCB) )
-    {
+            ( NULL == pfnResourceCB) ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WLAN WDA:Invalid pointers on WDA_DS_Register" );
         return VOS_STATUS_E_FAULT;
@@ -218,8 +215,7 @@ VOS_STATUS WDA_DS_Register
       Extract WDA context
      ------------------------------------------------------------------------*/
     wdaContext = (tWDA_CbContext *)vos_get_context( VOS_MODULE_ID_WDA, pvosGCtx );
-    if ( NULL == wdaContext )
-    {
+    if ( NULL == wdaContext ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WLAN WDA:Invalid wda context pointer "
                    "from pvosGCtx on WDA_DS_Register" );
@@ -240,8 +236,7 @@ VOS_STATUS WDA_DS_Register
                                  WDA_DS_TxFlowControlCallback,
                                  pvosGCtx );
 
-    if ( WDI_STATUS_SUCCESS != wdiStatus )
-    {
+    if ( WDI_STATUS_SUCCESS != wdiStatus ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WLAN TL:TL failed to register with DAL, Err: %d", wdiStatus );
         return VOS_STATUS_E_FAILURE;
@@ -283,21 +278,18 @@ VOS_STATUS
 WDA_DS_StartXmit
 (
     v_PVOID_t pvosGCtx
-)
-{
+) {
     vos_msg_t                    sMessage;
     VOS_STATUS                   status;
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-    if ( NULL == pvosGCtx )
-    {
+    if ( NULL == pvosGCtx ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WLAN WDA:Invalid pointers on WDA_DS_StartXmit" );
         return VOS_STATUS_E_FAULT;
     }
 
-    if(WDA_TL_IS_TX_XMIT_PENDING( pvosGCtx ))
-    {
+    if(WDA_TL_IS_TX_XMIT_PENDING( pvosGCtx )) {
         /*Already WDA_DS_TX_START_XMIT msg is pending in TL msg queue */
         return VOS_STATUS_SUCCESS;
     }
@@ -314,8 +306,7 @@ WDA_DS_StartXmit
 
     status = vos_tx_mq_serialize(VOS_MQ_ID_TL, &sMessage);
 
-    if(status != VOS_STATUS_SUCCESS)
-    {
+    if(status != VOS_STATUS_SUCCESS) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_FATAL,
                    "Serializing WDA TX Start Xmit event FAILED" );
         WDA_TL_CLEAR_TX_XMIT_PENDING(pvosGCtx);
@@ -349,8 +340,7 @@ WDA_DS_FinishULA
 (
     void (*callbackRoutine) (void *callbackContext),
     void  *callbackContext
-)
-{
+) {
     vos_msg_t                    sMessage;
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -425,8 +415,7 @@ WDA_DS_BuildTxPacketInfo
     v_U32_t         timeStamp,
     v_U8_t          ucIsEapol,
     v_U8_t          ucUP
-)
-{
+) {
     VOS_STATUS             vosStatus;
     WDI_DS_TxMetaInfoType* pTxMetaInfo = NULL;
     v_SIZE_t               usMacAddrSize;
@@ -437,8 +426,7 @@ WDA_DS_BuildTxPacketInfo
       Sanity check
       Extract TL control block
      ------------------------------------------------------------------------*/
-    if ( ( NULL == pvosGCtx ) || ( NULL == vosDataBuff ) || ( NULL == pvDestMacAddr ) )
-    {
+    if ( ( NULL == pvosGCtx ) || ( NULL == vosDataBuff ) || ( NULL == pvDestMacAddr ) ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Invalid parameter sent on WDA_DS_BuildTxPacketInfo" );
         return VOS_STATUS_E_FAULT;
@@ -448,8 +436,7 @@ WDA_DS_BuildTxPacketInfo
       Extract TX Meta Info pointer from PAL packet
      ------------------------------------------------------------------------*/
     pTxMetaInfo = WDI_DS_ExtractTxMetaData( VOS_TO_WPAL_PKT(vosDataBuff)  );
-    if ( NULL == pTxMetaInfo )
-    {
+    if ( NULL == pTxMetaInfo ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WLAN TL:Invalid RxMetaInfo pointer from PAL packet on WLANTL_RxFrames");
         VOS_ASSERT( 0 );
@@ -477,14 +464,11 @@ WDA_DS_BuildTxPacketInfo
     /* For management frames, peek into Frame Control
        field to get value of Protected Frame bit */
     pTxMetaInfo->fProtMgmtFrame = 0;
-    if ( WDA_TLI_MGMT_FRAME_TYPE == pTxMetaInfo->frmType )
-    {
-        if ( 1 == ucDisableFrmXtl )  /* should be 802.11, but check */
-        {
+    if ( WDA_TLI_MGMT_FRAME_TYPE == pTxMetaInfo->frmType ) {
+        if ( 1 == ucDisableFrmXtl ) { /* should be 802.11, but check */
             vosStatus = vos_pkt_peek_data( vosDataBuff, 0, (v_PVOID_t)&pFrameControl,
                                            sizeof( wpt_FrameCtrl ));
-            if ( VOS_STATUS_SUCCESS != vosStatus )
-            {
+            if ( VOS_STATUS_SUCCESS != vosStatus ) {
                 VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                            "WDA: Failed while attempting to extract Protect Bit in "
                            "Frame Control, status %d", vosStatus );
@@ -504,8 +488,7 @@ WDA_DS_BuildTxPacketInfo
                                       (v_PVOID_t)pvDestMacAddr,
                                       &usMacAddrSize );
     if ((VOS_STATUS_SUCCESS != vosStatus) ||
-            (usMacAddrSize != VOS_MAC_ADDR_SIZE))
-    {
+            (usMacAddrSize != VOS_MAC_ADDR_SIZE)) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Failed while attempting to extract MAC Addr %d",
                    vosStatus );
@@ -556,8 +539,7 @@ VOS_STATUS
 WDA_DS_TrimRxPacketInfo
 (
     vos_pkt_t *vosDataBuff
-)
-{
+) {
     /* Nothing to trim
      * Do Nothing */
 
@@ -600,13 +582,11 @@ WDA_DS_PeekRxPacketInfo
     vos_pkt_t *vosDataBuff,
     v_PVOID_t *ppRxHeader,
     v_BOOL_t  bSwap
-)
-{
+) {
     /*------------------------------------------------------------------------
       Sanity check
      ------------------------------------------------------------------------*/
-    if (  NULL == vosDataBuff )
-    {
+    if (  NULL == vosDataBuff ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Invalid parameter sent on WDA_DS_PeekRxPacketInfo" );
         return VOS_STATUS_E_FAULT;
@@ -614,8 +594,7 @@ WDA_DS_PeekRxPacketInfo
 
     *ppRxHeader = WDI_DS_ExtractRxMetaData( (wpt_packet*)vosDataBuff );
 
-    if ( NULL == *ppRxHeader )
-    {
+    if ( NULL == *ppRxHeader ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Failed to get RX meta data from WDI" );
         return VOS_STATUS_E_FAILURE;
@@ -664,13 +643,11 @@ WDA_DS_GetFrameTypeSubType
     vos_pkt_t *vosDataBuff,
     v_PVOID_t pRxHeader,
     v_U8_t    *ucTypeSubtype
-)
-{
+) {
     /*------------------------------------------------------------------------
       Sanity check
      ------------------------------------------------------------------------*/
-    if ( NULL == pRxHeader )
-    {
+    if ( NULL == pRxHeader ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Invalid parameter sent on WDA_DS_GetFrameTypeSubType" );
         return VOS_STATUS_E_FAULT;
@@ -713,8 +690,7 @@ WDA_DS_RxAmsduBdFix
 (
     v_PVOID_t pvosGCtx,
     v_PVOID_t pvBDHeader
-)
-{
+) {
     /* Do nothing for Prima */
     return VOS_STATUS_SUCCESS;
 }
@@ -750,8 +726,7 @@ WDA_DS_GetRssi
 (
     v_PVOID_t pvosGCtx,
     v_S7_t*   puRssi
-)
-{
+) {
     VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                "WDA:halPS_GetRssi no longer supported. Need replacement");
 
@@ -791,8 +766,7 @@ WDA_DS_GetTxResources
 (
     v_PVOID_t pvosGCtx,
     v_U32_t*  puResCount
-)
-{
+) {
     /* Return minimum necessary number of packet(DXE descriptor) for data */
     /* TODO Need to get this from DXE??? */
     *puResCount = WDA_TLI_BD_PDU_RESERVE_THRESHOLD + 50;
@@ -826,8 +800,7 @@ v_U64_t
 WDA_DS_GetReplayCounter
 (
     v_PVOID_t pRxHeader
-)
-{
+) {
     return WDA_GET_RX_REPLAY_COUNT( pRxHeader );
 }
 
@@ -864,8 +837,7 @@ VOS_STATUS
 WDA_DS_TxFrames
 (
     v_PVOID_t pvosGCtx
-)
-{
+) {
     VOS_STATUS vosStatus;
     vos_pkt_t  *pTxMgmtChain = NULL;
     vos_pkt_t  *pTxDataChain = NULL;
@@ -880,8 +852,7 @@ WDA_DS_TxFrames
     v_U32_t     uTxFailCount = 0;
 
     wdaContext = (tWDA_CbContext *)vos_get_context(VOS_MODULE_ID_WDA, pvosGCtx);
-    if ( NULL == wdaContext )
-    {
+    if ( NULL == wdaContext ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA:Invalid wda context pointer from pvosGCtx on WDA_DS_TxFrames" );
         return VOS_STATUS_E_FAULT;
@@ -907,15 +878,13 @@ WDA_DS_TxFrames
     // vosStatus will be set appropriately inside the loop
     vosStatus = VOS_STATUS_SUCCESS;
 
-    while ( NULL != pTxMgmtChain )
-    {
+    while ( NULL != pTxMgmtChain ) {
         /* Walk the chain and unchain the packet */
         pTxPacket = pTxMgmtChain;
         vosStatus = vos_pkt_walk_packet_chain( pTxMgmtChain, &pTxMgmtChain, VOS_TRUE );
 
         if( (VOS_STATUS_SUCCESS != vosStatus) &&
-                (VOS_STATUS_E_EMPTY != vosStatus) )
-        {
+                (VOS_STATUS_E_EMPTY != vosStatus) ) {
             VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                        "WDA Walking packet chain returned status : %d", vosStatus );
             VOS_ASSERT( 0 );
@@ -923,35 +892,30 @@ WDA_DS_TxFrames
             break;
         }
 
-        if ( VOS_STATUS_E_EMPTY == vosStatus )
-        {
+        if ( VOS_STATUS_E_EMPTY == vosStatus ) {
             vosStatus = VOS_STATUS_SUCCESS;
         }
 
         wdiStatus = WDI_DS_TxPacket( wdaContext->pWdiContext,
                                      (wpt_packet*)pTxPacket,
                                      0 /* more */ );
-        if ( WDI_STATUS_SUCCESS != wdiStatus )
-        {
+        if ( WDI_STATUS_SUCCESS != wdiStatus ) {
             VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,
                        "WDA : Pushing a packet to WDI failed." );
-            if ( WDI_STATUS_E_NOT_ALLOWED != wdiStatus )
-            {
+            if ( WDI_STATUS_E_NOT_ALLOWED != wdiStatus ) {
                 uTxFailCount++;
             }
             VOS_ASSERT( wdiStatus == WDI_STATUS_E_NOT_ALLOWED );
             //We need to free the packet here
             vos_pkt_get_user_data_ptr(pTxPacket, VOS_PKT_USER_DATA_ID_TL, (void **)&pfnTxComp);
-            if(pfnTxComp)
-            {
+            if(pfnTxComp) {
                 pfnTxComp(pvosGCtx, pTxPacket, VOS_STATUS_E_FAILURE);
             }
         }
 
     };
 
-    if ( uTxFailCount )
-    {
+    if ( uTxFailCount ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WDA : Tx fail count for mgmt pkts: %d.", uTxFailCount);
         uTxFailCount = 0;
@@ -973,15 +937,13 @@ WDA_DS_TxFrames
     // vosStatus will be set appropriately inside the loop
     vosStatus = VOS_STATUS_SUCCESS;
 
-    while ( NULL != pTxDataChain )
-    {
+    while ( NULL != pTxDataChain ) {
         /* Walk the chain and unchain the packet */
         pTxPacket = pTxDataChain;
         vosStatus = vos_pkt_walk_packet_chain( pTxDataChain, &pTxDataChain, VOS_TRUE );
 
         if( (VOS_STATUS_SUCCESS != vosStatus) &&
-                (VOS_STATUS_E_EMPTY != vosStatus) )
-        {
+                (VOS_STATUS_E_EMPTY != vosStatus) ) {
             VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                        "WDA Walking packet chain returned status : %d", vosStatus );
             VOS_ASSERT( 0 );
@@ -989,35 +951,30 @@ WDA_DS_TxFrames
             break;
         }
 
-        if ( VOS_STATUS_E_EMPTY == vosStatus )
-        {
+        if ( VOS_STATUS_E_EMPTY == vosStatus ) {
             vosStatus = VOS_STATUS_SUCCESS;
         }
 
         wdiStatus = WDI_DS_TxPacket( wdaContext->pWdiContext,
                                      (wpt_packet*)pTxPacket,
                                      0 /* more */ );
-        if ( WDI_STATUS_SUCCESS != wdiStatus )
-        {
+        if ( WDI_STATUS_SUCCESS != wdiStatus ) {
             VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_WARN,
                        "WDA : Pushing a packet to WDI failed." );
-            if ( WDI_STATUS_E_NOT_ALLOWED != wdiStatus )
-            {
+            if ( WDI_STATUS_E_NOT_ALLOWED != wdiStatus ) {
                 uTxFailCount++;
             }
             VOS_ASSERT( wdiStatus == WDI_STATUS_E_NOT_ALLOWED );
             //We need to free the packet here
             vos_pkt_get_user_data_ptr(pTxPacket, VOS_PKT_USER_DATA_ID_TL, (void **)&pfnTxComp);
-            if(pfnTxComp)
-            {
+            if(pfnTxComp) {
                 pfnTxComp(pvosGCtx, pTxPacket, VOS_STATUS_E_FAILURE);
             }
         }
 
     };
 
-    if ( uTxFailCount )
-    {
+    if ( uTxFailCount ) {
         VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                    "WDA : Tx fail count for data pkts: %d.", uTxFailCount);
     }
@@ -1055,8 +1012,7 @@ WDA_DS_TxFlowControlCallback
 (
     v_PVOID_t pvosGCtx,
     v_U8_t    ucFlowMask
-)
-{
+) {
     tWDA_CbContext* wdaContext = NULL;
     v_U8_t          ucOldFlowMask;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -1064,16 +1020,14 @@ WDA_DS_TxFlowControlCallback
     /*------------------------------------------------------------------------
       Sanity check
      ------------------------------------------------------------------------*/
-    if ( NULL == pvosGCtx )
-    {
+    if ( NULL == pvosGCtx ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid parameter sent on WDA_DS_TxFlowControlCallback" );
         return;
     }
 
     wdaContext = (tWDA_CbContext *)vos_get_context( VOS_MODULE_ID_WDA, pvosGCtx );
-    if ( NULL == wdaContext )
-    {
+    if ( NULL == wdaContext ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid context on WDA_DS_TxFlowControlCallback" );
         return;
@@ -1106,8 +1060,7 @@ WDA_DS_TxFlowControlCallback
        ucFlowMask > wdaContext->uTxFlowMask when enable happens
     */
 
-    if ( ucFlowMask > ucOldFlowMask  )
-    {
+    if ( ucFlowMask > ucOldFlowMask  ) {
         WDA_DS_StartXmit(pvosGCtx);
     }
 
@@ -1142,24 +1095,21 @@ WDA_DS_GetTxFlowMask
 (
     v_PVOID_t pvosGCtx,
     v_U8_t*   puFlowMask
-)
-{
+) {
     tWDA_CbContext* wdaContext = NULL;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
     /*------------------------------------------------------------------------
       Sanity check
      ------------------------------------------------------------------------*/
-    if ( ( NULL == pvosGCtx ) || ( NULL == puFlowMask ) )
-    {
+    if ( ( NULL == pvosGCtx ) || ( NULL == puFlowMask ) ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid parameter sent on WDA_DS_GetTxFlowMask" );
         return VOS_STATUS_E_INVAL;
     }
 
     wdaContext = (tWDA_CbContext *)vos_get_context( VOS_MODULE_ID_WDA, pvosGCtx );
-    if ( NULL == wdaContext )
-    {
+    if ( NULL == wdaContext ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid context on WDA_DS_GetTxFlowMask" );
         return VOS_STATUS_E_INVAL;
@@ -1175,8 +1125,7 @@ WDA_DS_TxCompleteCB
 (
     v_PVOID_t pvosGCtx,
     v_PVOID_t pFrameDataBuff
-)
-{
+) {
     tWDA_CbContext*        wdaContext = NULL;
     WDI_DS_TxMetaInfoType* pTxMetadata;
     VOS_STATUS             vosStatus;
@@ -1186,16 +1135,14 @@ WDA_DS_TxCompleteCB
       Sanity check
       ------------------------------------------------------------------------*/
 
-    if ( ( NULL == pvosGCtx ) || ( NULL == pFrameDataBuff ) )
-    {
+    if ( ( NULL == pvosGCtx ) || ( NULL == pFrameDataBuff ) ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid parameter sent on WDA_DS_TxCompleteCB" );
         return;
     }
 
     wdaContext = (tWDA_CbContext *)vos_get_context( VOS_MODULE_ID_WDA, pvosGCtx );
-    if ( NULL == wdaContext )
-    {
+    if ( NULL == wdaContext ) {
         VOS_TRACE( VOS_MODULE_ID_WDA, VOS_TRACE_LEVEL_ERROR,
                    "WDA: Invalid context on WDA_DS_TxCompleteCB" );
         return;

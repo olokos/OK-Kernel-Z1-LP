@@ -16,15 +16,15 @@
 #define _FDDI_
 
 struct fddi_addr {
-	u_char	a[6] ;
+    u_char	a[6] ;
 } ;
 
 #define GROUP_ADDR	0x80		/* MSB in a[0] */
 
 struct fddi_mac {
-	struct fddi_addr	mac_dest ;
-	struct fddi_addr	mac_source ;
-	u_char			mac_info[4478] ;
+    struct fddi_addr	mac_dest ;
+    struct fddi_addr	mac_source ;
+    u_char			mac_info[4478] ;
 } ;
 
 #define FDDI_MAC_SIZE	(12)
@@ -63,7 +63,7 @@ struct fddi_mac {
 #define C_INDICATOR	(1<<0)
 #define A_INDICATOR	(1<<1)
 #define E_INDICATOR	(1<<2)
-#define I_INDICATOR	(1<<6)		/* SK specific */ 
+#define I_INDICATOR	(1<<6)		/* SK specific */
 #define L_INDICATOR	(1<<7)		/* SK specific */
 
 #endif	/* _FDDI_ */

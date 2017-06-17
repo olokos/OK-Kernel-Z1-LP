@@ -32,7 +32,7 @@ static struct i2o_driver i2o_config_driver;
 
 /* Config OSM driver struct */
 static struct i2o_driver i2o_config_driver = {
-	.name = OSM_NAME,
+    .name = OSM_NAME,
 };
 
 #ifdef CONFIG_I2O_CONFIG_OLD_IOCTL
@@ -47,23 +47,22 @@ static struct i2o_driver i2o_config_driver = {
  *
  *	Returns 0 on success or negative error code on failure.
  */
-static int __init i2o_config_init(void)
-{
-	printk(KERN_INFO OSM_DESCRIPTION " v" OSM_VERSION "\n");
+static int __init i2o_config_init(void) {
+    printk(KERN_INFO OSM_DESCRIPTION " v" OSM_VERSION "\n");
 
-	if (i2o_driver_register(&i2o_config_driver)) {
-		osm_err("handler register failed.\n");
-		return -EBUSY;
-	}
+    if (i2o_driver_register(&i2o_config_driver)) {
+        osm_err("handler register failed.\n");
+        return -EBUSY;
+    }
 #ifdef CONFIG_I2O_CONFIG_OLD_IOCTL
-	if (i2o_config_old_init()) {
-		osm_err("old config handler initialization failed\n");
-		i2o_driver_unregister(&i2o_config_driver);
-		return -EBUSY;
-	}
+    if (i2o_config_old_init()) {
+        osm_err("old config handler initialization failed\n");
+        i2o_driver_unregister(&i2o_config_driver);
+        return -EBUSY;
+    }
 #endif
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -72,13 +71,12 @@ static int __init i2o_config_init(void)
  *	If old ioctl's are compiled in exit remove them and unregisters
  *	Configuration OSM from I2O core.
  */
-static void i2o_config_exit(void)
-{
+static void i2o_config_exit(void) {
 #ifdef CONFIG_I2O_CONFIG_OLD_IOCTL
-	i2o_config_old_exit();
+    i2o_config_old_exit();
 #endif
 
-	i2o_driver_unregister(&i2o_config_driver);
+    i2o_driver_unregister(&i2o_config_driver);
 }
 
 MODULE_AUTHOR("Markus Lidel <Markus.Lidel@shadowconnect.com>");

@@ -68,8 +68,7 @@ when        who    what, where, why
 /*---------------------------------------------------------------------------
   WDI_RxBdType - The format of the RX BD
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* 0x00 */
 #ifdef WPT_BIG_BYTE_ENDIAN
 
@@ -543,8 +542,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_RxFcBdType - The format of the RX special flow control BD
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* 0x00 */
 #ifdef WPT_BIG_BYTE_ENDIAN
 
@@ -840,8 +838,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_TxBdType - The format of the TX BD
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* 0x00 */
 #ifdef WPT_BIG_BYTE_ENDIAN
     /** (Only used by the DPU) This routing flag indicates the WQ number to
@@ -1157,8 +1154,7 @@ typedef struct
 /*---------------------------------------------------------------------------
   WDI_RxDeFragBdType - The format of the RX BD Defragmented
 ---------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     /* 0x00 */
 #ifdef WPT_BIG_BYTE_ENDIAN
     wpt_uint32 reserved1:30;

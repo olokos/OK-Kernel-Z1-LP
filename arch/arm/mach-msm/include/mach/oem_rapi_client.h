@@ -22,52 +22,52 @@
 #include <mach/msm_rpcrouter.h>
 
 enum {
-	OEM_RAPI_CLIENT_EVENT_NONE = 0,
+    OEM_RAPI_CLIENT_EVENT_NONE = 0,
 
-	/*
-	 * list of oem rapi client events
-	 */
+    /*
+     * list of oem rapi client events
+     */
 
-	OEM_RAPI_CLIENT_EVENT_MAX
+    OEM_RAPI_CLIENT_EVENT_MAX
 
 };
 
 struct oem_rapi_client_streaming_func_cb_arg {
-	uint32_t  event;
-	void      *handle;
-	uint32_t  in_len;
-	char      *input;
-	uint32_t out_len_valid;
-	uint32_t output_valid;
-	uint32_t output_size;
+    uint32_t  event;
+    void      *handle;
+    uint32_t  in_len;
+    char      *input;
+    uint32_t out_len_valid;
+    uint32_t output_valid;
+    uint32_t output_size;
 };
 
 struct oem_rapi_client_streaming_func_cb_ret {
-	uint32_t *out_len;
-	char *output;
+    uint32_t *out_len;
+    char *output;
 };
 
 struct oem_rapi_client_streaming_func_arg {
-	uint32_t event;
-	int (*cb_func)(struct oem_rapi_client_streaming_func_cb_arg *,
-		       struct oem_rapi_client_streaming_func_cb_ret *);
-	void *handle;
-	uint32_t in_len;
-	char *input;
-	uint32_t out_len_valid;
-	uint32_t output_valid;
-	uint32_t output_size;
+    uint32_t event;
+    int (*cb_func)(struct oem_rapi_client_streaming_func_cb_arg *,
+                   struct oem_rapi_client_streaming_func_cb_ret *);
+    void *handle;
+    uint32_t in_len;
+    char *input;
+    uint32_t out_len_valid;
+    uint32_t output_valid;
+    uint32_t output_size;
 };
 
 struct oem_rapi_client_streaming_func_ret {
-	uint32_t *out_len;
-	char *output;
+    uint32_t *out_len;
+    char *output;
 };
 
 int oem_rapi_client_streaming_function(
-	struct msm_rpc_client *client,
-	struct oem_rapi_client_streaming_func_arg *arg,
-	struct oem_rapi_client_streaming_func_ret *ret);
+    struct msm_rpc_client *client,
+    struct oem_rapi_client_streaming_func_arg *arg,
+    struct oem_rapi_client_streaming_func_ret *ret);
 
 int oem_rapi_client_close(void);
 

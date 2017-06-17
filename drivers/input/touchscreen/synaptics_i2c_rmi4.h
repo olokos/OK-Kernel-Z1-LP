@@ -82,15 +82,15 @@
  * @fn_number: function number
  */
 struct synaptics_rmi4_fn_desc {
-	unsigned char query_base_addr;
-	unsigned char cmd_base_addr;
-	unsigned char ctrl_base_addr;
-	unsigned char data_base_addr;
-	unsigned char intr_src_count:3;
-	unsigned char reserved_b3_b4:2;
-	unsigned char version:2;
-	unsigned char reserved_b7:1;
-	unsigned char fn_number;
+    unsigned char query_base_addr;
+    unsigned char cmd_base_addr;
+    unsigned char ctrl_base_addr;
+    unsigned char data_base_addr;
+    unsigned char intr_src_count:3;
+    unsigned char reserved_b3_b4:2;
+    unsigned char version:2;
+    unsigned char reserved_b7:1;
+    unsigned char fn_number;
 } __packed;
 
 /*
@@ -101,10 +101,10 @@ struct synaptics_rmi4_fn_desc {
  * @data_base: 16-bit base address for control registers
  */
 struct synaptics_rmi4_fn_full_addr {
-	unsigned short query_base;
-	unsigned short cmd_base;
-	unsigned short ctrl_base;
-	unsigned short data_base;
+    unsigned short query_base;
+    unsigned short cmd_base;
+    unsigned short ctrl_base;
+    unsigned short data_base;
 };
 
 /*
@@ -122,18 +122,18 @@ struct synaptics_rmi4_fn_full_addr {
  * @data: pointer to private data
  */
 struct synaptics_rmi4_fn {
-	unsigned char fn_number;
-	unsigned char num_of_data_sources;
-	unsigned char num_of_data_points;
-	unsigned char size_of_data_register_block;
-	unsigned char data1_offset;
-	unsigned char intr_reg_num;
-	unsigned char intr_mask;
-	struct synaptics_rmi4_fn_full_addr full_addr;
-	struct list_head link;
-	int data_size;
-	void *data;
-	void *extra;
+    unsigned char fn_number;
+    unsigned char num_of_data_sources;
+    unsigned char num_of_data_points;
+    unsigned char size_of_data_register_block;
+    unsigned char data1_offset;
+    unsigned char intr_reg_num;
+    unsigned char intr_mask;
+    struct synaptics_rmi4_fn_full_addr full_addr;
+    struct list_head link;
+    int data_size;
+    void *data;
+    void *extra;
 };
 
 /*
@@ -150,19 +150,19 @@ struct synaptics_rmi4_fn {
  * @support_fn_list: linked list for function handlers
  */
 struct synaptics_rmi4_device_info {
-	unsigned int version_major;
-	unsigned int version_minor;
-	unsigned char manufacturer_id;
-	unsigned char product_props;
-	unsigned char product_info[SYNAPTICS_RMI4_PRODUCT_INFO_SIZE];
-	unsigned char date_code[SYNAPTICS_RMI4_DATE_CODE_SIZE];
-	unsigned short tester_id;
-	unsigned short serial_number;
-	unsigned char product_id_string[SYNAPTICS_RMI4_PRODUCT_ID_SIZE + 1];
-	unsigned char build_id[SYNAPTICS_RMI4_BUILD_ID_SIZE];
-	unsigned char config_id[3];
-	struct mutex support_fn_list_mutex;
-	struct list_head support_fn_list;
+    unsigned int version_major;
+    unsigned int version_minor;
+    unsigned char manufacturer_id;
+    unsigned char product_props;
+    unsigned char product_info[SYNAPTICS_RMI4_PRODUCT_INFO_SIZE];
+    unsigned char date_code[SYNAPTICS_RMI4_DATE_CODE_SIZE];
+    unsigned short tester_id;
+    unsigned short serial_number;
+    unsigned char product_id_string[SYNAPTICS_RMI4_PRODUCT_ID_SIZE + 1];
+    unsigned char build_id[SYNAPTICS_RMI4_BUILD_ID_SIZE];
+    unsigned char config_id[3];
+    struct mutex support_fn_list_mutex;
+    struct list_head support_fn_list;
 };
 
 /*
@@ -204,106 +204,103 @@ struct synaptics_rmi4_device_info {
  * @irq_enable: pointer to irq enable function
  */
 struct synaptics_rmi4_data {
-	struct i2c_client *i2c_client;
-	struct input_dev *input_dev;
-	const struct synaptics_rmi4_platform_data *board;
-	struct synaptics_rmi4_device_info rmi4_mod_info;
-	struct regulator *vdd;
-	struct regulator *vcc_i2c;
-	struct mutex rmi4_io_ctrl_mutex;
-	struct delayed_work det_work;
-	struct workqueue_struct *det_workqueue;
+    struct i2c_client *i2c_client;
+    struct input_dev *input_dev;
+    const struct synaptics_rmi4_platform_data *board;
+    struct synaptics_rmi4_device_info rmi4_mod_info;
+    struct regulator *vdd;
+    struct regulator *vcc_i2c;
+    struct mutex rmi4_io_ctrl_mutex;
+    struct delayed_work det_work;
+    struct workqueue_struct *det_workqueue;
 #ifdef CONFIG_HAS_EARLYSUSPEND
-	struct early_suspend early_suspend;
+    struct early_suspend early_suspend;
 #endif
-	struct dentry *dir;
-	char fw_image_name[NAME_BUFFER_SIZE];
-	unsigned char current_page;
-	unsigned char button_0d_enabled;
-	unsigned char full_pm_cycle;
-	unsigned char num_of_rx;
-	unsigned char num_of_tx;
-	unsigned char num_of_fingers;
-	unsigned char max_touch_width;
-	unsigned char report_enable;
-	unsigned char intr_mask[MAX_INTR_REGISTERS];
-	unsigned short num_of_intr_regs;
-	unsigned short f01_query_base_addr;
-	unsigned short f01_cmd_base_addr;
-	unsigned short f01_ctrl_base_addr;
-	unsigned short f01_data_base_addr;
-	int irq;
-	int sensor_max_x;
-	int sensor_max_y;
-	int disp_maxx;
-	int disp_maxy;
-	int disp_minx;
-	int disp_miny;
-	bool irq_enabled;
-	bool touch_stopped;
-	bool fingers_on_2d;
-	bool sensor_sleep;
-	bool flip_x;
-	bool flip_y;
-	bool fw_updating;
-	bool suspended;
-	wait_queue_head_t wait;
-	bool stay_awake;
-	bool staying_awake;
-	int (*i2c_read)(struct synaptics_rmi4_data *pdata, unsigned short addr,
-			unsigned char *data, unsigned short length);
-	int (*i2c_write)(struct synaptics_rmi4_data *pdata, unsigned short addr,
-			unsigned char *data, unsigned short length);
-	int (*irq_enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
-	int (*reset_device)(struct synaptics_rmi4_data *rmi4_data);
+    struct dentry *dir;
+    char fw_image_name[NAME_BUFFER_SIZE];
+    unsigned char current_page;
+    unsigned char button_0d_enabled;
+    unsigned char full_pm_cycle;
+    unsigned char num_of_rx;
+    unsigned char num_of_tx;
+    unsigned char num_of_fingers;
+    unsigned char max_touch_width;
+    unsigned char report_enable;
+    unsigned char intr_mask[MAX_INTR_REGISTERS];
+    unsigned short num_of_intr_regs;
+    unsigned short f01_query_base_addr;
+    unsigned short f01_cmd_base_addr;
+    unsigned short f01_ctrl_base_addr;
+    unsigned short f01_data_base_addr;
+    int irq;
+    int sensor_max_x;
+    int sensor_max_y;
+    int disp_maxx;
+    int disp_maxy;
+    int disp_minx;
+    int disp_miny;
+    bool irq_enabled;
+    bool touch_stopped;
+    bool fingers_on_2d;
+    bool sensor_sleep;
+    bool flip_x;
+    bool flip_y;
+    bool fw_updating;
+    bool suspended;
+    wait_queue_head_t wait;
+    bool stay_awake;
+    bool staying_awake;
+    int (*i2c_read)(struct synaptics_rmi4_data *pdata, unsigned short addr,
+                    unsigned char *data, unsigned short length);
+    int (*i2c_write)(struct synaptics_rmi4_data *pdata, unsigned short addr,
+                     unsigned char *data, unsigned short length);
+    int (*irq_enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
+    int (*reset_device)(struct synaptics_rmi4_data *rmi4_data);
 #ifdef CONFIG_FB
-	struct notifier_block fb_notif;
+    struct notifier_block fb_notif;
 #else
 #ifdef CONFIG_HAS_EARLYSUSPEND
-	struct early_suspend early_suspend;
+    struct early_suspend early_suspend;
 #endif
 #endif
 };
 
 enum exp_fn {
-	RMI_DEV = 0,
-	RMI_F34,
-	RMI_F54,
-	RMI_FW_UPDATER,
-	RMI_LAST,
+    RMI_DEV = 0,
+    RMI_F34,
+    RMI_F54,
+    RMI_FW_UPDATER,
+    RMI_LAST,
 };
 
 struct synaptics_rmi4_exp_fn_ptr {
-	int (*read)(struct synaptics_rmi4_data *rmi4_data, unsigned short addr,
-			unsigned char *data, unsigned short length);
-	int (*write)(struct synaptics_rmi4_data *rmi4_data, unsigned short addr,
-			unsigned char *data, unsigned short length);
-	int (*enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
+    int (*read)(struct synaptics_rmi4_data *rmi4_data, unsigned short addr,
+                unsigned char *data, unsigned short length);
+    int (*write)(struct synaptics_rmi4_data *rmi4_data, unsigned short addr,
+                 unsigned char *data, unsigned short length);
+    int (*enable)(struct synaptics_rmi4_data *rmi4_data, bool enable);
 };
 
 void synaptics_rmi4_new_function(enum exp_fn fn_type, bool insert,
-		int (*func_init)(struct synaptics_rmi4_data *rmi4_data),
-		void (*func_remove)(struct synaptics_rmi4_data *rmi4_data),
-		void (*func_attn)(struct synaptics_rmi4_data *rmi4_data,
-				unsigned char intr_mask));
+                                 int (*func_init)(struct synaptics_rmi4_data *rmi4_data),
+                                 void (*func_remove)(struct synaptics_rmi4_data *rmi4_data),
+                                 void (*func_attn)(struct synaptics_rmi4_data *rmi4_data,
+                                         unsigned char intr_mask));
 
 static inline ssize_t synaptics_rmi4_store_error(struct device *dev,
-		struct device_attribute *attr, const char *buf, size_t count)
-{
-	dev_warn(dev, "%s Attempted to write to read-only attribute %s\n",
-			__func__, attr->attr.name);
-	return -EPERM;
+        struct device_attribute *attr, const char *buf, size_t count) {
+    dev_warn(dev, "%s Attempted to write to read-only attribute %s\n",
+             __func__, attr->attr.name);
+    return -EPERM;
 }
 
-static inline void batohs(unsigned short *dest, unsigned char *src)
-{
-	*dest = src[1] * 0x100 + src[0];
+static inline void batohs(unsigned short *dest, unsigned char *src) {
+    *dest = src[1] * 0x100 + src[0];
 }
 
-static inline void hstoba(unsigned char *dest, unsigned short src)
-{
-	dest[0] = src % 0x100;
-	dest[1] = src / 0x100;
+static inline void hstoba(unsigned char *dest, unsigned short src) {
+    dest[0] = src % 0x100;
+    dest[1] = src / 0x100;
 }
 
 #endif

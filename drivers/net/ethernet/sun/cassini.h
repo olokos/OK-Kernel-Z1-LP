@@ -2131,21 +2131,21 @@
 
 /* cassini header parser firmware */
 typedef struct cas_hp_inst {
-	const char *note;
+    const char *note;
 
-	u16 mask, val;
+    u16 mask, val;
 
-	u8 op;
-	u8 soff, snext;	/* if match succeeds, new offset and match */
-	u8 foff, fnext;	/* if match fails, new offset and match */
-	/* output info */
-	u8 outop;    /* output opcode */
+    u8 op;
+    u8 soff, snext;	/* if match succeeds, new offset and match */
+    u8 foff, fnext;	/* if match fails, new offset and match */
+    /* output info */
+    u8 outop;    /* output opcode */
 
-	u16 outarg;  /* output argument */
-	u8 outenab;  /* output enable: 0 = not, 1 = if match
+    u16 outarg;  /* output argument */
+    u8 outenab;  /* output enable: 0 = not, 1 = if match
 			 2 = if !match, 3 = always */
-	u8 outshift; /* barrel shift right, 4 bits */
-	u16 outmask;
+    u8 outshift; /* barrel shift right, 4 bits */
+    u16 outmask;
 } cas_hp_inst_t;
 
 /* comparison */
@@ -2232,23 +2232,37 @@ typedef struct cas_hp_inst {
 
 #ifdef USE_HP_IP46TCP4
 static cas_hp_inst_t cas_prog_ip46tcp4tab[] = {
-	CAS_PROG_IP46TCP4_PREAMBLE,
-	{ "TCP seq", /* DADDR should point to dest port */
-	  0x0000, 0x0000, OP_EQ, 0, S1_TCPFG, 4, S1_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff}, /* Load TCP seq # */
-	{ "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
-	  S1_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f}, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0,
-	  S1_TCPHc, LD_R1,  0x205,  3, 0xB, 0xf000},
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
-	  S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff},
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x000,  0, 0x0, 0x0000},
-	{ "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x080,  3, 0x0, 0xffff},
-	{ NULL },
+    CAS_PROG_IP46TCP4_PREAMBLE,
+    {
+        "TCP seq", /* DADDR should point to dest port */
+        0x0000, 0x0000, OP_EQ, 0, S1_TCPFG, 4, S1_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    }, /* Load TCP seq # */
+    {
+        "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
+        S1_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0,
+        S1_TCPHc, LD_R1,  0x205,  3, 0xB, 0xf000
+    },
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
+        S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff
+    },
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    {
+        "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x080,  3, 0x0, 0xffff
+    },
+    { NULL },
 };
 #ifdef HP_IP46TCP4_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_ip46tcp4tab
@@ -2261,25 +2275,41 @@ static cas_hp_inst_t cas_prog_ip46tcp4tab[] = {
  * and a few extra compares. */
 #ifdef USE_HP_IP46TCP4NOHTTP
 static cas_hp_inst_t cas_prog_ip46tcp4nohttptab[] = {
-	CAS_PROG_IP46TCP4_PREAMBLE,
-	{ "TCP seq", /* DADDR should point to dest port */
-	  0xFFFF, 0x0080, OP_EQ,  0, S2_HTTP,  0, S1_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff} , /* Load TCP seq # */
-	{ "TCP control flags", 0xFFFF, 0x8080, OP_EQ,  0, S2_HTTP,  0,
-	  S1_TCPHL, ST_FLG, 0x145,  2, 0x0, 0x002f, }, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
-	  LD_R1,  0x205,  3, 0xB, 0xf000},
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  LD_HDR, 0x0ff,  3, 0x0, 0xffff},
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  CL_REG, 0x002,  3, 0x0, 0x0000},
-	{ "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x080,  3, 0x0, 0xffff},
-	{ "No HTTP", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x044,  3, 0x0, 0xffff},
-	{ NULL },
+    CAS_PROG_IP46TCP4_PREAMBLE,
+    {
+        "TCP seq", /* DADDR should point to dest port */
+        0xFFFF, 0x0080, OP_EQ,  0, S2_HTTP,  0, S1_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    } , /* Load TCP seq # */
+    {
+        "TCP control flags", 0xFFFF, 0x8080, OP_EQ,  0, S2_HTTP,  0,
+        S1_TCPHL, ST_FLG, 0x145,  2, 0x0, 0x002f,
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
+        LD_R1,  0x205,  3, 0xB, 0xf000
+    },
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        LD_HDR, 0x0ff,  3, 0x0, 0xffff
+    },
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    {
+        "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        CL_REG, 0x002,  3, 0x0, 0x0000
+    },
+    {
+        "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x080,  3, 0x0, 0xffff
+    },
+    {
+        "No HTTP", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x044,  3, 0x0, 0xffff
+    },
+    { NULL },
 };
 #ifdef HP_IP46TCP4NOHTTP_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_ip46tcp4nohttptab
@@ -2299,48 +2329,88 @@ static cas_hp_inst_t cas_prog_ip46tcp4nohttptab[] = {
 
 #ifdef USE_HP_IP4FRAG
 static cas_hp_inst_t cas_prog_ip4fragtab[] = {
-	{ "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0, S1_PCKT,
-	  CL_REG, 0x3ff, 1, 0x0, 0x0000},
-	{ "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI,   0, S1_8023,
-	  IM_CTL, 0x00a,  3, 0x0, 0xffff},
-	{ "CFI?", 0x1000, 0x1000, OP_EQ,  0, S3_CLNP,  1, S1_8023,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S3_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLCc?",0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S3_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
-	  LD_SAP, 0x100,  3, 0x0, 0xffff},
-	{ "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S3_CLNP,
-	  LD_SUM, 0x00a,  1, 0x0, 0x0000},
-	{ "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S3_FRAG,
-	  LD_LEN, 0x03e,  3, 0x0, 0xffff},
-	{ "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S3_TCPSQ, 0, S3_CLNP,
-	  LD_FID, 0x182,  3, 0x0, 0xffff}, /* FID IP4&TCP src+dst */
-	{ "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S3_IPV6c, 0, S3_CLNP,
-	  LD_SUM, 0x015,  1, 0x0, 0x0000},
-	{ "IPV6 cont?", 0xf000, 0x6000, OP_EQ,  3, S3_TCP64, 0, S3_CLNP,
-	  LD_FID, 0x484,  1, 0x0, 0xffff}, /* FID IP6&TCP src+dst */
-	{ "TCP64?", 0xff00, 0x0600, OP_EQ, 18, S3_TCPSQ, 0, S3_CLNP,
-	  LD_LEN, 0x03f,  1, 0x0, 0xffff},
-	{ "TCP seq",	/* DADDR should point to dest port */
-	  0x0000, 0x0000, OP_EQ,  0, S3_TCPFG, 4, S3_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff}, /* Load TCP seq # */
-	{ "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S3_TCPHL, 0,
-	  S3_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f}, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S3_TCPHc, 0, S3_TCPHc,
-	  LD_R1,  0x205,  3, 0xB, 0xf000},
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  LD_HDR, 0x0ff,  3, 0x0, 0xffff},
-	{ "IP4 Fragment", 0x0000, 0x0000, OP_EQ,  0, S3_FOFF,  0, S3_FOFF,
-	  LD_FID, 0x103,  3, 0x0, 0xffff}, /* FID IP4 src+dst */
-	{ "IP4 frag offset", 0x0000, 0x0000, OP_EQ,  0, S3_FOFF,  0, S3_FOFF,
-	  LD_SEQ, 0x040,  1, 0xD, 0xfff8},
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ NULL },
+    {
+        "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0, S1_PCKT,
+        CL_REG, 0x3ff, 1, 0x0, 0x0000
+    },
+    {
+        "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI,   0, S1_8023,
+        IM_CTL, 0x00a,  3, 0x0, 0xffff
+    },
+    {
+        "CFI?", 0x1000, 0x1000, OP_EQ,  0, S3_CLNP,  1, S1_8023,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S3_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLCc?",0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S3_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
+        LD_SAP, 0x100,  3, 0x0, 0xffff
+    },
+    {
+        "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S3_CLNP,
+        LD_SUM, 0x00a,  1, 0x0, 0x0000
+    },
+    {
+        "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S3_FRAG,
+        LD_LEN, 0x03e,  3, 0x0, 0xffff
+    },
+    {
+        "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S3_TCPSQ, 0, S3_CLNP,
+        LD_FID, 0x182,  3, 0x0, 0xffff
+    }, /* FID IP4&TCP src+dst */
+    {
+        "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S3_IPV6c, 0, S3_CLNP,
+        LD_SUM, 0x015,  1, 0x0, 0x0000
+    },
+    {
+        "IPV6 cont?", 0xf000, 0x6000, OP_EQ,  3, S3_TCP64, 0, S3_CLNP,
+        LD_FID, 0x484,  1, 0x0, 0xffff
+    }, /* FID IP6&TCP src+dst */
+    {
+        "TCP64?", 0xff00, 0x0600, OP_EQ, 18, S3_TCPSQ, 0, S3_CLNP,
+        LD_LEN, 0x03f,  1, 0x0, 0xffff
+    },
+    {
+        "TCP seq",	/* DADDR should point to dest port */
+        0x0000, 0x0000, OP_EQ,  0, S3_TCPFG, 4, S3_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    }, /* Load TCP seq # */
+    {
+        "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S3_TCPHL, 0,
+        S3_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S3_TCPHc, 0, S3_TCPHc,
+        LD_R1,  0x205,  3, 0xB, 0xf000
+    },
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        LD_HDR, 0x0ff,  3, 0x0, 0xffff
+    },
+    {
+        "IP4 Fragment", 0x0000, 0x0000, OP_EQ,  0, S3_FOFF,  0, S3_FOFF,
+        LD_FID, 0x103,  3, 0x0, 0xffff
+    }, /* FID IP4 src+dst */
+    {
+        "IP4 frag offset", 0x0000, 0x0000, OP_EQ,  0, S3_FOFF,  0, S3_FOFF,
+        LD_SEQ, 0x040,  1, 0xD, 0xfff8
+    },
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    { NULL },
 };
 #ifdef HP_IP4FRAG_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_ip4fragtab
@@ -2352,21 +2422,33 @@ static cas_hp_inst_t cas_prog_ip4fragtab[] = {
  */
 #ifdef USE_HP_IP46TCP4BATCH
 static cas_hp_inst_t cas_prog_ip46tcp4batchtab[] = {
-	CAS_PROG_IP46TCP4_PREAMBLE,
-	{ "TCP seq",	/* DADDR should point to dest port */
-	  0x0000, 0x0000, OP_EQ,  0, S1_TCPFG, 0, S1_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff}, /* Load TCP seq # */
-	{ "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
-	  S1_TCPHL, ST_FLG, 0x000,  3, 0x0, 0x0000}, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0,
-	  S1_TCPHc, LD_R1,  0x205,  3, 0xB, 0xf000},
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
-	  S1_PCKT,  IM_CTL, 0x040,  3, 0x0, 0xffff}, /* set batch bit */
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
-	  S1_PCKT,  IM_CTL, 0x080,  3, 0x0, 0xffff},
-	{ NULL },
+    CAS_PROG_IP46TCP4_PREAMBLE,
+    {
+        "TCP seq",	/* DADDR should point to dest port */
+        0x0000, 0x0000, OP_EQ,  0, S1_TCPFG, 0, S1_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    }, /* Load TCP seq # */
+    {
+        "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
+        S1_TCPHL, ST_FLG, 0x000,  3, 0x0, 0x0000
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0,
+        S1_TCPHc, LD_R1,  0x205,  3, 0xB, 0xf000
+    },
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
+        S1_PCKT,  IM_CTL, 0x040,  3, 0x0, 0xffff
+    }, /* set batch bit */
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    {
+        "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
+        S1_PCKT,  IM_CTL, 0x080,  3, 0x0, 0xffff
+    },
+    { NULL },
 };
 #ifdef HP_IP46TCP4BATCH_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_ip46tcp4batchtab
@@ -2379,48 +2461,88 @@ static cas_hp_inst_t cas_prog_ip46tcp4batchtab[] = {
  */
 #ifdef USE_HP_WORKAROUND
 static cas_hp_inst_t  cas_prog_workaroundtab[] = {
-	{ "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0,
-	  S1_PCKT,  CL_REG, 0x3ff,  1, 0x0, 0x0000} ,
-	{ "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI, 0, S1_8023,
-	  IM_CTL, 0x04a,  3, 0x0, 0xffff},
-	{ "CFI?", 0x1000, 0x1000, OP_EQ,  0, S1_CLNP,  1, S1_8023,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S1_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLCc?", 0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S1_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
-	  IM_SAP, 0x6AE,  3, 0x0, 0xffff},
-	{ "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S1_CLNP,
-	  LD_SUM, 0x00a,  1, 0x0, 0x0000},
-	{ "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S1_CLNP,
-	  LD_LEN, 0x03e,  1, 0x0, 0xffff},
-	{ "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S1_TCPSQ, 0, S1_CLNP,
-	  LD_FID, 0x182,  3, 0x0, 0xffff}, /* FID IP4&TCP src+dst */
-	{ "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S1_IPV6L, 0, S1_CLNP,
-	  LD_SUM, 0x015,  1, 0x0, 0x0000},
-	{ "IPV6 len", 0xf000, 0x6000, OP_EQ,  0, S1_IPV6c, 0, S1_CLNP,
-	  IM_R1,  0x128,  1, 0x0, 0xffff},
-	{ "IPV6 cont?", 0x0000, 0x0000, OP_EQ,  3, S1_TCP64, 0, S1_CLNP,
-	  LD_FID, 0x484,  1, 0x0, 0xffff}, /* FID IP6&TCP src+dst */
-	{ "TCP64?", 0xff00, 0x0600, OP_EQ, 18, S1_TCPSQ, 0, S1_CLNP,
-	  LD_LEN, 0x03f,  1, 0x0, 0xffff},
-	{ "TCP seq",      /* DADDR should point to dest port */
-	  0x0000, 0x0000, OP_EQ,  0, S1_TCPFG, 4, S1_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff}, /* Load TCP seq # */
-	{ "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
-	  S1_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f}, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
-	  LD_R1,  0x205,  3, 0xB, 0xf000},
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
-	  S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff},
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP2,
-	  IM_SAP, 0x6AE,  3, 0x0, 0xffff} ,
-	{ "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ NULL },
+    {
+        "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0,
+        S1_PCKT,  CL_REG, 0x3ff,  1, 0x0, 0x0000
+    } ,
+    {
+        "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI, 0, S1_8023,
+        IM_CTL, 0x04a,  3, 0x0, 0xffff
+    },
+    {
+        "CFI?", 0x1000, 0x1000, OP_EQ,  0, S1_CLNP,  1, S1_8023,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S1_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLCc?", 0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S1_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
+        IM_SAP, 0x6AE,  3, 0x0, 0xffff
+    },
+    {
+        "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S1_CLNP,
+        LD_SUM, 0x00a,  1, 0x0, 0x0000
+    },
+    {
+        "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S1_CLNP,
+        LD_LEN, 0x03e,  1, 0x0, 0xffff
+    },
+    {
+        "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S1_TCPSQ, 0, S1_CLNP,
+        LD_FID, 0x182,  3, 0x0, 0xffff
+    }, /* FID IP4&TCP src+dst */
+    {
+        "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S1_IPV6L, 0, S1_CLNP,
+        LD_SUM, 0x015,  1, 0x0, 0x0000
+    },
+    {
+        "IPV6 len", 0xf000, 0x6000, OP_EQ,  0, S1_IPV6c, 0, S1_CLNP,
+        IM_R1,  0x128,  1, 0x0, 0xffff
+    },
+    {
+        "IPV6 cont?", 0x0000, 0x0000, OP_EQ,  3, S1_TCP64, 0, S1_CLNP,
+        LD_FID, 0x484,  1, 0x0, 0xffff
+    }, /* FID IP6&TCP src+dst */
+    {
+        "TCP64?", 0xff00, 0x0600, OP_EQ, 18, S1_TCPSQ, 0, S1_CLNP,
+        LD_LEN, 0x03f,  1, 0x0, 0xffff
+    },
+    {
+        "TCP seq",      /* DADDR should point to dest port */
+        0x0000, 0x0000, OP_EQ,  0, S1_TCPFG, 4, S1_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    }, /* Load TCP seq # */
+    {
+        "TCP control flags", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHL, 0,
+        S1_TCPHL, ST_FLG, 0x045,  3, 0x0, 0x002f
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
+        LD_R1,  0x205,  3, 0xB, 0xf000
+    },
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
+        S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff
+    },
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP2,
+        IM_SAP, 0x6AE,  3, 0x0, 0xffff
+    } ,
+    {
+        "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    { NULL },
 };
 #ifdef HP_WORKAROUND_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_workaroundtab
@@ -2429,80 +2551,132 @@ static cas_hp_inst_t  cas_prog_workaroundtab[] = {
 
 #ifdef USE_HP_ENCRYPT
 static cas_hp_inst_t  cas_prog_encryptiontab[] = {
-	{ "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0,
-	  S1_PCKT,  CL_REG, 0x3ff,  1, 0x0, 0x0000},
-	{ "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI,   0, S1_8023,
-	  IM_CTL, 0x00a,  3, 0x0, 0xffff},
+    {
+        "packet arrival?", 0xffff, 0x0000, OP_NP,  6, S1_VLAN,  0,
+        S1_PCKT,  CL_REG, 0x3ff,  1, 0x0, 0x0000
+    },
+    {
+        "VLAN?", 0xffff, 0x8100, OP_EQ,  1, S1_CFI,   0, S1_8023,
+        IM_CTL, 0x00a,  3, 0x0, 0xffff
+    },
 #if 0
 //"CFI?", /* 02 FIND CFI and If FIND go to S1_DROP */
 //0x1000, 0x1000, OP_EQ,  0, S1_DROP,  1, S1_8023,  CL_REG, 0x000,  0, 0x0, 0x00
-	00,
+    00,
 #endif
-	{ "CFI?", /* FIND CFI and If FIND go to CleanUP1 (ignore and send to host) */
-	  0x1000, 0x1000, OP_EQ,  0, S1_CLNP,  1, S1_8023,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S1_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "LLCc?", 0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S1_CLNP,
-	  CL_REG, 0x000,  0, 0x0, 0x0000},
-	{ "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
-	  LD_SAP, 0x100,  3, 0x0, 0xffff},
-	{ "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S1_CLNP,
-	  LD_SUM, 0x00a,  1, 0x0, 0x0000},
-	{ "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S1_CLNP,
-	  LD_LEN, 0x03e,  1, 0x0, 0xffff},
-	{ "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S1_TCPSQ, 0, S1_ESP4,
-	  LD_FID, 0x182,  1, 0x0, 0xffff}, /* FID IP4&TCP src+dst */
-	{ "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S1_IPV6L, 0, S1_CLNP,
-	  LD_SUM, 0x015,  1, 0x0, 0x0000},
-	{ "IPV6 len", 0xf000, 0x6000, OP_EQ,  0, S1_IPV6c, 0, S1_CLNP,
-	  IM_R1,  0x128,  1, 0x0, 0xffff},
-	{ "IPV6 cont?", 0x0000, 0x0000, OP_EQ,  3, S1_TCP64, 0, S1_CLNP,
-	  LD_FID, 0x484,  1, 0x0, 0xffff}, /*  FID IP6&TCP src+dst */
-	{ "TCP64?",
+    {
+        "CFI?", /* FIND CFI and If FIND go to CleanUP1 (ignore and send to host) */
+        0x1000, 0x1000, OP_EQ,  0, S1_CLNP,  1, S1_8023,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "8023?", 0xffff, 0x0600, OP_LT,  1, S1_LLC,   0, S1_IPV4,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLC?", 0xffff, 0xaaaa, OP_EQ,  1, S1_LLCc,  0, S1_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "LLCc?", 0xff00, 0x0300, OP_EQ,  2, S1_IPV4,  0, S1_CLNP,
+        CL_REG, 0x000,  0, 0x0, 0x0000
+    },
+    {
+        "IPV4?", 0xffff, 0x0800, OP_EQ,  1, S1_IPV4c, 0, S1_IPV6,
+        LD_SAP, 0x100,  3, 0x0, 0xffff
+    },
+    {
+        "IPV4 cont?", 0xff00, 0x4500, OP_EQ,  3, S1_IPV4F, 0, S1_CLNP,
+        LD_SUM, 0x00a,  1, 0x0, 0x0000
+    },
+    {
+        "IPV4 frag?", 0x3fff, 0x0000, OP_EQ,  1, S1_TCP44, 0, S1_CLNP,
+        LD_LEN, 0x03e,  1, 0x0, 0xffff
+    },
+    {
+        "TCP44?", 0x00ff, 0x0006, OP_EQ,  7, S1_TCPSQ, 0, S1_ESP4,
+        LD_FID, 0x182,  1, 0x0, 0xffff
+    }, /* FID IP4&TCP src+dst */
+    {
+        "IPV6?", 0xffff, 0x86dd, OP_EQ,  1, S1_IPV6L, 0, S1_CLNP,
+        LD_SUM, 0x015,  1, 0x0, 0x0000
+    },
+    {
+        "IPV6 len", 0xf000, 0x6000, OP_EQ,  0, S1_IPV6c, 0, S1_CLNP,
+        IM_R1,  0x128,  1, 0x0, 0xffff
+    },
+    {
+        "IPV6 cont?", 0x0000, 0x0000, OP_EQ,  3, S1_TCP64, 0, S1_CLNP,
+        LD_FID, 0x484,  1, 0x0, 0xffff
+    }, /*  FID IP6&TCP src+dst */
+    {
+        "TCP64?",
 #if 0
 //@@@0xff00, 0x0600, OP_EQ, 18, S1_TCPSQ, 0, S1_ESP6,  LD_LEN, 0x03f,  1, 0x0, 0xffff,
 #endif
-	  0xff00, 0x0600, OP_EQ, 12, S1_TCPSQ, 0, S1_ESP6,  LD_LEN,
-	  0x03f,  1, 0x0, 0xffff},
-	{ "TCP seq", /* 14:DADDR should point to dest port */
-	  0xFFFF, 0x0080, OP_EQ,  0, S2_HTTP,  0, S1_TCPFG, LD_SEQ,
-	  0x081,  3, 0x0, 0xffff}, /* Load TCP seq # */
-	{ "TCP control flags", 0xFFFF, 0x8080, OP_EQ,  0, S2_HTTP,  0,
-	  S1_TCPHL, ST_FLG, 0x145,  2, 0x0, 0x002f}, /* Load TCP flags */
-	{ "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
-	  LD_R1,  0x205,  3, 0xB, 0xf000} ,
-	{ "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
-	  S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff},
-	{ "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
-	  IM_CTL, 0x001,  3, 0x0, 0x0001},
-	{ "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  CL_REG, 0x002,  3, 0x0, 0x0000},
-	{ "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x080,  3, 0x0, 0xffff},
-	{ "No HTTP", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
-	  IM_CTL, 0x044,  3, 0x0, 0xffff},
-	{ "IPV4 ESP encrypted?",  /* S1_ESP4 */
-	  0x00ff, 0x0032, OP_EQ,  0, S1_CLNP2, 0, S1_AH4, IM_CTL,
-	  0x021, 1,  0x0, 0xffff},
-	{ "IPV4 AH encrypted?",   /* S1_AH4 */
-	  0x00ff, 0x0033, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP, IM_CTL,
-	  0x021, 1,  0x0, 0xffff},
-	{ "IPV6 ESP encrypted?",  /* S1_ESP6 */
+        0xff00, 0x0600, OP_EQ, 12, S1_TCPSQ, 0, S1_ESP6,  LD_LEN,
+        0x03f,  1, 0x0, 0xffff
+    },
+    {
+        "TCP seq", /* 14:DADDR should point to dest port */
+        0xFFFF, 0x0080, OP_EQ,  0, S2_HTTP,  0, S1_TCPFG, LD_SEQ,
+        0x081,  3, 0x0, 0xffff
+    }, /* Load TCP seq # */
+    {
+        "TCP control flags", 0xFFFF, 0x8080, OP_EQ,  0, S2_HTTP,  0,
+        S1_TCPHL, ST_FLG, 0x145,  2, 0x0, 0x002f
+    }, /* Load TCP flags */
+    {
+        "TCP length", 0x0000, 0x0000, OP_EQ,  0, S1_TCPHc, 0, S1_TCPHc,
+        LD_R1,  0x205,  3, 0xB, 0xf000
+    } ,
+    {
+        "TCP length cont", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0,
+        S1_PCKT,  LD_HDR, 0x0ff,  3, 0x0, 0xffff
+    },
+    {
+        "Cleanup", 0x0000, 0x0000, OP_EQ,  0, S1_CLNP2,  0, S1_CLNP2,
+        IM_CTL, 0x001,  3, 0x0, 0x0001
+    },
+    {
+        "Cleanup 2", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        CL_REG, 0x002,  3, 0x0, 0x0000
+    },
+    {
+        "Drop packet", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x080,  3, 0x0, 0xffff
+    },
+    {
+        "No HTTP", 0x0000, 0x0000, OP_EQ,  0, S1_PCKT,  0, S1_PCKT,
+        IM_CTL, 0x044,  3, 0x0, 0xffff
+    },
+    {
+        "IPV4 ESP encrypted?",  /* S1_ESP4 */
+        0x00ff, 0x0032, OP_EQ,  0, S1_CLNP2, 0, S1_AH4, IM_CTL,
+        0x021, 1,  0x0, 0xffff
+    },
+    {
+        "IPV4 AH encrypted?",   /* S1_AH4 */
+        0x00ff, 0x0033, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP, IM_CTL,
+        0x021, 1,  0x0, 0xffff
+    },
+    {
+        "IPV6 ESP encrypted?",  /* S1_ESP6 */
 #if 0
 //@@@0x00ff, 0x0032, OP_EQ,  0, S1_CLNP2, 0, S1_AH6, IM_CTL, 0x021, 1,  0x0, 0xffff,
 #endif
-	  0xff00, 0x3200, OP_EQ,  0, S1_CLNP2, 0, S1_AH6, IM_CTL,
-	  0x021, 1,  0x0, 0xffff},
-	{ "IPV6 AH encrypted?",   /* S1_AH6 */
+        0xff00, 0x3200, OP_EQ,  0, S1_CLNP2, 0, S1_AH6, IM_CTL,
+        0x021, 1,  0x0, 0xffff
+    },
+    {
+        "IPV6 AH encrypted?",   /* S1_AH6 */
 #if 0
 //@@@0x00ff, 0x0033, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP, IM_CTL, 0x021, 1,  0x0, 0xffff,
 #endif
-	  0xff00, 0x3300, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP, IM_CTL,
-	  0x021, 1,  0x0, 0xffff},
-	{ NULL },
+        0xff00, 0x3300, OP_EQ,  0, S1_CLNP2, 0, S1_CLNP, IM_CTL,
+        0x021, 1,  0x0, 0xffff
+    },
+    { NULL },
 };
 #ifdef HP_ENCRYPT_DEFAULT
 #define CAS_HP_FIRMWARE               cas_prog_encryptiontab
@@ -2605,8 +2779,8 @@ static cas_hp_inst_t cas_prog_null[] = { {NULL} };
 							     inserted into
 							     outgoing frame. */
 struct cas_tx_desc {
-	__le64     control;
-	__le64     buffer;
+    __le64     control;
+    __le64     buffer;
 };
 
 /* descriptor ring for free buffers contains page-sized buffers. the index
@@ -2614,8 +2788,8 @@ struct cas_tx_desc {
  * the completion ring.
  */
 struct cas_rx_desc {
-	__le64     index;
-	__le64     buffer;
+    __le64     index;
+    __le64     buffer;
 };
 
 /* received packets are put on the completion ring. */
@@ -2693,26 +2867,26 @@ struct cas_rx_desc {
 #define RX_INDEX_RELEASE                  0x0000000000002000ULL
 
 struct cas_rx_comp {
-	__le64     word1;
-	__le64     word2;
-	__le64     word3;
-	__le64     word4;
+    __le64     word1;
+    __le64     word2;
+    __le64     word3;
+    __le64     word4;
 };
 
 enum link_state {
-	link_down = 0,	/* No link, will retry */
-	link_aneg,	/* Autoneg in progress */
-	link_force_try,	/* Try Forced link speed */
-	link_force_ret,	/* Forced mode worked, retrying autoneg */
-	link_force_ok,	/* Stay in forced mode */
-	link_up		/* Link is up */
+    link_down = 0,	/* No link, will retry */
+    link_aneg,	/* Autoneg in progress */
+    link_force_try,	/* Try Forced link speed */
+    link_force_ret,	/* Forced mode worked, retrying autoneg */
+    link_force_ok,	/* Stay in forced mode */
+    link_up		/* Link is up */
 };
 
 typedef struct cas_page {
-	struct list_head list;
-	struct page *buffer;
-	dma_addr_t dma_addr;
-	int used;
+    struct list_head list;
+    struct page *buffer;
+    dma_addr_t dma_addr;
+    int used;
 } cas_page_t;
 
 
@@ -2732,10 +2906,10 @@ typedef struct cas_page {
 #define INIT_BLOCK_RX_COMP      (RX_COMP_RING_SIZE)
 
 struct cas_init_block {
-	struct cas_rx_comp rxcs[N_RX_COMP_RINGS][INIT_BLOCK_RX_COMP];
-	struct cas_rx_desc rxds[N_RX_DESC_RINGS][INIT_BLOCK_RX_DESC];
-	struct cas_tx_desc txds[N_TX_RINGS][INIT_BLOCK_TX];
-	__le64 tx_compwb;
+    struct cas_rx_comp rxcs[N_RX_COMP_RINGS][INIT_BLOCK_RX_COMP];
+    struct cas_rx_desc rxds[N_RX_DESC_RINGS][INIT_BLOCK_RX_DESC];
+    struct cas_tx_desc txds[N_TX_RINGS][INIT_BLOCK_TX];
+    __le64 tx_compwb;
 };
 
 /* tiny buffers to deal with target abort issue. we allocate a bit
@@ -2746,60 +2920,60 @@ struct cas_init_block {
 #define TX_TINY_BUF_BLOCK  ((INIT_BLOCK_TX + 1)*TX_TINY_BUF_LEN)
 
 struct cas_tiny_count {
-	int nbufs;
-	int used;
+    int nbufs;
+    int used;
 };
 
 struct cas {
-	spinlock_t lock; /* for most bits */
-	spinlock_t tx_lock[N_TX_RINGS]; /* tx bits */
-	spinlock_t stat_lock[N_TX_RINGS + 1]; /* for stat gathering */
-	spinlock_t rx_inuse_lock; /* rx inuse list */
-	spinlock_t rx_spare_lock; /* rx spare list */
+    spinlock_t lock; /* for most bits */
+    spinlock_t tx_lock[N_TX_RINGS]; /* tx bits */
+    spinlock_t stat_lock[N_TX_RINGS + 1]; /* for stat gathering */
+    spinlock_t rx_inuse_lock; /* rx inuse list */
+    spinlock_t rx_spare_lock; /* rx spare list */
 
-	void __iomem *regs;
-	int tx_new[N_TX_RINGS], tx_old[N_TX_RINGS];
-	int rx_old[N_RX_DESC_RINGS];
-	int rx_cur[N_RX_COMP_RINGS], rx_new[N_RX_COMP_RINGS];
-	int rx_last[N_RX_DESC_RINGS];
+    void __iomem *regs;
+    int tx_new[N_TX_RINGS], tx_old[N_TX_RINGS];
+    int rx_old[N_RX_DESC_RINGS];
+    int rx_cur[N_RX_COMP_RINGS], rx_new[N_RX_COMP_RINGS];
+    int rx_last[N_RX_DESC_RINGS];
 
-	struct napi_struct napi;
+    struct napi_struct napi;
 
-	/* Set when chip is actually in operational state
-	 * (ie. not power managed) */
-	int hw_running;
-	int opened;
-	struct mutex pm_mutex; /* open/close/suspend/resume */
+    /* Set when chip is actually in operational state
+     * (ie. not power managed) */
+    int hw_running;
+    int opened;
+    struct mutex pm_mutex; /* open/close/suspend/resume */
 
-	struct cas_init_block *init_block;
-	struct cas_tx_desc *init_txds[MAX_TX_RINGS];
-	struct cas_rx_desc *init_rxds[MAX_RX_DESC_RINGS];
-	struct cas_rx_comp *init_rxcs[MAX_RX_COMP_RINGS];
+    struct cas_init_block *init_block;
+    struct cas_tx_desc *init_txds[MAX_TX_RINGS];
+    struct cas_rx_desc *init_rxds[MAX_RX_DESC_RINGS];
+    struct cas_rx_comp *init_rxcs[MAX_RX_COMP_RINGS];
 
-	/* we use sk_buffs for tx and pages for rx. the rx skbuffs
-	 * are there for flow re-assembly. */
-	struct sk_buff      *tx_skbs[N_TX_RINGS][TX_DESC_RING_SIZE];
-	struct sk_buff_head  rx_flows[N_RX_FLOWS];
-	cas_page_t          *rx_pages[N_RX_DESC_RINGS][RX_DESC_RING_SIZE];
-	struct list_head     rx_spare_list, rx_inuse_list;
-	int                  rx_spares_needed;
+    /* we use sk_buffs for tx and pages for rx. the rx skbuffs
+     * are there for flow re-assembly. */
+    struct sk_buff      *tx_skbs[N_TX_RINGS][TX_DESC_RING_SIZE];
+    struct sk_buff_head  rx_flows[N_RX_FLOWS];
+    cas_page_t          *rx_pages[N_RX_DESC_RINGS][RX_DESC_RING_SIZE];
+    struct list_head     rx_spare_list, rx_inuse_list;
+    int                  rx_spares_needed;
 
-	/* for small packets when copying would be quicker than
-	   mapping */
-	struct cas_tiny_count tx_tiny_use[N_TX_RINGS][TX_DESC_RING_SIZE];
-	u8 *tx_tiny_bufs[N_TX_RINGS];
+    /* for small packets when copying would be quicker than
+       mapping */
+    struct cas_tiny_count tx_tiny_use[N_TX_RINGS][TX_DESC_RING_SIZE];
+    u8 *tx_tiny_bufs[N_TX_RINGS];
 
-	u32			msg_enable;
+    u32			msg_enable;
 
-	/* N_TX_RINGS must be >= N_RX_DESC_RINGS */
-	struct net_device_stats net_stats[N_TX_RINGS + 1];
+    /* N_TX_RINGS must be >= N_RX_DESC_RINGS */
+    struct net_device_stats net_stats[N_TX_RINGS + 1];
 
-	u32			pci_cfg[64 >> 2];
-	u8                      pci_revision;
+    u32			pci_cfg[64 >> 2];
+    u8                      pci_revision;
 
-	int                     phy_type;
-	int			phy_addr;
-	u32                     phy_id;
+    int                     phy_type;
+    int			phy_addr;
+    u32                     phy_id;
 #define CAS_FLAG_1000MB_CAP     0x00000001
 #define CAS_FLAG_REG_PLUS       0x00000002
 #define CAS_FLAG_TARGET_ABORT   0x00000004
@@ -2810,41 +2984,41 @@ struct cas {
                                  CAS_FLAG_RXD_POST_MASK)
 #define CAS_FLAG_ENTROPY_DEV    0x00000100
 #define CAS_FLAG_NO_HW_CSUM     0x00000200
-	u32                     cas_flags;
-	int                     packet_min; /* minimum packet size */
-	int			tx_fifo_size;
-	int			rx_fifo_size;
-	int			rx_pause_off;
-	int			rx_pause_on;
-	int                     crc_size;      /* 4 if half-duplex */
+    u32                     cas_flags;
+    int                     packet_min; /* minimum packet size */
+    int			tx_fifo_size;
+    int			rx_fifo_size;
+    int			rx_pause_off;
+    int			rx_pause_on;
+    int                     crc_size;      /* 4 if half-duplex */
 
-	int                     pci_irq_INTC;
-	int                     min_frame_size; /* for tx fifo workaround */
+    int                     pci_irq_INTC;
+    int                     min_frame_size; /* for tx fifo workaround */
 
-	/* page size allocation */
-	int                     page_size;
-	int                     page_order;
-	int                     mtu_stride;
+    /* page size allocation */
+    int                     page_size;
+    int                     page_order;
+    int                     mtu_stride;
 
-	u32			mac_rx_cfg;
+    u32			mac_rx_cfg;
 
-	/* Autoneg & PHY control */
-	int			link_cntl;
-	int			link_fcntl;
-	enum link_state		lstate;
-	struct timer_list	link_timer;
-	int			timer_ticks;
-	struct work_struct	reset_task;
+    /* Autoneg & PHY control */
+    int			link_cntl;
+    int			link_fcntl;
+    enum link_state		lstate;
+    struct timer_list	link_timer;
+    int			timer_ticks;
+    struct work_struct	reset_task;
 #if 0
-	atomic_t		reset_task_pending;
+    atomic_t		reset_task_pending;
 #else
-	atomic_t		reset_task_pending;
-	atomic_t		reset_task_pending_mtu;
-	atomic_t		reset_task_pending_spare;
-	atomic_t		reset_task_pending_all;
+    atomic_t		reset_task_pending;
+    atomic_t		reset_task_pending_mtu;
+    atomic_t		reset_task_pending_spare;
+    atomic_t		reset_task_pending_all;
 #endif
 
-	/* Link-down problem workaround */
+    /* Link-down problem workaround */
 #define LINK_TRANSITION_UNKNOWN 	0
 #define LINK_TRANSITION_ON_FAILURE 	1
 #define LINK_TRANSITION_STILL_FAILED 	2
@@ -2852,30 +3026,30 @@ struct cas {
 #define LINK_TRANSITION_LINK_CONFIG	4
 #define LINK_TRANSITION_LINK_DOWN	5
 #define LINK_TRANSITION_REQUESTED_RESET	6
-	int			link_transition;
-	int 			link_transition_jiffies_valid;
-	unsigned long		link_transition_jiffies;
+    int			link_transition;
+    int 			link_transition_jiffies_valid;
+    unsigned long		link_transition_jiffies;
 
-	/* Tuning */
-	u8 orig_cacheline_size;	/* value when loaded */
+    /* Tuning */
+    u8 orig_cacheline_size;	/* value when loaded */
 #define CAS_PREF_CACHELINE_SIZE	 0x20	/* Minimum desired */
 
-	/* Diagnostic counters and state. */
-	int 			casreg_len; /* reg-space size for dumping */
-	u64			pause_entered;
-	u16			pause_last_time_recvd;
+    /* Diagnostic counters and state. */
+    int 			casreg_len; /* reg-space size for dumping */
+    u64			pause_entered;
+    u16			pause_last_time_recvd;
 
-	dma_addr_t block_dvma, tx_tiny_dvma[N_TX_RINGS];
-	struct pci_dev *pdev;
-	struct net_device *dev;
+    dma_addr_t block_dvma, tx_tiny_dvma[N_TX_RINGS];
+    struct pci_dev *pdev;
+    struct net_device *dev;
 #if defined(CONFIG_OF)
-	struct device_node	*of_node;
+    struct device_node	*of_node;
 #endif
 
-	/* Firmware Info */
-	u16			fw_load_addr;
-	u32			fw_size;
-	u8			*fw_data;
+    /* Firmware Info */
+    u16			fw_load_addr;
+    u32			fw_size;
+    u8			*fw_data;
 };
 
 #define TX_DESC_NEXT(r, x)  (((x) + 1) & (TX_DESC_RINGN_SIZE(r) - 1))

@@ -103,17 +103,15 @@
  */
 #define mk_pte(page, pgprot) pfn_pte(page_to_pfn(page), (pgprot))
 
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_val(pte) = (pte_val(pte) & SUN3_PAGE_CHG_MASK) | pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) = (pte_val(pte) & SUN3_PAGE_CHG_MASK) | pgprot_val(newprot);
+    return pte;
 }
 
 #define pmd_set(pmdp,ptep) do {} while (0)
 
-static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
-{
-	pgd_val(*pgdp) = virt_to_phys(pmdp);
+static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp) {
+    pgd_val(*pgdp) = virt_to_phys(pmdp);
 }
 
 #define __pte_page(pte) \
@@ -121,11 +119,14 @@ static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
 #define __pmd_page(pmd) \
 ((unsigned long) __va (pmd_val (pmd) & PAGE_MASK))
 
-static inline int pte_none (pte_t pte) { return !pte_val (pte); }
-static inline int pte_present (pte_t pte) { return pte_val (pte) & SUN3_PAGE_VALID; }
-static inline void pte_clear (struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	pte_val (*ptep) = 0;
+static inline int pte_none (pte_t pte) {
+    return !pte_val (pte);
+}
+static inline int pte_present (pte_t pte) {
+    return pte_val (pte) & SUN3_PAGE_VALID;
+}
+static inline void pte_clear (struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_val (*ptep) = 0;
 }
 
 #define pte_pfn(pte)            (pte_val(pte) & SUN3_PAGE_PGNUM_MASK)
@@ -136,19 +137,33 @@ static inline void pte_clear (struct mm_struct *mm, unsigned long addr, pte_t *p
 #define pmd_page(pmd)		virt_to_page(__pmd_page(pmd))
 
 
-static inline int pmd_none2 (pmd_t *pmd) { return !pmd_val (*pmd); }
+static inline int pmd_none2 (pmd_t *pmd) {
+    return !pmd_val (*pmd);
+}
 #define pmd_none(pmd) pmd_none2(&(pmd))
 //static inline int pmd_bad (pmd_t pmd) { return (pmd_val (pmd) & SUN3_PMD_MASK) != SUN3_PMD_MAGIC; }
-static inline int pmd_bad2 (pmd_t *pmd) { return 0; }
+static inline int pmd_bad2 (pmd_t *pmd) {
+    return 0;
+}
 #define pmd_bad(pmd) pmd_bad2(&(pmd))
-static inline int pmd_present2 (pmd_t *pmd) { return pmd_val (*pmd) & SUN3_PMD_VALID; }
+static inline int pmd_present2 (pmd_t *pmd) {
+    return pmd_val (*pmd) & SUN3_PMD_VALID;
+}
 /* #define pmd_present(pmd) pmd_present2(&(pmd)) */
 #define pmd_present(pmd) (!pmd_none2(&(pmd)))
-static inline void pmd_clear (pmd_t *pmdp) { pmd_val (*pmdp) = 0; }
+static inline void pmd_clear (pmd_t *pmdp) {
+    pmd_val (*pmdp) = 0;
+}
 
-static inline int pgd_none (pgd_t pgd) { return 0; }
-static inline int pgd_bad (pgd_t pgd) { return 0; }
-static inline int pgd_present (pgd_t pgd) { return 1; }
+static inline int pgd_none (pgd_t pgd) {
+    return 0;
+}
+static inline int pgd_bad (pgd_t pgd) {
+    return 0;
+}
+static inline int pgd_present (pgd_t pgd) {
+    return 1;
+}
 static inline void pgd_clear (pgd_t *pgdp) {}
 
 
@@ -165,24 +180,59 @@ static inline void pgd_clear (pgd_t *pgdp) {}
  * Undefined behaviour if not...
  * [we have the full set here even if they don't change from m68k]
  */
-static inline int pte_write(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_WRITEABLE; }
-static inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_MODIFIED; }
-static inline int pte_young(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_ACCESSED; }
-static inline int pte_file(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_ACCESSED; }
-static inline int pte_special(pte_t pte)	{ return 0; }
+static inline int pte_write(pte_t pte)		{
+    return pte_val(pte) & SUN3_PAGE_WRITEABLE;
+}
+static inline int pte_dirty(pte_t pte)		{
+    return pte_val(pte) & SUN3_PAGE_MODIFIED;
+}
+static inline int pte_young(pte_t pte)		{
+    return pte_val(pte) & SUN3_PAGE_ACCESSED;
+}
+static inline int pte_file(pte_t pte)		{
+    return pte_val(pte) & SUN3_PAGE_ACCESSED;
+}
+static inline int pte_special(pte_t pte)	{
+    return 0;
+}
 
-static inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) &= ~SUN3_PAGE_WRITEABLE; return pte; }
-static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~SUN3_PAGE_MODIFIED; return pte; }
-static inline pte_t pte_mkold(pte_t pte)	{ pte_val(pte) &= ~SUN3_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mkwrite(pte_t pte)	{ pte_val(pte) |= SUN3_PAGE_WRITEABLE; return pte; }
-static inline pte_t pte_mkdirty(pte_t pte)	{ pte_val(pte) |= SUN3_PAGE_MODIFIED; return pte; }
-static inline pte_t pte_mkyoung(pte_t pte)	{ pte_val(pte) |= SUN3_PAGE_ACCESSED; return pte; }
-static inline pte_t pte_mknocache(pte_t pte)	{ pte_val(pte) |= SUN3_PAGE_NOCACHE; return pte; }
+static inline pte_t pte_wrprotect(pte_t pte)	{
+    pte_val(pte) &= ~SUN3_PAGE_WRITEABLE;
+    return pte;
+}
+static inline pte_t pte_mkclean(pte_t pte)	{
+    pte_val(pte) &= ~SUN3_PAGE_MODIFIED;
+    return pte;
+}
+static inline pte_t pte_mkold(pte_t pte)	{
+    pte_val(pte) &= ~SUN3_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mkwrite(pte_t pte)	{
+    pte_val(pte) |= SUN3_PAGE_WRITEABLE;
+    return pte;
+}
+static inline pte_t pte_mkdirty(pte_t pte)	{
+    pte_val(pte) |= SUN3_PAGE_MODIFIED;
+    return pte;
+}
+static inline pte_t pte_mkyoung(pte_t pte)	{
+    pte_val(pte) |= SUN3_PAGE_ACCESSED;
+    return pte;
+}
+static inline pte_t pte_mknocache(pte_t pte)	{
+    pte_val(pte) |= SUN3_PAGE_NOCACHE;
+    return pte;
+}
 // use this version when caches work...
 //static inline pte_t pte_mkcache(pte_t pte)	{ pte_val(pte) &= SUN3_PAGE_NOCACHE; return pte; }
 // until then, use:
-static inline pte_t pte_mkcache(pte_t pte)	{ return pte; }
-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+static inline pte_t pte_mkcache(pte_t pte)	{
+    return pte;
+}
+static inline pte_t pte_mkspecial(pte_t pte)	{
+    return pte;
+}
 
 extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 extern pgd_t kernel_pg_dir[PTRS_PER_PGD];
@@ -197,20 +247,17 @@ extern pgd_t kernel_pg_dir[PTRS_PER_PGD];
 #define pgd_offset_k(address) pgd_offset(&init_mm, address)
 
 /* Find an entry in the second-level pagetable. */
-static inline pmd_t *pmd_offset (pgd_t *pgd, unsigned long address)
-{
-	return (pmd_t *) pgd;
+static inline pmd_t *pmd_offset (pgd_t *pgd, unsigned long address) {
+    return (pmd_t *) pgd;
 }
 
-static inline unsigned long pte_to_pgoff(pte_t pte)
-{
-	return pte.pte & SUN3_PAGE_PGNUM_MASK;
+static inline unsigned long pte_to_pgoff(pte_t pte) {
+    return pte.pte & SUN3_PAGE_PGNUM_MASK;
 }
 
-static inline pte_t pgoff_to_pte(unsigned off)
-{
-	pte_t pte = { off + SUN3_PAGE_ACCESSED };
-	return pte;
+static inline pte_t pgoff_to_pte(unsigned off) {
+    pte_t pte = { off + SUN3_PAGE_ACCESSED };
+    return pte;
 }
 
 

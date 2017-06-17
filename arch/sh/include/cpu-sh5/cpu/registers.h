@@ -25,7 +25,7 @@
 #define SR	cr0
 #define SSR	cr1
 #define PSSR	cr2
-			/* cr3 UNDEFINED */
+/* cr3 UNDEFINED */
 #define INTEVT	cr4
 #define EXPEVT	cr5
 #define PEXPEVT	cr6
@@ -34,14 +34,14 @@
 #define PSPC	cr9
 #define RESVEC	cr10
 #define VBR	cr11
-			/* cr12 UNDEFINED */
+/* cr12 UNDEFINED */
 #define TEA	cr13
-			/* cr14-cr15 UNDEFINED */
+/* cr14-cr15 UNDEFINED */
 #define DCR	cr16
 #define KCR0	cr17
 #define KCR1	cr18
-			/* cr19-cr31 UNDEFINED */
-			/* cr32-cr61 RESERVED */
+/* cr19-cr31 UNDEFINED */
+/* cr32-cr61 RESERVED */
 #define CTC	cr62
 #define USR	cr63
 

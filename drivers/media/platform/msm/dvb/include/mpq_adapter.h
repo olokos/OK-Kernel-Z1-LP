@@ -21,103 +21,103 @@
 
 /** IDs of interfaces holding stream-buffers */
 enum mpq_adapter_stream_if {
-	/** Interface holding stream-buffer for video0 stream */
-	MPQ_ADAPTER_VIDEO0_STREAM_IF = 0,
+    /** Interface holding stream-buffer for video0 stream */
+    MPQ_ADAPTER_VIDEO0_STREAM_IF = 0,
 
-	/** Interface holding stream-buffer for video1 stream */
-	MPQ_ADAPTER_VIDEO1_STREAM_IF = 1,
+    /** Interface holding stream-buffer for video1 stream */
+    MPQ_ADAPTER_VIDEO1_STREAM_IF = 1,
 
-	/** Interface holding stream-buffer for video1 stream */
-	MPQ_ADAPTER_VIDEO2_STREAM_IF = 2,
+    /** Interface holding stream-buffer for video1 stream */
+    MPQ_ADAPTER_VIDEO2_STREAM_IF = 2,
 
-	/** Interface holding stream-buffer for video1 stream */
-	MPQ_ADAPTER_VIDEO3_STREAM_IF = 3,
+    /** Interface holding stream-buffer for video1 stream */
+    MPQ_ADAPTER_VIDEO3_STREAM_IF = 3,
 
-	/** Maximum number of interfaces holding stream-buffers */
-	MPQ_ADAPTER_MAX_NUM_OF_INTERFACES,
+    /** Maximum number of interfaces holding stream-buffers */
+    MPQ_ADAPTER_MAX_NUM_OF_INTERFACES,
 };
 
 enum dmx_packet_type {
-	DMX_PES_PACKET,
-	DMX_FRAMING_INFO_PACKET,
-	DMX_EOS_PACKET,
-	DMX_MARKER_PACKET
+    DMX_PES_PACKET,
+    DMX_FRAMING_INFO_PACKET,
+    DMX_EOS_PACKET,
+    DMX_MARKER_PACKET
 };
 
 struct dmx_pts_dts_info {
-	/** Indication whether PTS exist */
-	int pts_exist;
+    /** Indication whether PTS exist */
+    int pts_exist;
 
-	/** Indication whether DTS exist */
-	int dts_exist;
+    /** Indication whether DTS exist */
+    int dts_exist;
 
-	/** PTS value associated with the PES data if any */
-	u64 pts;
+    /** PTS value associated with the PES data if any */
+    u64 pts;
 
-	/** DTS value associated with the PES data if any */
-	u64 dts;
+    /** DTS value associated with the PES data if any */
+    u64 dts;
 };
 
 struct dmx_framing_packet_info {
-	/** framing pattern type, one of DMX_IDX_* definitions */
-	u64 pattern_type;
+    /** framing pattern type, one of DMX_IDX_* definitions */
+    u64 pattern_type;
 
-	/** PTS/DTS information */
-	struct dmx_pts_dts_info pts_dts_info;
+    /** PTS/DTS information */
+    struct dmx_pts_dts_info pts_dts_info;
 
-	/** STC value attached to first TS packet holding the pattern */
-	u64 stc;
+    /** STC value attached to first TS packet holding the pattern */
+    u64 stc;
 
-	/*
-	 * Number of TS packets with Transport Error Indicator (TEI)
-	 * found while constructing the frame.
-	 */
-	__u32 transport_error_indicator_counter;
+    /*
+     * Number of TS packets with Transport Error Indicator (TEI)
+     * found while constructing the frame.
+     */
+    __u32 transport_error_indicator_counter;
 
-	/* Number of continuity errors found while constructing the frame */
-	__u32 continuity_error_counter;
+    /* Number of continuity errors found while constructing the frame */
+    __u32 continuity_error_counter;
 
-	/*
-	 * Number of dropped bytes due to insufficient buffer space,
-	 * since last reported frame.
-	 */
-	__u32 ts_dropped_bytes;
+    /*
+     * Number of dropped bytes due to insufficient buffer space,
+     * since last reported frame.
+     */
+    __u32 ts_dropped_bytes;
 
-	/* Total number of TS packets holding the frame */
-	__u32 ts_packets_num;
+    /* Total number of TS packets holding the frame */
+    __u32 ts_packets_num;
 };
 
 struct dmx_pes_packet_info {
-	/** PTS/DTS information */
-	struct dmx_pts_dts_info pts_dts_info;
+    /** PTS/DTS information */
+    struct dmx_pts_dts_info pts_dts_info;
 
-	/** STC value attached to first TS packet holding the PES */
-	u64 stc;
+    /** STC value attached to first TS packet holding the PES */
+    u64 stc;
 };
 
 struct dmx_marker_info {
-	/* marker id */
-	u64 id;
+    /* marker id */
+    u64 id;
 };
 
 /** The meta-data used for video interface */
 struct mpq_adapter_video_meta_data {
-	/** meta-data packet type */
-	enum dmx_packet_type packet_type;
+    /** meta-data packet type */
+    enum dmx_packet_type packet_type;
 
-	/** packet-type specific information */
-	union {
-		struct dmx_framing_packet_info framing;
-		struct dmx_pes_packet_info pes;
-		struct dmx_marker_info marker;
-	} info;
+    /** packet-type specific information */
+    union {
+        struct dmx_framing_packet_info framing;
+        struct dmx_pes_packet_info pes;
+        struct dmx_marker_info marker;
+    } info;
 } __packed;
 
 
 /** Callback function to notify on registrations of specific interfaces */
 typedef void (*mpq_adapter_stream_if_callback)(
-				enum mpq_adapter_stream_if interface_id,
-				void *user_param);
+    enum mpq_adapter_stream_if interface_id,
+    void *user_param);
 
 
 /**
@@ -146,8 +146,8 @@ struct dvb_adapter *mpq_adapter_get(void);
  * is active.
  */
 int mpq_adapter_register_stream_if(
-		enum mpq_adapter_stream_if interface_id,
-		struct mpq_streambuffer *stream_buffer);
+    enum mpq_adapter_stream_if interface_id,
+    struct mpq_streambuffer *stream_buffer);
 
 
 /**
@@ -158,7 +158,7 @@ int mpq_adapter_register_stream_if(
  * Return     error status
  */
 int mpq_adapter_unregister_stream_if(
-		enum mpq_adapter_stream_if interface_id);
+    enum mpq_adapter_stream_if interface_id);
 
 
 /**
@@ -170,8 +170,8 @@ int mpq_adapter_unregister_stream_if(
  * Return     error status
  */
 int mpq_adapter_get_stream_if(
-		enum mpq_adapter_stream_if interface_id,
-		struct mpq_streambuffer **stream_buffer);
+    enum mpq_adapter_stream_if interface_id,
+    struct mpq_streambuffer **stream_buffer);
 
 
 /**
@@ -192,9 +192,9 @@ int mpq_adapter_get_stream_if(
  * value in callback parameter.
  */
 int mpq_adapter_notify_stream_if(
-		enum mpq_adapter_stream_if interface_id,
-		mpq_adapter_stream_if_callback callback,
-		void *user_param);
+    enum mpq_adapter_stream_if interface_id,
+    mpq_adapter_stream_if_callback callback,
+    void *user_param);
 
 #endif /* _MPQ_ADAPTER_H */
 

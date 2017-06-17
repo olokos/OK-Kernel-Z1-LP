@@ -276,10 +276,10 @@
  * @lock: lock to protect docg3 IO space from concurrent accesses
  */
 struct docg3_cascade {
-	struct mtd_info *floors[DOC_MAX_NBFLOORS];
-	void __iomem *base;
-	struct bch_control *bch;
-	struct mutex lock;
+    struct mtd_info *floors[DOC_MAX_NBFLOORS];
+    void __iomem *base;
+    struct bch_control *bch;
+    struct mutex lock;
 };
 
 /**
@@ -302,17 +302,17 @@ struct docg3_cascade {
  * @debugfs_root: debugfs root node
  */
 struct docg3 {
-	struct device *dev;
-	struct docg3_cascade *cascade;
-	unsigned int device_id:4;
-	unsigned int if_cfg:1;
-	unsigned int reliable:2;
-	int max_block;
-	u8 *bbt;
-	loff_t oob_write_ofs;
-	int oob_autoecc;
-	u8 oob_write_buf[DOC_LAYOUT_OOB_SIZE];
-	struct dentry *debugfs_root;
+    struct device *dev;
+    struct docg3_cascade *cascade;
+    unsigned int device_id:4;
+    unsigned int if_cfg:1;
+    unsigned int reliable:2;
+    int max_block;
+    u8 *bbt;
+    loff_t oob_write_ofs;
+    int oob_autoecc;
+    u8 oob_write_buf[DOC_LAYOUT_OOB_SIZE];
+    struct dentry *debugfs_root;
 };
 
 #define doc_err(fmt, arg...) dev_err(docg3->dev, (fmt), ## arg)
@@ -344,22 +344,22 @@ struct docg3 {
 #include <linux/tracepoint.h>
 
 TRACE_EVENT(docg3_io,
-	    TP_PROTO(int op, int width, u16 reg, int val),
-	    TP_ARGS(op, width, reg, val),
-	    TP_STRUCT__entry(
-		    __field(int, op)
-		    __field(unsigned char, width)
-		    __field(u16, reg)
-		    __field(int, val)),
-	    TP_fast_assign(
-		    __entry->op = op;
-		    __entry->width = width;
-		    __entry->reg = reg;
-		    __entry->val = val;),
-	    TP_printk("docg3: %s%02d reg=%04x, val=%04x",
-		      __entry->op ? "write" : "read", __entry->width,
-		      __entry->reg, __entry->val)
-	);
+            TP_PROTO(int op, int width, u16 reg, int val),
+            TP_ARGS(op, width, reg, val),
+            TP_STRUCT__entry(
+                __field(int, op)
+                __field(unsigned char, width)
+                __field(u16, reg)
+                __field(int, val)),
+            TP_fast_assign(
+                __entry->op = op;
+                __entry->width = width;
+                __entry->reg = reg;
+                __entry->val = val;),
+            TP_printk("docg3: %s%02d reg=%04x, val=%04x",
+                      __entry->op ? "write" : "read", __entry->width,
+                      __entry->reg, __entry->val)
+           );
 #endif
 
 /* This part must be outside protection */

@@ -111,8 +111,7 @@
 #define CSR_JOIN_RETRY_TIMEOUT_PERIOD        ( 1 *  PAL_TIMER_TO_SEC_UNIT )  // 1 second
 #endif
 
-typedef enum
-{
+typedef enum {
     eCsrNextScanNothing,
     eCsrNextLostLinkScan1Success,
     eCsrNextLostLinkScan1Failed,
@@ -132,8 +131,7 @@ typedef enum
 
 } eCsrScanCompleteNextCommand;
 
-typedef enum
-{
+typedef enum {
     eCsrJoinSuccess,
     eCsrJoinFailure,
     eCsrReassocSuccess,
@@ -148,8 +146,7 @@ typedef enum
 
 } eCsrRoamCompleteResult;
 
-typedef struct tagScanReqParam
-{
+typedef struct tagScanReqParam {
     tANI_U8 bReturnAfter1stMatch;
     tANI_U8 fUniqueResult;
     tANI_U8 freshScan;
@@ -157,8 +154,7 @@ typedef struct tagScanReqParam
     tANI_U8 reserved;
 } tScanReqParam;
 
-typedef struct tagCsrScanResult
-{
+typedef struct tagCsrScanResult {
     tListElem Link;
     tANI_S32 AgingCount;    //This BSS is removed when it reaches 0 or less
     tANI_U32 preferValue;   //The bigger the number, the better the BSS. This value override capValue
@@ -173,8 +169,7 @@ typedef struct tagCsrScanResult
     tCsrScanResultInfo Result;
 } tCsrScanResult;
 
-typedef struct
-{
+typedef struct {
     tDblLinkList List;
     tListElem *pCurEntry;
 } tScanResultList;

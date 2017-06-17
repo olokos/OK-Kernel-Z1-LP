@@ -2,18 +2,18 @@
 #include <linux/syscore_ops.h>
 
 struct clkops {
-	void			(*enable)(struct clk *);
-	void			(*disable)(struct clk *);
-	unsigned long		(*getrate)(struct clk *);
-	int			(*setrate)(struct clk *, unsigned long);
+    void			(*enable)(struct clk *);
+    void			(*disable)(struct clk *);
+    unsigned long		(*getrate)(struct clk *);
+    int			(*setrate)(struct clk *, unsigned long);
 };
 
 struct clk {
-	const struct clkops	*ops;
-	unsigned long		rate;
-	unsigned int		cken;
-	unsigned int		delay;
-	unsigned int		enabled;
+    const struct clkops	*ops;
+    unsigned long		rate;
+    unsigned int		cken;
+    unsigned int		delay;
+    unsigned int		enabled;
 };
 
 void clk_dummy_enable(struct clk *);

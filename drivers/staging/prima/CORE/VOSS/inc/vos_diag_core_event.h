@@ -61,8 +61,7 @@ extern "C" {
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_SECURITY
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t eventId;
     v_U8_t authMode;
     v_U8_t encryptionModeUnicast;
@@ -76,8 +75,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_STATUS
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t eventId;
     v_U8_t ssid[6];
     v_U8_t bssType;
@@ -93,8 +91,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_HANDOFF
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t eventId;
     v_U8_t currentApBssid[6];
     v_U8_t currentApRssi;
@@ -105,8 +102,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_VCC
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t eventId;
     v_U8_t rssi;
     v_U8_t txPer;
@@ -117,8 +113,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_QOS
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t eventId;
     v_U8_t reasonCode;
 } vos_event_wlan_qos_payload_type;
@@ -126,8 +121,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_PE
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     char       bssid[6];
     v_U16_t    event_type;
     v_U16_t    sme_state;
@@ -139,8 +133,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_ADD_BLOCK_ACK_SUCCESS
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     char        ucBaPeerMac[6];
     v_U8_t      ucBaTid;
     v_U8_t      ucBaBufferSize;
@@ -151,8 +144,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_ADD_BLOCK_ACK_FAILED
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     char        ucBaPeerMac[6];
     v_U8_t      ucBaTid;
     v_U8_t      ucReasonCode;
@@ -162,8 +154,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_DELETE_BLOCK_ACK_SUCCESS
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     char        ucBaPeerMac[6];
     v_U8_t      ucBaTid;
     v_U8_t      ucDeleteReasonCode;
@@ -172,8 +163,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_DELETE_BLOCK_ACK_FAILED
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     char        ucBaPeerMac[6];
     v_U8_t      ucBaTid;
     v_U8_t      ucDeleteReasonCode;
@@ -183,8 +173,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_BSS_PROTECTION
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t      event_type;
     v_U8_t      prot_type;
 } vos_event_wlan_bss_prot_payload_type;
@@ -192,8 +181,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_BRINGUP_STATUS
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U16_t  wlanStatus;
     char     driverVersion[10];
 } vos_event_wlan_bringup_status_payload_type;
@@ -203,8 +191,7 @@ VOS_PACK_START
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_POWERSAVE_GENERIC
   ------------------------------------------------------------------------*/
-typedef VOS_PACK_PRE struct
-{
+typedef VOS_PACK_PRE struct {
     v_U8_t   event_subtype;
     v_U32_t  imps_period;
     v_U8_t   full_power_request_reason;
@@ -222,8 +209,7 @@ VOS_PACK_END
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_POWERSAVE_WOW
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t   event_subtype;
     v_U8_t   wow_type;
     v_U8_t   wow_magic_pattern[6];
@@ -235,8 +221,7 @@ typedef struct
 /*-------------------------------------------------------------------------
   Event ID: EVENT_WLAN_BTC
   ------------------------------------------------------------------------*/
-typedef struct
-{
+typedef struct {
     v_U8_t  eventId;
     v_U8_t  btAddr[6];
     v_U16_t connHandle;

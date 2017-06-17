@@ -18,13 +18,13 @@
 #include <mach/board.h>
 #include "msm_vidc_resources.h"
 void msm_vidc_free_platform_resources(
-		struct msm_vidc_platform_resources *res);
+    struct msm_vidc_platform_resources *res);
 
 int read_hfi_type(struct platform_device *pdev);
 
 int read_platform_resources_from_dt(
-		struct msm_vidc_platform_resources *res);
+    struct msm_vidc_platform_resources *res);
 
 int read_platform_resources_from_board(
-		struct msm_vidc_platform_resources *res);
+    struct msm_vidc_platform_resources *res);
 #endif

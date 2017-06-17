@@ -27,13 +27,13 @@ struct _fips_drbg_ctx;
 extern void fips_reg_drbg_callback(void *src);
 
 struct msm_rng_device {
-	struct platform_device *pdev;
-	void __iomem *base;
-	struct clk *prng_clk;
-	uint32_t qrng_perf_client;
-	struct  semaphore drbg_sem;
-	struct fips_drbg_ctx_s *drbg_ctx;
-	int    fips140_drbg_enabled;
+    struct platform_device *pdev;
+    void __iomem *base;
+    struct clk *prng_clk;
+    uint32_t qrng_perf_client;
+    struct  semaphore drbg_sem;
+    struct fips_drbg_ctx_s *drbg_ctx;
+    int    fips140_drbg_enabled;
 };
 
 /*

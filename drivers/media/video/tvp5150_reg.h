@@ -86,11 +86,11 @@
 #define TVP5150_STATUS_REG_4        0x8b /* Status register #4 */
 #define TVP5150_STATUS_REG_5        0x8c /* Status register #5 */
 /* Reserved	8Dh-8Fh */
- /* Closed caption data registers */
+/* Closed caption data registers */
 #define TVP5150_CC_DATA_INI         0x90
 #define TVP5150_CC_DATA_END         0x93
 
- /* WSS data registers */
+/* WSS data registers */
 #define TVP5150_WSS_DATA_INI        0x94
 #define TVP5150_WSS_DATA_END        0x99
 

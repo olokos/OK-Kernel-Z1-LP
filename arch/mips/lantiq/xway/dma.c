@@ -56,199 +56,188 @@
 						ltq_dma_membase + (z))
 
 static struct resource ltq_dma_resource = {
-	.name	= "dma",
-	.start	= LTQ_DMA_BASE_ADDR,
-	.end	= LTQ_DMA_BASE_ADDR + LTQ_DMA_SIZE - 1,
-	.flags  = IORESOURCE_MEM,
+    .name	= "dma",
+    .start	= LTQ_DMA_BASE_ADDR,
+    .end	= LTQ_DMA_BASE_ADDR + LTQ_DMA_SIZE - 1,
+    .flags  = IORESOURCE_MEM,
 };
 
 static void __iomem *ltq_dma_membase;
 
 void
-ltq_dma_enable_irq(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_enable_irq(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
+    local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_enable_irq);
 
 void
-ltq_dma_disable_irq(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_disable_irq(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32_mask(1 << ch->nr, 0, LTQ_DMA_IRNEN);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32_mask(1 << ch->nr, 0, LTQ_DMA_IRNEN);
+    local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_disable_irq);
 
 void
-ltq_dma_ack_irq(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_ack_irq(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32(DMA_IRQ_ACK, LTQ_DMA_CIS);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32(DMA_IRQ_ACK, LTQ_DMA_CIS);
+    local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_ack_irq);
 
 void
-ltq_dma_open(struct ltq_dma_channel *ch)
-{
-	unsigned long flag;
+ltq_dma_open(struct ltq_dma_channel *ch) {
+    unsigned long flag;
 
-	local_irq_save(flag);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32_mask(0, DMA_CHAN_ON, LTQ_DMA_CCTRL);
-	ltq_dma_enable_irq(ch);
-	local_irq_restore(flag);
+    local_irq_save(flag);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32_mask(0, DMA_CHAN_ON, LTQ_DMA_CCTRL);
+    ltq_dma_enable_irq(ch);
+    local_irq_restore(flag);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_open);
 
 void
-ltq_dma_close(struct ltq_dma_channel *ch)
-{
-	unsigned long flag;
+ltq_dma_close(struct ltq_dma_channel *ch) {
+    unsigned long flag;
 
-	local_irq_save(flag);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
-	ltq_dma_disable_irq(ch);
-	local_irq_restore(flag);
+    local_irq_save(flag);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
+    ltq_dma_disable_irq(ch);
+    local_irq_restore(flag);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_close);
 
 static void
-ltq_dma_alloc(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_alloc(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	ch->desc = 0;
-	ch->desc_base = dma_alloc_coherent(NULL,
-				LTQ_DESC_NUM * LTQ_DESC_SIZE,
-				&ch->phys, GFP_ATOMIC);
-	memset(ch->desc_base, 0, LTQ_DESC_NUM * LTQ_DESC_SIZE);
+    ch->desc = 0;
+    ch->desc_base = dma_alloc_coherent(NULL,
+                                       LTQ_DESC_NUM * LTQ_DESC_SIZE,
+                                       &ch->phys, GFP_ATOMIC);
+    memset(ch->desc_base, 0, LTQ_DESC_NUM * LTQ_DESC_SIZE);
 
-	local_irq_save(flags);
-	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
-	ltq_dma_w32(ch->phys, LTQ_DMA_CDBA);
-	ltq_dma_w32(LTQ_DESC_NUM, LTQ_DMA_CDLEN);
-	ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
-	wmb();
-	ltq_dma_w32_mask(0, DMA_CHAN_RST, LTQ_DMA_CCTRL);
-	while (ltq_dma_r32(LTQ_DMA_CCTRL) & DMA_CHAN_RST)
-		;
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(ch->nr, LTQ_DMA_CS);
+    ltq_dma_w32(ch->phys, LTQ_DMA_CDBA);
+    ltq_dma_w32(LTQ_DESC_NUM, LTQ_DMA_CDLEN);
+    ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
+    wmb();
+    ltq_dma_w32_mask(0, DMA_CHAN_RST, LTQ_DMA_CCTRL);
+    while (ltq_dma_r32(LTQ_DMA_CCTRL) & DMA_CHAN_RST)
+        ;
+    local_irq_restore(flags);
 }
 
 void
-ltq_dma_alloc_tx(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_alloc_tx(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	ltq_dma_alloc(ch);
+    ltq_dma_alloc(ch);
 
-	local_irq_save(flags);
-	ltq_dma_w32(DMA_DESCPT, LTQ_DMA_CIE);
-	ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
-	ltq_dma_w32(DMA_WEIGHT | DMA_TX, LTQ_DMA_CCTRL);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(DMA_DESCPT, LTQ_DMA_CIE);
+    ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
+    ltq_dma_w32(DMA_WEIGHT | DMA_TX, LTQ_DMA_CCTRL);
+    local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_alloc_tx);
 
 void
-ltq_dma_alloc_rx(struct ltq_dma_channel *ch)
-{
-	unsigned long flags;
+ltq_dma_alloc_rx(struct ltq_dma_channel *ch) {
+    unsigned long flags;
 
-	ltq_dma_alloc(ch);
+    ltq_dma_alloc(ch);
 
-	local_irq_save(flags);
-	ltq_dma_w32(DMA_DESCPT, LTQ_DMA_CIE);
-	ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
-	ltq_dma_w32(DMA_WEIGHT, LTQ_DMA_CCTRL);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    ltq_dma_w32(DMA_DESCPT, LTQ_DMA_CIE);
+    ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
+    ltq_dma_w32(DMA_WEIGHT, LTQ_DMA_CCTRL);
+    local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_alloc_rx);
 
 void
-ltq_dma_free(struct ltq_dma_channel *ch)
-{
-	if (!ch->desc_base)
-		return;
-	ltq_dma_close(ch);
-	dma_free_coherent(NULL, LTQ_DESC_NUM * LTQ_DESC_SIZE,
-		ch->desc_base, ch->phys);
+ltq_dma_free(struct ltq_dma_channel *ch) {
+    if (!ch->desc_base)
+        return;
+    ltq_dma_close(ch);
+    dma_free_coherent(NULL, LTQ_DESC_NUM * LTQ_DESC_SIZE,
+                      ch->desc_base, ch->phys);
 }
 EXPORT_SYMBOL_GPL(ltq_dma_free);
 
 void
-ltq_dma_init_port(int p)
-{
-	ltq_dma_w32(p, LTQ_DMA_PS);
-	switch (p) {
-	case DMA_PORT_ETOP:
-		/*
-		 * Tell the DMA engine to swap the endianess of data frames and
-		 * drop packets if the channel arbitration fails.
-		 */
-		ltq_dma_w32_mask(0, DMA_ETOP_ENDIANESS | DMA_PDEN,
-			LTQ_DMA_PCTRL);
-		break;
+ltq_dma_init_port(int p) {
+    ltq_dma_w32(p, LTQ_DMA_PS);
+    switch (p) {
+    case DMA_PORT_ETOP:
+        /*
+         * Tell the DMA engine to swap the endianess of data frames and
+         * drop packets if the channel arbitration fails.
+         */
+        ltq_dma_w32_mask(0, DMA_ETOP_ENDIANESS | DMA_PDEN,
+                         LTQ_DMA_PCTRL);
+        break;
 
-	case DMA_PORT_DEU:
-		ltq_dma_w32((DMA_2W_BURST << 4) | (DMA_2W_BURST << 2),
-			LTQ_DMA_PCTRL);
-		break;
+    case DMA_PORT_DEU:
+        ltq_dma_w32((DMA_2W_BURST << 4) | (DMA_2W_BURST << 2),
+                    LTQ_DMA_PCTRL);
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 EXPORT_SYMBOL_GPL(ltq_dma_init_port);
 
 int __init
-ltq_dma_init(void)
-{
-	int i;
+ltq_dma_init(void) {
+    int i;
 
-	/* insert and request the memory region */
-	if (insert_resource(&iomem_resource, &ltq_dma_resource) < 0)
-		panic("Failed to insert dma memory");
+    /* insert and request the memory region */
+    if (insert_resource(&iomem_resource, &ltq_dma_resource) < 0)
+        panic("Failed to insert dma memory");
 
-	if (request_mem_region(ltq_dma_resource.start,
-			resource_size(&ltq_dma_resource), "dma") < 0)
-		panic("Failed to request dma memory");
+    if (request_mem_region(ltq_dma_resource.start,
+                           resource_size(&ltq_dma_resource), "dma") < 0)
+        panic("Failed to request dma memory");
 
-	/* remap dma register range */
-	ltq_dma_membase = ioremap_nocache(ltq_dma_resource.start,
-				resource_size(&ltq_dma_resource));
-	if (!ltq_dma_membase)
-		panic("Failed to remap dma memory");
+    /* remap dma register range */
+    ltq_dma_membase = ioremap_nocache(ltq_dma_resource.start,
+                                      resource_size(&ltq_dma_resource));
+    if (!ltq_dma_membase)
+        panic("Failed to remap dma memory");
 
-	/* power up and reset the dma engine */
-	ltq_pmu_enable(PMU_DMA);
-	ltq_dma_w32_mask(0, DMA_RESET, LTQ_DMA_CTRL);
+    /* power up and reset the dma engine */
+    ltq_pmu_enable(PMU_DMA);
+    ltq_dma_w32_mask(0, DMA_RESET, LTQ_DMA_CTRL);
 
-	/* disable all interrupts */
-	ltq_dma_w32(0, LTQ_DMA_IRNEN);
+    /* disable all interrupts */
+    ltq_dma_w32(0, LTQ_DMA_IRNEN);
 
-	/* reset/configure each channel */
-	for (i = 0; i < DMA_MAX_CHANNEL; i++) {
-		ltq_dma_w32(i, LTQ_DMA_CS);
-		ltq_dma_w32(DMA_CHAN_RST, LTQ_DMA_CCTRL);
-		ltq_dma_w32(DMA_POLL | DMA_CLK_DIV4, LTQ_DMA_CPOLL);
-		ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
-	}
-	return 0;
+    /* reset/configure each channel */
+    for (i = 0; i < DMA_MAX_CHANNEL; i++) {
+        ltq_dma_w32(i, LTQ_DMA_CS);
+        ltq_dma_w32(DMA_CHAN_RST, LTQ_DMA_CCTRL);
+        ltq_dma_w32(DMA_POLL | DMA_CLK_DIV4, LTQ_DMA_CPOLL);
+        ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
+    }
+    return 0;
 }
 
 postcore_initcall(ltq_dma_init);

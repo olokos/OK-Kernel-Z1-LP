@@ -21,126 +21,121 @@
 #include <media/rc-core.h>
 
 struct ir_raw_handler {
-	struct list_head list;
+    struct list_head list;
 
-	u64 protocols; /* which are handled by this handler */
-	int (*decode)(struct rc_dev *dev, struct ir_raw_event event);
+    u64 protocols; /* which are handled by this handler */
+    int (*decode)(struct rc_dev *dev, struct ir_raw_event event);
 
-	/* These two should only be used by the lirc decoder */
-	int (*raw_register)(struct rc_dev *dev);
-	int (*raw_unregister)(struct rc_dev *dev);
+    /* These two should only be used by the lirc decoder */
+    int (*raw_register)(struct rc_dev *dev);
+    int (*raw_unregister)(struct rc_dev *dev);
 };
 
 struct ir_raw_event_ctrl {
-	struct list_head		list;		/* to keep track of raw clients */
-	struct task_struct		*thread;
-	spinlock_t			lock;
-	struct kfifo_rec_ptr_1		kfifo;		/* fifo for the pulse/space durations */
-	ktime_t				last_event;	/* when last event occurred */
-	enum raw_event_type		last_type;	/* last event type */
-	struct rc_dev			*dev;		/* pointer to the parent rc_dev */
-	u64				enabled_protocols; /* enabled raw protocol decoders */
+    struct list_head		list;		/* to keep track of raw clients */
+    struct task_struct		*thread;
+    spinlock_t			lock;
+    struct kfifo_rec_ptr_1		kfifo;		/* fifo for the pulse/space durations */
+    ktime_t				last_event;	/* when last event occurred */
+    enum raw_event_type		last_type;	/* last event type */
+    struct rc_dev			*dev;		/* pointer to the parent rc_dev */
+    u64				enabled_protocols; /* enabled raw protocol decoders */
 
-	/* raw decoder state follows */
-	struct ir_raw_event prev_ev;
-	struct ir_raw_event this_ev;
-	struct nec_dec {
-		int state;
-		unsigned count;
-		u32 bits;
-		bool is_nec_x;
-		bool necx_repeat;
-	} nec;
-	struct rc5_dec {
-		int state;
-		u32 bits;
-		unsigned count;
-		unsigned wanted_bits;
-	} rc5;
-	struct rc6_dec {
-		int state;
-		u8 header;
-		u32 body;
-		bool toggle;
-		unsigned count;
-		unsigned wanted_bits;
-	} rc6;
-	struct sony_dec {
-		int state;
-		u32 bits;
-		unsigned count;
-	} sony;
-	struct jvc_dec {
-		int state;
-		u16 bits;
-		u16 old_bits;
-		unsigned count;
-		bool first;
-		bool toggle;
-	} jvc;
-	struct rc5_sz_dec {
-		int state;
-		u32 bits;
-		unsigned count;
-		unsigned wanted_bits;
-	} rc5_sz;
-	struct sanyo_dec {
-		int state;
-		unsigned count;
-		u64 bits;
-	} sanyo;
-	struct mce_kbd_dec {
-		struct input_dev *idev;
-		struct timer_list rx_timeout;
-		char name[64];
-		char phys[64];
-		int state;
-		u8 header;
-		u32 body;
-		unsigned count;
-		unsigned wanted_bits;
-	} mce_kbd;
-	struct lirc_codec {
-		struct rc_dev *dev;
-		struct lirc_driver *drv;
-		int carrier_low;
+    /* raw decoder state follows */
+    struct ir_raw_event prev_ev;
+    struct ir_raw_event this_ev;
+    struct nec_dec {
+        int state;
+        unsigned count;
+        u32 bits;
+        bool is_nec_x;
+        bool necx_repeat;
+    } nec;
+    struct rc5_dec {
+        int state;
+        u32 bits;
+        unsigned count;
+        unsigned wanted_bits;
+    } rc5;
+    struct rc6_dec {
+        int state;
+        u8 header;
+        u32 body;
+        bool toggle;
+        unsigned count;
+        unsigned wanted_bits;
+    } rc6;
+    struct sony_dec {
+        int state;
+        u32 bits;
+        unsigned count;
+    } sony;
+    struct jvc_dec {
+        int state;
+        u16 bits;
+        u16 old_bits;
+        unsigned count;
+        bool first;
+        bool toggle;
+    } jvc;
+    struct rc5_sz_dec {
+        int state;
+        u32 bits;
+        unsigned count;
+        unsigned wanted_bits;
+    } rc5_sz;
+    struct sanyo_dec {
+        int state;
+        unsigned count;
+        u64 bits;
+    } sanyo;
+    struct mce_kbd_dec {
+        struct input_dev *idev;
+        struct timer_list rx_timeout;
+        char name[64];
+        char phys[64];
+        int state;
+        u8 header;
+        u32 body;
+        unsigned count;
+        unsigned wanted_bits;
+    } mce_kbd;
+    struct lirc_codec {
+        struct rc_dev *dev;
+        struct lirc_driver *drv;
+        int carrier_low;
 
-		ktime_t gap_start;
-		u64 gap_duration;
-		bool gap;
-		bool send_timeout_reports;
+        ktime_t gap_start;
+        u64 gap_duration;
+        bool gap;
+        bool send_timeout_reports;
 
-	} lirc;
+    } lirc;
 };
 
 /* macros for IR decoders */
-static inline bool geq_margin(unsigned d1, unsigned d2, unsigned margin)
-{
-	return d1 > (d2 - margin);
+static inline bool geq_margin(unsigned d1, unsigned d2, unsigned margin) {
+    return d1 > (d2 - margin);
 }
 
-static inline bool eq_margin(unsigned d1, unsigned d2, unsigned margin)
-{
-	return ((d1 > (d2 - margin)) && (d1 < (d2 + margin)));
+static inline bool eq_margin(unsigned d1, unsigned d2, unsigned margin) {
+    return ((d1 > (d2 - margin)) && (d1 < (d2 + margin)));
 }
 
-static inline bool is_transition(struct ir_raw_event *x, struct ir_raw_event *y)
-{
-	return x->pulse != y->pulse;
+static inline bool is_transition(struct ir_raw_event *x, struct ir_raw_event *y) {
+    return x->pulse != y->pulse;
 }
 
-static inline void decrease_duration(struct ir_raw_event *ev, unsigned duration)
-{
-	if (duration > ev->duration)
-		ev->duration = 0;
-	else
-		ev->duration -= duration;
+static inline void decrease_duration(struct ir_raw_event *ev, unsigned duration) {
+    if (duration > ev->duration)
+        ev->duration = 0;
+    else
+        ev->duration -= duration;
 }
 
 /* Returns true if event is normal pulse/space event */
-static inline bool is_timing_event(struct ir_raw_event ev)
-{
-	return !ev.carrier_report && !ev.reset;
+static inline bool is_timing_event(struct ir_raw_event ev) {
+    return !ev.carrier_report && !ev.reset;
 }
 
 #define TO_US(duration)			DIV_ROUND_CLOSEST((duration), 1000)

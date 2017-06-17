@@ -14,7 +14,7 @@
 typedef unsigned long old_sigset_t;		/* at least 32 bits */
 
 typedef struct {
-	unsigned long sig[_NSIG_WORDS];
+    unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #define SIGHUP		 1
@@ -97,27 +97,27 @@ typedef struct {
 #include <asm-generic/signal-defs.h>
 
 struct old_sigaction {
-	__sighandler_t sa_handler;
-	old_sigset_t sa_mask;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
+    __sighandler_t sa_handler;
+    old_sigset_t sa_mask;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
 };
 
 struct sigaction {
-	__sighandler_t sa_handler;
-	unsigned long sa_flags;
-	__sigrestore_t sa_restorer;
-	sigset_t sa_mask;		/* mask last for extensibility */
+    __sighandler_t sa_handler;
+    unsigned long sa_flags;
+    __sigrestore_t sa_restorer;
+    sigset_t sa_mask;		/* mask last for extensibility */
 };
 
 struct k_sigaction {
-	struct sigaction sa;
+    struct sigaction sa;
 };
 
 typedef struct sigaltstack {
-	void __user *ss_sp;
-	int ss_flags;
-	size_t ss_size;
+    void __user *ss_sp;
+    int ss_flags;
+    size_t ss_size;
 } stack_t;
 
 #ifdef __KERNEL__
@@ -135,8 +135,8 @@ struct pt_regs;
  * perform before returning from the signal.
  */
 struct sig_dbg_op {
-	int dbg_type;
-	unsigned long dbg_value;
+    int dbg_type;
+    unsigned long dbg_value;
 };
 
 /* Enable or disable single-stepping.  The value sets the state. */

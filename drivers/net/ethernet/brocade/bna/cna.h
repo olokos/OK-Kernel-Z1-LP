@@ -43,7 +43,9 @@ extern char bfa_version[];
 
 #pragma pack(1)
 
-typedef struct mac { u8 mac[ETH_ALEN]; } mac_t;
+typedef struct mac {
+    u8 mac[ETH_ALEN];
+} mac_t;
 
 #pragma pack()
 

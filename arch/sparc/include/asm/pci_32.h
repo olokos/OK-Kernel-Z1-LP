@@ -16,9 +16,8 @@
 
 #define PCI_IRQ_NONE		0xffffffff
 
-static inline void pcibios_penalize_isa_irq(int irq, int active)
-{
-	/* We don't do dynamic PCI IRQ allocation */
+static inline void pcibios_penalize_isa_irq(int irq, int active) {
+    /* We don't do dynamic PCI IRQ allocation */
 }
 
 /* Dynamic DMA mapping stuff.
@@ -29,11 +28,10 @@ struct pci_dev;
 
 #ifdef CONFIG_PCI
 static inline void pci_dma_burst_advice(struct pci_dev *pdev,
-					enum pci_dma_burst_strategy *strat,
-					unsigned long *strategy_parameter)
-{
-	*strat = PCI_DMA_BURST_INFINITY;
-	*strategy_parameter = ~0UL;
+                                        enum pci_dma_burst_strategy *strat,
+                                        unsigned long *strategy_parameter) {
+    *strat = PCI_DMA_BURST_INFINITY;
+    *strategy_parameter = ~0UL;
 }
 #endif
 
@@ -52,9 +50,8 @@ static inline void pci_dma_burst_advice(struct pci_dev *pdev,
  * 64Kbytes by the Host controller.
  */
 
-static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-{
-	return PCI_IRQ_NONE;
+static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel) {
+    return PCI_IRQ_NONE;
 }
 #endif
 

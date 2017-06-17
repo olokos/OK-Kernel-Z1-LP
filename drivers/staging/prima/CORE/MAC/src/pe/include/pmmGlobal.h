@@ -40,8 +40,7 @@
 
 #include "sirApi.h"
 
-typedef struct sPmmStaState
-{
+typedef struct sPmmStaState {
     /// Whether this STA is in powersave or not
     tANI_U8 powerSave : 1;
     /// Whether this STA is CF-pollable or not
@@ -59,8 +58,7 @@ typedef struct sPmmStaState
 
 #define NO_STATE_CHANGE 0xFF
 
-typedef enum ePmmState
-{
+typedef enum ePmmState {
     ePMM_STATE_INVALID,
     ePMM_STATE_READY,
     //BMPS
@@ -86,14 +84,12 @@ typedef enum ePmmState
     ePMM_STATE_LAST,
 } tPmmState;
 
-typedef struct sPmmStaInfo
-{
+typedef struct sPmmStaInfo {
     tANI_U16 assocId;
     tANI_U32 staTxAckCnt;
 } tPmmStaInfo, *tpPmmStaInfo;
 
-typedef struct sPmmTim
-{
+typedef struct sPmmTim {
     tANI_U8 *pTim;                    /** Tim Bit Array*/
     tANI_U8 minAssocId;
     tANI_U8 maxAssocId;
@@ -103,8 +99,7 @@ typedef struct sPmmTim
     tpPmmStaInfo    pStaInfo;   /** Points to 1st Instant of the Array of MaxSTA StaInfo */
 } tPmmTim, *tpPmmTim;
 
-typedef struct sAniSirPmm
-{
+typedef struct sAniSirPmm {
 
 
     //tANI_U32 disModeBeforeSleeping;

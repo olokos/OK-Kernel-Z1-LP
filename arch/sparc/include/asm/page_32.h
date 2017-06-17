@@ -37,8 +37,8 @@
  * last valid one has num_bytes==0.
  */
 struct sparc_phys_banks {
-  unsigned long base_addr;
-  unsigned long num_bytes;
+    unsigned long base_addr;
+    unsigned long num_bytes;
 };
 
 #define SPARC_PHYS_BANKS 32
@@ -47,8 +47,8 @@ extern struct sparc_phys_banks sp_banks[SPARC_PHYS_BANKS+1];
 
 /* Cache alias structure.  Entry is valid if context != -1. */
 struct cache_palias {
-	unsigned long vaddr;
-	int context;
+    unsigned long vaddr;
+    int context;
 };
 
 /* passing structs on the Sparc slow us down tremendously... */
@@ -59,13 +59,27 @@ struct cache_palias {
 /*
  * These are used to make use of C type-checking..
  */
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long iopte; } iopte_t;
-typedef struct { unsigned long pmdv[16]; } pmd_t;
-typedef struct { unsigned long pgd; } pgd_t;
-typedef struct { unsigned long ctxd; } ctxd_t;
-typedef struct { unsigned long pgprot; } pgprot_t;
-typedef struct { unsigned long iopgprot; } iopgprot_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long iopte;
+} iopte_t;
+typedef struct {
+    unsigned long pmdv[16];
+} pmd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
+typedef struct {
+    unsigned long ctxd;
+} ctxd_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
+typedef struct {
+    unsigned long iopgprot;
+} iopgprot_t;
 
 #define pte_val(x)	((x).pte)
 #define iopte_val(x)	((x).iopte)
@@ -89,7 +103,9 @@ typedef struct { unsigned long iopgprot; } iopgprot_t;
  */
 typedef unsigned long pte_t;
 typedef unsigned long iopte_t;
-typedef struct { unsigned long pmdv[16]; } pmd_t;
+typedef struct {
+    unsigned long pmdv[16];
+} pmd_t;
 typedef unsigned long pgd_t;
 typedef unsigned long ctxd_t;
 typedef unsigned long pgprot_t;

@@ -70,8 +70,7 @@
  * @return None
  */
 void
-limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession psessionEntry)
-{
+limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession psessionEntry) {
     tANI_U8                 *pBody;
     tANI_U16                aid, reasonCode;
     tpSirMacMgmtHdr    pHdr;
@@ -85,8 +84,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
     pBody = WDA_GET_RX_MPDU_DATA(pRxPacketInfo);
 
 
-    if (limIsGroupAddr(pHdr->sa))
-    {
+    if (limIsGroupAddr(pHdr->sa)) {
         // Received Disassoc frame from a BC/MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOG1,
@@ -95,8 +93,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
         return;
     }
 
-    if (limIsGroupAddr(pHdr->da) && !limIsAddrBC(pHdr->da))
-    {
+    if (limIsGroupAddr(pHdr->da) && !limIsAddrBC(pHdr->da)) {
         // Received Disassoc frame for a MC address
         // Log error and ignore it
         PELOGE(limLog(pMac, LOG1,
@@ -107,8 +104,7 @@ limProcessDisassocFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo, tpPESession
 
 #ifdef WLAN_FEATURE_11W
     /* PMF: If this session is a PMF session, then ensure that this frame was protected */
-    if(psessionEntry->limRmfEnabled  && (WDA_GET_RX_DPU_FEEDBACK(pRxPacketInfo) & DPU_FEEDBACK_UNPROTECTED_ERROR))
-    {
+    if(psessionEntry->limRmfEnabled  && (WDA_GET_RX_DPU_FEEDBACK(pRxPacketInfo) & DPU_FEEDBACK_UNPROTECTED_ERROR)) {
         PELOGE(limLog(pMac, LOG1, FL("received an unprotected disassoc from AP"));)
         // If the frame received is unprotected, forward it to the supplicant to initiate
         // an SA query

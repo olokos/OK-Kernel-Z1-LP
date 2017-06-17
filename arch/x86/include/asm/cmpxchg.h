@@ -9,13 +9,13 @@
  * (or compile-time if the compiler implements __compiletime_error().
  */
 extern void __xchg_wrong_size(void)
-	__compiletime_error("Bad argument size for xchg");
+__compiletime_error("Bad argument size for xchg");
 extern void __cmpxchg_wrong_size(void)
-	__compiletime_error("Bad argument size for cmpxchg");
+__compiletime_error("Bad argument size for cmpxchg");
 extern void __xadd_wrong_size(void)
-	__compiletime_error("Bad argument size for xadd");
+__compiletime_error("Bad argument size for xadd");
 extern void __add_wrong_size(void)
-	__compiletime_error("Bad argument size for add");
+__compiletime_error("Bad argument size for add");
 
 /*
  * Constants for operation sizes. On 32-bit, the 64-bit size it set to
@@ -33,7 +33,7 @@ extern void __add_wrong_size(void)
 #define	__X86_CASE_Q	-1		/* sizeof will never return -1 */
 #endif
 
-/* 
+/*
  * An exchange-type operation, which takes a value and a pointer, and
  * returns a the old value.
  */

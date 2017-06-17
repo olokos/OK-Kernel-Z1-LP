@@ -14,59 +14,59 @@
 
 // ------------------------------------------------------------ dma_descr_group
 typedef struct dma_descr_group {
-  struct dma_descr_group       *next;
-  unsigned                      eol        : 1;
-  unsigned                      tol        : 1;
-  unsigned                      bol        : 1;
-  unsigned                                 : 1;
-  unsigned                      intr       : 1;
-  unsigned                                 : 2;
-  unsigned                      en         : 1;
-  unsigned                                 : 7;
-  unsigned                      dis        : 1;
-  unsigned                      md         : 16;
-  struct dma_descr_group       *up;
-  union {
-    struct dma_descr_context   *context;
-    struct dma_descr_group     *group;
-  }                             down;
+    struct dma_descr_group       *next;
+    unsigned                      eol        : 1;
+    unsigned                      tol        : 1;
+    unsigned                      bol        : 1;
+    unsigned                                 : 1;
+    unsigned                      intr       : 1;
+    unsigned                                 : 2;
+    unsigned                      en         : 1;
+    unsigned                                 : 7;
+    unsigned                      dis        : 1;
+    unsigned                      md         : 16;
+    struct dma_descr_group       *up;
+    union {
+        struct dma_descr_context   *context;
+        struct dma_descr_group     *group;
+    }                             down;
 } dma_descr_group;
 
 // ---------------------------------------------------------- dma_descr_context
 typedef struct dma_descr_context {
-  struct dma_descr_context     *next;
-  unsigned                      eol        : 1;
-  unsigned                                 : 3;
-  unsigned                      intr       : 1;
-  unsigned                                 : 1;
-  unsigned                      store_mode : 1;
-  unsigned                      en         : 1;
-  unsigned                                 : 7;
-  unsigned                      dis        : 1;
-  unsigned                      md0        : 16;
-  unsigned                      md1;
-  unsigned                      md2;
-  unsigned                      md3;
-  unsigned                      md4;
-  struct dma_descr_data        *saved_data;
-  char                         *saved_data_buf;
+    struct dma_descr_context     *next;
+    unsigned                      eol        : 1;
+    unsigned                                 : 3;
+    unsigned                      intr       : 1;
+    unsigned                                 : 1;
+    unsigned                      store_mode : 1;
+    unsigned                      en         : 1;
+    unsigned                                 : 7;
+    unsigned                      dis        : 1;
+    unsigned                      md0        : 16;
+    unsigned                      md1;
+    unsigned                      md2;
+    unsigned                      md3;
+    unsigned                      md4;
+    struct dma_descr_data        *saved_data;
+    char                         *saved_data_buf;
 } dma_descr_context;
 
 // ------------------------------------------------------------- dma_descr_data
 typedef struct dma_descr_data {
-  struct dma_descr_data        *next;
-  char                         *buf;
-  unsigned                      eol        : 1;
-  unsigned                                 : 2;
-  unsigned                      out_eop    : 1;
-  unsigned                      intr       : 1;
-  unsigned                      wait       : 1;
-  unsigned                                 : 2;
-  unsigned                                 : 3;
-  unsigned                      in_eop     : 1;
-  unsigned                                 : 4;
-  unsigned                      md         : 16;
-  char                         *after;
+    struct dma_descr_data        *next;
+    char                         *buf;
+    unsigned                      eol        : 1;
+    unsigned                                 : 2;
+    unsigned                      out_eop    : 1;
+    unsigned                      intr       : 1;
+    unsigned                      wait       : 1;
+    unsigned                                 : 2;
+    unsigned                                 : 3;
+    unsigned                      in_eop     : 1;
+    unsigned                                 : 4;
+    unsigned                      md         : 16;
+    char                         *after;
 } dma_descr_data;
 
 // --------------------------------------------------------------------- macros

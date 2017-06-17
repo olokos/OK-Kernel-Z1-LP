@@ -23,12 +23,12 @@ extern int __cpu_logical_map[NR_CPUS];
 #define cpu_logical_map(cpu)  __cpu_logical_map[cpu]
 
 enum {
-	SMP_MSG_FUNCTION,
-	SMP_MSG_RESCHEDULE,
-	SMP_MSG_FUNCTION_SINGLE,
-	SMP_MSG_TIMER,
+    SMP_MSG_FUNCTION,
+    SMP_MSG_RESCHEDULE,
+    SMP_MSG_FUNCTION_SINGLE,
+    SMP_MSG_TIMER,
 
-	SMP_MSG_NR,	/* must be last */
+    SMP_MSG_NR,	/* must be last */
 };
 
 DECLARE_PER_CPU(int, cpu_state);
@@ -51,22 +51,20 @@ int native_cpu_disable(unsigned int cpu);
 void play_dead_common(void);
 extern int __cpu_disable(void);
 
-static inline void __cpu_die(unsigned int cpu)
-{
-	extern struct plat_smp_ops *mp_ops;     /* private */
+static inline void __cpu_die(unsigned int cpu) {
+    extern struct plat_smp_ops *mp_ops;     /* private */
 
-	mp_ops->cpu_die(cpu);
+    mp_ops->cpu_die(cpu);
 }
 #endif
 
-static inline int hard_smp_processor_id(void)
-{
-	extern struct plat_smp_ops *mp_ops;	/* private */
+static inline int hard_smp_processor_id(void) {
+    extern struct plat_smp_ops *mp_ops;	/* private */
 
-	if (!mp_ops)
-		return 0;	/* boot CPU */
+    if (!mp_ops)
+        return 0;	/* boot CPU */
 
-	return mp_ops->smp_processor_id();
+    return mp_ops->smp_processor_id();
 }
 
 #else

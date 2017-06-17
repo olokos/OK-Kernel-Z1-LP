@@ -58,7 +58,7 @@
 #define VP_MASK_VAL(val, high_bit, low_bit) \
 	(((val) << (low_bit)) & VP_MASK(high_bit, low_bit))
 
- /* VP_ENABLE */
+/* VP_ENABLE */
 #define VP_ENABLE_ON			(1 << 0)
 
 /* VP_SRESET */

@@ -29,7 +29,7 @@
 
 /* arch/sh/kernel/cpu/sh4/sq.c */
 unsigned long sq_remap(unsigned long phys, unsigned int size,
-		       const char *name, pgprot_t prot);
+                       const char *name, pgprot_t prot);
 void sq_unmap(unsigned long vaddr);
 void sq_flush_range(unsigned long start, unsigned int len);
 

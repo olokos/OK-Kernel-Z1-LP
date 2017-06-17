@@ -44,11 +44,10 @@ EXPORT_SYMBOL(mn10300_dcache_flush_page);
 /*
  * allow userspace to flush the instruction cache
  */
-asmlinkage long sys_cacheflush(unsigned long start, unsigned long end)
-{
-	if (end < start)
-		return -EINVAL;
+asmlinkage long sys_cacheflush(unsigned long start, unsigned long end) {
+    if (end < start)
+        return -EINVAL;
 
-	flush_icache_range(start, end);
-	return 0;
+    flush_icache_range(start, end);
+    return 0;
 }

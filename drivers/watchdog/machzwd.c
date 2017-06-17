@@ -82,10 +82,9 @@
 #define zf_get_ZFL_version()   zf_readw(ZFL_VERSION)
 
 
-static unsigned short zf_readw(unsigned char port)
-{
-	outb(port, INDEX);
-	return inw(DATA_W);
+static unsigned short zf_readw(unsigned char port) {
+    outb(port, INDEX);
+    return inw(DATA_W);
 }
 
 
@@ -97,15 +96,15 @@ MODULE_ALIAS_MISCDEV(WATCHDOG_MINOR);
 static bool nowayout = WATCHDOG_NOWAYOUT;
 module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout,
-		"Watchdog cannot be stopped once started (default="
-				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+                 "Watchdog cannot be stopped once started (default="
+                 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 
 #define PFX "machzwd"
 
 static const struct watchdog_info zf_info = {
-	.options		= WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-	.firmware_version	= 1,
-	.identity		= "ZF-Logic watchdog",
+    .options		= WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+    .firmware_version	= 1,
+    .identity		= "ZF-Logic watchdog",
 };
 
 
@@ -120,7 +119,7 @@ static const struct watchdog_info zf_info = {
 static int action;
 module_param(action, int, 0);
 MODULE_PARM_DESC(action, "after watchdog resets, generate: "
-				"0 = RESET(*)  1 = SMI  2 = NMI  3 = SCI");
+                 "0 = RESET(*)  1 = SMI  2 = NMI  3 = SCI");
 
 static void zf_ping(unsigned long data);
 
@@ -149,22 +148,19 @@ static unsigned long next_heartbeat;
 #endif
 
 
-static inline void zf_set_status(unsigned char new)
-{
-	zf_writeb(STATUS, new);
+static inline void zf_set_status(unsigned char new) {
+    zf_writeb(STATUS, new);
 }
 
 
 /* CONTROL register functions */
 
-static inline unsigned short zf_get_control(void)
-{
-	return zf_readw(CONTROL);
+static inline unsigned short zf_get_control(void) {
+    return zf_readw(CONTROL);
 }
 
-static inline void zf_set_control(unsigned short new)
-{
-	zf_writew(CONTROL, new);
+static inline void zf_set_control(unsigned short new) {
+    zf_writew(CONTROL, new);
 }
 
 
@@ -173,181 +169,173 @@ static inline void zf_set_control(unsigned short new)
  *	Just set counter value
  */
 
-static inline void zf_set_timer(unsigned short new, unsigned char n)
-{
-	switch (n) {
-	case WD1:
-		zf_writew(COUNTER_1, new);
-	case WD2:
-		zf_writeb(COUNTER_2, new > 0xff ? 0xff : new);
-	default:
-		return;
-	}
+static inline void zf_set_timer(unsigned short new, unsigned char n) {
+    switch (n) {
+    case WD1:
+        zf_writew(COUNTER_1, new);
+    case WD2:
+        zf_writeb(COUNTER_2, new > 0xff ? 0xff : new);
+    default:
+        return;
+    }
 }
 
 /*
  * stop hardware timer
  */
-static void zf_timer_off(void)
-{
-	unsigned int ctrl_reg = 0;
-	unsigned long flags;
+static void zf_timer_off(void) {
+    unsigned int ctrl_reg = 0;
+    unsigned long flags;
 
-	/* stop internal ping */
-	del_timer_sync(&zf_timer);
+    /* stop internal ping */
+    del_timer_sync(&zf_timer);
 
-	spin_lock_irqsave(&zf_port_lock, flags);
-	/* stop watchdog timer */
-	ctrl_reg = zf_get_control();
-	ctrl_reg |= (ENABLE_WD1|ENABLE_WD2);	/* disable wd1 and wd2 */
-	ctrl_reg &= ~(ENABLE_WD1|ENABLE_WD2);
-	zf_set_control(ctrl_reg);
-	spin_unlock_irqrestore(&zf_port_lock, flags);
+    spin_lock_irqsave(&zf_port_lock, flags);
+    /* stop watchdog timer */
+    ctrl_reg = zf_get_control();
+    ctrl_reg |= (ENABLE_WD1|ENABLE_WD2);	/* disable wd1 and wd2 */
+    ctrl_reg &= ~(ENABLE_WD1|ENABLE_WD2);
+    zf_set_control(ctrl_reg);
+    spin_unlock_irqrestore(&zf_port_lock, flags);
 
-	pr_info("Watchdog timer is now disabled\n");
+    pr_info("Watchdog timer is now disabled\n");
 }
 
 
 /*
  * start hardware timer
  */
-static void zf_timer_on(void)
-{
-	unsigned int ctrl_reg = 0;
-	unsigned long flags;
+static void zf_timer_on(void) {
+    unsigned int ctrl_reg = 0;
+    unsigned long flags;
 
-	spin_lock_irqsave(&zf_port_lock, flags);
+    spin_lock_irqsave(&zf_port_lock, flags);
 
-	zf_writeb(PULSE_LEN, 0xff);
+    zf_writeb(PULSE_LEN, 0xff);
 
-	zf_set_timer(ZF_CTIMEOUT, WD1);
+    zf_set_timer(ZF_CTIMEOUT, WD1);
 
-	/* user land ping */
-	next_heartbeat = jiffies + ZF_USER_TIMEO;
+    /* user land ping */
+    next_heartbeat = jiffies + ZF_USER_TIMEO;
 
-	/* start the timer for internal ping */
-	mod_timer(&zf_timer, jiffies + ZF_HW_TIMEO);
+    /* start the timer for internal ping */
+    mod_timer(&zf_timer, jiffies + ZF_HW_TIMEO);
 
-	/* start watchdog timer */
-	ctrl_reg = zf_get_control();
-	ctrl_reg |= (ENABLE_WD1|zf_action);
-	zf_set_control(ctrl_reg);
-	spin_unlock_irqrestore(&zf_port_lock, flags);
+    /* start watchdog timer */
+    ctrl_reg = zf_get_control();
+    ctrl_reg |= (ENABLE_WD1|zf_action);
+    zf_set_control(ctrl_reg);
+    spin_unlock_irqrestore(&zf_port_lock, flags);
 
-	pr_info("Watchdog timer is now enabled\n");
+    pr_info("Watchdog timer is now enabled\n");
 }
 
 
-static void zf_ping(unsigned long data)
-{
-	unsigned int ctrl_reg = 0;
-	unsigned long flags;
+static void zf_ping(unsigned long data) {
+    unsigned int ctrl_reg = 0;
+    unsigned long flags;
 
-	zf_writeb(COUNTER_2, 0xff);
+    zf_writeb(COUNTER_2, 0xff);
 
-	if (time_before(jiffies, next_heartbeat)) {
-		dprintk("time_before: %ld\n", next_heartbeat - jiffies);
-		/*
-		 * reset event is activated by transition from 0 to 1 on
-		 * RESET_WD1 bit and we assume that it is already zero...
-		 */
+    if (time_before(jiffies, next_heartbeat)) {
+        dprintk("time_before: %ld\n", next_heartbeat - jiffies);
+        /*
+         * reset event is activated by transition from 0 to 1 on
+         * RESET_WD1 bit and we assume that it is already zero...
+         */
 
-		spin_lock_irqsave(&zf_port_lock, flags);
-		ctrl_reg = zf_get_control();
-		ctrl_reg |= RESET_WD1;
-		zf_set_control(ctrl_reg);
+        spin_lock_irqsave(&zf_port_lock, flags);
+        ctrl_reg = zf_get_control();
+        ctrl_reg |= RESET_WD1;
+        zf_set_control(ctrl_reg);
 
-		/* ...and nothing changes until here */
-		ctrl_reg &= ~(RESET_WD1);
-		zf_set_control(ctrl_reg);
-		spin_unlock_irqrestore(&zf_port_lock, flags);
+        /* ...and nothing changes until here */
+        ctrl_reg &= ~(RESET_WD1);
+        zf_set_control(ctrl_reg);
+        spin_unlock_irqrestore(&zf_port_lock, flags);
 
-		mod_timer(&zf_timer, jiffies + ZF_HW_TIMEO);
-	} else
-		pr_crit("I will reset your machine\n");
+        mod_timer(&zf_timer, jiffies + ZF_HW_TIMEO);
+    } else
+        pr_crit("I will reset your machine\n");
 }
 
 static ssize_t zf_write(struct file *file, const char __user *buf, size_t count,
-								loff_t *ppos)
-{
-	/* See if we got the magic character */
-	if (count) {
-		/*
-		 * no need to check for close confirmation
-		 * no way to disable watchdog ;)
-		 */
-		if (!nowayout) {
-			size_t ofs;
-			/*
-			 * note: just in case someone wrote the magic character
-			 * five months ago...
-			 */
-			zf_expect_close = 0;
+                        loff_t *ppos) {
+    /* See if we got the magic character */
+    if (count) {
+        /*
+         * no need to check for close confirmation
+         * no way to disable watchdog ;)
+         */
+        if (!nowayout) {
+            size_t ofs;
+            /*
+             * note: just in case someone wrote the magic character
+             * five months ago...
+             */
+            zf_expect_close = 0;
 
-			/* now scan */
-			for (ofs = 0; ofs != count; ofs++) {
-				char c;
-				if (get_user(c, buf + ofs))
-					return -EFAULT;
-				if (c == 'V') {
-					zf_expect_close = 42;
-					dprintk("zf_expect_close = 42\n");
-				}
-			}
-		}
+            /* now scan */
+            for (ofs = 0; ofs != count; ofs++) {
+                char c;
+                if (get_user(c, buf + ofs))
+                    return -EFAULT;
+                if (c == 'V') {
+                    zf_expect_close = 42;
+                    dprintk("zf_expect_close = 42\n");
+                }
+            }
+        }
 
-		/*
-		 * Well, anyhow someone wrote to us,
-		 * we should return that favour
-		 */
-		next_heartbeat = jiffies + ZF_USER_TIMEO;
-		dprintk("user ping at %ld\n", jiffies);
-	}
-	return count;
+        /*
+         * Well, anyhow someone wrote to us,
+         * we should return that favour
+         */
+        next_heartbeat = jiffies + ZF_USER_TIMEO;
+        dprintk("user ping at %ld\n", jiffies);
+    }
+    return count;
 }
 
-static long zf_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-{
-	void __user *argp = (void __user *)arg;
-	int __user *p = argp;
-	switch (cmd) {
-	case WDIOC_GETSUPPORT:
-		if (copy_to_user(argp, &zf_info, sizeof(zf_info)))
-			return -EFAULT;
-		break;
-	case WDIOC_GETSTATUS:
-	case WDIOC_GETBOOTSTATUS:
-		return put_user(0, p);
-	case WDIOC_KEEPALIVE:
-		zf_ping(0);
-		break;
-	default:
-		return -ENOTTY;
-	}
-	return 0;
+static long zf_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
+    void __user *argp = (void __user *)arg;
+    int __user *p = argp;
+    switch (cmd) {
+    case WDIOC_GETSUPPORT:
+        if (copy_to_user(argp, &zf_info, sizeof(zf_info)))
+            return -EFAULT;
+        break;
+    case WDIOC_GETSTATUS:
+    case WDIOC_GETBOOTSTATUS:
+        return put_user(0, p);
+    case WDIOC_KEEPALIVE:
+        zf_ping(0);
+        break;
+    default:
+        return -ENOTTY;
+    }
+    return 0;
 }
 
-static int zf_open(struct inode *inode, struct file *file)
-{
-	if (test_and_set_bit(0, &zf_is_open))
-		return -EBUSY;
-	if (nowayout)
-		__module_get(THIS_MODULE);
-	zf_timer_on();
-	return nonseekable_open(inode, file);
+static int zf_open(struct inode *inode, struct file *file) {
+    if (test_and_set_bit(0, &zf_is_open))
+        return -EBUSY;
+    if (nowayout)
+        __module_get(THIS_MODULE);
+    zf_timer_on();
+    return nonseekable_open(inode, file);
 }
 
-static int zf_close(struct inode *inode, struct file *file)
-{
-	if (zf_expect_close == 42)
-		zf_timer_off();
-	else {
-		del_timer(&zf_timer);
-		pr_err("device file closed unexpectedly. Will not stop the WDT!\n");
-	}
-	clear_bit(0, &zf_is_open);
-	zf_expect_close = 0;
-	return 0;
+static int zf_close(struct inode *inode, struct file *file) {
+    if (zf_expect_close == 42)
+        zf_timer_off();
+    else {
+        del_timer(&zf_timer);
+        pr_err("device file closed unexpectedly. Will not stop the WDT!\n");
+    }
+    clear_bit(0, &zf_is_open);
+    zf_expect_close = 0;
+    return 0;
 }
 
 /*
@@ -355,26 +343,25 @@ static int zf_close(struct inode *inode, struct file *file)
  */
 
 static int zf_notify_sys(struct notifier_block *this, unsigned long code,
-								void *unused)
-{
-	if (code == SYS_DOWN || code == SYS_HALT)
-		zf_timer_off();
-	return NOTIFY_DONE;
+                         void *unused) {
+    if (code == SYS_DOWN || code == SYS_HALT)
+        zf_timer_off();
+    return NOTIFY_DONE;
 }
 
 static const struct file_operations zf_fops = {
-	.owner		= THIS_MODULE,
-	.llseek		= no_llseek,
-	.write		= zf_write,
-	.unlocked_ioctl = zf_ioctl,
-	.open		= zf_open,
-	.release	= zf_close,
+    .owner		= THIS_MODULE,
+    .llseek		= no_llseek,
+    .write		= zf_write,
+    .unlocked_ioctl = zf_ioctl,
+    .open		= zf_open,
+    .release	= zf_close,
 };
 
 static struct miscdevice zf_miscdev = {
-	.minor = WATCHDOG_MINOR,
-	.name = "watchdog",
-	.fops = &zf_fops,
+    .minor = WATCHDOG_MINOR,
+    .name = "watchdog",
+    .fops = &zf_fops,
 };
 
 
@@ -383,74 +370,71 @@ static struct miscdevice zf_miscdev = {
  * turn the timebomb registers off.
  */
 static struct notifier_block zf_notifier = {
-	.notifier_call = zf_notify_sys,
+    .notifier_call = zf_notify_sys,
 };
 
-static void __init zf_show_action(int act)
-{
-	static const char * const str[] = { "RESET", "SMI", "NMI", "SCI" };
+static void __init zf_show_action(int act) {
+    static const char * const str[] = { "RESET", "SMI", "NMI", "SCI" };
 
-	pr_info("Watchdog using action = %s\n", str[act]);
+    pr_info("Watchdog using action = %s\n", str[act]);
 }
 
-static int __init zf_init(void)
-{
-	int ret;
+static int __init zf_init(void) {
+    int ret;
 
-	pr_info("MachZ ZF-Logic Watchdog driver initializing\n");
+    pr_info("MachZ ZF-Logic Watchdog driver initializing\n");
 
-	ret = zf_get_ZFL_version();
-	if (!ret || ret == 0xffff) {
-		pr_warn("no ZF-Logic found\n");
-		return -ENODEV;
-	}
+    ret = zf_get_ZFL_version();
+    if (!ret || ret == 0xffff) {
+        pr_warn("no ZF-Logic found\n");
+        return -ENODEV;
+    }
 
-	if (action <= 3 && action >= 0)
-		zf_action = zf_action >> action;
-	else
-		action = 0;
+    if (action <= 3 && action >= 0)
+        zf_action = zf_action >> action;
+    else
+        action = 0;
 
-	zf_show_action(action);
+    zf_show_action(action);
 
-	if (!request_region(ZF_IOBASE, 3, "MachZ ZFL WDT")) {
-		pr_err("cannot reserve I/O ports at %d\n", ZF_IOBASE);
-		ret = -EBUSY;
-		goto no_region;
-	}
+    if (!request_region(ZF_IOBASE, 3, "MachZ ZFL WDT")) {
+        pr_err("cannot reserve I/O ports at %d\n", ZF_IOBASE);
+        ret = -EBUSY;
+        goto no_region;
+    }
 
-	ret = register_reboot_notifier(&zf_notifier);
-	if (ret) {
-		pr_err("can't register reboot notifier (err=%d)\n", ret);
-		goto no_reboot;
-	}
+    ret = register_reboot_notifier(&zf_notifier);
+    if (ret) {
+        pr_err("can't register reboot notifier (err=%d)\n", ret);
+        goto no_reboot;
+    }
 
-	ret = misc_register(&zf_miscdev);
-	if (ret) {
-		pr_err("can't misc_register on minor=%d\n", WATCHDOG_MINOR);
-		goto no_misc;
-	}
+    ret = misc_register(&zf_miscdev);
+    if (ret) {
+        pr_err("can't misc_register on minor=%d\n", WATCHDOG_MINOR);
+        goto no_misc;
+    }
 
-	zf_set_status(0);
-	zf_set_control(0);
+    zf_set_status(0);
+    zf_set_control(0);
 
-	return 0;
+    return 0;
 
 no_misc:
-	unregister_reboot_notifier(&zf_notifier);
+    unregister_reboot_notifier(&zf_notifier);
 no_reboot:
-	release_region(ZF_IOBASE, 3);
+    release_region(ZF_IOBASE, 3);
 no_region:
-	return ret;
+    return ret;
 }
 
 
-static void __exit zf_exit(void)
-{
-	zf_timer_off();
+static void __exit zf_exit(void) {
+    zf_timer_off();
 
-	misc_deregister(&zf_miscdev);
-	unregister_reboot_notifier(&zf_notifier);
-	release_region(ZF_IOBASE, 3);
+    misc_deregister(&zf_miscdev);
+    unregister_reboot_notifier(&zf_notifier);
+    release_region(ZF_IOBASE, 3);
 }
 
 module_init(zf_init);

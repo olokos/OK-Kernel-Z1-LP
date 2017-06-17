@@ -50,14 +50,14 @@
  *
  */
 struct bcom_tdt {
-	u32 start;
-	u32 stop;
-	u32 var;
-	u32 fdt;
-	u32 exec_status;	/* used internally by BestComm engine */
-	u32 mvtp;		/* used internally by BestComm engine */
-	u32 context;
-	u32 litbase;
+    u32 start;
+    u32 stop;
+    u32 var;
+    u32 fdt;
+    u32 exec_status;	/* used internally by BestComm engine */
+    u32 mvtp;		/* used internally by BestComm engine */
+    u32 context;
+    u32 litbase;
 };
 
 /**
@@ -66,16 +66,16 @@ struct bcom_tdt {
  * This holds all info needed globaly to handle the engine
  */
 struct bcom_engine {
-	struct device_node		*ofnode;
-	struct mpc52xx_sdma __iomem     *regs;
-	phys_addr_t                      regs_base;
+    struct device_node		*ofnode;
+    struct mpc52xx_sdma __iomem     *regs;
+    phys_addr_t                      regs_base;
 
-	struct bcom_tdt			*tdt;
-	u32				*ctx;
-	u32				*var;
-	u32				*fdt;
+    struct bcom_tdt			*tdt;
+    u32				*ctx;
+    u32				*var;
+    u32				*fdt;
 
-	spinlock_t			lock;
+    spinlock_t			lock;
 };
 
 extern struct bcom_engine *bcom_eng;
@@ -89,12 +89,12 @@ extern struct bcom_engine *bcom_eng;
 #define BCOM_TASK_MAGIC		0x4243544B	/* 'BCTK' */
 
 struct bcom_task_header {
-	u32	magic;
-	u8	desc_size;	/* the size fields     */
-	u8	var_size;	/* are given in number */
-	u8	inc_size;	/* of 32-bits words    */
-	u8	first_var;
-	u8	reserved[8];
+    u32	magic;
+    u8	desc_size;	/* the size fields     */
+    u8	var_size;	/* are given in number */
+    u8	inc_size;	/* of 32-bits words    */
+    u8	first_var;
+    u8	reserved[8];
 };
 
 /* Descriptors structure & co */
@@ -106,21 +106,21 @@ struct bcom_task_header {
 /* Tasks pragma */
 #define BCOM_PRAGMA_BIT_RSV		7	/* reserved pragma bit */
 #define BCOM_PRAGMA_BIT_PRECISE_INC	6	/* increment 0=when possible, */
-						/*           1=iter end */
+/*           1=iter end */
 #define BCOM_PRAGMA_BIT_RST_ERROR_NO	5	/* don't reset errors on */
-						/* task enable */
+/* task enable */
 #define BCOM_PRAGMA_BIT_PACK		4	/* pack data enable */
 #define BCOM_PRAGMA_BIT_INTEGER		3	/* data alignment */
-						/* 0=frac(msb), 1=int(lsb) */
+/* 0=frac(msb), 1=int(lsb) */
 #define BCOM_PRAGMA_BIT_SPECREAD	2	/* XLB speculative read */
 #define BCOM_PRAGMA_BIT_CW		1	/* write line buffer enable */
 #define BCOM_PRAGMA_BIT_RL		0	/* read line buffer enable */
 
-	/* Looks like XLB speculative read generates XLB errors when a buffer
-	 * is at the end of the physical memory. i.e. when accessing the
-	 * lasts words, the engine tries to prefetch the next but there is no
-	 * next ...
-	 */
+/* Looks like XLB speculative read generates XLB errors when a buffer
+ * is at the end of the physical memory. i.e. when accessing the
+ * lasts words, the engine tries to prefetch the next but there is no
+ * next ...
+ */
 #define BCOM_STD_PRAGMA		((0 << BCOM_PRAGMA_BIT_RSV)		| \
 				 (0 << BCOM_PRAGMA_BIT_PRECISE_INC)	| \
 				 (0 << BCOM_PRAGMA_BIT_RST_ERROR_NO)	| \
@@ -249,100 +249,86 @@ extern void bcom_set_initiator(int task, int initiator);
  * in place to turn prefetch back on after it has been disabled.  There is
  * no reason it couldn't be done, it would just be more complex to implement.
  */
-static inline void bcom_disable_prefetch(void)
-{
-	u16 regval;
+static inline void bcom_disable_prefetch(void) {
+    u16 regval;
 
-	regval = in_be16(&bcom_eng->regs->PtdCntrl);
-	out_be16(&bcom_eng->regs->PtdCntrl, regval | 1);
+    regval = in_be16(&bcom_eng->regs->PtdCntrl);
+    out_be16(&bcom_eng->regs->PtdCntrl, regval | 1);
 };
 
 static inline void
-bcom_enable_task(int task)
-{
-        u16 reg;
-        reg = in_be16(&bcom_eng->regs->tcr[task]);
-        out_be16(&bcom_eng->regs->tcr[task],  reg | TASK_ENABLE);
+bcom_enable_task(int task) {
+    u16 reg;
+    reg = in_be16(&bcom_eng->regs->tcr[task]);
+    out_be16(&bcom_eng->regs->tcr[task],  reg | TASK_ENABLE);
 }
 
 static inline void
-bcom_disable_task(int task)
-{
-        u16 reg = in_be16(&bcom_eng->regs->tcr[task]);
-        out_be16(&bcom_eng->regs->tcr[task], reg & ~TASK_ENABLE);
+bcom_disable_task(int task) {
+    u16 reg = in_be16(&bcom_eng->regs->tcr[task]);
+    out_be16(&bcom_eng->regs->tcr[task], reg & ~TASK_ENABLE);
 }
 
 
 static inline u32 *
-bcom_task_desc(int task)
-{
-	return bcom_sram_pa2va(bcom_eng->tdt[task].start);
+bcom_task_desc(int task) {
+    return bcom_sram_pa2va(bcom_eng->tdt[task].start);
 }
 
 static inline int
-bcom_task_num_descs(int task)
-{
-	return (bcom_eng->tdt[task].stop - bcom_eng->tdt[task].start)/sizeof(u32) + 1;
+bcom_task_num_descs(int task) {
+    return (bcom_eng->tdt[task].stop - bcom_eng->tdt[task].start)/sizeof(u32) + 1;
 }
 
 static inline u32 *
-bcom_task_var(int task)
-{
-	return bcom_sram_pa2va(bcom_eng->tdt[task].var);
+bcom_task_var(int task) {
+    return bcom_sram_pa2va(bcom_eng->tdt[task].var);
 }
 
 static inline u32 *
-bcom_task_inc(int task)
-{
-	return &bcom_task_var(task)[BCOM_MAX_VAR];
+bcom_task_inc(int task) {
+    return &bcom_task_var(task)[BCOM_MAX_VAR];
 }
 
 
 static inline int
-bcom_drd_is_extended(u32 desc)
-{
-	return (desc) & BCOM_DRD_EXTENDED;
+bcom_drd_is_extended(u32 desc) {
+    return (desc) & BCOM_DRD_EXTENDED;
 }
 
 static inline int
-bcom_desc_is_drd(u32 desc)
-{
-	return !(desc & BCOM_LCD_MASK) && desc != BCOM_DESC_NOP;
+bcom_desc_is_drd(u32 desc) {
+    return !(desc & BCOM_LCD_MASK) && desc != BCOM_DESC_NOP;
 }
 
 static inline int
-bcom_desc_initiator(u32 desc)
-{
-	return (desc >> BCOM_DRD_INITIATOR_SHIFT) & 0x1f;
+bcom_desc_initiator(u32 desc) {
+    return (desc >> BCOM_DRD_INITIATOR_SHIFT) & 0x1f;
 }
 
 static inline void
-bcom_set_desc_initiator(u32 *desc, int initiator)
-{
-	*desc = (*desc & ~(0x1f << BCOM_DRD_INITIATOR_SHIFT)) |
-			((initiator & 0x1f) << BCOM_DRD_INITIATOR_SHIFT);
+bcom_set_desc_initiator(u32 *desc, int initiator) {
+    *desc = (*desc & ~(0x1f << BCOM_DRD_INITIATOR_SHIFT)) |
+            ((initiator & 0x1f) << BCOM_DRD_INITIATOR_SHIFT);
 }
 
 
 static inline void
-bcom_set_task_pragma(int task, int pragma)
-{
-	u32 *fdt = &bcom_eng->tdt[task].fdt;
-	*fdt = (*fdt & ~0xff) | pragma;
+bcom_set_task_pragma(int task, int pragma) {
+    u32 *fdt = &bcom_eng->tdt[task].fdt;
+    *fdt = (*fdt & ~0xff) | pragma;
 }
 
 static inline void
-bcom_set_task_auto_start(int task, int next_task)
-{
-	u16 __iomem *tcr = &bcom_eng->regs->tcr[task];
-	out_be16(tcr, (in_be16(tcr) & ~0xff) | 0x00c0 | next_task);
+bcom_set_task_auto_start(int task, int next_task) {
+    u16 __iomem *tcr = &bcom_eng->regs->tcr[task];
+    out_be16(tcr, (in_be16(tcr) & ~0xff) | 0x00c0 | next_task);
 }
 
 static inline void
-bcom_set_tcr_initiator(int task, int initiator)
-{
-	u16 __iomem *tcr = &bcom_eng->regs->tcr[task];
-	out_be16(tcr, (in_be16(tcr) & ~0x1f00) | ((initiator & 0x1f) << 8));
+bcom_set_tcr_initiator(int task, int initiator) {
+    u16 __iomem *tcr = &bcom_eng->regs->tcr[task];
+    out_be16(tcr, (in_be16(tcr) & ~0x1f00) | ((initiator & 0x1f) << 8));
 }
 
 

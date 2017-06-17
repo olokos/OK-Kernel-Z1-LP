@@ -14,18 +14,18 @@
 #define __ASM_ARCH_MSM_SIRC_H
 
 struct sirc_regs_t {
-	void    *int_enable;
-	void    *int_enable_clear;
-	void    *int_enable_set;
-	void    *int_type;
-	void    *int_polarity;
-	void    *int_clear;
+    void    *int_enable;
+    void    *int_enable_clear;
+    void    *int_enable_set;
+    void    *int_type;
+    void    *int_polarity;
+    void    *int_clear;
 };
 
 struct sirc_cascade_regs {
-	void    *int_status;
-	unsigned int    cascade_irq;
-	unsigned int    cascade_fiq;
+    void    *int_status;
+    unsigned int    cascade_irq;
+    unsigned int    cascade_fiq;
 };
 
 void msm_init_sirc(void);

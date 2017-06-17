@@ -39,8 +39,7 @@
 
 #define NO_SESSION 0xFF
 
-typedef enum
-{
+typedef enum {
     TRACE_CODE_TL_STA_STATE,
     TRACE_CODE_TL_EAPOL_PKT_PENDING,
     TRACE_CODE_TL_GET_FRAMES_EAPOL,

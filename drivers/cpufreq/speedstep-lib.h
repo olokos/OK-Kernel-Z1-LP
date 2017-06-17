@@ -12,16 +12,16 @@
 
 /* processors */
 enum speedstep_processor {
-	SPEEDSTEP_CPU_PIII_C_EARLY = 0x00000001,  /* Coppermine core */
-	SPEEDSTEP_CPU_PIII_C	   = 0x00000002,  /* Coppermine core */
-	SPEEDSTEP_CPU_PIII_T	   = 0x00000003,  /* Tualatin core */
-	SPEEDSTEP_CPU_P4M	   = 0x00000004,  /* P4-M  */
-/* the following processors are not speedstep-capable and are not auto-detected
- * in speedstep_detect_processor(). However, their speed can be detected using
- * the speedstep_get_frequency() call. */
-	SPEEDSTEP_CPU_PM	   = 0xFFFFFF03,  /* Pentium M  */
-	SPEEDSTEP_CPU_P4D	   = 0xFFFFFF04,  /* desktop P4  */
-	SPEEDSTEP_CPU_PCORE	   = 0xFFFFFF05,  /* Core */
+    SPEEDSTEP_CPU_PIII_C_EARLY = 0x00000001,  /* Coppermine core */
+    SPEEDSTEP_CPU_PIII_C	   = 0x00000002,  /* Coppermine core */
+    SPEEDSTEP_CPU_PIII_T	   = 0x00000003,  /* Tualatin core */
+    SPEEDSTEP_CPU_P4M	   = 0x00000004,  /* P4-M  */
+    /* the following processors are not speedstep-capable and are not auto-detected
+     * in speedstep_detect_processor(). However, their speed can be detected using
+     * the speedstep_get_frequency() call. */
+    SPEEDSTEP_CPU_PM	   = 0xFFFFFF03,  /* Pentium M  */
+    SPEEDSTEP_CPU_P4D	   = 0xFFFFFF04,  /* desktop P4  */
+    SPEEDSTEP_CPU_PCORE	   = 0xFFFFFF05,  /* Core */
 };
 
 /* speedstep states -- only two of them */
@@ -43,7 +43,7 @@ extern unsigned int speedstep_get_frequency(enum speedstep_processor processor);
  * cpufreq_notify_transition calls are initiated.
  */
 extern unsigned int speedstep_get_freqs(enum speedstep_processor processor,
-	unsigned int *low_speed,
-	unsigned int *high_speed,
-	unsigned int *transition_latency,
-	void (*set_state) (unsigned int state));
+                                        unsigned int *low_speed,
+                                        unsigned int *high_speed,
+                                        unsigned int *transition_latency,
+                                        void (*set_state) (unsigned int state));

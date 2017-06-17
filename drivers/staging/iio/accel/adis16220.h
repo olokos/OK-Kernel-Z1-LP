@@ -131,10 +131,10 @@
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16220_state {
-	struct spi_device	*us;
-	struct mutex		buf_lock;
-	u8			tx[ADIS16220_MAX_TX] ____cacheline_aligned;
-	u8			rx[ADIS16220_MAX_RX];
+    struct spi_device	*us;
+    struct mutex		buf_lock;
+    u8			tx[ADIS16220_MAX_TX] ____cacheline_aligned;
+    u8			rx[ADIS16220_MAX_RX];
 };
 
 #endif /* SPI_ADIS16220_H_ */

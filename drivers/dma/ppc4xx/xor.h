@@ -65,46 +65,46 @@
  * XOR Accelerator engine Command Block Type
  */
 struct xor_cb {
-	/*
-	 * Basic 64-bit format XOR CB (Table 19-1, p.463, 440spe_um_1_22.pdf)
-	 */
-	u32	cbc;		/* control */
-	u32	cbbc;		/* byte count */
-	u32	cbs;		/* status */
-	u8	pad0[4];	/* reserved */
-	u32	cbtah;		/* target address high */
-	u32	cbtal;		/* target address low */
-	u32	cblah;		/* link address high */
-	u32	cblal;		/* link address low */
-	struct {
-		u32 h;
-		u32 l;
-	} __attribute__ ((packed)) ops[16];
+    /*
+     * Basic 64-bit format XOR CB (Table 19-1, p.463, 440spe_um_1_22.pdf)
+     */
+    u32	cbc;		/* control */
+    u32	cbbc;		/* byte count */
+    u32	cbs;		/* status */
+    u8	pad0[4];	/* reserved */
+    u32	cbtah;		/* target address high */
+    u32	cbtal;		/* target address low */
+    u32	cblah;		/* link address high */
+    u32	cblal;		/* link address low */
+    struct {
+        u32 h;
+        u32 l;
+    } __attribute__ ((packed)) ops[16];
 } __attribute__ ((packed));
 
 /*
  * XOR hardware registers Table 19-3, UM 1.22
  */
 struct xor_regs {
-	u32	op_ar[16][2];	/* operand address[0]-high,[1]-low registers */
-	u8	pad0[352];	/* reserved */
-	u32	cbcr;		/* CB control register */
-	u32	cbbcr;		/* CB byte count register */
-	u32	cbsr;		/* CB status register */
-	u8	pad1[4];	/* reserved */
-	u32	cbtahr;		/* operand target address high register */
-	u32	cbtalr;		/* operand target address low register */
-	u32	cblahr;		/* CB link address high register */
-	u32	cblalr;		/* CB link address low register */
-	u32	crsr;		/* control set register */
-	u32	crrr;		/* control reset register */
-	u32	ccbahr;		/* current CB address high register */
-	u32	ccbalr;		/* current CB address low register */
-	u32	plbr;		/* PLB configuration register */
-	u32	ier;		/* interrupt enable register */
-	u32	pecr;		/* parity error count register */
-	u32	sr;		/* status register */
-	u32	revidr;		/* revision ID register */
+    u32	op_ar[16][2];	/* operand address[0]-high,[1]-low registers */
+    u8	pad0[352];	/* reserved */
+    u32	cbcr;		/* CB control register */
+    u32	cbbcr;		/* CB byte count register */
+    u32	cbsr;		/* CB status register */
+    u8	pad1[4];	/* reserved */
+    u32	cbtahr;		/* operand target address high register */
+    u32	cbtalr;		/* operand target address low register */
+    u32	cblahr;		/* CB link address high register */
+    u32	cblalr;		/* CB link address low register */
+    u32	crsr;		/* control set register */
+    u32	crrr;		/* control reset register */
+    u32	ccbahr;		/* current CB address high register */
+    u32	ccbalr;		/* current CB address low register */
+    u32	plbr;		/* PLB configuration register */
+    u32	ier;		/* interrupt enable register */
+    u32	pecr;		/* parity error count register */
+    u32	sr;		/* status register */
+    u32	revidr;		/* revision ID register */
 };
 
 #endif /* _PPC440SPE_XOR_H */

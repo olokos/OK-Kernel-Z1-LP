@@ -42,16 +42,16 @@
  * - if the contents of this structure are changed, the assembly constants must also be changed
  */
 struct thread_info {
-	struct task_struct	*task;		/* main task structure */
-	struct exec_domain	*exec_domain;	/* execution domain */
-	unsigned long		flags;		/* low level flags */
-	unsigned int		cpu;		/* current CPU */
-	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
-	struct restart_block	restart_block;
-	unsigned int		system_call;
-	__u64			user_timer;
-	__u64			system_timer;
-	unsigned long		last_break;	/* last breaking-event-address. */
+    struct task_struct	*task;		/* main task structure */
+    struct exec_domain	*exec_domain;	/* execution domain */
+    unsigned long		flags;		/* low level flags */
+    unsigned int		cpu;		/* current CPU */
+    int			preempt_count;	/* 0 => preemptable, <0 => BUG */
+    struct restart_block	restart_block;
+    unsigned int		system_call;
+    __u64			user_timer;
+    __u64			system_timer;
+    unsigned long		last_break;	/* last breaking-event-address. */
 };
 
 /*
@@ -73,9 +73,8 @@ struct thread_info {
 #define init_stack		(init_thread_union.stack)
 
 /* how to get the thread information struct from C */
-static inline struct thread_info *current_thread_info(void)
-{
-	return (struct thread_info *) S390_lowcore.thread_info;
+static inline struct thread_info *current_thread_info(void) {
+    return (struct thread_info *) S390_lowcore.thread_info;
 }
 
 #define THREAD_SIZE_ORDER THREAD_ORDER

@@ -51,17 +51,14 @@ extern HV_Topology smp_topology;
 #define smp_width		(smp_topology.width)
 
 /* Convenience functions for converting cpu <-> coords. */
-static inline int cpu_x(int cpu)
-{
-	return cpu % smp_width;
+static inline int cpu_x(int cpu) {
+    return cpu % smp_width;
 }
-static inline int cpu_y(int cpu)
-{
-	return cpu / smp_width;
+static inline int cpu_y(int cpu) {
+    return cpu / smp_width;
 }
-static inline int xy_to_cpu(int x, int y)
-{
-	return y * smp_width + x;
+static inline int xy_to_cpu(int x, int y) {
+    return y * smp_width + x;
 }
 
 /* Hypervisor message tags sent via the tile send_IPI*() routines. */
@@ -71,15 +68,13 @@ static inline int xy_to_cpu(int x, int y)
 #define MSG_TAG_CALL_FUNCTION_SINGLE	4
 
 /* Hook for the generic smp_call_function_many() routine. */
-static inline void arch_send_call_function_ipi_mask(struct cpumask *mask)
-{
-	send_IPI_many(mask, MSG_TAG_CALL_FUNCTION_MANY);
+static inline void arch_send_call_function_ipi_mask(struct cpumask *mask) {
+    send_IPI_many(mask, MSG_TAG_CALL_FUNCTION_MANY);
 }
 
 /* Hook for the generic smp_call_function_single() routine. */
-static inline void arch_send_call_function_single_ipi(int cpu)
-{
-	send_IPI_single(cpu, MSG_TAG_CALL_FUNCTION_SINGLE);
+static inline void arch_send_call_function_single_ipi(int cpu) {
+    send_IPI_single(cpu, MSG_TAG_CALL_FUNCTION_SINGLE);
 }
 
 /* Print out the boot string describing which cpus were disabled. */
@@ -111,9 +106,8 @@ extern struct cpumask cpu_cacheable_map;
 #define cpu_cacheable(cpu) cpumask_test_cpu((cpu), &cpu_cacheable_map)
 
 /* Convert an HV_LOTAR value into a cpu. */
-static inline int hv_lotar_to_cpu(HV_LOTAR lotar)
-{
-	return HV_LOTAR_X(lotar) + (HV_LOTAR_Y(lotar) * smp_width);
+static inline int hv_lotar_to_cpu(HV_LOTAR lotar) {
+    return HV_LOTAR_X(lotar) + (HV_LOTAR_Y(lotar) * smp_width);
 }
 
 /*
@@ -126,9 +120,8 @@ int bitmap_parselist_crop(const char *bp, unsigned long *maskp, int nmaskbits);
 #define cpulist_parse_crop(buf, dst) \
 			__cpulist_parse_crop((buf), (dst), NR_CPUS)
 static inline int __cpulist_parse_crop(const char *buf, struct cpumask *dstp,
-					int nbits)
-{
-	return bitmap_parselist_crop(buf, cpumask_bits(dstp), nbits);
+                                       int nbits) {
+    return bitmap_parselist_crop(buf, cpumask_bits(dstp), nbits);
 }
 
 /* Initialize the IPI subsystem. */

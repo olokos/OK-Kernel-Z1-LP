@@ -29,18 +29,16 @@
 #define UARTSR          PHYS(0x14)      /* Status reg */
 
 
-static inline void putc(int c)
-{
-	int j = 0x1000;
+static inline void putc(int c) {
+    int j = 0x1000;
 
-	while (--j && !(*UARTSR & UART_LSR_THRE))
-		barrier();
+    while (--j && !(*UARTSR & UART_LSR_THRE))
+        barrier();
 
-	*UARTDR = c;
+    *UARTDR = c;
 }
 
-static inline void flush(void)
-{
+static inline void flush(void) {
 }
 
 #define arch_decomp_setup()

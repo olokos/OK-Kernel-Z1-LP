@@ -32,8 +32,8 @@
  * @reg: register for control and data of gpio pin
  */
 struct msp71xx_exd_gpio_chip {
-	struct gpio_chip chip;
-	void __iomem *reg;
+    struct gpio_chip chip;
+    void __iomem *reg;
 };
 
 /*
@@ -43,13 +43,12 @@ struct msp71xx_exd_gpio_chip {
  *
  * It will return 0 if gpio value is low and other if high.
  */
-static int msp71xx_exd_gpio_get(struct gpio_chip *chip, unsigned offset)
-{
-	struct msp71xx_exd_gpio_chip *msp71xx_chip =
-	    to_msp71xx_exd_gpio_chip(chip);
-	const unsigned bit = MSP71XX_READ_OFFSET(offset);
+static int msp71xx_exd_gpio_get(struct gpio_chip *chip, unsigned offset) {
+    struct msp71xx_exd_gpio_chip *msp71xx_chip =
+        to_msp71xx_exd_gpio_chip(chip);
+    const unsigned bit = MSP71XX_READ_OFFSET(offset);
 
-	return __raw_readl(msp71xx_chip->reg) & (1 << bit);
+    return __raw_readl(msp71xx_chip->reg) & (1 << bit);
 }
 
 /*
@@ -62,13 +61,12 @@ static int msp71xx_exd_gpio_get(struct gpio_chip *chip, unsigned offset)
  * gpio pin low if value is 0 otherwise it will be high.
  */
 static void msp71xx_exd_gpio_set(struct gpio_chip *chip,
-				 unsigned offset, int value)
-{
-	struct msp71xx_exd_gpio_chip *msp71xx_chip =
-	    to_msp71xx_exd_gpio_chip(chip);
-	const unsigned bit = MSP71XX_DATA_OFFSET(offset);
+                                 unsigned offset, int value) {
+    struct msp71xx_exd_gpio_chip *msp71xx_chip =
+        to_msp71xx_exd_gpio_chip(chip);
+    const unsigned bit = MSP71XX_DATA_OFFSET(offset);
 
-	__raw_writel(1 << (bit + (value ? 1 : 0)), msp71xx_chip->reg);
+    __raw_writel(1 << (bit + (value ? 1 : 0)), msp71xx_chip->reg);
 }
 
 /*
@@ -81,14 +79,13 @@ static void msp71xx_exd_gpio_set(struct gpio_chip *chip,
  * gpio pin low if value is 0 otherwise it will be high.
  */
 static int msp71xx_exd_direction_output(struct gpio_chip *chip,
-					unsigned offset, int value)
-{
-	struct msp71xx_exd_gpio_chip *msp71xx_chip =
-	    to_msp71xx_exd_gpio_chip(chip);
+                                        unsigned offset, int value) {
+    struct msp71xx_exd_gpio_chip *msp71xx_chip =
+        to_msp71xx_exd_gpio_chip(chip);
 
-	msp71xx_exd_gpio_set(chip, offset, value);
-	__raw_writel(1 << MSP71XX_CFG_OUT_OFFSET(offset), msp71xx_chip->reg);
-	return 0;
+    msp71xx_exd_gpio_set(chip, offset, value);
+    __raw_writel(1 << MSP71XX_CFG_OUT_OFFSET(offset), msp71xx_chip->reg);
+    return 0;
 }
 
 /*
@@ -98,13 +95,12 @@ static int msp71xx_exd_direction_output(struct gpio_chip *chip,
  *
  * This call will set the mode for the @gpio to input.
  */
-static int msp71xx_exd_direction_input(struct gpio_chip *chip, unsigned offset)
-{
-	struct msp71xx_exd_gpio_chip *msp71xx_chip =
-	    to_msp71xx_exd_gpio_chip(chip);
+static int msp71xx_exd_direction_input(struct gpio_chip *chip, unsigned offset) {
+    struct msp71xx_exd_gpio_chip *msp71xx_chip =
+        to_msp71xx_exd_gpio_chip(chip);
 
-	__raw_writel(1 << MSP71XX_CFG_IN_OFFSET(offset), msp71xx_chip->reg);
-	return 0;
+    __raw_writel(1 << MSP71XX_CFG_IN_OFFSET(offset), msp71xx_chip->reg);
+    return 0;
 }
 
 #define MSP71XX_EXD_GPIO_BANK(name, exd_reg, base_gpio, num_gpio) \
@@ -133,14 +129,13 @@ static int msp71xx_exd_direction_input(struct gpio_chip *chip, unsigned offset)
  */
 static struct msp71xx_exd_gpio_chip msp71xx_exd_gpio_banks[] = {
 
-	MSP71XX_EXD_GPIO_BANK("GPIO_23_16", 0x188, 16, 8),
-	MSP71XX_EXD_GPIO_BANK("GPIO_27_24", 0x18C, 24, 4),
+    MSP71XX_EXD_GPIO_BANK("GPIO_23_16", 0x188, 16, 8),
+    MSP71XX_EXD_GPIO_BANK("GPIO_27_24", 0x18C, 24, 4),
 };
 
-void __init msp71xx_init_gpio_extended(void)
-{
-	int i;
+void __init msp71xx_init_gpio_extended(void) {
+    int i;
 
-	for (i = 0; i < ARRAY_SIZE(msp71xx_exd_gpio_banks); i++)
-		gpiochip_add(&msp71xx_exd_gpio_banks[i].chip);
+    for (i = 0; i < ARRAY_SIZE(msp71xx_exd_gpio_banks); i++)
+        gpiochip_add(&msp71xx_exd_gpio_banks[i].chip);
 }

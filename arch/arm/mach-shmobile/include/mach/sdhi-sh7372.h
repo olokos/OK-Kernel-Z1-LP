@@ -7,15 +7,13 @@
  * ZB3D2CLK which runs at 149.5MHz.
  * That is 149.5ticks/us. Approximate this as 150ticks/us.
  */
-static void udelay(int us)
-{
-	__raw_writel(us * 150, SDGENCNTA);
-	while(__raw_readl(SDGENCNTA)) ;
+static void udelay(int us) {
+    __raw_writel(us * 150, SDGENCNTA);
+    while(__raw_readl(SDGENCNTA)) ;
 }
 
-static void msleep(int ms)
-{
-	udelay(ms * 1000);
+static void msleep(int ms) {
+    udelay(ms * 1000);
 }
 
 #endif

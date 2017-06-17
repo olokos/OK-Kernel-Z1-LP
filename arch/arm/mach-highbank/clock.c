@@ -20,43 +20,38 @@
 #include <linux/clkdev.h>
 
 struct clk {
-	unsigned long rate;
+    unsigned long rate;
 };
 
-int clk_enable(struct clk *clk)
-{
-	return 0;
+int clk_enable(struct clk *clk) {
+    return 0;
 }
 
-void clk_disable(struct clk *clk)
-{}
-
-unsigned long clk_get_rate(struct clk *clk)
-{
-	return clk->rate;
+void clk_disable(struct clk *clk) {
 }
 
-long clk_round_rate(struct clk *clk, unsigned long rate)
-{
-	return clk->rate;
+unsigned long clk_get_rate(struct clk *clk) {
+    return clk->rate;
 }
 
-int clk_set_rate(struct clk *clk, unsigned long rate)
-{
-	return 0;
+long clk_round_rate(struct clk *clk, unsigned long rate) {
+    return clk->rate;
+}
+
+int clk_set_rate(struct clk *clk, unsigned long rate) {
+    return 0;
 }
 
 static struct clk eclk = { .rate = 200000000 };
 static struct clk pclk = { .rate = 150000000 };
 
 static struct clk_lookup lookups[] = {
-	{ .clk = &pclk, .con_id = "apb_pclk", },
-	{ .clk = &pclk, .dev_id = "sp804", },
-	{ .clk = &eclk, .dev_id = "ffe0e000.sdhci", },
-	{ .clk = &pclk, .dev_id = "fff36000.serial", },
+    { .clk = &pclk, .con_id = "apb_pclk", },
+    { .clk = &pclk, .dev_id = "sp804", },
+    { .clk = &eclk, .dev_id = "ffe0e000.sdhci", },
+    { .clk = &pclk, .dev_id = "fff36000.serial", },
 };
 
-void __init highbank_clocks_init(void)
-{
-	clkdev_add_table(lookups, ARRAY_SIZE(lookups));
+void __init highbank_clocks_init(void) {
+    clkdev_add_table(lookups, ARRAY_SIZE(lookups));
 }

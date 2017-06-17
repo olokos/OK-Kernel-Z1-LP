@@ -37,18 +37,16 @@
 #define MALTA_BONITO_PORT_BASE  ((unsigned long)ioremap (0x1fd00000, 0x10000))
 #define MALTA_MSC_PORT_BASE     get_msc_port_base(MSC01_PCI_SC2PIOBASL)
 
-static inline unsigned long get_gt_port_base(unsigned long reg)
-{
-	unsigned long addr;
-	addr = GT_READ(reg);
-	return (unsigned long) ioremap (((addr & 0xffff) << 21), 0x10000);
+static inline unsigned long get_gt_port_base(unsigned long reg) {
+    unsigned long addr;
+    addr = GT_READ(reg);
+    return (unsigned long) ioremap (((addr & 0xffff) << 21), 0x10000);
 }
 
-static inline unsigned long get_msc_port_base(unsigned long reg)
-{
-	unsigned long addr;
-	MSC_READ(reg, addr);
-	return (unsigned long) ioremap(addr, 0x10000);
+static inline unsigned long get_msc_port_base(unsigned long reg) {
+    unsigned long addr;
+    MSC_READ(reg, addr);
+    return (unsigned long) ioremap(addr, 0x10000);
 }
 
 /*

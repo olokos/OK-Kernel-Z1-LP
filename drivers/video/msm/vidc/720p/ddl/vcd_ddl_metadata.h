@@ -60,17 +60,17 @@
 
 void ddl_set_default_meta_data_hdr(struct ddl_client_context *ddl);
 u32 ddl_get_metadata_params(struct ddl_client_context	*ddl,
-	struct vcd_property_hdr *property_hdr, void *property_value);
+                            struct vcd_property_hdr *property_hdr, void *property_value);
 u32 ddl_set_metadata_params(struct ddl_client_context *ddl,
-			    struct vcd_property_hdr *property_hdr,
-			    void *property_value);
+                            struct vcd_property_hdr *property_hdr,
+                            void *property_value);
 void ddl_set_default_metadata_flag(struct ddl_client_context *ddl);
 void ddl_set_default_decoder_metadata_buffer_size
-    (struct ddl_decoder_data *decoder,
-	struct vcd_property_frame_size *frame_size,
-	struct vcd_buffer_requirement *output_buf_req);
+(struct ddl_decoder_data *decoder,
+ struct vcd_property_frame_size *frame_size,
+ struct vcd_buffer_requirement *output_buf_req);
 void ddl_set_default_encoder_metadata_buffer_size(struct ddl_encoder_data
-						  *encoder);
+        *encoder);
 void ddl_metadata_enable(struct ddl_client_context *ddl);
 u32 ddl_encode_set_metadata_output_buf(struct ddl_client_context *ddl);
 void ddl_decode_set_metadata_output(struct ddl_decoder_data *decoder);

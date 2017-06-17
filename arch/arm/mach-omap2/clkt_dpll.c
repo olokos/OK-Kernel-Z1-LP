@@ -78,59 +78,57 @@
  * (assuming that it is counting N upwards), or -2 if the enclosing loop
  * should skip to the next iteration (again assuming N is increasing).
  */
-static int _dpll_test_fint(struct clk *clk, u8 n)
-{
-	struct dpll_data *dd;
-	long fint, fint_min, fint_max;
-	int ret = 0;
+static int _dpll_test_fint(struct clk *clk, u8 n) {
+    struct dpll_data *dd;
+    long fint, fint_min, fint_max;
+    int ret = 0;
 
-	dd = clk->dpll_data;
+    dd = clk->dpll_data;
 
-	/* DPLL divider must result in a valid jitter correction val */
-	fint = clk->parent->rate / n;
+    /* DPLL divider must result in a valid jitter correction val */
+    fint = clk->parent->rate / n;
 
-	if (cpu_is_omap24xx()) {
-		/* Should not be called for OMAP2, so warn if it is called */
-		WARN(1, "No fint limits available for OMAP2!\n");
-		return DPLL_FINT_INVALID;
-	} else if (cpu_is_omap3430()) {
-		fint_min = OMAP3430_DPLL_FINT_BAND1_MIN;
-		fint_max = OMAP3430_DPLL_FINT_BAND2_MAX;
-	} else if (dd->flags & DPLL_J_TYPE) {
-		fint_min = OMAP3PLUS_DPLL_FINT_JTYPE_MIN;
-		fint_max = OMAP3PLUS_DPLL_FINT_JTYPE_MAX;
-	} else {
-		fint_min = OMAP3PLUS_DPLL_FINT_MIN;
-		fint_max = OMAP3PLUS_DPLL_FINT_MAX;
-	}
+    if (cpu_is_omap24xx()) {
+        /* Should not be called for OMAP2, so warn if it is called */
+        WARN(1, "No fint limits available for OMAP2!\n");
+        return DPLL_FINT_INVALID;
+    } else if (cpu_is_omap3430()) {
+        fint_min = OMAP3430_DPLL_FINT_BAND1_MIN;
+        fint_max = OMAP3430_DPLL_FINT_BAND2_MAX;
+    } else if (dd->flags & DPLL_J_TYPE) {
+        fint_min = OMAP3PLUS_DPLL_FINT_JTYPE_MIN;
+        fint_max = OMAP3PLUS_DPLL_FINT_JTYPE_MAX;
+    } else {
+        fint_min = OMAP3PLUS_DPLL_FINT_MIN;
+        fint_max = OMAP3PLUS_DPLL_FINT_MAX;
+    }
 
-	if (fint < fint_min) {
-		pr_debug("rejecting n=%d due to Fint failure, "
-			 "lowering max_divider\n", n);
-		dd->max_divider = n;
-		ret = DPLL_FINT_UNDERFLOW;
-	} else if (fint > fint_max) {
-		pr_debug("rejecting n=%d due to Fint failure, "
-			 "boosting min_divider\n", n);
-		dd->min_divider = n;
-		ret = DPLL_FINT_INVALID;
-	} else if (cpu_is_omap3430() && fint > OMAP3430_DPLL_FINT_BAND1_MAX &&
-		   fint < OMAP3430_DPLL_FINT_BAND2_MIN) {
-		pr_debug("rejecting n=%d due to Fint failure\n", n);
-		ret = DPLL_FINT_INVALID;
-	}
+    if (fint < fint_min) {
+        pr_debug("rejecting n=%d due to Fint failure, "
+                 "lowering max_divider\n", n);
+        dd->max_divider = n;
+        ret = DPLL_FINT_UNDERFLOW;
+    } else if (fint > fint_max) {
+        pr_debug("rejecting n=%d due to Fint failure, "
+                 "boosting min_divider\n", n);
+        dd->min_divider = n;
+        ret = DPLL_FINT_INVALID;
+    } else if (cpu_is_omap3430() && fint > OMAP3430_DPLL_FINT_BAND1_MAX &&
+               fint < OMAP3430_DPLL_FINT_BAND2_MIN) {
+        pr_debug("rejecting n=%d due to Fint failure\n", n);
+        ret = DPLL_FINT_INVALID;
+    }
 
-	return ret;
+    return ret;
 }
 
 static unsigned long _dpll_compute_new_rate(unsigned long parent_rate,
-					    unsigned int m, unsigned int n)
-{
-	unsigned long long num;
+        unsigned int m, unsigned int n) {
+    unsigned long long num;
 
-	num = (unsigned long long)parent_rate * m;
-	do_div(num, n);
-	return num;
+    num = (unsigned long long)parent_rate * m;
+    do_div(num, n);
+    return num;
 }
 
 /*
@@ -154,70 +152,68 @@ static unsigned long _dpll_compute_new_rate(unsigned long parent_rate,
  * function to bail out early; or 0 upon success.
  */
 static int _dpll_test_mult(int *m, int n, unsigned long *new_rate,
-			   unsigned long target_rate,
-			   unsigned long parent_rate)
-{
-	int r = 0, carry = 0;
+                           unsigned long target_rate,
+                           unsigned long parent_rate) {
+    int r = 0, carry = 0;
 
-	/* Unscale m and round if necessary */
-	if (*m % DPLL_SCALE_FACTOR >= DPLL_ROUNDING_VAL)
-		carry = 1;
-	*m = (*m / DPLL_SCALE_FACTOR) + carry;
+    /* Unscale m and round if necessary */
+    if (*m % DPLL_SCALE_FACTOR >= DPLL_ROUNDING_VAL)
+        carry = 1;
+    *m = (*m / DPLL_SCALE_FACTOR) + carry;
 
-	/*
-	 * The new rate must be <= the target rate to avoid programming
-	 * a rate that is impossible for the hardware to handle
-	 */
-	*new_rate = _dpll_compute_new_rate(parent_rate, *m, n);
-	if (*new_rate > target_rate) {
-		(*m)--;
-		*new_rate = 0;
-	}
+    /*
+     * The new rate must be <= the target rate to avoid programming
+     * a rate that is impossible for the hardware to handle
+     */
+    *new_rate = _dpll_compute_new_rate(parent_rate, *m, n);
+    if (*new_rate > target_rate) {
+        (*m)--;
+        *new_rate = 0;
+    }
 
-	/* Guard against m underflow */
-	if (*m < DPLL_MIN_MULTIPLIER) {
-		*m = DPLL_MIN_MULTIPLIER;
-		*new_rate = 0;
-		r = DPLL_MULT_UNDERFLOW;
-	}
+    /* Guard against m underflow */
+    if (*m < DPLL_MIN_MULTIPLIER) {
+        *m = DPLL_MIN_MULTIPLIER;
+        *new_rate = 0;
+        r = DPLL_MULT_UNDERFLOW;
+    }
 
-	if (*new_rate == 0)
-		*new_rate = _dpll_compute_new_rate(parent_rate, *m, n);
+    if (*new_rate == 0)
+        *new_rate = _dpll_compute_new_rate(parent_rate, *m, n);
 
-	return r;
+    return r;
 }
 
 /* Public functions */
 
-void omap2_init_dpll_parent(struct clk *clk)
-{
-	u32 v;
-	struct dpll_data *dd;
+void omap2_init_dpll_parent(struct clk *clk) {
+    u32 v;
+    struct dpll_data *dd;
 
-	dd = clk->dpll_data;
-	if (!dd)
-		return;
+    dd = clk->dpll_data;
+    if (!dd)
+        return;
 
-	v = __raw_readl(dd->control_reg);
-	v &= dd->enable_mask;
-	v >>= __ffs(dd->enable_mask);
+    v = __raw_readl(dd->control_reg);
+    v &= dd->enable_mask;
+    v >>= __ffs(dd->enable_mask);
 
-	/* Reparent the struct clk in case the dpll is in bypass */
-	if (cpu_is_omap24xx()) {
-		if (v == OMAP2XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP2XXX_EN_DPLL_FRBYPASS)
-			clk_reparent(clk, dd->clk_bypass);
-	} else if (cpu_is_omap34xx()) {
-		if (v == OMAP3XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP3XXX_EN_DPLL_FRBYPASS)
-			clk_reparent(clk, dd->clk_bypass);
-	} else if (cpu_is_omap44xx()) {
-		if (v == OMAP4XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP4XXX_EN_DPLL_FRBYPASS ||
-		    v == OMAP4XXX_EN_DPLL_MNBYPASS)
-			clk_reparent(clk, dd->clk_bypass);
-	}
-	return;
+    /* Reparent the struct clk in case the dpll is in bypass */
+    if (cpu_is_omap24xx()) {
+        if (v == OMAP2XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP2XXX_EN_DPLL_FRBYPASS)
+            clk_reparent(clk, dd->clk_bypass);
+    } else if (cpu_is_omap34xx()) {
+        if (v == OMAP3XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP3XXX_EN_DPLL_FRBYPASS)
+            clk_reparent(clk, dd->clk_bypass);
+    } else if (cpu_is_omap44xx()) {
+        if (v == OMAP4XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP4XXX_EN_DPLL_FRBYPASS ||
+                v == OMAP4XXX_EN_DPLL_MNBYPASS)
+            clk_reparent(clk, dd->clk_bypass);
+    }
+    return;
 }
 
 /**
@@ -234,46 +230,45 @@ void omap2_init_dpll_parent(struct clk *clk)
  * locked, or the appropriate bypass rate if the DPLL is bypassed, or 0
  * if the clock @clk is not a DPLL.
  */
-u32 omap2_get_dpll_rate(struct clk *clk)
-{
-	long long dpll_clk;
-	u32 dpll_mult, dpll_div, v;
-	struct dpll_data *dd;
+u32 omap2_get_dpll_rate(struct clk *clk) {
+    long long dpll_clk;
+    u32 dpll_mult, dpll_div, v;
+    struct dpll_data *dd;
 
-	dd = clk->dpll_data;
-	if (!dd)
-		return 0;
+    dd = clk->dpll_data;
+    if (!dd)
+        return 0;
 
-	/* Return bypass rate if DPLL is bypassed */
-	v = __raw_readl(dd->control_reg);
-	v &= dd->enable_mask;
-	v >>= __ffs(dd->enable_mask);
+    /* Return bypass rate if DPLL is bypassed */
+    v = __raw_readl(dd->control_reg);
+    v &= dd->enable_mask;
+    v >>= __ffs(dd->enable_mask);
 
-	if (cpu_is_omap24xx()) {
-		if (v == OMAP2XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP2XXX_EN_DPLL_FRBYPASS)
-			return dd->clk_bypass->rate;
-	} else if (cpu_is_omap34xx()) {
-		if (v == OMAP3XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP3XXX_EN_DPLL_FRBYPASS)
-			return dd->clk_bypass->rate;
-	} else if (cpu_is_omap44xx()) {
-		if (v == OMAP4XXX_EN_DPLL_LPBYPASS ||
-		    v == OMAP4XXX_EN_DPLL_FRBYPASS ||
-		    v == OMAP4XXX_EN_DPLL_MNBYPASS)
-			return dd->clk_bypass->rate;
-	}
+    if (cpu_is_omap24xx()) {
+        if (v == OMAP2XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP2XXX_EN_DPLL_FRBYPASS)
+            return dd->clk_bypass->rate;
+    } else if (cpu_is_omap34xx()) {
+        if (v == OMAP3XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP3XXX_EN_DPLL_FRBYPASS)
+            return dd->clk_bypass->rate;
+    } else if (cpu_is_omap44xx()) {
+        if (v == OMAP4XXX_EN_DPLL_LPBYPASS ||
+                v == OMAP4XXX_EN_DPLL_FRBYPASS ||
+                v == OMAP4XXX_EN_DPLL_MNBYPASS)
+            return dd->clk_bypass->rate;
+    }
 
-	v = __raw_readl(dd->mult_div1_reg);
-	dpll_mult = v & dd->mult_mask;
-	dpll_mult >>= __ffs(dd->mult_mask);
-	dpll_div = v & dd->div1_mask;
-	dpll_div >>= __ffs(dd->div1_mask);
+    v = __raw_readl(dd->mult_div1_reg);
+    dpll_mult = v & dd->mult_mask;
+    dpll_mult >>= __ffs(dd->mult_mask);
+    dpll_div = v & dd->div1_mask;
+    dpll_div >>= __ffs(dd->div1_mask);
 
-	dpll_clk = (long long)dd->clk_ref->rate * dpll_mult;
-	do_div(dpll_clk, dpll_div + 1);
+    dpll_clk = (long long)dd->clk_ref->rate * dpll_mult;
+    do_div(dpll_clk, dpll_div + 1);
 
-	return dpll_clk;
+    return dpll_clk;
 }
 
 /* DPLL rate rounding code */
@@ -290,71 +285,70 @@ u32 omap2_get_dpll_rate(struct clk *clk)
  * (expensive) function again.  Returns ~0 if the target rate cannot
  * be rounded, or the rounded rate upon success.
  */
-long omap2_dpll_round_rate(struct clk *clk, unsigned long target_rate)
-{
-	int m, n, r, scaled_max_m;
-	unsigned long scaled_rt_rp;
-	unsigned long new_rate = 0;
-	struct dpll_data *dd;
+long omap2_dpll_round_rate(struct clk *clk, unsigned long target_rate) {
+    int m, n, r, scaled_max_m;
+    unsigned long scaled_rt_rp;
+    unsigned long new_rate = 0;
+    struct dpll_data *dd;
 
-	if (!clk || !clk->dpll_data)
-		return ~0;
+    if (!clk || !clk->dpll_data)
+        return ~0;
 
-	dd = clk->dpll_data;
+    dd = clk->dpll_data;
 
-	pr_debug("clock: %s: starting DPLL round_rate, target rate %ld\n",
-		 clk->name, target_rate);
+    pr_debug("clock: %s: starting DPLL round_rate, target rate %ld\n",
+             clk->name, target_rate);
 
-	scaled_rt_rp = target_rate / (dd->clk_ref->rate / DPLL_SCALE_FACTOR);
-	scaled_max_m = dd->max_multiplier * DPLL_SCALE_FACTOR;
+    scaled_rt_rp = target_rate / (dd->clk_ref->rate / DPLL_SCALE_FACTOR);
+    scaled_max_m = dd->max_multiplier * DPLL_SCALE_FACTOR;
 
-	dd->last_rounded_rate = 0;
+    dd->last_rounded_rate = 0;
 
-	for (n = dd->min_divider; n <= dd->max_divider; n++) {
+    for (n = dd->min_divider; n <= dd->max_divider; n++) {
 
-		/* Is the (input clk, divider) pair valid for the DPLL? */
-		r = _dpll_test_fint(clk, n);
-		if (r == DPLL_FINT_UNDERFLOW)
-			break;
-		else if (r == DPLL_FINT_INVALID)
-			continue;
+        /* Is the (input clk, divider) pair valid for the DPLL? */
+        r = _dpll_test_fint(clk, n);
+        if (r == DPLL_FINT_UNDERFLOW)
+            break;
+        else if (r == DPLL_FINT_INVALID)
+            continue;
 
-		/* Compute the scaled DPLL multiplier, based on the divider */
-		m = scaled_rt_rp * n;
+        /* Compute the scaled DPLL multiplier, based on the divider */
+        m = scaled_rt_rp * n;
 
-		/*
-		 * Since we're counting n up, a m overflow means we
-		 * can bail out completely (since as n increases in
-		 * the next iteration, there's no way that m can
-		 * increase beyond the current m)
-		 */
-		if (m > scaled_max_m)
-			break;
+        /*
+         * Since we're counting n up, a m overflow means we
+         * can bail out completely (since as n increases in
+         * the next iteration, there's no way that m can
+         * increase beyond the current m)
+         */
+        if (m > scaled_max_m)
+            break;
 
-		r = _dpll_test_mult(&m, n, &new_rate, target_rate,
-				    dd->clk_ref->rate);
+        r = _dpll_test_mult(&m, n, &new_rate, target_rate,
+                            dd->clk_ref->rate);
 
-		/* m can't be set low enough for this n - try with a larger n */
-		if (r == DPLL_MULT_UNDERFLOW)
-			continue;
+        /* m can't be set low enough for this n - try with a larger n */
+        if (r == DPLL_MULT_UNDERFLOW)
+            continue;
 
-		pr_debug("clock: %s: m = %d: n = %d: new_rate = %ld\n",
-			 clk->name, m, n, new_rate);
+        pr_debug("clock: %s: m = %d: n = %d: new_rate = %ld\n",
+                 clk->name, m, n, new_rate);
 
-		if (target_rate == new_rate) {
-			dd->last_rounded_m = m;
-			dd->last_rounded_n = n;
-			dd->last_rounded_rate = target_rate;
-			break;
-		}
-	}
+        if (target_rate == new_rate) {
+            dd->last_rounded_m = m;
+            dd->last_rounded_n = n;
+            dd->last_rounded_rate = target_rate;
+            break;
+        }
+    }
 
-	if (target_rate != new_rate) {
-		pr_debug("clock: %s: cannot round to rate %ld\n", clk->name,
-			 target_rate);
-		return ~0;
-	}
+    if (target_rate != new_rate) {
+        pr_debug("clock: %s: cannot round to rate %ld\n", clk->name,
+                 target_rate);
+        return ~0;
+    }
 
-	return target_rate;
+    return target_rate;
 }
 

@@ -29,8 +29,7 @@
 #define EVENT_DEFS_H
 
 
-typedef enum
-{
+typedef enum {
     EVENT_DROP_ID = 0,
 
     EVENT_BAND_CLASS_CHANGE = 0x0100,   /* Includes band class as payload */

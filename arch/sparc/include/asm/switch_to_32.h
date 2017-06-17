@@ -43,17 +43,17 @@ extern struct thread_info *current_set[NR_CPUS];
 	"restore; restore; restore; restore; restore; restore; restore"); \
 } while(0)
 
-	/* Much care has gone into this code, do not touch it.
-	 *
-	 * We need to loadup regs l0/l1 for the newly forked child
-	 * case because the trap return path relies on those registers
-	 * holding certain values, gcc is told that they are clobbered.
-	 * Gcc needs registers for 3 values in and 1 value out, so we
-	 * clobber every non-fixed-usage register besides l2/l3/o4/o5.  -DaveM
-	 *
-	 * Hey Dave, that do not touch sign is too much of an incentive
-	 * - Anton & Pete
-	 */
+/* Much care has gone into this code, do not touch it.
+ *
+ * We need to loadup regs l0/l1 for the newly forked child
+ * case because the trap return path relies on those registers
+ * holding certain values, gcc is told that they are clobbered.
+ * Gcc needs registers for 3 values in and 1 value out, so we
+ * clobber every non-fixed-usage register besides l2/l3/o4/o5.  -DaveM
+ *
+ * Hey Dave, that do not touch sign is too much of an incentive
+ * - Anton & Pete
+ */
 #define switch_to(prev, next, last) do {						\
 	SWITCH_ENTER(prev);								\
 	SWITCH_DO_LAZY_FPU(next);							\
@@ -100,7 +100,7 @@ extern struct thread_info *current_set[NR_CPUS];
 	} while(0)
 
 extern void fpsave(unsigned long *fpregs, unsigned long *fsr,
-		   void *fpqueue, unsigned long *fpqdepth);
+                   void *fpqueue, unsigned long *fpqdepth);
 extern void synchronize_user_stack(void);
 
 #endif /* __SPARC_SWITCH_TO_H */

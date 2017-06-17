@@ -46,19 +46,18 @@ static ssize_t show_##name(struct device *dev,			\
 
 #if defined(topology_thread_cpumask) || defined(topology_core_cpumask) || \
     defined(topology_book_cpumask)
-static ssize_t show_cpumap(int type, const struct cpumask *mask, char *buf)
-{
-	ptrdiff_t len = PTR_ALIGN(buf + PAGE_SIZE - 1, PAGE_SIZE) - buf;
-	int n = 0;
+static ssize_t show_cpumap(int type, const struct cpumask *mask, char *buf) {
+    ptrdiff_t len = PTR_ALIGN(buf + PAGE_SIZE - 1, PAGE_SIZE) - buf;
+    int n = 0;
 
-	if (len > 1) {
-		n = type?
-			cpulist_scnprintf(buf, len-2, mask) :
-			cpumask_scnprintf(buf, len-2, mask);
-		buf[n++] = '\n';
-		buf[n] = '\0';
-	}
-	return n;
+    if (len > 1) {
+        n = type?
+            cpulist_scnprintf(buf, len-2, mask) :
+            cpumask_scnprintf(buf, len-2, mask);
+        buf[n++] = '\n';
+        buf[n] = '\0';
+    }
+    return n;
 }
 #endif
 
@@ -123,74 +122,70 @@ define_one_ro_named(book_siblings_list, show_book_cpumask_list);
 #endif
 
 static struct attribute *default_attrs[] = {
-	&dev_attr_physical_package_id.attr,
-	&dev_attr_core_id.attr,
-	&dev_attr_thread_siblings.attr,
-	&dev_attr_thread_siblings_list.attr,
-	&dev_attr_core_siblings.attr,
-	&dev_attr_core_siblings_list.attr,
+    &dev_attr_physical_package_id.attr,
+    &dev_attr_core_id.attr,
+    &dev_attr_thread_siblings.attr,
+    &dev_attr_thread_siblings_list.attr,
+    &dev_attr_core_siblings.attr,
+    &dev_attr_core_siblings_list.attr,
 #ifdef CONFIG_SCHED_BOOK
-	&dev_attr_book_id.attr,
-	&dev_attr_book_siblings.attr,
-	&dev_attr_book_siblings_list.attr,
+    &dev_attr_book_id.attr,
+    &dev_attr_book_siblings.attr,
+    &dev_attr_book_siblings_list.attr,
 #endif
-	NULL
+    NULL
 };
 
 static struct attribute_group topology_attr_group = {
-	.attrs = default_attrs,
-	.name = "topology"
+    .attrs = default_attrs,
+    .name = "topology"
 };
 
 /* Add/Remove cpu_topology interface for CPU device */
-static int __cpuinit topology_add_dev(unsigned int cpu)
-{
-	struct device *dev = get_cpu_device(cpu);
+static int __cpuinit topology_add_dev(unsigned int cpu) {
+    struct device *dev = get_cpu_device(cpu);
 
-	return sysfs_create_group(&dev->kobj, &topology_attr_group);
+    return sysfs_create_group(&dev->kobj, &topology_attr_group);
 }
 
-static void __cpuinit topology_remove_dev(unsigned int cpu)
-{
-	struct device *dev = get_cpu_device(cpu);
+static void __cpuinit topology_remove_dev(unsigned int cpu) {
+    struct device *dev = get_cpu_device(cpu);
 
-	sysfs_remove_group(&dev->kobj, &topology_attr_group);
+    sysfs_remove_group(&dev->kobj, &topology_attr_group);
 }
 
 static int __cpuinit topology_cpu_callback(struct notifier_block *nfb,
-					   unsigned long action, void *hcpu)
-{
-	unsigned int cpu = (unsigned long)hcpu;
-	int rc = 0;
+        unsigned long action, void *hcpu) {
+    unsigned int cpu = (unsigned long)hcpu;
+    int rc = 0;
 
-	switch (action) {
-	case CPU_UP_PREPARE:
-	case CPU_UP_PREPARE_FROZEN:
-		rc = topology_add_dev(cpu);
-		break;
-	case CPU_UP_CANCELED:
-	case CPU_UP_CANCELED_FROZEN:
-	case CPU_DEAD:
-	case CPU_DEAD_FROZEN:
-		topology_remove_dev(cpu);
-		break;
-	}
-	return notifier_from_errno(rc);
+    switch (action) {
+    case CPU_UP_PREPARE:
+    case CPU_UP_PREPARE_FROZEN:
+        rc = topology_add_dev(cpu);
+        break;
+    case CPU_UP_CANCELED:
+    case CPU_UP_CANCELED_FROZEN:
+    case CPU_DEAD:
+    case CPU_DEAD_FROZEN:
+        topology_remove_dev(cpu);
+        break;
+    }
+    return notifier_from_errno(rc);
 }
 
-static int __cpuinit topology_sysfs_init(void)
-{
-	int cpu;
-	int rc;
+static int __cpuinit topology_sysfs_init(void) {
+    int cpu;
+    int rc;
 
-	for_each_online_cpu(cpu) {
-		rc = topology_add_dev(cpu);
-		if (rc)
-			return rc;
-	}
-	hotcpu_notifier(topology_cpu_callback, 0);
+    for_each_online_cpu(cpu) {
+        rc = topology_add_dev(cpu);
+        if (rc)
+            return rc;
+    }
+    hotcpu_notifier(topology_cpu_callback, 0);
 
-	return 0;
+    return 0;
 }
 
 device_initcall(topology_sysfs_init);

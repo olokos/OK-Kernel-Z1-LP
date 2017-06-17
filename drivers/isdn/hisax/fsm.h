@@ -21,30 +21,30 @@ struct FsmInst;
 typedef void (*FSMFNPTR)(struct FsmInst *, int, void *);
 
 struct Fsm {
-	FSMFNPTR *jumpmatrix;
-	int state_count, event_count;
-	char **strEvent, **strState;
+    FSMFNPTR *jumpmatrix;
+    int state_count, event_count;
+    char **strEvent, **strState;
 };
 
 struct FsmInst {
-	struct Fsm *fsm;
-	int state;
-	int debug;
-	void *userdata;
-	int userint;
-	void (*printdebug) (struct FsmInst *, char *, ...);
+    struct Fsm *fsm;
+    int state;
+    int debug;
+    void *userdata;
+    int userint;
+    void (*printdebug) (struct FsmInst *, char *, ...);
 };
 
 struct FsmNode {
-	int state, event;
-	void (*routine) (struct FsmInst *, int, void *);
+    int state, event;
+    void (*routine) (struct FsmInst *, int, void *);
 };
 
 struct FsmTimer {
-	struct FsmInst *fi;
-	struct timer_list tl;
-	int event;
-	void *arg;
+    struct FsmInst *fi;
+    struct timer_list tl;
+    int event;
+    void *arg;
 };
 
 int FsmNew(struct Fsm *fsm, struct FsmNode *fnlist, int fncount);
@@ -53,9 +53,9 @@ int FsmEvent(struct FsmInst *fi, int event, void *arg);
 void FsmChangeState(struct FsmInst *fi, int newstate);
 void FsmInitTimer(struct FsmInst *fi, struct FsmTimer *ft);
 int FsmAddTimer(struct FsmTimer *ft, int millisec, int event,
-		void *arg, int where);
+                void *arg, int where);
 void FsmRestartTimer(struct FsmTimer *ft, int millisec, int event,
-		     void *arg, int where);
+                     void *arg, int where);
 void FsmDelTimer(struct FsmTimer *ft, int where);
 
 #endif

@@ -355,11 +355,11 @@ extern bool amd_iommu_iotlb_sup;
  * incoming PPR faults around.
  */
 struct amd_iommu_fault {
-	u64 address;    /* IO virtual address of the fault*/
-	u32 pasid;      /* Address space identifier */
-	u16 device_id;  /* Originating PCI device id */
-	u16 tag;        /* PPR tag */
-	u16 flags;      /* Fault flags */
+    u64 address;    /* IO virtual address of the fault*/
+    u32 pasid;      /* Address space identifier */
+    u16 device_id;  /* Originating PCI device id */
+    u16 tag;        /* PPR tag */
+    u16 flags;      /* Fault flags */
 
 };
 
@@ -377,21 +377,21 @@ struct iommu_domain;
  * independent of their use.
  */
 struct protection_domain {
-	struct list_head list;  /* for list of all protection domains */
-	struct list_head dev_list; /* List of all devices in this domain */
-	spinlock_t lock;	/* mostly used to lock the page table*/
-	struct mutex api_lock;	/* protect page tables in the iommu-api path */
-	u16 id;			/* the domain id written to the device table */
-	int mode;		/* paging mode (0-6 levels) */
-	u64 *pt_root;		/* page table root pointer */
-	int glx;		/* Number of levels for GCR3 table */
-	u64 *gcr3_tbl;		/* Guest CR3 table */
-	unsigned long flags;	/* flags to find out type of domain */
-	bool updated;		/* complete domain flush required */
-	unsigned dev_cnt;	/* devices assigned to this domain */
-	unsigned dev_iommu[MAX_IOMMUS]; /* per-IOMMU reference count */
-	void *priv;		/* private data */
-	struct iommu_domain *iommu_domain; /* Pointer to generic
+    struct list_head list;  /* for list of all protection domains */
+    struct list_head dev_list; /* List of all devices in this domain */
+    spinlock_t lock;	/* mostly used to lock the page table*/
+    struct mutex api_lock;	/* protect page tables in the iommu-api path */
+    u16 id;			/* the domain id written to the device table */
+    int mode;		/* paging mode (0-6 levels) */
+    u64 *pt_root;		/* page table root pointer */
+    int glx;		/* Number of levels for GCR3 table */
+    u64 *gcr3_tbl;		/* Guest CR3 table */
+    unsigned long flags;	/* flags to find out type of domain */
+    bool updated;		/* complete domain flush required */
+    unsigned dev_cnt;	/* devices assigned to this domain */
+    unsigned dev_iommu[MAX_IOMMUS]; /* per-IOMMU reference count */
+    void *priv;		/* private data */
+    struct iommu_domain *iommu_domain; /* Pointer to generic
 					      domain structure */
 
 };
@@ -400,21 +400,21 @@ struct protection_domain {
  * This struct contains device specific data for the IOMMU
  */
 struct iommu_dev_data {
-	struct list_head list;		  /* For domain->dev_list */
-	struct list_head dev_data_list;	  /* For global dev_data_list */
-	struct iommu_dev_data *alias_data;/* The alias dev_data */
-	struct protection_domain *domain; /* Domain the device is bound to */
-	atomic_t bind;			  /* Domain attach reverent count */
-	u16 devid;			  /* PCI Device ID */
-	bool iommu_v2;			  /* Device can make use of IOMMUv2 */
-	bool passthrough;		  /* Default for device is pt_domain */
-	struct {
-		bool enabled;
-		int qdep;
-	} ats;				  /* ATS state */
-	bool pri_tlp;			  /* PASID TLB required for
+    struct list_head list;		  /* For domain->dev_list */
+    struct list_head dev_data_list;	  /* For global dev_data_list */
+    struct iommu_dev_data *alias_data;/* The alias dev_data */
+    struct protection_domain *domain; /* Domain the device is bound to */
+    atomic_t bind;			  /* Domain attach reverent count */
+    u16 devid;			  /* PCI Device ID */
+    bool iommu_v2;			  /* Device can make use of IOMMUv2 */
+    bool passthrough;		  /* Default for device is pt_domain */
+    struct {
+        bool enabled;
+        int qdep;
+    } ats;				  /* ATS state */
+    bool pri_tlp;			  /* PASID TLB required for
 					     PPR completions */
-	u32 errata;			  /* Bitmap for errata to apply */
+    u32 errata;			  /* Bitmap for errata to apply */
 };
 
 /*
@@ -423,46 +423,46 @@ struct iommu_dev_data {
  */
 struct aperture_range {
 
-	/* address allocation bitmap */
-	unsigned long *bitmap;
+    /* address allocation bitmap */
+    unsigned long *bitmap;
 
-	/*
-	 * Array of PTE pages for the aperture. In this array we save all the
-	 * leaf pages of the domain page table used for the aperture. This way
-	 * we don't need to walk the page table to find a specific PTE. We can
-	 * just calculate its address in constant time.
-	 */
-	u64 *pte_pages[64];
+    /*
+     * Array of PTE pages for the aperture. In this array we save all the
+     * leaf pages of the domain page table used for the aperture. This way
+     * we don't need to walk the page table to find a specific PTE. We can
+     * just calculate its address in constant time.
+     */
+    u64 *pte_pages[64];
 
-	unsigned long offset;
+    unsigned long offset;
 };
 
 /*
  * Data container for a dma_ops specific protection domain
  */
 struct dma_ops_domain {
-	struct list_head list;
+    struct list_head list;
 
-	/* generic protection domain information */
-	struct protection_domain domain;
+    /* generic protection domain information */
+    struct protection_domain domain;
 
-	/* size of the aperture for the mappings */
-	unsigned long aperture_size;
+    /* size of the aperture for the mappings */
+    unsigned long aperture_size;
 
-	/* address we start to search for free addresses */
-	unsigned long next_address;
+    /* address we start to search for free addresses */
+    unsigned long next_address;
 
-	/* address space relevant data */
-	struct aperture_range *aperture[APERTURE_MAX_RANGES];
+    /* address space relevant data */
+    struct aperture_range *aperture[APERTURE_MAX_RANGES];
 
-	/* This will be set to true when TLB needs to be flushed */
-	bool need_flush;
+    /* This will be set to true when TLB needs to be flushed */
+    bool need_flush;
 
-	/*
-	 * if this is a preallocated domain, keep the device for which it was
-	 * preallocated in this variable
-	 */
-	u16 target_dev;
+    /*
+     * if this is a preallocated domain, keep the device for which it was
+     * preallocated in this variable
+     */
+    u16 target_dev;
 };
 
 /*
@@ -470,95 +470,95 @@ struct dma_ops_domain {
  * system.
  */
 struct amd_iommu {
-	struct list_head list;
+    struct list_head list;
 
-	/* Index within the IOMMU array */
-	int index;
+    /* Index within the IOMMU array */
+    int index;
 
-	/* locks the accesses to the hardware */
-	spinlock_t lock;
+    /* locks the accesses to the hardware */
+    spinlock_t lock;
 
-	/* Pointer to PCI device of this IOMMU */
-	struct pci_dev *dev;
+    /* Pointer to PCI device of this IOMMU */
+    struct pci_dev *dev;
 
-	/* physical address of MMIO space */
-	u64 mmio_phys;
-	/* virtual address of MMIO space */
-	u8 *mmio_base;
+    /* physical address of MMIO space */
+    u64 mmio_phys;
+    /* virtual address of MMIO space */
+    u8 *mmio_base;
 
-	/* capabilities of that IOMMU read from ACPI */
-	u32 cap;
+    /* capabilities of that IOMMU read from ACPI */
+    u32 cap;
 
-	/* flags read from acpi table */
-	u8 acpi_flags;
+    /* flags read from acpi table */
+    u8 acpi_flags;
 
-	/* Extended features */
-	u64 features;
+    /* Extended features */
+    u64 features;
 
-	/* IOMMUv2 */
-	bool is_iommu_v2;
+    /* IOMMUv2 */
+    bool is_iommu_v2;
 
-	/*
-	 * Capability pointer. There could be more than one IOMMU per PCI
-	 * device function if there are more than one AMD IOMMU capability
-	 * pointers.
-	 */
-	u16 cap_ptr;
+    /*
+     * Capability pointer. There could be more than one IOMMU per PCI
+     * device function if there are more than one AMD IOMMU capability
+     * pointers.
+     */
+    u16 cap_ptr;
 
-	/* pci domain of this IOMMU */
-	u16 pci_seg;
+    /* pci domain of this IOMMU */
+    u16 pci_seg;
 
-	/* first device this IOMMU handles. read from PCI */
-	u16 first_device;
-	/* last device this IOMMU handles. read from PCI */
-	u16 last_device;
+    /* first device this IOMMU handles. read from PCI */
+    u16 first_device;
+    /* last device this IOMMU handles. read from PCI */
+    u16 last_device;
 
-	/* start of exclusion range of that IOMMU */
-	u64 exclusion_start;
-	/* length of exclusion range of that IOMMU */
-	u64 exclusion_length;
+    /* start of exclusion range of that IOMMU */
+    u64 exclusion_start;
+    /* length of exclusion range of that IOMMU */
+    u64 exclusion_length;
 
-	/* command buffer virtual address */
-	u8 *cmd_buf;
-	/* size of command buffer */
-	u32 cmd_buf_size;
+    /* command buffer virtual address */
+    u8 *cmd_buf;
+    /* size of command buffer */
+    u32 cmd_buf_size;
 
-	/* size of event buffer */
-	u32 evt_buf_size;
-	/* event buffer virtual address */
-	u8 *evt_buf;
-	/* MSI number for event interrupt */
-	u16 evt_msi_num;
+    /* size of event buffer */
+    u32 evt_buf_size;
+    /* event buffer virtual address */
+    u8 *evt_buf;
+    /* MSI number for event interrupt */
+    u16 evt_msi_num;
 
-	/* Base of the PPR log, if present */
-	u8 *ppr_log;
+    /* Base of the PPR log, if present */
+    u8 *ppr_log;
 
-	/* true if interrupts for this IOMMU are already enabled */
-	bool int_enabled;
+    /* true if interrupts for this IOMMU are already enabled */
+    bool int_enabled;
 
-	/* if one, we need to send a completion wait command */
-	bool need_sync;
+    /* if one, we need to send a completion wait command */
+    bool need_sync;
 
-	/* default dma_ops domain for that IOMMU */
-	struct dma_ops_domain *default_dom;
+    /* default dma_ops domain for that IOMMU */
+    struct dma_ops_domain *default_dom;
 
-	/*
-	 * We can't rely on the BIOS to restore all values on reinit, so we
-	 * need to stash them
-	 */
+    /*
+     * We can't rely on the BIOS to restore all values on reinit, so we
+     * need to stash them
+     */
 
-	/* The iommu BAR */
-	u32 stored_addr_lo;
-	u32 stored_addr_hi;
+    /* The iommu BAR */
+    u32 stored_addr_lo;
+    u32 stored_addr_hi;
 
-	/*
-	 * Each iommu has 6 l1s, each of which is documented as having 0x12
-	 * registers
-	 */
-	u32 stored_l1[6][0x12];
+    /*
+     * Each iommu has 6 l1s, each of which is documented as having 0x12
+     * registers
+     */
+    u32 stored_l1[6][0x12];
 
-	/* The l2 indirect registers */
-	u32 stored_l2[0x83];
+    /* The l2 indirect registers */
+    u32 stored_l2[0x83];
 };
 
 /*
@@ -586,27 +586,27 @@ extern struct list_head amd_iommu_pd_list;
  * Structure defining one entry in the device table
  */
 struct dev_table_entry {
-	u64 data[4];
+    u64 data[4];
 };
 
 /*
  * One entry for unity mappings parsed out of the ACPI table.
  */
 struct unity_map_entry {
-	struct list_head list;
+    struct list_head list;
 
-	/* starting device id this entry is used for (including) */
-	u16 devid_start;
-	/* end device id this entry is used for (including) */
-	u16 devid_end;
+    /* starting device id this entry is used for (including) */
+    u16 devid_start;
+    /* end device id this entry is used for (including) */
+    u16 devid_end;
 
-	/* start address to unity map (including) */
-	u64 address_start;
-	/* end address to unity map (including) */
-	u64 address_end;
+    /* start address to unity map (including) */
+    u64 address_start;
+    /* end address to unity map (including) */
+    u64 address_end;
 
-	/* required protection */
-	int prot;
+    /* required protection */
+    int prot;
 };
 
 /*
@@ -663,17 +663,16 @@ extern int amd_iommu_max_glx_val;
 
 /* takes bus and device/function and returns the device id
  * FIXME: should that be in generic PCI code? */
-static inline u16 calc_devid(u8 bus, u8 devfn)
-{
-	return (((u16)bus) << 8) | devfn;
+static inline u16 calc_devid(u8 bus, u8 devfn) {
+    return (((u16)bus) << 8) | devfn;
 }
 
 #ifdef CONFIG_AMD_IOMMU_STATS
 
 struct __iommu_counter {
-	char *name;
-	struct dentry *dent;
-	u64 value;
+    char *name;
+    struct dentry *dent;
+    u64 value;
 };
 
 #define DECLARE_STATS_COUNTER(nm) \

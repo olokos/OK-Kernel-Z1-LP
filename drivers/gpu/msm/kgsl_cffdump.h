@@ -18,7 +18,9 @@
 
 extern unsigned int kgsl_cff_dump_enable;
 
-static inline bool kgsl_cffdump_flags_no_memzero(void) { return true; }
+static inline bool kgsl_cffdump_flags_no_memzero(void) {
+    return true;
+}
 
 struct kgsl_device_private;
 
@@ -29,24 +31,24 @@ void kgsl_cffdump_destroy(void);
 void kgsl_cffdump_open(struct kgsl_device *device);
 void kgsl_cffdump_close(struct kgsl_device *device);
 void kgsl_cffdump_syncmem(struct kgsl_device *,
-	struct kgsl_memdesc *memdesc, uint physaddr, uint sizebytes,
-	bool clean_cache);
+                          struct kgsl_memdesc *memdesc, uint physaddr, uint sizebytes,
+                          bool clean_cache);
 void kgsl_cffdump_setmem(struct kgsl_device *device, uint addr,
-			uint value, uint sizebytes);
+                         uint value, uint sizebytes);
 void kgsl_cffdump_regwrite(struct kgsl_device *device, uint addr,
-	uint value);
+                           uint value);
 void kgsl_cffdump_regpoll(struct kgsl_device *device, uint addr,
-	uint value, uint mask);
+                          uint value, uint mask);
 bool kgsl_cffdump_parse_ibs(struct kgsl_device_private *dev_priv,
-	const struct kgsl_memdesc *memdesc, uint gpuaddr, int sizedwords,
-	bool check_only);
+                            const struct kgsl_memdesc *memdesc, uint gpuaddr, int sizedwords,
+                            bool check_only);
 void kgsl_cffdump_user_event(struct kgsl_device *device,
-		unsigned int cff_opcode, unsigned int op1,
-		unsigned int op2, unsigned int op3,
-		unsigned int op4, unsigned int op5);
+                             unsigned int cff_opcode, unsigned int op1,
+                             unsigned int op2, unsigned int op3,
+                             unsigned int op4, unsigned int op5);
 
 void kgsl_cffdump_memory_base(struct kgsl_device *device, unsigned int base,
-			      unsigned int range, unsigned int gmemsize);
+                              unsigned int range, unsigned int gmemsize);
 
 void kgsl_cffdump_hang(struct kgsl_device *device);
 int kgsl_cff_dump_enable_set(void *data, u64 val);
@@ -54,84 +56,70 @@ int kgsl_cff_dump_enable_get(void *data, u64 *val);
 
 #else
 
-static inline void kgsl_cffdump_init(void)
-{
-	return;
+static inline void kgsl_cffdump_init(void) {
+    return;
 }
 
-static inline void kgsl_cffdump_destroy(void)
-{
-	return;
+static inline void kgsl_cffdump_destroy(void) {
+    return;
 }
 
-static inline void kgsl_cffdump_open(struct kgsl_device *device)
-{
-	return;
+static inline void kgsl_cffdump_open(struct kgsl_device *device) {
+    return;
 }
 
-static inline void kgsl_cffdump_close(struct kgsl_device *device)
-{
-	return;
+static inline void kgsl_cffdump_close(struct kgsl_device *device) {
+    return;
 }
 
 static inline void kgsl_cffdump_syncmem(struct kgsl_device *device,
-		struct kgsl_memdesc *memdesc, uint physaddr, uint sizebytes,
-		bool clean_cache)
-{
-	return;
+                                        struct kgsl_memdesc *memdesc, uint physaddr, uint sizebytes,
+                                        bool clean_cache) {
+    return;
 }
 
 static inline void kgsl_cffdump_setmem(struct kgsl_device *device, uint addr,
-		uint value, uint sizebytes)
-{
-	return;
+                                       uint value, uint sizebytes) {
+    return;
 }
 
 static inline void kgsl_cffdump_regwrite(struct kgsl_device *device, uint addr,
-					 uint value)
-{
-	return;
+        uint value) {
+    return;
 }
 
 static inline void kgsl_cffdump_regpoll(struct kgsl_device *device, uint addr,
-		uint value, uint mask)
-{
-	return;
+                                        uint value, uint mask) {
+    return;
 }
 
 static inline bool kgsl_cffdump_parse_ibs(struct kgsl_device_private *dev_priv,
-	const struct kgsl_memdesc *memdesc, uint gpuaddr, int sizedwords,
-	bool check_only)
-{
-	return false;
+        const struct kgsl_memdesc *memdesc, uint gpuaddr, int sizedwords,
+        bool check_only) {
+    return false;
 }
 
 static inline void kgsl_cffdump_memory_base(struct kgsl_device *device,
-		unsigned int base, unsigned int range, unsigned int gmemsize)
-{
-	return;
+        unsigned int base, unsigned int range, unsigned int gmemsize) {
+    return;
 }
 
-static inline void kgsl_cffdump_hang(struct kgsl_device *device)
-{
-	return;
+static inline void kgsl_cffdump_hang(struct kgsl_device *device) {
+    return;
 }
 
 static inline void kgsl_cffdump_user_event(struct kgsl_device *device,
-		unsigned int cff_opcode, unsigned int op1,
-		unsigned int op2, unsigned int op3,
-		unsigned int op4, unsigned int op5)
-{
-	return;
+        unsigned int cff_opcode, unsigned int op1,
+        unsigned int op2, unsigned int op3,
+        unsigned int op4, unsigned int op5) {
+    return;
 }
-static inline int kgsl_cff_dump_enable_set(void *data, u64 val)
-{
-	return -EINVAL;
+static inline int kgsl_cff_dump_enable_set(void *data, u64 val) {
+    return -EINVAL;
 }
 
-static inline int kgsl_cff_dump_enable_get(void *data, u64 *val)
-{
-	return -EINVAL;
+static inline int kgsl_cff_dump_enable_get(void *data, u64 *val) {
+    return -EINVAL;
 }
 
 #endif /* CONFIG_MSM_KGSL_CFF_DUMP */

@@ -293,7 +293,7 @@
 /*	PCIEPCCTLR	*/
 #define SH4A_PCIEPCCTLR		(0x020180)		/* R/W - 0x0000 0000 32 */
 
-											// Rev1.18
+// Rev1.18
 /*	PCIELAR0	*/
 #define	SH4A_PCIELAR0		(0x020200)	/* R/W R/W 0x0000 0000 32 */
 #define		BITS_LARn	(20)
@@ -569,15 +569,13 @@
 #define PCI_REG(x)		((x) + 0x40000)
 
 static inline void
-pci_write_reg(struct pci_channel *chan, unsigned long val, unsigned long reg)
-{
-	__raw_writel(val, chan->reg_base + reg);
+pci_write_reg(struct pci_channel *chan, unsigned long val, unsigned long reg) {
+    __raw_writel(val, chan->reg_base + reg);
 }
 
 static inline unsigned long
-pci_read_reg(struct pci_channel *chan, unsigned long reg)
-{
-	return __raw_readl(chan->reg_base + reg);
+pci_read_reg(struct pci_channel *chan, unsigned long reg) {
+    return __raw_readl(chan->reg_base + reg);
 }
 
 #endif /* __PCI_SH7786_H */

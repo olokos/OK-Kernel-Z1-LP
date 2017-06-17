@@ -25,8 +25,8 @@
 #define IA64_MAX_RSVD_REGIONS 9
 
 struct rsvd_region {
-	u64 start;	/* virtual address of beginning of element */
-	u64 end;	/* virtual address of end of element + 1 */
+    u64 start;	/* virtual address of beginning of element */
+    u64 end;	/* virtual address of end of element + 1 */
 };
 
 extern struct rsvd_region rsvd_region[IA64_MAX_RSVD_REGIONS + 1];
@@ -50,7 +50,7 @@ extern int reserve_elfcorehdr(u64 *start, u64 *end);
 #define GRANULEROUNDUP(n)	(((n)+IA64_GRANULE_SIZE-1) & ~(IA64_GRANULE_SIZE-1))
 
 #ifdef CONFIG_NUMA
-  extern void call_pernode_memory (unsigned long start, unsigned long len, void *func);
+extern void call_pernode_memory (unsigned long start, unsigned long len, void *func);
 #else
 # define call_pernode_memory(start, len, func)	(*func)(start, len, 0)
 #endif
@@ -61,15 +61,14 @@ extern int register_active_ranges(u64 start, u64 len, int nid);
 
 #ifdef CONFIG_VIRTUAL_MEM_MAP
 # define LARGE_GAP	0x40000000 /* Use virtual mem map if hole is > than this */
-  extern unsigned long VMALLOC_END;
-  extern struct page *vmem_map;
-  extern int find_largest_hole(u64 start, u64 end, void *arg);
-  extern int create_mem_map_page_table(u64 start, u64 end, void *arg);
-  extern int vmemmap_find_next_valid_pfn(int, int);
+extern unsigned long VMALLOC_END;
+extern struct page *vmem_map;
+extern int find_largest_hole(u64 start, u64 end, void *arg);
+extern int create_mem_map_page_table(u64 start, u64 end, void *arg);
+extern int vmemmap_find_next_valid_pfn(int, int);
 #else
-static inline int vmemmap_find_next_valid_pfn(int node, int i)
-{
-	return i + 1;
+static inline int vmemmap_find_next_valid_pfn(int node, int i) {
+    return i + 1;
 }
 #endif
 #endif /* meminit_h */

@@ -14,15 +14,15 @@
 #define __PLAT_SAMSUNG_SYSMMU_H __FILE__
 
 enum S5P_SYSMMU_INTERRUPT_TYPE {
-	SYSMMU_PAGEFAULT,
-	SYSMMU_AR_MULTIHIT,
-	SYSMMU_AW_MULTIHIT,
-	SYSMMU_BUSERROR,
-	SYSMMU_AR_SECURITY,
-	SYSMMU_AR_ACCESS,
-	SYSMMU_AW_SECURITY,
-	SYSMMU_AW_PROTECTION, /* 7 */
-	SYSMMU_FAULTS_NUM
+    SYSMMU_PAGEFAULT,
+    SYSMMU_AR_MULTIHIT,
+    SYSMMU_AW_MULTIHIT,
+    SYSMMU_BUSERROR,
+    SYSMMU_AR_SECURITY,
+    SYSMMU_AR_ACCESS,
+    SYSMMU_AW_SECURITY,
+    SYSMMU_AW_PROTECTION, /* 7 */
+    SYSMMU_FAULTS_NUM
 };
 
 #ifdef CONFIG_S5P_SYSTEM_MMU
@@ -82,9 +82,9 @@ void s5p_sysmmu_tlb_invalidate(sysmmu_ips ips);
  *         zero if the fault is not handled.
  */
 void s5p_sysmmu_set_fault_handler(sysmmu_ips ips,
-			int (*handler)(enum S5P_SYSMMU_INTERRUPT_TYPE itype,
-					unsigned long pgtable_base,
-					unsigned long fault_addr));
+                                  int (*handler)(enum S5P_SYSMMU_INTERRUPT_TYPE itype,
+                                          unsigned long pgtable_base,
+                                          unsigned long fault_addr));
 #else
 #define s5p_sysmmu_enable(ips, pgd) do { } while (0)
 #define s5p_sysmmu_disable(ips) do { } while (0)

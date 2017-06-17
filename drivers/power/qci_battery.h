@@ -13,12 +13,12 @@
  *
  */
 
- /*
- *
- *  The Driver with I/O communications via the I2C Interface for ON2 of AP BU.
- *  And it is only working on the nuvoTon WPCE775x Embedded Controller.
- *
- */
+/*
+*
+*  The Driver with I/O communications via the I2C Interface for ON2 of AP BU.
+*  And it is only working on the nuvoTon WPCE775x Embedded Controller.
+*
+*/
 
 #ifndef __QCI_BATTERY_H__
 #define __QCI_BATTERY_H__

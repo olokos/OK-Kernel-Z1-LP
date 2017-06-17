@@ -18,7 +18,7 @@
 typedef void (*irqvectptr)(void);
 
 struct etrax_interrupt_vector {
-	irqvectptr v[256];
+    irqvectptr v[256];
 };
 
 extern struct etrax_interrupt_vector *etrax_irv;	/* head.S */

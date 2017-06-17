@@ -35,8 +35,8 @@
 #define PXA_CAMERA_VSP		0x400
 
 struct pxacamera_platform_data {
-	unsigned long flags;
-	unsigned long mclk_10khz;
+    unsigned long flags;
+    unsigned long mclk_10khz;
 };
 
 extern void pxa_set_camera_info(struct pxacamera_platform_data *);

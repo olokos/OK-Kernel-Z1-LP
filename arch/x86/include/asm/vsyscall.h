@@ -2,9 +2,9 @@
 #define _ASM_X86_VSYSCALL_H
 
 enum vsyscall_num {
-	__NR_vgettimeofday,
-	__NR_vtime,
-	__NR_vgetcpu,
+    __NR_vgettimeofday,
+    __NR_vtime,
+    __NR_vgetcpu,
 };
 
 #define VSYSCALL_START (-10UL << 20)

@@ -31,33 +31,33 @@
 #define RESTRK_1080P_TURBO_PERF_LEVEL (RESTRK_1080P_MAX_PERF_LEVEL + 1)
 
 struct res_trk_context {
-	struct device *device;
-	u32 irq_num;
-	struct mutex lock;
-	struct clk *vcodec_clk;
-	struct clk *vcodec_pclk;
-	unsigned long vcodec_clk_rate;
-	unsigned int clock_enabled;
-	unsigned int perf_level;
-	struct regulator *footswitch;
-	struct msm_vidc_platform_data *vidc_platform_data;
-	int memtype;
-	int fw_mem_type;
-	int cmd_mem_type;
+    struct device *device;
+    u32 irq_num;
+    struct mutex lock;
+    struct clk *vcodec_clk;
+    struct clk *vcodec_pclk;
+    unsigned long vcodec_clk_rate;
+    unsigned int clock_enabled;
+    unsigned int perf_level;
+    struct regulator *footswitch;
+    struct msm_vidc_platform_data *vidc_platform_data;
+    int memtype;
+    int fw_mem_type;
+    int cmd_mem_type;
 #ifdef CONFIG_MSM_BUS_SCALING
-	struct msm_bus_scale_pdata *vidc_bus_client_pdata;
-	uint32_t     pcl;
+    struct msm_bus_scale_pdata *vidc_bus_client_pdata;
+    uint32_t     pcl;
 #endif
-	u32 core_type;
-	struct ddl_buf_addr firmware_addr;
-	struct ion_client *res_ion_client;
-	u32 disable_dmx;
-	u32 disable_fullhd;
-	enum ddl_mem_area res_mem_type;
-	u32 mmu_clks_on;
-	u32 secure_session;
-	struct mutex secure_lock;
-	u32 sec_clk_heap;
+    u32 core_type;
+    struct ddl_buf_addr firmware_addr;
+    struct ion_client *res_ion_client;
+    u32 disable_dmx;
+    u32 disable_fullhd;
+    enum ddl_mem_area res_mem_type;
+    u32 mmu_clks_on;
+    u32 secure_session;
+    struct mutex secure_lock;
+    u32 sec_clk_heap;
 };
 
 #if DEBUG
@@ -78,6 +78,6 @@ struct res_trk_context {
 
 #ifdef CONFIG_MSM_BUS_SCALING
 int res_trk_update_bus_perf_level(struct vcd_dev_ctxt *dev_ctxt,
-				u32 perf_level);
+                                  u32 perf_level);
 #endif
 #endif

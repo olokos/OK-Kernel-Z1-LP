@@ -146,37 +146,37 @@
  *   public (read-only) portion of aiutils handle returned by si_attach()
  */
 struct si_pub {
-	int ccrev;		/* chip common core rev */
-	u32 cccaps;		/* chip common capabilities */
-	int pmurev;		/* pmu core rev */
-	u32 pmucaps;		/* pmu capabilities */
-	uint boardtype;		/* board type */
-	uint boardvendor;	/* board vendor */
-	uint chip;		/* chip number */
-	uint chiprev;		/* chip revision */
-	uint chippkg;		/* chip package option */
+    int ccrev;		/* chip common core rev */
+    u32 cccaps;		/* chip common capabilities */
+    int pmurev;		/* pmu core rev */
+    u32 pmucaps;		/* pmu capabilities */
+    uint boardtype;		/* board type */
+    uint boardvendor;	/* board vendor */
+    uint chip;		/* chip number */
+    uint chiprev;		/* chip revision */
+    uint chippkg;		/* chip package option */
 };
 
 struct pci_dev;
 
 struct gpioh_item {
-	void *arg;
-	bool level;
-	void (*handler) (u32 stat, void *arg);
-	u32 event;
-	struct gpioh_item *next;
+    void *arg;
+    bool level;
+    void (*handler) (u32 stat, void *arg);
+    u32 event;
+    struct gpioh_item *next;
 };
 
 /* misc si info needed by some of the routines */
 struct si_info {
-	struct si_pub pub;	/* back plane public state (must be first) */
-	struct bcma_bus *icbus;	/* handle to soc interconnect bus */
-	struct pci_dev *pcibus;	/* handle to pci bus */
-	struct pcicore_info *pch; /* PCI/E core handle */
-	struct bcma_device *buscore;
-	struct list_head var_list; /* list of srom variables */
+    struct si_pub pub;	/* back plane public state (must be first) */
+    struct bcma_bus *icbus;	/* handle to soc interconnect bus */
+    struct pci_dev *pcibus;	/* handle to pci bus */
+    struct pcicore_info *pch; /* PCI/E core handle */
+    struct bcma_device *buscore;
+    struct list_head var_list; /* list of srom variables */
 
-	u32 chipst;		/* chip status */
+    u32 chipst;		/* chip status */
 };
 
 /*
@@ -190,7 +190,7 @@ struct si_info {
 
 /* AMBA Interconnect exported externs */
 extern struct bcma_device *ai_findcore(struct si_pub *sih,
-				       u16 coreid, u16 coreunit);
+                                       u16 coreid, u16 coreunit);
 extern u32 ai_core_cflags(struct bcma_device *core, u32 mask, u32 val);
 
 /* === exported functions === */
@@ -204,7 +204,7 @@ extern bool ai_clkctl_cc(struct si_pub *sih, uint mode);
 extern int ai_clkctl_xtal(struct si_pub *sih, uint what, bool on);
 extern bool ai_deviceremoved(struct si_pub *sih);
 extern u32 ai_gpiocontrol(struct si_pub *sih, u32 mask, u32 val,
-			     u8 priority);
+                          u8 priority);
 
 /* OTP status */
 extern bool ai_is_otp_disabled(struct si_pub *sih);
@@ -224,49 +224,40 @@ extern void ai_epa_4313war(struct si_pub *sih);
 extern uint ai_get_buscoretype(struct si_pub *sih);
 extern uint ai_get_buscorerev(struct si_pub *sih);
 
-static inline int ai_get_ccrev(struct si_pub *sih)
-{
-	return sih->ccrev;
+static inline int ai_get_ccrev(struct si_pub *sih) {
+    return sih->ccrev;
 }
 
-static inline u32 ai_get_cccaps(struct si_pub *sih)
-{
-	return sih->cccaps;
+static inline u32 ai_get_cccaps(struct si_pub *sih) {
+    return sih->cccaps;
 }
 
-static inline int ai_get_pmurev(struct si_pub *sih)
-{
-	return sih->pmurev;
+static inline int ai_get_pmurev(struct si_pub *sih) {
+    return sih->pmurev;
 }
 
-static inline u32 ai_get_pmucaps(struct si_pub *sih)
-{
-	return sih->pmucaps;
+static inline u32 ai_get_pmucaps(struct si_pub *sih) {
+    return sih->pmucaps;
 }
 
-static inline uint ai_get_boardtype(struct si_pub *sih)
-{
-	return sih->boardtype;
+static inline uint ai_get_boardtype(struct si_pub *sih) {
+    return sih->boardtype;
 }
 
-static inline uint ai_get_boardvendor(struct si_pub *sih)
-{
-	return sih->boardvendor;
+static inline uint ai_get_boardvendor(struct si_pub *sih) {
+    return sih->boardvendor;
 }
 
-static inline uint ai_get_chip_id(struct si_pub *sih)
-{
-	return sih->chip;
+static inline uint ai_get_chip_id(struct si_pub *sih) {
+    return sih->chip;
 }
 
-static inline uint ai_get_chiprev(struct si_pub *sih)
-{
-	return sih->chiprev;
+static inline uint ai_get_chiprev(struct si_pub *sih) {
+    return sih->chiprev;
 }
 
-static inline uint ai_get_chippkg(struct si_pub *sih)
-{
-	return sih->chippkg;
+static inline uint ai_get_chippkg(struct si_pub *sih) {
+    return sih->chippkg;
 }
 
 #endif				/* _BRCM_AIUTILS_H_ */

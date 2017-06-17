@@ -20,15 +20,15 @@
 #define MSM_MPM_NR_MPM_IRQS  64
 
 struct msm_mpm_device_data {
-	uint16_t *irqs_m2a;
-	unsigned int irqs_m2a_size;
-	uint16_t *bypassed_apps_irqs;
-	unsigned int bypassed_apps_irqs_size;
-	void __iomem *mpm_request_reg_base;
-	void __iomem *mpm_status_reg_base;
-	void __iomem *mpm_apps_ipc_reg;
-	unsigned int mpm_apps_ipc_val;
-	unsigned int mpm_ipc_irq;
+    uint16_t *irqs_m2a;
+    unsigned int irqs_m2a_size;
+    uint16_t *bypassed_apps_irqs;
+    unsigned int bypassed_apps_irqs_size;
+    void __iomem *mpm_request_reg_base;
+    void __iomem *mpm_status_reg_base;
+    void __iomem *mpm_apps_ipc_reg;
+    unsigned int mpm_apps_ipc_val;
+    unsigned int mpm_ipc_irq;
 };
 
 extern struct msm_mpm_device_data msm8660_mpm_dev_data;
@@ -118,7 +118,7 @@ bool msm_mpm_gpio_irqs_detectable(bool from_idle);
  * monitor the active irqs before going to sleep.
  */
 void msm_mpm_enter_sleep(uint32_t sclk_count, bool from_idle,
-		const struct cpumask *cpumask);
+                         const struct cpumask *cpumask);
 /**
  * msm_mpm_exit_sleep() -Called from PM code after resuming from low power mode
  *
@@ -144,25 +144,33 @@ void msm_mpm_exit_sleep(bool from_idle);
  */
 void __init of_mpm_init(struct device_node *node);
 #else
-static inline int msm_mpm_enable_irq(unsigned int irq, unsigned int enable)
-{ return -ENODEV; }
-static inline int msm_mpm_set_irq_wake(unsigned int irq, unsigned int on)
-{ return -ENODEV; }
-static inline int msm_mpm_set_irq_type(unsigned int irq, unsigned int flow_type)
-{ return -ENODEV; }
-static inline int msm_mpm_enable_pin(unsigned int pin, unsigned int enable)
-{ return -ENODEV; }
-static inline int msm_mpm_set_pin_wake(unsigned int pin, unsigned int on)
-{ return -ENODEV; }
+static inline int msm_mpm_enable_irq(unsigned int irq, unsigned int enable) {
+    return -ENODEV;
+}
+static inline int msm_mpm_set_irq_wake(unsigned int irq, unsigned int on) {
+    return -ENODEV;
+}
+static inline int msm_mpm_set_irq_type(unsigned int irq, unsigned int flow_type) {
+    return -ENODEV;
+}
+static inline int msm_mpm_enable_pin(unsigned int pin, unsigned int enable) {
+    return -ENODEV;
+}
+static inline int msm_mpm_set_pin_wake(unsigned int pin, unsigned int on) {
+    return -ENODEV;
+}
 static inline int msm_mpm_set_pin_type(unsigned int pin,
-				       unsigned int flow_type)
-{ return -ENODEV; }
-static inline bool msm_mpm_irqs_detectable(bool from_idle)
-{ return false; }
-static inline bool msm_mpm_gpio_irqs_detectable(bool from_idle)
-{ return false; }
+                                       unsigned int flow_type) {
+    return -ENODEV;
+}
+static inline bool msm_mpm_irqs_detectable(bool from_idle) {
+    return false;
+}
+static inline bool msm_mpm_gpio_irqs_detectable(bool from_idle) {
+    return false;
+}
 static inline void msm_mpm_enter_sleep(uint32_t sclk_count, bool from_idle
-		const struct cpumask *cpumask) {}
+                                       const struct cpumask *cpumask) {}
 static inline void msm_mpm_exit_sleep(bool from_idle) {}
 static inline void __init of_mpm_init(struct device_node *node) {}
 #endif
@@ -182,7 +190,7 @@ void msm_mpm_suspend_prepare(void);
  */
 void msm_mpm_suspend_wake(void);
 #else
-static inline void msm_mpm_suspend_prepare(void){}
+static inline void msm_mpm_suspend_prepare(void) {}
 static inline void msm_mpm_suspend_wake(void) {}
 #endif
 #endif /* __ARCH_ARM_MACH_MSM_MPM_H */

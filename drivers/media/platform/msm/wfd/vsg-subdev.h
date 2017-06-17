@@ -24,62 +24,62 @@
 #define VSG_MAGIC_IOCTL 'V'
 
 enum vsg_flags {
-	VSG_NEVER_RELEASE = 1<<0,
-	VSG_NEVER_SET_LAST_BUFFER = 1<<1,
-	VSG_BUF_BEING_ENCODED = 1<<2,
+    VSG_NEVER_RELEASE = 1<<0,
+    VSG_NEVER_SET_LAST_BUFFER = 1<<1,
+    VSG_BUF_BEING_ENCODED = 1<<2,
 };
 
 enum vsg_modes {
-	VSG_MODE_CFR,
-	VSG_MODE_VFR,
+    VSG_MODE_CFR,
+    VSG_MODE_VFR,
 };
 
 enum vsg_states {
-	VSG_STATE_NONE,
-	VSG_STATE_STARTED,
-	VSG_STATE_STOPPED,
-	VSG_STATE_ERROR
+    VSG_STATE_NONE,
+    VSG_STATE_STARTED,
+    VSG_STATE_STOPPED,
+    VSG_STATE_ERROR
 };
 
 struct vsg_buf_info {
-	struct mdp_buf_info mdp_buf_info;
-	struct timespec time;
-	/* Internal */
-	struct list_head node;
-	uint32_t flags;
+    struct mdp_buf_info mdp_buf_info;
+    struct timespec time;
+    /* Internal */
+    struct list_head node;
+    uint32_t flags;
 };
 
 struct vsg_msg_ops {
-	void *cbdata;
-	int (*encode_frame)(void *cbdata, struct vsg_buf_info *buffer);
-	int (*release_input_frame)(void *cbdata, struct vsg_buf_info *buffer);
+    void *cbdata;
+    int (*encode_frame)(void *cbdata, struct vsg_buf_info *buffer);
+    int (*release_input_frame)(void *cbdata, struct vsg_buf_info *buffer);
 };
 
 struct vsg_context {
-	struct vsg_buf_info free_queue, busy_queue;
-	struct vsg_msg_ops vmops;
-	/* All time related values below in nanosecs */
-	int64_t frame_interval, max_frame_interval, frame_interval_variance;
-	struct workqueue_struct *work_queue;
-	struct hrtimer threshold_timer;
-	struct mutex mutex;
-	struct vsg_buf_info *last_buffer;
-	int mode;
-	int state;
-	bool vsync_wait;
-	struct timespec delayed_frame_interval;
+    struct vsg_buf_info free_queue, busy_queue;
+    struct vsg_msg_ops vmops;
+    /* All time related values below in nanosecs */
+    int64_t frame_interval, max_frame_interval, frame_interval_variance;
+    struct workqueue_struct *work_queue;
+    struct hrtimer threshold_timer;
+    struct mutex mutex;
+    struct vsg_buf_info *last_buffer;
+    int mode;
+    int state;
+    bool vsync_wait;
+    struct timespec delayed_frame_interval;
 };
 
 struct vsg_work {
-	struct vsg_context *context;
-	struct work_struct work;
-	bool work_delayed;
+    struct vsg_context *context;
+    struct work_struct work;
+    bool work_delayed;
 };
 
 struct vsg_encode_work {
-	struct vsg_buf_info *buf;
-	struct vsg_context *context;
-	struct work_struct work;
+    struct vsg_buf_info *buf;
+    struct vsg_context *context;
+    struct work_struct work;
 };
 
 #define VSG_OPEN  _IO(VSG_MAGIC_IOCTL, 1)

@@ -204,15 +204,15 @@ struct c67x00_device;
  * @mode: SIE mode (host/peripheral/otg/not used)
  */
 struct c67x00_sie {
-	/* Entries to be used by the subdrivers */
-	spinlock_t lock;	/* protect this structure */
-	void *private_data;
-	void (*irq) (struct c67x00_sie *sie, u16 int_status, u16 msg);
+    /* Entries to be used by the subdrivers */
+    spinlock_t lock;	/* protect this structure */
+    void *private_data;
+    void (*irq) (struct c67x00_sie *sie, u16 int_status, u16 msg);
 
-	/* Read only: */
-	struct c67x00_device *dev;
-	int sie_num;
-	int mode;
+    /* Read only: */
+    struct c67x00_device *dev;
+    int sie_num;
+    int mode;
 };
 
 #define sie_dev(s)	(&(s)->dev->pdev->dev)
@@ -221,20 +221,20 @@ struct c67x00_sie {
  * struct c67x00_lcp
  */
 struct c67x00_lcp {
-	/* Internal use only */
-	struct mutex mutex;
-	struct completion msg_received;
-	u16 last_msg;
+    /* Internal use only */
+    struct mutex mutex;
+    struct completion msg_received;
+    u16 last_msg;
 };
 
 /*
  * struct c67x00_hpi
  */
 struct c67x00_hpi {
-	void __iomem *base;
-	int regstep;
-	spinlock_t lock;
-	struct c67x00_lcp lcp;
+    void __iomem *base;
+    int regstep;
+    spinlock_t lock;
+    struct c67x00_lcp lcp;
 };
 
 #define C67X00_SIES	2
@@ -248,10 +248,10 @@ struct c67x00_hpi {
  * @pdata: configuration provided by the platform
  */
 struct c67x00_device {
-	struct c67x00_hpi hpi;
-	struct c67x00_sie sie[C67X00_SIES];
-	struct platform_device *pdev;
-	struct c67x00_platform_data *pdata;
+    struct c67x00_hpi hpi;
+    struct c67x00_sie sie[C67X00_SIES];
+    struct platform_device *pdev;
+    struct c67x00_platform_data *pdata;
 };
 
 /* ---------------------------------------------------------------------
@@ -270,9 +270,9 @@ u16 c67x00_ll_get_usb_ctl(struct c67x00_sie *sie);
 void c67x00_ll_usb_clear_status(struct c67x00_sie *sie, u16 bits);
 u16 c67x00_ll_usb_get_status(struct c67x00_sie *sie);
 void c67x00_ll_write_mem_le16(struct c67x00_device *dev, u16 addr,
-			      void *data, int len);
+                              void *data, int len);
 void c67x00_ll_read_mem_le16(struct c67x00_device *dev, u16 addr,
-			     void *data, int len);
+                             void *data, int len);
 
 /* Host specific functions */
 void c67x00_ll_set_husb_eot(struct c67x00_device *dev, u16 value);

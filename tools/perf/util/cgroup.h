@@ -4,9 +4,9 @@
 struct option;
 
 struct cgroup_sel {
-	char *name;
-	int fd;
-	int refcnt;
+    char *name;
+    int fd;
+    int refcnt;
 };
 
 

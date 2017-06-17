@@ -30,48 +30,43 @@
 #define IO_MEM_RESOURCE_START	0UL
 #define IO_MEM_RESOURCE_END	0x1fffffffUL
 
-static void __init iomem_resource_init(void)
-{
-	iomem_resource.start = IO_MEM_RESOURCE_START;
-	iomem_resource.end = IO_MEM_RESOURCE_END;
+static void __init iomem_resource_init(void) {
+    iomem_resource.start = IO_MEM_RESOURCE_START;
+    iomem_resource.end = IO_MEM_RESOURCE_END;
 }
 
-void __init plat_time_init(void)
-{
-	unsigned long tclock;
+void __init plat_time_init(void) {
+    unsigned long tclock;
 
-	vr41xx_calculate_clock_frequency();
+    vr41xx_calculate_clock_frequency();
 
-	tclock = vr41xx_get_tclock_frequency();
-	if (current_cpu_data.processor_id == PRID_VR4131_REV2_0 ||
-	    current_cpu_data.processor_id == PRID_VR4131_REV2_1)
-		mips_hpt_frequency = tclock / 2;
-	else
-		mips_hpt_frequency = tclock / 4;
+    tclock = vr41xx_get_tclock_frequency();
+    if (current_cpu_data.processor_id == PRID_VR4131_REV2_0 ||
+            current_cpu_data.processor_id == PRID_VR4131_REV2_1)
+        mips_hpt_frequency = tclock / 2;
+    else
+        mips_hpt_frequency = tclock / 4;
 }
 
-void __init plat_mem_setup(void)
-{
-	iomem_resource_init();
+void __init plat_mem_setup(void) {
+    iomem_resource_init();
 
-	vr41xx_siu_setup();
+    vr41xx_siu_setup();
 }
 
-void __init prom_init(void)
-{
-	int argc, i;
-	char **argv;
+void __init prom_init(void) {
+    int argc, i;
+    char **argv;
 
-	argc = fw_arg0;
-	argv = (char **)fw_arg1;
+    argc = fw_arg0;
+    argv = (char **)fw_arg1;
 
-	for (i = 1; i < argc; i++) {
-		strlcat(arcs_cmdline, argv[i], COMMAND_LINE_SIZE);
-		if (i < (argc - 1))
-			strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
-	}
+    for (i = 1; i < argc; i++) {
+        strlcat(arcs_cmdline, argv[i], COMMAND_LINE_SIZE);
+        if (i < (argc - 1))
+            strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
+    }
 }
 
-void __init prom_free_prom_memory(void)
-{
+void __init prom_free_prom_memory(void) {
 }

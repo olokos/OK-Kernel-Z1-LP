@@ -37,36 +37,36 @@
 #define NBSH_ERR_CPU_VAL		BIT(24)
 
 enum tt_ids {
-	TT_INSTR = 0,
-	TT_DATA,
-	TT_GEN,
-	TT_RESV,
+    TT_INSTR = 0,
+    TT_DATA,
+    TT_GEN,
+    TT_RESV,
 };
 
 enum ll_ids {
-	LL_RESV = 0,
-	LL_L1,
-	LL_L2,
-	LL_LG,
+    LL_RESV = 0,
+    LL_L1,
+    LL_L2,
+    LL_LG,
 };
 
 enum ii_ids {
-	II_MEM = 0,
-	II_RESV,
-	II_IO,
-	II_GEN,
+    II_MEM = 0,
+    II_RESV,
+    II_IO,
+    II_GEN,
 };
 
 enum rrrr_ids {
-	R4_GEN	= 0,
-	R4_RD,
-	R4_WR,
-	R4_DRD,
-	R4_DWR,
-	R4_IRD,
-	R4_PREF,
-	R4_EVICT,
-	R4_SNOOP,
+    R4_GEN	= 0,
+    R4_RD,
+    R4_WR,
+    R4_DRD,
+    R4_DWR,
+    R4_IRD,
+    R4_PREF,
+    R4_EVICT,
+    R4_SNOOP,
 };
 
 extern const char * const tt_msgs[];
@@ -80,8 +80,8 @@ extern const char * const ii_msgs[];
  * per-family decoder ops
  */
 struct amd_decoder_ops {
-	bool (*dc_mce)(u16, u8);
-	bool (*ic_mce)(u16, u8);
+    bool (*dc_mce)(u16, u8);
+    bool (*ic_mce)(u16, u8);
 };
 
 void amd_report_gart_errors(bool);

@@ -91,9 +91,8 @@ static int          msglevel                = MSG_LEVEL_INFO;
 
 void
 vMgrEncodeBeacon(
-      PWLAN_FR_BEACON  pFrame
-     )
-{
+    PWLAN_FR_BEACON  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -123,9 +122,8 @@ vMgrEncodeBeacon(
 
 void
 vMgrDecodeBeacon(
-      PWLAN_FR_BEACON  pFrame
-    )
-{
+    PWLAN_FR_BEACON  pFrame
+) {
     PWLAN_IE        pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -173,7 +171,7 @@ vMgrDecodeBeacon(
             break;
 
         case WLAN_EID_RSN:
-            if (pFrame->pRSN == NULL) 
+            if (pFrame->pRSN == NULL)
                 pFrame->pRSN = (PWLAN_IE_RSN)pItem;
             break;
         case WLAN_EID_RSN_WPA:
@@ -219,7 +217,7 @@ vMgrDecodeBeacon(
 
         default:
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "Unrecognized EID=%dd in beacon decode.\n", pItem->byElementID);
-                break;
+            break;
 
         }
         pItem = (PWLAN_IE)(((PBYTE)pItem) + 2 + pItem->len);
@@ -241,9 +239,8 @@ vMgrDecodeBeacon(
 
 void
 vMgrEncodeIBSSATIM(
-      PWLAN_FR_IBSSATIM   pFrame
-    )
-{
+    PWLAN_FR_IBSSATIM   pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
     pFrame->len = WLAN_HDR_ADDR3_LEN;
 }
@@ -262,9 +259,8 @@ vMgrEncodeIBSSATIM(
 
 void
 vMgrDecodeIBSSATIM(
-      PWLAN_FR_IBSSATIM   pFrame
-    )
-{
+    PWLAN_FR_IBSSATIM   pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 }
 
@@ -282,9 +278,8 @@ vMgrDecodeIBSSATIM(
 
 void
 vMgrEncodeDisassociation(
-      PWLAN_FR_DISASSOC  pFrame
-    )
-{
+    PWLAN_FR_DISASSOC  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
 
@@ -308,9 +303,8 @@ vMgrEncodeDisassociation(
 
 void
 vMgrDecodeDisassociation(
-      PWLAN_FR_DISASSOC  pFrame
-    )
-{
+    PWLAN_FR_DISASSOC  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -332,9 +326,8 @@ vMgrDecodeDisassociation(
 
 void
 vMgrEncodeAssocRequest(
-      PWLAN_FR_ASSOCREQ  pFrame
-    )
-{
+    PWLAN_FR_ASSOCREQ  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
     /* Fixed Fields */
     pFrame->pwCapInfo = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
@@ -358,9 +351,8 @@ vMgrEncodeAssocRequest(
 
 void
 vMgrDecodeAssocRequest(
-      PWLAN_FR_ASSOCREQ  pFrame
-    )
-{
+    PWLAN_FR_ASSOCREQ  pFrame
+) {
     PWLAN_IE   pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -368,11 +360,11 @@ vMgrDecodeAssocRequest(
     pFrame->pwCapInfo = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
                                 + WLAN_ASSOCREQ_OFF_CAP_INFO);
     pFrame->pwListenInterval = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                                + WLAN_ASSOCREQ_OFF_LISTEN_INT);
+                                       + WLAN_ASSOCREQ_OFF_LISTEN_INT);
 
     /* Information elements */
     pItem = (PWLAN_IE)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                            + WLAN_ASSOCREQ_OFF_SSID);
+                       + WLAN_ASSOCREQ_OFF_SSID);
 
     while (((PBYTE)pItem) < (pFrame->pBuf + pFrame->len)) {
         switch (pItem->byElementID) {
@@ -422,9 +414,8 @@ vMgrDecodeAssocRequest(
 
 void
 vMgrEncodeAssocResponse(
-      PWLAN_FR_ASSOCRESP  pFrame
-     )
-{
+    PWLAN_FR_ASSOCRESP  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -452,9 +443,8 @@ vMgrEncodeAssocResponse(
 
 void
 vMgrDecodeAssocResponse(
-     PWLAN_FR_ASSOCRESP  pFrame
-     )
-{
+    PWLAN_FR_ASSOCRESP  pFrame
+) {
     PWLAN_IE   pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -469,7 +459,7 @@ vMgrDecodeAssocResponse(
 
     /* Information elements */
     pFrame->pSuppRates  = (PWLAN_IE_SUPP_RATES)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                           + WLAN_ASSOCRESP_OFF_SUPP_RATES);
+                          + WLAN_ASSOCRESP_OFF_SUPP_RATES);
 
     pItem = (PWLAN_IE)(pFrame->pSuppRates);
     pItem = (PWLAN_IE)(((PBYTE)pItem) + 2 + pItem->len);
@@ -477,7 +467,7 @@ vMgrDecodeAssocResponse(
     if ((((PBYTE)pItem) < (pFrame->pBuf + pFrame->len)) && (pItem->byElementID == WLAN_EID_EXTSUPP_RATES)) {
         pFrame->pExtSuppRates = (PWLAN_IE_SUPP_RATES)pItem;
         DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "pFrame->pExtSuppRates=[%p].\n", pItem);
-	} else
+    } else
         pFrame->pExtSuppRates = NULL;
 }
 
@@ -495,16 +485,15 @@ vMgrDecodeAssocResponse(
 
 void
 vMgrEncodeReassocRequest(
-      PWLAN_FR_REASSOCREQ  pFrame
-     )
-{
+    PWLAN_FR_REASSOCREQ  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
     pFrame->pwCapInfo = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
                                 + WLAN_REASSOCREQ_OFF_CAP_INFO);
     pFrame->pwListenInterval = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                                      + WLAN_REASSOCREQ_OFF_LISTEN_INT);
+                                       + WLAN_REASSOCREQ_OFF_LISTEN_INT);
     pFrame->pAddrCurrAP = (PIEEE_ADDR)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
                                        + WLAN_REASSOCREQ_OFF_CURR_AP);
     pFrame->len = WLAN_HDR_ADDR3_LEN + WLAN_REASSOCREQ_OFF_CURR_AP + sizeof(*(pFrame->pAddrCurrAP));
@@ -525,9 +514,8 @@ vMgrEncodeReassocRequest(
 
 void
 vMgrDecodeReassocRequest(
-      PWLAN_FR_REASSOCREQ  pFrame
-     )
-{
+    PWLAN_FR_REASSOCREQ  pFrame
+) {
     PWLAN_IE   pItem;
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
@@ -535,7 +523,7 @@ vMgrDecodeReassocRequest(
     pFrame->pwCapInfo = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
                                 + WLAN_REASSOCREQ_OFF_CAP_INFO);
     pFrame->pwListenInterval = (PWORD)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                                      + WLAN_REASSOCREQ_OFF_LISTEN_INT);
+                                       + WLAN_REASSOCREQ_OFF_LISTEN_INT);
     pFrame->pAddrCurrAP = (PIEEE_ADDR)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
                                        + WLAN_REASSOCREQ_OFF_CURR_AP);
 
@@ -560,7 +548,7 @@ vMgrDecodeReassocRequest(
                 pFrame->pRSN = (PWLAN_IE_RSN)pItem;
             break;
         case WLAN_EID_RSN_WPA:
-		if (pFrame->pRSNWPA == NULL)
+            if (pFrame->pRSNWPA == NULL)
                 if (WPAb_Is_RSN((PWLAN_IE_RSN_EXT)pItem) == TRUE)
                     pFrame->pRSNWPA = (PWLAN_IE_RSN_EXT)pItem;
             break;
@@ -571,7 +559,7 @@ vMgrDecodeReassocRequest(
             break;
         default:
             DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "Unrecognized EID=%dd in reassocreq decode.\n",
-                        pItem->byElementID);
+                    pItem->byElementID);
             break;
         }
         pItem = (PWLAN_IE)(((PBYTE)pItem) + 2 + pItem->len);
@@ -594,9 +582,8 @@ vMgrDecodeReassocRequest(
 
 void
 vMgrEncodeProbeRequest(
-     PWLAN_FR_PROBEREQ  pFrame
-     )
-{
+    PWLAN_FR_PROBEREQ  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
     pFrame->len = WLAN_HDR_ADDR3_LEN;
 }
@@ -614,9 +601,8 @@ vMgrEncodeProbeRequest(
 
 void
 vMgrDecodeProbeRequest(
-     PWLAN_FR_PROBEREQ  pFrame
-     )
-{
+    PWLAN_FR_PROBEREQ  pFrame
+) {
     PWLAN_IE   pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -666,9 +652,8 @@ vMgrDecodeProbeRequest(
 
 void
 vMgrEncodeProbeResponse(
-     PWLAN_FR_PROBERESP  pFrame
-    )
-{
+    PWLAN_FR_PROBERESP  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -698,9 +683,8 @@ vMgrEncodeProbeResponse(
 
 void
 vMgrDecodeProbeResponse(
-     PWLAN_FR_PROBERESP  pFrame
-    )
-{
+    PWLAN_FR_PROBERESP  pFrame
+) {
     PWLAN_IE    pItem;
 
 
@@ -810,9 +794,8 @@ vMgrDecodeProbeResponse(
 
 void
 vMgrEncodeAuthen(
-      PWLAN_FR_AUTHEN  pFrame
-    )
-{
+    PWLAN_FR_AUTHEN  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -839,9 +822,8 @@ vMgrEncodeAuthen(
 
 void
 vMgrDecodeAuthen(
-      PWLAN_FR_AUTHEN  pFrame
-    )
-{
+    PWLAN_FR_AUTHEN  pFrame
+) {
     PWLAN_IE    pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -876,9 +858,8 @@ vMgrDecodeAuthen(
 
 void
 vMgrEncodeDeauthen(
-      PWLAN_FR_DEAUTHEN  pFrame
-    )
-{
+    PWLAN_FR_DEAUTHEN  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -901,9 +882,8 @@ vMgrEncodeDeauthen(
 
 void
 vMgrDecodeDeauthen(
-      PWLAN_FR_DEAUTHEN  pFrame
-    )
-{
+    PWLAN_FR_DEAUTHEN  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -925,9 +905,8 @@ vMgrDecodeDeauthen(
 
 void
 vMgrEncodeReassocResponse(
-      PWLAN_FR_REASSOCRESP  pFrame
-     )
-{
+    PWLAN_FR_REASSOCRESP  pFrame
+) {
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
 
     /* Fixed Fields */
@@ -956,9 +935,8 @@ vMgrEncodeReassocResponse(
 
 void
 vMgrDecodeReassocResponse(
-      PWLAN_FR_REASSOCRESP  pFrame
-     )
-{
+    PWLAN_FR_REASSOCRESP  pFrame
+) {
     PWLAN_IE   pItem;
 
     pFrame->pHdr = (PUWLAN_80211HDR)pFrame->pBuf;
@@ -973,7 +951,7 @@ vMgrDecodeReassocResponse(
 
     /* Information elements */
     pFrame->pSuppRates = (PWLAN_IE_SUPP_RATES)(WLAN_HDR_A3_DATA_PTR(&(pFrame->pHdr->sA3))
-                                               + WLAN_REASSOCRESP_OFF_SUPP_RATES);
+                         + WLAN_REASSOCRESP_OFF_SUPP_RATES);
 
     pItem = (PWLAN_IE)(pFrame->pSuppRates);
     pItem = (PWLAN_IE)(((PBYTE)pItem) + 2 + pItem->len);

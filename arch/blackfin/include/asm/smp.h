@@ -25,7 +25,7 @@ extern unsigned long blackfin_iflush_l1_entry[NR_CPUS];
 #endif
 
 struct corelock_slot {
-	int lock;
+    int lock;
 };
 extern struct corelock_slot corelock;
 
@@ -37,7 +37,7 @@ extern unsigned long dcache_invld_count[NR_CPUS];
 #endif
 
 void smp_icache_flush_range_others(unsigned long start,
-					unsigned long end);
+                                   unsigned long end);
 #ifdef CONFIG_HOTPLUG_CPU
 void coreb_die(void);
 void cpu_die(void);

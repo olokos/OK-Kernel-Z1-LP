@@ -39,13 +39,13 @@
 #define TUNER_FREQ_MAX		(862000000)
 
 struct vbi_data {
-	struct video_device	*v_dev;
-	struct video_data	*video;
-	struct front_face	*front;
+    struct video_device	*v_dev;
+    struct video_data	*video;
+    struct front_face	*front;
 
-	unsigned int		copied;
-	unsigned int		vbi_size; /* the whole size of two fields */
-	int 			users;
+    unsigned int		copied;
+    unsigned int		vbi_size; /* the whole size of two fields */
+    int 			users;
 };
 
 /*
@@ -53,161 +53,161 @@ struct vbi_data {
  * resume()
  */
 struct running_context {
-	u32		freq;		/* VIDIOC_S_FREQUENCY */
-	int		audio_idx;	/* VIDIOC_S_TUNER    */
-	v4l2_std_id	tvnormid;	/* VIDIOC_S_STD     */
-	int		sig_index;	/* VIDIOC_S_INPUT  */
-	struct v4l2_pix_format pix;	/* VIDIOC_S_FMT   */
+    u32		freq;		/* VIDIOC_S_FREQUENCY */
+    int		audio_idx;	/* VIDIOC_S_TUNER    */
+    v4l2_std_id	tvnormid;	/* VIDIOC_S_STD     */
+    int		sig_index;	/* VIDIOC_S_INPUT  */
+    struct v4l2_pix_format pix;	/* VIDIOC_S_FMT   */
 };
 
 struct video_data {
-	/* v4l2 video device */
-	struct video_device	*v_dev;
+    /* v4l2 video device */
+    struct video_device	*v_dev;
 
-	/* the working context */
-	struct running_context	context;
+    /* the working context */
+    struct running_context	context;
 
-	/* for data copy */
-	int		field_count;
+    /* for data copy */
+    int		field_count;
 
-	char		*dst;
-	int		lines_copied;
-	int		prev_left;
+    char		*dst;
+    int		lines_copied;
+    int		prev_left;
 
-	int		lines_per_field;
-	int		lines_size;
+    int		lines_per_field;
+    int		lines_size;
 
-	/* for communication */
-	u8			endpoint_addr;
-	struct urb 		*urb_array[SBUF_NUM];
-	struct vbi_data		*vbi;
-	struct poseidon 	*pd;
-	struct front_face	*front;
+    /* for communication */
+    u8			endpoint_addr;
+    struct urb 		*urb_array[SBUF_NUM];
+    struct vbi_data		*vbi;
+    struct poseidon 	*pd;
+    struct front_face	*front;
 
-	int			is_streaming;
-	int			users;
+    int			is_streaming;
+    int			users;
 
-	/* for bubble handler */
-	struct work_struct	bubble_work;
+    /* for bubble handler */
+    struct work_struct	bubble_work;
 };
 
 enum pcm_stream_state {
-	STREAM_OFF,
-	STREAM_ON,
-	STREAM_SUSPEND,
+    STREAM_OFF,
+    STREAM_ON,
+    STREAM_SUSPEND,
 };
 
 #define AUDIO_BUFS (3)
 #define CAPTURE_STREAM_EN 1
 struct poseidon_audio {
-	struct urb		*urb_array[AUDIO_BUFS];
-	unsigned int 		copied_position;
-	struct snd_pcm_substream   *capture_pcm_substream;
+    struct urb		*urb_array[AUDIO_BUFS];
+    unsigned int 		copied_position;
+    struct snd_pcm_substream   *capture_pcm_substream;
 
-	unsigned int 		rcv_position;
-	struct	snd_card	*card;
-	int 			card_close;
+    unsigned int 		rcv_position;
+    struct	snd_card	*card;
+    int 			card_close;
 
-	int 			users;
-	int			pm_state;
-	enum pcm_stream_state 	capture_stream;
+    int 			users;
+    int			pm_state;
+    enum pcm_stream_state 	capture_stream;
 };
 
 struct radio_data {
-	__u32		fm_freq;
-	int		users;
-	unsigned int	is_radio_streaming;
-	int		pre_emphasis;
-	struct video_device *fm_dev;
+    __u32		fm_freq;
+    int		users;
+    unsigned int	is_radio_streaming;
+    int		pre_emphasis;
+    struct video_device *fm_dev;
 };
 
 #define DVB_SBUF_NUM		4
 #define DVB_URB_BUF_SIZE	0x2000
 struct pd_dvb_adapter {
-	struct dvb_adapter	dvb_adap;
-	struct dvb_frontend	dvb_fe;
-	struct dmxdev		dmxdev;
-	struct dvb_demux	demux;
+    struct dvb_adapter	dvb_adap;
+    struct dvb_frontend	dvb_fe;
+    struct dmxdev		dmxdev;
+    struct dvb_demux	demux;
 
-	atomic_t		users;
-	atomic_t		active_feed;
+    atomic_t		users;
+    atomic_t		active_feed;
 
-	/* data transfer */
-	s32			is_streaming;
-	struct urb		*urb_array[DVB_SBUF_NUM];
-	struct poseidon		*pd_device;
-	u8			ep_addr;
-	u8			reserved[3];
+    /* data transfer */
+    s32			is_streaming;
+    struct urb		*urb_array[DVB_SBUF_NUM];
+    struct poseidon		*pd_device;
+    u8			ep_addr;
+    u8			reserved[3];
 
-	/* data for power resume*/
-	struct dtv_frontend_properties fe_param;
+    /* data for power resume*/
+    struct dtv_frontend_properties fe_param;
 
-	/* for channel scanning */
-	int		prev_freq;
-	int		bandwidth;
-	unsigned long	last_jiffies;
+    /* for channel scanning */
+    int		prev_freq;
+    int		bandwidth;
+    unsigned long	last_jiffies;
 };
 
 struct front_face {
-	/* use this field to distinguish VIDEO and VBI */
-	enum v4l2_buf_type	type;
+    /* use this field to distinguish VIDEO and VBI */
+    enum v4l2_buf_type	type;
 
-	/* for host */
-	struct videobuf_queue	q;
+    /* for host */
+    struct videobuf_queue	q;
 
-	/* the bridge for host and device */
-	struct videobuf_buffer	*curr_frame;
+    /* the bridge for host and device */
+    struct videobuf_buffer	*curr_frame;
 
-	/* for device */
-	spinlock_t		queue_lock;
-	struct list_head	active;
-	struct poseidon		*pd;
+    /* for device */
+    spinlock_t		queue_lock;
+    struct list_head	active;
+    struct poseidon		*pd;
 };
 
 struct poseidon {
-	struct list_head	device_list;
+    struct list_head	device_list;
 
-	struct mutex		lock;
-	struct kref		kref;
+    struct mutex		lock;
+    struct kref		kref;
 
-	/* for V4L2 */
-	struct v4l2_device	v4l2_dev;
+    /* for V4L2 */
+    struct v4l2_device	v4l2_dev;
 
-	/* hardware info */
-	struct usb_device	*udev;
-	struct usb_interface	*interface;
-	int 			cur_transfer_mode;
+    /* hardware info */
+    struct usb_device	*udev;
+    struct usb_interface	*interface;
+    int 			cur_transfer_mode;
 
-	struct video_data	video_data;	/* video */
-	struct vbi_data		vbi_data;	/* vbi	 */
-	struct poseidon_audio	audio;		/* audio (alsa) */
-	struct radio_data	radio_data;	/* FM	 */
-	struct pd_dvb_adapter	dvb_data;	/* DVB	 */
+    struct video_data	video_data;	/* video */
+    struct vbi_data		vbi_data;	/* vbi	 */
+    struct poseidon_audio	audio;		/* audio (alsa) */
+    struct radio_data	radio_data;	/* FM	 */
+    struct pd_dvb_adapter	dvb_data;	/* DVB	 */
 
-	u32			state;
-	struct file		*file_for_stream; /* the active stream*/
+    u32			state;
+    struct file		*file_for_stream; /* the active stream*/
 
 #ifdef CONFIG_PM
-	int (*pm_suspend)(struct poseidon *);
-	int (*pm_resume)(struct poseidon *);
-	pm_message_t		msg;
+    int (*pm_suspend)(struct poseidon *);
+    int (*pm_resume)(struct poseidon *);
+    pm_message_t		msg;
 
-	struct work_struct	pm_work;
-	u8			portnum;
+    struct work_struct	pm_work;
+    u8			portnum;
 #endif
 };
 
 struct poseidon_format {
-	char 	*name;
-	int	fourcc;		 /* video4linux 2	  */
-	int	depth;		 /* bit/pixel		  */
-	int	flags;
+    char 	*name;
+    int	fourcc;		 /* video4linux 2	  */
+    int	depth;		 /* bit/pixel		  */
+    int	flags;
 };
 
 struct poseidon_tvnorm {
-	v4l2_std_id	v4l2_id;
-	char		name[12];
-	u32		tlg_tvnorm;
+    v4l2_std_id	v4l2_id;
+    char		name[12];
+    u32		tlg_tvnorm;
 };
 
 /* video */
@@ -242,9 +242,9 @@ s32 set_tuner_mode(struct poseidon*, unsigned char);
 
 /* bulk urb alloc/free */
 int alloc_bulk_urbs_generic(struct urb **urb_array, int num,
-			struct usb_device *udev, u8 ep_addr,
-			int buf_size, gfp_t gfp_flags,
-			usb_complete_t complete_fn, void *context);
+                            struct usb_device *udev, u8 ep_addr,
+                            int buf_size, gfp_t gfp_flags,
+                            usb_complete_t complete_fn, void *context);
 void free_all_urb_generic(struct urb **urb_array, int num);
 
 /* misc */

@@ -54,8 +54,7 @@
 // macro to map wpal trace levels into the bitmask
 #define WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( _level ) ( ( 1 << (_level) ) )
 
-typedef struct
-{
+typedef struct {
     // Trace level for a module, as a bitmask.  The bits in this mask
     // are ordered by wpt_tracelevel.  For example, each bit represents
     // one of the bits in wpt_tracelevel that may be turned on to have
@@ -75,8 +74,7 @@ typedef struct
 // Array of static data that contains all of the per module trace
 // information.  This includes the trace level for the module and
 // the 3 character 'name' of the module for marking the trace logs.
-moduleTraceInfo gTraceInfo[ eWLAN_MODULE_COUNT ] =
-{
+moduleTraceInfo gTraceInfo[ eWLAN_MODULE_COUNT ] = {
     { (1<<eWLAN_PAL_TRACE_LEVEL_FATAL)|(1<<eWLAN_PAL_TRACE_LEVEL_ERROR), "DAL" },
     { (1<<eWLAN_PAL_TRACE_LEVEL_FATAL)|(1<<eWLAN_PAL_TRACE_LEVEL_ERROR), "CTL" },
     { (1<<eWLAN_PAL_TRACE_LEVEL_FATAL)|(1<<eWLAN_PAL_TRACE_LEVEL_ERROR), "DAT" },
@@ -89,8 +87,7 @@ moduleTraceInfo gTraceInfo[ eWLAN_MODULE_COUNT ] =
 // can index into this array with the level and get the right string.  The
 // trace levels are...
 // none, Fatal, Error, Warning, Info, InfoHigh, InfoMed, InfoLow
-static const char * TRACE_LEVEL_STR[] =
-{
+static const char * TRACE_LEVEL_STR[] = {
     "  ", "F ", "E ", "W ", "I ", "IH", "IM", "IL"
 };
 
@@ -98,10 +95,8 @@ static const char * TRACE_LEVEL_STR[] =
 /*-------------------------------------------------------------------------
   Functions
   ------------------------------------------------------------------------*/
-static void wpalOutput(wpt_tracelevel level, char *strBuffer)
-{
-    switch(level)
-    {
+static void wpalOutput(wpt_tracelevel level, char *strBuffer) {
+    switch(level) {
     default:
         printk(KERN_CRIT "%s: Unknown trace level passed in!\n", __func__);
     // fall thru and use FATAL
@@ -137,38 +132,28 @@ static void wpalOutput(wpt_tracelevel level, char *strBuffer)
 }
 
 void wpalTraceSetLevel( wpt_moduleid module, wpt_tracelevel level,
-                        wpt_boolean on )
-{
+                        wpt_boolean on ) {
     // Make sure the caller is passing in a valid LEVEL and MODULE.
     if ( (eWLAN_PAL_TRACE_LEVEL_COUNT <= level) ||
-            (eWLAN_MODULE_COUNT <= module) )
-    {
+            (eWLAN_MODULE_COUNT <= module) ) {
         return;
     }
 
-    if ( eWLAN_PAL_TRACE_LEVEL_NONE == level )
-    {
+    if ( eWLAN_PAL_TRACE_LEVEL_NONE == level ) {
         // Treat 'none' differently.  NONE means we have to turn off all
         // the bits in the bit mask so none of the traces appear.
         gTraceInfo[ module ].moduleTraceLevel = 0;
-    }
-    else if ( eWLAN_PAL_TRACE_LEVEL_ALL == level )
-    {
+    } else if ( eWLAN_PAL_TRACE_LEVEL_ALL == level ) {
         // Treat 'all' differently.  ALL means we have to turn on all
         // the bits in the bit mask so all of the traces appear.
         gTraceInfo[ module ].moduleTraceLevel = 0xFFFF;
-    }
-    else
-    {
+    } else {
         // We are turning a particular trace level on or off
-        if (on)
-        {
+        if (on) {
             // Set the desired bit in the bit mask for the module trace level.
             gTraceInfo[ module ].moduleTraceLevel |=
                 WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level );
-        }
-        else
-        {
+        } else {
             // Clear the desired bit in the bit mask for the module trace level.
             gTraceInfo[ module ].moduleTraceLevel &=
                 ~(WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level ));
@@ -176,32 +161,26 @@ void wpalTraceSetLevel( wpt_moduleid module, wpt_tracelevel level,
     }
 }
 
-wpt_boolean wpalTraceCheckLevel( wpt_moduleid module, wpt_tracelevel level )
-{
+wpt_boolean wpalTraceCheckLevel( wpt_moduleid module, wpt_tracelevel level ) {
     wpt_boolean traceOn = eWLAN_PAL_FALSE;
 
     if ( ( eWLAN_PAL_TRACE_LEVEL_NONE == level ) ||
-            ( level >= eWLAN_PAL_TRACE_LEVEL_COUNT ))
-    {
+            ( level >= eWLAN_PAL_TRACE_LEVEL_COUNT )) {
         traceOn = eWLAN_PAL_FALSE;
-    }
-    else
-    {
+    } else {
         traceOn = ( level & gTraceInfo[ module ].moduleTraceLevel ) ? eWLAN_PAL_TRUE : eWLAN_PAL_FALSE;
     }
 
     return( traceOn );
 }
 
-void wpalTraceDisplay(void)
-{
+void wpalTraceDisplay(void) {
     wpt_moduleid moduleId;
 
     printk(KERN_CRIT
            "     1)FATAL  2)ERROR  3)WARN  4)INFO  "
            "5)INFO_H  6)INFO_M  7)INFO_L\n");
-    for (moduleId = 0; moduleId < eWLAN_MODULE_COUNT; ++moduleId)
-    {
+    for (moduleId = 0; moduleId < eWLAN_MODULE_COUNT; ++moduleId) {
         printk(KERN_CRIT
                "%2d)%s    %s        %s       %s       "
                "%s        %s         %s         %s\n",
@@ -249,15 +228,13 @@ void wpalTraceDisplay(void)
   \sa
 
   --------------------------------------------------------------------------*/
-void wpalTrace( wpt_moduleid module, wpt_tracelevel level, char *strFormat, ... )
-{
+void wpalTrace( wpt_moduleid module, wpt_tracelevel level, char *strFormat, ... ) {
     wpt_uint8 strBuffer[ WPAL_TRACE_BUFFER_SIZE ];
     int n;
 
     // Print the trace message when the desired level bit is set in the module
     // tracel level mask.
-    if ( gTraceInfo[ module ].moduleTraceLevel & WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level ) )
-    {
+    if ( gTraceInfo[ module ].moduleTraceLevel & WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level ) ) {
         va_list val;
         va_start(val, strFormat);
 
@@ -270,8 +247,7 @@ void wpalTrace( wpt_moduleid module, wpt_tracelevel level, char *strFormat, ... 
 
         // print the formatted log message after the prefix string.
         // note we reserve space for the terminating NUL
-        if ((n >= 0) && (n < WPAL_TRACE_BUFFER_SIZE))
-        {
+        if ((n >= 0) && (n < WPAL_TRACE_BUFFER_SIZE)) {
             vsnprintf(strBuffer + n, WPAL_TRACE_BUFFER_SIZE - n - 1, strFormat, val);
             wpalOutput(level, strBuffer);
         }
@@ -309,35 +285,30 @@ void wpalTrace( wpt_moduleid module, wpt_tracelevel level, char *strFormat, ... 
 #define CHARS_PER_LINE ((BYTES_PER_LINE * 3) + 1)
 
 void wpalDump( wpt_moduleid module, wpt_tracelevel level,
-               wpt_uint8 *pMemory, wpt_uint32 length)
-{
+               wpt_uint8 *pMemory, wpt_uint32 length) {
     char strBuffer[CHARS_PER_LINE];
     int n, num, offset;
 
     // Dump the memory when the desired level bit is set in the module
     // tracel level mask.
-    if ( gTraceInfo[ module ].moduleTraceLevel & WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level ) )
-    {
+    if ( gTraceInfo[ module ].moduleTraceLevel & WPAL_TRACE_LEVEL_TO_MODULE_BITMASK( level ) ) {
         num = 0;
         offset = 0;
-        while (length > 0)
-        {
+        while (length > 0) {
             n = snprintf(strBuffer + offset, CHARS_PER_LINE - offset - 1,
                          "%02X ", *pMemory);
             offset += n;
             num++;
             length--;
             pMemory++;
-            if (BYTES_PER_LINE == num)
-            {
+            if (BYTES_PER_LINE == num) {
                 wpalOutput(level, strBuffer);
                 num = 0;
                 offset = 0;
             }
         }
 
-        if (offset > 0)
-        {
+        if (offset > 0) {
             // partial line remains
             wpalOutput(level, strBuffer);
         }

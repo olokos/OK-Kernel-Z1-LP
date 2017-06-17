@@ -74,22 +74,20 @@ extern void flush_cache_all_hexagon(void);
  *
  */
 static inline void update_mmu_cache(struct vm_area_struct *vma,
-					unsigned long address, pte_t *ptep)
-{
-	/*  generic_ptrace_pokedata doesn't wind up here, does it?  */
+                                    unsigned long address, pte_t *ptep) {
+    /*  generic_ptrace_pokedata doesn't wind up here, does it?  */
 }
 
 #undef copy_to_user_page
 static inline void copy_to_user_page(struct vm_area_struct *vma,
-					     struct page *page,
-					     unsigned long vaddr,
-					     void *dst, void *src, int len)
-{
-	memcpy(dst, src, len);
-	if (vma->vm_flags & VM_EXEC) {
-		flush_icache_range((unsigned long) dst,
-		(unsigned long) dst + len);
-	}
+                                     struct page *page,
+                                     unsigned long vaddr,
+                                     void *dst, void *src, int len) {
+    memcpy(dst, src, len);
+    if (vma->vm_flags & VM_EXEC) {
+        flush_icache_range((unsigned long) dst,
+                           (unsigned long) dst + len);
+    }
 }
 
 

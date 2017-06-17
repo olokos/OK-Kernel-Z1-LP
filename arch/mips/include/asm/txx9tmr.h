@@ -12,19 +12,19 @@
 #include <linux/types.h>
 
 struct txx9_tmr_reg {
-	u32 tcr;
-	u32 tisr;
-	u32 cpra;
-	u32 cprb;
-	u32 itmr;
-	u32 unused0[3];
-	u32 ccdr;
-	u32 unused1[3];
-	u32 pgmr;
-	u32 unused2[3];
-	u32 wtmr;
-	u32 unused3[43];
-	u32 trr;
+    u32 tcr;
+    u32 tisr;
+    u32 cpra;
+    u32 cprb;
+    u32 itmr;
+    u32 unused0[3];
+    u32 ccdr;
+    u32 unused1[3];
+    u32 pgmr;
+    u32 unused2[3];
+    u32 wtmr;
+    u32 unused3[43];
+    u32 trr;
 };
 
 /* TMTCR : Timer Control */
@@ -53,9 +53,9 @@ struct txx9_tmr_reg {
 #define TXx9_TMWTMR_TWC		0x00000001
 
 void txx9_clocksource_init(unsigned long baseaddr,
-			   unsigned int imbusclk);
+                           unsigned int imbusclk);
 void txx9_clockevent_init(unsigned long baseaddr, int irq,
-			  unsigned int imbusclk);
+                          unsigned int imbusclk);
 void txx9_tmr_init(unsigned long baseaddr);
 
 #ifdef CONFIG_CPU_TX39XX

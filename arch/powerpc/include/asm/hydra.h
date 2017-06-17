@@ -54,9 +54,9 @@ struct Hydra {
 extern volatile struct Hydra __iomem *Hydra;
 
 
-    /*
-     *  Feature Control Register
-     */
+/*
+ *  Feature Control Register
+ */
 
 #define HYDRA_FC_SCC_CELL_EN	0x00000001	/* Enable SCC Clock */
 #define HYDRA_FC_SCSI_CELL_EN	0x00000002	/* Enable SCSI Clock */
@@ -69,9 +69,9 @@ extern volatile struct Hydra __iomem *Hydra;
 #define HYDRA_FC_MPIC_IS_MASTER	0x00000100	/* OpenPIC Master Mode */
 
 
-    /*
-     *  OpenPIC Interrupt Sources
-     */
+/*
+ *  OpenPIC Interrupt Sources
+ */
 
 #define HYDRA_INT_SIO		0
 #define HYDRA_INT_SCSI_DMA	1

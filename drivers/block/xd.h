@@ -73,29 +73,29 @@
 #undef DEBUG			/* define for debugging output */
 
 #ifdef DEBUG
-	#define DEBUG_STARTUP	/* debug driver initialisation */
-	#define DEBUG_OVERRIDE	/* debug override geometry detection */
-	#define DEBUG_READWRITE	/* debug each read/write command */
-	#define DEBUG_OTHER	/* debug misc. interrupt/DMA stuff */
-	#define DEBUG_COMMAND	/* debug each controller command */
+#define DEBUG_STARTUP	/* debug driver initialisation */
+#define DEBUG_OVERRIDE	/* debug override geometry detection */
+#define DEBUG_READWRITE	/* debug each read/write command */
+#define DEBUG_OTHER	/* debug misc. interrupt/DMA stuff */
+#define DEBUG_COMMAND	/* debug each controller command */
 #endif /* DEBUG */
 
 /* this structure defines the XT drives and their types */
 typedef struct {
-	u_char heads;
-	u_short cylinders;
-	u_char sectors;
-	u_char control;
-	int unit;
+    u_char heads;
+    u_short cylinders;
+    u_char sectors;
+    u_char control;
+    int unit;
 } XD_INFO;
 
 /* this structure defines a ROM BIOS signature */
 typedef struct {
-	unsigned int offset;
-	const char *string;
-	void (*init_controller)(unsigned int address);
-	void (*init_drive)(u_char drive);
-	const char *name;
+    unsigned int offset;
+    const char *string;
+    void (*init_controller)(unsigned int address);
+    void (*init_drive)(u_char drive);
+    const char *name;
 } XD_SIGNATURE;
 
 #ifndef MODULE

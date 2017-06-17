@@ -39,15 +39,15 @@ extern void brcmf_proto_stop(struct brcmf_pub *drvr);
  * Caller must reserve prot_hdrlen prepend space.
  */
 extern void brcmf_proto_hdrpush(struct brcmf_pub *, int ifidx,
-				struct sk_buff *txp);
+                                struct sk_buff *txp);
 
 /* Use protocol to issue command to dongle */
 extern int brcmf_proto_dcmd(struct brcmf_pub *drvr, int ifidx,
-				struct brcmf_dcmd *dcmd, int len);
+                            struct brcmf_dcmd *dcmd, int len);
 
 extern int brcmf_c_preinit_dcmds(struct brcmf_pub *drvr);
 
 extern int brcmf_proto_cdc_set_dcmd(struct brcmf_pub *drvr, int ifidx,
-				     uint cmd, void *buf, uint len);
+                                    uint cmd, void *buf, uint len);
 
 #endif				/* _BRCMF_PROTO_H_ */

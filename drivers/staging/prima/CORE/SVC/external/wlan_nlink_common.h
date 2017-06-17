@@ -91,15 +91,13 @@
 
 #define WLAN_SVC_SAP_RESTART_IND 0x108
 // Event data for WLAN_BTC_QUERY_STATE_RSP & WLAN_STA_ASSOC_DONE_IND
-typedef struct
-{
+typedef struct {
     unsigned char channel;  // 0 implies STA not associated to AP
 } tWlanAssocData;
 
 #define ANI_NL_MSG_BASE     0x10    /* Some arbitrary base */
 
-typedef enum eAniNlModuleTypes
-{
+typedef enum eAniNlModuleTypes {
     ANI_NL_MSG_PUMAC = ANI_NL_MSG_BASE + 0x01,// PTT Socket App
     ANI_NL_MSG_PTT   = ANI_NL_MSG_BASE + 0x07,// Quarky GUI
     WLAN_NL_MSG_BTC,
@@ -112,8 +110,7 @@ typedef enum eAniNlModuleTypes
 #define WLAN_NL_MSG_MAX  ANI_NL_MSG_MAX
 
 //All Netlink messages must contain this header
-typedef struct sAniHdr
-{
+typedef struct sAniHdr {
     unsigned short type;
     unsigned short length;
 } tAniHdr, tAniMsgHdr;

@@ -26,8 +26,8 @@
  *  DSP address + segid
  */
 struct rmm_addr {
-	u32 addr;
-	s32 segid;
+    u32 addr;
+    s32 segid;
 };
 
 /*
@@ -35,10 +35,10 @@ struct rmm_addr {
  *  Memory segment on the DSP available for remote allocations.
  */
 struct rmm_segment {
-	u32 base;		/* Base of the segment */
-	u32 length;		/* Size of the segment (target MAUs) */
-	s32 space;		/* Code or data */
-	u32 number;		/* Number of Allocated Blocks */
+    u32 base;		/* Base of the segment */
+    u32 length;		/* Size of the segment (target MAUs) */
+    s32 space;		/* Code or data */
+    u32 number;		/* Number of Allocated Blocks */
 };
 
 /*
@@ -74,7 +74,7 @@ struct rmm_target_obj;
  *  Ensures:
  */
 extern int rmm_alloc(struct rmm_target_obj *target, u32 segid, u32 size,
-			u32 align, u32 *dsp_address, bool reserve);
+                     u32 align, u32 *dsp_address, bool reserve);
 
 /*
  *  ======== rmm_create ========
@@ -98,7 +98,7 @@ extern int rmm_alloc(struct rmm_target_obj *target, u32 segid, u32 size,
  *      Failure:        *target_obj == NULL.
  */
 extern int rmm_create(struct rmm_target_obj **target_obj,
-			     struct rmm_segment seg_tab[], u32 num_segs);
+                      struct rmm_segment seg_tab[], u32 num_segs);
 
 /*
  *  ======== rmm_delete ========
@@ -133,7 +133,7 @@ extern void rmm_delete(struct rmm_target_obj *target);
  *  Ensures:
  */
 extern bool rmm_free(struct rmm_target_obj *target, u32 segid, u32 dsp_addr,
-		     u32 size, bool reserved);
+                     u32 size, bool reserved);
 
 /*
  *  ======== rmm_stat ========
@@ -151,6 +151,6 @@ extern bool rmm_free(struct rmm_target_obj *target, u32 segid, u32 dsp_addr,
  *  Ensures:
  */
 extern bool rmm_stat(struct rmm_target_obj *target, enum dsp_memtype segid,
-		     struct dsp_memstat *mem_stat_buf);
+                     struct dsp_memstat *mem_stat_buf);
 
 #endif /* RMM_ */

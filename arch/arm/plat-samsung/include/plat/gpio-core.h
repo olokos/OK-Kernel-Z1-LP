@@ -33,8 +33,8 @@ struct samsung_gpio_chip;
  * @resume: Routine to resume the GPIO block.
  */
 struct samsung_gpio_pm {
-	void (*save)(struct samsung_gpio_chip *chip);
-	void (*resume)(struct samsung_gpio_chip *chip);
+    void (*save)(struct samsung_gpio_chip *chip);
+    void (*resume)(struct samsung_gpio_chip *chip);
 };
 
 struct samsung_gpio_cfg;
@@ -61,21 +61,20 @@ struct samsung_gpio_cfg;
  * bank of GPIO has its own register space and configuration registers.
  */
 struct samsung_gpio_chip {
-	struct gpio_chip	chip;
-	struct samsung_gpio_cfg	*config;
-	struct samsung_gpio_pm	*pm;
-	void __iomem		*base;
-	int			irq_base;
-	int			group;
-	spinlock_t		 lock;
+    struct gpio_chip	chip;
+    struct samsung_gpio_cfg	*config;
+    struct samsung_gpio_pm	*pm;
+    void __iomem		*base;
+    int			irq_base;
+    int			group;
+    spinlock_t		 lock;
 #ifdef CONFIG_PM
-	u32			pm_save[4];
+    u32			pm_save[4];
 #endif
 };
 
-static inline struct samsung_gpio_chip *to_samsung_gpio(struct gpio_chip *gpc)
-{
-	return container_of(gpc, struct samsung_gpio_chip, chip);
+static inline struct samsung_gpio_chip *to_samsung_gpio(struct gpio_chip *gpc) {
+    return container_of(gpc, struct samsung_gpio_chip, chip);
 }
 
 /**
@@ -94,9 +93,8 @@ extern struct samsung_gpio_cfg s3c24xx_gpiocfg_default;
 #ifdef CONFIG_S3C_GPIO_TRACK
 extern struct samsung_gpio_chip *s3c_gpios[S3C_GPIO_END];
 
-static inline struct samsung_gpio_chip *samsung_gpiolib_getchip(unsigned int chip)
-{
-	return (chip < S3C_GPIO_END) ? s3c_gpios[chip] : NULL;
+static inline struct samsung_gpio_chip *samsung_gpiolib_getchip(unsigned int chip) {
+    return (chip < S3C_GPIO_END) ? s3c_gpios[chip] : NULL;
 }
 #else
 /* machine specific code should provide samsung_gpiolib_getchip */

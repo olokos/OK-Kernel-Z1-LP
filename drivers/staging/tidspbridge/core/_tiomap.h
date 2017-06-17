@@ -41,8 +41,8 @@
 #include <dspbridge/clk.h>
 
 struct map_l4_peripheral {
-	u32 phys_addr;
-	u32 dsp_virt_addr;
+    u32 phys_addr;
+    u32 dsp_virt_addr;
 };
 
 #define ARM_MAILBOX_START               0xfffcf000
@@ -155,42 +155,42 @@ struct map_l4_peripheral {
 
 /* define a static array with L4 mappings */
 static const struct map_l4_peripheral l4_peripheral_table[] = {
-	{L4_PERIPHERAL_MBOX, DSPVA_PERIPHERAL_MBOX},
-	{L4_PERIPHERAL_SCM, DSPVA_PERIPHERAL_SCM},
-	{L4_PERIPHERAL_MMU, DSPVA_PERIPHERAL_MMU},
-	{L4_PERIPHERAL_GPTIMER5, DSPVA_PERIPHERAL_GPTIMER5},
-	{L4_PERIPHERAL_GPTIMER6, DSPVA_PERIPHERAL_GPTIMER6},
-	{L4_PERIPHERAL_GPTIMER7, DSPVA_PERIPHERAL_GPTIMER7},
-	{L4_PERIPHERAL_GPTIMER8, DSPVA_PERIPHERAL_GPTIMER8},
-	{L4_PERIPHERAL_GPIO1, DSPVA_PERIPHERAL_GPIO1},
-	{L4_PERIPHERAL_GPIO2, DSPVA_PERIPHERAL_GPIO2},
-	{L4_PERIPHERAL_GPIO3, DSPVA_PERIPHERAL_GPIO3},
-	{L4_PERIPHERAL_GPIO4, DSPVA_PERIPHERAL_GPIO4},
-	{L4_PERIPHERAL_GPIO5, DSPVA_PERIPHERAL_GPIO5},
-	{L4_PERIPHERAL_IVA2WDT, DSPVA_PERIPHERAL_IVA2WDT},
-	{L4_PERIPHERAL_DISPLAY, DSPVA_PERIPHERAL_DISPLAY},
-	{L4_PERIPHERAL_SSI, DSPVA_PERIPHERAL_SSI},
-	{L4_PERIPHERAL_GDD, DSPVA_PERIPHERAL_GDD},
-	{L4_PERIPHERAL_SS1, DSPVA_PERIPHERAL_SS1},
-	{L4_PERIPHERAL_SS2, DSPVA_PERIPHERAL_SS2},
-	{L4_PERIPHERAL_UART1, DSPVA_PERIPHERAL_UART1},
-	{L4_PERIPHERAL_UART2, DSPVA_PERIPHERAL_UART2},
-	{L4_PERIPHERAL_UART3, DSPVA_PERIPHERAL_UART3},
-	{L4_PERIPHERAL_MCBSP1, DSPVA_PERIPHERAL_MCBSP1},
-	{L4_PERIPHERAL_MCBSP2, DSPVA_PERIPHERAL_MCBSP2},
-	{L4_PERIPHERAL_MCBSP3, DSPVA_PERIPHERAL_MCBSP3},
-	{L4_PERIPHERAL_MCBSP4, DSPVA_PERIPHERAL_MCBSP4},
-	{L4_PERIPHERAL_MCBSP5, DSPVA_PERIPHERAL_MCBSP5},
-	{L4_PERIPHERAL_CAMERA, DSPVA_PERIPHERAL_CAMERA},
-	{L4_PERIPHERAL_SPI1, DSPVA_PERIPHERAL_SPI1},
-	{L4_PERIPHERAL_SPI2, DSPVA_PERIPHERAL_SPI2},
-	{L4_PERIPHERAL_PRM, DSPVA_PERIPHERAL_PRM},
-	{L4_PERIPHERAL_CM, DSPVA_PERIPHERAL_CM},
-	{L4_PERIPHERAL_PER, DSPVA_PERIPHERAL_PER},
-	{PM_GRPSEL_BASE, DSPVA_GRPSEL_BASE},
-	{L4_PERIPHERAL_SIDETONE_MCBSP2, DSPVA_PERIPHERAL_SIDETONE_MCBSP2},
-	{L4_PERIPHERAL_SIDETONE_MCBSP3, DSPVA_PERIPHERAL_SIDETONE_MCBSP3},
-	{L4_PERIPHERAL_NULL, DSPVA_PERIPHERAL_NULL}
+    {L4_PERIPHERAL_MBOX, DSPVA_PERIPHERAL_MBOX},
+    {L4_PERIPHERAL_SCM, DSPVA_PERIPHERAL_SCM},
+    {L4_PERIPHERAL_MMU, DSPVA_PERIPHERAL_MMU},
+    {L4_PERIPHERAL_GPTIMER5, DSPVA_PERIPHERAL_GPTIMER5},
+    {L4_PERIPHERAL_GPTIMER6, DSPVA_PERIPHERAL_GPTIMER6},
+    {L4_PERIPHERAL_GPTIMER7, DSPVA_PERIPHERAL_GPTIMER7},
+    {L4_PERIPHERAL_GPTIMER8, DSPVA_PERIPHERAL_GPTIMER8},
+    {L4_PERIPHERAL_GPIO1, DSPVA_PERIPHERAL_GPIO1},
+    {L4_PERIPHERAL_GPIO2, DSPVA_PERIPHERAL_GPIO2},
+    {L4_PERIPHERAL_GPIO3, DSPVA_PERIPHERAL_GPIO3},
+    {L4_PERIPHERAL_GPIO4, DSPVA_PERIPHERAL_GPIO4},
+    {L4_PERIPHERAL_GPIO5, DSPVA_PERIPHERAL_GPIO5},
+    {L4_PERIPHERAL_IVA2WDT, DSPVA_PERIPHERAL_IVA2WDT},
+    {L4_PERIPHERAL_DISPLAY, DSPVA_PERIPHERAL_DISPLAY},
+    {L4_PERIPHERAL_SSI, DSPVA_PERIPHERAL_SSI},
+    {L4_PERIPHERAL_GDD, DSPVA_PERIPHERAL_GDD},
+    {L4_PERIPHERAL_SS1, DSPVA_PERIPHERAL_SS1},
+    {L4_PERIPHERAL_SS2, DSPVA_PERIPHERAL_SS2},
+    {L4_PERIPHERAL_UART1, DSPVA_PERIPHERAL_UART1},
+    {L4_PERIPHERAL_UART2, DSPVA_PERIPHERAL_UART2},
+    {L4_PERIPHERAL_UART3, DSPVA_PERIPHERAL_UART3},
+    {L4_PERIPHERAL_MCBSP1, DSPVA_PERIPHERAL_MCBSP1},
+    {L4_PERIPHERAL_MCBSP2, DSPVA_PERIPHERAL_MCBSP2},
+    {L4_PERIPHERAL_MCBSP3, DSPVA_PERIPHERAL_MCBSP3},
+    {L4_PERIPHERAL_MCBSP4, DSPVA_PERIPHERAL_MCBSP4},
+    {L4_PERIPHERAL_MCBSP5, DSPVA_PERIPHERAL_MCBSP5},
+    {L4_PERIPHERAL_CAMERA, DSPVA_PERIPHERAL_CAMERA},
+    {L4_PERIPHERAL_SPI1, DSPVA_PERIPHERAL_SPI1},
+    {L4_PERIPHERAL_SPI2, DSPVA_PERIPHERAL_SPI2},
+    {L4_PERIPHERAL_PRM, DSPVA_PERIPHERAL_PRM},
+    {L4_PERIPHERAL_CM, DSPVA_PERIPHERAL_CM},
+    {L4_PERIPHERAL_PER, DSPVA_PERIPHERAL_PER},
+    {PM_GRPSEL_BASE, DSPVA_GRPSEL_BASE},
+    {L4_PERIPHERAL_SIDETONE_MCBSP2, DSPVA_PERIPHERAL_SIDETONE_MCBSP2},
+    {L4_PERIPHERAL_SIDETONE_MCBSP3, DSPVA_PERIPHERAL_SIDETONE_MCBSP3},
+    {L4_PERIPHERAL_NULL, DSPVA_PERIPHERAL_NULL}
 };
 
 /*
@@ -228,50 +228,50 @@ static const struct map_l4_peripheral l4_peripheral_table[] = {
 
 /* OMAP242x specific resources */
 enum bpwr_ext_clock_id {
-	BPWR_GP_TIMER5 = 0x10,
-	BPWR_GP_TIMER6,
-	BPWR_GP_TIMER7,
-	BPWR_GP_TIMER8,
-	BPWR_WD_TIMER3,
-	BPWR_MCBSP1,
-	BPWR_MCBSP2,
-	BPWR_MCBSP3,
-	BPWR_MCBSP4,
-	BPWR_MCBSP5,
-	BPWR_SSI = 0x20
+    BPWR_GP_TIMER5 = 0x10,
+    BPWR_GP_TIMER6,
+    BPWR_GP_TIMER7,
+    BPWR_GP_TIMER8,
+    BPWR_WD_TIMER3,
+    BPWR_MCBSP1,
+    BPWR_MCBSP2,
+    BPWR_MCBSP3,
+    BPWR_MCBSP4,
+    BPWR_MCBSP5,
+    BPWR_SSI = 0x20
 };
 
 static const u32 bpwr_clkid[] = {
-	(u32) BPWR_GP_TIMER5,
-	(u32) BPWR_GP_TIMER6,
-	(u32) BPWR_GP_TIMER7,
-	(u32) BPWR_GP_TIMER8,
-	(u32) BPWR_WD_TIMER3,
-	(u32) BPWR_MCBSP1,
-	(u32) BPWR_MCBSP2,
-	(u32) BPWR_MCBSP3,
-	(u32) BPWR_MCBSP4,
-	(u32) BPWR_MCBSP5,
-	(u32) BPWR_SSI
+    (u32) BPWR_GP_TIMER5,
+    (u32) BPWR_GP_TIMER6,
+    (u32) BPWR_GP_TIMER7,
+    (u32) BPWR_GP_TIMER8,
+    (u32) BPWR_WD_TIMER3,
+    (u32) BPWR_MCBSP1,
+    (u32) BPWR_MCBSP2,
+    (u32) BPWR_MCBSP3,
+    (u32) BPWR_MCBSP4,
+    (u32) BPWR_MCBSP5,
+    (u32) BPWR_SSI
 };
 
 struct bpwr_clk_t {
-	u32 clk_id;
-	enum dsp_clk_id clk;
+    u32 clk_id;
+    enum dsp_clk_id clk;
 };
 
 static const struct bpwr_clk_t bpwr_clks[] = {
-	{(u32) BPWR_GP_TIMER5, DSP_CLK_GPT5},
-	{(u32) BPWR_GP_TIMER6, DSP_CLK_GPT6},
-	{(u32) BPWR_GP_TIMER7, DSP_CLK_GPT7},
-	{(u32) BPWR_GP_TIMER8, DSP_CLK_GPT8},
-	{(u32) BPWR_WD_TIMER3, DSP_CLK_WDT3},
-	{(u32) BPWR_MCBSP1, DSP_CLK_MCBSP1},
-	{(u32) BPWR_MCBSP2, DSP_CLK_MCBSP2},
-	{(u32) BPWR_MCBSP3, DSP_CLK_MCBSP3},
-	{(u32) BPWR_MCBSP4, DSP_CLK_MCBSP4},
-	{(u32) BPWR_MCBSP5, DSP_CLK_MCBSP5},
-	{(u32) BPWR_SSI, DSP_CLK_SSI}
+    {(u32) BPWR_GP_TIMER5, DSP_CLK_GPT5},
+    {(u32) BPWR_GP_TIMER6, DSP_CLK_GPT6},
+    {(u32) BPWR_GP_TIMER7, DSP_CLK_GPT7},
+    {(u32) BPWR_GP_TIMER8, DSP_CLK_GPT8},
+    {(u32) BPWR_WD_TIMER3, DSP_CLK_WDT3},
+    {(u32) BPWR_MCBSP1, DSP_CLK_MCBSP1},
+    {(u32) BPWR_MCBSP2, DSP_CLK_MCBSP2},
+    {(u32) BPWR_MCBSP3, DSP_CLK_MCBSP3},
+    {(u32) BPWR_MCBSP4, DSP_CLK_MCBSP4},
+    {(u32) BPWR_MCBSP5, DSP_CLK_MCBSP5},
+    {(u32) BPWR_SSI, DSP_CLK_SSI}
 };
 
 /* Interrupt Register Offsets */
@@ -319,41 +319,41 @@ static const struct bpwr_clk_t bpwr_clks[] = {
 
 /* This Bridge driver's device context: */
 struct bridge_dev_context {
-	struct dev_object *dev_obj;	/* Handle to Bridge device object. */
-	u32 dsp_base_addr;	/* Arm's API to DSP virt base addr */
-	/*
-	 * DSP External memory prog address as seen virtually by the OS on
-	 * the host side.
-	 */
-	u32 dsp_ext_base_addr;	/* See the comment above */
-	u32 api_reg_base;	/* API mem map'd registers */
-	void __iomem *dsp_mmu_base;	/* DSP MMU Mapped registers */
-	u32 api_clk_base;	/* CLK Registers */
-	u32 dsp_clk_m2_base;	/* DSP Clock Module m2 */
-	u32 public_rhea;	/* Pub Rhea */
-	u32 int_addr;		/* MB INTR reg */
-	u32 tc_endianism;	/* TC Endianism register */
-	u32 test_base;		/* DSP MMU Mapped registers */
-	u32 self_loop;		/* Pointer to the selfloop */
-	u32 dsp_start_add;	/* API Boot vector */
-	u32 internal_size;	/* Internal memory size */
+    struct dev_object *dev_obj;	/* Handle to Bridge device object. */
+    u32 dsp_base_addr;	/* Arm's API to DSP virt base addr */
+    /*
+     * DSP External memory prog address as seen virtually by the OS on
+     * the host side.
+     */
+    u32 dsp_ext_base_addr;	/* See the comment above */
+    u32 api_reg_base;	/* API mem map'd registers */
+    void __iomem *dsp_mmu_base;	/* DSP MMU Mapped registers */
+    u32 api_clk_base;	/* CLK Registers */
+    u32 dsp_clk_m2_base;	/* DSP Clock Module m2 */
+    u32 public_rhea;	/* Pub Rhea */
+    u32 int_addr;		/* MB INTR reg */
+    u32 tc_endianism;	/* TC Endianism register */
+    u32 test_base;		/* DSP MMU Mapped registers */
+    u32 self_loop;		/* Pointer to the selfloop */
+    u32 dsp_start_add;	/* API Boot vector */
+    u32 internal_size;	/* Internal memory size */
 
-	struct omap_mbox *mbox;		/* Mail box handle */
+    struct omap_mbox *mbox;		/* Mail box handle */
 
-	struct cfg_hostres *resources;	/* Host Resources */
+    struct cfg_hostres *resources;	/* Host Resources */
 
-	/*
-	 * Processor specific info is set when prog loaded and read from DCD.
-	 * [See bridge_dev_ctrl()]  PROC info contains DSP-MMU TLB entries.
-	 */
-	/* DMMU TLB entries */
-	struct bridge_ioctl_extproc atlb_entry[BRDIOCTL_NUMOFMMUTLB];
-	u32 brd_state;       /* Last known board state. */
+    /*
+     * Processor specific info is set when prog loaded and read from DCD.
+     * [See bridge_dev_ctrl()]  PROC info contains DSP-MMU TLB entries.
+     */
+    /* DMMU TLB entries */
+    struct bridge_ioctl_extproc atlb_entry[BRDIOCTL_NUMOFMMUTLB];
+    u32 brd_state;       /* Last known board state. */
 
-	/* TC Settings */
-	bool tc_word_swap_on;	/* Traffic Controller Word Swap */
-	struct pg_table_attrs *pt_attrs;
-	u32 dsp_per_clks;
+    /* TC Settings */
+    bool tc_word_swap_on;	/* Traffic Controller Word Swap */
+    struct pg_table_attrs *pt_attrs;
+    u32 dsp_per_clks;
 };
 
 /*

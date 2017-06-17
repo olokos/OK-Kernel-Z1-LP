@@ -184,7 +184,7 @@
 #define PNX8335_IP3902_MODULE_ID_MODULE_ID_SHIFT	16
 #define PNX8335_IP3902_MODULE_ID_VALUE			0x3902
 
- /* I/O location(gets remapped)*/
+/* I/O location(gets remapped)*/
 #define PNX8335_NAND_BASE	    0x18000000
 /* I/O location with CLE high */
 #define PNX8335_NAND_CLE_MASK	0x00100000

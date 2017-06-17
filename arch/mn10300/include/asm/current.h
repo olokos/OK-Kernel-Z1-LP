@@ -26,9 +26,8 @@ extern struct task_struct *__current;
 
 #else
 static inline __attribute__((const))
-struct task_struct *get_current(void)
-{
-	return current_thread_info()->task;
+struct task_struct *get_current(void) {
+    return current_thread_info()->task;
 }
 
 #define current get_current()

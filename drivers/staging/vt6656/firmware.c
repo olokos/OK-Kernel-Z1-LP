@@ -58,79 +58,77 @@ static int          msglevel                =MSG_LEVEL_INFO;
 
 BOOL
 FIRMWAREbDownload(
-     PSDevice pDevice
-    )
-{
-	const struct firmware *fw;
-	int NdisStatus;
-	void *pBuffer = NULL;
-	BOOL result = FALSE;
-	u16 wLength;
-	int ii;
+    PSDevice pDevice
+) {
+    const struct firmware *fw;
+    int NdisStatus;
+    void *pBuffer = NULL;
+    BOOL result = FALSE;
+    u16 wLength;
+    int ii;
 
-	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"---->Download firmware\n");
-	spin_unlock_irq(&pDevice->lock);
+    DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"---->Download firmware\n");
+    spin_unlock_irq(&pDevice->lock);
 
-	if (!pDevice->firmware) {
-		struct device *dev = &pDevice->usb->dev;
-		int rc;
+    if (!pDevice->firmware) {
+        struct device *dev = &pDevice->usb->dev;
+        int rc;
 
-		rc = request_firmware(&pDevice->firmware, FIRMWARE_NAME, dev);
-		if (rc) {
-			dev_err(dev, "firmware file %s request failed (%d)\n",
-				FIRMWARE_NAME, rc);
-			goto out;
-		}
-	}
-	fw = pDevice->firmware;
+        rc = request_firmware(&pDevice->firmware, FIRMWARE_NAME, dev);
+        if (rc) {
+            dev_err(dev, "firmware file %s request failed (%d)\n",
+                    FIRMWARE_NAME, rc);
+            goto out;
+        }
+    }
+    fw = pDevice->firmware;
 
-	pBuffer = kmalloc(FIRMWARE_CHUNK_SIZE, GFP_KERNEL);
-	if (!pBuffer)
-		goto out;
+    pBuffer = kmalloc(FIRMWARE_CHUNK_SIZE, GFP_KERNEL);
+    if (!pBuffer)
+        goto out;
 
-	for (ii = 0; ii < fw->size; ii += FIRMWARE_CHUNK_SIZE) {
-		wLength = min_t(int, fw->size - ii, FIRMWARE_CHUNK_SIZE);
-		memcpy(pBuffer, fw->data + ii, wLength);
+    for (ii = 0; ii < fw->size; ii += FIRMWARE_CHUNK_SIZE) {
+        wLength = min_t(int, fw->size - ii, FIRMWARE_CHUNK_SIZE);
+        memcpy(pBuffer, fw->data + ii, wLength);
 
-		NdisStatus = CONTROLnsRequestOutAsyn(pDevice,
-                                            0,
-                                            0x1200+ii,
-                                            0x0000,
-                                            wLength,
-                                            pBuffer
+        NdisStatus = CONTROLnsRequestOutAsyn(pDevice,
+                                             0,
+                                             0x1200+ii,
+                                             0x0000,
+                                             wLength,
+                                             pBuffer
                                             );
 
-		DBG_PRT(MSG_LEVEL_DEBUG,
-			KERN_INFO"Download firmware...%d %zu\n", ii, fw->size);
-		if (NdisStatus != STATUS_SUCCESS)
-			goto out;
-        }
+        DBG_PRT(MSG_LEVEL_DEBUG,
+                KERN_INFO"Download firmware...%d %zu\n", ii, fw->size);
+        if (NdisStatus != STATUS_SUCCESS)
+            goto out;
+    }
 
-	result = TRUE;
+    result = TRUE;
 
 out:
-	kfree(pBuffer);
+    kfree(pBuffer);
 
-	spin_lock_irq(&pDevice->lock);
-	return result;
+    spin_lock_irq(&pDevice->lock);
+    return result;
 }
 MODULE_FIRMWARE(FIRMWARE_NAME);
 
 BOOL
 FIRMWAREbBrach2Sram(
-     PSDevice pDevice
-    )
-{
+    PSDevice pDevice
+) {
     int NdisStatus;
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"---->Branch to Sram\n");
 
     NdisStatus = CONTROLnsRequestOut(pDevice,
-                                    1,
-                                    0x1200,
-                                    0x0000,
-                                    0,
-                                    NULL
+                                     1,
+                                     0x1200,
+                                     0x0000,
+                                     0,
+                                     NULL
                                     );
 
     if (NdisStatus != STATUS_SUCCESS) {
@@ -143,17 +141,16 @@ FIRMWAREbBrach2Sram(
 
 BOOL
 FIRMWAREbCheckVersion(
-     PSDevice pDevice
-    )
-{
-	int ntStatus;
+    PSDevice pDevice
+) {
+    int ntStatus;
 
     ntStatus = CONTROLnsRequestIn(pDevice,
-                                    MESSAGE_TYPE_READ,
-                                    0,
-                                    MESSAGE_REQUEST_VERSION,
-                                    2,
-                                    (PBYTE) &(pDevice->wFirmwareVersion));
+                                  MESSAGE_TYPE_READ,
+                                  0,
+                                  MESSAGE_REQUEST_VERSION,
+                                  2,
+                                  (PBYTE) &(pDevice->wFirmwareVersion));
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Firmware Version [%04x]\n", pDevice->wFirmwareVersion);
     if (ntStatus != STATUS_SUCCESS) {

@@ -51,42 +51,42 @@ struct user_data {
  * internal ram
  */
 typedef struct quicc {
-	union {
-		struct quicc32_pram ch_pram_tbl[32];	/* 32*64(bytes) per channel */	
-		struct user_data		u;
-	}ch_or_u;	/* multipul or user space */
+    union {
+        struct quicc32_pram ch_pram_tbl[32];	/* 32*64(bytes) per channel */
+        struct user_data		u;
+    } ch_or_u;	/* multipul or user space */
 
     /* BASE + 0xc00: PARAMETER RAM */
-	union {
-		struct scc_pram {
-			union {
-				struct hdlc_pram        h;
-				struct uart_pram        u;
-				struct bisync_pram      b;
-				struct transparent_pram t;
-				unsigned char   RESERVED66[0x70];
-			} pscc;               /* scc parameter area (protocol dependent) */
-			union {
-				struct {
-					unsigned char       RESERVED70[0x10];
-					struct spi_pram     spi;
-					unsigned char       RESERVED72[0x8];
-					struct timer_pram   timer;
-				} timer_spi;
-				struct {
-					struct idma_pram idma;
-					unsigned char       RESERVED67[0x4];
-					union {
-						struct smc_uart_pram u;
-						struct smc_trnsp_pram t;
-					} psmc;
-				} idma_smc;
-			} pothers;
-		} scc;
-		struct ethernet_pram    enet_scc;
-		struct global_multi_pram        m;
-		unsigned char   pr[0x100];
-	} pram[4];
+    union {
+        struct scc_pram {
+            union {
+                struct hdlc_pram        h;
+                struct uart_pram        u;
+                struct bisync_pram      b;
+                struct transparent_pram t;
+                unsigned char   RESERVED66[0x70];
+            } pscc;               /* scc parameter area (protocol dependent) */
+            union {
+                struct {
+                    unsigned char       RESERVED70[0x10];
+                    struct spi_pram     spi;
+                    unsigned char       RESERVED72[0x8];
+                    struct timer_pram   timer;
+                } timer_spi;
+                struct {
+                    struct idma_pram idma;
+                    unsigned char       RESERVED67[0x4];
+                    union {
+                        struct smc_uart_pram u;
+                        struct smc_trnsp_pram t;
+                    } psmc;
+                } idma_smc;
+            } pothers;
+        } scc;
+        struct ethernet_pram    enet_scc;
+        struct global_multi_pram        m;
+        unsigned char   pr[0x100];
+    } pram[4];
 
     /* reserved */
 
@@ -245,56 +245,56 @@ typedef struct quicc {
         volatile unsigned long l;
         struct {
             volatile unsigned short BRGC_RESERV:14;
-            volatile unsigned short rst:1;
-            volatile unsigned short en:1;
-            volatile unsigned short extc:2;
-            volatile unsigned short atb:1;
-            volatile unsigned short cd:12;
-            volatile unsigned short div16:1;
-        } b;
-    } brgc[4];                                  /* BRG1-BRG4 configuration regs*/
-    /* SCC registers */
-    struct scc_regs {
+                volatile unsigned short rst:1;
+                volatile unsigned short en:1;
+                volatile unsigned short extc:2;
+                volatile unsigned short atb:1;
+                volatile unsigned short cd:12;
+                volatile unsigned short div16:1;
+            } b;
+        } brgc[4];                                  /* BRG1-BRG4 configuration regs*/
+        /* SCC registers */
+        struct scc_regs {
         union {
             struct {
                 /* Low word. */
                 volatile unsigned short GSMR_RESERV2:1;
-                volatile unsigned short edge:2;
-                volatile unsigned short tci:1;
-                volatile unsigned short tsnc:2;
-                volatile unsigned short rinv:1;
-                volatile unsigned short tinv:1;
-                volatile unsigned short tpl:3;
-                volatile unsigned short tpp:2;
-                volatile unsigned short tend:1;
-                volatile unsigned short tdcr:2;
-                volatile unsigned short rdcr:2;
-                volatile unsigned short renc:3;
-                volatile unsigned short tenc:3;
-                volatile unsigned short diag:2;
-                volatile unsigned short enr:1;
-                volatile unsigned short ent:1;
-                volatile unsigned short mode:4;
-                /* High word. */
-                volatile unsigned short GSMR_RESERV1:14;
-                volatile unsigned short pri:1;
-                volatile unsigned short gde:1;
-                volatile unsigned short tcrc:2;
-                volatile unsigned short revd:1;
-                volatile unsigned short trx:1;
-                volatile unsigned short ttx:1;
-                volatile unsigned short cdp:1;
-                volatile unsigned short ctsp:1;
-                volatile unsigned short cds:1;
-                volatile unsigned short ctss:1;
-                volatile unsigned short tfl:1;
-                volatile unsigned short rfw:1;
-                volatile unsigned short txsy:1;
-                volatile unsigned short synl:2;
-                volatile unsigned short rtsm:1;
-                volatile unsigned short rsyn:1;
-            } b;
-            struct {
+                    volatile unsigned short edge:2;
+                    volatile unsigned short tci:1;
+                    volatile unsigned short tsnc:2;
+                    volatile unsigned short rinv:1;
+                    volatile unsigned short tinv:1;
+                    volatile unsigned short tpl:3;
+                    volatile unsigned short tpp:2;
+                    volatile unsigned short tend:1;
+                    volatile unsigned short tdcr:2;
+                    volatile unsigned short rdcr:2;
+                    volatile unsigned short renc:3;
+                    volatile unsigned short tenc:3;
+                    volatile unsigned short diag:2;
+                    volatile unsigned short enr:1;
+                    volatile unsigned short ent:1;
+                    volatile unsigned short mode:4;
+                    /* High word. */
+                    volatile unsigned short GSMR_RESERV1:14;
+                    volatile unsigned short pri:1;
+                    volatile unsigned short gde:1;
+                    volatile unsigned short tcrc:2;
+                    volatile unsigned short revd:1;
+                    volatile unsigned short trx:1;
+                    volatile unsigned short ttx:1;
+                    volatile unsigned short cdp:1;
+                    volatile unsigned short ctsp:1;
+                    volatile unsigned short cds:1;
+                    volatile unsigned short ctss:1;
+                    volatile unsigned short tfl:1;
+                    volatile unsigned short rfw:1;
+                    volatile unsigned short txsy:1;
+                    volatile unsigned short synl:2;
+                    volatile unsigned short rtsm:1;
+                    volatile unsigned short rsyn:1;
+                } b;
+                struct {
                 volatile unsigned long low;
                 volatile unsigned long high;
             } w;

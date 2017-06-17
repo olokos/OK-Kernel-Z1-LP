@@ -30,7 +30,7 @@
 #define X86_FEATURE_PGE		(0*32+13) /* Page Global Enable */
 #define X86_FEATURE_MCA		(0*32+14) /* Machine Check Architecture */
 #define X86_FEATURE_CMOV	(0*32+15) /* CMOV instructions */
-					  /* (plus FCMOVcc, FCOMI with FPU) */
+/* (plus FCMOVcc, FCOMI with FPU) */
 #define X86_FEATURE_PAT		(0*32+16) /* Page Attribute Table */
 #define X86_FEATURE_PSE36	(0*32+17) /* 36-bit PSEs */
 #define X86_FEATURE_PN		(0*32+18) /* Processor serial number */
@@ -89,7 +89,7 @@
 #define X86_FEATURE_LFENCE_RDTSC (3*32+18) /* "" Lfence synchronizes RDTSC */
 #define X86_FEATURE_11AP	(3*32+19) /* "" Bad local APIC aka 11AP */
 #define X86_FEATURE_NOPL	(3*32+20) /* The NOPL (0F 1F) instructions */
-					  /* 21 available, was AMD_C1E */
+/* 21 available, was AMD_C1E */
 #define X86_FEATURE_XTOPOLOGY	(3*32+22) /* cpu topology enum extensions */
 #define X86_FEATURE_TSC_RELIABLE (3*32+23) /* TSC is known to be reliable */
 #define X86_FEATURE_NONSTOP_TSC	(3*32+24) /* TSC does not stop in C states */
@@ -339,44 +339,43 @@ extern const char * const x86_power_flags[32];
  * patch the target code for additional performance.
  *
  */
-static __always_inline __pure bool __static_cpu_has(u16 bit)
-{
+static __always_inline __pure bool __static_cpu_has(u16 bit) {
 #if __GNUC__ > 4 || __GNUC_MINOR__ >= 5
-		asm goto("1: jmp %l[t_no]\n"
-			 "2:\n"
-			 ".section .altinstructions,\"a\"\n"
-			 " .long 1b - .\n"
-			 " .long 0\n"		/* no replacement */
-			 " .word %P0\n"		/* feature bit */
-			 " .byte 2b - 1b\n"	/* source len */
-			 " .byte 0\n"		/* replacement len */
-			 ".previous\n"
-			 /* skipping size check since replacement size = 0 */
-			 : : "i" (bit) : : t_no);
-		return true;
-	t_no:
-		return false;
+    asm goto("1: jmp %l[t_no]\n"
+             "2:\n"
+             ".section .altinstructions,\"a\"\n"
+             " .long 1b - .\n"
+             " .long 0\n"		/* no replacement */
+             " .word %P0\n"		/* feature bit */
+             " .byte 2b - 1b\n"	/* source len */
+             " .byte 0\n"		/* replacement len */
+             ".previous\n"
+             /* skipping size check since replacement size = 0 */
+             : : "i" (bit) : : t_no);
+    return true;
+t_no:
+    return false;
 #else
-		u8 flag;
-		/* Open-coded due to __stringify() in ALTERNATIVE() */
-		asm volatile("1: movb $0,%0\n"
-			     "2:\n"
-			     ".section .altinstructions,\"a\"\n"
-			     " .long 1b - .\n"
-			     " .long 3f - .\n"
-			     " .word %P1\n"		/* feature bit */
-			     " .byte 2b - 1b\n"		/* source len */
-			     " .byte 4f - 3f\n"		/* replacement len */
-			     ".previous\n"
-			     ".section .discard,\"aw\",@progbits\n"
-			     " .byte 0xff + (4f-3f) - (2b-1b)\n" /* size check */
-			     ".previous\n"
-			     ".section .altinstr_replacement,\"ax\"\n"
-			     "3: movb $1,%0\n"
-			     "4:\n"
-			     ".previous\n"
-			     : "=qm" (flag) : "i" (bit));
-		return flag;
+    u8 flag;
+    /* Open-coded due to __stringify() in ALTERNATIVE() */
+    asm volatile("1: movb $0,%0\n"
+                 "2:\n"
+                 ".section .altinstructions,\"a\"\n"
+                 " .long 1b - .\n"
+                 " .long 3f - .\n"
+                 " .word %P1\n"		/* feature bit */
+                 " .byte 2b - 1b\n"		/* source len */
+                 " .byte 4f - 3f\n"		/* replacement len */
+                 ".previous\n"
+                 ".section .discard,\"aw\",@progbits\n"
+                 " .byte 0xff + (4f-3f) - (2b-1b)\n" /* size check */
+                 ".previous\n"
+                 ".section .altinstr_replacement,\"ax\"\n"
+                 "3: movb $1,%0\n"
+                 "4:\n"
+                 ".previous\n"
+                 : "=qm" (flag) : "i" (bit));
+    return flag;
 #endif
 }
 

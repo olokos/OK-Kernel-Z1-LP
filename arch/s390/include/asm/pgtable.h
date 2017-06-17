@@ -58,11 +58,10 @@ extern unsigned long zero_page_mask;
 	 (((unsigned long)(vaddr)) &zero_page_mask))))
 
 #define is_zero_pfn is_zero_pfn
-static inline int is_zero_pfn(unsigned long pfn)
-{
-	extern unsigned long zero_pfn;
-	unsigned long offset_from_zero_pfn = pfn - zero_pfn;
-	return offset_from_zero_pfn <= (zero_page_mask >> PAGE_SHIFT);
+static inline int is_zero_pfn(unsigned long pfn) {
+    extern unsigned long zero_pfn;
+    unsigned long offset_from_zero_pfn = pfn - zero_pfn;
+    return offset_from_zero_pfn <= (zero_page_mask >> PAGE_SHIFT);
 }
 
 #define my_zero_pfn(addr)	page_to_pfn(ZERO_PAGE(addr))
@@ -202,8 +201,8 @@ extern struct page *vmemmap;
  * 0123456789012345678901234567890123456789012345678901234567890123
  *
  * X Space-Switch event:
- * G Segment-Invalid Bit:  
- * P Private-Space Bit:    
+ * G Segment-Invalid Bit:
+ * P Private-Space Bit:
  * S Storage-Alteration:
  * R Real space
  * TL Table-Length:
@@ -388,7 +387,7 @@ extern struct page *vmemmap;
  * Read permission implies execute permission and write permission
  * implies read permission.
  */
-         /*xwr*/
+/*xwr*/
 #define __P000	PAGE_NONE
 #define __P001	PAGE_RO
 #define __P010	PAGE_RO
@@ -407,239 +406,230 @@ extern struct page *vmemmap;
 #define __S110	PAGE_RW
 #define __S111	PAGE_RW
 
-static inline int mm_exclusive(struct mm_struct *mm)
-{
-	return likely(mm == current->active_mm &&
-		      atomic_read(&mm->context.attach_count) <= 1);
+static inline int mm_exclusive(struct mm_struct *mm) {
+    return likely(mm == current->active_mm &&
+                  atomic_read(&mm->context.attach_count) <= 1);
 }
 
-static inline int mm_has_pgste(struct mm_struct *mm)
-{
+static inline int mm_has_pgste(struct mm_struct *mm) {
 #ifdef CONFIG_PGSTE
-	if (unlikely(mm->context.has_pgste))
-		return 1;
+    if (unlikely(mm->context.has_pgste))
+        return 1;
 #endif
-	return 0;
+    return 0;
 }
 /*
  * pgd/pmd/pte query functions
  */
 #ifndef __s390x__
 
-static inline int pgd_present(pgd_t pgd) { return 1; }
-static inline int pgd_none(pgd_t pgd)    { return 0; }
-static inline int pgd_bad(pgd_t pgd)     { return 0; }
+static inline int pgd_present(pgd_t pgd) {
+    return 1;
+}
+static inline int pgd_none(pgd_t pgd)    {
+    return 0;
+}
+static inline int pgd_bad(pgd_t pgd)     {
+    return 0;
+}
 
-static inline int pud_present(pud_t pud) { return 1; }
-static inline int pud_none(pud_t pud)	 { return 0; }
-static inline int pud_bad(pud_t pud)	 { return 0; }
+static inline int pud_present(pud_t pud) {
+    return 1;
+}
+static inline int pud_none(pud_t pud)	 {
+    return 0;
+}
+static inline int pud_bad(pud_t pud)	 {
+    return 0;
+}
 
 #else /* __s390x__ */
 
-static inline int pgd_present(pgd_t pgd)
-{
-	if ((pgd_val(pgd) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R2)
-		return 1;
-	return (pgd_val(pgd) & _REGION_ENTRY_ORIGIN) != 0UL;
+static inline int pgd_present(pgd_t pgd) {
+    if ((pgd_val(pgd) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R2)
+        return 1;
+    return (pgd_val(pgd) & _REGION_ENTRY_ORIGIN) != 0UL;
 }
 
-static inline int pgd_none(pgd_t pgd)
-{
-	if ((pgd_val(pgd) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R2)
-		return 0;
-	return (pgd_val(pgd) & _REGION_ENTRY_INV) != 0UL;
+static inline int pgd_none(pgd_t pgd) {
+    if ((pgd_val(pgd) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R2)
+        return 0;
+    return (pgd_val(pgd) & _REGION_ENTRY_INV) != 0UL;
 }
 
-static inline int pgd_bad(pgd_t pgd)
-{
-	/*
-	 * With dynamic page table levels the pgd can be a region table
-	 * entry or a segment table entry. Check for the bit that are
-	 * invalid for either table entry.
-	 */
-	unsigned long mask =
-		~_SEGMENT_ENTRY_ORIGIN & ~_REGION_ENTRY_INV &
-		~_REGION_ENTRY_TYPE_MASK & ~_REGION_ENTRY_LENGTH;
-	return (pgd_val(pgd) & mask) != 0;
+static inline int pgd_bad(pgd_t pgd) {
+    /*
+     * With dynamic page table levels the pgd can be a region table
+     * entry or a segment table entry. Check for the bit that are
+     * invalid for either table entry.
+     */
+    unsigned long mask =
+        ~_SEGMENT_ENTRY_ORIGIN & ~_REGION_ENTRY_INV &
+        ~_REGION_ENTRY_TYPE_MASK & ~_REGION_ENTRY_LENGTH;
+    return (pgd_val(pgd) & mask) != 0;
 }
 
-static inline int pud_present(pud_t pud)
-{
-	if ((pud_val(pud) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R3)
-		return 1;
-	return (pud_val(pud) & _REGION_ENTRY_ORIGIN) != 0UL;
+static inline int pud_present(pud_t pud) {
+    if ((pud_val(pud) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R3)
+        return 1;
+    return (pud_val(pud) & _REGION_ENTRY_ORIGIN) != 0UL;
 }
 
-static inline int pud_none(pud_t pud)
-{
-	if ((pud_val(pud) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R3)
-		return 0;
-	return (pud_val(pud) & _REGION_ENTRY_INV) != 0UL;
+static inline int pud_none(pud_t pud) {
+    if ((pud_val(pud) & _REGION_ENTRY_TYPE_MASK) < _REGION_ENTRY_TYPE_R3)
+        return 0;
+    return (pud_val(pud) & _REGION_ENTRY_INV) != 0UL;
 }
 
-static inline int pud_bad(pud_t pud)
-{
-	/*
-	 * With dynamic page table levels the pud can be a region table
-	 * entry or a segment table entry. Check for the bit that are
-	 * invalid for either table entry.
-	 */
-	unsigned long mask =
-		~_SEGMENT_ENTRY_ORIGIN & ~_REGION_ENTRY_INV &
-		~_REGION_ENTRY_TYPE_MASK & ~_REGION_ENTRY_LENGTH;
-	return (pud_val(pud) & mask) != 0;
+static inline int pud_bad(pud_t pud) {
+    /*
+     * With dynamic page table levels the pud can be a region table
+     * entry or a segment table entry. Check for the bit that are
+     * invalid for either table entry.
+     */
+    unsigned long mask =
+        ~_SEGMENT_ENTRY_ORIGIN & ~_REGION_ENTRY_INV &
+        ~_REGION_ENTRY_TYPE_MASK & ~_REGION_ENTRY_LENGTH;
+    return (pud_val(pud) & mask) != 0;
 }
 
 #endif /* __s390x__ */
 
-static inline int pmd_present(pmd_t pmd)
-{
-	return (pmd_val(pmd) & _SEGMENT_ENTRY_ORIGIN) != 0UL;
+static inline int pmd_present(pmd_t pmd) {
+    return (pmd_val(pmd) & _SEGMENT_ENTRY_ORIGIN) != 0UL;
 }
 
-static inline int pmd_none(pmd_t pmd)
-{
-	return (pmd_val(pmd) & _SEGMENT_ENTRY_INV) != 0UL;
+static inline int pmd_none(pmd_t pmd) {
+    return (pmd_val(pmd) & _SEGMENT_ENTRY_INV) != 0UL;
 }
 
-static inline int pmd_bad(pmd_t pmd)
-{
-	unsigned long mask = ~_SEGMENT_ENTRY_ORIGIN & ~_SEGMENT_ENTRY_INV;
-	return (pmd_val(pmd) & mask) != _SEGMENT_ENTRY;
+static inline int pmd_bad(pmd_t pmd) {
+    unsigned long mask = ~_SEGMENT_ENTRY_ORIGIN & ~_SEGMENT_ENTRY_INV;
+    return (pmd_val(pmd) & mask) != _SEGMENT_ENTRY;
 }
 
-static inline int pte_none(pte_t pte)
-{
-	return (pte_val(pte) & _PAGE_INVALID) && !(pte_val(pte) & _PAGE_SWT);
+static inline int pte_none(pte_t pte) {
+    return (pte_val(pte) & _PAGE_INVALID) && !(pte_val(pte) & _PAGE_SWT);
 }
 
-static inline int pte_present(pte_t pte)
-{
-	unsigned long mask = _PAGE_RO | _PAGE_INVALID | _PAGE_SWT | _PAGE_SWX;
-	return (pte_val(pte) & mask) == _PAGE_TYPE_NONE ||
-		(!(pte_val(pte) & _PAGE_INVALID) &&
-		 !(pte_val(pte) & _PAGE_SWT));
+static inline int pte_present(pte_t pte) {
+    unsigned long mask = _PAGE_RO | _PAGE_INVALID | _PAGE_SWT | _PAGE_SWX;
+    return (pte_val(pte) & mask) == _PAGE_TYPE_NONE ||
+           (!(pte_val(pte) & _PAGE_INVALID) &&
+            !(pte_val(pte) & _PAGE_SWT));
 }
 
-static inline int pte_file(pte_t pte)
-{
-	unsigned long mask = _PAGE_RO | _PAGE_INVALID | _PAGE_SWT;
-	return (pte_val(pte) & mask) == _PAGE_TYPE_FILE;
+static inline int pte_file(pte_t pte) {
+    unsigned long mask = _PAGE_RO | _PAGE_INVALID | _PAGE_SWT;
+    return (pte_val(pte) & mask) == _PAGE_TYPE_FILE;
 }
 
-static inline int pte_special(pte_t pte)
-{
-	return (pte_val(pte) & _PAGE_SPECIAL);
+static inline int pte_special(pte_t pte) {
+    return (pte_val(pte) & _PAGE_SPECIAL);
 }
 
 #define __HAVE_ARCH_PTE_SAME
-static inline int pte_same(pte_t a, pte_t b)
-{
-	return pte_val(a) == pte_val(b);
+static inline int pte_same(pte_t a, pte_t b) {
+    return pte_val(a) == pte_val(b);
 }
 
-static inline pgste_t pgste_get_lock(pte_t *ptep)
-{
-	unsigned long new = 0;
+static inline pgste_t pgste_get_lock(pte_t *ptep) {
+    unsigned long new = 0;
 #ifdef CONFIG_PGSTE
-	unsigned long old;
+    unsigned long old;
 
-	preempt_disable();
-	asm(
-		"	lg	%0,%2\n"
-		"0:	lgr	%1,%0\n"
-		"	nihh	%0,0xff7f\n"	/* clear RCP_PCL_BIT in old */
-		"	oihh	%1,0x0080\n"	/* set RCP_PCL_BIT in new */
-		"	csg	%0,%1,%2\n"
-		"	jl	0b\n"
-		: "=&d" (old), "=&d" (new), "=Q" (ptep[PTRS_PER_PTE])
-		: "Q" (ptep[PTRS_PER_PTE]) : "cc");
+    preempt_disable();
+    asm(
+        "	lg	%0,%2\n"
+        "0:	lgr	%1,%0\n"
+        "	nihh	%0,0xff7f\n"	/* clear RCP_PCL_BIT in old */
+        "	oihh	%1,0x0080\n"	/* set RCP_PCL_BIT in new */
+        "	csg	%0,%1,%2\n"
+        "	jl	0b\n"
+        : "=&d" (old), "=&d" (new), "=Q" (ptep[PTRS_PER_PTE])
+        : "Q" (ptep[PTRS_PER_PTE]) : "cc");
 #endif
-	return __pgste(new);
+    return __pgste(new);
 }
 
-static inline void pgste_set_unlock(pte_t *ptep, pgste_t pgste)
-{
+static inline void pgste_set_unlock(pte_t *ptep, pgste_t pgste) {
 #ifdef CONFIG_PGSTE
-	asm(
-		"	nihh	%1,0xff7f\n"	/* clear RCP_PCL_BIT */
-		"	stg	%1,%0\n"
-		: "=Q" (ptep[PTRS_PER_PTE])
-		: "d" (pgste_val(pgste)), "Q" (ptep[PTRS_PER_PTE]) : "cc");
-	preempt_enable();
+    asm(
+        "	nihh	%1,0xff7f\n"	/* clear RCP_PCL_BIT */
+        "	stg	%1,%0\n"
+        : "=Q" (ptep[PTRS_PER_PTE])
+        : "d" (pgste_val(pgste)), "Q" (ptep[PTRS_PER_PTE]) : "cc");
+    preempt_enable();
 #endif
 }
 
-static inline pgste_t pgste_update_all(pte_t *ptep, pgste_t pgste)
-{
+static inline pgste_t pgste_update_all(pte_t *ptep, pgste_t pgste) {
 #ifdef CONFIG_PGSTE
-	unsigned long address, bits;
-	unsigned char skey;
+    unsigned long address, bits;
+    unsigned char skey;
 
-	if (!pte_present(*ptep))
-		return pgste;
-	address = pte_val(*ptep) & PAGE_MASK;
-	skey = page_get_storage_key(address);
-	bits = skey & (_PAGE_CHANGED | _PAGE_REFERENCED);
-	/* Clear page changed & referenced bit in the storage key */
-	if (bits & _PAGE_CHANGED)
-		page_set_storage_key(address, skey ^ bits, 1);
-	else if (bits)
-		page_reset_referenced(address);
-	/* Transfer page changed & referenced bit to guest bits in pgste */
-	pgste_val(pgste) |= bits << 48;		/* RCP_GR_BIT & RCP_GC_BIT */
-	/* Get host changed & referenced bits from pgste */
-	bits |= (pgste_val(pgste) & (RCP_HR_BIT | RCP_HC_BIT)) >> 52;
-	/* Clear host bits in pgste. */
-	pgste_val(pgste) &= ~(RCP_HR_BIT | RCP_HC_BIT);
-	pgste_val(pgste) &= ~(RCP_ACC_BITS | RCP_FP_BIT);
-	/* Copy page access key and fetch protection bit to pgste */
-	pgste_val(pgste) |=
-		(unsigned long) (skey & (_PAGE_ACC_BITS | _PAGE_FP_BIT)) << 56;
-	/* Transfer changed and referenced to kvm user bits */
-	pgste_val(pgste) |= bits << 45;		/* KVM_UR_BIT & KVM_UC_BIT */
-	/* Transfer changed & referenced to pte sofware bits */
-	pte_val(*ptep) |= bits << 1;		/* _PAGE_SWR & _PAGE_SWC */
+    if (!pte_present(*ptep))
+        return pgste;
+    address = pte_val(*ptep) & PAGE_MASK;
+    skey = page_get_storage_key(address);
+    bits = skey & (_PAGE_CHANGED | _PAGE_REFERENCED);
+    /* Clear page changed & referenced bit in the storage key */
+    if (bits & _PAGE_CHANGED)
+        page_set_storage_key(address, skey ^ bits, 1);
+    else if (bits)
+        page_reset_referenced(address);
+    /* Transfer page changed & referenced bit to guest bits in pgste */
+    pgste_val(pgste) |= bits << 48;		/* RCP_GR_BIT & RCP_GC_BIT */
+    /* Get host changed & referenced bits from pgste */
+    bits |= (pgste_val(pgste) & (RCP_HR_BIT | RCP_HC_BIT)) >> 52;
+    /* Clear host bits in pgste. */
+    pgste_val(pgste) &= ~(RCP_HR_BIT | RCP_HC_BIT);
+    pgste_val(pgste) &= ~(RCP_ACC_BITS | RCP_FP_BIT);
+    /* Copy page access key and fetch protection bit to pgste */
+    pgste_val(pgste) |=
+        (unsigned long) (skey & (_PAGE_ACC_BITS | _PAGE_FP_BIT)) << 56;
+    /* Transfer changed and referenced to kvm user bits */
+    pgste_val(pgste) |= bits << 45;		/* KVM_UR_BIT & KVM_UC_BIT */
+    /* Transfer changed & referenced to pte sofware bits */
+    pte_val(*ptep) |= bits << 1;		/* _PAGE_SWR & _PAGE_SWC */
 #endif
-	return pgste;
+    return pgste;
 
 }
 
-static inline pgste_t pgste_update_young(pte_t *ptep, pgste_t pgste)
-{
+static inline pgste_t pgste_update_young(pte_t *ptep, pgste_t pgste) {
 #ifdef CONFIG_PGSTE
-	int young;
+    int young;
 
-	if (!pte_present(*ptep))
-		return pgste;
-	young = page_reset_referenced(pte_val(*ptep) & PAGE_MASK);
-	/* Transfer page referenced bit to pte software bit (host view) */
-	if (young || (pgste_val(pgste) & RCP_HR_BIT))
-		pte_val(*ptep) |= _PAGE_SWR;
-	/* Clear host referenced bit in pgste. */
-	pgste_val(pgste) &= ~RCP_HR_BIT;
-	/* Transfer page referenced bit to guest bit in pgste */
-	pgste_val(pgste) |= (unsigned long) young << 50; /* set RCP_GR_BIT */
+    if (!pte_present(*ptep))
+        return pgste;
+    young = page_reset_referenced(pte_val(*ptep) & PAGE_MASK);
+    /* Transfer page referenced bit to pte software bit (host view) */
+    if (young || (pgste_val(pgste) & RCP_HR_BIT))
+        pte_val(*ptep) |= _PAGE_SWR;
+    /* Clear host referenced bit in pgste. */
+    pgste_val(pgste) &= ~RCP_HR_BIT;
+    /* Transfer page referenced bit to guest bit in pgste */
+    pgste_val(pgste) |= (unsigned long) young << 50; /* set RCP_GR_BIT */
 #endif
-	return pgste;
+    return pgste;
 
 }
 
-static inline void pgste_set_pte(pte_t *ptep, pgste_t pgste, pte_t entry)
-{
+static inline void pgste_set_pte(pte_t *ptep, pgste_t pgste, pte_t entry) {
 #ifdef CONFIG_PGSTE
-	unsigned long address;
-	unsigned long okey, nkey;
+    unsigned long address;
+    unsigned long okey, nkey;
 
-	if (!pte_present(entry))
-		return;
-	address = pte_val(entry) & PAGE_MASK;
-	okey = nkey = page_get_storage_key(address);
-	nkey &= ~(_PAGE_ACC_BITS | _PAGE_FP_BIT);
-	/* Set page access key and fetch protection bit from pgste */
-	nkey |= (pgste_val(pgste) & (RCP_ACC_BITS | RCP_FP_BIT)) >> 56;
-	if (okey != nkey)
-		page_set_storage_key(address, nkey, 1);
+    if (!pte_present(entry))
+        return;
+    address = pte_val(entry) & PAGE_MASK;
+    okey = nkey = page_get_storage_key(address);
+    nkey &= ~(_PAGE_ACC_BITS | _PAGE_FP_BIT);
+    /* Set page access key and fetch protection bit from pgste */
+    nkey |= (pgste_val(pgste) & (RCP_ACC_BITS | RCP_FP_BIT)) >> 56;
+    if (okey != nkey)
+        page_set_storage_key(address, nkey, 1);
 #endif
 }
 
@@ -651,11 +641,11 @@ static inline void pgste_set_pte(pte_t *ptep, pgste_t pgste, pte_t entry)
  * @crst_list: list of all crst tables used in the guest address space
  */
 struct gmap {
-	struct list_head list;
-	struct mm_struct *mm;
-	unsigned long *table;
-	unsigned long asce;
-	struct list_head crst_list;
+    struct list_head list;
+    struct mm_struct *mm;
+    unsigned long *table;
+    unsigned long asce;
+    struct list_head crst_list;
 };
 
 /**
@@ -664,8 +654,8 @@ struct gmap {
  * @entry: pointer to a segment table entry
  */
 struct gmap_rmap {
-	struct list_head list;
-	unsigned long *entry;
+    struct list_head list;
+    unsigned long *entry;
 };
 
 /**
@@ -674,8 +664,8 @@ struct gmap_rmap {
  * @mapper: list of segment table entries maping a page table
  */
 struct gmap_pgtable {
-	unsigned long vmaddr;
-	struct list_head mapper;
+    unsigned long vmaddr;
+    struct list_head mapper;
 };
 
 struct gmap *gmap_alloc(struct mm_struct *mm);
@@ -683,7 +673,7 @@ void gmap_free(struct gmap *gmap);
 void gmap_enable(struct gmap *gmap);
 void gmap_disable(struct gmap *gmap);
 int gmap_map_segment(struct gmap *gmap, unsigned long from,
-		     unsigned long to, unsigned long length);
+                     unsigned long to, unsigned long length);
 int gmap_unmap_segment(struct gmap *gmap, unsigned long to, unsigned long len);
 unsigned long __gmap_fault(unsigned long address, struct gmap *);
 unsigned long gmap_fault(unsigned long address, struct gmap *);
@@ -695,158 +685,141 @@ void gmap_discard(unsigned long from, unsigned long to, struct gmap *);
  * hook is made available.
  */
 static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-			      pte_t *ptep, pte_t entry)
-{
-	pgste_t pgste;
+                              pte_t *ptep, pte_t entry) {
+    pgste_t pgste;
 
-	if (mm_has_pgste(mm)) {
-		pgste = pgste_get_lock(ptep);
-		pgste_set_pte(ptep, pgste, entry);
-		*ptep = entry;
-		pgste_set_unlock(ptep, pgste);
-	} else
-		*ptep = entry;
+    if (mm_has_pgste(mm)) {
+        pgste = pgste_get_lock(ptep);
+        pgste_set_pte(ptep, pgste, entry);
+        *ptep = entry;
+        pgste_set_unlock(ptep, pgste);
+    } else
+        *ptep = entry;
 }
 
 /*
  * query functions pte_write/pte_dirty/pte_young only work if
  * pte_present() is true. Undefined behaviour if not..
  */
-static inline int pte_write(pte_t pte)
-{
-	return (pte_val(pte) & _PAGE_RO) == 0;
+static inline int pte_write(pte_t pte) {
+    return (pte_val(pte) & _PAGE_RO) == 0;
 }
 
-static inline int pte_dirty(pte_t pte)
-{
+static inline int pte_dirty(pte_t pte) {
 #ifdef CONFIG_PGSTE
-	if (pte_val(pte) & _PAGE_SWC)
-		return 1;
+    if (pte_val(pte) & _PAGE_SWC)
+        return 1;
 #endif
-	return 0;
+    return 0;
 }
 
-static inline int pte_young(pte_t pte)
-{
+static inline int pte_young(pte_t pte) {
 #ifdef CONFIG_PGSTE
-	if (pte_val(pte) & _PAGE_SWR)
-		return 1;
+    if (pte_val(pte) & _PAGE_SWR)
+        return 1;
 #endif
-	return 0;
+    return 0;
 }
 
 /*
  * pgd/pmd/pte modification functions
  */
 
-static inline void pgd_clear(pgd_t *pgd)
-{
+static inline void pgd_clear(pgd_t *pgd) {
 #ifdef __s390x__
-	if ((pgd_val(*pgd) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R2)
-		pgd_val(*pgd) = _REGION2_ENTRY_EMPTY;
+    if ((pgd_val(*pgd) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R2)
+        pgd_val(*pgd) = _REGION2_ENTRY_EMPTY;
 #endif
 }
 
-static inline void pud_clear(pud_t *pud)
-{
+static inline void pud_clear(pud_t *pud) {
 #ifdef __s390x__
-	if ((pud_val(*pud) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R3)
-		pud_val(*pud) = _REGION3_ENTRY_EMPTY;
+    if ((pud_val(*pud) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R3)
+        pud_val(*pud) = _REGION3_ENTRY_EMPTY;
 #endif
 }
 
-static inline void pmd_clear(pmd_t *pmdp)
-{
-	pmd_val(*pmdp) = _SEGMENT_ENTRY_EMPTY;
+static inline void pmd_clear(pmd_t *pmdp) {
+    pmd_val(*pmdp) = _SEGMENT_ENTRY_EMPTY;
 }
 
-static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-{
-	pte_val(*ptep) = _PAGE_TYPE_EMPTY;
+static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep) {
+    pte_val(*ptep) = _PAGE_TYPE_EMPTY;
 }
 
 /*
  * The following pte modification functions only work if
  * pte_present() is true. Undefined behaviour if not..
  */
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-	pte_val(pte) &= _PAGE_CHG_MASK;
-	pte_val(pte) |= pgprot_val(newprot);
-	return pte;
+static inline pte_t pte_modify(pte_t pte, pgprot_t newprot) {
+    pte_val(pte) &= _PAGE_CHG_MASK;
+    pte_val(pte) |= pgprot_val(newprot);
+    return pte;
 }
 
-static inline pte_t pte_wrprotect(pte_t pte)
-{
-	/* Do not clobber _PAGE_TYPE_NONE pages!  */
-	if (!(pte_val(pte) & _PAGE_INVALID))
-		pte_val(pte) |= _PAGE_RO;
-	return pte;
+static inline pte_t pte_wrprotect(pte_t pte) {
+    /* Do not clobber _PAGE_TYPE_NONE pages!  */
+    if (!(pte_val(pte) & _PAGE_INVALID))
+        pte_val(pte) |= _PAGE_RO;
+    return pte;
 }
 
-static inline pte_t pte_mkwrite(pte_t pte)
-{
-	pte_val(pte) &= ~_PAGE_RO;
-	return pte;
+static inline pte_t pte_mkwrite(pte_t pte) {
+    pte_val(pte) &= ~_PAGE_RO;
+    return pte;
 }
 
-static inline pte_t pte_mkclean(pte_t pte)
-{
+static inline pte_t pte_mkclean(pte_t pte) {
 #ifdef CONFIG_PGSTE
-	pte_val(pte) &= ~_PAGE_SWC;
+    pte_val(pte) &= ~_PAGE_SWC;
 #endif
-	return pte;
+    return pte;
 }
 
-static inline pte_t pte_mkdirty(pte_t pte)
-{
-	return pte;
+static inline pte_t pte_mkdirty(pte_t pte) {
+    return pte;
 }
 
-static inline pte_t pte_mkold(pte_t pte)
-{
+static inline pte_t pte_mkold(pte_t pte) {
 #ifdef CONFIG_PGSTE
-	pte_val(pte) &= ~_PAGE_SWR;
+    pte_val(pte) &= ~_PAGE_SWR;
 #endif
-	return pte;
+    return pte;
 }
 
-static inline pte_t pte_mkyoung(pte_t pte)
-{
-	return pte;
+static inline pte_t pte_mkyoung(pte_t pte) {
+    return pte;
 }
 
-static inline pte_t pte_mkspecial(pte_t pte)
-{
-	pte_val(pte) |= _PAGE_SPECIAL;
-	return pte;
+static inline pte_t pte_mkspecial(pte_t pte) {
+    pte_val(pte) |= _PAGE_SPECIAL;
+    return pte;
 }
 
 #ifdef CONFIG_HUGETLB_PAGE
-static inline pte_t pte_mkhuge(pte_t pte)
-{
-	/*
-	 * PROT_NONE needs to be remapped from the pte type to the ste type.
-	 * The HW invalid bit is also different for pte and ste. The pte
-	 * invalid bit happens to be the same as the ste _SEGMENT_ENTRY_LARGE
-	 * bit, so we don't have to clear it.
-	 */
-	if (pte_val(pte) & _PAGE_INVALID) {
-		if (pte_val(pte) & _PAGE_SWT)
-			pte_val(pte) |= _HPAGE_TYPE_NONE;
-		pte_val(pte) |= _SEGMENT_ENTRY_INV;
-	}
-	/*
-	 * Clear SW pte bits SWT and SWX, there are no SW bits in a segment
-	 * table entry.
-	 */
-	pte_val(pte) &= ~(_PAGE_SWT | _PAGE_SWX);
-	/*
-	 * Also set the change-override bit because we don't need dirty bit
-	 * tracking for hugetlbfs pages.
-	 */
-	pte_val(pte) |= (_SEGMENT_ENTRY_LARGE | _SEGMENT_ENTRY_CO);
-	return pte;
+static inline pte_t pte_mkhuge(pte_t pte) {
+    /*
+     * PROT_NONE needs to be remapped from the pte type to the ste type.
+     * The HW invalid bit is also different for pte and ste. The pte
+     * invalid bit happens to be the same as the ste _SEGMENT_ENTRY_LARGE
+     * bit, so we don't have to clear it.
+     */
+    if (pte_val(pte) & _PAGE_INVALID) {
+        if (pte_val(pte) & _PAGE_SWT)
+            pte_val(pte) |= _HPAGE_TYPE_NONE;
+        pte_val(pte) |= _SEGMENT_ENTRY_INV;
+    }
+    /*
+     * Clear SW pte bits SWT and SWX, there are no SW bits in a segment
+     * table entry.
+     */
+    pte_val(pte) &= ~(_PAGE_SWT | _PAGE_SWX);
+    /*
+     * Also set the change-override bit because we don't need dirty bit
+     * tracking for hugetlbfs pages.
+     */
+    pte_val(pte) |= (_SEGMENT_ENTRY_LARGE | _SEGMENT_ENTRY_CO);
+    return pte;
 }
 #endif
 
@@ -854,85 +827,80 @@ static inline pte_t pte_mkhuge(pte_t pte)
  * Get (and clear) the user dirty bit for a pte.
  */
 static inline int ptep_test_and_clear_user_dirty(struct mm_struct *mm,
-						 pte_t *ptep)
-{
-	pgste_t pgste;
-	int dirty = 0;
+        pte_t *ptep) {
+    pgste_t pgste;
+    int dirty = 0;
 
-	if (mm_has_pgste(mm)) {
-		pgste = pgste_get_lock(ptep);
-		pgste = pgste_update_all(ptep, pgste);
-		dirty = !!(pgste_val(pgste) & KVM_UC_BIT);
-		pgste_val(pgste) &= ~KVM_UC_BIT;
-		pgste_set_unlock(ptep, pgste);
-		return dirty;
-	}
-	return dirty;
+    if (mm_has_pgste(mm)) {
+        pgste = pgste_get_lock(ptep);
+        pgste = pgste_update_all(ptep, pgste);
+        dirty = !!(pgste_val(pgste) & KVM_UC_BIT);
+        pgste_val(pgste) &= ~KVM_UC_BIT;
+        pgste_set_unlock(ptep, pgste);
+        return dirty;
+    }
+    return dirty;
 }
 
 /*
  * Get (and clear) the user referenced bit for a pte.
  */
 static inline int ptep_test_and_clear_user_young(struct mm_struct *mm,
-						 pte_t *ptep)
-{
-	pgste_t pgste;
-	int young = 0;
+        pte_t *ptep) {
+    pgste_t pgste;
+    int young = 0;
 
-	if (mm_has_pgste(mm)) {
-		pgste = pgste_get_lock(ptep);
-		pgste = pgste_update_young(ptep, pgste);
-		young = !!(pgste_val(pgste) & KVM_UR_BIT);
-		pgste_val(pgste) &= ~KVM_UR_BIT;
-		pgste_set_unlock(ptep, pgste);
-	}
-	return young;
+    if (mm_has_pgste(mm)) {
+        pgste = pgste_get_lock(ptep);
+        pgste = pgste_update_young(ptep, pgste);
+        young = !!(pgste_val(pgste) & KVM_UR_BIT);
+        pgste_val(pgste) &= ~KVM_UR_BIT;
+        pgste_set_unlock(ptep, pgste);
+    }
+    return young;
 }
 
 #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
 static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
-					    unsigned long addr, pte_t *ptep)
-{
-	pgste_t pgste;
-	pte_t pte;
+        unsigned long addr, pte_t *ptep) {
+    pgste_t pgste;
+    pte_t pte;
 
-	if (mm_has_pgste(vma->vm_mm)) {
-		pgste = pgste_get_lock(ptep);
-		pgste = pgste_update_young(ptep, pgste);
-		pte = *ptep;
-		*ptep = pte_mkold(pte);
-		pgste_set_unlock(ptep, pgste);
-		return pte_young(pte);
-	}
-	return 0;
+    if (mm_has_pgste(vma->vm_mm)) {
+        pgste = pgste_get_lock(ptep);
+        pgste = pgste_update_young(ptep, pgste);
+        pte = *ptep;
+        *ptep = pte_mkold(pte);
+        pgste_set_unlock(ptep, pgste);
+        return pte_young(pte);
+    }
+    return 0;
 }
 
 #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
 static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
-					 unsigned long address, pte_t *ptep)
-{
-	/* No need to flush TLB
-	 * On s390 reference bits are in storage key and never in TLB
-	 * With virtualization we handle the reference bit, without we
-	 * we can simply return */
-	return ptep_test_and_clear_young(vma, address, ptep);
+        unsigned long address, pte_t *ptep) {
+    /* No need to flush TLB
+     * On s390 reference bits are in storage key and never in TLB
+     * With virtualization we handle the reference bit, without we
+     * we can simply return */
+    return ptep_test_and_clear_young(vma, address, ptep);
 }
 
-static inline void __ptep_ipte(unsigned long address, pte_t *ptep)
-{
-	if (!(pte_val(*ptep) & _PAGE_INVALID)) {
+static inline void __ptep_ipte(unsigned long address, pte_t *ptep) {
+    if (!(pte_val(*ptep) & _PAGE_INVALID)) {
 #ifndef __s390x__
-		/* pto must point to the start of the segment table */
-		pte_t *pto = (pte_t *) (((unsigned long) ptep) & 0x7ffffc00);
+        /* pto must point to the start of the segment table */
+        pte_t *pto = (pte_t *) (((unsigned long) ptep) & 0x7ffffc00);
 #else
-		/* ipte in zarch mode can do the math */
-		pte_t *pto = ptep;
+        /* ipte in zarch mode can do the math */
+        pte_t *pto = ptep;
 #endif
-		asm volatile(
-			"	ipte	%2,%3"
-			: "=m" (*ptep) : "m" (*ptep),
-			  "a" (pto), "a" (address));
-	}
+        asm volatile(
+            "	ipte	%2,%3"
+            : "=m" (*ptep) : "m" (*ptep),
+            "a" (pto), "a" (address));
+    }
 }
 
 /*
@@ -950,72 +918,68 @@ static inline void __ptep_ipte(unsigned long address, pte_t *ptep)
  */
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
 static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-				       unsigned long address, pte_t *ptep)
-{
-	pgste_t pgste;
-	pte_t pte;
+                                       unsigned long address, pte_t *ptep) {
+    pgste_t pgste;
+    pte_t pte;
 
-	mm->context.flush_mm = 1;
-	if (mm_has_pgste(mm))
-		pgste = pgste_get_lock(ptep);
+    mm->context.flush_mm = 1;
+    if (mm_has_pgste(mm))
+        pgste = pgste_get_lock(ptep);
 
-	pte = *ptep;
-	if (!mm_exclusive(mm))
-		__ptep_ipte(address, ptep);
-	pte_val(*ptep) = _PAGE_TYPE_EMPTY;
+    pte = *ptep;
+    if (!mm_exclusive(mm))
+        __ptep_ipte(address, ptep);
+    pte_val(*ptep) = _PAGE_TYPE_EMPTY;
 
-	if (mm_has_pgste(mm)) {
-		pgste = pgste_update_all(&pte, pgste);
-		pgste_set_unlock(ptep, pgste);
-	}
-	return pte;
+    if (mm_has_pgste(mm)) {
+        pgste = pgste_update_all(&pte, pgste);
+        pgste_set_unlock(ptep, pgste);
+    }
+    return pte;
 }
 
 #define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
 static inline pte_t ptep_modify_prot_start(struct mm_struct *mm,
-					   unsigned long address,
-					   pte_t *ptep)
-{
-	pte_t pte;
+        unsigned long address,
+        pte_t *ptep) {
+    pte_t pte;
 
-	mm->context.flush_mm = 1;
-	if (mm_has_pgste(mm))
-		pgste_get_lock(ptep);
+    mm->context.flush_mm = 1;
+    if (mm_has_pgste(mm))
+        pgste_get_lock(ptep);
 
-	pte = *ptep;
-	if (!mm_exclusive(mm))
-		__ptep_ipte(address, ptep);
-	return pte;
+    pte = *ptep;
+    if (!mm_exclusive(mm))
+        __ptep_ipte(address, ptep);
+    return pte;
 }
 
 static inline void ptep_modify_prot_commit(struct mm_struct *mm,
-					   unsigned long address,
-					   pte_t *ptep, pte_t pte)
-{
-	*ptep = pte;
-	if (mm_has_pgste(mm))
-		pgste_set_unlock(ptep, *(pgste_t *)(ptep + PTRS_PER_PTE));
+        unsigned long address,
+        pte_t *ptep, pte_t pte) {
+    *ptep = pte;
+    if (mm_has_pgste(mm))
+        pgste_set_unlock(ptep, *(pgste_t *)(ptep + PTRS_PER_PTE));
 }
 
 #define __HAVE_ARCH_PTEP_CLEAR_FLUSH
 static inline pte_t ptep_clear_flush(struct vm_area_struct *vma,
-				     unsigned long address, pte_t *ptep)
-{
-	pgste_t pgste;
-	pte_t pte;
+                                     unsigned long address, pte_t *ptep) {
+    pgste_t pgste;
+    pte_t pte;
 
-	if (mm_has_pgste(vma->vm_mm))
-		pgste = pgste_get_lock(ptep);
+    if (mm_has_pgste(vma->vm_mm))
+        pgste = pgste_get_lock(ptep);
 
-	pte = *ptep;
-	__ptep_ipte(address, ptep);
-	pte_val(*ptep) = _PAGE_TYPE_EMPTY;
+    pte = *ptep;
+    __ptep_ipte(address, ptep);
+    pte_val(*ptep) = _PAGE_TYPE_EMPTY;
 
-	if (mm_has_pgste(vma->vm_mm)) {
-		pgste = pgste_update_all(&pte, pgste);
-		pgste_set_unlock(ptep, pgste);
-	}
-	return pte;
+    if (mm_has_pgste(vma->vm_mm)) {
+        pgste = pgste_update_all(&pte, pgste);
+        pgste_set_unlock(ptep, pgste);
+    }
+    return pte;
 }
 
 /*
@@ -1027,85 +991,80 @@ static inline pte_t ptep_clear_flush(struct vm_area_struct *vma,
  */
 #define __HAVE_ARCH_PTEP_GET_AND_CLEAR_FULL
 static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
-					    unsigned long address,
-					    pte_t *ptep, int full)
-{
-	pgste_t pgste;
-	pte_t pte;
+        unsigned long address,
+        pte_t *ptep, int full) {
+    pgste_t pgste;
+    pte_t pte;
 
-	if (mm_has_pgste(mm))
-		pgste = pgste_get_lock(ptep);
+    if (mm_has_pgste(mm))
+        pgste = pgste_get_lock(ptep);
 
-	pte = *ptep;
-	if (!full)
-		__ptep_ipte(address, ptep);
-	pte_val(*ptep) = _PAGE_TYPE_EMPTY;
+    pte = *ptep;
+    if (!full)
+        __ptep_ipte(address, ptep);
+    pte_val(*ptep) = _PAGE_TYPE_EMPTY;
 
-	if (mm_has_pgste(mm)) {
-		pgste = pgste_update_all(&pte, pgste);
-		pgste_set_unlock(ptep, pgste);
-	}
-	return pte;
+    if (mm_has_pgste(mm)) {
+        pgste = pgste_update_all(&pte, pgste);
+        pgste_set_unlock(ptep, pgste);
+    }
+    return pte;
 }
 
 #define __HAVE_ARCH_PTEP_SET_WRPROTECT
 static inline pte_t ptep_set_wrprotect(struct mm_struct *mm,
-				       unsigned long address, pte_t *ptep)
-{
-	pgste_t pgste;
-	pte_t pte = *ptep;
+                                       unsigned long address, pte_t *ptep) {
+    pgste_t pgste;
+    pte_t pte = *ptep;
 
-	if (pte_write(pte)) {
-		mm->context.flush_mm = 1;
-		if (mm_has_pgste(mm))
-			pgste = pgste_get_lock(ptep);
+    if (pte_write(pte)) {
+        mm->context.flush_mm = 1;
+        if (mm_has_pgste(mm))
+            pgste = pgste_get_lock(ptep);
 
-		if (!mm_exclusive(mm))
-			__ptep_ipte(address, ptep);
-		*ptep = pte_wrprotect(pte);
+        if (!mm_exclusive(mm))
+            __ptep_ipte(address, ptep);
+        *ptep = pte_wrprotect(pte);
 
-		if (mm_has_pgste(mm))
-			pgste_set_unlock(ptep, pgste);
-	}
-	return pte;
+        if (mm_has_pgste(mm))
+            pgste_set_unlock(ptep, pgste);
+    }
+    return pte;
 }
 
 #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
 static inline int ptep_set_access_flags(struct vm_area_struct *vma,
-					unsigned long address, pte_t *ptep,
-					pte_t entry, int dirty)
-{
-	pgste_t pgste;
+                                        unsigned long address, pte_t *ptep,
+                                        pte_t entry, int dirty) {
+    pgste_t pgste;
 
-	if (pte_same(*ptep, entry))
-		return 0;
-	if (mm_has_pgste(vma->vm_mm))
-		pgste = pgste_get_lock(ptep);
+    if (pte_same(*ptep, entry))
+        return 0;
+    if (mm_has_pgste(vma->vm_mm))
+        pgste = pgste_get_lock(ptep);
 
-	__ptep_ipte(address, ptep);
-	*ptep = entry;
+    __ptep_ipte(address, ptep);
+    *ptep = entry;
 
-	if (mm_has_pgste(vma->vm_mm))
-		pgste_set_unlock(ptep, pgste);
-	return 1;
+    if (mm_has_pgste(vma->vm_mm))
+        pgste_set_unlock(ptep, pgste);
+    return 1;
 }
 
 /*
  * Conversion functions: convert a page and protection to a page entry,
  * and a page entry and page directory to the page they refer to.
  */
-static inline pte_t mk_pte_phys(unsigned long physpage, pgprot_t pgprot)
-{
-	pte_t __pte;
-	pte_val(__pte) = physpage + pgprot_val(pgprot);
-	return __pte;
+static inline pte_t mk_pte_phys(unsigned long physpage, pgprot_t pgprot) {
+    pte_t __pte;
+    pte_val(__pte) = physpage + pgprot_val(pgprot);
+    return __pte;
 }
 
-static inline pte_t mk_pte(struct page *page, pgprot_t pgprot)
-{
-	unsigned long physpage = page_to_phys(page);
+static inline pte_t mk_pte(struct page *page, pgprot_t pgprot) {
+    unsigned long physpage = page_to_phys(page);
 
-	return mk_pte_phys(physpage, pgprot);
+    return mk_pte_phys(physpage, pgprot);
 }
 
 #define pgd_index(address) (((address) >> PGDIR_SHIFT) & (PTRS_PER_PGD-1))
@@ -1131,20 +1090,18 @@ static inline pte_t mk_pte(struct page *page, pgprot_t pgprot)
 #define pud_deref(pud) (pud_val(pud) & _REGION_ENTRY_ORIGIN)
 #define pgd_deref(pgd) (pgd_val(pgd) & _REGION_ENTRY_ORIGIN)
 
-static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
-{
-	pud_t *pud = (pud_t *) pgd;
-	if ((pgd_val(*pgd) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R2)
-		pud = (pud_t *) pgd_deref(*pgd);
-	return pud  + pud_index(address);
+static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address) {
+    pud_t *pud = (pud_t *) pgd;
+    if ((pgd_val(*pgd) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R2)
+        pud = (pud_t *) pgd_deref(*pgd);
+    return pud  + pud_index(address);
 }
 
-static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
-{
-	pmd_t *pmd = (pmd_t *) pud;
-	if ((pud_val(*pud) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R3)
-		pmd = (pmd_t *) pud_deref(*pud);
-	return pmd + pmd_index(address);
+static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address) {
+    pmd_t *pmd = (pmd_t *) pud;
+    if ((pud_val(*pud) & _REGION_ENTRY_TYPE_MASK) == _REGION_ENTRY_TYPE_R3)
+        pmd = (pmd_t *) pud_deref(*pud);
+    return pmd + pmd_index(address);
 }
 
 #endif /* __s390x__ */
@@ -1201,13 +1158,12 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
 #else
 #define __SWP_OFFSET_MASK (~0UL >> 11)
 #endif
-static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset)
-{
-	pte_t pte;
-	offset &= __SWP_OFFSET_MASK;
-	pte_val(pte) = _PAGE_TYPE_SWAP | ((type & 0x1f) << 2) |
-		((offset & 1UL) << 7) | ((offset & ~1UL) << 11);
-	return pte;
+static inline pte_t mk_swap_pte(unsigned long type, unsigned long offset) {
+    pte_t pte;
+    offset &= __SWP_OFFSET_MASK;
+    pte_val(pte) = _PAGE_TYPE_SWAP | ((type & 0x1f) << 2) |
+                   ((offset & 1UL) << 7) | ((offset & ~1UL) << 11);
+    return pte;
 }
 
 #define __swp_type(entry)	(((entry).val >> 2) & 0x1f)

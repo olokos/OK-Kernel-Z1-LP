@@ -20,14 +20,13 @@
 #define TXMASK		0x3F00
 #define TXOFFSET	8
 
-void prom_putchar(char c)
-{
-	unsigned long flags;
+void prom_putchar(char c) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	do { } while ((ltq_r32(LTQ_ASC_FSTAT) & TXMASK) >> TXOFFSET);
-	if (c == '\n')
-		ltq_w32('\r', LTQ_ASC_TBUF);
-	ltq_w32(c, LTQ_ASC_TBUF);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    do { } while ((ltq_r32(LTQ_ASC_FSTAT) & TXMASK) >> TXOFFSET);
+    if (c == '\n')
+        ltq_w32('\r', LTQ_ASC_TBUF);
+    ltq_w32(c, LTQ_ASC_TBUF);
+    local_irq_restore(flags);
 }

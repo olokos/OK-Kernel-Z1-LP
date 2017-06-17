@@ -48,8 +48,8 @@
 #define WL_RSSI_ANT_MAX		4	/* max possible rx antennas */
 
 struct intctrlregs {
-	u32 intstatus;
-	u32 intmask;
+    u32 intstatus;
+    u32 intmask;
 };
 
 /* PIO structure,
@@ -59,375 +59,375 @@ struct intctrlregs {
  */
 /* 2byte-wide pio register set per channel(xmt or rcv) */
 struct pio2regs {
-	u16 fifocontrol;
-	u16 fifodata;
-	u16 fifofree;	/* only valid in xmt channel, not in rcv channel */
-	u16 PAD;
+    u16 fifocontrol;
+    u16 fifodata;
+    u16 fifofree;	/* only valid in xmt channel, not in rcv channel */
+    u16 PAD;
 };
 
 /* a pair of pio channels(tx and rx) */
 struct pio2regp {
-	struct pio2regs tx;
-	struct pio2regs rx;
+    struct pio2regs tx;
+    struct pio2regs rx;
 };
 
 /* 4byte-wide pio register set per channel(xmt or rcv) */
 struct pio4regs {
-	u32 fifocontrol;
-	u32 fifodata;
+    u32 fifocontrol;
+    u32 fifodata;
 };
 
 /* a pair of pio channels(tx and rx) */
 struct pio4regp {
-	struct pio4regs tx;
-	struct pio4regs rx;
+    struct pio4regs tx;
+    struct pio4regs rx;
 };
 
 /* read: 32-bit register that can be read as 32-bit or as 2 16-bit
  * write: only low 16b-it half can be written
  */
 union pmqreg {
-	u32 pmqhostdata;	/* read only! */
-	struct {
-		u16 pmqctrlstatus;	/* read/write */
-		u16 PAD;
-	} w;
+    u32 pmqhostdata;	/* read only! */
+    struct {
+        u16 pmqctrlstatus;	/* read/write */
+        u16 PAD;
+    } w;
 };
 
 struct fifo64 {
-	struct dma64regs dmaxmt;	/* dma tx */
-	struct pio4regs piotx;	/* pio tx */
-	struct dma64regs dmarcv;	/* dma rx */
-	struct pio4regs piorx;	/* pio rx */
+    struct dma64regs dmaxmt;	/* dma tx */
+    struct pio4regs piotx;	/* pio tx */
+    struct dma64regs dmarcv;	/* dma rx */
+    struct pio4regs piorx;	/* pio rx */
 };
 
 /*
  * Host Interface Registers
  */
 struct d11regs {
-	/* Device Control ("semi-standard host registers") */
-	u32 PAD[3];		/* 0x0 - 0x8 */
-	u32 biststatus;	/* 0xC */
-	u32 biststatus2;	/* 0x10 */
-	u32 PAD;		/* 0x14 */
-	u32 gptimer;		/* 0x18 */
-	u32 usectimer;	/* 0x1c *//* for corerev >= 26 */
+    /* Device Control ("semi-standard host registers") */
+    u32 PAD[3];		/* 0x0 - 0x8 */
+    u32 biststatus;	/* 0xC */
+    u32 biststatus2;	/* 0x10 */
+    u32 PAD;		/* 0x14 */
+    u32 gptimer;		/* 0x18 */
+    u32 usectimer;	/* 0x1c *//* for corerev >= 26 */
 
-	/* Interrupt Control *//* 0x20 */
-	struct intctrlregs intctrlregs[8];
+    /* Interrupt Control *//* 0x20 */
+    struct intctrlregs intctrlregs[8];
 
-	u32 PAD[40];		/* 0x60 - 0xFC */
+    u32 PAD[40];		/* 0x60 - 0xFC */
 
-	u32 intrcvlazy[4];	/* 0x100 - 0x10C */
+    u32 intrcvlazy[4];	/* 0x100 - 0x10C */
 
-	u32 PAD[4];		/* 0x110 - 0x11c */
+    u32 PAD[4];		/* 0x110 - 0x11c */
 
-	u32 maccontrol;	/* 0x120 */
-	u32 maccommand;	/* 0x124 */
-	u32 macintstatus;	/* 0x128 */
-	u32 macintmask;	/* 0x12C */
+    u32 maccontrol;	/* 0x120 */
+    u32 maccommand;	/* 0x124 */
+    u32 macintstatus;	/* 0x128 */
+    u32 macintmask;	/* 0x12C */
 
-	/* Transmit Template Access */
-	u32 tplatewrptr;	/* 0x130 */
-	u32 tplatewrdata;	/* 0x134 */
-	u32 PAD[2];		/* 0x138 - 0x13C */
+    /* Transmit Template Access */
+    u32 tplatewrptr;	/* 0x130 */
+    u32 tplatewrdata;	/* 0x134 */
+    u32 PAD[2];		/* 0x138 - 0x13C */
 
-	/* PMQ registers */
-	union pmqreg pmqreg;	/* 0x140 */
-	u32 pmqpatl;		/* 0x144 */
-	u32 pmqpath;		/* 0x148 */
-	u32 PAD;		/* 0x14C */
+    /* PMQ registers */
+    union pmqreg pmqreg;	/* 0x140 */
+    u32 pmqpatl;		/* 0x144 */
+    u32 pmqpath;		/* 0x148 */
+    u32 PAD;		/* 0x14C */
 
-	u32 chnstatus;	/* 0x150 */
-	u32 psmdebug;	/* 0x154 */
-	u32 phydebug;	/* 0x158 */
-	u32 machwcap;	/* 0x15C */
+    u32 chnstatus;	/* 0x150 */
+    u32 psmdebug;	/* 0x154 */
+    u32 phydebug;	/* 0x158 */
+    u32 machwcap;	/* 0x15C */
 
-	/* Extended Internal Objects */
-	u32 objaddr;		/* 0x160 */
-	u32 objdata;		/* 0x164 */
-	u32 PAD[2];		/* 0x168 - 0x16c */
+    /* Extended Internal Objects */
+    u32 objaddr;		/* 0x160 */
+    u32 objdata;		/* 0x164 */
+    u32 PAD[2];		/* 0x168 - 0x16c */
 
-	u32 frmtxstatus;	/* 0x170 */
-	u32 frmtxstatus2;	/* 0x174 */
-	u32 PAD[2];		/* 0x178 - 0x17c */
+    u32 frmtxstatus;	/* 0x170 */
+    u32 frmtxstatus2;	/* 0x174 */
+    u32 PAD[2];		/* 0x178 - 0x17c */
 
-	/* TSF host access */
-	u32 tsf_timerlow;	/* 0x180 */
-	u32 tsf_timerhigh;	/* 0x184 */
-	u32 tsf_cfprep;	/* 0x188 */
-	u32 tsf_cfpstart;	/* 0x18c */
-	u32 tsf_cfpmaxdur32;	/* 0x190 */
-	u32 PAD[3];		/* 0x194 - 0x19c */
+    /* TSF host access */
+    u32 tsf_timerlow;	/* 0x180 */
+    u32 tsf_timerhigh;	/* 0x184 */
+    u32 tsf_cfprep;	/* 0x188 */
+    u32 tsf_cfpstart;	/* 0x18c */
+    u32 tsf_cfpmaxdur32;	/* 0x190 */
+    u32 PAD[3];		/* 0x194 - 0x19c */
 
-	u32 maccontrol1;	/* 0x1a0 */
-	u32 machwcap1;	/* 0x1a4 */
-	u32 PAD[14];		/* 0x1a8 - 0x1dc */
+    u32 maccontrol1;	/* 0x1a0 */
+    u32 machwcap1;	/* 0x1a4 */
+    u32 PAD[14];		/* 0x1a8 - 0x1dc */
 
-	/* Clock control and hardware workarounds*/
-	u32 clk_ctl_st;	/* 0x1e0 */
-	u32 hw_war;
-	u32 d11_phypllctl;	/* the phypll request/avail bits are
+    /* Clock control and hardware workarounds*/
+    u32 clk_ctl_st;	/* 0x1e0 */
+    u32 hw_war;
+    u32 d11_phypllctl;	/* the phypll request/avail bits are
 				 * moved to clk_ctl_st
 				 */
-	u32 PAD[5];		/* 0x1ec - 0x1fc */
+    u32 PAD[5];		/* 0x1ec - 0x1fc */
 
-	/* 0x200-0x37F dma/pio registers */
-	struct fifo64 fifo64regs[6];
+    /* 0x200-0x37F dma/pio registers */
+    struct fifo64 fifo64regs[6];
 
-	/* FIFO diagnostic port access */
-	struct dma32diag dmafifo;	/* 0x380 - 0x38C */
+    /* FIFO diagnostic port access */
+    struct dma32diag dmafifo;	/* 0x380 - 0x38C */
 
-	u32 aggfifocnt;	/* 0x390 */
-	u32 aggfifodata;	/* 0x394 */
-	u32 PAD[16];		/* 0x398 - 0x3d4 */
-	u16 radioregaddr;	/* 0x3d8 */
-	u16 radioregdata;	/* 0x3da */
+    u32 aggfifocnt;	/* 0x390 */
+    u32 aggfifodata;	/* 0x394 */
+    u32 PAD[16];		/* 0x398 - 0x3d4 */
+    u16 radioregaddr;	/* 0x3d8 */
+    u16 radioregdata;	/* 0x3da */
 
-	/*
-	 * time delay between the change on rf disable input and
-	 * radio shutdown
-	 */
-	u32 rfdisabledly;	/* 0x3DC */
+    /*
+     * time delay between the change on rf disable input and
+     * radio shutdown
+     */
+    u32 rfdisabledly;	/* 0x3DC */
 
-	/* PHY register access */
-	u16 phyversion;	/* 0x3e0 - 0x0 */
-	u16 phybbconfig;	/* 0x3e2 - 0x1 */
-	u16 phyadcbias;	/* 0x3e4 - 0x2  Bphy only */
-	u16 phyanacore;	/* 0x3e6 - 0x3  pwwrdwn on aphy */
-	u16 phyrxstatus0;	/* 0x3e8 - 0x4 */
-	u16 phyrxstatus1;	/* 0x3ea - 0x5 */
-	u16 phycrsth;	/* 0x3ec - 0x6 */
-	u16 phytxerror;	/* 0x3ee - 0x7 */
-	u16 phychannel;	/* 0x3f0 - 0x8 */
-	u16 PAD[1];		/* 0x3f2 - 0x9 */
-	u16 phytest;		/* 0x3f4 - 0xa */
-	u16 phy4waddr;	/* 0x3f6 - 0xb */
-	u16 phy4wdatahi;	/* 0x3f8 - 0xc */
-	u16 phy4wdatalo;	/* 0x3fa - 0xd */
-	u16 phyregaddr;	/* 0x3fc - 0xe */
-	u16 phyregdata;	/* 0x3fe - 0xf */
+    /* PHY register access */
+    u16 phyversion;	/* 0x3e0 - 0x0 */
+    u16 phybbconfig;	/* 0x3e2 - 0x1 */
+    u16 phyadcbias;	/* 0x3e4 - 0x2  Bphy only */
+    u16 phyanacore;	/* 0x3e6 - 0x3  pwwrdwn on aphy */
+    u16 phyrxstatus0;	/* 0x3e8 - 0x4 */
+    u16 phyrxstatus1;	/* 0x3ea - 0x5 */
+    u16 phycrsth;	/* 0x3ec - 0x6 */
+    u16 phytxerror;	/* 0x3ee - 0x7 */
+    u16 phychannel;	/* 0x3f0 - 0x8 */
+    u16 PAD[1];		/* 0x3f2 - 0x9 */
+    u16 phytest;		/* 0x3f4 - 0xa */
+    u16 phy4waddr;	/* 0x3f6 - 0xb */
+    u16 phy4wdatahi;	/* 0x3f8 - 0xc */
+    u16 phy4wdatalo;	/* 0x3fa - 0xd */
+    u16 phyregaddr;	/* 0x3fc - 0xe */
+    u16 phyregdata;	/* 0x3fe - 0xf */
 
-	/* IHR *//* 0x400 - 0x7FE */
+    /* IHR *//* 0x400 - 0x7FE */
 
-	/* RXE Block */
-	u16 PAD[3];		/* 0x400 - 0x406 */
-	u16 rcv_fifo_ctl;	/* 0x406 */
-	u16 PAD;		/* 0x408 - 0x40a */
-	u16 rcv_frm_cnt;	/* 0x40a */
-	u16 PAD[4];		/* 0x40a - 0x414 */
-	u16 rssi;		/* 0x414 */
-	u16 PAD[5];		/* 0x414 - 0x420 */
-	u16 rcm_ctl;		/* 0x420 */
-	u16 rcm_mat_data;	/* 0x422 */
-	u16 rcm_mat_mask;	/* 0x424 */
-	u16 rcm_mat_dly;	/* 0x426 */
-	u16 rcm_cond_mask_l;	/* 0x428 */
-	u16 rcm_cond_mask_h;	/* 0x42A */
-	u16 rcm_cond_dly;	/* 0x42C */
-	u16 PAD[1];		/* 0x42E */
-	u16 ext_ihr_addr;	/* 0x430 */
-	u16 ext_ihr_data;	/* 0x432 */
-	u16 rxe_phyrs_2;	/* 0x434 */
-	u16 rxe_phyrs_3;	/* 0x436 */
-	u16 phy_mode;	/* 0x438 */
-	u16 rcmta_ctl;	/* 0x43a */
-	u16 rcmta_size;	/* 0x43c */
-	u16 rcmta_addr0;	/* 0x43e */
-	u16 rcmta_addr1;	/* 0x440 */
-	u16 rcmta_addr2;	/* 0x442 */
-	u16 PAD[30];		/* 0x444 - 0x480 */
+    /* RXE Block */
+    u16 PAD[3];		/* 0x400 - 0x406 */
+    u16 rcv_fifo_ctl;	/* 0x406 */
+    u16 PAD;		/* 0x408 - 0x40a */
+    u16 rcv_frm_cnt;	/* 0x40a */
+    u16 PAD[4];		/* 0x40a - 0x414 */
+    u16 rssi;		/* 0x414 */
+    u16 PAD[5];		/* 0x414 - 0x420 */
+    u16 rcm_ctl;		/* 0x420 */
+    u16 rcm_mat_data;	/* 0x422 */
+    u16 rcm_mat_mask;	/* 0x424 */
+    u16 rcm_mat_dly;	/* 0x426 */
+    u16 rcm_cond_mask_l;	/* 0x428 */
+    u16 rcm_cond_mask_h;	/* 0x42A */
+    u16 rcm_cond_dly;	/* 0x42C */
+    u16 PAD[1];		/* 0x42E */
+    u16 ext_ihr_addr;	/* 0x430 */
+    u16 ext_ihr_data;	/* 0x432 */
+    u16 rxe_phyrs_2;	/* 0x434 */
+    u16 rxe_phyrs_3;	/* 0x436 */
+    u16 phy_mode;	/* 0x438 */
+    u16 rcmta_ctl;	/* 0x43a */
+    u16 rcmta_size;	/* 0x43c */
+    u16 rcmta_addr0;	/* 0x43e */
+    u16 rcmta_addr1;	/* 0x440 */
+    u16 rcmta_addr2;	/* 0x442 */
+    u16 PAD[30];		/* 0x444 - 0x480 */
 
-	/* PSM Block *//* 0x480 - 0x500 */
+    /* PSM Block *//* 0x480 - 0x500 */
 
-	u16 PAD;		/* 0x480 */
-	u16 psm_maccontrol_h;	/* 0x482 */
-	u16 psm_macintstatus_l;	/* 0x484 */
-	u16 psm_macintstatus_h;	/* 0x486 */
-	u16 psm_macintmask_l;	/* 0x488 */
-	u16 psm_macintmask_h;	/* 0x48A */
-	u16 PAD;		/* 0x48C */
-	u16 psm_maccommand;	/* 0x48E */
-	u16 psm_brc;		/* 0x490 */
-	u16 psm_phy_hdr_param;	/* 0x492 */
-	u16 psm_postcard;	/* 0x494 */
-	u16 psm_pcard_loc_l;	/* 0x496 */
-	u16 psm_pcard_loc_h;	/* 0x498 */
-	u16 psm_gpio_in;	/* 0x49A */
-	u16 psm_gpio_out;	/* 0x49C */
-	u16 psm_gpio_oe;	/* 0x49E */
+    u16 PAD;		/* 0x480 */
+    u16 psm_maccontrol_h;	/* 0x482 */
+    u16 psm_macintstatus_l;	/* 0x484 */
+    u16 psm_macintstatus_h;	/* 0x486 */
+    u16 psm_macintmask_l;	/* 0x488 */
+    u16 psm_macintmask_h;	/* 0x48A */
+    u16 PAD;		/* 0x48C */
+    u16 psm_maccommand;	/* 0x48E */
+    u16 psm_brc;		/* 0x490 */
+    u16 psm_phy_hdr_param;	/* 0x492 */
+    u16 psm_postcard;	/* 0x494 */
+    u16 psm_pcard_loc_l;	/* 0x496 */
+    u16 psm_pcard_loc_h;	/* 0x498 */
+    u16 psm_gpio_in;	/* 0x49A */
+    u16 psm_gpio_out;	/* 0x49C */
+    u16 psm_gpio_oe;	/* 0x49E */
 
-	u16 psm_bred_0;	/* 0x4A0 */
-	u16 psm_bred_1;	/* 0x4A2 */
-	u16 psm_bred_2;	/* 0x4A4 */
-	u16 psm_bred_3;	/* 0x4A6 */
-	u16 psm_brcl_0;	/* 0x4A8 */
-	u16 psm_brcl_1;	/* 0x4AA */
-	u16 psm_brcl_2;	/* 0x4AC */
-	u16 psm_brcl_3;	/* 0x4AE */
-	u16 psm_brpo_0;	/* 0x4B0 */
-	u16 psm_brpo_1;	/* 0x4B2 */
-	u16 psm_brpo_2;	/* 0x4B4 */
-	u16 psm_brpo_3;	/* 0x4B6 */
-	u16 psm_brwk_0;	/* 0x4B8 */
-	u16 psm_brwk_1;	/* 0x4BA */
-	u16 psm_brwk_2;	/* 0x4BC */
-	u16 psm_brwk_3;	/* 0x4BE */
+    u16 psm_bred_0;	/* 0x4A0 */
+    u16 psm_bred_1;	/* 0x4A2 */
+    u16 psm_bred_2;	/* 0x4A4 */
+    u16 psm_bred_3;	/* 0x4A6 */
+    u16 psm_brcl_0;	/* 0x4A8 */
+    u16 psm_brcl_1;	/* 0x4AA */
+    u16 psm_brcl_2;	/* 0x4AC */
+    u16 psm_brcl_3;	/* 0x4AE */
+    u16 psm_brpo_0;	/* 0x4B0 */
+    u16 psm_brpo_1;	/* 0x4B2 */
+    u16 psm_brpo_2;	/* 0x4B4 */
+    u16 psm_brpo_3;	/* 0x4B6 */
+    u16 psm_brwk_0;	/* 0x4B8 */
+    u16 psm_brwk_1;	/* 0x4BA */
+    u16 psm_brwk_2;	/* 0x4BC */
+    u16 psm_brwk_3;	/* 0x4BE */
 
-	u16 psm_base_0;	/* 0x4C0 */
-	u16 psm_base_1;	/* 0x4C2 */
-	u16 psm_base_2;	/* 0x4C4 */
-	u16 psm_base_3;	/* 0x4C6 */
-	u16 psm_base_4;	/* 0x4C8 */
-	u16 psm_base_5;	/* 0x4CA */
-	u16 psm_base_6;	/* 0x4CC */
-	u16 psm_pc_reg_0;	/* 0x4CE */
-	u16 psm_pc_reg_1;	/* 0x4D0 */
-	u16 psm_pc_reg_2;	/* 0x4D2 */
-	u16 psm_pc_reg_3;	/* 0x4D4 */
-	u16 PAD[0xD];	/* 0x4D6 - 0x4DE */
-	u16 psm_corectlsts;	/* 0x4f0 *//* Corerev >= 13 */
-	u16 PAD[0x7];	/* 0x4f2 - 0x4fE */
+    u16 psm_base_0;	/* 0x4C0 */
+    u16 psm_base_1;	/* 0x4C2 */
+    u16 psm_base_2;	/* 0x4C4 */
+    u16 psm_base_3;	/* 0x4C6 */
+    u16 psm_base_4;	/* 0x4C8 */
+    u16 psm_base_5;	/* 0x4CA */
+    u16 psm_base_6;	/* 0x4CC */
+    u16 psm_pc_reg_0;	/* 0x4CE */
+    u16 psm_pc_reg_1;	/* 0x4D0 */
+    u16 psm_pc_reg_2;	/* 0x4D2 */
+    u16 psm_pc_reg_3;	/* 0x4D4 */
+    u16 PAD[0xD];	/* 0x4D6 - 0x4DE */
+    u16 psm_corectlsts;	/* 0x4f0 *//* Corerev >= 13 */
+    u16 PAD[0x7];	/* 0x4f2 - 0x4fE */
 
-	/* TXE0 Block *//* 0x500 - 0x580 */
-	u16 txe_ctl;		/* 0x500 */
-	u16 txe_aux;		/* 0x502 */
-	u16 txe_ts_loc;	/* 0x504 */
-	u16 txe_time_out;	/* 0x506 */
-	u16 txe_wm_0;	/* 0x508 */
-	u16 txe_wm_1;	/* 0x50A */
-	u16 txe_phyctl;	/* 0x50C */
-	u16 txe_status;	/* 0x50E */
-	u16 txe_mmplcp0;	/* 0x510 */
-	u16 txe_mmplcp1;	/* 0x512 */
-	u16 txe_phyctl1;	/* 0x514 */
+    /* TXE0 Block *//* 0x500 - 0x580 */
+    u16 txe_ctl;		/* 0x500 */
+    u16 txe_aux;		/* 0x502 */
+    u16 txe_ts_loc;	/* 0x504 */
+    u16 txe_time_out;	/* 0x506 */
+    u16 txe_wm_0;	/* 0x508 */
+    u16 txe_wm_1;	/* 0x50A */
+    u16 txe_phyctl;	/* 0x50C */
+    u16 txe_status;	/* 0x50E */
+    u16 txe_mmplcp0;	/* 0x510 */
+    u16 txe_mmplcp1;	/* 0x512 */
+    u16 txe_phyctl1;	/* 0x514 */
 
-	u16 PAD[0x05];	/* 0x510 - 0x51E */
+    u16 PAD[0x05];	/* 0x510 - 0x51E */
 
-	/* Transmit control */
-	u16 xmtfifodef;	/* 0x520 */
-	u16 xmtfifo_frame_cnt;	/* 0x522 *//* Corerev >= 16 */
-	u16 xmtfifo_byte_cnt;	/* 0x524 *//* Corerev >= 16 */
-	u16 xmtfifo_head;	/* 0x526 *//* Corerev >= 16 */
-	u16 xmtfifo_rd_ptr;	/* 0x528 *//* Corerev >= 16 */
-	u16 xmtfifo_wr_ptr;	/* 0x52A *//* Corerev >= 16 */
-	u16 xmtfifodef1;	/* 0x52C *//* Corerev >= 16 */
+    /* Transmit control */
+    u16 xmtfifodef;	/* 0x520 */
+    u16 xmtfifo_frame_cnt;	/* 0x522 *//* Corerev >= 16 */
+    u16 xmtfifo_byte_cnt;	/* 0x524 *//* Corerev >= 16 */
+    u16 xmtfifo_head;	/* 0x526 *//* Corerev >= 16 */
+    u16 xmtfifo_rd_ptr;	/* 0x528 *//* Corerev >= 16 */
+    u16 xmtfifo_wr_ptr;	/* 0x52A *//* Corerev >= 16 */
+    u16 xmtfifodef1;	/* 0x52C *//* Corerev >= 16 */
 
-	u16 PAD[0x09];	/* 0x52E - 0x53E */
+    u16 PAD[0x09];	/* 0x52E - 0x53E */
 
-	u16 xmtfifocmd;	/* 0x540 */
-	u16 xmtfifoflush;	/* 0x542 */
-	u16 xmtfifothresh;	/* 0x544 */
-	u16 xmtfifordy;	/* 0x546 */
-	u16 xmtfifoprirdy;	/* 0x548 */
-	u16 xmtfiforqpri;	/* 0x54A */
-	u16 xmttplatetxptr;	/* 0x54C */
-	u16 PAD;		/* 0x54E */
-	u16 xmttplateptr;	/* 0x550 */
-	u16 smpl_clct_strptr;	/* 0x552 *//* Corerev >= 22 */
-	u16 smpl_clct_stpptr;	/* 0x554 *//* Corerev >= 22 */
-	u16 smpl_clct_curptr;	/* 0x556 *//* Corerev >= 22 */
-	u16 PAD[0x04];	/* 0x558 - 0x55E */
-	u16 xmttplatedatalo;	/* 0x560 */
-	u16 xmttplatedatahi;	/* 0x562 */
+    u16 xmtfifocmd;	/* 0x540 */
+    u16 xmtfifoflush;	/* 0x542 */
+    u16 xmtfifothresh;	/* 0x544 */
+    u16 xmtfifordy;	/* 0x546 */
+    u16 xmtfifoprirdy;	/* 0x548 */
+    u16 xmtfiforqpri;	/* 0x54A */
+    u16 xmttplatetxptr;	/* 0x54C */
+    u16 PAD;		/* 0x54E */
+    u16 xmttplateptr;	/* 0x550 */
+    u16 smpl_clct_strptr;	/* 0x552 *//* Corerev >= 22 */
+    u16 smpl_clct_stpptr;	/* 0x554 *//* Corerev >= 22 */
+    u16 smpl_clct_curptr;	/* 0x556 *//* Corerev >= 22 */
+    u16 PAD[0x04];	/* 0x558 - 0x55E */
+    u16 xmttplatedatalo;	/* 0x560 */
+    u16 xmttplatedatahi;	/* 0x562 */
 
-	u16 PAD[2];		/* 0x564 - 0x566 */
+    u16 PAD[2];		/* 0x564 - 0x566 */
 
-	u16 xmtsel;		/* 0x568 */
-	u16 xmttxcnt;	/* 0x56A */
-	u16 xmttxshmaddr;	/* 0x56C */
+    u16 xmtsel;		/* 0x568 */
+    u16 xmttxcnt;	/* 0x56A */
+    u16 xmttxshmaddr;	/* 0x56C */
 
-	u16 PAD[0x09];	/* 0x56E - 0x57E */
+    u16 PAD[0x09];	/* 0x56E - 0x57E */
 
-	/* TXE1 Block */
-	u16 PAD[0x40];	/* 0x580 - 0x5FE */
+    /* TXE1 Block */
+    u16 PAD[0x40];	/* 0x580 - 0x5FE */
 
-	/* TSF Block */
-	u16 PAD[0X02];	/* 0x600 - 0x602 */
-	u16 tsf_cfpstrt_l;	/* 0x604 */
-	u16 tsf_cfpstrt_h;	/* 0x606 */
-	u16 PAD[0X05];	/* 0x608 - 0x610 */
-	u16 tsf_cfppretbtt;	/* 0x612 */
-	u16 PAD[0XD];	/* 0x614 - 0x62C */
-	u16 tsf_clk_frac_l;	/* 0x62E */
-	u16 tsf_clk_frac_h;	/* 0x630 */
-	u16 PAD[0X14];	/* 0x632 - 0x658 */
-	u16 tsf_random;	/* 0x65A */
-	u16 PAD[0x05];	/* 0x65C - 0x664 */
-	/* GPTimer 2 registers */
-	u16 tsf_gpt2_stat;	/* 0x666 */
-	u16 tsf_gpt2_ctr_l;	/* 0x668 */
-	u16 tsf_gpt2_ctr_h;	/* 0x66A */
-	u16 tsf_gpt2_val_l;	/* 0x66C */
-	u16 tsf_gpt2_val_h;	/* 0x66E */
-	u16 tsf_gptall_stat;	/* 0x670 */
-	u16 PAD[0x07];	/* 0x672 - 0x67E */
+    /* TSF Block */
+    u16 PAD[0X02];	/* 0x600 - 0x602 */
+    u16 tsf_cfpstrt_l;	/* 0x604 */
+    u16 tsf_cfpstrt_h;	/* 0x606 */
+    u16 PAD[0X05];	/* 0x608 - 0x610 */
+    u16 tsf_cfppretbtt;	/* 0x612 */
+    u16 PAD[0XD];	/* 0x614 - 0x62C */
+    u16 tsf_clk_frac_l;	/* 0x62E */
+    u16 tsf_clk_frac_h;	/* 0x630 */
+    u16 PAD[0X14];	/* 0x632 - 0x658 */
+    u16 tsf_random;	/* 0x65A */
+    u16 PAD[0x05];	/* 0x65C - 0x664 */
+    /* GPTimer 2 registers */
+    u16 tsf_gpt2_stat;	/* 0x666 */
+    u16 tsf_gpt2_ctr_l;	/* 0x668 */
+    u16 tsf_gpt2_ctr_h;	/* 0x66A */
+    u16 tsf_gpt2_val_l;	/* 0x66C */
+    u16 tsf_gpt2_val_h;	/* 0x66E */
+    u16 tsf_gptall_stat;	/* 0x670 */
+    u16 PAD[0x07];	/* 0x672 - 0x67E */
 
-	/* IFS Block */
-	u16 ifs_sifs_rx_tx_tx;	/* 0x680 */
-	u16 ifs_sifs_nav_tx;	/* 0x682 */
-	u16 ifs_slot;	/* 0x684 */
-	u16 PAD;		/* 0x686 */
-	u16 ifs_ctl;		/* 0x688 */
-	u16 PAD[0x3];	/* 0x68a - 0x68F */
-	u16 ifsstat;		/* 0x690 */
-	u16 ifsmedbusyctl;	/* 0x692 */
-	u16 iftxdur;		/* 0x694 */
-	u16 PAD[0x3];	/* 0x696 - 0x69b */
-	/* EDCF support in dot11macs */
-	u16 ifs_aifsn;	/* 0x69c */
-	u16 ifs_ctl1;	/* 0x69e */
+    /* IFS Block */
+    u16 ifs_sifs_rx_tx_tx;	/* 0x680 */
+    u16 ifs_sifs_nav_tx;	/* 0x682 */
+    u16 ifs_slot;	/* 0x684 */
+    u16 PAD;		/* 0x686 */
+    u16 ifs_ctl;		/* 0x688 */
+    u16 PAD[0x3];	/* 0x68a - 0x68F */
+    u16 ifsstat;		/* 0x690 */
+    u16 ifsmedbusyctl;	/* 0x692 */
+    u16 iftxdur;		/* 0x694 */
+    u16 PAD[0x3];	/* 0x696 - 0x69b */
+    /* EDCF support in dot11macs */
+    u16 ifs_aifsn;	/* 0x69c */
+    u16 ifs_ctl1;	/* 0x69e */
 
-	/* slow clock registers */
-	u16 scc_ctl;		/* 0x6a0 */
-	u16 scc_timer_l;	/* 0x6a2 */
-	u16 scc_timer_h;	/* 0x6a4 */
-	u16 scc_frac;	/* 0x6a6 */
-	u16 scc_fastpwrup_dly;	/* 0x6a8 */
-	u16 scc_per;		/* 0x6aa */
-	u16 scc_per_frac;	/* 0x6ac */
-	u16 scc_cal_timer_l;	/* 0x6ae */
-	u16 scc_cal_timer_h;	/* 0x6b0 */
-	u16 PAD;		/* 0x6b2 */
+    /* slow clock registers */
+    u16 scc_ctl;		/* 0x6a0 */
+    u16 scc_timer_l;	/* 0x6a2 */
+    u16 scc_timer_h;	/* 0x6a4 */
+    u16 scc_frac;	/* 0x6a6 */
+    u16 scc_fastpwrup_dly;	/* 0x6a8 */
+    u16 scc_per;		/* 0x6aa */
+    u16 scc_per_frac;	/* 0x6ac */
+    u16 scc_cal_timer_l;	/* 0x6ae */
+    u16 scc_cal_timer_h;	/* 0x6b0 */
+    u16 PAD;		/* 0x6b2 */
 
-	u16 PAD[0x26];
+    u16 PAD[0x26];
 
-	/* NAV Block */
-	u16 nav_ctl;		/* 0x700 */
-	u16 navstat;		/* 0x702 */
-	u16 PAD[0x3e];	/* 0x702 - 0x77E */
+    /* NAV Block */
+    u16 nav_ctl;		/* 0x700 */
+    u16 navstat;		/* 0x702 */
+    u16 PAD[0x3e];	/* 0x702 - 0x77E */
 
-	/* WEP/PMQ Block *//* 0x780 - 0x7FE */
-	u16 PAD[0x20];	/* 0x780 - 0x7BE */
+    /* WEP/PMQ Block *//* 0x780 - 0x7FE */
+    u16 PAD[0x20];	/* 0x780 - 0x7BE */
 
-	u16 wepctl;		/* 0x7C0 */
-	u16 wepivloc;	/* 0x7C2 */
-	u16 wepivkey;	/* 0x7C4 */
-	u16 wepwkey;		/* 0x7C6 */
+    u16 wepctl;		/* 0x7C0 */
+    u16 wepivloc;	/* 0x7C2 */
+    u16 wepivkey;	/* 0x7C4 */
+    u16 wepwkey;		/* 0x7C6 */
 
-	u16 PAD[4];		/* 0x7C8 - 0x7CE */
-	u16 pcmctl;		/* 0X7D0 */
-	u16 pcmstat;		/* 0X7D2 */
-	u16 PAD[6];		/* 0x7D4 - 0x7DE */
+    u16 PAD[4];		/* 0x7C8 - 0x7CE */
+    u16 pcmctl;		/* 0X7D0 */
+    u16 pcmstat;		/* 0X7D2 */
+    u16 PAD[6];		/* 0x7D4 - 0x7DE */
 
-	u16 pmqctl;		/* 0x7E0 */
-	u16 pmqstatus;	/* 0x7E2 */
-	u16 pmqpat0;		/* 0x7E4 */
-	u16 pmqpat1;		/* 0x7E6 */
-	u16 pmqpat2;		/* 0x7E8 */
+    u16 pmqctl;		/* 0x7E0 */
+    u16 pmqstatus;	/* 0x7E2 */
+    u16 pmqpat0;		/* 0x7E4 */
+    u16 pmqpat1;		/* 0x7E6 */
+    u16 pmqpat2;		/* 0x7E8 */
 
-	u16 pmqdat;		/* 0x7EA */
-	u16 pmqdator;	/* 0x7EC */
-	u16 pmqhst;		/* 0x7EE */
-	u16 pmqpath0;	/* 0x7F0 */
-	u16 pmqpath1;	/* 0x7F2 */
-	u16 pmqpath2;	/* 0x7F4 */
-	u16 pmqdath;		/* 0x7F6 */
+    u16 pmqdat;		/* 0x7EA */
+    u16 pmqdator;	/* 0x7EC */
+    u16 pmqhst;		/* 0x7EE */
+    u16 pmqpath0;	/* 0x7F0 */
+    u16 pmqpath1;	/* 0x7F2 */
+    u16 pmqpath2;	/* 0x7F4 */
+    u16 pmqdath;		/* 0x7F6 */
 
-	u16 PAD[0x04];	/* 0x7F8 - 0x7FE */
+    u16 PAD[0x04];	/* 0x7F8 - 0x7FE */
 
-	/* SHM *//* 0x800 - 0xEFE */
-	u16 PAD[0x380];	/* 0x800 - 0xEFE */
+    /* SHM *//* 0x800 - 0xEFE */
+    u16 PAD[0x380];	/* 0x800 - 0xEFE */
 };
 
 /* d11 register field offset */
@@ -668,9 +668,9 @@ struct d11regs {
 
 /* 802.11a PLCP header def */
 struct ofdm_phy_hdr {
-	u8 rlpt[3];		/* rate, length, parity, tail */
-	u16 service;
-	u8 pad;
+    u8 rlpt[3];		/* rate, length, parity, tail */
+    u16 service;
+    u8 pad;
 } __packed;
 
 #define	D11A_PHY_HDR_GRATE(phdr)	((phdr)->rlpt[0] & 0x0f)
@@ -702,10 +702,10 @@ struct ofdm_phy_hdr {
 
 /* 802.11b PLCP header def */
 struct cck_phy_hdr {
-	u8 signal;
-	u8 service;
-	u16 length;
-	u16 crc;
+    u8 signal;
+    u8 service;
+    u16 length;
+    u16 crc;
 } __packed;
 
 #define	D11B_PHY_HDR_LEN	6
@@ -748,40 +748,40 @@ struct cck_phy_hdr {
 
 /* TX DMA buffer header */
 struct d11txh {
-	__le16 MacTxControlLow;	/* 0x0 */
-	__le16 MacTxControlHigh;	/* 0x1 */
-	__le16 MacFrameControl;	/* 0x2 */
-	__le16 TxFesTimeNormal;	/* 0x3 */
-	__le16 PhyTxControlWord;	/* 0x4 */
-	__le16 PhyTxControlWord_1;	/* 0x5 */
-	__le16 PhyTxControlWord_1_Fbr;	/* 0x6 */
-	__le16 PhyTxControlWord_1_Rts;	/* 0x7 */
-	__le16 PhyTxControlWord_1_FbrRts;	/* 0x8 */
-	__le16 MainRates;	/* 0x9 */
-	__le16 XtraFrameTypes;	/* 0xa */
-	u8 IV[16];		/* 0x0b - 0x12 */
-	u8 TxFrameRA[6];	/* 0x13 - 0x15 */
-	__le16 TxFesTimeFallback;	/* 0x16 */
-	u8 RTSPLCPFallback[6];	/* 0x17 - 0x19 */
-	__le16 RTSDurFallback;	/* 0x1a */
-	u8 FragPLCPFallback[6];	/* 0x1b - 1d */
-	__le16 FragDurFallback;	/* 0x1e */
-	__le16 MModeLen;	/* 0x1f */
-	__le16 MModeFbrLen;	/* 0x20 */
-	__le16 TstampLow;	/* 0x21 */
-	__le16 TstampHigh;	/* 0x22 */
-	__le16 ABI_MimoAntSel;	/* 0x23 */
-	__le16 PreloadSize;	/* 0x24 */
-	__le16 AmpduSeqCtl;	/* 0x25 */
-	__le16 TxFrameID;	/* 0x26 */
-	__le16 TxStatus;	/* 0x27 */
-	__le16 MaxNMpdus;	/* 0x28 */
-	__le16 MaxABytes_MRT;	/* 0x29 */
-	__le16 MaxABytes_FBR;	/* 0x2a */
-	__le16 MinMBytes;	/* 0x2b */
-	u8 RTSPhyHeader[D11_PHY_HDR_LEN];	/* 0x2c - 0x2e */
-	struct ieee80211_rts rts_frame;	/* 0x2f - 0x36 */
-	u16 PAD;		/* 0x37 */
+    __le16 MacTxControlLow;	/* 0x0 */
+    __le16 MacTxControlHigh;	/* 0x1 */
+    __le16 MacFrameControl;	/* 0x2 */
+    __le16 TxFesTimeNormal;	/* 0x3 */
+    __le16 PhyTxControlWord;	/* 0x4 */
+    __le16 PhyTxControlWord_1;	/* 0x5 */
+    __le16 PhyTxControlWord_1_Fbr;	/* 0x6 */
+    __le16 PhyTxControlWord_1_Rts;	/* 0x7 */
+    __le16 PhyTxControlWord_1_FbrRts;	/* 0x8 */
+    __le16 MainRates;	/* 0x9 */
+    __le16 XtraFrameTypes;	/* 0xa */
+    u8 IV[16];		/* 0x0b - 0x12 */
+    u8 TxFrameRA[6];	/* 0x13 - 0x15 */
+    __le16 TxFesTimeFallback;	/* 0x16 */
+    u8 RTSPLCPFallback[6];	/* 0x17 - 0x19 */
+    __le16 RTSDurFallback;	/* 0x1a */
+    u8 FragPLCPFallback[6];	/* 0x1b - 1d */
+    __le16 FragDurFallback;	/* 0x1e */
+    __le16 MModeLen;	/* 0x1f */
+    __le16 MModeFbrLen;	/* 0x20 */
+    __le16 TstampLow;	/* 0x21 */
+    __le16 TstampHigh;	/* 0x22 */
+    __le16 ABI_MimoAntSel;	/* 0x23 */
+    __le16 PreloadSize;	/* 0x24 */
+    __le16 AmpduSeqCtl;	/* 0x25 */
+    __le16 TxFrameID;	/* 0x26 */
+    __le16 TxStatus;	/* 0x27 */
+    __le16 MaxNMpdus;	/* 0x28 */
+    __le16 MaxABytes_MRT;	/* 0x29 */
+    __le16 MaxABytes_FBR;	/* 0x2a */
+    __le16 MinMBytes;	/* 0x2b */
+    u8 RTSPhyHeader[D11_PHY_HDR_LEN];	/* 0x2c - 0x2e */
+    struct ieee80211_rts rts_frame;	/* 0x2f - 0x36 */
+    u16 PAD;		/* 0x37 */
 } __packed;
 
 #define	D11_TXH_LEN		112	/* bytes */
@@ -901,14 +901,14 @@ struct d11txh {
 
 /* tx status packet */
 struct tx_status {
-	u16 framelen;
-	u16 PAD;
-	u16 frameid;
-	u16 status;
-	u16 lasttxtime;
-	u16 sequence;
-	u16 phyerr;
-	u16 ackphyrxsh;
+    u16 framelen;
+    u16 PAD;
+    u16 frameid;
+    u16 status;
+    u16 lasttxtime;
+    u16 sequence;
+    u16 phyerr;
+    u16 ackphyrxsh;
 } __packed;
 
 #define	TXSTATUS_LEN	16
@@ -1301,15 +1301,15 @@ struct tx_status {
 #define MIMO_ANTSEL_OVERRIDE	0x8000	/* flag */
 
 struct shm_acparams {
-	u16 txop;
-	u16 cwmin;
-	u16 cwmax;
-	u16 cwcur;
-	u16 aifs;
-	u16 bslots;
-	u16 reggap;
-	u16 status;
-	u16 rsvd[8];
+    u16 txop;
+    u16 cwmin;
+    u16 cwmax;
+    u16 cwcur;
+    u16 aifs;
+    u16 bslots;
+    u16 reggap;
+    u16 status;
+    u16 rsvd[8];
 } __packed;
 #define M_EDCF_QLEN	(16 * 2)
 
@@ -1383,33 +1383,33 @@ struct shm_acparams {
  * RxChan: gain code, channel radio code, and phy type
  */
 struct d11rxhdr_le {
-	__le16 RxFrameSize;
-	u16 PAD;
-	__le16 PhyRxStatus_0;
-	__le16 PhyRxStatus_1;
-	__le16 PhyRxStatus_2;
-	__le16 PhyRxStatus_3;
-	__le16 PhyRxStatus_4;
-	__le16 PhyRxStatus_5;
-	__le16 RxStatus1;
-	__le16 RxStatus2;
-	__le16 RxTSFTime;
-	__le16 RxChan;
+    __le16 RxFrameSize;
+    u16 PAD;
+    __le16 PhyRxStatus_0;
+    __le16 PhyRxStatus_1;
+    __le16 PhyRxStatus_2;
+    __le16 PhyRxStatus_3;
+    __le16 PhyRxStatus_4;
+    __le16 PhyRxStatus_5;
+    __le16 RxStatus1;
+    __le16 RxStatus2;
+    __le16 RxTSFTime;
+    __le16 RxChan;
 } __packed;
 
 struct d11rxhdr {
-	u16 RxFrameSize;
-	u16 PAD;
-	u16 PhyRxStatus_0;
-	u16 PhyRxStatus_1;
-	u16 PhyRxStatus_2;
-	u16 PhyRxStatus_3;
-	u16 PhyRxStatus_4;
-	u16 PhyRxStatus_5;
-	u16 RxStatus1;
-	u16 RxStatus2;
-	u16 RxTSFTime;
-	u16 RxChan;
+    u16 RxFrameSize;
+    u16 PAD;
+    u16 PhyRxStatus_0;
+    u16 PhyRxStatus_1;
+    u16 PhyRxStatus_2;
+    u16 PhyRxStatus_3;
+    u16 PhyRxStatus_4;
+    u16 PhyRxStatus_5;
+    u16 RxStatus1;
+    u16 RxStatus2;
+    u16 RxTSFTime;
+    u16 RxChan;
 } __packed;
 
 /* PhyRxStatus_0: */
@@ -1584,83 +1584,83 @@ struct d11rxhdr {
 
 /* Scratch Reg defs */
 enum _ePsmScratchPadRegDefinitions {
-	S_RSV0 = 0,
-	S_RSV1,
-	S_RSV2,
+    S_RSV0 = 0,
+    S_RSV1,
+    S_RSV2,
 
-	/* offset 0x03: scratch registers for Dot11-contants */
-	S_DOT11_CWMIN,		/* CW-minimum */
-	S_DOT11_CWMAX,		/* CW-maximum */
-	S_DOT11_CWCUR,		/* CW-current */
-	S_DOT11_SRC_LMT,	/* short retry count limit */
-	S_DOT11_LRC_LMT,	/* long retry count limit */
-	S_DOT11_DTIMCOUNT,	/* DTIM-count */
+    /* offset 0x03: scratch registers for Dot11-contants */
+    S_DOT11_CWMIN,		/* CW-minimum */
+    S_DOT11_CWMAX,		/* CW-maximum */
+    S_DOT11_CWCUR,		/* CW-current */
+    S_DOT11_SRC_LMT,	/* short retry count limit */
+    S_DOT11_LRC_LMT,	/* long retry count limit */
+    S_DOT11_DTIMCOUNT,	/* DTIM-count */
 
-	/* offset 0x09: Tx-side scratch registers */
-	S_SEQ_NUM,		/* hardware sequence number reg */
-	S_SEQ_NUM_FRAG,		/* seq num for frags (at the start of MSDU) */
-	S_FRMRETX_CNT,		/* frame retx count */
-	S_SSRC,			/* Station short retry count */
-	S_SLRC,			/* Station long retry count */
-	S_EXP_RSP,		/* Expected response frame */
-	S_OLD_BREM,		/* Remaining backoff ctr */
-	S_OLD_CWWIN,		/* saved-off CW-cur */
-	S_TXECTL,		/* TXE-Ctl word constructed in scr-pad */
-	S_CTXTST,		/* frm type-subtype as read from Tx-descr */
+    /* offset 0x09: Tx-side scratch registers */
+    S_SEQ_NUM,		/* hardware sequence number reg */
+    S_SEQ_NUM_FRAG,		/* seq num for frags (at the start of MSDU) */
+    S_FRMRETX_CNT,		/* frame retx count */
+    S_SSRC,			/* Station short retry count */
+    S_SLRC,			/* Station long retry count */
+    S_EXP_RSP,		/* Expected response frame */
+    S_OLD_BREM,		/* Remaining backoff ctr */
+    S_OLD_CWWIN,		/* saved-off CW-cur */
+    S_TXECTL,		/* TXE-Ctl word constructed in scr-pad */
+    S_CTXTST,		/* frm type-subtype as read from Tx-descr */
 
-	/* offset 0x13: Rx-side scratch registers */
-	S_RXTST,		/* Type and subtype in Rxframe */
+    /* offset 0x13: Rx-side scratch registers */
+    S_RXTST,		/* Type and subtype in Rxframe */
 
-	/* Global state register */
-	S_STREG,		/* state storage actual bit maps below */
+    /* Global state register */
+    S_STREG,		/* state storage actual bit maps below */
 
-	S_TXPWR_SUM,		/* Tx power control: accumulator */
-	S_TXPWR_ITER,		/* Tx power control: iteration */
-	S_RX_FRMTYPE,		/* Rate and PHY type for frames */
-	S_THIS_AGG,		/* Size of this AGG (A-MSDU) */
+    S_TXPWR_SUM,		/* Tx power control: accumulator */
+    S_TXPWR_ITER,		/* Tx power control: iteration */
+    S_RX_FRMTYPE,		/* Rate and PHY type for frames */
+    S_THIS_AGG,		/* Size of this AGG (A-MSDU) */
 
-	S_KEYINDX,
-	S_RXFRMLEN,		/* Receive MPDU length in bytes */
+    S_KEYINDX,
+    S_RXFRMLEN,		/* Receive MPDU length in bytes */
 
-	/* offset 0x1B: Receive TSF time stored in SCR */
-	S_RXTSFTMRVAL_WD3,	/* TSF value at the start of rx */
-	S_RXTSFTMRVAL_WD2,	/* TSF value at the start of rx */
-	S_RXTSFTMRVAL_WD1,	/* TSF value at the start of rx */
-	S_RXTSFTMRVAL_WD0,	/* TSF value at the start of rx */
-	S_RXSSN,		/* Received start seq number for A-MPDU BA */
-	S_RXQOSFLD,		/* Rx-QoS field (if present) */
+    /* offset 0x1B: Receive TSF time stored in SCR */
+    S_RXTSFTMRVAL_WD3,	/* TSF value at the start of rx */
+    S_RXTSFTMRVAL_WD2,	/* TSF value at the start of rx */
+    S_RXTSFTMRVAL_WD1,	/* TSF value at the start of rx */
+    S_RXTSFTMRVAL_WD0,	/* TSF value at the start of rx */
+    S_RXSSN,		/* Received start seq number for A-MPDU BA */
+    S_RXQOSFLD,		/* Rx-QoS field (if present) */
 
-	/* offset 0x21: Scratch pad regs used in microcode as temp storage */
-	S_TMP0,			/* stmp0 */
-	S_TMP1,			/* stmp1 */
-	S_TMP2,			/* stmp2 */
-	S_TMP3,			/* stmp3 */
-	S_TMP4,			/* stmp4 */
-	S_TMP5,			/* stmp5 */
-	S_PRQPENALTY_CTR,	/* Probe response queue penalty counter */
-	S_ANTCNT,		/* unsuccessful attempts on current ant. */
-	S_SYMBOL,		/* flag for possible symbol ctl frames */
-	S_RXTP,			/* rx frame type */
-	S_STREG2,		/* extra state storage */
-	S_STREG3,		/* even more extra state storage */
-	S_STREG4,		/* ... */
-	S_STREG5,		/* remember to initialize it to zero */
+    /* offset 0x21: Scratch pad regs used in microcode as temp storage */
+    S_TMP0,			/* stmp0 */
+    S_TMP1,			/* stmp1 */
+    S_TMP2,			/* stmp2 */
+    S_TMP3,			/* stmp3 */
+    S_TMP4,			/* stmp4 */
+    S_TMP5,			/* stmp5 */
+    S_PRQPENALTY_CTR,	/* Probe response queue penalty counter */
+    S_ANTCNT,		/* unsuccessful attempts on current ant. */
+    S_SYMBOL,		/* flag for possible symbol ctl frames */
+    S_RXTP,			/* rx frame type */
+    S_STREG2,		/* extra state storage */
+    S_STREG3,		/* even more extra state storage */
+    S_STREG4,		/* ... */
+    S_STREG5,		/* remember to initialize it to zero */
 
-	S_ADJPWR_IDX,
-	S_CUR_PTR,		/* Temp pointer for A-MPDU re-Tx SHM table */
-	S_REVID4,		/* 0x33 */
-	S_INDX,			/* 0x34 */
-	S_ADDR0,		/* 0x35 */
-	S_ADDR1,		/* 0x36 */
-	S_ADDR2,		/* 0x37 */
-	S_ADDR3,		/* 0x38 */
-	S_ADDR4,		/* 0x39 */
-	S_ADDR5,		/* 0x3A */
-	S_TMP6,			/* 0x3B */
-	S_KEYINDX_BU,		/* Backup for Key index */
-	S_MFGTEST_TMP0,		/* Temp regs used for RX test calculations */
-	S_RXESN,		/* Received end sequence number for A-MPDU BA */
-	S_STREG6,		/* 0x3F */
+    S_ADJPWR_IDX,
+    S_CUR_PTR,		/* Temp pointer for A-MPDU re-Tx SHM table */
+    S_REVID4,		/* 0x33 */
+    S_INDX,			/* 0x34 */
+    S_ADDR0,		/* 0x35 */
+    S_ADDR1,		/* 0x36 */
+    S_ADDR2,		/* 0x37 */
+    S_ADDR3,		/* 0x38 */
+    S_ADDR4,		/* 0x39 */
+    S_ADDR5,		/* 0x3A */
+    S_TMP6,			/* 0x3B */
+    S_KEYINDX_BU,		/* Backup for Key index */
+    S_MFGTEST_TMP0,		/* Temp regs used for RX test calculations */
+    S_RXESN,		/* Received end sequence number for A-MPDU BA */
+    S_STREG6,		/* 0x3F */
 };
 
 #define S_BEACON_INDX	S_OLD_BREM
@@ -1674,63 +1674,63 @@ enum _ePsmScratchPadRegDefinitions {
 
 /* ucode mac statistic counters in shared memory */
 struct macstat {
-	u16 txallfrm;	/* 0x80 */
-	u16 txrtsfrm;	/* 0x82 */
-	u16 txctsfrm;	/* 0x84 */
-	u16 txackfrm;	/* 0x86 */
-	u16 txdnlfrm;	/* 0x88 */
-	u16 txbcnfrm;	/* 0x8a */
-	u16 txfunfl[8];	/* 0x8c - 0x9b */
-	u16 txtplunfl;	/* 0x9c */
-	u16 txphyerr;	/* 0x9e */
-	u16 pktengrxducast;	/* 0xa0 */
-	u16 pktengrxdmcast;	/* 0xa2 */
-	u16 rxfrmtoolong;	/* 0xa4 */
-	u16 rxfrmtooshrt;	/* 0xa6 */
-	u16 rxinvmachdr;	/* 0xa8 */
-	u16 rxbadfcs;	/* 0xaa */
-	u16 rxbadplcp;	/* 0xac */
-	u16 rxcrsglitch;	/* 0xae */
-	u16 rxstrt;		/* 0xb0 */
-	u16 rxdfrmucastmbss;	/* 0xb2 */
-	u16 rxmfrmucastmbss;	/* 0xb4 */
-	u16 rxcfrmucast;	/* 0xb6 */
-	u16 rxrtsucast;	/* 0xb8 */
-	u16 rxctsucast;	/* 0xba */
-	u16 rxackucast;	/* 0xbc */
-	u16 rxdfrmocast;	/* 0xbe */
-	u16 rxmfrmocast;	/* 0xc0 */
-	u16 rxcfrmocast;	/* 0xc2 */
-	u16 rxrtsocast;	/* 0xc4 */
-	u16 rxctsocast;	/* 0xc6 */
-	u16 rxdfrmmcast;	/* 0xc8 */
-	u16 rxmfrmmcast;	/* 0xca */
-	u16 rxcfrmmcast;	/* 0xcc */
-	u16 rxbeaconmbss;	/* 0xce */
-	u16 rxdfrmucastobss;	/* 0xd0 */
-	u16 rxbeaconobss;	/* 0xd2 */
-	u16 rxrsptmout;	/* 0xd4 */
-	u16 bcntxcancl;	/* 0xd6 */
-	u16 PAD;
-	u16 rxf0ovfl;	/* 0xda */
-	u16 rxf1ovfl;	/* 0xdc */
-	u16 rxf2ovfl;	/* 0xde */
-	u16 txsfovfl;	/* 0xe0 */
-	u16 pmqovfl;		/* 0xe2 */
-	u16 rxcgprqfrm;	/* 0xe4 */
-	u16 rxcgprsqovfl;	/* 0xe6 */
-	u16 txcgprsfail;	/* 0xe8 */
-	u16 txcgprssuc;	/* 0xea */
-	u16 prs_timeout;	/* 0xec */
-	u16 rxnack;
-	u16 frmscons;
-	u16 txnack;
-	u16 txglitch_nack;
-	u16 txburst;		/* 0xf6 # tx bursts */
-	u16 bphy_rxcrsglitch;	/* bphy rx crs glitch */
-	u16 phywatchdog;	/* 0xfa # of phy watchdog events */
-	u16 PAD;
-	u16 bphy_badplcp;	/* bphy bad plcp */
+    u16 txallfrm;	/* 0x80 */
+    u16 txrtsfrm;	/* 0x82 */
+    u16 txctsfrm;	/* 0x84 */
+    u16 txackfrm;	/* 0x86 */
+    u16 txdnlfrm;	/* 0x88 */
+    u16 txbcnfrm;	/* 0x8a */
+    u16 txfunfl[8];	/* 0x8c - 0x9b */
+    u16 txtplunfl;	/* 0x9c */
+    u16 txphyerr;	/* 0x9e */
+    u16 pktengrxducast;	/* 0xa0 */
+    u16 pktengrxdmcast;	/* 0xa2 */
+    u16 rxfrmtoolong;	/* 0xa4 */
+    u16 rxfrmtooshrt;	/* 0xa6 */
+    u16 rxinvmachdr;	/* 0xa8 */
+    u16 rxbadfcs;	/* 0xaa */
+    u16 rxbadplcp;	/* 0xac */
+    u16 rxcrsglitch;	/* 0xae */
+    u16 rxstrt;		/* 0xb0 */
+    u16 rxdfrmucastmbss;	/* 0xb2 */
+    u16 rxmfrmucastmbss;	/* 0xb4 */
+    u16 rxcfrmucast;	/* 0xb6 */
+    u16 rxrtsucast;	/* 0xb8 */
+    u16 rxctsucast;	/* 0xba */
+    u16 rxackucast;	/* 0xbc */
+    u16 rxdfrmocast;	/* 0xbe */
+    u16 rxmfrmocast;	/* 0xc0 */
+    u16 rxcfrmocast;	/* 0xc2 */
+    u16 rxrtsocast;	/* 0xc4 */
+    u16 rxctsocast;	/* 0xc6 */
+    u16 rxdfrmmcast;	/* 0xc8 */
+    u16 rxmfrmmcast;	/* 0xca */
+    u16 rxcfrmmcast;	/* 0xcc */
+    u16 rxbeaconmbss;	/* 0xce */
+    u16 rxdfrmucastobss;	/* 0xd0 */
+    u16 rxbeaconobss;	/* 0xd2 */
+    u16 rxrsptmout;	/* 0xd4 */
+    u16 bcntxcancl;	/* 0xd6 */
+    u16 PAD;
+    u16 rxf0ovfl;	/* 0xda */
+    u16 rxf1ovfl;	/* 0xdc */
+    u16 rxf2ovfl;	/* 0xde */
+    u16 txsfovfl;	/* 0xe0 */
+    u16 pmqovfl;		/* 0xe2 */
+    u16 rxcgprqfrm;	/* 0xe4 */
+    u16 rxcgprsqovfl;	/* 0xe6 */
+    u16 txcgprsfail;	/* 0xe8 */
+    u16 txcgprssuc;	/* 0xea */
+    u16 prs_timeout;	/* 0xec */
+    u16 rxnack;
+    u16 frmscons;
+    u16 txnack;
+    u16 txglitch_nack;
+    u16 txburst;		/* 0xf6 # tx bursts */
+    u16 bphy_rxcrsglitch;	/* bphy rx crs glitch */
+    u16 phywatchdog;	/* 0xfa # of phy watchdog events */
+    u16 PAD;
+    u16 bphy_badplcp;	/* bphy bad plcp */
 };
 
 /* dot11 core-specific control flags */
@@ -1882,20 +1882,20 @@ struct macstat {
 #define MAX_BYT_CNT	0x600	/* Maximum frame len */
 
 struct d11cnt {
-	u32 txfrag;
-	u32 txmulti;
-	u32 txfail;
-	u32 txretry;
-	u32 txretrie;
-	u32 rxdup;
-	u32 txrts;
-	u32 txnocts;
-	u32 txnoack;
-	u32 rxfrag;
-	u32 rxmulti;
-	u32 rxcrc;
-	u32 txfrmsnt;
-	u32 rxundec;
+    u32 txfrag;
+    u32 txmulti;
+    u32 txfail;
+    u32 txretry;
+    u32 txretrie;
+    u32 rxdup;
+    u32 txrts;
+    u32 txnocts;
+    u32 txnoack;
+    u32 rxfrag;
+    u32 rxmulti;
+    u32 rxcrc;
+    u32 txfrmsnt;
+    u32 rxundec;
 };
 
 #endif				/* _BRCM_D11_H_ */

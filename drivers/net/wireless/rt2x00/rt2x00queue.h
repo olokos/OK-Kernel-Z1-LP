@@ -57,16 +57,16 @@
  * @QID_ATIM: Atim queue (value unspecified, don't send it to device)
  */
 enum data_queue_qid {
-	QID_AC_VO = 0,
-	QID_AC_VI = 1,
-	QID_AC_BE = 2,
-	QID_AC_BK = 3,
-	QID_HCCA = 4,
-	QID_MGMT = 13,
-	QID_RX = 14,
-	QID_OTHER = 15,
-	QID_BEACON,
-	QID_ATIM,
+    QID_AC_VO = 0,
+    QID_AC_VI = 1,
+    QID_AC_BE = 2,
+    QID_AC_BK = 3,
+    QID_HCCA = 4,
+    QID_MGMT = 13,
+    QID_RX = 14,
+    QID_OTHER = 15,
+    QID_BEACON,
+    QID_ATIM,
 };
 
 /**
@@ -82,11 +82,11 @@ enum data_queue_qid {
  *	skb, instead of in the desc field.
  */
 enum skb_frame_desc_flags {
-	SKBDESC_DMA_MAPPED_RX = 1 << 0,
-	SKBDESC_DMA_MAPPED_TX = 1 << 1,
-	SKBDESC_IV_STRIPPED = 1 << 2,
-	SKBDESC_NOT_MAC80211 = 1 << 3,
-	SKBDESC_DESC_IN_SKB = 1 << 4,
+    SKBDESC_DMA_MAPPED_RX = 1 << 0,
+    SKBDESC_DMA_MAPPED_TX = 1 << 1,
+    SKBDESC_IV_STRIPPED = 1 << 2,
+    SKBDESC_NOT_MAC80211 = 1 << 3,
+    SKBDESC_DESC_IN_SKB = 1 << 4,
 };
 
 /**
@@ -107,30 +107,29 @@ enum skb_frame_desc_flags {
  * @entry: The entry to which this sk buffer belongs.
  */
 struct skb_frame_desc {
-	u8 flags;
+    u8 flags;
 
-	u8 desc_len;
-	u8 tx_rate_idx;
-	u8 tx_rate_flags;
+    u8 desc_len;
+    u8 tx_rate_idx;
+    u8 tx_rate_flags;
 
-	void *desc;
+    void *desc;
 
-	__le32 iv[2];
+    __le32 iv[2];
 
-	dma_addr_t skb_dma;
+    dma_addr_t skb_dma;
 
-	struct queue_entry *entry;
+    struct queue_entry *entry;
 };
 
 /**
  * get_skb_frame_desc - Obtain the rt2x00 frame descriptor from a sk_buff.
  * @skb: &struct sk_buff from where we obtain the &struct skb_frame_desc
  */
-static inline struct skb_frame_desc* get_skb_frame_desc(struct sk_buff *skb)
-{
-	BUILD_BUG_ON(sizeof(struct skb_frame_desc) >
-		     IEEE80211_TX_INFO_DRIVER_DATA_SIZE);
-	return (struct skb_frame_desc *)&IEEE80211_SKB_CB(skb)->driver_data;
+static inline struct skb_frame_desc* get_skb_frame_desc(struct sk_buff *skb) {
+    BUILD_BUG_ON(sizeof(struct skb_frame_desc) >
+                 IEEE80211_TX_INFO_DRIVER_DATA_SIZE);
+    return (struct skb_frame_desc *)&IEEE80211_SKB_CB(skb)->driver_data;
 }
 
 /**
@@ -145,13 +144,13 @@ static inline struct skb_frame_desc* get_skb_frame_desc(struct sk_buff *skb)
  * @RXDONE_L2PAD: 802.11 payload has been padded to 4-byte boundary.
  */
 enum rxdone_entry_desc_flags {
-	RXDONE_SIGNAL_PLCP = BIT(0),
-	RXDONE_SIGNAL_BITRATE = BIT(1),
-	RXDONE_SIGNAL_MCS = BIT(2),
-	RXDONE_MY_BSS = BIT(3),
-	RXDONE_CRYPTO_IV = BIT(4),
-	RXDONE_CRYPTO_ICV = BIT(5),
-	RXDONE_L2PAD = BIT(6),
+    RXDONE_SIGNAL_PLCP = BIT(0),
+    RXDONE_SIGNAL_BITRATE = BIT(1),
+    RXDONE_SIGNAL_MCS = BIT(2),
+    RXDONE_MY_BSS = BIT(3),
+    RXDONE_CRYPTO_IV = BIT(4),
+    RXDONE_CRYPTO_ICV = BIT(5),
+    RXDONE_L2PAD = BIT(6),
 };
 
 /**
@@ -180,18 +179,18 @@ enum rxdone_entry_desc_flags {
  * @icv: ICV data used during decryption.
  */
 struct rxdone_entry_desc {
-	u64 timestamp;
-	int signal;
-	int rssi;
-	int size;
-	int flags;
-	int dev_flags;
-	u16 rate_mode;
-	u8 cipher;
-	u8 cipher_status;
+    u64 timestamp;
+    int signal;
+    int rssi;
+    int size;
+    int flags;
+    int dev_flags;
+    u16 rate_mode;
+    u8 cipher;
+    u8 cipher_status;
 
-	__le32 iv[2];
-	__le32 icv;
+    __le32 iv[2];
+    __le32 icv;
 };
 
 /**
@@ -212,12 +211,12 @@ struct rxdone_entry_desc {
  *	frame transmission failed due to excessive retries.
  */
 enum txdone_entry_desc_flags {
-	TXDONE_UNKNOWN,
-	TXDONE_SUCCESS,
-	TXDONE_FALLBACK,
-	TXDONE_FAILURE,
-	TXDONE_EXCESSIVE_RETRY,
-	TXDONE_AMPDU,
+    TXDONE_UNKNOWN,
+    TXDONE_SUCCESS,
+    TXDONE_FALLBACK,
+    TXDONE_FAILURE,
+    TXDONE_EXCESSIVE_RETRY,
+    TXDONE_AMPDU,
 };
 
 /**
@@ -230,8 +229,8 @@ enum txdone_entry_desc_flags {
  * @retry: Retry count.
  */
 struct txdone_entry_desc {
-	unsigned long flags;
-	int retry;
+    unsigned long flags;
+    int retry;
 };
 
 /**
@@ -256,23 +255,23 @@ struct txdone_entry_desc {
  * @ENTRY_TXD_HT_MIMO_PS: The receiving STA is in dynamic SM PS mode.
  */
 enum txentry_desc_flags {
-	ENTRY_TXD_RTS_FRAME,
-	ENTRY_TXD_CTS_FRAME,
-	ENTRY_TXD_GENERATE_SEQ,
-	ENTRY_TXD_FIRST_FRAGMENT,
-	ENTRY_TXD_MORE_FRAG,
-	ENTRY_TXD_REQ_TIMESTAMP,
-	ENTRY_TXD_BURST,
-	ENTRY_TXD_ACK,
-	ENTRY_TXD_RETRY_MODE,
-	ENTRY_TXD_ENCRYPT,
-	ENTRY_TXD_ENCRYPT_PAIRWISE,
-	ENTRY_TXD_ENCRYPT_IV,
-	ENTRY_TXD_ENCRYPT_MMIC,
-	ENTRY_TXD_HT_AMPDU,
-	ENTRY_TXD_HT_BW_40,
-	ENTRY_TXD_HT_SHORT_GI,
-	ENTRY_TXD_HT_MIMO_PS,
+    ENTRY_TXD_RTS_FRAME,
+    ENTRY_TXD_CTS_FRAME,
+    ENTRY_TXD_GENERATE_SEQ,
+    ENTRY_TXD_FIRST_FRAGMENT,
+    ENTRY_TXD_MORE_FRAG,
+    ENTRY_TXD_REQ_TIMESTAMP,
+    ENTRY_TXD_BURST,
+    ENTRY_TXD_ACK,
+    ENTRY_TXD_RETRY_MODE,
+    ENTRY_TXD_ENCRYPT,
+    ENTRY_TXD_ENCRYPT_PAIRWISE,
+    ENTRY_TXD_ENCRYPT_IV,
+    ENTRY_TXD_ENCRYPT_MMIC,
+    ENTRY_TXD_HT_AMPDU,
+    ENTRY_TXD_HT_BW_40,
+    ENTRY_TXD_HT_SHORT_GI,
+    ENTRY_TXD_HT_MIMO_PS,
 };
 
 /**
@@ -301,38 +300,38 @@ enum txentry_desc_flags {
  * @iv_len: Length of IV data.
  */
 struct txentry_desc {
-	unsigned long flags;
+    unsigned long flags;
 
-	u16 length;
-	u16 header_length;
+    u16 length;
+    u16 header_length;
 
-	union {
-		struct {
-			u16 length_high;
-			u16 length_low;
-			u16 signal;
-			u16 service;
-			enum ifs ifs;
-		} plcp;
+    union {
+        struct {
+            u16 length_high;
+            u16 length_low;
+            u16 signal;
+            u16 service;
+            enum ifs ifs;
+        } plcp;
 
-		struct {
-			u16 mcs;
-			u8 stbc;
-			u8 ba_size;
-			u8 mpdu_density;
-			enum txop txop;
-			int wcid;
-		} ht;
-	} u;
+        struct {
+            u16 mcs;
+            u8 stbc;
+            u8 ba_size;
+            u8 mpdu_density;
+            enum txop txop;
+            int wcid;
+        } ht;
+    } u;
 
-	enum rate_modulation rate_mode;
+    enum rate_modulation rate_mode;
 
-	short retry_limit;
+    short retry_limit;
 
-	enum cipher cipher;
-	u16 key_idx;
-	u16 iv_offset;
-	u16 iv_len;
+    enum cipher cipher;
+    u16 key_idx;
+    u16 iv_offset;
+    u16 iv_len;
 };
 
 /**
@@ -354,11 +353,11 @@ struct txentry_desc {
  *	entry can be reused again.
  */
 enum queue_entry_flags {
-	ENTRY_BCN_ASSIGNED,
-	ENTRY_OWNER_DEVICE_DATA,
-	ENTRY_DATA_PENDING,
-	ENTRY_DATA_IO_FAILED,
-	ENTRY_DATA_STATUS_PENDING,
+    ENTRY_BCN_ASSIGNED,
+    ENTRY_OWNER_DEVICE_DATA,
+    ENTRY_DATA_PENDING,
+    ENTRY_DATA_IO_FAILED,
+    ENTRY_DATA_STATUS_PENDING,
 };
 
 /**
@@ -374,16 +373,16 @@ enum queue_entry_flags {
  *	points to data specific to a particular driver and queue type.
  */
 struct queue_entry {
-	unsigned long flags;
-	unsigned long last_action;
+    unsigned long flags;
+    unsigned long last_action;
 
-	struct data_queue *queue;
+    struct data_queue *queue;
 
-	struct sk_buff *skb;
+    struct sk_buff *skb;
 
-	unsigned int entry_idx;
+    unsigned int entry_idx;
 
-	void *priv_data;
+    void *priv_data;
 };
 
 /**
@@ -400,10 +399,10 @@ struct queue_entry {
  *	of the index array.
  */
 enum queue_index {
-	Q_INDEX,
-	Q_INDEX_DMA_DONE,
-	Q_INDEX_DONE,
-	Q_INDEX_MAX,
+    Q_INDEX,
+    Q_INDEX_DMA_DONE,
+    Q_INDEX_DONE,
+    Q_INDEX_MAX,
 };
 
 /**
@@ -419,8 +418,8 @@ enum queue_index {
  *	might still appear shortly after the pausing...
  */
 enum data_queue_flags {
-	QUEUE_STARTED,
-	QUEUE_PAUSED,
+    QUEUE_STARTED,
+    QUEUE_PAUSED,
 };
 
 /**
@@ -453,32 +452,32 @@ enum data_queue_flags {
  * @usb_maxpacket: Max packet size for given endpoint (USB only)
  */
 struct data_queue {
-	struct rt2x00_dev *rt2x00dev;
-	struct queue_entry *entries;
+    struct rt2x00_dev *rt2x00dev;
+    struct queue_entry *entries;
 
-	enum data_queue_qid qid;
-	unsigned long flags;
+    enum data_queue_qid qid;
+    unsigned long flags;
 
-	struct mutex status_lock;
-	spinlock_t tx_lock;
-	spinlock_t index_lock;
+    struct mutex status_lock;
+    spinlock_t tx_lock;
+    spinlock_t index_lock;
 
-	unsigned int count;
-	unsigned short limit;
-	unsigned short threshold;
-	unsigned short length;
-	unsigned short index[Q_INDEX_MAX];
+    unsigned int count;
+    unsigned short limit;
+    unsigned short threshold;
+    unsigned short length;
+    unsigned short index[Q_INDEX_MAX];
 
-	unsigned short txop;
-	unsigned short aifs;
-	unsigned short cw_min;
-	unsigned short cw_max;
+    unsigned short txop;
+    unsigned short aifs;
+    unsigned short cw_min;
+    unsigned short cw_max;
 
-	unsigned short data_size;
-	unsigned short desc_size;
+    unsigned short data_size;
+    unsigned short desc_size;
 
-	unsigned short usb_endpoint;
-	unsigned short usb_maxpacket;
+    unsigned short usb_endpoint;
+    unsigned short usb_maxpacket;
 };
 
 /**
@@ -493,10 +492,10 @@ struct data_queue {
  * @priv_size: Size of per-queue_entry private data.
  */
 struct data_queue_desc {
-	unsigned short entry_num;
-	unsigned short data_size;
-	unsigned short desc_size;
-	unsigned short priv_size;
+    unsigned short entry_num;
+    unsigned short data_size;
+    unsigned short desc_size;
+    unsigned short priv_size;
 };
 
 /**
@@ -595,56 +594,51 @@ struct data_queue_desc {
  * processing and return true as well.
  */
 bool rt2x00queue_for_each_entry(struct data_queue *queue,
-				enum queue_index start,
-				enum queue_index end,
-				void *data,
-				bool (*fn)(struct queue_entry *entry,
-					   void *data));
+                                enum queue_index start,
+                                enum queue_index end,
+                                void *data,
+                                bool (*fn)(struct queue_entry *entry,
+                                        void *data));
 
 /**
  * rt2x00queue_empty - Check if the queue is empty.
  * @queue: Queue to check if empty.
  */
-static inline int rt2x00queue_empty(struct data_queue *queue)
-{
-	return queue->length == 0;
+static inline int rt2x00queue_empty(struct data_queue *queue) {
+    return queue->length == 0;
 }
 
 /**
  * rt2x00queue_full - Check if the queue is full.
  * @queue: Queue to check if full.
  */
-static inline int rt2x00queue_full(struct data_queue *queue)
-{
-	return queue->length == queue->limit;
+static inline int rt2x00queue_full(struct data_queue *queue) {
+    return queue->length == queue->limit;
 }
 
 /**
  * rt2x00queue_free - Check the number of available entries in queue.
  * @queue: Queue to check.
  */
-static inline int rt2x00queue_available(struct data_queue *queue)
-{
-	return queue->limit - queue->length;
+static inline int rt2x00queue_available(struct data_queue *queue) {
+    return queue->limit - queue->length;
 }
 
 /**
  * rt2x00queue_threshold - Check if the queue is below threshold
  * @queue: Queue to check.
  */
-static inline int rt2x00queue_threshold(struct data_queue *queue)
-{
-	return rt2x00queue_available(queue) < queue->threshold;
+static inline int rt2x00queue_threshold(struct data_queue *queue) {
+    return rt2x00queue_available(queue) < queue->threshold;
 }
 /**
  * rt2x00queue_dma_timeout - Check if a timeout occurred for DMA transfers
  * @entry: Queue entry to check.
  */
-static inline int rt2x00queue_dma_timeout(struct queue_entry *entry)
-{
-	if (!test_bit(ENTRY_OWNER_DEVICE_DATA, &entry->flags))
-		return false;
-	return time_after(jiffies, entry->last_action + msecs_to_jiffies(100));
+static inline int rt2x00queue_dma_timeout(struct queue_entry *entry) {
+    if (!test_bit(ENTRY_OWNER_DEVICE_DATA, &entry->flags))
+        return false;
+    return time_after(jiffies, entry->last_action + msecs_to_jiffies(100));
 }
 
 /**
@@ -653,9 +647,8 @@ static inline int rt2x00queue_dma_timeout(struct queue_entry *entry)
  * @word: Word index from where the descriptor should be read.
  * @value: Address where the descriptor value should be written into.
  */
-static inline void _rt2x00_desc_read(__le32 *desc, const u8 word, __le32 *value)
-{
-	*value = desc[word];
+static inline void _rt2x00_desc_read(__le32 *desc, const u8 word, __le32 *value) {
+    *value = desc[word];
 }
 
 /**
@@ -665,11 +658,10 @@ static inline void _rt2x00_desc_read(__le32 *desc, const u8 word, __le32 *value)
  * @word: Word index from where the descriptor should be read.
  * @value: Address where the descriptor value should be written into.
  */
-static inline void rt2x00_desc_read(__le32 *desc, const u8 word, u32 *value)
-{
-	__le32 tmp;
-	_rt2x00_desc_read(desc, word, &tmp);
-	*value = le32_to_cpu(tmp);
+static inline void rt2x00_desc_read(__le32 *desc, const u8 word, u32 *value) {
+    __le32 tmp;
+    _rt2x00_desc_read(desc, word, &tmp);
+    *value = le32_to_cpu(tmp);
 }
 
 /**
@@ -679,9 +671,8 @@ static inline void rt2x00_desc_read(__le32 *desc, const u8 word, u32 *value)
  * @word: Word index from where the descriptor should be written.
  * @value: Value that should be written into the descriptor.
  */
-static inline void _rt2x00_desc_write(__le32 *desc, const u8 word, __le32 value)
-{
-	desc[word] = value;
+static inline void _rt2x00_desc_write(__le32 *desc, const u8 word, __le32 value) {
+    desc[word] = value;
 }
 
 /**
@@ -690,9 +681,8 @@ static inline void _rt2x00_desc_write(__le32 *desc, const u8 word, __le32 value)
  * @word: Word index from where the descriptor should be written.
  * @value: Value that should be written into the descriptor.
  */
-static inline void rt2x00_desc_write(__le32 *desc, const u8 word, u32 value)
-{
-	_rt2x00_desc_write(desc, word, cpu_to_le32(value));
+static inline void rt2x00_desc_write(__le32 *desc, const u8 word, u32 value) {
+    _rt2x00_desc_write(desc, word, cpu_to_le32(value));
 }
 
 #endif /* RT2X00QUEUE_H */

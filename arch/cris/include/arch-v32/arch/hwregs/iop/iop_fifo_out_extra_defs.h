@@ -94,12 +94,12 @@ typedef unsigned int reg_iop_fifo_out_extra_r_rd_data;
 
 /* Register r_stat, scope iop_fifo_out_extra, type r */
 typedef struct {
-  unsigned int avail_bytes    : 4;
-  unsigned int last           : 8;
-  unsigned int dif_in_en      : 1;
-  unsigned int dif_out_en     : 1;
-  unsigned int zero_data_last : 1;
-  unsigned int dummy1         : 17;
+    unsigned int avail_bytes    : 4;
+    unsigned int last           : 8;
+    unsigned int dif_in_en      : 1;
+    unsigned int dif_out_en     : 1;
+    unsigned int zero_data_last : 1;
+    unsigned int dummy1         : 17;
 } reg_iop_fifo_out_extra_r_stat;
 #define REG_RD_ADDR_iop_fifo_out_extra_r_stat 8
 
@@ -110,55 +110,55 @@ typedef unsigned int reg_iop_fifo_out_extra_rw_strb_dif_out;
 
 /* Register rw_intr_mask, scope iop_fifo_out_extra, type rw */
 typedef struct {
-  unsigned int urun      : 1;
-  unsigned int last_data : 1;
-  unsigned int dav       : 1;
-  unsigned int free      : 1;
-  unsigned int orun      : 1;
-  unsigned int dummy1    : 27;
+    unsigned int urun      : 1;
+    unsigned int last_data : 1;
+    unsigned int dav       : 1;
+    unsigned int free      : 1;
+    unsigned int orun      : 1;
+    unsigned int dummy1    : 27;
 } reg_iop_fifo_out_extra_rw_intr_mask;
 #define REG_RD_ADDR_iop_fifo_out_extra_rw_intr_mask 16
 #define REG_WR_ADDR_iop_fifo_out_extra_rw_intr_mask 16
 
 /* Register rw_ack_intr, scope iop_fifo_out_extra, type rw */
 typedef struct {
-  unsigned int urun      : 1;
-  unsigned int last_data : 1;
-  unsigned int dav       : 1;
-  unsigned int free      : 1;
-  unsigned int orun      : 1;
-  unsigned int dummy1    : 27;
+    unsigned int urun      : 1;
+    unsigned int last_data : 1;
+    unsigned int dav       : 1;
+    unsigned int free      : 1;
+    unsigned int orun      : 1;
+    unsigned int dummy1    : 27;
 } reg_iop_fifo_out_extra_rw_ack_intr;
 #define REG_RD_ADDR_iop_fifo_out_extra_rw_ack_intr 20
 #define REG_WR_ADDR_iop_fifo_out_extra_rw_ack_intr 20
 
 /* Register r_intr, scope iop_fifo_out_extra, type r */
 typedef struct {
-  unsigned int urun      : 1;
-  unsigned int last_data : 1;
-  unsigned int dav       : 1;
-  unsigned int free      : 1;
-  unsigned int orun      : 1;
-  unsigned int dummy1    : 27;
+    unsigned int urun      : 1;
+    unsigned int last_data : 1;
+    unsigned int dav       : 1;
+    unsigned int free      : 1;
+    unsigned int orun      : 1;
+    unsigned int dummy1    : 27;
 } reg_iop_fifo_out_extra_r_intr;
 #define REG_RD_ADDR_iop_fifo_out_extra_r_intr 24
 
 /* Register r_masked_intr, scope iop_fifo_out_extra, type r */
 typedef struct {
-  unsigned int urun      : 1;
-  unsigned int last_data : 1;
-  unsigned int dav       : 1;
-  unsigned int free      : 1;
-  unsigned int orun      : 1;
-  unsigned int dummy1    : 27;
+    unsigned int urun      : 1;
+    unsigned int last_data : 1;
+    unsigned int dav       : 1;
+    unsigned int free      : 1;
+    unsigned int orun      : 1;
+    unsigned int dummy1    : 27;
 } reg_iop_fifo_out_extra_r_masked_intr;
 #define REG_RD_ADDR_iop_fifo_out_extra_r_masked_intr 28
 
 
 /* Constants */
 enum {
-  regk_iop_fifo_out_extra_no               = 0x00000000,
-  regk_iop_fifo_out_extra_rw_intr_mask_default = 0x00000000,
-  regk_iop_fifo_out_extra_yes              = 0x00000001
+    regk_iop_fifo_out_extra_no               = 0x00000000,
+    regk_iop_fifo_out_extra_rw_intr_mask_default = 0x00000000,
+    regk_iop_fifo_out_extra_yes              = 0x00000001
 };
 #endif /* __iop_fifo_out_extra_defs_h */

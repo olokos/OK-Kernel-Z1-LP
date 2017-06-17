@@ -23,31 +23,28 @@ extern void check_bugs64_early(void);
 extern void check_bugs32(void);
 extern void check_bugs64(void);
 
-static inline void check_bugs_early(void)
-{
+static inline void check_bugs_early(void) {
 #ifdef CONFIG_64BIT
-	check_bugs64_early();
+    check_bugs64_early();
 #endif
 }
 
-static inline void check_bugs(void)
-{
-	unsigned int cpu = smp_processor_id();
+static inline void check_bugs(void) {
+    unsigned int cpu = smp_processor_id();
 
-	cpu_data[cpu].udelay_val = loops_per_jiffy;
-	check_bugs32();
+    cpu_data[cpu].udelay_val = loops_per_jiffy;
+    check_bugs32();
 #ifdef CONFIG_64BIT
-	check_bugs64();
+    check_bugs64();
 #endif
 }
 
-static inline int r4k_daddiu_bug(void)
-{
+static inline int r4k_daddiu_bug(void) {
 #ifdef CONFIG_64BIT
-	WARN_ON(daddiu_bug < 0);
-	return daddiu_bug != 0;
+    WARN_ON(daddiu_bug < 0);
+    return daddiu_bug != 0;
 #else
-	return 0;
+    return 0;
 #endif
 }
 

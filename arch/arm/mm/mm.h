@@ -16,29 +16,26 @@ extern pmd_t *top_pmd;
 /* PFN alias flushing, for VIPT caches */
 #define FLUSH_ALIAS_START	0xffff4000
 
-static inline void set_top_pte(unsigned long va, pte_t pte)
-{
-	pte_t *ptep = pte_offset_kernel(top_pmd, va);
-	set_pte_ext(ptep, pte, 0);
-	local_flush_tlb_kernel_page(va);
+static inline void set_top_pte(unsigned long va, pte_t pte) {
+    pte_t *ptep = pte_offset_kernel(top_pmd, va);
+    set_pte_ext(ptep, pte, 0);
+    local_flush_tlb_kernel_page(va);
 }
 
-static inline pte_t get_top_pte(unsigned long va)
-{
-	pte_t *ptep = pte_offset_kernel(top_pmd, va);
-	return *ptep;
+static inline pte_t get_top_pte(unsigned long va) {
+    pte_t *ptep = pte_offset_kernel(top_pmd, va);
+    return *ptep;
 }
 
-static inline pmd_t *pmd_off_k(unsigned long virt)
-{
-	return pmd_offset(pud_offset(pgd_offset_k(virt), virt), virt);
+static inline pmd_t *pmd_off_k(unsigned long virt) {
+    return pmd_offset(pud_offset(pgd_offset_k(virt), virt), virt);
 }
 
 struct mem_type {
-	pteval_t prot_pte;
-	pmdval_t prot_l1;
-	pmdval_t prot_sect;
-	unsigned int domain;
+    pteval_t prot_pte;
+    pmdval_t prot_l1;
+    pmdval_t prot_sect;
+    unsigned int domain;
 };
 
 const struct mem_type *get_mem_type(unsigned int type);

@@ -38,11 +38,11 @@
 #endif
 
 enum emulation_result {
-	EMULATE_DONE,         /* no further processing */
-	EMULATE_DO_MMIO,      /* kvm_run filled with MMIO request */
-	EMULATE_DO_DCR,       /* kvm_run filled with DCR request */
-	EMULATE_FAIL,         /* can't emulate this instruction */
-	EMULATE_AGAIN,        /* something went wrong. go again */
+    EMULATE_DONE,         /* no further processing */
+    EMULATE_DO_MMIO,      /* kvm_run filled with MMIO request */
+    EMULATE_DO_DCR,       /* kvm_run filled with DCR request */
+    EMULATE_FAIL,         /* can't emulate this instruction */
+    EMULATE_AGAIN,        /* something went wrong. go again */
 };
 
 extern int kvmppc_vcpu_run(struct kvm_run *kvm_run, struct kvm_vcpu *vcpu);
@@ -85,7 +85,7 @@ extern void kvmppc_mmu_dtlb_miss(struct kvm_vcpu *vcpu);
 extern void kvmppc_mmu_itlb_miss(struct kvm_vcpu *vcpu);
 
 extern struct kvm_vcpu *kvmppc_core_vcpu_create(struct kvm *kvm,
-                                                unsigned int id);
+        unsigned int id);
 extern void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu);
 extern int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu);
 extern int kvmppc_core_check_processor_compat(void);
@@ -103,7 +103,7 @@ extern void kvmppc_core_dequeue_dec(struct kvm_vcpu *vcpu);
 extern void kvmppc_core_queue_external(struct kvm_vcpu *vcpu,
                                        struct kvm_interrupt *irq);
 extern void kvmppc_core_dequeue_external(struct kvm_vcpu *vcpu,
-                                         struct kvm_interrupt *irq);
+        struct kvm_interrupt *irq);
 
 extern int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
                                   unsigned int op, int *advance);
@@ -120,14 +120,14 @@ extern void kvmppc_map_magic(struct kvm_vcpu *vcpu);
 extern long kvmppc_alloc_hpt(struct kvm *kvm);
 extern void kvmppc_free_hpt(struct kvm *kvm);
 extern long kvmppc_prepare_vrma(struct kvm *kvm,
-				struct kvm_userspace_memory_region *mem);
+                                struct kvm_userspace_memory_region *mem);
 extern void kvmppc_map_vrma(struct kvm_vcpu *vcpu,
-			struct kvm_memory_slot *memslot, unsigned long porder);
+                            struct kvm_memory_slot *memslot, unsigned long porder);
 extern int kvmppc_pseries_do_hcall(struct kvm_vcpu *vcpu);
 extern long kvm_vm_ioctl_create_spapr_tce(struct kvm *kvm,
-				struct kvm_create_spapr_tce *args);
+        struct kvm_create_spapr_tce *args);
 extern long kvm_vm_ioctl_allocate_rma(struct kvm *kvm,
-				struct kvm_allocate_rma *rma);
+                                      struct kvm_allocate_rma *rma);
 extern struct kvmppc_linear_info *kvm_alloc_rma(void);
 extern void kvm_release_rma(struct kvmppc_linear_info *ri);
 extern struct kvmppc_linear_info *kvm_alloc_hpt(void);
@@ -135,41 +135,39 @@ extern void kvm_release_hpt(struct kvmppc_linear_info *li);
 extern int kvmppc_core_init_vm(struct kvm *kvm);
 extern void kvmppc_core_destroy_vm(struct kvm *kvm);
 extern int kvmppc_core_prepare_memory_region(struct kvm *kvm,
-				struct kvm_userspace_memory_region *mem);
+        struct kvm_userspace_memory_region *mem);
 extern void kvmppc_core_commit_memory_region(struct kvm *kvm,
-				struct kvm_userspace_memory_region *mem);
+        struct kvm_userspace_memory_region *mem);
 
 /*
  * Cuts out inst bits with ordering according to spec.
  * That means the leftmost bit is zero. All given bits are included.
  */
-static inline u32 kvmppc_get_field(u64 inst, int msb, int lsb)
-{
-	u32 r;
-	u32 mask;
+static inline u32 kvmppc_get_field(u64 inst, int msb, int lsb) {
+    u32 r;
+    u32 mask;
 
-	BUG_ON(msb > lsb);
+    BUG_ON(msb > lsb);
 
-	mask = (1 << (lsb - msb + 1)) - 1;
-	r = (inst >> (63 - lsb)) & mask;
+    mask = (1 << (lsb - msb + 1)) - 1;
+    r = (inst >> (63 - lsb)) & mask;
 
-	return r;
+    return r;
 }
 
 /*
  * Replaces inst bits with ordering according to spec.
  */
-static inline u32 kvmppc_set_field(u64 inst, int msb, int lsb, int value)
-{
-	u32 r;
-	u32 mask;
+static inline u32 kvmppc_set_field(u64 inst, int msb, int lsb, int value) {
+    u32 r;
+    u32 mask;
 
-	BUG_ON(msb > lsb);
+    BUG_ON(msb > lsb);
 
-	mask = ((1 << (lsb - msb + 1)) - 1) << (63 - lsb);
-	r = (inst & ~mask) | ((value << (63 - lsb)) & mask);
+    mask = ((1 << (lsb - msb + 1)) - 1) << (63 - lsb);
+    r = (inst & ~mask) | ((value << (63 - lsb)) & mask);
 
-	return r;
+    return r;
 }
 
 void kvmppc_core_get_sregs(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs);
@@ -184,24 +182,23 @@ int kvm_vcpu_ioctl_set_one_reg(struct kvm_vcpu *vcpu, struct kvm_one_reg *reg);
 void kvmppc_set_pid(struct kvm_vcpu *vcpu, u32 pid);
 
 #ifdef CONFIG_KVM_BOOK3S_64_HV
-static inline void kvmppc_set_xics_phys(int cpu, unsigned long addr)
-{
-	paca[cpu].kvm_hstate.xics_phys = addr;
+static inline void kvmppc_set_xics_phys(int cpu, unsigned long addr) {
+    paca[cpu].kvm_hstate.xics_phys = addr;
 }
 
 extern void kvm_linear_init(void);
 
 #else
-static inline void kvmppc_set_xics_phys(int cpu, unsigned long addr)
-{}
+static inline void kvmppc_set_xics_phys(int cpu, unsigned long addr) {
+}
 
-static inline void kvm_linear_init(void)
-{}
+static inline void kvm_linear_init(void) {
+}
 #endif
 
 int kvm_vcpu_ioctl_config_tlb(struct kvm_vcpu *vcpu,
-			      struct kvm_config_tlb *cfg);
+                              struct kvm_config_tlb *cfg);
 int kvm_vcpu_ioctl_dirty_tlb(struct kvm_vcpu *vcpu,
-			     struct kvm_dirty_tlb *cfg);
+                             struct kvm_dirty_tlb *cfg);
 
 #endif /* __POWERPC_KVM_PPC_H__ */

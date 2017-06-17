@@ -19,7 +19,7 @@
 #include <linux/mfd/pm8xxx/pm8921.h>
 
 int mipi_toshiba_device_register(struct msm_panel_info *pinfo,
-					u32 channel, u32 panel);
+                                 u32 channel, u32 panel);
 
 #define MIPI_TOSHIBA_PWM_FREQ_HZ 300
 #define MIPI_TOSHIBA_PWM_PERIOD_USEC (USEC_PER_SEC / MIPI_TOSHIBA_PWM_FREQ_HZ)

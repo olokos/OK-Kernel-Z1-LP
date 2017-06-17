@@ -26,12 +26,12 @@
  * @late_init: called during late init
  */
 struct clock_init_data {
-	struct list_head list;
-	struct clk_lookup *table;
-	size_t size;
-	void (*pre_init)(void);
-	void (*post_init)(void);
-	int (*late_init)(void);
+    struct list_head list;
+    struct clk_lookup *table;
+    size_t size;
+    void (*pre_init)(void);
+    void (*post_init)(void);
+    int (*late_init)(void);
 };
 
 extern struct clock_init_data msm9615_clock_init_data;
@@ -65,11 +65,12 @@ int find_vdd_level(struct clk *clk, unsigned long rate);
 int clock_debug_register(struct clk_lookup *t, size_t s);
 void clock_debug_print_enabled(void);
 #else
-static inline int clock_debug_register(struct clk_lookup *t, size_t s)
-{
-	return 0;
+static inline int clock_debug_register(struct clk_lookup *t, size_t s) {
+    return 0;
 }
-static inline void clock_debug_print_enabled(void) { return; }
+static inline void clock_debug_print_enabled(void) {
+    return;
+}
 #endif
 
 #endif

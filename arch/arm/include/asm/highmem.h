@@ -44,9 +44,8 @@ extern void kunmap_high(struct page *page);
 #ifdef ARCH_NEEDS_KMAP_HIGH_GET
 extern void *kmap_high_get(struct page *page);
 #else
-static inline void *kmap_high_get(struct page *page)
-{
-	return NULL;
+static inline void *kmap_high_get(struct page *page) {
+    return NULL;
 }
 #endif
 

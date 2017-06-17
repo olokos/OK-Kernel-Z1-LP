@@ -33,27 +33,26 @@
  *
  * Returns a copy of a virtual memory region on success or NULL.
  */
-struct vm_area_struct *vb2_get_vma(struct vm_area_struct *vma)
-{
-	struct vm_area_struct *vma_copy;
+struct vm_area_struct *vb2_get_vma(struct vm_area_struct *vma) {
+    struct vm_area_struct *vma_copy;
 
-	vma_copy = kmalloc(sizeof(*vma_copy), GFP_KERNEL);
-	if (vma_copy == NULL)
-		return NULL;
+    vma_copy = kmalloc(sizeof(*vma_copy), GFP_KERNEL);
+    if (vma_copy == NULL)
+        return NULL;
 
-	if (vma->vm_ops && vma->vm_ops->open)
-		vma->vm_ops->open(vma);
+    if (vma->vm_ops && vma->vm_ops->open)
+        vma->vm_ops->open(vma);
 
-	if (vma->vm_file)
-		get_file(vma->vm_file);
+    if (vma->vm_file)
+        get_file(vma->vm_file);
 
-	memcpy(vma_copy, vma, sizeof(*vma));
+    memcpy(vma_copy, vma, sizeof(*vma));
 
-	vma_copy->vm_mm = NULL;
-	vma_copy->vm_next = NULL;
-	vma_copy->vm_prev = NULL;
+    vma_copy->vm_mm = NULL;
+    vma_copy->vm_next = NULL;
+    vma_copy->vm_prev = NULL;
 
-	return vma_copy;
+    return vma_copy;
 }
 EXPORT_SYMBOL_GPL(vb2_get_vma);
 
@@ -64,18 +63,17 @@ EXPORT_SYMBOL_GPL(vb2_get_vma);
  * This function releases the previously acquired memory area after a hardware
  * operation.
  */
-void vb2_put_vma(struct vm_area_struct *vma)
-{
-	if (!vma)
-		return;
+void vb2_put_vma(struct vm_area_struct *vma) {
+    if (!vma)
+        return;
 
-	if (vma->vm_ops && vma->vm_ops->close)
-		vma->vm_ops->close(vma);
+    if (vma->vm_ops && vma->vm_ops->close)
+        vma->vm_ops->close(vma);
 
-	if (vma->vm_file)
-		fput(vma->vm_file);
+    if (vma->vm_file)
+        fput(vma->vm_file);
 
-	kfree(vma);
+    kfree(vma);
 }
 EXPORT_SYMBOL_GPL(vb2_put_vma);
 
@@ -94,45 +92,44 @@ EXPORT_SYMBOL_GPL(vb2_put_vma);
  * Returns 0 on success.
  */
 int vb2_get_contig_userptr(unsigned long vaddr, unsigned long size,
-			   struct vm_area_struct **res_vma, dma_addr_t *res_pa)
-{
-	struct mm_struct *mm = current->mm;
-	struct vm_area_struct *vma;
-	unsigned long offset, start, end;
-	unsigned long this_pfn, prev_pfn;
-	dma_addr_t pa = 0;
+                           struct vm_area_struct **res_vma, dma_addr_t *res_pa) {
+    struct mm_struct *mm = current->mm;
+    struct vm_area_struct *vma;
+    unsigned long offset, start, end;
+    unsigned long this_pfn, prev_pfn;
+    dma_addr_t pa = 0;
 
-	start = vaddr;
-	offset = start & ~PAGE_MASK;
-	end = start + size;
+    start = vaddr;
+    offset = start & ~PAGE_MASK;
+    end = start + size;
 
-	vma = find_vma(mm, start);
+    vma = find_vma(mm, start);
 
-	if (vma == NULL || vma->vm_end < end)
-		return -EFAULT;
+    if (vma == NULL || vma->vm_end < end)
+        return -EFAULT;
 
-	for (prev_pfn = 0; start < end; start += PAGE_SIZE) {
-		int ret = follow_pfn(vma, start, &this_pfn);
-		if (ret)
-			return ret;
+    for (prev_pfn = 0; start < end; start += PAGE_SIZE) {
+        int ret = follow_pfn(vma, start, &this_pfn);
+        if (ret)
+            return ret;
 
-		if (prev_pfn == 0)
-			pa = this_pfn << PAGE_SHIFT;
-		else if (this_pfn != prev_pfn + 1)
-			return -EFAULT;
+        if (prev_pfn == 0)
+            pa = this_pfn << PAGE_SHIFT;
+        else if (this_pfn != prev_pfn + 1)
+            return -EFAULT;
 
-		prev_pfn = this_pfn;
-	}
+        prev_pfn = this_pfn;
+    }
 
-	/*
-	 * Memory is contigous, lock vma and return to the caller
-	 */
-	*res_vma = vb2_get_vma(vma);
-	if (*res_vma == NULL)
-		return -ENOMEM;
+    /*
+     * Memory is contigous, lock vma and return to the caller
+     */
+    *res_vma = vb2_get_vma(vma);
+    if (*res_vma == NULL)
+        return -ENOMEM;
 
-	*res_pa = pa + offset;
-	return 0;
+    *res_pa = pa + offset;
+    return 0;
 }
 EXPORT_SYMBOL_GPL(vb2_get_contig_userptr);
 
@@ -147,32 +144,31 @@ EXPORT_SYMBOL_GPL(vb2_get_contig_userptr);
  * Returns 0 on success.
  */
 int vb2_mmap_pfn_range(struct vm_area_struct *vma, unsigned long paddr,
-				unsigned long size,
-				const struct vm_operations_struct *vm_ops,
-				void *priv)
-{
-	int ret;
+                       unsigned long size,
+                       const struct vm_operations_struct *vm_ops,
+                       void *priv) {
+    int ret;
 
-	size = min_t(unsigned long, vma->vm_end - vma->vm_start, size);
+    size = min_t(unsigned long, vma->vm_end - vma->vm_start, size);
 
-	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-	ret = remap_pfn_range(vma, vma->vm_start, paddr >> PAGE_SHIFT,
-				size, vma->vm_page_prot);
-	if (ret) {
-		printk(KERN_ERR "Remapping memory failed, error: %d\n", ret);
-		return ret;
-	}
+    vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+    ret = remap_pfn_range(vma, vma->vm_start, paddr >> PAGE_SHIFT,
+                          size, vma->vm_page_prot);
+    if (ret) {
+        printk(KERN_ERR "Remapping memory failed, error: %d\n", ret);
+        return ret;
+    }
 
-	vma->vm_flags		|= VM_DONTEXPAND | VM_RESERVED;
-	vma->vm_private_data	= priv;
-	vma->vm_ops		= vm_ops;
+    vma->vm_flags		|= VM_DONTEXPAND | VM_RESERVED;
+    vma->vm_private_data	= priv;
+    vma->vm_ops		= vm_ops;
 
-	vma->vm_ops->open(vma);
+    vma->vm_ops->open(vma);
 
-	pr_debug("%s: mapped paddr 0x%08lx at 0x%08lx, size %ld\n",
-			__func__, paddr, vma->vm_start, size);
+    pr_debug("%s: mapped paddr 0x%08lx at 0x%08lx, size %ld\n",
+             __func__, paddr, vma->vm_start, size);
 
-	return 0;
+    return 0;
 }
 EXPORT_SYMBOL_GPL(vb2_mmap_pfn_range);
 
@@ -183,15 +179,14 @@ EXPORT_SYMBOL_GPL(vb2_mmap_pfn_range);
  * This function adds another user to the provided vma. It expects
  * struct vb2_vmarea_handler pointer in vma->vm_private_data.
  */
-static void vb2_common_vm_open(struct vm_area_struct *vma)
-{
-	struct vb2_vmarea_handler *h = vma->vm_private_data;
+static void vb2_common_vm_open(struct vm_area_struct *vma) {
+    struct vb2_vmarea_handler *h = vma->vm_private_data;
 
-	pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
-	       __func__, h, atomic_read(h->refcount), vma->vm_start,
-	       vma->vm_end);
+    pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+             __func__, h, atomic_read(h->refcount), vma->vm_start,
+             vma->vm_end);
 
-	atomic_inc(h->refcount);
+    atomic_inc(h->refcount);
 }
 
 /**
@@ -201,15 +196,14 @@ static void vb2_common_vm_open(struct vm_area_struct *vma)
  * This function releases the user from the provided vma. It expects
  * struct vb2_vmarea_handler pointer in vma->vm_private_data.
  */
-static void vb2_common_vm_close(struct vm_area_struct *vma)
-{
-	struct vb2_vmarea_handler *h = vma->vm_private_data;
+static void vb2_common_vm_close(struct vm_area_struct *vma) {
+    struct vb2_vmarea_handler *h = vma->vm_private_data;
 
-	pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
-	       __func__, h, atomic_read(h->refcount), vma->vm_start,
-	       vma->vm_end);
+    pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+             __func__, h, atomic_read(h->refcount), vma->vm_start,
+             vma->vm_end);
 
-	h->put(h->arg);
+    h->put(h->arg);
 }
 
 /**
@@ -217,8 +211,8 @@ static void vb2_common_vm_close(struct vm_area_struct *vma)
  * video buffers
  */
 const struct vm_operations_struct vb2_common_vm_ops = {
-	.open = vb2_common_vm_open,
-	.close = vb2_common_vm_close,
+    .open = vb2_common_vm_open,
+    .close = vb2_common_vm_close,
 };
 EXPORT_SYMBOL_GPL(vb2_common_vm_ops);
 

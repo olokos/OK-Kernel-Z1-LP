@@ -63,9 +63,8 @@
  *	IRQ context.
  */
 
-static inline void mca_enable_dma(unsigned int dmanr)
-{
-	outb(MCA_DMA_FN_RESET_MASK | dmanr, MCA_DMA_REG_FN);
+static inline void mca_enable_dma(unsigned int dmanr) {
+    outb(MCA_DMA_FN_RESET_MASK | dmanr, MCA_DMA_REG_FN);
 }
 
 /**
@@ -76,9 +75,8 @@ static inline void mca_enable_dma(unsigned int dmanr)
  *	IRQ context.
  */
 
-static inline void mca_disable_dma(unsigned int dmanr)
-{
-	outb(MCA_DMA_FN_MASK | dmanr, MCA_DMA_REG_FN);
+static inline void mca_disable_dma(unsigned int dmanr) {
+    outb(MCA_DMA_FN_MASK | dmanr, MCA_DMA_REG_FN);
 }
 
 /**
@@ -90,12 +88,11 @@ static inline void mca_disable_dma(unsigned int dmanr)
  *	limitation (16Mb).
  */
 
-static inline void mca_set_dma_addr(unsigned int dmanr, unsigned int a)
-{
-	outb(MCA_DMA_FN_SET_ADDR | dmanr, MCA_DMA_REG_FN);
-	outb(a & 0xff, MCA_DMA_REG_EXE);
-	outb((a >> 8) & 0xff, MCA_DMA_REG_EXE);
-	outb((a >> 16) & 0xff, MCA_DMA_REG_EXE);
+static inline void mca_set_dma_addr(unsigned int dmanr, unsigned int a) {
+    outb(MCA_DMA_FN_SET_ADDR | dmanr, MCA_DMA_REG_FN);
+    outb(a & 0xff, MCA_DMA_REG_EXE);
+    outb((a >> 8) & 0xff, MCA_DMA_REG_EXE);
+    outb((a >> 16) & 0xff, MCA_DMA_REG_EXE);
 }
 
 /**
@@ -106,16 +103,15 @@ static inline void mca_set_dma_addr(unsigned int dmanr, unsigned int a)
  *	limitation (16Mb). The return is a bus address.
  */
 
-static inline unsigned int mca_get_dma_addr(unsigned int dmanr)
-{
-	unsigned int addr;
+static inline unsigned int mca_get_dma_addr(unsigned int dmanr) {
+    unsigned int addr;
 
-	outb(MCA_DMA_FN_GET_ADDR | dmanr, MCA_DMA_REG_FN);
-	addr = inb(MCA_DMA_REG_EXE);
-	addr |= inb(MCA_DMA_REG_EXE) << 8;
-	addr |= inb(MCA_DMA_REG_EXE) << 16;
+    outb(MCA_DMA_FN_GET_ADDR | dmanr, MCA_DMA_REG_FN);
+    addr = inb(MCA_DMA_REG_EXE);
+    addr |= inb(MCA_DMA_REG_EXE) << 8;
+    addr |= inb(MCA_DMA_REG_EXE) << 16;
 
-	return addr;
+    return addr;
 }
 
 /**
@@ -127,13 +123,12 @@ static inline unsigned int mca_get_dma_addr(unsigned int dmanr)
  *	Setting a count of zero will not do what you expect.
  */
 
-static inline void mca_set_dma_count(unsigned int dmanr, unsigned int count)
-{
-	count--;  /* transfers one more than count -- correct for this */
+static inline void mca_set_dma_count(unsigned int dmanr, unsigned int count) {
+    count--;  /* transfers one more than count -- correct for this */
 
-	outb(MCA_DMA_FN_SET_COUNT | dmanr, MCA_DMA_REG_FN);
-	outb(count & 0xff, MCA_DMA_REG_EXE);
-	outb((count >> 8) & 0xff, MCA_DMA_REG_EXE);
+    outb(MCA_DMA_FN_SET_COUNT | dmanr, MCA_DMA_REG_FN);
+    outb(count & 0xff, MCA_DMA_REG_EXE);
+    outb((count >> 8) & 0xff, MCA_DMA_REG_EXE);
 }
 
 /**
@@ -144,15 +139,14 @@ static inline void mca_set_dma_count(unsigned int dmanr, unsigned int count)
  *	on this DMA channel.
  */
 
-static inline unsigned int mca_get_dma_residue(unsigned int dmanr)
-{
-	unsigned short count;
+static inline unsigned int mca_get_dma_residue(unsigned int dmanr) {
+    unsigned short count;
 
-	outb(MCA_DMA_FN_GET_COUNT | dmanr, MCA_DMA_REG_FN);
-	count = 1 + inb(MCA_DMA_REG_EXE);
-	count += inb(MCA_DMA_REG_EXE) << 8;
+    outb(MCA_DMA_FN_GET_COUNT | dmanr, MCA_DMA_REG_FN);
+    count = 1 + inb(MCA_DMA_REG_EXE);
+    count += inb(MCA_DMA_REG_EXE) << 8;
 
-	return count;
+    return count;
 }
 
 /**
@@ -164,15 +158,14 @@ static inline unsigned int mca_get_dma_residue(unsigned int dmanr)
  *	with an I/O port target.
  */
 
-static inline void mca_set_dma_io(unsigned int dmanr, unsigned int io_addr)
-{
-	/*
-	 * DMA from a port address -- set the io address
-	 */
+static inline void mca_set_dma_io(unsigned int dmanr, unsigned int io_addr) {
+    /*
+     * DMA from a port address -- set the io address
+     */
 
-	outb(MCA_DMA_FN_SET_IO | dmanr, MCA_DMA_REG_FN);
-	outb(io_addr & 0xff, MCA_DMA_REG_EXE);
-	outb((io_addr >>  8) & 0xff, MCA_DMA_REG_EXE);
+    outb(MCA_DMA_FN_SET_IO | dmanr, MCA_DMA_REG_FN);
+    outb(io_addr & 0xff, MCA_DMA_REG_EXE);
+    outb((io_addr >>  8) & 0xff, MCA_DMA_REG_EXE);
 }
 
 /**
@@ -192,10 +185,9 @@ static inline void mca_set_dma_io(unsigned int dmanr, unsigned int io_addr)
  *	%MCA_DMA_MODE_16 to do 16bit transfers.
  */
 
-static inline void mca_set_dma_mode(unsigned int dmanr, unsigned int mode)
-{
-	outb(MCA_DMA_FN_SET_MODE | dmanr, MCA_DMA_REG_FN);
-	outb(mode, MCA_DMA_REG_EXE);
+static inline void mca_set_dma_mode(unsigned int dmanr, unsigned int mode) {
+    outb(MCA_DMA_FN_SET_MODE | dmanr, MCA_DMA_REG_FN);
+    outb(mode, MCA_DMA_REG_EXE);
 }
 
 #endif /* _ASM_X86_MCA_DMA_H */

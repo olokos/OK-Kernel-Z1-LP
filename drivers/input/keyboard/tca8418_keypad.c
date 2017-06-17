@@ -111,317 +111,308 @@
 
 
 static const struct i2c_device_id tca8418_id[] = {
-	{ TCA8418_NAME, 8418, },
-	{ }
+    { TCA8418_NAME, 8418, },
+    { }
 };
 MODULE_DEVICE_TABLE(i2c, tca8418_id);
 
 struct tca8418_keypad {
-	unsigned int rows;
-	unsigned int cols;
-	unsigned int keypad_mask; /* Mask for keypad col/rol regs */
-	unsigned int irq;
-	unsigned int row_shift;
+    unsigned int rows;
+    unsigned int cols;
+    unsigned int keypad_mask; /* Mask for keypad col/rol regs */
+    unsigned int irq;
+    unsigned int row_shift;
 
-	struct i2c_client *client;
-	struct input_dev *input;
+    struct i2c_client *client;
+    struct input_dev *input;
 
-	/* Flexible array member, must be at end of struct */
-	unsigned short keymap[];
+    /* Flexible array member, must be at end of struct */
+    unsigned short keymap[];
 };
 
 /*
  * Write a byte to the TCA8418
  */
 static int tca8418_write_byte(struct tca8418_keypad *keypad_data,
-			      int reg, u8 val)
-{
-	int error;
+                              int reg, u8 val) {
+    int error;
 
-	error = i2c_smbus_write_byte_data(keypad_data->client, reg, val);
-	if (error < 0) {
-		dev_err(&keypad_data->client->dev,
-			"%s failed, reg: %d, val: %d, error: %d\n",
-			__func__, reg, val, error);
-		return error;
-	}
+    error = i2c_smbus_write_byte_data(keypad_data->client, reg, val);
+    if (error < 0) {
+        dev_err(&keypad_data->client->dev,
+                "%s failed, reg: %d, val: %d, error: %d\n",
+                __func__, reg, val, error);
+        return error;
+    }
 
-	return 0;
+    return 0;
 }
 
 /*
  * Read a byte from the TCA8418
  */
 static int tca8418_read_byte(struct tca8418_keypad *keypad_data,
-			     int reg, u8 *val)
-{
-	int error;
+                             int reg, u8 *val) {
+    int error;
 
-	error = i2c_smbus_read_byte_data(keypad_data->client, reg);
-	if (error < 0) {
-		dev_err(&keypad_data->client->dev,
-				"%s failed, reg: %d, error: %d\n",
-				__func__, reg, error);
-		return error;
-	}
+    error = i2c_smbus_read_byte_data(keypad_data->client, reg);
+    if (error < 0) {
+        dev_err(&keypad_data->client->dev,
+                "%s failed, reg: %d, error: %d\n",
+                __func__, reg, error);
+        return error;
+    }
 
-	*val = (u8)error;
+    *val = (u8)error;
 
-	return 0;
+    return 0;
 }
 
-static void tca8418_read_keypad(struct tca8418_keypad *keypad_data)
-{
-	int error, col, row;
-	u8 reg, state, code;
+static void tca8418_read_keypad(struct tca8418_keypad *keypad_data) {
+    int error, col, row;
+    u8 reg, state, code;
 
-	/* Initial read of the key event FIFO */
-	error = tca8418_read_byte(keypad_data, REG_KEY_EVENT_A, &reg);
+    /* Initial read of the key event FIFO */
+    error = tca8418_read_byte(keypad_data, REG_KEY_EVENT_A, &reg);
 
-	/* Assume that key code 0 signifies empty FIFO */
-	while (error >= 0 && reg > 0) {
-		state = reg & KEY_EVENT_VALUE;
-		code  = reg & KEY_EVENT_CODE;
+    /* Assume that key code 0 signifies empty FIFO */
+    while (error >= 0 && reg > 0) {
+        state = reg & KEY_EVENT_VALUE;
+        code  = reg & KEY_EVENT_CODE;
 
-		row = code / TCA8418_MAX_COLS;
-		col = code % TCA8418_MAX_COLS;
+        row = code / TCA8418_MAX_COLS;
+        col = code % TCA8418_MAX_COLS;
 
-		row = (col) ? row : row - 1;
-		col = (col) ? col - 1 : TCA8418_MAX_COLS - 1;
+        row = (col) ? row : row - 1;
+        col = (col) ? col - 1 : TCA8418_MAX_COLS - 1;
 
-		code = MATRIX_SCAN_CODE(row, col, keypad_data->row_shift);
-		input_event(keypad_data->input, EV_MSC, MSC_SCAN, code);
-		input_report_key(keypad_data->input,
-				keypad_data->keymap[code], state);
+        code = MATRIX_SCAN_CODE(row, col, keypad_data->row_shift);
+        input_event(keypad_data->input, EV_MSC, MSC_SCAN, code);
+        input_report_key(keypad_data->input,
+                         keypad_data->keymap[code], state);
 
-		/* Read for next loop */
-		error = tca8418_read_byte(keypad_data, REG_KEY_EVENT_A, &reg);
-	}
+        /* Read for next loop */
+        error = tca8418_read_byte(keypad_data, REG_KEY_EVENT_A, &reg);
+    }
 
-	if (error < 0)
-		dev_err(&keypad_data->client->dev,
-			"unable to read REG_KEY_EVENT_A\n");
+    if (error < 0)
+        dev_err(&keypad_data->client->dev,
+                "unable to read REG_KEY_EVENT_A\n");
 
-	input_sync(keypad_data->input);
+    input_sync(keypad_data->input);
 }
 
 /*
  * Threaded IRQ handler and this can (and will) sleep.
  */
-static irqreturn_t tca8418_irq_handler(int irq, void *dev_id)
-{
-	struct tca8418_keypad *keypad_data = dev_id;
-	u8 reg;
-	int error;
+static irqreturn_t tca8418_irq_handler(int irq, void *dev_id) {
+    struct tca8418_keypad *keypad_data = dev_id;
+    u8 reg;
+    int error;
 
-	error = tca8418_read_byte(keypad_data, REG_INT_STAT, &reg);
-	if (error) {
-		dev_err(&keypad_data->client->dev,
-			"unable to read REG_INT_STAT\n");
-		goto exit;
-	}
+    error = tca8418_read_byte(keypad_data, REG_INT_STAT, &reg);
+    if (error) {
+        dev_err(&keypad_data->client->dev,
+                "unable to read REG_INT_STAT\n");
+        goto exit;
+    }
 
-	if (reg & INT_STAT_OVR_FLOW_INT)
-		dev_warn(&keypad_data->client->dev, "overflow occurred\n");
+    if (reg & INT_STAT_OVR_FLOW_INT)
+        dev_warn(&keypad_data->client->dev, "overflow occurred\n");
 
-	if (reg & INT_STAT_K_INT)
-		tca8418_read_keypad(keypad_data);
+    if (reg & INT_STAT_K_INT)
+        tca8418_read_keypad(keypad_data);
 
 exit:
-	/* Clear all interrupts, even IRQs we didn't check (GPI, CAD, LCK) */
-	reg = 0xff;
-	error = tca8418_write_byte(keypad_data, REG_INT_STAT, reg);
-	if (error)
-		dev_err(&keypad_data->client->dev,
-			"unable to clear REG_INT_STAT\n");
+    /* Clear all interrupts, even IRQs we didn't check (GPI, CAD, LCK) */
+    reg = 0xff;
+    error = tca8418_write_byte(keypad_data, REG_INT_STAT, reg);
+    if (error)
+        dev_err(&keypad_data->client->dev,
+                "unable to clear REG_INT_STAT\n");
 
-	return IRQ_HANDLED;
+    return IRQ_HANDLED;
 }
 
 /*
  * Configure the TCA8418 for keypad operation
  */
-static int __devinit tca8418_configure(struct tca8418_keypad *keypad_data)
-{
-	int reg, error;
+static int __devinit tca8418_configure(struct tca8418_keypad *keypad_data) {
+    int reg, error;
 
-	/* Write config register, if this fails assume device not present */
-	error = tca8418_write_byte(keypad_data, REG_CFG,
-				CFG_INT_CFG | CFG_OVR_FLOW_IEN | CFG_KE_IEN);
-	if (error < 0)
-		return -ENODEV;
+    /* Write config register, if this fails assume device not present */
+    error = tca8418_write_byte(keypad_data, REG_CFG,
+                               CFG_INT_CFG | CFG_OVR_FLOW_IEN | CFG_KE_IEN);
+    if (error < 0)
+        return -ENODEV;
 
 
-	/* Assemble a mask for row and column registers */
-	reg  =  ~(~0 << keypad_data->rows);
-	reg += (~(~0 << keypad_data->cols)) << 8;
-	keypad_data->keypad_mask = reg;
+    /* Assemble a mask for row and column registers */
+    reg  =  ~(~0 << keypad_data->rows);
+    reg += (~(~0 << keypad_data->cols)) << 8;
+    keypad_data->keypad_mask = reg;
 
-	/* Set registers to keypad mode */
-	error |= tca8418_write_byte(keypad_data, REG_KP_GPIO1, reg);
-	error |= tca8418_write_byte(keypad_data, REG_KP_GPIO2, reg >> 8);
-	error |= tca8418_write_byte(keypad_data, REG_KP_GPIO3, reg >> 16);
+    /* Set registers to keypad mode */
+    error |= tca8418_write_byte(keypad_data, REG_KP_GPIO1, reg);
+    error |= tca8418_write_byte(keypad_data, REG_KP_GPIO2, reg >> 8);
+    error |= tca8418_write_byte(keypad_data, REG_KP_GPIO3, reg >> 16);
 
-	/* Enable column debouncing */
-	error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS1, reg);
-	error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS2, reg >> 8);
-	error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS3, reg >> 16);
+    /* Enable column debouncing */
+    error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS1, reg);
+    error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS2, reg >> 8);
+    error |= tca8418_write_byte(keypad_data, REG_DEBOUNCE_DIS3, reg >> 16);
 
-	return error;
+    return error;
 }
 
 static int __devinit tca8418_keypad_probe(struct i2c_client *client,
-					  const struct i2c_device_id *id)
-{
-	const struct tca8418_keypad_platform_data *pdata =
-						client->dev.platform_data;
-	struct tca8418_keypad *keypad_data;
-	struct input_dev *input;
-	int error, row_shift, max_keys;
+        const struct i2c_device_id *id) {
+    const struct tca8418_keypad_platform_data *pdata =
+            client->dev.platform_data;
+    struct tca8418_keypad *keypad_data;
+    struct input_dev *input;
+    int error, row_shift, max_keys;
 
-	/* Copy the platform data */
-	if (!pdata) {
-		dev_dbg(&client->dev, "no platform data\n");
-		return -EINVAL;
-	}
+    /* Copy the platform data */
+    if (!pdata) {
+        dev_dbg(&client->dev, "no platform data\n");
+        return -EINVAL;
+    }
 
-	if (!pdata->keymap_data) {
-		dev_err(&client->dev, "no keymap data defined\n");
-		return -EINVAL;
-	}
+    if (!pdata->keymap_data) {
+        dev_err(&client->dev, "no keymap data defined\n");
+        return -EINVAL;
+    }
 
-	if (!pdata->rows || pdata->rows > TCA8418_MAX_ROWS) {
-		dev_err(&client->dev, "invalid rows\n");
-		return -EINVAL;
-	}
+    if (!pdata->rows || pdata->rows > TCA8418_MAX_ROWS) {
+        dev_err(&client->dev, "invalid rows\n");
+        return -EINVAL;
+    }
 
-	if (!pdata->cols || pdata->cols > TCA8418_MAX_COLS) {
-		dev_err(&client->dev, "invalid columns\n");
-		return -EINVAL;
-	}
+    if (!pdata->cols || pdata->cols > TCA8418_MAX_COLS) {
+        dev_err(&client->dev, "invalid columns\n");
+        return -EINVAL;
+    }
 
-	/* Check i2c driver capabilities */
-	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE)) {
-		dev_err(&client->dev, "%s adapter not supported\n",
-			dev_driver_string(&client->adapter->dev));
-		return -ENODEV;
-	}
+    /* Check i2c driver capabilities */
+    if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE)) {
+        dev_err(&client->dev, "%s adapter not supported\n",
+                dev_driver_string(&client->adapter->dev));
+        return -ENODEV;
+    }
 
-	row_shift = get_count_order(pdata->cols);
-	max_keys = pdata->rows << row_shift;
+    row_shift = get_count_order(pdata->cols);
+    max_keys = pdata->rows << row_shift;
 
-	/* Allocate memory for keypad_data, keymap and input device */
-	keypad_data = kzalloc(sizeof(*keypad_data) +
-			max_keys * sizeof(keypad_data->keymap[0]), GFP_KERNEL);
-	if (!keypad_data)
-		return -ENOMEM;
+    /* Allocate memory for keypad_data, keymap and input device */
+    keypad_data = kzalloc(sizeof(*keypad_data) +
+                          max_keys * sizeof(keypad_data->keymap[0]), GFP_KERNEL);
+    if (!keypad_data)
+        return -ENOMEM;
 
-	keypad_data->rows = pdata->rows;
-	keypad_data->cols = pdata->cols;
-	keypad_data->client = client;
-	keypad_data->row_shift = row_shift;
+    keypad_data->rows = pdata->rows;
+    keypad_data->cols = pdata->cols;
+    keypad_data->client = client;
+    keypad_data->row_shift = row_shift;
 
-	/* Initialize the chip or fail if chip isn't present */
-	error = tca8418_configure(keypad_data);
-	if (error < 0)
-		goto fail1;
+    /* Initialize the chip or fail if chip isn't present */
+    error = tca8418_configure(keypad_data);
+    if (error < 0)
+        goto fail1;
 
-	/* Configure input device */
-	input = input_allocate_device();
-	if (!input) {
-		error = -ENOMEM;
-		goto fail1;
-	}
-	keypad_data->input = input;
+    /* Configure input device */
+    input = input_allocate_device();
+    if (!input) {
+        error = -ENOMEM;
+        goto fail1;
+    }
+    keypad_data->input = input;
 
-	input->name = client->name;
-	input->dev.parent = &client->dev;
+    input->name = client->name;
+    input->dev.parent = &client->dev;
 
-	input->id.bustype = BUS_I2C;
-	input->id.vendor  = 0x0001;
-	input->id.product = 0x001;
-	input->id.version = 0x0001;
+    input->id.bustype = BUS_I2C;
+    input->id.vendor  = 0x0001;
+    input->id.product = 0x001;
+    input->id.version = 0x0001;
 
-	input->keycode     = keypad_data->keymap;
-	input->keycodesize = sizeof(keypad_data->keymap[0]);
-	input->keycodemax  = max_keys;
+    input->keycode     = keypad_data->keymap;
+    input->keycodesize = sizeof(keypad_data->keymap[0]);
+    input->keycodemax  = max_keys;
 
-	__set_bit(EV_KEY, input->evbit);
-	if (pdata->rep)
-		__set_bit(EV_REP, input->evbit);
+    __set_bit(EV_KEY, input->evbit);
+    if (pdata->rep)
+        __set_bit(EV_REP, input->evbit);
 
-	input_set_capability(input, EV_MSC, MSC_SCAN);
+    input_set_capability(input, EV_MSC, MSC_SCAN);
 
-	input_set_drvdata(input, keypad_data);
+    input_set_drvdata(input, keypad_data);
 
-	matrix_keypad_build_keymap(pdata->keymap_data, row_shift,
-			input->keycode, input->keybit);
+    matrix_keypad_build_keymap(pdata->keymap_data, row_shift,
+                               input->keycode, input->keybit);
 
-	if (pdata->irq_is_gpio)
-		client->irq = gpio_to_irq(client->irq);
+    if (pdata->irq_is_gpio)
+        client->irq = gpio_to_irq(client->irq);
 
-	error = request_threaded_irq(client->irq, NULL, tca8418_irq_handler,
-				     IRQF_TRIGGER_FALLING,
-				     client->name, keypad_data);
-	if (error) {
-		dev_dbg(&client->dev,
-			"Unable to claim irq %d; error %d\n",
-			client->irq, error);
-		goto fail2;
-	}
+    error = request_threaded_irq(client->irq, NULL, tca8418_irq_handler,
+                                 IRQF_TRIGGER_FALLING,
+                                 client->name, keypad_data);
+    if (error) {
+        dev_dbg(&client->dev,
+                "Unable to claim irq %d; error %d\n",
+                client->irq, error);
+        goto fail2;
+    }
 
-	error = input_register_device(input);
-	if (error) {
-		dev_dbg(&client->dev,
-			"Unable to register input device, error: %d\n", error);
-		goto fail3;
-	}
+    error = input_register_device(input);
+    if (error) {
+        dev_dbg(&client->dev,
+                "Unable to register input device, error: %d\n", error);
+        goto fail3;
+    }
 
-	i2c_set_clientdata(client, keypad_data);
-	return 0;
+    i2c_set_clientdata(client, keypad_data);
+    return 0;
 
 fail3:
-	free_irq(client->irq, keypad_data);
+    free_irq(client->irq, keypad_data);
 fail2:
-	input_free_device(input);
+    input_free_device(input);
 fail1:
-	kfree(keypad_data);
-	return error;
+    kfree(keypad_data);
+    return error;
 }
 
-static int __devexit tca8418_keypad_remove(struct i2c_client *client)
-{
-	struct tca8418_keypad *keypad_data = i2c_get_clientdata(client);
+static int __devexit tca8418_keypad_remove(struct i2c_client *client) {
+    struct tca8418_keypad *keypad_data = i2c_get_clientdata(client);
 
-	free_irq(keypad_data->client->irq, keypad_data);
+    free_irq(keypad_data->client->irq, keypad_data);
 
-	input_unregister_device(keypad_data->input);
+    input_unregister_device(keypad_data->input);
 
-	kfree(keypad_data);
+    kfree(keypad_data);
 
-	return 0;
+    return 0;
 }
 
 
 static struct i2c_driver tca8418_keypad_driver = {
-	.driver = {
-		.name	= TCA8418_NAME,
-		.owner	= THIS_MODULE,
-	},
-	.probe		= tca8418_keypad_probe,
-	.remove		= __devexit_p(tca8418_keypad_remove),
-	.id_table	= tca8418_id,
+    .driver = {
+        .name	= TCA8418_NAME,
+        .owner	= THIS_MODULE,
+    },
+    .probe		= tca8418_keypad_probe,
+    .remove		= __devexit_p(tca8418_keypad_remove),
+    .id_table	= tca8418_id,
 };
 
-static int __init tca8418_keypad_init(void)
-{
-	return i2c_add_driver(&tca8418_keypad_driver);
+static int __init tca8418_keypad_init(void) {
+    return i2c_add_driver(&tca8418_keypad_driver);
 }
 subsys_initcall(tca8418_keypad_init);
 
-static void __exit tca8418_keypad_exit(void)
-{
-	i2c_del_driver(&tca8418_keypad_driver);
+static void __exit tca8418_keypad_exit(void) {
+    i2c_del_driver(&tca8418_keypad_driver);
 }
 module_exit(tca8418_keypad_exit);
 

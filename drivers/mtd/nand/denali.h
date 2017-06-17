@@ -458,42 +458,42 @@
 #define DENALI_BUF_SIZE		(NAND_MAX_PAGESIZE + NAND_MAX_OOBSIZE)
 
 struct nand_buf {
-	int head;
-	int tail;
-	uint8_t buf[DENALI_BUF_SIZE];
-	dma_addr_t dma_buf;
+    int head;
+    int tail;
+    uint8_t buf[DENALI_BUF_SIZE];
+    dma_addr_t dma_buf;
 };
 
 #define INTEL_CE4100	1
 #define INTEL_MRST	2
 
 struct denali_nand_info {
-	struct mtd_info mtd;
-	struct nand_chip nand;
-	int flash_bank; /* currently selected chip */
-	int status;
-	int platform;
-	struct nand_buf buf;
-	struct device *dev;
-	int total_used_banks;
-	uint32_t block;  /* stored for future use */
-	uint16_t page;
-	void __iomem *flash_reg;  /* Mapped io reg base address */
-	void __iomem *flash_mem;  /* Mapped io reg base address */
+    struct mtd_info mtd;
+    struct nand_chip nand;
+    int flash_bank; /* currently selected chip */
+    int status;
+    int platform;
+    struct nand_buf buf;
+    struct device *dev;
+    int total_used_banks;
+    uint32_t block;  /* stored for future use */
+    uint16_t page;
+    void __iomem *flash_reg;  /* Mapped io reg base address */
+    void __iomem *flash_mem;  /* Mapped io reg base address */
 
-	/* elements used by ISR */
-	struct completion complete;
-	spinlock_t irq_lock;
-	uint32_t irq_status;
-	int irq_debug_array[32];
-	int idx;
+    /* elements used by ISR */
+    struct completion complete;
+    spinlock_t irq_lock;
+    uint32_t irq_status;
+    int irq_debug_array[32];
+    int idx;
 
-	uint32_t devnum;	/* represent how many nands connected */
-	uint32_t fwblks; /* represent how many blocks FW used */
-	uint32_t totalblks;
-	uint32_t blksperchip;
-	uint32_t bbtskipbytes;
-	uint32_t max_banks;
+    uint32_t devnum;	/* represent how many nands connected */
+    uint32_t fwblks; /* represent how many blocks FW used */
+    uint32_t totalblks;
+    uint32_t blksperchip;
+    uint32_t bbtskipbytes;
+    uint32_t max_banks;
 };
 
 #endif /*_LLD_NAND_*/

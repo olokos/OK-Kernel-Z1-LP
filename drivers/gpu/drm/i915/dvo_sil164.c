@@ -59,205 +59,196 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define SIL164_REGC 0x0c
 
 struct sil164_priv {
-	//I2CDevRec d;
-	bool quiet;
+    //I2CDevRec d;
+    bool quiet;
 };
 
 #define SILPTR(d) ((SIL164Ptr)(d->DriverPrivate.ptr))
 
-static bool sil164_readb(struct intel_dvo_device *dvo, int addr, uint8_t *ch)
-{
-	struct sil164_priv *sil = dvo->dev_priv;
-	struct i2c_adapter *adapter = dvo->i2c_bus;
-	u8 out_buf[2];
-	u8 in_buf[2];
+static bool sil164_readb(struct intel_dvo_device *dvo, int addr, uint8_t *ch) {
+    struct sil164_priv *sil = dvo->dev_priv;
+    struct i2c_adapter *adapter = dvo->i2c_bus;
+    u8 out_buf[2];
+    u8 in_buf[2];
 
-	struct i2c_msg msgs[] = {
-		{
-			.addr = dvo->slave_addr,
-			.flags = 0,
-			.len = 1,
-			.buf = out_buf,
-		},
-		{
-			.addr = dvo->slave_addr,
-			.flags = I2C_M_RD,
-			.len = 1,
-			.buf = in_buf,
-		}
-	};
+    struct i2c_msg msgs[] = {
+        {
+            .addr = dvo->slave_addr,
+            .flags = 0,
+            .len = 1,
+            .buf = out_buf,
+        },
+        {
+            .addr = dvo->slave_addr,
+            .flags = I2C_M_RD,
+            .len = 1,
+            .buf = in_buf,
+        }
+    };
 
-	out_buf[0] = addr;
-	out_buf[1] = 0;
+    out_buf[0] = addr;
+    out_buf[1] = 0;
 
-	if (i2c_transfer(adapter, msgs, 2) == 2) {
-		*ch = in_buf[0];
-		return true;
-	};
+    if (i2c_transfer(adapter, msgs, 2) == 2) {
+        *ch = in_buf[0];
+        return true;
+    };
 
-	if (!sil->quiet) {
-		DRM_DEBUG_KMS("Unable to read register 0x%02x from %s:%02x.\n",
-			  addr, adapter->name, dvo->slave_addr);
-	}
-	return false;
+    if (!sil->quiet) {
+        DRM_DEBUG_KMS("Unable to read register 0x%02x from %s:%02x.\n",
+                      addr, adapter->name, dvo->slave_addr);
+    }
+    return false;
 }
 
-static bool sil164_writeb(struct intel_dvo_device *dvo, int addr, uint8_t ch)
-{
-	struct sil164_priv *sil = dvo->dev_priv;
-	struct i2c_adapter *adapter = dvo->i2c_bus;
-	uint8_t out_buf[2];
-	struct i2c_msg msg = {
-		.addr = dvo->slave_addr,
-		.flags = 0,
-		.len = 2,
-		.buf = out_buf,
-	};
+static bool sil164_writeb(struct intel_dvo_device *dvo, int addr, uint8_t ch) {
+    struct sil164_priv *sil = dvo->dev_priv;
+    struct i2c_adapter *adapter = dvo->i2c_bus;
+    uint8_t out_buf[2];
+    struct i2c_msg msg = {
+        .addr = dvo->slave_addr,
+        .flags = 0,
+        .len = 2,
+        .buf = out_buf,
+    };
 
-	out_buf[0] = addr;
-	out_buf[1] = ch;
+    out_buf[0] = addr;
+    out_buf[1] = ch;
 
-	if (i2c_transfer(adapter, &msg, 1) == 1)
-		return true;
+    if (i2c_transfer(adapter, &msg, 1) == 1)
+        return true;
 
-	if (!sil->quiet) {
-		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
-			  addr, adapter->name, dvo->slave_addr);
-	}
+    if (!sil->quiet) {
+        DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
+                      addr, adapter->name, dvo->slave_addr);
+    }
 
-	return false;
+    return false;
 }
 
 /* Silicon Image 164 driver for chip on i2c bus */
 static bool sil164_init(struct intel_dvo_device *dvo,
-			struct i2c_adapter *adapter)
-{
-	/* this will detect the SIL164 chip on the specified i2c bus */
-	struct sil164_priv *sil;
-	unsigned char ch;
+                        struct i2c_adapter *adapter) {
+    /* this will detect the SIL164 chip on the specified i2c bus */
+    struct sil164_priv *sil;
+    unsigned char ch;
 
-	sil = kzalloc(sizeof(struct sil164_priv), GFP_KERNEL);
-	if (sil == NULL)
-		return false;
+    sil = kzalloc(sizeof(struct sil164_priv), GFP_KERNEL);
+    if (sil == NULL)
+        return false;
 
-	dvo->i2c_bus = adapter;
-	dvo->dev_priv = sil;
-	sil->quiet = true;
+    dvo->i2c_bus = adapter;
+    dvo->dev_priv = sil;
+    sil->quiet = true;
 
-	if (!sil164_readb(dvo, SIL164_VID_LO, &ch))
-		goto out;
+    if (!sil164_readb(dvo, SIL164_VID_LO, &ch))
+        goto out;
 
-	if (ch != (SIL164_VID & 0xff)) {
-		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
-			  ch, adapter->name, dvo->slave_addr);
-		goto out;
-	}
+    if (ch != (SIL164_VID & 0xff)) {
+        DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
+                      ch, adapter->name, dvo->slave_addr);
+        goto out;
+    }
 
-	if (!sil164_readb(dvo, SIL164_DID_LO, &ch))
-		goto out;
+    if (!sil164_readb(dvo, SIL164_DID_LO, &ch))
+        goto out;
 
-	if (ch != (SIL164_DID & 0xff)) {
-		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
-			  ch, adapter->name, dvo->slave_addr);
-		goto out;
-	}
-	sil->quiet = false;
+    if (ch != (SIL164_DID & 0xff)) {
+        DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
+                      ch, adapter->name, dvo->slave_addr);
+        goto out;
+    }
+    sil->quiet = false;
 
-	DRM_DEBUG_KMS("init sil164 dvo controller successfully!\n");
-	return true;
+    DRM_DEBUG_KMS("init sil164 dvo controller successfully!\n");
+    return true;
 
 out:
-	kfree(sil);
-	return false;
+    kfree(sil);
+    return false;
 }
 
-static enum drm_connector_status sil164_detect(struct intel_dvo_device *dvo)
-{
-	uint8_t reg9;
+static enum drm_connector_status sil164_detect(struct intel_dvo_device *dvo) {
+    uint8_t reg9;
 
-	sil164_readb(dvo, SIL164_REG9, &reg9);
+    sil164_readb(dvo, SIL164_REG9, &reg9);
 
-	if (reg9 & SIL164_9_HTPLG)
-		return connector_status_connected;
-	else
-		return connector_status_disconnected;
+    if (reg9 & SIL164_9_HTPLG)
+        return connector_status_connected;
+    else
+        return connector_status_disconnected;
 }
 
 static enum drm_mode_status sil164_mode_valid(struct intel_dvo_device *dvo,
-					      struct drm_display_mode *mode)
-{
-	return MODE_OK;
+        struct drm_display_mode *mode) {
+    return MODE_OK;
 }
 
 static void sil164_mode_set(struct intel_dvo_device *dvo,
-			    struct drm_display_mode *mode,
-			    struct drm_display_mode *adjusted_mode)
-{
-	/* As long as the basics are set up, since we don't have clock
-	 * dependencies in the mode setup, we can just leave the
-	 * registers alone and everything will work fine.
-	 */
-	/* recommended programming sequence from doc */
-	/*sil164_writeb(sil, 0x08, 0x30);
-	  sil164_writeb(sil, 0x09, 0x00);
-	  sil164_writeb(sil, 0x0a, 0x90);
-	  sil164_writeb(sil, 0x0c, 0x89);
-	  sil164_writeb(sil, 0x08, 0x31);*/
-	/* don't do much */
-	return;
+                            struct drm_display_mode *mode,
+                            struct drm_display_mode *adjusted_mode) {
+    /* As long as the basics are set up, since we don't have clock
+     * dependencies in the mode setup, we can just leave the
+     * registers alone and everything will work fine.
+     */
+    /* recommended programming sequence from doc */
+    /*sil164_writeb(sil, 0x08, 0x30);
+      sil164_writeb(sil, 0x09, 0x00);
+      sil164_writeb(sil, 0x0a, 0x90);
+      sil164_writeb(sil, 0x0c, 0x89);
+      sil164_writeb(sil, 0x08, 0x31);*/
+    /* don't do much */
+    return;
 }
 
 /* set the SIL164 power state */
-static void sil164_dpms(struct intel_dvo_device *dvo, int mode)
-{
-	int ret;
-	unsigned char ch;
+static void sil164_dpms(struct intel_dvo_device *dvo, int mode) {
+    int ret;
+    unsigned char ch;
 
-	ret = sil164_readb(dvo, SIL164_REG8, &ch);
-	if (ret == false)
-		return;
+    ret = sil164_readb(dvo, SIL164_REG8, &ch);
+    if (ret == false)
+        return;
 
-	if (mode == DRM_MODE_DPMS_ON)
-		ch |= SIL164_8_PD;
-	else
-		ch &= ~SIL164_8_PD;
+    if (mode == DRM_MODE_DPMS_ON)
+        ch |= SIL164_8_PD;
+    else
+        ch &= ~SIL164_8_PD;
 
-	sil164_writeb(dvo, SIL164_REG8, ch);
-	return;
+    sil164_writeb(dvo, SIL164_REG8, ch);
+    return;
 }
 
-static void sil164_dump_regs(struct intel_dvo_device *dvo)
-{
-	uint8_t val;
+static void sil164_dump_regs(struct intel_dvo_device *dvo) {
+    uint8_t val;
 
-	sil164_readb(dvo, SIL164_FREQ_LO, &val);
-	DRM_LOG_KMS("SIL164_FREQ_LO: 0x%02x\n", val);
-	sil164_readb(dvo, SIL164_FREQ_HI, &val);
-	DRM_LOG_KMS("SIL164_FREQ_HI: 0x%02x\n", val);
-	sil164_readb(dvo, SIL164_REG8, &val);
-	DRM_LOG_KMS("SIL164_REG8: 0x%02x\n", val);
-	sil164_readb(dvo, SIL164_REG9, &val);
-	DRM_LOG_KMS("SIL164_REG9: 0x%02x\n", val);
-	sil164_readb(dvo, SIL164_REGC, &val);
-	DRM_LOG_KMS("SIL164_REGC: 0x%02x\n", val);
+    sil164_readb(dvo, SIL164_FREQ_LO, &val);
+    DRM_LOG_KMS("SIL164_FREQ_LO: 0x%02x\n", val);
+    sil164_readb(dvo, SIL164_FREQ_HI, &val);
+    DRM_LOG_KMS("SIL164_FREQ_HI: 0x%02x\n", val);
+    sil164_readb(dvo, SIL164_REG8, &val);
+    DRM_LOG_KMS("SIL164_REG8: 0x%02x\n", val);
+    sil164_readb(dvo, SIL164_REG9, &val);
+    DRM_LOG_KMS("SIL164_REG9: 0x%02x\n", val);
+    sil164_readb(dvo, SIL164_REGC, &val);
+    DRM_LOG_KMS("SIL164_REGC: 0x%02x\n", val);
 }
 
-static void sil164_destroy(struct intel_dvo_device *dvo)
-{
-	struct sil164_priv *sil = dvo->dev_priv;
+static void sil164_destroy(struct intel_dvo_device *dvo) {
+    struct sil164_priv *sil = dvo->dev_priv;
 
-	if (sil) {
-		kfree(sil);
-		dvo->dev_priv = NULL;
-	}
+    if (sil) {
+        kfree(sil);
+        dvo->dev_priv = NULL;
+    }
 }
 
 struct intel_dvo_dev_ops sil164_ops = {
-	.init = sil164_init,
-	.detect = sil164_detect,
-	.mode_valid = sil164_mode_valid,
-	.mode_set = sil164_mode_set,
-	.dpms = sil164_dpms,
-	.dump_regs = sil164_dump_regs,
-	.destroy = sil164_destroy,
+    .init = sil164_init,
+    .detect = sil164_detect,
+    .mode_valid = sil164_mode_valid,
+    .mode_set = sil164_mode_set,
+    .dpms = sil164_dpms,
+    .dump_regs = sil164_dump_regs,
+    .destroy = sil164_destroy,
 };

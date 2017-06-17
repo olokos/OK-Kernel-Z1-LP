@@ -45,9 +45,8 @@ extern void paging_init(void);
 #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
 #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
 
-static inline int pte_file(pte_t pte)
-{
-	return 0;
+static inline int pte_file(pte_t pte) {
+    return 0;
 }
 
 #define set_pte(pteptr, pteval) (*(pteptr) = pteval)
@@ -101,8 +100,8 @@ extern unsigned int kobjsize(const void *objp);
 
 /* provide a special get_unmapped_area for framebuffer mmaps of nommu */
 extern unsigned long get_fb_unmapped_area(struct file *filp, unsigned long,
-					  unsigned long, unsigned long,
-					  unsigned long);
+        unsigned long, unsigned long,
+        unsigned long);
 #define HAVE_ARCH_FB_UNMAPPED_AREA
 
 #include <asm-generic/pgtable.h>

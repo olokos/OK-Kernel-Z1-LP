@@ -125,23 +125,23 @@
 extern int ext_resolution;
 
 struct hdmi_disp_mode_timing_type {
-	uint32	video_format;
-	uint32	active_h;
-	uint32	front_porch_h;
-	uint32	pulse_width_h;
-	uint32	back_porch_h;
-	boolean	active_low_h;
-	uint32	active_v;
-	uint32	front_porch_v;
-	uint32	pulse_width_v;
-	uint32	back_porch_v;
-	boolean	active_low_v;
-	/* Must divide by 1000 to get the actual frequency in MHZ */
-	uint32	pixel_freq;
-	/* Must divide by 1000 to get the actual frequency in HZ */
-	uint32	refresh_rate;
-	boolean	interlaced;
-	boolean	supported;
+    uint32	video_format;
+    uint32	active_h;
+    uint32	front_porch_h;
+    uint32	pulse_width_h;
+    uint32	back_porch_h;
+    boolean	active_low_h;
+    uint32	active_v;
+    uint32	front_porch_v;
+    uint32	pulse_width_v;
+    uint32	back_porch_v;
+    boolean	active_low_v;
+    /* Must divide by 1000 to get the actual frequency in MHZ */
+    uint32	pixel_freq;
+    /* Must divide by 1000 to get the actual frequency in HZ */
+    uint32	refresh_rate;
+    boolean	interlaced;
+    boolean	supported;
 };
 
 #define HDMI_SETTINGS_640x480p60_4_3					\
@@ -203,19 +203,19 @@ struct hdmi_disp_mode_timing_type {
  * hardware and driver.  Use HDMI_SETUP_LUT in the module init to
  * setup the LUT with the supported modes. */
 extern struct hdmi_disp_mode_timing_type
-	hdmi_common_supported_video_mode_lut[HDMI_VFRMT_MAX];
+    hdmi_common_supported_video_mode_lut[HDMI_VFRMT_MAX];
 
 /* Structure that encapsulates all the supported display modes by the HDMI sink
  * device */
 struct hdmi_disp_mode_list_type {
-	uint32	disp_mode_list[HDMI_VFRMT_MAX];
+    uint32	disp_mode_list[HDMI_VFRMT_MAX];
 #define TOP_AND_BOTTOM		0x10
 #define FRAME_PACKING		0x20
 #define SIDE_BY_SIDE_HALF	0x40
-	uint32	disp_3d_mode_list[HDMI_VFRMT_MAX];
-	uint32	disp_multi_3d_mode_list[16];
-	uint32	disp_multi_3d_mode_list_cnt;
-	uint32	num_of_elements;
+    uint32	disp_3d_mode_list[HDMI_VFRMT_MAX];
+    uint32	disp_multi_3d_mode_list[16];
+    uint32	disp_multi_3d_mode_list_cnt;
+    uint32	num_of_elements;
 };
 #endif
 
@@ -228,38 +228,38 @@ struct hdmi_disp_mode_list_type {
 #define MAX_SPKR_ALLOC_DATA_BLOCK_SIZE	3
 
 struct external_common_state_type {
-	boolean hpd_state;
-	struct kobject *uevent_kobj;
-	uint32 video_resolution;
-	boolean default_res_supported;
-	struct device *dev;
-	struct switch_dev sdev;
-	struct switch_dev audio_sdev;
+    boolean hpd_state;
+    struct kobject *uevent_kobj;
+    uint32 video_resolution;
+    boolean default_res_supported;
+    struct device *dev;
+    struct switch_dev sdev;
+    struct switch_dev audio_sdev;
 #ifdef CONFIG_FB_MSM_HDMI_3D
-	boolean format_3d;
-	void (*switch_3d)(boolean on);
+    boolean format_3d;
+    void (*switch_3d)(boolean on);
 #endif
 #ifdef CONFIG_FB_MSM_HDMI_COMMON
-	boolean hdcp_active;
-	boolean hpd_feature_on;
-	boolean hdmi_sink;
-	struct hdmi_disp_mode_list_type disp_mode_list;
-	uint16 video_latency, audio_latency;
-	uint16 physical_address;
-	uint32 preferred_video_format;
-	uint8 pt_scan_info;
-	uint8 it_scan_info;
-	uint8 ce_scan_info;
-	uint8 spd_vendor_name[8];
-	uint8 spd_product_description[16];
-	boolean present_3d;
-	boolean present_hdcp;
-	uint8 audio_data_block[MAX_AUDIO_DATA_BLOCK_SIZE];
-	int adb_size;
-	uint8 spkr_alloc_data_block[MAX_SPKR_ALLOC_DATA_BLOCK_SIZE];
-	int sadb_size;
-	int (*read_edid_block)(int block, uint8 *edid_buf);
-	int (*hpd_feature)(int on);
+    boolean hdcp_active;
+    boolean hpd_feature_on;
+    boolean hdmi_sink;
+    struct hdmi_disp_mode_list_type disp_mode_list;
+    uint16 video_latency, audio_latency;
+    uint16 physical_address;
+    uint32 preferred_video_format;
+    uint8 pt_scan_info;
+    uint8 it_scan_info;
+    uint8 ce_scan_info;
+    uint8 spd_vendor_name[8];
+    uint8 spd_product_description[16];
+    boolean present_3d;
+    boolean present_hdcp;
+    uint8 audio_data_block[MAX_AUDIO_DATA_BLOCK_SIZE];
+    int adb_size;
+    uint8 spkr_alloc_data_block[MAX_SPKR_ALLOC_DATA_BLOCK_SIZE];
+    int sadb_size;
+    int (*read_edid_block)(int block, uint8 *edid_buf);
+    int (*hpd_feature)(int on);
 #endif
 };
 
@@ -283,10 +283,10 @@ const char *video_format_2string(uint32 format);
 bool hdmi_common_get_video_format_from_drv_data(struct msm_fb_data_type *mfd);
 const struct hdmi_disp_mode_timing_type *hdmi_common_get_mode(uint32 mode);
 const struct hdmi_disp_mode_timing_type *hdmi_common_get_supported_mode(
-	uint32 mode);
+    uint32 mode);
 const struct hdmi_disp_mode_timing_type *hdmi_mhl_get_mode(uint32 mode);
 const struct hdmi_disp_mode_timing_type *hdmi_mhl_get_supported_mode(
-	uint32 mode);
+    uint32 mode);
 void hdmi_common_init_panel_info(struct msm_panel_info *pinfo);
 
 ssize_t video_3d_format_2string(uint32 format, char *buf);

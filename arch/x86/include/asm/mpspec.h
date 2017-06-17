@@ -57,19 +57,16 @@ extern int smp_found_config;
 # define smp_found_config 0
 #endif
 
-static inline void get_smp_config(void)
-{
-	x86_init.mpparse.get_smp_config(0);
+static inline void get_smp_config(void) {
+    x86_init.mpparse.get_smp_config(0);
 }
 
-static inline void early_get_smp_config(void)
-{
-	x86_init.mpparse.get_smp_config(1);
+static inline void early_get_smp_config(void) {
+    x86_init.mpparse.get_smp_config(1);
 }
 
-static inline void find_smp_config(void)
-{
-	x86_init.mpparse.find_smp_config();
+static inline void find_smp_config(void) {
+    x86_init.mpparse.find_smp_config();
 }
 
 #ifdef CONFIG_X86_MPPARSE
@@ -98,17 +95,17 @@ void __cpuinit generic_processor_info(int apicid, int version);
 #ifdef CONFIG_ACPI
 extern void mp_register_ioapic(int id, u32 address, u32 gsi_base);
 extern void mp_override_legacy_irq(u8 bus_irq, u8 polarity, u8 trigger,
-				   u32 gsi);
+                                   u32 gsi);
 extern void mp_config_acpi_legacy_irqs(void);
 struct device;
 extern int mp_register_gsi(struct device *dev, u32 gsi, int edge_level,
-				 int active_high_low);
+                           int active_high_low);
 #endif /* CONFIG_ACPI */
 
 #define PHYSID_ARRAY_SIZE	BITS_TO_LONGS(MAX_LOCAL_APIC)
 
 struct physid_mask {
-	unsigned long mask[PHYSID_ARRAY_SIZE];
+    unsigned long mask[PHYSID_ARRAY_SIZE];
 };
 
 typedef struct physid_mask physid_mask_t;
@@ -146,21 +143,18 @@ typedef struct physid_mask physid_mask_t;
 #define physids_shift_left(d, s, n)				\
 	bitmap_shift_left((d).mask, (s).mask, n, MAX_LOCAL_APIC)
 
-static inline unsigned long physids_coerce(physid_mask_t *map)
-{
-	return map->mask[0];
+static inline unsigned long physids_coerce(physid_mask_t *map) {
+    return map->mask[0];
 }
 
-static inline void physids_promote(unsigned long physids, physid_mask_t *map)
-{
-	physids_clear(*map);
-	map->mask[0] = physids;
+static inline void physids_promote(unsigned long physids, physid_mask_t *map) {
+    physids_clear(*map);
+    map->mask[0] = physids;
 }
 
-static inline void physid_set_mask_of_physid(int physid, physid_mask_t *map)
-{
-	physids_clear(*map);
-	physid_set(physid, *map);
+static inline void physid_set_mask_of_physid(int physid, physid_mask_t *map) {
+    physids_clear(*map);
+    physid_set(physid, *map);
 }
 
 #define PHYSID_MASK_ALL		{ {[0 ... PHYSID_ARRAY_SIZE-1] = ~0UL} }

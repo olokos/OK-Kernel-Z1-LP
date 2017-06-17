@@ -38,20 +38,20 @@
 #define warn(f, arg...) printk(KERN_WARNING LOG_PREFIX": " f "\n" , ## arg)
 
 struct rtl2830_priv {
-	struct i2c_adapter *i2c;
-	struct dvb_frontend fe;
-	struct rtl2830_config cfg;
-	struct i2c_adapter tuner_i2c_adapter;
+    struct i2c_adapter *i2c;
+    struct dvb_frontend fe;
+    struct rtl2830_config cfg;
+    struct i2c_adapter tuner_i2c_adapter;
 
-	bool sleeping;
+    bool sleeping;
 
-	u8 page; /* active register page */
+    u8 page; /* active register page */
 };
 
 struct rtl2830_reg_val_mask {
-	u16 reg;
-	u8  val;
-	u8  mask;
+    u16 reg;
+    u8  val;
+    u8  mask;
 };
 
 #endif /* RTL2830_PRIV_H */

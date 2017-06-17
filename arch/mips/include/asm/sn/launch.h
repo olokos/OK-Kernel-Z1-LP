@@ -65,17 +65,17 @@ typedef int launch_state_t;
 typedef void (*launch_proc_t)(u64 call_parm);
 
 typedef struct launch_s {
-	volatile u64		magic;	/* Magic number                     */
-	volatile u64		busy;	/* Slave currently active           */
-	volatile launch_proc_t	call_addr;	/* Func. for slave to call  */
-	volatile u64		call_addr_c;	/* 1's complement of call_addr*/
-	volatile u64		call_parm;	/* Single parm passed to call*/
-	volatile void *stack_addr;	/* Stack pointer for slave function */
-	volatile void *gp_addr;		/* Global pointer for slave func.   */
-	volatile char 		*bevutlb;/* Address of bev utlb ex handler   */
-	volatile char 		*bevnormal;/*Address of bev normal ex handler */
-	volatile char 		*bevecc;/* Address of bev cache err handler */
-	volatile char		pad[160];	/* Pad to LAUNCH_SIZEOF	    */
+    volatile u64		magic;	/* Magic number                     */
+    volatile u64		busy;	/* Slave currently active           */
+    volatile launch_proc_t	call_addr;	/* Func. for slave to call  */
+    volatile u64		call_addr_c;	/* 1's complement of call_addr*/
+    volatile u64		call_parm;	/* Single parm passed to call*/
+    volatile void *stack_addr;	/* Stack pointer for slave function */
+    volatile void *gp_addr;		/* Global pointer for slave func.   */
+    volatile char 		*bevutlb;/* Address of bev utlb ex handler   */
+    volatile char 		*bevnormal;/*Address of bev normal ex handler */
+    volatile char 		*bevecc;/* Address of bev cache err handler */
+    volatile char		pad[160];	/* Pad to LAUNCH_SIZEOF	    */
 } launch_t;
 
 /*

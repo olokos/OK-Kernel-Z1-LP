@@ -64,15 +64,15 @@
 /* Am I fucking pedantic or what? */
 struct Entry_header {
 #ifdef __BIG_ENDIAN
-	u8	entry_cnt;
-	u8	entry_type;
-	u8	flags;
-	u8	sys_def_1;
+    u8	entry_cnt;
+    u8	entry_type;
+    u8	flags;
+    u8	sys_def_1;
 #else /* __LITTLE_ENDIAN */
-	u8	entry_type;
-	u8	entry_cnt;
-	u8	sys_def_1;
-	u8	flags;
+    u8	entry_type;
+    u8	entry_cnt;
+    u8	sys_def_1;
+    u8	flags;
 #endif
 };
 
@@ -90,27 +90,27 @@ struct Entry_header {
 #define EFLAG_BAD_PAYLOAD	8
 
 struct dataseg {
-	u32	d_base;
-	u32	d_count;
+    u32	d_base;
+    u32	d_count;
 };
 
 struct Command_Entry {
-	struct Entry_header	hdr;
-	u32			handle;
+    struct Entry_header	hdr;
+    u32			handle;
 #ifdef __BIG_ENDIAN
-	u8			target_id;
-	u8			target_lun;
+    u8			target_id;
+    u8			target_lun;
 #else /* __LITTLE_ENDIAN */
-	u8			target_lun;
-	u8			target_id;
+    u8			target_lun;
+    u8			target_id;
 #endif
-	u16			cdb_length;
-	u16			control_flags;
-	u16			rsvd;
-	u16			time_out;
-	u16			segment_cnt;
-	u8			cdb[12];
-	struct dataseg		dataseg[4];
+    u16			cdb_length;
+    u16			control_flags;
+    u16			rsvd;
+    u16			time_out;
+    u16			segment_cnt;
+    u8			cdb[12];
+    struct dataseg		dataseg[4];
 };
 
 /* command entry control flag definitions */
@@ -123,47 +123,47 @@ struct Command_Entry {
 #define CFLAG_WRITE		0x40
 
 struct Ext_Command_Entry {
-	struct Entry_header	hdr;
-	u32			handle;
+    struct Entry_header	hdr;
+    u32			handle;
 #ifdef __BIG_ENDIAN
-	u8			target_id;
-	u8			target_lun;
+    u8			target_id;
+    u8			target_lun;
 #else /* __LITTLE_ENDIAN */
-	u8			target_lun;
-	u8			target_id;
+    u8			target_lun;
+    u8			target_id;
 #endif
-	u16			cdb_length;
-	u16			control_flags;
-	u16			rsvd;
-	u16			time_out;
-	u16			segment_cnt;
-	u8			cdb[44];
+    u16			cdb_length;
+    u16			control_flags;
+    u16			rsvd;
+    u16			time_out;
+    u16			segment_cnt;
+    u8			cdb[44];
 };
 
 struct Continuation_Entry {
-	struct Entry_header	hdr;
-	u32			reserved;
-	struct dataseg		dataseg[7];
+    struct Entry_header	hdr;
+    u32			reserved;
+    struct dataseg		dataseg[7];
 };
 
 struct Marker_Entry {
-	struct Entry_header	hdr;
-	u32			reserved;
+    struct Entry_header	hdr;
+    u32			reserved;
 #ifdef __BIG_ENDIAN
-	u8			target_id;
-	u8			target_lun;
+    u8			target_id;
+    u8			target_lun;
 #else /* __LITTLE_ENDIAN */
-	u8			target_lun;
-	u8			target_id;
+    u8			target_lun;
+    u8			target_id;
 #endif
 #ifdef __BIG_ENDIAN
-	u8			rsvd;
-	u8			modifier;
+    u8			rsvd;
+    u8			modifier;
 #else /* __LITTLE_ENDIAN */
-	u8			modifier;
-	u8			rsvd;
+    u8			modifier;
+    u8			rsvd;
 #endif
-	u8			rsvds[52];
+    u8			rsvds[52];
 };
 
 /* marker entry modifier definitions */
@@ -172,17 +172,17 @@ struct Marker_Entry {
 #define SYNC_ALL	2
 
 struct Status_Entry {
-	struct Entry_header	hdr;
-	u32			handle;
-	u16			scsi_status;
-	u16			completion_status;
-	u16			state_flags;
-	u16			status_flags;
-	u16			time;
-	u16			req_sense_len;
-	u32			residual;
-	u8			rsvd[8];
-	u8			req_sense_data[32];
+    struct Entry_header	hdr;
+    u32			handle;
+    u16			scsi_status;
+    u16			completion_status;
+    u16			state_flags;
+    u16			status_flags;
+    u16			time;
+    u16			req_sense_len;
+    u32			residual;
+    u8			rsvd[8];
+    u8			req_sense_data[32];
 };
 
 /* status entry completion status definitions */
@@ -276,18 +276,18 @@ struct Status_Entry {
 #define MBOX_SET_DEV_QUEUE_PARAMS	0x0039
 
 struct host_param {
-	u_short		initiator_scsi_id;
-	u_short		bus_reset_delay;
-	u_short		retry_count;
-	u_short		retry_delay;
-	u_short		async_data_setup_time;
-	u_short		req_ack_active_negation;
-	u_short		data_line_active_negation;
-	u_short		data_dma_burst_enable;
-	u_short		command_dma_burst_enable;
-	u_short		tag_aging;
-	u_short		selection_timeout;
-	u_short		max_queue_depth;
+    u_short		initiator_scsi_id;
+    u_short		bus_reset_delay;
+    u_short		retry_count;
+    u_short		retry_delay;
+    u_short		async_data_setup_time;
+    u_short		req_ack_active_negation;
+    u_short		data_line_active_negation;
+    u_short		data_dma_burst_enable;
+    u_short		command_dma_burst_enable;
+    u_short		tag_aging;
+    u_short		selection_timeout;
+    u_short		max_queue_depth;
 };
 
 /*
@@ -306,12 +306,12 @@ struct host_param {
  */
 
 struct dev_param {
-	u_short		device_flags;
-	u_short		execution_throttle;
-	u_short		synchronous_period;
-	u_short		synchronous_offset;
-	u_short		device_enable;
-	u_short		reserved; /* pad */
+    u_short		device_flags;
+    u_short		execution_throttle;
+    u_short		synchronous_period;
+    u_short		synchronous_offset;
+    u_short		device_enable;
+    u_short		reserved; /* pad */
 };
 
 /*
@@ -327,60 +327,60 @@ struct dev_param {
 #define PREV_RES_PTR(wheee)   (((wheee) - 1) & RES_QUEUE_LEN)
 
 struct pti_queue_entry {
-	char __opaque[QUEUE_ENTRY_LEN];
+    char __opaque[QUEUE_ENTRY_LEN];
 };
 
 struct scsi_cmnd;
 
 /* Software state for the driver. */
 struct qlogicpti {
-	/* These are the hot elements in the cache, so they come first. */
-	void __iomem             *qregs;                /* Adapter registers          */
-	struct pti_queue_entry   *res_cpu;              /* Ptr to RESPONSE bufs (CPU) */
-	struct pti_queue_entry   *req_cpu;              /* Ptr to REQUEST bufs (CPU)  */
+    /* These are the hot elements in the cache, so they come first. */
+    void __iomem             *qregs;                /* Adapter registers          */
+    struct pti_queue_entry   *res_cpu;              /* Ptr to RESPONSE bufs (CPU) */
+    struct pti_queue_entry   *req_cpu;              /* Ptr to REQUEST bufs (CPU)  */
 
-	u_int	                  req_in_ptr;		/* index of next request slot */
-	u_int	                  res_out_ptr;		/* index of next result slot  */
-	long	                  send_marker;		/* must we send a marker?     */
-	struct platform_device	 *op;
-	unsigned long		  __pad;
+    u_int	                  req_in_ptr;		/* index of next request slot */
+    u_int	                  res_out_ptr;		/* index of next result slot  */
+    long	                  send_marker;		/* must we send a marker?     */
+    struct platform_device	 *op;
+    unsigned long		  __pad;
 
-	int                       cmd_count[MAX_TARGETS];
-	unsigned long             tag_ages[MAX_TARGETS];
+    int                       cmd_count[MAX_TARGETS];
+    unsigned long             tag_ages[MAX_TARGETS];
 
-	/* The cmd->handler is only 32-bits, so that things work even on monster
-	 * Ex000 sparc64 machines with >4GB of ram we just keep track of the
-	 * scsi command pointers here.  This is essentially what Matt Jacob does. -DaveM
-	 */
-	struct scsi_cmnd         *cmd_slots[QLOGICPTI_REQ_QUEUE_LEN + 1];
+    /* The cmd->handler is only 32-bits, so that things work even on monster
+     * Ex000 sparc64 machines with >4GB of ram we just keep track of the
+     * scsi command pointers here.  This is essentially what Matt Jacob does. -DaveM
+     */
+    struct scsi_cmnd         *cmd_slots[QLOGICPTI_REQ_QUEUE_LEN + 1];
 
-	/* The rest of the elements are unimportant for performance. */
-	struct qlogicpti         *next;
-	__u32                     res_dvma;             /* Ptr to RESPONSE bufs (DVMA)*/
-	__u32                     req_dvma;             /* Ptr to REQUEST bufs (DVMA) */
-	u_char	                  fware_majrev, fware_minrev, fware_micrev;
-	struct Scsi_Host         *qhost;
-	int                       qpti_id;
-	int                       scsi_id;
-	int                       prom_node;
-	char                      prom_name[64];
-	int                       irq;
-	char                      differential, ultra, clock;
-	unsigned char             bursts;
-	struct	host_param        host_param;
-	struct	dev_param         dev_param[MAX_TARGETS];
+    /* The rest of the elements are unimportant for performance. */
+    struct qlogicpti         *next;
+    __u32                     res_dvma;             /* Ptr to RESPONSE bufs (DVMA)*/
+    __u32                     req_dvma;             /* Ptr to REQUEST bufs (DVMA) */
+    u_char	                  fware_majrev, fware_minrev, fware_micrev;
+    struct Scsi_Host         *qhost;
+    int                       qpti_id;
+    int                       scsi_id;
+    int                       prom_node;
+    char                      prom_name[64];
+    int                       irq;
+    char                      differential, ultra, clock;
+    unsigned char             bursts;
+    struct	host_param        host_param;
+    struct	dev_param         dev_param[MAX_TARGETS];
 
-	void __iomem              *sreg;
+    void __iomem              *sreg;
 #define SREG_TPOWER               0x80   /* State of termpwr           */
 #define SREG_FUSE                 0x40   /* State of on board fuse     */
 #define SREG_PDISAB               0x20   /* Disable state for power on */
 #define SREG_DSENSE               0x10   /* Sense for differential     */
 #define SREG_IMASK                0x0c   /* Interrupt level            */
 #define SREG_SPMASK               0x03   /* Mask for switch pack       */
-	unsigned char             swsreg;
-	unsigned int	
-		gotirq	:	1,	/* this instance got an irq */
-		is_pti	: 	1;	/* Non-zero if this is a PTI board. */
+    unsigned char             swsreg;
+    unsigned int
+    gotirq	:	1,	/* this instance got an irq */
+              is_pti	: 	1;	/* Non-zero if this is a PTI board. */
 };
 
 /* How to twiddle them bits... */

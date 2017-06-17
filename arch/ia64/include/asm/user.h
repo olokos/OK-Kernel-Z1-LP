@@ -36,17 +36,17 @@
 #define EF_SIZE		3072	/* XXX fix me */
 
 struct user {
-	unsigned long	regs[EF_SIZE/8+32];	/* integer and fp regs */
-	size_t		u_tsize;		/* text size (pages) */
-	size_t		u_dsize;		/* data size (pages) */
-	size_t		u_ssize;		/* stack size (pages) */
-	unsigned long	start_code;		/* text starting address */
-	unsigned long	start_data;		/* data starting address */
-	unsigned long	start_stack;		/* stack starting address */
-	long int	signal;			/* signal causing core dump */
-	unsigned long	u_ar0;			/* help gdb find registers */
-	unsigned long	magic;			/* identifies a core file */
-	char		u_comm[32];		/* user command name */
+    unsigned long	regs[EF_SIZE/8+32];	/* integer and fp regs */
+    size_t		u_tsize;		/* text size (pages) */
+    size_t		u_dsize;		/* data size (pages) */
+    size_t		u_ssize;		/* stack size (pages) */
+    unsigned long	start_code;		/* text starting address */
+    unsigned long	start_data;		/* data starting address */
+    unsigned long	start_stack;		/* stack starting address */
+    long int	signal;			/* signal causing core dump */
+    unsigned long	u_ar0;			/* help gdb find registers */
+    unsigned long	magic;			/* identifies a core file */
+    char		u_comm[32];		/* user command name */
 };
 
 #define NBPG			PAGE_SIZE

@@ -25,29 +25,29 @@
 
 /* z/VM spool file control block SFBLOK */
 struct file_control_block {
-	char reserved_1[8];
-	char user_owner[8];
-	char user_orig[8];
-	__s32 data_recs;
-	__s16 rec_len;
-	__s16 file_num;
-	__u8  file_stat;
-	__u8  dev_type;
-	char  reserved_2[6];
-	char  file_name[12];
-	char  file_type[12];
-	char  create_date[8];
-	char  create_time[8];
-	char  reserved_3[6];
-	__u8  file_class;
-	__u8  sfb_lok;
-	__u64 distr_code;
-	__u32 reserved_4;
-	__u8  current_starting_copy_number;
-	__u8  sfblock_cntrl_flags;
-	__u8  reserved_5;
-	__u8  more_status_flags;
-	char  rest[200];
+    char reserved_1[8];
+    char user_owner[8];
+    char user_orig[8];
+    __s32 data_recs;
+    __s16 rec_len;
+    __s16 file_num;
+    __u8  file_stat;
+    __u8  dev_type;
+    char  reserved_2[6];
+    char  file_name[12];
+    char  file_type[12];
+    char  create_date[8];
+    char  create_time[8];
+    char  reserved_3[6];
+    __u8  file_class;
+    __u8  sfb_lok;
+    __u64 distr_code;
+    __u32 reserved_4;
+    __u8  current_starting_copy_number;
+    __u8  sfblock_cntrl_flags;
+    __u8  reserved_5;
+    __u8  more_status_flags;
+    char  rest[200];
 } __attribute__ ((packed));
 
 #define FLG_SYSTEM_HOLD	0x04
@@ -60,19 +60,19 @@ struct file_control_block {
  * via the ccw_device driver model.
  */
 struct urdev {
-	struct ccw_device *cdev;	/* Backpointer to ccw device */
-	struct mutex io_mutex;		/* Serialises device IO */
-	struct completion *io_done;	/* do_ur_io waits; irq completes */
-	struct device *device;
-	struct cdev *char_device;
-	struct ccw_dev_id dev_id;	/* device id */
-	size_t reclen;			/* Record length for *write* CCWs */
-	int class;			/* VM device class */
-	int io_request_rc;		/* return code from I/O request */
-	atomic_t ref_count;		/* reference counter */
-	wait_queue_head_t wait;		/* wait queue to serialize open */
-	int open_flag;			/* "urdev is open" flag */
-	spinlock_t open_lock;		/* serialize critical sections */
+    struct ccw_device *cdev;	/* Backpointer to ccw device */
+    struct mutex io_mutex;		/* Serialises device IO */
+    struct completion *io_done;	/* do_ur_io waits; irq completes */
+    struct device *device;
+    struct cdev *char_device;
+    struct ccw_dev_id dev_id;	/* device id */
+    size_t reclen;			/* Record length for *write* CCWs */
+    int class;			/* VM device class */
+    int io_request_rc;		/* return code from I/O request */
+    atomic_t ref_count;		/* reference counter */
+    wait_queue_head_t wait;		/* wait queue to serialize open */
+    int open_flag;			/* "urdev is open" flag */
+    spinlock_t open_lock;		/* serialize critical sections */
 };
 
 /*
@@ -80,10 +80,10 @@ struct urdev {
  * freed on release().
  */
 struct urfile {
-	struct urdev *urd;
-	unsigned int flags;
-	size_t dev_reclen;
-	__u16 file_reclen;
+    struct urdev *urd;
+    unsigned int flags;
+    size_t dev_reclen;
+    __u16 file_reclen;
 };
 
 /*

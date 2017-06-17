@@ -22,38 +22,35 @@
  * enum subsys_id - Destination subsystems for events.
  */
 enum subsys_id {
-	/* SMD subsystems */
-	SYSMON_SS_MODEM     = SMD_APPS_MODEM,
-	SYSMON_SS_LPASS     = SMD_APPS_QDSP,
-	SYSMON_SS_WCNSS     = SMD_APPS_WCNSS,
-	SYSMON_SS_DSPS      = SMD_APPS_DSPS,
-	SYSMON_SS_Q6FW      = SMD_APPS_Q6FW,
+    /* SMD subsystems */
+    SYSMON_SS_MODEM     = SMD_APPS_MODEM,
+    SYSMON_SS_LPASS     = SMD_APPS_QDSP,
+    SYSMON_SS_WCNSS     = SMD_APPS_WCNSS,
+    SYSMON_SS_DSPS      = SMD_APPS_DSPS,
+    SYSMON_SS_Q6FW      = SMD_APPS_Q6FW,
 
-	/* Non-SMD subsystems */
-	SYSMON_SS_EXT_MODEM = SMD_NUM_TYPE,
-	SYSMON_NUM_SS
+    /* Non-SMD subsystems */
+    SYSMON_SS_EXT_MODEM = SMD_NUM_TYPE,
+    SYSMON_NUM_SS
 };
 
 #ifdef CONFIG_MSM_SYSMON_COMM
 int sysmon_send_event(enum subsys_id dest_ss, const char *event_ss,
-		      enum subsys_notif_type notif);
+                      enum subsys_notif_type notif);
 int sysmon_get_reason(enum subsys_id dest_ss, char *buf, size_t len);
 int sysmon_send_shutdown(enum subsys_id dest_ss);
 #else
 static inline int sysmon_send_event(enum subsys_id dest_ss,
-				    const char *event_ss,
-				    enum subsys_notif_type notif)
-{
-	return 0;
+                                    const char *event_ss,
+                                    enum subsys_notif_type notif) {
+    return 0;
 }
 static inline int sysmon_get_reason(enum subsys_id dest_ss, char *buf,
-				    size_t len)
-{
-	return 0;
+                                    size_t len) {
+    return 0;
 }
-static inline int sysmon_send_shutdown(enum subsys_id dest_ss)
-{
-	return 0;
+static inline int sysmon_send_shutdown(enum subsys_id dest_ss) {
+    return 0;
 }
 #endif
 

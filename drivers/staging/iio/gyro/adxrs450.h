@@ -40,8 +40,8 @@
 #define ADXRS450_GET_ST(a)	((a >> 26) & 0x3)
 
 enum {
-	ID_ADXRS450,
-	ID_ADXRS453,
+    ID_ADXRS450,
+    ID_ADXRS453,
 };
 
 /**
@@ -52,10 +52,10 @@ enum {
  * @rx:			recieve buffer
  **/
 struct adxrs450_state {
-	struct spi_device	*us;
-	struct mutex		buf_lock;
-	u8			tx[ADXRS450_MAX_RX] ____cacheline_aligned;
-	u8			rx[ADXRS450_MAX_TX];
+    struct spi_device	*us;
+    struct mutex		buf_lock;
+    u8			tx[ADXRS450_MAX_RX] ____cacheline_aligned;
+    u8			rx[ADXRS450_MAX_TX];
 
 };
 

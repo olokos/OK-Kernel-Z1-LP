@@ -16,24 +16,22 @@
 
 #define __SWAB_64_THRU_32__
 
-static inline __attribute_const__ __u32 __arch_swab32(__u32 x)
-{
+static inline __attribute_const__ __u32 __arch_swab32(__u32 x) {
     __u32 res;
     /* instruction sequence from Xtensa ISA release 2/2000 */
     __asm__("ssai     8           \n\t"
-	    "srli     %0, %1, 16  \n\t"
-	    "src      %0, %0, %1  \n\t"
-	    "src      %0, %0, %0  \n\t"
-	    "src      %0, %1, %0  \n"
-	    : "=&a" (res)
-	    : "a" (x)
-	    );
+            "srli     %0, %1, 16  \n\t"
+            "src      %0, %0, %1  \n\t"
+            "src      %0, %0, %0  \n\t"
+            "src      %0, %1, %0  \n"
+            : "=&a" (res)
+            : "a" (x)
+           );
     return res;
 }
 #define __arch_swab32 __arch_swab32
 
-static inline __attribute_const__ __u16 __arch_swab16(__u16 x)
-{
+static inline __attribute_const__ __u16 __arch_swab16(__u16 x) {
     /* Given that 'short' values are signed (i.e., can be negative),
      * we cannot assume that the upper 16-bits of the register are
      * zero.  We are careful to mask values after shifting.
@@ -57,11 +55,11 @@ static inline __attribute_const__ __u16 __arch_swab16(__u16 x)
     __u32 tmp;
 
     __asm__("extui    %1, %2, 8, 8\n\t"
-	    "slli     %0, %2, 8   \n\t"
-	    "or       %0, %0, %1  \n"
-	    : "=&a" (res), "=&a" (tmp)
-	    : "a" (x)
-	    );
+            "slli     %0, %2, 8   \n\t"
+            "or       %0, %0, %1  \n"
+            : "=&a" (res), "=&a" (tmp)
+            : "a" (x)
+           );
 
     return res;
 }

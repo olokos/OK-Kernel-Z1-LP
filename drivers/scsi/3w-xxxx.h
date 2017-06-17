@@ -1,6 +1,6 @@
-/* 
+/*
    3w-xxxx.h -- 3ware Storage Controller device driver for Linux.
-   
+
    Written By: Adam Radford <linuxraid@lsi.com>
    Modifications By: Joel Jacobson <linux@3ware.com>
    		     Arnaldo Carvalho de Melo <acme@conectiva.com.br>
@@ -15,38 +15,38 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
 
-   This program is distributed in the hope that it will be useful,           
-   but WITHOUT ANY WARRANTY; without even the implied warranty of            
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             
-   GNU General Public License for more details.                              
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-   NO WARRANTY                                                               
-   THE PROGRAM IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR        
-   CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT      
-   LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT,      
-   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Each Recipient is    
-   solely responsible for determining the appropriateness of using and       
-   distributing the Program and assumes all risks associated with its        
-   exercise of rights under this Agreement, including but not limited to     
-   the risks and costs of program errors, damage to or loss of data,         
-   programs or equipment, and unavailability or interruption of operations.  
+   NO WARRANTY
+   THE PROGRAM IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR
+   CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT
+   LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT,
+   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Each Recipient is
+   solely responsible for determining the appropriateness of using and
+   distributing the Program and assumes all risks associated with its
+   exercise of rights under this Agreement, including but not limited to
+   the risks and costs of program errors, damage to or loss of data,
+   programs or equipment, and unavailability or interruption of operations.
 
-   DISCLAIMER OF LIABILITY                                                   
-   NEITHER RECIPIENT NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY   
-   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL        
-   DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND   
-   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR     
-   TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE    
-   USE OR DISTRIBUTION OF THE PROGRAM OR THE EXERCISE OF ANY RIGHTS GRANTED  
-   HEREUNDER, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES             
+   DISCLAIMER OF LIABILITY
+   NEITHER RECIPIENT NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY
+   DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+   DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND
+   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+   TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+   USE OR DISTRIBUTION OF THE PROGRAM OR THE EXERCISE OF ANY RIGHTS GRANTED
+   HEREUNDER, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES
 
-   You should have received a copy of the GNU General Public License         
-   along with this program; if not, write to the Free Software               
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-   Bugs/Comments/Suggestions should be mailed to:                            
+   Bugs/Comments/Suggestions should be mailed to:
    linuxraid@lsi.com
-   
+
    For more information, goto:
    http://www.lsi.com
 */
@@ -58,61 +58,60 @@
 
 /* AEN strings */
 static char *tw_aen_string[] = {
-	[0x000] = "INFO: AEN queue empty",
-	[0x001] = "INFO: Soft reset occurred",
-	[0x002] = "ERROR: Unit degraded: Unit #",
-	[0x003] = "ERROR: Controller error",
-	[0x004] = "ERROR: Rebuild failed: Unit #",
-	[0x005] = "INFO: Rebuild complete: Unit #",
-	[0x006] = "ERROR: Incomplete unit detected: Unit #",
-	[0x007] = "INFO: Initialization complete: Unit #",
-	[0x008] = "WARNING: Unclean shutdown detected: Unit #",
-	[0x009] = "WARNING: ATA port timeout: Port #",
-	[0x00A] = "ERROR: Drive error: Port #",
-	[0x00B] = "INFO: Rebuild started: Unit #",
-	[0x00C] = "INFO: Initialization started: Unit #",
-	[0x00D] = "ERROR: Logical unit deleted: Unit #",
-	[0x00F] = "WARNING: SMART threshold exceeded: Port #",
-	[0x021] = "WARNING: ATA UDMA downgrade: Port #",
-	[0x022] = "WARNING: ATA UDMA upgrade: Port #",
-	[0x023] = "WARNING: Sector repair occurred: Port #",
-	[0x024] = "ERROR: SBUF integrity check failure",
-	[0x025] = "ERROR: Lost cached write: Port #",
-	[0x026] = "ERROR: Drive ECC error detected: Port #",
-	[0x027] = "ERROR: DCB checksum error: Port #",
-	[0x028] = "ERROR: DCB unsupported version: Port #",
-	[0x029] = "INFO: Verify started: Unit #",
-	[0x02A] = "ERROR: Verify failed: Port #",
-	[0x02B] = "INFO: Verify complete: Unit #",
-	[0x02C] = "WARNING: Overwrote bad sector during rebuild: Port #",
-	[0x02D] = "ERROR: Encountered bad sector during rebuild: Port #",
-	[0x02E] = "ERROR: Replacement drive is too small: Port #",
-	[0x02F] = "WARNING: Verify error: Unit not previously initialized: Unit #",
-	[0x030] = "ERROR: Drive not supported: Port #"
+    [0x000] = "INFO: AEN queue empty",
+    [0x001] = "INFO: Soft reset occurred",
+    [0x002] = "ERROR: Unit degraded: Unit #",
+    [0x003] = "ERROR: Controller error",
+    [0x004] = "ERROR: Rebuild failed: Unit #",
+    [0x005] = "INFO: Rebuild complete: Unit #",
+    [0x006] = "ERROR: Incomplete unit detected: Unit #",
+    [0x007] = "INFO: Initialization complete: Unit #",
+    [0x008] = "WARNING: Unclean shutdown detected: Unit #",
+    [0x009] = "WARNING: ATA port timeout: Port #",
+    [0x00A] = "ERROR: Drive error: Port #",
+    [0x00B] = "INFO: Rebuild started: Unit #",
+    [0x00C] = "INFO: Initialization started: Unit #",
+    [0x00D] = "ERROR: Logical unit deleted: Unit #",
+    [0x00F] = "WARNING: SMART threshold exceeded: Port #",
+    [0x021] = "WARNING: ATA UDMA downgrade: Port #",
+    [0x022] = "WARNING: ATA UDMA upgrade: Port #",
+    [0x023] = "WARNING: Sector repair occurred: Port #",
+    [0x024] = "ERROR: SBUF integrity check failure",
+    [0x025] = "ERROR: Lost cached write: Port #",
+    [0x026] = "ERROR: Drive ECC error detected: Port #",
+    [0x027] = "ERROR: DCB checksum error: Port #",
+    [0x028] = "ERROR: DCB unsupported version: Port #",
+    [0x029] = "INFO: Verify started: Unit #",
+    [0x02A] = "ERROR: Verify failed: Port #",
+    [0x02B] = "INFO: Verify complete: Unit #",
+    [0x02C] = "WARNING: Overwrote bad sector during rebuild: Port #",
+    [0x02D] = "ERROR: Encountered bad sector during rebuild: Port #",
+    [0x02E] = "ERROR: Replacement drive is too small: Port #",
+    [0x02F] = "WARNING: Verify error: Unit not previously initialized: Unit #",
+    [0x030] = "ERROR: Drive not supported: Port #"
 };
 
 /*
    Sense key lookup table
    Format: ESDC/flags,SenseKey,AdditionalSenseCode,AdditionalSenseCodeQualifier
 */
-static unsigned char tw_sense_table[][4] =
-{
-  /* Codes for newer firmware */
-                            // ATA Error                    SCSI Error
-  {0x01, 0x03, 0x13, 0x00}, // Address mark not found       Address mark not found for data field
-  {0x04, 0x0b, 0x00, 0x00}, // Aborted command              Aborted command
-  {0x10, 0x0b, 0x14, 0x00}, // ID not found                 Recorded entity not found
-  {0x40, 0x03, 0x11, 0x00}, // Uncorrectable ECC error      Unrecovered read error
-  {0x61, 0x04, 0x00, 0x00}, // Device fault                 Hardware error
-  {0x84, 0x0b, 0x47, 0x00}, // Data CRC error               SCSI parity error
-  {0xd0, 0x0b, 0x00, 0x00}, // Device busy                  Aborted command
-  {0xd1, 0x0b, 0x00, 0x00}, // Device busy                  Aborted command
-  {0x37, 0x02, 0x04, 0x00}, // Unit offline                 Not ready
-  {0x09, 0x02, 0x04, 0x00}, // Unrecovered disk error       Not ready
+static unsigned char tw_sense_table[][4] = {
+    /* Codes for newer firmware */
+    // ATA Error                    SCSI Error
+    {0x01, 0x03, 0x13, 0x00}, // Address mark not found       Address mark not found for data field
+    {0x04, 0x0b, 0x00, 0x00}, // Aborted command              Aborted command
+    {0x10, 0x0b, 0x14, 0x00}, // ID not found                 Recorded entity not found
+    {0x40, 0x03, 0x11, 0x00}, // Uncorrectable ECC error      Unrecovered read error
+    {0x61, 0x04, 0x00, 0x00}, // Device fault                 Hardware error
+    {0x84, 0x0b, 0x47, 0x00}, // Data CRC error               SCSI parity error
+    {0xd0, 0x0b, 0x00, 0x00}, // Device busy                  Aborted command
+    {0xd1, 0x0b, 0x00, 0x00}, // Device busy                  Aborted command
+    {0x37, 0x02, 0x04, 0x00}, // Unit offline                 Not ready
+    {0x09, 0x02, 0x04, 0x00}, // Unrecovered disk error       Not ready
 
-  /* Codes for older firmware */
-                            // 3ware Error                  SCSI Error
-  {0x51, 0x0b, 0x00, 0x00}  // Unspecified                  Aborted command
+    /* Codes for older firmware */
+    // 3ware Error                  SCSI Error
+    {0x51, 0x0b, 0x00, 0x00}  // Unspecified                  Aborted command
 };
 
 /* Control register bit definitions */
@@ -286,79 +285,79 @@ static unsigned char tw_sense_table[][4] =
 
 /* Scatter Gather List Entry */
 typedef struct TAG_TW_SG_Entry {
-	u32 address;
-	u32 length;
+    u32 address;
+    u32 length;
 } TW_SG_Entry;
 
 typedef unsigned char TW_Sector[512];
 
 /* Command Packet */
 typedef struct TW_Command {
-	unsigned char opcode__sgloffset;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char unit__hostid;
-	/* Second DWORD */
-	unsigned char status;
-	unsigned char flags;
-	union {
-		unsigned short block_count;
-		unsigned short parameter_count;
-		unsigned short message_credits;
-	} byte6;
-	union {
-		struct {
-			u32 lba;
-			TW_SG_Entry sgl[TW_MAX_SGL_LENGTH];
-			u32 padding;	/* pad to 512 bytes */
-		} io;
-		struct {
-			TW_SG_Entry sgl[TW_MAX_SGL_LENGTH];
-			u32 padding[2];
-		} param;
-		struct {
-			u32 response_queue_pointer;
-			u32 padding[125];
-		} init_connection;
-		struct {
-			char version[504];
-		} ioctl_miniport_version;
-	} byte8;
+    unsigned char opcode__sgloffset;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char unit__hostid;
+    /* Second DWORD */
+    unsigned char status;
+    unsigned char flags;
+    union {
+        unsigned short block_count;
+        unsigned short parameter_count;
+        unsigned short message_credits;
+    } byte6;
+    union {
+        struct {
+            u32 lba;
+            TW_SG_Entry sgl[TW_MAX_SGL_LENGTH];
+            u32 padding;	/* pad to 512 bytes */
+        } io;
+        struct {
+            TW_SG_Entry sgl[TW_MAX_SGL_LENGTH];
+            u32 padding[2];
+        } param;
+        struct {
+            u32 response_queue_pointer;
+            u32 padding[125];
+        } init_connection;
+        struct {
+            char version[504];
+        } ioctl_miniport_version;
+    } byte8;
 } TW_Command;
 
 #pragma pack()
 
 typedef struct TAG_TW_Ioctl {
-	unsigned char opcode;
-	unsigned short table_id;
-	unsigned char parameter_id;
-	unsigned char parameter_size_bytes;
-	unsigned char unit_index;
-	unsigned char data[1];
+    unsigned char opcode;
+    unsigned short table_id;
+    unsigned char parameter_id;
+    unsigned char parameter_size_bytes;
+    unsigned char unit_index;
+    unsigned char data[1];
 } TW_Ioctl;
 
 #pragma pack(1)
 
 /* Structure for new chardev ioctls */
 typedef struct TAG_TW_New_Ioctl {
-	unsigned int data_buffer_length;
-	unsigned char padding [508];
-	TW_Command firmware_command;
-	char data_buffer[1];
+    unsigned int data_buffer_length;
+    unsigned char padding [508];
+    TW_Command firmware_command;
+    char data_buffer[1];
 } TW_New_Ioctl;
 
 /* GetParam descriptor */
 typedef struct {
-	unsigned short	table_id;
-	unsigned char	parameter_id;
-	unsigned char	parameter_size_bytes;
-	unsigned char	data[1];
+    unsigned short	table_id;
+    unsigned char	parameter_id;
+    unsigned char	parameter_size_bytes;
+    unsigned char	data[1];
 } TW_Param, *PTW_Param;
 
 /* Response queue */
 typedef union TAG_TW_Response_Queue {
-	u32 response_id;
-	u32 value;
+    u32 response_id;
+    u32 value;
 } TW_Response_Queue;
 
 typedef int TW_Cmd_State;
@@ -372,62 +371,61 @@ typedef int TW_Cmd_State;
 #define TW_START_MASK (TW_S_STARTED | TW_S_POSTED | TW_S_PENDING | TW_S_COMPLETED)
 
 /* Command header for ATA pass-thru */
-typedef struct TAG_TW_Passthru
-{
-	unsigned char opcode__sgloffset;
-	unsigned char size;
-	unsigned char request_id;
-	unsigned char aport__hostid;
-	unsigned char status;
-	unsigned char flags;
-	unsigned short param;
-	unsigned short features;
-	unsigned short sector_count;
-	unsigned short sector_num;
-	unsigned short cylinder_lo;
-	unsigned short cylinder_hi;
-	unsigned char drive_head;
-	unsigned char command;
-	TW_SG_Entry sg_list[TW_ATA_PASS_SGL_MAX];
-	unsigned char padding[12];
+typedef struct TAG_TW_Passthru {
+    unsigned char opcode__sgloffset;
+    unsigned char size;
+    unsigned char request_id;
+    unsigned char aport__hostid;
+    unsigned char status;
+    unsigned char flags;
+    unsigned short param;
+    unsigned short features;
+    unsigned short sector_count;
+    unsigned short sector_num;
+    unsigned short cylinder_lo;
+    unsigned short cylinder_hi;
+    unsigned char drive_head;
+    unsigned char command;
+    TW_SG_Entry sg_list[TW_ATA_PASS_SGL_MAX];
+    unsigned char padding[12];
 } TW_Passthru;
 
 typedef struct TAG_TW_Device_Extension {
-	u32			base_addr;
-	unsigned long		*alignment_virtual_address[TW_Q_LENGTH];
-	unsigned long		alignment_physical_address[TW_Q_LENGTH];
-	int			is_unit_present[TW_MAX_UNITS];
-	unsigned long		*command_packet_virtual_address[TW_Q_LENGTH];
-	unsigned long		command_packet_physical_address[TW_Q_LENGTH];
-	struct pci_dev		*tw_pci_dev;
-	struct scsi_cmnd	*srb[TW_Q_LENGTH];
-	unsigned char		free_queue[TW_Q_LENGTH];
-	unsigned char		free_head;
-	unsigned char		free_tail;
-	unsigned char		pending_queue[TW_Q_LENGTH];
-	unsigned char		pending_head;
-	unsigned char		pending_tail;
-	TW_Cmd_State		state[TW_Q_LENGTH];
-	u32			posted_request_count;
-	u32			max_posted_request_count;
-	u32			request_count_marked_pending;
-	u32			pending_request_count;
-	u32			max_pending_request_count;
-	u32			max_sgl_entries;
-	u32			sgl_entries;
-	u32			num_resets;
-	u32			sector_count;
-	u32			max_sector_count;
-	u32			aen_count;
-	struct Scsi_Host	*host;
-	struct mutex		ioctl_lock;
-	unsigned short		aen_queue[TW_Q_LENGTH];
-	unsigned char		aen_head;
-	unsigned char		aen_tail;
-	volatile long		flags; /* long req'd for set_bit --RR */
-	int			reset_print;
-	volatile int		chrdev_request_id;
-	wait_queue_head_t	ioctl_wqueue;
+    u32			base_addr;
+    unsigned long		*alignment_virtual_address[TW_Q_LENGTH];
+    unsigned long		alignment_physical_address[TW_Q_LENGTH];
+    int			is_unit_present[TW_MAX_UNITS];
+    unsigned long		*command_packet_virtual_address[TW_Q_LENGTH];
+    unsigned long		command_packet_physical_address[TW_Q_LENGTH];
+    struct pci_dev		*tw_pci_dev;
+    struct scsi_cmnd	*srb[TW_Q_LENGTH];
+    unsigned char		free_queue[TW_Q_LENGTH];
+    unsigned char		free_head;
+    unsigned char		free_tail;
+    unsigned char		pending_queue[TW_Q_LENGTH];
+    unsigned char		pending_head;
+    unsigned char		pending_tail;
+    TW_Cmd_State		state[TW_Q_LENGTH];
+    u32			posted_request_count;
+    u32			max_posted_request_count;
+    u32			request_count_marked_pending;
+    u32			pending_request_count;
+    u32			max_pending_request_count;
+    u32			max_sgl_entries;
+    u32			sgl_entries;
+    u32			num_resets;
+    u32			sector_count;
+    u32			max_sector_count;
+    u32			aen_count;
+    struct Scsi_Host	*host;
+    struct mutex		ioctl_lock;
+    unsigned short		aen_queue[TW_Q_LENGTH];
+    unsigned char		aen_head;
+    unsigned char		aen_tail;
+    volatile long		flags; /* long req'd for set_bit --RR */
+    int			reset_print;
+    volatile int		chrdev_request_id;
+    wait_queue_head_t	ioctl_wqueue;
 } TW_Device_Extension;
 
 #pragma pack()

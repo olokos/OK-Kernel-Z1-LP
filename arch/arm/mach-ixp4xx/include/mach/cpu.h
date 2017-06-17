@@ -35,23 +35,21 @@
 #define cpu_is_ixp46x()	((read_cpuid_id() & IXP46X_PROCESSOR_ID_MASK) == \
 			 IXP46X_PROCESSOR_ID_VALUE)
 
-static inline u32 ixp4xx_read_feature_bits(void)
-{
-	u32 val = ~*IXP4XX_EXP_CFG2;
+static inline u32 ixp4xx_read_feature_bits(void) {
+    u32 val = ~*IXP4XX_EXP_CFG2;
 
-	if (cpu_is_ixp42x_rev_a0())
-		return IXP42X_FEATURE_MASK & ~(IXP4XX_FEATURE_RCOMP |
-					       IXP4XX_FEATURE_AES);
-	if (cpu_is_ixp42x())
-		return val & IXP42X_FEATURE_MASK;
-	if (cpu_is_ixp43x())
-		return val & IXP43X_FEATURE_MASK;
-	return val & IXP46X_FEATURE_MASK;
+    if (cpu_is_ixp42x_rev_a0())
+        return IXP42X_FEATURE_MASK & ~(IXP4XX_FEATURE_RCOMP |
+                                       IXP4XX_FEATURE_AES);
+    if (cpu_is_ixp42x())
+        return val & IXP42X_FEATURE_MASK;
+    if (cpu_is_ixp43x())
+        return val & IXP43X_FEATURE_MASK;
+    return val & IXP46X_FEATURE_MASK;
 }
 
-static inline void ixp4xx_write_feature_bits(u32 value)
-{
-	*IXP4XX_EXP_CFG2 = ~value;
+static inline void ixp4xx_write_feature_bits(u32 value) {
+    *IXP4XX_EXP_CFG2 = ~value;
 }
 
 #endif  /* _ASM_ARCH_CPU_H */

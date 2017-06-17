@@ -28,13 +28,13 @@
  *	@cfg_gpio: A callback to configure the pins for I2C operation.
  */
 struct s3c2410_platform_i2c {
-	int		bus_num;
-	unsigned int	flags;
-	unsigned int	slave_addr;
-	unsigned long	frequency;
-	unsigned int	sda_delay;
+    int		bus_num;
+    unsigned int	flags;
+    unsigned int	slave_addr;
+    unsigned long	frequency;
+    unsigned int	sda_delay;
 
-	void	(*cfg_gpio)(struct platform_device *dev);
+    void	(*cfg_gpio)(struct platform_device *dev);
 };
 
 /**

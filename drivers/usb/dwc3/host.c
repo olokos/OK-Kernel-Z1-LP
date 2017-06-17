@@ -40,64 +40,62 @@
 #include "core.h"
 #include "xhci.h"
 
-int dwc3_host_init(struct dwc3 *dwc)
-{
-	struct platform_device	*xhci;
-	int			ret;
-	struct xhci_plat_data	pdata;
+int dwc3_host_init(struct dwc3 *dwc) {
+    struct platform_device	*xhci;
+    int			ret;
+    struct xhci_plat_data	pdata;
 
-	xhci = platform_device_alloc("xhci-hcd", -1);
-	if (!xhci) {
-		dev_err(dwc->dev, "couldn't allocate xHCI device\n");
-		ret = -ENOMEM;
-		goto err0;
-	}
+    xhci = platform_device_alloc("xhci-hcd", -1);
+    if (!xhci) {
+        dev_err(dwc->dev, "couldn't allocate xHCI device\n");
+        ret = -ENOMEM;
+        goto err0;
+    }
 
-	dma_set_coherent_mask(&xhci->dev, dwc->dev->coherent_dma_mask);
+    dma_set_coherent_mask(&xhci->dev, dwc->dev->coherent_dma_mask);
 
-	xhci->dev.dma_mask	= dwc->dev->dma_mask;
-	xhci->dev.dma_parms	= dwc->dev->dma_parms;
+    xhci->dev.dma_mask	= dwc->dev->dma_mask;
+    xhci->dev.dma_parms	= dwc->dev->dma_parms;
 
-	dwc->xhci = xhci;
-	pdata.vendor = ((dwc->revision & DWC3_GSNPSID_MASK) >>
-			__ffs(DWC3_GSNPSID_MASK) & DWC3_GSNPSREV_MASK);
-	pdata.revision = dwc->revision & DWC3_GSNPSREV_MASK;
+    dwc->xhci = xhci;
+    pdata.vendor = ((dwc->revision & DWC3_GSNPSID_MASK) >>
+                    __ffs(DWC3_GSNPSID_MASK) & DWC3_GSNPSREV_MASK);
+    pdata.revision = dwc->revision & DWC3_GSNPSREV_MASK;
 
-	ret = platform_device_add_data(xhci, (const void *) &pdata,
-			sizeof(struct xhci_plat_data));
-	if (ret) {
-		dev_err(dwc->dev, "couldn't add pdata to xHCI device\n");
-		goto err1;
-	}
+    ret = platform_device_add_data(xhci, (const void *) &pdata,
+                                   sizeof(struct xhci_plat_data));
+    if (ret) {
+        dev_err(dwc->dev, "couldn't add pdata to xHCI device\n");
+        goto err1;
+    }
 
-	ret = platform_device_add_resources(xhci, dwc->xhci_resources,
-						DWC3_XHCI_RESOURCES_NUM);
-	if (ret) {
-		dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
-		goto err1;
-	}
+    ret = platform_device_add_resources(xhci, dwc->xhci_resources,
+                                        DWC3_XHCI_RESOURCES_NUM);
+    if (ret) {
+        dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
+        goto err1;
+    }
 
-	/* Add XHCI device if !OTG, otherwise OTG takes care of this */
-	if (!dwc->dotg) {
-		xhci->dev.parent = dwc->dev;
-		ret = platform_device_add(xhci);
-		if (ret) {
-			dev_err(dwc->dev, "failed to register xHCI device\n");
-			goto err1;
-		}
-	}
+    /* Add XHCI device if !OTG, otherwise OTG takes care of this */
+    if (!dwc->dotg) {
+        xhci->dev.parent = dwc->dev;
+        ret = platform_device_add(xhci);
+        if (ret) {
+            dev_err(dwc->dev, "failed to register xHCI device\n");
+            goto err1;
+        }
+    }
 
-	return 0;
+    return 0;
 
 err1:
-	platform_device_put(xhci);
+    platform_device_put(xhci);
 
 err0:
-	return ret;
+    return ret;
 }
 
-void dwc3_host_exit(struct dwc3 *dwc)
-{
-	if (!dwc->dotg)
-		platform_device_unregister(dwc->xhci);
+void dwc3_host_exit(struct dwc3 *dwc) {
+    if (!dwc->dotg)
+        platform_device_unregister(dwc->xhci);
 }

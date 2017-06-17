@@ -49,9 +49,9 @@ typedef void (*bfa_sm_t)(void *sm, int event);
  * For converting from state machine function to state encoding.
  */
 struct bfa_sm_table {
-	bfa_sm_t	sm;	/*!< state machine function	*/
-	int		state;	/*!< state machine encoding	*/
-	char		*name;	/*!< state name for display	*/
+    bfa_sm_t	sm;	/*!< state machine function	*/
+    int		state;	/*!< state machine encoding	*/
+    char		*name;	/*!< state name for display	*/
 };
 #define BFA_SM(_sm)		((bfa_sm_t)(_sm))
 
@@ -81,13 +81,12 @@ typedef void (*bfa_fsm_t)(void *fsm, int event);
 	((_fsm)->fsm == (bfa_fsm_t)(_state))
 
 static inline int
-bfa_sm_to_state(const struct bfa_sm_table *smt, bfa_sm_t sm)
-{
-	int	i = 0;
+bfa_sm_to_state(const struct bfa_sm_table *smt, bfa_sm_t sm) {
+    int	i = 0;
 
-	while (smt[i].sm && smt[i].sm != sm)
-		i++;
-	return smt[i].state;
+    while (smt[i].sm && smt[i].sm != sm)
+        i++;
+    return smt[i].state;
 }
 
 /**
@@ -97,44 +96,40 @@ bfa_sm_to_state(const struct bfa_sm_table *smt, bfa_sm_t sm)
 typedef void (*bfa_wc_resume_t) (void *cbarg);
 
 struct bfa_wc {
-	bfa_wc_resume_t wc_resume;
-	void		*wc_cbarg;
-	int		wc_count;
+    bfa_wc_resume_t wc_resume;
+    void		*wc_cbarg;
+    int		wc_count;
 };
 
 static inline void
-bfa_wc_up(struct bfa_wc *wc)
-{
-	wc->wc_count++;
+bfa_wc_up(struct bfa_wc *wc) {
+    wc->wc_count++;
 }
 
 static inline void
-bfa_wc_down(struct bfa_wc *wc)
-{
-	wc->wc_count--;
-	if (wc->wc_count == 0)
-		wc->wc_resume(wc->wc_cbarg);
+bfa_wc_down(struct bfa_wc *wc) {
+    wc->wc_count--;
+    if (wc->wc_count == 0)
+        wc->wc_resume(wc->wc_cbarg);
 }
 
 /**
  * Initialize a waiting counter.
  */
 static inline void
-bfa_wc_init(struct bfa_wc *wc, bfa_wc_resume_t wc_resume, void *wc_cbarg)
-{
-	wc->wc_resume = wc_resume;
-	wc->wc_cbarg = wc_cbarg;
-	wc->wc_count = 0;
-	bfa_wc_up(wc);
+bfa_wc_init(struct bfa_wc *wc, bfa_wc_resume_t wc_resume, void *wc_cbarg) {
+    wc->wc_resume = wc_resume;
+    wc->wc_cbarg = wc_cbarg;
+    wc->wc_count = 0;
+    bfa_wc_up(wc);
 }
 
 /**
  * Wait for counter to reach zero
  */
 static inline void
-bfa_wc_wait(struct bfa_wc *wc)
-{
-	bfa_wc_down(wc);
+bfa_wc_wait(struct bfa_wc *wc) {
+    bfa_wc_down(wc);
 }
 
 #endif /* __BFA_CS_H__ */

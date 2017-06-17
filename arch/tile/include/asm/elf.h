@@ -126,7 +126,7 @@ extern int dump_task_regs(struct task_struct *, elf_gregset_t *);
 /* Support auto-mapping of the user interrupt vectors. */
 struct linux_binprm;
 extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-				       int executable_stack);
+                                       int executable_stack);
 #ifdef CONFIG_COMPAT
 
 #define COMPAT_ELF_PLATFORM "tilegx-m32"

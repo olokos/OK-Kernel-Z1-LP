@@ -84,27 +84,27 @@
 
 /* STV06xx device descriptor */
 struct sd {
-	struct gspca_dev gspca_dev;
+    struct gspca_dev gspca_dev;
 
-	/* A pointer to the currently connected sensor */
-	const struct stv06xx_sensor *sensor;
+    /* A pointer to the currently connected sensor */
+    const struct stv06xx_sensor *sensor;
 
-	/* A pointer to the sd_desc struct */
-	struct sd_desc desc;
+    /* A pointer to the sd_desc struct */
+    struct sd_desc desc;
 
-	/* Sensor private data */
-	void *sensor_priv;
+    /* Sensor private data */
+    void *sensor_priv;
 
-	/* The first 4 lines produced by the stv6422 are no good, this keeps
-	   track of how many bytes we still need to skip during a frame */
-	int to_skip;
+    /* The first 4 lines produced by the stv6422 are no good, this keeps
+       track of how many bytes we still need to skip during a frame */
+    int to_skip;
 
-	/* Bridge / Camera type */
-	u8 bridge;
-	#define BRIDGE_STV600 0
-	#define BRIDGE_STV602 1
-	#define BRIDGE_STV610 2
-	#define BRIDGE_ST6422 3 /* With integrated sensor */
+    /* Bridge / Camera type */
+    u8 bridge;
+#define BRIDGE_STV600 0
+#define BRIDGE_STV602 1
+#define BRIDGE_STV610 2
+#define BRIDGE_ST6422 3 /* With integrated sensor */
 };
 
 int stv06xx_write_bridge(struct sd *sd, u16 address, u16 i2c_data);

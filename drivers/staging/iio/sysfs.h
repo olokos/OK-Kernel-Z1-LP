@@ -21,18 +21,18 @@ struct iio_chan_spec;
  * @l:		list head for maintaining list of dynamically created attrs.
  */
 struct iio_dev_attr {
-	struct device_attribute dev_attr;
-	u64 address;
-	struct list_head l;
-	struct iio_chan_spec const *c;
+    struct device_attribute dev_attr;
+    u64 address;
+    struct list_head l;
+    struct iio_chan_spec const *c;
 };
 
 #define to_iio_dev_attr(_dev_attr)				\
 	container_of(_dev_attr, struct iio_dev_attr, dev_attr)
 
 ssize_t iio_read_const_attr(struct device *dev,
-			    struct device_attribute *attr,
-			    char *len);
+                            struct device_attribute *attr,
+                            char *len);
 
 /**
  * struct iio_const_attr - constant device specific attribute
@@ -41,8 +41,8 @@ ssize_t iio_read_const_attr(struct device *dev,
  * @dev_attr:	underlying device attribute
  */
 struct iio_const_attr {
-	const char *string;
-	struct device_attribute dev_attr;
+    const char *string;
+    struct device_attribute dev_attr;
 };
 
 #define to_iio_const_attr(_dev_attr) \

@@ -112,46 +112,46 @@
  * which means the word ordering of the pair depends on endianess.
  */
 struct pt_regs {
-	REG_PAIR(tsr, orig_a4);
-	REG_PAIR(rilc, ilc);
-	REG_PAIR(pc, csr);
+    REG_PAIR(tsr, orig_a4);
+    REG_PAIR(rilc, ilc);
+    REG_PAIR(pc, csr);
 
-	REG_PAIR(b17, b16);
-	REG_PAIR(b19, b18);
-	REG_PAIR(b21, b20);
-	REG_PAIR(b23, b22);
-	REG_PAIR(b25, b24);
-	REG_PAIR(b27, b26);
-	REG_PAIR(b29, b28);
-	REG_PAIR(b31, b30);
+    REG_PAIR(b17, b16);
+    REG_PAIR(b19, b18);
+    REG_PAIR(b21, b20);
+    REG_PAIR(b23, b22);
+    REG_PAIR(b25, b24);
+    REG_PAIR(b27, b26);
+    REG_PAIR(b29, b28);
+    REG_PAIR(b31, b30);
 
-	REG_PAIR(b1, b0);
-	REG_PAIR(b3, b2);
-	REG_PAIR(b5, b4);
-	REG_PAIR(b7, b6);
-	REG_PAIR(b9, b8);
-	REG_PAIR(b11, b10);
-	REG_PAIR(b13, b12);
+    REG_PAIR(b1, b0);
+    REG_PAIR(b3, b2);
+    REG_PAIR(b5, b4);
+    REG_PAIR(b7, b6);
+    REG_PAIR(b9, b8);
+    REG_PAIR(b11, b10);
+    REG_PAIR(b13, b12);
 
-	REG_PAIR(a17, a16);
-	REG_PAIR(a19, a18);
-	REG_PAIR(a21, a20);
-	REG_PAIR(a23, a22);
-	REG_PAIR(a25, a24);
-	REG_PAIR(a27, a26);
-	REG_PAIR(a29, a28);
-	REG_PAIR(a31, a30);
+    REG_PAIR(a17, a16);
+    REG_PAIR(a19, a18);
+    REG_PAIR(a21, a20);
+    REG_PAIR(a23, a22);
+    REG_PAIR(a25, a24);
+    REG_PAIR(a27, a26);
+    REG_PAIR(a29, a28);
+    REG_PAIR(a31, a30);
 
-	REG_PAIR(a1, a0);
-	REG_PAIR(a3, a2);
-	REG_PAIR(a5, a4);
-	REG_PAIR(a7, a6);
-	REG_PAIR(a9, a8);
-	REG_PAIR(a11, a10);
-	REG_PAIR(a13, a12);
+    REG_PAIR(a1, a0);
+    REG_PAIR(a3, a2);
+    REG_PAIR(a5, a4);
+    REG_PAIR(a7, a6);
+    REG_PAIR(a9, a8);
+    REG_PAIR(a11, a10);
+    REG_PAIR(a13, a12);
 
-	REG_PAIR(a15, a14);
-	REG_PAIR(sp, dp);
+    REG_PAIR(a15, a14);
+    REG_PAIR(sp, dp);
 };
 
 #ifdef __KERNEL__

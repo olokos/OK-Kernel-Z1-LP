@@ -147,12 +147,10 @@ WLAN_BAPReadLocalVersionInfo
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -221,15 +219,13 @@ WLAN_BAPReadLocalSupportedCmds
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     v_U8_t supportedCmds[] = WLANBAP_PAL_SUPPORTED_HCI_CMDS;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -292,11 +288,9 @@ WLAN_BAPReadBufferSize
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -362,11 +356,9 @@ WLAN_BAPReadDataBlockSize
     ptBtampHandle btampHandle,
     tpBtampHCI_Event pBapHCIEvent /* This now encodes ALL event types */
     /* Including "Read" Command Complete*/
-)
-{
+) {
     /* Validate params */
-    if ((btampHandle == NULL) || (NULL == pBapHCIEvent))
-    {
+    if ((btampHandle == NULL) || (NULL == pBapHCIEvent)) {
         return VOS_STATUS_E_FAULT;
     }
 
@@ -431,12 +423,10 @@ WLAN_BAPSetConfig
 (
     ptBtampHandle btampHandle,
     WLANBAP_ConfigType *pConfig
-)
-{
+) {
     ptBtampContext btampContext;
     /* Validate params */
-    if ((NULL == btampHandle)|| (NULL == pConfig))
-    {
+    if ((NULL == btampHandle)|| (NULL == pConfig)) {
         return VOS_STATUS_E_FAULT;
     }
     btampContext = (ptBtampContext) btampHandle; /* btampContext value */
@@ -477,12 +467,10 @@ WLAN_BAPSetConfig
 ----------------------------------------------------------------------------*/
 VOS_STATUS
 WLAN_BAPGetMask( ptBtampHandle btampHandle,
-                 v_U8_t       *pEvent_mask_page_2)
-{
+                 v_U8_t       *pEvent_mask_page_2) {
     ptBtampContext btampContext;
     /* Validate params */
-    if ((NULL == btampHandle)|| (NULL == pEvent_mask_page_2))
-    {
+    if ((NULL == btampHandle)|| (NULL == pEvent_mask_page_2)) {
         return VOS_STATUS_E_FAULT;
     }
     btampContext = (ptBtampContext) btampHandle; /* btampContext value */
@@ -524,8 +512,7 @@ VOS_STATUS
 WLAN_BAPDisconnect
 (
     ptBtampHandle btampHandle
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     tWLAN_BAPEvent bapEvent; /* State machine event */
     v_U8_t status;    /* return the BT-AMP status here */
@@ -535,8 +522,7 @@ WLAN_BAPDisconnect
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_FATAL, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_FATAL,
                    "btampHandle is NULL in %s", __func__);
 
@@ -593,16 +579,14 @@ WLAN_BAPDisconnect
 v_BOOL_t WLAN_BAPSessionOn
 (
     ptBtampHandle btampHandle
-)
-{
+) {
     ptBtampContext btampContext = (ptBtampContext) btampHandle;
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
     VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_INFO_HIGH, "%s: btampHandle value: %p", __func__,  btampHandle);
 
     /* Validate params */
-    if (btampHandle == NULL)
-    {
+    if (btampHandle == NULL) {
         VOS_TRACE( VOS_MODULE_ID_BAP, VOS_TRACE_LEVEL_ERROR,
                    "btampHandle is NULL in %s", __func__);
 

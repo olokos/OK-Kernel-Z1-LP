@@ -17,7 +17,7 @@
 
 extern void *__bzero(void *__s, size_t __count);
 extern long __strncpy_from_user_nocheck_asm(char *__to,
-                                            const char *__from, long __len);
+        const char *__from, long __len);
 extern long __strncpy_from_user_asm(char *__to, const char *__from,
                                     long __len);
 extern long __strlen_user_nocheck_asm(const char *s);

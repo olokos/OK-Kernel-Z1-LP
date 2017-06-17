@@ -23,10 +23,9 @@
 extern struct kimage *ia64_kimage;
 extern const unsigned int relocate_new_kernel_size;
 extern void relocate_new_kernel(unsigned long, unsigned long,
-		struct ia64_boot_param *, unsigned long);
+                                struct ia64_boot_param *, unsigned long);
 static inline void
-crash_setup_regs(struct pt_regs *newregs, struct pt_regs *oldregs)
-{
+crash_setup_regs(struct pt_regs *newregs, struct pt_regs *oldregs) {
 }
 extern struct resource efi_memmap_res;
 extern struct resource boot_param_res;
@@ -36,7 +35,7 @@ extern void kexec_disable_iosapic(void);
 extern void crash_save_this_cpu(void);
 struct rsvd_region;
 extern unsigned long kdump_find_rsvd_region(unsigned long size,
-		struct rsvd_region *rsvd_regions, int n);
+        struct rsvd_region *rsvd_regions, int n);
 extern void kdump_cpu_freeze(struct unw_frame_info *info, void *arg);
 extern int kdump_status[];
 extern atomic_t kdump_cpu_freezed;

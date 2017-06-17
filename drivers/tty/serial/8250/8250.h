@@ -14,53 +14,53 @@
 #include <linux/serial_8250.h>
 
 struct uart_8250_port {
-	struct uart_port	port;
-	struct timer_list	timer;		/* "no irq" timer */
-	struct list_head	list;		/* ports on this IRQ */
-	unsigned short		capabilities;	/* port capabilities */
-	unsigned short		bugs;		/* port bugs */
-	unsigned int		tx_loadsz;	/* transmit fifo load size */
-	unsigned char		acr;
-	unsigned char		ier;
-	unsigned char		lcr;
-	unsigned char		mcr;
-	unsigned char		mcr_mask;	/* mask of user bits */
-	unsigned char		mcr_force;	/* mask of forced bits */
-	unsigned char		cur_iotype;	/* Running I/O type */
+    struct uart_port	port;
+    struct timer_list	timer;		/* "no irq" timer */
+    struct list_head	list;		/* ports on this IRQ */
+    unsigned short		capabilities;	/* port capabilities */
+    unsigned short		bugs;		/* port bugs */
+    unsigned int		tx_loadsz;	/* transmit fifo load size */
+    unsigned char		acr;
+    unsigned char		ier;
+    unsigned char		lcr;
+    unsigned char		mcr;
+    unsigned char		mcr_mask;	/* mask of user bits */
+    unsigned char		mcr_force;	/* mask of forced bits */
+    unsigned char		cur_iotype;	/* Running I/O type */
 
-	/*
-	 * Some bits in registers are cleared on a read, so they must
-	 * be saved whenever the register is read but the bits will not
-	 * be immediately processed.
-	 */
+    /*
+     * Some bits in registers are cleared on a read, so they must
+     * be saved whenever the register is read but the bits will not
+     * be immediately processed.
+     */
 #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
-	unsigned char		lsr_saved_flags;
+    unsigned char		lsr_saved_flags;
 #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
-	unsigned char		msr_saved_flags;
+    unsigned char		msr_saved_flags;
 };
 
 struct old_serial_port {
-	unsigned int uart;
-	unsigned int baud_base;
-	unsigned int port;
-	unsigned int irq;
-	unsigned int flags;
-	unsigned char hub6;
-	unsigned char io_type;
-	unsigned char *iomem_base;
-	unsigned short iomem_reg_shift;
-	unsigned long irqflags;
+    unsigned int uart;
+    unsigned int baud_base;
+    unsigned int port;
+    unsigned int irq;
+    unsigned int flags;
+    unsigned char hub6;
+    unsigned char io_type;
+    unsigned char *iomem_base;
+    unsigned short iomem_reg_shift;
+    unsigned long irqflags;
 };
 
 /*
  * This replaces serial_uart_config in include/linux/serial.h
  */
 struct serial8250_config {
-	const char	*name;
-	unsigned short	fifo_size;
-	unsigned short	tx_loadsz;
-	unsigned char	fcr;
-	unsigned int	flags;
+    const char	*name;
+    unsigned short	fifo_size;
+    unsigned short	tx_loadsz;
+    unsigned char	fcr;
+    unsigned int	flags;
 };
 
 #define UART_CAP_FIFO	(1 << 8)	/* UART has FIFO */
@@ -86,14 +86,12 @@ struct serial8250_config {
 #define SERIAL8250_SHARE_IRQS 0
 #endif
 
-static inline int serial_in(struct uart_8250_port *up, int offset)
-{
-	return up->port.serial_in(&up->port, offset);
+static inline int serial_in(struct uart_8250_port *up, int offset) {
+    return up->port.serial_in(&up->port, offset);
 }
 
-static inline void serial_out(struct uart_8250_port *up, int offset, int value)
-{
-	up->port.serial_out(&up->port, offset, value);
+static inline void serial_out(struct uart_8250_port *up, int offset, int value) {
+    up->port.serial_out(&up->port, offset, value);
 }
 
 #if defined(__alpha__) && !defined(CONFIG_PCI)

@@ -39,13 +39,13 @@
 #define DRIVER_DESC "AME DTV-5100 USB2.0 DVB-T"
 
 static struct {
-	u8 request;
-	u8 value;
-	u16 index;
+    u8 request;
+    u8 value;
+    u16 index;
 } dtv5100_init[] = {
-	{ 0x000000c5, 0x00000000, 0x00000001 },
-	{ 0x000000c5, 0x00000001, 0x00000001 },
-	{ }		/* Terminating entry */
+    { 0x000000c5, 0x00000000, 0x00000001 },
+    { 0x000000c5, 0x00000001, 0x00000001 },
+    { }		/* Terminating entry */
 };
 
 #endif

@@ -56,12 +56,11 @@ int nlm_wakeup_secondary_cpus(u32 wakeup_mask);
 void nlm_rmiboot_preboot(void);
 
 static inline void
-nlm_set_nmi_handler(void *handler)
-{
-	char *reset_data;
+nlm_set_nmi_handler(void *handler) {
+    char *reset_data;
 
-	reset_data = (char *)CKSEG1ADDR(RESET_DATA_PHYS);
-	*(int64_t *)(reset_data + BOOT_NMI_HANDLER) = (long)handler;
+    reset_data = (char *)CKSEG1ADDR(RESET_DATA_PHYS);
+    *(int64_t *)(reset_data + BOOT_NMI_HANDLER) = (long)handler;
 }
 
 /*

@@ -51,96 +51,96 @@ struct ite_dev;
 
 /* struct for storing the parameters of different recognized devices */
 struct ite_dev_params {
-	/* model of the device */
-	const char *model;
+    /* model of the device */
+    const char *model;
 
-	/* size of the I/O region */
-	int io_region_size;
+    /* size of the I/O region */
+    int io_region_size;
 
-	/* IR pnp I/O resource number */
-	int io_rsrc_no;
+    /* IR pnp I/O resource number */
+    int io_rsrc_no;
 
-	/* true if the hardware supports transmission */
-	bool hw_tx_capable;
+    /* true if the hardware supports transmission */
+    bool hw_tx_capable;
 
-	/* base sampling period, in ns */
-	u32 sample_period;
+    /* base sampling period, in ns */
+    u32 sample_period;
 
-	/* rx low carrier frequency, in Hz, 0 means no demodulation */
-	unsigned int rx_low_carrier_freq;
+    /* rx low carrier frequency, in Hz, 0 means no demodulation */
+    unsigned int rx_low_carrier_freq;
 
-	/* tx high carrier frequency, in Hz, 0 means no demodulation */
-	unsigned int rx_high_carrier_freq;
+    /* tx high carrier frequency, in Hz, 0 means no demodulation */
+    unsigned int rx_high_carrier_freq;
 
-	/* tx carrier frequency, in Hz */
-	unsigned int tx_carrier_freq;
+    /* tx carrier frequency, in Hz */
+    unsigned int tx_carrier_freq;
 
-	/* duty cycle, 0-100 */
-	int tx_duty_cycle;
+    /* duty cycle, 0-100 */
+    int tx_duty_cycle;
 
-	/* hw-specific operation function pointers; most of these must be
-	 * called while holding the spin lock, except for the TX FIFO length
-	 * one */
-	/* get pending interrupt causes */
-	int (*get_irq_causes) (struct ite_dev *dev);
+    /* hw-specific operation function pointers; most of these must be
+     * called while holding the spin lock, except for the TX FIFO length
+     * one */
+    /* get pending interrupt causes */
+    int (*get_irq_causes) (struct ite_dev *dev);
 
-	/* enable rx */
-	void (*enable_rx) (struct ite_dev *dev);
+    /* enable rx */
+    void (*enable_rx) (struct ite_dev *dev);
 
-	/* make rx enter the idle state; keep listening for a pulse, but stop
-	 * streaming space bytes */
-	void (*idle_rx) (struct ite_dev *dev);
+    /* make rx enter the idle state; keep listening for a pulse, but stop
+     * streaming space bytes */
+    void (*idle_rx) (struct ite_dev *dev);
 
-	/* disable rx completely */
-	void (*disable_rx) (struct ite_dev *dev);
+    /* disable rx completely */
+    void (*disable_rx) (struct ite_dev *dev);
 
-	/* read bytes from RX FIFO; return read count */
-	int (*get_rx_bytes) (struct ite_dev *dev, u8 *buf, int buf_size);
+    /* read bytes from RX FIFO; return read count */
+    int (*get_rx_bytes) (struct ite_dev *dev, u8 *buf, int buf_size);
 
-	/* enable tx FIFO space available interrupt */
-	void (*enable_tx_interrupt) (struct ite_dev *dev);
+    /* enable tx FIFO space available interrupt */
+    void (*enable_tx_interrupt) (struct ite_dev *dev);
 
-	/* disable tx FIFO space available interrupt */
-	void (*disable_tx_interrupt) (struct ite_dev *dev);
+    /* disable tx FIFO space available interrupt */
+    void (*disable_tx_interrupt) (struct ite_dev *dev);
 
-	/* get number of full TX FIFO slots */
-	int (*get_tx_used_slots) (struct ite_dev *dev);
+    /* get number of full TX FIFO slots */
+    int (*get_tx_used_slots) (struct ite_dev *dev);
 
-	/* put a byte to the TX FIFO */
-	void (*put_tx_byte) (struct ite_dev *dev, u8 value);
+    /* put a byte to the TX FIFO */
+    void (*put_tx_byte) (struct ite_dev *dev, u8 value);
 
-	/* disable hardware completely */
-	void (*disable) (struct ite_dev *dev);
+    /* disable hardware completely */
+    void (*disable) (struct ite_dev *dev);
 
-	/* initialize the hardware */
-	void (*init_hardware) (struct ite_dev *dev);
+    /* initialize the hardware */
+    void (*init_hardware) (struct ite_dev *dev);
 
-	/* set the carrier parameters */
-	void (*set_carrier_params) (struct ite_dev *dev, bool high_freq,
-				    bool use_demodulator, u8 carrier_freq_bits,
-				    u8 allowance_bits, u8 pulse_width_bits);
+    /* set the carrier parameters */
+    void (*set_carrier_params) (struct ite_dev *dev, bool high_freq,
+                                bool use_demodulator, u8 carrier_freq_bits,
+                                u8 allowance_bits, u8 pulse_width_bits);
 };
 
 /* ITE CIR device structure */
 struct ite_dev {
-	struct pnp_dev *pdev;
-	struct rc_dev *rdev;
-	struct ir_raw_event rawir;
+    struct pnp_dev *pdev;
+    struct rc_dev *rdev;
+    struct ir_raw_event rawir;
 
-	/* sync data */
-	spinlock_t lock;
-	bool in_use, transmitting;
+    /* sync data */
+    spinlock_t lock;
+    bool in_use, transmitting;
 
-	/* transmit support */
-	int tx_fifo_allowance;
-	wait_queue_head_t tx_queue, tx_ended;
+    /* transmit support */
+    int tx_fifo_allowance;
+    wait_queue_head_t tx_queue, tx_ended;
 
-	/* hardware I/O settings */
-	unsigned long cir_addr;
-	int cir_irq;
+    /* hardware I/O settings */
+    unsigned long cir_addr;
+    int cir_irq;
 
-	/* overridable copy of model parameters */
-	struct ite_dev_params params;
+    /* overridable copy of model parameters */
+    struct ite_dev_params params;
 };
 
 /* common values for all kinds of hardware */

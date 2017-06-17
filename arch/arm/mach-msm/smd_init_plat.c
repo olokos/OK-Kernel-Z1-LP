@@ -185,348 +185,343 @@
 #endif
 
 static int intr_init(struct interrupt_config_item *private_irq,
-			struct smd_irq_config *platform_irq,
-			struct platform_device *pdev
-			)
-{
-	int irq_id;
-	int ret;
-	int ret_wake;
+                     struct smd_irq_config *platform_irq,
+                     struct platform_device *pdev
+                    ) {
+    int irq_id;
+    int ret;
+    int ret_wake;
 
-	private_irq->out_bit_pos = platform_irq->out_bit_pos;
-	private_irq->out_offset = platform_irq->out_offset;
-	private_irq->out_base = platform_irq->out_base;
+    private_irq->out_bit_pos = platform_irq->out_bit_pos;
+    private_irq->out_offset = platform_irq->out_offset;
+    private_irq->out_base = platform_irq->out_base;
 
-	irq_id = platform_get_irq_byname(
-					pdev,
-					platform_irq->irq_name
-				);
-	SMD_DBG("smd: %s: register irq: %s id: %d\n", __func__,
-				platform_irq->irq_name, irq_id);
-	ret = request_irq(irq_id,
-				private_irq->irq_handler,
-				platform_irq->flags,
-				platform_irq->device_name,
-				(void *)platform_irq->dev_id
-			);
-	if (ret < 0) {
-		platform_irq->irq_id = ret;
-		private_irq->irq_id = ret;
-	} else {
-		platform_irq->irq_id = irq_id;
-		private_irq->irq_id = irq_id;
-		ret_wake = enable_irq_wake(irq_id);
-		if (ret_wake < 0) {
-			pr_err("smd: enable_irq_wake failed on %s",
-					platform_irq->irq_name);
-		}
-	}
+    irq_id = platform_get_irq_byname(
+                 pdev,
+                 platform_irq->irq_name
+             );
+    SMD_DBG("smd: %s: register irq: %s id: %d\n", __func__,
+            platform_irq->irq_name, irq_id);
+    ret = request_irq(irq_id,
+                      private_irq->irq_handler,
+                      platform_irq->flags,
+                      platform_irq->device_name,
+                      (void *)platform_irq->dev_id
+                     );
+    if (ret < 0) {
+        platform_irq->irq_id = ret;
+        private_irq->irq_id = ret;
+    } else {
+        platform_irq->irq_id = irq_id;
+        private_irq->irq_id = irq_id;
+        ret_wake = enable_irq_wake(irq_id);
+        if (ret_wake < 0) {
+            pr_err("smd: enable_irq_wake failed on %s",
+                   platform_irq->irq_name);
+        }
+    }
 
-	return ret;
+    return ret;
 }
 
-int smd_core_init(void)
-{
-	int r;
-	unsigned long flags = IRQF_TRIGGER_RISING;
-	SMD_INFO("smd_core_init()\n");
+int smd_core_init(void) {
+    int r;
+    unsigned long flags = IRQF_TRIGGER_RISING;
+    SMD_INFO("smd_core_init()\n");
 
-	MSM_CFG_A2M_SMD_INT;
-	MSM_CFG_A2Q6_SMD_INT;
-	MSM_CFG_A2M_SMSM_INT;
-	MSM_CFG_A2Q6_SMSM_INT;
-	MSM_CFG_A2DSPS_SMD_INT;
-	MSM_CFG_A2DSPS_SMSM_INT;
-	MSM_CFG_A2WCNSS_SMD_INT;
-	MSM_CFG_A2WCNSS_SMSM_INT;
+    MSM_CFG_A2M_SMD_INT;
+    MSM_CFG_A2Q6_SMD_INT;
+    MSM_CFG_A2M_SMSM_INT;
+    MSM_CFG_A2Q6_SMSM_INT;
+    MSM_CFG_A2DSPS_SMD_INT;
+    MSM_CFG_A2DSPS_SMSM_INT;
+    MSM_CFG_A2WCNSS_SMD_INT;
+    MSM_CFG_A2WCNSS_SMSM_INT;
 
-	r = request_irq(INT_A9_M2A_0, smd_modem_irq_handler,
-			flags, "smd_dev", 0);
-	if (r < 0)
-		return r;
-	interrupt_stats[SMD_MODEM].smd_interrupt_id = INT_A9_M2A_0;
-	r = enable_irq_wake(INT_A9_M2A_0);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_A9_M2A_0\n",
-			__func__);
+    r = request_irq(INT_A9_M2A_0, smd_modem_irq_handler,
+                    flags, "smd_dev", 0);
+    if (r < 0)
+        return r;
+    interrupt_stats[SMD_MODEM].smd_interrupt_id = INT_A9_M2A_0;
+    r = enable_irq_wake(INT_A9_M2A_0);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_A9_M2A_0\n",
+               __func__);
 
-	r = request_irq(INT_A9_M2A_5, smsm_modem_irq_handler,
-			flags, "smsm_dev", 0);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		return r;
-	}
-	interrupt_stats[SMD_MODEM].smsm_interrupt_id = INT_A9_M2A_5;
-	r = enable_irq_wake(INT_A9_M2A_5);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_A9_M2A_5\n",
-			__func__);
+    r = request_irq(INT_A9_M2A_5, smsm_modem_irq_handler,
+                    flags, "smsm_dev", 0);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        return r;
+    }
+    interrupt_stats[SMD_MODEM].smsm_interrupt_id = INT_A9_M2A_5;
+    r = enable_irq_wake(INT_A9_M2A_5);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_A9_M2A_5\n",
+               __func__);
 
 #if defined(CONFIG_QDSP6)
 #if (INT_ADSP_A11 == INT_ADSP_A11_SMSM)
-		flags |= IRQF_SHARED;
+    flags |= IRQF_SHARED;
 #endif
-	r = request_irq(INT_ADSP_A11, smd_dsp_irq_handler,
-			flags, "smd_dev", smd_dsp_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		return r;
-	}
+    r = request_irq(INT_ADSP_A11, smd_dsp_irq_handler,
+                    flags, "smd_dev", smd_dsp_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        return r;
+    }
 
-	interrupt_stats[SMD_Q6].smd_interrupt_id = INT_ADSP_A11;
-	r = request_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler,
-			flags, "smsm_dev", smsm_dsp_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
-		return r;
-	}
+    interrupt_stats[SMD_Q6].smd_interrupt_id = INT_ADSP_A11;
+    r = request_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler,
+                    flags, "smsm_dev", smsm_dsp_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
+        return r;
+    }
 
-	interrupt_stats[SMD_Q6].smsm_interrupt_id = INT_ADSP_A11_SMSM;
-	r = enable_irq_wake(INT_ADSP_A11);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_ADSP_A11\n",
-			__func__);
+    interrupt_stats[SMD_Q6].smsm_interrupt_id = INT_ADSP_A11_SMSM;
+    r = enable_irq_wake(INT_ADSP_A11);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_ADSP_A11\n",
+               __func__);
 
 #if (INT_ADSP_A11 != INT_ADSP_A11_SMSM)
-	r = enable_irq_wake(INT_ADSP_A11_SMSM);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_ADSP_A11_SMSM\n",
-			__func__);
+    r = enable_irq_wake(INT_ADSP_A11_SMSM);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_ADSP_A11_SMSM\n",
+               __func__);
 #endif
-	flags &= ~IRQF_SHARED;
+    flags &= ~IRQF_SHARED;
 #endif
 
 #if defined(CONFIG_DSPS)
-	r = request_irq(INT_DSPS_A11, smd_dsps_irq_handler,
-			flags, "smd_dev", smd_dsps_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
-		free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
-		return r;
-	}
+    r = request_irq(INT_DSPS_A11, smd_dsps_irq_handler,
+                    flags, "smd_dev", smd_dsps_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
+        free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
+        return r;
+    }
 
-	interrupt_stats[SMD_DSPS].smd_interrupt_id = INT_DSPS_A11;
-	r = enable_irq_wake(INT_DSPS_A11);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_ADSP_A11\n",
-			__func__);
+    interrupt_stats[SMD_DSPS].smd_interrupt_id = INT_DSPS_A11;
+    r = enable_irq_wake(INT_DSPS_A11);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_ADSP_A11\n",
+               __func__);
 #endif
 
 #if defined(CONFIG_WCNSS)
-	r = request_irq(INT_WCNSS_A11, smd_wcnss_irq_handler,
-			flags, "smd_dev", smd_wcnss_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
-		free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
-		free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
-		return r;
-	}
+    r = request_irq(INT_WCNSS_A11, smd_wcnss_irq_handler,
+                    flags, "smd_dev", smd_wcnss_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
+        free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
+        free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
+        return r;
+    }
 
-	interrupt_stats[SMD_WCNSS].smd_interrupt_id = INT_WCNSS_A11;
-	r = enable_irq_wake(INT_WCNSS_A11);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_WCNSS_A11\n",
-			__func__);
+    interrupt_stats[SMD_WCNSS].smd_interrupt_id = INT_WCNSS_A11;
+    r = enable_irq_wake(INT_WCNSS_A11);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_WCNSS_A11\n",
+               __func__);
 
-	r = request_irq(INT_WCNSS_A11_SMSM, smsm_wcnss_irq_handler,
-			flags, "smsm_dev", smsm_wcnss_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
-		free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
-		free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
-		free_irq(INT_WCNSS_A11, smd_wcnss_irq_handler);
-		return r;
-	}
+    r = request_irq(INT_WCNSS_A11_SMSM, smsm_wcnss_irq_handler,
+                    flags, "smsm_dev", smsm_wcnss_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
+        free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
+        free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
+        free_irq(INT_WCNSS_A11, smd_wcnss_irq_handler);
+        return r;
+    }
 
-	interrupt_stats[SMD_WCNSS].smsm_interrupt_id = INT_WCNSS_A11_SMSM;
-	r = enable_irq_wake(INT_WCNSS_A11_SMSM);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_WCNSS_A11_SMSM\n",
-			__func__);
+    interrupt_stats[SMD_WCNSS].smsm_interrupt_id = INT_WCNSS_A11_SMSM;
+    r = enable_irq_wake(INT_WCNSS_A11_SMSM);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_WCNSS_A11_SMSM\n",
+               __func__);
 #endif
 
 #if defined(CONFIG_DSPS_SMSM)
-	r = request_irq(INT_DSPS_A11_SMSM, smsm_dsps_irq_handler,
-			flags, "smsm_dev", smsm_dsps_irq_handler);
-	if (r < 0) {
-		free_irq(INT_A9_M2A_0, 0);
-		free_irq(INT_A9_M2A_5, 0);
-		free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
-		free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
-		free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
-		free_irq(INT_WCNSS_A11, smd_wcnss_irq_handler);
-		free_irq(INT_WCNSS_A11_SMSM, smsm_wcnss_irq_handler);
-		return r;
-	}
+    r = request_irq(INT_DSPS_A11_SMSM, smsm_dsps_irq_handler,
+                    flags, "smsm_dev", smsm_dsps_irq_handler);
+    if (r < 0) {
+        free_irq(INT_A9_M2A_0, 0);
+        free_irq(INT_A9_M2A_5, 0);
+        free_irq(INT_ADSP_A11, smd_dsp_irq_handler);
+        free_irq(INT_ADSP_A11_SMSM, smsm_dsp_irq_handler);
+        free_irq(INT_DSPS_A11, smd_dsps_irq_handler);
+        free_irq(INT_WCNSS_A11, smd_wcnss_irq_handler);
+        free_irq(INT_WCNSS_A11_SMSM, smsm_wcnss_irq_handler);
+        return r;
+    }
 
-	interrupt_stats[SMD_DSPS].smsm_interrupt_id = INT_DSPS_A11_SMSM;
-	r = enable_irq_wake(INT_DSPS_A11_SMSM);
-	if (r < 0)
-		pr_err("%s: enable_irq_wake failed for INT_DSPS_A11_SMSM\n",
-			__func__);
+    interrupt_stats[SMD_DSPS].smsm_interrupt_id = INT_DSPS_A11_SMSM;
+    r = enable_irq_wake(INT_DSPS_A11_SMSM);
+    if (r < 0)
+        pr_err("%s: enable_irq_wake failed for INT_DSPS_A11_SMSM\n",
+               __func__);
 #endif
-	SMD_INFO("smd_core_init() done\n");
+    SMD_INFO("smd_core_init() done\n");
 
-	return 0;
+    return 0;
 }
 
-int smd_core_platform_init(struct platform_device *pdev)
-{
-	int i;
-	int ret;
-	uint32_t num_ss;
-	struct smd_platform *smd_platform_data;
-	struct smd_subsystem_config *smd_ss_config_list;
-	struct smd_subsystem_config *cfg;
-	struct interrupt_config *private_intr_config;
-	int err_ret = 0;
+int smd_core_platform_init(struct platform_device *pdev) {
+    int i;
+    int ret;
+    uint32_t num_ss;
+    struct smd_platform *smd_platform_data;
+    struct smd_subsystem_config *smd_ss_config_list;
+    struct smd_subsystem_config *cfg;
+    struct interrupt_config *private_intr_config;
+    int err_ret = 0;
 
-	smd_platform_data = pdev->dev.platform_data;
-	num_ss = smd_platform_data->num_ss_configs;
-	smd_ss_config_list = smd_platform_data->smd_ss_configs;
+    smd_platform_data = pdev->dev.platform_data;
+    num_ss = smd_platform_data->num_ss_configs;
+    smd_ss_config_list = smd_platform_data->smd_ss_configs;
 
-	if (smd_platform_data->smd_ssr_config)
-		disable_smsm_reset_handshake = smd_platform_data->
-			   smd_ssr_config->disable_smsm_reset_handshake;
+    if (smd_platform_data->smd_ssr_config)
+        disable_smsm_reset_handshake = smd_platform_data->
+                                       smd_ssr_config->disable_smsm_reset_handshake;
 
-	for (i = 0; i < num_ss; i++) {
-		cfg = &smd_ss_config_list[i];
-		private_intr_config = smd_get_intr_config(cfg->edge);
-		if (!private_intr_config) {
-			pr_err("%s: invalid edge\n", __func__);
-			goto intr_failed;
-		}
+    for (i = 0; i < num_ss; i++) {
+        cfg = &smd_ss_config_list[i];
+        private_intr_config = smd_get_intr_config(cfg->edge);
+        if (!private_intr_config) {
+            pr_err("%s: invalid edge\n", __func__);
+            goto intr_failed;
+        }
 
-		ret = intr_init(
-			&private_intr_config->smd,
-			&cfg->smd_int,
-			pdev
-			);
+        ret = intr_init(
+                  &private_intr_config->smd,
+                  &cfg->smd_int,
+                  pdev
+              );
 
-		if (ret < 0) {
-			err_ret = ret;
-			pr_err("smd: register irq failed on %s\n",
-				cfg->smd_int.irq_name);
-			goto intr_failed;
-		}
+        if (ret < 0) {
+            err_ret = ret;
+            pr_err("smd: register irq failed on %s\n",
+                   cfg->smd_int.irq_name);
+            goto intr_failed;
+        }
 
-		interrupt_stats[cfg->irq_config_id].smd_interrupt_id
-						 = cfg->smd_int.irq_id;
-		/* only init smsm structs if this edge supports smsm */
-		if (cfg->smsm_int.irq_id)
-			ret = intr_init(
-				&private_intr_config->smsm,
-				&cfg->smsm_int,
-				pdev
-				);
+        interrupt_stats[cfg->irq_config_id].smd_interrupt_id
+            = cfg->smd_int.irq_id;
+        /* only init smsm structs if this edge supports smsm */
+        if (cfg->smsm_int.irq_id)
+            ret = intr_init(
+                      &private_intr_config->smsm,
+                      &cfg->smsm_int,
+                      pdev
+                  );
 
-		if (ret < 0) {
-			err_ret = ret;
-			pr_err("smd: register irq failed on %s\n",
-				cfg->smsm_int.irq_name);
-			goto intr_failed;
-		}
+        if (ret < 0) {
+            err_ret = ret;
+            pr_err("smd: register irq failed on %s\n",
+                   cfg->smsm_int.irq_name);
+            goto intr_failed;
+        }
 
-		if (cfg->smsm_int.irq_id)
-			interrupt_stats[cfg->irq_config_id].smsm_interrupt_id
-						 = cfg->smsm_int.irq_id;
-		if (cfg->subsys_name)
-			smd_set_edge_subsys_name(cfg->edge, cfg->subsys_name);
+        if (cfg->smsm_int.irq_id)
+            interrupt_stats[cfg->irq_config_id].smsm_interrupt_id
+                = cfg->smsm_int.irq_id;
+        if (cfg->subsys_name)
+            smd_set_edge_subsys_name(cfg->edge, cfg->subsys_name);
 
-		smd_set_edge_initialized(cfg->edge);
-	}
+        smd_set_edge_initialized(cfg->edge);
+    }
 
-	SMD_INFO("smd_core_platform_init() done\n");
+    SMD_INFO("smd_core_platform_init() done\n");
 
-	return 0;
+    return 0;
 
 intr_failed:
-	pr_err("smd: deregistering IRQs\n");
-	for (i = 0; i < num_ss; ++i) {
-		cfg = &smd_ss_config_list[i];
+    pr_err("smd: deregistering IRQs\n");
+    for (i = 0; i < num_ss; ++i) {
+        cfg = &smd_ss_config_list[i];
 
-		if (cfg->smd_int.irq_id >= 0)
-			free_irq(cfg->smd_int.irq_id,
-				(void *)cfg->smd_int.dev_id
-				);
-		if (cfg->smsm_int.irq_id >= 0)
-			free_irq(cfg->smsm_int.irq_id,
-				(void *)cfg->smsm_int.dev_id
-				);
-	}
-	return err_ret;
+        if (cfg->smd_int.irq_id >= 0)
+            free_irq(cfg->smd_int.irq_id,
+                     (void *)cfg->smd_int.dev_id
+                    );
+        if (cfg->smsm_int.irq_id >= 0)
+            free_irq(cfg->smsm_int.irq_id,
+                     (void *)cfg->smsm_int.dev_id
+                    );
+    }
+    return err_ret;
 }
 
-static int msm_smd_probe_legacy(struct platform_device *pdev)
-{
-	int ret;
+static int msm_smd_probe_legacy(struct platform_device *pdev) {
+    int ret;
 
-	if (!smem_initialized_check())
-		return -ENODEV;
+    if (!smem_initialized_check())
+        return -ENODEV;
 
-	SMD_INFO("smd probe\n");
-	if (pdev) {
-		if (pdev->dev.of_node) {
-			pr_err("%s: invalid device tree init\n", __func__);
-			return -ENODEV;
-		} else if (pdev->dev.platform_data) {
-			ret = smd_core_platform_init(pdev);
-			if (ret) {
-				pr_err(
-				"SMD: smd_core_platform_init() failed\n");
-				return -ENODEV;
-			}
-		} else {
-			ret = smd_core_init();
-			if (ret) {
-				pr_err("smd_core_init() failed\n");
-				return -ENODEV;
-			}
-		}
-	} else {
-		pr_err("SMD: PDEV not found\n");
-		return -ENODEV;
-	}
+    SMD_INFO("smd probe\n");
+    if (pdev) {
+        if (pdev->dev.of_node) {
+            pr_err("%s: invalid device tree init\n", __func__);
+            return -ENODEV;
+        } else if (pdev->dev.platform_data) {
+            ret = smd_core_platform_init(pdev);
+            if (ret) {
+                pr_err(
+                    "SMD: smd_core_platform_init() failed\n");
+                return -ENODEV;
+            }
+        } else {
+            ret = smd_core_init();
+            if (ret) {
+                pr_err("smd_core_init() failed\n");
+                return -ENODEV;
+            }
+        }
+    } else {
+        pr_err("SMD: PDEV not found\n");
+        return -ENODEV;
+    }
 
-	ret = smsm_post_init();
-	if (ret) {
-		pr_err("smd_post_init() failed ret = %d\n", ret);
-		return ret;
-	}
-	smd_post_init(1, 0);
+    ret = smsm_post_init();
+    if (ret) {
+        pr_err("smd_post_init() failed ret = %d\n", ret);
+        return ret;
+    }
+    smd_post_init(1, 0);
 
-	return 0;
+    return 0;
 }
 
 static struct platform_driver msm_smd_driver_legacy = {
-	.probe = msm_smd_probe_legacy,
-	.driver = {
-		.name = MODULE_NAME,
-		.owner = THIS_MODULE,
-	},
+    .probe = msm_smd_probe_legacy,
+    .driver = {
+        .name = MODULE_NAME,
+        .owner = THIS_MODULE,
+    },
 };
 
-int msm_smd_driver_register(void)
-{
+int msm_smd_driver_register(void) {
 
-	int rc;
+    int rc;
 
-	rc = platform_driver_register(&msm_smd_driver_legacy);
-	if (rc) {
-		pr_err("%s: smd_driver register failed %d\n",
-			__func__, rc);
-		return rc;
-	}
-	return 0;
+    rc = platform_driver_register(&msm_smd_driver_legacy);
+    if (rc) {
+        pr_err("%s: smd_driver register failed %d\n",
+               __func__, rc);
+        return rc;
+    }
+    return 0;
 }
 EXPORT_SYMBOL(msm_smd_driver_register);
 

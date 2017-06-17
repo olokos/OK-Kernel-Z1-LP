@@ -135,7 +135,7 @@ extern struct pmx_dev spear300_pmx_gpio1;
 
 /* Add spear300 machine function declarations here */
 void __init spear300_init(struct pmx_mode *pmx_mode, struct pmx_dev **pmx_devs,
-		u8 pmx_dev_count);
+                          u8 pmx_dev_count);
 
 #endif /* CONFIG_MACH_SPEAR300 */
 
@@ -155,7 +155,7 @@ extern struct pmx_dev spear310_pmx_tdm0;
 
 /* Add spear310 machine function declarations here */
 void __init spear310_init(struct pmx_mode *pmx_mode, struct pmx_dev **pmx_devs,
-		u8 pmx_dev_count);
+                          u8 pmx_dev_count);
 
 #endif /* CONFIG_MACH_SPEAR310 */
 
@@ -195,7 +195,7 @@ extern struct pmx_dev spear320_pmx_i2c1;
 
 /* Add spear320 machine function declarations here */
 void __init spear320_init(struct pmx_mode *pmx_mode, struct pmx_dev **pmx_devs,
-		u8 pmx_dev_count);
+                          u8 pmx_dev_count);
 
 #endif /* CONFIG_MACH_SPEAR320 */
 

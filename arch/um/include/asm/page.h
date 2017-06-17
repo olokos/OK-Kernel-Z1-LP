@@ -33,9 +33,15 @@ struct page;
 
 #if defined(CONFIG_3_LEVEL_PGTABLES) && !defined(CONFIG_64BIT)
 
-typedef struct { unsigned long pte_low, pte_high; } pte_t;
-typedef struct { unsigned long pmd; } pmd_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pte_low, pte_high;
+} pte_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 #define pte_val(x) ((x).pte_low | ((unsigned long long) (x).pte_high << 32))
 
 #define pte_get_bits(pte, bits) ((pte).pte_low & (bits))
@@ -57,11 +63,17 @@ typedef unsigned long long phys_t;
 
 #else
 
-typedef struct { unsigned long pte; } pte_t;
-typedef struct { unsigned long pgd; } pgd_t;
+typedef struct {
+    unsigned long pte;
+} pte_t;
+typedef struct {
+    unsigned long pgd;
+} pgd_t;
 
 #ifdef CONFIG_3_LEVEL_PGTABLES
-typedef struct { unsigned long pmd; } pmd_t;
+typedef struct {
+    unsigned long pmd;
+} pmd_t;
 #define pmd_val(x)	((x).pmd)
 #define __pmd(x) ((pmd_t) { (x) } )
 #endif
@@ -81,7 +93,9 @@ typedef unsigned long phys_t;
 
 #endif
 
-typedef struct { unsigned long pgprot; } pgprot_t;
+typedef struct {
+    unsigned long pgprot;
+} pgprot_t;
 
 typedef struct page *pgtable_t;
 

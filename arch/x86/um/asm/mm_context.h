@@ -21,17 +21,17 @@ extern void ldt_host_info(void);
 	((LDT_PAGES_MAX*sizeof(void *))/LDT_ENTRY_SIZE)
 
 struct ldt_entry {
-	__u32 a;
-	__u32 b;
+    __u32 a;
+    __u32 b;
 };
 
 typedef struct uml_ldt {
-	int entry_count;
-	struct mutex lock;
-	union {
-		struct ldt_entry * pages[LDT_PAGES_MAX];
-		struct ldt_entry entries[LDT_DIRECT_ENTRIES];
-	} u;
+    int entry_count;
+    struct mutex lock;
+    union {
+        struct ldt_entry * pages[LDT_PAGES_MAX];
+        struct ldt_entry entries[LDT_DIRECT_ENTRIES];
+    } u;
 } uml_ldt_t;
 
 #define LDT_entry_a(info) \
@@ -66,7 +66,7 @@ typedef struct uml_ldt {
 #endif
 
 struct uml_arch_mm_context {
-	uml_ldt_t ldt;
+    uml_ldt_t ldt;
 };
 
 #endif

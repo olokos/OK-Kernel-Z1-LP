@@ -86,18 +86,18 @@
 
 /* Register rw_cfg, scope iop_scrc_out, type rw */
 typedef struct {
-  unsigned int trig    : 2;
-  unsigned int inv_crc : 1;
-  unsigned int dummy1  : 29;
+    unsigned int trig    : 2;
+    unsigned int inv_crc : 1;
+    unsigned int dummy1  : 29;
 } reg_iop_scrc_out_rw_cfg;
 #define REG_RD_ADDR_iop_scrc_out_rw_cfg 0
 #define REG_WR_ADDR_iop_scrc_out_rw_cfg 0
 
 /* Register rw_ctrl, scope iop_scrc_out, type rw */
 typedef struct {
-  unsigned int strb_src : 1;
-  unsigned int out_src  : 1;
-  unsigned int dummy1   : 30;
+    unsigned int strb_src : 1;
+    unsigned int out_src  : 1;
+    unsigned int dummy1   : 30;
 } reg_iop_scrc_out_rw_ctrl;
 #define REG_RD_ADDR_iop_scrc_out_rw_ctrl 4
 #define REG_WR_ADDR_iop_scrc_out_rw_ctrl 4
@@ -114,8 +114,8 @@ typedef unsigned int reg_iop_scrc_out_rw_crc;
 
 /* Register rw_data, scope iop_scrc_out, type rw */
 typedef struct {
-  unsigned int val : 1;
-  unsigned int dummy1 : 31;
+    unsigned int val : 1;
+    unsigned int dummy1 : 31;
 } reg_iop_scrc_out_rw_data;
 #define REG_RD_ADDR_iop_scrc_out_rw_data 16
 #define REG_WR_ADDR_iop_scrc_out_rw_data 16
@@ -127,20 +127,20 @@ typedef unsigned int reg_iop_scrc_out_r_computed_crc;
 
 /* Constants */
 enum {
-  regk_iop_scrc_out_crc                    = 0x00000001,
-  regk_iop_scrc_out_data                   = 0x00000000,
-  regk_iop_scrc_out_dif                    = 0x00000001,
-  regk_iop_scrc_out_hi                     = 0x00000000,
-  regk_iop_scrc_out_neg                    = 0x00000002,
-  regk_iop_scrc_out_no                     = 0x00000000,
-  regk_iop_scrc_out_pos                    = 0x00000001,
-  regk_iop_scrc_out_pos_neg                = 0x00000003,
-  regk_iop_scrc_out_reg                    = 0x00000000,
-  regk_iop_scrc_out_rw_cfg_default         = 0x00000000,
-  regk_iop_scrc_out_rw_crc_default         = 0x00000000,
-  regk_iop_scrc_out_rw_ctrl_default        = 0x00000000,
-  regk_iop_scrc_out_rw_data_default        = 0x00000000,
-  regk_iop_scrc_out_rw_init_crc_default    = 0x00000000,
-  regk_iop_scrc_out_yes                    = 0x00000001
+    regk_iop_scrc_out_crc                    = 0x00000001,
+    regk_iop_scrc_out_data                   = 0x00000000,
+    regk_iop_scrc_out_dif                    = 0x00000001,
+    regk_iop_scrc_out_hi                     = 0x00000000,
+    regk_iop_scrc_out_neg                    = 0x00000002,
+    regk_iop_scrc_out_no                     = 0x00000000,
+    regk_iop_scrc_out_pos                    = 0x00000001,
+    regk_iop_scrc_out_pos_neg                = 0x00000003,
+    regk_iop_scrc_out_reg                    = 0x00000000,
+    regk_iop_scrc_out_rw_cfg_default         = 0x00000000,
+    regk_iop_scrc_out_rw_crc_default         = 0x00000000,
+    regk_iop_scrc_out_rw_ctrl_default        = 0x00000000,
+    regk_iop_scrc_out_rw_data_default        = 0x00000000,
+    regk_iop_scrc_out_rw_init_crc_default    = 0x00000000,
+    regk_iop_scrc_out_yes                    = 0x00000001
 };
 #endif /* __iop_scrc_out_defs_h */

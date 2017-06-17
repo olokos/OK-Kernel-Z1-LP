@@ -85,7 +85,7 @@
 #define PSR_ENDSTATE	0
 #endif
 
-/* 
+/*
  * These are 'magic' values for PTRACE_PEEKUSR that return info about where a
  * process is located in memory.
  */
@@ -102,11 +102,11 @@
  */
 #ifndef __KERNEL__
 struct pt_regs {
-	long uregs[18];
+    long uregs[18];
 };
 #else /* __KERNEL__ */
 struct pt_regs {
-	unsigned long uregs[18];
+    unsigned long uregs[18];
 };
 #endif /* __KERNEL__ */
 
@@ -163,35 +163,33 @@ struct pt_regs {
 /* Are the current registers suitable for user mode?
  * (used to maintain security in signal handlers)
  */
-static inline int valid_user_regs(struct pt_regs *regs)
-{
-	unsigned long mode = regs->ARM_cpsr & MODE_MASK;
+static inline int valid_user_regs(struct pt_regs *regs) {
+    unsigned long mode = regs->ARM_cpsr & MODE_MASK;
 
-	/*
-	 * Always clear the F (FIQ) and A (delayed abort) bits
-	 */
-	regs->ARM_cpsr &= ~(PSR_F_BIT | PSR_A_BIT);
+    /*
+     * Always clear the F (FIQ) and A (delayed abort) bits
+     */
+    regs->ARM_cpsr &= ~(PSR_F_BIT | PSR_A_BIT);
 
-	if ((regs->ARM_cpsr & PSR_I_BIT) == 0) {
-		if (mode == USR_MODE)
-			return 1;
-		if (elf_hwcap & HWCAP_26BIT && mode == USR26_MODE)
-			return 1;
-	}
+    if ((regs->ARM_cpsr & PSR_I_BIT) == 0) {
+        if (mode == USR_MODE)
+            return 1;
+        if (elf_hwcap & HWCAP_26BIT && mode == USR26_MODE)
+            return 1;
+    }
 
-	/*
-	 * Force CPSR to something logical...
-	 */
-	regs->ARM_cpsr &= PSR_f | PSR_s | PSR_x | PSR_T_BIT | MODE32_BIT;
-	if (!(elf_hwcap & HWCAP_26BIT))
-		regs->ARM_cpsr |= USR_MODE;
+    /*
+     * Force CPSR to something logical...
+     */
+    regs->ARM_cpsr &= PSR_f | PSR_s | PSR_x | PSR_T_BIT | MODE32_BIT;
+    if (!(elf_hwcap & HWCAP_26BIT))
+        regs->ARM_cpsr |= USR_MODE;
 
-	return 0;
+    return 0;
 }
 
-static inline long regs_return_value(struct pt_regs *regs)
-{
-	return regs->ARM_r0;
+static inline long regs_return_value(struct pt_regs *regs) {
+    return regs->ARM_r0;
 }
 
 #define instruction_pointer(regs)	(regs)->ARM_pc
@@ -224,7 +222,7 @@ extern int regs_query_register_offset(const char *name);
 extern const char *regs_query_register_name(unsigned int offset);
 extern bool regs_within_kernel_stack(struct pt_regs *regs, unsigned long addr);
 extern unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
-					       unsigned int n);
+        unsigned int n);
 
 /**
  * regs_get_register() - get register value from its offset
@@ -236,17 +234,15 @@ extern unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
  * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
  */
 static inline unsigned long regs_get_register(struct pt_regs *regs,
-					      unsigned int offset)
-{
-	if (unlikely(offset > MAX_REG_OFFSET))
-		return 0;
-	return *(unsigned long *)((unsigned long)regs + offset);
+        unsigned int offset) {
+    if (unlikely(offset > MAX_REG_OFFSET))
+        return 0;
+    return *(unsigned long *)((unsigned long)regs + offset);
 }
 
 /* Valid only for Kernel mode traps. */
-static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-{
-	return regs->ARM_sp;
+static inline unsigned long kernel_stack_pointer(struct pt_regs *regs) {
+    return regs->ARM_sp;
 }
 
 #endif /* __KERNEL__ */

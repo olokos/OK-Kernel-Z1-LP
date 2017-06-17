@@ -30,16 +30,16 @@
 #define Z180_IDLE_TIMEOUT (20 * 1000)
 
 struct z180_ringbuffer {
-	unsigned int prevctx;
-	struct kgsl_memdesc      cmdbufdesc;
+    unsigned int prevctx;
+    struct kgsl_memdesc      cmdbufdesc;
 };
 
 struct z180_device {
-	struct kgsl_device dev;    /* Must be first field in this struct */
-	int current_timestamp;
-	int timestamp;
-	struct z180_ringbuffer ringbuffer;
-	spinlock_t cmdwin_lock;
+    struct kgsl_device dev;    /* Must be first field in this struct */
+    int current_timestamp;
+    int timestamp;
+    struct z180_ringbuffer ringbuffer;
+    spinlock_t cmdwin_lock;
 };
 
 int z180_dump(struct kgsl_device *, int);

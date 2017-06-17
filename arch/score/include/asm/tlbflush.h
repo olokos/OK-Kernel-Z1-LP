@@ -15,11 +15,11 @@
 extern void local_flush_tlb_all(void);
 extern void local_flush_tlb_mm(struct mm_struct *mm);
 extern void local_flush_tlb_range(struct vm_area_struct *vma,
-	unsigned long start, unsigned long end);
+                                  unsigned long start, unsigned long end);
 extern void local_flush_tlb_kernel_range(unsigned long start,
-	unsigned long end);
+        unsigned long end);
 extern void local_flush_tlb_page(struct vm_area_struct *vma,
-	unsigned long page);
+                                 unsigned long page);
 extern void local_flush_tlb_one(unsigned long vaddr);
 
 #define flush_tlb_all()			local_flush_tlb_all()
@@ -33,108 +33,95 @@ extern void local_flush_tlb_one(unsigned long vaddr);
 
 #ifndef __ASSEMBLY__
 
-static inline unsigned long pevn_get(void)
-{
-	unsigned long val;
+static inline unsigned long pevn_get(void) {
+    unsigned long val;
 
-	__asm__ __volatile__(
-		"mfcr %0, cr11\n"
-		"nop\nnop\n"
-		: "=r" (val));
+    __asm__ __volatile__(
+        "mfcr %0, cr11\n"
+        "nop\nnop\n"
+        : "=r" (val));
 
-	return val;
+    return val;
 }
 
-static inline void pevn_set(unsigned long val)
-{
-	__asm__ __volatile__(
-		"mtcr %0, cr11\n"
-		"nop\nnop\nnop\nnop\nnop\n"
-	: : "r" (val));
+static inline void pevn_set(unsigned long val) {
+    __asm__ __volatile__(
+        "mtcr %0, cr11\n"
+        "nop\nnop\nnop\nnop\nnop\n"
+        : : "r" (val));
 }
 
-static inline void pectx_set(unsigned long val)
-{
-	__asm__ __volatile__(
-		"mtcr %0, cr12\n"
-		"nop\nnop\nnop\nnop\nnop\n"
-	: : "r" (val));
+static inline void pectx_set(unsigned long val) {
+    __asm__ __volatile__(
+        "mtcr %0, cr12\n"
+        "nop\nnop\nnop\nnop\nnop\n"
+        : : "r" (val));
 }
 
-static inline unsigned long pectx_get(void)
-{
-	unsigned long val;
-	__asm__ __volatile__(
-		"mfcr %0, cr12\n"
-		"nop\nnop\n"
-	: "=r" (val));
-	return val;
+static inline unsigned long pectx_get(void) {
+    unsigned long val;
+    __asm__ __volatile__(
+        "mfcr %0, cr12\n"
+        "nop\nnop\n"
+        : "=r" (val));
+    return val;
 }
-static inline unsigned long tlblock_get(void)
-{
-	unsigned long val;
+static inline unsigned long tlblock_get(void) {
+    unsigned long val;
 
-	__asm__ __volatile__(
-		"mfcr %0, cr7\n"
-		"nop\nnop\n"
-	: "=r" (val));
-	return val;
+    __asm__ __volatile__(
+        "mfcr %0, cr7\n"
+        "nop\nnop\n"
+        : "=r" (val));
+    return val;
 }
-static inline void tlblock_set(unsigned long val)
-{
-	__asm__ __volatile__(
-		"mtcr %0, cr7\n"
-		"nop\nnop\nnop\nnop\nnop\n"
-	: : "r" (val));
+static inline void tlblock_set(unsigned long val) {
+    __asm__ __volatile__(
+        "mtcr %0, cr7\n"
+        "nop\nnop\nnop\nnop\nnop\n"
+        : : "r" (val));
 }
 
-static inline void tlbpt_set(unsigned long val)
-{
-	__asm__ __volatile__(
-		"mtcr %0, cr8\n"
-		"nop\nnop\nnop\nnop\nnop\n"
-		: : "r" (val));
+static inline void tlbpt_set(unsigned long val) {
+    __asm__ __volatile__(
+        "mtcr %0, cr8\n"
+        "nop\nnop\nnop\nnop\nnop\n"
+        : : "r" (val));
 }
 
-static inline long tlbpt_get(void)
-{
-	long val;
+static inline long tlbpt_get(void) {
+    long val;
 
-	__asm__ __volatile__(
-		"mfcr %0, cr8\n"
-		"nop\nnop\n"
-		: "=r" (val));
+    __asm__ __volatile__(
+        "mfcr %0, cr8\n"
+        "nop\nnop\n"
+        : "=r" (val));
 
-	return val;
+    return val;
 }
 
-static inline void peaddr_set(unsigned long val)
-{
-	__asm__ __volatile__(
-		"mtcr %0, cr9\n"
-		"nop\nnop\nnop\nnop\nnop\n"
-		: : "r" (val));
+static inline void peaddr_set(unsigned long val) {
+    __asm__ __volatile__(
+        "mtcr %0, cr9\n"
+        "nop\nnop\nnop\nnop\nnop\n"
+        : : "r" (val));
 }
 
 /* TLB operations. */
-static inline void tlb_probe(void)
-{
-	__asm__ __volatile__("stlb;nop;nop;nop;nop;nop");
+static inline void tlb_probe(void) {
+    __asm__ __volatile__("stlb;nop;nop;nop;nop;nop");
 }
 
-static inline void tlb_read(void)
-{
-	__asm__ __volatile__("mftlb;nop;nop;nop;nop;nop");
+static inline void tlb_read(void) {
+    __asm__ __volatile__("mftlb;nop;nop;nop;nop;nop");
 }
 
-static inline void tlb_write_indexed(void)
-{
-	__asm__ __volatile__("mtptlb;nop;nop;nop;nop;nop");
+static inline void tlb_write_indexed(void) {
+    __asm__ __volatile__("mtptlb;nop;nop;nop;nop;nop");
 }
 
-static inline void tlb_write_random(void)
-{
-	__asm__ __volatile__("mtrtlb;nop;nop;nop;nop;nop");
+static inline void tlb_write_random(void) {
+    __asm__ __volatile__("mtrtlb;nop;nop;nop;nop;nop");
 }
 
 #endif /* Not __ASSEMBLY__ */

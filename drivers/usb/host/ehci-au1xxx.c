@@ -17,234 +17,229 @@
 
 extern int usb_disabled(void);
 
-static int au1xxx_ehci_setup(struct usb_hcd *hcd)
-{
-	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
-	int ret = ehci_init(hcd);
+static int au1xxx_ehci_setup(struct usb_hcd *hcd) {
+    struct ehci_hcd *ehci = hcd_to_ehci(hcd);
+    int ret = ehci_init(hcd);
 
-	ehci->need_io_watchdog = 0;
-	ehci_reset(ehci);
-	return ret;
+    ehci->need_io_watchdog = 0;
+    ehci_reset(ehci);
+    return ret;
 }
 
 static const struct hc_driver ehci_au1xxx_hc_driver = {
-	.description		= hcd_name,
-	.product_desc		= "Au1xxx EHCI",
-	.hcd_priv_size		= sizeof(struct ehci_hcd),
+    .description		= hcd_name,
+    .product_desc		= "Au1xxx EHCI",
+    .hcd_priv_size		= sizeof(struct ehci_hcd),
 
-	/*
-	 * generic hardware linkage
-	 */
-	.irq			= ehci_irq,
-	.flags			= HCD_MEMORY | HCD_USB2,
+    /*
+     * generic hardware linkage
+     */
+    .irq			= ehci_irq,
+    .flags			= HCD_MEMORY | HCD_USB2,
 
-	/*
-	 * basic lifecycle operations
-	 *
-	 * FIXME -- ehci_init() doesn't do enough here.
-	 * See ehci-ppc-soc for a complete implementation.
-	 */
-	.reset			= au1xxx_ehci_setup,
-	.start			= ehci_run,
-	.stop			= ehci_stop,
-	.shutdown		= ehci_shutdown,
+    /*
+     * basic lifecycle operations
+     *
+     * FIXME -- ehci_init() doesn't do enough here.
+     * See ehci-ppc-soc for a complete implementation.
+     */
+    .reset			= au1xxx_ehci_setup,
+    .start			= ehci_run,
+    .stop			= ehci_stop,
+    .shutdown		= ehci_shutdown,
 
-	/*
-	 * managing i/o requests and associated device resources
-	 */
-	.urb_enqueue		= ehci_urb_enqueue,
-	.urb_dequeue		= ehci_urb_dequeue,
-	.endpoint_disable	= ehci_endpoint_disable,
-	.endpoint_reset		= ehci_endpoint_reset,
+    /*
+     * managing i/o requests and associated device resources
+     */
+    .urb_enqueue		= ehci_urb_enqueue,
+    .urb_dequeue		= ehci_urb_dequeue,
+    .endpoint_disable	= ehci_endpoint_disable,
+    .endpoint_reset		= ehci_endpoint_reset,
 
-	/*
-	 * scheduling support
-	 */
-	.get_frame_number	= ehci_get_frame,
+    /*
+     * scheduling support
+     */
+    .get_frame_number	= ehci_get_frame,
 
-	/*
-	 * root hub support
-	 */
-	.hub_status_data	= ehci_hub_status_data,
-	.hub_control		= ehci_hub_control,
-	.bus_suspend		= ehci_bus_suspend,
-	.bus_resume		= ehci_bus_resume,
-	.relinquish_port	= ehci_relinquish_port,
-	.port_handed_over	= ehci_port_handed_over,
+    /*
+     * root hub support
+     */
+    .hub_status_data	= ehci_hub_status_data,
+    .hub_control		= ehci_hub_control,
+    .bus_suspend		= ehci_bus_suspend,
+    .bus_resume		= ehci_bus_resume,
+    .relinquish_port	= ehci_relinquish_port,
+    .port_handed_over	= ehci_port_handed_over,
 
-	.clear_tt_buffer_complete	= ehci_clear_tt_buffer_complete,
+    .clear_tt_buffer_complete	= ehci_clear_tt_buffer_complete,
 };
 
-static int ehci_hcd_au1xxx_drv_probe(struct platform_device *pdev)
-{
-	struct usb_hcd *hcd;
-	struct ehci_hcd *ehci;
-	struct resource *res;
-	int ret;
+static int ehci_hcd_au1xxx_drv_probe(struct platform_device *pdev) {
+    struct usb_hcd *hcd;
+    struct ehci_hcd *ehci;
+    struct resource *res;
+    int ret;
 
-	if (usb_disabled())
-		return -ENODEV;
+    if (usb_disabled())
+        return -ENODEV;
 
-	if (pdev->resource[1].flags != IORESOURCE_IRQ) {
-		pr_debug("resource[1] is not IORESOURCE_IRQ");
-		return -ENOMEM;
-	}
-	hcd = usb_create_hcd(&ehci_au1xxx_hc_driver, &pdev->dev, "Au1xxx");
-	if (!hcd)
-		return -ENOMEM;
+    if (pdev->resource[1].flags != IORESOURCE_IRQ) {
+        pr_debug("resource[1] is not IORESOURCE_IRQ");
+        return -ENOMEM;
+    }
+    hcd = usb_create_hcd(&ehci_au1xxx_hc_driver, &pdev->dev, "Au1xxx");
+    if (!hcd)
+        return -ENOMEM;
 
-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	hcd->rsrc_start = res->start;
-	hcd->rsrc_len = resource_size(res);
+    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    hcd->rsrc_start = res->start;
+    hcd->rsrc_len = resource_size(res);
 
-	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
-		pr_debug("request_mem_region failed");
-		ret = -EBUSY;
-		goto err1;
-	}
+    if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+        pr_debug("request_mem_region failed");
+        ret = -EBUSY;
+        goto err1;
+    }
 
-	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
-	if (!hcd->regs) {
-		pr_debug("ioremap failed");
-		ret = -ENOMEM;
-		goto err2;
-	}
+    hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
+    if (!hcd->regs) {
+        pr_debug("ioremap failed");
+        ret = -ENOMEM;
+        goto err2;
+    }
 
-	if (alchemy_usb_control(ALCHEMY_USB_EHCI0, 1)) {
-		printk(KERN_INFO "%s: controller init failed!\n", pdev->name);
-		ret = -ENODEV;
-		goto err3;
-	}
+    if (alchemy_usb_control(ALCHEMY_USB_EHCI0, 1)) {
+        printk(KERN_INFO "%s: controller init failed!\n", pdev->name);
+        ret = -ENODEV;
+        goto err3;
+    }
 
-	ehci = hcd_to_ehci(hcd);
-	ehci->caps = hcd->regs;
-	ehci->regs = hcd->regs +
-		HC_LENGTH(ehci, readl(&ehci->caps->hc_capbase));
-	/* cache this readonly data; minimize chip reads */
-	ehci->hcs_params = readl(&ehci->caps->hcs_params);
+    ehci = hcd_to_ehci(hcd);
+    ehci->caps = hcd->regs;
+    ehci->regs = hcd->regs +
+                 HC_LENGTH(ehci, readl(&ehci->caps->hc_capbase));
+    /* cache this readonly data; minimize chip reads */
+    ehci->hcs_params = readl(&ehci->caps->hcs_params);
 
-	ret = usb_add_hcd(hcd, pdev->resource[1].start,
-			  IRQF_SHARED);
-	if (ret == 0) {
-		platform_set_drvdata(pdev, hcd);
-		return ret;
-	}
+    ret = usb_add_hcd(hcd, pdev->resource[1].start,
+                      IRQF_SHARED);
+    if (ret == 0) {
+        platform_set_drvdata(pdev, hcd);
+        return ret;
+    }
 
-	alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
+    alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
 err3:
-	iounmap(hcd->regs);
+    iounmap(hcd->regs);
 err2:
-	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+    release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
 err1:
-	usb_put_hcd(hcd);
-	return ret;
+    usb_put_hcd(hcd);
+    return ret;
 }
 
-static int ehci_hcd_au1xxx_drv_remove(struct platform_device *pdev)
-{
-	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+static int ehci_hcd_au1xxx_drv_remove(struct platform_device *pdev) {
+    struct usb_hcd *hcd = platform_get_drvdata(pdev);
 
-	usb_remove_hcd(hcd);
-	alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
-	iounmap(hcd->regs);
-	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
-	usb_put_hcd(hcd);
-	platform_set_drvdata(pdev, NULL);
+    usb_remove_hcd(hcd);
+    alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
+    iounmap(hcd->regs);
+    release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+    usb_put_hcd(hcd);
+    platform_set_drvdata(pdev, NULL);
 
-	return 0;
+    return 0;
 }
 
 #ifdef CONFIG_PM
-static int ehci_hcd_au1xxx_drv_suspend(struct device *dev)
-{
-	struct usb_hcd *hcd = dev_get_drvdata(dev);
-	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
-	unsigned long flags;
-	int rc = 0;
+static int ehci_hcd_au1xxx_drv_suspend(struct device *dev) {
+    struct usb_hcd *hcd = dev_get_drvdata(dev);
+    struct ehci_hcd *ehci = hcd_to_ehci(hcd);
+    unsigned long flags;
+    int rc = 0;
 
-	if (time_before(jiffies, ehci->next_statechange))
-		msleep(10);
+    if (time_before(jiffies, ehci->next_statechange))
+        msleep(10);
 
-	/* Root hub was already suspended. Disable irq emission and
-	 * mark HW unaccessible.  The PM and USB cores make sure that
-	 * the root hub is either suspended or stopped.
-	 */
-	ehci_prepare_ports_for_controller_suspend(ehci, device_may_wakeup(dev));
-	spin_lock_irqsave(&ehci->lock, flags);
-	ehci_writel(ehci, 0, &ehci->regs->intr_enable);
-	(void)ehci_readl(ehci, &ehci->regs->intr_enable);
+    /* Root hub was already suspended. Disable irq emission and
+     * mark HW unaccessible.  The PM and USB cores make sure that
+     * the root hub is either suspended or stopped.
+     */
+    ehci_prepare_ports_for_controller_suspend(ehci, device_may_wakeup(dev));
+    spin_lock_irqsave(&ehci->lock, flags);
+    ehci_writel(ehci, 0, &ehci->regs->intr_enable);
+    (void)ehci_readl(ehci, &ehci->regs->intr_enable);
 
-	clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-	spin_unlock_irqrestore(&ehci->lock, flags);
+    clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+    spin_unlock_irqrestore(&ehci->lock, flags);
 
-	// could save FLADJ in case of Vaux power loss
-	// ... we'd only use it to handle clock skew
+    // could save FLADJ in case of Vaux power loss
+    // ... we'd only use it to handle clock skew
 
-	alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
+    alchemy_usb_control(ALCHEMY_USB_EHCI0, 0);
 
-	return rc;
+    return rc;
 }
 
-static int ehci_hcd_au1xxx_drv_resume(struct device *dev)
-{
-	struct usb_hcd *hcd = dev_get_drvdata(dev);
-	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
+static int ehci_hcd_au1xxx_drv_resume(struct device *dev) {
+    struct usb_hcd *hcd = dev_get_drvdata(dev);
+    struct ehci_hcd *ehci = hcd_to_ehci(hcd);
 
-	alchemy_usb_control(ALCHEMY_USB_EHCI0, 1);
+    alchemy_usb_control(ALCHEMY_USB_EHCI0, 1);
 
-	// maybe restore FLADJ
+    // maybe restore FLADJ
 
-	if (time_before(jiffies, ehci->next_statechange))
-		msleep(100);
+    if (time_before(jiffies, ehci->next_statechange))
+        msleep(100);
 
-	/* Mark hardware accessible again as we are out of D3 state by now */
-	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+    /* Mark hardware accessible again as we are out of D3 state by now */
+    set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
 
-	/* If CF is still set, we maintained PCI Vaux power.
-	 * Just undo the effect of ehci_pci_suspend().
-	 */
-	if (ehci_readl(ehci, &ehci->regs->configured_flag) == FLAG_CF) {
-		int	mask = INTR_MASK;
+    /* If CF is still set, we maintained PCI Vaux power.
+     * Just undo the effect of ehci_pci_suspend().
+     */
+    if (ehci_readl(ehci, &ehci->regs->configured_flag) == FLAG_CF) {
+        int	mask = INTR_MASK;
 
-		ehci_prepare_ports_for_controller_resume(ehci);
-		if (!hcd->self.root_hub->do_remote_wakeup)
-			mask &= ~STS_PCD;
-		ehci_writel(ehci, mask, &ehci->regs->intr_enable);
-		ehci_readl(ehci, &ehci->regs->intr_enable);
-		return 0;
-	}
+        ehci_prepare_ports_for_controller_resume(ehci);
+        if (!hcd->self.root_hub->do_remote_wakeup)
+            mask &= ~STS_PCD;
+        ehci_writel(ehci, mask, &ehci->regs->intr_enable);
+        ehci_readl(ehci, &ehci->regs->intr_enable);
+        return 0;
+    }
 
-	ehci_dbg(ehci, "lost power, restarting\n");
-	usb_root_hub_lost_power(hcd->self.root_hub);
+    ehci_dbg(ehci, "lost power, restarting\n");
+    usb_root_hub_lost_power(hcd->self.root_hub);
 
-	/* Else reset, to cope with power loss or flush-to-storage
-	 * style "resume" having let BIOS kick in during reboot.
-	 */
-	(void) ehci_halt(ehci);
-	(void) ehci_reset(ehci);
+    /* Else reset, to cope with power loss or flush-to-storage
+     * style "resume" having let BIOS kick in during reboot.
+     */
+    (void) ehci_halt(ehci);
+    (void) ehci_reset(ehci);
 
-	/* emptying the schedule aborts any urbs */
-	spin_lock_irq(&ehci->lock);
-	if (ehci->reclaim)
-		end_unlink_async(ehci);
-	ehci_work(ehci);
-	spin_unlock_irq(&ehci->lock);
+    /* emptying the schedule aborts any urbs */
+    spin_lock_irq(&ehci->lock);
+    if (ehci->reclaim)
+        end_unlink_async(ehci);
+    ehci_work(ehci);
+    spin_unlock_irq(&ehci->lock);
 
-	ehci_writel(ehci, ehci->command, &ehci->regs->command);
-	ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
-	ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
+    ehci_writel(ehci, ehci->command, &ehci->regs->command);
+    ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
+    ehci_readl(ehci, &ehci->regs->command);	/* unblock posted writes */
 
-	/* here we "know" root ports should always stay powered */
-	ehci_port_power(ehci, 1);
+    /* here we "know" root ports should always stay powered */
+    ehci_port_power(ehci, 1);
 
-	ehci->rh_state = EHCI_RH_SUSPENDED;
+    ehci->rh_state = EHCI_RH_SUSPENDED;
 
-	return 0;
+    return 0;
 }
 
 static const struct dev_pm_ops au1xxx_ehci_pmops = {
-	.suspend	= ehci_hcd_au1xxx_drv_suspend,
-	.resume		= ehci_hcd_au1xxx_drv_resume,
+    .suspend	= ehci_hcd_au1xxx_drv_suspend,
+    .resume		= ehci_hcd_au1xxx_drv_resume,
 };
 
 #define AU1XXX_EHCI_PMOPS &au1xxx_ehci_pmops
@@ -254,14 +249,14 @@ static const struct dev_pm_ops au1xxx_ehci_pmops = {
 #endif
 
 static struct platform_driver ehci_hcd_au1xxx_driver = {
-	.probe		= ehci_hcd_au1xxx_drv_probe,
-	.remove		= ehci_hcd_au1xxx_drv_remove,
-	.shutdown	= usb_hcd_platform_shutdown,
-	.driver = {
-		.name	= "au1xxx-ehci",
-		.owner	= THIS_MODULE,
-		.pm	= AU1XXX_EHCI_PMOPS,
-	}
+    .probe		= ehci_hcd_au1xxx_drv_probe,
+    .remove		= ehci_hcd_au1xxx_drv_remove,
+    .shutdown	= usb_hcd_platform_shutdown,
+    .driver = {
+        .name	= "au1xxx-ehci",
+        .owner	= THIS_MODULE,
+        .pm	= AU1XXX_EHCI_PMOPS,
+    }
 };
 
 MODULE_ALIAS("platform:au1xxx-ehci");

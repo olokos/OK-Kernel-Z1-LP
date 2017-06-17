@@ -123,10 +123,10 @@
  * data with timestamps.
  */
 struct ssp_request {
-	char __user *buf;	/* Where to put the data. */
-	size_t len;		/* Size of buf. MUST be a multiple of */
-				/* SSP_INPUT_CHUNK_SIZE! */
-	struct timespec ts;	/* The time the data was sampled. */
+    char __user *buf;	/* Where to put the data. */
+    size_t len;		/* Size of buf. MUST be a multiple of */
+    /* SSP_INPUT_CHUNK_SIZE! */
+    struct timespec ts;	/* The time the data was sampled. */
 };
 
 #endif

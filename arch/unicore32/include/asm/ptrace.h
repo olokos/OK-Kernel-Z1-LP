@@ -46,7 +46,7 @@
  * has to be a multiple of 8.
  */
 struct pt_regs {
-	unsigned long uregs[34];
+    unsigned long uregs[34];
 };
 
 #define UCreg_asr		uregs[32]
@@ -101,26 +101,25 @@ struct pt_regs {
 /* Are the current registers suitable for user mode?
  * (used to maintain security in signal handlers)
  */
-static inline int valid_user_regs(struct pt_regs *regs)
-{
-	unsigned long mode = regs->UCreg_asr & MODE_MASK;
+static inline int valid_user_regs(struct pt_regs *regs) {
+    unsigned long mode = regs->UCreg_asr & MODE_MASK;
 
-	/*
-	 * Always clear the R (REAL) bits
-	 */
-	regs->UCreg_asr &= ~(PSR_R_BIT);
+    /*
+     * Always clear the R (REAL) bits
+     */
+    regs->UCreg_asr &= ~(PSR_R_BIT);
 
-	if ((regs->UCreg_asr & PSR_I_BIT) == 0) {
-		if (mode == USER_MODE)
-			return 1;
-	}
+    if ((regs->UCreg_asr & PSR_I_BIT) == 0) {
+        if (mode == USER_MODE)
+            return 1;
+    }
 
-	/*
-	 * Force ASR to something logical...
-	 */
-	regs->UCreg_asr &= PSR_f | USER_MODE;
+    /*
+     * Force ASR to something logical...
+     */
+    regs->UCreg_asr &= PSR_f | USER_MODE;
 
-	return 0;
+    return 0;
 }
 
 #define instruction_pointer(regs)	((regs)->UCreg_pc)

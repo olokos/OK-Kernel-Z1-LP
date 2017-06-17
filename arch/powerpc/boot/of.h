@@ -11,9 +11,9 @@ void *of_vmlinux_alloc(unsigned long size);
 void of_exit(void);
 void *of_finddevice(const char *name);
 int of_getprop(const void *phandle, const char *name, void *buf,
-	       const int buflen);
+               const int buflen);
 int of_setprop(const void *phandle, const char *name, const void *buf,
-	       const int buflen);
+               const int buflen);
 
 /* Console functions */
 void of_console_init(void);

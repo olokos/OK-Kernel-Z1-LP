@@ -81,137 +81,132 @@
 /* Stacked Virt. Terminates operation for the specified virtual processor.*/
 
 union vac {
-	unsigned long value;
-	struct {
-		unsigned int a_int:1;
-		unsigned int a_from_int_cr:1;
-		unsigned int a_to_int_cr:1;
-		unsigned int a_from_psr:1;
-		unsigned int a_from_cpuid:1;
-		unsigned int a_cover:1;
-		unsigned int a_bsw:1;
-		long reserved:57;
-	};
+    unsigned long value;
+    struct {
+        unsigned int a_int:1;
+        unsigned int a_from_int_cr:1;
+        unsigned int a_to_int_cr:1;
+        unsigned int a_from_psr:1;
+        unsigned int a_from_cpuid:1;
+        unsigned int a_cover:1;
+        unsigned int a_bsw:1;
+        long reserved:57;
+    };
 };
 
 union vdc {
-	unsigned long value;
-	struct {
-		unsigned int d_vmsw:1;
-		unsigned int d_extint:1;
-		unsigned int d_ibr_dbr:1;
-		unsigned int d_pmc:1;
-		unsigned int d_to_pmd:1;
-		unsigned int d_itm:1;
-		long reserved:58;
-	};
+    unsigned long value;
+    struct {
+        unsigned int d_vmsw:1;
+        unsigned int d_extint:1;
+        unsigned int d_ibr_dbr:1;
+        unsigned int d_pmc:1;
+        unsigned int d_to_pmd:1;
+        unsigned int d_itm:1;
+        long reserved:58;
+    };
 };
 
 struct vpd {
-	union vac   vac;
-	union vdc   vdc;
-	unsigned long  virt_env_vaddr;
-	unsigned long  reserved1[29];
-	unsigned long  vhpi;
-	unsigned long  reserved2[95];
-	unsigned long  vgr[16];
-	unsigned long  vbgr[16];
-	unsigned long  vnat;
-	unsigned long  vbnat;
-	unsigned long  vcpuid[5];
-	unsigned long  reserved3[11];
-	unsigned long  vpsr;
-	unsigned long  vpr;
-	unsigned long  reserved4[76];
-	union {
-		unsigned long  vcr[128];
-		struct {
-			unsigned long dcr;
-			unsigned long itm;
-			unsigned long iva;
-			unsigned long rsv1[5];
-			unsigned long pta;
-			unsigned long rsv2[7];
-			unsigned long ipsr;
-			unsigned long isr;
-			unsigned long rsv3;
-			unsigned long iip;
-			unsigned long ifa;
-			unsigned long itir;
-			unsigned long iipa;
-			unsigned long ifs;
-			unsigned long iim;
-			unsigned long iha;
-			unsigned long rsv4[38];
-			unsigned long lid;
-			unsigned long ivr;
-			unsigned long tpr;
-			unsigned long eoi;
-			unsigned long irr[4];
-			unsigned long itv;
-			unsigned long pmv;
-			unsigned long cmcv;
-			unsigned long rsv5[5];
-			unsigned long lrr0;
-			unsigned long lrr1;
-			unsigned long rsv6[46];
-		};
-	};
-	unsigned long  reserved5[128];
-	unsigned long  reserved6[3456];
-	unsigned long  vmm_avail[128];
-	unsigned long  reserved7[4096];
+    union vac   vac;
+    union vdc   vdc;
+    unsigned long  virt_env_vaddr;
+    unsigned long  reserved1[29];
+    unsigned long  vhpi;
+    unsigned long  reserved2[95];
+    unsigned long  vgr[16];
+    unsigned long  vbgr[16];
+    unsigned long  vnat;
+    unsigned long  vbnat;
+    unsigned long  vcpuid[5];
+    unsigned long  reserved3[11];
+    unsigned long  vpsr;
+    unsigned long  vpr;
+    unsigned long  reserved4[76];
+    union {
+        unsigned long  vcr[128];
+        struct {
+            unsigned long dcr;
+            unsigned long itm;
+            unsigned long iva;
+            unsigned long rsv1[5];
+            unsigned long pta;
+            unsigned long rsv2[7];
+            unsigned long ipsr;
+            unsigned long isr;
+            unsigned long rsv3;
+            unsigned long iip;
+            unsigned long ifa;
+            unsigned long itir;
+            unsigned long iipa;
+            unsigned long ifs;
+            unsigned long iim;
+            unsigned long iha;
+            unsigned long rsv4[38];
+            unsigned long lid;
+            unsigned long ivr;
+            unsigned long tpr;
+            unsigned long eoi;
+            unsigned long irr[4];
+            unsigned long itv;
+            unsigned long pmv;
+            unsigned long cmcv;
+            unsigned long rsv5[5];
+            unsigned long lrr0;
+            unsigned long lrr1;
+            unsigned long rsv6[46];
+        };
+    };
+    unsigned long  reserved5[128];
+    unsigned long  reserved6[3456];
+    unsigned long  vmm_avail[128];
+    unsigned long  reserved7[4096];
 };
 
 #define PAL_PROC_VM_BIT		(1UL << 40)
 #define PAL_PROC_VMSW_BIT	(1UL << 54)
 
 static inline s64 ia64_pal_vp_env_info(u64 *buffer_size,
-		u64 *vp_env_info)
-{
-	struct ia64_pal_retval iprv;
-	PAL_CALL_STK(iprv, PAL_VP_ENV_INFO, 0, 0, 0);
-	*buffer_size = iprv.v0;
-	*vp_env_info = iprv.v1;
-	return iprv.status;
+                                       u64 *vp_env_info) {
+    struct ia64_pal_retval iprv;
+    PAL_CALL_STK(iprv, PAL_VP_ENV_INFO, 0, 0, 0);
+    *buffer_size = iprv.v0;
+    *vp_env_info = iprv.v1;
+    return iprv.status;
 }
 
-static inline s64 ia64_pal_vp_exit_env(u64 iva)
-{
-	struct ia64_pal_retval iprv;
+static inline s64 ia64_pal_vp_exit_env(u64 iva) {
+    struct ia64_pal_retval iprv;
 
-	PAL_CALL_STK(iprv, PAL_VP_EXIT_ENV, (u64)iva, 0, 0);
-	return iprv.status;
+    PAL_CALL_STK(iprv, PAL_VP_EXIT_ENV, (u64)iva, 0, 0);
+    return iprv.status;
 }
 
 static inline s64 ia64_pal_vp_init_env(u64 config_options, u64 pbase_addr,
-			u64 vbase_addr, u64 *vsa_base)
-{
-	struct ia64_pal_retval iprv;
+                                       u64 vbase_addr, u64 *vsa_base) {
+    struct ia64_pal_retval iprv;
 
-	PAL_CALL_STK(iprv, PAL_VP_INIT_ENV, config_options, pbase_addr,
-			vbase_addr);
-	*vsa_base = iprv.v0;
+    PAL_CALL_STK(iprv, PAL_VP_INIT_ENV, config_options, pbase_addr,
+                 vbase_addr);
+    *vsa_base = iprv.v0;
 
-	return iprv.status;
+    return iprv.status;
 }
 
-static inline s64 ia64_pal_vp_restore(u64 *vpd, u64 pal_proc_vector)
-{
-	struct ia64_pal_retval iprv;
+static inline s64 ia64_pal_vp_restore(u64 *vpd, u64 pal_proc_vector) {
+    struct ia64_pal_retval iprv;
 
-	PAL_CALL_STK(iprv, PAL_VP_RESTORE, (u64)vpd, pal_proc_vector, 0);
+    PAL_CALL_STK(iprv, PAL_VP_RESTORE, (u64)vpd, pal_proc_vector, 0);
 
-	return iprv.status;
+    return iprv.status;
 }
 
-static inline s64 ia64_pal_vp_save(u64 *vpd, u64 pal_proc_vector)
-{
-	struct ia64_pal_retval iprv;
+static inline s64 ia64_pal_vp_save(u64 *vpd, u64 pal_proc_vector) {
+    struct ia64_pal_retval iprv;
 
-	PAL_CALL_STK(iprv, PAL_VP_SAVE, (u64)vpd, pal_proc_vector, 0);
+    PAL_CALL_STK(iprv, PAL_VP_SAVE, (u64)vpd, pal_proc_vector, 0);
 
-	return iprv.status;
+    return iprv.status;
 }
 
 #endif

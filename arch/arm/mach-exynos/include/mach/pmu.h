@@ -16,16 +16,16 @@
 #define PMU_TABLE_END	NULL
 
 enum sys_powerdown {
-	SYS_AFTR,
-	SYS_LPA,
-	SYS_SLEEP,
-	NUM_SYS_POWERDOWN,
+    SYS_AFTR,
+    SYS_LPA,
+    SYS_SLEEP,
+    NUM_SYS_POWERDOWN,
 };
 
 extern unsigned long l2x0_regs_phys;
 struct exynos4_pmu_conf {
-	void __iomem *reg;
-	unsigned int val[NUM_SYS_POWERDOWN];
+    void __iomem *reg;
+    unsigned int val[NUM_SYS_POWERDOWN];
 };
 
 extern void exynos4_sys_powerdown_conf(enum sys_powerdown mode);

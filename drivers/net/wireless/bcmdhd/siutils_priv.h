@@ -2,13 +2,13 @@
  * Include file private to the SOC Interconnect support files.
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -44,54 +44,54 @@ typedef void (*si_intrsrestore_t)(void *intr_arg, uint32 arg);
 typedef bool (*si_intrsenabled_t)(void *intr_arg);
 
 typedef struct gpioh_item {
-	void			*arg;
-	bool			level;
-	gpio_handler_t		handler;
-	uint32			event;
-	struct gpioh_item	*next;
+    void			*arg;
+    bool			level;
+    gpio_handler_t		handler;
+    uint32			event;
+    struct gpioh_item	*next;
 } gpioh_item_t;
 
 /* misc si info needed by some of the routines */
 typedef struct si_info {
-	struct si_pub pub;		/* back plane public state (must be first field) */
+    struct si_pub pub;		/* back plane public state (must be first field) */
 
-	void	*osh;			/* osl os handle */
-	void	*sdh;			/* bcmsdh handle */
+    void	*osh;			/* osl os handle */
+    void	*sdh;			/* bcmsdh handle */
 
-	uint	dev_coreid;		/* the core provides driver functions */
-	void	*intr_arg;		/* interrupt callback function arg */
-	si_intrsoff_t intrsoff_fn;	/* turns chip interrupts off */
-	si_intrsrestore_t intrsrestore_fn; /* restore chip interrupts */
-	si_intrsenabled_t intrsenabled_fn; /* check if interrupts are enabled */
+    uint	dev_coreid;		/* the core provides driver functions */
+    void	*intr_arg;		/* interrupt callback function arg */
+    si_intrsoff_t intrsoff_fn;	/* turns chip interrupts off */
+    si_intrsrestore_t intrsrestore_fn; /* restore chip interrupts */
+    si_intrsenabled_t intrsenabled_fn; /* check if interrupts are enabled */
 
-	void *pch;			/* PCI/E core handle */
+    void *pch;			/* PCI/E core handle */
 
-	gpioh_item_t *gpioh_head; 	/* GPIO event handlers list */
+    gpioh_item_t *gpioh_head; 	/* GPIO event handlers list */
 
-	bool	memseg;			/* flag to toggle MEM_SEG register */
+    bool	memseg;			/* flag to toggle MEM_SEG register */
 
-	char *vars;
-	uint varsz;
+    char *vars;
+    uint varsz;
 
-	void	*curmap;		/* current regs va */
-	void	*regs[SI_MAXCORES];	/* other regs va */
+    void	*curmap;		/* current regs va */
+    void	*regs[SI_MAXCORES];	/* other regs va */
 
-	uint	curidx;			/* current core index */
-	uint	numcores;		/* # discovered cores */
-	uint	coreid[SI_MAXCORES];	/* id of each core */
-	uint32	coresba[SI_MAXCORES];	/* backplane address of each core */
-	void	*regs2[SI_MAXCORES];	/* va of each core second register set (usbh20) */
-	uint32	coresba2[SI_MAXCORES];	/* address of each core second register set (usbh20) */
-	uint32	coresba_size[SI_MAXCORES]; /* backplane address space size */
-	uint32	coresba2_size[SI_MAXCORES]; /* second address space size */
+    uint	curidx;			/* current core index */
+    uint	numcores;		/* # discovered cores */
+    uint	coreid[SI_MAXCORES];	/* id of each core */
+    uint32	coresba[SI_MAXCORES];	/* backplane address of each core */
+    void	*regs2[SI_MAXCORES];	/* va of each core second register set (usbh20) */
+    uint32	coresba2[SI_MAXCORES];	/* address of each core second register set (usbh20) */
+    uint32	coresba_size[SI_MAXCORES]; /* backplane address space size */
+    uint32	coresba2_size[SI_MAXCORES]; /* second address space size */
 
-	void	*curwrap;		/* current wrapper va */
-	void	*wrappers[SI_MAXCORES];	/* other cores wrapper va */
-	uint32	wrapba[SI_MAXCORES];	/* address of controlling wrapper */
+    void	*curwrap;		/* current wrapper va */
+    void	*wrappers[SI_MAXCORES];	/* other cores wrapper va */
+    uint32	wrapba[SI_MAXCORES];	/* address of controlling wrapper */
 
-	uint32	cia[SI_MAXCORES];	/* erom cia entry for each core */
-	uint32	cib[SI_MAXCORES];	/* erom cia entry for each core */
-	uint32	oob_router;		/* oob router registers for axi */
+    uint32	cia[SI_MAXCORES];	/* erom cia entry for each core */
+    uint32	cib[SI_MAXCORES];	/* erom cia entry for each core */
+    uint32	oob_router;		/* oob router registers for axi */
 } si_info_t;
 
 #define	SI_INFO(sih)	(si_info_t *)(uintptr)sih

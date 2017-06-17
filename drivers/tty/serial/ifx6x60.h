@@ -67,63 +67,63 @@
 #define IFX_SPI_POWER_SRDY		2
 
 struct ifx_spi_device {
-	/* Our SPI device */
-	struct spi_device *spi_dev;
+    /* Our SPI device */
+    struct spi_device *spi_dev;
 
-	/* Port specific data */
-	struct kfifo tx_fifo;
-	spinlock_t fifo_lock;
-	unsigned long signal_state;
+    /* Port specific data */
+    struct kfifo tx_fifo;
+    spinlock_t fifo_lock;
+    unsigned long signal_state;
 
-	/* TTY Layer logic */
-	struct tty_port tty_port;
-	struct device *tty_dev;
-	int minor;
+    /* TTY Layer logic */
+    struct tty_port tty_port;
+    struct device *tty_dev;
+    int minor;
 
-	/* Low level I/O work */
-	struct tasklet_struct io_work_tasklet;
-	unsigned long flags;
-	dma_addr_t rx_dma;
-	dma_addr_t tx_dma;
+    /* Low level I/O work */
+    struct tasklet_struct io_work_tasklet;
+    unsigned long flags;
+    dma_addr_t rx_dma;
+    dma_addr_t tx_dma;
 
-	int modem;		/* Modem type */
-	int use_dma;		/* provide dma-able addrs in SPI msg */
-	long max_hz;		/* max SPI frequency */
+    int modem;		/* Modem type */
+    int use_dma;		/* provide dma-able addrs in SPI msg */
+    long max_hz;		/* max SPI frequency */
 
-	spinlock_t write_lock;
-	int write_pending;
-	spinlock_t power_lock;
-	unsigned char power_status;
+    spinlock_t write_lock;
+    int write_pending;
+    spinlock_t power_lock;
+    unsigned char power_status;
 
-	unsigned char *rx_buffer;
-	unsigned char *tx_buffer;
-	dma_addr_t rx_bus;
-	dma_addr_t tx_bus;
-	unsigned char spi_more;
-	unsigned char spi_slave_cts;
+    unsigned char *rx_buffer;
+    unsigned char *tx_buffer;
+    dma_addr_t rx_bus;
+    dma_addr_t tx_bus;
+    unsigned char spi_more;
+    unsigned char spi_slave_cts;
 
-	struct timer_list spi_timer;
+    struct timer_list spi_timer;
 
-	struct spi_message spi_msg;
-	struct spi_transfer spi_xfer;
+    struct spi_message spi_msg;
+    struct spi_transfer spi_xfer;
 
-	struct {
-		/* gpio lines */
-		unsigned short srdy;		/* slave-ready gpio */
-		unsigned short mrdy;		/* master-ready gpio */
-		unsigned short reset;		/* modem-reset gpio */
-		unsigned short po;		/* modem-on gpio */
-		unsigned short reset_out;	/* modem-in-reset gpio */
-		/* state/stats */
-		int unack_srdy_int_nb;
-	} gpio;
+    struct {
+        /* gpio lines */
+        unsigned short srdy;		/* slave-ready gpio */
+        unsigned short mrdy;		/* master-ready gpio */
+        unsigned short reset;		/* modem-reset gpio */
+        unsigned short po;		/* modem-on gpio */
+        unsigned short reset_out;	/* modem-in-reset gpio */
+        /* state/stats */
+        int unack_srdy_int_nb;
+    } gpio;
 
-	/* modem reset */
-	unsigned long mdm_reset_state;
+    /* modem reset */
+    unsigned long mdm_reset_state;
 #define MR_START	0
 #define MR_INPROGRESS	1
 #define MR_COMPLETE	2
-	wait_queue_head_t mdm_reset_wait;
+    wait_queue_head_t mdm_reset_wait;
 };
 
 #endif /* _IFX6X60_H */

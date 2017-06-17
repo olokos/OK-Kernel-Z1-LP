@@ -20,15 +20,15 @@
 #define DIR_MODE         0550
 
 extern struct dentry *hypfs_mkdir(struct super_block *sb, struct dentry *parent,
-				  const char *name);
+                                  const char *name);
 
 extern struct dentry *hypfs_create_u64(struct super_block *sb,
-				       struct dentry *dir, const char *name,
-				       __u64 value);
+                                       struct dentry *dir, const char *name,
+                                       __u64 value);
 
 extern struct dentry *hypfs_create_str(struct super_block *sb,
-				       struct dentry *dir, const char *name,
-				       char *string);
+                                       struct dentry *dir, const char *name,
+                                       char *string);
 
 /* LPAR Hypervisor */
 extern int hypfs_diag_init(void);
@@ -44,24 +44,24 @@ extern int hypfs_vm_create_files(struct super_block *sb, struct dentry *root);
 struct hypfs_dbfs_file;
 
 struct hypfs_dbfs_data {
-	void			*buf;
-	void			*buf_free_ptr;
-	size_t			size;
-	struct hypfs_dbfs_file	*dbfs_file;
-	struct kref		kref;
+    void			*buf;
+    void			*buf_free_ptr;
+    size_t			size;
+    struct hypfs_dbfs_file	*dbfs_file;
+    struct kref		kref;
 };
 
 struct hypfs_dbfs_file {
-	const char	*name;
-	int		(*data_create)(void **data, void **data_free_ptr,
-				       size_t *size);
-	void		(*data_free)(const void *buf_free_ptr);
+    const char	*name;
+    int		(*data_create)(void **data, void **data_free_ptr,
+                           size_t *size);
+    void		(*data_free)(const void *buf_free_ptr);
 
-	/* Private data for hypfs_dbfs.c */
-	struct hypfs_dbfs_data	*data;
-	struct delayed_work	data_free_work;
-	struct mutex		lock;
-	struct dentry		*dentry;
+    /* Private data for hypfs_dbfs.c */
+    struct hypfs_dbfs_data	*data;
+    struct delayed_work	data_free_work;
+    struct mutex		lock;
+    struct dentry		*dentry;
 };
 
 extern int hypfs_dbfs_init(void);

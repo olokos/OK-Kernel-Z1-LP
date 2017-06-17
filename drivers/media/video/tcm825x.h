@@ -154,8 +154,8 @@
 
 /* define a structure for tcm825x register initialization values */
 struct tcm825x_reg {
-	u8 val;
-	u16 reg;
+    u8 val;
+    u16 reg;
 };
 
 enum image_size { subQCIF = 0, QQVGA, QCIF, QVGA, CIF, VGA };
@@ -167,34 +167,34 @@ enum pixel_format { YUV422 = 0, RGB565 };
 #define TCM825X_XCLK_MAX	25000000
 
 struct capture_size {
-	unsigned long width;
-	unsigned long height;
+    unsigned long width;
+    unsigned long height;
 };
 
 struct tcm825x_platform_data {
-	/* Is the sensor usable? Doesn't yet mean it's there, but you
-	 * can try! */
-	int (*is_okay)(void);
-	/* Set power state, zero is off, non-zero is on. */
-	int (*power_set)(int power);
-	/* Default registers written after power-on or reset. */
-	const struct tcm825x_reg *(*default_regs)(void);
-	int (*needs_reset)(struct v4l2_int_device *s, void *buf,
-			   struct v4l2_pix_format *fmt);
-	int (*ifparm)(struct v4l2_ifparm *p);
-	int (*is_upside_down)(void);
+    /* Is the sensor usable? Doesn't yet mean it's there, but you
+     * can try! */
+    int (*is_okay)(void);
+    /* Set power state, zero is off, non-zero is on. */
+    int (*power_set)(int power);
+    /* Default registers written after power-on or reset. */
+    const struct tcm825x_reg *(*default_regs)(void);
+    int (*needs_reset)(struct v4l2_int_device *s, void *buf,
+                       struct v4l2_pix_format *fmt);
+    int (*ifparm)(struct v4l2_ifparm *p);
+    int (*is_upside_down)(void);
 };
 
 /* Array of image sizes supported by TCM825X.  These must be ordered from
  * smallest image size to largest.
  */
 static const struct capture_size tcm825x_sizes[] = {
-	{ 128,  96 }, /* subQCIF */
-	{ 160, 120 }, /* QQVGA */
-	{ 176, 144 }, /* QCIF */
-	{ 320, 240 }, /* QVGA */
-	{ 352, 288 }, /* CIF */
-	{ 640, 480 }, /* VGA */
+    { 128,  96 }, /* subQCIF */
+    { 160, 120 }, /* QQVGA */
+    { 176, 144 }, /* QCIF */
+    { 320, 240 }, /* QVGA */
+    { 352, 288 }, /* CIF */
+    { 640, 480 }, /* VGA */
 };
 
 #endif /* ifndef TCM825X_H */

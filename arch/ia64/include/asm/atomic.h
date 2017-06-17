@@ -27,59 +27,55 @@
 #define atomic64_set(v,i)	(((v)->counter) = (i))
 
 static __inline__ int
-ia64_atomic_add (int i, atomic_t *v)
-{
-	__s32 old, new;
-	CMPXCHG_BUGCHECK_DECL
+ia64_atomic_add (int i, atomic_t *v) {
+    __s32 old, new;
+    CMPXCHG_BUGCHECK_DECL
 
-	do {
-		CMPXCHG_BUGCHECK(v);
-		old = atomic_read(v);
-		new = old + i;
-	} while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic_t)) != old);
-	return new;
+    do {
+        CMPXCHG_BUGCHECK(v);
+        old = atomic_read(v);
+        new = old + i;
+    } while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic_t)) != old);
+    return new;
 }
 
 static __inline__ long
-ia64_atomic64_add (__s64 i, atomic64_t *v)
-{
-	__s64 old, new;
-	CMPXCHG_BUGCHECK_DECL
+ia64_atomic64_add (__s64 i, atomic64_t *v) {
+    __s64 old, new;
+    CMPXCHG_BUGCHECK_DECL
 
-	do {
-		CMPXCHG_BUGCHECK(v);
-		old = atomic64_read(v);
-		new = old + i;
-	} while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic64_t)) != old);
-	return new;
+    do {
+        CMPXCHG_BUGCHECK(v);
+        old = atomic64_read(v);
+        new = old + i;
+    } while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic64_t)) != old);
+    return new;
 }
 
 static __inline__ int
-ia64_atomic_sub (int i, atomic_t *v)
-{
-	__s32 old, new;
-	CMPXCHG_BUGCHECK_DECL
+ia64_atomic_sub (int i, atomic_t *v) {
+    __s32 old, new;
+    CMPXCHG_BUGCHECK_DECL
 
-	do {
-		CMPXCHG_BUGCHECK(v);
-		old = atomic_read(v);
-		new = old - i;
-	} while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic_t)) != old);
-	return new;
+    do {
+        CMPXCHG_BUGCHECK(v);
+        old = atomic_read(v);
+        new = old - i;
+    } while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic_t)) != old);
+    return new;
 }
 
 static __inline__ long
-ia64_atomic64_sub (__s64 i, atomic64_t *v)
-{
-	__s64 old, new;
-	CMPXCHG_BUGCHECK_DECL
+ia64_atomic64_sub (__s64 i, atomic64_t *v) {
+    __s64 old, new;
+    CMPXCHG_BUGCHECK_DECL
 
-	do {
-		CMPXCHG_BUGCHECK(v);
-		old = atomic64_read(v);
-		new = old - i;
-	} while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic64_t)) != old);
-	return new;
+    do {
+        CMPXCHG_BUGCHECK(v);
+        old = atomic64_read(v);
+        new = old - i;
+    } while (ia64_cmpxchg(acq, v, old, new, sizeof(atomic64_t)) != old);
+    return new;
 }
 
 #define atomic_cmpxchg(v, old, new) (cmpxchg(&((v)->counter), old, new))
@@ -89,35 +85,33 @@ ia64_atomic64_sub (__s64 i, atomic64_t *v)
 	(cmpxchg(&((v)->counter), old, new))
 #define atomic64_xchg(v, new) (xchg(&((v)->counter), new))
 
-static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u)
-{
-	int c, old;
-	c = atomic_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
-	return c;
+static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u) {
+    int c, old;
+    c = atomic_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
+    return c;
 }
 
 
-static __inline__ long atomic64_add_unless(atomic64_t *v, long a, long u)
-{
-	long c, old;
-	c = atomic64_read(v);
-	for (;;) {
-		if (unlikely(c == (u)))
-			break;
-		old = atomic64_cmpxchg((v), c, c + (a));
-		if (likely(old == c))
-			break;
-		c = old;
-	}
-	return c != (u);
+static __inline__ long atomic64_add_unless(atomic64_t *v, long a, long u) {
+    long c, old;
+    c = atomic64_read(v);
+    for (;;) {
+        if (unlikely(c == (u)))
+            break;
+        old = atomic64_cmpxchg((v), c, c + (a));
+        if (likely(old == c))
+            break;
+        c = old;
+    }
+    return c != (u);
 }
 
 #define atomic64_inc_not_zero(v) atomic64_add_unless((v), 1, 0)
@@ -151,15 +145,13 @@ static __inline__ long atomic64_add_unless(atomic64_t *v, long a, long u)
  * negative.
  */
 static __inline__ int
-atomic_add_negative (int i, atomic_t *v)
-{
-	return atomic_add_return(i, v) < 0;
+atomic_add_negative (int i, atomic_t *v) {
+    return atomic_add_return(i, v) < 0;
 }
 
 static __inline__ long
-atomic64_add_negative (__s64 i, atomic64_t *v)
-{
-	return atomic64_add_return(i, v) < 0;
+atomic64_add_negative (__s64 i, atomic64_t *v) {
+    return atomic64_add_return(i, v) < 0;
 }
 
 #define atomic_sub_return(i,v)						\

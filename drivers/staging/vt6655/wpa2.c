@@ -75,8 +75,7 @@ const unsigned char abyOUIPSK[4]     = { 0x00, 0x0F, 0xAC, 0x02 };
 void
 WPA2_ClearRSN (
     PKnownBSS        pBSSNode
-    )
-{
+) {
     int ii;
 
     pBSSNode->bWPA2Valid = false;
@@ -111,8 +110,7 @@ void
 WPA2vParseRSN (
     PKnownBSS        pBSSNode,
     PWLAN_IE_RSN     pRSN
-    )
-{
+) {
     int                 i, j;
     unsigned short m = 0, n = 0;
     unsigned char *pbyOUI;
@@ -136,7 +134,7 @@ WPA2vParseRSN (
 
     // information element header makes sense
     if ((pRSN->byElementID == WLAN_EID_RSN) &&
-        (pRSN->wVersion == 1)) {
+            (pRSN->wVersion == 1)) {
 
         DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Legal 802.11i RSN\n");
 
@@ -265,8 +263,7 @@ unsigned int
 WPA2uSetIEs(
     void *pMgmtHandle,
     PWLAN_IE_RSN pRSNIEs
-    )
-{
+) {
     PSMgmtObject    pMgmt = (PSMgmtObject) pMgmtHandle;
     unsigned char *pbyBuffer = NULL;
     unsigned int ii = 0;
@@ -276,8 +273,8 @@ WPA2uSetIEs(
         return(0);
     }
     if (((pMgmt->eAuthenMode == WMAC_AUTH_WPA2) ||
-         (pMgmt->eAuthenMode == WMAC_AUTH_WPA2PSK)) &&
-        (pMgmt->pCurrBSS != NULL)) {
+            (pMgmt->eAuthenMode == WMAC_AUTH_WPA2PSK)) &&
+            (pMgmt->pCurrBSS != NULL)) {
         /* WPA2 IE */
         pbyBuffer = (unsigned char *) pRSNIEs;
         pRSNIEs->byElementID = WLAN_EID_RSN;
@@ -339,8 +336,8 @@ WPA2uSetIEs(
         pRSNIEs->len +=2;
 
         if ((pMgmt->gsPMKIDCache.BSSIDInfoCount > 0) &&
-            (pMgmt->bRoaming == true) &&
-            (pMgmt->eAuthenMode == WMAC_AUTH_WPA2)) {
+                (pMgmt->bRoaming == true) &&
+                (pMgmt->eAuthenMode == WMAC_AUTH_WPA2)) {
             // RSN PMKID
             pwPMKID = (unsigned short *)(&pRSNIEs->abyRSN[18]);  // Point to PMKID count
             *pwPMKID = 0;                               // Initialize PMKID count

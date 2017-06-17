@@ -6,17 +6,17 @@
 #include <linux/types.h>
 
 struct hvtramp_mapping {
-	__u64		vaddr;
-	__u64		tte;
+    __u64		vaddr;
+    __u64		tte;
 };
 
 struct hvtramp_descr {
-	__u32			cpu;
-	__u32			num_mappings;
-	__u64			fault_info_va;
-	__u64			fault_info_pa;
-	__u64			thread_reg;
-	struct hvtramp_mapping	maps[1];
+    __u32			cpu;
+    __u32			num_mappings;
+    __u64			fault_info_va;
+    __u64			fault_info_pa;
+    __u64			thread_reg;
+    struct hvtramp_mapping	maps[1];
 };
 
 extern void hv_cpu_startup(unsigned long hvdescr_pa);

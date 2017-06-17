@@ -34,21 +34,18 @@ extern nodemask_t numa_nodes_parsed __initdata;
 extern int __init numa_add_memblk(int nodeid, u64 start, u64 end);
 extern void __init numa_set_distance(int from, int to, int distance);
 
-static inline void set_apicid_to_node(int apicid, s16 node)
-{
-	__apicid_to_node[apicid] = node;
+static inline void set_apicid_to_node(int apicid, s16 node) {
+    __apicid_to_node[apicid] = node;
 }
 
 extern int __cpuinit numa_cpu_node(int cpu);
 
 #else	/* CONFIG_NUMA */
-static inline void set_apicid_to_node(int apicid, s16 node)
-{
+static inline void set_apicid_to_node(int apicid, s16 node) {
 }
 
-static inline int numa_cpu_node(int cpu)
-{
-	return NUMA_NO_NODE;
+static inline int numa_cpu_node(int cpu) {
+    return NUMA_NO_NODE;
 }
 #endif	/* CONFIG_NUMA */
 

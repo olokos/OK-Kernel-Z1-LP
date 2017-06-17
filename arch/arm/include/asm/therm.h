@@ -21,8 +21,8 @@
 #define FAN_ALWAYS_ON		2
 
 struct therm {
-	int hi;
-	int lo;
+    int hi;
+    int lo;
 };
 
 #endif

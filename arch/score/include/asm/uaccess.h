@@ -136,7 +136,9 @@
  */
 #define __get_user(x, ptr) __get_user_nocheck((x), (ptr), sizeof(*(ptr)))
 
-struct __large_struct { unsigned long buf[100]; };
+struct __large_struct {
+    unsigned long buf[100];
+};
 #define __m(x) (*(struct __large_struct __user *)(x))
 
 /*
@@ -291,33 +293,31 @@ extern void __put_user_unknown(void);
 extern int __copy_tofrom_user(void *to, const void *from, unsigned long len);
 
 static inline unsigned long
-copy_from_user(void *to, const void *from, unsigned long len)
-{
-	unsigned long over;
+copy_from_user(void *to, const void *from, unsigned long len) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_READ, from, len))
-		return __copy_tofrom_user(to, from, len);
+    if (access_ok(VERIFY_READ, from, len))
+        return __copy_tofrom_user(to, from, len);
 
-	if ((unsigned long)from < TASK_SIZE) {
-		over = (unsigned long)from + len - TASK_SIZE;
-		return __copy_tofrom_user(to, from, len - over) + over;
-	}
-	return len;
+    if ((unsigned long)from < TASK_SIZE) {
+        over = (unsigned long)from + len - TASK_SIZE;
+        return __copy_tofrom_user(to, from, len - over) + over;
+    }
+    return len;
 }
 
 static inline unsigned long
-copy_to_user(void *to, const void *from, unsigned long len)
-{
-	unsigned long over;
+copy_to_user(void *to, const void *from, unsigned long len) {
+    unsigned long over;
 
-	if (access_ok(VERIFY_WRITE, to, len))
-		return __copy_tofrom_user(to, from, len);
+    if (access_ok(VERIFY_WRITE, to, len))
+        return __copy_tofrom_user(to, from, len);
 
-	if ((unsigned long)to < TASK_SIZE) {
-		over = (unsigned long)to + len - TASK_SIZE;
-		return __copy_tofrom_user(to, from, len - over) + over;
-	}
-	return len;
+    if ((unsigned long)to < TASK_SIZE) {
+        over = (unsigned long)to + len - TASK_SIZE;
+        return __copy_tofrom_user(to, from, len - over) + over;
+    }
+    return len;
 }
 
 #define __copy_from_user(to, from, len)	\
@@ -327,25 +327,22 @@ copy_to_user(void *to, const void *from, unsigned long len)
 		__copy_tofrom_user((to), (from), (len))
 
 static inline unsigned long
-__copy_to_user_inatomic(void *to, const void *from, unsigned long len)
-{
-	return __copy_to_user(to, from, len);
+__copy_to_user_inatomic(void *to, const void *from, unsigned long len) {
+    return __copy_to_user(to, from, len);
 }
 
 static inline unsigned long
-__copy_from_user_inatomic(void *to, const void *from, unsigned long len)
-{
-	return __copy_from_user(to, from, len);
+__copy_from_user_inatomic(void *to, const void *from, unsigned long len) {
+    return __copy_from_user(to, from, len);
 }
 
 #define __copy_in_user(to, from, len)	__copy_from_user(to, from, len)
 
 static inline unsigned long
-copy_in_user(void *to, const void *from, unsigned long len)
-{
-	if (access_ok(VERIFY_READ, from, len) &&
-		      access_ok(VERFITY_WRITE, to, len))
-		return copy_from_user(to, from, len);
+copy_in_user(void *to, const void *from, unsigned long len) {
+    if (access_ok(VERIFY_READ, from, len) &&
+            access_ok(VERFITY_WRITE, to, len))
+        return copy_from_user(to, from, len);
 }
 
 /*
@@ -361,12 +358,11 @@ copy_in_user(void *to, const void *from, unsigned long len)
  */
 extern unsigned long __clear_user(void __user *src, unsigned long size);
 
-static inline unsigned long clear_user(char *src, unsigned long size)
-{
-	if (access_ok(VERIFY_WRITE, src, size))
-		return __clear_user(src, size);
+static inline unsigned long clear_user(char *src, unsigned long size) {
+    if (access_ok(VERIFY_WRITE, src, size))
+        return __clear_user(src, size);
 
-	return -EFAULT;
+    return -EFAULT;
 }
 /*
  * __strncpy_from_user: - Copy a NUL terminated string from userspace, with less checking.
@@ -390,32 +386,29 @@ static inline unsigned long clear_user(char *src, unsigned long size)
  */
 extern int __strncpy_from_user(char *dst, const char *src, long len);
 
-static inline int strncpy_from_user(char *dst, const char *src, long len)
-{
-	if (access_ok(VERIFY_READ, src, 1))
-		return __strncpy_from_user(dst, src, len);
+static inline int strncpy_from_user(char *dst, const char *src, long len) {
+    if (access_ok(VERIFY_READ, src, 1))
+        return __strncpy_from_user(dst, src, len);
 
-	return -EFAULT;
+    return -EFAULT;
 }
 
 extern int __strlen_user(const char *src);
-static inline long strlen_user(const char __user *src)
-{
-	return __strlen_user(src);
+static inline long strlen_user(const char __user *src) {
+    return __strlen_user(src);
 }
 
 extern int __strnlen_user(const char *str, long len);
-static inline long strnlen_user(const char __user *str, long len)
-{
-	if (!access_ok(VERIFY_READ, str, 0))
-		return 0;
-	else		
-		return __strnlen_user(str, len);
+static inline long strnlen_user(const char __user *str, long len) {
+    if (!access_ok(VERIFY_READ, str, 0))
+        return 0;
+    else
+        return __strnlen_user(str, len);
 }
 
 struct exception_table_entry {
-	unsigned long insn;
-	unsigned long fixup;
+    unsigned long insn;
+    unsigned long fixup;
 };
 
 extern int fixup_exception(struct pt_regs *regs);

@@ -4,12 +4,12 @@ FILE:
 
 DESCRIPTION:
    Qualcomm QMI driver code
-   
+
 FUNCTIONS:
    Generic QMUX functions
       ParseQMUX
       FillQMUX
-   
+
    Generic QMI functions
       GetTLV
       ValidQMIMessage
@@ -22,7 +22,7 @@ FUNCTIONS:
       QMIWDSSetEventReportReq
       QMIWDSGetPKGSRVCStatusReq
       QMIDMSGetMEIDReq
-      
+
    Parse data from QMI responses
       QMICTLGetClientIDResp
       QMICTLReleaseClientIDResp
@@ -63,13 +63,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMUXHeaderSize( void )
-{
-   return sizeof( sQMUX );
+u16 QMUXHeaderSize( void ) {
+    return sizeof( sQMUX );
 }
 
 /*===========================================================================
@@ -78,13 +77,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMICTLGetClientIDReq
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMICTLGetClientIDReqSize( void )
-{
-   return sizeof( sQMUX ) + 10;
+u16 QMICTLGetClientIDReqSize( void ) {
+    return sizeof( sQMUX ) + 10;
 }
 
 /*===========================================================================
@@ -93,13 +91,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMICTLReleaseClientIDReq
- 
+
 RETURN VALUE:
    u16 - size of header
 ===========================================================================*/
-u16 QMICTLReleaseClientIDReqSize( void )
-{
-   return sizeof( sQMUX ) + 11;
+u16 QMICTLReleaseClientIDReqSize( void ) {
+    return sizeof( sQMUX ) + 11;
 }
 
 /*===========================================================================
@@ -108,13 +105,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMICTLReadyReq
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMICTLReadyReqSize( void )
-{
-   return sizeof( sQMUX ) + 6;
+u16 QMICTLReadyReqSize( void ) {
+    return sizeof( sQMUX ) + 6;
 }
 
 /*===========================================================================
@@ -123,13 +119,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMIWDSSetEventReportReq
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMIWDSSetEventReportReqSize( void )
-{
-   return sizeof( sQMUX ) + 15;
+u16 QMIWDSSetEventReportReqSize( void ) {
+    return sizeof( sQMUX ) + 15;
 }
 
 /*===========================================================================
@@ -138,13 +133,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMIWDSGetPKGSRVCStatusReq
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMIWDSGetPKGSRVCStatusReqSize( void )
-{
-   return sizeof( sQMUX ) + 7;
+u16 QMIWDSGetPKGSRVCStatusReqSize( void ) {
+    return sizeof( sQMUX ) + 7;
 }
 
 /*===========================================================================
@@ -153,13 +147,12 @@ METHOD:
 
 DESCRIPTION:
    Get size of buffer needed for QMUX + QMIDMSGetMEIDReq
- 
+
 RETURN VALUE:
    u16 - size of buffer
 ===========================================================================*/
-u16 QMIDMSGetMEIDReqSize( void )
-{
-   return sizeof( sQMUX ) + 7;
+u16 QMIDMSGetMEIDReqSize( void ) {
+    return sizeof( sQMUX ) + 7;
 }
 
 /*=========================================================================*/
@@ -183,32 +176,29 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int ParseQMUX(
-   u16 *    pClientID,
-   void *   pBuffer,
-   u16      buffSize )
-{
-   sQMUX * pQMUXHeader;
-   
-   if (pBuffer == 0 || buffSize < 12)
-   {
-      return -ENOMEM;
-   }
+    u16 *    pClientID,
+    void *   pBuffer,
+    u16      buffSize ) {
+    sQMUX * pQMUXHeader;
 
-   // QMUX Header
-   pQMUXHeader = (sQMUX *)pBuffer;
+    if (pBuffer == 0 || buffSize < 12) {
+        return -ENOMEM;
+    }
 
-   if (pQMUXHeader->mTF != 1
-   ||  pQMUXHeader->mLength != buffSize - 1
-   ||  pQMUXHeader->mCtrlFlag != 0x80 )
-   {
-      return -EINVAL;
-   }
+    // QMUX Header
+    pQMUXHeader = (sQMUX *)pBuffer;
 
-   // Client ID   
-   *pClientID = (pQMUXHeader->mQMIClientID << 8) 
-              + pQMUXHeader->mQMIService;
-   
-   return sizeof( sQMUX );
+    if (pQMUXHeader->mTF != 1
+            ||  pQMUXHeader->mLength != buffSize - 1
+            ||  pQMUXHeader->mCtrlFlag != 0x80 ) {
+        return -EINVAL;
+    }
+
+    // Client ID
+    *pClientID = (pQMUXHeader->mQMIClientID << 8)
+                 + pQMUXHeader->mQMIService;
+
+    return sizeof( sQMUX );
 }
 
 /*===========================================================================
@@ -228,29 +218,27 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int FillQMUX(
-   u16      clientID,
-   void *   pBuffer,
-   u16      buffSize )
-{
-   sQMUX * pQMUXHeader;
+    u16      clientID,
+    void *   pBuffer,
+    u16      buffSize ) {
+    sQMUX * pQMUXHeader;
 
-   if (pBuffer == 0 ||  buffSize < sizeof( sQMUX ))
-   {
-      return -ENOMEM;
-   }
+    if (pBuffer == 0 ||  buffSize < sizeof( sQMUX )) {
+        return -ENOMEM;
+    }
 
-   // QMUX Header
-   pQMUXHeader = (sQMUX *)pBuffer;
+    // QMUX Header
+    pQMUXHeader = (sQMUX *)pBuffer;
 
-   pQMUXHeader->mTF = 1;
-   pQMUXHeader->mLength = buffSize - 1;
-   pQMUXHeader->mCtrlFlag = 0;
+    pQMUXHeader->mTF = 1;
+    pQMUXHeader->mLength = buffSize - 1;
+    pQMUXHeader->mCtrlFlag = 0;
 
-   // Service and Client ID   
-   pQMUXHeader->mQMIService = clientID & 0xff;
-   pQMUXHeader->mQMIClientID = clientID >> 8;
+    // Service and Client ID
+    pQMUXHeader->mQMIService = clientID & 0xff;
+    pQMUXHeader->mQMIClientID = clientID >> 8;
 
-   return 0;
+    return 0;
 }
 
 /*=========================================================================*/
@@ -265,7 +253,7 @@ DESCRIPTION:
    Get data bufffer of a specified TLV from a QMI message
 
    QMI Message shall NOT include SDU
-   
+
 PARAMETERS
    pQMIMessage    [ I ] - QMI Message buffer
    messageLen     [ I ] - Size of QMI Message buffer
@@ -278,48 +266,42 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 u16 GetTLV(
-   void *   pQMIMessage,
-   u16      messageLen,
-   u8       type,
-   void *   pOutDataBuf,
-   u16      bufferLen )
-{
-   u16 pos;
-   u16 tlvSize = 0;
-   u16 cpyCount;
-   
-   if (pQMIMessage == 0 || pOutDataBuf == 0)
-   {
-      return -ENOMEM;
-   }   
-   
-   for (pos = 4; 
-        pos + 3 < messageLen; 
-        pos += tlvSize + 3)
-   {
-      tlvSize = *(u16 *)(pQMIMessage + pos + 1);
-      if (*(u8 *)(pQMIMessage + pos) == type)
-      {
-         if (bufferLen < tlvSize)
-         {
-            return -ENOMEM;
-         }
-        
-         /* replacement memcpy
-            memcpy( pOutDataBuf,
-                    pQMIMessage + pos + 3,
-                    tlvSize ); */
-         
-         for (cpyCount = 0; cpyCount < tlvSize; cpyCount++)
-         {
-            *((char*)(pOutDataBuf + cpyCount)) = *((char*)(pQMIMessage + pos + 3 + cpyCount));
-         }
-         
-         return tlvSize;
-      }
-   }
-   
-   return -ENOMSG;
+    void *   pQMIMessage,
+    u16      messageLen,
+    u8       type,
+    void *   pOutDataBuf,
+    u16      bufferLen ) {
+    u16 pos;
+    u16 tlvSize = 0;
+    u16 cpyCount;
+
+    if (pQMIMessage == 0 || pOutDataBuf == 0) {
+        return -ENOMEM;
+    }
+
+    for (pos = 4;
+            pos + 3 < messageLen;
+            pos += tlvSize + 3) {
+        tlvSize = *(u16 *)(pQMIMessage + pos + 1);
+        if (*(u8 *)(pQMIMessage + pos) == type) {
+            if (bufferLen < tlvSize) {
+                return -ENOMEM;
+            }
+
+            /* replacement memcpy
+               memcpy( pOutDataBuf,
+                       pQMIMessage + pos + 3,
+                       tlvSize ); */
+
+            for (cpyCount = 0; cpyCount < tlvSize; cpyCount++) {
+                *((char*)(pOutDataBuf + cpyCount)) = *((char*)(pQMIMessage + pos + 3 + cpyCount));
+            }
+
+            return tlvSize;
+        }
+    }
+
+    return -ENOMSG;
 }
 
 /*===========================================================================
@@ -341,28 +323,21 @@ RETURN VALUE:
          Positive for QMI error code
 ===========================================================================*/
 int ValidQMIMessage(
-   void *   pQMIMessage,
-   u16      messageLen )
-{
-   char mandTLV[4];
+    void *   pQMIMessage,
+    u16      messageLen ) {
+    char mandTLV[4];
 
-   if (GetTLV( pQMIMessage, messageLen, 2, &mandTLV[0], 4 ) == 4)
-   {
-      // Found TLV
-      if (*(u16 *)&mandTLV[0] != 0)
-      {
-         return *(u16 *)&mandTLV[2];
-      }
-      else
-      {
-         return 0;
-      }
-   }
-   else
-   {
-      return -ENOMSG;
-   }
-}      
+    if (GetTLV( pQMIMessage, messageLen, 2, &mandTLV[0], 4 ) == 4) {
+        // Found TLV
+        if (*(u16 *)&mandTLV[0] != 0) {
+            return *(u16 *)&mandTLV[2];
+        } else {
+            return 0;
+        }
+    } else {
+        return -ENOMSG;
+    }
+}
 
 /*===========================================================================
 METHOD:
@@ -370,7 +345,7 @@ METHOD:
 
 DESCRIPTION:
    Get the message ID of a QMI message
-   
+
    QMI Message shall NOT include SDU
 
 PARAMETERS
@@ -382,17 +357,13 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int GetQMIMessageID(
-   void *   pQMIMessage,
-   u16      messageLen )
-{
-   if (messageLen < 2)
-   {
-      return -ENODATA;
-   }
-   else
-   {
-      return *(u16 *)pQMIMessage;
-   }
+    void *   pQMIMessage,
+    u16      messageLen ) {
+    if (messageLen < 2) {
+        return -ENODATA;
+    } else {
+        return *(u16 *)pQMIMessage;
+    }
 }
 
 /*=========================================================================*/
@@ -417,34 +388,32 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMICTLGetClientIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID,
-   u8       serviceType )
-{
-   if (pBuffer == 0 || buffSize < QMICTLGetClientIDReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID,
+    u8       serviceType ) {
+    if (pBuffer == 0 || buffSize < QMICTLGetClientIDReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI CTL GET CLIENT ID
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))= 0x00;
-   // Transaction ID
-   *(u8 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0022;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0004;
-      // QMI Service Type
-      *(u8 *)(pBuffer + sizeof( sQMUX ) + 6)  = 0x01;
-      // Size
-      *(u16 *)(pBuffer + sizeof( sQMUX ) + 7) = 0x0001;
-      // QMI svc type
-      *(u8 *)(pBuffer + sizeof( sQMUX ) + 9)  = serviceType;
+    // QMI CTL GET CLIENT ID
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))= 0x00;
+    // Transaction ID
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0022;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0004;
+    // QMI Service Type
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 6)  = 0x01;
+    // Size
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 7) = 0x0001;
+    // QMI svc type
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 9)  = serviceType;
 
-  // success
-  return sizeof( sQMUX ) + 10;
+    // success
+    return sizeof( sQMUX ) + 10;
 }
 
 /*===========================================================================
@@ -465,34 +434,32 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMICTLReleaseClientIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID,
-   u16      clientID )
-{
-   if (pBuffer == 0 || buffSize < QMICTLReleaseClientIDReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID,
+    u16      clientID ) {
+    if (pBuffer == 0 || buffSize < QMICTLReleaseClientIDReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI CTL RELEASE CLIENT ID REQ
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
-   // Transaction ID
-   *(u8 *)(pBuffer + sizeof( sQMUX ) + 1 ) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0023;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0005;
-      // Release client ID
-      *(u8 *)(pBuffer + sizeof( sQMUX ) + 6)  = 0x01;
-      // Size
-      *(u16 *)(pBuffer + sizeof( sQMUX ) + 7) = 0x0002;
-      // QMI svs type / Client ID
-      *(u16 *)(pBuffer + sizeof( sQMUX ) + 9)  = clientID;
-      
-  // success
-  return sizeof( sQMUX ) + 11;
+    // QMI CTL RELEASE CLIENT ID REQ
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
+    // Transaction ID
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 1 ) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0023;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0005;
+    // Release client ID
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 6)  = 0x01;
+    // Size
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 7) = 0x0002;
+    // QMI svs type / Client ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 9)  = clientID;
+
+    // success
+    return sizeof( sQMUX ) + 11;
 }
 
 /*===========================================================================
@@ -512,27 +479,25 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMICTLReadyReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u8       transactionID )
-{
-   if (pBuffer == 0 || buffSize < QMICTLReadyReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u8       transactionID ) {
+    if (pBuffer == 0 || buffSize < QMICTLReadyReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI CTL GET VERSION INFO REQ
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
-   // Transaction ID
-   *(u8 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0021;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0000;
+    // QMI CTL GET VERSION INFO REQ
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
+    // Transaction ID
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 2) = 0x0021;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 4) = 0x0000;
 
-  // success
-  return sizeof( sQMUX ) + 6;
+    // success
+    return sizeof( sQMUX ) + 6;
 }
 
 /*===========================================================================
@@ -552,35 +517,33 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMIWDSSetEventReportReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID )
-{
-   if (pBuffer == 0 || buffSize < QMIWDSSetEventReportReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID ) {
+    if (pBuffer == 0 || buffSize < QMIWDSSetEventReportReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI WDS SET EVENT REPORT REQ
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
-   // Transaction ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0001;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0008;
-      // Report channel rate TLV
-      *(u8 *)(pBuffer + sizeof( sQMUX ) + 7)  = 0x11;
-      // Size
-      *(u16 *)(pBuffer + sizeof( sQMUX ) + 8) = 0x0005;
-      // Stats period
-      *(u8 *)(pBuffer + sizeof( sQMUX ) + 10)  = 0x01;
-      // Stats mask
-      *(u32 *)(pBuffer + sizeof( sQMUX ) + 11)  = 0x000000ff;
+    // QMI WDS SET EVENT REPORT REQ
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
+    // Transaction ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0001;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0008;
+    // Report channel rate TLV
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 7)  = 0x11;
+    // Size
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 8) = 0x0005;
+    // Stats period
+    *(u8 *)(pBuffer + sizeof( sQMUX ) + 10)  = 0x01;
+    // Stats mask
+    *(u32 *)(pBuffer + sizeof( sQMUX ) + 11)  = 0x000000ff;
 
-  // success
-  return sizeof( sQMUX ) + 15;
+    // success
+    return sizeof( sQMUX ) + 15;
 }
 
 /*===========================================================================
@@ -600,27 +563,25 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMIWDSGetPKGSRVCStatusReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID )
-{
-   if (pBuffer == 0 || buffSize < QMIWDSGetPKGSRVCStatusReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID ) {
+    if (pBuffer == 0 || buffSize < QMIWDSGetPKGSRVCStatusReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI WDS Get PKG SRVC Status REQ
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
-   // Transaction ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0022;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0000;
+    // QMI WDS Get PKG SRVC Status REQ
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
+    // Transaction ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0022;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0000;
 
-  // success
-  return sizeof( sQMUX ) + 7;
+    // success
+    return sizeof( sQMUX ) + 7;
 }
 
 /*===========================================================================
@@ -640,27 +601,25 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMIDMSGetMEIDReq(
-   void *   pBuffer,
-   u16      buffSize,
-   u16      transactionID )
-{
-   if (pBuffer == 0 || buffSize < QMIDMSGetMEIDReqSize() )
-   {
-      return -ENOMEM;
-   }
+    void *   pBuffer,
+    u16      buffSize,
+    u16      transactionID ) {
+    if (pBuffer == 0 || buffSize < QMIDMSGetMEIDReqSize() ) {
+        return -ENOMEM;
+    }
 
-   // QMI DMS GET SERIAL NUMBERS REQ
-   // Request
-   *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
-   // Transaction ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
-   // Message ID
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0025;
-   // Size of TLV's
-   *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0000;
+    // QMI DMS GET SERIAL NUMBERS REQ
+    // Request
+    *(u8 *)(pBuffer + sizeof( sQMUX ))  = 0x00;
+    // Transaction ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 1) = transactionID;
+    // Message ID
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 3) = 0x0025;
+    // Size of TLV's
+    *(u16 *)(pBuffer + sizeof( sQMUX ) + 5) = 0x0000;
 
-  // success
-  return sizeof( sQMUX ) + 7;
+    // success
+    return sizeof( sQMUX ) + 7;
 }
 
 /*=========================================================================*/
@@ -684,43 +643,38 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMICTLGetClientIDResp(
-   void * pBuffer,
-   u16    buffSize,
-   u16 *  pClientID )
-{
-   int result;
-   
-   // Ignore QMUX and SDU
-   //    QMI CTL SDU is 2 bytes, not 3
-   u8 offset = sizeof( sQMUX ) + 2;
+    void * pBuffer,
+    u16    buffSize,
+    u16 *  pClientID ) {
+    int result;
 
-   if (pBuffer == 0 || buffSize < offset )
-   {
-      return -ENOMEM;
-   }
+    // Ignore QMUX and SDU
+    //    QMI CTL SDU is 2 bytes, not 3
+    u8 offset = sizeof( sQMUX ) + 2;
 
-   pBuffer = pBuffer + offset;
-   buffSize -= offset;
+    if (pBuffer == 0 || buffSize < offset ) {
+        return -ENOMEM;
+    }
 
-   result = GetQMIMessageID( pBuffer, buffSize );
-   if (result != 0x22)
-   {
-      return -EFAULT;
-   }
+    pBuffer = pBuffer + offset;
+    buffSize -= offset;
 
-   result = ValidQMIMessage( pBuffer, buffSize );
-   if (result != 0)
-   {
-      return -EFAULT;
-   }
+    result = GetQMIMessageID( pBuffer, buffSize );
+    if (result != 0x22) {
+        return -EFAULT;
+    }
 
-   result = GetTLV( pBuffer, buffSize, 0x01, pClientID, 2 );
-   if (result != 2)
-   {
-      return -EFAULT;
-   }
+    result = ValidQMIMessage( pBuffer, buffSize );
+    if (result != 0) {
+        return -EFAULT;
+    }
 
-   return 0;
+    result = GetTLV( pBuffer, buffSize, 0x01, pClientID, 2 );
+    if (result != 2) {
+        return -EFAULT;
+    }
+
+    return 0;
 }
 
 /*===========================================================================
@@ -739,36 +693,32 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMICTLReleaseClientIDResp(
-   void *   pBuffer,
-   u16      buffSize )
-{
-   int result;
-   
-   // Ignore QMUX and SDU
-   //    QMI CTL SDU is 2 bytes, not 3
-   u8 offset = sizeof( sQMUX ) + 2;
+    void *   pBuffer,
+    u16      buffSize ) {
+    int result;
 
-   if (pBuffer == 0 || buffSize < offset )
-   {
-      return -ENOMEM;
-   }
+    // Ignore QMUX and SDU
+    //    QMI CTL SDU is 2 bytes, not 3
+    u8 offset = sizeof( sQMUX ) + 2;
 
-   pBuffer = pBuffer + offset;
-   buffSize -= offset;
+    if (pBuffer == 0 || buffSize < offset ) {
+        return -ENOMEM;
+    }
 
-   result = GetQMIMessageID( pBuffer, buffSize );
-   if (result != 0x23)
-   {
-      return -EFAULT;
-   }
+    pBuffer = pBuffer + offset;
+    buffSize -= offset;
 
-   result = ValidQMIMessage( pBuffer, buffSize );
-   if (result != 0)
-   {
-      return -EFAULT;
-   }
+    result = GetQMIMessageID( pBuffer, buffSize );
+    if (result != 0x23) {
+        return -EFAULT;
+    }
 
-   return 0;
+    result = ValidQMIMessage( pBuffer, buffSize );
+    if (result != 0) {
+        return -EFAULT;
+    }
+
+    return 0;
 }
 
 /*===========================================================================
@@ -800,99 +750,84 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMIWDSEventResp(
-   void *   pBuffer,
-   u16      buffSize,
-   u32 *    pTXOk,
-   u32 *    pRXOk,
-   u32 *    pTXErr,
-   u32 *    pRXErr,
-   u32 *    pTXOfl,
-   u32 *    pRXOfl,
-   u64 *    pTXBytesOk,
-   u64 *    pRXBytesOk,
-   bool *   pbLinkState,
-   bool *   pbReconfigure )
-{
-   int result;
-   u8 pktStatusRead[2];
+    void *   pBuffer,
+    u16      buffSize,
+    u32 *    pTXOk,
+    u32 *    pRXOk,
+    u32 *    pTXErr,
+    u32 *    pRXErr,
+    u32 *    pTXOfl,
+    u32 *    pRXOfl,
+    u64 *    pTXBytesOk,
+    u64 *    pRXBytesOk,
+    bool *   pbLinkState,
+    bool *   pbReconfigure ) {
+    int result;
+    u8 pktStatusRead[2];
 
-   // Ignore QMUX and SDU
-   u8 offset = sizeof( sQMUX ) + 3;
+    // Ignore QMUX and SDU
+    u8 offset = sizeof( sQMUX ) + 3;
 
-   if (pBuffer == 0 
-   || buffSize < offset
-   || pTXOk == 0
-   || pRXOk == 0
-   || pTXErr == 0
-   || pRXErr == 0
-   || pTXOfl == 0
-   || pRXOfl == 0
-   || pTXBytesOk == 0
-   || pRXBytesOk == 0
-   || pbLinkState == 0
-   || pbReconfigure == 0 )
-   {
-      return -ENOMEM;
-   }
+    if (pBuffer == 0
+            || buffSize < offset
+            || pTXOk == 0
+            || pRXOk == 0
+            || pTXErr == 0
+            || pRXErr == 0
+            || pTXOfl == 0
+            || pRXOfl == 0
+            || pTXBytesOk == 0
+            || pRXBytesOk == 0
+            || pbLinkState == 0
+            || pbReconfigure == 0 ) {
+        return -ENOMEM;
+    }
 
-   pBuffer = pBuffer + offset;
-   buffSize -= offset;
+    pBuffer = pBuffer + offset;
+    buffSize -= offset;
 
-   // Note: Indications.  No Mandatory TLV required
+    // Note: Indications.  No Mandatory TLV required
 
-   result = GetQMIMessageID( pBuffer, buffSize );
-   // QMI WDS Set Event Report Resp
-   if (result == 0x01)
-   {
-      // TLV's are not mandatory
-      GetTLV( pBuffer, buffSize, 0x10, (void*)pTXOk, 4 );
-      GetTLV( pBuffer, buffSize, 0x11, (void*)pRXOk, 4 );
-      GetTLV( pBuffer, buffSize, 0x12, (void*)pTXErr, 4 );
-      GetTLV( pBuffer, buffSize, 0x13, (void*)pRXErr, 4 );
-      GetTLV( pBuffer, buffSize, 0x14, (void*)pTXOfl, 4 );
-      GetTLV( pBuffer, buffSize, 0x15, (void*)pRXOfl, 4 );
-      GetTLV( pBuffer, buffSize, 0x19, (void*)pTXBytesOk, 8 );
-      GetTLV( pBuffer, buffSize, 0x1A, (void*)pRXBytesOk, 8 );
-   }
-   // QMI WDS Get PKG SRVC Status Resp
-   else if (result == 0x22)
-   {
-      result = GetTLV( pBuffer, buffSize, 0x01, &pktStatusRead[0], 2 );
-      // 1 or 2 bytes may be received
-      if (result >= 1)
-      {
-         if (pktStatusRead[0] == 0x02)
-         {
-            *pbLinkState = true;
-         }
-         else
-         {
-            *pbLinkState = false;
-         }
-      }
-      if (result == 2)
-      {
-         if (pktStatusRead[1] == 0x01)
-         {
-            *pbReconfigure = true;
-         }
-         else
-         {
-            *pbReconfigure = false;
-         }
-      }
-      
-      if (result < 0)
-      {
-         return result;
-      }
-   }
-   else
-   {
-      return -EFAULT;
-   }
+    result = GetQMIMessageID( pBuffer, buffSize );
+    // QMI WDS Set Event Report Resp
+    if (result == 0x01) {
+        // TLV's are not mandatory
+        GetTLV( pBuffer, buffSize, 0x10, (void*)pTXOk, 4 );
+        GetTLV( pBuffer, buffSize, 0x11, (void*)pRXOk, 4 );
+        GetTLV( pBuffer, buffSize, 0x12, (void*)pTXErr, 4 );
+        GetTLV( pBuffer, buffSize, 0x13, (void*)pRXErr, 4 );
+        GetTLV( pBuffer, buffSize, 0x14, (void*)pTXOfl, 4 );
+        GetTLV( pBuffer, buffSize, 0x15, (void*)pRXOfl, 4 );
+        GetTLV( pBuffer, buffSize, 0x19, (void*)pTXBytesOk, 8 );
+        GetTLV( pBuffer, buffSize, 0x1A, (void*)pRXBytesOk, 8 );
+    }
+    // QMI WDS Get PKG SRVC Status Resp
+    else if (result == 0x22) {
+        result = GetTLV( pBuffer, buffSize, 0x01, &pktStatusRead[0], 2 );
+        // 1 or 2 bytes may be received
+        if (result >= 1) {
+            if (pktStatusRead[0] == 0x02) {
+                *pbLinkState = true;
+            } else {
+                *pbLinkState = false;
+            }
+        }
+        if (result == 2) {
+            if (pktStatusRead[1] == 0x01) {
+                *pbReconfigure = true;
+            } else {
+                *pbReconfigure = false;
+            }
+        }
 
-   return 0;
+        if (result < 0) {
+            return result;
+        }
+    } else {
+        return -EFAULT;
+    }
+
+    return 0;
 }
 
 /*===========================================================================
@@ -913,42 +848,37 @@ RETURN VALUE:
          Negative errno for error
 ===========================================================================*/
 int QMIDMSGetMEIDResp(
-   void *   pBuffer,
-   u16      buffSize,
-   char *   pMEID,
-   int      meidSize )
-{
-   int result;
+    void *   pBuffer,
+    u16      buffSize,
+    char *   pMEID,
+    int      meidSize ) {
+    int result;
 
-   // Ignore QMUX and SDU
-   u8 offset = sizeof( sQMUX ) + 3;
+    // Ignore QMUX and SDU
+    u8 offset = sizeof( sQMUX ) + 3;
 
-   if (pBuffer == 0 || buffSize < offset || meidSize < 14 )
-   {
-      return -ENOMEM;
-   }
+    if (pBuffer == 0 || buffSize < offset || meidSize < 14 ) {
+        return -ENOMEM;
+    }
 
-   pBuffer = pBuffer + offset;
-   buffSize -= offset;
+    pBuffer = pBuffer + offset;
+    buffSize -= offset;
 
-   result = GetQMIMessageID( pBuffer, buffSize );
-   if (result != 0x25)
-   {
-      return -EFAULT;
-   }
+    result = GetQMIMessageID( pBuffer, buffSize );
+    if (result != 0x25) {
+        return -EFAULT;
+    }
 
-   result = ValidQMIMessage( pBuffer, buffSize );
-   if (result != 0)
-   {
-      return -EFAULT;
-   }
+    result = ValidQMIMessage( pBuffer, buffSize );
+    if (result != 0) {
+        return -EFAULT;
+    }
 
-   result = GetTLV( pBuffer, buffSize, 0x12, (void*)pMEID, 14 );
-   if (result != 14)
-   {
-      return -EFAULT;
-   }
+    result = GetTLV( pBuffer, buffSize, 0x12, (void*)pMEID, 14 );
+    if (result != 14) {
+        return -EFAULT;
+    }
 
-   return 0;
+    return 0;
 }
 

@@ -468,7 +468,7 @@
  */
 
 struct tsi721_dma_desc {
-	__le32 type_id;
+    __le32 type_id;
 
 #define TSI721_DMAD_DEVID	0x0000ffff
 #define TSI721_DMAD_CRF		0x00010000
@@ -477,43 +477,43 @@ struct tsi721_dma_desc {
 #define TSI721_DMAD_IOF		0x08000000
 #define TSI721_DMAD_DTYPE	0xe0000000
 
-	__le32 bcount;
+    __le32 bcount;
 
 #define TSI721_DMAD_BCOUNT1	0x03ffffff /* if DTYPE == 1 */
 #define TSI721_DMAD_BCOUNT2	0x0000000f /* if DTYPE == 2 */
 #define TSI721_DMAD_TT		0x0c000000
 #define TSI721_DMAD_RADDR0	0xc0000000
 
-	union {
-		__le32 raddr_lo;	   /* if DTYPE == (1 || 2) */
-		__le32 next_lo;		   /* if DTYPE == 3 */
-	};
+    union {
+        __le32 raddr_lo;	   /* if DTYPE == (1 || 2) */
+        __le32 next_lo;		   /* if DTYPE == 3 */
+    };
 
 #define TSI721_DMAD_CFGOFF	0x00ffffff
 #define TSI721_DMAD_HOPCNT	0xff000000
 
-	union {
-		__le32 raddr_hi;	   /* if DTYPE == (1 || 2) */
-		__le32 next_hi;		   /* if DTYPE == 3 */
-	};
+    union {
+        __le32 raddr_hi;	   /* if DTYPE == (1 || 2) */
+        __le32 next_hi;		   /* if DTYPE == 3 */
+    };
 
-	union {
-		struct {		   /* if DTYPE == 1 */
-			__le32 bufptr_lo;
-			__le32 bufptr_hi;
-			__le32 s_dist;
-			__le32 s_size;
-		} t1;
-		__le32 data[4];		   /* if DTYPE == 2 */
-		u32    reserved[4];	   /* if DTYPE == 3 */
-	};
+    union {
+        struct {		   /* if DTYPE == 1 */
+            __le32 bufptr_lo;
+            __le32 bufptr_hi;
+            __le32 s_dist;
+            __le32 s_size;
+        } t1;
+        __le32 data[4];		   /* if DTYPE == 2 */
+        u32    reserved[4];	   /* if DTYPE == 3 */
+    };
 } __aligned(32);
 
 /*
  * Inbound Messaging Descriptor
  */
 struct tsi721_imsg_desc {
-	__le32 type_id;
+    __le32 type_id;
 
 #define TSI721_IMD_DEVID	0x0000ffff
 #define TSI721_IMD_CRF		0x00010000
@@ -521,7 +521,7 @@ struct tsi721_imsg_desc {
 #define TSI721_IMD_TT		0x00180000
 #define TSI721_IMD_DTYPE	0xe0000000
 
-	__le32 msg_info;
+    __le32 msg_info;
 
 #define TSI721_IMD_BCOUNT	0x00000ff8
 #define TSI721_IMD_SSIZE	0x0000f000
@@ -531,9 +531,9 @@ struct tsi721_imsg_desc {
 #define TSI721_IMD_CS		0x78000000
 #define TSI721_IMD_HO		0x80000000
 
-	__le32 bufptr_lo;
-	__le32 bufptr_hi;
-	u32    reserved[12];
+    __le32 bufptr_lo;
+    __le32 bufptr_hi;
+    u32    reserved[12];
 
 } __aligned(64);
 
@@ -541,7 +541,7 @@ struct tsi721_imsg_desc {
  * Outbound Messaging Descriptor
  */
 struct tsi721_omsg_desc {
-	__le32 type_id;
+    __le32 type_id;
 
 #define TSI721_OMD_DEVID	0x0000ffff
 #define TSI721_OMD_CRF		0x00010000
@@ -550,7 +550,7 @@ struct tsi721_omsg_desc {
 #define TSI721_OMD_DTYPE	0xe0000000
 #define TSI721_OMD_RSRVD	0x17f80000
 
-	__le32 msg_info;
+    __le32 msg_info;
 
 #define TSI721_OMD_BCOUNT	0x00000ff8
 #define TSI721_OMD_SSIZE	0x0000f000
@@ -559,49 +559,49 @@ struct tsi721_omsg_desc {
 #define TSI721_OMD_MBOX		0x00c00000
 #define TSI721_OMD_TT		0x0c000000
 
-	union {
-		__le32 bufptr_lo;	/* if DTYPE == 4 */
-		__le32 next_lo;		/* if DTYPE == 5 */
-	};
+    union {
+        __le32 bufptr_lo;	/* if DTYPE == 4 */
+        __le32 next_lo;		/* if DTYPE == 5 */
+    };
 
-	union {
-		__le32 bufptr_hi;	/* if DTYPE == 4 */
-		__le32 next_hi;		/* if DTYPE == 5 */
-	};
+    union {
+        __le32 bufptr_hi;	/* if DTYPE == 4 */
+        __le32 next_hi;		/* if DTYPE == 5 */
+    };
 
 } __aligned(16);
 
 struct tsi721_dma_sts {
-	__le64	desc_sts[8];
+    __le64	desc_sts[8];
 } __aligned(64);
 
 struct tsi721_desc_sts_fifo {
-	union {
-		__le64	da64;
-		struct {
-			__le32	lo;
-			__le32	hi;
-		} da32;
-	} stat[8];
+    union {
+        __le64	da64;
+        struct {
+            __le32	lo;
+            __le32	hi;
+        } da32;
+    } stat[8];
 } __aligned(64);
 
 /* Descriptor types for BDMA and Messaging blocks */
 enum dma_dtype {
-	DTYPE1 = 1, /* Data Transfer DMA Descriptor */
-	DTYPE2 = 2, /* Immediate Data Transfer DMA Descriptor */
-	DTYPE3 = 3, /* Block Pointer DMA Descriptor */
-	DTYPE4 = 4, /* Outbound Msg DMA Descriptor */
-	DTYPE5 = 5, /* OB Messaging Block Pointer Descriptor */
-	DTYPE6 = 6  /* Inbound Messaging Descriptor */
+    DTYPE1 = 1, /* Data Transfer DMA Descriptor */
+    DTYPE2 = 2, /* Immediate Data Transfer DMA Descriptor */
+    DTYPE3 = 3, /* Block Pointer DMA Descriptor */
+    DTYPE4 = 4, /* Outbound Msg DMA Descriptor */
+    DTYPE5 = 5, /* OB Messaging Block Pointer Descriptor */
+    DTYPE6 = 6  /* Inbound Messaging Descriptor */
 };
 
 enum dma_rtype {
-	NREAD = 0,
-	LAST_NWRITE_R = 1,
-	ALL_NWRITE = 2,
-	ALL_NWRITE_R = 3,
-	MAINT_RD = 4,
-	MAINT_WR = 5
+    NREAD = 0,
+    LAST_NWRITE_R = 1,
+    ALL_NWRITE = 2,
+    ALL_NWRITE_R = 3,
+    MAINT_RD = 4,
+    MAINT_WR = 5
 };
 
 /*
@@ -615,71 +615,71 @@ enum dma_rtype {
 #define MSG_DMA_ENTRY_INX_TO_SIZE(x)	((0x10 << (x)) & 0xFFFF0)
 
 enum tsi721_smsg_int_flag {
-	SMSG_INT_NONE		= 0x00000000,
-	SMSG_INT_ECC_COR_CH	= 0x000000ff,
-	SMSG_INT_ECC_NCOR_CH	= 0x0000ff00,
-	SMSG_INT_ECC_COR	= 0x00020000,
-	SMSG_INT_ECC_NCOR	= 0x00040000,
-	SMSG_INT_UNS_RSP	= 0x00800000,
-	SMSG_INT_ALL		= 0x0006ffff
+    SMSG_INT_NONE		= 0x00000000,
+    SMSG_INT_ECC_COR_CH	= 0x000000ff,
+    SMSG_INT_ECC_NCOR_CH	= 0x0000ff00,
+    SMSG_INT_ECC_COR	= 0x00020000,
+    SMSG_INT_ECC_NCOR	= 0x00040000,
+    SMSG_INT_UNS_RSP	= 0x00800000,
+    SMSG_INT_ALL		= 0x0006ffff
 };
 
 /* Structures */
 
 struct tsi721_bdma_chan {
-	int		bd_num;		/* number of buffer descriptors */
-	void		*bd_base;	/* start of DMA descriptors */
-	dma_addr_t	bd_phys;
-	void		*sts_base;	/* start of DMA BD status FIFO */
-	dma_addr_t	sts_phys;
-	int		sts_size;
+    int		bd_num;		/* number of buffer descriptors */
+    void		*bd_base;	/* start of DMA descriptors */
+    dma_addr_t	bd_phys;
+    void		*sts_base;	/* start of DMA BD status FIFO */
+    dma_addr_t	sts_phys;
+    int		sts_size;
 };
 
 struct tsi721_imsg_ring {
-	u32		size;
-	/* VA/PA of data buffers for incoming messages */
-	void		*buf_base;
-	dma_addr_t	buf_phys;
-	/* VA/PA of circular free buffer list */
-	void		*imfq_base;
-	dma_addr_t	imfq_phys;
-	/* VA/PA of Inbound message descriptors */
-	void		*imd_base;
-	dma_addr_t	imd_phys;
-	 /* Inbound Queue buffer pointers */
-	void		*imq_base[TSI721_IMSGD_RING_SIZE];
+    u32		size;
+    /* VA/PA of data buffers for incoming messages */
+    void		*buf_base;
+    dma_addr_t	buf_phys;
+    /* VA/PA of circular free buffer list */
+    void		*imfq_base;
+    dma_addr_t	imfq_phys;
+    /* VA/PA of Inbound message descriptors */
+    void		*imd_base;
+    dma_addr_t	imd_phys;
+    /* Inbound Queue buffer pointers */
+    void		*imq_base[TSI721_IMSGD_RING_SIZE];
 
-	u32		rx_slot;
-	void		*dev_id;
-	u32		fq_wrptr;
-	u32		desc_rdptr;
-	spinlock_t	lock;
+    u32		rx_slot;
+    void		*dev_id;
+    u32		fq_wrptr;
+    u32		desc_rdptr;
+    spinlock_t	lock;
 };
 
 struct tsi721_omsg_ring {
-	u32		size;
-	/* VA/PA of OB Msg descriptors */
-	void		*omd_base;
-	dma_addr_t	omd_phys;
-	/* VA/PA of OB Msg data buffers */
-	void		*omq_base[TSI721_OMSGD_RING_SIZE];
-	dma_addr_t	omq_phys[TSI721_OMSGD_RING_SIZE];
-	/* VA/PA of OB Msg descriptor status FIFO */
-	void		*sts_base;
-	dma_addr_t	sts_phys;
-	u32		sts_size; /* # of allocated status entries */
-	u32		sts_rdptr;
+    u32		size;
+    /* VA/PA of OB Msg descriptors */
+    void		*omd_base;
+    dma_addr_t	omd_phys;
+    /* VA/PA of OB Msg data buffers */
+    void		*omq_base[TSI721_OMSGD_RING_SIZE];
+    dma_addr_t	omq_phys[TSI721_OMSGD_RING_SIZE];
+    /* VA/PA of OB Msg descriptor status FIFO */
+    void		*sts_base;
+    dma_addr_t	sts_phys;
+    u32		sts_size; /* # of allocated status entries */
+    u32		sts_rdptr;
 
-	u32		tx_slot;
-	void		*dev_id;
-	u32		wr_count;
-	spinlock_t	lock;
+    u32		tx_slot;
+    void		*dev_id;
+    u32		wr_count;
+    spinlock_t	lock;
 };
 
 enum tsi721_flags {
-	TSI721_USING_MSI	= (1 << 0),
-	TSI721_USING_MSIX	= (1 << 1),
-	TSI721_IMSGID_SET	= (1 << 2),
+    TSI721_USING_MSI	= (1 << 0),
+    TSI721_USING_MSIX	= (1 << 1),
+    TSI721_IMSGID_SET	= (1 << 2),
 };
 
 #ifdef CONFIG_PCI_MSI
@@ -703,66 +703,66 @@ enum tsi721_flags {
 
 /* MSI-X vector and init table entry indexes */
 enum tsi721_msix_vect {
-	TSI721_VECT_IDB,
-	TSI721_VECT_PWRX, /* PW_RX is part of SRIO MAC Interrupt reporting */
-	TSI721_VECT_OMB0_DONE,
-	TSI721_VECT_OMB1_DONE,
-	TSI721_VECT_OMB2_DONE,
-	TSI721_VECT_OMB3_DONE,
-	TSI721_VECT_OMB0_INT,
-	TSI721_VECT_OMB1_INT,
-	TSI721_VECT_OMB2_INT,
-	TSI721_VECT_OMB3_INT,
-	TSI721_VECT_IMB0_RCV,
-	TSI721_VECT_IMB1_RCV,
-	TSI721_VECT_IMB2_RCV,
-	TSI721_VECT_IMB3_RCV,
-	TSI721_VECT_IMB0_INT,
-	TSI721_VECT_IMB1_INT,
-	TSI721_VECT_IMB2_INT,
-	TSI721_VECT_IMB3_INT,
-	TSI721_VECT_MAX
+    TSI721_VECT_IDB,
+    TSI721_VECT_PWRX, /* PW_RX is part of SRIO MAC Interrupt reporting */
+    TSI721_VECT_OMB0_DONE,
+    TSI721_VECT_OMB1_DONE,
+    TSI721_VECT_OMB2_DONE,
+    TSI721_VECT_OMB3_DONE,
+    TSI721_VECT_OMB0_INT,
+    TSI721_VECT_OMB1_INT,
+    TSI721_VECT_OMB2_INT,
+    TSI721_VECT_OMB3_INT,
+    TSI721_VECT_IMB0_RCV,
+    TSI721_VECT_IMB1_RCV,
+    TSI721_VECT_IMB2_RCV,
+    TSI721_VECT_IMB3_RCV,
+    TSI721_VECT_IMB0_INT,
+    TSI721_VECT_IMB1_INT,
+    TSI721_VECT_IMB2_INT,
+    TSI721_VECT_IMB3_INT,
+    TSI721_VECT_MAX
 };
 
 #define IRQ_DEVICE_NAME_MAX	64
 
 struct msix_irq {
-	u16	vector;
-	char	irq_name[IRQ_DEVICE_NAME_MAX];
+    u16	vector;
+    char	irq_name[IRQ_DEVICE_NAME_MAX];
 };
 #endif /* CONFIG_PCI_MSI */
 
 struct tsi721_device {
-	struct pci_dev	*pdev;
-	struct rio_mport *mport;
-	u32		flags;
-	void __iomem	*regs;
+    struct pci_dev	*pdev;
+    struct rio_mport *mport;
+    u32		flags;
+    void __iomem	*regs;
 #ifdef CONFIG_PCI_MSI
-	struct msix_irq	msix[TSI721_VECT_MAX];
+    struct msix_irq	msix[TSI721_VECT_MAX];
 #endif
-	/* Doorbells */
-	void __iomem	*odb_base;
-	void		*idb_base;
-	dma_addr_t	idb_dma;
-	struct work_struct idb_work;
-	u32		db_discard_count;
+    /* Doorbells */
+    void __iomem	*odb_base;
+    void		*idb_base;
+    dma_addr_t	idb_dma;
+    struct work_struct idb_work;
+    u32		db_discard_count;
 
-	/* Inbound Port-Write */
-	struct work_struct pw_work;
-	struct kfifo	pw_fifo;
-	spinlock_t	pw_fifo_lock;
-	u32		pw_discard_count;
+    /* Inbound Port-Write */
+    struct work_struct pw_work;
+    struct kfifo	pw_fifo;
+    spinlock_t	pw_fifo_lock;
+    u32		pw_discard_count;
 
-	/* BDMA Engine */
-	struct tsi721_bdma_chan bdma[TSI721_DMA_CHNUM];
+    /* BDMA Engine */
+    struct tsi721_bdma_chan bdma[TSI721_DMA_CHNUM];
 
-	/* Inbound Messaging */
-	int		imsg_init[TSI721_IMSG_CHNUM];
-	struct tsi721_imsg_ring imsg_ring[TSI721_IMSG_CHNUM];
+    /* Inbound Messaging */
+    int		imsg_init[TSI721_IMSG_CHNUM];
+    struct tsi721_imsg_ring imsg_ring[TSI721_IMSG_CHNUM];
 
-	/* Outbound Messaging */
-	int		omsg_init[TSI721_OMSG_CHNUM];
-	struct tsi721_omsg_ring	omsg_ring[TSI721_OMSG_CHNUM];
+    /* Outbound Messaging */
+    int		omsg_init[TSI721_OMSG_CHNUM];
+    struct tsi721_omsg_ring	omsg_ring[TSI721_OMSG_CHNUM];
 };
 
 #endif

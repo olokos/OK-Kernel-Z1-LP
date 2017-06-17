@@ -23,14 +23,12 @@ int smux_loopback_init(void);
 int smux_tx_loopback(struct smux_pkt_t *pkt_ptr);
 
 #else
-static inline int smux_loopback_init(void)
-{
-	return 0;
+static inline int smux_loopback_init(void) {
+    return 0;
 }
 
-static inline int smux_tx_loopback(struct smux_pkt_t *pkt_ptr)
-{
-	return -ENODEV;
+static inline int smux_tx_loopback(struct smux_pkt_t *pkt_ptr) {
+    return -ENODEV;
 }
 
 

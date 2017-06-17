@@ -15,16 +15,16 @@
 #define  SUCCESS             0x00
 
 struct app_info_block {
-	u32 nTxMsg;                    // DPRAM msg sent to DSP with app_id
-	u32 nRxMsg;                    // DPRAM msg rcv from dsp with app_id
-	u32 nTxMsgReject;              // DPRAM msg rejected due to DSP doorbell set
-	u32 nRxMsgMiss;                // DPRAM msg dropped due to overflow
-	struct fown_struct *fileobject;// Application's file object
-	u16 app_id;                    // Application id
-	int DspBCMsgFlag;
-	int NumOfMsg;                   // number of messages queued up
-	wait_queue_head_t wait_dpram_msg;
-	struct list_head app_sqlist;   // link list of msgs for applicaton on slow queue
+    u32 nTxMsg;                    // DPRAM msg sent to DSP with app_id
+    u32 nRxMsg;                    // DPRAM msg rcv from dsp with app_id
+    u32 nTxMsgReject;              // DPRAM msg rejected due to DSP doorbell set
+    u32 nRxMsgMiss;                // DPRAM msg dropped due to overflow
+    struct fown_struct *fileobject;// Application's file object
+    u16 app_id;                    // Application id
+    int DspBCMsgFlag;
+    int NumOfMsg;                   // number of messages queued up
+    wait_queue_head_t wait_dpram_msg;
+    struct list_head app_sqlist;   // link list of msgs for applicaton on slow queue
 } __attribute__((packed));
 
 /*end of Jim*/
@@ -59,32 +59,31 @@ struct app_info_block {
 
 #define MAX_BUF_SIZE            4096
 
-struct ft1000_device
-{
-	struct usb_device *dev;
-	struct net_device *net;
+struct ft1000_device {
+    struct usb_device *dev;
+    struct net_device *net;
 
-	u32 status;
+    u32 status;
 
-	struct urb *rx_urb;
-	struct urb *tx_urb;
+    struct urb *rx_urb;
+    struct urb *tx_urb;
 
-	u8 tx_buf[MAX_BUF_SIZE];
-	u8 rx_buf[MAX_BUF_SIZE];
+    u8 tx_buf[MAX_BUF_SIZE];
+    u8 rx_buf[MAX_BUF_SIZE];
 
-	u8 bulk_in_endpointAddr;
-	u8 bulk_out_endpointAddr;
+    u8 bulk_in_endpointAddr;
+    u8 bulk_out_endpointAddr;
 
-	//struct ft1000_ethernet_configuration configuration;
+    //struct ft1000_ethernet_configuration configuration;
 
 //	struct net_device_stats stats; //mbelian
 } __attribute__ ((packed));
 
 struct ft1000_debug_dirs {
-	struct list_head list;
-	struct dentry *dent;
-	struct dentry *file;
-	int int_number;
+    struct list_head list;
+    struct dentry *dent;
+    struct dentry *file;
+    int int_number;
 };
 
 struct ft1000_info {
@@ -95,7 +94,7 @@ struct ft1000_info {
 
     unsigned char fcodeldr;
     unsigned char bootmode;
-	unsigned char usbboot;
+    unsigned char usbboot;
     unsigned short dspalive;
     u16 ASIC_ID;
     bool fProvComplete;
@@ -130,7 +129,7 @@ struct ft1000_info {
     u16 ProgConStat;
     struct list_head prov_list;
     int appcnt;
-	struct app_info_block app_info[MAX_NUM_APP];
+    struct app_info_block app_info[MAX_NUM_APP];
     u16 DSPInfoBlklen;
     u16 DrvMsgPend;
     int (*ft1000_reset)(struct net_device *dev);
@@ -139,9 +138,9 @@ struct ft1000_info {
         u16 Rec[MAX_DSP_SESS_REC];
         u32 MagRec[MAX_DSP_SESS_REC/2];
     } DSPSess;
-	unsigned short tempbuf[32];
-	char netdevname[IFNAMSIZ];
-	struct proc_dir_entry *ft1000_proc_dir; //mbelian
+    unsigned short tempbuf[32];
+    char netdevname[IFNAMSIZ];
+    struct proc_dir_entry *ft1000_proc_dir; //mbelian
 };
 
 

@@ -34,24 +34,22 @@ FUNCTION perf_if_proc_init
 
 DESCRIPTION  Initialize the proc interface for thje performance data.
 */
-static __init int per_init(void)
-{
+static __init int per_init(void) {
 
-  if (atomic_read(&pm_op_lock) == 1) {
-	printk(KERN_INFO "Can not load KSAPI, monitors are in use\n");
-	return PM_PER_ERR;
-  }
-  atomic_set(&pm_op_lock, 1);
-  per_process_perf_init();
-  printk(KERN_INFO "ksapi init\n");
-  return 0;
+    if (atomic_read(&pm_op_lock) == 1) {
+        printk(KERN_INFO "Can not load KSAPI, monitors are in use\n");
+        return PM_PER_ERR;
+    }
+    atomic_set(&pm_op_lock, 1);
+    per_process_perf_init();
+    printk(KERN_INFO "ksapi init\n");
+    return 0;
 }
 
-static void __exit per_exit(void)
-{
-  per_process_perf_exit();
-  printk(KERN_INFO "ksapi exit\n");
-  atomic_set(&pm_op_lock, 0);
+static void __exit per_exit(void) {
+    per_process_perf_exit();
+    printk(KERN_INFO "ksapi exit\n");
+    atomic_set(&pm_op_lock, 0);
 }
 
 MODULE_LICENSE("GPL v2");

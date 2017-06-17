@@ -27,11 +27,11 @@
 #define RIO_DIR_IN				0x1
 
 struct RioCommand {
-	short length;
-	int request;
-	int requesttype;
-	int value;
-	int index;
-	void __user *buffer;
-	int timeout;
+    short length;
+    int request;
+    int requesttype;
+    int value;
+    int index;
+    void __user *buffer;
+    int timeout;
 };

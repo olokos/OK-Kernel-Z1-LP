@@ -19,18 +19,18 @@ extern void ldom_power_off(void);
  * just waits for the LDC_EVENT_UP event.
  */
 struct ldc_channel_config {
-	void (*event)(void *arg, int event);
+    void (*event)(void *arg, int event);
 
-	u32			mtu;
-	unsigned int		rx_irq;
-	unsigned int		tx_irq;
-	u8			mode;
+    u32			mtu;
+    unsigned int		rx_irq;
+    unsigned int		tx_irq;
+    u8			mode;
 #define LDC_MODE_RAW		0x00
 #define LDC_MODE_UNRELIABLE	0x01
 #define LDC_MODE_RESERVED	0x02
 #define LDC_MODE_STREAM		0x03
 
-	u8			debug;
+    u8			debug;
 #define LDC_DEBUG_HS		0x01
 #define LDC_DEBUG_STATE		0x02
 #define LDC_DEBUG_RX		0x04
@@ -52,8 +52,8 @@ struct ldc_channel;
 
 /* Allocate state for a channel.  */
 extern struct ldc_channel *ldc_alloc(unsigned long id,
-				     const struct ldc_channel_config *cfgp,
-				     void *event_arg);
+                                     const struct ldc_channel_config *cfgp,
+                                     void *event_arg);
 
 /* Shut down and free state for a channel.  */
 extern void ldc_free(struct ldc_channel *lp);
@@ -73,7 +73,7 @@ extern int ldc_state(struct ldc_channel *lp);
 
 /* Read and write operations.  Only valid when the link is up.  */
 extern int ldc_write(struct ldc_channel *lp, const void *buf,
-		     unsigned int size);
+                     unsigned int size);
 extern int ldc_read(struct ldc_channel *lp, void *buf, unsigned int size);
 
 #define LDC_MAP_SHADOW	0x01
@@ -87,52 +87,50 @@ extern int ldc_read(struct ldc_channel *lp, void *buf, unsigned int size);
 #define LDC_MAP_ALL	0x03f
 
 struct ldc_trans_cookie {
-	u64			cookie_addr;
-	u64			cookie_size;
+    u64			cookie_addr;
+    u64			cookie_size;
 };
 
 struct scatterlist;
 extern int ldc_map_sg(struct ldc_channel *lp,
-		      struct scatterlist *sg, int num_sg,
-		      struct ldc_trans_cookie *cookies, int ncookies,
-		      unsigned int map_perm);
+                      struct scatterlist *sg, int num_sg,
+                      struct ldc_trans_cookie *cookies, int ncookies,
+                      unsigned int map_perm);
 
 extern int ldc_map_single(struct ldc_channel *lp,
-			  void *buf, unsigned int len,
-			  struct ldc_trans_cookie *cookies, int ncookies,
-			  unsigned int map_perm);
+                          void *buf, unsigned int len,
+                          struct ldc_trans_cookie *cookies, int ncookies,
+                          unsigned int map_perm);
 
 extern void ldc_unmap(struct ldc_channel *lp, struct ldc_trans_cookie *cookies,
-		      int ncookies);
+                      int ncookies);
 
 extern int ldc_copy(struct ldc_channel *lp, int copy_dir,
-		    void *buf, unsigned int len, unsigned long offset,
-		    struct ldc_trans_cookie *cookies, int ncookies);
+                    void *buf, unsigned int len, unsigned long offset,
+                    struct ldc_trans_cookie *cookies, int ncookies);
 
 static inline int ldc_get_dring_entry(struct ldc_channel *lp,
-				      void *buf, unsigned int len,
-				      unsigned long offset,
-				      struct ldc_trans_cookie *cookies,
-				      int ncookies)
-{
-	return ldc_copy(lp, LDC_COPY_IN, buf, len, offset, cookies, ncookies);
+                                      void *buf, unsigned int len,
+                                      unsigned long offset,
+                                      struct ldc_trans_cookie *cookies,
+                                      int ncookies) {
+    return ldc_copy(lp, LDC_COPY_IN, buf, len, offset, cookies, ncookies);
 }
 
 static inline int ldc_put_dring_entry(struct ldc_channel *lp,
-				      void *buf, unsigned int len,
-				      unsigned long offset,
-				      struct ldc_trans_cookie *cookies,
-				      int ncookies)
-{
-	return ldc_copy(lp, LDC_COPY_OUT, buf, len, offset, cookies, ncookies);
+                                      void *buf, unsigned int len,
+                                      unsigned long offset,
+                                      struct ldc_trans_cookie *cookies,
+                                      int ncookies) {
+    return ldc_copy(lp, LDC_COPY_OUT, buf, len, offset, cookies, ncookies);
 }
 
 extern void *ldc_alloc_exp_dring(struct ldc_channel *lp, unsigned int len,
-				 struct ldc_trans_cookie *cookies,
-				 int *ncookies, unsigned int map_perm);
+                                 struct ldc_trans_cookie *cookies,
+                                 int *ncookies, unsigned int map_perm);
 
 extern void ldc_free_exp_dring(struct ldc_channel *lp, void *buf,
-			       unsigned int len,
-			       struct ldc_trans_cookie *cookies, int ncookies);
+                               unsigned int len,
+                               struct ldc_trans_cookie *cookies, int ncookies);
 
 #endif /* _SPARC64_LDC_H */

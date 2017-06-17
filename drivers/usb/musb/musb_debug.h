@@ -46,12 +46,10 @@
 int musb_init_debugfs(struct musb *musb);
 void musb_exit_debugfs(struct musb *musb);
 #else
-static inline int musb_init_debugfs(struct musb *musb)
-{
-	return 0;
+static inline int musb_init_debugfs(struct musb *musb) {
+    return 0;
 }
-static inline void musb_exit_debugfs(struct musb *musb)
-{
+static inline void musb_exit_debugfs(struct musb *musb) {
 }
 #endif
 

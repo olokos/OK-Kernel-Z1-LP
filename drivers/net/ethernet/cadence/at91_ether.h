@@ -70,42 +70,39 @@
 #define EMAC_MULTICAST	0x40000000	/* multicast address */
 #define EMAC_UNICAST	0x20000000	/* unicast address */
 
-struct rbf_t
-{
-	unsigned int addr;
-	unsigned long size;
+struct rbf_t {
+    unsigned int addr;
+    unsigned long size;
 };
 
-struct recv_desc_bufs
-{
-	struct rbf_t descriptors[MAX_RX_DESCR];		/* must be on sizeof (rbf_t) boundary */
-	char recv_buf[MAX_RX_DESCR][MAX_RBUFF_SZ];	/* must be on long boundary */
+struct recv_desc_bufs {
+    struct rbf_t descriptors[MAX_RX_DESCR];		/* must be on sizeof (rbf_t) boundary */
+    char recv_buf[MAX_RX_DESCR][MAX_RBUFF_SZ];	/* must be on long boundary */
 };
 
-struct at91_private
-{
-	struct mii_if_info mii;			/* ethtool support */
-	struct macb_platform_data board_data;	/* board-specific
+struct at91_private {
+    struct mii_if_info mii;			/* ethtool support */
+    struct macb_platform_data board_data;	/* board-specific
 						 * configuration (shared with
 						 * macb for common data */
-	struct clk *ether_clk;			/* clock */
+    struct clk *ether_clk;			/* clock */
 
-	/* PHY */
-	unsigned long phy_type;			/* type of PHY (PHY_ID) */
-	spinlock_t lock;			/* lock for MDI interface */
-	short phy_media;			/* media interface type */
-	unsigned short phy_address;		/* 5-bit MDI address of PHY (0..31) */
-	struct timer_list check_timer;		/* Poll link status */
+    /* PHY */
+    unsigned long phy_type;			/* type of PHY (PHY_ID) */
+    spinlock_t lock;			/* lock for MDI interface */
+    short phy_media;			/* media interface type */
+    unsigned short phy_address;		/* 5-bit MDI address of PHY (0..31) */
+    struct timer_list check_timer;		/* Poll link status */
 
-	/* Transmit */
-	struct sk_buff *skb;			/* holds skb until xmit interrupt completes */
-	dma_addr_t skb_physaddr;		/* phys addr from pci_map_single */
-	int skb_length;				/* saved skb length for pci_unmap_single */
+    /* Transmit */
+    struct sk_buff *skb;			/* holds skb until xmit interrupt completes */
+    dma_addr_t skb_physaddr;		/* phys addr from pci_map_single */
+    int skb_length;				/* saved skb length for pci_unmap_single */
 
-	/* Receive */
-	int rxBuffIndex;			/* index into receive descriptor list */
-	struct recv_desc_bufs *dlist;		/* descriptor list address */
-	struct recv_desc_bufs *dlist_phys;	/* descriptor list physical address */
+    /* Receive */
+    int rxBuffIndex;			/* index into receive descriptor list */
+    struct recv_desc_bufs *dlist;		/* descriptor list address */
+    struct recv_desc_bufs *dlist_phys;	/* descriptor list physical address */
 };
 
 #endif

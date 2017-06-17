@@ -25,74 +25,69 @@
 #define MSG_LIMIT	100
 
 static void rpmsg_sample_cb(struct rpmsg_channel *rpdev, void *data, int len,
-						void *priv, u32 src)
-{
-	int ret;
-	static int rx_count;
+                            void *priv, u32 src) {
+    int ret;
+    static int rx_count;
 
-	dev_info(&rpdev->dev, "incoming msg %d (src: 0x%x)\n", ++rx_count, src);
+    dev_info(&rpdev->dev, "incoming msg %d (src: 0x%x)\n", ++rx_count, src);
 
-	print_hex_dump(KERN_DEBUG, __func__, DUMP_PREFIX_NONE, 16, 1,
-		       data, len,  true);
+    print_hex_dump(KERN_DEBUG, __func__, DUMP_PREFIX_NONE, 16, 1,
+                   data, len,  true);
 
-	/* samples should not live forever */
-	if (rx_count >= MSG_LIMIT) {
-		dev_info(&rpdev->dev, "goodbye!\n");
-		return;
-	}
+    /* samples should not live forever */
+    if (rx_count >= MSG_LIMIT) {
+        dev_info(&rpdev->dev, "goodbye!\n");
+        return;
+    }
 
-	/* send a new message now */
-	ret = rpmsg_send(rpdev, MSG, strlen(MSG));
-	if (ret)
-		dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
+    /* send a new message now */
+    ret = rpmsg_send(rpdev, MSG, strlen(MSG));
+    if (ret)
+        dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
 }
 
-static int rpmsg_sample_probe(struct rpmsg_channel *rpdev)
-{
-	int ret;
+static int rpmsg_sample_probe(struct rpmsg_channel *rpdev) {
+    int ret;
 
-	dev_info(&rpdev->dev, "new channel: 0x%x -> 0x%x!\n",
-					rpdev->src, rpdev->dst);
+    dev_info(&rpdev->dev, "new channel: 0x%x -> 0x%x!\n",
+             rpdev->src, rpdev->dst);
 
-	/* send a message to our remote processor */
-	ret = rpmsg_send(rpdev, MSG, strlen(MSG));
-	if (ret) {
-		dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
-		return ret;
-	}
+    /* send a message to our remote processor */
+    ret = rpmsg_send(rpdev, MSG, strlen(MSG));
+    if (ret) {
+        dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
+        return ret;
+    }
 
-	return 0;
+    return 0;
 }
 
-static void __devexit rpmsg_sample_remove(struct rpmsg_channel *rpdev)
-{
-	dev_info(&rpdev->dev, "rpmsg sample client driver is removed\n");
+static void __devexit rpmsg_sample_remove(struct rpmsg_channel *rpdev) {
+    dev_info(&rpdev->dev, "rpmsg sample client driver is removed\n");
 }
 
 static struct rpmsg_device_id rpmsg_driver_sample_id_table[] = {
-	{ .name	= "rpmsg-client-sample" },
-	{ },
+    { .name	= "rpmsg-client-sample" },
+    { },
 };
 MODULE_DEVICE_TABLE(rpmsg, rpmsg_driver_sample_id_table);
 
 static struct rpmsg_driver rpmsg_sample_client = {
-	.drv.name	= KBUILD_MODNAME,
-	.drv.owner	= THIS_MODULE,
-	.id_table	= rpmsg_driver_sample_id_table,
-	.probe		= rpmsg_sample_probe,
-	.callback	= rpmsg_sample_cb,
-	.remove		= __devexit_p(rpmsg_sample_remove),
+    .drv.name	= KBUILD_MODNAME,
+    .drv.owner	= THIS_MODULE,
+    .id_table	= rpmsg_driver_sample_id_table,
+    .probe		= rpmsg_sample_probe,
+    .callback	= rpmsg_sample_cb,
+    .remove		= __devexit_p(rpmsg_sample_remove),
 };
 
-static int __init rpmsg_client_sample_init(void)
-{
-	return register_rpmsg_driver(&rpmsg_sample_client);
+static int __init rpmsg_client_sample_init(void) {
+    return register_rpmsg_driver(&rpmsg_sample_client);
 }
 module_init(rpmsg_client_sample_init);
 
-static void __exit rpmsg_client_sample_fini(void)
-{
-	unregister_rpmsg_driver(&rpmsg_sample_client);
+static void __exit rpmsg_client_sample_fini(void) {
+    unregister_rpmsg_driver(&rpmsg_sample_client);
 }
 module_exit(rpmsg_client_sample_fini);
 

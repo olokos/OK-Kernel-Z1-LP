@@ -25,9 +25,9 @@
 
 /* Struct for adding new cards */
 typedef struct icn_cdef {
-	int port;
-	char id1[10];
-	char id2[10];
+    int port;
+    char id1[10];
+    char id2[10];
 } icn_cdef;
 
 #if defined(__KERNEL__) || defined(__DEBUGVAR__)
@@ -92,93 +92,93 @@ typedef struct icn_cdef {
  * Layout of card's data buffers
  */
 typedef struct {
-	unsigned char length;   /* Bytecount of fragment (max 250)    */
-	unsigned char endflag;  /* 0=last frag., 0xff=frag. continued */
-	unsigned char data[ICN_FRAGSIZE];	/* The data                           */
-	/* Fill to 256 bytes */
-	char unused[0x100 - ICN_FRAGSIZE - 2];
+    unsigned char length;   /* Bytecount of fragment (max 250)    */
+    unsigned char endflag;  /* 0=last frag., 0xff=frag. continued */
+    unsigned char data[ICN_FRAGSIZE];	/* The data                           */
+    /* Fill to 256 bytes */
+    char unused[0x100 - ICN_FRAGSIZE - 2];
 } frag_buf;
 
 /*
  * Layout of card's shared memory
  */
 typedef union {
-	struct {
-		unsigned char scns;	/* Index to free SendFrag.             */
-		unsigned char scnr;	/* Index to active SendFrag   READONLY */
-		unsigned char ecns;	/* Index to free RcvFrag.     READONLY */
-		unsigned char ecnr;	/* Index to valid RcvFrag              */
-		char unused[6];
-		unsigned short fuell1;	/* Internal Buf Bytecount              */
-	} data_control;
-	struct {
-		char unused[SHM_CCTL_OFFSET];
-		unsigned char iopc_i;	/* Read-Ptr Status-Queue      READONLY */
-		unsigned char iopc_o;	/* Write-Ptr Status-Queue              */
-		unsigned char pcio_i;	/* Write-Ptr Command-Queue             */
-		unsigned char pcio_o;	/* Read-Ptr Command Queue     READONLY */
-	} comm_control;
-	struct {
-		char unused[SHM_CBUF_OFFSET];
-		unsigned char pcio_buf[0x100];	/* Ring-Buffer Command-Queue           */
-		unsigned char iopc_buf[0x100];	/* Ring-Buffer Status-Queue            */
-	} comm_buffers;
-	struct {
-		char unused[SHM_DBUF_OFFSET];
-		frag_buf receive_buf[0x10];
-		frag_buf send_buf[0x10];
-	} data_buffers;
+    struct {
+        unsigned char scns;	/* Index to free SendFrag.             */
+        unsigned char scnr;	/* Index to active SendFrag   READONLY */
+        unsigned char ecns;	/* Index to free RcvFrag.     READONLY */
+        unsigned char ecnr;	/* Index to valid RcvFrag              */
+        char unused[6];
+        unsigned short fuell1;	/* Internal Buf Bytecount              */
+    } data_control;
+    struct {
+        char unused[SHM_CCTL_OFFSET];
+        unsigned char iopc_i;	/* Read-Ptr Status-Queue      READONLY */
+        unsigned char iopc_o;	/* Write-Ptr Status-Queue              */
+        unsigned char pcio_i;	/* Write-Ptr Command-Queue             */
+        unsigned char pcio_o;	/* Read-Ptr Command Queue     READONLY */
+    } comm_control;
+    struct {
+        char unused[SHM_CBUF_OFFSET];
+        unsigned char pcio_buf[0x100];	/* Ring-Buffer Command-Queue           */
+        unsigned char iopc_buf[0x100];	/* Ring-Buffer Status-Queue            */
+    } comm_buffers;
+    struct {
+        char unused[SHM_DBUF_OFFSET];
+        frag_buf receive_buf[0x10];
+        frag_buf send_buf[0x10];
+    } data_buffers;
 } icn_shmem;
 
 /*
  * Per card driver data
  */
 typedef struct icn_card {
-	struct icn_card *next;  /* Pointer to next device struct    */
-	struct icn_card *other; /* Pointer to other card for ICN4B  */
-	unsigned short port;    /* Base-port-address                */
-	int myid;               /* Driver-Nr. assigned by linklevel */
-	int rvalid;             /* IO-portregion has been requested */
-	int leased;             /* Flag: This Adapter is connected  */
-				/*       to a leased line           */
-	unsigned short flags;   /* Statusflags                      */
-	int doubleS0;           /* Flag: ICN4B                      */
-	int secondhalf;         /* Flag: Second half of a doubleS0  */
-	int fw_rev;             /* Firmware revision loaded         */
-	int ptype;              /* Protocol type (1TR6 or Euro)     */
-	struct timer_list st_timer;   /* Timer for Status-Polls     */
-	struct timer_list rb_timer;   /* Timer for B-Channel-Polls  */
-	u_char rcvbuf[ICN_BCH][4096]; /* B-Channel-Receive-Buffers  */
-	int rcvidx[ICN_BCH];    /* Index for above buffers          */
-	int l2_proto[ICN_BCH];  /* Current layer-2-protocol         */
-	isdn_if interface;      /* Interface to upper layer         */
-	int iptr;               /* Index to imsg-buffer             */
-	char imsg[60];          /* Internal buf for status-parsing  */
-	char msg_buf[2048];     /* Buffer for status-messages       */
-	char *msg_buf_write;    /* Writepointer for statusbuffer    */
-	char *msg_buf_read;     /* Readpointer for statusbuffer     */
-	char *msg_buf_end;      /* Pointer to end of statusbuffer   */
-	int sndcount[ICN_BCH];  /* Byte-counters for B-Ch.-send     */
-	int xlen[ICN_BCH];      /* Byte-counters/Flags for sent-ACK */
-	struct sk_buff *xskb[ICN_BCH]; /* Current transmitted skb   */
-	struct sk_buff_head spqueue[ICN_BCH];  /* Sendqueue         */
-	char regname[35];       /* Name used for request_region     */
-	u_char xmit_lock[ICN_BCH]; /* Semaphore for pollbchan_send()*/
-	spinlock_t lock;        /* protect critical operations      */
+    struct icn_card *next;  /* Pointer to next device struct    */
+    struct icn_card *other; /* Pointer to other card for ICN4B  */
+    unsigned short port;    /* Base-port-address                */
+    int myid;               /* Driver-Nr. assigned by linklevel */
+    int rvalid;             /* IO-portregion has been requested */
+    int leased;             /* Flag: This Adapter is connected  */
+    /*       to a leased line           */
+    unsigned short flags;   /* Statusflags                      */
+    int doubleS0;           /* Flag: ICN4B                      */
+    int secondhalf;         /* Flag: Second half of a doubleS0  */
+    int fw_rev;             /* Firmware revision loaded         */
+    int ptype;              /* Protocol type (1TR6 or Euro)     */
+    struct timer_list st_timer;   /* Timer for Status-Polls     */
+    struct timer_list rb_timer;   /* Timer for B-Channel-Polls  */
+    u_char rcvbuf[ICN_BCH][4096]; /* B-Channel-Receive-Buffers  */
+    int rcvidx[ICN_BCH];    /* Index for above buffers          */
+    int l2_proto[ICN_BCH];  /* Current layer-2-protocol         */
+    isdn_if interface;      /* Interface to upper layer         */
+    int iptr;               /* Index to imsg-buffer             */
+    char imsg[60];          /* Internal buf for status-parsing  */
+    char msg_buf[2048];     /* Buffer for status-messages       */
+    char *msg_buf_write;    /* Writepointer for statusbuffer    */
+    char *msg_buf_read;     /* Readpointer for statusbuffer     */
+    char *msg_buf_end;      /* Pointer to end of statusbuffer   */
+    int sndcount[ICN_BCH];  /* Byte-counters for B-Ch.-send     */
+    int xlen[ICN_BCH];      /* Byte-counters/Flags for sent-ACK */
+    struct sk_buff *xskb[ICN_BCH]; /* Current transmitted skb   */
+    struct sk_buff_head spqueue[ICN_BCH];  /* Sendqueue         */
+    char regname[35];       /* Name used for request_region     */
+    u_char xmit_lock[ICN_BCH]; /* Semaphore for pollbchan_send()*/
+    spinlock_t lock;        /* protect critical operations      */
 } icn_card;
 
 /*
  * Main driver data
  */
 typedef struct icn_dev {
-	spinlock_t devlock;     /* spinlock to protect this struct  */
-	unsigned long memaddr;	/* Address of memory mapped buffers */
-	icn_shmem __iomem *shmem;       /* Pointer to memory-mapped-buffers */
-	int mvalid;             /* IO-shmem has been requested      */
-	int channel;            /* Currently mapped channel         */
-	struct icn_card *mcard; /* Currently mapped card            */
-	int chanlock;           /* Semaphore for channel-mapping    */
-	int firstload;          /* Flag: firmware never loaded      */
+    spinlock_t devlock;     /* spinlock to protect this struct  */
+    unsigned long memaddr;	/* Address of memory mapped buffers */
+    icn_shmem __iomem *shmem;       /* Pointer to memory-mapped-buffers */
+    int mvalid;             /* IO-shmem has been requested      */
+    int channel;            /* Currently mapped channel         */
+    struct icn_card *mcard; /* Currently mapped card            */
+    int chanlock;           /* Semaphore for channel-mapping    */
+    int firstload;          /* Flag: firmware never loaded      */
 } icn_dev;
 
 typedef icn_dev *icn_devptr;

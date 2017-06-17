@@ -44,75 +44,64 @@ void set_pte_vaddr_pud(pud_t *pud_page, unsigned long vaddr, pte_t new_pte);
 
 
 static inline void native_pte_clear(struct mm_struct *mm, unsigned long addr,
-				    pte_t *ptep)
-{
-	*ptep = native_make_pte(0);
+                                    pte_t *ptep) {
+    *ptep = native_make_pte(0);
 }
 
-static inline void native_set_pte(pte_t *ptep, pte_t pte)
-{
-	*ptep = pte;
+static inline void native_set_pte(pte_t *ptep, pte_t pte) {
+    *ptep = pte;
 }
 
-static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte)
-{
-	native_set_pte(ptep, pte);
+static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte) {
+    native_set_pte(ptep, pte);
 }
 
-static inline void native_set_pmd(pmd_t *pmdp, pmd_t pmd)
-{
-	*pmdp = pmd;
+static inline void native_set_pmd(pmd_t *pmdp, pmd_t pmd) {
+    *pmdp = pmd;
 }
 
-static inline void native_pmd_clear(pmd_t *pmd)
-{
-	native_set_pmd(pmd, native_make_pmd(0));
+static inline void native_pmd_clear(pmd_t *pmd) {
+    native_set_pmd(pmd, native_make_pmd(0));
 }
 
-static inline pte_t native_ptep_get_and_clear(pte_t *xp)
-{
+static inline pte_t native_ptep_get_and_clear(pte_t *xp) {
 #ifdef CONFIG_SMP
-	return native_make_pte(xchg(&xp->pte, 0));
+    return native_make_pte(xchg(&xp->pte, 0));
 #else
-	/* native_local_ptep_get_and_clear,
-	   but duplicated because of cyclic dependency */
-	pte_t ret = *xp;
-	native_pte_clear(NULL, 0, xp);
-	return ret;
+    /* native_local_ptep_get_and_clear,
+       but duplicated because of cyclic dependency */
+    pte_t ret = *xp;
+    native_pte_clear(NULL, 0, xp);
+    return ret;
 #endif
 }
 
-static inline pmd_t native_pmdp_get_and_clear(pmd_t *xp)
-{
+static inline pmd_t native_pmdp_get_and_clear(pmd_t *xp) {
 #ifdef CONFIG_SMP
-	return native_make_pmd(xchg(&xp->pmd, 0));
+    return native_make_pmd(xchg(&xp->pmd, 0));
 #else
-	/* native_local_pmdp_get_and_clear,
-	   but duplicated because of cyclic dependency */
-	pmd_t ret = *xp;
-	native_pmd_clear(xp);
-	return ret;
+    /* native_local_pmdp_get_and_clear,
+       but duplicated because of cyclic dependency */
+    pmd_t ret = *xp;
+    native_pmd_clear(xp);
+    return ret;
 #endif
 }
 
-static inline void native_set_pud(pud_t *pudp, pud_t pud)
-{
-	*pudp = pud;
+static inline void native_set_pud(pud_t *pudp, pud_t pud) {
+    *pudp = pud;
 }
 
-static inline void native_pud_clear(pud_t *pud)
-{
-	native_set_pud(pud, native_make_pud(0));
+static inline void native_pud_clear(pud_t *pud) {
+    native_set_pud(pud, native_make_pud(0));
 }
 
-static inline void native_set_pgd(pgd_t *pgdp, pgd_t pgd)
-{
-	*pgdp = pgd;
+static inline void native_set_pgd(pgd_t *pgdp, pgd_t pgd) {
+    *pgdp = pgd;
 }
 
-static inline void native_pgd_clear(pgd_t *pgd)
-{
-	native_set_pgd(pgd, native_make_pgd(0));
+static inline void native_pgd_clear(pgd_t *pgd) {
+    native_set_pgd(pgd, native_make_pgd(0));
 }
 
 extern void sync_global_pgds(unsigned long start, unsigned long end);
@@ -125,7 +114,9 @@ extern void sync_global_pgds(unsigned long start, unsigned long end);
 /*
  * Level 4 access.
  */
-static inline int pgd_large(pgd_t pgd) { return 0; }
+static inline int pgd_large(pgd_t pgd) {
+    return 0;
+}
 #define mk_kernel_pgd(address) __pgd((address) | _KERNPG_TABLE)
 
 /* PUD - Level3 access */

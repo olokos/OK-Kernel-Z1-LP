@@ -41,11 +41,11 @@
 #include <mach/serial.h>
 
 struct tnetv107x_device_info {
-	struct davinci_uart_config	*serial_config;
-	struct davinci_mmc_config	*mmc_config[2];  /* 2 controllers */
-	struct davinci_nand_pdata	*nand_config[4]; /* 4 chipsels */
-	struct matrix_keypad_platform_data *keypad_config;
-	struct ti_ssp_data		*ssp_config;
+    struct davinci_uart_config	*serial_config;
+    struct davinci_mmc_config	*mmc_config[2];  /* 2 controllers */
+    struct davinci_nand_pdata	*nand_config[4]; /* 4 chipsels */
+    struct matrix_keypad_platform_data *keypad_config;
+    struct ti_ssp_data		*ssp_config;
 };
 
 extern struct platform_device tnetv107x_wdt_device;

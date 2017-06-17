@@ -74,8 +74,7 @@ void limPostSmeRemoveKeyCnf(tpAniSirGlobal pMac, tpPESession psessionEntry, tLim
 #define  PTAPS  0xedb88320
 
 static inline tANI_U32
-limCrcUpdate(tANI_U32 crc, tANI_U8 x)
-{
+limCrcUpdate(tANI_U32 crc, tANI_U8 x) {
 
     // Update CRC computation for 8 bits contained in x
     //
@@ -84,8 +83,7 @@ limCrcUpdate(tANI_U32 crc, tANI_U8 x)
     int i;
 
     z = crc^x;
-    for (i=0; i<8; i++)
-    {
+    for (i=0; i<8; i++) {
         fb = z & 1;
         z >>= 1;
         if (fb) z ^= PTAPS;

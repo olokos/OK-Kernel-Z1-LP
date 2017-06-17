@@ -18,8 +18,8 @@
 /*
  * Do SMP slave processor setup necessary before we can savely execute C code.
  */
-	.macro	smp_slave_setup
-	.endm
+.macro	smp_slave_setup
+.endm
 
 
 #endif /* __ASM_MACH_GENERIC_KERNEL_ENTRY_H */

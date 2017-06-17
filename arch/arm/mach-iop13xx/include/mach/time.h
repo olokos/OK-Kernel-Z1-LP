@@ -21,103 +21,91 @@
 
 void iop_init_time(unsigned long tickrate);
 
-static inline unsigned long iop13xx_core_freq(void)
-{
-	unsigned long freq = __raw_readl(IOP13XX_PROCESSOR_FREQ);
-	freq &= IOP13XX_CORE_FREQ_MASK;
-	switch (freq) {
-	case IOP13XX_CORE_FREQ_600:
-		return 600000000;
-	case IOP13XX_CORE_FREQ_667:
-		return 667000000;
-	case IOP13XX_CORE_FREQ_800:
-		return 800000000;
-	case IOP13XX_CORE_FREQ_933:
-		return 933000000;
-	case IOP13XX_CORE_FREQ_1000:
-		return 1000000000;
-	case IOP13XX_CORE_FREQ_1200:
-		return 1200000000;
-	default:
-		printk("%s: warning unknown frequency, defaulting to 800Mhz\n",
-			__func__);
-	}
+static inline unsigned long iop13xx_core_freq(void) {
+    unsigned long freq = __raw_readl(IOP13XX_PROCESSOR_FREQ);
+    freq &= IOP13XX_CORE_FREQ_MASK;
+    switch (freq) {
+    case IOP13XX_CORE_FREQ_600:
+        return 600000000;
+    case IOP13XX_CORE_FREQ_667:
+        return 667000000;
+    case IOP13XX_CORE_FREQ_800:
+        return 800000000;
+    case IOP13XX_CORE_FREQ_933:
+        return 933000000;
+    case IOP13XX_CORE_FREQ_1000:
+        return 1000000000;
+    case IOP13XX_CORE_FREQ_1200:
+        return 1200000000;
+    default:
+        printk("%s: warning unknown frequency, defaulting to 800Mhz\n",
+               __func__);
+    }
 
-	return 800000000;
+    return 800000000;
 }
 
-static inline unsigned long iop13xx_xsi_bus_ratio(void)
-{
-	unsigned long  ratio = __raw_readl(IOP13XX_PROCESSOR_FREQ);
-	ratio &= IOP13XX_XSI_FREQ_RATIO_MASK;
-	switch (ratio) {
-	case IOP13XX_XSI_FREQ_RATIO_2:
-		return 2;
-	case IOP13XX_XSI_FREQ_RATIO_3:
-		return 3;
-	case IOP13XX_XSI_FREQ_RATIO_4:
-		return 4;
-	default:
-		printk("%s: warning unknown ratio, defaulting to 2\n",
-			__func__);
-	}
+static inline unsigned long iop13xx_xsi_bus_ratio(void) {
+    unsigned long  ratio = __raw_readl(IOP13XX_PROCESSOR_FREQ);
+    ratio &= IOP13XX_XSI_FREQ_RATIO_MASK;
+    switch (ratio) {
+    case IOP13XX_XSI_FREQ_RATIO_2:
+        return 2;
+    case IOP13XX_XSI_FREQ_RATIO_3:
+        return 3;
+    case IOP13XX_XSI_FREQ_RATIO_4:
+        return 4;
+    default:
+        printk("%s: warning unknown ratio, defaulting to 2\n",
+               __func__);
+    }
 
-	return 2;
+    return 2;
 }
 
-static inline u32 read_tmr0(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c0, c9, 0" : "=r" (val));
-	return val;
+static inline u32 read_tmr0(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c0, c9, 0" : "=r" (val));
+    return val;
 }
 
-static inline void write_tmr0(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c0, c9, 0" : : "r" (val));
+static inline void write_tmr0(u32 val) {
+    asm volatile("mcr p6, 0, %0, c0, c9, 0" : : "r" (val));
 }
 
-static inline void write_tmr1(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c1, c9, 0" : : "r" (val));
+static inline void write_tmr1(u32 val) {
+    asm volatile("mcr p6, 0, %0, c1, c9, 0" : : "r" (val));
 }
 
-static inline u32 read_tcr0(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c2, c9, 0" : "=r" (val));
-	return val;
+static inline u32 read_tcr0(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c2, c9, 0" : "=r" (val));
+    return val;
 }
 
-static inline void write_tcr0(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c2, c9, 0" : : "r" (val));
+static inline void write_tcr0(u32 val) {
+    asm volatile("mcr p6, 0, %0, c2, c9, 0" : : "r" (val));
 }
 
-static inline u32 read_tcr1(void)
-{
-	u32 val;
-	asm volatile("mrc p6, 0, %0, c3, c9, 0" : "=r" (val));
-	return val;
+static inline u32 read_tcr1(void) {
+    u32 val;
+    asm volatile("mrc p6, 0, %0, c3, c9, 0" : "=r" (val));
+    return val;
 }
 
-static inline void write_tcr1(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c3, c9, 0" : : "r" (val));
+static inline void write_tcr1(u32 val) {
+    asm volatile("mcr p6, 0, %0, c3, c9, 0" : : "r" (val));
 }
 
-static inline void write_trr0(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c4, c9, 0" : : "r" (val));
+static inline void write_trr0(u32 val) {
+    asm volatile("mcr p6, 0, %0, c4, c9, 0" : : "r" (val));
 }
 
-static inline void write_trr1(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c5, c9, 0" : : "r" (val));
+static inline void write_trr1(u32 val) {
+    asm volatile("mcr p6, 0, %0, c5, c9, 0" : : "r" (val));
 }
 
-static inline void write_tisr(u32 val)
-{
-	asm volatile("mcr p6, 0, %0, c6, c9, 0" : : "r" (val));
+static inline void write_tisr(u32 val) {
+    asm volatile("mcr p6, 0, %0, c6, c9, 0" : : "r" (val));
 }
 #endif

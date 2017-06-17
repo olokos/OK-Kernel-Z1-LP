@@ -86,34 +86,34 @@
 
 /* Register rw_cfg, scope rt_trace, type rw */
 typedef struct {
-  unsigned int en       : 1;
-  unsigned int mode     : 1;
-  unsigned int owner    : 1;
-  unsigned int wp       : 1;
-  unsigned int stall    : 1;
-  unsigned int dummy1   : 3;
-  unsigned int wp_start : 7;
-  unsigned int dummy2   : 1;
-  unsigned int wp_stop  : 7;
-  unsigned int dummy3   : 9;
+    unsigned int en       : 1;
+    unsigned int mode     : 1;
+    unsigned int owner    : 1;
+    unsigned int wp       : 1;
+    unsigned int stall    : 1;
+    unsigned int dummy1   : 3;
+    unsigned int wp_start : 7;
+    unsigned int dummy2   : 1;
+    unsigned int wp_stop  : 7;
+    unsigned int dummy3   : 9;
 } reg_rt_trace_rw_cfg;
 #define REG_RD_ADDR_rt_trace_rw_cfg 0
 #define REG_WR_ADDR_rt_trace_rw_cfg 0
 
 /* Register rw_tap_ctrl, scope rt_trace, type rw */
 typedef struct {
-  unsigned int ack_data : 1;
-  unsigned int ack_guru : 1;
-  unsigned int dummy1   : 30;
+    unsigned int ack_data : 1;
+    unsigned int ack_guru : 1;
+    unsigned int dummy1   : 30;
 } reg_rt_trace_rw_tap_ctrl;
 #define REG_RD_ADDR_rt_trace_rw_tap_ctrl 4
 #define REG_WR_ADDR_rt_trace_rw_tap_ctrl 4
 
 /* Register r_tap_stat, scope rt_trace, type r */
 typedef struct {
-  unsigned int dav   : 1;
-  unsigned int empty : 1;
-  unsigned int dummy1 : 30;
+    unsigned int dav   : 1;
+    unsigned int empty : 1;
+    unsigned int dummy1 : 30;
 } reg_rt_trace_r_tap_stat;
 #define REG_RD_ADDR_rt_trace_r_tap_stat 8
 
@@ -124,9 +124,9 @@ typedef unsigned int reg_rt_trace_rw_tap_data;
 
 /* Register rw_tap_hdata, scope rt_trace, type rw */
 typedef struct {
-  unsigned int op     : 4;
-  unsigned int sub_op : 4;
-  unsigned int dummy1 : 24;
+    unsigned int op     : 4;
+    unsigned int sub_op : 4;
+    unsigned int dummy1 : 24;
 } reg_rt_trace_rw_tap_hdata;
 #define REG_RD_ADDR_rt_trace_rw_tap_hdata 16
 #define REG_WR_ADDR_rt_trace_rw_tap_hdata 16
@@ -138,36 +138,36 @@ typedef unsigned int reg_rt_trace_r_redir;
 
 /* Constants */
 enum {
-  regk_rt_trace_brk                        = 0x0000000c,
-  regk_rt_trace_dbg                        = 0x00000003,
-  regk_rt_trace_dbgdi                      = 0x00000004,
-  regk_rt_trace_dbgdo                      = 0x00000005,
-  regk_rt_trace_gmode                      = 0x00000000,
-  regk_rt_trace_no                         = 0x00000000,
-  regk_rt_trace_nop                        = 0x00000000,
-  regk_rt_trace_normal                     = 0x00000000,
-  regk_rt_trace_rdmem                      = 0x00000007,
-  regk_rt_trace_rdmemb                     = 0x00000009,
-  regk_rt_trace_rdpreg                     = 0x00000002,
-  regk_rt_trace_rdreg                      = 0x00000001,
-  regk_rt_trace_rdsreg                     = 0x00000003,
-  regk_rt_trace_redir                      = 0x00000006,
-  regk_rt_trace_ret                        = 0x0000000b,
-  regk_rt_trace_rw_cfg_default             = 0x00000000,
-  regk_rt_trace_trcfg                      = 0x00000001,
-  regk_rt_trace_wp                         = 0x00000001,
-  regk_rt_trace_wp0                        = 0x00000001,
-  regk_rt_trace_wp1                        = 0x00000002,
-  regk_rt_trace_wp2                        = 0x00000004,
-  regk_rt_trace_wp3                        = 0x00000008,
-  regk_rt_trace_wp4                        = 0x00000010,
-  regk_rt_trace_wp5                        = 0x00000020,
-  regk_rt_trace_wp6                        = 0x00000040,
-  regk_rt_trace_wrmem                      = 0x00000008,
-  regk_rt_trace_wrmemb                     = 0x0000000a,
-  regk_rt_trace_wrpreg                     = 0x00000005,
-  regk_rt_trace_wrreg                      = 0x00000004,
-  regk_rt_trace_wrsreg                     = 0x00000006,
-  regk_rt_trace_yes                        = 0x00000001
+    regk_rt_trace_brk                        = 0x0000000c,
+    regk_rt_trace_dbg                        = 0x00000003,
+    regk_rt_trace_dbgdi                      = 0x00000004,
+    regk_rt_trace_dbgdo                      = 0x00000005,
+    regk_rt_trace_gmode                      = 0x00000000,
+    regk_rt_trace_no                         = 0x00000000,
+    regk_rt_trace_nop                        = 0x00000000,
+    regk_rt_trace_normal                     = 0x00000000,
+    regk_rt_trace_rdmem                      = 0x00000007,
+    regk_rt_trace_rdmemb                     = 0x00000009,
+    regk_rt_trace_rdpreg                     = 0x00000002,
+    regk_rt_trace_rdreg                      = 0x00000001,
+    regk_rt_trace_rdsreg                     = 0x00000003,
+    regk_rt_trace_redir                      = 0x00000006,
+    regk_rt_trace_ret                        = 0x0000000b,
+    regk_rt_trace_rw_cfg_default             = 0x00000000,
+    regk_rt_trace_trcfg                      = 0x00000001,
+    regk_rt_trace_wp                         = 0x00000001,
+    regk_rt_trace_wp0                        = 0x00000001,
+    regk_rt_trace_wp1                        = 0x00000002,
+    regk_rt_trace_wp2                        = 0x00000004,
+    regk_rt_trace_wp3                        = 0x00000008,
+    regk_rt_trace_wp4                        = 0x00000010,
+    regk_rt_trace_wp5                        = 0x00000020,
+    regk_rt_trace_wp6                        = 0x00000040,
+    regk_rt_trace_wrmem                      = 0x00000008,
+    regk_rt_trace_wrmemb                     = 0x0000000a,
+    regk_rt_trace_wrpreg                     = 0x00000005,
+    regk_rt_trace_wrreg                      = 0x00000004,
+    regk_rt_trace_wrsreg                     = 0x00000006,
+    regk_rt_trace_yes                        = 0x00000001
 };
 #endif /* __rt_trace_defs_h */

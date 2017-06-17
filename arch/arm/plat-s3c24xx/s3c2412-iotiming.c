@@ -41,25 +41,24 @@
  * @pfx: The prefix to print each line with.
  * @iot: The IO timing information
  */
-static void s3c2412_print_timing(const char *pfx, struct s3c_iotimings *iot)
-{
-	struct s3c2412_iobank_timing *bt;
-	unsigned int bank;
+static void s3c2412_print_timing(const char *pfx, struct s3c_iotimings *iot) {
+    struct s3c2412_iobank_timing *bt;
+    unsigned int bank;
 
-	for (bank = 0; bank < MAX_BANKS; bank++) {
-		bt = iot->bank[bank].io_2412;
-		if (!bt)
-			continue;
+    for (bank = 0; bank < MAX_BANKS; bank++) {
+        bt = iot->bank[bank].io_2412;
+        if (!bt)
+            continue;
 
-		printk(KERN_DEBUG "%s: %d: idcy=%d.%d wstrd=%d.%d wstwr=%d,%d"
-		       "wstoen=%d.%d wstwen=%d.%d wstbrd=%d.%d\n", pfx, bank,
-		       print_ns(bt->idcy),
-		       print_ns(bt->wstrd),
-		       print_ns(bt->wstwr),
-		       print_ns(bt->wstoen),
-		       print_ns(bt->wstwen),
-		       print_ns(bt->wstbrd));
-	}
+        printk(KERN_DEBUG "%s: %d: idcy=%d.%d wstrd=%d.%d wstwr=%d,%d"
+               "wstoen=%d.%d wstwen=%d.%d wstbrd=%d.%d\n", pfx, bank,
+               print_ns(bt->idcy),
+               print_ns(bt->wstrd),
+               print_ns(bt->wstwr),
+               print_ns(bt->wstoen),
+               print_ns(bt->wstwen),
+               print_ns(bt->wstbrd));
+    }
 }
 
 /**
@@ -67,9 +66,8 @@ static void s3c2412_print_timing(const char *pfx, struct s3c_iotimings *iot)
  * @cyc_tns: The cycle time in 10ths of nanoseconds.
  * @clk_tns: The clock period in 10ths of nanoseconds.
  */
-static inline unsigned int to_div(unsigned int cyc_tns, unsigned int clk_tns)
-{
-	return cyc_tns ? DIV_ROUND_UP(cyc_tns, clk_tns) : 0;
+static inline unsigned int to_div(unsigned int cyc_tns, unsigned int clk_tns) {
+    return cyc_tns ? DIV_ROUND_UP(cyc_tns, clk_tns) : 0;
 }
 
 /**
@@ -79,14 +77,13 @@ static inline unsigned int to_div(unsigned int cyc_tns, unsigned int clk_tns)
  * @err: Pointer to err variable to update in event of failure.
  */
 static unsigned int calc_timing(unsigned int hwtm, unsigned int clk_tns,
-				unsigned int *err)
-{
-	unsigned int ret = to_div(hwtm, clk_tns);
+                                unsigned int *err) {
+    unsigned int ret = to_div(hwtm, clk_tns);
 
-	if (ret > 0xf)
-		*err = -EINVAL;
+    if (ret > 0xf)
+        *err = -EINVAL;
 
-	return ret;
+    return ret;
 }
 
 /**
@@ -95,19 +92,18 @@ static unsigned int calc_timing(unsigned int hwtm, unsigned int clk_tns,
  * @bt: The bank timing.
  */
 static int s3c2412_calc_bank(struct s3c_cpufreq_config *cfg,
-			     struct s3c2412_iobank_timing *bt)
-{
-	unsigned int hclk = cfg->freq.hclk_tns;
-	int err = 0;
+                             struct s3c2412_iobank_timing *bt) {
+    unsigned int hclk = cfg->freq.hclk_tns;
+    int err = 0;
 
-	bt->smbidcyr = calc_timing(bt->idcy, hclk, &err);
-	bt->smbwstrd = calc_timing(bt->wstrd, hclk, &err);
-	bt->smbwstwr = calc_timing(bt->wstwr, hclk, &err);
-	bt->smbwstoen = calc_timing(bt->wstoen, hclk, &err);
-	bt->smbwstwen = calc_timing(bt->wstwen, hclk, &err);
-	bt->smbwstbrd = calc_timing(bt->wstbrd, hclk, &err);
+    bt->smbidcyr = calc_timing(bt->idcy, hclk, &err);
+    bt->smbwstrd = calc_timing(bt->wstrd, hclk, &err);
+    bt->smbwstwr = calc_timing(bt->wstwr, hclk, &err);
+    bt->smbwstoen = calc_timing(bt->wstoen, hclk, &err);
+    bt->smbwstwen = calc_timing(bt->wstwen, hclk, &err);
+    bt->smbwstbrd = calc_timing(bt->wstbrd, hclk, &err);
 
-	return err;
+    return err;
 }
 
 /**
@@ -117,20 +113,19 @@ static int s3c2412_calc_bank(struct s3c_cpufreq_config *cfg,
  * @iob: The IO bank information to decode.
 */
 void s3c2412_iotiming_debugfs(struct seq_file *seq,
-			      struct s3c_cpufreq_config *cfg,
-			      union s3c_iobank *iob)
-{
-	struct s3c2412_iobank_timing *bt = iob->io_2412;
+                              struct s3c_cpufreq_config *cfg,
+                              union s3c_iobank *iob) {
+    struct s3c2412_iobank_timing *bt = iob->io_2412;
 
-	seq_printf(seq,
-		   "\tRead: idcy=%d.%d wstrd=%d.%d wstwr=%d,%d"
-		   "wstoen=%d.%d wstwen=%d.%d wstbrd=%d.%d\n",
-		   print_ns(bt->idcy),
-		   print_ns(bt->wstrd),
-		   print_ns(bt->wstwr),
-		   print_ns(bt->wstoen),
-		   print_ns(bt->wstwen),
-		   print_ns(bt->wstbrd));
+    seq_printf(seq,
+               "\tRead: idcy=%d.%d wstrd=%d.%d wstwr=%d,%d"
+               "wstoen=%d.%d wstwen=%d.%d wstbrd=%d.%d\n",
+               print_ns(bt->idcy),
+               print_ns(bt->wstrd),
+               print_ns(bt->wstwr),
+               print_ns(bt->wstoen),
+               print_ns(bt->wstwen),
+               print_ns(bt->wstbrd));
 }
 
 /**
@@ -142,28 +137,27 @@ void s3c2412_iotiming_debugfs(struct seq_file *seq,
  * configured as IO, using s3c2412_calc_bank().
  */
 int s3c2412_iotiming_calc(struct s3c_cpufreq_config *cfg,
-			  struct s3c_iotimings *iot)
-{
-	struct s3c2412_iobank_timing *bt;
-	int bank;
-	int ret;
+                          struct s3c_iotimings *iot) {
+    struct s3c2412_iobank_timing *bt;
+    int bank;
+    int ret;
 
-	for (bank = 0; bank < MAX_BANKS; bank++) {
-		bt = iot->bank[bank].io_2412;
-		if (!bt)
-			continue;
+    for (bank = 0; bank < MAX_BANKS; bank++) {
+        bt = iot->bank[bank].io_2412;
+        if (!bt)
+            continue;
 
-		ret = s3c2412_calc_bank(cfg, bt);
-		if (ret) {
-			printk(KERN_ERR "%s: cannot calculate bank %d io\n",
-			       __func__, bank);
-			goto err;
-		}
-	}
+        ret = s3c2412_calc_bank(cfg, bt);
+        if (ret) {
+            printk(KERN_ERR "%s: cannot calculate bank %d io\n",
+                   __func__, bank);
+            goto err;
+        }
+    }
 
-	return 0;
- err:
-	return ret;
+    return 0;
+err:
+    return ret;
 }
 
 /**
@@ -175,47 +169,44 @@ int s3c2412_iotiming_calc(struct s3c_cpufreq_config *cfg,
  * calling s3c2412_iotiming_calc().
  */
 void s3c2412_iotiming_set(struct s3c_cpufreq_config *cfg,
-			  struct s3c_iotimings *iot)
-{
-	struct s3c2412_iobank_timing *bt;
-	void __iomem *regs;
-	int bank;
+                          struct s3c_iotimings *iot) {
+    struct s3c2412_iobank_timing *bt;
+    void __iomem *regs;
+    int bank;
 
-	/* set the io timings from the specifier */
+    /* set the io timings from the specifier */
 
-	for (bank = 0; bank < MAX_BANKS; bank++) {
-		bt = iot->bank[bank].io_2412;
-		if (!bt)
-			continue;
+    for (bank = 0; bank < MAX_BANKS; bank++) {
+        bt = iot->bank[bank].io_2412;
+        if (!bt)
+            continue;
 
-		regs = S3C2412_SSMC_BANK(bank);
+        regs = S3C2412_SSMC_BANK(bank);
 
-		__raw_writel(bt->smbidcyr, regs + SMBIDCYR);
-		__raw_writel(bt->smbwstrd, regs + SMBWSTRDR);
-		__raw_writel(bt->smbwstwr, regs + SMBWSTWRR);
-		__raw_writel(bt->smbwstoen, regs + SMBWSTOENR);
-		__raw_writel(bt->smbwstwen, regs + SMBWSTWENR);
-		__raw_writel(bt->smbwstbrd, regs + SMBWSTBRDR);
-	}
+        __raw_writel(bt->smbidcyr, regs + SMBIDCYR);
+        __raw_writel(bt->smbwstrd, regs + SMBWSTRDR);
+        __raw_writel(bt->smbwstwr, regs + SMBWSTWRR);
+        __raw_writel(bt->smbwstoen, regs + SMBWSTOENR);
+        __raw_writel(bt->smbwstwen, regs + SMBWSTWENR);
+        __raw_writel(bt->smbwstbrd, regs + SMBWSTBRDR);
+    }
 }
 
-static inline unsigned int s3c2412_decode_timing(unsigned int clock, u32 reg)
-{
-	return (reg & 0xf) * clock;
+static inline unsigned int s3c2412_decode_timing(unsigned int clock, u32 reg) {
+    return (reg & 0xf) * clock;
 }
 
 static void s3c2412_iotiming_getbank(struct s3c_cpufreq_config *cfg,
-				     struct s3c2412_iobank_timing *bt,
-				     unsigned int bank)
-{
-	unsigned long clk = cfg->freq.hclk_tns;  /* ssmc clock??? */
-	void __iomem *regs = S3C2412_SSMC_BANK(bank);
+                                     struct s3c2412_iobank_timing *bt,
+                                     unsigned int bank) {
+    unsigned long clk = cfg->freq.hclk_tns;  /* ssmc clock??? */
+    void __iomem *regs = S3C2412_SSMC_BANK(bank);
 
-	bt->idcy = s3c2412_decode_timing(clk, __raw_readl(regs + SMBIDCYR));
-	bt->wstrd = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTRDR));
-	bt->wstoen = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTOENR));
-	bt->wstwen = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTWENR));
-	bt->wstbrd = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTBRDR));
+    bt->idcy = s3c2412_decode_timing(clk, __raw_readl(regs + SMBIDCYR));
+    bt->wstrd = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTRDR));
+    bt->wstoen = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTOENR));
+    bt->wstwen = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTWENR));
+    bt->wstbrd = s3c2412_decode_timing(clk, __raw_readl(regs + SMBWSTBRDR));
 }
 
 /**
@@ -223,64 +214,61 @@ static void s3c2412_iotiming_getbank(struct s3c_cpufreq_config *cfg,
  * @bank: The bank number.
  * @bankcfg: The value of S3C2412_EBI_BANKCFG.
  */
-static inline bool bank_is_io(unsigned int bank, u32 bankcfg)
-{
-	if (bank < 2)
-		return true;
+static inline bool bank_is_io(unsigned int bank, u32 bankcfg) {
+    if (bank < 2)
+        return true;
 
-	return !(bankcfg & (1 << bank));
+    return !(bankcfg & (1 << bank));
 }
 
 int s3c2412_iotiming_get(struct s3c_cpufreq_config *cfg,
-			 struct s3c_iotimings *timings)
-{
-	struct s3c2412_iobank_timing *bt;
-	u32 bankcfg = __raw_readl(S3C2412_EBI_BANKCFG);
-	unsigned int bank;
+                         struct s3c_iotimings *timings) {
+    struct s3c2412_iobank_timing *bt;
+    u32 bankcfg = __raw_readl(S3C2412_EBI_BANKCFG);
+    unsigned int bank;
 
-	/* look through all banks to see what is currently set. */
+    /* look through all banks to see what is currently set. */
 
-	for (bank = 0; bank < MAX_BANKS; bank++) {
-		if (!bank_is_io(bank, bankcfg))
-			continue;
+    for (bank = 0; bank < MAX_BANKS; bank++) {
+        if (!bank_is_io(bank, bankcfg))
+            continue;
 
-		bt = kzalloc(sizeof(struct s3c2412_iobank_timing), GFP_KERNEL);
-		if (!bt) {
-			printk(KERN_ERR "%s: no memory for bank\n", __func__);
-			return -ENOMEM;
-		}
+        bt = kzalloc(sizeof(struct s3c2412_iobank_timing), GFP_KERNEL);
+        if (!bt) {
+            printk(KERN_ERR "%s: no memory for bank\n", __func__);
+            return -ENOMEM;
+        }
 
-		timings->bank[bank].io_2412 = bt;
-		s3c2412_iotiming_getbank(cfg, bt, bank);
-	}
+        timings->bank[bank].io_2412 = bt;
+        s3c2412_iotiming_getbank(cfg, bt, bank);
+    }
 
-	s3c2412_print_timing("get", timings);
-	return 0;
+    s3c2412_print_timing("get", timings);
+    return 0;
 }
 
 /* this is in here as it is so small, it doesn't currently warrant a file
  * to itself. We expect that any s3c24xx needing this is going to also
  * need the iotiming support.
  */
-void s3c2412_cpufreq_setrefresh(struct s3c_cpufreq_config *cfg)
-{
-	struct s3c_cpufreq_board *board = cfg->board;
-	u32 refresh;
+void s3c2412_cpufreq_setrefresh(struct s3c_cpufreq_config *cfg) {
+    struct s3c_cpufreq_board *board = cfg->board;
+    u32 refresh;
 
-	WARN_ON(board == NULL);
+    WARN_ON(board == NULL);
 
-	/* Reduce both the refresh time (in ns) and the frequency (in MHz)
-	 * down to ensure that we do not overflow 32 bit numbers.
-	 *
-	 * This should work for HCLK up to 133MHz and refresh period up
-	 * to 30usec.
-	 */
+    /* Reduce both the refresh time (in ns) and the frequency (in MHz)
+     * down to ensure that we do not overflow 32 bit numbers.
+     *
+     * This should work for HCLK up to 133MHz and refresh period up
+     * to 30usec.
+     */
 
-	refresh = (cfg->freq.hclk / 100) * (board->refresh / 10);
-	refresh = DIV_ROUND_UP(refresh, (1000 * 1000)); /* apply scale  */
-	refresh &= ((1 << 16) - 1);
+    refresh = (cfg->freq.hclk / 100) * (board->refresh / 10);
+    refresh = DIV_ROUND_UP(refresh, (1000 * 1000)); /* apply scale  */
+    refresh &= ((1 << 16) - 1);
 
-	s3c_freq_dbg("%s: refresh value %u\n", __func__, (unsigned int)refresh);
+    s3c_freq_dbg("%s: refresh value %u\n", __func__, (unsigned int)refresh);
 
-	__raw_writel(refresh, S3C2412_REFRESH);
+    __raw_writel(refresh, S3C2412_REFRESH);
 }

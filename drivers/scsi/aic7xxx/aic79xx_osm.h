@@ -123,26 +123,24 @@ extern struct scsi_host_template aic79xx_driver_template;
 typedef uint32_t bus_size_t;
 
 typedef enum {
-	BUS_SPACE_MEMIO,
-	BUS_SPACE_PIO
+    BUS_SPACE_MEMIO,
+    BUS_SPACE_PIO
 } bus_space_tag_t;
 
 typedef union {
-	u_long		  ioport;
-	volatile uint8_t __iomem *maddr;
+    u_long		  ioport;
+    volatile uint8_t __iomem *maddr;
 } bus_space_handle_t;
 
-typedef struct bus_dma_segment
-{
-	dma_addr_t	ds_addr;
-	bus_size_t	ds_len;
+typedef struct bus_dma_segment {
+    dma_addr_t	ds_addr;
+    bus_size_t	ds_len;
 } bus_dma_segment_t;
 
-struct ahd_linux_dma_tag
-{
-	bus_size_t	alignment;
-	bus_size_t	boundary;
-	bus_size_t	maxsize;
+struct ahd_linux_dma_tag {
+    bus_size_t	alignment;
+    bus_size_t	boundary;
+    bus_size_t	maxsize;
 };
 typedef struct ahd_linux_dma_tag* bus_dma_tag_t;
 
@@ -164,29 +162,29 @@ typedef void bus_dmamap_callback_t(void *, bus_dma_segment_t *, int, int);
 #define BUS_SPACE_MAXSIZE_32BIT	0xFFFFFFFF
 
 int	ahd_dma_tag_create(struct ahd_softc *, bus_dma_tag_t /*parent*/,
-			   bus_size_t /*alignment*/, bus_size_t /*boundary*/,
-			   dma_addr_t /*lowaddr*/, dma_addr_t /*highaddr*/,
-			   bus_dma_filter_t*/*filter*/, void */*filterarg*/,
-			   bus_size_t /*maxsize*/, int /*nsegments*/,
-			   bus_size_t /*maxsegsz*/, int /*flags*/,
-			   bus_dma_tag_t */*dma_tagp*/);
+                       bus_size_t /*alignment*/, bus_size_t /*boundary*/,
+                       dma_addr_t /*lowaddr*/, dma_addr_t /*highaddr*/,
+                       bus_dma_filter_t*/*filter*/, void */*filterarg*/,
+                       bus_size_t /*maxsize*/, int /*nsegments*/,
+                       bus_size_t /*maxsegsz*/, int /*flags*/,
+                       bus_dma_tag_t */*dma_tagp*/);
 
 void	ahd_dma_tag_destroy(struct ahd_softc *, bus_dma_tag_t /*tag*/);
 
 int	ahd_dmamem_alloc(struct ahd_softc *, bus_dma_tag_t /*dmat*/,
-			 void** /*vaddr*/, int /*flags*/,
-			 bus_dmamap_t* /*mapp*/);
+                     void** /*vaddr*/, int /*flags*/,
+                     bus_dmamap_t* /*mapp*/);
 
 void	ahd_dmamem_free(struct ahd_softc *, bus_dma_tag_t /*dmat*/,
-			void* /*vaddr*/, bus_dmamap_t /*map*/);
+                        void* /*vaddr*/, bus_dmamap_t /*map*/);
 
 void	ahd_dmamap_destroy(struct ahd_softc *, bus_dma_tag_t /*tag*/,
-			   bus_dmamap_t /*map*/);
+                           bus_dmamap_t /*map*/);
 
 int	ahd_dmamap_load(struct ahd_softc *ahd, bus_dma_tag_t /*dmat*/,
-			bus_dmamap_t /*map*/, void * /*buf*/,
-			bus_size_t /*buflen*/, bus_dmamap_callback_t *,
-			void */*callback_arg*/, int /*flags*/);
+                    bus_dmamap_t /*map*/, void * /*buf*/,
+                    bus_size_t /*buflen*/, bus_dmamap_callback_t *,
+                    void */*callback_arg*/, int /*flags*/);
 
 int	ahd_dmamap_unload(struct ahd_softc *, bus_dma_tag_t, bus_dmamap_t);
 
@@ -238,88 +236,88 @@ typedef struct timer_list ahd_timer_t;
  */
 
 typedef enum {
-	AHD_DEV_FREEZE_TIL_EMPTY = 0x02, /* Freeze queue until active == 0 */
-	AHD_DEV_Q_BASIC		 = 0x10, /* Allow basic device queuing */
-	AHD_DEV_Q_TAGGED	 = 0x20, /* Allow full SCSI2 command queueing */
-	AHD_DEV_PERIODIC_OTAG	 = 0x40, /* Send OTAG to prevent starvation */
+    AHD_DEV_FREEZE_TIL_EMPTY = 0x02, /* Freeze queue until active == 0 */
+    AHD_DEV_Q_BASIC		 = 0x10, /* Allow basic device queuing */
+    AHD_DEV_Q_TAGGED	 = 0x20, /* Allow full SCSI2 command queueing */
+    AHD_DEV_PERIODIC_OTAG	 = 0x40, /* Send OTAG to prevent starvation */
 } ahd_linux_dev_flags;
 
 struct ahd_linux_device {
-	TAILQ_ENTRY(ahd_linux_device) links;
+    TAILQ_ENTRY(ahd_linux_device) links;
 
-	/*
-	 * The number of transactions currently
-	 * queued to the device.
-	 */
-	int			active;
+    /*
+     * The number of transactions currently
+     * queued to the device.
+     */
+    int			active;
 
-	/*
-	 * The currently allowed number of 
-	 * transactions that can be queued to
-	 * the device.  Must be signed for
-	 * conversion from tagged to untagged
-	 * mode where the device may have more
-	 * than one outstanding active transaction.
-	 */
-	int			openings;
+    /*
+     * The currently allowed number of
+     * transactions that can be queued to
+     * the device.  Must be signed for
+     * conversion from tagged to untagged
+     * mode where the device may have more
+     * than one outstanding active transaction.
+     */
+    int			openings;
 
-	/*
-	 * A positive count indicates that this
-	 * device's queue is halted.
-	 */
-	u_int			qfrozen;
-	
-	/*
-	 * Cumulative command counter.
-	 */
-	u_long			commands_issued;
+    /*
+     * A positive count indicates that this
+     * device's queue is halted.
+     */
+    u_int			qfrozen;
 
-	/*
-	 * The number of tagged transactions when
-	 * running at our current opening level
-	 * that have been successfully received by
-	 * this device since the last QUEUE FULL.
-	 */
-	u_int			tag_success_count;
+    /*
+     * Cumulative command counter.
+     */
+    u_long			commands_issued;
+
+    /*
+     * The number of tagged transactions when
+     * running at our current opening level
+     * that have been successfully received by
+     * this device since the last QUEUE FULL.
+     */
+    u_int			tag_success_count;
 #define AHD_TAG_SUCCESS_INTERVAL 50
 
-	ahd_linux_dev_flags	flags;
+    ahd_linux_dev_flags	flags;
 
-	/*
-	 * Per device timer.
-	 */
-	struct timer_list	timer;
+    /*
+     * Per device timer.
+     */
+    struct timer_list	timer;
 
-	/*
-	 * The high limit for the tags variable.
-	 */
-	u_int			maxtags;
+    /*
+     * The high limit for the tags variable.
+     */
+    u_int			maxtags;
 
-	/*
-	 * The computed number of tags outstanding
-	 * at the time of the last QUEUE FULL event.
-	 */
-	u_int			tags_on_last_queuefull;
+    /*
+     * The computed number of tags outstanding
+     * at the time of the last QUEUE FULL event.
+     */
+    u_int			tags_on_last_queuefull;
 
-	/*
-	 * How many times we have seen a queue full
-	 * with the same number of tags.  This is used
-	 * to stop our adaptive queue depth algorithm
-	 * on devices with a fixed number of tags.
-	 */
-	u_int			last_queuefull_same_count;
+    /*
+     * How many times we have seen a queue full
+     * with the same number of tags.  This is used
+     * to stop our adaptive queue depth algorithm
+     * on devices with a fixed number of tags.
+     */
+    u_int			last_queuefull_same_count;
 #define AHD_LOCK_TAGS_COUNT 50
 
-	/*
-	 * How many transactions have been queued
-	 * without the device going idle.  We use
-	 * this statistic to determine when to issue
-	 * an ordered tag to prevent transaction
-	 * starvation.  This statistic is only updated
-	 * if the AHD_DEV_PERIODIC_OTAG flag is set
-	 * on this device.
-	 */
-	u_int			commands_since_idle_or_otag;
+    /*
+     * How many transactions have been queued
+     * without the device going idle.  We use
+     * this statistic to determine when to issue
+     * an ordered tag to prevent transaction
+     * starvation.  This statistic is only updated
+     * if the AHD_DEV_PERIODIC_OTAG flag is set
+     * on this device.
+     */
+    u_int			commands_since_idle_or_otag;
 #define AHD_OTAG_THRESH	500
 };
 
@@ -336,10 +334,10 @@ struct ahd_linux_device {
  * Per-SCB OSM storage.
  */
 struct scb_platform_data {
-	struct ahd_linux_device	*dev;
-	dma_addr_t		 buf_busaddr;
-	uint32_t		 xfer_len;
-	uint32_t		 sense_resid;	/* Auto-Sense residual */
+    struct ahd_linux_device	*dev;
+    dma_addr_t		 buf_busaddr;
+    uint32_t		 xfer_len;
+    uint32_t		 sense_resid;	/* Auto-Sense residual */
 };
 
 /*
@@ -349,18 +347,18 @@ struct scb_platform_data {
  * this driver.
  */
 struct ahd_platform_data {
-	/*
-	 * Fields accessed from interrupt context.
-	 */
-	struct scsi_target *starget[AHD_NUM_TARGETS]; 
+    /*
+     * Fields accessed from interrupt context.
+     */
+    struct scsi_target *starget[AHD_NUM_TARGETS];
 
-	spinlock_t		 spin_lock;
-	struct completion	*eh_done;
-	struct Scsi_Host        *host;		/* pointer to scsi host */
+    spinlock_t		 spin_lock;
+    struct completion	*eh_done;
+    struct Scsi_Host        *host;		/* pointer to scsi host */
 #define AHD_LINUX_NOIRQ	((uint32_t)~0)
-	uint32_t		 irq;		/* IRQ for this adapter */
-	uint32_t		 bios_address;
-	resource_size_t		 mem_busaddr;	/* Mem Base Addr */
+    uint32_t		 irq;		/* IRQ for this adapter */
+    uint32_t		 bios_address;
+    resource_size_t		 mem_busaddr;	/* Mem Base Addr */
 };
 
 void ahd_delay(long);
@@ -369,41 +367,38 @@ void ahd_delay(long);
 uint8_t ahd_inb(struct ahd_softc * ahd, long port);
 void ahd_outb(struct ahd_softc * ahd, long port, uint8_t val);
 void ahd_outw_atomic(struct ahd_softc * ahd,
-				     long port, uint16_t val);
+                     long port, uint16_t val);
 void ahd_outsb(struct ahd_softc * ahd, long port,
-			       uint8_t *, int count);
+               uint8_t *, int count);
 void ahd_insb(struct ahd_softc * ahd, long port,
-			       uint8_t *, int count);
+              uint8_t *, int count);
 
 /**************************** Initialization **********************************/
 int		ahd_linux_register_host(struct ahd_softc *,
-					struct scsi_host_template *);
+                                struct scsi_host_template *);
 
 /*************************** Pretty Printing **********************************/
 struct info_str {
-	char *buffer;
-	int length;
-	off_t offset;
-	int pos;
+    char *buffer;
+    int length;
+    off_t offset;
+    int pos;
 };
 
 /******************************** Locking *************************************/
 static inline void
-ahd_lockinit(struct ahd_softc *ahd)
-{
-	spin_lock_init(&ahd->platform_data->spin_lock);
+ahd_lockinit(struct ahd_softc *ahd) {
+    spin_lock_init(&ahd->platform_data->spin_lock);
 }
 
 static inline void
-ahd_lock(struct ahd_softc *ahd, unsigned long *flags)
-{
-	spin_lock_irqsave(&ahd->platform_data->spin_lock, *flags);
+ahd_lock(struct ahd_softc *ahd, unsigned long *flags) {
+    spin_lock_irqsave(&ahd->platform_data->spin_lock, *flags);
 }
 
 static inline void
-ahd_unlock(struct ahd_softc *ahd, unsigned long *flags)
-{
-	spin_unlock_irqrestore(&ahd->platform_data->spin_lock, *flags);
+ahd_unlock(struct ahd_softc *ahd, unsigned long *flags) {
+    spin_unlock_irqrestore(&ahd->platform_data->spin_lock, *flags);
 }
 
 /******************************* PCI Definitions ******************************/
@@ -460,16 +455,15 @@ ahd_unlock(struct ahd_softc *ahd, unsigned long *flags)
 #define PCIXM_STATUS_MAXCRDS	0x1C00	/* Maximum Cumulative Read Size */
 #define PCIXM_STATUS_RCVDSCEM	0x2000	/* Received a Split Comp w/Error msg */
 
-typedef enum
-{
-	AHD_POWER_STATE_D0,
-	AHD_POWER_STATE_D1,
-	AHD_POWER_STATE_D2,
-	AHD_POWER_STATE_D3
+typedef enum {
+    AHD_POWER_STATE_D0,
+    AHD_POWER_STATE_D1,
+    AHD_POWER_STATE_D2,
+    AHD_POWER_STATE_D3
 } ahd_power_state;
 
 void ahd_power_state_change(struct ahd_softc *ahd,
-			    ahd_power_state new_state);
+                            ahd_power_state new_state);
 
 /******************************* PCI Routines *********************************/
 int			 ahd_linux_pci_init(void);
@@ -478,43 +472,39 @@ int			 ahd_pci_map_registers(struct ahd_softc *ahd);
 int			 ahd_pci_map_int(struct ahd_softc *ahd);
 
 uint32_t		 ahd_pci_read_config(ahd_dev_softc_t pci,
-					     int reg, int width);
+                                     int reg, int width);
 void			 ahd_pci_write_config(ahd_dev_softc_t pci,
-					  int reg, uint32_t value,
-					  int width);
+                                      int reg, uint32_t value,
+                                      int width);
 
 static inline int ahd_get_pci_function(ahd_dev_softc_t);
 static inline int
-ahd_get_pci_function(ahd_dev_softc_t pci)
-{
-	return (PCI_FUNC(pci->devfn));
+ahd_get_pci_function(ahd_dev_softc_t pci) {
+    return (PCI_FUNC(pci->devfn));
 }
 
 static inline int ahd_get_pci_slot(ahd_dev_softc_t);
 static inline int
-ahd_get_pci_slot(ahd_dev_softc_t pci)
-{
-	return (PCI_SLOT(pci->devfn));
+ahd_get_pci_slot(ahd_dev_softc_t pci) {
+    return (PCI_SLOT(pci->devfn));
 }
 
 static inline int ahd_get_pci_bus(ahd_dev_softc_t);
 static inline int
-ahd_get_pci_bus(ahd_dev_softc_t pci)
-{
-	return (pci->bus->number);
+ahd_get_pci_bus(ahd_dev_softc_t pci) {
+    return (pci->bus->number);
 }
 
 static inline void ahd_flush_device_writes(struct ahd_softc *);
 static inline void
-ahd_flush_device_writes(struct ahd_softc *ahd)
-{
-	/* XXX Is this sufficient for all architectures??? */
-	ahd_inb(ahd, INTSTAT);
+ahd_flush_device_writes(struct ahd_softc *ahd) {
+    /* XXX Is this sufficient for all architectures??? */
+    ahd_inb(ahd, INTSTAT);
 }
 
 /**************************** Proc FS Support *********************************/
 int	ahd_linux_proc_info(struct Scsi_Host *, char *, char **,
-			    off_t, int, int);
+                        off_t, int, int);
 
 /*********************** Transaction Access Wrappers **************************/
 static inline void ahd_cmd_set_transaction_status(struct scsi_cmnd *, uint32_t);
@@ -534,136 +524,117 @@ static inline u_long ahd_get_residual(struct scb *);
 static inline u_long ahd_get_sense_residual(struct scb *);
 static inline int ahd_perform_autosense(struct scb *);
 static inline uint32_t ahd_get_sense_bufsize(struct ahd_softc *,
-					       struct scb *);
+        struct scb *);
 static inline void ahd_notify_xfer_settings_change(struct ahd_softc *,
-						     struct ahd_devinfo *);
+        struct ahd_devinfo *);
 static inline void ahd_platform_scb_free(struct ahd_softc *ahd,
-					   struct scb *scb);
+        struct scb *scb);
 static inline void ahd_freeze_scb(struct scb *scb);
 
 static inline
-void ahd_cmd_set_transaction_status(struct scsi_cmnd *cmd, uint32_t status)
-{
-	cmd->result &= ~(CAM_STATUS_MASK << 16);
-	cmd->result |= status << 16;
+void ahd_cmd_set_transaction_status(struct scsi_cmnd *cmd, uint32_t status) {
+    cmd->result &= ~(CAM_STATUS_MASK << 16);
+    cmd->result |= status << 16;
 }
 
 static inline
-void ahd_set_transaction_status(struct scb *scb, uint32_t status)
-{
-	ahd_cmd_set_transaction_status(scb->io_ctx,status);
+void ahd_set_transaction_status(struct scb *scb, uint32_t status) {
+    ahd_cmd_set_transaction_status(scb->io_ctx,status);
 }
 
 static inline
-void ahd_cmd_set_scsi_status(struct scsi_cmnd *cmd, uint32_t status)
-{
-	cmd->result &= ~0xFFFF;
-	cmd->result |= status;
+void ahd_cmd_set_scsi_status(struct scsi_cmnd *cmd, uint32_t status) {
+    cmd->result &= ~0xFFFF;
+    cmd->result |= status;
 }
 
 static inline
-void ahd_set_scsi_status(struct scb *scb, uint32_t status)
-{
-	ahd_cmd_set_scsi_status(scb->io_ctx, status);
+void ahd_set_scsi_status(struct scb *scb, uint32_t status) {
+    ahd_cmd_set_scsi_status(scb->io_ctx, status);
 }
 
 static inline
-uint32_t ahd_cmd_get_transaction_status(struct scsi_cmnd *cmd)
-{
-	return ((cmd->result >> 16) & CAM_STATUS_MASK);
+uint32_t ahd_cmd_get_transaction_status(struct scsi_cmnd *cmd) {
+    return ((cmd->result >> 16) & CAM_STATUS_MASK);
 }
 
 static inline
-uint32_t ahd_get_transaction_status(struct scb *scb)
-{
-	return (ahd_cmd_get_transaction_status(scb->io_ctx));
+uint32_t ahd_get_transaction_status(struct scb *scb) {
+    return (ahd_cmd_get_transaction_status(scb->io_ctx));
 }
 
 static inline
-uint32_t ahd_cmd_get_scsi_status(struct scsi_cmnd *cmd)
-{
-	return (cmd->result & 0xFFFF);
+uint32_t ahd_cmd_get_scsi_status(struct scsi_cmnd *cmd) {
+    return (cmd->result & 0xFFFF);
 }
 
 static inline
-uint32_t ahd_get_scsi_status(struct scb *scb)
-{
-	return (ahd_cmd_get_scsi_status(scb->io_ctx));
+uint32_t ahd_get_scsi_status(struct scb *scb) {
+    return (ahd_cmd_get_scsi_status(scb->io_ctx));
 }
 
 static inline
-void ahd_set_transaction_tag(struct scb *scb, int enabled, u_int type)
-{
-	/*
-	 * Nothing to do for linux as the incoming transaction
-	 * has no concept of tag/non tagged, etc.
-	 */
+void ahd_set_transaction_tag(struct scb *scb, int enabled, u_int type) {
+    /*
+     * Nothing to do for linux as the incoming transaction
+     * has no concept of tag/non tagged, etc.
+     */
 }
 
 static inline
-u_long ahd_get_transfer_length(struct scb *scb)
-{
-	return (scb->platform_data->xfer_len);
+u_long ahd_get_transfer_length(struct scb *scb) {
+    return (scb->platform_data->xfer_len);
 }
 
 static inline
-int ahd_get_transfer_dir(struct scb *scb)
-{
-	return (scb->io_ctx->sc_data_direction);
+int ahd_get_transfer_dir(struct scb *scb) {
+    return (scb->io_ctx->sc_data_direction);
 }
 
 static inline
-void ahd_set_residual(struct scb *scb, u_long resid)
-{
-	scsi_set_resid(scb->io_ctx, resid);
+void ahd_set_residual(struct scb *scb, u_long resid) {
+    scsi_set_resid(scb->io_ctx, resid);
 }
 
 static inline
-void ahd_set_sense_residual(struct scb *scb, u_long resid)
-{
-	scb->platform_data->sense_resid = resid;
+void ahd_set_sense_residual(struct scb *scb, u_long resid) {
+    scb->platform_data->sense_resid = resid;
 }
 
 static inline
-u_long ahd_get_residual(struct scb *scb)
-{
-	return scsi_get_resid(scb->io_ctx);
+u_long ahd_get_residual(struct scb *scb) {
+    return scsi_get_resid(scb->io_ctx);
 }
 
 static inline
-u_long ahd_get_sense_residual(struct scb *scb)
-{
-	return (scb->platform_data->sense_resid);
+u_long ahd_get_sense_residual(struct scb *scb) {
+    return (scb->platform_data->sense_resid);
 }
 
 static inline
-int ahd_perform_autosense(struct scb *scb)
-{
-	/*
-	 * We always perform autosense in Linux.
-	 * On other platforms this is set on a
-	 * per-transaction basis.
-	 */
-	return (1);
+int ahd_perform_autosense(struct scb *scb) {
+    /*
+     * We always perform autosense in Linux.
+     * On other platforms this is set on a
+     * per-transaction basis.
+     */
+    return (1);
 }
 
 static inline uint32_t
-ahd_get_sense_bufsize(struct ahd_softc *ahd, struct scb *scb)
-{
-	return (sizeof(struct scsi_sense_data));
+ahd_get_sense_bufsize(struct ahd_softc *ahd, struct scb *scb) {
+    return (sizeof(struct scsi_sense_data));
 }
 
 static inline void
 ahd_notify_xfer_settings_change(struct ahd_softc *ahd,
-				struct ahd_devinfo *devinfo)
-{
-	/* Nothing to do here for linux */
+                                struct ahd_devinfo *devinfo) {
+    /* Nothing to do here for linux */
 }
 
 static inline void
-ahd_platform_scb_free(struct ahd_softc *ahd, struct scb *scb)
-{
-	ahd->flags &= ~AHD_RESOURCE_SHORTAGE;
+ahd_platform_scb_free(struct ahd_softc *ahd, struct scb *scb) {
+    ahd->flags &= ~AHD_RESOURCE_SHORTAGE;
 }
 
 int	ahd_platform_alloc(struct ahd_softc *ahd, void *platform_arg);
@@ -672,24 +643,23 @@ void	ahd_platform_init(struct ahd_softc *ahd);
 void	ahd_platform_freeze_devq(struct ahd_softc *ahd, struct scb *scb);
 
 static inline void
-ahd_freeze_scb(struct scb *scb)
-{
-	if ((scb->io_ctx->result & (CAM_DEV_QFRZN << 16)) == 0) {
-                scb->io_ctx->result |= CAM_DEV_QFRZN << 16;
-                scb->platform_data->dev->qfrozen++;
-        }
+ahd_freeze_scb(struct scb *scb) {
+    if ((scb->io_ctx->result & (CAM_DEV_QFRZN << 16)) == 0) {
+        scb->io_ctx->result |= CAM_DEV_QFRZN << 16;
+        scb->platform_data->dev->qfrozen++;
+    }
 }
 
 void	ahd_platform_set_tags(struct ahd_softc *ahd, struct scsi_device *sdev,
-			      struct ahd_devinfo *devinfo, ahd_queue_alg);
+                              struct ahd_devinfo *devinfo, ahd_queue_alg);
 int	ahd_platform_abort_scbs(struct ahd_softc *ahd, int target,
-				char channel, int lun, u_int tag,
-				role_t role, uint32_t status);
+                            char channel, int lun, u_int tag,
+                            role_t role, uint32_t status);
 irqreturn_t
-	ahd_linux_isr(int irq, void *dev_id);
+ahd_linux_isr(int irq, void *dev_id);
 void	ahd_done(struct ahd_softc*, struct scb*);
 void	ahd_send_async(struct ahd_softc *, char channel,
-		       u_int target, u_int lun, ac_code);
+                       u_int target, u_int lun, ac_code);
 void	ahd_print_path(struct ahd_softc *, struct scb *);
 
 #ifdef CONFIG_PCI

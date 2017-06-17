@@ -14,13 +14,12 @@ void trace_event(union perf_event *event);
 struct ui_progress;
 
 #ifdef NO_NEWT_SUPPORT
-static inline int ui_helpline__show_help(const char *format __used, va_list ap __used)
-{
-	return 0;
+static inline int ui_helpline__show_help(const char *format __used, va_list ap __used) {
+    return 0;
 }
 
 static inline void ui_progress__update(u64 curr __used, u64 total __used,
-				       const char *title __used) {}
+                                       const char *title __used) {}
 
 #define ui__error(format, arg...) ui__warning(format, ##arg)
 #else

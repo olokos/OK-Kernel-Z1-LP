@@ -92,8 +92,8 @@
 #define S626_DIO_CHANNELS       48
 #define S626_DIO_BANKS		3	/*  Number of DIO groups. */
 #define S626_DIO_EXTCHANS	40	/*  Number of */
-					/*  extended-capability */
-					/*  DIO channels. */
+/*  extended-capability */
+/*  DIO channels. */
 
 #define NUM_TRIMDACS	12	/*  Number of valid TrimDAC channels. */
 
@@ -356,7 +356,7 @@
 #define MISC2_BATT_ENABLE	0x0008	/*  Backup battery enable. */
 #define MISC2_WDENABLE		0x0004	/*  Watchdog timer enable. */
 #define MISC2_WDPERIOD_MASK	0x0003	/*  Watchdog interval */
-						/*  select mask. */
+/*  select mask. */
 
 /*  Bit masks for ACON1 register. */
 #define A2_RUN			0x40000000	/*  Run A2 based on TSL2. */
@@ -364,8 +364,8 @@
 #define A1_SWAP			0x00200000	/*  Use big-endian for A1. */
 #define A2_SWAP			0x00100000	/*  Use big-endian for A2. */
 #define WS_MODES		0x00019999	/*  WS0 = TSL1 trigger */
-						/*  input, WS1-WS4 = */
-						/*  CS* outputs. */
+/*  input, WS1-WS4 = */
+/*  CS* outputs. */
 
 #if PLATFORM == INTEL		/* Base ACON1 config: always run A1 based
 				 * on TSL1. */
@@ -388,7 +388,7 @@
 #define INVERT_BCLK2		0x00100000	/*  Invert BCLK2 (DACs). */
 #define BCLK2_OE		0x00040000	/*  enab BCLK2 (DACs). */
 #define ACON2_XORMASK		0x000C0000	/*  XOR mask for ACON2 */
-						/*  active-low bits. */
+/*  active-low bits. */
 
 #define ACON2_INIT		(ACON2_XORMASK ^ (A1_CLKSRC_BCLK1 | A2_CLKSRC_X2 | INVERT_BCLK2 | BCLK2_OE))
 
@@ -426,8 +426,8 @@
 #define RSD3			0x00001800	/*  Shift data in on SD3. */
 #define RSD2			0x00001000	/*  Shift data in on SD2. */
 #define LOW_A2			0x00000002	/*  Drive last SD low */
-						/*  for 7 clks, then */
-						/*  tri-state. */
+/*  for 7 clks, then */
+/*  tri-state. */
 #define EOS		     	0x00000001	/*  End of superframe. */
 
 /*  I2C configuration constants. */
@@ -445,9 +445,9 @@
 /*  Max retries to wait for EEPROM write. */
 #define I2C_RETRIES		(I2C_WRTIME * I2C_BITRATE / 9.0)
 #define I2C_ERR			0x0002	/*  I2C control/status */
-						/*  flag ERROR. */
+/*  flag ERROR. */
 #define I2C_BUSY		0x0001	/*  I2C control/status */
-						/*  flag BUSY. */
+/*  flag BUSY. */
 #define I2C_ABORT		0x0080	/*  I2C status flag ABORT. */
 #define I2C_ATTRSTART		0x3	/*  I2C attribute START. */
 #define I2C_ATTRCONT		0x2	/*  I2C attribute CONT. */
@@ -482,7 +482,7 @@
 
 /*  DEBI command constants. */
 #define DEBI_CMD_SIZE16		(2 << 17)	/*  Transfer size is */
-						/*  always 2 bytes. */
+/*  always 2 bytes. */
 #define DEBI_CMD_READ		0x00010000	/*  Read operation. */
 #define DEBI_CMD_WRITE		0x00000000	/*  Write operation. */
 
@@ -494,40 +494,40 @@
 
 /*  DEBI configuration constants. */
 #define DEBI_CFG_XIRQ_EN	0x80000000	/*  enab external */
-						/*  interrupt on GPIO3. */
+/*  interrupt on GPIO3. */
 #define DEBI_CFG_XRESUME	0x40000000	/*  Resume block */
-						/*  transfer when XIRQ */
-						/*  deasserted. */
+/*  transfer when XIRQ */
+/*  deasserted. */
 #define DEBI_CFG_FAST		0x10000000	/*  Fast mode enable. */
 
 /*  4-bit field that specifies DEBI timeout value in PCI clock cycles: */
 #define DEBI_CFG_TOUT_BIT	22	/*    Finish DEBI cycle after */
-					/*    this many clocks. */
+/*    this many clocks. */
 
 /*  2-bit field that specifies Endian byte lane steering: */
 #define DEBI_CFG_SWAP_NONE	0x00000000	/*    Straight - don't */
-						/*    swap any bytes */
-						/*    (Intel). */
+/*    swap any bytes */
+/*    (Intel). */
 #define DEBI_CFG_SWAP_2		0x00100000	/*    2-byte swap (Motorola). */
 #define DEBI_CFG_SWAP_4		0x00200000	/*    4-byte swap. */
 #define DEBI_CFG_16		0x00080000	/*  Slave is able to */
-						/*  serve 16-bit */
-						/*  cycles. */
+/*  serve 16-bit */
+/*  cycles. */
 
 #define DEBI_CFG_SLAVE16	0x00080000	/*  Slave is able to */
-						/*  serve 16-bit */
-						/*  cycles. */
+/*  serve 16-bit */
+/*  cycles. */
 #define DEBI_CFG_INC		0x00040000	/*  enab address */
-						/*  increment for block */
-						/*  transfers. */
+/*  increment for block */
+/*  transfers. */
 #define DEBI_CFG_INTEL		0x00020000	/*  Intel style local bus. */
 #define DEBI_CFG_TIMEROFF	0x00010000	/*  Disable timer. */
 
 #if PLATFORM == INTEL
 
 #define DEBI_TOUT		7	/*  Wait 7 PCI clocks */
-						/*  (212 ns) before */
-						/*  polling RDY. */
+/*  (212 ns) before */
+/*  polling RDY. */
 
 /*  Intel byte lane steering (pass through all byte lanes). */
 #define DEBI_SWAP		DEBI_CFG_SWAP_NONE
@@ -535,7 +535,7 @@
 #elif PLATFORM == MOTOROLA
 
 #define DEBI_TOUT		15	/*  Wait 15 PCI clocks (454 ns) */
-					/*  maximum before timing out. */
+/*  maximum before timing out. */
 #define DEBI_SWAP		DEBI_CFG_SWAP_2	/*  Motorola byte lane steering. */
 
 #endif
@@ -547,11 +547,11 @@
 
 /*  LoadSrc values: */
 #define LOADSRC_INDX		0	/*  Preload core in response to */
-					/*  Index. */
+/*  Index. */
 #define LOADSRC_OVER		1	/*  Preload core in response to */
-					/*  Overflow. */
+/*  Overflow. */
 #define LOADSRCB_OVERA		2	/*  Preload B core in response */
-					/*  to A Overflow. */
+/*  to A Overflow. */
 #define LOADSRC_NONE		3	/*  Never preload core. */
 
 /*  IntSrc values: */
@@ -581,9 +581,9 @@
 
 /*  ClkPol values: */
 #define CLKPOL_POS		0	/*  Counter/Extender clock is */
-					/*  active high. */
+/*  active high. */
 #define CLKPOL_NEG		1	/*  Counter/Extender clock is */
-					/*  active low. */
+/*  active low. */
 #define CNTDIR_UP		0	/*  Timer counts up. */
 #define CNTDIR_DOWN 		1	/*  Timer counts down. */
 
@@ -609,32 +609,32 @@
 /*  a COUNTER_SETUP. */
 
 #define CLKSRC_COUNTER		0	/*  Counter: ENC_C clock, ENC_D */
-					/*  direction. */
+/*  direction. */
 #define CLKSRC_TIMER		2	/*  Timer: SYS_C clock, */
-					/*  direction specified by */
-					/*  ClkPol. */
+/*  direction specified by */
+/*  ClkPol. */
 #define CLKSRC_EXTENDER		3	/*  Extender: OVR_A clock, */
-					/*  ENC_D direction. */
+/*  ENC_D direction. */
 
 /*  Enumerated counter clock multipliers. */
 
 #define MULT_X0			0x0003	/*  Supports no multipliers; */
-					/*  fixed physical multiplier = */
-					/*  3. */
+/*  fixed physical multiplier = */
+/*  3. */
 #define MULT_X1			0x0002	/*  Supports multiplier x1; */
-					/*  fixed physical multiplier = */
-					/*  2. */
+/*  fixed physical multiplier = */
+/*  2. */
 #define MULT_X2			0x0001	/*  Supports multipliers x1, */
-					/*  x2; physical multipliers = */
-					/*  1 or 2. */
+/*  x2; physical multipliers = */
+/*  1 or 2. */
 #define MULT_X4			0x0000	/*  Supports multipliers x1, */
-					/*  x2, x4; physical */
-					/*  multipliers = 0, 1 or 2. */
+/*  x2, x4; physical */
+/*  multipliers = 0, 1 or 2. */
 
 /*  Sanity-check limits for parameters. */
 
 #define NUM_COUNTERS		6	/*  Maximum valid counter */
-					/*  logical channel number. */
+/*  logical channel number. */
 #define NUM_INTSOURCES		4
 #define NUM_LATCHSOURCES	4
 #define NUM_CLKMULTS		4
@@ -721,7 +721,7 @@
 #define STDMSK_CLKENAB		((uint16_t)(1 << STDBIT_CLKENAB))
 
 struct bufferDMA {
-	dma_addr_t PhysicalBase;
-	void *LogicalBase;
-	uint32_t DMAHandle;
+    dma_addr_t PhysicalBase;
+    void *LogicalBase;
+    uint32_t DMAHandle;
 };

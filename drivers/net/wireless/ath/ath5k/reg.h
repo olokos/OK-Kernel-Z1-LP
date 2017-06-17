@@ -2114,18 +2114,18 @@
 #define AR5K_RF_BUFFER_CONTROL_2	0x98cc	/* Bank 7 on 5111 */
 
 #define AR5K_RF_BUFFER_CONTROL_3	0x98d0	/* Bank 2 on 5112 */
-						/* Channel set on 5111 */
-						/* Used to read radio revision*/
+/* Channel set on 5111 */
+/* Used to read radio revision*/
 
 #define AR5K_RF_BUFFER_CONTROL_4	0x98d4  /* RF Stage register on 5110 */
-						/* Bank 0,1,2,6 on 5111 */
-						/* Bank 1 on 5112 */
-						/* Used during activation on 5111 */
+/* Bank 0,1,2,6 on 5111 */
+/* Bank 1 on 5112 */
+/* Used during activation on 5111 */
 
 #define AR5K_RF_BUFFER_CONTROL_5	0x98d8	/* Bank 3 on 5111 */
-						/* Used during activation on 5111 */
-						/* Channel on 5112 */
-						/* Bank 6 on 5112 */
+/* Used during activation on 5111 */
+/* Channel on 5112 */
+/* Bank 6 on 5112 */
 
 #define AR5K_RF_BUFFER_CONTROL_6	0x98dc	/* Bank 3 on 5112 */
 

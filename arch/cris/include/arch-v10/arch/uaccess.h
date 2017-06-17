@@ -1,4 +1,4 @@
-/* 
+/*
  * Authors:    Bjorn Wesen (bjornw@axis.com)
  *	       Hans-Peter Nilsson (hp@axis.com)
  *
@@ -88,63 +88,62 @@
  * (without the null byte)
  */
 static inline long
-__do_strncpy_from_user(char *dst, const char *src, long count)
-{
-	long res;
+__do_strncpy_from_user(char *dst, const char *src, long count) {
+    long res;
 
-	if (count == 0)
-		return 0;
+    if (count == 0)
+        return 0;
 
-	/*
-	 * Currently, in 2.4.0-test9, most ports use a simple byte-copy loop.
-	 *  So do we.
-	 *
-	 *  This code is deduced from:
-	 *
-	 *	char tmp2;
-	 *	long tmp1, tmp3	
-	 *	tmp1 = count;
-	 *	while ((*dst++ = (tmp2 = *src++)) != 0
-	 *	       && --tmp1)
-	 *	  ;
-	 *
-	 *	res = count - tmp1;
-	 *
-	 *  with tweaks.
-	 */
+    /*
+     * Currently, in 2.4.0-test9, most ports use a simple byte-copy loop.
+     *  So do we.
+     *
+     *  This code is deduced from:
+     *
+     *	char tmp2;
+     *	long tmp1, tmp3
+     *	tmp1 = count;
+     *	while ((*dst++ = (tmp2 = *src++)) != 0
+     *	       && --tmp1)
+     *	  ;
+     *
+     *	res = count - tmp1;
+     *
+     *  with tweaks.
+     */
 
-	__asm__ __volatile__ (
-		"	move.d %3,%0\n"
-		"	move.b [%2+],$r9\n"
-		"1:	beq 2f\n"
-		"	move.b $r9,[%1+]\n"
+    __asm__ __volatile__ (
+        "	move.d %3,%0\n"
+        "	move.b [%2+],$r9\n"
+        "1:	beq 2f\n"
+        "	move.b $r9,[%1+]\n"
 
-		"	subq 1,%0\n"
-		"	bne 1b\n"
-		"	move.b [%2+],$r9\n"
+        "	subq 1,%0\n"
+        "	bne 1b\n"
+        "	move.b [%2+],$r9\n"
 
-		"2:	sub.d %3,%0\n"
-		"	neg.d %0,%0\n"
-		"3:\n"
-		"	.section .fixup,\"ax\"\n"
-		"4:	move.d %7,%0\n"
-		"	jump 3b\n"
+        "2:	sub.d %3,%0\n"
+        "	neg.d %0,%0\n"
+        "3:\n"
+        "	.section .fixup,\"ax\"\n"
+        "4:	move.d %7,%0\n"
+        "	jump 3b\n"
 
-		/* There's one address for a fault at the first move, and
-		   two possible PC values for a fault at the second move,
-		   being a delay-slot filler.  However, the branch-target
-		   for the second move is the same as the first address.
-		   Just so you don't get confused...  */
-		"	.previous\n"
-		"	.section __ex_table,\"a\"\n"
-		"	.dword 1b,4b\n"
-		"	.dword 2b,4b\n"
-		"	.previous"
-		: "=r" (res), "=r" (dst), "=r" (src), "=r" (count)
-		: "3" (count), "1" (dst), "2" (src), "g" (-EFAULT)
-		: "r9");
+        /* There's one address for a fault at the first move, and
+           two possible PC values for a fault at the second move,
+           being a delay-slot filler.  However, the branch-target
+           for the second move is the same as the first address.
+           Just so you don't get confused...  */
+        "	.previous\n"
+        "	.section __ex_table,\"a\"\n"
+        "	.dword 1b,4b\n"
+        "	.dword 2b,4b\n"
+        "	.previous"
+        : "=r" (res), "=r" (dst), "=r" (src), "=r" (count)
+        : "3" (count), "1" (dst), "2" (src), "g" (-EFAULT)
+        : "r9");
 
-	return res;
+    return res;
 }
 
 /* A few copy asms to build up the more complex ones from.
@@ -603,58 +602,57 @@ __do_strncpy_from_user(char *dst, const char *src, long count)
  */
 
 static inline long
-strnlen_user(const char *s, long n)
-{
-	long res, tmp1;
+strnlen_user(const char *s, long n) {
+    long res, tmp1;
 
-	if (!access_ok(VERIFY_READ, s, 0))
-		return 0;
+    if (!access_ok(VERIFY_READ, s, 0))
+        return 0;
 
-	/*
-	 * This code is deduced from:
-	 *
-	 *	tmp1 = n;
-	 *	while (tmp1-- > 0 && *s++)
-	 *	  ;
-	 *
-	 *	res = n - tmp1;
-	 *
-	 *  (with tweaks).
-	 */
+    /*
+     * This code is deduced from:
+     *
+     *	tmp1 = n;
+     *	while (tmp1-- > 0 && *s++)
+     *	  ;
+     *
+     *	res = n - tmp1;
+     *
+     *  (with tweaks).
+     */
 
-	__asm__ __volatile__ (
-		"	move.d %1,$r9\n"
-		"0:\n"
-		"	ble 1f\n"
-		"	subq 1,$r9\n"
+    __asm__ __volatile__ (
+        "	move.d %1,$r9\n"
+        "0:\n"
+        "	ble 1f\n"
+        "	subq 1,$r9\n"
 
-		"	test.b [%0+]\n"
-		"	bne 0b\n"
-		"	test.d $r9\n"
-		"1:\n"
-		"	move.d %1,%0\n"
-		"	sub.d $r9,%0\n"
-		"2:\n"
-		"	.section .fixup,\"ax\"\n"
+        "	test.b [%0+]\n"
+        "	bne 0b\n"
+        "	test.d $r9\n"
+        "1:\n"
+        "	move.d %1,%0\n"
+        "	sub.d $r9,%0\n"
+        "2:\n"
+        "	.section .fixup,\"ax\"\n"
 
-		"3:	clear.d %0\n"
-		"	jump 2b\n"
+        "3:	clear.d %0\n"
+        "	jump 2b\n"
 
-		/* There's one address for a fault at the first move, and
-		   two possible PC values for a fault at the second move,
-		   being a delay-slot filler.  However, the branch-target
-		   for the second move is the same as the first address.
-		   Just so you don't get confused...  */
-		"	.previous\n"
-		"	.section __ex_table,\"a\"\n"
-		"	.dword 0b,3b\n"
-		"	.dword 1b,3b\n"
-		"	.previous\n"
-		: "=r" (res), "=r" (tmp1)
-		: "0" (s), "1" (n)
-		: "r9");
+        /* There's one address for a fault at the first move, and
+           two possible PC values for a fault at the second move,
+           being a delay-slot filler.  However, the branch-target
+           for the second move is the same as the first address.
+           Just so you don't get confused...  */
+        "	.previous\n"
+        "	.section __ex_table,\"a\"\n"
+        "	.dword 0b,3b\n"
+        "	.dword 1b,3b\n"
+        "	.previous\n"
+        : "=r" (res), "=r" (tmp1)
+        : "0" (s), "1" (n)
+        : "r9");
 
-	return res;
+    return res;
 }
 
 #endif

@@ -171,16 +171,16 @@
  * @rx:			dma-able receive buffer
  **/
 struct sca3000_state {
-	struct spi_device		*us;
-	const struct sca3000_chip_info	*info;
-	struct work_struct		interrupt_handler_ws;
-	s64				last_timestamp;
-	int				mo_det_use_count;
-	struct mutex			lock;
-	int				bpse;
-	/* Can these share a cacheline ? */
-	u8				rx[2] ____cacheline_aligned;
-	u8				tx[6] ____cacheline_aligned;
+    struct spi_device		*us;
+    const struct sca3000_chip_info	*info;
+    struct work_struct		interrupt_handler_ws;
+    s64				last_timestamp;
+    int				mo_det_use_count;
+    struct mutex			lock;
+    int				bpse;
+    /* Can these share a cacheline ? */
+    u8				rx[2] ____cacheline_aligned;
+    u8				tx[6] ____cacheline_aligned;
 };
 
 /**
@@ -197,20 +197,20 @@ struct sca3000_state {
  * sca3000 variant.
  **/
 struct sca3000_chip_info {
-	unsigned int		scale;
-	bool			temp_output;
-	int			measurement_mode_freq;
-	int			option_mode_1;
-	int			option_mode_1_freq;
-	int			option_mode_2;
-	int			option_mode_2_freq;
-	int			mot_det_mult_xz[6];
-	int			mot_det_mult_y[7];
+    unsigned int		scale;
+    bool			temp_output;
+    int			measurement_mode_freq;
+    int			option_mode_1;
+    int			option_mode_1_freq;
+    int			option_mode_2;
+    int			option_mode_2_freq;
+    int			mot_det_mult_xz[6];
+    int			mot_det_mult_y[7];
 };
 
 int sca3000_read_data_short(struct sca3000_state *st,
-			    u8 reg_address_high,
-			    int len);
+                            u8 reg_address_high,
+                            int len);
 
 /**
  * sca3000_write_reg() write a single register
@@ -251,18 +251,15 @@ void sca3000_unconfigure_ring(struct iio_dev *indio_dev);
 void sca3000_ring_int_process(u8 val, struct iio_buffer *ring);
 
 #else
-static inline void sca3000_register_ring_funcs(struct iio_dev *indio_dev)
-{
+static inline void sca3000_register_ring_funcs(struct iio_dev *indio_dev) {
 }
 
 static inline
-int sca3000_register_ring_access_and_init(struct iio_dev *indio_dev)
-{
-	return 0;
+int sca3000_register_ring_access_and_init(struct iio_dev *indio_dev) {
+    return 0;
 }
 
-static inline void sca3000_ring_int_process(u8 val, void *ring)
-{
+static inline void sca3000_ring_int_process(u8 val, void *ring) {
 }
 
 #endif

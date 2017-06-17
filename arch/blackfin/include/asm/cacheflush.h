@@ -37,37 +37,36 @@ extern void blackfin_invalidate_entire_icache(void);
 #define flush_icache_range_others(start, end)	do { } while (0)
 #endif
 
-static inline void flush_icache_range(unsigned start, unsigned end)
-{
+static inline void flush_icache_range(unsigned start, unsigned end) {
 #if defined(CONFIG_BFIN_EXTMEM_WRITEBACK)
-	if (end <= physical_mem_end)
-		blackfin_dcache_flush_range(start, end);
+    if (end <= physical_mem_end)
+        blackfin_dcache_flush_range(start, end);
 #endif
 #if defined(CONFIG_BFIN_L2_WRITEBACK)
-	if (start >= L2_START && end <= L2_START + L2_LENGTH)
-		blackfin_dcache_flush_range(start, end);
+    if (start >= L2_START && end <= L2_START + L2_LENGTH)
+        blackfin_dcache_flush_range(start, end);
 #endif
 
-	/* Make sure all write buffers in the data side of the core
-	 * are flushed before trying to invalidate the icache.  This
-	 * needs to be after the data flush and before the icache
-	 * flush so that the SSYNC does the right thing in preventing
-	 * the instruction prefetcher from hitting things in cached
-	 * memory at the wrong time -- it runs much further ahead than
-	 * the pipeline.
-	 */
-	SSYNC();
+    /* Make sure all write buffers in the data side of the core
+     * are flushed before trying to invalidate the icache.  This
+     * needs to be after the data flush and before the icache
+     * flush so that the SSYNC does the right thing in preventing
+     * the instruction prefetcher from hitting things in cached
+     * memory at the wrong time -- it runs much further ahead than
+     * the pipeline.
+     */
+    SSYNC();
 #if defined(CONFIG_BFIN_EXTMEM_ICACHEABLE)
-	if (end <= physical_mem_end) {
-		blackfin_icache_flush_range(start, end);
-		flush_icache_range_others(start, end);
-	}
+    if (end <= physical_mem_end) {
+        blackfin_icache_flush_range(start, end);
+        flush_icache_range_others(start, end);
+    }
 #endif
 #if defined(CONFIG_BFIN_L2_ICACHEABLE)
-	if (start >= L2_START && end <= L2_START + L2_LENGTH) {
-		blackfin_icache_flush_range(start, end);
-		flush_icache_range_others(start, end);
-	}
+    if (start >= L2_START && end <= L2_START + L2_LENGTH) {
+        blackfin_icache_flush_range(start, end);
+        flush_icache_range_others(start, end);
+    }
 #endif
 }
 
@@ -96,23 +95,22 @@ do { memcpy(dst, src, len);						\
 extern unsigned long reserved_mem_dcache_on;
 extern unsigned long reserved_mem_icache_on;
 
-static inline int bfin_addr_dcacheable(unsigned long addr)
-{
+static inline int bfin_addr_dcacheable(unsigned long addr) {
 #ifdef CONFIG_BFIN_EXTMEM_DCACHEABLE
-	if (addr < (_ramend - DMA_UNCACHED_REGION))
-		return 1;
+    if (addr < (_ramend - DMA_UNCACHED_REGION))
+        return 1;
 #endif
 
-	if (reserved_mem_dcache_on &&
-		addr >= _ramend && addr < physical_mem_end)
-		return 1;
+    if (reserved_mem_dcache_on &&
+            addr >= _ramend && addr < physical_mem_end)
+        return 1;
 
 #ifdef CONFIG_BFIN_L2_DCACHEABLE
-	if (addr >= L2_START && addr < L2_START + L2_LENGTH)
-		return 1;
+    if (addr >= L2_START && addr < L2_START + L2_LENGTH)
+        return 1;
 #endif
 
-	return 0;
+    return 0;
 }
 
 #endif				/* _BLACKFIN_ICACHEFLUSH_H */

@@ -29,8 +29,8 @@
 #define DEV_ERR(fmt, args...)   pr_err(fmt, ##args)
 
 struct dss_io_data {
-	u32 len;
-	void __iomem *base;
+    u32 len;
+    void __iomem *base;
 };
 
 void dss_reg_w(struct dss_io_data *io, u32 offset, u32 value, u32 debug);
@@ -43,60 +43,60 @@ void dss_reg_dump(void __iomem *base, u32 len, const char *prefix, u32 debug);
 #define DSS_REG_R(io, offset)          dss_reg_r(io, offset, true)
 
 enum dss_vreg_type {
-	DSS_REG_LDO,
-	DSS_REG_VS,
+    DSS_REG_LDO,
+    DSS_REG_VS,
 };
 
 struct dss_vreg {
-	struct regulator *vreg; /* vreg handle */
-	char vreg_name[32];
-	int min_voltage;
-	int max_voltage;
-	int enable_load;
-	int disable_load;
-	int pre_on_sleep;
-	int post_on_sleep;
-	int pre_off_sleep;
-	int post_off_sleep;
+    struct regulator *vreg; /* vreg handle */
+    char vreg_name[32];
+    int min_voltage;
+    int max_voltage;
+    int enable_load;
+    int disable_load;
+    int pre_on_sleep;
+    int post_on_sleep;
+    int pre_off_sleep;
+    int post_off_sleep;
 };
 
 struct dss_gpio {
-	unsigned gpio;
-	unsigned value;
-	char gpio_name[32];
+    unsigned gpio;
+    unsigned value;
+    char gpio_name[32];
 };
 
 enum dss_clk_type {
-	DSS_CLK_AHB, /* no set rate. rate controlled through rpm */
-	DSS_CLK_PCLK,
-	DSS_CLK_OTHER,
+    DSS_CLK_AHB, /* no set rate. rate controlled through rpm */
+    DSS_CLK_PCLK,
+    DSS_CLK_OTHER,
 };
 
 struct dss_clk {
-	struct clk *clk; /* clk handle */
-	char clk_name[32];
-	enum dss_clk_type type;
-	unsigned long rate;
+    struct clk *clk; /* clk handle */
+    char clk_name[32];
+    enum dss_clk_type type;
+    unsigned long rate;
 };
 
 struct dss_module_power {
-	unsigned num_vreg;
-	struct dss_vreg *vreg_config;
-	unsigned num_gpio;
-	struct dss_gpio *gpio_config;
-	unsigned num_clk;
-	struct dss_clk *clk_config;
+    unsigned num_vreg;
+    struct dss_vreg *vreg_config;
+    unsigned num_gpio;
+    struct dss_gpio *gpio_config;
+    unsigned num_clk;
+    struct dss_clk *clk_config;
 };
 
 int msm_dss_ioremap_byname(struct platform_device *pdev,
-	struct dss_io_data *io_data, const char *name);
+                           struct dss_io_data *io_data, const char *name);
 void msm_dss_iounmap(struct dss_io_data *io_data);
 
 int msm_dss_enable_gpio(struct dss_gpio *in_gpio, int num_gpio, int enable);
 int msm_dss_gpio_enable(struct dss_gpio *in_gpio, int num_gpio, int enable);
 
 int msm_dss_config_vreg(struct device *dev, struct dss_vreg *in_vreg,
-	int num_vreg, int config);
+                        int num_vreg, int config);
 int msm_dss_enable_vreg(struct dss_vreg *in_vreg, int num_vreg,	int enable);
 
 int msm_dss_get_clk(struct device *dev, struct dss_clk *clk_arry, int num_clk);
@@ -105,8 +105,8 @@ int msm_dss_clk_set_rate(struct dss_clk *clk_arry, int num_clk);
 int msm_dss_enable_clk(struct dss_clk *clk_arry, int num_clk, int enable);
 
 int mdss_i2c_byte_read(struct i2c_client *client, uint8_t slave_addr,
-		       uint8_t reg_offset, uint8_t *read_buf);
+                       uint8_t reg_offset, uint8_t *read_buf);
 int mdss_i2c_byte_write(struct i2c_client *client, uint8_t slave_addr,
-			uint8_t reg_offset, uint8_t *value);
+                        uint8_t reg_offset, uint8_t *value);
 
 #endif /* __MDSS_IO_UTIL_H__ */

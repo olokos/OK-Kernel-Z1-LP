@@ -34,143 +34,136 @@ static LIST_HEAD(ptable_list);
 
 #define PTABLE_SIZE (PTRS_PER_PMD * sizeof(pmd_t))
 
-void __init init_pointer_table(unsigned long ptable)
-{
-	ptable_desc *dp;
-	unsigned long page = ptable & PAGE_MASK;
-	unsigned char mask = 1 << ((ptable - page)/PTABLE_SIZE);
+void __init init_pointer_table(unsigned long ptable) {
+    ptable_desc *dp;
+    unsigned long page = ptable & PAGE_MASK;
+    unsigned char mask = 1 << ((ptable - page)/PTABLE_SIZE);
 
-	dp = PD_PTABLE(page);
-	if (!(PD_MARKBITS(dp) & mask)) {
-		PD_MARKBITS(dp) = 0xff;
-		list_add(dp, &ptable_list);
-	}
+    dp = PD_PTABLE(page);
+    if (!(PD_MARKBITS(dp) & mask)) {
+        PD_MARKBITS(dp) = 0xff;
+        list_add(dp, &ptable_list);
+    }
 
-	PD_MARKBITS(dp) &= ~mask;
+    PD_MARKBITS(dp) &= ~mask;
 #ifdef DEBUG
-	printk("init_pointer_table: %lx, %x\n", ptable, PD_MARKBITS(dp));
+    printk("init_pointer_table: %lx, %x\n", ptable, PD_MARKBITS(dp));
 #endif
 
-	/* unreserve the page so it's possible to free that page */
-	PD_PAGE(dp)->flags &= ~(1 << PG_reserved);
-	init_page_count(PD_PAGE(dp));
+    /* unreserve the page so it's possible to free that page */
+    PD_PAGE(dp)->flags &= ~(1 << PG_reserved);
+    init_page_count(PD_PAGE(dp));
 
-	return;
+    return;
 }
 
-pmd_t *get_pointer_table (void)
-{
-	ptable_desc *dp = ptable_list.next;
-	unsigned char mask = PD_MARKBITS (dp);
-	unsigned char tmp;
-	unsigned int off;
+pmd_t *get_pointer_table (void) {
+    ptable_desc *dp = ptable_list.next;
+    unsigned char mask = PD_MARKBITS (dp);
+    unsigned char tmp;
+    unsigned int off;
 
-	/*
-	 * For a pointer table for a user process address space, a
-	 * table is taken from a page allocated for the purpose.  Each
-	 * page can hold 8 pointer tables.  The page is remapped in
-	 * virtual address space to be noncacheable.
-	 */
-	if (mask == 0) {
-		void *page;
-		ptable_desc *new;
+    /*
+     * For a pointer table for a user process address space, a
+     * table is taken from a page allocated for the purpose.  Each
+     * page can hold 8 pointer tables.  The page is remapped in
+     * virtual address space to be noncacheable.
+     */
+    if (mask == 0) {
+        void *page;
+        ptable_desc *new;
 
-		if (!(page = (void *)get_zeroed_page(GFP_KERNEL)))
-			return NULL;
+        if (!(page = (void *)get_zeroed_page(GFP_KERNEL)))
+            return NULL;
 
-		flush_tlb_kernel_page(page);
-		nocache_page(page);
+        flush_tlb_kernel_page(page);
+        nocache_page(page);
 
-		new = PD_PTABLE(page);
-		PD_MARKBITS(new) = 0xfe;
-		list_add_tail(new, dp);
+        new = PD_PTABLE(page);
+        PD_MARKBITS(new) = 0xfe;
+        list_add_tail(new, dp);
 
-		return (pmd_t *)page;
-	}
+        return (pmd_t *)page;
+    }
 
-	for (tmp = 1, off = 0; (mask & tmp) == 0; tmp <<= 1, off += PTABLE_SIZE)
-		;
-	PD_MARKBITS(dp) = mask & ~tmp;
-	if (!PD_MARKBITS(dp)) {
-		/* move to end of list */
-		list_move_tail(dp, &ptable_list);
-	}
-	return (pmd_t *) (page_address(PD_PAGE(dp)) + off);
+    for (tmp = 1, off = 0; (mask & tmp) == 0; tmp <<= 1, off += PTABLE_SIZE)
+        ;
+    PD_MARKBITS(dp) = mask & ~tmp;
+    if (!PD_MARKBITS(dp)) {
+        /* move to end of list */
+        list_move_tail(dp, &ptable_list);
+    }
+    return (pmd_t *) (page_address(PD_PAGE(dp)) + off);
 }
 
-int free_pointer_table (pmd_t *ptable)
-{
-	ptable_desc *dp;
-	unsigned long page = (unsigned long)ptable & PAGE_MASK;
-	unsigned char mask = 1 << (((unsigned long)ptable - page)/PTABLE_SIZE);
+int free_pointer_table (pmd_t *ptable) {
+    ptable_desc *dp;
+    unsigned long page = (unsigned long)ptable & PAGE_MASK;
+    unsigned char mask = 1 << (((unsigned long)ptable - page)/PTABLE_SIZE);
 
-	dp = PD_PTABLE(page);
-	if (PD_MARKBITS (dp) & mask)
-		panic ("table already free!");
+    dp = PD_PTABLE(page);
+    if (PD_MARKBITS (dp) & mask)
+        panic ("table already free!");
 
-	PD_MARKBITS (dp) |= mask;
+    PD_MARKBITS (dp) |= mask;
 
-	if (PD_MARKBITS(dp) == 0xff) {
-		/* all tables in page are free, free page */
-		list_del(dp);
-		cache_page((void *)page);
-		free_page (page);
-		return 1;
-	} else if (ptable_list.next != dp) {
-		/*
-		 * move this descriptor to the front of the list, since
-		 * it has one or more free tables.
-		 */
-		list_move(dp, &ptable_list);
-	}
-	return 0;
+    if (PD_MARKBITS(dp) == 0xff) {
+        /* all tables in page are free, free page */
+        list_del(dp);
+        cache_page((void *)page);
+        free_page (page);
+        return 1;
+    } else if (ptable_list.next != dp) {
+        /*
+         * move this descriptor to the front of the list, since
+         * it has one or more free tables.
+         */
+        list_move(dp, &ptable_list);
+    }
+    return 0;
 }
 
 /* invalidate page in both caches */
-static inline void clear040(unsigned long paddr)
-{
-	asm volatile (
-		"nop\n\t"
-		".chip 68040\n\t"
-		"cinvp %%bc,(%0)\n\t"
-		".chip 68k"
-		: : "a" (paddr));
+static inline void clear040(unsigned long paddr) {
+    asm volatile (
+        "nop\n\t"
+        ".chip 68040\n\t"
+        "cinvp %%bc,(%0)\n\t"
+        ".chip 68k"
+        : : "a" (paddr));
 }
 
 /* invalidate page in i-cache */
-static inline void cleari040(unsigned long paddr)
-{
-	asm volatile (
-		"nop\n\t"
-		".chip 68040\n\t"
-		"cinvp %%ic,(%0)\n\t"
-		".chip 68k"
-		: : "a" (paddr));
+static inline void cleari040(unsigned long paddr) {
+    asm volatile (
+        "nop\n\t"
+        ".chip 68040\n\t"
+        "cinvp %%ic,(%0)\n\t"
+        ".chip 68k"
+        : : "a" (paddr));
 }
 
 /* push page in both caches */
 /* RZ: cpush %bc DOES invalidate %ic, regardless of DPI */
-static inline void push040(unsigned long paddr)
-{
-	asm volatile (
-		"nop\n\t"
-		".chip 68040\n\t"
-		"cpushp %%bc,(%0)\n\t"
-		".chip 68k"
-		: : "a" (paddr));
+static inline void push040(unsigned long paddr) {
+    asm volatile (
+        "nop\n\t"
+        ".chip 68040\n\t"
+        "cpushp %%bc,(%0)\n\t"
+        ".chip 68k"
+        : : "a" (paddr));
 }
 
 /* push and invalidate page in both caches, must disable ints
  * to avoid invalidating valid data */
-static inline void pushcl040(unsigned long paddr)
-{
-	unsigned long flags;
+static inline void pushcl040(unsigned long paddr) {
+    unsigned long flags;
 
-	local_irq_save(flags);
-	push040(paddr);
-	if (CPU_IS_060)
-		clear040(paddr);
-	local_irq_restore(flags);
+    local_irq_save(flags);
+    push040(paddr);
+    if (CPU_IS_060)
+        clear040(paddr);
+    local_irq_restore(flags);
 }
 
 /*
@@ -200,43 +193,41 @@ static inline void pushcl040(unsigned long paddr)
  * _physical_ address.
  */
 
-void cache_clear (unsigned long paddr, int len)
-{
+void cache_clear (unsigned long paddr, int len) {
     if (CPU_IS_COLDFIRE) {
-	flush_cf_bcache(0, DCACHE_MAX_ADDR);
+        flush_cf_bcache(0, DCACHE_MAX_ADDR);
     } else if (CPU_IS_040_OR_060) {
-	int tmp;
+        int tmp;
 
-	/*
-	 * We need special treatment for the first page, in case it
-	 * is not page-aligned. Page align the addresses to work
-	 * around bug I17 in the 68060.
-	 */
-	if ((tmp = -paddr & (PAGE_SIZE - 1))) {
-	    pushcl040(paddr & PAGE_MASK);
-	    if ((len -= tmp) <= 0)
-		return;
-	    paddr += tmp;
-	}
-	tmp = PAGE_SIZE;
-	paddr &= PAGE_MASK;
-	while ((len -= tmp) >= 0) {
-	    clear040(paddr);
-	    paddr += tmp;
-	}
-	if ((len += tmp))
-	    /* a page boundary gets crossed at the end */
-	    pushcl040(paddr);
-    }
-    else /* 68030 or 68020 */
-	asm volatile ("movec %/cacr,%/d0\n\t"
-		      "oriw %0,%/d0\n\t"
-		      "movec %/d0,%/cacr"
-		      : : "i" (FLUSH_I_AND_D)
-		      : "d0");
+        /*
+         * We need special treatment for the first page, in case it
+         * is not page-aligned. Page align the addresses to work
+         * around bug I17 in the 68060.
+         */
+        if ((tmp = -paddr & (PAGE_SIZE - 1))) {
+            pushcl040(paddr & PAGE_MASK);
+            if ((len -= tmp) <= 0)
+                return;
+            paddr += tmp;
+        }
+        tmp = PAGE_SIZE;
+        paddr &= PAGE_MASK;
+        while ((len -= tmp) >= 0) {
+            clear040(paddr);
+            paddr += tmp;
+        }
+        if ((len += tmp))
+            /* a page boundary gets crossed at the end */
+            pushcl040(paddr);
+    } else /* 68030 or 68020 */
+        asm volatile ("movec %/cacr,%/d0\n\t"
+                      "oriw %0,%/d0\n\t"
+                      "movec %/d0,%/cacr"
+                      : : "i" (FLUSH_I_AND_D)
+                      : "d0");
 #ifdef CONFIG_M68K_L2_CACHE
     if(mach_l2_flush)
-	mach_l2_flush(0);
+        mach_l2_flush(0);
 #endif
 }
 EXPORT_SYMBOL(cache_clear);
@@ -249,30 +240,29 @@ EXPORT_SYMBOL(cache_clear);
  * _physical_ address.
  */
 
-void cache_push (unsigned long paddr, int len)
-{
+void cache_push (unsigned long paddr, int len) {
     if (CPU_IS_COLDFIRE) {
-	flush_cf_bcache(0, DCACHE_MAX_ADDR);
+        flush_cf_bcache(0, DCACHE_MAX_ADDR);
     } else if (CPU_IS_040_OR_060) {
-	int tmp = PAGE_SIZE;
+        int tmp = PAGE_SIZE;
 
-	/*
-         * on 68040 or 68060, push cache lines for pages in the range;
-	 * on the '040 this also invalidates the pushed lines, but not on
-	 * the '060!
-	 */
-	len += paddr & (PAGE_SIZE - 1);
+        /*
+             * on 68040 or 68060, push cache lines for pages in the range;
+         * on the '040 this also invalidates the pushed lines, but not on
+         * the '060!
+         */
+        len += paddr & (PAGE_SIZE - 1);
 
-	/*
-	 * Work around bug I17 in the 68060 affecting some instruction
-	 * lines not being invalidated properly.
-	 */
-	paddr &= PAGE_MASK;
+        /*
+         * Work around bug I17 in the 68060 affecting some instruction
+         * lines not being invalidated properly.
+         */
+        paddr &= PAGE_MASK;
 
-	do {
-	    push040(paddr);
-	    paddr += tmp;
-	} while ((len -= tmp) > 0);
+        do {
+            push040(paddr);
+            paddr += tmp;
+        } while ((len -= tmp) > 0);
     }
     /*
      * 68030/68020 have no writeback cache. On the other hand,
@@ -284,14 +274,14 @@ void cache_push (unsigned long paddr, int len)
      * be required.
      */
     else /* 68030 or 68020 */
-	asm volatile ("movec %/cacr,%/d0\n\t"
-		      "oriw %0,%/d0\n\t"
-		      "movec %/d0,%/cacr"
-		      : : "i" (FLUSH_I)
-		      : "d0");
+        asm volatile ("movec %/cacr,%/d0\n\t"
+                      "oriw %0,%/d0\n\t"
+                      "movec %/d0,%/cacr"
+                      : : "i" (FLUSH_I)
+                      : "d0");
 #ifdef CONFIG_M68K_L2_CACHE
     if(mach_l2_flush)
-	mach_l2_flush(1);
+        mach_l2_flush(1);
 #endif
 }
 EXPORT_SYMBOL(cache_push);

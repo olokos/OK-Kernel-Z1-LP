@@ -24,9 +24,8 @@ extern struct cpumask node_2_cpu_mask[];
 extern char cpu_2_node[];
 
 /* Returns the number of the node containing CPU 'cpu'. */
-static inline int cpu_to_node(int cpu)
-{
-	return cpu_2_node[cpu];
+static inline int cpu_to_node(int cpu) {
+    return cpu_2_node[cpu];
 }
 
 /*
@@ -36,9 +35,8 @@ static inline int cpu_to_node(int cpu)
 #define parent_node(node) (node)
 
 /* Returns a bitmask of CPUs on Node 'node'. */
-static inline const struct cpumask *cpumask_of_node(int node)
-{
-	return &node_2_cpu_mask[node];
+static inline const struct cpumask *cpumask_of_node(int node) {
+    return &node_2_cpu_mask[node];
 }
 
 /* For now, use numa node -1 for global allocation. */

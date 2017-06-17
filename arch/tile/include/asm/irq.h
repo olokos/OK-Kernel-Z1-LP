@@ -49,12 +49,12 @@ void ack_bad_irq(unsigned int irq);
  * particular IRQ number.
  */
 enum {
-	/* per-cpu interrupt; use enable/disable_percpu_irq() to mask */
-	TILE_IRQ_PERCPU,
-	/* global interrupt, hardware responsible for clearing. */
-	TILE_IRQ_HW_CLEAR,
-	/* global interrupt, software responsible for clearing. */
-	TILE_IRQ_SW_CLEAR,
+    /* per-cpu interrupt; use enable/disable_percpu_irq() to mask */
+    TILE_IRQ_PERCPU,
+    /* global interrupt, hardware responsible for clearing. */
+    TILE_IRQ_HW_CLEAR,
+    /* global interrupt, software responsible for clearing. */
+    TILE_IRQ_SW_CLEAR,
 };
 
 

@@ -66,7 +66,7 @@
  */
 #define	FRM_SMT		(0)	/* asynchr. frames */
 #define	FRM_LLCA	(1)
-#define	FRM_IMPA	(2)	
+#define	FRM_IMPA	(2)
 #define	FRM_MAC		(4)	/* synchr. frames */
 #define	FRM_LLCS	(5)
 #define	FRM_IMPS	(6)
@@ -90,38 +90,38 @@
  * receive frame descriptor
  */
 union rx_descr {
-	struct {
+    struct {
 #ifdef	LITTLE_ENDIAN
-	unsigned	rx_length :16 ;	/* frame length lower/upper byte */
-	unsigned	rx_erfbb  :2 ;	/* received frame byte boundary */
-	unsigned	rx_reserv2:2 ;	/* reserved */	
-	unsigned	rx_sfrmty :3 ;	/* frame type bits */
-	unsigned	rx_sadrrg :1 ;	/* DA == MA or broad-/multicast */
-	unsigned	rx_sfrmerr:1 ;	/* received frame not valid */
-	unsigned	rx_seac0  :1 ;	/* frame-copied  C-indicator */
-	unsigned	rx_seac1  :1 ;	/* address-match A-indicator */
-	unsigned	rx_seac2  :1 ;	/* frame-error   E-indicator */
-	unsigned	rx_ssrcrtg:1 ;	/* == 1 SA has MSB set */
-	unsigned	rx_reserv1:1 ;	/* reserved */	
-	unsigned	rx_msrabt :1 ;	/* memory status receive abort */
-	unsigned	rx_msvalid:1 ;	/* memory status valid */
+        unsigned	rx_length :16 ;	/* frame length lower/upper byte */
+        unsigned	rx_erfbb  :2 ;	/* received frame byte boundary */
+        unsigned	rx_reserv2:2 ;	/* reserved */
+        unsigned	rx_sfrmty :3 ;	/* frame type bits */
+        unsigned	rx_sadrrg :1 ;	/* DA == MA or broad-/multicast */
+        unsigned	rx_sfrmerr:1 ;	/* received frame not valid */
+        unsigned	rx_seac0  :1 ;	/* frame-copied  C-indicator */
+        unsigned	rx_seac1  :1 ;	/* address-match A-indicator */
+        unsigned	rx_seac2  :1 ;	/* frame-error   E-indicator */
+        unsigned	rx_ssrcrtg:1 ;	/* == 1 SA has MSB set */
+        unsigned	rx_reserv1:1 ;	/* reserved */
+        unsigned	rx_msrabt :1 ;	/* memory status receive abort */
+        unsigned	rx_msvalid:1 ;	/* memory status valid */
 #else
-	unsigned	rx_msvalid:1 ;	/* memory status valid */
-	unsigned	rx_msrabt :1 ;	/* memory status receive abort */
-	unsigned	rx_reserv1:1 ;	/* reserved */	
-	unsigned	rx_ssrcrtg:1 ;	/* == 1 SA has MSB set */
-	unsigned	rx_seac2  :1 ;	/* frame-error   E-indicator */
-	unsigned	rx_seac1  :1 ;	/* address-match A-indicator */
-	unsigned	rx_seac0  :1 ;	/* frame-copied  C-indicator */
-	unsigned	rx_sfrmerr:1 ;	/* received frame not valid */
-	unsigned	rx_sadrrg :1 ;	/* DA == MA or broad-/multicast */
-	unsigned	rx_sfrmty :3 ;	/* frame type bits */
-	unsigned	rx_erfbb  :2 ;	/* received frame byte boundary */
-	unsigned	rx_reserv2:2 ;	/* reserved */	
-	unsigned	rx_length :16 ;	/* frame length lower/upper byte */
+        unsigned	rx_msvalid:1 ;	/* memory status valid */
+        unsigned	rx_msrabt :1 ;	/* memory status receive abort */
+        unsigned	rx_reserv1:1 ;	/* reserved */
+        unsigned	rx_ssrcrtg:1 ;	/* == 1 SA has MSB set */
+        unsigned	rx_seac2  :1 ;	/* frame-error   E-indicator */
+        unsigned	rx_seac1  :1 ;	/* address-match A-indicator */
+        unsigned	rx_seac0  :1 ;	/* frame-copied  C-indicator */
+        unsigned	rx_sfrmerr:1 ;	/* received frame not valid */
+        unsigned	rx_sadrrg :1 ;	/* DA == MA or broad-/multicast */
+        unsigned	rx_sfrmty :3 ;	/* frame type bits */
+        unsigned	rx_erfbb  :2 ;	/* received frame byte boundary */
+        unsigned	rx_reserv2:2 ;	/* reserved */
+        unsigned	rx_length :16 ;	/* frame length lower/upper byte */
 #endif
-	} r ;
-	long	i ;
+    } r ;
+    long	i ;
 } ;
 
 /* defines for Receive Frame Descriptor access */
@@ -160,28 +160,28 @@ union rx_descr {
  * transmit frame descriptor
  */
 union tx_descr {
-	struct {
+    struct {
 #ifdef	LITTLE_ENDIAN
-	unsigned	tx_length:16 ;	/* frame length lower/upper byte */
-	unsigned	tx_res	 :8 ;	/* reserved 	 (bit 16..23) */
-	unsigned	tx_xmtabt:1 ;	/* transmit abort */
-	unsigned	tx_nfcs  :1 ;	/* no frame check sequence */
-	unsigned	tx_xdone :1 ;	/* give up token */
-	unsigned	tx_rpxm  :2 ;	/* byte offset */
-	unsigned	tx_pat1  :2 ;	/* must be TXP1 */
-	unsigned	tx_more	 :1 ;	/* more frame in chain */
+        unsigned	tx_length:16 ;	/* frame length lower/upper byte */
+        unsigned	tx_res	 :8 ;	/* reserved 	 (bit 16..23) */
+        unsigned	tx_xmtabt:1 ;	/* transmit abort */
+        unsigned	tx_nfcs  :1 ;	/* no frame check sequence */
+        unsigned	tx_xdone :1 ;	/* give up token */
+        unsigned	tx_rpxm  :2 ;	/* byte offset */
+        unsigned	tx_pat1  :2 ;	/* must be TXP1 */
+        unsigned	tx_more	 :1 ;	/* more frame in chain */
 #else
-	unsigned	tx_more	 :1 ;	/* more frame in chain */
-	unsigned	tx_pat1  :2 ;	/* must be TXP1 */
-	unsigned	tx_rpxm  :2 ;	/* byte offset */
-	unsigned	tx_xdone :1 ;	/* give up token */
-	unsigned	tx_nfcs  :1 ;	/* no frame check sequence */
-	unsigned	tx_xmtabt:1 ;	/* transmit abort */
-	unsigned	tx_res	 :8 ;	/* reserved 	 (bit 16..23) */
-	unsigned	tx_length:16 ;	/* frame length lower/upper byte */
+        unsigned	tx_more	 :1 ;	/* more frame in chain */
+        unsigned	tx_pat1  :2 ;	/* must be TXP1 */
+        unsigned	tx_rpxm  :2 ;	/* byte offset */
+        unsigned	tx_xdone :1 ;	/* give up token */
+        unsigned	tx_nfcs  :1 ;	/* no frame check sequence */
+        unsigned	tx_xmtabt:1 ;	/* transmit abort */
+        unsigned	tx_res	 :8 ;	/* reserved 	 (bit 16..23) */
+        unsigned	tx_length:16 ;	/* frame length lower/upper byte */
 #endif
-	} t ;
-	long	i ;
+    } t ;
+    long	i ;
 } ;
 
 /* defines for Transmit Descriptor access */
@@ -192,26 +192,26 @@ union tx_descr {
 #define TD_C_NFCS	0x02000000L	/* no frame check sequence */
 #define TD_C_XMTABT	0x01000000L	/* transmit abort */
 
-#define	TD_C_LNCNU	0x0000ff00L	
+#define	TD_C_LNCNU	0x0000ff00L
 #define TD_C_LNCNL	0x000000ffL
 #define TD_C_LNCN	0x0000ffffL	/* frame length lower/upper byte */
- 
+
 /*
  * transmit pointer
  */
 union tx_pointer {
-	struct t {
+    struct t {
 #ifdef	LITTLE_ENDIAN
-	unsigned	tp_pointer:16 ;	/* pointer to tx_descr (low/high) */
-	unsigned	tp_res	  :8 ;	/* reserved 	 (bit 16..23) */
-	unsigned	tp_pattern:8 ;	/* fixed pattern (bit 24..31) */
+        unsigned	tp_pointer:16 ;	/* pointer to tx_descr (low/high) */
+        unsigned	tp_res	  :8 ;	/* reserved 	 (bit 16..23) */
+        unsigned	tp_pattern:8 ;	/* fixed pattern (bit 24..31) */
 #else
-	unsigned	tp_pattern:8 ;	/* fixed pattern (bit 24..31) */
-	unsigned	tp_res	  :8 ;	/* reserved 	 (bit 16..23) */
-	unsigned	tp_pointer:16 ;	/* pointer to tx_descr (low/high) */
+        unsigned	tp_pattern:8 ;	/* fixed pattern (bit 24..31) */
+        unsigned	tp_res	  :8 ;	/* reserved 	 (bit 16..23) */
+        unsigned	tp_pointer:16 ;	/* pointer to tx_descr (low/high) */
 #endif
-	} t ;
-	long	i ;
+    } t ;
+    long	i ;
 } ;
 
 /* defines for Nontag Mode Pointer access */
@@ -226,9 +226,9 @@ union tx_pointer {
 #define TX_INT_PATTERN	0xa0000000L
 
 struct tx_queue {
-	struct tx_queue *tq_next ;
-	u_short tq_pack_offset ;	/* offset buffer memory */
-	u_char  tq_pad[2] ;
+    struct tx_queue *tq_next ;
+    u_short tq_pack_offset ;	/* offset buffer memory */
+    u_char  tq_pad[2] ;
 } ;
 
 /*
@@ -267,8 +267,8 @@ struct tx_queue {
 #define FM_THT		0x17		/* r/w upper 16-bit of THT timer */
 #define FM_TNEG		0x18		/* read upper 16-bit of TNEG (TTRT) */
 #define FM_TMRS		0x19		/* read lower 5-bit of TNEG,TRT,THT */
-			/* F E D C  B A 9 8  7 6 5 4  3 2 1 0
-			   x |-TNEG4-0| |-TRT4-0-| |-THT4-0-| (x-late count) */
+/* F E D C  B A 9 8  7 6 5 4  3 2 1 0
+   x |-TNEG4-0| |-TRT4-0-| |-THT4-0-| (x-late count) */
 #define FM_TREQ0	0x1a		/* r/w 16-bit TREQ0 reg (LSW of TRT) */
 #define FM_TREQ1	0x1b		/* r/w 16-bit TREQ1 reg (MSW of TRT) */
 #define FM_PRI0		0x1c		/* r/w priority r. for asyn.-queue 0 */
@@ -293,9 +293,9 @@ struct tx_queue {
 #define FM_RPR		0x2d		/* r/w the read ptr. for receive qu. */
 #define FM_WPR		0x2e		/* r/w the write ptr. for receive qu.*/
 #define FM_SWPR		0x2f		/* r/w the shadow wr.-ptr. for rec.q.*/
-/* Supernet 3 */ 
-#define FM_RPR1         FM_RPR   
-#define FM_WPR1         FM_WPR 
+/* Supernet 3 */
+#define FM_RPR1         FM_RPR
+#define FM_WPR1         FM_WPR
 #define FM_SWPR1        FM_SWPR
 
 #define FM_WPXS		0x30		/* r/w the write ptr. for synchr. qu.*/
@@ -339,8 +339,8 @@ struct tx_queue {
 #define	FM_SWPR2	0x6a		/* r/w the shadow wptr. for rec. q. 2 */
 #define	FM_EARV2	0x6b		/* r/w end addr of rec. qu. 2 */
 #define	FM_UNLCKDLY	0x6c		/* r/w Auto Unlock Delay register */
-					/* Bit 15-8: RECV2 unlock threshold */
-					/* Bit  7-0: RECV1 unlock threshold */
+/* Bit 15-8: RECV2 unlock threshold */
+/* Bit  7-0: RECV1 unlock threshold */
 /* 0x6f-0x73	Hidden */
 #define	FM_LTDPA1	0x79		/* r/w Last Trans desc ptr for A1 qu. */
 /* 0x80-0x9a	PLCS registers of built-in PLCS  (Supernet 3 only) */
@@ -366,16 +366,16 @@ struct tx_queue {
  * Mode Register 1 (MDREG1)
  */
 #define FM_RES0		0x0001		/* reserved */
-					/* SN3: other definition */
+/* SN3: other definition */
 #define	FM_XMTINH_HOLD	0x0002		/* transmit-inhibit/hold bit */
-					/* SN3: other definition */
+/* SN3: other definition */
 #define	FM_HOFLXI	0x0003		/* SN3: Hold / Flush / Inhibit */
 #define	FM_FULL_HALF	0x0004		/* full-duplex/half-duplex bit */
 #define	FM_LOCKTX	0x0008		/* lock-transmit-asynchr.-queues bit */
 #define FM_EXGPA0	0x0010		/* extended-group-addressing bit 0 */
 #define FM_EXGPA1	0x0020		/* extended-group-addressing bit 1 */
 #define FM_DISCRY	0x0040		/* disable-carry bit */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_SELRA	0x0080		/* select input from PHY (1=RA,0=RB) */
 
 #define FM_ADDET	0x0700		/* address detection */
@@ -401,7 +401,7 @@ struct tx_queue {
 #define FM_MELOOP	(7<<12)		/* external loopback */
 
 #define	FM_SNGLFRM	0x8000		/* single-frame-receive mode */
-					/* SN3: reserved */
+/* SN3: reserved */
 
 #define	MDR1INIT	(FM_MINIT | FM_MDAMA)
 
@@ -411,7 +411,7 @@ struct tx_queue {
 #define	FM_AFULL	0x000f		/* 4-bit value (empty loc.in txqueue)*/
 #define	FM_RCVERR	0x0010		/* rec.-errored-frames bit */
 #define	FM_SYMCTL	0x0020		/* sysmbol-control bit */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define	FM_SYNPRQ	0x0040		/* synchron.-NP-DMA-request bit */
 #define	FM_ENNPRQ	0x0080		/* enable-NP-DMA-request bit */
 #define	FM_ENHSRQ	0x0100		/* enable-host-request bit */
@@ -421,7 +421,7 @@ struct tx_queue {
 #define	FM_CHKPAR	0x2000		/* 1 = parity of 32-bit buffer BD-bus*/
 #define	FM_STRPFCS	0x4000		/* 1 = strips FCS field of rec.frame */
 #define	FM_BMMODE	0x8000		/* Buffer-Memory-Mode (1 = tag mode) */
-					/* SN3: 1 = tag, 0 = modified tag */
+/* SN3: 1 = tag, 0 = modified tag */
 
 /*
  * Status Register 1, Upper 16 Bits (ST1U)
@@ -430,16 +430,16 @@ struct tx_queue {
 #define FM_STEFRMA0	0x0002		/* transmit end of frame: asyn. qu.0 */
 #define FM_STEFRMA1	0x0004		/* transmit end of frame: asyn. qu.1 */
 #define FM_STEFRMA2	0x0008		/* transmit end of frame: asyn. qu.2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STECFRMS	0x0010		/* transmit end of chain of syn. qu. */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STECFRMA0	0x0020		/* transmit end of chain of asyn. q0 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STECFRMA1	0x0040		/* transmit end of chain of asyn. q1 */
-					/* SN3: STECMDA1 */
+/* SN3: STECMDA1 */
 #define FM_STECMDA1	0x0040		/* SN3: 'no description' */
 #define FM_STECFRMA2	0x0080		/* transmit end of chain of asyn. q2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define	FM_STEXDONS	0x0100		/* transmit until XDONE in syn. qu. */
 #define	FM_STBFLA	0x0200		/* asynchr.-queue trans. buffer full */
 #define	FM_STBFLS	0x0400		/* synchr.-queue transm. buffer full */
@@ -447,7 +447,7 @@ struct tx_queue {
 #define	FM_STXABRA0	0x1000		/* asynchr. queue 0 transmit-abort */
 #define	FM_STXABRA1	0x2000		/* asynchr. queue 1 transmit-abort */
 #define	FM_STXABRA2	0x4000		/* asynchr. queue 2 transmit-abort */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define	FM_SXMTABT	0x8000		/* transmit abort */
 
 /*
@@ -457,25 +457,25 @@ struct tx_queue {
 #define FM_SQLCKA0	0x0002		/* queue lock for asynchr. queue 0 */
 #define FM_SQLCKA1	0x0004		/* queue lock for asynchr. queue 1 */
 #define FM_SQLCKA2	0x0008		/* queue lock for asynchr. queue 2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STXINFLS	0x0010		/* transmit instruction full: syn. */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STXINFLA0	0x0020		/* transmit instruction full: asyn.0 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STXINFLA1	0x0040		/* transmit instruction full: asyn.1 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STXINFLA2	0x0080		/* transmit instruction full: asyn.2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_SPCEPDS	0x0100		/* parity/coding error: syn. queue */
 #define FM_SPCEPDA0	0x0200		/* parity/coding error: asyn. queue0 */
 #define FM_SPCEPDA1	0x0400		/* parity/coding error: asyn. queue1 */
 #define FM_SPCEPDA2	0x0800		/* parity/coding error: asyn. queue2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_STBURS	0x1000		/* transmit buffer underrun: syn. q. */
 #define FM_STBURA0	0x2000		/* transmit buffer underrun: asyn.0 */
 #define FM_STBURA1	0x4000		/* transmit buffer underrun: asyn.1 */
 #define FM_STBURA2	0x8000		/* transmit buffer underrun: asyn.2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 
 /*
  * Status Register 2, Upper 16 Bits (ST2U)
@@ -490,9 +490,9 @@ struct tx_queue {
 #define FM_SERRSF	0x0080		/* error in special frame */
 #define FM_SNFSLD	0x0100		/* NP and FORMAC+ simultaneous load */
 #define FM_SRFRCTOV	0x0200		/* receive frame counter overflow */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_SRCVFRM	0x0400		/* receive frame */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_SRCVOVR	0x0800		/* receive FIFO overflow */
 #define FM_SRBFL	0x1000		/* receive buffer full */
 #define FM_SRABT	0x2000		/* receive abort */
@@ -529,7 +529,7 @@ struct tx_queue {
 #define	FM_SRQUNLCK2	0x0002		/* receive queue unlocked queue 2 */
 #define	FM_SRPERRQ1	0x0004		/* receive parity error rx queue 1 */
 #define	FM_SRPERRQ2	0x0008		/* receive parity error rx queue 2 */
-					/* Bit 4-10: reserved */
+/* Bit 4-10: reserved */
 #define	FM_SRCVOVR2	0x0800		/* receive FIFO overfull rx queue 2 */
 #define	FM_SRBFL2	0x1000		/* receive buffer full rx queue 2 */
 #define	FM_SRABT2	0x2000		/* receive abort rx queue 2 */
@@ -543,7 +543,7 @@ struct tx_queue {
 #define	FM_AF_BIST_DONE		0x0001	/* Address Filter BIST is done */
 #define	FM_PLC_BIST_DONE	0x0002	/* internal PLC Bist is done */
 #define	FM_PDX_BIST_DONE	0x0004	/* PDX BIST is done */
-					/* Bit  3: reserved */
+/* Bit  3: reserved */
 #define	FM_SICAMDAMAT		0x0010	/* Status internal CAM DA match */
 #define	FM_SICAMDAXACT		0x0020	/* Status internal CAM DA exact match */
 #define	FM_SICAMSAMAT		0x0040	/* Status internal CAM SA match */
@@ -626,7 +626,7 @@ struct tx_queue {
  * Supernet 3:
  * Address Filter Status Register (AFSTAT)
  */
-					/* Bit  0-4: reserved */
+/* Bit  0-4: reserved */
 #define	FM_REV_NO	0x00e0		/* Revision Number of Address Filter */
 #define	FM_BIST_DONE	0x0100		/* BIST complete */
 #define	FM_EMPTY	0x0200		/* CAM empty */
@@ -676,7 +676,7 @@ struct tx_queue {
 #define FM_ICLLA0	0x12		/* clear asynchronous queue 0 lock */
 #define FM_ICLLA1	0x14		/* clear asynchronous queue 1 lock */
 #define FM_ICLLA2	0x18		/* clear asynchronous queue 2 lock */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_ICLLR	0x20		/* clear receive queue (SN3:1) lock */
 #define FM_ICLLR2	0x21		/* SN3: clear receive queue 2 lock */
 #define FM_ITRXBUS	0x22		/* SN3: Tristate X-Bus (SAS only) */
@@ -687,18 +687,18 @@ struct tx_queue {
  * instruction set for command register 2 (NPADDR6-0 = 0x01)
  */
 #define FM_ITRS		0x01		/* transmit synchronous queue */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_ITRA0	0x02		/* transmit asynchronous queue 0 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_ITRA1	0x04		/* transmit asynchronous queue 1 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_ITRA2	0x08		/* transmit asynchronous queue 2 */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define FM_IACTR	0x10		/* abort current transmit activity */
 #define FM_IRSTQ	0x20		/* reset transmit queues */
 #define FM_ISTTB	0x30		/* set tag bit */
 #define FM_IERSF	0x40		/* enable receive single frame */
-					/* SN3: reserved */
+/* SN3: reserved */
 #define	FM_ITR		0x50		/* SN3: Transmit Command */
 
 
@@ -863,7 +863,7 @@ struct tx_queue {
 
 /*
  * PLC status register A (PL_STATUS_A: log. addr. 0x10)
- * It is used to report status information to the Node Processor about the 
+ * It is used to report status information to the Node Processor about the
  * Line State Machine (LSM).
  */
 #ifdef	MOT_ELM
@@ -974,7 +974,7 @@ struct tx_queue {
 /*
  * The PLC interrupt mask register (PL_INTR_MASK: log. addr. 0x02) constr. is
  * equal PL_INTR_EVENT register.
- * For each set bit, the setting of corresponding bit generate an int to NP. 
+ * For each set bit, the setting of corresponding bit generate an int to NP.
  */
 
 #ifdef	MOT_ELM
@@ -1029,7 +1029,7 @@ struct tx_queue {
 #define	PLC_QELM_A_BIST	0x5b6b		/* BIST signature of QELM Rev. A */
 
 /*
- 	FDDI board recources	
+ 	FDDI board recources
  */
 
 /*

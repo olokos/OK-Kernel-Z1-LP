@@ -47,12 +47,12 @@
 #define ACPI_DEBUG_BUFFER_SIZE  4196
 
 struct command_info {
-	char *name;		/* Command Name */
-	u8 min_args;		/* Minimum arguments required */
+    char *name;		/* Command Name */
+    u8 min_args;		/* Minimum arguments required */
 };
 
 struct argument_info {
-	char *name;		/* Argument Name */
+    char *name;		/* Argument Name */
 };
 
 #define PARAM_LIST(pl)                  pl
@@ -72,7 +72,7 @@ void acpi_db_terminate(void);
 
 acpi_status
 acpi_db_single_step(struct acpi_walk_state *walk_state,
-		    union acpi_parse_object *op, u32 op_type);
+                    union acpi_parse_object *op, u32 op_type);
 
 /*
  * dbcmds - debug commands and output routines
@@ -85,8 +85,8 @@ void acpi_db_unload_acpi_table(char *table_arg, char *instance_arg);
 
 void
 acpi_db_set_method_breakpoint(char *location,
-			      struct acpi_walk_state *walk_state,
-			      union acpi_parse_object *op);
+                              struct acpi_walk_state *walk_state,
+                              union acpi_parse_object *op);
 
 void acpi_db_set_method_call_breakpoint(union acpi_parse_object *op);
 
@@ -124,8 +124,8 @@ ACPI_HW_DEPENDENT_RETURN_VOID(void acpi_db_display_gpes(void))
 void acpi_db_check_integrity(void);
 
 ACPI_HW_DEPENDENT_RETURN_VOID(void
-			      acpi_db_generate_gpe(char *gpe_arg,
-						   char *block_arg))
+                              acpi_db_generate_gpe(char *gpe_arg,
+                                      char *block_arg))
 
 void acpi_db_check_predefined_names(void);
 
@@ -140,7 +140,7 @@ void acpi_db_decode_and_display_object(char *target, char *output_type);
 
 void
 acpi_db_display_result_object(union acpi_operand_object *obj_desc,
-			      struct acpi_walk_state *walk_state);
+                              struct acpi_walk_state *walk_state);
 
 acpi_status acpi_db_display_all_methods(char *display_count_arg);
 
@@ -156,7 +156,7 @@ void acpi_db_display_object_type(char *object_arg);
 
 void
 acpi_db_display_argument_object(union acpi_operand_object *obj_desc,
-				struct acpi_walk_state *walk_state);
+                                struct acpi_walk_state *walk_state);
 
 /*
  * dbexec - debugger control method execution
@@ -165,7 +165,7 @@ void acpi_db_execute(char *name, char **args, u32 flags);
 
 void
 acpi_db_create_execution_threads(char *num_threads_arg,
-				 char *num_loops_arg, char *method_name_arg);
+                                 char *num_loops_arg, char *method_name_arg);
 
 #ifdef ACPI_DBG_TRACK_ALLOCATIONS
 u32 acpi_db_get_cache_info(struct acpi_memory_list *cache);
@@ -203,8 +203,8 @@ char *acpi_db_get_from_history(char *command_num_arg);
  */
 acpi_status
 acpi_db_command_dispatch(char *input_buffer,
-			 struct acpi_walk_state *walk_state,
-			 union acpi_parse_object *op);
+                         struct acpi_walk_state *walk_state,
+                         union acpi_parse_object *op);
 
 void ACPI_SYSTEM_XFACE acpi_db_execute_thread(void *context);
 

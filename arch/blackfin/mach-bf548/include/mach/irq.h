@@ -436,17 +436,17 @@
  * bfin pint registers layout
  */
 struct bfin_pint_regs {
-	u32 mask_set;
-	u32 mask_clear;
-	u32 request;
-	u32 assign;
-	u32 edge_set;
-	u32 edge_clear;
-	u32 invert_set;
-	u32 invert_clear;
-	u32 pinstate;
-	u32 latch;
-	u32 __pad0[2];
+    u32 mask_set;
+    u32 mask_clear;
+    u32 request;
+    u32 assign;
+    u32 edge_set;
+    u32 edge_clear;
+    u32 invert_set;
+    u32 invert_clear;
+    u32 pinstate;
+    u32 latch;
+    u32 __pad0[2];
 };
 
 #endif

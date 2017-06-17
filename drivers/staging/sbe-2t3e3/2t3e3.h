@@ -614,10 +614,10 @@
  *
  **********************************************************************/
 typedef struct {
-	u32 rdes0;
-	u32 rdes1;
-	u32 rdes2;
-	u32 rdes3;
+    u32 rdes0;
+    u32 rdes1;
+    u32 rdes2;
+    u32 rdes3;
 } t3e3_rx_desc_t;
 
 #define SBE_2T3E3_RX_DESC_RING_SIZE			64
@@ -649,10 +649,10 @@ typedef struct {
 /*********************/
 
 typedef struct {
-	u32 tdes0;
-	u32 tdes1;
-	u32 tdes2;
-	u32 tdes3;
+    u32 tdes0;
+    u32 tdes1;
+    u32 tdes2;
+    u32 tdes3;
 } t3e3_tx_desc_t;
 
 #define SBE_2T3E3_TX_DESC_RING_SIZE			256
@@ -686,66 +686,66 @@ typedef struct {
 #define MCLBYTES (SBE_2T3E3_MTU + 128)
 
 struct channel {
-	struct pci_dev *pdev;
-	struct net_device *dev;
-	struct card *card;
-	unsigned long addr;	/* DECchip */
+    struct pci_dev *pdev;
+    struct net_device *dev;
+    struct card *card;
+    unsigned long addr;	/* DECchip */
 
-	int leds;
+    int leds;
 
-	/* pci specific */
-	struct {
-		u32 slot;           /* should be 0 or 1 */
-		u32 command;
-		u8 cache_size;
-	} h;
+    /* pci specific */
+    struct {
+        u32 slot;           /* should be 0 or 1 */
+        u32 command;
+        u8 cache_size;
+    } h;
 
-	/* statistics */
-	t3e3_stats_t s;
+    /* statistics */
+    t3e3_stats_t s;
 
-	/* running */
-	struct {
-		u32 flags;
-	} r;
+    /* running */
+    struct {
+        u32 flags;
+    } r;
 
-	/* parameters */
-	t3e3_param_t p;
+    /* parameters */
+    t3e3_param_t p;
 
-	u32 liu_regs[SBE_2T3E3_LIU_REG_MAX];	   /* LIU registers */
-	u32 framer_regs[SBE_2T3E3_FRAMER_REG_MAX]; /* Framer registers */
+    u32 liu_regs[SBE_2T3E3_LIU_REG_MAX];	   /* LIU registers */
+    u32 framer_regs[SBE_2T3E3_FRAMER_REG_MAX]; /* Framer registers */
 
-	/* Ethernet Controller */
-	struct {
-		u_int16_t card_serial_number[3];
+    /* Ethernet Controller */
+    struct {
+        u_int16_t card_serial_number[3];
 
-		u32 reg[SBE_2T3E3_21143_REG_MAX]; /* registers i.e. CSR */
+        u32 reg[SBE_2T3E3_21143_REG_MAX]; /* registers i.e. CSR */
 
-		u32 interrupt_enable_mask;
+        u32 interrupt_enable_mask;
 
-		/* receive chain/ring */
-		t3e3_rx_desc_t *rx_ring;
-		struct sk_buff *rx_data[SBE_2T3E3_RX_DESC_RING_SIZE];
-		u32 rx_ring_current_read;
+        /* receive chain/ring */
+        t3e3_rx_desc_t *rx_ring;
+        struct sk_buff *rx_data[SBE_2T3E3_RX_DESC_RING_SIZE];
+        u32 rx_ring_current_read;
 
-		/* transmit chain/ring */
-		t3e3_tx_desc_t *tx_ring;
-		struct sk_buff *tx_data[SBE_2T3E3_TX_DESC_RING_SIZE];
-		u32 tx_ring_current_read;
-		u32 tx_ring_current_write;
-		int tx_full;
-		int tx_free_cnt;
-		spinlock_t tx_lock;
-	} ether;
+        /* transmit chain/ring */
+        t3e3_tx_desc_t *tx_ring;
+        struct sk_buff *tx_data[SBE_2T3E3_TX_DESC_RING_SIZE];
+        u32 tx_ring_current_read;
+        u32 tx_ring_current_write;
+        int tx_full;
+        int tx_free_cnt;
+        spinlock_t tx_lock;
+    } ether;
 
-	int32_t interrupt_active;
-	int32_t rcv_count;
+    int32_t interrupt_active;
+    int32_t rcv_count;
 };
 
 struct card {
-	spinlock_t bootrom_lock;
-	unsigned long bootrom_addr;
-	struct timer_list timer; /* for updating LEDs */
-	struct channel channels[0];
+    spinlock_t bootrom_lock;
+    unsigned long bootrom_addr;
+    struct timer_list timer; /* for updating LEDs */
+    struct channel channels[0];
 };
 
 #define SBE_2T3E3_FLAG_NETWORK_UP		0x00000001
@@ -761,7 +761,7 @@ void t3e3_if_up(struct channel *);
 void t3e3_if_down(struct channel *);
 int t3e3_if_start_xmit(struct sk_buff *skb, struct net_device *dev);
 void t3e3_if_config(struct channel *, u32, char *,
-		    t3e3_resp_t *, int *);
+                    t3e3_resp_t *, int *);
 void t3e3_set_frame_type(struct channel *, u32);
 u32 t3e3_eeprom_read_word(struct channel *, u32);
 void t3e3_read_card_serial_number(struct channel *);
@@ -837,41 +837,35 @@ void exar7300_unipolar_onoff(struct channel *, u32);
 void update_led(struct channel *, int);
 int setup_device(struct net_device *dev, struct channel *sc);
 
-static inline int has_two_ports(struct pci_dev *pdev)
-{
-	return pdev->subsystem_device == PCI_SUBDEVICE_ID_SBE_2T3E3_P0;
+static inline int has_two_ports(struct pci_dev *pdev) {
+    return pdev->subsystem_device == PCI_SUBDEVICE_ID_SBE_2T3E3_P0;
 }
 
 #define dev_to_priv(dev) (*(struct channel **) ((hdlc_device*)(dev) + 1))
 
-static inline u32 dc_read(unsigned long addr, u32 reg)
-{
-	return inl(addr + (reg << 3));
+static inline u32 dc_read(unsigned long addr, u32 reg) {
+    return inl(addr + (reg << 3));
 }
 
-static inline void dc_write(unsigned long addr, u32 reg, u32 val)
-{
-	outl(val, addr + (reg << 3));
+static inline void dc_write(unsigned long addr, u32 reg, u32 val) {
+    outl(val, addr + (reg << 3));
 }
 
-static inline void dc_set_bits(unsigned long addr, u32 reg, u32 bits)
-{
-	dc_write(addr, reg, dc_read(addr, reg) | bits);
+static inline void dc_set_bits(unsigned long addr, u32 reg, u32 bits) {
+    dc_write(addr, reg, dc_read(addr, reg) | bits);
 }
 
-static inline void dc_clear_bits(unsigned long addr, u32 reg, u32 bits)
-{
-	dc_write(addr, reg, dc_read(addr, reg) & ~bits);
+static inline void dc_clear_bits(unsigned long addr, u32 reg, u32 bits) {
+    dc_write(addr, reg, dc_read(addr, reg) & ~bits);
 }
 
 #define CPLD_MAP_REG(reg, sc)	(cpld_reg_map[(reg)][(sc)->h.slot])
 
-static inline void cpld_write(struct channel *channel, unsigned reg, u32 val)
-{
-	unsigned long flags;
-	spin_lock_irqsave(&channel->card->bootrom_lock, flags);
-	bootrom_write(channel, CPLD_MAP_REG(reg, channel), val);
-	spin_unlock_irqrestore(&channel->card->bootrom_lock, flags);
+static inline void cpld_write(struct channel *channel, unsigned reg, u32 val) {
+    unsigned long flags;
+    spin_lock_irqsave(&channel->card->bootrom_lock, flags);
+    bootrom_write(channel, CPLD_MAP_REG(reg, channel), val);
+    spin_unlock_irqrestore(&channel->card->bootrom_lock, flags);
 }
 
 #define exar7250_set_bit(sc, reg, bit)			\

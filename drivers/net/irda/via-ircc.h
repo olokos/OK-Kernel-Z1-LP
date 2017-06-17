@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      via-ircc.h
  * Version:       1.0
  * Description:   Driver for the VIA VT8231/VT8233 IrDA chipsets
@@ -22,8 +22,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
  * Comment:
- * jul/08/2002 : Rx buffer length should use Rx ring ptr.	
- * Oct/28/2002 : Add SB id for 3147 and 3177.	
+ * jul/08/2002 : Rx buffer length should use Rx ring ptr.
+ * Oct/28/2002 : Add SB id for 3147 and 3177.
  * jul/09/2002 : only implement two kind of dongle currently.
  * Oct/02/2002 : work on VT8231 and VT8233 .
  * Aug/06/2003 : change driver format to pci driver .
@@ -40,87 +40,86 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define MAX_RX_WINDOW 7
 
 struct st_fifo_entry {
-	int status;
-	int len;
+    int status;
+    int len;
 };
 
 struct st_fifo {
-	struct st_fifo_entry entries[MAX_RX_WINDOW + 2];
-	int pending_bytes;
-	int head;
-	int tail;
-	int len;
+    struct st_fifo_entry entries[MAX_RX_WINDOW + 2];
+    int pending_bytes;
+    int head;
+    int tail;
+    int len;
 };
 
 struct frame_cb {
-	void *start;		/* Start of frame in DMA mem */
-	int len;		/* Length of frame in DMA mem */
+    void *start;		/* Start of frame in DMA mem */
+    int len;		/* Length of frame in DMA mem */
 };
 
 struct tx_fifo {
-	struct frame_cb queue[MAX_TX_WINDOW + 2];	/* Info about frames in queue */
-	int ptr;		/* Currently being sent */
-	int len;		/* Length of queue */
-	int free;		/* Next free slot */
-	void *tail;		/* Next free start in DMA mem */
+    struct frame_cb queue[MAX_TX_WINDOW + 2];	/* Info about frames in queue */
+    int ptr;		/* Currently being sent */
+    int len;		/* Length of queue */
+    int free;		/* Next free slot */
+    void *tail;		/* Next free start in DMA mem */
 };
 
 
-struct eventflag		// for keeping track of Interrupt Events
-{
-	//--------tx part
-	unsigned char TxFIFOUnderRun;
-	unsigned char EOMessage;
-	unsigned char TxFIFOReady;
-	unsigned char EarlyEOM;
-	//--------rx part
-	unsigned char PHYErr;
-	unsigned char CRCErr;
-	unsigned char RxFIFOOverRun;
-	unsigned char EOPacket;
-	unsigned char RxAvail;
-	unsigned char TooLargePacket;
-	unsigned char SIRBad;
-	//--------unknown
-	unsigned char Unknown;
-	//----------
-	unsigned char TimeOut;
-	unsigned char RxDMATC;
-	unsigned char TxDMATC;
+struct eventflag {	// for keeping track of Interrupt Events
+    //--------tx part
+    unsigned char TxFIFOUnderRun;
+    unsigned char EOMessage;
+    unsigned char TxFIFOReady;
+    unsigned char EarlyEOM;
+    //--------rx part
+    unsigned char PHYErr;
+    unsigned char CRCErr;
+    unsigned char RxFIFOOverRun;
+    unsigned char EOPacket;
+    unsigned char RxAvail;
+    unsigned char TooLargePacket;
+    unsigned char SIRBad;
+    //--------unknown
+    unsigned char Unknown;
+    //----------
+    unsigned char TimeOut;
+    unsigned char RxDMATC;
+    unsigned char TxDMATC;
 };
 
 /* Private data for each instance */
 struct via_ircc_cb {
-	struct st_fifo st_fifo;	/* Info about received frames */
-	struct tx_fifo tx_fifo;	/* Info about frames to be transmitted */
+    struct st_fifo st_fifo;	/* Info about received frames */
+    struct tx_fifo tx_fifo;	/* Info about frames to be transmitted */
 
-	struct net_device *netdev;	/* Yes! we are some kind of netdevice */
+    struct net_device *netdev;	/* Yes! we are some kind of netdevice */
 
-	struct irlap_cb *irlap;	/* The link layer we are binded to */
-	struct qos_info qos;	/* QoS capabilities for this device */
+    struct irlap_cb *irlap;	/* The link layer we are binded to */
+    struct qos_info qos;	/* QoS capabilities for this device */
 
-	chipio_t io;		/* IrDA controller information */
-	iobuff_t tx_buff;	/* Transmit buffer */
-	iobuff_t rx_buff;	/* Receive buffer */
-	dma_addr_t tx_buff_dma;
-	dma_addr_t rx_buff_dma;
+    chipio_t io;		/* IrDA controller information */
+    iobuff_t tx_buff;	/* Transmit buffer */
+    iobuff_t rx_buff;	/* Receive buffer */
+    dma_addr_t tx_buff_dma;
+    dma_addr_t rx_buff_dma;
 
-	__u8 ier;		/* Interrupt enable register */
+    __u8 ier;		/* Interrupt enable register */
 
-	struct timeval stamp;
-	struct timeval now;
+    struct timeval stamp;
+    struct timeval now;
 
-	spinlock_t lock;	/* For serializing operations */
+    spinlock_t lock;	/* For serializing operations */
 
-	__u32 flags;		/* Interface flags */
-	__u32 new_speed;
-	int index;		/* Instance index */
+    __u32 flags;		/* Interface flags */
+    __u32 new_speed;
+    int index;		/* Instance index */
 
-	struct eventflag EventFlag;
-	unsigned int chip_id;	/* to remember chip id */
-	unsigned int RetryCount;
-	unsigned int RxDataReady;
-	unsigned int RxLastCount;
+    struct eventflag EventFlag;
+    unsigned int chip_id;	/* to remember chip id */
+    unsigned int RetryCount;
+    unsigned int RxDataReady;
+    unsigned int RxLastCount;
 };
 
 
@@ -163,11 +162,11 @@ struct via_ircc_cb {
 #define StartAddr 	0x10	// the first register address
 #define EndAddr 	0x3f	// the last register address
 #define GetBit(val,bit)  val = (unsigned char) ((val>>bit) & 0x1)
-			// Returns the bit
+// Returns the bit
 #define SetBit(val,bit)  val= (unsigned char ) (val | (0x1 << bit))
-			// Sets bit to 1
+// Sets bit to 1
 #define ResetBit(val,bit) val= (unsigned char ) (val & ~(0x1 << bit))
-			// Sets bit to 0
+// Sets bit to 0
 
 #define OFF   0
 #define ON   1
@@ -184,139 +183,130 @@ struct via_ircc_cb {
 #define Rd_Valid 0x08
 #define RxBit 0x08
 
-static void DisableDmaChannel(unsigned int channel)
-{
-	switch (channel) {	// 8 Bit DMA channels DMAC1
-	case 0:
-		outb(4, MASK1);	//mask channel 0
-		break;
-	case 1:
-		outb(5, MASK1);	//Mask channel 1
-		break;
-	case 2:
-		outb(6, MASK1);	//Mask channel 2
-		break;
-	case 3:
-		outb(7, MASK1);	//Mask channel 3
-		break;
-	case 5:
-		outb(5, MASK2);	//Mask channel 5
-		break;
-	case 6:
-		outb(6, MASK2);	//Mask channel 6
-		break;
-	case 7:
-		outb(7, MASK2);	//Mask channel 7
-		break;
-	default:
-		break;
-	}
+static void DisableDmaChannel(unsigned int channel) {
+    switch (channel) {	// 8 Bit DMA channels DMAC1
+    case 0:
+        outb(4, MASK1);	//mask channel 0
+        break;
+    case 1:
+        outb(5, MASK1);	//Mask channel 1
+        break;
+    case 2:
+        outb(6, MASK1);	//Mask channel 2
+        break;
+    case 3:
+        outb(7, MASK1);	//Mask channel 3
+        break;
+    case 5:
+        outb(5, MASK2);	//Mask channel 5
+        break;
+    case 6:
+        outb(6, MASK2);	//Mask channel 6
+        break;
+    case 7:
+        outb(7, MASK2);	//Mask channel 7
+        break;
+    default:
+        break;
+    }
 }
 
-static unsigned char ReadLPCReg(int iRegNum)
-{
-	unsigned char iVal;
+static unsigned char ReadLPCReg(int iRegNum) {
+    unsigned char iVal;
 
-	outb(0x87, 0x2e);
-	outb(0x87, 0x2e);
-	outb(iRegNum, 0x2e);
-	iVal = inb(0x2f);
-	outb(0xaa, 0x2e);
+    outb(0x87, 0x2e);
+    outb(0x87, 0x2e);
+    outb(iRegNum, 0x2e);
+    iVal = inb(0x2f);
+    outb(0xaa, 0x2e);
 
-	return iVal;
+    return iVal;
 }
 
-static void WriteLPCReg(int iRegNum, unsigned char iVal)
-{
+static void WriteLPCReg(int iRegNum, unsigned char iVal) {
 
-	outb(0x87, 0x2e);
-	outb(0x87, 0x2e);
-	outb(iRegNum, 0x2e);
-	outb(iVal, 0x2f);
-	outb(0xAA, 0x2e);
+    outb(0x87, 0x2e);
+    outb(0x87, 0x2e);
+    outb(iRegNum, 0x2e);
+    outb(iVal, 0x2f);
+    outb(0xAA, 0x2e);
 }
 
-static __u8 ReadReg(unsigned int BaseAddr, int iRegNum)
-{
-	return (__u8) inb(BaseAddr + iRegNum);
+static __u8 ReadReg(unsigned int BaseAddr, int iRegNum) {
+    return (__u8) inb(BaseAddr + iRegNum);
 }
 
-static void WriteReg(unsigned int BaseAddr, int iRegNum, unsigned char iVal)
-{
-	outb(iVal, BaseAddr + iRegNum);
+static void WriteReg(unsigned int BaseAddr, int iRegNum, unsigned char iVal) {
+    outb(iVal, BaseAddr + iRegNum);
 }
 
 static int WriteRegBit(unsigned int BaseAddr, unsigned char RegNum,
-		unsigned char BitPos, unsigned char value)
-{
-	__u8 Rtemp, Wtemp;
+                       unsigned char BitPos, unsigned char value) {
+    __u8 Rtemp, Wtemp;
 
-	if (BitPos > 7) {
-		return -1;
-	}
-	if ((RegNum < StartAddr) || (RegNum > EndAddr))
-		return -1;
-	Rtemp = ReadReg(BaseAddr, RegNum);
-	if (value == 0)
-		Wtemp = ResetBit(Rtemp, BitPos);
-	else {
-		if (value == 1)
-			Wtemp = SetBit(Rtemp, BitPos);
-		else
-			return -1;
-	}
-	WriteReg(BaseAddr, RegNum, Wtemp);
-	return 0;
+    if (BitPos > 7) {
+        return -1;
+    }
+    if ((RegNum < StartAddr) || (RegNum > EndAddr))
+        return -1;
+    Rtemp = ReadReg(BaseAddr, RegNum);
+    if (value == 0)
+        Wtemp = ResetBit(Rtemp, BitPos);
+    else {
+        if (value == 1)
+            Wtemp = SetBit(Rtemp, BitPos);
+        else
+            return -1;
+    }
+    WriteReg(BaseAddr, RegNum, Wtemp);
+    return 0;
 }
 
 static __u8 CheckRegBit(unsigned int BaseAddr, unsigned char RegNum,
-		 unsigned char BitPos)
-{
-	__u8 temp;
+                        unsigned char BitPos) {
+    __u8 temp;
 
-	if (BitPos > 7)
-		return 0xff;
-	if ((RegNum < StartAddr) || (RegNum > EndAddr)) {
+    if (BitPos > 7)
+        return 0xff;
+    if ((RegNum < StartAddr) || (RegNum > EndAddr)) {
 //     printf("what is the register %x!\n",RegNum);
-	}
-	temp = ReadReg(BaseAddr, RegNum);
-	return GetBit(temp, BitPos);
+    }
+    temp = ReadReg(BaseAddr, RegNum);
+    return GetBit(temp, BitPos);
 }
 
-static void SetMaxRxPacketSize(__u16 iobase, __u16 size)
-{
-	__u16 low, high;
-	if ((size & 0xe000) == 0) {
-		low = size & 0x00ff;
-		high = (size & 0x1f00) >> 8;
-		WriteReg(iobase, I_CF_L_2, low);
-		WriteReg(iobase, I_CF_H_2, high);
+static void SetMaxRxPacketSize(__u16 iobase, __u16 size) {
+    __u16 low, high;
+    if ((size & 0xe000) == 0) {
+        low = size & 0x00ff;
+        high = (size & 0x1f00) >> 8;
+        WriteReg(iobase, I_CF_L_2, low);
+        WriteReg(iobase, I_CF_H_2, high);
 
-	}
+    }
 
 }
 
 //for both Rx and Tx
 
-static void SetFIFO(__u16 iobase, __u16 value)
-{
-	switch (value) {
-	case 128:
-		WriteRegBit(iobase, 0x11, 0, 0);
-		WriteRegBit(iobase, 0x11, 7, 1);
-		break;
-	case 64:
-		WriteRegBit(iobase, 0x11, 0, 0);
-		WriteRegBit(iobase, 0x11, 7, 0);
-		break;
-	case 32:
-		WriteRegBit(iobase, 0x11, 0, 1);
-		WriteRegBit(iobase, 0x11, 7, 0);
-		break;
-	default:
-		WriteRegBit(iobase, 0x11, 0, 0);
-		WriteRegBit(iobase, 0x11, 7, 0);
-	}
+static void SetFIFO(__u16 iobase, __u16 value) {
+    switch (value) {
+    case 128:
+        WriteRegBit(iobase, 0x11, 0, 0);
+        WriteRegBit(iobase, 0x11, 7, 1);
+        break;
+    case 64:
+        WriteRegBit(iobase, 0x11, 0, 0);
+        WriteRegBit(iobase, 0x11, 7, 0);
+        break;
+    case 32:
+        WriteRegBit(iobase, 0x11, 0, 1);
+        WriteRegBit(iobase, 0x11, 7, 0);
+        break;
+    default:
+        WriteRegBit(iobase, 0x11, 0, 0);
+        WriteRegBit(iobase, 0x11, 7, 0);
+    }
 
 }
 
@@ -409,443 +399,418 @@ static void SetFIFO(__u16 iobase, __u16 value)
 #define GetFIRVersion(BaseAddr)		ReadReg(BaseAddr,VERSION)
 
 
-static void SetTimer(__u16 iobase, __u8 count)
-{
-	EnTimerInt(iobase, OFF);
-	WriteReg(iobase, TIMER, count);
-	EnTimerInt(iobase, ON);
+static void SetTimer(__u16 iobase, __u8 count) {
+    EnTimerInt(iobase, OFF);
+    WriteReg(iobase, TIMER, count);
+    EnTimerInt(iobase, ON);
 }
 
 
-static void SetSendByte(__u16 iobase, __u32 count)
-{
-	__u32 low, high;
+static void SetSendByte(__u16 iobase, __u32 count) {
+    __u32 low, high;
 
-	if ((count & 0xf000) == 0) {
-		low = count & 0x00ff;
-		high = (count & 0x0f00) >> 8;
-		WriteReg(iobase, TX_C_L, low);
-		WriteReg(iobase, TX_C_H, high);
-	}
+    if ((count & 0xf000) == 0) {
+        low = count & 0x00ff;
+        high = (count & 0x0f00) >> 8;
+        WriteReg(iobase, TX_C_L, low);
+        WriteReg(iobase, TX_C_H, high);
+    }
 }
 
-static void ResetChip(__u16 iobase, __u8 type)
-{
-	__u8 value;
+static void ResetChip(__u16 iobase, __u8 type) {
+    __u8 value;
 
-	value = (type + 2) << 4;
-	WriteReg(iobase, RESET, type);
+    value = (type + 2) << 4;
+    WriteReg(iobase, RESET, type);
 }
 
-static int CkRxRecv(__u16 iobase, struct via_ircc_cb *self)
-{
-	__u8 low, high;
-	__u16 wTmp = 0, wTmp1 = 0, wTmp_new = 0;
+static int CkRxRecv(__u16 iobase, struct via_ircc_cb *self) {
+    __u8 low, high;
+    __u16 wTmp = 0, wTmp1 = 0, wTmp_new = 0;
 
-	low = ReadReg(iobase, RX_C_L);
-	high = ReadReg(iobase, RX_C_H);
-	wTmp1 = high;
-	wTmp = (wTmp1 << 8) | low;
-	udelay(10);
-	low = ReadReg(iobase, RX_C_L);
-	high = ReadReg(iobase, RX_C_H);
-	wTmp1 = high;
-	wTmp_new = (wTmp1 << 8) | low;
-	if (wTmp_new != wTmp)
-		return 1;
-	else
-		return 0;
+    low = ReadReg(iobase, RX_C_L);
+    high = ReadReg(iobase, RX_C_H);
+    wTmp1 = high;
+    wTmp = (wTmp1 << 8) | low;
+    udelay(10);
+    low = ReadReg(iobase, RX_C_L);
+    high = ReadReg(iobase, RX_C_H);
+    wTmp1 = high;
+    wTmp_new = (wTmp1 << 8) | low;
+    if (wTmp_new != wTmp)
+        return 1;
+    else
+        return 0;
 
 }
 
-static __u16 RxCurCount(__u16 iobase, struct via_ircc_cb * self)
-{
-	__u8 low, high;
-	__u16 wTmp = 0, wTmp1 = 0;
+static __u16 RxCurCount(__u16 iobase, struct via_ircc_cb * self) {
+    __u8 low, high;
+    __u16 wTmp = 0, wTmp1 = 0;
 
-	low = ReadReg(iobase, RX_P_L);
-	high = ReadReg(iobase, RX_P_H);
-	wTmp1 = high;
-	wTmp = (wTmp1 << 8) | low;
-	return wTmp;
+    low = ReadReg(iobase, RX_P_L);
+    high = ReadReg(iobase, RX_P_H);
+    wTmp1 = high;
+    wTmp = (wTmp1 << 8) | low;
+    return wTmp;
 }
 
 /* This Routine can only use in recevie_complete
  * for it will update last count.
  */
 
-static __u16 GetRecvByte(__u16 iobase, struct via_ircc_cb * self)
-{
-	__u8 low, high;
-	__u16 wTmp, wTmp1, ret;
+static __u16 GetRecvByte(__u16 iobase, struct via_ircc_cb * self) {
+    __u8 low, high;
+    __u16 wTmp, wTmp1, ret;
 
-	low = ReadReg(iobase, RX_P_L);
-	high = ReadReg(iobase, RX_P_H);
-	wTmp1 = high;
-	wTmp = (wTmp1 << 8) | low;
+    low = ReadReg(iobase, RX_P_L);
+    high = ReadReg(iobase, RX_P_H);
+    wTmp1 = high;
+    wTmp = (wTmp1 << 8) | low;
 
 
-	if (wTmp >= self->RxLastCount)
-		ret = wTmp - self->RxLastCount;
-	else
-		ret = (0x8000 - self->RxLastCount) + wTmp;
-	self->RxLastCount = wTmp;
+    if (wTmp >= self->RxLastCount)
+        ret = wTmp - self->RxLastCount;
+    else
+        ret = (0x8000 - self->RxLastCount) + wTmp;
+    self->RxLastCount = wTmp;
 
-/* RX_P is more actually the RX_C
- low=ReadReg(iobase,RX_C_L);
- high=ReadReg(iobase,RX_C_H);
+    /* RX_P is more actually the RX_C
+     low=ReadReg(iobase,RX_C_L);
+     high=ReadReg(iobase,RX_C_H);
 
- if(!(high&0xe000)) {
-	 temp=(high<<8)+low;
-	 return temp;
- }
- else return 0;
-*/
-	return ret;
+     if(!(high&0xe000)) {
+    	 temp=(high<<8)+low;
+    	 return temp;
+     }
+     else return 0;
+    */
+    return ret;
 }
 
-static void Sdelay(__u16 scale)
-{
-	__u8 bTmp;
-	int i, j;
+static void Sdelay(__u16 scale) {
+    __u8 bTmp;
+    int i, j;
 
-	for (j = 0; j < scale; j++) {
-		for (i = 0; i < 0x20; i++) {
-			bTmp = inb(0xeb);
-			outb(bTmp, 0xeb);
-		}
-	}
+    for (j = 0; j < scale; j++) {
+        for (i = 0; i < 0x20; i++) {
+            bTmp = inb(0xeb);
+            outb(bTmp, 0xeb);
+        }
+    }
 }
 
-static void Tdelay(__u16 scale)
-{
-	__u8 bTmp;
-	int i, j;
+static void Tdelay(__u16 scale) {
+    __u8 bTmp;
+    int i, j;
 
-	for (j = 0; j < scale; j++) {
-		for (i = 0; i < 0x50; i++) {
-			bTmp = inb(0xeb);
-			outb(bTmp, 0xeb);
-		}
-	}
+    for (j = 0; j < scale; j++) {
+        for (i = 0; i < 0x50; i++) {
+            bTmp = inb(0xeb);
+            outb(bTmp, 0xeb);
+        }
+    }
 }
 
 
-static void ActClk(__u16 iobase, __u8 value)
-{
-	__u8 bTmp;
-	bTmp = ReadReg(iobase, 0x34);
-	if (value)
-		WriteReg(iobase, 0x34, bTmp | Clk_bit);
-	else
-		WriteReg(iobase, 0x34, bTmp & ~Clk_bit);
+static void ActClk(__u16 iobase, __u8 value) {
+    __u8 bTmp;
+    bTmp = ReadReg(iobase, 0x34);
+    if (value)
+        WriteReg(iobase, 0x34, bTmp | Clk_bit);
+    else
+        WriteReg(iobase, 0x34, bTmp & ~Clk_bit);
 }
 
-static void ClkTx(__u16 iobase, __u8 Clk, __u8 Tx)
-{
-	__u8 bTmp;
+static void ClkTx(__u16 iobase, __u8 Clk, __u8 Tx) {
+    __u8 bTmp;
 
-	bTmp = ReadReg(iobase, 0x34);
-	if (Clk == 0)
-		bTmp &= ~Clk_bit;
-	else {
-		if (Clk == 1)
-			bTmp |= Clk_bit;
-	}
-	WriteReg(iobase, 0x34, bTmp);
-	Sdelay(1);
-	if (Tx == 0)
-		bTmp &= ~Tx_bit;
-	else {
-		if (Tx == 1)
-			bTmp |= Tx_bit;
-	}
-	WriteReg(iobase, 0x34, bTmp);
+    bTmp = ReadReg(iobase, 0x34);
+    if (Clk == 0)
+        bTmp &= ~Clk_bit;
+    else {
+        if (Clk == 1)
+            bTmp |= Clk_bit;
+    }
+    WriteReg(iobase, 0x34, bTmp);
+    Sdelay(1);
+    if (Tx == 0)
+        bTmp &= ~Tx_bit;
+    else {
+        if (Tx == 1)
+            bTmp |= Tx_bit;
+    }
+    WriteReg(iobase, 0x34, bTmp);
 }
 
-static void Wr_Byte(__u16 iobase, __u8 data)
-{
-	__u8 bData = data;
+static void Wr_Byte(__u16 iobase, __u8 data) {
+    __u8 bData = data;
 //      __u8 btmp;
-	int i;
+    int i;
 
-	ClkTx(iobase, 0, 1);
+    ClkTx(iobase, 0, 1);
 
-	Tdelay(2);
-	ActClk(iobase, 1);
-	Tdelay(1);
+    Tdelay(2);
+    ActClk(iobase, 1);
+    Tdelay(1);
 
-	for (i = 0; i < 8; i++) {	//LDN
+    for (i = 0; i < 8; i++) {	//LDN
 
-		if ((bData >> i) & 0x01) {
-			ClkTx(iobase, 0, 1);	//bit data = 1;
-		} else {
-			ClkTx(iobase, 0, 0);	//bit data = 1;
-		}
-		Tdelay(2);
-		Sdelay(1);
-		ActClk(iobase, 1);	//clk hi
-		Tdelay(1);
-	}
+        if ((bData >> i) & 0x01) {
+            ClkTx(iobase, 0, 1);	//bit data = 1;
+        } else {
+            ClkTx(iobase, 0, 0);	//bit data = 1;
+        }
+        Tdelay(2);
+        Sdelay(1);
+        ActClk(iobase, 1);	//clk hi
+        Tdelay(1);
+    }
 }
 
-static __u8 Rd_Indx(__u16 iobase, __u8 addr, __u8 index)
-{
-	__u8 data = 0, bTmp, data_bit;
-	int i;
+static __u8 Rd_Indx(__u16 iobase, __u8 addr, __u8 index) {
+    __u8 data = 0, bTmp, data_bit;
+    int i;
 
-	bTmp = addr | (index << 1) | 0;
-	ClkTx(iobase, 0, 0);
-	Tdelay(2);
-	ActClk(iobase, 1);
-	udelay(1);
-	Wr_Byte(iobase, bTmp);
-	Sdelay(1);
-	ClkTx(iobase, 0, 0);
-	Tdelay(2);
-	for (i = 0; i < 10; i++) {
-		ActClk(iobase, 1);
-		Tdelay(1);
-		ActClk(iobase, 0);
-		Tdelay(1);
-		ClkTx(iobase, 0, 1);
-		Tdelay(1);
-		bTmp = ReadReg(iobase, 0x34);
-		if (!(bTmp & Rd_Valid))
-			break;
-	}
-	if (!(bTmp & Rd_Valid)) {
-		for (i = 0; i < 8; i++) {
-			ActClk(iobase, 1);
-			Tdelay(1);
-			ActClk(iobase, 0);
-			bTmp = ReadReg(iobase, 0x34);
-			data_bit = 1 << i;
-			if (bTmp & RxBit)
-				data |= data_bit;
-			else
-				data &= ~data_bit;
-			Tdelay(2);
-		}
-	} else {
-		for (i = 0; i < 2; i++) {
-			ActClk(iobase, 1);
-			Tdelay(1);
-			ActClk(iobase, 0);
-			Tdelay(2);
-		}
-		bTmp = ReadReg(iobase, 0x34);
-	}
-	for (i = 0; i < 1; i++) {
-		ActClk(iobase, 1);
-		Tdelay(1);
-		ActClk(iobase, 0);
-		Tdelay(2);
-	}
-	ClkTx(iobase, 0, 0);
-	Tdelay(1);
-	for (i = 0; i < 3; i++) {
-		ActClk(iobase, 1);
-		Tdelay(1);
-		ActClk(iobase, 0);
-		Tdelay(2);
-	}
-	return data;
+    bTmp = addr | (index << 1) | 0;
+    ClkTx(iobase, 0, 0);
+    Tdelay(2);
+    ActClk(iobase, 1);
+    udelay(1);
+    Wr_Byte(iobase, bTmp);
+    Sdelay(1);
+    ClkTx(iobase, 0, 0);
+    Tdelay(2);
+    for (i = 0; i < 10; i++) {
+        ActClk(iobase, 1);
+        Tdelay(1);
+        ActClk(iobase, 0);
+        Tdelay(1);
+        ClkTx(iobase, 0, 1);
+        Tdelay(1);
+        bTmp = ReadReg(iobase, 0x34);
+        if (!(bTmp & Rd_Valid))
+            break;
+    }
+    if (!(bTmp & Rd_Valid)) {
+        for (i = 0; i < 8; i++) {
+            ActClk(iobase, 1);
+            Tdelay(1);
+            ActClk(iobase, 0);
+            bTmp = ReadReg(iobase, 0x34);
+            data_bit = 1 << i;
+            if (bTmp & RxBit)
+                data |= data_bit;
+            else
+                data &= ~data_bit;
+            Tdelay(2);
+        }
+    } else {
+        for (i = 0; i < 2; i++) {
+            ActClk(iobase, 1);
+            Tdelay(1);
+            ActClk(iobase, 0);
+            Tdelay(2);
+        }
+        bTmp = ReadReg(iobase, 0x34);
+    }
+    for (i = 0; i < 1; i++) {
+        ActClk(iobase, 1);
+        Tdelay(1);
+        ActClk(iobase, 0);
+        Tdelay(2);
+    }
+    ClkTx(iobase, 0, 0);
+    Tdelay(1);
+    for (i = 0; i < 3; i++) {
+        ActClk(iobase, 1);
+        Tdelay(1);
+        ActClk(iobase, 0);
+        Tdelay(2);
+    }
+    return data;
 }
 
-static void Wr_Indx(__u16 iobase, __u8 addr, __u8 index, __u8 data)
-{
-	int i;
-	__u8 bTmp;
+static void Wr_Indx(__u16 iobase, __u8 addr, __u8 index, __u8 data) {
+    int i;
+    __u8 bTmp;
 
-	ClkTx(iobase, 0, 0);
-	udelay(2);
-	ActClk(iobase, 1);
-	udelay(1);
-	bTmp = addr | (index << 1) | 1;
-	Wr_Byte(iobase, bTmp);
-	Wr_Byte(iobase, data);
-	for (i = 0; i < 2; i++) {
-		ClkTx(iobase, 0, 0);
-		Tdelay(2);
-		ActClk(iobase, 1);
-		Tdelay(1);
-	}
-	ActClk(iobase, 0);
+    ClkTx(iobase, 0, 0);
+    udelay(2);
+    ActClk(iobase, 1);
+    udelay(1);
+    bTmp = addr | (index << 1) | 1;
+    Wr_Byte(iobase, bTmp);
+    Wr_Byte(iobase, data);
+    for (i = 0; i < 2; i++) {
+        ClkTx(iobase, 0, 0);
+        Tdelay(2);
+        ActClk(iobase, 1);
+        Tdelay(1);
+    }
+    ActClk(iobase, 0);
 }
 
-static void ResetDongle(__u16 iobase)
-{
-	int i;
-	ClkTx(iobase, 0, 0);
-	Tdelay(1);
-	for (i = 0; i < 30; i++) {
-		ActClk(iobase, 1);
-		Tdelay(1);
-		ActClk(iobase, 0);
-		Tdelay(1);
-	}
-	ActClk(iobase, 0);
+static void ResetDongle(__u16 iobase) {
+    int i;
+    ClkTx(iobase, 0, 0);
+    Tdelay(1);
+    for (i = 0; i < 30; i++) {
+        ActClk(iobase, 1);
+        Tdelay(1);
+        ActClk(iobase, 0);
+        Tdelay(1);
+    }
+    ActClk(iobase, 0);
 }
 
-static void SetSITmode(__u16 iobase)
-{
+static void SetSITmode(__u16 iobase) {
 
-	__u8 bTmp;
+    __u8 bTmp;
 
-	bTmp = ReadLPCReg(0x28);
-	WriteLPCReg(0x28, bTmp | 0x10);	//select ITMOFF
-	bTmp = ReadReg(iobase, 0x35);
-	WriteReg(iobase, 0x35, bTmp | 0x40);	// Driver ITMOFF
-	WriteReg(iobase, 0x28, bTmp | 0x80);	// enable All interrupt
+    bTmp = ReadLPCReg(0x28);
+    WriteLPCReg(0x28, bTmp | 0x10);	//select ITMOFF
+    bTmp = ReadReg(iobase, 0x35);
+    WriteReg(iobase, 0x35, bTmp | 0x40);	// Driver ITMOFF
+    WriteReg(iobase, 0x28, bTmp | 0x80);	// enable All interrupt
 }
 
-static void SI_SetMode(__u16 iobase, int mode)
-{
-	//__u32 dTmp;
-	__u8 bTmp;
+static void SI_SetMode(__u16 iobase, int mode) {
+    //__u32 dTmp;
+    __u8 bTmp;
 
-	WriteLPCReg(0x28, 0x70);	// S/W Reset
-	SetSITmode(iobase);
-	ResetDongle(iobase);
-	udelay(10);
-	Wr_Indx(iobase, 0x40, 0x0, 0x17);	//RX ,APEN enable,Normal power
-	Wr_Indx(iobase, 0x40, 0x1, mode);	//Set Mode
-	Wr_Indx(iobase, 0x40, 0x2, 0xff);	//Set power to FIR VFIR > 1m
-	bTmp = Rd_Indx(iobase, 0x40, 1);
+    WriteLPCReg(0x28, 0x70);	// S/W Reset
+    SetSITmode(iobase);
+    ResetDongle(iobase);
+    udelay(10);
+    Wr_Indx(iobase, 0x40, 0x0, 0x17);	//RX ,APEN enable,Normal power
+    Wr_Indx(iobase, 0x40, 0x1, mode);	//Set Mode
+    Wr_Indx(iobase, 0x40, 0x2, 0xff);	//Set power to FIR VFIR > 1m
+    bTmp = Rd_Indx(iobase, 0x40, 1);
 }
 
-static void InitCard(__u16 iobase)
-{
-	ResetChip(iobase, 5);
-	WriteReg(iobase, I_ST_CT_0, 0x00);	// open CHIP on
-	SetSIRBOF(iobase, 0xc0);	// hardware default value
-	SetSIREOF(iobase, 0xc1);
+static void InitCard(__u16 iobase) {
+    ResetChip(iobase, 5);
+    WriteReg(iobase, I_ST_CT_0, 0x00);	// open CHIP on
+    SetSIRBOF(iobase, 0xc0);	// hardware default value
+    SetSIREOF(iobase, 0xc1);
 }
 
-static void CommonInit(__u16 iobase)
-{
+static void CommonInit(__u16 iobase) {
 //  EnTXCRC(iobase,0);
-	SwapDMA(iobase, OFF);
-	SetMaxRxPacketSize(iobase, 0x0fff);	//set to max:4095
-	EnRXFIFOReadyInt(iobase, OFF);
-	EnRXFIFOHalfLevelInt(iobase, OFF);
-	EnTXFIFOHalfLevelInt(iobase, OFF);
-	EnTXFIFOUnderrunEOMInt(iobase, ON);
+    SwapDMA(iobase, OFF);
+    SetMaxRxPacketSize(iobase, 0x0fff);	//set to max:4095
+    EnRXFIFOReadyInt(iobase, OFF);
+    EnRXFIFOHalfLevelInt(iobase, OFF);
+    EnTXFIFOHalfLevelInt(iobase, OFF);
+    EnTXFIFOUnderrunEOMInt(iobase, ON);
 //  EnTXFIFOReadyInt(iobase,ON);
-	InvertTX(iobase, OFF);
-	InvertRX(iobase, OFF);
+    InvertTX(iobase, OFF);
+    InvertRX(iobase, OFF);
 //  WriteLPCReg(0xF0,0); //(if VT1211 then do this)
-	if (IsSIROn(iobase)) {
-		SIRFilter(iobase, ON);
-		SIRRecvAny(iobase, ON);
-	} else {
-		SIRFilter(iobase, OFF);
-		SIRRecvAny(iobase, OFF);
-	}
-	EnRXSpecInt(iobase, ON);
-	WriteReg(iobase, I_ST_CT_0, 0x80);
-	EnableDMA(iobase, ON);
+    if (IsSIROn(iobase)) {
+        SIRFilter(iobase, ON);
+        SIRRecvAny(iobase, ON);
+    } else {
+        SIRFilter(iobase, OFF);
+        SIRRecvAny(iobase, OFF);
+    }
+    EnRXSpecInt(iobase, ON);
+    WriteReg(iobase, I_ST_CT_0, 0x80);
+    EnableDMA(iobase, ON);
 }
 
-static void SetBaudRate(__u16 iobase, __u32 rate)
-{
-	__u8 value = 11, temp;
+static void SetBaudRate(__u16 iobase, __u32 rate) {
+    __u8 value = 11, temp;
 
-	if (IsSIROn(iobase)) {
-		switch (rate) {
-		case (__u32) (2400L):
-			value = 47;
-			break;
-		case (__u32) (9600L):
-			value = 11;
-			break;
-		case (__u32) (19200L):
-			value = 5;
-			break;
-		case (__u32) (38400L):
-			value = 2;
-			break;
-		case (__u32) (57600L):
-			value = 1;
-			break;
-		case (__u32) (115200L):
-			value = 0;
-			break;
-		default:
-			break;
-		}
-	} else if (IsMIROn(iobase)) {
-		value = 0;	// will automatically be fixed in 1.152M
-	} else if (IsFIROn(iobase)) {
-		value = 0;	// will automatically be fixed in 4M
-	}
-	temp = (ReadReg(iobase, I_CF_H_1) & 0x03);
-	temp |= value << 2;
-	WriteReg(iobase, I_CF_H_1, temp);
+    if (IsSIROn(iobase)) {
+        switch (rate) {
+        case (__u32) (2400L):
+            value = 47;
+            break;
+        case (__u32) (9600L):
+            value = 11;
+            break;
+        case (__u32) (19200L):
+            value = 5;
+            break;
+        case (__u32) (38400L):
+            value = 2;
+            break;
+        case (__u32) (57600L):
+            value = 1;
+            break;
+        case (__u32) (115200L):
+            value = 0;
+            break;
+        default:
+            break;
+        }
+    } else if (IsMIROn(iobase)) {
+        value = 0;	// will automatically be fixed in 1.152M
+    } else if (IsFIROn(iobase)) {
+        value = 0;	// will automatically be fixed in 4M
+    }
+    temp = (ReadReg(iobase, I_CF_H_1) & 0x03);
+    temp |= value << 2;
+    WriteReg(iobase, I_CF_H_1, temp);
 }
 
-static void SetPulseWidth(__u16 iobase, __u8 width)
-{
-	__u8 temp, temp1, temp2;
+static void SetPulseWidth(__u16 iobase, __u8 width) {
+    __u8 temp, temp1, temp2;
 
-	temp = (ReadReg(iobase, I_CF_L_1) & 0x1f);
-	temp1 = (ReadReg(iobase, I_CF_H_1) & 0xfc);
-	temp2 = (width & 0x07) << 5;
-	temp |= temp2;
-	temp2 = (width & 0x18) >> 3;
-	temp1 |= temp2;
-	WriteReg(iobase, I_CF_L_1, temp);
-	WriteReg(iobase, I_CF_H_1, temp1);
+    temp = (ReadReg(iobase, I_CF_L_1) & 0x1f);
+    temp1 = (ReadReg(iobase, I_CF_H_1) & 0xfc);
+    temp2 = (width & 0x07) << 5;
+    temp |= temp2;
+    temp2 = (width & 0x18) >> 3;
+    temp1 |= temp2;
+    WriteReg(iobase, I_CF_L_1, temp);
+    WriteReg(iobase, I_CF_H_1, temp1);
 }
 
-static void SetSendPreambleCount(__u16 iobase, __u8 count)
-{
-	__u8 temp;
+static void SetSendPreambleCount(__u16 iobase, __u8 count) {
+    __u8 temp;
 
-	temp = ReadReg(iobase, I_CF_L_1) & 0xe0;
-	temp |= count;
-	WriteReg(iobase, I_CF_L_1, temp);
+    temp = ReadReg(iobase, I_CF_L_1) & 0xe0;
+    temp |= count;
+    WriteReg(iobase, I_CF_L_1, temp);
 
 }
 
-static void SetVFIR(__u16 BaseAddr, __u8 val)
-{
-	__u8 tmp;
+static void SetVFIR(__u16 BaseAddr, __u8 val) {
+    __u8 tmp;
 
-	tmp = ReadReg(BaseAddr, I_CF_L_0);
-	WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
-	WriteRegBit(BaseAddr, I_CF_H_0, 5, val);
+    tmp = ReadReg(BaseAddr, I_CF_L_0);
+    WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
+    WriteRegBit(BaseAddr, I_CF_H_0, 5, val);
 }
 
-static void SetFIR(__u16 BaseAddr, __u8 val)
-{
-	__u8 tmp;
+static void SetFIR(__u16 BaseAddr, __u8 val) {
+    __u8 tmp;
 
-	WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
-	tmp = ReadReg(BaseAddr, I_CF_L_0);
-	WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
-	WriteRegBit(BaseAddr, I_CF_L_0, 6, val);
+    WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
+    tmp = ReadReg(BaseAddr, I_CF_L_0);
+    WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
+    WriteRegBit(BaseAddr, I_CF_L_0, 6, val);
 }
 
-static void SetMIR(__u16 BaseAddr, __u8 val)
-{
-	__u8 tmp;
+static void SetMIR(__u16 BaseAddr, __u8 val) {
+    __u8 tmp;
 
-	WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
-	tmp = ReadReg(BaseAddr, I_CF_L_0);
-	WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
-	WriteRegBit(BaseAddr, I_CF_L_0, 5, val);
+    WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
+    tmp = ReadReg(BaseAddr, I_CF_L_0);
+    WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
+    WriteRegBit(BaseAddr, I_CF_L_0, 5, val);
 }
 
-static void SetSIR(__u16 BaseAddr, __u8 val)
-{
-	__u8 tmp;
+static void SetSIR(__u16 BaseAddr, __u8 val) {
+    __u8 tmp;
 
-	WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
-	tmp = ReadReg(BaseAddr, I_CF_L_0);
-	WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
-	WriteRegBit(BaseAddr, I_CF_L_0, 4, val);
+    WriteRegBit(BaseAddr, I_CF_H_0, 5, 0);
+    tmp = ReadReg(BaseAddr, I_CF_L_0);
+    WriteReg(BaseAddr, I_CF_L_0, tmp & 0x8f);
+    WriteRegBit(BaseAddr, I_CF_L_0, 4, val);
 }
 
 #endif				/* via_IRCC_H */

@@ -163,15 +163,16 @@ typedef unsigned long int 		dword;
 #define CHIP_91100	7
 
 static const char * chip_ids[ 15 ] =  {
-	NULL, NULL, NULL,
-	/* 3 */ "SMC91C90/91C92",
-	/* 4 */ "SMC91C94",
-	/* 5 */ "SMC91C95",
-	NULL,
-	/* 7 */ "SMC91C100",
-	/* 8 */ "SMC91C100FD",
-	NULL, NULL, NULL,
-	NULL, NULL, NULL};
+    NULL, NULL, NULL,
+    /* 3 */ "SMC91C90/91C92",
+    /* 4 */ "SMC91C94",
+    /* 5 */ "SMC91C95",
+    NULL,
+    /* 7 */ "SMC91C100",
+    /* 8 */ "SMC91C100FD",
+    NULL, NULL, NULL,
+    NULL, NULL, NULL
+};
 
 /*
  . Transmit status bits

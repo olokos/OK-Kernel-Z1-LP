@@ -41,7 +41,7 @@
  * GPL licensing note -- nVidia is allowing a liberal interpretation of
  * the documentation restriction above, to merely say that this nVidia's
  * copyright and disclaimer should be included with all code derived
- * from this source.  -- Jeff Garzik <jgarzik@pobox.com>, 01/Nov/99 
+ * from this source.  -- Jeff Garzik <jgarzik@pobox.com>, 01/Nov/99
  */
 
 /* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/nv/riva_hw.h,v 1.21 2002/10/14 18:22:46 mvojkovi Exp $ */
@@ -104,8 +104,7 @@ typedef unsigned int   U032;
 /*
  * Raster OPeration. Windows style ROP3.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -119,8 +118,7 @@ typedef volatile struct
 /*
  * 8X8 Monochrome pattern.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -138,8 +136,7 @@ typedef volatile struct
 /*
  * Scissor clip rectangle.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -154,8 +151,7 @@ typedef volatile struct
 /*
  * 2D filled rectangle.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -172,8 +168,7 @@ typedef volatile struct
 /*
  * 2D screen-screen BLT.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -189,8 +184,7 @@ typedef volatile struct
 /*
  * 2D pixel BLT.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -208,8 +202,7 @@ typedef volatile struct
 /*
  * Filled rectangle combined with monochrome expand.  Useful for glyphs.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -220,26 +213,22 @@ typedef volatile struct
     U032 reserved01[0x0BB];
     U032 reserved03[(0x040)-1];
     U032 Color1A;
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 WidthHeight;
     } UnclippedRectangle[64];
     U032 reserved04[(0x080)-3];
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 BottomRight;
     } ClipB;
     U032 Color1B;
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 BottomRight;
     } ClippedRectangle[64];
     U032 reserved05[(0x080)-5];
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 BottomRight;
     } ClipC;
@@ -248,8 +237,7 @@ typedef volatile struct
     U032 PointC;
     U032 MonochromeData1C;
     U032 reserved06[(0x080)+121];
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 BottomRight;
     } ClipD;
@@ -259,8 +247,7 @@ typedef volatile struct
     U032 PointD;
     U032 MonochromeData1D;
     U032 reserved07[(0x080)+120];
-    struct
-    {
+    struct {
         U032 TopLeft;
         U032 BottomRight;
     } ClipE;
@@ -274,8 +261,7 @@ typedef volatile struct
 /*
  * 3D textured, Z buffered triangle.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -288,7 +274,7 @@ typedef volatile struct
     U032 TextureFormat;
     U032 TextureFilter;
     U032 FogColor;
-/* This is a problem on LynxOS */
+    /* This is a problem on LynxOS */
 #ifdef Control
 #undef Control
 #endif
@@ -304,8 +290,7 @@ typedef volatile struct
     float TextureS;
     float TextureT;
 } RivaTexturedTriangle03;
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -319,15 +304,14 @@ typedef volatile struct
     U032 TextureFormat;
     U032 TextureFilter;
     U032 Blend;
-/* This is a problem on LynxOS */
+    /* This is a problem on LynxOS */
 #ifdef Control
 #undef Control
 #endif
     U032 Control;
     U032 FogColor;
     U032 reserved02[0x39];
-    struct
-    {
+    struct {
         float ScreenX;
         float ScreenY;
         float ScreenZ;
@@ -342,8 +326,7 @@ typedef volatile struct
 /*
  * 2D line.
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -377,8 +360,7 @@ typedef volatile struct
 /*
  * 2D/3D surfaces
  */
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -389,8 +371,7 @@ typedef volatile struct
     U032 reserved01[0x0BE];
     U032 Offset;
 } RivaSurface;
-typedef volatile struct
-{
+typedef volatile struct {
     U032 reserved00[4];
 #ifdef __BIG_ENDIAN
     U032 FifoFree;
@@ -403,7 +384,7 @@ typedef volatile struct
     U032 RenderBufferOffset;
     U032 ZBufferOffset;
 } RivaSurface3D;
-    
+
 /***************************************************************************\
 *                                                                           *
 *                        Virtualized RIVA H/W interface.                    *
@@ -418,8 +399,7 @@ struct _riva_hw_state;
 /*
  * Virtialized chip interface. Makes RIVA 128 and TNT look alike.
  */
-typedef struct _riva_hw_inst
-{
+typedef struct _riva_hw_inst {
     /*
      * Chip specific settings.
      */
@@ -490,8 +470,7 @@ typedef struct _riva_hw_inst
 /*
  * Extended mode state information.
  */
-typedef struct _riva_hw_state
-{
+typedef struct _riva_hw_state {
     U032 bpp;
     U032 width;
     U032 height;
@@ -511,10 +490,10 @@ typedef struct _riva_hw_state
     U032 pllsel;
     U032 general;
     U032 crtcOwner;
-    U032 head; 
-    U032 head2; 
+    U032 head;
+    U032 head2;
     U032 config;
-    U032 cursorConfig;	
+    U032 cursorConfig;
     U032 cursor0;
     U032 cursor1;
     U032 cursor2;

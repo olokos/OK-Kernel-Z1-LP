@@ -21,9 +21,8 @@
 extern int mcf_pinmux_request(unsigned, unsigned);
 extern void mcf_pinmux_release(unsigned, unsigned);
 
-static inline int mcf_pinmux_is_valid(unsigned pinmux)
-{
-	return pinmux != MCFPINMUX_NONE;
+static inline int mcf_pinmux_is_valid(unsigned pinmux) {
+    return pinmux != MCFPINMUX_NONE;
 }
 
 #endif

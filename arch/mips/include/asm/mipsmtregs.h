@@ -165,36 +165,34 @@
 
 #ifndef __ASSEMBLY__
 
-static inline unsigned int dvpe(void)
-{
-	int res = 0;
+static inline unsigned int dvpe(void) {
+    int res = 0;
 
-	__asm__ __volatile__(
-	"	.set	push						\n"
-	"	.set	noreorder					\n"
-	"	.set	noat						\n"
-	"	.set	mips32r2					\n"
-	"	.word	0x41610001		# dvpe $1		\n"
-	"	move	%0, $1						\n"
-	"	ehb							\n"
-	"	.set	pop						\n"
-	: "=r" (res));
+    __asm__ __volatile__(
+        "	.set	push						\n"
+        "	.set	noreorder					\n"
+        "	.set	noat						\n"
+        "	.set	mips32r2					\n"
+        "	.word	0x41610001		# dvpe $1		\n"
+        "	move	%0, $1						\n"
+        "	ehb							\n"
+        "	.set	pop						\n"
+        : "=r" (res));
 
-	instruction_hazard();
+    instruction_hazard();
 
-	return res;
+    return res;
 }
 
-static inline void __raw_evpe(void)
-{
-	__asm__ __volatile__(
-	"	.set	push						\n"
-	"	.set	noreorder					\n"
-	"	.set	noat						\n"
-	"	.set	mips32r2					\n"
-	"	.word	0x41600021		# evpe			\n"
-	"	ehb							\n"
-	"	.set	pop						\n");
+static inline void __raw_evpe(void) {
+    __asm__ __volatile__(
+        "	.set	push						\n"
+        "	.set	noreorder					\n"
+        "	.set	noat						\n"
+        "	.set	mips32r2					\n"
+        "	.word	0x41600021		# evpe			\n"
+        "	ehb							\n"
+        "	.set	pop						\n");
 }
 
 /* Enable virtual processor execution if previous suggested it should be.
@@ -202,40 +200,37 @@ static inline void __raw_evpe(void)
 
 #define EVPE_ENABLE MVPCONTROL_EVP
 
-static inline void evpe(int previous)
-{
-	if ((previous & MVPCONTROL_EVP))
-		__raw_evpe();
+static inline void evpe(int previous) {
+    if ((previous & MVPCONTROL_EVP))
+        __raw_evpe();
 }
 
-static inline unsigned int dmt(void)
-{
-	int res;
+static inline unsigned int dmt(void) {
+    int res;
 
-	__asm__ __volatile__(
-	"	.set	push						\n"
-	"	.set	mips32r2					\n"
-	"	.set	noat						\n"
-	"	.word	0x41610BC1			# dmt $1	\n"
-	"	ehb							\n"
-	"	move	%0, $1						\n"
-	"	.set	pop						\n"
-	: "=r" (res));
+    __asm__ __volatile__(
+        "	.set	push						\n"
+        "	.set	mips32r2					\n"
+        "	.set	noat						\n"
+        "	.word	0x41610BC1			# dmt $1	\n"
+        "	ehb							\n"
+        "	move	%0, $1						\n"
+        "	.set	pop						\n"
+        : "=r" (res));
 
-	instruction_hazard();
+    instruction_hazard();
 
-	return res;
+    return res;
 }
 
-static inline void __raw_emt(void)
-{
-	__asm__ __volatile__(
-	"	.set	noreorder					\n"
-	"	.set	mips32r2					\n"
-	"	.word	0x41600be1			# emt		\n"
-	"	ehb							\n"
-	"	.set	mips0						\n"
-	"	.set	reorder");
+static inline void __raw_emt(void) {
+    __asm__ __volatile__(
+        "	.set	noreorder					\n"
+        "	.set	mips32r2					\n"
+        "	.word	0x41600be1			# emt		\n"
+        "	ehb							\n"
+        "	.set	mips0						\n"
+        "	.set	reorder");
 }
 
 /* enable multi-threaded execution if previous suggested it should be.
@@ -243,18 +238,16 @@ static inline void __raw_emt(void)
 
 #define EMT_ENABLE VPECONTROL_TE
 
-static inline void emt(int previous)
-{
-	if ((previous & EMT_ENABLE))
-		__raw_emt();
+static inline void emt(int previous) {
+    if ((previous & EMT_ENABLE))
+        __raw_emt();
 }
 
-static inline void ehb(void)
-{
-	__asm__ __volatile__(
-	"	.set	mips32r2				\n"
-	"	ehb						\n"
-	"	.set	mips0					\n");
+static inline void ehb(void) {
+    __asm__ __volatile__(
+        "	.set	mips32r2				\n"
+        "	ehb						\n"
+        "	.set	mips0					\n");
 }
 
 #define mftc0(rt,sel)							\

@@ -103,8 +103,8 @@ typedef __u64 fpureg_t;
  */
 
 struct mips_fpu_struct {
-	fpureg_t	fpr[NUM_FPU_REGS];
-	unsigned int	fcr31;
+    fpureg_t	fpr[NUM_FPU_REGS];
+    unsigned int	fcr31;
 };
 
 #define NUM_DSP_REGS   6
@@ -112,8 +112,8 @@ struct mips_fpu_struct {
 typedef __u32 dspreg_t;
 
 struct mips_dsp_state {
-	dspreg_t        dspr[NUM_DSP_REGS];
-	unsigned int    dspcontrol;
+    dspreg_t        dspr[NUM_DSP_REGS];
+    unsigned int    dspcontrol;
 };
 
 #define INIT_CPUMASK { \
@@ -121,74 +121,74 @@ struct mips_dsp_state {
 }
 
 struct mips3264_watch_reg_state {
-	/* The width of watchlo is 32 in a 32 bit kernel and 64 in a
-	   64 bit kernel.  We use unsigned long as it has the same
-	   property. */
-	unsigned long watchlo[NUM_WATCH_REGS];
-	/* Only the mask and IRW bits from watchhi. */
-	u16 watchhi[NUM_WATCH_REGS];
+    /* The width of watchlo is 32 in a 32 bit kernel and 64 in a
+       64 bit kernel.  We use unsigned long as it has the same
+       property. */
+    unsigned long watchlo[NUM_WATCH_REGS];
+    /* Only the mask and IRW bits from watchhi. */
+    u16 watchhi[NUM_WATCH_REGS];
 };
 
 union mips_watch_reg_state {
-	struct mips3264_watch_reg_state mips3264;
+    struct mips3264_watch_reg_state mips3264;
 };
 
 #ifdef CONFIG_CPU_CAVIUM_OCTEON
 
 struct octeon_cop2_state {
-	/* DMFC2 rt, 0x0201 */
-	unsigned long   cop2_crc_iv;
-	/* DMFC2 rt, 0x0202 (Set with DMTC2 rt, 0x1202) */
-	unsigned long   cop2_crc_length;
-	/* DMFC2 rt, 0x0200 (set with DMTC2 rt, 0x4200) */
-	unsigned long   cop2_crc_poly;
-	/* DMFC2 rt, 0x0402; DMFC2 rt, 0x040A */
-	unsigned long   cop2_llm_dat[2];
-       /* DMFC2 rt, 0x0084 */
-	unsigned long   cop2_3des_iv;
-	/* DMFC2 rt, 0x0080; DMFC2 rt, 0x0081; DMFC2 rt, 0x0082 */
-	unsigned long   cop2_3des_key[3];
-	/* DMFC2 rt, 0x0088 (Set with DMTC2 rt, 0x0098) */
-	unsigned long   cop2_3des_result;
-	/* DMFC2 rt, 0x0111 (FIXME: Read Pass1 Errata) */
-	unsigned long   cop2_aes_inp0;
-	/* DMFC2 rt, 0x0102; DMFC2 rt, 0x0103 */
-	unsigned long   cop2_aes_iv[2];
-	/* DMFC2 rt, 0x0104; DMFC2 rt, 0x0105; DMFC2 rt, 0x0106; DMFC2
-	 * rt, 0x0107 */
-	unsigned long   cop2_aes_key[4];
-	/* DMFC2 rt, 0x0110 */
-	unsigned long   cop2_aes_keylen;
-	/* DMFC2 rt, 0x0100; DMFC2 rt, 0x0101 */
-	unsigned long   cop2_aes_result[2];
-	/* DMFC2 rt, 0x0240; DMFC2 rt, 0x0241; DMFC2 rt, 0x0242; DMFC2
-	 * rt, 0x0243; DMFC2 rt, 0x0244; DMFC2 rt, 0x0245; DMFC2 rt,
-	 * 0x0246; DMFC2 rt, 0x0247; DMFC2 rt, 0x0248; DMFC2 rt,
-	 * 0x0249; DMFC2 rt, 0x024A; DMFC2 rt, 0x024B; DMFC2 rt,
-	 * 0x024C; DMFC2 rt, 0x024D; DMFC2 rt, 0x024E - Pass2 */
-	unsigned long   cop2_hsh_datw[15];
-	/* DMFC2 rt, 0x0250; DMFC2 rt, 0x0251; DMFC2 rt, 0x0252; DMFC2
-	 * rt, 0x0253; DMFC2 rt, 0x0254; DMFC2 rt, 0x0255; DMFC2 rt,
-	 * 0x0256; DMFC2 rt, 0x0257 - Pass2 */
-	unsigned long   cop2_hsh_ivw[8];
-	/* DMFC2 rt, 0x0258; DMFC2 rt, 0x0259 - Pass2 */
-	unsigned long   cop2_gfm_mult[2];
-	/* DMFC2 rt, 0x025E - Pass2 */
-	unsigned long   cop2_gfm_poly;
-	/* DMFC2 rt, 0x025A; DMFC2 rt, 0x025B - Pass2 */
-	unsigned long   cop2_gfm_result[2];
+    /* DMFC2 rt, 0x0201 */
+    unsigned long   cop2_crc_iv;
+    /* DMFC2 rt, 0x0202 (Set with DMTC2 rt, 0x1202) */
+    unsigned long   cop2_crc_length;
+    /* DMFC2 rt, 0x0200 (set with DMTC2 rt, 0x4200) */
+    unsigned long   cop2_crc_poly;
+    /* DMFC2 rt, 0x0402; DMFC2 rt, 0x040A */
+    unsigned long   cop2_llm_dat[2];
+    /* DMFC2 rt, 0x0084 */
+    unsigned long   cop2_3des_iv;
+    /* DMFC2 rt, 0x0080; DMFC2 rt, 0x0081; DMFC2 rt, 0x0082 */
+    unsigned long   cop2_3des_key[3];
+    /* DMFC2 rt, 0x0088 (Set with DMTC2 rt, 0x0098) */
+    unsigned long   cop2_3des_result;
+    /* DMFC2 rt, 0x0111 (FIXME: Read Pass1 Errata) */
+    unsigned long   cop2_aes_inp0;
+    /* DMFC2 rt, 0x0102; DMFC2 rt, 0x0103 */
+    unsigned long   cop2_aes_iv[2];
+    /* DMFC2 rt, 0x0104; DMFC2 rt, 0x0105; DMFC2 rt, 0x0106; DMFC2
+     * rt, 0x0107 */
+    unsigned long   cop2_aes_key[4];
+    /* DMFC2 rt, 0x0110 */
+    unsigned long   cop2_aes_keylen;
+    /* DMFC2 rt, 0x0100; DMFC2 rt, 0x0101 */
+    unsigned long   cop2_aes_result[2];
+    /* DMFC2 rt, 0x0240; DMFC2 rt, 0x0241; DMFC2 rt, 0x0242; DMFC2
+     * rt, 0x0243; DMFC2 rt, 0x0244; DMFC2 rt, 0x0245; DMFC2 rt,
+     * 0x0246; DMFC2 rt, 0x0247; DMFC2 rt, 0x0248; DMFC2 rt,
+     * 0x0249; DMFC2 rt, 0x024A; DMFC2 rt, 0x024B; DMFC2 rt,
+     * 0x024C; DMFC2 rt, 0x024D; DMFC2 rt, 0x024E - Pass2 */
+    unsigned long   cop2_hsh_datw[15];
+    /* DMFC2 rt, 0x0250; DMFC2 rt, 0x0251; DMFC2 rt, 0x0252; DMFC2
+     * rt, 0x0253; DMFC2 rt, 0x0254; DMFC2 rt, 0x0255; DMFC2 rt,
+     * 0x0256; DMFC2 rt, 0x0257 - Pass2 */
+    unsigned long   cop2_hsh_ivw[8];
+    /* DMFC2 rt, 0x0258; DMFC2 rt, 0x0259 - Pass2 */
+    unsigned long   cop2_gfm_mult[2];
+    /* DMFC2 rt, 0x025E - Pass2 */
+    unsigned long   cop2_gfm_poly;
+    /* DMFC2 rt, 0x025A; DMFC2 rt, 0x025B - Pass2 */
+    unsigned long   cop2_gfm_result[2];
 };
 #define INIT_OCTEON_COP2 {0,}
 
 struct octeon_cvmseg_state {
-	unsigned long cvmseg[CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE]
-			    [cpu_dcache_line_size() / sizeof(unsigned long)];
+    unsigned long cvmseg[CONFIG_CAVIUM_OCTEON_CVMSEG_SIZE]
+    [cpu_dcache_line_size() / sizeof(unsigned long)];
 };
 
 #endif
 
 typedef struct {
-	unsigned long seg;
+    unsigned long seg;
 } mm_segment_t;
 
 #define ARCH_MIN_TASKALIGN	8
@@ -199,40 +199,40 @@ struct mips_abi;
  * If you change thread_struct remember to change the #defines below too!
  */
 struct thread_struct {
-	/* Saved main processor registers. */
-	unsigned long reg16;
-	unsigned long reg17, reg18, reg19, reg20, reg21, reg22, reg23;
-	unsigned long reg29, reg30, reg31;
+    /* Saved main processor registers. */
+    unsigned long reg16;
+    unsigned long reg17, reg18, reg19, reg20, reg21, reg22, reg23;
+    unsigned long reg29, reg30, reg31;
 
-	/* Saved cp0 stuff. */
-	unsigned long cp0_status;
+    /* Saved cp0 stuff. */
+    unsigned long cp0_status;
 
-	/* Saved fpu/fpu emulator stuff. */
-	struct mips_fpu_struct fpu;
+    /* Saved fpu/fpu emulator stuff. */
+    struct mips_fpu_struct fpu;
 #ifdef CONFIG_MIPS_MT_FPAFF
-	/* Emulated instruction count */
-	unsigned long emulated_fp;
-	/* Saved per-thread scheduler affinity mask */
-	cpumask_t user_cpus_allowed;
+    /* Emulated instruction count */
+    unsigned long emulated_fp;
+    /* Saved per-thread scheduler affinity mask */
+    cpumask_t user_cpus_allowed;
 #endif /* CONFIG_MIPS_MT_FPAFF */
 
-	/* Saved state of the DSP ASE, if available. */
-	struct mips_dsp_state dsp;
+    /* Saved state of the DSP ASE, if available. */
+    struct mips_dsp_state dsp;
 
-	/* Saved watch register state, if available. */
-	union mips_watch_reg_state watch;
+    /* Saved watch register state, if available. */
+    union mips_watch_reg_state watch;
 
-	/* Other stuff associated with the thread. */
-	unsigned long cp0_badvaddr;	/* Last user fault */
-	unsigned long cp0_baduaddr;	/* Last kernel fault accessing USEG */
-	unsigned long error_code;
-	unsigned long irix_trampoline;  /* Wheee... */
-	unsigned long irix_oldctx;
+    /* Other stuff associated with the thread. */
+    unsigned long cp0_badvaddr;	/* Last user fault */
+    unsigned long cp0_baduaddr;	/* Last kernel fault accessing USEG */
+    unsigned long error_code;
+    unsigned long irix_trampoline;  /* Wheee... */
+    unsigned long irix_oldctx;
 #ifdef CONFIG_CPU_CAVIUM_OCTEON
     struct octeon_cop2_state cp2 __attribute__ ((__aligned__(128)));
     struct octeon_cvmseg_state cvmseg __attribute__ ((__aligned__(128)));
 #endif
-	struct mips_abi *abi;
+    struct mips_abi *abi;
 };
 
 #ifdef CONFIG_MIPS_MT_FPAFF

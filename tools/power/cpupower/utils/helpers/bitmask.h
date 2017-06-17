@@ -8,8 +8,8 @@
  */
 
 struct bitmask {
-	unsigned int size;
-	unsigned long *maskp;
+    unsigned int size;
+    unsigned long *maskp;
 };
 
 struct bitmask *bitmask_alloc(unsigned int n);

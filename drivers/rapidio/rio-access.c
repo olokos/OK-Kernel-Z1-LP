@@ -160,16 +160,15 @@ EXPORT_SYMBOL_GPL(rio_mport_write_config_32);
  * Send a doorbell message to a RIO device. The doorbell message
  * has a 16-bit info field provided by the data argument.
  */
-int rio_mport_send_doorbell(struct rio_mport *mport, u16 destid, u16 data)
-{
-	int res;
-	unsigned long flags;
+int rio_mport_send_doorbell(struct rio_mport *mport, u16 destid, u16 data) {
+    int res;
+    unsigned long flags;
 
-	spin_lock_irqsave(&rio_doorbell_lock, flags);
-	res = mport->ops->dsend(mport, mport->id, destid, data);
-	spin_unlock_irqrestore(&rio_doorbell_lock, flags);
+    spin_lock_irqsave(&rio_doorbell_lock, flags);
+    res = mport->ops->dsend(mport, mport->id, destid, data);
+    spin_unlock_irqrestore(&rio_doorbell_lock, flags);
 
-	return res;
+    return res;
 }
 
 EXPORT_SYMBOL_GPL(rio_mport_send_doorbell);

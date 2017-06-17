@@ -16,14 +16,14 @@
 #include "diagfwd.h"
 
 struct diag_log_mask_t {
-	uint8_t equip_id;
-	uint32_t num_items;
-	uint8_t ptr[MAX_ITEMS_PER_EQUIP_ID];
+    uint8_t equip_id;
+    uint32_t num_items;
+    uint8_t ptr[MAX_ITEMS_PER_EQUIP_ID];
 } __packed;
 
 void diag_send_event_mask_update(struct diag_smd_info *smd_info, int num_bytes);
 void diag_send_msg_mask_update(struct diag_smd_info *smd_info, int ssid_first,
-					 int ssid_last, int proc);
+                               int ssid_last, int proc);
 void diag_send_log_mask_update(struct diag_smd_info *smd_info, int);
 void diag_mask_update_fn(struct work_struct *work);
 void diag_send_feature_mask_update(struct diag_smd_info *smd_info);

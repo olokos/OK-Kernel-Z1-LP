@@ -70,30 +70,31 @@ MSM_BUS_SPS_TO_DDR_VOTE_VECTOR(5, 200 * 1024 * 1024);
 MSM_BUS_SPS_TO_DDR_VOTE_VECTOR(6, UINT_MAX);
 
 static unsigned int sdcc_bw_vectors[] = {0, (13 * 1024 * 1024),
-				(26 * 1024 * 1024), (52 * 1024 * 1024),
-				(104 * 1024 * 1024), (200 * 1024 * 1024),
-				UINT_MAX};
+                                         (26 * 1024 * 1024), (52 * 1024 * 1024),
+                                         (104 * 1024 * 1024), (200 * 1024 * 1024),
+                                         UINT_MAX
+                                        };
 
 static struct msm_bus_paths sps_to_ddr_bus_scale_usecases[] = {
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(0),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(1),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(2),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(3),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(4),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(5),
-	MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(6),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(0),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(1),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(2),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(3),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(4),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(5),
+    MSM_BUS_SPS_TO_DDR_VOTE_VECTOR_USECASE(6),
 };
 
 static struct msm_bus_scale_pdata sps_to_ddr_bus_scale_data = {
-	sps_to_ddr_bus_scale_usecases,
-	ARRAY_SIZE(sps_to_ddr_bus_scale_usecases),
-	.name = "msm_sdcc",
+    sps_to_ddr_bus_scale_usecases,
+    ARRAY_SIZE(sps_to_ddr_bus_scale_usecases),
+    .name = "msm_sdcc",
 };
 
 static struct msm_mmc_bus_voting_data sps_to_ddr_bus_voting_data = {
-	.use_cases = &sps_to_ddr_bus_scale_data,
-	.bw_vecs = sdcc_bw_vectors,
-	.bw_vecs_size = sizeof(sdcc_bw_vectors),
+    .use_cases = &sps_to_ddr_bus_scale_data,
+    .bw_vecs = sdcc_bw_vectors,
+    .bw_vecs_size = sizeof(sdcc_bw_vectors),
 };
 
 #endif /* _BOARD_STORAGE_A_H */

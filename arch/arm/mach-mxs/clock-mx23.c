@@ -37,77 +37,71 @@
 
 #define PARENT_RATE_SHIFT	8
 
-static int _raw_clk_enable(struct clk *clk)
-{
-	u32 reg;
+static int _raw_clk_enable(struct clk *clk) {
+    u32 reg;
 
-	if (clk->enable_reg) {
-		reg = __raw_readl(clk->enable_reg);
-		reg &= ~(1 << clk->enable_shift);
-		__raw_writel(reg, clk->enable_reg);
-	}
+    if (clk->enable_reg) {
+        reg = __raw_readl(clk->enable_reg);
+        reg &= ~(1 << clk->enable_shift);
+        __raw_writel(reg, clk->enable_reg);
+    }
 
-	return 0;
+    return 0;
 }
 
-static void _raw_clk_disable(struct clk *clk)
-{
-	u32 reg;
+static void _raw_clk_disable(struct clk *clk) {
+    u32 reg;
 
-	if (clk->enable_reg) {
-		reg = __raw_readl(clk->enable_reg);
-		reg |= 1 << clk->enable_shift;
-		__raw_writel(reg, clk->enable_reg);
-	}
+    if (clk->enable_reg) {
+        reg = __raw_readl(clk->enable_reg);
+        reg |= 1 << clk->enable_shift;
+        __raw_writel(reg, clk->enable_reg);
+    }
 }
 
 /*
  * ref_xtal_clk
  */
-static unsigned long ref_xtal_clk_get_rate(struct clk *clk)
-{
-	return 24000000;
+static unsigned long ref_xtal_clk_get_rate(struct clk *clk) {
+    return 24000000;
 }
 
 static struct clk ref_xtal_clk = {
-	.get_rate = ref_xtal_clk_get_rate,
+    .get_rate = ref_xtal_clk_get_rate,
 };
 
 /*
  * pll_clk
  */
-static unsigned long pll_clk_get_rate(struct clk *clk)
-{
-	return 480000000;
+static unsigned long pll_clk_get_rate(struct clk *clk) {
+    return 480000000;
 }
 
-static int pll_clk_enable(struct clk *clk)
-{
-	__raw_writel(BM_CLKCTRL_PLLCTRL0_POWER |
-			BM_CLKCTRL_PLLCTRL0_EN_USB_CLKS,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_PLLCTRL0_SET);
+static int pll_clk_enable(struct clk *clk) {
+    __raw_writel(BM_CLKCTRL_PLLCTRL0_POWER |
+                 BM_CLKCTRL_PLLCTRL0_EN_USB_CLKS,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_PLLCTRL0_SET);
 
-	/* Only a 10us delay is need. PLLCTRL1 LOCK bitfied is only a timer
-	 * and is incorrect (excessive). Per definition of the PLLCTRL0
-	 * POWER field, waiting at least 10us.
-	 */
-	udelay(10);
+    /* Only a 10us delay is need. PLLCTRL1 LOCK bitfied is only a timer
+     * and is incorrect (excessive). Per definition of the PLLCTRL0
+     * POWER field, waiting at least 10us.
+     */
+    udelay(10);
 
-	return 0;
+    return 0;
 }
 
-static void pll_clk_disable(struct clk *clk)
-{
-	__raw_writel(BM_CLKCTRL_PLLCTRL0_POWER |
-			BM_CLKCTRL_PLLCTRL0_EN_USB_CLKS,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_PLLCTRL0_CLR);
+static void pll_clk_disable(struct clk *clk) {
+    __raw_writel(BM_CLKCTRL_PLLCTRL0_POWER |
+                 BM_CLKCTRL_PLLCTRL0_EN_USB_CLKS,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_PLLCTRL0_CLR);
 }
 
 static struct clk pll_clk = {
-	 .get_rate = pll_clk_get_rate,
-	 .enable = pll_clk_enable,
-	 .disable = pll_clk_disable,
-	 .parent = &ref_xtal_clk,
+    .get_rate = pll_clk_get_rate,
+    .enable = pll_clk_enable,
+    .disable = pll_clk_disable,
+    .parent = &ref_xtal_clk,
 };
 
 /*
@@ -152,15 +146,13 @@ _DEFINE_CLOCK_REF(ref_io_clk, FRAC, IO);
  *
  * clk_get_rate
  */
-static unsigned long rtc_clk_get_rate(struct clk *clk)
-{
-	/* ref_xtal_clk is implemented as the only parent */
-	return clk_get_rate(clk->parent) / 768;
+static unsigned long rtc_clk_get_rate(struct clk *clk) {
+    /* ref_xtal_clk is implemented as the only parent */
+    return clk_get_rate(clk->parent) / 768;
 }
 
-static unsigned long clk32k_clk_get_rate(struct clk *clk)
-{
-	return clk->parent->get_rate(clk->parent) / 750;
+static unsigned long clk32k_clk_get_rate(struct clk *clk) {
+    return clk->parent->get_rate(clk->parent) / 750;
 }
 
 #define _CLK_GET_RATE(name, rs)						\
@@ -219,64 +211,63 @@ _CLK_GET_RATE_STUB(pwm_clk)
 /*
  * clk_set_rate
  */
-static int cpu_clk_set_rate(struct clk *clk, unsigned long rate)
-{
-	u32 reg, bm_busy, div_max, d, f, div, frac;
-	unsigned long diff, parent_rate, calc_rate;
+static int cpu_clk_set_rate(struct clk *clk, unsigned long rate) {
+    u32 reg, bm_busy, div_max, d, f, div, frac;
+    unsigned long diff, parent_rate, calc_rate;
 
-	parent_rate = clk_get_rate(clk->parent);
+    parent_rate = clk_get_rate(clk->parent);
 
-	if (clk->parent == &ref_xtal_clk) {
-		div_max = BM_CLKCTRL_CPU_DIV_XTAL >> BP_CLKCTRL_CPU_DIV_XTAL;
-		bm_busy = BM_CLKCTRL_CPU_BUSY_REF_XTAL;
-		div = DIV_ROUND_UP(parent_rate, rate);
-		if (div == 0 || div > div_max)
-			return -EINVAL;
-	} else {
-		div_max = BM_CLKCTRL_CPU_DIV_CPU >> BP_CLKCTRL_CPU_DIV_CPU;
-		bm_busy = BM_CLKCTRL_CPU_BUSY_REF_CPU;
-		rate >>= PARENT_RATE_SHIFT;
-		parent_rate >>= PARENT_RATE_SHIFT;
-		diff = parent_rate;
-		div = frac = 1;
-		for (d = 1; d <= div_max; d++) {
-			f = parent_rate * 18 / d / rate;
-			if ((parent_rate * 18 / d) % rate)
-				f++;
-			if (f < 18 || f > 35)
-				continue;
+    if (clk->parent == &ref_xtal_clk) {
+        div_max = BM_CLKCTRL_CPU_DIV_XTAL >> BP_CLKCTRL_CPU_DIV_XTAL;
+        bm_busy = BM_CLKCTRL_CPU_BUSY_REF_XTAL;
+        div = DIV_ROUND_UP(parent_rate, rate);
+        if (div == 0 || div > div_max)
+            return -EINVAL;
+    } else {
+        div_max = BM_CLKCTRL_CPU_DIV_CPU >> BP_CLKCTRL_CPU_DIV_CPU;
+        bm_busy = BM_CLKCTRL_CPU_BUSY_REF_CPU;
+        rate >>= PARENT_RATE_SHIFT;
+        parent_rate >>= PARENT_RATE_SHIFT;
+        diff = parent_rate;
+        div = frac = 1;
+        for (d = 1; d <= div_max; d++) {
+            f = parent_rate * 18 / d / rate;
+            if ((parent_rate * 18 / d) % rate)
+                f++;
+            if (f < 18 || f > 35)
+                continue;
 
-			calc_rate = parent_rate * 18 / f / d;
-			if (calc_rate > rate)
-				continue;
+            calc_rate = parent_rate * 18 / f / d;
+            if (calc_rate > rate)
+                continue;
 
-			if (rate - calc_rate < diff) {
-				frac = f;
-				div = d;
-				diff = rate - calc_rate;
-			}
+            if (rate - calc_rate < diff) {
+                frac = f;
+                div = d;
+                diff = rate - calc_rate;
+            }
 
-			if (diff == 0)
-				break;
-		}
+            if (diff == 0)
+                break;
+        }
 
-		if (diff == parent_rate)
-			return -EINVAL;
+        if (diff == parent_rate)
+            return -EINVAL;
 
-		reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
-		reg &= ~BM_CLKCTRL_FRAC_CPUFRAC;
-		reg |= frac;
-		__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
-	}
+        reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
+        reg &= ~BM_CLKCTRL_FRAC_CPUFRAC;
+        reg |= frac;
+        __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
+    }
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU);
-	reg &= ~BM_CLKCTRL_CPU_DIV_CPU;
-	reg |= div << BP_CLKCTRL_CPU_DIV_CPU;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU);
+    reg &= ~BM_CLKCTRL_CPU_DIV_CPU;
+    reg |= div << BP_CLKCTRL_CPU_DIV_CPU;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU);
 
-	mxs_clkctrl_timeout(HW_CLKCTRL_CPU, bm_busy);
+    mxs_clkctrl_timeout(HW_CLKCTRL_CPU, bm_busy);
 
-	return 0;
+    return 0;
 }
 
 #define _CLK_SET_RATE(name, dr)						\
@@ -361,35 +352,35 @@ _CLK_SET_PARENT_STUB(clk32k_clk)
  * clk definition
  */
 static struct clk cpu_clk = {
-	.get_rate = cpu_clk_get_rate,
-	.set_rate = cpu_clk_set_rate,
-	.set_parent = cpu_clk_set_parent,
-	.parent = &ref_cpu_clk,
+    .get_rate = cpu_clk_get_rate,
+    .set_rate = cpu_clk_set_rate,
+    .set_parent = cpu_clk_set_parent,
+    .parent = &ref_cpu_clk,
 };
 
 static struct clk hbus_clk = {
-	.get_rate = hbus_clk_get_rate,
-	.parent = &cpu_clk,
+    .get_rate = hbus_clk_get_rate,
+    .parent = &cpu_clk,
 };
 
 static struct clk xbus_clk = {
-	.get_rate = xbus_clk_get_rate,
-	.set_rate = xbus_clk_set_rate,
-	.parent = &ref_xtal_clk,
+    .get_rate = xbus_clk_get_rate,
+    .set_rate = xbus_clk_set_rate,
+    .parent = &ref_xtal_clk,
 };
 
 static struct clk rtc_clk = {
-	.get_rate = rtc_clk_get_rate,
-	.parent = &ref_xtal_clk,
+    .get_rate = rtc_clk_get_rate,
+    .parent = &ref_xtal_clk,
 };
 
 /* usb_clk gate is controlled in DIGCTRL other than CLKCTRL */
 static struct clk usb_clk = {
-	.enable_reg = DIGCTRL_BASE_ADDR,
-	.enable_shift = 2,
-	.enable = _raw_clk_enable,
-	.disable = _raw_clk_disable,
-	.parent = &pll_clk,
+    .enable_reg = DIGCTRL_BASE_ADDR,
+    .enable_shift = 2,
+    .enable = _raw_clk_enable,
+    .disable = _raw_clk_disable,
+    .parent = &pll_clk,
 };
 
 #define _DEFINE_CLOCK(name, er, es, p)					\
@@ -421,116 +412,114 @@ _DEFINE_CLOCK(clk32k_clk, XTAL, TIMROT_CLK32K_GATE, &ref_xtal_clk);
 	},
 
 static struct clk_lookup lookups[] = {
-	/* for amba bus driver */
-	_REGISTER_CLOCK("duart", "apb_pclk", xbus_clk)
-	/* for amba-pl011 driver */
-	_REGISTER_CLOCK("duart", NULL, uart_clk)
-	_REGISTER_CLOCK("mxs-auart.0", NULL, uart_clk)
-	_REGISTER_CLOCK("rtc", NULL, rtc_clk)
-	_REGISTER_CLOCK("mxs-dma-apbh", NULL, hbus_clk)
-	_REGISTER_CLOCK("mxs-dma-apbx", NULL, xbus_clk)
-	_REGISTER_CLOCK("mxs-mmc.0", NULL, ssp_clk)
-	_REGISTER_CLOCK("mxs-mmc.1", NULL, ssp_clk)
-	_REGISTER_CLOCK(NULL, "usb", usb_clk)
-	_REGISTER_CLOCK(NULL, "audio", audio_clk)
-	_REGISTER_CLOCK("mxs-pwm.0", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.1", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.2", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.3", NULL, pwm_clk)
-	_REGISTER_CLOCK("mxs-pwm.4", NULL, pwm_clk)
-	_REGISTER_CLOCK("imx23-fb", NULL, lcdif_clk)
-	_REGISTER_CLOCK("imx23-gpmi-nand", NULL, gpmi_clk)
+    /* for amba bus driver */
+    _REGISTER_CLOCK("duart", "apb_pclk", xbus_clk)
+    /* for amba-pl011 driver */
+    _REGISTER_CLOCK("duart", NULL, uart_clk)
+    _REGISTER_CLOCK("mxs-auart.0", NULL, uart_clk)
+    _REGISTER_CLOCK("rtc", NULL, rtc_clk)
+    _REGISTER_CLOCK("mxs-dma-apbh", NULL, hbus_clk)
+    _REGISTER_CLOCK("mxs-dma-apbx", NULL, xbus_clk)
+    _REGISTER_CLOCK("mxs-mmc.0", NULL, ssp_clk)
+    _REGISTER_CLOCK("mxs-mmc.1", NULL, ssp_clk)
+    _REGISTER_CLOCK(NULL, "usb", usb_clk)
+    _REGISTER_CLOCK(NULL, "audio", audio_clk)
+    _REGISTER_CLOCK("mxs-pwm.0", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.1", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.2", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.3", NULL, pwm_clk)
+    _REGISTER_CLOCK("mxs-pwm.4", NULL, pwm_clk)
+    _REGISTER_CLOCK("imx23-fb", NULL, lcdif_clk)
+    _REGISTER_CLOCK("imx23-gpmi-nand", NULL, gpmi_clk)
 };
 
-static int clk_misc_init(void)
-{
-	u32 reg;
-	int ret;
+static int clk_misc_init(void) {
+    u32 reg;
+    int ret;
 
-	/* Fix up parent per register setting */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CLKSEQ);
-	cpu_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_CPU) ?
-			&ref_xtal_clk : &ref_cpu_clk;
-	emi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_EMI) ?
-			&ref_xtal_clk : &ref_emi_clk;
-	ssp_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP) ?
-			&ref_xtal_clk : &ref_io_clk;
-	gpmi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_GPMI) ?
-			&ref_xtal_clk : &ref_io_clk;
-	lcdif_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_PIX) ?
-			&ref_xtal_clk : &ref_pix_clk;
+    /* Fix up parent per register setting */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_CLKSEQ);
+    cpu_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_CPU) ?
+                     &ref_xtal_clk : &ref_cpu_clk;
+    emi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_EMI) ?
+                     &ref_xtal_clk : &ref_emi_clk;
+    ssp_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_SSP) ?
+                     &ref_xtal_clk : &ref_io_clk;
+    gpmi_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_GPMI) ?
+                      &ref_xtal_clk : &ref_io_clk;
+    lcdif_clk.parent = (reg & BM_CLKCTRL_CLKSEQ_BYPASS_PIX) ?
+                       &ref_xtal_clk : &ref_pix_clk;
 
-	/* Use int div over frac when both are available */
-	__raw_writel(BM_CLKCTRL_CPU_DIV_XTAL_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
-	__raw_writel(BM_CLKCTRL_CPU_DIV_CPU_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
-	__raw_writel(BM_CLKCTRL_HBUS_DIV_FRAC_EN,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS_CLR);
+    /* Use int div over frac when both are available */
+    __raw_writel(BM_CLKCTRL_CPU_DIV_XTAL_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
+    __raw_writel(BM_CLKCTRL_CPU_DIV_CPU_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_CLR);
+    __raw_writel(BM_CLKCTRL_HBUS_DIV_FRAC_EN,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS_CLR);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
-	reg &= ~BM_CLKCTRL_XBUS_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
+    reg &= ~BM_CLKCTRL_XBUS_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_XBUS);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP);
-	reg &= ~BM_CLKCTRL_SSP_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP);
+    reg &= ~BM_CLKCTRL_SSP_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_SSP);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
-	reg &= ~BM_CLKCTRL_GPMI_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
+    reg &= ~BM_CLKCTRL_GPMI_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_GPMI);
 
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_PIX);
-	reg &= ~BM_CLKCTRL_PIX_DIV_FRAC_EN;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_PIX);
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_PIX);
+    reg &= ~BM_CLKCTRL_PIX_DIV_FRAC_EN;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_PIX);
 
-	/*
-	 * Set safe hbus clock divider. A divider of 3 ensure that
-	 * the Vddd voltage required for the cpu clock is sufficiently
-	 * high for the hbus clock.
-	 */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
-	reg &= BM_CLKCTRL_HBUS_DIV;
-	reg |= 3 << BP_CLKCTRL_HBUS_DIV;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
+    /*
+     * Set safe hbus clock divider. A divider of 3 ensure that
+     * the Vddd voltage required for the cpu clock is sufficiently
+     * high for the hbus clock.
+     */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
+    reg &= BM_CLKCTRL_HBUS_DIV;
+    reg |= 3 << BP_CLKCTRL_HBUS_DIV;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_HBUS);
 
-	ret = mxs_clkctrl_timeout(HW_CLKCTRL_HBUS, BM_CLKCTRL_HBUS_BUSY);
+    ret = mxs_clkctrl_timeout(HW_CLKCTRL_HBUS, BM_CLKCTRL_HBUS_BUSY);
 
-	/* Gate off cpu clock in WFI for power saving */
-	__raw_writel(BM_CLKCTRL_CPU_INTERRUPT_WAIT,
-			CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_SET);
+    /* Gate off cpu clock in WFI for power saving */
+    __raw_writel(BM_CLKCTRL_CPU_INTERRUPT_WAIT,
+                 CLKCTRL_BASE_ADDR + HW_CLKCTRL_CPU_SET);
 
-	/*
-	 * 480 MHz seems too high to be ssp clock source directly,
-	 * so set frac to get a 288 MHz ref_io.
-	 */
-	reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
-	reg &= ~BM_CLKCTRL_FRAC_IOFRAC;
-	reg |= 30 << BP_CLKCTRL_FRAC_IOFRAC;
-	__raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
+    /*
+     * 480 MHz seems too high to be ssp clock source directly,
+     * so set frac to get a 288 MHz ref_io.
+     */
+    reg = __raw_readl(CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
+    reg &= ~BM_CLKCTRL_FRAC_IOFRAC;
+    reg |= 30 << BP_CLKCTRL_FRAC_IOFRAC;
+    __raw_writel(reg, CLKCTRL_BASE_ADDR + HW_CLKCTRL_FRAC);
 
-	return ret;
+    return ret;
 }
 
-int __init mx23_clocks_init(void)
-{
-	clk_misc_init();
+int __init mx23_clocks_init(void) {
+    clk_misc_init();
 
-	/*
-	 * source ssp clock from ref_io than ref_xtal,
-	 * as ref_xtal only provides 24 MHz as maximum.
-	 */
-	clk_set_parent(&ssp_clk, &ref_io_clk);
+    /*
+     * source ssp clock from ref_io than ref_xtal,
+     * as ref_xtal only provides 24 MHz as maximum.
+     */
+    clk_set_parent(&ssp_clk, &ref_io_clk);
 
-	clk_prepare_enable(&cpu_clk);
-	clk_prepare_enable(&hbus_clk);
-	clk_prepare_enable(&xbus_clk);
-	clk_prepare_enable(&emi_clk);
-	clk_prepare_enable(&uart_clk);
+    clk_prepare_enable(&cpu_clk);
+    clk_prepare_enable(&hbus_clk);
+    clk_prepare_enable(&xbus_clk);
+    clk_prepare_enable(&emi_clk);
+    clk_prepare_enable(&uart_clk);
 
-	clkdev_add_table(lookups, ARRAY_SIZE(lookups));
+    clkdev_add_table(lookups, ARRAY_SIZE(lookups));
 
-	mxs_timer_init(&clk32k_clk, MX23_INT_TIMER0);
+    mxs_timer_init(&clk32k_clk, MX23_INT_TIMER0);
 
-	return 0;
+    return 0;
 }
